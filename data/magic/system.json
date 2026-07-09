@@ -1,0 +1,42 @@
+{
+  "nome_sistema": "Arkania",
+  "descricao": "Força primordial que molda a própria realidade. Não está disponível para qualquer um — apenas bruxas têm conexão inata com ela.",
+  "afinidade_natural": "Mulheres possuem afinidade naturalmente maior. Homens que controlam Arkania tendem a enlouquecer com o poder.",
+  "marca": {
+    "nome": "Estrelas no Pulso",
+    "descricao": "Todos que dominam Arkania carregam estrelas luminosas no pulso. Quanto mais estrelas, maior o domínio. Não podem ser falsificadas nem escondidas."
+  },
+  "arautos": {
+    "descricao": "Manifestações vivas dos tipos de Arkania — não são bruxas comuns, representam a própria Arkania tomando forma consciente para se comunicar com seus fiéis."
+  },
+  "tipos": [
+    {
+      "id": "elemental",
+      "titulo": "Arkania Elemental",
+      "descricao": "Controle sobre os elementos primordiais da natureza.",
+      "unlock": "inicial"
+    },
+    {
+      "id": "primordial",
+      "titulo": "Arkania Primordial",
+      "descricao": "Acesso às forças mais antigas e brutas da criação.",
+      "unlock": "avancado"
+    },
+    {
+      "id": "sangue",
+      "titulo": "Arkania do Sangue",
+      "descricao": "Magia ligada ao ciclo vital e à força do sangue. Relacionada à deidade Haemus.",
+      "unlock": "avancado"
+    },
+    {
+      "id": "axis",
+      "titulo": "A.X.I.S.",
+      "descricao": "Tipo raro e misterioso de Arkania. Detalhes classificados.",
+      "unlock": "secreto"
+    }
+  ],
+  "catalizadores": {
+    "descricao": "Objetos que amplificam ou canalizam o poder da Arkania.",
+    "tipos": ["Cristais", "Itens Encantados", "Lankias", "Tatuagens"]
+  }
+}

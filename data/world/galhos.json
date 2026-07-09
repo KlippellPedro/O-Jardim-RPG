@@ -1,0 +1,25 @@
+[
+  {
+    "id": "realidade-0",
+    "tipo": "galho",
+    "titulo": "Realidade 0",
+    "arvore": "aethel",
+    "descricao": "O Galho principal da Árvore da Aethel. É onde se passa a campanha 'O Último Eclipse'. Contém a Dimensão Padrão (com todos os reinos), além de Nadalon, Espelhos, Sonhar, Întuneric, Êtuneric e Coliseu.",
+    "nota": "No sistema, 'Realidade' e 'Galho' são sinônimos. 'Realidade 0' é o rótulo imersivo preferido para este Galho específico.",
+    "unlock": "inicial",
+    "tags": ["galho", "realidade", "aethel"]
+  },
+  {
+    "id": "arkarin",
+    "tipo": "galho",
+    "titulo": "Arkarin",
+    "arvore": "mulher-carmesim",
+    "descricao": "O único Galho da Árvore da Mulher Carmesim, e o único Galho que é destino — não origem. Arkarin é o ponto inevitável onde toda existência converge após a morte. Não é céu, não é inferno, nem purgatório: é simplesmente onde a existência acaba.",
+    "caracteristicas": "Feito de silêncio, vazio e eternidade. Tempo, espaço e realidade se desfazem lentamente até restar apenas o que foi. Ninguém escapa — não importa quão poderoso, divino ou insignificante.",
+    "locais_notaveis": ["Tribunal de Arkarin", "Castelo Carmesim", "Biblioteca", "Mandamentos"],
+    "fluxo_presente": "fluxo-do-sangue",
+    "nota": "Arkarin era descrito como uma Dimensão da Realidade 0 em notas antigas do Obsidian — isso está desatualizado. Arkarin é um Galho próprio, não uma Dimensão dentro do Galho da Aethel.",
+    "unlock": "inicial",
+    "tags": ["galho", "morte", "destino", "carmesim"]
+  }
+]

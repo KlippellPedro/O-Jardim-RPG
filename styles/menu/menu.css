@@ -1,0 +1,378 @@
+/* ─────────────────────────────────────────────
+   Menu Hub — O Último Eclipse
+   ───────────────────────────────────────────── */
+
+/* Canvas de fundo */
+.menu-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: radial-gradient(
+    ellipse 120% 80% at 50% 30%,
+    var(--eclipse-ring) 0%,
+    var(--deep) 60%,
+    var(--void) 100%
+  );
+}
+
+/* Eclipse visual */
+.eclipse-orb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -65%);
+  width: min(600px, 80vw);
+  height: min(600px, 80vw);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.eclipse-orb::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    transparent 38%,
+    rgba(201, 162, 39, 0.12) 45%,
+    rgba(124, 69, 204, 0.18) 55%,
+    rgba(138, 26, 42, 0.10) 65%,
+    transparent 75%
+  );
+  animation: eclipse-breathe 8s var(--ease-smooth) infinite;
+}
+
+.eclipse-orb::after {
+  content: '';
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: var(--void);
+  box-shadow:
+    0 0 80px rgba(201, 162, 39, 0.15),
+    0 0 160px rgba(124, 69, 204, 0.10),
+    inset 0 0 60px rgba(201, 162, 39, 0.08);
+}
+
+/* Anel dourado */
+.eclipse-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: linear-gradient(var(--void), var(--void)) padding-box,
+              conic-gradient(
+                from 180deg,
+                rgba(201,162,39,0.8) 0%,
+                rgba(201,162,39,0.2) 25%,
+                transparent 40%,
+                rgba(201,162,39,0.1) 60%,
+                rgba(201,162,39,0.7) 80%,
+                rgba(201,162,39,0.8) 100%
+              ) border-box;
+  animation: rune-spin 40s linear infinite;
+}
+
+/* Canvas de estrelas */
+#stars-canvas {
+  position: absolute;
+  inset: 0;
+  opacity: 0.7;
+}
+
+/* Layout principal */
+.menu-layout {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: var(--space-8) var(--space-6);
+  gap: var(--space-8);
+}
+
+/* Header com título */
+.menu-header {
+  text-align: center;
+  padding-top: var(--space-12);
+}
+
+.menu-eyebrow {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-bottom: var(--space-3);
+  animation: float-in-down var(--dur-slow) var(--ease-out) 200ms both;
+}
+
+.menu-title {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-3xl), 6vw, var(--text-hero));
+  font-weight: 400;
+  color: var(--moon);
+  letter-spacing: 0.06em;
+  text-shadow:
+    0 0 40px rgba(201, 162, 39, 0.3),
+    0 0 80px rgba(201, 162, 39, 0.10);
+  line-height: 1;
+  animation: float-in-down var(--dur-slow) var(--ease-out) 300ms both;
+}
+
+.menu-title span {
+  color: var(--gold);
+  position: relative;
+}
+
+.menu-title span::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: reveal-line 1.2s var(--ease-out) 900ms both;
+}
+
+.menu-subtitle {
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  animation: float-in-down var(--dur-slow) var(--ease-out) 450ms both;
+}
+
+/* Separador ornamental */
+.menu-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  animation: fade-in var(--dur-slow) var(--ease-out) 600ms both;
+}
+
+.menu-ornament-line {
+  height: 1px;
+  width: 80px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim));
+}
+
+.menu-ornament-line:last-child {
+  background: linear-gradient(270deg, transparent, var(--gold-dim));
+}
+
+.menu-ornament-diamond {
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  box-shadow: var(--shadow-gold);
+}
+
+/* Grid de navegação */
+.menu-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-8) 0;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Cards de navegação */
+.menu-card {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-8);
+  background: var(--shadow);
+  border: 1px solid var(--invisible);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    transform      var(--dur-base) var(--ease-spring),
+    border-color   var(--dur-base) var(--ease-smooth),
+    box-shadow     var(--dur-base) var(--ease-smooth),
+    background     var(--dur-base) var(--ease-smooth);
+  overflow: hidden;
+  text-align: left;
+  animation: float-in-up var(--dur-slow) var(--ease-out) both;
+}
+
+.menu-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.03) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+/* Linha lateral colorida */
+.menu-card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 2px;
+  border-radius: var(--radius-full);
+  background: var(--card-accent, var(--gold));
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-smooth);
+}
+
+.menu-card:hover {
+  transform: translateX(6px);
+  border-color: var(--card-accent, var(--gold));
+  box-shadow:
+    var(--shadow-card),
+    -4px 0 20px rgba(0,0,0,0.5),
+    inset 0 0 0 1px rgba(255,255,255,0.03);
+  background: var(--surface);
+}
+
+.menu-card:hover::after {
+  opacity: 1;
+}
+
+.menu-card:active {
+  transform: translateX(4px) scale(0.99);
+}
+
+/* Ícone do card */
+.menu-card-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--invisible);
+  font-size: 22px;
+  transition: all var(--dur-base) var(--ease-smooth);
+  color: var(--card-accent, var(--gold));
+}
+
+.menu-card:hover .menu-card-icon {
+  background: rgba(201, 162, 39, 0.08);
+  border-color: var(--card-accent, var(--gold));
+  box-shadow: 0 0 16px rgba(201, 162, 39, 0.2);
+}
+
+/* Texto do card */
+.menu-card-content {
+  flex: 1;
+}
+
+.menu-card-title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  color: var(--moon);
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-1);
+  transition: color var(--dur-base) var(--ease-smooth);
+}
+
+.menu-card:hover .menu-card-title {
+  color: var(--gold-light);
+}
+
+.menu-card-desc {
+  font-size: var(--text-sm);
+  color: var(--dim);
+  letter-spacing: 0.02em;
+}
+
+/* Seta do card */
+.menu-card-arrow {
+  flex-shrink: 0;
+  color: var(--dim);
+  font-size: var(--text-lg);
+  transition: all var(--dur-base) var(--ease-spring);
+  opacity: 0;
+}
+
+.menu-card:hover .menu-card-arrow {
+  opacity: 1;
+  transform: translateX(4px);
+  color: var(--card-accent, var(--gold));
+}
+
+/* Variantes de cor por módulo */
+.menu-card[data-module="ficha"]   { --card-accent: var(--gold);    }
+.menu-card[data-module="mundo"]   { --card-accent: var(--arkania); }
+.menu-card[data-module="arsenal"] { --card-accent: var(--blood);   }
+
+.menu-card[data-module="ficha"]:hover   { box-shadow: var(--shadow-card), 0 0 30px rgba(201,162,39,0.08); }
+.menu-card[data-module="mundo"]:hover   { box-shadow: var(--shadow-card), 0 0 30px rgba(124,69,204,0.10); }
+.menu-card[data-module="arsenal"]:hover { box-shadow: var(--shadow-card), 0 0 30px rgba(139,26,42,0.10); }
+
+.menu-card[data-module="mundo"]:hover .menu-card-icon  { background: rgba(124,69,204,0.08); border-color: var(--arkania); box-shadow: var(--shadow-arkania); }
+.menu-card[data-module="arsenal"]:hover .menu-card-icon { background: rgba(139,26,42,0.08); border-color: var(--blood); }
+
+/* Footer */
+.menu-footer {
+  text-align: center;
+  padding-bottom: var(--space-8);
+  animation: fade-in 1s var(--ease-out) 1.2s both;
+}
+
+.menu-footer-text {
+  font-size: var(--text-xs);
+  color: var(--dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Estado: módulo não disponível ainda */
+.menu-card[data-wip] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.menu-card[data-wip]::after {
+  display: none;
+}
+
+/* Tag "Em breve" */
+.menu-card-badge {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  background: var(--eclipse-ring);
+  border: 1px solid var(--invisible);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .menu-layout { padding: var(--space-6) var(--space-4); }
+  .menu-header { padding-top: var(--space-8); }
+  .menu-nav    { gap: var(--space-3); }
+  .menu-card   { padding: var(--space-4) var(--space-6); gap: var(--space-4); }
+  .menu-card-icon { width: 40px; height: 40px; font-size: 18px; }
+}

@@ -1,0 +1,73 @@
+/* ─────────────────────────────────────────────
+   Animações base — O Último Eclipse
+   ───────────────────────────────────────────── */
+
+@keyframes pulse-gold {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+@keyframes pulse-arkania {
+  0%, 100% { box-shadow: var(--shadow-arkania); }
+  50%       { box-shadow: 0 0 40px rgba(157, 110, 245, 0.5); }
+}
+
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96%           { opacity: 0.85; }
+  97%           { opacity: 1; }
+  98%           { opacity: 0.9; }
+}
+
+@keyframes star-drift {
+  0%   { transform: translateY(0) translateX(0); opacity: 0.6; }
+  100% { transform: translateY(-100px) translateX(20px); opacity: 0; }
+}
+
+@keyframes eclipse-breathe {
+  0%, 100% { transform: scale(1);    opacity: 0.7; }
+  50%       { transform: scale(1.05); opacity: 1;   }
+}
+
+@keyframes float-in-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float-in-down {
+  from { opacity: 0; transform: translateY(-24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes rune-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes reveal-line {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Classes utilitárias */
+.anim-float-up   { animation: float-in-up  var(--dur-slow) var(--ease-out) both; }
+.anim-float-down { animation: float-in-down var(--dur-slow) var(--ease-out) both; }
+.anim-fade       { animation: fade-in       var(--dur-slow) var(--ease-out) both; }
+
+/* Delays para stagger */
+.delay-1 { animation-delay: 100ms; }
+.delay-2 { animation-delay: 200ms; }
+.delay-3 { animation-delay: 350ms; }
+.delay-4 { animation-delay: 500ms; }
+.delay-5 { animation-delay: 650ms; }
+.delay-6 { animation-delay: 800ms; }

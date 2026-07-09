@@ -1,0 +1,84 @@
+/* ─────────────────────────────────────────────
+   O ÚLTIMO ECLIPSE — Design Tokens
+   Paleta: escuridão cósmica + ouro lunar + roxo Arkania
+   ───────────────────────────────────────────── */
+
+:root {
+  /* Cores de fundo */
+  --void:          #03030a;   /* Mais escuro — o nada */
+  --deep:          #07070f;   /* Fundo principal */
+  --shadow:        #0e0e1c;   /* Cartões e painéis */
+  --eclipse-ring:  #1a1028;   /* Anel de eclipse */
+  --surface:       #14122a;   /* Superfícies elevadas */
+
+  /* Cores de texto */
+  --moon:          #e8dcc8;   /* Texto principal — luz da lua */
+  --star:          #9fa8c4;   /* Texto secundário — luz das estrelas */
+  --dim:           #5a5e7a;   /* Texto terciário — apagado */
+  --invisible:     #2a2a40;   /* Separadores, contornos sutis */
+
+  /* Acentos */
+  --gold:          #c9a227;   /* Dourado imperial — destaque principal */
+  --gold-light:    #e8c456;   /* Dourado brilhante — hover */
+  --gold-dim:      #6b5214;   /* Dourado escuro — sombra */
+  --arkania:       #7c45cc;   /* Roxo da magia */
+  --arkania-glow:  #9d6ef5;   /* Roxo brilhante — brilho mágico */
+  --blood:         #8b1a2a;   /* Vermelho sangue */
+  --frost:         #4a9ebb;   /* Azul gelo — elementos de água */
+
+  /* Eclipse — o fenômeno central */
+  --eclipse-core:  rgba(201, 162, 39, 0.08);
+  --eclipse-mid:   rgba(124, 69, 204, 0.12);
+  --eclipse-outer: rgba(138, 26, 42, 0.06);
+
+  /* Tipografia */
+  --font-display:  'Cinzel', 'Palatino Linotype', serif;
+  --font-body:     'Crimson Pro', 'Georgia', serif;
+  --font-ui:       'Inter', 'Segoe UI', sans-serif;
+  --font-mono:     'JetBrains Mono', 'Consolas', monospace;
+
+  /* Tamanhos de fonte */
+  --text-xs:    0.75rem;
+  --text-sm:    0.875rem;
+  --text-base:  1rem;
+  --text-lg:    1.125rem;
+  --text-xl:    1.375rem;
+  --text-2xl:   1.75rem;
+  --text-3xl:   2.25rem;
+  --text-4xl:   3rem;
+  --text-hero:  4.5rem;
+
+  /* Espaçamento */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+
+  /* Bordas */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   16px;
+  --radius-full: 9999px;
+
+  /* Transições */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in:     cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:    cubic-bezier(0, 0, 0.2, 1);
+
+  --dur-fast:   150ms;
+  --dur-base:   250ms;
+  --dur-slow:   400ms;
+  --dur-xslow:  700ms;
+
+  /* Sombras */
+  --shadow-gold:    0 0 20px rgba(201, 162, 39, 0.25);
+  --shadow-arkania: 0 0 24px rgba(124, 69, 204, 0.35);
+  --shadow-deep:    0 8px 32px rgba(0, 0, 0, 0.8);
+  --shadow-card:    0 4px 20px rgba(0, 0, 0, 0.6), 0 0 1px rgba(255,255,255,0.04);
+}

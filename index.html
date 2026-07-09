@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O Último Eclipse</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/core/variables.css">
+  <link rel="stylesheet" href="styles/core/reset.css">
+  <link rel="stylesheet" href="styles/core/animations.css">
+  <link rel="stylesheet" href="styles/menu/menu.css">
+</head>
+<body>
+
+  <!-- Fundo atmosférico -->
+  <div class="menu-bg">
+    <canvas id="stars-canvas"></canvas>
+    <div class="eclipse-orb">
+      <div class="eclipse-ring"></div>
+    </div>
+  </div>
+
+  <!-- Layout principal -->
+  <main class="menu-layout">
+
+    <!-- Cabeçalho -->
+    <header class="menu-header">
+      <p class="menu-eyebrow">O Jardim das Árvores &bull; Realidade 0</p>
+      <h1 class="menu-title">O Último <span>Eclipse</span></h1>
+      <p class="menu-subtitle">Campanha &bull; Árvore da Aethel</p>
+
+      <div class="menu-ornament">
+        <div class="menu-ornament-line"></div>
+        <div class="menu-ornament-diamond"></div>
+        <div class="menu-ornament-diamond" style="opacity:0.4; transform:rotate(45deg) scale(0.6)"></div>
+        <div class="menu-ornament-diamond"></div>
+        <div class="menu-ornament-line"></div>
+      </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="menu-nav" role="navigation" aria-label="Módulos do sistema">
+
+      <button
+        class="menu-card anim-float-up delay-2"
+        data-module="ficha"
+        aria-label="Abrir fichas de personagem"
+      >
+        <div class="menu-card-icon" aria-hidden="true">⚔</div>
+        <div class="menu-card-content">
+          <div class="menu-card-title">Ficha</div>
+          <div class="menu-card-desc">Criar e gerenciar personagens</div>
+        </div>
+        <span class="menu-card-arrow" aria-hidden="true">›</span>
+      </button>
+
+      <button
+        class="menu-card anim-float-up delay-3"
+        data-module="mundo"
+        aria-label="Explorar o mundo e o lore"
+      >
+        <div class="menu-card-icon" aria-hidden="true">✦</div>
+        <div class="menu-card-content">
+          <div class="menu-card-title">Mundo</div>
+          <div class="menu-card-desc">Dimensões, reinos e panteão</div>
+        </div>
+        <span class="menu-card-arrow" aria-hidden="true">›</span>
+      </button>
+
+      <button
+        class="menu-card anim-float-up delay-4"
+        data-module="arsenal"
+        aria-label="Ver armas e itens"
+      >
+        <div class="menu-card-icon" aria-hidden="true">🗡</div>
+        <div class="menu-card-content">
+          <div class="menu-card-title">Arsenal</div>
+          <div class="menu-card-desc">Armas, armaduras e equipamentos</div>
+        </div>
+        <span class="menu-card-arrow" aria-hidden="true">›</span>
+      </button>
+
+    </nav>
+
+    <!-- Rodapé -->
+    <footer class="menu-footer">
+      <p class="menu-footer-text">
+        Jardim &ensp;·&ensp; Árvore da Aethel &ensp;·&ensp; Realidade 0
+      </p>
+    </footer>
+
+  </main>
+
+  <script src="src/menu/menu.js"></script>
+</body>
+</html>
