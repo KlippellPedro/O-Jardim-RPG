@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>O Último Eclipse</title>
+  <title>O Jardim RPG</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,8 +21,38 @@
   <!-- Fundo atmosférico -->
   <div class="menu-bg">
     <canvas id="stars-canvas"></canvas>
-    <div class="eclipse-orb">
-      <div class="eclipse-ring"></div>
+    <canvas id="tree-canvas"></canvas>
+  </div>
+
+  <!-- Configurações -->
+  <button
+    class="menu-settings-btn"
+    id="settings-btn"
+    type="button"
+    aria-haspopup="true"
+    aria-expanded="false"
+    aria-controls="settings-panel"
+    aria-label="Configurações"
+  >⚙</button>
+
+  <div class="menu-settings-panel" id="settings-panel" role="menu" hidden>
+    <div class="settings-item settings-item--wip" role="menuitem" aria-disabled="true">
+      <span class="settings-item-label">Perfil do player</span>
+      <span class="settings-item-badge">Em breve</span>
+    </div>
+
+    <div class="settings-item settings-item--actions" role="group" aria-label="Exportar ou importar ficha">
+      <span class="settings-item-label">Ficha (.json)</span>
+      <div class="settings-item-actions">
+        <button type="button" class="settings-action" id="settings-export">Exportar</button>
+        <button type="button" class="settings-action" id="settings-import">Importar</button>
+        <input type="file" id="settings-import-input" accept="application/json" hidden>
+      </div>
+    </div>
+
+    <div class="settings-item settings-item--wip" role="menuitem" aria-disabled="true">
+      <span class="settings-item-label">Gerenciar desbloqueios</span>
+      <span class="settings-item-badge">Em breve</span>
     </div>
   </div>
 
@@ -31,9 +61,7 @@
 
     <!-- Cabeçalho -->
     <header class="menu-header">
-      <p class="menu-eyebrow">O Jardim das Árvores &bull; Realidade 0</p>
-      <h1 class="menu-title">O Último <span>Eclipse</span></h1>
-      <p class="menu-subtitle">Campanha &bull; Árvore da Aethel</p>
+      <h1 class="menu-title">O <span class="menu-title-accent">Jardim</span><span class="menu-title-tag">RPG</span></h1>
 
       <div class="menu-ornament">
         <div class="menu-ornament-line"></div>
@@ -55,7 +83,7 @@
         <div class="menu-card-icon" aria-hidden="true">⚔</div>
         <div class="menu-card-content">
           <div class="menu-card-title">Ficha</div>
-          <div class="menu-card-desc">Criar e gerenciar personagens</div>
+          <div class="menu-card-desc">Criar e gerenciar seus personagens</div>
         </div>
         <span class="menu-card-arrow" aria-hidden="true">›</span>
       </button>
@@ -68,35 +96,41 @@
         <div class="menu-card-icon" aria-hidden="true">✦</div>
         <div class="menu-card-content">
           <div class="menu-card-title">Mundo</div>
-          <div class="menu-card-desc">Dimensões, reinos e panteão</div>
+          <div class="menu-card-desc">Deidades, fluxos, reinos e etc.</div>
         </div>
         <span class="menu-card-arrow" aria-hidden="true">›</span>
       </button>
 
       <button
         class="menu-card anim-float-up delay-4"
-        data-module="arsenal"
-        aria-label="Ver armas e itens"
+        data-module="loja"
+        aria-label="Ver a loja"
       >
-        <div class="menu-card-icon" aria-hidden="true">🗡</div>
+        <div class="menu-card-icon" aria-hidden="true">❖</div>
         <div class="menu-card-content">
           <div class="menu-card-title">Arsenal</div>
-          <div class="menu-card-desc">Armas, armaduras e equipamentos</div>
+          <div class="menu-card-desc">Armas, itens, veiculos e etc.</div>
+        </div>
+        <span class="menu-card-arrow" aria-hidden="true">›</span>
+      </button>
+
+      <button
+        class="menu-card anim-float-up delay-5"
+        data-module="bestiario"
+        aria-label="Consultar o bestiário"
+      >
+        <div class="menu-card-icon" aria-hidden="true">◉</div>
+        <div class="menu-card-content">
+          <div class="menu-card-title">Bestiário</div>
+          <div class="menu-card-desc">Seres, criaturas e drops</div>
         </div>
         <span class="menu-card-arrow" aria-hidden="true">›</span>
       </button>
 
     </nav>
 
-    <!-- Rodapé -->
-    <footer class="menu-footer">
-      <p class="menu-footer-text">
-        Jardim &ensp;·&ensp; Árvore da Aethel &ensp;·&ensp; Realidade 0
-      </p>
-    </footer>
-
   </main>
 
-  <script src="src/menu/menu.js"></script>
+  <script type="module" src="src/menu/menu.js"></script>
 </body>
 </html>

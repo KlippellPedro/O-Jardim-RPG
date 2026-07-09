@@ -1,7 +1,9 @@
 /* ─────────────────────────────────────────────────────────
-   O Jardim das Árvores — Menu
-   Animação: 10 Árvores/deidades crescendo a partir do eclipse
+   O Jardim RPG — Menu
+   Animação: 10 Árvores/deidades crescendo a partir do centro
    ───────────────────────────────────────────────────────── */
+
+import { storage } from '../core/storage.js';
 
 // ── Constantes ────────────────────────────────────────────
 
@@ -37,8 +39,10 @@ function initCosmicTree() {
   function build() {
     segments = [];
     CX = W / 2;
-    CY = H * 0.37;
-    const baseLen = Math.min(W, H) * 0.165;
+    // Tronco nasce rente à borda inferior — os galhos se abrem pra cima,
+    // atravessando o título. A árvore é o cenário, não um detalhe.
+    CY = H * 0.98;
+    const baseLen = H * 0.7;
 
     // 10 Árvores espalhadas num arco de 270°, centrado no topo
     const ARC   = Math.PI * 1.5;
@@ -71,8 +75,10 @@ function initCosmicTree() {
     const t0 = waveStart;
     const t1 = waveStart + WAVE_DUR;
 
-    const alpha = Math.max(0.02, 0.30 - depth * 0.045);
-    const width = Math.max(0.15, 1.6 - depth * 0.27);
+    // Linhas finas e esmaecidas — um esboço mágico atmosférico, não uma
+    // ilustração cheia. O pulso (fase 2) oscila isso entre ~15% e ~25%.
+    const alpha = Math.max(0.02, 0.26 - depth * 0.032);
+    const width = Math.max(0.15, 1.4 - depth * 0.22);
 
     segments.push({
       x1: x, y1: y, x2: ex, y2: ey,
@@ -236,29 +242,6 @@ function initCosmicTree() {
   requestAnimationFrame(drawGrowth);
 }
 
-// ── Parallax suave no eclipse ──────────────────────────────
-
-function initParallax() {
-  const orb = document.querySelector('.eclipse-orb');
-  if (!orb) return;
-
-  let tx = 0, ty = 0, cx = 0, cy = 0;
-
-  document.addEventListener('mousemove', (e) => {
-    const mx = window.innerWidth  / 2;
-    const my = window.innerHeight / 2;
-    tx = (e.clientX - mx) / mx * 16;
-    ty = (e.clientY - my) / my * 11;
-  });
-
-  (function tick() {
-    cx += (tx - cx) * 0.055;
-    cy += (ty - cy) * 0.055;
-    orb.style.transform = `translate(calc(-50% + ${cx.toFixed(2)}px), calc(-62% + ${cy.toFixed(2)}px))`;
-    requestAnimationFrame(tick);
-  })();
-}
-
 // ── Cards ──────────────────────────────────────────────────
 
 function initCards() {
@@ -267,8 +250,57 @@ function initCards() {
       const mod = card.dataset.module;
       if (!mod) return;
       card.style.transform = 'translateX(6px) scale(0.98)';
-      setTimeout(() => { window.location.href = `${mod}.html`; }, 180);
+      setTimeout(() => { window.location.href = `templates/${mod}.html`; }, 180);
     });
+  });
+}
+
+// ── Configurações ────────────────────────────────────────────
+
+function initSettings() {
+  const btn   = document.getElementById('settings-btn');
+  const panel = document.getElementById('settings-panel');
+  if (!btn || !panel) return;
+
+  function open() {
+    panel.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+  }
+
+  function close() {
+    panel.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    panel.hidden ? open() : close();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!panel.hidden && !panel.contains(e.target)) close();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+  });
+
+  const exportBtn   = document.getElementById('settings-export');
+  const importBtn   = document.getElementById('settings-import');
+  const importInput = document.getElementById('settings-import-input');
+
+  exportBtn.addEventListener('click', () => storage.exportar('jardim-rpg-ficha'));
+  importBtn.addEventListener('click', () => importInput.click());
+
+  importInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      await storage.importar(file);
+      window.location.reload();
+    } catch {
+      alert('Não foi possível importar o arquivo. Verifique se é um .json exportado por este sistema.');
+    }
   });
 }
 
@@ -276,6 +308,6 @@ function initCards() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initCosmicTree();
-  initParallax();
   initCards();
+  initSettings();
 });

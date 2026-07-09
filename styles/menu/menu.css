@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────
-   Menu Hub — O Último Eclipse
+   Menu Hub — O Jardim RPG
    ───────────────────────────────────────────── */
 
 /* Canvas de fundo */
@@ -16,70 +16,17 @@
   );
 }
 
-/* Eclipse visual */
-.eclipse-orb {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -65%);
-  width: min(600px, 80vw);
-  height: min(600px, 80vw);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.eclipse-orb::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 35% 35%,
-    transparent 38%,
-    rgba(201, 162, 39, 0.12) 45%,
-    rgba(124, 69, 204, 0.18) 55%,
-    rgba(138, 26, 42, 0.10) 65%,
-    transparent 75%
-  );
-  animation: eclipse-breathe 8s var(--ease-smooth) infinite;
-}
-
-.eclipse-orb::after {
-  content: '';
-  position: absolute;
-  inset: 8%;
-  border-radius: 50%;
-  background: var(--void);
-  box-shadow:
-    0 0 80px rgba(201, 162, 39, 0.15),
-    0 0 160px rgba(124, 69, 204, 0.10),
-    inset 0 0 60px rgba(201, 162, 39, 0.08);
-}
-
-/* Anel dourado */
-.eclipse-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  background: linear-gradient(var(--void), var(--void)) padding-box,
-              conic-gradient(
-                from 180deg,
-                rgba(201,162,39,0.8) 0%,
-                rgba(201,162,39,0.2) 25%,
-                transparent 40%,
-                rgba(201,162,39,0.1) 60%,
-                rgba(201,162,39,0.7) 80%,
-                rgba(201,162,39,0.8) 100%
-              ) border-box;
-  animation: rune-spin 40s linear infinite;
-}
-
 /* Canvas de estrelas */
 #stars-canvas {
   position: absolute;
   inset: 0;
   opacity: 0.7;
+}
+
+/* Árvore Cósmica — as 10 Árvores/deidades crescendo a partir do centro */
+#tree-canvas {
+  position: absolute;
+  inset: 0;
 }
 
 /* Layout principal */
@@ -88,7 +35,7 @@
   z-index: 1;
   min-height: 100dvh;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr;
   padding: var(--space-8) var(--space-6);
   gap: var(--space-8);
 }
@@ -97,17 +44,6 @@
 .menu-header {
   text-align: center;
   padding-top: var(--space-12);
-}
-
-.menu-eyebrow {
-  font-family: var(--font-ui);
-  font-size: var(--text-xs);
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0.7;
-  margin-bottom: var(--space-3);
-  animation: float-in-down var(--dur-slow) var(--ease-out) 200ms both;
 }
 
 .menu-title {
@@ -123,12 +59,12 @@
   animation: float-in-down var(--dur-slow) var(--ease-out) 300ms both;
 }
 
-.menu-title span {
+.menu-title-accent {
   color: var(--gold);
   position: relative;
 }
 
-.menu-title span::after {
+.menu-title-accent::after {
   content: '';
   position: absolute;
   bottom: -4px;
@@ -138,13 +74,17 @@
   animation: reveal-line 1.2s var(--ease-out) 900ms both;
 }
 
-.menu-subtitle {
-  margin-top: var(--space-4);
-  font-size: var(--text-sm);
-  color: var(--dim);
-  letter-spacing: 0.15em;
+.menu-title-tag {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-lg);
+  letter-spacing: 0.4em;
   text-transform: uppercase;
-  animation: float-in-down var(--dur-slow) var(--ease-out) 450ms both;
+  color: var(--star);
+  opacity: 0.75;
+  animation: fade-in var(--dur-slow) var(--ease-out) 700ms both;
 }
 
 /* Separador ornamental */
@@ -153,7 +93,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-3);
-  margin-top: var(--space-6);
+  margin-top: var(--space-8);
   animation: fade-in var(--dur-slow) var(--ease-out) 600ms both;
 }
 
@@ -316,29 +256,144 @@
 }
 
 /* Variantes de cor por módulo */
-.menu-card[data-module="ficha"]   { --card-accent: var(--gold);    }
-.menu-card[data-module="mundo"]   { --card-accent: var(--arkania); }
-.menu-card[data-module="arsenal"] { --card-accent: var(--blood);   }
+.menu-card[data-module="ficha"]     { --card-accent: var(--gold);    }
+.menu-card[data-module="mundo"]     { --card-accent: var(--arkania); }
+.menu-card[data-module="loja"]      { --card-accent: var(--blood);   }
+.menu-card[data-module="bestiario"] { --card-accent: var(--moss);    }
 
-.menu-card[data-module="ficha"]:hover   { box-shadow: var(--shadow-card), 0 0 30px rgba(201,162,39,0.08); }
-.menu-card[data-module="mundo"]:hover   { box-shadow: var(--shadow-card), 0 0 30px rgba(124,69,204,0.10); }
-.menu-card[data-module="arsenal"]:hover { box-shadow: var(--shadow-card), 0 0 30px rgba(139,26,42,0.10); }
+.menu-card[data-module="ficha"]:hover     { box-shadow: var(--shadow-card), 0 0 30px rgba(201,162,39,0.08); }
+.menu-card[data-module="mundo"]:hover     { box-shadow: var(--shadow-card), 0 0 30px rgba(124,69,204,0.10); }
+.menu-card[data-module="loja"]:hover      { box-shadow: var(--shadow-card), 0 0 30px rgba(139,26,42,0.10); }
+.menu-card[data-module="bestiario"]:hover { box-shadow: var(--shadow-card), 0 0 30px rgba(122,155,90,0.10); }
 
-.menu-card[data-module="mundo"]:hover .menu-card-icon  { background: rgba(124,69,204,0.08); border-color: var(--arkania); box-shadow: var(--shadow-arkania); }
-.menu-card[data-module="arsenal"]:hover .menu-card-icon { background: rgba(139,26,42,0.08); border-color: var(--blood); }
+.menu-card[data-module="mundo"]:hover .menu-card-icon     { background: rgba(124,69,204,0.08); border-color: var(--arkania); box-shadow: var(--shadow-arkania); }
+.menu-card[data-module="loja"]:hover .menu-card-icon      { background: rgba(139,26,42,0.08); border-color: var(--blood); }
+.menu-card[data-module="bestiario"]:hover .menu-card-icon { background: rgba(122,155,90,0.08); border-color: var(--moss); box-shadow: 0 0 16px rgba(122,155,90,0.3); }
 
-/* Footer */
-.menu-footer {
-  text-align: center;
-  padding-bottom: var(--space-8);
-  animation: fade-in 1s var(--ease-out) 1.2s both;
+/* Botão de configurações */
+.menu-settings-btn {
+  position: fixed;
+  top: var(--space-6);
+  right: var(--space-6);
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--invisible);
+  color: var(--dim);
+  font-size: 18px;
+  line-height: 1;
+  transition:
+    color        var(--dur-base) var(--ease-smooth),
+    border-color var(--dur-base) var(--ease-smooth),
+    background   var(--dur-base) var(--ease-smooth),
+    transform    var(--dur-slow) var(--ease-spring);
+  animation: fade-in var(--dur-slow) var(--ease-out) 900ms both;
 }
 
-.menu-footer-text {
-  font-size: var(--text-xs);
-  color: var(--dim);
-  letter-spacing: 0.15em;
+.menu-settings-btn:hover {
+  color: var(--gold);
+  border-color: var(--gold-dim);
+  background: rgba(201, 162, 39, 0.06);
+}
+
+.menu-settings-btn[aria-expanded="true"] {
+  color: var(--gold);
+  border-color: var(--gold-dim);
+  transform: rotate(45deg);
+}
+
+/* Painel de configurações */
+.menu-settings-panel {
+  position: fixed;
+  top: calc(var(--space-6) + 48px);
+  right: var(--space-6);
+  z-index: 5;
+  width: min(300px, calc(100vw - var(--space-6) * 2));
+  display: flex;
+  flex-direction: column;
+  background: var(--shadow);
+  border: 1px solid var(--invisible);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-deep);
+  padding: var(--space-2);
+  animation: float-in-down var(--dur-base) var(--ease-out) both;
+}
+
+.menu-settings-panel[hidden] {
+  display: none;
+}
+
+.settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+}
+
+.settings-item + .settings-item {
+  border-top: 1px solid var(--invisible);
+}
+
+.settings-item--wip {
+  opacity: 0.5;
+}
+
+.settings-item--actions {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-2);
+}
+
+.settings-item-label {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--moon);
+  letter-spacing: 0.02em;
+}
+
+.settings-item-badge {
+  flex-shrink: 0;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: var(--dim);
+  background: var(--surface);
+  border: 1px solid var(--invisible);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.settings-item-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.settings-action {
+  flex: 1;
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--star);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--invisible);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  text-align: center;
+  transition: color var(--dur-base) var(--ease-smooth), border-color var(--dur-base) var(--ease-smooth);
+}
+
+.settings-action:hover {
+  color: var(--gold-light);
+  border-color: var(--gold-dim);
 }
 
 /* Estado: módulo não disponível ainda */

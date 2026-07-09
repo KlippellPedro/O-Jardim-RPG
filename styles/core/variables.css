@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────
-   O ÚLTIMO ECLIPSE — Design Tokens
+   O JARDIM RPG — Design Tokens
    Paleta: escuridão cósmica + ouro lunar + roxo Arkania
    ───────────────────────────────────────────── */
 
@@ -25,6 +25,8 @@
   --arkania-glow:  #9d6ef5;   /* Roxo brilhante — brilho mágico */
   --blood:         #8b1a2a;   /* Vermelho sangue */
   --frost:         #4a9ebb;   /* Azul gelo — elementos de água */
+  --neon:          #35d8ec;   /* Azul-neon A.X.I.S — Fluxos & Magias */
+  --moss:          #7a9b5a;   /* Verde-musgo — Bestiário */
 
   /* Eclipse — o fenômeno central */
   --eclipse-core:  rgba(201, 162, 39, 0.08);

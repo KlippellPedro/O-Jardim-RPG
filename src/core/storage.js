@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'ultimo-eclipse';
+const STORAGE_KEY = 'jardim-rpg';
 const BACKUP_INTERVAL_MS = 10 * 60 * 1000;
 
 export const storage = {
@@ -19,7 +19,7 @@ export const storage = {
     localStorage.removeItem(`${STORAGE_KEY}:${key}`);
   },
 
-  exportar(filename = 'eclipse-save') {
+  exportar(filename = 'jardim-rpg-save') {
     const keys = Object.keys(localStorage).filter(k => k.startsWith(STORAGE_KEY));
     const dados = {};
     keys.forEach(k => {
