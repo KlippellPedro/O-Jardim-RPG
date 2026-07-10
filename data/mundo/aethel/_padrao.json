@@ -1,0 +1,49 @@
+{
+  "descricao": "Padrão de pastas pra organizar o conteúdo de cada Árvore, refletindo a ordem real em que os players descobrem as coisas em campanha. Cada arquivo é uma revelação separada — importável no Mundo (botão 'Importar conteúdo') na hora certa da história, não tudo de uma vez.",
+
+  "estrutura_de_pastas": "data/arvores/{id-da-arvore}/",
+
+  "arquivos_por_arvore": [
+    {
+      "arquivo": "deidade.json",
+      "tipo": "deidade",
+      "quantidade": "sempre 1",
+      "quando_revelar": "Quando os players descobrem quem é a deidade por trás da Árvore — nome, epíteto, domínio, status."
+    },
+    {
+      "arquivo": "fluxo.json",
+      "tipo": "fluxo",
+      "quantidade": "sempre 1",
+      "quando_revelar": "Quando os players descobrem o Fluxo que a Árvore rege. Costuma ser mais abstrato/técnico que a Deidade — geralmente revelado depois."
+    },
+    {
+      "arquivo": "galho-{slug}.json",
+      "tipo": "galho (ou realidade, são sinônimos)",
+      "quantidade": "1 ou mais — cada Árvore pode ter vários Galhos",
+      "quando_revelar": "Quando os players chegam a esse Galho específico. conteudo.arvore deve apontar pro id da Árvore-mãe."
+    },
+    {
+      "arquivo": "dimensao-{slug}.json",
+      "tipo": "dimensao",
+      "quantidade": "1 ou mais por Galho",
+      "quando_revelar": "Quando os players chegam a essa Dimensão dentro de um Galho já descoberto. conteudo.galho deve apontar pro id do Galho-mãe."
+    },
+    {
+      "arquivo": "local-{slug}.json",
+      "tipo": "reino ou mundo",
+      "quantidade": "1 ou mais por Dimensão",
+      "quando_revelar": "Quando os players chegam a esse Reino/Mundo dentro de uma Dimensão já descoberta. conteudo.dimensao deve apontar pro id da Dimensão-mãe. Ainda não existe nenhum exemplo desse nível em nenhuma Árvore — ver data/arvores/aethel/dimensao-padrao.json → _proximo_passo."
+    }
+  ],
+
+  "campos_com_underscore": "Qualquer campo começando com '_' (ex.: '_origem', '_quando_revelar', '_pronto_para_importar') é anotação minha pra você — não faz parte do schema de import (tipo/id/titulo/conteudo). Se importar o arquivo do jeito que está, o sistema simplesmente ignora esses campos, sem problema.",
+
+  "arvore_de_referencia_completa": "data/arvores/aethel/ — primeira Árvore organizada nesse padrão, do início (Deidade) até uma Dimensão. Use como modelo pras próximas.",
+
+  "arvores_pendentes": [
+    "ousias", "keryx", "haemus", "ignis", "moros",
+    "aperion", "chronus", "erebus", "mulher-carmesim"
+  ],
+
+  "nota_mulher_carmesim": "A Árvore da Mulher Carmesim é um caso especial — ela só tem 1 Galho (Arkarin), não vários. A pasta dela ainda segue o mesmo padrão (deidade.json, fluxo.json, galho-arkarin.json, ...), só não vai ter mais de um arquivo 'galho-*.json'."
+}

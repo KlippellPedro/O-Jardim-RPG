@@ -258,17 +258,17 @@
 /* Variantes de cor por módulo */
 .menu-card[data-module="ficha"]     { --card-accent: var(--gold);    }
 .menu-card[data-module="mundo"]     { --card-accent: var(--arkania); }
+.menu-card[data-module="regras"]    { --card-accent: var(--frost);   }
 .menu-card[data-module="loja"]      { --card-accent: var(--blood);   }
-.menu-card[data-module="bestiario"] { --card-accent: var(--moss);    }
 
 .menu-card[data-module="ficha"]:hover     { box-shadow: var(--shadow-card), 0 0 30px rgba(201,162,39,0.08); }
 .menu-card[data-module="mundo"]:hover     { box-shadow: var(--shadow-card), 0 0 30px rgba(124,69,204,0.10); }
+.menu-card[data-module="regras"]:hover    { box-shadow: var(--shadow-card), 0 0 30px rgba(74,158,187,0.10); }
 .menu-card[data-module="loja"]:hover      { box-shadow: var(--shadow-card), 0 0 30px rgba(139,26,42,0.10); }
-.menu-card[data-module="bestiario"]:hover { box-shadow: var(--shadow-card), 0 0 30px rgba(122,155,90,0.10); }
 
 .menu-card[data-module="mundo"]:hover .menu-card-icon     { background: rgba(124,69,204,0.08); border-color: var(--arkania); box-shadow: var(--shadow-arkania); }
+.menu-card[data-module="regras"]:hover .menu-card-icon    { background: rgba(74,158,187,0.08); border-color: var(--frost); box-shadow: 0 0 16px rgba(74,158,187,0.3); }
 .menu-card[data-module="loja"]:hover .menu-card-icon      { background: rgba(139,26,42,0.08); border-color: var(--blood); }
-.menu-card[data-module="bestiario"]:hover .menu-card-icon { background: rgba(122,155,90,0.08); border-color: var(--moss); box-shadow: 0 0 16px rgba(122,155,90,0.3); }
 
 /* Botão de configurações */
 .menu-settings-btn {

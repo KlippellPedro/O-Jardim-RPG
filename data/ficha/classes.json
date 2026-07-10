@@ -1,0 +1,314 @@
+[
+  {
+    "id": "guerreiro",
+    "tipo": "classe",
+    "titulo": "Guerreiro",
+    "categoria": "padrao",
+    "arvore": null,
+    "vida": { "base": 5, "atributo": "constituicao" },
+    "forca_vital": { "base": 2, "atributo": null },
+    "progressao": [
+      { "nivel": 1,  "ganhos": ["Implacável", "Grau de perícia"] },
+      { "nivel": 2,  "ganhos": ["Poder de guerreiro"] },
+      { "nivel": 3,  "ganhos": ["Batalhão"] },
+      { "nivel": 4,  "ganhos": ["Até a Morte"] },
+      { "nivel": 5,  "ganhos": ["Implacável (2)"] },
+      { "nivel": 6,  "ganhos": ["Poder de guerreiro", "Grau de perícia"] },
+      { "nivel": 7,  "ganhos": ["Até a Morte"] },
+      { "nivel": 8,  "ganhos": ["Batalhão (2)"] },
+      { "nivel": 9,  "ganhos": ["Poder de guerreiro"] },
+      { "nivel": 10, "ganhos": ["Implacável (3)"] },
+      { "nivel": 11, "ganhos": ["Poder de guerreiro", "Grau de perícia"] },
+      { "nivel": 12, "ganhos": ["Até a Morte"] },
+      { "nivel": 13, "ganhos": ["Poder de guerreiro"] },
+      { "nivel": 14, "ganhos": ["Batalhão (3)"] },
+      { "nivel": 15, "ganhos": ["Implacável (4)", "Arsenal Especial"] },
+      { "nivel": 16, "ganhos": ["Poder de guerreiro"] },
+      { "nivel": 17, "ganhos": ["Poder de guerreiro", "Grau de perícia"] },
+      { "nivel": 18, "ganhos": ["Até a Morte"] },
+      { "nivel": 19, "ganhos": ["Poder de guerreiro"] },
+      { "nivel": 20, "ganhos": ["Implacável (5)", "[PENDENTE] Batalhão (??), ... — progressão de N20 incompleta no PDF original"] }
+    ],
+    "habilidades": {
+      "implacavel": {
+        "descricao": "Habilidade principal do Guerreiro. Evolui em 5 estágios (N1, N5, N10, N15, N20) com progressão narrativa e mecânica em cada um.",
+        "niveis": {
+          "1":  "[PENDENTE — texto do N1 Implacável não registrado neste documento. Ler PDF.]",
+          "5":  "[PENDENTE — texto do N5 Implacável não registrado neste documento. Ler PDF.]",
+          "10": "[PENDENTE — texto do N10 Implacável não registrado neste documento. Ler PDF.]",
+          "15": "[PENDENTE — texto do N15 Implacável não registrado neste documento. Ler PDF.]",
+          "20": "[PENDENTE — texto do N20 Implacável não registrado neste documento. Ler PDF.]"
+        }
+      },
+      "batalhao": {
+        "descricao": "[PENDENTE — descrição da habilidade Batalhão não registrada neste documento. Ler PDF.]"
+      },
+      "arsenal_especial": {
+        "descricao": "[PENDENTE — descrição de Arsenal Especial não registrada neste documento. Ler PDF.]"
+      },
+      "ate_a_morte": {
+        "descricao": "[PENDENTE — descrição de 'Até a Morte' não registrada neste documento. Ler PDF.]"
+      },
+      "grau_de_pericia": {
+        "descricao": "[PENDENTE — 'Grau de perícia' aparece em várias progressões de classe, mas a definição formal ainda não foi escrita por Pedro.]"
+      }
+    },
+    "poderes": [
+      { "nome": "Grito de Batalha",   "custo_fv": 4,  "descricao": "[PENDENTE — ler PDF]", "pre_requisito": null },
+      { "nome": "Comando de Guerra",  "custo_fv": 3,  "descricao": "[PENDENTE — ler PDF]", "pre_requisito": null },
+      { "nome": "Alvo do Batalhão",   "custo_fv": 6,  "descricao": "[PENDENTE — ler PDF]", "pre_requisito": null },
+      { "nome": "Correndo",           "custo_fv": 2,  "descricao": "[PENDENTE — ler PDF]", "pre_requisito": null },
+      { "nome": "Armas do Arsenal",   "custo_fv": 0,  "descricao": "[PENDENTE — ler PDF]", "pre_requisito": null },
+      { "nome": "Escudos do Arsenal", "custo_fv": 0,  "descricao": "[PENDENTE — ler PDF]", "pre_requisito": null },
+      { "nome": "Armaduras do Arsenal","custo_fv": 0, "descricao": "[PENDENTE — ler PDF]", "pre_requisito": null },
+      { "nome": "Armas de Qualidade", "custo_fv": 0,  "descricao": "[PENDENTE — ler PDF]", "pre_requisito": null },
+      { "nome": "Sério isso?",        "custo_fv": 0,  "descricao": "[PENDENTE — ler PDF]", "pre_requisito": null },
+      { "nome": "Reação Foda",        "custo_fv": 0,  "descricao": "[PENDENTE — ler PDF]", "pre_requisito": "N10 Guerreiro" }
+    ]
+  },
+
+  {
+    "id": "piloto",
+    "tipo": "classe",
+    "titulo": "Piloto",
+    "categoria": "padrao",
+    "arvore": null,
+    "pendente": true,
+    "nota_pendente": "PDF de progressão existe mas não foi lido em detalhe neste documento."
+  },
+
+  {
+    "id": "ninja",
+    "tipo": "classe",
+    "titulo": "Ninja",
+    "categoria": "padrao",
+    "arvore": null,
+    "pendente": true,
+    "nota_pendente": "PDF de progressão existe mas não foi lido em detalhe neste documento."
+  },
+
+  {
+    "id": "pop-star",
+    "tipo": "classe",
+    "titulo": "Pop Star",
+    "categoria": "padrao",
+    "arvore": null,
+    "pendente": true,
+    "nota_pendente": "PDF de progressão existe mas não foi lido em detalhe neste documento."
+  },
+
+  {
+    "id": "espadachim",
+    "tipo": "classe",
+    "titulo": "Espadachim",
+    "categoria": "padrao",
+    "arvore": null,
+    "pendente": true,
+    "nota_pendente": "PDF de progressão existe mas não foi lido em detalhe neste documento."
+  },
+
+  {
+    "id": "lutador",
+    "tipo": "classe",
+    "titulo": "Lutador",
+    "categoria": "padrao",
+    "arvore": null,
+    "pendente": true,
+    "nota_pendente": "PDF de progressão existe mas não foi lido em detalhe neste documento."
+  },
+
+  {
+    "id": "atirador",
+    "tipo": "classe",
+    "titulo": "Atirador",
+    "categoria": "padrao",
+    "arvore": null,
+    "pendente": true,
+    "nota_pendente": "PDF de progressão existe mas não foi lido em detalhe neste documento."
+  },
+
+  {
+    "id": "medico",
+    "tipo": "classe",
+    "titulo": "Médico",
+    "categoria": "padrao",
+    "arvore": null,
+    "pendente": true,
+    "nota_pendente": "PDF de progressão existe mas não foi lido em detalhe neste documento."
+  },
+
+  {
+    "id": "guardiao",
+    "tipo": "classe",
+    "titulo": "Guardião",
+    "categoria": "padrao",
+    "arvore": null,
+    "pendente": true,
+    "nota_pendente": "PDF de progressão existe mas não foi lido em detalhe neste documento."
+  },
+
+  {
+    "id": "cacador",
+    "tipo": "classe",
+    "titulo": "Caçador",
+    "categoria": "padrao",
+    "arvore": null,
+    "pendente": true,
+    "nota_pendente": "PDF de progressão existe mas não foi lido em detalhe neste documento."
+  },
+
+  {
+    "id": "engenheiro",
+    "tipo": "classe",
+    "titulo": "Engenheiro",
+    "categoria": "padrao",
+    "arvore": null,
+    "pendente": true,
+    "nota_pendente": "PDF de progressão existe mas não foi lido em detalhe neste documento."
+  },
+
+  {
+    "id": "alquimista",
+    "tipo": "classe",
+    "titulo": "Alquimista",
+    "categoria": "padrao",
+    "arvore": null,
+    "pendente": true,
+    "nota_pendente": "Pedro ainda não terminou de escrever esta classe. Não é lacuna de leitura — é trabalho em andamento."
+  },
+
+  {
+    "id": "comerciante",
+    "tipo": "classe",
+    "titulo": "Comerciante",
+    "categoria": "padrao",
+    "arvore": null,
+    "pendente": true,
+    "nota_pendente": "Pedro ainda não terminou de escrever esta classe. Não é lacuna de leitura — é trabalho em andamento."
+  },
+
+  {
+    "id": "campeao-dimensional",
+    "tipo": "classe",
+    "titulo": "Campeão Dimensional",
+    "categoria": "esquecida",
+    "arvore": null,
+    "nao_conta_limite": true,
+    "pendente": true,
+    "nota_pendente": "Classe esquecida — não conta no limite de 2 classes. PDF não lido em detalhe."
+  },
+
+  {
+    "id": "pirata-amaldicoado",
+    "tipo": "classe",
+    "titulo": "Pirata Amaldiçoado",
+    "categoria": "esquecida",
+    "arvore": null,
+    "nao_conta_limite": true,
+    "pendente": true,
+    "nota_pendente": "Classe esquecida — não conta no limite de 2 classes. PDF não lido em detalhe."
+  },
+
+  {
+    "id": "cartista-arcano",
+    "tipo": "classe",
+    "titulo": "Cartista Arcano",
+    "categoria": "esquecida",
+    "arvore": null,
+    "nao_conta_limite": true,
+    "pendente": true,
+    "nota_pendente": "Classe esquecida — não conta no limite de 2 classes. PDF não lido em detalhe."
+  },
+
+  {
+    "id": "guia-dimensional",
+    "tipo": "classe",
+    "titulo": "Guia Dimensional",
+    "categoria": "esquecida",
+    "arvore": null,
+    "nao_conta_limite": true,
+    "pendente": true,
+    "nota_pendente": "Classe esquecida — não conta no limite de 2 classes. PDF não lido em detalhe."
+  },
+
+  {
+    "id": "cacador-de-entidades",
+    "tipo": "classe",
+    "titulo": "Caçador de Entidades",
+    "categoria": "esquecida",
+    "arvore": null,
+    "nao_conta_limite": true,
+    "pendente": true,
+    "nota_pendente": "Classe esquecida — não conta no limite de 2 classes. PDF não lido em detalhe."
+  },
+
+  {
+    "id": "escritor-de-contos",
+    "tipo": "classe",
+    "titulo": "Escritor de Contos",
+    "categoria": "esquecida",
+    "arvore": null,
+    "nao_conta_limite": true,
+    "pendente": true,
+    "nota_pendente": "Classe esquecida — não conta no limite de 2 classes. PDF não lido em detalhe."
+  },
+
+  {
+    "id": "invocador",
+    "tipo": "classe",
+    "titulo": "Invocador",
+    "categoria": "esquecida",
+    "arvore": null,
+    "nao_conta_limite": true,
+    "pendente": true,
+    "nota_pendente": "Classe esquecida — não conta no limite de 2 classes. PDF não lido em detalhe."
+  },
+
+  {
+    "id": "viajante-classe",
+    "tipo": "classe",
+    "titulo": "Viajante *",
+    "categoria": "esquecida",
+    "arvore": null,
+    "nao_conta_limite": true,
+    "asterisco": true,
+    "pendente": true,
+    "nota_pendente": "Classe esquecida com asterisco (*). Significado do asterisco ainda não definido no PDF — pode indicar que não conta no limite de classes, ou algo mais específico. PDF não lido em detalhe."
+  },
+
+  {
+    "id": "elementarista",
+    "tipo": "classe",
+    "titulo": "Elementarista *",
+    "categoria": "esquecida",
+    "arvore": null,
+    "nao_conta_limite": true,
+    "asterisco": true,
+    "pendente": true,
+    "nota_pendente": "Classe esquecida com asterisco (*). Significado do asterisco ainda não definido. PDF não lido em detalhe."
+  },
+
+  {
+    "id": "decodificador",
+    "tipo": "classe",
+    "titulo": "Decodificador *",
+    "categoria": "esquecida",
+    "arvore": null,
+    "nao_conta_limite": true,
+    "asterisco": true,
+    "pendente": true,
+    "nota_pendente": "Classe esquecida com asterisco (*). Significado do asterisco ainda não definido. PDF não lido em detalhe."
+  },
+
+  {
+    "id": "codificador",
+    "tipo": "classe",
+    "titulo": "Codificador *",
+    "categoria": "esquecida",
+    "arvore": null,
+    "nao_conta_limite": true,
+    "asterisco": true,
+    "pendente": true,
+    "nota_pendente": "Classe esquecida com asterisco (*). Significado do asterisco ainda não definido. PDF não lido em detalhe."
+  }
+]

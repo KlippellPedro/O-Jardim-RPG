@@ -1,0 +1,306 @@
+{
+  "descricao": "Sistema de bônus adicionais escolhidos ao longo da progressão do personagem. Humanos e todas as raças esquecidas começam com 1 Legado de Ascensão.",
+  "onde_aparece": "Não fica na tela de Regras — é mostrado na Ficha, na parte de Poderes, no momento em que o player adiciona um Legado.",
+  "total_pdfs": 7,
+  "nota": "6 dos 7 PDFs (Legados 2 a 7) foram lidos e catalogados nesta sessão. O PDF do Legado 1 é um arquivo de 98 páginas / 9.5MB que o ambiente de leitura não conseguiu processar (falta a dependência poppler-utils/pdftoppm para PDFs grandes). Precisa ser lido depois, manualmente ou com o ambiente corrigido.",
+
+  "legados": [
+    {
+      "id": "to-ficando-bom",
+      "titulo": "Tô ficando bom",
+      "descricao": "Recebe +1 no modificador de um atributo à escolha (Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma).",
+      "pre_requisitos": [],
+      "fonte": "Legado 2 (lido)"
+    },
+    {
+      "id": "esquiva",
+      "titulo": "Esquiva",
+      "descricao": "Você aprimora significativamente sua agilidade, recebendo +2 em Defesa e Reflexos.",
+      "pre_requisitos": [
+        { "atributo": "destreza", "valor_minimo": 14 }
+      ],
+      "fonte": "Legado 2 (lido)"
+    },
+    {
+      "id": "leitura-labial",
+      "titulo": "Leitura Labial",
+      "descricao": "Permite interpretar falas de pessoas a uma certa distância, desde que consiga ver a boca do ser.",
+      "pre_requisitos": [],
+      "fonte": "Legado 2 (lido)"
+    },
+    {
+      "id": "maos-leves",
+      "titulo": "Mãos Leves",
+      "descricao": "Você ganha a capacidade de sacar qualquer item como ação livre.",
+      "pre_requisitos": [
+        { "atributo": "destreza", "valor_minimo": 16 }
+      ],
+      "fonte": "Legado 2 (lido)"
+    },
+    {
+      "id": "artista-marcial",
+      "titulo": "Artista Marcial",
+      "descricao": "Você recebe proficiência em armas ou armaduras marciais; caso escolha uma segunda vez, recebe a outra que não foi escolhida.",
+      "pre_requisitos": [
+        { "ou": [
+          { "pericia": "luta",    "nivel": "Mestre" },
+          { "pericia": "pontaria","nivel": "Mestre" }
+        ]},
+        { "nivel_personagem": 7 }
+      ],
+      "fonte": "Legado 2 (lido)"
+    },
+    {
+      "id": "kit-diverso",
+      "titulo": "Kit Diverso",
+      "descricao": "Você pode escolher um kit de qualquer coisa, o qual irá renovar caso gaste uma ação de descanso — mas ele terá +1 espaço no inventário.",
+      "pre_requisitos": [],
+      "fonte": "Legado 2 (lido)"
+    },
+
+    {
+      "id": "nao-e-tao-pesado",
+      "titulo": "Não é Tão Pesado",
+      "descricao": "Reduz a penalidade de armadura ou escudo em 1. Escolhendo uma segunda vez, a penalidade reduz em 3; escolhendo uma terceira vez, conta para ambos.",
+      "pre_requisitos": [],
+      "fonte": "Legado 3 (lido)"
+    },
+    {
+      "id": "correntes",
+      "titulo": "Correntes",
+      "descricao": "Você pode arremessar suas armas e puxá-las de volta no mesmo turno como ação de movimento (o dano é o mesmo).",
+      "pre_requisitos": [],
+      "fonte": "Legado 3 (lido)"
+    },
+    {
+      "id": "bala-agil",
+      "titulo": "Bala Ágil",
+      "descricao": "Você adiciona seu modificador de Destreza no dano de armas à distância.",
+      "pre_requisitos": [],
+      "fonte": "Legado 3 (lido)"
+    },
+    {
+      "id": "sempre-no-x1",
+      "titulo": "Sempre no x1",
+      "descricao": "Sempre que estiver em 1x1, você causa mais dano no ser (teste de Furtividade).",
+      "pre_requisitos": [],
+      "fonte": "Legado 3 (lido)"
+    },
+    {
+      "id": "magico-interrogacao",
+      "titulo": "Mágico?",
+      "descricao": "Você recebe vantagem para resistir ou conjurar magias.",
+      "pre_requisitos": [],
+      "fonte": "Legado 3 (lido)"
+    },
+    {
+      "id": "magico-exclamacao",
+      "titulo": "Mágico!",
+      "descricao": "Você se concentra 1 turno a menos para realizar magias.",
+      "pre_requisitos": [],
+      "fonte": "Legado 3 (lido)"
+    },
+
+    {
+      "id": "sem-chance",
+      "titulo": "Sem Chance",
+      "descricao": "Você se torna incapaz de tirar desastres em seus dados.",
+      "pre_requisitos": [],
+      "fonte": "Legado 4 (lido)"
+    },
+    {
+      "id": "rapidinho",
+      "titulo": "Rapidinho",
+      "descricao": "Aumenta seu deslocamento em 2m. Escolhendo uma segunda vez, aumenta em 6m adicionais.",
+      "pre_requisitos": [
+        { "atributo": "destreza", "valor_minimo": 16 }
+      ],
+      "fonte": "Legado 4 (lido)"
+    },
+    {
+      "id": "sou-bom-nisso",
+      "titulo": "Sou Bom Nisso",
+      "descricao": "Você recebe +2 ou vantagem em Luta ou Pontaria.",
+      "pre_requisitos": [],
+      "fonte": "Legado 4 (lido)"
+    },
+    {
+      "id": "cozinheiro",
+      "titulo": "Cozinheiro",
+      "descricao": "Recebe o ofício Cozinhar. Quem comer sua comida recupera 0,5 de cansaço e melhora a condição do local em 1 (máx: Boa).",
+      "pre_requisitos": [],
+      "fonte": "Legado 4 (lido)"
+    },
+    {
+      "id": "mais-potente",
+      "titulo": "Mais Potente",
+      "descricao": "Caso use duas mãos para atacar com uma arma de uma mão, você recebe +4 no ataque dessa arma (apenas armas corpo a corpo).",
+      "pre_requisitos": [],
+      "fonte": "Legado 4 (lido)"
+    },
+    {
+      "id": "sempre-foi-assim",
+      "titulo": "Sempre Foi Assim",
+      "descricao": "Armas que já são de duas mãos passam a dar +1 dado de dano (apenas armas corpo a corpo).",
+      "pre_requisitos": [],
+      "fonte": "Legado 4 (lido)"
+    },
+
+    {
+      "id": "ainda-nao",
+      "titulo": "Ainda Não",
+      "descricao": "Você tem vantagem em testes de Constituição caso entre em \"morrendo\" ou tome dano massivo.",
+      "pre_requisitos": [
+        { "nivel_personagem": 5 }
+      ],
+      "fonte": "Legado 5 (lido)"
+    },
+    {
+      "id": "desonroso",
+      "titulo": "Desonroso",
+      "descricao": "Se estiver enfrentando um oponente desarmado, tem vantagem em testes de ataque e recebe +4 para desviar de qualquer ataque.",
+      "pre_requisitos": [
+        { "nivel_personagem": 6 }
+      ],
+      "fonte": "Legado 5 (lido)"
+    },
+    {
+      "id": "codigo-de-etica",
+      "titulo": "Código de Ética",
+      "descricao": "Você se torna incapaz de atacar seres desarmados. Porém, se o oponente estiver armado, seus ataques causam dano adicional igual ao seu nível e você sempre age antes dele na iniciativa.",
+      "pre_requisitos": [
+        { "nivel_personagem": 6 }
+      ],
+      "fonte": "Legado 5 (lido)"
+    },
+    {
+      "id": "monstro",
+      "titulo": "Monstro",
+      "descricao": "Você passa a dobrar seu modificador de Força em ataques corpo a corpo.",
+      "pre_requisitos": [
+        { "nivel_personagem": 10 }
+      ],
+      "fonte": "Legado 5 (lido)"
+    },
+    {
+      "id": "ossos-duros",
+      "titulo": "Ossos Duros",
+      "descricao": "Recebe 5 de redução a danos físicos.",
+      "pre_requisitos": [
+        { "nivel_personagem": 6 }
+      ],
+      "fonte": "Legado 5 (lido)"
+    },
+    {
+      "id": "bruto",
+      "titulo": "Bruto",
+      "descricao": "Se não estiver usando armadura, você recebe metade do seu modificador de Força como bônus de Defesa.",
+      "pre_requisitos": [
+        { "nivel_personagem": 4 }
+      ],
+      "fonte": "Legado 5 (lido)"
+    },
+
+    {
+      "id": "flexivel",
+      "titulo": "Flexível",
+      "descricao": "Você treina muito sua mobilidade e por conta disso tem +1 ação de reação por turno.",
+      "pre_requisitos": [
+        { "nivel_personagem": 10 }
+      ],
+      "fonte": "Legado 6 (lido)"
+    },
+    {
+      "id": "instinto-animal",
+      "titulo": "Instinto Animal",
+      "descricao": "Você tem vantagem em testes de iniciativa e nunca pode ser surpreendido em combate.",
+      "pre_requisitos": [
+        { "nivel_personagem": 12 }
+      ],
+      "fonte": "Legado 6 (lido)"
+    },
+    {
+      "id": "mao-pesada",
+      "titulo": "Mão Pesada",
+      "descricao": "Se acertar um ataque corpo a corpo crítico, o alvo é empurrado 3m para longe e cai no chão.",
+      "pre_requisitos": [
+        { "nivel_personagem": 5 }
+      ],
+      "fonte": "Legado 6 (lido)"
+    },
+    {
+      "id": "quebra-dente",
+      "titulo": "Quebra Dente",
+      "descricao": "Ataques corpo a corpo causam −2 na Defesa do inimigo até o fim do combate (acumulativo até −6).",
+      "pre_requisitos": [
+        { "nivel_personagem": 7 }
+      ],
+      "fonte": "Legado 6 (lido)"
+    },
+    {
+      "id": "sem-tempo-irmao",
+      "titulo": "Sem Tempo Irmão",
+      "descricao": "Você pode realizar uma ação de movimento extra no início do combate, antes de qualquer outro agir.",
+      "pre_requisitos": [
+        { "nivel_personagem": 4 }
+      ],
+      "fonte": "Legado 6 (lido)"
+    },
+    {
+      "id": "to-de-pe-ainda",
+      "titulo": "Tô de Pé Ainda",
+      "descricao": "Enquanto estiver com menos da metade da vida, você recebe +2 na Defesa e resistência a danos físicos.",
+      "pre_requisitos": [
+        { "nivel_personagem": 7 }
+      ],
+      "fonte": "Legado 6 (lido)"
+    },
+
+    {
+      "id": "sortudo-pra-cacete",
+      "titulo": "Sortudo pra Cacete",
+      "descricao": "Eventos ruins têm menos chance de acontecer com você.",
+      "pre_requisitos": [],
+      "fonte": "Legado 7 (lido)"
+    },
+    {
+      "id": "mentiroso-nato",
+      "titulo": "Mentiroso Nato",
+      "descricao": "Você tem vantagem em testes de Enganação, e mentiras simples nunca levantam suspeita.",
+      "pre_requisitos": [],
+      "fonte": "Legado 7 (lido)"
+    },
+    {
+      "id": "veterano-de-guerra",
+      "titulo": "Veterano de Guerra",
+      "descricao": "Você recupera o dobro de P.V. ou F.V. em cenas de descanso.",
+      "pre_requisitos": [],
+      "fonte": "Legado 7 (lido)"
+    },
+    {
+      "id": "posturado",
+      "titulo": "Posturado",
+      "descricao": "Você não pode ser derrubado ou empurrado enquanto estiver consciente. Caso morra, morre de pé.",
+      "pre_requisitos": [
+        { "nivel_personagem": 8 }
+      ],
+      "fonte": "Legado 7 (lido)"
+    },
+    {
+      "id": "ja-fui-clt",
+      "titulo": "Já fui CLT",
+      "descricao": "Você não se cansa tão fácil assim — não recebe o efeito de cansaço leve.",
+      "pre_requisitos": [],
+      "fonte": "Legado 7 (lido)"
+    },
+    {
+      "id": "selvagem",
+      "titulo": "Selvagem",
+      "descricao": "Animais e criaturas irracionais não te atacam a menos que sejam provocados.",
+      "pre_requisitos": [],
+      "fonte": "Legado 7 (lido)"
+    }
+  ],
+
+  "pendente": "Legado 1 ainda não foi lido (PDF grande demais para o ambiente atual processar). Os demais 6 (Legados 2 a 7) estão completos, 36 legados no total."
+}

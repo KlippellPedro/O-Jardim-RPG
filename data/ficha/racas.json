@@ -1,0 +1,370 @@
+[
+  {
+    "id": "humano",
+    "tipo": "raca",
+    "titulo": "Humano",
+    "categoria": "padrao",
+    "tamanho": "normal",
+    "legado_ascensao_inicial": 1,
+    "nota_legado": "Sem condição — o único Legado de Ascensão gratuito ao criar personagem",
+    "atributos_minimos": { "vida": 4, "forca_vital": 3, "movimento": 3 },
+    "modificadores_atributos": {},
+    "pericias_bonus": {},
+    "equipamento_inicial": {
+      "lunaris": -5,
+      "nota": "Começa com -5 Lunaris, mas já possui 1 acessório"
+    },
+    "habilidades": [],
+    "condicoes": []
+  },
+
+  {
+    "id": "vampiro",
+    "tipo": "raca",
+    "titulo": "Vampiro",
+    "categoria": "padrao",
+    "tamanho": "normal",
+    "legado_ascensao_inicial": 0,
+    "modificadores_atributos": {
+      "destreza": 2
+    },
+    "pericias_bonus": {
+      "enganacao": 2,
+      "intimidacao": 4
+    },
+    "equipamento_inicial": { "lunaris": 0 },
+    "habilidades": [
+      "Ao tomar sangue, recupera 1d6 de Vida"
+    ],
+    "condicoes": [
+      "Se não tomar sangue por 1 dia, desvantagem em todos os dados"
+    ]
+  },
+
+  {
+    "id": "goblim",
+    "tipo": "raca",
+    "titulo": "Goblim",
+    "categoria": "padrao",
+    "tamanho": "pequeno",
+    "legado_ascensao_inicial": 0,
+    "modificadores_atributos": {
+      "vida": -4,
+      "inteligencia": 1
+    },
+    "modificadores_movimento": "+2m",
+    "pericias_bonus": {
+      "ladinagem": 2
+    },
+    "equipamento_inicial": { "lunaris": 15 },
+    "habilidades": [
+      "Vantagem para vender qualquer coisa"
+    ],
+    "condicoes": []
+  },
+
+  {
+    "id": "anao",
+    "tipo": "raca",
+    "titulo": "Anão",
+    "categoria": "padrao",
+    "tamanho": "pequeno",
+    "legado_ascensao_inicial": 0,
+    "modificadores_atributos": {
+      "sabedoria": 2,
+      "carisma": -2
+    },
+    "rerolagens": 5,
+    "pericias_iniciais_maximas": 5,
+    "equipamento_inicial": { "lunaris": -5 },
+    "habilidades": [
+      "Pode re-rolar 5 dados",
+      "Construções recebem modificador comum e -2 kg"
+    ],
+    "condicoes": [
+      "[TEXTO INCOMPLETO NO PDF — 'porém não gosta de...' — aguardando Pedro completar]"
+    ]
+  },
+
+  {
+    "id": "golem",
+    "tipo": "raca",
+    "titulo": "Golem",
+    "categoria": "padrao",
+    "tamanho": "enorme",
+    "legado_ascensao_inicial": 0,
+    "modificadores_atributos": {
+      "constituicao": 2,
+      "destreza": -2,
+      "vida": 10
+    },
+    "pericias_bonus": {
+      "fortitude": 4
+    },
+    "equipamento_inicial": { "lunaris": 0, "itens": 0 },
+    "habilidades": [
+      "+4 na CD"
+    ],
+    "condicoes": [
+      "Sem itens ou Lunaris iniciais",
+      "Perde senso de direção e espaço"
+    ]
+  },
+
+  {
+    "id": "espirito",
+    "tipo": "raca",
+    "titulo": "Espírito",
+    "categoria": "padrao",
+    "tamanho": "normal",
+    "legado_ascensao_inicial": 0,
+    "modificadores_atributos": {
+      "forca": -2,
+      "constituicao": -2,
+      "sabedoria": 1,
+      "mana_bonus": 3
+    },
+    "modificadores_movimento": "+8",
+    "rerolagens": 4,
+    "equipamento_inicial": { "lunaris": 0 },
+    "habilidades": [
+      "Visão noturna",
+      "Corpo espiritual"
+    ],
+    "condicoes": [
+      "Não pode vestir ou usar itens comuns"
+    ]
+  },
+
+  {
+    "id": "gigante",
+    "tipo": "raca",
+    "titulo": "Gigante",
+    "categoria": "padrao",
+    "tamanho": "grande",
+    "legado_ascensao_inicial": 0,
+    "modificadores_atributos": {
+      "constituicao": 2,
+      "sabedoria": 2
+    },
+    "modificadores_movimento": "-4",
+    "pericias_bonus": {
+      "diplomacia": 4
+    },
+    "equipamento_inicial": {
+      "lunaris": 5,
+      "itens": ["1 item marcial"]
+    },
+    "habilidades": [
+      "Traços Raciais (habilidade especial)"
+    ],
+    "condicoes": []
+  },
+
+  {
+    "id": "animalia",
+    "tipo": "raca",
+    "titulo": "Animália",
+    "categoria": "padrao",
+    "tamanho": "variável (depende do animal)",
+    "legado_ascensao_inicial": 0,
+    "modificadores_atributos": {
+      "nota": "Tudo definido pelo animal específico escolhido"
+    },
+    "pericias_bonus": {
+      "sobrevivencia": 2
+    },
+    "equipamento_inicial": { "lunaris": 0, "nota": "Normal" },
+    "habilidades": [
+      "Fala com animais",
+      "Demais atributos e habilidades variam conforme o animal"
+    ],
+    "condicoes": [
+      "Condições variam pelo animal escolhido"
+    ]
+  },
+
+  {
+    "id": "sereia",
+    "tipo": "raca",
+    "titulo": "Sereia / Tritão",
+    "categoria": "padrao",
+    "tamanho": "normal",
+    "legado_ascensao_inicial": 0,
+    "modificadores_atributos": {
+      "carisma": 1,
+      "destreza": 1,
+      "constituicao": -2
+    },
+    "pericias_bonus": {
+      "canto": "Especialista"
+    },
+    "equipamento_inicial": { "lunaris": 0, "nota": "Normal" },
+    "habilidades": [
+      "Canto Apaixonante"
+    ],
+    "condicoes": [
+      "Anfíbio"
+    ]
+  },
+
+  {
+    "id": "elfo",
+    "tipo": "raca",
+    "titulo": "Elfo",
+    "categoria": "esquecida",
+    "legado_ascensao_inicial": 1,
+    "pre_requisito": "Ser originário de Nadalon",
+    "tamanho": "normal",
+    "rerolagens": 4,
+    "modificadores_atributos": {
+      "inteligencia": 4
+    },
+    "equipamento_inicial": {
+      "lunaris": "×2 do normal",
+      "itens": "×2 do normal"
+    },
+    "habilidades": [
+      "Longevidade (não envelhece)"
+    ],
+    "linhagens": [
+      "Natureza", "Sombras", "Gelo", "Fogo", "Fluxo da Origem", "Noite Eterna", "Tempestades"
+    ],
+    "nota_linhagens": "Cada linhagem concede características extras — detalhes não especificados neste documento",
+    "condicoes": []
+  },
+
+  {
+    "id": "desperto",
+    "tipo": "raca",
+    "titulo": "Desperto",
+    "categoria": "esquecida",
+    "legado_ascensao_inicial": 1,
+    "pre_requisito": "Morrer e voltar (evento narrativo)",
+    "tamanho": "normal",
+    "rerolagens_por_seculo_morto": 1,
+    "modificadores_atributos": {},
+    "pericias_bonus": {
+      "vontade": 4
+    },
+    "equipamento_inicial": {
+      "lunaris": 0,
+      "itens": 0
+    },
+    "habilidades": [
+      "Fragmento de Arkarin (vibra perto de espíritos e coisas ligadas à morte)",
+      "Renegado da Morte (vantagem contra efeitos de morte, drenagem de F.V. e prisão de alma)"
+    ],
+    "condicoes": [
+      "Condição Ancestral extra dependendo do motivo do retorno (decidido pelo mestre/narrativa)"
+    ]
+  },
+
+  {
+    "id": "auleth",
+    "tipo": "raca",
+    "titulo": "Auleth",
+    "categoria": "esquecida",
+    "legado_ascensao_inicial": 1,
+    "pre_requisito": "Ser do Espaço (origem dimensional)",
+    "tamanho": "variável (pode alterar forma física)",
+    "modificadores_atributos": {
+      "inteligencia": 2,
+      "sabedoria": 2,
+      "carisma": -3,
+      "vida_bonus": "2× nível inicial"
+    },
+    "pericias_iniciais_total": 12,
+    "conhecimentos_extremos": 2,
+    "equipamento_inicial": { "lunaris": 0, "itens": "Nenhum item material" },
+    "habilidades": [
+      "Alterar forma física (ação completa)",
+      "Imune a doenças",
+      "Não precisa comer, beber ou dormir (só meditar)"
+    ],
+    "condicoes": [
+      "Dificuldade com emoções"
+    ]
+  },
+
+  {
+    "id": "automato",
+    "tipo": "raca",
+    "titulo": "Autômato",
+    "categoria": "esquecida",
+    "legado_ascensao_inicial": 1,
+    "pendente": true,
+    "nota_pendente": "5 arquivos PDF de Autômato existem mas não foram lidos em detalhe. Provável que haja subespécies ou variantes."
+  },
+
+  {
+    "id": "clone",
+    "tipo": "raca",
+    "titulo": "Clone",
+    "categoria": "esquecida",
+    "legado_ascensao_inicial": 1,
+    "pendente": true,
+    "nota_pendente": "Sem PDF específico no material. Aguardando Pedro criar/encontrar a ficha."
+  },
+
+  {
+    "id": "viajante",
+    "tipo": "raca",
+    "titulo": "Viajante",
+    "categoria": "esquecida",
+    "legado_ascensao_inicial": 1,
+    "pre_requisito": "Ser de outro universo (evento narrativo: travessia dimensional)",
+    "tamanho": "normal",
+    "modificadores_atributos": {
+      "nota": "Atributos recalculados após a travessia"
+    },
+    "equipamento_inicial": {
+      "itens_do_universo_original": "Máximo 5 itens",
+      "habilidades_preservadas": "Máximo 3 habilidades do universo original",
+      "lunaris": 0
+    },
+    "processo_travessia": [
+      "Ancoragem",
+      "Ruptura",
+      "Travessia",
+      "Reestruturação"
+    ],
+    "habilidades": [
+      "Mantém até 5 itens e 3 habilidades do universo original"
+    ],
+    "condicoes": [
+      "Perde poderes e memórias na travessia",
+      "Atributos recalculados após a reestruturação"
+    ]
+  },
+
+  {
+    "id": "amalgamo",
+    "tipo": "raca",
+    "titulo": "Amalgamo",
+    "categoria": "esquecida",
+    "legado_ascensao_inicial": 1,
+    "pendente": true,
+    "nota_pendente": "Sem PDF específico no material. Aguardando Pedro criar/encontrar a ficha."
+  },
+
+  {
+    "id": "bruxa",
+    "tipo": "raca",
+    "titulo": "Bruxa",
+    "categoria": "esquecida",
+    "legado_ascensao_inicial": 1,
+    "pendente": true,
+    "nota_pendente": "A menção 'usuários de Arkania são as Bruxas, marcadas por estrelas no pulso' aparece na lore, mas a ficha de raça específica não foi encontrada nos PDFs. Aguardando Pedro criar."
+  },
+
+  {
+    "id": "entidade",
+    "tipo": "raca",
+    "titulo": "Entidade *",
+    "categoria": "esquecida",
+    "legado_ascensao_inicial": 1,
+    "pendente": true,
+    "nota_pendente": "Sem PDF específico. O asterisco (*) ao lado do nome tem significado ainda não definido — verificar com Pedro."
+  }
+]

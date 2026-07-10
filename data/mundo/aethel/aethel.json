@@ -1,0 +1,94 @@
+{
+  "pacote": "arvore-aethel",
+
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e_esse_arquivo": "Pacote único com todo o conteúdo da Árvore de Aethel, organizado na ordem real que os players vão descobrir em campanha: Deidade → Fluxo → Galho → Dimensão. Substitui os 4 arquivos separados que existiam antes (deidade.json, fluxo.json, galho-realidade-0.json, dimensao-padrao.json, numa pasta data/arvores/aethel/ que não existe mais) — juntei tudo aqui pra não espalhar em muitos arquivos pequenos conforme as outras Árvores forem organizadas.",
+
+    "como_importar_tudo_de_uma_vez": "Na tela do Mundo (#/arvores), clique em 'Importar conteúdo' e selecione este arquivo inteiro. As 4 entradas do array 'entradas' abaixo entram de uma vez — a Árvore de Aethel toda fica com conteúdo disponível.",
+
+    "como_separar_so_uma_parte": "Se quiser revelar uma coisa de cada vez pros players (ex.: só a Deidade agora, o Galho semanas depois), copie UM objeto de dentro do array 'entradas' (ex.: só o bloco com \"tipo\": \"deidade\") pra um arquivo novo, sozinho, sem o array/pacote em volta — assim: { \"tipo\": \"...\", \"id\": \"...\", \"titulo\": \"...\", \"conteudo\": {...} }. O sistema de import aceita tanto um pacote inteiro quanto uma entrada avulsa — os campos '_secao'/'_origem'/etc. podem ficar ou sair, tanto faz, o sistema ignora eles de qualquer jeito.",
+
+    "estrutura_de_cada_entrada": "Cada objeto dentro de 'entradas' tem os campos oficiais que o sistema de import realmente lê (tipo, id, titulo, conteudo) e campos extras começando com '_' (como '_secao', '_origem', '_pronto_para_importar') que são só anotações minhas pra você — o sistema ignora esses campos silenciosamente na hora de importar, não precisa apagar antes de usar.",
+
+    "ordem_de_revelacao_sugerida": [
+      "1. Deidade (Aethel) — quem ela é, o que governa. Ficha completa pronta.",
+      "2. Fluxo (Fluxo da Origem) — ainda em RASCUNHO, ver o campo _origem da entrada 2.",
+      "3. Galho (Realidade 0) — onde a campanha 'O Último Eclipse' acontece. Ficha completa pronta.",
+      "4. Dimensão (Dimensão Padrão) — o nível dentro do Galho. Ficha completa pronta."
+    ],
+
+    "nota_sobre_o_campo_pacote": "O campo 'pacote' (bem no topo do arquivo) é só uma etiqueta pra você identificar o arquivo — o sistema de import não lê esse campo pra nada, ele só confere se existe um array chamado 'entradas'. Pode renomear à vontade sem quebrar nada.",
+
+    "proximo_nivel_da_cascata": "Falta o exemplo de 'Local' (Reino/Mundo) pra fechar a cascata inteira — os Reinos citados na Dimensão Padrão (Salém, Império, Astraluna, Emberhold, Lionês, Reino dos Anões) ainda não têm entrada nenhuma. Quando for escrever, adicione um novo objeto no array 'entradas' com tipo 'reino', e conteudo.dimensao apontando pro id 'padrao'."
+  },
+
+  "entradas": [
+    {
+      "_secao": "1 de 4 — DEIDADE",
+      "tipo": "deidade",
+      "id": "aethel",
+      "titulo": "Aethel",
+      "conteudo": {
+        "epiteto": "Aquela que flui na Origem",
+        "genero": "Feminino",
+        "dominio": "Criação pura, nascimento de novos Galhos, luz e ordem.",
+        "descricao": "Focada na criação pura, Aethel é uma entidade de luz e ordem que zela pelo nascimento de novos Galhos. Suspeita ativamente que algo está errado com Keryx e caça pistas sozinha — única das deidades que age em vez de esperar.",
+        "fluxo": "fluxo-da-origem",
+        "status": "ativa"
+      },
+
+      "_origem": "Conteúdo real — recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "Aethel é a única Árvore que os players 'conhecem' desde o início (o círculo dela já aparece nomeado na tela de Árvores, sem precisar importar nada). Mas isso é só o NOME — esta entrada é a ficha completa dela (epíteto, domínio, status). Decisão sua: em que ponto da campanha os players descobrem esses detalhes de verdade? Só importe quando esse momento acontecer na mesa."
+    },
+
+    {
+      "_secao": "2 de 4 — FLUXO (rascunho — ver _origem abaixo)",
+      "tipo": "fluxo",
+      "id": "fluxo-da-origem",
+      "titulo": "Fluxo da Origem",
+      "conteudo": {
+        "arvore": "aethel",
+        "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo que rege a criação de novos Galhos, a luz e a ordem — o mesmo domínio da deidade Aethel, já que Árvore, Deidade e Fluxo são a mesma entidade (Modelo B dos Fluxos: cada Árvore tem seu próprio Fluxo, com leis próprias)."
+      },
+
+      "_origem": "PLACEHOLDER — nenhum PDF ou nota específica sobre o Fluxo da Origem foi lida ainda (diferente do Fluxo do Vazio, que já tinha um exemplo pronto). O texto de 'descricao' acima foi inferido a partir do domínio já conhecido da deidade Aethel, só pra não deixar o campo vazio — não é conteúdo oficial.",
+      "_pronto_para_importar": false,
+      "_o_que_falta": "Reescrever 'descricao' com o material de origem de verdade (se existir um PDF/nota específica sobre o Fluxo em si, distinto da deidade). Considerar se vale a pena um campo 'marca_corporal' — o Fluxo do Vazio tinha um ('Estrelas no pulso'), pode ser um padrão pra todos os Fluxos.",
+      "_quando_revelar": "Geralmente o Fluxo é um detalhe mais técnico/abstrato que os players descobrem depois da Deidade em si — não precisa ser revelado junto."
+    },
+
+    {
+      "_secao": "3 de 4 — GALHO",
+      "tipo": "galho",
+      "id": "realidade-0",
+      "titulo": "Realidade 0",
+      "conteudo": {
+        "arvore": "aethel",
+        "descricao": "O Galho principal da Árvore de Aethel. É onde se passa a campanha 'O Último Eclipse'. Contém a Dimensão Padrão (com todos os reinos), além de Nadalon, Espelhos, Sonhar, Întuneric, Êtuneric e Coliseu.",
+        "nota": "\"Realidade\" e \"Galho\" são sinônimos — \"Realidade 0\" é o rótulo imersivo preferido para este Galho específico."
+      },
+
+      "_origem": "Conteúdo real — recuperado do antigo data/world/galhos.json antes de ele ser removido nesta sessão.",
+      "_pronto_para_importar": true,
+      "_atencao_nomenclatura": "Numa conversa anterior você comentou de passagem que ia mudar o nome de 'Realidade 0' pra 'Galho 0'. Mantive 'Realidade 0' aqui porque o próprio dado já tem uma nota explícita dizendo que esse é o rótulo imersivo PREFERIDO — não troquei sem confirmação, já que pareceu uma decisão deliberada de estilo, não um erro. Se você realmente quer renomear, é só trocar 'titulo' (e reescrever a 'nota') nesta entrada — o 'id' (realidade-0) pode continuar igual, ele não aparece pro player.",
+      "_proximo_passo": "Este Galho tem várias Dimensões (Dimensão Padrão está na próxima entrada deste mesmo arquivo; Nadalon, Espelhos, Sonhar, Întuneric, Êtuneric e Coliseu ainda não têm entrada — adicione um objeto novo no array 'entradas' pra cada uma quando quiser, seguindo o mesmo padrão)."
+    },
+
+    {
+      "_secao": "4 de 4 — DIMENSÃO",
+      "tipo": "dimensao",
+      "id": "padrao",
+      "titulo": "Dimensão Padrão",
+      "conteudo": {
+        "galho": "realidade-0",
+        "descricao": "A dimensão central e habitável da Realidade 0. Abriga os grandes reinos do mundo mortal — Salém, o Império, Astraluna, Emberhold, Lionês, o Reino dos Anões e outros.",
+        "caracteristicas": "Dimensão física onde o tempo e o espaço seguem regras consistentes. É o palco principal da campanha."
+      },
+
+      "_origem": "Conteúdo real — recuperado do antigo data/world/dimensions.json antes de ele ser removido nesta sessão.",
+      "_pronto_para_importar": true,
+      "_proximo_passo": "Os Reinos citados na descrição (Salém, Império, Astraluna, Emberhold, Lionês, Reino dos Anões) seriam o próximo nível da cascata — 'Locais' dentro desta Dimensão (tipo: 'reino', campo conteudo.dimensao: 'padrao'). Nenhum deles tem entrada ainda; esse é o exemplo que falta pra fechar 'da Árvore até uma Dimensão E um Local'. As outras Dimensões da Realidade 0 (Nadalon, Espelhos, Sonhar, Întuneric, Êtuneric, Coliseu) também ainda não têm entrada — mesmo padrão desta aqui, um novo objeto no array."
+    }
+  ]
+}

@@ -1,50 +1,42 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mundo — O Jardim RPG</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mundo — O Jardim RPG</title>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="../styles/core/variables.css">
-  <link rel="stylesheet" href="../styles/core/reset.css">
-  <link rel="stylesheet" href="../styles/core/animations.css">
-  <link rel="stylesheet" href="../styles/mundo/mundo.css">
-</head>
-<body>
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles/core/variables.css" />
+    <link rel="stylesheet" href="../styles/core/reset.css" />
+    <link rel="stylesheet" href="../styles/core/animations.css" />
+    <link rel="stylesheet" href="../styles/mundo/mundo.css" />
+  </head>
+  <body>
+    <div class="mundo-bg">
+      <canvas id="mundo-tree-canvas"></canvas>
+    </div>
 
-  <div class="mundo-bg"></div>
+    <div class="mundo-page">
+      <header class="mundo-header">
+        <a class="mundo-back" href="../index.html">‹ O Jardim RPG</a>
+        <h1 class="mundo-title">Mundo</h1>
+        <button type="button" class="mundo-import-btn" id="mundo-import-btn">Importar conteúdo</button>
+        <input type="file" id="mundo-import-input" accept="application/json" hidden />
+      </header>
 
-  <div class="mundo-page">
+      <main class="mundo-content" id="mundo-content" aria-live="polite"></main>
+    </div>
 
-    <header class="mundo-header">
-      <a class="mundo-back" href="../index.html">‹ O Jardim RPG</a>
-      <h1 class="mundo-title">Mundo</h1>
-      <button type="button" class="mundo-import-btn" id="mundo-import-btn">Importar conteúdo</button>
-      <input type="file" id="mundo-import-input" accept="application/json" hidden>
-    </header>
+    <div class="mundo-toast" id="mundo-toast" role="status" hidden></div>
 
-    <nav class="mundo-tabs" role="tablist" aria-label="Categorias do mundo">
-      <button class="mundo-tab" type="button" role="tab" data-cat="cosmologia">Cosmologia</button>
-      <button class="mundo-tab" type="button" role="tab" data-cat="deidades">Deidades e Fluxos</button>
-      <button class="mundo-tab" type="button" role="tab" data-cat="realidades">Realidades e Dimensões</button>
-      <button class="mundo-tab" type="button" role="tab" data-cat="reinos">Reinos e Mundos</button>
-      <button class="mundo-tab" type="button" role="tab" data-cat="personagens">Personagens</button>
-      <button class="mundo-tab" type="button" role="tab" data-cat="eventos">Eventos</button>
-      <button class="mundo-tab" type="button" role="tab" data-cat="idiomas">Idiomas e Cultura</button>
-    </nav>
-
-    <main class="mundo-content" id="mundo-content" aria-live="polite"></main>
-
-  </div>
-
-  <div class="mundo-toast" id="mundo-toast" role="status" hidden></div>
-
-  <script type="module" src="../src/mundo/mundo.js"></script>
-</body>
+    <script type="module" src="../src/mundo/mundo.js"></script>
+  </body>
 </html>

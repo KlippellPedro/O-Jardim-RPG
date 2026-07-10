@@ -1,0 +1,87 @@
+{
+  "nota": "Base: Tormenta 20 (confirmado com Pedro). Luta e Pontaria são perícias, não resistências. Fortitude, Reflexos e Vontade são Resistências (defesas passivas), não perícias.",
+
+  "resistencias": [
+    { "id": "fortitude", "titulo": "Fortitude",  "atributo": "constituicao", "descricao": "Resistência física — corpo, doenças, venenos, exaustão" },
+    { "id": "reflexos",  "titulo": "Reflexos",   "atributo": "destreza",     "descricao": "Resistência a ataques evitáveis — armadilhas, explosões, efeitos de área" },
+    { "id": "vontade",   "titulo": "Vontade",    "atributo": "sabedoria",    "descricao": "Resistência mental — ilusões, encantamentos, medo, sanidade" }
+  ],
+
+  "nao_sao_pericias": [
+    {
+      "id": "iniciativa",
+      "titulo": "Iniciativa",
+      "atributo": "destreza",
+      "descricao": "Confirmado por Pedro: NÃO é perícia. É um número estático (como a Defesa Natural) que define a ordem de ação em combate — pode receber os mesmos bônus de uma perícia, mas nunca rola dado junto. Movida da lista de perícias nesta sessão.",
+      "ver_tambem": "data/rules/mechanics.json → iniciativa"
+    }
+  ],
+
+  "pericias": [
+    { "id": "atletismo",         "titulo": "Atletismo",         "atributo": "forca",          "origem": "Tormenta" },
+    { "id": "luta",              "titulo": "Luta",              "atributo": "forca",          "origem": "Tormenta", "uso": "Ataques corpo a corpo; usada no Contra-Ataque" },
+    { "id": "acrobacia",         "titulo": "Acrobacia",         "atributo": "destreza",       "origem": "Tormenta" },
+    { "id": "cavalgar",          "titulo": "Cavalgar",          "atributo": "destreza",       "origem": "Tormenta" },
+    { "id": "furtividade",       "titulo": "Furtividade",       "atributo": "destreza",       "origem": "Tormenta" },
+    { "id": "ladinagem",         "titulo": "Ladinagem",         "atributo": "destreza",       "origem": "Tormenta" },
+    { "id": "pilotagem",         "titulo": "Pilotagem",         "atributo": "destreza",       "origem": "Tormenta" },
+    { "id": "pontaria",          "titulo": "Pontaria",          "atributo": "destreza",       "origem": "Tormenta", "uso": "Ataques à distância" },
+    { "id": "conhecimento",      "titulo": "Conhecimento",      "atributo": "inteligencia",   "origem": "Tormenta" },
+    { "id": "guerra",            "titulo": "Guerra",            "atributo": "inteligencia",   "origem": "Tormenta" },
+    { "id": "investigacao",      "titulo": "Investigação",      "atributo": "inteligencia",   "origem": "Tormenta" },
+    { "id": "misticismo",        "titulo": "Misticismo",        "atributo": "inteligencia",   "origem": "Tormenta" },
+    { "id": "nobreza",           "titulo": "Nobreza",           "atributo": "inteligencia",   "origem": "Tormenta" },
+    { "id": "oficio",            "titulo": "Ofício",            "atributo": "inteligencia",   "origem": "Tormenta", "nota": "Artesanato geral — distinto de Tecnologia" },
+    { "id": "cura",              "titulo": "Cura",              "atributo": "sabedoria",      "origem": "Tormenta" },
+    { "id": "intuicao",          "titulo": "Intuição",          "atributo": "sabedoria",      "origem": "Tormenta" },
+    { "id": "percepcao",         "titulo": "Percepção",         "atributo": "sabedoria",      "origem": "Tormenta" },
+    { "id": "religiao",          "titulo": "Religião",          "atributo": "sabedoria",      "origem": "Tormenta" },
+    { "id": "sobrevivencia",     "titulo": "Sobrevivência",     "atributo": "sabedoria",      "origem": "Tormenta" },
+    { "id": "atuacao",           "titulo": "Atuação",           "atributo": "carisma",        "origem": "Tormenta" },
+    { "id": "diplomacia",        "titulo": "Diplomacia",        "atributo": "carisma",        "origem": "Tormenta" },
+    { "id": "enganacao",         "titulo": "Enganação",         "atributo": "carisma",        "origem": "Tormenta" },
+    { "id": "intimidacao",       "titulo": "Intimidação",       "atributo": "carisma",        "origem": "Tormenta" },
+    { "id": "jogatina",          "titulo": "Jogatina",          "atributo": "carisma",        "origem": "Tormenta" },
+    { "id": "lidar-animais",     "titulo": "Lidar com Animais", "atributo": "carisma",        "origem": "Tormenta" },
+    { "id": "obter-informacao",  "titulo": "Obter Informação",  "atributo": "carisma",        "origem": "Tormenta" },
+
+    {
+      "id": "ressonancia",
+      "titulo": "Ressonância",
+      "atributo": "sabedoria",
+      "origem": "O Jardim",
+      "status": "aprovada",
+      "descricao": "Perceber, identificar e resistir a efeitos de Fluxos alheios; sentir qual Fluxo alguém carrega. Preenche uma lacuna real: nenhuma perícia do Tormenta cobre os Fluxos especificamente."
+    },
+    {
+      "id": "tecnologia",
+      "titulo": "Tecnologia",
+      "atributo": "inteligencia",
+      "origem": "O Jardim",
+      "status": "aprovada",
+      "descricao": "Operar, reparar e entender itens A.X.I.S e maquinário avançado. Distinto de Ofício (artesanato geral) — dá identidade mecânica própria a quem segue a linha de Jota Macedo."
+    },
+    {
+      "id": "ritos-de-arkarin",
+      "titulo": "Ritos de Arkarin",
+      "atributo": "sabedoria",
+      "origem": "O Jardim",
+      "status": "aprovada",
+      "descricao": "Rituais ligados à morte, ao Fluxo do Sangue, à Mulher Carmesim. Relevante para Despertos e classes ligadas à morte."
+    },
+    {
+      "id": "sanidade",
+      "titulo": "Sanidade",
+      "atributo": "sabedoria",
+      "origem": "O Jardim",
+      "status": "aprovada",
+      "descricao": "Teste usado quando a Trilha de Sanidade é abalada. Ver mecânica completa em data/rules/mechanics.json → sanidade."
+    }
+  ],
+
+  "totais": {
+    "tormenta_base": 26,
+    "o_jardim_aprovadas": 4,
+    "nota": "As 4 perícias de O Jardim foram aprovadas por Pedro (não são mais propostas). Iniciativa foi removida desta lista — confirmada como não-perícia."
+  }
+}
