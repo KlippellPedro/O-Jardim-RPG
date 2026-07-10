@@ -1,0 +1,598 @@
+/* ─────────────────────────────────────────────
+   Loja — O Jardim RPG
+   Índice em cards (uma por categoria) → galeria de itens
+   por categoria → página de detalhe por item. Conteúdo
+   chega por import de JSON (ver src/loja/lojaImport.js).
+   Mesma linguagem visual de Regras, com cor de assinatura
+   própria (--blood, já usada no card do hub) e um destaque
+   de cor por categoria.
+   ───────────────────────────────────────────── */
+
+.loja-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse 120% 60% at 50% 0%,
+    color-mix(in srgb, var(--blood) 16%, var(--eclipse-ring)) 0%,
+    var(--deep) 55%,
+    var(--void) 100%
+  );
+}
+
+.loja-page {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-6) var(--space-16);
+}
+
+.loja-header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--invisible);
+  animation: fade-in var(--dur-slow) var(--ease-out) both;
+}
+
+.loja-back {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--dim);
+  letter-spacing: 0.04em;
+  transition: color var(--dur-base) var(--ease-smooth);
+}
+
+.loja-back:hover {
+  color: var(--blood);
+}
+
+.loja-title {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  color: var(--blood);
+  letter-spacing: 0.05em;
+  margin-right: auto;
+  cursor: pointer;
+  transition: color var(--dur-base) var(--ease-smooth);
+}
+
+.loja-title:hover {
+  color: #c23a4e;
+}
+
+.loja-import-btn {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--star);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--invisible);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-4);
+  transition: color var(--dur-base) var(--ease-smooth), border-color var(--dur-base) var(--ease-smooth);
+}
+
+.loja-import-btn:hover {
+  color: #e6919e;
+  border-color: var(--blood);
+}
+
+/* Contêiner reaproveitado entre renders — fade-in de base
+   reiniciado manualmente a cada troca de rota (ver JS). */
+.loja-content {
+  animation: fade-in var(--dur-base) var(--ease-out) both;
+}
+
+.loja-intro {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: var(--text-base);
+  color: var(--star);
+  max-width: 60ch;
+  line-height: 1.6;
+  margin: var(--space-6) 0 var(--space-8);
+  animation: fade-in var(--dur-slow) var(--ease-out) 100ms both;
+}
+
+/* ── Índice — grid de cards, uma por categoria ──────────── */
+
+.loja-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: var(--space-6);
+  padding-bottom: var(--space-8);
+}
+
+.loja-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  width: 100%;
+  text-align: left;
+  padding: var(--space-6);
+  background: color-mix(in srgb, var(--accent, var(--dim)) 6%, var(--shadow));
+  border: 1px solid color-mix(in srgb, var(--accent, var(--dim)) 30%, var(--invisible));
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  animation: float-in-up var(--dur-slow) var(--ease-out) both;
+  transition:
+    transform    var(--dur-base) var(--ease-spring),
+    border-color var(--dur-base) var(--ease-smooth),
+    box-shadow   var(--dur-base) var(--ease-smooth),
+    background   var(--dur-base) var(--ease-smooth);
+}
+
+.loja-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.loja-card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background: var(--accent, var(--gold));
+  box-shadow: 0 0 12px var(--accent, var(--gold));
+  transition: width var(--dur-slow) var(--ease-out);
+}
+
+.loja-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent, var(--star));
+  background: color-mix(in srgb, var(--accent, var(--dim)) 13%, var(--shadow));
+  box-shadow:
+    0 14px 32px rgba(0,0,0,0.5),
+    0 0 28px color-mix(in srgb, var(--accent, transparent) 35%, transparent);
+}
+
+.loja-card:hover::after {
+  width: 100%;
+}
+
+.loja-card:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+.loja-card-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--accent, var(--gold));
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent, transparent) 55%, transparent));
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+
+.loja-card:hover .loja-card-icon {
+  transform: scale(1.15) rotate(-4deg);
+}
+
+.loja-card-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--moon);
+  letter-spacing: 0.04em;
+  transition: color var(--dur-base) var(--ease-smooth);
+}
+
+.loja-card:hover .loja-card-title {
+  color: var(--accent, var(--gold-light));
+}
+
+.loja-card-desc {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--star);
+  line-height: 1.55;
+}
+
+.loja-card-arrow {
+  align-self: flex-end;
+  margin-top: auto;
+  font-size: var(--text-lg);
+  color: var(--dim);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all var(--dur-base) var(--ease-spring);
+}
+
+.loja-card:hover .loja-card-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--accent, var(--gold));
+}
+
+/* ── Categoria — trilha de volta + cabeçalho ────────────── */
+
+.loja-crumb {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--dim);
+  margin-bottom: var(--space-8);
+  transition: color var(--dur-base) var(--ease-smooth), transform var(--dur-base) var(--ease-smooth);
+  animation: fade-in var(--dur-slow) var(--ease-out) both;
+}
+
+.loja-crumb:hover {
+  color: var(--accent, var(--blood));
+  transform: translateX(-3px);
+}
+
+.loja-cat-header {
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent, var(--invisible)) 30%, var(--invisible));
+  animation: float-in-up var(--dur-slow) var(--ease-out) both;
+}
+
+.loja-cat-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  color: var(--moon);
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-3);
+}
+
+.loja-cat-icon {
+  font-size: 1.4rem;
+  color: var(--accent, var(--gold));
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent, transparent) 45%, transparent));
+}
+
+.loja-cat-desc {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: var(--text-base);
+  color: var(--star);
+  max-width: 56ch;
+  line-height: 1.6;
+}
+
+/* ── Estado vazio — evocativo, não técnico ──────────────── */
+
+.loja-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-6);
+  padding: var(--space-16) var(--space-6);
+  animation: fade-in var(--dur-slow) var(--ease-out) 120ms both;
+}
+
+.loja-empty-ornament {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 180px;
+}
+
+.loja-empty-ornament-line {
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--accent, var(--invisible)) 40%, var(--invisible));
+}
+
+.loja-empty-ornament-rune {
+  font-size: var(--text-lg);
+  color: var(--accent, var(--gold-dim));
+  line-height: 1;
+  animation: pulse-gold 4s var(--ease-smooth) infinite;
+}
+
+.loja-empty-text {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: var(--text-lg);
+  color: var(--star);
+  max-width: 36ch;
+  line-height: 1.7;
+}
+
+.loja-cta-btn {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent, var(--gold));
+  background: color-mix(in srgb, var(--accent, var(--gold)) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent, var(--gold)) 45%, var(--invisible));
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-6);
+  margin-top: var(--space-2);
+  transition:
+    color      var(--dur-base) var(--ease-smooth),
+    background var(--dur-base) var(--ease-smooth),
+    box-shadow var(--dur-base) var(--ease-smooth);
+}
+
+.loja-cta-btn:hover {
+  background: color-mix(in srgb, var(--accent, var(--gold)) 14%, transparent);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--accent, transparent) 30%, transparent);
+}
+
+/* ── Galeria de itens dentro de uma categoria ───────────── */
+
+.loja-item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.loja-item-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  text-align: left;
+  background: color-mix(in srgb, var(--accent, var(--dim)) 5%, var(--shadow));
+  border: 1px solid color-mix(in srgb, var(--accent, var(--dim)) 25%, var(--invisible));
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-6);
+  cursor: pointer;
+  animation: float-in-up var(--dur-slow) var(--ease-out) both;
+  transition:
+    transform    var(--dur-base) var(--ease-spring),
+    border-color var(--dur-base) var(--ease-smooth),
+    box-shadow   var(--dur-base) var(--ease-smooth);
+}
+
+.loja-item-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.45), 0 0 20px color-mix(in srgb, var(--accent, transparent) 28%, transparent);
+}
+
+.loja-item-card-title {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  color: var(--moon);
+  letter-spacing: 0.03em;
+  transition: color var(--dur-base) var(--ease-smooth);
+}
+
+.loja-item-card:hover .loja-item-card-title {
+  color: var(--accent);
+}
+
+.loja-item-card-desc {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--dim);
+  line-height: 1.5;
+}
+
+/* ── Item — breadcrumb + cabeçalho de detalhe ───────────── */
+
+.loja-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+  animation: fade-in var(--dur-slow) var(--ease-out) both;
+}
+
+.loja-breadcrumb-link {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--dim);
+  transition: color var(--dur-base) var(--ease-smooth);
+}
+
+.loja-breadcrumb-link:hover {
+  color: var(--blood);
+}
+
+.loja-detail-header {
+  position: relative;
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent, var(--invisible)) 35%, var(--invisible));
+  animation: float-in-up var(--dur-slow) var(--ease-out) both;
+}
+
+/* Brilho ambiente atrás do título, na cor da categoria */
+.loja-detail-header::before {
+  content: '';
+  position: absolute;
+  top: -32px;
+  left: -32px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent, transparent) 25%, transparent) 0%, transparent 70%);
+  filter: blur(4px);
+  z-index: -1;
+  pointer-events: none;
+  animation: fade-in var(--dur-xslow) var(--ease-out) both;
+}
+
+.loja-detail-title {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-3xl);
+  color: var(--moon);
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-3);
+}
+
+.loja-detail-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--accent, var(--gold)), transparent);
+  animation: reveal-line 1s var(--ease-out) 200ms both;
+}
+
+.loja-detail-icon {
+  font-size: 1.6rem;
+  color: var(--accent, var(--gold));
+  animation: loja-icon-pulse 4s var(--ease-smooth) infinite;
+}
+
+@keyframes loja-icon-pulse {
+  0%, 100% { filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent, transparent) 45%, transparent)); }
+  50%      { filter: drop-shadow(0 0 18px color-mix(in srgb, var(--accent, transparent) 75%, transparent)); }
+}
+
+.loja-detail-subtitulo {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--accent, var(--star));
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--accent, var(--gold-dim));
+}
+
+/* ── Item — corpo (campos de conteúdo) ──────────────────── */
+
+.loja-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  animation: fade-in var(--dur-slow) var(--ease-out) 120ms both;
+}
+
+.loja-detail-descricao {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  color: var(--moon);
+  line-height: 1.8;
+  max-width: 60ch;
+}
+
+.loja-fields {
+  display: grid;
+  grid-template-columns: minmax(140px, 34%) 1fr;
+  gap: var(--space-3) var(--space-4);
+}
+
+.loja-fields dt {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+  padding-top: 2px;
+}
+
+.loja-fields dd {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--moon);
+  line-height: 1.6;
+}
+
+.loja-fields .loja-fields {
+  grid-column: 1 / -1;
+  margin-top: var(--space-1);
+  padding-left: var(--space-4);
+  border-left: 1px solid var(--invisible);
+}
+
+.loja-entry-link {
+  color: var(--accent, var(--gold));
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent, var(--gold)) 45%, transparent);
+  text-underline-offset: 2px;
+  transition: color var(--dur-base) var(--ease-smooth);
+}
+
+.loja-entry-link:hover {
+  color: var(--moon);
+}
+
+/* ── Toast de feedback do import ─────────────────────────── */
+
+.loja-toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-8);
+  transform: translateX(-50%);
+  z-index: 10;
+  max-width: min(420px, calc(100vw - var(--space-6) * 2));
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--moon);
+  background: var(--surface);
+  border: 1px solid var(--invisible);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-6);
+  box-shadow: var(--shadow-deep);
+  animation: float-in-up var(--dur-base) var(--ease-out) both;
+}
+
+.loja-toast[hidden] {
+  display: none;
+}
+
+.loja-toast[data-tipo="sucesso"] {
+  border-color: var(--blood);
+}
+
+.loja-toast[data-tipo="erro"] {
+  border-color: var(--blood);
+  color: #e8b0b8;
+}
+
+/* ── Transição de página — View Transitions API ──────────
+   Sem suporte no navegador, essas regras não têm efeito algum. */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 420ms;
+  animation-timing-function: var(--ease-smooth);
+}
+
+::view-transition-old(root) { animation-name: loja-vt-out; }
+::view-transition-new(root) { animation-name: loja-vt-in; }
+
+@keyframes loja-vt-out {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.985); }
+}
+
+@keyframes loja-vt-in {
+  from { opacity: 0; transform: scale(1.015); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Responsivo */
+@media (max-width: 560px) {
+  .loja-page      { padding: var(--space-4) var(--space-4) var(--space-12); }
+  .loja-title     { font-size: var(--text-2xl); }
+  .loja-grid      { grid-template-columns: 1fr; }
+  .loja-card      { padding: var(--space-4) var(--space-6); }
+  .loja-item-grid { grid-template-columns: 1fr; }
+  .loja-cat-title { font-size: var(--text-2xl); }
+  .loja-detail-title { font-size: var(--text-2xl); }
+  .loja-detail-header::before { width: 160px; height: 160px; }
+  .loja-fields    { grid-template-columns: 1fr; }
+  .loja-fields dt { padding-top: var(--space-2); }
+}

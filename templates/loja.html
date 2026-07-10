@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loja — O Jardim RPG</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles/core/variables.css" />
+    <link rel="stylesheet" href="../styles/core/reset.css" />
+    <link rel="stylesheet" href="../styles/core/animations.css" />
+    <link rel="stylesheet" href="../styles/loja/loja.css" />
+  </head>
+  <body>
+    <div class="loja-bg"></div>
+
+    <div class="loja-page">
+      <header class="loja-header">
+        <a class="loja-back" href="../index.html">‹ O Jardim RPG</a>
+        <h1 class="loja-title">Loja</h1>
+        <button type="button" class="loja-import-btn" id="loja-import-btn">Importar conteúdo</button>
+        <input type="file" id="loja-import-input" accept="application/json" hidden />
+      </header>
+
+      <main class="loja-content" id="loja-content" aria-live="polite"></main>
+    </div>
+
+    <div class="loja-toast" id="loja-toast" role="status" hidden></div>
+
+    <script type="module" src="../src/loja/loja.js"></script>
+  </body>
+</html>
