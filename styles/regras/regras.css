@@ -1,7 +1,8 @@
 /* ─────────────────────────────────────────────
    Regras — O Jardim RPG
-   Mecânicas gerais em tópicos. Sub-navegação por
-   categoria (rotas dedicadas) fica pra um prompt futuro.
+   Índice em cards (um por mecânica) + página dedicada por
+   tópico, com roteamento client-side isolado a esta página
+   (mesmo esquema de Mundo — ver src/regras/regras.js).
    ───────────────────────────────────────────── */
 
 .regras-bg {
@@ -52,6 +53,19 @@
   font-size: var(--text-3xl);
   color: var(--frost);
   letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: color var(--dur-base) var(--ease-smooth);
+}
+
+.regras-title:hover {
+  color: var(--gold-light);
+}
+
+/* Contêiner reaproveitado entre índice/detalhe — fade-in de base por
+   trás das animações mais vistosas de cada elemento interno; reiniciado
+   manualmente a cada troca de rota (ver resetarAnimacao() no JS). */
+.regras-content {
+  animation: fade-in var(--dur-base) var(--ease-out) both;
 }
 
 .regras-intro {
@@ -61,50 +75,237 @@
   color: var(--star);
   max-width: 60ch;
   line-height: 1.6;
-  margin: var(--space-6) 0;
+  margin: var(--space-6) 0 var(--space-8);
   animation: fade-in var(--dur-slow) var(--ease-out) 100ms both;
 }
 
-/* ── Índice de tópicos — navegação por âncora ── */
-.regras-toc {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-6);
-  padding: var(--space-4) 0;
-  border-top: 1px solid var(--invisible);
-  border-bottom: 1px solid var(--invisible);
-  margin-bottom: var(--space-8);
-  animation: fade-in var(--dur-slow) var(--ease-out) 150ms both;
+/* ── Índice — grid de cards ─────────────────────────────── */
+
+.regras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: var(--space-6);
+  padding-bottom: var(--space-8);
 }
 
-.regras-toc a {
-  font-family: var(--font-ui);
-  font-size: var(--text-xs);
-  letter-spacing: 0.06em;
-  color: var(--dim);
+.regras-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  width: 100%;
+  text-align: left;
+  padding: var(--space-6);
+  background: color-mix(in srgb, var(--accent, var(--dim)) 6%, var(--shadow));
+  border: 1px solid color-mix(in srgb, var(--accent, var(--dim)) 30%, var(--invisible));
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  animation: float-in-up var(--dur-slow) var(--ease-out) both;
+  transition:
+    transform    var(--dur-base) var(--ease-spring),
+    border-color var(--dur-base) var(--ease-smooth),
+    box-shadow   var(--dur-base) var(--ease-smooth),
+    background   var(--dur-base) var(--ease-smooth);
+}
+
+.regras-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Barra de destaque que "acende" no rodapé do card ao passar o mouse */
+.regras-card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background: var(--accent, var(--gold));
+  box-shadow: 0 0 12px var(--accent, var(--gold));
+  transition: width var(--dur-slow) var(--ease-out);
+}
+
+.regras-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent, var(--star));
+  background: color-mix(in srgb, var(--accent, var(--dim)) 13%, var(--shadow));
+  box-shadow:
+    0 14px 32px rgba(0,0,0,0.5),
+    0 0 28px color-mix(in srgb, var(--accent, transparent) 35%, transparent);
+}
+
+.regras-card:hover::after {
+  width: 100%;
+}
+
+.regras-card:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+.regras-card-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--accent, var(--gold));
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent, transparent) 55%, transparent));
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+
+.regras-card:hover .regras-card-icon {
+  transform: scale(1.15) rotate(-4deg);
+}
+
+.regras-card-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--moon);
+  letter-spacing: 0.04em;
   transition: color var(--dur-base) var(--ease-smooth);
 }
 
-.regras-toc a:hover {
-  color: var(--frost);
+.regras-card:hover .regras-card-title {
+  color: var(--accent, var(--gold-light));
 }
 
-/* ── Seções de conteúdo ── */
-.regras-section {
-  margin-bottom: var(--space-12);
+.regras-card-desc {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--star);
+  line-height: 1.55;
+}
+
+.regras-card-arrow {
+  align-self: flex-end;
+  margin-top: auto;
+  font-size: var(--text-lg);
+  color: var(--dim);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all var(--dur-base) var(--ease-spring);
+}
+
+.regras-card:hover .regras-card-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--accent, var(--gold));
+}
+
+/* ── Detalhe — trilha de volta ──────────────────────────── */
+
+.regras-crumb {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--dim);
+  margin-bottom: var(--space-8);
+  transition: color var(--dur-base) var(--ease-smooth), transform var(--dur-base) var(--ease-smooth);
   animation: fade-in var(--dur-slow) var(--ease-out) both;
 }
 
-.regras-section-title {
-  font-family: var(--font-display);
-  font-size: var(--text-2xl);
-  color: var(--frost);
-  letter-spacing: 0.04em;
-  margin-bottom: var(--space-4);
-  padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--invisible);
-  scroll-margin-top: var(--space-6);
+.regras-crumb:hover {
+  color: var(--accent, var(--gold));
+  transform: translateX(-3px);
 }
+
+/* ── Detalhe — cabeçalho do tópico ──────────────────────── */
+
+.regras-detail-header {
+  position: relative;
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent, var(--invisible)) 35%, var(--invisible));
+  animation: float-in-up var(--dur-slow) var(--ease-out) both;
+}
+
+/* Brilho ambiente atrás do título, na cor do tópico — cada
+   página de detalhe ganha uma identidade visual própria. */
+.regras-detail-header::before {
+  content: '';
+  position: absolute;
+  top: -32px;
+  left: -32px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent, transparent) 25%, transparent) 0%, transparent 70%);
+  filter: blur(4px);
+  z-index: -1;
+  pointer-events: none;
+  animation: fade-in var(--dur-xslow) var(--ease-out) both;
+}
+
+.regras-detail-title {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-3xl);
+  color: var(--moon);
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-3);
+}
+
+.regras-detail-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--accent, var(--gold)), transparent);
+  animation: reveal-line 1s var(--ease-out) 200ms both;
+}
+
+.regras-detail-icon {
+  font-size: 1.6rem;
+  color: var(--accent, var(--gold));
+  animation: regras-icon-pulse 4s var(--ease-smooth) infinite;
+}
+
+@keyframes regras-icon-pulse {
+  0%, 100% { filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent, transparent) 45%, transparent)); }
+  50%      { filter: drop-shadow(0 0 18px color-mix(in srgb, var(--accent, transparent) 75%, transparent)); }
+}
+
+.regras-detail-resumo {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: var(--text-base);
+  color: var(--star);
+  max-width: 60ch;
+  line-height: 1.6;
+}
+
+/* ── Detalhe — corpo do tópico ──────────────────────────── */
+
+.regras-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* Revelação em cascata — cada bloco direto aparece um pouco
+   depois do anterior (mesmo espírito do cosmo-node do Mundo). */
+.regras-detail > * {
+  animation: fade-in var(--dur-slow) var(--ease-out) both;
+}
+
+.regras-detail > *:nth-child(1) { animation-delay:  40ms; }
+.regras-detail > *:nth-child(2) { animation-delay: 100ms; }
+.regras-detail > *:nth-child(3) { animation-delay: 160ms; }
+.regras-detail > *:nth-child(4) { animation-delay: 220ms; }
+.regras-detail > *:nth-child(5) { animation-delay: 280ms; }
+.regras-detail > *:nth-child(6) { animation-delay: 340ms; }
+.regras-detail > *:nth-child(7)  { animation-delay: 400ms; }
+.regras-detail > *:nth-child(8)  { animation-delay: 460ms; }
+.regras-detail > *:nth-child(9)  { animation-delay: 520ms; }
+.regras-detail > *:nth-child(10) { animation-delay: 580ms; }
 
 .regras-subtitle {
   font-family: var(--font-ui);
@@ -112,7 +313,7 @@
   letter-spacing: 0.10em;
   text-transform: uppercase;
   color: var(--dim);
-  margin: var(--space-6) 0 var(--space-3);
+  margin-top: var(--space-2);
 }
 
 .regras-note {
@@ -121,18 +322,20 @@
   font-size: var(--text-sm);
   color: var(--star);
   line-height: 1.6;
-  margin-bottom: var(--space-4);
 }
 
-.regras-note a {
+.regras-inline-link {
+  font: inherit;
+  font-style: normal;
   color: var(--frost);
   text-decoration: underline;
   text-decoration-color: color-mix(in srgb, var(--frost) 40%, transparent);
   text-underline-offset: 2px;
+  cursor: pointer;
   transition: color var(--dur-base) var(--ease-smooth);
 }
 
-.regras-note a:hover {
+.regras-inline-link:hover {
   color: var(--moon);
 }
 
@@ -203,7 +406,6 @@
   display: grid;
   grid-template-columns: minmax(120px, 40%) 1fr;
   gap: var(--space-2) var(--space-4);
-  margin-bottom: var(--space-4);
 }
 
 .regras-kv dt {
@@ -235,11 +437,37 @@
   padding: var(--space-1) 0;
 }
 
+/* ── Transição de página — View Transitions API ──────────
+   Sem suporte no navegador, essas regras não têm efeito algum
+   e a troca cai pra instantânea + animações normais do conteúdo. */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 420ms;
+  animation-timing-function: var(--ease-smooth);
+}
+
+::view-transition-old(root) { animation-name: regras-vt-out; }
+::view-transition-new(root) { animation-name: regras-vt-in; }
+
+@keyframes regras-vt-out {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.985); }
+}
+
+@keyframes regras-vt-in {
+  from { opacity: 0; transform: scale(1.015); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
 /* Responsivo */
 @media (max-width: 560px) {
-  .regras-page  { padding: var(--space-4) var(--space-4) var(--space-12); }
-  .regras-title { font-size: var(--text-2xl); }
-  .regras-section-title { font-size: var(--text-xl); }
+  .regras-page   { padding: var(--space-4) var(--space-4) var(--space-12); }
+  .regras-title  { font-size: var(--text-2xl); }
+  .regras-grid   { grid-template-columns: 1fr; }
+  .regras-card   { padding: var(--space-4) var(--space-6); }
+  .regras-detail-title { font-size: var(--text-2xl); }
+  .regras-detail-header::before { width: 160px; height: 160px; }
   .regras-xp-grid { grid-template-columns: repeat(2, 1fr); }
   .regras-list--inline { flex-direction: column; gap: var(--space-2); }
 }
