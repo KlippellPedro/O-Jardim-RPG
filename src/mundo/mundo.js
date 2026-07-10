@@ -6,6 +6,7 @@
 import { router } from '../core/router.js';
 import { CATEGORIAS, categoriaPorTipo } from './categorias.js';
 import { getEntradas, entradasPorCategoria, processarArquivo } from './mundoImport.js';
+import { montarCena3DArvores } from './tree3d.js';
 
 const content = document.getElementById('mundo-content');
 const toast   = document.getElementById('mundo-toast');
@@ -74,7 +75,7 @@ function initAtmosphere() {
 
 // ── Toast de feedback ────────────────────────────────────
 
-function mostrarToast(mensagem, tipo) {
+export function mostrarToast(mensagem, tipo) {
   toast.textContent = mensagem;
   toast.dataset.tipo = tipo;
   toast.hidden = false;
@@ -799,12 +800,11 @@ function renderArvoresScreen() {
     bloqueada: !(arvore.id === 'aethel' || mapa[arvore.id]?.tipo === 'deidade'),
   }));
 
-  const parar = montarClusterCirculos(
-    content,
-    itens,
-    item => `/${item.catId}/${item.id}`,
-    { stageClass: 'arvores-stage' }
-  );
+  const parar = montarCena3DArvores(content, itens, {
+    resolverDestino: item => `/${item.catId}/${item.id}`,
+    aoEntrar: (path) => { pararAnimacoesCirculos(); router.navegar(path); },
+    aoBloqueada: () => mostrarToast('Ainda não descoberta.', 'erro'),
+  });
   clustersAtivos.push(parar);
 }
 
