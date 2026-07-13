@@ -1,0 +1,56 @@
+{
+  "descricao": "Padrão pra organizar o conteúdo de cada Árvore, refletindo a ordem real em que os players descobrem as coisas em campanha. Cada Árvore vira UM pacote (arquivo .json com um array 'entradas'), não mais um arquivo por camada — importável inteiro ou entrada por entrada no Mundo (botão 'Importar conteúdo'), na hora certa da história.",
+
+  "_atualizado_2026-07-11": "Esta versão substitui a anterior (que descrevia data/arvores/{id}/ com um arquivo por camada — deidade.json, fluxo.json, galho-*.json, dimensao-*.json). Essa estrutura foi abandonada; todas as 10 Árvores já foram organizadas no padrão novo abaixo.",
+
+  "estrutura_de_pastas": "data/mundo/{Nome-da-Árvore}/{slug}.json — UM arquivo por Árvore, com um array 'entradas' contendo todas as camadas já escritas (Deidade, Fluxo, Galho, Dimensão, e opcionalmente Personagem). A pasta usa o nome de exibição da Árvore (ex.: 'Gênese', 'Alétheia'); o arquivo usa uma versão em minúsculas sem acento do mesmo nome (ex.: genese.json, aletheia.json). Os campos 'id' dentro de cada entrada continuam usando o slug da deidade (aethel, ousias, keryx...) — é esse id que aparece nas rotas /deidades/{id}, no localStorage e nos nomes dos .glb.",
+
+  "tipos_de_entrada": [
+    {
+      "tipo": "deidade",
+      "quantidade": "sempre 1 por Árvore",
+      "quando_revelar": "Quando os players descobrem quem é a deidade por trás da Árvore — nome, epíteto, domínio, status."
+    },
+    {
+      "tipo": "fluxo",
+      "quantidade": "sempre 1 por Árvore",
+      "quando_revelar": "Quando os players descobrem o Fluxo que a Árvore rege. Costuma ser mais abstrato/técnico que a Deidade — geralmente revelado depois. conteudo.arvore deve apontar pro TITULO de exibição da Árvore (ex.: \"Gênese\"), só de referência pro leitor — o código não usa esse campo pra nada."
+    },
+    {
+      "tipo": "galho (ou realidade, são sinônimos)",
+      "quantidade": "1 ou mais — cada Árvore pode ter vários Galhos",
+      "quando_revelar": "Quando os players chegam a esse Galho específico. conteudo.arvore deve apontar pro ID da Deidade-mãe (ex.: \"aethel\", não \"Gênese\") — é esse campo que o código usa pra agrupar \"Galhos desta Árvore\" na página da Deidade (ver src/mundo/views/details/decorators.js)."
+    },
+    {
+      "tipo": "dimensao",
+      "quantidade": "1 ou mais por Galho",
+      "quando_revelar": "Quando os players chegam a essa Dimensão dentro de um Galho já descoberto. conteudo.galho deve apontar pro ID do Galho-mãe."
+    },
+    {
+      "tipo": "reino ou mundo",
+      "quantidade": "1 ou mais por Dimensão",
+      "quando_revelar": "Quando os players chegam a esse Reino/Mundo dentro de uma Dimensão já descoberta. conteudo.dimensao deve apontar pro id da Dimensão-mãe. Ainda não existe nenhum exemplo desse nível em nenhuma Árvore."
+    },
+    {
+      "tipo": "personagem (ou soberano, npc)",
+      "quantidade": "0 ou mais, avulso",
+      "quando_revelar": "Não faz parte da cascata Árvore→Galho→Dimensão — é uma camada solta pra NPCs, soberanos etc. Usado pela primeira vez em data/mundo/Parley (subjulgado)/parley-axis.json, pra representar Keryx como remanescente fraco por baixo da A.X.I.S."
+    }
+  ],
+
+  "campos_com_underscore": "Qualquer campo começando com '_' (ex.: '_origem', '_quando_revelar', '_pronto_para_importar') é anotação pra você — não faz parte do schema de import (tipo/id/titulo/conteudo). Se importar o arquivo do jeito que está, o sistema simplesmente ignora esses campos, sem problema.",
+
+  "arvore_de_referencia_completa": "data/mundo/Gênese/genese.json — primeira Árvore organizada nesse padrão, do início (Deidade) até uma Dimensão, com o guia mais detalhado de como importar tudo de uma vez ou separar entrada por entrada. Use como modelo.",
+
+  "status_das_arvores": {
+    "com_deidade_e_fluxo_reais": [
+      "aethel (Gênese)", "ousias (Alétheia)", "keryx (Parley/A.X.I.S)", "haemus (Anima)",
+      "ignis (Vórtice)", "moros (Baluarte)", "aperion (Matriz)", "chronus (Éon)",
+      "erebus (Abismo)", "mulher-carmesim (Limiar)"
+    ],
+    "com_galho_real_tambem": ["aethel (Realidade 0)", "mulher-carmesim (Arkarin)"],
+    "todas_as_outras": "Têm Galho e Dimensão só como PLACEHOLDER (marcados '_pronto_para_importar': false) — substitua pelo conteúdo de verdade antes de importar essas duas camadas especificamente."
+  },
+
+  "nota_mulher_carmesim": "A Árvore da Mulher Carmesim é um caso especial — ela só tem 1 Galho (Arkarin), não vários, e ele já tem conteúdo real (ver limiar.json)."
+}

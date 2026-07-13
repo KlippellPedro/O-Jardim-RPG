@@ -255,6 +255,20 @@ function initCards() {
   });
 }
 
+function initCustomIcons() {
+  document.querySelectorAll('[data-icon-image]').forEach(imagem => {
+    const fallback = imagem.parentElement.querySelector('[data-icon-fallback]');
+    const mostrarImagem = () => {
+      imagem.hidden = false;
+      if (fallback) fallback.hidden = true;
+    };
+
+    imagem.addEventListener('load', mostrarImagem, { once: true });
+    imagem.addEventListener('error', () => imagem.remove(), { once: true });
+    if (imagem.complete && imagem.naturalWidth > 0) mostrarImagem();
+  });
+}
+
 // ── Configurações ────────────────────────────────────────────
 
 function initSettings() {
@@ -308,6 +322,7 @@ function initSettings() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initCosmicTree();
+  initCustomIcons();
   initCards();
   initSettings();
 });

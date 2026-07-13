@@ -1,0 +1,80 @@
+{
+  "pacote": "arvore-vortice",
+
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e_esse_arquivo": "Pacote da Árvore de Vórtice — mesmo formato de data/mundo/Gênese/genese.json. Deidade e Fluxo têm conteúdo REAL (recuperado do antigo data/world/panteon.json), com um ajuste — ver '_ajustado_para_bater_com_estrutura_do_jardim' na entrada de Deidade. Galho e Dimensão são PLACEHOLDERS PUROS. NÃO importe essas duas como estão.",
+    "ordem_de_revelacao_sugerida": [
+      "1. Deidade (Ignis) — pronta pra importar.",
+      "2. Fluxo (Fluxo da Inconstância) — rascunho, mas coerente.",
+      "3. Galho — PLACEHOLDER, substitua antes de importar.",
+      "4. Dimensão — PLACEHOLDER, substitua antes de importar."
+    ]
+  },
+
+  "entradas": [
+    {
+      "_secao": "1 de 4 — DEIDADE",
+      "tipo": "deidade",
+      "id": "ignis",
+      "titulo": "Ignis",
+      "conteudo": {
+        "epiteto": "Aquele que flui na Inconstância",
+        "genero": "Masculino",
+        "dominio": "A mudança constante e a entropia — impede que o Jardim fique estagnado ou morra pela calmaria.",
+        "descricao": "Caótico e intenso. Governa a mudança constante e a entropia, impedindo que os Galhos fiquem estagnados. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo — ironicamente, o próprio Fluxo da mudança está estacionado.",
+        "fluxo": "fluxo-da-inconstancia",
+        "status": "paralisada"
+      },
+
+      "_origem": "Conteúdo real — recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
+      "_ajustado_para_bater_com_estrutura_do_jardim": "O panteon.json antigo tinha epíteto 'Aquela que flui na Mutação' e gênero 'Feminino'. A tabela mais recente 'Estrutura do Jardim' mostra epíteto 'Aquele que flui na Inconstância' e gênero 'Masculino' — usei a versão mais recente aqui. Se isso foi um erro de digitação na tabela em vez de uma mudança deliberada, é só ajustar este campo.",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Vórtice."
+    },
+
+    {
+      "_secao": "2 de 4 — FLUXO (rascunho — ver _origem abaixo)",
+      "tipo": "fluxo",
+      "id": "fluxo-da-inconstancia",
+      "titulo": "Fluxo da Inconstância",
+      "conteudo": {
+        "arvore": "Vórtice",
+        "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo que rege a mudança constante e a entropia — o mesmo domínio da deidade Ignis, já que Árvore, Deidade e Fluxo são a mesma entidade."
+      },
+
+      "_origem": "PLACEHOLDER — nenhuma fonte específica sobre o Fluxo em si foi lida ainda. Texto inferido a partir do domínio já conhecido de Ignis.",
+      "_pronto_para_importar": true,
+      "_o_que_falta": "Reescrever 'descricao' com material de origem de verdade, se existir.",
+      "_quando_revelar": "Geralmente revelado depois da Deidade em si."
+    },
+
+    {
+      "_secao": "3 de 4 — GALHO (placeholder — ver _origem)",
+      "tipo": "galho",
+      "id": "vortice-galho-1",
+      "titulo": "Galho de Vórtice (placeholder)",
+      "conteudo": {
+        "arvore": "ignis",
+        "descricao": "[PLACEHOLDER] Ainda não existe um Galho definido pra Árvore de Vórtice em nenhuma fonte. Substitua id/titulo/descricao por um Galho de verdade quando decidir o que existe aqui."
+      },
+
+      "_origem": "PLACEHOLDER puro — nenhuma fonte definiu Galhos pra esta Árvore.",
+      "_pronto_para_importar": false,
+      "_proximo_passo": "Escreva o(s) Galho(s) reais — duplique este bloco com ids diferentes se precisar de mais de um."
+    },
+
+    {
+      "_secao": "4 de 4 — DIMENSÃO (placeholder — ver _origem)",
+      "tipo": "dimensao",
+      "id": "vortice-dimensao-1",
+      "titulo": "Dimensão de Vórtice (placeholder)",
+      "conteudo": {
+        "galho": "vortice-galho-1",
+        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro do Galho acima. Substitua quando tiver o conteúdo de verdade."
+      },
+
+      "_origem": "PLACEHOLDER puro — mesmo caso do Galho acima.",
+      "_pronto_para_importar": false
+    }
+  ]
+}

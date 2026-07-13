@@ -1,0 +1,79 @@
+{
+  "pacote": "arvore-eon",
+
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e_esse_arquivo": "Pacote da Árvore de Éon — mesmo formato de data/mundo/Gênese/genese.json. Deidade e Fluxo têm conteúdo REAL (recuperado do antigo data/world/panteon.json). Galho e Dimensão são PLACEHOLDERS PUROS. NÃO importe essas duas como estão.",
+    "ordem_de_revelacao_sugerida": [
+      "1. Deidade (Chronus) — pronta pra importar.",
+      "2. Fluxo (Fluxo do Tempo) — rascunho, mas coerente.",
+      "3. Galho — PLACEHOLDER, substitua antes de importar.",
+      "4. Dimensão — PLACEHOLDER, substitua antes de importar."
+    ]
+  },
+
+  "entradas": [
+    {
+      "_secao": "1 de 4 — DEIDADE",
+      "tipo": "deidade",
+      "id": "chronus",
+      "titulo": "Chronus",
+      "conteudo": {
+        "epiteto": "Aquele que flui no Tempo",
+        "genero": "Masculino",
+        "dominio": "A linha sucessiva e imutável de eventos — garante que passado, presente e futuro jamais se misturem.",
+        "descricao": "Paciente e inevitável. Ele zela pela linha sucessiva e imutável de eventos. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo.",
+        "fluxo": "fluxo-do-tempo",
+        "status": "paralisada"
+      },
+
+      "_origem": "Conteúdo real — recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Éon."
+    },
+
+    {
+      "_secao": "2 de 4 — FLUXO (rascunho — ver _origem abaixo)",
+      "tipo": "fluxo",
+      "id": "fluxo-do-tempo",
+      "titulo": "Fluxo do Tempo",
+      "conteudo": {
+        "arvore": "Éon",
+        "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo que rege a linha sucessiva de eventos — o mesmo domínio da deidade Chronus, já que Árvore, Deidade e Fluxo são a mesma entidade."
+      },
+
+      "_origem": "PLACEHOLDER — nenhuma fonte específica sobre o Fluxo em si foi lida ainda. Texto inferido a partir do domínio já conhecido de Chronus.",
+      "_pronto_para_importar": true,
+      "_o_que_falta": "Reescrever 'descricao' com material de origem de verdade, se existir.",
+      "_quando_revelar": "Geralmente revelado depois da Deidade em si."
+    },
+
+    {
+      "_secao": "3 de 4 — GALHO (placeholder — ver _origem)",
+      "tipo": "galho",
+      "id": "eon-galho-1",
+      "titulo": "Galho de Éon (placeholder)",
+      "conteudo": {
+        "arvore": "chronus",
+        "descricao": "[PLACEHOLDER] Ainda não existe um Galho definido pra Árvore de Éon em nenhuma fonte. Substitua id/titulo/descricao por um Galho de verdade quando decidir o que existe aqui."
+      },
+
+      "_origem": "PLACEHOLDER puro — nenhuma fonte definiu Galhos pra esta Árvore.",
+      "_pronto_para_importar": false,
+      "_proximo_passo": "Escreva o(s) Galho(s) reais — duplique este bloco com ids diferentes se precisar de mais de um."
+    },
+
+    {
+      "_secao": "4 de 4 — DIMENSÃO (placeholder — ver _origem)",
+      "tipo": "dimensao",
+      "id": "eon-dimensao-1",
+      "titulo": "Dimensão de Éon (placeholder)",
+      "conteudo": {
+        "galho": "eon-galho-1",
+        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro do Galho acima. Substitua quando tiver o conteúdo de verdade."
+      },
+
+      "_origem": "PLACEHOLDER puro — mesmo caso do Galho acima.",
+      "_pronto_para_importar": false
+    }
+  ]
+}

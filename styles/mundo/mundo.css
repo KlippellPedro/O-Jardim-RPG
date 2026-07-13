@@ -717,6 +717,11 @@
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
+  /* Valor de respaldo só até o JS (tree3d.js: ajustarAlturaStage) fixar a
+     altura exata da viewport disponível abaixo do cabeçalho — min-height
+     em dvh puro somaria com a altura do cabeçalho e deixaria a página mais
+     alta que uma viewport inteira, sobrando espaço vazio (com estrelas,
+     mas vazio) no fim, exigindo rolagem à toa. */
   min-height: 66vh;
   overflow: hidden;
 }
@@ -843,6 +848,10 @@
 
 .arvores-stage-3d {
   display: flex;
+  /* Cancela o padding-bottom fixo de .mundo-page — sem isso a página fica
+     var(--space-16) mais alta que a viewport, sobrando uma faixa sem
+     estrelas (só o vazio de .mundo-bg) no fim, exigindo rolagem à toa. */
+  margin-bottom: calc(-1 * var(--space-16));
   background-color: var(--void);
   background-image:
     /* estrelas próximas — maiores, mais brilhantes, tile mais espaçado */
@@ -902,6 +911,7 @@
   color: var(--moon);
   text-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
   white-space: nowrap;
+  transition: text-shadow 300ms var(--ease-smooth), transform 300ms var(--ease-smooth);
 }
 
 .arvores-3d-label--bloqueada {
@@ -912,22 +922,18 @@
   text-shadow: none;
 }
 
-.arvores-3d-hint {
-  position: absolute;
-  bottom: var(--space-4);
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  letter-spacing: 0.06em;
-  color: var(--dim);
-  opacity: 0.75;
-  transition: opacity 350ms var(--ease-smooth);
-  pointer-events: none;
+.arvores-3d-label--hover {
+  transform: translate(-50%, -100%) scale(1.08);
+  text-shadow: 0 0 10px var(--accent, currentColor), 0 0 22px var(--accent, currentColor);
 }
 
-.arvores-3d-hint--oculto {
-  opacity: 0;
+/* A.X.I.S — identidade original (Parley) subjugada por baixo. Fonte
+   monoespaçada mesmo em repouso já denuncia que essa Árvore não é como as
+   outras; o hover (ver tree3d.js) faz o nome vazar pra Parley por um instante. */
+.arvores-3d-label--subjugada {
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  color: var(--accent, currentColor);
 }
 
 /* Responsivo */

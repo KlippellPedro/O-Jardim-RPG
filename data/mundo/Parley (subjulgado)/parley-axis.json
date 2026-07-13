@@ -1,0 +1,104 @@
+{
+  "pacote": "arvore-parley-axis",
+
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e_esse_arquivo": "Pacote da Árvore de Parley/A.X.I.S — o caso especial da cascata. Mesmo formato de data/mundo/Gênese/genese.json, mas com uma torção: fisicamente é UMA Árvore só, só que com duas identidades sobrepostas (ver src/mundo/config/arvores.js e src/mundo/views/components/tree3d.js, onde isso já foi implementado visualmente — o modelo 3D é uma gaiola tecnológica, e o rótulo na tela de Árvores mostra 'A.X.I.S' em neon, com um glitch no hover que revela 'Parley' em prata por baixo).",
+
+    "ATENCAO_id_e_titulo": "A entrada de Deidade abaixo usa \"id\": \"keryx\" (tem que ser esse id — é o mesmo usado em ARVORES/config, no nome do .glb e nas rotas /deidades/keryx) mas \"titulo\": \"A.X.I.S\" (a identidade dominante, que é o que efetivamente aparece pro player em todo canto assim que importado — breadcrumbs, cor de destaque, etc.). Ou seja: import com id 'keryx' → o player vê 'A.X.I.S'. Isso é intencional, não um erro de digitação.",
+
+    "sobre_a_entrada_extra_de_personagem": "Além da cascata normal (Deidade/Fluxo/Galho/Dimensão), este arquivo tem uma 5ª entrada do tipo 'personagem' (Keryx remanescente) — o que restou da deidade original, fraca e presa, existindo por baixo da A.X.I.S. É uma forma de os players poderem 'descobrir' a Parley separadamente da A.X.I.S, narrativamente, sem mexer no slot da Árvore em si. Totalmente opcional — apague se não quiser usar essa camada extra.",
+
+    "o_que_e_real_vs_placeholder": "Deidade, Fluxo e a entrada de Personagem têm conteúdo REAL, recuperado do antigo data/world/panteon.json (removido numa sessão anterior) e reconciliado com a tabela mais recente 'Estrutura do Jardim' (que separou Parley/Keryx subjugado da A.X.I.S/Jota Macedo em duas linhas). Galho e Dimensão são PLACEHOLDERS PUROS — NÃO importe como estão.",
+
+    "ordem_de_revelacao_sugerida": [
+      "1. Deidade (id 'keryx', mostra 'A.X.I.S') — pronta pra importar.",
+      "2. Fluxo (Fluxo da Tecnologia) — pronto pra importar, já tem cor/símbolo próprios no código.",
+      "3. Personagem (Keryx remanescente) — pronto pra importar, revela a Parley por baixo.",
+      "4. Galho — PLACEHOLDER, substitua antes de importar.",
+      "5. Dimensão — PLACEHOLDER, substitua antes de importar."
+    ]
+  },
+
+  "entradas": [
+    {
+      "_secao": "1 de 5 — DEIDADE (id 'keryx', titulo 'A.X.I.S' — ver ATENCAO_id_e_titulo acima)",
+      "tipo": "deidade",
+      "id": "keryx",
+      "titulo": "A.X.I.S",
+      "conteudo": {
+        "epiteto": "Aquele que flui na Tecnologia",
+        "genero": "Masculino",
+        "dominio": "A nova malha artificial que intercepta, filtra e bloqueia a comunicação direta entre todas as deidades, isolando-as umas das outras.",
+        "descricao": "Jota Macedo convenceu Keryx — o antigo Fluxo da Comunicação, guardião das leis e pactos entre as Árvores — a assinar um contrato que se revelou uma prisão. Keryx não foi derrotado por força: foi enganado pela diplomacia, a própria arma que ele mais confiava. Desde então, Jota governa o que restou do Fluxo de Keryx através da A.X.I.S, uma malha tecnológica artificial que corta a comunicação direta entre as demais deidades — é por isso que quase todas elas estão paralisadas e isoladas, sem conseguir se falar.",
+        "fluxo": "fluxo-da-tecnologia",
+        "status": "dominante"
+      },
+
+      "_origem": "Conteúdo real — recuperado do antigo data/world/panteon.json (entrada 'keryx', que na época ainda tratava Keryx e A.X.I.S como uma coisa só) antes de ele ser removido nesta sessão, reconciliado com a tabela mais recente 'Estrutura do Jardim' (que separa Parley/Keryx subjugado da A.X.I.S/Jota Macedo em duas linhas distintas — segui essa divisão mais recente aqui).",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "Diferente de Aethel (que já aparece desde o início), esta Árvore some como '??' até ser importada — nesse momento, o rótulo na cena 3D troca de '??' pra 'A.X.I.S' em neon."
+    },
+
+    {
+      "_secao": "2 de 5 — FLUXO",
+      "tipo": "fluxo",
+      "id": "fluxo-da-tecnologia",
+      "titulo": "Fluxo da Tecnologia",
+      "conteudo": {
+        "arvore": "A.X.I.S",
+        "descricao": "A malha artificial que Jota Macedo controla através da A.X.I.S — governa maquinário avançado e intercepta a comunicação entre as demais Árvores. Ver também a perícia \"Tecnologia\" em src/regras/regrasData.js, que já cita itens A.X.I.S e a linha de Jota Macedo."
+      },
+
+      "_origem": "Conteúdo real — este id ('fluxo-da-tecnologia') já é usado/temático no código (styles/core/variables.css → --neon, src/mundo/config/temas.js → símbolo ⬡), então já herda essa cor/símbolo assim que importado. Descrição adaptada do domínio já estabelecido na Deidade acima.",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "Geralmente revelado junto ou logo depois da Deidade, já que aqui os dois contam a mesma história."
+    },
+
+    {
+      "_secao": "3 de 5 — PERSONAGEM (opcional — ver sobre_a_entrada_extra_de_personagem acima)",
+      "tipo": "personagem",
+      "id": "keryx-remanescente",
+      "titulo": "Keryx",
+      "conteudo": {
+        "epiteto": "O que restou de Aquele que fluía na Comunicação",
+        "genero": "Masculino",
+        "descricao": "O que resta de Keryx depois do contrato com Jota Macedo. Ainda existe — fraco, preso, sem controle sobre o próprio Fluxo, que agora responde à A.X.I.S (entrada 'keryx' deste mesmo pacote). Diplomata e rígido por natureza, foi justamente sua confiança nos pactos e nas leis entre realidades que Jota usou contra ele. Rege (ou regia) as leis e os pactos entre as realidades.",
+        "status": "preso",
+        "subjugado_por": "A.X.I.S / Jota Macedo"
+      },
+
+      "_origem": "Conteúdo real — reconciliado a partir do antigo data/world/panteon.json (status 'preso', 'prisioneiro_de: jota-macedo', a descrição de ter sido 'enganado pela diplomacia') com o epíteto/domínio de Comunicação da tabela 'Estrutura do Jardim' (linha 'Parley (Subjugado) / Keryx').",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "Pensado como uma descoberta separada da Deidade acima — por exemplo, algo que os players encontram investigando a fundo, não só olhando a Árvore de fora. Categoria 'Personagens' no Mundo, não 'Deidades e Fluxos'."
+    },
+
+    {
+      "_secao": "4 de 5 — GALHO (placeholder — ver _origem)",
+      "tipo": "galho",
+      "id": "axis-galho-1",
+      "titulo": "Galho de A.X.I.S (placeholder)",
+      "conteudo": {
+        "arvore": "keryx",
+        "descricao": "[PLACEHOLDER] Ainda não existe um Galho definido pra esta Árvore em nenhuma fonte. Substitua id/titulo/descricao por um Galho de verdade quando decidir o que existe aqui — por exemplo, algum tipo de 'servidor' ou 'núcleo' onde a malha da A.X.I.S de fato reside."
+      },
+
+      "_origem": "PLACEHOLDER puro — nenhuma fonte definiu Galhos pra esta Árvore.",
+      "_pronto_para_importar": false,
+      "_proximo_passo": "Escreva o(s) Galho(s) reais — duplique este bloco com ids diferentes se precisar de mais de um."
+    },
+
+    {
+      "_secao": "5 de 5 — DIMENSÃO (placeholder — ver _origem)",
+      "tipo": "dimensao",
+      "id": "axis-dimensao-1",
+      "titulo": "Dimensão de A.X.I.S (placeholder)",
+      "conteudo": {
+        "galho": "axis-galho-1",
+        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro do Galho acima. Substitua quando tiver o conteúdo de verdade."
+      },
+
+      "_origem": "PLACEHOLDER puro — mesmo caso do Galho acima.",
+      "_pronto_para_importar": false
+    }
+  ]
+}

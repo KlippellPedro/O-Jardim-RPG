@@ -1,0 +1,81 @@
+{
+  "pacote": "arvore-limiar",
+
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e_esse_arquivo": "Pacote da Árvore de Limiar — mesmo formato de data/mundo/Gênese/genese.json. Caso especial: Deidade, Fluxo E Galho (Arkarin) têm conteúdo REAL aqui, recuperado do antigo data/world/panteon.json — é a segunda Árvore (depois de Gênese) a ter um Galho de verdade. Só a Dimensão continua PLACEHOLDER. Outra particularidade: Limiar só tem ESTE Galho (Arkarin), diferente das outras Árvores que tendem a ter vários — reflexo da natureza dela (ela é o fim de tudo, não uma entre múltiplas origens).",
+    "ordem_de_revelacao_sugerida": [
+      "1. Deidade (Mulher Carmesim) — pronta pra importar.",
+      "2. Fluxo (Fluxo do Sangue) — rascunho, mas coerente.",
+      "3. Galho (Arkarin) — conteúdo real, pronto pra importar.",
+      "4. Dimensão — PLACEHOLDER, substitua antes de importar."
+    ]
+  },
+
+  "entradas": [
+    {
+      "_secao": "1 de 4 — DEIDADE",
+      "tipo": "deidade",
+      "id": "mulher-carmesim",
+      "titulo": "Mulher Carmesim",
+      "conteudo": {
+        "epiteto": "Aquela que Flui no Fim",
+        "genero": "Feminino",
+        "dominio": "O término de todas as eras e ciclos — recepciona tudo o que acaba, transformando o fim em solo pro recomeço.",
+        "descricao": "Também chamada de \"A Escritora do Fim\". Pacientemente recepciona tudo o que acaba, transformando o fim em solo para o recomeço. Preside o Tribunal de Arkarin, onde julga os mortos. Estruturalmente é igual às outras deidades — tem Árvore, tem Fluxo, tem Galho —, mas seu único Galho é Arkarin, o destino final de toda existência, o ponto de convergência de todas as outras Árvores: não uma origem, e sim uma chegada. Diferente das demais, não está paralisada pela queda de Keryx — opera em seu domínio ininterruptamente.",
+        "fluxo": "fluxo-do-sangue",
+        "status": "ativa"
+      },
+
+      "_origem": "Conteúdo real — recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Limiar."
+    },
+
+    {
+      "_secao": "2 de 4 — FLUXO (rascunho — ver _origem abaixo)",
+      "tipo": "fluxo",
+      "id": "fluxo-do-sangue",
+      "titulo": "Fluxo do Sangue",
+      "conteudo": {
+        "arvore": "Limiar",
+        "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo ligado à morte, ao julgamento dos mortos e ao fim de toda existência — o mesmo domínio da Mulher Carmesim, já que Árvore, Deidade e Fluxo são a mesma entidade. Ver também a perícia \"Ritos de Arkarin\" em src/regras/regrasData.js, que já cita este Fluxo."
+      },
+
+      "_origem": "PLACEHOLDER — nenhuma fonte específica sobre o Fluxo em si (distinto da deidade) foi lida ainda, mas o id 'fluxo-do-sangue' já é usado/temático no código (styles/core/variables.css → --blood, src/mundo/config/temas.js → símbolo ✥), então já está pronto pra herdar essa cor/símbolo assim que importado.",
+      "_pronto_para_importar": true,
+      "_o_que_falta": "Reescrever 'descricao' com material de origem de verdade, se existir.",
+      "_quando_revelar": "Geralmente revelado depois da Deidade em si."
+    },
+
+    {
+      "_secao": "3 de 4 — GALHO",
+      "tipo": "galho",
+      "id": "arkarin",
+      "titulo": "Arkarin",
+      "conteudo": {
+        "arvore": "mulher-carmesim",
+        "descricao": "O único Galho da Árvore de Limiar — o destino final de toda existência. Sedia o Tribunal de Arkarin, onde a Mulher Carmesim julga os mortos. É o ponto de convergência de todas as outras Árvores: não uma origem, mas a chegada.",
+        "nota": "Diferente das outras Árvores (que costumam ter vários Galhos), Limiar tem só este — reflexo de sua natureza: ela é o fim, não um entre múltiplos começos."
+      },
+
+      "_origem": "Conteúdo real — recuperado do antigo data/world/panteon.json (campo descricao/nota_narracao da entrada mulher-carmesim) antes de ele ser removido nesta sessão.",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "Quando os players chegam a Arkarin.",
+      "_proximo_passo": "Falta a Dimensão dentro de Arkarin (ver entrada 4 deste mesmo arquivo) — e, depois dela, os Locais (Reinos/Mundos) que existirem lá dentro."
+    },
+
+    {
+      "_secao": "4 de 4 — DIMENSÃO (placeholder — ver _origem)",
+      "tipo": "dimensao",
+      "id": "limiar-dimensao-1",
+      "titulo": "Dimensão de Arkarin (placeholder)",
+      "conteudo": {
+        "galho": "arkarin",
+        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro de Arkarin. Substitua quando tiver o conteúdo de verdade — provavelmente algo como \"o Salão do Tribunal\" ou similar, mas isso é um chute meu, não conteúdo oficial."
+      },
+
+      "_origem": "PLACEHOLDER puro — nenhuma fonte descreve a Dimensão dentro de Arkarin ainda, só o Galho em si.",
+      "_pronto_para_importar": false
+    }
+  ]
+}

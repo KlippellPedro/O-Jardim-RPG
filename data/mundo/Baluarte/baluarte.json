@@ -1,0 +1,79 @@
+{
+  "pacote": "arvore-baluarte",
+
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e_esse_arquivo": "Pacote da Árvore de Baluarte — mesmo formato de data/mundo/Gênese/genese.json. Deidade e Fluxo têm conteúdo REAL (recuperado do antigo data/world/panteon.json). Galho e Dimensão são PLACEHOLDERS PUROS. NÃO importe essas duas como estão.",
+    "ordem_de_revelacao_sugerida": [
+      "1. Deidade (Moros) — pronta pra importar.",
+      "2. Fluxo (Fluxo do Físico) — rascunho, mas coerente.",
+      "3. Galho — PLACEHOLDER, substitua antes de importar.",
+      "4. Dimensão — PLACEHOLDER, substitua antes de importar."
+    ]
+  },
+
+  "entradas": [
+    {
+      "_secao": "1 de 4 — DEIDADE",
+      "tipo": "deidade",
+      "id": "moros",
+      "titulo": "Moros",
+      "conteudo": {
+        "epiteto": "Aquele que flui no Físico",
+        "genero": "Masculino",
+        "dominio": "Peso, gravidade e substância física — sem sua proteção, nada seria sólido e tudo colapsaria em éter.",
+        "descricao": "Estóico e pesado. É ele quem dá peso, gravidade e substância física ao mundo. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo.",
+        "fluxo": "fluxo-do-fisico",
+        "status": "paralisada"
+      },
+
+      "_origem": "Conteúdo real — recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão (lá o epíteto era 'Aquele que flui na Matéria'; ajustei pra 'Físico' pra bater com a tabela mais recente 'Estrutura do Jardim' — mesmo domínio, nome atualizado).",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Baluarte."
+    },
+
+    {
+      "_secao": "2 de 4 — FLUXO (rascunho — ver _origem abaixo)",
+      "tipo": "fluxo",
+      "id": "fluxo-do-fisico",
+      "titulo": "Fluxo do Físico",
+      "conteudo": {
+        "arvore": "Baluarte",
+        "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo que rege peso, gravidade e substância física — o mesmo domínio da deidade Moros, já que Árvore, Deidade e Fluxo são a mesma entidade."
+      },
+
+      "_origem": "PLACEHOLDER — nenhuma fonte específica sobre o Fluxo em si foi lida ainda. Texto inferido a partir do domínio já conhecido de Moros.",
+      "_pronto_para_importar": true,
+      "_o_que_falta": "Reescrever 'descricao' com material de origem de verdade, se existir.",
+      "_quando_revelar": "Geralmente revelado depois da Deidade em si."
+    },
+
+    {
+      "_secao": "3 de 4 — GALHO (placeholder — ver _origem)",
+      "tipo": "galho",
+      "id": "baluarte-galho-1",
+      "titulo": "Galho de Baluarte (placeholder)",
+      "conteudo": {
+        "arvore": "moros",
+        "descricao": "[PLACEHOLDER] Ainda não existe um Galho definido pra Árvore de Baluarte em nenhuma fonte. Substitua id/titulo/descricao por um Galho de verdade quando decidir o que existe aqui."
+      },
+
+      "_origem": "PLACEHOLDER puro — nenhuma fonte definiu Galhos pra esta Árvore.",
+      "_pronto_para_importar": false,
+      "_proximo_passo": "Escreva o(s) Galho(s) reais — duplique este bloco com ids diferentes se precisar de mais de um."
+    },
+
+    {
+      "_secao": "4 de 4 — DIMENSÃO (placeholder — ver _origem)",
+      "tipo": "dimensao",
+      "id": "baluarte-dimensao-1",
+      "titulo": "Dimensão de Baluarte (placeholder)",
+      "conteudo": {
+        "galho": "baluarte-galho-1",
+        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro do Galho acima. Substitua quando tiver o conteúdo de verdade."
+      },
+
+      "_origem": "PLACEHOLDER puro — mesmo caso do Galho acima.",
+      "_pronto_para_importar": false
+    }
+  ]
+}

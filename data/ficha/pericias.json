@@ -1,11 +1,5 @@
 {
-  "nota": "Base: Tormenta 20 (confirmado com Pedro). Luta e Pontaria são perícias, não resistências. Fortitude, Reflexos e Vontade são Resistências (defesas passivas), não perícias.",
-
-  "resistencias": [
-    { "id": "fortitude", "titulo": "Fortitude",  "atributo": "constituicao", "descricao": "Resistência física — corpo, doenças, venenos, exaustão" },
-    { "id": "reflexos",  "titulo": "Reflexos",   "atributo": "destreza",     "descricao": "Resistência a ataques evitáveis — armadilhas, explosões, efeitos de área" },
-    { "id": "vontade",   "titulo": "Vontade",    "atributo": "sabedoria",    "descricao": "Resistência mental — ilusões, encantamentos, medo, sanidade" }
-  ],
+  "nota": "Base: Tormenta 20 (confirmado com Pedro). Luta e Pontaria são perícias. Fortitude, Reflexos e Vontade eram tratadas como Resistências à parte (defesas passivas) — reclassificadas em 2026-07-11 (confirmado com Pedro) como perícias comuns, pra aparecerem na mesma lista/UI de Perícias em vez de uma seção separada na Ficha.",
 
   "nao_sao_pericias": [
     {
@@ -20,12 +14,14 @@
   "pericias": [
     { "id": "atletismo",         "titulo": "Atletismo",         "atributo": "forca",          "origem": "Tormenta" },
     { "id": "luta",              "titulo": "Luta",              "atributo": "forca",          "origem": "Tormenta", "uso": "Ataques corpo a corpo; usada no Contra-Ataque" },
+    { "id": "fortitude",         "titulo": "Fortitude",         "atributo": "constituicao",   "origem": "Tormenta", "descricao": "Resistência física — corpo, doenças, venenos, exaustão" },
     { "id": "acrobacia",         "titulo": "Acrobacia",         "atributo": "destreza",       "origem": "Tormenta" },
     { "id": "cavalgar",          "titulo": "Cavalgar",          "atributo": "destreza",       "origem": "Tormenta" },
     { "id": "furtividade",       "titulo": "Furtividade",       "atributo": "destreza",       "origem": "Tormenta" },
     { "id": "ladinagem",         "titulo": "Ladinagem",         "atributo": "destreza",       "origem": "Tormenta" },
     { "id": "pilotagem",         "titulo": "Pilotagem",         "atributo": "destreza",       "origem": "Tormenta" },
     { "id": "pontaria",          "titulo": "Pontaria",          "atributo": "destreza",       "origem": "Tormenta", "uso": "Ataques à distância" },
+    { "id": "reflexos",          "titulo": "Reflexos",          "atributo": "destreza",       "origem": "Tormenta", "descricao": "Resistência a ataques evitáveis — armadilhas, explosões, efeitos de área" },
     { "id": "conhecimento",      "titulo": "Conhecimento",      "atributo": "inteligencia",   "origem": "Tormenta" },
     { "id": "guerra",            "titulo": "Guerra",            "atributo": "inteligencia",   "origem": "Tormenta" },
     { "id": "investigacao",      "titulo": "Investigação",      "atributo": "inteligencia",   "origem": "Tormenta" },
@@ -37,13 +33,13 @@
     { "id": "percepcao",         "titulo": "Percepção",         "atributo": "sabedoria",      "origem": "Tormenta" },
     { "id": "religiao",          "titulo": "Religião",          "atributo": "sabedoria",      "origem": "Tormenta" },
     { "id": "sobrevivencia",     "titulo": "Sobrevivência",     "atributo": "sabedoria",      "origem": "Tormenta" },
+    { "id": "vontade",           "titulo": "Vontade",           "atributo": "sabedoria",      "origem": "Tormenta", "descricao": "Resistência mental — ilusões, encantamentos, medo, sanidade" },
     { "id": "atuacao",           "titulo": "Atuação",           "atributo": "carisma",        "origem": "Tormenta" },
     { "id": "diplomacia",        "titulo": "Diplomacia",        "atributo": "carisma",        "origem": "Tormenta" },
     { "id": "enganacao",         "titulo": "Enganação",         "atributo": "carisma",        "origem": "Tormenta" },
     { "id": "intimidacao",       "titulo": "Intimidação",       "atributo": "carisma",        "origem": "Tormenta" },
     { "id": "jogatina",          "titulo": "Jogatina",          "atributo": "carisma",        "origem": "Tormenta" },
-    { "id": "lidar-animais",     "titulo": "Lidar com Animais", "atributo": "carisma",        "origem": "Tormenta" },
-    { "id": "obter-informacao",  "titulo": "Obter Informação",  "atributo": "carisma",        "origem": "Tormenta" },
+    { "id": "adestramento",     "titulo": "Adestramento",       "atributo": "carisma",        "origem": "Tormenta" },
 
     {
       "id": "ressonancia",
@@ -80,8 +76,8 @@
   ],
 
   "totais": {
-    "tormenta_base": 26,
+    "tormenta_base": 28,
     "o_jardim_aprovadas": 4,
-    "nota": "As 4 perícias de O Jardim foram aprovadas por Pedro (não são mais propostas). Iniciativa foi removida desta lista — confirmada como não-perícia."
+    "nota": "As 4 perícias de O Jardim foram aprovadas por Pedro (não são mais propostas). Iniciativa foi removida desta lista — confirmada como não-perícia. Fortitude/Reflexos/Vontade contam no total do Tormenta (28 = 25 + as 3 reclassificadas de Resistências)."
   }
 }

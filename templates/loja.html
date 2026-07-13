@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Loja — O Jardim RPG</title>
+    <link rel="icon" type="image/png" href="../assets/img/icons/favicon.png" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -26,12 +27,41 @@
       <header class="loja-header">
         <a class="loja-back" href="../index.html">‹ O Jardim RPG</a>
         <h1 class="loja-title">Loja</h1>
-        <button type="button" class="loja-import-btn" id="loja-import-btn">Importar conteúdo</button>
-        <input type="file" id="loja-import-input" accept="application/json" hidden />
+
+        <div class="loja-header-tools">
+          <div class="loja-search">
+            <span class="loja-search-icon" aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              class="loja-search-input"
+              id="loja-search-input"
+              placeholder="Buscar item…"
+              aria-label="Buscar item"
+            />
+          </div>
+
+          <div class="loja-wallet" id="loja-wallet">
+            <span class="loja-wallet-saldo" title="Carteira — em breve gerenciada pelo Banqueiro no Discord">
+              <span class="loja-wallet-icon" aria-hidden="true" id="loja-wallet-icon">☾</span>
+              <span class="loja-wallet-valor" id="loja-wallet-valor">20</span>
+            </span>
+            <div class="loja-moeda-seletor" id="loja-moeda-seletor"></div>
+          </div>
+
+          <button type="button" class="loja-import-btn" id="loja-import-btn">Importar conteúdo</button>
+          <input type="file" id="loja-import-input" accept="application/json" hidden />
+        </div>
       </header>
 
-      <main class="loja-content" id="loja-content" aria-live="polite"></main>
+      <div class="loja-quickfilters" id="loja-quickfilters" role="group" aria-label="Filtrar por raridade"></div>
+
+      <div class="loja-shell">
+        <aside class="loja-sidebar" id="loja-sidebar" aria-label="Categorias da loja"></aside>
+        <main class="loja-content" id="loja-content" aria-live="polite"></main>
+      </div>
     </div>
+
+    <div class="loja-modal-layer" id="loja-modal-layer" hidden></div>
 
     <div class="loja-toast" id="loja-toast" role="status" hidden></div>
 

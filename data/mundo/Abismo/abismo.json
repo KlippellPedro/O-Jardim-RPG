@@ -1,0 +1,79 @@
+{
+  "pacote": "arvore-abismo",
+
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e_esse_arquivo": "Pacote da Árvore de Abismo — mesmo formato de data/mundo/Gênese/genese.json. Deidade e Fluxo têm conteúdo REAL (recuperado do antigo data/world/panteon.json). Galho e Dimensão são PLACEHOLDERS PUROS. NÃO importe essas duas como estão.",
+    "ordem_de_revelacao_sugerida": [
+      "1. Deidade (Erebus) — pronta pra importar.",
+      "2. Fluxo (Fluxo do Vazio) — rascunho, mas coerente; ver nota sobre 'marca_corporal' abaixo.",
+      "3. Galho — PLACEHOLDER, substitua antes de importar.",
+      "4. Dimensão — PLACEHOLDER, substitua antes de importar."
+    ]
+  },
+
+  "entradas": [
+    {
+      "_secao": "1 de 4 — DEIDADE",
+      "tipo": "deidade",
+      "id": "erebus",
+      "titulo": "Erebus",
+      "conteudo": {
+        "epiteto": "Aquele que Flui no Vazio",
+        "genero": "Masculino",
+        "dominio": "O nada absoluto — guarda a \"saída\" definitiva da existência.",
+        "descricao": "Governa o nada absoluto. É a deidade silenciosa que guarda a saída definitiva da existência, sendo o mais temido, neutro e enigmático de todos. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo.",
+        "fluxo": "fluxo-do-vazio",
+        "status": "paralisada"
+      },
+
+      "_origem": "Conteúdo real — recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Abismo."
+    },
+
+    {
+      "_secao": "2 de 4 — FLUXO (rascunho — ver _origem abaixo)",
+      "tipo": "fluxo",
+      "id": "fluxo-do-vazio",
+      "titulo": "Fluxo do Vazio",
+      "conteudo": {
+        "arvore": "Abismo",
+        "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo que rege o nada absoluto — o mesmo domínio da deidade Erebus, já que Árvore, Deidade e Fluxo são a mesma entidade."
+      },
+
+      "_origem": "PLACEHOLDER — o antigo data/mundo/aethel/aethel.json (removido nesta sessão, recuperado do histórico do git) menciona de passagem que 'o Fluxo do Vazio já tinha um exemplo pronto' e cogitava um campo 'marca_corporal' (\"Estrelas no pulso\") como padrão pra todos os Fluxos — mas o texto original desse exemplo não sobreviveu em nenhum arquivo ainda existente ou recuperável do histórico. Se você tiver essa nota/PDF original em algum lugar, é só colar a 'descricao' de verdade aqui e adicionar 'marca_corporal': 'Estrelas no pulso' (ou o que for) ao 'conteudo'.",
+      "_pronto_para_importar": true,
+      "_o_que_falta": "Reescrever 'descricao' com o material de origem de verdade, se você ainda tiver acesso a ele. Considerar adicionar 'marca_corporal' como padrão pra todos os Fluxos, não só este.",
+      "_quando_revelar": "Geralmente revelado depois da Deidade em si."
+    },
+
+    {
+      "_secao": "3 de 4 — GALHO (placeholder — ver _origem)",
+      "tipo": "galho",
+      "id": "abismo-galho-1",
+      "titulo": "Galho de Abismo (placeholder)",
+      "conteudo": {
+        "arvore": "erebus",
+        "descricao": "[PLACEHOLDER] Ainda não existe um Galho definido pra Árvore de Abismo em nenhuma fonte. Substitua id/titulo/descricao por um Galho de verdade quando decidir o que existe aqui."
+      },
+
+      "_origem": "PLACEHOLDER puro — nenhuma fonte definiu Galhos pra esta Árvore.",
+      "_pronto_para_importar": false,
+      "_proximo_passo": "Escreva o(s) Galho(s) reais — duplique este bloco com ids diferentes se precisar de mais de um."
+    },
+
+    {
+      "_secao": "4 de 4 — DIMENSÃO (placeholder — ver _origem)",
+      "tipo": "dimensao",
+      "id": "abismo-dimensao-1",
+      "titulo": "Dimensão de Abismo (placeholder)",
+      "conteudo": {
+        "galho": "abismo-galho-1",
+        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro do Galho acima. Substitua quando tiver o conteúdo de verdade."
+      },
+
+      "_origem": "PLACEHOLDER puro — mesmo caso do Galho acima.",
+      "_pronto_para_importar": false
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "versao": "1.0",
+  "descricao": "Legados adicionados à versão oficial. Não fazem parte dos 36 Legados confirmados nos PDFs originais.",
+  "novos": [
+    {
+      "id": "ancora-de-arvore",
+      "titulo": "Âncora de Árvore",
+      "descricao": "Uma vez por cena, quando for teleportado, banido ou deslocado dimensionalmente contra a vontade, use sua reação e gaste 2 Mana para permanecer onde está.",
+      "pre_requisitos": [
+        { "nivel_personagem": 5 }
+      ],
+      "fonte": "Criação da versão 1.0"
+    },
+    {
+      "id": "eco-do-fluxo",
+      "titulo": "Eco do Fluxo",
+      "descricao": "Uma vez por cena, após gastar pelo menos 3 Mana em uma única habilidade, recupere 1 Mana no fim do turno. Não ativa com habilidades de custo reduzido para menos de 3 Mana.",
+      "pre_requisitos": [
+        { "nivel_personagem": 7 }
+      ],
+      "fonte": "Criação da versão 1.0"
+    },
+    {
+      "id": "passo-entre-galhos",
+      "titulo": "Passo Entre Galhos",
+      "descricao": "Uma vez por turno, depois de obter sucesso em Acrobacia ou Furtividade, mova 1,5 m sem provocar reações. Esse movimento não atravessa obstáculos.",
+      "pre_requisitos": [
+        { "atributo": "destreza", "valor_minimo": 14 }
+      ],
+      "fonte": "Criação da versão 1.0"
+    },
+    {
+      "id": "memoria-do-eclipse",
+      "titulo": "Memória do Eclipse",
+      "descricao": "Uma vez por sessão, peça ao mestre uma pista verdadeira sobre algo que o personagem já presenciou ou role Investigação ou Conhecimento com vantagem.",
+      "pre_requisitos": [
+        { "atributo": "inteligencia", "valor_minimo": 14 }
+      ],
+      "fonte": "Criação da versão 1.0"
+    },
+    {
+      "id": "vinculo-lunar",
+      "titulo": "Vínculo Lunar",
+      "descricao": "Quando um aliado a até 15 m for alvo de um ataque, use sua reação e gaste 2 Mana para conceder +2 na Defesa contra somente esse ataque.",
+      "pre_requisitos": [
+        { "nivel_personagem": 5 }
+      ],
+      "fonte": "Criação da versão 1.0"
+    },
+    {
+      "id": "segunda-primavera",
+      "titulo": "Segunda Primavera",
+      "descricao": "Uma vez por descanso, quando sair de Morrendo por receber cura, recupere 1d6 de Vida adicional e reduza 1 Cansaço.",
+      "pre_requisitos": [
+        { "nivel_personagem": 10 }
+      ],
+      "fonte": "Criação da versão 1.0"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "pacote": "arvore-aletheia",
+
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e_esse_arquivo": "Pacote da Árvore de Alétheia — mesmo formato de data/mundo/Gênese/genese.json (leia aquele arquivo pro guia completo de como importar tudo de uma vez ou separar entrada por entrada). Deidade e Fluxo abaixo têm conteúdo REAL: recuperado do antigo data/world/panteon.json (removido numa sessão anterior desta reorganização) e com epíteto/gênero conferidos contra a tabela de referência mais recente 'Estrutura do Jardim'. Galho e Dimensão são PLACEHOLDERS PUROS — só existem pra mostrar a forma da cascata (igual às outras Árvores, nenhuma tem Galho/Dimensão reais ainda, exceto Gênese e Limiar). NÃO importe essas duas como estão — escreva o conteúdo de verdade primeiro.",
+    "ordem_de_revelacao_sugerida": [
+      "1. Deidade (Ousias) — pronta pra importar.",
+      "2. Fluxo (Fluxo da Essência) — rascunho, mas coerente; pode reescrever depois.",
+      "3. Galho — PLACEHOLDER, substitua antes de importar.",
+      "4. Dimensão — PLACEHOLDER, substitua antes de importar."
+    ]
+  },
+
+  "entradas": [
+    {
+      "_secao": "1 de 4 — DEIDADE",
+      "tipo": "deidade",
+      "id": "ousias",
+      "titulo": "Ousias",
+      "conteudo": {
+        "epiteto": "Aquela que flui na Essência",
+        "genero": "Feminino",
+        "dominio": "A alma e a verdade fundamental das coisas — o que define a natureza real de um ser.",
+        "descricao": "Governa o que define a alma e a verdade fundamental das coisas. É filosófica e raramente interfere, a menos que a natureza de um ser seja corrompida. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisada desde que Keryx foi subjugado por Jota Macedo — sente que algo está errado, mas não confia o bastante nas outras pra agir sozinha.",
+        "fluxo": "fluxo-da-essencia",
+        "status": "paralisada"
+      },
+
+      "_origem": "Conteúdo real — recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão (mesma fonte da entrada de Aethel em genese.json).",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Alétheia — nome, epíteto, domínio, status."
+    },
+
+    {
+      "_secao": "2 de 4 — FLUXO (rascunho — ver _origem abaixo)",
+      "tipo": "fluxo",
+      "id": "fluxo-da-essencia",
+      "titulo": "Fluxo da Essência",
+      "conteudo": {
+        "arvore": "Alétheia",
+        "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo que rege a alma e a verdade fundamental das coisas — o mesmo domínio da deidade Ousias, já que Árvore, Deidade e Fluxo são a mesma entidade."
+      },
+
+      "_origem": "PLACEHOLDER — nenhuma fonte específica sobre o Fluxo em si (distinto da deidade) foi lida ainda. Texto inferido a partir do domínio já conhecido de Ousias, só pra não deixar o campo vazio — não é conteúdo oficial.",
+      "_pronto_para_importar": true,
+      "_o_que_falta": "Reescrever 'descricao' com material de origem de verdade, se existir. Considerar um campo 'marca_corporal' (ver nota em data/mundo/Abismo/abismo.json).",
+      "_quando_revelar": "Geralmente revelado depois da Deidade em si."
+    },
+
+    {
+      "_secao": "3 de 4 — GALHO (placeholder — ver _origem)",
+      "tipo": "galho",
+      "id": "aletheia-galho-1",
+      "titulo": "Galho de Alétheia (placeholder)",
+      "conteudo": {
+        "arvore": "ousias",
+        "descricao": "[PLACEHOLDER] Ainda não existe um Galho definido pra Árvore de Alétheia em nenhuma fonte. Substitua id/titulo/descricao por um Galho de verdade quando decidir o que existe aqui."
+      },
+
+      "_origem": "PLACEHOLDER puro — nenhuma fonte (Estrutura do Jardim ou o antigo panteon.json) definiu Galhos pra esta Árvore.",
+      "_pronto_para_importar": false,
+      "_proximo_passo": "Escreva o(s) Galho(s) reais — cada Árvore pode ter vários, então duplique este bloco no array 'entradas' com ids diferentes se precisar de mais de um."
+    },
+
+    {
+      "_secao": "4 de 4 — DIMENSÃO (placeholder — ver _origem)",
+      "tipo": "dimensao",
+      "id": "aletheia-dimensao-1",
+      "titulo": "Dimensão de Alétheia (placeholder)",
+      "conteudo": {
+        "galho": "aletheia-galho-1",
+        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro do Galho acima. Substitua quando tiver o conteúdo de verdade."
+      },
+
+      "_origem": "PLACEHOLDER puro — mesmo caso do Galho acima.",
+      "_pronto_para_importar": false
+    }
+  ]
+}

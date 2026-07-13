@@ -1,0 +1,73 @@
+export const CLASSES_COM_PDF = new Set([
+  'guerreiro', 'piloto', 'ninja', 'pop-star', 'espadachim', 'lutador',
+  'atirador', 'medico', 'guardiao', 'cacador', 'engenheiro',
+  'campeao-dimensional', 'pirata-amaldicoado', 'cartista-arcano',
+]);
+
+export const RACAS_COM_PDF = new Set([
+  'humano', 'vampiro', 'goblim', 'anao', 'golem', 'espirito', 'gigante',
+  'animalia', 'sereia', 'elfo', 'desperto', 'auleth', 'automato', 'viajante',
+]);
+
+export const REGRAS_RACIAIS = {
+  humano: 'Mantenha 1 Legado inicial, limitado aos Legados de entrada sem requisito de nível. O acessório substitui 5 Lunaris, sem dívida inicial.',
+  vampiro: 'Destreza +1; escolha Enganação ou Intimidação como Treinada. Beber sangue recupera 1d6 de Vida apenas uma vez por descanso. Após 24 h sem sangue, fica Fatigado em vez de receber desvantagem em tudo.',
+  goblim: 'Inteligência +1, Ladinagem Aprendiz e +1,5 m de movimento. Troque a perda fixa de 4 PV por −1 PV por nível apenas no nível 1; mantenha os 15 Lunaris como vantagem econômica única.',
+  anao: 'Sabedoria +1 e Carisma −1. Substitua cinco rerrolagens por uma rerrolagem por descanso; construções ocupam um espaço a menos, no mínimo um.',
+  golem: 'Constituição +1, Destreza −1, +5 PV iniciais e Fortitude Aprendiz. O antigo “+4 na DT” foi removido porque não possuía efeito definido. Não começa com equipamento ou Lunaris.',
+  espirito: 'Força −1, Constituição −1, Sabedoria +1 e +3 Mana iniciais. Movimento +3 m e uma rerrolagem por descanso. Corpo espiritual precisa listar exatamente quais objetos, danos e barreiras afeta.',
+  gigante: 'Constituição +1, −1,5 m de movimento e Atletismo Aprendiz. Escolha Sabedoria +1 ou o item marcial inicial; não receba ambos junto com bônus social e dinheiro extra.',
+  animalia: 'Escolha um pacote animal publicado com quatro partes: um atributo +1, uma perícia Aprendiz, uma habilidade de exploração e uma limitação. Nenhum pacote pode conceder voo, tamanho, sentidos e ataque natural ao mesmo tempo.',
+  sereia: 'Carisma +1, Constituição −1, Atuação Aprendiz e Anfíbio. Canto Apaixonante usa ação, custa 2 Mana e permite Vontade contra sua DT; não começa em grau Especialista.',
+  elfo: 'Inteligência +1, uma rerrolagem por descanso e uma linhagem. Remova equipamento e Lunaris em dobro. A linhagem ocupa o orçamento de uma habilidade racial, não um pacote adicional inteiro.',
+  desperto: 'Vontade Aprendiz, Fragmento de Arkarin e vantagem apenas contra aprisionamento de alma. O Legado inicial permanece; a condição ancestral deve ter benefício e complicação equivalentes.',
+  auleth: 'Inteligência +1, Sabedoria +1 e Carisma −1. Seis perícias iniciais, não doze. Alterar forma não muda estatísticas; imunidade a doenças vira vantagem, e Vida extra fica limitada a +2 no nível 1.',
+  automato: 'Não publicar números até escolher uma das cinco variantes do PDF. Cada variante deve seguir o mesmo orçamento: um atributo +1, duas propriedades construtivas e uma vulnerabilidade relevante.',
+  viajante: 'Converta itens e poderes do universo original por equivalentes do mesmo grau. No nível 1, limite a um item comum e uma habilidade de entrada; os demais retornam por marcos narrativos.',
+};
+
+export const REGRAS_LEGADOS = {
+  'to-ficando-bom': 'Escolha uma vez a partir do nível 5: aumente um atributo em 2, respeitando o limite de atributo da campanha. Não pode ser escolhido novamente.',
+  esquiva: 'Receba +1 na Defesa e +1 em Reflexos. Não acumula com outro Legado que conceda bônus fixo às duas defesas.',
+  'leitura-labial': 'Você compreende falas a até 30 m quando enxerga claramente a boca. Sob pressão ou visão parcial, faça Percepção contra DT 15; isso não atravessa máscaras ou idiomas desconhecidos.',
+  'maos-leves': 'Sacar ou guardar um item simples vira ação livre uma vez por turno; trocar equipamento complexo continua usando Movimento.',
+  'artista-marcial': 'A partir do nível 3, escolha proficiência com armas marciais ou armaduras marciais. Pode ser escolhido novamente no nível 7 para receber a outra proficiência.',
+  'kit-diverso': 'Escolha um kit de ofício ou exploração. Ele ocupa um espaço adicional; ao concluir um descanso, você repõe componentes mundanos, mas não itens raros, mágicos ou com preço individual.',
+  'nao-e-tao-pesado': 'Reduza em 1 a penalidade de uma armadura ou escudo escolhido. Pode ser adquirido duas vezes, uma para cada categoria.',
+  correntes: 'Você pode arremessar uma arma corpo a corpo até a distância Curta e recuperá-la com sua ação de Movimento. Isso não concede ataque adicional nem ignora a proficiência da arma.',
+  'bala-agil': 'Uma vez por turno, some o modificador de Destreza ao dano de um ataque à distância. O mesmo modificador não pode ser somado duas vezes ao mesmo dano.',
+  'sempre-no-x1': 'Uma vez por turno, cause +2 de dano contra um alvo sem aliados adjacentes. Não exige teste extra de Furtividade.',
+  'magico-interrogacao': 'Ao escolher o Legado, selecione conjuração ou resistência mágica. Uma vez por cena, role com vantagem no tipo escolhido.',
+  'magico-exclamacao': 'Uma vez por cena, reduza em uma ação o tempo de concentração de uma magia, com mínimo de uma ação. Exige nível 7 e não afeta rituais.',
+  'sem-chance': 'Uma vez por descanso, ao obter 1 natural, repita o d20 e mantenha o novo resultado. Isso não remove falhas críticas do jogo.',
+  rapidinho: 'Aumente o movimento em 1,5 m. Pode ser escolhido uma segunda vez para mais 1,5 m.',
+  'sou-bom-nisso': 'Escolha Luta ou Pontaria e receba +2. Não concede vantagem e não pode ser escolhido para as duas perícias.',
+  cozinheiro: 'Durante um descanso, prepare alimento para até seis criaturas. Cada uma reduz 1 Cansaço e melhora sua recuperação em uma categoria, no máximo Boa. Uma criatura recebe esse benefício apenas uma vez por dia.',
+  'mais-potente': 'Ao usar duas mãos em uma arma versátil, cause +2 de dano uma vez por turno, em vez de +4 no ataque.',
+  'sempre-foi-assim': 'Uma vez por turno, uma arma originalmente de duas mãos causa um dado adicional; exige nível 7.',
+  'ainda-nao': 'Uma vez por cena, receba vantagem no primeiro teste de Morrendo ou contra dano massivo. Exige nível 5.',
+  desonroso: 'Uma vez por cena, receba vantagem em um ataque contra oponente desarmado. Remova o bônus de +4 para desviar de todos os ataques.',
+  'codigo-de-etica': 'Contra oponente armado, receba +2 na iniciativa e cause +2 de dano uma vez por turno. Remova dano igual ao nível e iniciativa automática.',
+  monstro: 'Uma vez por turno, some novamente o modificador de Força ao dano corpo a corpo. Não dobre o modificador em todos os ataques.',
+  'ossos-duros': 'Redução 2 contra dano físico, aumentando para 3 no nível 15. Não acumula com outra redução fixa.',
+  bruto: 'Enquanto não usar armadura, some metade do modificador de Força à Defesa, arredondado para baixo, limitado a +2.',
+  flexivel: 'Uma vez por rodada, depois de usar sua reação, gaste 2 Mana para recuperar a reação. Exige nível 10.',
+  'instinto-animal': 'Receba +3 na Iniciativa estática e não fique Surpreendido por ameaças percebidas. Não usa vantagem porque Iniciativa não é rolada.',
+  'mao-pesada': 'Ao obter crítico corpo a corpo, empurre o alvo 3 m. Ele testa Fortitude contra sua DT para não cair; criaturas duas categorias maiores não são empurradas.',
+  'quebra-dente': 'Após um crítico corpo a corpo, o próximo ataque contra o alvo recebe +2. Não reduz Defesa até o fim do combate nem acumula.',
+  'sem-tempo-irmao': 'No início do combate, antes do primeiro turno, você pode se mover até metade do deslocamento. Não pode atacar, usar item ou ativar habilidade durante esse movimento.',
+  'to-de-pe-ainda': 'Enquanto estiver com metade da Vida ou menos, receba +1 na Defesa e Redução 1 contra dano físico. Não acumula com outra redução fixa.',
+  'veterano-de-guerra': 'Recupere 25% a mais de PV ou Mana em cada descanso, arredondado para cima, em vez de dobrar a recuperação.',
+  'sortudo-pra-cacete': 'Uma vez por sessão, peça ao mestre para repetir uma rolagem de evento aleatório e aceite o segundo resultado.',
+  'mentiroso-nato': 'Receba +2 em Enganação. Uma vez por cena, role um teste de Enganação com vantagem; mentiras simples dispensam teste apenas quando o alvo não possui motivo para desconfiar.',
+  posturado: 'Receba +5 na Defesa passiva contra ser derrubado ou empurrado. Uma vez por cena, ao falhar nessa resistência, permaneça no lugar mesmo assim.',
+  'ja-fui-clt': 'Uma vez por dia, reduza em 1 o Cansaço que acabaria de receber, no mínimo zero.',
+  selvagem: 'Animais comuns começam neutros e não atacam sem ameaça ou provocação. Animais treinados, famintos ou sobrenaturais ainda podem exigir Adestramento contra a DT da cena.',
+};
+
+export const REQUISITOS_LEGADOS_V1 = {
+  'to-ficando-bom': [{ nivel_personagem: 5 }],
+  'artista-marcial': [{ nivel_personagem: 3 }],
+  'magico-exclamacao': [{ nivel_personagem: 7 }],
+  'sempre-foi-assim': [{ nivel_personagem: 7 }],
+};

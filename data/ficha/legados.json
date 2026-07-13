@@ -1,8 +1,8 @@
 {
   "descricao": "Sistema de bônus adicionais escolhidos ao longo da progressão do personagem. Humanos e todas as raças esquecidas começam com 1 Legado de Ascensão.",
-  "onde_aparece": "Não fica na tela de Regras — é mostrado na Ficha, na parte de Poderes, no momento em que o player adiciona um Legado.",
+  "onde_aparece": "A lista e as regras de balanceamento aparecem em Regras. A escolha do personagem também será mostrada na Ficha, na parte de Poderes.",
   "total_pdfs": 7,
-  "nota": "6 dos 7 PDFs (Legados 2 a 7) foram lidos e catalogados nesta sessão. O PDF do Legado 1 é um arquivo de 98 páginas / 9.5MB que o ambiente de leitura não conseguiu processar (falta a dependência poppler-utils/pdftoppm para PDFs grandes). Precisa ser lido depois, manualmente ou com o ambiente corrigido.",
+  "nota": "Os 36 Legados apresentados nos PDFs 2 a 7 foram conferidos e catalogados. O primeiro PDF é a página introdutória da seção e não contém um conjunto adicional de Legados.",
 
   "legados": [
     {
@@ -301,6 +301,5 @@
       "fonte": "Legado 7 (lido)"
     }
   ],
-
-  "pendente": "Legado 1 ainda não foi lido (PDF grande demais para o ambiente atual processar). Os demais 6 (Legados 2 a 7) estão completos, 36 legados no total."
+  "pendente": null
 }

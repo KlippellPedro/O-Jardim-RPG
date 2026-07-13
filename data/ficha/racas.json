@@ -4,10 +4,15 @@
     "tipo": "raca",
     "titulo": "Humano",
     "categoria": "padrao",
+    "arvore": null,
     "tamanho": "normal",
     "legado_ascensao_inicial": 1,
     "nota_legado": "Sem condição — o único Legado de Ascensão gratuito ao criar personagem",
-    "atributos_minimos": { "vida": 4, "forca_vital": 3, "movimento": 3 },
+    "atributos_minimos": {
+      "vida": 4,
+      "forca_vital": 3,
+      "movimento": 3
+    },
     "modificadores_atributos": {},
     "pericias_bonus": {},
     "equipamento_inicial": {
@@ -23,6 +28,7 @@
     "tipo": "raca",
     "titulo": "Vampiro",
     "categoria": "padrao",
+    "arvore": null,
     "tamanho": "normal",
     "legado_ascensao_inicial": 0,
     "modificadores_atributos": {
@@ -32,7 +38,9 @@
       "enganacao": 2,
       "intimidacao": 4
     },
-    "equipamento_inicial": { "lunaris": 0 },
+    "equipamento_inicial": {
+      "lunaris": 0
+    },
     "habilidades": [
       "Ao tomar sangue, recupera 1d6 de Vida"
     ],
@@ -46,6 +54,7 @@
     "tipo": "raca",
     "titulo": "Goblim",
     "categoria": "padrao",
+    "arvore": null,
     "tamanho": "pequeno",
     "legado_ascensao_inicial": 0,
     "modificadores_atributos": {
@@ -56,7 +65,9 @@
     "pericias_bonus": {
       "ladinagem": 2
     },
-    "equipamento_inicial": { "lunaris": 15 },
+    "equipamento_inicial": {
+      "lunaris": 15
+    },
     "habilidades": [
       "Vantagem para vender qualquer coisa"
     ],
@@ -68,6 +79,7 @@
     "tipo": "raca",
     "titulo": "Anão",
     "categoria": "padrao",
+    "arvore": null,
     "tamanho": "pequeno",
     "legado_ascensao_inicial": 0,
     "modificadores_atributos": {
@@ -76,7 +88,9 @@
     },
     "rerolagens": 5,
     "pericias_iniciais_maximas": 5,
-    "equipamento_inicial": { "lunaris": -5 },
+    "equipamento_inicial": {
+      "lunaris": -5
+    },
     "habilidades": [
       "Pode re-rolar 5 dados",
       "Construções recebem modificador comum e -2 kg"
@@ -91,6 +105,7 @@
     "tipo": "raca",
     "titulo": "Golem",
     "categoria": "padrao",
+    "arvore": null,
     "tamanho": "enorme",
     "legado_ascensao_inicial": 0,
     "modificadores_atributos": {
@@ -101,7 +116,10 @@
     "pericias_bonus": {
       "fortitude": 4
     },
-    "equipamento_inicial": { "lunaris": 0, "itens": 0 },
+    "equipamento_inicial": {
+      "lunaris": 0,
+      "itens": 0
+    },
     "habilidades": [
       "+4 na CD"
     ],
@@ -116,6 +134,7 @@
     "tipo": "raca",
     "titulo": "Espírito",
     "categoria": "padrao",
+    "arvore": null,
     "tamanho": "normal",
     "legado_ascensao_inicial": 0,
     "modificadores_atributos": {
@@ -126,7 +145,9 @@
     },
     "modificadores_movimento": "+8",
     "rerolagens": 4,
-    "equipamento_inicial": { "lunaris": 0 },
+    "equipamento_inicial": {
+      "lunaris": 0
+    },
     "habilidades": [
       "Visão noturna",
       "Corpo espiritual"
@@ -141,6 +162,7 @@
     "tipo": "raca",
     "titulo": "Gigante",
     "categoria": "padrao",
+    "arvore": null,
     "tamanho": "grande",
     "legado_ascensao_inicial": 0,
     "modificadores_atributos": {
@@ -153,7 +175,9 @@
     },
     "equipamento_inicial": {
       "lunaris": 5,
-      "itens": ["1 item marcial"]
+      "itens": [
+        "1 item marcial"
+      ]
     },
     "habilidades": [
       "Traços Raciais (habilidade especial)"
@@ -166,6 +190,7 @@
     "tipo": "raca",
     "titulo": "Animália",
     "categoria": "padrao",
+    "arvore": null,
     "tamanho": "variável (depende do animal)",
     "legado_ascensao_inicial": 0,
     "modificadores_atributos": {
@@ -174,7 +199,10 @@
     "pericias_bonus": {
       "sobrevivencia": 2
     },
-    "equipamento_inicial": { "lunaris": 0, "nota": "Normal" },
+    "equipamento_inicial": {
+      "lunaris": 0,
+      "nota": "Normal"
+    },
     "habilidades": [
       "Fala com animais",
       "Demais atributos e habilidades variam conforme o animal"
@@ -189,6 +217,7 @@
     "tipo": "raca",
     "titulo": "Sereia / Tritão",
     "categoria": "padrao",
+    "arvore": null,
     "tamanho": "normal",
     "legado_ascensao_inicial": 0,
     "modificadores_atributos": {
@@ -199,7 +228,10 @@
     "pericias_bonus": {
       "canto": "Especialista"
     },
-    "equipamento_inicial": { "lunaris": 0, "nota": "Normal" },
+    "equipamento_inicial": {
+      "lunaris": 0,
+      "nota": "Normal"
+    },
     "habilidades": [
       "Canto Apaixonante"
     ],
@@ -213,6 +245,7 @@
     "tipo": "raca",
     "titulo": "Elfo",
     "categoria": "esquecida",
+    "arvore": null,
     "legado_ascensao_inicial": 1,
     "pre_requisito": "Ser originário de Nadalon",
     "tamanho": "normal",
@@ -228,7 +261,13 @@
       "Longevidade (não envelhece)"
     ],
     "linhagens": [
-      "Natureza", "Sombras", "Gelo", "Fogo", "Fluxo da Origem", "Noite Eterna", "Tempestades"
+      "Natureza",
+      "Sombras",
+      "Gelo",
+      "Fogo",
+      "Fluxo da Origem",
+      "Noite Eterna",
+      "Tempestades"
     ],
     "nota_linhagens": "Cada linhagem concede características extras — detalhes não especificados neste documento",
     "condicoes": []
@@ -239,6 +278,7 @@
     "tipo": "raca",
     "titulo": "Desperto",
     "categoria": "esquecida",
+    "arvore": null,
     "legado_ascensao_inicial": 1,
     "pre_requisito": "Morrer e voltar (evento narrativo)",
     "tamanho": "normal",
@@ -265,6 +305,7 @@
     "tipo": "raca",
     "titulo": "Auleth",
     "categoria": "esquecida",
+    "arvore": null,
     "legado_ascensao_inicial": 1,
     "pre_requisito": "Ser do Espaço (origem dimensional)",
     "tamanho": "variável (pode alterar forma física)",
@@ -276,7 +317,10 @@
     },
     "pericias_iniciais_total": 12,
     "conhecimentos_extremos": 2,
-    "equipamento_inicial": { "lunaris": 0, "itens": "Nenhum item material" },
+    "equipamento_inicial": {
+      "lunaris": 0,
+      "itens": "Nenhum item material"
+    },
     "habilidades": [
       "Alterar forma física (ação completa)",
       "Imune a doenças",
@@ -292,6 +336,7 @@
     "tipo": "raca",
     "titulo": "Autômato",
     "categoria": "esquecida",
+    "arvore": null,
     "legado_ascensao_inicial": 1,
     "pendente": true,
     "nota_pendente": "5 arquivos PDF de Autômato existem mas não foram lidos em detalhe. Provável que haja subespécies ou variantes."
@@ -302,6 +347,7 @@
     "tipo": "raca",
     "titulo": "Clone",
     "categoria": "esquecida",
+    "arvore": null,
     "legado_ascensao_inicial": 1,
     "pendente": true,
     "nota_pendente": "Sem PDF específico no material. Aguardando Pedro criar/encontrar a ficha."
@@ -312,6 +358,7 @@
     "tipo": "raca",
     "titulo": "Viajante",
     "categoria": "esquecida",
+    "arvore": null,
     "legado_ascensao_inicial": 1,
     "pre_requisito": "Ser de outro universo (evento narrativo: travessia dimensional)",
     "tamanho": "normal",
@@ -343,6 +390,7 @@
     "tipo": "raca",
     "titulo": "Amalgamo",
     "categoria": "esquecida",
+    "arvore": null,
     "legado_ascensao_inicial": 1,
     "pendente": true,
     "nota_pendente": "Sem PDF específico no material. Aguardando Pedro criar/encontrar a ficha."
@@ -353,6 +401,7 @@
     "tipo": "raca",
     "titulo": "Bruxa",
     "categoria": "esquecida",
+    "arvore": null,
     "legado_ascensao_inicial": 1,
     "pendente": true,
     "nota_pendente": "A menção 'usuários de Arkania são as Bruxas, marcadas por estrelas no pulso' aparece na lore, mas a ficha de raça específica não foi encontrada nos PDFs. Aguardando Pedro criar."
@@ -363,6 +412,7 @@
     "tipo": "raca",
     "titulo": "Entidade *",
     "categoria": "esquecida",
+    "arvore": null,
     "legado_ascensao_inicial": 1,
     "pendente": true,
     "nota_pendente": "Sem PDF específico. O asterisco (*) ao lado do nome tem significado ainda não definido — verificar com Pedro."

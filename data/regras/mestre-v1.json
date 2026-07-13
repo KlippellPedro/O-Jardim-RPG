@@ -1,0 +1,144 @@
+{
+  "tipo": "regras-mestre",
+  "versao": "1.0",
+  "titulo": "Ferramentas do Mestre",
+  "resumo": "Referências matemáticas para DTs, encontros, dano, progressão e pressão de recursos.",
+  "destaques": [
+    ["Grupo de referência", "4–5 jogadores"],
+    ["Combate comum", "4–5 rodadas"],
+    ["Especialista", "65% na DT padrão"]
+  ],
+  "secoes": [
+    {
+      "titulo": "DT padrão por nível do desafio",
+      "tipo": "tabela",
+      "colunas": ["Nível", "DT padrão", "Fácil", "Difícil", "Extrema"],
+      "linhas": [
+        [0, 15, 10, 20, 25],
+        [1, 15, 10, 20, 25],
+        [5, 17, 12, 22, 27],
+        [10, 20, 15, 25, 30],
+        [15, 22, 17, 27, 32],
+        [20, 25, 20, 30, 35],
+        [25, 27, 22, 32, 37],
+        [30, 30, 25, 35, 40],
+        [35, 32, 27, 37, 42],
+        [40, 35, 30, 40, 45]
+      ]
+    },
+    {
+      "titulo": "Probabilidade contra DT padrão do mesmo nível",
+      "tipo": "tabela",
+      "colunas": ["Perfil", "Bônus além do nível", "Normal", "Vantagem", "Desvantagem"],
+      "linhas": [
+        ["Generalista", "Atributo +2, Iniciante", "40%", "64%", "16%"],
+        ["Praticante", "Atributo +3, Aprendiz", "55%", "79,75%", "30,25%"],
+        ["Especialista", "Atributo +3, Treinado", "65%", "87,75%", "42,25%"],
+        ["Especialista avançado", "Atributo +3, Especialista", "75%", "93,75%", "56,25%"],
+        ["Mestre", "Atributo +3, Mestre", "85%", "97,75%", "72,25%"]
+      ]
+    },
+    {
+      "titulo": "Como escolher a dificuldade",
+      "tipo": "lista",
+      "itens": [
+        "Fácil (-5): a preparação do grupo neutralizou a maior parte do risco.",
+        "Padrão (+0): um especialista Treinado tem aproximadamente 65% de sucesso.",
+        "Difícil (+5): exige investimento ou vantagem; o especialista de referência cai para aproximadamente 40%.",
+        "Extrema (+10): feito excepcional, normalmente dependente de recursos, ajuda ou preparação.",
+        "Não peça teste para tarefas sem risco, custo ou consequência relevante.",
+        "Quando todos puderem tentar e apenas um sucesso resolver a cena, aumente a DT ou limite quem possui contexto para tentar."
+      ]
+    },
+    {
+      "titulo": "Orçamento de um encontro",
+      "tipo": "lista",
+      "itens": [
+        "Meça o DPR médio real do grupo durante três rodadas antes de fechar a Vida dos inimigos.",
+        "Vida efetiva total do encontro padrão = DPR do grupo × 4,5. Use ×3 para confronto curto e ×6 para chefe resistente.",
+        "Ações inimigas por rodada devem ficar entre 80% e 110% das ações relevantes do grupo em encontro padrão.",
+        "Um chefe sozinho precisa de reação, ação de cenário ou fases; aumentar apenas Vida cria combate parado.",
+        "Objetivos, cobertura, terreno e deslocamento devem alterar decisões, não somente aplicar bônus numérico.",
+        "Evite retirar o turno inteiro de um jogador por mais de uma rodada consecutiva."
+      ]
+    },
+    {
+      "titulo": "Ataque e dano de inimigos",
+      "tipo": "tabela",
+      "colunas": ["Papel", "Chance de acertar alvo apropriado", "Dano por acerto em relação à Vida máxima"],
+      "linhas": [
+        ["Lacaio", "40%–50%", "10%–15%"],
+        ["Inimigo padrão", "55%–60%", "20%–25%"],
+        ["Elite", "60%–65%", "30%–35%"],
+        ["Golpe de chefe anunciado", "60%–65%", "40%–50%"],
+        ["Efeito de área", "DT padrão", "15%–25% por alvo"]
+      ]
+    },
+    {
+      "titulo": "Leitura dos números de combate",
+      "tipo": "texto",
+      "paragrafos": [
+        "As porcentagens de dano usam a Vida do alvo apropriado, normalmente um personagem de linha de frente para ataques físicos e um personagem vulnerável para ameaças que punem posicionamento.",
+        "Esses valores são referências provisórias até Arsenal, Bestiário e todos os Poderes de Classe terem dano, ação, alcance e custo definidos. Registre o resultado real e ajuste primeiro a Vida do encontro, depois o dano."
+      ]
+    },
+    {
+      "titulo": "Pressão de descanso",
+      "tipo": "lista",
+      "itens": [
+        "Descansar nunca falha apenas porque o mestre não quer; o custo vem do mundo continuar agindo.",
+        "Use relógios visíveis ou consequências anunciadas: inimigos se reposicionam, pistas esfriam, recursos acabam ou o objetivo avança.",
+        "Um descanso em local hostil pode ser interrompido, mas a ameaça precisa ter sido apresentada antes da escolha.",
+        "Não puna planejamento eficiente. Se o grupo conquistou segurança, permita que receba o benefício.",
+        "Compare encontros por recursos gastos, não por uma quantidade fixa obrigatória entre descansos."
+      ]
+    },
+    {
+      "titulo": "Recompensas de XP",
+      "tipo": "tabela",
+      "colunas": ["Marco", "Percentual do próximo nível", "Uso"],
+      "linhas": [
+        ["Descoberta ou objetivo menor", "10%", "Pista relevante, acordo ou obstáculo importante"],
+        ["Missão relevante", "25%", "Objetivo principal de uma sequência de sessões"],
+        ["Fim de arco", "50%", "Mudança permanente na campanha"],
+        ["Temporada concluída", "100% ou nível direto", "Quando o ritmo narrativo pede um novo patamar"]
+      ]
+    },
+    {
+      "titulo": "Vida negativa e resgate",
+      "tipo": "tabela",
+      "colunas": ["Déficit sobre a Vida máxima", "Gravidade", "DT com Ferido 0"],
+      "linhas": [
+        ["0%–10%", 0, 12],
+        ["Acima de 10% até 25%", 1, 14],
+        ["Acima de 25% até 50%", 2, 16],
+        ["Acima de 50% até 75%", 3, 18],
+        ["Acima de 75%", 4, 20],
+        ["100% ou mais", "Morte", "Sem teste convencional"]
+      ]
+    },
+    {
+      "titulo": "Auditoria de habilidades",
+      "tipo": "lista",
+      "itens": [
+        "Ação extra: exige reação, Mana, uma vez por cena ou gatilho raro; nunca é passiva e ilimitada.",
+        "Multiplicador de dano: não acumula com crítico e precisa de uso limitado.",
+        "Redução de dano fixa: compare em três rodadas e impeça acumular fontes equivalentes.",
+        "Controle: todo efeito forte oferece resistência e duração curta; chefes não perdem cenas inteiras por uma única falha.",
+        "Bônus de ataque e Defesa acima de +2 precisam ser temporários, restritos ou substituir vantagem.",
+        "Imunidade total deve virar vantagem, redução ou sucesso melhorado, salvo quando for puramente ambiental.",
+        "Classe especial pode quebrar uma regra específica, mas seus níveis consomem nível total e ela só entra a partir do nível 15."
+      ]
+    },
+    {
+      "titulo": "Segredos e descobertas",
+      "tipo": "lista",
+      "itens": [
+        "Informação necessária para usar uma mecânica nunca deve ser segredo.",
+        "Identidade verdadeira, fraqueza oculta, origem de entidade e consequência de pacto podem usar uma chave de descoberta da página Mundo.",
+        "Antes da descoberta, mostre apenas o rótulo Confidencial e uma descrição que não revele a solução da investigação.",
+        "A importação deste arquivo não desbloqueia segredos dos jogadores."
+      ]
+    }
+  ]
+}
