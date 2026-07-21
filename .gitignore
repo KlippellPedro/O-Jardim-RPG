@@ -10,6 +10,28 @@ Thumbs.db
 # Logs
 *.log
 
+# Segredos e configuracao local
+.env
+.env.*
+!.env.example
+
 # Node (caso use no futuro)
 node_modules/
 dist/
+
+# Ambientes locais
+.venv/
+.venv-test/
+
+# Backups do banco: contem e-mails e hashes de senha, nunca vao para o git
+backups/
+*.jsonl.gz
+
+# Cache do Python em qualquer pasta (tools/, scripts avulsos...)
+__pycache__/
+*.pyc
+*.pyo
+
+# Pacotes de deploy: sao gerados por tools/build-discloud-packages.ps1 a partir
+# do codigo, entao versiona-los so incharia o repositorio.
+*-discloud.zip
