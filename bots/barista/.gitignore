@@ -1,0 +1,12 @@
+# Segredos — nunca versionar
+.env
+# Cookie de conta YouTube (sessão logada). Vai pro deploy pelo build, nunca pro git.
+cookies.txt
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.venv-test/
+.pytest_cache/

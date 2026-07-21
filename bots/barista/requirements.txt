@@ -1,0 +1,11 @@
+discord.py[voice]==2.7.1
+python-dotenv==1.2.2
+# Sem versao fixa: o extrator do YouTube muda com frequencia. O extra
+# "default" inclui o componente EJS mantido pelo proprio yt-dlp.
+yt-dlp[default]
+# Runtime JavaScript externo exigido pelo yt-dlp atual para suporte completo.
+deno==2.9.3
+# O FFmpeg é instalado no contêiner pela linha APT=ffmpeg do discloud.config.
+# Mesmo Postgres compartilhado do Banqueiro/Jornalista (playlist e /menu).
+psycopg[binary]==3.3.4
+psycopg-pool==3.3.1
