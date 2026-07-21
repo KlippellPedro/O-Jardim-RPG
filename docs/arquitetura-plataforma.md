@@ -37,6 +37,42 @@ Três regras que o projeto segue para não repetir problemas já corrigidos:
 - **Ícones são WebP de 192 px.** Os PNGs de origem têm 1254 px e ~1,5 MB cada;
   `tools/otimizar-icones.py` gera as versões web a partir deles.
 
+## Quem pode criar conta
+
+`CADASTRO` decide: `aberto`, `convite` ou `fechado`. Produção assume `convite`
+quando a variável não está definida — esquecer de configurar não pode resultar
+em cadastro aberto para a internet, ainda mais sem confirmação de e-mail.
+
+No modo `convite`, o código é o mesmo do convite de campanha: a conta nasce já
+dentro da mesa de quem convidou, com o papel do convite, e o mestre recebe
+aviso. Pedir o código no cadastro e de novo depois seria a mesma pergunta duas
+vezes.
+
+A conta de `CREATOR_EMAIL` se cadastra em qualquer modo. Sem essa exceção o
+primeiro acesso ficaria travado: não há campanha para convidar ninguém antes de
+existir a primeira conta.
+
+## Limite de tentativas
+
+`core/limites.py` guarda a contagem no banco — reiniciar o container não pode
+servir de reset para quem está martelando a porta. Cada ação tem sua política:
+
+| Ação | Teto | Chave |
+| --- | --- | --- |
+| login | 5 em 15 min | e-mail + origem |
+| cadastro | 3 em 60 min | origem |
+| pedido de senha | 5 em 60 min | origem |
+| troca de senha | 5 em 15 min | conta |
+
+A contagem roda em transação própria (`limites.cobrar`). A conexão do pool faz
+rollback quando a rota levanta exceção — contar na mesma transação do trabalho
+apagaria justamente as tentativas recusadas, que são as que precisam contar, e
+o teto nunca seria atingido.
+
+O login usa e-mail + origem para que errar a senha de uma conta não tranque o
+acesso das outras a partir do mesmo lugar. As demais usam só a origem: ali o
+que se quer barrar é o volume vindo de um ponto.
+
 ## Senha esquecida
 
 Não há envio de e-mail. Quem esquece a senha pede a um administrador, que gera

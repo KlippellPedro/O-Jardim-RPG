@@ -160,6 +160,28 @@ Abrir **Painel do mestre**. Deve ter cinco seções no topo.
 - [ ] Em **Minha conta**, trocar a própria senha voluntariamente funciona.
 - [ ] Tentar redefinir a senha da conta criador → bloqueado.
 
+## 7b. Cadastro por convite e limite de tentativas
+
+Em produção o padrão é `CADASTRO=convite`. Para conferir localmente, suba a API
+com `CADASTRO=convite` apontando para o banco de teste.
+
+- [ ] Na tela de entrada, clicar em **Cadastre-se** → aparece o campo
+      **Código do convite** e o aviso "Esta mesa é por convite".
+- [ ] Tentar criar conta sem código → o navegador barra (campo obrigatório).
+- [ ] Digitar um código inventado → "convite invalido ou expirado".
+- [ ] **[M]** Gerar um convite no painel do mestre e usá-lo para criar conta →
+      a conta é criada **e já aparece dentro da campanha**, com o papel do
+      convite.
+- [ ] **[M]** O mestre recebe o aviso "Fulana entrou na campanha".
+- [ ] A contagem de usos do convite subiu em um.
+- [ ] Errar o código quatro vezes seguidas → na quarta vem
+      "muitas tentativas; tente novamente em 60 minuto(s)".
+- [ ] Pedir senha nova seis vezes com e-mails diferentes → a sexta é recusada
+      pelo limite.
+- [ ] Com `CADASTRO=fechado`, clicar em **Cadastre-se** → aparece "Cadastro
+      fechado" em vez do formulário.
+- [ ] A conta de `CREATOR_EMAIL` consegue se cadastrar em qualquer modo.
+
 ## 8. Backup **[A]**
 
 - [ ] Administração › Backup › **Gerar e baixar backup** → o arquivo baixa.

@@ -35,13 +35,27 @@ personagens, conteúdo liberado, Discord e cofre. A campanha selecionada é a
 
 ## Limites conhecidos antes de produção
 
-- confirmação de e-mail ainda precisa ser concluída antes de abrir cadastro ao
-  público geral; a recuperação de senha é feita pelo administrador, sem e-mail;
+- não há confirmação de e-mail; por isso produção assume `CADASTRO=convite` e a
+  recuperação de senha é feita pelo administrador, sem e-mail;
 - testes de integração exigem um PostgreSQL descartável separado;
 - `ID=jardim-rpg` em `discloud.config` precisa estar disponível/reservado na conta.
 
-Não exponha esta versão como cadastro público antes dos fluxos de verificação
-de e-mail e recuperação de senha estarem prontos.
+## Quem pode criar conta
+
+```env
+CADASTRO=aberto    # qualquer pessoa (padrão fora de produção)
+CADASTRO=convite   # exige código de convite de campanha (padrão em produção)
+CADASTRO=fechado   # só o administrador cria contas
+```
+
+No modo `convite` a conta já entra na campanha do código usado, com o papel do
+convite, e o mestre é avisado. A conta de `CREATOR_EMAIL` se cadastra em
+qualquer modo — sem isso o primeiro acesso ficaria travado, já que não existe
+campanha para convidar ninguém antes da primeira conta.
+
+Rotas públicas têm limite de tentativas por origem (`core/limites.py`): 3
+cadastros e 5 pedidos de senha por hora, 5 logins por 15 minutos. A contagem
+fica no banco, então reiniciar o app não zera nada.
 
 ## Configuração local
 
@@ -104,6 +118,7 @@ APP_ENV=production
 DATABASE_URL=postgresql://...@<hostname-real-do-banco>:5432/...
 SERVICE_API_KEY=segredo-compartilhado-apenas-com-os-bots
 CREATOR_EMAIL=dono@exemplo.com
+CADASTRO=convite
 COOKIE_SECURE=true
 ALLOWED_ORIGINS=https://jardim-rpg.discloud.app
 TRUSTED_HOSTS=jardim-rpg.discloud.app,jardimapi
