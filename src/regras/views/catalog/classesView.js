@@ -1,100 +1,145 @@
-import { CLASSES_COM_PDF } from '../../config/catalogos.js';
-import { escapar, selo, tituloCampo } from './shared.js';
+import { RECOMPENSAS_CLASSE } from '../../../ficha/config/progressao.js';
+import { ARVORES } from '../../../mundo/config/arvores.js';
+import { barraCatalogo, escapar, selo } from './shared.js';
 
-function estadoClasse(classe) {
-  if (CLASSES_COM_PDF.has(classe.id)) {
-    return classe.pendente
-      ? ['Em desenvolvimento', 'atencao']
-      : ['Regra oficial', 'confirmado'];
-  }
+const TITULO_ARVORE = new Map(ARVORES.map(arvore => [arvore.id, arvore.titulo]));
 
-  return classe.categoria === 'padrao'
-    ? ['Em desenvolvimento · sem PDF', 'pendente']
-    : ['Citada no índice · sem ficha neste ZIP', 'pendente'];
+function perfilClasse(classe) {
+  if (Number(classe.vida) === 5) return { titulo: 'Resistente', tom: 'vida' };
+  if (Number(classe.mana) === 4) return { titulo: 'Canalizadora', tom: 'mana' };
+  return { titulo: 'Híbrida', tom: 'hibrido' };
+}
+
+function tabelaProgressao() {
+  const linhas = Array.from({ length: 20 }, (_, indice) => {
+    const nivel = indice + 1;
+    return `<div class="regras-progression-item">
+      <span class="regras-progression-level">${String(nivel).padStart(2, '0')}</span>
+      <span class="regras-progression-reward">${escapar(RECOMPENSAS_CLASSE[nivel])}</span>
+    </div>`;
+  }).join('');
+
+  return `
+    <h3 class="regras-subtitle">Progressão universal</h3>
+    <p class="regras-lead">Esta tabela vale para <strong>todas as classes</strong>, do nível 1 ao 20. Ela mostra quando são recebidos espaços de Habilidade de Classe e Graus de Treinamento.</p>
+    <div class="regras-progression-grid" aria-label="Progressão de classe do nível 1 ao 20">${linhas}</div>
+    <div class="regras-callout regras-callout--compact">
+      <strong>Como ler</strong>
+      <p>O nível 1 de cada classe é recebido somente uma vez. Graus de Treinamento respeitam o nível mínimo e o tempo de treino. Os efeitos específicos de Habilidades e Poderes continuam reservados para uma revisão posterior.</p>
+    </div>`;
 }
 
 function cardClasse(classe) {
-  const [estado, tom] = estadoClasse(classe);
-  const vida = classe.vida?.base
-    ? `${classe.vida.base}${classe.vida.atributo ? ` + Mod.${tituloCampo(classe.vida.atributo)}` : ''}`
-    : null;
-  const mana = classe.forca_vital?.base
-    ? `${classe.forca_vital.base}${classe.forca_vital.atributo ? ` + Mod.${tituloCampo(classe.forca_vital.atributo)}` : ''}`
-    : null;
+  const nomeProvisorio = Boolean(classe.nome_provisorio);
+  const estado = nomeProvisorio ? 'Nome provisório' : 'Balanceada';
+  const perfil = perfilClasse(classe);
+  const exclusiva = classe.disponibilidade === 'exclusiva';
+  const disponibilidade = exclusiva
+    ? `Exclusiva de ${TITULO_ARVORE.get(classe.arvore) || 'Árvore não identificada'}`
+    : 'Geral · todas as Árvores';
+  const categoria = classe.categoria === 'padrao' ? 'Classe comum' : 'Classe especial';
 
   return `
-    <article class="regras-entity">
-      <div class="regras-entity-heading"><h4>${escapar(classe.titulo)}</h4>${selo(estado, tom)}</div>
-      ${vida || mana ? `<dl class="regras-entity-stats">${vida ? `<div><dt>Vida/nível</dt><dd>${escapar(vida)}</dd></div>` : ''}${mana ? `<div><dt>Mana/nível</dt><dd>${escapar(mana)}</dd></div>` : ''}</dl>` : ''}
-      ${classe.nota_pendente ? `<p class="regras-entity-note">${escapar(classe.nota_pendente)}</p>` : ''}
+    <article class="regras-class-card regras-class-card--${perfil.tom}" data-catalog-item>
+      <header class="regras-class-card-header">
+        <div>
+          <span class="regras-card-eyebrow">${escapar(categoria)}</span>
+          <h4>${escapar(classe.titulo)}</h4>
+        </div>
+        ${selo(estado, nomeProvisorio ? 'atencao' : 'confirmado')}
+      </header>
+      <div class="regras-resource-pair" aria-label="Recursos recebidos por nível">
+        <div class="regras-resource-stat regras-resource-stat--vida">
+          <span>Vida</span>
+          <strong>+${escapar(classe.vida)}</strong>
+          <small>+ Mod. Constituição</small>
+        </div>
+        <div class="regras-resource-stat regras-resource-stat--mana">
+          <span>Mana</span>
+          <strong>+${escapar(classe.mana)}</strong>
+          <small>por nível</small>
+        </div>
+      </div>
+      <footer class="regras-class-card-footer">
+        <span class="regras-profile-pill regras-profile-pill--${perfil.tom}">${escapar(perfil.titulo)}</span>
+        <span>${escapar(disponibilidade)}</span>
+      </footer>
     </article>`;
 }
 
 function linksCategorias() {
   return `
-    <div class="regras-route-grid">
-      <button type="button" data-topico-link="classes-comuns"><strong>Classes comuns</strong><span>Disponíveis em todas as Árvores.</span></button>
-      <button type="button" data-topico-link="classes-especiais"><strong>Classes especiais</strong><span>Restritas a algumas Árvores ou extintas.</span></button>
+    <div class="regras-route-grid regras-route-grid--catalog">
+      <button type="button" data-topico-link="classes-comuns"><span class="regras-route-index">01</span><strong>Classes comuns</strong><span>Escolhas iniciais disponíveis em todas as Árvores.</span><i aria-hidden="true">→</i></button>
+      <button type="button" data-topico-link="classes-especiais"><span class="regras-route-index">02</span><strong>Classes especiais</strong><span>Uma geral e dez exclusivas, acessíveis a partir do nível total 15.</span><i aria-hidden="true">→</i></button>
+    </div>`;
+}
+
+function regrasRecursos() {
+  return `
+    <h3 class="regras-subtitle">Recursos e multiclasse</h3>
+    <div class="regras-info-grid">
+      <section class="regras-info-card">
+        <span class="regras-card-eyebrow">Vida e Mana</span>
+        <h4>Cada avanço usa a classe escolhida</h4>
+        <p>O primeiro nível da primeira classe já está incluído nas fórmulas iniciais. Nos níveis seguintes, some os recursos da classe em que o nível foi investido.</p>
+        <div class="regras-mini-formula"><strong>Vida</strong><span>valor da classe + Mod.Constituição</span></div>
+        <div class="regras-mini-formula"><strong>Mana</strong><span>valor da classe</span></div>
+      </section>
+      <section class="regras-info-card">
+        <span class="regras-card-eyebrow">Composição</span>
+        <h4>Até três caminhos na mesma ficha</h4>
+        <p>O limite normal é de duas classes comuns e uma especial. Todo nível de qualquer classe entra no Nível Total do personagem.</p>
+        <div class="regras-rule-pills"><span>2 comuns</span><span>1 especial</span><span>Nível 15+</span></div>
+      </section>
+      <section class="regras-info-card">
+        <span class="regras-card-eyebrow">Disponibilidade</span>
+        <h4>Geral ou exclusiva de Árvore</h4>
+        <p>Classes gerais funcionam em qualquer Árvore. Classes exclusivas exigem vínculo com a Árvore indicada e nunca ignoram os requisitos normais.</p>
+      </section>
     </div>`;
 }
 
 export function renderizarPaginaClasses(classes, id) {
   const comuns = classes.filter(item => item.categoria === 'padrao');
-  const comunsPublicadas = comuns.filter(item => CLASSES_COM_PDF.has(item.id));
-  const especiais = classes.filter(item => item.categoria === 'esquecida');
-  const especiaisPublicadas = especiais.filter(item => CLASSES_COM_PDF.has(item.id));
-  const estruturaOficial = `
-    <h3 class="regras-subtitle">Progressão universal</h3>
-    <ul class="regras-list">
-      <li>Toda classe possui 20 níveis. O nível total é a soma de todas elas.</li>
-      <li>Níveis de classe 1, 5, 10, 15 e 20 entregam as cinco Identidades exclusivas.</li>
-      <li>Os demais níveis alternam Poderes de Classe e Graus de Perícia conforme a tabela universal.</li>
-      <li>Ações ou reações adicionais sempre exigem Mana, recarga ou um gatilho limitado.</li>
-      <li>Classes sem custo, alcance, ação ou duração definidos aparecem como Em desenvolvimento.</li>
-    </ul>
-    <button type="button" class="regras-inline-link" data-topico-link="xp">Abrir a tabela universal de progressão</button>`;
+  const especiais = classes.filter(item => item.categoria !== 'padrao');
+  const gerais = classes.filter(item => item.disponibilidade === 'geral');
+  const exclusivas = classes.filter(item => item.disponibilidade === 'exclusiva');
 
   if (id === 'classes') {
     return {
-      status: 'Regra oficial',
-      resumo: 'Escolha de progressão do personagem, separada pela disponibilidade entre as Árvores.',
+      status: 'Balanceamento inicial definido',
+      resumo: 'Compare Vida e Mana rapidamente e consulte a progressão usada por todas as classes.',
       destaques: [
-        ['Comuns publicadas', comunsPublicadas.length],
-        ['Especiais publicadas', especiaisPublicadas.length],
-        ['Níveis por classe', 20],
+        ['Classes catalogadas', classes.length],
+        ['Classes gerais', gerais.length],
+        ['Classes exclusivas', exclusivas.length],
       ],
       corpo: `
-        <p class="regras-lead">Classes comuns existem em todas as Árvores. Classes especiais existem apenas em algumas Árvores ou foram extintas; no livro elas aparecem como Classes Esquecidas.</p>
+        <p class="regras-lead">As classes estão focadas no que a ficha precisa calcular agora: <strong>Vida e Mana por nível</strong>. Habilidades e Poderes específicos permanecem fora desta versão até a revisão do livro.</p>
         ${linksCategorias()}
-        <h3 class="regras-subtitle">Regra de escolha</h3>
-        <ul class="regras-list">
-          <li>O limite é de duas classes comuns e uma classe especial.</li>
-          <li>Classes especiais exigem nível total 15 e um acontecimento narrativo, salvo exceção explícita.</li>
-          <li>Elas podem ser mais impactantes e quebrar uma regra específica, mas seus níveis consomem nível total normalmente.</li>
-          <li>Ao entrar em outra classe, não receba novamente dinheiro, itens ou benefícios de criação.</li>
-        </ul>
-        ${estruturaOficial}`,
+        ${regrasRecursos()}
+        ${tabelaProgressao()}`,
     };
   }
 
   const lista = id === 'classes-comuns' ? comuns : especiais;
-  const publicadas = lista.filter(item => CLASSES_COM_PDF.has(item.id));
-  const semFicha = lista.filter(item => !CLASSES_COM_PDF.has(item.id));
-
+  const tituloCatalogo = id === 'classes-comuns' ? 'Catálogo de classes comuns' : 'Catálogo de classes especiais';
   return {
-    status: 'Regra oficial',
+    status: 'Balanceamento inicial definido',
     resumo: id === 'classes-comuns'
-      ? 'Classes encontradas em todas as Árvores.'
-      : 'Classes restritas, perdidas ou extintas entre as Árvores.',
+      ? 'Compare os recursos das classes disponíveis como escolha inicial.'
+      : 'Compare a classe especial geral e as exclusivas de cada Árvore.',
     destaques: [
-      ['Publicadas no ZIP', publicadas.length],
-      ['Somente índice/desenvolvimento', semFicha.length],
-      ['Auditável por completo', lista.filter(item => !item.pendente).length],
+      ['Classes', lista.length],
+      ['Perfis de recursos', 3],
+      ['Exclusivas de Árvore', lista.filter(item => item.disponibilidade === 'exclusiva').length],
     ],
     corpo: `
-      ${estruturaOficial}
-      <h3 class="regras-subtitle">Com PDF próprio</h3>
-      <div class="regras-entity-grid">${publicadas.map(cardClasse).join('')}</div>
-      ${semFicha.length ? `<h3 class="regras-subtitle">Ainda sem ficha publicada neste ZIP</h3><div class="regras-entity-grid">${semFicha.map(cardClasse).join('')}</div>` : ''}`,
+      <p class="regras-note regras-catalog-intro">Todas usam um orçamento de 7 pontos por nível: <strong>5 Vida / 2 Mana</strong>, <strong>4 Vida / 3 Mana</strong> ou <strong>3 Vida / 4 Mana</strong>. A categoria especial não aumenta esse total.</p>
+      <h3 class="regras-subtitle">${tituloCatalogo}</h3>
+      ${barraCatalogo({ total: lista.length, rotulo: 'classes' })}
+      <div class="regras-class-grid" data-catalog-grid>${lista.map(cardClasse).join('')}</div>
+      ${tabelaProgressao()}`,
   };
 }

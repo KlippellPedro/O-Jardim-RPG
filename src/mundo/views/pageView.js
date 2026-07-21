@@ -39,7 +39,7 @@ export function renderizarEstadoVazio(categoria) {
       <span class="mundo-empty-ornament-line"></span>
     </div>
     <p class="mundo-empty-text"></p>
-    <button type="button" class="mundo-cta-btn" data-action="importar">Importar conteúdo</button>
+    <button type="button" class="mundo-cta-btn" disabled>Aguardando liberação do mestre</button>
   `;
   vazio.querySelector('.mundo-empty-text').textContent = categoria.vazio;
   content.appendChild(vazio);

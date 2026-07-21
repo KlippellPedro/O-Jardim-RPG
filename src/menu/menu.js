@@ -3,7 +3,8 @@
    Animação: 10 Árvores/deidades crescendo a partir do centro
    ───────────────────────────────────────────────────────── */
 
-import { storage } from '../core/storage.js';
+import { abrirPortal, inicializarPlataforma } from '../plataforma/portal.js?v=5';
+import { sessaoApi } from '../plataforma/sessaoApi.js';
 
 // ── Constantes ────────────────────────────────────────────
 
@@ -244,14 +245,25 @@ function initCosmicTree() {
 
 // ── Cards ──────────────────────────────────────────────────
 
+// Cada módulo tem endereço próprio (/ficha, /mundo…). O clique navega na hora:
+// o atraso de 180ms que existia aqui só somava espera à carga da página.
 function initCards() {
   document.querySelectorAll('.menu-card:not([data-wip])').forEach(card => {
+    const destino = card.dataset.module ? `/${card.dataset.module}` : null;
+    if (!destino) return;
     card.addEventListener('click', () => {
-      const mod = card.dataset.module;
-      if (!mod) return;
-      card.style.transform = 'translateX(6px) scale(0.98)';
-      setTimeout(() => { window.location.href = `templates/${mod}.html`; }, 180);
+      card.dataset.carregando = 'true';
+      window.location.href = destino;
     });
+    // Baixa o HTML do módulo enquanto o dedo ainda está a caminho do clique.
+    card.addEventListener('pointerenter', () => {
+      if (card.dataset.prefetch) return;
+      card.dataset.prefetch = 'true';
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = destino;
+      document.head.appendChild(link);
+    }, { once: true });
   });
 }
 
@@ -299,30 +311,84 @@ function initSettings() {
     if (e.key === 'Escape') close();
   });
 
-  const exportBtn   = document.getElementById('settings-export');
-  const importBtn   = document.getElementById('settings-import');
-  const importInput = document.getElementById('settings-import-input');
+  document.getElementById('settings-account')?.addEventListener('click', () => abrirPortal('conta'));
+  document.getElementById('settings-avisos')?.addEventListener('click', () => abrirPortal('avisos'));
+  document.getElementById('settings-vault')?.addEventListener('click', () => abrirPortal('cofre'));
+  document.getElementById('settings-master')?.addEventListener('click', () => abrirPortal('mestre'));
+  document.getElementById('settings-admin')?.addEventListener('click', () => abrirPortal('admin'));
+}
 
-  exportBtn.addEventListener('click', () => storage.exportar('jardim-rpg-ficha'));
-  importBtn.addEventListener('click', () => importInput.click());
+function atualizarEntrada(contexto) {
+  const usuario = contexto?.usuario;
+  const campanha = contexto?.campanha;
+  const papelGlobal = usuario?.papel_plataforma || 'player';
+  const nomesCargo = {
+    player: 'Player',
+    mestre: 'Mestre',
+    admin: 'Administrador',
+    criador: 'Criador',
+  };
+  const contextoEl = document.getElementById('menu-contexto');
+  if (contextoEl && usuario) {
+    contextoEl.querySelector('.menu-contexto-label').textContent = `${usuario.nome_exibicao} · ${nomesCargo[papelGlobal] || papelGlobal}`;
+    contextoEl.querySelector('.menu-contexto-valor').textContent = campanha
+      ? `Campanha atual: ${campanha.nome}`
+      : 'Nenhuma campanha selecionada';
+  }
 
-  importInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-      await storage.importar(file);
-      window.location.reload();
-    } catch {
-      alert('Não foi possível importar o arquivo. Verifique se é um .json exportado por este sistema.');
-    }
+  const naoLidos = contexto?.avisosNaoLidos || 0;
+  const contador = document.getElementById('settings-avisos-contador');
+  if (contador) {
+    contador.textContent = naoLidos ? String(naoLidos) : 'Novidades';
+    contador.dataset.alerta = String(naoLidos > 0);
+  }
+  const atalhoAvisos = document.getElementById('atalho-avisos-texto');
+  if (atalhoAvisos && naoLidos) {
+    atalhoAvisos.textContent = `${naoLidos} aviso(s) que você ainda não leu`;
+  }
+
+  // O painel do mestre é da campanha selecionada, não do cargo global: mesmo o
+  // criador só o vê quando está em uma mesa que ele administra.
+  const gerenciaCampanha = ['mestre', 'assistente'].includes(contexto?.detalhes?.meu_papel);
+  const administra = ['admin', 'criador'].includes(papelGlobal);
+  document.querySelectorAll('[data-acesso="mestre"]').forEach(item => { item.hidden = !gerenciaCampanha; });
+  document.querySelectorAll('[data-acesso="admin"]').forEach(item => { item.hidden = !administra; });
+  const settingsMaster = document.getElementById('settings-master');
+  const settingsAdmin = document.getElementById('settings-admin');
+  const settingsVault = document.getElementById('settings-vault');
+  if (settingsMaster) settingsMaster.hidden = !gerenciaCampanha;
+  if (settingsAdmin) settingsAdmin.hidden = !administra;
+  if (settingsVault) settingsVault.hidden = !campanha;
+}
+
+// Sessão acontecendo agora acende o card, para ninguém perder o começo da mesa.
+async function marcarSessaoAtiva(contexto) {
+  const indicador = document.getElementById('sessao-indicador');
+  if (!indicador || !contexto?.campanha) return;
+  try {
+    const estado = await sessaoApi.obter(contexto.campanha.id);
+    indicador.hidden = !estado.sessao;
+  } catch {
+    indicador.hidden = true;
+  }
+}
+
+function initAtalhosPortal() {
+  document.querySelectorAll('[data-portal-aba]').forEach(item => {
+    item.addEventListener('click', () => abrirPortal(item.dataset.portalAba));
   });
+  document.addEventListener('jardim:contexto-alterado', evento => atualizarEntrada(evento.detail));
 }
 
 // ── Init ───────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initCosmicTree();
   initCustomIcons();
-  initCards();
   initSettings();
+  initAtalhosPortal();
+  const contexto = await inicializarPlataforma({ exigirCampanha: true });
+  atualizarEntrada(contexto);
+  initCards();
+  marcarSessaoAtiva(contexto);
 });

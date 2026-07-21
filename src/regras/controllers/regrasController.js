@@ -25,6 +25,37 @@ function voltarAoTopo() {
   window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
 }
 
+function normalizarBusca(valor) {
+  return String(valor || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLocaleLowerCase('pt-BR')
+    .trim();
+}
+
+function filtrarCatalogo(input) {
+  const secao = input.closest('.regras-rule-section');
+  const toolbar = input.closest('[data-catalog-toolbar]');
+  if (!secao || !toolbar) return;
+  const termo = normalizarBusca(input.value);
+  const itens = [...secao.querySelectorAll('[data-catalog-item]')];
+  let visiveis = 0;
+  itens.forEach(item => {
+    const corresponde = !termo || normalizarBusca(item.textContent).includes(termo);
+    item.hidden = !corresponde;
+    if (corresponde) visiveis += 1;
+  });
+  const contador = toolbar.querySelector('[data-catalog-count]');
+  const rotulo = toolbar.dataset.catalogLabel || 'itens';
+  if (contador) {
+    contador.textContent = termo
+      ? `${visiveis} de ${itens.length} ${rotulo}`
+      : `${itens.length} ${rotulo}`;
+  }
+  const vazio = secao.querySelector('[data-catalog-empty]');
+  if (vazio) vazio.hidden = visiveis !== 0;
+}
+
 function renderizarIndice() {
   renderizacaoAtual += 1;
   reiniciarAnimacao(content);
@@ -106,6 +137,18 @@ export function inicializarRegras() {
   content.addEventListener('click', evento => {
     const botao = evento.target.closest('[data-topico-link]');
     if (botao) router.navegar(`/${botao.dataset.topicoLink}`);
+
+    const expansao = evento.target.closest('[data-catalog-expand]');
+    if (expansao) {
+      const secao = expansao.closest('.regras-rule-section');
+      const abrir = expansao.dataset.catalogExpand === 'open';
+      secao?.querySelectorAll('details[data-catalog-item]:not([hidden])')
+        .forEach(item => { item.open = abrir; });
+    }
+  });
+
+  content.addEventListener('input', evento => {
+    if (evento.target.matches('[data-catalog-search]')) filtrarCatalogo(evento.target);
   });
 
   const titulo = document.querySelector('.regras-title');

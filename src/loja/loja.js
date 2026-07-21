@@ -2,8 +2,7 @@
    O Jardim RPG — Loja
    Loja de jogo: barra lateral de categorias sempre visível +
    grade de cards (imagem, raridade, preço) + modal estilo carta
-   pro detalhe. Conteúdo chega por import de JSON (ver
-   services/entradasService.js) — sem senha, sem dado de exemplo embutido.
+   pro detalhe. Conteúdo chega da campanha central depois da liberação do mestre.
    O botão de ação é só visual por enquanto: a compra de verdade
    vai rodar pelo Banqueiro, um bot no Discord, fora deste app.
    ───────────────────────────────────────────────────────── */
@@ -11,18 +10,18 @@
 import { router } from '../core/router.js';
 import { CATEGORIAS, categoriaPorId, categoriaPorTipo } from './config/categorias.js';
 import {
+  carregarEntradas,
   entradasPorCategoria,
   getEntradas,
-  processarArquivo,
 } from './services/entradasService.js';
 import {
-  candidataUnicaEhMoeda,
   definirMoedaAtiva,
+  definirMoedasRemotas,
   getMoedaAtiva,
   getMoedas,
-  processarArquivoMoedas,
-  removerMoeda,
 } from './services/moedasService.js';
+import { inicializarPlataforma } from '../plataforma/portal.js?v=5';
+import { personagensApi } from '../plataforma/personagensApi.js';
 
 const content       = document.getElementById('loja-content');
 const sidebarEl      = document.getElementById('loja-sidebar');
@@ -382,24 +381,12 @@ function renderMoedaSeletor() {
     opcao.addEventListener('click', () => selecionarMoeda(moeda.id));
     linha.appendChild(opcao);
 
-    if (moedas.length > 1) {
-      const remover = document.createElement('button');
-      remover.type = 'button';
-      remover.className = 'loja-moeda-remover';
-      remover.setAttribute('aria-label', `Remover moeda ${moeda.nome}`);
-      remover.textContent = '×';
-      remover.addEventListener('click', () => {
-        if (removerMoeda(moeda.id)) { renderMoedaSeletor(); renderizarGradeFiltrada(); }
-      });
-      linha.appendChild(remover);
-    }
-
     painel.appendChild(linha);
   });
 
   const dica = document.createElement('p');
   dica.className = 'loja-moeda-dica';
-  dica.textContent = 'Novas moedas entram por "Importar conteúdo", no topo.';
+  dica.textContent = 'As moedas exibidas vêm da carteira do personagem ativo.';
   painel.appendChild(dica);
 
   moedaSeletorEl.append(btn, painel);
@@ -614,7 +601,7 @@ function renderEmptyGrade(categoria, semResultadoDeFiltro) {
         <span class="loja-empty-ornament-line"></span>
       </div>
       <p class="loja-empty-text"></p>
-      <button type="button" class="loja-cta-btn" data-action="importar">Importar conteúdo</button>
+      <button type="button" class="loja-cta-btn" disabled>Aguardando liberação do mestre</button>
     `;
     vazio.querySelector('.loja-empty-text').textContent = categoria.vazio;
   }
@@ -796,59 +783,23 @@ function abrirModalItem(catId, itemId) {
   fechar.focus();
 }
 
-// ── Import ───────────────────────────────────────────────
-// Um botão só, dois conteúdos possíveis: itens (entradas) e moedas — ver
-// candidataUnicaEhMoeda em moedasService.js. Um pacote pode trazer as duas
-// chaves juntas ({"entradas":[...],"moedas":[...]}); um arquivo solto (sem
-// nenhuma das duas chaves no topo) decide pelo formato do objeto.
-
-function decidirImportadores(json) {
-  const temChaveEntradas = Array.isArray(json?.entradas);
-  const temChaveMoedas = Array.isArray(json?.moedas);
-  if (temChaveEntradas || temChaveMoedas) return { entradas: temChaveEntradas, moedas: temChaveMoedas };
-
-  const ehMoedaSolta = candidataUnicaEhMoeda(json);
-  return { entradas: !ehMoedaSolta, moedas: ehMoedaSolta };
-}
-
-function initImport() {
-  const btn   = document.getElementById('loja-import-btn');
-  const input = document.getElementById('loja-import-input');
-
-  function disparar() { input.click(); }
-
-  btn.addEventListener('click', disparar);
-  content.addEventListener('click', (e) => {
-    if (e.target.closest('[data-action="importar"]')) disparar();
-  });
-
-  input.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const raw = await file.text();
-    let json = null;
-    try { json = JSON.parse(raw); } catch { /* processador de entradas relata o JSON malformado abaixo */ }
-
-    const { entradas: rodarEntradas, moedas: rodarMoedas } = decidirImportadores(json);
-    const resultadoMoedas   = rodarMoedas ? processarArquivoMoedas(raw) : null;
-    const resultadoEntradas = rodarEntradas ? processarArquivo(raw) : null;
-
-    const mensagem = [resultadoMoedas?.mensagem, resultadoEntradas?.mensagem].filter(Boolean).join(' ');
-    const ok = Boolean(resultadoMoedas?.ok || resultadoEntradas?.ok);
-    mostrarToast(mensagem, ok ? 'sucesso' : 'erro');
-    input.value = '';
-
-    // Atualiza só o que mudou (sem reanimar a página inteira, sem fechar
-    // um modal aberto de outro item) — permanece onde o usuário está.
-    if (resultadoMoedas?.ok) renderMoedaSeletor();
-    if (resultadoEntradas?.ok) renderizarGradeFiltrada();
-  });
-}
-
 // ── Init ──────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const contexto = await inicializarPlataforma({ exigirCampanha: true });
+    await carregarEntradas(contexto.campanha.id);
+    const personagemAtivoId = contexto.campanha.personagem_ativo_id;
+    if (personagemAtivoId) {
+      const detalhe = await personagensApi.obter(personagemAtivoId);
+      definirMoedasRemotas(detalhe.personagem?.carteira || []);
+    }
+    const status = document.getElementById('loja-content-status');
+    if (status) status.textContent = contexto.campanha.nome;
+  } catch (erro) {
+    console.error('Falha ao carregar a Loja central:', erro);
+    mostrarToast(erro.message || 'Não foi possível carregar a Loja da campanha.', 'erro');
+  }
   renderSidebar();
   renderQuickFilters();
   renderMoedaSeletor();
@@ -890,6 +841,5 @@ document.addEventListener('DOMContentLoaded', () => {
   const titulo = document.querySelector('.loja-title');
   if (titulo) titulo.addEventListener('click', () => router.navegar('/'));
 
-  initImport();
   router.iniciar();
 });

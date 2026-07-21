@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mundo — O Jardim RPG</title>
-    <link rel="icon" type="image/png" href="../assets/img/icons/favicon.png" />
+    <link rel="icon" type="image/png" href="../assets/img/icons/favicon-64.png" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="../styles/core/reset.css" />
     <link rel="stylesheet" href="../styles/core/animations.css" />
     <link rel="stylesheet" href="../styles/mundo/mundo.css" />
+    <link rel="stylesheet" href="../styles/plataforma/plataforma.css" />
   </head>
   <body>
     <div class="mundo-bg">
@@ -27,10 +28,9 @@
 
     <div class="mundo-page">
       <header class="mundo-header">
-        <a class="mundo-back" href="../index.html">‹ O Jardim RPG</a>
+        <a class="mundo-back" href="/">‹ O Jardim RPG</a>
         <h1 class="mundo-title">Mundo</h1>
-        <button type="button" class="mundo-import-btn" id="mundo-import-btn">Importar conteúdo</button>
-        <input type="file" id="mundo-import-input" accept="application/json" hidden />
+        <button type="button" class="mundo-import-btn" id="mundo-content-status" disabled>Conteúdo da campanha</button>
       </header>
 
       <main class="mundo-content" id="mundo-content" aria-live="polite"></main>
@@ -47,6 +47,6 @@
         }
       }
     </script>
-    <script type="module" src="../src/mundo/mundo.js"></script>
+    <script type="module" src="../src/mundo/mundo.js?v=3"></script>
   </body>
 </html>

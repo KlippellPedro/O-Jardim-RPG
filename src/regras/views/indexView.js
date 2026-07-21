@@ -11,6 +11,8 @@ function criarCard(topico, indice) {
   card.style.setProperty('--accent', topico.accent);
   card.style.animationDelay = `${indice * 70}ms`;
   card.setAttribute('aria-label', `Ver regras de ${topico.titulo}`);
+  card.dataset.busca = [topico.titulo, topico.resumo, topico.grupo, (topico.termos || []).join(' ')]
+    .filter(Boolean).join(' ');
 
   const titulo = document.createElement('span');
   titulo.className = 'regras-card-title';
@@ -36,6 +38,56 @@ function criarCard(topico, indice) {
   return card;
 }
 
+/* Busca sem acento: "pericia" acha "Perícias". Filtra por título, resumo e
+   pelas palavras-chave do tópico — no meio do jogo ninguém lembra em qual card
+   está a regra de condições. */
+function normalizar(valor) {
+  return String(valor || '')
+    .toLocaleLowerCase('pt-BR')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function criarBusca(content) {
+  const area = document.createElement('div');
+  area.className = 'regras-busca';
+
+  const campo = document.createElement('input');
+  campo.type = 'search';
+  campo.className = 'regras-busca-campo';
+  campo.placeholder = 'Buscar regra… (ex.: condições, descanso, crítico)';
+  campo.setAttribute('aria-label', 'Buscar nas regras');
+
+  const contador = document.createElement('span');
+  contador.className = 'regras-busca-contador';
+
+  area.append(campo, contador);
+
+  function filtrar() {
+    const termo = normalizar(campo.value.trim());
+    const cards = [...content.querySelectorAll('.regras-card')];
+    let visiveis = 0;
+    cards.forEach(card => {
+      const casa = !termo || normalizar(card.dataset.busca).includes(termo);
+      card.hidden = !casa;
+      if (casa) visiveis += 1;
+    });
+    // Grupo inteiro sem resultado some junto com o título.
+    content.querySelectorAll('.regras-index-section').forEach(grupo => {
+      grupo.hidden = ![...grupo.querySelectorAll('.regras-card')].some(card => !card.hidden);
+    });
+    contador.textContent = termo
+      ? (visiveis ? `${visiveis} tópico(s)` : 'Nada encontrado')
+      : '';
+  }
+
+  campo.addEventListener('input', filtrar);
+  campo.addEventListener('keydown', evento => {
+    if (evento.key === 'Escape') { campo.value = ''; filtrar(); }
+  });
+  return area;
+}
+
 export function renderizarIndice(content, topicos) {
   content.innerHTML = '';
   content.classList.remove('regras-content--detail');
@@ -44,6 +96,7 @@ export function renderizarIndice(content, topicos) {
   intro.className = 'regras-intro';
   intro.textContent = 'As mecânicas gerais que sustentam O Jardim. Escolha um tópico para ver os detalhes.';
   content.appendChild(intro);
+  content.appendChild(criarBusca(content));
 
   const grupos = [
     { nome: 'Mecânicas', topicos: topicos.filter(topico => !topico.grupo) },

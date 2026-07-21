@@ -51,7 +51,7 @@ export function renderizarPaginaLegados(dados, dadosNovos) {
       ['Adicionados na v1.0', novos.length],
     ],
     corpo: `
-      <p class="regras-lead">Humanos e raças especiais começam com um Legado. Todos os personagens escolhem outro nos níveis totais 5, 10, 15, 20, 25, 30, 35 e 40.</p>
+      <p class="regras-lead">Todos os personagens escolhem um Legado nos níveis totais 5, 10, 15, 20, 25, 30, 35 e 40. Nenhuma raça concede Legado adicional nesta versão técnica.</p>
       <div class="regras-balance-note"><strong>Regra de seleção</strong><p>Bônus com o mesmo nome ou função não acumulam. Um Legado só pode ser escolhido novamente quando o próprio texto permitir. Ações, reações, redução de dano e multiplicadores sempre obedecem ao custo ou à frequência descrita.</p></div>
       <h3 class="regras-subtitle">Legados catalogados</h3>
       <div class="regras-entity-grid regras-entity-grid--legacies">${legados.map(cardLegado).join('')}</div>

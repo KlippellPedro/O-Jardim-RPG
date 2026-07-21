@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>O Jardim RPG</title>
-  <link rel="icon" type="image/png" href="assets/img/icons/favicon.png">
+  <link rel="icon" type="image/png" href="assets/img/icons/favicon-64.png">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="styles/core/reset.css">
   <link rel="stylesheet" href="styles/core/animations.css">
   <link rel="stylesheet" href="styles/menu/menu.css">
+  <link rel="stylesheet" href="styles/plataforma/plataforma.css">
 </head>
 <body>
 
@@ -34,54 +35,76 @@
     aria-expanded="false"
     aria-controls="settings-panel"
     aria-label="Configurações"
-  ><span class="menu-settings-icon" aria-hidden="true"><img class="menu-icon-image" data-icon-image src="assets/img/icons/menu/configuracoes.png" alt="" hidden><span data-icon-fallback>⚙</span></span></button>
+  ><span class="menu-settings-icon" aria-hidden="true"><img class="menu-icon-image" data-icon-image src="assets/img/icons/menu/configuracoes.webp" alt="" hidden><span data-icon-fallback>⚙</span></span></button>
 
   <div class="menu-settings-panel" id="settings-panel" role="menu" hidden>
-    <div class="settings-item settings-item--wip" role="menuitem" aria-disabled="true">
+    <button class="settings-item settings-action" id="settings-account" type="button" role="menuitem">
       <span class="settings-item-label">Perfil do player</span>
-      <span class="settings-item-badge">Em breve</span>
-    </div>
+      <span class="settings-item-badge">Conta</span>
+    </button>
 
-    <div class="settings-item settings-item--actions" role="group" aria-label="Exportar ou importar ficha">
-      <span class="settings-item-label">Ficha (.json)</span>
-      <div class="settings-item-actions">
-        <button type="button" class="settings-action" id="settings-export">Exportar</button>
-        <button type="button" class="settings-action" id="settings-import">Importar</button>
-        <input type="file" id="settings-import-input" accept="application/json" hidden>
-      </div>
-    </div>
+    <button class="settings-item settings-action" id="settings-avisos" type="button" role="menuitem">
+      <span class="settings-item-label">Avisos</span>
+      <span class="settings-item-badge" id="settings-avisos-contador">0</span>
+    </button>
 
-    <div class="settings-item settings-item--wip" role="menuitem" aria-disabled="true">
-      <span class="settings-item-label">Gerenciar desbloqueios</span>
-      <span class="settings-item-badge">Em breve</span>
-    </div>
+    <button class="settings-item settings-action" id="settings-vault" type="button" role="menuitem">
+      <span class="settings-item-label">Cofre de recompensas</span>
+      <span class="settings-item-badge">Discord</span>
+    </button>
+
+    <button class="settings-item settings-action" id="settings-master" type="button" role="menuitem" hidden>
+      <span class="settings-item-label">Conteúdo e liberações</span>
+      <span class="settings-item-badge">Mestre</span>
+    </button>
+
+    <button class="settings-item settings-action" id="settings-admin" type="button" role="menuitem" hidden>
+      <span class="settings-item-label">Usuários e cargos</span>
+      <span class="settings-item-badge">Admin</span>
+    </button>
   </div>
 
   <!-- Layout principal -->
   <main class="menu-layout">
 
-    <!-- Cabeçalho -->
     <header class="menu-header">
+      <span class="menu-eyebrow">Plataforma de campanha</span>
       <h1 class="menu-title">O <span class="menu-title-accent">Jardim</span><span class="menu-title-tag">RPG</span></h1>
+
+      <p class="menu-subtitle">Fichas, mundo, regras e itens reunidos no mesmo lugar — com cada informação visível apenas para quem deve vê-la.</p>
 
       <div class="menu-ornament">
         <div class="menu-ornament-line"></div>
         <div class="menu-ornament-diamond"></div>
-        <div class="menu-ornament-diamond" style="opacity:0.4; transform:rotate(45deg) scale(0.6)"></div>
+        <div class="menu-ornament-diamond menu-ornament-diamond--minor"></div>
         <div class="menu-ornament-diamond"></div>
         <div class="menu-ornament-line"></div>
       </div>
+
+      <div class="menu-contexto" id="menu-contexto" aria-live="polite">
+        <span class="menu-contexto-label">Preparando seu acesso</span>
+        <strong class="menu-contexto-valor">Carregando conta e campanha…</strong>
+      </div>
     </header>
 
-    <!-- Navegação -->
-    <nav class="menu-nav" role="navigation" aria-label="Módulos do sistema">
+    <section class="menu-dashboard" aria-label="Início da plataforma">
+      <div class="menu-modulos">
+        <div class="menu-section-heading">
+          <div>
+            <span>Explorar</span>
+            <h2>Módulos da campanha</h2>
+          </div>
+          <p>Escolha o que deseja consultar ou editar agora.</p>
+        </div>
+
+        <nav class="menu-nav" role="navigation" aria-label="Módulos do sistema">
 
       <button
         class="menu-card anim-float-up delay-2"
         data-module="ficha"
         aria-label="Abrir fichas de personagem"
       >
-        <div class="menu-card-icon" aria-hidden="true"><img class="menu-icon-image" data-icon-image src="assets/img/icons/menu/ficha.png" alt="" hidden><span data-icon-fallback>⚔</span></div>
+        <div class="menu-card-icon" aria-hidden="true"><img class="menu-icon-image" data-icon-image src="assets/img/icons/menu/ficha.webp" alt="" hidden><span data-icon-fallback>⚔</span></div>
         <div class="menu-card-content">
           <div class="menu-card-title">Ficha</div>
           <div class="menu-card-desc">Criar e gerenciar seus personagens</div>
@@ -94,7 +117,7 @@
         data-module="mundo"
         aria-label="Explorar o mundo e o lore"
       >
-        <div class="menu-card-icon" aria-hidden="true"><img class="menu-icon-image" data-icon-image src="assets/img/icons/menu/mundo.png" alt="" hidden><span data-icon-fallback>✦</span></div>
+        <div class="menu-card-icon" aria-hidden="true"><img class="menu-icon-image" data-icon-image src="assets/img/icons/menu/mundo.webp" alt="" hidden><span data-icon-fallback>✦</span></div>
         <div class="menu-card-content">
           <div class="menu-card-title">Mundo</div>
           <div class="menu-card-desc">Deidades, fluxos, reinos e etc.</div>
@@ -107,7 +130,7 @@
         data-module="regras"
         aria-label="Consultar as regras do sistema"
       >
-        <div class="menu-card-icon" aria-hidden="true"><img class="menu-icon-image" data-icon-image src="assets/img/icons/menu/regras.png" alt="" hidden><span data-icon-fallback>§</span></div>
+        <div class="menu-card-icon" aria-hidden="true"><img class="menu-icon-image" data-icon-image src="assets/img/icons/menu/regras.webp" alt="" hidden><span data-icon-fallback>§</span></div>
         <div class="menu-card-content">
           <div class="menu-card-title">Regras</div>
           <div class="menu-card-desc">Mecânicas, atributos e testes</div>
@@ -115,23 +138,65 @@
         <span class="menu-card-arrow" aria-hidden="true">›</span>
       </button>
 
-      <button
-        class="menu-card anim-float-up delay-5"
-        data-module="loja"
-        aria-label="Ver a loja"
-      >
-        <div class="menu-card-icon" aria-hidden="true"><img class="menu-icon-image" data-icon-image src="assets/img/icons/menu/loja.png" alt="" hidden><span data-icon-fallback>❖</span></div>
-        <div class="menu-card-content">
-          <div class="menu-card-title">Loja</div>
-          <div class="menu-card-desc">Arsenal, veículos, bestiário e drops</div>
-        </div>
-        <span class="menu-card-arrow" aria-hidden="true">›</span>
-      </button>
+          <button
+            class="menu-card menu-card--sessao anim-float-up delay-5"
+            data-module="sessao"
+            aria-label="Abrir a sessão ao vivo da mesa"
+          >
+            <div class="menu-card-icon" aria-hidden="true"><span data-icon-fallback>⚔</span></div>
+            <div class="menu-card-content">
+              <div class="menu-card-title">Sessão ao vivo <span class="menu-card-pulso" id="sessao-indicador" hidden>acontecendo agora</span></div>
+              <div class="menu-card-desc">Iniciativa, vida e condições em tempo real</div>
+            </div>
+            <span class="menu-card-arrow" aria-hidden="true">›</span>
+          </button>
 
-    </nav>
+          <button
+            class="menu-card anim-float-up delay-5"
+            data-module="loja"
+            aria-label="Ver itens liberados para a campanha"
+          >
+            <div class="menu-card-icon" aria-hidden="true"><img class="menu-icon-image" data-icon-image src="assets/img/icons/menu/loja.webp" alt="" hidden><span data-icon-fallback>❖</span></div>
+            <div class="menu-card-content">
+              <div class="menu-card-title">Itens</div>
+              <div class="menu-card-desc">Equipamentos, veículos, criaturas e recompensas liberadas</div>
+            </div>
+            <span class="menu-card-arrow" aria-hidden="true">›</span>
+          </button>
+        </nav>
+      </div>
+
+      <aside class="menu-atalhos" aria-labelledby="atalhos-titulo">
+        <span class="menu-atalhos-kicker">Acesso rápido</span>
+        <h2 id="atalhos-titulo">O que você quer organizar?</h2>
+        <p>Abra somente a área necessária, sem procurar opções em menus escondidos.</p>
+        <div class="menu-atalhos-lista">
+          <button type="button" data-portal-aba="conta">
+            <strong>Minha conta</strong>
+            <span>Perfil, Discord e personagem ativo</span>
+          </button>
+          <button type="button" data-portal-aba="campanhas">
+            <strong>Campanhas</strong>
+            <span>Entrar, selecionar ou administrar mesas</span>
+          </button>
+          <button type="button" data-portal-aba="avisos">
+            <strong>Avisos</strong>
+            <span id="atalho-avisos-texto">Mudanças feitas pelo mestre e pela administração</span>
+          </button>
+          <button type="button" data-portal-aba="mestre" data-acesso="mestre" hidden>
+            <strong>Painel do mestre</strong>
+            <span>Membros, conteúdo e liberações</span>
+          </button>
+          <button type="button" data-portal-aba="admin" data-acesso="admin" hidden>
+            <strong>Administração</strong>
+            <span>Usuários, cargos e acessos</span>
+          </button>
+        </div>
+      </aside>
+    </section>
 
   </main>
 
-  <script type="module" src="src/menu/menu.js"></script>
+  <script type="module" src="src/menu/menu.js?v=5"></script>
 </body>
 </html>

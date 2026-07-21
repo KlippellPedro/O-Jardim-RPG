@@ -1,13 +1,22 @@
-import { criarRepositorioEntradas } from '../../core/entryRepository.js';
+import { conteudoApi } from '../../plataforma/conteudoApi.js';
 import { validarEntrada } from '../schemas/entradaSchema.js';
 
-const repositorio = criarRepositorioEntradas({
-  chaveStorage: 'mundo-entradas',
-  validarEntrada,
-});
+let entradas = {};
 
-export const {
-  getEntradas,
-  entradasPorCategoria,
-  processarArquivo,
-} = repositorio;
+export async function carregarEntradas(campanhaId) {
+  const resposta = await conteudoApi.visivel(campanhaId, 'mundo');
+  entradas = Object.fromEntries((resposta.informacoes || []).flatMap(informacao => {
+    const entrada = informacao.dados;
+    if (!entrada || validarEntrada(entrada)) return [];
+    return [[entrada.id, entrada]];
+  }));
+  return entradas;
+}
+
+export function getEntradas() {
+  return entradas;
+}
+
+export function entradasPorCategoria(categoria) {
+  return Object.values(entradas).filter(entrada => categoria.tipos.includes(entrada.tipo));
+}

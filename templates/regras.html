@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Regras — O Jardim RPG</title>
-    <link rel="icon" type="image/png" href="../assets/img/icons/favicon.png" />
+    <link rel="icon" type="image/png" href="../assets/img/icons/favicon-64.png" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,25 +19,15 @@
     <link rel="stylesheet" href="../styles/core/reset.css" />
     <link rel="stylesheet" href="../styles/core/animations.css" />
     <link rel="stylesheet" href="../styles/regras/regras.css" />
+    <link rel="stylesheet" href="../styles/plataforma/plataforma.css" />
   </head>
   <body>
     <div class="regras-bg"></div>
 
     <div class="regras-page">
       <header class="regras-header">
-        <a class="regras-back" href="../index.html">‹ O Jardim RPG</a>
+        <a class="regras-back" href="/">‹ O Jardim RPG</a>
         <h1 class="regras-title">Regras</h1>
-        <div class="regras-header-tools">
-          <button type="button" class="regras-master-import" id="regras-master-import-btn">
-            Importar área do mestre
-          </button>
-          <input
-            type="file"
-            id="regras-master-import-input"
-            accept="application/json"
-            hidden
-          />
-        </div>
       </header>
 
       <main class="regras-content" id="regras-content" aria-live="polite"></main>
@@ -45,6 +35,6 @@
 
     <div class="regras-toast" id="regras-toast" role="status" hidden></div>
 
-    <script type="module" src="../src/regras/regras.js"></script>
+    <script type="module" src="../src/regras/regras.js?v=3"></script>
   </body>
 </html>

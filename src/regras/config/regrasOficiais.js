@@ -1,3 +1,5 @@
+import { RECOMPENSAS_CLASSE } from '../../ficha/config/progressao.js';
+
 function formatarXP(valor) {
   return new Intl.NumberFormat('pt-BR').format(valor);
 }
@@ -8,13 +10,19 @@ const tabelaXP = Array.from({ length: 40 }, (_, indice) => {
   return `<span><strong>N${nivel}</strong>${formatarXP(xp)} XP</span>`;
 }).join('');
 
+const tabelaClasses = Array.from({ length: 10 }, (_, indice) => {
+  const primeiro = indice + 1;
+  const segundo = primeiro + 10;
+  return `<tr><td>${primeiro}</td><td>${RECOMPENSAS_CLASSE[primeiro]}</td><td>${segundo}</td><td>${RECOMPENSAS_CLASSE[segundo]}</td></tr>`;
+}).join('');
+
 export const REGRAS_OFICIAIS = {
   'sistema-base': {
     status: 'Regra oficial',
     resumo: 'Criação de personagem, atributos, Mana e as fórmulas centrais da versão 1.0.',
     destaques: [
       ['Teste', 'd20 + bônus vs. DT'],
-      ['Atributos', '15, 14, 13, 12, 10, 8'],
+      ['Atributos', '15, 14, 13, 12, 10, 8, 7'],
       ['Níveis', '1–40 no total'],
     ],
     corpo: `
@@ -22,24 +30,24 @@ export const REGRAS_OFICIAIS = {
 
       <h3 class="regras-subtitle">Criação de personagem</h3>
       <ol class="regras-steps">
-        <li><strong>Distribua</strong> 15, 14, 13, 12, 10 e 8 entre os seis atributos.</li>
-        <li><strong>Aplique</strong> os ajustes de raça, respeitando o limite natural 20.</li>
-        <li><strong>Escolha</strong> três perícias ligadas à história e três perícias livres; todas começam em Aprendiz.</li>
-        <li><strong>Escolha</strong> uma classe comum. Humanos recebem um Legado inicial; raças especiais também.</li>
-        <li><strong>Receba</strong> um item comum e 20 Lunaris, antes dos ajustes de raça.</li>
+        <li><strong>Distribua</strong> 15, 14, 13, 12, 10, 8 e 7 entre Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo.</li>
+        <li><strong>Escolha</strong> uma raça comum e, quando exigido, sua variante. Ela define ajustes iniciais, fisiologia e características.</li>
+        <li><strong>Escolha</strong> seis perícias para começar em Aprendiz. Humanos escolhem sete por Adaptabilidade.</li>
+        <li><strong>Escolha</strong> uma classe comum. Ela define os ganhos de Vida e Mana dos níveis posteriores.</li>
+        <li><strong>Receba</strong> um item comum e 20 Lunaris.</li>
       </ol>
-      <p class="regras-note">Rolar 6d20 e distribuir os resultados é uma variante opcional do mestre. Ela produz personagens muito desiguais e não é usada pela regra padrão.</p>
+      <p class="regras-note">Rolar 7d20 e distribuir os resultados é uma variante opcional do mestre. Ela produz personagens muito desiguais e não é usada pela regra padrão.</p>
 
       <h3 class="regras-subtitle">Fórmulas fundamentais</h3>
       <dl class="regras-kv regras-kv--boxed">
         <dt>Modificador</dt><dd>⌊(Atributo − 10) ÷ 2⌋</dd>
         <dt>Teste</dt><dd>d20 + Mod. de Atributo + ⌊Nível ÷ 2⌋ + Grau</dd>
-        <dt>Vida inicial</dt><dd>máx. 1, 10 + (2 × Mod.Força) + (2 × Mod.Constituição)</dd>
+        <dt>Vida inicial</dt><dd>máx. 1, 10 + (2 × Mod.Força) + (2 × Mod.Constituição) + ajuste da raça</dd>
         <dt>Vida por nível</dt><dd>ganho da classe + Mod.Constituição, mínimo 1</dd>
-        <dt>Mana inicial</dt><dd>máx. 1, 6 + (2 × Mod.Inteligência) + Mod.Sabedoria</dd>
+        <dt>Mana inicial</dt><dd>máx. 1, 6 + (2 × Mod.Inteligência) + Mod.Sabedoria + ajuste da raça</dd>
         <dt>Mana por nível</dt><dd>ganho de Mana da classe, mínimo 1</dd>
         <dt>Defesa Natural</dt><dd>10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + equipamento</dd>
-        <dt>Movimento</dt><dd>9 m + (1,5 m × Mod.Destreza), mínimo 4,5 m</dd>
+        <dt>Movimento</dt><dd>9 m + (1,5 m × Mod.Destreza) + ajuste da raça ou morfologia, mínimo 4,5 m</dd>
         <dt>Iniciativa</dt><dd>10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + bônus</dd>
       </dl>
 
@@ -50,10 +58,11 @@ export const REGRAS_OFICIAIS = {
         <li>O limite é de <strong>duas classes comuns e uma classe especial</strong>.</li>
         <li>Depois de alcançar nível 20 em uma classe, escolha outra classe para continuar aumentando o nível total.</li>
         <li>Classes especiais exigem nível total 15 e um acontecimento narrativo, salvo exceção declarada pela própria classe.</li>
+        <li>Classes gerais podem ser obtidas em qualquer Árvore; classes exclusivas exigem que o personagem pertença à Árvore indicada.</li>
       </ul>
 
       <h3 class="regras-subtitle">Maestria de atributo</h3>
-      <p class="regras-note">Ao alcançar valor 20 sem itens, pactos ou efeitos temporários, receba a maestria correspondente. Intervenções externas podem elevar o atributo acima de 20, mas não concedem outra maestria.</p>
+      <p class="regras-note">Ao alcançar valor 20 sem itens, pactos ou efeitos temporários, receba a maestria correspondente. Intervenções externas podem elevar o atributo acima de 20, mas não concedem outra maestria. Entre os pacotes raciais publicados, somente Intelecto Élfico pode ultrapassar esse limite: +4 em Inteligência, até o máximo 24. Essa permissão não se aplica a outros atributos.</p>
       <ul class="regras-sublist regras-sublist--grid">
         <li><strong>Força</strong> — uma vez por turno, +2 no dano de um ataque corpo a corpo.</li>
         <li><strong>Destreza</strong> — +1 na Defesa Natural ou +1,5 m de movimento.</li>
@@ -64,7 +73,7 @@ export const REGRAS_OFICIAIS = {
       </ul>
 
       <h3 class="regras-subtitle">Fluxo</h3>
-      <p class="regras-note"><strong>Fluxo</strong> é o sétimo atributo (revisado em 2026-07-12) — mede conexão e capacidade de canalização de Fluxos. Já entra na distribuição inicial e sobe/desce como os demais, mas sua fórmula de uso em jogo e o bônus de maestria em 20 permanecem Em desenvolvimento junto do sistema de magia.</p>
+      <p class="regras-note"><strong>Fluxo</strong> é o sétimo atributo — mede conexão e capacidade de canalização de Fluxos. Já entra na distribuição inicial e sobe como os demais, mas sua fórmula de uso em jogo e a maestria em 20 permanecem Em desenvolvimento junto do sistema de magia.</p>
     `,
   },
 
@@ -79,7 +88,7 @@ export const REGRAS_OFICIAIS = {
     corpo: `
       <h3 class="regras-subtitle">Fórmula de teste</h3>
       <div class="regras-formula">d20 + Mod. de Atributo + ⌊Nível total ÷ 2⌋ + bônus do Grau</div>
-      <p class="regras-note">Luta e Pontaria usam a mesma fórmula. Fortitude, Reflexos e Vontade não são perícias, mas usam esta escala quando uma rolagem defensiva for necessária.</p>
+      <p class="regras-note">Luta e Pontaria usam a mesma fórmula. Fortitude, Reflexos e Vontade são perícias e também fornecem as respectivas Defesas passivas.</p>
 
       <h3 class="regras-subtitle">Graus de perícia</h3>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -334,25 +343,25 @@ export const REGRAS_OFICIAIS = {
 
   treinar: {
     status: 'Regra oficial',
-    resumo: 'Treino exige tempo e conquista de classe; dinheiro ou dias livres não compram sozinho o maior bônus do jogo.',
+    resumo: 'Treino exige tempo e um Grau de Treinamento; dinheiro ou dias livres não compram sozinhos o maior bônus do jogo.',
     destaques: [
       ['Dia de treino', '6 horas'],
-      ['Recurso', 'Grau de Perícia'],
+      ['Recurso', 'Grau de Treinamento'],
       ['Maior grau', 'Renomado'],
     ],
     corpo: `
-      <p class="regras-lead">Para subir um grau, você precisa receber um Grau de Perícia por classe, legado ou evento e cumprir o treinamento. O tempo sozinho nunca concede o avanço.</p>
+      <p class="regras-lead">Para subir uma perícia em um grau, você precisa receber um Grau de Treinamento pela tabela de classe ou por uma recompensa explícita e cumprir o treinamento. O tempo sozinho nunca concede o avanço.</p>
 
       <h3 class="regras-subtitle">Progressão</h3>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Avanço</th><th>Tempo</th><th>Requisito</th></tr></thead>
         <tbody>
-          <tr><td>Iniciante → Aprendiz</td><td>3 dias</td><td>Instrutor, livro ou experiência relevante</td></tr>
-          <tr><td>Aprendiz → Treinado</td><td>7 dias</td><td>1 Grau de Perícia; nível 3</td></tr>
-          <tr><td>Treinado → Especialista</td><td>14 dias</td><td>1 Grau de Perícia; nível 7</td></tr>
-          <tr><td>Especialista → Mestre</td><td>21 dias</td><td>1 Grau de Perícia; nível 13 e instrutor</td></tr>
-          <tr><td>Mestre → Veterano</td><td>32 dias</td><td>1 Grau; nível 19 e feito notável</td></tr>
-          <tr><td>Veterano → Renomado</td><td>62 dias</td><td>1 Grau; nível 29, feito e item especial</td></tr>
+          <tr><td>Iniciante → Aprendiz</td><td>3 dias</td><td>1 Grau de Treinamento; nível 1</td></tr>
+          <tr><td>Aprendiz → Treinado</td><td>7 dias</td><td>1 Grau de Treinamento; nível 3</td></tr>
+          <tr><td>Treinado → Especialista</td><td>14 dias</td><td>1 Grau de Treinamento; nível 7</td></tr>
+          <tr><td>Especialista → Mestre</td><td>21 dias</td><td>1 Grau de Treinamento; nível 13 e instrutor</td></tr>
+          <tr><td>Mestre → Veterano</td><td>32 dias</td><td>1 Grau de Treinamento; nível 19 e feito notável</td></tr>
+          <tr><td>Veterano → Renomado</td><td>62 dias</td><td>1 Grau de Treinamento; nível 29, feito e item especial</td></tr>
         </tbody>
       </table></div>
 
@@ -387,21 +396,10 @@ export const REGRAS_OFICIAIS = {
       </table></div>
 
       <h3 class="regras-subtitle">Progressão universal de classe</h3>
-      <p class="regras-note">Todas as classes usam esta tabela. A ficha da classe precisa listar apenas as cinco Identidades e os Poderes disponíveis.</p>
+      <p class="regras-note">Esta é a tabela que representa todas as classes do nível 1 ao 20. As Habilidades específicas permanecem sem efeito publicado nesta versão; a tabela serve para reservar os espaços e organizar o teste da ficha.</p>
       <div class="regras-table-wrap"><table class="regras-table regras-table--progression">
         <thead><tr><th>Nível da classe</th><th>Recompensa</th><th>Nível da classe</th><th>Recompensa</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>Identidade I + treinamento inicial</td><td>11</td><td>Poder de classe</td></tr>
-          <tr><td>2</td><td>Poder de classe</td><td>12</td><td>Grau de Perícia</td></tr>
-          <tr><td>3</td><td>Grau de Perícia</td><td>13</td><td>Poder de classe</td></tr>
-          <tr><td>4</td><td>Poder de classe</td><td>14</td><td>Poder de classe</td></tr>
-          <tr><td>5</td><td>Identidade II</td><td>15</td><td>Identidade IV</td></tr>
-          <tr><td>6</td><td>Poder de classe</td><td>16</td><td>Poder de classe</td></tr>
-          <tr><td>7</td><td>Grau de Perícia</td><td>17</td><td>Grau de Perícia</td></tr>
-          <tr><td>8</td><td>Poder de classe</td><td>18</td><td>Poder de classe</td></tr>
-          <tr><td>9</td><td>Poder de classe</td><td>19</td><td>Poder de classe</td></tr>
-          <tr><td>10</td><td>Identidade III</td><td>20</td><td>Identidade V</td></tr>
-        </tbody>
+        <tbody>${tabelaClasses}</tbody>
       </table></div>
 
       <h3 class="regras-subtitle">Especialização e multiclasse</h3>
@@ -409,6 +407,7 @@ export const REGRAS_OFICIAIS = {
         <li>Uma classe pode chegar ao nível 20 sem que o personagem possua outra classe.</li>
         <li>Para aumentar o nível total depois disso, invista em outra classe.</li>
         <li>Classes especiais exigem nível total 15, consomem nível normalmente e não contam no limite de duas classes comuns.</li>
+        <li>Categoria e disponibilidade são independentes: Viajante é especial e geral; as outras classes especiais são exclusivas de uma Árvore.</li>
         <li>Ao entrar em uma nova classe, você não recebe novamente equipamento, dinheiro ou outros benefícios de criação.</li>
       </ul>
 
@@ -461,7 +460,7 @@ export const REGRAS_OFICIAIS = {
     ],
     corpo: `
       <h3 class="regras-subtitle">Sanidade</h3>
-      <div class="regras-formula">d20 + Sanidade ou Vontade contra DT 10 / 15 / 20 / 25</div>
+      <div class="regras-formula">d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25</div>
       <ul class="regras-list">
         <li>Falha causa 1d4, 1d6, 1d8 ou 2d6 de perda, conforme a intensidade do evento.</li>
         <li>Sucesso crítico evita toda perda; sucesso reduz a perda à metade; falha crítica maximiza os dados.</li>

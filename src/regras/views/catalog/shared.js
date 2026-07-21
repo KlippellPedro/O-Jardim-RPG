@@ -30,3 +30,20 @@ export function listaHtml(itens, classe = 'regras-entity-list') {
 export function selo(texto, tom = 'neutro') {
   return `<span class="regras-source-badge regras-source-badge--${tom}">${escapar(texto)}</span>`;
 }
+
+export function barraCatalogo({ total, rotulo, expansivel = false }) {
+  return `
+    <div class="regras-catalog-toolbar" data-catalog-toolbar data-catalog-label="${escapar(rotulo)}">
+      <label class="regras-catalog-search">
+        <span class="regras-catalog-search-icon" aria-hidden="true">⌕</span>
+        <span class="sr-only">Buscar ${escapar(rotulo)}</span>
+        <input type="search" data-catalog-search placeholder="Buscar por nome, origem ou característica..." autocomplete="off">
+      </label>
+      <span class="regras-catalog-count" data-catalog-count>${escapar(total)} ${escapar(rotulo)}</span>
+      ${expansivel ? `<div class="regras-catalog-actions" aria-label="Controlar detalhes">
+        <button type="button" data-catalog-expand="open">Abrir todos</button>
+        <button type="button" data-catalog-expand="close">Recolher</button>
+      </div>` : ''}
+    </div>
+    <p class="regras-catalog-empty" data-catalog-empty hidden>Nenhum resultado encontrado. Tente outro termo.</p>`;
+}

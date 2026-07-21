@@ -1,7 +1,7 @@
-import { storage } from '../../core/storage.js';
+import { conteudoApi } from '../../plataforma/conteudoApi.js';
 import { validarPacoteMestre } from '../schemas/masterRulesSchema.js';
 
-const CHAVE_STORAGE = 'regras-mestre';
+let regrasMestre = null;
 
 export const TOPICO_MESTRE = {
   id: 'mestre',
@@ -14,33 +14,18 @@ export const TOPICO_MESTRE = {
 };
 
 export function getRegrasMestre() {
-  const pacote = storage.get(CHAVE_STORAGE);
-  return pacote && validarPacoteMestre(pacote) === null ? pacote : null;
+  return regrasMestre;
 }
 
 export function temRegrasMestre() {
   return getRegrasMestre() !== null;
 }
 
-export function importarRegrasMestre(raw) {
-  let pacote;
-
-  try {
-    pacote = JSON.parse(raw);
-  } catch {
-    return { ok: false, mensagem: 'Arquivo inválido: JSON malformado.' };
-  }
-
-  const erro = validarPacoteMestre(pacote);
-  if (erro) return { ok: false, mensagem: `Arquivo inválido: ${erro}.` };
-
-  if (!storage.set(CHAVE_STORAGE, pacote)) {
-    return { ok: false, mensagem: 'Não foi possível salvar a área do mestre.' };
-  }
-
-  return {
-    ok: true,
-    mensagem: `Área do mestre ${pacote.versao} importada com sucesso.`,
-    pacote,
-  };
+export async function carregarRegrasMestre(campanhaId) {
+  const resposta = await conteudoApi.visivel(campanhaId, 'regras');
+  const pacote = (resposta.informacoes || [])
+    .map(item => item.dados)
+    .find(item => validarPacoteMestre(item) === null);
+  regrasMestre = pacote || null;
+  return regrasMestre;
 }

@@ -1,31 +1,3 @@
-export const CLASSES_COM_PDF = new Set([
-  'guerreiro', 'piloto', 'ninja', 'pop-star', 'espadachim', 'lutador',
-  'atirador', 'medico', 'guardiao', 'cacador', 'engenheiro',
-  'campeao-dimensional', 'pirata-amaldicoado', 'cartista-arcano',
-]);
-
-export const RACAS_COM_PDF = new Set([
-  'humano', 'vampiro', 'goblim', 'anao', 'golem', 'espirito', 'gigante',
-  'animalia', 'sereia', 'elfo', 'desperto', 'auleth', 'automato', 'viajante',
-]);
-
-export const REGRAS_RACIAIS = {
-  humano: 'Mantenha 1 Legado inicial, limitado aos Legados de entrada sem requisito de nível. O acessório substitui 5 Lunaris, sem dívida inicial.',
-  vampiro: 'Destreza +1; escolha Enganação ou Intimidação como Treinada. Beber sangue recupera 1d6 de Vida apenas uma vez por descanso. Após 24 h sem sangue, fica Fatigado em vez de receber desvantagem em tudo.',
-  goblim: 'Inteligência +1, Ladinagem Aprendiz e +1,5 m de movimento. Troque a perda fixa de 4 PV por −1 PV por nível apenas no nível 1; mantenha os 15 Lunaris como vantagem econômica única.',
-  anao: 'Sabedoria +1 e Carisma −1. Substitua cinco rerrolagens por uma rerrolagem por descanso; construções ocupam um espaço a menos, no mínimo um.',
-  golem: 'Constituição +1, Destreza −1, +5 PV iniciais e Fortitude Aprendiz. O antigo “+4 na DT” foi removido porque não possuía efeito definido. Não começa com equipamento ou Lunaris.',
-  espirito: 'Força −1, Constituição −1, Sabedoria +1 e +3 Mana iniciais. Movimento +3 m e uma rerrolagem por descanso. Corpo espiritual precisa listar exatamente quais objetos, danos e barreiras afeta.',
-  gigante: 'Constituição +1, −1,5 m de movimento e Atletismo Aprendiz. Escolha Sabedoria +1 ou o item marcial inicial; não receba ambos junto com bônus social e dinheiro extra.',
-  animalia: 'Escolha um pacote animal publicado com quatro partes: um atributo +1, uma perícia Aprendiz, uma habilidade de exploração e uma limitação. Nenhum pacote pode conceder voo, tamanho, sentidos e ataque natural ao mesmo tempo.',
-  sereia: 'Carisma +1, Constituição −1, Atuação Aprendiz e Anfíbio. Canto Apaixonante usa ação, custa 2 Mana e permite Vontade contra sua DT; não começa em grau Especialista.',
-  elfo: 'Inteligência +1, uma rerrolagem por descanso e uma linhagem. Remova equipamento e Lunaris em dobro. A linhagem ocupa o orçamento de uma habilidade racial, não um pacote adicional inteiro.',
-  desperto: 'Vontade Aprendiz, Fragmento de Arkarin e vantagem apenas contra aprisionamento de alma. O Legado inicial permanece; a condição ancestral deve ter benefício e complicação equivalentes.',
-  auleth: 'Inteligência +1, Sabedoria +1 e Carisma −1. Seis perícias iniciais, não doze. Alterar forma não muda estatísticas; imunidade a doenças vira vantagem, e Vida extra fica limitada a +2 no nível 1.',
-  automato: 'Não publicar números até escolher uma das cinco variantes do PDF. Cada variante deve seguir o mesmo orçamento: um atributo +1, duas propriedades construtivas e uma vulnerabilidade relevante.',
-  viajante: 'Converta itens e poderes do universo original por equivalentes do mesmo grau. No nível 1, limite a um item comum e uma habilidade de entrada; os demais retornam por marcos narrativos.',
-};
-
 export const REGRAS_LEGADOS = {
   'to-ficando-bom': 'Escolha uma vez a partir do nível 5: aumente um atributo em 2, respeitando o limite de atributo da campanha. Não pode ser escolhido novamente.',
   esquiva: 'Receba +1 na Defesa e +1 em Reflexos. Não acumula com outro Legado que conceda bônus fixo às duas defesas.',
