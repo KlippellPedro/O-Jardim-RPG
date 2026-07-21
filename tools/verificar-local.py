@@ -195,12 +195,32 @@ def verificar_backup() -> None:
         banco.close()
 
 
+def _python_das_suites() -> str:
+    """Prefere o venv da plataforma ao interpretador que rodou este script.
+
+    Com `sys.executable` puro, chamar a verificação pelo Python global fazia a
+    suíte falhar por falta de dependência e o relatório culpava o código.
+    """
+    for candidato in (
+        RAIZ / "plataforma" / ".venv-test" / "Scripts" / "python.exe",
+        RAIZ / "plataforma" / ".venv-test" / "bin" / "python",
+        RAIZ / "plataforma" / ".venv" / "Scripts" / "python.exe",
+        RAIZ / "plataforma" / ".venv" / "bin" / "python",
+    ):
+        if candidato.exists():
+            return str(candidato)
+    return sys.executable
+
+
 def verificar_testes() -> None:
     passo("Suites automatizadas")
     ambiente = {**os.environ, "TEST_DATABASE_URL": TESTE, "DATABASE_URL": DEV}
+    interpretador = _python_das_suites()
+    if interpretador != sys.executable:
+        ok(f"usando o venv da plataforma: {Path(interpretador).parent.parent.name}")
     for suite in ("tests.test_unit", "tests.test_database_integration"):
         processo = subprocess.run(
-            [sys.executable, "-m", "unittest", suite],
+            [interpretador, "-m", "unittest", suite],
             cwd=RAIZ / "plataforma",
             env=ambiente,
             capture_output=True,
