@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sessão ao vivo — O Jardim RPG</title>
+    <link rel="icon" type="image/png" href="../assets/img/icons/favicon-64.png" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles/core/variables.css" />
+    <link rel="stylesheet" href="../styles/core/reset.css" />
+    <link rel="stylesheet" href="../styles/core/animations.css" />
+    <link rel="stylesheet" href="../styles/sessao/sessao.css" />
+    <link rel="stylesheet" href="../styles/plataforma/plataforma.css" />
+  </head>
+  <body>
+    <div class="sessao-bg"></div>
+
+    <div class="sessao-page">
+      <header class="sessao-header">
+        <a class="sessao-back" href="/">‹ O Jardim RPG</a>
+        <div class="sessao-titulo-bloco">
+          <h1 class="sessao-title">Sessão ao vivo</h1>
+          <span class="sessao-campanha" id="sessao-campanha"></span>
+        </div>
+        <div class="sessao-conexao" id="sessao-conexao" role="status">
+          <span class="sessao-conexao-ponto" aria-hidden="true"></span>
+          <span class="sessao-conexao-texto">conectando…</span>
+        </div>
+      </header>
+
+      <main class="sessao-content" id="sessao-content"></main>
+    </div>
+
+    <div class="sessao-toast" id="sessao-toast" role="status" hidden></div>
+
+    <script type="module" src="../src/sessao/sessao.js?v=1"></script>
+  </body>
+</html>
