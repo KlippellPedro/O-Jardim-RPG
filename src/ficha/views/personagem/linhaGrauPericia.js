@@ -6,6 +6,7 @@ import {
   GRAUS_PERICIA,
   GRAUS_INFO,
   NIVEL_MINIMO_GRAU,
+  obterGrauPericiaEfetivo,
   modificador,
   calcularBonusPericia,
 } from '../../services/calculoService.js';
@@ -36,6 +37,7 @@ export function criarLinhaGrauPericia(personagem, item, {
   aoEditarRolagem,
   aoAbrirDetalhes,
   aoEditar,
+  aoRolar,
 }) {
   const linha = document.createElement('div');
   linha.className = 'ficha-pericia-linha';
@@ -68,7 +70,8 @@ export function criarLinhaGrauPericia(personagem, item, {
     atributoSelect.appendChild(option);
   });
 
-  let grauAtual = personagem.pericias?.[item.id] || 'iniciante';
+  let grauBase = personagem.pericias?.[item.id] || 'iniciante';
+  let grauAtual = obterGrauPericiaEfetivo(personagem, item.id);
   const selectGrau = document.createElement('select');
   selectGrau.className = 'ficha-campo-select ficha-pericia-select';
   selectGrau.setAttribute('aria-label', `Grau de ${item.titulo}`);
@@ -76,8 +79,8 @@ export function criarLinhaGrauPericia(personagem, item, {
     const opt = document.createElement('option');
     opt.value = grau;
     opt.textContent = GRAUS_INFO[grau].titulo;
-    opt.selected = grau === grauAtual;
-    opt.disabled = grau !== grauAtual && personagem.nivel < NIVEL_MINIMO_GRAU[grau];
+    opt.selected = grau === grauBase;
+    opt.disabled = grau !== grauBase && personagem.nivel < NIVEL_MINIMO_GRAU[grau];
     selectGrau.appendChild(opt);
   });
 
@@ -109,6 +112,25 @@ export function criarLinhaGrauPericia(personagem, item, {
 
   const acoes = document.createElement('div');
   acoes.className = 'ficha-pericia-acoes';
+
+  // Rolar é a ação mais usada da linha, então fica visível junto do bônus. O
+  // "?" continua ao lado, para quem quer conferir de onde o número saiu.
+  if (typeof aoRolar === 'function') {
+    const rolar = document.createElement('button');
+    rolar.type = 'button';
+    rolar.className = 'ficha-pericia-rolar';
+    rolar.textContent = '🎲';
+    rolar.setAttribute('aria-label', `Rolar ${item.titulo}`);
+    rolar.title = `Rolar ${item.titulo}`;
+    rolar.addEventListener('click', () => aoRolar(item, grauAtual, {
+      atributo: atributoAtual,
+      vantagens: rolagemAtual.vantagens + rolagemAutomatica.vantagens,
+      desvantagens: rolagemAtual.desvantagens + rolagemAutomatica.desvantagens,
+      bonusEfeitos: somarModificadores(personagem, 'pericia_bonus', item.id),
+    }));
+    acoes.appendChild(rolar);
+  }
+
   acoes.appendChild(info);
   if (typeof aoEditar === 'function') {
     const editar = document.createElement('button');
@@ -142,10 +164,11 @@ export function criarLinhaGrauPericia(personagem, item, {
   selectGrau.addEventListener('change', () => {
     const novoGrau = selectGrau.value;
     if (aoMudarGrau(novoGrau) === false) {
-      selectGrau.value = grauAtual;
+      selectGrau.value = grauBase;
       return;
     }
-    grauAtual = novoGrau;
+    grauBase = novoGrau;
+    grauAtual = obterGrauPericiaEfetivo(personagem, item.id);
     atualizarResultado();
     linha.dispatchEvent(new CustomEvent('pericia:grau-alterado', { bubbles: true }));
   });

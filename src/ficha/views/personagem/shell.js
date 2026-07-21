@@ -37,6 +37,10 @@ const ABAS = [
   { id: 'notas', titulo: 'Notas', render: renderAbaNotas },
 ];
 
+function tituloCatalogo(lista, id) {
+  return lista?.find(item => item.id === id)?.titulo || null;
+}
+
 export function renderizarPersonagem(content, catalogo, id, abaId, opcoes = {}) {
   const personagem = obterPersonagem(id);
   if (!personagem) {
@@ -53,6 +57,36 @@ export function renderizarPersonagem(content, catalogo, id, abaId, opcoes = {}) 
   const deveRestaurarFocoNaAba = document.activeElement?.classList?.contains('ficha-aba-btn');
 
   content.innerHTML = '';
+
+  const contexto = document.createElement('header');
+  contexto.className = 'ficha-personagem-contexto';
+  const identidade = document.createElement('div');
+  const sobretitulo = document.createElement('span');
+  sobretitulo.textContent = 'Personagem da campanha atual';
+  const nome = document.createElement('h2');
+  nome.textContent = personagem.nome;
+  const raca = tituloCatalogo(catalogo.racas, personagem.racaId);
+  const classe = tituloCatalogo(catalogo.classes, personagem.classeId)
+    || tituloCatalogo(catalogo.classes, personagem.classes?.[0]?.id);
+  const meta = document.createElement('p');
+  meta.textContent = [`Nível ${personagem.nivel || 1}`, raca, classe].filter(Boolean).join(' · ');
+  identidade.append(sobretitulo, nome, meta);
+  const ajudaBtn = document.createElement('button');
+  ajudaBtn.type = 'button';
+  ajudaBtn.className = 'ficha-ajuda-btn';
+  ajudaBtn.textContent = '?';
+  ajudaBtn.setAttribute('aria-label', 'Explicar as seções da ficha');
+  ajudaBtn.setAttribute('aria-expanded', 'false');
+  contexto.append(identidade, ajudaBtn);
+  const explicacao = document.createElement('p');
+  explicacao.className = 'ficha-ajuda-caixa';
+  explicacao.textContent = 'Use as abas para separar os dados da ficha. Alterações mecânicas são salvas na conta; inventário e moedas também podem receber atualizações dos bots do Discord.';
+  explicacao.hidden = true;
+  ajudaBtn.addEventListener('click', () => {
+    explicacao.hidden = !explicacao.hidden;
+    ajudaBtn.setAttribute('aria-expanded', String(!explicacao.hidden));
+  });
+  content.append(contexto, explicacao);
 
   const nav = document.createElement('nav');
   nav.className = 'ficha-abas-nav';

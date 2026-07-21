@@ -10,6 +10,18 @@ import { atualizarPersonagem } from '../../../services/personagensService.js';
 import { listarArvoresDisponiveis } from '../../../services/arvoresService.js';
 import {
   calcularDerivados,
+  calcularDerivadosComClasses,
+  aplicarAjusteAtributoRacial,
+  capacidadeModificacoesRaciais,
+  obterAjustesAtributosRaciais,
+  obterLimitesAtributosRaciais,
+  obterModificacoesRaciaisInstaladas,
+  obterAjustesPericiasRaciais,
+  obterArvoresClassePermitidas,
+  obterFragmentosRaciaisConhecidos,
+  obterFragmentosRaciaisExpressos,
+  capacidadeMaldicoesRaciais,
+  obterMaldicoesRaciaisConhecidas,
   modificador,
   nivelPorXp,
   TABELA_XP,
@@ -20,6 +32,7 @@ import { NOMES_ATRIBUTOS } from '../../../config/nomesAtributos.js';
 import {
   listarEfeitosAtivos,
   somarModificadores,
+  valorAtributoEfetivo,
 } from '../../../services/modificadoresService.js';
 import { abrirModalSimples, fecharModalSimples } from '../modalSimples.js';
 
@@ -89,9 +102,8 @@ function atualizarStatsCalculadosNoDom(personagem) {
   });
 }
 
-// ── Identidade — campos soltos, editáveis, sem efeito mecânico ──────────
-// (exceto árvore/raça, que ainda só trocam o id — recalcular atributos numa
-// troca de raça fica pra depois, ver nota no bloco).
+// ── Identidade — campos soltos, editáveis. Trocar a raça recalcula os
+// derivados e sincroniza eventuais ajustes raciais de atributo.
 
 function criarCampoTexto({ rotulo, valor, placeholder, datalistId, datalistOpcoes, aoMudar }) {
   const campo = document.createElement('label');
@@ -150,7 +162,7 @@ function criarCampoSelect({ rotulo, valor, opcoes, aoMudar }) {
     option.selected = opcao.id === valor;
     select.appendChild(option);
   });
-  select.addEventListener('change', () => aoMudar(select.value || null));
+  select.addEventListener('change', () => aoMudar(select.value || null, select));
   campo.appendChild(select);
   return campo;
 }
@@ -181,22 +193,318 @@ function blocoIdentidade(personagem, ctx) {
   }));
 
   grade.appendChild(criarCampoSelect({
-    rotulo: 'Árvore',
+    rotulo: personagem.racaId === 'errante' ? 'Árvore atual' : 'Árvore',
     valor: personagem.arvoreId,
     opcoes: listarArvoresDisponiveis(),
-    aoMudar: valor => salvar(personagem, ctx, { arvoreId: valor }),
+    aoMudar: (valor, select) => {
+      const racaAtual = ctx.catalogo.racas.find(item => item.id === personagem.racaId) || null;
+      const racaIncompativel = racaAtual?.disponibilidade === 'restrita'
+        && Array.isArray(racaAtual.arvores)
+        && racaAtual.arvores.length > 0
+        && !racaAtual.arvores.includes(valor);
+      if (racaIncompativel) {
+        ctx.mostrarToast(`${racaAtual.titulo} não está disponível nessa Árvore.`, 'erro');
+        select.value = personagem.arvoreId || '';
+        return;
+      }
+      const erro = validarComposicaoClasses(
+        personagem.classes,
+        ctx.catalogo.classes,
+        obterArvoresClassePermitidas(personagem, valor),
+      );
+      if (erro) {
+        ctx.mostrarToast(erro, 'erro');
+        select.value = personagem.arvoreId || '';
+        return;
+      }
+      salvar(personagem, ctx, { arvoreId: valor });
+    },
   }));
 
-  // Trocar de raça só atualiza o id por enquanto — recalcular atributos
-  // finais/derivados a partir da nova raça (aplicarModificadoresRaciais)
-  // fica pro próximo passo, já que envolve decidir o que fazer com ajustes
-  // manuais que o jogador já tenha feito em cima da raça antiga.
+  const racasDisponiveisParaEdicao = ctx.catalogo.racas.filter(raca => (
+    raca.disponibilidade === 'geral' || raca.id === personagem.racaId
+  ));
   grade.appendChild(criarCampoSelect({
     rotulo: 'Raça',
     valor: personagem.racaId,
-    opcoes: ctx.catalogo.racas,
-    aoMudar: valor => salvar(personagem, ctx, { racaId: valor }),
+    opcoes: racasDisponiveisParaEdicao,
+    aoMudar: (valor, select) => {
+      const raca = ctx.catalogo.racas.find(item => item.id === valor) || null;
+      const escolhaRacial = Array.isArray(raca?.variantes) && raca.variantes.length > 0
+        ? { varianteId: raca.variantes[0].id }
+        : {};
+      const erroClasses = validarComposicaoClasses(
+        personagem.classes,
+        ctx.catalogo.classes,
+        obterArvoresClassePermitidas({ ...personagem, racaId: valor, escolhaRacial }),
+      );
+      if (erroClasses) {
+        ctx.mostrarToast(erroClasses, 'erro');
+        select.value = personagem.racaId || '';
+        return;
+      }
+      const variante = raca?.variantes?.find(item => item.id === escolhaRacial.varianteId) || null;
+      const { recursosDefinidos: _, ...derivados } = calcularDerivadosComClasses(
+        personagem.atributosFinais,
+        raca,
+        personagem.classes,
+        ctx.catalogo.classes,
+        personagem.nivel,
+        escolhaRacial,
+      );
+      salvar(personagem, ctx, {
+        racaId: valor,
+        escolhaRacial,
+        tamanho: variante?.tamanho || personagem.tamanho,
+        ajustesAtributosRaciais: obterAjustesAtributosRaciais(raca, escolhaRacial),
+        limitesAtributosRaciais: obterLimitesAtributosRaciais(raca, escolhaRacial),
+        ajustesPericiasRaciais: obterAjustesPericiasRaciais(raca, escolhaRacial),
+        derivados,
+      });
+    },
   }));
+
+  const racaAtual = ctx.catalogo.racas.find(item => item.id === personagem.racaId) || null;
+  if (racaAtual?.origem_externa) {
+    grade.appendChild(criarCampoTexto({
+      rotulo: 'Mundo ou RPG de origem',
+      valor: personagem.escolhaRacial?.rpgOrigem,
+      placeholder: 'Ex.: nome do outro RPG ou cenário',
+      aoMudar: valor => salvar(personagem, ctx, {
+        escolhaRacial: { ...(personagem.escolhaRacial || {}), rpgOrigem: valor },
+      }),
+    }));
+    grade.appendChild(criarCampoTexto({
+      rotulo: 'Campanha de origem',
+      valor: personagem.escolhaRacial?.campanhaOrigem,
+      placeholder: 'Ex.: nome da campanha anterior',
+      aoMudar: valor => salvar(personagem, ctx, {
+        escolhaRacial: { ...(personagem.escolhaRacial || {}), campanhaOrigem: valor },
+      }),
+    }));
+    grade.appendChild(criarCampoSelect({
+      rotulo: 'Árvore de origem equivalente',
+      valor: personagem.escolhaRacial?.arvoreOrigemId,
+      opcoes: listarArvoresDisponiveis(),
+      aoMudar: (valor, select) => {
+        const escolhaRacial = {
+          ...(personagem.escolhaRacial || {}),
+          arvoreOrigemId: valor,
+        };
+        const erro = validarComposicaoClasses(
+          personagem.classes,
+          ctx.catalogo.classes,
+          obterArvoresClassePermitidas({ ...personagem, escolhaRacial }),
+        );
+        if (erro) {
+          ctx.mostrarToast(erro, 'erro');
+          select.value = personagem.escolhaRacial?.arvoreOrigemId || '';
+          return;
+        }
+        salvar(personagem, ctx, { escolhaRacial });
+      },
+    }));
+  }
+  if (Array.isArray(racaAtual?.variantes) && racaAtual.variantes.length > 0) {
+    grade.appendChild(criarCampoSelect({
+      rotulo: racaAtual.rotulo_variante
+        || (racaAtual.id === 'automato' ? 'Chassi' : 'Morfologia racial'),
+      valor: personagem.escolhaRacial?.varianteId,
+      opcoes: racaAtual.variantes,
+      aoMudar: valor => {
+        const variante = racaAtual.variantes.find(item => item.id === valor) || null;
+        const escolhaBase = {
+          ...(personagem.escolhaRacial || {}),
+          varianteId: valor,
+          ...(valor !== 'arquivo-vivo' ? { periciasProjeto: [] } : {}),
+        };
+        if (Array.isArray(racaAtual.maldicoes)) {
+          const campoMaldicoes = String(
+            racaAtual.maldicoes_config?.campo || 'maldicoesConhecidasIds',
+          );
+          escolhaBase[campoMaldicoes] = obterMaldicoesRaciaisConhecidas(
+            racaAtual,
+            escolhaBase,
+          ).map(item => item.id);
+        }
+        const modificacoesValidas = obterModificacoesRaciaisInstaladas(
+          racaAtual,
+          escolhaBase,
+          personagem.nivel,
+        ).map(item => item.id);
+        const escolhaRacial = {
+          ...escolhaBase,
+          ...(Array.isArray(racaAtual.modificacoes)
+            ? { modificacoesIds: modificacoesValidas }
+            : {}),
+        };
+        const { recursosDefinidos: _, ...derivados } = calcularDerivadosComClasses(
+          personagem.atributosFinais,
+          racaAtual,
+          personagem.classes,
+          ctx.catalogo.classes,
+          personagem.nivel,
+          escolhaRacial,
+        );
+        salvar(personagem, ctx, {
+          escolhaRacial,
+          tamanho: variante?.tamanho || personagem.tamanho,
+          ajustesAtributosRaciais: obterAjustesAtributosRaciais(racaAtual, escolhaRacial),
+          limitesAtributosRaciais: obterLimitesAtributosRaciais(racaAtual, escolhaRacial),
+          derivados,
+        });
+      },
+    }));
+  }
+
+  const escolhaAtributos = racaAtual?.escolha_atributos;
+  const totalAtributos = Math.max(0, Math.trunc(Number(escolhaAtributos?.total) || 0));
+  const campoAtributos = String(escolhaAtributos?.campo || 'atributosRaciais');
+  for (let indice = 0; indice < totalAtributos; indice += 1) {
+    const atuais = Array.from(
+      { length: totalAtributos },
+      (_, posicao) => personagem.escolhaRacial?.[campoAtributos]?.[posicao] || '',
+    );
+    grade.appendChild(criarCampoSelect({
+      rotulo: totalAtributos > 1
+        ? `${escolhaAtributos.titulo || 'Atributo racial'} ${indice + 1}`
+        : (escolhaAtributos.titulo || 'Atributo racial'),
+      valor: atuais[indice],
+      opcoes: Object.entries(NOMES_ATRIBUTOS)
+        .filter(([id]) => id === atuais[indice] || !atuais.includes(id))
+        .map(([id, titulo]) => ({ id, titulo })),
+      aoMudar: valor => {
+        const atributosRaciais = [...atuais];
+        atributosRaciais[indice] = valor || '';
+        const escolhaRacial = {
+          ...(personagem.escolhaRacial || {}),
+          [campoAtributos]: atributosRaciais.filter(Boolean),
+        };
+        const { recursosDefinidos: _, ...derivados } = calcularDerivadosComClasses(
+          personagem.atributosFinais,
+          racaAtual,
+          personagem.classes,
+          ctx.catalogo.classes,
+          personagem.nivel,
+          escolhaRacial,
+        );
+        salvar(personagem, ctx, {
+          escolhaRacial,
+          ajustesAtributosRaciais: obterAjustesAtributosRaciais(racaAtual, escolhaRacial),
+          limitesAtributosRaciais: obterLimitesAtributosRaciais(racaAtual, escolhaRacial),
+          derivados,
+        });
+      },
+    }));
+  }
+
+  const varianteAtual = racaAtual?.variantes?.find(
+    item => item.id === personagem.escolhaRacial?.varianteId,
+  ) || null;
+  const escolhaPericias = varianteAtual?.escolha_pericias || racaAtual?.escolha_pericias;
+  const totalPericiasProjeto = Math.max(0, Math.trunc(Number(escolhaPericias?.total) || 0));
+  const campoPericias = String(escolhaPericias?.campo || 'periciasProjeto');
+  for (let indice = 0; indice < totalPericiasProjeto; indice += 1) {
+    const atuais = Array.from(
+      { length: totalPericiasProjeto },
+      (_, posicao) => personagem.escolhaRacial?.[campoPericias]?.[posicao] || '',
+    );
+    grade.appendChild(criarCampoSelect({
+      rotulo: `${escolhaPericias.titulo || 'Perícia escolhida'} ${indice + 1}`,
+      valor: atuais[indice],
+      opcoes: (ctx.catalogo.pericias || [])
+        .filter(pericia => pericia.id === atuais[indice] || !atuais.includes(pericia.id)),
+      aoMudar: valor => {
+        const periciasProjeto = [...atuais];
+        periciasProjeto[indice] = valor || '';
+        salvar(personagem, ctx, {
+          escolhaRacial: {
+            ...(personagem.escolhaRacial || {}),
+            [campoPericias]: periciasProjeto.filter(Boolean),
+          },
+        });
+      },
+    }));
+  }
+
+  if (Array.isArray(racaAtual?.assinaturas) && racaAtual.assinaturas.length > 0) {
+    grade.appendChild(criarCampoTexto({
+      rotulo: 'Nome da Assinatura Remanescente',
+      valor: personagem.escolhaRacial?.assinaturaNome,
+      placeholder: 'Ex.: Corte do Dragão Rubro',
+      aoMudar: valor => salvar(personagem, ctx, {
+        escolhaRacial: { ...(personagem.escolhaRacial || {}), assinaturaNome: valor },
+      }),
+    }));
+    grade.appendChild(criarCampoSelect({
+      rotulo: 'Formato da Assinatura',
+      valor: personagem.escolhaRacial?.assinaturaFormatoId,
+      opcoes: racaAtual.assinaturas,
+      aoMudar: valor => salvar(personagem, ctx, {
+        escolhaRacial: {
+          ...(personagem.escolhaRacial || {}),
+          assinaturaFormatoId: valor,
+        },
+      }),
+    }));
+  }
+
+  if (Array.isArray(racaAtual?.linhagens) && racaAtual.linhagens.length > 0) {
+    grade.appendChild(criarCampoSelect({
+      rotulo: 'Linhagem Élfica',
+      valor: personagem.escolhaRacial?.linhagemId,
+      opcoes: racaAtual.linhagens,
+      aoMudar: valor => salvar(personagem, ctx, {
+        escolhaRacial: {
+          ...(personagem.escolhaRacial || {}),
+          linhagemId: valor,
+        },
+      }),
+    }));
+  }
+
+  if (Array.isArray(racaAtual?.condicoes_ancestrais) && racaAtual.condicoes_ancestrais.length > 0) {
+    grade.appendChild(criarCampoSelect({
+      rotulo: 'Condição Ancestral',
+      valor: personagem.escolhaRacial?.condicaoAncestralId,
+      opcoes: racaAtual.condicoes_ancestrais,
+      aoMudar: valor => {
+        const escolhaRacial = {
+          ...(personagem.escolhaRacial || {}),
+          condicaoAncestralId: valor,
+        };
+        salvar(personagem, ctx, {
+          escolhaRacial,
+          ajustesPericiasRaciais: obterAjustesPericiasRaciais(racaAtual, escolhaRacial),
+        });
+      },
+    }));
+  }
+
+  const conhecimentosExtremosTotal = Math.max(
+    0,
+    Math.trunc(Number(racaAtual?.conhecimentos_extremos_total) || 0),
+  );
+  for (let indice = 0; indice < conhecimentosExtremosTotal; indice += 1) {
+    grade.appendChild(criarCampoTexto({
+      rotulo: `Conhecimento Extremo ${indice + 1}`,
+      valor: personagem.escolhaRacial?.conhecimentosExtremos?.[indice],
+      placeholder: 'Ex.: tecnologia A.X.I.S',
+      aoMudar: valor => {
+        const conhecimentosExtremos = Array.from(
+          { length: conhecimentosExtremosTotal },
+          (_, posicao) => personagem.escolhaRacial?.conhecimentosExtremos?.[posicao] || '',
+        );
+        conhecimentosExtremos[indice] = valor;
+        salvar(personagem, ctx, {
+          escolhaRacial: {
+            ...(personagem.escolhaRacial || {}),
+            conhecimentosExtremos,
+          },
+        });
+      },
+    }));
+  }
 
   grade.appendChild(criarCampoTexto({
     rotulo: 'Tamanho',
@@ -235,6 +543,284 @@ function blocoIdentidade(personagem, ctx) {
   grade.appendChild(nivelCampo);
 
   bloco.appendChild(grade);
+  return bloco;
+}
+
+function textoPreRequisitosModificacao(modificacao) {
+  return [
+    Number(modificacao.nivel_minimo) > 1 ? `nível ${modificacao.nivel_minimo}` : '',
+    Number(modificacao.passivas_exigidas) > 0
+      ? `${modificacao.passivas_exigidas} passivas instaladas`
+      : '',
+    modificacao.postura_exigida === 'bipede' ? 'chassi bípede' : '',
+  ].filter(Boolean).join(' · ');
+}
+
+function blocoModificacoesRaciais(personagem, ctx) {
+  const raca = ctx.catalogo.racas.find(item => item.id === personagem.racaId) || null;
+  if (!Array.isArray(raca?.modificacoes) || raca.modificacoes.length === 0) return null;
+
+  const bloco = document.createElement('div');
+  bloco.className = 'ficha-detalhe-bloco ficha-detalhe-bloco--modificacoes-raciais';
+  const h = document.createElement('h3');
+  h.className = 'ficha-secao-titulo';
+  h.textContent = 'Modificações do Autômato';
+  bloco.appendChild(h);
+
+  const capacidade = capacidadeModificacoesRaciais(raca, personagem.nivel);
+  const instaladas = obterModificacoesRaciaisInstaladas(
+    raca,
+    personagem.escolhaRacial,
+    personagem.nivel,
+  );
+  const idsInstaladas = new Set(instaladas.map(item => item.id));
+  const passivasInstaladas = instaladas.filter(item => item.categoria === 'passiva').length;
+  const ativasInstaladas = instaladas.filter(item => item.categoria === 'ativa').length;
+
+  const resumo = document.createElement('p');
+  resumo.className = 'ficha-classes-resumo';
+  resumo.textContent = `${instaladas.length}/${capacidade} instaladas · ${passivasInstaladas} passivas · ${ativasInstaladas} ativas`;
+  bloco.appendChild(resumo);
+
+  const aviso = document.createElement('p');
+  aviso.className = 'ficha-wizard-aviso';
+  aviso.textContent = 'Selecionar aqui registra uma instalação já concluída. Tempo, peças e Lunaris continuam sendo resolvidos pelo mestre.';
+  bloco.appendChild(aviso);
+
+  const variante = raca.variantes?.find(
+    item => item.id === personagem.escolhaRacial?.varianteId,
+  ) || null;
+  const lista = document.createElement('div');
+  lista.className = 'ficha-classes-lista';
+
+  raca.modificacoes.forEach(modificacao => {
+    const linha = document.createElement('label');
+    linha.className = 'ficha-modificacao-racial';
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = idsInstaladas.has(modificacao.id);
+
+    const nivelInsuficiente = personagem.nivel < Math.max(1, Number(modificacao.nivel_minimo) || 1);
+    const posturaIncompativel = Boolean(modificacao.postura_exigida)
+      && modificacao.postura_exigida !== variante?.postura;
+    const faltamPassivas = modificacao.categoria === 'ativa'
+      && passivasInstaladas < Math.max(0, Number(modificacao.passivas_exigidas) || 0);
+    const semEspaco = instaladas.length >= capacidade;
+    const removerQuebrariaAtivas = checkbox.checked
+      && modificacao.categoria === 'passiva'
+      && ativasInstaladas > 0
+      && passivasInstaladas <= 3;
+    checkbox.disabled = checkbox.checked
+      ? removerQuebrariaAtivas
+      : nivelInsuficiente || posturaIncompativel || faltamPassivas || semEspaco;
+
+    const texto = document.createElement('span');
+    const preRequisitos = textoPreRequisitosModificacao(modificacao);
+    texto.textContent = `${modificacao.titulo} · ${modificacao.categoria === 'ativa' ? 'Ativa' : 'Passiva'}${preRequisitos ? ` · ${preRequisitos}` : ''}`;
+    texto.title = modificacao.descricao;
+
+    checkbox.addEventListener('change', () => {
+      const idsAtuais = instaladas.map(item => item.id);
+      const propostos = checkbox.checked
+        ? [...idsAtuais, modificacao.id]
+        : idsAtuais.filter(id => id !== modificacao.id);
+      const escolhaRacial = {
+        ...(personagem.escolhaRacial || {}),
+        modificacoesIds: propostos,
+      };
+      const validas = obterModificacoesRaciaisInstaladas(
+        raca,
+        escolhaRacial,
+        personagem.nivel,
+      );
+      if (checkbox.checked && !validas.some(item => item.id === modificacao.id)) {
+        checkbox.checked = false;
+        ctx.mostrarToast('Essa modificação ainda não cumpre todos os pré-requisitos.', 'erro');
+        return;
+      }
+      escolhaRacial.modificacoesIds = validas.map(item => item.id);
+      const { recursosDefinidos: _, ...derivados } = calcularDerivadosComClasses(
+        personagem.atributosFinais,
+        raca,
+        personagem.classes,
+        ctx.catalogo.classes,
+        personagem.nivel,
+        escolhaRacial,
+      );
+      if (salvar(personagem, ctx, { escolhaRacial, derivados })) ctx.recarregar();
+    });
+
+    linha.append(checkbox, texto);
+    lista.appendChild(linha);
+  });
+  bloco.appendChild(lista);
+  return bloco;
+}
+
+function blocoFragmentosRaciais(personagem, ctx) {
+  const raca = ctx.catalogo.racas.find(item => item.id === personagem.racaId) || null;
+  if (!Array.isArray(raca?.fragmentos) || raca.fragmentos.length === 0) return null;
+
+  const conhecidos = obterFragmentosRaciaisConhecidos(raca, personagem.escolhaRacial);
+  const expressos = obterFragmentosRaciaisExpressos(raca, personagem.escolhaRacial);
+  const idsConhecidos = new Set(conhecidos.map(item => item.id));
+  const idsExpressos = new Set(expressos.map(item => item.id));
+  const config = raca.fragmentos_config || {};
+  const maxConhecidos = Math.max(0, Math.trunc(Number(config.conhecidos_maximo) || 0));
+  const maxExpressos = Math.max(0, Math.trunc(Number(config.expressos) || 0));
+
+  const bloco = document.createElement('div');
+  bloco.className = 'ficha-detalhe-bloco ficha-detalhe-bloco--modificacoes-raciais';
+  const h = document.createElement('h3');
+  h.className = 'ficha-secao-titulo';
+  h.textContent = 'Fragmentos Constituintes do Amálgamo';
+  const resumo = document.createElement('p');
+  resumo.className = 'ficha-classes-resumo';
+  resumo.textContent = `${conhecidos.length}/${maxConhecidos} conhecidos · ${expressos.length}/${maxExpressos} expressos`;
+  const aviso = document.createElement('p');
+  aviso.className = 'ficha-wizard-aviso';
+  aviso.textContent = `O Amálgamo começa com ${config.conhecidos_iniciais || 3} Fragmentos conhecidos. Novas assimilações exigem autorização do mestre. Marque até ${maxExpressos} deles como expressos após um descanso.`;
+  bloco.append(h, resumo, aviso);
+
+  const salvarFragmentos = escolhaRacial => {
+    const conhecidosValidos = obterFragmentosRaciaisConhecidos(raca, escolhaRacial);
+    escolhaRacial.fragmentosConhecidosIds = conhecidosValidos.map(item => item.id);
+    escolhaRacial.fragmentosExpressosIds = obterFragmentosRaciaisExpressos(
+      raca,
+      escolhaRacial,
+    ).map(item => item.id);
+    const { recursosDefinidos: _, ...derivados } = calcularDerivadosComClasses(
+      personagem.atributosFinais,
+      raca,
+      personagem.classes,
+      ctx.catalogo.classes,
+      personagem.nivel,
+      escolhaRacial,
+    );
+    return salvar(personagem, ctx, {
+      escolhaRacial,
+      ajustesPericiasRaciais: obterAjustesPericiasRaciais(raca, escolhaRacial),
+      derivados,
+    });
+  };
+
+  const lista = document.createElement('div');
+  lista.className = 'ficha-classes-lista';
+  raca.fragmentos.forEach(fragmento => {
+    const linha = document.createElement('div');
+    linha.className = 'ficha-modificacao-racial';
+
+    const conhecidoLabel = document.createElement('label');
+    conhecidoLabel.className = 'ficha-fragmento-opcao';
+    const conhecido = document.createElement('input');
+    conhecido.type = 'checkbox';
+    conhecido.checked = idsConhecidos.has(fragmento.id);
+    conhecido.disabled = !conhecido.checked && conhecidos.length >= maxConhecidos;
+    const conhecidoTexto = document.createElement('span');
+    conhecidoTexto.textContent = `${fragmento.titulo} · Conhecido`;
+    conhecidoTexto.title = fragmento.descricao;
+    conhecidoLabel.append(conhecido, conhecidoTexto);
+
+    const expressoLabel = document.createElement('label');
+    expressoLabel.className = 'ficha-fragmento-opcao';
+    const expresso = document.createElement('input');
+    expresso.type = 'checkbox';
+    expresso.checked = idsExpressos.has(fragmento.id);
+    expresso.disabled = !conhecido.checked
+      || (!expresso.checked && expressos.length >= maxExpressos);
+    const expressoTexto = document.createElement('span');
+    expressoTexto.textContent = 'Expresso';
+    expressoLabel.append(expresso, expressoTexto);
+
+    conhecido.addEventListener('change', () => {
+      const novosConhecidos = conhecido.checked
+        ? [...conhecidos.map(item => item.id), fragmento.id]
+        : conhecidos.map(item => item.id).filter(id => id !== fragmento.id);
+      const novosExpressos = conhecido.checked
+        ? expressos.map(item => item.id)
+        : expressos.map(item => item.id).filter(id => id !== fragmento.id);
+      const escolhaRacial = {
+        ...(personagem.escolhaRacial || {}),
+        fragmentosConhecidosIds: novosConhecidos,
+        fragmentosExpressosIds: novosExpressos,
+      };
+      if (salvarFragmentos(escolhaRacial)) ctx.recarregar();
+    });
+
+    expresso.addEventListener('change', () => {
+      const novosExpressos = expresso.checked
+        ? [...expressos.map(item => item.id), fragmento.id]
+        : expressos.map(item => item.id).filter(id => id !== fragmento.id);
+      const escolhaRacial = {
+        ...(personagem.escolhaRacial || {}),
+        fragmentosExpressosIds: novosExpressos,
+      };
+      if (salvarFragmentos(escolhaRacial)) ctx.recarregar();
+    });
+
+    linha.append(conhecidoLabel, expressoLabel);
+    lista.appendChild(linha);
+  });
+  bloco.appendChild(lista);
+  return bloco;
+}
+
+function blocoMaldicoesRaciais(personagem, ctx) {
+  const raca = ctx.catalogo.racas.find(item => item.id === personagem.racaId) || null;
+  if (!Array.isArray(raca?.maldicoes) || raca.maldicoes.length === 0) return null;
+
+  const capacidade = capacidadeMaldicoesRaciais(raca, personagem.escolhaRacial);
+  const conhecidas = obterMaldicoesRaciaisConhecidas(raca, personagem.escolhaRacial);
+  const idsConhecidas = new Set(conhecidas.map(item => item.id));
+  const campo = String(raca.maldicoes_config?.campo || 'maldicoesConhecidasIds');
+
+  const bloco = document.createElement('div');
+  bloco.className = 'ficha-detalhe-bloco ficha-detalhe-bloco--modificacoes-raciais';
+  const h = document.createElement('h3');
+  h.className = 'ficha-secao-titulo';
+  h.textContent = 'Maldições Conhecidas da Bruxa';
+  const resumo = document.createElement('p');
+  resumo.className = 'ficha-classes-resumo';
+  resumo.textContent = `${conhecidas.length}/${capacidade} conhecidas`;
+  const aviso = document.createElement('p');
+  aviso.className = 'ficha-wizard-aviso';
+  aviso.textContent = personagem.escolhaRacial?.varianteId === 'grimorio'
+    ? 'O Grimório permite conhecer cinco Maldições. Trocar de Instrumento reduz o limite para três.'
+    : 'Escolha três Maldições. Apenas uma Maldição Tecida da mesma Bruxa pode afetar uma criatura por vez.';
+  bloco.append(h, resumo, aviso);
+
+  const lista = document.createElement('div');
+  lista.className = 'ficha-classes-lista';
+  raca.maldicoes.forEach(maldicao => {
+    const linha = document.createElement('label');
+    linha.className = 'ficha-modificacao-racial';
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = idsConhecidas.has(maldicao.id);
+    checkbox.disabled = !checkbox.checked && conhecidas.length >= capacidade;
+    const texto = document.createElement('span');
+    texto.textContent = maldicao.titulo;
+    texto.title = maldicao.descricao;
+
+    checkbox.addEventListener('change', () => {
+      const ids = checkbox.checked
+        ? [...conhecidas.map(item => item.id), maldicao.id]
+        : conhecidas.map(item => item.id).filter(id => id !== maldicao.id);
+      const escolhaRacial = {
+        ...(personagem.escolhaRacial || {}),
+        [campo]: ids,
+      };
+      escolhaRacial[campo] = obterMaldicoesRaciaisConhecidas(
+        raca,
+        escolhaRacial,
+      ).map(item => item.id);
+      if (salvar(personagem, ctx, { escolhaRacial })) ctx.recarregar();
+    });
+
+    linha.append(checkbox, texto);
+    lista.appendChild(linha);
+  });
+  bloco.appendChild(lista);
   return bloco;
 }
 
@@ -311,7 +897,12 @@ function blocoAtributos(personagem, ctx) {
   Object.entries(NOMES_ATRIBUTOS).forEach(([chave, rotulo]) => {
     const valorBase = personagem.atributosFinais?.[chave] ?? 0;
     const bonusEfeito = somarModificadores(personagem, 'atributo', chave);
-    const valor = valorBase + bonusEfeito;
+    const bonusRacial = aplicarAjusteAtributoRacial(
+      valorBase,
+      personagem.ajustesAtributosRaciais?.[chave],
+      personagem.limitesAtributosRaciais?.[chave],
+    ) - valorBase;
+    const valor = valorAtributoEfetivo(personagem, chave);
     grade.appendChild(criarCardAtributo(
       SIGLA_ATRIBUTO[chave] || chave.slice(0, 3).toUpperCase(), rotulo, valor, modificador(valor),
       (novoValor) => {
@@ -319,29 +910,32 @@ function blocoAtributos(personagem, ctx) {
           ctx.mostrarToast('O atributo deve ser um número inteiro entre 1 e 99.', 'erro');
           return false;
         }
-        const novoValorBase = novoValor - bonusEfeito;
+        const novoValorSemEfeitos = novoValor - bonusEfeito;
+        const limiteRacial = Number(personagem.limitesAtributosRaciais?.[chave]);
+        const novoValorBase = Number.isFinite(limiteRacial) && novoValorSemEfeitos > limiteRacial
+          ? novoValorSemEfeitos
+          : novoValorSemEfeitos - bonusRacial;
         // personagem.atributosFinais é atualizado a cada salvar(); o valorBase
         // capturado no render ficaria obsoleto numa segunda edição seguida e
         // debitaria aumentos pendentes a mais.
         const baseAtual = Number(personagem.atributosFinais?.[chave]) || valorBase;
         const atributosFinais = { ...personagem.atributosFinais, [chave]: novoValorBase };
         const raca = ctx.catalogo.racas.find(item => item.id === personagem.racaId) || null;
-        const antes = calcularDerivados(personagem.atributosFinais, raca, personagem.nivel);
-        const depois = calcularDerivados(atributosFinais, raca, personagem.nivel);
+        const { recursosDefinidos: _, ...depois } = calcularDerivadosComClasses(
+          atributosFinais,
+          raca,
+          personagem.classes,
+          ctx.catalogo.classes,
+          personagem.nivel,
+          personagem.escolhaRacial,
+        );
         return salvar(personagem, ctx, {
           atributosFinais,
           aumentosAtributoPendentes: Math.max(
             0,
             personagem.aumentosAtributoPendentes - Math.max(0, novoValorBase - baseAtual),
           ),
-          derivados: {
-            ...personagem.derivados,
-            vida: Math.max(1, (Number(personagem.derivados?.vida) || 0) + depois.vida - antes.vida),
-            mana: Math.max(1, (Number(personagem.derivados?.mana) || 0) + depois.mana - antes.mana),
-            movimento: depois.movimento,
-            defesaNatural: depois.defesaNatural,
-            iniciativa: depois.iniciativa,
-          },
+          derivados: depois,
         });
       },
     ));
@@ -482,8 +1076,7 @@ function corpoModalLevelUp(personagem, ctx) {
       const option = document.createElement('option');
       option.value = classe.id;
       const especial = classe.categoria !== 'padrao' ? ' · Especial' : '';
-      const pendente = classe.pendente || classe.mecanicaPendente ? ' · Em desenvolvimento' : '';
-      option.textContent = `${classe.titulo}${especial}${pendente}`;
+      option.textContent = `${classe.titulo}${especial}`;
       select.appendChild(option);
     });
     campoClasse.append(labelClasse, select);
@@ -547,7 +1140,12 @@ function blocoNivel(personagem, ctx) {
     const novosMarcosLegado = Math.max(0, marcosLegado(novoNivel) - personagem.marcosLegadoConcedidos);
     const novosMarcosAtributo = Math.max(0, marcosAtributo(novoNivel) - personagem.marcosAtributoConcedidos);
     const raca = ctx.catalogo.racas.find(item => item.id === personagem.racaId) || null;
-    const derivadosDoNivel = calcularDerivados(personagem.atributosFinais, raca, novoNivel);
+    const derivadosDoNivel = calcularDerivados(
+      personagem.atributosFinais,
+      raca,
+      novoNivel,
+      personagem.escolhaRacial,
+    );
     const novosPendentes = Math.max(0, novoNivel - niveisAlocados);
     const subiuNivel = novosPendentes > personagem.niveisClassePendentes;
 
@@ -601,13 +1199,13 @@ function blocoNivel(personagem, ctx) {
 // nomeados; Vida, Mana e Sanidade também reutilizam esse modal.
 
 const FORMULAS_COMBATE = {
-  Vida: 'Base racial: 10 + 2 × Mod. Força + 2 × Mod. Constituição. Ganhos de classe e ajustes personalizados são somados ao máximo.',
-  Mana: 'Base racial: 6 + 2 × Mod. Inteligência + Mod. Sabedoria. Ganhos de classe e ajustes personalizados são somados ao máximo.',
+  Vida: 'Base racial: 10 + 2 × Mod. Força + 2 × Mod. Constituição. Chassi, modificações, ganhos de classe e ajustes personalizados são somados ao máximo quando aplicáveis.',
+  Mana: 'Base racial: 6 + 2 × Mod. Inteligência + Mod. Sabedoria. Para Autômatos, a mesma barra representa Energia do Núcleo.',
   Sanidade: 'Base 100 + ajustes personalizados registrados pelo jogador.',
   Cansaço: 'Escala atual de 0 a 6. Quanto mais próximo de 6, mais crítico o estado.',
   Defesa: 'Defesa Natural (10 + metade do nível total + Mod. Destreza) + Armadura − Penalidade + ajustes personalizados.',
   'Iniciativa': '10 + metade do nível total + Mod. Destreza + Bônus/Penalidade + ajustes personalizados.',
-  'Movimento': '9 m (padrão humano) + 1,5 m × Mod. Destreza + bônus da raça − Penalidade + ajustes personalizados.',
+  'Movimento': '9 m (padrão humano) + 1,5 m × Mod. Destreza + bônus da raça − Penalidade + ajustes personalizados. Um chassi que declare Movimento fixo substitui a fórmula-base.',
 };
 
 function estadoCansaco(valor) {
@@ -659,7 +1257,12 @@ function linhasEfeitos(personagem, tipo, alvo) {
 function detalhesCalculo(rotulo, personagem, ctx) {
   const recursos = personagem.recursos || {};
   const raca = ctx.catalogo.racas.find(item => item.id === personagem.racaId) || null;
-  const baseRacial = calcularDerivados(personagem.atributosFinais, raca, personagem.nivel);
+  const baseRacial = calcularDerivados(
+    personagem.atributosFinais,
+    raca,
+    personagem.nivel,
+    personagem.escolhaRacial,
+  );
   const detalhes = [];
   let total = 0;
   let rotuloTotal = 'Total atual';
@@ -1068,6 +1671,10 @@ function classeDisponivel(personagem, classe, catalogoClasses) {
   const atuais = personagem.classes || [];
   const existente = atuais.find(item => item.id === classe.id);
   const especial = classe.categoria !== 'padrao';
+  if (classe.disponibilidade === 'exclusiva'
+    && !obterArvoresClassePermitidas(personagem).includes(classe.arvore)) {
+    return false;
+  }
   if (existente) return existente.nivel < 20 && (!especial || personagem.nivel >= 15);
   if (especial) {
     return personagem.nivel >= 15
@@ -1084,7 +1691,10 @@ function classeDisponivel(personagem, classe, catalogoClasses) {
   return comuns.length < 2;
 }
 
-function validarComposicaoClasses(classes, catalogoClasses) {
+function validarComposicaoClasses(classes, catalogoClasses, arvoreId = null) {
+  const arvoresPermitidas = new Set(
+    (Array.isArray(arvoreId) ? arvoreId : [arvoreId]).filter(Boolean),
+  );
   if (!Array.isArray(classes) || classes.length === 0) {
     return 'O personagem precisa ter pelo menos uma classe.';
   }
@@ -1093,6 +1703,13 @@ function validarComposicaoClasses(classes, catalogoClasses) {
   }
   if (classes.some(item => !Number.isInteger(item.nivel) || item.nivel < 1 || item.nivel > 20)) {
     return 'Cada classe precisa ter um nível inteiro entre 1 e 20.';
+  }
+  const exclusivaIncompativel = classes
+    .map(item => catalogoClasses.find(classe => classe.id === item.id))
+    .find(classe => classe?.disponibilidade === 'exclusiva'
+      && !arvoresPermitidas.has(classe.arvore));
+  if (exclusivaIncompativel) {
+    return `${exclusivaIncompativel.titulo} é exclusiva de outra Árvore.`;
   }
   const total = totalNiveisClasse(classes);
   if (total > 40) return 'A soma dos níveis de classe não pode passar de 40.';
@@ -1126,24 +1743,21 @@ function aplicarNiveisClasse(personagem, classe, quantidade, ctx) {
   if (existente) existente.nivel += aplicar;
   else classes.push({ id: classe.id, nivel: aplicar });
 
-  const baseVida = Number(classe.vida?.base);
-  const baseMana = Number(classe.forca_vital?.base);
-  const recursosDefinidos = Number.isFinite(baseVida) && Number.isFinite(baseMana);
-  const derivados = { ...personagem.derivados };
-  let niveisRecursosPendentes = personagem.niveisRecursosPendentes;
-  if (recursosDefinidos) {
-    derivados.vida = (Number(derivados.vida) || 0)
-      + aplicar * Math.max(1, baseVida + modificador(personagem.atributosFinais.constituicao));
-    derivados.mana = (Number(derivados.mana) || 0)
-      + aplicar * Math.max(1, baseMana);
-  } else {
-    niveisRecursosPendentes += aplicar;
-  }
+  const raca = ctx.catalogo.racas.find(item => item.id === personagem.racaId) || null;
+  const derivadosCalculados = calcularDerivadosComClasses(
+    personagem.atributosFinais,
+    raca,
+    classes,
+    ctx.catalogo.classes,
+    personagem.nivel,
+    personagem.escolhaRacial,
+  );
+  const { recursosDefinidos, ...derivados } = derivadosCalculados;
 
   const salvou = salvar(personagem, ctx, {
     classes,
     niveisClassePendentes: personagem.niveisClassePendentes - aplicar,
-    niveisRecursosPendentes,
+    niveisRecursosPendentes: recursosDefinidos ? 0 : personagem.niveisRecursosPendentes + aplicar,
     derivados,
   });
   if (salvou) ctx.recarregar();
@@ -1168,14 +1782,26 @@ function blocoClasses(personagem, ctx) {
   const lista = document.createElement('div');
   lista.className = 'ficha-classes-lista';
   const salvarClasses = classes => {
-    const erroComposicao = validarComposicaoClasses(classes, ctx.catalogo.classes);
+    const erroComposicao = validarComposicaoClasses(
+      classes,
+      ctx.catalogo.classes,
+      obterArvoresClassePermitidas(personagem),
+    );
     if (erroComposicao) {
       ctx.mostrarToast(erroComposicao, 'erro');
       return false;
     }
     const nivel = totalNiveisClasse(classes);
     const raca = ctx.catalogo.racas.find(item => item.id === personagem.racaId) || null;
-    const derivadosNivel = calcularDerivados(personagem.atributosFinais, raca, nivel);
+    const derivadosCalculados = calcularDerivadosComClasses(
+      personagem.atributosFinais,
+      raca,
+      classes,
+      ctx.catalogo.classes,
+      null,
+      personagem.escolhaRacial,
+    );
+    const { recursosDefinidos, ...derivadosNivel } = derivadosCalculados;
     const novosMarcosLegado = Math.max(0, marcosLegado(nivel) - personagem.marcosLegadoConcedidos);
     const novosMarcosAtributo = Math.max(0, marcosAtributo(nivel) - personagem.marcosAtributoConcedidos);
     const salvou = salvar(personagem, ctx, {
@@ -1188,11 +1814,8 @@ function blocoClasses(personagem, ctx) {
       marcosLegadoConcedidos: Math.max(personagem.marcosLegadoConcedidos, marcosLegado(nivel)),
       aumentosAtributoPendentes: personagem.aumentosAtributoPendentes + novosMarcosAtributo,
       marcosAtributoConcedidos: Math.max(personagem.marcosAtributoConcedidos, marcosAtributo(nivel)),
-      derivados: {
-        ...personagem.derivados,
-        defesaNatural: derivadosNivel.defesaNatural,
-        iniciativa: derivadosNivel.iniciativa,
-      },
+      niveisRecursosPendentes: recursosDefinidos ? 0 : personagem.niveisRecursosPendentes,
+      derivados: derivadosNivel,
     });
     if (salvou) ctx.recarregar();
     return salvou;
@@ -1212,7 +1835,11 @@ function blocoClasses(personagem, ctx) {
       const composicaoCandidata = (personagem.classes || [])
         .map((atual, i) => i === indice ? { ...atual, id: classe.id } : atual);
       option.disabled = classe.id !== item.id
-        && Boolean(validarComposicaoClasses(composicaoCandidata, ctx.catalogo.classes));
+        && Boolean(validarComposicaoClasses(
+          composicaoCandidata,
+          ctx.catalogo.classes,
+          obterArvoresClassePermitidas(personagem),
+        ));
       select.appendChild(option);
     });
     select.addEventListener('change', () => {
@@ -1266,7 +1893,11 @@ function blocoClasses(personagem, ctx) {
     const novaClasse = ctx.catalogo.classes.find(classe => {
       if ((personagem.classes || []).some(atual => atual.id === classe.id)) return false;
       const candidatas = [...(personagem.classes || []), { id: classe.id, nivel: 1 }];
-      return !validarComposicaoClasses(candidatas, ctx.catalogo.classes);
+      return !validarComposicaoClasses(
+        candidatas,
+        ctx.catalogo.classes,
+        obterArvoresClassePermitidas(personagem),
+      );
     });
     if (!novaClasse) {
       ctx.mostrarToast('Não há outra classe disponível para adicionar.', 'erro');
@@ -1292,8 +1923,7 @@ function blocoClasses(personagem, ctx) {
       const option = document.createElement('option');
       option.value = classe.id;
       const especial = classe.categoria !== 'padrao' ? ' · Especial' : '';
-      const pendente = classe.pendente || classe.mecanicaPendente ? ' · Em desenvolvimento' : '';
-      option.textContent = `${classe.titulo}${especial}${pendente}`;
+      option.textContent = `${classe.titulo}${especial}`;
       select.appendChild(option);
     });
 
@@ -1326,11 +1956,6 @@ function listarNotificacoes(personagem) {
     id: 'classes',
     titulo: 'Níveis de classe pendentes',
     texto: `${personagem.niveisClassePendentes} nível(is) ainda precisam ser distribuídos entre suas classes.`,
-  });
-  if (personagem.niveisRecursosPendentes > 0) itens.push({
-    id: 'recursos',
-    titulo: 'Progressão em desenvolvimento',
-    texto: `${personagem.niveisRecursosPendentes} nível(is) pertencem a classes cujo ganho de Vida e Mana ainda não foi publicado.`,
   });
   if (personagem.legadosAscensaoPendentes > 0) itens.push({
     id: 'poderes',
@@ -1438,6 +2063,12 @@ export function renderAbaFicha(container, personagem, ctx) {
   topo.className = 'ficha-topo-grade';
   topo.append(blocoIdentidade(personagem, ctx), blocoClasses(personagem, ctx));
   blocos.appendChild(topo);
+  const modificacoesRaciais = blocoModificacoesRaciais(personagem, ctx);
+  if (modificacoesRaciais) blocos.appendChild(modificacoesRaciais);
+  const fragmentosRaciais = blocoFragmentosRaciais(personagem, ctx);
+  if (fragmentosRaciais) blocos.appendChild(fragmentosRaciais);
+  const maldicoesRaciais = blocoMaldicoesRaciais(personagem, ctx);
+  if (maldicoesRaciais) blocos.appendChild(maldicoesRaciais);
   blocos.appendChild(blocoAtributos(personagem, ctx));
   blocos.appendChild(blocoRecursos(personagem, ctx));
   blocos.appendChild(blocoCombate(personagem, ctx));

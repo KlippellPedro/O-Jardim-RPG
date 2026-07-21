@@ -3,6 +3,7 @@ import { NOMES_ATRIBUTOS } from '../../../config/nomesAtributos.js';
 import { atualizarPersonagem } from '../../../services/personagensService.js';
 import { dadosCalculoAtaque, normalizarAtaque } from '../../../services/ataquesService.js';
 import { abrirModalSimples, fecharModalSimples } from '../modalSimples.js';
+import { adicionarRolagem } from '../rolarBotao.js';
 
 const PERICIAS = [
   { id: 'luta', titulo: 'Luta' },
@@ -234,6 +235,48 @@ export function renderAtaques(container, personagem, ctx) {
     abrirModalSimples({ titulo: 'Remover ataque', corpo, classeExtra: 'ficha-modal--confirmacao' });
   }
 
+  /* Modal curto do ataque: acerto e, logo depois, o dano. */
+  function abrirRolagemDeAtaque(ataque) {
+    const dados = dadosCalculoAtaque(personagem, ataque, ctx.catalogo);
+    const arma = ataque.origemItemId ? inventario.find(item => item.id === ataque.origemItemId) : null;
+    const corpo = el('div', 'ficha-calculo-modal');
+    corpo.appendChild(el('p', 'ficha-calculo-formula',
+      `${dados.pericia.titulo} · bônus ${sinal(dados.total)}${ataque.dano ? ` · dano ${ataque.dano}` : ''}`));
+
+    const estado = situacaoRolagem(dados.rolagem);
+    if (estado.tipo !== 'normal') {
+      corpo.appendChild(el('p', `ficha-pericia-modal-situacao ficha-pericia-modal-situacao--${estado.tipo}`, estado.titulo));
+    }
+
+    const origem = {
+      tipo: 'ataque',
+      ataque: ataque.nome,
+      pericia: dados.pericia.id,
+      arma: arma?.nome || null,
+      personagem: personagem.nome,
+    };
+    adicionarRolagem({
+      corpo,
+      titulo: `Ataque · ${ataque.nome}`,
+      bonus: dados.total,
+      rolagem: dados.rolagem,
+      personagemId: personagem.id,
+      origem,
+      aoRolar: () => {
+        if (!ataque.dano || corpo.querySelector('.ficha-rolagem-area--dano')) return;
+        const area = adicionarRolagem({
+          corpo,
+          titulo: `Dano · ${ataque.nome}`,
+          formula: ataque.dano,
+          personagemId: personagem.id,
+          origem: { ...origem, momento: 'dano' },
+        });
+        area.classList.add('ficha-rolagem-area--dano');
+      },
+    });
+    abrirModalSimples({ titulo: `Rolar ${ataque.nome}`, corpo, classeExtra: 'ficha-modal--calculo' });
+  }
+
   function abrirCalculo(ataque) {
     const dados = dadosCalculoAtaque(personagem, ataque, ctx.catalogo);
     const arma = ataque.origemItemId ? inventario.find(item => item.id === ataque.origemItemId) : null;
@@ -276,6 +319,35 @@ export function renderAtaques(container, personagem, ctx) {
       fontes.appendChild(listaFontes);
       corpo.appendChild(fontes);
     }
+    // Acerto e dano em sequência: o dano só aparece depois de rolar o ataque,
+    // que é a ordem em que a mesa realmente joga.
+    const origem = {
+      tipo: 'ataque',
+      ataque: ataque.nome,
+      pericia: dados.pericia.id,
+      arma: arma?.nome || null,
+      personagem: personagem.nome,
+    };
+    adicionarRolagem({
+      corpo,
+      titulo: `Ataque · ${ataque.nome}`,
+      bonus: dados.total,
+      rolagem: dados.rolagem,
+      personagemId: personagem.id,
+      origem,
+      aoRolar: () => {
+        if (!ataque.dano || corpo.querySelector('.ficha-rolagem-area--dano')) return;
+        const area = adicionarRolagem({
+          corpo,
+          titulo: `Dano · ${ataque.nome}`,
+          formula: ataque.dano,
+          personagemId: personagem.id,
+          origem: { ...origem, momento: 'dano' },
+        });
+        area.classList.add('ficha-rolagem-area--dano');
+      },
+    });
+
     abrirModalSimples({ titulo: `Cálculo — ${ataque.nome}`, corpo, classeExtra: 'ficha-modal--ataque-calculo' });
   }
 
@@ -309,9 +381,14 @@ export function renderAtaques(container, personagem, ctx) {
       el('h3', '', ataque.nome),
       el('span', '', `${PERICIAS.find(item => item.id === ataque.pericia)?.titulo || 'Luta'} · ${NOMES_ATRIBUTOS[dados.atributo] || dados.atributo}`),
     );
+    // Rolar fica no card, não escondido atrás do cálculo: é o que se faz no
+    // meio da luta. O bônus continua clicável para conferir a conta.
+    const acoesTopo = el('div', 'ficha-ataque-acoes-topo');
+    const rolarAgora = botao('🎲', 'ficha-ataque-rolar', () => abrirRolagemDeAtaque(ataque), `Rolar ataque ${ataque.nome}`);
     const bonus = botao('', 'ficha-ataque-bonus', () => abrirCalculo(ataque), `Ver cálculo do ataque ${ataque.nome}`);
     bonus.append(el('span', '', 'Ataque'), el('strong', '', sinal(dados.total)));
-    header.append(identidade, bonus);
+    acoesTopo.append(rolarAgora, bonus);
+    header.append(identidade, acoesTopo);
     const estatisticas = el('div', 'ficha-ataque-dados');
     [
       ['Dano', ataque.dano || '—'],

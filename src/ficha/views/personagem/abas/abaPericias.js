@@ -13,6 +13,7 @@ import {
 } from '../../../services/modificadoresService.js';
 import { criarLinhaGrauPericia } from '../linhaGrauPericia.js';
 import { abrirModalSimples, fecharModalSimples } from '../modalSimples.js';
+import { adicionarRolagem } from '../rolarBotao.js';
 
 function salvarGrau(personagem, item, novoGrau, ctx) {
   const pericias = { ...(personagem.pericias || {}) };
@@ -84,6 +85,46 @@ function instrucaoRolagem(rolagem, bonus) {
   return `Role 1d20 e some ${textoSinal(bonus)}.`;
 }
 
+/* Modal enxuto do dado: só o essencial para rolar no meio da cena. Quem quer a
+   conta inteira abre o "?" ao lado, que continua onde estava. */
+function abrirRolagemRapida(personagem, item, grau, configuracao) {
+  const atributoAtual = configuracao.atributo || item.atributo;
+  const valorAtributo = valorAtributoEfetivo(personagem, atributoAtual) || 10;
+  const modAtributo = modificador(valorAtributo);
+  const bonusEfeitos = somarModificadores(personagem, 'pericia_bonus', item.id);
+  const total = calcularBonusPericia(grau, modAtributo, personagem.nivel) + bonusEfeitos;
+
+  const corpo = document.createElement('div');
+  corpo.className = 'ficha-calculo-modal';
+  const resumo = document.createElement('p');
+  resumo.className = 'ficha-calculo-formula';
+  resumo.textContent = `${NOMES_ATRIBUTOS[atributoAtual] || atributoAtual} · Grau ${GRAUS_INFO[grau]?.titulo || grau} · bônus ${textoSinal(total)}`;
+  corpo.appendChild(resumo);
+
+  const situacao = resumoRolagem(configuracao);
+  if (situacao.tipo !== 'normal') {
+    const aviso = document.createElement('p');
+    aviso.className = `ficha-pericia-modal-situacao ficha-pericia-modal-situacao--${situacao.tipo}`;
+    aviso.textContent = situacao.titulo;
+    corpo.appendChild(aviso);
+  }
+
+  adicionarRolagem({
+    corpo,
+    titulo: item.titulo,
+    bonus: total,
+    rolagem: configuracao,
+    personagemId: personagem.id,
+    origem: { tipo: 'pericia', pericia: item.id, grau, atributo: atributoAtual, personagem: personagem.nome },
+  });
+
+  abrirModalSimples({
+    titulo: `Rolar ${item.titulo}`,
+    corpo,
+    classeExtra: 'ficha-modal--calculo',
+  });
+}
+
 function abrirCalculoPericia(personagem, item, grau, configuracao) {
   const atributoAtual = configuracao.atributo || item.atributo;
   const valorAtributo = valorAtributoEfetivo(personagem, atributoAtual) || 10;
@@ -147,6 +188,21 @@ function abrirCalculoPericia(personagem, item, grau, configuracao) {
   totalValor.textContent = textoSinal(total);
   totalEl.append(totalRotulo, totalValor);
   corpo.appendChild(totalEl);
+
+  adicionarRolagem({
+    corpo,
+    titulo: `${item.titulo}`,
+    bonus: total,
+    rolagem: configuracao,
+    personagemId: personagem.id,
+    origem: {
+      tipo: 'pericia',
+      pericia: item.id,
+      grau,
+      atributo: atributoAtual,
+      personagem: personagem.nome,
+    },
+  });
 
   abrirModalSimples({
     titulo: `Cálculo — ${item.titulo}`,
@@ -436,6 +492,7 @@ function criarSecao(personagem, itens, ctx) {
       aoMudarAtributo: novoAtributo => salvarAtributo(personagem, item, novoAtributo, ctx),
       aoEditarRolagem: (rolagem, aplicar, automaticas) => abrirEditorRolagem(personagem, item, rolagem, ctx, aplicar, automaticas),
       aoAbrirDetalhes: (pericia, grau, configuracao) => abrirCalculoPericia(personagem, pericia, grau, configuracao),
+      aoRolar: (pericia, grau, configuracao) => abrirRolagemRapida(personagem, pericia, grau, configuracao),
       aoEditar: item.personalizada ? pericia => abrirEditorPericia(personagem, ctx, pericia) : null,
     });
     tabela.appendChild(linha);

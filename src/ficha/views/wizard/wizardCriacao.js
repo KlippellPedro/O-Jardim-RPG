@@ -9,10 +9,10 @@
 import { listarArvoresDisponiveis } from '../../services/arvoresService.js';
 import { criarPersonagem } from '../../services/personagensService.js';
 import {
-  aplicarModificadoresRaciais, calcularDerivados, calcularLunarisInicial, legadosAscensaoIniciais,
-  periciasRaciaisIniciais,
+  normalizarAtributosIniciais, calcularDerivados, calcularLunarisInicial,
+  obterAjustesAtributosRaciais, obterLimitesAtributosRaciais,
+  obterAjustesPericiasRaciais,
 } from '../../services/calculoService.js';
-import { itemInicialPermitido } from '../../config/regrasRaciais.js';
 import { renderPassoNomeArvore } from './passoNomeArvore.js';
 import { renderPassoRaca } from './passoRaca.js';
 import { renderPassoClasse } from './passoClasse.js';
@@ -73,12 +73,15 @@ export function fecharModal() {
 
 function validarPasso(estado) {
   if (estado.passo === 1) return estado.nome.trim().length > 0 && !!estado.arvoreId;
-  if (estado.passo === 2) return !!estado.racaId;
+  if (estado.passo === 2) {
+    const raca = estado.catalogo.racas.find(item => item.id === estado.racaId);
+    const exigeVariante = Array.isArray(raca?.variantes) && raca.variantes.length > 0;
+    return Boolean(raca) && (!exigeVariante || Boolean(estado.escolhaRacial?.varianteId));
+  }
   if (estado.passo === 3) return !!estado.classeId;
   if (estado.passo === 4) return !!obterAtributosBase(estado);
   if (estado.passo === 5) {
-    const raca = estado.catalogo.racas.find(item => item.id === estado.racaId) || null;
-    return treinamentoCompleto(estado, raca);
+    return treinamentoCompleto(estado);
   }
   if (estado.passo === 6) return !!obterAtributosBase(estado);
   return false;
@@ -103,10 +106,8 @@ export function abrirWizardCriacao(catalogo, { aoCriar }) {
     atributosRolados: null,
     atribuicaoDados: null,
     periciasIniciais: [],
-    periciaRacialEscolhida: null,
-    escolhaGigante: null,
     itemInicial: '',
-    acessorioInicial: '',
+    escolhaRacial: {},
   };
 
   modalLayer.innerHTML = '';
@@ -201,7 +202,7 @@ export function abrirWizardCriacao(catalogo, { aoCriar }) {
     render();
   });
 
-  btnAvancar.addEventListener('click', () => {
+  btnAvancar.addEventListener('click', async () => {
     if (!validarPasso(estado)) return;
 
     if (estado.passo < TITULOS_PASSO.length) {
@@ -212,34 +213,22 @@ export function abrirWizardCriacao(catalogo, { aoCriar }) {
 
     const raca = catalogo.racas.find(r => r.id === estado.racaId) || null;
     const atributosBase = obterAtributosBase(estado);
-    const atributosFinais = aplicarModificadoresRaciais(atributosBase, raca, {
-      escolhaGigante: estado.escolhaGigante,
-    });
-    const derivados = calcularDerivados(atributosFinais, raca);
-    const lunarisInicial = calcularLunarisInicial(raca);
-    const legadosAscensaoPendentes = legadosAscensaoIniciais(raca);
+    const atributosFinais = normalizarAtributosIniciais(atributosBase);
+    const derivados = calcularDerivados(atributosFinais, raca, 1, estado.escolhaRacial);
+    const lunarisInicial = calcularLunarisInicial();
     const pericias = Object.fromEntries(
       estado.periciasIniciais.map(id => [id, 'aprendiz']),
     );
-    Object.assign(pericias, periciasRaciaisIniciais(raca, estado.periciaRacialEscolhida));
-    const inventarioInicial = itemInicialPermitido(raca)
-      ? [{
-        id: `item-inicial-${Date.now().toString(36)}`,
-        nome: estado.itemInicial.trim(),
-        quantidade: 1,
-        descricao: estado.escolhaGigante === 'item-marcial' ? 'Item marcial inicial' : 'Item comum inicial',
-      }]
-      : [];
-    if (raca?.id === 'humano') {
-      inventarioInicial.push({
-        id: `acessorio-inicial-${Date.now().toString(36)}`,
-        nome: estado.acessorioInicial.trim(),
-        quantidade: 1,
-        descricao: 'Acessório racial; substitui 5 Lunaris iniciais',
-      });
-    }
+    const inventarioInicial = [{
+      id: `item-inicial-${Date.now().toString(36)}`,
+      nome: estado.itemInicial.trim(),
+      quantidade: 1,
+      descricao: 'Item comum inicial',
+    }];
 
-    const resultado = criarPersonagem({
+    btnAvancar.disabled = true;
+    btnAvancar.textContent = 'Salvando na conta…';
+    const resultado = await criarPersonagem({
       nome: estado.nome,
       arvoreId: estado.arvoreId,
       racaId: estado.racaId,
@@ -248,18 +237,20 @@ export function abrirWizardCriacao(catalogo, { aoCriar }) {
       atributosFinais,
       derivados,
       lunarisInicial,
-      legadosAscensaoPendentes,
+      legadosAscensaoPendentes: 0,
       pericias,
       inventarioInicial,
-      escolhaRacial: {
-        periciaTreinada: estado.periciaRacialEscolhida,
-        gigante: estado.escolhaGigante,
-      },
+      escolhaRacial: estado.escolhaRacial,
+      ajustesAtributosRaciais: obterAjustesAtributosRaciais(raca, estado.escolhaRacial),
+      limitesAtributosRaciais: obterLimitesAtributosRaciais(raca, estado.escolhaRacial),
+      ajustesPericiasRaciais: obterAjustesPericiasRaciais(raca, estado.escolhaRacial),
     });
 
     if (!resultado.ok) {
       erro.textContent = resultado.mensagem;
       erro.hidden = false;
+      btnAvancar.disabled = false;
+      btnAvancar.textContent = 'Criar personagem';
       return;
     }
 

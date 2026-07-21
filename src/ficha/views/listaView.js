@@ -3,15 +3,12 @@ import {
   listarPersonagens,
   excluirPersonagem,
   atualizarPersonagem,
-  exportarPersonagem,
-  importarPersonagem,
 } from '../services/personagensService.js';
 import { listarArvoresDisponiveis } from '../services/arvoresService.js';
 import { abrirWizardCriacao } from './wizard/wizardCriacao.js';
 
 const CONFIRMAR_EXCLUSAO_MS = 3500;
-const FOTO_LIMITE_MB = 2;
-const IMPORTACAO_LIMITE_MB = 5;
+const FOTO_LIMITE_MB = 0.5;
 
 function formatarData(iso) {
   const data = new Date(iso);
@@ -40,43 +37,6 @@ function dispararCriacao(ctx) {
   });
 }
 
-function criarBotaoImportar(ctx) {
-  const wrapper = document.createDocumentFragment();
-
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'ficha-cta-btn ficha-cta-btn--secundario';
-  btn.textContent = 'Importar personagem';
-
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'application/json';
-  input.hidden = true;
-  btn.addEventListener('click', () => input.click());
-  input.addEventListener('change', async () => {
-    const file = input.files[0];
-    if (!file) return;
-    if (file.size > IMPORTACAO_LIMITE_MB * 1024 * 1024) {
-      ctx.mostrarToast(`Arquivo muito grande (máx. ${IMPORTACAO_LIMITE_MB}MB).`, 'erro');
-      input.value = '';
-      return;
-    }
-    try {
-      const raw = await file.text();
-      const resultado = importarPersonagem(raw);
-      ctx.mostrarToast(resultado.mensagem, resultado.ok ? 'sucesso' : 'erro');
-      if (resultado.ok) renderizarLista(ctx.content, ctx.catalogo, { mostrarToast: ctx.mostrarToast });
-    } catch {
-      ctx.mostrarToast('Não foi possível ler o arquivo selecionado.', 'erro');
-    } finally {
-      input.value = '';
-    }
-  });
-
-  wrapper.append(btn, input);
-  return wrapper;
-}
-
 function criarEstadoVazio(ctx) {
   const vazio = document.createElement('div');
   vazio.className = 'ficha-empty';
@@ -86,7 +46,7 @@ function criarEstadoVazio(ctx) {
   ornamento.setAttribute('aria-hidden', 'true');
   ornamento.innerHTML = `
     <span class="ficha-empty-ornament-line"></span>
-    <img class="ficha-empty-ornament-icon" src="../assets/img/icons/menu/ficha.png" alt="">
+    <img class="ficha-empty-ornament-icon" src="../assets/img/icons/menu/ficha.webp" alt="">
     <span class="ficha-empty-ornament-line"></span>
   `;
   vazio.appendChild(ornamento);
@@ -105,7 +65,6 @@ function criarEstadoVazio(ctx) {
   btn.textContent = 'Criar meu primeiro personagem';
   btn.addEventListener('click', () => dispararCriacao(ctx));
   acoes.appendChild(btn);
-  acoes.appendChild(criarBotaoImportar(ctx));
 
   vazio.appendChild(acoes);
 
@@ -165,28 +124,6 @@ function criarAvatarPersonagem(personagem, ctx) {
   return avatar;
 }
 
-function criarBotaoExportar(personagem, ctx) {
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'ficha-exportar-btn';
-  btn.textContent = 'Exportar';
-  btn.setAttribute('aria-label', `Exportar ${personagem.nome} como JSON`);
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const raw = exportarPersonagem(personagem.id);
-    if (!raw) { ctx.mostrarToast('Não foi possível exportar este personagem.', 'erro'); return; }
-
-    const blob = new Blob([raw], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${(personagem.nome || 'personagem').trim() || 'personagem'}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  });
-  return btn;
-}
-
 function criarBotaoExcluir(personagem, ctx) {
   const btn = document.createElement('button');
   btn.type = 'button';
@@ -214,7 +151,7 @@ function criarBotaoExcluir(personagem, ctx) {
 
     clearTimeout(timer);
     if (!excluirPersonagem(personagem.id)) {
-      ctx.mostrarToast('Não foi possível excluir o personagem do navegador.', 'erro');
+      ctx.mostrarToast('Não foi possível arquivar o personagem na conta.', 'erro');
       confirmando = false;
       btn.textContent = 'Excluir';
       btn.classList.remove('ficha-excluir-btn--confirmando');
@@ -298,7 +235,6 @@ function criarCard(personagem, ctx, indice) {
   foto.setAttribute('aria-label', personagem.foto ? `Trocar foto de ${personagem.nome}` : `Adicionar foto de ${personagem.nome}`);
   foto.addEventListener('click', () => avatar.querySelector('input[type="file"]')?.click());
   rodape.appendChild(foto);
-  rodape.appendChild(criarBotaoExportar(personagem, ctx));
   rodape.appendChild(criarBotaoExcluir(personagem, ctx));
   card.appendChild(rodape);
 
@@ -313,15 +249,18 @@ export function renderizarLista(content, catalogo, { mostrarToast }) {
   const header = document.createElement('div');
   header.className = 'ficha-lista-header';
 
+  const tituloGrupo = document.createElement('div');
+  tituloGrupo.className = 'ficha-lista-titulo-grupo';
   const h2 = document.createElement('h2');
   h2.className = 'ficha-lista-titulo';
   h2.textContent = 'Seus personagens';
-  header.appendChild(h2);
+  const descricao = document.createElement('p');
+  descricao.textContent = 'Abra uma ficha existente ou crie um novo personagem para a campanha atual.';
+  tituloGrupo.append(h2, descricao);
+  header.appendChild(tituloGrupo);
 
   const acoes = document.createElement('div');
   acoes.className = 'ficha-lista-acoes';
-
-  acoes.appendChild(criarBotaoImportar(ctx));
 
   const criarBtn = document.createElement('button');
   criarBtn.type = 'button';
@@ -330,9 +269,27 @@ export function renderizarLista(content, catalogo, { mostrarToast }) {
   criarBtn.addEventListener('click', () => dispararCriacao(ctx));
   acoes.appendChild(criarBtn);
 
+  const ajudaBtn = document.createElement('button');
+  ajudaBtn.type = 'button';
+  ajudaBtn.className = 'ficha-ajuda-btn';
+  ajudaBtn.textContent = '?';
+  ajudaBtn.setAttribute('aria-label', 'Explicar a tela de personagens');
+  ajudaBtn.setAttribute('aria-expanded', 'false');
+  acoes.appendChild(ajudaBtn);
+
   header.appendChild(acoes);
 
   content.appendChild(header);
+
+  const ajuda = document.createElement('p');
+  ajuda.className = 'ficha-ajuda-caixa';
+  ajuda.textContent = 'Cada card representa uma ficha salva na campanha selecionada. Clique no card para editar. “Excluir” arquiva o personagem e preserva o histórico da conta.';
+  ajuda.hidden = true;
+  ajudaBtn.addEventListener('click', () => {
+    ajuda.hidden = !ajuda.hidden;
+    ajudaBtn.setAttribute('aria-expanded', String(!ajuda.hidden));
+  });
+  content.appendChild(ajuda);
 
   const personagens = listarPersonagens();
 
@@ -342,9 +299,55 @@ export function renderizarLista(content, catalogo, { mostrarToast }) {
     return;
   }
 
+  const controles = document.createElement('div');
+  controles.className = 'ficha-lista-filtros';
+  const busca = document.createElement('input');
+  busca.type = 'search';
+  busca.placeholder = 'Buscar por nome, raça, classe ou árvore';
+  busca.setAttribute('aria-label', 'Buscar personagens');
+  const ordenar = document.createElement('select');
+  ordenar.setAttribute('aria-label', 'Ordenar personagens');
+  [['recentes', 'Mais recentes'], ['nome', 'Nome (A–Z)'], ['nivel', 'Maior nível']].forEach(([valor, label]) => {
+    const option = document.createElement('option'); option.value = valor; option.textContent = label; ordenar.append(option);
+  });
+  const resultado = document.createElement('span');
+  resultado.className = 'ficha-lista-resultado';
+  controles.append(busca, ordenar, resultado);
+  content.appendChild(controles);
+
   const grid = document.createElement('div');
   grid.className = 'ficha-personagem-grid';
-  personagens.forEach((p, i) => grid.appendChild(criarCard(p, ctx, i)));
   content.appendChild(grid);
+
+  function textoBusca(personagem) {
+    const arvore = labelArvore(personagem.arvoreId) || '';
+    const raca = labelCatalogo(catalogo.racas, personagem.racaId) || '';
+    const classes = (personagem.classes || [])
+      .map(item => labelCatalogo(catalogo.classes, item.id) || '')
+      .join(' ');
+    return `${personagem.nome} ${arvore} ${raca} ${classes}`.toLocaleLowerCase('pt-BR');
+  }
+
+  function renderizarFiltrados() {
+    const termo = busca.value.trim().toLocaleLowerCase('pt-BR');
+    const filtrados = personagens.filter(personagem => !termo || textoBusca(personagem).includes(termo));
+    filtrados.sort((a, b) => {
+      if (ordenar.value === 'nome') return a.nome.localeCompare(b.nome, 'pt-BR');
+      if (ordenar.value === 'nivel') return Number(b.nivel || 0) - Number(a.nivel || 0);
+      return new Date(b.criadoEm || 0).getTime() - new Date(a.criadoEm || 0).getTime();
+    });
+    grid.innerHTML = '';
+    filtrados.forEach((personagem, indice) => grid.appendChild(criarCard(personagem, ctx, indice)));
+    resultado.textContent = `${filtrados.length} de ${personagens.length} personagens`;
+    if (!filtrados.length) {
+      const vazio = document.createElement('p');
+      vazio.className = 'ficha-lista-sem-resultado';
+      vazio.textContent = 'Nenhum personagem corresponde a essa busca.';
+      grid.append(vazio);
+    }
+  }
+  busca.addEventListener('input', renderizarFiltrados);
+  ordenar.addEventListener('change', renderizarFiltrados);
+  renderizarFiltrados();
   window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
 }

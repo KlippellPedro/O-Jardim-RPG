@@ -1,6 +1,5 @@
 import {
   REGRAS_LEGADOS,
-  REGRAS_RACIAIS,
   REQUISITOS_LEGADOS_V1,
 } from '../../regras/config/catalogos.js';
 
@@ -35,11 +34,8 @@ export async function carregarCatalogo() {
         const todasPericias = [...(pericias.pericias || []), ...(pericias.resistencias || [])];
         const unicas = [...new Map(todasPericias.map(item => [item.id, item])).values()];
         return {
-          classes: classes.map(classe => ({ ...classe, mecanicaPendente: true })),
-          racas: racas.map(raca => ({
-            ...raca,
-            regraOficial: REGRAS_RACIAIS[raca.id] || null,
-          })),
+          classes,
+          racas,
           // Fortitude, Reflexos e Vontade fazem parte da lista normal de
           // pericias. `resistencias` permanece vazio apenas por compatibilidade
           // com eventuais consumidores antigos do catalogo.

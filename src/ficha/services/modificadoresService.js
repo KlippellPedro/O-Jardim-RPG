@@ -1,3 +1,5 @@
+import { aplicarAjusteAtributoRacial } from './calculoService.js';
+
 function entradasComOrigem(personagem) {
   return [
     ...(personagem.poderes || []).map(item => ({ item, colecao: 'poderes' })),
@@ -42,6 +44,24 @@ function efeitosEquipamentos(personagem) {
   });
 }
 
+function efeitosRaciais(personagem) {
+  return Object.entries(personagem.ajustesPericiasRaciais || {}).flatMap(([periciaId, valor]) => {
+    const bonus = Number(valor);
+    if (!Number.isFinite(bonus) || bonus === 0) return [];
+    return [{
+      id: `raca-${personagem.racaId || 'sem-id'}-pericia-${periciaId}`,
+      tipo: 'pericia_bonus',
+      alvo: periciaId,
+      valor: bonus,
+      modo: 'sempre',
+      descricao: 'Bônus racial permanente',
+      origemId: personagem.racaId || 'raca',
+      origemNome: 'Raça',
+      colecao: 'raca',
+    }];
+  });
+}
+
 export function listarEfeitosAtivos(personagem, tipo = null, alvo = null) {
   const configurados = entradasComOrigem(personagem).flatMap(({ item, colecao }) =>
     (item.efeitos || []).flatMap(efeito => {
@@ -49,7 +69,7 @@ export function listarEfeitosAtivos(personagem, tipo = null, alvo = null) {
       if (!ativo || (tipo && efeito.tipo !== tipo) || (alvo && efeito.alvo !== alvo)) return [];
       return [{ ...efeito, origemId: item.id, origemNome: item.nome, colecao }];
     }));
-  return [...configurados, ...efeitosEquipamentos(personagem)]
+  return [...configurados, ...efeitosEquipamentos(personagem), ...efeitosRaciais(personagem)]
     .filter(efeito => (!tipo || efeito.tipo === tipo) && (!alvo || efeito.alvo === alvo));
 }
 
@@ -59,7 +79,12 @@ export function somarModificadores(personagem, tipo, alvo) {
 }
 
 export function valorAtributoEfetivo(personagem, atributo) {
-  return (Number(personagem.atributosFinais?.[atributo]) || 0)
+  const valorComRaca = aplicarAjusteAtributoRacial(
+    personagem.atributosFinais?.[atributo],
+    personagem.ajustesAtributosRaciais?.[atributo],
+    personagem.limitesAtributosRaciais?.[atributo],
+  );
+  return valorComRaca
     + somarModificadores(personagem, 'atributo', atributo);
 }
 

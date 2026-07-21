@@ -2,6 +2,7 @@ import {
   BONUS_GRAU,
   calcularBonusPericia,
   modificador,
+  obterGrauPericiaEfetivo,
 } from './calculoService.js';
 import {
   listarEfeitosAtivos,
@@ -88,7 +89,7 @@ export function dadosCalculoAtaque(personagem, ataque, catalogo) {
   const modAtributo = modificador(valorAtributo);
   const nivel = Math.max(1, Number(personagem?.nivel) || 1);
   const metadeNivel = Math.floor(nivel / 2);
-  const grau = personagem?.pericias?.[periciaId] || 'iniciante';
+  const grau = obterGrauPericiaEfetivo(personagem, periciaId);
   const bonusGrau = BONUS_GRAU[grau] ?? 0;
   const bonusEfeitos = somarModificadores(personagem, 'pericia_bonus', periciaId);
   const total = calcularBonusPericia(grau, modAtributo, nivel) + bonusEfeitos;

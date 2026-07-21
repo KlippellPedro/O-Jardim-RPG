@@ -1,6 +1,6 @@
 /* ─────────────────────────────────────────────────────────
    O Jardim RPG — Ficha
-   Lista, criação e ficha completa persistidas no navegador.
+   Lista, criação e ficha completa persistidas na conta e campanha.
    ───────────────────────────────────────────────────────── */
 
 import { router } from '../core/router.js';
@@ -8,6 +8,10 @@ import { executarComTransicao, reiniciarAnimacao } from '../core/viewTransition.
 import { carregarCatalogo } from './services/catalogoService.js';
 import { renderizarLista } from './views/listaView.js';
 import { renderizarPersonagem } from './views/personagem/shell.js';
+import { carregarPersonagensCampanha } from './services/personagensService.js';
+import { inicializarPlataforma } from '../plataforma/portal.js?v=5';
+import { carregarEntradas as carregarItensLiberados } from '../loja/services/entradasService.js';
+import { carregarEntradas as carregarMundoLiberado } from '../mundo/services/entradasService.js';
 
 const content = document.getElementById('ficha-content');
 const toast = document.getElementById('ficha-toast');
@@ -27,7 +31,7 @@ function mostrarToast(mensagem, tipo) {
 // substitui o antigo breadcrumb duplicado que ficava embaixo dele).
 function apontarBackParaApp() {
   backLink.textContent = '‹ O Jardim RPG';
-  backLink.href = '../index.html';
+  backLink.href = '/';
   backLink.onclick = null;
 }
 
@@ -50,7 +54,30 @@ async function comCatalogo(renderizar) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  let campanhaAtivaId;
+  try {
+    const contexto = await inicializarPlataforma({ exigirCampanha: true });
+    campanhaAtivaId = contexto.campanha.id;
+    await Promise.all([
+      carregarItensLiberados(campanhaAtivaId),
+      carregarMundoLiberado(campanhaAtivaId),
+    ]);
+    await carregarPersonagensCampanha(campanhaAtivaId);
+  } catch (erro) {
+    console.error('Falha ao carregar personagens da conta:', erro);
+    content.innerHTML = '<p class="ficha-erro-carregamento">Não foi possível carregar os personagens desta campanha. Tente recarregar a página.</p>';
+    return;
+  }
+
+  document.addEventListener('jardim:erro-sincronizacao', evento => {
+    mostrarToast(evento.detail?.mensagem || 'Não foi possível sincronizar a ficha. Recarregue antes de continuar.', 'erro');
+  });
+  document.addEventListener('jardim:contexto-alterado', evento => {
+    const novaCampanha = evento.detail?.campanha?.id;
+    if (campanhaAtivaId && novaCampanha && novaCampanha !== campanhaAtivaId) window.location.reload();
+  });
+
   router.registrar('/', () => executarComTransicao(() => {
     apontarBackParaApp();
     reiniciarAnimacao(content);

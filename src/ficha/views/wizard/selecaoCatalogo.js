@@ -1,12 +1,25 @@
-// Compartilhado pelos passos de Raça e Classe — filtra pela Árvore
-// escolhida (campo "arvore" em data/ficha/racas.json/classes.json), com
-// fallback pra mostrar tudo enquanto esse campo ainda não foi preenchido
-// (hoje está null em toda raça/classe — ver conversa sobre o wizard).
+// Compartilhado pelos passos de Raça e Classe. Catálogos que declaram
+// `disponibilidade` exibem opções gerais e as exclusivas da Árvore escolhida.
+// Catálogos antigos continuam usando o filtro por `arvore`, com fallback.
 
 function agruparPorCategoria(lista) {
   return {
     comuns: lista.filter(item => item.categoria === 'padrao'),
     especiais: lista.filter(item => item.categoria !== 'padrao'),
+  };
+}
+
+export function filtrarCatalogoPorArvore(lista, arvoreId) {
+  const usaDisponibilidade = lista.some(item => Boolean(item.disponibilidade));
+  const filtrada = usaDisponibilidade
+    ? lista.filter(item => item.disponibilidade === 'geral'
+      || item.arvore === arvoreId
+      || (Array.isArray(item.arvores) && item.arvores.includes(arvoreId)))
+    : lista.filter(item => item.arvore === arvoreId);
+
+  return {
+    itens: usaDisponibilidade || filtrada.length > 0 ? filtrada : lista,
+    usandoFiltro: usaDisponibilidade || filtrada.length > 0,
   };
 }
 
@@ -20,9 +33,7 @@ export function renderSelecaoCatalogo(container, {
   bloquearItem = () => false,
   motivoBloqueio = () => '',
 }) {
-  const filtrada = lista.filter(item => item.arvore === arvoreId);
-  const usandoFiltro = filtrada.length > 0;
-  const itens = usandoFiltro ? filtrada : lista;
+  const { itens, usandoFiltro } = filtrarCatalogoPorArvore(lista, arvoreId);
 
   if (!usandoFiltro) {
     const aviso = document.createElement('p');
@@ -49,7 +60,7 @@ export function renderSelecaoCatalogo(container, {
       btn.className = 'ficha-wizard-opcao';
       const bloqueado = bloquearItem(item);
       if (valorSelecionado === item.id) btn.classList.add('ficha-wizard-opcao--selecionada');
-      const emDesenvolvimento = item.pendente || item.mecanicaPendente;
+      const emDesenvolvimento = Boolean(item.pendente);
       if (emDesenvolvimento) {
         btn.classList.add('ficha-wizard-opcao--pendente');
       }

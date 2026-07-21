@@ -1,6 +1,8 @@
 import { storage } from '../../core/storage.js';
+import { personagensApi } from '../../plataforma/personagensApi.js';
+import { obterContextoPlataforma } from '../../plataforma/portal.js?v=5';
 import { marcosAtributo, marcosLegado, totalNiveisClasse } from '../config/progressao.js';
-import { ATRIBUTOS, GRAUS_PERICIA, aplicarModificadoresRaciais, calcularDerivados } from './calculoService.js';
+import { ATRIBUTOS, GRAUS_PERICIA, normalizarAtributosIniciais, calcularDerivados } from './calculoService.js';
 import {
   normalizarCarteiraPersonagem,
   normalizarConfigInventario,
@@ -15,21 +17,12 @@ import { normalizarNotas } from './notasService.js';
 import { normalizarAliados } from './aliadosService.js';
 
 const CHAVE_STORAGE = 'ficha-personagens';
-const LIMITE_IMPORTACAO_CARACTERES = 5 * 1024 * 1024;
-
-function gerarId() {
-  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-    return crypto.randomUUID();
-  }
-  return `personagem-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-}
+const CHAVE_MIGRACOES = 'ficha-personagens-migrados';
+let mapaRemoto = {};
+const filasSalvamento = new Map();
 
 function getMapa() {
-  const mapa = storage.get(CHAVE_STORAGE);
-  if (!mapa || typeof mapa !== 'object' || Array.isArray(mapa)) return {};
-  return Object.fromEntries(
-    Object.entries(mapa).map(([id, personagem]) => [id, normalizarPersonagem(personagem)]),
-  );
+  return mapaRemoto;
 }
 
 const ATRIBUTOS_PERICIA_PERSONALIZADA = new Set([
@@ -52,6 +45,28 @@ function normalizarMapaAtributos(valor, fallback = 10) {
     const seguro = Number.isFinite(numero) ? numero : fallback;
     return [chave, Math.max(1, Math.min(99, Math.trunc(seguro)))];
   }));
+}
+
+function normalizarMapaNumericoParcial(valor, minimo, maximo) {
+  if (!valor || typeof valor !== 'object' || Array.isArray(valor)) return {};
+  return Object.fromEntries(ATRIBUTOS.flatMap(chave => {
+    const numero = Number(valor[chave]);
+    if (!Number.isFinite(numero)) return [];
+    return [[chave, Math.max(minimo, Math.min(maximo, Math.trunc(numero)))]];
+  }));
+}
+
+function normalizarBonusPericiasRaciais(valor) {
+  if (!valor || typeof valor !== 'object' || Array.isArray(valor)) return {};
+  const chavesProibidas = new Set(['__proto__', 'prototype', 'constructor']);
+  return Object.fromEntries(
+    Object.entries(valor).slice(0, 300).flatMap(([id, bonus]) => {
+      const chave = String(id).trim().slice(0, 80);
+      const numero = Number(bonus);
+      if (!chave || chavesProibidas.has(chave) || !Number.isFinite(numero)) return [];
+      return [[chave, Math.max(-99, Math.min(99, Math.trunc(numero)))]];
+    }),
+  );
 }
 
 function numeroFinito(valor, fallback = 0) {
@@ -253,6 +268,35 @@ function normalizarEfeitosAtivos(valor) {
   );
 }
 
+function normalizarEscolhaRacial(valor) {
+  if (!valor || typeof valor !== 'object' || Array.isArray(valor)) return {};
+  const escolha = { ...valor };
+  if (Array.isArray(valor.modificacoesIds)) {
+    escolha.modificacoesIds = [...new Set(valor.modificacoesIds
+      .map(id => String(id || '').trim().slice(0, 80))
+      .filter(Boolean))].slice(0, 30);
+  }
+  [
+    'atributosRaciais',
+    'periciasProjeto',
+    'periciasMemoria',
+    'fragmentosConhecidosIds',
+    'fragmentosExpressosIds',
+    'maldicoesConhecidasIds',
+  ].forEach(campo => {
+    if (!Array.isArray(valor[campo])) return;
+    escolha[campo] = [...new Set(valor[campo]
+      .map(id => String(id || '').trim().slice(0, 80))
+      .filter(Boolean))].slice(0, 7);
+  });
+  ['rpgOrigem', 'campanhaOrigem', 'arvoreOrigemId', 'assinaturaNome', 'assinaturaFormatoId']
+    .forEach(campo => {
+      if (valor[campo] === undefined || valor[campo] === null) return;
+      escolha[campo] = String(valor[campo]).trim().slice(0, campo === 'assinaturaNome' ? 120 : 80);
+    });
+  return escolha;
+}
+
 function normalizarPersonagem(personagem) {
   const nivel = Math.max(1, Math.min(40, Math.trunc(Number(personagem?.nivel) || 1)));
   const eraVersaoAntiga = personagem?.versaoRegras !== '1.0';
@@ -262,13 +306,9 @@ function normalizarPersonagem(personagem) {
   // `undefined`, NaN ou Fluxo 1 durante a migração.
   const atributosBaseMigrados = normalizarMapaAtributos(personagem?.atributosBase);
   const atributosFinaisFonte = eraVersaoAntiga && nivel === 1 && personagem?.atributosBase
-    ? aplicarModificadoresRaciais(atributosBaseMigrados, referenciaRaca, {
-      escolhaGigante: personagem?.escolhaRacial?.gigante,
-    })
+    ? normalizarAtributosIniciais(atributosBaseMigrados)
     : personagem?.atributosFinais
-      || aplicarModificadoresRaciais(atributosBaseMigrados, referenciaRaca, {
-        escolhaGigante: personagem?.escolhaRacial?.gigante,
-      });
+      || normalizarAtributosIniciais(atributosBaseMigrados);
   const atributosFinaisMigrados = normalizarMapaAtributos(atributosFinaisFonte);
   const classesExistentes = Array.isArray(personagem?.classes)
     ? [...new Map(personagem.classes
@@ -335,6 +375,20 @@ function normalizarPersonagem(personagem) {
     classes,
     atributosBase: atributosBaseMigrados,
     atributosFinais: atributosFinaisMigrados,
+    ajustesAtributosRaciais: normalizarMapaNumericoParcial(
+      personagem?.ajustesAtributosRaciais,
+      -99,
+      99,
+    ),
+    limitesAtributosRaciais: normalizarMapaNumericoParcial(
+      personagem?.limitesAtributosRaciais,
+      1,
+      99,
+    ),
+    ajustesPericiasRaciais: normalizarBonusPericiasRaciais(
+      personagem?.ajustesPericiasRaciais,
+    ),
+    escolhaRacial: normalizarEscolhaRacial(personagem?.escolhaRacial),
     derivados,
     recursos,
     pericias: normalizarGrausPericias(personagem?.pericias),
@@ -384,7 +438,216 @@ function normalizarPersonagem(personagem) {
 }
 
 function salvarMapa(mapa) {
-  return storage.set(CHAVE_STORAGE, mapa);
+  mapaRemoto = mapa;
+  return true;
+}
+
+function carteiraParaApi(personagem) {
+  const unicas = new Map();
+  (personagem.carteira || []).forEach(moeda => {
+    const nome = String(moeda.nome || moeda.id || '').trim();
+    if (!nome) return;
+    unicas.set(nome.toLocaleLowerCase('pt-BR'), {
+      moeda: nome,
+      saldo: Math.trunc(Number(moeda.saldo) || 0),
+      simbolo: String(moeda.simbolo || '').slice(0, 4) || null,
+    });
+  });
+  return [...unicas.values()];
+}
+
+function inventarioParaApi(personagem) {
+  const unicos = new Map();
+  (personagem.inventario || []).forEach(item => {
+    const id = String(item.id || '').trim();
+    const titulo = String(item.nome || item.titulo || '').trim();
+    if (!id || !titulo) return;
+    const dados = { ...item };
+    delete dados.id;
+    delete dados.nome;
+    delete dados.titulo;
+    delete dados.quantidade;
+    unicos.set(id, {
+      item_id: id,
+      titulo,
+      quantidade: Math.max(1, Math.trunc(Number(item.quantidade) || 1)),
+      dados,
+    });
+  });
+  return [...unicos.values()];
+}
+
+function fichaParaApi(personagem) {
+  const ficha = { ...personagem };
+  delete ficha._versaoServidor;
+  delete ficha._economiaVersao;
+  delete ficha._sincronizando;
+  delete ficha.carteira;
+  delete ficha.inventario;
+  delete ficha.lunaris;
+  return ficha;
+}
+
+function personagemDoServidor(registro) {
+  const carteira = (registro.carteira || []).map((moeda, indice) => ({
+    id: String(moeda.moeda || `moeda-${indice}`).trim().toLocaleLowerCase('pt-BR'),
+    nome: moeda.moeda,
+    simbolo: String(moeda.moeda).toLocaleLowerCase('pt-BR') === 'lunaris' ? '☾' : '◈',
+    saldo: Number(moeda.saldo) || 0,
+  }));
+  const inventario = (registro.inventario_central || []).map(item => ({
+    ...(item.dados || {}),
+    id: item.item_id,
+    nome: item.titulo,
+    quantidade: item.quantidade,
+  }));
+  return normalizarPersonagem({
+    ...(registro.ficha || {}),
+    id: registro.id,
+    nome: registro.nome,
+    carteira,
+    inventario,
+    criadoEm: registro.criado_em || registro.ficha?.criadoEm || new Date().toISOString(),
+    atualizadoEm: registro.atualizado_em || registro.ficha?.atualizadoEm || new Date().toISOString(),
+    _versaoServidor: Number(registro.versao) || 1,
+    _economiaVersao: Number(registro.economia_versao) || 1,
+  });
+}
+
+async function persistirNovoPersonagem(personagem, campanhaId) {
+  const criado = await personagensApi.criar(campanhaId, fichaParaApi(personagem));
+  try {
+    const economia = await personagensApi.salvarEconomia(
+      criado.id,
+      criado.economia_versao || 1,
+      carteiraParaApi(personagem),
+      inventarioParaApi(personagem),
+    );
+    return normalizarPersonagem({
+      ...personagem,
+      id: criado.id,
+      criadoEm: personagem.criadoEm || new Date().toISOString(),
+      atualizadoEm: new Date().toISOString(),
+      _versaoServidor: criado.versao || 1,
+      _economiaVersao: economia.economia_versao,
+    });
+  } catch (erro) {
+    await personagensApi.arquivar(criado.id).catch(() => {});
+    throw erro;
+  }
+}
+
+async function migrarPersonagensDoNavegador(campanhaId) {
+  const legado = storage.get(CHAVE_STORAGE);
+  if (!legado || typeof legado !== 'object' || Array.isArray(legado)) return;
+  const controle = storage.get(CHAVE_MIGRACOES) || {};
+  if (controle.campanha_id && controle.campanha_id !== campanhaId) return;
+  controle.campanha_id = campanhaId;
+  controle.personagens = controle.personagens || {};
+  for (const [idLegado, bruto] of Object.entries(legado)) {
+    if (controle.personagens[idLegado]) continue;
+    const personagem = normalizarPersonagem(bruto);
+    const salvo = await persistirNovoPersonagem(personagem, campanhaId);
+    mapaRemoto[salvo.id] = salvo;
+    controle.personagens[idLegado] = salvo.id;
+    storage.set(CHAVE_MIGRACOES, controle);
+  }
+}
+
+export async function carregarPersonagensCampanha(campanhaId) {
+  // Uma requisição só: a listagem completa já vem com carteira e inventário.
+  const resposta = await personagensApi.listar(campanhaId, true);
+  mapaRemoto = Object.fromEntries((resposta.personagens || []).map(item => {
+    const personagem = personagemDoServidor(item);
+    return [personagem.id, personagem];
+  }));
+  await migrarPersonagensDoNavegador(campanhaId);
+  return listarPersonagens();
+}
+
+// Digitar num campo ou arrastar um contador dispara um evento por tecla/passo.
+// Sem espera, cada um virava um PUT da ficha mais um PUT da economia. A janela
+// junta a rajada num envio só; o teto garante que trabalho longo não fica
+// preso no navegador esperando uma pausa que nunca vem.
+const ESPERA_SINCRONIZACAO = 900;
+const ESPERA_MAXIMA = 5000;
+const agendamentos = new Map();
+const economiaEnviada = new Map();
+
+function sincronizarAgora(id) {
+  const agendado = agendamentos.get(id);
+  if (agendado) {
+    clearTimeout(agendado.temporizador);
+    agendamentos.delete(id);
+  }
+
+  const anterior = filasSalvamento.get(id) || Promise.resolve();
+  const tarefa = anterior.catch(() => {}).then(async () => {
+    const personagem = mapaRemoto[id];
+    if (!personagem) return;
+    const ficha = await personagensApi.salvar(
+      id,
+      personagem._versaoServidor || 1,
+      fichaParaApi(personagem),
+    );
+    if (!mapaRemoto[id]) return;
+    mapaRemoto[id]._versaoServidor = ficha.personagem.versao;
+
+    // Economia só vai quando muda de verdade: editar uma nota não precisa
+    // reescrever carteira e inventário inteiros.
+    const carteira = carteiraParaApi(mapaRemoto[id]);
+    const inventario = inventarioParaApi(mapaRemoto[id]);
+    const assinatura = JSON.stringify([carteira, inventario]);
+    if (economiaEnviada.get(id) === assinatura) return;
+    const economia = await personagensApi.salvarEconomia(
+      id,
+      mapaRemoto[id]._economiaVersao || 1,
+      carteira,
+      inventario,
+    );
+    if (mapaRemoto[id]) mapaRemoto[id]._economiaVersao = economia.economia_versao;
+    economiaEnviada.set(id, assinatura);
+  }).catch(erro => {
+    console.error('Falha ao sincronizar personagem:', erro);
+    economiaEnviada.delete(id);
+    document.dispatchEvent(new CustomEvent('jardim:erro-sincronizacao', {
+      detail: { personagemId: id, mensagem: erro.message },
+    }));
+  });
+  filasSalvamento.set(id, tarefa);
+  tarefa.finally(() => {
+    if (filasSalvamento.get(id) === tarefa) filasSalvamento.delete(id);
+  });
+  return tarefa;
+}
+
+function enfileirarSincronizacao(id) {
+  const agendado = agendamentos.get(id);
+  const primeiraAlteracao = agendado?.desde || Date.now();
+  if (agendado) clearTimeout(agendado.temporizador);
+
+  if (Date.now() - primeiraAlteracao >= ESPERA_MAXIMA) {
+    sincronizarAgora(id);
+    return;
+  }
+  agendamentos.set(id, {
+    desde: primeiraAlteracao,
+    temporizador: setTimeout(() => sincronizarAgora(id), ESPERA_SINCRONIZACAO),
+  });
+}
+
+/** Envia tudo que está esperando — usado ao sair da página. */
+export function sincronizarPendentes() {
+  [...agendamentos.keys()].forEach(sincronizarAgora);
+}
+
+// Trocar de aba, minimizar ou fechar conta como "acabei de editar": o que
+// estiver na janela de espera sai agora, sem aguardar os 900 ms.
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') sincronizarPendentes();
+  });
+  window.addEventListener('pagehide', sincronizarPendentes);
 }
 
 export function listarPersonagens() {
@@ -396,22 +659,23 @@ export function obterPersonagem(id) {
   return getMapa()[id] || null;
 }
 
-// atributosBase: valores rolados (7d20) e distribuídos pelo jogador, antes
-// de modificador racial. atributosFinais/derivados/lunarisInicial já vêm
+// atributosBase: valores rolados (7d20) e distribuídos pelo jogador.
+// atributosFinais/derivados/lunarisInicial já vêm
 // calculados do wizard (ver services/calculoService.js) — este serviço só
 // persiste, não recalcula nada.
-export function criarPersonagem({
+export async function criarPersonagem({
   nome, arvoreId, racaId, classeId,
   atributosBase, atributosFinais, derivados,
   lunarisInicial, legadosAscensaoPendentes,
   pericias, inventarioInicial, escolhaRacial,
+  ajustesAtributosRaciais, limitesAtributosRaciais, ajustesPericiasRaciais,
 }) {
   const nomeLimpo = String(nome || '').trim();
   if (!nomeLimpo) return { ok: false, mensagem: 'Dê um nome ao personagem antes de criar.' };
 
   const agora = new Date().toISOString();
   const personagem = {
-    id: gerarId(),
+    id: null,
     nome: nomeLimpo,
     arvoreId: arvoreId || null,
     racaId: racaId || null,
@@ -427,6 +691,19 @@ export function criarPersonagem({
     versaoRegras: '1.0',
     atributosBase: atributosBase || null,
     atributosFinais: atributosFinais || null,
+    ajustesAtributosRaciais: normalizarMapaNumericoParcial(
+      ajustesAtributosRaciais,
+      -99,
+      99,
+    ),
+    limitesAtributosRaciais: normalizarMapaNumericoParcial(
+      limitesAtributosRaciais,
+      1,
+      99,
+    ),
+    ajustesPericiasRaciais: normalizarBonusPericiasRaciais(
+      ajustesPericiasRaciais,
+    ),
     derivados: derivados || null,
     // Recursos "atuais" (jogáveis, sobem/descem em mesa) separados dos
     // "derivados" (máximos calculados na criação) — ver views/personagem/.
@@ -447,7 +724,7 @@ export function criarPersonagem({
     aumentosAtributoPendentes: 0,
     niveisClassePendentes: 0,
     niveisRecursosPendentes: 0,
-    escolhaRacial: escolhaRacial || {},
+    escolhaRacial: normalizarEscolhaRacial(escolhaRacial),
     // Ausência de uma perícia neste mapa == grau "iniciante" (ver
     // calculoService.js/GRAUS_PERICIA) — só grava o que já foi treinado.
     pericias: pericias || {},
@@ -470,12 +747,15 @@ export function criarPersonagem({
     atualizadoEm: agora,
   };
 
-  const mapa = getMapa();
-  mapa[personagem.id] = personagem;
-  if (!salvarMapa(mapa)) {
-    return { ok: false, mensagem: 'Não foi possível salvar o personagem no navegador.' };
+  try {
+    const campanhaId = obterContextoPlataforma().campanha?.id;
+    if (!campanhaId) return { ok: false, mensagem: 'Escolha uma campanha antes de criar o personagem.' };
+    const salvo = await persistirNovoPersonagem(personagem, campanhaId);
+    mapaRemoto[salvo.id] = salvo;
+    return { ok: true, personagem: salvo };
+  } catch (erro) {
+    return { ok: false, mensagem: erro.message || 'Não foi possível salvar o personagem na conta.' };
   }
-  return { ok: true, personagem };
 }
 
 // Atualização parcial genérica — todas as abas da ficha completa (recursos,
@@ -496,9 +776,8 @@ export function atualizarPersonagem(id, patch) {
     atualizadoEm: new Date().toISOString(),
   });
   mapa[id] = atualizado;
-  if (!salvarMapa(mapa)) {
-    return { ok: false, mensagem: 'Não foi possível salvar as alterações no navegador.' };
-  }
+  salvarMapa(mapa);
+  enfileirarSincronizacao(id);
   return { ok: true, personagem: atualizado };
 }
 
@@ -506,48 +785,12 @@ export function excluirPersonagem(id) {
   const mapa = getMapa();
   if (!mapa[id]) return false;
   delete mapa[id];
-  return salvarMapa(mapa);
-}
-
-// JSON completo do personagem, pra baixar como arquivo — mesmo dado que já
-// existe (nada de exportação parcial), só num lugar mais prático que a Ficha.
-export function exportarPersonagem(id) {
-  const personagem = obterPersonagem(id);
-  return personagem ? JSON.stringify(personagem, null, 2) : null;
-}
-
-// Aceita tanto um export daqui quanto uma ficha vinda de outra pessoa/outro
-// PC — sempre com id novo (nunca reaproveita o do arquivo, pra não colidir
-// com um personagem que já exista neste navegador). normalizarPersonagem já
-// preenche/migra campos ausentes, então serve tanto pra formatos antigos
-// quanto pra um JSON incompleto passado à mão.
-export function importarPersonagem(raw) {
-  if (typeof raw !== 'string' || raw.length > LIMITE_IMPORTACAO_CARACTERES) {
-    return { ok: false, mensagem: 'Erro: o arquivo do personagem está vazio ou excede 5MB.' };
-  }
-  let bruto;
-  try {
-    bruto = JSON.parse(raw);
-  } catch {
-    return { ok: false, mensagem: 'Erro: arquivo inválido (JSON malformado).' };
-  }
-
-  if (!bruto || typeof bruto !== 'object' || Array.isArray(bruto) || !String(bruto.nome || '').trim()) {
-    return { ok: false, mensagem: 'Erro: arquivo inválido — não parece ser um personagem (falta "nome").' };
-  }
-
-  const agora = new Date().toISOString();
-  const personagem = normalizarPersonagem({
-    ...bruto,
-    id: gerarId(),
-    criadoEm: bruto.criadoEm || agora,
-    atualizadoEm: agora,
+  salvarMapa(mapa);
+  personagensApi.arquivar(id).catch(erro => {
+    console.error('Falha ao arquivar personagem:', erro);
+    document.dispatchEvent(new CustomEvent('jardim:erro-sincronizacao', {
+      detail: { personagemId: id, mensagem: erro.message },
+    }));
   });
-
-  const mapa = getMapa();
-  mapa[personagem.id] = personagem;
-  if (!salvarMapa(mapa)) {
-    return { ok: false, mensagem: 'Não foi possível salvar o personagem importado no navegador.' };
-  }
-  return { ok: true, personagem, mensagem: `${personagem.nome} foi importado.` };
+  return true;
 }

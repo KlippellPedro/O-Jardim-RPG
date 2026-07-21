@@ -1,5 +1,6 @@
 import { atualizarPersonagem } from '../../../services/personagensService.js';
-import { GRAUS_PERICIA } from '../../../services/calculoService.js';
+import { GRAUS_PERICIA, obterGrauPericiaEfetivo } from '../../../services/calculoService.js';
+import { valorAtributoEfetivo } from '../../../services/modificadoresService.js';
 import { renderizarColecaoPoderesHabilidades } from '../colecaoPoderesHabilidades.js';
 import { abrirModalSimples, fecharModalSimples } from '../modalSimples.js';
 
@@ -20,11 +21,11 @@ const NOMES_CAMPOS = {
 function atendeRequisito(req, personagem) {
   if (Array.isArray(req.ou)) return req.ou.some(sub => atendeRequisito(sub, personagem));
   if (req.atributo && typeof req.valor_minimo === 'number') {
-    return (personagem.atributosFinais?.[req.atributo] ?? 0) >= req.valor_minimo;
+    return valorAtributoEfetivo(personagem, req.atributo) >= req.valor_minimo;
   }
   if (typeof req.nivel_personagem === 'number') return personagem.nivel >= req.nivel_personagem;
   if (req.pericia && req.nivel) {
-    const grauAtual = personagem.pericias?.[req.pericia] || 'iniciante';
+    const grauAtual = obterGrauPericiaEfetivo(personagem, req.pericia);
     const alvo = String(req.nivel).toLowerCase();
     return GRAUS_PERICIA.indexOf(grauAtual) >= GRAUS_PERICIA.indexOf(alvo);
   }

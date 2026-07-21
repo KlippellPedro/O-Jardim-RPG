@@ -2,6 +2,7 @@ import { atualizarPersonagem } from '../../services/personagensService.js';
 import { entradaTemEfeitoAoUsar } from '../../services/modificadoresService.js';
 import { NOMES_ATRIBUTOS } from '../../config/nomesAtributos.js';
 import { abrirModalSimples, fecharModalSimples } from './modalSimples.js';
+import { registrarUso } from '../../services/dadosService.js';
 
 const TIPOS = [
   { valor: 'ativa', rotulo: 'Ativa' },
@@ -574,6 +575,27 @@ export function usarEntrada(personagem, ctx, config, item) {
   }
   Object.assign(personagem, resultado.personagem);
   ctx.mostrarToast(`${item.nome} foi usado${custo ? ` por ${custoTexto(item)}` : ''}.`, 'sucesso');
+
+  // O mesmo uso vai para o log da mesa: é o que dá ao mestre a prova de que o
+  // poder foi gasto, com custo e horário, sem depender da palavra de ninguém.
+  registrarUso({
+    tipo: config.chave === 'magias' ? 'magia' : (config.chave === 'habilidades' ? 'habilidade' : 'poder'),
+    titulo: item.nome,
+    personagemId: personagem.id,
+    detalhes: {
+      custo,
+      tipo_custo: tipoCusto,
+      colecao: config.chave,
+      descricao: (item.descricao || '').slice(0, 300),
+      recursos_apos: {
+        vida: recursos.vidaAtual,
+        mana: recursos.manaAtual,
+        sanidade: recursos.sanidade,
+        cansaco: recursos.cansaco,
+      },
+    },
+  }).catch(erro => console.error('Falha ao registrar o uso na mesa:', erro));
+
   if (entradaTemEfeitoAoUsar(item)) ctx.recarregar();
   return true;
 }
