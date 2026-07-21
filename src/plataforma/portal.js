@@ -28,6 +28,10 @@ let mensagem;
 let inicializacao;
 let exigenciaCampanha = true;
 let modoAuth = 'login';
+// Descoberto na primeira vez que a tela de cadastro aparece; 'aberto' é o
+// palpite inicial só para não travar a tela se a consulta falhar.
+let modoCadastro = 'aberto';
+let modoCadastroConsultado = false;
 let modoCampanha = 'entrar';
 
 function cargoAtual() {
@@ -235,9 +239,24 @@ function renderAuth() {
   const area = painel.querySelector('.plataforma-auth-form');
 
   if (modoAuth === 'cadastro') {
+    if (modoCadastro === 'fechado') {
+      const aviso = document.createElement('div');
+      aviso.className = 'plataforma-card';
+      aviso.append(elemento('h3', '', 'Cadastro fechado'));
+      aviso.append(elemento('p', '', 'As contas desta mesa são criadas por um administrador. Fale com quem cuida do Jardim.'));
+      area.append(aviso, linkAlternar('Já tem conta?', 'Entrar', () => { modoAuth = 'login'; renderAuth(); }));
+      return;
+    }
+
+    const exigeConvite = modoCadastro === 'convite';
     const form = document.createElement('form');
     form.className = 'plataforma-card';
     form.append(elemento('h3', '', 'Criar conta'));
+    if (exigeConvite) {
+      form.append(elemento('p', 'plataforma-aviso-suave',
+        'Esta mesa é por convite. Use o código que o mestre te passou — sua conta já entra na campanha dele.'));
+      form.append(campo('Código do convite', 'text', 'convite', { required: true, maxlength: 120, autocomplete: 'off' }));
+    }
     form.append(campo('Nome de exibição', 'text', 'nome', { required: true, minlength: 2, maxlength: 80, autocomplete: 'name' }));
     form.append(campo('E-mail', 'email', 'email', { required: true, autocomplete: 'email' }));
     form.append(campo('Senha (mínimo de 12 caracteres)', 'password', 'senha', { required: true, minlength: 12, maxlength: 128, autocomplete: 'new-password' }));
@@ -254,6 +273,7 @@ function renderAuth() {
           nome_exibicao: dados.get('nome'),
           email: dados.get('email'),
           senha: dados.get('senha'),
+          convite: exigeConvite ? String(dados.get('convite') || '').trim() : null,
         });
         await carregarContexto();
         informar('Conta criada com segurança.', 'sucesso');
@@ -298,7 +318,24 @@ function renderAuth() {
       entrar.disabled = false;
     }
   });
-  area.append(form, linkAlternar('Não tem conta?', 'Cadastre-se', () => { modoAuth = 'cadastro'; renderAuth(); }));
+  area.append(form, linkAlternar('Não tem conta?', 'Cadastre-se', abrirCadastro));
+}
+
+/** Descobre se a mesa pede convite antes de desenhar o formulário. */
+async function abrirCadastro() {
+  if (!modoCadastroConsultado) {
+    try {
+      const resposta = await authApi.modoDeCadastro();
+      modoCadastro = resposta?.modo || 'aberto';
+    } catch {
+      // Servidor antigo ou fora do ar: o formulário simples ainda funciona, e
+      // o próprio cadastro recusa se faltar convite.
+      modoCadastro = 'aberto';
+    }
+    modoCadastroConsultado = true;
+  }
+  modoAuth = 'cadastro';
+  renderAuth();
 }
 
 function renderEntradaCampanha() {
