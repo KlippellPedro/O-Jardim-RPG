@@ -1,0 +1,61 @@
+# Postgres de desenvolvimento do Jardim.
+#
+# Existe porque o banco de produção fica na VLAN da Discloud e não aceita
+# conexão de fora: sem isto, não há como rodar a plataforma e os bots na
+# máquina, nem testar a restauração de um backup sem tocar em produção.
+#
+#   docker compose up -d        sobe o banco
+#   docker compose down         desliga (os dados ficam no volume)
+#   docker compose down -v      desliga e APAGA os dados
+#
+# A porta é 5433 de propósito: 5432 costuma estar ocupada por um Postgres
+# instalado na máquina, e a colisão daria um erro difícil de entender.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: jardim-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: jardim
+      POSTGRES_PASSWORD: jardim-local
+      POSTGRES_DB: jardim
+      # Comparação e ordenação em português, como no banco de produção.
+      LANG: pt_BR.utf8
+    ports:
+      - "5433:5432"
+    volumes:
+      - jardim-dados:/var/lib/postgresql/data
+    healthcheck:
+      # Os scripts esperam por isto antes de rodar as migrações.
+      test: ["CMD-SHELL", "pg_isready -U jardim -d jardim"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # Banco separado e descartável para os testes de integração, que criam e
+  # apagam schemas. Assim `docker compose down -v` não leva junto o banco de
+  # desenvolvimento com os personagens de teste.
+  postgres-teste:
+    image: postgres:16-alpine
+    container_name: jardim-postgres-teste
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: jardim
+      POSTGRES_PASSWORD: jardim-local
+      POSTGRES_DB: jardim_teste
+    ports:
+      - "5434:5432"
+    # tmpfs: o banco de teste vive na memória e some ao desligar, que é o
+    # comportamento desejado para testes.
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jardim -d jardim_teste"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  jardim-dados:
+    name: jardim-dados
