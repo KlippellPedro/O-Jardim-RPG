@@ -1,47 +1,136 @@
 # O Jardim RPG — histórico de balanceamento v0.2
 
-> Documento histórico e substituído. As regras oficiais estão em
-> `fundamentos-v1.md` e na página de Regras; estes números permanecem apenas
-> para registrar a evolução das decisões.
+> Documento histórico. As regras em uso estão em `fundamentos-v1.md` e na
+> página de Regras. Uma ideia registrada aqui não se torna regra oficial sem
+> aparecer nesses dois lugares.
 
-Este documento registra hipóteses, cálculos e decisões propostas. Nada aqui deve ser tratado como definitivo antes de playtest.
+## Decisões que continuam ativas
 
-## Referências de base
+- Testes usam `d20 + Mod.Atributo + piso(Nível Total / 2) + bônus do Grau`.
+- A DT padrão usa `15 + piso(Nível do desafio / 2)`.
+- O nível total vai de 1 a 40 e cada classe vai de 1 a 20.
+- XP total do nível N usa `500 x N x (N - 1)`.
+- A criação padrão distribui `15, 14, 13, 12, 10, 8 e 7` entre sete atributos.
+- Vida e Mana iniciais usam as fórmulas publicadas em `fundamentos-v1.md`.
+- A progressão de classe concede Habilidades e Graus de Treinamento pela tabela
+  universal, sem publicar ainda os efeitos das Habilidades.
 
-- [Tormenta20 — Resumo de Regras](https://jamboeditora.com.br/wp-content/uploads/2023/06/Tormenta20-Resumo-de-Regras.pdf): teste de perícia com d20, metade do nível, atributo, treinamento, escala de CDs, ações e ferimentos.
-- [D&D 2024 — Creating a Character](https://www.dndbeyond.com/sources/dnd/br-2024/creating-a-character): conjunto padrão 15, 14, 13, 12, 10, 8 e compra por pontos.
-- [D&D Basic Rules — Using Ability Scores](https://www.dndbeyond.com/sources/dnd/basic-rules-2014/using-ability-scores): CDs estáticas e vantagem/desvantagem.
-- [Pathfinder 2e — Rules Overview](https://2e.aonprd.com/Rules.aspx?ID=2266): quatro graus de sucesso.
-- [Pathfinder 2e — Level-Based DCs](https://2e.aonprd.com/Rules.aspx?ID=2629): CDs que acompanham o nível.
-- [Pathfinder 2e — Proficiency Without Level](https://2e.aonprd.com/Rules.aspx?ID=2762): bônus fixos por grau como referência de progressão controlada.
+## Balanceamento de recursos desta etapa
 
-As referências servem como régua matemática. O texto e as decisões de O Jardim são próprios.
+A prioridade continua sendo validar a ficha sem antecipar Habilidades e
+Poderes. Para diferenciar as classes nos cálculos:
 
-## Diagnóstico do sistema atual
+- raças comuns usam ajustes iniciais de Vida e Mana, fisiologia e uma
+  característica exclusiva;
+- classes mantêm somente Vida e Mana por nível;
+- toda classe recebe um orçamento total de 7 pontos por nível;
+- os chassis são 5 Vida/2 Mana, 4 Vida/3 Mana e 3 Vida/4 Mana;
+- classes comuns e especiais usam o mesmo orçamento;
+- classes gerais funcionam em qualquer Árvore;
+- cada Árvore possui uma classe especial exclusiva;
+- Viajante é uma classe especial geral;
+- Habilidades, Poderes, equipamentos e condições raciais ou de classe foram
+  retirados dos catálogos técnicos.
 
-### Atributos em 6d20
+Esses valores formam o balanceamento inicial aprovado para os cálculos. O
+playtest ainda pode justificar ajustes, principalmente depois que custos de
+Mana, dano, cura e Habilidades retornarem ao sistema.
 
-Os personagens podem começar separando 40 pontos de atributo, usar a proposta padrão 15, 14, 13, 12, 10 e 8 ou rodar 6d20 caso o mestre deixr, mas por padrão fica a distribuição de 40 pontos.
+Raças especiais não obedecem ao mesmo orçamento das raças comuns. Elas são
+recompensas ou transformações deliberadamente acima da curva, liberadas apenas
+por decisão do mestre. A força adicional precisa continuar escrita com gatilho,
+custo, frequência e limites claros para permanecer utilizável na mesa.
 
-na criação da ficha o maximo que pode ter em um atributo é 20
+O primeiro pacote-base especial aprovado é o Elfo: +2 Vida, +4 Mana, +4
+Inteligência com teto racial 24, um Legado adicional, quatro rerrolagens de
+testes de Inteligência por sessão e longevidade. O valor acima da curva é
+intencional. Natureza foi publicada com uma passiva de exploração e uma
+manifestação de cura ou controle de área. Sombras recebeu furtividade e
+teleporte tático. Gelo controla ou protege um alvo; Fogo sustenta dano ofensivo;
+Fluxo da Origem manipula criação, restauração e supressão; Noite Eterna domina
+visão e economia de ações; Tempestades combina voo, dano e empurrão. As sete
+Linhagens possuem efeito publicado, mas seus valores ainda dependem de playtest.
 
-### Valores derivados
+O segundo pacote-base especial aprovado é o Desperto: +4 Vida, +2 Mana, +4
+Vontade, um Legado adicional e recursos ligados à passagem por Arkarin. Ele
+pode retornar em qualquer Árvore. Seu limite de cinco rerrolagens por sessão
+depende de séculos completos passados morto, enquanto Recusar o Fim custa 6
+Mana e só funciona uma vez por cena. O personagem começa sem Lunaris e sem
+itens apenas quando a raça é autorizada na criação; uma transformação posterior
+não apaga bens sobreviventes. Suas seis Condições Ancestrais foram publicadas:
+Julgado e Rejeitado, Juramento Inacabado, Chamado dos Vivos, Corpo Reconstruído,
+Alma Fragmentada e Retorno Profano. Cada uma combina uma dádiva forte com uma
+cicatriz obrigatória; o personagem recebe somente uma combinação.
 
-- `Movimento = Mod.Destreza × 2` tendo como movmento minimo 1
-- `Vida = Mod.Constituição + Mod.Força × 3` tendo como vida minima 3
-- `Força Vital = Mod.Sabedoria + Mod.Inteligência × 2` tendo como força vital minima 2
-não tem numeros negativos nessa parte pq se não vai fiar uma bosta de jogar
+O terceiro pacote especial aprovado é a Auleth. Os registros antigos forneciam
++2 Inteligência, +2 Sabedoria, −3 Carisma, Vida adicional, doze perícias
+iniciais, dois Conhecimentos Extremos, forma variável, imunidade a doenças,
+meditação e dificuldade emocional. A versão atual traduz a Vida do primeiro
+nível em +2 Vida, preserva os demais ajustes e limita os atributos ao teto
+natural 20. Como não havia Árvore indicada além da origem espacial/dimensional,
+a Auleth foi classificada como especial geral. O efeito dos dois Conhecimentos
+Extremos foi reconstruído como áreas delimitadas que concedem vantagem e uma
+rerrolagem por sessão; não existia explicação mecânica preservada para esse
+campo.
 
-### Perícias
+O quarto pacote especial aprovado é o Autômato, exclusivo da A.X.I.S. As cinco
+páginas recuperadas eram partes consecutivas de uma única regra, não cinco
+variantes: elas continham oito chassis, dez modificações passivas e oito ativas.
+A adaptação atual substitui níveis raciais pelo Nível Total, conserva Constituição
+como Integridade Estrutural, converte Mana em Energia do Núcleo e permite classe
+desde o nível 1. Os antigos bônus de +15 a +50 Vida dos chassis foram convertidos
+para +3 a +10, e Resistente concede +2 Vida por Nível Total em vez de +5. Chassis,
+Movimento fixo, Blindagem, Escudo, Resistente e Rodas entram automaticamente nos
+cálculos; imunidades, reparos e ativações permanecem regras explícitas de mesa.
 
+O quinto pacote especial aprovado é o Clone, compatível originalmente com
+Gênese, Alétheia, A.X.I.S, Anima e Limiar. Ele recebe +3 Vida, +3 Mana, +2 em
+dois atributos diferentes com teto 20 e um Legado adicional. O orçamento acima
+da curva também inclui Cópia Biométrica, Memórias Residuais e Regeneração
+Programada. Seus quatro Projetos separam infiltração, conhecimento, resistência
+e continuidade: Réplica Perfeita, Arquivo Vivo, Organismo Otimizado e Série
+Contínua. A Vida por nível do Organismo entra automaticamente nos cálculos; as
+memórias e os corpos reserva dependem de decisões narrativas do mestre.
 
-d20 + Mod.Atributo + piso(Nível/2) + Grau
+O sexto pacote especial aprovado é o Errante, uma ferramenta de conversão para
+personagens vindos de outra Árvore, campanha ou sistema de RPG. Ele recebe +3
+Vida, +3 Mana, +4 em um atributo escolhido com teto 20 e um Legado adicional.
+Nenhum valor externo é importado diretamente: identidade e narrativa são
+preservadas, enquanto a ficha é reconstruída no patamar atual. A Assinatura
+Remanescente converte somente um poder para um dos seis formatos fechados. A
+Dupla Proveniência permite acesso à classe exclusiva da Árvore atual ou da
+origem equivalente, mas conserva o limite de uma única classe especial.
 
-Graus fornecem +0, +2, +4, +6, +8, +10 e +12. Obstáculos com nível usam CD base + metade do nível, preservando a chance relativa.
+O sétimo pacote especial aprovado é o Amálgamo, com origem natural em Gênese,
+Anima, Vórtice, Abismo ou Limiar. Ele recebe +5 Vida, +1 Mana, +2 Constituição e
++2 Fluxo, ambos limitados a 20. A identidade mecânica utiliza três Fragmentos
+conhecidos e dois expressos, com assimilação narrativa até o máximo de seis. O
+Surto de Convergência manifesta um terceiro por três rodadas, uma vez por
+sessão, por 6 Mana e 1 Cansaço posterior. Carapaça, Órgão de Fluxo e Massa
+Colossal atualizam Defesa, Mana e Fortitude automaticamente na ficha.
 
-### Vantagem
+O oitavo pacote especial aprovado é a Bruxa, com origem natural em Alétheia,
+Anima, Vórtice, Éon, Abismo ou Limiar. Ela recebe +1 Vida, +5 Mana, +2
+Inteligência, +2 Fluxo, +4 Misticismo e um Legado adicional. Maldição Tecida
+usa uma lista fechada de seis efeitos, dos quais a Bruxa conhece três ou cinco
+com Grimório. Preço da Bruxaria converte no máximo 3 Mana ausentes em 2 Vida
+cada e funciona somente com características raciais. A raça Entidade permanece
+adiada e indisponível porque seu pacote exige uma revisão própria mais complexa.
 
-Vantagem não equivale sempre a +5. Seu valor depende da chance original:
+## Metas de playtest
+
+| Situação | Faixa desejada |
+| --- | ---: |
+| Especialista contra desafio padrão do próprio nível | 65% a 80% de sucesso |
+| Generalista contra desafio padrão | 40% a 60% |
+| Desafio difícil para especialista | 40% a 60% |
+| Combate comum | 3 a 5 rodadas |
+| Uso da melhor reação | nenhuma opção acima de 70% das escolhas |
+
+As três últimas metas dependem de Arsenal, Bestiário e Habilidades completas.
+Até esses dados existirem, elas são objetivos, não resultados confirmados.
+
+## Probabilidade de vantagem
 
 | Resultado mínimo no d20 | Normal | Vantagem | Desvantagem |
 | ---: | ---: | ---: | ---: |
@@ -51,95 +140,50 @@ Vantagem não equivale sempre a +5. Seu valor depende da chance original:
 | 15 | 30% | 51% | 9% |
 | 20 | 5% | 9,75% | 0,25% |
 
-Fontes de vantagem e desvantagem são registradas e canceladas uma a uma. Depois
-desse cancelamento, qualquer saldo positivo concede uma única vantagem e qualquer
-saldo negativo impõe uma única desvantagem. O tamanho do saldo não acrescenta
-mais d20; ele apenas preserva a condição contra novas fontes opostas. Vantagem
-continua rara quando também existe bônus numérico.
+Fontes de vantagem e desvantagem se anulam uma a uma. Depois disso, qualquer
+saldo positivo concede uma vantagem e qualquer saldo negativo impõe uma
+desvantagem; o tamanho do saldo não acrescenta mais d20.
 
-### XP
-
-A tabela segue a fórmula triangular até o nível 23:
+## XP
 
 ```text
-XP(N) = 500 × N × (N − 1)
+XP(N) = 500 x N x (N - 1)
 ```
 
-O nível 24 deveria exigir 276.000 XP, mas a tabela antiga mostra 277.000 e mantém diferença de 1.000 até o nível 40. Pela fórmula, N40 exige 780.000 XP.
+O custo para passar do nível N ao N+1 é `N x 1.000 XP`. Assim, o nível 24 exige
+276.000 XP e o nível 40 exige 780.000 XP.
 
-### Ferimentos
+## O que já pode ser testado
 
-O d20 atual dá peso igual a resultados narrativamente muito diferentes. Uma tabela em 2d6 concentra 55,6% dos resultados entre 6 e 8 e torna os extremos 2 e 12 raros, com 2,78% cada. Isso produz trauma comum previsível e momentos extremos memoráveis.
+1. Criação com sete atributos e seis perícias em Aprendiz.
+2. Cálculo de Vida, Mana, Movimento, Defesa e Iniciativa no nível 1.
+3. Ganho de Vida e Mana ao investir níveis em uma ou mais classes.
+4. Recalcular recursos ao alterar Constituição, Inteligência ou Sabedoria.
+5. Limites de multiclasse, nível total, XP e marcos de atributo ou Legado.
+6. Uso e treinamento dos Graus de Perícia.
 
-## Metas numéricas de playtest
+## O que ainda não pode ser concluído
 
-| Situação | Faixa desejada |
-| --- | ---: |
-| Especialista contra desafio padrão do próprio nível | 65–80% de sucesso |
-| Generalista contra desafio padrão | 40–60% |
-| Desafio difícil para especialista | 40–60% |
-| Combate comum | 3–5 rodadas |
-| Uso da melhor reação | nenhuma opção acima de 70% das escolhas |
-| Coreografia | todos os riscos escolhidos ao menos uma vez em 3 sessões |
+- Dano por rodada e duração real de combate.
+- Economia de Mana das Habilidades.
+- Equilíbrio das futuras raças comuns adicionais.
+- Poder individual e disponibilidade por Árvore das raças especiais restantes,
+  além do balanceamento prático das sete Linhagens Élficas, do Desperto, de
+  suas seis Condições Ancestrais e da Auleth.
+- Identidade mecânica completa das classes além de Vida e Mana.
+- Balanceamento de magia e do atributo Fluxo.
 
-## O que ainda não pode ser balanceado com precisão
+Esses pontos dependem da transcrição e revisão do livro. Não há uma fonte
+verificada no repositório atual para preencher automaticamente esses números.
 
-- Dano por rodada e duração de combate: faltam no site os dados completos de armas, armaduras e habilidades de classe.
-- Economia de Força Vital: a maior parte dos poderes no JSON está marcada como pendente.
-- Raças: bônus antigos variam de +1 a +4, rerrolagens, itens e vantagens narrativas sem uma mesma unidade de custo.
-- Multiclasse: é necessário confirmar como níveis de duas classes somam Vida, FV e progressão de habilidades.
+## Protocolo de teste da ficha
 
-Até esses dados serem migrados do livro, os números de combate devem ser tratados como playtest, não como versão final.
-
-## Protocolo de teste
-
-1. Monte quatro personagens nos níveis totais 1, 10, 20 e 30.
-2. Para cada nível, registre 20 testes padrão e 10 difíceis, divididos entre especialista e generalista.
-3. Em combate, registre rodadas, dano sofrido, FV gasto, reação escolhida e quedas a 0 PV.
-4. Ajuste primeiro CDs e bônus globais; só depois altere habilidades individuais.
-5. Mude uma variável por rodada de teste para saber qual alteração causou o resultado.
-
-## Catálogos de personagem — Playtest 0.4
-
-O ZIP `O Último Eclipse.zip` confirma os seguintes materiais publicados:
-
-| Categoria | Com ficha/PDF | Citada ou em desenvolvimento |
-| --- | ---: | ---: |
-| Classes comuns | 11 | 2 |
-| Classes especiais | 3 | 8 |
-| Raças comuns | 9 | 0 |
-| Raças especiais | 5 | 4 |
-| Legados catalogados | 36 | PDF 1 é a abertura da seção |
-
-“Comum” descreve disponibilidade em todas as Árvores. “Especial” descreve uma classe ou raça restrita a determinadas Árvores ou extinta; não concede um orçamento de poder maior.
-
-### Orçamento racial
-
-Para o primeiro playtest comparável, cada raça deve oferecer aproximadamente:
-
-1. Um ajuste de atributo de `+1`.
-2. Uma perícia em Aprendiz ou um recurso menor equivalente.
-3. Uma habilidade característica com ação, frequência e limite definidos.
-4. Uma limitação apenas quando ela realmente compensa um benefício adicional.
-
-Os dados antigos variam de `+1` a `+4`, chegam a cinco rerrolagens e misturam bônus de combate, itens e vantagens narrativas. As propostas normalizadas ficam separadas dos textos do livro na interface.
-
-### Chassi de classe
-
-Todas as classes usam 20 níveis. Habilidades de identidade ficam nos níveis 1, 5, 10, 15 e 20; poderes, perícias e melhorias ocupam os níveis intermediários. Ações e reações extras precisam de custo, recarga ou gatilho raro.
-
-Somente Guerreiro possui progressão parcialmente migrada. As outras classes não podem receber uma auditoria de dano, cura ou FV confiável até que seus três PDFs sejam transcritos com ação, alcance, custo, duração e texto das habilidades.
-
-### Legados de maior risco
-
-Todos os 36 Legados catalogados receberam texto fechado de playtest. Os principais problemas eram:
-
-- Remover desastres e falhas críticas de forma permanente.
-- Conceder reação extra todo turno sem custo.
-- Dobrar modificadores ou recuperação sem limite.
-- Somar dano igual ao nível e garantir iniciativa automaticamente.
-- Aplicar redução de Defesa acumulativa até o fim do combate.
-
-As revisões transformam esses efeitos em usos por turno, cena, descanso ou sessão e evitam acumular bônus equivalentes.
-
-Seis Legados novos foram adicionados apenas ao Playtest 0.4: Âncora de Árvore, Eco do Fluxo, Passo Entre Galhos, Memória do Eclipse, Vínculo Lunar e Segunda Primavera. Eles não fazem parte dos PDFs e aparecem separados na interface.
+1. Crie personagens com combinações diferentes de atributos, raça e classe.
+2. Registre os recursos no nível 1.
+3. Suba para os níveis 2, 3, 7, 13, 19 e 20, conferindo Vida, Mana e Graus de
+   Treinamento.
+4. Teste uma multiclasse e confirme que o primeiro nível da nova classe concede
+   recursos, mas não repete benefícios de criação.
+5. Altere Constituição e confirme a atualização da Vida de todos os níveis de
+   classe já recebidos.
+6. Mude somente uma regra por rodada de teste e registre o resultado.

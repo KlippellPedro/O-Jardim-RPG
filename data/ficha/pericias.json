@@ -1,13 +1,12 @@
 {
-  "nota": "Base: Tormenta 20 (confirmado com Pedro). Luta e Pontaria são perícias. Fortitude, Reflexos e Vontade eram tratadas como Resistências à parte (defesas passivas) — reclassificadas em 2026-07-11 (confirmado com Pedro) como perícias comuns, pra aparecerem na mesma lista/UI de Perícias em vez de uma seção separada na Ficha.",
+  "nota": "Luta, Pontaria, Fortitude, Reflexos e Vontade são perícias. Fortitude, Reflexos e Vontade também fornecem as respectivas Defesas passivas.",
 
   "nao_sao_pericias": [
     {
       "id": "iniciativa",
       "titulo": "Iniciativa",
       "atributo": "destreza",
-      "descricao": "Confirmado por Pedro: NÃO é perícia. É um número estático (como a Defesa Natural) que define a ordem de ação em combate — pode receber os mesmos bônus de uma perícia, mas nunca rola dado junto. Movida da lista de perícias nesta sessão.",
-      "ver_tambem": "data/rules/mechanics.json → iniciativa"
+      "descricao": "Não é perícia. É um valor estático que define a ordem de ação: 10 + metade do nível total + Mod.Destreza + bônus."
     }
   ],
 
@@ -71,7 +70,7 @@
       "atributo": "sabedoria",
       "origem": "O Jardim",
       "status": "aprovada",
-      "descricao": "Teste usado quando a Trilha de Sanidade é abalada. Ver mecânica completa em data/rules/mechanics.json → sanidade."
+      "descricao": "Perícia usada quando a Trilha de Sanidade é abalada. A mecânica completa está na seção Condições Especiais da página de Regras."
     }
   ],
 

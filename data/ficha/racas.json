@@ -4,417 +4,2038 @@
     "tipo": "raca",
     "titulo": "Humano",
     "categoria": "padrao",
+    "disponibilidade": "geral",
     "arvore": null,
-    "tamanho": "normal",
-    "legado_ascensao_inicial": 1,
-    "nota_legado": "Sem condição — o único Legado de Ascensão gratuito ao criar personagem",
-    "atributos_minimos": {
-      "vida": 4,
-      "forca_vital": 3,
-      "movimento": 3
-    },
-    "modificadores_atributos": {},
-    "pericias_bonus": {},
-    "equipamento_inicial": {
-      "lunaris": -5,
-      "nota": "Começa com -5 Lunaris, mas já possui 1 acessório"
-    },
-    "habilidades": [],
-    "condicoes": []
+    "vida": 0,
+    "mana": 0,
+    "movimento": 0,
+    "pericias_iniciais_adicionais": 1,
+    "fisiologia": ["Tamanho Normal."],
+    "caracteristicas": [
+      {
+        "id": "adaptabilidade-humana",
+        "titulo": "Adaptabilidade",
+        "tipo": "criacao",
+        "descricao": "Na criação, escolha uma perícia adicional para começar em Aprendiz. Assim, um Humano começa com sete perícias em Aprendiz, em vez de seis.",
+        "automatizada": true
+      }
+    ],
+    "recursos_provisorios": false
   },
-
   {
     "id": "vampiro",
     "tipo": "raca",
     "titulo": "Vampiro",
     "categoria": "padrao",
+    "disponibilidade": "geral",
     "arvore": null,
-    "tamanho": "normal",
-    "legado_ascensao_inicial": 0,
-    "modificadores_atributos": {
-      "destreza": 2
-    },
-    "pericias_bonus": {
-      "enganacao": 2,
-      "intimidacao": 4
-    },
-    "equipamento_inicial": {
-      "lunaris": 0
-    },
-    "habilidades": [
-      "Ao tomar sangue, recupera 1d6 de Vida"
+    "vida": 1,
+    "mana": 0,
+    "movimento": 0,
+    "fisiologia": ["Enxerga normalmente em escuridão natural, mas não através de escuridão criada por magia ou Fluxo."],
+    "caracteristicas": [
+      {
+        "id": "hemofagia",
+        "titulo": "Hemofagia",
+        "tipo": "acao",
+        "descricao": "Uma vez por cena, gaste uma ação para beber o sangue de um ser vivo voluntário ou incapacitado e recuperar 1d6 de Vida. Não funciona com construtos, Espíritos ou criaturas sem sangue.",
+        "automatizada": false
+      },
+      {
+        "id": "fome-de-sangue",
+        "titulo": "Fome de Sangue",
+        "tipo": "limitacao",
+        "descricao": "Depois de 24 horas sem consumir sangue, descansos recuperam apenas metade da Mana normal, com mínimo de 1, até o Vampiro se alimentar.",
+        "automatizada": false
+      }
     ],
-    "condicoes": [
-      "Se não tomar sangue por 1 dia, desvantagem em todos os dados"
-    ]
+    "recursos_provisorios": false
   },
-
   {
     "id": "goblim",
     "tipo": "raca",
     "titulo": "Goblim",
     "categoria": "padrao",
+    "disponibilidade": "geral",
     "arvore": null,
-    "tamanho": "pequeno",
-    "legado_ascensao_inicial": 0,
-    "modificadores_atributos": {
-      "vida": -4,
-      "inteligencia": 1
-    },
-    "modificadores_movimento": "+2m",
-    "pericias_bonus": {
-      "ladinagem": 2
-    },
-    "equipamento_inicial": {
-      "lunaris": 15
-    },
-    "habilidades": [
-      "Vantagem para vender qualquer coisa"
+    "vida": -1,
+    "mana": 1,
+    "movimento": 1.5,
+    "fisiologia": ["Tamanho Pequeno."],
+    "caracteristicas": [
+      {
+        "id": "passos-ligeiros",
+        "titulo": "Passos Ligeiros",
+        "tipo": "passiva",
+        "descricao": "Receba +1,5 m de Movimento.",
+        "automatizada": true
+      },
+      {
+        "id": "mercador-improvisador",
+        "titulo": "Mercador Improvisador",
+        "tipo": "passiva",
+        "descricao": "Receba vantagem em testes feitos para negociar a venda de um item que pertence ao Goblim.",
+        "automatizada": false
+      }
     ],
-    "condicoes": []
+    "recursos_provisorios": false
   },
-
   {
     "id": "anao",
     "tipo": "raca",
     "titulo": "Anão",
     "categoria": "padrao",
+    "disponibilidade": "geral",
     "arvore": null,
-    "tamanho": "pequeno",
-    "legado_ascensao_inicial": 0,
-    "modificadores_atributos": {
-      "sabedoria": 2,
-      "carisma": -2
-    },
-    "rerolagens": 5,
-    "pericias_iniciais_maximas": 5,
-    "equipamento_inicial": {
-      "lunaris": -5
-    },
-    "habilidades": [
-      "Pode re-rolar 5 dados",
-      "Construções recebem modificador comum e -2 kg"
+    "vida": 2,
+    "mana": 0,
+    "movimento": 0,
+    "fisiologia": ["Tamanho Pequeno."],
+    "caracteristicas": [
+      {
+        "id": "maos-de-oficio",
+        "titulo": "Mãos de Ofício",
+        "tipo": "passiva",
+        "descricao": "Receba vantagem em testes de Ofício para construir ou reparar. Uma vez por descanso, depois de falhar em um desses testes, você pode rerrolá-lo e deve usar o novo resultado.",
+        "automatizada": false
+      }
     ],
-    "condicoes": [
-      "[TEXTO INCOMPLETO NO PDF — 'porém não gosta de...' — aguardando Pedro completar]"
-    ]
+    "recursos_provisorios": false
   },
-
   {
     "id": "golem",
     "tipo": "raca",
     "titulo": "Golem",
     "categoria": "padrao",
+    "disponibilidade": "geral",
     "arvore": null,
-    "tamanho": "enorme",
-    "legado_ascensao_inicial": 0,
-    "modificadores_atributos": {
-      "constituicao": 2,
-      "destreza": -2,
-      "vida": 10
-    },
-    "pericias_bonus": {
-      "fortitude": 4
-    },
-    "equipamento_inicial": {
-      "lunaris": 0,
-      "itens": 0
-    },
-    "habilidades": [
-      "+4 na CD"
+    "vida": 5,
+    "mana": -2,
+    "movimento": 0,
+    "fisiologia": [
+      "Tamanho Grande ou Enorme, definido na criação.",
+      "Não precisa respirar, comer ou beber e não contrai doenças comuns."
     ],
-    "condicoes": [
-      "Sem itens ou Lunaris iniciais",
-      "Perde senso de direção e espaço"
-    ]
+    "caracteristicas": [
+      {
+        "id": "corpo-construido",
+        "titulo": "Corpo Construído",
+        "tipo": "passiva",
+        "descricao": "Ofício pode substituir Medicina para tratar o Golem, usando a mesma DT e o mesmo tempo. Tratamentos que dependam exclusivamente de uma biologia viva não funcionam nele.",
+        "automatizada": false
+      },
+      {
+        "id": "estrutura-adaptada",
+        "titulo": "Estrutura Adaptada",
+        "tipo": "limitacao",
+        "descricao": "Armaduras e vestimentas comuns precisam ser adaptadas ao corpo do Golem antes de serem equipadas.",
+        "automatizada": false
+      }
+    ],
+    "recursos_provisorios": false
   },
-
   {
     "id": "espirito",
     "tipo": "raca",
     "titulo": "Espírito",
     "categoria": "padrao",
+    "disponibilidade": "geral",
     "arvore": null,
-    "tamanho": "normal",
-    "legado_ascensao_inicial": 0,
-    "modificadores_atributos": {
-      "forca": -2,
-      "constituicao": -2,
-      "sabedoria": 1,
-      "mana_bonus": 3
-    },
-    "modificadores_movimento": "+8",
-    "rerolagens": 4,
-    "equipamento_inicial": {
-      "lunaris": 0
-    },
-    "habilidades": [
-      "Visão noturna",
-      "Corpo espiritual"
+    "vida": -2,
+    "mana": 3,
+    "movimento": 0,
+    "fisiologia": [
+      "Não precisa respirar, comer ou beber.",
+      "Enxerga normalmente em escuridão natural.",
+      "Não pode vestir armaduras comuns."
     ],
-    "condicoes": [
-      "Não pode vestir ou usar itens comuns"
-    ]
+    "caracteristicas": [
+      {
+        "id": "passagem-eterea",
+        "titulo": "Passagem Etérea",
+        "tipo": "movimento",
+        "descricao": "Uma vez por cena, gaste 2 Mana durante seu movimento para atravessar até 1,5 m de material sólido. Você precisa conhecer ou enxergar um espaço livre do outro lado, não pode terminar dentro do material nem carregar outra criatura.",
+        "automatizada": false
+      }
+    ],
+    "recursos_provisorios": false
   },
-
   {
     "id": "gigante",
     "tipo": "raca",
     "titulo": "Gigante",
     "categoria": "padrao",
+    "disponibilidade": "geral",
     "arvore": null,
-    "tamanho": "grande",
-    "legado_ascensao_inicial": 0,
-    "modificadores_atributos": {
-      "constituicao": 2,
-      "sabedoria": 2
-    },
-    "modificadores_movimento": "-4",
-    "pericias_bonus": {
-      "diplomacia": 4
-    },
-    "equipamento_inicial": {
-      "lunaris": 5,
-      "itens": [
-        "1 item marcial"
-      ]
-    },
-    "habilidades": [
-      "Traços Raciais (habilidade especial)"
+    "vida": 4,
+    "mana": -1,
+    "movimento": 0,
+    "fisiologia": ["Tamanho Grande; equipamentos precisam ter tamanho compatível."],
+    "caracteristicas": [
+      {
+        "id": "porte-colossal",
+        "titulo": "Porte Colossal",
+        "tipo": "passiva",
+        "descricao": "Receba vantagem para resistir a empurrões e quedas causados por outra criatura. Sua capacidade de carga é dobrada.",
+        "automatizada": false
+      }
     ],
-    "condicoes": []
+    "recursos_provisorios": false
   },
-
   {
     "id": "animalia",
     "tipo": "raca",
     "titulo": "Animália",
     "categoria": "padrao",
+    "disponibilidade": "geral",
     "arvore": null,
-    "tamanho": "variável (depende do animal)",
-    "legado_ascensao_inicial": 0,
-    "modificadores_atributos": {
-      "nota": "Tudo definido pelo animal específico escolhido"
-    },
-    "pericias_bonus": {
-      "sobrevivencia": 2
-    },
-    "equipamento_inicial": {
-      "lunaris": 0,
-      "nota": "Normal"
-    },
-    "habilidades": [
-      "Fala com animais",
-      "Demais atributos e habilidades variam conforme o animal"
+    "vida": 0,
+    "mana": 0,
+    "movimento": 0,
+    "fisiologia": ["O tamanho e a aparência são definidos pelo animal representado e pela morfologia escolhida."],
+    "caracteristicas": [
+      {
+        "id": "voz-da-fauna",
+        "titulo": "Voz da Fauna",
+        "tipo": "passiva",
+        "descricao": "Você consegue comunicar ideias simples a animais e compreender suas respostas básicas. Isso não concede controle sobre eles.",
+        "automatizada": false
+      }
     ],
-    "condicoes": [
-      "Condições variam pelo animal escolhido"
-    ]
+    "variantes": [
+      {
+        "id": "agil",
+        "titulo": "Morfologia Ágil",
+        "vida": -1,
+        "mana": 1,
+        "movimento": 1.5,
+        "caracteristicas": [
+          {
+            "id": "instinto-agil",
+            "titulo": "Instinto Ágil",
+            "tipo": "passiva",
+            "descricao": "Receba +1,5 m de Movimento e vantagem em testes de Acrobacia para escalar ou se equilibrar.",
+            "automatizada": true
+          }
+        ]
+      },
+      {
+        "id": "robusta",
+        "titulo": "Morfologia Robusta",
+        "vida": 2,
+        "mana": 0,
+        "movimento": 0,
+        "caracteristicas": [
+          {
+            "id": "corpo-robusto",
+            "titulo": "Corpo Robusto",
+            "tipo": "passiva",
+            "descricao": "Receba vantagem para resistir a empurrões e quedas causados por outra criatura.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "mistica",
+        "titulo": "Morfologia Mística",
+        "vida": 0,
+        "mana": 2,
+        "movimento": 0,
+        "caracteristicas": [
+          {
+            "id": "sentidos-misticos",
+            "titulo": "Sentidos Místicos",
+            "tipo": "passiva",
+            "descricao": "Enxerga normalmente em escuridão natural e recebe vantagem em Percepção quando olfato ou audição forem o sentido principal do teste.",
+            "automatizada": false
+          }
+        ]
+      }
+    ],
+    "recursos_provisorios": false
   },
-
   {
     "id": "sereia",
     "tipo": "raca",
     "titulo": "Sereia / Tritão",
     "categoria": "padrao",
+    "disponibilidade": "geral",
     "arvore": null,
-    "tamanho": "normal",
-    "legado_ascensao_inicial": 0,
-    "modificadores_atributos": {
-      "carisma": 1,
-      "destreza": 1,
-      "constituicao": -2
-    },
-    "pericias_bonus": {
-      "canto": "Especialista"
-    },
-    "equipamento_inicial": {
-      "lunaris": 0,
-      "nota": "Normal"
-    },
-    "habilidades": [
-      "Canto Apaixonante"
+    "vida": -1,
+    "mana": 2,
+    "movimento": 0,
+    "fisiologia": ["Anfíbio: respira no ar e na água; seu deslocamento de natação é igual ao Movimento terrestre."],
+    "caracteristicas": [
+      {
+        "id": "canto-fascinante",
+        "titulo": "Canto Fascinante",
+        "tipo": "acao",
+        "descricao": "Uma vez por cena, gaste uma ação e 2 Mana para fazer um teste de Carisma contra a Vontade de uma criatura a até 9 m que possa ouvir. Em sucesso, ela fica fascinada até o início do seu próximo turno; o efeito termina antes se ela sofrer dano.",
+        "automatizada": false
+      }
     ],
-    "condicoes": [
-      "Anfíbio"
-    ]
+    "recursos_provisorios": false
   },
-
+  {
+    "id": "miceliano",
+    "tipo": "raca",
+    "titulo": "Miceliano",
+    "categoria": "padrao",
+    "disponibilidade": "geral",
+    "arvore": null,
+    "vida": 1,
+    "mana": 1,
+    "movimento": 0,
+    "fisiologia": [
+      "Organismo fúngico: alimenta-se como um ser vivo comum, mas também consegue absorver nutrientes ao permanecer em contato com solo fértil durante um descanso."
+    ],
+    "caracteristicas": [
+      {
+        "id": "rede-micelial",
+        "titulo": "Rede Micelial",
+        "tipo": "passiva",
+        "descricao": "Gaste uma ação para deixar esporos em uma criatura voluntária que você toque. Até o próximo descanso, vocês podem trocar silenciosamente ideias simples enquanto estiverem a até 30 m um do outro. Uma criatura só pode carregar os esporos de um Miceliano por vez.",
+        "automatizada": false
+      },
+      {
+        "id": "memoria-do-solo",
+        "titulo": "Memória do Solo",
+        "tipo": "exploracao",
+        "descricao": "Depois de permanecer 1 minuto em contato com terra, madeira ou fungos de uma área, faça um teste de Sobrevivência para perceber se criaturas passaram por aquele local recentemente. O efeito revela presença e direção aproximada, não identidades.",
+        "automatizada": false
+      }
+    ],
+    "recursos_provisorios": false
+  },
+  {
+    "id": "slime",
+    "tipo": "raca",
+    "titulo": "Slime",
+    "categoria": "padrao",
+    "disponibilidade": "geral",
+    "arvore": null,
+    "vida": 3,
+    "mana": -2,
+    "movimento": 0,
+    "fisiologia": [
+      "Corpo semissólido: não possui ossos nem órgãos em posições fixas.",
+      "Armaduras e vestimentas rígidas precisam ser adaptadas ao corpo do Slime."
+    ],
+    "caracteristicas": [
+      {
+        "id": "corpo-maleavel",
+        "titulo": "Corpo Maleável",
+        "tipo": "movimento",
+        "descricao": "Sem carregar equipamento rígido maior que a passagem, você pode atravessar aberturas de pelo menos 15 cm. O trecho apertado conta como terreno difícil e você não pode terminar o movimento dentro dele.",
+        "automatizada": false
+      },
+      {
+        "id": "amortecimento-gelatinoso",
+        "titulo": "Amortecimento Gelatinoso",
+        "tipo": "passiva",
+        "descricao": "Reduza pela metade o dano sofrido por quedas. Você também recebe vantagem em testes para escapar de agarrões ou amarras que não sejam hermeticamente fechadas.",
+        "automatizada": false
+      }
+    ],
+    "recursos_provisorios": false
+  },
+  {
+    "id": "feerico",
+    "tipo": "raca",
+    "titulo": "Feérico",
+    "categoria": "padrao",
+    "disponibilidade": "geral",
+    "arvore": null,
+    "vida": -2,
+    "mana": 4,
+    "movimento": 0,
+    "fisiologia": ["Tamanho Pequeno ou Normal, definido na criação."],
+    "caracteristicas": [
+      {
+        "id": "truque-feerico",
+        "titulo": "Truque Feérico",
+        "tipo": "passiva",
+        "descricao": "Crie à vontade um efeito sensorial pequeno e inofensivo, como faíscas, um perfume, um sussurro ou uma imagem do tamanho da sua mão. O truque não causa dano, não concede bônus e não reproduz uma criatura de forma convincente.",
+        "automatizada": false
+      },
+      {
+        "id": "glamour",
+        "titulo": "Glamour",
+        "tipo": "acao",
+        "descricao": "Uma vez por cena, gaste uma ação e 2 Mana para criar uma ilusão visual e sonora de até 3 m em um ponto a até 15 m. Ela dura enquanto você mantiver concentração, por no máximo 1 minuto. Quem interagir diretamente pode testar Percepção contra seu Misticismo para reconhecer a ilusão.",
+        "automatizada": false
+      }
+    ],
+    "recursos_provisorios": false
+  },
   {
     "id": "elfo",
     "tipo": "raca",
     "titulo": "Elfo",
     "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
+    "arvores": ["aethel"],
     "arvore": null,
-    "legado_ascensao_inicial": 1,
-    "pre_requisito": "Ser originário de Nadalon",
-    "tamanho": "normal",
-    "rerolagens": 4,
-    "modificadores_atributos": {
+    "origem_natural": {
+      "arvore_id": "aethel",
+      "dimensao": "Nadalon"
+    },
+    "transformacao_em_qualquer_arvore": true,
+    "vida": 2,
+    "mana": 4,
+    "movimento": 0,
+    "ajustes_atributos": {
       "inteligencia": 4
     },
-    "equipamento_inicial": {
-      "lunaris": "×2 do normal",
-      "itens": "×2 do normal"
+    "limites_atributos": {
+      "inteligencia": 24
     },
-    "habilidades": [
-      "Longevidade (não envelhece)"
+    "legados_adicionais": 1,
+    "beneficios_criacao": {
+      "lunaris_total": 40,
+      "itens_comuns_total": 2,
+      "retroativos_em_transformacao": false
+    },
+    "fisiologia": [
+      "Não envelhece e é imune a envelhecimento sobrenatural."
+    ],
+    "caracteristicas": [
+      {
+        "id": "intelecto-elfico",
+        "titulo": "Intelecto Élfico",
+        "tipo": "passiva",
+        "descricao": "Receba +4 em Inteligência. Somente esse bônus racial pode levar Inteligência acima do limite natural 20, até o máximo 24; ele não altera o limite de nenhum outro atributo.",
+        "automatizada": true
+      },
+      {
+        "id": "memoria-milenar",
+        "titulo": "Memória Milenar",
+        "tipo": "rerrolagem",
+        "descricao": "Você possui quatro rerrolagens por sessão, utilizáveis somente em testes cujo atributo seja Inteligência. Ao gastar uma, rerrole o teste e use o novo resultado.",
+        "usos": 4,
+        "recuperacao": "sessao",
+        "atributo": "inteligencia",
+        "automatizada": false
+      },
+      {
+        "id": "heranca-ancestral",
+        "titulo": "Herança Ancestral",
+        "tipo": "aquisicao",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional.",
+        "automatizada": false
+      },
+      {
+        "id": "linhagem-elfica",
+        "titulo": "Linhagem Élfica",
+        "tipo": "escolha",
+        "descricao": "Escolha uma das sete Linhagens Élficas. Você recebe apenas as características da Linhagem escolhida e não pode acumular efeitos de duas Linhagens.",
+        "automatizada": false
+      }
     ],
     "linhagens": [
-      "Natureza",
-      "Sombras",
-      "Gelo",
-      "Fogo",
-      "Fluxo da Origem",
-      "Noite Eterna",
-      "Tempestades"
+      {
+        "id": "natureza",
+        "titulo": "Natureza",
+        "efeito_pendente": false,
+        "caracteristicas": [
+          {
+            "id": "simbiose-primordial",
+            "titulo": "Simbiose Primordial",
+            "tipo": "passiva",
+            "descricao": "Você pode trocar ideias simples com plantas. Elas percebem luz, água, toque, dano e movimentações próximas, mas não reconhecem nomes, rostos ou conceitos complexos. Você ignora terreno difícil causado por vegetação natural e recebe vantagem em Sobrevivência quando o teste envolver plantas, florestas ou rastros deixados na vegetação.",
+            "automatizada": false
+          },
+          {
+            "id": "dominio-verdejante",
+            "titulo": "Domínio Verdejante",
+            "tipo": "acao",
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para fazer vegetação brotar em uma área de 6 m de raio, centrada em um ponto a até 15 m. O efeito pode nascer sobre terra, pedra ou madeira e dura três rodadas. Escolha Florescimento ou Raízes Aprisionadoras; os dois efeitos não podem ser usados juntos na mesma ativação.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 15,
+            "raio_m": 6,
+            "duracao_rodadas": 3,
+            "automatizada": false,
+            "opcoes": [
+              {
+                "id": "florescimento",
+                "titulo": "Florescimento",
+                "descricao": "Criaturas escolhidas na área, incluindo você, recuperam 2d6 + Mod.Inteligência de Vida. Cada criatura é curada somente uma vez por ativação."
+              },
+              {
+                "id": "raizes-aprisionadoras",
+                "titulo": "Raízes Aprisionadoras",
+                "descricao": "Faça um teste de Misticismo e compare com os Reflexos de cada inimigo escolhido na área. Em falha, o Movimento da criatura vira 0 até o final do próximo turno dela. A área permanece terreno difícil para os inimigos durante toda a duração."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sombras",
+        "titulo": "Sombras",
+        "efeito_pendente": false,
+        "caracteristicas": [
+          {
+            "id": "sombra-viva",
+            "titulo": "Sombra Viva",
+            "tipo": "passiva",
+            "descricao": "Você enxerga normalmente através de escuridão natural ou sobrenatural. Enquanto estiver em penumbra ou escuridão, recebe vantagem em Furtividade e pode tentar se esconder sem cobertura física, desde que uma sombra cubra a maior parte do corpo. Esse ocultamento termina ao entrar em luz intensa, atacar ou realizar uma ação chamativa.",
+            "automatizada": false
+          },
+          {
+            "id": "passo-umbral",
+            "titulo": "Passo Umbral",
+            "tipo": "movimento",
+            "descricao": "Uma vez por cena, gaste seu Movimento e 4 Mana para escolher uma sombra visível a até 24 m e se teleportar para um espaço desocupado junto dela. Você pode levar uma criatura voluntária adjacente, desde que exista espaço para ambos no destino. O teleporte não provoca reações. Até o começo do seu próximo turno, ataques contra você sofrem desvantagem; seu primeiro ataque durante esse período recebe vantagem, mas encerra imediatamente essa proteção. A habilidade não funciona sem uma sombra visível no destino.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "alcance_m": 24,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "gelo",
+        "titulo": "Gelo",
+        "efeito_pendente": false,
+        "caracteristicas": [
+          {
+            "id": "coracao-invernal",
+            "titulo": "Coração Invernal",
+            "tipo": "passiva",
+            "descricao": "Você é imune aos efeitos ambientais de frio extremo, ignora terreno difícil causado por gelo ou neve, reduz pela metade o dano causado diretamente por frio ou gelo e não escorrega nem cai apenas por estar sobre uma superfície congelada.",
+            "automatizada": false
+          },
+          {
+            "id": "sepulcro-glacial",
+            "titulo": "Sepulcro Glacial",
+            "tipo": "acao",
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para escolher uma criatura a até 15 m e fazer um teste de Misticismo contra a Fortitude dela. Uma criatura voluntária pode escolher falhar. Em falha, ela fica aprisionada no gelo até o final do próximo turno dela: seu Movimento vira 0, ela não pode realizar ações ou reações e recebe Redução 5 contra danos. Em sucesso, seu Movimento fica reduzido pela metade e ela não pode realizar reações até o final do próximo turno. Outra criatura adjacente pode gastar uma ação e superar o resultado original de Misticismo com Atletismo para quebrar o gelo antecipadamente.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 15,
+            "teste": "misticismo_vs_fortitude",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "fogo",
+        "titulo": "Fogo",
+        "efeito_pendente": false,
+        "caracteristicas": [
+          {
+            "id": "coracao-incandescente",
+            "titulo": "Coração Incandescente",
+            "tipo": "passiva",
+            "descricao": "Você é imune aos efeitos ambientais de calor extremo e reduz pela metade o dano causado diretamente por fogo ou calor. À vontade, pode criar, extinguir ou moldar uma chama inofensiva do tamanho da sua mão em um ponto a até 9 m; isso não causa dano, não dissipa fogo sobrenatural e não cria combustível de valor.",
+            "automatizada": false
+          },
+          {
+            "id": "avatar-das-chamas",
+            "titulo": "Avatar das Chamas",
+            "tipo": "acao",
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para assumir o Avatar das Chamas por três rodadas. Ao ativar, faça um único teste de Misticismo e compare com os Reflexos de cada inimigo escolhido a até 6 m: em falha, ele sofre 2d6 + Mod.Inteligência de dano de fogo; em sucesso, sofre metade. Durante a manifestação, o primeiro ataque que você acertar em cada turno causa +1d6 de dano de fogo e, uma vez por turno, uma criatura que acertar você com um ataque corpo a corpo sofre 1d6 de dano de fogo.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "raio_m": 6,
+            "duracao_rodadas": 3,
+            "teste": "misticismo_vs_reflexos",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "fluxo-da-origem",
+        "titulo": "Fluxo da Origem",
+        "efeito_pendente": false,
+        "caracteristicas": [
+          {
+            "id": "eco-da-primeira-centelha",
+            "titulo": "Eco da Primeira Centelha",
+            "tipo": "passiva",
+            "descricao": "Você recebe vantagem em Ressonância ou Misticismo para identificar a origem, a natureza ou o funcionamento de um Fluxo ou efeito sobrenatural. Uma vez por cena, ao gastar Mana em uma característica, Habilidade ou Poder, reduza esse custo em 2 Mana, até o mínimo de 1.",
+            "automatizada": false
+          },
+          {
+            "id": "mandato-da-origem",
+            "titulo": "Mandato da Origem",
+            "tipo": "acao",
+            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para impor um Mandato da Origem em um ponto ou criatura a até 15 m. Escolha Gerar, Restaurar ou Desfazer; apenas uma opção pode ser usada por ativação.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 6,
+            "alcance_m": 15,
+            "automatizada": false,
+            "opcoes": [
+              {
+                "id": "gerar",
+                "titulo": "Gerar",
+                "descricao": "Crie um objeto comum, não mágico e sem mecanismos complexos, com no máximo 3 m em qualquer dimensão. Ele não pode conter material raro, substância consumível nem valor monetário e desaparece ao final da cena."
+              },
+              {
+                "id": "restaurar",
+                "titulo": "Restaurar",
+                "descricao": "Uma criatura recupera 3d6 + Mod.Inteligência de Vida e encerra uma condição prejudicial com duração definida. Isso não remove morte, ferimento permanente, transformação, maldição ou consequência narrativa."
+              },
+              {
+                "id": "desfazer",
+                "titulo": "Desfazer",
+                "descricao": "Faça um teste de Misticismo contra a Fortitude de uma criatura. Em falha, ela sofre 3d6 + Mod.Inteligência de dano que ignora Redução e um efeito sobrenatural ativo escolhido fica suprimido até o final do próximo turno dela. Em sucesso, sofre metade do dano e nenhum efeito é suprimido. Isso não suprime raça, classe, transformação permanente ou efeito narrativo."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "noite-eterna",
+        "titulo": "Noite Eterna",
+        "efeito_pendente": false,
+        "caracteristicas": [
+          {
+            "id": "veu-sem-aurora",
+            "titulo": "Véu sem Aurora",
+            "tipo": "passiva",
+            "descricao": "Você enxerga normalmente através de qualquer escuridão e é imune a cegueira ou medo causados exclusivamente pela falta de luz. Enquanto não estiver sob luz intensa, recebe vantagem em Intimidação e Vontade. Uma vez por turno, como ação livre, pode extinguir uma fonte de luz não mágica a até 9 m; isso não apaga incêndios ou fontes maiores que uma fogueira.",
+            "automatizada": false
+          },
+          {
+            "id": "reinado-da-noite",
+            "titulo": "Reinado da Noite",
+            "tipo": "acao",
+            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para criar uma área de escuridão absoluta com 9 m de raio, centrada em um ponto a até 15 m, durante três rodadas. Luz comum e chamas não iluminam a área. Você e as criaturas escolhidas ao ativar enxergam normalmente; as demais enxergam somente a 1,5 m, sofrem desvantagem em Percepção baseada em visão e não podem realizar reações contra criaturas que não enxerguem. Faça um único teste de Misticismo e compare com a Vontade de cada inimigo que entrar ou começar o turno na área. Em falha, naquele turno ele precisa escolher entre realizar ações ou usar seu Movimento, não ambos. Efeitos que declarem dissipar escuridão sobrenatural podem encerrar a área normalmente.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 6,
+            "alcance_m": 15,
+            "raio_m": 9,
+            "duracao_rodadas": 3,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "tempestades",
+        "titulo": "Tempestades",
+        "efeito_pendente": false,
+        "caracteristicas": [
+          {
+            "id": "sangue-da-tormenta",
+            "titulo": "Sangue da Tormenta",
+            "tipo": "passiva",
+            "descricao": "Você ignora penalidades ambientais de chuva, ventos e tempestades comuns, reduz pela metade o dano causado diretamente por eletricidade, trovão ou vento e sempre sabe como o clima natural da região deve se comportar nas próximas 24 horas. Isso não revela interferências sobrenaturais futuras.",
+            "automatizada": false
+          },
+          {
+            "id": "olho-da-tempestade",
+            "titulo": "Olho da Tempestade",
+            "tipo": "acao",
+            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para envolver-se em uma tempestade de 6 m de raio durante três rodadas. A área acompanha você e você recebe deslocamento de voo igual ao seu Movimento; se ainda estiver voando quando o efeito terminar, desce em segurança até 9 m e cai normalmente pelo restante. Ao ativar e uma vez no início de cada um dos seus dois próximos turnos, escolha até Mod.Inteligência inimigos na área, com mínimo de um, e faça um único teste de Misticismo contra os Reflexos deles. Em falha, cada alvo sofre 1d6 + Mod.Inteligência de dano elétrico e é empurrado 3 m; em sucesso, sofre metade do dano e não é empurrado.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 6,
+            "raio_m": 6,
+            "duracao_rodadas": 3,
+            "teste": "misticismo_vs_reflexos",
+            "automatizada": false
+          }
+        ]
+      }
     ],
-    "nota_linhagens": "Cada linhagem concede características extras — detalhes não especificados neste documento",
-    "condicoes": []
+    "recursos_provisorios": false
   },
-
   {
     "id": "desperto",
     "tipo": "raca",
     "titulo": "Desperto",
     "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
+    "arvores": ["aethel", "ousias", "keryx", "haemus", "ignis", "moros", "aperion", "chronus", "erebus", "mulher-carmesim"],
     "arvore": null,
-    "legado_ascensao_inicial": 1,
-    "pre_requisito": "Morrer e voltar (evento narrativo)",
-    "tamanho": "normal",
-    "rerolagens_por_seculo_morto": 1,
-    "modificadores_atributos": {},
-    "pericias_bonus": {
+    "origem_sobrenatural": {
+      "arvore_id": "mulher-carmesim",
+      "galho": "arkarin",
+      "descricao": "Morreu, chegou a Arkarin e retornou ao mundo dos vivos."
+    },
+    "transformacao_em_qualquer_arvore": true,
+    "vida": 4,
+    "mana": 2,
+    "movimento": 0,
+    "ajustes_pericias": {
       "vontade": 4
     },
-    "equipamento_inicial": {
-      "lunaris": 0,
-      "itens": 0
+    "legados_adicionais": 1,
+    "beneficios_criacao": {
+      "lunaris_total": 0,
+      "itens_comuns_total": 0,
+      "retroativos_em_transformacao": false
     },
-    "habilidades": [
-      "Fragmento de Arkarin (vibra perto de espíritos e coisas ligadas à morte)",
-      "Renegado da Morte (vantagem contra efeitos de morte, drenagem de F.V. e prisão de alma)"
+    "fisiologia": [
+      "Continua sendo um ser vivo, salvo alteração declarada pela Condição Ancestral escolhida.",
+      "Carrega um Fragmento de Arkarin ligado à própria alma."
     ],
-    "condicoes": [
-      "Condição Ancestral extra dependendo do motivo do retorno (decidido pelo mestre/narrativa)"
-    ]
+    "caracteristicas": [
+      {
+        "id": "fragmento-de-arkarin",
+        "titulo": "Fragmento de Arkarin",
+        "tipo": "sensorial",
+        "descricao": "O fragmento vibra quando existe, a até 15 m, um Espírito ou alma aprisionada, um cadáver alterado sobrenaturalmente ou um efeito ligado à morte ou ao Fluxo de Arkarin. Ele revela presença e direção aproximada, mas não identidade, quantidade ou distância exata.",
+        "alcance_m": 15,
+        "automatizada": false
+      },
+      {
+        "id": "renegado-da-morte",
+        "titulo": "Renegado da Morte",
+        "tipo": "passiva",
+        "descricao": "Receba +4 em Vontade e vantagem em testes contra morte instantânea, drenagem de Vida ou Mana, controle da alma e aprisionamento espiritual. Se um efeito tentaria capturar, consumir ou controlar sua alma sem permitir resistência, faça Vontade contra a DT do efeito.",
+        "automatizada": true
+      },
+      {
+        "id": "ecos-de-seculos-mortos",
+        "titulo": "Ecos de Séculos Mortos",
+        "tipo": "rerrolagem",
+        "descricao": "Para cada século completo que permaneceu morto, receba uma rerrolagem por sessão, até o máximo de cinco. Você pode usá-la em qualquer teste, mas deve manter o novo resultado. Quem permaneceu morto por menos de um século não recebe rerrolagens desta característica.",
+        "rerrolagens_por_seculo": 1,
+        "maximo_rerrolagens": 5,
+        "recuperacao": "sessao",
+        "automatizada": false
+      },
+      {
+        "id": "recusar-o-fim",
+        "titulo": "Recusar o Fim",
+        "tipo": "reacao",
+        "descricao": "Uma vez por cena, quando morreria, gaste uma reação e 6 Mana, mesmo inconsciente. Sua Vida torna-se 1, Morrendo é removido, Ferido aumenta em 1 e a morte instantânea ou captura da alma que ativou a reação é negada. Não funciona sem Mana suficiente nem depois que a morte já foi concluída.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "custo_mana": 6,
+        "automatizada": false
+      },
+      {
+        "id": "condicao-ancestral",
+        "titulo": "Condição Ancestral",
+        "tipo": "escolha",
+        "descricao": "Escolha uma Condição Ancestral baseada no motivo do retorno. Você recebe somente a dádiva e a cicatriz da Condição escolhida.",
+        "automatizada": false
+      }
+    ],
+    "condicoes_ancestrais": [
+      {
+        "id": "julgado-e-rejeitado",
+        "titulo": "Julgado e Rejeitado",
+        "motivo_retorno": "O Tribunal de Arkarin recusou sua permanência entre os mortos e o condenou a retornar.",
+        "dadiva": {
+          "id": "veredito-inacabado",
+          "titulo": "Veredito Inacabado",
+          "tipo": "reacao",
+          "descricao": "Uma vez por sessão, ao usar Recusar o Fim, você não gasta Mana nem reação. Isso ainda consome o uso de Recusar o Fim daquela cena.",
+          "usos": 1,
+          "recuperacao": "sessao",
+          "automatizada": false
+        },
+        "cicatriz": {
+          "id": "sentenca-aprofundada",
+          "titulo": "Sentença Aprofundada",
+          "tipo": "passiva",
+          "descricao": "Sempre que usar Recusar o Fim, receba Ferido +2 em vez de Ferido +1.",
+          "automatizada": false
+        }
+      },
+      {
+        "id": "juramento-inacabado",
+        "titulo": "Juramento Inacabado",
+        "motivo_retorno": "Sua vontade foi forte o bastante para arrastá-lo de volta. Defina com o mestre um juramento objetivo e possível de concluir.",
+        "dadiva": {
+          "id": "forca-da-promessa",
+          "titulo": "Força da Promessa",
+          "tipo": "alteracao_resultado",
+          "descricao": "Uma vez por sessão, transforme uma falha comum em sucesso comum quando o teste contribuir diretamente para cumprir ou proteger seu juramento. Isso não transforma uma ação impossível em possível.",
+          "usos": 1,
+          "recuperacao": "sessao",
+          "automatizada": false
+        },
+        "cicatriz": {
+          "id": "quebra-da-palavra",
+          "titulo": "Quebra da Palavra",
+          "tipo": "passiva",
+          "descricao": "Se abandonar ou contrariar voluntariamente seu juramento, sua Mana atual torna-se 0 e não pode ser recuperada acima da metade do máximo até realizar uma reparação aceita pelo mestre. Coerção ou impossibilidade não quebram o juramento. Ao cumprir o juramento, você pode estabelecer outro depois de um descanso completo.",
+          "automatizada": false
+        }
+      },
+      {
+        "id": "chamado-dos-vivos",
+        "titulo": "Chamado dos Vivos",
+        "motivo_retorno": "Uma pessoa viva chamou sua alma de volta. Ela se torna sua Âncora e precisa aceitar conscientemente o vínculo.",
+        "dadiva": {
+          "id": "laco-do-retorno",
+          "titulo": "Laço do Retorno",
+          "tipo": "reacao",
+          "descricao": "Enquanto estiverem na mesma Árvore, você sabe a direção da Âncora e se ela está saudável, Ferida, Morrendo ou morta. Uma vez por cena, quando ela sofrer dano a até 30 m, gaste uma reação e 3 Mana para se teleportar até um espaço adjacente. Ela ignora o dano e os efeitos adicionais; você sofre metade desse dano e recebe os efeitos no lugar dela.",
+          "usos": 1,
+          "recuperacao": "cena",
+          "custo_mana": 3,
+          "alcance_m": 30,
+          "automatizada": false
+        },
+        "cicatriz": {
+          "id": "dependencia-da-ancora",
+          "titulo": "Dependência da Âncora",
+          "tipo": "passiva",
+          "descricao": "Enquanto estiver a mais de 1 km da Âncora ou em outra dimensão, você sofre desvantagem em Vontade e não pode usar as rerrolagens de Ecos de Séculos Mortos. Se a Âncora morrer, a cicatriz permanece até um novo vínculo ser estabelecido por acontecimento narrativo aprovado pelo mestre.",
+          "automatizada": false
+        }
+      },
+      {
+        "id": "corpo-reconstruido",
+        "titulo": "Corpo Reconstruído",
+        "motivo_retorno": "Seu corpo foi remontado, recriado ou remendado para obrigar sua alma a retornar.",
+        "dadiva": {
+          "id": "carne-refeita",
+          "titulo": "Carne Refeita",
+          "tipo": "fisiologia",
+          "descricao": "Você não precisa respirar, comer, beber ou dormir e é imune a doenças e venenos comuns. Um descanso exige apenas permanecer consciente e relativamente imóvel pelo tempo normal.",
+          "automatizada": false
+        },
+        "cicatriz": {
+          "id": "biologia-impossivel",
+          "titulo": "Biologia Impossível",
+          "tipo": "passiva",
+          "descricao": "Cura não pode ser usada para tratar seu corpo. Ofício ou Ritos de Arkarin podem substituí-la, usando a mesma DT e o mesmo tempo. Efeitos que dependam exclusivamente de uma biologia viva não funcionam em você; curas sobrenaturais que não dependam de anatomia continuam funcionando.",
+          "automatizada": false
+        }
+      },
+      {
+        "id": "alma-fragmentada",
+        "titulo": "Alma Fragmentada",
+        "motivo_retorno": "Somente uma parte de sua alma escapou de Arkarin. O restante continua perdido ou aprisionado.",
+        "ajustes_pericias": {
+          "vontade": -4
+        },
+        "dadiva": {
+          "id": "ausencia-momentanea",
+          "titulo": "Ausência Momentânea",
+          "tipo": "reacao",
+          "descricao": "Uma vez por cena, quando for atingido por um ataque, gaste uma reação e 4 Mana para ignorar seu dano e efeitos adicionais. Até o começo do seu próximo turno, você fica incorpóreo, pode atravessar até 1,5 m de matéria sólida, mas não pode atacar, manipular objetos nem terminar dentro de algo.",
+          "usos": 1,
+          "recuperacao": "cena",
+          "custo_mana": 4,
+          "automatizada": false
+        },
+        "cicatriz": {
+          "id": "espirito-incompleto",
+          "titulo": "Espírito Incompleto",
+          "tipo": "passiva",
+          "descricao": "Você não recebe o +4 em Vontade de Renegado da Morte. Conserva as vantagens e resistências concedidas pela característica.",
+          "automatizada": true
+        }
+      },
+      {
+        "id": "retorno-profano",
+        "titulo": "Retorno Profano",
+        "motivo_retorno": "Um ritual, entidade ou força proibida arrancou sua alma de Arkarin.",
+        "dadiva": {
+          "id": "folego-roubado",
+          "titulo": "Fôlego Roubado",
+          "tipo": "acao",
+          "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para escolher um ser vivo a até 9 m e fazer Ritos de Arkarin contra a Fortitude dele. Se superar a defesa, cause 2d6 + Mod.Sabedoria de dano e recupere Vida igual ao dano realmente causado. Caso não supere, cause e recupere metade. Não afeta Espíritos, cadáveres, construtos ou criaturas sem essência vital.",
+          "usos": 1,
+          "recuperacao": "cena",
+          "custo_mana": 4,
+          "alcance_m": 9,
+          "teste": "ritos-de-arkarin_vs_fortitude",
+          "automatizada": false
+        },
+        "cicatriz": {
+          "id": "fome-do-tumulo",
+          "titulo": "Fome do Túmulo",
+          "tipo": "passiva",
+          "descricao": "Qualquer recuperação de Vida que não venha de Fôlego Roubado é reduzida pela metade, com mínimo de 1.",
+          "automatizada": false
+        }
+      }
+    ],
+    "condicoes_pendentes": false,
+    "recursos_provisorios": false
   },
-
   {
     "id": "auleth",
     "tipo": "raca",
     "titulo": "Auleth",
     "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
+    "arvores": ["aethel", "ousias", "keryx", "haemus", "ignis", "moros", "aperion", "chronus", "erebus", "mulher-carmesim"],
     "arvore": null,
-    "legado_ascensao_inicial": 1,
-    "pre_requisito": "Ser do Espaço (origem dimensional)",
-    "tamanho": "variável (pode alterar forma física)",
-    "modificadores_atributos": {
+    "origem_dimensional": {
+      "tipo": "ser-do-espaco",
+      "descricao": "Uma consciência de origem espacial ou dimensional que assume uma forma física para existir entre os povos das Árvores."
+    },
+    "transformacao_em_qualquer_arvore": true,
+    "vida": 2,
+    "mana": 0,
+    "movimento": 0,
+    "ajustes_atributos": {
       "inteligencia": 2,
       "sabedoria": 2,
-      "carisma": -3,
-      "vida_bonus": "2× nível inicial"
+      "carisma": -3
     },
-    "pericias_iniciais_total": 12,
-    "conhecimentos_extremos": 2,
-    "equipamento_inicial": {
-      "lunaris": 0,
-      "itens": "Nenhum item material"
+    "limites_atributos": {
+      "inteligencia": 20,
+      "sabedoria": 20
     },
-    "habilidades": [
-      "Alterar forma física (ação completa)",
-      "Imune a doenças",
-      "Não precisa comer, beber ou dormir (só meditar)"
+    "pericias_iniciais_adicionais": 6,
+    "conhecimentos_extremos_total": 2,
+    "legados_adicionais": 1,
+    "beneficios_criacao": {
+      "lunaris_total": 0,
+      "itens_comuns_total": 0,
+      "retroativos_em_transformacao": false
+    },
+    "tamanhos_permitidos": ["Minúsculo", "Pequeno", "Normal", "Grande", "Enorme"],
+    "fisiologia": [
+      "Não precisa comer, beber ou dormir. Para concluir um descanso, medita pelo tempo normal e pode perceber os arredores, mas qualquer atividade além de observação simples interrompe a recuperação.",
+      "É imune a doenças comuns ou sobrenaturais, mas não a venenos ou outras condições que apenas produzam sintomas semelhantes.",
+      "Sua massa permanece aproximadamente constante quando altera o tamanho; formas pequenas tornam-se mais densas e formas grandes, mais rarefeitas."
     ],
-    "condicoes": [
-      "Dificuldade com emoções"
-    ]
+    "caracteristicas": [
+      {
+        "id": "conhecimentos-extremos",
+        "titulo": "Conhecimentos Extremos",
+        "tipo": "escolha",
+        "descricao": "Escolha duas áreas de estudo aprovadas pelo mestre, cada uma mais estreita que uma Árvore ou Fluxo inteiro e mais ampla que um único indivíduo. Quando um teste de Conhecimento, Investigação, Misticismo, Ressonância, Tecnologia ou Ritos de Arkarin tratar diretamente de uma área escolhida, você recebe vantagem. Uma vez por sessão para cada área, depois de falhar em um desses testes, pode rerrolá-lo e deve manter o novo resultado. Isso não revela segredos sem pistas nem informações que nenhuma fonte acessível poderia fornecer.",
+        "escolhas": 2,
+        "pericias_aplicaveis": ["conhecimento", "investigacao", "misticismo", "ressonancia", "tecnologia", "ritos-de-arkarin"],
+        "rerrolagens_por_escolha": 1,
+        "recuperacao": "sessao",
+        "automatizada": false
+      },
+      {
+        "id": "forma-sem-molde",
+        "titulo": "Forma sem Molde",
+        "tipo": "acao_completa",
+        "descricao": "À vontade, gaste sua ação e todo o Movimento do turno para alterar anatomia, aparência, voz e tamanho entre Minúsculo, Pequeno, Normal, Grande ou Enorme. A transformação não altera atributos, Vida, Mana, Movimento, alcance, capacidade de carga ou quantidade de ações e não concede sentidos, ataques, imunidades ou características da forma copiada. Sua massa permanece constante. Equipamentos não se transformam e caem intactos aos seus pés quando forem incompatíveis. Imitar perfeitamente uma criatura específica exige Enganação contra a Intuição de quem a conheça; a forma permanece até você mudá-la novamente.",
+        "custo_mana": 0,
+        "automatizada": false
+      },
+      {
+        "id": "emocao-distante",
+        "titulo": "Emoção Distante",
+        "tipo": "limitacao",
+        "descricao": "Além do ajuste de -3 em Carisma, você sofre desvantagem em Intuição para interpretar emoções e em Diplomacia para consolar, inspirar ou criar um vínculo emocional. A limitação não se aplica a negociações objetivas, análise lógica, Enganação ou Intimidação.",
+        "automatizada": false
+      }
+    ],
+    "recursos_provisorios": false
   },
-
   {
     "id": "automato",
     "tipo": "raca",
     "titulo": "Autômato",
     "categoria": "esquecida",
-    "arvore": null,
-    "legado_ascensao_inicial": 1,
-    "pendente": true,
-    "nota_pendente": "5 arquivos PDF de Autômato existem mas não foram lidos em detalhe. Provável que haja subespécies ou variantes."
+    "disponibilidade": "restrita",
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
+    "arvores": ["keryx"],
+    "arvore": "keryx",
+    "arvore_titulo": "A.X.I.S",
+    "vida": 0,
+    "mana": 0,
+    "movimento": 0,
+    "nome_mana": "Energia do Núcleo",
+    "nivel_nucleo": "nivel_total",
+    "capacidade_modificacoes": {
+      "base": 1,
+      "nivel_por_slot": 2,
+      "formula": "1 + piso(Nível Total / 2)"
+    },
+    "fisiologia": [
+      "Construto consciente da A.X.I.S; Constituição representa Integridade Estrutural, mas continua sendo usada normalmente nas fórmulas e em Fortitude.",
+      "Não precisa respirar, comer, beber ou dormir. Para concluir um descanso, permanece inativo ou em recarga pelo tempo normal.",
+      "É imune a atordoamento, doenças, encantamentos, enjoo, fadiga, sono e venenos enquanto não possuir a modificação Máquina Viva."
+    ],
+    "caracteristicas": [
+      {
+        "id": "nucleo-autonomo",
+        "titulo": "Núcleo Autônomo",
+        "tipo": "passiva",
+        "descricao": "Você possui vontade própria e não precisa obedecer a um criador. Seu Nível Total também é o nível do núcleo, e você pode receber níveis de classe desde o nível 1. Sua Mana representa a Energia do Núcleo e é recuperada normalmente por descanso ou Relaxar.",
+        "automatizada": false
+      },
+      {
+        "id": "corpo-artificial",
+        "titulo": "Corpo Artificial",
+        "tipo": "passiva",
+        "descricao": "Você é imune a atordoamento, doenças, encantamentos, enjoo, fadiga, sono e venenos. Não precisa respirar, comer, beber ou dormir. Essas imunidades são perdidas enquanto Máquina Viva estiver instalada.",
+        "imunidades": ["atordoamento", "doenca", "encantamento", "enjoo", "fadiga", "sono", "veneno"],
+        "automatizada": false
+      },
+      {
+        "id": "reparo-mecanico",
+        "titulo": "Reparo Mecânico",
+        "tipo": "limitacao",
+        "descricao": "Descanso e curas comuns ou mágicas não recuperam sua Vida. Um personagem pode gastar uma hora e fazer Ofício (Engenharia) contra DT 15 + piso do seu Nível Total dividido por 2; em sucesso, você recupera 5 de Vida. Uma nova tentativa exige outra hora. Máquina Viva substitui esta regra pela recuperação normal.",
+        "pericia": "oficio",
+        "especializacao": "engenharia",
+        "dt_base": 15,
+        "dt_metade_nivel": true,
+        "vida_por_sucesso": 5,
+        "tempo_horas": 1,
+        "automatizada": false
+      },
+      {
+        "id": "colapso-do-nucleo",
+        "titulo": "Colapso do Núcleo",
+        "tipo": "passiva",
+        "descricao": "Ao chegar a 0 Vida ou menos, você segue normalmente as regras de Morrendo. Seu núcleo somente é destruído quando sua morte é concluída. Substituir um núcleo destruído exige um acontecimento narrativo aprovado pelo mestre.",
+        "automatizada": false
+      },
+      {
+        "id": "arquitetura-modular",
+        "titulo": "Arquitetura Modular",
+        "tipo": "escolha",
+        "descricao": "Seu limite de modificações instaladas é 1 + piso do Nível Total dividido por 2. Uma modificação ativa exige pelo menos três passivas instaladas, além dos demais pré-requisitos. Instalar uma modificação exige um dia de trabalho de alguém capaz de realizar Ofício (Engenharia); custos e obtenção de peças são resolvidos pelo mestre.",
+        "automatizada": false
+      }
+    ],
+    "variantes": [
+      {
+        "id": "bipede-pequeno",
+        "titulo": "Chassi Bípede Pequeno",
+        "postura": "bipede",
+        "tamanho": "Pequeno",
+        "medida_m": 3,
+        "vida": 3,
+        "mana": 0,
+        "movimento_fixo": 6,
+        "ajustes_atributos": { "forca": -2, "destreza": 2 },
+        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "dano_natural": "1d6",
+        "caracteristicas": [{
+          "id": "chassi-bipede-pequeno",
+          "titulo": "Estrutura Bípede Pequena",
+          "tipo": "passiva",
+          "descricao": "Tamanho Pequeno, aproximadamente 3 m, Movimento 6 m e arma natural com dano-base 1d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+          "automatizada": false
+        }]
+      },
+      {
+        "id": "bipede-normal",
+        "titulo": "Chassi Bípede Normal",
+        "postura": "bipede",
+        "tamanho": "Normal",
+        "medida_m": 4.5,
+        "vida": 5,
+        "mana": 0,
+        "movimento_fixo": 9,
+        "ajustes_atributos": { "forca": 2, "destreza": 1 },
+        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "dano_natural": "1d8",
+        "caracteristicas": [{
+          "id": "chassi-bipede-normal",
+          "titulo": "Estrutura Bípede Normal",
+          "tipo": "passiva",
+          "descricao": "Tamanho Normal, aproximadamente 4,5 m, Movimento 9 m e arma natural com dano-base 1d8. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+          "automatizada": false
+        }]
+      },
+      {
+        "id": "bipede-grande",
+        "titulo": "Chassi Bípede Grande",
+        "postura": "bipede",
+        "tamanho": "Grande",
+        "medida_m": 6,
+        "vida": 8,
+        "mana": 0,
+        "movimento_fixo": 12,
+        "ajustes_atributos": { "forca": 4, "destreza": 0 },
+        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "dano_natural": "2d6",
+        "caracteristicas": [{
+          "id": "chassi-bipede-grande",
+          "titulo": "Estrutura Bípede Grande",
+          "tipo": "passiva",
+          "descricao": "Tamanho Grande, aproximadamente 6 m, Movimento 12 m e arma natural com dano-base 2d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+          "automatizada": false
+        }]
+      },
+      {
+        "id": "bipede-enorme",
+        "titulo": "Chassi Bípede Enorme",
+        "postura": "bipede",
+        "tamanho": "Enorme",
+        "medida_m": 9,
+        "vida": 10,
+        "mana": 0,
+        "movimento_fixo": 12,
+        "ajustes_atributos": { "forca": 5, "destreza": -2 },
+        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "dano_natural": "3d6",
+        "caracteristicas": [{
+          "id": "chassi-bipede-enorme",
+          "titulo": "Estrutura Bípede Enorme",
+          "tipo": "passiva",
+          "descricao": "Tamanho Enorme, aproximadamente 9 m, Movimento 12 m e arma natural com dano-base 3d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+          "automatizada": false
+        }]
+      },
+      {
+        "id": "quadrupede-pequeno",
+        "titulo": "Chassi Quadrúpede Pequeno",
+        "postura": "quadrupede",
+        "tamanho": "Pequeno",
+        "medida_m": 0.7,
+        "vida": 3,
+        "mana": 0,
+        "movimento_fixo": 9,
+        "ajustes_atributos": { "forca": -3, "destreza": 4 },
+        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "dano_natural": "1d4",
+        "caracteristicas": [{
+          "id": "chassi-quadrupede-pequeno",
+          "titulo": "Estrutura Quadrúpede Pequena",
+          "tipo": "limitacao",
+          "descricao": "Tamanho Pequeno, aproximadamente 0,7 m, Movimento 9 m e arma natural com dano-base 1d4. Não possui manipuladores para empunhar armas ou ferramentas convencionais.",
+          "automatizada": false
+        }]
+      },
+      {
+        "id": "quadrupede-normal",
+        "titulo": "Chassi Quadrúpede Normal",
+        "postura": "quadrupede",
+        "tamanho": "Normal",
+        "medida_m": 1.5,
+        "vida": 5,
+        "mana": 0,
+        "movimento_fixo": 12,
+        "ajustes_atributos": { "forca": 0, "destreza": 3 },
+        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "dano_natural": "1d6",
+        "caracteristicas": [{
+          "id": "chassi-quadrupede-normal",
+          "titulo": "Estrutura Quadrúpede Normal",
+          "tipo": "limitacao",
+          "descricao": "Tamanho Normal, aproximadamente 1,5 m, Movimento 12 m e arma natural com dano-base 1d6. Não possui manipuladores para empunhar armas ou ferramentas convencionais.",
+          "automatizada": false
+        }]
+      },
+      {
+        "id": "quadrupede-grande",
+        "titulo": "Chassi Quadrúpede Grande",
+        "postura": "quadrupede",
+        "tamanho": "Grande",
+        "medida_m": 3,
+        "vida": 8,
+        "mana": 0,
+        "movimento_fixo": 15,
+        "ajustes_atributos": { "forca": 3, "destreza": 2 },
+        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "dano_natural": "1d8",
+        "caracteristicas": [{
+          "id": "chassi-quadrupede-grande",
+          "titulo": "Estrutura Quadrúpede Grande",
+          "tipo": "limitacao",
+          "descricao": "Tamanho Grande, aproximadamente 3 m, Movimento 15 m e arma natural com dano-base 1d8. Não possui manipuladores para empunhar armas ou ferramentas convencionais.",
+          "automatizada": false
+        }]
+      },
+      {
+        "id": "quadrupede-enorme",
+        "titulo": "Chassi Quadrúpede Enorme",
+        "postura": "quadrupede",
+        "tamanho": "Enorme",
+        "medida_m": 4.5,
+        "vida": 10,
+        "mana": 0,
+        "movimento_fixo": 15,
+        "ajustes_atributos": { "forca": 5, "destreza": 0 },
+        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "dano_natural": "2d6",
+        "caracteristicas": [{
+          "id": "chassi-quadrupede-enorme",
+          "titulo": "Estrutura Quadrúpede Enorme",
+          "tipo": "limitacao",
+          "descricao": "Tamanho Enorme, aproximadamente 4,5 m, Movimento 15 m e arma natural com dano-base 2d6. Não possui manipuladores para empunhar armas ou ferramentas convencionais.",
+          "automatizada": false
+        }]
+      }
+    ],
+    "modificacoes": [
+      {
+        "id": "propulsores",
+        "titulo": "Propulsores",
+        "categoria": "passiva",
+        "nivel_minimo": 9,
+        "descricao": "Receba deslocamento de voo 12 m. Se terminar o turno no ar sem poder continuar voando, você cai normalmente.",
+        "voo_m": 12,
+        "automatizada": false
+      },
+      {
+        "id": "blindagem",
+        "titulo": "Blindagem",
+        "categoria": "passiva",
+        "nivel_minimo": 1,
+        "descricao": "Placas metálicas reforçam o chassi. Receba +2 Defesa se for Pequeno, +3 se for Normal, +4 se for Grande ou +6 se for Enorme.",
+        "defesa_por_tamanho": { "Pequeno": 2, "Normal": 3, "Grande": 4, "Enorme": 6 },
+        "automatizada": true
+      },
+      {
+        "id": "combatente",
+        "titulo": "Combatente",
+        "categoria": "passiva",
+        "nivel_minimo": 1,
+        "postura_exigida": "bipede",
+        "descricao": "Você sabe usar armas simples e marciais. Exige chassi bípede.",
+        "automatizada": false
+      },
+      {
+        "id": "compartimento-de-carga",
+        "titulo": "Compartimento de Carga",
+        "categoria": "passiva",
+        "nivel_minimo": 1,
+        "descricao": "Seu chassi possui um compartimento equivalente a um mochilão, com capacidade adicional para quinze itens. Retirar um item guardado exige uma ação de movimento.",
+        "itens_adicionais": 15,
+        "automatizada": false
+      },
+      {
+        "id": "corpo-macico",
+        "titulo": "Corpo Maciço",
+        "categoria": "passiva",
+        "nivel_minimo": 1,
+        "descricao": "Receba Resistência 10 contra danos físicos comuns. Isso não reduz dano que declare ignorar Resistência nem efeitos internos, espirituais ou direcionados ao núcleo.",
+        "resistencia_fisica": 10,
+        "automatizada": false
+      },
+      {
+        "id": "escudo",
+        "titulo": "Escudo",
+        "categoria": "passiva",
+        "nivel_minimo": 12,
+        "descricao": "Um disco de força protege sua frente. Receba +4 Defesa e reduza pela metade o dano balístico. O mestre pode negar o benefício contra ataques que ignorem ou contornem o disco.",
+        "defesa": 4,
+        "reducao_dano_balistico": "metade",
+        "automatizada": true
+      },
+      {
+        "id": "esmagador",
+        "titulo": "Esmagador",
+        "categoria": "passiva",
+        "nivel_minimo": 1,
+        "descricao": "O dano-base de sua arma natural aumenta em uma categoria: 1d4 para 1d6, 1d6 para 1d8, 1d8 para 2d6, 2d6 para 3d6 e 3d6 para 4d6.",
+        "aumenta_dano_natural": 1,
+        "automatizada": false
+      },
+      {
+        "id": "resistente",
+        "titulo": "Resistente",
+        "categoria": "passiva",
+        "nivel_minimo": 10,
+        "descricao": "Receba +2 Vida máxima por Nível Total. Este valor substitui o antigo +5 por nível, incompatível com a progressão atual.",
+        "vida_por_nivel": 2,
+        "automatizada": true
+      },
+      {
+        "id": "maquina-viva",
+        "titulo": "Máquina Viva",
+        "categoria": "passiva",
+        "nivel_minimo": 1,
+        "descricao": "Partes orgânicas permitem que você recupere Vida por descanso e curas comuns ou mágicas. Enquanto esta modificação estiver instalada, você perde todas as imunidades de Corpo Artificial e não pode usar Reparo Mecânico.",
+        "automatizada": false
+      },
+      {
+        "id": "rodas",
+        "titulo": "Rodas",
+        "categoria": "passiva",
+        "nivel_minimo": 1,
+        "descricao": "Rodas substituem seus pés ou patas. Receba +9 m de Movimento terrestre.",
+        "movimento": 9,
+        "automatizada": true
+      },
+      {
+        "id": "laser",
+        "titulo": "Laser",
+        "categoria": "ativa",
+        "nivel_minimo": 15,
+        "passivas_exigidas": 3,
+        "tipo": "acao_completa",
+        "custo_mana": 8,
+        "alcance_m": 30,
+        "descricao": "Gaste uma ação completa e 8 Energia do Núcleo para disparar uma linha de 30 m. Faça um teste de Tecnologia e compare com os Reflexos de cada criatura na linha. Em falha, ela sofre 8d10+8 de dano de raio; em sucesso, evita o dano. Depois do disparo, o Laser precisa de 1d4+1 rodadas para recarregar.",
+        "dano": "8d10+8",
+        "recarga_rodadas": "1d4+1",
+        "automatizada": false
+      },
+      {
+        "id": "deteccao",
+        "titulo": "Detecção",
+        "categoria": "ativa",
+        "nivel_minimo": 1,
+        "passivas_exigidas": 3,
+        "tipo": "acao",
+        "custo_mana": 2,
+        "alcance_m": 20,
+        "duracao": "cena",
+        "descricao": "Gaste uma ação e 2 Energia do Núcleo para ativar sensores até o fim da cena. Você sabe quando seres se movem a até 20 m e a direção aproximada do movimento, mas não descobre identidade, quantidade, distância exata nem seres completamente imóveis.",
+        "automatizada": false
+      },
+      {
+        "id": "eletrificar",
+        "titulo": "Eletrificar",
+        "categoria": "ativa",
+        "nivel_minimo": 5,
+        "passivas_exigidas": 3,
+        "tipo": "reacao",
+        "custo_mana": 5,
+        "alcance_m": 5,
+        "descricao": "Uma vez por rodada, quando sofrer um ataque corpo a corpo, gaste uma reação e 5 Energia do Núcleo para descarregar eletricidade. Faça um teste de Tecnologia contra os Reflexos de todas as outras criaturas a até 5 m. Em falha, cada uma sofre 3d8+4 de dano de raio; em sucesso, sofre metade.",
+        "dano": "3d8+4",
+        "frequencia": "uma vez por rodada",
+        "automatizada": false
+      },
+      {
+        "id": "garra-extensora",
+        "titulo": "Garra Extensora",
+        "categoria": "ativa",
+        "nivel_minimo": 1,
+        "passivas_exigidas": 3,
+        "tipo": "acao",
+        "custo_mana": 2,
+        "alcance_m": 12,
+        "descricao": "Gaste uma ação e 2 Energia do Núcleo para disparar uma garra presa a cabos contra uma criatura ou objeto a até 12 m. Contra uma criatura, faça Pontaria contra Reflexos; em sucesso, ela fica agarrada enquanto o cabo permanecer preso. Ela pode gastar uma ação e superar 10 + seu bônus de Pontaria com Atletismo ou Acrobacia para escapar. Depois de solta ou recolhida, a garra exige uma ação completa para recarregar.",
+        "automatizada": false
+      },
+      {
+        "id": "modo-veiculo",
+        "titulo": "Modo Veículo",
+        "categoria": "ativa",
+        "nivel_minimo": 1,
+        "passivas_exigidas": 3,
+        "tipo": "movimento",
+        "custo_mana": 2,
+        "duracao": "ate_desativar",
+        "descricao": "Gaste uma ação de movimento e 2 Energia do Núcleo para assumir ou abandonar uma forma de veículo. Você transporta uma criatura do seu tamanho, duas de uma categoria menor, quatro de duas categorias menores e assim por diante. Mudar de forma expulsa passageiros e não altera seus atributos, Movimento ou Defesa.",
+        "automatizada": false
+      },
+      {
+        "id": "pulso-estridente",
+        "titulo": "Pulso Estridente",
+        "categoria": "ativa",
+        "nivel_minimo": 4,
+        "passivas_exigidas": 3,
+        "tipo": "acao",
+        "custo_mana": 6,
+        "alcance_m": 6,
+        "usos": 1,
+        "recuperacao": "cena",
+        "descricao": "Uma vez por cena, gaste uma ação e 6 Energia do Núcleo para liberar um pulso sônico. Faça Tecnologia contra a Fortitude de cada outra criatura a até 6 m. Em falha, ela fica atordoada por 1d4+1 rodadas; em sucesso, não sofre efeito.",
+        "automatizada": false
+      },
+      {
+        "id": "punho-voador",
+        "titulo": "Punho Voador",
+        "categoria": "ativa",
+        "nivel_minimo": 1,
+        "passivas_exigidas": 3,
+        "postura_exigida": "bipede",
+        "tipo": "acao",
+        "custo_mana": 2,
+        "alcance_m": 12,
+        "descricao": "Gaste uma ação e 2 Energia do Núcleo para disparar um punho. Faça um ataque de Pontaria a até 12 m usando o dano-base de sua arma natural; o punho retorna imediatamente depois do ataque. Exige chassi bípede.",
+        "automatizada": false
+      },
+      {
+        "id": "raio-inferno",
+        "titulo": "Raio Inferno",
+        "categoria": "ativa",
+        "nivel_minimo": 4,
+        "passivas_exigidas": 3,
+        "tipo": "acao",
+        "custo_mana": 4,
+        "alcance_m": 20,
+        "descricao": "Gaste uma ação e 4 Energia do Núcleo para disparar um raio quente contra uma criatura a até 20 m. Faça Pontaria contra Reflexos. Em falha, ela sofre 4d6+4 de dano de fogo; em sucesso, sofre metade.",
+        "dano": "4d6+4",
+        "automatizada": false
+      }
+    ],
+    "recursos_provisorios": false
   },
-
   {
     "id": "clone",
     "tipo": "raca",
     "titulo": "Clone",
     "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
+    "arvores": ["aethel", "ousias", "keryx", "haemus", "mulher-carmesim"],
     "arvore": null,
-    "legado_ascensao_inicial": 1,
-    "pendente": true,
-    "nota_pendente": "Sem PDF específico no material. Aguardando Pedro criar/encontrar a ficha."
+    "origens_compativeis": [
+      { "arvore_id": "aethel", "titulo": "Gênese", "metodo": "reconstrução pela Origem" },
+      { "arvore_id": "ousias", "titulo": "Alétheia", "metodo": "reprodução da Essência" },
+      { "arvore_id": "keryx", "titulo": "A.X.I.S", "metodo": "clonagem tecnológica" },
+      { "arvore_id": "haemus", "titulo": "Anima", "metodo": "cultivo de um corpo vivo" },
+      { "arvore_id": "mulher-carmesim", "titulo": "Limiar", "metodo": "reconstrução pelo sangue" }
+    ],
+    "transformacao_em_qualquer_arvore": true,
+    "vida": 3,
+    "mana": 3,
+    "movimento": 0,
+    "escolha_atributos": {
+      "total": 2,
+      "bonus_por_escolha": 2,
+      "distintos": true,
+      "limite": 20,
+      "campo": "atributosRaciais",
+      "titulo": "Atributo da Matriz"
+    },
+    "legados_adicionais": 1,
+    "rotulo_variante": "Projeto de Clonagem",
+    "descricao_variantes": "Escolha um único Projeto. Ele representa a finalidade para a qual o Clone foi criado.",
+    "fisiologia": [
+      "É biologicamente vivo e precisa respirar, alimentar-se, dormir e descansar normalmente.",
+      "A aparência pode reproduzir outra raça, mas o Clone possui somente as características raciais deste pacote."
+    ],
+    "caracteristicas": [
+      {
+        "id": "matriz-aperfeicoada",
+        "titulo": "Matriz Aperfeiçoada",
+        "tipo": "criacao",
+        "descricao": "Escolha dois atributos diferentes. Cada um recebe +2, respeitando o limite natural 20.",
+        "automatizada": true
+      },
+      {
+        "id": "copia-biometrica",
+        "titulo": "Cópia Biométrica",
+        "tipo": "passiva",
+        "descricao": "Você reproduz aparência, voz, digitais, retina e outras características físicas do Original. Receba vantagem em Enganação para se passar por ele quando aparência, voz ou identificação biométrica forem as evidências principais. Pessoas que conheçam intimamente o Original podem usar Intuição para perceber diferenças de comportamento. Você não copia automaticamente raça, classe, Habilidades, Poderes, Legados, alma, pactos, bênçãos, Fragmentos de Arkarin ou lembranças completas.",
+        "automatizada": false
+      },
+      {
+        "id": "memorias-residuais",
+        "titulo": "Memórias Residuais",
+        "tipo": "informacao",
+        "descricao": "Uma vez por sessão, pergunte se possui uma lembrança relacionada ao Original. Se ele conhecia a informação no momento da clonagem, o mestre entrega uma memória curta, verdadeira e incompleta: imagem, frase, sensação, rosto ou localização aproximada. Isso não fornece senhas completas, segredos sem contexto ou conhecimentos posteriores à clonagem.",
+        "usos": 1,
+        "recuperacao": "sessao",
+        "automatizada": false
+      },
+      {
+        "id": "regeneracao-programada",
+        "titulo": "Regeneração Programada",
+        "tipo": "reacao",
+        "descricao": "Uma vez por cena, quando sofrer dano e ficar com metade da Vida máxima ou menos, gaste uma reação e 4 Mana para recuperar 2d6 + Mod.Constituição de Vida, com mínimo de 2d6.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "custo_mana": 4,
+        "cura": "2d6 + Mod.Constituição",
+        "automatizada": false
+      },
+      {
+        "id": "projeto-clonagem",
+        "titulo": "Projeto de Clonagem",
+        "tipo": "escolha",
+        "descricao": "Escolha Réplica Perfeita, Arquivo Vivo, Organismo Otimizado ou Série Contínua. Você recebe somente as características do Projeto escolhido.",
+        "automatizada": false
+      }
+    ],
+    "variantes": [
+      {
+        "id": "replica-perfeita",
+        "titulo": "Réplica Perfeita",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "identidade-implantada",
+            "titulo": "Identidade Implantada",
+            "tipo": "rerrolagem",
+            "descricao": "Receba três rerrolagens por sessão, utilizáveis em Enganação, Intuição ou testes de conhecimento diretamente relacionados ao Original. Memórias Residuais pode ser usada duas vezes por sessão, em vez de uma.",
+            "usos": 3,
+            "recuperacao": "sessao",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "arquivo-vivo",
+        "titulo": "Arquivo Vivo",
+        "vida": 0,
+        "mana": 0,
+        "escolha_pericias": {
+          "total": 2,
+          "campo": "periciasProjeto",
+          "graus": 1
+        },
+        "caracteristicas": [
+          {
+            "id": "conhecimento-implantado",
+            "titulo": "Conhecimento Implantado",
+            "tipo": "treinamento",
+            "descricao": "Escolha duas perícias. Cada uma sobe um Grau de Treinamento, respeitando o grau máximo permitido pelo Nível Total. Receba duas rerrolagens por sessão, utilizáveis somente nessas perícias.",
+            "usos": 2,
+            "recuperacao": "sessao",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "organismo-otimizado",
+        "titulo": "Organismo Otimizado",
+        "vida": 0,
+        "mana": 0,
+        "vida_por_nivel": 1,
+        "caracteristicas": [
+          {
+            "id": "corpo-otimizado",
+            "titulo": "Corpo Otimizado",
+            "tipo": "passiva",
+            "descricao": "Receba +1 Vida máxima por Nível Total e vantagem em Fortitude contra doenças, fadiga e venenos. Regeneração Programada recupera 3d6 + Mod.Constituição de Vida, em vez de 2d6.",
+            "automatizada": true
+          }
+        ]
+      },
+      {
+        "id": "serie-continua",
+        "titulo": "Série Contínua",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "corpo-reserva",
+            "titulo": "Corpo Reserva",
+            "tipo": "retorno",
+            "descricao": "Você pode manter um único corpo reserva preparado em instalação apropriada. Quando sua morte for concluída, sua consciência desperta nele após 24 horas, se a instalação e o corpo continuarem intactos. Equipamentos não são transportados. O novo corpo conserva atributos, classes e progressão, mas possui somente as memórias registradas na última sincronização.",
+            "automatizada": false
+          }
+        ]
+      }
+    ],
+    "recursos_provisorios": false
   },
-
   {
-    "id": "viajante",
+    "id": "errante",
     "tipo": "raca",
-    "titulo": "Viajante",
+    "titulo": "Errante",
     "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
+    "arvores": ["aethel", "ousias", "keryx", "haemus", "ignis", "moros", "aperion", "chronus", "erebus", "mulher-carmesim"],
     "arvore": null,
-    "legado_ascensao_inicial": 1,
-    "pre_requisito": "Ser de outro universo (evento narrativo: travessia dimensional)",
-    "tamanho": "normal",
-    "modificadores_atributos": {
-      "nota": "Atributos recalculados após a travessia"
+    "origem_externa": true,
+    "acesso_duplo_classes_exclusivas": true,
+    "vida": 3,
+    "mana": 3,
+    "movimento": 0,
+    "escolha_atributos": {
+      "total": 1,
+      "bonus_por_escolha": 4,
+      "distintos": true,
+      "limite": 20,
+      "campo": "atributosRaciais",
+      "titulo": "Atributo Marcante"
     },
-    "equipamento_inicial": {
-      "itens_do_universo_original": "Máximo 5 itens",
-      "habilidades_preservadas": "Máximo 3 habilidades do universo original",
-      "lunaris": 0
+    "legados_adicionais": 1,
+    "campos_origem": [
+      { "id": "rpgOrigem", "titulo": "Mundo ou RPG de origem" },
+      { "id": "campanhaOrigem", "titulo": "Campanha de origem" },
+      { "id": "arvoreOrigemId", "titulo": "Árvore de origem equivalente" }
+    ],
+    "escolha_pericias": {
+      "total": 3,
+      "campo": "periciasMemoria",
+      "titulo": "Perícia das Memórias"
     },
-    "processo_travessia": [
-      "Ancoragem",
-      "Ruptura",
-      "Travessia",
-      "Reestruturação"
+    "caracteristicas": [
+      {
+        "id": "identidade-preservada",
+        "titulo": "Identidade Preservada",
+        "tipo": "conversao",
+        "descricao": "Conserve nome, aparência, personalidade, lembranças, relações, cicatrizes, objetivos e reputação do personagem original quando fizerem sentido. Nível, experiência, atributos, raça, classe, poderes, dinheiro e equipamentos são reconstruídos pelas regras e pelo patamar da campanha atual; nenhum número de outro sistema é importado diretamente.",
+        "automatizada": false
+      },
+      {
+        "id": "memorias-outra-campanha",
+        "titulo": "Memórias de Outra Campanha",
+        "tipo": "rerrolagem",
+        "descricao": "Escolha três perícias relacionadas ao que fazia na campanha anterior. Receba três rerrolagens por sessão, compartilhadas entre essas perícias. Depois de rerrolar, mantenha o novo resultado.",
+        "usos": 3,
+        "recuperacao": "sessao",
+        "automatizada": false
+      },
+      {
+        "id": "assinatura-remanescente",
+        "titulo": "Assinatura Remanescente",
+        "tipo": "escolha",
+        "descricao": "Escolha uma Habilidade, magia, técnica ou poder marcante do personagem original, dê a ela um nome e converta-a para um único formato publicado. Nome, aparência e narrativa são preservados, mas somente a mecânica do formato escolhido funciona.",
+        "automatizada": false
+      },
+      {
+        "id": "legado-outra-historia",
+        "titulo": "Legado de Outra História",
+        "tipo": "aquisicao",
+        "descricao": "Receba um Legado adicional para representar uma arma, companheiro, bênção, mutação, técnica permanente ou artefato que atravessou a mudança. Use as regras de um Legado existente, embora seu nome e sua aparência possam ser diferentes.",
+        "automatizada": false
+      },
+      {
+        "id": "sobrevivente-outra-historia",
+        "titulo": "Sobrevivente de Outra História",
+        "tipo": "reacao",
+        "descricao": "Uma vez por sessão, quando um dano deixaria você com 0 Vida ou menos, sua Vida torna-se 1. Isso não impede morte instantânea, destruição da alma ou uma consequência narrativa que não seja causada por dano.",
+        "usos": 1,
+        "recuperacao": "sessao",
+        "automatizada": false
+      },
+      {
+        "id": "dupla-proveniencia",
+        "titulo": "Dupla Proveniência",
+        "tipo": "acesso",
+        "descricao": "Você pode cumprir os requisitos da classe exclusiva de sua Árvore atual ou de sua Árvore de origem equivalente. O acesso não concede nenhuma classe automaticamente e o limite normal de uma classe especial permanece; portanto, escolha no máximo uma das duas. Mudar a Árvore atual substitui apenas o vínculo atual e nunca acumula acesso a Árvores anteriormente visitadas.",
+        "automatizada": true
+      }
     ],
-    "habilidades": [
-      "Mantém até 5 itens e 3 habilidades do universo original"
+    "assinaturas": [
+      {
+        "id": "ofensiva",
+        "titulo": "Ofensiva",
+        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para usar o teste apropriado contra a resistência definida pelo mestre. Em falha, cause 3d6 + Mod.Atributo de dano; em sucesso, cause metade.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "custo_mana": 5,
+        "dano": "3d6 + Mod.Atributo"
+      },
+      {
+        "id": "defensiva",
+        "titulo": "Defensiva",
+        "descricao": "Uma vez por cena, quando sofrer dano, gaste uma reação e 4 Mana para reduzir esse dano em 2d6 + Mod.Atributo, até o mínimo de 0.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "custo_mana": 4,
+        "reducao": "2d6 + Mod.Atributo"
+      },
+      {
+        "id": "restauradora",
+        "titulo": "Restauradora",
+        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para tocar uma criatura e recuperar 2d6 + Mod.Atributo de Vida.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "custo_mana": 5,
+        "cura": "2d6 + Mod.Atributo"
+      },
+      {
+        "id": "movimento",
+        "titulo": "Movimento",
+        "descricao": "Uma vez por cena, gaste seu Movimento e 4 Mana para realizar o deslocamento especial preservado ou se teleportar para um espaço desocupado que enxergue a até 12 m. Isso não provoca reações.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "custo_mana": 4,
+        "alcance_m": 12
+      },
+      {
+        "id": "controle",
+        "titulo": "Controle",
+        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para usar o teste apropriado contra uma resistência definida pelo mestre. Em falha, aplique uma condição leve aprovada pelo mestre até o final do próximo turno do alvo; em sucesso, nenhuma condição é aplicada.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "custo_mana": 5
+      },
+      {
+        "id": "transformacao",
+        "titulo": "Transformação",
+        "descricao": "Uma vez por sessão, gaste uma ação e 6 Mana para assumir a forma preservada durante três rodadas. Receba +2 Defesa e vantagem em duas perícias relacionadas à forma, escolhidas quando a Assinatura for aprovada. A forma não concede outros efeitos.",
+        "usos": 1,
+        "recuperacao": "sessao",
+        "custo_mana": 6,
+        "duracao_rodadas": 3,
+        "defesa": 2
+      }
     ],
-    "condicoes": [
-      "Perde poderes e memórias na travessia",
-      "Atributos recalculados após a reestruturação"
-    ]
+    "conversao": [
+      { "origem": "Nível e experiência", "destino": "Ajustados ao Nível Total da campanha atual" },
+      { "origem": "Atributos", "destino": "Redistribuídos pelas regras atuais" },
+      { "origem": "Raça antiga", "destino": "Aparência preservada; somente as mecânicas do Errante funcionam" },
+      { "origem": "Classe antiga", "destino": "Representada pelas classes atuais" },
+      { "origem": "Poder marcante", "destino": "Convertido em uma Assinatura Remanescente" },
+      { "origem": "Item importante", "destino": "Pode ser representado pelo Legado adicional" },
+      { "origem": "Dinheiro e equipamentos", "destino": "Ajustados pelo mestre à campanha atual" }
+    ],
+    "recursos_provisorios": false
   },
-
   {
     "id": "amalgamo",
     "tipo": "raca",
-    "titulo": "Amalgamo",
+    "titulo": "Amálgamo",
     "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
+    "arvores": ["aethel", "haemus", "ignis", "erebus", "mulher-carmesim"],
     "arvore": null,
-    "legado_ascensao_inicial": 1,
-    "pendente": true,
-    "nota_pendente": "Sem PDF específico no material. Aguardando Pedro criar/encontrar a ficha."
+    "transformacao_em_qualquer_arvore": true,
+    "origens_compativeis": [
+      { "arvore_id": "aethel", "titulo": "Gênese", "metodo": "fusão pela Origem" },
+      { "arvore_id": "haemus", "titulo": "Anima", "metodo": "fusão de organismos vivos" },
+      { "arvore_id": "ignis", "titulo": "Vórtice", "metodo": "convergência pela inconstância" },
+      { "arvore_id": "erebus", "titulo": "Abismo", "metodo": "união de existências corrompidas pelo Vazio" },
+      { "arvore_id": "mulher-carmesim", "titulo": "Limiar", "metodo": "fusão de corpos, sangue ou almas" }
+    ],
+    "vida": 5,
+    "mana": 1,
+    "movimento": 0,
+    "ajustes_atributos": {
+      "constituicao": 2,
+      "fluxo": 2
+    },
+    "limites_atributos": {
+      "constituicao": 20,
+      "fluxo": 20
+    },
+    "fragmentos_config": {
+      "conhecidos_iniciais": 3,
+      "conhecidos_maximo": 6,
+      "expressos": 2,
+      "surto_adicional": 1
+    },
+    "fisiologia": [
+      "É um ser vivo e pode ser tratado normalmente com Medicina.",
+      "Seu corpo reúne diferentes criaturas, corpos, almas ou essências, mas não acumula os pacotes raciais das partes que o formaram."
+    ],
+    "caracteristicas": [
+      {
+        "id": "anatomia-plural",
+        "titulo": "Anatomia Plural",
+        "tipo": "rerrolagem",
+        "descricao": "Uma vez por cena, depois de falhar em Fortitude contra doença, veneno, fadiga ou alteração corporal, rerrole o teste e mantenha o novo resultado.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "automatizada": false
+      },
+      {
+        "id": "alma-coral",
+        "titulo": "Alma Coral",
+        "tipo": "rerrolagem",
+        "descricao": "Uma vez por sessão, depois de falhar em Vontade, rerrole o teste e mantenha o novo resultado. Isso não concede acesso automático às memórias completas dos seres constituintes.",
+        "usos": 1,
+        "recuperacao": "sessao",
+        "automatizada": false
+      },
+      {
+        "id": "reconfiguracao-visceral",
+        "titulo": "Reconfiguração Visceral",
+        "tipo": "reacao",
+        "descricao": "Uma vez por cena, depois de sofrer dano, gaste uma reação e 4 Mana para receber Resistência 5 contra o tipo daquele dano até o começo do seu próximo turno, incluindo o dano que ativou a reação.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "custo_mana": 4,
+        "resistencia": 5,
+        "automatizada": false
+      },
+      {
+        "id": "assimilacao-controlada",
+        "titulo": "Assimilação Controlada",
+        "tipo": "progressao",
+        "descricao": "Comece conhecendo três Fragmentos. Um acontecimento narrativo autorizado pelo mestre pode desbloquear outro Fragmento da lista, até o máximo de seis conhecidos. Derrotar, tocar ou consumir uma criatura não concede automaticamente características, e poderes raciais completos nunca são copiados.",
+        "automatizada": false
+      },
+      {
+        "id": "surto-convergencia",
+        "titulo": "Surto de Convergência",
+        "tipo": "acao",
+        "descricao": "Uma vez por sessão, gaste uma ação e 6 Mana para expressar um terceiro Fragmento conhecido durante três rodadas. Quando terminar, ele deixa de funcionar, todo benefício temporário ou excesso de Mana é removido e você recebe 1 ponto de Cansaço.",
+        "usos": 1,
+        "recuperacao": "sessao",
+        "custo_mana": 6,
+        "duracao_rodadas": 3,
+        "automatizada": false
+      }
+    ],
+    "fragmentos": [
+      {
+        "id": "carapaca",
+        "titulo": "Carapaça",
+        "descricao": "Receba +3 Defesa.",
+        "defesa": 3,
+        "automatizada": true
+      },
+      {
+        "id": "predador",
+        "titulo": "Predador",
+        "descricao": "Receba uma arma natural de dano-base 1d8 e vantagem em Sobrevivência para rastrear criaturas feridas.",
+        "dano_natural": "1d8",
+        "automatizada": false
+      },
+      {
+        "id": "regenerador",
+        "titulo": "Regenerador",
+        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para recuperar 3d6 + Mod.Constituição de Vida.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "custo_mana": 5,
+        "cura": "3d6 + Mod.Constituição",
+        "automatizada": false
+      },
+      {
+        "id": "alado",
+        "titulo": "Alado",
+        "descricao": "Receba deslocamento de voo igual ao seu Movimento. O Fragmento não funciona enquanto estiver usando equipamento pesado.",
+        "automatizada": false
+      },
+      {
+        "id": "abissal",
+        "titulo": "Abissal",
+        "descricao": "Você pode respirar debaixo d'água, enxerga normalmente em escuridão natural e recebe deslocamento de natação igual ao Movimento.",
+        "automatizada": false
+      },
+      {
+        "id": "membros-multiplos",
+        "titulo": "Membros Múltiplos",
+        "descricao": "Receba vantagem para agarrar ou escapar de agarrões e uma interação adicional com objeto por turno. Isso não concede ataques, ações ou reações adicionais.",
+        "automatizada": false
+      },
+      {
+        "id": "orgao-fluxo",
+        "titulo": "Órgão de Fluxo",
+        "descricao": "Receba +4 Mana máxima. Uma vez por cena, reduza um custo de Mana em 2, até o mínimo de 1. Se o Fragmento deixar de ser expresso, perca a Mana atual que ultrapassar o novo máximo.",
+        "mana": 4,
+        "automatizada": true
+      },
+      {
+        "id": "massa-colossal",
+        "titulo": "Massa Colossal",
+        "descricao": "Receba +4 em Fortitude, capacidade de carga dobrada e vantagem contra empurrões e quedas provocadas por outras criaturas.",
+        "ajustes_pericias": { "fortitude": 4 },
+        "automatizada": true
+      }
+    ],
+    "recursos_provisorios": false
   },
-
   {
     "id": "bruxa",
     "tipo": "raca",
     "titulo": "Bruxa",
     "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
+    "arvores": ["ousias", "haemus", "ignis", "chronus", "erebus", "mulher-carmesim"],
     "arvore": null,
-    "legado_ascensao_inicial": 1,
-    "pendente": true,
-    "nota_pendente": "A menção 'usuários de Arkania são as Bruxas, marcadas por estrelas no pulso' aparece na lore, mas a ficha de raça específica não foi encontrada nos PDFs. Aguardando Pedro criar."
+    "transformacao_em_qualquer_arvore": true,
+    "origens_compativeis": [
+      { "arvore_id": "ousias", "titulo": "Alétheia", "metodo": "pacto firmado pela Essência" },
+      { "arvore_id": "haemus", "titulo": "Anima", "metodo": "bruxaria ligada à vitalidade" },
+      { "arvore_id": "ignis", "titulo": "Vórtice", "metodo": "transformação pela inconstância" },
+      { "arvore_id": "chronus", "titulo": "Éon", "metodo": "ritual ou pacto através do tempo" },
+      { "arvore_id": "erebus", "titulo": "Abismo", "metodo": "contato prolongado com o Vazio" },
+      { "arvore_id": "mulher-carmesim", "titulo": "Limiar", "metodo": "pacto, ritual ou força ligada ao sangue e à morte" }
+    ],
+    "vida": 1,
+    "mana": 5,
+    "movimento": 0,
+    "ajustes_atributos": {
+      "inteligencia": 2,
+      "fluxo": 2
+    },
+    "limites_atributos": {
+      "inteligencia": 20,
+      "fluxo": 20
+    },
+    "ajustes_pericias": {
+      "misticismo": 4
+    },
+    "legados_adicionais": 1,
+    "rotulo_variante": "Instrumento de Bruxaria",
+    "descricao_variantes": "Escolha somente um Instrumento. Sua aparência pode variar, mas apenas a regra do Instrumento escolhido funciona.",
+    "maldicoes_config": {
+      "conhecidas_base": 3,
+      "campo": "maldicoesConhecidasIds"
+    },
+    "fisiologia": [
+      "Bruxa é uma natureza mágica adquirida, não uma profissão nem uma identidade de gênero.",
+      "Permanece um ser vivo, salvo transformação narrativa posterior declarada pelo mestre."
+    ],
+    "caracteristicas": [
+      {
+        "id": "olhar-bruxo",
+        "titulo": "Olhar Bruxo",
+        "tipo": "sensorial",
+        "descricao": "Você percebe a presença e a direção aproximada de maldições, pactos, possessões e rituais ativos a até 15 m, mas não identifica automaticamente o efeito. Receba vantagem para resistir a maldições, possessões e tentativas de controlar sua alma.",
+        "alcance_m": 15,
+        "automatizada": false
+      },
+      {
+        "id": "preco-bruxaria",
+        "titulo": "Preço da Bruxaria",
+        "tipo": "substituicao-custo",
+        "descricao": "Uma vez por cena, quando não possuir Mana suficiente para uma característica racial, substitua até 3 pontos ausentes por 2 de Vida para cada ponto. Esse custo não pode ser reduzido, ignora Resistência, não pode deixar você com menos de 1 Vida e não paga custos de classes, itens ou Legados.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "mana_substituivel_maximo": 3,
+        "vida_por_mana": 2,
+        "automatizada": false
+      },
+      {
+        "id": "maldicao-tecida",
+        "titulo": "Maldição Tecida",
+        "tipo": "acao",
+        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para amaldiçoar uma criatura a até 15 m. Faça Misticismo contra a Vontade dela. Se a criatura falhar, a Maldição dura três rodadas; se resistir, dura somente até o final do próximo turno dela. Apenas uma Maldição Tecida da mesma Bruxa pode afetar uma criatura; uma nova substitui a anterior.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "custo_mana": 5,
+        "alcance_m": 15,
+        "teste": "misticismo_vs_vontade",
+        "automatizada": false
+      },
+      {
+        "id": "grande-saba",
+        "titulo": "Grande Sabá",
+        "tipo": "acao",
+        "descricao": "Uma vez por sessão, gaste uma ação e 8 Mana para escolher uma Maldição conhecida e até Mod.Fluxo criaturas a até 15 m, com mínimo de uma. Faça um único teste de Misticismo e compare com a Vontade de cada alvo. A duração é determinada separadamente pelo resultado de cada criatura, seguindo Maldição Tecida.",
+        "usos": 1,
+        "recuperacao": "sessao",
+        "custo_mana": 8,
+        "alcance_m": 15,
+        "teste": "misticismo_vs_vontade",
+        "automatizada": false
+      }
+    ],
+    "maldicoes": [
+      {
+        "id": "infortunio",
+        "titulo": "Infortúnio",
+        "descricao": "A criatura sofre desvantagem no primeiro teste que realizar em cada turno."
+      },
+      {
+        "id": "enfraquecimento",
+        "titulo": "Enfraquecimento",
+        "descricao": "A criatura causa 2 pontos a menos de dano em cada ataque, até o mínimo de 0."
+      },
+      {
+        "id": "passos-presos",
+        "titulo": "Passos Presos",
+        "descricao": "O Movimento da criatura é reduzido à metade e ela não pode realizar reações de movimento."
+      },
+      {
+        "id": "lingua-selada",
+        "titulo": "Língua Selada",
+        "descricao": "A criatura não pode usar características que exijam fala, canto ou palavras de ativação."
+      },
+      {
+        "id": "definhamento",
+        "titulo": "Definhamento",
+        "descricao": "As recuperações de Vida da criatura são reduzidas pela metade e ela sofre 1d6 de dano no começo do turno."
+      },
+      {
+        "id": "pele-exposta",
+        "titulo": "Pele Exposta",
+        "descricao": "Ao aplicar, escolha um tipo de dano. A criatura perde Resistência contra ele e sofre +2 desse dano sempre que for atingida por ele."
+      }
+    ],
+    "variantes": [
+      {
+        "id": "familiar",
+        "titulo": "Familiar",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "familiar-bruxo",
+            "titulo": "Familiar",
+            "tipo": "companheiro",
+            "descricao": "Você possui uma criatura Minúscula não combatente. Pode compartilhar os sentidos dela e fazer características de toque partirem dela enquanto estiver a até 18 m. Se sofrer dano, o Familiar desaparece e retorna no próximo descanso.",
+            "alcance_m": 18,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "grimorio",
+        "titulo": "Grimório",
+        "vida": 0,
+        "mana": 0,
+        "maldicoes_conhecidas": 5,
+        "caracteristicas": [
+          {
+            "id": "grimorio-bruxo",
+            "titulo": "Grimório",
+            "tipo": "rerrolagem",
+            "descricao": "Conheça cinco Maldições, em vez de três. Uma vez por cena, depois de fazer um teste de Misticismo, rerrole-o e mantenha o novo resultado.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "caldeirao",
+        "titulo": "Caldeirão",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "caldeirao-bruxo",
+            "titulo": "Caldeirão",
+            "tipo": "preparacao",
+            "descricao": "Ao terminar um descanso, prepare duas doses. Ao preparar cada uma, escolha se ela recupera 2d6 + Mod.Inteligência de Vida ou 2d4 de Mana. As doses expiram no próximo descanso e não podem ser acumuladas.",
+            "doses": 2,
+            "recuperacao_vida": "2d6 + Mod.Inteligência",
+            "recuperacao_mana": "2d4",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "vassoura",
+        "titulo": "Vassoura",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "voo-da-vassoura",
+            "titulo": "Vassoura",
+            "tipo": "acao",
+            "descricao": "Uma vez por cena, gaste uma ação e 3 Mana para receber deslocamento de voo igual ao Movimento até o final da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 3,
+            "automatizada": false
+          }
+        ]
+      }
+    ],
+    "recursos_provisorios": false
   },
-
   {
     "id": "entidade",
     "tipo": "raca",
-    "titulo": "Entidade *",
+    "titulo": "Entidade",
     "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
+    "arvores": [],
     "arvore": null,
-    "legado_ascensao_inicial": 1,
-    "pendente": true,
-    "nota_pendente": "Sem PDF específico. O asterisco (*) ao lado do nome tem significado ainda não definido — verificar com Pedro."
+    "vida": 0,
+    "mana": 0,
+    "indisponivel": true,
+    "motivo_indisponivel": "Raça deliberadamente adiada por exigir um pacote próprio mais complexo antes de poder ser escolhida.",
+    "recursos_provisorios": true
   }
 ]

@@ -1,8 +1,8 @@
 {
   "tipo": "regras-mestre",
-  "versao": "1.0",
+  "versao": "1.1",
   "titulo": "Ferramentas do Mestre",
-  "resumo": "Referências matemáticas para DTs, encontros, dano, progressão e pressão de recursos.",
+  "resumo": "Referências matemáticas para DTs, encontros, dano, progressão e pressão de recursos da versão técnica atual.",
   "destaques": [
     ["Grupo de referência", "4–5 jogadores"],
     ["Combate comum", "4–5 rodadas"],
@@ -79,7 +79,7 @@
       "tipo": "texto",
       "paragrafos": [
         "As porcentagens de dano usam a Vida do alvo apropriado, normalmente um personagem de linha de frente para ataques físicos e um personagem vulnerável para ameaças que punem posicionamento.",
-        "Esses valores são referências provisórias até Arsenal, Bestiário e todos os Poderes de Classe terem dano, ação, alcance e custo definidos. Registre o resultado real e ajuste primeiro a Vida do encontro, depois o dano."
+        "Esses valores são referências provisórias até Arsenal, Bestiário e as Habilidades de Classe voltarem a ter dano, ação, alcance e custo definidos. Registre o resultado real e ajuste primeiro a Vida do encontro, depois o dano."
       ]
     },
     {
@@ -118,16 +118,52 @@
       ]
     },
     {
-      "titulo": "Auditoria de habilidades",
+      "titulo": "Conteúdo adiado de raças e classes",
       "tipo": "lista",
       "itens": [
-        "Ação extra: exige reação, Mana, uma vez por cena ou gatilho raro; nunca é passiva e ilimitada.",
-        "Multiplicador de dano: não acumula com crítico e precisa de uso limitado.",
-        "Redução de dano fixa: compare em três rodadas e impeça acumular fontes equivalentes.",
-        "Controle: todo efeito forte oferece resistência e duração curta; chefes não perdem cenas inteiras por uma única falha.",
-        "Bônus de ataque e Defesa acima de +2 precisam ser temporários, restritos ou substituir vantagem.",
-        "Imunidade total deve virar vantagem, redução ou sucesso melhorado, salvo quando for puramente ambiental.",
-        "Classe especial pode quebrar uma regra específica, mas seus níveis consomem nível total e ela só entra a partir do nível 15."
+        "Raças comuns definem ajustes iniciais de Vida e Mana, fisiologia e características próprias; efeitos calculáveis são aplicados automaticamente pela ficha.",
+        "Nesta versão, classes definem somente Vida e Mana por nível e seguem a tabela universal do nível 1 ao 20.",
+        "Toda classe usa um orçamento de 7 pontos por nível, distribuído entre 5 Vida/2 Mana, 4 Vida/3 Mana ou 3 Vida/4 Mana.",
+        "Habilidades e Poderes do livro não produzem efeito mecânico até serem revisados e publicados novamente.",
+        "Ao recuperar esse conteúdo, cada efeito precisa declarar ação, alcance, custo, duração, frequência e resistência quando aplicável.",
+        "Classes especiais continuam exigindo nível total 15, consomem nível normalmente e não contam no limite de duas classes comuns.",
+        "Classes gerais podem ser obtidas em qualquer Árvore; classes exclusivas só podem ser obtidas por personagens da Árvore indicada.",
+        "Cada Árvore possui uma classe especial exclusiva, enquanto Viajante é uma classe especial geral.",
+        "Raças especiais são recompensas ou transformações deliberadamente acima da curva e somente o mestre pode autorizar seu uso.",
+        "Uma conquista de outra campanha pode justificar começar com uma raça especial, mas nunca concede esse acesso automaticamente.",
+        "Ao adquirir uma raça especial, ela substitui o pacote racial anterior; características de duas raças não se acumulam.",
+        "O Elfo possui origem natural em Nadalon, na Árvore de Gênese, mas pode surgir por transformação narrativa em qualquer Árvore.",
+        "Somente o bônus racial do Elfo pode elevar Inteligência acima de 20, até 24; nenhum outro atributo recebe essa permissão.",
+        "As sete Linhagens Élficas possuem efeitos publicados; cada Elfo escolhe somente uma Linhagem e não acumula seus benefícios com os de outra.",
+        "O Desperto morreu, passou por Arkarin e retornou; por isso pode surgir em qualquer Árvore mediante autorização ou transformação narrativa.",
+        "O Desperto escolhe somente uma das seis Condições Ancestrais publicadas e recebe obrigatoriamente tanto sua dádiva quanto sua cicatriz.",
+        "A Auleth é uma raça especial geral de origem espacial ou dimensional; seus bônus de Inteligência e Sabedoria respeitam o limite natural 20.",
+        "Cada Auleth escolhe duas áreas para Conhecimentos Extremos; o mestre precisa impedir áreas amplas como uma Árvore ou Fluxo inteiro e não deve revelar segredos sem pistas ou fonte possível.",
+        "O Autômato é uma raça especial exclusiva da A.X.I.S e escolhe obrigatoriamente um dos oito chassis publicados.",
+        "O Nível Total do Autômato também é o nível de seu núcleo; ele recebe classes desde o nível 1 e sua Mana representa a Energia do Núcleo.",
+        "O limite de modificações do Autômato é 1 + piso do Nível Total dividido por 2; toda modificação ativa também exige três passivas instaladas.",
+        "Blindagem, Escudo, Resistente e Rodas alteram automaticamente os cálculos da ficha quando estiverem instalados; os demais efeitos precisam ser aplicados na mesa conforme suas descrições.",
+        "Máquina Viva remove todas as imunidades de Corpo Artificial e o Reparo Mecânico enquanto permite que o Autômato recupere Vida normalmente.",
+        "O Clone possui origem compatível com Gênese, Alétheia, A.X.I.S, Anima ou Limiar; uma transformação narrativa compatível pode ocorrer em qualquer Árvore.",
+        "Matriz Aperfeiçoada concede +2 em dois atributos diferentes, sempre respeitando o limite natural 20.",
+        "A Cópia Biométrica não concede características da raça aparente nem copia classe, Legados, alma, pactos, bênçãos ou Fragmentos de Arkarin.",
+        "Cada Clone escolhe somente um Projeto de Clonagem: Réplica Perfeita, Arquivo Vivo, Organismo Otimizado ou Série Contínua.",
+        "O corpo reserva da Série Contínua precisa ter sido preparado antes da morte, permanecer intacto e retorna somente com as memórias da última sincronização.",
+        "O Errante converte um personagem de outra Árvore, campanha ou sistema sem importar diretamente níveis, atributos, poderes, recursos ou equipamentos externos.",
+        "A identidade narrativa do Errante pode ser preservada, mas sua ficha usa o Nível Total, as classes, os recursos e os limites da campanha atual.",
+        "Cada Errante escolhe somente um formato de Assinatura Remanescente; nome e aparência não acrescentam efeitos à mecânica publicada.",
+        "O Errante pode acessar a classe exclusiva da Árvore atual ou da Árvore de origem equivalente, mas o limite normal de uma única classe especial permanece.",
+        "Mudar a Árvore atual do Errante substitui o vínculo anterior e nunca acumula acesso às Árvores que ele apenas visitou.",
+        "O Amálgamo possui origem natural compatível com Gênese, Anima, Vórtice, Abismo ou Limiar; uma transformação narrativa pode ocorrer em qualquer Árvore.",
+        "O Amálgamo começa conhecendo três Fragmentos Constituintes, mantém dois expressos e pode assimilar narrativamente até o máximo de seis conhecidos.",
+        "Derrotar, tocar ou consumir uma criatura nunca concede automaticamente um Fragmento ao Amálgamo, e pacotes raciais completos não podem ser copiados.",
+        "Surto de Convergência expressa um terceiro Fragmento por três rodadas, custa 6 Mana, funciona uma vez por sessão e causa 1 Cansaço ao terminar.",
+        "Quando Órgão de Fluxo deixa de ser expresso, toda Mana atual acima do novo máximo é perdida.",
+        "A Bruxa possui origem natural compatível com Alétheia, Anima, Vórtice, Éon, Abismo ou Limiar; uma transformação narrativa pode ocorrer em qualquer Árvore.",
+        "Preço da Bruxaria substitui no máximo 3 Mana ausentes por 2 Vida cada, funciona uma vez por cena e paga somente características raciais sem poder deixar a Bruxa abaixo de 1 Vida.",
+        "A Bruxa conhece três Maldições Tecidas; Grimório aumenta esse total para cinco, enquanto os demais Instrumentos não alteram o limite.",
+        "Apenas uma Maldição Tecida da mesma Bruxa pode afetar uma criatura; aplicar outra substitui a anterior.",
+        "A raça Entidade permanece adiada e indisponível para escolha até receber um pacote próprio completo."
       ]
     },
     {
