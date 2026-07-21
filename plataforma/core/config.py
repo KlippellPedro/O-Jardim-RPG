@@ -36,6 +36,15 @@ def _csv_env(name: str) -> tuple[str, ...]:
     )
 
 
+# Quem pode criar conta:
+#   aberto   — qualquer pessoa. Só para desenvolvimento.
+#   convite  — precisa de um código de convite de campanha válido. Padrão em
+#              produção: sem confirmação de e-mail, cadastro livre num site
+#              público é convite para conta de spam.
+#   fechado  — ninguém se cadastra sozinho; um administrador cria as contas.
+_CADASTRO_VALIDO = {"aberto", "convite", "fechado"}
+
+
 @dataclass(frozen=True)
 class Settings:
     environment: str
@@ -50,10 +59,19 @@ class Settings:
     startup_timeout: int
     creator_user_id: UUID | None
     creator_email: str | None
+    cadastro: str
 
     @property
     def production(self) -> bool:
         return self.environment == "production"
+
+    @property
+    def cadastro_exige_convite(self) -> bool:
+        return self.cadastro == "convite"
+
+    @property
+    def cadastro_fechado(self) -> bool:
+        return self.cadastro == "fechado"
 
     @property
     def has_creator_rule(self) -> bool:
@@ -62,6 +80,10 @@ class Settings:
     def validate(self) -> None:
         if not self.database_url:
             raise RuntimeError("DATABASE_URL nao definida")
+        if self.cadastro not in _CADASTRO_VALIDO:
+            raise RuntimeError(
+                f"CADASTRO deve ser um de {', '.join(sorted(_CADASTRO_VALIDO))}"
+            )
         if self.production and (
             not self.service_api_key or len(self.service_api_key) < 32
         ):
@@ -94,4 +116,10 @@ def load_settings() -> Settings:
         startup_timeout=_int_env("DATABASE_STARTUP_TIMEOUT", 15, 5, 60),
         creator_user_id=creator_user_id,
         creator_email=(os.getenv("CREATOR_EMAIL") or "").strip().lower() or None,
+        # Produção fecha por padrão: esquecer de configurar não deve resultar
+        # em cadastro aberto ao mundo.
+        cadastro=(
+            os.getenv("CADASTRO")
+            or ("convite" if environment == "production" else "aberto")
+        ).strip().lower(),
     )

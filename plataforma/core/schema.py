@@ -533,4 +533,30 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        10,
+        "limite_de_tentativas_para_qualquer_acao",
+        (
+            # A tabela nasceu só para o login, mas a mecânica serve para
+            # cadastro, pedido de senha e troca de senha. O nome acompanha o
+            # uso; a coluna `chave_hash` já embute a ação, então limites de
+            # ações diferentes não se misturam.
+            """
+            ALTER TABLE IF EXISTS limites_login RENAME TO limites_acesso
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS limites_acesso (
+                chave_hash TEXT PRIMARY KEY,
+                tentativas INTEGER NOT NULL DEFAULT 0,
+                janela_iniciada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                bloqueado_ate TIMESTAMPTZ
+            )
+            """,
+            # Faxina do que já expirou, para a tabela não crescer para sempre.
+            """
+            CREATE INDEX IF NOT EXISTS limites_acesso_janela_idx
+            ON limites_acesso (janela_iniciada_em)
+            """,
+        ),
+    ),
 )

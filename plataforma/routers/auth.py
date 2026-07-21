@@ -9,6 +9,7 @@ from psycopg.errors import UniqueViolation
 from core.audit import record_audit
 from core.config import Settings
 from core.database import Database
+from core import limites
 from core.dependencies import (
     AuthenticatedUser,
     get_current_user,
@@ -22,7 +23,7 @@ from core.security import (
     new_secret_token,
     verify_password,
 )
-from core.notifications import notify
+from core.notifications import campaign_member_ids, notify
 from schemas import LoginInput, PasswordChangeInput, PasswordHelpInput, RegisterInput
 
 
@@ -30,57 +31,44 @@ router = APIRouter(prefix="/auth", tags=["autenticacao"])
 
 
 def _client_fingerprint(request: Request) -> str:
-    forwarded = request.headers.get("x-forwarded-for", "").split(",", 1)[0].strip()
-    ip = forwarded or (request.client.host if request.client else "desconhecido")
-    return hash_token(ip)
+    return limites.impressao_do_cliente(request)
 
 
 def _login_limit_key(email: str, request: Request) -> str:
-    return hash_token(f"{email.lower()}|{_client_fingerprint(request)}")
+    return limites.chave(limites.LOGIN, email.lower(), _client_fingerprint(request))
 
 
-def _check_login_limit(connection, key_hash: str) -> None:
-    row = connection.execute(
-        "SELECT * FROM limites_login WHERE chave_hash=%s FOR UPDATE",
-        (key_hash,),
-    ).fetchone()
-    now = datetime.now(timezone.utc)
-    if not row:
-        return
-    if row["bloqueado_ate"] and row["bloqueado_ate"] > now:
+def _validar_convite(connection, codigo: str | None):
+    """Confere o código e devolve o convite, ou recusa o cadastro.
+
+    Reaproveita a mesma checagem de `campanhas/entrar`: código não revogado,
+    dentro da validade e com uso sobrando. A recusa é sempre igual — dizer
+    "expirado" em vez de "inexistente" contaria se o código já existiu.
+    """
+    if not codigo or not codigo.strip():
         raise HTTPException(
-            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail="muitas tentativas; tente novamente mais tarde",
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="o cadastro exige um convite de campanha",
         )
-    if row["janela_iniciada_em"] < now - timedelta(minutes=15):
-        connection.execute("DELETE FROM limites_login WHERE chave_hash=%s", (key_hash,))
-
-
-def _record_login_failure(connection, key_hash: str) -> None:
-    row = connection.execute(
-        "SELECT tentativas, janela_iniciada_em FROM limites_login WHERE chave_hash=%s FOR UPDATE",
-        (key_hash,),
-    ).fetchone()
-    now = datetime.now(timezone.utc)
-    if not row or row["janela_iniciada_em"] < now - timedelta(minutes=15):
-        attempts = 1
-        window = now
-    else:
-        attempts = int(row["tentativas"]) + 1
-        window = row["janela_iniciada_em"]
-    blocked_until = now + timedelta(minutes=15) if attempts >= 5 else None
-    connection.execute(
+    convite = connection.execute(
         """
-        INSERT INTO limites_login
-            (chave_hash, tentativas, janela_iniciada_em, bloqueado_ate)
-        VALUES (%s, %s, %s, %s)
-        ON CONFLICT (chave_hash) DO UPDATE SET
-            tentativas=EXCLUDED.tentativas,
-            janela_iniciada_em=EXCLUDED.janela_iniciada_em,
-            bloqueado_ate=EXCLUDED.bloqueado_ate
+        SELECT id, campanha_id, papel, max_usos, usos, expira_em, revogado_em
+        FROM convites_campanha WHERE codigo_hash=%s FOR UPDATE
         """,
-        (key_hash, attempts, window, blocked_until),
-    )
+        (hash_token(codigo.strip()),),
+    ).fetchone()
+    agora = datetime.now(timezone.utc)
+    if (
+        not convite
+        or convite["revogado_em"] is not None
+        or convite["expira_em"] <= agora
+        or convite["usos"] >= convite["max_usos"]
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="convite invalido ou expirado",
+        )
+    return convite
 
 
 def _create_session(
@@ -151,6 +139,16 @@ def _set_auth_cookies(
     )
 
 
+@router.get("/cadastro")
+def modo_de_cadastro(settings: Settings = Depends(get_settings)):
+    """Diz à tela de entrada se ela deve pedir convite, ou nem oferecer conta.
+
+    Só o modo sai daqui: nada de contagem de contas ou de nomes, que serviriam
+    para medir o tamanho da mesa de fora.
+    """
+    return {"modo": settings.cadastro}
+
+
 @router.post("/registrar", status_code=status.HTTP_201_CREATED)
 def register(
     payload: RegisterInput,
@@ -165,8 +163,24 @@ def register(
     # API; sem isto ela ficaria como player até o próximo restart.
     is_creator = bool(settings.creator_email) and email == settings.creator_email
     role = "criador" if is_creator else "player"
+
+    if settings.cadastro_fechado and not is_creator:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="o cadastro esta fechado; peca a um administrador",
+        )
+
+    # Conta a tentativa antes de qualquer validação: tentar códigos de convite
+    # em sequência tem que custar caro, não sair de graça por ser recusado.
+    limites.cobrar(database, limites.CADASTRO, limites.chave(limites.CADASTRO, _client_fingerprint(request)))
+
+    convite = None
     try:
         with database.connection() as connection:
+            # O criador entra sem convite: exigir um travaria o primeiro acesso,
+            # já que ainda não existe campanha para convidar ninguém.
+            if settings.cadastro_exige_convite and not is_creator:
+                convite = _validar_convite(connection, payload.convite)
             if is_creator:
                 connection.execute(
                     """
@@ -192,6 +206,22 @@ def register(
                     is_creator,
                 ),
             )
+            # Quem chegou por convite já entra na campanha: mandar a pessoa
+            # digitar o mesmo código de novo, logo depois de cadastrar, seria
+            # pedir duas vezes a mesma coisa.
+            if convite is not None:
+                connection.execute(
+                    """
+                    INSERT INTO membros_campanha (campanha_id, usuario_id, papel, status)
+                    VALUES (%s, %s, %s, 'ativo')
+                    """,
+                    (convite["campanha_id"], user_id, convite["papel"]),
+                )
+                connection.execute(
+                    "UPDATE convites_campanha SET usos=usos+1 WHERE id=%s",
+                    (convite["id"],),
+                )
+
             session_token, csrf_token = _create_session(
                 connection,
                 user_id=user_id,
@@ -206,6 +236,18 @@ def register(
                 target_id=str(user_id),
                 details={"papel_plataforma": role},
             )
+            if convite is not None:
+                notify(
+                    connection,
+                    user_ids=campaign_member_ids(
+                        connection, convite["campanha_id"], roles=("mestre", "assistente")
+                    ),
+                    category="campanha",
+                    title=f"{payload.nome_exibicao} entrou na campanha",
+                    message=f"Criou a conta com um convite e entrou como {convite['papel']}.",
+                    campaign_id=convite["campanha_id"],
+                    actor_user_id=user_id,
+                )
     except UniqueViolation:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -240,7 +282,7 @@ def login(
     session_token = None
     csrf_token = None
     with database.connection() as connection:
-        _check_login_limit(connection, limit_key)
+        limites.conferir(connection, limites.LOGIN, limit_key)
         user = connection.execute(
             """
             SELECT id, email, nome_exibicao, senha_hash, ativo,
@@ -250,10 +292,10 @@ def login(
             (email,),
         ).fetchone()
         if not user or not user["ativo"] or not verify_password(payload.senha, user["senha_hash"]):
-            _record_login_failure(connection, limit_key)
+            limites.registrar(connection, limites.LOGIN, limit_key)
             login_failed = True
         else:
-            connection.execute("DELETE FROM limites_login WHERE chave_hash=%s", (limit_key,))
+            limites.limpar(connection, limit_key)
             session_token, csrf_token = _create_session(
                 connection,
                 user_id=user["id"],
@@ -299,6 +341,13 @@ def pedir_redefinicao(
     não a conta — senão a rota viraria um jeito de descobrir quem tem cadastro.
     """
     email = str(payload.email).strip().lower()
+    # O índice de pedido aberto já barra repetir o mesmo e-mail; o limite por
+    # origem barra quem varia o endereço para encher a fila do admin.
+    limites.cobrar(
+        database, limites.PEDIDO_SENHA,
+        limites.chave(limites.PEDIDO_SENHA, _client_fingerprint(request)),
+    )
+
     with database.connection() as connection:
         alvo = connection.execute(
             "SELECT id, nome_exibicao FROM usuarios WHERE LOWER(email)=LOWER(%s) AND ativo=TRUE",
@@ -381,6 +430,11 @@ def change_password(
     reset do administrador — em ambos os casos a senha antiga é conhecida por
     quem está digitando, então ela é exigida.
     """
+    # Exige a senha atual, então é alvo de tentativa às cegas por quem pegou
+    # uma sessão emprestada num computador compartilhado.
+    chave_troca = limites.chave(limites.TROCA_SENHA, str(user.id))
+    limites.cobrar(database, limites.TROCA_SENHA, chave_troca)
+
     with database.connection() as connection:
         current = connection.execute(
             "SELECT senha_hash, senha_provisoria FROM usuarios WHERE id=%s AND ativo=TRUE FOR UPDATE",
@@ -391,6 +445,7 @@ def change_password(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="a senha atual nao confere",
             )
+        limites.limpar(connection, chave_troca)
         connection.execute(
             """
             UPDATE usuarios

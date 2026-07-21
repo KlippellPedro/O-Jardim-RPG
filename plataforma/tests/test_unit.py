@@ -1,16 +1,18 @@
 from __future__ import annotations
 
 import collections
+import contextlib
 import gzip
 import io
 import json
 import os
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest import mock
 from uuid import UUID
 
+from fastapi import HTTPException
 from pydantic import ValidationError
 
 from core.backup import (
@@ -20,6 +22,7 @@ from core.backup import (
     ler_cabecalho,
     nome_do_arquivo,
 )
+from core import limites
 from core.character_summary import carregar_catalogos, resumir_ficha
 from core.dados import _classificar, rolar_formula, rolar_teste
 from core.config import load_settings
@@ -334,7 +337,7 @@ class BackupTests(unittest.TestCase):
 
     def test_sessoes_e_tokens_nunca_entram_no_arquivo(self):
         cabecalho, _, _ = self.gerar(list(TABELAS) + list(TABELAS_IGNORADAS))
-        for proibida in ("sessoes_auth", "limites_login", "codigos_vinculo_discord"):
+        for proibida in ("sessoes_auth", "limites_acesso", "codigos_vinculo_discord"):
             self.assertNotIn(proibida, cabecalho["tabelas"])
             self.assertIn(proibida, cabecalho["ignoradas"])
 
@@ -565,6 +568,139 @@ class FrontendRouteTests(unittest.TestCase):
         self.assertIn("/", caminhos)
         self.assertIn("/index.html", caminhos)
         self.assertIn("/{pagina}", caminhos)
+
+
+class LimiteDeTentativasTests(unittest.TestCase):
+    """Cadastro e pedido de senha eram rotas públicas sem freio nenhum."""
+
+    class ConexaoFalsa:
+        """Banco de mentira que guarda uma linha por chave."""
+
+        def __init__(self):
+            self.linhas: dict[str, dict] = {}
+            self.apagadas: list[str] = []
+
+        def execute(self, sql, params=None):
+            sql_limpo = " ".join(sql.split())
+            self.ultimo = (sql_limpo, params)
+            if sql_limpo.startswith("SELECT"):
+                self.resultado = self.linhas.get(params[0])
+            elif sql_limpo.startswith("DELETE"):
+                self.apagadas.append(params[0])
+                self.linhas.pop(params[0], None)
+                self.resultado = None
+            else:  # INSERT ... ON CONFLICT
+                chave, tentativas, janela, bloqueado = params
+                self.linhas[chave] = {
+                    "tentativas": tentativas,
+                    "janela_iniciada_em": janela,
+                    "bloqueado_ate": bloqueado,
+                }
+                self.resultado = None
+            return self
+
+        def fetchone(self):
+            return self.resultado
+
+    def test_acoes_diferentes_nao_compartilham_contagem(self):
+        origem = "mesmo-ip"
+        self.assertNotEqual(
+            limites.chave(limites.LOGIN, origem),
+            limites.chave(limites.CADASTRO, origem),
+        )
+
+    def test_bloqueia_ao_atingir_o_teto(self):
+        conexao = self.ConexaoFalsa()
+        chave = limites.chave(limites.CADASTRO, "um-ip")
+        for _ in range(limites.CADASTRO.tentativas):
+            limites.conferir(conexao, limites.CADASTRO, chave)
+            limites.registrar(conexao, limites.CADASTRO, chave)
+        with self.assertRaises(HTTPException) as capturado:
+            limites.conferir(conexao, limites.CADASTRO, chave)
+        self.assertEqual(capturado.exception.status_code, 429)
+        self.assertIn("Retry-After", capturado.exception.headers)
+
+    def test_uma_tentativa_a_menos_ainda_passa(self):
+        conexao = self.ConexaoFalsa()
+        chave = limites.chave(limites.CADASTRO, "outro-ip")
+        for _ in range(limites.CADASTRO.tentativas - 1):
+            limites.registrar(conexao, limites.CADASTRO, chave)
+        limites.conferir(conexao, limites.CADASTRO, chave)  # não levanta
+
+    def test_janela_vencida_e_esquecida(self):
+        conexao = self.ConexaoFalsa()
+        chave = limites.chave(limites.LOGIN, "ip-antigo")
+        conexao.linhas[chave] = {
+            "tentativas": 99,
+            "janela_iniciada_em": datetime.now(timezone.utc)
+            - timedelta(minutes=limites.LOGIN.janela_minutos + 1),
+            "bloqueado_ate": None,
+        }
+        limites.conferir(conexao, limites.LOGIN, chave)
+        self.assertIn(chave, conexao.apagadas)
+
+    def test_sucesso_zera_a_contagem(self):
+        conexao = self.ConexaoFalsa()
+        chave = limites.chave(limites.LOGIN, "ip")
+        limites.registrar(conexao, limites.LOGIN, chave)
+        limites.limpar(conexao, chave)
+        self.assertNotIn(chave, conexao.linhas)
+
+    def test_tentativa_e_contada_fora_da_transacao_do_trabalho(self):
+        """O registro não pode ser desfeito pelo rollback da rota que recusou.
+
+        A conexão do pool faz rollback quando a rota levanta exceção. Se a
+        contagem morasse na mesma transação, toda tentativa recusada — as que
+        mais importam — seria esquecida, e o limite nunca chegaria ao teto.
+        """
+        conexao = self.ConexaoFalsa()
+
+        class BancoFalso:
+            @contextlib.contextmanager
+            def connection(self):
+                yield conexao
+
+        chave = limites.chave(limites.CADASTRO, "ip")
+        limites.cobrar(BancoFalso(), limites.CADASTRO, chave)
+        self.assertEqual(conexao.linhas[chave]["tentativas"], 1)
+
+
+class ModoDeCadastroTests(unittest.TestCase):
+    """Sem confirmação de e-mail, cadastro livre num site público vira spam."""
+
+    def load(self, **env):
+        base = {"DATABASE_URL": "postgresql://x/y", "CADASTRO": "", "APP_ENV": ""}
+        with mock.patch.dict(os.environ, {**base, **env}, clear=False):
+            return load_settings()
+
+    def test_producao_exige_convite_por_padrao(self):
+        settings = self.load(APP_ENV="production")
+        self.assertEqual(settings.cadastro, "convite")
+        self.assertTrue(settings.cadastro_exige_convite)
+
+    def test_desenvolvimento_fica_aberto(self):
+        self.assertEqual(self.load(APP_ENV="development").cadastro, "aberto")
+
+    def test_modo_invalido_e_recusado_no_boot(self):
+        settings = self.load(CADASTRO="mais_ou_menos")
+        with self.assertRaises(RuntimeError):
+            settings.validate()
+
+    def test_fechado_reconhecido(self):
+        self.assertTrue(self.load(CADASTRO="fechado").cadastro_fechado)
+
+    def test_convite_cabe_no_cadastro(self):
+        entrada = RegisterInput(
+            email="a@b.com", nome_exibicao="Conta",
+            senha="uma-senha-bem-longa", convite="ABC-123",
+        )
+        self.assertEqual(entrada.convite, "ABC-123")
+
+    def test_convite_e_opcional_quando_a_mesa_esta_aberta(self):
+        entrada = RegisterInput(
+            email="a@b.com", nome_exibicao="Conta", senha="uma-senha-bem-longa",
+        )
+        self.assertIsNone(entrada.convite)
 
 
 if __name__ == "__main__":

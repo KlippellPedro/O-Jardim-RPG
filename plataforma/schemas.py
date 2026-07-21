@@ -18,6 +18,9 @@ class RegisterInput(BaseModel):
     email: EmailStr
     nome_exibicao: str = Field(min_length=2, max_length=80)
     senha: str = Field(min_length=12, max_length=128)
+    # Obrigatório quando CADASTRO=convite; a conta já entra na campanha do
+    # código usado, então quem convidou não precisa de um segundo passo.
+    convite: str | None = Field(default=None, max_length=120)
 
     @field_validator("nome_exibicao")
     @classmethod

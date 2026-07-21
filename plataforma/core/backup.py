@@ -62,7 +62,7 @@ TABELAS: tuple[str, ...] = (
 # que motivou a restauração.
 TABELAS_IGNORADAS: frozenset[str] = frozenset({
     "sessoes_auth",
-    "limites_login",
+    "limites_acesso",
     "codigos_vinculo_discord",
 })
 
