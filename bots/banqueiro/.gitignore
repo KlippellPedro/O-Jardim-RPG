@@ -1,0 +1,14 @@
+# Segredos — nunca versionar
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.venv-test/
+
+# Banco de dados local do bot (dados de runtime)
+data/vendedor.sqlite3
+data/*.sqlite3-shm
+data/*.sqlite3-wal

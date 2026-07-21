@@ -1,0 +1,3934 @@
+{
+  "_nota": "Catálogo da Loja: armas (inclui Obstinadas), armaduras, equipamentos, veículos (tiers), bestiário (monstro, preço por fórmula) e drops de seres. Arkania foi removido e substituído.",
+  "entradas": [
+    {
+      "tipo": "arma",
+      "id": "adaga",
+      "titulo": "Adaga",
+      "conteudo": {
+        "preco": 5,
+        "raridade": "comum",
+        "atributos": [
+          "1d4 de dano",
+          "Crítico 19"
+        ],
+        "dano": "1d4",
+        "critico": "19",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "manopla",
+      "titulo": "Manopla",
+      "conteudo": {
+        "preco": 5,
+        "raridade": "comum",
+        "atributos": [
+          "2d3 de dano",
+          "Crítico 19"
+        ],
+        "dano": "2d3",
+        "critico": "19",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Impacto",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "machadinha",
+      "titulo": "Machadinha",
+      "conteudo": {
+        "preco": 5,
+        "raridade": "comum",
+        "atributos": [
+          "1d6 de dano",
+          "Crítico 18"
+        ],
+        "dano": "1d6",
+        "critico": "18",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Corte",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "clava",
+      "titulo": "Clava",
+      "conteudo": {
+        "preco": 8,
+        "raridade": "comum",
+        "atributos": [
+          "1d10 de dano",
+          "Crítico x3"
+        ],
+        "dano": "1d10",
+        "critico": "x3",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Impacto",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "porrete",
+      "titulo": "Porrete",
+      "conteudo": {
+        "preco": 8,
+        "raridade": "comum",
+        "atributos": [
+          "1d6 de dano",
+          "Crítico x3"
+        ],
+        "dano": "1d6",
+        "critico": "x3",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Impacto",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "espada-curta",
+      "titulo": "Espada Curta",
+      "conteudo": {
+        "preco": 8,
+        "raridade": "comum",
+        "atributos": [
+          "1d6 de dano",
+          "Crítico 19"
+        ],
+        "dano": "1d6",
+        "critico": "19",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Corte",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "espada-longa",
+      "titulo": "Espada Longa",
+      "conteudo": {
+        "preco": 10,
+        "raridade": "comum",
+        "atributos": [
+          "1d8 de dano",
+          "Crítico 18"
+        ],
+        "dano": "1d8",
+        "critico": "18",
+        "alcance": "Curto",
+        "tipo_de_dano": "Corte",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "lanca",
+      "titulo": "Lança",
+      "conteudo": {
+        "preco": 10,
+        "raridade": "comum",
+        "atributos": [
+          "1d6 de dano",
+          "Crítico x3"
+        ],
+        "dano": "1d6",
+        "critico": "x3",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "tridente",
+      "titulo": "Tridente",
+      "conteudo": {
+        "preco": 10,
+        "raridade": "comum",
+        "atributos": [
+          "3d3 de dano",
+          "Crítico 19"
+        ],
+        "dano": "3d3",
+        "critico": "19",
+        "alcance": "Curto",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "martelo-leve",
+      "titulo": "Martelo Leve",
+      "conteudo": {
+        "preco": 10,
+        "raridade": "comum",
+        "atributos": [
+          "2d2 de dano",
+          "Crítico x3"
+        ],
+        "dano": "2d2",
+        "critico": "x3",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Impacto",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "foice-curta",
+      "titulo": "Foice Curta",
+      "conteudo": {
+        "preco": 10,
+        "raridade": "comum",
+        "atributos": [
+          "2d3 de dano",
+          "Crítico x3"
+        ],
+        "dano": "2d3",
+        "critico": "x3",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Corte",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "nunchaku",
+      "titulo": "Nunchaku",
+      "conteudo": {
+        "preco": 10,
+        "raridade": "comum",
+        "atributos": [
+          "1d5 de dano",
+          "Crítico 16"
+        ],
+        "dano": "1d5",
+        "critico": "16",
+        "alcance": "Curto",
+        "tipo_de_dano": "Impacto",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "katana",
+      "titulo": "Katana",
+      "conteudo": {
+        "preco": 20,
+        "raridade": "incomum",
+        "atributos": [
+          "2d6 de dano",
+          "Crítico 18"
+        ],
+        "dano": "2d6",
+        "critico": "18",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Corte",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "manopla-pesada",
+      "titulo": "Manopla Pesada",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "1d12 de dano",
+          "Crítico 19"
+        ],
+        "dano": "1d12",
+        "critico": "19",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Impacto",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "lanca-longa",
+      "titulo": "Lança Longa",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "2d8 de dano",
+          "Crítico 18/x3"
+        ],
+        "dano": "2d8",
+        "critico": "18/x3",
+        "alcance": "Curto",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "tridente-longo",
+      "titulo": "Tridente Longo",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "3d5 de dano",
+          "Crítico 18"
+        ],
+        "dano": "3d5",
+        "critico": "18",
+        "alcance": "Curto",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "martelo-de-guerra",
+      "titulo": "Martelo de Guerra",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "2d5 de dano",
+          "Crítico 18"
+        ],
+        "dano": "2d5",
+        "critico": "18",
+        "alcance": "Curto",
+        "tipo_de_dano": "Impacto",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "machado-de-guerra",
+      "titulo": "Machado de Guerra",
+      "conteudo": {
+        "preco": 35,
+        "raridade": "raro",
+        "atributos": [
+          "1d12 de dano",
+          "Crítico x3"
+        ],
+        "dano": "1d12",
+        "critico": "x3",
+        "alcance": "Curto",
+        "tipo_de_dano": "Corte",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "espadao",
+      "titulo": "Espadão",
+      "conteudo": {
+        "preco": 35,
+        "raridade": "raro",
+        "atributos": [
+          "1d12 de dano",
+          "Crítico 18"
+        ],
+        "dano": "1d12",
+        "critico": "18",
+        "alcance": "Curto",
+        "tipo_de_dano": "Corte",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "foice-longa",
+      "titulo": "Foice Longa",
+      "conteudo": {
+        "preco": 35,
+        "raridade": "raro",
+        "atributos": [
+          "3d5 de dano",
+          "Crítico x4"
+        ],
+        "dano": "3d5",
+        "critico": "x4",
+        "alcance": "Curto",
+        "tipo_de_dano": "Corte",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "marreta",
+      "titulo": "Marreta",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "3d4 de dano",
+          "Crítico x3"
+        ],
+        "dano": "3d4",
+        "critico": "x3",
+        "alcance": "Curto",
+        "tipo_de_dano": "Impacto",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "machado-taurino",
+      "titulo": "Machado Taurino",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "2d8 de dano",
+          "Crítico 19/x3"
+        ],
+        "dano": "2d8",
+        "critico": "19/x3",
+        "alcance": "Curto",
+        "tipo_de_dano": "Corte",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "nunchaku-pesado",
+      "titulo": "Nunchaku Pesado",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "3d5 de dano",
+          "Crítico x3"
+        ],
+        "dano": "3d5",
+        "critico": "x3",
+        "alcance": "Curto",
+        "tipo_de_dano": "Impacto",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "chicote",
+      "titulo": "Chicote",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "2d5 de dano",
+          "Crítico 19x2"
+        ],
+        "dano": "2d5",
+        "critico": "19x2",
+        "alcance": "Médio",
+        "tipo_de_dano": "Impacto",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "katana-longa",
+      "titulo": "Katana Longa",
+      "conteudo": {
+        "preco": 45,
+        "raridade": "raro",
+        "atributos": [
+          "2d10 de dano",
+          "Crítico 18"
+        ],
+        "dano": "2d10",
+        "critico": "18",
+        "alcance": "Curto",
+        "tipo_de_dano": "Corte",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "arco-curto",
+      "titulo": "Arco Curto",
+      "conteudo": {
+        "preco": 5,
+        "raridade": "comum",
+        "atributos": [
+          "1d6 de dano",
+          "Crítico 19"
+        ],
+        "dano": "1d6",
+        "critico": "19",
+        "alcance": "Médio",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "simples",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "besta",
+      "titulo": "Besta",
+      "conteudo": {
+        "preco": 5,
+        "raridade": "comum",
+        "atributos": [
+          "1d8 de dano",
+          "Crítico 19"
+        ],
+        "dano": "1d8",
+        "critico": "19",
+        "alcance": "Médio",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "simples",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "dardo",
+      "titulo": "Dardo",
+      "conteudo": {
+        "preco": 5,
+        "raridade": "comum",
+        "atributos": [
+          "1d4 de dano",
+          "Crítico 18"
+        ],
+        "dano": "1d4",
+        "critico": "18",
+        "alcance": "Curto",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "simples",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "pistola",
+      "titulo": "Pistola",
+      "conteudo": {
+        "preco": 12,
+        "raridade": "incomum",
+        "atributos": [
+          "1d10 de dano",
+          "Crítico 20"
+        ],
+        "dano": "1d10",
+        "critico": "20",
+        "alcance": "Médio",
+        "tipo_de_dano": "Balístico",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "revolver",
+      "titulo": "Revolver",
+      "conteudo": {
+        "preco": 15,
+        "raridade": "incomum",
+        "atributos": [
+          "2d6 de dano",
+          "Crítico x3"
+        ],
+        "dano": "2d6",
+        "critico": "x3",
+        "alcance": "Médio",
+        "tipo_de_dano": "Balístico",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "submetralhadora",
+      "titulo": "Submetralhadora",
+      "conteudo": {
+        "preco": 15,
+        "raridade": "incomum",
+        "atributos": [
+          "2d6 de dano",
+          "Crítico 19/x3"
+        ],
+        "dano": "2d6",
+        "critico": "19/x3",
+        "alcance": "Curto",
+        "tipo_de_dano": "Balístico",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "mosquete",
+      "titulo": "Mosquete",
+      "conteudo": {
+        "preco": 10,
+        "raridade": "comum",
+        "atributos": [
+          "1d8 de dano",
+          "Crítico 18"
+        ],
+        "dano": "1d8",
+        "critico": "18",
+        "alcance": "Médio",
+        "tipo_de_dano": "Balístico",
+        "subtipo": "simples",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "fuzil-de-caca",
+      "titulo": "Fuzil de caça",
+      "conteudo": {
+        "preco": 20,
+        "raridade": "incomum",
+        "atributos": [
+          "2d8 de dano",
+          "Crítico 19/x3"
+        ],
+        "dano": "2d8",
+        "critico": "19/x3",
+        "alcance": "Médio",
+        "tipo_de_dano": "Balístico",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "shuriken",
+      "titulo": "Shuriken",
+      "conteudo": {
+        "preco": 8,
+        "raridade": "comum",
+        "atributos": [
+          "1d4 de dano",
+          "Crítico 18"
+        ],
+        "dano": "1d4",
+        "critico": "18",
+        "alcance": "Curto",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "simples",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "kunai",
+      "titulo": "Kunai",
+      "conteudo": {
+        "preco": 8,
+        "raridade": "comum",
+        "atributos": [
+          "2d3 de dano",
+          "Crítico x3"
+        ],
+        "dano": "2d3",
+        "critico": "x3",
+        "alcance": "Médio",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "simples",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "zarabatana",
+      "titulo": "Zarabatana",
+      "conteudo": {
+        "preco": 8,
+        "raridade": "comum",
+        "atributos": [
+          "1d4 de dano",
+          "Crítico 19"
+        ],
+        "dano": "1d4",
+        "critico": "19",
+        "alcance": "Médio",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "simples",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "arco-longo",
+      "titulo": "Arco Longo",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "1d8 de dano",
+          "Crítico x3"
+        ],
+        "dano": "1d8",
+        "critico": "x3",
+        "alcance": "Médio",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "besta-pesada",
+      "titulo": "Besta pesada",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "1d12 de dano",
+          "Crítico 19"
+        ],
+        "dano": "1d12",
+        "critico": "19",
+        "alcance": "Médio",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "dardo-envenenado",
+      "titulo": "Dardo Envenenado",
+      "conteudo": {
+        "preco": 40,
+        "raridade": "raro",
+        "atributos": [
+          "2d9 de dano",
+          "Crítico x3"
+        ],
+        "dano": "2d9",
+        "critico": "x3",
+        "alcance": "Médio",
+        "tipo_de_dano": "Perfuração/Veneno",
+        "subtipo": "marcial",
+        "descricao": "Dispara em rajada de 3 projéteis por turno. O alvo faz teste de Fortitude ou sofre 30 de dano de veneno.",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "espingarda",
+      "titulo": "Espingarda",
+      "conteudo": {
+        "preco": 65,
+        "raridade": "raro",
+        "atributos": [
+          "4d6 de dano",
+          "Crítico x3"
+        ],
+        "dano": "4d6",
+        "critico": "x3",
+        "alcance": "Curto",
+        "tipo_de_dano": "Balístico",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "fuzil-de-assalto",
+      "titulo": "Fuzil de assalto",
+      "conteudo": {
+        "preco": 45,
+        "raridade": "raro",
+        "atributos": [
+          "2d10 de dano",
+          "Crítico 19"
+        ],
+        "dano": "2d10",
+        "critico": "19",
+        "alcance": "Médio",
+        "tipo_de_dano": "Balístico",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "shuriken-pesada",
+      "titulo": "Shuriken Pesada",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "3d3 de dano",
+          "Crítico x2"
+        ],
+        "dano": "3d3",
+        "critico": "x2",
+        "alcance": "Longo",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "kunai-pesada",
+      "titulo": "Kunai Pesada",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "4d3 de dano",
+          "Crítico 19"
+        ],
+        "dano": "4d3",
+        "critico": "19",
+        "alcance": "Médio",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "thompson",
+      "titulo": "Thompson",
+      "conteudo": {
+        "preco": 130,
+        "raridade": "epico",
+        "atributos": [
+          "3d10 de dano",
+          "Crítico x3"
+        ],
+        "dano": "3d10",
+        "critico": "x3",
+        "alcance": "Médio",
+        "tipo_de_dano": "Balístico",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "minigun",
+      "titulo": "Minigun",
+      "conteudo": {
+        "preco": 250,
+        "raridade": "epico",
+        "atributos": [
+          "3d12 de dano",
+          "Crítico 19/x2"
+        ],
+        "dano": "3d12",
+        "critico": "19/x2",
+        "alcance": "Médio",
+        "tipo_de_dano": "Balístico",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "awp",
+      "titulo": "AWP",
+      "conteudo": {
+        "preco": 280,
+        "raridade": "epico",
+        "atributos": [
+          "3d12 de dano",
+          "Crítico 19/x3"
+        ],
+        "dano": "3d12",
+        "critico": "19/x3",
+        "alcance": "Longo",
+        "tipo_de_dano": "Balístico",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "bazuca",
+      "titulo": "Bazuca",
+      "conteudo": {
+        "preco": 500,
+        "raridade": "lendario",
+        "atributos": [
+          "10d8+4d4 de dano",
+          "Crítico 19x2"
+        ],
+        "dano": "10d8+4d4",
+        "critico": "19x2",
+        "alcance": "Médio",
+        "tipo_de_dano": "Impacto/Fogo",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "acessorio",
+      "titulo": "Acessório",
+      "conteudo": {
+        "descricao": "+2 em uma perícia à escolha.",
+        "preco": 25,
+        "raridade": "incomum"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "kit",
+      "titulo": "Kit",
+      "conteudo": {
+        "descricao": "Concede vantagem em uma perícia à escolha. (2 usos)",
+        "preco": 45,
+        "raridade": "raro"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "mochila",
+      "titulo": "Mochila",
+      "conteudo": {
+        "descricao": "+5 de espaço no inventário. (-1 de movimento)",
+        "preco": 20,
+        "raridade": "incomum",
+        "material": "Couro"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "mochilao",
+      "titulo": "Mochilão",
+      "conteudo": {
+        "descricao": "+10 de espaço no inventário. (-3 de movimento)",
+        "preco": 35,
+        "raridade": "raro",
+        "material": "Couro Bom"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "algemas",
+      "titulo": "Algemas",
+      "conteudo": {
+        "descricao": "Prende um ser; CD 30 para escapar.",
+        "preco": 15,
+        "raridade": "incomum",
+        "material": "Ferro"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "instrumento-musical",
+      "titulo": "Instrumento musical",
+      "conteudo": {
+        "descricao": "Pode aumentar a condição do local em 1.",
+        "preco": 30,
+        "raridade": "incomum",
+        "material": "Madeira"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pomada-restauradora",
+      "titulo": "Pomada Restauradora",
+      "conteudo": {
+        "descricao": "Esfregar a pasta em um ferimento é uma ação completa e cura 2d4 pontos de vida.",
+        "preco": 12,
+        "raridade": "incomum",
+        "material": "Ervas"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "kit-de-aventureiro",
+      "titulo": "Kit de Aventureiro",
+      "conteudo": {
+        "descricao": "Contém o básico para sobreviver na floresta: saco de dormir, corda, odre e ração de viagem para uma semana.",
+        "preco": 40,
+        "raridade": "raro"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "lampiao",
+      "titulo": "Lampião",
+      "conteudo": {
+        "descricao": "A luz do lampião atinge 9m. Uma carga de óleo dura 6 horas e custa 2 Lunaris.",
+        "preco": 8,
+        "raridade": "comum",
+        "material": "Metal/Vidro"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "odre",
+      "titulo": "Odre",
+      "conteudo": {
+        "descricao": "Existe em vários tamanhos, mas o odre mais comum comporta 1 litro de líquido.",
+        "preco": 5,
+        "raridade": "comum",
+        "material": "Couro"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "racao-de-viagem",
+      "titulo": "Ração de viagem",
+      "conteudo": {
+        "descricao": "Perfeita para longas viagens: uma porção alimenta uma pessoa por um dia.",
+        "preco": 5,
+        "raridade": "comum",
+        "material": "Carne Seca"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "saco-de-dormir",
+      "titulo": "Saco de dormir",
+      "conteudo": {
+        "descricao": "Um colchão e uma coberta finos o bastante para serem enrolados e amarrados.",
+        "preco": 10,
+        "raridade": "comum",
+        "material": "Couro/Algodão"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "traje",
+      "titulo": "Traje",
+      "conteudo": {
+        "descricao": "+5 de RD a frio ou calor.",
+        "preco": 15,
+        "raridade": "incomum",
+        "material": "Tecido"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "traje-de-luxo",
+      "titulo": "Traje de Luxo",
+      "conteudo": {
+        "descricao": "+5 em Nobreza e +1 de Status.",
+        "preco": 100,
+        "raridade": "raro",
+        "material": "Tecido Excelente"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "algibeira",
+      "titulo": "Algibeira",
+      "conteudo": {
+        "descricao": "Guarda até 20 Lunaris de qualquer tipo sem ocupar espaço no inventário.",
+        "preco": 5,
+        "raridade": "comum",
+        "material": "Couro"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pingente-lunar",
+      "titulo": "Pingente Lunar",
+      "conteudo": {
+        "descricao": "Restaura 2d10 de F.V. de todos num raio de 12m e remove efeitos negativos. (1 uso)",
+        "preco": 120,
+        "raridade": "epico",
+        "material": "Essência Lunar"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "lente-arcana",
+      "titulo": "Lente Arcana",
+      "conteudo": {
+        "descricao": "Permite ler qualquer escrita, mesmo em outro idioma, ou magias básicas.",
+        "preco": 150,
+        "raridade": "epico",
+        "material": "Cristal Arcano"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "ampulheta-do-tempo",
+      "titulo": "Ampulheta do Tempo",
+      "conteudo": {
+        "descricao": "Concede +1 ação de movimento extra.",
+        "preco": 300,
+        "raridade": "epico",
+        "material": "Areia das Almas"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "manto-das-sombras",
+      "titulo": "Manto das Sombras",
+      "conteudo": {
+        "descricao": "+2 em Furtividade e pode se ocultar totalmente por 1 turno em áreas escuras.",
+        "preco": 250,
+        "raridade": "epico",
+        "material": "Seda Sombria"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "anel-da-duplicata",
+      "titulo": "Anel da duplicata",
+      "conteudo": {
+        "descricao": "Ao lançar uma magia, ela sai uma segunda vez com 25% do efeito.",
+        "preco": 300,
+        "raridade": "epico",
+        "material": "Ouro Arcano"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "livro-dos-sussurros",
+      "titulo": "Livro dos Sussurros",
+      "conteudo": {
+        "descricao": "Concede vantagem em testes de Conhecimento e responde 1 pergunta por dia sobre o tema do livro.",
+        "preco": 220,
+        "raridade": "epico",
+        "material": "Couro Espectral"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pedra-da-memoria",
+      "titulo": "Pedra da Memória",
+      "conteudo": {
+        "descricao": "Permite relembrar qualquer evento vivido nos últimos 7 dias.",
+        "preco": 230,
+        "raridade": "epico",
+        "material": "Fluorita"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "botas-do-vento",
+      "titulo": "Botas do Vento",
+      "conteudo": {
+        "descricao": "+3m de movimento e ignora penalidades de terreno difícil.",
+        "preco": 260,
+        "raridade": "epico",
+        "material": "Couro Etéreo"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "mascara-do-enganador",
+      "titulo": "Máscara do Enganador",
+      "conteudo": {
+        "descricao": "Permite copiar a voz e aparência de alguém que você matou há até 1 mês.",
+        "preco": 260,
+        "raridade": "epico",
+        "material": "Osso Polido"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "flor-da-noite-eterna",
+      "titulo": "Flor da Noite Eterna",
+      "conteudo": {
+        "descricao": "Consumida, restaura 50% da F.V. total de um ser; em um alimento, cura 25% de até 5 seres. (1 uso)",
+        "preco": 350,
+        "raridade": "lendario",
+        "material": "Essência Sombria"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "relicario-de-prata",
+      "titulo": "Relicário de Prata",
+      "conteudo": {
+        "descricao": "Protege contra efeitos de medo e possessão espiritual.",
+        "preco": 300,
+        "raridade": "epico",
+        "material": "Prata Pura"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "olho-de-golem",
+      "titulo": "Olho de Golem",
+      "conteudo": {
+        "descricao": "Permite enxergar através de ilusões e escuridão mágica.",
+        "preco": 280,
+        "raridade": "epico",
+        "material": "Pedra Viva"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "coroa-do-eclipse",
+      "titulo": "Coroa do Eclipse",
+      "conteudo": {
+        "descricao": "Aumenta todos os atributos em +2.",
+        "preco": 600,
+        "raridade": "lendario",
+        "material": "Ouro Corroído"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "amuleto-de-solari",
+      "titulo": "Amuleto de Solari",
+      "conteudo": {
+        "descricao": "Concede um escudo de 150 de Vida. O escudo se restaura após 2 sessões.",
+        "preco": 800,
+        "raridade": "lendario",
+        "material": "Lágrima do Sol"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "semente-da-noite",
+      "titulo": "Semente da Noite",
+      "conteudo": {
+        "descricao": "Plantada, após 1 minuto cria uma barreira orgânica de trevas que protege por 2 turnos (ou uma noite fora de combate).",
+        "preco": 310,
+        "raridade": "lendario",
+        "material": "Essência Noturna"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "lanterna-do-vigia",
+      "titulo": "Lanterna do Vigia",
+      "conteudo": {
+        "descricao": "Projeta uma luz espectral que revela seres espirituais num raio de 10m.",
+        "preco": 200,
+        "raridade": "epico",
+        "material": "Chama da Salamandra"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "lagrima-de-ferro",
+      "titulo": "Lágrima de Ferro",
+      "conteudo": {
+        "descricao": "Uma gota metálica que flutua ao redor do portador e absorve 50% do dano do primeiro ataque físico recebido. (1/dia)",
+        "preco": 360,
+        "raridade": "lendario",
+        "material": "Aço Vivo"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "moeda-do-enganador",
+      "titulo": "Moeda do Enganador",
+      "conteudo": {
+        "descricao": "Lançada, cria uma duplicata ilusória do usuário por 1 turno. (3 usos)",
+        "preco": 270,
+        "raridade": "epico",
+        "material": "Ouro Clonado"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "caixa-da-melodia",
+      "titulo": "Caixa da Melodia",
+      "conteudo": {
+        "descricao": "Aberta, emite uma canção inaudível que induz sono leve em todos a 6m (DT Vontade).",
+        "preco": 310,
+        "raridade": "lendario",
+        "material": "Madeira Negra"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "orbe-do-silencio",
+      "titulo": "Orbe do Silêncio",
+      "conteudo": {
+        "descricao": "Ativado, cria uma zona de silêncio absoluto em 8m por 2 turnos.",
+        "preco": 320,
+        "raridade": "lendario",
+        "material": "Quartzo"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "anel-do-gemeo",
+      "titulo": "Anel do Gêmeo",
+      "conteudo": {
+        "descricao": "Permite comunicação telepática com o portador do outro anel.",
+        "preco": 200,
+        "raridade": "epico",
+        "material": "Obsidiana"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "caixa-do-coracao",
+      "titulo": "Caixa do Coração",
+      "conteudo": {
+        "descricao": "Colocado um item dentro, ele \"bate\" como um coração e gera uma cópia imperfeita do objeto após 1h.",
+        "preco": 420,
+        "raridade": "lendario",
+        "material": "Madeira Viva"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "chave-sem-porta",
+      "titulo": "Chave sem Porta",
+      "conteudo": {
+        "descricao": "Abre qualquer fechadura, mas há 5% de chance de abrir um portal para a dimensão espelhada.",
+        "preco": 320,
+        "raridade": "lendario",
+        "material": "Metal"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "dente-de-gigante",
+      "titulo": "Dente de Gigante",
+      "conteudo": {
+        "descricao": "Arremessado, ao cair cria uma onda sísmica em 5m (5d8 de dano e derruba inimigos).",
+        "preco": 400,
+        "raridade": "lendario",
+        "material": "Osso de Gigante"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "botas-de-pluma",
+      "titulo": "Botas de Pluma",
+      "conteudo": {
+        "descricao": "Anula dano de queda e concede +5 de deslocamento.",
+        "preco": 280,
+        "raridade": "epico",
+        "material": "Penas de Grifo"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "garrafinha",
+      "titulo": "Garrafinha",
+      "conteudo": {
+        "descricao": "Pode conter um evento climático; ao abrir, o evento começa a acontecer.",
+        "preco": 450,
+        "raridade": "lendario",
+        "material": "Vidro Encantado"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "ultimo-folego",
+      "titulo": "Ultimo Folego",
+      "conteudo": {
+        "descricao": "Concede +1 ação de reação por combate.",
+        "preco": 800,
+        "raridade": "lendario",
+        "material": "Essência de Harpia"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pedra",
+      "titulo": "Pedra",
+      "conteudo": {
+        "descricao": "Apenas uma pedra comum Pedra",
+        "preco": 5000,
+        "raridade": "lendario"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escamas",
+      "titulo": "Escamas",
+      "conteudo": {
+        "descricao": "Armadura leve feita de escamas de animal.",
+        "preco": 6,
+        "raridade": "comum",
+        "bonus": "+2",
+        "penalidade": "-1",
+        "material": "Animal"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "pluma",
+      "titulo": "Pluma",
+      "conteudo": {
+        "descricao": "Recebe +3m de movimento. Ocupa 2 espaços no inventario",
+        "preco": 13,
+        "raridade": "incomum",
+        "bonus": "+2",
+        "penalidade": "0",
+        "material": "Penas e malha"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "couro",
+      "titulo": "Couro",
+      "conteudo": {
+        "descricao": "Recebe 1 de resistência a corte ou Perfuração",
+        "preco": 5,
+        "raridade": "comum",
+        "bonus": "+2",
+        "penalidade": "-1",
+        "material": "Couro"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "padrao",
+      "titulo": "Padrão",
+      "conteudo": {
+        "descricao": "Recebe 2 de resistência a corte ou Perfuração",
+        "preco": 8,
+        "raridade": "comum",
+        "bonus": "+3",
+        "penalidade": "-2",
+        "material": "Couro Batido"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "malha",
+      "titulo": "Malha",
+      "conteudo": {
+        "descricao": "Pode ser usada por de baixo de uma armadura, porém não pode ter mod",
+        "preco": 12,
+        "raridade": "incomum",
+        "bonus": "+3",
+        "penalidade": "-1",
+        "material": "Malha"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "espacosa",
+      "titulo": "Espaçosa",
+      "conteudo": {
+        "descricao": "+3 espaços no inventário.",
+        "preco": 15,
+        "raridade": "incomum",
+        "bonus": "+3",
+        "penalidade": "-2",
+        "material": "Malha Revestida"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "boa",
+      "titulo": "Boa",
+      "conteudo": {
+        "descricao": "Recebe 4 de resistência a corte ou Perfuração",
+        "preco": 15,
+        "raridade": "incomum",
+        "bonus": "+4",
+        "penalidade": "-2",
+        "material": "Couro Bom"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "ossos",
+      "titulo": "Ossos",
+      "conteudo": {
+        "descricao": "+2 Intimidação e -1 em Car",
+        "preco": 15,
+        "raridade": "incomum",
+        "bonus": "+4",
+        "penalidade": "-2",
+        "material": "Ossos"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "colete",
+      "titulo": "Colete",
+      "conteudo": {
+        "descricao": "Recebe 5 de resistência a danos balísticos",
+        "preco": 20,
+        "raridade": "incomum",
+        "bonus": "+5",
+        "penalidade": "-3",
+        "material": "Kevlar"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "ferro",
+      "titulo": "Ferro",
+      "conteudo": {
+        "descricao": "Armadura pesada de ferro batido; resistente e barata.",
+        "preco": 20,
+        "raridade": "incomum",
+        "bonus": "+6",
+        "penalidade": "-3",
+        "material": "Ferro"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "aco",
+      "titulo": "Aço",
+      "conteudo": {
+        "descricao": "Recebe 2 de resistência a corte e Perfuração",
+        "preco": 25,
+        "raridade": "incomum",
+        "bonus": "+7",
+        "penalidade": "-4",
+        "material": "Aço"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "espiritual",
+      "titulo": "Espiritual",
+      "conteudo": {
+        "descricao": "Recebe resistencia a danos fisicos, porem não pode tocar em nada",
+        "preco": 400,
+        "raridade": "lendario",
+        "bonus": "+0",
+        "penalidade": "-0",
+        "material": "Éter"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "luxuosa",
+      "titulo": "Luxuosa",
+      "conteudo": {
+        "descricao": "+1 no Mod de Carisma, Vantagem em testes de convencimento",
+        "preco": 30,
+        "raridade": "incomum",
+        "bonus": "+5",
+        "penalidade": "-5",
+        "material": "Ouro"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "planador",
+      "titulo": "Planador",
+      "conteudo": {
+        "descricao": "Pode planar por 50m",
+        "preco": 60,
+        "raridade": "raro",
+        "bonus": "+5",
+        "penalidade": "-2",
+        "material": "Asas de Harpia"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "excelente",
+      "titulo": "Excelente",
+      "conteudo": {
+        "descricao": "Recebe 10 de resistência a corte ou Perfuração",
+        "preco": 40,
+        "raridade": "raro",
+        "bonus": "+6",
+        "penalidade": "-4",
+        "material": "Couro Excelente"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "guerra",
+      "titulo": "Guerra",
+      "conteudo": {
+        "descricao": "Recebe 15 de resistência a um tipo de dano",
+        "preco": 50,
+        "raridade": "raro",
+        "bonus": "+8",
+        "penalidade": "-5",
+        "material": "Titânio"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "flexivel",
+      "titulo": "Flexível",
+      "conteudo": {
+        "descricao": "+1 ação de reação por turno",
+        "preco": 150,
+        "raridade": "epico",
+        "bonus": "+8",
+        "penalidade": "-5",
+        "material": "Nano material"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "elemental",
+      "titulo": "Elemental",
+      "conteudo": {
+        "descricao": "+10 de resistência a algum elemento",
+        "preco": 80,
+        "raridade": "raro",
+        "bonus": "+10",
+        "penalidade": "-5",
+        "material": "Núcleo de Golem"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "tatica",
+      "titulo": "Tática",
+      "conteudo": {
+        "descricao": "+1 no alcance de armas a distancia",
+        "preco": 90,
+        "raridade": "raro",
+        "bonus": "+10",
+        "penalidade": "-5",
+        "material": "Fibras"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "vanguarda",
+      "titulo": "Vanguarda",
+      "conteudo": {
+        "descricao": "Concede vantagem em testes de resistência física",
+        "preco": 95,
+        "raridade": "raro",
+        "bonus": "+13",
+        "penalidade": "-6",
+        "material": "Aço Reforçado"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "guardiao",
+      "titulo": "Guardião",
+      "conteudo": {
+        "descricao": "Caso seja um guardião essa armadura lhe da +5 na defesa",
+        "preco": 200,
+        "raridade": "epico",
+        "bonus": "+15",
+        "penalidade": "-6",
+        "material": "Aço Juramentado"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "anti-magia",
+      "titulo": "Anti-mágia",
+      "conteudo": {
+        "descricao": "Recebe 10 em resistência a danos mágicos",
+        "preco": 1000,
+        "raridade": "lendario",
+        "bonus": "+20",
+        "penalidade": "-8",
+        "material": "Dimeritium"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "tecnologica",
+      "titulo": "Tecnológica",
+      "conteudo": {
+        "descricao": "Pode voar caso a armadura seja recarregada",
+        "preco": 2000,
+        "raridade": "lendario",
+        "bonus": "+25",
+        "penalidade": "-10",
+        "material": "A.X.I.S"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "improvisado",
+      "titulo": "Improvisado",
+      "conteudo": {
+        "descricao": "Concede +1 de bônus de defesa, mas -2 em ataques.",
+        "preco": 5,
+        "raridade": "comum",
+        "bonus": "+1",
+        "penalidade": "-2",
+        "material": "Sucata",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "madeira",
+      "titulo": "Madeira",
+      "conteudo": {
+        "descricao": "Escudo simples de madeira bruta; bloqueio básico.",
+        "preco": 10,
+        "raridade": "comum",
+        "bonus": "+1",
+        "penalidade": "0",
+        "material": "Madeira Bruta",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "redondo",
+      "titulo": "Redondo",
+      "conteudo": {
+        "descricao": "-1 em Furtividade.",
+        "preco": 15,
+        "raridade": "incomum",
+        "bonus": "+2",
+        "penalidade": "0",
+        "material": "Madeira Reforçada",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "cacador",
+      "titulo": "Caçador",
+      "conteudo": {
+        "descricao": "+2 em furtividade",
+        "preco": 25,
+        "raridade": "incomum",
+        "bonus": "+2",
+        "penalidade": "-1",
+        "material": "Madeira e folhas",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "osso",
+      "titulo": "Osso",
+      "conteudo": {
+        "descricao": "+2 em Intimidação.",
+        "preco": 25,
+        "raridade": "incomum",
+        "bonus": "+2",
+        "penalidade": "-1",
+        "material": "Osso",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "ferro-2",
+      "titulo": "Ferro",
+      "conteudo": {
+        "descricao": "2 de RD a dois tipos de dano comuns",
+        "preco": 35,
+        "raridade": "raro",
+        "bonus": "+3",
+        "penalidade": "-1",
+        "material": "Ferro",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "espinhoso",
+      "titulo": "Espinhoso",
+      "conteudo": {
+        "descricao": "Pode causar d6+For de dano de perfuração",
+        "preco": 45,
+        "raridade": "raro",
+        "bonus": "+2",
+        "penalidade": "-1",
+        "material": "Metal",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "torre",
+      "titulo": "Torre",
+      "conteudo": {
+        "descricao": "5 de RD a três tipos de dano",
+        "preco": 65,
+        "raridade": "raro",
+        "bonus": "+4",
+        "penalidade": "-2",
+        "material": "Liga de Aço",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "luxuoso",
+      "titulo": "Luxuoso",
+      "conteudo": {
+        "descricao": "+1 no Mod de Carisma, Vantagem em testes de convencimento",
+        "preco": 50,
+        "raridade": "raro",
+        "bonus": "+4",
+        "penalidade": "-4",
+        "material": "Ouro",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "canhao",
+      "titulo": "Canhão",
+      "conteudo": {
+        "descricao": "Causa 2d6 de dano balístico e empurra o alvo 5m pra longe",
+        "preco": 85,
+        "raridade": "raro",
+        "bonus": "+4",
+        "penalidade": "-5",
+        "material": "Ferro e Aço",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "barricada",
+      "titulo": "Barricada",
+      "conteudo": {
+        "descricao": "Faz com que anule completamente o dano no bloqueio. (duas mãos)",
+        "preco": 85,
+        "raridade": "raro",
+        "bonus": "+5",
+        "penalidade": "-5",
+        "material": "Grafeno",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudao",
+      "titulo": "Escudão",
+      "conteudo": {
+        "descricao": "Recebe 5 em resistência a dois tipo de dano",
+        "preco": 90,
+        "raridade": "raro",
+        "bonus": "+5",
+        "penalidade": "-4",
+        "material": "Titânio",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "guardiao-2",
+      "titulo": "Guardião",
+      "conteudo": {
+        "descricao": "Caso seja um guardião a defesa aumenta em +5",
+        "preco": 120,
+        "raridade": "epico",
+        "bonus": "+5",
+        "penalidade": "-4",
+        "material": "Aço Juramentado",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "anti-magia-2",
+      "titulo": "Anti-mágia",
+      "conteudo": {
+        "descricao": "Recebe 5 em resistência a danos mágicos",
+        "preco": 150,
+        "raridade": "epico",
+        "bonus": "+6",
+        "penalidade": "-5",
+        "material": "Dimeritium",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "lunar",
+      "titulo": "Lunar",
+      "conteudo": {
+        "descricao": "Recebe 2 vantagens e +5 em Fortitude a noite",
+        "preco": 250,
+        "raridade": "epico",
+        "bonus": "+8",
+        "penalidade": "-6",
+        "material": "Restos de Auleth",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "tecnologico",
+      "titulo": "Tecnologico",
+      "conteudo": {
+        "descricao": "Pode anular dano de queda caso o escudo seja recarregado",
+        "preco": 1000,
+        "raridade": "lendario",
+        "bonus": "+15",
+        "penalidade": "-8",
+        "material": "A.X.I.S",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "anel-do-fluxo",
+      "titulo": "Anel do Fluxo",
+      "conteudo": {
+        "descricao": "Seus ataques recebem +3d8 de dano de Fluxo de um elemento à sua escolha.",
+        "preco": 600,
+        "raridade": "lendario",
+        "material": "Cristal de Fluxo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "couraca-primordial",
+      "titulo": "Couraça Primordial",
+      "conteudo": {
+        "descricao": "Recebe 10 de resistência a todos os tipos de dano.",
+        "preco": 3000,
+        "raridade": "lendario",
+        "bonus": "+50",
+        "penalidade": "-12",
+        "material": "Éter Primordial"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "egide-primordial",
+      "titulo": "Égide Primordial",
+      "conteudo": {
+        "descricao": "Recebe 5 de resistência a todos os tipos de dano.",
+        "preco": 2000,
+        "raridade": "lendario",
+        "bonus": "+25",
+        "penalidade": "-9",
+        "material": "Éter Primordial",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-chassi",
+      "titulo": "Chassi de Veículo",
+      "conteudo": {
+        "descricao": "Base de qualquer veículo: 10 de Vida e 5 de deslocamento, sem armas e sem modificações. Pré-requisito: classe Piloto. Instale Núcleo, Estrutura, Armas e Utilidades para personalizá-lo. O Tier 4 de cada sistema é liberado pelo mestre.",
+        "preco": 500,
+        "raridade": "incomum",
+        "sistema": "Chassi",
+        "subtipo": "base",
+        "tier": "T0"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-nucleo-estavel-t1",
+      "titulo": "Núcleo Estável — T1",
+      "conteudo": {
+        "descricao": "2 sistemas ativos; +1 em um dos sistemas ativos.",
+        "preco": 1200,
+        "raridade": "incomum",
+        "sistema": "Núcleo",
+        "subtipo": "Estável",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-nucleo-estavel-t2",
+      "titulo": "Núcleo Estável — T2",
+      "conteudo": {
+        "descricao": "3 sistemas ativos; +1 em um dos sistemas ativos.",
+        "preco": 3500,
+        "raridade": "raro",
+        "sistema": "Núcleo",
+        "subtipo": "Estável",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-nucleo-estavel-t3",
+      "titulo": "Núcleo Estável — T3",
+      "conteudo": {
+        "descricao": "4 sistemas ativos; +1 em um dos sistemas ativos.",
+        "preco": 7500,
+        "raridade": "epico",
+        "sistema": "Núcleo",
+        "subtipo": "Estável",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-nucleo-sobrecarga-t1",
+      "titulo": "Núcleo Sobrecarga — T1",
+      "conteudo": {
+        "descricao": "3 sistemas ativos; uma falha desliga 1 sistema aleatório.",
+        "preco": 1000,
+        "raridade": "incomum",
+        "sistema": "Núcleo",
+        "subtipo": "Sobrecarga",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-nucleo-sobrecarga-t2",
+      "titulo": "Núcleo Sobrecarga — T2",
+      "conteudo": {
+        "descricao": "5 sistemas ativos; uma falha desliga 2 sistemas aleatórios.",
+        "preco": 3200,
+        "raridade": "raro",
+        "sistema": "Núcleo",
+        "subtipo": "Sobrecarga",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-nucleo-sobrecarga-t3",
+      "titulo": "Núcleo Sobrecarga — T3",
+      "conteudo": {
+        "descricao": "6 sistemas ativos; uma falha desliga 3 sistemas aleatórios.",
+        "preco": 7000,
+        "raridade": "epico",
+        "sistema": "Núcleo",
+        "subtipo": "Sobrecarga",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-estrutura-leve-t1",
+      "titulo": "Estrutura Leve — T1",
+      "conteudo": {
+        "descricao": "+1 de deslocamento; 0 de resistência.",
+        "preco": 800,
+        "raridade": "incomum",
+        "sistema": "Estrutura",
+        "subtipo": "Leve",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-estrutura-leve-t2",
+      "titulo": "Estrutura Leve — T2",
+      "conteudo": {
+        "descricao": "+2 de deslocamento; -1 de resistência.",
+        "preco": 2500,
+        "raridade": "raro",
+        "sistema": "Estrutura",
+        "subtipo": "Leve",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-estrutura-leve-t3",
+      "titulo": "Estrutura Leve — T3",
+      "conteudo": {
+        "descricao": "+3 de deslocamento; -2 de resistência.",
+        "preco": 6000,
+        "raridade": "epico",
+        "sistema": "Estrutura",
+        "subtipo": "Leve",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-estrutura-pesada-t1",
+      "titulo": "Estrutura Pesada — T1",
+      "conteudo": {
+        "descricao": "0 de deslocamento; +1 de resistência.",
+        "preco": 1000,
+        "raridade": "incomum",
+        "sistema": "Estrutura",
+        "subtipo": "Pesada",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-estrutura-pesada-t2",
+      "titulo": "Estrutura Pesada — T2",
+      "conteudo": {
+        "descricao": "-1 de deslocamento; +2 de resistência.",
+        "preco": 3000,
+        "raridade": "raro",
+        "sistema": "Estrutura",
+        "subtipo": "Pesada",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-estrutura-pesada-t3",
+      "titulo": "Estrutura Pesada — T3",
+      "conteudo": {
+        "descricao": "-2 de deslocamento; +3 de resistência.",
+        "preco": 7000,
+        "raridade": "epico",
+        "sistema": "Estrutura",
+        "subtipo": "Pesada",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-arma-leve-t1",
+      "titulo": "Arma Leve — T1",
+      "conteudo": {
+        "descricao": "1 de dano; +1 disparo.",
+        "preco": 1000,
+        "raridade": "incomum",
+        "sistema": "Armas",
+        "subtipo": "Leve",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-arma-leve-t2",
+      "titulo": "Arma Leve — T2",
+      "conteudo": {
+        "descricao": "1 de dano; +1 disparo.",
+        "preco": 3000,
+        "raridade": "raro",
+        "sistema": "Armas",
+        "subtipo": "Leve",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-arma-leve-t3",
+      "titulo": "Arma Leve — T3",
+      "conteudo": {
+        "descricao": "1 de dano; +1 disparo.",
+        "preco": 7000,
+        "raridade": "epico",
+        "sistema": "Armas",
+        "subtipo": "Leve",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-arma-pesada-t1",
+      "titulo": "Arma Pesada — T1",
+      "conteudo": {
+        "descricao": "2 de dano; +1 de alcance.",
+        "preco": 1200,
+        "raridade": "incomum",
+        "sistema": "Armas",
+        "subtipo": "Pesada",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-arma-pesada-t2",
+      "titulo": "Arma Pesada — T2",
+      "conteudo": {
+        "descricao": "2 de dano; +1 de alcance.",
+        "preco": 3500,
+        "raridade": "raro",
+        "sistema": "Armas",
+        "subtipo": "Pesada",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-arma-pesada-t3",
+      "titulo": "Arma Pesada — T3",
+      "conteudo": {
+        "descricao": "3 de dano; +1 de alcance.",
+        "preco": 8000,
+        "raridade": "epico",
+        "sistema": "Armas",
+        "subtipo": "Pesada",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-geladeira-t1",
+      "titulo": "Utilidade: Geladeira — T1",
+      "conteudo": {
+        "descricao": "Comida não estraga.",
+        "preco": 100,
+        "raridade": "incomum",
+        "sistema": "Utilidades",
+        "subtipo": "Geladeira",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-geladeira-t2",
+      "titulo": "Utilidade: Geladeira — T2",
+      "conteudo": {
+        "descricao": "Transforma matéria orgânica em comida.",
+        "preco": 500,
+        "raridade": "raro",
+        "sistema": "Utilidades",
+        "subtipo": "Geladeira",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-geladeira-t3",
+      "titulo": "Utilidade: Geladeira — T3",
+      "conteudo": {
+        "descricao": "A comida pode ter qualquer sabor e aparência.",
+        "preco": 800,
+        "raridade": "epico",
+        "sistema": "Utilidades",
+        "subtipo": "Geladeira",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-filtro-t1",
+      "titulo": "Utilidade: Filtro — T1",
+      "conteudo": {
+        "descricao": "Água é descontaminada.",
+        "preco": 100,
+        "raridade": "incomum",
+        "sistema": "Utilidades",
+        "subtipo": "Filtro",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-filtro-t2",
+      "titulo": "Utilidade: Filtro — T2",
+      "conteudo": {
+        "descricao": "Transforma matéria orgânica em água.",
+        "preco": 500,
+        "raridade": "raro",
+        "sistema": "Utilidades",
+        "subtipo": "Filtro",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-filtro-t3",
+      "titulo": "Utilidade: Filtro — T3",
+      "conteudo": {
+        "descricao": "A água pode ter qualquer sabor e aparência.",
+        "preco": 800,
+        "raridade": "epico",
+        "sistema": "Utilidades",
+        "subtipo": "Filtro",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-dormitorios-t1",
+      "titulo": "Utilidade: Dormitórios — T1",
+      "conteudo": {
+        "descricao": "Descanso bom.",
+        "preco": 100,
+        "raridade": "incomum",
+        "sistema": "Utilidades",
+        "subtipo": "Dormitórios",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-dormitorios-t2",
+      "titulo": "Utilidade: Dormitórios — T2",
+      "conteudo": {
+        "descricao": "Descanso maravilhoso.",
+        "preco": 500,
+        "raridade": "raro",
+        "sistema": "Utilidades",
+        "subtipo": "Dormitórios",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-dormitorios-t3",
+      "titulo": "Utilidade: Dormitórios — T3",
+      "conteudo": {
+        "descricao": "Descanso excelente: +1d8.",
+        "preco": 800,
+        "raridade": "epico",
+        "sistema": "Utilidades",
+        "subtipo": "Dormitórios",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-jardim-t1",
+      "titulo": "Utilidade: Jardim — T1",
+      "conteudo": {
+        "descricao": "Bom para relaxar.",
+        "preco": 100,
+        "raridade": "incomum",
+        "sistema": "Utilidades",
+        "subtipo": "Jardim",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-jardim-t2",
+      "titulo": "Utilidade: Jardim — T2",
+      "conteudo": {
+        "descricao": "Relaxamento maravilhoso.",
+        "preco": 500,
+        "raridade": "raro",
+        "sistema": "Utilidades",
+        "subtipo": "Jardim",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-jardim-t3",
+      "titulo": "Utilidade: Jardim — T3",
+      "conteudo": {
+        "descricao": "Relaxamento excelente: +1d8.",
+        "preco": 800,
+        "raridade": "epico",
+        "sistema": "Utilidades",
+        "subtipo": "Jardim",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-academia-t1",
+      "titulo": "Utilidade: Academia — T1",
+      "conteudo": {
+        "descricao": "Treino bom.",
+        "preco": 100,
+        "raridade": "incomum",
+        "sistema": "Utilidades",
+        "subtipo": "Academia",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-academia-t2",
+      "titulo": "Utilidade: Academia — T2",
+      "conteudo": {
+        "descricao": "Treino maravilhoso.",
+        "preco": 500,
+        "raridade": "raro",
+        "sistema": "Utilidades",
+        "subtipo": "Academia",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-academia-t3",
+      "titulo": "Utilidade: Academia — T3",
+      "conteudo": {
+        "descricao": "Treino excelente.",
+        "preco": 800,
+        "raridade": "epico",
+        "sistema": "Utilidades",
+        "subtipo": "Academia",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-area-medica-t1",
+      "titulo": "Utilidade: Área Médica — T1",
+      "conteudo": {
+        "descricao": "+1d4 e +2 em cura.",
+        "preco": 100,
+        "raridade": "incomum",
+        "sistema": "Utilidades",
+        "subtipo": "Área Médica",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-area-medica-t2",
+      "titulo": "Utilidade: Área Médica — T2",
+      "conteudo": {
+        "descricao": "+1d8 e vantagem em cura.",
+        "preco": 500,
+        "raridade": "raro",
+        "sistema": "Utilidades",
+        "subtipo": "Área Médica",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-area-medica-t3",
+      "titulo": "Utilidade: Área Médica — T3",
+      "conteudo": {
+        "descricao": "+1d12, +4 e vantagem em cura.",
+        "preco": 800,
+        "raridade": "epico",
+        "sistema": "Utilidades",
+        "subtipo": "Área Médica",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-armazem-t1",
+      "titulo": "Utilidade: Armazém — T1",
+      "conteudo": {
+        "descricao": "Armazena 15 itens.",
+        "preco": 100,
+        "raridade": "incomum",
+        "sistema": "Utilidades",
+        "subtipo": "Armazém",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-armazem-t2",
+      "titulo": "Utilidade: Armazém — T2",
+      "conteudo": {
+        "descricao": "Armazena 30 itens.",
+        "preco": 500,
+        "raridade": "raro",
+        "sistema": "Utilidades",
+        "subtipo": "Armazém",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-armazem-t3",
+      "titulo": "Utilidade: Armazém — T3",
+      "conteudo": {
+        "descricao": "Armazena 60 itens.",
+        "preco": 800,
+        "raridade": "epico",
+        "sistema": "Utilidades",
+        "subtipo": "Armazém",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-escudo-t1",
+      "titulo": "Utilidade: Escudo — T1",
+      "conteudo": {
+        "descricao": "+1 de Vida ao veículo.",
+        "preco": 100,
+        "raridade": "incomum",
+        "sistema": "Utilidades",
+        "subtipo": "Escudo",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-escudo-t2",
+      "titulo": "Utilidade: Escudo — T2",
+      "conteudo": {
+        "descricao": "+2 de Vida ao veículo.",
+        "preco": 500,
+        "raridade": "raro",
+        "sistema": "Utilidades",
+        "subtipo": "Escudo",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-escudo-t3",
+      "titulo": "Utilidade: Escudo — T3",
+      "conteudo": {
+        "descricao": "+3 de Vida ao veículo.",
+        "preco": 800,
+        "raridade": "epico",
+        "sistema": "Utilidades",
+        "subtipo": "Escudo",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-capsula-fuga-t1",
+      "titulo": "Utilidade: Cápsula de Fuga — T1",
+      "conteudo": {
+        "descricao": "Comporta 4 seres.",
+        "preco": 100,
+        "raridade": "incomum",
+        "sistema": "Utilidades",
+        "subtipo": "Cápsula de Fuga",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-capsula-fuga-t2",
+      "titulo": "Utilidade: Cápsula de Fuga — T2",
+      "conteudo": {
+        "descricao": "Comporta 8 seres.",
+        "preco": 500,
+        "raridade": "raro",
+        "sistema": "Utilidades",
+        "subtipo": "Cápsula de Fuga",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-capsula-fuga-t3",
+      "titulo": "Utilidade: Cápsula de Fuga — T3",
+      "conteudo": {
+        "descricao": "Comporta 12 seres.",
+        "preco": 800,
+        "raridade": "epico",
+        "sistema": "Utilidades",
+        "subtipo": "Cápsula de Fuga",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-hangar-t1",
+      "titulo": "Utilidade: Hangar — T1",
+      "conteudo": {
+        "descricao": "Abriga 1 veículo pequeno.",
+        "preco": 100,
+        "raridade": "incomum",
+        "sistema": "Utilidades",
+        "subtipo": "Hangar",
+        "tier": "T1"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-hangar-t2",
+      "titulo": "Utilidade: Hangar — T2",
+      "conteudo": {
+        "descricao": "Abriga 1 veículo médio.",
+        "preco": 500,
+        "raridade": "raro",
+        "sistema": "Utilidades",
+        "subtipo": "Hangar",
+        "tier": "T2"
+      }
+    },
+    {
+      "tipo": "veiculo",
+      "id": "veiculo-util-hangar-t3",
+      "titulo": "Utilidade: Hangar — T3",
+      "conteudo": {
+        "descricao": "Abriga 2 veículos médios.",
+        "preco": 800,
+        "raridade": "epico",
+        "sistema": "Utilidades",
+        "subtipo": "Hangar",
+        "tier": "T3"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "cajado",
+      "titulo": "Cajado",
+      "conteudo": {
+        "preco": 5,
+        "raridade": "comum",
+        "atributos": [
+          "1d6 de dano",
+          "Crítico 20"
+        ],
+        "dano": "1d6",
+        "critico": "20",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Impacto",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "faca",
+      "titulo": "Faca de Caça",
+      "conteudo": {
+        "preco": 5,
+        "raridade": "comum",
+        "atributos": [
+          "1d4 de dano",
+          "Crítico 19"
+        ],
+        "dano": "1d4",
+        "critico": "19",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Corte",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "funda",
+      "titulo": "Funda",
+      "conteudo": {
+        "preco": 5,
+        "raridade": "comum",
+        "atributos": [
+          "1d4 de dano",
+          "Crítico 20"
+        ],
+        "dano": "1d4",
+        "critico": "20",
+        "alcance": "Médio",
+        "tipo_de_dano": "Impacto",
+        "subtipo": "simples",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "foice-de-mao",
+      "titulo": "Foice de Mão",
+      "conteudo": {
+        "preco": 8,
+        "raridade": "comum",
+        "atributos": [
+          "1d6 de dano",
+          "Crítico 18"
+        ],
+        "dano": "1d6",
+        "critico": "18",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Corte",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "chuco",
+      "titulo": "Chuço",
+      "conteudo": {
+        "preco": 8,
+        "raridade": "comum",
+        "atributos": [
+          "1d8 de dano",
+          "Crítico 20"
+        ],
+        "dano": "1d8",
+        "critico": "20",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "simples",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "montante",
+      "titulo": "Montante",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "2d6 de dano",
+          "Crítico 19"
+        ],
+        "dano": "2d6",
+        "critico": "19",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Corte",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "rapieira",
+      "titulo": "Rapieira",
+      "conteudo": {
+        "preco": 25,
+        "raridade": "incomum",
+        "atributos": [
+          "1d8 de dano",
+          "Crítico 18"
+        ],
+        "dano": "1d8",
+        "critico": "18",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "cimitarra",
+      "titulo": "Cimitarra",
+      "conteudo": {
+        "preco": 25,
+        "raridade": "incomum",
+        "atributos": [
+          "1d8 de dano",
+          "Crítico 18"
+        ],
+        "dano": "1d8",
+        "critico": "18",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Corte",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "mangual",
+      "titulo": "Mangual",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "2d6 de dano",
+          "Crítico x3"
+        ],
+        "dano": "2d6",
+        "critico": "x3",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Impacto",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "alabarda",
+      "titulo": "Alabarda",
+      "conteudo": {
+        "preco": 45,
+        "raridade": "raro",
+        "atributos": [
+          "2d10 de dano",
+          "Crítico x3"
+        ],
+        "dano": "2d10",
+        "critico": "x3",
+        "alcance": "Curto",
+        "tipo_de_dano": "Corte",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "machado-duplo",
+      "titulo": "Machado Duplo",
+      "conteudo": {
+        "preco": 50,
+        "raridade": "raro",
+        "atributos": [
+          "2d12 de dano",
+          "Crítico 19"
+        ],
+        "dano": "2d12",
+        "critico": "19",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Corte",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "lanca-de-cavalaria",
+      "titulo": "Lança de Cavalaria",
+      "conteudo": {
+        "preco": 45,
+        "raridade": "raro",
+        "atributos": [
+          "3d6 de dano",
+          "Crítico x3"
+        ],
+        "dano": "3d6",
+        "critico": "x3",
+        "alcance": "Curto",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "marcial",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "arco-composto",
+      "titulo": "Arco Composto",
+      "conteudo": {
+        "preco": 30,
+        "raridade": "incomum",
+        "atributos": [
+          "1d10 de dano",
+          "Crítico 19"
+        ],
+        "dano": "1d10",
+        "critico": "19",
+        "alcance": "Longo",
+        "tipo_de_dano": "Perfuração",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "espingarda-cano-duplo",
+      "titulo": "Espingarda de Cano Duplo",
+      "conteudo": {
+        "preco": 70,
+        "raridade": "raro",
+        "atributos": [
+          "5d6 de dano",
+          "Crítico x3"
+        ],
+        "dano": "5d6",
+        "critico": "x3",
+        "alcance": "Curto",
+        "tipo_de_dano": "Balístico",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "rifle-de-precisao",
+      "titulo": "Rifle de Precisão",
+      "conteudo": {
+        "preco": 260,
+        "raridade": "epico",
+        "atributos": [
+          "4d10 de dano",
+          "Crítico 19/x3"
+        ],
+        "dano": "4d10",
+        "critico": "19/x3",
+        "alcance": "Longo",
+        "tipo_de_dano": "Balístico",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "lanca-chamas",
+      "titulo": "Lança-Chamas",
+      "conteudo": {
+        "preco": 200,
+        "raridade": "epico",
+        "atributos": [
+          "3d8 de dano",
+          "Crítico x2"
+        ],
+        "dano": "3d8",
+        "critico": "x2",
+        "alcance": "Curto",
+        "tipo_de_dano": "Fogo",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "canhao-de-mao",
+      "titulo": "Canhão de Mão",
+      "conteudo": {
+        "preco": 240,
+        "raridade": "epico",
+        "atributos": [
+          "4d8 de dano",
+          "Crítico 19"
+        ],
+        "dano": "4d8",
+        "critico": "19",
+        "alcance": "Médio",
+        "tipo_de_dano": "Impacto/Fogo",
+        "subtipo": "marcial",
+        "modo": "À distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "lamina-de-plasma",
+      "titulo": "Lâmina de Plasma",
+      "conteudo": {
+        "preco": 320,
+        "raridade": "epico",
+        "atributos": [
+          "3d10 de dano",
+          "Crítico 18"
+        ],
+        "dano": "3d10",
+        "critico": "18",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Fogo",
+        "subtipo": "marcial",
+        "material": "Tecnologia",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "foice-ceifadora",
+      "titulo": "Foice Ceifadora",
+      "conteudo": {
+        "preco": 480,
+        "raridade": "lendario",
+        "atributos": [
+          "4d8 de dano",
+          "Crítico x4"
+        ],
+        "dano": "4d8",
+        "critico": "x4",
+        "alcance": "Curto",
+        "tipo_de_dano": "Corte",
+        "subtipo": "marcial",
+        "descricao": "Rola o dano de crítico duas vezes contra alvos abaixo de 25% de Vida.",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "gambeson",
+      "titulo": "Gambeson",
+      "conteudo": {
+        "descricao": "Armadura acolchoada leve e barata.",
+        "preco": 5,
+        "raridade": "comum",
+        "bonus": "+1",
+        "penalidade": "0",
+        "material": "Tecido Acolchoado"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "brigantina",
+      "titulo": "Brigantina",
+      "conteudo": {
+        "descricao": "Placas de metal rebitadas em couro; boa proteção com mobilidade.",
+        "preco": 25,
+        "raridade": "incomum",
+        "bonus": "+5",
+        "penalidade": "-2",
+        "material": "Placas e Couro"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "meia-armadura",
+      "titulo": "Meia-Armadura",
+      "conteudo": {
+        "descricao": "Recebe 3 de resistência a corte e perfuração.",
+        "preco": 30,
+        "raridade": "incomum",
+        "bonus": "+6",
+        "penalidade": "-3",
+        "material": "Aço"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-de-placas",
+      "titulo": "Armadura de Placas",
+      "conteudo": {
+        "descricao": "Recebe 8 de resistência a dano físico.",
+        "preco": 90,
+        "raridade": "raro",
+        "bonus": "+12",
+        "penalidade": "-6",
+        "material": "Aço Forjado"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "malha-elfica",
+      "titulo": "Cota de Malha Élfica",
+      "conteudo": {
+        "descricao": "Leve como seda; não impõe penalidade de furtividade.",
+        "preco": 150,
+        "raridade": "epico",
+        "bonus": "+10",
+        "penalidade": "-1",
+        "material": "Mithril"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-solar",
+      "titulo": "Armadura Solar",
+      "conteudo": {
+        "descricao": "Ao amanhecer, restaura 3d10 de Vida do portador. +10 de RD a trevas.",
+        "preco": 900,
+        "raridade": "lendario",
+        "bonus": "+22",
+        "penalidade": "-8",
+        "material": "Lágrima do Sol"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "broquel",
+      "titulo": "Broquel",
+      "conteudo": {
+        "descricao": "Escudo pequeno; +1 de bônus sem penalidade.",
+        "preco": 8,
+        "raridade": "comum",
+        "bonus": "+1",
+        "penalidade": "0",
+        "material": "Madeira e Metal",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "paves",
+      "titulo": "Pavês",
+      "conteudo": {
+        "descricao": "Escudo alto de infantaria; +2 de RD a distância enquanto agachado.",
+        "preco": 60,
+        "raridade": "raro",
+        "bonus": "+4",
+        "penalidade": "-3",
+        "material": "Madeira Reforçada",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-espelhado",
+      "titulo": "Escudo Espelhado",
+      "conteudo": {
+        "descricao": "Uma vez por combate, reflete uma magia à distância de volta ao lançador.",
+        "preco": 260,
+        "raridade": "epico",
+        "bonus": "+6",
+        "penalidade": "-4",
+        "material": "Prata Polida",
+        "subtipo": "escudo"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "corda-de-escalada",
+      "titulo": "Corda de Escalada",
+      "conteudo": {
+        "descricao": "15m de corda resistente; vantagem em testes de Escalada.",
+        "preco": 5,
+        "raridade": "comum",
+        "material": "Cânhamo"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "tocha",
+      "titulo": "Tocha",
+      "conteudo": {
+        "descricao": "Ilumina 6m por 1 hora. Pode ser usada como arma improvisada de fogo.",
+        "preco": 2,
+        "raridade": "comum",
+        "material": "Madeira e Breu"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "kit-de-ferramentas",
+      "titulo": "Kit de Ferramentas",
+      "conteudo": {
+        "descricao": "Vantagem em testes de Ofício e para desarmar mecanismos.",
+        "preco": 15,
+        "raridade": "comum",
+        "material": "Metal"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-cura-menor",
+      "titulo": "Poção de Cura Menor",
+      "conteudo": {
+        "descricao": "Restaura 2d4+2 de Vida. (1 uso)",
+        "preco": 20,
+        "raridade": "incomum",
+        "material": "Ervas Alquímicas"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "antidoto",
+      "titulo": "Antídoto",
+      "conteudo": {
+        "descricao": "Encerra um efeito de veneno e concede vantagem contra o próximo. (1 uso)",
+        "preco": 18,
+        "raridade": "incomum",
+        "material": "Ervas Alquímicas"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-cura-maior",
+      "titulo": "Poção de Cura Maior",
+      "conteudo": {
+        "descricao": "Restaura 4d4+4 de Vida. (1 uso)",
+        "preco": 45,
+        "raridade": "raro",
+        "material": "Ervas Raras"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pergaminho-teleporte",
+      "titulo": "Pergaminho de Teleporte",
+      "conteudo": {
+        "descricao": "Teleporta o usuário e até 3 aliados adjacentes para um local visível a 60m. (1 uso)",
+        "preco": 80,
+        "raridade": "raro",
+        "material": "Papel Rúnico"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "capa-da-invisibilidade",
+      "titulo": "Capa da Invisibilidade",
+      "conteudo": {
+        "descricao": "Torna o usuário invisível por 3 turnos ou até atacar. (1/dia)",
+        "preco": 280,
+        "raridade": "epico",
+        "material": "Seda Etérea"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "anel-de-protecao",
+      "titulo": "Anel de Proteção",
+      "conteudo": {
+        "descricao": "+2 de Defesa e +2 em testes de resistência.",
+        "preco": 220,
+        "raridade": "epico",
+        "material": "Prata Rúnica"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "orbe-dos-elementos",
+      "titulo": "Orbe dos Elementos",
+      "conteudo": {
+        "descricao": "Uma vez por turno, adiciona 2d6 de dano elemental (fogo, gelo ou raio) a uma magia ou ataque.",
+        "preco": 350,
+        "raridade": "lendario",
+        "material": "Cristal Elemental"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "coracao-de-fluxo",
+      "titulo": "Coração de Fluxo",
+      "conteudo": {
+        "descricao": "Recupera 1d6 de Mana no início de cada turno. Enquanto ativo, suas magias custam -1 de Mana.",
+        "preco": 500,
+        "raridade": "lendario",
+        "material": "Núcleo de Fluxo"
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "calice-da-vida",
+      "titulo": "Cálice da Vida Eterna",
+      "conteudo": {
+        "descricao": "Uma vez por sessão, reverte um aliado caído a 50% da Vida total.",
+        "preco": 700,
+        "raridade": "lendario",
+        "material": "Ouro Vivo"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "lobo-cinzento",
+      "titulo": "Lobo Cinzento",
+      "conteudo": {
+        "descricao": "Predador de matilha; ataca em grupo e persegue presas feridas.",
+        "preco": 15,
+        "raridade": "comum",
+        "nivel": 5,
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "urso-das-cavernas",
+      "titulo": "Urso das Cavernas",
+      "conteudo": {
+        "descricao": "Fera territorial e resistente, ótima na exploração de covis.",
+        "preco": 62,
+        "raridade": "incomum",
+        "nivel": 12,
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "aranha-gigante",
+      "titulo": "Aranha Gigante",
+      "conteudo": {
+        "descricao": "Tece teias e injeta veneno paralisante nas presas.",
+        "preco": 83,
+        "raridade": "incomum",
+        "nivel": 18,
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "basilisco",
+      "titulo": "Basilisco",
+      "conteudo": {
+        "descricao": "Seu olhar petrifica; caçá-lo exige espelhos e cuidado.",
+        "preco": 318,
+        "raridade": "raro",
+        "nivel": 28,
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "quimera",
+      "titulo": "Quimera",
+      "conteudo": {
+        "descricao": "Híbrido de leão, cabra e dragão que cospe fogo.",
+        "preco": 823,
+        "raridade": "epico",
+        "nivel": 38,
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "coruja-arcana",
+      "titulo": "Coruja Arcana",
+      "conteudo": {
+        "descricao": "Vê no escuro e sussurra segredos ao seu vínculo.",
+        "preco": 80,
+        "raridade": "incomum",
+        "nivel": 6,
+        "classe": "Familiar"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "gato-espectral",
+      "titulo": "Gato Espectral",
+      "conteudo": {
+        "descricao": "Atravessa paredes e avisa de perigos invisíveis.",
+        "preco": 220,
+        "raridade": "raro",
+        "nivel": 14,
+        "classe": "Familiar"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "dragonete",
+      "titulo": "Dragonete",
+      "conteudo": {
+        "descricao": "Pequeno dragão leal; cospe brasas e defende o dono.",
+        "preco": 478,
+        "raridade": "epico",
+        "nivel": 22,
+        "classe": "Familiar"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "fenix-menor",
+      "titulo": "Fênix Menor",
+      "conteudo": {
+        "descricao": "Renasce das cinzas uma vez por dia e cura aliados.",
+        "preco": 1598,
+        "raridade": "lendario",
+        "nivel": 35,
+        "classe": "Familiar"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "esqueleto-guerreiro",
+      "titulo": "Esqueleto Guerreiro",
+      "conteudo": {
+        "descricao": "Morto-vivo obediente que empunha a arma com que caiu.",
+        "preco": 26,
+        "raridade": "comum",
+        "nivel": 4,
+        "classe": "Servo"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "zumbi-bruto",
+      "titulo": "Zumbi Bruto",
+      "conteudo": {
+        "descricao": "Lento, mas absurdamente resistente e incansável.",
+        "preco": 26,
+        "raridade": "comum",
+        "nivel": 10,
+        "classe": "Servo"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "carnical",
+      "titulo": "Carniçal",
+      "conteudo": {
+        "descricao": "Rastreador macabro que fareja sangue a quilômetros.",
+        "preco": 102,
+        "raridade": "incomum",
+        "nivel": 16,
+        "classe": "Servo"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "cavaleiro-da-morte",
+      "titulo": "Cavaleiro da Morte",
+      "conteudo": {
+        "descricao": "Campeão caído reerguido; comanda outros mortos-vivos.",
+        "preco": 290,
+        "raridade": "raro",
+        "nivel": 30,
+        "classe": "Servo"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "elemental-de-fogo-menor",
+      "titulo": "Elemental de Fogo Menor",
+      "conteudo": {
+        "descricao": "Chama viva conjurada; incendeia tudo que toca por pouco tempo.",
+        "preco": 46,
+        "raridade": "comum",
+        "nivel": 8,
+        "classe": "Invocação"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "golem-de-pedra",
+      "titulo": "Golem de Pedra",
+      "conteudo": {
+        "descricao": "Guardião de pedra invocado para barrar passagens.",
+        "preco": 190,
+        "raridade": "raro",
+        "nivel": 18,
+        "classe": "Invocação"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "demonio-menor",
+      "titulo": "Demônio Menor",
+      "conteudo": {
+        "descricao": "Servo do abismo trazido por pacto; cobra um preço ao fim.",
+        "preco": 856,
+        "raridade": "epico",
+        "nivel": 26,
+        "classe": "Invocação"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "anjo-guardiao",
+      "titulo": "Anjo Guardião",
+      "conteudo": {
+        "descricao": "Presença celestial que protege e cura por uma cena.",
+        "preco": 1345,
+        "raridade": "lendario",
+        "nivel": 40,
+        "classe": "Invocação"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "mercenario-novato",
+      "titulo": "Mercenário Novato",
+      "conteudo": {
+        "descricao": "Espadachim barato disposto a qualquer trabalho sujo.",
+        "preco": 35,
+        "raridade": "comum",
+        "nivel": 3,
+        "classe": "Ajudante"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "curandeiro-errante",
+      "titulo": "Curandeiro Errante",
+      "conteudo": {
+        "descricao": "Trata ferimentos e doenças em viagem.",
+        "preco": 52,
+        "raridade": "incomum",
+        "nivel": 10,
+        "classe": "Ajudante"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "guarda-costas",
+      "titulo": "Guarda-Costas",
+      "conteudo": {
+        "descricao": "Protetor treinado que intercepta ataques ao contratante.",
+        "preco": 110,
+        "raridade": "incomum",
+        "nivel": 16,
+        "classe": "Ajudante"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "mestre-ferreiro",
+      "titulo": "Mestre Ferreiro",
+      "conteudo": {
+        "descricao": "Forja e repara equipamento em campo.",
+        "preco": 258,
+        "raridade": "raro",
+        "nivel": 22,
+        "classe": "Ajudante"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "dragao-anciao",
+      "titulo": "Dragão Ancião",
+      "conteudo": {
+        "descricao": "Wyrm milenar cuja sombra escurece vales inteiros.",
+        "preco": 8545,
+        "raridade": "lendario",
+        "nivel": 40,
+        "classe": "Ser Lendário"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "leviata",
+      "titulo": "Leviatã",
+      "conteudo": {
+        "descricao": "Serpente dos abismos que engole navios.",
+        "preco": 17150,
+        "raridade": "lendario",
+        "nivel": 45,
+        "classe": "Ser Lendário"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "fenix-imortal",
+      "titulo": "Fênix Imortal",
+      "conteudo": {
+        "descricao": "A chama eterna; sua presença reacende os caídos.",
+        "preco": 18100,
+        "raridade": "lendario",
+        "nivel": 50,
+        "classe": "Ser Lendário"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "kraken",
+      "titulo": "Kraken",
+      "conteudo": {
+        "descricao": "Terror de tentáculos que arrasta cidades costeiras ao mar.",
+        "preco": 15215,
+        "raridade": "lendario",
+        "nivel": 42,
+        "classe": "Ser Lendário"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-humano-carne",
+      "titulo": "Carne de Humano",
+      "conteudo": {
+        "descricao": "Carne extraída de Humano. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 10,
+        "raridade": "comum",
+        "parte": "Carne",
+        "especie": "Humano"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-humano-orgaos",
+      "titulo": "Órgãos de Humano",
+      "conteudo": {
+        "descricao": "Órgãos extraída de Humano. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 15,
+        "raridade": "comum",
+        "parte": "Órgãos",
+        "especie": "Humano"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-humano-essência",
+      "titulo": "Essência de Humano",
+      "conteudo": {
+        "descricao": "Essência extraída de Humano. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 25,
+        "raridade": "comum",
+        "parte": "Essência",
+        "especie": "Humano"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-vampiro-orgaos",
+      "titulo": "Órgãos de Vampiro",
+      "conteudo": {
+        "descricao": "Órgãos extraída de Vampiro. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 80,
+        "raridade": "incomum",
+        "parte": "Órgãos",
+        "especie": "Vampiro"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-vampiro-essência",
+      "titulo": "Essência de Vampiro",
+      "conteudo": {
+        "descricao": "Essência extraída de Vampiro. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 150,
+        "raridade": "raro",
+        "parte": "Essência",
+        "especie": "Vampiro"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-goblin-carne",
+      "titulo": "Carne de Goblin",
+      "conteudo": {
+        "descricao": "Carne extraída de Goblin. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 5,
+        "raridade": "comum",
+        "parte": "Carne",
+        "especie": "Goblin"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-goblin-orgaos",
+      "titulo": "Órgãos de Goblin",
+      "conteudo": {
+        "descricao": "Órgãos extraída de Goblin. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 8,
+        "raridade": "comum",
+        "parte": "Órgãos",
+        "especie": "Goblin"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-anao-carne",
+      "titulo": "Carne de Anão",
+      "conteudo": {
+        "descricao": "Carne extraída de Anão. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 20,
+        "raridade": "comum",
+        "parte": "Carne",
+        "especie": "Anão"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-anao-orgaos",
+      "titulo": "Órgãos de Anão",
+      "conteudo": {
+        "descricao": "Órgãos extraída de Anão. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 30,
+        "raridade": "comum",
+        "parte": "Órgãos",
+        "especie": "Anão"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-anao-essência",
+      "titulo": "Essência de Anão",
+      "conteudo": {
+        "descricao": "Essência extraída de Anão. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 40,
+        "raridade": "comum",
+        "parte": "Essência",
+        "especie": "Anão"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-golem-orgaos",
+      "titulo": "Órgãos de Golem",
+      "conteudo": {
+        "descricao": "Órgãos extraída de Golem. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 60,
+        "raridade": "incomum",
+        "parte": "Órgãos",
+        "especie": "Golem"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-golem-essência",
+      "titulo": "Essência de Golem",
+      "conteudo": {
+        "descricao": "Essência extraída de Golem. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 120,
+        "raridade": "incomum",
+        "parte": "Essência",
+        "especie": "Golem"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-espirito-essência",
+      "titulo": "Essência de Espírito",
+      "conteudo": {
+        "descricao": "Essência extraída de Espírito. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 200,
+        "raridade": "raro",
+        "parte": "Essência",
+        "especie": "Espírito"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-gigante-carne",
+      "titulo": "Carne de Gigante",
+      "conteudo": {
+        "descricao": "Carne extraída de Gigante. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 120,
+        "raridade": "incomum",
+        "parte": "Carne",
+        "especie": "Gigante"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-gigante-orgaos",
+      "titulo": "Órgãos de Gigante",
+      "conteudo": {
+        "descricao": "Órgãos extraída de Gigante. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 180,
+        "raridade": "raro",
+        "parte": "Órgãos",
+        "especie": "Gigante"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-gigante-essência",
+      "titulo": "Essência de Gigante",
+      "conteudo": {
+        "descricao": "Essência extraída de Gigante. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 250,
+        "raridade": "raro",
+        "parte": "Essência",
+        "especie": "Gigante"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-animália-carne",
+      "titulo": "Carne de Animália",
+      "conteudo": {
+        "descricao": "Carne extraída de Animália. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 20,
+        "raridade": "comum",
+        "parte": "Carne",
+        "especie": "Animália"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-animália-orgaos",
+      "titulo": "Órgãos de Animália",
+      "conteudo": {
+        "descricao": "Órgãos extraída de Animália. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 35,
+        "raridade": "comum",
+        "parte": "Órgãos",
+        "especie": "Animália"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-animália-essência",
+      "titulo": "Essência de Animália",
+      "conteudo": {
+        "descricao": "Essência extraída de Animália. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 25,
+        "raridade": "comum",
+        "parte": "Essência",
+        "especie": "Animália"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-sereia-tritao-carne",
+      "titulo": "Carne de Sereia/Tritão",
+      "conteudo": {
+        "descricao": "Carne extraída de Sereia/Tritão. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 35,
+        "raridade": "comum",
+        "parte": "Carne",
+        "especie": "Sereia/Tritão"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-sereia-tritao-orgaos",
+      "titulo": "Órgãos de Sereia/Tritão",
+      "conteudo": {
+        "descricao": "Órgãos extraída de Sereia/Tritão. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 70,
+        "raridade": "incomum",
+        "parte": "Órgãos",
+        "especie": "Sereia/Tritão"
+      }
+    },
+    {
+      "tipo": "drop",
+      "id": "drop-sereia-tritao-essência",
+      "titulo": "Essência de Sereia/Tritão",
+      "conteudo": {
+        "descricao": "Essência extraída de Sereia/Tritão. Preço de mercado (parte fresca, mercado grande). Modificadores: conservada -20%, corrompida -50%; abate limpo +20%, brutal -15%; de ser lendário x2 a x3. Sem os materiais certos de extração, o valor cai 75%.",
+        "preco": 90,
+        "raridade": "incomum",
+        "parte": "Essência",
+        "especie": "Sereia/Tritão"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "excalibur",
+      "titulo": "Excalibur",
+      "conteudo": {
+        "descricao": "Impossível finalizar seres com essa espada.",
+        "preco": 5000,
+        "raridade": "lendario",
+        "atributos": [
+          "10d40+10d26+10d8+80 de dano",
+          "Crítico 10/x8"
+        ],
+        "dano": "10d40+10d26+10d8+80",
+        "critico": "10/x8",
+        "alcance": "Curto",
+        "tipo_de_dano": "Pureza",
+        "subtipo": "marcial",
+        "material": "Obstinada",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "martelo-das-chamas",
+      "titulo": "Martelo das Chamas",
+      "conteudo": {
+        "descricao": "Um martelo \"abençoado\" pela dama das chamas.",
+        "preco": 4200,
+        "raridade": "lendario",
+        "atributos": [
+          "10d12+100 de dano",
+          "Crítico 20/x10"
+        ],
+        "dano": "10d12+100",
+        "critico": "20/x10",
+        "alcance": "Curto",
+        "tipo_de_dano": "Fogo Astral",
+        "subtipo": "marcial",
+        "material": "Obstinada",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "triceratops",
+      "titulo": "Triceratops",
+      "conteudo": {
+        "descricao": "Uma katana que pertenceu a um antigo vampiro Ventrue.",
+        "preco": 3500,
+        "raridade": "lendario",
+        "atributos": [
+          "9d9+42 de dano",
+          "Crítico 15/x5"
+        ],
+        "dano": "9d9+42",
+        "critico": "15/x5",
+        "alcance": "Curto",
+        "tipo_de_dano": "Escuridão",
+        "subtipo": "marcial",
+        "material": "Obstinada",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "mjolnir",
+      "titulo": "Mjölnir",
+      "conteudo": {
+        "descricao": "Volta para o portador após arremessada; se critar, causa 25% do dano num alcance Médio.",
+        "preco": 4800,
+        "raridade": "lendario",
+        "atributos": [
+          "12d12+100 de dano",
+          "Crítico 19/x8"
+        ],
+        "dano": "12d12+100",
+        "critico": "19/x8",
+        "alcance": "Corpo a corpo / Longo",
+        "tipo_de_dano": "Raio",
+        "subtipo": "marcial",
+        "material": "Obstinada",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "rhaast",
+      "titulo": "Rhaast",
+      "conteudo": {
+        "descricao": "10% do dano volta como cura para o portador.",
+        "preco": 4000,
+        "raridade": "lendario",
+        "atributos": [
+          "8d12+6d10+60 de dano",
+          "Crítico 18/x6"
+        ],
+        "dano": "8d12+6d10+60",
+        "critico": "18/x6",
+        "alcance": "Curto/Longo",
+        "tipo_de_dano": "Sangue",
+        "subtipo": "marcial",
+        "material": "Obstinada",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "zangetsu",
+      "titulo": "Zangetsu",
+      "conteudo": {
+        "descricao": "A cada 2 de F.V. gasto, causa +5 de dano.",
+        "preco": 3800,
+        "raridade": "lendario",
+        "atributos": [
+          "8d12 de dano",
+          "Crítico 19/x7"
+        ],
+        "dano": "8d12",
+        "critico": "19/x7",
+        "alcance": "Curto",
+        "tipo_de_dano": "Vazio",
+        "subtipo": "marcial",
+        "material": "Obstinada",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "gungnir",
+      "titulo": "Gungnir",
+      "conteudo": {
+        "descricao": "Caso quebre um juramento, a lança se volta contra o portador.",
+        "preco": 4500,
+        "raridade": "lendario",
+        "atributos": [
+          "10d12+80 de dano",
+          "Crítico 20/x10"
+        ],
+        "dano": "10d12+80",
+        "critico": "20/x10",
+        "alcance": "Médio",
+        "tipo_de_dano": "Luz Solar",
+        "subtipo": "marcial",
+        "material": "Obstinada",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "masamune",
+      "titulo": "Masamune",
+      "conteudo": {
+        "descricao": "O primeiro ataque em um combate sempre acerta; se matar um ser, pode agir novamente.",
+        "preco": 4600,
+        "raridade": "lendario",
+        "atributos": [
+          "9d10+9d10 de dano",
+          "Crítico 18/x6"
+        ],
+        "dano": "9d10+9d10",
+        "critico": "18/x6",
+        "alcance": "Curto",
+        "tipo_de_dano": "Metal",
+        "subtipo": "marcial",
+        "material": "Obstinada",
+        "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "murasame",
+      "titulo": "Murasame",
+      "conteudo": {
+        "descricao": "Caso corte alguém, o ser morre instantaneamente.",
+        "preco": 5000,
+        "raridade": "lendario",
+        "atributos": [
+          "Hit Kill de dano",
+          "Crítico —"
+        ],
+        "dano": "Hit Kill",
+        "critico": "—",
+        "alcance": "Curto",
+        "tipo_de_dano": "Vazio",
+        "subtipo": "marcial",
+        "material": "Obstinada",
+        "modo": "Corpo a corpo"
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "entradas": [
+    {"tipo":"arma","id":"espada-de-longinus","titulo":"Espada de Longinus","conteudo":{"raridade":"lendario","preco":450,"atributos":["+15 Ataque Físico"]}},
+    {"tipo":"veiculo","id":"cavalo-mecanico-keryx","titulo":"Cavalo Mecânico de Keryx","conteudo":{"raridade":"raro","preco":180}},
+    {"tipo":"monstro","id":"sombra-de-erebus","titulo":"Sombra de Erebus","conteudo":{"raridade":"epico","preco":620}},
+    {"tipo":"drop","id":"cristal-de-mana-bruto","titulo":"Cristal de Mana Bruto","conteudo":{"raridade":"incomum","preco":{"Lunaris":40,"Solares":5}}}
+  ]
+}
