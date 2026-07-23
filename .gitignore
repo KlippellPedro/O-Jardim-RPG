@@ -18,6 +18,7 @@ Thumbs.db
 # Node (caso use no futuro)
 node_modules/
 dist/
+*.tsbuildinfo
 
 # Ambientes locais
 .venv/

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Regras — O Jardim RPG</title>
+    <link rel="icon" type="image/png" href="../assets/img/icons/favicon-64.png" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles/core/variables.css" />
+    <link rel="stylesheet" href="../styles/core/reset.css" />
+    <link rel="stylesheet" href="../styles/core/animations.css" />
+    <link rel="stylesheet" href="../styles/core/navigation-loader.css?v=1" />
+    <link rel="stylesheet" href="../styles/regras/regras.css" />
+    <link rel="stylesheet" href="../styles/plataforma/plataforma.css?v=4" />
+    <!-- PWA: instalável + cache offline (network-first; não intercepta API/SSE) -->
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#0b0a12">
+    <link rel="apple-touch-icon" href="/assets/img/icons/sessao-ao-vivo.png">
+    <script>
+      if ('serviceWorker' in navigator) {
+        addEventListener('load', () => navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {}));
+      }
+    </script>
+  </head>
+  <body>
+    <div class="regras-bg"></div>
+
+    <div class="regras-page">
+      <header class="regras-header">
+        <a class="regras-back" href="/">‹ O Jardim RPG</a>
+        <h1 class="regras-title">Regras</h1>
+      </header>
+
+      <main class="regras-content" id="regras-content" aria-live="polite"></main>
+    </div>
+
+    <div class="regras-toast" id="regras-toast" role="status" hidden></div>
+
+    <script type="module" src="../src/core/navigationLoader.js?v=1"></script>
+    <script type="module" src="../src/regras/regras.js?v=6"></script>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "name": "O Jardim RPG",
+  "short_name": "O Jardim",
+  "description": "Fichas, mundo, regras, itens e sessão ao vivo da sua campanha, tudo em um lugar.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#08070f",
+  "theme_color": "#0b0a12",
+  "categories": ["games", "entertainment", "utilities"],
+  "icons": [
+    {
+      "src": "/assets/img/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/img/icons/sessao-ao-vivo.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/img/icons/favicon-64.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    { "name": "Sessão ao vivo", "url": "/sessao", "icons": [{ "src": "/assets/img/icons/menu/sessao-ao-vivo.png", "sizes": "256x256" }] },
+    { "name": "Ficha", "url": "/ficha", "icons": [{ "src": "/assets/img/icons/menu/ficha.webp", "sizes": "any" }] },
+    { "name": "Regras", "url": "/regras", "icons": [{ "src": "/assets/img/icons/menu/regras.webp", "sizes": "any" }] }
+  ]
+}

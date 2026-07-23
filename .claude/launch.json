@@ -6,6 +6,24 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "5501"],
       "port": 5501
+    },
+    {
+      "name": "O Jardim (serve-local)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["tools/serve-local.mjs", "8765"],
+      "port": 8765
+    },
+    {
+      "name": "Plataforma API",
+      "runtimeExecutable": "plataforma/.venv/Scripts/python.exe",
+      "runtimeArgs": ["-m", "uvicorn", "main:app", "--app-dir", "plataforma", "--host", "127.0.0.1", "--port", "8080"],
+      "port": 8080
+    },
+    {
+      "name": "Frontend React (Vite)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 5173
     }
   ]
 }
