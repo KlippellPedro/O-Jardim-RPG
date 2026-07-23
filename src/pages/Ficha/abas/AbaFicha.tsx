@@ -1,7 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { HelpCircle, X, Dices } from 'lucide-react';
 import { SectionTitle, LabeledInput, LabeledSelect, ResourceBar } from '../components/SharedFichaComponents';
 import { ModalInfoFicha } from '../components/ModalInfoFicha';
+import { carregarCatalogo } from '../../../services/catalogoService';
+import { ICatalogo } from '../../../types/catalogo';
+
+const ARVORES = [
+  { id: 'genese', nome: 'Gênese' },
+  { id: 'aurora', nome: 'Aurora' },
+  { id: 'crepusculo', nome: 'Crepúsculo' },
+  { id: 'abismo', nome: 'Abismo' },
+  { id: 'aletheia', nome: 'Alétheia' },
+  { id: 'anima', nome: 'Anima' },
+];
 
 export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: any }) => {
   const f = character.ficha || {};
@@ -10,13 +21,18 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
   const maxMana = character.derivados?.mana || 10;
   const maxSanidade = status.sanidadeMaxima || 100;
   const maxCansaco = status.cansacoMaximo || 6;
-  
+
   const vAtual = status.vidaAtual ?? maxVida;
   const mAtual = status.manaAtual ?? maxMana;
   const sAtual = status.sanidadeAtual ?? maxSanidade;
   const cAtual = status.cansacoAtual ?? 0;
 
   const [activeModal, setActiveModal] = useState<any>(null);
+  const [catalogo, setCatalogo] = useState<ICatalogo | null>(null);
+
+  useEffect(() => {
+    carregarCatalogo().then(setCatalogo);
+  }, []);
 
   const handleStatus = (field: string, change: number, max: number) => {
     const current = status[field] ?? (field === 'cansacoAtual' ? 0 : max);
@@ -39,8 +55,18 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
           <SectionTitle title="Identidade do Personagem" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <LabeledInput label="Nome do Personagem" value={character.nome} onChange={(v:any) => onUpdate(['nome'], v)} />
-            <LabeledSelect label="Árvore" value={f.arvoreId} options={['Gênese', 'Aethel', 'Aurora']} onChange={(v:any) => onUpdate(['ficha', 'arvoreId'], v)} />
-            <LabeledSelect label="Raça" value={f.racaId} options={['Humano', 'Elfo', 'Anão']} onChange={(v:any) => onUpdate(['ficha', 'racaId'], v)} />
+            <LabeledSelect
+              label="Árvore"
+              value={f.arvoreId}
+              options={ARVORES.map(arvore => ({ value: arvore.id, label: arvore.nome }))}
+              onChange={(v:any) => onUpdate(['ficha', 'arvoreId'], v)}
+            />
+            <LabeledSelect
+              label="Raça"
+              value={f.racaId}
+              options={catalogo ? catalogo.racas.map(raca => ({ value: raca.id, label: raca.titulo })) : [{ value: '', label: 'Carregando...' }]}
+              onChange={(v:any) => onUpdate(['ficha', 'racaId'], v)}
+            />
             
             <LabeledInput label="Origem" value={f.origem} placeholder="Ex: Jornalista" onChange={(v:any) => onUpdate(['ficha', 'origem'], v)} />
             <LabeledInput label="Título" value={f.titulo} placeholder="Ex: O Assassino" onChange={(v:any) => onUpdate(['ficha', 'titulo'], v)} />
@@ -55,7 +81,12 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
           <p className="text-xs text-gray-500 mb-4">{f.classes?.length || 1} classe · nível total {character.nivel}</p>
           <div className="flex gap-2 mb-4">
              <div className="flex-1">
-               <LabeledSelect label="" value={f.classeId} options={['Guerreiro', 'Mago', 'Ladino']} onChange={(v:any) => onUpdate(['ficha', 'classeId'], v)} />
+               <LabeledSelect
+                 label=""
+                 value={f.classeId}
+                 options={catalogo ? catalogo.classes.map(classe => ({ value: classe.id, label: classe.titulo })) : [{ value: '', label: 'Carregando...' }]}
+                 onChange={(v:any) => onUpdate(['ficha', 'classeId'], v)}
+               />
              </div>
              <div className="w-20">
                <LabeledInput label="Nível" value={character.nivel} onChange={(_v: any) => {}} />
