@@ -1,19 +1,202 @@
 import { useState } from 'react';
-import { Search, Zap } from 'lucide-react';
+import { Search, Zap, Pencil, Trash2, Dices } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { FichaModal } from '../components/FichaModal';
+import { LabeledInput, LabeledSelect } from '../components/SharedFichaComponents';
+import { registrosApi } from '../../../services/registrosApi';
+import { useAuthStore } from '../../../store/useAuthStore';
 
-export const AbaPoderes = ({ character }: { character: any; onUpdate?: any }) => {
+interface ICustoPoder {
+  recurso: 'nenhum' | 'mana' | 'vida' | 'sanidade' | 'cansaco';
+  valor: number;
+}
+
+interface IPoder {
+  id: string;
+  nome: string;
+  fonte: string;
+  tipo: 'Ativa' | 'Passiva' | 'Reação' | 'Sustentada' | 'Outro';
+  nivelAdquirido: string;
+  custo: ICustoPoder;
+  acao: string;
+  duracao: string;
+  alcance: string;
+  descricao: string;
+}
+
+const TIPOS_PODER = ['Ativa', 'Passiva', 'Reação', 'Sustentada', 'Outro'];
+
+const RECURSOS_CUSTO = [
+  { value: 'nenhum', label: 'Nenhum' },
+  { value: 'mana', label: 'Mana' },
+  { value: 'vida', label: 'Vida' },
+  { value: 'sanidade', label: 'Sanidade' },
+  { value: 'cansaco', label: 'Cansaço' },
+];
+
+const RECURSO_LABEL: Record<string, string> = {
+  nenhum: 'Nenhum',
+  mana: 'Mana',
+  vida: 'Vida',
+  sanidade: 'Sanidade',
+  cansaco: 'Cansaço',
+};
+
+const gerarId = () => `poderes-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+
+const criarPoderVazio = (): IPoder => ({
+  id: '',
+  nome: '',
+  fonte: '',
+  tipo: 'Ativa',
+  nivelAdquirido: '',
+  custo: { recurso: 'nenhum', valor: 0 },
+  acao: '',
+  duracao: '',
+  alcance: '',
+  descricao: '',
+});
+
+function custoTexto(custo?: ICustoPoder) {
+  if (!custo || custo.recurso === 'nenhum' || !custo.valor) return 'Sem custo';
+  return `${custo.valor} ${RECURSO_LABEL[custo.recurso] || custo.recurso}`;
+}
+
+export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: any }) => {
   const [busca, setBusca] = useState('');
-  
-  const poderes = character.ficha?.poderes || [];
+  const [modalItem, setModalItem] = useState<IPoder | null>(null);
+  const [usandoId, setUsandoId] = useState<string | null>(null);
+  const [ultimoUsoMsg, setUltimoUsoMsg] = useState<{ id: string; texto: string; erro?: boolean } | null>(null);
 
-  const poderesVisiveis = poderes.filter((p: any) => 
+  const campanhaAtiva = useAuthStore((s) => s.campanhaAtiva);
+
+  const f = character.ficha || {};
+  const status = f.status || {};
+  const poderes: IPoder[] = f.poderes || [];
+
+  const poderesVisiveis = poderes.filter((p) =>
     !busca || p.nome?.toLowerCase().includes(busca.toLowerCase())
   );
 
+  const salvarLista = (novaLista: IPoder[]) => {
+    onUpdate(['ficha', 'poderes'], novaLista);
+  };
+
+  const abrirNovo = () => {
+    setModalItem(criarPoderVazio());
+  };
+
+  const abrirEditar = (item: IPoder) => {
+    setModalItem({ ...criarPoderVazio(), ...item, custo: { ...criarPoderVazio().custo, ...(item.custo || {}) } });
+  };
+
+  const fecharModal = () => setModalItem(null);
+
+  const handleSalvar = () => {
+    if (!modalItem) return;
+    const nomeLimpo = (modalItem.nome || '').trim();
+    if (!nomeLimpo) return;
+
+    const jaExiste = poderes.some((p) => p.id === modalItem.id);
+    if (jaExiste) {
+      salvarLista(poderes.map((p) => (p.id === modalItem.id ? { ...modalItem, nome: nomeLimpo } : p)));
+    } else {
+      const novoItem: IPoder = { ...modalItem, nome: nomeLimpo, id: gerarId() };
+      salvarLista([...poderes, novoItem]);
+    }
+    fecharModal();
+  };
+
+  const excluirItem = (item: IPoder) => {
+    if (!window.confirm(`Excluir ${item.nome}?`)) return;
+    salvarLista(poderes.filter((p) => p.id !== item.id));
+  };
+
+  const atualizarCampoModal = (campo: keyof IPoder, valor: any) => {
+    setModalItem((prev) => (prev ? { ...prev, [campo]: valor } : prev));
+  };
+
+  const atualizarCustoModal = (campo: keyof ICustoPoder, valor: any) => {
+    setModalItem((prev) => (prev ? { ...prev, custo: { ...prev.custo, [campo]: valor } } : prev));
+  };
+
+  const usarPoder = async (item: IPoder) => {
+    const recurso = item.custo?.recurso || 'nenhum';
+    const valor = Number(item.custo?.valor) || 0;
+
+    // Mapeia recurso -> campo em ficha.status e valida disponibilidade antes de gastar.
+    let campoStatus: string | null = null;
+    let novoValorStatus: number | null = null;
+
+    if (recurso !== 'nenhum' && valor > 0) {
+      if (recurso === 'cansaco') {
+        const maxCansaco = status.cansacoMaximo || 6;
+        const atual = status.cansacoAtual ?? 0;
+        const novo = atual + valor;
+        if (novo > maxCansaco) {
+          setUltimoUsoMsg({ id: item.id, texto: `Usar ${item.nome} ultrapassaria o limite de Cansaço.`, erro: true });
+          setTimeout(() => setUltimoUsoMsg((m) => (m?.id === item.id ? null : m)), 3000);
+          return;
+        }
+        campoStatus = 'cansacoAtual';
+        novoValorStatus = novo;
+      } else {
+        const mapaCampo: Record<string, { campo: string; max: number }> = {
+          mana: { campo: 'manaAtual', max: character.derivados?.mana || 10 },
+          vida: { campo: 'vidaAtual', max: character.derivados?.vida || 10 },
+          sanidade: { campo: 'sanidadeAtual', max: status.sanidadeMaxima || 100 },
+        };
+        const regra = mapaCampo[recurso];
+        if (regra) {
+          const atual = status[regra.campo] ?? regra.max;
+          const novo = atual - valor;
+          if (novo < 0) {
+            setUltimoUsoMsg({ id: item.id, texto: `Não há ${RECURSO_LABEL[recurso]} suficiente para usar ${item.nome}.`, erro: true });
+            setTimeout(() => setUltimoUsoMsg((m) => (m?.id === item.id ? null : m)), 3000);
+            return;
+          }
+          campoStatus = regra.campo;
+          novoValorStatus = novo;
+        }
+      }
+    }
+
+    setUsandoId(item.id);
+    try {
+      if (campanhaAtiva?.id) {
+        await registrosApi.registrarUso({
+          campanhaId: campanhaAtiva.id,
+          personagemId: character.id,
+          tipo: 'poder',
+          titulo: item.nome,
+          detalhes: {
+            custo: valor,
+            recurso,
+            acao: item.acao || '',
+            descricao: (item.descricao || '').slice(0, 300),
+          },
+        });
+      }
+
+      if (campoStatus && novoValorStatus !== null) {
+        onUpdate(['ficha', 'status', campoStatus], novoValorStatus);
+      }
+
+      setUltimoUsoMsg({ id: item.id, texto: `${item.nome} foi usado${valor ? ` por ${custoTexto(item.custo)}` : ''}.` });
+      setTimeout(() => setUltimoUsoMsg((m) => (m?.id === item.id ? null : m)), 3000);
+    } catch (e: any) {
+      setUltimoUsoMsg({ id: item.id, texto: e?.message || 'Falha ao registrar o uso.', erro: true });
+      setTimeout(() => setUltimoUsoMsg((m) => (m?.id === item.id ? null : m)), 3000);
+    } finally {
+      setUsandoId(null);
+    }
+  };
+
+  const ehNovo = modalItem ? !poderes.some((p) => p.id === modalItem.id) : false;
+
   return (
     <div className="space-y-6">
-      
+
       {/* HEADER */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -22,7 +205,7 @@ export const AbaPoderes = ({ character }: { character: any; onUpdate?: any }) =>
         </div>
         <div className="flex items-center gap-3 bg-[#15141b] border border-white/5 rounded-xl px-4 py-3">
           <span className="text-3xl font-bold text-[#c7a44c]">{poderes.length}</span>
-          <span className="text-sm text-gray-500 uppercase tracking-widest font-bold leading-tight">Poderes<br/>Conhecidos</span>
+          <span className="text-sm text-gray-500 uppercase tracking-widest font-bold leading-tight">Poderes<br />Conhecidos</span>
         </div>
       </div>
 
@@ -30,15 +213,18 @@ export const AbaPoderes = ({ character }: { character: any; onUpdate?: any }) =>
       <div className="flex gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-          <input 
-            type="text" 
+          <input
+            type="text"
             placeholder="Buscar poder..."
             value={busca}
             onChange={e => setBusca(e.target.value)}
             className="w-full bg-[#0f0e15] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:border-[#c7a44c]/50 outline-none text-sm"
           />
         </div>
-        <button className="px-6 py-3 rounded-xl border border-yellow-600/30 text-yellow-600 font-bold text-sm hover:bg-yellow-600/10 transition-colors border-dashed">
+        <button
+          onClick={abrirNovo}
+          className="px-6 py-3 rounded-xl border border-yellow-600/30 text-yellow-600 font-bold text-sm hover:bg-yellow-600/10 transition-colors border-dashed"
+        >
           + Novo Poder
         </button>
       </div>
@@ -46,28 +232,77 @@ export const AbaPoderes = ({ character }: { character: any; onUpdate?: any }) =>
       {/* LISTA DE PODERES */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4">
         <div className="flex flex-col gap-4">
-          {poderesVisiveis.map((p: any) => (
-            <motion.div 
+          {poderesVisiveis.map((p) => (
+            <motion.div
               layout
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              key={p.id || Math.random()} 
+              key={p.id}
               className="bg-[#121118] border border-white/5 rounded-xl p-5 hover:border-yellow-600/30 transition-colors group"
             >
               <div className="flex gap-4 items-start">
                 <div className="w-10 h-10 rounded-full bg-black/50 border border-white/5 flex items-center justify-center text-yellow-600 flex-shrink-0 mt-1">
                   <Zap size={18} />
                 </div>
-                <div>
-                  <h4 className="text-white font-bold text-lg mb-1">{p.nome || 'Poder Desconhecido'}</h4>
-                  <div className="flex gap-2 mb-3">
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-start gap-3">
+                    <h4 className="text-white font-bold text-lg mb-1">{p.nome || 'Poder Desconhecido'}</h4>
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                      <button
+                        onClick={() => abrirEditar(p)}
+                        className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                        title="Editar"
+                      >
+                        <Pencil size={14} />
+                      </button>
+                      <button
+                        onClick={() => excluirItem(p)}
+                        className="p-2 rounded-lg hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-colors"
+                        title="Excluir"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-3">
                     <span className="text-[10px] px-2 py-0.5 bg-black/40 rounded border border-white/5 text-gray-400 capitalize">
-                      {p.tipo || 'Passivo'}
+                      {p.tipo || 'Ativa'}
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 bg-black/40 rounded border border-white/5 text-gray-400 capitalize">
-                      {p.origem || 'Classe'}
+                    {p.fonte && (
+                      <span className="text-[10px] px-2 py-0.5 bg-black/40 rounded border border-white/5 text-gray-400 capitalize">
+                        {p.fonte}
+                      </span>
+                    )}
+                    {p.nivelAdquirido && (
+                      <span className="text-[10px] px-2 py-0.5 bg-black/40 rounded border border-white/5 text-gray-400">
+                        Nível {p.nivelAdquirido}
+                      </span>
+                    )}
+                    <span className="text-[10px] px-2 py-0.5 bg-[#c7a44c]/10 rounded border border-[#c7a44c]/30 text-[#c7a44c] font-bold">
+                      {custoTexto(p.custo)}
                     </span>
                   </div>
-                  <p className="text-gray-400 text-sm leading-relaxed">{p.descricao || 'Sem descrição cadastrada.'}</p>
+                  <p className="text-gray-400 text-sm leading-relaxed mb-3">{p.descricao || 'Sem descrição cadastrada.'}</p>
+
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-gray-500 mb-3">
+                    {p.acao && <span><span className="text-gray-600">Ação:</span> {p.acao}</span>}
+                    {p.duracao && <span><span className="text-gray-600">Duração:</span> {p.duracao}</span>}
+                    {p.alcance && <span><span className="text-gray-600">Alcance:</span> {p.alcance}</span>}
+                  </div>
+
+                  <div className="flex items-center gap-3 pt-3 border-t border-white/5">
+                    <button
+                      onClick={() => usarPoder(p)}
+                      disabled={usandoId === p.id}
+                      className="px-4 py-2 rounded-lg bg-[#c7a44c]/10 border border-[#c7a44c]/30 text-[#c7a44c] hover:bg-[#c7a44c]/20 hover:scale-105 flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50 disabled:hover:scale-100"
+                    >
+                      <Dices size={14} /> {usandoId === p.id ? 'Usando...' : 'Usar'}
+                    </button>
+                    {ultimoUsoMsg?.id === p.id && (
+                      <span className={`text-xs font-bold ${ultimoUsoMsg.erro ? 'text-red-400' : 'text-green-400'}`}>
+                        {ultimoUsoMsg.texto}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -80,6 +315,79 @@ export const AbaPoderes = ({ character }: { character: any; onUpdate?: any }) =>
           )}
         </div>
       </div>
+
+      {/* MODAL CRIAR/EDITAR */}
+      <FichaModal isOpen={!!modalItem} onClose={fecharModal} title={ehNovo ? 'Novo Poder' : 'Editar Poder'}>
+        {modalItem && (
+          <div className="flex flex-col gap-4">
+            <LabeledInput label="Nome" value={modalItem.nome} onChange={(v: string) => atualizarCampoModal('nome', v)} placeholder="Ex.: Lâmina Espectral" />
+
+            <div className="grid grid-cols-2 gap-4">
+              <LabeledSelect
+                label="Tipo"
+                value={modalItem.tipo}
+                options={TIPOS_PODER}
+                onChange={(v: string) => atualizarCampoModal('tipo', v)}
+              />
+              <LabeledInput label="Fonte" value={modalItem.fonte} onChange={(v: string) => atualizarCampoModal('fonte', v)} placeholder="Ex.: Árvore, Raça, Classe..." />
+            </div>
+
+            <LabeledInput label="Nível Adquirido" value={modalItem.nivelAdquirido} onChange={(v: string) => atualizarCampoModal('nivelAdquirido', v)} placeholder="Ex.: 1" />
+
+            <div className="grid grid-cols-2 gap-4">
+              <LabeledSelect
+                label="Recurso do Custo"
+                value={modalItem.custo.recurso}
+                options={RECURSOS_CUSTO}
+                onChange={(v: string) => atualizarCustoModal('recurso', v)}
+              />
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Valor do Custo</label>
+                <input
+                  type="number"
+                  min={0}
+                  value={modalItem.custo.valor}
+                  onChange={(e) => atualizarCustoModal('valor', Math.max(0, Number(e.target.value) || 0))}
+                  className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              <LabeledInput label="Ação" value={modalItem.acao} onChange={(v: string) => atualizarCampoModal('acao', v)} placeholder="Ação padrão..." />
+              <LabeledInput label="Duração" value={modalItem.duracao} onChange={(v: string) => atualizarCampoModal('duracao', v)} placeholder="Instantânea..." />
+              <LabeledInput label="Alcance" value={modalItem.alcance} onChange={(v: string) => atualizarCampoModal('alcance', v)} placeholder="Pessoal, 9m..." />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Descrição</label>
+              <textarea
+                value={modalItem.descricao}
+                onChange={(e) => atualizarCampoModal('descricao', e.target.value)}
+                rows={4}
+                className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors resize-none"
+                placeholder="Descreva o efeito do poder..."
+              />
+            </div>
+
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                onClick={fecharModal}
+                className="px-5 py-2.5 rounded-lg border border-white/10 text-gray-400 hover:text-white hover:border-white/30 transition-colors text-sm font-bold"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleSalvar}
+                disabled={!modalItem.nome.trim()}
+                className="px-5 py-2.5 rounded-lg bg-[#c7a44c] text-black hover:bg-[#d4af37] transition-colors text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Salvar
+              </button>
+            </div>
+          </div>
+        )}
+      </FichaModal>
     </div>
   );
 };
