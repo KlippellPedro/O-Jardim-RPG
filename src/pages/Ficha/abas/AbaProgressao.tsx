@@ -1,0 +1,227 @@
+import { useMemo, useState } from 'react';
+import { BookOpen, Crown, LockKeyhole, Sparkles, Swords, Users } from 'lucide-react';
+import { LEGADOS_CATALOGO, RACAS_CATALOGO } from '../../../services/catalogoService';
+import { capacidadeModificacoesRaciais } from '../../../services/calculoService';
+import { useAuthStore } from '../../../store/useAuthStore';
+import {
+  avaliarLegado,
+  caracteristicasRaciaisAutomaticas,
+  classesDaFicha,
+  eventosDesbloqueados,
+  habilidadesAutomaticas,
+  legadosSelecionados,
+  podeSelecionarPoder,
+  poderesSelecionados,
+  selecoesPoderValidas,
+  vagasLegado,
+  vagasPoderDaClasse,
+  type ILegadoCatalogo,
+} from '../../../services/progressaoFichaService';
+
+const Card = ({ titulo, origem, descricao, detalhe }: { titulo: string; origem: string; descricao: string; detalhe?: string }) => (
+  <article className="rounded-xl border border-white/10 bg-[#111017] p-4">
+    <div className="flex flex-wrap items-start justify-between gap-2">
+      <h4 className="font-bold text-white">{titulo}</h4>
+      <span className="rounded-full border border-[#c7a44c]/25 bg-[#c7a44c]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#c7a44c]">{origem}</span>
+    </div>
+    {detalhe && <p className="mt-2 text-xs font-bold text-emerald-300">{detalhe}</p>}
+    <p className="mt-2 text-sm leading-relaxed text-gray-400">{descricao}</p>
+  </article>
+);
+
+const Secao = ({ titulo, icone, children }: { titulo: string; icone: React.ReactNode; children: React.ReactNode }) => (
+  <section className="rounded-2xl border border-white/5 bg-[#0f0e15] p-5 md:p-6">
+    <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-white">{icone}{titulo}</h3>
+    {children}
+  </section>
+);
+
+export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdate: any }) => {
+  const [buscaLegado, setBuscaLegado] = useState('');
+  const ficha = character.ficha || {};
+  const usuario = useAuthStore((state) => state.usuario);
+  const campanha = useAuthStore((state) => state.campanhaAtiva);
+  const isMestre = usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador' || campanha?.papel === 'mestre' || campanha?.papel === 'assistente';
+  const classes = classesDaFicha(ficha);
+  const selecoesPoder = selecoesPoderValidas(ficha);
+  const idsLegados: string[] = Array.isArray(ficha.legadosSelecionados) ? ficha.legadosSelecionados : [];
+  const tracos = caracteristicasRaciaisAutomaticas(ficha);
+  const raca = RACAS_CATALOGO.find((item) => item.id === ficha.racaId);
+  const escolhaRacial = ficha.escolhaRacial || {};
+  const habilidades = habilidadesAutomaticas(ficha);
+  const eventos = eventosDesbloqueados(ficha);
+  const poderes = poderesSelecionados(ficha);
+  const legados = legadosSelecionados(ficha);
+  const vagasLegados = vagasLegado(ficha);
+
+  const catalogoLegados = useMemo(() => {
+    const termo = buscaLegado.trim().toLocaleLowerCase('pt-BR');
+    return (LEGADOS_CATALOGO as ILegadoCatalogo[]).filter((item) => !termo
+      || item.titulo.toLocaleLowerCase('pt-BR').includes(termo)
+      || item.descricao.toLocaleLowerCase('pt-BR').includes(termo));
+  }, [buscaLegado]);
+
+  const adicionarPoder = (classeId: string, poderId: string) => {
+    if (!window.confirm('A escolha de um poder de classe é permanente para jogadores. Confirmar?')) return;
+    onUpdate(['ficha', 'poderesClasseSelecionados'], [...selecoesPoder, { classeId, poderId }]);
+  };
+  const removerPoder = (classeId: string, poderId: string) => {
+    const indice = selecoesPoder.findIndex((item) => item.classeId === classeId && item.poderId === poderId);
+    onUpdate(['ficha', 'poderesClasseSelecionados'], selecoesPoder.filter((_, atual) => atual !== indice));
+  };
+  const adicionarLegado = (id: string) => {
+    if (!window.confirm('A escolha de um Legado é permanente para jogadores. Confirmar?')) return;
+    onUpdate(['ficha', 'legadosSelecionados'], [...idsLegados, id]);
+  };
+  const removerLegado = (id: string) => {
+    const indice = idsLegados.indexOf(id);
+    onUpdate(['ficha', 'legadosSelecionados'], idsLegados.filter((_, atual) => atual !== indice));
+  };
+  const atualizarEscolhaRacial = (campo: string, ids: string[]) => onUpdate(['ficha', 'escolhaRacial'], { ...escolhaRacial, [campo]: ids });
+  const alternarFragmentoConhecido = (id: string) => {
+    const atuais: string[] = escolhaRacial.fragmentosConhecidosIds || [];
+    const maximo = Math.max(0, Number(raca?.fragmentos_config?.conhecidos_maximo) || 0);
+    if (atuais.includes(id)) {
+      onUpdate(['ficha', 'escolhaRacial'], {
+        ...escolhaRacial,
+        fragmentosConhecidosIds: atuais.filter((item) => item !== id),
+        fragmentosExpressosIds: (escolhaRacial.fragmentosExpressosIds || []).filter((item: string) => item !== id),
+      });
+    } else if (atuais.length < maximo) atualizarEscolhaRacial('fragmentosConhecidosIds', [...atuais, id]);
+  };
+  const alternarFragmentoExpresso = (id: string) => {
+    const conhecidos: string[] = escolhaRacial.fragmentosConhecidosIds || [];
+    const atuais: string[] = escolhaRacial.fragmentosExpressosIds || [];
+    const maximo = Math.max(0, Number(raca?.fragmentos_config?.expressos) || 0);
+    if (atuais.includes(id)) atualizarEscolhaRacial('fragmentosExpressosIds', atuais.filter((item) => item !== id));
+    else if (conhecidos.includes(id) && atuais.length < maximo) atualizarEscolhaRacial('fragmentosExpressosIds', [...atuais, id]);
+  };
+  const alternarModificacao = (id: string) => {
+    const atuais: string[] = escolhaRacial.modificacoesIds || [];
+    const maximo = capacidadeModificacoesRaciais(raca || null, Number(ficha.nivel) || 1);
+    if (atuais.includes(id)) atualizarEscolhaRacial('modificacoesIds', atuais.filter((item) => item !== id));
+    else if (atuais.length < maximo) atualizarEscolhaRacial('modificacoesIds', [...atuais, id]);
+  };
+
+  return (
+    <div className="space-y-6">
+      <header className="rounded-2xl border border-white/5 bg-[#0f0e15] p-6">
+        <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>Progressão</h2>
+        <p className="mt-1 text-sm text-gray-400">Características raciais e habilidades de classe aparecem automaticamente. Você escolhe apenas os poderes e Legados liberados.</p>
+      </header>
+
+      <Secao titulo="Características raciais" icone={<Users size={18} className="text-emerald-400" />}>
+        <div className="grid gap-3 lg:grid-cols-2">
+          {tracos.map((item) => <Card key={item.id} titulo={item.titulo} origem={item.origem} descricao={item.descricao} />)}
+          {!tracos.length && <p className="text-sm text-gray-500">A raça atual não possui características estruturadas no catálogo.</p>}
+        </div>
+        {Array.isArray(raca?.fragmentos) && raca.fragmentos.length > 0 && (
+          <div className="mt-5 rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4">
+            <h4 className="font-bold text-white">Fragmentos do Amálgamo</h4>
+            <p className="mt-1 text-xs text-gray-500">Conhecidos: {(escolhaRacial.fragmentosConhecidosIds || []).length}/{raca.fragmentos_config?.conhecidos_maximo || 0}. Expressos: {(escolhaRacial.fragmentosExpressosIds || []).length}/{raca.fragmentos_config?.expressos || 0}.</p>
+            <div className="mt-3 grid gap-2 md:grid-cols-2">
+              {raca.fragmentos.map((item: any) => {
+                const conhecido = (escolhaRacial.fragmentosConhecidosIds || []).includes(item.id);
+                const expresso = (escolhaRacial.fragmentosExpressosIds || []).includes(item.id);
+                return <div key={item.id} className="rounded-lg border border-white/5 bg-black/20 p-3"><strong className="text-sm text-white">{item.titulo}</strong><p className="mt-1 text-xs text-gray-400">{item.descricao}</p><div className="mt-2 flex gap-2"><button type="button" onClick={() => alternarFragmentoConhecido(item.id)} className={`rounded border px-2 py-1 text-xs font-bold ${conhecido ? 'border-emerald-500/40 text-emerald-300' : 'border-white/10 text-gray-400'}`}>{conhecido ? 'Conhecido' : 'Conhecer'}</button><button type="button" disabled={!conhecido} onClick={() => alternarFragmentoExpresso(item.id)} className={`rounded border px-2 py-1 text-xs font-bold disabled:opacity-30 ${expresso ? 'border-[#c7a44c]/40 text-[#c7a44c]' : 'border-white/10 text-gray-400'}`}>{expresso ? 'Expresso' : 'Expressar'}</button></div></div>;
+              })}
+            </div>
+          </div>
+        )}
+        {Array.isArray(raca?.modificacoes) && raca.modificacoes.length > 0 && (
+          <div className="mt-5 rounded-xl border border-sky-500/15 bg-sky-500/5 p-4">
+            <h4 className="font-bold text-white">Modificações do Autômato</h4>
+            <p className="mt-1 text-xs text-gray-500">Instaladas: {(escolhaRacial.modificacoesIds || []).length}/{capacidadeModificacoesRaciais(raca, Number(ficha.nivel) || 1)}. Modificações ativas só funcionam com as passivas e pré-requisitos descritos.</p>
+            <div className="mt-3 grid gap-2 md:grid-cols-2">
+              {raca.modificacoes.map((item: any) => { const instalada = (escolhaRacial.modificacoesIds || []).includes(item.id); return <div key={item.id} className="rounded-lg border border-white/5 bg-black/20 p-3"><div className="flex items-start justify-between gap-2"><strong className="text-sm text-white">{item.titulo}</strong><button type="button" onClick={() => alternarModificacao(item.id)} className={`rounded border px-2 py-1 text-xs font-bold ${instalada ? 'border-red-500/30 text-red-300' : 'border-sky-500/30 text-sky-300'}`}>{instalada ? 'Remover' : 'Instalar'}</button></div><p className="mt-1 text-xs text-gray-400">{item.descricao}</p></div>; })}
+            </div>
+          </div>
+        )}
+      </Secao>
+
+      <Secao titulo="Habilidades de classe" icone={<BookOpen size={18} className="text-sky-400" />}>
+        <div className="grid gap-3 lg:grid-cols-2">
+          {habilidades.map((item) => <Card key={item.id} titulo={item.titulo} origem={item.origem} detalhe={`Estágio liberado no nível ${item.nivel}`} descricao={item.descricao} />)}
+          {!habilidades.length && <p className="text-sm text-gray-500">Nenhuma habilidade de classe foi liberada.</p>}
+        </div>
+      </Secao>
+
+      <Secao titulo="Poderes de classe" icone={<Swords size={18} className="text-orange-400" />}>
+        <div className="mb-5 grid gap-3 lg:grid-cols-2">
+          {poderes.map((item) => <Card key={item.id} titulo={item.titulo} origem={item.origem} detalhe={item.custoMana ? `${item.custoMana} Mana` : 'Sem custo de Mana'} descricao={item.descricao} />)}
+          {!poderes.length && <p className="text-sm text-gray-500">Use as vagas abaixo para escolher seus poderes.</p>}
+        </div>
+        <div className="space-y-4">
+          {classes.map(({ classe, nivel }) => {
+            const selecionados = selecoesPoder.filter((item) => item.classeId === classe.id);
+            const vagas = vagasPoderDaClasse(classe, nivel);
+            return (
+              <div key={classe.id} className="rounded-xl border border-white/10 bg-black/20 p-4">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <strong className="text-white">{classe.titulo}</strong>
+                  <span className="text-xs font-bold text-[#c7a44c]">{selecionados.length}/{vagas} vagas</span>
+                </div>
+                <div className="grid gap-2 md:grid-cols-2">
+                  {(classe.poderes || []).map((poder) => {
+                    const quantidade = selecionados.filter((item) => item.poderId === poder.id).length;
+                    const avaliacao = podeSelecionarPoder(poder, classe, nivel, selecoesPoder, ficha);
+                    return (
+                      <div key={poder.id} className="rounded-lg border border-white/5 bg-[#121118] p-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div><strong className="text-sm text-white">{poder.titulo}</strong><p className="mt-1 text-xs text-gray-500">{poder.custo_mana || 0} Mana</p></div>
+                          <div className="flex gap-1">
+                            {quantidade > 0 && isMestre && <button type="button" onClick={() => removerPoder(classe.id, poder.id)} className="rounded-lg border border-red-500/30 px-2 py-1 text-xs font-bold text-red-300">Remover</button>}
+                            <button type="button" disabled={!avaliacao.permitido} title={avaliacao.motivo} onClick={() => adicionarPoder(classe.id, poder.id)} className="rounded-lg border border-[#c7a44c]/30 px-2 py-1 text-xs font-bold text-[#c7a44c] disabled:cursor-not-allowed disabled:opacity-30">Escolher{quantidade ? ` (${quantidade})` : ''}</button>
+                          </div>
+                        </div>
+                        <p className="mt-2 text-xs leading-relaxed text-gray-400">{poder.descricao}</p>
+                        {(poder.pre_requisitos || []).length > 0 && <p className="mt-2 text-[11px] text-amber-300">Requisito: {poder.pre_requisitos?.join('; ')}</p>}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Secao>
+
+      <Secao titulo="Eventos de classe" icone={<Sparkles size={18} className="text-fuchsia-400" />}>
+        <div className="grid gap-3 lg:grid-cols-2">
+          {eventos.map((item) => <Card key={item.id} titulo={item.titulo} origem={item.origem} detalhe={`Disponível desde o nível ${item.nivel}`} descricao={item.descricao} />)}
+          {!eventos.length && <p className="text-sm text-gray-500">Nenhum evento foi liberado.</p>}
+        </div>
+      </Secao>
+
+      <Secao titulo={`Legados de Ascensão (${idsLegados.length}/${vagasLegados})`} icone={<Crown size={18} className="text-[#c7a44c]" />}>
+        <div className="mb-5 grid gap-3 lg:grid-cols-2">
+          {legados.map((item, indice) => (
+            <div key={`${item.id}-${indice}`} className="relative">
+              <Card titulo={item.titulo} origem="Legado" descricao={item.descricao} />
+              {isMestre && <button type="button" onClick={() => removerLegado(item.id)} className="absolute bottom-3 right-3 text-xs font-bold text-red-300">Remover</button>}
+            </div>
+          ))}
+          {!legados.length && <p className="text-sm text-gray-500">O primeiro Legado é liberado no nível total 5.</p>}
+        </div>
+        <input value={buscaLegado} onChange={(event) => setBuscaLegado(event.target.value)} placeholder="Buscar entre os 42 Legados..." className="mb-3 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none focus:border-[#c7a44c]/50" />
+        <div className="grid max-h-[32rem] gap-2 overflow-y-auto pr-1 lg:grid-cols-2">
+          {catalogoLegados.map((legado) => {
+            const avaliacao = avaliarLegado(legado, ficha, idsLegados);
+            return (
+              <div key={legado.id} className="rounded-lg border border-white/5 bg-[#121118] p-3">
+                <div className="flex items-start justify-between gap-3">
+                  <strong className="text-sm text-white">{legado.titulo}</strong>
+                  <button type="button" disabled={!avaliacao.permitido} title={avaliacao.motivo} onClick={() => adicionarLegado(legado.id)} className="flex items-center gap-1 rounded-lg border border-[#c7a44c]/30 px-2 py-1 text-xs font-bold text-[#c7a44c] disabled:cursor-not-allowed disabled:opacity-30">
+                    {!avaliacao.permitido && <LockKeyhole size={11} />} Escolher
+                  </button>
+                </div>
+                <p className="mt-2 text-xs leading-relaxed text-gray-400">{legado.descricao}</p>
+                {!avaliacao.permitido && avaliacao.motivo !== 'Todas as vagas de Legado já foram preenchidas.' && <p className="mt-2 text-[11px] text-amber-300">{avaliacao.motivo}</p>}
+              </div>
+            );
+          })}
+        </div>
+      </Secao>
+    </div>
+  );
+};

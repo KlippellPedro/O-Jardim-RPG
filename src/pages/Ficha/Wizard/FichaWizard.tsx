@@ -9,7 +9,7 @@ import { X, ChevronRight, ChevronLeft, Dices, Shield, Sword, Sparkles, ListOrder
 import {
   rolarAtributos,
   normalizarAtributosIniciais,
-  calcularDerivados,
+  calcularDerivadosComClasses,
   ATRIBUTOS,
   TAtributo,
   TMetodoAtributos,
@@ -54,6 +54,8 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
   const [escolhaRacial, setEscolhaRacial] = useState<Record<string, string>>({});
   const [classeId, setClasseId] = useState<string | null>(null);
   const [divindade, setDivindade] = useState('');
+  const [periciasIniciais, setPericiasIniciais] = useState<string[]>([]);
+  const [itemInicial, setItemInicial] = useState('');
   
   // Atributos State
   const [metodoAtributos, setMetodoAtributos] = useState<TMetodoAtributos>('padrao');
@@ -144,11 +146,20 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
     if (!catalogo || !racaId || !classeId) return;
 
     const raca = catalogo.racas.find((r) => r.id === racaId);
-    if (!raca) return;
+    const classe = catalogo.classes.find((item) => item.id === classeId);
+    if (!raca || !classe) return;
 
     const escolhaRacialFinal = { ...escolhaRacial, divindade };
     const atributosFinais = normalizarAtributosIniciais(atribuicao);
-    const derivados = calcularDerivados(atributosFinais, raca, 1, escolhaRacialFinal);
+    const classes = [{ classeId, nivel: 1 }];
+    const derivados = calcularDerivadosComClasses(
+      atributosFinais,
+      raca,
+      classes,
+      catalogo.classes,
+      1,
+      escolhaRacialFinal,
+    );
 
     // BUG-07: payload explicitamente tipado com ICreateCharacterPayload
     const payload: ICreateCharacterPayload = {
@@ -156,13 +167,16 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
       arvoreId,
       racaId,
       classeId,
+      classes,
+      nivel: 1,
+      xp: 0,
       metodoAtributos,
       atributosBase: atribuicao,
       atributosFinais,
       derivados,
       lunarisInicial: 20,
-      pericias: {},
-      inventarioInicial: [],
+      pericias: Object.fromEntries(periciasIniciais.map(id => [id, 'aprendiz'])),
+      inventarioInicial: [{ titulo: itemInicial.trim(), quantidade: 1 }],
       escolhaRacial: escolhaRacialFinal,
     };
 
@@ -190,12 +204,14 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
 
     // Raça/Classe exclusivas de outra Árvore, ou especiais não liberadas
     // pelo mestre, não aparecem como opção: mestre/assistente vê tudo.
-    const racasFiltradas = isMestre
+    const racasDisponiveis = isMestre
       ? (catalogo?.racas || [])
       : filtrarPorLiberacao(filtrarPorArvore(catalogo?.racas || [], arvoreId), config.racas_liberadas || []);
-    const classesFiltradas = isMestre
+    const racasFiltradas = racasDisponiveis.filter(raca => raca.categoria === 'padrao');
+    const classesDisponiveis = isMestre
       ? (catalogo?.classes || [])
       : filtrarPorLiberacao(filtrarPorArvore(catalogo?.classes || [], arvoreId), config.classes_liberadas || []);
+    const classesFiltradas = classesDisponiveis.filter(classe => classe.categoria === 'padrao');
     const pontosGastos = calcularPontosAtributos(atribuicao);
     const pontosRestantes = COMPRA_PONTOS_ORCAMENTO - pontosGastos;
     const opcoesDoConjunto = [...new Set(valoresDisponiveis)].sort((a, b) => b - a);
@@ -246,7 +262,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
               {racasFiltradas.map(raca => (
                 <button
                   key={raca.id}
-                  onClick={() => { setRacaId(raca.id); setEscolhaRacial({}); }}
+                  onClick={() => { setRacaId(raca.id); setEscolhaRacial({}); setPericiasIniciais([]); }}
                   className={`w-full p-4 rounded-2xl border text-left transition-all flex flex-col gap-1 ${racaId === raca.id ? 'border-primary bg-primary/10' : 'border-white/5 bg-black/40 hover:border-white/20'}`}
                 >
                   <h3 className="text-lg font-bold text-white" style={{fontFamily: 'Cinzel, serif'}}>{raca.titulo}</h3>
@@ -437,10 +453,72 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
           </motion.div>
         );
       case 6:
+        const racaDasPericias = catalogo?.racas.find(r => r.id === racaId);
+        const limitePericias = 6 + Math.max(0, Number(racaDasPericias?.pericias_iniciais_adicionais) || 0);
+        const alternarPericia = (periciaId: string) => {
+          setPericiasIniciais(atuais => {
+            if (atuais.includes(periciaId)) return atuais.filter(id => id !== periciaId);
+            if (atuais.length >= limitePericias) return atuais;
+            return [...atuais, periciaId];
+          });
+        };
+        return (
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
+            <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
+              <h3 className="text-xl text-white font-bold">Perícias e equipamento inicial</h3>
+              <p className="text-sm text-gray-400 mt-1">
+                Escolha exatamente {limitePericias} perícias para começar em Aprendiz e informe um item comum aprovado pelo Mestre.
+              </p>
+              <p className={`text-xs font-bold mt-2 ${periciasIniciais.length === limitePericias ? 'text-green-400' : 'text-primary'}`}>
+                {periciasIniciais.length} de {limitePericias} perícias escolhidas
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-[38vh] overflow-y-auto pr-2 custom-scrollbar">
+              {(catalogo?.pericias || []).map(pericia => {
+                const selecionada = periciasIniciais.includes(pericia.id);
+                return (
+                  <button
+                    type="button"
+                    key={pericia.id}
+                    onClick={() => alternarPericia(pericia.id)}
+                    className={`p-3 rounded-xl border text-left transition-all ${selecionada ? 'border-green-500 bg-green-500/10' : 'border-white/10 bg-black/30 hover:border-white/30'}`}
+                  >
+                    <span className="text-sm text-white font-bold block">{pericia.titulo}</span>
+                    <span className="text-[10px] text-gray-500 uppercase tracking-wider">{pericia.atributo}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-2">Seu item comum inicial</label>
+              <input
+                type="text"
+                value={itemInicial}
+                onChange={event => setItemInicial(event.target.value)}
+                maxLength={200}
+                placeholder="Ex: espada curta, kit de cura ou mochila"
+                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary/50"
+              />
+              <p className="text-xs text-gray-500 mt-2">O item entra no inventário central com origem de criação e sem preço de revenda.</p>
+            </div>
+          </motion.div>
+        );
+      case 7:
         // Calculos em tempo real da Preview
         const previewRaca = catalogo?.racas.find(r => r.id === racaId);
         const previewClasse = catalogo?.classes.find(c => c.id === classeId);
-        const previewDerivados = previewRaca ? calcularDerivados(atribuicao, previewRaca, 1, escolhaRacial) : null;
+        const previewDerivados = previewRaca && previewClasse
+          ? calcularDerivadosComClasses(
+              atribuicao,
+              previewRaca,
+              [{ classeId: previewClasse.id, nivel: 1 }],
+              catalogo?.classes || [],
+              1,
+              escolhaRacial,
+            )
+          : null;
 
         return (
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, x: -20 }} className="flex flex-col items-center py-6">
@@ -497,6 +575,11 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
         ? !compraPontosValida(atribuicao)
         : !conjuntoAtributosValido(atribuicao, valoresDisponiveis);
     }
+    if (step === 6) {
+      const raca = catalogo?.racas.find(item => item.id === racaId);
+      const limite = 6 + Math.max(0, Number(raca?.pericias_iniciais_adicionais) || 0);
+      return periciasIniciais.length !== limite || itemInicial.trim().length < 2;
+    }
     return false;
   };
 
@@ -513,7 +596,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-transparent opacity-50"></div>
           <div className="relative z-10 flex flex-col gap-3">
             <div className="flex gap-2">
-              {[1, 2, 3, 4, 5, 6].map(i => (
+              {[1, 2, 3, 4, 5, 6, 7].map(i => (
                 <div key={i} className={`h-1.5 w-10 md:w-12 rounded-full transition-colors ${i < step ? 'bg-primary' : i === step ? 'bg-primary/50 animate-pulse shadow-[0_0_10px_rgba(var(--color-primary),0.8)]' : 'bg-white/10'}`} />
               ))}
             </div>
@@ -542,7 +625,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             <ChevronLeft size={20} /> Retornar
           </button>
           
-          {step < 6 ? (
+          {step < 7 ? (
             <button 
               onClick={() => setStep(s => s + 1)}
               disabled={isNextDisabled()}

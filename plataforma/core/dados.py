@@ -6,7 +6,7 @@ pelo console. O bônus continua vindo da ficha — validá-lo exigiria reimpleme
 todo o cálculo de perícias em Python —, mas ele é gravado junto com a origem
 declarada, então o mestre vê de onde cada número saiu.
 
-Regra do sistema (docs/regras/fundamentos-v1.md):
+Regra do sistema (docs/regras/regras-publicas-v1.md):
 
     Teste = d20 + Mod.Atributo + piso(Nível Total / 2) + bônus do Grau
 
@@ -80,22 +80,12 @@ def rolar_teste(bonus: int, vantagens: int = 0, desvantagens: int = 0, dt: int |
 
 
 def _classificar(total: int, natural: int, dt: int) -> str:
-    """Sucesso crítico em DT+10, falha crítica em DT-10; 20 e 1 movem um grau."""
-    escala = ["falha critica", "falha", "sucesso", "sucesso critico"]
-    if total >= dt + 10:
-        posicao = 3
-    elif total >= dt:
-        posicao = 2
-    elif total <= dt - 10:
-        posicao = 0
-    else:
-        posicao = 1
-
+    """Somente o d20 natural gera crítico; a distância até a DT não altera o grau."""
     if natural == 20:
-        posicao += 1
-    elif natural == 1:
-        posicao -= 1
-    return escala[max(0, min(3, posicao))]
+        return "sucesso critico"
+    if natural == 1:
+        return "falha critica"
+    return "sucesso" if total >= dt else "falha"
 
 
 def _separar_repeticoes(expressao: str) -> tuple[int, str]:

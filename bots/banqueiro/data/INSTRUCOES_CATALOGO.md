@@ -16,7 +16,11 @@ Cada item é um objeto assim (o mesmo schema do site, em `data/loja`):
     "descricao": "texto de abertura (opcional)",
     "preco": 10,
     "raridade": "comum",
-    "atributos": ["1d8 de dano", "Crítico 18"]
+    "atributos": ["1d8 de dano", "Crítico 18-20/x2"],
+    "dano": "1d8",
+    "margem_ameaca": 18,
+    "multiplicador_critico": 2,
+    "critico": "18-20/x2"
   }
 }
 ```
@@ -27,6 +31,9 @@ Cada item é um objeto assim (o mesmo schema do site, em `data/loja`):
 - **preco:** número (vale em qualquer moeda) **ou** objeto `{"Lunaris": 40, "Solares": 5}`.
 - **raridade:** `comum | incomum | raro | epico | lendario | reliquia |
   reliquia da criacao` (acentos e maiúsculas também são aceitos).
+- **margem_ameaca:** menor resultado natural que gera crítico (`18`, `19` ou `20`).
+- **multiplicador_critico:** quantas vezes os dados da arma são rolados (`2`, `3` ou `4`).
+- Margens `18` e `19` usam `x2`; multiplicadores `x3` e `x4` exigem margem `20`.
 - Qualquer outro campo em `conteudo` (dano, material, bonus…) aparece como detalhe no card.
 
 O PostgreSQL guarda o mesmo objeto no campo `conteudo` (JSONB), mas o item
@@ -45,7 +52,8 @@ ele não publica mudanças feitas no JSON.
 ## O que já está feito
 
 - **Armas:** 87 (com `subtipo` `simples`/`marcial` e `modo`
-  `Corpo a corpo`/`À distância`; inclui Obstinadas e Relíquias da Criação).
+  `Corpo a corpo`/`À distância`, margem de ameaça e multiplicador crítico;
+  inclui Obstinadas e Relíquias da Criação).
 - **Equipamentos:** 56 (o material que vazava pro fim do `descricao` foi movido
   pro campo `material`; descrições e typos revisados).
 - **Armaduras e escudos:** 52 (com `bonus`, `penalidade`, `material`).

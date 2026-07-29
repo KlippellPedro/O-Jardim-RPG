@@ -105,6 +105,23 @@ def _embed_pericia(p) -> discord.Embed:
     return e
 
 
+def _embed_magia(m) -> discord.Embed:
+    circulo = "Ritual" if m.get("circulo") == "ritual" else f"{m.get('circulo', '?')}º círculo"
+    e = ui.embed(f"🔮 {m.get('titulo', 'Magia')}", (m.get("efeito") or "Sem efeito publicado.").strip()[:4000])
+    e.add_field(name="Círculo e tradição", value=f"{circulo} · {m.get('tradicao', 'Não informada')}", inline=True)
+    e.add_field(name="Custo", value=f"{m.get('custo_mana', 0)} Mana", inline=True)
+    e.add_field(name="Execução", value=str(m.get("execucao", "Não informada")), inline=True)
+    e.add_field(name="Alcance e alvo", value=f"{m.get('alcance', '?')} · {m.get('alvo', '?')}"[:1024], inline=False)
+    e.add_field(name="Duração", value=str(m.get("duracao", "Instantânea")), inline=True)
+    if m.get("defesa"):
+        e.add_field(name="Defesa", value=str(m["defesa"]), inline=True)
+    if m.get("dano"):
+        e.add_field(name="Dano", value=str(m["dano"]), inline=True)
+    if m.get("concentracao"):
+        e.add_field(name="Concentração", value="Sim. Só um efeito pode ser mantido por vez.", inline=False)
+    return e
+
+
 def _embed_fundamento(secao) -> discord.Embed:
     texto = secao.get("texto", "")
     if len(texto) > 4000:
@@ -129,6 +146,7 @@ def _embed_item(nav, categoria, item) -> discord.Embed:
         "classes": _embed_classe,
         "legados": _embed_legado,
         "pericias": _embed_pericia,
+        "magias": _embed_magia,
         "fundamentos": _embed_fundamento,
     }.get(categoria, lambda x: ui.embed(x.get("titulo", "?")))(item)
 
@@ -258,13 +276,13 @@ class Regras(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(name="regras", description="Navega pelas regras por menus: raças, classes, perícias, legados e fundamentos.")
+    @app_commands.command(name="regras", description="Navega por raças, classes, perícias, legados, magias e fundamentos.")
     async def regras(self, interaction: discord.Interaction):
         view = NavRegras(self.bot.navegacao, interaction.user.id)
         await interaction.response.send_message(embed=view.embed, view=view, ephemeral=True)
         view.message = await interaction.original_response()
 
-    @app_commands.command(name="regra", description="Vai direto pra uma regra pelo nome (raça, classe, perícia ou Legado).")
+    @app_commands.command(name="regra", description="Vai direto para uma regra pelo nome, inclusive magias.")
     @app_commands.describe(termo="Nome que você quer ver (ex.: Humano, Guerreiro, Atletismo).")
     async def regra(self, interaction: discord.Interaction, termo: app_commands.Range[str, 2, 100]):
         achados = self.bot.navegacao.buscar_item(termo)
@@ -293,7 +311,7 @@ class Regras(commands.Cog):
         if not achados:
             achados = [
                 (categoria, item)
-                for categoria in ("racas", "classes", "pericias", "legados")
+                for categoria in ("racas", "classes", "pericias", "legados", "magias")
                 for item in self.bot.navegacao.itens(categoria)
             ]
         escolhas = []

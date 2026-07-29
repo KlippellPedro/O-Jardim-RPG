@@ -18,11 +18,8 @@ MODOS = {
     "desvantagem": "Desvantagem",
 }
 
-# Flavor de 20/1 natural — o sistema não dá crítico automático (ver
-# docs/regras/fundamentos-v1.md, "Testes e Dificuldade do Teste"): um 20
-# natural melhora o resultado em um grau, um 1 natural piora em um grau.
-# O texto aqui só decora esse fato, não inventa um "crítico" que a regra
-# não garante.
+# A fonte pública gerada em docs/regras/regras-publicas-v1.md define que
+# somente 20 e 1 naturais geram sucesso crítico e falha crítica.
 _FLAVOR_20 = (
     "Os deuses do dado sorriem hoje.",
     "Direto pra lenda da mesa.",
@@ -95,14 +92,14 @@ class Dados(commands.Cog):
             emb.colour = 0xF1C40F
             emb.add_field(
                 name="🌟 20 natural!",
-                value=f"{random.choice(_FLAVOR_20)} O resultado melhora em um grau.",
+                value=f"{random.choice(_FLAVOR_20)} Sucesso crítico.",
                 inline=False,
             )
         elif resultado.escolhido == 1:
             emb.colour = 0x992D22
             emb.add_field(
                 name="💀 1 natural...",
-                value=f"{random.choice(_FLAVOR_1)} O resultado piora em um grau.",
+                value=f"{random.choice(_FLAVOR_1)} Falha crítica.",
                 inline=False,
             )
 

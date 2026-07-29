@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from psycopg.types.json import Jsonb
 
 from core.audit import record_audit
-from core.character_summary import validar_arvore_raca_classe
+from core.character_summary import validar_regras_ficha
 from core.database import Database
 from core.economy_commands import MAX_ECONOMY_AMOUNT
 from core.economy_models import (
@@ -30,7 +30,7 @@ from schemas import CharacterCreateInput, CharacterUpdateInput, EconomyReplaceIn
 
 
 router = APIRouter(prefix="/personagens", tags=["personagens"])
-_CENTRAL_FIELDS = {"carteira", "inventario", "lunaris"}
+_CENTRAL_FIELDS = {"carteira", "inventario", "lunaris", "lunarisInicial", "inventarioInicial"}
 _PROTECTED_INVENTORY_DATA_KEYS = {
     "catalogo_item_id",
     "custo",
@@ -132,11 +132,10 @@ def create_character(
             campanha_row = connection.execute(
                 "SELECT configuracoes FROM campanhas WHERE id=%s", (payload.campanha_id,)
             ).fetchone()
-            erro_catalogo = validar_arvore_raca_classe(
-                payload.ficha.get("arvoreId"),
-                payload.ficha.get("racaId"),
-                payload.ficha.get("classeId"),
+            erro_catalogo = validar_regras_ficha(
+                payload.ficha,
                 campanha_row["configuracoes"] if campanha_row else None,
+                criacao=True,
             )
             if erro_catalogo:
                 raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=erro_catalogo)
@@ -164,6 +163,70 @@ def create_character(
                 user.id,
             ),
         )
+        connection.execute(
+            """
+            INSERT INTO saldos_personagem (campanha_id, personagem_id, moeda, saldo)
+            VALUES (%s, %s, 'Lunaris', 20)
+            """,
+            (payload.campanha_id, character_id),
+        )
+        connection.execute(
+            """
+            INSERT INTO lancamentos_economia
+                (id, campanha_id, personagem_id, moeda, delta, saldo_apos,
+                 motivo, origem, ator_usuario_id)
+            VALUES (%s, %s, %s, 'Lunaris', 20, 20, %s, %s, %s)
+            """,
+            (
+                uuid4(),
+                payload.campanha_id,
+                character_id,
+                "beneficio inicial da criacao",
+                "criacao-personagem",
+                user.id,
+            ),
+        )
+        inventario_inicial = payload.ficha.get("inventarioInicial")
+        item_inicial = inventario_inicial[0] if isinstance(inventario_inicial, list) and inventario_inicial else None
+        titulo_inicial = (
+            " ".join(str(item_inicial.get("titulo") or "").split())[:200]
+            if isinstance(item_inicial, dict)
+            else ""
+        )
+        item_inicial_id = f"manual:{uuid4()}" if titulo_inicial else None
+        if item_inicial_id:
+            dados_iniciais = {"origem": "criacao", "raridade": "comum", "equipado": False}
+            connection.execute(
+                """
+                INSERT INTO inventario_personagem
+                    (campanha_id, personagem_id, item_id, titulo, quantidade, dados)
+                VALUES (%s, %s, %s, %s, 1, %s)
+                """,
+                (
+                    payload.campanha_id,
+                    character_id,
+                    item_inicial_id,
+                    titulo_inicial,
+                    Jsonb(dados_iniciais),
+                ),
+            )
+            connection.execute(
+                """
+                INSERT INTO lancamentos_economia
+                    (id, campanha_id, personagem_id, item_id, delta,
+                     motivo, origem, ator_usuario_id)
+                VALUES (%s, %s, %s, %s, 1, %s, %s, %s)
+                """,
+                (
+                    uuid4(),
+                    payload.campanha_id,
+                    character_id,
+                    item_inicial_id,
+                    "item comum inicial da criacao",
+                    "criacao-personagem",
+                    user.id,
+                ),
+            )
         record_audit(
             connection,
             action="personagem.criado",
@@ -181,6 +244,13 @@ def create_character(
         "ficha": _sheet_without_central_fields(payload.ficha),
         "versao": 1,
         "economia_versao": 1,
+        "carteira": [{"moeda": "Lunaris", "saldo": 20}],
+        "inventario_central": ([{
+            "item_id": item_inicial_id,
+            "titulo": titulo_inicial,
+            "quantidade": 1,
+            "dados": {"origem": "criacao", "raridade": "comum", "equipado": False},
+        }] if item_inicial_id else []),
         "status": "ativo",
     }
 
@@ -301,6 +371,17 @@ def update_character(
     with database.connection() as connection:
         current = _authorized_character(connection, character_id, user.id)
         name = payload.nome or current["nome"]
+        if current["papel"] not in {"mestre", "assistente"}:
+            campanha_row = connection.execute(
+                "SELECT configuracoes FROM campanhas WHERE id=%s", (current["campanha_id"],)
+            ).fetchone()
+            erro_regras = validar_regras_ficha(
+                payload.ficha,
+                campanha_row["configuracoes"] if campanha_row else None,
+                ficha_anterior=current["ficha"],
+            )
+            if erro_regras:
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=erro_regras)
         row = connection.execute(
             """
             UPDATE personagens

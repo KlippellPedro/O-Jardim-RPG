@@ -1,4 +1,4 @@
-import type { IRaca } from '../types/catalogo';
+import type { IClasse, IRaca } from '../types/catalogo';
 import { obterOpcaoRacialSelecionada } from './racaService';
 
 export const ATRIBUTOS = ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'fluxo'] as const;
@@ -23,6 +23,16 @@ export const COMPRA_PONTOS_BASE = 8;
 export const COMPRA_PONTOS_MAXIMO = 15;
 export const ATRIBUTO_VALOR_MINIMO = 1;
 export const ATRIBUTO_VALOR_MAXIMO = 20;
+export const GRAUS_PERICIA = ['iniciante', 'aprendiz', 'treinado', 'especialista', 'mestre', 'veterano', 'renomado'] as const;
+export const BONUS_GRAU: Record<string, number> = {
+  iniciante: 0,
+  aprendiz: 2,
+  treinado: 4,
+  especialista: 6,
+  mestre: 8,
+  veterano: 10,
+  renomado: 12,
+};
 
 export function distribuirValoresAtributos(valores: readonly number[]): Record<TAtributo, number> {
   return Object.fromEntries(ATRIBUTOS.map((atributo, indice) => [
@@ -110,6 +120,91 @@ export function obterAjustesAtributosRaciais(raca: IRaca, escolhaRacial: any = {
   );
 }
 
+export function obterLimitesAtributosRaciais(raca: IRaca, escolhaRacial: any = {}) {
+  const variante = obterVarianteRacial(raca, escolhaRacial);
+  const configuracao = raca?.escolha_atributos;
+  const campo = String(configuracao?.campo || 'atributosRaciais');
+  const total = Math.max(0, Math.trunc(Number(configuracao?.total) || 0));
+  const limite = Number(configuracao?.limite);
+  const escolhas = [...new Set(
+    (Array.isArray(escolhaRacial?.[campo]) ? escolhaRacial[campo] : [])
+      .filter((atributo: unknown): atributo is TAtributo => ATRIBUTOS.includes(atributo as TAtributo)),
+  )].slice(0, total);
+  const limitesEscolhidos = Number.isFinite(limite)
+    ? Object.fromEntries(escolhas.map(atributo => [atributo, limite]))
+    : {};
+  return {
+    ...(raca?.limites_atributos || {}),
+    ...(variante?.limites_atributos || {}),
+    ...limitesEscolhidos,
+  } as Record<string, number>;
+}
+
+export function obterFragmentosRaciaisConhecidos(raca: IRaca | null, escolhaRacial: any = {}) {
+  if (!Array.isArray(raca?.fragmentos)) return [];
+  const porId = new Map(raca.fragmentos.map((fragmento: any) => [fragmento.id, fragmento]));
+  const maximo = Math.max(0, Math.trunc(Number(raca.fragmentos_config?.conhecidos_maximo) || 0));
+  return [...new Set(
+    (Array.isArray(escolhaRacial?.fragmentosConhecidosIds) ? escolhaRacial.fragmentosConhecidosIds : [])
+      .map((id: unknown) => String(id || '').trim())
+      .filter(Boolean),
+  )].slice(0, maximo).map(id => porId.get(id)).filter(Boolean) as any[];
+}
+
+export function obterFragmentosRaciaisExpressos(raca: IRaca | null, escolhaRacial: any = {}) {
+  const conhecidos = obterFragmentosRaciaisConhecidos(raca, escolhaRacial);
+  const porId = new Map(conhecidos.map((fragmento: any) => [fragmento.id, fragmento]));
+  const maximo = Math.max(0, Math.trunc(Number(raca?.fragmentos_config?.expressos) || 0));
+  return [...new Set(
+    (Array.isArray(escolhaRacial?.fragmentosExpressosIds) ? escolhaRacial.fragmentosExpressosIds : [])
+      .map((id: unknown) => String(id || '').trim())
+      .filter(Boolean),
+  )].slice(0, maximo).map(id => porId.get(id)).filter(Boolean) as any[];
+}
+
+export function capacidadeModificacoesRaciais(raca: IRaca | null, nivel = 1) {
+  if (!Array.isArray(raca?.modificacoes)) return 0;
+  const base = Math.max(0, Math.trunc(Number(raca.capacidade_modificacoes?.base) || 0));
+  const nivelPorSlot = Math.max(1, Math.trunc(Number(raca.capacidade_modificacoes?.nivel_por_slot) || 2));
+  return base + Math.floor(Math.max(1, Number(nivel) || 1) / nivelPorSlot);
+}
+
+export function obterModificacoesRaciaisInstaladas(raca: IRaca | null, escolhaRacial: any = {}, nivel = 1) {
+  if (!Array.isArray(raca?.modificacoes)) return [];
+  const variante = obterVarianteRacial(raca, escolhaRacial);
+  const porId = new Map(raca.modificacoes.map((modificacao: any) => [modificacao.id, modificacao]));
+  const ids = [...new Set(
+    (Array.isArray(escolhaRacial?.modificacoesIds) ? escolhaRacial.modificacoesIds : [])
+      .map((id: unknown) => String(id || '').trim())
+      .filter(Boolean),
+  )].slice(0, capacidadeModificacoesRaciais(raca, nivel));
+  const candidatas = ids
+    .map(id => porId.get(id) as any)
+    .filter(Boolean)
+    .filter(item => Math.max(1, Number(nivel) || 1) >= Math.max(1, Number(item.nivel_minimo) || 1))
+    .filter(item => !item.postura_exigida || item.postura_exigida === variante?.postura);
+  const passivas = candidatas.filter(item => item.categoria === 'passiva').length;
+  return candidatas.filter(item => item.categoria !== 'ativa'
+    || passivas >= Math.max(0, Number(item.passivas_exigidas) || 0));
+}
+
+export function obterAjustesPericiasRaciais(raca: IRaca | null, escolhaRacial: any = {}) {
+  const condicao = Array.isArray(raca?.condicoes_ancestrais)
+    ? raca.condicoes_ancestrais.find((item: any) => item.id === escolhaRacial?.condicaoAncestralId)
+    : null;
+  const fragmentos = obterFragmentosRaciaisExpressos(raca, escolhaRacial);
+  const mapas = [
+    raca?.ajustes_pericias || {},
+    condicao?.ajustes_pericias || {},
+    ...fragmentos.map((fragmento: any) => fragmento.ajustes_pericias || {}),
+  ];
+  const chaves = new Set(mapas.flatMap(mapa => Object.keys(mapa)));
+  return Object.fromEntries([...chaves].flatMap(chave => {
+    const total = mapas.reduce((soma, mapa) => soma + (Number(mapa[chave]) || 0), 0);
+    return total === 0 ? [] : [[chave, total]];
+  })) as Record<string, number>;
+}
+
 export function aplicarAjusteAtributoRacial(valorBase: number, ajuste = 0, limite: number | null = null) {
   const base = Number(valorBase) || 0;
   const bonus = Number(ajuste);
@@ -127,13 +222,13 @@ export function aplicarAjusteAtributoRacial(valorBase: number, ajuste = 0, limit
 
 export function aplicarAjustesAtributosRaciais(atributosFinais: Record<string, number>, raca: IRaca, escolhaRacial: any = {}) {
   const ajustes = obterAjustesAtributosRaciais(raca, escolhaRacial);
-  // Omitindo limitadores estritos por agora para simplificar Wizard
+  const limites = obterLimitesAtributosRaciais(raca, escolhaRacial);
   return Object.fromEntries(ATRIBUTOS.map(chave => [
     chave,
     aplicarAjusteAtributoRacial(
       atributosFinais?.[chave],
       ajustes[chave],
-      null, // Limites can be implemented fully later if needed
+      limites[chave],
     ),
   ]));
 }
@@ -152,16 +247,6 @@ export function nivelPorXp(xp: number) {
   return nivel;
 }
 
-export function obterFragmentosRaciaisExpressos(_raca: IRaca | null, _escolhaRacial: any = {}) {
-  // Simplified for Phase 1
-  return [];
-}
-
-export function obterModificacoesRaciaisInstaladas(_raca: IRaca | null, _escolhaRacial: any = {}, _nivel = 1) {
-  // Simplified for Phase 1
-  return [];
-}
-
 export function calcularDerivados(atributosFinais: Record<string, number>, raca: IRaca | null, nivel = 1, escolhaRacial: any = {}) {
   const atributosEfetivos = raca ? aplicarAjustesAtributosRaciais(atributosFinais, raca, escolhaRacial) : atributosFinais;
   const metadeNivel = Math.floor(Math.max(1, Number(nivel) || 1) / 2);
@@ -173,6 +258,7 @@ export function calcularDerivados(atributosFinais: Record<string, number>, raca:
   const modSabedoria = modificador(atributosEfetivos.sabedoria);
   
   const varianteRacial = obterVarianteRacial(raca, escolhaRacial);
+  const fragmentosExpressos = obterFragmentosRaciaisExpressos(raca, escolhaRacial);
   
   const baseVidaRaca = Number(raca?.vida) || 0;
   const baseVidaVariante = Number(varianteRacial?.vida) || 0;
@@ -180,13 +266,30 @@ export function calcularDerivados(atributosFinais: Record<string, number>, raca:
 
   const baseManaRaca = Number(raca?.mana) || 0;
   const baseManaVariante = Number(varianteRacial?.mana) || 0;
-  const bonusManaRacial = baseManaRaca + baseManaVariante;
+  const bonusManaRacial = baseManaRaca + baseManaVariante
+    + fragmentosExpressos.reduce((total, fragmento: any) => total + (Number(fragmento.mana) || 0), 0);
 
   const baseMovimentoRaca = Number(raca?.movimento) || 0;
   const baseMovimentoVariante = Number(varianteRacial?.movimento) || 0;
   const bonusMovimentoRacial = baseMovimentoRaca + baseMovimentoVariante;
 
   const bonusVidaVariantePorNivel = (Number(varianteRacial?.vida_por_nivel) || 0) * Math.max(1, Number(nivel) || 1);
+  const modificacoes = obterModificacoesRaciaisInstaladas(raca, escolhaRacial, nivel);
+  const bonusVidaModificacoes = modificacoes.reduce(
+    (total: number, item: any) => total + ((Number(item.vida_por_nivel) || 0) * Math.max(1, Number(nivel) || 1)),
+    0,
+  );
+  const bonusMovimentoModificacoes = modificacoes.reduce(
+    (total: number, item: any) => total + (Number(item.movimento) || 0),
+    0,
+  );
+  const bonusDefesaModificacoes = modificacoes.reduce((total: number, item: any) => (
+    total + (Number(item.defesa) || 0) + (Number(item.defesa_por_tamanho?.[varianteRacial?.tamanho]) || 0)
+  ), 0);
+  const bonusDefesaFragmentos = fragmentosExpressos.reduce(
+    (total: number, fragmento: any) => total + (Number(fragmento.defesa) || 0),
+    0,
+  );
 
   const movimentoFixo = Number(varianteRacial?.movimento_fixo);
   const movimentoBase = Number.isFinite(movimentoFixo)
@@ -194,10 +297,52 @@ export function calcularDerivados(atributosFinais: Record<string, number>, raca:
     : 9 + (1.5 * modDestreza) + bonusMovimentoRacial;
 
   return {
-    vida: Math.max(1, 10 + (2 * modForca) + (2 * modConstituicao) + bonusVidaRacial + bonusVidaVariantePorNivel),
+    vida: Math.max(1, 10 + (2 * modForca) + (2 * modConstituicao) + bonusVidaRacial + bonusVidaVariantePorNivel + bonusVidaModificacoes),
     mana: Math.max(1, 6 + (2 * modInteligencia) + modSabedoria + bonusManaRacial),
-    movimento: Math.max(4.5, movimentoBase),
-    defesaNatural: 10 + metadeNivel + modDestreza,
+    movimento: Math.max(4.5, movimentoBase + bonusMovimentoModificacoes),
+    defesaNatural: 10 + metadeNivel + modDestreza + bonusDefesaModificacoes + bonusDefesaFragmentos,
     iniciativa: 10 + metadeNivel + modDestreza,
   };
+}
+
+export function calcularDerivadosComClasses(
+  atributosFinais: Record<string, number>,
+  raca: IRaca | null,
+  classesPersonagem: Array<{ id?: string; classeId?: string; nivel?: number }>,
+  catalogoClasses: IClasse[],
+  nivelDeReferencia: number | null = null,
+  escolhaRacial: any = {},
+) {
+  const classes = Array.isArray(classesPersonagem) ? classesPersonagem : [];
+  const catalogo = new Map((catalogoClasses || []).map(classe => [classe.id, classe]));
+  const nivelTotal = classes.reduce(
+    (total, classe) => total + Math.max(0, Math.trunc(Number(classe?.nivel) || 0)),
+    0,
+  );
+  const nivelParaEscala = nivelDeReferencia !== null
+    && nivelDeReferencia !== undefined
+    && Number.isFinite(Number(nivelDeReferencia))
+    ? Math.max(1, Number(nivelDeReferencia))
+    : Math.max(1, nivelTotal);
+  const derivados = calcularDerivados(atributosFinais, raca, nivelParaEscala, escolhaRacial);
+  const atributosEfetivos = raca
+    ? aplicarAjustesAtributosRaciais(atributosFinais, raca, escolhaRacial)
+    : atributosFinais;
+  const modConstituicao = modificador(atributosEfetivos.constituicao);
+  let vida = derivados.vida;
+  let mana = derivados.mana;
+  let recursosDefinidos = true;
+
+  classes.forEach((referencia, indice) => {
+    const classe = catalogo.get(String(referencia.classeId || referencia.id || ''));
+    if (!classe) {
+      recursosDefinidos = false;
+      return;
+    }
+    const niveisComGanho = Math.max(0, Math.trunc(Number(referencia.nivel) || 0) - (indice === 0 ? 1 : 0));
+    vida += niveisComGanho * Math.max(1, Number(classe.vida) + modConstituicao);
+    mana += niveisComGanho * Math.max(1, Number(classe.mana));
+  });
+
+  return { ...derivados, vida, mana, recursosDefinidos };
 }

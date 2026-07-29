@@ -4,21 +4,14 @@ import { motion } from 'framer-motion';
 import { carregarCatalogo } from '../../../services/catalogoService';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { IPericiaCatalogo } from '../../../types/catalogo';
+import { IPericiaCatalogo, IRaca } from '../../../types/catalogo';
 import { ModalVantagensPericia } from '../components/ModalVantagensPericia';
 import { ModalCalculoPericia } from '../components/ModalCalculoPericia';
+import { aplicarAjustesAtributosRaciais, BONUS_GRAU, obterAjustesPericiasRaciais } from '../../../services/calculoService';
+import { resumirEquipamentos } from '../../../services/equipamentoService';
+import { penalidadeCansacoTeste } from '../../../services/statusService';
 
 const GRAUS_PERICIA = ['iniciante', 'aprendiz', 'treinado', 'especialista', 'mestre', 'veterano', 'renomado'];
-const BONUS_GRAU: Record<string, number> = {
-  iniciante: 0,
-  aprendiz: 2,
-  treinado: 4,
-  especialista: 6,
-  mestre: 8,
-  veterano: 10,
-  renomado: 12,
-};
-
 const NOMES_ATRIBUTOS: Record<string, string> = {
   forca: 'Força',
   destreza: 'Destreza',
@@ -32,6 +25,7 @@ const NOMES_ATRIBUTOS: Record<string, string> = {
 export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate: any }) => {
   const campanhaAtiva = useAuthStore(s => s.campanhaAtiva);
   const [periciasCatalogo, setPericiasCatalogo] = useState<IPericiaCatalogo[]>([]);
+  const [racasCatalogo, setRacasCatalogo] = useState<IRaca[]>([]);
   const [busca, setBusca] = useState('');
   const [filtroAtributo, setFiltroAtributo] = useState('');
   const [rolando, setRolando] = useState<string | null>(null);
@@ -39,15 +33,22 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
   useEffect(() => {
     carregarCatalogo().then(data => {
       setPericiasCatalogo(data.pericias || []);
+      setRacasCatalogo(data.racas || []);
     });
   }, []);
 
   const f = character.ficha || {};
   const pericias = f.pericias || {};
   const rolagens = f.rolagensPericias || {};
-  const attrs = f.atributosFinais || character.atributosFinais || { forca: 10, destreza: 10, constituicao: 10, inteligencia: 10, sabedoria: 10, carisma: 10, fluxo: 10 };
+  const attrsBase = f.atributosFinais || character.atributosFinais || { forca: 10, destreza: 10, constituicao: 10, inteligencia: 10, sabedoria: 10, carisma: 10, fluxo: 10 };
+  const racaAtual = racasCatalogo.find(raca => raca.id === f.racaId) || null;
+  const attrs = racaAtual ? aplicarAjustesAtributosRaciais(attrsBase, racaAtual, f.escolhaRacial) : attrsBase;
+  const ajustesRaciaisPericias = obterAjustesPericiasRaciais(racaAtual, f.escolhaRacial);
   const nivel = character.nivel || 1;
   const metadeNivelCalculado = Math.floor(Math.max(1, nivel) / 2);
+  const penalidadeArmadura = resumirEquipamentos(character.inventarioCentral || [], f).penalidadeArmadura;
+  const penalidadeDaPericia = (periciaId: string) => ['acrobacia', 'atletismo', 'furtividade'].includes(periciaId) ? penalidadeArmadura : 0;
+  const penalidadeCansacoDaPericia = (atributo: string) => penalidadeCansacoTeste(f.status?.cansacoAtual, ['forca', 'destreza', 'constituicao'].includes(atributo));
 
   const handleGrauChange = (periciaId: string, grau: string) => {
     const novasPericias = { ...pericias };
@@ -108,7 +109,8 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
   const activeAttr = activePericiaObj ? (attrs[activePericiaObj.atributo] || 10) : 10;
   const activeMod = Math.floor((activeAttr - 10) / 2);
   const activeBonusGrau = BONUS_GRAU[activeGrau] || 0;
-  const activeTotal = activeMod + metadeNivelCalculado + activeBonusGrau;
+  const activeBonusRacial = activePericiaObj ? (ajustesRaciaisPericias[activePericiaObj.id] || 0) : 0;
+  const activeTotal = activeMod + metadeNivelCalculado + activeBonusGrau + activeBonusRacial - penalidadeDaPericia(activePericiaObj?.id || '') + penalidadeCansacoDaPericia(activePericiaObj?.atributo || '');
 
   const periciasVisiveis = todasPericias
     .filter(p => !busca || p.titulo.toLowerCase().includes(busca.toLowerCase()))
@@ -176,7 +178,10 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
             const attrVal = attrs[p.atributo] || 10;
             const mod = Math.floor((attrVal - 10) / 2);
             const bonusG = BONUS_GRAU[grauAtual] || 0;
-            const total = mod + metadeNivelCalculado + bonusG;
+            const bonusRacial = ajustesRaciaisPericias[p.id] || 0;
+            const penalidadeEquipamento = penalidadeDaPericia(p.id);
+            const penalidadeCansaco = penalidadeCansacoDaPericia(p.atributo);
+            const total = mod + metadeNivelCalculado + bonusG + bonusRacial - penalidadeEquipamento + penalidadeCansaco;
             const totalStr = total >= 0 ? `+${total}` : `${total}`;
 
             const rolagem = rolagens[p.id] || { vantagens: 0, desvantagens: 0 };
@@ -206,6 +211,13 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                   <span className="text-[10px] px-2 py-1.5 bg-black/40 rounded border border-white/5 text-gray-400 capitalize font-bold">
                     {NOMES_ATRIBUTOS[p.atributo]?.substring(0,3)} {mod >= 0 ? `+${mod}` : mod}
                   </span>
+                  {bonusRacial !== 0 && (
+                    <span className="text-[10px] px-2 py-1.5 rounded border border-emerald-500/20 bg-emerald-500/10 text-emerald-300 font-bold">
+                      Raça {bonusRacial >= 0 ? '+' : ''}{bonusRacial}
+                    </span>
+                  )}
+                  {penalidadeEquipamento > 0 && <span className="text-[10px] font-bold text-orange-300">Armadura -{penalidadeEquipamento}</span>}
+                  {penalidadeCansaco < 0 && <span className="text-[10px] font-bold text-red-300">Cansaço {penalidadeCansaco}</span>}
                   
                   <select
                     value={grauAtual}
@@ -300,6 +312,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
           metadeNivel={metadeNivelCalculado}
           grauNome={activeGrau}
           bonusGrau={activeBonusGrau}
+          bonusRacial={activeBonusRacial}
           total={activeTotal}
           descricao={activePericiaObj.descricao}
         />

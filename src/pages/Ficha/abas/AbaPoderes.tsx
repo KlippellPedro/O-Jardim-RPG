@@ -5,6 +5,7 @@ import { FichaModal } from '../components/FichaModal';
 import { LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
+import { poderesSelecionados } from '../../../services/progressaoFichaService';
 
 interface ICustoPoder {
   recurso: 'nenhum' | 'mana' | 'vida' | 'sanidade' | 'cansaco';
@@ -85,6 +86,18 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
   const f = character.ficha || {};
   const status = f.status || {};
   const poderes: IPoder[] = f.poderes || [];
+  const poderesClasse: IPoder[] = poderesSelecionados(f).map((item) => ({
+    id: item.id,
+    nome: item.titulo,
+    fonte: `Classe: ${item.origem}`,
+    tipo: item.descricao.toLocaleLowerCase('pt-BR').startsWith('passivo') ? 'Passiva' : 'Ativa',
+    nivelAdquirido: String(item.nivel),
+    custo: { recurso: item.custoMana ? 'mana' : 'nenhum', valor: item.custoMana || 0 },
+    acao: '',
+    duracao: '',
+    alcance: '',
+    descricao: item.descricao,
+  }));
 
   const poderesVisiveis = poderes
     .filter((p) => !busca || p.nome?.toLowerCase().includes(busca.toLowerCase()))
@@ -231,7 +244,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
           <p className="text-gray-400 text-sm">Habilidades ativas, passivas e características especiais.</p>
         </div>
         <div className="flex items-center gap-3 bg-[#15141b] border border-white/5 rounded-xl px-4 py-3">
-          <span className="text-3xl font-bold text-[#c7a44c]">{poderes.length}</span>
+          <span className="text-3xl font-bold text-[#c7a44c]">{poderes.length + poderesClasse.length}</span>
           <span className="text-sm text-gray-500 uppercase tracking-widest font-bold leading-tight">Poderes<br />Conhecidos</span>
         </div>
       </div>
@@ -255,6 +268,23 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
           + Novo Poder
         </button>
       </div>
+
+      {poderesClasse.length > 0 && (
+        <section className="bg-[#0f0e15] border border-[#c7a44c]/20 rounded-2xl p-4">
+          <h3 className="mb-3 text-xs font-bold uppercase tracking-widest text-[#c7a44c]">Poderes oficiais de classe</h3>
+          <div className="grid gap-3 lg:grid-cols-2">
+            {poderesClasse.map((poder) => (
+              <article key={poder.id} className="rounded-xl border border-white/5 bg-[#121118] p-4">
+                <div className="flex items-start justify-between gap-3"><strong className="text-white">{poder.nome}</strong><span className="text-[10px] text-[#c7a44c]">{custoTexto(poder.custo)}</span></div>
+                <p className="mt-1 text-[11px] text-gray-500">{poder.fonte}</p>
+                <p className="mt-2 text-sm leading-relaxed text-gray-400">{poder.descricao}</p>
+                {poder.tipo !== 'Passiva' && <button type="button" onClick={() => usarPoder(poder)} disabled={usandoId === poder.id} className="mt-3 flex items-center gap-2 rounded-lg border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-3 py-2 text-xs font-bold text-[#c7a44c] disabled:opacity-50"><Dices size={14} />{usandoId === poder.id ? 'Usando...' : 'Usar'}</button>}
+                {ultimoUsoMsg?.id === poder.id && <p className={`mt-2 text-xs ${ultimoUsoMsg.erro ? 'text-red-400' : 'text-green-400'}`}>{ultimoUsoMsg.texto}</p>}
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* LISTA DE PODERES */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4">

@@ -20,7 +20,7 @@ class Ajuda(commands.Cog):
             "Eu mostro as regras publicadas de **O Jardim** por menus, sempre do jeito "
             "que estão escritas: sem inventar nada.",
         )
-        emb.add_field(name="/regras", value="Navega por menus: raças, classes, perícias, legados e fundamentos.", inline=False)
+        emb.add_field(name="/regras", value="Navega por menus: raças, classes, perícias, legados, magias e fundamentos.", inline=False)
         emb.add_field(name="/regra <termo>", value="Vai direto pra uma regra pelo nome (ex.: Humano, Guerreiro, Atletismo).", inline=False)
         emb.add_field(name="/fontes", value="Veja quais documentos oficiais eu consulto.", inline=False)
         await interaction.response.send_message(embed=emb, ephemeral=True)

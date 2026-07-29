@@ -5,6 +5,7 @@ import { FichaModal } from '../components/FichaModal';
 import { LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
+import { caracteristicasRaciaisAutomaticas, habilidadesAutomaticas } from '../../../services/progressaoFichaService';
 
 // ---------------------------------------------------------------------------
 // Tipos locais da entidade "habilidade" (traços raciais, talentos, competências)
@@ -104,6 +105,10 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
   const [ultimoUsoMsg, setUltimoUsoMsg] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
 
   const habilidades: IHabilidade[] = character.ficha?.habilidades || [];
+  const habilidadesOficiais = [
+    ...caracteristicasRaciaisAutomaticas(character.ficha || {}),
+    ...habilidadesAutomaticas(character.ficha || {}),
+  ];
   const status = character.ficha?.status || {};
 
   const habilidadesVisiveis = habilidades
@@ -251,10 +256,27 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
           <p className="text-gray-400 text-sm">Traços raciais, talentos e competências diversas.</p>
         </div>
         <div className="flex items-center gap-3 bg-[#15141b] border border-white/5 rounded-xl px-4 py-3">
-          <span className="text-3xl font-bold text-[#c7a44c]">{habilidades.length}</span>
+          <span className="text-3xl font-bold text-[#c7a44c]">{habilidades.length + habilidadesOficiais.length}</span>
           <span className="text-sm text-gray-500 uppercase tracking-widest font-bold leading-tight">Habilidades<br/>Conhecidas</span>
         </div>
       </div>
+
+      {habilidadesOficiais.length > 0 && (
+        <section className="rounded-2xl border border-[#c7a44c]/20 bg-[#0f0e15] p-4">
+          <h3 className="mb-3 text-xs font-bold uppercase tracking-widest text-[#c7a44c]">Habilidades oficiais automáticas</h3>
+          <div className="grid gap-3 lg:grid-cols-2">
+            {habilidadesOficiais.map((item) => (
+              <article key={item.id} className="rounded-xl border border-white/5 bg-[#121118] p-4">
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <strong className="text-white">{item.titulo}</strong>
+                  <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-blue-300">{item.origem}</span>
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-gray-400">{item.descricao}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* FEEDBACK DE USO */}
       {ultimoUsoMsg && (

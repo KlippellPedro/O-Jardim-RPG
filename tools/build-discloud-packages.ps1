@@ -15,6 +15,26 @@ $banqueiroStage = Join-Path $stageRoot 'banqueiro'
 $jornalistaStage = Join-Path $stageRoot 'jornalista'
 $gerenteStage = Join-Path $stageRoot 'gerente'
 
+function Sync-PublicRules {
+  $npmCommand = Get-Command npm.cmd -ErrorAction SilentlyContinue
+  if (-not $npmCommand) {
+    $npmCommand = Get-Command npm -ErrorAction SilentlyContinue
+  }
+  if (-not $npmCommand) {
+    throw 'npm nao encontrado. Ele e necessario para gerar as regras publicas oficiais.'
+  }
+  Push-Location $root
+  try {
+    & $npmCommand.Source run generate:rules
+    if ($LASTEXITCODE -ne 0) {
+      throw "Geracao das regras publicas falhou com codigo $LASTEXITCODE."
+    }
+  }
+  finally {
+    Pop-Location
+  }
+}
+
 function Copy-ProjectItem {
   param([string]$Source, [string]$DestinationRoot)
   $sourcePath = Join-Path $root $Source
@@ -79,6 +99,7 @@ function Remove-GeneratedPythonFiles {
 }
 
 try {
+  Sync-PublicRules
   if (-not $BotsOnly) {
     Build-Frontend
   }
@@ -156,9 +177,14 @@ try {
   New-Item -ItemType Directory -Path $gerenteDocs, $gerenteFicha -Force | Out-Null
 
   @(
+    'docs\regras\regras-publicas-v1.md'
+  ) | ForEach-Object { Copy-ProjectItem $_ $gerenteDocs }
+
+  @(
     'data\ficha\classes.json',
     'data\ficha\legados.json',
     'data\ficha\legados-novos.json',
+    'data\ficha\magias.json',
     'data\ficha\pericias.json',
     'data\ficha\racas.json'
   ) | ForEach-Object { Copy-ProjectItem $_ $gerenteFicha }

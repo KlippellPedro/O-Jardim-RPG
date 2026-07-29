@@ -5,6 +5,7 @@ import {
   ATRIBUTOS,
   VALORES_ATRIBUTOS_PADRAO,
   COMPRA_PONTOS_ORCAMENTO,
+  calcularDerivadosComClasses,
   calcularPontosAtributos,
   compraPontosValida,
   conjuntoAtributosValido,
@@ -34,4 +35,23 @@ test('organização preserva inclusive valores repetidos do conjunto', () => {
 
   const duplicadoIlegal = { ...reorganizados, [ATRIBUTOS[0]]: 15 };
   assert.equal(conjuntoAtributosValido(duplicadoIlegal, VALORES_ATRIBUTOS_PADRAO), false);
+});
+
+test('Vida e Mana acumulam os ganhos de cada nível e de cada classe', () => {
+  const atributos = Object.fromEntries(ATRIBUTOS.map(atributo => [atributo, 10]));
+  const classes = [
+    { id: 'guerreiro', titulo: 'Guerreiro', vida: 5, mana: 2 },
+    { id: 'mago', titulo: 'Mago', vida: 3, mana: 4 },
+  ];
+  const derivados = calcularDerivadosComClasses(
+    atributos,
+    null,
+    [{ classeId: 'guerreiro', nivel: 3 }, { classeId: 'mago', nivel: 1 }],
+    classes,
+  );
+
+  assert.equal(derivados.vida, 23);
+  assert.equal(derivados.mana, 14);
+  assert.equal(derivados.recursosDefinidos, true);
+  assert.equal(derivados.defesaNatural, 12);
 });

@@ -12,6 +12,7 @@ interface ModalCalculoPericiaProps {
   metadeNivel: number;
   grauNome: string;
   bonusGrau: number;
+  bonusRacial?: number;
   total: number;
   descricao?: string;
 }
@@ -27,6 +28,7 @@ export const ModalCalculoPericia: React.FC<ModalCalculoPericiaProps> = ({
   metadeNivel,
   grauNome,
   bonusGrau,
+  bonusRacial = 0,
   total,
   descricao
 }) => {
@@ -46,6 +48,13 @@ export const ModalCalculoPericia: React.FC<ModalCalculoPericiaProps> = ({
             <span className="text-gray-400 text-sm">{atributoNome} {atributoValor} · modificador</span>
             <span className="text-white font-mono">{modificador >= 0 ? `+${modificador}` : modificador}</span>
           </div>
+
+          {bonusRacial !== 0 && (
+            <div className="flex justify-between items-center bg-[#121118] border border-emerald-500/10 rounded-lg p-3">
+              <span className="text-gray-400 text-sm">Ajuste racial</span>
+              <span className="text-emerald-300 font-mono">{bonusRacial >= 0 ? '+' : ''}{bonusRacial}</span>
+            </div>
+          )}
 
           <div className="flex justify-between items-center bg-[#121118] border border-white/5 rounded-lg p-3">
             <span className="text-gray-400 text-sm">Metade do nível {nivel}</span>

@@ -18,9 +18,11 @@ import { AbaAtaques } from './abas/AbaAtaques';
 import { AbaMagias } from './abas/AbaMagias';
 import { AbaAliados } from './abas/AbaAliados';
 import { AbaNotas } from './abas/AbaNotas';
+import { AbaProgressao } from './abas/AbaProgressao';
+import { AbaDescanso } from './abas/AbaDescanso';
 
 
-const TABS = ['Ficha', 'Perícias', 'Inventário', 'Poderes', 'Habilidades', 'Ataques', 'Magias', 'Aliados', 'Notas'];
+const TABS = ['Ficha', 'Progressão', 'Perícias', 'Inventário', 'Poderes', 'Habilidades', 'Ataques', 'Descanso', 'Magias', 'Aliados', 'Notas'];
 
 const EMPTY_SAVE_STATE: CharacterDomainSaveState = { phase: 'idle' };
 
@@ -263,9 +265,11 @@ export const PersonagemSheet: React.FC = () => {
       description="As edições aparecem imediatamente e são sincronizadas em sequência. Se houver falha ou conflito, a ficha mostra como recuperar os dados."
       items={[
         { label: 'Ficha', value: 'Identidade, classe, atributos, status vitais e experiência' },
+        { label: 'Progressão', value: 'Características raciais, habilidades e eventos automáticos, poderes de classe e Legados' },
+        { label: 'Descanso', value: 'Recuperação, Cansaço, condições e crises de Sanidade' },
         { label: 'Perícias', value: 'Graus, vantagens/desvantagens e rolagens' },
         { label: 'Inventário', value: 'Itens e moedas (sincronizados com o servidor)' },
-        { label: 'Poderes / Habilidades / Magias', value: 'Criar, editar, usar (com custo de recurso) e registrar na mesa' },
+        { label: 'Poderes / Habilidades / Magias', value: 'Escolher progressão, consultar efeitos, conjurar pelo catálogo oficial e registrar na mesa' },
         { label: 'Ataques', value: 'Criar, editar e rolar acerto/dano no servidor' },
         { label: 'Aliados', value: 'Companheiros e seguidores' },
         { label: 'Notas', value: 'História e anotações de sessão' },
@@ -296,11 +300,13 @@ export const PersonagemSheet: React.FC = () => {
     
     switch (activeTab) {
       case 'Ficha': return <AbaFicha {...props} />;
+      case 'Progressão': return <AbaProgressao {...props} />;
       case 'Perícias': return <AbaPericias {...props} />;
       case 'Inventário': return <AbaInventario {...props} />;
       case 'Poderes': return <AbaPoderes {...props} />;
       case 'Habilidades': return <AbaHabilidades {...props} />;
       case 'Ataques': return <AbaAtaques {...props} />;
+      case 'Descanso': return <AbaDescanso {...props} />;
       case 'Magias': return <AbaMagias {...props} />;
       case 'Aliados': return <AbaAliados {...props} />;
       case 'Notas': return <AbaNotas {...props} />;

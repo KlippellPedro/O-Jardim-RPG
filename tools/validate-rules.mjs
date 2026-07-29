@@ -48,7 +48,11 @@ const lerJson = async caminho => JSON.parse(await fs.readFile(
 
 const classes = await lerJson('../data/ficha/classes.json');
 const racas = await lerJson('../data/ficha/racas.json');
+const magiasDocumento = await lerJson('../data/ficha/magias.json');
+const magias = magiasDocumento.magias || [];
 const mestre = await lerJson('../data/regras/mestre-v1.json');
+const catalogoLoja = await lerJson('../bots/banqueiro/data/catalogo.json');
+const armas = catalogoLoja.entradas.filter(entrada => entrada.tipo === 'arma');
 const camposAdiados = [
   'habilidades',
   'poderes',
@@ -60,6 +64,40 @@ const camposAdiados = [
 
 assert.equal(classes.length, 24, 'O catálogo precisa conter 24 classes.');
 assert.equal(racas.length, 21, 'O catálogo precisa conter 21 raças.');
+assert.equal(magias.length, 28, 'O catálogo inicial precisa conter 25 magias e três rituais.');
+assert.equal(
+  magias.filter(magia => typeof magia.circulo === 'number').length,
+  25,
+  'Cada um dos cinco círculos precisa publicar cinco magias.',
+);
+assert.ok(
+  magias.filter(magia => typeof magia.circulo === 'number')
+    .every(magia => magia.custo_mana === magia.circulo * 2),
+  'O custo base das magias precisa ser duas vezes o círculo.',
+);
+assert.ok(
+  magias.filter(magia => magia.circulo === 'ritual')
+    .every(magia => magia.somente_mestre === true && magia.ataque === false),
+  'Rituais iniciais precisam de concessão do Mestre e não podem causar crítico.',
+);
+assert.ok(armas.length > 0, 'O catálogo da loja precisa conter armas.');
+assert.ok(
+  armas.every(({ conteudo }) => Number.isInteger(conteudo.margem_ameaca)
+    && conteudo.margem_ameaca >= 18
+    && conteudo.margem_ameaca <= 20),
+  'Toda arma precisa ter margem de ameaça entre 18 e 20.',
+);
+assert.ok(
+  armas.every(({ conteudo }) => Number.isInteger(conteudo.multiplicador_critico)
+    && conteudo.multiplicador_critico >= 2
+    && conteudo.multiplicador_critico <= 4),
+  'Toda arma precisa ter multiplicador crítico entre x2 e x4.',
+);
+assert.ok(
+  armas.every(({ conteudo }) => conteudo.margem_ameaca === 20
+    || conteudo.multiplicador_critico === 2),
+  'Margens ampliadas precisam usar x2; x3 e x4 exigem margem 20.',
+);
 assert.ok(
   classes.every(classe => Number.isFinite(classe.vida) && Number.isFinite(classe.mana)),
   'Toda classe precisa definir Vida e Mana numéricas.',
@@ -151,6 +189,11 @@ assert.ok(
     && classe.progressao?.length === 20
     && classe.poderes?.length >= 10),
   'Toda classe precisa publicar 20 níveis e ao menos 10 poderes.',
+);
+assert.deepEqual(
+  classes.filter(classe => classe.progressao_magia).map(classe => classe.id),
+  ['cartista-arcano', 'elementarista'],
+  'Somente as duas fontes de magia publicadas podem liberar seleção automática.',
 );
 assert.equal(validarPacoteMestre(mestre), null, 'O pacote do mestre está inválido.');
 

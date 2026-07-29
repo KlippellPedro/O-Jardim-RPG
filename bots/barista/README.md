@@ -65,7 +65,7 @@ carteira compartilhada com o Banqueiro.
   que a mesa usa no Discord funciona igual na página da sessão.
 - `/teste [modificador] [modo] [motivo]` — teste de d20 (`normal`,
   `vantagem` ou `desvantagem`), seguindo a regra de
-  `docs/regras/fundamentos-v1.md`: com vantagem rola dois d20 e fica com o
+  `docs/regras/regras-publicas-v1.md`: com vantagem rola dois d20 e fica com o
   maior; com desvantagem, com o menor. Em 20/1 natural mostra um aviso de
   que o resultado melhora/piora um grau (regra do sistema, não é um
   "crítico" automático).
@@ -239,4 +239,3 @@ bots/barista/
   vez antes de confiar na lógica de playlist/carteira em produção — só foi
   verificada por leitura/espelhamento do padrão já provado no Banqueiro,
   nunca executada de fato (sem `TEST_DATABASE_URL` neste ambiente).
-

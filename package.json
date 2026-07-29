@@ -8,9 +8,14 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test:autosave": "node --import ./tests/frontend/registerTsLoader.mjs --test tests/frontend/autosaveQueue.test.ts tests/frontend/characterAutosave.integration.test.ts",
-    "test:frontend": "node --import ./tests/frontend/registerTsLoader.mjs --test tests/frontend/autosaveQueue.test.ts tests/frontend/characterAutosave.integration.test.ts tests/frontend/lojaCommands.test.ts tests/frontend/economyOperations.test.ts tests/frontend/raceChoices.test.ts tests/frontend/classProgression.test.ts tests/frontend/mundoVisibility.test.ts tests/frontend/attributeGeneration.test.ts",
+    "test:frontend": "node --import ./tests/frontend/registerTsLoader.mjs --test tests/frontend/autosaveQueue.test.ts tests/frontend/characterAutosave.integration.test.ts tests/frontend/lojaCommands.test.ts tests/frontend/economyOperations.test.ts tests/frontend/raceChoices.test.ts tests/frontend/classProgression.test.ts tests/frontend/mundoVisibility.test.ts tests/frontend/attributeGeneration.test.ts tests/frontend/criticalRules.test.ts tests/frontend/statusRules.test.ts tests/frontend/progressionAndRecovery.test.ts tests/frontend/magicRules.test.ts",
+    "generate:rules": "node --import ./tests/frontend/registerTsLoader.mjs tools/generate-public-rules.mjs",
+    "check:rules-source": "node --import ./tests/frontend/registerTsLoader.mjs tools/generate-public-rules.mjs --check",
+    "normalize:arsenal": "node tools/normalize-arsenal-balance.mjs",
+    "audit:balance": "node tools/audit-balance.mjs",
     "check:typography": "node tools/check-site-typography.mjs",
-    "fix:typography": "node tools/check-site-typography.mjs --fix"
+    "fix:typography": "node tools/check-site-typography.mjs --fix",
+    "fix:weapon-criticals": "node tools/normalize-weapon-criticals.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^9.108.0",

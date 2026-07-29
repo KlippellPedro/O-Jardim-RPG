@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Search, Crosshair, Dices, Pencil, Trash2, Flame, GripVertical, Star } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
@@ -6,6 +6,15 @@ import { LabeledInput, LabeledModalSelect } from '../components/SharedFichaCompo
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { useCharacterStore } from '../../../store/useCharacterStore';
+import {
+  ameacaCritico,
+  formatarCritico,
+  formulaDanoCritico,
+  normalizarCriticoBalanceado,
+} from '../../../services/criticalService';
+import { carregarCatalogo } from '../../../services/catalogoService';
+import { aplicarAjustesAtributosRaciais, BONUS_GRAU, modificador, obterAjustesPericiasRaciais } from '../../../services/calculoService';
+import type { ICatalogo } from '../../../types/catalogo';
 
 interface IAtaque {
   id: string;
@@ -14,8 +23,13 @@ interface IAtaque {
   bonusAcerto: number;
   dano: string;
   alcance: string;
+  margemAmeaca: number;
+  multiplicadorCritico: number;
   favorito?: boolean;
   isInventory?: boolean;
+  subtipo?: string;
+  municaoAtual?: number;
+  municaoMaxima?: number;
 }
 
 interface IResultadoRolagem {
@@ -33,7 +47,15 @@ const TIPO_ATAQUE_COLORS: Record<string, string> = {
   'Alcance': 'bg-purple-500/10 border-purple-500/30 text-purple-400'
 };
 
-const FORM_VAZIO = { nome: '', tipo: 'Corpo a Corpo', bonusAcerto: '0', dano: '', alcance: '' };
+const FORM_VAZIO = {
+  nome: '',
+  tipo: 'Corpo a Corpo',
+  bonusAcerto: '0',
+  dano: '',
+  alcance: '',
+  margemAmeaca: '20',
+  multiplicadorCritico: '2',
+};
 
 function gerarId(): string {
   return `ataques-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
@@ -47,11 +69,21 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
   const [form, setForm] = useState(FORM_VAZIO);
   const [rolando, setRolando] = useState<string | null>(null);
   const [resultado, setResultado] = useState<IResultadoRolagem | null>(null);
+  const [defesaAlvo, setDefesaAlvo] = useState('');
+  const [catalogo, setCatalogo] = useState<ICatalogo | null>(null);
+
+  useEffect(() => {
+    carregarCatalogo().then(setCatalogo);
+  }, []);
 
   const campanhaId = useAuthStore(state => state.campanhaAtiva?.id);
   const mutateEconomy = useCharacterStore((state) => state.mutateEconomy);
 
-  const ataquesManuais: IAtaque[] = character.ficha?.ataques || [];
+  const ataquesManuais: IAtaque[] = (character.ficha?.ataques || []).map((ataque: Partial<IAtaque>) => ({
+    ...ataque,
+    margemAmeaca: Number(ataque.margemAmeaca ?? 20),
+    multiplicadorCritico: Number(ataque.multiplicadorCritico ?? 2),
+  })) as IAtaque[];
   
   const armasEquipadas: IAtaque[] = (character.inventarioCentral || [])
     .filter((i: any) => i.dados?.categoria === 'arma' && i.dados?.equipado)
@@ -62,12 +94,44 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
       bonusAcerto: i.dados?.bonusAcerto || 0,
       dano: i.dados?.dano || '',
       alcance: i.dados?.alcance || '1,5m',
+      margemAmeaca: Number(i.dados?.margem_ameaca ?? i.dados?.margemAmeaca ?? 20),
+      multiplicadorCritico: Number(i.dados?.multiplicador_critico ?? i.dados?.multiplicadorCritico ?? 2),
+      subtipo: String(i.dados?.subtipo || 'simples'),
+      municaoAtual: Number(i.dados?.municaoAtual ?? i.dados?.municao_atual) || 0,
+      municaoMaxima: Number(i.dados?.municaoMaxima ?? i.dados?.municao_maxima) || 0,
       favorito: i.dados?.favorito || false,
       isInventory: true
     }));
 
   const ordemAtaques: string[] = character.ficha?.ordemAtaques || [];
   const ataques: IAtaque[] = [...armasEquipadas, ...ataquesManuais];
+  const ficha = character.ficha || {};
+  const racaAtual = catalogo?.racas.find(raca => raca.id === ficha.racaId) || null;
+  const atributosBase = ficha.atributosFinais || character.atributosFinais || {};
+  const atributos = racaAtual
+    ? aplicarAjustesAtributosRaciais(atributosBase, racaAtual, ficha.escolhaRacial)
+    : atributosBase;
+  const ajustesRaciaisPericias = obterAjustesPericiasRaciais(racaAtual, ficha.escolhaRacial);
+  const metadeNivel = Math.floor(Math.max(1, Number(character.nivel) || 1) / 2);
+  const proficiencias = new Set((Array.isArray(ficha.proficiencias) ? ficha.proficiencias : []).map((item: unknown) => String(item).toLocaleLowerCase('pt-BR')));
+
+  const penalidadeFaltaProficiencia = (item: IAtaque) => {
+    if (!item.isInventory || !item.subtipo || item.subtipo.toLocaleLowerCase('pt-BR') === 'simples') return 0;
+    const subtipo = item.subtipo.toLocaleLowerCase('pt-BR');
+    return proficiencias.has(subtipo) || proficiencias.has(`armas_${subtipo}`) || proficiencias.has(`armas ${subtipo}`) ? 0 : -5;
+  };
+
+  const calcularBonusAtaque = (item: IAtaque) => {
+    const periciaId = item.tipo === 'Corpo a Corpo' ? 'luta' : 'pontaria';
+    const atributoId = periciaId === 'luta' ? 'forca' : 'destreza';
+    const grau = ficha.pericias?.[periciaId] || 'iniciante';
+    return modificador(atributos[atributoId] ?? 10)
+      + metadeNivel
+      + (BONUS_GRAU[grau] || 0)
+      + (ajustesRaciaisPericias[periciaId] || 0)
+      + (Number(item.bonusAcerto) || 0)
+      + penalidadeFaltaProficiencia(item);
+  };
 
   const ataquesVisiveis = ataques
     .filter((a: any) => !busca || a.nome?.toLowerCase().includes(busca.toLowerCase()))
@@ -124,6 +188,8 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
       bonusAcerto: String(item.bonusAcerto ?? 0),
       dano: item.dano || '',
       alcance: item.alcance || '',
+      margemAmeaca: String(item.margemAmeaca ?? 20),
+      multiplicadorCritico: String(item.multiplicadorCritico ?? 2),
     });
     setModalAberto(true);
   };
@@ -140,6 +206,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
     if (!nome) return;
 
     const bonusNumerico = Number(form.bonusAcerto);
+    const critico = normalizarCriticoBalanceado(form.margemAmeaca, form.multiplicadorCritico);
 
     if (editandoId && editandoInventario) {
       void mutateEconomy(character.id, (current) => {
@@ -153,7 +220,10 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
               tipoAtaque: form.tipo,
               bonusAcerto: Number.isFinite(bonusNumerico) ? bonusNumerico : 0,
               dano: form.dano.trim(),
-              alcance: form.alcance.trim()
+              alcance: form.alcance.trim(),
+              margem_ameaca: critico.margemAmeaca,
+              multiplicador_critico: critico.multiplicadorCritico,
+              critico: formatarCritico(critico.margemAmeaca, critico.multiplicadorCritico),
             }
           };
         });
@@ -167,6 +237,8 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
         bonusAcerto: Number.isFinite(bonusNumerico) ? bonusNumerico : 0,
         dano: form.dano.trim(),
         alcance: form.alcance.trim(),
+        margemAmeaca: critico.margemAmeaca,
+        multiplicadorCritico: critico.multiplicadorCritico,
       };
 
       const novaLista = editandoId
@@ -205,14 +277,36 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
       alert('Nenhuma campanha ativa. Selecione uma campanha para rolar dados.');
       return;
     }
+    if (item.isInventory && Number(item.municaoMaxima) > 0 && Number(item.municaoAtual) <= 0) {
+      alert('Esta arma está sem munição. Recarregue no Inventário antes de atacar.');
+      return;
+    }
     setRolando(`${item.id}-acerto`);
     try {
+      const defesa = Number(defesaAlvo);
+      const defesaInformada = defesaAlvo.trim() !== '' && Number.isFinite(defesa) && defesa >= 1;
       const { registro } = await registrosApi.rolar({
         campanhaId,
         personagemId: character.id,
         titulo: `Ataque: ${item.nome}`,
-        bonus: item.bonusAcerto || 0,
+        bonus: calcularBonusAtaque(item),
+        dt: defesaInformada ? defesa : null,
+        origem: {
+          tipo: 'ataque',
+          ataque_id: item.id,
+          defesa_alvo: defesaInformada ? defesa : null,
+          margem_ameaca: item.margemAmeaca,
+          multiplicador_critico: item.multiplicadorCritico,
+        },
       });
+      if (item.isInventory && Number(item.municaoMaxima) > 0) {
+        void mutateEconomy(character.id, (current) => ({
+          carteira: current.carteira,
+          inventario: current.inventario.map((entrada) => entrada.item_id === item.id
+            ? { ...entrada, dados: { ...entrada.dados, municaoAtual: Math.max(0, Number(entrada.dados?.municaoAtual ?? entrada.dados?.municao_atual ?? 0) - 1) } }
+            : entrada),
+        }));
+      }
       setResultado({ ataqueId: item.id, tipo: 'acerto', resultado: registro.resultado, detalhes: registro.detalhes });
     } catch (erro: any) {
       alert(erro?.message || 'Falha ao rolar o ataque.');
@@ -227,13 +321,26 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
       return;
     }
     if (!item.dano) return;
+    const natural = resultado?.ataqueId === item.id && resultado.tipo === 'acerto'
+      ? resultado.detalhes?.natural
+      : null;
+    const critico = ameacaCritico(natural, item.margemAmeaca);
+    const formulaCritica = critico ? formulaDanoCritico(item.dano, item.multiplicadorCritico) : null;
+    const formula = formulaCritica || item.dano;
     setRolando(`${item.id}-dano`);
     try {
       const { registro } = await registrosApi.rolar({
         campanhaId,
         personagemId: character.id,
-        titulo: `Dano: ${item.nome}`,
-        formula: item.dano,
+        titulo: critico ? `Dano crítico x${item.multiplicadorCritico}: ${item.nome}` : `Dano: ${item.nome}`,
+        formula,
+        origem: {
+          tipo: critico ? 'dano_critico' : 'dano',
+          ataque_id: item.id,
+          formula_base: item.dano,
+          margem_ameaca: item.margemAmeaca,
+          multiplicador_critico: item.multiplicadorCritico,
+        },
       });
       setResultado({ ataqueId: item.id, tipo: 'dano', resultado: registro.resultado, detalhes: registro.detalhes });
     } catch (erro: any) {
@@ -261,7 +368,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
       </div>
 
       {/* FERRAMENTAS */}
-      <div className="flex gap-4">
+      <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
           <input
@@ -272,6 +379,16 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
             className="w-full bg-[#0f0e15] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:border-red-500/50 outline-none text-sm"
           />
         </div>
+        <input
+          type="number"
+          min="1"
+          inputMode="numeric"
+          aria-label="Defesa do alvo"
+          placeholder="Defesa do alvo (opcional)"
+          value={defesaAlvo}
+          onChange={event => setDefesaAlvo(event.target.value)}
+          className="md:w-56 bg-[#0f0e15] border border-white/5 rounded-xl py-3 px-4 text-white focus:border-red-500/50 outline-none text-sm"
+        />
         <button
           onClick={abrirNovo}
           className="px-6 py-3 rounded-xl border border-red-500/30 text-red-500 font-bold text-sm hover:bg-red-500/10 transition-colors border-dashed"
@@ -285,6 +402,20 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
         <Reorder.Group axis="y" values={ataquesVisiveis} onReorder={handleReorder} className="flex flex-col gap-4">
           {ataquesVisiveis.map((a: IAtaque) => {
             const resultadoAtual = resultado?.ataqueId === a.id ? resultado : null;
+            const criticoAtual = resultadoAtual?.tipo === 'acerto'
+              && ameacaCritico(resultadoAtual.detalhes?.natural, a.margemAmeaca);
+            const defesaUsada = Number(resultadoAtual?.detalhes?.dt);
+            const temDefesa = resultadoAtual?.tipo === 'acerto' && Number.isFinite(defesaUsada) && defesaUsada >= 1;
+            const naturalAtual = Number(resultadoAtual?.detalhes?.natural);
+            const acertouAtual = resultadoAtual?.tipo !== 'acerto'
+              ? null
+              : criticoAtual
+                ? true
+                : naturalAtual === 1
+                  ? false
+                  : temDefesa
+                    ? Number(resultadoAtual.resultado) >= defesaUsada
+                    : null;
             return (
               <Reorder.Item
                 value={a}
@@ -334,16 +465,29 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
                       <span className={`text-[10px] px-2 py-0.5 rounded border font-bold tracking-wider uppercase ${TIPO_ATAQUE_COLORS[a.tipo] || TIPO_ATAQUE_COLORS['Corpo a Corpo']}`}>
                         {a.tipo || 'Corpo a Corpo'}
                       </span>
+                      <span className="text-[10px] px-2 py-0.5 rounded border font-bold tracking-wider uppercase bg-yellow-500/10 border-yellow-500/30 text-yellow-400">
+                        Crítico {formatarCritico(a.margemAmeaca, a.multiplicadorCritico)}
+                      </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 mt-2 mb-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2 mb-4">
                       <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
                         <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Bônus de Acerto</span>
-                        <span className="text-lg font-bold text-white font-mono">{bonusStr(a.bonusAcerto || 0)}</span>
+                        <span className="text-lg font-bold text-white font-mono">{bonusStr(calcularBonusAtaque(a))}</span>
                       </div>
                       <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
                         <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Dano</span>
                         <span className="text-lg font-bold text-red-400 font-mono">{a.dano || 'Não informado'}</span>
+                      </div>
+                      <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
+                        <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Margem</span>
+                        <span className="text-lg font-bold text-yellow-400 font-mono">
+                          {a.margemAmeaca === 20 ? '20' : `${a.margemAmeaca}-20`}
+                        </span>
+                      </div>
+                      <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
+                        <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Multiplicador</span>
+                        <span className="text-lg font-bold text-yellow-400 font-mono">x{a.multiplicadorCritico}</span>
                       </div>
                     </div>
 
@@ -351,12 +495,22 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
                       <div className="bg-black/40 border border-red-500/20 rounded-lg p-3 flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2 text-xs text-gray-400 uppercase tracking-wider font-bold">
                           <Flame size={14} className="text-red-500" />
-                          {resultadoAtual.tipo === 'acerto' ? 'Acerto' : 'Dano'}
+                          {criticoAtual
+                            ? 'Crítico'
+                            : resultadoAtual.tipo === 'dano'
+                              ? 'Dano'
+                              : acertouAtual === true
+                                ? 'Acerto'
+                                : acertouAtual === false
+                                  ? 'Erro'
+                                  : 'Rolagem de ataque'}
                           {resultadoAtual.tipo === 'acerto' && resultadoAtual.detalhes?.natural != null && (
                             <span className="text-gray-600 normal-case font-normal">(natural {resultadoAtual.detalhes.natural})</span>
                           )}
                         </div>
-                        <span className="text-2xl font-bold text-white font-mono">{resultadoAtual.resultado}</span>
+                        <span className={`text-2xl font-bold font-mono ${criticoAtual ? 'text-yellow-400' : 'text-white'}`}>
+                          {resultadoAtual.resultado}
+                        </span>
                       </div>
                     )}
 
@@ -366,10 +520,15 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
                         {a.dano && (
                           <button
                             onClick={() => rolarDano(a)}
-                            disabled={rolando === `${a.id}-dano`}
+                            disabled={rolando === `${a.id}-dano` || acertouAtual === false}
+                            title={acertouAtual === false ? 'O ataque errou a Defesa informada.' : undefined}
                             className="px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50"
                           >
-                            <Dices size={14} /> {rolando === `${a.id}-dano` ? 'Rolando...' : 'Rolar Dano'}
+                            <Dices size={14} /> {rolando === `${a.id}-dano`
+                              ? 'Rolando...'
+                              : criticoAtual
+                                ? `Dano crítico x${a.multiplicadorCritico}`
+                                : 'Rolar Dano'}
                           </button>
                         )}
                         <button
@@ -411,7 +570,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
           />
           <div className="grid grid-cols-2 gap-4">
             <LabeledInput
-              label="Bônus de Acerto"
+              label="Bônus adicional de Acerto"
               value={form.bonusAcerto}
               placeholder="0"
               onChange={(v: string) => setForm(f => ({ ...f, bonusAcerto: v.replace(/[^0-9+-]/g, '') }))}
@@ -429,6 +588,32 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
             placeholder="Ex: 1,5m ou 18m"
             onChange={(v: string) => setForm(f => ({ ...f, alcance: v }))}
           />
+          <div className="grid grid-cols-2 gap-4">
+            <LabeledModalSelect
+              label="Margem de Ameaça"
+              value={form.margemAmeaca}
+              options={['20', '19', '18']}
+              onChange={(v: string) => setForm(f => ({
+                ...f,
+                margemAmeaca: v,
+                multiplicadorCritico: v === '20' ? f.multiplicadorCritico : '2',
+              }))}
+            />
+            <LabeledModalSelect
+              label="Multiplicador Crítico"
+              value={form.multiplicadorCritico}
+              options={['2', '3', '4']}
+              onChange={(v: string) => setForm(f => ({
+                ...f,
+                multiplicadorCritico: v,
+                margemAmeaca: v === '2' ? f.margemAmeaca : '20',
+              }))}
+            />
+          </div>
+          <p className="text-xs text-gray-500">
+            Margens 18 e 19 usam x2. Multiplicadores x3 e x4 exigem margem 20.
+            No crítico, apenas os dados da arma são multiplicados; bônus fixos entram uma vez.
+          </p>
 
           <div className="flex justify-end gap-3 mt-2">
             <button

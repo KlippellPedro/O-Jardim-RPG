@@ -18,13 +18,20 @@ def _base() -> BaseConhecimento:
 def test_carrega_as_sete_fontes_publicadas():
     base = _base()
     assert len(base.fontes) == 7
-    assert len(base.trechos) >= 80
+    assert len(base.trechos) >= 108
+
+
+def test_busca_magia_encontra_custo_e_efeito():
+    resultados = _base().buscar("quanto custa Projétil Elemental?")
+    assert resultados
+    assert resultados[0].trecho.titulo == "Projétil Elemental"
+    assert "Custo mana: 2" in resultados[0].trecho.texto
 
 
 def test_busca_vida_negativa_encontra_secao_correta():
     resultados = _base().buscar("como funciona vida negativa e morrendo?")
     assert resultados
-    assert "Vida negativa e Morrendo" in resultados[0].trecho.titulo
+    assert "Vida negativa" in resultados[0].trecho.titulo
 
 
 def test_busca_legado_esquiva_encontra_descricao():

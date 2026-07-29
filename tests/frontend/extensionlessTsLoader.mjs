@@ -13,3 +13,10 @@ export async function resolve(specifier, context, nextResolve) {
     return nextResolve(`${specifier}.ts`, context);
   }
 }
+
+export async function load(url, context, nextLoad) {
+  if (!url.endsWith('.json')) return nextLoad(url, context);
+  const response = await nextLoad(url, { ...context, importAttributes: { type: 'json' } });
+  const text = Buffer.isBuffer(response.source) ? response.source.toString('utf8') : String(response.source);
+  return { format: 'module', shortCircuit: true, source: `export default ${text};` };
+}

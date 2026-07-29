@@ -17,13 +17,13 @@ from pathlib import Path
 from typing import Iterable, Optional
 
 ARQUIVOS_MARKDOWN = (
-    "docs/regras/fundamentos-v1.md",
-    "docs/regras/balanceamento-v0.2.md",
+    "docs/regras/regras-publicas-v1.md",
 )
 ARQUIVOS_JSON = (
     "data/ficha/classes.json",
     "data/ficha/legados.json",
     "data/ficha/legados-novos.json",
+    "data/ficha/magias.json",
     "data/ficha/pericias.json",
     "data/ficha/racas.json",
 )
@@ -221,6 +221,12 @@ class BaseConhecimento:
             self._adicionar(fonte_pericias, item.get("titulo", item.get("id", "Não é perícia")), _campos_texto(item), "perícia")
         for pericia in pericias.get("pericias", []):
             self._adicionar(fonte_pericias, pericia.get("titulo", pericia.get("id", "Perícia")), _campos_texto(pericia), "perícia")
+
+        fonte_magias = "data/ficha/magias.json"
+        magias = self._ler_json(fonte_magias)
+        self._adicionar(fonte_magias, "Sobre o catálogo de magia", _campos_texto(magias, {"magias"}), "magia")
+        for magia in magias.get("magias", []):
+            self._adicionar(fonte_magias, magia.get("titulo", magia.get("id", "Magia")), _campos_texto(magia), "magia")
 
     def _preparar_indice(self) -> None:
         self._contagens: list[Counter[str]] = []

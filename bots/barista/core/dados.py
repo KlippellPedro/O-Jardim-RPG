@@ -3,7 +3,7 @@ Núcleo de rolagem de dados do Barista.
 
 Puro (sem discord.py): recebe uma expressão tipo "2d6+1d4-3" ou pede um
 teste de d20 (normal/vantagem/desvantagem, regra descrita em
-docs/regras/fundamentos-v1.md — "com vantagem, role dois d20 e use o
+docs/regras/regras-publicas-v1.md — "com vantagem, role dois d20 e use o
 maior; com desvantagem, use o menor") e devolve os valores rolados junto
 do total, pra quem chama decidir como mostrar.
 

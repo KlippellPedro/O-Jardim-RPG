@@ -8,7 +8,7 @@ as informações estruturadas do sistema.
 
 - `/regras` — navega por raças, classes, perícias, Legados e fundamentos;
 - `/regra <termo>` — busca direta com sugestões de raça, classe, perícia ou Legado;
-- `/fontes` — lista os sete arquivos públicos consultados;
+- `/fontes` — lista os seis arquivos públicos consultados;
 - `/ajuda` — explica os comandos.
 
 As respostas vêm diretamente dos dados publicados. Quando não encontra um
@@ -17,8 +17,7 @@ nome, o bot orienta a navegar por `/regras`. O arquivo protegido
 
 ## Fontes
 
-- `docs/regras/fundamentos-v1.md`
-- `docs/regras/balanceamento-v0.2.md`
+- `docs/regras/regras-publicas-v1.md` (gerado de `src/data/regras.ts`)
 - `data/ficha/classes.json`
 - `data/ficha/legados.json`
 - `data/ficha/legados-novos.json`

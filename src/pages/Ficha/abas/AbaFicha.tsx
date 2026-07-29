@@ -4,12 +4,15 @@ import { SectionTitle, LabeledInput, LabeledModalSelect, ResourceBar } from '../
 import { ModalInfoFicha } from '../components/ModalInfoFicha';
 import { carregarCatalogo } from '../../../services/catalogoService';
 import { ICatalogo } from '../../../types/catalogo';
-import { ATRIBUTOS, ATRIBUTO_VALOR_MINIMO, ATRIBUTO_VALOR_MAXIMO, calcularDerivados, modificador, TABELA_XP, nivelPorXp, TAtributo } from '../../../services/calculoService';
+import { ATRIBUTOS, ATRIBUTO_VALOR_MINIMO, ATRIBUTO_VALOR_MAXIMO, calcularDerivadosComClasses, modificador, TABELA_XP, nivelPorXp, TAtributo } from '../../../services/calculoService';
 import { limparEscolhasPrincipaisRaciais, obterGruposEscolhaRacial } from '../../../services/racaService';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { ARVORES, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao } from '../../../data/arvoresCatalog';
 import { ProgressaoClasses } from '../components/ProgressaoClasses';
+import { atualizarStatusVital, multiplicadorMovimentoCansaco, penalidadeCansacoIniciativa } from '../../../services/statusService';
+import { resumirEquipamentos } from '../../../services/equipamentoService';
+import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../data/condicoes';
 
 const NOMES_ATRIBUTOS: Record<TAtributo, string> = {
   forca: 'Força',
@@ -33,6 +36,17 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
   const maxMana = character.derivados?.mana || 10;
   const maxSanidade = status.sanidadeMaxima || 100;
   const maxCansaco = status.cansacoMaximo || 6;
+  const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], f);
+  const defesaNatural = Number(character.derivados?.defesaNatural ?? f.derivados?.defesaNatural) || 10;
+  const estaExposto = (f.condicoesAtivas || []).some((item: any) => String(item?.id || item?.nome || '').toLocaleLowerCase('pt-BR') === 'exposto');
+  const penalidadeDefesa = estaExposto ? 2 : 0;
+  const defesaTotal = defesaNatural + resumoEquipamento.defesaEquipamento - penalidadeDefesa;
+  const iniciativaBase = Number(character.derivados?.iniciativa ?? f.derivados?.iniciativa) || 10;
+  const penalidadeIniciativa = penalidadeCansacoIniciativa(status.cansacoAtual);
+  const iniciativaFinal = iniciativaBase + penalidadeIniciativa;
+  const movimentoBase = Number(character.derivados?.movimento ?? f.derivados?.movimento) || 9;
+  const penalidadeSobrecarga = resumoEquipamento.sobrecarregado ? 3 : 0;
+  const movimentoFinal = Math.max(0, (movimentoBase - penalidadeSobrecarga) * multiplicadorMovimentoCansaco(status.cansacoAtual));
 
   const vAtual = status.vidaAtual ?? maxVida;
   const mAtual = status.manaAtual ?? maxMana;
@@ -46,21 +60,29 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
     carregarCatalogo().then(setCatalogo);
   }, []);
 
-  const handleStatus = (field: string, change: number, max: number) => {
-    const current = status[field] ?? (field === 'cansacoAtual' ? 0 : max);
-    let next = current + change;
-    if (next > max) next = max;
-    if (next < 0) next = 0;
-    onUpdate(['ficha', 'status', field], next);
-  };
-
   const attrs = f.atributosFinais || character.atributosFinais || { forca:10, destreza:10, constituicao:10, inteligencia:10, sabedoria:10, carisma:10, fluxo:10 };
+
+  const handleStatus = (field: string, change: number, max: number) => {
+    const proximoStatus = atualizarStatusVital(status, field, change, max, attrs.constituicao);
+    onUpdate(['ficha', 'status'], proximoStatus);
+  };
 
   // BUG-FIX: valores dos atributos eram só leitura; agora dá pra ajustar
   // direto na ficha digitando o número (clamp 1-20).
   const handleAttrChange = (attr: TAtributo, novoValor: number) => {
     const novo = Math.max(ATRIBUTO_VALOR_MINIMO, Math.min(ATRIBUTO_VALOR_MAXIMO, novoValor));
-    onUpdate(['ficha', 'atributosFinais', attr], novo);
+    const novosAtributos = { ...attrs, [attr]: novo };
+    const derivados = catalogo
+      ? calcularDerivadosComClasses(
+          novosAtributos,
+          racaAtual,
+          classes,
+          catalogo.classes,
+          nivelTotalClasses,
+          f.escolhaRacial,
+        )
+      : f.derivados;
+    onUpdate(['ficha'], { ...f, atributosFinais: novosAtributos, derivados });
   };
 
   // BUG-FIX: "Rolar Teste" mostrava só Força/Destreza com bônus fixo (+2/+0)
@@ -88,7 +110,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
         campanhaId: campanhaAtiva.id,
         personagemId: character.id,
         titulo: `Teste de ${NOMES_ATRIBUTOS[atributoTeste]}`,
-        bonus: modTeste,
+        bonus: modTeste + Math.floor(Math.max(1, Number(character.nivel) || 1) / 2),
       });
       setResultadoTeste({ resultado: registro.resultado, detalhes: registro.detalhes });
     } catch (e: any) {
@@ -197,8 +219,8 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
 
   const salvarIdentidadeRacial = (novaRacaId: string, novaEscolhaRacial: Record<string, any>) => {
     const novaRaca = catalogo?.racas.find(raca => raca.id === novaRacaId) || null;
-    const derivados = novaRaca
-      ? calcularDerivados(attrs, novaRaca, character.nivel || 1, novaEscolhaRacial)
+    const derivados = novaRaca && catalogo
+      ? calcularDerivadosComClasses(attrs, novaRaca, classes, catalogo.classes, nivelTotalClasses, novaEscolhaRacial)
       : f.derivados;
     onUpdate(['ficha'], {
       ...f,
@@ -227,12 +249,30 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
   // valor antigo. Uma única chamada elimina a corrida; classeId (usado só
   // como legenda no card da lista) é derivado de ficha.classes na leitura.
   const salvarClasses = (novaLista: IClasseSlot[]) => {
-    onUpdate(['ficha', 'classes'], novaLista);
     const nivelTotal = novaLista.reduce((sum, c) => sum + (Number(c.nivel) || 1), 0) || 1;
-    onUpdate(['ficha', 'nivel'], nivelTotal);
+    const derivados = catalogo
+      ? calcularDerivadosComClasses(attrs, racaAtual, novaLista, catalogo.classes, nivelTotal, f.escolhaRacial)
+      : f.derivados;
+    onUpdate(['ficha'], {
+      ...f,
+      classeId: novaLista[0]?.classeId || f.classeId,
+      classes: novaLista,
+      nivel: nivelTotal,
+      derivados,
+    });
   };
 
   const nivelTotalClasses = classes.reduce((sum, c) => sum + (Number(c.nivel) || 1), 0) || 1;
+  const classesAtuaisCatalogo = classes
+    .map(slot => ({ slot, classe: catalogo?.classes.find(item => item.id === slot.classeId) }))
+    .filter(item => item.classe);
+  const comunsAtuais = classesAtuaisCatalogo.filter(item => item.classe?.categoria === 'padrao');
+  const possuiEspecial = classesAtuaisCatalogo.some(item => item.classe?.categoria !== 'padrao');
+  const classesDisponiveisMulticlasse = classesFiltradas.filter(classe => {
+    if (classes.some(slot => slot.classeId === classe.id) || nivelTotalClasses >= 40) return false;
+    if (classe.categoria !== 'padrao') return !possuiEspecial && nivelTotalClasses >= 15;
+    return comunsAtuais.length < 2 && comunsAtuais.some(item => Number(item.slot.nivel) >= 20);
+  });
 
   const handleAdicionarClasse = () => {
     salvarClasses([...classes, { classeId: '', nivel: 1 }]);
@@ -247,7 +287,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
   };
 
   const handleClasseNivelChange = (index: number, nivel: number) => {
-    const nivelLimpo = Math.max(1, Math.trunc(nivel) || 1);
+    const nivelLimpo = Math.min(20, Math.max(1, Math.trunc(nivel) || 1));
     salvarClasses(classes.map((c, i) => (i === index ? { ...c, nivel: nivelLimpo } : c)));
   };
 
@@ -267,12 +307,14 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               value={f.arvoreId}
               options={(isMestre ? ARVORES : arvoresDisponiveis).map(arvore => ({ value: arvore.id, label: arvore.nome }))}
               onChange={(v:any) => onUpdate(['ficha', 'arvoreId'], v)}
+              disabled={!isMestre}
             />
             <LabeledModalSelect
               label="Raça"
               value={f.racaId}
               options={catalogo ? racasFiltradas.map(raca => ({ value: raca.id, label: raca.titulo })) : [{ value: '', label: 'Carregando...' }]}
               onChange={handleRacaChange}
+              disabled={!isMestre}
             />
 
             {gruposEscolhaRacial.map(grupo => (
@@ -282,6 +324,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                 value={f.escolhaRacial?.[grupo.campo]}
                 options={grupo.opcoes.map(opcao => ({ value: opcao.id, label: opcao.titulo }))}
                 onChange={(valor: string) => handleEscolhaRacialChange(grupo.campo, valor)}
+                disabled={!isMestre}
               />
             ))}
             
@@ -305,12 +348,15 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                     value={classeSlot.classeId}
                     options={catalogo ? classesFiltradas.map(classe => ({ value: classe.id, label: classe.titulo })) : [{ value: '', label: 'Carregando...' }]}
                     onChange={(v: any) => handleClasseChange(index, v)}
+                    disabled={!isMestre}
                   />
                 </div>
                 <div className="w-20">
                   <input
                     type="number"
                     min={1}
+                    max={20}
+                    readOnly={!isMestre}
                     value={classeSlot.nivel}
                     onChange={(e) => handleClasseNivelChange(index, parseInt(e.target.value) || 1)}
                     className="w-full bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors text-center"
@@ -319,7 +365,8 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                 <div className="flex items-center">
                   <button
                     onClick={() => handleRemoverClasse(index)}
-                    className="text-gray-600 hover:text-red-500 transition-colors"
+                    disabled={!isMestre}
+                    className="text-gray-600 hover:text-red-500 transition-colors disabled:hidden"
                     title="Remover classe"
                   >
                     <X size={16} />
@@ -333,7 +380,8 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
           </div>
           <button
             onClick={handleAdicionarClasse}
-            className="w-full py-3 rounded-lg border border-yellow-600/30 text-yellow-600 text-xs font-bold uppercase tracking-widest hover:bg-yellow-600/10 transition-colors border-dashed"
+            disabled={!isMestre || classes.length >= 3}
+            className="w-full py-3 rounded-lg border border-yellow-600/30 text-yellow-600 text-xs font-bold uppercase tracking-widest hover:bg-yellow-600/10 transition-colors border-dashed disabled:cursor-not-allowed disabled:opacity-40"
           >
             + Adicionar Classe
           </button>
@@ -444,6 +492,17 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
             items: [{ label: 'Cansaço Máximo (Limite)', value: maxCansaco }]
           })} />
         </div>
+        <div className="mt-6 grid grid-cols-1 gap-3 border-t border-white/5 pt-5 md:grid-cols-4">
+          <LabeledInput label="Morrendo" type="number" value={status.morrendo ?? 0} onChange={(valor: string) => onUpdate(['ficha', 'status'], { ...status, morrendo: Math.max(0, Math.min(Number(attrs.constituicao) >= 20 ? 4 : 3, Math.trunc(Number(valor) || 0))) })} />
+          <LabeledInput label="Ferido" type="number" value={status.ferido ?? 0} onChange={(valor: string) => onUpdate(['ficha', 'status'], { ...status, ferido: Math.max(0, Math.trunc(Number(valor) || 0)) })} />
+          <label className="flex items-center gap-3 rounded-xl border border-white/5 bg-[#121118] px-4 py-3 text-sm text-gray-300">
+            <input type="checkbox" checked={Boolean(status.estabilizado)} onChange={(evento) => onUpdate(['ficha', 'status'], { ...status, estabilizado: evento.target.checked })} />
+            Estabilizado
+          </label>
+          <div className={`flex items-center rounded-xl border px-4 py-3 text-sm font-bold ${status.morto ? 'border-red-500/40 bg-red-500/10 text-red-300' : vAtual <= 0 ? 'border-amber-500/30 bg-amber-500/10 text-amber-300' : 'border-emerald-500/20 bg-emerald-500/5 text-emerald-300'}`}>
+            {status.morto ? 'Morto' : vAtual <= 0 ? `Déficit de Vida: ${Math.abs(vAtual)}` : 'Consciente'}
+          </div>
+        </div>
       </div>
 
       {/* LINHA 5: COMBATE */}
@@ -459,15 +518,16 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                 title: 'DEFESA',
                 description: 'A dificuldade para acertar ataques contra você. Baseia-se na agilidade e equipamentos.',
                 items: [
-                  { label: 'Defesa Natural', value: character.derivados?.defesaNatural || 10 },
-                  { label: 'Armadura', value: '+ 0 (Não implementado)' }
+                  { label: 'Defesa Natural', value: defesaNatural },
+                  { label: 'Armadura e escudo', value: `+ ${resumoEquipamento.defesaEquipamento}` },
+                  { label: 'Condições', value: `- ${penalidadeDefesa}` }
                 ],
-                total: { label: 'Defesa Total', value: character.derivados?.defesaNatural || 10 }
+                total: { label: 'Defesa Total', value: defesaTotal }
               })} />
             </div>
-            <input type="text" value={character.derivados?.defesaNatural || 10} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
-            <LabeledInput label="Armadura" value="0" onChange={()=>{}} />
-            <div className="mt-2"><LabeledInput label="Penalidade da Defesa" value="0" onChange={()=>{}} /></div>
+            <input type="text" value={defesaTotal} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
+            <LabeledInput label="Armadura e Escudo" value={String(resumoEquipamento.defesaEquipamento)} onChange={()=>{}} />
+            <div className="mt-2"><LabeledInput label="Penalidade da Defesa" value={String(penalidadeDefesa)} onChange={()=>{}} /></div>
           </div>
           
           <div className="bg-[#121118] border border-white/5 rounded-xl p-4">
@@ -477,13 +537,14 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                 title: 'INICIATIVA',
                 description: 'Sua velocidade de reação. Determina quem age primeiro em combate.',
                 items: [
-                  { label: 'Iniciativa Base', value: character.derivados?.iniciativa || 10 }
+                  { label: 'Iniciativa Base', value: iniciativaBase },
+                  { label: 'Cansaço', value: penalidadeIniciativa }
                 ],
-                total: { label: 'Iniciativa Final', value: character.derivados?.iniciativa || 10 }
+                total: { label: 'Iniciativa Final', value: iniciativaFinal }
               })} />
             </div>
-            <input type="text" value={character.derivados?.iniciativa || 10} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
-            <LabeledInput label="Bônus / Penalidade" value="0" onChange={()=>{}} />
+            <input type="text" value={iniciativaFinal} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
+            <LabeledInput label="Bônus / Penalidade" value={String(penalidadeIniciativa)} onChange={()=>{}} />
           </div>
 
           <div className="bg-[#121118] border border-white/5 rounded-xl p-4">
@@ -493,13 +554,15 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                 title: 'MOVIMENTO',
                 description: 'Distância (em metros) que você pode se deslocar durante o combate.',
                 items: [
-                  { label: 'Deslocamento Base', value: `${character.derivados?.movimento || 9}m` }
+                  { label: 'Deslocamento Base', value: `${movimentoBase}m` },
+                  { label: 'Sobrecarga', value: `-${penalidadeSobrecarga}m` },
+                  { label: 'Cansaço 5+', value: multiplicadorMovimentoCansaco(status.cansacoAtual) === 0.5 ? 'metade' : 'sem redução' }
                 ],
-                total: { label: 'Movimento Final', value: `${character.derivados?.movimento || 9}m` }
+                total: { label: 'Movimento Final', value: `${movimentoFinal}m` }
               })} />
             </div>
-            <input type="text" value={`${character.derivados?.movimento || 9} m`} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
-            <LabeledInput label="Penalidade de Movimento" value="0" onChange={()=>{}} />
+            <input type="text" value={`${movimentoFinal} m`} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
+            <LabeledInput label="Penalidade de Movimento" value={String(penalidadeSobrecarga)} onChange={()=>{}} />
           </div>
         </div>
 
@@ -509,11 +572,11 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="flex flex-col gap-2">
             <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Resistências</label>
-            <textarea placeholder="Ex.: Fogo 5, Corte 3..." className="bg-[#121118] border border-white/5 rounded-md p-3 text-sm text-gray-300 min-h-[100px] resize-none focus:border-[#c7a44c]/50"></textarea>
+            <textarea readOnly={!isMestre} value={f.resistenciasTexto || ''} onChange={(event) => onUpdate(['ficha', 'resistenciasTexto'], event.target.value)} placeholder="Ex.: Fogo 5, Corte 3..." className="bg-[#121118] border border-white/5 rounded-md p-3 text-sm text-gray-300 min-h-[100px] resize-none focus:border-[#c7a44c]/50 read-only:cursor-not-allowed read-only:opacity-70"></textarea>
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Proficiências</label>
-            <textarea placeholder="Ex.: Armas simples..." className="bg-[#121118] border border-white/5 rounded-md p-3 text-sm text-gray-300 min-h-[100px] resize-none focus:border-[#c7a44c]/50"></textarea>
+            <textarea readOnly={!isMestre} value={(f.proficiencias || []).join(', ')} onChange={(event) => onUpdate(['ficha', 'proficiencias'], event.target.value.split(/[,\n]/).map((item) => item.trim().toLocaleLowerCase('pt-BR')).filter(Boolean))} placeholder="Ex.: armas marciais, armaduras leves..." className="bg-[#121118] border border-white/5 rounded-md p-3 text-sm text-gray-300 min-h-[100px] resize-none focus:border-[#c7a44c]/50 read-only:cursor-not-allowed read-only:opacity-70"></textarea>
           </div>
           <div className="flex flex-col gap-2 relative">
             <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Condições Ativas</label>
@@ -550,8 +613,8 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
         <SectionTitle title="Experiência" />
         <div className="flex items-center gap-4">
            <div className="flex gap-2">
-              <button onClick={() => handleXp(-100)} disabled={xpAtual <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-100</button>
-              <button onClick={() => handleXp(-10)} disabled={xpAtual <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-10</button>
+              <button onClick={() => handleXp(-100)} disabled={!isMestre || xpAtual <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-100</button>
+              <button onClick={() => handleXp(-10)} disabled={!isMestre || xpAtual <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-10</button>
            </div>
            <div className="flex-1 h-6 bg-[#050508] border border-white/10 rounded-lg relative overflow-hidden flex items-center justify-center group shadow-inner ring-1 ring-inset ring-white/5">
               {/* Verde estilo Minecraft com Gradiente e Glow */}
@@ -564,6 +627,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               <div className="relative z-10 flex items-center text-white font-bold text-xs font-mono drop-shadow-md">
                 <input 
                   type="text"
+                  readOnly={!isMestre}
                   className="bg-transparent border-none outline-none text-right w-16 text-white font-bold placeholder-white/70 group-hover:bg-white/10 rounded transition-colors"
                   value={xpInput !== undefined ? xpInput : xpAtual}
                   onChange={(e) => setXpInput(e.target.value)}
@@ -575,10 +639,11 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               </div>
            </div>
            <div className="flex gap-2">
-              <button onClick={() => handleXp(10)} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white">+10</button>
-              <button onClick={() => handleXp(100)} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white">+100</button>
+              <button onClick={() => handleXp(10)} disabled={!isMestre} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">+10</button>
+              <button onClick={() => handleXp(100)} disabled={!isMestre} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">+100</button>
            </div>
         </div>
+        {!isMestre && <p className="text-xs text-gray-500">O Mestre registra a experiência. Quando houver XP suficiente, você escolhe em qual classe aplicar o novo nível.</p>}
         {podeSubirNivel && (
           <button
             onClick={() => setActiveModal({ isLevelUpModal: true })}
@@ -614,6 +679,26 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               <button onClick={() => setActiveModal(null)} className="text-gray-500 hover:text-white transition-colors">
                 <X size={20} />
               </button>
+            </div>
+            <div className="mb-5">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-gray-500">Aplicar condição oficial</p>
+              <div className="grid max-h-44 grid-cols-2 gap-2 overflow-y-auto pr-1">
+                {[...CONDICOES_OFICIAIS, ...CRISES_SANIDADE].map((regra) => (
+                  <button key={regra.id} type="button" onClick={() => {
+                    const next = [...(f.condicoesAtivas || []), {
+                      id: regra.id,
+                      nome: regra.titulo,
+                      descricao: regra.efeitos.join(' '),
+                      afeta: regra.categoria,
+                      duracao: regra.duracao,
+                    }];
+                    onUpdate(['ficha', 'condicoesAtivas'], next);
+                    setActiveModal(null);
+                  }} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-left text-xs font-bold text-gray-300 hover:border-red-500/30 hover:text-red-300">
+                    {regra.titulo}
+                  </button>
+                ))}
+              </div>
             </div>
             
             <form onSubmit={(e) => {
@@ -684,7 +769,8 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                         <button
                           key={i}
                           onClick={() => handleSubirNivel({ tipo: 'existente', index: i })}
-                          className="flex justify-between items-center w-full p-3 rounded-lg border border-white/10 hover:border-[#c7a44c]/50 hover:bg-[#c7a44c]/10 transition-colors text-left"
+                          disabled={c.nivel >= 20 || nivelTotalClasses >= 40}
+                          className="flex justify-between items-center w-full p-3 rounded-lg border border-white/10 hover:border-[#c7a44c]/50 hover:bg-[#c7a44c]/10 transition-colors text-left disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                           <span className="text-white font-bold">{classeObj?.titulo || 'Classe'}</span>
                           <span className="text-xs text-gray-400">Nível {c.nivel} ➔ <span className="text-[#c7a44c] font-bold">{c.nivel + 1}</span></span>
@@ -711,16 +797,17 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                     className="flex-1 bg-[#121118] border border-white/10 rounded-lg px-3 py-3 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 appearance-none"
                   >
                     <option value="">Selecione uma classe...</option>
-                    {classesFiltradas
-                      .filter(cl => !classes.some(c => c.classeId === cl.id)) // Oculta as que já possui
-                      .map(cl => (
+                    {classesDisponiveisMulticlasse.map(cl => (
                         <option key={cl.id} value={cl.id}>{cl.titulo}</option>
-                    ))}
+                      ))}
                   </select>
                   <button type="submit" className="px-4 py-3 bg-[#15141b] text-[#c7a44c] border border-[#c7a44c]/30 font-bold uppercase tracking-widest rounded-lg hover:bg-[#c7a44c]/20 transition-colors">
                     Adicionar
                   </button>
                 </form>
+                {classesDisponiveisMulticlasse.length === 0 && (
+                  <p className="mt-2 text-xs text-gray-500">A segunda classe comum exige uma classe comum no nível 20. Uma classe especial exige nível total 15 e liberação do Mestre.</p>
+                )}
               </div>
             </div>
           </div>

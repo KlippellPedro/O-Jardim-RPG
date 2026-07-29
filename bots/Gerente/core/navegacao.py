@@ -21,6 +21,7 @@ CATEGORIAS = (
     ("classes", "Classes", "⚔️"),
     ("pericias", "Perícias", "🎯"),
     ("legados", "Legados", "✨"),
+    ("magias", "Magias", "🔮"),
     ("fundamentos", "Fundamentos", "📖"),
 )
 
@@ -53,7 +54,8 @@ class Navegacao:
         legados = self._json("data/ficha/legados.json").get("legados", [])
         novos = self._json("data/ficha/legados-novos.json").get("novos", [])
         self.legados = legados + novos
-        self.fundamentos = self._secoes_markdown("docs/regras/fundamentos-v1.md")
+        self.magias = self._json("data/ficha/magias.json").get("magias", [])
+        self.fundamentos = self._secoes_markdown("docs/regras/regras-publicas-v1.md")
 
     def _json(self, relativo: str):
         return json.loads((self.raiz / relativo).read_text(encoding="utf-8-sig"))
@@ -98,6 +100,8 @@ class Navegacao:
             return self.pericias
         if categoria == "legados":
             return self.legados
+        if categoria == "magias":
+            return self.magias
         if categoria == "fundamentos":
             return self.fundamentos
         return []
@@ -115,7 +119,7 @@ class Navegacao:
         return grupos
 
     def buscar_item(self, termo: str) -> list[tuple[str, dict]]:
-        """Procura por título em raças/classes/perícias/legados. Retorna
+        """Procura por título em raças/classes/perícias/legados/magias. Retorna
         (categoria, item), priorizando correspondência exata."""
         alvo = normalizar(termo)
         if not alvo:
@@ -127,6 +131,7 @@ class Navegacao:
             ("classes", self.classes),
             ("pericias", self.pericias),
             ("legados", self.legados),
+            ("magias", self.magias),
         )
         for categoria, itens in fontes:
             for it in itens:

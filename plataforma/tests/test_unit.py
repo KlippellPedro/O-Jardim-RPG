@@ -546,15 +546,15 @@ class DadosTests(unittest.TestCase):
         self.assertEqual(resultado["total"], resultado["natural"] + 7)
 
     def test_classificacao_contra_a_dt(self):
-        self.assertEqual(_classificar(25, 10, 15), "sucesso critico")
+        self.assertEqual(_classificar(25, 10, 15), "sucesso")
         self.assertEqual(_classificar(15, 10, 15), "sucesso")
         self.assertEqual(_classificar(14, 10, 15), "falha")
-        self.assertEqual(_classificar(5, 10, 15), "falha critica")
+        self.assertEqual(_classificar(5, 10, 15), "falha")
 
-    def test_natural_20_e_1_movem_um_grau(self):
-        self.assertEqual(_classificar(14, 20, 15), "sucesso")
-        self.assertEqual(_classificar(16, 1, 15), "falha")
-        # Sem passar do topo nem do fundo da escala.
+    def test_somente_natural_20_e_1_geram_criticos(self):
+        self.assertEqual(_classificar(14, 20, 15), "sucesso critico")
+        self.assertEqual(_classificar(16, 1, 15), "falha critica")
+        # A distância até a DT não muda o resultado crítico.
         self.assertEqual(_classificar(30, 20, 15), "sucesso critico")
         self.assertEqual(_classificar(1, 1, 15), "falha critica")
 

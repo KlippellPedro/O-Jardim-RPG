@@ -10,14 +10,16 @@
         "raridade": "comum",
         "atributos": [
           "1d4 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2"
         ],
         "dano": "1d4",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Perfuração",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -29,14 +31,16 @@
         "raridade": "comum",
         "atributos": [
           "2d3 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2"
         ],
         "dano": "2d3",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Impacto",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -48,14 +52,16 @@
         "raridade": "comum",
         "atributos": [
           "1d6 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2"
         ],
         "dano": "1d6",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Corte",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -67,14 +73,16 @@
         "raridade": "comum",
         "atributos": [
           "1d10 de dano",
-          "Crítico x3"
+          "Crítico 20/x3"
         ],
         "dano": "1d10",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Impacto",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3
       }
     },
     {
@@ -86,14 +94,16 @@
         "raridade": "comum",
         "atributos": [
           "1d6 de dano",
-          "Crítico x3"
+          "Crítico 20/x3"
         ],
         "dano": "1d6",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Impacto",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3
       }
     },
     {
@@ -105,14 +115,16 @@
         "raridade": "comum",
         "atributos": [
           "1d6 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2"
         ],
         "dano": "1d6",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Corte",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -124,14 +136,16 @@
         "raridade": "comum",
         "atributos": [
           "1d8 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2"
         ],
         "dano": "1d8",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Curto",
         "tipo_de_dano": "Corte",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -143,14 +157,16 @@
         "raridade": "comum",
         "atributos": [
           "1d6 de dano",
-          "Crítico x3"
+          "Crítico 20/x3"
         ],
         "dano": "1d6",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Perfuração",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3
       }
     },
     {
@@ -162,14 +178,16 @@
         "raridade": "comum",
         "atributos": [
           "3d3 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2"
         ],
         "dano": "3d3",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Curto",
         "tipo_de_dano": "Perfuração",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -181,14 +199,16 @@
         "raridade": "comum",
         "atributos": [
           "2d2 de dano",
-          "Crítico x3"
+          "Crítico 20/x3"
         ],
         "dano": "2d2",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Impacto",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3
       }
     },
     {
@@ -200,14 +220,16 @@
         "raridade": "comum",
         "atributos": [
           "2d3 de dano",
-          "Crítico x3"
+          "Crítico 20/x3"
         ],
         "dano": "2d3",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Corte",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3
       }
     },
     {
@@ -219,14 +241,16 @@
         "raridade": "comum",
         "atributos": [
           "1d5 de dano",
-          "Crítico 16"
+          "Crítico 18-20/x2"
         ],
         "dano": "1d5",
-        "critico": "16",
+        "critico": "18-20/x2",
         "alcance": "Curto",
         "tipo_de_dano": "Impacto",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -238,14 +262,16 @@
         "raridade": "incomum",
         "atributos": [
           "2d6 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2"
         ],
         "dano": "2d6",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Corte",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -257,14 +283,16 @@
         "raridade": "incomum",
         "atributos": [
           "1d12 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2"
         ],
         "dano": "1d12",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Impacto",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -276,14 +304,16 @@
         "raridade": "incomum",
         "atributos": [
           "2d8 de dano",
-          "Crítico 18/x3"
+          "Crítico 20/x3"
         ],
         "dano": "2d8",
-        "critico": "18/x3",
+        "critico": "20/x3",
         "alcance": "Curto",
         "tipo_de_dano": "Perfuração",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3
       }
     },
     {
@@ -295,14 +325,16 @@
         "raridade": "incomum",
         "atributos": [
           "3d5 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2"
         ],
         "dano": "3d5",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Curto",
         "tipo_de_dano": "Perfuração",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -314,14 +346,16 @@
         "raridade": "incomum",
         "atributos": [
           "2d5 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2"
         ],
         "dano": "2d5",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Curto",
         "tipo_de_dano": "Impacto",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -333,14 +367,16 @@
         "raridade": "raro",
         "atributos": [
           "1d12 de dano",
-          "Crítico x3"
+          "Crítico 20/x3"
         ],
         "dano": "1d12",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Curto",
         "tipo_de_dano": "Corte",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3
       }
     },
     {
@@ -352,14 +388,16 @@
         "raridade": "raro",
         "atributos": [
           "1d12 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2"
         ],
         "dano": "1d12",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Curto",
         "tipo_de_dano": "Corte",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -371,14 +409,16 @@
         "raridade": "raro",
         "atributos": [
           "3d5 de dano",
-          "Crítico x4"
+          "Crítico 20/x4"
         ],
         "dano": "3d5",
-        "critico": "x4",
+        "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Corte",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4
       }
     },
     {
@@ -390,14 +430,16 @@
         "raridade": "incomum",
         "atributos": [
           "3d4 de dano",
-          "Crítico x3"
+          "Crítico 20/x3"
         ],
         "dano": "3d4",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Curto",
         "tipo_de_dano": "Impacto",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3
       }
     },
     {
@@ -409,14 +451,16 @@
         "raridade": "incomum",
         "atributos": [
           "2d8 de dano",
-          "Crítico 19/x3"
+          "Crítico 20/x3"
         ],
         "dano": "2d8",
-        "critico": "19/x3",
+        "critico": "20/x3",
         "alcance": "Curto",
         "tipo_de_dano": "Corte",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3
       }
     },
     {
@@ -428,14 +472,16 @@
         "raridade": "incomum",
         "atributos": [
           "3d5 de dano",
-          "Crítico x3"
+          "Crítico 20/x3"
         ],
         "dano": "3d5",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Curto",
         "tipo_de_dano": "Impacto",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3
       }
     },
     {
@@ -447,14 +493,16 @@
         "raridade": "incomum",
         "atributos": [
           "2d5 de dano",
-          "Crítico 19x2"
+          "Crítico 19-20/x2"
         ],
         "dano": "2d5",
-        "critico": "19x2",
+        "critico": "19-20/x2",
         "alcance": "Médio",
         "tipo_de_dano": "Impacto",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -466,14 +514,16 @@
         "raridade": "raro",
         "atributos": [
           "2d10 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2"
         ],
         "dano": "2d10",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Curto",
         "tipo_de_dano": "Corte",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -485,14 +535,19 @@
         "raridade": "comum",
         "atributos": [
           "1d6 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2",
+          "Munição 1"
         ],
         "dano": "1d6",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Médio",
         "tipo_de_dano": "Perfuração",
         "subtipo": "simples",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -504,14 +559,19 @@
         "raridade": "comum",
         "atributos": [
           "1d8 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2",
+          "Munição 1"
         ],
         "dano": "1d8",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Médio",
         "tipo_de_dano": "Perfuração",
         "subtipo": "simples",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -523,14 +583,19 @@
         "raridade": "comum",
         "atributos": [
           "1d4 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2",
+          "Munição 1"
         ],
         "dano": "1d4",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Curto",
         "tipo_de_dano": "Perfuração",
         "subtipo": "simples",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -542,14 +607,19 @@
         "raridade": "incomum",
         "atributos": [
           "1d10 de dano",
-          "Crítico 20"
+          "Crítico 20/x2",
+          "Munição 12"
         ],
         "dano": "1d10",
-        "critico": "20",
+        "critico": "20/x2",
         "alcance": "Médio",
         "tipo_de_dano": "Balístico",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 2,
+        "municao_maxima": 12,
+        "municao_atual": 12
       }
     },
     {
@@ -561,14 +631,19 @@
         "raridade": "incomum",
         "atributos": [
           "2d6 de dano",
-          "Crítico x3"
+          "Crítico 20/x3",
+          "Munição 6"
         ],
         "dano": "2d6",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Médio",
         "tipo_de_dano": "Balístico",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3,
+        "municao_maxima": 6,
+        "municao_atual": 6
       }
     },
     {
@@ -580,14 +655,19 @@
         "raridade": "incomum",
         "atributos": [
           "2d6 de dano",
-          "Crítico 19/x3"
+          "Crítico 20/x3",
+          "Munição 30"
         ],
         "dano": "2d6",
-        "critico": "19/x3",
+        "critico": "20/x3",
         "alcance": "Curto",
         "tipo_de_dano": "Balístico",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3,
+        "municao_maxima": 30,
+        "municao_atual": 30
       }
     },
     {
@@ -599,14 +679,19 @@
         "raridade": "comum",
         "atributos": [
           "1d8 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2",
+          "Munição 1"
         ],
         "dano": "1d8",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Médio",
         "tipo_de_dano": "Balístico",
         "subtipo": "simples",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -618,14 +703,19 @@
         "raridade": "incomum",
         "atributos": [
           "2d8 de dano",
-          "Crítico 19/x3"
+          "Crítico 20/x3",
+          "Munição 5"
         ],
         "dano": "2d8",
-        "critico": "19/x3",
+        "critico": "20/x3",
         "alcance": "Médio",
         "tipo_de_dano": "Balístico",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3,
+        "municao_maxima": 5,
+        "municao_atual": 5
       }
     },
     {
@@ -637,14 +727,19 @@
         "raridade": "comum",
         "atributos": [
           "1d4 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2",
+          "Munição 1"
         ],
         "dano": "1d4",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Curto",
         "tipo_de_dano": "Perfuração",
         "subtipo": "simples",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -656,14 +751,19 @@
         "raridade": "comum",
         "atributos": [
           "2d3 de dano",
-          "Crítico x3"
+          "Crítico 20/x3",
+          "Munição 1"
         ],
         "dano": "2d3",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Médio",
         "tipo_de_dano": "Perfuração",
         "subtipo": "simples",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -675,14 +775,19 @@
         "raridade": "comum",
         "atributos": [
           "1d4 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2",
+          "Munição 1"
         ],
         "dano": "1d4",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Médio",
         "tipo_de_dano": "Perfuração",
         "subtipo": "simples",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -694,14 +799,19 @@
         "raridade": "incomum",
         "atributos": [
           "1d8 de dano",
-          "Crítico x3"
+          "Crítico 20/x3",
+          "Munição 1"
         ],
         "dano": "1d8",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Médio",
         "tipo_de_dano": "Perfuração",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -713,14 +823,19 @@
         "raridade": "incomum",
         "atributos": [
           "1d12 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2",
+          "Munição 1"
         ],
         "dano": "1d12",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Médio",
         "tipo_de_dano": "Perfuração",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -732,15 +847,20 @@
         "raridade": "raro",
         "atributos": [
           "2d9 de dano",
-          "Crítico x3"
+          "Crítico 20/x3",
+          "Munição 1"
         ],
         "dano": "2d9",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Médio",
         "tipo_de_dano": "Perfuração/Veneno",
         "subtipo": "marcial",
         "descricao": "Dispara em rajada de 3 projéteis por turno. O alvo faz teste de Fortitude ou sofre 30 de dano de veneno.",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -752,14 +872,19 @@
         "raridade": "raro",
         "atributos": [
           "4d6 de dano",
-          "Crítico x3"
+          "Crítico 20/x3",
+          "Munição 8"
         ],
         "dano": "4d6",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Curto",
         "tipo_de_dano": "Balístico",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3,
+        "municao_maxima": 8,
+        "municao_atual": 8
       }
     },
     {
@@ -771,14 +896,19 @@
         "raridade": "raro",
         "atributos": [
           "2d10 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2",
+          "Munição 30"
         ],
         "dano": "2d10",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Médio",
         "tipo_de_dano": "Balístico",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2,
+        "municao_maxima": 30,
+        "municao_atual": 30
       }
     },
     {
@@ -790,14 +920,19 @@
         "raridade": "incomum",
         "atributos": [
           "3d3 de dano",
-          "Crítico x2"
+          "Crítico 20/x2",
+          "Munição 1"
         ],
         "dano": "3d3",
-        "critico": "x2",
+        "critico": "20/x2",
         "alcance": "Longo",
         "tipo_de_dano": "Perfuração",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 2,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -809,14 +944,19 @@
         "raridade": "incomum",
         "atributos": [
           "4d3 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2",
+          "Munição 1"
         ],
         "dano": "4d3",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Médio",
         "tipo_de_dano": "Perfuração",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -828,14 +968,19 @@
         "raridade": "epico",
         "atributos": [
           "3d10 de dano",
-          "Crítico x3"
+          "Crítico 20/x3",
+          "Munição 30"
         ],
         "dano": "3d10",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Médio",
         "tipo_de_dano": "Balístico",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3,
+        "municao_maxima": 30,
+        "municao_atual": 30
       }
     },
     {
@@ -847,14 +992,19 @@
         "raridade": "epico",
         "atributos": [
           "3d12 de dano",
-          "Crítico 19/x2"
+          "Crítico 19-20/x2",
+          "Munição 100"
         ],
         "dano": "3d12",
-        "critico": "19/x2",
+        "critico": "19-20/x2",
         "alcance": "Médio",
         "tipo_de_dano": "Balístico",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2,
+        "municao_maxima": 100,
+        "municao_atual": 100
       }
     },
     {
@@ -866,14 +1016,19 @@
         "raridade": "epico",
         "atributos": [
           "3d12 de dano",
-          "Crítico 19/x3"
+          "Crítico 20/x3",
+          "Munição 5"
         ],
         "dano": "3d12",
-        "critico": "19/x3",
+        "critico": "20/x3",
         "alcance": "Longo",
         "tipo_de_dano": "Balístico",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3,
+        "municao_maxima": 5,
+        "municao_atual": 5
       }
     },
     {
@@ -885,14 +1040,19 @@
         "raridade": "lendario",
         "atributos": [
           "10d8+4d4 de dano",
-          "Crítico 19x2"
+          "Crítico 19-20/x2",
+          "Munição 1"
         ],
         "dano": "10d8+4d4",
-        "critico": "19x2",
+        "critico": "19-20/x2",
         "alcance": "Médio",
         "tipo_de_dano": "Impacto/Fogo",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -2571,14 +2731,16 @@
         "raridade": "comum",
         "atributos": [
           "1d6 de dano",
-          "Crítico 20"
+          "Crítico 20/x2"
         ],
         "dano": "1d6",
-        "critico": "20",
+        "critico": "20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Impacto",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -2590,14 +2752,16 @@
         "raridade": "comum",
         "atributos": [
           "1d4 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2"
         ],
         "dano": "1d4",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Corte",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -2609,14 +2773,19 @@
         "raridade": "comum",
         "atributos": [
           "1d4 de dano",
-          "Crítico 20"
+          "Crítico 20/x2",
+          "Munição 1"
         ],
         "dano": "1d4",
-        "critico": "20",
+        "critico": "20/x2",
         "alcance": "Médio",
         "tipo_de_dano": "Impacto",
         "subtipo": "simples",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 2,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -2628,14 +2797,16 @@
         "raridade": "comum",
         "atributos": [
           "1d6 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2"
         ],
         "dano": "1d6",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Corte",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -2647,14 +2818,16 @@
         "raridade": "comum",
         "atributos": [
           "1d8 de dano",
-          "Crítico 20"
+          "Crítico 20/x2"
         ],
         "dano": "1d8",
-        "critico": "20",
+        "critico": "20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Perfuração",
         "subtipo": "simples",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -2666,14 +2839,16 @@
         "raridade": "incomum",
         "atributos": [
           "2d6 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2"
         ],
         "dano": "2d6",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Corte",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -2685,14 +2860,16 @@
         "raridade": "incomum",
         "atributos": [
           "1d8 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2"
         ],
         "dano": "1d8",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Perfuração",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -2704,14 +2881,16 @@
         "raridade": "incomum",
         "atributos": [
           "1d8 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2"
         ],
         "dano": "1d8",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Corte",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -2723,14 +2902,16 @@
         "raridade": "incomum",
         "atributos": [
           "2d6 de dano",
-          "Crítico x3"
+          "Crítico 20/x3"
         ],
         "dano": "2d6",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Impacto",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3
       }
     },
     {
@@ -2742,14 +2923,16 @@
         "raridade": "raro",
         "atributos": [
           "2d10 de dano",
-          "Crítico x3"
+          "Crítico 20/x3"
         ],
         "dano": "2d10",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Curto",
         "tipo_de_dano": "Corte",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3
       }
     },
     {
@@ -2761,14 +2944,16 @@
         "raridade": "raro",
         "atributos": [
           "2d12 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2"
         ],
         "dano": "2d12",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Corte",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -2780,14 +2965,16 @@
         "raridade": "raro",
         "atributos": [
           "3d6 de dano",
-          "Crítico x3"
+          "Crítico 20/x3"
         ],
         "dano": "3d6",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Curto",
         "tipo_de_dano": "Perfuração",
         "subtipo": "marcial",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3
       }
     },
     {
@@ -2799,14 +2986,19 @@
         "raridade": "incomum",
         "atributos": [
           "1d10 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2",
+          "Munição 1"
         ],
         "dano": "1d10",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Longo",
         "tipo_de_dano": "Perfuração",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -2818,14 +3010,19 @@
         "raridade": "raro",
         "atributos": [
           "5d6 de dano",
-          "Crítico x3"
+          "Crítico 20/x3",
+          "Munição 2"
         ],
         "dano": "5d6",
-        "critico": "x3",
+        "critico": "20/x3",
         "alcance": "Curto",
         "tipo_de_dano": "Balístico",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3,
+        "municao_maxima": 2,
+        "municao_atual": 2
       }
     },
     {
@@ -2837,14 +3034,19 @@
         "raridade": "epico",
         "atributos": [
           "4d10 de dano",
-          "Crítico 19/x3"
+          "Crítico 20/x3",
+          "Munição 5"
         ],
         "dano": "4d10",
-        "critico": "19/x3",
+        "critico": "20/x3",
         "alcance": "Longo",
         "tipo_de_dano": "Balístico",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 3,
+        "municao_maxima": 5,
+        "municao_atual": 5
       }
     },
     {
@@ -2856,14 +3058,19 @@
         "raridade": "epico",
         "atributos": [
           "3d8 de dano",
-          "Crítico x2"
+          "Crítico 20/x2",
+          "Munição 10"
         ],
         "dano": "3d8",
-        "critico": "x2",
+        "critico": "20/x2",
         "alcance": "Curto",
         "tipo_de_dano": "Fogo",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 2,
+        "municao_maxima": 10,
+        "municao_atual": 10
       }
     },
     {
@@ -2875,14 +3082,19 @@
         "raridade": "epico",
         "atributos": [
           "4d8 de dano",
-          "Crítico 19"
+          "Crítico 19-20/x2",
+          "Munição 1"
         ],
         "dano": "4d8",
-        "critico": "19",
+        "critico": "19-20/x2",
         "alcance": "Médio",
         "tipo_de_dano": "Impacto/Fogo",
         "subtipo": "marcial",
-        "modo": "À distância"
+        "modo": "À distância",
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2,
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -2894,15 +3106,17 @@
         "raridade": "epico",
         "atributos": [
           "3d10 de dano",
-          "Crítico 18"
+          "Crítico 18-20/x2"
         ],
         "dano": "3d10",
-        "critico": "18",
+        "critico": "18-20/x2",
         "alcance": "Corpo a corpo",
         "tipo_de_dano": "Fogo",
         "subtipo": "marcial",
         "material": "Tecnologia",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 18,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -2914,15 +3128,17 @@
         "raridade": "lendario",
         "atributos": [
           "4d8 de dano",
-          "Crítico x4"
+          "Crítico 20/x4"
         ],
         "dano": "4d8",
-        "critico": "x4",
+        "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Corte",
         "subtipo": "marcial",
         "descricao": "Rola o dano de crítico duas vezes contra alvos abaixo de 25% de Vida.",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4
       }
     },
     {
@@ -3750,16 +3966,21 @@
         "preco": 5000,
         "raridade": "lendario",
         "atributos": [
-          "10d40+10d26+10d8+80 de dano",
-          "Crítico 10/x8"
+          "6d10+12 de dano",
+          "Crítico 20/x4"
         ],
-        "dano": "10d40+10d26+10d8+80",
-        "critico": "10/x8",
+        "dano": "6d10+12",
+        "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Pureza",
         "subtipo": "marcial",
         "material": "Obstinada",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 25,
+        "tier_poder": "lendario",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -3771,16 +3992,21 @@
         "preco": 4200,
         "raridade": "lendario",
         "atributos": [
-          "10d12+100 de dano",
-          "Crítico 20/x10"
+          "6d10+10 de dano",
+          "Crítico 20/x4"
         ],
-        "dano": "10d12+100",
-        "critico": "20/x10",
+        "dano": "6d10+10",
+        "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Fogo Astral",
         "subtipo": "marcial",
         "material": "Obstinada",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 25,
+        "tier_poder": "lendario",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -3792,16 +4018,21 @@
         "preco": 3500,
         "raridade": "lendario",
         "atributos": [
-          "9d9+42 de dano",
-          "Crítico 15/x5"
+          "6d10+8 de dano",
+          "Crítico 20/x4"
         ],
-        "dano": "9d9+42",
-        "critico": "15/x5",
+        "dano": "6d10+8",
+        "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Escuridão",
         "subtipo": "marcial",
         "material": "Obstinada",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 25,
+        "tier_poder": "lendario",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -3813,16 +4044,21 @@
         "preco": 4800,
         "raridade": "lendario",
         "atributos": [
-          "12d12+100 de dano",
-          "Crítico 19/x8"
+          "6d10+12 de dano",
+          "Crítico 20/x4"
         ],
-        "dano": "12d12+100",
-        "critico": "19/x8",
+        "dano": "6d10+12",
+        "critico": "20/x4",
         "alcance": "Corpo a corpo / Longo",
         "tipo_de_dano": "Raio",
         "subtipo": "marcial",
         "material": "Obstinada",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 25,
+        "tier_poder": "lendario",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -3834,16 +4070,21 @@
         "preco": 4000,
         "raridade": "lendario",
         "atributos": [
-          "8d12+6d10+60 de dano",
-          "Crítico 18/x6"
+          "5d12+10 de dano",
+          "Crítico 20/x4"
         ],
-        "dano": "8d12+6d10+60",
-        "critico": "18/x6",
+        "dano": "5d12+10",
+        "critico": "20/x4",
         "alcance": "Curto/Longo",
         "tipo_de_dano": "Sangue",
         "subtipo": "marcial",
         "material": "Obstinada",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 25,
+        "tier_poder": "lendario",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -3855,16 +4096,21 @@
         "preco": 3800,
         "raridade": "lendario",
         "atributos": [
-          "8d12 de dano",
-          "Crítico 19/x7"
+          "6d10+8 de dano",
+          "Crítico 20/x4"
         ],
-        "dano": "8d12",
-        "critico": "19/x7",
+        "dano": "6d10+8",
+        "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Vazio",
         "subtipo": "marcial",
         "material": "Obstinada",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 25,
+        "tier_poder": "lendario",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -3876,16 +4122,21 @@
         "preco": 4500,
         "raridade": "lendario",
         "atributos": [
-          "10d12+80 de dano",
-          "Crítico 20/x10"
+          "5d10+12 de dano",
+          "Crítico 20/x4"
         ],
-        "dano": "10d12+80",
-        "critico": "20/x10",
+        "dano": "5d10+12",
+        "critico": "20/x4",
         "alcance": "Médio",
         "tipo_de_dano": "Luz Solar",
         "subtipo": "marcial",
         "material": "Obstinada",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 25,
+        "tier_poder": "lendario",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -3897,16 +4148,21 @@
         "preco": 4600,
         "raridade": "lendario",
         "atributos": [
-          "9d10+9d10 de dano",
-          "Crítico 18/x6"
+          "6d10+10 de dano",
+          "Crítico 20/x4"
         ],
-        "dano": "9d10+9d10",
-        "critico": "18/x6",
+        "dano": "6d10+10",
+        "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Metal",
         "subtipo": "marcial",
         "material": "Obstinada",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 25,
+        "tier_poder": "lendario",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -3919,15 +4175,17 @@
         "raridade": "lendario",
         "atributos": [
           "Hit Kill de dano",
-          "Crítico não informado"
+          "Crítico 20/x2"
         ],
         "dano": "Hit Kill",
-        "critico": "Não informado",
+        "critico": "20/x2",
         "alcance": "Curto",
         "tipo_de_dano": "Vazio",
         "subtipo": "marcial",
         "material": "Obstinada",
-        "modo": "Corpo a corpo"
+        "modo": "Corpo a corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -3938,17 +4196,22 @@
         "preco": 50000,
         "raridade": "relíquia da criação",
         "atributos": [
-          "10d40 + 10d26 + 10d8 + 80 de dano",
-          "Crítico 10/x8",
+          "8d12+20 de dano",
+          "Crítico 20/x4",
           "Efeito: Impossível finalizar seres com essa espada."
         ],
-        "dano": "10d40 + 10d26 + 10d8 + 80",
-        "critico": "10/x8",
+        "dano": "8d12+20",
+        "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Pureza",
         "subtipo": "reliquia-criacao",
         "modo": "Corpo a corpo",
-        "efeito": "Impossível finalizar seres com essa espada."
+        "efeito": "Impossível finalizar seres com essa espada.",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 35,
+        "tier_poder": "reliquia",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -3959,17 +4222,22 @@
         "preco": 50000,
         "raridade": "relíquia da criação",
         "atributos": [
-          "10d12 + 100 de dano",
-          "Crítico 20/x10",
+          "8d12+16 de dano",
+          "Crítico 20/x4",
           "Efeito: Um martelo abençoado pela dama das chamas."
         ],
-        "dano": "10d12 + 100",
-        "critico": "20/x10",
+        "dano": "8d12+16",
+        "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Fogo Astral",
         "subtipo": "reliquia-criacao",
         "modo": "Corpo a corpo",
-        "efeito": "Um martelo abençoado pela dama das chamas."
+        "efeito": "Um martelo abençoado pela dama das chamas.",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 35,
+        "tier_poder": "reliquia",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -3980,17 +4248,22 @@
         "preco": 50000,
         "raridade": "relíquia da criação",
         "atributos": [
-          "9d9 + 42 de dano",
-          "Crítico 15/x5",
+          "10d10+8 de dano",
+          "Crítico 20/x4",
           "Efeito: Uma katana que pertenceu a um antigo vampiro Ventrue."
         ],
-        "dano": "9d9 + 42",
-        "critico": "15/x5",
+        "dano": "10d10+8",
+        "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Escuridão",
         "subtipo": "reliquia-criacao",
         "modo": "Corpo a corpo",
-        "efeito": "Uma katana que pertenceu a um antigo vampiro Ventrue."
+        "efeito": "Uma katana que pertenceu a um antigo vampiro Ventrue.",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 35,
+        "tier_poder": "reliquia",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -4001,17 +4274,22 @@
         "preco": 50000,
         "raridade": "relíquia da criação",
         "atributos": [
-          "12d12 + 100 de dano",
-          "Crítico 19/x8",
+          "8d12+18 de dano",
+          "Crítico 20/x4",
           "Efeito: Volta para o portador após arremessada; em caso de crítico, causa 25% do dano em alcance Médio."
         ],
-        "dano": "12d12 + 100",
-        "critico": "19/x8",
+        "dano": "8d12+18",
+        "critico": "20/x4",
         "alcance": "Longo",
         "tipo_de_dano": "Raio",
         "subtipo": "reliquia-criacao",
         "modo": "À Distância",
-        "efeito": "Volta para o portador após arremessada; em caso de crítico, causa 25% do dano em alcance Médio."
+        "efeito": "Volta para o portador após arremessada; em caso de crítico, causa 25% do dano em alcance Médio.",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 35,
+        "tier_poder": "reliquia",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -4022,17 +4300,22 @@
         "preco": 50000,
         "raridade": "relíquia da criação",
         "atributos": [
-          "8d12 + 6d10 + 60 de dano",
-          "Crítico 18/x6",
+          "8d12+12 de dano",
+          "Crítico 20/x4",
           "Efeito: 10% do dano causado retorna como cura para o portador."
         ],
-        "dano": "8d12 + 6d10 + 60",
-        "critico": "18/x6",
+        "dano": "8d12+12",
+        "critico": "20/x4",
         "alcance": "Curto/Longo",
         "tipo_de_dano": "Sangue",
         "subtipo": "reliquia-criacao",
         "modo": "Híbrida",
-        "efeito": "10% do dano causado retorna como cura para o portador."
+        "efeito": "10% do dano causado retorna como cura para o portador.",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 35,
+        "tier_poder": "reliquia",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -4043,17 +4326,22 @@
         "preco": 50000,
         "raridade": "relíquia da criação",
         "atributos": [
-          "8d12 de dano",
-          "Crítico 19/x7",
+          "8d12+10 de dano",
+          "Crítico 20/x4",
           "Efeito: A cada 2 de F.V. gasto, adiciona +5 de dano."
         ],
-        "dano": "8d12",
-        "critico": "19/x7",
+        "dano": "8d12+10",
+        "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Vazio",
         "subtipo": "reliquia-criacao",
         "modo": "Corpo a corpo",
-        "efeito": "A cada 2 de F.V. gasto, adiciona +5 de dano."
+        "efeito": "A cada 2 de F.V. gasto, adiciona +5 de dano.",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 35,
+        "tier_poder": "reliquia",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -4064,17 +4352,22 @@
         "preco": 50000,
         "raridade": "relíquia da criação",
         "atributos": [
-          "10d12 + 80 de dano",
-          "Crítico 20/x10",
+          "8d12+14 de dano",
+          "Crítico 20/x4",
           "Efeito: Caso quebre um juramento, a lança se volta contra o portador."
         ],
-        "dano": "10d12 + 80",
-        "critico": "20/x10",
+        "dano": "8d12+14",
+        "critico": "20/x4",
         "alcance": "Médio",
         "tipo_de_dano": "Luz Solar",
         "subtipo": "reliquia-criacao",
         "modo": "Corpo a corpo",
-        "efeito": "Caso quebre um juramento, a lança se volta contra o portador."
+        "efeito": "Caso quebre um juramento, a lança se volta contra o portador.",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 35,
+        "tier_poder": "reliquia",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -4085,17 +4378,22 @@
         "preco": 50000,
         "raridade": "relíquia da criação",
         "atributos": [
-          "9d10 + 9d10 de dano",
-          "Crítico 18/x6",
+          "10d10+10 de dano",
+          "Crítico 20/x4",
           "Efeito: O primeiro ataque em um combate sempre acerta. Se matar um ser, ganha uma ação adicional."
         ],
-        "dano": "9d10 + 9d10",
-        "critico": "18/x6",
+        "dano": "10d10+10",
+        "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Metal",
         "subtipo": "reliquia-criacao",
         "modo": "Corpo a corpo",
-        "efeito": "O primeiro ataque em um combate sempre acerta. Se matar um ser, ganha uma ação adicional."
+        "efeito": "O primeiro ataque em um combate sempre acerta. Se matar um ser, ganha uma ação adicional.",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 4,
+        "nivel_recomendado": 35,
+        "tier_poder": "reliquia",
+        "requer_autorizacao_mestre": true
       }
     },
     {
@@ -4107,16 +4405,18 @@
         "raridade": "relíquia da criação",
         "atributos": [
           "Hit Kill",
-          "Crítico N/A",
+          "Crítico 20/x2",
           "Efeito: Caso corte alguém, o ser morre instantaneamente."
         ],
         "dano": "Hit Kill",
-        "critico": "N/A",
+        "critico": "20/x2",
         "alcance": "Curto",
         "tipo_de_dano": "Desconhecido (?????)",
         "subtipo": "reliquia-criacao",
         "modo": "Corpo a corpo",
-        "efeito": "Caso corte alguém, o ser morre instantaneamente."
+        "efeito": "Caso corte alguém, o ser morre instantaneamente.",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 2
       }
     },
     {
@@ -4411,9 +4711,13 @@
         "atributos": [
           "Tecnológico",
           "Cortante",
-          "Letal"
+          "Letal",
+          "Crítico 20/x2"
         ],
-        "modo": "Corpo a Corpo"
+        "modo": "Corpo a Corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 2,
+        "critico": "20/x2"
       }
     },
     {
@@ -4428,9 +4732,16 @@
           "Ilegal",
           "Tecnológico",
           "Longo Alcance",
-          "Destruidor"
+          "Destruidor",
+          "Crítico 20/x2",
+          "Munição 1"
         ],
-        "modo": "À Distância"
+        "modo": "À Distância",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 2,
+        "critico": "20/x2",
+        "municao_maxima": 1,
+        "municao_atual": 1
       }
     },
     {
@@ -4444,9 +4755,13 @@
         "atributos": [
           "Tecnológico",
           "Ígneo",
-          "Alcance Estendido"
+          "Alcance Estendido",
+          "Crítico 20/x2"
         ],
-        "modo": "Corpo a Corpo"
+        "modo": "Corpo a Corpo",
+        "margem_ameaca": 20,
+        "multiplicador_critico": 2,
+        "critico": "20/x2"
       }
     },
     {

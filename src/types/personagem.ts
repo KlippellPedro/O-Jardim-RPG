@@ -5,6 +5,9 @@ export interface ICreateCharacterPayload {
   arvoreId: string;
   racaId: string;
   classeId: string;
+  classes: Array<{ classeId: string; nivel: number }>;
+  nivel: number;
+  xp: number;
   metodoAtributos: 'padrao' | 'pontos' | 'rolado';
   atributosBase: Record<string, number>;
   atributosFinais: Record<string, number>;

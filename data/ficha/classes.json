@@ -5595,6 +5595,14 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-07-28",
+    "progressao_magia": {
+      "fonte": "Baralho Arcano",
+      "tradicoes": ["Elemental"],
+      "marcos": [
+        { "nivel": 10, "circulo": 1, "vagas": 3 },
+        { "nivel": 15, "circulo": 2, "vagas": 4 }
+      ]
+    },
     "descricao": "Classe especial de Éon que manipula probabilidades com um baralho vivo sem escolher resultados ilimitadamente.",
     "progressao": [
       {
@@ -5845,7 +5853,7 @@
           },
           {
             "nivel": 15,
-            "descricao": "Uma vez por combate, use duas cartas de primeiro círculo ou uma de segundo círculo com uma ação completa."
+            "descricao": "Aprenda uma magia elemental de segundo círculo. Uma vez por combate, use duas cartas de primeiro círculo ou uma de segundo círculo com uma ação completa."
           },
           {
             "nivel": 20,
@@ -7847,6 +7855,16 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-07-28",
+    "progressao_magia": {
+      "fonte": "Magias Elementais",
+      "tradicoes": ["Elemental"],
+      "marcos": [
+        { "nivel": 3, "circulo": 1, "vagas": 2 },
+        { "nivel": 8, "circulo": 2, "vagas": 4 },
+        { "nivel": 14, "circulo": 3, "vagas": 6 },
+        { "nivel": 20, "circulo": 4, "vagas": 8 }
+      ]
+    },
     "descricao": "Conjurador do Vórtice que domina um elemento, descobre derivações e altera o campo de batalha com manifestações naturais.",
     "progressao": [
       {

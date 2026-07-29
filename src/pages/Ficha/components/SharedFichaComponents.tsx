@@ -39,7 +39,7 @@ export const LabeledSelect = ({ label, value, options, onChange }: any) => (
   </div>
 );
 
-export const LabeledModalSelect = ({ label, value, options, onChange, placeholder = "Selecione..." }: any) => {
+export const LabeledModalSelect = ({ label, value, options, onChange, placeholder = "Selecione...", disabled = false }: any) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectedLabel = options.find((o: any) => (o.value || o) === value)?.label || value || placeholder;
 
@@ -48,8 +48,9 @@ export const LabeledModalSelect = ({ label, value, options, onChange, placeholde
       <div className="flex flex-col gap-1">
         {label && <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">{label}</label>}
         <div 
-          onClick={() => setIsOpen(true)}
-          className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 hover:border-[#c7a44c]/50 transition-colors cursor-pointer flex justify-between items-center"
+          onClick={() => { if (!disabled) setIsOpen(true); }}
+          aria-disabled={disabled}
+          className={`bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 transition-colors flex justify-between items-center ${disabled ? 'cursor-not-allowed opacity-60' : 'hover:border-[#c7a44c]/50 cursor-pointer'}`}
         >
           <span className={!value ? "text-gray-600" : "text-gray-300"}>{selectedLabel}</span>
           <span className="text-gray-600 text-[10px] font-mono">▼</span>

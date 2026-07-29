@@ -1,0 +1,31 @@
+export interface ICondicaoRegra {
+  id: string;
+  titulo: string;
+  categoria: 'física' | 'mental' | 'combate';
+  duracao: string;
+  efeitos: string[];
+  remocao: string;
+}
+
+export const CONDICOES_OFICIAIS: ICondicaoRegra[] = [
+  { id: 'amedrontado', titulo: 'Amedrontado', categoria: 'mental', duracao: 'Até o fim da cena ou até superar a fonte.', efeitos: ['Desvantagem em testes contra a fonte do medo.', 'Não pode se aproximar voluntariamente da fonte.'], remocao: 'No fim do turno, Vontade contra a DT da fonte encerra a condição.' },
+  { id: 'exposto', titulo: 'Exposto', categoria: 'combate', duracao: 'Até o começo do próximo turno.', efeitos: ['Defesa reduzida em 2.', 'Exposto não acumula consigo mesmo.'], remocao: 'Termina automaticamente no começo do próximo turno.' },
+  { id: 'caido', titulo: 'Caído', categoria: 'física', duracao: 'Até se levantar.', efeitos: ['Ataques corpo a corpo contra você recebem +2.', 'Seus ataques sofrem -2.', 'Levantar consome a ação de movimento e provoca reações.'], remocao: 'Gaste a ação de movimento para levantar.' },
+  { id: 'sangramento', titulo: 'Sangramento', categoria: 'física', duracao: 'Até ser tratado.', efeitos: ['Sofra 1d6 de dano no fim do turno.', 'Novas aplicações aumentam o dano em +1, até +5, mas não adicionam dados.'], remocao: 'Cura DT 15 com ação padrão ou qualquer cura de pelo menos 1 PV.' },
+  { id: 'atordoado', titulo: 'Atordoado', categoria: 'física', duracao: 'Até o fim do próximo turno, salvo indicação diferente.', efeitos: ['Não pode usar ações nem reações.', 'Defesa reduzida em 5.'], remocao: 'Termina ao fim da duração. Uma nova aplicação apenas renova a duração.' },
+  { id: 'agarrado', titulo: 'Agarrado', categoria: 'física', duracao: 'Enquanto o agarrão for mantido.', efeitos: ['Movimento 0.', 'Ataques contra alvos que não participam do agarrão sofrem -2.'], remocao: 'Ação padrão e teste oposto de Atletismo ou Acrobacia.' },
+  { id: 'cego', titulo: 'Cego', categoria: 'física', duracao: 'Conforme a fonte.', efeitos: ['Desvantagem em testes que dependem de visão.', 'Ataques contra você recebem +2 se o atacante puder vê-lo.'], remocao: 'Remova ou supere a fonte da cegueira.' },
+  { id: 'imobilizado', titulo: 'Imobilizado', categoria: 'física', duracao: 'Conforme a fonte.', efeitos: ['Movimento 0.', 'Não pode usar ações que exijam deslocamento.'], remocao: 'Teste indicado pela fonte como ação padrão.' },
+  { id: 'inconsciente', titulo: 'Inconsciente', categoria: 'física', duracao: 'Enquanto persistir a causa.', efeitos: ['Não pode agir nem reagir.', 'Defesa reduzida em 5 e falha automaticamente em testes de Força e Destreza.'], remocao: 'Recupere-se da causa. Em Morrendo, volte a pelo menos 1 PV.' },
+  { id: 'surpreendido', titulo: 'Surpreendido', categoria: 'combate', duracao: 'Primeira rodada.', efeitos: ['Iniciativa reduzida em 5 na primeira rodada.', 'Sem reação até realizar o primeiro turno.'], remocao: 'Termina depois do primeiro turno.' },
+  { id: 'concentrando', titulo: 'Concentrando', categoria: 'mental', duracao: 'Enquanto mantiver o efeito.', efeitos: ['Só pode manter um efeito de concentração por vez.', 'Ao sofrer dano, teste Vontade DT 10 ou metade do dano, o que for maior. Falha encerra o efeito.'], remocao: 'Encerre voluntariamente, fique incapacitado ou falhe no teste de concentração.' },
+];
+
+export const CRISES_SANIDADE: ICondicaoRegra[] = [
+  { id: 'crise-panico', titulo: 'Pânico', categoria: 'mental', duracao: '1d4 rodadas.', efeitos: ['Fique Amedrontado pela fonte e use o movimento para se afastar dela.'], remocao: 'Vontade DT 15 no fim de cada turno encerra a crise.' },
+  { id: 'crise-dissociacao', titulo: 'Dissociação', categoria: 'mental', duracao: '1d4 rodadas.', efeitos: ['Não pode usar reações e sofre -2 em testes de percepção e interação.'], remocao: 'Vontade DT 15 no fim de cada turno encerra a crise.' },
+  { id: 'crise-paranoia', titulo: 'Paranoia', categoria: 'mental', duracao: 'Até o fim da cena.', efeitos: ['Não recebe bônus de ajuda e testa Vontade DT 15 para aceitar cura de outra criatura.'], remocao: 'Termina em segurança ao fim da cena.' },
+  { id: 'crise-catatonia', titulo: 'Catatonia', categoria: 'mental', duracao: '1d4 rodadas.', efeitos: ['Fique Atordoado, mas receba +5 contra empurrões e agarrões.'], remocao: 'Um aliado pode usar ação padrão e Medicina ou Persuasão DT 15.' },
+  { id: 'crise-compulsao', titulo: 'Compulsão', categoria: 'mental', duracao: 'Até cumprir uma ação simples ou superar a crise.', efeitos: ['No turno, deve realizar a ação compulsiva definida pela fonte antes de outras ações.'], remocao: 'Vontade DT 15 no começo do turno permite agir normalmente.' },
+  { id: 'crise-furia', titulo: 'Fúria', categoria: 'mental', duracao: '1d4 rodadas.', efeitos: ['Receba +2 no dano corpo a corpo e -2 Defesa.', 'Deve atacar uma ameaça visível se puder.'], remocao: 'Vontade DT 15 no fim do turno encerra a crise.' },
+];

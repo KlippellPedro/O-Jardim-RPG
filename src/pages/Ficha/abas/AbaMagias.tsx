@@ -1,478 +1,349 @@
-import { useState, useEffect } from 'react';
-import { Search, Flame, Dices, Pencil, Trash2, CheckCircle2, AlertCircle, GripVertical, Star } from 'lucide-react';
-import { motion, Reorder } from 'framer-motion';
-import { FichaModal } from '../components/FichaModal';
-import { LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  AlertCircle,
+  BookOpen,
+  CheckCircle2,
+  Dices,
+  Flame,
+  LockKeyhole,
+  Search,
+  Shield,
+  Sparkles,
+  X,
+} from 'lucide-react';
+import { motion } from 'framer-motion';
 import { registrosApi } from '../../../services/registrosApi';
+import {
+  MAGIAS_CATALOGO,
+  circuloRotulo,
+  magiaElegivelParaAprender,
+  magiasDaFicha,
+  obterPerfilMagico,
+  podeConjurarMagia,
+  type IMagiaCatalogo,
+} from '../../../services/magiaService';
 import { useAuthStore } from '../../../store/useAuthStore';
 
-type RecursoCusto = 'nenhum' | 'mana' | 'vida' | 'sanidade' | 'cansaco';
-
-interface ICustoMagia {
-  recurso: RecursoCusto;
-  valor: number;
+interface IMagiaAntiga {
+  id?: string;
+  nome?: string;
+  circulo?: string;
+  escola?: string;
+  efeito?: string;
 }
 
-interface IMagia {
-  id: string;
-  nome: string;
-  circulo: string;
-  escola: string;
-  custo: ICustoMagia;
-  execucao: string;
-  alcance: string;
-  efeito: string;
-  ordem?: number;
-  favorito?: boolean;
-}
-
-const CIRCULOS = ['1º Círculo', '2º Círculo', '3º Círculo', '4º Círculo', '5º Círculo', 'Ritual'];
-
-const CIRCULO_COLORS: Record<string, string> = {
-  '1º Círculo': 'bg-sky-500/10 border-sky-500/30 text-sky-400',
-  '2º Círculo': 'bg-blue-500/10 border-blue-500/30 text-blue-400',
-  '3º Círculo': 'bg-purple-500/10 border-purple-500/30 text-purple-400',
-  '4º Círculo': 'bg-fuchsia-500/10 border-fuchsia-500/30 text-fuchsia-400',
-  '5º Círculo': 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400',
-  'Ritual': 'bg-red-900/20 border-red-500/50 text-red-500'
+const CIRCULO_CORES: Record<string, string> = {
+  '1': 'border-sky-500/30 bg-sky-500/10 text-sky-300',
+  '2': 'border-blue-500/30 bg-blue-500/10 text-blue-300',
+  '3': 'border-purple-500/30 bg-purple-500/10 text-purple-300',
+  '4': 'border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-300',
+  '5': 'border-amber-500/30 bg-amber-500/10 text-amber-300',
+  ritual: 'border-red-500/30 bg-red-500/10 text-red-300',
 };
 
-const RECURSO_OPTIONS = [
-  { value: 'nenhum', label: 'Nenhum' },
-  { value: 'mana', label: 'Mana' },
-  { value: 'vida', label: 'Vida' },
-  { value: 'sanidade', label: 'Sanidade' },
-  { value: 'cansaco', label: 'Cansaço' },
-];
-
-const RECURSO_LABEL: Record<RecursoCusto, string> = {
-  nenhum: 'Nenhum',
-  mana: 'Mana',
-  vida: 'Vida',
-  sanidade: 'Sanidade',
-  cansaco: 'Cansaço',
-};
-
-// Mapeia cada recurso gasto por uma magia para o campo correspondente em ficha.status
-// (mesmos campos usados por AbaFicha.tsx: vidaAtual/manaAtual/sanidadeAtual/cansacoAtual).
-const RECURSO_CAMPO: Record<Exclude<RecursoCusto, 'nenhum'>, string> = {
-  mana: 'manaAtual',
-  vida: 'vidaAtual',
-  sanidade: 'sanidadeAtual',
-  cansaco: 'cansacoAtual',
-};
-
-const gerarIdMagia = () => `magias-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
-
-const criarFormularioVazio = () => ({
-  nome: '',
-  circulo: '',
-  escola: '',
-  custoRecurso: 'nenhum' as RecursoCusto,
-  custoValor: '0',
-  execucao: '',
-  alcance: '',
-  efeito: '',
-  ordem: 0,
-  favorito: false,
-});
-
-const formatarCusto = (custo?: ICustoMagia) => {
-  if (!custo || custo.recurso === 'nenhum' || !custo.valor) return 'Nenhum';
-  return `${custo.valor} ${RECURSO_LABEL[custo.recurso]}`;
-};
+const formatarBonus = (valor: number) => valor >= 0 ? `+${valor}` : String(valor);
 
 export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: any }) => {
   const [busca, setBusca] = useState('');
-  const [modalAberto, setModalAberto] = useState(false);
-  const [editandoId, setEditandoId] = useState<string | null>(null);
-  const [form, setForm] = useState(criarFormularioVazio());
-  const [erroForm, setErroForm] = useState('');
-  const [ultimoUsoMsg, setUltimoUsoMsg] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
+  const [mostrarCatalogo, setMostrarCatalogo] = useState(false);
+  const [defesasAlvo, setDefesasAlvo] = useState<Record<string, string>>({});
+  const [mensagem, setMensagem] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
+  const [conjurandoId, setConjurandoId] = useState<string | null>(null);
 
-  const campanhaAtiva = useAuthStore((s) => s.campanhaAtiva);
-
-  const magias: IMagia[] = character.ficha?.magias || [];
-  const status = character.ficha?.status || {};
-
-  const maxVida = character.derivados?.vida || 10;
-  const maxMana = character.derivados?.mana || 10;
-  const maxSanidade = status.sanidadeMaxima || 100;
-  const maxCansaco = status.cansacoMaximo || 6;
-
-  const RECURSO_MAX: Record<Exclude<RecursoCusto, 'nenhum'>, number> = {
-    mana: maxMana,
-    vida: maxVida,
-    sanidade: maxSanidade,
-    cansaco: maxCansaco,
-  };
-
-  const magiasVisiveis = magias
-    .filter((m) => !busca || m.nome?.toLowerCase().includes(busca.toLowerCase()))
-    .sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
-
-  const salvarLista = (novaLista: IMagia[]) => {
-    onUpdate(['ficha', 'magias'], novaLista);
-  };
-
-  const handleReorder = (novosItens: IMagia[]) => {
-    const comOrdem = novosItens.map((item, index) => ({ ...item, ordem: index }));
-    salvarLista(comOrdem);
-  };
-
-  const toggleFavorito = (id: string) => {
-    let modificada = magias.map(m => m.id === id ? { ...m, favorito: !m.favorito } : m);
-    const itemTarget = modificada.find(m => m.id === id);
-    if (itemTarget && itemTarget.favorito) {
-      modificada = [itemTarget, ...modificada.filter(m => m.id !== id)];
-    }
-    const comOrdem = modificada.map((item, index) => ({ ...item, ordem: index }));
-    salvarLista(comOrdem);
-  };
+  const campanha = useAuthStore((state) => state.campanhaAtiva);
+  const usuario = useAuthStore((state) => state.usuario);
+  const ficha = character.ficha || {};
+  const status = ficha.status || {};
+  const perfil = useMemo(() => obterPerfilMagico(ficha), [ficha]);
+  const magiasConhecidas = useMemo(() => magiasDaFicha(ficha), [ficha]);
+  const magiasAntigas: IMagiaAntiga[] = Array.isArray(ficha.magias) ? ficha.magias : [];
+  const isMestre = usuario?.papel_plataforma === 'admin'
+    || usuario?.papel_plataforma === 'criador'
+    || campanha?.papel === 'mestre'
+    || campanha?.papel === 'assistente';
+  const manaMaxima = Math.max(0, Number(character.derivados?.mana || ficha.derivados?.mana) || 0);
+  const manaAtual = Math.max(0, Number(status.manaAtual ?? manaMaxima));
+  const concentracaoAtiva = status.concentracaoAtiva as { magiaId?: string; titulo?: string } | null | undefined;
 
   useEffect(() => {
-    if (!ultimoUsoMsg) return;
-    const timer = setTimeout(() => setUltimoUsoMsg(null), 3000);
-    return () => clearTimeout(timer);
-  }, [ultimoUsoMsg]);
+    if (!mensagem) return undefined;
+    const timer = window.setTimeout(() => setMensagem(null), 5000);
+    return () => window.clearTimeout(timer);
+  }, [mensagem]);
 
-  const abrirCriar = () => {
-    setEditandoId(null);
-    setForm(criarFormularioVazio());
-    setErroForm('');
-    setModalAberto(true);
-  };
+  const catalogoVisivel = MAGIAS_CATALOGO.filter((magia) => {
+    const termo = busca.trim().toLocaleLowerCase('pt-BR');
+    if (!termo) return true;
+    return [magia.titulo, magia.tradicao, magia.efeito, circuloRotulo(magia.circulo)]
+      .some((valor) => valor.toLocaleLowerCase('pt-BR').includes(termo));
+  });
 
-  const abrirEditar = (magia: IMagia) => {
-    setEditandoId(magia.id);
-    setForm({
-      nome: magia.nome || '',
-      circulo: magia.circulo || '',
-      escola: magia.escola || '',
-      custoRecurso: magia.custo?.recurso || 'nenhum',
-      custoValor: String(magia.custo?.valor ?? 0),
-      execucao: magia.execucao || '',
-      alcance: magia.alcance || '',
-      efeito: magia.efeito || '',
-      ordem: magia.ordem ?? 0,
-      favorito: magia.favorito ?? false,
-    });
-    setErroForm('');
-    setModalAberto(true);
-  };
-
-  const fecharModal = () => {
-    setModalAberto(false);
-    setEditandoId(null);
-  };
-
-  const salvarMagia = () => {
-    const nome = form.nome.trim();
-    if (!nome) {
-      setErroForm('Informe o nome da magia.');
+  const aprenderOuConceder = (magia: IMagiaCatalogo) => {
+    if (isMestre) {
+      const atuais = perfil.concedidasIds;
+      const jaConcedida = atuais.includes(magia.id);
+      onUpdate(
+        ['ficha', 'magiasConcedidasIds'],
+        jaConcedida ? atuais.filter((id) => id !== magia.id) : [...atuais, magia.id],
+      );
+      setMensagem({
+        tipo: 'sucesso',
+        texto: jaConcedida ? `${magia.titulo} removida das concessões.` : `${magia.titulo} concedida pelo Mestre.`,
+      });
       return;
     }
 
-    const valorNumerico = Math.max(0, Math.trunc(Number(form.custoValor) || 0));
-
-    const dados: IMagia = {
-      id: editandoId || gerarIdMagia(),
-      nome,
-      circulo: form.circulo.trim(),
-      escola: form.escola.trim(),
-      custo: { recurso: form.custoRecurso, valor: valorNumerico },
-      execucao: form.execucao.trim(),
-      alcance: form.alcance.trim(),
-      efeito: form.efeito.trim(),
-    };
-
-    const novaLista = editandoId
-      ? magias.map((m) => (m.id === editandoId ? dados : m))
-      : [...magias, dados];
-
-    onUpdate(['ficha', 'magias'], novaLista);
-    fecharModal();
-  };
-
-  const excluirMagia = (magia: IMagia) => {
-    if (!window.confirm(`Excluir a magia "${magia.nome}"?`)) return;
-    onUpdate(['ficha', 'magias'], magias.filter((m) => m.id !== magia.id));
-  };
-
-  const conjurarMagia = async (magia: IMagia) => {
-    const custo = magia.custo || { recurso: 'nenhum', valor: 0 };
-
-    if (custo.recurso !== 'nenhum' && custo.valor > 0) {
-      if (custo.recurso === 'cansaco') {
-        const atual = status.cansacoAtual ?? 0;
-        if (atual + custo.valor > maxCansaco) {
-          setUltimoUsoMsg({ tipo: 'erro', texto: `Cansaço insuficiente para conjurar "${magia.nome}".` });
-          return;
-        }
-      } else {
-        const campo = RECURSO_CAMPO[custo.recurso];
-        const max = RECURSO_MAX[custo.recurso];
-        const atual = status[campo] ?? max;
-        if (atual < custo.valor) {
-          setUltimoUsoMsg({ tipo: 'erro', texto: `${RECURSO_LABEL[custo.recurso]} insuficiente para conjurar "${magia.nome}".` });
-          return;
-        }
-      }
+    const avaliacao = magiaElegivelParaAprender(ficha, magia);
+    if (!avaliacao.permitido) {
+      setMensagem({ tipo: 'erro', texto: avaliacao.motivo || 'Esta magia ainda não pode ser aprendida.' });
+      return;
     }
+    if (!window.confirm(`Aprender ${magia.titulo}? A escolha só poderá ser removida pelo Mestre.`)) return;
+    onUpdate(['ficha', 'magiasConhecidasIds'], [...perfil.conhecidasIds, magia.id]);
+    setMensagem({ tipo: 'sucesso', texto: `${magia.titulo} foi aprendida.` });
+  };
 
-    if (custo.recurso !== 'nenhum' && custo.valor > 0) {
-      if (custo.recurso === 'cansaco') {
-        const atual = status.cansacoAtual ?? 0;
-        onUpdate(['ficha', 'status', 'cansacoAtual'], Math.min(maxCansaco, atual + custo.valor));
-      } else {
-        const campo = RECURSO_CAMPO[custo.recurso];
-        const max = RECURSO_MAX[custo.recurso];
-        const atual = status[campo] ?? max;
-        onUpdate(['ficha', 'status', campo], Math.max(0, atual - custo.valor));
-      }
+  const encerrarConcentracao = () => {
+    onUpdate(['ficha', 'status', 'concentracaoAtiva'], null);
+    setMensagem({ tipo: 'sucesso', texto: 'Concentração encerrada.' });
+  };
+
+  const conjurar = async (magia: IMagiaCatalogo) => {
+    const avaliacao = podeConjurarMagia(ficha, magia);
+    if (!avaliacao.permitido) {
+      setMensagem({ tipo: 'erro', texto: avaliacao.motivo || 'Não é possível conjurar esta magia.' });
+      return;
+    }
+    if (manaAtual < magia.custo_mana) {
+      setMensagem({ tipo: 'erro', texto: `Mana insuficiente. ${magia.titulo} custa ${magia.custo_mana}.` });
+      return;
+    }
+    if (magia.defesa && !campanha?.id) {
+      setMensagem({ tipo: 'erro', texto: 'Ative uma campanha para realizar o teste de conjuração no servidor.' });
+      return;
+    }
+    if (
+      magia.concentracao
+      && concentracaoAtiva?.magiaId
+      && concentracaoAtiva.magiaId !== magia.id
+      && !window.confirm(`Conjurar ${magia.titulo} encerrará ${concentracaoAtiva.titulo || 'a concentração atual'}. Continuar?`)
+    ) return;
+
+    setConjurandoId(magia.id);
+    onUpdate(['ficha', 'status', 'manaAtual'], manaAtual - magia.custo_mana);
+    if (magia.concentracao) {
+      onUpdate(['ficha', 'status', 'concentracaoAtiva'], { magiaId: magia.id, titulo: magia.titulo });
     }
 
     try {
-      const campanhaId = campanhaAtiva?.id;
-      if (campanhaId) {
-        await registrosApi.registrarUso({
-          campanhaId,
+      if (campanha?.id && magia.defesa) {
+        const defesaInformada = Number(defesasAlvo[magia.id]);
+        const resposta = await registrosApi.rolar({
+          campanhaId: campanha.id,
           personagemId: character.id,
-          tipo: 'magia',
-          titulo: magia.nome,
-          detalhes: {
+          titulo: `Conjuração: ${magia.titulo}`,
+          bonus: perfil.bonusConjuracao,
+          dt: Number.isFinite(defesaInformada) && defesaInformada > 0 ? defesaInformada : null,
+          origem: {
+            tipo: 'magia',
+            magia_id: magia.id,
             circulo: magia.circulo,
-            escola: magia.escola,
-            custo,
-            execucao: magia.execucao,
-            alcance: magia.alcance,
+            defesa: magia.defesa,
+            dt_magia: perfil.dtMagia,
+            custo_mana: magia.custo_mana,
+            concentracao: magia.concentracao,
           },
         });
+        const resultado = resposta.registro.resultado;
+        setMensagem({
+          tipo: 'sucesso',
+          texto: resultado === null
+            ? `${magia.titulo} conjurada.`
+            : `${magia.titulo}: resultado ${resultado}. Compare com ${magia.defesa}${defesaInformada > 0 ? ` ${defesaInformada}` : ''}.`,
+        });
+      } else if (campanha?.id) {
+        await registrosApi.registrarUso({
+          campanhaId: campanha.id,
+          personagemId: character.id,
+          tipo: 'magia',
+          titulo: magia.titulo,
+          detalhes: {
+            magia_id: magia.id,
+            circulo: magia.circulo,
+            custo_mana: magia.custo_mana,
+            dt_magia: perfil.dtMagia,
+            concentracao: magia.concentracao,
+          },
+        });
+        setMensagem({ tipo: 'sucesso', texto: `${magia.titulo} conjurada e registrada.` });
+      } else {
+        setMensagem({ tipo: 'sucesso', texto: `${magia.titulo} conjurada. Custo aplicado à ficha.` });
       }
-      setUltimoUsoMsg({ tipo: 'sucesso', texto: `"${magia.nome}" conjurada com sucesso!` });
-    } catch (e) {
-      setUltimoUsoMsg({ tipo: 'erro', texto: 'Magia conjurada, mas houve falha ao registrar o uso no servidor.' });
+    } catch {
+      setMensagem({ tipo: 'erro', texto: 'O custo foi aplicado, mas o servidor não registrou a conjuração.' });
+    } finally {
+      setConjurandoId(null);
     }
+  };
+
+  const renderMagia = (magia: IMagiaCatalogo, modoCatalogo = false) => {
+    const conhecida = perfil.conhecidasIds.includes(magia.id);
+    const concedida = perfil.concedidasIds.includes(magia.id);
+    const avaliacao = magiaElegivelParaAprender(ficha, magia);
+    const podeAprender = isMestre || avaliacao.permitido;
+    const cor = CIRCULO_CORES[String(magia.circulo)] || CIRCULO_CORES.ritual;
+
+    return (
+      <article key={`${modoCatalogo ? 'catalogo' : 'ficha'}:${magia.id}`} className="rounded-2xl border border-white/5 bg-[#121118] p-5">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-lg font-bold text-white">{magia.titulo}</h3>
+              <span className={`rounded border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${cor}`}>
+                {circuloRotulo(magia.circulo)}
+              </span>
+              <span className="rounded border border-white/5 bg-black/30 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                {magia.tradicao}
+              </span>
+              {magia.concentracao && <span className="rounded border border-violet-500/30 bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-violet-300">Concentração</span>}
+              {concedida && <span className="rounded border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-amber-300">Concedida</span>}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs text-gray-500">
+              <span><strong className="text-gray-400">Custo:</strong> {magia.custo_mana} Mana</span>
+              <span><strong className="text-gray-400">Execução:</strong> {magia.execucao}</span>
+              <span><strong className="text-gray-400">Alcance:</strong> {magia.alcance}</span>
+              <span><strong className="text-gray-400">Duração:</strong> {magia.duracao}</span>
+            </div>
+            <p className="mt-3 text-sm leading-relaxed text-gray-300">{magia.efeito}</p>
+            {(magia.dano || magia.defesa) && (
+              <div className="mt-3 flex flex-wrap gap-2 text-xs font-bold">
+                {magia.dano && <span className="rounded-lg bg-red-500/10 px-2.5 py-1 text-red-300">Dano {magia.dano}</span>}
+                {magia.defesa && <span className="rounded-lg bg-sky-500/10 px-2.5 py-1 text-sky-300">Contra {magia.defesa}</span>}
+                {magia.ataque && <span className="rounded-lg bg-amber-500/10 px-2.5 py-1 text-amber-300">Crítico no 20 natural</span>}
+              </div>
+            )}
+          </div>
+
+          {modoCatalogo ? (
+            <div className="w-full md:w-48">
+              <button
+                type="button"
+                onClick={() => aprenderOuConceder(magia)}
+                disabled={!isMestre && (conhecida || !podeAprender)}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-4 py-2.5 text-xs font-bold text-[#d7bb72] transition-colors hover:bg-[#c7a44c]/20 disabled:cursor-not-allowed disabled:border-white/5 disabled:bg-white/5 disabled:text-gray-600"
+              >
+                {!podeAprender && !conhecida ? <LockKeyhole size={14} /> : <BookOpen size={14} />}
+                {isMestre ? (concedida ? 'Remover concessão' : 'Conceder') : (conhecida ? 'Já conhecida' : 'Aprender')}
+              </button>
+              {!isMestre && !avaliacao.permitido && !conhecida && <p className="mt-2 text-center text-[10px] leading-relaxed text-gray-600">{avaliacao.motivo}</p>}
+            </div>
+          ) : (
+            <div className="w-full space-y-2 md:w-48">
+              {magia.defesa && (
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500">
+                  Defesa do alvo, opcional
+                  <input
+                    type="number"
+                    min="1"
+                    value={defesasAlvo[magia.id] || ''}
+                    onChange={(event) => setDefesasAlvo((atual) => ({ ...atual, [magia.id]: event.target.value }))}
+                    placeholder={magia.defesa}
+                    className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none focus:border-sky-500/40"
+                  />
+                </label>
+              )}
+              <button
+                type="button"
+                onClick={() => void conjurar(magia)}
+                disabled={conjurandoId === magia.id}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-sky-500/30 bg-sky-500/10 px-4 py-2.5 text-xs font-bold text-sky-300 transition-colors hover:bg-sky-500/20 disabled:opacity-50"
+              >
+                <Dices size={14} /> {conjurandoId === magia.id ? 'Conjurando...' : 'Conjurar'}
+              </button>
+            </div>
+          )}
+        </div>
+      </article>
+    );
   };
 
   return (
     <div className="space-y-6">
-
-      {/* HEADER */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Cinzel, serif' }}>Magias</h2>
-          <p className="text-gray-400 text-sm">Lista de magias, milagres e feitiços conhecidos.</p>
+      <header className="rounded-2xl border border-white/5 bg-[#0f0e15] p-6">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <h2 className="flex items-center gap-2 text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>
+              <Sparkles className="text-sky-300" /> Magia e Fluxo
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-gray-400">
+              Fluxo mede sua capacidade de canalização. A fonte libera círculos e vagas; Misticismo acrescenta treinamento ao teste.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setMostrarCatalogo((valor) => !valor)}
+            className="rounded-xl border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-5 py-3 text-sm font-bold text-[#d7bb72] hover:bg-[#c7a44c]/20"
+          >
+            {mostrarCatalogo ? 'Voltar às conhecidas' : isMestre ? 'Abrir catálogo e concessões' : 'Aprender magia'}
+          </button>
         </div>
-        <div className="flex items-center gap-3 bg-[#15141b] border border-white/5 rounded-xl px-4 py-3">
-          <span className="text-3xl font-bold text-[#29b6f6]">{magias.length}</span>
-          <span className="text-sm text-gray-500 uppercase tracking-widest font-bold leading-tight">Magias<br />Conhecidas</span>
-        </div>
-      </div>
 
-      {/* FEEDBACK DE USO */}
-      {ultimoUsoMsg && (
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          className={`flex items-center gap-2 rounded-xl border px-4 py-3 text-sm font-bold ${
-            ultimoUsoMsg.tipo === 'sucesso'
-              ? 'bg-green-500/10 border-green-500/30 text-green-400'
-              : 'bg-red-500/10 border-red-500/30 text-red-400'
-          }`}
-        >
-          {ultimoUsoMsg.tipo === 'sucesso' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
-          {ultimoUsoMsg.texto}
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Fonte</span><strong className="mt-1 block text-sm text-white">{perfil.fontes.join(', ') || 'Nenhuma'}</strong></div>
+          <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Fluxo</span><strong className="mt-1 block text-sm text-white">{perfil.fluxo} ({formatarBonus(perfil.modificadorFluxo)})</strong></div>
+          <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Teste</span><strong className="mt-1 block text-sm text-sky-300">d20 {formatarBonus(perfil.bonusConjuracao)}</strong></div>
+          <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">DT de magia</span><strong className="mt-1 block text-sm text-sky-300">{perfil.dtMagia}</strong></div>
+          <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Círculo e vagas</span><strong className="mt-1 block text-sm text-white">{perfil.circuloMaximo || 0}º, {perfil.conhecidasIds.length}/{perfil.vagasConhecidas}</strong></div>
+        </div>
+
+        <div className="mt-3 flex flex-wrap items-center gap-3 rounded-xl border border-white/5 bg-black/20 px-4 py-3 text-xs text-gray-400">
+          <Shield size={15} className="text-emerald-300" />
+          <span>Mana {manaAtual}/{manaMaxima}</span>
+          <span>Fluxo libera até o {perfil.circuloDoFluxo || 0}º círculo.</span>
+          <span>Sua fonte libera até o {perfil.circuloDaFonte || 0}º.</span>
+        </div>
+      </header>
+
+      {mensagem && (
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className={`flex items-center gap-2 rounded-xl border px-4 py-3 text-sm font-bold ${mensagem.tipo === 'sucesso' ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300' : 'border-red-500/30 bg-red-500/10 text-red-300'}`}>
+          {mensagem.tipo === 'sucesso' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
+          {mensagem.texto}
         </motion.div>
       )}
 
-      {/* FERRAMENTAS */}
-      <div className="flex gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-          <input
-            type="text"
-            placeholder="Buscar magia..."
-            value={busca}
-            onChange={e => setBusca(e.target.value)}
-            className="w-full bg-[#0f0e15] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:border-[#29b6f6]/50 outline-none text-sm"
-          />
-        </div>
-        <button
-          onClick={abrirCriar}
-          className="px-6 py-3 rounded-xl border border-[#29b6f6]/30 text-[#29b6f6] font-bold text-sm hover:bg-[#29b6f6]/10 transition-colors border-dashed"
-        >
-          + Nova Magia
-        </button>
-      </div>
+      {concentracaoAtiva?.magiaId && (
+        <section className="flex flex-col gap-3 rounded-2xl border border-violet-500/30 bg-violet-500/10 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div><span className="text-[10px] font-bold uppercase tracking-widest text-violet-300">Concentração ativa</span><strong className="mt-1 block text-white">{concentracaoAtiva.titulo}</strong><p className="mt-1 text-xs text-gray-400">Ao sofrer dano, teste Vontade contra DT 10 ou metade do dano, o que for maior.</p></div>
+          <button type="button" onClick={encerrarConcentracao} className="flex items-center justify-center gap-2 rounded-xl border border-violet-500/30 px-4 py-2 text-xs font-bold text-violet-200"><X size={14} /> Encerrar</button>
+        </section>
+      )}
 
-      {/* LISTA */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4">
-        <Reorder.Group axis="y" values={magiasVisiveis} onReorder={handleReorder} className="flex flex-col gap-4">
-          {magiasVisiveis.map((m) => (
-            <Reorder.Item
-              value={m}
-              key={m.id}
-              className={`bg-[#121118] border ${m.favorito ? 'border-[#29b6f6]/50 shadow-[0_0_15px_rgba(41,182,246,0.15)]' : 'border-white/5 hover:border-[#29b6f6]/30'} rounded-xl p-5 transition-colors group relative`}
-            >
-              <div className="flex gap-4 items-start">
-                <div className="flex flex-col gap-2 items-center flex-shrink-0">
-                  <div className="flex gap-1 mb-1">
-                    <button onClick={() => toggleFavorito(m.id)} className={`transition-colors ${m.favorito ? 'text-[#29b6f6] drop-shadow-[0_0_8px_rgba(41,182,246,0.5)]' : 'text-gray-600 hover:text-gray-400'}`}>
-                      <Star size={16} fill={m.favorito ? 'currentColor' : 'none'} />
-                    </button>
-                    <div className="cursor-grab active:cursor-grabbing text-gray-600 hover:text-gray-400 p-0.5">
-                      <GripVertical size={16} />
-                    </div>
-                  </div>
-                  <div className={`w-10 h-10 rounded-full bg-black/50 border flex items-center justify-center ${m.favorito ? 'border-[#29b6f6]/50 text-[#29b6f6]' : 'border-white/5 text-[#29b6f6]'}`}>
-                    <Flame size={18} />
-                  </div>
-                </div>
-                
-                <div className="flex-1 min-w-0 pt-1">
-                  <div className="flex justify-between items-start gap-3">
-                    <h4 className="text-white font-bold text-lg mb-1">{m.nome || 'Magia Desconhecida'}</h4>
-                    <div className="flex items-center gap-1.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button
-                        onClick={() => abrirEditar(m)}
-                        title="Editar"
-                        className="w-7 h-7 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-colors"
-                      >
-                        <Pencil size={14} />
-                      </button>
-                      <button
-                        onClick={() => excluirMagia(m)}
-                        title="Excluir"
-                        className="w-7 h-7 rounded flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex gap-2 mb-3 flex-wrap">
-                    <span className={`text-[10px] px-2 py-0.5 rounded border font-bold tracking-wider uppercase ${CIRCULO_COLORS[m.circulo] || 'bg-black/40 border-white/5 text-gray-400'}`}>
-                      {m.circulo || '1º Círculo'}
-                    </span>
-                    <span className="text-[10px] px-2 py-0.5 bg-black/40 rounded border border-white/5 text-gray-400 uppercase tracking-wider font-bold">
-                      {m.escola || 'Universal'}
-                    </span>
-                    <span className="text-[10px] px-2 py-0.5 bg-[#29b6f6]/10 border border-[#29b6f6]/30 text-[#29b6f6] rounded font-bold uppercase tracking-wider">
-                      Custo: {formatarCusto(m.custo)}
-                    </span>
-                  </div>
-
-                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-gray-500 mb-3">
-                    {m.execucao && <span><span className="text-gray-600 font-bold uppercase">Execução:</span> {m.execucao}</span>}
-                    {m.alcance && <span><span className="text-gray-600 font-bold uppercase">Alcance:</span> {m.alcance}</span>}
-                  </div>
-
-                  <div className="flex justify-between items-center mt-2 pt-3 border-t border-white/5">
-                    <span className="text-sm text-gray-400 flex-1 pr-4 leading-relaxed">{m.efeito || 'Efeito principal da magia...'}</span>
-                    <button
-                      onClick={() => conjurarMagia(m)}
-                      className="px-4 py-2 rounded-lg bg-[#29b6f6]/10 border border-[#29b6f6]/30 text-[#29b6f6] hover:bg-[#29b6f6]/20 flex items-center gap-2 text-xs font-bold transition-all whitespace-nowrap hover:scale-105"
-                    >
-                      <Dices size={14} /> Conjurar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </Reorder.Item>
-          ))}
-          {magiasVisiveis.length === 0 && (
-            <div className="py-12 text-center">
-              <Flame size={48} className="text-gray-700 mx-auto mb-4 opacity-50" />
-              <p className="text-gray-500 font-bold uppercase tracking-widest">Nenhuma Magia Encontrada</p>
-            </div>
+      {mostrarCatalogo ? (
+        <section className="space-y-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+            <input value={busca} onChange={(event) => setBusca(event.target.value)} placeholder="Buscar por nome, círculo, tradição ou efeito" className="w-full rounded-xl border border-white/5 bg-[#0f0e15] py-3 pl-10 pr-4 text-sm text-white outline-none focus:border-sky-500/40" />
+          </div>
+          <div className="space-y-3">{catalogoVisivel.map((magia) => renderMagia(magia, true))}</div>
+        </section>
+      ) : (
+        <section className="space-y-4">
+          <div className="flex items-center justify-between"><h3 className="font-bold text-white">Magias conhecidas</h3><span className="text-xs text-gray-500">{magiasConhecidas.length} oficiais</span></div>
+          {magiasConhecidas.length > 0 ? <div className="space-y-3">{magiasConhecidas.map((magia) => renderMagia(magia))}</div> : (
+            <div className="rounded-2xl border border-dashed border-white/10 bg-[#0f0e15] py-14 text-center"><Flame size={42} className="mx-auto mb-3 text-gray-700" /><p className="font-bold text-gray-500">Nenhuma magia oficial conhecida</p><p className="mt-2 text-xs text-gray-600">{perfil.possuiFonte ? 'Use Aprender magia para preencher as vagas liberadas.' : 'Uma classe, habilidade ou concessão do Mestre precisa fornecer acesso.'}</p></div>
           )}
-        </Reorder.Group>
-      </div>
+        </section>
+      )}
 
-      {/* MODAL DE CRIAR/EDITAR */}
-      <FichaModal isOpen={modalAberto} onClose={fecharModal} title={editandoId ? 'Editar Magia' : 'Nova Magia'}>
-        <div className="flex flex-col gap-4">
-          <LabeledInput
-            label="Nome"
-            value={form.nome}
-            placeholder="Ex: Bola de Fogo"
-            onChange={(v: string) => setForm({ ...form, nome: v })}
-          />
-
-          <div className="grid grid-cols-2 gap-4">
-            <LabeledModalSelect
-              label="Círculo"
-              value={form.circulo}
-              options={CIRCULOS}
-              onChange={(v: string) => setForm({ ...form, circulo: v })}
-            />
-            <LabeledInput
-              label="Escola"
-              value={form.escola}
-              placeholder="Ex: Evocação"
-              onChange={(v: string) => setForm({ ...form, escola: v })}
-            />
+      {magiasAntigas.length > 0 && !mostrarCatalogo && (
+        <section className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-5">
+          <h3 className="flex items-center gap-2 font-bold text-amber-200"><AlertCircle size={17} /> Registros anteriores</h3>
+          <p className="mt-2 text-xs leading-relaxed text-gray-400">Estas anotações foram preservadas, mas não usam custos, círculos ou testes oficiais. O Mestre pode conceder a versão correspondente pelo catálogo.</p>
+          <div className="mt-4 grid gap-3 md:grid-cols-2">
+            {magiasAntigas.map((magia, indice) => <article key={magia.id || `${magia.nome}:${indice}`} className="rounded-xl border border-white/5 bg-black/20 p-4"><strong className="text-white">{magia.nome || 'Magia sem nome'}</strong><p className="mt-1 text-[11px] text-gray-500">{magia.circulo || 'Sem círculo'} | {magia.escola || 'Sem tradição'}</p><p className="mt-2 text-xs text-gray-400">{magia.efeito || 'Sem efeito registrado.'}</p></article>)}
           </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <LabeledModalSelect
-              label="Recurso do Custo"
-              value={form.custoRecurso}
-              options={RECURSO_OPTIONS}
-              onChange={(v: string) => setForm({ ...form, custoRecurso: v as RecursoCusto })}
-            />
-            <LabeledInput
-              label="Valor do Custo"
-              value={form.custoValor}
-              placeholder="0"
-              onChange={(v: string) => setForm({ ...form, custoValor: v.replace(/[^0-9]/g, '') })}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <LabeledInput
-              label="Execução"
-              value={form.execucao}
-              placeholder="Ex: Padrão, Reação..."
-              onChange={(v: string) => setForm({ ...form, execucao: v })}
-            />
-            <LabeledInput
-              label="Alcance"
-              value={form.alcance}
-              placeholder="Ex: Curto, 9m..."
-              onChange={(v: string) => setForm({ ...form, alcance: v })}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Efeito</label>
-            <textarea
-              value={form.efeito}
-              onChange={(e) => setForm({ ...form, efeito: e.target.value })}
-              placeholder="Descreva o efeito da magia..."
-              className="bg-[#121118] border border-white/5 rounded-md p-3 text-sm text-gray-300 min-h-[100px] resize-none focus:outline-none focus:border-[#c7a44c]/50 transition-colors placeholder:text-gray-700"
-            />
-          </div>
-
-          {erroForm && <p className="text-xs text-red-400 font-bold">{erroForm}</p>}
-
-          <div className="flex justify-end gap-3 pt-2">
-            <button
-              onClick={fecharModal}
-              className="px-4 py-2 rounded-lg border border-white/10 text-gray-400 hover:text-white hover:border-white/30 text-sm font-bold transition-colors"
-            >
-              Cancelar
-            </button>
-            <button
-              onClick={salvarMagia}
-              className="px-4 py-2 rounded-lg bg-[#c7a44c]/20 border border-[#c7a44c]/40 text-[#c7a44c] hover:bg-[#c7a44c]/30 text-sm font-bold transition-colors"
-            >
-              {editandoId ? 'Salvar Alterações' : 'Criar Magia'}
-            </button>
-          </div>
-        </div>
-      </FichaModal>
+        </section>
+      )}
     </div>
   );
 };

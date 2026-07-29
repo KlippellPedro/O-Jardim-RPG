@@ -17,6 +17,7 @@ def test_carrega_todas_as_categorias():
     assert nav.classes, "classes vazia"
     assert nav.pericias, "pericias vazia"
     assert nav.legados, "legados vazia (base + novos)"
+    assert len(nav.magias) == 28
     assert nav.fundamentos, "nenhuma seção de fundamentos"
 
 
@@ -64,3 +65,10 @@ def test_fundamentos_tem_titulo_e_texto():
     secao = nav.fundamentos[0]
     assert secao["titulo"] and secao["texto"]
     assert nav.item("fundamentos", secao["id"]) == secao
+
+
+def test_magias_podem_ser_navegadas_e_buscadas():
+    nav = Navegacao()
+    magia = nav.item("magias", "projetil-elemental")
+    assert magia["custo_mana"] == 2
+    assert nav.buscar_item("Projétil Elemental")[0] == ("magias", magia)

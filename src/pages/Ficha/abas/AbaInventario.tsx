@@ -7,6 +7,8 @@ import { createManualItemId } from '../../../services/economyOperations';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput } from '../components/SharedFichaComponents';
 import { Select } from '../../../components/ui/Select';
+import { formatarCritico, normalizarCriticoBalanceado } from '../../../services/criticalService';
+import { resumirEquipamentos } from '../../../services/equipamentoService';
 import {
   getCurrencySymbol,
   getCurrencyTheme,
@@ -42,6 +44,8 @@ interface IInventoryItem {
 
   // Específicos
   dano?: string;
+  margemAmeaca?: number;
+  multiplicadorCritico?: number;
   municaoAtual?: number;
   municaoMaxima?: number;
   defesa?: number;
@@ -91,6 +95,11 @@ const paraBackend = (item: IInventoryItem) => ({
     modificacoes: item.modificacoes,
 
     dano: item.dano,
+    margem_ameaca: item.margemAmeaca,
+    multiplicador_critico: item.multiplicadorCritico,
+    critico: item.categoria === 'arma'
+      ? formatarCritico(item.margemAmeaca, item.multiplicadorCritico)
+      : item._dadosOriginais.critico,
     municaoAtual: item.municaoAtual,
     municaoMaxima: item.municaoMaxima,
     defesa: item.defesa,
@@ -119,10 +128,12 @@ const paraUI = (item: any, index: number): IInventoryItem => ({
   modificacoes: item.dados?.modificacoes || [],
 
   dano: item.dados?.dano || '',
-  municaoAtual: item.dados?.municaoAtual || 0,
-  municaoMaxima: item.dados?.municaoMaxima || 0,
-  defesa: item.dados?.defesa || 0,
-  penalidade: item.dados?.penalidade || 0,
+  margemAmeaca: Number(item.dados?.margem_ameaca ?? item.dados?.margemAmeaca ?? 20),
+  multiplicadorCritico: Number(item.dados?.multiplicador_critico ?? item.dados?.multiplicadorCritico ?? 2),
+  municaoAtual: Number(item.dados?.municaoAtual ?? item.dados?.municao_atual) || 0,
+  municaoMaxima: Number(item.dados?.municaoMaxima ?? item.dados?.municao_maxima) || 0,
+  defesa: Number(item.dados?.defesa ?? String(item.dados?.bonus || '').replace('+', '')) || 0,
+  penalidade: Number(item.dados?.penalidade) || 0,
   combustivelAtual: item.dados?.combustivelAtual || 0,
   combustivelMaximo: item.dados?.combustivelMaximo || 0,
   efeito: item.dados?.efeito || '',
@@ -145,6 +156,8 @@ const ITEM_VAZIO: Omit<IInventoryItem, 'id'> = {
   durabilidadeAtual: 10,
   durabilidadeMaxima: 10,
   modificacoes: [],
+  margemAmeaca: 20,
+  multiplicadorCritico: 2,
   ordem: 0,
   _dadosOriginais: {},
 };
@@ -168,6 +181,7 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
   const inventario: IInventoryItem[] = (character.inventarioCentral || [])
     .map(paraUI)
     .sort((a: IInventoryItem, b: IInventoryItem) => a.ordem - b.ordem);
+  const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], character.ficha || {});
 
   const carteiraSalva: { moeda: string; saldo: number; simbolo?: string }[] =
     character.carteira?.length ? character.carteira : [{ moeda: 'Lunaris', saldo: 0 }];
@@ -239,6 +253,7 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
       ? itemAtual.quantidade
       : quantidadeInformada;
 
+    const critico = normalizarCriticoBalanceado(form.margemAmeaca, form.multiplicadorCritico);
     const normalizado: IInventoryItem = {
       id: editandoId || createManualItemId(),
       nome: form.nome.trim(),
@@ -256,6 +271,8 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
       modificacoes: form.modificacoes,
 
       dano: form.dano,
+      margemAmeaca: critico.margemAmeaca,
+      multiplicadorCritico: critico.multiplicadorCritico,
       municaoAtual: Number(form.municaoAtual) || 0,
       municaoMaxima: Number(form.municaoMaxima) || 0,
       defesa: Number(form.defesa) || 0,
@@ -412,8 +429,11 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
 
           <div className="mt-6 flex justify-between text-sm">
             <span className="text-gray-400 font-bold uppercase tracking-widest">Carga Atual</span>
-            <span className="text-white font-mono">{espacosUsados.toFixed(1)} <span className="text-gray-500 text-xs">ESPAÇOS USADOS</span></span>
+            <span className={`font-mono ${resumoEquipamento.sobrecarregado ? 'text-red-400' : 'text-white'}`}>{espacosUsados.toFixed(1)} / {resumoEquipamento.capacidade} <span className="text-gray-500 text-xs">ESPAÇOS</span></span>
           </div>
+          <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-gray-400"><span>Defesa equipada: <strong className="text-sky-300">+{resumoEquipamento.defesaEquipamento}</strong></span><span>Penalidade: <strong className="text-orange-300">-{resumoEquipamento.penalidadeArmadura}</strong></span></div>
+          {resumoEquipamento.sobrecarregado && <p className="mt-2 text-xs font-bold text-red-300">Sobrecarregado: movimento reduzido em 3 m e desvantagem em testes físicos.</p>}
+          {resumoEquipamento.conflitos.map((conflito) => <p key={conflito} className="mt-1 text-xs text-amber-300">{conflito}</p>)}
         </div>
 
         <div className="md:col-span-2 bg-[#0f0e15] border border-white/5 rounded-2xl p-4 flex flex-col gap-3">
@@ -614,6 +634,11 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
                           ) : null}
 
                           {item.dano && <div className="text-xs text-gray-300 bg-black/30 border border-white/5 px-2 py-1 rounded">Dano: <span className="font-mono text-[#c7a44c]">{item.dano}</span></div>}
+                          {item.categoria === 'arma' && (
+                            <div className="text-xs text-gray-300 bg-black/30 border border-yellow-500/20 px-2 py-1 rounded">
+                              Crítico: <span className="font-mono text-yellow-400">{formatarCritico(item.margemAmeaca, item.multiplicadorCritico)}</span>
+                            </div>
+                          )}
                           {item.defesa != null && item.defesa > 0 && <div className="text-xs text-gray-300 bg-black/30 border border-white/5 px-2 py-1 rounded">Defesa: <span className="font-mono text-blue-400">+{item.defesa}</span></div>}
                         </div>
 
@@ -715,10 +740,34 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
 
           {/* CAMPOS ESPECÍFICOS */}
           {form.categoria === 'arma' && (
-            <div className="border-t border-white/5 pt-4 grid grid-cols-3 gap-3">
+            <div className="border-t border-white/5 pt-4 grid grid-cols-2 md:grid-cols-5 gap-3">
               <LabeledInput label="Dano" value={form.dano || ''} placeholder="Ex.: 1d8+2" onChange={(v: string) => setCampo('dano', v)} />
               <LabeledInput label="Munição Atual" value={String(form.municaoAtual ?? '')} onChange={(v: string) => setCampo('municaoAtual', v)} />
               <LabeledInput label="Munição Máx." value={String(form.municaoMaxima ?? '')} onChange={(v: string) => setCampo('municaoMaxima', v)} />
+              <div>
+                <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1 block">Margem</label>
+                <Select
+                  value={String(form.margemAmeaca ?? 20)}
+                  onChange={(v) => setForm((prev) => ({
+                    ...prev,
+                    margemAmeaca: Number(v),
+                    multiplicadorCritico: v === '20' ? prev.multiplicadorCritico : 2,
+                  }))}
+                  options={['20', '19', '18'].map((value) => ({ value, label: value === '20' ? '20' : `${value}-20` }))}
+                />
+              </div>
+              <div>
+                <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1 block">Crítico</label>
+                <Select
+                  value={String(form.multiplicadorCritico ?? 2)}
+                  onChange={(v) => setForm((prev) => ({
+                    ...prev,
+                    multiplicadorCritico: Number(v),
+                    margemAmeaca: v === '2' ? prev.margemAmeaca : 20,
+                  }))}
+                  options={['2', '3', '4'].map((value) => ({ value, label: `x${value}` }))}
+                />
+              </div>
             </div>
           )}
 

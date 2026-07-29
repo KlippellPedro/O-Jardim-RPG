@@ -2,13 +2,19 @@ from __future__ import annotations
 
 import json
 import logging
+import re
+import unicodedata
 from pathlib import Path
 
 
 log = logging.getLogger("jardim-plataforma")
 
-_NOMES: dict[str, dict[str, str]] = {"raca": {}, "classe": {}}
-_CATALOGO: dict[str, dict[str, dict]] = {"raca": {}, "classe": {}}
+_NOMES: dict[str, dict[str, str]] = {"raca": {}, "classe": {}, "pericia": {}, "legado": {}, "magia": {}}
+_CATALOGO: dict[str, dict[str, dict]] = {"raca": {}, "classe": {}, "pericia": {}, "legado": {}, "magia": {}}
+_ATRIBUTOS = ("forca", "destreza", "constituicao", "inteligencia", "sabedoria", "carisma", "fluxo")
+_VALORES_PADRAO = sorted((15, 14, 13, 12, 10, 8, 8))
+_GRAUS = ("iniciante", "aprendiz", "treinado", "especialista", "mestre", "veterano", "renomado")
+_NIVEL_MINIMO_GRAU = (1, 1, 3, 7, 13, 19, 29)
 
 
 def carregar_catalogos(data_root: Path) -> None:
@@ -42,6 +48,52 @@ def carregar_catalogos(data_root: Path) -> None:
             for item in itens
             if isinstance(item, dict) and item.get("id")
         }
+
+    caminho_pericias = data_root / "ficha" / "pericias.json"
+    try:
+        documento = json.loads(caminho_pericias.read_text(encoding="utf-8"))
+        pericias = documento.get("pericias", []) if isinstance(documento, dict) else []
+        _NOMES["pericia"] = {
+            str(item.get("id")): str(item.get("titulo") or item.get("id"))
+            for item in pericias
+            if isinstance(item, dict) and item.get("id")
+        }
+        _CATALOGO["pericia"] = {
+            str(item.get("id")): item
+            for item in pericias
+            if isinstance(item, dict) and item.get("id")
+        }
+    except (OSError, json.JSONDecodeError, AttributeError):
+        log.exception("Falha ao ler catalogo de pericias em %s", caminho_pericias)
+
+    legados: list[dict] = []
+    for arquivo, chave in (("legados.json", "legados"), ("legados-novos.json", "novos")):
+        caminho = data_root / "ficha" / arquivo
+        try:
+            documento = json.loads(caminho.read_text(encoding="utf-8"))
+            encontrados = documento.get(chave, []) if isinstance(documento, dict) else []
+            legados.extend(item for item in encontrados if isinstance(item, dict) and item.get("id"))
+        except (OSError, json.JSONDecodeError, AttributeError):
+            log.exception("Falha ao ler catalogo de legados em %s", caminho)
+    _NOMES["legado"] = {str(item["id"]): str(item.get("titulo") or item["id"]) for item in legados}
+    _CATALOGO["legado"] = {str(item["id"]): item for item in legados}
+
+    caminho_magias = data_root / "ficha" / "magias.json"
+    try:
+        documento = json.loads(caminho_magias.read_text(encoding="utf-8"))
+        magias = documento.get("magias", []) if isinstance(documento, dict) else []
+        _NOMES["magia"] = {
+            str(item.get("id")): str(item.get("titulo") or item.get("id"))
+            for item in magias
+            if isinstance(item, dict) and item.get("id")
+        }
+        _CATALOGO["magia"] = {
+            str(item.get("id")): item
+            for item in magias
+            if isinstance(item, dict) and item.get("id")
+        }
+    except (OSError, json.JSONDecodeError, AttributeError):
+        log.exception("Falha ao ler catalogo de magias em %s", caminho_magias)
 
 
 def _compativel_com_arvore(tipo: str, item_id, arvore_id, liberados: list) -> str | None:
@@ -80,6 +132,505 @@ def validar_arvore_raca_classe(arvore_id, raca_id, classe_id, configuracoes: dic
     if erro:
         return erro
     return _compativel_com_arvore("classe", classe_id, arvore_id, config.get("classes_liberadas") or [])
+
+
+def _inteiro(valor) -> int | None:
+    if isinstance(valor, bool):
+        return None
+    try:
+        numero = int(valor)
+    except (TypeError, ValueError, OverflowError):
+        return None
+    return numero if str(valor).strip() == str(numero) or isinstance(valor, int) else None
+
+
+def _classes_da_ficha(ficha: dict) -> list[dict]:
+    bruto = ficha.get("classes")
+    if not isinstance(bruto, list) or not bruto:
+        classe_id = ficha.get("classeId")
+        return [{"classeId": classe_id, "nivel": ficha.get("nivel", 1)}] if classe_id else []
+    return [item for item in bruto if isinstance(item, dict)]
+
+
+def _nivel_por_xp(xp: int) -> int:
+    nivel = 1
+    for candidato in range(2, 41):
+        if xp < 500 * candidato * (candidato - 1):
+            break
+        nivel = candidato
+    return nivel
+
+
+def _graus_de_treinamento(classes: list[tuple[dict, int]]) -> int:
+    total = 0
+    for classe, nivel in classes:
+        for marco in classe.get("progressao") or []:
+            if not isinstance(marco, dict) or _inteiro(marco.get("nivel")) is None:
+                continue
+            if int(marco["nivel"]) > nivel:
+                continue
+            for recompensa in marco.get("recompensas") or []:
+                if isinstance(recompensa, dict) and recompensa.get("tipo") == "grau_pericia":
+                    total += max(1, _inteiro(recompensa.get("quantidade")) or 1)
+    return total
+
+
+def _vagas_poder(classe: dict, nivel: int) -> int:
+    return sum(
+        1
+        for marco in classe.get("progressao") or []
+        if isinstance(marco, dict) and (_inteiro(marco.get("nivel")) or 99) <= nivel
+        for recompensa in marco.get("recompensas") or []
+        if isinstance(recompensa, dict) and recompensa.get("tipo") == "poder"
+    )
+
+
+def _indice_grau(grau) -> int:
+    try:
+        return _GRAUS.index(str(grau).lower())
+    except ValueError:
+        return -1
+
+
+def _atende_requisito_legado(requisito, ficha: dict, nivel_total: int) -> bool:
+    if not isinstance(requisito, dict):
+        return True
+    alternativas = requisito.get("ou")
+    if isinstance(alternativas, list):
+        return any(_atende_requisito_legado(item, ficha, nivel_total) for item in alternativas)
+    minimo_nivel = _inteiro(requisito.get("nivel_personagem"))
+    if minimo_nivel is not None and nivel_total < minimo_nivel:
+        return False
+    atributo = requisito.get("atributo")
+    if atributo:
+        finais = ficha.get("atributosFinais") if isinstance(ficha.get("atributosFinais"), dict) else {}
+        if (_inteiro(finais.get(str(atributo).lower())) or 0) < (_inteiro(requisito.get("valor_minimo")) or 0):
+            return False
+    pericia = requisito.get("pericia")
+    if pericia:
+        pericias = ficha.get("pericias") if isinstance(ficha.get("pericias"), dict) else {}
+        if _indice_grau(pericias.get(str(pericia))) < _indice_grau(requisito.get("nivel")):
+            return False
+    return True
+
+
+def _normalizar_texto(valor) -> str:
+    return "".join(
+        caractere for caractere in unicodedata.normalize("NFD", str(valor or "").lower().strip())
+        if unicodedata.category(caractere) != "Mn"
+    )
+
+
+def _atende_requisito_poder(requisito, classe: dict, nivel: int, ficha: dict, ids_selecionados: set[str]) -> bool:
+    texto = str(requisito or "").strip()
+    por_nivel = re.search(r"n[ií]vel\s+(\d+)(?:\s+de\s+(.+))?", texto, re.IGNORECASE)
+    if por_nivel:
+        nome = _normalizar_texto(por_nivel.group(2) or classe.get("titulo"))
+        corresponde = nome in {_normalizar_texto(classe.get("id")), _normalizar_texto(classe.get("titulo"))}
+        return not corresponde or nivel >= int(por_nivel.group(1))
+    por_atributo = re.match(r"^(for[cç]a|destreza|constitui[cç][aã]o|intelig[eê]ncia|sabedoria|carisma|fluxo)\s+(\d+)$", texto, re.IGNORECASE)
+    if por_atributo:
+        finais = ficha.get("atributosFinais") if isinstance(ficha.get("atributosFinais"), dict) else {}
+        return (_inteiro(finais.get(_normalizar_texto(por_atributo.group(1)))) or 0) >= int(por_atributo.group(2))
+    por_estagio = re.match(r"^(.+?)\s+(\d+)$", texto)
+    if por_estagio:
+        habilidade = next((item for item in classe.get("habilidades") or [] if _normalizar_texto(item.get("titulo")) == _normalizar_texto(por_estagio.group(1))), None)
+        liberados = sum(1 for marco in (habilidade.get("niveis") or []) if (_inteiro(marco) or 99) <= nivel) if habilidade else 0
+        return habilidade is not None and liberados >= int(por_estagio.group(2))
+    poder = next((item for item in classe.get("poderes") or [] if _normalizar_texto(item.get("titulo")) == _normalizar_texto(texto)), None)
+    return bool(poder and str(poder.get("id")) in ids_selecionados)
+
+
+def _validar_escolhas_progressao(ficha: dict, anterior: dict, classes: list[tuple[dict, int]], nivel_total: int, raca: dict) -> str | None:
+    escolha_racial = ficha.get("escolhaRacial") if isinstance(ficha.get("escolhaRacial"), dict) else {}
+    fragmentos = {str(item.get("id")): item for item in raca.get("fragmentos") or [] if isinstance(item, dict) and item.get("id")}
+    conhecidos = escolha_racial.get("fragmentosConhecidosIds") or []
+    expressos = escolha_racial.get("fragmentosExpressosIds") or []
+    if any(not isinstance(lista, list) for lista in (conhecidos, expressos)):
+        return "fragmentos raciais devem ser listas de ids"
+    max_conhecidos = max(0, _inteiro((raca.get("fragmentos_config") or {}).get("conhecidos_maximo")) or 0)
+    max_expressos = max(0, _inteiro((raca.get("fragmentos_config") or {}).get("expressos")) or 0)
+    if any(not isinstance(item, str) for item in conhecidos + expressos):
+        return "fragmentos raciais devem conter apenas ids"
+    if len(conhecidos) != len(set(conhecidos)) or len(conhecidos) > max_conhecidos or any(item not in fragmentos for item in conhecidos):
+        return "fragmentos conhecidos excedem o limite racial ou contem id invalido"
+    if len(expressos) != len(set(expressos)) or len(expressos) > max_expressos or any(item not in conhecidos for item in expressos):
+        return "fragmentos expressos devem estar entre os conhecidos e respeitar o limite racial"
+
+    modificacoes_catalogo = {str(item.get("id")): item for item in raca.get("modificacoes") or [] if isinstance(item, dict) and item.get("id")}
+    modificacoes = escolha_racial.get("modificacoesIds") or []
+    if not isinstance(modificacoes, list) or any(not isinstance(item, str) for item in modificacoes) or len(modificacoes) != len(set(modificacoes)):
+        return "modificacoes raciais devem ser uma lista sem ids repetidos"
+    capacidade_config = raca.get("capacidade_modificacoes") or {}
+    capacidade = max(0, _inteiro(capacidade_config.get("base")) or 0) + nivel_total // max(1, _inteiro(capacidade_config.get("nivel_por_slot")) or 2)
+    if len(modificacoes) > capacidade or any(item not in modificacoes_catalogo for item in modificacoes):
+        return "modificacoes instaladas excedem a capacidade racial ou contem id invalido"
+    postura = escolha_racial.get("varianteId")
+    candidatas = [modificacoes_catalogo[item] for item in modificacoes]
+    if any(nivel_total < max(1, _inteiro(item.get("nivel_minimo")) or 1) for item in candidatas):
+        return "o nivel total ainda nao permite uma modificacao instalada"
+    if any(item.get("postura_exigida") and item.get("postura_exigida") != postura for item in candidatas):
+        return "uma modificacao instalada exige outro chassi ou postura"
+    passivas = sum(1 for item in candidatas if item.get("categoria") == "passiva")
+    if any(item.get("categoria") == "ativa" and passivas < max(0, _inteiro(item.get("passivas_exigidas")) or 0) for item in candidatas):
+        return "uma modificacao ativa exige mais modificacoes passivas"
+
+    selecoes = ficha.get("poderesClasseSelecionados") or []
+    if not isinstance(selecoes, list):
+        return "poderesClasseSelecionados deve ser uma lista"
+    referencias = {str(classe.get("id")): (classe, nivel) for classe, nivel in classes}
+    ids_selecionados = {
+        str(item.get("poderId"))
+        for item in selecoes
+        if isinstance(item, dict) and item.get("poderId")
+    }
+    contagem: dict[str, int] = {}
+    repeticoes: dict[tuple[str, str], int] = {}
+    for selecao in selecoes:
+        if not isinstance(selecao, dict):
+            return "selecao de poder de classe invalida"
+        classe_id = str(selecao.get("classeId") or "")
+        poder_id = str(selecao.get("poderId") or "")
+        referencia = referencias.get(classe_id)
+        poder = next((item for item in (referencia[0].get("poderes") or []) if str(item.get("id")) == poder_id), None) if referencia else None
+        if not referencia or not isinstance(poder, dict):
+            return "a ficha contem um poder que nao pertence a uma classe adquirida"
+        contagem[classe_id] = contagem.get(classe_id, 0) + 1
+        chave = (classe_id, poder_id)
+        repeticoes[chave] = repeticoes.get(chave, 0) + 1
+        limite = max(1, _inteiro(poder.get("limite")) or (99 if poder.get("repetivel") else 1))
+        if repeticoes[chave] > limite:
+            return "um poder de classe foi escolhido mais vezes que o permitido"
+        if not all(_atende_requisito_poder(item, referencia[0], referencia[1], ficha, ids_selecionados) for item in poder.get("pre_requisitos") or []):
+            return "a ficha nao atende aos pre-requisitos de um poder de classe"
+    for classe_id, quantidade in contagem.items():
+        classe, nivel = referencias[classe_id]
+        if quantidade > _vagas_poder(classe, nivel):
+            return "a ficha possui mais poderes de classe do que as vagas liberadas"
+
+    selecionados = ficha.get("legadosSelecionados") or []
+    if not isinstance(selecionados, list) or any(not isinstance(item, str) for item in selecionados):
+        return "legadosSelecionados deve ser uma lista de ids"
+    vagas = nivel_total // 5 + max(0, _inteiro(raca.get("legados_adicionais")) or 0)
+    if len(selecionados) > vagas:
+        return "a ficha possui mais Legados do que os marcos liberados"
+    contagem_legados: dict[str, int] = {}
+    for legado_id in selecionados:
+        legado = _CATALOGO["legado"].get(legado_id)
+        if not legado:
+            return "a ficha contem um Legado inexistente"
+        contagem_legados[legado_id] = contagem_legados.get(legado_id, 0) + 1
+        limite = max(1, _inteiro(legado.get("limite")) or (2 if legado.get("repetivel") else 1))
+        if contagem_legados[legado_id] > limite:
+            return "um Legado foi escolhido mais vezes que o permitido"
+        if not all(_atende_requisito_legado(item, ficha, nivel_total) for item in legado.get("pre_requisitos") or []):
+            return "a ficha nao atende aos pre-requisitos de um Legado escolhido"
+
+    if anterior:
+        poderes_anteriores = anterior.get("poderesClasseSelecionados") or []
+        legados_anteriores = anterior.get("legadosSelecionados") or []
+        if any(item not in selecoes for item in poderes_anteriores if isinstance(item, dict)):
+            return "poderes de classe adquiridos so podem ser removidos pelo mestre"
+        if any(selecionados.count(item) < legados_anteriores.count(item) for item in set(legados_anteriores)):
+            return "Legados adquiridos so podem ser removidos pelo mestre"
+    return None
+
+
+def _fluxo_efetivo(ficha: dict, raca: dict) -> int:
+    finais = ficha.get("atributosFinais") if isinstance(ficha.get("atributosFinais"), dict) else {}
+    valor = _inteiro(finais.get("fluxo")) or 1
+    ajuste = _inteiro((raca.get("ajustes_atributos") or {}).get("fluxo")) or 0
+    escolha = ficha.get("escolhaRacial") if isinstance(ficha.get("escolhaRacial"), dict) else {}
+    variante_id = escolha.get("varianteId")
+    for colecao in ("variantes", "linhagens", "condicoes_ancestrais"):
+        opcao = next(
+            (
+                item for item in raca.get(colecao) or []
+                if isinstance(item, dict) and str(item.get("id")) == str(variante_id)
+            ),
+            None,
+        )
+        if opcao:
+            ajuste += _inteiro((opcao.get("ajustes_atributos") or {}).get("fluxo")) or 0
+            break
+    configuracao = raca.get("escolha_atributos") if isinstance(raca.get("escolha_atributos"), dict) else {}
+    campo = str(configuracao.get("campo") or "atributosRaciais")
+    escolhas = escolha.get(campo) if isinstance(escolha.get(campo), list) else []
+    total = max(0, _inteiro(configuracao.get("total")) or 0)
+    escolhas_unicas = list(dict.fromkeys(item for item in escolhas if isinstance(item, str)))
+    if "fluxo" in escolhas_unicas[:total]:
+        ajuste += _inteiro(configuracao.get("bonus_por_escolha")) or 0
+    limite = _inteiro((raca.get("limites_atributos") or {}).get("fluxo"))
+    if limite is not None and ajuste > 0:
+        ajuste = min(ajuste, max(0, limite - valor))
+    return max(1, valor + ajuste)
+
+
+def _circulo_por_fluxo(fluxo: int) -> int:
+    if fluxo >= 18:
+        return 5
+    if fluxo >= 16:
+        return 4
+    if fluxo >= 14:
+        return 3
+    if fluxo >= 12:
+        return 2
+    return 1 if fluxo >= 8 else 0
+
+
+def _validar_magias(
+    ficha: dict,
+    anterior: dict,
+    classes: list[tuple[dict, int]],
+    raca: dict,
+    *,
+    criacao: bool,
+) -> str | None:
+    conhecidas = ficha.get("magiasConhecidasIds") or []
+    concedidas = ficha.get("magiasConcedidasIds") or []
+    if not isinstance(conhecidas, list) or any(not isinstance(item, str) for item in conhecidas):
+        return "magiasConhecidasIds deve ser uma lista de ids"
+    if not isinstance(concedidas, list) or any(not isinstance(item, str) for item in concedidas):
+        return "magiasConcedidasIds deve ser uma lista de ids"
+    if len(conhecidas) != len(set(conhecidas)) or len(concedidas) != len(set(concedidas)):
+        return "magias conhecidas e concedidas nao podem repetir ids"
+    if any(item not in _CATALOGO["magia"] for item in conhecidas + concedidas):
+        return "a ficha contem uma magia inexistente"
+
+    circulo_fonte = 0
+    vagas = 0
+    tradicoes: set[str] = set()
+    for classe, nivel in classes:
+        fonte = classe.get("progressao_magia") if isinstance(classe.get("progressao_magia"), dict) else {}
+        marcos = [
+            marco for marco in fonte.get("marcos") or []
+            if isinstance(marco, dict) and (_inteiro(marco.get("nivel")) or 99) <= nivel
+        ]
+        if not marcos:
+            continue
+        marco = max(marcos, key=lambda item: _inteiro(item.get("nivel")) or 0)
+        circulo_fonte = max(circulo_fonte, _inteiro(marco.get("circulo")) or 0)
+        vagas += max(0, _inteiro(marco.get("vagas")) or 0)
+        tradicoes.update(str(item) for item in fonte.get("tradicoes") or [])
+
+    if len(conhecidas) > vagas:
+        return "a ficha possui mais magias conhecidas do que as vagas liberadas"
+    circulo_fluxo = _circulo_por_fluxo(_fluxo_efetivo(ficha, raca))
+    for magia_id in conhecidas:
+        magia = _CATALOGO["magia"][magia_id]
+        circulo = _inteiro(magia.get("circulo"))
+        if circulo is None or magia.get("somente_mestre"):
+            return "rituais e magias especiais precisam ser concedidos pelo mestre"
+        if circulo > circulo_fonte:
+            return "a fonte de magia ainda nao libera o circulo escolhido"
+        if circulo > circulo_fluxo:
+            return "Fluxo insuficiente para o circulo de uma magia conhecida"
+        if str(magia.get("tradicao")) not in tradicoes:
+            return "a fonte da ficha nao ensina a tradicao de uma magia conhecida"
+
+    if criacao and (conhecidas or concedidas or ficha.get("magias")):
+        return "a criacao comum nao comeca com magias"
+    if anterior:
+        anteriores = anterior.get("magiasConhecidasIds") or []
+        if any(item not in conhecidas for item in anteriores if isinstance(item, str)):
+            return "magias aprendidas so podem ser removidas pelo mestre"
+        if concedidas != (anterior.get("magiasConcedidasIds") or []):
+            return "somente o mestre pode alterar magias concedidas"
+        if ficha.get("magias") != anterior.get("magias"):
+            return "somente o mestre pode alterar registros antigos de magia"
+    return None
+
+
+def validar_regras_ficha(
+    ficha: dict,
+    configuracoes: dict | None,
+    *,
+    criacao: bool = False,
+    ficha_anterior: dict | None = None,
+) -> str | None:
+    """Valida as regras publicadas para fichas de jogadores comuns.
+
+    Mestre e assistente continuam podendo preparar NPCs e excecoes narrativas;
+    essa decisao de permissao fica no router, nao no cliente.
+    """
+    if not isinstance(ficha, dict):
+        return "ficha invalida"
+    anterior = ficha_anterior if isinstance(ficha_anterior, dict) else {}
+    config = configuracoes or {}
+    arvore_id = ficha.get("arvoreId")
+    raca_id = str(ficha.get("racaId") or "")
+    raca = _CATALOGO["raca"].get(raca_id)
+    if not raca:
+        return "raca inexistente no catalogo oficial"
+    if criacao and raca.get("categoria") != "padrao":
+        return "a criacao deve comecar com uma raca comum"
+    erro = _compativel_com_arvore("raca", raca_id, arvore_id, config.get("racas_liberadas") or [])
+    if erro:
+        return erro
+
+    for campo in ("arvoreId", "racaId", "metodoAtributos"):
+        if not criacao and campo in anterior and ficha.get(campo) != anterior.get(campo):
+            return f"jogador nao pode alterar {campo} depois da criacao"
+    for campo in ("proficiencias", "resistenciasTexto"):
+        if not criacao and ficha.get(campo) != anterior.get(campo):
+            return f"somente o mestre pode alterar {campo}"
+    if not criacao:
+        escolha = ficha.get("escolhaRacial") if isinstance(ficha.get("escolhaRacial"), dict) else {}
+        escolha_anterior = anterior.get("escolhaRacial") if isinstance(anterior.get("escolhaRacial"), dict) else {}
+        campos_fixos = {"varianteId", "linhagemId", "condicaoAncestralId"}
+        configuracao_atributos = raca.get("escolha_atributos")
+        if isinstance(configuracao_atributos, dict) and configuracao_atributos.get("campo"):
+            campos_fixos.add(str(configuracao_atributos["campo"]))
+        if any(escolha.get(campo) != escolha_anterior.get(campo) for campo in campos_fixos):
+            return "escolhas raciais de criacao so podem ser alteradas pelo mestre"
+
+    referencias = _classes_da_ficha(ficha)
+    if not referencias:
+        return "informe ao menos uma classe"
+    ids: list[str] = []
+    classes: list[tuple[dict, int]] = []
+    for referencia in referencias:
+        classe_id = str(referencia.get("classeId") or referencia.get("id") or "")
+        nivel = _inteiro(referencia.get("nivel"))
+        classe = _CATALOGO["classe"].get(classe_id)
+        if not classe:
+            return "classe inexistente no catalogo oficial"
+        if nivel is None or not 1 <= nivel <= 20:
+            return "cada classe deve ter entre 1 e 20 niveis"
+        if classe_id in ids:
+            return "a mesma classe nao pode ocupar dois espacos"
+        ids.append(classe_id)
+        classes.append((classe, nivel))
+        erro = _compativel_com_arvore("classe", classe_id, arvore_id, config.get("classes_liberadas") or [])
+        if erro:
+            return erro
+
+    comuns = [(classe, nivel) for classe, nivel in classes if classe.get("categoria") == "padrao"]
+    especiais = [(classe, nivel) for classe, nivel in classes if classe.get("categoria") != "padrao"]
+    nivel_total = sum(nivel for _, nivel in classes)
+    if nivel_total > 40:
+        return "o nivel total nao pode passar de 40"
+    if len(comuns) > 2 or len(especiais) > 1:
+        return "o limite e duas classes comuns e uma classe especial"
+    if criacao and (len(classes) != 1 or len(comuns) != 1 or classes[0][1] != 1):
+        return "a criacao deve comecar no nivel 1 de uma unica classe comum"
+    if len(comuns) == 2 and not any(nivel == 20 for _, nivel in comuns):
+        return "a segunda classe comum so pode ser escolhida depois de uma classe chegar ao nivel 20"
+    if especiais:
+        nivel_sem_especial = nivel_total - especiais[0][1]
+        if nivel_sem_especial < 15:
+            return "uma classe especial exige nivel total 15 antes de ser adquirida"
+    if str(ficha.get("classeId") or "") != ids[0]:
+        return "classeId deve identificar a primeira classe da ficha"
+    nivel_declarado = _inteiro(ficha.get("nivel"))
+    if nivel_declarado != nivel_total:
+        return "o nivel da ficha deve ser a soma dos niveis de classe"
+
+    anteriores = {
+        str(item.get("classeId") or item.get("id") or ""): _inteiro(item.get("nivel")) or 0
+        for item in _classes_da_ficha(anterior)
+    }
+    if not criacao:
+        atuais = {classe_id: nivel for classe_id, (_, nivel) in zip(ids, classes)}
+        if any(classe_id not in atuais or atuais[classe_id] < nivel for classe_id, nivel in anteriores.items()):
+            return "jogador nao pode remover classes nem reduzir niveis adquiridos"
+
+    xp = _inteiro(ficha.get("xp", 0))
+    if xp is None or xp < 0:
+        return "XP deve ser um numero inteiro nao negativo"
+    if criacao and xp != 0:
+        return "personagens comecam com 0 XP"
+    xp_anterior = _inteiro(anterior.get("xp", 0)) or 0
+    if not criacao and xp != xp_anterior:
+        return "somente o mestre pode alterar o XP"
+    nivel_anterior = sum(_inteiro(item.get("nivel")) or 0 for item in _classes_da_ficha(anterior))
+    if "xp" in anterior and nivel_total > _nivel_por_xp(xp):
+        return "o XP registrado nao permite esse nivel total"
+    if not criacao and "xp" not in anterior and nivel_total > nivel_anterior:
+        return "o mestre precisa registrar o XP antes de aumentar o nivel"
+
+    metodo = ficha.get("metodoAtributos")
+    base = ficha.get("atributosBase")
+    finais = ficha.get("atributosFinais")
+    if not isinstance(base, dict) or not isinstance(finais, dict):
+        return "atributosBase e atributosFinais sao obrigatorios"
+    valores_base = [_inteiro(base.get(atributo)) for atributo in _ATRIBUTOS]
+    valores_finais = [_inteiro(finais.get(atributo)) for atributo in _ATRIBUTOS]
+    if any(valor is None for valor in valores_base + valores_finais):
+        return "todos os sete atributos devem ser numeros inteiros"
+    if metodo == "padrao" and sorted(valores_base) != _VALORES_PADRAO:
+        return "o conjunto padrao deve usar 15, 14, 13, 12, 10, 8 e 8 uma vez cada"
+    if metodo == "pontos" and (any(not 8 <= valor <= 15 for valor in valores_base) or sum(valores_base) != 80):
+        return "a compra deve distribuir exatamente 24 pontos, com valores entre 8 e 15"
+    if metodo not in {"padrao", "pontos"}:
+        return "a rolagem de atributos exige autorizacao do mestre"
+    if any(not 1 <= valor <= 20 for valor in valores_finais):
+        return "atributos naturais devem ficar entre 1 e 20"
+    aumentos = [final - inicial for inicial, final in zip(valores_base, valores_finais)]
+    if any(aumento < 0 for aumento in aumentos):
+        return "atributos adquiridos nao podem ficar abaixo dos valores de criacao"
+    if sum(aumentos) > nivel_total // 4:
+        return "a ficha possui mais aumentos de atributo do que os niveis permitem"
+    if criacao and any(aumentos):
+        return "atributos de criacao ainda nao recebem aumentos de nivel"
+    if not criacao and isinstance(anterior.get("atributosBase"), dict) and base != anterior.get("atributosBase"):
+        return "os atributos-base nao podem ser alterados depois da criacao"
+    if not criacao and isinstance(anterior.get("atributosFinais"), dict):
+        for atributo in _ATRIBUTOS:
+            if (_inteiro(finais.get(atributo)) or 0) < (_inteiro(anterior["atributosFinais"].get(atributo)) or 0):
+                return "jogador nao pode reduzir um atributo adquirido"
+
+    pericias = ficha.get("pericias") or {}
+    if not isinstance(pericias, dict):
+        return "pericias deve ser um objeto de id para grau"
+    customizadas = {
+        str(item.get("id"))
+        for item in ficha.get("periciasCustomizadas") or []
+        if isinstance(item, dict) and str(item.get("id") or "").startswith("custom_")
+    }
+    custo_graus = 0
+    indices: dict[str, int] = {}
+    for pericia_id, grau in pericias.items():
+        if str(pericia_id) not in _CATALOGO["pericia"] and str(pericia_id) not in customizadas:
+            return "a ficha contem uma pericia inexistente"
+        if grau not in _GRAUS:
+            return "a ficha contem um grau de pericia invalido"
+        indice = _GRAUS.index(grau)
+        if nivel_total < _NIVEL_MINIMO_GRAU[indice]:
+            return f"o nivel total ainda nao permite o grau {grau}"
+        indices[str(pericia_id)] = indice
+        custo_graus += indice
+    iniciais = 6 + max(0, _inteiro(raca.get("pericias_iniciais_adicionais")) or 0)
+    if criacao and (len(pericias) != iniciais or any(grau != "aprendiz" for grau in pericias.values())):
+        return f"escolha exatamente {iniciais} pericias em Aprendiz na criacao"
+    bonus_maestria = 2 if (_inteiro(finais.get("inteligencia")) or 0) >= 20 else 0
+    orcamento_graus = iniciais + _graus_de_treinamento(classes) + bonus_maestria
+    if custo_graus > orcamento_graus:
+        return "os graus de pericia excedem os Graus de Treinamento recebidos"
+    if not criacao and isinstance(anterior.get("pericias"), dict):
+        for pericia_id, grau_anterior in anterior["pericias"].items():
+            if grau_anterior in _GRAUS and indices.get(str(pericia_id), -1) < _GRAUS.index(grau_anterior):
+                return "jogador nao pode reduzir um grau de pericia adquirido"
+
+    erro_progressao = _validar_escolhas_progressao(ficha, anterior, classes, nivel_total, raca)
+    if erro_progressao:
+        return erro_progressao
+
+    erro_magias = _validar_magias(ficha, anterior, classes, raca, criacao=criacao)
+    if erro_magias:
+        return erro_magias
+
+    if criacao:
+        if _inteiro(ficha.get("lunarisInicial")) != 20:
+            return "personagens comecam com 20 Lunaris"
+        inventario = ficha.get("inventarioInicial")
+        if not isinstance(inventario, list) or len(inventario) != 1:
+            return "escolha exatamente um item comum inicial"
+        item = inventario[0]
+        titulo = item.get("titulo") if isinstance(item, dict) else None
+        if not isinstance(titulo, str) or not 2 <= len(" ".join(titulo.split())) <= 200:
+            return "o item comum inicial precisa de um nome valido"
+    return None
 
 
 def _nome(tipo: str, identificador) -> str | None:

@@ -1,4 +1,4 @@
-import { ICatalogo, IClasse, IRaca, IPericiaCatalogo } from '../types/catalogo';
+import type { ICatalogo, IClasse, IRaca, IPericiaCatalogo } from '../types/catalogo';
 
 // We import JSONs directly in Vite for faster loading and static bundling.
 import classesData from '../../data/ficha/classes.json';
@@ -15,6 +15,15 @@ let cache: ICatalogo | null = null;
 
 export const RACAS_CATALOGO = racasData as unknown as IRaca[];
 export const CLASSES_CATALOGO = classesData as unknown as IClasse[];
+export const LEGADOS_CATALOGO = [
+  ...(legadosData as any).legados.map((legado: any) => ({
+    ...legado,
+    descricao: REGRAS_LEGADOS[legado.id] || legado.descricao,
+    pre_requisitos: REQUISITOS_LEGADOS_V1[legado.id] || legado.pre_requisitos,
+    versaoRegras: REGRAS_LEGADOS[legado.id] ? '1.0' : 'fonte',
+  })),
+  ...(legadosNovosData as any).novos.map((legado: any) => ({ ...legado, versaoRegras: '1.0' })),
+];
 
 export async function carregarCatalogo(): Promise<ICatalogo> {
   if (!cache) {
@@ -30,15 +39,7 @@ export async function carregarCatalogo(): Promise<ICatalogo> {
       racas,
       pericias: unicas,
       resistencias: [],
-      legados: [
-        ...(legadosData as any).legados.map((legado: any) => ({
-          ...legado,
-          descricao: REGRAS_LEGADOS[legado.id] || legado.descricao,
-          pre_requisitos: REQUISITOS_LEGADOS_V1[legado.id] || legado.pre_requisitos,
-          versaoRegras: REGRAS_LEGADOS[legado.id] ? '1.0' : 'fonte',
-        })),
-        ...(legadosNovosData as any).novos.map((legado: any) => ({ ...legado, versaoRegras: '1.0' })),
-      ],
+      legados: LEGADOS_CATALOGO,
     };
   }
   return cache;

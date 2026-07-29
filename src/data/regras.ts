@@ -84,7 +84,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Fluxo</h3>
-      <p class="regras-note"><strong>Fluxo</strong> é o sétimo atributo. Ele mede a conexão e a capacidade de canalizar Fluxos. Já entra na distribuição inicial e sobe como os demais, mas sua fórmula de uso em jogo e a maestria em 20 permanecem em desenvolvimento junto do sistema de magia.</p>
+      <p class="regras-note"><strong>Fluxo</strong> é o sétimo atributo. Ele mede controle e capacidade de canalização. Em magia, substitui o atributo normalmente ligado a Misticismo e limita o maior círculo que o personagem consegue conjurar com segurança. Fluxo alto não concede magias sozinho: uma classe, habilidade, item ou decisão do Mestre precisa fornecer acesso.</p>
     `,
   },
 
@@ -95,7 +95,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     destaques: [
       ['Base', 'd20 + atributo + nível/2 + grau'],
       ['Graus', '7 estágios'],
-      ['Crítico', 'margem de 10'],
+      ['Crítico', '20 natural'],
     ],
     corpo: `
       <h3 class="regras-subtitle">Fórmula de teste</h3>
@@ -116,25 +116,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         </tbody>
       </table></div>
 
-      <h3 class="regras-subtitle">Dificuldades de Teste</h3>
-      <p class="regras-note">Para desafios sem nível, use 5, 10, 15, 20, 25, 30 e 40. Para ameaças que evoluem junto dos personagens, use a tabela abaixo.</p>
-      <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Dificuldade</th><th>DT</th><th>Uso</th></tr></thead>
-        <tbody>
-          <tr><td>Rotineira</td><td>10 + ⌊Nível ÷ 2⌋</td><td>Personagem preparado</td></tr>
-          <tr><td>Padrão</td><td>15 + ⌊Nível ÷ 2⌋</td><td>Desafio relevante</td></tr>
-          <tr><td>Difícil</td><td>20 + ⌊Nível ÷ 2⌋</td><td>Especialista esperado</td></tr>
-          <tr><td>Extrema</td><td>25 + ⌊Nível ÷ 2⌋</td><td>Feito excepcional</td></tr>
-        </tbody>
-      </table></div>
-
       <h3 class="regras-subtitle">Graus de resultado</h3>
       <ul class="regras-list">
-        <li><strong>Sucesso crítico:</strong> resultado igual ou superior à DT + 10.</li>
+        <li><strong>Sucesso crítico:</strong> o d20 mostra 20 natural.</li>
         <li><strong>Sucesso:</strong> resultado igual ou superior à DT.</li>
         <li><strong>Falha:</strong> resultado abaixo da DT.</li>
-        <li><strong>Falha crítica:</strong> resultado igual ou inferior à DT − 10.</li>
-        <li>Um 20 natural melhora o resultado em um grau; um 1 natural piora em um grau.</li>
+        <li><strong>Falha crítica:</strong> o d20 mostra 1 natural.</li>
+        <li>Somar 10 ou mais acima da DT não transforma o teste em crítico.</li>
+        <li>Se uma ação for impossível, o Mestre não pede a rolagem. Quando houver rolagem, o 20 natural é um sucesso crítico.</li>
       </ul>
 
       <h3 class="regras-subtitle">Vantagem e desvantagem</h3>
@@ -168,10 +157,24 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Ataques e cobertura</h3>
       <div class="regras-formula">d20 + Luta ou Pontaria contra a Defesa Natural</div>
       <ul class="regras-list">
-        <li>Igualar a Defesa acerta. Superá-la por 10 gera sucesso crítico.</li>
-        <li>Em um crítico, dobre apenas os dados de dano; bônus fixos são somados uma vez.</li>
+        <li>Igualar a Defesa acerta. Um 1 natural sempre erra.</li>
+        <li>Cada arma informa sua <strong>Margem de Ameaça</strong> e seu <strong>Multiplicador Crítico</strong>, escritos como 20/x2, 19-20/x2 ou 20/x3.</li>
+        <li>Se o número natural do d20 estiver dentro da margem da arma, o ataque acerta e se torna crítico. Não há rolagem de confirmação.</li>
+        <li>O multiplicador indica quantas vezes os dados da arma são rolados. Em x3, 2d6+4 vira 6d6+4.</li>
+        <li>Bônus fixos e dados adicionais de habilidades, venenos ou efeitos externos entram uma vez, salvo quando a própria habilidade disser o contrário.</li>
+        <li>Para balanceamento, margens 18-20 e 19-20 usam x2; multiplicadores x3 e x4 usam margem 20.</li>
         <li>Cobertura parcial concede +2 de Defesa; cobertura superior concede +5.</li>
       </ul>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Perfil</th><th>Chance</th><th>Aumento médio nos dados</th><th>Uso sugerido</th></tr></thead>
+        <tbody>
+          <tr><td>20/x2</td><td>5%</td><td>+5%</td><td>Arma equilibrada</td></tr>
+          <tr><td>19-20/x2</td><td>10%</td><td>+10%</td><td>Arma precisa</td></tr>
+          <tr><td>18-20/x2</td><td>15%</td><td>+15%</td><td>Arma de margem ampla</td></tr>
+          <tr><td>20/x3</td><td>5%</td><td>+10%</td><td>Arma pesada</td></tr>
+          <tr><td>20/x4</td><td>5%</td><td>+15%</td><td>Arma brutal ou excepcional</td></tr>
+        </tbody>
+      </table></div>
 
       <h3 class="regras-subtitle">Reações</h3>
       <p class="regras-note">Você recupera sua reação no início do próprio turno. Defesa Natural não gasta reação.</p>
@@ -262,6 +265,13 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ol>
       <p class="regras-note">Um teste de Cura usa a mesma DT. Sucesso estabiliza o alvo, impedindo novos testes de Morrendo, mas somente cura suficiente para chegar a 1 PV devolve a consciência. Ao despertar, aumente Ferido em 1.</p>
 
+      <h3 class="regras-subtitle">Remover Ferido</h3>
+      <ul class="regras-list">
+        <li>Um descanso completo de qualidade Boa ou superior reduz Ferido em 1 se o personagem receber tratamento e terminar o descanso consciente.</li>
+        <li>Ferido só pode ser reduzido uma vez por descanso completo, mesmo com várias fontes de cura.</li>
+        <li>Poderes e tratamentos que removem Ferido fora do descanso precisam declarar isso explicitamente.</li>
+      </ul>
+
       <h3 class="regras-subtitle">Quando rolar ferimento crítico</h3>
       <ul class="regras-list">
         <li>Quando um único golpe causar dano igual ou superior à metade dos seus PV máximos.</li>
@@ -323,14 +333,21 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     ],
     corpo: `
       <h3 class="regras-subtitle">Descanso completo</h3>
+      <ul class="regras-list">
+        <li><strong>Péssima:</strong> menos de 4 horas, duas interrupções perigosas ou exposição severa.</li>
+        <li><strong>Ruim:</strong> entre 4 e 7 horas ou local inseguro, sem abrigo, alimento ou água suficientes.</li>
+        <li><strong>Boa:</strong> 8 horas, abrigo básico, alimento, água e no máximo uma interrupção curta.</li>
+        <li><strong>Maravilhosa:</strong> 8 horas em local seguro, cama adequada, refeição completa e sem interrupções.</li>
+        <li><strong>Excelente:</strong> santuário protegido com conforto e cuidado médico ou sobrenatural. Exige autorização do mestre.</li>
+      </ul>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Qualidade</th><th>PV e Mana recuperados</th><th>Reduz Cansaço</th></tr></thead>
+        <thead><tr><th>Qualidade</th><th>PV e Mana</th><th>Sanidade</th><th>Reduz Cansaço</th></tr></thead>
         <tbody>
-          <tr><td>Péssima</td><td>10% do máximo</td><td>1</td></tr>
-          <tr><td>Ruim</td><td>25% do máximo</td><td>2</td></tr>
-          <tr><td>Boa</td><td>50% do máximo</td><td>3</td></tr>
-          <tr><td>Maravilhosa</td><td>75% do máximo</td><td>4</td></tr>
-          <tr><td>Excelente</td><td>100% do máximo</td><td>todo o Cansaço</td></tr>
+          <tr><td>Péssima</td><td>10% do máximo</td><td>0%</td><td>1</td></tr>
+          <tr><td>Ruim</td><td>25% do máximo</td><td>5%</td><td>2</td></tr>
+          <tr><td>Boa</td><td>50% do máximo</td><td>10%</td><td>3</td></tr>
+          <tr><td>Maravilhosa</td><td>75% do máximo</td><td>20%</td><td>4</td></tr>
+          <tr><td>Excelente</td><td>100% do máximo</td><td>35%</td><td>todo o Cansaço</td></tr>
         </tbody>
       </table></div>
 
@@ -354,7 +371,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>6: Colapso</td><td>Inconsciente até reduzir Cansaço.</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">Combate intenso, seis horas de treino ou uma noite sem dormir geram Cansaço. Use apenas valores inteiros.</p>
+      <p class="regras-note">Um combate é intenso quando o personagem chega à metade dos PV, gasta metade da Mana ou entra em Morrendo. A cena gera apenas 1 Cansaço, mesmo com vários gatilhos. Seis horas de treino e uma noite sem dormir também geram 1 Cansaço. Use apenas valores inteiros.</p>
     `,
   },
 
@@ -441,26 +458,143 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     `,
   },
 
-  'magia-fluxo': {
+  legados: {
     categoria: 'Livro do Jogador',
-    status: 'Em Desenvolvimento',
-    resumo: 'O vocabulário está definido, mas círculos, conjuração e efeitos ainda serão balanceados em uma etapa própria.',
+    status: 'Publicado para playtest',
+    resumo: 'Legados são escolhas permanentes de ascensão, recebidas por nível total e validadas pela ficha.',
     destaques: [
-      ['Reserva', 'Mana'],
-      ['Conexão', 'Fluxo'],
-      ['Publicação', 'pendente'],
+      ['Catálogo', '42 Legados'],
+      ['Marco', 'a cada 5 níveis'],
+      ['Escolha', 'permanente']
     ],
     corpo: `
-      <h3 class="regras-subtitle">O que já está definido</h3>
+      <p class="regras-lead">Nos níveis totais 5, 10, 15, 20, 25, 30, 35 e 40, escolha um Legado de Ascensão cujos pré-requisitos sejam atendidos. A raça pode conceder vagas adicionais quando isso estiver escrito no catálogo racial.</p>
       <ul class="regras-list">
-        <li><strong>Mana</strong> é a reserva gasta para ativar poderes, técnicas e futuramente magias.</li>
-        <li><strong>Fluxo</strong> é o sétimo atributo. Ele mede a conexão e a capacidade de canalizar Fluxos e já recebe um valor na distribuição inicial junto dos outros seis (revisado em 2026-07-12).</li>
-        <li>O uso mecânico de Fluxo em jogo (o que ele afeta além de existir na ficha) ainda está Em desenvolvimento.</li>
-        <li>Cada Fluxo do mundo, como Sangue ou Tecnologia, terá identidade, efeitos e formas de conjuração próprias.</li>
+        <li>Um Legado não pode ser removido ou trocado pelo jogador depois de adquirido.</li>
+        <li>Legados não são recompensas de classe. Multiclasse não repete os marcos.</li>
+        <li>Um Legado só pode ser escolhido novamente quando estiver marcado como repetível e respeitando seu limite.</li>
+        <li>Pré-requisitos de nível, atributo e perícia são verificados no momento da escolha.</li>
+        <li>O Mestre pode autorizar uma troca apenas para corrigir erro de criação ou mudança oficial das regras.</li>
+      </ul>
+    `,
+  },
+
+  equipamentos: {
+    categoria: 'Combate e Mecânicas',
+    status: 'Regra oficial',
+    resumo: 'Armaduras, escudos, carga, proficiência, munição e Resistência usam limites únicos na ficha.',
+    destaques: [
+      ['Carga', '10 + 2 × Mod.Força positivo + metade do nível'],
+      ['Armadura', '1 principal, 1 malha e 1 escudo'],
+      ['Resistência', 'reduz dano após o crítico']
+    ],
+    corpo: `
+      <h3 class="regras-subtitle">Carga e espaços</h3>
+      <div class="regras-formula">Capacidade = 10 + (2 × Mod.Força positivo) + ⌊Nível total ÷ 2⌋, mínimo 5</div>
+      <ul class="regras-list">
+        <li>Cada item ocupa os espaços declarados no catálogo, multiplicados pela quantidade.</li>
+        <li>Acima da capacidade, o personagem fica Sobrecarregado: movimento reduzido em 3 m e desvantagem em testes físicos.</li>
+        <li>Recipientes e habilidades só aumentam a capacidade quando trazem um valor explícito.</li>
       </ul>
 
-      <h3 class="regras-subtitle">O que ainda falta</h3>
-      <p class="regras-note">Círculos, acesso, custos, manutenção, concentração, alcance, DT de magia e recuperação serão publicados juntos. Até isso acontecer, nenhum número antigo de magia faz parte da versão oficial.</p>
+      <h3 class="regras-subtitle">Armaduras e escudos</h3>
+      <ul class="regras-list">
+        <li>Equipe no máximo uma armadura principal, uma malha compatível por baixo e um escudo.</li>
+        <li>Os bônus de Defesa dessas três peças somam. Duas armaduras principais nunca somam.</li>
+        <li>A penalidade total de armadura se aplica a Acrobacia, Atletismo e Furtividade.</li>
+        <li>Sem proficiência no subtipo, dobre a penalidade da peça e não use habilidades que exijam proficiência.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Resistência e tipos de dano</h3>
+      <ol class="regras-steps">
+        <li>Role o dano e aplique o multiplicador crítico aos dados e modificadores que fazem parte do ataque.</li>
+        <li>Some dados extras declarados pelo efeito. Dados extras só multiplicam se a fonte disser isso.</li>
+        <li>Aplique vulnerabilidade ou redução percentual.</li>
+        <li>Subtraia a Resistência correspondente ao tipo de dano, até o mínimo 0.</li>
+      </ol>
+      <p class="regras-note">Resistência física geral cobre corte, perfuração e impacto, mas não dano balístico. Resistência de um tipo específico não protege contra outros tipos.</p>
+
+      <h3 class="regras-subtitle">Armas, proficiência e munição</h3>
+      <ul class="regras-list">
+        <li>Armas simples podem ser usadas por qualquer personagem. Armas marciais e exóticas exigem proficiência correspondente.</li>
+        <li>Sem proficiência, o ataque sofre -5 e não pode ativar propriedades especiais da arma.</li>
+        <li>Armas de disparo gastam uma unidade de munição por ataque, salvo propriedade diferente. Sem munição, o ataque não pode ser realizado.</li>
+        <li>Recarregar um carregador usa ação de movimento. Munição avulsa e armas pesadas podem exigir ação padrão quando declarado.</li>
+      </ul>
+    `,
+  },
+
+  'magia-fluxo': {
+    categoria: 'Livro do Jogador',
+    status: 'Regra oficial para playtest',
+    resumo: 'Acesso, teste, DT, círculos, Mana, concentração, críticos e o primeiro catálogo de magia.',
+    destaques: [
+      ['Teste', 'd20 + Fluxo + nível/2 + Misticismo'],
+      ['Círculos', '1º ao 5º e Ritual'],
+      ['Custos', '2 / 4 / 6 / 8 / 10 Mana'],
+    ],
+    corpo: `
+      <p class="regras-lead">Magia é uma aplicação estruturada de um Fluxo. Mana paga a manifestação, Fluxo mede o controle do conjurador e Misticismo representa treinamento. O catálogo inicial está publicado para playtest; ajustes futuros devem preservar esta matemática central.</p>
+
+      <h3 class="regras-subtitle">Acesso e magias conhecidas</h3>
+      <ul class="regras-list">
+        <li>Ter Fluxo alto não ensina magia. O acesso vem de uma classe, habilidade, item, Legado ou concessão do Mestre.</li>
+        <li>Cada fonte informa tradições, círculo máximo e quantidade de magias conhecidas.</li>
+        <li>Escolher uma magia conhecida é permanente. O Mestre pode permitir troca durante treinamento ou mudança narrativa.</li>
+        <li>Manifestações narrativas sem círculo não causam dano, não impõem condições e não substituem perícias.</li>
+      </ul>
+
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Fonte atual</th><th>Progressão publicada</th></tr></thead>
+        <tbody>
+          <tr><td>Elementarista</td><td>N3: 2 magias de até 1º; N8: 4 de até 2º; N14: 6 de até 3º; N20: 8 de até 4º.</td></tr>
+          <tr><td>Cartista Arcano</td><td>N10: 3 magias elementais de 1º; N15: 4 magias de até 2º.</td></tr>
+          <tr><td>5º círculo e Ritual</td><td>Exigem uma fonte específica ainda não publicada ou concessão do Mestre.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 class="regras-subtitle">Teste e DT de magia</h3>
+      <div class="regras-formula">Teste de conjuração = d20 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo</div>
+      <div class="regras-formula">DT de magia = 10 + Mod. Fluxo + ⌊Nível total ÷ 2⌋ + Grau de Misticismo</div>
+      <ul class="regras-list">
+        <li>Quando a magia indicar uma Defesa, faça um teste de conjuração e compare o mesmo resultado à Defesa passiva de cada alvo.</li>
+        <li>Magias sem Defesa funcionam sem teste, salvo pressão, interrupção ou oposição indicada pelo Mestre.</li>
+        <li>Bônus raciais de Misticismo entram nas duas fórmulas. Outros bônus só entram quando citarem magia ou conjuração.</li>
+        <li>Um 1 natural sempre falha no teste. Um 20 natural sempre acerta, mas só magias de alvo único marcadas como ataque causam crítico.</li>
+        <li>No crítico mágico, dobre apenas os dados de dano da magia. Áreas, cura, barreiras, condições e dano contínuo não são multiplicados.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Círculos, Fluxo e Mana</h3>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Círculo</th><th>Fluxo mínimo</th><th>Custo base</th><th>Dano de alvo</th><th>Dano de área</th></tr></thead>
+        <tbody>
+          <tr><td>1º</td><td>8</td><td>2 Mana</td><td>2d8</td><td>2d6</td></tr>
+          <tr><td>2º</td><td>12</td><td>4 Mana</td><td>4d8</td><td>4d6</td></tr>
+          <tr><td>3º</td><td>14</td><td>6 Mana</td><td>6d8</td><td>6d6</td></tr>
+          <tr><td>4º</td><td>16</td><td>8 Mana</td><td>8d8</td><td>8d6</td></tr>
+          <tr><td>5º</td><td>18</td><td>10 Mana</td><td>10d8</td><td>10d6</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">O personagem usa o menor limite entre o círculo liberado por sua fonte e o círculo permitido por Fluxo. Uma redução nunca baixa o custo de uma magia para menos de 1 Mana, salvo uma habilidade que diga expressamente custo 0.</p>
+
+      <h3 class="regras-subtitle">Concentração</h3>
+      <ul class="regras-list">
+        <li>Você mantém apenas uma magia ou efeito de concentração por vez. Começar outro encerra o anterior imediatamente.</li>
+        <li>Ao sofrer dano, teste Vontade contra DT 10 ou metade do dano recebido, o que for maior. Falha encerra a concentração.</li>
+        <li>Ficar Atordoado, Inconsciente ou incapaz de agir encerra a concentração. Encerrar voluntariamente não exige ação.</li>
+        <li>A duração máxima consta na magia. Pagar Mana novamente não estende uma conjuração já ativa.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Rituais e maestria em Fluxo</h3>
+      <ul class="regras-list">
+        <li>Rituais não pertencem a um círculo, não causam crítico e exigem o tempo, o alvo e o custo próprios do catálogo.</li>
+        <li>Interromper um ritual antes do final não gasta Mana. A reserva é paga quando o efeito é concluído.</li>
+        <li>Rituais não servem como ação de combate, mesmo quando o grupo tenta reduzir seu tempo.</li>
+        <li><strong>Fluxo 20:</strong> uma vez por cena, repita um teste de conjuração ou de concentração e mantenha o novo resultado.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Catálogo inicial</h3>
+      <p class="regras-note">O catálogo estruturado em <strong>data/ficha/magias.json</strong> contém 25 magias elementais, cinco em cada círculo, e três rituais universais. A ficha mostra custo, execução, alcance, duração, Defesa e concentração diretamente dessa fonte.</p>
     `,
   },
 
@@ -491,6 +625,28 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         </tbody>
       </table></div>
 
+      <h3 class="regras-subtitle">Crises</h3>
+      <ul class="regras-list">
+        <li>Em Ruptura, cada nova perda exige Vontade DT 15. Falha gera Pânico, Dissociação, Paranoia, Catatonia, Compulsão ou Fúria.</li>
+        <li>Pânico, Dissociação, Catatonia e Fúria duram 1d4 rodadas e permitem Vontade DT 15 no fim do turno.</li>
+        <li>Paranoia dura até o fim da cena. Compulsão permite Vontade DT 15 no começo do turno para agir normalmente.</li>
+        <li>Em Sanidade 0, a crise é imediata. Depois da cena, o personagem permanece com 0 até receber descanso e tratamento em segurança.</li>
+        <li>Uma condição permanente em Quebra deve ser definida com o jogador e só muda por resolução narrativa ou tratamento prolongado.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Condições gerais</h3>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Condição</th><th>Efeito principal</th><th>Remoção</th></tr></thead>
+        <tbody>
+          <tr><td>Amedrontado</td><td>Desvantagem contra a fonte e não se aproxima dela.</td><td>Vontade contra a DT da fonte no fim do turno.</td></tr>
+          <tr><td>Exposto</td><td>-2 Defesa.</td><td>Começo do próximo turno.</td></tr>
+          <tr><td>Caído</td><td>-2 em ataques; ataques corpo a corpo contra você recebem +2.</td><td>Ação de movimento para levantar.</td></tr>
+          <tr><td>Sangramento</td><td>1d6 de dano no fim do turno; aplicações extras dão +1, até +5.</td><td>Cura DT 15 ou recuperar pelo menos 1 PV.</td></tr>
+          <tr><td>Atordoado</td><td>Sem ações ou reações e -5 Defesa.</td><td>Fim da duração.</td></tr>
+          <tr><td>Concentrando</td><td>Mantém um efeito; dano exige Vontade DT 10 ou metade do dano.</td><td>Falha no teste, incapacidade ou encerramento voluntário.</td></tr>
+        </tbody>
+      </table></div>
+
       <h3 class="regras-subtitle">Iniciativa estática</h3>
       <ul class="regras-list">
         <li>Iniciativa = 10 + metade do nível + Mod.Destreza + bônus.</li>
@@ -508,7 +664,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
   classes: {
     categoria: 'Livro do Jogador',
-    status: 'Catálogo balanceado',
+    status: 'Publicado para playtest',
     resumo: 'Classes comuns servem a qualquer Árvore; classes especiais são mais fortes, restritas às Árvores indicadas e exigem liberação do Mestre.',
     destaques: [
       ['Classes', '24 catalogadas'],
@@ -520,10 +676,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
   racas: {
     categoria: 'Livro do Jogador',
-    status: 'Em Desenvolvimento',
+    status: 'Publicado para playtest',
     resumo: 'Raças comuns podem nascer em qualquer Árvore; raças especiais são mais fortes e aparecem somente nas Árvores compatíveis.',
     destaques: [
-      ['Raças', '21 catalogadas'],
+      ['Raças', '20 publicadas, 1 adiada'],
       ['Comuns / especiais', '12 / 9'],
       ['Ajustes', 'Vida, Mana e Mov.']
     ],
@@ -533,13 +689,25 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   mestre: {
     categoria: 'Guia do Mestre',
     status: 'Somente Mestre',
-    resumo: 'Ferramentas exclusivas para o Mestre: criação de NPCs, tabela de XP, tesouros.',
+    resumo: 'Ferramentas exclusivas para o Mestre: dificuldades, criação de NPCs, tabela de XP e tesouros.',
     destaques: [
       ['Acesso', 'Apenas Mestre']
     ],
     corpo: `
       <p class="regras-lead">Este conteúdo é restrito e reservado para quem comanda a mesa.</p>
-      <div class="regras-formula">Em construção: tabelas de encontros, armadilhas, e recompensas do mestre.</div>
+      <h3 class="regras-subtitle">Dificuldades de Teste</h3>
+      <p class="regras-note">Para desafios sem nível, use 5, 10, 15, 20, 25, 30 e 40. Para ameaças que evoluem junto dos personagens, use a tabela abaixo.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Dificuldade</th><th>DT</th><th>Uso</th></tr></thead>
+        <tbody>
+          <tr><td>Rotineira</td><td>10 + ⌊Nível ÷ 2⌋</td><td>Personagem preparado</td></tr>
+          <tr><td>Padrão</td><td>15 + ⌊Nível ÷ 2⌋</td><td>Desafio relevante</td></tr>
+          <tr><td>Difícil</td><td>20 + ⌊Nível ÷ 2⌋</td><td>Especialista esperado</td></tr>
+          <tr><td>Extrema</td><td>25 + ⌊Nível ÷ 2⌋</td><td>Feito excepcional</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">A DT deve representar a dificuldade da situação, não ser ajustada depois de ver o resultado do jogador.</p>
+      <div class="regras-formula">Em construção: tabelas de encontros, armadilhas e recompensas do mestre.</div>
     `
   }
 };
