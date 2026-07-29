@@ -1,4 +1,4 @@
-"""Testes do core/ui.py — só as partes puras (sem precisar de um Discord real)."""
+"""Testes do core/ui.py: só as partes puras (sem precisar de um Discord real)."""
 
 import sys
 from pathlib import Path

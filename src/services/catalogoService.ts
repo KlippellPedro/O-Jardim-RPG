@@ -13,10 +13,13 @@ const REQUISITOS_LEGADOS_V1: Record<string, string[]> = {};
 
 let cache: ICatalogo | null = null;
 
+export const RACAS_CATALOGO = racasData as unknown as IRaca[];
+export const CLASSES_CATALOGO = classesData as unknown as IClasse[];
+
 export async function carregarCatalogo(): Promise<ICatalogo> {
   if (!cache) {
-    const classes = classesData as IClasse[];
-    const racas = racasData as unknown as IRaca[];
+    const classes = CLASSES_CATALOGO;
+    const racas = RACAS_CATALOGO;
     const periciasRaw = periciasData as { pericias: IPericiaCatalogo[]; resistencias?: IPericiaCatalogo[] };
     
     const todasPericias = [...(periciasRaw.pericias || []), ...(periciasRaw.resistencias || [])];

@@ -125,7 +125,7 @@ export function botao(rotulo, classe = '', aoClicar = null) {
   return node;
 }
 
-/* Botão que se desabilita durante a ação e volta sozinho se der erro — sem
+/* Botão que se desabilita durante a ação e volta sozinho se der erro - sem
    isso cada tela repetia o mesmo try/finally com `disabled`. */
 export function acao(rotulo, classe, executar, { confirmar = null } = {}) {
   const node = botao(rotulo, classe);
@@ -216,9 +216,9 @@ export function subabas(itens, ativa, aoTrocar) {
 }
 
 export function dataCurta(valor) {
-  if (!valor) return '—';
+  if (!valor) return '-';
   const data = new Date(valor);
-  if (Number.isNaN(data.getTime())) return '—';
+  if (Number.isNaN(data.getTime())) return '-';
   return data.toLocaleString('pt-BR', {
     day: '2-digit',
     month: '2-digit',
@@ -239,7 +239,7 @@ export function dataRelativa(valor) {
   return dataCurta(valor);
 }
 
-/* Filtro por texto sem acento — "Aethel" acha "aethel" e "AETHEL". */
+/* Filtro por texto sem acento - "Aethel" acha "aethel" e "AETHEL". */
 export function normalizar(valor) {
   return String(valor || '')
     .toLocaleLowerCase('pt-BR')

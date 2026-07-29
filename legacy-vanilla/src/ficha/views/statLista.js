@@ -1,4 +1,4 @@
-// Grade de estatísticas (label + valor) — cada par vira UM item de grid só
+// Grade de estatísticas (label + valor) - cada par vira UM item de grid só
 // (ver ficha.css: .ficha-wizard-preview-lista) pra não embaralhar label e
 // valor quando a grade quebra em várias colunas.
 

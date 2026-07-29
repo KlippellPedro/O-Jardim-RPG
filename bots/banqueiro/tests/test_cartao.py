@@ -1,4 +1,4 @@
-"""Testes do Cartão Lunar — rodam SEM Discord.
+"""Testes do Cartão Lunar: rodam SEM Discord.
 Uso: python tests/test_cartao.py  (a partir de bots/banqueiro)
 """
 

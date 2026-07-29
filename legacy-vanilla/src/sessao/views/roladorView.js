@@ -1,6 +1,6 @@
 /* Rolador da mesa: o mestre também precisa de dado.
 
-   Aceita a mesma sintaxe do Rollem que a mesa já usava no Discord — `2d6+3`,
+   Aceita a mesma sintaxe do Rollem que a mesa já usava no Discord - `2d6+3`,
    `1d20+1d4-2` e `2#d20` para duas rolagens separadas. Tudo cai no mesmo log
    da sessão, junto com as rolagens dos jogadores. */
 
@@ -44,7 +44,7 @@ export function criarRolador(campanhaId, { aoRolar = null } = {}) {
   const bloco = elemento('section', 'sessao-bloco sessao-rolador');
   bloco.append(elemento('h3', '', 'Rolar dado'));
   bloco.append(elemento('p', 'sessao-rolador-ajuda',
-    'Use 2d6+3, 1d20+1d4-2 ou 2#d20 para duas rolagens separadas — a mesma sintaxe do Discord.'));
+    'Use 2d6+3, 1d20+1d4-2 ou 2#d20 para duas rolagens separadas - a mesma sintaxe do Discord.'));
 
   const form = document.createElement('form');
   form.className = 'sessao-adicionar';

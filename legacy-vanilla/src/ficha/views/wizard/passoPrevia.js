@@ -1,4 +1,4 @@
-// Último passo — só revisão, nada pra escolher aqui. Mostra o resumo (nome,
+// Último passo - só revisão, nada pra escolher aqui. Mostra o resumo (nome,
 // Árvore, raça, classe) e tudo que os passos anteriores já calcularam
 // (atributos finais, Vida/Mana/Movimento/Lunaris), para a ficha nascer
 // com a maioria das informações iniciais preenchidas.

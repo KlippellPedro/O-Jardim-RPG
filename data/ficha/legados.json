@@ -53,7 +53,7 @@
     {
       "id": "kit-diverso",
       "titulo": "Kit Diverso",
-      "descricao": "Você pode escolher um kit de qualquer coisa, o qual irá renovar caso gaste uma ação de descanso — mas ele terá +1 espaço no inventário.",
+      "descricao": "Você pode escolher um kit de qualquer coisa. Ele é renovado quando você gasta uma ação de descanso, mas ocupa +1 espaço no inventário.",
       "pre_requisitos": [],
       "fonte": "Legado 2 (lido)"
     },
@@ -213,7 +213,7 @@
     {
       "id": "instinto-animal",
       "titulo": "Instinto Animal",
-      "descricao": "Você tem vantagem em testes de iniciativa e nunca pode ser surpreendido em combate.",
+      "descricao": "Você recebe +3 na Iniciativa fixa e nunca pode ser surpreendido em combate.",
       "pre_requisitos": [
         { "nivel_personagem": 12 }
       ],
@@ -289,7 +289,7 @@
     {
       "id": "ja-fui-clt",
       "titulo": "Já fui CLT",
-      "descricao": "Você não se cansa tão fácil assim — não recebe o efeito de cansaço leve.",
+      "descricao": "Você não se cansa tão fácil e não recebe o efeito de cansaço leve.",
       "pre_requisitos": [],
       "fonte": "Legado 7 (lido)"
     },

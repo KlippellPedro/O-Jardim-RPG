@@ -6,7 +6,7 @@ o prêmio — Lunaris + itens sorteados por raridade, ponderados pela estação
 atual do Jardim); publica no canal do jornal os avisos que o Banqueiro
 enfileira — recompensa colocada em alguém, jogador procurado por dívida,
 captura de procurado; e é dono do ciclo de **estação + clima** do Jardim e
-das notícias customizadas do mestre (ver `Plano_Jornalista.md` na raiz do
+das notícias customizadas do mestre (ver `docs/Plano_Jornalista.md` na raiz do
 repo pro plano completo, decisões e o que ainda falta).
 
 Esse bot nasceu de um split do antigo **Consultor**: toda a parte de
@@ -28,7 +28,7 @@ sozinho pelo mundo e de tudo que é "conteúdo"/narrativa pro servidor.
 - **Estação (`estacao`)**: até 17/07/2026 era escrita pelo Banqueiro
   (`/estacao_definir`) e só lida pelo Jornalista. Passou a ser **escrita
   pelo Jornalista** (`/jornal estacao_definir`) — ver
-  `Plano_Jornalista.md`, Decisão 2: o dono lógico é quem consome o valor
+  `docs/Plano_Jornalista.md`, Decisão 2: o dono lógico é quem consome o valor
   (o sorteio de loot dos baús automáticos), não quem mexe com dinheiro.
 - **Segredos:** `DISCORD_TOKEN` e `DATABASE_URL` somente nas Variáveis do
   painel — precisam de um app Discord e um token **próprios**, diferentes
@@ -46,46 +46,65 @@ Quando `PLATFORM_API_URL` e `SERVICE_API_KEY` estiverem configuradas (mesma
 integração do Banqueiro), o loot dos baús vai direto pro cofre da conta no
 site. Sem integração — ou pra contas ainda não vinculadas — o prêmio cai na
 mesma `carteira`/`inventario` que o Banqueiro usa, e o jogador pode guardar
-as moedas em segurança com `/cofre depositar` no Banqueiro.
+as moedas em segurança com `/cofre_depositar` no Banqueiro.
 
 ## Comandos
 
 **Baús automáticos** (`cogs/baus.py`):
 
-- `/bau_config` — [Mestre] liga/desliga os baús automáticos, define canal,
-  janela de horário e itens por baú.
-- `/bau_agora` — [Mestre] solta um baú imediatamente (pra testar).
+- `/bau_config` — [Mestre] liga/desliga os baús automáticos e define janela
+  de horário e itens por baú. O parâmetro de canal antigo continua aceito.
+- `/bau_canal_adicionar` / `/bau_canal_remover` — [Mestre] mantém a lista
+  de destinos entre os quais cada novo baú é sorteado.
+- `/bau_canais` — [Mestre] mostra os destinos válidos e os que estão sendo
+  ignorados porque foram apagados ou perderam permissões.
+- `/bau_pendentes` — [Mestre] lista entregas que ainda aguardam confirmação,
+  com vencedor, prêmio exato, erro e ID da mensagem.
+- `/bau_reprocessar <mensagem_id>` — [Mestre] tenta a entrega novamente para
+  o mesmo vencedor, usando o prêmio persistido e a mesma chave idempotente.
+- `/bau_agora` — [Mestre] solta um baú imediatamente em um canal informado
+  ou sorteado da rotação (pra testar).
 
-O baú em si não tem comando de jogador: aparece sozinho no canal
-configurado, com um botão "Abrir baú 🎁" — o primeiro clique leva. Os avisos
+O baú em si não tem comando de jogador: aparece sozinho em um dos canais
+válidos da rotação, com um botão "Abrir baú 🎁" — o primeiro clique leva.
+Antes de entregar, o bot grava no PostgreSQL o vencedor, o prêmio completo e
+a chave `bau-drop:<mensagem_id>`. O card muda para o estado final com vencedor,
+prêmio e destino. Se a resposta da plataforma for ambígua, o botão não reabre:
+a entrega fica pendente e pode ser reprocessada sem trocar o vencedor nem
+duplicar o depósito. O fallback na carteira do Banqueiro conclui o prêmio e o
+status na mesma transação. Se ninguém abrir dentro do prazo, o card mostra que
+o baú desapareceu. O canal único salvo por versões antigas é migrado
+automaticamente para a rotação. Os avisos
 (recompensas, procurados, capturas) também aparecem sozinhos, publicados
-automaticamente no canal definido com `/jornal_definir` no Banqueiro — o
+automaticamente na categoria **Dinheiro e economia** de `/jornal canal`. Se
+ela não estiver configurada, o bot usa `/jornal principal` como fallback. O
 Jornalista checa a fila a cada minuto.
 
 **Jornal** (`cogs/jornal.py` — grupo `/jornal`, todo master-only via
 `default_permissions`, exceto `/estacao` que é fora do grupo de propósito):
 
-- `/jornal publicar <titulo> <conteudo>` — publica uma notícia customizada,
-  formatada como embed de jornal.
+- `/jornal principal <canal>` — define o canal principal e fallback para
+  conteúdos sem uma rota específica. Essa configuração agora pertence ao
+  Jornalista.
+- `/jornal publicar` — abre um formulário com título, resumo, corpo, autoria
+  e URL HTTPS de imagem opcional. Mostra uma prévia privada com **Publicar**
+  e **Cancelar**; nada chega ao canal antes da confirmação.
+- `/jornal canal` / `/jornal canais` — define e consulta rotas específicas
+  para notícia, clima, entrada, saída de membros, avisos de dinheiro e o
+  resultado da Loteria Dominical.
 - `/jornal estacao_definir <estacao>` — define a estação do Jardim (as 6:
   Primavera/Verão/Outono/Inverno/Noite Eterna/Eclipse — ver
-  `core/economia.py` e `Plano_Jornalista.md`), muda o peso de raridade do
+  `core/economia.py` e `docs/Plano_Jornalista.md`), muda o peso de raridade do
   loot dos baús automáticos, e avisa no canal do jornal.
 - `/jornal avancar_mes` — sorteia o clima do mês (`core/clima.py`),
   restrito ao que a estação atual permite (4 comuns + o exclusivo da
   estação + 3 raros universais bem menos prováveis), e publica em formato
   de "capa de jornal". Efeito é sempre narrativo — o Jornalista não toca
   no motor de rolagem, o texto já deixa isso explícito.
-- `/jornal registro_definir <canal>` — define o canal de registro (ex.:
-  `#registro`) — usado pra mencionar em `on_member_join` e como referência
-  pro registro por Árvore.
-- `/jornal registro_criar_cargos` — cria (ou reaproveita, se já existirem
-  pelo nome) os 10 cargos de Árvore com nome+cor oficiais
-  (`core/arvores.py`) e guarda o mapeamento automaticamente.
-- `/jornal registro_publicar` — publica a mensagem de registro (menu de
-  seleção com as 10 Árvores) no canal atual. Escolher uma Árvore troca a
-  anterior (uma por pessoa) e manda DM de confirmação. É puramente
-  cosmético — muda só a cor do cargo, sem ligação com classe/ficha.
+- `/registro criar`, `/registro opcao` e `/registro publicar` — criam os
+  painéis atuais de cargos por reação. `/registro preset_arvores` prepara o
+  painel das 10 Árvores; `/registro paineis` e `/registro opcoes` consultam
+  a configuração.
 - `/estacao` — qualquer jogador pode ver a estação atual (só leitura).
 
 **Entrada/saída de membro** (`cogs/boasvindas.py` — sem comando, dispara
@@ -106,7 +125,8 @@ Veja `.env.example`:
 
 - `DISCORD_TOKEN` — obrigatória (token do app Discord do Jornalista);
 - `DATABASE_URL` — obrigatória (mesmo Postgres do Banqueiro);
-- `GUILD_ID` — opcional, acelera a sincronização de comandos num servidor;
+- `GUILD_ID` — opcional; quando definido, publica os comandos somente nesse
+  servidor e remove cópias globais antigas para não exibir duplicados;
 - `DATABASE_STARTUP_TIMEOUT` — opcional, padrão 12 segundos;
 - `PLATFORM_API_URL` / `SERVICE_API_KEY` — opcional, integração com o site.
 
@@ -137,18 +157,21 @@ bots/jornalista/
 │   ├── economia.py      # fatia de economia usada pro loot (cofre, estação)
 │   ├── clima.py         # clima do mês, restrito pela estação
 │   ├── arvores.py        # as 10 Árvores (nome/cor) pro registro cosmético
-│   ├── ui.py            # cores/ícones por categoria (Plano_Jornalista.md, Decisão 3)
+│   ├── ui.py            # cores/ícones por categoria (docs/Plano_Jornalista.md, Decisão 3)
 │   └── loot.py
 ├── cogs/
 │   ├── baus.py          # agendamento + anúncio + entrega dos baús
 │   ├── avisos.py         # publica a fila de avisos que o Banqueiro enfileira
-│   ├── jornal.py         # grupo /jornal: publicar, estacao_definir, avancar_mes, registro_*, /estacao
+│   ├── jornal.py         # grupo /jornal: modal de notícia, canais, estação e boas-vindas
+│   ├── registro.py       # painéis configuráveis de cargos por reação
 │   ├── boasvindas.py      # on_member_join/on_member_remove
 │   └── ajuda.py           # /ajuda
 └── tests/
+    ├── test_comandos.py
     ├── test_economia.py
     ├── test_clima.py
-    └── test_arvores.py
+    ├── test_arvores.py
+    └── test_jornal_ui.py
 ```
 
 ## Testes
@@ -164,3 +187,4 @@ python -m pytest tests/ -k "not test_db"
 
 Os testes prefixados `test_db_` precisam de um Postgres descartável (mesmo
 padrão do Banqueiro — `tests/db_utils.py`, nunca roda contra produção).
+

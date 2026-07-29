@@ -1,5 +1,5 @@
 {
-  "_nota": "Sistema de veículos do RPG (tiers de upgrade — Núcleo/Estrutura/Armas/Utilidades — e chassis em Veículos). NÃO é lista de itens simples; ver INSTRUCOES_CATALOGO.md pra converter em itens 'veiculo' da loja.",
+  "_nota": "Sistema de veículos do RPG (tiers de upgrade: Núcleo/Estrutura/Armas/Utilidades: e chassis em Veículos). NÃO é lista de itens simples; ver INSTRUCOES_CATALOGO.md pra converter em itens 'veiculo' da loja.",
   "fontes": {
     "Núcleo": {
       "linhas": [

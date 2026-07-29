@@ -4,7 +4,7 @@ export const authApi = {
   registrar(dados) {
     return api('/auth/registrar', { method: 'POST', body: dados });
   },
-  // 'aberto' | 'convite' | 'fechado' — decide o que a tela de entrada oferece.
+  // 'aberto' | 'convite' | 'fechado' - decide o que a tela de entrada oferece.
   modoDeCadastro() {
     return api('/auth/cadastro');
   },

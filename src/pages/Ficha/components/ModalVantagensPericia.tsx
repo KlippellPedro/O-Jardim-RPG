@@ -66,7 +66,7 @@ export const ModalVantagensPericia: React.FC<ModalVantagensPericiaProps> = ({
     <FichaModal
       isOpen={isOpen}
       onClose={onClose}
-      title={`VANTAGENS E DESVANTAGENS — ${periciaNome.toUpperCase()}`}
+      title={`VANTAGENS E DESVANTAGENS: ${periciaNome.toUpperCase()}`}
     >
       <div className="space-y-6">
         <p className="text-gray-400 text-sm">

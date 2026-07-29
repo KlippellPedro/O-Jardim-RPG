@@ -1,11 +1,11 @@
 """
-Cog Registro — painéis de auto-registro por REAÇÃO (estilo Zira clássico). O
+Cog Registro: painéis de auto-registro por REAÇÃO (estilo Zira clássico). O
 mestre cria painéis (ex.: Idade +18/-18, Pronomes, Notificações), cada um com N
 opções; cada opção é um emoji. Quem reage ganha o cargo; quem tira a reação,
 perde. Modo "único" = só um cargo do painel por vez (troca ao reagir em outro).
 
 Persistência: os listeners são de reação crua (on_raw_reaction_add/remove), que
-funcionam por id da mensagem + emoji mesmo depois de reiniciar — não precisa
+funcionam por id da mensagem + emoji mesmo depois de reiniciar: não precisa
 recriar nada no boot. O mapeamento emoji→cargo vem do banco pelo id da mensagem.
 """
 
@@ -110,7 +110,7 @@ class Registro(commands.Cog):
             await membro.add_roles(cargo, reason="Registro: reagiu")
         except discord.Forbidden:
             log.warning(
-                "Sem permissão pra gerenciar o cargo %s na guild %s — dê 'Gerenciar Cargos' "
+                "Sem permissão pra gerenciar o cargo %s na guild %s: dê 'Gerenciar Cargos' "
                 "e suba o cargo do Jornalista acima dos de registro.", cargo.id, guild.id,
             )
 
@@ -136,6 +136,7 @@ class Registro(commands.Cog):
 
     # ── Comandos de configuração (mestre) ────────────────────────────────────
     @registro.command(name="criar", description="Cria um painel de registro novo (ex.: Idade, Pronomes).")
+    @app_commands.checks.has_permissions(manage_guild=True)
     @app_commands.describe(
         titulo="Título do painel (aparece em destaque).",
         descricao="Texto explicativo (opcional).",
@@ -162,9 +163,10 @@ class Registro(commands.Cog):
         )
 
     @registro.command(name="opcao", description="Adiciona uma opção de cargo (um emoji) a um painel.")
+    @app_commands.checks.has_permissions(manage_guild=True)
     @app_commands.describe(
         painel="Número do painel (veja em /registro paineis).",
-        emoji="Emoji da reação (obrigatório — é ele que a pessoa clica).",
+        emoji="Emoji da reação (obrigatório: é ele que a pessoa clica).",
         texto="Rótulo que aparece na lista do painel (ex.: +18, Ele/Dele).",
         cargo="Cargo que a pessoa ganha ao reagir (deixe vazio pra criar um novo).",
         criar_cargo="Se não escolher um cargo, crio um cargo novo com este nome.",
@@ -192,13 +194,13 @@ class Registro(commands.Cog):
         existentes = self.bot.db.listar_opcoes(painel)
         if any((op.get("emoji") or "") == emoji_norm for op in existentes):
             await interaction.response.send_message(
-                f"⚠️ O emoji {emoji_norm} já é usado nesse painel — cada opção precisa de um emoji diferente.",
+                f"⚠️ O emoji {emoji_norm} já é usado nesse painel: cada opção precisa de um emoji diferente.",
                 ephemeral=True,
             )
             return
         if len(existentes) >= MAX_REACOES:
             await interaction.response.send_message(
-                f"⚠️ O painel já tem {MAX_REACOES} opções — é o máximo de reações que o Discord deixa numa mensagem.",
+                f"⚠️ O painel já tem {MAX_REACOES} opções: é o máximo de reações que o Discord deixa numa mensagem.",
                 ephemeral=True,
             )
             return
@@ -232,7 +234,7 @@ class Registro(commands.Cog):
         me = interaction.guild.me
         if cargo != interaction.guild.default_role and me.top_role <= cargo:
             aviso = (
-                "\n⚠️ Esse cargo está **acima** do meu na hierarquia — não vou conseguir dá-lo/tirá-lo "
+                "\n⚠️ Esse cargo está **acima** do meu na hierarquia: não vou conseguir dá-lo/tirá-lo "
                 "até você subir o cargo do Jornalista em Config. → Cargos."
             )
         await interaction.response.send_message(
@@ -243,6 +245,7 @@ class Registro(commands.Cog):
         )
 
     @registro.command(name="opcoes", description="Lista as opções (emojis) de um painel.")
+    @app_commands.checks.has_permissions(manage_guild=True)
     @app_commands.describe(painel="Número do painel.")
     async def opcoes(self, interaction: discord.Interaction, painel: int):
         p = await self._achar_painel(interaction, painel)
@@ -257,16 +260,17 @@ class Registro(commands.Cog):
             )
             return
         linhas = [
-            f"• #{op['id']} — {op.get('emoji') or '❓'} {op['label']} → <@&{op['cargo_id']}>"
+            f"• #{op['id']}: {op.get('emoji') or '❓'} {op['label']} → <@&{op['cargo_id']}>"
             for op in ops
         ]
         modo = "único (um cargo por vez)" if p["unico"] else "múltiplo (pode acumular)"
         await interaction.response.send_message(
-            f"**Painel #{painel} — {p['titulo']}** · modo {modo}\n" + "\n".join(linhas),
+            f"**Painel #{painel}: {p['titulo']}** · modo {modo}\n" + "\n".join(linhas),
             ephemeral=True,
         )
 
     @registro.command(name="remover_opcao", description="Remove uma opção (emoji) de um painel.")
+    @app_commands.checks.has_permissions(manage_guild=True)
     @app_commands.describe(painel="Número do painel.", opcao="Número da opção (veja em /registro opcoes).")
     async def remover_opcao(self, interaction: discord.Interaction, painel: int, opcao: int):
         if not interaction.guild_id:
@@ -284,6 +288,7 @@ class Registro(commands.Cog):
             )
 
     @registro.command(name="modo", description="Define se o painel deixa só um cargo por vez (único) ou vários.")
+    @app_commands.checks.has_permissions(manage_guild=True)
     @app_commands.describe(painel="Número do painel.", unico="Sim = só um cargo por vez; Não = pode acumular.")
     async def modo(self, interaction: discord.Interaction, painel: int, unico: bool):
         if not interaction.guild_id:
@@ -300,6 +305,7 @@ class Registro(commands.Cog):
         )
 
     @registro.command(name="publicar", description="Publica (ou republica) o painel e coloca as reações num canal.")
+    @app_commands.checks.has_permissions(manage_guild=True)
     @app_commands.describe(painel="Número do painel.", canal="Canal onde publicar (padrão: o canal atual).")
     async def publicar(
         self,
@@ -347,12 +353,13 @@ class Registro(commands.Cog):
 
         aviso = ""
         if len(ops) > MAX_REACOES:
-            aviso += f"\n⚠️ O painel tem {len(ops)} opções, mas o Discord só deixa {MAX_REACOES} reações — publiquei as {MAX_REACOES} primeiras."
+            aviso += f"\n⚠️ O painel tem {len(ops)} opções, mas o Discord só deixa {MAX_REACOES} reações: publiquei as {MAX_REACOES} primeiras."
         if falhas:
             aviso += f"\n⚠️ Não consegui reagir com: {' '.join(falhas)} (emoji de outro servidor? Use um deste servidor ou um emoji comum)."
         await interaction.followup.send(f"✅ Painel #{painel} publicado em {destino.mention}.{aviso}", ephemeral=True)
 
     @registro.command(name="paineis", description="Lista todos os painéis de registro do servidor.")
+    @app_commands.checks.has_permissions(manage_guild=True)
     async def paineis(self, interaction: discord.Interaction):
         if not interaction.guild_id:
             await interaction.response.send_message("⚠️ Só dentro de um servidor.", ephemeral=True)
@@ -369,10 +376,11 @@ class Registro(commands.Cog):
         for p in lst:
             pub = "publicado" if p.get("mensagem_id") else "não publicado"
             modo = "único" if p["unico"] else "múltiplo"
-            linhas.append(f"• **#{p['id']}** — {p['titulo']} · {p['num_opcoes']} opção(ões) · {modo} · {pub}")
+            linhas.append(f"• **#{p['id']}**: {p['titulo']} · {p['num_opcoes']} opção(ões) · {modo} · {pub}")
         await interaction.response.send_message("**Painéis de registro:**\n" + "\n".join(linhas), ephemeral=True)
 
     @registro.command(name="apagar", description="Apaga um painel inteiro (não apaga os cargos do servidor).")
+    @app_commands.checks.has_permissions(manage_guild=True)
     @app_commands.describe(painel="Número do painel.")
     async def apagar(self, interaction: discord.Interaction, painel: int):
         if not interaction.guild_id:
@@ -388,6 +396,7 @@ class Registro(commands.Cog):
             await interaction.response.send_message(f"⚠️ Não achei o painel #{painel}.", ephemeral=True)
 
     @registro.command(name="canal", description="Define pra qual canal as boas-vindas mandam os novatos se registrarem.")
+    @app_commands.checks.has_permissions(manage_guild=True)
     @app_commands.describe(canal="Canal de registro (ex.: #registro).")
     async def canal(self, interaction: discord.Interaction, canal: discord.TextChannel):
         if not interaction.guild_id:
@@ -399,6 +408,7 @@ class Registro(commands.Cog):
         )
 
     @registro.command(name="preset_arvores", description="Cria um painel pronto com as 10 Árvores do Jardim (cria os cargos).")
+    @app_commands.checks.has_permissions(manage_guild=True)
     async def preset_arvores(self, interaction: discord.Interaction):
         if not interaction.guild_id or not interaction.guild:
             await interaction.response.send_message("⚠️ Só dentro de um servidor.", ephemeral=True)
@@ -409,7 +419,7 @@ class Registro(commands.Cog):
         painel_id = self.bot.db.criar_painel(
             str(interaction.guild_id),
             "Registro por Árvore",
-            "Reaja com o emoji da sua Árvore do Jardim — é cosmético, muda a cor do seu nome. "
+            "Reaja com o emoji da sua Árvore do Jardim: é cosmético, muda a cor do seu nome. "
             "Dá pra trocar quando quiser (tire a reação antiga).",
             unico=True,
         )
@@ -429,6 +439,10 @@ class Registro(commands.Cog):
                     continue
             emoji = _EMOJIS_ARVORES[indice % len(_EMOJIS_ARVORES)]
             self.bot.db.add_opcao(str(interaction.guild_id), painel_id, arvore.nome, str(cargo.id), emoji)
+            # Sem isso o Horóscopo do Jardim nunca sabe qual cargo corresponde
+            # a qual Árvore: o bônus de Lunaris em dobro (Baus.aplicar_bonus_horoscopo)
+            # depende inteiramente desse mapa.
+            self.bot.db.set_cargo_arvore(str(interaction.guild_id), arvore.id, str(cargo.id))
 
         txt = f"✅ Painel de Árvores criado (#{painel_id}) com {len(arvores_mod.ARVORES) - len(falhou)} opções."
         if criados:

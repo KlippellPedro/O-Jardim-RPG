@@ -1,11 +1,64 @@
-import { IRaca } from '../types/catalogo';
+import type { IRaca } from '../types/catalogo';
+import { obterOpcaoRacialSelecionada } from './racaService';
 
 export const ATRIBUTOS = ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'fluxo'] as const;
 export type TAtributo = typeof ATRIBUTOS[number];
+export type TMetodoAtributos = 'padrao' | 'pontos' | 'rolado';
 
-export const VALORES_ATRIBUTOS_PADRAO = [15, 14, 13, 12, 10, 8, 7];
+export const ROTULOS_ATRIBUTOS: Record<TAtributo, string> = {
+  forca: 'Força',
+  destreza: 'Destreza',
+  constituicao: 'Constituição',
+  inteligencia: 'Inteligência',
+  sabedoria: 'Sabedoria',
+  carisma: 'Carisma',
+  fluxo: 'Fluxo',
+};
+
+// O conjunto padrão custa exatamente 24 pontos quando todos os sete
+// atributos começam em 8: (15-8)+(14-8)+(13-8)+(12-8)+(10-8) = 24.
+export const VALORES_ATRIBUTOS_PADRAO = [15, 14, 13, 12, 10, 8, 8] as const;
+export const COMPRA_PONTOS_ORCAMENTO = 24;
+export const COMPRA_PONTOS_BASE = 8;
+export const COMPRA_PONTOS_MAXIMO = 15;
 export const ATRIBUTO_VALOR_MINIMO = 1;
 export const ATRIBUTO_VALOR_MAXIMO = 20;
+
+export function distribuirValoresAtributos(valores: readonly number[]): Record<TAtributo, number> {
+  return Object.fromEntries(ATRIBUTOS.map((atributo, indice) => [
+    atributo,
+    Number(valores[indice]) || COMPRA_PONTOS_BASE,
+  ])) as Record<TAtributo, number>;
+}
+
+export function criarCompraPontosVazia(): Record<TAtributo, number> {
+  return distribuirValoresAtributos(ATRIBUTOS.map(() => COMPRA_PONTOS_BASE));
+}
+
+export function calcularPontosAtributos(atribuicao: Record<string, number>): number {
+  return ATRIBUTOS.reduce(
+    (total, atributo) => total + (Number(atribuicao?.[atributo]) - COMPRA_PONTOS_BASE),
+    0,
+  );
+}
+
+export function compraPontosValida(atribuicao: Record<string, number>): boolean {
+  const valoresValidos = ATRIBUTOS.every((atributo) => {
+    const valor = Number(atribuicao?.[atributo]);
+    return Number.isInteger(valor) && valor >= COMPRA_PONTOS_BASE && valor <= COMPRA_PONTOS_MAXIMO;
+  });
+  return valoresValidos && calcularPontosAtributos(atribuicao) === COMPRA_PONTOS_ORCAMENTO;
+}
+
+export function conjuntoAtributosValido(
+  atribuicao: Record<string, number>,
+  valores: readonly number[],
+): boolean {
+  const atribuidos = ATRIBUTOS.map(atributo => Number(atribuicao?.[atributo])).sort((a, b) => a - b);
+  const esperados = [...valores].map(Number).sort((a, b) => a - b);
+  return atribuidos.length === esperados.length
+    && atribuidos.every((valor, indice) => Number.isInteger(valor) && valor === esperados[indice]);
+}
 
 export function rolarAtributos(): number[] {
   return Array.from({ length: ATRIBUTOS.length }, () => 1 + Math.floor(Math.random() * 20));
@@ -28,8 +81,7 @@ export function normalizarAtributosIniciais(atribuicao: Record<string, number>):
 }
 
 export function obterVarianteRacial(raca: IRaca | null, escolhaRacial: any = {}) {
-  if (!Array.isArray(raca?.variantes)) return null;
-  return raca.variantes.find(variante => variante.id === escolhaRacial?.varianteId) || null;
+  return obterOpcaoRacialSelecionada(raca, escolhaRacial);
 }
 
 function somarMapasNumericos(...mapas: any[]) {

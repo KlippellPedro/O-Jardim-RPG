@@ -276,7 +276,7 @@ export function renderAliados(container, personagem, ctx) {
       if (salvar(novaLista, aliado ? 'Aliado atualizado.' : 'Aliado comum adicionado.')) fecharModalSimples();
     });
     abrirModalSimples({
-      titulo: aliado ? `Editar — ${aliado.nome}` : 'Novo aliado comum',
+      titulo: aliado ? `Editar: ${aliado.nome}` : 'Novo aliado comum',
       corpo: form,
       classeExtra: 'ficha-modal--aliado-editor',
     });
@@ -335,7 +335,7 @@ export function renderAliados(container, personagem, ctx) {
     [
       ['Tipo / espécie', aliado.especie],
       ['Papel', aliado.papel || 'Não informado'],
-      ['Nível', aliado.nivel || '—'],
+      ['Nível', aliado.nivel || '-'],
       ['Vida', `${aliado.vidaAtual} / ${aliado.vidaMaxima}`],
       ['Defesa', aliado.defesa],
       ['Movimento', aliado.movimento || 'Não informado'],
@@ -417,9 +417,9 @@ export function renderAliados(container, personagem, ctx) {
     const stats = el('div', 'ficha-aliado-stats');
     [
       ['Defesa', aliado.defesa],
-      ['Movimento', aliado.movimento || '—'],
+      ['Movimento', aliado.movimento || '-'],
       ['Iniciativa', sinal(aliado.iniciativa)],
-      ['Nível', aliado.nivel || '—'],
+      ['Nível', aliado.nivel || '-'],
     ].forEach(([rotulo, valor]) => {
       const item = el('div');
       item.append(el('span', '', rotulo), el('strong', '', String(valor)));
@@ -429,7 +429,7 @@ export function renderAliados(container, personagem, ctx) {
     ataque.append(
       el('span', '', 'Ataque principal'),
       el('strong', '', aliado.ataqueNome || 'Não informado'),
-      el('small', '', aliado.ataqueNome ? `${sinal(aliado.bonusAtaque)} · ${aliado.dano || 'dano —'} · ${aliado.alcance || 'alcance —'}` : 'Edite o aliado para cadastrar.'),
+      el('small', '', aliado.ataqueNome ? `${sinal(aliado.bonusAtaque)} · ${aliado.dano || 'dano -'} · ${aliado.alcance || 'alcance -'}` : 'Edite o aliado para cadastrar.'),
     );
     const descricao = el('p', 'ficha-aliado-descricao', aliado.nota || aliado.habilidades || 'Sem observações registradas.');
     if (aliado.condicoes) descricao.classList.add('ficha-aliado-descricao--condicao');

@@ -1,6 +1,6 @@
 /* Botão de rolar, compartilhado pelos modais de perícia e ataque.
 
-   Mostra o resultado no próprio modal em vez de abrir outro — quem rola quer
+   Mostra o resultado no próprio modal em vez de abrir outro - quem rola quer
    ver o número sem perder de vista de onde ele saiu. */
 
 import { blocoResultado, rolarFormula, rolarTeste } from '../../services/dadosService.js';
@@ -14,7 +14,7 @@ function campoDT() {
   entrada.type = 'number';
   entrada.min = '1';
   entrada.max = '60';
-  entrada.placeholder = '—';
+  entrada.placeholder = '-';
   entrada.setAttribute('aria-label', 'Dificuldade do teste');
   campo.append(rotulo, entrada);
   campo.entrada = entrada;

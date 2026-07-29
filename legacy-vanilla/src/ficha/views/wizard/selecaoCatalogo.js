@@ -38,7 +38,7 @@ export function renderSelecaoCatalogo(container, {
   if (!usandoFiltro) {
     const aviso = document.createElement('p');
     aviso.className = 'ficha-wizard-aviso';
-    aviso.textContent = `Nenhuma ${tipoLabel} associada à Árvore de ${arvoreTitulo} ainda — mostrando todas as ${lista.length}.`;
+    aviso.textContent = `Nenhuma ${tipoLabel} associada à Árvore de ${arvoreTitulo} ainda - mostrando todas as ${lista.length}.`;
     container.appendChild(aviso);
   }
 

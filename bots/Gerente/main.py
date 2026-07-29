@@ -1,4 +1,4 @@
-"""O Jardim RPG — bot Gerente, consulta verificável das regras publicadas."""
+"""O Jardim RPG: bot Gerente, consulta verificável das regras publicadas."""
 
 from __future__ import annotations
 
@@ -41,6 +41,10 @@ class Gerente(commands.Bot):
         if config.GUILD_ID:
             guild = discord.Object(id=int(config.GUILD_ID))
             self.tree.copy_global_to(guild=guild)
+            # Mantém somente a cópia rápida do servidor configurado e remove
+            # comandos globais antigos que poderiam aparecer duplicados.
+            self.tree.clear_commands(guild=None)
+            await self.tree.sync()
             comandos = await self.tree.sync(guild=guild)
             log.info("Slash sincronizado no servidor %s (%d comandos).", config.GUILD_ID, len(comandos))
         else:

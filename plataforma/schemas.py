@@ -1,10 +1,22 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from typing import Any, Literal
 from uuid import UUID
 
-from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    EmailStr,
+    Field,
+    StrictBool,
+    StrictInt,
+    field_validator,
+    model_validator,
+)
+
+from core.condicoes import normalizar_condicoes
 
 
 CampaignRole = Literal["mestre", "assistente", "jogador", "observador"]
@@ -17,7 +29,7 @@ AssignablePlatformRole = Literal["player", "mestre", "admin"]
 class RegisterInput(BaseModel):
     email: EmailStr
     nome_exibicao: str = Field(min_length=2, max_length=80)
-    senha: str = Field(min_length=12, max_length=128)
+    senha: str = Field(min_length=8, max_length=128)
     # Obrigatório quando CADASTRO=convite; a conta já entra na campanha do
     # código usado, então quem convidou não precisa de um segundo passo.
     convite: str | None = Field(default=None, max_length=120)
@@ -47,7 +59,7 @@ class PasswordHelpInput(BaseModel):
 
 class PasswordChangeInput(BaseModel):
     senha_atual: str = Field(min_length=1, max_length=128)
-    nova_senha: str = Field(min_length=12, max_length=128)
+    nova_senha: str = Field(min_length=8, max_length=128)
 
     @model_validator(mode="after")
     def require_different_password(self):
@@ -69,6 +81,7 @@ class CampaignCreateInput(BaseModel):
 class CampaignUpdateInput(BaseModel):
     nome: str | None = Field(default=None, min_length=2, max_length=100)
     descricao: str | None = Field(default=None, max_length=2000)
+    configuracoes: dict[str, Any] | None = Field(default=None)
 
     @field_validator("nome")
     @classmethod
@@ -202,7 +215,10 @@ class WalletTransactionInput(BaseModel):
     @field_validator("moeda")
     @classmethod
     def clean_currency(cls, value: str) -> str:
-        return " ".join(value.strip().split())
+        cleaned = " ".join(value.strip().split())
+        if not cleaned:
+            raise ValueError("moeda nao pode ser vazia")
+        return cleaned
 
 
 class InventoryTransactionInput(BaseModel):
@@ -217,22 +233,46 @@ class InventoryTransactionInput(BaseModel):
 
 
 class EconomyWalletItem(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+
     moeda: str = Field(min_length=1, max_length=40)
     saldo: int = Field(ge=-9_000_000_000, le=9_000_000_000)
     simbolo: str | None = Field(default=None, max_length=4)
 
+    @field_validator("moeda")
+    @classmethod
+    def clean_currency(cls, value: str) -> str:
+        cleaned = " ".join(value.strip().split())
+        if not cleaned:
+            raise ValueError("moeda nao pode ser vazia")
+        return cleaned
+
 
 class EconomyInventoryItem(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+
     item_id: str = Field(min_length=1, max_length=160)
     titulo: str = Field(min_length=1, max_length=200)
     quantidade: int = Field(ge=1, le=1_000_000)
     dados: dict[str, Any] = Field(default_factory=dict)
 
+    @field_validator("item_id", "titulo")
+    @classmethod
+    def clean_required_text(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("item_id e titulo nao podem ser vazios")
+        return cleaned
+
 
 class EconomyReplaceInput(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+
     versao_esperada: int = Field(ge=1)
-    carteira: list[EconomyWalletItem] = Field(default_factory=list, max_length=50)
-    inventario: list[EconomyInventoryItem] = Field(default_factory=list, max_length=500)
+    # Esta rota substitui o agregado inteiro. Exigir os dois campos impede que
+    # um cliente parcial apague silenciosamente carteira ou inventario.
+    carteira: list[EconomyWalletItem] = Field(max_length=50)
+    inventario: list[EconomyInventoryItem] = Field(max_length=500)
 
     @model_validator(mode="after")
     def validate_unique_entries(self):
@@ -242,7 +282,15 @@ class EconomyReplaceInput(BaseModel):
         item_ids = [item.item_id.strip() for item in self.inventario]
         if len(item_ids) != len(set(item_ids)):
             raise ValueError("o inventario contem itens duplicados")
-        encoded = json.dumps(self.model_dump(), ensure_ascii=False, separators=(",", ":"))
+        try:
+            encoded = json.dumps(
+                self.model_dump(mode="python"),
+                ensure_ascii=False,
+                allow_nan=False,
+                separators=(",", ":"),
+            )
+        except (TypeError, ValueError) as error:
+            raise ValueError("a economia contem dados que nao sao JSON valido") from error
         if len(encoded.encode("utf-8")) > 1_000_000:
             raise ValueError("a economia da ficha excede o limite de 1 MB")
         return self
@@ -260,6 +308,75 @@ class VaultTransferCurrencyInput(BaseModel):
     personagem_id: UUID
     moeda: str = Field(min_length=1, max_length=40)
     quantidade: int = Field(ge=1, le=9_000_000_000)
+
+    @field_validator("moeda")
+    @classmethod
+    def clean_currency(cls, value: str) -> str:
+        cleaned = " ".join(value.strip().split())
+        if not cleaned:
+            raise ValueError("moeda nao pode ser vazia")
+        return cleaned
+
+
+_IDEMPOTENCY_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$"
+
+
+class StrictCommandInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+
+class ShopCommandItemInput(StrictCommandInput):
+    item_id: str = Field(min_length=1, max_length=160)
+    quantidade: StrictInt = Field(default=1, ge=1, le=500)
+
+    @field_validator("item_id")
+    @classmethod
+    def clean_item_id(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("item_id nao pode ser vazio")
+        return cleaned
+
+
+class ShopBatchCommandInput(StrictCommandInput):
+    campanha_id: UUID
+    personagem_id: UUID
+    economia_versao_esperada: StrictInt = Field(ge=1)
+    idempotencia: str = Field(
+        min_length=8,
+        max_length=128,
+        pattern=_IDEMPOTENCY_PATTERN,
+    )
+    itens: list[ShopCommandItemInput] = Field(min_length=1, max_length=50)
+
+    @model_validator(mode="after")
+    def validate_batch(self):
+        item_ids = [item.item_id for item in self.itens]
+        if len(item_ids) != len(set(item_ids)):
+            raise ValueError("o lote contem item_id duplicado")
+        if sum(item.quantidade for item in self.itens) > 500:
+            raise ValueError("o lote excede 500 unidades")
+        return self
+
+
+class BountyClaimCommandInput(StrictCommandInput):
+    cacador_personagem_id: UUID
+    alvo_personagem_id: UUID
+    idempotencia: str = Field(
+        min_length=8,
+        max_length=128,
+        pattern=_IDEMPOTENCY_PATTERN,
+    )
+
+
+class BountyResolveCommandInput(StrictCommandInput):
+    claim_id: UUID
+    aprovado: StrictBool
+    idempotencia: str = Field(
+        min_length=8,
+        max_length=128,
+        pattern=_IDEMPOTENCY_PATTERN,
+    )
 
 
 class VaultDepositItem(BaseModel):
@@ -287,6 +404,57 @@ class DiscordVaultDepositInput(BaseModel):
         if not self.itens and not self.moedas:
             raise ValueError("informe ao menos um item ou moeda")
         return self
+
+
+# ── Cofre unificado: bots leem/escrevem o cofre da conta como fonte única de
+# posse de item (em vez da tabela `inventario` local do Banqueiro). ──────────
+
+
+class VaultWithdrawItem(BaseModel):
+    item_id: str = Field(min_length=1, max_length=160)
+    quantidade: int = Field(default=1, ge=1, le=1_000_000)
+
+
+class DiscordVaultWithdrawInput(BaseModel):
+    discord_user_id: str = Field(min_length=5, max_length=30, pattern=r"^[0-9]+$")
+    discord_guild_id: str = Field(min_length=5, max_length=30, pattern=r"^[0-9]+$")
+    idempotencia: str = Field(min_length=8, max_length=160)
+    motivo: str = Field(min_length=2, max_length=500)
+    itens: list[VaultWithdrawItem] = Field(min_length=1, max_length=50)
+
+
+class VaultTransferMove(BaseModel):
+    de_discord_user_id: str = Field(min_length=5, max_length=30, pattern=r"^[0-9]+$")
+    para_discord_user_id: str = Field(min_length=5, max_length=30, pattern=r"^[0-9]+$")
+    itens: list[VaultWithdrawItem] = Field(min_length=1, max_length=20)
+
+
+class DiscordVaultTransferInput(BaseModel):
+    discord_guild_id: str = Field(min_length=5, max_length=30, pattern=r"^[0-9]+$")
+    idempotencia: str = Field(min_length=8, max_length=160)
+    motivo: str = Field(min_length=2, max_length=500)
+    movimentos: list[VaultTransferMove] = Field(min_length=1, max_length=4)
+    respeitar_capacidade: bool = True
+
+
+class DiscordVaultReserveInput(BaseModel):
+    discord_user_id: str = Field(min_length=5, max_length=30, pattern=r"^[0-9]+$")
+    discord_guild_id: str = Field(min_length=5, max_length=30, pattern=r"^[0-9]+$")
+    origem: str = Field(min_length=2, max_length=60)
+    referencia: str = Field(min_length=1, max_length=160)
+    item_id: str = Field(min_length=1, max_length=160)
+    quantidade: int = Field(default=1, ge=1, le=1_000_000)
+    motivo: str = Field(min_length=2, max_length=500)
+    expira_em: datetime
+
+
+class DiscordVaultReserveResolveInput(BaseModel):
+    discord_guild_id: str = Field(min_length=5, max_length=30, pattern=r"^[0-9]+$")
+    origem: str = Field(min_length=2, max_length=60)
+    referencia: str = Field(min_length=1, max_length=160)
+    destino_discord_user_id: str | None = Field(
+        default=None, min_length=5, max_length=30, pattern=r"^[0-9]+$"
+    )
 
 
 class SessionOpenInput(BaseModel):
@@ -318,22 +486,18 @@ class ParticipantUpdateInput(BaseModel):
     vida_maxima: int | None = Field(default=None, ge=0, le=99_999)
     dano: int | None = Field(default=None, ge=0, le=99_999)
     cura: int | None = Field(default=None, ge=0, le=99_999)
-    condicoes: list[str] | None = Field(default=None, max_length=20)
+    condicoes: list[Any] | None = Field(default=None, max_length=20)
     anotacao: str | None = Field(default=None, max_length=500)
     visivel: bool | None = None
     vida_visivel: bool | None = None
 
     @field_validator("condicoes")
     @classmethod
-    def clean_conditions(cls, value: list[str] | None) -> list[str] | None:
+    def clean_conditions(cls, value: list[Any] | None) -> list[dict] | None:
+        # Aceita strings (formato antigo) ou {nome, turnos} e normaliza os dois.
         if value is None:
             return None
-        limpas: list[str] = []
-        for item in value:
-            texto = " ".join(str(item).strip().split())[:40]
-            if texto and texto not in limpas:
-                limpas.append(texto)
-        return limpas
+        return normalizar_condicoes(value)
 
     @model_validator(mode="after")
     def require_change(self):

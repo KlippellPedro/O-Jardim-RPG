@@ -9,24 +9,31 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
 ## Mecânicas
 
 - **Carteira** (`/carteira`) — dinheiro "vivo". Recebe o Lunaris dos baús,
-  compras, vendas etc. **Sempre vulnerável, sem chance nenhuma**:
-  `/roubar <membro>` leva 50% fixo do saldo (`ROUBO_CARTEIRA_PERCENT`) —
-  deixar dinheiro na carteira é escolha (ou risco) do jogador; não tem como
-  se defender. Depois de ser roubada, a vítima fica um tempo protegida
+  compras, vendas etc. `/roubar <membro>` abre uma tentativa pública e a
+  vítima tem **5 segundos** para clicar em `Impedir o roubo`. Se o prazo
+  acabar, o ladrão leva 50% fixo do saldo (`ROUBO_CARTEIRA_PERCENT`). A
+  tentativa consome o cooldown mesmo quando é impedida. Depois de ser roubada,
+  a vítima fica um tempo protegida
   contra novo roubo de carteira (`ROUBO_PROTECAO_VITIMA_HORAS`) e recebe uma
   DM avisando quanto foi levado e por quem (silenciosamente ignorado se a
   vítima tiver DM fechada).
 - **Cofre** (`/cofre`) — guarda itens (limitados pelo tier) e dinheiro
   (`/cofre_depositar`, `/cofre_sacar` — saque cobra uma taxa pequena). O
-  dinheiro guardado é **defensável**: `/roubar_cofre` tenta arrombar e, se
-  der certo, leva 50% fixo do saldo guardado (`ROUBO_COFRE_PERCENT`) — mas
-  a *chance* de dar certo depende da **Segurança** que o dono comprou
+  dinheiro guardado é **defensável**: `/roubar_cofre` também dá 5 segundos
+  para a vítima impedir. Sem reação, tenta arrombar e, se der certo, leva 50%
+  fixo do saldo guardado (`ROUBO_COFRE_PERCENT`) — mas a *chance* de dar certo
+  depende da **Segurança** que o dono comprou
   (`/cofre_seguranca_melhorar`). Segurança Básica (de fábrica) defende 50%
   das tentativas; cada tier comprado é um patamar fixo de defesa mais alto
   (nível 1 já defende 70%, e sobe dali — ver `SEGURANCA_TIERS` em
   `core/economia.py`). Se o roubo falhar, o ladrão paga multa pro alvo. O
   cofre também pode render juros (`/juros_cofre`, comando de mestre, tipo
   timeskip de fim de sessão) — só o saldo guardado, nunca a carteira.
+- **Proteção do mestre** — `/mestre_proteger <membro>` define uma única conta
+  imune aos dois tipos de roubo no servidor; chamar o comando sem membro remove
+  a proteção. Tentar roubar essa conta consome o cooldown e queima no máximo
+  1 Lunaris da carteira do ladrão, apenas como punição cômica. A conta
+  protegida também não pode receber novas recompensas.
 - **Dívida e procurados** — usar a linha de crédito cria uma dívida separada
   do saldo da carteira. Receber Lunaris não paga essa dívida: o jogador escolhe
   quanto pagar com `/divida_pagar <quantia>`. A dívida cresce sozinha com o tempo (`DIVIDA_TICK_HORAS`,
@@ -60,17 +67,18 @@ regras de `/roubar_cofre` por servidor com `/setroubo`, sem editar código.
   banco usado pelo Jornalista**, cada bot como aplicação separada na mesma
   VLAN privada.
 - **Segredos:** `DISCORD_TOKEN` e `DATABASE_URL` somente nas Variáveis do painel.
-- **Catálogo:** a tabela `catalogo_itens` é a fonte de verdade. O arquivo
-  `data/catalogo.json` é usado uma única vez, para semear uma tabela vazia
-  (só o Banqueiro semeia; o Jornalista só lê).
+- **Catálogo em execução:** a tabela `catalogo_itens` é a fonte lida pelos
+  bots. O arquivo versionado `data/catalogo.json` serve de semente inicial e
+  também de fonte para republicações controladas pelo mestre.
 
 Na Discloud, Banqueiro e PostgreSQL continuam sendo **duas aplicações
 separadas**, ligadas pela mesma VLAN privada. O banco não deve ser colocado no
 mesmo processo ou no mesmo ZIP do bot.
 
-O comando antigo `/importar` foi removido. Depois que um dashboard alterar o
-catálogo central, o mestre pode usar `/catalogo_recarregar` para atualizar a
-memória do bot sem reiniciá-lo.
+O comando antigo `/importar` foi removido. Para publicar adições, edições e
+remoções feitas em `data/catalogo.json`, use `/catalogo_republicar`. O comando
+`/catalogo_recarregar` apenas atualiza a memória do bot com o conteúdo que já
+está no PostgreSQL.
 
 Quando `PLATFORM_API_URL` e `SERVICE_API_KEY` estiverem configuradas, o bot
 também oferece:
@@ -124,7 +132,8 @@ Veja `.env.example` para a lista sem segredos:
 
 - `DISCORD_TOKEN` — obrigatória;
 - `DATABASE_URL` — obrigatória;
-- `GUILD_ID` — opcional, acelera a sincronização de comandos num servidor;
+- `GUILD_ID` — opcional; quando definido, publica os comandos somente nesse
+  servidor e remove cópias globais antigas para não exibir duplicados;
 - `DATABASE_STARTUP_TIMEOUT` — opcional, padrão 12 segundos.
 
 Nunca envie o `.env` real ao Git. O `.gitignore` e o `.discloudignore` protegem
@@ -189,5 +198,5 @@ bots/banqueiro/
 │   ├── ajuda.py             # /ajuda (por categoria) e /comandos (lista tudo)
 │   ├── integracao.py
 │   └── trocas.py
-└── data/catalogo.json      # somente semente inicial
+└── data/catalogo.json      # semente inicial e fonte de republicação
 ```

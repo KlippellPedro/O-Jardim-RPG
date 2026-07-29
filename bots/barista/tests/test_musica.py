@@ -3,6 +3,7 @@
 import asyncio
 import json
 import sys
+import threading
 from pathlib import Path
 
 import pytest
@@ -37,6 +38,34 @@ def test_valida_e_canonicaliza_link_youtube():
     assert musica._url_youtube_video(f"https://youtu.be/{video_id}?si=segredo") == esperado
     assert musica._url_youtube_video(f"https://music.youtube.com/watch?v={video_id}") == esperado
     assert musica._url_youtube_video("Never Gonna Give You Up") is None
+
+
+@pytest.mark.parametrize(
+    "link",
+    [
+        "https://soundcloud.com/artista/faixa",
+        "https://www.soundcloud.com/artista/faixa?utm_source=teste#trecho",
+        "https://on.soundcloud.com/abc123",
+    ],
+)
+def test_valida_link_soundcloud(link):
+    resultado = musica._url_soundcloud(link)
+    assert resultado is not None
+    assert "#" not in resultado
+
+
+@pytest.mark.parametrize(
+    "link",
+    [
+        "http://soundcloud.com/artista/faixa",
+        "https://soundcloud.com:8443/artista/faixa",
+        "https://usuario@www.youtube.com/watch?v=jNQXAC9IVRw",
+    ],
+)
+def test_recusa_autoridade_insegura_em_host_permitido(link):
+    validador = musica._url_soundcloud if "soundcloud" in link else musica._url_youtube_video
+    with pytest.raises(musica.ErroMusica):
+        validador(link)
 
 
 @pytest.mark.parametrize(
@@ -138,6 +167,8 @@ def test_buscar_youtube_usa_oembed_e_espelha_no_soundcloud(monkeypatch):
             return {"entries": [{"title": "Me at the zoo", "url": "https://audio.invalid", "duration": 19}]}
 
     monkeypatch.setattr(musica, "_metadados_youtube", lambda _: ("Me at the zoo", "jawed"))
+    # O teste não pode depender da existência de um cookies.txt na máquina.
+    monkeypatch.setattr(musica, "YOUTUBE_DISPONIVEL", False)
     monkeypatch.setattr(musica.yt_dlp, "YoutubeDL", YDL)
 
     faixa = asyncio.run(musica.buscar_faixa(url_youtube, solicitante_id=42))
@@ -146,6 +177,72 @@ def test_buscar_youtube_usa_oembed_e_espelha_no_soundcloud(monkeypatch):
     assert faixa.url_pagina == url_youtube
     assert faixa.origem_audio == "youtube-espelhado"
     assert "SoundCloud" in faixa.observacao_origem()
+
+
+def test_recusa_url_http_fora_da_allowlist_sem_chamar_ytdlp(monkeypatch):
+    class YDL:
+        def __init__(self, _):
+            raise AssertionError("yt-dlp não deveria receber URL fora da allowlist")
+
+    monkeypatch.setattr(musica.yt_dlp, "YoutubeDL", YDL)
+
+    with pytest.raises(musica.ErroMusica, match="YouTube, Spotify ou SoundCloud"):
+        asyncio.run(musica.buscar_faixa("https://exemplo.invalid/audio", solicitante_id=42))
+
+
+def test_url_malformada_vira_erro_amigavel_sem_chamar_ytdlp(monkeypatch):
+    class YDL:
+        def __init__(self, _):
+            raise AssertionError("yt-dlp não deveria receber URL malformada")
+
+    monkeypatch.setattr(musica.yt_dlp, "YoutubeDL", YDL)
+    with pytest.raises(musica.ErroMusica, match="malformado"):
+        asyncio.run(musica.buscar_faixa("https://[", solicitante_id=42))
+
+
+def test_extracao_tem_timeout_e_slot_so_libera_quando_thread_termina(monkeypatch):
+    async def cenario():
+        semaforo = asyncio.BoundedSemaphore(1)
+        monkeypatch.setattr(musica, "_SEMAFORO_EXTRACOES", semaforo)
+        monkeypatch.setattr(musica, "EXTRACAO_TIMEOUT_S", 0.02)
+
+        iniciou = threading.Event()
+        liberar = threading.Event()
+
+        def extracao_travada():
+            iniciou.set()
+            liberar.wait(timeout=1)
+            return "primeira"
+
+        with pytest.raises(musica.ErroMusica, match="demorou demais"):
+            await musica._executar_extracao(extracao_travada)
+        assert iniciou.is_set()
+        assert semaforo.locked(), "a thread ainda ativa precisa continuar ocupando a vaga"
+
+        segunda = asyncio.create_task(musica._executar_extracao(lambda: "segunda"))
+        await asyncio.sleep(0.01)
+        assert not segunda.done(), "a segunda extração não pode furar o limite global"
+
+        liberar.set()
+        assert await asyncio.wait_for(segunda, timeout=0.5) == "segunda"
+        assert not semaforo.locked()
+
+    asyncio.run(cenario())
+
+
+def test_espera_por_vaga_de_extracao_tambem_tem_timeout(monkeypatch):
+    async def cenario():
+        semaforo = asyncio.BoundedSemaphore(1)
+        await semaforo.acquire()
+        monkeypatch.setattr(musica, "_SEMAFORO_EXTRACOES", semaforo)
+        monkeypatch.setattr(musica, "EXTRACAO_TIMEOUT_S", 0.01)
+        try:
+            with pytest.raises(musica.ErroMusica, match="muitas buscas"):
+                await musica._executar_extracao(lambda: "não deve iniciar")
+        finally:
+            semaforo.release()
+
+    asyncio.run(cenario())
 
 
 def _faixa(titulo: str) -> musica.Faixa:

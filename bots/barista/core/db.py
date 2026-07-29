@@ -1,6 +1,6 @@
 """
 Acesso ao PostgreSQL compartilhado do Jardim (Banqueiro/Jornalista/Barista,
-mesma VLAN da Discloud — ver Plano_Banco_Central.md).
+mesma VLAN da Discloud — ver docs/Plano_Banco_Central.md).
 
 O Barista só declara aqui as tabelas que ele mesmo usa: `carteira` e
 `extrato` são as MESMAS tabelas do Banqueiro (IF NOT EXISTS — não importa
@@ -373,3 +373,4 @@ class Database:
                 (guild_id, nome),
             ).fetchone()
         return row is not None
+

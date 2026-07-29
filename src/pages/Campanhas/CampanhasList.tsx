@@ -24,7 +24,7 @@ export const CampanhasList: React.FC = () => {
   const handleSelectCampanha = async (id: string) => {
     setIsLoading(true);
     await setCampanhaAtiva(id);
-    // isLoading será mantido true até a navegação completar —
+    // isLoading será mantido true até a navegação completar -
     // o componente vai desmontar, portanto não precisamos de setIsLoading(false)
     navigate('/ficha');
   };

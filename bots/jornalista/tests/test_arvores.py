@@ -1,4 +1,4 @@
-"""Testes de core/arvores.py — dado puro, sem discord.py nem banco."""
+"""Testes de core/arvores.py: dado puro, sem discord.py nem banco."""
 
 import sys
 from pathlib import Path

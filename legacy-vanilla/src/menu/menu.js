@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────
-   O Jardim RPG — Menu
+   O Jardim RPG - Menu
    Animação: 10 Árvores/deidades crescendo a partir do centro
    ───────────────────────────────────────────────────────── */
 
@@ -8,20 +8,20 @@ import { sessaoApi } from '../plataforma/sessaoApi.js';
 
 // ── Constantes ────────────────────────────────────────────
 
-const KERYX_IDX = 2; // Árvore presa por Jota — tratamento visual especial
+const KERYX_IDX = 2; // Árvore presa por Jota - tratamento visual especial
 
-// Cada deidade tem um tom de cor. Não tão saturado — o fundo é quase tudo dourado.
+// Cada deidade tem um tom de cor. Não tão saturado - o fundo é quase tudo dourado.
 const DEITY_RGBA = [
-  '201,162,39',   // 0 Aethel   — ouro (Origem)
-  '210,195,168',  // 1 Ousias   — branco-lua (Essência)
-  '74,158,187',   // 2 Keryx    — azul-gelo (Tecnologia — preso)
-  '120,185,130',  // 3 Haemus   — verde-sálvia (Vida)
-  '200,100,60',   // 4 Ignis    — âmbar-brasa (Mutação)
-  '140,158,174',  // 5 Moros    — aço (Matéria)
-  '85,170,204',   // 6 Aperion  — azul-céu (Espaço)
-  '190,160,60',   // 7 Chronus  — âmbar (Tempo)
-  '100,68,136',   // 8 Erebus   — violeta (Vazio)
-  '139,26,42',    // 9 Carmesim — sangue (Sangue)
+  '201,162,39',   // 0 Aethel   - ouro (Origem)
+  '210,195,168',  // 1 Ousias   - branco-lua (Essência)
+  '74,158,187',   // 2 Keryx    - azul-gelo (Tecnologia - preso)
+  '120,185,130',  // 3 Haemus   - verde-sálvia (Vida)
+  '200,100,60',   // 4 Ignis    - âmbar-brasa (Mutação)
+  '140,158,174',  // 5 Moros    - aço (Matéria)
+  '85,170,204',   // 6 Aperion  - azul-céu (Espaço)
+  '190,160,60',   // 7 Chronus  - âmbar (Tempo)
+  '100,68,136',   // 8 Erebus   - violeta (Vazio)
+  '139,26,42',    // 9 Carmesim - sangue (Sangue)
 ];
 
 // ── Árvore Cósmica ────────────────────────────────────────
@@ -40,7 +40,7 @@ function initCosmicTree() {
   function build() {
     segments = [];
     CX = W / 2;
-    // Tronco nasce rente à borda inferior — os galhos se abrem pra cima,
+    // Tronco nasce rente à borda inferior - os galhos se abrem pra cima,
     // atravessando o título. A árvore é o cenário, não um detalhe.
     CY = H * 0.98;
     const baseLen = H * 0.7;
@@ -55,7 +55,7 @@ function initCosmicTree() {
       // Galhos apontando para cima são mais longos
       const upness  = Math.max(0, -Math.sin(angle));
       const lenMult = 0.55 + 0.45 * upness;
-      // Keryx: galhos menores (preso — crescimento truncado)
+      // Keryx: galhos menores (preso - crescimento truncado)
       const maxD = i === KERYX_IDX ? 4 : 5;
       grow(CX, CY, angle, baseLen * lenMult, 0, maxD, i, 0);
     }
@@ -76,7 +76,7 @@ function initCosmicTree() {
     const t0 = waveStart;
     const t1 = waveStart + WAVE_DUR;
 
-    // Linhas finas e esmaecidas — um esboço mágico atmosférico, não uma
+    // Linhas finas e esmaecidas - um esboço mágico atmosférico, não uma
     // ilustração cheia. O pulso (fase 2) oscila isso entre ~15% e ~25%.
     const alpha = Math.max(0.02, 0.26 - depth * 0.032);
     const width = Math.max(0.15, 1.4 - depth * 0.22);
@@ -143,7 +143,7 @@ function initCosmicTree() {
 
     for (const seg of segments) {
       let a = seg.alpha * pulse;
-      // Keryx: galhos piscam aleatoriamente — conexão instável
+      // Keryx: galhos piscam aleatoriamente - conexão instável
       if (seg.broken) {
         a *= flicker < 0.08 ? 0.1 : flicker < 0.15 ? 0.5 : 1.0;
       }

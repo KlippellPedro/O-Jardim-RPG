@@ -78,7 +78,7 @@ function inteiroNaoNegativo(valor, maximo = Number.MAX_SAFE_INTEGER) {
   return Math.max(0, Math.min(maximo, Math.trunc(numeroFinito(valor, 0))));
 }
 
-// Um import feito à mão pode trazer grau inválido ("mestre2", número...) —
+// Um import feito à mão pode trazer grau inválido ("mestre2", número...) -
 // grau desconhecido quebraria a aba Perícias (GRAUS_INFO[grau] indefinido).
 // "iniciante" explícito também é descartado: ausência no mapa já significa isso.
 function normalizarGrausPericias(valor) {
@@ -115,7 +115,7 @@ function normalizarListaAjustes(valor) {
 }
 
 // As views assumem os formatos destes campos (somaAjustes faz .reduce na
-// lista, os modais fazem .map) — um import corrompido não pode derrubar a
+// lista, os modais fazem .map) - um import corrompido não pode derrubar a
 // aba Ficha inteira. Só normaliza chaves presentes pra não inchar o save.
 function sanitizarCamposRecursos(recursos) {
   CHAVES_AJUSTES_RECURSOS.forEach(chave => {
@@ -636,7 +636,7 @@ function enfileirarSincronizacao(id) {
   });
 }
 
-/** Envia tudo que está esperando — usado ao sair da página. */
+/** Envia tudo que está esperando - usado ao sair da página. */
 export function sincronizarPendentes() {
   [...agendamentos.keys()].forEach(sincronizarAgora);
 }
@@ -661,7 +661,7 @@ export function obterPersonagem(id) {
 
 // atributosBase: valores rolados (7d20) e distribuídos pelo jogador.
 // atributosFinais/derivados/lunarisInicial já vêm
-// calculados do wizard (ver services/calculoService.js) — este serviço só
+// calculados do wizard (ver services/calculoService.js) - este serviço só
 // persiste, não recalcula nada.
 export async function criarPersonagem({
   nome, arvoreId, racaId, classeId,
@@ -679,7 +679,7 @@ export async function criarPersonagem({
     nome: nomeLimpo,
     arvoreId: arvoreId || null,
     racaId: racaId || null,
-    // Identidade solta, sem efeito mecânico — preenchida/editada na Ficha,
+    // Identidade solta, sem efeito mecânico - preenchida/editada na Ficha,
     // não no wizard (que já é longo o suficiente sem pedir isso na criação).
     tamanho: '',
     origem: '',
@@ -706,7 +706,7 @@ export async function criarPersonagem({
     ),
     derivados: derivados || null,
     // Recursos "atuais" (jogáveis, sobem/descem em mesa) separados dos
-    // "derivados" (máximos calculados na criação) — ver views/personagem/.
+    // "derivados" (máximos calculados na criação) - ver views/personagem/.
     recursos: {
       vidaAtual: derivados?.vida ?? 0,
       manaAtual: derivados?.mana ?? 0,
@@ -726,7 +726,7 @@ export async function criarPersonagem({
     niveisRecursosPendentes: 0,
     escolhaRacial: normalizarEscolhaRacial(escolhaRacial),
     // Ausência de uma perícia neste mapa == grau "iniciante" (ver
-    // calculoService.js/GRAUS_PERICIA) — só grava o que já foi treinado.
+    // calculoService.js/GRAUS_PERICIA) - só grava o que já foi treinado.
     pericias: pericias || {},
     periciasPersonalizadas: [],
     atributosPericias: {},
@@ -758,7 +758,7 @@ export async function criarPersonagem({
   }
 }
 
-// Atualização parcial genérica — todas as abas da ficha completa (recursos,
+// Atualização parcial genérica - todas as abas da ficha completa (recursos,
 // perícias, poderes, inventário, ataques, aliados, notas...) passam por
 // aqui em vez de terem uma função de update dedicada cada uma.
 export function atualizarPersonagem(id, patch) {

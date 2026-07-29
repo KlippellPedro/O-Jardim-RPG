@@ -34,8 +34,8 @@ def new_temporary_password() -> str:
     """Senha provisória ditável por voz: blocos do alfabeto sem letra ambígua.
 
     O admin precisa passar isso por Discord ou pessoalmente, então nada de
-    caracteres que se confundem (0/O, 1/I). O tamanho respeita o mínimo de 12
-    exigido no cadastro.
+    caracteres que se confundem (0/O, 1/I). Mesmo com o mínimo de cadastro em
+    8 caracteres, a senha provisória continua maior por ser gerada pelo sistema.
     """
     blocos = ["".join(secrets.choice(_HUMAN_ALPHABET) for _ in range(4)) for _ in range(4)]
     return "-".join(blocos)

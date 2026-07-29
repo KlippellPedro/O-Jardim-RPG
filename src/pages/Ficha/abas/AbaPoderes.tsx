@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Search, Zap, Pencil, Trash2, Dices } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Search, Zap, Pencil, Trash2, Dices, GripVertical, Star } from 'lucide-react';
+import { Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
-import { LabeledInput, LabeledSelect } from '../components/SharedFichaComponents';
+import { LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 
@@ -22,6 +22,8 @@ interface IPoder {
   duracao: string;
   alcance: string;
   descricao: string;
+  ordem?: number;
+  favorito?: boolean;
 }
 
 const TIPOS_PODER = ['Ativa', 'Passiva', 'Reação', 'Sustentada', 'Outro'];
@@ -42,6 +44,14 @@ const RECURSO_LABEL: Record<string, string> = {
   cansaco: 'Cansaço',
 };
 
+const TIPO_COLORS: Record<string, string> = {
+  Ativa: 'bg-red-500/10 border-red-500/30 text-red-400',
+  Passiva: 'bg-blue-500/10 border-blue-500/30 text-blue-400',
+  Reação: 'bg-amber-500/10 border-amber-500/30 text-amber-400',
+  Sustentada: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+  Outro: 'bg-gray-500/10 border-gray-500/30 text-gray-400'
+};
+
 const gerarId = () => `poderes-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 
 const criarPoderVazio = (): IPoder => ({
@@ -55,6 +65,8 @@ const criarPoderVazio = (): IPoder => ({
   duracao: '',
   alcance: '',
   descricao: '',
+  ordem: 0,
+  favorito: false,
 });
 
 function custoTexto(custo?: ICustoPoder) {
@@ -74,12 +86,27 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
   const status = f.status || {};
   const poderes: IPoder[] = f.poderes || [];
 
-  const poderesVisiveis = poderes.filter((p) =>
-    !busca || p.nome?.toLowerCase().includes(busca.toLowerCase())
-  );
+  const poderesVisiveis = poderes
+    .filter((p) => !busca || p.nome?.toLowerCase().includes(busca.toLowerCase()))
+    .sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
 
   const salvarLista = (novaLista: IPoder[]) => {
     onUpdate(['ficha', 'poderes'], novaLista);
+  };
+
+  const handleReorder = (novosItens: IPoder[]) => {
+    const comOrdem = novosItens.map((item, index) => ({ ...item, ordem: index }));
+    salvarLista(comOrdem);
+  };
+
+  const toggleFavorito = (id: string) => {
+    let modificada = poderes.map(p => p.id === id ? { ...p, favorito: !p.favorito } : p);
+    const itemTarget = modificada.find(p => p.id === id);
+    if (itemTarget && itemTarget.favorito) {
+      modificada = [itemTarget, ...modificada.filter(p => p.id !== id)];
+    }
+    const comOrdem = modificada.map((item, index) => ({ ...item, ordem: index }));
+    salvarLista(comOrdem);
   };
 
   const abrirNovo = () => {
@@ -231,32 +258,42 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
 
       {/* LISTA DE PODERES */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4">
-        <div className="flex flex-col gap-4">
+        <Reorder.Group axis="y" values={poderesVisiveis} onReorder={handleReorder} className="flex flex-col gap-4">
           {poderesVisiveis.map((p) => (
-            <motion.div
-              layout
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            <Reorder.Item
+              value={p}
               key={p.id}
-              className="bg-[#121118] border border-white/5 rounded-xl p-5 hover:border-yellow-600/30 transition-colors group"
+              className={`bg-[#121118] border ${p.favorito ? 'border-yellow-600/50 shadow-[0_0_15px_rgba(202,138,4,0.15)]' : 'border-white/5 hover:border-yellow-600/30'} rounded-xl p-5 transition-colors group relative`}
             >
               <div className="flex gap-4 items-start">
-                <div className="w-10 h-10 rounded-full bg-black/50 border border-white/5 flex items-center justify-center text-yellow-600 flex-shrink-0 mt-1">
-                  <Zap size={18} />
+                <div className="flex flex-col gap-2 items-center flex-shrink-0">
+                  <div className="flex gap-1 mb-1">
+                    <button onClick={() => toggleFavorito(p.id)} className={`transition-colors ${p.favorito ? 'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]' : 'text-gray-600 hover:text-gray-400'}`}>
+                      <Star size={16} fill={p.favorito ? 'currentColor' : 'none'} />
+                    </button>
+                    <div className="cursor-grab active:cursor-grabbing text-gray-600 hover:text-gray-400 p-0.5">
+                      <GripVertical size={16} />
+                    </div>
+                  </div>
+                  <div className={`w-10 h-10 rounded-full bg-black/50 border flex items-center justify-center ${p.favorito ? 'border-yellow-600/50 text-yellow-500' : 'border-white/5 text-yellow-600'}`}>
+                    <Zap size={18} />
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
+
+                <div className="flex-1 min-w-0 pt-1">
                   <div className="flex justify-between items-start gap-3">
                     <h4 className="text-white font-bold text-lg mb-1">{p.nome || 'Poder Desconhecido'}</h4>
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
                       <button
                         onClick={() => abrirEditar(p)}
-                        className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                        className="w-7 h-7 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-colors"
                         title="Editar"
                       >
                         <Pencil size={14} />
                       </button>
                       <button
                         onClick={() => excluirItem(p)}
-                        className="p-2 rounded-lg hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-colors"
+                        className="w-7 h-7 rounded flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
                         title="Excluir"
                       >
                         <Trash2 size={14} />
@@ -264,7 +301,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-3">
-                    <span className="text-[10px] px-2 py-0.5 bg-black/40 rounded border border-white/5 text-gray-400 capitalize">
+                    <span className={`text-[10px] px-2 py-0.5 rounded border font-bold tracking-wider uppercase ${TIPO_COLORS[p.tipo] || TIPO_COLORS['Outro']}`}>
                       {p.tipo || 'Ativa'}
                     </span>
                     {p.fonte && (
@@ -277,16 +314,16 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                         Nível {p.nivelAdquirido}
                       </span>
                     )}
-                    <span className="text-[10px] px-2 py-0.5 bg-[#c7a44c]/10 rounded border border-[#c7a44c]/30 text-[#c7a44c] font-bold">
+                    <span className="text-[10px] px-2 py-0.5 bg-[#c7a44c]/10 rounded border border-[#c7a44c]/30 text-[#c7a44c] font-bold uppercase tracking-wider">
                       {custoTexto(p.custo)}
                     </span>
                   </div>
                   <p className="text-gray-400 text-sm leading-relaxed mb-3">{p.descricao || 'Sem descrição cadastrada.'}</p>
 
                   <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-gray-500 mb-3">
-                    {p.acao && <span><span className="text-gray-600">Ação:</span> {p.acao}</span>}
-                    {p.duracao && <span><span className="text-gray-600">Duração:</span> {p.duracao}</span>}
-                    {p.alcance && <span><span className="text-gray-600">Alcance:</span> {p.alcance}</span>}
+                    {p.acao && <span><span className="text-gray-600 font-bold uppercase">Ação:</span> {p.acao}</span>}
+                    {p.duracao && <span><span className="text-gray-600 font-bold uppercase">Duração:</span> {p.duracao}</span>}
+                    {p.alcance && <span><span className="text-gray-600 font-bold uppercase">Alcance:</span> {p.alcance}</span>}
                   </div>
 
                   <div className="flex items-center gap-3 pt-3 border-t border-white/5">
@@ -305,7 +342,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </Reorder.Item>
           ))}
           {poderesVisiveis.length === 0 && (
             <div className="py-12 text-center">
@@ -313,7 +350,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
               <p className="text-gray-500 font-bold uppercase tracking-widest">Nenhum Poder Encontrado</p>
             </div>
           )}
-        </div>
+        </Reorder.Group>
       </div>
 
       {/* MODAL CRIAR/EDITAR */}
@@ -323,7 +360,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
             <LabeledInput label="Nome" value={modalItem.nome} onChange={(v: string) => atualizarCampoModal('nome', v)} placeholder="Ex.: Lâmina Espectral" />
 
             <div className="grid grid-cols-2 gap-4">
-              <LabeledSelect
+              <LabeledModalSelect
                 label="Tipo"
                 value={modalItem.tipo}
                 options={TIPOS_PODER}
@@ -335,7 +372,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
             <LabeledInput label="Nível Adquirido" value={modalItem.nivelAdquirido} onChange={(v: string) => atualizarCampoModal('nivelAdquirido', v)} placeholder="Ex.: 1" />
 
             <div className="grid grid-cols-2 gap-4">
-              <LabeledSelect
+              <LabeledModalSelect
                 label="Recurso do Custo"
                 value={modalItem.custo.recurso}
                 options={RECURSOS_CUSTO}

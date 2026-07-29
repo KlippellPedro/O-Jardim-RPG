@@ -281,7 +281,7 @@ function renderAuth() {
       <aside class="plataforma-auth-hero">
         <span class="plataforma-auth-marca">✦ O Jardim RPG</span>
         <h3>Suas fichas, campanhas e recompensas em uma conta</h3>
-        <p>Entre para acessar seus personagens salvos no servidor — o JSON deixa de ser a fonte de dados.</p>
+        <p>Entre para acessar seus personagens salvos no servidor - o JSON deixa de ser a fonte de dados.</p>
         <ul class="plataforma-auth-features">
           <li>Fichas na nuvem, sincronizadas entre abas e dispositivos</li>
           <li>Campanhas, convites e papéis por mesa (mestre, jogador, observador)</li>
@@ -309,7 +309,7 @@ function renderAuth() {
     form.append(elemento('h3', '', 'Criar conta'));
     if (exigeConvite) {
       form.append(elemento('p', 'plataforma-aviso-suave',
-        'Esta mesa é por convite. Use o código que o mestre te passou — sua conta já entra na campanha dele.'));
+        'Esta mesa é por convite. Use o código que o mestre te passou - sua conta já entra na campanha dele.'));
       form.append(campo('Código do convite', 'text', 'convite', {
         required: true,
         maxlength: 120,

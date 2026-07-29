@@ -1,19 +1,19 @@
 # Gerente — O Jardim RPG
 
 Bot de consulta às regras publicadas para jogadores. Ele não depende de IA,
-API paga ou banco: indexa os documentos empacotados junto da aplicação e
-mostra trechos acompanhados do arquivo-fonte.
+API paga ou banco: lê os documentos empacotados junto da aplicação e mostra
+as informações estruturadas do sistema.
 
 ## Comandos
 
-- `/duvida <pergunta>` — procura os trechos mais relacionados a uma pergunta;
-- `/regra <termo>` — busca direta por regra, raça, classe, perícia ou Legado;
+- `/regras` — navega por raças, classes, perícias, Legados e fundamentos;
+- `/regra <termo>` — busca direta com sugestões de raça, classe, perícia ou Legado;
 - `/fontes` — lista os sete arquivos públicos consultados;
 - `/ajuda` — explica os comandos.
 
-As respostas são **extrativas**. Quando não encontra evidência suficiente, o
-bot pede para reformular ou confirmar com o mestre. O arquivo protegido
-`data/regras/mestre-v1.json` é deliberadamente excluído do índice.
+As respostas vêm diretamente dos dados publicados. Quando não encontra um
+nome, o bot orienta a navegar por `/regras`. O arquivo protegido
+`data/regras/mestre-v1.json` é deliberadamente excluído do pacote.
 
 ## Fontes
 
@@ -34,8 +34,8 @@ No repositório, o bot lê esses caminhos diretamente. O script
 Copie `.env.example` para `.env` apenas no ambiente local e preencha:
 
 - `DISCORD_TOKEN` — obrigatório;
-- `GUILD_ID` — opcional, recomendado no servidor de teste para sincronização
-  imediata dos slash commands.
+- `GUILD_ID` — opcional; quando definido, publica os comandos somente nesse
+  servidor e remove cópias globais antigas para não exibir duplicados.
 
 O token nunca deve ser commitado ou enviado em mensagens.
 

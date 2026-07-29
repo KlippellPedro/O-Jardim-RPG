@@ -1,4 +1,4 @@
-"""Cog Ajuda — menu de comandos do Banqueiro por categoria (Select do Discord)."""
+"""Cog Ajuda: menu de comandos do Banqueiro por categoria (Select do Discord)."""
 
 from __future__ import annotations
 
@@ -14,18 +14,22 @@ CATEGORIAS = {
         "descricao": "Carteira, loja, câmbio e Cartão Lunar.",
         "comandos": [
             ("/carteira", "Mostra sua carteira, cofre e crédito."),
+            ("/perfil [membro]", "Mostra o perfil econômico: patrimônio, itens, roubos e recompensas."),
             ("/pagar <membro> <quantia>", "Transfere dinheiro da sua carteira pra de outro jogador."),
-            ("/ranking", "Mostra as carteiras mais cheias do servidor."),
-            ("/extrato [membro]", "Mostra o histórico recente de transações."),
+            ("/ranking [categoria]", "Top 10 do servidor: carteira, patrimônio, poupança, roubos, recompensas ou leilão."),
+            ("/extrato [membro]", "Mostra o histórico de transações (paginado)."),
             ("/loja [categoria]", "Lista o que está à venda."),
             ("/comprar <item>", "Compra um item da loja."),
+            ("/item <busca>", "Mostra os detalhes de um item do catálogo."),
+            ("/monstro <busca>", "Mostra a ficha de um monstro do bestiário."),
             ("/vender <item>", "Vende um item de volta pra loja."),
             ("/inventario", "Mostra seu inventário."),
             ("/cambio <de> <para> <quantia>", "Troca Lunaris ⇄ Solares."),
+            ("/cambio_ver", "Mostra a taxa de câmbio atual e se o ajuste automático está ligado."),
             ("/cofre", "Mostra seu cofre/armazém (itens, dinheiro guardado e segurança)."),
             ("/cofre_melhorar", "Faz upgrade do cofre (mais itens e mais dinheiro guardável)."),
             ("/cofre_seguranca_melhorar", "Sobe a segurança do cofre (reduz a chance de te roubarem)."),
-            ("/cofre_depositar <quantia>", "Guarda dinheiro da carteira no cofre (fica a salvo de roubo)."),
+            ("/cofre_depositar <quantia>", "Guarda dinheiro no cofre, onde a segurança reduz o risco de roubo."),
             ("/cofre_sacar <quantia>", "Tira dinheiro do cofre pra carteira (cobra taxa pequena)."),
             ("/cartao", "Mostra seu Cartão Lunar."),
             ("/cartao_melhorar", "Sobe o nível do Cartão Lunar."),
@@ -35,12 +39,14 @@ CATEGORIAS = {
     },
     "roubo": {
         "rotulo": "🥷 Roubo",
-        "descricao": "Risco e recompensa entre jogadores. Carteira é sempre vulnerável; cofre depende da segurança do alvo.",
+        "descricao": "Risco e recompensa entre jogadores. O alvo tem 5 segundos para perceber e impedir a tentativa.",
         "comandos": [
-            ("/roubar <membro>", "Rouba 50% do saldo de Lunaris da carteira do alvo. Sempre funciona."),
-            ("/roubar_cofre <membro>", "Tenta arrombar o cofre do alvo. Chance depende da segurança dele — se falhar, você paga multa."),
+            ("/roubar <membro> [furtivo]", "Tenta levar 50% da carteira; o alvo tem 5 segundos para impedir. Furtivo suprime o aviso público."),
+            ("/roubar_cofre <membro> [furtivo]", "Tenta arrombar o cofre após 5 segundos. A chance depende da segurança; falha cobra multa."),
             ("/recompensa_colocar <membro> <valor>", "Coloca recompensa na cabeça de outro jogador (pago da sua carteira)."),
             ("/recompensa_ver [membro]", "Mostra a recompensa em alguém, ou os mais procurados do servidor."),
+            ("/protecao_comprar <tipo>", "Compra um item de defesa passiva (Cão de Guarda ou Alarme Mágico) contra roubo."),
+            ("/protecao_ver", "Mostra suas proteções ativas contra roubo."),
         ],
     },
     "baus": {
@@ -59,6 +65,30 @@ CATEGORIAS = {
         "descricao": "Ofereça itens ou baús a outros jogadores.",
         "comandos": [
             ("/oferecer <para> <o_que> <preco>", "Oferece um item/baú seu a outro jogador (dá pra cancelar antes de ser aceita)."),
+            ("/trocar <membro> <meu_item> <item_dele>", "Troca segura item-por-item: ninguém perde a posse até o outro lado aceitar."),
+        ],
+    },
+    "mercado": {
+        "rotulo": "🔨 Mercado",
+        "descricao": "Leilão entre jogadores e a Loteria Dominical.",
+        "comandos": [
+            ("/leilao_iniciar <o_que> <lance_minimo> <duracao_horas>", "Coloca um item/baú seu em leilão pros outros jogadores."),
+            ("/leilao_ver", "Lista os leilões ativos do servidor."),
+            ("/leilao_cancelar <leilao_id>", "Cancela seu leilão ativo (só antes do primeiro lance) e recupera o item."),
+            ("/loteria_comprar <quantidade>", "Compra bilhetes da Loteria Dominical (sorteio semanal no jornal)."),
+            ("/loteria_meus_bilhetes", "Mostra quantos bilhetes você tem na rodada atual."),
+            ("/loteria_bolo", "Mostra bilhetes vendidos, participantes e prêmio estimado antes de comprar."),
+        ],
+    },
+    "financas": {
+        "rotulo": "🏦 Finanças",
+        "descricao": "Investimentos e empréstimos entre jogadores.",
+        "comandos": [
+            ("/investir <valor>", "Trava um valor por alguns dias num Título do Jardim; rende ao vencer."),
+            ("/investir_ver", "Mostra seus Títulos do Jardim ativos."),
+            ("/emprestar_para <membro> <valor> <juros_diarios_percent> <prazo_dias>", "Propõe um empréstimo a outro jogador (ele precisa aceitar)."),
+            ("/emprestimo_pagar <emprestimo_id> <valor>", "Paga parte ou tudo de um empréstimo ativo que você deve."),
+            ("/emprestimos_ver", "Mostra seus empréstimos (como credor ou devedor)."),
         ],
     },
     "integracao": {
@@ -79,13 +109,17 @@ CATEGORIAS = {
             ("/daritem <membro> <item>", "Dá um item do catálogo a um jogador."),
             ("/tirar_item <membro> <item>", "Remove um item do inventário de um jogador."),
             ("/resetjogador <membro>", "Zera carteira, cofre, inventário e cartão de um jogador."),
+            ("/resetar_tudo <confirmacao>", "Zera a economia do servidor INTEIRO: carteira, cofre, inventário e cartão de todo mundo."),
             ("/setcredito <membro> <valor>", "Define o crédito do Cartão Lunar."),
             ("/setcambio <lunaris_por_solares>", "Ajusta a taxa de câmbio do servidor."),
-            ("/setroubo", "Ajusta a chance de /roubar_cofre contra Segurança Básica e o cooldown."),
-            ("/juros_cofre <taxa_percent>", "Aplica juros sobre o dinheiro guardado no cofre de todo mundo."),
+            ("/cambio_auto <ligar>", "Liga/desliga o câmbio flutuante automático (ajusta a taxa pela demanda)."),
+            ("/crise_declarar <ativa>", "Liga/desliga a Crise Econômica (reduz o rendimento dos investimentos que vencerem)."),
+            ("/setroubo", "Ajusta a chance de /roubar_cofre contra Segurança Básica e o cooldown (vale pros dois roubos)."),
+            ("/mestre_proteger [membro]", "Protege uma conta contra roubos; sem membro, remove a proteção."),
+            ("/juros_cofre <taxa_percent>", "Bônus extra de juros no cofre (o cofre já rende automaticamente todo dia)."),
+            ("/seteconomia", "Ajusta taxas de venda, saque, juros, leilão e loteria deste servidor."),
             ("/catalogo_recarregar", "Recarrega o catálogo salvo no banco central."),
             ("/catalogo_republicar", "Re-semeia o catálogo do arquivo (publica adições/edições e desativa removidos)."),
-            ("/jornal_definir <canal>", "Define o canal onde o Jardim (e o Jornalista) publica avisos."),
         ],
     },
 }

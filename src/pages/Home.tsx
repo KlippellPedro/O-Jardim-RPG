@@ -70,7 +70,7 @@ export default function Home() {
           O <span className="text-primary">Jardim</span> RPG
         </h1>
         <p className="text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
-          Fichas, mundo, regras e itens reunidos no mesmo lugar — com cada informação visível apenas para
+          Fichas, mundo, regras e itens reunidos no mesmo lugar. Cada informação fica visível apenas para
           quem deve vê-la.
         </p>
       </motion.div>

@@ -1,9 +1,9 @@
 """
 Núcleo de clima do Jornalista: clima mensal sorteado, restrito pela estação
-atual (ver core/economia.py:ESTACOES). Puro (sem discord.py) — devolve o
+atual (ver core/economia.py:ESTACOES). Puro (sem discord.py): devolve o
 clima sorteado pra quem chama decidir como mostrar.
 
-Efeitos são só flavor narrativo (ver Plano_Jornalista.md) — o Jornalista não
+Efeitos são só flavor narrativo (ver docs/Plano_Jornalista.md): o Jornalista não
 tem acesso à ficha nem ao motor de rolagem, então não aplica bônus sozinho
 em nenhum teste; cada efeito pressupõe "combine com o mestre".
 """
@@ -30,11 +30,11 @@ class ItemClima:
 
 
 CLIMAS: List[ItemClima] = [
-    # Comuns — qualquer uma das 4 estações normais (não rolam em Noite
+    # Comuns: qualquer uma das 4 estações normais (não rolam em Noite
     # Eterna/Eclipse, que têm climas próprios mais marcantes).
     ItemClima(
         "ensolarado", "☀️ Ensolarado",
-        "Nenhum efeito — dia comum de aventura.",
+        "Nenhum efeito: dia comum de aventura.",
         estacoes=_NORMAIS,
     ),
     ItemClima(
@@ -44,13 +44,13 @@ CLIMAS: List[ItemClima] = [
     ),
     ItemClima(
         "chuva", "🌧️ Chuva",
-        "Trilhas de barro atrapalham rastreamento, mas passos ficam abafados — "
+        "Trilhas de barro atrapalham rastreamento, mas passos ficam abafados: "
         "vantagem ou desvantagem em Furtividade, dependendo da cena.",
         estacoes=_NORMAIS,
     ),
     ItemClima(
         "vento_forte", "💨 Vento Forte",
-        "Desvantagem em ataques à distância — as flechas desviam.",
+        "Desvantagem em ataques à distância: as flechas desviam.",
         estacoes=_NORMAIS,
     ),
 
@@ -67,7 +67,7 @@ CLIMAS: List[ItemClima] = [
     ),
     ItemClima(
         "ventania_de_folhas", "🍂 Ventania de Folhas",
-        "Vantagem em Furtividade — o barulho das folhas cobre os passos.",
+        "Vantagem em Furtividade: o barulho das folhas cobre os passos.",
         estacoes=["outono"],
     ),
     ItemClima(
@@ -79,7 +79,7 @@ CLIMAS: List[ItemClima] = [
     # Exclusivos das estações especiais.
     ItemClima(
         "silencio_absoluto", "🌑 Silêncio Absoluto",
-        "Vantagem em Furtividade, mas desvantagem em Percepção auditiva — dá pra "
+        "Vantagem em Furtividade, mas desvantagem em Percepção auditiva: dá pra "
         "se esconder, mas também não se ouve o perigo chegando.",
         estacoes=["noite_eterna"],
     ),
@@ -89,7 +89,7 @@ CLIMAS: List[ItemClima] = [
         estacoes=["eclipse"],
     ),
 
-    # Raros — podem cair em qualquer estação, chance bem menor.
+    # Raros: podem cair em qualquer estação, chance bem menor.
     ItemClima(
         "nevoa_maldita", "🌫️ Névoa Maldita",
         "Desvantagem em Percepção visual; gancho pro mestre encaixar um encontro inesperado.",
@@ -97,7 +97,7 @@ CLIMAS: List[ItemClima] = [
     ),
     ItemClima(
         "chuva_de_cinzas", "🩸 Chuva de Cinzas",
-        "Só presságio — algo grande aconteceu em outro lugar do Jardim.",
+        "Só presságio: algo grande aconteceu em outro lugar do Jardim.",
         estacoes=None, peso=PESO_RARO,
     ),
     ItemClima(
@@ -123,3 +123,4 @@ def sortear_clima(estacao_id: str, rng: Optional[random.Random] = None) -> ItemC
     permitidos = climas_permitidos(estacao_id)
     pesos = [c.peso for c in permitidos]
     return gerador.choices(permitidos, weights=pesos, k=1)[0]
+

@@ -31,14 +31,17 @@ export const ModalInfoFicha: React.FC<ModalInfoFichaProps> = ({
 
         {items.length > 0 && (
           <div className="space-y-2">
-            {items.map((item, idx) => (
-              <div key={idx} className="flex justify-between items-center bg-[#121118] border border-white/5 rounded-lg p-3">
-                <span className="text-gray-400 text-sm">{item.label}</span>
-                <span className={`font-mono font-bold ${item.color || 'text-white'}`}>
-                  {item.value}
-                </span>
-              </div>
-            ))}
+            {items.map((item, idx) => {
+              const isLongText = typeof item.value === 'string' && item.value.length > 15;
+              return (
+                <div key={idx} className={`flex ${isLongText ? 'flex-col gap-1 items-start' : 'justify-between items-center'} bg-[#121118] border border-white/5 rounded-lg p-3`}>
+                  <span className="text-[#c7a44c] font-bold text-xs uppercase tracking-wider">{item.label}</span>
+                  <span className={`${isLongText ? 'text-gray-300 text-sm mt-1 leading-relaxed' : 'font-mono font-bold text-right'} ${item.color || (isLongText ? '' : 'text-white')}`}>
+                    {item.value}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         )}
 

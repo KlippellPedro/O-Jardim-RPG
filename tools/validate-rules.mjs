@@ -15,30 +15,30 @@ import {
   obterFragmentosRaciaisExpressos,
   capacidadeMaldicoesRaciais,
   obterMaldicoesRaciaisConhecidas,
-} from '../src/ficha/services/calculoService.js';
-import { RECOMPENSAS_CLASSE } from '../src/ficha/config/progressao.js';
-import { ARVORES } from '../src/mundo/config/arvores.js';
-import { validarPacoteMestre } from '../src/regras/schemas/masterRulesSchema.js';
-import { filtrarCatalogoPorArvore } from '../src/ficha/views/wizard/selecaoCatalogo.js';
-import { quantidadePericiasIniciais } from '../src/ficha/views/wizard/passoTreinamento.js';
-import { somarModificadores } from '../src/ficha/services/modificadoresService.js';
+} from '../legacy-vanilla/src/ficha/services/calculoService.js';
+import { RECOMPENSAS_CLASSE } from '../legacy-vanilla/src/ficha/config/progressao.js';
+import { ARVORES } from '../legacy-vanilla/src/mundo/config/arvores.js';
+import { validarPacoteMestre } from '../legacy-vanilla/src/regras/schemas/masterRulesSchema.js';
+import { filtrarCatalogoPorArvore } from '../legacy-vanilla/src/ficha/views/wizard/selecaoCatalogo.js';
+import { quantidadePericiasIniciais } from '../legacy-vanilla/src/ficha/views/wizard/passoTreinamento.js';
+import { somarModificadores } from '../legacy-vanilla/src/ficha/services/modificadoresService.js';
 
 // Importar os módulos alterados também funciona como verificação de sintaxe e
 // de caminhos relativos, sem precisar iniciar a interface no navegador.
 await Promise.all([
-  import('../src/ficha/services/catalogoService.js'),
-  import('../src/ficha/services/personagensService.js'),
-  import('../src/ficha/views/personagem/abas/abaFicha.js'),
-  import('../src/ficha/views/personagem/abas/abaHabilidades.js'),
-  import('../src/ficha/views/wizard/passoPrevia.js'),
-  import('../src/ficha/views/wizard/passoRaca.js'),
-  import('../src/ficha/views/wizard/passoTreinamento.js'),
-  import('../src/ficha/views/wizard/wizardCriacao.js'),
-  import('../src/regras/config/regrasOficiais.js'),
-  import('../src/regras/config/topicos.js'),
-  import('../src/regras/views/catalog/classesView.js'),
-  import('../src/regras/views/catalog/legaciesView.js'),
-  import('../src/regras/views/catalog/racesView.js'),
+  import('../legacy-vanilla/src/ficha/services/catalogoService.js'),
+  import('../legacy-vanilla/src/ficha/services/personagensService.js'),
+  import('../legacy-vanilla/src/ficha/views/personagem/abas/abaFicha.js'),
+  import('../legacy-vanilla/src/ficha/views/personagem/abas/abaHabilidades.js'),
+  import('../legacy-vanilla/src/ficha/views/wizard/passoPrevia.js'),
+  import('../legacy-vanilla/src/ficha/views/wizard/passoRaca.js'),
+  import('../legacy-vanilla/src/ficha/views/wizard/passoTreinamento.js'),
+  import('../legacy-vanilla/src/ficha/views/wizard/wizardCriacao.js'),
+  import('../legacy-vanilla/src/regras/config/regrasOficiais.js'),
+  import('../legacy-vanilla/src/regras/config/topicos.js'),
+  import('../legacy-vanilla/src/regras/views/catalog/classesView.js'),
+  import('../legacy-vanilla/src/regras/views/catalog/legaciesView.js'),
+  import('../legacy-vanilla/src/regras/views/catalog/racesView.js'),
 ]);
 
 const lerJson = async caminho => JSON.parse(await fs.readFile(
@@ -69,29 +69,27 @@ assert.ok(
   'Toda classe precisa respeitar o orçamento de 7 pontos de Vida e Mana.',
 );
 assert.ok(
-  classes.every(classe => ['geral', 'exclusiva'].includes(classe.disponibilidade)),
-  'Toda classe precisa declarar disponibilidade geral ou exclusiva.',
+  classes.every(classe => ['geral', 'restrita'].includes(classe.disponibilidade)),
+  'Toda classe precisa declarar disponibilidade geral ou restrita.',
 );
 const classesGerais = classes.filter(classe => classe.disponibilidade === 'geral');
-const classesExclusivas = classes.filter(classe => classe.disponibilidade === 'exclusiva');
-assert.equal(classesGerais.length, 14, 'O catálogo precisa conter 14 classes gerais.');
+const classesEspeciais = classes.filter(classe => classe.disponibilidade === 'restrita');
+assert.equal(classesGerais.length, 13, 'O catálogo precisa conter 13 classes comuns.');
 assert.ok(
-  classesGerais.every(classe => classe.arvore === null),
-  'Classes gerais não podem ficar vinculadas a uma Árvore.',
+  classesGerais.every(classe => classe.categoria === 'padrao' && classe.arvore === null),
+  'Classes comuns não podem ficar vinculadas a uma Árvore.',
 );
-assert.equal(
-  classesExclusivas.length,
-  ARVORES.length,
-  'Cada Árvore precisa ter exatamente uma classe exclusiva.',
-);
-assert.deepEqual(
-  classesExclusivas.map(classe => classe.arvore).sort(),
-  ARVORES.map(arvore => arvore.id).sort(),
-  'As classes exclusivas não cobrem as dez Árvores uma única vez.',
+assert.equal(classesEspeciais.length, 11, 'O catálogo precisa conter 11 classes especiais.');
+assert.ok(
+  classesEspeciais.every(classe => classe.categoria !== 'padrao'
+    && classe.requer_autorizacao_mestre === true
+    && Array.isArray(classe.arvores)
+    && classe.arvores.length > 0),
+  'Classes especiais precisam declarar autorização e ao menos uma Árvore compatível.',
 );
 assert.ok(
-  classesExclusivas.every(classe => classe.categoria !== 'padrao'),
-  'Classes exclusivas precisam permanecer na categoria especial.',
+  ARVORES.every(arvore => classesEspeciais.some(classe => classe.arvores.includes(arvore.id))),
+  'Toda Árvore precisa possuir ao menos uma classe especial compatível.',
 );
 assert.deepEqual(
   classes.filter(classe => classe.nome_provisorio).map(classe => classe.id).sort(),
@@ -101,11 +99,14 @@ assert.deepEqual(
 ARVORES.forEach(arvore => {
   const { itens, usandoFiltro } = filtrarCatalogoPorArvore(classes, arvore.id);
   assert.equal(usandoFiltro, true, `O filtro de classes não foi usado em ${arvore.titulo}.`);
-  assert.equal(itens.length, 15, `${arvore.titulo} precisa mostrar 14 gerais e 1 exclusiva.`);
   assert.equal(
-    itens.filter(classe => classe.disponibilidade === 'exclusiva')[0]?.arvore,
-    arvore.id,
-    `${arvore.titulo} mostrou uma classe exclusiva incompatível.`,
+    itens.filter(classe => classe.categoria === 'padrao').length,
+    13,
+    `${arvore.titulo} precisa mostrar as 13 classes comuns.`,
+  );
+  assert.ok(
+    itens.some(classe => classe.categoria !== 'padrao' && classe.arvores.includes(arvore.id)),
+    `${arvore.titulo} precisa mostrar ao menos uma classe especial compatível.`,
   );
 });
 assert.ok(
@@ -142,8 +143,14 @@ assert.equal(
   'As raças comuns fixas não podem repetir o mesmo par de Vida e Mana.',
 );
 assert.ok(
-  [...classes, ...racas].every(item => camposAdiados.every(campo => !(campo in item))),
-  'Os catálogos ainda contêm campos mecânicos adiados.',
+  racas.every(item => camposAdiados.every(campo => !(campo in item))),
+  'O catálogo de raças ainda contém campos mecânicos adiados.',
+);
+assert.ok(
+  classes.every(classe => classe.progressao_publicada === true
+    && classe.progressao?.length === 20
+    && classe.poderes?.length >= 10),
+  'Toda classe precisa publicar 20 níveis e ao menos 10 poderes.',
 );
 assert.equal(validarPacoteMestre(mestre), null, 'O pacote do mestre está inválido.');
 

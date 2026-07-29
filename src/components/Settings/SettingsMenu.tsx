@@ -8,13 +8,12 @@ import { ContaPanel } from './ContaPanel';
 import { MestrePanel } from './MestrePanel';
 import { AvisosPanel } from './AvisosPanel';
 import { CampanhasPanel } from './CampanhasPanel';
-import { CofrePanel } from './CofrePanel';
 import { useNavigate } from 'react-router-dom';
 
 // ────────────────────────────────────────────────────────────
 // Tipos
 // ────────────────────────────────────────────────────────────
-type PanelType = 'conta' | 'avisos' | 'campanhas' | 'cofre' | 'mestre' | null;
+type PanelType = 'conta' | 'avisos' | 'campanhas' | 'mestre' | null;
 
 // ────────────────────────────────────────────────────────────
 // Role Badge
@@ -55,11 +54,6 @@ const PANELS: Record<
     icon: <Swords className="text-blue-400" size={20} />,
     component: <CampanhasPanel />,
   },
-  cofre: {
-    title: 'Cofre de Recompensas',
-    icon: <Gem className="text-yellow-500" size={20} />,
-    component: <CofrePanel />,
-  },
   mestre: {
     title: 'Painel do Mestre',
     icon: <Crown className="text-red-400" size={20} />,
@@ -95,7 +89,7 @@ const DropdownItem = ({
 );
 
 // ────────────────────────────────────────────────────────────
-// SettingsMenu — componente principal
+// SettingsMenu - componente principal
 // ────────────────────────────────────────────────────────────
 export const SettingsMenu: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -193,13 +187,23 @@ export const SettingsMenu: React.FC = () => {
 
               <DropdownItem label="Mesas e Campanhas" onClick={() => openPanel('campanhas')} />
 
-              <DropdownItem label="Cofre" badge={<Gem size={14} className="text-primary/60" />} onClick={() => openPanel('cofre')} />
+              <DropdownItem
+                label="Cofre"
+                badge={<Gem size={14} className="text-primary/60" />}
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                  navigate('/cofre');
+                }}
+              />
 
               {canSeeMestre && (
                 <DropdownItem
                   label="Painel do Mestre"
                   badge={<RoleBadge role={campanhaAtiva?.papel} />}
-                  onClick={() => openPanel('mestre')}
+                  onClick={() => {
+                    setIsDropdownOpen(false);
+                    navigate('/mestre');
+                  }}
                 />
               )}
 

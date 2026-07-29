@@ -559,4 +559,64 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        11,
+        "comandos_economicos_idempotentes",
+        (
+            """
+            CREATE TABLE IF NOT EXISTS comandos_economia (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                tipo TEXT NOT NULL,
+                idempotencia TEXT NOT NULL,
+                requisicao_hash TEXT NOT NULL CHECK (LENGTH(requisicao_hash) = 64),
+                resultado JSONB,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                concluido_em TIMESTAMPTZ,
+                UNIQUE (campanha_id, usuario_id, tipo, idempotencia),
+                CHECK ((resultado IS NULL) = (concluido_em IS NULL))
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS comandos_economia_criados_idx
+            ON comandos_economia (campanha_id, criado_em DESC)
+            """,
+        ),
+    ),
+    (
+        12,
+        "reservas_do_cofre_unificado",
+        (
+            # Escrow do cofre da conta: um leilão do Discord segura um item
+            # por até 72h, atravessando restart do bot. Sem isso, se
+            # `db.criar_leilao` falhasse logo depois da retirada, o item
+            # sumiria sem nenhum registro — a UNIQUE(campanha_id, origem,
+            # referencia) É a chave de idempotência, não um campo à parte.
+            """
+            CREATE TABLE IF NOT EXISTS reservas_cofre (
+                id UUID PRIMARY KEY,
+                usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                origem TEXT NOT NULL,
+                referencia TEXT NOT NULL,
+                item_id TEXT NOT NULL,
+                titulo TEXT NOT NULL,
+                quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+                dados JSONB NOT NULL DEFAULT '{}'::jsonb,
+                status TEXT NOT NULL DEFAULT 'reservada'
+                    CHECK (status IN ('reservada', 'entregue', 'devolvida')),
+                motivo TEXT NOT NULL,
+                expira_em TIMESTAMPTZ NOT NULL,
+                resolvido_em TIMESTAMPTZ,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE (campanha_id, origem, referencia)
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS reservas_cofre_pendentes_idx
+            ON reservas_cofre (campanha_id, expira_em) WHERE status = 'reservada'
+            """,
+        ),
+    ),
 )

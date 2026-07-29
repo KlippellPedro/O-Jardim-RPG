@@ -600,7 +600,7 @@ export function renderAbaInventario(container, personagem, ctx) {
     });
 
     abrirModalSimples({
-      titulo: existente ? `Editar — ${existente.nome}` : tipoInicial === 'veiculo' ? 'Novo veículo ou montaria' : 'Novo item',
+      titulo: existente ? `Editar: ${existente.nome}` : tipoInicial === 'veiculo' ? 'Novo veículo ou montaria' : 'Novo item',
       corpo: form,
       classeExtra: 'ficha-modal--inventario-editor',
     });
@@ -920,11 +920,11 @@ export function renderAbaInventario(container, personagem, ctx) {
     const stats = document.createElement('div');
     stats.className = 'ficha-veiculo-stats';
     [
-      ['Velocidade', item.velocidade || '—'],
-      ['Defesa', item.defesa || '—'],
-      ['Tripulação', item.tripulacao || '—'],
-      ['Passageiros', item.passageiros || '—'],
-      ['Carga', item.cargaMaxima ? `${item.cargaAtual}/${item.cargaMaxima}` : '—'],
+      ['Velocidade', item.velocidade || '-'],
+      ['Defesa', item.defesa || '-'],
+      ['Tripulação', item.tripulacao || '-'],
+      ['Passageiros', item.passageiros || '-'],
+      ['Carga', item.cargaMaxima ? `${item.cargaAtual}/${item.cargaMaxima}` : '-'],
     ].forEach(([rotulo, valor]) => {
       const stat = document.createElement('div');
       const label = document.createElement('span');

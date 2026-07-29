@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────
-   O Jardim RPG — Mundo — Cena 3D das Árvores
+   O Jardim RPG - Mundo - Cena 3D das Árvores
    Substitui o cluster de círculos DOM na tela de entrada (Árvores)
    por uma cena Three.js: cada Árvore é um modelo low-poly com um
    globo de vidro, gerado via tools/blender/generate_tree.py. Clicar
@@ -27,11 +27,11 @@ const placeholderGeoTronco = new THREE.ConeGeometry(0.1, 1, 6);
 const placeholderGeoCopa = new THREE.IcosahedronGeometry(0.35, 0);
 
 // Cor cinza usada nos placeholders bloqueados em todo o app (mesma de
-// desenharGalhoMini) — reaproveitada aqui pro glow de hover não entregar
+// desenharGalhoMini) - reaproveitada aqui pro glow de hover não entregar
 // a cor real de uma Árvore ainda não descoberta.
 const RGB_BLOQUEADA = '90,94,122';
 
-// Textura de brilho compartilhada (gerada uma vez via canvas 2D) — tingida
+// Textura de brilho compartilhada (gerada uma vez via canvas 2D) - tingida
 // por instância através da cor do SpriteMaterial, então não precisa de uma
 // textura por Árvore.
 let glowTextureCompartilhada = null;
@@ -62,7 +62,7 @@ function criarGlow(corRgbString) {
     blending: THREE.AdditiveBlending,
   });
   const sprite = new THREE.Sprite(mat);
-  // Tamanho provisório (domes bloqueados/placeholder não têm raio real) —
+  // Tamanho provisório (domes bloqueados/placeholder não têm raio real) -
   // reescalado pra caber certinho assim que o modelo real carrega, em
   // montarCena3DArvores.
   sprite.scale.setScalar(2.9);
@@ -122,7 +122,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
   stage.appendChild(labelLayer);
 
   // Reduzida em relação à versão anterior porque os domes agora são bem
-  // maiores (ver generate_tree.py — precisam de folga pra conter a árvore
+  // maiores (ver generate_tree.py - precisam de folga pra conter a árvore
   // inteira). Isso preserva o mesmo tamanho aparente/espaçamento no arco.
   const ESCALA_VISAO_GERAL = 0.3;
   const ARCO_RAIO = 6.6;
@@ -134,49 +134,49 @@ export function montarCena3DArvores(host, itens, callbacks) {
 
   // ── Anti-sobreposição ────────────────────────────────────────────────
   // Raio visual aproximado de um dome já escalado pro mundo (raio típico
-  // gerado em generate_tree.py, ~1.5, vezes ESCALA_VISAO_GERAL) — usado só
+  // gerado em generate_tree.py, ~1.5, vezes ESCALA_VISAO_GERAL) - usado só
   // pra calcular distâncias mínimas de segurança, não precisa ser exato
   // (o raio real varia um pouco por Árvore e só é conhecido depois que o
   // .glb carrega, tarde demais pro layout inicial).
   const RAIO_VISUAL_ESTIMADO = 1.5 * ESCALA_VISAO_GERAL;
-  // Distância mínima entre os centros de duas cúpulas "normais" — folga
+  // Distância mínima entre os centros de duas cúpulas "normais" - folga
   // generosa (bem mais que a soma dos raios) pra sobrar um vão nítido entre
   // elas, não só evitar encostar.
   const DIST_MINIMA_CENTROS = RAIO_VISUAL_ESTIMADO * 2 + 1.0;
   // A Limiar precisa de um vazio bem maior em volta dela (ver POSICAO_LIMIAR).
   const DIST_MINIMA_LIMIAR = DIST_MINIMA_CENTROS * 2.3;
 
-  // ── A Limiar (Fim) — canto isolado fixo, fora do espalhamento comum ──
-  // Ela "é e não é uma Árvore" (lore) — por isso não participa do
+  // ── A Limiar (Fim) - canto isolado fixo, fora do espalhamento comum ──
+  // Ela "é e não é uma Árvore" (lore) - por isso não participa do
   // relaxamento com as demais: fica plantada num canto extremo, bem além da
   // abertura horizontal do arco e bem acima da faixa vertical comum.
   // IMPORTANTE: de propósito NÃO empurramos ela também pra bem longe no
-  // eixo Z (profundidade) — numa câmera em perspectiva o deslocamento
+  // eixo Z (profundidade) - numa câmera em perspectiva o deslocamento
   // angular na tela é ~x/profundidade, então uma profundidade muito maior
   // ENCOLHE de volta o deslocamento horizontal, cancelando o isolamento em
   // vez de reforçar (testado: com z bem negativo o rótulo dela acabava
   // caindo colado no de Abismo/Matriz na tela, mesmo estando a >8 unidades
-  // de distância no mundo 3D). Por isso a profundidade fica rasa — perto do
-  // resto do grupo —, deixando x/y fazerem o trabalho de isolar de verdade.
+  // de distância no mundo 3D). Por isso a profundidade fica rasa - perto do
+  // resto do grupo -, deixando x/y fazerem o trabalho de isolar de verdade.
   const POSICAO_LIMIAR = {
     x: ARCO_MEIA_LARGURA * 1.9,
     y: 3.6,
     z: 1.2,
   };
 
-  // ── A A.X.I.S — patrulha contínua, nunca estática ────────────────────
-  // Subjugou Keryx e intercepta a comunicação das outras deidades — não faz
+  // ── A A.X.I.S - patrulha contínua, nunca estática ────────────────────
+  // Subjugou Keryx e intercepta a comunicação das outras deidades - não faz
   // sentido ela ficar parada num slot fixo do arquipélago como as demais.
   // Percorre uma trajetória tipo Lissajous (cada eixo com seu próprio
   // período, todos bem lentos) que varre boa parte do mesmo volume onde as
-  // outras Árvores vivem — de propósito: ela invade o espaço delas, não
+  // outras Árvores vivem - de propósito: ela invade o espaço delas, não
   // respeita o vão que as outras mantêm entre si (ver animate()).
   const AXIS_PATRULHA_X_AMPL = ARCO_MEIA_LARGURA * 0.85;
   const AXIS_PATRULHA_Y_BASE = 0.6;
   const AXIS_PATRULHA_Y_AMPL = 1.8;
   const AXIS_PATRULHA_Z_OFFSET = -1.5;
   const AXIS_PATRULHA_Z_AMPL = 4.5;
-  const AXIS_PATRULHA_PERIODO_X = 42; // segundos por ciclo — bem devagar
+  const AXIS_PATRULHA_PERIODO_X = 42; // segundos por ciclo - bem devagar
   const AXIS_PATRULHA_PERIODO_Y = 23;
   const AXIS_PATRULHA_PERIODO_Z = 31;
 
@@ -188,7 +188,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
   }
 
   // As 8 "pontas" do paralelepípedo que contém toda a trajetória de
-  // patrulha — usadas só pro cálculo de enquadramento da câmera (garante
+  // patrulha - usadas só pro cálculo de enquadramento da câmera (garante
   // que a A.X.I.S nunca escapa da viewport, mesmo no pior caso da varredura).
   function pontosLimitesPatrulhaAxis() {
     const xs = [-AXIS_PATRULHA_X_AMPL, AXIS_PATRULHA_X_AMPL];
@@ -201,7 +201,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
 
   // Empurra pares mais próximos que DIST_MINIMA_CENTROS pra longe um do
   // outro (metade pra cada lado), e empurra qualquer candidato que invada o
-  // vazio reservado da Limiar (obstaculo) — sempre determinístico: mesma
+  // vazio reservado da Limiar (obstaculo) - sempre determinístico: mesma
   // entrada sempre produz a mesma saída, sem Math.random() em lugar nenhum,
   // então o layout continua estável entre visitas.
   function aplicarAntiSobreposicao(candidatos, obstaculo) {
@@ -239,9 +239,9 @@ export function montarCena3DArvores(host, itens, callbacks) {
     }
   }
 
-  // Hash determinístico (não é Math.random() — o layout precisa ser sempre
+  // Hash determinístico (não é Math.random() - o layout precisa ser sempre
   // o mesmo entre visitas, senão o player perde a memória espacial de onde
-  // cada Árvore fica) — dá uma variação "orgânica" estável por índice.
+  // cada Árvore fica) - dá uma variação "orgânica" estável por índice.
   function hash01(n) {
     const x = Math.sin(n * 12.9898) * 43758.5453;
     return x - Math.floor(x);
@@ -255,13 +255,13 @@ export function montarCena3DArvores(host, itens, callbacks) {
   const HOME_TARGET = new THREE.Vector3(0, 1.1, 0);
 
   // Preenchido depois que o layout (com anti-sobreposição) e a patrulha da
-  // A.X.I.S já têm suas posições/limites definidos — ver final do bloco de
+  // A.X.I.S já têm suas posições/limites definidos - ver final do bloco de
   // criação dos itens, mais abaixo. Vazio aqui só serve de valor inicial de
   // segurança pra o primeiro resize() (chamado antes disso existir).
   let pontosParaEnquadrar = [];
 
   // Busca exata (não aproximada) da menor distância de câmera que ainda
-  // enquadra todos os pontos dados, usando a câmera/projeção reais — evita
+  // enquadra todos os pontos dados, usando a câmera/projeção reais - evita
   // erro de aproximação analítica (ângulo horizontal vs. vertical, câmera
   // inclinada olhando pra HOME_TARGET) que causava corte nas bordas antes.
   function distanciaParaEnquadrar(aspect) {
@@ -287,7 +287,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
       if (cabeTudo) return dist;
       dist += PASSO;
     }
-    return dist; // não convergiu em MAX_ITER passos — melhor esforço
+    return dist; // não convergiu em MAX_ITER passos - melhor esforço
   }
 
   camera.position.set(0, HOME_CAM_Y, Math.max(8, distanciaParaEnquadrar(1)));
@@ -298,7 +298,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
   stage.appendChild(renderer.domElement);
 
   // Clearcoat e transmission (vidro dos domes) quase não aparecem sem um
-  // environment map — são camadas baseadas em IBL, não em luzes diretas.
+  // environment map - são camadas baseadas em IBL, não em luzes diretas.
   // RoomEnvironment é o ambiente procedural padrão que os próprios exemplos
   // oficiais do Three.js usam pra isso, sem precisar de um HDRI externo.
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
@@ -306,7 +306,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
   scene.environment = envRT.texture;
 
   // Preenche exatamente o espaço que sobra da viewport abaixo do cabeçalho
-  // — usar min-height em vh/dvh no CSS soma com a altura do cabeçalho (que
+  // - usar min-height em vh/dvh no CSS soma com a altura do cabeçalho (que
   // varia por página/breakpoint) e deixa a página mais alta que uma
   // viewport inteira, sobrando um trecho vazio (mas com estrelas) no fim,
   // exigindo rolagem à toa. Medir e fixar a altura via JS evita isso sem
@@ -346,7 +346,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
   scene.add(rim);
 
   const registros = [];
-  // Candidatos ao relaxamento de anti-sobreposição — só as Árvores
+  // Candidatos ao relaxamento de anti-sobreposição - só as Árvores
   // "normais" (nem a Limiar isolada, nem a A.X.I.S em patrulha contínua)
   // entram nessa lista. Guarda o índice (não a referência do registro
   // ainda, que só existe depois de criado) pra escrever de volta depois.
@@ -357,12 +357,12 @@ export function montarCena3DArvores(host, itens, callbacks) {
     const angle = (t - 0.5) * ARCO_ABERTURA;
 
     // O arco é só o "esqueleto" pra manter alguma ordem esquerda→direita
-    // (senão vira sopa de letrinha sem organização nenhuma) — X/Y/Z ganham
+    // (senão vira sopa de letrinha sem organização nenhuma) - X/Y/Z ganham
     // uma variação orgânica bem agressiva por cima, principalmente Y/Z
     // (pedido explícito: "arquipélago cósmico", com mundos bem mais perto
     // ou bem mais longe da câmera, não uma faixa horizontal arrumadinha).
     // Calculada pra TODOS os itens (mesmo Limiar/A.X.I.S) só pra manter os
-    // índices do hash estáveis — as duas exceções abaixo descartam esse
+    // índices do hash estáveis - as duas exceções abaixo descartam esse
     // valor e usam posição própria.
     const xJitter = (hash01(i * 2.1 + 13) - 0.5) * 1.1;
     const alturaVariacao = (hash01(i * 3.7 + 1) - 0.5) * 5.0;
@@ -373,7 +373,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
     let baseY = alturaVariacao;
 
     if (item.isolada) {
-      // A Limiar "é e não é uma Árvore" — canto fixo e isolado, nunca
+      // A Limiar "é e não é uma Árvore" - canto fixo e isolado, nunca
       // participa do relaxamento comum (ver POSICAO_LIMIAR).
       x = POSICAO_LIMIAR.x;
       baseY = POSICAO_LIMIAR.y;
@@ -382,7 +382,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
       candidatosRelaxar.push({ i, x, y: baseY, z });
     }
     // Se for `item.subjugada` (A.X.I.S): x/z/baseY calculados acima nunca
-    // chegam a ser usados de verdade — a posição inicial real vem de
+    // chegam a ser usados de verdade - a posição inicial real vem de
     // posicaoPatrulhaAxis(0) logo abaixo, e depois é recalculada a cada
     // frame em animate().
 
@@ -414,13 +414,13 @@ export function montarCena3DArvores(host, itens, callbacks) {
       baseY, bobPhase: Math.random() * Math.PI * 2,
       bobSpeed: 0.45 + Math.random() * 0.3,
       baseScale: ESCALA_VISAO_GERAL,
-      // A.X.I.S nunca fica parada — ver ramo `r.patrulha` em animate().
+      // A.X.I.S nunca fica parada - ver ramo `r.patrulha` em animate().
       patrulha: !!item.subjugada,
     };
     registros.push(registro);
 
     // Sinal de que uma identidade original foi subjugada (ex.: Parley sob a
-    // A.X.I.S) — passar o mouse faz o rótulo "vazar" o nome/cor originais por
+    // A.X.I.S) - passar o mouse faz o rótulo "vazar" o nome/cor originais por
     // um instante antes de voltar à identidade dominante, como um sinal
     // fraco piscando por baixo do controle.
     if (item.subjugada && !item.bloqueada && item.tituloSubjugada) {
@@ -486,7 +486,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
   // Pontos que a câmera "geral" precisa sempre enquadrar: todas as posições
   // finais já relaxadas, o canto fixo da Limiar (se houver) e as 8 pontas do
   // paralelepípedo que contém toda a trajetória de patrulha da A.X.I.S (se
-  // houver) — assim o enquadramento nunca corta ninguém, incluindo o pior
+  // houver) - assim o enquadramento nunca corta ninguém, incluindo o pior
   // caso da varredura contínua.
   pontosParaEnquadrar = [
     ...candidatosRelaxar.map(c => new THREE.Vector3(c.x, c.y, c.z)),
@@ -497,7 +497,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
   if (registros.some(r => r.patrulha)) {
     pontosParaEnquadrar.push(...pontosLimitesPatrulhaAxis());
   }
-  // Recalcula o enquadramento agora que existem pontos de verdade — a
+  // Recalcula o enquadramento agora que existem pontos de verdade - a
   // primeira chamada de resize() (antes deste bloco existir) usou o
   // bootstrap de distanciaParaEnquadrar (retorno fixo, sem pontos).
   resize();
@@ -507,7 +507,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
     registros.forEach(r => {
       if (estado !== 'geral') { r.label.style.display = 'none'; return; }
       const alvo = r.holder.position.clone();
-      // Placeholders bloqueados são bem menores que um dome de verdade —
+      // Placeholders bloqueados são bem menores que um dome de verdade -
       // cada um usa sua própria altura de referência pro label não flutuar
       // baixo demais (dentro do dome) nem alto demais (acima do placeholder).
       const raioEfetivo = r.item.bloqueada ? 1.5 : (r.raioDome || 1.4);
@@ -517,7 +517,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
       r.label.style.display = '';
       const px = (alvo.x * 0.5 + 0.5) * w;
       const py = (1 - (alvo.y * 0.5 + 0.5)) * h;
-      // Margem bem maior que antes (8px) na horizontal — a Limiar agora fica
+      // Margem bem maior que antes (8px) na horizontal - a Limiar agora fica
       // de propósito num canto bem extremo (ver POSICAO_LIMIAR), e o texto
       // do rótulo (centralizado no ponto via CSS transform) cortava na
       // borda da tela em janelas estreitas com só 8px de folga.
@@ -535,7 +535,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
     });
 
     // Domes maiores (pra caber a árvore inteira, ver generate_tree.py) pedem
-    // um enquadramento de câmera proporcionalmente mais recuado — sem isso,
+    // um enquadramento de câmera proporcionalmente mais recuado - sem isso,
     // árvores com dome bem acima da referência ficariam grudadas na câmera.
     const REFERENCIA_RAIO_DOME = 1.4;
     const fatorZoom = (registro.raioDome || REFERENCIA_RAIO_DOME) / REFERENCIA_RAIO_DOME;
@@ -594,7 +594,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
     entrarNaArvore(registro);
   }
 
-  // Hover — a árvore sob o mouse cresce levemente e acende um glow por
+  // Hover - a árvore sob o mouse cresce levemente e acende um glow por
   // trás dela (cor real se descoberta, cinza neutro se ainda bloqueada,
   // pra não entregar de qual Árvore se trata antes da hora).
   let hoverAtual = null;
@@ -638,7 +638,7 @@ export function montarCena3DArvores(host, itens, callbacks) {
     if (estado === 'geral') {
       registros.forEach(r => {
         if (r.patrulha) {
-          // A.X.I.S nunca ocupa um slot fixo do arquipélago — desliza numa
+          // A.X.I.S nunca ocupa um slot fixo do arquipélago - desliza numa
           // trajetória contínua e lenta (tipo Lissajous) que varre o mesmo
           // volume onde as outras Árvores vivem, de propósito invadindo o
           // espaço delas em vez de respeitar o vão que mantêm entre si.

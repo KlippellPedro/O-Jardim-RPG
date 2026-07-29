@@ -1,11 +1,11 @@
 """
 Catálogo do Jornalista. As entradas vêm do PostgreSQL central (mesma tabela
-`catalogo_itens` que o Banqueiro lê e semeia) — o Jornalista nunca semeia,
+`catalogo_itens` que o Banqueiro lê e semeia): o Jornalista nunca semeia,
 só lê, pra sortear os itens dos baús que anuncia.
 Aceita:
   - um arquivo com UMA entrada:  {tipo,id,titulo,conteudo}
   - um pacote:                    {"entradas": [ {…}, {…} ]}
-  - moedas:                       {"moedas": [ {…} ]}  (ignoradas aqui — moeda
+  - moedas:                       {"moedas": [ {…} ]}  (ignoradas aqui: moeda
                                   é tratada na carteira, não no catálogo)
 Campos que começam com "_" (ex.: "_exemplos") são anotações e são ignorados,
 igual ao site.
@@ -19,13 +19,44 @@ from typing import Dict, List, Optional, Tuple
 
 from .economia import normalizar
 
-TIPOS_VALIDOS = {"arma", "armadura", "equipamento", "veiculo", "monstro", "drop"}
-RARIDADES = ["comum", "incomum", "raro", "epico", "lendario"]
+TIPOS_VALIDOS = {
+    "arma",
+    "armadura",
+    "artefato",
+    "consumivel",
+    "drop",
+    "equipamento",
+    "fruto-eden",
+    "implante",
+    "monstro",
+    "veiculo",
+    "veiculo-completo",
+}
+RARIDADES = (
+    "comum",
+    "incomum",
+    "raro",
+    "epico",
+    "lendario",
+    "reliquia",
+    "reliquia da criacao",
+)
+ROTULO_RARIDADE = {
+    "comum": "Comum",
+    "incomum": "Incomum",
+    "raro": "Raro",
+    "epico": "Épico",
+    "lendario": "Lendário",
+    "reliquia": "Relíquia",
+    "reliquia da criacao": "Relíquia da Criação",
+}
 
 # tipo -> categoria (mesmo mapa de src/loja/config/categorias.js)
 CATEGORIA_DE = {
     "arma": "arsenal", "armadura": "arsenal", "equipamento": "arsenal",
-    "veiculo": "veiculos", "monstro": "bestiario", "drop": "drops",
+    "artefato": "arsenal", "consumivel": "arsenal", "fruto-eden": "arsenal",
+    "implante": "arsenal", "veiculo": "veiculos", "veiculo-completo": "veiculos",
+    "monstro": "bestiario", "drop": "drops",
 }
 ACAO_DA_CATEGORIA = {
     "arsenal": "Comprar", "veiculos": "Comprar",
@@ -38,6 +69,10 @@ def normalizar_raridade(valor: object) -> str:
     return n if n in RARIDADES else "comum"
 
 
+def rotulo_raridade(valor: object) -> str:
+    return ROTULO_RARIDADE[normalizar_raridade(valor)]
+
+
 class Item:
     def __init__(self, tipo: str, id: str, titulo: str, conteudo: dict):
         self.tipo = tipo
@@ -48,6 +83,10 @@ class Item:
     @property
     def raridade(self) -> str:
         return normalizar_raridade(self.conteudo.get("raridade"))
+
+    @property
+    def raridade_rotulo(self) -> str:
+        return rotulo_raridade(self.conteudo.get("raridade"))
 
     @property
     def preco(self):
@@ -91,6 +130,9 @@ def validar_entrada(e: object) -> Optional[str]:
         return 'faltando "titulo"'
     if not isinstance(e.get("conteudo"), dict):
         return 'faltando "conteudo"'
+    raridade = e["conteudo"].get("raridade")
+    if raridade is not None and normalizar(raridade) not in RARIDADES:
+        return f'raridade desconhecida: "{raridade}"'
     return None
 
 
@@ -121,12 +163,18 @@ class Catalogo:
         if entradas is None:
             return 0, ["formato não reconhecido (sem 'entradas' nem 'tipo')"]
         sucesso, erros = 0, []
+        ids_vistos = set()
         for i, e in enumerate(entradas):
             erro = validar_entrada(e)
             if erro:
                 erros.append(f"entrada {i + 1}: {erro}")
                 continue
-            item = Item(e["tipo"], e["id"].strip(), e["titulo"].strip(), e.get("conteudo") or {})
+            item_id = e["id"].strip()
+            if item_id in ids_vistos:
+                erros.append(f'entrada {i + 1}: id duplicado: "{item_id}"')
+                continue
+            ids_vistos.add(item_id)
+            item = Item(e["tipo"], item_id, e["titulo"].strip(), e.get("conteudo") or {})
             self._itens[item.id] = item
             sucesso += 1
         return sucesso, erros

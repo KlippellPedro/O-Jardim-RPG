@@ -15,7 +15,7 @@ from typing import Optional
 
 from .conhecimento import descobrir_raiz_fontes
 
-# (id, rótulo, emoji) — ordem em que aparecem no menu do /regras.
+# (id, rótulo, emoji): ordem em que aparecem no menu do /regras.
 CATEGORIAS = (
     ("racas", "Raças", "🧬"),
     ("classes", "Classes", "⚔️"),
@@ -94,6 +94,8 @@ class Navegacao:
             return self.racas
         if categoria == "classes":
             return self.classes
+        if categoria == "pericias":
+            return self.pericias
         if categoria == "legados":
             return self.legados
         if categoria == "fundamentos":

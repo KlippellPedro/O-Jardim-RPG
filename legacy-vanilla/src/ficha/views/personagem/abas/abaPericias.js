@@ -205,7 +205,7 @@ function abrirCalculoPericia(personagem, item, grau, configuracao) {
   });
 
   abrirModalSimples({
-    titulo: `Cálculo — ${item.titulo}`,
+    titulo: `Cálculo: ${item.titulo}`,
     corpo,
     classeExtra: 'ficha-modal--calculo',
   });
@@ -319,7 +319,7 @@ function abrirEditorRolagem(personagem, item, rolagemAtual, ctx, aoAplicar, auto
 
   atualizar();
   abrirModalSimples({
-    titulo: `Vantagens e desvantagens — ${item.titulo}`,
+    titulo: `Vantagens e desvantagens: ${item.titulo}`,
     corpo,
     classeExtra: 'ficha-modal--rolagem',
   });

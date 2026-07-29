@@ -63,6 +63,10 @@ class Barista(commands.Bot):
         if config.GUILD_ID:
             guild = discord.Object(id=int(config.GUILD_ID))
             self.tree.copy_global_to(guild=guild)
+            # Em modo de servidor único, remove registros globais antigos para
+            # que o Discord não mostre duas cópias do mesmo slash command.
+            self.tree.clear_commands(guild=None)
+            await self.tree.sync()
             comandos = await self.tree.sync(guild=guild)
             log.info("Slash sincronizado no servidor %s (%d comandos).", config.GUILD_ID, len(comandos))
         else:

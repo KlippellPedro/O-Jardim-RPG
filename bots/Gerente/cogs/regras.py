@@ -62,8 +62,8 @@ def _embed_raca(r) -> discord.Embed:
 
 def _embed_classe(c) -> discord.Embed:
     e = ui.embed(f"⚔️ {c.get('titulo', 'Classe')}", _meta(c))
-    e.add_field(name="Vida / nível", value=str(c.get("vida", "—")), inline=True)
-    e.add_field(name="Mana / nível", value=str(c.get("mana", "—")), inline=True)
+    e.add_field(name="Vida / nível", value=str(c.get("vida", "Não informado")), inline=True)
+    e.add_field(name="Mana / nível", value=str(c.get("mana", "Não informado")), inline=True)
     return e
 
 
@@ -88,11 +88,20 @@ def _embed_legado(l) -> discord.Embed:
 
 def _embed_pericia(p) -> discord.Embed:
     atr = navegacao.ATRIBUTO_ROTULO.get(p.get("atributo"), str(p.get("atributo", "")).capitalize())
-    e = ui.embed(f"🎯 {p.get('titulo', 'Perícia')}")
+    e = ui.embed(
+        f"🎯 {p.get('titulo', 'Perícia')}",
+        (p.get("descricao") or "").strip() or None,
+    )
     if atr:
         e.add_field(name="Atributo-chave", value=atr, inline=True)
     if p.get("origem"):
         e.add_field(name="Origem", value=str(p["origem"]), inline=True)
+    if p.get("status"):
+        e.add_field(name="Status", value=str(p["status"]).capitalize(), inline=True)
+    if p.get("uso"):
+        e.add_field(name="Uso", value=str(p["uso"])[:1024], inline=False)
+    if p.get("nota"):
+        e.add_field(name="Nota", value=str(p["nota"])[:1024], inline=False)
     return e
 
 
@@ -141,25 +150,29 @@ class NavRegras(discord.ui.View):
         self.categoria = None
         self.pagina = 0
         self.embed: discord.Embed | None = None
+        self.message: discord.InteractionMessage | None = None
         self._render()
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user.id != self.autor_id:
-            await interaction.response.send_message("Só quem abriu esse menu pode navegar — mande `/regras`.", ephemeral=True)
+            await interaction.response.send_message("Só quem abriu esse menu pode navegar: mande `/regras`.", ephemeral=True)
             return False
         return True
 
     async def on_timeout(self) -> None:
         for child in self.children:
             child.disabled = True
+        if self.message is not None:
+            try:
+                await self.message.edit(view=self)
+            except discord.HTTPException:
+                log.debug("não consegui desabilitar o menu expirado de regras")
 
     # cada tela: limpa componentes e monta os certos + define self.embed
     def _render(self) -> None:
         self.clear_items()
         if self.categoria is None:
             self._tela_menu()
-        elif self.categoria == "pericias":
-            self._tela_pericias()
         else:
             self._tela_lista()
 
@@ -174,10 +187,6 @@ class NavRegras(discord.ui.View):
         sel.callback = self._on_categoria
         self.add_item(sel)
 
-    def _tela_pericias(self) -> None:
-        self.embed = _embed_pericias_geral(self.nav)
-        self._add_botao("⌂ Menu", self._on_menu)
-
     def _tela_lista(self) -> None:
         rot, emoji = _rotulo(self.categoria)
         itens = self.nav.itens(self.categoria)
@@ -185,13 +194,13 @@ class NavRegras(discord.ui.View):
         inicio = self.pagina * POR_PAGINA
         fatia = itens[inicio:inicio + POR_PAGINA]
 
-        linhas = "\n".join(f"• {it.get('titulo', '?')}" for it in fatia) or "—"
+        linhas = "\n".join(f"• {it.get('titulo', '?')}" for it in fatia) or "Nenhum resultado"
         self.embed = ui.embed(f"{emoji} {rot}", linhas)
         if total > POR_PAGINA:
             paginas = (total + POR_PAGINA - 1) // POR_PAGINA
             self.embed.set_footer(text=f"{ui.MARCA} · Página {self.pagina + 1}/{paginas}")
 
-        sel = discord.ui.Select(placeholder=f"Escolha — {rot}…")
+        sel = discord.ui.Select(placeholder=f"Escolha: {rot}…")
         for it in fatia:
             sel.add_option(label=str(it.get("titulo", "?"))[:100], value=str(it.get("id", ""))[:100])
         sel.callback = self._on_item
@@ -253,6 +262,7 @@ class Regras(commands.Cog):
     async def regras(self, interaction: discord.Interaction):
         view = NavRegras(self.bot.navegacao, interaction.user.id)
         await interaction.response.send_message(embed=view.embed, view=view, ephemeral=True)
+        view.message = await interaction.original_response()
 
     @app_commands.command(name="regra", description="Vai direto pra uma regra pelo nome (raça, classe, perícia ou Legado).")
     @app_commands.describe(termo="Nome que você quer ver (ex.: Humano, Guerreiro, Atletismo).")
@@ -274,6 +284,35 @@ class Regras(commands.Cog):
             outros = ", ".join(it.get("titulo", "?") for _, it in achados[1:4])
             emb.set_footer(text=f"{ui.MARCA} · Também achei: {outros}")
         await interaction.response.send_message(embed=emb)
+
+    @regra.autocomplete("termo")
+    async def regra_autocomplete(
+        self, interaction: discord.Interaction, atual: str
+    ) -> list[app_commands.Choice[str]]:
+        achados = self.bot.navegacao.buscar_item(atual) if atual.strip() else []
+        if not achados:
+            achados = [
+                (categoria, item)
+                for categoria in ("racas", "classes", "pericias", "legados")
+                for item in self.bot.navegacao.itens(categoria)
+            ]
+        escolhas = []
+        vistos = set()
+        for categoria, item in achados:
+            titulo = str(item.get("titulo", "")).strip()
+            if not titulo or titulo.casefold() in vistos:
+                continue
+            vistos.add(titulo.casefold())
+            rotulo, _emoji = _rotulo(categoria)
+            escolhas.append(
+                app_commands.Choice(
+                    name=f"{titulo} · {rotulo}"[:100],
+                    value=titulo[:100],
+                )
+            )
+            if len(escolhas) == 25:
+                break
+        return escolhas
 
     @app_commands.command(name="fontes", description="Mostra quais documentos oficiais o Gerente consulta.")
     async def fontes(self, interaction: discord.Interaction):

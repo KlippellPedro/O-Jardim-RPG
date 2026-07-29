@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { HelpCircle, Search, Dices } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { carregarCatalogo } from '../../../services/catalogoService';
+import { registrosApi } from '../../../services/registrosApi';
+import { useAuthStore } from '../../../store/useAuthStore';
 import { IPericiaCatalogo } from '../../../types/catalogo';
 import { ModalVantagensPericia } from '../components/ModalVantagensPericia';
 import { ModalCalculoPericia } from '../components/ModalCalculoPericia';
@@ -28,9 +30,11 @@ const NOMES_ATRIBUTOS: Record<string, string> = {
 };
 
 export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate: any }) => {
+  const campanhaAtiva = useAuthStore(s => s.campanhaAtiva);
   const [periciasCatalogo, setPericiasCatalogo] = useState<IPericiaCatalogo[]>([]);
   const [busca, setBusca] = useState('');
   const [filtroAtributo, setFiltroAtributo] = useState('');
+  const [rolando, setRolando] = useState<string | null>(null);
 
   useEffect(() => {
     carregarCatalogo().then(data => {
@@ -70,9 +74,35 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
     onUpdate(['ficha', 'rolagensPericias'], nextRolagens);
   };
 
-  const [activeModal, setActiveModal] = useState<{ type: 'vantagens' | 'calculo', periciaId: string } | null>(null);
+  const handleRolar = async (pericia: any, totalBonus: number, vantagens: number, desvantagens: number) => {
+    if (!campanhaAtiva?.id) {
+      alert('Nenhuma campanha ativa. Selecione uma campanha no Menu para rolar dados.');
+      return;
+    }
+    setRolando(pericia.id);
+    try {
+      const { registro } = await registrosApi.rolar({
+        campanhaId: campanhaAtiva.id,
+        personagemId: character.id,
+        titulo: `Teste de ${pericia.titulo}`,
+        bonus: totalBonus,
+        vantagens,
+        desvantagens,
+      });
+      setActiveModal({ type: 'resultado', periciaId: pericia.id, registro });
+    } catch (e: any) {
+      alert(e?.message || 'Falha ao rolar a perícia.');
+    } finally {
+      setRolando(null);
+    }
+  };
 
-  const activePericiaObj = activeModal ? periciasCatalogo.find(p => p.id === activeModal.periciaId) : null;
+  const [activeModal, setActiveModal] = useState<{ type: 'vantagens' | 'calculo' | 'nova' | 'resultado', periciaId: string, registro?: any } | null>(null);
+
+  const periciasCustomizadas = f.periciasCustomizadas || [];
+  const todasPericias = [...periciasCatalogo, ...periciasCustomizadas];
+
+  const activePericiaObj = activeModal ? todasPericias.find(p => p.id === activeModal.periciaId) : null;
   const activeRolagem = activeModal ? (rolagens[activeModal.periciaId] || { vantagens: 0, desvantagens: 0 }) : { vantagens: 0, desvantagens: 0 };
   const activeGrau = activeModal ? (pericias[activeModal.periciaId] || 'iniciante') : 'iniciante';
   const activeAttr = activePericiaObj ? (attrs[activePericiaObj.atributo] || 10) : 10;
@@ -80,14 +110,14 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
   const activeBonusGrau = BONUS_GRAU[activeGrau] || 0;
   const activeTotal = activeMod + metadeNivelCalculado + activeBonusGrau;
 
-  const periciasVisiveis = periciasCatalogo
+  const periciasVisiveis = todasPericias
     .filter(p => !busca || p.titulo.toLowerCase().includes(busca.toLowerCase()))
     .filter(p => !filtroAtributo || p.atributo === filtroAtributo)
     .sort((a, b) => a.titulo.localeCompare(b.titulo));
 
   const contagemGraus = GRAUS_PERICIA.slice(1).map(g => ({
     grau: g,
-    count: periciasCatalogo.filter(p => pericias[p.id] === g).length
+    count: todasPericias.filter(p => pericias[p.id] === g).length
   })).filter(g => g.count > 0);
 
   return (
@@ -205,7 +235,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                       }`}
                       title="Configurar Vantagens e Desvantagens"
                     >
-                      {vant > 0 || desv > 0 ? `${vant}V - ${desv}D` : 'V / D'}
+                      {vant > 0 || desv > 0 ? `${vant}V / ${desv}D` : 'V / D'}
                     </button>
                     {(vant > 0 || desv > 0) && (
                       <button 
@@ -217,13 +247,29 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                     )}
                   </div>
                   
-                  <button className="px-3 py-1.5 rounded bg-[#c7a44c]/10 border border-[#c7a44c]/30 text-[#c7a44c] hover:bg-[#c7a44c]/20 hover:scale-105 flex items-center gap-2 text-xs font-bold transition-all">
-                    <Dices size={14} /> Rolar
+                  <button 
+                    onClick={() => handleRolar(p, total, vant, desv)}
+                    disabled={rolando === p.id}
+                    className="px-3 py-1.5 rounded bg-[#c7a44c]/10 border border-[#c7a44c]/30 text-[#c7a44c] hover:bg-[#c7a44c]/20 hover:scale-105 flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50 disabled:hover:scale-100"
+                  >
+                    <Dices size={14} /> {rolando === p.id ? '...' : 'Rolar'}
                   </button>
                 </div>
               </motion.div>
             );
           })}
+
+          <motion.div 
+            layout
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            onClick={() => setActiveModal({ type: 'nova', periciaId: '' })}
+            className="bg-[#121118] border border-dashed border-white/20 rounded-xl p-4 flex flex-col items-center justify-center gap-2 hover:border-[#c7a44c]/50 hover:bg-[#c7a44c]/5 transition-colors cursor-pointer min-h-[140px] group"
+          >
+            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#c7a44c]/20 transition-colors">
+              <span className="text-2xl text-gray-500 group-hover:text-[#c7a44c] mb-1">+</span>
+            </div>
+            <span className="text-xs font-bold text-gray-500 group-hover:text-[#c7a44c] uppercase tracking-widest text-center mt-2">Nova Perícia <br/> ou Ofício</span>
+          </motion.div>
         </div>
         {periciasVisiveis.length === 0 && (
           <div className="p-8 text-center text-gray-500">Nenhuma perícia encontrada com esses filtros.</div>
@@ -257,6 +303,114 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
           total={activeTotal}
           descricao={activePericiaObj.descricao}
         />
+      )}
+
+      {activeModal?.type === 'nova' && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          onClick={() => setActiveModal(null)}
+        >
+          <div 
+            className="bg-[#0f0e15] border border-[#c7a44c]/50 rounded-2xl p-6 w-full max-w-md shadow-[0_0_50px_rgba(199,164,76,0.2)]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-[#c7a44c] font-bold tracking-widest uppercase">Nova Perícia / Ofício</h3>
+              <button onClick={() => setActiveModal(null)} className="text-gray-500 hover:text-white transition-colors">
+                ✕
+              </button>
+            </div>
+            
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const form = e.target as HTMLFormElement;
+              const titulo = (form.elements.namedItem('titulo') as HTMLInputElement).value;
+              const atributo = (form.elements.namedItem('atributo') as HTMLSelectElement).value;
+              
+              if (titulo && atributo) {
+                const newId = 'custom_' + Date.now();
+                const nextCustom = [...(f.periciasCustomizadas || []), { id: newId, titulo, atributo, descricao: 'Perícia/Ofício customizado.' }];
+                onUpdate(['ficha', 'periciasCustomizadas'], nextCustom);
+                
+                const novasPericias = { ...pericias, [newId]: 'aprendiz' };
+                onUpdate(['ficha', 'pericias'], novasPericias);
+                
+                setActiveModal(null);
+              }
+            }} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Nome da Perícia/Ofício</label>
+                <input name="titulo" type="text" required placeholder="Ex: Forja, Navegação, Etiqueta..." className="bg-[#121118] border border-white/5 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-[#c7a44c]/50" />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Atributo Base</label>
+                <select name="atributo" required className="bg-[#121118] border border-white/5 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-[#c7a44c]/50 appearance-none">
+                  <option value="">Selecione um atributo...</option>
+                  {Object.entries(NOMES_ATRIBUTOS).map(([key, label]) => (
+                    <option key={key} value={key}>{label}</option>
+                  ))}
+                </select>
+              </div>
+              <button type="submit" className="mt-4 w-full py-3 bg-[#c7a44c]/20 text-[#c7a44c] border border-[#c7a44c]/50 font-bold uppercase tracking-widest rounded-lg hover:bg-[#c7a44c]/30 transition-colors">
+                Criar Perícia
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {activeModal?.type === 'resultado' && activeModal.registro && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          onClick={() => setActiveModal(null)}
+        >
+          <div 
+            className="bg-[#0f0e15] border border-[#c7a44c]/50 rounded-2xl p-6 w-full max-w-sm shadow-[0_0_50px_rgba(199,164,76,0.2)] flex flex-col items-center text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-gray-400 font-bold tracking-widest uppercase mb-2">{activeModal.registro.titulo}</h3>
+            
+            <div className="text-5xl font-bold text-[#c7a44c] my-6 drop-shadow-[0_0_15px_rgba(199,164,76,0.5)]">
+              {activeModal.registro.resultado}
+            </div>
+
+            <div className="w-full bg-[#121118] border border-white/5 rounded-xl p-4 flex flex-col gap-3 text-sm text-left mb-6">
+              <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                <span className="text-gray-500">Fórmula</span>
+                <span className="text-gray-300 font-mono font-bold tracking-wider">{activeModal.registro.formula || '1d20'}</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                <span className="text-gray-500">Dados Sorteados</span>
+                <span className="text-white font-mono flex gap-2">
+                  {activeModal.registro.detalhes?.dados?.map((d: number, i: number) => (
+                    <span key={i} className="text-[#c7a44c] font-bold">{d}</span>
+                  ))}
+                  {activeModal.registro.detalhes?.dados_ignorados?.length > 0 && (
+                    <>
+                      <span className="text-gray-600">|</span>
+                      {activeModal.registro.detalhes.dados_ignorados.map((d: number, i: number) => (
+                        <span key={i} className="text-gray-600 line-through opacity-50" title="Dado ignorado por desvantagem/vantagem">{d}</span>
+                      ))}
+                    </>
+                  )}
+                  {(!activeModal.registro.detalhes?.dados?.length && !activeModal.registro.detalhes?.dados_ignorados?.length) && (
+                    <span className="text-gray-600">-</span>
+                  )}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-500">Bônus Fixo</span>
+                <span className={`${activeModal.registro.detalhes?.bonus >= 0 ? 'text-green-400' : 'text-red-400'} font-mono font-bold`}>
+                  {activeModal.registro.detalhes?.bonus > 0 ? '+' : ''}{activeModal.registro.detalhes?.bonus || 0}
+                </span>
+              </div>
+            </div>
+
+            <button onClick={() => setActiveModal(null)} className="w-full py-3 bg-[#c7a44c]/10 text-[#c7a44c] border border-[#c7a44c]/30 font-bold uppercase tracking-widest rounded-lg hover:bg-[#c7a44c]/20 transition-colors">
+              Fechar Resultado
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -1,9 +1,9 @@
 """
 Apresentação (embeds) do Jornalista.
 
-Objetivo: centralizar a "cara" do bot num lugar só — mesmo espírito do
+Objetivo: centralizar a "cara" do bot num lugar só: mesmo espírito do
 core/ui.py do Banqueiro/Barista. Cores e ícones por categoria seguem a
-Decisão 3 do Plano_Jornalista.md (aprovada em 17/07/2026): cada tipo de
+Decisão 3 do docs/Plano_Jornalista.md (aprovada em 17/07/2026): cada tipo de
 conteúdo (chegada/partida de membro, registro, recompensa, procurado,
 capturado, dívida quitada, baú, clima, notícia do mestre) tem sua própria
 cor/ícone, pra diferenciar visualmente os avisos publicados no jornal.
@@ -19,17 +19,17 @@ NOME_BOT = "Jornalista"
 MARCA = f"🌿 O Jardim · {NOME_BOT}"
 
 COR = {
-    "chegada": 0x7F8C9A,         # azul-acinzentado — chegada de membro
-    "partida": 0x7F8C9A,         # azul-acinzentado — partida de membro
-    "registro": 0x2ECC71,        # verde — registro concluído (escolha de Árvore)
-    "recompensa": 0xE74C3C,      # vermelho — recompensa colocada
-    "procurado": 0xE67E22,       # laranja — procurado por dívida
-    "capturado": 0x9B59B6,       # roxo — capturado
-    "divida_quitada": 0x2ECC71,  # verde — dívida quitada
-    "bau": 0xF1C40F,             # dourado — baú anunciado
-    "clima": 0x3498DB,           # azul — clima do mês
-    "noticia": 0xECF0F1,         # branco/cinza-claro — notícia do mestre
-    "erro": 0xE74C3C,            # vermelho — falhas/avisos
+    "chegada": 0x7F8C9A,         # azul-acinzentado: chegada de membro
+    "partida": 0x7F8C9A,         # azul-acinzentado: partida de membro
+    "registro": 0x2ECC71,        # verde: registro concluído (escolha de Árvore)
+    "recompensa": 0xE74C3C,      # vermelho: recompensa colocada
+    "procurado": 0xE67E22,       # laranja: procurado por dívida
+    "capturado": 0x9B59B6,       # roxo: capturado
+    "divida_quitada": 0x2ECC71,  # verde: dívida quitada
+    "bau": 0xF1C40F,             # dourado: baú anunciado
+    "clima": 0x3498DB,           # azul: clima do mês
+    "noticia": 0xECF0F1,         # branco/cinza-claro: notícia do mestre
+    "erro": 0xE74C3C,            # vermelho: falhas/avisos
 }
 
 ICONE = {
@@ -61,7 +61,7 @@ def embed(
     descricao: Optional[str] = None,
     cor: Optional[int] = None,
 ) -> discord.Embed:
-    """Embed com a marca do bot já no footer — usar em vez de discord.Embed() cru."""
+    """Embed com a marca do bot já no footer: usar em vez de discord.Embed() cru."""
     e = discord.Embed(
         title=titulo,
         description=descricao,
@@ -69,3 +69,4 @@ def embed(
     )
     e.set_footer(text=MARCA)
     return e
+

@@ -1,7 +1,7 @@
 // Wizard de criação de personagem: Nome+Árvore → Raça → Classe → Atributos
 // → Treinamento → Prévia. Só depois de escolher a Árvore é que
 // Raça/Classe mostram as opções ligadas a ela (com fallback pra "mostrar
-// todas" — ver selecaoCatalogo.js). O passo de Atributos só decide os
+// todas" - ver selecaoCatalogo.js). O passo de Atributos só decide os
 // valores; a Prévia calcula e mostra Vida/Mana/Movimento/Lunaris antes de
 // criar, para a ficha nascer com as informações iniciais preenchidas.
 // das informações iniciais preenchidas.
@@ -181,7 +181,7 @@ export function abrirWizardCriacao(catalogo, { aoCriar }) {
       progresso.appendChild(bolha);
     });
 
-    titulo.textContent = `Passo ${estado.passo} de ${TITULOS_PASSO.length} — ${TITULOS_PASSO[estado.passo - 1]}`;
+    titulo.textContent = `Passo ${estado.passo} de ${TITULOS_PASSO.length} - ${TITULOS_PASSO[estado.passo - 1]}`;
 
     corpo.innerHTML = '';
     const ctx = { atualizar: render, atualizarValidade, arvoresDisponiveis, catalogo };

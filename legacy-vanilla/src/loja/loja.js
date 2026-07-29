@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────
-   O Jardim RPG — Loja
+   O Jardim RPG - Loja
    Loja de jogo: barra lateral de categorias sempre visível +
    grade de cards (imagem, raridade, preço) + modal estilo carta
    pro detalhe. Conteúdo chega da campanha central depois da liberação do mestre.
@@ -36,7 +36,7 @@ let toastTimer = null;
 
 const TODOS_ID = 'todos';
 
-// Categoria "Todos" — visão combinada, não é um tipo de conteúdo de verdade
+// Categoria "Todos" - visão combinada, não é um tipo de conteúdo de verdade
 // (não existe em categorias.js, que só descreve categorias importáveis).
 const CATEGORIA_TODOS = {
   id: TODOS_ID,
@@ -48,16 +48,16 @@ const CATEGORIA_TODOS = {
   acao: 'Comprar',
 };
 
-// Estado central da grade — busca e raridade se aplicam à categoria atual;
+// Estado central da grade - busca e raridade se aplicam à categoria atual;
 // trocar de categoria reseta os dois (recomeço limpo por seção).
 const estado = { categoria: TODOS_ID, busca: '', raridade: null };
 let gridArea = null; // sub-container reaproveitado por renderizarGradeFiltrada()
 let modalTriggerEl = null; // pra devolver o foco ao fechar o modal
 
-// ── Raridade — convenção nova só da Loja, não é regra oficial do jogo ───
+// ── Raridade - convenção nova só da Loja, não é regra oficial do jogo ───
 // "Comum" é o único termo já usado nas regras (item inicial); os outros 4
 // níveis são inventados aqui, reaproveitando cores que já existem na
-// paleta (variables.css) — nenhuma cor nova.
+// paleta (variables.css) - nenhuma cor nova.
 
 const RARIDADES = ['comum', 'incomum', 'raro', 'epico', 'lendario'];
 
@@ -69,7 +69,7 @@ const RARIDADE_INFO = {
   lendario: { label: 'Lendário', cor: 'var(--gold)' },
 };
 
-// Aceita "Épico", "epico", "ÉPICO"... — cai em "comum" se ausente/desconhecida.
+// Aceita "Épico", "epico", "ÉPICO"... - cai em "comum" se ausente/desconhecida.
 const MAPA_SEM_ACENTO = {
   á: 'a', à: 'a', â: 'a', ã: 'a',
   é: 'e', ê: 'e',
@@ -79,7 +79,7 @@ const MAPA_SEM_ACENTO = {
   ç: 'c',
 };
 
-// Compartilhada com o preço por moeda (ver precoParaMoeda) — mesma dobra de
+// Compartilhada com o preço por moeda (ver precoParaMoeda) - mesma dobra de
 // acento/caixa serve pra casar "raridade"/nome de moeda escritos de formas
 // diferentes ("Épico"/"epico", "Solares"/"SÓIS") com a chave certa.
 function normalizarChave(valor) {
@@ -106,7 +106,7 @@ function mostrarToast(mensagem, tipo) {
   toastTimer = setTimeout(() => { toast.hidden = true; }, 5000);
 }
 
-// ── Transição de página — View Transitions API quando o
+// ── Transição de página - View Transitions API quando o
 // navegador suporta; sem suporte, cai pra troca instantânea. ──
 
 function comTransicao(fn) {
@@ -119,9 +119,9 @@ function comTransicao(fn) {
   }
 }
 
-// `.loja-content` é reaproveitado entre renders — precisa reiniciar
+// `.loja-content` é reaproveitado entre renders - precisa reiniciar
 // a própria animação manualmente a cada troca de rota (não a cada
-// filtro/busca, que só atualiza a grade interna — ver renderizarGradeFiltrada).
+// filtro/busca, que só atualiza a grade interna - ver renderizarGradeFiltrada).
 function resetarAnimacao() {
   content.style.animation = 'none';
   void content.offsetHeight;
@@ -140,7 +140,7 @@ function humanizarChave(chave) {
 
 // ── Render genérico de campos de `conteudo` + cross-links ──
 // O schema de arma/veículo/monstro/drop ainda não foi definido,
-// então qualquer chave vira uma linha — sem supor nomes de campo
+// então qualquer chave vira uma linha - sem supor nomes de campo
 // (exceto os curados: descricao/imagem/raridade/preco/atributos/
 // nivel/classe, tratados à parte no card e no modal).
 
@@ -205,7 +205,7 @@ function entradasDaVisao(categoriaId) {
   return categoria ? entradasPorCategoria(categoria) : [];
 }
 
-// ── Barra lateral — montada uma vez, estado ativo por rota ──
+// ── Barra lateral - montada uma vez, estado ativo por rota ──
 
 function renderSidebar() {
   sidebarEl.innerHTML = '';
@@ -243,7 +243,7 @@ function atualizarSidebarAtiva(categoriaId) {
   });
 }
 
-// ── Filtros rápidos de raridade — montados uma vez ───────
+// ── Filtros rápidos de raridade - montados uma vez ───────
 
 function renderQuickFilters() {
   quickfiltersEl.innerHTML = '';
@@ -284,12 +284,12 @@ function atualizarQuickFiltersAtivo() {
   });
 }
 
-// ── Carteira — seletor de moeda ──────────────────────────
+// ── Carteira - seletor de moeda ──────────────────────────
 // Lunaris vem por padrão; outras moedas chegam por import de JSON, igual
-// os itens (ver initImport, mais abaixo, e services/moedasService.js) —
+// os itens (ver initImport, mais abaixo, e services/moedasService.js) -
 // não tem campo de texto pra digitar uma moeda nova aqui. Trocar a ativa
 // ou remover uma já cadastrada continua sendo ação direta no painel; nunca
-// mexe em busca/raridade/rota — só atualiza rótulo, ícone e preços em tela.
+// mexe em busca/raridade/rota - só atualiza rótulo, ícone e preços em tela.
 
 let moedaPainelAberto = false;
 // Campanha + personagem ativo, para comprar itens liberados com a carteira dele.
@@ -319,7 +319,7 @@ function selecionarMoeda(id) {
   fecharMoedaPainel();
   renderMoedaSeletor();
   // O modal (se algum estiver aberto) fica atrás do próprio backdrop, que
-  // cobre a carteira inteira — não dá pra trocar de moeda sem fechá-lo
+  // cobre a carteira inteira - não dá pra trocar de moeda sem fechá-lo
   // primeiro, então só a grade por trás precisa atualizar o preço em tela.
   renderizarGradeFiltrada();
 }
@@ -436,7 +436,7 @@ function criarImagemBloco(entrada, categoria) {
   return bloco;
 }
 
-// `conteudo.preco` aceita número (mesmo valor em qualquer moeda — o autor
+// `conteudo.preco` aceita número (mesmo valor em qualquer moeda - o autor
 // ainda não diferenciou) ou objeto { "NomeDaMoeda": valor, ... } pra um preço
 // próprio por moeda (nomes casam sem acento/caixa, ver normalizarChave).
 function precoParaMoeda(entrada, moeda) {
@@ -468,7 +468,7 @@ function criarPrecoEl(entrada, comMoeda) {
   if (typeof valor === 'number') {
     texto.textContent = comMoeda ? `${valor.toLocaleString('pt-BR')} ${moeda.nome}` : valor.toLocaleString('pt-BR');
   } else {
-    texto.textContent = comMoeda ? 'Preço a definir' : '—';
+    texto.textContent = comMoeda ? 'Preço a definir' : '-';
   }
   preco.appendChild(texto);
 
@@ -567,7 +567,7 @@ function criarItemCard(entrada, indice) {
 
   const raridadeChave = normalizarRaridade(entrada.conteudo?.raridade);
 
-  // Não pode ser <button> — o rodapé tem um <button> de ação próprio, e
+  // Não pode ser <button> - o rodapé tem um <button> de ação próprio, e
   // botão dentro de botão é HTML inválido (leitor de tela não expõe o
   // interno direito). role="button" + tabindex cobre teclado/a11y.
   const card = document.createElement('div');
@@ -614,7 +614,7 @@ function criarItemCard(entrada, indice) {
   return card;
 }
 
-// ── Grade — cabeçalho de categoria (estável) + área filtrável ──
+// ── Grade - cabeçalho de categoria (estável) + área filtrável ──
 
 function renderEmptyGrade(categoria, semResultadoDeFiltro) {
   const vazio = document.createElement('div');
@@ -653,7 +653,7 @@ function aplicarFiltros(entradas) {
   });
 }
 
-// Só redesenha a grade (cards/estado vazio) — não mexe no cabeçalho da
+// Só redesenha a grade (cards/estado vazio) - não mexe no cabeçalho da
 // categoria nem reinicia a animação da página. Chamada a cada tecla da
 // busca e a cada clique nas pills de raridade, então precisa ser leve.
 function renderizarGradeFiltrada() {
@@ -678,7 +678,7 @@ function renderizarGradeFiltrada() {
   gridArea.appendChild(grid);
 }
 
-// Troca de categoria de verdade (sidebar/rota) — reconstrói o cabeçalho,
+// Troca de categoria de verdade (sidebar/rota) - reconstrói o cabeçalho,
 // reseta busca/raridade e reinicia a animação da página.
 function montarGrade(categoriaId) {
   const categoria = categoriaOuTodos(categoriaId);
@@ -686,7 +686,7 @@ function montarGrade(categoriaId) {
 
   // Chegar numa rota de grade (clique, mas também botão voltar/avançar do
   // navegador, ou edição manual do hash) significa que nenhum item deveria
-  // estar em modal — fecha um modal esquecido de uma navegação anterior,
+  // estar em modal - fecha um modal esquecido de uma navegação anterior,
   // sem disparar outra navegação (já estamos indo pro lugar certo).
   fecharModal({ navegar: false });
 
@@ -727,7 +727,7 @@ function montarGrade(categoriaId) {
   renderizarGradeFiltrada();
 }
 
-// ── Modal — detalhe de item, estilo carta ────────────────
+// ── Modal - detalhe de item, estilo carta ────────────────
 
 function fecharModal({ navegar = true } = {}) {
   if (modalLayer.hidden) return;
@@ -865,7 +865,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const partes = path.split('/').filter(Boolean);
     if (partes.length === 2 && categoriaPorId(partes[0])) {
       const [catId, itemId] = partes;
-      // Grade já renderizada (navegação normal dentro do app) — mantém o
+      // Grade já renderizada (navegação normal dentro do app) - mantém o
       // pano de fundo como está (pode ser "Todos", pode ser outra
       // categoria) e só abre o modal por cima. Só remonta a grade quando
       // não há nada renderizado ainda (link direto/reload).

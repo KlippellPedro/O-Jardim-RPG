@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────
-   O Jardim RPG — Sessão ao vivo
+   O Jardim RPG - Sessão ao vivo
    Mestre controla iniciativa, vida e condições; a mesa inteira
    acompanha em tempo real pelo fluxo de eventos do servidor.
    ───────────────────────────────────────────────────────── */
@@ -79,7 +79,7 @@ function desenhar() {
 }
 
 /* Toda ação segue o mesmo caminho: manda, rebusca o estado e redesenha. O
-   servidor é a única fonte de verdade — nada é adivinhado na tela. */
+   servidor é a única fonte de verdade - nada é adivinhado na tela. */
 async function executar(acao, mensagemDeSucesso = null) {
   try {
     await acao();

@@ -1,4 +1,4 @@
-// Lista genérica de itens editáveis — Inventário, Ataques, Magias e Aliados
+// Lista genérica de itens editáveis - Inventário, Ataques, Magias e Aliados
 // só declaram os campos; adicionar/editar/remover e persistência (via
 // aoSalvar) são compartilhados aqui em vez de reimplementados 4 vezes.
 

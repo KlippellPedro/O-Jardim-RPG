@@ -1,4 +1,4 @@
-/* Desenho da mesa ao vivo. O mesmo componente serve mestre e jogador — o que
+/* Desenho da mesa ao vivo. O mesmo componente serve mestre e jogador - o que
    muda é o que o servidor mandou: quem comanda recebe controles e números
    exatos, quem joga recebe a ordem do turno e o estado dos inimigos em
    palavras ("Ferido"), nunca os pontos de vida deles. */
@@ -200,7 +200,7 @@ function comandoDaMesa(estado, ctx) {
   const turno = elemento('div', 'sessao-turno');
   if (estado.sessao.em_combate) {
     turno.append(elemento('span', 'sessao-rodada', `Rodada ${estado.sessao.rodada}`));
-    turno.append(elemento('strong', 'sessao-vez', estado.sessao.turno_de?.nome || '—'));
+    turno.append(elemento('strong', 'sessao-vez', estado.sessao.turno_de?.nome || '-'));
   } else {
     turno.append(elemento('span', 'sessao-rodada', 'Fora de combate'));
   }
@@ -264,12 +264,12 @@ function formularioParticipante(ctx) {
     .forEach(([valor, rotulo]) => tipo.append(new Option(rotulo, valor)));
 
   // Atalho do bestiário: escolher um monstro preenche o nome, sugere uma vida
-  // pelo nível (o mestre ajusta) e marca como inimigo — sem digitar na mão.
+  // pelo nível (o mestre ajusta) e marca como inimigo - sem digitar na mão.
   const bestiario = document.createElement('select');
   bestiario.className = 'sessao-select';
   bestiario.disabled = true;
   bestiario.setAttribute('aria-label', 'Puxar um monstro do bestiário');
-  bestiario.append(new Option('— do bestiário —', ''));
+  bestiario.append(new Option('- do bestiário -', ''));
   ctx.bestiario?.().then(({ monstros }) => {
     (monstros || []).forEach(m => {
       const opcao = new Option(m.nivel != null ? `${m.titulo} · Nv ${m.nivel}` : m.titulo, m.id);
@@ -382,7 +382,7 @@ function painelDoJogador(estado) {
     turno.append(elemento('span', 'sessao-rodada', `Rodada ${estado.sessao.rodada}`));
     const vez = estado.sessao.turno_de;
     const ehMinhaVez = estado.participantes.some(p => p.id === vez?.id && p.e_meu);
-    turno.append(elemento('strong', 'sessao-vez', ehMinhaVez ? `Sua vez: ${vez.nome}` : `Vez de ${vez?.nome || '—'}`));
+    turno.append(elemento('strong', 'sessao-vez', ehMinhaVez ? `Sua vez: ${vez.nome}` : `Vez de ${vez?.nome || '-'}`));
     if (ehMinhaVez) painel.dataset.minhaVez = 'true';
   } else {
     turno.append(elemento('span', 'sessao-rodada', 'Sem combate no momento'));
@@ -397,7 +397,7 @@ function telaSemSessao(estado, ctx) {
 
   if (!ctx.comando) {
     bloco.append(elemento('p', 'sessao-vazio',
-      'Quando o mestre abrir a mesa, esta página acende sozinha — pode deixar aberta.'));
+      'Quando o mestre abrir a mesa, esta página acende sozinha - pode deixar aberta.'));
     return bloco;
   }
 

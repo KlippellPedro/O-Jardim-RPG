@@ -1,6 +1,6 @@
 """
 Configuração do bot Banqueiro. Lê variáveis de ambiente (.env).
-Segurança: o TOKEN NUNCA é hardcoded — vem só do ambiente. Se faltar,
+Segurança: o TOKEN NUNCA é hardcoded: vem só do ambiente. Se faltar,
 o main.py aborta com mensagem clara (fail-closed), em vez de rodar inseguro.
 """
 
@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-# Token do bot — validado no main (não no import, pra não quebrar os testes).
+# Token do bot: validado no main (não no import, pra não quebrar os testes).
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 DATABASE_URL = os.getenv("DATABASE_URL")  # PostgreSQL central da Discloud
 

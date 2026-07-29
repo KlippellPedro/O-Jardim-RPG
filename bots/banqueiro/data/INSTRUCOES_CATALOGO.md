@@ -21,11 +21,12 @@ Cada item é um objeto assim (o mesmo schema do site, em `data/loja`):
 }
 ```
 
-- **tipo:** um de `arma`, `armadura`, `equipamento` (→ categoria Arsenal), `veiculo`
-  (→ Veículos), `monstro` (→ Bestiário, botão "Contratar"), `drop` (→ Drops).
-- **id:** slug único (minúsculas, com hífens). Se repetir, o bot adiciona `-2` etc.
+- **tipo:** um de `arma`, `armadura`, `equipamento`, `consumivel`, `artefato`,
+  `fruto-eden`, `implante`, `veiculo`, `veiculo-completo`, `monstro` ou `drop`.
+- **id:** slug único (minúsculas, com hífens). IDs repetidos são rejeitados na publicação.
 - **preco:** número (vale em qualquer moeda) **ou** objeto `{"Lunaris": 40, "Solares": 5}`.
-- **raridade:** `comum | incomum | raro | epico | lendario` (só cor/peso de loot, não é regra).
+- **raridade:** `comum | incomum | raro | epico | lendario | reliquia |
+  reliquia da criacao` (acentos e maiúsculas também são aceitos).
 - Qualquer outro campo em `conteudo` (dano, material, bonus…) aparece como detalhe no card.
 
 O PostgreSQL guarda o mesmo objeto no campo `conteudo` (JSONB), mas o item
@@ -33,25 +34,27 @@ completo vive na tabela `catalogo_itens`.
 
 ## Como adicionar itens
 
-Em produção, adicione/edite registros em `catalogo_itens` pelo futuro dashboard
-do mestre. Depois use `/catalogo_recarregar` no Discord. O comando `/importar`
-foi removido para que o banco seja a fonte única de verdade.
+Adicione ou edite entradas em `data/catalogo.json`. Valide os IDs, tipos e
+raridades nos testes e então use `/catalogo_republicar` no Banqueiro. Esse
+comando atualiza o PostgreSQL com o arquivo, publica adições/edições e desativa
+as entradas removidas.
 
-`data/catalogo.json` é somente a semente de um banco novo. Alterá-lo não
-sobrescreve um catálogo que já existe no PostgreSQL.
+`/catalogo_recarregar` apenas recarrega na memória o que já está no PostgreSQL;
+ele não publica mudanças feitas no JSON.
 
 ## O que já está feito
 
-- **Armas:** 75 (com `subtipo` `simples`/`marcial` e `modo`
-  `Corpo a corpo`/`À distância`; inclui as 9 Obstinadas).
+- **Armas:** 87 (com `subtipo` `simples`/`marcial` e `modo`
+  `Corpo a corpo`/`À distância`; inclui Obstinadas e Relíquias da Criação).
 - **Equipamentos:** 56 (o material que vazava pro fim do `descricao` foi movido
   pro campo `material`; descrições e typos revisados).
-- **Armaduras e escudos:** 50 (com `bonus`, `penalidade`, `material`).
-- **Veículos:** 49 — modelo **complexo** (Opção B, ver abaixo).
-- **Bestiário:** 25 seres (`tipo: "monstro"`, preço por fórmula).
+- **Armaduras e escudos:** 52 (com `bonus`, `penalidade`, `material`).
+- **Veículos:** 55 — 49 sistemas e 6 veículos completos.
+- **Bestiário:** 28 seres (`tipo: "monstro"`, preço por fórmula).
 - **Drops:** 22 partes de seres (`tipo: "drop"`).
+- **Especiais:** 5 Frutos do Éden, 4 Implantes e 4 Artefatos Mágicos.
 
-Total: **277 entradas**.
+Total: **313 entradas**.
 
 Arkania foi **removido** (conceito descontinuado) e substituído por itens
 equivalentes usando conceitos vivos: `anel-do-fluxo`, `couraca-primordial`,

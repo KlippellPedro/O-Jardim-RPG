@@ -32,7 +32,7 @@ export const CATEGORIAS = [
     titulo: 'Personagens',
     tipos: ['personagem', 'soberano', 'npc'],
     descricao: 'Soberanos, NPCs e outras figuras notáveis.',
-    vazio: 'Nenhum personagem descoberto ainda. Ninguém foi encontrado pelo caminho — por enquanto.',
+    vazio: 'Nenhum personagem descoberto ainda. Ninguém foi encontrado pelo caminho - por enquanto.',
   },
   {
     id: 'eventos',

@@ -1,6 +1,6 @@
 """
 Configuração do bot Jornalista. Lê variáveis de ambiente (.env).
-Segurança: o TOKEN NUNCA é hardcoded — vem só do ambiente. Se faltar,
+Segurança: o TOKEN NUNCA é hardcoded: vem só do ambiente. Se faltar,
 o main.py aborta com mensagem clara (fail-closed), em vez de rodar inseguro.
 """
 
@@ -16,7 +16,7 @@ try:
 except Exception:
     pass
 
-# Token do bot — validado no main (não no import, pra não quebrar os testes).
+# Token do bot: validado no main (não no import, pra não quebrar os testes).
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
 # Mesmo PostgreSQL central do Banqueiro (VLAN da Discloud). O Jornalista só

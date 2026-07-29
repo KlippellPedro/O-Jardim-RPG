@@ -13,26 +13,26 @@
   "pericias": [
     { "id": "atletismo",         "titulo": "Atletismo",         "atributo": "forca",          "origem": "Tormenta" },
     { "id": "luta",              "titulo": "Luta",              "atributo": "forca",          "origem": "Tormenta", "uso": "Ataques corpo a corpo; usada no Contra-Ataque" },
-    { "id": "fortitude",         "titulo": "Fortitude",         "atributo": "constituicao",   "origem": "Tormenta", "descricao": "Resistência física — corpo, doenças, venenos, exaustão" },
+    { "id": "fortitude",         "titulo": "Fortitude",         "atributo": "constituicao",   "origem": "Tormenta", "descricao": "Resistência física contra doenças, venenos e exaustão" },
     { "id": "acrobacia",         "titulo": "Acrobacia",         "atributo": "destreza",       "origem": "Tormenta" },
     { "id": "cavalgar",          "titulo": "Cavalgar",          "atributo": "destreza",       "origem": "Tormenta" },
     { "id": "furtividade",       "titulo": "Furtividade",       "atributo": "destreza",       "origem": "Tormenta" },
     { "id": "ladinagem",         "titulo": "Ladinagem",         "atributo": "destreza",       "origem": "Tormenta" },
     { "id": "pilotagem",         "titulo": "Pilotagem",         "atributo": "destreza",       "origem": "Tormenta" },
     { "id": "pontaria",          "titulo": "Pontaria",          "atributo": "destreza",       "origem": "Tormenta", "uso": "Ataques à distância" },
-    { "id": "reflexos",          "titulo": "Reflexos",          "atributo": "destreza",       "origem": "Tormenta", "descricao": "Resistência a ataques evitáveis — armadilhas, explosões, efeitos de área" },
+    { "id": "reflexos",          "titulo": "Reflexos",          "atributo": "destreza",       "origem": "Tormenta", "descricao": "Resistência a ataques evitáveis, incluindo armadilhas, explosões e efeitos de área" },
     { "id": "conhecimento",      "titulo": "Conhecimento",      "atributo": "inteligencia",   "origem": "Tormenta" },
     { "id": "guerra",            "titulo": "Guerra",            "atributo": "inteligencia",   "origem": "Tormenta" },
     { "id": "investigacao",      "titulo": "Investigação",      "atributo": "inteligencia",   "origem": "Tormenta" },
     { "id": "misticismo",        "titulo": "Misticismo",        "atributo": "inteligencia",   "origem": "Tormenta" },
     { "id": "nobreza",           "titulo": "Nobreza",           "atributo": "inteligencia",   "origem": "Tormenta" },
-    { "id": "oficio",            "titulo": "Ofício",            "atributo": "inteligencia",   "origem": "Tormenta", "nota": "Artesanato geral — distinto de Tecnologia" },
+    { "id": "oficio",            "titulo": "Ofício",            "atributo": "inteligencia",   "origem": "Tormenta", "nota": "Artesanato geral, distinto de Tecnologia" },
     { "id": "cura",              "titulo": "Cura",              "atributo": "sabedoria",      "origem": "Tormenta" },
     { "id": "intuicao",          "titulo": "Intuição",          "atributo": "sabedoria",      "origem": "Tormenta" },
     { "id": "percepcao",         "titulo": "Percepção",         "atributo": "sabedoria",      "origem": "Tormenta" },
     { "id": "religiao",          "titulo": "Religião",          "atributo": "sabedoria",      "origem": "Tormenta" },
     { "id": "sobrevivencia",     "titulo": "Sobrevivência",     "atributo": "sabedoria",      "origem": "Tormenta" },
-    { "id": "vontade",           "titulo": "Vontade",           "atributo": "sabedoria",      "origem": "Tormenta", "descricao": "Resistência mental — ilusões, encantamentos, medo, sanidade" },
+    { "id": "vontade",           "titulo": "Vontade",           "atributo": "sabedoria",      "origem": "Tormenta", "descricao": "Resistência mental contra ilusões, encantamentos, medo e perda de sanidade" },
     { "id": "atuacao",           "titulo": "Atuação",           "atributo": "carisma",        "origem": "Tormenta" },
     { "id": "diplomacia",        "titulo": "Diplomacia",        "atributo": "carisma",        "origem": "Tormenta" },
     { "id": "enganacao",         "titulo": "Enganação",         "atributo": "carisma",        "origem": "Tormenta" },
@@ -54,7 +54,7 @@
       "atributo": "inteligencia",
       "origem": "O Jardim",
       "status": "aprovada",
-      "descricao": "Operar, reparar e entender itens A.X.I.S e maquinário avançado. Distinto de Ofício (artesanato geral) — dá identidade mecânica própria a quem segue a linha de Jota Macedo."
+      "descricao": "Operar, reparar e entender itens A.X.I.S e maquinário avançado. Ao contrário de Ofício, que cobre o artesanato geral, Tecnologia dá identidade mecânica própria a quem segue a linha de Jota Macedo."
     },
     {
       "id": "ritos-de-arkarin",
@@ -77,6 +77,6 @@
   "totais": {
     "tormenta_base": 28,
     "o_jardim_aprovadas": 4,
-    "nota": "As 4 perícias de O Jardim foram aprovadas por Pedro (não são mais propostas). Iniciativa foi removida desta lista — confirmada como não-perícia. Fortitude/Reflexos/Vontade contam no total do Tormenta (28 = 25 + as 3 reclassificadas de Resistências)."
+    "nota": "As 4 perícias de O Jardim foram aprovadas por Pedro e não são mais propostas. Iniciativa foi removida desta lista porque não é uma perícia. Fortitude, Reflexos e Vontade contam no total do Tormenta (28 = 25 + as 3 reclassificadas de Resistências)."
   }
 }

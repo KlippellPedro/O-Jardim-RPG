@@ -1,13 +1,58 @@
 import { api } from './apiClient';
+import type { EconomyOperation } from './economyOperations';
+
+export interface CarteiraPersonagemItem {
+  moeda: string;
+  saldo: number;
+  simbolo?: string;
+}
+
+export interface InventarioPersonagemItem {
+  item_id: string;
+  titulo: string;
+  quantidade: number;
+  dados: Record<string, any>;
+}
+
+export interface PersonagemApiRecord {
+  id: string;
+  nome: string;
+  dono_usuario_id?: string | null;
+  ficha: Record<string, any>;
+  versao: number;
+  economia_versao?: number;
+  carteira?: CarteiraPersonagemItem[];
+  inventario_central?: InventarioPersonagemItem[];
+  criado_em?: string;
+  atualizado_em?: string;
+  [key: string]: unknown;
+}
+
+export interface AtualizarPersonagemPayload {
+  versao_esperada: number;
+  nome: string;
+  ficha: Record<string, any>;
+}
+
+export interface AplicarOperacoesEconomiaPayload {
+  versaoEsperada: number;
+  operacoes: EconomyOperation[];
+}
+
+export interface EconomiaPersonagemResponse {
+  economia_versao: number;
+  carteira: CarteiraPersonagemItem[];
+  inventario: InventarioPersonagemItem[];
+}
 
 export const personagensApi = {
   listar(campanhaId: string, completo = false) {
     const query = new URLSearchParams({ campanha_id: campanhaId });
     if (completo) query.set('completo', 'true');
-    return api<{ personagens: any[] }>(`/personagens?${query.toString()}`);
+    return api<{ personagens: PersonagemApiRecord[] }>(`/personagens?${query.toString()}`);
   },
   obter(personagemId: string) {
-    return api<any>(`/personagens/${encodeURIComponent(personagemId)}`);
+    return api<{ personagem: PersonagemApiRecord }>(`/personagens/${encodeURIComponent(personagemId)}`);
   },
   criar(campanhaId: string, personagem: any, donoUsuarioId: string | null = null) {
     return api('/personagens', {
@@ -20,8 +65,8 @@ export const personagensApi = {
       },
     });
   },
-  atualizar(personagemId: string, payload: any) {
-    return api(`/personagens/${encodeURIComponent(personagemId)}`, {
+  atualizar(personagemId: string, payload: AtualizarPersonagemPayload) {
+    return api<{ personagem: PersonagemApiRecord }>(`/personagens/${encodeURIComponent(personagemId)}`, {
       method: 'PUT',
       body: payload
     });
@@ -29,23 +74,22 @@ export const personagensApi = {
   arquivar(personagemId: string) {
     return api(`/personagens/${encodeURIComponent(personagemId)}`, { method: 'DELETE' });
   },
-  // Carteira e inventário centralizado ficam fora de `ficha` (o backend os
-  // remove antes de gravar) — só este endpoint os persiste de verdade.
-  sincronizarEconomia(
+  aplicarOperacoesEconomia(
     personagemId: string,
-    payload: {
-      versaoEsperada: number;
-      carteira: { moeda: string; saldo: number; simbolo?: string }[];
-      inventario: { item_id: string; titulo: string; quantidade: number; dados: Record<string, any> }[];
-    }
+    payload: AplicarOperacoesEconomiaPayload,
+    keepalive = false,
   ) {
-    return api<{ economia_versao: number }>(`/personagens/${encodeURIComponent(personagemId)}/economia`, {
-      method: 'PUT',
-      body: {
-        versao_esperada: payload.versaoEsperada,
-        carteira: payload.carteira,
-        inventario: payload.inventario,
+    return api<EconomiaPersonagemResponse>(
+      `/personagens/${encodeURIComponent(personagemId)}/economia/operacoes`,
+      {
+        method: 'POST',
+        body: {
+          versao_esperada: payload.versaoEsperada,
+          operacoes: payload.operacoes,
+        },
+        keepalive: keepalive || undefined,
       },
-    });
+    );
   },
+
 };

@@ -8,7 +8,8 @@ from fastapi.responses import StreamingResponse
 from psycopg.types.json import Jsonb
 
 from core.audit import record_audit
-from core.dados import rolar_dado
+from core.character_summary import iniciativa_fixa
+from core.condicoes import decrementar_condicoes, normalizar_condicoes
 from core.database import Database
 from core.dependencies import (
     AuthenticatedUser,
@@ -118,7 +119,7 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
             "nome": item["nome"],
             "tipo": item["tipo"],
             "iniciativa": item["iniciativa"],
-            "condicoes": item["condicoes"],
+            "condicoes": normalizar_condicoes(item["condicoes"]),
             "ordem": item["ordem"],
             "indice": indice,
             "e_meu": proprio,
@@ -213,6 +214,7 @@ def abrir_sessao(
             personagens = connection.execute(
                 """
                 SELECT id, nome,
+                       ficha,
                        COALESCE((ficha->'derivados'->>'vida')::int, 0) AS vida_maxima,
                        COALESCE((ficha->'recursos'->>'vidaAtual')::int, 0) AS vida_atual
                 FROM personagens
@@ -228,10 +230,11 @@ def abrir_sessao(
                     """
                     INSERT INTO sessao_participantes
                         (id, sessao_id, personagem_id, nome, tipo,
-                         vida_atual, vida_maxima, ordem)
-                    VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s)
+                         iniciativa, vida_atual, vida_maxima, ordem)
+                    VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s)
                     """,
                     (uuid4(), sessao_id, personagem["id"], personagem["nome"],
+                     iniciativa_fixa(personagem["ficha"]),
                      min(atual, maximo) if maximo else atual, maximo, ordem),
                 )
 
@@ -438,6 +441,59 @@ def remover_participante(
     return None
 
 
+@router.get("/bestiario")
+def listar_bestiario(
+    campanha_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """Monstros do catálogo, para o mestre montar a cena rápido. Só quem comanda."""
+    with database.connection() as connection:
+        require_campaign_manager(connection, campanha_id, user.id)
+        linhas = connection.execute(
+            """
+            SELECT id, titulo, conteudo
+            FROM catalogo_itens
+            WHERE tipo='monstro' AND ativo=TRUE
+            ORDER BY titulo
+            """
+        ).fetchall()
+    monstros = []
+    for linha in linhas:
+        conteudo = linha["conteudo"] or {}
+        monstros.append(
+            {
+                "id": linha["id"],
+                "titulo": linha["titulo"],
+                "nivel": conteudo.get("nivel"),
+                "classe": conteudo.get("classe"),
+                "descricao": conteudo.get("descricao"),
+            }
+        )
+    return {"monstros": monstros}
+
+
+def _passar_rodada_condicoes(connection, sessao_id) -> None:
+    """Passa uma rodada para as condições em cena: decrementa a duração e
+    remove as que zeraram. Grava só quem mudou."""
+    linhas = connection.execute(
+        "SELECT id, condicoes FROM sessao_participantes WHERE sessao_id=%s",
+        (sessao_id,),
+    ).fetchall()
+    for linha in linhas:
+        antes = normalizar_condicoes(linha["condicoes"])
+        depois = decrementar_condicoes(linha["condicoes"])
+        if depois != antes:
+            connection.execute(
+                """
+                UPDATE sessao_participantes
+                SET condicoes=%s, atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s
+                """,
+                (Jsonb(depois), linha["id"]),
+            )
+
+
 @router.post("/{sessao_id}/turno")
 def controlar_turno(
     sessao_id: UUID,
@@ -456,6 +512,7 @@ def controlar_turno(
         rodada = int(sessao["rodada"])
         indice = int(sessao["turno_indice"])
         em_combate = bool(sessao["em_combate"])
+        nova_rodada = False
 
         if payload.acao == "ordenar":
             linhas = connection.execute(
@@ -488,6 +545,7 @@ def controlar_turno(
             if indice >= total:
                 indice = 0
                 rodada += 1
+                nova_rodada = True
         elif payload.acao == "anterior" and total:
             indice -= 1
             if indice < 0:
@@ -503,6 +561,8 @@ def controlar_turno(
             """,
             (rodada, indice, em_combate, sessao_id),
         )
+        if nova_rodada:
+            _passar_rodada_condicoes(connection, sessao_id)
         atualizada = _sessao_aberta(connection, sessao["campanha_id"])
         estado = _montar_estado(connection, atualizada, "mestre", user.id)
         campanha_id = sessao["campanha_id"]
@@ -511,43 +571,51 @@ def controlar_turno(
 
 
 @router.post("/{sessao_id}/iniciativa")
-def rolar_iniciativa(
+def sincronizar_iniciativa(
     sessao_id: UUID,
     user: AuthenticatedUser = Depends(require_csrf),
     database: Database = Depends(get_database),
 ):
-    """Rola 1d20 de iniciativa para todo mundo e já ordena a fila.
+    """Copia a iniciativa fixa das fichas e ordena a fila, sem rolar dados.
 
-    O dado sai do servidor como qualquer outra rolagem — o mestre não digita
-    número nenhum, e o resultado fica no log junto com o resto da sessão.
+    NPCs e inimigos sem ficha mantêm o número definido pelo mestre.
     """
     with database.connection() as connection:
         sessao = _sessao_sob_comando(connection, sessao_id, user.id)
         participantes = connection.execute(
-            "SELECT id, nome, personagem_id FROM sessao_participantes WHERE sessao_id=%s",
+            """
+            SELECT sp.id, sp.nome, sp.personagem_id, sp.iniciativa, p.ficha
+            FROM sessao_participantes sp
+            LEFT JOIN personagens p ON p.id=sp.personagem_id
+            WHERE sp.sessao_id=%s
+            """,
             (sessao_id,),
         ).fetchall()
         if not participantes:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="adicione participantes antes de rolar iniciativa",
+                detail="adicione participantes antes de ordenar a iniciativa",
             )
 
-        sorteios = []
+        iniciativas = []
         for participante in participantes:
-            valor = rolar_dado(20)
-            sorteios.append({"linha": participante, "valor": valor})
+            valor = (
+                iniciativa_fixa(participante["ficha"])
+                if participante["personagem_id"] and participante["ficha"]
+                else int(participante["iniciativa"])
+            )
+            iniciativas.append({"linha": participante, "valor": valor})
         # Maior iniciativa começa; empate mantém a ordem alfabética do nome.
-        sorteios.sort(key=lambda item: (-item["valor"], item["linha"]["nome"]))
+        iniciativas.sort(key=lambda item: (-item["valor"], item["linha"]["nome"]))
 
-        for posicao, sorteio in enumerate(sorteios):
+        for posicao, item in enumerate(iniciativas):
             connection.execute(
                 """
                 UPDATE sessao_participantes
                 SET iniciativa=%s, ordem=%s, atualizado_em=CURRENT_TIMESTAMP
                 WHERE id=%s
                 """,
-                (sorteio["valor"], posicao, sorteio["linha"]["id"]),
+                (item["valor"], posicao, item["linha"]["id"]),
             )
 
         connection.execute(
@@ -558,35 +626,17 @@ def rolar_iniciativa(
             """,
             (sessao_id,),
         )
-        connection.execute(
-            """
-            INSERT INTO registros_mesa
-                (id, campanha_id, sessao_id, usuario_id, autor_nome, tipo,
-                 titulo, formula, resultado, detalhes)
-            VALUES (%s, %s, %s, %s, %s, 'rolagem', 'Iniciativa da cena', 'd20', NULL, %s)
-            """,
-            (
-                uuid4(),
-                sessao["campanha_id"],
-                sessao_id,
-                user.id,
-                user.nome_exibicao,
-                Jsonb({
-                    "iniciativas": [
-                        {"nome": s["linha"]["nome"], "valor": s["valor"]} for s in sorteios
-                    ],
-                    "origem": {"tipo": "iniciativa"},
-                }),
-            ),
-        )
         record_audit(
             connection,
-            action="sessao.iniciativa_rolada",
+            action="sessao.iniciativa_sincronizada",
             actor_user_id=user.id,
             campaign_id=sessao["campanha_id"],
             target_type="sessao",
             target_id=str(sessao_id),
-            details={"participantes": len(sorteios)},
+            details={
+                "participantes": len(iniciativas),
+                "origem": "valor_fixo_da_ficha",
+            },
         )
         atualizada = _sessao_aberta(connection, sessao["campanha_id"])
         estado = _montar_estado(connection, atualizada, "mestre", user.id)

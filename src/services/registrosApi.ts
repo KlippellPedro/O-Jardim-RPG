@@ -11,7 +11,7 @@ export interface IRegistro {
   criado_em: string;
 }
 
-// Todo dado é sorteado no servidor — o cliente nunca escolhe o resultado,
+// Todo dado é sorteado no servidor - o cliente nunca escolhe o resultado,
 // só monta o pedido (bônus/vantagem/desvantagem/DT) e exibe a resposta.
 export const registrosApi = {
   rolar(payload: {

@@ -45,6 +45,20 @@ def test_pericias_agrupadas_por_atributo():
     assert total == len(nav.pericias)
 
 
+def test_pericias_tambem_podem_ser_navegadas_como_itens():
+    nav = Navegacao()
+    assert nav.itens("pericias") == nav.pericias
+    primeira = nav.pericias[0]
+    assert nav.item("pericias", primeira["id"]) == primeira
+
+
+def test_pericias_preservam_detalhes_publicados():
+    nav = Navegacao()
+    ressonancia = nav.item("pericias", "ressonancia")
+    assert ressonancia["descricao"]
+    assert ressonancia["status"] == "aprovada"
+
+
 def test_fundamentos_tem_titulo_e_texto():
     nav = Navegacao()
     secao = nav.fundamentos[0]

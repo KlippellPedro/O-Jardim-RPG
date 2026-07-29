@@ -1,7 +1,7 @@
 """
 Núcleo de música do Barista: busca/extração via yt-dlp e fila por servidor.
 
-Abordagem escolhida (ver Analise_Infra_Discloud.md): tocar direto com
+Abordagem escolhida (ver docs/Analise_Infra_Discloud.md): tocar direto com
 FFmpeg no processo do próprio bot, sem Lavalink — mais simples de operar e
 cabe no orçamento de RAM atual da Discloud. Isso usa mais CPU/rede durante
 a reprodução e depende do binário `ffmpeg` estar disponível no host.
@@ -12,7 +12,9 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import random
 import re
+import time
 from collections import deque
 from dataclasses import dataclass, field
 from typing import Deque, Dict, List, Optional, Union
@@ -52,8 +54,20 @@ FFMPEG_EXECUTAVEL = "ffmpeg"
 SPOTIFY_OEMBED = "https://open.spotify.com/oembed"
 YOUTUBE_OEMBED = "https://www.youtube.com/oembed"
 SPOTIFY_TIMEOUT_S = 8
+EXTRACAO_TIMEOUT_S = 30.0
+MAX_EXTRACOES_SIMULTANEAS = 4
 _SPOTIFY_ID_RE = re.compile(r"^[A-Za-z0-9]{22}$")
 _YOUTUBE_ID_RE = re.compile(r"^[A-Za-z0-9_-]{11}$")
+_HOSTS_SOUNDCLOUD = {
+    "soundcloud.com",
+    "www.soundcloud.com",
+    "m.soundcloud.com",
+    "on.soundcloud.com",
+}
+
+# Uma única barreira vale para todos os servidores. Sem isso, vários /tocar ao
+# mesmo tempo criam threads e processos de extração sem limite no mesmo host.
+_SEMAFORO_EXTRACOES = asyncio.BoundedSemaphore(MAX_EXTRACOES_SIMULTANEAS)
 
 # O pacote oficial `deno` instala o executável junto do ambiente Python.
 # O yt-dlp atual precisa de um runtime JavaScript externo para obter todos
@@ -69,6 +83,9 @@ YDL_OPCOES = {
     "no_color": True,
     "logger": _YTDLPLogger(),
     "source_address": "0.0.0.0",
+    "socket_timeout": 15,
+    "retries": 2,
+    "fragment_retries": 2,
     "js_runtimes": {"deno": {"path": DENO_EXECUTAVEL}},
 }
 
@@ -86,6 +103,18 @@ VOLUME_PADRAO = 0.5
 
 class ErroMusica(Exception):
     """Erro esperado (busca vazia, ffmpeg ausente, etc.) — mostrável ao usuário."""
+
+
+def _validar_autoridade_https(parsed, plataforma: str) -> None:
+    """Recusa credenciais e portas alternativas mesmo em hosts permitidos."""
+    try:
+        porta = parsed.port
+    except ValueError as exc:
+        raise ErroMusica(f"O link do {plataforma} tem uma porta inválida.") from exc
+    if parsed.scheme.lower() != "https":
+        raise ErroMusica(f"O link do {plataforma} precisa usar HTTPS.")
+    if parsed.username is not None or parsed.password is not None or porta not in (None, 443):
+        raise ErroMusica(f"O link do {plataforma} não é válido.")
 
 
 @dataclass
@@ -137,8 +166,7 @@ def _url_spotify_track(consulta: str) -> Optional[str]:
     host = (parsed.hostname or "").lower().rstrip(".")
     if host not in {"open.spotify.com", "www.open.spotify.com"}:
         return None
-    if parsed.scheme.lower() != "https":
-        raise ErroMusica("O link do Spotify precisa usar HTTPS.")
+    _validar_autoridade_https(parsed, "Spotify")
 
     partes = [parte for parte in parsed.path.split("/") if parte]
     if partes and partes[0].lower().startswith("intl-"):
@@ -183,8 +211,7 @@ def _url_youtube_video(consulta: str) -> Optional[str]:
     hosts_youtube = {"youtube.com", "www.youtube.com", "m.youtube.com", "music.youtube.com"}
     if host not in hosts_youtube | {"youtu.be", "www.youtu.be"}:
         return None
-    if parsed.scheme.lower() != "https":
-        raise ErroMusica("O link do YouTube precisa usar HTTPS.")
+    _validar_autoridade_https(parsed, "YouTube")
 
     video_id = None
     partes = [parte for parte in parsed.path.split("/") if parte]
@@ -204,6 +231,31 @@ def _url_youtube_video(consulta: str) -> Optional[str]:
     if not video_id or not _YOUTUBE_ID_RE.fullmatch(video_id):
         raise ErroMusica("Use o link de um vídeo/faixa do YouTube, não de canal ou playlist.")
     return f"https://www.youtube.com/watch?v={video_id}"
+
+
+def _url_soundcloud(consulta: str) -> Optional[str]:
+    """Aceita somente páginas HTTPS públicas dos hosts conhecidos do SoundCloud."""
+    texto = consulta.strip()
+    try:
+        parsed = urlsplit(texto)
+    except ValueError:
+        return None
+    host = (parsed.hostname or "").lower().rstrip(".")
+    if host not in _HOSTS_SOUNDCLOUD:
+        return None
+    _validar_autoridade_https(parsed, "SoundCloud")
+    if not parsed.path or parsed.path == "/":
+        raise ErroMusica("Use o link de uma faixa ou playlist do SoundCloud.")
+    return parsed._replace(fragment="").geturl()
+
+
+def _eh_url_http(consulta: str) -> bool:
+    """Classifica uma URL sem deixar entrada malformada escapar como erro interno."""
+    try:
+        parsed = urlsplit(consulta.strip())
+    except ValueError as exc:
+        raise ErroMusica("Esse link está malformado.") from exc
+    return parsed.scheme.lower() in {"http", "https"}
 
 
 def _metadados_youtube(url_video: str) -> tuple[str, str]:
@@ -227,15 +279,57 @@ def _metadados_youtube(url_video: str) -> tuple[str, str]:
     return titulo.strip()[:200], autor.strip()[:100] if isinstance(autor, str) else ""
 
 
+async def _executar_extracao(extrator):
+    """Executa uma extração bloqueante com limite global e prazo de resposta.
+
+    Uma thread do Python não pode ser interrompida com segurança. Se o prazo
+    estourar, a vaga permanece ocupada até a thread realmente terminar; assim
+    várias extrações travadas não contornam o limite global.
+    """
+    try:
+        await asyncio.wait_for(
+            _SEMAFORO_EXTRACOES.acquire(), timeout=EXTRACAO_TIMEOUT_S
+        )
+    except asyncio.TimeoutError as exc:
+        raise ErroMusica(
+            "Há muitas buscas de música em andamento. Tenta novamente em alguns segundos."
+        ) from exc
+    loop = asyncio.get_running_loop()
+    try:
+        futuro = loop.run_in_executor(None, extrator)
+    except Exception:
+        _SEMAFORO_EXTRACOES.release()
+        raise
+
+    def _finalizar_futuro(concluido) -> None:
+        try:
+            if not concluido.cancelled():
+                # Marca uma exceção tardia como observada mesmo quando quem
+                # chamou já recebeu timeout. O await normal continua podendo
+                # propagar a mesma exceção quando termina dentro do prazo.
+                concluido.exception()
+        except Exception:
+            log.debug("extração terminou com erro depois do timeout", exc_info=True)
+        finally:
+            _SEMAFORO_EXTRACOES.release()
+
+    futuro.add_done_callback(_finalizar_futuro)
+    try:
+        return await asyncio.wait_for(asyncio.shield(futuro), timeout=EXTRACAO_TIMEOUT_S)
+    except asyncio.TimeoutError as exc:
+        raise ErroMusica(
+            "A busca da música demorou demais. Tenta novamente em alguns segundos."
+        ) from exc
+
+
 async def buscar_faixa(consulta: str, solicitante_id: int) -> Faixa:
     """Resolve uma busca ou URL num stream tocável. O yt-dlp é bloqueante,
     então roda numa thread separada pra não travar o loop do bot."""
-    loop = asyncio.get_running_loop()
-
     def _extrair():
         url_spotify = _url_spotify_track(consulta)
         url_youtube = None if url_spotify else _url_youtube_video(consulta)
-        eh_url = urlsplit(consulta.strip()).scheme.lower() in {"http", "https"}
+        url_soundcloud = None if (url_spotify or url_youtube) else _url_soundcloud(consulta)
+        eh_url_http = _eh_url_http(consulta)
 
         # Cada tentativa é (consulta_ydl, origem_audio, url_original). Com cookies,
         # o YouTube vem primeiro e o SoundCloud é o fallback; sem cookies, só o
@@ -256,13 +350,16 @@ async def buscar_faixa(consulta: str, solicitante_id: int) -> Faixa:
             except ErroMusica:
                 if not tentativas:
                     raise  # sem YouTube direto e sem metadados: não há como tocar
-        elif not eh_url:
+        elif url_soundcloud:
+            tentativas.append((url_soundcloud, "soundcloud", url_soundcloud))
+        elif eh_url_http:
+            raise ErroMusica(
+                "Por segurança, aceito links somente do YouTube, Spotify ou SoundCloud."
+            )
+        else:
             if YOUTUBE_DISPONIVEL:
                 tentativas.append((f"ytsearch5:{consulta.strip()}", "busca-youtube", None))
             tentativas.append((f"scsearch5:{consulta.strip()}", "busca-soundcloud", None))
-        else:
-            # URL direta que não é Spotify nem YouTube (ex.: SoundCloud) — toca como veio.
-            tentativas.append((consulta, "fonte informada", None))
 
         erro_download = None
         for consulta_ydl, origem_audio, url_original in tentativas:
@@ -289,7 +386,7 @@ async def buscar_faixa(consulta: str, solicitante_id: int) -> Faixa:
         raise ErroMusica("Não encontrei áudio tocável pra essa busca.")
 
     try:
-        info, url_original, origem_audio = await loop.run_in_executor(None, _extrair)
+        info, url_original, origem_audio = await _executar_extracao(_extrair)
     except ErroMusica:
         raise
     except yt_dlp.utils.DownloadError as exc:
@@ -349,6 +446,15 @@ class FilaServidor:
     volume: float = VOLUME_PADRAO
     canal: Optional[discord.abc.Messageable] = None
     fonte_atual: Optional[discord.AudioSource] = None
+    # Repetição: "off" | "uma" (repete a faixa atual) | "tudo" (cicla a fila).
+    repeticao: str = "off"
+    # Marca de tempo (monotônica) do início da faixa atual e, se pausada, o
+    # instante da pausa — para calcular a posição descontando o tempo parado.
+    inicio_monotonico: Optional[float] = None
+    pausado_em: Optional[float] = None
+    # Sinaliza que a faixa que vai terminar foi pulada de propósito: nesse caso
+    # o modo de repetição não deve reenfileirá-la.
+    pular_solicitado: bool = False
 
     def adicionar(self, faixa: Faixa) -> int:
         self.faixas.append(faixa)
@@ -358,10 +464,41 @@ class FilaServidor:
         self.atual = self.faixas.popleft() if self.faixas else None
         return self.atual
 
+    def embaralhar(self, rng=random) -> int:
+        """Embaralha a ordem das faixas ainda por tocar (não mexe na atual)."""
+        itens = list(self.faixas)
+        rng.shuffle(itens)
+        self.faixas = deque(itens)
+        return len(itens)
+
+    def marcar_inicio(self) -> None:
+        self.inicio_monotonico = time.monotonic()
+        self.pausado_em = None
+
+    def marcar_pausa(self) -> None:
+        if self.inicio_monotonico is not None and self.pausado_em is None:
+            self.pausado_em = time.monotonic()
+
+    def marcar_retomada(self) -> None:
+        if self.pausado_em is not None and self.inicio_monotonico is not None:
+            self.inicio_monotonico += time.monotonic() - self.pausado_em
+            self.pausado_em = None
+
+    def posicao_s(self) -> Optional[int]:
+        """Segundos decorridos da faixa atual, descontando pausas."""
+        if self.inicio_monotonico is None:
+            return None
+        fim = self.pausado_em if self.pausado_em is not None else time.monotonic()
+        return max(0, int(fim - self.inicio_monotonico))
+
     def limpar(self) -> None:
         self.faixas.clear()
         self.atual = None
         self.fonte_atual = None
+        self.repeticao = "off"
+        self.inicio_monotonico = None
+        self.pausado_em = None
+        self.pular_solicitado = False
 
 
 class GerenciadorMusica:
@@ -400,4 +537,6 @@ class GerenciadorMusica:
 
         fila.fonte_atual = fonte
         voice_client.play(fonte, after=ao_terminar)
+        fila.marcar_inicio()
         return faixa
+

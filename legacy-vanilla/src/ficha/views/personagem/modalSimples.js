@@ -1,5 +1,5 @@
 // Modal genérico reaproveitado pelas abas da ficha completa (info de
-// cálculo, ajustes personalizados, level up...) — reaproveita o mesmo
+// cálculo, ajustes personalizados, level up...) - reaproveita o mesmo
 // #ficha-modal-layer do wizard de criação (wizardCriacao.js), mas nunca
 // abre ao mesmo tempo (o wizard só aparece a partir da lista de
 // personagens, estas abas só a partir da ficha de um personagem já criado).

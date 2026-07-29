@@ -1,4 +1,10 @@
-# Barista — O Jardim RPG
+# Barista — O Jardim RPG (descontinuado)
+
+> **Bot em desativação (27/07/2026):** o Rollem/Rollen (bot externo) já cobre
+> rolagem de dados e a mesa passou a compartilhar tela pra música, então o
+> Barista inteiro — dados, música e o `/menu` de bebidas — está sendo
+> removido. Este README fica só como registro histórico até a pasta ser
+> apagada.
 
 Segundo bot do Jardim: rolagem de dados, música nos canais de voz (com
 playlists nomeadas) e um cardápio de bebidas (`/menu`) que debita a
@@ -9,14 +15,14 @@ carteira compartilhada com o Banqueiro.
 - **Runtime:** Python 3.11 na Discloud.
 - **Estado:** a fila de reprodução em si continua só em memória (reinicia
   com o processo). Playlists e o `/menu` usam o **mesmo PostgreSQL central
-  do Banqueiro/Jornalista**, por VLAN (`Plano_Banco_Central.md`) — mas essa
+  do Banqueiro/Jornalista**, por VLAN (`docs/Plano_Banco_Central.md`) — mas essa
   conexão é **opcional pro Barista**: sem `DATABASE_URL` configurada (ou se
   a conexão falhar), o bot sobe normalmente e dados/música continuam
   funcionando; só `/playlist_*` e `/menu` ficam indisponíveis (ver
   `main.py` e `core/db.py`). Diferente do Banqueiro/Jornalista, que exigem
   o banco pra sequer iniciar.
 - **Música:** toca direto com `yt-dlp` + Deno + FFmpeg no próprio processo do bot,
-  sem Lavalink (ver `Analise_Infra_Discloud.md` na raiz do repo — um
+  sem Lavalink (ver `docs/Analise_Infra_Discloud.md` na raiz do repo — um
   servidor Lavalink separado não cabia no orçamento de RAM planejado). Essa
   escolha é mais simples de operar, mas usa mais CPU/rede durante a
   reprodução. O FFmpeg é instalado pelo `APT=ffmpeg` do
@@ -26,18 +32,21 @@ carteira compartilhada com o Banqueiro.
   O bot usa `yt-dlp[default]`, o componente EJS oficial e o runtime Deno,
   configuração atualmente exigida pelo extrator. Isso corrige a execução de
   JavaScript, mas não burla bloqueio de IP/PO Token e não é garantia absoluta.
-  Cookies não são usados: são credenciais sensíveis, expiram e podem colocar
-  a conta de origem em risco.
+  Quando `YOUTUBE_COOKIES` aponta para um arquivo existente, ou existe um
+  `cookies.txt` na raiz do Barista, o YouTube direto é tentado primeiro. Esse
+  arquivo representa uma sessão autenticada: use somente uma conta dedicada,
+  sem dados pessoais, e nunca versione ou compartilhe o cookie/ZIP de deploy.
 - **YouTube e Spotify na Discloud:** o YouTube bloqueia a extração direta no
   IP atual da hospedagem mesmo com Deno/EJS, e o Spotify não fornece áudio
   completo pela Web API para este tipo de bot. O Barista consulta o oEmbed
   oficial do link para obter título/autor e procura no SoundCloud um áudio
-  correspondente. A mensagem do comando informa essa troca de fonte. Links
-  de canal, álbum e playlist são recusados para evitar tocar conteúdo
-  diferente do pedido. Como a correspondência é por metadados, ela deve ser
-  conferida pelo título mostrado e não é garantia de ser a mesma gravação.
-- `RAM=300` em `discloud.config` é uma estimativa inicial pra um bot leve
-  de texto + um trecho de transcodificação de áudio; ajuste depois de ver o
+  correspondente quando a extração direta não está disponível ou falha. A
+  mensagem do comando informa essa troca de fonte. URLs são aceitas somente
+  dos hosts HTTPS conhecidos de YouTube, Spotify e SoundCloud; outras URLs são
+  recusadas. Como a correspondência é por metadados, ela deve ser conferida
+  pelo título mostrado e não é garantia de ser a mesma gravação.
+- `RAM=512` em `discloud.config` é a configuração atual para comandos de texto,
+  extração e transcodificação de áudio; ajuste depois de ver o
   consumo real em produção (o painel da Discloud mostra o uso).
 
 ## Comandos
@@ -67,20 +76,26 @@ carteira compartilhada com o Banqueiro.
 
 **Música** (`cogs/musica.py`, núcleo em `core/musica.py`):
 
-- `/tocar <busca>` — busca no YouTube, aceita link direto ou link de uma faixa
-  do Spotify e toca/enfileira. Links de YouTube/Spotify são espelhados para
-  uma correspondência no SoundCloud; não são streams extraídos dessas duas
-  plataformas.
+- `/tocar <busca>` — busca por nome ou aceita links HTTPS de YouTube, faixa do
+  Spotify e SoundCloud. Com cookie, tenta o YouTube direto; sem ele, ou quando
+  a tentativa falha, usa uma correspondência no SoundCloud. Outras URLs são
+  recusadas por segurança. Cada extração tem prazo de 30 segundos e há no
+  máximo quatro extrações simultâneas no processo inteiro.
 - `!musica <busca>` (também `!tocar`/`!play`) — mesmo efeito de `/tocar`,
   via mensagem de texto em vez de slash command. **Precisa da intent
   privilegiada "Message Content" ligada no Developer Portal do bot** (Bot →
   Privileged Gateway Intents), além do `intents.message_content = True` já
   presente em `main.py` — sem isso o bot recusa conectar.
-- `/pular`, `/pausar`, `/despausar`, `/parar` — controle de reprodução.
-  `/parar` limpa a fila inteira e desconecta do canal.
+- `/pular`, `/pausar`, `/despausar`, `/parar` — controle de reprodução. Só
+  funciona para quem está na mesma call do bot ou tem **Gerenciar Servidor**.
+  `/parar` limpa a fila inteira e desconecta do canal. Uma sessão ativa não
+  pode ser puxada por alguém de outra call; quando a fila termina, o Barista
+  espera 90 segundos por uma nova música e sai automaticamente se continuar
+  ocioso. Uma primeira busca que falha não faz o bot entrar na call.
 - `/fila` — mostra a faixa atual e o que vem a seguir.
-- `/volume <porcentagem>` — 0 a 200%; para evitar depender da `libopus`
-  compartilhada do Python, a alteração vale a partir da próxima faixa.
+- `/volume <porcentagem>` — 0 a 200%, com a mesma restrição de call/permissão;
+  para evitar depender da `libopus` compartilhada do Python, a alteração vale
+  a partir da próxima faixa.
 
 **Playlist** (`cogs/playlist.py`, persistência em `core/db.py` — precisa de
 banco configurado):
@@ -122,12 +137,16 @@ configurado):
 Veja `.env.example`:
 
 - `DISCORD_TOKEN` — obrigatória;
-- `GUILD_ID` — opcional, acelera a sincronização de comandos num servidor
-  de testes;
+- `GUILD_ID` — opcional; quando definido, publica os comandos somente nesse
+  servidor e remove cópias globais antigas para não exibir duplicados;
 - `DATABASE_URL` — opcional. Sem ela, `/playlist_*` e `/menu` ficam
   indisponíveis, mas o resto do bot funciona normalmente;
 - `DATABASE_STARTUP_TIMEOUT` — opcional (padrão 12s), tempo máximo pra
-  validar o banco na inicialização.
+  validar o banco na inicialização;
+- `YOUTUBE_COOKIES` — opcional, caminho para um `cookies.txt`. Se ficar vazio,
+  o bot procura `cookies.txt` na própria raiz. O script de build inclui esse
+  arquivo no ZIP quando ele existe; portanto o ZIP também deve ser tratado
+  como segredo e nunca commitado ou compartilhado.
 
 Nunca envie o `.env` real ao Git. O `.gitignore` e o `.discloudignore`
 protegem esse arquivo; em produção, configure o valor no painel.
@@ -213,10 +232,11 @@ bots/barista/
   a senha está certa antes de depender dele localmente.
 - Observar o consumo real de RAM/CPU durante a reprodução e ajustar `RAM`
   em `discloud.config`.
-- Se o bloqueio anti-bot do YouTube persistir mesmo com Deno/EJS, avaliar um
-  provedor de PO Token compatível com yt-dlp. Não adicionar cookies de conta
-  pessoal sem uma análise específica de segurança e manutenção.
+- Se o bloqueio anti-bot do YouTube persistir mesmo com Deno/EJS e cookie de
+  conta dedicada, avaliar um provedor de PO Token compatível com yt-dlp. Não
+  usar cookie de conta pessoal.
 - Rodar `tests/test_db.py` contra um Postgres de teste real pelo menos uma
   vez antes de confiar na lógica de playlist/carteira em produção — só foi
   verificada por leitura/espelhamento do padrão já provado no Banqueiro,
   nunca executada de fato (sem `TEST_DATABASE_URL` neste ambiente).
+

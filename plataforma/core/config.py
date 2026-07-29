@@ -60,6 +60,10 @@ class Settings:
     creator_user_id: UUID | None
     creator_email: str | None
     cadastro: str
+    automatic_backup_enabled: bool
+    automatic_backup_interval_hours: int
+    automatic_backup_retention: int
+    automatic_backup_directory: str
 
     @property
     def production(self) -> bool:
@@ -122,4 +126,17 @@ def load_settings() -> Settings:
             os.getenv("CADASTRO")
             or ("convite" if environment == "production" else "aberto")
         ).strip().lower(),
+        automatic_backup_enabled=_bool_env(
+            "AUTOMATIC_BACKUP_ENABLED",
+            environment == "production",
+        ),
+        automatic_backup_interval_hours=_int_env(
+            "AUTOMATIC_BACKUP_INTERVAL_HOURS", 24, 1, 720
+        ),
+        automatic_backup_retention=_int_env(
+            "AUTOMATIC_BACKUP_RETENTION", 7, 1, 90
+        ),
+        automatic_backup_directory=(
+            os.getenv("AUTOMATIC_BACKUP_DIRECTORY") or "backups"
+        ).strip(),
     )

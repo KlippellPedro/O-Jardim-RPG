@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────
-   O Jardim RPG — Loja
+   O Jardim RPG - Loja
    Categorias e o mapeamento de tipo → categoria. Mesmo
    esquema de src/mundo/config/categorias.js, com ícone e cor de
    destaque próprios pra cada card do índice.
@@ -34,7 +34,7 @@ export const CATEGORIAS = [
     accent: 'var(--moss)',
     descricao: 'Criaturas, monstros e ameaças que rondam O Jardim.',
     vazio: 'Nenhuma criatura foi catalogada ainda. O que ronda a escuridão continua desconhecido.',
-    // Seres, não mercadoria — o verbo do botão reflete isso (ver plano da
+    // Seres, não mercadoria - o verbo do botão reflete isso (ver plano da
     // reforma visual da Loja: Bestiário usa "Contratar", não "Comprar").
     acao: 'Contratar',
   },

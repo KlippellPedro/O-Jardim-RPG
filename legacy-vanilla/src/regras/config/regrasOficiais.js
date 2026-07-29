@@ -64,16 +64,16 @@ export const REGRAS_OFICIAIS = {
       <h3 class="regras-subtitle">Maestria de atributo</h3>
       <p class="regras-note">Ao alcançar valor 20 sem itens, pactos ou efeitos temporários, receba a maestria correspondente. Intervenções externas podem elevar o atributo acima de 20, mas não concedem outra maestria. Entre os pacotes raciais publicados, somente Intelecto Élfico pode ultrapassar esse limite: +4 em Inteligência, até o máximo 24. Essa permissão não se aplica a outros atributos.</p>
       <ul class="regras-sublist regras-sublist--grid">
-        <li><strong>Força</strong> — uma vez por turno, +2 no dano de um ataque corpo a corpo.</li>
-        <li><strong>Destreza</strong> — +1 na Defesa Natural ou +1,5 m de movimento.</li>
-        <li><strong>Constituição</strong> — você morre em Morrendo 4, em vez de Morrendo 3.</li>
-        <li><strong>Inteligência</strong> — torne-se Aprendiz em duas perícias.</li>
-        <li><strong>Sabedoria</strong> — reduza em 2 a primeira perda de Sanidade de cada cena.</li>
-        <li><strong>Carisma</strong> — uma vez por cena, repita um teste social; mantenha o novo resultado.</li>
+        <li><strong>Força:</strong> uma vez por turno, +2 no dano de um ataque corpo a corpo.</li>
+        <li><strong>Destreza:</strong> +1 na Defesa Natural ou +1,5 m de movimento.</li>
+        <li><strong>Constituição:</strong> você morre em Morrendo 4, em vez de Morrendo 3.</li>
+        <li><strong>Inteligência:</strong> torne-se Aprendiz em duas perícias.</li>
+        <li><strong>Sabedoria:</strong> reduza em 2 a primeira perda de Sanidade de cada cena.</li>
+        <li><strong>Carisma:</strong> uma vez por cena, repita um teste social; mantenha o novo resultado.</li>
       </ul>
 
       <h3 class="regras-subtitle">Fluxo</h3>
-      <p class="regras-note"><strong>Fluxo</strong> é o sétimo atributo — mede conexão e capacidade de canalização de Fluxos. Já entra na distribuição inicial e sobe como os demais, mas sua fórmula de uso em jogo e a maestria em 20 permanecem Em desenvolvimento junto do sistema de magia.</p>
+      <p class="regras-note"><strong>Fluxo</strong> é o sétimo atributo. Ele mede a conexão e a capacidade de canalizar Fluxos. Já entra na distribuição inicial e sobe como os demais, mas sua fórmula de uso em jogo e a maestria em 20 permanecem em desenvolvimento junto do sistema de magia.</p>
     `,
   },
 
@@ -118,10 +118,10 @@ export const REGRAS_OFICIAIS = {
 
       <h3 class="regras-subtitle">Graus de resultado</h3>
       <ul class="regras-list">
-        <li><strong>Sucesso crítico</strong> — resultado igual ou superior à DT + 10.</li>
-        <li><strong>Sucesso</strong> — resultado igual ou superior à DT.</li>
-        <li><strong>Falha</strong> — resultado abaixo da DT.</li>
-        <li><strong>Falha crítica</strong> — resultado igual ou inferior à DT − 10.</li>
+        <li><strong>Sucesso crítico:</strong> resultado igual ou superior à DT + 10.</li>
+        <li><strong>Sucesso:</strong> resultado igual ou superior à DT.</li>
+        <li><strong>Falha:</strong> resultado abaixo da DT.</li>
+        <li><strong>Falha crítica:</strong> resultado igual ou inferior à DT − 10.</li>
         <li>Um 20 natural melhora o resultado em um grau; um 1 natural piora em um grau.</li>
       </ul>
 
@@ -146,9 +146,9 @@ export const REGRAS_OFICIAIS = {
     corpo: `
       <h3 class="regras-subtitle">Seu turno</h3>
       <ul class="regras-list">
-        <li><strong>Ação Padrão</strong> — atacar, usar habilidade, prestar auxílio ou realizar uma manobra.</li>
-        <li><strong>Ação de Movimento</strong> — deslocar-se, levantar, sacar ou manipular um objeto relevante.</li>
-        <li><strong>Ação Livre</strong> — gesto ou fala breve. O mestre limita repetições que tenham impacto mecânico.</li>
+        <li><strong>Ação Padrão:</strong> atacar, usar habilidade, prestar auxílio ou realizar uma manobra.</li>
+        <li><strong>Ação de Movimento:</strong> deslocar-se, levantar, sacar ou manipular um objeto relevante.</li>
+        <li><strong>Ação Livre:</strong> gesto ou fala breve. O mestre limita repetições que tenham impacto mecânico.</li>
         <li>Você pode converter sua Ação Padrão em uma segunda Ação de Movimento.</li>
       </ul>
 
@@ -174,10 +174,10 @@ export const REGRAS_OFICIAIS = {
 
       <h3 class="regras-subtitle">Tipos de dano</h3>
       <ul class="regras-sublist regras-sublist--grid">
-        <li><strong>Físicos</strong> — corte, perfuração, impacto e balístico.</li>
-        <li><strong>Persistentes</strong> — sangramento, fogo e veneno; causam dano no fim do turno até serem removidos.</li>
-        <li><strong>Energia</strong> — elemental, Arkania, tecnologia e Fluxos.</li>
-        <li><strong>Mental</strong> — afeta Sanidade ou Vida conforme a fonte.</li>
+        <li><strong>Físicos:</strong> corte, perfuração, impacto e balístico.</li>
+        <li><strong>Persistentes:</strong> sangramento, fogo e veneno; causam dano no fim do turno até serem removidos.</li>
+        <li><strong>Energia:</strong> elemental, Arkania, tecnologia e Fluxos.</li>
+        <li><strong>Mental:</strong> afeta Sanidade ou Vida conforme a fonte.</li>
       </ul>
     `,
   },
@@ -254,7 +254,7 @@ export const REGRAS_OFICIAIS = {
         <li>Role apenas uma vez por fonte de dano, mesmo que os dois gatilhos aconteçam.</li>
       </ul>
 
-      <h3 class="regras-subtitle">Tabela de trauma — 2d6</h3>
+      <h3 class="regras-subtitle">Tabela de trauma (2d6)</h3>
       <div class="regras-table-wrap"><table class="regras-table regras-table--probability">
         <thead><tr><th>2d6</th><th>Chance</th><th>Resultado</th></tr></thead>
         <tbody>
@@ -328,13 +328,13 @@ export const REGRAS_OFICIAIS = {
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Nível</th><th>Efeito</th></tr></thead>
         <tbody>
-          <tr><td>0 — Disposto</td><td>Sem penalidade.</td></tr>
-          <tr><td>1 — Cansado</td><td>−1 em testes físicos.</td></tr>
-          <tr><td>2 — Fatigado</td><td>−2 em testes físicos e −1 Iniciativa.</td></tr>
-          <tr><td>3 — Esgotado</td><td>−2 em todos os testes.</td></tr>
-          <tr><td>4 — Exausto</td><td>Desvantagem em testes físicos; não pode treinar.</td></tr>
-          <tr><td>5 — Debilitado</td><td>Movimento pela metade e sem reações.</td></tr>
-          <tr><td>6 — Colapso</td><td>Inconsciente até reduzir Cansaço.</td></tr>
+          <tr><td>0: Disposto</td><td>Sem penalidade.</td></tr>
+          <tr><td>1: Cansado</td><td>−1 em testes físicos.</td></tr>
+          <tr><td>2: Fatigado</td><td>−2 em testes físicos e −1 Iniciativa.</td></tr>
+          <tr><td>3: Esgotado</td><td>−2 em todos os testes.</td></tr>
+          <tr><td>4: Exausto</td><td>Desvantagem em testes físicos; não pode treinar.</td></tr>
+          <tr><td>5: Debilitado</td><td>Movimento pela metade e sem reações.</td></tr>
+          <tr><td>6: Colapso</td><td>Inconsciente até reduzir Cansaço.</td></tr>
         </tbody>
       </table></div>
       <p class="regras-note">Combate intenso, seis horas de treino ou uma noite sem dormir geram Cansaço. Use apenas valores inteiros.</p>
@@ -420,9 +420,9 @@ export const REGRAS_OFICIAIS = {
 
       <h3 class="regras-subtitle">Recompensas por marco</h3>
       <ul class="regras-list">
-        <li><strong>Descoberta ou objetivo menor</strong> — 10% do próximo nível.</li>
-        <li><strong>Missão relevante</strong> — 25% do próximo nível.</li>
-        <li><strong>Fim de arco</strong> — 50% do próximo nível.</li>
+        <li><strong>Descoberta ou objetivo menor:</strong> 10% do próximo nível.</li>
+        <li><strong>Missão relevante:</strong> 25% do próximo nível.</li>
+        <li><strong>Fim de arco:</strong> 50% do próximo nível.</li>
         <li>Divida XP de combate pelo grupo; XP de descoberta e arco é concedido igualmente.</li>
       </ul>
     `,
@@ -440,9 +440,9 @@ export const REGRAS_OFICIAIS = {
       <h3 class="regras-subtitle">O que já está definido</h3>
       <ul class="regras-list">
         <li><strong>Mana</strong> é a reserva gasta para ativar poderes, técnicas e futuramente magias.</li>
-        <li><strong>Fluxo</strong> é o sétimo atributo — mede conexão e capacidade de canalização de Fluxos, e já recebe um valor na distribuição inicial junto dos outros seis (revisado em 2026-07-12).</li>
+        <li><strong>Fluxo</strong> é o sétimo atributo. Ele mede a conexão e a capacidade de canalizar Fluxos e já recebe um valor na distribuição inicial junto dos outros seis (revisado em 2026-07-12).</li>
         <li>O uso mecânico de Fluxo em jogo (o que ele afeta além de existir na ficha) ainda está Em desenvolvimento.</li>
-        <li>Cada Fluxo (do mundo — Sangue, Tecnologia, etc.) terá identidade, efeitos e formas de conjuração próprias.</li>
+        <li>Cada Fluxo do mundo, como Sangue ou Tecnologia, terá identidade, efeitos e formas de conjuração próprias.</li>
       </ul>
 
       <h3 class="regras-subtitle">O que ainda falta</h3>

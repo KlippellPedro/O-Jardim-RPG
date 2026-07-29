@@ -1,4 +1,4 @@
-"""Testes de core/clima.py — lógica pura (sem discord.py, sem banco)."""
+"""Testes de core/clima.py: lógica pura (sem discord.py, sem banco)."""
 
 import random
 import sys

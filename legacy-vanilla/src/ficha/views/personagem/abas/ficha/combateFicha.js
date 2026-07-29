@@ -6,9 +6,9 @@ import {
 import { abrirModalSimples } from '../../modalSimples.js';
 import { salvar, sinal, somaAjustes } from './fichaCompartilhada.js';
 
-// ── Combate — cada stat calculado ganha um "?" (fórmula) e, quando pode
+// ── Combate - cada stat calculado ganha um "?" (fórmula) e, quando pode
 // receber bônus situacionais (armadura, terreno, evento...), um "±" que
-// abre uma lista de ajustes nomeados em vez de um único campo numérico —
+// abre uma lista de ajustes nomeados em vez de um único campo numérico -
 // mesmo padrão do projeto de referência (calc-help + ajuste personalizado).
 // Defesa Natural, Iniciativa e Movimento usam o mesmo padrão de ajustes
 // nomeados; Vida, Mana e Sanidade também reutilizam esse modal.
@@ -182,7 +182,7 @@ export function criarBotaoInfo(rotulo, personagem, ctx) {
   btn.setAttribute('aria-label', `Como ${rotulo} é calculado`);
   btn.addEventListener('click', () => {
     abrirModalSimples({
-      titulo: `Cálculo — ${rotulo}`,
+      titulo: `Cálculo: ${rotulo}`,
       corpo: corpoModalCalculo(rotulo, personagem, ctx),
       classeExtra: 'ficha-modal--calculo',
     });
@@ -211,7 +211,7 @@ function corpoModalAjustes(personagem, ctx, chave) {
     if (ajustes.length === 0) {
       const vazio = document.createElement('p');
       vazio.className = 'ficha-wizard-intro';
-      vazio.textContent = 'Nenhum ajuste ainda — some itens abaixo (equipamento, evento, maldição...).';
+      vazio.textContent = 'Nenhum ajuste ainda. Adicione itens abaixo, como equipamentos, eventos ou maldições.';
       lista.appendChild(vazio);
       return;
     }
@@ -307,7 +307,7 @@ export function criarBotaoAjustes(personagem, ctx, chave, rotulo) {
   }
   btn.addEventListener('click', () => {
     abrirModalSimples({
-      titulo: `Ajustes — ${rotulo}`,
+      titulo: `Ajustes: ${rotulo}`,
       corpo: corpoModalAjustes(personagem, ctx, chave),
     });
   });
@@ -395,7 +395,7 @@ export function blocoCombate(personagem, ctx) {
   h.textContent = 'Combate';
   bloco.appendChild(h);
 
-  // bonusDefesa é o campo antigo (número solto) — quem já tinha um valor
+  // bonusDefesa é o campo antigo (número solto) - quem já tinha um valor
   // aqui não perde nada; ajustesDefesa (lista nomeada) é o novo jeito de
   // somar, os dois se acumulam.
   const bonusDefesaLegado = personagem.recursos?.bonusDefesa ?? 0;
@@ -477,4 +477,3 @@ export function blocoCombate(personagem, ctx) {
 
   return bloco;
 }
-

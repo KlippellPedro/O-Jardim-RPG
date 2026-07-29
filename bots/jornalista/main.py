@@ -1,5 +1,5 @@
 """
-O Jardim RPG — bot Jornalista.
+O Jardim RPG: bot Jornalista.
 Anuncia baús que aparecem sozinhos pelo servidor (loot aleatório) e publica
 os avisos que o Banqueiro enfileira (recompensas, procurados por dívida,
 capturas) no canal do jornal. Toda a economia (carteira, loja, cofre,
@@ -28,8 +28,32 @@ EXTENSOES = (
     "cogs.jornal",
     "cogs.registro",
     "cogs.boasvindas",
+    "cogs.horoscopo",
+    "cogs.entrevista",
+    "cogs.loteria",
     "cogs.ajuda",
 )
+
+
+async def on_app_command_error(interaction: discord.Interaction, error: discord.app_commands.AppCommandError) -> None:
+    """Sem isso, uma checagem falhando (ex.: /setroubo sem permissão) mostra
+    pro usuário só o genérico "The application did not respond"."""
+    if isinstance(error, discord.app_commands.MissingPermissions):
+        mensagem = "⚠️ Você precisa da permissão **Gerenciar Servidor** pra usar esse comando."
+    elif isinstance(error, discord.app_commands.CommandOnCooldown):
+        mensagem = f"🕒 Calma aí: tente de novo em {error.retry_after:.0f}s."
+    elif isinstance(error, discord.app_commands.CheckFailure):
+        mensagem = "⚠️ Você não tem permissão pra usar esse comando."
+    else:
+        log.exception("erro nao tratado num comando de aplicacao", exc_info=error)
+        mensagem = "⚠️ Algo deu errado ao executar esse comando. Tente de novo em instantes."
+    try:
+        if interaction.response.is_done():
+            await interaction.followup.send(mensagem, ephemeral=True)
+        else:
+            await interaction.response.send_message(mensagem, ephemeral=True)
+    except discord.HTTPException:
+        log.info("nao consegui avisar o usuario sobre um erro de comando")
 
 
 class Jornalista(commands.Bot):
@@ -39,7 +63,7 @@ class Jornalista(commands.Bot):
         # e pra checar cargos do jogador no registro por Árvore (Passo 5).
         # Também precisa ser ligada no Developer Portal (Bot > Privileged
         # Gateway Intents > Server Members Intent), senão o bot recusa
-        # conectar — mesma pegadinha do Barista com Message Content.
+        # conectar: mesma pegadinha do Barista com Message Content.
         intents.members = True
         super().__init__(command_prefix="!jornalista ", intents=intents, help_command=None)
         self.db = Database(
@@ -60,7 +84,7 @@ class Jornalista(commands.Bot):
             raise
 
     def recarregar_catalogo(self):
-        """O Jornalista só lê o catálogo central — quem semeia é o Banqueiro
+        """O Jornalista só lê o catálogo central: quem semeia é o Banqueiro
         (ou o site). Um catálogo vazio não é erro aqui, só um aviso: os baús
         ainda dão Lunaris mesmo sem item nenhum pra sortear."""
         entradas = self.db.catalogo_listar()
@@ -76,12 +100,17 @@ class Jornalista(commands.Bot):
         return n, erros
 
     async def setup_hook(self):
+        self.tree.on_error = on_app_command_error
         for ext in EXTENSOES:
             await self.load_extension(ext)
             log.info("Cog carregado: %s", ext)
         if config.GUILD_ID:
             guild = discord.Object(id=int(config.GUILD_ID))
             self.tree.copy_global_to(guild=guild)
+            # Evita manter uma versão global antiga junto da cópia rápida do
+            # servidor configurado, que aparece como comando duplicado.
+            self.tree.clear_commands(guild=None)
+            await self.tree.sync()
             comandos = await self.tree.sync(guild=guild)
             log.info("Slash sincronizado no servidor %s (%d comandos).", config.GUILD_ID, len(comandos))
         else:

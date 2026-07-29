@@ -15,9 +15,37 @@ export interface ICofreMoeda {
   atualizado_em: string;
 }
 
+export interface ICofreTierInfo {
+  id: string;
+  nome: string;
+  capacidade: number;
+  capacidade_moeda: number;
+  custo?: number;
+}
+
+export interface ICofreSegurancaInfo {
+  id: string;
+  nome: string;
+  defesa: number;
+  custo?: number;
+}
+
+export interface ICofreNivel {
+  vinculado: boolean;
+  tier?: ICofreTierInfo;
+  proximo_tier?: ICofreTierInfo | null;
+  seguranca?: ICofreSegurancaInfo;
+  proxima_seguranca?: ICofreSegurancaInfo | null;
+  saldos_guardados?: { moeda: string; saldo: number }[];
+  itens_no_inventario?: number;
+}
+
 export const cofreApi = {
   obter(campanhaId: string) {
     return api<{ itens: ICofreItem[]; moedas: ICofreMoeda[] }>(`/cofre?campanha_id=${encodeURIComponent(campanhaId)}`);
+  },
+  nivel(campanhaId: string) {
+    return api<ICofreNivel>(`/cofre/nivel?campanha_id=${encodeURIComponent(campanhaId)}`);
   },
   movimentos(campanhaId: string) {
     return api<{ movimentos: any[] }>(`/cofre/movimentos?campanha_id=${encodeURIComponent(campanhaId)}`);

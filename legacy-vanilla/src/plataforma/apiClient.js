@@ -11,7 +11,7 @@ export class ApiError extends Error {
 
 // FastAPI devolve `detail` como STRING nos HTTPException que a plataforma
 // levanta à mão (ex.: "chave de servico invalida"), mas como uma LISTA de
-// {loc, msg, type} nos erros de validação automática do Pydantic (422) —
+// {loc, msg, type} nos erros de validação automática do Pydantic (422) -
 // sem tratar esse segundo formato, a mensagem real (ex.: "senha deve ter
 // pelo menos 8 caracteres") se perdia e só sobrava o "Falha 422" genérico.
 function extrairMensagem(detalhe, status) {
@@ -56,7 +56,7 @@ export async function api(caminho, { method = 'GET', body, signal } = {}) {
 
   // 204/205 não têm corpo, mas o FastAPI ainda manda `content-type: application/json`
   // neles. Checar o content-type antes do status fazia `response.json()` engasgar
-  // num corpo vazio e derrubar TODA ação de exclusão do site — arquivar campanha,
+  // num corpo vazio e derrubar TODA ação de exclusão do site - arquivar campanha,
   // revogar convite, encerrar sessão e até sair da conta.
   const semCorpo = response.status === 204 || response.status === 205;
   const tipo = response.headers.get('content-type') || '';

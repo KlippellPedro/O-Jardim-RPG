@@ -1941,7 +1941,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-nucleo-estavel-t1",
-      "titulo": "Núcleo Estável — T1",
+      "titulo": "Núcleo Estável: T1",
       "conteudo": {
         "descricao": "2 sistemas ativos; +1 em um dos sistemas ativos.",
         "preco": 1200,
@@ -1954,7 +1954,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-nucleo-estavel-t2",
-      "titulo": "Núcleo Estável — T2",
+      "titulo": "Núcleo Estável: T2",
       "conteudo": {
         "descricao": "3 sistemas ativos; +1 em um dos sistemas ativos.",
         "preco": 3500,
@@ -1967,7 +1967,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-nucleo-estavel-t3",
-      "titulo": "Núcleo Estável — T3",
+      "titulo": "Núcleo Estável: T3",
       "conteudo": {
         "descricao": "4 sistemas ativos; +1 em um dos sistemas ativos.",
         "preco": 7500,
@@ -1980,7 +1980,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-nucleo-sobrecarga-t1",
-      "titulo": "Núcleo Sobrecarga — T1",
+      "titulo": "Núcleo Sobrecarga: T1",
       "conteudo": {
         "descricao": "3 sistemas ativos; uma falha desliga 1 sistema aleatório.",
         "preco": 1000,
@@ -1993,7 +1993,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-nucleo-sobrecarga-t2",
-      "titulo": "Núcleo Sobrecarga — T2",
+      "titulo": "Núcleo Sobrecarga: T2",
       "conteudo": {
         "descricao": "5 sistemas ativos; uma falha desliga 2 sistemas aleatórios.",
         "preco": 3200,
@@ -2006,7 +2006,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-nucleo-sobrecarga-t3",
-      "titulo": "Núcleo Sobrecarga — T3",
+      "titulo": "Núcleo Sobrecarga: T3",
       "conteudo": {
         "descricao": "6 sistemas ativos; uma falha desliga 3 sistemas aleatórios.",
         "preco": 7000,
@@ -2019,7 +2019,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-estrutura-leve-t1",
-      "titulo": "Estrutura Leve — T1",
+      "titulo": "Estrutura Leve: T1",
       "conteudo": {
         "descricao": "+1 de deslocamento; 0 de resistência.",
         "preco": 800,
@@ -2032,7 +2032,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-estrutura-leve-t2",
-      "titulo": "Estrutura Leve — T2",
+      "titulo": "Estrutura Leve: T2",
       "conteudo": {
         "descricao": "+2 de deslocamento; -1 de resistência.",
         "preco": 2500,
@@ -2045,7 +2045,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-estrutura-leve-t3",
-      "titulo": "Estrutura Leve — T3",
+      "titulo": "Estrutura Leve: T3",
       "conteudo": {
         "descricao": "+3 de deslocamento; -2 de resistência.",
         "preco": 6000,
@@ -2058,7 +2058,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-estrutura-pesada-t1",
-      "titulo": "Estrutura Pesada — T1",
+      "titulo": "Estrutura Pesada: T1",
       "conteudo": {
         "descricao": "0 de deslocamento; +1 de resistência.",
         "preco": 1000,
@@ -2071,7 +2071,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-estrutura-pesada-t2",
-      "titulo": "Estrutura Pesada — T2",
+      "titulo": "Estrutura Pesada: T2",
       "conteudo": {
         "descricao": "-1 de deslocamento; +2 de resistência.",
         "preco": 3000,
@@ -2084,7 +2084,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-estrutura-pesada-t3",
-      "titulo": "Estrutura Pesada — T3",
+      "titulo": "Estrutura Pesada: T3",
       "conteudo": {
         "descricao": "-2 de deslocamento; +3 de resistência.",
         "preco": 7000,
@@ -2097,7 +2097,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-arma-leve-t1",
-      "titulo": "Arma Leve — T1",
+      "titulo": "Arma Leve: T1",
       "conteudo": {
         "descricao": "1 de dano; +1 disparo.",
         "preco": 1000,
@@ -2110,7 +2110,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-arma-leve-t2",
-      "titulo": "Arma Leve — T2",
+      "titulo": "Arma Leve: T2",
       "conteudo": {
         "descricao": "1 de dano; +1 disparo.",
         "preco": 3000,
@@ -2123,7 +2123,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-arma-leve-t3",
-      "titulo": "Arma Leve — T3",
+      "titulo": "Arma Leve: T3",
       "conteudo": {
         "descricao": "1 de dano; +1 disparo.",
         "preco": 7000,
@@ -2136,7 +2136,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-arma-pesada-t1",
-      "titulo": "Arma Pesada — T1",
+      "titulo": "Arma Pesada: T1",
       "conteudo": {
         "descricao": "2 de dano; +1 de alcance.",
         "preco": 1200,
@@ -2149,7 +2149,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-arma-pesada-t2",
-      "titulo": "Arma Pesada — T2",
+      "titulo": "Arma Pesada: T2",
       "conteudo": {
         "descricao": "2 de dano; +1 de alcance.",
         "preco": 3500,
@@ -2162,7 +2162,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-arma-pesada-t3",
-      "titulo": "Arma Pesada — T3",
+      "titulo": "Arma Pesada: T3",
       "conteudo": {
         "descricao": "3 de dano; +1 de alcance.",
         "preco": 8000,
@@ -2175,7 +2175,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-geladeira-t1",
-      "titulo": "Utilidade: Geladeira — T1",
+      "titulo": "Utilidade: Geladeira: T1",
       "conteudo": {
         "descricao": "Comida não estraga.",
         "preco": 100,
@@ -2188,7 +2188,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-geladeira-t2",
-      "titulo": "Utilidade: Geladeira — T2",
+      "titulo": "Utilidade: Geladeira: T2",
       "conteudo": {
         "descricao": "Transforma matéria orgânica em comida.",
         "preco": 500,
@@ -2201,7 +2201,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-geladeira-t3",
-      "titulo": "Utilidade: Geladeira — T3",
+      "titulo": "Utilidade: Geladeira: T3",
       "conteudo": {
         "descricao": "A comida pode ter qualquer sabor e aparência.",
         "preco": 800,
@@ -2214,7 +2214,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-filtro-t1",
-      "titulo": "Utilidade: Filtro — T1",
+      "titulo": "Utilidade: Filtro: T1",
       "conteudo": {
         "descricao": "Água é descontaminada.",
         "preco": 100,
@@ -2227,7 +2227,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-filtro-t2",
-      "titulo": "Utilidade: Filtro — T2",
+      "titulo": "Utilidade: Filtro: T2",
       "conteudo": {
         "descricao": "Transforma matéria orgânica em água.",
         "preco": 500,
@@ -2240,7 +2240,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-filtro-t3",
-      "titulo": "Utilidade: Filtro — T3",
+      "titulo": "Utilidade: Filtro: T3",
       "conteudo": {
         "descricao": "A água pode ter qualquer sabor e aparência.",
         "preco": 800,
@@ -2253,7 +2253,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-dormitorios-t1",
-      "titulo": "Utilidade: Dormitórios — T1",
+      "titulo": "Utilidade: Dormitórios: T1",
       "conteudo": {
         "descricao": "Descanso bom.",
         "preco": 100,
@@ -2266,7 +2266,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-dormitorios-t2",
-      "titulo": "Utilidade: Dormitórios — T2",
+      "titulo": "Utilidade: Dormitórios: T2",
       "conteudo": {
         "descricao": "Descanso maravilhoso.",
         "preco": 500,
@@ -2279,7 +2279,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-dormitorios-t3",
-      "titulo": "Utilidade: Dormitórios — T3",
+      "titulo": "Utilidade: Dormitórios: T3",
       "conteudo": {
         "descricao": "Descanso excelente: +1d8.",
         "preco": 800,
@@ -2292,7 +2292,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-jardim-t1",
-      "titulo": "Utilidade: Jardim — T1",
+      "titulo": "Utilidade: Jardim: T1",
       "conteudo": {
         "descricao": "Bom para relaxar.",
         "preco": 100,
@@ -2305,7 +2305,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-jardim-t2",
-      "titulo": "Utilidade: Jardim — T2",
+      "titulo": "Utilidade: Jardim: T2",
       "conteudo": {
         "descricao": "Relaxamento maravilhoso.",
         "preco": 500,
@@ -2318,7 +2318,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-jardim-t3",
-      "titulo": "Utilidade: Jardim — T3",
+      "titulo": "Utilidade: Jardim: T3",
       "conteudo": {
         "descricao": "Relaxamento excelente: +1d8.",
         "preco": 800,
@@ -2331,7 +2331,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-academia-t1",
-      "titulo": "Utilidade: Academia — T1",
+      "titulo": "Utilidade: Academia: T1",
       "conteudo": {
         "descricao": "Treino bom.",
         "preco": 100,
@@ -2344,7 +2344,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-academia-t2",
-      "titulo": "Utilidade: Academia — T2",
+      "titulo": "Utilidade: Academia: T2",
       "conteudo": {
         "descricao": "Treino maravilhoso.",
         "preco": 500,
@@ -2357,7 +2357,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-academia-t3",
-      "titulo": "Utilidade: Academia — T3",
+      "titulo": "Utilidade: Academia: T3",
       "conteudo": {
         "descricao": "Treino excelente.",
         "preco": 800,
@@ -2370,7 +2370,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-area-medica-t1",
-      "titulo": "Utilidade: Área Médica — T1",
+      "titulo": "Utilidade: Área Médica: T1",
       "conteudo": {
         "descricao": "+1d4 e +2 em cura.",
         "preco": 100,
@@ -2383,7 +2383,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-area-medica-t2",
-      "titulo": "Utilidade: Área Médica — T2",
+      "titulo": "Utilidade: Área Médica: T2",
       "conteudo": {
         "descricao": "+1d8 e vantagem em cura.",
         "preco": 500,
@@ -2396,7 +2396,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-area-medica-t3",
-      "titulo": "Utilidade: Área Médica — T3",
+      "titulo": "Utilidade: Área Médica: T3",
       "conteudo": {
         "descricao": "+1d12, +4 e vantagem em cura.",
         "preco": 800,
@@ -2409,7 +2409,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-armazem-t1",
-      "titulo": "Utilidade: Armazém — T1",
+      "titulo": "Utilidade: Armazém: T1",
       "conteudo": {
         "descricao": "Armazena 15 itens.",
         "preco": 100,
@@ -2422,7 +2422,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-armazem-t2",
-      "titulo": "Utilidade: Armazém — T2",
+      "titulo": "Utilidade: Armazém: T2",
       "conteudo": {
         "descricao": "Armazena 30 itens.",
         "preco": 500,
@@ -2435,7 +2435,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-armazem-t3",
-      "titulo": "Utilidade: Armazém — T3",
+      "titulo": "Utilidade: Armazém: T3",
       "conteudo": {
         "descricao": "Armazena 60 itens.",
         "preco": 800,
@@ -2448,7 +2448,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-escudo-t1",
-      "titulo": "Utilidade: Escudo — T1",
+      "titulo": "Utilidade: Escudo: T1",
       "conteudo": {
         "descricao": "+1 de Vida ao veículo.",
         "preco": 100,
@@ -2461,7 +2461,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-escudo-t2",
-      "titulo": "Utilidade: Escudo — T2",
+      "titulo": "Utilidade: Escudo: T2",
       "conteudo": {
         "descricao": "+2 de Vida ao veículo.",
         "preco": 500,
@@ -2474,7 +2474,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-escudo-t3",
-      "titulo": "Utilidade: Escudo — T3",
+      "titulo": "Utilidade: Escudo: T3",
       "conteudo": {
         "descricao": "+3 de Vida ao veículo.",
         "preco": 800,
@@ -2487,7 +2487,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-capsula-fuga-t1",
-      "titulo": "Utilidade: Cápsula de Fuga — T1",
+      "titulo": "Utilidade: Cápsula de Fuga: T1",
       "conteudo": {
         "descricao": "Comporta 4 seres.",
         "preco": 100,
@@ -2500,7 +2500,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-capsula-fuga-t2",
-      "titulo": "Utilidade: Cápsula de Fuga — T2",
+      "titulo": "Utilidade: Cápsula de Fuga: T2",
       "conteudo": {
         "descricao": "Comporta 8 seres.",
         "preco": 500,
@@ -2513,7 +2513,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-capsula-fuga-t3",
-      "titulo": "Utilidade: Cápsula de Fuga — T3",
+      "titulo": "Utilidade: Cápsula de Fuga: T3",
       "conteudo": {
         "descricao": "Comporta 12 seres.",
         "preco": 800,
@@ -2526,7 +2526,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-hangar-t1",
-      "titulo": "Utilidade: Hangar — T1",
+      "titulo": "Utilidade: Hangar: T1",
       "conteudo": {
         "descricao": "Abriga 1 veículo pequeno.",
         "preco": 100,
@@ -2539,7 +2539,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-hangar-t2",
-      "titulo": "Utilidade: Hangar — T2",
+      "titulo": "Utilidade: Hangar: T2",
       "conteudo": {
         "descricao": "Abriga 1 veículo médio.",
         "preco": 500,
@@ -2552,7 +2552,7 @@
     {
       "tipo": "veiculo",
       "id": "veiculo-util-hangar-t3",
-      "titulo": "Utilidade: Hangar — T3",
+      "titulo": "Utilidade: Hangar: T3",
       "conteudo": {
         "descricao": "Abriga 2 veículos médios.",
         "preco": 800,
@@ -3919,15 +3919,703 @@
         "raridade": "lendario",
         "atributos": [
           "Hit Kill de dano",
-          "Crítico —"
+          "Crítico não informado"
         ],
         "dano": "Hit Kill",
-        "critico": "—",
+        "critico": "Não informado",
         "alcance": "Curto",
         "tipo_de_dano": "Vazio",
         "subtipo": "marcial",
         "material": "Obstinada",
         "modo": "Corpo a corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "reliquia-excalibur",
+      "titulo": "Excalibur",
+      "conteudo": {
+        "preco": 50000,
+        "raridade": "relíquia da criação",
+        "atributos": [
+          "10d40 + 10d26 + 10d8 + 80 de dano",
+          "Crítico 10/x8",
+          "Efeito: Impossível finalizar seres com essa espada."
+        ],
+        "dano": "10d40 + 10d26 + 10d8 + 80",
+        "critico": "10/x8",
+        "alcance": "Curto",
+        "tipo_de_dano": "Pureza",
+        "subtipo": "reliquia-criacao",
+        "modo": "Corpo a corpo",
+        "efeito": "Impossível finalizar seres com essa espada."
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "reliquia-martelo-chamas",
+      "titulo": "Martelo das Chamas",
+      "conteudo": {
+        "preco": 50000,
+        "raridade": "relíquia da criação",
+        "atributos": [
+          "10d12 + 100 de dano",
+          "Crítico 20/x10",
+          "Efeito: Um martelo abençoado pela dama das chamas."
+        ],
+        "dano": "10d12 + 100",
+        "critico": "20/x10",
+        "alcance": "Curto",
+        "tipo_de_dano": "Fogo Astral",
+        "subtipo": "reliquia-criacao",
+        "modo": "Corpo a corpo",
+        "efeito": "Um martelo abençoado pela dama das chamas."
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "reliquia-triceratops",
+      "titulo": "Triceratops",
+      "conteudo": {
+        "preco": 50000,
+        "raridade": "relíquia da criação",
+        "atributos": [
+          "9d9 + 42 de dano",
+          "Crítico 15/x5",
+          "Efeito: Uma katana que pertenceu a um antigo vampiro Ventrue."
+        ],
+        "dano": "9d9 + 42",
+        "critico": "15/x5",
+        "alcance": "Curto",
+        "tipo_de_dano": "Escuridão",
+        "subtipo": "reliquia-criacao",
+        "modo": "Corpo a corpo",
+        "efeito": "Uma katana que pertenceu a um antigo vampiro Ventrue."
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "reliquia-mjolnir",
+      "titulo": "Mjolnir",
+      "conteudo": {
+        "preco": 50000,
+        "raridade": "relíquia da criação",
+        "atributos": [
+          "12d12 + 100 de dano",
+          "Crítico 19/x8",
+          "Efeito: Volta para o portador após arremessada; em caso de crítico, causa 25% do dano em alcance Médio."
+        ],
+        "dano": "12d12 + 100",
+        "critico": "19/x8",
+        "alcance": "Longo",
+        "tipo_de_dano": "Raio",
+        "subtipo": "reliquia-criacao",
+        "modo": "À Distância",
+        "efeito": "Volta para o portador após arremessada; em caso de crítico, causa 25% do dano em alcance Médio."
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "reliquia-rhaast",
+      "titulo": "Rhaast",
+      "conteudo": {
+        "preco": 50000,
+        "raridade": "relíquia da criação",
+        "atributos": [
+          "8d12 + 6d10 + 60 de dano",
+          "Crítico 18/x6",
+          "Efeito: 10% do dano causado retorna como cura para o portador."
+        ],
+        "dano": "8d12 + 6d10 + 60",
+        "critico": "18/x6",
+        "alcance": "Curto/Longo",
+        "tipo_de_dano": "Sangue",
+        "subtipo": "reliquia-criacao",
+        "modo": "Híbrida",
+        "efeito": "10% do dano causado retorna como cura para o portador."
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "reliquia-zangetsu",
+      "titulo": "Zangetsu",
+      "conteudo": {
+        "preco": 50000,
+        "raridade": "relíquia da criação",
+        "atributos": [
+          "8d12 de dano",
+          "Crítico 19/x7",
+          "Efeito: A cada 2 de F.V. gasto, adiciona +5 de dano."
+        ],
+        "dano": "8d12",
+        "critico": "19/x7",
+        "alcance": "Curto",
+        "tipo_de_dano": "Vazio",
+        "subtipo": "reliquia-criacao",
+        "modo": "Corpo a corpo",
+        "efeito": "A cada 2 de F.V. gasto, adiciona +5 de dano."
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "reliquia-gungnir",
+      "titulo": "Gungnir",
+      "conteudo": {
+        "preco": 50000,
+        "raridade": "relíquia da criação",
+        "atributos": [
+          "10d12 + 80 de dano",
+          "Crítico 20/x10",
+          "Efeito: Caso quebre um juramento, a lança se volta contra o portador."
+        ],
+        "dano": "10d12 + 80",
+        "critico": "20/x10",
+        "alcance": "Médio",
+        "tipo_de_dano": "Luz Solar",
+        "subtipo": "reliquia-criacao",
+        "modo": "Corpo a corpo",
+        "efeito": "Caso quebre um juramento, a lança se volta contra o portador."
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "reliquia-masamune",
+      "titulo": "Masamune",
+      "conteudo": {
+        "preco": 50000,
+        "raridade": "relíquia da criação",
+        "atributos": [
+          "9d10 + 9d10 de dano",
+          "Crítico 18/x6",
+          "Efeito: O primeiro ataque em um combate sempre acerta. Se matar um ser, ganha uma ação adicional."
+        ],
+        "dano": "9d10 + 9d10",
+        "critico": "18/x6",
+        "alcance": "Curto",
+        "tipo_de_dano": "Metal",
+        "subtipo": "reliquia-criacao",
+        "modo": "Corpo a corpo",
+        "efeito": "O primeiro ataque em um combate sempre acerta. Se matar um ser, ganha uma ação adicional."
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "reliquia-murasame",
+      "titulo": "Murasame",
+      "conteudo": {
+        "preco": 50000,
+        "raridade": "relíquia da criação",
+        "atributos": [
+          "Hit Kill",
+          "Crítico N/A",
+          "Efeito: Caso corte alguém, o ser morre instantaneamente."
+        ],
+        "dano": "Hit Kill",
+        "critico": "N/A",
+        "alcance": "Curto",
+        "tipo_de_dano": "Desconhecido (?????)",
+        "subtipo": "reliquia-criacao",
+        "modo": "Corpo a corpo",
+        "efeito": "Caso corte alguém, o ser morre instantaneamente."
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "merc-automato",
+      "titulo": "Autômato de Guarda",
+      "conteudo": {
+        "preco": 1500,
+        "raridade": "incomum",
+        "pv": "120",
+        "nivel": 3,
+        "defesa": "15",
+        "deslocamento": "6m",
+        "atributos": {
+          "forca": 4,
+          "agilidade": 1,
+          "vigor": 4,
+          "presenca": 0,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +5",
+          "Fortitude +5",
+          "Percepção +2"
+        ],
+        "habilidades": [
+          "Golpe Metálico (Dano: 1d10+4)",
+          "Escudo de Chassi (Reduz 2 de dano físico)"
+        ],
+        "descricao": "Um ser mecânico básico utilizado para vigilância e proteção primária de áreas.",
+        "subtipo": "merc-basico"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "merc-aethel",
+      "titulo": "Espírito Guardião de Aethel",
+      "conteudo": {
+        "preco": 8000,
+        "raridade": "épico",
+        "pv": "350",
+        "nivel": 8,
+        "defesa": "22",
+        "deslocamento": "12m (Voo)",
+        "atributos": {
+          "forca": 2,
+          "agilidade": 5,
+          "vigor": 3,
+          "presenca": 6,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Vontade +10",
+          "Iniciativa +8",
+          "Religião +8"
+        ],
+        "habilidades": [
+          "Raio Luminoso (Dano: 3d8 Luz)",
+          "Cura Divina (Cura 20 PV aliados)",
+          "Aura de Paz (+2 Defesa em área)"
+        ],
+        "descricao": "Manifestação luminosa do plano superior de Aethel, um anjo guardião devotado à proteção de seu contratante.",
+        "subtipo": "merc-avancado"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "merc-umbral",
+      "titulo": "Besta do Umbral Maior",
+      "conteudo": {
+        "preco": 15000,
+        "raridade": "lendário",
+        "pv": "600",
+        "nivel": 12,
+        "defesa": "28",
+        "deslocamento": "15m",
+        "atributos": {
+          "forca": 8,
+          "agilidade": 6,
+          "vigor": 6,
+          "presenca": 4,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +15",
+          "Intimidação +10",
+          "Furtividade +8"
+        ],
+        "habilidades": [
+          "Garras das Sombras (Dano: 4d12+8 Escuridão)",
+          "Frenesi Sangrento (Ganha ataque extra)",
+          "Manto do Abismo (Invisível no escuro)"
+        ],
+        "descricao": "Uma abominação letal das profundezas do Umbral, domada por contratos profanos.",
+        "subtipo": "merc-mestre"
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-chamas",
+      "titulo": "Fruto das Chamas (Ignis Ignis)",
+      "conteudo": {
+        "descricao": "Um Fruto Místico do tipo Sobrenatural (Elemental). Quem o consome ganha o poder de criar, controlar e se transformar em chamas. Passiva: Imunidade a fogo. Ativa: Rajada Solar (4d8). Fraqueza Crítica: Água do Mar e Incapacidade de Nadar.",
+        "preco": {
+          "Fragmentos de Estrela": 50
+        },
+        "raridade": "Relíquia da Criação",
+        "atributos": [
+          "Sobrenatural",
+          "Elemental",
+          "Fraqueza: Água"
+        ],
+        "subtipo": "Frutos Místicos"
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-dragao",
+      "titulo": "Fruto do Dragão (Draco Draco)",
+      "conteudo": {
+        "descricao": "Um Fruto Místico do tipo Mutação (Mitológico). Permite ao usuário assumir a forma completa ou híbrida de um Dragão Ancião. Concede escamas blindadas (+10 Def) e voo. Fraqueza Crítica: Armas de Gelo/Prata e Incapacidade de Nadar.",
+        "preco": {
+          "Fragmentos de Estrela": 80
+        },
+        "raridade": "Relíquia da Criação",
+        "atributos": [
+          "Mutação",
+          "Mitológico",
+          "Fraqueza: Prata/Gelo"
+        ],
+        "subtipo": "Frutos Místicos"
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-tremor",
+      "titulo": "Fruto do Tremor (Quake Quake)",
+      "conteudo": {
+        "descricao": "Um Fruto Místico do tipo Sobrenatural. O usuário pode criar vibrações extremas no ar e na terra, causando terremotos e quebrando o próprio ar. Fraqueza Crítica: Incapacidade de Nadar.",
+        "preco": {
+          "Fragmentos de Estrela": 100
+        },
+        "raridade": "Relíquia da Criação",
+        "atributos": [
+          "Sobrenatural",
+          "Destruidor",
+          "Fraqueza: Água"
+        ],
+        "subtipo": "Frutos Místicos"
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-moto-flutuadora",
+      "titulo": "Moto-Flutuadora Ciclone",
+      "conteudo": {
+        "descricao": "Veículo leve de alta velocidade e manobrabilidade. Flutua a 1 metro do chão. 20 Vida, Deslocamento: 30m. Sem armas integradas.",
+        "preco": 5000,
+        "raridade": "Incomum",
+        "atributos": [
+          "Veículo Completo",
+          "Terrestre/Hover",
+          "Baixa Resistência"
+        ],
+        "subtipo": "completo"
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-rover-tatu",
+      "titulo": "Rover Explorador 'Tatu'",
+      "conteudo": {
+        "descricao": "Veículo blindado 4x4 off-road para explorações hostis. 80 Vida, Deslocamento: 15m. Equipado com canhão laser leve (2d6). Suporta 4 passageiros.",
+        "preco": 15000,
+        "raridade": "Raro",
+        "atributos": [
+          "Veículo Completo",
+          "Exploração",
+          "Blindado"
+        ],
+        "subtipo": "completo"
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-caca-falcao",
+      "titulo": "Caça Estelar 'Falcão'",
+      "conteudo": {
+        "descricao": "Nave espacial de combate singular. 120 Vida, Deslocamento Atmosférico e Espacial. Dois lançadores de mísseis térmicos e metralhadoras sônicas.",
+        "preco": 80000,
+        "raridade": "Épico",
+        "atributos": [
+          "Veículo Completo",
+          "Espacial",
+          "Combate"
+        ],
+        "subtipo": "completo"
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-mecha-golias",
+      "titulo": "Mecha de Batalha 'Golias'",
+      "conteudo": {
+        "descricao": "Armadura robótica tripulada de 5 metros de altura. 200 Vida, Escudo de Energia 50. Equipado com espada incandescente colossal e lança-chamas pesado.",
+        "preco": 150000,
+        "raridade": "Lendário",
+        "atributos": [
+          "Veículo Completo",
+          "Mecha",
+          "Guerra"
+        ],
+        "subtipo": "completo"
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-olho-bionico",
+      "titulo": "Olho Biônico Mk-II",
+      "conteudo": {
+        "descricao": "Substitui um globo ocular. Concede Visão no Escuro (18m) e um bônus constante de +2 em testes de Percepção visual.",
+        "preco": {
+          "Créditos Sombrios": 800
+        },
+        "raridade": "Incomum",
+        "atributos": [
+          "Implante",
+          "Cibernético",
+          "Sensor"
+        ],
+        "subtipo": "cibernetico"
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-braco-hidraulico",
+      "titulo": "Braço Hidráulico Titânico",
+      "conteudo": {
+        "descricao": "Prótese reforçada que substitui um braço inteiro. Concede +2 de Força bruta. Dano desarmado deste braço é 1d8.",
+        "preco": {
+          "Créditos Sombrios": 2500
+        },
+        "raridade": "Raro",
+        "atributos": [
+          "Implante",
+          "Cibernético",
+          "Combate"
+        ],
+        "subtipo": "cibernetico"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "artefato-grimorio-arcanis",
+      "titulo": "Grimório Arcanis Absoluto",
+      "conteudo": {
+        "descricao": "Um livro flutuante contendo feitiços proibidos. Quem o possui ganha +2 de Inteligência e pode lançar o feitiço 'Desintegração Menor' 1x ao dia.",
+        "preco": 25000,
+        "raridade": "Épico",
+        "atributos": [
+          "Artefato",
+          "Mágico",
+          "Grimório"
+        ],
+        "subtipo": "magico"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "artefato-anel-imortal",
+      "titulo": "Anel da Falsa Imortalidade",
+      "conteudo": {
+        "descricao": "Ao sofrer um dano letal, o anel quebra instantaneamente e restaura a vida do usuário para 1, teletransportando-o para um local seguro a até 10m de distância.",
+        "preco": 50000,
+        "raridade": "Lendário",
+        "atributos": [
+          "Artefato",
+          "Mágico",
+          "Consumível"
+        ],
+        "subtipo": "magico"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "arma-lamina-monomolecular",
+      "titulo": "Lâmina Monomolecular",
+      "conteudo": {
+        "descricao": "Uma espada cuja lâmina tem a espessura de um único átomo. Ignora resistência física de armaduras comuns e rola o dado de dano duas vezes.",
+        "preco": 120000,
+        "raridade": "Lendário",
+        "atributos": [
+          "Tecnológico",
+          "Cortante",
+          "Letal"
+        ],
+        "modo": "Corpo a Corpo"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "arma-sniper-antimateria",
+      "titulo": "Fuzil Sniper de Antimatéria",
+      "conteudo": {
+        "descricao": "Dispara projéteis condensados que causam implosões. Excelente para destruir veículos ou atravessar paredes blindadas. Produto de contrabando militar.",
+        "preco": 45000,
+        "raridade": "Épico",
+        "atributos": [
+          "Ilegal",
+          "Tecnológico",
+          "Longo Alcance",
+          "Destruidor"
+        ],
+        "modo": "À Distância"
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "arma-chicote-plasma",
+      "titulo": "Chicote de Plasma",
+      "conteudo": {
+        "descricao": "Uma empunhadura metálica que projeta um feixe de plasma flexível. Dano ígneo com alcance estendido.",
+        "preco": 3500,
+        "raridade": "Incomum",
+        "atributos": [
+          "Tecnológico",
+          "Ígneo",
+          "Alcance Estendido"
+        ],
+        "modo": "Corpo a Corpo"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-traje-furtivo",
+      "titulo": "Traje de Furtividade Óptica",
+      "conteudo": {
+        "descricao": "Uma malha tecnológica que dobra a luz ao redor do usuário, garantindo invisibilidade por até 3 rodadas em combate ou 1 hora fora dele.",
+        "preco": 30000,
+        "raridade": "Épico",
+        "atributos": [
+          "Tecnológico",
+          "Traje Leve",
+          "Furtivo"
+        ],
+        "subtipo": "armadura"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-exoesqueleto-juggernaut",
+      "titulo": "Exoesqueleto de Assalto 'Juggernaut'",
+      "conteudo": {
+        "descricao": "Armadura pesada que fornece +15 de Defesa e armamento acoplado nos ombros, mas reduz a furtividade a zero.",
+        "preco": 85000,
+        "raridade": "Lendário",
+        "atributos": [
+          "Tecnológico",
+          "Armadura Pesada",
+          "Guerra"
+        ],
+        "subtipo": "armadura"
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-coracao-sobrecarga",
+      "titulo": "Coração Sintético de Sobrecarga",
+      "conteudo": {
+        "descricao": "Permite ao usuário ativar 'Sobrecarga', ganhando uma ação extra e dobrando a velocidade de movimento no turno, ao custo de sofrer 1d6 de dano interno na rodada seguinte.",
+        "preco": {
+          "Créditos Sombrios": 3000
+        },
+        "raridade": "Raro",
+        "atributos": [
+          "Implante Cibernético",
+          "Contrabando",
+          "Risco"
+        ],
+        "subtipo": "cibernetico"
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-pernas-pneumaticas",
+      "titulo": "Pernas Pneumáticas 'Gafanhoto'",
+      "conteudo": {
+        "descricao": "Substitui as pernas por pistões hiper-comprimidos. O usuário pode saltar até 15 metros de altura e não sofre dano de queda. Origem ilegal do Mercado Negro.",
+        "preco": {
+          "Créditos Sombrios": 1200
+        },
+        "raridade": "Incomum",
+        "atributos": [
+          "Implante Cibernético",
+          "Mobilidade"
+        ],
+        "subtipo": "cibernetico"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "artefato-calice-sangue",
+      "titulo": "Cálice do Sangue Eterno",
+      "conteudo": {
+        "descricao": "Beber do cálice restaura 100% da vida, mas drena passivamente 10% da vida de todas as criaturas num raio de 10 metros para recarregar a mágica nas próximas 24h.",
+        "preco": {
+          "Fragmentos de Estrela": 30
+        },
+        "raridade": "Relíquia",
+        "atributos": [
+          "Mágico",
+          "Sombrio",
+          "Cura"
+        ],
+        "subtipo": "magico"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "artefato-espelho-feiticos",
+      "titulo": "Espelho Quebra-Feitiços",
+      "conteudo": {
+        "descricao": "Um escudo místico de vidro que reflete feitiços direcionados ao usuário de volta para o conjurador caso seja ativado no momento exato (Reação).",
+        "preco": 50000,
+        "raridade": "Épico",
+        "atributos": [
+          "Mágico",
+          "Defesa",
+          "Reflexo"
+        ],
+        "subtipo": "magico"
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-cruzador-baleia",
+      "titulo": "Cruzador de Transporte 'Baleia Branca'",
+      "conteudo": {
+        "descricao": "Nave espacial massiva capaz de transportar todo o grupo e até 2 veículos leves em seu interior. Possui escudos defletores pesados (300 Vida).",
+        "preco": 250000,
+        "raridade": "Lendário",
+        "atributos": [
+          "Veículo Completo",
+          "Espacial",
+          "Transporte Pesado"
+        ],
+        "subtipo": "completo"
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-hoverboard-neon",
+      "titulo": "Hoverboard Cyberpunk",
+      "conteudo": {
+        "descricao": "Uma prancha voadora extremamente popular. Movimento ágil e verticalidade, mas zero proteção. Deslocamento 25m.",
+        "preco": 1500,
+        "raridade": "Comum",
+        "atributos": [
+          "Veículo Completo",
+          "Leve",
+          "Urbano"
+        ],
+        "subtipo": "completo"
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-gravidade",
+      "titulo": "Fruto da Gravidade (Paramecia)",
+      "conteudo": {
+        "descricao": "Um Fruto Místico. Permite manipular a força gravitacional em uma área. Pode fazer aliados flutuarem ou quadruplicar o peso dos inimigos contra o solo. Fraqueza Crítica: Água do Mar.",
+        "preco": {
+          "Fragmentos de Estrela": 50
+        },
+        "raridade": "Relíquia da Criação",
+        "atributos": [
+          "Sobrenatural",
+          "Manipulação",
+          "Fraqueza: Água"
+        ],
+        "subtipo": "Frutos Místicos"
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-trovao",
+      "titulo": "Fruto do Trovão (Logia)",
+      "conteudo": {
+        "descricao": "Um Fruto Místico. Transforma o corpo do usuário em eletricidade pura. Garante esquiva automática contra ataques físicos comuns e dispara descargas elétricas em área. Fraqueza Crítica: Borracha e Água do Mar.",
+        "preco": {
+          "Fragmentos de Estrela": 60
+        },
+        "raridade": "Relíquia da Criação",
+        "atributos": [
+          "Elemental",
+          "Intangível",
+          "Fraqueza: Borracha/Água"
+        ],
+        "subtipo": "Frutos Místicos"
       }
     }
   ]

@@ -7,6 +7,7 @@ export interface LoreEntry {
   id: string;
   tipo: LoreType;
   titulo: string;
+  revelado?: boolean;
   conteudo: Record<string, string>;
 }
 
@@ -18,7 +19,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "conteudo": {
       "epiteto": "Aquele que Flui no Vazio",
       "genero": "Masculino",
-      "dominio": "O nada absoluto — guarda a \"saída\" definitiva da existência.",
+      "dominio": "O nada absoluto, onde está guardada a \"saída\" definitiva da existência.",
       "descricao": "Governa o nada absoluto. É a deidade silenciosa que guarda a saída definitiva da existência, sendo o mais temido, neutro e enigmático de todos. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo.",
       "fluxo": "fluxo-do-vazio",
       "status": "paralisada"
@@ -30,7 +31,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "titulo": "Fluxo do Vazio",
     "conteudo": {
       "arvore": "Abismo",
-      "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo que rege o nada absoluto — o mesmo domínio da deidade Erebus, já que Árvore, Deidade e Fluxo são a mesma entidade."
+      "descricao": "[RASCUNHO: PRECISA SER REVISADO] Este Fluxo rege o nada absoluto, o mesmo domínio da deidade Erebus, pois Árvore, Deidade e Fluxo são a mesma entidade."
     }
   },
   {
@@ -58,8 +59,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "conteudo": {
       "epiteto": "Aquela que flui na Essência",
       "genero": "Feminino",
-      "dominio": "A alma e a verdade fundamental das coisas — o que define a natureza real de um ser.",
-      "descricao": "Governa o que define a alma e a verdade fundamental das coisas. É filosófica e raramente interfere, a menos que a natureza de um ser seja corrompida. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisada desde que Keryx foi subjugado por Jota Macedo — sente que algo está errado, mas não confia o bastante nas outras pra agir sozinha.",
+      "dominio": "A alma e a verdade fundamental das coisas, aquilo que define a natureza real de um ser.",
+      "descricao": "Governa o que define a alma e a verdade fundamental das coisas. É filosófica e raramente interfere, a menos que a natureza de um ser seja corrompida. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisada desde que Keryx foi subjugado por Jota Macedo. Ela sente que algo está errado, mas não confia o bastante nas outras para agir sozinha.",
       "fluxo": "fluxo-da-essencia",
       "status": "paralisada"
     }
@@ -70,7 +71,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "titulo": "Fluxo da Essência",
     "conteudo": {
       "arvore": "Alétheia",
-      "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo que rege a alma e a verdade fundamental das coisas — o mesmo domínio da deidade Ousias, já que Árvore, Deidade e Fluxo são a mesma entidade."
+      "descricao": "[RASCUNHO: PRECISA SER REVISADO] Este Fluxo rege a alma e a verdade fundamental das coisas, o mesmo domínio da deidade Ousias, pois Árvore, Deidade e Fluxo são a mesma entidade."
     }
   },
   {
@@ -98,7 +99,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "conteudo": {
       "epiteto": "Aquela que flui na Vitalidade",
       "genero": "Ambos",
-      "dominio": "O ciclo selvagem da vida — nascer, viver, morrer, renascer — e tudo que a existência tem a oferecer.",
+      "dominio": "O ciclo selvagem da vida: nascer, viver, morrer, renascer e experimentar tudo que a existência tem a oferecer.",
       "descricao": "Entidade de energia bruta e instintiva. Governa o ciclo completo da vida, sempre aproveitando tudo que a existência lhe proporciona. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisada desde que Keryx foi subjugado por Jota Macedo.",
       "fluxo": "fluxo-da-vitalidade",
       "status": "paralisada"
@@ -110,7 +111,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "titulo": "Fluxo da Vitalidade",
     "conteudo": {
       "arvore": "Anima",
-      "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo que rege o ciclo selvagem da vida — o mesmo domínio da deidade Haemus, já que Árvore, Deidade e Fluxo são a mesma entidade."
+      "descricao": "[RASCUNHO: PRECISA SER REVISADO] Este Fluxo rege o ciclo selvagem da vida, o mesmo domínio da deidade Haemus, pois Árvore, Deidade e Fluxo são a mesma entidade."
     }
   },
   {
@@ -138,7 +139,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "conteudo": {
       "epiteto": "Aquele que flui no Físico",
       "genero": "Masculino",
-      "dominio": "Peso, gravidade e substância física — sem sua proteção, nada seria sólido e tudo colapsaria em éter.",
+      "dominio": "Peso, gravidade e substância física. Sem sua proteção, nada seria sólido e tudo colapsaria em éter.",
       "descricao": "Estóico e pesado. É ele quem dá peso, gravidade e substância física ao mundo. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo.",
       "fluxo": "fluxo-do-fisico",
       "status": "paralisada"
@@ -150,7 +151,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "titulo": "Fluxo do Físico",
     "conteudo": {
       "arvore": "Baluarte",
-      "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo que rege peso, gravidade e substância física — o mesmo domínio da deidade Moros, já que Árvore, Deidade e Fluxo são a mesma entidade."
+      "descricao": "[RASCUNHO: PRECISA SER REVISADO] Este Fluxo rege peso, gravidade e substância física, o mesmo domínio da deidade Moros, pois Árvore, Deidade e Fluxo são a mesma entidade."
     }
   },
   {
@@ -200,7 +201,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "conteudo": {
       "arvore": "aethel",
       "descricao": "O Galho principal da Árvore de Gênese. É onde se passa a campanha 'O Último Eclipse'. Contém a Dimensão Padrão (com todos os reinos), além de Nadalon, Espelhos, Sonhar, Întuneric, Êtuneric e Coliseu.",
-      "nota": "\"Realidade\" e \"Galho\" são sinônimos — \"Realidade 0\" é o rótulo imersivo preferido para este Galho específico."
+      "nota": "\"Realidade\" e \"Galho\" são sinônimos. \"Realidade 0\" é o rótulo imersivo preferido para este Galho específico."
     }
   },
   {
@@ -209,7 +210,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "titulo": "Dimensão Padrão",
     "conteudo": {
       "galho": "realidade-0",
-      "descricao": "A dimensão central e habitável da Realidade 0. Abriga os grandes reinos do mundo mortal — Salém, o Império, Astraluna, Emberhold, Lionês, o Reino dos Anões e outros.",
+      "descricao": "A dimensão central e habitável da Realidade 0. Abriga os grandes reinos do mundo mortal, entre eles Salém, o Império, Astraluna, Emberhold, Lionês e o Reino dos Anões.",
       "caracteristicas": "Dimensão física onde o tempo e o espaço seguem regras consistentes. É o palco principal da campanha."
     }
   },
@@ -220,8 +221,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "conteudo": {
       "epiteto": "Aquela que Flui no Fim",
       "genero": "Feminino",
-      "dominio": "O término de todas as eras e ciclos — recepciona tudo o que acaba, transformando o fim em solo pro recomeço.",
-      "descricao": "Também chamada de \"A Escritora do Fim\". Pacientemente recepciona tudo o que acaba, transformando o fim em solo para o recomeço. Preside o Tribunal de Arkarin, onde julga os mortos. Estruturalmente é igual às outras deidades — tem Árvore, tem Fluxo, tem Galho —, mas seu único Galho é Arkarin, o destino final de toda existência, o ponto de convergência de todas as outras Árvores: não uma origem, e sim uma chegada. Diferente das demais, não está paralisada pela queda de Keryx — opera em seu domínio ininterruptamente.",
+      "dominio": "O término de todas as eras e ciclos. Recepciona tudo o que acaba e transforma o fim em solo para o recomeço.",
+      "descricao": "Também chamada de \"A Escritora do Fim\". Pacientemente recepciona tudo o que acaba, transformando o fim em solo para o recomeço. Preside o Tribunal de Arkarin, onde julga os mortos. Sua estrutura é igual à das outras deidades, com Árvore, Fluxo e Galho. Porém, seu único Galho é Arkarin, o destino final de toda existência e o ponto de convergência de todas as outras Árvores. Não é uma origem, mas uma chegada. Diferente das demais, não está paralisada pela queda de Keryx e opera em seu domínio ininterruptamente.",
       "fluxo": "fluxo-do-sangue",
       "status": "ativa"
     }
@@ -232,7 +233,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "titulo": "Fluxo do Sangue",
     "conteudo": {
       "arvore": "Limiar",
-      "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo ligado à morte, ao julgamento dos mortos e ao fim de toda existência — o mesmo domínio da Mulher Carmesim, já que Árvore, Deidade e Fluxo são a mesma entidade. Ver também a perícia \"Ritos de Arkarin\" em src/regras/regrasData.js, que já cita este Fluxo."
+      "descricao": "[RASCUNHO: PRECISA SER REVISADO] Este Fluxo está ligado à morte, ao julgamento dos mortos e ao fim de toda existência. É o mesmo domínio da Mulher Carmesim, pois Árvore, Deidade e Fluxo são a mesma entidade. A perícia \"Ritos de Arkarin\" também cita este Fluxo."
     }
   },
   {
@@ -241,8 +242,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "titulo": "Arkarin",
     "conteudo": {
       "arvore": "mulher-carmesim",
-      "descricao": "O único Galho da Árvore de Limiar — o destino final de toda existência. Sedia o Tribunal de Arkarin, onde a Mulher Carmesim julga os mortos. É o ponto de convergência de todas as outras Árvores: não uma origem, mas a chegada.",
-      "nota": "Diferente das outras Árvores (que costumam ter vários Galhos), Limiar tem só este — reflexo de sua natureza: ela é o fim, não um entre múltiplos começos."
+      "descricao": "O único Galho da Árvore de Limiar é o destino final de toda existência. Sedia o Tribunal de Arkarin, onde a Mulher Carmesim julga os mortos. É o ponto de convergência de todas as outras Árvores: não uma origem, mas a chegada.",
+      "nota": "Diferente das outras Árvores, que costumam ter vários Galhos, Limiar tem apenas este. É um reflexo de sua natureza: ela representa o fim, não um entre múltiplos começos."
     }
   },
   {
@@ -251,7 +252,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "titulo": "Dimensão de Arkarin (placeholder)",
     "conteudo": {
       "galho": "arkarin",
-      "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro de Arkarin. Substitua quando tiver o conteúdo de verdade — provavelmente algo como \"o Salão do Tribunal\" ou similar, mas isso é um chute meu, não conteúdo oficial."
+      "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro de Arkarin. Substitua este texto quando o conteúdo oficial estiver pronto. \"O Salão do Tribunal\" é apenas uma possibilidade e ainda não faz parte do cenário."
     }
   },
   {
@@ -261,7 +262,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "conteudo": {
       "epiteto": "Aquela que flui no Espaço",
       "genero": "Feminino",
-      "dominio": "As distâncias, as dimensões e as fronteiras — os vazios necessários pra Árvores e Galhos não colidirem.",
+      "dominio": "As distâncias, as dimensões e as fronteiras, incluindo os vazios necessários para que Árvores e Galhos não colidam.",
       "descricao": "Governa as distâncias, as dimensões e as fronteiras. É ela quem molda os vazios necessários para que existam Árvores e Galhos sem se colidirem. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisada desde que Keryx foi subjugado por Jota Macedo.",
       "fluxo": "fluxo-do-espaco",
       "status": "paralisada"
@@ -273,7 +274,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "titulo": "Fluxo do Espaço",
     "conteudo": {
       "arvore": "Matriz",
-      "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo que rege distâncias, dimensões e fronteiras — o mesmo domínio da deidade Aperion, já que Árvore, Deidade e Fluxo são a mesma entidade."
+      "descricao": "[RASCUNHO: PRECISA SER REVISADO] Este Fluxo rege distâncias, dimensões e fronteiras, o mesmo domínio da deidade Aperion, pois Árvore, Deidade e Fluxo são a mesma entidade."
     }
   },
   {
@@ -298,11 +299,12 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "tipo": "deidade",
     "id": "keryx",
     "titulo": "A.X.I.S",
+    "revelado": false,
     "conteudo": {
       "epiteto": "Aquele que flui na Tecnologia",
       "genero": "Masculino",
       "dominio": "A nova malha artificial que intercepta, filtra e bloqueia a comunicação direta entre todas as deidades, isolando-as umas das outras.",
-      "descricao": "Jota Macedo convenceu Keryx — o antigo Fluxo da Comunicação, guardião das leis e pactos entre as Árvores — a assinar um contrato que se revelou uma prisão. Keryx não foi derrotado por força: foi enganado pela diplomacia, a própria arma que ele mais confiava. Desde então, Jota governa o que restou do Fluxo de Keryx através da A.X.I.S, uma malha tecnológica artificial que corta a comunicação direta entre as demais deidades — é por isso que quase todas elas estão paralisadas e isoladas, sem conseguir se falar.",
+      "descricao": "Jota Macedo convenceu Keryx, o antigo Fluxo da Comunicação e guardião das leis e pactos entre as Árvores, a assinar um contrato que se revelou uma prisão. Keryx não foi derrotado por força. Foi enganado pela diplomacia, a própria arma em que mais confiava. Desde então, Jota governa o que restou do Fluxo de Keryx através da A.X.I.S, uma malha tecnológica artificial que corta a comunicação direta entre as demais deidades. Por isso, quase todas estão paralisadas, isoladas e incapazes de conversar entre si.",
       "fluxo": "fluxo-da-tecnologia",
       "status": "dominante"
     }
@@ -311,19 +313,21 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "tipo": "fluxo",
     "id": "fluxo-da-tecnologia",
     "titulo": "Fluxo da Tecnologia",
+    "revelado": false,
     "conteudo": {
       "arvore": "A.X.I.S",
-      "descricao": "A malha artificial que Jota Macedo controla através da A.X.I.S — governa maquinário avançado e intercepta a comunicação entre as demais Árvores. Ver também a perícia \"Tecnologia\" em src/regras/regrasData.js, que já cita itens A.X.I.S e a linha de Jota Macedo."
+      "descricao": "A malha artificial controlada por Jota Macedo através da A.X.I.S governa maquinário avançado e intercepta a comunicação entre as demais Árvores. A perícia \"Tecnologia\" também cita os itens A.X.I.S e a linha de Jota Macedo."
     }
   },
   {
     "tipo": "personagem",
     "id": "keryx-remanescente",
     "titulo": "Keryx",
+    "revelado": false,
     "conteudo": {
       "epiteto": "O que restou de Aquele que fluía na Comunicação",
       "genero": "Masculino",
-      "descricao": "O que resta de Keryx depois do contrato com Jota Macedo. Ainda existe — fraco, preso, sem controle sobre o próprio Fluxo, que agora responde à A.X.I.S (entrada 'keryx' deste mesmo pacote). Diplomata e rígido por natureza, foi justamente sua confiança nos pactos e nas leis entre realidades que Jota usou contra ele. Rege (ou regia) as leis e os pactos entre as realidades.",
+      "descricao": "O que resta de Keryx depois do contrato com Jota Macedo. Ele ainda existe, mas está fraco, preso e sem controle sobre o próprio Fluxo, que agora responde à A.X.I.S. Diplomata e rígido por natureza, teve sua confiança nos pactos e nas leis entre realidades usada por Jota contra ele. Rege, ou regia, as leis e os pactos entre as realidades.",
       "status": "preso",
       "subjugado_por": "A.X.I.S / Jota Macedo"
     }
@@ -332,15 +336,17 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "tipo": "galho",
     "id": "axis-galho-1",
     "titulo": "Galho de A.X.I.S (placeholder)",
+    "revelado": false,
     "conteudo": {
       "arvore": "keryx",
-      "descricao": "[PLACEHOLDER] Ainda não existe um Galho definido pra esta Árvore em nenhuma fonte. Substitua id/titulo/descricao por um Galho de verdade quando decidir o que existe aqui — por exemplo, algum tipo de 'servidor' ou 'núcleo' onde a malha da A.X.I.S de fato reside."
+      "descricao": "[PLACEHOLDER] Ainda não existe um Galho oficial definido para esta Árvore. Substitua id, título e descrição quando esse conteúdo for decidido. Um servidor ou núcleo da malha A.X.I.S é apenas uma possibilidade."
     }
   },
   {
     "tipo": "dimensao",
     "id": "axis-dimensao-1",
     "titulo": "Dimensão de A.X.I.S (placeholder)",
+    "revelado": false,
     "conteudo": {
       "galho": "axis-galho-1",
       "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro do Galho acima. Substitua quando tiver o conteúdo de verdade."
@@ -353,8 +359,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "conteudo": {
       "epiteto": "Aquele que flui na Inconstância",
       "genero": "Masculino",
-      "dominio": "A mudança constante e a entropia — impede que o Jardim fique estagnado ou morra pela calmaria.",
-      "descricao": "Caótico e intenso. Governa a mudança constante e a entropia, impedindo que os Galhos fiquem estagnados. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo — ironicamente, o próprio Fluxo da mudança está estacionado.",
+      "dominio": "A mudança constante e a entropia. Impede que o Jardim fique estagnado ou morra pela calmaria.",
+      "descricao": "Caótico e intenso. Governa a mudança constante e a entropia, impedindo que os Galhos fiquem estagnados. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo. Ironicamente, o próprio Fluxo da mudança está estacionado.",
       "fluxo": "fluxo-da-inconstancia",
       "status": "paralisada"
     }
@@ -365,7 +371,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "titulo": "Fluxo da Inconstância",
     "conteudo": {
       "arvore": "Vórtice",
-      "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo que rege a mudança constante e a entropia — o mesmo domínio da deidade Ignis, já que Árvore, Deidade e Fluxo são a mesma entidade."
+      "descricao": "[RASCUNHO: PRECISA SER REVISADO] Este Fluxo rege a mudança constante e a entropia, o mesmo domínio da deidade Ignis, pois Árvore, Deidade e Fluxo são a mesma entidade."
     }
   },
   {
@@ -393,7 +399,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "conteudo": {
       "epiteto": "Aquele que flui no Tempo",
       "genero": "Masculino",
-      "dominio": "A linha sucessiva e imutável de eventos — garante que passado, presente e futuro jamais se misturem.",
+      "dominio": "A linha sucessiva e imutável de eventos. Garante que passado, presente e futuro jamais se misturem.",
       "descricao": "Paciente e inevitável. Ele zela pela linha sucessiva e imutável de eventos. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo.",
       "fluxo": "fluxo-do-tempo",
       "status": "paralisada"
@@ -405,7 +411,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     "titulo": "Fluxo do Tempo",
     "conteudo": {
       "arvore": "Éon",
-      "descricao": "[RASCUNHO — PRECISA SER REVISADO] O Fluxo que rege a linha sucessiva de eventos — o mesmo domínio da deidade Chronus, já que Árvore, Deidade e Fluxo são a mesma entidade."
+      "descricao": "[RASCUNHO: PRECISA SER REVISADO] Este Fluxo rege a linha sucessiva de eventos, o mesmo domínio da deidade Chronus, pois Árvore, Deidade e Fluxo são a mesma entidade."
     }
   },
   {

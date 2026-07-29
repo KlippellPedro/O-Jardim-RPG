@@ -1,6 +1,6 @@
 /* Log da mesa: rolagens e usos de poder, do mais recente ao mais antigo.
 
-   O mestre vê tudo — é o ponto do registro, a prova do que aconteceu. O
+   O mestre vê tudo - é o ponto do registro, a prova do que aconteceu. O
    jogador vê só o que ele mesmo registrou: descobrir pelo log que outro rolou
    Furtividade entregaria a cena. Esse recorte é feito no servidor. */
 
@@ -98,7 +98,7 @@ function linhaDoRegistro(registro) {
 }
 
 /**
- * Painel do log. Devolve `{ elemento, atualizar }` — quem chama decide quando
+ * Painel do log. Devolve `{ elemento, atualizar }` - quem chama decide quando
  * recarregar (o fluxo de eventos da sessão avisa a cada novo registro).
  */
 export function criarLog(campanhaId, { comando = false } = {}) {

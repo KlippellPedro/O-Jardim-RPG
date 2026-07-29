@@ -29,7 +29,7 @@ def bootstrap_context(
             campanhas = connection.execute(
                 """
                 SELECT c.id, c.nome, c.descricao, c.status, c.atualizado_em,
-                       c.dono_id, 'mestre' AS papel, m.personagem_ativo_id
+                       c.dono_id, c.configuracoes, 'mestre' AS papel, m.personagem_ativo_id
                 FROM campanhas c
                 LEFT JOIN membros_campanha m
                   ON m.campanha_id=c.id AND m.usuario_id=%s AND m.status='ativo'
@@ -42,7 +42,7 @@ def bootstrap_context(
             campanhas = connection.execute(
                 """
                 SELECT c.id, c.nome, c.descricao, c.status, c.atualizado_em,
-                       c.dono_id, m.papel, m.personagem_ativo_id
+                       c.dono_id, c.configuracoes, m.papel, m.personagem_ativo_id
                 FROM campanhas c
                 JOIN membros_campanha m ON m.campanha_id=c.id
                 WHERE m.usuario_id=%s AND m.status='ativo' AND c.status='ativa'
@@ -97,7 +97,14 @@ def bootstrap_context(
                 personagens = connection.execute(
                     """
                     SELECT p.id, p.campanha_id, p.dono_usuario_id, p.nome,
-                           p.ficha, p.versao, p.economia_versao, p.status,
+                           jsonb_build_object(
+                               'racaId', p.ficha->'racaId',
+                               'classes', COALESCE(p.ficha->'classes', '[]'::jsonb),
+                               'nivel', p.ficha->'nivel',
+                               'derivados', jsonb_build_object('vida', p.ficha->'derivados'->'vida'),
+                               'recursos', jsonb_build_object('vidaAtual', p.ficha->'recursos'->'vidaAtual')
+                           ) AS ficha,
+                           p.versao, p.economia_versao, p.status,
                            p.atualizado_em, u.nome_exibicao AS dono_nome
                     -- ficha completa fica fora da resposta; ver resumir_ficha
                     FROM personagens p
@@ -111,7 +118,14 @@ def bootstrap_context(
                 personagens = connection.execute(
                     """
                     SELECT p.id, p.campanha_id, p.dono_usuario_id, p.nome,
-                           p.ficha, p.versao, p.economia_versao, p.status,
+                           jsonb_build_object(
+                               'racaId', p.ficha->'racaId',
+                               'classes', COALESCE(p.ficha->'classes', '[]'::jsonb),
+                               'nivel', p.ficha->'nivel',
+                               'derivados', jsonb_build_object('vida', p.ficha->'derivados'->'vida'),
+                               'recursos', jsonb_build_object('vidaAtual', p.ficha->'recursos'->'vidaAtual')
+                           ) AS ficha,
+                           p.versao, p.economia_versao, p.status,
                            p.atualizado_em, u.nome_exibicao AS dono_nome
                     -- ficha completa fica fora da resposta; ver resumir_ficha
                     FROM personagens p

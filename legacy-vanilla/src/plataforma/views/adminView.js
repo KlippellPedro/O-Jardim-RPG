@@ -60,7 +60,7 @@ function renderManutencao(area, ctx) {
 
   const explicacao = elemento('div', 'plataforma-backup-info');
   explicacao.append(
-    elemento('p', '', 'Guarde o arquivo fora do servidor — no seu computador ou num drive. '
+    elemento('p', '', 'Guarde o arquivo fora do servidor - no seu computador ou num drive. '
       + 'É o que permite recomeçar se o banco da Discloud se perder.'),
     elemento('p', '', 'O arquivo tem e-mails e senhas cifradas: trate como material sensível '
       + 'e não poste em canal público. Sessões abertas e códigos de vínculo ficam de fora de propósito.'),
@@ -134,7 +134,7 @@ function renderManutencao(area, ctx) {
 function mostrarSenhaProvisoria(linha, resultado) {
   linha.querySelector('.plataforma-senha-provisoria')?.remove();
   const bloco = elemento('div', 'plataforma-senha-provisoria');
-  bloco.append(elemento('strong', '', 'Senha provisória — anote agora, ela não aparece de novo'));
+  bloco.append(elemento('strong', '', 'Senha provisória - anote agora, ela não aparece de novo'));
 
   const codigo = elemento('code', 'plataforma-senha-codigo', resultado.senha_provisoria);
   const copiar = botao('Copiar', 'plataforma-botao--secundario plataforma-botao--mini', async () => {
@@ -190,7 +190,7 @@ async function renderUsuarios(area, ctx) {
   let pagina = 1;
 
   /* Quem clicou em "esqueci a senha" aparece no topo, com o botão que já existe
-     para gerar a provisória — o admin resolve sem procurar a conta na lista. */
+     para gerar a provisória - o admin resolve sem procurar a conta na lista. */
   async function desenharPedidos() {
     try {
       const resposta = await adminApi.pedidosDeSenha();

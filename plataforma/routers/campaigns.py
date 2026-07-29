@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from psycopg.types.json import Jsonb
 
 from core.audit import record_audit
 from core.database import Database
@@ -170,19 +171,20 @@ def update_campaign(
                 detail="somente o mestre altera a campanha",
             )
         current = connection.execute(
-            "SELECT nome, descricao FROM campanhas WHERE id=%s FOR UPDATE",
+            "SELECT nome, descricao, configuracoes FROM campanhas WHERE id=%s FOR UPDATE",
             (campaign_id,),
         ).fetchone()
         row = connection.execute(
             """
             UPDATE campanhas
-            SET nome=%s, descricao=%s, atualizado_em=CURRENT_TIMESTAMP
+            SET nome=%s, descricao=%s, configuracoes=%s, atualizado_em=CURRENT_TIMESTAMP
             WHERE id=%s AND status='ativa'
-            RETURNING id, dono_id, nome, descricao, status, atualizado_em
+            RETURNING id, dono_id, nome, descricao, configuracoes, status, atualizado_em
             """,
             (
                 payload.nome if payload.nome is not None else current["nome"],
                 payload.descricao if payload.descricao is not None else current["descricao"],
+                Jsonb(payload.configuracoes) if payload.configuracoes is not None else current["configuracoes"],
                 campaign_id,
             ),
         ).fetchone()

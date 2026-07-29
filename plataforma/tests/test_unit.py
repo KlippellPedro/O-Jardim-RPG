@@ -6,6 +6,7 @@ import gzip
 import io
 import json
 import os
+import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -13,6 +14,7 @@ from unittest import mock
 from uuid import UUID
 
 from fastapi import HTTPException
+from fastapi.testclient import TestClient
 from pydantic import ValidationError
 
 from core.backup import (
@@ -22,8 +24,9 @@ from core.backup import (
     ler_cabecalho,
     nome_do_arquivo,
 )
+from core.automatic_backup import salvar_backup_automatico
 from core import limites
-from core.character_summary import carregar_catalogos, resumir_ficha
+from core.character_summary import carregar_catalogos, iniciativa_fixa, resumir_ficha
 from core.dados import _classificar, rolar_formula, rolar_teste
 from core.config import load_settings
 from core.notifications import notify
@@ -76,13 +79,19 @@ class SecurityTests(unittest.TestCase):
 
 
 class SchemaTests(unittest.TestCase):
-    def test_short_password_is_rejected(self):
+    def test_registration_password_boundary(self):
         with self.assertRaises(ValidationError):
             RegisterInput(
                 email="player@example.com",
                 nome_exibicao="Player",
-                senha="curta",
+                senha="1234567",
             )
+        entrada = RegisterInput(
+            email="player@example.com",
+            nome_exibicao="Player",
+            senha="12345678",
+        )
+        self.assertEqual(entrada.senha, "12345678")
 
     def test_large_sheet_is_rejected(self):
         with self.assertRaises(ValidationError):
@@ -221,7 +230,10 @@ class TemporaryPasswordTests(unittest.TestCase):
 
     def test_change_enforces_minimum_length(self):
         with self.assertRaises(ValidationError):
-            PasswordChangeInput(senha_atual="provisoria", nova_senha="curta")
+            PasswordChangeInput(senha_atual="provisoria", nova_senha="1234567")
+
+        entrada = PasswordChangeInput(senha_atual="provisoria", nova_senha="12345678")
+        self.assertEqual(entrada.nova_senha, "12345678")
 
     def test_valid_change_is_accepted(self):
         entrada = PasswordChangeInput(
@@ -267,6 +279,34 @@ class CharacterSummaryTests(unittest.TestCase):
         })
         self.assertNotIn("inventario", resumo)
         self.assertNotIn("notas", resumo)
+
+    def test_iniciativa_fixa_soma_bonus_ajustes_e_efeitos_sem_d20(self):
+        ficha = {
+            "derivados": {"iniciativa": 14},
+            "recursos": {
+                "bonusIniciativa": 2,
+                "ajustesIniciativa": [{"valor": 3}, {"valor": -1}],
+            },
+            "efeitosAtivos": {"habilidade-ativa": True},
+            "poderes": [{
+                "id": "poder-sempre",
+                "efeitos": [{
+                    "tipo": "combate", "alvo": "iniciativa", "valor": 2, "modo": "sempre",
+                }],
+            }],
+            "habilidades": [{
+                "id": "habilidade-ativa",
+                "efeitos": [{
+                    "tipo": "combate", "alvo": "iniciativa", "valor": 1, "modo": "ativavel",
+                }],
+            }, {
+                "id": "habilidade-inativa",
+                "efeitos": [{
+                    "tipo": "combate", "alvo": "iniciativa", "valor": 99, "modo": "ativavel",
+                }],
+            }],
+        }
+        self.assertEqual(iniciativa_fixa(ficha), 21)
 
 
 class BackupTests(unittest.TestCase):
@@ -391,6 +431,35 @@ class BackupTests(unittest.TestCase):
         self.assertLess(antigo, novo)
         self.assertTrue(novo.endswith(".jsonl.gz"))
 
+    def test_backup_automatico_grava_e_rotaciona_sem_apagar_outros_arquivos(self):
+        def gerador(_database):
+            return b"backup", {"linhas": 3, "bytes": 6}
+
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            unrelated = directory / "anotacoes.txt"
+            unrelated.write_text("preservar", encoding="utf-8")
+            moments = [
+                datetime(2026, 1, day, 3, 0, tzinfo=timezone.utc)
+                for day in (1, 2, 3)
+            ]
+            for moment in moments:
+                salvar_backup_automatico(
+                    object(), directory, 2, generator=gerador, moment=moment
+                )
+
+            backups = sorted(directory.glob("jardim-backup-*.jsonl.gz"))
+            self.assertEqual(len(backups), 2)
+            self.assertEqual(backups[0].read_bytes(), b"backup")
+            self.assertTrue(unrelated.exists())
+
+    def test_backup_automatico_recusa_diretorio_raiz(self):
+        root = Path(Path.cwd().anchor)
+        with self.assertRaises(ValueError):
+            salvar_backup_automatico(
+                object(), root, 2, generator=lambda _: (b"x", {})
+            )
+
 
 class SessaoAoVivoTests(unittest.TestCase):
     """Regras que decidem o que o jogador enxerga durante a sessão."""
@@ -422,7 +491,17 @@ class SessaoAoVivoTests(unittest.TestCase):
 
     def test_condicoes_repetidas_e_vazias_somem(self):
         entrada = ParticipantUpdateInput(condicoes=["Caído", " Caído ", "", "  ", "Cego"])
-        self.assertEqual(entrada.condicoes, ["Caído", "Cego"])
+        self.assertEqual(
+            entrada.condicoes,
+            [{"nome": "Caído", "turnos": None}, {"nome": "Cego", "turnos": None}],
+        )
+
+    def test_condicao_com_duracao_em_turnos(self):
+        entrada = ParticipantUpdateInput(condicoes=[{"nome": "Atordoado", "turnos": 2}, "Cego"])
+        self.assertEqual(
+            entrada.condicoes,
+            [{"nome": "Atordoado", "turnos": 2}, {"nome": "Cego", "turnos": None}],
+        )
 
     def test_atualizacao_exige_alguma_mudanca(self):
         with self.assertRaises(ValidationError):
@@ -552,14 +631,148 @@ class PedidoDeSenhaTests(unittest.TestCase):
 
 
 class FrontendRouteTests(unittest.TestCase):
-    """As rotas de página são o que evita o 404 no "voltar pro Jardim"."""
+    """O FastAPI entrega o bundle Vite sem capturar rotas ou erros da API."""
 
-    def test_every_module_has_a_clean_address(self):
-        from main import _PAGES
+    @classmethod
+    def setUpClass(cls):
+        from main import _FRONTEND_INDEX, _FRONTEND_ROOT, app
 
-        for atalho in ("ficha", "mundo", "regras", "loja"):
-            self.assertIn(atalho, _PAGES)
-            self.assertTrue(_PAGES[atalho].endswith(".html"))
+        cls.frontend_index = _FRONTEND_INDEX
+        cls.frontend_root = _FRONTEND_ROOT
+        cls.client = TestClient(app, raise_server_exceptions=False)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.client.close()
+
+    def test_localiza_dist_no_repositorio_e_no_pacote(self):
+        from main import _localizar_frontend_dist
+
+        with tempfile.TemporaryDirectory() as temp:
+            raiz = Path(temp)
+            app_root = raiz / "plataforma"
+            app_root.mkdir()
+
+            dist_repositorio = raiz / "dist"
+            dist_repositorio.mkdir()
+            (dist_repositorio / "index.html").write_text("repo", encoding="utf-8")
+            self.assertEqual(_localizar_frontend_dist(app_root), dist_repositorio.resolve())
+
+            dist_pacote = app_root / "dist"
+            dist_pacote.mkdir()
+            (dist_pacote / "index.html").write_text("pacote", encoding="utf-8")
+            self.assertEqual(_localizar_frontend_dist(app_root), dist_pacote.resolve())
+
+    def test_raiz_e_rotas_react_devolvem_o_mesmo_index(self):
+        esperado = self.frontend_index.read_bytes()
+        rotas = (
+            "/",
+            "/login",
+            "/campanhas",
+            "/admin",
+            "/ficha/00000000-0000-0000-0000-000000000001",
+            "/regras/classes/guerreiro?origem=link-direto",
+        )
+
+        for rota in rotas:
+            resposta = self.client.get(rota, headers={"Accept": "text/html"})
+            self.assertEqual(resposta.status_code, 200, rota)
+            self.assertIn("text/html", resposta.headers["content-type"], rota)
+            self.assertEqual(resposta.content, esperado, rota)
+
+        self.assertIn(b"/assets/", esperado)
+        self.assertNotIn(b"/src/main.tsx", esperado)
+
+    def test_asset_compilado_e_servido_sem_fallback_html(self):
+        asset = next((self.frontend_root / "assets").glob("*.js"))
+        caminho = "/" + asset.relative_to(self.frontend_root).as_posix()
+
+        resposta = self.client.get(caminho)
+
+        self.assertEqual(resposta.status_code, 200)
+        self.assertIn("javascript", resposta.headers["content-type"])
+        self.assertNotEqual(resposta.content, self.frontend_index.read_bytes())
+
+    def test_arquivo_ausente_nao_devolve_index(self):
+        for caminho in ("/assets/inexistente.js", "/models/inexistente.glb", "/sw.js"):
+            resposta = self.client.get(caminho, headers={"Accept": "text/html"})
+            self.assertEqual(resposta.status_code, 404, caminho)
+            self.assertNotIn("text/html", resposta.headers.get("content-type", ""), caminho)
+
+    def test_api_inexistente_continua_json_mesmo_aceitando_html(self):
+        for metodo in (self.client.get, self.client.post):
+            resposta = metodo(
+                "/api/v1/inexistente",
+                headers={"Accept": "text/html"},
+            )
+
+            self.assertEqual(resposta.status_code, 404)
+            self.assertIn("application/json", resposta.headers["content-type"])
+
+    def test_openapi_e_catalogos_publicos_nao_caem_no_fallback(self):
+        openapi = self.client.get(
+            "/api/openapi.json",
+            headers={"Accept": "text/html"},
+        )
+        catalogo = self.client.get(
+            "/data/ficha/classes.json",
+            headers={"Accept": "text/html"},
+        )
+        catalogo_ausente = self.client.get(
+            "/data/ficha/inexistente.json",
+            headers={"Accept": "text/html"},
+        )
+
+        self.assertEqual(openapi.status_code, 200)
+        self.assertIn("application/json", openapi.headers["content-type"])
+        self.assertEqual(catalogo.status_code, 200)
+        self.assertIn("application/json", catalogo.headers["content-type"])
+        self.assertEqual(catalogo_ausente.status_code, 404)
+        self.assertNotIn(
+            "text/html", catalogo_ausente.headers.get("content-type", "")
+        )
+
+    def test_fontes_e_templates_antigos_nao_sao_expostos(self):
+        for caminho in ("/src/main.tsx", "/templates/ficha.html"):
+            resposta = self.client.get(caminho, headers={"Accept": "text/html"})
+            self.assertEqual(resposta.status_code, 404, caminho)
+            self.assertNotIn("text/html", resposta.headers.get("content-type", ""))
+
+    def test_frontend_ausente_responde_503_sem_gerar_erro_interno(self):
+        import main
+
+        with tempfile.TemporaryDirectory() as temp:
+            index_ausente = Path(temp) / "dist" / "index.html"
+            with mock.patch.object(main, "_FRONTEND_INDEX", index_ausente):
+                resposta = main._frontend_index_response()
+
+        self.assertEqual(resposta.status_code, 503)
+        self.assertEqual(resposta.headers["cache-control"], "no-store")
+
+    def test_fallback_exige_navegacao_html(self):
+        resposta = self.client.get("/login", headers={"Accept": "application/json"})
+
+        self.assertEqual(resposta.status_code, 404)
+        self.assertIn("application/json", resposta.headers["content-type"])
+
+    def test_fallback_preserva_method_not_allowed_da_api(self):
+        resposta = self.client.get(
+            "/api/v1/auth/entrar",
+            headers={"Accept": "text/html"},
+        )
+
+        self.assertEqual(resposta.status_code, 405)
+        self.assertIn("application/json", resposta.headers["content-type"])
+
+    def test_fallback_preserva_redirect_de_barra_da_api(self):
+        resposta = self.client.get(
+            "/api/v1/contexto/",
+            headers={"Accept": "text/html"},
+            follow_redirects=False,
+        )
+
+        self.assertEqual(resposta.status_code, 307)
+        self.assertTrue(resposta.headers["location"].endswith("/api/v1/contexto"))
 
     def test_registered_paths_cover_index_and_modules(self):
         from main import app
@@ -567,7 +780,8 @@ class FrontendRouteTests(unittest.TestCase):
         caminhos = {rota.path for rota in app.routes if hasattr(rota, "path")}
         self.assertIn("/", caminhos)
         self.assertIn("/index.html", caminhos)
-        self.assertIn("/{pagina}", caminhos)
+        self.assertNotIn("/{full_path:path}", caminhos)
+        self.assertIn(404, app.exception_handlers)
 
 
 class LimiteDeTentativasTests(unittest.TestCase):

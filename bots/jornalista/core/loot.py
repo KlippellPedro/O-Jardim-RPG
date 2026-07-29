@@ -1,4 +1,4 @@
-"""Loot dos baús — logica PURA. rng injetavel. Preparado pra Estações."""
+"""Loot dos baús: logica PURA. rng injetavel. Preparado pra Estações."""
 
 from __future__ import annotations
 
@@ -12,13 +12,25 @@ try:
 except Exception:
     TZ = None
 
-PESOS_RARIDADE: Dict[str, int] = {"comum": 60, "incomum": 25, "raro": 10, "epico": 4, "lendario": 1}
+PESOS_RARIDADE: Dict[str, int] = {
+    "comum": 60,
+    "incomum": 25,
+    "raro": 10,
+    "epico": 4,
+    "lendario": 1,
+    "reliquia": 1,
+    "reliquia da criacao": 1,
+}
 LUNARIS_MIN, LUNARIS_MAX = 5, 40
+CHANCE_BAU_ENIGMA = 0.25  # 1 em cada 4 baús normais nasce trancado com enigma
 
 
 def sortear_item(catalogo, rng=_random, pesos: Optional[Dict[str, int]] = None, tipos=None):
-    """Sorteia 1 item, ponderado por raridade. Respeita peso 0 explicito
-    (raridade fora do dict recebe peso 1). None se catalogo vazio."""
+    """Sorteia 1 item, ponderado por raridade.
+
+    Um perfil de pesos explícito é autoritativo: raridades ausentes ou com
+    peso zero não participam. Retorna None se não houver item elegível.
+    """
     pesos = pesos if pesos is not None else PESOS_RARIDADE
     itens = catalogo.listar()
     if tipos:
@@ -28,10 +40,10 @@ def sortear_item(catalogo, rng=_random, pesos: Optional[Dict[str, int]] = None, 
     por_raridade: Dict[str, List] = {}
     for it in itens:
         por_raridade.setdefault(it.raridade, []).append(it)
-    raridades = list(por_raridade.keys())
-    w = [pesos[r] if r in pesos else 1 for r in raridades]
-    if sum(w) <= 0:
-        w = [1] * len(raridades)
+    raridades = [r for r in por_raridade if pesos.get(r, 0) > 0]
+    if not raridades:
+        return None
+    w = [pesos[r] for r in raridades]
     escolhida = rng.choices(raridades, weights=w, k=1)[0]
     return rng.choice(por_raridade[escolhida])
 

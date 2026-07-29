@@ -1,9 +1,9 @@
 """
-As 10 Árvores do Jardim — nome e cor oficiais, mesma fonte que
+As 10 Árvores do Jardim: nome e cor oficiais, mesma fonte que
 src/mundo/config/arvores.js usa pra cena 3D (RGB convertido pra hex aqui).
 
-Usado pelo registro por Árvore (Passo 5 do Plano_Jornalista.md, Decisão 1):
-puramente cosmético, "qual Árvore você é" — sem ligação com classe/ficha.
+Usado pelo registro por Árvore (Passo 5 do docs/Plano_Jornalista.md, Decisão 1):
+puramente cosmético, "qual Árvore você é": sem ligação com classe/ficha.
 """
 
 from __future__ import annotations
@@ -37,3 +37,4 @@ _POR_ID = {a.id: a for a in ARVORES}
 
 def obter(arvore_id: str) -> Optional[Arvore]:
     return _POR_ID.get(arvore_id)
+

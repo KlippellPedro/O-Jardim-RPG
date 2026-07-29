@@ -3,7 +3,7 @@ Apresentação (embeds, cores, paginação) do Banqueiro.
 
 Objetivo: centralizar a "cara" do bot num lugar só, pra todo comando usar a
 mesma marca, as mesmas cores por raridade/categoria e a mesma barra de
-capacidade — em vez de cada cog inventar seu próprio hex e formatação.
+capacidade: em vez de cada cog inventar seu próprio hex e formatação.
 
 Sem Discord.py "de verdade" nas partes que dá pra testar puro (barra, ícones,
 paleta); Embed/View usam discord.py porque são objetos de apresentação.
@@ -14,6 +14,7 @@ from __future__ import annotations
 from typing import Iterable, List, Optional, Sequence
 
 import discord
+from discord import app_commands
 
 from . import economia
 
@@ -22,15 +23,15 @@ MARCA = f"🌿 O Jardim · {NOME_BOT}"
 
 # Cor por categoria de comando (não confundir com cor por raridade de item).
 COR = {
-    "economia": 0xF1C40F,    # dourado — carteira, câmbio, cartão
-    "loja": 0x2ECC71,        # verde — loja, compras, venda
-    "cofre": 0x3498DB,       # azul — cofre/armazém
-    "inventario": 0x9B59B6,  # roxo — inventário
-    "bau": 0xE67E22,         # laranja — baús
-    "troca": 0xF1C40F,       # dourado — trocas entre players
-    "integracao": 0x1ABC9C,  # verde-água — vínculo com o site
-    "erro": 0xE74C3C,        # vermelho — falhas/avisos
-    "ajuda": 0x5865F2,       # blurple — menu de ajuda
+    "economia": 0xF1C40F,    # dourado: carteira, câmbio, cartão
+    "loja": 0x2ECC71,        # verde: loja, compras, venda
+    "cofre": 0x3498DB,       # azul: cofre/armazém
+    "inventario": 0x9B59B6,  # roxo: inventário
+    "bau": 0xE67E22,         # laranja: baús
+    "troca": 0xF1C40F,       # dourado: trocas entre players
+    "integracao": 0x1ABC9C,  # verde-água: vínculo com o site
+    "erro": 0xE74C3C,        # vermelho: falhas/avisos
+    "ajuda": 0x5865F2,       # blurple: menu de ajuda
 }
 
 COR_RARIDADE = {
@@ -39,6 +40,8 @@ COR_RARIDADE = {
     "raro": 0x3498DB,
     "epico": 0x9B59B6,
     "lendario": 0xF1C40F,
+    "reliquia": 0xE74C3C,
+    "reliquia da criacao": 0xE879F9,
 }
 
 ICONE_RARIDADE = {
@@ -47,9 +50,21 @@ ICONE_RARIDADE = {
     "raro": "🔵",
     "epico": "🟣",
     "lendario": "🟡",
+    "reliquia": "🔴",
+    "reliquia da criacao": "💠",
 }
 
-SIMBOLO_MOEDA = {"lunaris": "☾", "solares": "☉"}
+SIMBOLO_MOEDA = {"lunaris": "☾", "solares": "☉", "fragmentos de estrela": "✧", "creditos sombrios": "♆"}
+
+# Única fonte das 4 moedas pros Choice de app_commands: antes cada cog tinha
+# sua própria cópia (5 idênticas + uma em trocas.py com só 2 moedas, que
+# fazia /oferecer recusar Fragmentos/Créditos que /leilao_iniciar aceitava).
+MOEDAS_CHOICES = [
+    app_commands.Choice(name="Lunaris ☾", value="Lunaris"),
+    app_commands.Choice(name="Solares ☉", value="Solares"),
+    app_commands.Choice(name="Fragmentos de Estrela ✧", value="Fragmentos de Estrela"),
+    app_commands.Choice(name="Créditos Sombrios ♆", value="Créditos Sombrios"),
+]
 
 
 def cor_categoria(chave: str) -> int:
@@ -75,7 +90,7 @@ def embed(
     descricao: Optional[str] = None,
     cor: Optional[int] = None,
 ) -> discord.Embed:
-    """Embed com a marca do bot já no footer — usar em vez de discord.Embed() cru."""
+    """Embed com a marca do bot já no footer: usar em vez de discord.Embed() cru."""
     e = discord.Embed(
         title=titulo,
         description=descricao,

@@ -99,19 +99,19 @@ function criarReferencias(personagem, catalogo) {
     ...(variante?.caracteristicas || []),
     ...(assinatura ? [{
       ...assinatura,
-      titulo: `Assinatura Remanescente — ${personagem.escolhaRacial?.assinaturaNome || assinatura.titulo}`,
+      titulo: `Assinatura Remanescente - ${personagem.escolhaRacial?.assinaturaNome || assinatura.titulo}`,
     }] : []),
     ...fragmentosExpressos.map(fragmento => ({
       ...fragmento,
-      titulo: `Fragmento Expresso — ${fragmento.titulo}`,
+      titulo: `Fragmento Expresso - ${fragmento.titulo}`,
     })),
     ...maldicoesConhecidas.map(maldicao => ({
       ...maldicao,
-      titulo: `Maldição Conhecida — ${maldicao.titulo}`,
+      titulo: `Maldição Conhecida - ${maldicao.titulo}`,
     })),
     ...modificacoesInstaladas.map(modificacao => ({
       ...modificacao,
-      titulo: `Modificação ${modificacao.categoria === 'ativa' ? 'Ativa' : 'Passiva'} — ${modificacao.titulo}`,
+      titulo: `Modificação ${modificacao.categoria === 'ativa' ? 'Ativa' : 'Passiva'} - ${modificacao.titulo}`,
     })),
     ...(linhagem?.caracteristicas || []).map(referencia => ({
       ...referencia,
@@ -123,11 +123,11 @@ function criarReferencias(personagem, catalogo) {
     ...(condicaoAncestral ? [
       {
         ...condicaoAncestral.dadiva,
-        titulo: `Dádiva — ${condicaoAncestral.dadiva.titulo}`,
+        titulo: `Dádiva - ${condicaoAncestral.dadiva.titulo}`,
       },
       {
         ...condicaoAncestral.cicatriz,
-        titulo: `Cicatriz — ${condicaoAncestral.cicatriz.titulo}`,
+        titulo: `Cicatriz - ${condicaoAncestral.cicatriz.titulo}`,
       },
     ] : []),
   ];

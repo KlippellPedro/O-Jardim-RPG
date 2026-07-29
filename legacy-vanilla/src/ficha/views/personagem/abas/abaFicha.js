@@ -1,7 +1,7 @@
-// Ficha — estatísticas centrais (versão 1.0 das Regras) + recursos jogáveis.
+// Ficha - estatísticas centrais (versão 1.0 das Regras) + recursos jogáveis.
 // Início e Ficha eram abas separadas; viraram uma só (mesma ideia do projeto
 // de referência Ficha-Supremacia-do-Protesto: tudo da identidade central do
-// personagem numa página, em seções empilhadas de largura cheia — não um
+// personagem numa página, em seções empilhadas de largura cheia - não um
 // grid de cartões pequenos competindo por espaço).
 
 import { router } from '../../../../core/router.js';
@@ -447,7 +447,7 @@ function criarCardAtributo(sigla, rotulo, valor, mod, aoMudar) {
   ajuda.setAttribute('aria-label', `Como o modificador de ${rotulo} é calculado`);
   ajuda.addEventListener('click', () => {
     abrirModalSimples({
-      titulo: `Cálculo — ${rotulo}`,
+      titulo: `Cálculo: ${rotulo}`,
       corpo: `O valor do atributo é editável. O modificador é arredondado para baixo: (${rotulo} − 10) ÷ 2. Com ${valorEl.value}, o modificador é ${sinal(modificador(valorEl.value))}.`,
     });
   });
@@ -570,7 +570,7 @@ function blocoRecursos(personagem, ctx) {
   const manaMaxima = Math.max(1, (personagem.derivados?.mana ?? 1) + somaAjustes(personagem.recursos?.ajustesMana) + somarModificadores(personagem, 'recurso_maximo', 'mana'));
   const sanidadeMaxima = Math.max(1, 100 + somaAjustes(personagem.recursos?.ajustesSanidade) + somarModificadores(personagem, 'recurso_maximo', 'sanidade'));
 
-  // Vida/Mana em cima (as duas "grandes"), Sanidade/Cansaço embaixo —
+  // Vida/Mana em cima (as duas "grandes"), Sanidade/Cansaço embaixo -
   // duas linhas de duas, não uma grade de quatro disputando a mesma fileira.
   const linhaPrincipal = document.createElement('div');
   linhaPrincipal.className = 'ficha-recursos-grade';
@@ -641,7 +641,7 @@ function blocoRecursos(personagem, ctx) {
   return bloco;
 }
 
-// Aparece na hora em que o XP empurra o nível total pra cima — deixa
+// Aparece na hora em que o XP empurra o nível total pra cima - deixa
 // escolher a classe do novo nível ali mesmo, sem precisar procurar a seção
 // Classe. "Decidir depois" só fecha; o nível pendente continua disponível
 // lá embaixo, em Classe, pra investir quando quiser (classeDisponivel e

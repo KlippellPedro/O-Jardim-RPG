@@ -38,7 +38,7 @@ function renderizarDiagramaHierarquia(entrada) {
   const diagrama = document.createElement('div');
   diagrama.className = 'cosmo-diagram';
   diagrama.setAttribute('role', 'group');
-  diagrama.setAttribute('aria-label', 'Hierarquia do Jardim — clique para ver detalhes');
+  diagrama.setAttribute('aria-label', 'Hierarquia do Jardim - clique para ver detalhes');
 
   niveis.forEach((nivel, indice) => {
     const botao = document.createElement('button');

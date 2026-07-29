@@ -3,7 +3,7 @@ import { botao, campo, elemento, texto } from './ui.js';
 
 /* Bloco recolhido para "Minha conta".
 
-   Aberto por padrão, o formulário parecia uma exigência — quem entrava achava
+   Aberto por padrão, o formulário parecia uma exigência - quem entrava achava
    que precisava trocar a senha para continuar. Recolhido, some do caminho de
    quem só queria ver o perfil, e continua a um clique de quem quer trocar. */
 export function blocoTrocarSenha(ctx) {

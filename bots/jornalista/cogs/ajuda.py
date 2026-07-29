@@ -1,6 +1,6 @@
-"""Cog Ajuda — menu de comandos do Jornalista por categoria (Select do Discord).
+"""Cog Ajuda: menu de comandos do Jornalista por categoria (Select do Discord).
 
-Não existia até 17/07/2026 — o bot tinha comandos mas nenhum jeito de
+Não existia até 17/07/2026: o bot tinha comandos mas nenhum jeito de
 descobrir quais, diferente do Banqueiro/Barista que já tinham /ajuda."""
 
 from __future__ import annotations
@@ -16,20 +16,31 @@ CATEGORIAS = {
         "rotulo": "🎁 Baús automáticos",
         "descricao": "Baús que aparecem sozinhos pelo servidor.",
         "comandos": [
-            ("/bau_config", "[Mestre] Liga/desliga os baús, define canal, janela de horário e itens por baú."),
-            ("/bau_agora", "[Mestre] Solta um baú imediatamente (pra testar)."),
+            ("/bau_config", "[Mestre] Liga/desliga os baús e define horário e quantidade de itens."),
+            ("/bau_canal_adicionar <canal>", "[Mestre] Adiciona um destino à rotação aleatória."),
+            ("/bau_canal_remover <canal>", "[Mestre] Remove um destino da rotação."),
+            ("/bau_canais", "[Mestre] Lista destinos válidos e canais ignorados por falta de acesso."),
+            ("/bau_pendentes", "[Mestre] Lista vencedores cuja entrega ainda precisa ser confirmada."),
+            ("/bau_reprocessar <mensagem_id>", "[Mestre] Tenta novamente a mesma entrega, com vencedor, prêmio e chave preservados."),
+            ("/bau_agora", "[Mestre] Solta um baú imediatamente, sorteando um canal (pra testar)."),
+            ("/bau_canal_tema <canal> [tipo]", "[Mestre] Enviesa o tipo de item que cai nos baús de um canal (imersão geográfica)."),
         ],
     },
     "jornal": {
         "rotulo": "📰 Jornal",
         "descricao": "Notícias, estação e clima do Jardim.",
         "comandos": [
-            ("/jornal publicar <titulo> <conteudo>", "[Mestre] Publica uma notícia customizada."),
+            ("/jornal publicar", "[Mestre] Abre o formulário, mostra uma prévia privada e só publica após confirmação."),
+            ("/jornal principal <canal>", "[Mestre] Define o canal principal e fallback do Jornalista."),
             ("/jornal estacao_definir <estacao>", "[Mestre] Define a estação do Jardim (muda o loot dos baús)."),
             ("/jornal avancar_mes", "[Mestre] Sorteia o clima do mês, restrito pela estação atual."),
+            ("/jornal clima_auto <ligar>", "[Mestre] Liga/desliga o boletim automático do Jornal Lunar (a cada ~48h)."),
+            ("/jornal estacao_auto <ligar>", "[Mestre] Liga/desliga a rotação automática de estação (avança 1x/semana)."),
+            ("/jornal rumor <texto> [horas]", "[Mestre] Publica um rumor e agenda um baú surpresa em algumas horas."),
+            ("/jornal desafio <pergunta> [recompensa]", "[Mestre] Publica uma pergunta; quem responder primeiro no canal ganha Lunaris."),
             ("/jornal mensagem <tipo> <texto>", "[Mestre] Edita o texto de entrada/saída de membros (use {mencao} e {nome})."),
             ("/jornal mensagem_ver <tipo>", "[Mestre] Mostra o texto atual (personalizado ou padrão) de entrada/saída."),
-            ("/jornal canal <categoria> <canal>", "[Mestre] Define o canal de cada conteúdo (entrada, saída, notícia, clima)."),
+            ("/jornal canal <categoria> <canal>", "[Mestre] Define o canal de cada conteúdo (entrada, saída, notícia, clima e dinheiro)."),
             ("/jornal canais", "[Mestre] Mostra em que canal cada conteúdo é publicado."),
             ("/jornal imagem <tipo> <url>", "[Mestre] Imagem fixa das boas-vindas ou da despedida."),
             ("/jornal canais_boasvindas <canal1>", "[Mestre] Canais do bloco 'Confira estes canais' das boas-vindas."),
@@ -38,7 +49,7 @@ CATEGORIAS = {
     },
     "registro": {
         "rotulo": "🪪 Registro (reações)",
-        "descricao": "Painéis de cargos por reação — o jogador reage com o emoji (estilo Zira).",
+        "descricao": "Painéis de cargos por reação: o jogador reage com o emoji (estilo Zira).",
         "comandos": [
             ("/registro criar <titulo> [descricao] [unico]", "[Mestre] Cria um painel novo (ex.: Idade, Pronomes)."),
             ("/registro opcao <painel> <emoji> <texto> [cargo] [criar_cargo]", "[Mestre] Adiciona uma opção de cargo (um emoji) ao painel."),
@@ -52,14 +63,22 @@ CATEGORIAS = {
             ("/registro preset_arvores", "[Mestre] Cria um painel pronto com as 10 Árvores do Jardim."),
         ],
     },
+    "estrelas": {
+        "rotulo": "✨ Horóscopo e Entrevista",
+        "descricao": "Consultas e respostas das features que rodam sozinhas pelo Jardim.",
+        "comandos": [
+            ("/horoscopo", "Mostra a Árvore favorecida pelas estrelas hoje e se você tem o cargo dela."),
+            ("/entrevista_responder", "Responde à entrevista pendente do Jornal Lunar (use se sua DM estiver fechada)."),
+        ],
+    },
 }
 
 
 def _pagina(chave: str) -> discord.Embed:
     info = CATEGORIAS[chave]
     emb = ui.embed(info["rotulo"], categoria="noticia", descricao=info["descricao"])
-    corpo = "\n".join(f"**{cmd}**\n{desc}" for cmd, desc in info["comandos"])
-    emb.add_field(name="Comandos", value=corpo[:1024], inline=False)
+    for cmd, desc in info["comandos"]:
+        emb.add_field(name=cmd[:256], value=desc[:1024], inline=False)
     emb.set_footer(text=f"{ui.MARCA} · Escolha outra categoria no menu abaixo")
     return emb
 

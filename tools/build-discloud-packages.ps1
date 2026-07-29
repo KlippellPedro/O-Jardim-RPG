@@ -13,7 +13,6 @@ $stageRoot = Join-Path $tempRoot ("jardim-discloud-" + [guid]::NewGuid().ToStrin
 $platformStage = Join-Path $stageRoot 'plataforma'
 $banqueiroStage = Join-Path $stageRoot 'banqueiro'
 $jornalistaStage = Join-Path $stageRoot 'jornalista'
-$baristaStage = Join-Path $stageRoot 'barista'
 $gerenteStage = Join-Path $stageRoot 'gerente'
 
 function Copy-ProjectItem {
@@ -23,6 +22,39 @@ function Copy-ProjectItem {
     throw "Arquivo obrigatorio ausente: $Source"
   }
   Copy-Item -LiteralPath $sourcePath -Destination $DestinationRoot -Recurse -Force
+}
+
+function Build-Frontend {
+  $npmCommand = Get-Command npm.cmd -ErrorAction SilentlyContinue
+  if (-not $npmCommand) {
+    $npmCommand = Get-Command npm -ErrorAction SilentlyContinue
+  }
+  if (-not $npmCommand) {
+    throw 'npm nao encontrado. Instale o Node.js antes de gerar o pacote da plataforma.'
+  }
+
+  Push-Location $root
+  try {
+    & $npmCommand.Source run build
+    if ($LASTEXITCODE -ne 0) {
+      throw "Build do frontend falhou com codigo $LASTEXITCODE."
+    }
+  }
+  finally {
+    Pop-Location
+  }
+
+  $requiredBuildItems = @(
+    @{ Path = 'dist\index.html'; Type = 'Leaf' },
+    @{ Path = 'dist\assets'; Type = 'Container' },
+    @{ Path = 'dist\models'; Type = 'Container' }
+  )
+  foreach ($item in $requiredBuildItems) {
+    $absolutePath = Join-Path $root $item.Path
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType $item.Type)) {
+      throw "Build incompleto: item obrigatorio ausente: $($item.Path)"
+    }
+  }
 }
 
 function Remove-GeneratedPythonFiles {
@@ -47,7 +79,11 @@ function Remove-GeneratedPythonFiles {
 }
 
 try {
-  New-Item -ItemType Directory -Path $platformStage, $banqueiroStage, $jornalistaStage, $baristaStage, $gerenteStage -Force | Out-Null
+  if (-not $BotsOnly) {
+    Build-Frontend
+  }
+
+  New-Item -ItemType Directory -Path $platformStage, $banqueiroStage, $jornalistaStage, $gerenteStage -Force | Out-Null
 
   if (-not $BotsOnly) {
     @(
@@ -63,8 +99,11 @@ try {
       'plataforma\README.md'
     ) | ForEach-Object { Copy-ProjectItem $_ $platformStage }
 
-    @('index.html', 'assets', 'styles', 'src', 'templates') |
-      ForEach-Object { Copy-ProjectItem $_ $platformStage }
+    Copy-ProjectItem 'dist' $platformStage
+
+    $platformTools = Join-Path $platformStage 'tools'
+    New-Item -ItemType Directory -Path $platformTools -Force | Out-Null
+    Copy-ProjectItem 'tools\migrar-inventario-cofre.py' $platformTools
 
     $platformData = Join-Path $platformStage 'data'
     New-Item -ItemType Directory -Path $platformData -Force | Out-Null
@@ -99,25 +138,6 @@ try {
   ) | ForEach-Object { Copy-ProjectItem $_ $jornalistaStage }
 
   @(
-    'bots\barista\cogs',
-    'bots\barista\core',
-    'bots\barista\main.py',
-    'bots\barista\requirements.txt',
-    'bots\barista\discloud.config',
-    'bots\barista\.discloudignore',
-    'bots\barista\.gitignore',
-    'bots\barista\.env.example',
-    'bots\barista\README.md'
-  ) | ForEach-Object { Copy-ProjectItem $_ $baristaStage }
-
-  # Cookie de conta YouTube (opcional, NUNCA versionado no git): entra no pacote
-  # de deploy quando existir, pra o Barista tocar do YouTube direto na Discloud.
-  $baristaCookies = Join-Path $root 'bots\barista\cookies.txt'
-  if (Test-Path -LiteralPath $baristaCookies) {
-    Copy-Item -LiteralPath $baristaCookies -Destination $baristaStage -Force
-  }
-
-  @(
     'bots\Gerente\cogs',
     'bots\Gerente\core',
     'bots\Gerente\main.py',
@@ -134,10 +154,7 @@ try {
   $gerenteDocs = Join-Path $gerenteStage 'fontes\docs\regras'
   $gerenteFicha = Join-Path $gerenteStage 'fontes\data\ficha'
   New-Item -ItemType Directory -Path $gerenteDocs, $gerenteFicha -Force | Out-Null
-  @(
-    'docs\regras\fundamentos-v1.md',
-    'docs\regras\balanceamento-v0.2.md'
-  ) | ForEach-Object { Copy-ProjectItem $_ $gerenteDocs }
+
   @(
     'data\ficha\classes.json',
     'data\ficha\legados.json',
@@ -151,7 +168,6 @@ try {
   if (-not $PlatformOnly) {
     Remove-GeneratedPythonFiles $banqueiroStage
     Remove-GeneratedPythonFiles $jornalistaStage
-    Remove-GeneratedPythonFiles $baristaStage
     Remove-GeneratedPythonFiles $gerenteStage
   }
   if (-not $BotsOnly) {
@@ -161,20 +177,17 @@ try {
   $platformZip = Join-Path $root 'plataforma\plataforma-discloud.zip'
   $banqueiroZip = Join-Path $root 'bots\banqueiro\banqueiro-discloud.zip'
   $jornalistaZip = Join-Path $root 'bots\jornalista\jornalista-discloud.zip'
-  $baristaZip = Join-Path $root 'bots\barista\barista-discloud.zip'
   $gerenteZip = Join-Path $root 'bots\Gerente\gerente-discloud.zip'
   $pacotes = @()
   if (-not $PlatformOnly) {
     if (Test-Path -LiteralPath $banqueiroZip) { Remove-Item -LiteralPath $banqueiroZip -Force }
     if (Test-Path -LiteralPath $jornalistaZip) { Remove-Item -LiteralPath $jornalistaZip -Force }
-    if (Test-Path -LiteralPath $baristaZip) { Remove-Item -LiteralPath $baristaZip -Force }
     if (Test-Path -LiteralPath $gerenteZip) { Remove-Item -LiteralPath $gerenteZip -Force }
 
     Compress-Archive -Path (Join-Path $banqueiroStage '*') -DestinationPath $banqueiroZip -CompressionLevel Optimal
     Compress-Archive -Path (Join-Path $jornalistaStage '*') -DestinationPath $jornalistaZip -CompressionLevel Optimal
-    Compress-Archive -Path (Join-Path $baristaStage '*') -DestinationPath $baristaZip -CompressionLevel Optimal
     Compress-Archive -Path (Join-Path $gerenteStage '*') -DestinationPath $gerenteZip -CompressionLevel Optimal
-    $pacotes = @($banqueiroZip, $jornalistaZip, $baristaZip, $gerenteZip)
+    $pacotes = @($banqueiroZip, $jornalistaZip, $gerenteZip)
   }
 
   if (-not $BotsOnly) {

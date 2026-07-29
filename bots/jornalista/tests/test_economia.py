@@ -1,5 +1,5 @@
 """
-Testes da fatia de economia que o Jornalista usa pra entregar loot — rodam
+Testes da fatia de economia que o Jornalista usa pra entregar loot: rodam
 SEM Discord e SEM banco de dados.
 Uso: python tests/test_economia.py  (a partir de bots/jornalista)
 """

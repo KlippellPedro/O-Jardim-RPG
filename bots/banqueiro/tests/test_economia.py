@@ -1,5 +1,5 @@
 """
-Testes do motor da economia — rodam SEM Discord/token.
+Testes do motor da economia: rodam SEM Discord/token.
 Uso: python tests/test_economia.py   (a partir da pasta bots/banqueiro)
 """
 
@@ -13,7 +13,7 @@ BASE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE))
 
 from core import economia
-from core.db import SaldoInsuficiente
+from core.db import AlvoProtegido, SaldoInsuficiente
 from tests.db_utils import novo_db
 
 from core.catalogo import Catalogo
@@ -68,9 +68,11 @@ def test_seguranca_cofre():
 
 
 def test_capacidade_moeda_do_cofre():
-    assert economia.capacidade_moeda_do_cofre("comum") == 300
-    assert economia.pode_guardar_moeda(290, 10, "comum") is True
-    assert economia.pode_guardar_moeda(291, 10, "comum") is False
+    assert [economia.capacidade_moeda_do_cofre(tier) for tier in (
+        "comum", "prata", "dourado", "arcano", "eterno"
+    )] == [500, 1500, 5000, 15000, 50000]
+    assert economia.pode_guardar_moeda(490, 10, "comum") is True
+    assert economia.pode_guardar_moeda(491, 10, "comum") is False
 
 
 def test_db():
@@ -163,6 +165,177 @@ def test_db_cooldown_cofre_e_protecao_vitima():
     assert db.get_protecao_vitima(g, u) is None
     db.registrar_protecao_vitima(g, u, daqui_1h)
     assert db.get_protecao_vitima(g, u) is not None
+
+
+def test_db_reserva_cooldown_e_protecao_do_mestre():
+    db = novo_db()
+    g, ladrao, mestre = "guild_mestre", "ladrao", "mestre"
+    db.garantir_jogador(g, ladrao)
+
+    assert db.get_mestre_protegido(g) is None
+    db.set_cambio(g, 12, 0.03)
+    db.set_mestre_protegido(g, mestre)
+    assert db.get_mestre_protegido(g) == mestre
+    assert db.get_cambio(g) == (12, 0.03)
+
+    agora = datetime.now(timezone.utc)
+    proxima = agora + timedelta(hours=1)
+    reservado, salvo = db.reservar_tentativa_roubo(
+        g, ladrao, agora, proxima
+    )
+    assert reservado is True and salvo == proxima
+    reservado, salvo = db.reservar_tentativa_roubo(
+        g, ladrao, agora, agora + timedelta(hours=2)
+    )
+    assert reservado is False and salvo == proxima
+
+    saldo_antes = db.get_saldo(g, ladrao, "Lunaris")
+    assert db.penalizar_tentativa_contra_mestre(g, ladrao, mestre) == 1
+    assert db.get_saldo(g, ladrao, "Lunaris") == saldo_antes - 1
+    assert db.listar_extrato(g, ladrao)[0]["delta"] == -1
+
+    db.set_mestre_protegido(g, None)
+    assert db.get_mestre_protegido(g) is None
+
+
+def test_db_reserva_exclusiva_do_alvo_de_roubo():
+    db = novo_db()
+    g, alvo = "guild_reserva_alvo", "alvo"
+    agora = datetime.now(timezone.utc)
+    primeira = agora + timedelta(seconds=30)
+    segunda = agora + timedelta(seconds=45)
+
+    reservado, salvo = db.reservar_alvo_roubo(g, alvo, agora, primeira)
+    assert reservado is True and salvo == primeira
+    reservado, salvo = db.reservar_alvo_roubo(g, alvo, agora, segunda)
+    assert reservado is False and salvo == primeira
+    assert db.liberar_alvo_roubo(g, alvo, segunda) is False
+    assert db.liberar_alvo_roubo(g, alvo, primeira) is True
+
+    reservado, salvo = db.reservar_alvo_roubo(g, alvo, agora, segunda)
+    assert reservado is True and salvo == segunda
+
+
+def test_db_roubo_e_recompensa_sao_atomicos():
+    db = novo_db()
+    g, ladrao, alvo = "guild_roubo_atomico", "ladrao", "alvo"
+    db.garantir_jogador(g, ladrao)
+    db.garantir_jogador(g, alvo)
+
+    # Cria dívida sem usar recebimentos para quitá-la, depois abastece a
+    # carteira que será roubada e cadastra as duas partes da recompensa.
+    db.debitar(g, alvo, "Lunaris", 100, permitir_negativo_ate=200)
+    db.creditar(g, alvo, "Lunaris", 100)
+    db.adicionar_recompensa(g, alvo, 50, sistema=False)
+    db.adicionar_recompensa(g, alvo, 30, sistema=True)
+
+    resultado = db.executar_roubo_carteira(
+        g,
+        ladrao,
+        alvo,
+        "Ladrão",
+        "Alvo",
+        datetime.now(timezone.utc) + timedelta(hours=1),
+    )
+    assert resultado["recompensa"]["valor"] == 80
+    assert resultado["recompensa"]["divida_perdoada"] == 80
+    assert resultado["valor"] == 50
+    assert db.get_saldo(g, alvo, "Lunaris") == 50
+    assert db.get_saldo(g, ladrao, "Lunaris") == 150
+    assert db.get_divida(g, alvo) == 0
+    assert db.get_recompensa(g, alvo)["valor"] == 0
+
+    # Uma segunda transação pode roubar saldo, mas nunca paga o mesmo bounty.
+    segunda = db.executar_roubo_carteira(
+        g,
+        ladrao,
+        alvo,
+        "Ladrão",
+        "Alvo",
+        datetime.now(timezone.utc) + timedelta(hours=1),
+    )
+    assert segunda["recompensa"]["valor"] == 0
+
+
+def test_db_roubo_reverte_tudo_se_a_transacao_falhar():
+    db = novo_db()
+    g, ladrao, alvo = "guild_roubo_rollback", "ladrao", "alvo"
+    db.garantir_jogador(g, ladrao)
+    db.garantir_jogador(g, alvo)
+    saldo_ladrao = db.get_saldo(g, ladrao, "Lunaris")
+    saldo_alvo = db.get_saldo(g, alvo, "Lunaris")
+    original = db._resgatar_recompensa_tx
+
+    def falhar(*_args, **_kwargs):
+        raise RuntimeError("falha simulada")
+
+    db._resgatar_recompensa_tx = falhar
+    try:
+        db.executar_roubo_carteira(
+            g,
+            ladrao,
+            alvo,
+            "Ladrão",
+            "Alvo",
+            datetime.now(timezone.utc) + timedelta(hours=1),
+        )
+        raise AssertionError("a falha simulada deveria escapar")
+    except RuntimeError as exc:
+        assert str(exc) == "falha simulada"
+    finally:
+        db._resgatar_recompensa_tx = original
+
+    assert db.get_saldo(g, ladrao, "Lunaris") == saldo_ladrao
+    assert db.get_saldo(g, alvo, "Lunaris") == saldo_alvo
+    assert db.get_protecao_vitima(g, alvo) is None
+
+
+def test_db_roubo_revalida_mestre_no_instante_da_transferencia():
+    db = novo_db()
+    g, ladrao, alvo = "guild_protecao_tardia", "ladrao", "mestre"
+    db.garantir_jogador(g, ladrao)
+    db.garantir_jogador(g, alvo)
+    saldo_ladrao = db.get_saldo(g, ladrao, "Lunaris")
+    saldo_alvo = db.get_saldo(g, alvo, "Lunaris")
+    db.set_mestre_protegido(g, alvo)
+
+    try:
+        db.executar_roubo_carteira(
+            g,
+            ladrao,
+            alvo,
+            "Ladrão",
+            "Mestre",
+            datetime.now(timezone.utc) + timedelta(hours=1),
+        )
+        raise AssertionError("a proteção tardia deveria impedir a transferência")
+    except AlvoProtegido:
+        pass
+
+    assert db.get_saldo(g, ladrao, "Lunaris") == saldo_ladrao
+    assert db.get_saldo(g, alvo, "Lunaris") == saldo_alvo
+
+
+def test_db_roubo_de_cofre_e_multa_transferem_atomicamente():
+    db = novo_db()
+    g, ladrao, alvo = "guild_cofre_atomico", "ladrao", "alvo"
+    db.garantir_jogador(g, ladrao)
+    db.garantir_jogador(g, alvo)
+    db.creditar_cofre(g, alvo, "Lunaris", 60)
+
+    resultado = db.executar_roubo_cofre(
+        g, ladrao, alvo, "Ladrão", "Alvo"
+    )
+    assert resultado["valor"] == 30
+    assert db.get_saldo_cofre(g, alvo, "Lunaris") == 30
+    assert db.get_saldo(g, ladrao, "Lunaris") == 50
+
+    multa = db.transferir_multa_roubo(
+        g, ladrao, alvo, 0.20, "Ladrão", "Alvo"
+    )
+    assert multa == 10
+    assert db.get_saldo(g, ladrao, "Lunaris") == 40
+    assert db.get_saldo(g, alvo, "Lunaris") == 30
 
 
 def test_db_recompensa():

@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────
-   O Jardim RPG — Ficha
+   O Jardim RPG - Ficha
    Lista, criação e ficha completa persistidas na conta e campanha.
    ───────────────────────────────────────────────────────── */
 
@@ -26,7 +26,7 @@ function mostrarToast(mensagem, tipo) {
   toastTimer = setTimeout(() => { toast.hidden = true; }, 4000);
 }
 
-// Link do topo é o único "voltar" da página — na lista, sai do app (link de
+// Link do topo é o único "voltar" da página - na lista, sai do app (link de
 // verdade); na ficha de um personagem, volta pra lista (navegação da SPA,
 // substitui o antigo breadcrumb duplicado que ficava embaixo dele).
 function apontarBackParaApp() {

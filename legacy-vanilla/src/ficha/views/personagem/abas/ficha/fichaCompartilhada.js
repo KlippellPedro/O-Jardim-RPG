@@ -63,7 +63,7 @@ function atualizarStatsCalculadosNoDom(personagem) {
   });
 }
 
-// ── Identidade — campos soltos, editáveis. Trocar a raça recalcula os
+// ── Identidade - campos soltos, editáveis. Trocar a raça recalcula os
 // derivados e sincroniza eventuais ajustes raciais de atributo.
 
 export function criarCampoTexto({ rotulo, valor, placeholder, datalistId, datalistOpcoes, aoMudar }) {

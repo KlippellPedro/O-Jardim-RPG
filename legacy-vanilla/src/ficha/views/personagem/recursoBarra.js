@@ -1,4 +1,4 @@
-// Barra de recurso — valor atual/máximo sobreposto numa barra colorida por
+// Barra de recurso - valor atual/máximo sobreposto numa barra colorida por
 // recurso, com botões de passo rápido (±1/±5, configurável) nas duas pontas
 // e o número atual como input editável (aceita valor absoluto OU delta,
 // +N/-N). Layout inspirado no HUD do projeto de referência
@@ -6,7 +6,7 @@
 // Jardim (--blood, --neon, --arkania...) em vez de inventar cor nova.
 //
 // Sem `maximo`, vira um "chip" simples (steppers + número, sem barra de
-// preenchimento) — usado por recursos sem teto, como Lunaris.
+// preenchimento) - usado por recursos sem teto, como Lunaris.
 
 function aplicarEntrada(valorAtual, entrada) {
   const texto = entrada.trim();
@@ -34,7 +34,7 @@ export function criarBarraRecurso({
   limiteMaximo = maximo,
   cor = 'var(--gold)',
   incrementos = [1, 5],
-  critico = 'baixo', // 'baixo' (alerta perto do mínimo) | 'alto' (perto do teto, ex. Cansaço) | false (sem alerta — XP/Lunaris não têm "zona de perigo")
+  critico = 'baixo', // 'baixo' (alerta perto do mínimo) | 'alto' (perto do teto, ex. Cansaço) | false (sem alerta - XP/Lunaris não têm "zona de perigo")
   mostrarRotulo = true,
   acoes = [],
   tipo = 'padrao',

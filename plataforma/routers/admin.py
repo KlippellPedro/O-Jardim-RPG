@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 
 from core.audit import record_audit
 from core.backup import gerar_backup, nome_do_arquivo
@@ -102,8 +102,8 @@ def list_users(
             SELECT COUNT(*) AS total
             FROM usuarios
             WHERE (%s = '' OR nome_exibicao ILIKE %s OR email ILIKE %s)
-              AND (%s IS NULL OR papel_plataforma=%s)
-              AND (%s IS NULL OR ativo=%s)
+              AND (%s::text IS NULL OR papel_plataforma=%s)
+              AND (%s::boolean IS NULL OR ativo=%s)
             """,
             (term, like_term, like_term, papel, papel, ativo, ativo),
         ).fetchone()["total"]
@@ -113,8 +113,8 @@ def list_users(
                    email_verificado, criado_em, atualizado_em
             FROM usuarios
             WHERE (%s = '' OR nome_exibicao ILIKE %s OR email ILIKE %s)
-              AND (%s IS NULL OR papel_plataforma=%s)
-              AND (%s IS NULL OR ativo=%s)
+              AND (%s::text IS NULL OR papel_plataforma=%s)
+              AND (%s::boolean IS NULL OR ativo=%s)
             ORDER BY ativo DESC, papel_plataforma, nome_exibicao
             LIMIT %s OFFSET %s
             """,
@@ -219,6 +219,30 @@ def download_backup(
             "Cache-Control": "no-store",
         },
     )
+
+
+@router.get("/backup-automatico")
+def automatic_backup_status(
+    request: Request,
+    user: AuthenticatedUser = Depends(require_platform_admin),
+):
+    del user
+    manager = getattr(request.app.state, "automatic_backup", None)
+    if manager is None:
+        settings = request.app.state.settings
+        return {
+            "ativo": False,
+            "executando": False,
+            "intervalo_horas": settings.automatic_backup_interval_hours,
+            "retencao": settings.automatic_backup_retention,
+            "arquivos": 0,
+            "ultimo_arquivo": None,
+            "ultimo_em": None,
+            "proximo_em": None,
+            "ultimo_erro": None,
+            "ultimo_resumo": None,
+        }
+    return manager.status()
 
 
 @router.get("/campanhas")

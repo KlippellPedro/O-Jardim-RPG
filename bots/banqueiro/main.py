@@ -1,5 +1,5 @@
 """
-O Jardim RPG — bot Banqueiro.
+O Jardim RPG: bot Banqueiro.
 Ponto de entrada. Roda com: python main.py  (com o .env preenchido).
 """
 
@@ -13,6 +13,7 @@ from discord.ext import commands
 from core import config
 from core.db import Database, DatabaseUnavailable
 from core.catalogo import Catalogo
+from core.inventario import Inventario
 from core.platform_api import PlatformClient
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -24,8 +25,34 @@ EXTENSOES = (
     "cogs.trocas",
     "cogs.integracao",
     "cogs.recompensas",
+    "cogs.protecao",
+    "cogs.mercado",
+    "cogs.investimentos",
+    "cogs.emprestimos",
+    "cogs.loteria",
     "cogs.ajuda",
 )
+
+
+async def on_app_command_error(interaction: discord.Interaction, error: discord.app_commands.AppCommandError) -> None:
+    """Sem isso, uma checagem falhando (ex.: /setroubo sem permissão) mostra
+    pro usuário só o genérico "The application did not respond"."""
+    if isinstance(error, discord.app_commands.MissingPermissions):
+        mensagem = "⚠️ Você precisa da permissão **Gerenciar Servidor** pra usar esse comando."
+    elif isinstance(error, discord.app_commands.CommandOnCooldown):
+        mensagem = f"🕒 Calma aí: tente de novo em {error.retry_after:.0f}s."
+    elif isinstance(error, discord.app_commands.CheckFailure):
+        mensagem = "⚠️ Você não tem permissão pra usar esse comando."
+    else:
+        log.exception("erro nao tratado num comando de aplicacao", exc_info=error)
+        mensagem = "⚠️ Algo deu errado ao executar esse comando. Tente de novo em instantes."
+    try:
+        if interaction.response.is_done():
+            await interaction.followup.send(mensagem, ephemeral=True)
+        else:
+            await interaction.response.send_message(mensagem, ephemeral=True)
+    except discord.HTTPException:
+        log.info("nao consegui avisar o usuario sobre um erro de comando")
 
 
 class Banqueiro(commands.Bot):
@@ -45,6 +72,9 @@ class Banqueiro(commands.Bot):
                     config.PLATFORM_API_URL,
                     config.SERVICE_API_KEY,
                 )
+            # Fachada única de posse de item (cofre da plataforma vs
+            # tabela `inventario` local): ver core/inventario.py.
+            self.inventario = Inventario(self)
         except Exception:
             self.db.fechar()
             raise
@@ -90,12 +120,19 @@ class Banqueiro(commands.Bot):
         return n, desativados, erros
 
     async def setup_hook(self):
+        self.tree.on_error = on_app_command_error
         for ext in EXTENSOES:
             await self.load_extension(ext)
             log.info("Cog carregado: %s", ext)
         if config.GUILD_ID:
             guild = discord.Object(id=int(config.GUILD_ID))
             self.tree.copy_global_to(guild=guild)
+            # GUILD_ID coloca o bot em modo de servidor único. Limpa comandos
+            # globais antigos antes de sincronizar a cópia local; sem isso o
+            # Discord pode continuar exibindo as duas versões por até a
+            # propagação global terminar.
+            self.tree.clear_commands(guild=None)
+            await self.tree.sync()
             comandos = await self.tree.sync(guild=guild)
             log.info("Slash sincronizado no servidor %s (%d comandos).", config.GUILD_ID, len(comandos))
         else:

@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Search, Crosshair, Dices, Pencil, Trash2, Flame } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Search, Crosshair, Dices, Pencil, Trash2, Flame, GripVertical, Star } from 'lucide-react';
+import { Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
-import { LabeledInput, LabeledSelect } from '../components/SharedFichaComponents';
+import { LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
+import { useCharacterStore } from '../../../store/useCharacterStore';
 
 interface IAtaque {
   id: string;
@@ -13,6 +14,8 @@ interface IAtaque {
   bonusAcerto: number;
   dano: string;
   alcance: string;
+  favorito?: boolean;
+  isInventory?: boolean;
 }
 
 interface IResultadoRolagem {
@@ -24,6 +27,12 @@ interface IResultadoRolagem {
 
 const TIPOS_ATAQUE = ['Corpo a Corpo', 'Distância', 'Alcance'];
 
+const TIPO_ATAQUE_COLORS: Record<string, string> = {
+  'Corpo a Corpo': 'bg-red-500/10 border-red-500/30 text-red-400',
+  'Distância': 'bg-amber-500/10 border-amber-500/30 text-amber-400',
+  'Alcance': 'bg-purple-500/10 border-purple-500/30 text-purple-400'
+};
+
 const FORM_VAZIO = { nome: '', tipo: 'Corpo a Corpo', bonusAcerto: '0', dano: '', alcance: '' };
 
 function gerarId(): string {
@@ -34,26 +43,81 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
   const [busca, setBusca] = useState('');
   const [modalAberto, setModalAberto] = useState(false);
   const [editandoId, setEditandoId] = useState<string | null>(null);
+  const [editandoInventario, setEditandoInventario] = useState(false);
   const [form, setForm] = useState(FORM_VAZIO);
   const [rolando, setRolando] = useState<string | null>(null);
   const [resultado, setResultado] = useState<IResultadoRolagem | null>(null);
 
   const campanhaId = useAuthStore(state => state.campanhaAtiva?.id);
+  const mutateEconomy = useCharacterStore((state) => state.mutateEconomy);
 
-  const ataques: IAtaque[] = character.ficha?.ataques || [];
+  const ataquesManuais: IAtaque[] = character.ficha?.ataques || [];
+  
+  const armasEquipadas: IAtaque[] = (character.inventarioCentral || [])
+    .filter((i: any) => i.dados?.categoria === 'arma' && i.dados?.equipado)
+    .map((i: any) => ({
+      id: i.item_id,
+      nome: i.titulo,
+      tipo: i.dados?.tipoAtaque || 'Corpo a Corpo',
+      bonusAcerto: i.dados?.bonusAcerto || 0,
+      dano: i.dados?.dano || '',
+      alcance: i.dados?.alcance || '1,5m',
+      favorito: i.dados?.favorito || false,
+      isInventory: true
+    }));
 
-  const ataquesVisiveis = ataques.filter((a: any) =>
-    !busca || a.nome?.toLowerCase().includes(busca.toLowerCase())
-  );
+  const ordemAtaques: string[] = character.ficha?.ordemAtaques || [];
+  const ataques: IAtaque[] = [...armasEquipadas, ...ataquesManuais];
+
+  const ataquesVisiveis = ataques
+    .filter((a: any) => !busca || a.nome?.toLowerCase().includes(busca.toLowerCase()))
+    .sort((a, b) => {
+      const ia = ordemAtaques.indexOf(a.id);
+      const ib = ordemAtaques.indexOf(b.id);
+      if (ia === -1 && ib === -1) return 0;
+      if (ia === -1) return 1;
+      if (ib === -1) return -1;
+      return ia - ib;
+    });
+
+  const handleReorder = (novosItens: IAtaque[]) => {
+    onUpdate(['ficha', 'ordemAtaques'], novosItens.map(a => a.id));
+  };
+
+  const toggleFavorito = (id: string, isInventory?: boolean) => {
+    const itemTarget = ataques.find(a => a.id === id);
+    const wasFavorite = itemTarget?.favorito;
+
+    if (isInventory) {
+      void mutateEconomy(character.id, (current) => {
+        const inventario = current.inventario.map((item) => (
+          item.item_id === id
+            ? { ...item, dados: { ...item.dados, favorito: !item.dados?.favorito } }
+            : item
+        ));
+        return { carteira: current.carteira, inventario };
+      });
+    } else {
+      const novaLista = ataquesManuais.map((a: IAtaque) => a.id === id ? { ...a, favorito: !a.favorito } : a);
+      onUpdate(['ficha', 'ataques'], novaLista);
+    }
+    
+    if (!wasFavorite) {
+       const novaOrdem = [id, ...ordemAtaques.filter(x => x !== id)];
+       onUpdate(['ficha', 'ordemAtaques'], novaOrdem);
+    }
+  };
 
   const abrirNovo = () => {
     setEditandoId(null);
+    setEditandoInventario(false);
     setForm(FORM_VAZIO);
     setModalAberto(true);
   };
 
   const abrirEditar = (item: IAtaque) => {
     setEditandoId(item.id);
+    setEditandoInventario(Boolean(item.isInventory));
     setForm({
       nome: item.nome || '',
       tipo: item.tipo || 'Corpo a Corpo',
@@ -67,6 +131,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
   const fecharModal = () => {
     setModalAberto(false);
     setEditandoId(null);
+    setEditandoInventario(false);
     setForm(FORM_VAZIO);
   };
 
@@ -75,26 +140,62 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
     if (!nome) return;
 
     const bonusNumerico = Number(form.bonusAcerto);
-    const item: IAtaque = {
-      id: editandoId || gerarId(),
-      nome,
-      tipo: form.tipo || 'Corpo a Corpo',
-      bonusAcerto: Number.isFinite(bonusNumerico) ? bonusNumerico : 0,
-      dano: form.dano.trim(),
-      alcance: form.alcance.trim(),
-    };
 
-    const novaLista = editandoId
-      ? ataques.map((a: IAtaque) => (a.id === editandoId ? item : a))
-      : [...ataques, item];
+    if (editandoId && editandoInventario) {
+      void mutateEconomy(character.id, (current) => {
+        const inventario = current.inventario.map((item) => {
+          if (item.item_id !== editandoId) return item;
+          return {
+            ...item,
+            titulo: nome,
+            dados: {
+              ...item.dados,
+              tipoAtaque: form.tipo,
+              bonusAcerto: Number.isFinite(bonusNumerico) ? bonusNumerico : 0,
+              dano: form.dano.trim(),
+              alcance: form.alcance.trim()
+            }
+          };
+        });
+        return { carteira: current.carteira, inventario };
+      });
+    } else {
+      const item: IAtaque = {
+        id: editandoId || gerarId(),
+        nome,
+        tipo: form.tipo || 'Corpo a Corpo',
+        bonusAcerto: Number.isFinite(bonusNumerico) ? bonusNumerico : 0,
+        dano: form.dano.trim(),
+        alcance: form.alcance.trim(),
+      };
 
-    onUpdate(['ficha', 'ataques'], novaLista);
+      const novaLista = editandoId
+        ? ataquesManuais.map((a: IAtaque) => (a.id === editandoId ? item : a))
+        : [...ataquesManuais, item];
+
+      onUpdate(['ficha', 'ataques'], novaLista);
+    }
+    
     fecharModal();
   };
 
   const excluir = (item: IAtaque) => {
+    if (item.isInventory) {
+      if (!window.confirm(`Desequipar a arma "${item.nome}"? Ela continuará na sua mochila.`)) return;
+      void mutateEconomy(character.id, (current) => {
+        const inventario = current.inventario.map((itemAtual) => (
+          itemAtual.item_id === item.id
+            ? { ...itemAtual, dados: { ...itemAtual.dados, equipado: false } }
+            : itemAtual
+        ));
+        return { carteira: current.carteira, inventario };
+      });
+      if (resultado?.ataqueId === item.id) setResultado(null);
+      return;
+    }
+
     if (!window.confirm(`Excluir o ataque "${item.nome}"?`)) return;
-    const novaLista = ataques.filter((a: IAtaque) => a.id !== item.id);
+    const novaLista = ataquesManuais.filter((a: IAtaque) => a.id !== item.id);
     onUpdate(['ficha', 'ataques'], novaLista);
     if (resultado?.ataqueId === item.id) setResultado(null);
   };
@@ -181,101 +282,117 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
 
       {/* LISTA */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Reorder.Group axis="y" values={ataquesVisiveis} onReorder={handleReorder} className="flex flex-col gap-4">
           {ataquesVisiveis.map((a: IAtaque) => {
             const resultadoAtual = resultado?.ataqueId === a.id ? resultado : null;
             return (
-              <motion.div
-                layout
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              <Reorder.Item
+                value={a}
                 key={a.id}
-                className="bg-[#121118] border border-white/5 rounded-xl p-5 flex flex-col gap-4 hover:border-red-500/30 transition-colors group relative"
+                className={`bg-[#121118] border ${a.favorito ? 'border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.15)]' : 'border-white/5 hover:border-red-500/30'} rounded-xl p-5 transition-colors group relative`}
               >
-                <div className="flex justify-between items-start">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-black/50 border border-white/5 flex items-center justify-center text-red-500">
+                <div className="flex gap-4 items-start">
+                  <div className="flex flex-col gap-2 items-center flex-shrink-0">
+                    <div className="flex gap-1 mb-1">
+                      <button onClick={() => toggleFavorito(a.id, a.isInventory)} className={`transition-colors ${a.favorito ? 'text-red-400 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]' : 'text-gray-600 hover:text-gray-400'}`}>
+                        <Star size={16} fill={a.favorito ? 'currentColor' : 'none'} />
+                      </button>
+                      <div className="cursor-grab active:cursor-grabbing text-gray-600 hover:text-gray-400 p-0.5">
+                        <GripVertical size={16} />
+                      </div>
+                    </div>
+                    <div className={`w-10 h-10 rounded-lg bg-black/50 border flex items-center justify-center ${a.favorito ? 'border-red-500/50 text-red-500' : 'border-white/5 text-red-500'}`}>
                       <Crosshair size={18} />
                     </div>
-                    <div>
-                      <h4 className="text-white font-bold mb-1">{a.nome || 'Ataque Desconhecido'}</h4>
-                      <span className="text-[10px] px-2 py-0.5 bg-black/40 rounded border border-white/5 text-gray-400 capitalize">
+                  </div>
+
+                  <div className="flex-1 min-w-0 pt-1">
+                    <div className="flex justify-between items-start gap-3">
+                      <h4 className="text-white font-bold text-lg mb-1 flex items-center gap-2">
+                        {a.nome || 'Ataque Desconhecido'} 
+                        {a.isInventory && <span className="px-1.5 py-0.5 rounded bg-[#c7a44c]/20 border border-[#c7a44c]/30 text-[#c7a44c] text-[8px] uppercase tracking-widest">Arma</span>}
+                      </h4>
+                      <div className="flex items-center gap-1.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={() => abrirEditar(a)}
+                          title="Editar"
+                          className="w-7 h-7 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-colors"
+                        >
+                          <Pencil size={14} />
+                        </button>
+                        <button
+                          onClick={() => excluir(a)}
+                          title="Excluir"
+                          className="w-7 h-7 rounded flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      <span className={`text-[10px] px-2 py-0.5 rounded border font-bold tracking-wider uppercase ${TIPO_ATAQUE_COLORS[a.tipo] || TIPO_ATAQUE_COLORS['Corpo a Corpo']}`}>
                         {a.tipo || 'Corpo a Corpo'}
                       </span>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={() => abrirEditar(a)}
-                      className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
-                      title="Editar"
-                    >
-                      <Pencil size={14} />
-                    </button>
-                    <button
-                      onClick={() => excluir(a)}
-                      className="p-2 rounded-lg hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-colors"
-                      title="Excluir"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-2 gap-2 mt-2">
-                  <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
-                    <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Bônus de Acerto</span>
-                    <span className="text-lg font-bold text-white font-mono">{bonusStr(a.bonusAcerto || 0)}</span>
-                  </div>
-                  <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
-                    <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Dano</span>
-                    <span className="text-lg font-bold text-red-400 font-mono">{a.dano || '—'}</span>
-                  </div>
-                </div>
-
-                {resultadoAtual && (
-                  <div className="bg-black/40 border border-red-500/20 rounded-lg p-3 flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-xs text-gray-400 uppercase tracking-wider font-bold">
-                      <Flame size={14} className="text-red-500" />
-                      {resultadoAtual.tipo === 'acerto' ? 'Acerto' : 'Dano'}
-                      {resultadoAtual.tipo === 'acerto' && resultadoAtual.detalhes?.natural != null && (
-                        <span className="text-gray-600 normal-case font-normal">(natural {resultadoAtual.detalhes.natural})</span>
-                      )}
+                    <div className="grid grid-cols-2 gap-2 mt-2 mb-4">
+                      <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
+                        <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Bônus de Acerto</span>
+                        <span className="text-lg font-bold text-white font-mono">{bonusStr(a.bonusAcerto || 0)}</span>
+                      </div>
+                      <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
+                        <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Dano</span>
+                        <span className="text-lg font-bold text-red-400 font-mono">{a.dano || 'Não informado'}</span>
+                      </div>
                     </div>
-                    <span className="text-2xl font-bold text-white font-mono">{resultadoAtual.resultado}</span>
-                  </div>
-                )}
 
-                <div className="flex justify-between items-center mt-2 pt-3 border-t border-white/5">
-                  <span className="text-xs text-gray-500">{a.alcance || 'Alcance: 1,5m'}</span>
-                  <div className="flex items-center gap-2">
-                    {a.dano && (
-                      <button
-                        onClick={() => rolarDano(a)}
-                        disabled={rolando === `${a.id}-dano`}
-                        className="px-3 py-2 rounded bg-black/40 border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50"
-                      >
-                        <Dices size={14} /> {rolando === `${a.id}-dano` ? 'Rolando...' : 'Rolar Dano'}
-                      </button>
+                    {resultadoAtual && (
+                      <div className="bg-black/40 border border-red-500/20 rounded-lg p-3 flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-2 text-xs text-gray-400 uppercase tracking-wider font-bold">
+                          <Flame size={14} className="text-red-500" />
+                          {resultadoAtual.tipo === 'acerto' ? 'Acerto' : 'Dano'}
+                          {resultadoAtual.tipo === 'acerto' && resultadoAtual.detalhes?.natural != null && (
+                            <span className="text-gray-600 normal-case font-normal">(natural {resultadoAtual.detalhes.natural})</span>
+                          )}
+                        </div>
+                        <span className="text-2xl font-bold text-white font-mono">{resultadoAtual.resultado}</span>
+                      </div>
                     )}
-                    <button
-                      onClick={() => rolarAcerto(a)}
-                      disabled={rolando === `${a.id}-acerto`}
-                      className="px-4 py-2 rounded bg-red-500/10 border border-red-500/30 text-red-500 hover:bg-red-500/20 flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50"
-                    >
-                      <Dices size={14} /> {rolando === `${a.id}-acerto` ? 'Rolando...' : 'Atacar'}
-                    </button>
+
+                    <div className="flex justify-between items-center mt-2 pt-3 border-t border-white/5">
+                      <span className="text-xs text-gray-500 font-bold uppercase tracking-wider">{a.alcance || '1,5m'}</span>
+                      <div className="flex items-center gap-2">
+                        {a.dano && (
+                          <button
+                            onClick={() => rolarDano(a)}
+                            disabled={rolando === `${a.id}-dano`}
+                            className="px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50"
+                          >
+                            <Dices size={14} /> {rolando === `${a.id}-dano` ? 'Rolando...' : 'Rolar Dano'}
+                          </button>
+                        )}
+                        <button
+                          onClick={() => rolarAcerto(a)}
+                          disabled={rolando === `${a.id}-acerto`}
+                          className="px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/30 text-red-500 hover:bg-red-500/20 flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50 hover:scale-105 disabled:hover:scale-100"
+                        >
+                          <Dices size={14} /> {rolando === `${a.id}-acerto` ? 'Rolando...' : 'Atacar'}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </motion.div>
+              </Reorder.Item>
             );
           })}
           {ataquesVisiveis.length === 0 && (
-            <div className="col-span-full py-12 text-center">
+            <div className="py-12 text-center">
               <Crosshair size={48} className="text-gray-700 mx-auto mb-4 opacity-50" />
               <p className="text-gray-500 font-bold uppercase tracking-widest">Nenhum Ataque Encontrado</p>
             </div>
           )}
-        </div>
+        </Reorder.Group>
       </div>
 
       <FichaModal isOpen={modalAberto} onClose={fecharModal} title={editandoId ? 'Editar Ataque' : 'Novo Ataque'}>
@@ -286,7 +403,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
             placeholder="Ex: Espada Longa"
             onChange={(v: string) => setForm(f => ({ ...f, nome: v }))}
           />
-          <LabeledSelect
+          <LabeledModalSelect
             label="Tipo"
             value={form.tipo}
             options={TIPOS_ATAQUE}

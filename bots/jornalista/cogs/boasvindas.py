@@ -1,6 +1,6 @@
 """
-Cog Boas-vindas — narra chegada e partida de membros do servidor (Passo 4
-do Plano_Jornalista.md). Precisa da intent privilegiada `members` (main.py)
+Cog Boas-vindas: narra chegada e partida de membros do servidor (Passo 4
+do docs/Plano_Jornalista.md). Precisa da intent privilegiada `members` (main.py)
 ligada também no Developer Portal, senão os eventos nunca disparam.
 """
 
@@ -124,3 +124,4 @@ class Boasvindas(commands.Cog):
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Boasvindas(bot))
+

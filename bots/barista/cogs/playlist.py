@@ -55,6 +55,7 @@ class Playlist(commands.Cog):
         ][:25]
 
     @app_commands.command(name="playlist_criar", description="Cria uma playlist nomeada vazia.")
+    @app_commands.guild_only()
     @app_commands.describe(nome="Nome da playlist, ex.: Combate")
     async def playlist_criar(self, interaction: discord.Interaction, nome: str):
         if self.bot.db is None:
@@ -74,6 +75,7 @@ class Playlist(commands.Cog):
         )
 
     @app_commands.command(name="playlist_adicionar", description="Adiciona uma música ao fim de uma playlist.")
+    @app_commands.guild_only()
     @app_commands.describe(nome="Nome da playlist", busca="Nome da música ou link")
     @app_commands.autocomplete(nome=_autocomplete_playlist)
     async def playlist_adicionar(self, interaction: discord.Interaction, nome: str, busca: str):
@@ -101,6 +103,7 @@ class Playlist(commands.Cog):
         )
 
     @app_commands.command(name="playlist_tocar", description="Toca uma playlist inteira, do começo (limpa a fila atual).")
+    @app_commands.guild_only()
     @app_commands.describe(nome="Nome da playlist")
     @app_commands.autocomplete(nome=_autocomplete_playlist)
     async def playlist_tocar(self, interaction: discord.Interaction, nome: str):
@@ -156,6 +159,7 @@ class Playlist(commands.Cog):
         await interaction.followup.send(embed=emb)
 
     @app_commands.command(name="playlist_listar", description="Lista as playlists deste servidor.")
+    @app_commands.guild_only()
     async def playlist_listar(self, interaction: discord.Interaction):
         if self.bot.db is None:
             await interaction.response.send_message(_SEM_BANCO, ephemeral=True)
@@ -170,6 +174,7 @@ class Playlist(commands.Cog):
         await interaction.response.send_message(embed=emb)
 
     @app_commands.command(name="playlist_ver", description="Mostra as músicas de uma playlist.")
+    @app_commands.guild_only()
     @app_commands.describe(nome="Nome da playlist")
     @app_commands.autocomplete(nome=_autocomplete_playlist)
     async def playlist_ver(self, interaction: discord.Interaction, nome: str):
@@ -189,6 +194,7 @@ class Playlist(commands.Cog):
         await interaction.response.send_message(embed=emb)
 
     @app_commands.command(name="playlist_apagar", description="Apaga uma playlist inteira.")
+    @app_commands.guild_only()
     @app_commands.describe(nome="Nome da playlist")
     @app_commands.autocomplete(nome=_autocomplete_playlist)
     async def playlist_apagar(self, interaction: discord.Interaction, nome: str):

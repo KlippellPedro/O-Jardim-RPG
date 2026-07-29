@@ -259,7 +259,7 @@ export function abrirModificadores(personagem, ctx, config, item) {
   renderizarLista();
 
   abrirModalSimples({
-    titulo: `Modificadores — ${item.nome}`,
+    titulo: `Modificadores: ${item.nome}`,
     corpo,
     classeExtra: 'ficha-modal--modificadores',
   });
@@ -404,7 +404,7 @@ function criarLinhaDetalhe(rotulo, valor) {
   const dt = document.createElement('dt');
   dt.textContent = rotulo;
   const dd = document.createElement('dd');
-  dd.textContent = valor || '—';
+  dd.textContent = valor || '-';
   grupo.append(dt, dd);
   return grupo;
 }

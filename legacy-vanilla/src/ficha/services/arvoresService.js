@@ -3,7 +3,7 @@ import { getEntradas } from '../../mundo/services/entradasService.js';
 
 // Gênese é a única Árvore "conhecida" desde o início em Mundo (ver
 // src/mundo/views/arvores/arvoresView.js: bloqueada = !(id === 'aethel' || ...)),
-// mesmo sem uma entrada 'deidade' importada ainda — reproduzido aqui com um
+// mesmo sem uma entrada 'deidade' importada ainda - reproduzido aqui com um
 // registro mínimo só pra manter a mesma regra sem duplicar o config inteiro.
 const GENESE_PADRAO = { tipo: 'deidade', id: 'aethel', titulo: 'Gênese', conteudo: {} };
 

@@ -1,9 +1,10 @@
 """
-Testes do loot dos baús — rodam SEM Discord.
+Testes do loot dos baús: rodam SEM Discord.
 Uso: python tests/test_loot.py  (a partir de bots/banqueiro)
 """
 
 import random
+import json
 import sys
 from pathlib import Path
 
@@ -34,6 +35,59 @@ def test_sortear_bau_catalogo_vazio():
     premio = loot.sortear_bau(Catalogo(), qtd_itens=3, rng=random.Random(0))
     assert premio["itens"] == []            # sem itens, mas ainda dá Lunaris
     assert 5 <= premio["lunaris"] <= 40
+
+
+def test_perfil_nao_sorteia_raridade_que_nao_declarou():
+    catalogo = Catalogo()
+    total, erros = catalogo.carregar_dados({
+        "entradas": [{
+            "tipo": "arma",
+            "id": "reliquia-teste",
+            "titulo": "Relíquia Teste",
+            "conteudo": {"raridade": "relíquia da criação"},
+        }],
+    })
+    assert total == 1 and erros == []
+    assert loot.sortear_item(
+        catalogo,
+        rng=random.Random(0),
+        pesos={"comum": 100},
+    ) is None
+
+
+def test_semente_completa_aceita_tipos_e_raridades_da_loja():
+    caminho = BASE / "data" / "catalogo.json"
+    total_arquivo = len(json.loads(caminho.read_text(encoding="utf-8"))["entradas"])
+    catalogo = Catalogo()
+    total, erros = catalogo.carregar_arquivo(str(caminho))
+
+    assert total == total_arquivo
+    assert erros == []
+    assert catalogo.get("reliquia-excalibur").raridade == "reliquia da criacao"
+    assert catalogo.get("reliquia-excalibur").raridade_rotulo == "Relíquia da Criação"
+    assert catalogo.get("veiculo-moto-flutuadora").tipo == "veiculo-completo"
+    assert catalogo.get("artefato-grimorio-arcanis").tipo == "artefato"
+
+
+def test_catalogo_rejeita_id_duplicado_e_raridade_desconhecida():
+    entrada = {
+        "tipo": "arma",
+        "id": "teste",
+        "titulo": "Teste",
+        "conteudo": {"raridade": "raro"},
+    }
+    catalogo = Catalogo()
+    total, erros = catalogo.carregar_dados({
+        "entradas": [
+            entrada,
+            {**entrada, "titulo": "Duplicado"},
+            {**entrada, "id": "erro-raridade", "conteudo": {"raridade": "rarissima"}},
+        ],
+    })
+
+    assert total == 1
+    assert any("id duplicado" in erro for erro in erros)
+    assert any("raridade desconhecida" in erro for erro in erros)
 
 
 if __name__ == "__main__":

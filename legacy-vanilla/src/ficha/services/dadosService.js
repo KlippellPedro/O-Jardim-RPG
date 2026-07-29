@@ -147,6 +147,6 @@ export function resumoDoRegistro(registro) {
   const valor = detalhes.repeticoes > 1 && Array.isArray(detalhes.rolagens)
     ? detalhes.rolagens.map(r => r.total).join(', ')
     : registro.resultado;
-  const grau = detalhes.grau ? ` — ${ROTULO_GRAU[detalhes.grau] || detalhes.grau}` : '';
+  const grau = detalhes.grau ? ` - ${ROTULO_GRAU[detalhes.grau] || detalhes.grau}` : '';
   return `${registro.titulo}: ${valor}${grau}`;
 }

@@ -108,8 +108,10 @@ A plataforma e o PostgreSQL são aplicações separadas na mesma VLAN:
    (sem hífen)** — o `discloud.config` pede `jardim-api`, mas o hostname
    configurado de fato no painel da Discloud é `jardimapi`; use sempre o
    valor real do painel, não o do `discloud.config`, se divergirem.
-3. Banqueiro/Jornalista/Barista: bots separados na VLAN, chamando
-   `http://jardimapi:8080/api/v1/interno`.
+3. Banqueiro/Jornalista: bots separados na VLAN, chamando
+   `http://jardimapi:8080/api/v1/interno`. (O Barista foi descontinuado —
+   dados agora é o Rollem/Rollen externo, música é por compartilhamento de
+   tela.)
 
 Variáveis de produção da plataforma:
 
@@ -165,14 +167,29 @@ não depende de nada instalado.
 
 ### Automático
 
+Em produção a própria plataforma gera uma cópia local a cada 24 horas e mantém
+as 7 mais recentes. O painel Administração › Backup mostra o estado da rotina.
+É possível ajustar sem alterar código:
+
+```env
+AUTOMATIC_BACKUP_ENABLED=true
+AUTOMATIC_BACKUP_INTERVAL_HOURS=24
+AUTOMATIC_BACKUP_RETENTION=7
+AUTOMATIC_BACKUP_DIRECTORY=backups
+```
+
+Esses arquivos ficam no armazenamento do app. Eles ajudam contra exclusão ou
+alteração acidental no banco, mas não protegem contra a perda total do servidor.
+Para manter também uma cópia externa, o script abaixo continua disponível:
+
 ```powershell
 python tools/backup-jardim.py --destino backups/    # baixa e rotaciona
 python tools/backup-jardim.py verificar ARQUIVO     # confere sem restaurar
 python tools/backup-jardim.py restaurar ARQUIVO     # devolve ao banco
 ```
 
-O download usa `/api/v1/interno/backup` com a `SERVICE_API_KEY` dos bots;
-mantém os 14 arquivos mais recentes. Para agendar todo dia às 3h:
+O download externo usa `/api/v1/interno/backup` com a `SERVICE_API_KEY` dos bots;
+mantém os 14 arquivos mais recentes. Para agendá-lo todo dia às 3h:
 
 ```powershell
 schtasks /create /tn "Backup Jardim" /tr "python C:\caminho\tools\backup-jardim.py" /sc daily /st 03:00

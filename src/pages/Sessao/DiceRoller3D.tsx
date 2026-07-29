@@ -1,19 +1,22 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import React from 'react';
+import { Canvas } from '@react-three/fiber';
 import { Physics, RigidBody, CuboidCollider, RapierRigidBody } from '@react-three/rapier';
-import { EffectComposer, Bloom } from '@react-three/postprocessing';
+import { Text, Float, Billboard, Stars } from '@react-three/drei';
 import * as THREE from 'three';
+import { sfx } from '../../utils/audioSynth';
 
 // Geometria padrão de Icosaedro do Three.js
 // Os índices das faces e suas normais locais podem ser usados para descobrir a face para cima.
-const D20 = ({ position, onSleep, forceResult }: { position: [number, number, number], onSleep?: (result: number) => void, forceResult?: boolean }) => {
-  const rigidBody = useRef<RapierRigidBody>(null);
-  const [isCritical, setIsCritical] = useState(false);
-  const [color, setColor] = useState('#3b82f6'); // azul padrão
+const D20 = ({ position, onSleep, forceResult }: { position: [number, number, number], onSleep?: (result: number) => void, forceResult?: number }) => {
+  const rigidBody = React.useRef<RapierRigidBody>(null);
+  const [isCritical, setIsCritical] = React.useState(false);
+  const [color, setColor] = React.useState('#3b82f6'); // azul padrão
+  const [finalResult, setFinalResult] = React.useState<number | null>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Aplica um impulso aleatório no spawn
     if (rigidBody.current) {
+      sfx.playDiceClack();
       const impulse = {
         x: (Math.random() - 0.5) * 10,
         y: 10 + Math.random() * 5,
@@ -36,19 +39,22 @@ const D20 = ({ position, onSleep, forceResult }: { position: [number, number, nu
     // Sorteamos o valor simulado para garantir distribuição perfeita,
     // já que ler a normal exata do IcosahedronGeometry exige mapeamento rígido das faces.
     // Em uma V2 com modelo GLTF, leríamos o osso/face.
-    const result = Math.floor(Math.random() * 20) + 1;
+    const result = forceResult ?? (Math.floor(Math.random() * 20) + 1);
     
-    if (result === 20) {
+    if (result >= 20) {
       setIsCritical(true);
       setColor('#fbbf24'); // dourado para crítico
-    } else if (result === 1) {
+      sfx.playCritSound();
+    } else if (result <= 1) {
       setIsCritical(false);
       setColor('#ef4444'); // vermelho para desastre
+      sfx.playDisasterSound();
     } else {
       setIsCritical(false);
       setColor('#3b82f6');
     }
 
+    setFinalResult(result);
     if (onSleep) onSleep(result);
   };
 
@@ -67,7 +73,7 @@ const D20 = ({ position, onSleep, forceResult }: { position: [number, number, nu
           color={color} 
           roughness={0.2}
           metalness={0.8}
-          emissive={isCritical ? new THREE.Color('#fbbf24') : new THREE.Color('#000000')}
+          emissive={isCritical ? '#fbbf24' : '#000000'}
           emissiveIntensity={isCritical ? 5 : 0}
         />
         {/* Adiciona arestas para ficar estiloso */}
@@ -76,6 +82,25 @@ const D20 = ({ position, onSleep, forceResult }: { position: [number, number, nu
           <lineBasicMaterial color={isCritical ? "#ffffff" : "#60a5fa"} linewidth={2} />
         </lineSegments>
       </mesh>
+
+      {/* Holograma do Resultado */}
+      {finalResult !== null && (
+        <Billboard position={[0, 2, 0]}>
+          <Float speed={5} rotationIntensity={0.2} floatIntensity={0.5}>
+            <Text
+              fontSize={1.5}
+              color={color}
+              anchorX="center"
+              anchorY="middle"
+              font="https://fonts.gstatic.com/s/cinzel/v11/8vI-7wQzO2jQ8-h3i2K-.woff2" // Exemplo Fonte Cinzel
+              outlineWidth={0.05}
+              outlineColor="#000000"
+            >
+              {finalResult}
+            </Text>
+          </Float>
+        </Billboard>
+      )}
     </RigidBody>
   );
 };
@@ -105,13 +130,14 @@ const FloorAndWalls = () => {
 interface DiceRoller3DProps {
   onRollComplete?: (result: number) => void;
   isRolling?: boolean;
+  forceResult?: number;
 }
 
-export const DiceRoller3D: React.FC<DiceRoller3DProps> = ({ onRollComplete, isRolling }) => {
-  const [dices, setDices] = useState<{ id: string; key: number }[]>([]);
+export const DiceRoller3D: React.FC<DiceRoller3DProps> = ({ onRollComplete, isRolling, forceResult }) => {
+  const [dices, setDices] = React.useState<{ id: string; key: number }[]>([]);
 
   // Toda vez que isRolling vira true, disparamos um novo dado
-  useEffect(() => {
+  React.useEffect(() => {
     if (isRolling) {
       setDices(prev => [...prev, { id: crypto.randomUUID(), key: Date.now() }]);
     }
@@ -122,7 +148,6 @@ export const DiceRoller3D: React.FC<DiceRoller3DProps> = ({ onRollComplete, isRo
       <Canvas
         shadows
         camera={{ position: [0, 15, 10], fov: 45 }}
-        frameloop="demand" // <-- Otimização de performance extrema!
       >
         <ambientLight intensity={1.5} />
         <directionalLight 
@@ -132,12 +157,15 @@ export const DiceRoller3D: React.FC<DiceRoller3DProps> = ({ onRollComplete, isRo
           shadow-mapSize={[1024, 1024]}
         />
         
+        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+        
         <Physics gravity={[0, -30, 0]}>
           <FloorAndWalls />
           {dices.map((dice) => (
             <D20 
               key={dice.key} 
               position={[(Math.random() - 0.5) * 5, 5, (Math.random() - 0.5) * 5]} 
+              forceResult={forceResult}
               onSleep={(res) => {
                 // Notificamos e também removemos o dado antigo depois de alguns segundos para limpar a tela
                 if (onRollComplete) onRollComplete(res);
@@ -148,15 +176,6 @@ export const DiceRoller3D: React.FC<DiceRoller3DProps> = ({ onRollComplete, isRo
             />
           ))}
         </Physics>
-
-        {/* Efeito de Bloom para Hype do Crítico */}
-        <EffectComposer>
-          <Bloom 
-            luminanceThreshold={1} // Apenas objetos com emissive > 1 brilham
-            mipmapBlur 
-            intensity={1.5} 
-          />
-        </EffectComposer>
       </Canvas>
     </div>
   );

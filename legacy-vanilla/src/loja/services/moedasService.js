@@ -1,7 +1,7 @@
 /* ─────────────────────────────────────────────────────────
-   O Jardim RPG — Loja
+   O Jardim RPG - Loja
    Moedas da carteira. Lunaris vem por padrão (é a moeda oficial
-   das regras — ver "Receba um item comum e 20 Lunaris"). Outras
+   das regras - ver "Receba um item comum e 20 Lunaris"). Outras
    moedas vêm da carteira central do personagem ativo na campanha.
    A moeda ativa decide qual preço de `conteudo.preco` aparece
    pra cada item (ver precoParaMoeda em loja.js).
@@ -14,7 +14,7 @@ const CHAVE_ATIVA = 'loja-moeda-ativa';
 const MOEDA_PADRAO = { id: 'lunaris', nome: 'Lunaris', simbolo: '☾', saldo: 20 };
 let moedasRemotas = [MOEDA_PADRAO];
 
-// Mesma convenção de dobra de acento usada em normalizarRaridade (loja.js) —
+// Mesma convenção de dobra de acento usada em normalizarRaridade (loja.js) -
 // aceita "Solares"/"Sóis"/"SÓIS" como o mesmo nome pra fins de duplicidade/slug.
 const MAPA_SEM_ACENTO = {
   á: 'a', à: 'a', â: 'a', ã: 'a', ä: 'a',

@@ -34,7 +34,7 @@ export const ModalCalculoPericia: React.FC<ModalCalculoPericiaProps> = ({
     <FichaModal
       isOpen={isOpen}
       onClose={onClose}
-      title={`CÁLCULO DE PERÍCIA — ${periciaNome.toUpperCase()}`}
+      title={`CÁLCULO DE PERÍCIA: ${periciaNome.toUpperCase()}`}
     >
       <div className="space-y-6">
         <p className="text-gray-400 text-sm italic">

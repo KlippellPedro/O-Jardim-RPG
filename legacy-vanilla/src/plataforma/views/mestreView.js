@@ -219,7 +219,7 @@ async function renderMesa(area, ctx) {
 /* ── Personagens dos jogadores ───────────────────────────────────────────── */
 
 // O servidor resolve raça e classe para nome legível (core/character_summary)
-// e não manda a ficha inteira — aqui só sobra a apresentação.
+// e não manda a ficha inteira - aqui só sobra a apresentação.
 function resumoFicha(resumo = {}) {
   const partes = [];
   if (resumo.raca) partes.push(resumo.raca);

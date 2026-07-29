@@ -1,21 +1,22 @@
 """
-O Jardim RPG — Banqueiro
+O Jardim RPG: Banqueiro
 Lógica PURA da economia: sem Discord, sem banco de dados, sem I/O.
 Fácil de testar isoladamente (ver tests/test_economia.py).
 
 Moedas do sistema:
-  - Lunaris (☾) — moeda oficial. Todo jogador começa com 20.
-  - Solares (☉) — moeda "solar", mais valiosa.
+  - Lunaris (☾): moeda oficial. Todo jogador começa com 20.
+  - Solares (☉): moeda "solar", mais valiosa.
 O schema de preço vem da Loja do site (data/loja): `conteudo.preco` é um
 número (vale em qualquer moeda) OU um objeto { "Lunaris": X, "Solares": Y }.
 
 Convenção de nomes de moeda: comparações ignoram acento e caixa, igual ao
-site (src/loja/services/moedasService.js) — "Solares" == "SOLARES" == "solares".
+site (src/loja/services/moedasService.js): "Solares" == "SOLARES" == "solares".
 """
 
 from __future__ import annotations
 
 import math
+import random
 import unicodedata
 from typing import Optional, Union, Tuple, List, Dict
 
@@ -25,10 +26,10 @@ Numero = Union[int, float]
 
 MOEDA_OFICIAL = "Lunaris"
 NOME_BOT = "Banqueiro"  # nome do bot (troque aqui pra renomear em tudo)
-SIMBOLOS = {"lunaris": "☾", "solares": "☉"}
+SIMBOLOS = {"lunaris": "☾", "solares": "☉", "fragmentos de estrela": "✧", "creditos sombrios": "♆"}
 
 # Saldo inicial da carteira (bate com "Receba um item comum e 20 Lunaris").
-SALDO_INICIAL: Dict[str, int] = {"Lunaris": 20, "Solares": 0}
+SALDO_INICIAL: Dict[str, int] = {"Lunaris": 20, "Solares": 0, "Fragmentos de Estrela": 0, "Créditos Sombrios": 0}
 
 # Câmbio padrão (configurável por servidor no banco). 1 Solares = 10 Lunaris.
 CAMBIO_RATE_PADRAO = 10          # quantos Lunaris valem 1 Solares
@@ -38,19 +39,19 @@ CAMBIO_TAXA_PADRAO = 0.02        # 2% de taxa do banco (vibe da "Transferência 
 VENDA_RATIO = 0.5                # 50% do valor de compra
 
 # /abrir_todos abre no máximo isso por vez (cada baú é uma chamada de rede pra
-# entrega central) — evita travar numa fila enorme e passar do prazo de
+# entrega central): evita travar numa fila enorme e passar do prazo de
 # resposta do Discord. Sobrando baú, o jogador só chama de novo.
 ABRIR_TODOS_LIMITE = 25
 
-# Cofre / Armazém — tabela de tamanho do "Cofre Lunar" (custo em Lunaris).
-# Todo jogador começa no Cofre Comum (10 itens, guarda até 300 Lunaris).
-# capacidade_moeda = teto de Lunaris que dá pra manter guardado nesse tier.
+# Cofre / Armazém: tabela de tamanho do "Cofre Lunar" (custo em Lunaris).
+# Todo jogador começa no Cofre Comum (10 itens, guarda até 500 por moeda).
+# capacidade_moeda = teto de cada moeda que dá pra manter guardada nesse tier.
 COFRE_TIERS: List[Dict] = [
-    {"id": "comum",   "nome": "Cofre Comum",   "capacidade": 10,  "capacidade_moeda": 300,   "custo": 100},
-    {"id": "prata",   "nome": "Cofre de Prata", "capacidade": 20,  "capacidade_moeda": 700,   "custo": 250},
-    {"id": "dourado", "nome": "Cofre Dourado", "capacidade": 40,  "capacidade_moeda": 1500,  "custo": 500},
-    {"id": "arcano",  "nome": "Cofre Arcano",  "capacidade": 60,  "capacidade_moeda": 3000,  "custo": 800},
-    {"id": "eterno",  "nome": "Cofre Eterno",  "capacidade": 200, "capacidade_moeda": 10000, "custo": 2000},
+    {"id": "comum",   "nome": "Cofre Comum",   "capacidade": 10,  "capacidade_moeda": 500,   "custo": 100},
+    {"id": "prata",   "nome": "Cofre de Prata", "capacidade": 20,  "capacidade_moeda": 1500,  "custo": 250},
+    {"id": "dourado", "nome": "Cofre Dourado", "capacidade": 40,  "capacidade_moeda": 5000,  "custo": 500},
+    {"id": "arcano",  "nome": "Cofre Arcano",  "capacidade": 60,  "capacidade_moeda": 15000, "custo": 800},
+    {"id": "eterno",  "nome": "Cofre Eterno",  "capacidade": 200, "capacidade_moeda": 50000, "custo": 2000},
 ]
 COFRE_TIER_INICIAL = "comum"
 COFRE_SAQUE_TAXA = 0.03  # taxa cobrada ao sacar do cofre pra carteira (custódia não é de graça)
@@ -186,7 +187,7 @@ def pode_guardar_moeda(saldo_atual: int, quantidade: int, tier_id: str) -> bool:
 # ─────────────────────────── Segurança do cofre ───────────────────────────────
 # `defesa` = chance (fração 0-1) de o LADRÃO FALHAR um /roubar_cofre contra
 # esse jogador. Todo jogador começa na Segurança Básica (defesa "de fábrica",
-# sem comprar nada). Cada tier comprado é um patamar fixo de defesa — não é
+# sem comprar nada). Cada tier comprado é um patamar fixo de defesa: não é
 # um bônus somado, é o nível de proteção que aquele cofre garante.
 SEGURANCA_TIERS: List[Dict] = [
     {"id": "basica",      "nome": "Segurança Básica",     "defesa": 0.50, "custo": 0},
@@ -223,9 +224,9 @@ def proximo_seguranca(tier_id: str) -> Optional[Dict]:
 
 
 # ────────────────────────────────── Roubo ─────────────────────────────────────
-# A carteira é sempre vulnerável: /roubar sempre funciona, sem chance de
-# falhar — só varia o quanto leva. O cofre é defensável: /roubar_cofre
-# depende de uma chance definida pela Segurança comprada no cofre do alvo.
+# A carteira não tem defesa percentual, mas a vítima pode impedir a tentativa
+# no botão de 5 segundos. Se não impedir, /roubar leva a fração abaixo. O
+# cofre tem a mesma janela e ainda depende da Segurança comprada pelo alvo.
 ROUBO_COOLDOWN_HORAS = 24            # 1 tentativa de /roubar por jogador a cada 24h
 ROUBO_PROTECAO_VITIMA_HORAS = 6      # depois de ser roubado, fica 6h sem poder ser roubado de novo
 ROUBO_CARTEIRA_PERCENT = 0.50        # /roubar leva 50% fixo do saldo de Lunaris da carteira
@@ -240,7 +241,7 @@ ROUBO_MULTA_PERCENT_MAX = 0.25       # ...de multa pro alvo (flagrado tentando a
 def chance_roubo_cofre(seguranca_tier_alvo: str, chance_base: Optional[float] = None) -> float:
     """Chance de sucesso do LADRÃO em /roubar_cofre = 1 - defesa do alvo.
     `chance_base` (fração 0-1, vindo do /setroubo) sobrescreve a defesa só
-    pra quem está na Segurança Básica — tiers comprados sempre entregam a
+    pra quem está na Segurança Básica: tiers comprados sempre entregam a
     defesa fixa da tabela, senão o mestre poderia desvalorizar um upgrade
     já pago mudando a configuração do servidor depois."""
     if chance_base is not None and normalizar(seguranca_tier_alvo) == SEGURANCA_TIER_INICIAL:
@@ -256,6 +257,12 @@ def chance_roubo_cofre(seguranca_tier_alvo: str, chance_base: Optional[float] = 
 # fundo no vermelho e o Banqueiro põe recompensa na cabeça do devedor.
 DIVIDA_TICK_HORAS = 24               # de quanto em quanto tempo a dívida "anda"
 DIVIDA_TAXA_CRESCIMENTO = 0.08       # a dívida cresce 8% a cada tick
+
+# Juros automático do cofre: recompensa por guardar (menor que o crescimento da
+# dívida, então guardar rende mas dever ainda é pior). O mestre pode dar um
+# bônus extra a qualquer momento com /juros_cofre.
+JUROS_COFRE_TICK_HORAS = 24          # aplica juros do cofre uma vez por dia
+JUROS_COFRE_TAXA = 0.02              # +2% por dia no que está guardado no cofre
 DIVIDA_PENALIDADE_CREDITO = 15       # crédito cai isso a cada tick em dívida
 DIVIDA_CREDITO_MINIMO = -200         # crédito não desce de -200 só por dívida
 CREDITO_RECUPERACAO_TICK = 10        # crédito sobe isso por tick pra quem tá em dia (< neutro)
@@ -369,7 +376,114 @@ def bau_compravel_por_id(bau_id):
     return None
 
 
-# Estações do Jardim (ESTACOES/estacao_info) moveram pro Jornalista —
-# bots/jornalista/core/economia.py — porque é ele quem sorteia o loot dos
-# baús automáticos que a estação influencia. Ver Plano_Jornalista.md,
+# Estações do Jardim (ESTACOES/estacao_info) moveram pro Jornalista:
+# bots/jornalista/core/economia.py: porque é ele quem sorteia o loot dos
+# baús automáticos que a estação influencia. Ver docs/Plano_Jornalista.md,
 # Decisão 2. /jornal estacao_definir substitui o antigo /estacao_definir.
+
+
+# ─────────────────────────── Furtividade no roubo ─────────────────────────────
+CUSTO_FURTIVIDADE = 15  # Lunaris pra suprimir o ping da vítima em /roubar e /roubar_cofre
+
+
+# ─────────────────────── Itens de defesa passiva (consumíveis) ────────────────
+# Comprados com /protecao_comprar, consumidos automaticamente na próxima vez
+# que alguém tenta roubar o dono. Não passam pelo catálogo central (não são
+# itens de inventário "de verdade", só um contador por tipo).
+PROTECAO_TIPOS: Dict[str, Dict] = {
+    "cao_de_guarda": {
+        "nome": "Cão de Guarda",
+        "custo": 80,
+        "descricao": "Bloqueia automaticamente a próxima tentativa de roubo contra você (carteira ou cofre).",
+    },
+    "alarme_magico": {
+        "nome": "Alarme Mágico",
+        "custo": 50,
+        "descricao": "Estende sua janela de defesa de 5s para 10s na próxima tentativa de roubo.",
+    },
+}
+DEFESA_ROUBO_TIMEOUT_PADRAO = 5.0
+DEFESA_ROUBO_TIMEOUT_ALARME = 10.0
+
+
+def protecao_por_id(tipo_id: str) -> Optional[Dict]:
+    return PROTECAO_TIPOS.get(normalizar(tipo_id).replace(" ", "_"))
+
+
+# ───────────────────────── Cargo dinâmico de recompensa ───────────────────────
+CACADOR_RECOMPENSA_HORAS = 24  # duração do cargo "Caçador de Recompensas" após uma captura
+CARGO_MAIS_PROCURADO_PADRAO = "🎯 Mais Procurado"
+CARGO_CACADOR_PADRAO = "🏹 Caçador de Recompensas"
+
+
+# ──────────────────────────────── Câmbio flutuante ─────────────────────────────
+CAMBIO_AUTO_AJUSTE_MAX = 0.05     # variação máxima por ciclo (5%)
+CAMBIO_RATE_MINIMO = 5
+CAMBIO_RATE_MAXIMO = 20
+CAMBIO_FLUXO_LIMIAR = 500         # abaixo disso o fluxo do dia é considerado ruído, não pressão real
+
+
+def ajustar_cambio_flutuante(rate_atual: int, fluxo_lunaris_para_solares: int, fluxo_solares_para_lunaris: int) -> int:
+    """Novo `cambio_rate` (Lunaris por 1 Solares) dado o fluxo líquido do período.
+
+    Mais gente convertendo Lunaris->Solares (demanda por Solares) empurra o
+    rate pra cima (Solares fica mais caro); o inverso baixa. Sempre inteiro e
+    sempre dentro da banda [CAMBIO_RATE_MINIMO, CAMBIO_RATE_MAXIMO].
+    """
+    liquido = int(fluxo_lunaris_para_solares) - int(fluxo_solares_para_lunaris)
+    if abs(liquido) < CAMBIO_FLUXO_LIMIAR:
+        return int(rate_atual)
+    direcao = 1 if liquido > 0 else -1
+    variacao = max(1, round(rate_atual * CAMBIO_AUTO_AJUSTE_MAX))
+    novo = int(rate_atual) + direcao * variacao
+    return max(CAMBIO_RATE_MINIMO, min(CAMBIO_RATE_MAXIMO, novo))
+
+
+# ──────────────────────────────────── Leilão ───────────────────────────────────
+LEILAO_CORTE_CASA = 0.05          # taxa do Banqueiro sobre toda venda em leilão
+LEILAO_DURACAO_MIN_HORAS = 1
+LEILAO_DURACAO_MAX_HORAS = 72
+
+
+def valor_liquido_leilao(lance: int, taxa: float = None) -> int:
+    """Quanto o vendedor recebe depois do corte da casa."""
+    taxa = LEILAO_CORTE_CASA if taxa is None else taxa
+    return max(0, lance - math.floor(lance * taxa))
+
+
+# ──────────────────────── Investimentos (Títulos do Jardim) ───────────────────
+INVESTIMENTO_DIAS = 7
+INVESTIMENTO_TAXA_NORMAL = 0.05   # rendimento ao vencer, em condições normais
+INVESTIMENTO_TAXA_CRISE = -0.02   # rendimento se a guild estiver em Crise Econômica
+
+
+def valor_maturado_investimento(valor: int, em_crise: bool) -> int:
+    taxa = INVESTIMENTO_TAXA_CRISE if em_crise else INVESTIMENTO_TAXA_NORMAL
+    return max(0, int(valor) + math.floor(valor * taxa))
+
+
+# ──────────────────────────────── Empréstimos P2P ──────────────────────────────
+EMPRESTIMO_JUROS_MAXIMO = 0.20    # trava de segurança: 20%/dia no máximo permitido
+EMPRESTIMO_PRAZO_MAX_DIAS = 30
+
+
+def compor_juros_emprestimo(valor_devido: int, juros_diarios: float) -> int:
+    """Aplica um dia de juros compostos sobre o saldo devedor."""
+    if valor_devido <= 0:
+        return 0
+    return int(valor_devido) + max(1, math.floor(valor_devido * juros_diarios))
+
+
+# ──────────────────────────────── Loteria Dominical ────────────────────────────
+LOTERIA_PRECO_BILHETE = 25
+LOTERIA_CORTE_CASA = 0.10
+
+
+def sortear_vencedor_loteria(bilhetes: List[Tuple[str, int]], rng=None):
+    """`bilhetes`: [(user_id, quantidade), ...]. None se ninguém comprou."""
+    gerador = rng or random
+    if not bilhetes:
+        return None
+    ids = [b[0] for b in bilhetes]
+    pesos = [b[1] for b in bilhetes]
+    return gerador.choices(ids, weights=pesos, k=1)[0]

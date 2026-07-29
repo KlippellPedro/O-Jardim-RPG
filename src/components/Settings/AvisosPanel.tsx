@@ -21,7 +21,7 @@ export const AvisosPanel: React.FC = () => {
   const [isMarking, setIsMarking] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // BUG-FIX: avisos são por usuário (GET /avisos), não por campanha — a rota
+  // BUG-FIX: avisos são por usuário (GET /avisos), não por campanha - a rota
   // antiga (/campanhas/{id}/avisos) nunca existiu no backend e sempre 404ava.
   const fetchAvisos = useCallback(async () => {
     setIsLoading(true);

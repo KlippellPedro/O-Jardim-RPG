@@ -245,7 +245,7 @@ export function renderMagias(container, personagem, ctx) {
       if (salvar(novaLista, magia ? 'Magia atualizada.' : 'Magia adicionada ao grimório.')) fecharModalSimples();
     });
     abrirModalSimples({
-      titulo: magia ? `Editar — ${magia.nome}` : 'Nova magia',
+      titulo: magia ? `Editar - ${magia.nome}` : 'Nova magia',
       corpo: form,
       classeExtra: 'ficha-modal--magia-editor',
     });
@@ -359,14 +359,14 @@ export function renderMagias(container, personagem, ctx) {
       el('span', '', magia.fonte || 'Grimório'),
     );
     const circulo = el('div', 'ficha-magia-circulo');
-    circulo.append(el('span', '', 'Círculo'), el('strong', '', magia.circulo || '—'));
+    circulo.append(el('span', '', 'Círculo'), el('strong', '', magia.circulo || '-'));
     header.append(identidade, circulo);
     const dados = el('div', 'ficha-magia-dados');
     [
       ['Custo', custoTexto(magia)],
-      ['Ação', magia.acao || '—'],
-      ['Alcance', magia.alcance || '—'],
-      ['Duração', magia.duracao || '—'],
+      ['Ação', magia.acao || '-'],
+      ['Alcance', magia.alcance || '-'],
+      ['Duração', magia.duracao || '-'],
     ].forEach(([rotulo, valor]) => {
       const item = el('div');
       item.append(el('span', '', rotulo), el('strong', '', valor));

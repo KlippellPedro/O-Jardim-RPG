@@ -258,3 +258,48 @@ def visible_content(
         "papel": access.role,
         "entradas": [row["dados_completos"] for row in rows],
     }
+
+
+@router.get("/busca")
+def buscar_conteudo(
+    campanha_id: UUID,
+    q: str = Query(min_length=2, max_length=80),
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """Busca global no que a campanha liberou (loja e mundo) e nos personagens
+    do próprio jogador. Cada resultado aponta para o módulo certo."""
+    termo = f"%{q.strip()}%"
+    resultados = []
+    with database.connection() as connection:
+        campaign_access(connection, campanha_id, user.id)
+        conteudo = connection.execute(
+            """
+            SELECT tipo AS modulo, chave_recurso, titulo
+            FROM informacoes_campanha
+            WHERE campanha_id=%s AND acesso_padrao <> 'oculto'
+              AND tipo IN ('loja', 'mundo')
+              AND titulo ILIKE %s
+            ORDER BY tipo, titulo
+            LIMIT 25
+            """,
+            (campanha_id, termo),
+        ).fetchall()
+        for row in conteudo:
+            resultados.append(
+                {"modulo": row["modulo"], "titulo": row["titulo"], "ref": None}
+            )
+        personagens = connection.execute(
+            """
+            SELECT id, nome FROM personagens
+            WHERE campanha_id=%s AND dono_usuario_id=%s AND status='ativo'
+              AND nome ILIKE %s
+            ORDER BY nome LIMIT 10
+            """,
+            (campanha_id, user.id, termo),
+        ).fetchall()
+        for row in personagens:
+            resultados.append(
+                {"modulo": "ficha", "titulo": row["nome"], "ref": str(row["id"])}
+            )
+    return {"resultados": resultados}

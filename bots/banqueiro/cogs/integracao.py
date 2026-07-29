@@ -53,6 +53,7 @@ class Integracao(commands.Cog):
         description="[Mestre] Liga este servidor Discord a uma campanha do site.",
     )
     @app_commands.default_permissions(manage_guild=True)
+    @app_commands.checks.has_permissions(manage_guild=True)
     async def campanha_vincular(
         self,
         interaction: discord.Interaction,
@@ -101,7 +102,7 @@ class Integracao(commands.Cog):
         campaigns = result.get("campanhas") or []
         characters = result.get("personagens") or []
         campaign_lines = [
-            f"• **{item['nome']}** — {item['papel']}"
+            f"• **{item['nome']}**: {item['papel']}"
             for item in campaigns
         ] or ["• nenhuma campanha"]
         character_lines = [

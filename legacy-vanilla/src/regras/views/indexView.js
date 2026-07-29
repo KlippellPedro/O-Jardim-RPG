@@ -39,7 +39,7 @@ function criarCard(topico, indice) {
 }
 
 /* Busca sem acento: "pericia" acha "Perícias". Filtra por título, resumo e
-   pelas palavras-chave do tópico — no meio do jogo ninguém lembra em qual card
+   pelas palavras-chave do tópico - no meio do jogo ninguém lembra em qual card
    está a regra de condições. */
 function normalizar(valor) {
   return String(valor || '')

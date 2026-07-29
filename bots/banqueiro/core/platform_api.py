@@ -6,9 +6,15 @@ import httpx
 
 
 class PlatformApiError(RuntimeError):
-    def __init__(self, message: str, status_code: int | None = None):
+    def __init__(self, message: str, status_code: int | None = None, code: str | None = None):
         super().__init__(message)
         self.status_code = status_code
+        # Código curto e estável (ex.: "cofre_cheio", "quantidade_indisponivel",
+        # "nao_vinculado") que os endpoints do cofre unificado devolvem em
+        # `detail.codigo`. Sem isso, todo 409 parece igual pro chamador: e
+        # "cofre cheio" (erro do usuário) e "sem quantidade" (não pode cair
+        # pro legado) precisam de tratamento bem diferente.
+        self.code = code
 
 
 class PlatformClient:
@@ -39,8 +45,14 @@ class PlatformClient:
             payload = {}
         if response.is_error:
             detail = payload.get("detail") if isinstance(payload, dict) else None
-            message = detail if isinstance(detail, str) else "a plataforma recusou a operacao"
-            raise PlatformApiError(message, response.status_code)
+            if isinstance(detail, str):
+                message, code = detail, None
+            elif isinstance(detail, dict):
+                message = detail.get("mensagem") or "a plataforma recusou a operacao"
+                code = detail.get("codigo")
+            else:
+                message, code = "a plataforma recusou a operacao", None
+            raise PlatformApiError(message, response.status_code, code)
         return payload if isinstance(payload, dict) else {}
 
     async def link_discord_account(
@@ -83,6 +95,21 @@ class PlatformClient:
             f"/interno/discord/usuarios/{discord_user_id}/contexto",
         )
 
+    async def _request_retrying_transport_errors(self, method: str, path: str, **kwargs) -> dict[str, Any]:
+        """Duas tentativas, mas só retenta erro de transporte (timeout,
+        conexão): um `status_code` presente significa que a plataforma
+        respondeu de verdade (2xx, 4xx, 5xx) e insistir não muda o resultado.
+        Seguro porque toda escrita do cofre é idempotente por chave."""
+        last_error: PlatformApiError | None = None
+        for attempt in range(2):
+            try:
+                return await self._request(method, path, **kwargs)
+            except PlatformApiError as exc:
+                last_error = exc
+                if exc.status_code is not None or attempt == 1:
+                    raise
+        raise last_error or PlatformApiError("nao consegui completar a operacao")
+
     async def deposit_vault(
         self,
         *,
@@ -102,16 +129,115 @@ class PlatformClient:
             "itens": items or [],
             "moedas": currencies or [],
         }
-        last_error: PlatformApiError | None = None
-        for attempt in range(2):
-            try:
-                return await self._request(
-                    "POST",
-                    "/interno/discord/cofre/depositar",
-                    json=payload,
-                )
-            except PlatformApiError as exc:
-                last_error = exc
-                if exc.status_code is not None or attempt == 1:
-                    raise
-        raise last_error or PlatformApiError("nao consegui depositar a recompensa")
+        return await self._request_retrying_transport_errors(
+            "POST", "/interno/discord/cofre/depositar", json=payload
+        )
+
+    async def get_vault(self, *, discord_guild_id: int, discord_user_id: int) -> dict[str, Any]:
+        """Leitura do cofre unificado (itens, moedas, capacidade, reservas)."""
+        return await self._request(
+            "GET", f"/interno/discord/cofre/{discord_guild_id}/{discord_user_id}"
+        )
+
+    async def withdraw_vault(
+        self,
+        *,
+        discord_user_id: int,
+        discord_guild_id: int,
+        idempotency_key: str,
+        reason: str,
+        items: list[dict[str, Any]],
+    ) -> dict[str, Any]:
+        """Retira item(ns) do cofre: venda, o mestre tirando algo, etc."""
+        payload = {
+            "discord_user_id": str(discord_user_id),
+            "discord_guild_id": str(discord_guild_id),
+            "idempotencia": idempotency_key,
+            "motivo": reason,
+            "itens": items,
+        }
+        return await self._request_retrying_transport_errors(
+            "POST", "/interno/discord/cofre/retirar", json=payload
+        )
+
+    async def transfer_vault(
+        self,
+        *,
+        discord_guild_id: int,
+        idempotency_key: str,
+        reason: str,
+        moves: list[dict[str, Any]],
+        respect_capacity: bool = True,
+    ) -> dict[str, Any]:
+        """Move item(ns) entre cofres numa única transação: /oferecer é um
+        `move`, /trocar são dois espelhados. Nunca compor retirar+depositar
+        no lado do bot: duas chamadas HTTP não são atômicas."""
+        payload = {
+            "discord_guild_id": str(discord_guild_id),
+            "idempotencia": idempotency_key,
+            "motivo": reason,
+            "movimentos": moves,
+            "respeitar_capacidade": respect_capacity,
+        }
+        return await self._request_retrying_transport_errors(
+            "POST", "/interno/discord/cofre/transferir", json=payload
+        )
+
+    async def reserve_vault(
+        self,
+        *,
+        discord_user_id: int,
+        discord_guild_id: int,
+        origin: str,
+        reference: str,
+        item_id: str,
+        quantity: int,
+        reason: str,
+        expires_at: str,
+    ) -> dict[str, Any]:
+        """Escrow de leilão: retira o item do cofre e o mantém retido até
+        `expires_at`. `reference` é a própria chave de idempotência."""
+        payload = {
+            "discord_user_id": str(discord_user_id),
+            "discord_guild_id": str(discord_guild_id),
+            "origem": origin,
+            "referencia": reference,
+            "item_id": item_id,
+            "quantidade": quantity,
+            "motivo": reason,
+            "expira_em": expires_at,
+        }
+        return await self._request_retrying_transport_errors(
+            "POST", "/interno/discord/cofre/reservas", json=payload
+        )
+
+    async def resolve_vault_reservation(
+        self,
+        *,
+        discord_guild_id: int,
+        origin: str,
+        reference: str,
+        destination_discord_user_id: int | None = None,
+    ) -> dict[str, Any]:
+        """Entrega ao vencedor (`destination_discord_user_id` informado) ou
+        devolve ao dono original (omitido)."""
+        payload = {
+            "discord_guild_id": str(discord_guild_id),
+            "origem": origin,
+            "referencia": reference,
+            "destino_discord_user_id": (
+                str(destination_discord_user_id) if destination_discord_user_id is not None else None
+            ),
+        }
+        return await self._request_retrying_transport_errors(
+            "POST", "/interno/discord/cofre/reservas/resolver", json=payload
+        )
+
+    async def list_pending_vault_reservations(
+        self, *, discord_guild_id: int, expired_only: bool = False
+    ) -> dict[str, Any]:
+        return await self._request(
+            "GET",
+            "/interno/discord/cofre/reservas/pendentes",
+            params={"discord_guild_id": str(discord_guild_id), "vencidas": expired_only},
+        )

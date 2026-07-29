@@ -1,56 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { DiceRoller3D } from './DiceRoller3D';
+import { ActiveTurnCard } from './components/ActiveTurnCard';
 import { InitiativeTracker } from './InitiativeTracker';
+import { SessionLogPanel } from './components/SessionLogPanel';
 import { useSessaoStore } from '../../store/useSessaoStore';
 import { useAuthStore } from '../../store/useAuthStore';
 
 export const SessaoPage: React.FC = () => {
-  const [isRolling, setIsRolling] = useState(false);
-  const { adicionarRolagem } = useSessaoStore();
-  const { usuario } = useAuthStore();
+  const [isRollDisabled, setIsRollDisabled] = useState(false);
+  const { rolarDados, conectarSSE, desconectarSSE, turnoAtualIndex, emCombate, rodada, iniciativa } = useSessaoStore();
+  const { campanhaAtiva } = useAuthStore();
+  
+  const activeCampaignId = campanhaAtiva?.id;
 
-  const handleRequestRoll = () => {
-    // Ativa a trigger para o Canvas disparar um dado
-    setIsRolling(true);
-    // Volta pra false rápido pra permitir próximos cliques
-    setTimeout(() => setIsRolling(false), 50);
+  useEffect(() => {
+    if (activeCampaignId) {
+      conectarSSE(activeCampaignId);
+      return () => desconectarSSE();
+    }
+  }, [activeCampaignId, conectarSSE, desconectarSSE]);
+
+  if (!activeCampaignId) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-[#050508] text-white">
+        <h2>Por favor, selecione uma campanha ativa para acessar a sessão.</h2>
+      </div>
+    );
+  }
+
+  const handleRequestRoll = async (formula: string = '1d20', titulo: string = 'Rolagem manual') => {
+    if (isRollDisabled) return;
+    setIsRollDisabled(true);
+    try {
+      // Faz a request real pro backend
+      await rolarDados({
+        titulo: titulo,
+        formula: formula
+      });
+    } catch {
+      // Erro já é tratado internamente pelo useSessaoStore; aqui apenas garantimos
+      // que o botão seja reabilitado independentemente do resultado.
+    } finally {
+      setTimeout(() => setIsRollDisabled(false), 500);
+    }
   };
 
-  const handleRollComplete = (resultado: number) => {
-    // Registra no histórico do tracker
-    adicionarRolagem({
-      ator: usuario?.nome_exibicao || 'Jogador',
-      formula: '1d20',
-      resultado_total: resultado,
-      dados: [resultado],
-      isCritico: resultado === 20,
-      isDesastre: resultado === 1
-    });
-  };
+  const nomeAtivo = iniciativa[turnoAtualIndex]?.nome;
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="absolute inset-0 z-10 overflow-hidden"
+      className="absolute inset-0 z-10 overflow-hidden bg-[#050508]"
     >
-      {/* 
-        A área inteira pode ser clicada para rolar se o usuário quiser, 
-        mas vamos deixar isso focado no botão do Tracker para não ser acidental.
-        Porém, a área renderiza o Canvas 3D por trás de tudo.
-      */}
-      <DiceRoller3D isRolling={isRolling} onRollComplete={handleRollComplete} />
+      {/* Background de Mesa Virtual (Sem Grid, Iluminação Suave no Centro) */}
+      <div className="absolute inset-0 z-0 bg-[#050508]" />
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,_rgba(199,164,76,0.15)_0%,_transparent_60%)] pointer-events-none" />
 
-      <InitiativeTracker onRequestRoll={handleRequestRoll} />
-      
-      {/* HUD central inferior (opcional para o futuro: atalhos rápidos) */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-4 pointer-events-none">
-        <div className="bg-black/50 backdrop-blur-md px-6 py-2 rounded-full border border-white/10 text-white/50 text-sm">
-          Painel de Combate Ativo
+      {/* Topo Central: Indicador de Cena */}
+      <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+        <div className="bg-[#0f0e15]/90 backdrop-blur-md border border-[#c7a44c]/30 px-8 py-3 rounded-full shadow-[0_0_30px_rgba(199,164,76,0.15)]">
+          <span className="text-[#c7a44c] font-bold uppercase tracking-widest text-sm">
+            {emCombate
+              ? `Rodada ${rodada}${nomeAtivo ? ` • Turno de ${nomeAtivo}` : ''}`
+              : 'Fora de Combate'}
+          </span>
         </div>
       </div>
+      
+      {/* Painel Esquerdo: Histórico de Rolagens */}
+      <SessionLogPanel />
+
+      {/* Centro: Foco no Turno Ativo */}
+      <ActiveTurnCard onRequestRoll={handleRequestRoll} />
+
+      {/* Painel Direito: Tracker de Iniciativa */}
+      <InitiativeTracker onRequestRoll={handleRequestRoll} isRollDisabled={isRollDisabled} />
     </motion.div>
   );
 };

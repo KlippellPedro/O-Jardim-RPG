@@ -7,11 +7,13 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from core import live_session
+from core.automatic_backup import AutomaticBackup
 from core.character_summary import carregar_catalogos
 from core.config import load_settings
 from core.content_seed import seed_world_library
@@ -29,7 +31,9 @@ from routers import (
     notifications,
     rolls,
     sessions,
+    shop,
     vault,
+    bounties,
 )
 
 
@@ -40,13 +44,43 @@ logging.basicConfig(
 log = logging.getLogger("jardim-plataforma")
 settings = load_settings()
 _APP_ROOT = Path(__file__).resolve().parent
-_FRONTEND_ROOT = _APP_ROOT if (_APP_ROOT / "index.html").exists() else _APP_ROOT.parent
 _DATA_ROOT = _APP_ROOT / "data" if (_APP_ROOT / "data").exists() else _APP_ROOT.parent / "data"
+
+
+def _localizar_frontend_dist(app_root: Path) -> Path:
+    """Localiza o bundle Vite no repositório ou no pacote de produção.
+
+    No desenvolvimento, ``main.py`` fica em ``plataforma/`` e o bundle em
+    ``../dist``. No ZIP da Discloud, ambos ficam no mesmo diretório raiz, com
+    o bundle dentro de ``dist/``.
+    """
+
+    candidatos = (app_root / "dist", app_root.parent / "dist")
+    for candidato in candidatos:
+        if (candidato / "index.html").is_file():
+            return candidato.resolve()
+    # Mantém um caminho determinístico para que a resposta de erro e os logs
+    # indiquem exatamente onde o artefato deveria estar no pacote.
+    return candidatos[0].resolve()
+
+
+_FRONTEND_ROOT = _localizar_frontend_dist(_APP_ROOT)
+_FRONTEND_INDEX = _FRONTEND_ROOT / "index.html"
+if not _FRONTEND_INDEX.is_file():
+    log.warning(
+        "Bundle do frontend ausente em %s; execute `npm run build` antes do deploy.",
+        _FRONTEND_ROOT,
+    )
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     settings.validate()
+    if settings.production and not _FRONTEND_INDEX.is_file():
+        raise RuntimeError(
+            f"frontend compilado ausente: {_FRONTEND_INDEX}; "
+            "gere o bundle antes de iniciar a aplicacao"
+        )
     database = Database(settings.database_url, settings.startup_timeout)
     database.open()
     if not settings.has_creator_rule:
@@ -66,10 +100,30 @@ async def lifespan(app: FastAPI):
     live_session.registrar_loop(asyncio.get_running_loop())
     app.state.database = database
     app.state.settings = settings
+    backup_manager = None
+    backup_task = None
+    if settings.automatic_backup_enabled:
+        backup_directory = Path(settings.automatic_backup_directory)
+        if not backup_directory.is_absolute():
+            backup_directory = _APP_ROOT / backup_directory
+        backup_manager = AutomaticBackup(
+            database,
+            backup_directory,
+            interval_hours=settings.automatic_backup_interval_hours,
+            retention=settings.automatic_backup_retention,
+        )
+        backup_task = asyncio.create_task(
+            backup_manager.run(),
+            name="jardim-backup-automatico",
+        )
+    app.state.automatic_backup = backup_manager
     log.info("Plataforma iniciada; schema central atualizado.")
     try:
         yield
     finally:
+        if backup_manager and backup_task:
+            backup_manager.stop()
+            await backup_task
         database.close()
 
 
@@ -94,6 +148,10 @@ if settings.allowed_origins:
         allow_methods=["GET", "POST", "PUT", "DELETE"],
         allow_headers=["Content-Type", "X-CSRF-Token", "X-Service-Key"],
     )
+
+# JSON de contexto/fichas e módulos de texto encolhem bastante com compressão.
+# O Starlette exclui text/event-stream, então a sessão ao vivo continua fluindo.
+app.add_middleware(GZipMiddleware, minimum_size=500, compresslevel=5)
 
 
 @app.middleware("http")
@@ -125,26 +183,23 @@ for api_router in (
     auth.router,
     campaigns.router,
     characters.router,
+    content.router,
     context.router,
-    knowledge.router,
     discord_links.router,
     internal.router,
-    content.router,
+    knowledge.router,
     notifications.router,
     rolls.router,
     sessions.router,
+    shop.router,
     vault.router,
+    bounties.router,
 ):
     app.include_router(api_router, prefix="/api/v1")
 
 
 class _EstaticosDeDesenvolvimento(StaticFiles):
-    """Fora de produção, o navegador não guarda JS/CSS em cache.
-
-    Sem isto, editar um módulo e recarregar mostrava a versão antiga — o
-    navegador reaproveita módulos ES agressivamente, e a confusão de "corrigi e
-    não mudou nada" custa mais caro que o cache economiza ao desenvolver.
-    """
+    """Evita cache do bundle compilado durante validações locais."""
 
     def is_not_modified(self, response_headers, request_headers) -> bool:  # noqa: D102
         return False
@@ -155,76 +210,63 @@ class _EstaticosDeDesenvolvimento(StaticFiles):
         return resposta
 
 
-_Estaticos = StaticFiles if settings.production else _EstaticosDeDesenvolvimento
+class _EstaticosDeProducao(StaticFiles):
+    """Aplica cache explícito aos arquivos estáticos compilados."""
 
-for public_path in ("assets", "styles", "src", "templates"):
+    def __init__(
+        self,
+        *args,
+        cache_seconds: int = 300,
+        immutable: bool = False,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+        self.cache_seconds = cache_seconds
+        self.immutable = immutable
+
+    def file_response(self, *args, **kwargs):  # noqa: D102
+        resposta = super().file_response(*args, **kwargs)
+        diretivas = ["public", f"max-age={self.cache_seconds}"]
+        if self.immutable:
+            diretivas.append("immutable")
+        else:
+            diretivas.append("stale-while-revalidate=86400")
+        resposta.headers["Cache-Control"] = ", ".join(diretivas)
+        return resposta
+
+
+def _montar_diretorio_estatico(
+    public_path: str,
+    *,
+    cache_seconds: int,
+    immutable: bool = False,
+) -> None:
     directory = _FRONTEND_ROOT / public_path
-    if directory.exists():
-        app.mount(f"/{public_path}", _Estaticos(directory=directory), name=public_path)
-
-
-# Páginas do site. Sem estas rotas, "voltar para O Jardim" (../index.html) e
-# qualquer endereço digitado à mão caíam no 404 JSON do FastAPI — a tela preta
-# com `{"detail":"Not Found"}`. Os módulos ganham endereço limpo (/ficha) e o
-# caminho antigo /templates/ficha.html continua servido pelo mount acima.
-_PAGES = {
-    "ficha": "ficha.html",
-    "mundo": "mundo.html",
-    "regras": "regras.html",
-    "loja": "loja.html",
-    "itens": "loja.html",
-    "sessao": "sessao.html",
-}
-
-_PAGINA_404 = """<!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Caminho perdido — O Jardim RPG</title>
-<style>
-  body { margin:0; min-height:100vh; display:grid; place-items:center; text-align:center;
-         background:#0b0c14; color:#e8e6f0; font:16px/1.6 system-ui, sans-serif; padding:2rem; }
-  h1 { font-size:1.6rem; margin:0 0 .5rem; color:#c9a227; }
-  p { margin:0 0 1.5rem; color:#9fa0b5; }
-  a { display:inline-block; padding:.7rem 1.2rem; border-radius:.5rem;
-      background:#c9a227; color:#0b0c14; font-weight:600; text-decoration:none; }
-</style></head>
-<body><main>
-  <h1>Este caminho não existe no Jardim</h1>
-  <p>A página que você tentou abrir não faz parte da plataforma.</p>
-  <a href="/">‹ Voltar para O Jardim</a>
-</main></body></html>"""
-
-
-def _page_response(nome_arquivo: str) -> FileResponse:
-    return FileResponse(
-        _FRONTEND_ROOT / "templates" / nome_arquivo,
-        headers={"Cache-Control": "no-cache"},
+    if not directory.is_dir():
+        return
+    if settings.production:
+        estaticos = _EstaticosDeProducao(
+            directory=directory,
+            cache_seconds=cache_seconds,
+            immutable=immutable,
+        )
+    else:
+        estaticos = _EstaticosDeDesenvolvimento(directory=directory)
+    app.mount(
+        f"/{public_path}",
+        estaticos,
+        name=f"frontend-{public_path}",
     )
 
 
-@app.exception_handler(404)
-async def pagina_nao_encontrada(request: Request, exc: HTTPException):
-    """Navegação errada volta pro Jardim; chamada de API continua JSON."""
-    if request.url.path.startswith("/api/") or "text/html" not in request.headers.get("accept", ""):
-        return JSONResponse(status_code=404, content={"detail": exc.detail or "nao encontrado"})
-    return HTMLResponse(status_code=404, content=_PAGINA_404)
-
-
-@app.get("/", include_in_schema=False)
-@app.get("/index.html", include_in_schema=False)
-def frontend_index():
-    return FileResponse(
-        _FRONTEND_ROOT / "index.html",
-        headers={"Cache-Control": "no-cache"},
-    )
-
-
-@app.get("/{pagina}", include_in_schema=False)
-def frontend_page(pagina: str):
-    arquivo = _PAGES.get(pagina.lower().removesuffix(".html"))
-    if not arquivo:
-        raise HTTPException(status_code=404, detail="pagina nao encontrada")
-    return _page_response(arquivo)
+# O Vite gera nomes com hash dentro de assets/, por isso esses arquivos podem
+# ser imutáveis. Os modelos mantêm nomes estáveis e recebem cache mais curto.
+_montar_diretorio_estatico(
+    "assets",
+    cache_seconds=31536000,
+    immutable=True,
+)
+_montar_diretorio_estatico("models", cache_seconds=86400)
 
 
 # Catálogos de construção da ficha/regras são públicos. Mundo e Loja não são
@@ -237,3 +279,55 @@ for public_data in ("ficha",):
             StaticFiles(directory=directory),
             name=f"data-{public_data}",
         )
+
+
+def _frontend_index_response() -> FileResponse | JSONResponse:
+    if not _FRONTEND_INDEX.is_file():
+        return JSONResponse(
+            status_code=503,
+            content={"detail": "O bundle do frontend não foi encontrado."},
+            headers={"Cache-Control": "no-store"},
+        )
+    resposta = FileResponse(_FRONTEND_INDEX, media_type="text/html")
+    resposta.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resposta.headers["Pragma"] = "no-cache"
+    resposta.headers["Expires"] = "0"
+    return resposta
+
+
+_PREFIXOS_RESERVADOS_DO_FRONTEND = frozenset({"api", "assets", "models", "data"})
+
+
+def _deve_usar_fallback_spa(request: Request) -> bool:
+    """Decide se um 404 representa uma navegação do React Router."""
+
+    if request.method not in {"GET", "HEAD"}:
+        return False
+    if "text/html" not in request.headers.get("accept", "").lower():
+        return False
+
+    caminho = request.url.path.strip("/")
+    primeiro_segmento = caminho.partition("/")[0].lower()
+    if primeiro_segmento in _PREFIXOS_RESERVADOS_DO_FRONTEND:
+        return False
+    # Um arquivo inexistente deve continuar 404; devolver HTML como JS/CSS/GLB
+    # produz erros de MIME difíceis de diagnosticar no navegador.
+    return not Path(caminho).suffix
+
+
+@app.exception_handler(404)
+async def frontend_not_found(request: Request, exc: HTTPException):
+    """Usa o shell React apenas em navegação HTML fora das áreas reservadas."""
+
+    if _deve_usar_fallback_spa(request):
+        return _frontend_index_response()
+    return JSONResponse(
+        status_code=404,
+        content={"detail": exc.detail or "nao encontrado"},
+    )
+
+
+@app.get("/", include_in_schema=False)
+@app.get("/index.html", include_in_schema=False)
+def frontend_index():
+    return _frontend_index_response()

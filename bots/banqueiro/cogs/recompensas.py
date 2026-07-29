@@ -1,7 +1,7 @@
-"""Cog Recompensas — dívida que cresce sozinha, vira caçada com recompensa
+"""Cog Recompensas: dívida que cresce sozinha, vira caçada com recompensa
 paga pelo Banqueiro, e recompensa que qualquer jogador pode colocar na
 cabeça de outro. Quem rouba (carteira ou cofre) um alvo com recompensa ativa
-leva o valor junto — ver core.economia.Economia._resgatar_recompensa."""
+leva o valor junto: ver core.economia.Economia._resgatar_recompensa."""
 
 from __future__ import annotations
 
@@ -12,8 +12,10 @@ import discord
 from discord import app_commands
 from discord.ext import commands, tasks
 
+from core import cargos as cargos_mod
 from core import economia, ui
 from core.db import SaldoInsuficiente
+from core.tasks_util import registrar_reinicio_em_erro
 
 log = logging.getLogger("banqueiro")
 
@@ -24,10 +26,26 @@ def _sid(interaction): return str(interaction.guild_id)
 class Recompensas(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        registrar_reinicio_em_erro(self.ciclo_divida, "ciclo_divida", log)
+        registrar_reinicio_em_erro(self.ciclo_cacadores, "ciclo_cacadores", log)
         self.ciclo_divida.start()
+        self.ciclo_cacadores.start()
 
     def cog_unload(self):
         self.ciclo_divida.cancel()
+        self.ciclo_cacadores.cancel()
+
+    # ── Sweep do cargo temporário de Caçador de Recompensas ────────────────
+    @tasks.loop(minutes=15)
+    async def ciclo_cacadores(self):
+        try:
+            await cargos_mod.sweep_cacadores_expirados(self.bot)
+        except Exception:
+            log.exception("erro no sweep de cacadores de recompensa expirados")
+
+    @ciclo_cacadores.before_loop
+    async def _antes_ciclo_cacadores(self):
+        await self.bot.wait_until_ready()
 
     # ── Ciclo de dívida (roda sozinho, cresce dívida e cria recompensa) ────
     @tasks.loop(hours=economia.DIVIDA_TICK_HORAS)
@@ -44,6 +62,7 @@ class Recompensas(commands.Cog):
 
     async def _processar_divida_guild(self, gid: str):
         db = self.bot.db
+        mestre_protegido = db.get_mestre_protegido(gid)
         for dev in db.listar_devedores(gid):
             uid = dev["user_id"]
             nova_divida = db.aplicar_juros_divida(gid, uid, economia.DIVIDA_TAXA_CRESCIMENTO)
@@ -53,16 +72,23 @@ class Recompensas(commands.Cog):
             alvo_credito = max(economia.DIVIDA_CREDITO_MINIMO, credito_atual - economia.DIVIDA_PENALIDADE_CREDITO)
             if alvo_credito != credito_atual:
                 db.add_credito(gid, uid, alvo_credito - credito_atual)
-            if nova_divida >= economia.DIVIDA_RECOMPENSA_LIMIAR:
+            if (
+                nova_divida >= economia.DIVIDA_RECOMPENSA_LIMIAR
+                and uid != mestre_protegido
+            ):
                 rec = db.get_recompensa(gid, uid)
                 if not rec["tem_sistema"]:
                     valor = min(economia.DIVIDA_RECOMPENSA_TETO, nova_divida)
                     db.adicionar_recompensa(gid, uid, valor, sistema=True)
+                    try:
+                        await cargos_mod.sincronizar_mais_procurado(self.bot)
+                    except Exception:
+                        log.exception("falha ao sincronizar cargo de mais procurado (guild %s)", gid)
                     db.criar_aviso(
                         gid,
                         f"🚨 **Procurado!** <@{uid}> deve ☾ {nova_divida} Lunaris ao Banqueiro e agora "
                         f"tem recompensa de ☾ {valor} na cabeça. Quem roubar a carteira ou o cofre dele "
-                        "leva a recompensa — e a dívida é perdoada.",
+                        "leva a recompensa: e a dívida é perdoada.",
                     )
         for sol in db.listar_solventes_com_credito_baixo(gid, economia.CREDITO_RECUPERACAO_TETO):
             uid = sol["user_id"]
@@ -72,10 +98,10 @@ class Recompensas(commands.Cog):
                 db.add_credito(gid, uid, alvo - credito_atual)
 
         # Quem pagou a própria dívida (sem ser capturado) não deve continuar
-        # com recompensa de sistema pendurada na cabeça — só some a parte que
+        # com recompensa de sistema pendurada na cabeça: só some a parte que
         # veio da dívida; recompensa colocada por outro jogador continua.
         for uid in db.limpar_recompensas_sistema_quitadas(gid):
-            db.criar_aviso(gid, f"📋 <@{uid}> quitou a dívida com o Banqueiro — não está mais procurado por isso.")
+            db.criar_aviso(gid, f"📋 <@{uid}> quitou a dívida com o Banqueiro: não está mais procurado por isso.")
 
     # ── Comandos de jogador ─────────────────────────────────────────────────
     @app_commands.command(description="Mostra sua situação de dívida no Cartão Lunar (e se você tá procurado).")
@@ -97,7 +123,7 @@ class Recompensas(commands.Cog):
         emb = ui.embed("📋 Sua situação com o Banqueiro", categoria="economia", descricao=desc)
         emb.add_field(name="Crédito", value=str(cartao["credito"]))
         if rec["valor"] > 0:
-            emb.add_field(name="⚠️ Recompensa na sua cabeça", value=f"☾ {rec['valor']} — quem te roubar leva junto.", inline=False)
+            emb.add_field(name="⚠️ Recompensa na sua cabeça", value=f"☾ {rec['valor']}: quem te roubar leva junto.", inline=False)
         await interaction.response.send_message(embed=emb, ephemeral=True)
 
     @app_commands.command(
@@ -158,6 +184,12 @@ class Recompensas(commands.Cog):
             return
         db = self.bot.db
         alvo_id = str(membro.id)
+        if db.get_mestre_protegido(sid) == alvo_id:
+            await interaction.response.send_message(
+                "Essa conta está protegida como mestre e não pode receber recompensa.",
+                ephemeral=True,
+            )
+            return
         db.garantir_jogador(sid, uid)
         db.garantir_jogador(sid, alvo_id)
         try:
@@ -167,6 +199,10 @@ class Recompensas(commands.Cog):
             return
         total = db.adicionar_recompensa(sid, alvo_id, valor, sistema=False)
         db.registrar_extrato(sid, uid, -valor, "Lunaris", f"Recompensa colocada em {membro.display_name}")
+        try:
+            await cargos_mod.sincronizar_mais_procurado(self.bot)
+        except Exception:
+            log.exception("falha ao sincronizar cargo de mais procurado (guild %s)", sid)
         db.criar_aviso(
             sid,
             f"💰 {interaction.user.mention} colocou ☾ {valor} Lunaris de recompensa pela cabeça de "
@@ -190,7 +226,7 @@ class Recompensas(commands.Cog):
                 return
             origem = "dívida com o Banqueiro" if rec["tem_sistema"] else "outro(s) jogador(es)"
             emb = ui.embed(f"🎯 Recompensa em {membro.display_name}", categoria="economia",
-                descricao=f"☾ **{rec['valor']} Lunaris** — origem: {origem}.")
+                descricao=f"☾ **{rec['valor']} Lunaris**: origem: {origem}.")
             await interaction.response.send_message(embed=emb)
             return
         top = db.listar_recompensas(sid, limite=10)
@@ -198,7 +234,7 @@ class Recompensas(commands.Cog):
             await interaction.response.send_message("Ninguém tem recompensa na cabeça agora.", ephemeral=True)
             return
         linhas = [
-            f"{i + 1}. <@{r['alvo_user_id']}> — ☾ {r['valor']}" + (" 🚨 procurado" if r["tem_sistema"] else "")
+            f"{i + 1}. <@{r['alvo_user_id']}>: ☾ {r['valor']}" + (" 🚨 procurado" if r["tem_sistema"] else "")
             for i, r in enumerate(top)
         ]
         emb = ui.embed("🎯 Mais procurados", categoria="economia", descricao="\n".join(linhas))

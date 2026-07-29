@@ -214,7 +214,7 @@ export function renderAtaques(container, personagem, ctx) {
       if (salvarAtaques(novaLista, ataque ? 'Ataque atualizado.' : 'Ataque manual criado.')) fecharModalSimples();
     });
     abrirModalSimples({
-      titulo: ataque ? `Editar — ${ataque.nome}` : 'Novo ataque manual',
+      titulo: ataque ? `Editar - ${ataque.nome}` : 'Novo ataque manual',
       corpo: form,
       classeExtra: 'ficha-modal--ataque-editor',
     });
@@ -348,7 +348,7 @@ export function renderAtaques(container, personagem, ctx) {
       },
     });
 
-    abrirModalSimples({ titulo: `Cálculo — ${ataque.nome}`, corpo, classeExtra: 'ficha-modal--ataque-calculo' });
+    abrirModalSimples({ titulo: `Cálculo - ${ataque.nome}`, corpo, classeExtra: 'ficha-modal--ataque-calculo' });
   }
 
   function duplicar(ataque) {
@@ -391,10 +391,10 @@ export function renderAtaques(container, personagem, ctx) {
     header.append(identidade, acoesTopo);
     const estatisticas = el('div', 'ficha-ataque-dados');
     [
-      ['Dano', ataque.dano || '—'],
-      ['Tipo', ataque.tipo || '—'],
-      ['Crítico', ataque.critico || '—'],
-      ['Alcance', ataque.alcance || '—'],
+      ['Dano', ataque.dano || '-'],
+      ['Tipo', ataque.tipo || '-'],
+      ['Crítico', ataque.critico || '-'],
+      ['Alcance', ataque.alcance || '-'],
     ].forEach(([rotulo, valor]) => {
       const item = el('div');
       item.append(el('span', '', rotulo), el('strong', '', valor));

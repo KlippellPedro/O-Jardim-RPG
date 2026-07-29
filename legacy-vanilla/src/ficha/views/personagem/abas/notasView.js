@@ -210,7 +210,7 @@ export function renderNotas(container, personagem, ctx) {
     });
     renderizarTopicos();
     abrirModalSimples({
-      titulo: nota ? `Editar — ${nota.titulo}` : 'Nova nota',
+      titulo: nota ? `Editar - ${nota.titulo}` : 'Nova nota',
       corpo: form,
       classeExtra: 'ficha-modal--nota-editor',
     });

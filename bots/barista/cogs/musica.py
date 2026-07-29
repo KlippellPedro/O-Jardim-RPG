@@ -15,38 +15,192 @@ from core import ui
 
 log = logging.getLogger("barista.musica")
 
+TEMPO_OCIOSO_S = 90.0
+TIMEOUT_DESCONEXAO_S = 10.0
+
+
+def _mmss(segundos: int) -> str:
+    minutos, seg = divmod(max(0, int(segundos)), 60)
+    horas, minutos = divmod(minutos, 60)
+    return f"{horas}:{minutos:02d}:{seg:02d}" if horas else f"{minutos}:{seg:02d}"
+
+
+def _barra_progresso(pos: int, total: int, largura: int = 18) -> str:
+    """Barra tipo ▬▬🔘▬▬ mostrando a posição na faixa."""
+    if not total or total <= 0:
+        return ""
+    frac = min(1.0, max(0.0, pos / total))
+    marcador = min(largura - 1, int(frac * largura))
+    return "▬" * marcador + "🔘" + "▬" * (largura - marcador - 1)
+
+
+# Sons ambiente pra mesa. Cada um é uma busca (não URL fixa, que apodrece) que
+# o mesmo motor do /tocar resolve; entra em loop até trocarem ou pararem.
+_AMBIENTES = {
+    "taverna": ("🍺 Taverna", "taverna medieval musica ambiente rpg 1 hora"),
+    "floresta": ("🌲 Floresta", "floresta sons da natureza ambiente relaxante 1 hora"),
+    "combate": ("⚔️ Combate", "musica epica de batalha rpg 1 hora"),
+    "caverna": ("🕯️ Caverna", "caverna masmorra ambiente sombrio rpg 1 hora"),
+    "chuva": ("🌧️ Chuva", "chuva e trovoes relaxante 1 hora"),
+    "cidade": ("🏰 Cidade", "cidade medieval movimentada ambiente rpg 1 hora"),
+}
+
 
 class Musica(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.gerenciador = core_musica.GerenciadorMusica()
+        self._locks_voz: dict[int, asyncio.Lock] = {}
+        self._tarefas_desconexao: dict[int, asyncio.Task] = {}
 
     def _voice_client(self, guild: Optional[discord.Guild]) -> Optional[discord.VoiceClient]:
         return guild.voice_client if guild else None
 
-    async def _conectar_voz(self, membro: discord.abc.User) -> discord.VoiceClient:
-        """Entra (ou move pra) o canal de voz de quem chamou. Levanta
-        ErroMusica se a pessoa não estiver numa call."""
+    def _lock_voz(self, guild_id: int) -> asyncio.Lock:
+        lock = self._locks_voz.get(guild_id)
+        if lock is None:
+            lock = asyncio.Lock()
+            self._locks_voz[guild_id] = lock
+        return lock
+
+    def _cancelar_desconexao_ociosa(self, guild_id: int) -> None:
+        tarefa = self._tarefas_desconexao.pop(guild_id, None)
+        if tarefa is not None and not tarefa.done():
+            tarefa.cancel()
+
+    def _agendar_desconexao_ociosa(self, guild_id: int, vc: discord.VoiceClient) -> None:
+        self._cancelar_desconexao_ociosa(guild_id)
+        tarefa = asyncio.create_task(
+            self._desconectar_quando_ocioso(guild_id, vc),
+            name=f"barista-desconectar-{guild_id}",
+        )
+        self._tarefas_desconexao[guild_id] = tarefa
+
+    async def _desconectar_quando_ocioso(
+        self,
+        guild_id: int,
+        vc: discord.VoiceClient,
+    ) -> None:
+        """Sai da call somente se a mesma sessão continuar vazia após o prazo.
+
+        A tarefa deixa de ser cancelável antes de iniciar ``disconnect``. Uma
+        nova solicitação então espera o lock, vê a sessão desconectada e cria
+        outra conexão, em vez de interromper o protocolo de voz pela metade.
+        """
+        tarefa_atual = asyncio.current_task()
+        try:
+            await asyncio.sleep(TEMPO_OCIOSO_S)
+            async with self._lock_voz(guild_id):
+                if self._tarefas_desconexao.get(guild_id) is not tarefa_atual:
+                    return
+                self._tarefas_desconexao.pop(guild_id, None)
+
+                guild = self.bot.get_guild(guild_id)
+                fila = self.gerenciador.fila(guild_id)
+                vc_atual = self._voice_client(guild)
+                if (
+                    vc_atual is not vc
+                    or not vc.is_connected()
+                    or vc.is_playing()
+                    or vc.is_paused()
+                    or fila.faixas
+                ):
+                    return
+
+                fila.limpar()
+                try:
+                    await asyncio.wait_for(
+                        vc.disconnect(), timeout=TIMEOUT_DESCONEXAO_S
+                    )
+                    log.info(
+                        "Desconectei por ociosidade após %.0fs (guild %s).",
+                        TEMPO_OCIOSO_S,
+                        guild_id,
+                    )
+                except asyncio.TimeoutError:
+                    log.warning(
+                        "Desconexão por ociosidade excedeu %.0fs (guild %s).",
+                        TIMEOUT_DESCONEXAO_S,
+                        guild_id,
+                    )
+                    if vc.is_connected():
+                        self._agendar_desconexao_ociosa(guild_id, vc)
+                except discord.DiscordException as exc:
+                    log.warning(
+                        "Falha ao desconectar sessão ociosa (guild %s): %s",
+                        guild_id,
+                        exc,
+                    )
+                    if vc.is_connected():
+                        self._agendar_desconexao_ociosa(guild_id, vc)
+        except asyncio.CancelledError:
+            return
+        finally:
+            if self._tarefas_desconexao.get(guild_id) is tarefa_atual:
+                self._tarefas_desconexao.pop(guild_id, None)
+
+    def _validar_destino_voz(self, membro: discord.abc.User) -> None:
+        """Valida a call sem conectar nem mover o bot."""
         if not isinstance(membro, discord.Member) or membro.voice is None or membro.voice.channel is None:
             raise core_musica.ErroMusica("Entre num canal de voz primeiro.")
 
-        canal_voz = membro.voice.channel
         vc = self._voice_client(membro.guild)
-        try:
-            if vc is None:
-                # Um deploy enquanto o bot estava numa call pode deixar a
-                # sessão anterior visível por alguns segundos. Não deixa o
-                # jogador preso em "pensando..." pelo timeout padrão de 60 s.
-                vc = await canal_voz.connect(timeout=12.0, reconnect=True)
-            elif vc.channel.id != canal_voz.id:
-                await vc.move_to(canal_voz)
-        except asyncio.TimeoutError as exc:
+        canal_bot = getattr(vc, "channel", None) if vc is not None else None
+        if vc is not None and (
+            canal_bot is None or canal_bot.id != membro.voice.channel.id
+        ):
+            nome_canal = getattr(canal_bot, "name", "outro canal")
             raise core_musica.ErroMusica(
-                "A conexão com o canal de voz demorou demais. Tenta novamente em alguns segundos."
-            ) from exc
-        except discord.DiscordException as exc:
-            raise core_musica.ErroMusica(f"Não consegui entrar no canal de voz: {exc}") from exc
-        return vc
+                f"Já estou conectado em **{nome_canal}**. Entre nesse canal "
+                "ou peça a alguém com Gerenciar Servidor para usar `/parar` primeiro."
+            )
+
+    @staticmethod
+    def _pode_controlar(interaction: discord.Interaction, vc: discord.VoiceClient) -> bool:
+        membro = interaction.user
+        permissoes = getattr(membro, "guild_permissions", None)
+        if permissoes is not None and permissoes.manage_guild:
+            return True
+        canal_membro = getattr(getattr(membro, "voice", None), "channel", None)
+        canal_bot = getattr(vc, "channel", None)
+        return canal_membro is not None and canal_bot is not None and canal_membro.id == canal_bot.id
+
+    async def _exigir_controle(self, interaction: discord.Interaction, vc: discord.VoiceClient) -> bool:
+        if self._pode_controlar(interaction, vc):
+            return True
+        await interaction.response.send_message(
+            "Entre no mesmo canal de voz do Barista para controlar a música. "
+            "Quem tem **Gerenciar Servidor** pode controlar de qualquer canal.",
+            ephemeral=True,
+        )
+        return False
+
+    async def _conectar_voz(self, membro: discord.abc.User) -> discord.VoiceClient:
+        """Entra no canal de voz de quem chamou. Levanta
+        ErroMusica se a pessoa não estiver numa call."""
+        self._validar_destino_voz(membro)
+        guild_id = membro.guild.id
+
+        async with self._lock_voz(guild_id):
+            # O estado de voz pode ter mudado enquanto uma busca era resolvida.
+            # Revalida dentro do lock antes de tocar na conexão.
+            self._validar_destino_voz(membro)
+            canal_voz = membro.voice.channel
+            vc = self._voice_client(membro.guild)
+            self._cancelar_desconexao_ociosa(guild_id)
+            try:
+                if vc is None:
+                    # Um deploy enquanto o bot estava numa call pode deixar a
+                    # sessão anterior visível por alguns segundos. Não deixa o
+                    # jogador preso em "pensando..." pelo timeout padrão de 60 s.
+                    vc = await canal_voz.connect(timeout=12.0, reconnect=True)
+            except asyncio.TimeoutError as exc:
+                raise core_musica.ErroMusica(
+                    "A conexão com o canal de voz demorou demais. Tenta novamente em alguns segundos."
+                ) from exc
+            except discord.DiscordException as exc:
+                raise core_musica.ErroMusica(f"Não consegui entrar no canal de voz: {exc}") from exc
+            return vc
 
     async def _tocar(
         self,
@@ -56,10 +210,13 @@ class Musica(commands.Cog):
         busca: str,
     ) -> discord.Embed:
         """Lógica compartilhada entre /tocar (slash) e !musica (prefixo):
-        conecta na call, busca a faixa e entra na fila. Levanta ErroMusica
+        valida a call, busca a faixa, conecta e entra na fila. Levanta ErroMusica
         pra quem chamou decidir como mostrar o erro."""
-        vc = await self._conectar_voz(membro)
+        # Confere a call antes da operação cara, mas só cria a conexão depois
+        # que a faixa foi resolvida com sucesso.
+        self._validar_destino_voz(membro)
         faixa = await core_musica.buscar_faixa(busca, membro.id)
+        vc = await self._conectar_voz(membro)
 
         fila = self.gerenciador.fila(membro.guild.id)
         fila.canal = canal_texto
@@ -67,7 +224,12 @@ class Musica(commands.Cog):
         ja_tocando = vc.is_playing() or vc.is_paused()
 
         if not ja_tocando:
-            await self._agendar_proxima(membro.guild.id, vc)
+            try:
+                await self._agendar_proxima(membro.guild.id, vc)
+            except Exception:
+                fila.limpar()
+                self._agendar_desconexao_ociosa(membro.guild.id, vc)
+                raise
             return ui.embed(
                 "🎶 Tocando agora",
                 categoria="musica",
@@ -118,7 +280,12 @@ class Musica(commands.Cog):
             # playing audio" e perde uma faixa da playlist.
             vc.stop()
         elif not (vc.is_playing() or vc.is_paused()):
-            await self._agendar_proxima(guild_id, vc)
+            try:
+                await self._agendar_proxima(guild_id, vc)
+            except Exception:
+                fila.limpar()
+                self._agendar_desconexao_ociosa(guild_id, vc)
+                raise
 
         return len(faixas)
 
@@ -135,11 +302,23 @@ class Musica(commands.Cog):
         if not vc.is_connected():
             return
         fila = self.gerenciador.fila(guild_id)
+        # Repetição: reenfileira a faixa que acabou — na frente ("uma") ou no
+        # fim ("tudo") — a menos que o usuário tenha pulado de propósito.
+        terminada = fila.atual
+        pulou = fila.pular_solicitado
+        fila.pular_solicitado = False
+        if terminada is not None and not pulou:
+            if fila.repeticao == "uma":
+                fila.faixas.appendleft(terminada)
+            elif fila.repeticao == "tudo":
+                fila.faixas.append(terminada)
         try:
             faixa = await self._agendar_proxima(guild_id, vc)
         except core_musica.ErroMusica as exc:
             if fila.canal:
                 await fila.canal.send(f"⚠️ {exc}")
+            if not fila.faixas and not (vc.is_playing() or vc.is_paused()):
+                self._agendar_desconexao_ociosa(guild_id, vc)
             return
         if faixa and fila.canal:
             emb = ui.embed(
@@ -151,8 +330,11 @@ class Musica(commands.Cog):
                 ),
             )
             await fila.canal.send(embed=emb)
+        elif faixa is None:
+            self._agendar_desconexao_ociosa(guild_id, vc)
 
-    @app_commands.command(name="tocar", description="Toca por nome ou link do YouTube/Spotify.")
+    @app_commands.command(name="tocar", description="Toca por nome ou link do YouTube, Spotify ou SoundCloud.")
+    @app_commands.guild_only()
     @app_commands.describe(busca="Nome da música ou link")
     async def tocar(self, interaction: discord.Interaction, busca: str):
         await interaction.response.defer()
@@ -175,57 +357,150 @@ class Musica(commands.Cog):
         await ctx.send(embed=emb)
 
     @app_commands.command(name="pular", description="Pula a música atual.")
+    @app_commands.guild_only()
     async def pular(self, interaction: discord.Interaction):
         vc = self._voice_client(interaction.guild)
         if vc is None or not (vc.is_playing() or vc.is_paused()):
             await interaction.response.send_message("Não tem nada tocando agora.", ephemeral=True)
             return
+        if not await self._exigir_controle(interaction, vc):
+            return
+        # Pular ignora a repetição para esta faixa (não reenfileira a atual).
+        self.gerenciador.fila(interaction.guild_id).pular_solicitado = True
         vc.stop()  # dispara o "after" registrado em _agendar_proxima, que avança a fila
         await interaction.response.send_message("⏭️ Pulei pra próxima.")
 
     @app_commands.command(name="pausar", description="Pausa a música atual.")
+    @app_commands.guild_only()
     async def pausar(self, interaction: discord.Interaction):
         vc = self._voice_client(interaction.guild)
         if vc is None or not vc.is_playing():
             await interaction.response.send_message("Não tem nada tocando agora.", ephemeral=True)
             return
+        if not await self._exigir_controle(interaction, vc):
+            return
         vc.pause()
+        self.gerenciador.fila(interaction.guild_id).marcar_pausa()
         await interaction.response.send_message("⏸️ Pausei.")
 
     @app_commands.command(name="despausar", description="Retoma a música pausada.")
+    @app_commands.guild_only()
     async def despausar(self, interaction: discord.Interaction):
         vc = self._voice_client(interaction.guild)
         if vc is None or not vc.is_paused():
             await interaction.response.send_message("Não tem nada pausado agora.", ephemeral=True)
             return
+        if not await self._exigir_controle(interaction, vc):
+            return
         vc.resume()
+        self.gerenciador.fila(interaction.guild_id).marcar_retomada()
         await interaction.response.send_message("▶️ Retomei.")
 
     @app_commands.command(name="fila", description="Mostra a fila de músicas.")
+    @app_commands.guild_only()
     async def fila_cmd(self, interaction: discord.Interaction):
         fila = self.gerenciador.fila(interaction.guild_id)
         emb = ui.embed("🎼 Fila", categoria="musica")
 
         if fila.atual:
-            emb.add_field(name="Tocando agora", value=f"[{fila.atual.titulo}]({fila.atual.url_pagina})", inline=False)
+            valor = f"[{fila.atual.titulo}]({fila.atual.url_pagina})"
+            pos, total = fila.posicao_s(), fila.atual.duracao_s
+            if pos is not None and total:
+                valor += f"\n{_barra_progresso(pos, total)} `{_mmss(pos)} / {fila.atual.duracao_fmt()}`"
+            emb.add_field(name="Tocando agora", value=valor, inline=False)
         if fila.faixas:
             linhas = [f"{i}. [{f.titulo}]({f.url_pagina})" for i, f in enumerate(fila.faixas, start=1)]
             emb.add_field(name="A seguir", value="\n".join(linhas)[:1024], inline=False)
         elif not fila.atual:
             emb.description = "A fila está vazia."
 
+        rep = {
+            "uma": "🔂 repetindo a faixa atual",
+            "tudo": "🔁 repetindo a fila toda",
+        }.get(fila.repeticao)
+        if rep:
+            emb.set_footer(text=f"{ui.MARCA} · {rep}")
+
         await interaction.response.send_message(embed=emb)
 
+    @app_commands.command(name="loop", description="Repete a faixa atual, a fila inteira, ou desliga.")
+    @app_commands.guild_only()
+    @app_commands.describe(modo="O que repetir")
+    @app_commands.choices(modo=[
+        app_commands.Choice(name="Desligar", value="off"),
+        app_commands.Choice(name="Repetir a faixa atual", value="uma"),
+        app_commands.Choice(name="Repetir a fila toda", value="tudo"),
+    ])
+    async def loop(self, interaction: discord.Interaction, modo: app_commands.Choice[str]):
+        vc = self._voice_client(interaction.guild)
+        if vc is None or not (vc.is_playing() or vc.is_paused()):
+            await interaction.response.send_message("Não tem nada tocando pra repetir.", ephemeral=True)
+            return
+        if not await self._exigir_controle(interaction, vc):
+            return
+        fila = self.gerenciador.fila(interaction.guild_id)
+        fila.repeticao = modo.value
+        rotulo = {
+            "off": "Repetição desligada 🚫",
+            "uma": "Repetindo a faixa atual 🔂",
+            "tudo": "Repetindo a fila toda 🔁",
+        }[modo.value]
+        await interaction.response.send_message(rotulo)
+
+    @app_commands.command(name="embaralhar", description="Embaralha a ordem da fila.")
+    @app_commands.guild_only()
+    async def embaralhar(self, interaction: discord.Interaction):
+        fila = self.gerenciador.fila(interaction.guild_id)
+        if len(fila.faixas) < 2:
+            await interaction.response.send_message(
+                "Precisa de pelo menos 2 músicas na fila pra embaralhar.", ephemeral=True
+            )
+            return
+        vc = self._voice_client(interaction.guild)
+        if vc is not None and not await self._exigir_controle(interaction, vc):
+            return
+        total = fila.embaralhar()
+        await interaction.response.send_message(f"🔀 Embaralhei {total} música(s) da fila.")
+
+    @app_commands.command(name="ambiente", description="Toca um som ambiente em loop pra ambientar a cena.")
+    @app_commands.guild_only()
+    @app_commands.describe(tipo="Clima da cena")
+    @app_commands.choices(tipo=[
+        app_commands.Choice(name=rotulo, value=chave)
+        for chave, (rotulo, _busca) in _AMBIENTES.items()
+    ])
+    async def ambiente(self, interaction: discord.Interaction, tipo: app_commands.Choice[str]):
+        await interaction.response.defer()
+        rotulo, busca = _AMBIENTES[tipo.value]
+        try:
+            emb = await self._tocar(membro=interaction.user, canal_texto=interaction.channel, busca=busca)
+        except core_musica.ErroMusica as exc:
+            await interaction.followup.send(f"⚠️ {exc}", ephemeral=True)
+            return
+        # Ambiente é feito pra ficar de fundo: entra em loop até trocarem/pararem.
+        self.gerenciador.fila(interaction.guild_id).repeticao = "uma"
+        emb.set_footer(text=f"{ui.MARCA} · {rotulo} em loop 🔂 · /parar ou /loop desligam")
+        await interaction.followup.send(embed=emb)
+
     @app_commands.command(name="volume", description="Ajusta o volume (0 a 200%).")
+    @app_commands.guild_only()
     @app_commands.describe(porcentagem="Volume em porcentagem, de 0 a 200")
     async def volume(self, interaction: discord.Interaction, porcentagem: app_commands.Range[int, 0, 200]):
+        vc = self._voice_client(interaction.guild)
+        if vc is None:
+            await interaction.response.send_message("Não estou em nenhum canal de voz agora.", ephemeral=True)
+            return
+        if not await self._exigir_controle(interaction, vc):
+            return
         fila = self.gerenciador.fila(interaction.guild_id)
         fila.volume = porcentagem / 100
         sufixo = " A faixa atual mantém o volume anterior; vale a partir da próxima." if fila.fonte_atual else ""
         await interaction.response.send_message(f"🔊 Volume ajustado pra {porcentagem}%.{sufixo}")
 
     @app_commands.command(name="musica_status", description="[Mestre] Diagnóstico do YouTube: cookie + teste de extração.")
+    @app_commands.guild_only()
     @app_commands.default_permissions(manage_guild=True)
+    @app_commands.checks.has_permissions(manage_guild=True)
     async def musica_status(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=True)
         cookie = core_musica.config.youtube_cookies_path()
@@ -247,14 +522,70 @@ class Musica(commands.Cog):
         await interaction.followup.send("\n".join(linhas), ephemeral=True)
 
     @app_commands.command(name="parar", description="Para a música, limpa a fila e sai do canal.")
+    @app_commands.guild_only()
     async def parar(self, interaction: discord.Interaction):
         vc = self._voice_client(interaction.guild)
-        fila = self.gerenciador.fila(interaction.guild_id)
-        fila.limpar()
-        if vc is not None:
-            vc.stop()
-            await vc.disconnect()
-        await interaction.response.send_message("⏹️ Parei e limpei a fila.")
+        if vc is None:
+            await interaction.response.send_message("Não estou em nenhum canal de voz agora.", ephemeral=True)
+            return
+        if not await self._exigir_controle(interaction, vc):
+            return
+        guild_id = interaction.guild_id
+        mensagem = "⏹️ Parei e limpei a fila."
+        ephemeral = False
+        async with self._lock_voz(guild_id):
+            vc_atual = self._voice_client(interaction.guild)
+            if vc_atual is not vc or not vc.is_connected():
+                mensagem = "Eu já estava desconectado."
+                ephemeral = True
+            else:
+                self._cancelar_desconexao_ociosa(guild_id)
+                fila = self.gerenciador.fila(guild_id)
+                fila.limpar()
+                vc.stop()
+                try:
+                    await asyncio.wait_for(
+                        vc.disconnect(), timeout=TIMEOUT_DESCONEXAO_S
+                    )
+                except asyncio.TimeoutError:
+                    self._agendar_desconexao_ociosa(guild_id, vc)
+                    mensagem = (
+                        "⚠️ A desconexão demorou demais. Limpei a fila e vou "
+                        "tentar sair novamente por ociosidade."
+                    )
+                    ephemeral = True
+                except discord.DiscordException as exc:
+                    self._agendar_desconexao_ociosa(guild_id, vc)
+                    log.warning(
+                        "Falha no /parar durante desconexão (guild %s): %s",
+                        guild_id,
+                        exc,
+                    )
+                    mensagem = (
+                        "⚠️ Limpei a fila, mas não consegui sair da call agora. "
+                        "Vou tentar novamente por ociosidade."
+                    )
+                    ephemeral = True
+        await interaction.response.send_message(mensagem, ephemeral=ephemeral)
+
+    def cog_unload(self) -> None:
+        for tarefa in self._tarefas_desconexao.values():
+            tarefa.cancel()
+        self._tarefas_desconexao.clear()
+
+    async def cog_app_command_error(
+        self,
+        interaction: discord.Interaction,
+        error: app_commands.AppCommandError,
+    ) -> None:
+        if isinstance(error, app_commands.MissingPermissions):
+            mensagem = "Esse diagnóstico exige a permissão **Gerenciar Servidor**."
+            if interaction.response.is_done():
+                await interaction.followup.send(mensagem, ephemeral=True)
+            else:
+                await interaction.response.send_message(mensagem, ephemeral=True)
+            return
+        raise error
 
 
 async def setup(bot):

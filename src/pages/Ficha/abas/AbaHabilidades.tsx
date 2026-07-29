@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Search, Star, Pencil, Trash2, Dices } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Search, Star, Pencil, Trash2, Dices, GripVertical } from 'lucide-react';
+import { motion, Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
-import { LabeledInput, LabeledSelect } from '../components/SharedFichaComponents';
+import { LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 
@@ -28,6 +28,8 @@ interface IHabilidade {
   duracao: string;
   alcance: string;
   descricao: string;
+  ordem?: number;
+  favorito?: boolean;
 }
 
 const TIPOS_HABILIDADE: TipoHabilidade[] = ['Ativa', 'Passiva', 'Reação', 'Sustentada', 'Outro'];
@@ -39,6 +41,14 @@ const RECURSOS: { value: RecursoCusto; label: string }[] = [
   { value: 'sanidade', label: 'Sanidade' },
   { value: 'cansaco', label: 'Cansaço' },
 ];
+
+const TIPO_COLORS: Record<TipoHabilidade, string> = {
+  Ativa: 'bg-red-500/10 border-red-500/30 text-red-400',
+  Passiva: 'bg-blue-500/10 border-blue-500/30 text-blue-400',
+  Reação: 'bg-amber-500/10 border-amber-500/30 text-amber-400',
+  Sustentada: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+  Outro: 'bg-gray-500/10 border-gray-500/30 text-gray-400'
+};
 
 // Mapeia o recurso da habilidade para os campos de status usados na Ficha
 // (veja AbaFicha.tsx: vidaAtual/manaAtual/sanidadeAtual/cansacoAtual)
@@ -77,6 +87,8 @@ const habilidadeVazia = (): IHabilidade => ({
   duracao: '',
   alcance: '',
   descricao: '',
+  ordem: 0,
+  favorito: false,
 });
 
 export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpdate: any }) => {
@@ -94,9 +106,24 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
   const habilidades: IHabilidade[] = character.ficha?.habilidades || [];
   const status = character.ficha?.status || {};
 
-  const habilidadesVisiveis = habilidades.filter((h: IHabilidade) =>
-    !busca || h.nome?.toLowerCase().includes(busca.toLowerCase())
-  );
+  const habilidadesVisiveis = habilidades
+    .filter((h: IHabilidade) => !busca || h.nome?.toLowerCase().includes(busca.toLowerCase()))
+    .sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+
+  const handleReorder = (novosItens: IHabilidade[]) => {
+    const comOrdem = novosItens.map((item, index) => ({ ...item, ordem: index }));
+    onUpdate(['ficha', 'habilidades'], comOrdem);
+  };
+
+  const toggleFavorito = (id: string) => {
+    let modificada = habilidades.map(h => h.id === id ? { ...h, favorito: !h.favorito } : h);
+    const itemTarget = modificada.find(h => h.id === id);
+    if (itemTarget && itemTarget.favorito) {
+      modificada = [itemTarget, ...modificada.filter(h => h.id !== id)];
+    }
+    const comOrdem = modificada.map((item, index) => ({ ...item, ordem: index }));
+    onUpdate(['ficha', 'habilidades'], comOrdem);
+  };
 
   const mostrarUsoMsg = (tipo: 'sucesso' | 'erro', texto: string) => {
     setUltimoUsoMsg({ tipo, texto });
@@ -265,22 +292,32 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
 
       {/* LISTA */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4">
-        <div className="flex flex-col gap-4">
+        <Reorder.Group axis="y" values={habilidadesVisiveis} onReorder={handleReorder} className="flex flex-col gap-4">
           {habilidadesVisiveis.map((h: IHabilidade) => (
-            <motion.div
-              layout
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            <Reorder.Item
+              value={h}
               key={h.id}
-              className="bg-[#121118] border border-white/5 rounded-xl p-5 hover:border-yellow-600/30 transition-colors group"
+              className={`bg-[#121118] border ${h.favorito ? 'border-yellow-600/50 shadow-[0_0_15px_rgba(202,138,4,0.15)]' : 'border-white/5 hover:border-yellow-600/30'} rounded-xl p-5 transition-colors group relative`}
             >
               <div className="flex gap-4 items-start">
-                <div className="w-10 h-10 rounded-full bg-black/50 border border-white/5 flex items-center justify-center text-yellow-600 flex-shrink-0 mt-1">
-                  <Star size={18} />
+                <div className="flex flex-col gap-2 items-center flex-shrink-0">
+                  <div className="flex gap-1 mb-1">
+                    <button onClick={() => toggleFavorito(h.id)} className={`transition-colors ${h.favorito ? 'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]' : 'text-gray-600 hover:text-gray-400'}`}>
+                      <Star size={16} fill={h.favorito ? 'currentColor' : 'none'} />
+                    </button>
+                    <div className="cursor-grab active:cursor-grabbing text-gray-600 hover:text-gray-400 p-0.5">
+                      <GripVertical size={16} />
+                    </div>
+                  </div>
+                  <div className={`w-10 h-10 rounded-full bg-black/50 border flex items-center justify-center ${h.favorito ? 'border-yellow-600/50 text-yellow-500' : 'border-white/5 text-yellow-600'}`}>
+                    <Star size={18} fill={h.favorito ? 'currentColor' : 'none'} />
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
+                
+                <div className="flex-1 min-w-0 pt-1">
                   <div className="flex justify-between items-start gap-3">
                     <h4 className="text-white font-bold text-lg mb-1">{h.nome || 'Habilidade Desconhecida'}</h4>
-                    <div className="flex items-center gap-1.5 flex-shrink-0">
+                    <div className="flex items-center gap-1.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => abrirEditar(h)}
                         title="Editar"
@@ -301,10 +338,10 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                     <span className="text-[10px] px-2 py-0.5 bg-black/40 rounded border border-white/5 text-gray-400 capitalize">
                       {h.origem || 'Geral'}
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 bg-black/40 rounded border border-white/5 text-gray-400">
+                    <span className={`text-[10px] px-2 py-0.5 rounded border font-bold tracking-wider uppercase ${TIPO_COLORS[h.tipo] || TIPO_COLORS['Outro']}`}>
                       {h.tipo || 'Ativa'}
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 bg-black/40 rounded border border-white/5 text-gray-400">
+                    <span className="text-[10px] px-2 py-0.5 bg-[#c7a44c]/10 border border-[#c7a44c]/30 text-[#c7a44c] rounded font-bold uppercase tracking-wider">
                       {custoTexto(h)}
                     </span>
                     {h.nivelAdquirido ? (
@@ -325,7 +362,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                       <button
                         onClick={() => usar(h)}
                         disabled={usoPendenteId === h.id}
-                        className="px-3 py-1.5 rounded bg-[#c7a44c]/10 border border-[#c7a44c]/30 text-[#c7a44c] hover:bg-[#c7a44c]/20 hover:scale-105 flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50 disabled:hover:scale-100"
+                        className="px-4 py-2 rounded-lg bg-[#c7a44c]/10 border border-[#c7a44c]/30 text-[#c7a44c] hover:bg-[#c7a44c]/20 hover:scale-105 flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50 disabled:hover:scale-100"
                       >
                         <Dices size={14} /> {usoPendenteId === h.id ? 'Usando...' : 'Usar'}
                       </button>
@@ -333,7 +370,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                   )}
                 </div>
               </div>
-            </motion.div>
+            </Reorder.Item>
           ))}
           {habilidadesVisiveis.length === 0 && (
             <div className="py-12 text-center">
@@ -341,7 +378,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
               <p className="text-gray-500 font-bold uppercase tracking-widest">Nenhuma Habilidade Encontrada</p>
             </div>
           )}
-        </div>
+        </Reorder.Group>
       </div>
 
       {/* MODAL DE CRIAR/EDITAR */}
@@ -367,7 +404,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
             onChange={(v: string) => setForm({ ...form, origem: v })}
           />
 
-          <LabeledSelect
+          <LabeledModalSelect
             label="Tipo"
             value={form.tipo}
             options={TIPOS_HABILIDADE.map(t => ({ value: t, label: t }))}
@@ -382,7 +419,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
           />
 
           <div className="grid grid-cols-2 gap-2">
-            <LabeledSelect
+            <LabeledModalSelect
               label="Recurso do Custo"
               value={form.custo.recurso}
               options={RECURSOS}

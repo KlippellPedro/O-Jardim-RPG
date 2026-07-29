@@ -1,13 +1,13 @@
 // Layout da ficha completa de um personagem: menu persistente de abas
 // (Ficha, Perícias, Poderes, Habilidades, Inventário, Ataques, Magias,
-// Aliados, Notas) + painel da aba ativa. Ficha absorveu Início — eram duas
+// Aliados, Notas) + painel da aba ativa. Ficha absorveu Início - eram duas
 // abas fragmentando a mesma "identidade central" do personagem; viraram uma
 // só, seguindo a lógica do projeto de referência (tudo isso é uma página
 // única lá). Trocar de aba navega pra /personagem/{id}/{aba}; as próprias
 // Mudanças estruturais chamam ctx.recarregar(), que redesenha somente o
 // painel ativo e preserva navegação, posição da página e o restante da ficha.
 //
-// Sem breadcrumb/cabeçalho de identidade aqui — o "‹ Seus personagens" vira
+// Sem breadcrumb/cabeçalho de identidade aqui - o "‹ Seus personagens" vira
 // o próprio link do topo da página (ver ficha.js), e nome/nível/raça/classe
 // saíram completamente por enquanto: vão voltar como campos editáveis (o
 // personagem pode mudar de raça/classe sem precisar de outra ficha), não
