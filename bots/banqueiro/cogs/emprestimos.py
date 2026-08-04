@@ -232,12 +232,19 @@ class Emprestimos(commands.Cog):
     @tasks.loop(hours=24)
     async def ciclo_juros(self):
         db = self.bot.db
+        # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
+        # isto, todo restart (cada deploy na Discloud) compunha juros de
+        # emprestimo de novo mesmo horas depois do ultimo tick. Nao e por
+        # guild (a listagem abaixo ja cruza todas), entao usa uma chave unica.
+        if not db.ciclo_guild_devido("_global", "emprestimos_juros", 24):
+            return
         for emp in db.listar_emprestimos_ativos():
             try:
                 novo = economia.compor_juros_emprestimo(emp["valor_devido"], emp["juros_diarios"])
                 db.aplicar_juros_emprestimo(emp["id"], novo)
             except Exception:
                 log.exception("erro ao aplicar juros no emprestimo %s", emp.get("id"))
+        db.marcar_ciclo_guild("_global", "emprestimos_juros")
         agora = datetime.now(timezone.utc)
         for emp in db.listar_emprestimos_vencidos(agora):
             try:

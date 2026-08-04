@@ -13,19 +13,19 @@ BASE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE))
 
 from core import economia
-from core.db import AlvoProtegido, SaldoInsuficiente
+from core.db import AlvoProtegido, SaldoInsuficiente, UpgradeDesatualizado
 from tests.db_utils import novo_db
 
 from core.catalogo import Catalogo
 
 
 def test_resolver_preco():
-    assert economia.resolver_preco(450, "Lunaris") == 450
-    assert economia.resolver_preco(450, "Solares") == 450          # número vale em qualquer moeda
+    assert economia.resolver_preco(450, "Lunaris") is None
+    assert economia.resolver_preco(450, "Solares") == 450          # número é preço nativo em Solares
     assert economia.resolver_preco({"Lunaris": 40, "Solares": 5}, "solares") == 5
     assert economia.resolver_preco({"Lunaris": 40}, "Solares") is None
     assert economia.resolver_preco(None, "Lunaris") is None
-    assert economia.resolver_preco(-3, "Lunaris") is None
+    assert economia.resolver_preco(-3, "Solares") is None
 
 
 def test_converter():
@@ -44,27 +44,67 @@ def test_converter():
 
 
 def test_cofre():
+    assert len(economia.COFRE_TIERS) == 15
+    assert all(a["capacidade"] < b["capacidade"] for a, b in zip(economia.COFRE_TIERS, economia.COFRE_TIERS[1:]))
+    assert all(isinstance(tier["custos"], dict) and tier["custos"] for tier in economia.COFRE_TIERS)
+    assert set(economia.COFRE_TIERS[-1]["custos"]) == {
+        "Lunaris", "Solares", "Fragmentos de Estrela", "Créditos Sombrios"
+    }
     assert economia.capacidade_do_cofre("comum") == 10
-    assert economia.proximo_cofre("comum")["id"] == "prata"
-    assert economia.proximo_cofre("eterno") is None
+    assert economia.proximo_cofre("comum")["id"] == "cobre"
+    assert economia.proximo_cofre("eterno")["id"] == "astral"
+    assert economia.proximo_cofre("sem-fim") is None
+    assert economia.cofre_por_id("sem-fim")["limite_pratico"] is True
     assert economia.pode_guardar(9, 1, "comum") is True
     assert economia.pode_guardar(10, 1, "comum") is False
+    assert economia.upgrade_noticiavel("cofre", "lunar") is True
+    assert economia.upgrade_noticiavel("cofre", "sem-fim") is True
+    assert economia.upgrade_noticiavel("cofre", "prata") is False
 
 
 def test_seguranca_cofre():
+    assert len(economia.SEGURANCA_TIERS) == 15
+    assert all(a["defesa"] < b["defesa"] for a, b in zip(economia.SEGURANCA_TIERS, economia.SEGURANCA_TIERS[1:]))
+    assert economia.SEGURANCA_TIERS[0]["custos"] == {}
+    assert set(economia.SEGURANCA_TIERS[-1]["custos"]) == {
+        "Lunaris", "Solares", "Fragmentos de Estrela", "Créditos Sombrios"
+    }
     assert economia.defesa_seguranca("basica") == 0.50
-    assert economia.proximo_seguranca("basica")["id"] == "fechadura"
-    assert economia.proximo_seguranca("maximo") is None
+    assert economia.proximo_seguranca("basica")["id"] == "tranca-dupla"
+    assert economia.proximo_seguranca("maximo")["id"] == "soberana"
+    assert economia.proximo_seguranca("absoluta") is None
+    assert economia.defesa_seguranca("absoluta") == 0.99
+    assert round(economia.chance_roubo_cofre("absoluta"), 2) == 0.01
     # Segurança Básica: 50% de defesa -> ladrão tem 50% de chance
     assert round(economia.chance_roubo_cofre("basica"), 2) == 0.50
-    # nível 1 (Fechadura Reforçada): 70% de defesa -> ladrão tem 30% de chance
+    # Fechadura Reforçada preserva os 70% antigos -> ladrão tem 30% de chance
     assert round(economia.chance_roubo_cofre("fechadura"), 2) == 0.30
     # tiers comprados usam sempre o valor fixo da tabela, mesmo com /setroubo configurado
     assert round(economia.chance_roubo_cofre("fechadura", chance_base=0.9), 2) == 0.30
     # a chance do ladrão nunca cai abaixo do piso, mesmo com defesa configurada pertinho de 100%
-    assert economia.chance_roubo_cofre("basica", chance_base=0.01) == economia.ROUBO_COFRE_CHANCE_MINIMA
+    assert round(economia.chance_roubo_cofre("basica", chance_base=0.01), 2) == economia.ROUBO_COFRE_CHANCE_MINIMA
     # chance_base configurado (ex.: /setroubo) só afeta quem tá na Segurança Básica
     assert round(economia.chance_roubo_cofre("basica", chance_base=0.5), 2) == 0.50
+    assert economia.upgrade_noticiavel("seguranca", "maximo") is True
+    assert economia.upgrade_noticiavel("seguranca", "absoluta") is True
+    assert economia.upgrade_noticiavel("cartao", "eterno") is True
+
+
+def test_custo_de_upgrade_desconta_so_moedas_conversiveis():
+    tier = {
+        "custos": {
+            "Lunaris": 101,
+            "Solares": 21,
+            "Fragmentos de Estrela": 3,
+            "Créditos Sombrios": 7,
+        }
+    }
+    assert economia.custos_upgrade(tier, reputacao=150) == {
+        "Lunaris": 96,
+        "Solares": 20,
+        "Fragmentos de Estrela": 3,
+        "Créditos Sombrios": 7,
+    }
 
 
 def test_capacidade_moeda_do_cofre():
@@ -73,6 +113,14 @@ def test_capacidade_moeda_do_cofre():
     )] == [500, 1500, 5000, 15000, 50000]
     assert economia.pode_guardar_moeda(490, 10, "comum") is True
     assert economia.pode_guardar_moeda(491, 10, "comum") is False
+
+
+def test_roubo_bem_sucedido_da_carteira_leva_todo_o_saldo_exposto():
+    assert economia.ROUBO_CARTEIRA_PERCENT == 1.0
+    assert economia.valor_roubo_carteira(1) == 1
+    assert economia.valor_roubo_carteira(37) == 37
+    assert economia.valor_roubo_carteira(100) == 100
+    assert economia.valor_roubo_carteira(0) == 0
 
 
 def test_db():
@@ -102,6 +150,53 @@ def test_db():
     assert db.get_cambio(g) == (10, 0.02)
     db.set_cambio(g, 8, 0.05)
     assert db.get_cambio(g) == (8, 0.05)
+
+
+def test_upgrade_multimoeda_e_atomico():
+    db = novo_db()
+    g = "guild-upgrades"
+
+    sucesso = "sucesso"
+    db.garantir_jogador(g, sucesso)
+    db.creditar(g, sucesso, "Lunaris", 200)
+    db.creditar(g, sucesso, "Solares", 10)
+    restantes = db.comprar_upgrade_multimoeda(
+        g, sucesso, "cofre", "comum", "cobre",
+        {"Lunaris": 100, "Solares": 5},
+        "Upgrade atômico de teste",
+    )
+    assert db.get_cofre_tier(g, sucesso) == "cobre"
+    assert restantes == {"Lunaris": 120, "Solares": 5}
+    assert {(r["moeda"], r["delta"]) for r in db.listar_extrato(g, sucesso)} == {
+        ("Lunaris", -100), ("Solares", -5)
+    }
+
+    insuficiente = "insuficiente"
+    db.garantir_jogador(g, insuficiente)
+    db.creditar(g, insuficiente, "Lunaris", 200)
+    saldo_antes = db.get_saldo(g, insuficiente, "Lunaris")
+    try:
+        db.comprar_upgrade_multimoeda(
+            g, insuficiente, "cofre", "comum", "cobre",
+            {"Lunaris": 100, "Solares": 1},
+            "Não pode ser parcial",
+        )
+        raise AssertionError("deveria faltar Solares")
+    except SaldoInsuficiente:
+        pass
+    assert db.get_cofre_tier(g, insuficiente) == "comum"
+    assert db.get_saldo(g, insuficiente, "Lunaris") == saldo_antes
+    assert db.listar_extrato(g, insuficiente) == []
+
+    try:
+        db.comprar_upgrade_multimoeda(
+            g, insuficiente, "cofre", "prata", "aco",
+            {"Lunaris": 1}, "Tier concorrente",
+        )
+        raise AssertionError("deveria rejeitar o tier desatualizado")
+    except UpgradeDesatualizado:
+        pass
+    assert db.get_cofre_tier(g, insuficiente) == "comum"
 
 
 def test_db_cofre_saldo_e_roubo():
@@ -239,13 +334,14 @@ def test_db_roubo_e_recompensa_sao_atomicos():
     )
     assert resultado["recompensa"]["valor"] == 80
     assert resultado["recompensa"]["divida_perdoada"] == 80
-    assert resultado["valor"] == 50
-    assert db.get_saldo(g, alvo, "Lunaris") == 50
-    assert db.get_saldo(g, ladrao, "Lunaris") == 150
+    assert resultado["valor"] == 100
+    assert db.get_saldo(g, alvo, "Lunaris") == 0
+    assert db.get_saldo(g, ladrao, "Lunaris") == 200
     assert db.get_divida(g, alvo) == 0
     assert db.get_recompensa(g, alvo)["valor"] == 0
 
     # Uma segunda transação pode roubar saldo, mas nunca paga o mesmo bounty.
+    db.creditar(g, alvo, "Lunaris", 40)
     segunda = db.executar_roubo_carteira(
         g,
         ladrao,
@@ -254,6 +350,7 @@ def test_db_roubo_e_recompensa_sao_atomicos():
         "Alvo",
         datetime.now(timezone.utc) + timedelta(hours=1),
     )
+    assert segunda["valor"] == 40
     assert segunda["recompensa"]["valor"] == 0
 
 

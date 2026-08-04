@@ -118,6 +118,12 @@ def test_ciclo_clima_publica_nas_guilds_optantes():
         def listar_guilds_clima_auto(self):
             return ["1", "2"]
 
+        def ciclo_guild_devido(self, gid, ciclo, intervalo_horas):
+            return True
+
+        def marcar_ciclo_guild(self, gid, ciclo):
+            pass
+
     publicados = []
 
     cog = object.__new__(cog_jornal.Jornal)  # sem __init__: não inicia o loop real

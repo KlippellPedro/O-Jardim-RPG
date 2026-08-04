@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
-from typing import Dict, List
+from datetime import datetime, timedelta, timezone
+from typing import Dict, List, Optional
+from uuid import uuid4
 
 from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
@@ -341,6 +343,19 @@ _SCHEMA = (
         user_id TEXT NOT NULL,
         quantidade INTEGER NOT NULL DEFAULT 0,
         PRIMARY KEY (guild_id, user_id)
+    )
+    """,
+    # Marca a última vez que cada ciclo periódico (clima_auto, estacao_auto,
+    # entrevista...) realmente publicou algo por guild. `tasks.loop(hours=N)`
+    # roda a primeira iteração assim que o bot sobe — sem isto, todo deploy
+    # na Discloud reinicia o bot e cada ciclo dispara de novo na hora, mesmo
+    # tendo rodado poucas horas antes do commit.
+    """
+    CREATE TABLE IF NOT EXISTS ciclos_guild (
+        guild_id TEXT NOT NULL,
+        ciclo TEXT NOT NULL,
+        executado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, ciclo)
     )
     """,
 )
@@ -1212,19 +1227,184 @@ class Database:
             )
 
     def marcar_bau_entrega_entregue(
-        self, guild_id: str, mensagem_id: str, resultado: dict
+        self,
+        guild_id: str,
+        mensagem_id: str,
+        resultado: dict,
+        *,
+        vencedor_user_id: Optional[str] = None,
+        lunaris: int = 0,
     ) -> None:
+        """`vencedor_user_id`/`lunaris`: credita a carteira local na MESMA
+        transação que fecha a entrega (`WHERE status<>'entregue'` faz o
+        crédito só acontecer uma vez mesmo se `processar_entrega` for
+        chamado de novo por um retry do recovery)."""
         with self._conn() as con:
-            con.execute(
+            fechada = con.execute(
                 """
                 UPDATE baus_entregas
                 SET status='entregue', resultado=%s, ultimo_erro=NULL,
                     atualizado_em=CURRENT_TIMESTAMP,
                     entregue_em=CURRENT_TIMESTAMP
-                WHERE guild_id=%s AND mensagem_id=%s
+                WHERE guild_id=%s AND mensagem_id=%s AND status<>'entregue'
+                RETURNING mensagem_id
                 """,
                 (Jsonb(resultado), guild_id, mensagem_id),
+            ).fetchone()
+            if fechada is not None and lunaris and vencedor_user_id is not None:
+                self._garantir_jogador(con, guild_id, vencedor_user_id)
+                con.execute(
+                    """
+                    INSERT INTO carteira (guild_id, user_id, moeda, saldo)
+                    VALUES (%s, %s, 'Lunaris', %s)
+                    ON CONFLICT (guild_id, user_id, moeda)
+                    DO UPDATE SET saldo = carteira.saldo + EXCLUDED.saldo
+                    """,
+                    (guild_id, vencedor_user_id, int(lunaris)),
+                )
+
+    # ── Escrita direta no cofre da plataforma ──────────────────────────────
+    # Espelha bots/banqueiro/core/db.py::depositar_cofre_plataforma, que por
+    # sua vez espelha plataforma/routers/internal.py::deposit_discord_reward.
+    # Existe porque o baú do Jornalista caía direto pro cofre local quando o
+    # salto HTTP até a API falhava — e item no cofre local não aparece no
+    # site nem chega na ficha. Bot e plataforma dividem o mesmo PostgreSQL
+    # (VLAN da Discloud), então a queda do HTTP não precisa ser a queda do
+    # cofre. Mesma chave de idempotência dos dois lados: um depósito que a
+    # API tenha gravado antes da resposta se perder não é creditado de novo.
+    def par_cofre_plataforma(self, guild_id: str, user_id: str):
+        """(usuario_id, campanha_id) vinculados a esse par Discord, ou None."""
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT d.usuario_id, cd.campanha_id
+                FROM contas_discord d
+                JOIN campanhas_discord cd ON cd.discord_guild_id=%s
+                JOIN membros_campanha m
+                  ON m.campanha_id=cd.campanha_id AND m.usuario_id=d.usuario_id
+                WHERE d.discord_user_id=%s AND m.status='ativo'
+                """,
+                (guild_id, user_id),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def depositar_cofre_plataforma(
+        self,
+        guild_id: str,
+        user_id: str,
+        *,
+        idempotencia: str,
+        motivo: str,
+        itens: Optional[List[dict]] = None,
+        moedas: Optional[List[dict]] = None,
+        origem: str = "jornalista",
+    ) -> Optional[dict]:
+        """`None` = conta não vinculada (quem chamou cai pro cofre local)."""
+        itens = itens or []
+        moedas = moedas or []
+        if not itens and not moedas:
+            raise ValueError("informe ao menos um item ou moeda")
+
+        par = self.par_cofre_plataforma(guild_id, user_id)
+        if par is None:
+            return None
+        usuario_id, campanha_id = par["usuario_id"], par["campanha_id"]
+
+        with self._conn() as con:
+            con.execute(
+                "SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))",
+                (f"movimento:{campanha_id}:{origem}:{idempotencia}",),
             )
+            existente = con.execute(
+                """
+                SELECT id FROM movimentos_cofre
+                WHERE campanha_id=%s AND origem=%s AND idempotencia=%s
+                """,
+                (campanha_id, origem, idempotencia),
+            ).fetchone()
+            if existente:
+                return {
+                    "movimento_id": existente["id"],
+                    "campanha_id": campanha_id,
+                    "repetido": True,
+                }
+
+            for item in itens:
+                con.execute(
+                    """
+                    INSERT INTO cofre_itens_usuario
+                        (usuario_id, campanha_id, item_id, titulo, quantidade, dados, origem)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (usuario_id, campanha_id, item_id) DO UPDATE SET
+                        titulo=EXCLUDED.titulo,
+                        quantidade=cofre_itens_usuario.quantidade + EXCLUDED.quantidade,
+                        dados=EXCLUDED.dados,
+                        origem=EXCLUDED.origem,
+                        atualizado_em=CURRENT_TIMESTAMP
+                    """,
+                    (
+                        usuario_id,
+                        campanha_id,
+                        str(item["item_id"]),
+                        str(item["titulo"]),
+                        int(item.get("quantidade") or 1),
+                        Jsonb(item.get("dados") or {}),
+                        origem,
+                    ),
+                )
+            for moeda in moedas:
+                con.execute(
+                    """
+                    INSERT INTO cofre_saldos_usuario
+                        (usuario_id, campanha_id, moeda, saldo)
+                    VALUES (%s, %s, %s, %s)
+                    ON CONFLICT (usuario_id, campanha_id, moeda) DO UPDATE SET
+                        saldo=cofre_saldos_usuario.saldo + EXCLUDED.saldo,
+                        atualizado_em=CURRENT_TIMESTAMP
+                    """,
+                    (usuario_id, campanha_id, str(moeda["moeda"]), int(moeda["quantidade"])),
+                )
+
+            movimento_id = uuid4()
+            detalhes = {"motivo": motivo, "itens": itens, "moedas": moedas}
+            con.execute(
+                """
+                INSERT INTO movimentos_cofre
+                    (id, usuario_id, campanha_id, origem, idempotencia, detalhes)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                """,
+                (movimento_id, usuario_id, campanha_id, origem, idempotencia, Jsonb(detalhes)),
+            )
+            premios = [str(item["titulo"]) for item in itens]
+            premios += [f"{moeda['quantidade']} {moeda['moeda']}" for moeda in moedas]
+            con.execute(
+                """
+                INSERT INTO notificacoes
+                    (id, usuario_id, campanha_id, categoria, titulo, mensagem, dados)
+                VALUES (%s, %s, %s, 'economia', %s, %s, %s)
+                """,
+                (
+                    uuid4(),
+                    usuario_id,
+                    campanha_id,
+                    "Recompensa nova no seu cofre",
+                    f"{', '.join(premios[:4])} — {motivo}"[:600],
+                    Jsonb({"origem": origem}),
+                ),
+            )
+            con.execute(
+                """
+                INSERT INTO eventos_auditoria
+                    (id, campanha_id, ator_servico, acao, alvo_tipo, alvo_id, detalhes)
+                VALUES (%s, %s, %s, 'cofre.recompensa_discord', 'usuario', %s, %s)
+                """,
+                (uuid4(), campanha_id, origem, str(usuario_id), Jsonb(detalhes)),
+            )
+        return {
+            "movimento_id": movimento_id,
+            "campanha_id": campanha_id,
+            "repetido": False,
+        }
 
     def entregar_bau_legado(self, guild_id: str, mensagem_id: str) -> dict:
         """Entrega no banco legado e conclui a fila na mesma transação.
@@ -1468,6 +1648,32 @@ class Database:
         with self._conn() as con:
             rows = con.execute("SELECT guild_id FROM config WHERE estacao_auto = TRUE").fetchall()
         return [row["guild_id"] for row in rows]
+
+    # ── Controle de ciclos periódicos (evita reenvio a cada restart) ────────
+    def ciclo_guild_devido(self, guild_id: str, ciclo: str, intervalo_horas: float) -> bool:
+        """False = já rodou dentro do intervalo; a chamada deve pular esta guild."""
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT executado_em FROM ciclos_guild
+                WHERE guild_id=%s AND ciclo=%s
+                """,
+                (guild_id, ciclo),
+            ).fetchone()
+        if row is None:
+            return True
+        return row["executado_em"] <= datetime.now(timezone.utc) - timedelta(hours=intervalo_horas)
+
+    def marcar_ciclo_guild(self, guild_id: str, ciclo: str) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO ciclos_guild (guild_id, ciclo, executado_em)
+                VALUES (%s, %s, CURRENT_TIMESTAMP)
+                ON CONFLICT (guild_id, ciclo) DO UPDATE SET executado_em = CURRENT_TIMESTAMP
+                """,
+                (guild_id, ciclo),
+            )
 
     # ── Horóscopo do Jardim ─────────────────────────────────────────────────
     def set_horoscopo(self, guild_id: str, arvore_id: str) -> None:

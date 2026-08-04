@@ -63,6 +63,9 @@ class _DB:
     def get_config_roubo(self, g):
         return {"chance_base": 0.5}
 
+    def get_cartao(self, g, u):
+        return {"credito": 0}
+
     def get_mestre_protegido(self, g):
         return None
 
@@ -160,12 +163,35 @@ def test_cofre_lista_itens_e_separa_capacidades_sem_barras_quebradas():
     _rodar(Economia.cofre.callback(cog, interacao))
 
     _, embed, _, _ = interacao.response.mensagens[0]
-    texto = "\n".join(f"{campo.name}\n{campo.value}" for campo in embed.fields)
+    texto = "\n".join([embed.description or "", *(f"{campo.name}\n{campo.value}" for campo in embed.fields)])
     assert "Espada Lunar" in texto and "Poção" in texto
     assert "3/10" in texto
     assert "30 / 500" in texto
-    assert "1.500 por moeda" in texto
+    assert "Bronze I · Cofre Comum" in texto
+    assert "Bronze I · Segurança Básica" in texto
+    assert "Cofre de Cobre" not in texto
+    assert "Tranca Dupla" not in texto
+    assert "/cofre_melhorias" in embed.footer.text
     assert "▰" not in texto and "▱" not in texto
+
+
+def test_cofre_melhorias_mostra_so_os_proximos_niveis_e_custos():
+    db = _DB()
+    cog = _cog(db)
+    interacao = _Interacao(100, 1)
+
+    _rodar(Economia.cofre_melhorias.callback(cog, interacao))
+
+    _, embed, _, ephemeral = interacao.response.mensagens[0]
+    texto = "\n".join(f"{campo.name}\n{campo.value}" for campo in embed.fields)
+    assert ephemeral is True
+    assert "Bronze II" in texto
+    assert "Cofre Comum" in texto and "Cofre de Cobre" in texto
+    assert "10 itens · 500 por moeda" in texto
+    assert "15 itens · 900 por moeda" in texto
+    assert "Tranca Dupla" in texto and "58%" in texto
+    assert "Cofre de Prata" not in texto
+    assert "Alarme Mecânico" not in texto
 
 
 # ── /ranking ──────────────────────────────────────────────────────────────

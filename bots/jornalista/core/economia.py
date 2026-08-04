@@ -25,11 +25,21 @@ SALDO_INICIAL: Dict[str, int] = {"Lunaris": 20, "Solares": 0}
 # Cofre / Armazém: precisa bater com bots/banqueiro/core/economia.py, já
 # que os dois bots leem a mesma tabela `cofre` no Postgres central.
 COFRE_TIERS: List[Dict] = [
-    {"id": "comum",   "nome": "Cofre Comum",   "capacidade": 10,  "capacidade_moeda": 500,   "custo": 100},
-    {"id": "prata",   "nome": "Cofre de Prata", "capacidade": 20,  "capacidade_moeda": 1500,  "custo": 250},
-    {"id": "dourado", "nome": "Cofre Dourado", "capacidade": 40,  "capacidade_moeda": 5000,  "custo": 500},
-    {"id": "arcano",  "nome": "Cofre Arcano",  "capacidade": 60,  "capacidade_moeda": 15000, "custo": 800},
-    {"id": "eterno",  "nome": "Cofre Eterno",  "capacidade": 200, "capacidade_moeda": 50000, "custo": 2000},
+    {"id": "comum", "nome": "Cofre Comum", "capacidade": 10, "capacidade_moeda": 500, "custos": {"Lunaris": 100}},
+    {"id": "cobre", "nome": "Cofre de Cobre", "capacidade": 15, "capacidade_moeda": 900, "custos": {"Lunaris": 150}},
+    {"id": "prata", "nome": "Cofre de Prata", "capacidade": 20, "capacidade_moeda": 1500, "custos": {"Lunaris": 250}},
+    {"id": "aco", "nome": "Cofre de Aço", "capacidade": 30, "capacidade_moeda": 2800, "custos": {"Lunaris": 375}},
+    {"id": "dourado", "nome": "Cofre Dourado", "capacidade": 40, "capacidade_moeda": 5000, "custos": {"Lunaris": 500}},
+    {"id": "obsidiana", "nome": "Cofre de Obsidiana", "capacidade": 50, "capacidade_moeda": 9000, "custos": {"Lunaris": 350, "Solares": 30}},
+    {"id": "arcano", "nome": "Cofre Arcano", "capacidade": 60, "capacidade_moeda": 15000, "custos": {"Lunaris": 400, "Solares": 40}},
+    {"id": "runico", "nome": "Cofre Rúnico", "capacidade": 80, "capacidade_moeda": 30000, "custos": {"Lunaris": 600, "Solares": 60}},
+    {"id": "eterno", "nome": "Cofre Eterno", "capacidade": 200, "capacidade_moeda": 50000, "custos": {"Lunaris": 1000, "Solares": 100}},
+    {"id": "astral", "nome": "Cofre Astral", "capacidade": 300, "capacidade_moeda": 100000, "custos": {"Solares": 200, "Fragmentos de Estrela": 5}},
+    {"id": "lunar", "nome": "Cofre Lunar", "capacidade": 500, "capacidade_moeda": 250000, "custos": {"Solares": 300, "Fragmentos de Estrela": 10}},
+    {"id": "soberano", "nome": "Cofre Soberano", "capacidade": 800, "capacidade_moeda": 750000, "custos": {"Solares": 450, "Fragmentos de Estrela": 20}},
+    {"id": "dimensional", "nome": "Cofre Dimensional", "capacidade": 1200, "capacidade_moeda": 2000000, "custos": {"Solares": 500, "Fragmentos de Estrela": 30, "Créditos Sombrios": 500}},
+    {"id": "paradoxal", "nome": "Cofre Paradoxal", "capacidade": 2500, "capacidade_moeda": 10000000, "custos": {"Solares": 750, "Fragmentos de Estrela": 50, "Créditos Sombrios": 1500}},
+    {"id": "sem-fim", "nome": "Cofre Sem-Fim", "capacidade": 1000000, "capacidade_moeda": 9000000000000, "custos": {"Lunaris": 5000, "Solares": 1000, "Fragmentos de Estrela": 100, "Créditos Sombrios": 3000}, "limite_pratico": True},
 ]
 COFRE_TIER_INICIAL = "comum"
 

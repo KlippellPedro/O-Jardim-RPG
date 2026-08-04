@@ -395,8 +395,14 @@ class Jornal(commands.Cog):
     @tasks.loop(hours=CLIMA_AUTO_INTERVALO_HORAS)
     async def ciclo_clima(self):
         for gid in self.bot.db.listar_guilds_clima_auto():
+            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
+            # isto, todo restart (cada deploy na Discloud) publicava clima de
+            # novo mesmo horas depois do ultimo.
+            if not self.bot.db.ciclo_guild_devido(gid, "clima_auto", CLIMA_AUTO_INTERVALO_HORAS):
+                continue
             try:
                 await self._publicar_clima_auto(gid)
+                self.bot.db.marcar_ciclo_guild(gid, "clima_auto")
             except Exception:
                 log.exception("erro no ciclo de clima automatico (guild %s)", gid)
 
@@ -408,8 +414,14 @@ class Jornal(commands.Cog):
     @tasks.loop(hours=ESTACAO_AUTO_INTERVALO_HORAS)
     async def ciclo_estacao_auto(self):
         for gid in self.bot.db.listar_guilds_estacao_auto():
+            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
+            # isto, todo restart avancava a estacao de novo mesmo dias antes
+            # do proximo avanco semanal de verdade.
+            if not self.bot.db.ciclo_guild_devido(gid, "estacao_auto", ESTACAO_AUTO_INTERVALO_HORAS):
+                continue
             try:
                 await self._avancar_estacao_auto(gid)
+                self.bot.db.marcar_ciclo_guild(gid, "estacao_auto")
             except Exception:
                 log.exception("erro no ciclo de rotacao automatica de estacao (guild %s)", gid)
 

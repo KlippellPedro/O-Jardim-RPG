@@ -31,7 +31,7 @@ class Integracao(commands.Cog):
     async def vincular(self, interaction: discord.Interaction, codigo: str):
         try:
             await self._client().link_discord_account(
-                code=codigo,
+                code=codigo.strip(),
                 discord_user_id=interaction.user.id,
                 discord_name=str(interaction.user),
             )

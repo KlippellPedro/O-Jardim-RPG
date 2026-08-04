@@ -4,6 +4,7 @@ SEM Discord e SEM banco de dados.
 Uso: python tests/test_economia.py  (a partir de bots/jornalista)
 """
 
+import importlib.util
 import sys
 from pathlib import Path
 
@@ -14,12 +15,24 @@ from core import economia
 
 
 def test_capacidade_do_cofre_tier_conhecido():
+    assert len(economia.COFRE_TIERS) == 15
     assert economia.capacidade_do_cofre("comum") == 10
     assert economia.capacidade_do_cofre("eterno") == 200
+    assert economia.capacidade_do_cofre("sem-fim") == 1000000
 
 
 def test_capacidade_do_cofre_tier_desconhecido_cai_no_inicial():
     assert economia.capacidade_do_cofre("nao-existe") == economia.capacidade_do_cofre(economia.COFRE_TIER_INICIAL)
+
+
+def test_espelho_de_cofres_permanece_identico_ao_banqueiro():
+    caminho = BASE.parent / "banqueiro" / "core" / "economia.py"
+    spec = importlib.util.spec_from_file_location("economia_banqueiro_contrato", caminho)
+    assert spec is not None and spec.loader is not None
+    modulo = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(modulo)
+
+    assert economia.COFRE_TIERS == modulo.COFRE_TIERS
 
 
 def test_pode_guardar_respeita_capacidade():

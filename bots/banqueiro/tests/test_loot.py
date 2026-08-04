@@ -56,8 +56,9 @@ def test_perfil_nao_sorteia_raridade_que_nao_declarou():
 
 
 def test_semente_completa_aceita_tipos_e_raridades_da_loja():
-    caminho = BASE / "data" / "catalogo.json"
-    total_arquivo = len(json.loads(caminho.read_text(encoding="utf-8"))["entradas"])
+    caminho = BASE.parent.parent / "data" / "loja" / "catalogo.json"
+    entradas = json.loads(caminho.read_text(encoding="utf-8"))["entradas"]
+    total_arquivo = len(entradas)
     catalogo = Catalogo()
     total, erros = catalogo.carregar_arquivo(str(caminho))
 
@@ -67,6 +68,10 @@ def test_semente_completa_aceita_tipos_e_raridades_da_loja():
     assert catalogo.get("reliquia-excalibur").raridade_rotulo == "Relíquia da Criação"
     assert catalogo.get("veiculo-moto-flutuadora").tipo == "veiculo-completo"
     assert catalogo.get("artefato-grimorio-arcanis").tipo == "artefato"
+    assert catalogo.get("selo-diagnostico").tipo == "consumivel"
+    assert catalogo.get("implante-memoria-espelhada").tipo == "implante"
+    assert sum(bool(item["conteudo"].get("promocao", {}).get("ativa")) for item in entradas) == 3
+    assert catalogo.get("reliquia-murasame").preco == {"Fragmentos de Estrela": 750}
 
 
 def test_catalogo_rejeita_id_duplicado_e_raridade_desconhecida():

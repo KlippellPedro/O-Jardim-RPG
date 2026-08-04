@@ -57,7 +57,7 @@ def test_estacao_nao_sorteia_raridade_que_nao_declarou():
 
 
 def test_catalogo_publicado_aceita_tipos_e_raridades_da_loja():
-    caminho = BASE.parent / "banqueiro" / "data" / "catalogo.json"
+    caminho = BASE.parent.parent / "data" / "loja" / "catalogo.json"
     total_arquivo = len(json.loads(caminho.read_text(encoding="utf-8"))["entradas"])
     catalogo = Catalogo()
     total, erros = catalogo.carregar_arquivo(str(caminho))
@@ -67,6 +67,8 @@ def test_catalogo_publicado_aceita_tipos_e_raridades_da_loja():
     assert catalogo.get("reliquia-excalibur").raridade == "reliquia da criacao"
     assert catalogo.get("reliquia-excalibur").raridade_rotulo == "Relíquia da Criação"
     assert catalogo.get("fruto-chamas").tipo == "fruto-eden"
+    assert catalogo.get("selo-nova-tentativa").tipo == "consumivel"
+    assert catalogo.get("reliquia-manto-abismo").tipo == "artefato"
 
 
 def test_agendar_proximo_futuro():

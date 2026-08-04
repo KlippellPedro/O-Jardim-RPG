@@ -50,6 +50,17 @@ class PlatformClient:
             elif isinstance(detail, dict):
                 message = detail.get("mensagem") or "a plataforma recusou a operacao"
                 code = detail.get("codigo")
+            elif isinstance(detail, list):
+                # Erro de validacao do FastAPI (422): lista de {"loc", "msg", ...}.
+                # Sem isto virava sempre "a plataforma recusou a operacao", que nao
+                # dizia qual campo estava errado (ex.: codigo colado com texto extra).
+                mensagens = [
+                    f"{'.'.join(str(parte) for parte in item.get('loc', ()) if parte != 'body')}: {item.get('msg')}"
+                    for item in detail
+                    if isinstance(item, dict) and item.get("msg")
+                ]
+                message = "; ".join(mensagens) or "dados invalidos"
+                code = None
             else:
                 message, code = "a plataforma recusou a operacao", None
             raise PlatformApiError(message, response.status_code, code)

@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import asyncio
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -34,10 +35,12 @@ class _Catalogo:
 
 
 class _DB:
-    def __init__(self, *, par=None, cofre_tier="comum", saldo=1000, inventario_legado=None):
+    def __init__(self, *, par=None, cofre_tier="comum", saldo=1000, reputacao=1, faturas=0, inventario_legado=None):
         self.par = par
         self.cofre_tier = cofre_tier
         self.saldos = {"Lunaris": saldo}
+        self.reputacao = reputacao
+        self.faturas = faturas
         self.inventario_legado = list(inventario_legado or [])
         self.chamadas = []
 
@@ -48,10 +51,19 @@ class _DB:
         return self.cofre_tier
 
     def get_cartao(self, guild_id, user_id):
-        return {"credito": 1, "tier": "comum"}
+        return {"credito": self.reputacao, "tier": "comum"}
 
     def get_divida(self, guild_id, user_id):
         return 0
+
+    def get_saldo(self, guild_id, user_id, moeda):
+        return self.saldos.get(moeda, 0)
+
+    def get_total_faturas_pendentes(self, guild_id, user_id):
+        return self.faturas
+
+    def converter_faturas_vencidas(self, guild_id):
+        return []
 
     def get_economia_config(self, guild_id):
         return {"venda_ratio": 0.5}
@@ -63,6 +75,25 @@ class _DB:
         self.saldos[moeda] = saldo - quantia
         self.chamadas.append(("debitar", moeda, quantia))
         return self.saldos[moeda]
+
+    def cobrar_compra_com_fatura(self, guild_id, user_id, quantia, limite_total, descricao, chave, prazo_dias=7):
+        saldo = self.saldos.get("Lunaris", 0)
+        financiado = max(0, quantia - saldo)
+        disponivel = limite_total - self.faturas
+        if financiado > disponivel:
+            raise SaldoInsuficiente("limite insuficiente")
+        usado = min(saldo, quantia)
+        self.saldos["Lunaris"] = saldo - usado
+        self.faturas += financiado
+        self.chamadas.append(("fatura", financiado, chave))
+        return {
+            "saldo": self.saldos["Lunaris"],
+            "carteira_usada": usado,
+            "financiado": financiado,
+            "fatura_id": 1,
+            "vence_em": datetime.now(timezone.utc) + timedelta(days=prazo_dias),
+            "repetido": False,
+        }
 
     def creditar(self, guild_id, user_id, moeda, quantia):
         self.saldos[moeda] = self.saldos.get(moeda, 0) + quantia
@@ -155,8 +186,10 @@ class _Interacao:
         self.followup = _Followup()
 
 
-def _item_espada(preco=100):
-    return Item("arma", "espada", "Espada", {"preco": preco, "raridade": "comum"})
+def _item_espada(preco=None, raridade="comum"):
+    if preco is None:
+        preco = {"Lunaris": 100}
+    return Item("arma", "espada", "Espada", {"preco": preco, "raridade": raridade})
 
 
 def _cog(*, db, platform):
@@ -233,6 +266,39 @@ def test_comprar_sem_saldo_nem_credito_suficiente_nao_debita_nem_entrega():
     _rodar(cog._executar_compra(_Interacao(), "espada", "Lunaris"))
 
     assert not any(c[0] == "add_item" for c in db.chamadas)
+
+
+def test_comprar_com_falta_de_saldo_oferece_fatura_sem_cobrar_antes_da_confirmacao():
+    db = _DB(par=None, saldo=70)
+    cog = _cog(db=db, platform=_Platform())
+    interacao = _Interacao()
+
+    _rodar(cog._executar_compra(interacao, "espada", "Lunaris"))
+
+    assert not any(c[0] in ("debitar", "fatura", "add_item") for c in db.chamadas)
+    _args, kwargs = interacao.response.mensagens[0]
+    assert kwargs["ephemeral"] is True
+    assert "Valor financiado: ☾ **30**" in kwargs["embed"].description
+    assert kwargs["view"].__class__.__name__ == "ConfirmarFinanciamentoView"
+
+    botao = _Interacao(interaction_id=interacao.id)
+    _rodar(kwargs["view"].executar(botao))
+    assert ("fatura", 30, f"item:{interacao.id}") in db.chamadas
+    assert ("add_item", "espada", 1) in db.chamadas
+
+
+def test_comprar_raro_bloqueia_reputacao_baixa_antes_de_cobrar():
+    db = _DB(par=None, saldo=10_000, reputacao=249)
+    cog = _cog(db=db, platform=_Platform())
+    cog.bot.catalogo = _Catalogo([_item_espada(raridade="raro")])
+    interacao = _Interacao()
+
+    _rodar(cog._executar_compra(interacao, "espada", "Lunaris"))
+
+    assert not any(c[0] in ("debitar", "fatura", "add_item") for c in db.chamadas)
+    (args, kwargs) = interacao.response.mensagens[0]
+    assert kwargs["ephemeral"] is True
+    assert "250 de reputação" in args[0]
 
 
 # ── /vender ──────────────────────────────────────────────────────────────

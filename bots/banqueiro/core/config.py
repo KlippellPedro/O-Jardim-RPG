@@ -18,7 +18,14 @@ except Exception:
     pass
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / "data"
+# No monorepositório, todo conteúdo editável vive em data/loja. O pacote de
+# deploy copia somente esses arquivos para data/ ao lado do bot.
+REPOSITORY_DATA_DIR = BASE_DIR.parent.parent / "data" / "loja"
+PACKAGED_DATA_DIR = BASE_DIR / "data"
+DATA_DIR = Path(
+    os.getenv("BANQUEIRO_DATA_DIR")
+    or (REPOSITORY_DATA_DIR if (REPOSITORY_DATA_DIR / "catalogo.json").is_file() else PACKAGED_DATA_DIR)
+)
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 # Token do bot: validado no main (não no import, pra não quebrar os testes).

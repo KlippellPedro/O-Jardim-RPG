@@ -10,7 +10,8 @@ substitui os dois conjuntos de chamadas por um só.
 
 Regra de fallback: ENTRADA pode cair pro legado, SAÍDA falha fechada:
 
-    dar()                          -> cofre; 404 não-vinculado -> legado
+    dar()                          -> API, depois PostgreSQL direto
+                                      (core/entrega.py), depois legado
     tirar() / mover() / reservar() -> cofre; QUALQUER falha -> CofreIndisponivel
 
 `dar()` está criando valor do nada: cair pro cofre local do Banqueiro nunca
@@ -27,7 +28,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
-from . import economia
+from . import economia, entrega
 from .platform_api import PlatformApiError
 
 
@@ -151,28 +152,27 @@ class Inventario:
         if self.modo(guild_id, user_id) == "legado":
             self.bot.db.add_item(guild_id, user_id, item_id, titulo, tipo, quantidade)
             return "legado"
-        try:
-            await self.bot.platform.deposit_vault(
-                discord_user_id=int(user_id),
-                discord_guild_id=int(guild_id),
-                idempotency_key=chave,
-                reason=motivo,
-                items=[
-                    {
-                        "item_id": item_id,
-                        "titulo": titulo,
-                        "quantidade": quantidade,
-                        "dados": {**(dados or {}), "tipo": tipo},
-                    }
-                ],
-            )
+        destino = await entrega.entregar_no_cofre(
+            self.bot,
+            guild_id=guild_id,
+            user_id=user_id,
+            idempotencia=chave,
+            motivo=motivo,
+            itens=[
+                {
+                    "item_id": item_id,
+                    "titulo": titulo,
+                    "quantidade": quantidade,
+                    "dados": {**(dados or {}), "tipo": tipo},
+                }
+            ],
+        )
+        if destino == entrega.COFRE:
             return "cofre"
-        except PlatformApiError:
-            # Mesma regra do Jornalista (bots/jornalista/cogs/baus.py): uma
-            # recompensa nunca fica refém da plataforma. Não importa o
-            # motivo do erro, cai pro cofre local.
-            self.bot.db.add_item(guild_id, user_id, item_id, titulo, tipo, quantidade)
-            return "legado"
+        # Nem a API nem o banco aceitaram o cofre da conta: uma recompensa
+        # nunca fica refém da plataforma, cai pro cofre local.
+        self.bot.db.add_item(guild_id, user_id, item_id, titulo, tipo, quantidade)
+        return "legado"
 
     async def tirar(
         self, guild_id: str, user_id: str, item_id: str, quantidade: int = 1, *, motivo: str, chave: str

@@ -227,7 +227,7 @@ def test_recovery_usa_premio_vencedor_e_chave_persistidos():
             chamadas.append(("iniciar", guild_id, mensagem_id))
             return dict(entrega)
 
-        def marcar_bau_entrega_entregue(self, guild_id, mensagem_id, resultado):
+        def marcar_bau_entrega_entregue(self, guild_id, mensagem_id, resultado, **kwargs):
             chamadas.append(("entregue", guild_id, mensagem_id, resultado))
 
     class _Platform:
@@ -246,7 +246,7 @@ def test_recovery_usa_premio_vencedor_e_chave_persistidos():
         deposito = next(item[1] for item in chamadas if item[0] == "depositar")
         assert deposito["discord_user_id"] == 42
         assert deposito["idempotency_key"] == "bau-drop:321"
-        assert deposito["currencies"] == [{"moeda": "Lunaris", "quantidade": 17}]
+        assert deposito["currencies"] == []  # Lunaris de bau vai pra carteira local, nao pro cofre
         assert deposito["items"][0]["item_id"] == "orbe"
         assert resultado["confirmado"] is True
         assert any(item[0] == "entregue" for item in chamadas)
@@ -257,7 +257,13 @@ def test_recovery_usa_premio_vencedor_e_chave_persistidos():
 def test_recovery_automatico_reprocessa_pendentes_de_todas_as_guilds():
     """Sem alguém digitar /bau_reprocessar: o loop de recovery deve varrer
     todas as guilds do bot e reentregar quem ainda está pendente."""
-    premio = serializar_premio_bau({"lunaris": 5, "itens": []})
+    premio = serializar_premio_bau({
+        "lunaris": 5,
+        "itens": [{
+            "id": "orbe", "titulo": "Orbe", "tipo": "artefato",
+            "raridade": "raro", "conteudo": {}, "quantidade": 1,
+        }],
+    })
     pendente = {
         "guild_id": "100",
         "mensagem_id": "321",
@@ -279,7 +285,7 @@ def test_recovery_automatico_reprocessa_pendentes_de_todas_as_guilds():
         def iniciar_tentativa_bau_entrega(self, guild_id, mensagem_id):
             return dict(pendente)
 
-        def marcar_bau_entrega_entregue(self, guild_id, mensagem_id, resultado):
+        def marcar_bau_entrega_entregue(self, guild_id, mensagem_id, resultado, **kwargs):
             chamadas.append(("entregue", guild_id, mensagem_id))
 
         def get_bau_entrega(self, guild_id, mensagem_id):
@@ -324,7 +330,13 @@ def test_falha_na_plataforma_cai_para_o_cofre_local_em_vez_de_ficar_pendente():
     """Não importa o motivo do erro (conta não vinculada, plataforma fora do
     ar, bug momentâneo): a entrega tem que sair do "pendente" sozinha, sem
     ninguém precisar rodar /bau_reprocessar."""
-    premio = serializar_premio_bau({"lunaris": 5, "itens": []})
+    premio = serializar_premio_bau({
+        "lunaris": 5,
+        "itens": [{
+            "id": "orbe", "titulo": "Orbe", "tipo": "artefato",
+            "raridade": "raro", "conteudo": {}, "quantidade": 1,
+        }],
+    })
     pendente = {
         "guild_id": "100",
         "mensagem_id": "321",
@@ -383,7 +395,13 @@ def test_falha_na_plataforma_cai_para_o_cofre_local_em_vez_de_ficar_pendente():
 def test_entrega_so_fica_pendente_se_ate_o_fallback_local_falhar():
     """Único caso legítimo de continuar pendente: o próprio banco local do
     bot falhou (não a plataforma): aí sim precisa de atenção manual."""
-    premio = serializar_premio_bau({"lunaris": 5, "itens": []})
+    premio = serializar_premio_bau({
+        "lunaris": 5,
+        "itens": [{
+            "id": "orbe", "titulo": "Orbe", "tipo": "artefato",
+            "raridade": "raro", "conteudo": {}, "quantidade": 1,
+        }],
+    })
     pendente = {
         "guild_id": "100",
         "mensagem_id": "321",

@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import math
 from contextlib import contextmanager
-from typing import Dict, List, Optional
+from datetime import datetime, timedelta, timezone
+from typing import Dict, List, Mapping, Optional
+from uuid import uuid4
 
 from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
@@ -13,6 +15,10 @@ from . import economia
 
 class SaldoInsuficiente(Exception):
     pass
+
+
+class UpgradeDesatualizado(Exception):
+    """O nível mudou entre a consulta do comando e a confirmação da compra."""
 
 
 class AlvoProtegido(Exception):
@@ -144,6 +150,28 @@ _SCHEMA = (
         atualizada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (guild_id, user_id)
     )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS faturas_cartao (
+        id BIGSERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        descricao TEXT NOT NULL,
+        valor_original INTEGER NOT NULL CHECK (valor_original > 0),
+        valor_pendente INTEGER NOT NULL CHECK (valor_pendente >= 0),
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        vence_em TIMESTAMPTZ NOT NULL,
+        paga_em TIMESTAMPTZ,
+        convertida_em TIMESTAMPTZ,
+        reputacao_concedida BOOLEAN NOT NULL DEFAULT FALSE,
+        chave TEXT NOT NULL,
+        UNIQUE (guild_id, user_id, chave)
+    )
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS faturas_cartao_pendentes_idx
+    ON faturas_cartao (guild_id, user_id, vence_em)
+    WHERE valor_pendente > 0 AND convertida_em IS NULL
     """,
     """
     CREATE TABLE IF NOT EXISTS config (
@@ -330,6 +358,19 @@ _SCHEMA = (
     """
     ALTER TABLE leiloes ADD COLUMN IF NOT EXISTS modo_posse TEXT NOT NULL DEFAULT 'legado'
     """,
+    # Marca a última vez que cada ciclo periódico (juros do cofre, dívida,
+    # câmbio flutuante, juros de empréstimo...) realmente rodou. `tasks.loop
+    # (hours=N)` dispara a primeira iteração assim que o bot sobe: sem isto,
+    # todo deploy na Discloud reinicia o bot e cobra/paga juros de novo, mesmo
+    # tendo rodado poucas horas antes do commit.
+    """
+    CREATE TABLE IF NOT EXISTS ciclos_guild (
+        guild_id TEXT NOT NULL,
+        ciclo TEXT NOT NULL,
+        executado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, ciclo)
+    )
+    """,
 )
 
 
@@ -440,6 +481,32 @@ class Database:
         with self._conn() as con:
             self._garantir_jogador(con, guild_id, user_id)
 
+    # ── Controle de ciclos periódicos (evita reaplicar juros a cada restart) ─
+    def ciclo_guild_devido(self, guild_id: str, ciclo: str, intervalo_horas: float) -> bool:
+        """False = já rodou dentro do intervalo; a chamada deve pular esta guild."""
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT executado_em FROM ciclos_guild
+                WHERE guild_id=%s AND ciclo=%s
+                """,
+                (guild_id, ciclo),
+            ).fetchone()
+        if row is None:
+            return True
+        return row["executado_em"] <= datetime.now(timezone.utc) - timedelta(hours=intervalo_horas)
+
+    def marcar_ciclo_guild(self, guild_id: str, ciclo: str) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO ciclos_guild (guild_id, ciclo, executado_em)
+                VALUES (%s, %s, CURRENT_TIMESTAMP)
+                ON CONFLICT (guild_id, ciclo) DO UPDATE SET executado_em = CURRENT_TIMESTAMP
+                """,
+                (guild_id, ciclo),
+            )
+
     def get_carteira(self, guild_id: str, user_id: str) -> Dict[str, int]:
         with self._conn() as con:
             rows = con.execute(
@@ -461,6 +528,330 @@ class Database:
                 (guild_id, user_id),
             ).fetchone()
         return int(row["valor"]) if row else 0
+
+    def get_total_faturas_pendentes(self, guild_id: str, user_id: str) -> int:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT COALESCE(SUM(valor_pendente), 0) AS total
+                FROM faturas_cartao
+                WHERE guild_id=%s AND user_id=%s
+                  AND valor_pendente > 0 AND convertida_em IS NULL
+                """,
+                (guild_id, user_id),
+            ).fetchone()
+        return int(row["total"]) if row else 0
+
+    def listar_faturas_pendentes(self, guild_id: str, user_id: str) -> List[dict]:
+        self.converter_faturas_vencidas(guild_id)
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT id, descricao, valor_original, valor_pendente, criado_em, vence_em
+                FROM faturas_cartao
+                WHERE guild_id=%s AND user_id=%s
+                  AND valor_pendente > 0 AND convertida_em IS NULL
+                ORDER BY vence_em, id
+                """,
+                (guild_id, user_id),
+            ).fetchall()
+        return [
+            {
+                "id": int(row["id"]),
+                "descricao": row["descricao"],
+                "valor_original": int(row["valor_original"]),
+                "valor_pendente": int(row["valor_pendente"]),
+                "criado_em": row["criado_em"],
+                "vence_em": row["vence_em"],
+            }
+            for row in rows
+        ]
+
+    def cobrar_compra_com_fatura(
+        self,
+        guild_id: str,
+        user_id: str,
+        quantia: int,
+        limite_total: int,
+        descricao: str,
+        chave: str,
+        prazo_dias: int = economia.FATURA_PRAZO_DIAS,
+    ) -> dict:
+        """Cobra a carteira e financia somente o restante em fatura.
+
+        A cotação mostrada pelo Discord é apenas informativa. Esta transação
+        revalida carteira, dívida e demais faturas sob bloqueio para impedir
+        duas confirmações simultâneas de ultrapassarem o limite do cartão.
+        """
+        if quantia <= 0 or limite_total < 0 or prazo_dias <= 0:
+            raise ValueError("parametros de compra invalidos")
+        self.converter_faturas_vencidas(guild_id)
+        agora = datetime.now(timezone.utc)
+        vencimento = agora + timedelta(days=int(prazo_dias))
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            carteira_row = con.execute(
+                """
+                SELECT saldo FROM carteira
+                WHERE guild_id=%s AND user_id=%s AND moeda='Lunaris'
+                FOR UPDATE
+                """,
+                (guild_id, user_id),
+            ).fetchone()
+            saldo = int(carteira_row["saldo"]) if carteira_row else 0
+
+            repetida = con.execute(
+                """
+                SELECT id, valor_original, valor_pendente, vence_em
+                FROM faturas_cartao
+                WHERE guild_id=%s AND user_id=%s AND chave=%s
+                """,
+                (guild_id, user_id, str(chave)),
+            ).fetchone()
+            if repetida is not None:
+                return {
+                    "saldo": saldo,
+                    "carteira_usada": 0,
+                    "financiado": int(repetida["valor_original"]),
+                    "fatura_id": int(repetida["id"]),
+                    "vence_em": repetida["vence_em"],
+                    "repetido": True,
+                }
+
+            faturas = con.execute(
+                """
+                SELECT id, valor_pendente FROM faturas_cartao
+                WHERE guild_id=%s AND user_id=%s
+                  AND valor_pendente > 0 AND convertida_em IS NULL
+                FOR UPDATE
+                """,
+                (guild_id, user_id),
+            ).fetchall()
+            pendente = sum(int(row["valor_pendente"]) for row in faturas)
+            divida_row = con.execute(
+                """
+                SELECT valor FROM divida_cartao
+                WHERE guild_id=%s AND user_id=%s
+                FOR UPDATE
+                """,
+                (guild_id, user_id),
+            ).fetchone()
+            divida = int(divida_row["valor"]) if divida_row else 0
+            cotacao = economia.cotar_pagamento(
+                quantia,
+                saldo,
+                limite_total,
+                divida,
+                pendente,
+            )
+            if not cotacao["pode_comprar"]:
+                total = saldo + cotacao["limite_disponivel"]
+                raise SaldoInsuficiente(
+                    f"tem {saldo} na carteira e {cotacao['limite_disponivel']} de limite disponível "
+                    f"({total} no total), mas precisa de {quantia} Lunaris"
+                )
+
+            carteira_usada = cotacao["da_carteira"]
+            financiado = cotacao["financiado"]
+            novo_saldo = saldo - carteira_usada
+            con.execute(
+                """
+                UPDATE carteira SET saldo=%s
+                WHERE guild_id=%s AND user_id=%s AND moeda='Lunaris'
+                """,
+                (novo_saldo, guild_id, user_id),
+            )
+            fatura_id = None
+            if financiado:
+                fatura = con.execute(
+                    """
+                    INSERT INTO faturas_cartao (
+                        guild_id, user_id, descricao, valor_original,
+                        valor_pendente, criado_em, vence_em, chave
+                    )
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    RETURNING id
+                    """,
+                    (
+                        guild_id,
+                        user_id,
+                        str(descricao)[:500],
+                        financiado,
+                        financiado,
+                        agora,
+                        vencimento,
+                        str(chave)[:200],
+                    ),
+                ).fetchone()
+                fatura_id = int(fatura["id"])
+        return {
+            "saldo": novo_saldo,
+            "carteira_usada": carteira_usada,
+            "financiado": financiado,
+            "fatura_id": fatura_id,
+            "vence_em": vencimento if financiado else None,
+            "repetido": False,
+        }
+
+    def pagar_faturas(self, guild_id: str, user_id: str, quantia: int) -> dict:
+        """Paga as faturas mais antigas e premia apenas quitações no prazo."""
+        if quantia <= 0:
+            raise ValueError("a quantia deve ser positiva")
+        convertidas = self.converter_faturas_vencidas(guild_id)
+        convertido = sum(
+            item["valor"] for item in convertidas if item["user_id"] == user_id
+        )
+        agora = datetime.now(timezone.utc)
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            carteira_row = con.execute(
+                """
+                SELECT saldo FROM carteira
+                WHERE guild_id=%s AND user_id=%s AND moeda='Lunaris'
+                FOR UPDATE
+                """,
+                (guild_id, user_id),
+            ).fetchone()
+            saldo = int(carteira_row["saldo"]) if carteira_row else 0
+            faturas = con.execute(
+                """
+                SELECT id, valor_original, valor_pendente, vence_em, reputacao_concedida
+                FROM faturas_cartao
+                WHERE guild_id=%s AND user_id=%s
+                  AND valor_pendente > 0 AND convertida_em IS NULL
+                ORDER BY vence_em, id
+                FOR UPDATE
+                """,
+                (guild_id, user_id),
+            ).fetchall()
+            total = sum(int(row["valor_pendente"]) for row in faturas)
+            if total <= 0:
+                return {
+                    "pago": 0,
+                    "restante": 0,
+                    "saldo": saldo,
+                    "reputacao_ganha": 0,
+                    "convertido_em_divida": convertido,
+                }
+            pago = min(int(quantia), total)
+            if saldo < pago:
+                raise SaldoInsuficiente(
+                    f"tem {saldo} Lunaris na carteira, mas precisa de {pago} para esse pagamento"
+                )
+            con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda='Lunaris'
+                """,
+                (pago, guild_id, user_id),
+            )
+
+            faltando_alocar = pago
+            reputacao_ganha = 0
+            for row in faturas:
+                if faltando_alocar <= 0:
+                    break
+                atual = int(row["valor_pendente"])
+                parcela = min(atual, faltando_alocar)
+                novo_valor = atual - parcela
+                quitou_no_prazo = (
+                    novo_valor == 0
+                    and not bool(row["reputacao_concedida"])
+                    and agora <= row["vence_em"]
+                )
+                ganho = economia.reputacao_por_fatura_paga(row["valor_original"]) if quitou_no_prazo else 0
+                reputacao_ganha += ganho
+                con.execute(
+                    """
+                    UPDATE faturas_cartao
+                    SET valor_pendente=%s,
+                        paga_em=CASE WHEN %s=0 THEN %s ELSE paga_em END,
+                        reputacao_concedida=reputacao_concedida OR %s
+                    WHERE id=%s
+                    """,
+                    (novo_valor, novo_valor, agora, quitou_no_prazo, row["id"]),
+                )
+                faltando_alocar -= parcela
+
+            if reputacao_ganha:
+                con.execute(
+                    """
+                    UPDATE cartao SET credito=credito+%s
+                    WHERE guild_id=%s AND user_id=%s
+                    """,
+                    (reputacao_ganha, guild_id, user_id),
+                )
+        return {
+            "pago": pago,
+            "restante": total - pago,
+            "saldo": saldo - pago,
+            "reputacao_ganha": reputacao_ganha,
+            "convertido_em_divida": convertido,
+        }
+
+    def converter_faturas_vencidas(self, guild_id: str) -> List[dict]:
+        """Transforma somente o saldo ainda aberto após o vencimento em dívida."""
+        agora = datetime.now(timezone.utc)
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT id, user_id, valor_pendente
+                FROM faturas_cartao
+                WHERE guild_id=%s AND valor_pendente > 0
+                  AND convertida_em IS NULL AND vence_em <= %s
+                ORDER BY user_id, id
+                FOR UPDATE
+                """,
+                (guild_id, agora),
+            ).fetchall()
+            por_usuario: Dict[str, dict] = {}
+            for row in rows:
+                info = por_usuario.setdefault(row["user_id"], {"valor": 0, "faturas": 0})
+                info["valor"] += int(row["valor_pendente"])
+                info["faturas"] += 1
+            resultados = []
+            for uid, info in por_usuario.items():
+                divida = con.execute(
+                    """
+                    INSERT INTO divida_cartao (guild_id, user_id, valor, atualizada_em)
+                    VALUES (%s, %s, %s, %s)
+                    ON CONFLICT (guild_id, user_id) DO UPDATE SET
+                        valor=divida_cartao.valor + EXCLUDED.valor,
+                        atualizada_em=EXCLUDED.atualizada_em
+                    RETURNING valor
+                    """,
+                    (guild_id, uid, info["valor"], agora),
+                ).fetchone()
+                resultados.append(
+                    {
+                        "user_id": uid,
+                        "valor": info["valor"],
+                        "faturas": info["faturas"],
+                        "divida_total": int(divida["valor"]),
+                    }
+                )
+                con.execute(
+                    """
+                    INSERT INTO avisos_pendentes (guild_id, mensagem)
+                    VALUES (%s, %s)
+                    """,
+                    (
+                        guild_id,
+                        f"⚠️ A fatura de <@{uid}> venceu. ☾ **{info['valor']} Lunaris** "
+                        "não pagos viraram dívida com o Banqueiro.",
+                    ),
+                )
+            if rows:
+                con.execute(
+                    """
+                    UPDATE faturas_cartao
+                    SET valor_pendente=0, convertida_em=%s
+                    WHERE guild_id=%s AND valor_pendente > 0
+                      AND convertida_em IS NULL AND vence_em <= %s
+                    """,
+                    (agora, guild_id, agora),
+                )
+        return resultados
 
     def top_carteiras(self, guild_id: str, moeda: str, limite: int = 10) -> List[dict]:
         with self._conn() as con:
@@ -663,7 +1054,7 @@ class Database:
                 if divida + falta > limite:
                     disponivel = saldo + max(0, limite - divida)
                     raise SaldoInsuficiente(
-                        f"tem {saldo} na carteira e {max(0, limite - divida)} de crédito disponível "
+                        f"tem {saldo} na carteira e {max(0, limite - divida)} de limite disponível no cartão "
                         f"({disponivel} no total), mas precisa de {quantia} {nome}"
                     )
                 con.execute(
@@ -944,14 +1335,21 @@ class Database:
             ).fetchall()
         return [dict(row) for row in rows]
 
-    # ── Leitura direta do cofre da plataforma (cofre unificado) ────────────
+    # ── Acesso direto ao cofre da plataforma (cofre unificado) ─────────────
     # O bot e a plataforma web compartilham o mesmo PostgreSQL (VLAN da
     # Discloud): plataforma/routers/vault.py::get_vault_bank_tier já faz o
     # inverso (lê `inventario`/`cofre` daqui). Ler direto evita um round-trip
     # HTTP em cada tecla de autocomplete de /oferecer, /trocar e
     # /leilao_iniciar, onde o Discord só dá ~3s e o cliente HTTP tem timeout
     # de 10s. `None` de retorno = conta não vinculada a essa guild (modo
-    # legado); escrita continua indo sempre pela API (core/inventario.py).
+    # legado).
+    #
+    # A ENTRADA de recompensa (`depositar_cofre_plataforma`) também sabe
+    # escrever por aqui, como rede de segurança de `core/entrega.py`: quando
+    # o salto HTTP até a API cai, uma recompensa já paga não pode sumir nem
+    # ficar presa numa tabela que o site não lê. Saída (retirar, transferir,
+    # reservar) continua exclusiva da API, que é quem arbitra posse entre
+    # dois cofres — ver o contrato em core/inventario.py.
     def par_cofre_plataforma(self, guild_id: str, user_id: str):
         """(usuario_id, campanha_id) vinculados a esse par Discord, ou None."""
         with self._conn() as con:
@@ -1019,6 +1417,139 @@ class Database:
                 (par["usuario_id"], par["campanha_id"]),
             ).fetchall()
         return [dict(row) for row in rows]
+
+    def depositar_cofre_plataforma(
+        self,
+        guild_id: str,
+        user_id: str,
+        *,
+        idempotencia: str,
+        motivo: str,
+        itens: Optional[List[dict]] = None,
+        moedas: Optional[List[dict]] = None,
+        origem: str = "banqueiro",
+    ) -> Optional[dict]:
+        """Espelha plataforma/routers/internal.py::deposit_discord_reward.
+
+        Mesma transação, mesma trava e mesma chave de idempotência do
+        endpoint: chamar os dois com a mesma chave credita uma vez só, então
+        `core/entrega.py` pode tentar o HTTP primeiro e cair pra cá sem risco
+        de pagar em dobro nem de perder a recompensa se a resposta se perder
+        no meio do caminho.
+
+        Devolve `None` quando a conta não está vinculada a essa guild (quem
+        chamou deve cair pro cofre local), ou
+        `{"movimento_id", "campanha_id", "repetido"}`.
+        """
+        itens = itens or []
+        moedas = moedas or []
+        if not itens and not moedas:
+            raise ValueError("informe ao menos um item ou moeda")
+
+        par = self.par_cofre_plataforma(guild_id, user_id)
+        if par is None:
+            return None
+        usuario_id, campanha_id = par["usuario_id"], par["campanha_id"]
+
+        with self._conn() as con:
+            # Trava ANTES de checar a chave, senão duas entregas concorrentes
+            # com a mesma chave (o HTTP que expirou e o fallback daqui, por
+            # exemplo) passam as duas pelo SELECT e a segunda esbarra no
+            # UNIQUE como erro cru.
+            con.execute(
+                "SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))",
+                (f"movimento:{campanha_id}:{origem}:{idempotencia}",),
+            )
+            existente = con.execute(
+                """
+                SELECT id FROM movimentos_cofre
+                WHERE campanha_id=%s AND origem=%s AND idempotencia=%s
+                """,
+                (campanha_id, origem, idempotencia),
+            ).fetchone()
+            if existente:
+                return {
+                    "movimento_id": existente["id"],
+                    "campanha_id": campanha_id,
+                    "repetido": True,
+                }
+
+            for item in itens:
+                con.execute(
+                    """
+                    INSERT INTO cofre_itens_usuario
+                        (usuario_id, campanha_id, item_id, titulo, quantidade, dados, origem)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (usuario_id, campanha_id, item_id) DO UPDATE SET
+                        titulo=EXCLUDED.titulo,
+                        quantidade=cofre_itens_usuario.quantidade + EXCLUDED.quantidade,
+                        dados=EXCLUDED.dados,
+                        origem=EXCLUDED.origem,
+                        atualizado_em=CURRENT_TIMESTAMP
+                    """,
+                    (
+                        usuario_id,
+                        campanha_id,
+                        str(item["item_id"]),
+                        str(item["titulo"]),
+                        int(item.get("quantidade") or 1),
+                        Jsonb(item.get("dados") or {}),
+                        origem,
+                    ),
+                )
+            for moeda in moedas:
+                con.execute(
+                    """
+                    INSERT INTO cofre_saldos_usuario
+                        (usuario_id, campanha_id, moeda, saldo)
+                    VALUES (%s, %s, %s, %s)
+                    ON CONFLICT (usuario_id, campanha_id, moeda) DO UPDATE SET
+                        saldo=cofre_saldos_usuario.saldo + EXCLUDED.saldo,
+                        atualizado_em=CURRENT_TIMESTAMP
+                    """,
+                    (usuario_id, campanha_id, str(moeda["moeda"]), int(moeda["quantidade"])),
+                )
+
+            movimento_id = uuid4()
+            detalhes = {"motivo": motivo, "itens": itens, "moedas": moedas}
+            con.execute(
+                """
+                INSERT INTO movimentos_cofre
+                    (id, usuario_id, campanha_id, origem, idempotencia, detalhes)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                """,
+                (movimento_id, usuario_id, campanha_id, origem, idempotencia, Jsonb(detalhes)),
+            )
+            premios = [str(item["titulo"]) for item in itens]
+            premios += [f"{moeda['quantidade']} {moeda['moeda']}" for moeda in moedas]
+            con.execute(
+                """
+                INSERT INTO notificacoes
+                    (id, usuario_id, campanha_id, categoria, titulo, mensagem, dados)
+                VALUES (%s, %s, %s, 'economia', %s, %s, %s)
+                """,
+                (
+                    uuid4(),
+                    usuario_id,
+                    campanha_id,
+                    "Recompensa nova no seu cofre",
+                    f"{', '.join(premios[:4])} — {motivo}"[:600],
+                    Jsonb({"origem": origem}),
+                ),
+            )
+            con.execute(
+                """
+                INSERT INTO eventos_auditoria
+                    (id, campanha_id, ator_servico, acao, alvo_tipo, alvo_id, detalhes)
+                VALUES (%s, %s, %s, 'cofre.recompensa_discord', 'usuario', %s, %s)
+                """,
+                (uuid4(), campanha_id, origem, str(usuario_id), Jsonb(detalhes)),
+            )
+        return {
+            "movimento_id": movimento_id,
+            "campanha_id": campanha_id,
+            "repetido": False,
+        }
 
     def get_cofre_tier(self, guild_id: str, user_id: str) -> str:
         with self._conn() as con:
@@ -1107,6 +1638,109 @@ class Database:
                 """,
                 (tier, guild_id, user_id),
             )
+
+    def comprar_upgrade_multimoeda(
+        self,
+        guild_id: str,
+        user_id: str,
+        trilha: str,
+        tier_esperado: str,
+        novo_tier: str,
+        custos: Mapping[str, int],
+        descricao: str,
+    ) -> Dict[str, int]:
+        """Cobra todas as moedas e avança um upgrade em uma única transação.
+
+        A verificação do tier atual evita duas compras concorrentes do mesmo
+        nível. Nenhum saldo é alterado se uma das moedas estiver faltando.
+        Upgrades não usam o limite do Cartão Lunar.
+        """
+        trilhas = {
+            "cofre": ("cofre", "tier", economia.COFRE_TIER_INICIAL),
+            "seguranca": ("cofre", "seguranca_tier", economia.SEGURANCA_TIER_INICIAL),
+            "cartao": ("cartao", "tier", economia.CARTAO_TIER_INICIAL),
+        }
+        chave = economia.normalizar(trilha)
+        if chave not in trilhas:
+            raise ValueError("trilha de upgrade invalida")
+        if not isinstance(custos, Mapping) or not custos:
+            raise ValueError("o upgrade precisa ter ao menos um custo")
+
+        custos_validos: Dict[str, int] = {}
+        nomes_normalizados = set()
+        for moeda, quantia in custos.items():
+            nome = str(moeda).strip()
+            normalizado = economia.normalizar(nome)
+            if not nome or normalizado in nomes_normalizados:
+                raise ValueError("moeda de upgrade invalida ou duplicada")
+            if isinstance(quantia, bool) or not isinstance(quantia, int) or quantia <= 0:
+                raise ValueError("os custos do upgrade devem ser inteiros positivos")
+            nomes_normalizados.add(normalizado)
+            custos_validos[nome] = int(quantia)
+
+        tabela, coluna, tier_inicial = trilhas[chave]
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            atual = con.execute(
+                f"SELECT {coluna} AS tier FROM {tabela} "
+                "WHERE guild_id=%s AND user_id=%s FOR UPDATE",
+                (guild_id, user_id),
+            ).fetchone()
+            tier_atual = atual["tier"] if atual else tier_inicial
+            if economia.normalizar(tier_atual) != economia.normalizar(tier_esperado):
+                raise UpgradeDesatualizado(
+                    "seu nível mudou enquanto a compra era processada; consulte as melhorias novamente"
+                )
+
+            cobrancas = []
+            for moeda, quantia in custos_validos.items():
+                nome_real = self._nome_moeda_real(con, guild_id, user_id, moeda)
+                cobrancas.append((economia.normalizar(nome_real), nome_real, quantia))
+            cobrancas.sort(key=lambda item: item[0])
+
+            saldos: Dict[str, int] = {}
+            faltas = []
+            for _, moeda, quantia in cobrancas:
+                row = con.execute(
+                    """
+                    SELECT saldo FROM carteira
+                    WHERE guild_id=%s AND user_id=%s AND moeda=%s
+                    FOR UPDATE
+                    """,
+                    (guild_id, user_id, moeda),
+                ).fetchone()
+                saldo = int(row["saldo"]) if row else 0
+                saldos[moeda] = saldo
+                if saldo < quantia:
+                    faltas.append(f"{quantia - saldo} {moeda}")
+
+            if faltas:
+                raise SaldoInsuficiente("faltam " + ", ".join(faltas))
+
+            restantes: Dict[str, int] = {}
+            for _, moeda, quantia in cobrancas:
+                row = con.execute(
+                    """
+                    UPDATE carteira SET saldo=saldo-%s
+                    WHERE guild_id=%s AND user_id=%s AND moeda=%s
+                    RETURNING saldo
+                    """,
+                    (quantia, guild_id, user_id, moeda),
+                ).fetchone()
+                restantes[moeda] = int(row["saldo"])
+                con.execute(
+                    """
+                    INSERT INTO extrato (guild_id, user_id, delta, moeda, descricao)
+                    VALUES (%s, %s, %s, %s, %s)
+                    """,
+                    (guild_id, user_id, -quantia, moeda, descricao),
+                )
+
+            con.execute(
+                f"UPDATE {tabela} SET {coluna}=%s WHERE guild_id=%s AND user_id=%s",
+                (novo_tier, guild_id, user_id),
+            )
+        return restantes
 
     def get_cambio(self, guild_id: str):
         with self._conn() as con:
@@ -1732,9 +2366,7 @@ class Database:
             saldo_alvo = carteiras[alvo_user_id]["saldo"]
             if saldo_alvo <= 0:
                 raise SaldoInsuficiente("a carteira da vitima esta vazia")
-            quantia = max(
-                1, math.floor(saldo_alvo * economia.ROUBO_CARTEIRA_PERCENT)
-            )
+            quantia = economia.valor_roubo_carteira(saldo_alvo)
             row = con.execute(
                 """
                 UPDATE carteira SET saldo=saldo-%s
@@ -2130,7 +2762,7 @@ class Database:
     def resetar_jogador(self, guild_id: str, user_id: str) -> None:
         """[Mestre] apaga carteira, cofre (itens e saldo), inventário e cartão de um jogador."""
         with self._conn() as con:
-            for tabela in ("carteira", "inventario", "cofre_saldo", "baus_estoque", "divida_cartao"):
+            for tabela in ("carteira", "inventario", "cofre_saldo", "baus_estoque", "divida_cartao", "faturas_cartao"):
                 con.execute(
                     f"DELETE FROM {tabela} WHERE guild_id=%s AND user_id=%s",
                     (guild_id, user_id),
@@ -2164,7 +2796,7 @@ class Database:
             resultado = {}
             for tabela in (
                 "carteira", "inventario", "cofre_saldo", "baus_estoque",
-                "divida_cartao", "loteria_bilhetes", "investimentos", "emprestimos",
+                "divida_cartao", "faturas_cartao", "loteria_bilhetes", "investimentos", "emprestimos",
             ):
                 cur = con.execute(f"DELETE FROM {tabela} WHERE guild_id=%s", (guild_id,))
                 resultado[tabela] = cur.rowcount

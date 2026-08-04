@@ -1,5 +1,5 @@
 """Cog Economia: comandos do jogador. Integra o Cartão Lunar (cashback,
-desconto, linha de crédito). Lógica vem de core.economia e core.db."""
+desconto por reputação bancária e limite do cartão). Lógica vem de core.economia e core.db."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ import math
 import random
 import time
 from datetime import datetime, timedelta, timezone
-from typing import Optional, List
+from typing import Awaitable, Callable, Optional, List
 
 import discord
 from discord import app_commands
@@ -17,11 +17,11 @@ from discord.ext import commands, tasks
 
 from core import cargos as cargos_mod
 from core import economia
+from core import entrega as entrega_mod
 from core import loot as loot_mod
 from core import ui
-from core.db import AlvoProtegido, SaldoInsuficiente
+from core.db import AlvoProtegido, SaldoInsuficiente, UpgradeDesatualizado
 from core.inventario import CofreCheio, CofreIndisponivel, ItemIndisponivel
-from core.platform_api import PlatformApiError
 from core.tasks_util import registrar_reinicio_em_erro
 
 log = logging.getLogger("banqueiro")
@@ -55,6 +55,50 @@ def fmt_quantidade(valor: int) -> str:
     return f"{int(valor):,}".replace(",", ".")
 
 
+PATAMARES_VISUAIS = (
+    ("🟫", "Bronze I"),
+    ("🟫", "Bronze II"),
+    ("🟫", "Bronze III"),
+    ("⚪", "Prata I"),
+    ("⚪", "Prata II"),
+    ("⚪", "Prata III"),
+    ("🟨", "Ouro I"),
+    ("🟨", "Ouro II"),
+    ("🟨", "Ouro III"),
+    ("🔷", "Safira I"),
+    ("🔷", "Safira II"),
+    ("🔴", "Rubi I"),
+    ("🔴", "Rubi II"),
+    ("💎", "Diamante"),
+    ("🌌", "Absoluto"),
+)
+
+
+def visual_tier(tiers: List[dict], tier_id: str) -> dict:
+    """Metadados visuais estáveis para qualquer uma das duas trilhas."""
+    alvo = economia.normalizar(tier_id)
+    indice = next(
+        (i for i, tier in enumerate(tiers) if tier["id"] == alvo),
+        0,
+    )
+    icone, patamar = PATAMARES_VISUAIS[min(indice, len(PATAMARES_VISUAIS) - 1)]
+    return {
+        "icone": icone,
+        "patamar": patamar,
+        "nivel": indice + 1,
+        "total": len(tiers),
+    }
+
+
+def fmt_capacidade_tier(tier: dict) -> str:
+    if tier.get("limite_pratico"):
+        return "∞ itens · ∞ moedas"
+    return (
+        f"{fmt_quantidade(tier['capacidade'])} itens · "
+        f"{fmt_quantidade(tier['capacidade_moeda'])} por moeda"
+    )
+
+
 def fmt_itens_cofre(itens, limite: int = 12) -> str:
     """Lista compacta que respeita o limite de 1.024 caracteres do embed."""
     if not itens:
@@ -71,8 +115,49 @@ def fmt_preco(preco) -> str:
     if preco is None:
         return "Não informado"
     if isinstance(preco, dict):
-        return " / ".join(f"{v} {k}" for k, v in preco.items())
-    return f"{preco} (qualquer moeda)"
+        return " / ".join(
+            f"{SIMBOLO.get(economia.normalizar(k), '◈')} {fmt_quantidade(v)} {k}"
+            for k, v in preco.items()
+        )
+    return f"☉ {fmt_quantidade(preco)} Solares"
+
+
+def fmt_custos(custos: dict, compacto: bool = False, markdown: bool = True) -> str:
+    """Exibe um pacote multimoeda sem esconder nenhum material exigido."""
+    if not custos:
+        return "Sem custo"
+    separador = " · " if compacto else "\n"
+    def quantidade(valor: int) -> str:
+        texto = fmt_quantidade(valor)
+        return f"**{texto}**" if markdown else texto
+    return separador.join(
+        f"{SIMBOLO.get(economia.normalizar(moeda), '◈')} {quantidade(valor)} {moeda}"
+        for moeda, valor in custos.items()
+    )
+
+
+def fmt_requisito_reputacao(valor: int) -> str:
+    return "Livre" if int(valor) <= 0 else f"🏦 {int(valor)} de reputação"
+
+
+def embed_confirmacao_financiamento(descricao: str, cotacao: dict) -> discord.Embed:
+    vencimento = datetime.now(timezone.utc) + timedelta(days=economia.FATURA_PRAZO_DIAS)
+    vence_ts = int(vencimento.timestamp())
+    emb = ui.embed(
+        "💳 Confirmar uso do limite?",
+        categoria="economia",
+        descricao=(
+            f"**{descricao}**\n\n"
+            f"Preço: ☾ **{cotacao['preco']}**\n"
+            f"Saldo da carteira: ☾ **{cotacao['saldo_carteira']}**\n"
+            f"Sai da carteira: ☾ **{cotacao['da_carteira']}**\n"
+            f"Valor financiado: ☾ **{cotacao['financiado']}**\n"
+            f"Limite restante após a compra: ☾ **{cotacao['limite_apos']}**\n"
+            f"Vencimento da fatura: <t:{vence_ts}:F> (<t:{vence_ts}:R>)"
+        ),
+    )
+    emb.set_footer(text=f"{ui.MARCA} · Só haverá cobrança se você confirmar")
+    return emb
 
 
 def _tag_item(it) -> str:
@@ -117,6 +202,8 @@ def _embed_item(it) -> discord.Embed:
         emb.description = it.descricao[:4096]
     emb.add_field(name="Tipo", value=_tag_item(it), inline=True)
     emb.add_field(name="Raridade", value=it.raridade_rotulo, inline=True)
+    requisito = economia.reputacao_minima_raridade(it.raridade)
+    emb.add_field(name="Acesso bancário", value=fmt_requisito_reputacao(requisito), inline=True)
     if it.preco is not None:
         emb.add_field(name="Preço", value=fmt_preco(it.preco), inline=True)
     if it.atributos:
@@ -202,15 +289,75 @@ class DefesaRouboView(discord.ui.View):
         self.stop()
 
 
+class ConfirmarFinanciamentoView(discord.ui.View):
+    """Confirmação privada antes de qualquer uso do limite do cartão."""
+
+    def __init__(
+        self,
+        *,
+        autor_id: int,
+        executar: Callable[[discord.Interaction], Awaitable[None]],
+        timeout: float = 60,
+    ):
+        super().__init__(timeout=timeout)
+        self.autor_id = autor_id
+        self.executar = executar
+        self.finalizado = False
+
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        if interaction.user.id != self.autor_id:
+            await interaction.response.send_message(
+                "Só quem iniciou a compra pode confirmar o financiamento.",
+                ephemeral=True,
+            )
+            return False
+        return True
+
+    def _desabilitar(self) -> None:
+        for child in self.children:
+            child.disabled = True
+
+    @discord.ui.button(label="Confirmar financiamento", emoji="💳", style=discord.ButtonStyle.success)
+    async def confirmar(self, interaction: discord.Interaction, _button: discord.ui.Button):
+        if self.finalizado:
+            await interaction.response.send_message("Esta compra já foi processada.", ephemeral=True)
+            return
+        self.finalizado = True
+        self._desabilitar()
+        await interaction.response.defer(ephemeral=True)
+        await interaction.edit_original_response(view=self)
+        try:
+            await self.executar(interaction)
+        except Exception:
+            log.exception("erro ao concluir compra financiada")
+            await interaction.followup.send(
+                "⚠️ Não foi possível concluir a compra. Nenhum novo clique será processado; tente novamente.",
+                ephemeral=True,
+            )
+        finally:
+            self.stop()
+
+    @discord.ui.button(label="Cancelar", emoji="✖️", style=discord.ButtonStyle.secondary)
+    async def cancelar(self, interaction: discord.Interaction, _button: discord.ui.Button):
+        if self.finalizado:
+            await interaction.response.send_message("Esta compra já foi processada.", ephemeral=True)
+            return
+        self.finalizado = True
+        self._desabilitar()
+        await interaction.response.edit_message(content="Compra cancelada. Nada foi cobrado.", embed=None, view=self)
+        self.stop()
+
+
 class LojaView(discord.ui.View):
     """Loja navegável: ◀ ▶ pra paginar e um menu pra comprar direto (mesma
     lógica de dinheiro do /comprar, via cog._executar_compra)."""
 
-    def __init__(self, cog, itens, *, autor_id: int, moeda: str = "Lunaris", timeout: float = 180):
+    def __init__(self, cog, itens, *, autor_id: int, moeda: str = "Lunaris", reputacao: int = 0, timeout: float = 180):
         super().__init__(timeout=timeout)
         self.cog = cog
         self.autor_id = autor_id
         self.moeda = moeda
+        self.reputacao = int(reputacao)
         self.paginas = ui.paginar(itens, 20)
         self.total = sum(len(p) for p in self.paginas)
         self.indice = 0
@@ -234,9 +381,15 @@ class LojaView(discord.ui.View):
             descricao=f"{self.total} item(ns) à venda: escolha no menu pra comprar com {self.moeda}.",
         )
         for it in self._itens_pagina():
+            requisito = economia.reputacao_minima_raridade(it.raridade)
+            acesso = (
+                f"🏦 reputação {requisito}"
+                if requisito > 0 and requisito > self.reputacao
+                else ("✅ acesso livre" if requisito <= 0 else f"✅ acesso · reputação {requisito}")
+            )
             emb.add_field(
                 name=f"{ui.icone_raridade(it.raridade)} {it.titulo}  ·  {_tag_item(it)}",
-                value=f"`{it.id}`: {fmt_preco(it.preco)}",
+                value=f"`{it.id}`: {fmt_preco(it.preco)} · {acesso}",
                 inline=False,
             )
         if len(self.paginas) > 1:
@@ -306,6 +459,11 @@ class Economia(commands.Cog):
     async def ciclo_juros_cofre(self):
         for guild in self.bot.guilds:
             gid = str(guild.id)
+            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
+            # isto, todo restart (cada deploy na Discloud) pagava juros de
+            # novo mesmo horas depois do ultimo tick.
+            if not self.bot.db.ciclo_guild_devido(gid, "juros_cofre", economia.JUROS_COFRE_TICK_HORAS):
+                continue
             try:
                 taxa = self.bot.db.get_economia_config(gid)["juros_cofre_taxa"]
                 afetados = self.bot.db.aplicar_juros_cofre(gid, taxa)
@@ -315,6 +473,7 @@ class Economia(commands.Cog):
                         f"💰 O cofre rendeu juros! Quem guardou Lunaris viu o saldo crescer "
                         f"~{int(taxa * 100)}%. Guarde mais com `/cofre_depositar`.",
                     )
+                self.bot.db.marcar_ciclo_guild(gid, "juros_cofre")
             except Exception:
                 log.exception("erro no ciclo de juros do cofre (guild %s)", gid)
 
@@ -329,7 +488,7 @@ class Economia(commands.Cog):
         itens = cat.buscar(current, limite=25) if current else cat.listar()[:25]
         return [app_commands.Choice(name=i.titulo[:100], value=i.id) for i in itens]
 
-    @app_commands.command(description="Mostra sua carteira, cofre e crédito.")
+    @app_commands.command(description="Mostra carteira, cofre, cartão e reputação bancária.")
     @app_commands.describe(membro="Ver de outra pessoa (opcional).")
     async def carteira(self, interaction, membro: Optional[discord.Member] = None):
         alvo = membro or interaction.user
@@ -340,16 +499,36 @@ class Economia(commands.Cog):
         cofre = economia.cofre_por_id(tier)
         cap = economia.capacidade_do_cofre(tier)
         cartao = db.get_cartao(sid, uid)
+        cartao_tier = economia.cartao_por_id(cartao["tier"]) or economia.cartao_por_id(economia.CARTAO_TIER_INICIAL)
+        divida = db.get_divida(sid, uid)
+        faturas_pendentes = db.get_total_faturas_pendentes(sid, uid)
+        limite_total = economia.limite_efetivo(cartao["tier"], cartao["credito"])
+        limite_restante = economia.limite_disponivel(
+            cartao["tier"], cartao["credito"], divida, faturas_pendentes
+        )
+        reputacao = economia.beneficios_reputacao(cartao["credito"])
         emb = ui.embed(f"💰 Carteira de {alvo.display_name}", categoria="economia",
                         descricao=fmt_carteira(db.get_carteira(sid, uid)))
         emb.add_field(name="🔒 Guardado no cofre", value=fmt_carteira(db.get_cofre_saldo(sid, uid), vazio="nada guardado"), inline=False)
         emb.add_field(name=f"{cofre['nome']}: itens", value=ui.barra(await self.bot.inventario.contar(sid, uid), cap), inline=False)
-        emb.add_field(name="Cartão", value=f"crédito {cartao['credito']} · {economia.cartao_por_id(cartao['tier'])['nome']}")
-        divida = db.get_divida(sid, uid)
+        emb.add_field(
+            name="💳 Cartão Lunar",
+            value=(
+                f"**{cartao_tier['nome']}** · limite disponível ☾ **{limite_restante} / {limite_total}**\n"
+                f"🏦 Reputação bancária: **{cartao['credito']}** · {reputacao['rotulo']}"
+            ),
+            inline=False,
+        )
         if divida > 0:
             emb.add_field(
                 name="📋 Dívida do Cartão Lunar",
                 value=f"☾ {divida} Lunaris · pague quando quiser com `/divida_pagar`",
+                inline=False,
+            )
+        if faturas_pendentes > 0:
+            emb.add_field(
+                name="🧾 Faturas pendentes",
+                value=f"☾ {faturas_pendentes} Lunaris · consulte com `/fatura`",
                 inline=False,
             )
         protegido = db.get_mestre_protegido(sid) == uid
@@ -590,7 +769,10 @@ class Economia(commands.Cog):
         if not itens:
             await interaction.response.send_message("Nada à venda nessa categoria ainda.", ephemeral=True)
             return
-        view = LojaView(self, itens, autor_id=interaction.user.id)
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        self.bot.db.garantir_jogador(sid, uid)
+        reputacao = self.bot.db.get_cartao(sid, uid)["credito"]
+        view = LojaView(self, itens, autor_id=interaction.user.id, reputacao=reputacao)
         await interaction.response.send_message(embed=view.embed_atual(), view=view)
 
     @app_commands.command(description="Compra um item da loja.")
@@ -613,6 +795,15 @@ class Economia(commands.Cog):
         sid, uid = _sid(interaction), str(interaction.user.id)
         db = self.bot.db
         db.garantir_jogador(sid, uid)
+        cartao = db.get_cartao(sid, uid)
+        requisito = economia.reputacao_minima_raridade(it.raridade)
+        if requisito > 0 and cartao["credito"] < requisito:
+            await interaction.response.send_message(
+                f"🔒 **{it.titulo}** é {it.raridade_rotulo} e exige **{requisito} de reputação bancária**. "
+                f"Sua reputação atual é **{cartao['credito']}**. Pague faturas no prazo para evoluir.",
+                ephemeral=True,
+            )
+            return
         # Capacidade agora vale igual nos dois modos: antes só era checada
         # sem integração ligada, deixando o cofre da plataforma efetivamente
         # ilimitado por compra. É uma checagem consultiva (o depósito em si
@@ -622,23 +813,120 @@ class Economia(commands.Cog):
             tier = db.get_cofre_tier(sid, uid)
             await interaction.response.send_message(f"Seu cofre ({economia.cofre_por_id(tier)['nome']}) está cheio. Use `/cofre_melhorar`.", ephemeral=True)
             return
-        cartao = db.get_cartao(sid, uid)
-        benef = economia.beneficios_credito(cartao["credito"])
-        limite = economia.limite_efetivo(cartao["tier"], cartao["credito"]) if economia.mesma_moeda(moeda_nome, "Lunaris") else 0
-        divida_antes = db.get_divida(sid, uid)
+        benef = economia.beneficios_reputacao(cartao["credito"])
+        if economia.mesma_moeda(moeda_nome, "Lunaris"):
+            db.converter_faturas_vencidas(sid)
+            limite = economia.limite_efetivo(cartao["tier"], cartao["credito"])
+            pendente = db.get_total_faturas_pendentes(sid, uid)
+            cotacao = economia.cotar_pagamento(
+                preco,
+                db.get_saldo(sid, uid, "Lunaris"),
+                limite,
+                db.get_divida(sid, uid),
+                pendente,
+            )
+            if not cotacao["pode_comprar"]:
+                await interaction.response.send_message(
+                    f"💸 A compra custa ☾ **{preco}**, mas você tem ☾ **{cotacao['saldo_carteira']}** "
+                    f"na carteira e ☾ **{cotacao['limite_disponivel']}** de limite disponível. "
+                    "Carteira + limite não cobrem o valor inteiro.",
+                    ephemeral=True,
+                )
+                return
+            if cotacao["precisa_confirmacao"]:
+                compra_id = str(interaction.id)
+
+                async def confirmar(interacao_botao: discord.Interaction):
+                    cartao_atual = db.get_cartao(sid, uid)
+                    if requisito > 0 and cartao_atual["credito"] < requisito:
+                        await interacao_botao.followup.send(
+                            "🔒 Sua reputação mudou e não permite mais esta compra.", ephemeral=True
+                        )
+                        return
+                    if not await self.bot.inventario.cabe(sid, uid, 1):
+                        await interacao_botao.followup.send(
+                            "Seu cofre ficou cheio antes da confirmação. Nada foi cobrado.", ephemeral=True
+                        )
+                        return
+                    limite_atual = economia.limite_efetivo(
+                        cartao_atual["tier"], cartao_atual["credito"]
+                    )
+                    try:
+                        pagamento = db.cobrar_compra_com_fatura(
+                            sid,
+                            uid,
+                            preco,
+                            limite_atual,
+                            f"Compra: {it.titulo}",
+                            f"item:{compra_id}",
+                        )
+                    except SaldoInsuficiente as exc:
+                        await interacao_botao.followup.send(f"💸 {exc}", ephemeral=True)
+                        return
+                    if pagamento["repetido"]:
+                        await interacao_botao.followup.send(
+                            "Esta compra já tinha sido processada.", ephemeral=True
+                        )
+                        return
+                    await self._finalizar_compra_item(
+                        interacao_botao,
+                        it,
+                        moeda_nome,
+                        preco,
+                        benef,
+                        pagamento,
+                        compra_id=compra_id,
+                        resposta_ja_deferida=True,
+                    )
+
+                view = ConfirmarFinanciamentoView(
+                    autor_id=interaction.user.id,
+                    executar=confirmar,
+                )
+                await interaction.response.send_message(
+                    embed=embed_confirmacao_financiamento(f"Compra de {it.titulo}", cotacao),
+                    view=view,
+                    ephemeral=True,
+                )
+                return
+
         try:
-            db.debitar(sid, uid, moeda_nome, preco, permitir_negativo_ate=limite)
+            saldo = db.debitar(sid, uid, moeda_nome, preco)
         except SaldoInsuficiente as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
-        db.registrar_extrato(sid, uid, -preco, moeda_nome, f"Compra: {it.titulo}")
-        divida_depois = db.get_divida(sid, uid)
-        divida_criada = max(0, divida_depois - divida_antes)
-        # A entrega no cofre central é uma chamada HTTP que pode passar dos 3s
-        # que o Discord dá pra responder a interação; defere antes pra não
-        # estourar ("The application did not respond"). Daqui pra frente toda
-        # resposta é followup.send.
-        await interaction.response.defer()
+        await self._finalizar_compra_item(
+            interaction,
+            it,
+            moeda_nome,
+            preco,
+            benef,
+            {
+                "saldo": saldo,
+                "carteira_usada": preco,
+                "financiado": 0,
+                "vence_em": None,
+            },
+            compra_id=str(interaction.id),
+        )
+
+    async def _finalizar_compra_item(
+        self,
+        interaction,
+        it,
+        moeda_nome: str,
+        preco: int,
+        benef: dict,
+        pagamento: dict,
+        *,
+        compra_id: str,
+        resposta_ja_deferida: bool = False,
+    ):
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        db = self.bot.db
+        # A entrega no cofre central é uma chamada HTTP que pode passar dos 3s.
+        if not resposta_ja_deferida:
+            await interaction.response.defer()
         # Inventario.dar() nunca falha de um jeito que exija estorno: cai pro
         # cofre local em qualquer problema da plataforma (mesma regra do
         # Jornalista pra recompensa de baú): o dinheiro já debitado sempre
@@ -647,8 +935,9 @@ class Economia(commands.Cog):
             sid, uid, it.id, it.titulo, it.tipo, 1,
             dados={**it.conteudo, "raridade": it.raridade, "origem": "loja-discord"},
             motivo=f"Compra de {it.titulo} no Banqueiro",
-            chave=f"compra-item:{interaction.id}",
+            chave=f"compra-item:{compra_id}",
         )
+        db.registrar_extrato(sid, uid, -preco, moeda_nome, f"Compra: {it.titulo}")
         destino_central = destino == "cofre"
         cashback = 0
         if benef["cashback"] > 0 and economia.mesma_moeda(moeda_nome, "Lunaris"):
@@ -665,11 +954,15 @@ class Economia(commands.Cog):
         )
         if cashback:
             linhas.append(f"💳 Cashback: +{cashback} Lunaris.")
-        if divida_criada > 0:
-            linhas.append(f"⚠️ Usou {divida_criada} Lunaris do crédito. Dívida total: {divida_depois} Lunaris.")
+        if pagamento["financiado"] > 0:
+            vence_ts = int(pagamento["vence_em"].timestamp())
+            linhas.append(
+                f"🧾 Fatura criada: ☾ **{pagamento['financiado']} Lunaris** · vence <t:{vence_ts}:R>. "
+                "Pague com `/fatura_pagar` para ganhar reputação."
+            )
         emb = ui.embed(f"{ui.icone_raridade(it.raridade)} Compra realizada!", categoria="loja",
                         descricao="\n".join(linhas), cor=ui.cor_raridade(it.raridade))
-        await interaction.followup.send(embed=emb)
+        await interaction.followup.send(embed=emb, ephemeral=pagamento["financiado"] > 0)
 
     @comprar.autocomplete("item")
     async def comprar_ac(self, interaction, current: str):
@@ -737,7 +1030,7 @@ class Economia(commands.Cog):
     async def cambio(self, interaction, de: app_commands.Choice[str], para: app_commands.Choice[str], quantia: app_commands.Range[int, 1]):
         sid, uid = _sid(interaction), str(interaction.user.id)
         rate, taxa = self.bot.db.get_cambio(sid)
-        benef = economia.beneficios_credito(self.bot.db.get_cartao(sid, uid)["credito"])
+        benef = economia.beneficios_reputacao(self.bot.db.get_cartao(sid, uid)["credito"])
         taxa_aj = max(0.0, min(0.99, taxa * benef["taxa_mult"] * (1 - benef["desconto"])))
         try:
             recebido, taxa_cobrada = economia.converter(quantia, de.value, para.value, rate, taxa_aj)
@@ -794,112 +1087,239 @@ class Economia(commands.Cog):
         db = self.bot.db
         tier = db.get_cofre_tier(sid, uid)
         seg_tier = db.get_seguranca_tier(sid, uid)
-        cofre = economia.cofre_por_id(tier)
-        seguranca = economia.seguranca_por_id(seg_tier)
-        prox = economia.proximo_cofre(tier)
-        prox_seg = economia.proximo_seguranca(seg_tier)
+        cofre = economia.cofre_por_id(tier) or economia.cofre_por_id(economia.COFRE_TIER_INICIAL)
+        seguranca = economia.seguranca_por_id(seg_tier) or economia.seguranca_por_id(economia.SEGURANCA_TIER_INICIAL)
+        visual_cofre = visual_tier(economia.COFRE_TIERS, tier)
+        visual_seguranca = visual_tier(economia.SEGURANCA_TIERS, seg_tier)
         itens = await self.bot.inventario.listar(sid, uid)
         total_itens = sum(item.quantidade for item in itens)
         capacidade_itens = economia.capacidade_do_cofre(tier)
         emb = ui.embed(
             f"🔒 Cofre de {interaction.user.display_name}",
             categoria="cofre",
-            descricao=f"**{cofre['nome']}**\n{seguranca['nome']}",
+            descricao=(
+                f"{visual_cofre['icone']} **{visual_cofre['patamar']} · {cofre['nome']}** "
+                f"`Nv. {visual_cofre['nivel']}/{visual_cofre['total']}`\n"
+                f"{visual_seguranca['icone']} **{visual_seguranca['patamar']} · {seguranca['nome']}** "
+                f"`Nv. {visual_seguranca['nivel']}/{visual_seguranca['total']}`"
+            ),
         )
+        limite_pratico = bool(cofre.get("limite_pratico"))
+        capacidade_itens_txt = "∞" if limite_pratico else fmt_quantidade(capacidade_itens)
         emb.add_field(
-            name=f"📦 Itens guardados — {total_itens}/{capacidade_itens}",
-            value=fmt_itens_cofre(itens),
+            name=f"📦 Conteúdo · {total_itens}/{capacidade_itens_txt}",
+            value=fmt_itens_cofre(itens, limite=6),
             inline=False,
         )
         saldo_cofre = db.get_cofre_saldo(sid, uid)
         cap_moeda = economia.capacidade_moeda_do_cofre(tier)
+        capacidade_moeda_txt = "∞" if limite_pratico else fmt_quantidade(cap_moeda)
         moedas_exibidas = list(saldo_cofre.keys())
         if "Lunaris" not in moedas_exibidas:
             moedas_exibidas.insert(0, "Lunaris")
         saldos = "\n".join(
             f"{SIMBOLO.get(economia.normalizar(m), '◈')} **{m}:** "
-            f"{fmt_quantidade(saldo_cofre.get(m, 0))} / {fmt_quantidade(cap_moeda)}"
+            f"{fmt_quantidade(saldo_cofre.get(m, 0))} / {capacidade_moeda_txt}"
             for m in moedas_exibidas
         )
         emb.add_field(
-            name=f"🪙 Dinheiro protegido — limite por moeda",
+            name="🪙 Saldo protegido",
             value=saldos,
             inline=False,
         )
         chance = round(economia.chance_roubo_cofre(seg_tier, db.get_config_roubo(sid)["chance_base"]) * 100)
         emb.add_field(
-            name="🛡️ Segurança atual",
-            value=f"**{seguranca['nome']}**\nChance estimada de arrombamento hoje: **~{chance}%**",
+            name="🛡️ Risco de arrombamento",
+            value=f"Defesa **{round(seguranca['defesa'] * 100)}%** · chance estimada de sucesso do ladrão **~{chance}%**",
             inline=False,
         )
-        if prox:
-            emb.add_field(
-                name="⬆️ Próxima melhoria do cofre",
-                value=(
-                    f"**{prox['nome']}**\n"
-                    f"{prox['capacidade']} itens · {fmt_quantidade(economia.capacidade_moeda_do_cofre(prox['id']))} por moeda\n"
-                    f"Custo: ☾ {fmt_quantidade(prox['custo'])} · `/cofre_melhorar`"
-                ),
-                inline=False,
-            )
-        if prox_seg:
-            emb.add_field(
-                name="🔐 Próxima melhoria de segurança",
-                value=(
-                    f"**{prox_seg['nome']}** · {int(prox_seg['defesa'] * 100)}% de defesa\n"
-                    f"Custo: ☾ {fmt_quantidade(prox_seg['custo'])} · `/cofre_seguranca_melhorar`"
-                ),
-                inline=False,
-            )
         if db.get_mestre_protegido(sid) == uid:
             emb.add_field(
                 name="🛡️ Proteção do mestre",
                 value="Este cofre é imune a tentativas de roubo.",
                 inline=False,
             )
-        emb.set_footer(text=f"{ui.MARCA} · Deposite com /cofre_depositar · saque com /cofre_sacar")
+        emb.set_footer(text=f"{ui.MARCA} · Evolua com /cofre_melhorias · guarde com /cofre_depositar")
         await interaction.response.send_message(embed=emb)
 
-    @app_commands.command(name="cofre_melhorar", description="Faz upgrade do cofre (paga em Lunaris).")
+    @app_commands.command(name="cofre_melhorias", description="Mostra os próximos upgrades disponíveis para seu cofre.")
+    async def cofre_melhorias(self, interaction):
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        db = self.bot.db
+        db.garantir_jogador(sid, uid)
+
+        tier = db.get_cofre_tier(sid, uid)
+        seg_tier = db.get_seguranca_tier(sid, uid)
+        atual = economia.cofre_por_id(tier) or economia.cofre_por_id(economia.COFRE_TIER_INICIAL)
+        seguranca_atual = economia.seguranca_por_id(seg_tier) or economia.seguranca_por_id(economia.SEGURANCA_TIER_INICIAL)
+        prox = economia.proximo_cofre(tier)
+        prox_seg = economia.proximo_seguranca(seg_tier)
+        visual_atual = visual_tier(economia.COFRE_TIERS, tier)
+        visual_seg_atual = visual_tier(economia.SEGURANCA_TIERS, seg_tier)
+        cartao = db.get_cartao(sid, uid)
+        reputacao_atual = cartao["credito"]
+        desconto = economia.beneficios_reputacao(reputacao_atual)["desconto"]
+
+        emb = ui.embed(
+            "✨ Melhorias do Cofre",
+            categoria="cofre",
+            descricao=(
+                "Duas trilhas independentes. Aqui aparecem somente as melhorias "
+                "que você pode comprar agora."
+            ),
+        )
+
+        if prox:
+            visual_prox = visual_tier(economia.COFRE_TIERS, prox["id"])
+            custos = economia.custos_upgrade(prox, reputacao_atual)
+            requisito = economia.reputacao_minima_upgrade("cofre", prox["id"])
+            acesso = "✅ liberado" if requisito <= 0 or reputacao_atual >= requisito else "🔒 bloqueado"
+            emb.add_field(
+                name=f"{visual_prox['icone']} Armazenamento · {visual_prox['patamar']}",
+                value=(
+                    f"{visual_atual['icone']} **{atual['nome']}** → {visual_prox['icone']} **{prox['nome']}**\n"
+                    f"{fmt_capacidade_tier(atual)} → **{fmt_capacidade_tier(prox)}**\n"
+                    f"Reputação exigida: **{requisito}** · {acesso}\n"
+                    f"Custo para você:\n{fmt_custos(custos)}\n"
+                    "Use `/cofre_melhorar` para comprar."
+                ),
+                inline=False,
+            )
+        else:
+            emb.add_field(
+                name=f"{visual_atual['icone']} Armazenamento · nível máximo",
+                value=f"**{atual['nome']}** · {fmt_capacidade_tier(atual)}",
+                inline=False,
+            )
+
+        if prox_seg:
+            visual_prox_seg = visual_tier(economia.SEGURANCA_TIERS, prox_seg["id"])
+            custos_seg = economia.custos_upgrade(prox_seg, reputacao_atual)
+            requisito_seg = economia.reputacao_minima_upgrade("seguranca", prox_seg["id"])
+            acesso_seg = "✅ liberado" if requisito_seg <= 0 or reputacao_atual >= requisito_seg else "🔒 bloqueado"
+            emb.add_field(
+                name=f"{visual_prox_seg['icone']} Segurança · {visual_prox_seg['patamar']}",
+                value=(
+                    f"{visual_seg_atual['icone']} **{seguranca_atual['nome']}** → "
+                    f"{visual_prox_seg['icone']} **{prox_seg['nome']}**\n"
+                    f"Defesa {round(seguranca_atual['defesa'] * 100)}% → "
+                    f"**{round(prox_seg['defesa'] * 100)}%**\n"
+                    f"Reputação exigida: **{requisito_seg}** · {acesso_seg}\n"
+                    f"Custo para você:\n{fmt_custos(custos_seg)}\n"
+                    "Use `/cofre_seguranca_melhorar` para comprar."
+                ),
+                inline=False,
+            )
+        else:
+            emb.add_field(
+                name=f"{visual_seg_atual['icone']} Segurança · nível máximo",
+                value=f"**{seguranca_atual['nome']}** · {round(seguranca_atual['defesa'] * 100)}% de defesa",
+                inline=False,
+            )
+
+        if desconto:
+            emb.add_field(
+                name="💳 Benefício aplicado",
+                value=(
+                    f"Sua reputação bancária reduziu Lunaris e Solares em "
+                    f"**{round(desconto * 100)}%**. Materiais raros mantêm o custo integral."
+                ),
+                inline=False,
+            )
+        emb.set_footer(text=f"{ui.MARCA} · Os valores exibidos já são os custos finais para sua reputação")
+        await interaction.response.send_message(embed=emb, ephemeral=True)
+
+    @app_commands.command(name="cofre_melhorar", description="Faz upgrade do cofre com as moedas e materiais exigidos.")
     async def cofre_melhorar(self, interaction):
         sid, uid = _sid(interaction), str(interaction.user.id)
         db = self.bot.db
-        prox = economia.proximo_cofre(db.get_cofre_tier(sid, uid))
+        tier_atual = db.get_cofre_tier(sid, uid)
+        prox = economia.proximo_cofre(tier_atual)
         if not prox:
-            await interaction.response.send_message("Seu cofre já está no máximo (Eterno).", ephemeral=True)
+            await interaction.response.send_message("Seu cofre já está no máximo (Sem-Fim).", ephemeral=True)
             return
-        benef = economia.beneficios_credito(db.get_cartao(sid, uid)["credito"])
-        custo = math.ceil(prox["custo"] * (1 - benef["desconto"]))
+        cartao = db.get_cartao(sid, uid)
+        requisito = economia.reputacao_minima_upgrade("cofre", prox["id"])
+        if requisito > 0 and cartao["credito"] < requisito:
+            await interaction.response.send_message(
+                f"🔒 **{prox['nome']}** exige **{requisito} de reputação bancária**. "
+                f"Você tem **{cartao['credito']}**. Quite faturas no prazo para evoluir.",
+                ephemeral=True,
+            )
+            return
+        custos = economia.custos_upgrade(prox, cartao["credito"])
         try:
-            db.debitar(sid, uid, "Lunaris", custo)
-        except SaldoInsuficiente as e:
+            db.comprar_upgrade_multimoeda(
+                sid, uid, "cofre", tier_atual, prox["id"], custos,
+                f"Upgrade do cofre para {prox['nome']}",
+            )
+        except (SaldoInsuficiente, UpgradeDesatualizado) as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
-        db.set_cofre_tier(sid, uid, prox["id"])
-        db.registrar_extrato(sid, uid, -custo, "Lunaris", f"Upgrade do cofre pra {prox['nome']}")
-        emb = ui.embed("🔒 Cofre melhorado!", categoria="cofre",
-            descricao=f"Agora você tem um **{prox['nome']}** ({prox['capacidade']} itens, guarda até {economia.capacidade_moeda_do_cofre(prox['id'])} Lunaris). Custou ☾ {custo}.")
+        visual = visual_tier(economia.COFRE_TIERS, prox["id"])
+        if economia.upgrade_noticiavel("cofre", prox["id"]):
+            db.criar_aviso(
+                sid,
+                f"🏛️ {interaction.user.mention} alcançou o **{prox['nome']}** "
+                f"(`Nv. {visual['nivel']}/{visual['total']}`), com {fmt_capacidade_tier(prox)}.",
+            )
+        emb = ui.embed(
+            f"{visual['icone']} {visual['patamar']} desbloqueado!",
+            categoria="cofre",
+            descricao=(
+                f"**{prox['nome']}** · `Nv. {visual['nivel']}/{visual['total']}`\n"
+                f"📦 {fmt_capacidade_tier(prox)}\n"
+                f"🪙 Investimento:\n{fmt_custos(custos)}"
+            ),
+        )
+        emb.set_footer(text=f"{ui.MARCA} · Veja o próximo passo com /cofre_melhorias")
         await interaction.response.send_message(embed=emb)
 
     @app_commands.command(name="cofre_seguranca_melhorar", description="Sobe a segurança do cofre (reduz a chance de te roubarem).")
     async def cofre_seguranca_melhorar(self, interaction):
         sid, uid = _sid(interaction), str(interaction.user.id)
         db = self.bot.db
-        prox = economia.proximo_seguranca(db.get_seguranca_tier(sid, uid))
+        tier_atual = db.get_seguranca_tier(sid, uid)
+        prox = economia.proximo_seguranca(tier_atual)
         if not prox:
             await interaction.response.send_message("Sua segurança já está no máximo.", ephemeral=True)
             return
-        benef = economia.beneficios_credito(db.get_cartao(sid, uid)["credito"])
-        custo = math.ceil(prox["custo"] * (1 - benef["desconto"]))
+        cartao = db.get_cartao(sid, uid)
+        requisito = economia.reputacao_minima_upgrade("seguranca", prox["id"])
+        if requisito > 0 and cartao["credito"] < requisito:
+            await interaction.response.send_message(
+                f"🔒 **{prox['nome']}** exige **{requisito} de reputação bancária**. "
+                f"Você tem **{cartao['credito']}**.",
+                ephemeral=True,
+            )
+            return
+        custos = economia.custos_upgrade(prox, cartao["credito"])
         try:
-            db.debitar(sid, uid, "Lunaris", custo)
-        except SaldoInsuficiente as e:
+            db.comprar_upgrade_multimoeda(
+                sid, uid, "seguranca", tier_atual, prox["id"], custos,
+                f"Upgrade de segurança para {prox['nome']}",
+            )
+        except (SaldoInsuficiente, UpgradeDesatualizado) as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
-        db.set_seguranca_tier(sid, uid, prox["id"])
-        db.registrar_extrato(sid, uid, -custo, "Lunaris", f"Upgrade de segurança pra {prox['nome']}")
-        emb = ui.embed("🛡️ Segurança melhorada!", categoria="cofre",
-            descricao=f"Agora seu cofre tem **{prox['nome']}** ({int(prox['defesa']*100)}% de defesa contra /roubar_cofre). Custou ☾ {custo}.")
+        visual = visual_tier(economia.SEGURANCA_TIERS, prox["id"])
+        if economia.upgrade_noticiavel("seguranca", prox["id"]):
+            db.criar_aviso(
+                sid,
+                f"🛡️ {interaction.user.mention} alcançou **{prox['nome']}** no cofre "
+                f"(`Nv. {visual['nivel']}/{visual['total']}`): "
+                f"**{round(prox['defesa'] * 100)}%** de proteção contra arrombamento.",
+            )
+        emb = ui.embed(
+            f"{visual['icone']} {visual['patamar']} desbloqueado!",
+            categoria="cofre",
+            descricao=(
+                f"**{prox['nome']}** · `Nv. {visual['nivel']}/{visual['total']}`\n"
+                f"🛡️ Defesa contra arrombamento: **{round(prox['defesa'] * 100)}%**\n"
+                f"🪙 Investimento:\n{fmt_custos(custos)}"
+            ),
+        )
+        emb.set_footer(text=f"{ui.MARCA} · Veja o próximo passo com /cofre_melhorias")
         await interaction.response.send_message(embed=emb)
 
     @app_commands.command(name="cofre_depositar", description="Guarda dinheiro no cofre, protegido pelo nível de segurança.")
@@ -1073,7 +1493,7 @@ class Economia(commands.Cog):
         else:
             await interaction.response.send_message(embed=emb)
 
-    @app_commands.command(description="Tenta roubar metade da carteira; o alvo tem 5 segundos para impedir.")
+    @app_commands.command(description="Tenta esvaziar a carteira; o alvo tem 5 segundos para impedir.")
     @app_commands.describe(
         membro="De quem você quer roubar.",
         furtivo=f"Pague ☾ {economia.CUSTO_FURTIVIDADE} pra não avisar o alvo publicamente (padrão: não).",
@@ -1429,21 +1849,38 @@ class Economia(commands.Cog):
             except Exception:
                 log.exception("nao consegui liberar a reserva de roubo de %s", alvo_id)
 
-    @app_commands.command(description="Mostra seu Cartão Lunar (crédito, nível e limite).")
+    @app_commands.command(description="Mostra seu Cartão Lunar, limite e reputação bancária.")
     @app_commands.describe(membro="Ver de outra pessoa (opcional).")
     async def cartao(self, interaction, membro: Optional[discord.Member] = None):
         alvo = membro or interaction.user
         sid, uid = _sid(interaction), str(alvo.id)
         db = self.bot.db
         c = db.get_cartao(sid, uid)
-        benef = economia.beneficios_credito(c["credito"])
+        benef = economia.beneficios_reputacao(c["credito"])
         tier = economia.cartao_por_id(c["tier"]) or economia.cartao_por_id(economia.CARTAO_TIER_INICIAL)
         limite = economia.limite_efetivo(c["tier"], c["credito"])
         divida = db.get_divida(sid, uid)
+        faturas_pendentes = db.get_total_faturas_pendentes(sid, uid)
         emb = ui.embed(f"💳 Cartão Lunar de {alvo.display_name}", categoria="economia")
-        emb.add_field(name="Crédito", value=f"{c['credito']}: {benef['rotulo']}", inline=False)
-        emb.add_field(name="Nível", value=f"{tier['nome']} (limite base {tier['limite']})")
-        emb.add_field(name="Limite de crédito", value=f"☾ {limite} Lunaris")
+        limite_restante = economia.limite_disponivel(
+            c["tier"], c["credito"], divida, faturas_pendentes
+        )
+        emb.add_field(name="🏦 Reputação bancária", value=f"**{c['credito']} pontos** · {benef['rotulo']}", inline=False)
+        emb.add_field(name="💳 Nível do cartão", value=tier["nome"], inline=False)
+        emb.add_field(
+            name="🌙 Limite do cartão",
+            value=(
+                f"Total: ☾ **{limite}** · em faturas: ☾ **{faturas_pendentes}** · "
+                f"em dívida: ☾ **{divida}** · disponível: ☾ **{limite_restante}**"
+            ),
+            inline=False,
+        )
+        if faturas_pendentes > 0:
+            emb.add_field(
+                name="🧾 Faturas abertas",
+                value=f"☾ {faturas_pendentes} Lunaris · veja vencimentos com `/fatura`",
+                inline=False,
+            )
         if divida > 0:
             emb.add_field(
                 name="Dívida atual",
@@ -1453,11 +1890,16 @@ class Economia(commands.Cog):
         prox = economia.proximo_cartao(c["tier"])
         rodape = f"{ui.MARCA}"
         if prox:
-            rodape += f" · Próximo: {prox['nome']} (limite {prox['limite']}): ☾ {prox['custo']} · /cartao_melhorar"
+            requisito = economia.reputacao_minima_upgrade("cartao", prox["id"])
+            custos = economia.custos_upgrade(prox, c["credito"])
+            rodape += (
+                f" · Próximo: {prox['nome']} · reputação {requisito} · "
+                f"limite {prox['limite']} · {fmt_custos(custos, compacto=True, markdown=False)} · /cartao_melhorar"
+            )
         emb.set_footer(text=rodape)
         await interaction.response.send_message(embed=emb)
 
-    @app_commands.command(name="cartao_melhorar", description="Sobe o nível do Cartão Lunar (paga em Lunaris).")
+    @app_commands.command(name="cartao_melhorar", description="Melhora o Cartão Lunar com as moedas e materiais exigidos.")
     async def cartao_melhorar(self, interaction):
         sid, uid = _sid(interaction), str(interaction.user.id)
         db = self.bot.db
@@ -1466,17 +1908,35 @@ class Economia(commands.Cog):
         if not prox:
             await interaction.response.send_message("Seu cartão já é Eterno (máximo).", ephemeral=True)
             return
-        benef = economia.beneficios_credito(c["credito"])
-        custo = math.ceil(prox["custo"] * (1 - benef["desconto"]))
+        requisito = economia.reputacao_minima_upgrade("cartao", prox["id"])
+        if requisito > 0 and c["credito"] < requisito:
+            await interaction.response.send_message(
+                f"🔒 **{prox['nome']}** exige **{requisito} de reputação bancária**. "
+                f"Você tem **{c['credito']}**. Pague faturas no prazo para melhorar sua reputação.",
+                ephemeral=True,
+            )
+            return
+        custos = economia.custos_upgrade(prox, c["credito"])
         try:
-            db.debitar(sid, uid, "Lunaris", custo)
-        except SaldoInsuficiente as e:
+            db.comprar_upgrade_multimoeda(
+                sid, uid, "cartao", c["tier"], prox["id"], custos,
+                f"Upgrade do cartão para {prox['nome']}",
+            )
+        except (SaldoInsuficiente, UpgradeDesatualizado) as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
-        db.set_cartao_tier(sid, uid, prox["id"])
-        db.registrar_extrato(sid, uid, -custo, "Lunaris", f"Upgrade do cartão pra {prox['nome']}")
+        if economia.upgrade_noticiavel("cartao", prox["id"]):
+            db.criar_aviso(
+                sid,
+                f"💳 {interaction.user.mention} conquistou o **{prox['nome']}**, "
+                f"o nível máximo do Cartão Lunar.",
+            )
         emb = ui.embed("💳 Cartão melhorado!", categoria="economia",
-            descricao=f"Agora você tem um **{prox['nome']}** (limite {prox['limite']} Lunaris). Custou ☾ {custo}.")
+            descricao=(
+                f"Agora você tem um **{prox['nome']}** "
+                f"(limite do cartão: {prox['limite']} Lunaris).\n"
+                f"Investimento: {fmt_custos(custos, compacto=True)}."
+            ))
         await interaction.response.send_message(embed=emb)
 
 
@@ -1487,8 +1947,12 @@ class Economia(commands.Cog):
     async def loja_baus(self, interaction):
         emb = ui.embed("🎁 Loja de Baús", categoria="bau")
         for b in economia.BAUS_COMPRAVEIS:
+            requisito = economia.reputacao_minima_bau(b["id"])
             emb.add_field(name=f"{b['nome']}: ☾ {b['preco']} Lunaris",
-                          value=f"`{b['id']}` · {b['itens']} item(ns) + Lunaris", inline=False)
+                          value=(
+                              f"`{b['id']}` · {b['itens']} item(ns) + Lunaris · "
+                              f"{fmt_requisito_reputacao(requisito)}"
+                          ), inline=False)
         emb.set_footer(text=f"{ui.MARCA} · /comprar_bau <tipo> · /abrir_bau <tipo>")
         await interaction.response.send_message(embed=emb)
 
@@ -1504,22 +1968,107 @@ class Economia(commands.Cog):
         db = self.bot.db
         db.garantir_jogador(sid, uid)
         cartao = db.get_cartao(sid, uid)
+        requisito = economia.reputacao_minima_bau(b["id"])
+        if requisito > 0 and cartao["credito"] < requisito:
+            await interaction.response.send_message(
+                f"🔒 Este baú exige **{requisito} de reputação bancária**. "
+                f"Sua reputação atual é **{cartao['credito']}**.",
+                ephemeral=True,
+            )
+            return
         limite = economia.limite_efetivo(cartao["tier"], cartao["credito"])
-        divida_antes = db.get_divida(sid, uid)
+        db.converter_faturas_vencidas(sid)
+        cotacao = economia.cotar_pagamento(
+            b["preco"],
+            db.get_saldo(sid, uid, "Lunaris"),
+            limite,
+            db.get_divida(sid, uid),
+            db.get_total_faturas_pendentes(sid, uid),
+        )
+        if not cotacao["pode_comprar"]:
+            await interaction.response.send_message(
+                f"💸 O baú custa ☾ **{b['preco']}**, mas sua carteira + limite disponível "
+                f"somam apenas ☾ **{cotacao['saldo_carteira'] + cotacao['limite_disponivel']}**.",
+                ephemeral=True,
+            )
+            return
+        if cotacao["precisa_confirmacao"]:
+            compra_id = str(interaction.id)
+
+            async def confirmar(interacao_botao: discord.Interaction):
+                cartao_atual = db.get_cartao(sid, uid)
+                if requisito > 0 and cartao_atual["credito"] < requisito:
+                    await interacao_botao.followup.send(
+                        "🔒 Sua reputação mudou e não permite mais esta compra.", ephemeral=True
+                    )
+                    return
+                limite_atual = economia.limite_efetivo(
+                    cartao_atual["tier"], cartao_atual["credito"]
+                )
+                try:
+                    pagamento = db.cobrar_compra_com_fatura(
+                        sid,
+                        uid,
+                        b["preco"],
+                        limite_atual,
+                        f"Compra: {b['nome']}",
+                        f"bau:{compra_id}",
+                    )
+                except SaldoInsuficiente as exc:
+                    await interacao_botao.followup.send(f"💸 {exc}", ephemeral=True)
+                    return
+                if pagamento["repetido"]:
+                    await interacao_botao.followup.send(
+                        "Esta compra já tinha sido processada.", ephemeral=True
+                    )
+                    return
+                await self._finalizar_compra_bau(
+                    interacao_botao, b, pagamento, resposta_ja_deferida=True
+                )
+
+            view = ConfirmarFinanciamentoView(
+                autor_id=interaction.user.id,
+                executar=confirmar,
+            )
+            await interaction.response.send_message(
+                embed=embed_confirmacao_financiamento(f"Compra de {b['nome']}", cotacao),
+                view=view,
+                ephemeral=True,
+            )
+            return
         try:
-            saldo_novo = db.debitar(sid, uid, "Lunaris", b["preco"], permitir_negativo_ate=limite)
+            saldo_novo = db.debitar(sid, uid, "Lunaris", b["preco"])
         except SaldoInsuficiente as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
+        await self._finalizar_compra_bau(
+            interaction,
+            b,
+            {
+                "saldo": saldo_novo,
+                "carteira_usada": b["preco"],
+                "financiado": 0,
+                "vence_em": None,
+            },
+        )
+
+    async def _finalizar_compra_bau(self, interaction, b: dict, pagamento: dict, *, resposta_ja_deferida: bool = False):
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        db = self.bot.db
         db.add_bau(sid, uid, b["id"], 1)
         db.registrar_extrato(sid, uid, -b["preco"], "Lunaris", f"Comprou {b['nome']}")
         msg = f"Você comprou um **{b['nome']}** por ☾ {b['preco']}. Abra com `/abrir_bau`."
-        divida_depois = db.get_divida(sid, uid)
-        divida_criada = max(0, divida_depois - divida_antes)
-        if divida_criada > 0:
-            msg += f"\n⚠️ Usou {divida_criada} Lunaris do crédito. Dívida total: {divida_depois} Lunaris."
+        if pagamento["financiado"] > 0:
+            vence_ts = int(pagamento["vence_em"].timestamp())
+            msg += (
+                f"\n🧾 Fatura criada: ☾ **{pagamento['financiado']} Lunaris** · "
+                f"vence <t:{vence_ts}:R>. Pague com `/fatura_pagar`."
+            )
         emb = ui.embed("🎁 Baú comprado!", categoria="bau", descricao=msg)
-        await interaction.response.send_message(embed=emb)
+        if resposta_ja_deferida:
+            await interaction.followup.send(embed=emb, ephemeral=True)
+        else:
+            await interaction.response.send_message(embed=emb)
 
     @app_commands.command(name="meus_baus", description="Mostra os baús que você tem pra abrir.")
     async def meus_baus(self, interaction):
@@ -1536,71 +2085,100 @@ class Economia(commands.Cog):
         await interaction.response.send_message(embed=emb)
 
     def _entregar_legado(self, sid: str, uid: str, premio: dict) -> List[str]:
+        """Entrega no cofre local. Levantar aqui significa "nada saiu", e é o
+        que autoriza `_abrir_um_bau` a repor o baú.
+
+        Por isso o crédito das moedas vem primeiro e sozinho: passou dele, o
+        jogador JÁ recebeu algo e repor o baú duplicaria o prêmio. Falha de
+        item depois disso vira aviso na lista de ganhos, não exceção."""
         db = self.bot.db
         db.creditar(sid, uid, "Lunaris", premio["lunaris"])
-        db.registrar_extrato(sid, uid, premio["lunaris"], "Lunaris", "Baú aberto")
-        tier = db.get_cofre_tier(sid, uid)
         ganhos = [f"☾ {premio['lunaris']} Lunaris"]
-        for it in premio["itens"]:
-            if economia.pode_guardar(db.contar_itens(sid, uid), 1, tier):
-                db.add_item(sid, uid, it.id, it.titulo, it.tipo, 1)
-                ganhos.append(f"**{it.titulo}** ({it.raridade_rotulo})")
-            else:
-                ganhos.append(f"~~{it.titulo}~~: cofre cheio! (`/cofre_melhorar`)")
+        try:
+            db.registrar_extrato(sid, uid, premio["lunaris"], "Lunaris", "Baú aberto")
+            tier = db.get_cofre_tier(sid, uid)
+            for it in premio["itens"]:
+                if economia.pode_guardar(db.contar_itens(sid, uid), 1, tier):
+                    db.add_item(sid, uid, it.id, it.titulo, it.tipo, 1)
+                    ganhos.append(f"**{it.titulo}** ({it.raridade_rotulo})")
+                else:
+                    ganhos.append(f"~~{it.titulo}~~: cofre cheio! (`/cofre_melhorar`)")
+        except Exception:
+            log.exception(
+                "entrega legada parcial (guild=%s user=%s): moedas creditadas, itens nao",
+                sid, uid,
+            )
+            ganhos.append("⚠️ Não consegui guardar os itens: avise o mestre.")
         return ganhos
 
     async def _abrir_um_bau(self, interaction, sid: str, uid: str, b: dict, indice: int = 0):
         """Sorteia e entrega o prêmio de UM baú (já removido do estoque de
-        quem chamou). Devolve (ganhos, destino, ok, lunaris). ok=False = a
-        entrega central falhou de um jeito recuperável; o baú já foi
-        devolvido ao estoque e o chamador deve avisar o jogador.
+        quem chamou). Devolve (ganhos, destino, ok, lunaris). ok=False = nada
+        foi entregue e o baú JÁ voltou ao estoque; o chamador só precisa
+        avisar o jogador.
+
+        A entrega passa por core/entrega.py, que tenta a API, cai pro
+        PostgreSQL compartilhado e só então pro cofre local: um baú pago
+        nunca fica sem prêmio porque o salto HTTP até a plataforma caiu.
+        Falhar de verdade aqui exige o banco inteiro fora — e aí o baú é
+        reposto em vez de sumir.
 
         `indice` distingue baús abertos na MESMA interação (/abrir_todos
         chama isto várias vezes com o mesmo interaction.id): sem ele, dois
-        baús iguais que sorteiam o mesmo Lunaris geram chave idêntica, a
-        plataforma deduplica o segundo depósito e o bot conta como aberto
-        mesmo assim: o jogador perde o loot em silêncio."""
+        baús iguais que sorteiam o mesmo Lunaris geram chave idêntica, o
+        depósito é deduplicado e o bot conta como aberto mesmo assim: o
+        jogador perde o loot em silêncio."""
         db = self.bot.db
         premio = loot_mod.sortear_bau(self.bot.catalogo, qtd_itens=b["itens"], rng=random,
                                       pesos=b["pesos"], lunaris_min=b["lunaris_min"], lunaris_max=b["lunaris_max"], tipos=b.get("tipos"))
         ganhos = [f"☾ {premio['lunaris']} Lunaris"]
         ganhos.extend(f"**{it.titulo}** ({it.raridade_rotulo})" for it in premio["itens"])
-        destino = "cofre da sua conta no site"
-        if self.bot.platform is not None:
-            try:
-                await self.bot.platform.deposit_vault(
-                    discord_user_id=interaction.user.id,
-                    discord_guild_id=interaction.guild_id,
-                    idempotency_key=f"bau-comprado:{interaction.id}:{indice}:{b['id']}:{premio['lunaris']}",
-                    reason=f"Abertura de {b['nome']} comprado no Banqueiro",
-                    items=[{
-                        "item_id": it.id,
-                        "titulo": it.titulo,
-                        "quantidade": 1,
-                        "dados": {
-                            **it.conteudo,
-                            "tipo": it.tipo,
-                            "raridade": it.raridade,
-                            "origem": "bau-comprado-discord",
-                        },
-                    } for it in premio["itens"]],
-                    currencies=[{"moeda": "Lunaris", "quantidade": premio["lunaris"]}],
-                )
-            except PlatformApiError as exc:
-                log.warning(
-                    "falha ao depositar bau na plataforma (guild=%s user=%s bau=%s status=%s): %s",
-                    sid, uid, b["id"], exc.status_code, exc,
-                )
-                if exc.status_code == 404:
-                    destino = "sua carteira no Banqueiro (vincule sua conta pra usar a ficha)"
-                    ganhos = self._entregar_legado(sid, uid, premio)
-                else:
-                    if exc.status_code is not None and 400 <= exc.status_code < 500:
-                        db.add_bau(sid, uid, b["id"], 1)
-                    return [], "", False, 0
-        else:
-            destino = "sua carteira"
+        try:
+            # Lunaris de baú vai sempre pra carteira local (gastável em /loja,
+            # mas roubável — é o que a carteira é pra isso). Só os itens usam
+            # o cofre da conta no site: é ele que fica protegido e que a
+            # ficha enxerga.
+            destino_entrega = await entrega_mod.entregar_no_cofre(
+                self.bot,
+                guild_id=sid,
+                user_id=uid,
+                idempotencia=f"bau-comprado:{interaction.id}:{indice}:{b['id']}:{premio['lunaris']}",
+                motivo=f"Abertura de {b['nome']} comprado no Banqueiro",
+                itens=[{
+                    "item_id": it.id,
+                    "titulo": it.titulo,
+                    "quantidade": 1,
+                    "dados": {
+                        **it.conteudo,
+                        "tipo": it.tipo,
+                        "raridade": it.raridade,
+                        "origem": "bau-comprado-discord",
+                    },
+                } for it in premio["itens"]],
+                moedas=[],
+            )
+            if destino_entrega == entrega_mod.COFRE:
+                db.creditar(sid, uid, "Lunaris", premio["lunaris"])
+                return ganhos, "Lunaris na carteira · itens no cofre da conta no site", True, premio["lunaris"]
             ganhos = self._entregar_legado(sid, uid, premio)
+        except Exception:
+            # Só chega aqui com o PostgreSQL fora: nem o cofre da conta nem o
+            # local aceitaram escrita. Repõe o baú — ele foi pago.
+            log.exception(
+                "nao consegui entregar o bau (guild=%s user=%s bau=%s); repondo no estoque",
+                sid, uid, b["id"],
+            )
+            try:
+                db.add_bau(sid, uid, b["id"], 1)
+            except Exception:
+                log.exception(
+                    "falha ao repor o bau %s de %s/%s no estoque", b["id"], sid, uid
+                )
+            return [], "", False, 0
+        destino = (
+            "sua carteira no Banqueiro (vincule sua conta pra usar a ficha)"
+            if self.bot.platform is not None else "sua carteira"
+        )
         return ganhos, destino, True, premio["lunaris"]
 
     @app_commands.command(name="abrir_bau", description="Abre um baú que você comprou.")
@@ -1622,13 +2200,14 @@ class Economia(commands.Cog):
         ganhos, destino, ok, _lunaris = await self._abrir_um_bau(interaction, sid, uid, b)
         if not ok:
             await interaction.followup.send(
-                "Nao consegui confirmar a entrega central. "
-                "Se o erro foi de validacao, o bau voltou ao estoque; caso contrario, avise o mestre para conferir o cofre.",
+                "⚠️ O banco não respondeu e eu não consegui entregar o prêmio. "
+                f"Seu **{b['nome']}** voltou pro estoque: tente de novo em instantes.",
                 ephemeral=True,
             )
             return
         rodape_dica = (
-            "Escolha o personagem pelo site." if self.bot.platform is not None
+            "Escolha o personagem pelo site pra receber os itens; as moedas já estão na carteira."
+            if "cofre da conta" in destino
             else "As moedas ficam na carteira: use `/cofre_depositar` para contar com a segurança do cofre."
         )
         emb = ui.embed(f"🎁 {b['nome']} aberto!", categoria="bau",
@@ -1651,12 +2230,13 @@ class Economia(commands.Cog):
         await interaction.response.defer()
         total_lunaris = 0
         itens_ganhos: List[str] = []
-        falhas = 0
+        destinos: set[str] = set()
+        interrompeu = False
         abertos = 0
         indice = 0
         restantes = economia.ABRIR_TODOS_LIMITE
         for entrada in estoque:
-            if restantes <= 0:
+            if restantes <= 0 or interrompeu:
                 break
             b = economia.bau_compravel_por_id(entrada["bau_id"])
             if not b:
@@ -1664,21 +2244,30 @@ class Economia(commands.Cog):
             for _ in range(min(entrada["quantidade"], restantes)):
                 if not db.remover_bau(sid, uid, b["id"], 1):
                     break
-                ganhos, _destino, ok, lunaris = await self._abrir_um_bau(interaction, sid, uid, b, indice)
+                ganhos, destino, ok, lunaris = await self._abrir_um_bau(interaction, sid, uid, b, indice)
                 indice += 1
                 restantes -= 1
                 if not ok:
-                    falhas += 1
-                    continue
+                    # Só falha com o banco fora, e aí o próximo baú falharia
+                    # igual: para na hora em vez de repetir 25 vezes. O baú
+                    # foi reposto pelo _abrir_um_bau.
+                    interrompeu = True
+                    break
                 abertos += 1
                 total_lunaris += lunaris
+                destinos.add(destino)
                 itens_ganhos.extend(g for g in ganhos if "Lunaris" not in g)
         linhas = [f"Abriu **{abertos}** baú(s), ganhou ☾ **{total_lunaris} Lunaris** no total."]
         if itens_ganhos:
             linhas.append("Itens: " + ", ".join(itens_ganhos)[:900])
-        if falhas:
-            linhas.append(f"⚠️ {falhas} baú(s) não confirmaram entrega central e voltaram pro estoque.")
-        if total_no_estoque > economia.ABRIR_TODOS_LIMITE:
+        if destinos:
+            linhas.append("Entregue em " + ", ".join(f"**{d}**" for d in sorted(destinos)) + ".")
+        if interrompeu:
+            linhas.append(
+                "⚠️ O banco parou de responder no meio: o baú que faltou entregar voltou "
+                "pro estoque e o resto continua com você. Rode `/abrir_todos` de novo em instantes."
+            )
+        if not interrompeu and total_no_estoque > economia.ABRIR_TODOS_LIMITE:
             linhas.append(f"Você tinha mais baús do que o limite de {economia.ABRIR_TODOS_LIMITE} por vez: rode `/abrir_todos` de novo pro resto.")
         emb = ui.embed("🎁 Baús abertos!", categoria="bau", descricao="\n".join(linhas))
         await interaction.followup.send(embed=emb)

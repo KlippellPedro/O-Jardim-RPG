@@ -32,8 +32,15 @@ class Horoscopo(commands.Cog):
     @tasks.loop(hours=HOROSCOPO_INTERVALO_HORAS)
     async def ciclo(self):
         for guild in self.bot.guilds:
+            gid = str(guild.id)
+            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
+            # isto, todo restart (cada deploy na Discloud) sorteava um novo
+            # horoscopo do dia, mesmo horas depois do ultimo.
+            if not self.bot.db.ciclo_guild_devido(gid, "horoscopo", HOROSCOPO_INTERVALO_HORAS):
+                continue
             try:
                 await self._publicar(guild)
+                self.bot.db.marcar_ciclo_guild(gid, "horoscopo")
             except Exception:
                 log.exception("erro no ciclo do horoscopo (guild %s)", guild.id)
 

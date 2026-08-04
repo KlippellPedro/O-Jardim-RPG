@@ -286,58 +286,81 @@ class Baus(commands.Cog):
         modo_entrega = str(atual.get("modo_entrega") or "legado")
         if modo_entrega == "legado":
             return self.bot.db.entregar_bau_legado(guild_id, mensagem_id)
-        if self.bot.platform is None:
-            # Sem integração configurada neste processo, a plataforma nunca vai
-            # responder: cair pro cofre local do Banqueiro é melhor do que
-            # prender o prêmio esperando por sempre um /bau_reprocessar.
-            log.warning(
-                "bau %s caiu para o modo legado: integracao com a plataforma indisponivel neste processo",
-                mensagem_id,
-            )
-            self.bot.db.definir_modo_bau_entrega(guild_id, mensagem_id, "legado")
-            return self.bot.db.entregar_bau_legado(guild_id, mensagem_id)
+        itens_cofre = [
+            {
+                "item_id": item["id"],
+                "titulo": item["titulo"],
+                "quantidade": item["quantidade"],
+                "dados": {
+                    **item["conteudo"],
+                    "tipo": item["tipo"],
+                    "raridade": item["raridade"],
+                    "origem": "bau-discord",
+                },
+            }
+            for item in premio["itens"]
+        ]
+        # Lunaris de baú vai pra carteira local (gastável em /loja, mas roubável —
+        # é o que a carteira é pra isso). Só os itens usam o cofre da conta no
+        # site: é ele que fica protegido e que a ficha enxerga.
+        lunaris = premio["lunaris"]
 
-        try:
-            await self.bot.platform.deposit_vault(
-                discord_user_id=int(vencedor_user_id),
-                discord_guild_id=int(guild_id),
-                idempotency_key=str(atual["idempotencia"]),
-                reason="Bau automatico do Jornalista",
-                items=[
-                    {
-                        "item_id": item["id"],
-                        "titulo": item["titulo"],
-                        "quantidade": item["quantidade"],
-                        "dados": {
-                            **item["conteudo"],
-                            "tipo": item["tipo"],
-                            "raridade": item["raridade"],
-                            "origem": "bau-discord",
-                        },
-                    }
-                    for item in premio["itens"]
-                ],
-                currencies=[
-                    {"moeda": "Lunaris", "quantidade": premio["lunaris"]}
-                ],
-            )
-        except PlatformApiError as exc:
-            # Não importa o motivo (conta não vinculada, servidor fora do ar,
-            # bug momentâneo): a recompensa não pode ficar refém da
-            # plataforma. Cai pro cofre local do Banqueiro, que sempre
-            # funciona, em vez de prender o baú esperando um mestre
+        # sortear_item pode não achar nada pro tema/raridade configurado: sem
+        # item nenhum não há o que depositar no cofre da conta (moedas não
+        # entram mais nesse depósito), então não há API/banco pra chamar.
+        entregue = not itens_cofre
+        if itens_cofre and self.bot.platform is not None:
+            try:
+                await self.bot.platform.deposit_vault(
+                    discord_user_id=int(vencedor_user_id),
+                    discord_guild_id=int(guild_id),
+                    idempotency_key=str(atual["idempotencia"]),
+                    reason="Bau automatico do Jornalista",
+                    items=itens_cofre,
+                    currencies=[],
+                )
+                entregue = True
+            except PlatformApiError as exc:
+                log.warning(
+                    "bau %s: entrega pela API falhou (%s) — tentando o banco direto",
+                    mensagem_id, exc,
+                )
+
+        if not entregue:
+            # O salto HTTP caiu, mas o cofre da conta vive no mesmo PostgreSQL
+            # que este bot já usa: escrever direto mantém o prêmio visível no
+            # site em vez de escondê-lo no cofre local. Mesma chave de
+            # idempotência do HTTP, então não credita duas vezes se a API
+            # tiver gravado antes de a resposta se perder.
+            try:
+                entregue = self.bot.db.depositar_cofre_plataforma(
+                    guild_id,
+                    vencedor_user_id,
+                    idempotencia=str(atual["idempotencia"]),
+                    motivo="Bau automatico do Jornalista",
+                    itens=itens_cofre,
+                    moedas=[],
+                ) is not None
+            except Exception:
+                log.exception("bau %s: entrega direta no banco falhou", mensagem_id)
+
+        if not entregue:
+            # Conta não vinculada, ou nenhuma rota até o cofre da conta: a
+            # recompensa não pode ficar refém da plataforma. Cai pro cofre
+            # local do Banqueiro em vez de prender o baú esperando um mestre
             # reprocessar manualmente.
-            log.warning("bau %s caiu para o modo legado: %s", mensagem_id, exc)
+            log.warning("bau %s caiu para o modo legado", mensagem_id)
             self.bot.db.definir_modo_bau_entrega(guild_id, mensagem_id, "legado")
             return self.bot.db.entregar_bau_legado(guild_id, mensagem_id)
 
         resultado = {
             "ganhos": _ganhos_do_premio(premio),
-            "destino": "cofre da sua conta no site",
+            "destino": "Lunaris na carteira · itens no cofre da conta no site",
             "confirmado": True,
         }
         self.bot.db.marcar_bau_entrega_entregue(
-            guild_id, mensagem_id, resultado
+            guild_id, mensagem_id, resultado,
+            vencedor_user_id=vencedor_user_id, lunaris=lunaris,
         )
         return resultado
 

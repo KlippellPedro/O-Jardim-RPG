@@ -27,12 +27,15 @@ class Recompensas(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         registrar_reinicio_em_erro(self.ciclo_divida, "ciclo_divida", log)
+        registrar_reinicio_em_erro(self.ciclo_faturas, "ciclo_faturas", log)
         registrar_reinicio_em_erro(self.ciclo_cacadores, "ciclo_cacadores", log)
         self.ciclo_divida.start()
+        self.ciclo_faturas.start()
         self.ciclo_cacadores.start()
 
     def cog_unload(self):
         self.ciclo_divida.cancel()
+        self.ciclo_faturas.cancel()
         self.ciclo_cacadores.cancel()
 
     # ── Sweep do cargo temporário de Caçador de Recompensas ────────────────
@@ -51,8 +54,15 @@ class Recompensas(commands.Cog):
     @tasks.loop(hours=economia.DIVIDA_TICK_HORAS)
     async def ciclo_divida(self):
         for guild in self.bot.guilds:
+            gid = str(guild.id)
+            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
+            # isto, todo restart (cada deploy na Discloud) cobrava juros de
+            # divida de novo mesmo horas depois do ultimo tick.
+            if not self.bot.db.ciclo_guild_devido(gid, "divida", economia.DIVIDA_TICK_HORAS):
+                continue
             try:
-                await self._processar_divida_guild(str(guild.id))
+                await self._processar_divida_guild(gid)
+                self.bot.db.marcar_ciclo_guild(gid, "divida")
             except Exception:
                 log.exception("erro no ciclo de divida (guild %s)", guild.id)
 
@@ -60,42 +70,55 @@ class Recompensas(commands.Cog):
     async def _antes_ciclo_divida(self):
         await self.bot.wait_until_ready()
 
+    # Faturas são verificadas com frequência própria para não atrasar em até
+    # 24h só porque o ciclo de juros roda diariamente.
+    @tasks.loop(minutes=1)
+    async def ciclo_faturas(self):
+        for guild in self.bot.guilds:
+            gid = str(guild.id)
+            try:
+                convertidas = self.bot.db.converter_faturas_vencidas(gid)
+                # A fatura já cumpriu os sete dias. Se o total convertido
+                # alcançou o limiar de caça, publica o status de Procurado no
+                # mesmo ciclo, sem esperar o próximo tick diário (e sem cobrar
+                # juros antes da hora).
+                for conversao in convertidas:
+                    await self._promover_a_procurado(
+                        gid,
+                        conversao["user_id"],
+                        conversao["divida_total"],
+                    )
+            except Exception:
+                log.exception("erro no ciclo de faturas (guild %s)", gid)
+
+    @ciclo_faturas.before_loop
+    async def _antes_ciclo_faturas(self):
+        await self.bot.wait_until_ready()
+
     async def _processar_divida_guild(self, gid: str):
         db = self.bot.db
-        mestre_protegido = db.get_mestre_protegido(gid)
         for dev in db.listar_devedores(gid):
             uid = dev["user_id"]
             nova_divida = db.aplicar_juros_divida(gid, uid, economia.DIVIDA_TAXA_CRESCIMENTO)
             crescimento = nova_divida - dev["divida"]
             db.registrar_extrato(gid, uid, -crescimento, "Lunaris", "Juros da dívida em atraso")
-            credito_atual = dev["credito"]
-            alvo_credito = max(economia.DIVIDA_CREDITO_MINIMO, credito_atual - economia.DIVIDA_PENALIDADE_CREDITO)
-            if alvo_credito != credito_atual:
-                db.add_credito(gid, uid, alvo_credito - credito_atual)
-            if (
-                nova_divida >= economia.DIVIDA_RECOMPENSA_LIMIAR
-                and uid != mestre_protegido
-            ):
-                rec = db.get_recompensa(gid, uid)
-                if not rec["tem_sistema"]:
-                    valor = min(economia.DIVIDA_RECOMPENSA_TETO, nova_divida)
-                    db.adicionar_recompensa(gid, uid, valor, sistema=True)
-                    try:
-                        await cargos_mod.sincronizar_mais_procurado(self.bot)
-                    except Exception:
-                        log.exception("falha ao sincronizar cargo de mais procurado (guild %s)", gid)
-                    db.criar_aviso(
-                        gid,
-                        f"🚨 **Procurado!** <@{uid}> deve ☾ {nova_divida} Lunaris ao Banqueiro e agora "
-                        f"tem recompensa de ☾ {valor} na cabeça. Quem roubar a carteira ou o cofre dele "
-                        "leva a recompensa: e a dívida é perdoada.",
-                    )
-        for sol in db.listar_solventes_com_credito_baixo(gid, economia.CREDITO_RECUPERACAO_TETO):
+            reputacao_atual = dev["credito"]  # chave legada do banco
+            alvo_reputacao = max(
+                economia.DIVIDA_REPUTACAO_MINIMA,
+                reputacao_atual - economia.DIVIDA_PENALIDADE_REPUTACAO,
+            )
+            if alvo_reputacao != reputacao_atual:
+                db.add_credito(gid, uid, alvo_reputacao - reputacao_atual)
+            await self._promover_a_procurado(gid, uid, nova_divida)
+        for sol in db.listar_solventes_com_credito_baixo(gid, economia.REPUTACAO_RECUPERACAO_TETO):
             uid = sol["user_id"]
-            credito_atual = sol["credito"]
-            alvo = min(economia.CREDITO_RECUPERACAO_TETO, credito_atual + economia.CREDITO_RECUPERACAO_TICK)
-            if alvo != credito_atual:
-                db.add_credito(gid, uid, alvo - credito_atual)
+            reputacao_atual = sol["credito"]  # chave legada do banco
+            alvo = min(
+                economia.REPUTACAO_RECUPERACAO_TETO,
+                reputacao_atual + economia.REPUTACAO_RECUPERACAO_TICK,
+            )
+            if alvo != reputacao_atual:
+                db.add_credito(gid, uid, alvo - reputacao_atual)
 
         # Quem pagou a própria dívida (sem ser capturado) não deve continuar
         # com recompensa de sistema pendurada na cabeça: só some a parte que
@@ -103,7 +126,122 @@ class Recompensas(commands.Cog):
         for uid in db.limpar_recompensas_sistema_quitadas(gid):
             db.criar_aviso(gid, f"📋 <@{uid}> quitou a dívida com o Banqueiro: não está mais procurado por isso.")
 
+    async def _promover_a_procurado(
+        self, guild_id: str, user_id: str, divida_total: int
+    ) -> bool:
+        """Cria uma única recompensa de sistema ao cruzar o limiar da dívida.
+
+        É compartilhado pelo vencimento da fatura e pelo ciclo diário de juros,
+        garantindo anúncio imediato no Jornalista sem recompensas duplicadas.
+        """
+        if divida_total < economia.DIVIDA_RECOMPENSA_LIMIAR:
+            return False
+        db = self.bot.db
+        if user_id == db.get_mestre_protegido(guild_id):
+            return False
+        if db.get_recompensa(guild_id, user_id)["tem_sistema"]:
+            return False
+
+        valor = min(economia.DIVIDA_RECOMPENSA_TETO, divida_total)
+        db.adicionar_recompensa(guild_id, user_id, valor, sistema=True)
+        try:
+            await cargos_mod.sincronizar_mais_procurado(self.bot)
+        except Exception:
+            log.exception(
+                "falha ao sincronizar cargo de mais procurado (guild %s)",
+                guild_id,
+            )
+        db.criar_aviso(
+            guild_id,
+            f"🚨 **Procurado!** <@{user_id}> deve ☾ {divida_total} Lunaris ao Banqueiro e agora "
+            f"tem recompensa de ☾ {valor} na cabeça. Quem roubar a carteira ou o cofre dele "
+            "leva a recompensa: e a dívida é perdoada.",
+        )
+        return True
+
     # ── Comandos de jogador ─────────────────────────────────────────────────
+    @app_commands.command(description="Mostra suas faturas pendentes do Cartão Lunar.")
+    async def fatura(self, interaction: discord.Interaction):
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        db = self.bot.db
+        db.garantir_jogador(sid, uid)
+        faturas = db.listar_faturas_pendentes(sid, uid)
+        if not faturas:
+            await interaction.response.send_message(
+                "✅ Você não tem faturas pendentes no Cartão Lunar.", ephemeral=True
+            )
+            return
+        linhas = []
+        for fat in faturas[:10]:
+            vence_ts = int(fat["vence_em"].timestamp())
+            linhas.append(
+                f"• `#{fat['id']}` **{fat['descricao']}** — ☾ **{fat['valor_pendente']}** "
+                f"· vence <t:{vence_ts}:R>"
+            )
+        if len(faturas) > 10:
+            linhas.append(f"… e mais {len(faturas) - 10} fatura(s).")
+        total = sum(fat["valor_pendente"] for fat in faturas)
+        emb = ui.embed(
+            "🧾 Faturas do Cartão Lunar",
+            categoria="economia",
+            descricao="\n".join(linhas),
+        )
+        emb.add_field(name="Total pendente", value=f"☾ **{total} Lunaris**", inline=False)
+        emb.set_footer(text=f"{ui.MARCA} · Pague as mais antigas primeiro com /fatura_pagar")
+        await interaction.response.send_message(embed=emb, ephemeral=True)
+
+    @app_commands.command(
+        name="fatura_pagar",
+        description="Paga faturas pendentes usando Lunaris da carteira.",
+    )
+    @app_commands.describe(quantia="Quanto pagar; as faturas mais antigas têm prioridade.")
+    async def fatura_pagar(
+        self,
+        interaction: discord.Interaction,
+        quantia: app_commands.Range[int, 1],
+    ):
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        db = self.bot.db
+        try:
+            resultado = db.pagar_faturas(sid, uid, quantia)
+        except SaldoInsuficiente as exc:
+            await interaction.response.send_message(f"💸 {exc}", ephemeral=True)
+            return
+        if resultado["pago"] <= 0:
+            if resultado.get("convertido_em_divida", 0) > 0:
+                await interaction.response.send_message(
+                    f"⚠️ O prazo terminou: ☾ **{resultado['convertido_em_divida']} Lunaris** "
+                    "foram transferidos para sua dívida. Consulte `/divida`.",
+                    ephemeral=True,
+                )
+                return
+            await interaction.response.send_message(
+                "Você não tem faturas pendentes no Cartão Lunar.", ephemeral=True
+            )
+            return
+        db.registrar_extrato(
+            sid,
+            uid,
+            -resultado["pago"],
+            "Lunaris",
+            "Pagamento de fatura do Cartão Lunar",
+        )
+        linhas = [
+            f"Você pagou ☾ **{resultado['pago']} Lunaris**.",
+            f"Faturas ainda pendentes: ☾ **{resultado['restante']} Lunaris**.",
+            f"Saldo na carteira: ☾ **{resultado['saldo']} Lunaris**.",
+        ]
+        if resultado["reputacao_ganha"]:
+            linhas.append(
+                f"🏦 Pagamento pontual: **+{resultado['reputacao_ganha']} de reputação bancária**."
+            )
+        emb = ui.embed(
+            "🧾 Pagamento de fatura",
+            categoria="economia",
+            descricao="\n".join(linhas),
+        )
+        await interaction.response.send_message(embed=emb, ephemeral=True)
+
     @app_commands.command(description="Mostra sua situação de dívida no Cartão Lunar (e se você tá procurado).")
     async def divida(self, interaction: discord.Interaction):
         sid, uid = _sid(interaction), str(interaction.user.id)
@@ -118,10 +256,11 @@ class Recompensas(commands.Cog):
             desc = (
                 f"Você deve ☾ **{divida} Lunaris**. Receber dinheiro não paga essa dívida automaticamente. "
                 f"Use `/divida_pagar` quando decidir pagar. A dívida cresce a cada "
-                f"{economia.DIVIDA_TICK_HORAS}h (~{int(economia.DIVIDA_TAXA_CRESCIMENTO*100)}%) e machuca seu crédito."
+                f"{economia.DIVIDA_TICK_HORAS}h (~{int(economia.DIVIDA_TAXA_CRESCIMENTO*100)}%) "
+                "e reduz sua reputação bancária."
             )
         emb = ui.embed("📋 Sua situação com o Banqueiro", categoria="economia", descricao=desc)
-        emb.add_field(name="Crédito", value=str(cartao["credito"]))
+        emb.add_field(name="🏦 Reputação bancária", value=f"{cartao['credito']} pontos")
         if rec["valor"] > 0:
             emb.add_field(name="⚠️ Recompensa na sua cabeça", value=f"☾ {rec['valor']}: quem te roubar leva junto.", inline=False)
         await interaction.response.send_message(embed=emb, ephemeral=True)

@@ -8,10 +8,31 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
 
 ## Mecânicas
 
+- **Reputação bancária e Cartão Lunar** — são valores diferentes. A reputação
+  é a confiança do Banqueiro no jogador: ela libera raridades da loja, baús,
+  níveis de cartão, cofre e segurança, além de benefícios como descontos,
+  cashback e aumento de limite. Itens Comuns são livres; Incomum exige 100,
+  Raro 250, Épico 450, Lendário 700, Relíquia 1.000 e Relíquia da Criação
+  1.500 pontos. O **limite do cartão** é o teto em Lunaris que
+  pode financiar uma compra quando a carteira não cobre o preço. A parte já
+  usada vira fatura; portanto,
+  `limite disponível = limite total - faturas pendentes - dívida`.
+  O banco ainda armazena a reputação na coluna legada `cartao.credito`, mas
+  comandos e mensagens usam os nomes corretos.
+- **Fatura em sete dias** — o Banqueiro tenta cobrar somente a carteira. Se
+  faltar Lunaris e o limite disponível cobrir todo o restante, mostra uma
+  confirmação privada com preço, saldo, valor financiado, limite restante e
+  vencimento. Nada é financiado sem confirmação. A compra confirmada cria uma
+  fatura consultável em `/fatura`, pagável com `/fatura_pagar`. Quitar uma
+  fatura inteira no prazo concede de 3 a 50 pontos de reputação, conforme o
+  valor originalmente financiado. Depois de sete dias, somente o saldo ainda
+  aberto vira dívida e passa a sofrer as regras de devedor. Reputação negativa
+  pode se recuperar até zero depois da quitação; reputação positiva só é ganha
+  mantendo faturas em dia.
 - **Carteira** (`/carteira`) — dinheiro "vivo". Recebe o Lunaris dos baús,
   compras, vendas etc. `/roubar <membro>` abre uma tentativa pública e a
   vítima tem **5 segundos** para clicar em `Impedir o roubo`. Se o prazo
-  acabar, o ladrão leva 50% fixo do saldo (`ROUBO_CARTEIRA_PERCENT`). A
+  acabar, o ladrão leva 100% do saldo exposto (`ROUBO_CARTEIRA_PERCENT`). A
   tentativa consome o cooldown mesmo quando é impedida. Depois de ser roubada,
   a vítima fica um tempo protegida
   contra novo roubo de carteira (`ROUBO_PROTECAO_VITIMA_HORAS`) e recebe uma
@@ -19,13 +40,20 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
   vítima tiver DM fechada).
 - **Cofre** (`/cofre`) — guarda itens (limitados pelo tier) e dinheiro
   (`/cofre_depositar`, `/cofre_sacar` — saque cobra uma taxa pequena). O
-  dinheiro guardado é **defensável**: `/roubar_cofre` também dá 5 segundos
+  tamanho possui 15 níveis e termina no Cofre Sem-Fim, sem limite prático.
+  `/cofre` mostra somente o estado atual; `/cofre_melhorias` reúne os próximos
+  upgrades disponíveis, ganhos e preços. Os primeiros níveis usam Lunaris;
+  a progressão passa a combinar Solares, Fragmentos de Estrela e Créditos
+  Sombrios, até o pacote final com as quatro moedas. A cobrança é atômica:
+  se faltar qualquer material, nenhum saldo ou nível é alterado. Descontos
+  de reputação alcançam Lunaris e Solares, mas não os materiais raros. O dinheiro guardado é
+  **defensável**: `/roubar_cofre` também dá 5 segundos
   para a vítima impedir. Sem reação, tenta arrombar e, se der certo, leva 50%
   fixo do saldo guardado (`ROUBO_COFRE_PERCENT`) — mas a *chance* de dar certo
   depende da **Segurança** que o dono comprou
   (`/cofre_seguranca_melhorar`). Segurança Básica (de fábrica) defende 50%
   das tentativas; cada tier comprado é um patamar fixo de defesa mais alto
-  (nível 1 já defende 70%, e sobe dali — ver `SEGURANCA_TIERS` em
+  (a progressão agora possui 15 níveis e chega a 99% — ver `SEGURANCA_TIERS` em
   `core/economia.py`). Se o roubo falhar, o ladrão paga multa pro alvo. O
   cofre também pode render juros (`/juros_cofre`, comando de mestre, tipo
   timeskip de fim de sessão) — só o saldo guardado, nunca a carteira.
@@ -34,17 +62,18 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
   a proteção. Tentar roubar essa conta consome o cooldown e queima no máximo
   1 Lunaris da carteira do ladrão, apenas como punição cômica. A conta
   protegida também não pode receber novas recompensas.
-- **Dívida e procurados** — usar a linha de crédito cria uma dívida separada
-  do saldo da carteira. Receber Lunaris não paga essa dívida: o jogador escolhe
+- **Dívida e procurados** — o valor financiado fica primeiro em uma fatura e
+  somente o saldo não pago após sete dias vira uma dívida separada da carteira.
+  Receber Lunaris não paga essa dívida: o jogador escolhe
   quanto pagar com `/divida_pagar <quantia>`. A dívida cresce sozinha com o tempo (`DIVIDA_TICK_HORAS`,
-  `DIVIDA_TAXA_CRESCIMENTO`) e corrói o crédito. Passar de um certo limiar
+  `DIVIDA_TAXA_CRESCIMENTO`) e reduz a reputação bancária. Passar de um certo limiar
   de dívida (`DIVIDA_RECOMPENSA_LIMIAR`) coloca uma recompensa automática na
   cabeça do devedor — o Banqueiro avisa o Jornalista, que anuncia no jornal.
   Quem "capturar" o devedor (roubando a carteira ou o cofre dele) leva a
   recompensa e a dívida é perdoada. Se o devedor pagar por conta própria sem
   ser capturado, a recompensa de sistema é removida — só
   não some a parte que outro jogador colocou por conta dele. Fica em dia e o
-  crédito se recupera sozinho aos poucos. Veja sua situação com `/divida`.
+  reputação se recupera sozinha aos poucos. Veja sua situação com `/divida`.
 - **Recompensas entre jogadores** — qualquer um pode colocar recompensa na
   cabeça de outro (`/recompensa_colocar`, pago da própria carteira). Some
   com recompensas do sistema se houver. `/recompensa_ver` mostra quem tá
@@ -53,7 +82,7 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
   qualquer jogador: compras, vendas, câmbio, depósito/saque do cofre,
   roubos (dos dois lados), multas, recompensas, pagamentos, juros de
   dívida e ações de mestre. Serve pra resolver "quem mexeu no meu dinheiro"
-  numa disputa de mesa. Praticamente toda operação que move Lunaris/Solares
+  numa disputa de mesa. Praticamente toda operação que move qualquer moeda
   grava uma linha via `db.registrar_extrato(...)`.
 
 Todas essas constantes (chances, percentuais, prazos) vivem em
@@ -68,7 +97,7 @@ regras de `/roubar_cofre` por servidor com `/setroubo`, sem editar código.
   VLAN privada.
 - **Segredos:** `DISCORD_TOKEN` e `DATABASE_URL` somente nas Variáveis do painel.
 - **Catálogo em execução:** a tabela `catalogo_itens` é a fonte lida pelos
-  bots. O arquivo versionado `data/catalogo.json` serve de semente inicial e
+  bots. O arquivo versionado `data/loja/catalogo.json` serve de semente inicial e
   também de fonte para republicações controladas pelo mestre.
 
 Na Discloud, Banqueiro e PostgreSQL continuam sendo **duas aplicações
@@ -76,7 +105,7 @@ separadas**, ligadas pela mesma VLAN privada. O banco não deve ser colocado no
 mesmo processo ou no mesmo ZIP do bot.
 
 O comando antigo `/importar` foi removido. Para publicar adições, edições e
-remoções feitas em `data/catalogo.json`, use `/catalogo_republicar`. O comando
+remoções feitas em `data/loja/catalogo.json`, use `/catalogo_republicar`. O comando
 `/catalogo_recarregar` apenas atualiza a memória do bot com o conteúdo que já
 está no PostgreSQL.
 
@@ -198,5 +227,5 @@ bots/banqueiro/
 │   ├── ajuda.py             # /ajuda (por categoria) e /comandos (lista tudo)
 │   ├── integracao.py
 │   └── trocas.py
-└── data/catalogo.json      # semente inicial e fonte de republicação
+└── ../../data/loja/catalogo.json # fonte única no monorepositório
 ```

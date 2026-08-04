@@ -12,7 +12,6 @@ from discord.ext import commands
 from core import economia, ui
 from core.db import SaldoInsuficiente
 from core.inventario import CofreIndisponivel, ItemIndisponivel
-from core.platform_api import PlatformApiError
 
 log = logging.getLogger("banqueiro")
 
@@ -75,33 +74,12 @@ class Admin(commands.Cog):
     @app_commands.choices(moeda=MOEDAS_CHOICES)
     async def dar(self, interaction, membro: discord.Member, moeda: app_commands.Choice[str], quantia: app_commands.Range[int, 1]):
         sid = str(interaction.guild_id)
-        await interaction.response.defer(ephemeral=True)
-        destino_central = False
-        if self.bot.platform is not None:
-            try:
-                await self.bot.platform.deposit_vault(
-                    discord_user_id=membro.id,
-                    discord_guild_id=interaction.guild_id,
-                    idempotency_key=f"dar-moeda:{interaction.id}",
-                    reason=f"Recebido do mestre ({interaction.user.display_name})",
-                    currencies=[{"moeda": moeda.value, "quantidade": quantia}],
-                )
-                destino_central = True
-            except PlatformApiError as exc:
-                log.warning(
-                    "falha ao depositar /dar na plataforma (guild=%s membro=%s moeda=%s status=%s): %s",
-                    sid, membro.id, moeda.value, exc.status_code, exc,
-                )
-        if destino_central:
-            await interaction.followup.send(
-                f"✅ Depositei {quantia} {moeda.value} no cofre da conta de {membro.mention} no site. "
-                "Ele(a) escolhe o personagem pela ficha.",
-                ephemeral=True,
-            )
-            return
         novo = self.bot.db.creditar(sid, str(membro.id), moeda.value, quantia)
         self.bot.db.registrar_extrato(sid, str(membro.id), quantia, moeda.value, "Recebido do mestre")
-        await interaction.followup.send(f"✅ Dei {quantia} {moeda.value} pra {membro.mention}. Saldo: {novo}.", ephemeral=True)
+        await interaction.response.send_message(
+            f"✅ Dei {quantia} {moeda.value} pra carteira de {membro.mention}. Saldo: {novo}.",
+            ephemeral=True,
+        )
 
     @app_commands.command(description="[Mestre] Remove moeda de um jogador.")
     @app_commands.default_permissions(manage_guild=True)
@@ -249,6 +227,7 @@ class Admin(commands.Cog):
             f"🏦 {r['cofre_saldo']} saldo(s) de cofre local zerado(s)",
             f"📦 {r['baus_estoque']} baú(s) em estoque removido(s)",
             f"💳 {r['divida_cartao']} dívida(s) de cartão zerada(s)",
+            f"🧾 {r.get('faturas_cartao', 0)} fatura(s) de cartão removida(s)",
             f"🎟️ {r['loteria_bilhetes']} bilhete(s) de loteria removido(s)",
             f"📈 {r['investimentos']} investimento(s) removido(s)",
             f"🤝 {r['emprestimos']} empréstimo(s) removido(s)",
@@ -265,13 +244,26 @@ class Admin(commands.Cog):
             view=None,
         )
 
-    @app_commands.command(name="setcredito", description="[Mestre] Define o crédito do Cartão Lunar de um jogador.")
+    async def _definir_reputacao(self, interaction, membro: discord.Member, valor: int, *, comando_legado: bool = False):
+        self.bot.db.set_credito(str(interaction.guild_id), str(membro.id), valor)
+        benef = economia.beneficios_reputacao(valor)
+        prefixo = "ℹ️ `/setcredito` agora se chama `/setreputacao`.\n" if comando_legado else ""
+        await interaction.response.send_message(
+            f"{prefixo}✅ Reputação bancária de {membro.mention} = {valor} pontos ({benef['rotulo']}).",
+            ephemeral=True,
+        )
+
+    @app_commands.command(name="setreputacao", description="[Mestre] Define a reputação bancária de um jogador.")
+    @app_commands.default_permissions(manage_guild=True)
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def setreputacao(self, interaction, membro: discord.Member, valor: app_commands.Range[int, -100, 100000]):
+        await self._definir_reputacao(interaction, membro, valor)
+
+    @app_commands.command(name="setcredito", description="[Legado] Use /setreputacao para definir a reputação bancária.")
     @app_commands.default_permissions(manage_guild=True)
     @app_commands.checks.has_permissions(manage_guild=True)
     async def setcredito(self, interaction, membro: discord.Member, valor: app_commands.Range[int, -100, 100000]):
-        self.bot.db.set_credito(str(interaction.guild_id), str(membro.id), valor)
-        benef = economia.beneficios_credito(valor)
-        await interaction.response.send_message(f"✅ Crédito de {membro.mention} = {valor} ({benef['rotulo']}).", ephemeral=True)
+        await self._definir_reputacao(interaction, membro, valor, comando_legado=True)
 
     @app_commands.command(name="setcambio", description="[Mestre] Ajusta o câmbio (Lunaris por 1 Solares e taxa %).")
     @app_commands.default_permissions(manage_guild=True)

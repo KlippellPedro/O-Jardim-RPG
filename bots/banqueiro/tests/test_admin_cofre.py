@@ -59,6 +59,13 @@ class _DB:
     def contar_cofre_plataforma(self, guild_id, user_id):
         return sum(i["quantidade"] for i in self.inventario_legado)
 
+    def creditar(self, guild_id, user_id, moeda, quantia):
+        self.chamadas.append(("creditar", guild_id, user_id, moeda, quantia))
+        return quantia
+
+    def registrar_extrato(self, guild_id, user_id, quantia, moeda, motivo):
+        self.chamadas.append(("registrar_extrato", guild_id, user_id, quantia, moeda, motivo))
+
 
 class _Platform:
     def __init__(self):
@@ -135,6 +142,18 @@ def _admin(*, db, platform):
 
 def _rodar(coro):
     return asyncio.run(coro)
+
+
+def test_dar_moeda_credita_carteira_mesmo_com_conta_vinculada():
+    plataforma = _Platform()
+    db = _DB(par={"usuario_id": "u", "campanha_id": "c"})
+    admin = _admin(db=db, platform=plataforma)
+    moeda = type("Moeda", (), {"value": "Lunaris"})()
+
+    _rodar(admin.dar.callback(admin, _Interacao(), _Membro(), moeda, 10_000))
+
+    assert any(chamada[0] == "creditar" and chamada[-1] == 10_000 for chamada in db.chamadas)
+    assert not plataforma.chamadas
 
 
 # ── /daritem ─────────────────────────────────────────────────────────────

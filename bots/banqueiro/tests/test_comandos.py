@@ -45,6 +45,7 @@ COMANDOS_ESPERADOS = {
     "catalogo_republicar",
     "cofre",
     "cofre_depositar",
+    "cofre_melhorias",
     "cofre_melhorar",
     "cofre_sacar",
     "cofre_seguranca_melhorar",
@@ -60,6 +61,8 @@ COMANDOS_ESPERADOS = {
     "emprestimo_pagar",
     "emprestimos_ver",
     "extrato",
+    "fatura",
+    "fatura_pagar",
     "inventario",
     "investir",
     "investir_ver",
@@ -91,6 +94,7 @@ COMANDOS_ESPERADOS = {
     "roubar_cofre",
     "setcambio",
     "setcredito",
+    "setreputacao",
     "seteconomia",
     "setroubo",
     "tirar",
@@ -179,6 +183,12 @@ def test_juros_automatico_do_cofre_aplica_e_avisa():
         def criar_aviso(self, gid, msg):
             self.avisos.append((gid, msg))
 
+        def ciclo_guild_devido(self, gid, ciclo, intervalo_horas):
+            return True
+
+        def marcar_ciclo_guild(self, gid, ciclo):
+            pass
+
     db = _DB()
     bot = type("Bot", (), {})()
     bot.db = db
@@ -207,6 +217,12 @@ def test_juros_automatico_nao_avisa_cofre_vazio():
 
         def criar_aviso(self, gid, msg):
             self.avisos.append((gid, msg))
+
+        def ciclo_guild_devido(self, gid, ciclo, intervalo_horas):
+            return True
+
+        def marcar_ciclo_guild(self, gid, ciclo):
+            pass
 
     db = _DB()
     bot = type("Bot", (), {})()

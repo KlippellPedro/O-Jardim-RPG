@@ -73,12 +73,20 @@ class Entrevista(commands.Cog):
     @tasks.loop(hours=ENTREVISTA_INTERVALO_HORAS)
     async def ciclo(self):
         for guild in self.bot.guilds:
+            gid = str(guild.id)
             try:
                 await self._recuperar_pendentes(guild)
             except Exception:
                 log.exception("erro ao recuperar entrevistas pendentes (guild %s)", guild.id)
+            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
+            # isto, todo restart mandava uma entrevista nova por DM mesmo dias
+            # antes do proximo ciclo semanal de verdade. _recuperar_pendentes
+            # acima nao entra nesse controle: e so retry, sempre seguro rodar.
+            if not self.bot.db.ciclo_guild_devido(gid, "entrevista", ENTREVISTA_INTERVALO_HORAS):
+                continue
             try:
                 await self._nova_entrevista(guild)
+                self.bot.db.marcar_ciclo_guild(gid, "entrevista")
             except Exception:
                 log.exception("erro no ciclo de entrevista (guild %s)", guild.id)
 

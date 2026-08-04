@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Iterable, Optional
 
 ARQUIVOS_MARKDOWN = (
-    "docs/regras/regras-publicas-v1.md",
+    "data/regras/regras-publicas-v1.md",
 )
 ARQUIVOS_JSON = (
     "data/ficha/classes.json",

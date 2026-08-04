@@ -420,8 +420,14 @@ class Mercado(commands.Cog):
     @tasks.loop(hours=24)
     async def ciclo_cambio_flutuante(self):
         for gid in self.bot.db.listar_guilds_cambio_auto():
+            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
+            # isto, todo restart ajustava o cambio de novo mesmo horas depois
+            # do ultimo ajuste diario.
+            if not self.bot.db.ciclo_guild_devido(gid, "cambio_flutuante", 24):
+                continue
             try:
                 await self._ajustar_cambio_guild(gid)
+                self.bot.db.marcar_ciclo_guild(gid, "cambio_flutuante")
             except Exception:
                 log.exception("erro no ciclo de cambio flutuante (guild %s)", gid)
 
