@@ -54,8 +54,10 @@ class Navegacao:
         legados = self._json("data/ficha/legados.json").get("legados", [])
         novos = self._json("data/ficha/legados-novos.json").get("novos", [])
         self.legados = legados + novos
-        self.magias = self._json("data/ficha/magias.json").get("magias", [])
-        self.fundamentos = self._secoes_markdown("docs/regras/regras-publicas-v1.md")
+        magias_doc = self._json("data/ficha/magias.json")
+        self.magias = magias_doc.get("magias", [])
+        self.fluxos = magias_doc.get("fluxos", [])
+        self.fundamentos = self._secoes_markdown("data/regras/regras-publicas-v1.md")
 
     def _json(self, relativo: str):
         return json.loads((self.raiz / relativo).read_text(encoding="utf-8-sig"))
@@ -110,6 +112,21 @@ class Navegacao:
         for it in self.itens(categoria):
             if it.get("id") == item_id:
                 return it
+        return None
+
+    def magias_do_fluxo(self, fluxo_id: str) -> list[dict]:
+        """Magias de um Fluxo, ordenadas por círculo. O catálogo tem 330 entradas,
+        então o menu do /regras desce por Fluxo antes de listar."""
+        def chave(magia: dict):
+            circulo = magia.get("circulo")
+            return (circulo if isinstance(circulo, int) else 99, str(magia.get("titulo", "")))
+
+        return sorted((m for m in self.magias if m.get("fluxo") == fluxo_id), key=chave)
+
+    def fluxo(self, fluxo_id: str) -> Optional[dict]:
+        for item in self.fluxos:
+            if item.get("id") == fluxo_id:
+                return item
         return None
 
     def pericias_por_atributo(self) -> dict[str, list[dict]]:

@@ -10,11 +10,16 @@ from pathlib import Path
 log = logging.getLogger("jardim-plataforma")
 
 _NOMES: dict[str, dict[str, str]] = {"raca": {}, "classe": {}, "pericia": {}, "legado": {}, "magia": {}}
+# (fluxo_minimo, circulo) em ordem decrescente, lido de data/ficha/magias.json.
+_CIRCULOS_POR_FLUXO: list[tuple[int, int]] = []
 _CATALOGO: dict[str, dict[str, dict]] = {"raca": {}, "classe": {}, "pericia": {}, "legado": {}, "magia": {}}
 _ATRIBUTOS = ("forca", "destreza", "constituicao", "inteligencia", "sabedoria", "carisma", "fluxo")
 _VALORES_PADRAO = sorted((15, 14, 13, 12, 10, 8, 8))
 _GRAUS = ("iniciante", "aprendiz", "treinado", "especialista", "mestre", "veterano", "renomado")
 _NIVEL_MINIMO_GRAU = (1, 1, 3, 7, 13, 19, 29)
+
+# Espelha src/services/racaService.ts::RACA_PERSONALIZADA_ID.
+RACA_PERSONALIZADA_ID = "raca-personalizada"
 
 
 def carregar_catalogos(data_root: Path) -> None:
@@ -92,8 +97,34 @@ def carregar_catalogos(data_root: Path) -> None:
             for item in magias
             if isinstance(item, dict) and item.get("id")
         }
+        regras = documento.get("regras", {}) if isinstance(documento, dict) else {}
+        circulos = [
+            (_inteiro(item.get("fluxo_minimo")) or 0, _inteiro(item.get("circulo")) or 0)
+            for item in regras.get("circulos") or []
+            if isinstance(item, dict)
+        ]
+        _CIRCULOS_POR_FLUXO.clear()
+        _CIRCULOS_POR_FLUXO.extend(sorted(circulos, reverse=True))
     except (OSError, json.JSONDecodeError, AttributeError):
         log.exception("Falha ao ler catalogo de magias em %s", caminho_magias)
+
+
+_CHAVES_LIBERACAO = {
+    "raca": ("racas_liberadas", "racas_liberadas_membros"),
+    "classe": ("classes_liberadas", "classes_liberadas_membros"),
+}
+
+
+def _liberados_para(config: dict, tipo: str, usuario_id) -> list:
+    """União do que o mestre liberou pra campanha inteira com o que liberou
+    só pra este jogador (`racas_liberadas_membros`/`classes_liberadas_membros`,
+    chaveado por usuario_id) — espelha data/mundo/arvoresCatalog.ts::filtrarPorLiberacao,
+    que já faz essa mesma união do lado do cliente."""
+    chave_global, chave_membros = _CHAVES_LIBERACAO[tipo]
+    globais = config.get(chave_global) or []
+    membros = config.get(chave_membros) or {}
+    individuais = (membros.get(str(usuario_id)) if usuario_id and isinstance(membros, dict) else None) or []
+    return [*globais, *individuais]
 
 
 def _compativel_com_arvore(tipo: str, item_id, arvore_id, liberados: list) -> str | None:
@@ -367,15 +398,12 @@ def _fluxo_efetivo(ficha: dict, raca: dict) -> int:
 
 
 def _circulo_por_fluxo(fluxo: int) -> int:
-    if fluxo >= 18:
-        return 5
-    if fluxo >= 16:
-        return 4
-    if fluxo >= 14:
-        return 3
-    if fluxo >= 12:
-        return 2
-    return 1 if fluxo >= 8 else 0
+    """Maior circulo que o atributo Fluxo sustenta, pelos limiares publicados
+    em data/ficha/magias.json (14, 18, 22... ate o 10o circulo)."""
+    for minimo, circulo in _CIRCULOS_POR_FLUXO:
+        if fluxo >= minimo:
+            return circulo
+    return 0
 
 
 def _validar_magias(
@@ -425,7 +453,10 @@ def _validar_magias(
             return "a fonte de magia ainda nao libera o circulo escolhido"
         if circulo > circulo_fluxo:
             return "Fluxo insuficiente para o circulo de uma magia conhecida"
-        if str(magia.get("tradicao")) not in tradicoes:
+        # "tradicao" nomeia o Fluxo da magia; quem casa com a classe e
+        # "fontes_permitidas" (Canalizacao, Sintonia, Cartomancia de Fluxo).
+        permitidas = {str(item) for item in magia.get("fontes_permitidas") or []}
+        if permitidas and not (permitidas & tradicoes):
             return "a fonte da ficha nao ensina a tradicao de uma magia conhecida"
 
     if criacao and (conhecidas or concedidas or ficha.get("magias")):
@@ -447,11 +478,15 @@ def validar_regras_ficha(
     *,
     criacao: bool = False,
     ficha_anterior: dict | None = None,
+    usuario_id=None,
 ) -> str | None:
     """Valida as regras publicadas para fichas de jogadores comuns.
 
     Mestre e assistente continuam podendo preparar NPCs e excecoes narrativas;
     essa decisao de permissao fica no router, nao no cliente.
+
+    `usuario_id` (o dono do personagem) resolve liberação individual - ver
+    `_liberados_para`. Sem ele, só a liberação da campanha inteira conta.
     """
     if not isinstance(ficha, dict):
         return "ficha invalida"
@@ -462,15 +497,26 @@ def validar_regras_ficha(
     raca = _CATALOGO["raca"].get(raca_id)
     if not raca:
         return "raca inexistente no catalogo oficial"
-    if criacao and raca.get("categoria") != "padrao":
-        return "a criacao deve comecar com uma raca comum"
-    erro = _compativel_com_arvore("raca", raca_id, arvore_id, config.get("racas_liberadas") or [])
+    liberados_raca = _liberados_para(config, "raca", usuario_id)
+    # Criação normalmente exige raça comum; uma raça especial já liberada
+    # pra este jogador (ou pra campanha) é a exceção documentada no painel
+    # do mestre ("aparecem na criação/edição de fichas depois de liberadas").
+    if criacao and raca.get("categoria") != "padrao" and raca_id not in liberados_raca:
+        return "a criacao deve comecar com uma raca comum, ou uma raca especial liberada pelo mestre"
+    erro = _compativel_com_arvore("raca", raca_id, arvore_id, liberados_raca)
     if erro:
         return erro
 
-    for campo in ("arvoreId", "racaId", "metodoAtributos"):
+    for campo in ("arvoreId", "metodoAtributos"):
         if not criacao and campo in anterior and ficha.get(campo) != anterior.get(campo):
             return f"jogador nao pode alterar {campo} depois da criacao"
+    if not criacao and "racaId" in anterior and raca_id != str(anterior.get("racaId") or ""):
+        # Trocar de raça depois de criado só é permitido se a NOVA raça for
+        # especial e liberada pra este jogador - uma "transformação" que o
+        # mestre concedeu, nunca respec livre entre duas raças comuns (essa
+        # continua caindo no "raca inexistente"/liberação acima se não bater).
+        if raca.get("categoria") != "esquecida" or raca_id not in liberados_raca:
+            return "jogador so pode trocar de raca para uma raca especial liberada pelo mestre"
     for campo in ("proficiencias", "resistenciasTexto"):
         if not criacao and ficha.get(campo) != anterior.get(campo):
             return f"somente o mestre pode alterar {campo}"
@@ -484,6 +530,7 @@ def validar_regras_ficha(
         if any(escolha.get(campo) != escolha_anterior.get(campo) for campo in campos_fixos):
             return "escolhas raciais de criacao so podem ser alteradas pelo mestre"
 
+    liberados_classe = _liberados_para(config, "classe", usuario_id)
     referencias = _classes_da_ficha(ficha)
     if not referencias:
         return "informe ao menos uma classe"
@@ -501,7 +548,7 @@ def validar_regras_ficha(
             return "a mesma classe nao pode ocupar dois espacos"
         ids.append(classe_id)
         classes.append((classe, nivel))
-        erro = _compativel_com_arvore("classe", classe_id, arvore_id, config.get("classes_liberadas") or [])
+        erro = _compativel_com_arvore("classe", classe_id, arvore_id, liberados_classe)
         if erro:
             return erro
 
@@ -512,11 +559,22 @@ def validar_regras_ficha(
         return "o nivel total nao pode passar de 40"
     if len(comuns) > 2 or len(especiais) > 1:
         return "o limite e duas classes comuns e uma classe especial"
-    if criacao and (len(classes) != 1 or len(comuns) != 1 or classes[0][1] != 1):
-        return "a criacao deve comecar no nivel 1 de uma unica classe comum"
+    if criacao:
+        if len(classes) != 1 or classes[0][1] != 1:
+            return "a criacao deve comecar no nivel 1 de uma unica classe"
+        classe_inicial = classes[0][0]
+        # Mesma exceção da raça: uma classe especial já liberada pra este
+        # jogador (ou pra campanha) pode começar a ficha, não só uma comum.
+        if classe_inicial.get("categoria") != "padrao" and str(classe_inicial.get("id")) not in liberados_classe:
+            return "a criacao deve comecar com uma classe comum, ou uma classe especial liberada pelo mestre"
     if len(comuns) == 2 and not any(nivel == 20 for _, nivel in comuns):
         return "a segunda classe comum so pode ser escolhida depois de uma classe chegar ao nivel 20"
-    if especiais:
+    if especiais and comuns:
+        # O nível 15 só é pré-requisito quando a especial vem MULTICLASSANDO
+        # sobre uma base comum já em progresso. Uma ficha que É a especial
+        # liberada desde a criação (sem base comum) não tem "antes" nenhum
+        # pra exigir - senão a própria exceção de criação acima não faria
+        # sentido: ela nunca teria 15 níveis pra mostrar no nível 1.
         nivel_sem_especial = nivel_total - especiais[0][1]
         if nivel_sem_especial < 15:
             return "uma classe especial exige nivel total 15 antes de ser adquirida"
@@ -532,8 +590,26 @@ def validar_regras_ficha(
     }
     if not criacao:
         atuais = {classe_id: nivel for classe_id, (_, nivel) in zip(ids, classes)}
-        if any(classe_id not in atuais or atuais[classe_id] < nivel for classe_id, nivel in anteriores.items()):
-            return "jogador nao pode remover classes nem reduzir niveis adquiridos"
+        removidas = [
+            (classe_id, nivel_anterior) for classe_id, nivel_anterior in anteriores.items()
+            if classe_id not in atuais or atuais[classe_id] < nivel_anterior
+        ]
+        if removidas:
+            # Mesma lógica da raça: só tolera uma classe "sumir" da lista se
+            # ela era comum E entrou uma classe especial liberada no lugar -
+            # uma troca de transformação, nunca perda de progresso real.
+            trocas_liberadas = [
+                classe_id for classe_id in atuais
+                if classe_id not in anteriores
+                and _CATALOGO["classe"].get(classe_id, {}).get("categoria") == "esquecida"
+                and classe_id in liberados_classe
+            ]
+            todas_comuns = all(
+                _CATALOGO["classe"].get(classe_id, {}).get("categoria") == "padrao"
+                for classe_id, _ in removidas
+            )
+            if not todas_comuns or len(trocas_liberadas) < len(removidas):
+                return "jogador nao pode remover classes nem reduzir niveis adquiridos"
 
     xp = _inteiro(ficha.get("xp", 0))
     if xp is None or xp < 0:
@@ -564,8 +640,12 @@ def validar_regras_ficha(
         return "a compra deve distribuir exatamente 24 pontos, com valores entre 8 e 15"
     if metodo not in {"padrao", "pontos"}:
         return "a rolagem de atributos exige autorizacao do mestre"
-    if any(not 1 <= valor <= 20 for valor in valores_finais):
-        return "atributos naturais devem ficar entre 1 e 20"
+    # O teto de 20 só rege a CRIAÇÃO (métodos padrao/pontos acima, que nunca
+    # passam de 15 de qualquer forma). Depois de criado, o atributo final
+    # pode passar de 20 por bênção, mutação ou algo negociado com o mestre -
+    # só o piso de 1 continua valendo, pra não aceitar atributo negativo/zero.
+    if any(valor < 1 for valor in valores_finais):
+        return "atributos naturais nao podem ficar abaixo de 1"
     aumentos = [final - inicial for inicial, final in zip(valores_base, valores_finais)]
     if any(aumento < 0 for aumento in aumentos):
         return "atributos adquiridos nao podem ficar abaixo dos valores de criacao"
@@ -647,7 +727,74 @@ def _numero(valor, padrao: int = 0) -> int:
         return padrao
 
 
-def iniciativa_fixa(ficha: dict | None) -> int:
+def _status_ficha(ficha: dict) -> dict:
+    legado = ficha.get("recursos") if isinstance(ficha.get("recursos"), dict) else {}
+    atual = ficha.get("status") if isinstance(ficha.get("status"), dict) else {}
+    return {**legado, **atual}
+
+
+def _normalizar_condicoes_iniciativa(condicoes) -> set[str]:
+    resultado: set[str] = set()
+    for item in condicoes or []:
+        if isinstance(item, str):
+            resultado.add(_normalizar_texto(item))
+        elif isinstance(item, dict):
+            for campo in ("id", "nome", "titulo"):
+                valor = _normalizar_texto(item.get(campo))
+                if valor:
+                    resultado.add(valor)
+    return resultado
+
+
+def _condicoes_ficha(ficha: dict) -> set[str]:
+    return _normalizar_condicoes_iniciativa(ficha.get("condicoesAtivas"))
+
+
+def _atributo_efetivo(ficha: dict, atributo: str) -> int:
+    finais = ficha.get("atributosFinais") if isinstance(ficha.get("atributosFinais"), dict) else {}
+    base = _numero(finais.get(atributo), 10)
+    raca = _CATALOGO["raca"].get(str(ficha.get("racaId") or "")) or {}
+    escolha = ficha.get("escolhaRacial") if isinstance(ficha.get("escolhaRacial"), dict) else {}
+    ajuste = _numero((raca.get("ajustes_atributos") or {}).get(atributo))
+    limite = (raca.get("limites_atributos") or {}).get(atributo)
+
+    for colecao, campo in (
+        ("variantes", "varianteId"),
+        ("linhagens", "linhagemId"),
+        ("condicoes_ancestrais", "condicaoAncestralId"),
+    ):
+        opcao = next((
+            item for item in raca.get(colecao) or []
+            if isinstance(item, dict) and str(item.get("id")) == str(escolha.get(campo))
+        ), None)
+        if opcao:
+            ajuste += _numero((opcao.get("ajustes_atributos") or {}).get(atributo))
+            if atributo in (opcao.get("limites_atributos") or {}):
+                limite = opcao["limites_atributos"][atributo]
+            break
+
+    configuracao = raca.get("escolha_atributos") if isinstance(raca.get("escolha_atributos"), dict) else {}
+    campo = str(configuracao.get("campo") or "atributosRaciais")
+    escolhas = escolha.get(campo) if isinstance(escolha.get(campo), list) else []
+    total = max(0, _numero(configuracao.get("total")))
+    if atributo in list(dict.fromkeys(item for item in escolhas if isinstance(item, str)))[:total]:
+        ajuste += _numero(configuracao.get("bonus_por_escolha"))
+        if configuracao.get("limite") is not None:
+            limite = configuracao.get("limite")
+
+    limite_numero = _inteiro(limite)
+    if limite_numero is not None and ajuste > 0:
+        ajuste = min(ajuste, max(0, limite_numero - base))
+    return max(1, base + ajuste)
+
+
+def sabedoria_desempate(ficha: dict | None) -> int:
+    if not isinstance(ficha, dict):
+        return -99
+    return (_atributo_efetivo(ficha, "sabedoria") - 10) // 2
+
+
+def iniciativa_fixa(ficha: dict | None, *, condicoes=None) -> int:
     """Calcula a iniciativa da ficha sem dado, igual ao front-end.
 
     Iniciativa é um atributo fixo: base derivada + bônus/penalidade + ajustes
@@ -656,14 +803,19 @@ def iniciativa_fixa(ficha: dict | None) -> int:
     if not isinstance(ficha, dict):
         return 0
     derivados = ficha.get("derivados") if isinstance(ficha.get("derivados"), dict) else {}
-    recursos = ficha.get("recursos") if isinstance(ficha.get("recursos"), dict) else {}
+    status = _status_ficha(ficha)
     total = _numero(derivados.get("iniciativa"), 10)
-    total += _numero(recursos.get("bonusIniciativa"))
+    total += _numero(status.get("bonusIniciativa"))
     total += sum(
         _numero(item.get("valor"))
-        for item in (recursos.get("ajustesIniciativa") or [])
+        for item in (status.get("ajustesIniciativa") or [])
         if isinstance(item, dict)
     )
+    if _numero(status.get("cansacoAtual")) >= 2:
+        total -= 1
+    condicoes_ativas = _condicoes_ficha(ficha) if condicoes is None else _normalizar_condicoes_iniciativa(condicoes)
+    if "surpreendido" in condicoes_ativas:
+        total -= 5
 
     ativos = ficha.get("efeitosAtivos") if isinstance(ficha.get("efeitosAtivos"), dict) else {}
     for colecao in ("poderes", "habilidades", "magias"):
@@ -699,12 +851,21 @@ def resumir_ficha(ficha: dict | None) -> dict:
         classes.append(f"{nome} {nivel}" if nivel else nome)
 
     derivados = ficha.get("derivados") if isinstance(ficha.get("derivados"), dict) else {}
-    recursos = ficha.get("recursos") if isinstance(ficha.get("recursos"), dict) else {}
+    status = _status_ficha(ficha)
     vida_maxima = derivados.get("vida")
-    vida_atual = recursos.get("vidaAtual")
+    vida_atual = status.get("vidaAtual")
 
+    raca_id = str(ficha.get("racaId") or "")
+    # Espelha src/services/racaService.ts::nomeExibicaoRaca - a raça
+    # personalizada é mecanicamente vazia, o nome de verdade vem do texto
+    # livre que o jogador escreveu, não do rótulo genérico do catálogo.
+    nome_raca = (
+        str(ficha.get("racaNomePersonalizado") or "").strip() or _nome("raca", raca_id)
+        if raca_id == RACA_PERSONALIZADA_ID
+        else _nome("raca", raca_id)
+    )
     resumo = {
-        "raca": _nome("raca", ficha.get("racaId")),
+        "raca": nome_raca,
         "classes": classes,
         "nivel": ficha.get("nivel"),
     }

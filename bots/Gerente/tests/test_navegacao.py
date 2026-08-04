@@ -17,7 +17,8 @@ def test_carrega_todas_as_categorias():
     assert nav.classes, "classes vazia"
     assert nav.pericias, "pericias vazia"
     assert nav.legados, "legados vazia (base + novos)"
-    assert len(nav.magias) == 28
+    assert len(nav.magias) == 330  # 11 Fluxos × 10 círculos × 3 magias
+    assert len(nav.fluxos) == 11
     assert nav.fundamentos, "nenhuma seção de fundamentos"
 
 
@@ -69,6 +70,16 @@ def test_fundamentos_tem_titulo_e_texto():
 
 def test_magias_podem_ser_navegadas_e_buscadas():
     nav = Navegacao()
-    magia = nav.item("magias", "projetil-elemental")
+    magia = nav.item("magias", "impacto-elemental")
     assert magia["custo_mana"] == 2
-    assert nav.buscar_item("Projétil Elemental")[0] == ("magias", magia)
+    assert nav.buscar_item("Impacto Elemental")[0] == ("magias", magia)
+
+
+def test_magias_sao_filtradas_por_fluxo_para_caber_no_menu():
+    nav = Navegacao()
+    do_fisico = nav.magias_do_fluxo("fisico")
+    assert len(do_fisico) == 30
+    assert {m["circulo"] for m in do_fisico} == set(range(1, 11))
+    # A lista sai ordenada por círculo, que é como o menu apresenta.
+    assert [m["circulo"] for m in do_fisico] == sorted(m["circulo"] for m in do_fisico)
+    assert nav.magias_do_fluxo("inexistente") == []

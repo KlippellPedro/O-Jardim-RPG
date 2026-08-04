@@ -105,8 +105,12 @@ def _embed_pericia(p) -> discord.Embed:
     return e
 
 
+def _circulo_rotulo(circulo) -> str:
+    return "Ritual" if circulo == "ritual" else f"{circulo if circulo is not None else '?'}º círculo"
+
+
 def _embed_magia(m) -> discord.Embed:
-    circulo = "Ritual" if m.get("circulo") == "ritual" else f"{m.get('circulo', '?')}º círculo"
+    circulo = _circulo_rotulo(m.get("circulo"))
     e = ui.embed(f"🔮 {m.get('titulo', 'Magia')}", (m.get("efeito") or "Sem efeito publicado.").strip()[:4000])
     e.add_field(name="Círculo e tradição", value=f"{circulo} · {m.get('tradicao', 'Não informada')}", inline=True)
     e.add_field(name="Custo", value=f"{m.get('custo_mana', 0)} Mana", inline=True)
@@ -166,6 +170,7 @@ class NavRegras(discord.ui.View):
         self.nav = nav
         self.autor_id = autor_id
         self.categoria = None
+        self.fluxo = None  # só usado dentro de Magias
         self.pagina = 0
         self.embed: discord.Embed | None = None
         self.message: discord.InteractionMessage | None = None
@@ -191,6 +196,8 @@ class NavRegras(discord.ui.View):
         self.clear_items()
         if self.categoria is None:
             self._tela_menu()
+        elif self.categoria == "magias" and self.fluxo is None:
+            self._tela_fluxos()
         else:
             self._tela_lista()
 
@@ -205,25 +212,59 @@ class NavRegras(discord.ui.View):
         sel.callback = self._on_categoria
         self.add_item(sel)
 
+    def _tela_fluxos(self) -> None:
+        self.embed = ui.embed(
+            "🔮 Magias por Fluxo",
+            "São dez círculos em onze Fluxos. Escolha o Fluxo para ver as magias dele, do 1º ao 10º círculo.",
+        )
+        sel = discord.ui.Select(placeholder="Escolha um Fluxo…")
+        for fluxo in self.nav.fluxos[:POR_PAGINA]:
+            total = len(self.nav.magias_do_fluxo(fluxo.get("id", "")))
+            sel.add_option(
+                label=str(fluxo.get("titulo", "?"))[:100],
+                value=str(fluxo.get("id", ""))[:100],
+                description=f"{fluxo.get('arvore', '')} · {total} magias"[:100],
+            )
+        sel.callback = self._on_fluxo
+        self.add_item(sel)
+        self._add_botao("⌂ Menu", self._on_menu)
+
     def _tela_lista(self) -> None:
         rot, emoji = _rotulo(self.categoria)
-        itens = self.nav.itens(self.categoria)
+        if self.categoria == "magias":
+            fluxo = self.nav.fluxo(self.fluxo) or {}
+            itens = self.nav.magias_do_fluxo(self.fluxo)
+            rot = f"{rot} · {fluxo.get('titulo', self.fluxo)}"
+        else:
+            itens = self.nav.itens(self.categoria)
         total = len(itens)
         inicio = self.pagina * POR_PAGINA
         fatia = itens[inicio:inicio + POR_PAGINA]
 
-        linhas = "\n".join(f"• {it.get('titulo', '?')}" for it in fatia) or "Nenhum resultado"
-        self.embed = ui.embed(f"{emoji} {rot}", linhas)
+        if self.categoria == "magias":
+            linhas = "\n".join(f"• {_circulo_rotulo(it.get('circulo'))} — {it.get('titulo', '?')}" for it in fatia)
+        else:
+            linhas = "\n".join(f"• {it.get('titulo', '?')}" for it in fatia)
+        self.embed = ui.embed(f"{emoji} {rot}", linhas or "Nenhum resultado")
         if total > POR_PAGINA:
             paginas = (total + POR_PAGINA - 1) // POR_PAGINA
             self.embed.set_footer(text=f"{ui.MARCA} · Página {self.pagina + 1}/{paginas}")
 
-        sel = discord.ui.Select(placeholder=f"Escolha: {rot}…")
+        sel = discord.ui.Select(placeholder=f"Escolha: {rot}…"[:150])
         for it in fatia:
-            sel.add_option(label=str(it.get("titulo", "?"))[:100], value=str(it.get("id", ""))[:100])
+            if self.categoria == "magias":
+                sel.add_option(
+                    label=str(it.get("titulo", "?"))[:100],
+                    value=str(it.get("id", ""))[:100],
+                    description=f"{_circulo_rotulo(it.get('circulo'))} · {it.get('custo_mana', 0)} Mana"[:100],
+                )
+            else:
+                sel.add_option(label=str(it.get("titulo", "?"))[:100], value=str(it.get("id", ""))[:100])
         sel.callback = self._on_item
         self.add_item(sel)
 
+        if self.categoria == "magias":
+            self._add_botao("◀ Fluxos", self._on_voltar_fluxos)
         self._add_botao("⌂ Menu", self._on_menu)
         if total > POR_PAGINA:
             self._add_botao("◀", self._pagina_anterior, desabilitado=self.pagina == 0)
@@ -237,6 +278,19 @@ class NavRegras(discord.ui.View):
     # ── callbacks ────────────────────────────────────────────────────────────
     async def _on_categoria(self, interaction: discord.Interaction) -> None:
         self.categoria = interaction.data["values"][0]
+        self.fluxo = None
+        self.pagina = 0
+        self._render()
+        await interaction.response.edit_message(embed=self.embed, view=self)
+
+    async def _on_fluxo(self, interaction: discord.Interaction) -> None:
+        self.fluxo = interaction.data["values"][0]
+        self.pagina = 0
+        self._render()
+        await interaction.response.edit_message(embed=self.embed, view=self)
+
+    async def _on_voltar_fluxos(self, interaction: discord.Interaction) -> None:
+        self.fluxo = None
         self.pagina = 0
         self._render()
         await interaction.response.edit_message(embed=self.embed, view=self)
@@ -255,6 +309,7 @@ class NavRegras(discord.ui.View):
 
     async def _on_menu(self, interaction: discord.Interaction) -> None:
         self.categoria = None
+        self.fluxo = None
         self.pagina = 0
         self._render()
         await interaction.response.edit_message(embed=self.embed, view=self)

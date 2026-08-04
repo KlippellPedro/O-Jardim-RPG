@@ -22,9 +22,9 @@ def test_carrega_as_sete_fontes_publicadas():
 
 
 def test_busca_magia_encontra_custo_e_efeito():
-    resultados = _base().buscar("quanto custa Projétil Elemental?")
+    resultados = _base().buscar("quanto custa Impacto Elemental?")
     assert resultados
-    assert resultados[0].trecho.titulo == "Projétil Elemental"
+    assert resultados[0].trecho.titulo == "Impacto Elemental"
     assert "Custo mana: 2" in resultados[0].trecho.texto
 
 

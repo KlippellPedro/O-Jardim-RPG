@@ -3,7 +3,13 @@ from __future__ import annotations
 from copy import deepcopy
 from pathlib import Path
 
-from core.character_summary import carregar_catalogos, validar_regras_ficha
+from core.character_summary import (
+    RACA_PERSONALIZADA_ID,
+    _circulo_por_fluxo,
+    carregar_catalogos,
+    resumir_ficha,
+    validar_regras_ficha,
+)
 
 
 DATA_ROOT = Path(__file__).resolve().parent.parent.parent / "data"
@@ -127,46 +133,190 @@ class TestCharacterRules:
         assert "pre-requisitos" in erro
 
     def test_validates_magic_source_slots_circle_and_flux(self):
+        """Catálogo de dez círculos: Canalizador nível 8 libera até o 4º círculo
+        com 4 vagas, mas o atributo Fluxo 15 só sustenta o 1º."""
         anterior = _ficha_criacao()
         anterior["arvoreId"] = "ignis"
         anterior["classes"] = [
             {"classeId": "guerreiro", "nivel": 20},
-            {"classeId": "elementarista", "nivel": 8},
+            {"classeId": "canalizador", "nivel": 8},
         ]
         anterior["nivel"] = 28
         anterior["xp"] = 378000
-        anterior["atributosFinais"]["fluxo"] = 12
-        configuracoes = {"classes_liberadas": ["elementarista"]}
+        anterior["atributosFinais"]["fluxo"] = 15  # base 8 + 7 do orçamento de nível
 
         atual = deepcopy(anterior)
         atual["magiasConhecidasIds"] = [
-            "projetil-elemental",
-            "surto-elemental",
-            "bastiao-elemental",
-            "lanca-elemental",
+            "propriedade-errante",
+            "rajada-improvavel",
+            "troca-repentina",
         ]
-        assert validar_regras_ficha(atual, configuracoes, ficha_anterior=anterior) is None
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
 
         circulo_alto = deepcopy(atual)
-        circulo_alto["magiasConhecidasIds"][-1] = "ruptura-elemental"
-        assert "fonte de magia" in validar_regras_ficha(circulo_alto, configuracoes, ficha_anterior=anterior)
+        circulo_alto["magiasConhecidasIds"][-1] = "vortice-menor"  # 5º círculo
+        assert "fonte de magia" in validar_regras_ficha(circulo_alto, {}, ficha_anterior=anterior)
 
         sem_fluxo = deepcopy(atual)
-        sem_fluxo["atributosFinais"]["fluxo"] = 11
+        sem_fluxo["atributosFinais"]["fluxo"] = 13  # abaixo do mínimo do 1º círculo
         anterior_sem_fluxo = deepcopy(anterior)
-        anterior_sem_fluxo["atributosFinais"]["fluxo"] = 11
-        assert "Fluxo insuficiente" in validar_regras_ficha(sem_fluxo, configuracoes, ficha_anterior=anterior_sem_fluxo)
+        anterior_sem_fluxo["atributosFinais"]["fluxo"] = 13
+        assert "Fluxo insuficiente" in validar_regras_ficha(sem_fluxo, {}, ficha_anterior=anterior_sem_fluxo)
 
+        # O servidor conta vagas; o Fluxo nativo de cada magia é checado na ficha.
         excedente = deepcopy(atual)
-        excedente["magiasConhecidasIds"].append("passo-elemental")
-        assert "mais magias" in validar_regras_ficha(excedente, configuracoes, ficha_anterior=anterior)
+        excedente["magiasConhecidasIds"].extend(["impacto-elemental", "escudo-material"])
+        assert "mais magias" in validar_regras_ficha(excedente, {}, ficha_anterior=anterior)
+
+    def test_circulo_liberado_acompanha_os_limiares_publicados(self):
+        """O servidor precisa enxergar os dez círculos publicados, não os cinco
+        do catálogo antigo: os limiares saem de data/ficha/magias.json."""
+        assert [_circulo_por_fluxo(fluxo) for fluxo in (13, 14, 17, 18, 21, 22)] == [0, 1, 1, 2, 2, 3]
+        assert [_circulo_por_fluxo(fluxo) for fluxo in (34, 38, 42, 46, 50, 99)] == [6, 7, 8, 9, 10, 10]
+
+    def test_atributo_final_pode_passar_de_20_fora_da_criacao(self):
+        """O teto de 20 só rege a criação (métodos padrao/pontos nunca
+        passam de 15 de qualquer forma). Um atributo adquirido - bênção,
+        mutação, algo negociado com o mestre - pode passar de 20 depois."""
+        anterior = _ficha_criacao()
+        anterior["classes"] = [
+            {"classeId": "guerreiro", "nivel": 20},
+            {"classeId": "ninja", "nivel": 8},
+        ]
+        anterior["nivel"] = 28
+        anterior["xp"] = 378000
+        atual = deepcopy(anterior)
+        atual["atributosFinais"]["forca"] = 22  # base 15, aumento 7 (orcamento: 28 // 4 = 7)
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+    def test_atributo_final_nao_pode_ficar_abaixo_de_1(self):
+        anterior = _ficha_criacao()
+        atual = deepcopy(anterior)
+        atual["atributosFinais"]["forca"] = 0
+        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        assert "abaixo de 1" in erro
 
     def test_players_cannot_change_master_grants_or_old_magic_records(self):
         anterior = _ficha_criacao()
         atual = deepcopy(anterior)
-        atual["magiasConcedidasIds"] = ["ritual-do-limiar-seguro"]
+        atual["magiasConcedidasIds"] = ["centelha-de-possibilidade"]
         assert "somente o mestre" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
 
         atual = deepcopy(anterior)
         atual["magias"] = [{"id": "manual", "nome": "Antiga"}]
         assert "registros antigos" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+
+class TestLiberacaoDeRacaEClasseEspecial:
+    """Regressão: o painel do mestre promete que raça/classe especial
+    liberada "aparece na criação/edição de fichas", mas até aqui a criação
+    exigia incondicionalmente raça/classe comum (liberada ou não), e nenhuma
+    ficha já criada podia trocar de raça/classe - nem pra algo liberado."""
+
+    @classmethod
+    def setup_class(cls):
+        carregar_catalogos(DATA_ROOT)
+
+    def _ficha_elfo(self) -> dict:
+        ficha = _ficha_criacao()
+        ficha["racaId"] = "elfo"  # esquecida, presa a arvoreId="aethel"
+        return ficha
+
+    def test_creation_rejects_unliberated_special_race(self):
+        erro = validar_regras_ficha(self._ficha_elfo(), {}, criacao=True)
+        assert "raca comum" in erro
+
+    def test_creation_accepts_special_race_liberated_for_the_campaign(self):
+        config = {"racas_liberadas": ["elfo"]}
+        assert validar_regras_ficha(self._ficha_elfo(), config, criacao=True) is None
+
+    def test_creation_accepts_special_race_liberated_only_for_this_player(self):
+        config = {"racas_liberadas_membros": {"user-1": ["elfo"]}}
+        assert validar_regras_ficha(self._ficha_elfo(), config, criacao=True, usuario_id="user-1") is None
+        # liberado só pro user-1: outro jogador continua barrado
+        erro = validar_regras_ficha(self._ficha_elfo(), config, criacao=True, usuario_id="user-2")
+        assert "raca comum" in erro
+
+    def test_creation_accepts_a_pure_liberated_special_class_at_level_1(self):
+        ficha = _ficha_criacao()
+        ficha["classeId"] = "invocador"  # esquecida, presa a arvoreId="aethel"
+        ficha["classes"] = [{"classeId": "invocador", "nivel": 1}]
+        config = {"classes_liberadas": ["invocador"]}
+        assert validar_regras_ficha(ficha, config, criacao=True) is None
+
+    def test_player_can_swap_race_to_a_race_liberated_after_creation(self):
+        anterior = _ficha_criacao()  # racaId="vampiro" (comum)
+        atual = deepcopy(anterior)
+        atual["racaId"] = "elfo"
+        config = {"racas_liberadas": ["elfo"]}
+        assert validar_regras_ficha(atual, config, ficha_anterior=anterior) is None
+
+    def test_player_cannot_swap_race_to_an_unliberated_special_race(self):
+        anterior = _ficha_criacao()
+        atual = deepcopy(anterior)
+        atual["racaId"] = "elfo"
+        # Barrado já pela checagem de liberação de `_compativel_com_arvore`,
+        # antes mesmo de chegar na regra de troca pós-criação.
+        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        assert "liberado pelo mestre nesta campanha" in erro
+
+    def test_player_still_cannot_swap_between_two_common_races(self):
+        """Nunca foi promessa do painel: raça comum continua travada, mesmo
+        com liberações no ar - senão vira respec livre."""
+        anterior = _ficha_criacao()  # "vampiro"
+        atual = deepcopy(anterior)
+        atual["racaId"] = "goblim"
+        config = {"racas_liberadas": ["elfo"], "racas_liberadas_membros": {"qualquer": ["goblim"]}}
+        erro = validar_regras_ficha(atual, config, ficha_anterior=anterior)
+        assert "raca especial liberada" in erro
+
+    def test_arvore_still_locked_after_creation_even_with_liberation(self):
+        anterior = _ficha_criacao()
+        atual = deepcopy(anterior)
+        atual["arvoreId"] = "ousias"
+        config = {"racas_liberadas": ["elfo"]}
+        erro = validar_regras_ficha(atual, config, ficha_anterior=anterior)
+        assert "jogador nao pode alterar arvoreId" in erro
+
+    def test_player_can_swap_class_slot_to_a_liberated_special_class(self):
+        anterior = _ficha_criacao()  # classes=[guerreiro nivel 1] (comum)
+        atual = deepcopy(anterior)
+        atual["classeId"] = "invocador"
+        atual["classes"] = [{"classeId": "invocador", "nivel": 1}]
+        config = {"classes_liberadas": ["invocador"]}
+        assert validar_regras_ficha(atual, config, ficha_anterior=anterior) is None
+
+    def test_player_cannot_drop_a_common_class_without_a_liberated_replacement(self):
+        anterior = _ficha_criacao()
+        atual = deepcopy(anterior)
+        atual["classeId"] = "ninja"
+        atual["classes"] = [{"classeId": "ninja", "nivel": 1}]
+        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        assert "remover classes" in erro
+
+
+class TestRacaPersonalizada:
+    """Entrada real e mecanicamente vazia em data/ficha/racas.json (categoria
+    padrao, sem liberação) - o nome de verdade vem de `racaNomePersonalizado`,
+    texto livre que o jogador escreve na ficha."""
+
+    @classmethod
+    def setup_class(cls):
+        carregar_catalogos(DATA_ROOT)
+
+    def test_creation_accepts_the_custom_race_without_any_liberation(self):
+        ficha = _ficha_criacao()
+        ficha["racaId"] = RACA_PERSONALIZADA_ID
+        ficha["racaNomePersonalizado"] = "Filho da Névoa"
+        assert validar_regras_ficha(ficha, {}, criacao=True) is None
+
+    def test_resumo_do_mestre_usa_o_nome_escrito_pelo_jogador(self):
+        ficha = _ficha_criacao()
+        ficha["racaId"] = RACA_PERSONALIZADA_ID
+        ficha["racaNomePersonalizado"] = "Filho da Névoa"
+        assert resumir_ficha(ficha)["raca"] == "Filho da Névoa"
+
+    def test_resumo_cai_no_rotulo_do_catalogo_sem_nome_escrito(self):
+        ficha = _ficha_criacao()
+        ficha["racaId"] = RACA_PERSONALIZADA_ID
+        assert resumir_ficha(ficha)["raca"] == "Outra coisa (personalizada)"

@@ -6,8 +6,10 @@ as informações estruturadas do sistema.
 
 ## Comandos
 
-- `/regras` — navega por raças, classes, perícias, Legados e fundamentos;
-- `/regra <termo>` — busca direta com sugestões de raça, classe, perícia ou Legado;
+- `/regras` — navega por raças, classes, perícias, Legados, magias e fundamentos;
+  em Magias a navegação desce primeiro pelo Fluxo, porque o catálogo tem 330
+  entradas e um Select do Discord só comporta 25 opções;
+- `/regra <termo>` — busca direta com sugestões de raça, classe, perícia, Legado ou magia;
 - `/fontes` — lista os seis arquivos públicos consultados;
 - `/ajuda` — explica os comandos.
 
@@ -17,7 +19,7 @@ nome, o bot orienta a navegar por `/regras`. O arquivo protegido
 
 ## Fontes
 
-- `docs/regras/regras-publicas-v1.md` (gerado de `src/data/regras.ts`)
+- `data/regras/regras-publicas-v1.md` (gerado de `data/regras/regras.ts`)
 - `data/ficha/classes.json`
 - `data/ficha/legados.json`
 - `data/ficha/legados-novos.json`
