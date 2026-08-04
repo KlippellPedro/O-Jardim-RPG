@@ -1,116 +1,237 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { useSessaoStore } from '../../../store/useSessaoStore';
+import React, { useEffect, useMemo, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Dice5, Heart, Shield, Sparkles, User, Zap } from 'lucide-react';
+import { useSessaoStore, type SessionRollRequest } from '../../../store/useSessaoStore';
 import { useCharacterStore } from '../../../store/useCharacterStore';
-import { Shield, Heart, Zap, User, Sword, Sparkles } from 'lucide-react';
 import { PlayerGallery } from './PlayerGallery';
+import { validateDiceFormula } from '../sessionUtils';
 
 interface ActiveTurnCardProps {
-  onRequestRoll: (formula?: string, title?: string) => void;
+  onRequestRoll: (request: SessionRollRequest) => Promise<void>;
+  isRollDisabled?: boolean;
 }
 
-export const ActiveTurnCard: React.FC<ActiveTurnCardProps> = ({ onRequestRoll }) => {
-  const { iniciativa, turnoAtualIndex } = useSessaoStore();
-  const { characters } = useCharacterStore();
+interface QuickRollProps extends ActiveTurnCardProps {
+  characterId?: string | null;
+  entityName?: string;
+  compact?: boolean;
+  canRoll: boolean;
+}
 
-  const entidadeAtiva = iniciativa[turnoAtualIndex];
+const QuickRoll: React.FC<QuickRollProps> = ({
+  onRequestRoll,
+  isRollDisabled,
+  characterId,
+  entityName,
+  compact = false,
+  canRoll,
+}) => {
+  const [bonus, setBonus] = useState(0);
+  const [formula, setFormula] = useState('2d6');
+  const [formulaError, setFormulaError] = useState<string | null>(null);
+  const disabled = !!isRollDisabled || !canRoll;
 
-  if (!entidadeAtiva) {
-    return (
-      <div className="absolute inset-y-0 left-[400px] right-[350px] flex flex-col pointer-events-none">
-        <div className="pt-20 pb-2 flex flex-col items-center gap-2 text-gray-500 opacity-50 shrink-0">
-          <Sparkles size={32} />
-          <p className="uppercase tracking-widest text-xs">O combate ainda não começou</p>
+  const rollTest = async () => {
+    await onRequestRoll({
+      titulo: entityName ? `Teste de ${entityName}` : 'Teste d20',
+      personagemId: characterId,
+      bonus,
+      origem: { tela: 'sessao', acao: 'teste_manual' },
+    });
+  };
+
+  const rollFormula = async () => {
+    const validationError = validateDiceFormula(formula);
+    setFormulaError(validationError);
+    if (validationError) return;
+    await onRequestRoll({
+      titulo: entityName ? `Rolagem de ${entityName}` : 'Rolagem manual',
+      personagemId: characterId,
+      formula: formula.trim(),
+      origem: { tela: 'sessao', acao: 'formula_manual' },
+    });
+  };
+
+  return (
+    <section className={`rounded-xl border border-white/[0.08] bg-black/25 ${compact ? 'p-4' : 'p-5'}`} aria-labelledby="quick-roll-title">
+      <div className="flex items-center gap-2">
+        <Dice5 size={17} className="text-[#c7a44c]" />
+        <h2 id="quick-roll-title" className="text-sm font-semibold text-white">Rolagem rápida</h2>
+      </div>
+      <p className="mt-1 text-xs text-white/40">
+        {canRoll ? 'O servidor sorteia e registra todos os resultados.' : 'Observadores não podem realizar rolagens.'}
+      </p>
+
+      <div className={`mt-4 grid gap-3 ${compact ? 'grid-cols-1 2xl:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2'}`}>
+        <div className="rounded-lg border border-white/[0.07] bg-white/[0.025] p-3">
+          <label htmlFor="session-roll-bonus" className="text-[11px] font-medium uppercase tracking-wider text-white/45">Teste d20 · bônus</label>
+          <div className="mt-2 flex gap-2">
+            <input
+              id="session-roll-bonus"
+              type="number"
+              min={-99}
+              max={99}
+              value={bonus}
+              onChange={(event) => setBonus(Math.max(-99, Math.min(99, Number(event.target.value) || 0)))}
+              className="min-w-0 flex-1 rounded-md border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none focus:border-[#c7a44c]/60"
+            />
+            <button
+              type="button"
+              onClick={() => void rollTest()}
+              disabled={disabled}
+              className="rounded-md bg-[#c7a44c] px-3 py-2 text-xs font-bold text-black hover:bg-[#dec269] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Rolar
+            </button>
+          </div>
         </div>
-        <div className="relative flex-1 pointer-events-auto">
+
+        <div className="rounded-lg border border-white/[0.07] bg-white/[0.025] p-3">
+          <label htmlFor="session-roll-formula" className="text-[11px] font-medium uppercase tracking-wider text-white/45">Fórmula</label>
+          <div className="mt-2 flex gap-2">
+            <input
+              id="session-roll-formula"
+              value={formula}
+              maxLength={20}
+              onChange={(event) => {
+                setFormula(event.target.value);
+                if (formulaError) setFormulaError(null);
+              }}
+              onBlur={() => setFormulaError(validateDiceFormula(formula))}
+              className="min-w-0 flex-1 rounded-md border border-white/10 bg-black/30 px-3 py-2 font-mono text-sm text-white outline-none focus:border-[#c7a44c]/60"
+              placeholder="2d6+3"
+              aria-invalid={!!formulaError}
+              aria-describedby={formulaError ? 'session-roll-formula-error' : undefined}
+            />
+            <button
+              type="button"
+              onClick={() => void rollFormula()}
+              disabled={disabled}
+              className="rounded-md border border-[#c7a44c]/35 px-3 py-2 text-xs font-bold text-[#e3c363] hover:bg-[#c7a44c]/10 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Rolar
+            </button>
+          </div>
+          {formulaError ? <p id="session-roll-formula-error" className="mt-2 text-[11px] text-red-300">{formulaError}</p> : null}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export const ActiveTurnCard: React.FC<ActiveTurnCardProps> = ({ onRequestRoll, isRollDisabled }) => {
+  const { iniciativa, turnoAtualIndex, turnoAtualId, emCombate, comando, meuPapel } = useSessaoStore();
+  const { characters, fetchCharacters } = useCharacterStore();
+  const reduceMotion = useReducedMotion();
+  const activeEntity = emCombate
+    ? iniciativa.find((entity) => entity.id === turnoAtualId) ?? iniciativa[turnoAtualIndex]
+    : undefined;
+  const canRoll = meuPapel !== 'observador';
+
+  useEffect(() => {
+    void fetchCharacters();
+  }, [fetchCharacters]);
+
+  const charactersById = useMemo(
+    () => new Map(characters.map((character) => [character.id, character])),
+    [characters],
+  );
+
+  if (!activeEntity) {
+    const ownEntity = iniciativa.find((entity) => entity.eMeu);
+    return (
+      <div className="custom-scrollbar h-full overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl space-y-6">
           <PlayerGallery />
+          <QuickRoll
+            onRequestRoll={onRequestRoll}
+            isRollDisabled={isRollDisabled}
+            characterId={ownEntity?.personagemId}
+            entityName={ownEntity?.nome}
+            canRoll={canRoll}
+          />
         </div>
       </div>
     );
   }
 
-  const char = characters.find(c => c.id === entidadeAtiva.id || c.nome === entidadeAtiva.nome);
-  
-  const nome = char?.nome || entidadeAtiva.nome;
-  const nivel = char?.nivel || '?';
-  const classe = char?.classes?.[0]?.id || char?.classeId || entidadeAtiva.tipo;
-  const foto = char?.foto || null;
-  const hpMax = char?.derivados?.vida || entidadeAtiva.hpTotal || 0;
-  const hpAtual = entidadeAtiva.hpAtual ?? hpMax;
-  const mana = char?.derivados?.mana || 0;
-  const defesa = char?.derivados?.defesaNatural || 10;
-  const forca = Number(char?.ficha?.atributos?.forca || char?.ficha?.atributos?.str || 0);
+  const character = activeEntity.personagemId ? charactersById.get(activeEntity.personagemId) : undefined;
+  const hpMax = activeEntity.hpTotal ?? character?.derivados?.vida;
+  const hpCurrent = activeEntity.hpAtual ?? hpMax;
+  const mana = character?.derivados?.mana;
+  const defense = character?.derivados?.defesaNatural;
+  const rollCharacterId = comando || activeEntity.eMeu ? activeEntity.personagemId : null;
 
   return (
-    <div className="absolute inset-y-0 left-[400px] right-[350px] flex items-center justify-center pointer-events-none">
-        <motion.div
-          key={entidadeAtiva.id}
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          className="pointer-events-auto bg-[#0f0e15]/90 backdrop-blur-2xl border border-[#c7a44c]/30 rounded-2xl p-8 w-[500px] shadow-[0_0_50px_rgba(199,164,76,0.15)] flex flex-col gap-8"
-        >
-          {/* Header do Card */}
-          <div className="flex items-center gap-6">
-            <div className="w-24 h-24 rounded-xl border border-[#c7a44c]/50 bg-black/60 overflow-hidden flex items-center justify-center shadow-inner shrink-0">
-              {foto ? (
-                <img src={foto} alt={nome} className="w-full h-full object-cover" />
-              ) : (
-                <User size={48} className="text-[#c7a44c]/50" />
-              )}
-            </div>
-            <div className="flex-1 overflow-hidden">
-              <h2 className="text-3xl font-bold text-white tracking-wider uppercase truncate" style={{ fontFamily: 'Cinzel, serif' }} title={nome}>
-                {nome}
-              </h2>
-              <p className="text-sm text-[#c7a44c] uppercase tracking-widest mt-2 truncate">
-                {entidadeAtiva.tipo === 'jogador'
-                  ? `Nível ${nivel} • ${classe}`
-                  : `${entidadeAtiva.tipo === 'aliado' ? 'Aliado' : 'Inimigo'} • Iniciativa ${entidadeAtiva.iniciativa}`}
-              </p>
+    <div className="custom-scrollbar h-full overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
+      <motion.div
+        key={activeEntity.id}
+        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mx-auto max-w-4xl space-y-5"
+      >
+        <section className="overflow-hidden rounded-2xl border border-[#c7a44c]/25 bg-[#0d0c12]/88 shadow-[0_20px_70px_rgba(0,0,0,0.35)]">
+          <div className="border-b border-white/[0.08] bg-[#c7a44c]/[0.06] px-5 py-3">
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#d7b85c]">
+              <Sparkles size={14} /> Turno atual
             </div>
           </div>
 
-          {/* Status Bars */}
-          <div className="grid grid-cols-3 gap-4">
-            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 flex flex-col items-center shadow-inner">
-              <Heart size={20} className="text-red-400 mb-2" />
-              <span className="text-[10px] uppercase tracking-widest text-gray-400 mb-1">HP</span>
-              <span className="text-xl font-bold text-white">{hpAtual} / {hpMax || '?'}</span>
+          <div className="p-5 sm:p-7">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+              <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#c7a44c]/25 bg-black/35">
+                {character?.foto ? (
+                  <img src={character.foto} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <User size={34} className="text-[#c7a44c]/45" />
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <h1 className="truncate text-2xl font-semibold text-white sm:text-3xl">{activeEntity.nome}</h1>
+                <p className="mt-1 text-sm capitalize text-white/45">
+                  {activeEntity.tipo} · Iniciativa {activeEntity.iniciativa}
+                </p>
+                {activeEntity.condicoes.length ? (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {activeEntity.condicoes.map((condition) => (
+                      <span key={`${condition.nome}-${condition.turnos ?? 'p'}`} className="rounded-full border border-amber-300/20 bg-amber-300/[0.07] px-2 py-1 text-[11px] text-amber-100/80">
+                        {condition.nome}{condition.turnos ? ` · ${condition.turnos} turnos` : ''}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
             </div>
-            <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 flex flex-col items-center shadow-inner">
-              <Zap size={20} className="text-blue-400 mb-2" />
-              <span className="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Mana</span>
-              <span className="text-xl font-bold text-white">{mana}</span>
-            </div>
-            <div className="bg-gray-500/10 border border-gray-500/30 rounded-xl p-4 flex flex-col items-center shadow-inner">
-              <Shield size={20} className="text-gray-400 mb-2" />
-              <span className="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Defesa</span>
-              <span className="text-xl font-bold text-white">{defesa}</span>
-            </div>
-          </div>
 
-          {/* Ações Rápidas */}
-          <div className="flex flex-col gap-4 pt-6 border-t border-white/10">
-            <span className="text-xs text-gray-500 uppercase tracking-widest text-center">Ações Rápidas</span>
-            <div className="grid grid-cols-2 gap-4">
-              <button
-                onClick={() => {
-                  const bonus = forca > 0 ? `+${forca}` : '';
-                  onRequestRoll(`1d20${bonus}`, `Ataque Básico (${nome})`);
-                }}
-                className="py-4 bg-red-900/40 hover:bg-red-800/60 border border-red-500/50 rounded-xl text-red-200 font-bold transition-all shadow-[0_0_15px_rgba(239,68,68,0.1)] hover:shadow-[0_0_25px_rgba(239,68,68,0.3)] flex items-center justify-center gap-2"
-              >
-                <Sword size={18} /> Ataque {forca > 0 ? `(+${forca})` : ''}
-              </button>
-              <button
-                onClick={() => onRequestRoll(`1d20`, `Teste Neutro (${nome})`)}
-                className="py-4 bg-[#c7a44c]/20 hover:bg-[#c7a44c]/30 border border-[#c7a44c]/50 rounded-xl text-[#c7a44c] font-bold transition-all shadow-[0_0_15px_rgba(199,164,76,0.1)] hover:shadow-[0_0_25px_rgba(199,164,76,0.3)] flex items-center justify-center gap-2"
-              >
-                <Sparkles size={18} /> Teste de D20
-              </button>
+            <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3">
+              <div className="rounded-xl border border-red-400/15 bg-red-400/[0.06] p-3 text-red-100/80 sm:p-4">
+                <Heart size={17} className="mb-2 text-red-300" />
+                <span className="block text-[10px] uppercase tracking-wider text-white/35">Vida</span>
+                <strong className="mt-1 block text-sm text-white sm:text-lg">{hpCurrent !== undefined ? `${hpCurrent}/${hpMax ?? '?'}` : activeEntity.estado_vida ?? 'N/D'}</strong>
+              </div>
+              <div className="rounded-xl border border-sky-400/15 bg-sky-400/[0.06] p-3 text-sky-100/80 sm:p-4">
+                <Zap size={17} className="mb-2 text-sky-300" />
+                <span className="block text-[10px] uppercase tracking-wider text-white/35">Mana</span>
+                <strong className="mt-1 block text-sm text-white sm:text-lg">{mana ?? 'N/D'}</strong>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/[0.035] p-3 text-white/70 sm:p-4">
+                <Shield size={17} className="mb-2" />
+                <span className="block text-[10px] uppercase tracking-wider text-white/35">Defesa</span>
+                <strong className="mt-1 block text-sm text-white sm:text-lg">{defense ?? 'N/D'}</strong>
+              </div>
             </div>
           </div>
-        </motion.div>
+        </section>
+
+        <QuickRoll
+          onRequestRoll={onRequestRoll}
+          isRollDisabled={isRollDisabled}
+          characterId={rollCharacterId}
+          entityName={activeEntity.eMeu || comando ? activeEntity.nome : undefined}
+          compact
+          canRoll={canRoll}
+        />
+      </motion.div>
     </div>
   );
 };

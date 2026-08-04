@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingCart, Zap, Heart, Eye } from 'lucide-react';
-import { LojaItem, getCurrencySymbol } from '../../../data/lojaCatalog';
+import { LojaItem, getCurrencySymbol } from '../../../services/lojaCatalogService';
 
 interface ItemCardProps {
   item: LojaItem;
@@ -42,6 +42,12 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onBuy, onView, podeCom
       {item.raridade === 'Relíquia da Criação' && (
         <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/10 via-red-500/5 to-transparent pointer-events-none rounded-3xl mix-blend-screen animate-pulse" />
       )}
+      {item.promocao ? (
+        <div className="relative z-[1] flex items-center justify-between gap-3 border-b border-rose-400/30 bg-gradient-to-r from-rose-600/30 to-orange-500/10 px-6 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-rose-200">
+          <span>{item.promocao.rotulo}</span>
+          <span className="rounded-full bg-rose-500 px-2 py-1 text-white">-{item.promocao.descontoPercentual}%</span>
+        </div>
+      ) : null}
       {/* HEADER DO CARD */}
       <div className="p-6 pb-4 border-b border-white/5 relative">
         {/* WISHLIST BTN */}
@@ -49,6 +55,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onBuy, onView, podeCom
           <button 
             type="button"
             onClick={(e) => { e.stopPropagation(); onToggleWishlist(item); }}
+            aria-label={isWishlisted ? `Remover ${item.nome} da lista de desejos` : `Adicionar ${item.nome} à lista de desejos`}
             className={`absolute top-4 right-4 z-10 p-2 rounded-full transition-all hover:scale-110 shadow-lg backdrop-blur-md border ${
               isWishlisted 
                 ? 'bg-red-500/20 text-red-500 border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.4)]' 
@@ -90,6 +97,11 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onBuy, onView, podeCom
       <div className="p-6 pt-0 mt-auto flex justify-between items-end gap-4">
         <div>
           <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1 block">Preço</span>
+          {item.precoAnterior ? (
+            <span className="mb-0.5 block text-xs font-bold text-gray-500 line-through">
+              {item.precoAnterior.toLocaleString('pt-BR')} {getCurrencySymbol(item.moedaPreco)}
+            </span>
+          ) : null}
           <span className={`text-2xl font-bold flex items-center gap-1 ${item.moedaPreco === 'Solares' ? 'text-yellow-400' : item.moedaPreco === 'Lunaris' ? 'text-gray-200' : item.moedaPreco === 'Fragmentos de Estrela' ? 'text-fuchsia-400' : 'text-indigo-400'}`}>
             {item.valorOriginal.toLocaleString('pt-BR')} <span className="text-xs">{getCurrencySymbol(item.moedaPreco)}</span>
           </span>

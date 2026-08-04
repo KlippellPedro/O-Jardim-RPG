@@ -62,6 +62,15 @@ export function useCofre(campanhaId: string | undefined) {
     [campanhaId, fetchTudo],
   );
 
+  const sacarDoBanco = useCallback(
+    async (personagemId: string, moeda: string, quantidade: number) => {
+      if (!campanhaId) throw new Error('Nenhuma campanha selecionada.');
+      await cofreApi.sacarDoBanco(campanhaId, personagemId, moeda, quantidade);
+      await fetchTudo();
+    },
+    [campanhaId, fetchTudo],
+  );
+
   const desvincularDiscord = useCallback(async () => {
     await discordApi.desvincular();
     setVinculo(null);
@@ -78,6 +87,7 @@ export function useCofre(campanhaId: string | undefined) {
     fetchTudo,
     transferirItem,
     transferirMoeda,
+    sacarDoBanco,
     desvincularDiscord,
   };
 }

@@ -1,6 +1,20 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { atualizarStatusVital, estadoVida, limiteMorrendo, multiplicadorMovimentoCansaco, penalidadeCansacoIniciativa, penalidadeCansacoTeste } from '../../src/services/statusService';
+import {
+  atualizarStatusVital,
+  bonusIniciativaFicha,
+  desvantagensAutomaticasTeste,
+  estadoVida,
+  limiteMorrendo,
+  movimentoBloqueadoPorCondicao,
+  multiplicadorMovimentoCansaco,
+  obterStatusFicha,
+  penalidadeAtaqueCondicoes,
+  penalidadeCansacoIniciativa,
+  penalidadeCansacoTeste,
+  penalidadeDefesaCondicoes,
+  penalidadeIniciativaCondicoes,
+} from '../../src/services/statusService';
 
 test('Vida continua abaixo de zero e inicia Morrendo 1', () => {
   const status = atualizarStatusVital({ vidaAtual: 2 }, 'vidaAtual', -7, 20, 12);
@@ -17,6 +31,32 @@ test('Cansaço aplica as penalidades graduais publicadas', () => {
   assert.equal(penalidadeCansacoTeste(3, false), -2);
   assert.equal(penalidadeCansacoIniciativa(2), -1);
   assert.equal(multiplicadorMovimentoCansaco(5), 0.5);
+  assert.equal(desvantagensAutomaticasTeste(4, true, false), 1);
+  assert.equal(desvantagensAutomaticasTeste(4, true, true), 2);
+  assert.equal(desvantagensAutomaticasTeste(4, false, true), 0);
+});
+
+test('condições oficiais alteram defesa, iniciativa, ataques e movimento', () => {
+  const condicoes = [{ id: 'exposto' }, { nome: 'Atordoado' }, 'Surpreendido', { titulo: 'Caído' }];
+  assert.equal(penalidadeDefesaCondicoes(condicoes), 7);
+  assert.equal(penalidadeIniciativaCondicoes(condicoes), -5);
+  assert.equal(penalidadeAtaqueCondicoes(condicoes), -2);
+  assert.equal(movimentoBloqueadoPorCondicao([{ nome: 'Imobilizado' }]), true);
+});
+
+test('status atual prevalece sobre recursos legados', () => {
+  assert.deepEqual(
+    obterStatusFicha({ recursos: { vidaAtual: 12, manaAtual: 3 }, status: { vidaAtual: 8 } }),
+    { vidaAtual: 8, manaAtual: 3 },
+  );
+});
+
+test('iniciativa soma bônus nomeados e efeitos ativos', () => {
+  assert.equal(bonusIniciativaFicha({
+    recursos: { bonusIniciativa: 2, ajustesIniciativa: [{ valor: 3 }, { valor: -1 }] },
+    efeitosAtivos: { ativa: true },
+    habilidades: [{ id: 'ativa', efeitos: [{ modo: 'ativavel', tipo: 'combate', alvo: 'iniciativa', valor: 2 }] }],
+  }), 6);
 });
 
 test('déficit igual à Vida máxima causa morte imediata', () => {

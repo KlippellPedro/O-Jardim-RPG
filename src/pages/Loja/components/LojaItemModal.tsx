@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { LojaItem, getCurrencySymbol } from '../../../data/lojaCatalog';
+import { LojaItem, getCurrencySymbol } from '../../../services/lojaCatalogService';
 import { X, ShoppingCart, Info, Swords, Activity, Skull, Sparkles, AlertTriangle } from 'lucide-react';
 import { ICharacter } from '../../../types/character';
 
@@ -28,6 +28,33 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
 
   // Renderização específica baseada na Categoria
   const renderDetails = () => {
+    if (item.categoria === 'Consumíveis' && dadosBrutos.subtipo === 'selo') {
+      return (
+        <div className="mt-6 flex flex-col gap-4 border-t border-white/10 pt-6">
+          <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gray-500">
+            <Sparkles size={16} /> Inscrição mágica
+          </h4>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              ['Fluxo', dadosBrutos.fluxo],
+              ['Grau', dadosBrutos.grau],
+              ['DT', dadosBrutos.dt_inscricao],
+              ['Criação', `${dadosBrutos.custo_mana_criacao} Mana`],
+            ].map(([rotulo, valor]) => (
+              <div key={rotulo} className="rounded-xl border border-white/10 bg-white/5 p-3 text-center">
+                <div className="text-[10px] uppercase tracking-widest text-gray-500">{rotulo}</div>
+                <div className="mt-1 font-bold capitalize text-fuchsia-200">{valor}</div>
+              </div>
+            ))}
+          </div>
+          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+            <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-gray-500">Ativação</div>
+            <p className="text-sm text-gray-300">{dadosBrutos.ativacao}</p>
+          </div>
+        </div>
+      );
+    }
+
     switch (item.categoria) {
       case 'Mercenários':
         return (
@@ -147,6 +174,7 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
     case 'Épico': accentColor = 'text-yellow-400 border-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.2)] bg-yellow-500/10'; break;
     case 'Lendário': accentColor = 'text-orange-400 border-orange-500 shadow-[0_0_20px_rgba(249,115,22,0.2)] bg-orange-500/10'; break;
     case 'Relíquia': accentColor = 'text-red-400 border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.3)] bg-red-500/10'; break;
+    case 'Relíquia da Criação': accentColor = 'text-fuchsia-300 border-fuchsia-500 shadow-[0_0_35px_rgba(217,70,239,0.35)] bg-fuchsia-500/10'; break;
     default: accentColor = 'text-gray-400 border-white/20 bg-white/5'; break;
   }
 
@@ -183,6 +211,11 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
                   {dadosBrutos.subtipo}
                 </span>
               )}
+              {item.promocao ? (
+                <span className="text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md border border-rose-400/50 text-rose-200 bg-rose-500/20">
+                  {item.promocao.rotulo} · -{item.promocao.descontoPercentual}%
+                </span>
+              ) : null}
             </div>
             <h2 id="loja-item-modal-title" className="text-3xl font-bold text-white tracking-wide mt-2" style={{ fontFamily: 'Cinzel, serif' }}>
               {item.nome}
@@ -224,7 +257,7 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
           <div className="px-6 pb-6">
             <div className="bg-fuchsia-900/20 border border-fuchsia-500/30 p-4 rounded-xl flex flex-col shadow-[0_0_15px_rgba(232,121,249,0.1)]">
               <span className="text-[10px] text-fuchsia-400 uppercase tracking-widest font-bold mb-2 flex items-center gap-2">
-                <Sparkles size={14} /> Poder Primordial
+                <Sparkles size={14} /> {dadosBrutos.subtipo === 'selo' ? 'Efeito do selo' : 'Poder Primordial'}
               </span>
               <p className="text-fuchsia-100/90 text-sm leading-relaxed">{dadosBrutos.efeito}</p>
             </div>
@@ -236,6 +269,11 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
           <div className="flex gap-6 items-center">
             <div className="flex flex-col items-end">
               <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Preço estimado</span>
+              {item.precoAnterior ? (
+                <span className="text-xs font-bold text-gray-500 line-through">
+                  {item.precoAnterior.toLocaleString('pt-BR')} {getCurrencySymbol(item.moedaPreco)}
+                </span>
+              ) : null}
               <div className="flex items-center gap-2">
                 <span className={`text-2xl font-bold flex items-center gap-1 ${item.moedaPreco === 'Solares' ? 'text-yellow-400' : item.moedaPreco === 'Lunaris' ? 'text-gray-200' : item.moedaPreco === 'Fragmentos de Estrela' ? 'text-fuchsia-400' : 'text-indigo-400'}`}>
                   {item.valorOriginal.toLocaleString('pt-BR')} <span className="text-sm">{getCurrencySymbol(item.moedaPreco)}</span>

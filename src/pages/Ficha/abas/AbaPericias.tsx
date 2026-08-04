@@ -9,7 +9,16 @@ import { ModalVantagensPericia } from '../components/ModalVantagensPericia';
 import { ModalCalculoPericia } from '../components/ModalCalculoPericia';
 import { aplicarAjustesAtributosRaciais, BONUS_GRAU, obterAjustesPericiasRaciais } from '../../../services/calculoService';
 import { resumirEquipamentos } from '../../../services/equipamentoService';
-import { penalidadeCansacoTeste } from '../../../services/statusService';
+import { desvantagensAutomaticasTeste, obterStatusFicha, penalidadeCansacoTeste } from '../../../services/statusService';
+import { AjusteButton, AjustesFichaModal } from '../components/AjustesFichaModal';
+import { ModalPortal } from '../components/ModalPortal';
+import {
+  ajusteOrigem,
+  chaveAjuste,
+  nomeAjusteOrigem,
+  obterAjustesManuais,
+  totalAjustesManuais,
+} from '../../../services/ajustesFichaService';
 
 const GRAUS_PERICIA = ['iniciante', 'aprendiz', 'treinado', 'especialista', 'mestre', 'veterano', 'renomado'];
 const NOMES_ATRIBUTOS: Record<string, string> = {
@@ -40,15 +49,32 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
   const f = character.ficha || {};
   const pericias = f.pericias || {};
   const rolagens = f.rolagensPericias || {};
+  const status = obterStatusFicha(f);
   const attrsBase = f.atributosFinais || character.atributosFinais || { forca: 10, destreza: 10, constituicao: 10, inteligencia: 10, sabedoria: 10, carisma: 10, fluxo: 10 };
   const racaAtual = racasCatalogo.find(raca => raca.id === f.racaId) || null;
-  const attrs = racaAtual ? aplicarAjustesAtributosRaciais(attrsBase, racaAtual, f.escolhaRacial) : attrsBase;
+  const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], f);
+  const attrsAntesRaca = Object.fromEntries(Object.keys(NOMES_ATRIBUTOS).map((atributo) => [
+    atributo,
+    Number(attrsBase[atributo] ?? 10)
+      + ajusteOrigem(f, 'atributo', atributo)
+      + totalAjustesManuais(f, chaveAjuste('atributo', atributo))
+      + (resumoEquipamento.bonusAtributos[atributo] || 0),
+  ]));
+  const attrs = racaAtual ? aplicarAjustesAtributosRaciais(attrsAntesRaca, racaAtual, f.escolhaRacial) : attrsAntesRaca;
   const ajustesRaciaisPericias = obterAjustesPericiasRaciais(racaAtual, f.escolhaRacial);
   const nivel = character.nivel || 1;
   const metadeNivelCalculado = Math.floor(Math.max(1, nivel) / 2);
-  const penalidadeArmadura = resumirEquipamentos(character.inventarioCentral || [], f).penalidadeArmadura;
+  const penalidadeArmadura = resumoEquipamento.penalidadeArmadura;
   const penalidadeDaPericia = (periciaId: string) => ['acrobacia', 'atletismo', 'furtividade'].includes(periciaId) ? penalidadeArmadura : 0;
-  const penalidadeCansacoDaPericia = (atributo: string) => penalidadeCansacoTeste(f.status?.cansacoAtual, ['forca', 'destreza', 'constituicao'].includes(atributo));
+  const periciaFisica = (atributo: string) => ['forca', 'destreza', 'constituicao'].includes(atributo);
+  const penalidadeCansacoDaPericia = (atributo: string) => penalidadeCansacoTeste(status.cansacoAtual, periciaFisica(atributo));
+  const desvantagensAutomaticasDaPericia = (periciaId: string, atributo: string) => (
+    desvantagensAutomaticasTeste(status.cansacoAtual, periciaFisica(atributo), resumoEquipamento.sobrecarregado)
+    + (resumoEquipamento.desvantagensPericias[periciaId] || 0)
+  );
+  const bonusExtraDaPericia = (periciaId: string) => ajusteOrigem(f, 'pericia', periciaId)
+    + totalAjustesManuais(f, chaveAjuste('pericia', periciaId))
+    + (resumoEquipamento.bonusPericias[periciaId] || 0);
 
   const handleGrauChange = (periciaId: string, grau: string) => {
     const novasPericias = { ...pericias };
@@ -98,7 +124,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
     }
   };
 
-  const [activeModal, setActiveModal] = useState<{ type: 'vantagens' | 'calculo' | 'nova' | 'resultado', periciaId: string, registro?: any } | null>(null);
+  const [activeModal, setActiveModal] = useState<{ type: 'vantagens' | 'calculo' | 'ajustes' | 'nova' | 'resultado', periciaId: string, registro?: any } | null>(null);
 
   const periciasCustomizadas = f.periciasCustomizadas || [];
   const todasPericias = [...periciasCatalogo, ...periciasCustomizadas];
@@ -110,7 +136,9 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
   const activeMod = Math.floor((activeAttr - 10) / 2);
   const activeBonusGrau = BONUS_GRAU[activeGrau] || 0;
   const activeBonusRacial = activePericiaObj ? (ajustesRaciaisPericias[activePericiaObj.id] || 0) : 0;
-  const activeTotal = activeMod + metadeNivelCalculado + activeBonusGrau + activeBonusRacial - penalidadeDaPericia(activePericiaObj?.id || '') + penalidadeCansacoDaPericia(activePericiaObj?.atributo || '');
+  const activeBonusExtra = activePericiaObj ? bonusExtraDaPericia(activePericiaObj.id) : 0;
+  const activeDesvantagensAutomaticas = desvantagensAutomaticasDaPericia(activePericiaObj?.id || '', activePericiaObj?.atributo || '');
+  const activeTotal = activeMod + metadeNivelCalculado + activeBonusGrau + activeBonusRacial + activeBonusExtra - penalidadeDaPericia(activePericiaObj?.id || '') + penalidadeCansacoDaPericia(activePericiaObj?.atributo || '');
 
   const periciasVisiveis = todasPericias
     .filter(p => !busca || p.titulo.toLowerCase().includes(busca.toLowerCase()))
@@ -179,9 +207,12 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
             const mod = Math.floor((attrVal - 10) / 2);
             const bonusG = BONUS_GRAU[grauAtual] || 0;
             const bonusRacial = ajustesRaciaisPericias[p.id] || 0;
+            const bonusExtra = bonusExtraDaPericia(p.id);
             const penalidadeEquipamento = penalidadeDaPericia(p.id);
             const penalidadeCansaco = penalidadeCansacoDaPericia(p.atributo);
-            const total = mod + metadeNivelCalculado + bonusG + bonusRacial - penalidadeEquipamento + penalidadeCansaco;
+            const desvantagensAutomaticas = desvantagensAutomaticasDaPericia(p.id, p.atributo);
+            const vantagensEquipamento = resumoEquipamento.vantagensPericias[p.id] || 0;
+            const total = mod + metadeNivelCalculado + bonusG + bonusRacial + bonusExtra - penalidadeEquipamento + penalidadeCansaco;
             const totalStr = total >= 0 ? `+${total}` : `${total}`;
 
             const rolagem = rolagens[p.id] || { vantagens: 0, desvantagens: 0 };
@@ -203,6 +234,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                       className="text-[#c7a44c] opacity-50 hover:opacity-100 transition-opacity cursor-pointer" 
                       onClick={() => setActiveModal({ type: 'calculo', periciaId: p.id })}
                     />
+                    <AjusteButton label={p.titulo} onClick={() => setActiveModal({ type: 'ajustes', periciaId: p.id })} />
                   </div>
                   <span className="text-2xl font-bold text-[#c7a44c] leading-none drop-shadow-md">{totalStr}</span>
                 </div>
@@ -218,6 +250,8 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                   )}
                   {penalidadeEquipamento > 0 && <span className="text-[10px] font-bold text-orange-300">Armadura -{penalidadeEquipamento}</span>}
                   {penalidadeCansaco < 0 && <span className="text-[10px] font-bold text-red-300">Cansaço {penalidadeCansaco}</span>}
+                  {desvantagensAutomaticas > 0 && <span className="text-[10px] font-bold text-red-300">{desvantagensAutomaticas}D automática</span>}
+                  {vantagensEquipamento > 0 && <span className="text-[10px] font-bold text-emerald-300">Item {vantagensEquipamento}V</span>}
                   
                   <select
                     value={grauAtual}
@@ -260,7 +294,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                   </div>
                   
                   <button 
-                    onClick={() => handleRolar(p, total, vant, desv)}
+                    onClick={() => handleRolar(p, total, vant + vantagensEquipamento, desv + desvantagensAutomaticas)}
                     disabled={rolando === p.id}
                     className="px-3 py-1.5 rounded bg-[#c7a44c]/10 border border-[#c7a44c]/30 text-[#c7a44c] hover:bg-[#c7a44c]/20 hover:scale-105 flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50 disabled:hover:scale-100"
                   >
@@ -313,14 +347,34 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
           grauNome={activeGrau}
           bonusGrau={activeBonusGrau}
           bonusRacial={activeBonusRacial}
+          bonusOutros={activeBonusExtra}
+          penalidadeEquipamento={penalidadeDaPericia(activePericiaObj.id)}
+          penalidadeCansaco={penalidadeCansacoDaPericia(activePericiaObj.atributo)}
           total={activeTotal}
+          desvantagensAutomaticas={activeDesvantagensAutomaticas}
           descricao={activePericiaObj.descricao}
         />
       )}
 
+      {activeModal?.type === 'ajustes' && activePericiaObj && (
+        <AjustesFichaModal
+          isOpen={true}
+          onClose={() => setActiveModal(null)}
+          titulo={activePericiaObj.titulo}
+          automaticos={[
+            { nome: 'Raça', valor: Number(ajustesRaciaisPericias[activePericiaObj.id]) || 0 },
+            { nome: nomeAjusteOrigem(f, 'pericia', activePericiaObj.id) || 'Origem', valor: ajusteOrigem(f, 'pericia', activePericiaObj.id) },
+            { nome: 'Itens equipados', valor: resumoEquipamento.bonusPericias[activePericiaObj.id] || 0 },
+          ]}
+          ajustes={obterAjustesManuais(f, chaveAjuste('pericia', activePericiaObj.id))}
+          onChange={(ajustes) => onUpdate(['ficha', 'ajustesFicha', chaveAjuste('pericia', activePericiaObj.id)], ajustes)}
+        />
+      )}
+
       {activeModal?.type === 'nova' && (
+        <ModalPortal>
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
           onClick={() => setActiveModal(null)}
         >
           <div 
@@ -370,11 +424,13 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
             </form>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {activeModal?.type === 'resultado' && activeModal.registro && (
+        <ModalPortal>
         <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-[110] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
           onClick={() => setActiveModal(null)}
         >
           <div 
@@ -424,6 +480,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
             </button>
           </div>
         </div>
+        </ModalPortal>
       )}
     </div>
   );

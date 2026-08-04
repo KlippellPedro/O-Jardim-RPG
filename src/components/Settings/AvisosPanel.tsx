@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../../store/useAuthStore';
 import { avisosApi } from '../../services/avisosApi';
-import { Bell, Loader2, CheckCheck, CheckCheck as MarkAllIcon } from 'lucide-react';
+import { Bell, Loader2, CheckCheck, CheckCheck as MarkAllIcon, Trash2 } from 'lucide-react';
 
 interface IAviso {
   id: string;
@@ -19,6 +19,7 @@ export const AvisosPanel: React.FC = () => {
   const [avisos, setAvisos] = useState<IAviso[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isMarking, setIsMarking] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // BUG-FIX: avisos são por usuário (GET /avisos), não por campanha - a rota
@@ -54,12 +55,26 @@ export const AvisosPanel: React.FC = () => {
     }
   };
 
+  const handleLimparLidos = async () => {
+    if (!window.confirm('Apagar os avisos já lidos?')) return;
+    setIsClearing(true);
+    try {
+      await avisosApi.limparLidos();
+      setAvisos((prev) => prev.filter((a) => !a.lida_em));
+    } catch (err) {
+      console.error('Falha ao limpar avisos:', err);
+    } finally {
+      setIsClearing(false);
+    }
+  };
+
   const formatDate = (iso: string) => {
     const d = new Date(iso);
     return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
   };
 
   const naoLidos = avisos.filter((a) => !a.lida_em).length;
+  const lidos = avisos.length - naoLidos;
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -69,15 +84,30 @@ export const AvisosPanel: React.FC = () => {
           <Bell className="text-primary" size={20} />
           <h3 className="text-lg font-bold text-white">Avisos</h3>
           {isLoading && <Loader2 size={16} className="animate-spin text-gray-500 ml-auto" />}
-          {!isLoading && naoLidos > 0 && (
-            <button
-              onClick={handleMarkAllRead}
-              disabled={isMarking}
-              className="ml-auto flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
-            >
-              {isMarking ? <Loader2 size={12} className="animate-spin" /> : <MarkAllIcon size={12} />}
-              Marcar tudo como lido
-            </button>
+          {!isLoading && (naoLidos > 0 || lidos > 0) && (
+            <div className="ml-auto flex items-center gap-2">
+              {naoLidos > 0 && (
+                <button
+                  onClick={handleMarkAllRead}
+                  disabled={isMarking}
+                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                >
+                  {isMarking ? <Loader2 size={12} className="animate-spin" /> : <MarkAllIcon size={12} />}
+                  Marcar tudo como lido
+                </button>
+              )}
+              {lidos > 0 && (
+                <button
+                  onClick={handleLimparLidos}
+                  disabled={isClearing}
+                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                  title="Apaga apenas os avisos já lidos"
+                >
+                  {isClearing ? <Loader2 size={12} className="animate-spin" /> : <Trash2 size={12} />}
+                  Limpar lidos
+                </button>
+              )}
+            </div>
           )}
         </div>
 

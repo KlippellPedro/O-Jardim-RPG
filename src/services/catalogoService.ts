@@ -6,21 +6,24 @@ import racasData from '../../data/ficha/racas.json';
 import periciasData from '../../data/ficha/pericias.json';
 import legadosData from '../../data/ficha/legados.json';
 import legadosNovosData from '../../data/ficha/legados-novos.json';
+import legadosRegrasData from '../../data/ficha/legados-regras-v1.json';
 
-// Legacy compatibility configurations (simplified or omitted if not strictly needed for creation)
-const REGRAS_LEGADOS: Record<string, string> = {};
-const REQUISITOS_LEGADOS_V1: Record<string, string[]> = {};
+type RegraLegadoV1 = { descricao: string; pre_requisitos?: unknown[] };
+const REGRAS_LEGADOS = legadosRegrasData.regras as Record<string, RegraLegadoV1>;
 
 let cache: ICatalogo | null = null;
 
 export const RACAS_CATALOGO = racasData as unknown as IRaca[];
 export const CLASSES_CATALOGO = classesData as unknown as IClasse[];
+const PERICIAS_RAW = periciasData as { pericias: IPericiaCatalogo[]; resistencias?: IPericiaCatalogo[] };
+export const PERICIAS_CATALOGO = [...new Map(
+  [...(PERICIAS_RAW.pericias || []), ...(PERICIAS_RAW.resistencias || [])].map((item) => [item.id, item]),
+).values()];
 export const LEGADOS_CATALOGO = [
   ...(legadosData as any).legados.map((legado: any) => ({
     ...legado,
-    descricao: REGRAS_LEGADOS[legado.id] || legado.descricao,
-    pre_requisitos: REQUISITOS_LEGADOS_V1[legado.id] || legado.pre_requisitos,
-    versaoRegras: REGRAS_LEGADOS[legado.id] ? '1.0' : 'fonte',
+    ...(REGRAS_LEGADOS[legado.id] || {}),
+    versaoRegras: REGRAS_LEGADOS[legado.id] ? legadosRegrasData.versao : 'fonte',
   })),
   ...(legadosNovosData as any).novos.map((legado: any) => ({ ...legado, versaoRegras: '1.0' })),
 ];
@@ -29,15 +32,10 @@ export async function carregarCatalogo(): Promise<ICatalogo> {
   if (!cache) {
     const classes = CLASSES_CATALOGO;
     const racas = RACAS_CATALOGO;
-    const periciasRaw = periciasData as { pericias: IPericiaCatalogo[]; resistencias?: IPericiaCatalogo[] };
-    
-    const todasPericias = [...(periciasRaw.pericias || []), ...(periciasRaw.resistencias || [])];
-    const unicas = [...new Map(todasPericias.map(item => [item.id, item])).values()];
-
     cache = {
       classes,
       racas,
-      pericias: unicas,
+      pericias: PERICIAS_CATALOGO,
       resistencias: [],
       legados: LEGADOS_CATALOGO,
     };

@@ -4,6 +4,7 @@ import { motion, Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput } from '../components/SharedFichaComponents';
 import { useCharacterStore } from '../../../store/useCharacterStore';
+import { bonusIniciativaFicha, obterStatusFicha, penalidadeCansacoIniciativa, penalidadeIniciativaCondicoes } from '../../../services/statusService';
 
 interface IAliado {
   id: string;
@@ -212,12 +213,21 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
           {itensVisiveis.map((a) => {
             const isComplexo = a.categoria === 'complexo';
             const charVinculado = isComplexo ? personagens.find(p => p.id === a.personagemId) : null;
+            const fichaVinculada = charVinculado?.ficha || {};
+            const statusVinculado = obterStatusFicha(fichaVinculada);
+            const vidaMaximaVinculada = Number(charVinculado?.derivados?.vida ?? fichaVinculada?.derivados?.vida) || 1;
+            const iniciativaBaseVinculada = Number(charVinculado?.derivados?.iniciativa ?? fichaVinculada?.derivados?.iniciativa) || 0;
             
             // Sync status ao vivo se complexo
-            const vidaAtual = isComplexo ? (charVinculado?.ficha?.derivados?.vidaAtual || charVinculado?.ficha?.vidaAtual || 0) : a.vidaAtual;
-            const vidaMaxima = isComplexo ? (charVinculado?.ficha?.derivados?.vidaMaxima || charVinculado?.ficha?.vidaMaxima || 1) : a.vidaMaxima;
+            const vidaAtual = isComplexo ? Number(statusVinculado.vidaAtual ?? vidaMaximaVinculada) : a.vidaAtual;
+            const vidaMaxima = isComplexo ? vidaMaximaVinculada : a.vidaMaxima;
             const nomeExibicao = isComplexo ? (charVinculado?.nome || a.nome) : a.nome;
-            const iniciativa = isComplexo ? (charVinculado?.ficha?.iniciativa || charVinculado?.ficha?.atributos?.agilidade || 0) : a.iniciativa;
+            const iniciativa = isComplexo
+              ? iniciativaBaseVinculada
+                + bonusIniciativaFicha(fichaVinculada)
+                + penalidadeCansacoIniciativa(statusVinculado.cansacoAtual)
+                + penalidadeIniciativaCondicoes(fichaVinculada.condicoesAtivas)
+              : a.iniciativa;
 
             const percentVida = Math.min(100, Math.max(0, ((vidaAtual || 0) / (vidaMaxima || 1)) * 100));
 

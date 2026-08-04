@@ -10,19 +10,65 @@ import { TransferirModal } from '../../components/Cofre/TransferirModal';
 
 type Alvo =
   | { tipo: 'moeda'; moeda: string; saldo: number }
+  // 'banco' é o Cofre bancário do Banqueiro (tabela do bot, à esquerda na
+  // tela): outro estoque, outra rota — não some do cofre de recompensas.
+  | { tipo: 'banco'; moeda: string; saldo: number }
   | { tipo: 'item'; itemId: string; titulo: string; quantidade: number };
 
-function BarraCapacidade({ atual, maximo, label }: { atual: number; maximo: number; label: string }) {
-  const percentual = maximo > 0 ? Math.min(100, (atual / maximo) * 100) : 0;
+const MOEDAS_VISUAIS: Record<string, { simbolo: string; classe: string }> = {
+  Lunaris: { simbolo: '☾', classe: 'border-violet-400/25 bg-violet-400/10 text-violet-200' },
+  Solares: { simbolo: '☉', classe: 'border-amber-400/25 bg-amber-400/10 text-amber-200' },
+  'Fragmentos de Estrela': { simbolo: '✧', classe: 'border-cyan-400/25 bg-cyan-400/10 text-cyan-200' },
+  'Créditos Sombrios': { simbolo: '♆', classe: 'border-fuchsia-400/25 bg-fuchsia-400/10 text-fuchsia-200' },
+};
+
+function CustosUpgrade({ custos }: { custos: Record<string, number> }) {
+  const entradas = Object.entries(custos ?? {}).filter(([, valor]) => valor > 0);
+  if (!entradas.length) return <span className="text-gray-500">Sem custo</span>;
+  return (
+    <span className="inline-flex flex-wrap gap-1.5 align-middle">
+      {entradas.map(([moeda, valor]) => {
+        const visual = MOEDAS_VISUAIS[moeda] ?? {
+          simbolo: '◈',
+          classe: 'border-white/10 bg-white/5 text-gray-300',
+        };
+        return (
+          <span
+            key={moeda}
+            title={moeda}
+            className={`inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 font-mono text-[11px] ${visual.classe}`}
+          >
+            <span aria-hidden>{visual.simbolo}</span>
+            <strong>{valor.toLocaleString('pt-BR')}</strong>
+            <span className="font-sans opacity-80">{moeda}</span>
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
+function BarraCapacidade({
+  atual,
+  maximo,
+  label,
+  ilimitado = false,
+}: {
+  atual: number;
+  maximo: number;
+  label: string;
+  ilimitado?: boolean;
+}) {
+  const percentual = ilimitado ? 100 : maximo > 0 ? Math.min(100, (atual / maximo) * 100) : 0;
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex justify-between text-xs">
         <span className="text-gray-400 uppercase tracking-wider">{label}</span>
-        <span className="text-gray-300 font-mono">{atual} / {maximo}</span>
+        <span className="text-gray-300 font-mono">{atual} / {ilimitado ? '∞' : maximo}</span>
       </div>
       <div className="h-2 rounded-full bg-black/50 border border-white/5 overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-primary/60 to-primary rounded-full transition-all duration-500"
+          className={`h-full rounded-full bg-gradient-to-r from-primary/60 to-primary transition-all duration-500 ${ilimitado ? 'opacity-30' : ''}`}
           style={{ width: `${percentual}%` }}
         />
       </div>
@@ -34,7 +80,7 @@ export function CofrePage() {
   const { campanhaAtiva } = useAuthStore();
   const {
     itens, moedas, vinculo, personagens, nivel, isLoading, error,
-    transferirItem, transferirMoeda,
+    transferirItem, transferirMoeda, sacarDoBanco,
   } = useCofre(campanhaAtiva?.id);
 
   const [selectedPersonagemId, setSelectedPersonagemId] = useState<string>('');
@@ -95,9 +141,17 @@ export function CofrePage() {
             ) : (
               <div className="space-y-5">
                 <div>
-                  <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Nível atual</p>
+                  <div className="flex items-center justify-between gap-3 mb-1">
+                    <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Nível atual</p>
+                    <p className="text-[10px] uppercase tracking-widest text-gray-600 font-mono">
+                      {nivel.tier_nivel ?? 1} de {nivel.tier_total ?? 15}
+                    </p>
+                  </div>
                   <p className="text-2xl font-bold text-primary" style={{ fontFamily: 'Cinzel, serif' }}>
                     {nivel.tier?.nome}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Reputação bancária: <span className="text-gray-300 font-bold">{nivel.reputacao_bancaria ?? 1}</span>
                   </p>
                 </div>
 
@@ -107,24 +161,38 @@ export function CofrePage() {
                       atual={nivel.itens_no_inventario ?? 0}
                       maximo={nivel.tier.capacidade}
                       label="Itens no cofre"
+                      ilimitado={nivel.tier.limite_pratico}
                     />
                     <BarraCapacidade
                       atual={Math.max(...(nivel.saldos_guardados?.map((s) => s.saldo) ?? [0]), 0)}
                       maximo={nivel.tier.capacidade_moeda}
                       label="Maior saldo guardado"
+                      ilimitado={nivel.tier.limite_pratico}
                     />
                   </div>
                 )}
 
                 {nivel.proximo_tier && (
-                  <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 flex items-center gap-3">
-                    <Sparkles size={16} className="text-primary shrink-0" />
-                    <p className="text-xs text-gray-300">
-                      Próximo nível: <span className="text-primary font-bold">{nivel.proximo_tier.nome}</span>
-                      {' '}- {nivel.proximo_tier.capacidade} itens e até{' '}
-                      {nivel.proximo_tier.capacidade_moeda.toLocaleString('pt-BR')} por moeda.
-                      {' '}Custa {nivel.proximo_tier.custo?.toLocaleString('pt-BR')} Lunaris no Discord.
-                    </p>
+                  <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 flex items-start gap-3">
+                    <Sparkles size={16} className="text-primary shrink-0 mt-0.5" />
+                    <div className="min-w-0 space-y-2 text-xs text-gray-300">
+                      <p>
+                        Próximo nível: <span className="text-primary font-bold">{nivel.proximo_tier.nome}</span>
+                        {' '}- {nivel.proximo_tier.limite_pratico
+                          ? 'capacidade sem limite prático para itens e moedas.'
+                          : `${nivel.proximo_tier.capacidade.toLocaleString('pt-BR')} itens e até ${nivel.proximo_tier.capacidade_moeda.toLocaleString('pt-BR')} por moeda.`}
+                      </p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-gray-500 uppercase tracking-wider text-[10px] font-bold">Custo no Discord</span>
+                        <CustosUpgrade custos={nivel.proximo_tier.custos} />
+                      </div>
+                      <p className="text-gray-500">
+                        Exige {nivel.proximo_tier.reputacao_exigida.toLocaleString('pt-BR')} de reputação
+                        {(nivel.reputacao_bancaria ?? 1) >= nivel.proximo_tier.reputacao_exigida
+                          ? ' — requisito atingido.'
+                          : ` — faltam ${(nivel.proximo_tier.reputacao_exigida - (nivel.reputacao_bancaria ?? 1)).toLocaleString('pt-BR')}.`}
+                      </p>
+                    </div>
                   </div>
                 )}
 
@@ -133,14 +201,23 @@ export function CofrePage() {
                     <ShieldCheck size={16} className="text-emerald-400" />
                     <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Segurança</p>
                   </div>
-                  <p className="text-white font-semibold">{nivel.seguranca?.nome}</p>
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-white font-semibold">{nivel.seguranca?.nome}</p>
+                    <p className="text-[10px] uppercase tracking-widest text-gray-600 font-mono">
+                      {nivel.seguranca_nivel ?? 1} de {nivel.seguranca_total ?? 15}
+                    </p>
+                  </div>
                   <p className="text-xs text-gray-500 mt-1">
                     {Math.round((nivel.seguranca?.defesa ?? 0) * 100)}% de chance de frustrar um roubo ao seu cofre.
                   </p>
                   {nivel.proxima_seguranca && (
-                    <p className="text-xs text-gray-600 mt-2">
-                      Próximo nível ({nivel.proxima_seguranca.nome}) custa {nivel.proxima_seguranca.custo} Lunaris.
-                    </p>
+                    <div className="text-xs text-gray-600 mt-3 space-y-2">
+                      <p>
+                        Próximo nível: <span className="text-gray-400 font-semibold">{nivel.proxima_seguranca.nome}</span>
+                        {' '}· exige {nivel.proxima_seguranca.reputacao_exigida.toLocaleString('pt-BR')} de reputação.
+                      </p>
+                      <CustosUpgrade custos={nivel.proxima_seguranca.custos} />
+                    </div>
                   )}
                 </div>
 
@@ -152,17 +229,33 @@ export function CofrePage() {
                     </div>
                     <div className="space-y-1.5">
                       {nivel.saldos_guardados.map((s) => (
-                        <div key={s.moeda} className="flex justify-between text-sm">
+                        <div key={s.moeda} className="flex items-center justify-between gap-2 text-sm">
                           <span className="text-gray-400">{s.moeda}</span>
-                          <span className="text-white font-mono font-bold">{s.saldo}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-white font-mono font-bold">{s.saldo}</span>
+                            {selectedPersonagemId && s.saldo > 0 && (
+                              <button
+                                onClick={() => setAlvo({ tipo: 'banco', moeda: s.moeda, saldo: s.saldo })}
+                                className="p-1.5 rounded-lg bg-primary/20 text-primary hover:bg-primary/40 transition-colors"
+                                title={`Sacar ${s.moeda} para ${personagemSelecionado?.nome ?? 'o personagem'}`}
+                              >
+                                <Send size={13} />
+                              </button>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
+                    <p className="text-[11px] text-gray-600 mt-3">
+                      {selectedPersonagemId
+                        ? 'O saque vai direto pra ficha e aparece no seu /extrato no Discord.'
+                        : 'Selecione um personagem ao lado para sacar direto pra ficha.'}
+                    </p>
                   </div>
                 )}
 
                 <p className="text-[11px] text-gray-600 pt-2 border-t border-white/5">
-                  Depósitos, saques e melhorias continuam pelos comandos do Banqueiro no Discord. Esta página serve para consultar o cofre.
+                  Depósitos e melhorias continuam pelos comandos do Banqueiro no Discord.
                 </p>
               </div>
             )}
@@ -277,14 +370,14 @@ export function CofrePage() {
           isOpen={!!alvo}
           onClose={() => setAlvo(null)}
           tipo={alvo.tipo}
-          titulo={alvo.tipo === 'moeda' ? alvo.moeda : alvo.titulo}
-          disponivel={alvo.tipo === 'moeda' ? alvo.saldo : alvo.quantidade}
+          titulo={alvo.tipo === 'item' ? alvo.titulo : alvo.moeda}
+          disponivel={alvo.tipo === 'item' ? alvo.quantidade : alvo.saldo}
           personagemNome={personagemSelecionado.nome}
-          onConfirm={(quantidade) => (
-            alvo.tipo === 'moeda'
-              ? transferirMoeda(selectedPersonagemId, alvo.moeda, quantidade)
-              : transferirItem(selectedPersonagemId, alvo.itemId, quantidade)
-          )}
+          onConfirm={(quantidade) => {
+            if (alvo.tipo === 'item') return transferirItem(selectedPersonagemId, alvo.itemId, quantidade);
+            if (alvo.tipo === 'banco') return sacarDoBanco(selectedPersonagemId, alvo.moeda, quantidade);
+            return transferirMoeda(selectedPersonagemId, alvo.moeda, quantidade);
+          }}
         />
       )}
     </div>

@@ -74,8 +74,16 @@ export function rolarAtributos(): number[] {
   return Array.from({ length: ATRIBUTOS.length }, () => 1 + Math.floor(Math.random() * 20));
 }
 
+export function rolagemAtributosPermitida(_isMestre: boolean): boolean {
+  return true;
+}
+
 export function modificador(valor: number | string): number {
   return Math.floor(((Number(valor) || 0) - 10) / 2);
+}
+
+export function bonusTesteAtributo(valor: number | string, penalidadeAtiva = 0): number {
+  return modificador(valor) + (Number(penalidadeAtiva) || 0);
 }
 
 export function normalizarAtributosIniciais(atribuicao: Record<string, number>): Record<TAtributo, number> {
@@ -234,7 +242,7 @@ export function aplicarAjustesAtributosRaciais(atributosFinais: Record<string, n
 }
 
 export const TABELA_XP = Array.from(
-  { length: 40 },
+  { length: 60 },
   (_, indice) => 500 * (indice + 1) * indice,
 );
 
@@ -247,14 +255,18 @@ export function nivelPorXp(xp: number) {
   return nivel;
 }
 
-export function calcularDerivados(atributosFinais: Record<string, number>, raca: IRaca | null, nivel = 1, escolhaRacial: any = {}) {
+function calcularDerivadosBase(
+  atributosFinais: Record<string, number>,
+  raca: IRaca | null,
+  nivel = 1,
+  escolhaRacial: any = {},
+  limitarRecursos = true,
+) {
   const atributosEfetivos = raca ? aplicarAjustesAtributosRaciais(atributosFinais, raca, escolhaRacial) : atributosFinais;
   const metadeNivel = Math.floor(Math.max(1, Number(nivel) || 1) / 2);
   
-  const modForca = modificador(atributosEfetivos.forca);
   const modDestreza = modificador(atributosEfetivos.destreza);
   const modConstituicao = modificador(atributosEfetivos.constituicao);
-  const modInteligencia = modificador(atributosEfetivos.inteligencia);
   const modSabedoria = modificador(atributosEfetivos.sabedoria);
   
   const varianteRacial = obterVarianteRacial(raca, escolhaRacial);
@@ -296,13 +308,20 @@ export function calcularDerivados(atributosFinais: Record<string, number>, raca:
     ? movimentoFixo
     : 9 + (1.5 * modDestreza) + bonusMovimentoRacial;
 
+  const vidaBase = (4 * modConstituicao) + bonusVidaRacial + bonusVidaVariantePorNivel + bonusVidaModificacoes;
+  const manaBase = (3 * modSabedoria) + bonusManaRacial;
+
   return {
-    vida: Math.max(1, 10 + (2 * modForca) + (2 * modConstituicao) + bonusVidaRacial + bonusVidaVariantePorNivel + bonusVidaModificacoes),
-    mana: Math.max(1, 6 + (2 * modInteligencia) + modSabedoria + bonusManaRacial),
+    vida: limitarRecursos ? Math.max(1, vidaBase) : vidaBase,
+    mana: limitarRecursos ? Math.max(1, manaBase) : manaBase,
     movimento: Math.max(4.5, movimentoBase + bonusMovimentoModificacoes),
     defesaNatural: 10 + metadeNivel + modDestreza + bonusDefesaModificacoes + bonusDefesaFragmentos,
     iniciativa: 10 + metadeNivel + modDestreza,
   };
+}
+
+export function calcularDerivados(atributosFinais: Record<string, number>, raca: IRaca | null, nivel = 1, escolhaRacial: any = {}) {
+  return calcularDerivadosBase(atributosFinais, raca, nivel, escolhaRacial);
 }
 
 export function calcularDerivadosComClasses(
@@ -324,25 +343,26 @@ export function calcularDerivadosComClasses(
     && Number.isFinite(Number(nivelDeReferencia))
     ? Math.max(1, Number(nivelDeReferencia))
     : Math.max(1, nivelTotal);
-  const derivados = calcularDerivados(atributosFinais, raca, nivelParaEscala, escolhaRacial);
-  const atributosEfetivos = raca
-    ? aplicarAjustesAtributosRaciais(atributosFinais, raca, escolhaRacial)
-    : atributosFinais;
-  const modConstituicao = modificador(atributosEfetivos.constituicao);
+  const derivados = calcularDerivadosBase(atributosFinais, raca, nivelParaEscala, escolhaRacial, false);
   let vida = derivados.vida;
   let mana = derivados.mana;
   let recursosDefinidos = true;
 
-  classes.forEach((referencia, indice) => {
+  classes.forEach((referencia) => {
     const classe = catalogo.get(String(referencia.classeId || referencia.id || ''));
     if (!classe) {
       recursosDefinidos = false;
       return;
     }
-    const niveisComGanho = Math.max(0, Math.trunc(Number(referencia.nivel) || 0) - (indice === 0 ? 1 : 0));
-    vida += niveisComGanho * Math.max(1, Number(classe.vida) + modConstituicao);
+    const niveisComGanho = Math.max(0, Math.trunc(Number(referencia.nivel) || 0));
+    vida += niveisComGanho * Math.max(1, Number(classe.vida));
     mana += niveisComGanho * Math.max(1, Number(classe.mana));
   });
 
-  return { ...derivados, vida, mana, recursosDefinidos };
+  return {
+    ...derivados,
+    vida: Math.max(1, vida),
+    mana: Math.max(1, mana),
+    recursosDefinidos,
+  };
 }

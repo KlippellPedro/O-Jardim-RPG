@@ -21,6 +21,7 @@ import { MasterPage } from './pages/Mestre/MasterPage';
 import { CofrePage } from './pages/Cofre/CofrePage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { resetAllCharacterData } from './store/useCharacterStore';
+import { PreviewGallery } from './redesign/PreviewGallery';
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ProtectedRoute - guarda de rota unificada
@@ -32,12 +33,14 @@ interface ProtectedRouteProps {
   children: JSX.Element;
   requireCampaign?: boolean;
   requireAdmin?: boolean; // BUG-01: nova prop para proteger rotas administrativas
+  requireCampaignManager?: boolean;
 }
 
 const ProtectedRoute = ({
   children,
   requireCampaign = false,
   requireAdmin = false,
+  requireCampaignManager = false,
 }: ProtectedRouteProps) => {
   const { usuario, isInitialized, campanhaAtiva } = useAuthStore();
 
@@ -60,13 +63,17 @@ const ProtectedRoute = ({
   if (requireAdmin) {
     const isAdmin =
       usuario.papel_plataforma === 'admin' ||
-      usuario.papel_plataforma === 'criador' ||
-      usuario.admin_plataforma === true;
+      usuario.papel_plataforma === 'criador';
     if (!isAdmin) return <Navigate to="/" replace />;
   }
 
   // Requer campanha ativa selecionada
   if (requireCampaign && !campanhaAtiva) return <Navigate to="/campanhas" replace />;
+
+  if (requireCampaignManager) {
+    const managesCampaign = campanhaAtiva?.papel === 'mestre' || campanhaAtiva?.papel === 'assistente';
+    if (!managesCampaign) return <Navigate to="/" replace />;
+  }
 
   return children;
 };
@@ -131,6 +138,9 @@ function App() {
 
           <AnimatePresence mode="wait">
             <Routes>
+              {/* Rota de teste do redesign (desprotegida) */}
+              <Route path="/redesign-preview" element={<PreviewGallery />} />
+              
               {/* Rotas públicas - redirecionam se já logado */}
               <Route path="/login" element={!usuario ? <Login /> : <Navigate to="/" replace />} />
               <Route path="/cadastro" element={!usuario ? <Cadastro /> : <Navigate to="/" replace />} />
@@ -170,7 +180,7 @@ function App() {
               <Route
                 path="/mestre"
                 element={
-                  <ProtectedRoute requireCampaign>
+                  <ProtectedRoute requireCampaign requireCampaignManager>
                     <MasterPage />
                   </ProtectedRoute>
                 }
@@ -179,6 +189,22 @@ function App() {
               {/* Páginas em construção */}
               <Route
                 path="/mundo"
+                element={
+                  <ProtectedRoute>
+                    <MundoPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/mundo/arvores/:arvoreId"
+                element={
+                  <ProtectedRoute>
+                    <MundoPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/mundo/cronologia"
                 element={
                   <ProtectedRoute>
                     <MundoPage />

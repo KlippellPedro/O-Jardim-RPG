@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ShoppingBag, CheckCircle, XCircle, LayoutGrid, Sword, Shield, FlaskConical, CarFront, Users, Gem, Archive, Heart, ArrowRightLeft, Sparkles, Cpu, Wand2, Apple, MapPin, Building2, Skull, Globe2 } from 'lucide-react';
-import { calcularValorRevenda, LojaItem, ItemCategoria, ItemRaridade, getCurrencySymbol, lerPrecoNativoLoja, mapearCatalogoLoja, somarPrecosNativos } from '../../data/lojaCatalog';
+import { calcularValorRevenda, LojaItem, ItemCategoria, ItemRaridade, getCurrencySymbol, itemCorrespondeBusca, itemCorrespondeSubfiltro, lerPrecoNativoLoja, mapearCatalogoLoja, somarPrecosNativos } from '../../services/lojaCatalogService';
 import { ItemCard } from './components/ItemCard';
 import { LojaItemModal } from './components/LojaItemModal';
 import { CartDrawer, CartItem } from './components/CartDrawer';
@@ -57,14 +58,22 @@ const CATEGORIAS_ICONES = {
 
 const RARIDADES_CORES = {
   'Todas': 'hover:bg-white/10 text-gray-400',
-  'Comum': 'hover:bg-gray-500/20 text-gray-300 border-gray-500/50',
-  'Incomum': 'hover:bg-blue-500/20 text-blue-400 border-blue-500/50',
-  'Raro': 'hover:bg-purple-500/20 text-purple-400 border-purple-500/50',
-  'Épico': 'hover:bg-yellow-500/20 text-yellow-400 border-yellow-500/50',
-  'Lendário': 'hover:bg-orange-500/20 text-orange-400 border-orange-500/50',
-  'Relíquia': 'hover:bg-red-500/20 text-red-400 border-red-500/50',
-  'Relíquia da Criação': 'hover:bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/50',
+  'Comum': 'hover:bg-gray-500/20 text-gray-300',
+  'Incomum': 'hover:bg-blue-500/20 text-blue-400',
+  'Raro': 'hover:bg-purple-500/20 text-purple-400',
+  'Épico': 'hover:bg-yellow-500/20 text-yellow-400',
+  'Lendário': 'hover:bg-orange-500/20 text-orange-400',
+  'Relíquia': 'hover:bg-red-500/20 text-red-400',
+  'Relíquia da Criação': 'hover:bg-fuchsia-500/20 text-fuchsia-400',
 } as const;
+
+const SUBFILTROS_POR_CATEGORIA: Partial<Record<ItemCategoria, readonly string[]>> = {
+  'Armas': ['Todos', 'Corpo a Corpo', 'À Distância', 'Mágicas'],
+  'Armaduras e Escudos': ['Todos', 'Armaduras', 'Escudos'],
+  'Veículos': ['Todos', 'Veículos Completos', 'Peças e Módulos'],
+  'Consumíveis': ['Todos', 'Poções', 'Selos', 'Rituais', 'Ferramentas'],
+  'Frutos do Éden': ['Todos', 'Sobrenatural', 'Mutação', 'Elemental'],
+};
 
 export const LojaPage: React.FC = () => {
   const { characters, fetchCharacters, flushCharacterSaves } = useCharacterStore();
@@ -86,6 +95,24 @@ export const LojaPage: React.FC = () => {
     setLocalizacaoAtualState(id);
     if (localizacaoStorageKey) localStorage.setItem(localizacaoStorageKey, String(id));
   };
+
+  // Permite chegar na Loja já numa localização específica via link (ex.: o
+  // botão "Ir para a Loja" do Banco Lunar na cena do Mundo usa
+  // /loja?localizacao=4). Só some da URL depois de aplicado, senão volta a
+  // forçar essa localização toda vez que o usuário troca de aba.
+  const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    const alvo = Number(searchParams.get('localizacao'));
+    if ([1, 2, 3, 4].includes(alvo) && localizacaoDisponivel(alvo)) {
+      trocarLocalizacao(alvo);
+    }
+    if (searchParams.has('localizacao')) {
+      const proximos = new URLSearchParams(searchParams);
+      proximos.delete('localizacao');
+      setSearchParams(proximos, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [modoLoja, setModoLoja] = useState<'Comprar' | 'Vender' | 'Recompensas'>('Comprar');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategoria, setSelectedCategoria] = useState<ItemCategoria | 'Todos'>('Todos');
@@ -399,6 +426,7 @@ export const LojaPage: React.FC = () => {
       
       return [{
         id: invItem.item_id,
+        tipoOrigem: original?.tipoOrigem ?? 'inventario',
         nome: invItem.titulo,
         categoria: original?.categoria ?? 'Outros',
         raridade: (invItem.dados?.raridade as ItemRaridade) || 'Comum',
@@ -414,63 +442,38 @@ export const LojaPage: React.FC = () => {
   }, [compradorAtivo, catalogo]);
 
   const filteredItems = useMemo(() => {
-    let source = modoLoja === 'Comprar' ? catalogo : modoLoja === 'Vender' ? itensVenda : [];
+    const source = modoLoja === 'Comprar' ? catalogo : modoLoja === 'Vender' ? itensVenda : [];
 
-    let items = source.filter(item => {
-      const matchSearch = item.nome.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          item.descricao.toLowerCase().includes(searchTerm.toLowerCase());
+    return source.filter(item => {
+      const matchSearch = itemCorrespondeBusca(item, searchTerm);
       const matchCat = selectedCategoria === 'Todos' || item.categoria === selectedCategoria;
       const matchRar = selectedRaridade === 'Todas' || item.raridade === selectedRaridade;
-      const matchLocal = modoLoja !== 'Comprar' || item.nivelLoja === localizacaoAtual;
+      // Cumulativo: cada localização mostra o que é dela mais tudo que já
+      // apareceria nas anteriores — é o que o texto "Acesso irrestrito a
+      // todos os artefatos da criação" do Banco Lunar promete. Com `===`
+      // (comparação antiga) cada local só mostrava os itens exatamente
+      // daquele nível, então o Banco Lunar (nível 4, onde caem relíquias e
+      // artefatos) escondia tudo que não fosse raríssimo.
+      const matchLocal = modoLoja !== 'Comprar' || item.nivelLoja <= localizacaoAtual;
 
       if (mostrarWishlist && modoLoja === 'Comprar' && !wishlist.includes(item.id)) return false;
       
-      let matchSub = true;
-      if (subfiltro !== 'Todos' && modoLoja === 'Comprar') {
-        const d = item.dadosBrutos || {};
-        const modo = d.modo?.toLowerCase() || '';
-        const desc = item.descricao.toLowerCase();
-        
-        if (selectedCategoria === 'Armas') {
-          if (subfiltro === 'Corpo a Corpo' && modo !== 'corpo a corpo') matchSub = false;
-          if (subfiltro === 'À Distância' && modo !== 'à distância') matchSub = false;
-          if (subfiltro === 'Mágicas' && !desc.includes('mágica') && !desc.includes('magia') && !desc.includes('runa')) matchSub = false;
-        } else if (selectedCategoria === 'Armaduras e Escudos') {
-          const isEscudo = d.subtipo === 'escudo' || desc.includes('escudo');
-          if (subfiltro === 'Escudos' && !isEscudo) matchSub = false;
-          if (subfiltro === 'Armaduras' && isEscudo) matchSub = false;
-        } else if (selectedCategoria === 'Veículos') {
-          const isCompleto = d.sistema === 'Chassi' || desc.includes('completo') || desc.includes('montado');
-          if (subfiltro === 'Veículos Completos' && !isCompleto) matchSub = false;
-          if (subfiltro === 'Peças e Módulos' && isCompleto) matchSub = false;
-        } else if (selectedCategoria === 'Consumíveis') {
-          const isPocao = desc.includes('poção') || desc.includes('elixir') || desc.includes('frasco') || desc.includes('cura');
-          const isRitual = desc.includes('ritual') || desc.includes('pergaminho') || desc.includes('selo');
-          if (subfiltro === 'Poções' && !isPocao) matchSub = false;
-          if (subfiltro === 'Rituais' && !isRitual) matchSub = false;
-          if (subfiltro === 'Ferramentas' && (isPocao || isRitual)) matchSub = false;
-        }
-      }
+      const matchSub = modoLoja !== 'Comprar' || itemCorrespondeSubfiltro(item, selectedCategoria, subfiltro);
 
       return matchSearch && matchCat && matchRar && matchSub && matchLocal;
     });
-
-    return items;
   }, [searchTerm, selectedCategoria, selectedRaridade, subfiltro, catalogo, itensVenda, modoLoja, mostrarWishlist, wishlist, localizacaoAtual]);
+
+  const itensEmPromocao = useMemo(
+    () => catalogo.filter((item) => item.promocao && item.nivelLoja <= localizacaoAtual).slice(0, 3),
+    [catalogo, localizacaoAtual],
+  );
 
   const visibleItems = filteredItems.slice(0, itemsToShow);
   
-  const getSubfiltros = () => {
-    switch (selectedCategoria) {
-      case 'Armas': return ['Todos', 'Corpo a Corpo', 'À Distância', 'Mágicas'];
-      case 'Armaduras e Escudos': return ['Todos', 'Armaduras', 'Escudos'];
-      case 'Veículos': return ['Todos', 'Veículos Completos', 'Peças e Módulos'];
-      case 'Consumíveis': return ['Todos', 'Poções', 'Rituais', 'Ferramentas'];
-      case 'Frutos do Éden': return ['Todos', 'Sobrenatural', 'Mutação', 'Elemental'];
-      default: return [];
-    }
-  };
-  const subfiltrosDisponiveis = getSubfiltros();
+  const subfiltrosDisponiveis = selectedCategoria === 'Todos'
+    ? []
+    : SUBFILTROS_POR_CATEGORIA[selectedCategoria] ?? [];
 
   useEffect(() => {
     setSubfiltro('Todos');
@@ -634,6 +637,37 @@ export const LojaPage: React.FC = () => {
           {catalogoError}
         </div>
       )}
+
+      {modoLoja === 'Comprar' && itensEmPromocao.length > 0 ? (
+        <section className="mb-12" aria-labelledby="ofertas-destaque-titulo">
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-rose-400">
+                <Sparkles size={16} aria-hidden="true" /> Preços temporariamente reduzidos
+              </div>
+              <h2 id="ofertas-destaque-titulo" className="text-3xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>
+                Ofertas em destaque
+              </h2>
+            </div>
+            <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-rose-300">
+              {itensEmPromocao.length} itens
+            </span>
+          </div>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+            {itensEmPromocao.map((item) => (
+              <ItemCard
+                key={`promocao:${item.id}`}
+                item={item}
+                onView={setItemSelecionado}
+                onBuy={handleAddToCart}
+                podeComprar={Boolean(compradorAtivo)}
+                isWishlisted={wishlist.includes(item.id)}
+                onToggleWishlist={() => toggleWishlist(item.id)}
+              />
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {/* FILTROS DE INTERFACE (PILLS) */}
       <div className="flex flex-col gap-6 mb-12 bg-[#0b0a12]/50 backdrop-blur-md p-6 rounded-3xl border border-white/5 shadow-xl">

@@ -10,42 +10,61 @@
 }
 
 @layer components {
-  /* Regras Page Legacy HTML overrides with Glassmorphism */
+  .regra-reader-shell {
+    background-image:
+      radial-gradient(circle at 50% -20%, rgba(199, 164, 76, 0.08), transparent 42%),
+      linear-gradient(180deg, rgba(21, 18, 27, 0.98), rgba(13, 12, 18, 0.98));
+  }
+
+  .regra-book-page {
+    position: relative;
+    background-image:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+      linear-gradient(rgba(255, 255, 255, 0.008) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .regra-book-page::before {
+    content: '';
+    @apply pointer-events-none absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-[#c7a44c]/20 to-transparent;
+  }
+
+  /* Conteúdo editorial das regras */
   .regras-content h3.regras-subtitle {
-    @apply text-2xl font-bold text-yellow-600 mb-6 mt-12 border-b border-white/10 pb-2 tracking-wide uppercase;
+    @apply mb-5 mt-12 scroll-mt-24 border-b border-[#c7a44c]/20 pb-3 text-xl font-bold tracking-wide text-[#d8bd75] sm:text-2xl;
     font-family: 'Cinzel', serif;
   }
   
   .regras-content p.regras-lead {
-    @apply text-lg text-gray-300 mb-6 font-light leading-relaxed;
+    @apply mb-7 text-base font-light leading-8 text-gray-300 sm:text-lg sm:leading-9;
   }
   
   .regras-content p.regras-note {
-    @apply relative pl-12 pr-6 py-4 my-6 rounded-xl bg-blue-900/10 border border-blue-500/20 text-gray-300 text-sm leading-relaxed backdrop-blur-sm;
+    @apply relative my-7 rounded-r-xl border-y border-r border-[#c7a44c]/20 border-l-2 border-l-[#c7a44c]/40 bg-[#c7a44c]/5 py-4 pl-11 pr-5 text-sm leading-7 text-gray-300;
   }
   .regras-content p.regras-note::before {
-    content: 'ℹ';
-    @apply absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-blue-500 font-bold font-serif opacity-80;
+    content: '✦';
+    @apply absolute left-4 top-4 font-serif text-lg font-bold text-[#c7a44c] opacity-80;
   }
 
   .regras-content .regras-formula {
-    @apply bg-black/60 border border-yellow-600/30 rounded-xl p-4 my-6 text-center text-yellow-500 font-mono text-lg font-bold shadow-[0_0_15px_rgba(202,138,4,0.1)] backdrop-blur-md;
+    @apply my-7 rounded-xl border border-[#c7a44c]/25 bg-black/25 p-4 text-center font-mono text-base font-bold leading-7 text-[#d8bd75] shadow-inner sm:text-lg;
   }
 
   .regras-content .regras-table-wrap {
-    @apply my-8 overflow-x-auto rounded-2xl border border-white/5 bg-black/40 backdrop-blur-sm shadow-xl;
+    @apply my-8 overflow-x-auto rounded-xl border border-white/10 bg-black/20 shadow-lg;
   }
   .regras-content table.regras-table {
     @apply w-full text-left text-sm whitespace-nowrap md:whitespace-normal;
   }
   .regras-content table.regras-table thead {
-    @apply bg-black/60 border-b border-white/10 text-gray-400 font-bold uppercase tracking-widest text-xs;
+    @apply border-b border-[#c7a44c]/20 bg-[#c7a44c]/10 text-[10px] font-bold uppercase tracking-widest text-[#cbb87e];
   }
   .regras-content table.regras-table th {
     @apply p-4;
   }
   .regras-content table.regras-table td {
-    @apply p-4 border-b border-white/5 text-gray-300;
+    @apply border-b border-white/5 p-4 leading-6 text-gray-300;
   }
   .regras-content table.regras-table tbody tr:hover {
     @apply bg-white/5 transition-colors;
@@ -57,11 +76,11 @@
   }
   .regras-content ul.regras-list li,
   .regras-content ol.regras-steps li {
-    @apply relative pl-8 text-gray-300;
+    @apply relative pl-8 leading-7 text-gray-300;
   }
   .regras-content ul.regras-list li::before {
     content: '';
-    @apply absolute left-2 top-2.5 w-2 h-2 rounded-full bg-yellow-600/60;
+    @apply absolute left-2 top-2.5 h-1.5 w-1.5 rotate-45 bg-[#c7a44c]/70;
   }
   .regras-content ol.regras-steps {
     counter-reset: step-counter;
@@ -69,17 +88,17 @@
   .regras-content ol.regras-steps li::before {
     counter-increment: step-counter;
     content: counter(step-counter);
-    @apply absolute left-0 top-1 w-6 h-6 rounded-full bg-yellow-600/20 border border-yellow-600/50 flex items-center justify-center text-xs text-yellow-500 font-bold;
+    @apply absolute left-0 top-1 flex h-6 w-6 items-center justify-center rounded-full border border-[#c7a44c]/40 bg-[#c7a44c]/10 text-xs font-bold text-[#d8bd75];
   }
   
   .regras-content .regras-kv {
     @apply grid grid-cols-1 md:grid-cols-2 gap-4 my-6;
   }
   .regras-content .regras-kv dt {
-    @apply font-bold text-white text-sm uppercase tracking-wide bg-black/40 p-3 rounded-t-xl md:rounded-l-xl md:rounded-tr-none border border-white/5 border-b-0 md:border-b md:border-r-0;
+    @apply rounded-t-xl border border-b-0 border-white/10 bg-black/25 p-3 text-xs font-bold uppercase tracking-wide text-[#d8bd75] md:rounded-l-xl md:rounded-tr-none md:border-b md:border-r-0;
   }
   .regras-content .regras-kv dd {
-    @apply text-gray-400 font-mono text-sm bg-[#0f0e15]/80 p-3 rounded-b-xl md:rounded-r-xl md:rounded-bl-none border border-white/5;
+    @apply rounded-b-xl border border-white/10 bg-[#0f0e15]/70 p-3 font-mono text-sm leading-6 text-gray-400 md:rounded-r-xl md:rounded-bl-none;
   }
 
   .regras-content .regras-distance-grid {

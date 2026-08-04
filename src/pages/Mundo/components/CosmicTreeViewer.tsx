@@ -2,6 +2,12 @@ import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stars, Float, Text, Billboard, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
+import { BANCO_LUNAR_INFO } from '../bancoLunarInfo';
+
+const BANCO_LUNAR_MODEL_PATH = '/models/props/banco-lunar.glb';
+const BANCO_LUNAR_RADIUS = 50; // Fora da órbita da Árvore mais distante (Abismo, radius 40)
+const BANCO_LUNAR_SPEED = 0.025;
+const BANCO_LUNAR_HEIGHT = 6; // Halo acima do plano das Árvores
 
 export interface TreeData {
   id: string;
@@ -13,17 +19,27 @@ export interface TreeData {
   modelPath: string; // Caminho pro modelo GLB
 }
 
+/**
+ * As cores aqui são a paleta CANÔNICA da tabela "Estrutura do Jardim", a mesma
+ * de data/mundo/arvoresCatalog.ts (campo `rgb`) e
+ * bots/jornalista/core/arvores.py. Este arquivo tinha uma paleta
+ * própria e divergente - Gênese saía dourada em vez de rosa, Abismo roxo em vez
+ * de preto, Baluarte azul-acinzentado em vez de marrom.
+ *
+ * Limiar fica no centro (radius 0) de propósito: ela é a chegada de todas as
+ * outras Árvores, não uma entre múltiplas origens.
+ */
 export const COSMIC_TREES: TreeData[] = [
-  { id: 'limiar', deidadeId: 'mulher-carmesim', name: 'Limiar', color: '#8b1a2a', radius: 0, speed: 0, modelPath: '/models/trees/mulher-carmesim.glb' }, // Centro
-  { id: 'genese', deidadeId: 'aethel', name: 'Gênese', color: '#c9a227', radius: 8, speed: 0.1, modelPath: '/models/trees/aethel.glb' },
-  { id: 'abismo', deidadeId: 'erebus', name: 'Abismo', color: '#644488', radius: 12, speed: 0.08, modelPath: '/models/trees/erebus.glb' },
-  { id: 'aletheia', deidadeId: 'ousias', name: 'Alétheia', color: '#d2c3a8', radius: 15, speed: 0.12, modelPath: '/models/trees/ousias.glb' },
-  { id: 'anima', deidadeId: 'haemus', name: 'Anima', color: '#78b982', radius: 18, speed: 0.09, modelPath: '/models/trees/haemus.glb' },
-  { id: 'baluarte', deidadeId: 'moros', name: 'Baluarte', color: '#8c9eae', radius: 22, speed: 0.07, modelPath: '/models/trees/moros.glb' },
-  { id: 'matriz', deidadeId: 'aperion', name: 'Matriz', color: '#55aacc', radius: 26, speed: 0.06, modelPath: '/models/trees/aperion.glb' },
-  { id: 'axis', deidadeId: 'keryx', name: 'A.X.I.S', color: '#4a9ebb', radius: 30, speed: 0.15, modelPath: '/models/trees/axis.glb' },
-  { id: 'vortice', deidadeId: 'ignis', name: 'Vórtice', color: '#c8643c', radius: 35, speed: 0.2, modelPath: '/models/trees/ignis.glb' },
-  { id: 'eon', deidadeId: 'chronus', name: 'Éon', color: '#bea03c', radius: 40, speed: 0.05, modelPath: '/models/trees/chronus.glb' },
+  { id: 'limiar', deidadeId: 'mulher-carmesim', name: 'Limiar', color: '#861c30', radius: 0, speed: 0, modelPath: '/models/trees/mulher-carmesim.glb' }, // Vermelho vinho - Centro
+  { id: 'genese', deidadeId: 'aethel', name: 'Gênese', color: '#d6789c', radius: 8, speed: 0.1, modelPath: '/models/trees/aethel.glb' }, // Rosa
+  { id: 'eon', deidadeId: 'chronus', name: 'Éon', color: '#a88a48', radius: 12, speed: 0.05, modelPath: '/models/trees/chronus.glb' }, // Dourado envelhecido
+  { id: 'aletheia', deidadeId: 'ousias', name: 'Alétheia', color: '#dec658', radius: 15, speed: 0.12, modelPath: '/models/trees/ousias.glb' }, // Amarelo
+  { id: 'anima', deidadeId: 'haemus', name: 'Anima', color: '#56ac5c', radius: 18, speed: 0.09, modelPath: '/models/trees/haemus.glb' }, // Verde
+  { id: 'baluarte', deidadeId: 'moros', name: 'Baluarte', color: '#745234', radius: 22, speed: 0.07, modelPath: '/models/trees/moros.glb' }, // Marrom
+  { id: 'matriz', deidadeId: 'aperion', name: 'Matriz', color: '#8454bc', radius: 26, speed: 0.06, modelPath: '/models/trees/aperion.glb' }, // Roxo
+  { id: 'axis', deidadeId: 'keryx', name: 'A.X.I.S', color: '#35d8ec', radius: 30, speed: 0.15, modelPath: '/models/trees/axis.glb' }, // Azul-neon artificial
+  { id: 'vortice', deidadeId: 'ignis', name: 'Vórtice', color: '#de722a', radius: 35, speed: 0.2, modelPath: '/models/trees/ignis.glb' }, // Laranja
+  { id: 'abismo', deidadeId: 'erebus', name: 'Abismo', color: '#221e28', radius: 40, speed: 0.08, modelPath: '/models/trees/erebus.glb' }, // Preto - Última órbita
 ];
 
 // Posição global para a câmera seguir
@@ -141,6 +157,61 @@ const TreeModel = ({ tree }: { tree: TreeData }) => {
   );
 };
 
+const MoonBankModel = () => {
+  const { scene } = useGLTF(BANCO_LUNAR_MODEL_PATH);
+  const clone = useMemo(() => scene.clone(), [scene]);
+
+  return <primitive object={clone} scale={2.2} />;
+};
+
+/**
+ * O Banco Lunar (ver bancoLunarInfo.ts) não é uma Árvore — não tem
+ * deidadeId nem participa da seleção/foco de câmera das Árvores. Orbita
+ * sozinho, bem por fora da órbita mais distante (Abismo, radius 40) e um
+ * pouco acima do plano delas, pra ler como algo que sobrevoa o conjunto
+ * inteiro em vez de pertencer a uma Árvore específica.
+ */
+const MoonBankNode = ({ onClick }: { onClick: () => void }) => {
+  const groupRef = useRef<THREE.Group>(null);
+  const offset = useMemo(() => Math.random() * Math.PI * 2, []);
+
+  useFrame((state) => {
+    if (groupRef.current) {
+      const time = state.clock.elapsedTime;
+      const angle = time * BANCO_LUNAR_SPEED + offset;
+      groupRef.current.position.x = Math.cos(angle) * BANCO_LUNAR_RADIUS;
+      groupRef.current.position.z = Math.sin(angle) * BANCO_LUNAR_RADIUS;
+      groupRef.current.position.y = BANCO_LUNAR_HEIGHT + Math.sin(time * 0.3) * 1.2;
+    }
+  });
+
+  return (
+    <group
+      ref={groupRef}
+      position={[Math.cos(offset) * BANCO_LUNAR_RADIUS, BANCO_LUNAR_HEIGHT, Math.sin(offset) * BANCO_LUNAR_RADIUS]}
+      onClick={(e) => { e.stopPropagation(); onClick(); }}
+    >
+      <Float speed={1.5} rotationIntensity={0.4} floatIntensity={0.8}>
+        <GlowSprite color={BANCO_LUNAR_INFO.cor} isSelected={false} />
+
+        {/* Hitbox maior invisível para facilitar o clique */}
+        <mesh>
+          <sphereGeometry args={[2, 16, 16]} />
+          <meshBasicMaterial visible={false} />
+        </mesh>
+
+        <MoonBankModel />
+      </Float>
+
+      <Billboard position={[0, 2.6, 0]}>
+        <Text fontSize={0.5} color={BANCO_LUNAR_INFO.cor} anchorX="center" anchorY="middle">
+          {BANCO_LUNAR_INFO.nome}
+        </Text>
+      </Billboard>
+    </group>
+  );
+};
+
 interface CosmicNodeProps {
   tree: TreeData;
   isSelected: boolean;
@@ -251,10 +322,11 @@ interface CosmicTreeViewerProps {
   selectedDeidadeId: string | null;
   onSelectDeidade: (id: string | null) => void;
   onOpenInfo: (id: string) => void;
+  onOpenBancoLunar: () => void;
   lockedDeidades?: string[];
 }
 
-export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({ selectedDeidadeId, onSelectDeidade, onOpenInfo, lockedDeidades = [] }) => {
+export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({ selectedDeidadeId, onSelectDeidade, onOpenInfo, onOpenBancoLunar, lockedDeidades = [] }) => {
   const controlsRef = useRef<OrbitControlsRef>(null);
 
   return (
@@ -269,7 +341,7 @@ export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({ selectedDeid
           <li><strong>Clique Esquerdo (Arraste):</strong> Rotacionar câmera</li>
           <li><strong>Scroll do Mouse:</strong> Dar Zoom (Afastar/Aproximar)</li>
           <li><strong>Clique Esquerdo na Árvore:</strong> Focar câmera</li>
-          <li><strong>Duplo Clique na Árvore:</strong> Entrar/Abrir Lore</li>
+          <li><strong>Segundo clique na Árvore:</strong> Abrir o resumo</li>
           <li><strong>Clique fora das árvores:</strong> Voltar para visão geral</li>
         </ul>
       </div>
@@ -310,8 +382,15 @@ export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({ selectedDeid
             <meshBasicMaterial color={tree.color} transparent opacity={0.1} side={THREE.DoubleSide} />
           </mesh>
         ))}
-        
-        <OrbitControls 
+
+        <mesh position={[0, BANCO_LUNAR_HEIGHT, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[BANCO_LUNAR_RADIUS - 0.05, BANCO_LUNAR_RADIUS + 0.05, 64]} />
+          <meshBasicMaterial color={BANCO_LUNAR_INFO.cor} transparent opacity={0.12} side={THREE.DoubleSide} />
+        </mesh>
+
+        <MoonBankNode onClick={onOpenBancoLunar} />
+
+        <OrbitControls
           ref={controlsRef}
           enableZoom={true} 
           enablePan={true} 
@@ -336,3 +415,4 @@ export default CosmicTreeViewer;
 COSMIC_TREES.forEach(tree => {
   useGLTF.preload(tree.modelPath);
 });
+useGLTF.preload(BANCO_LUNAR_MODEL_PATH);

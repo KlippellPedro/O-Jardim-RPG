@@ -1,9 +1,19 @@
 import { create } from 'zustand';
-import { sessaoApi, ParticipantePayload } from '../services/sessaoApi';
-import { registrosApi, IRegistro } from '../services/registrosApi';
+import {
+  sessaoApi,
+  type ParticipantePayload,
+  type SessaoParticipanteResponse,
+} from '../services/sessaoApi';
+import { registrosApi, type IRegistro } from '../services/registrosApi';
+
+export interface SessionCondition {
+  nome: string;
+  turnos: number | null;
+}
 
 export interface EntidadeIniciativa {
   id: string;
+  personagemId?: string | null;
   nome: string;
   iniciativa: number;
   hpAtual?: number;
@@ -12,190 +22,325 @@ export interface EntidadeIniciativa {
   cor?: string;
   estado_vida?: string;
   visivel?: boolean;
+  vidaVisivel?: boolean;
+  eMeu?: boolean;
+  ordem?: number;
+  condicoes: SessionCondition[];
 }
 
-function mapParticipantes(participantes: any[] | undefined): EntidadeIniciativa[] {
-  return (participantes || []).map((p: any) => ({
-    id: p.id,
-    nome: p.nome,
-    iniciativa: p.iniciativa,
-    hpAtual: p.vida_atual,
-    hpTotal: p.vida_maxima,
-    tipo: p.tipo,
-    cor: p.tipo === 'jogador' ? '#4FD1C5' : p.tipo === 'aliado' ? '#34d399' : '#ef4444',
-    estado_vida: p.estado_vida,
-    visivel: p.visivel,
-  }));
+export type SessionConnectionStatus = 'connecting' | 'online' | 'offline';
+
+export interface SessionRollRequest {
+  titulo: string;
+  personagemId?: string | null;
+  bonus?: number;
+  vantagens?: number;
+  desvantagens?: number;
+  dt?: number | null;
+  formula?: string | null;
+  origem?: Record<string, unknown>;
+}
+
+function normalizeConditions(value: unknown): SessionCondition[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((condition) => {
+    if (typeof condition === 'string' && condition.trim()) {
+      return [{ nome: condition.trim(), turnos: null }];
+    }
+    if (!condition || typeof condition !== 'object') return [];
+    const item = condition as Record<string, unknown>;
+    if (typeof item.nome !== 'string' || !item.nome.trim()) return [];
+    return [{
+      nome: item.nome.trim(),
+      turnos: typeof item.turnos === 'number' && Number.isInteger(item.turnos)
+        ? item.turnos
+        : null,
+    }];
+  });
+}
+
+function mapParticipantes(participantes: SessaoParticipanteResponse[]): EntidadeIniciativa[] {
+  return participantes.map((participante) => {
+    const tipo = participante.tipo === 'jogador' || participante.tipo === 'aliado'
+      ? participante.tipo
+      : 'inimigo';
+    return {
+      id: String(participante.id),
+      personagemId: participante.personagem_id ?? null,
+      nome: String(participante.nome ?? 'Entidade'),
+      iniciativa: Number(participante.iniciativa) || 0,
+      hpAtual: typeof participante.vida_atual === 'number' ? participante.vida_atual : undefined,
+      hpTotal: typeof participante.vida_maxima === 'number' ? participante.vida_maxima : undefined,
+      tipo,
+      cor: tipo === 'jogador' ? '#4FD1C5' : tipo === 'aliado' ? '#34d399' : '#ef4444',
+      estado_vida: typeof participante.estado_vida === 'string' ? participante.estado_vida : undefined,
+      visivel: typeof participante.visivel === 'boolean' ? participante.visivel : undefined,
+      vidaVisivel: typeof participante.vida_visivel === 'boolean' ? participante.vida_visivel : undefined,
+      eMeu: !!participante.e_meu,
+      ordem: typeof participante.ordem === 'number' ? participante.ordem : undefined,
+      condicoes: normalizeConditions(participante.condicoes),
+    };
+  });
 }
 
 interface SessaoState {
   campanhaId: string | null;
   sessaoId: string | null;
+  sessaoStatus: 'preparacao' | 'aberta' | null;
+  tituloSessao: string | null;
+  iniciadaEm: string | null;
   comando: boolean;
   meuPapel: string | null;
+  bloqueada: boolean;
   iniciativa: EntidadeIniciativa[];
   turnoAtualIndex: number;
+  turnoAtualId: string | null;
   emCombate: boolean;
   rodada: number;
   rolagens: IRegistro[];
   eventSource: EventSource | null;
   sessaoVersao: number;
+  connectionStatus: SessionConnectionStatus;
+  isLoading: boolean;
+  error: string | null;
 
-  // EventSource & Sync
   conectarSSE: (campanhaId: string) => void;
   desconectarSSE: () => void;
   fetchEstadoSessao: () => Promise<void>;
   fetchRolagens: () => Promise<void>;
+  publicarAoVivo: () => Promise<void>;
+  encerrarSessao: () => Promise<void>;
 
-  // Iniciativa
   adicionarEntidade: (entidade: ParticipantePayload) => Promise<void>;
   removerEntidade: (id: string) => Promise<void>;
   iniciarCombate: () => Promise<void>;
   encerrarCombate: () => Promise<void>;
   proximoTurno: () => Promise<void>;
+  turnoAnterior: () => Promise<void>;
   ordenarIniciativa: () => Promise<void>;
+  sincronizarIniciativa: () => Promise<void>;
   atualizarEntidade: (id: string, payload: ParticipantePayload) => Promise<void>;
 
-  // Rolagens
-  rolarDados: (payload: any) => Promise<IRegistro | null>;
+  rolarDados: (payload: SessionRollRequest) => Promise<IRegistro | null>;
+  clearError: () => void;
 }
 
 export const useSessaoStore = create<SessaoState>((set, get) => ({
   campanhaId: null,
   sessaoId: null,
+  sessaoStatus: null,
+  tituloSessao: null,
+  iniciadaEm: null,
   comando: false,
   meuPapel: null,
+  bloqueada: true,
   iniciativa: [],
   turnoAtualIndex: 0,
+  turnoAtualId: null,
   emCombate: false,
   rodada: 0,
   rolagens: [],
   eventSource: null,
   sessaoVersao: 0,
+  connectionStatus: 'offline',
+  isLoading: false,
+  error: null,
 
-  conectarSSE: (campanhaId: string) => {
-    const currentState = get();
-    if (currentState.eventSource) {
-      currentState.eventSource.close();
-    }
+  conectarSSE: (campanhaId) => {
+    get().eventSource?.close();
+    set({ campanhaId, connectionStatus: 'connecting', error: null });
 
-    set({ campanhaId });
-    get().fetchEstadoSessao();
-    get().fetchRolagens();
+    void get().fetchEstadoSessao().then(() => get().fetchRolagens());
 
-    const es = new EventSource(`/api/v1/sessao/${campanhaId}/eventos`);
-    
-    es.onmessage = (event) => {
-      const data = event.data;
-      if (data === 'ping') return;
-      if (data === 'conectado') return;
-      
+    const eventSource = new EventSource(`/api/v1/sessao/${campanhaId}/eventos`);
+    eventSource.onopen = () => set({ connectionStatus: 'online', error: null });
+    eventSource.onerror = () => set({
+      connectionStatus: 'offline',
+      error: 'A conexão ao vivo foi interrompida. O navegador tentará reconectar automaticamente.',
+    });
+    eventSource.onmessage = (event) => {
+      if (event.data === 'ping' || event.data === 'conectado') return;
       try {
-        const payload = JSON.parse(data);
+        const payload = JSON.parse(event.data) as { tipo?: string };
         if (payload.tipo === 'registro') {
-          get().fetchRolagens();
+          void get().fetchRolagens();
         } else {
-          // 'turno', 'participante_adicionado', etc.
-          get().fetchEstadoSessao();
+          void get().fetchEstadoSessao().then(() => get().fetchRolagens());
         }
-      } catch (e) {
-        console.error("Falha ao ler evento SSE", e);
+      } catch (error) {
+        console.error('Falha ao ler evento SSE', error);
       }
     };
-
-    set({ eventSource: es });
+    set({ eventSource });
   },
 
   desconectarSSE: () => {
-    const es = get().eventSource;
-    if (es) {
-      es.close();
-      set({ eventSource: null, campanhaId: null, sessaoId: null });
-    }
+    get().eventSource?.close();
+    set({
+      eventSource: null,
+      campanhaId: null,
+      sessaoId: null,
+      sessaoStatus: null,
+      tituloSessao: null,
+      iniciadaEm: null,
+      comando: false,
+      meuPapel: null,
+      bloqueada: true,
+      iniciativa: [],
+      turnoAtualIndex: 0,
+      turnoAtualId: null,
+      emCombate: false,
+      rodada: 0,
+      rolagens: [],
+      sessaoVersao: 0,
+      connectionStatus: 'offline',
+      isLoading: false,
+      error: null,
+    });
   },
 
   fetchEstadoSessao: async () => {
-    const { campanhaId } = get();
+    const { campanhaId, sessaoId } = get();
     if (!campanhaId) return;
+    const isInitialLoad = !sessaoId;
+    if (isInitialLoad) set({ isLoading: true, error: null });
 
     try {
-      const resp = await sessaoApi.obterSessao(campanhaId);
-      if (resp && resp.sessao) {
+      const response = await sessaoApi.obterSessao(campanhaId);
+      if (response?.sessao) {
         set({
-          sessaoId: resp.sessao.id,
-          comando: resp.comando,
-          meuPapel: resp.meu_papel,
-          iniciativa: mapParticipantes(resp.participantes),
-          turnoAtualIndex: resp.sessao.turno_de?.indice || 0,
-          emCombate: !!resp.sessao.em_combate,
-          rodada: resp.sessao.rodada || 0,
-          sessaoVersao: resp.sessao.versao,
+          sessaoId: response.sessao.id,
+          sessaoStatus: response.sessao.status,
+          tituloSessao: response.sessao.titulo ?? 'Sessão ao vivo',
+          iniciadaEm: response.sessao.iniciada_em ?? null,
+          comando: !!response.comando,
+          meuPapel: response.meu_papel ?? null,
+          bloqueada: false,
+          iniciativa: mapParticipantes(response.participantes),
+          turnoAtualIndex: response.sessao.turno_de?.indice ?? 0,
+          turnoAtualId: response.sessao.turno_de?.id ?? null,
+          emCombate: !!response.sessao.em_combate,
+          rodada: response.sessao.rodada ?? 0,
+          sessaoVersao: response.sessao.versao ?? 0,
+          error: null,
         });
         return;
       }
 
       set({
         sessaoId: null,
+        sessaoStatus: null,
+        tituloSessao: null,
+        iniciadaEm: null,
         iniciativa: [],
         turnoAtualIndex: 0,
+        turnoAtualId: null,
         emCombate: false,
         rodada: 0,
-        comando: resp?.comando ?? false,
-        meuPapel: resp?.meu_papel ?? null,
+        comando: !!response?.comando,
+        meuPapel: response?.meu_papel ?? null,
+        bloqueada: response?.bloqueada ?? !response?.comando,
+        rolagens: [],
       });
 
-      // Mestre chegando numa campanha sem sessão aberta: abre a mesa
-      // automaticamente para não deixar o painel vazio sem nenhuma ação possível.
-      if (resp?.comando) {
-        await sessaoApi.abrirSessao(campanhaId, "Sessão ao vivo", true);
-        const reaberta = await sessaoApi.obterSessao(campanhaId);
-        if (reaberta && reaberta.sessao) {
+      if (response?.comando) {
+        const reopened = await sessaoApi.abrirSessao(campanhaId, 'Sessão ao vivo', true);
+        if (reopened?.sessao) {
           set({
-            sessaoId: reaberta.sessao.id,
-            comando: reaberta.comando,
-            meuPapel: reaberta.meu_papel,
-            iniciativa: mapParticipantes(reaberta.participantes),
-            turnoAtualIndex: reaberta.sessao.turno_de?.indice || 0,
-            emCombate: !!reaberta.sessao.em_combate,
-            rodada: reaberta.sessao.rodada || 0,
-            sessaoVersao: reaberta.sessao.versao,
+            sessaoId: reopened.sessao.id,
+            sessaoStatus: reopened.sessao.status,
+            tituloSessao: reopened.sessao.titulo ?? 'Sessão ao vivo',
+            iniciadaEm: reopened.sessao.iniciada_em ?? null,
+            comando: !!reopened.comando,
+            meuPapel: reopened.meu_papel ?? null,
+            bloqueada: false,
+            iniciativa: mapParticipantes(reopened.participantes),
+            turnoAtualIndex: reopened.sessao.turno_de?.indice ?? 0,
+            turnoAtualId: reopened.sessao.turno_de?.id ?? null,
+            emCombate: !!reopened.sessao.em_combate,
+            rodada: reopened.sessao.rodada ?? 0,
+            sessaoVersao: reopened.sessao.versao ?? 0,
           });
         }
       }
     } catch (error) {
-      console.error("Falha ao buscar sessão", error);
+      console.error('Falha ao buscar sessão', error);
+      set({ error: 'Não foi possível carregar o estado da sessão.' });
+    } finally {
+      if (isInitialLoad) set({ isLoading: false });
     }
   },
 
   fetchRolagens: async () => {
-    const { campanhaId } = get();
+    const { campanhaId, comando, sessaoStatus } = get();
     if (!campanhaId) return;
-
-    try {
-      const resp = await registrosApi.listar(campanhaId, { apenasSessao: true, limite: 50 });
-      set({ rolagens: resp.registros });
-    } catch (error) {
-      console.error("Falha ao buscar registros", error);
+    if (!comando && sessaoStatus !== 'aberta') {
+      set({ rolagens: [] });
+      return;
     }
+    try {
+      const response = await registrosApi.listar(campanhaId, { apenasSessao: true, limite: 80 });
+      set({ rolagens: response.registros });
+    } catch (error) {
+      console.error('Falha ao buscar registros', error);
+      set({ error: 'Não foi possível atualizar o histórico de rolagens.' });
+    }
+  },
+
+  publicarAoVivo: async () => {
+    const { sessaoId } = get();
+    if (!sessaoId) throw new Error('Nenhuma sessão preparada.');
+    const response = await sessaoApi.publicarAoVivo(sessaoId);
+    if (!response.sessao) throw new Error('A sessão não foi liberada pelo servidor.');
+    set({
+      sessaoStatus: response.sessao.status,
+      iniciadaEm: response.sessao.iniciada_em ?? null,
+      sessaoVersao: response.sessao.versao ?? 0,
+      bloqueada: false,
+      error: null,
+    });
+    await get().fetchRolagens();
+  },
+
+  encerrarSessao: async () => {
+    const { sessaoId } = get();
+    if (!sessaoId) return;
+    await sessaoApi.encerrarSessao(sessaoId);
+    set({
+      sessaoId: null,
+      sessaoStatus: null,
+      tituloSessao: null,
+      iniciadaEm: null,
+      iniciativa: [],
+      rolagens: [],
+      emCombate: false,
+      rodada: 0,
+      bloqueada: false,
+    });
+    await get().fetchEstadoSessao();
   },
 
   adicionarEntidade: async (entidade) => {
     const { sessaoId } = get();
     if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
-    await sessaoApi.adicionarParticipante(sessaoId, { ...entidade, visivel: true, vida_visivel: true });
+    await sessaoApi.adicionarParticipante(sessaoId, {
+      ...entidade,
+      visivel: entidade.visivel ?? true,
+      vida_visivel: entidade.vida_visivel ?? true,
+    });
     await get().fetchEstadoSessao();
   },
 
   atualizarEntidade: async (id, payload) => {
     const { sessaoId } = get();
-    if (!sessaoId) return;
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
     await sessaoApi.atualizarParticipante(sessaoId, id, payload);
     await get().fetchEstadoSessao();
   },
 
   removerEntidade: async (id) => {
     const { sessaoId } = get();
-    if (!sessaoId) return;
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
     await sessaoApi.removerParticipante(sessaoId, id);
     await get().fetchEstadoSessao();
   },
@@ -209,22 +354,36 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
 
   encerrarCombate: async () => {
     const { sessaoId } = get();
-    if (!sessaoId) return;
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
     await sessaoApi.controlarTurno(sessaoId, 'encerrar');
     await get().fetchEstadoSessao();
   },
 
   proximoTurno: async () => {
     const { sessaoId } = get();
-    if (!sessaoId) return;
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
     await sessaoApi.controlarTurno(sessaoId, 'proximo');
+    await get().fetchEstadoSessao();
+  },
+
+  turnoAnterior: async () => {
+    const { sessaoId } = get();
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
+    await sessaoApi.controlarTurno(sessaoId, 'anterior');
     await get().fetchEstadoSessao();
   },
 
   ordenarIniciativa: async () => {
     const { sessaoId } = get();
-    if (!sessaoId) return;
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
     await sessaoApi.controlarTurno(sessaoId, 'ordenar');
+    await get().fetchEstadoSessao();
+  },
+
+  sincronizarIniciativa: async () => {
+    const { sessaoId } = get();
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
+    await sessaoApi.sincronizarIniciativa(sessaoId);
     await get().fetchEstadoSessao();
   },
 
@@ -232,11 +391,14 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
     const { campanhaId } = get();
     if (!campanhaId) return null;
     try {
-      const resp = await registrosApi.rolar({ ...payload, campanhaId });
-      return resp.registro;
-    } catch (e) {
-      console.error("Falha ao rolar", e);
-      return null;
+      const response = await registrosApi.rolar({ ...payload, campanhaId });
+      return response.registro;
+    } catch (error) {
+      console.error('Falha ao rolar', error);
+      set({ error: 'A rolagem falhou. Verifique a expressão e tente novamente.' });
+      throw error;
     }
   },
+
+  clearError: () => set({ error: null }),
 }));

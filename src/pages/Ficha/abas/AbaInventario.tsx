@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Search, Backpack, Coins, Shield, Sword, Box, Minus, Plus, Car, Trash2, Pencil, Sparkles, Wrench, Star, GripVertical } from 'lucide-react';
+import { useDeferredValue, useMemo, useState } from 'react';
+import { Search, Backpack, Coins, Shield, Sword, Box, Minus, Plus, Car, Trash2, Pencil, Wrench, Star, GripVertical, SlidersHorizontal, ListFilter } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { useCharacterStore } from '../../../store/useCharacterStore';
 import { useAuthStore } from '../../../store/useAuthStore';
@@ -8,7 +8,15 @@ import { FichaModal } from '../components/FichaModal';
 import { LabeledInput } from '../components/SharedFichaComponents';
 import { Select } from '../../../components/ui/Select';
 import { formatarCritico, normalizarCriticoBalanceado } from '../../../services/criticalService';
-import { resumirEquipamentos } from '../../../services/equipamentoService';
+import {
+  normalizarEfeitosEquipamento,
+  normalizarModificacoesEquipamento,
+  resumirEquipamentos,
+  type IEfeitoEquipamento,
+  type IModificacaoEquipamento,
+} from '../../../services/equipamentoService';
+import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
+import { ModificacoesItemModal, RaridadeItemModal } from '../components/ItemEffectsModals';
 import {
   getCurrencySymbol,
   getCurrencyTheme,
@@ -16,14 +24,8 @@ import {
   MoedaTipo,
   normalizarRaridadeChave,
   rotuloRaridadeChave,
-} from '../../../data/lojaCatalog';
-
-interface IModificacao {
-  id: string;
-  nome: string;
-  efeito: string;
-  tipo: 'comum' | 'especial';
-}
+} from '../../../services/lojaCatalogService';
+import { EFEITOS_POR_MODIFICACAO_MAXIMOS, obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
 
 interface IInventoryItem {
   id: string;
@@ -40,7 +42,8 @@ interface IInventoryItem {
   favorito: boolean;
   durabilidadeAtual: number;
   durabilidadeMaxima: number;
-  modificacoes: IModificacao[];
+  modificacoes: IModificacaoEquipamento[];
+  efeitosRaridade: IEfeitoEquipamento[];
 
   // Específicos
   dano?: string;
@@ -66,8 +69,25 @@ const CATEGORY_COLORS: Record<string, string> = {
   geral: 'text-gray-400 border-white/10 bg-black/40',
 };
 
+const CATEGORY_ACCENTS: Record<IInventoryItem['categoria'], string> = {
+  arma: 'before:bg-orange-400',
+  armadura: 'before:bg-sky-400',
+  consumivel: 'before:bg-emerald-400',
+  veiculo: 'before:bg-amber-400',
+  geral: 'before:bg-slate-400',
+};
+
+const CATEGORIAS_FILTRO: Array<{ value: 'todos' | IInventoryItem['categoria']; label: string }> = [
+  { value: 'todos', label: 'Todos' },
+  { value: 'arma', label: 'Armas' },
+  { value: 'armadura', label: 'Armaduras' },
+  { value: 'consumivel', label: 'Consumíveis' },
+  { value: 'veiculo', label: 'Veículos' },
+  { value: 'geral', label: 'Gerais' },
+];
+
 const RARIDADES_CONFIG = {
-  comum: { cor: 'text-gray-400', bg: 'bg-[#121118]', border: 'border-white/5', glow: '' },
+  comum: { cor: 'text-slate-300', bg: 'bg-[#121118]', border: 'border-slate-500/25', glow: '' },
   incomum: { cor: 'text-green-400', bg: 'bg-green-900/10', border: 'border-green-500/30', glow: 'shadow-[0_0_15px_rgba(74,222,128,0.05)]' },
   raro: { cor: 'text-blue-400', bg: 'bg-blue-900/10', border: 'border-blue-500/30', glow: 'shadow-[0_0_15px_rgba(96,165,250,0.1)]' },
   epico: { cor: 'text-purple-400', bg: 'bg-purple-900/10', border: 'border-purple-500/40', glow: 'shadow-[0_0_20px_rgba(192,132,252,0.15)]' },
@@ -93,6 +113,7 @@ const paraBackend = (item: IInventoryItem) => ({
     durabilidadeAtual: item.durabilidadeAtual,
     durabilidadeMaxima: item.durabilidadeMaxima,
     modificacoes: item.modificacoes,
+    efeitosRaridade: item.efeitosRaridade,
 
     dano: item.dano,
     margem_ameaca: item.margemAmeaca,
@@ -125,7 +146,8 @@ const paraUI = (item: any, index: number): IInventoryItem => ({
   favorito: item.dados?.favorito || false,
   durabilidadeAtual: item.dados?.durabilidadeAtual || 0,
   durabilidadeMaxima: item.dados?.durabilidadeMaxima || 0,
-  modificacoes: item.dados?.modificacoes || [],
+  modificacoes: normalizarModificacoesEquipamento(item.dados?.modificacoes),
+  efeitosRaridade: normalizarEfeitosEquipamento(item.dados?.efeitosRaridade),
 
   dano: item.dados?.dano || '',
   margemAmeaca: Number(item.dados?.margem_ameaca ?? item.dados?.margemAmeaca ?? 20),
@@ -156,6 +178,7 @@ const ITEM_VAZIO: Omit<IInventoryItem, 'id'> = {
   durabilidadeAtual: 10,
   durabilidadeMaxima: 10,
   modificacoes: [],
+  efeitosRaridade: [],
   margemAmeaca: 20,
   multiplicadorCritico: 2,
   ordem: 0,
@@ -172,16 +195,27 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
   const podeGerenciarEconomia = papelCampanha === 'mestre'
     || papelCampanha === 'assistente';
   const [busca, setBusca] = useState('');
+  const [filtroCategoria, setFiltroCategoria] = useState<'todos' | IInventoryItem['categoria']>('todos');
   const [moedasReveladas, setMoedasReveladas] = useState<string[]>([]);
   
   const [modalAberto, setModalAberto] = useState(false);
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [form, setForm] = useState<typeof ITEM_VAZIO>(ITEM_VAZIO);
+  const [submodal, setSubmodal] = useState<'modificacoes' | 'raridade' | null>(null);
+  const [itemModificacoesVisivel, setItemModificacoesVisivel] = useState<IInventoryItem | null>(null);
 
-  const inventario: IInventoryItem[] = (character.inventarioCentral || [])
+  const periciasDisponiveis = useMemo(() => [...new Map([
+    ...PERICIAS_CATALOGO,
+    ...((character.ficha?.periciasCustomizadas || []) as Array<{ id: string; titulo: string }>),
+  ].map((pericia) => [pericia.id, { id: pericia.id, titulo: pericia.titulo }])).values()], [character.ficha?.periciasCustomizadas]);
+
+  const inventario: IInventoryItem[] = useMemo(() => (character.inventarioCentral || [])
     .map(paraUI)
-    .sort((a: IInventoryItem, b: IInventoryItem) => a.ordem - b.ordem);
-  const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], character.ficha || {});
+    .sort((a: IInventoryItem, b: IInventoryItem) => a.ordem - b.ordem), [character.inventarioCentral]);
+  const resumoEquipamento = useMemo(
+    () => resumirEquipamentos(character.inventarioCentral || [], character.ficha || {}),
+    [character.inventarioCentral, character.ficha],
+  );
 
   const carteiraSalva: { moeda: string; saldo: number; simbolo?: string }[] =
     character.carteira?.length ? character.carteira : [{ moeda: 'Lunaris', saldo: 0 }];
@@ -208,7 +242,10 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
     && inventario.some((item) => item.id === editandoId && !itemEhManual(item)),
   );
 
-  const locaisUnicos = Array.from(new Set(inventario.map(i => i.localArmazenamento || 'Mochila'))).sort((a, b) => a.localeCompare(b));
+  const locaisUnicos = useMemo(
+    () => Array.from(new Set(inventario.map(i => i.localArmazenamento || 'Mochila'))).sort((a, b) => a.localeCompare(b)),
+    [inventario],
+  );
 
   const mutarInventario = (updater: (atual: IInventoryItem[]) => IInventoryItem[]) => {
     void mutateEconomy(character.id, (current) => {
@@ -240,10 +277,35 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
     setModalAberto(true);
   };
 
-  const fecharModal = () => setModalAberto(false);
+  const fecharModal = () => {
+    setSubmodal(null);
+    setModalAberto(false);
+  };
 
   const handleSalvar = () => {
     if (!form.nome?.trim()) return;
+
+    const regraRaridade = obterRegraRaridade(form.raridade);
+    const efeitosConfigurados = [
+      ...form.efeitosRaridade,
+      ...form.modificacoes.flatMap((modificacao) => modificacao.efeitos),
+    ];
+    if (form.modificacoes.length > regraRaridade.modificacoesMaximas) {
+      window.alert(`${regraRaridade.titulo} aceita no máximo ${regraRaridade.modificacoesMaximas} modificação(ões). Remova o excedente antes de salvar.`);
+      return;
+    }
+    if (form.efeitosRaridade.length > regraRaridade.efeitosRaridadeMaximos) {
+      window.alert(`${regraRaridade.titulo} aceita no máximo ${regraRaridade.efeitosRaridadeMaximos} efeito(s) próprios de raridade.`);
+      return;
+    }
+    if (form.modificacoes.some((modificacao) => modificacao.efeitos.length > EFEITOS_POR_MODIFICACAO_MAXIMOS)) {
+      window.alert('Cada modificação pode alterar no máximo um valor automático da ficha. Remova o efeito excedente antes de salvar.');
+      return;
+    }
+    if (efeitosConfigurados.some((efeito) => Math.abs(efeito.valor) > regraRaridade.valorMaximoPorEfeito)) {
+      window.alert(`Cada efeito de um item ${regraRaridade.titulo} deve ficar entre -${regraRaridade.valorMaximoPorEfeito} e +${regraRaridade.valorMaximoPorEfeito}.`);
+      return;
+    }
 
     const itemAtual = editandoId
       ? inventario.find((item) => item.id === editandoId)
@@ -269,6 +331,7 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
       durabilidadeAtual: Number(form.durabilidadeAtual) || 0,
       durabilidadeMaxima: Number(form.durabilidadeMaxima) || 0,
       modificacoes: form.modificacoes,
+      efeitosRaridade: form.efeitosRaridade,
 
       dano: form.dano,
       margemAmeaca: critico.margemAmeaca,
@@ -371,27 +434,6 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
     });
   };
 
-  const addModificacao = () => {
-    setForm(prev => ({
-      ...prev,
-      modificacoes: [...prev.modificacoes, { id: Date.now().toString(), nome: '', efeito: '', tipo: 'comum' }]
-    }));
-  };
-
-  const removeModificacao = (id: string) => {
-    setForm(prev => ({
-      ...prev,
-      modificacoes: prev.modificacoes.filter(m => m.id !== id)
-    }));
-  };
-
-  const updateModificacao = (id: string, field: keyof IModificacao, value: any) => {
-    setForm(prev => ({
-      ...prev,
-      modificacoes: prev.modificacoes.map(m => m.id === id ? { ...m, [field]: value } : m)
-    }));
-  };
-
   const getIconForType = (type: string) => {
     switch (type?.toLowerCase()) {
       case 'arma': return <Sword size={16} />;
@@ -402,14 +444,19 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
     }
   };
 
-  const inventarioVisivel = inventario.filter((item) =>
-    !busca || item.nome?.toLowerCase().includes(busca.toLowerCase()) || item.localArmazenamento?.toLowerCase().includes(busca.toLowerCase())
-  );
+  const buscaAdiada = useDeferredValue(busca.trim().toLocaleLowerCase('pt-BR'));
+  const inventarioVisivel = useMemo(() => inventario.filter((item) => {
+    const correspondeCategoria = filtroCategoria === 'todos' || item.categoria === filtroCategoria;
+    const correspondeBusca = !buscaAdiada
+      || item.nome?.toLocaleLowerCase('pt-BR').includes(buscaAdiada)
+      || item.localArmazenamento?.toLocaleLowerCase('pt-BR').includes(buscaAdiada);
+    return correspondeCategoria && correspondeBusca;
+  }), [buscaAdiada, filtroCategoria, inventario]);
 
-  const inventarioAgrupadoPorLocal = locaisUnicos.reduce((acc, local) => {
+  const inventarioAgrupadoPorLocal = useMemo(() => locaisUnicos.reduce((acc, local) => {
     acc[local] = inventarioVisivel.filter(i => i.localArmazenamento === local);
     return acc;
-  }, {} as Record<string, IInventoryItem[]>);
+  }, {} as Record<string, IInventoryItem[]>), [inventarioVisivel, locaisUnicos]);
 
   const espacosUsados = inventario.reduce(
     (soma, item) => soma + (item.espacos || 0) * (item.quantidade || 1),
@@ -495,7 +542,7 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
       </div>
 
       {/* FERRAMENTAS */}
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-3 xl:flex-row">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
           <input
@@ -512,6 +559,24 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
         >
           + Adicionar Item
         </button>
+      </div>
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar" aria-label="Filtrar inventário por categoria">
+        <ListFilter size={15} className="mr-1 shrink-0 text-gray-500" />
+        {CATEGORIAS_FILTRO.map((categoria) => {
+          const ativo = filtroCategoria === categoria.value;
+          const cor = categoria.value === 'todos' ? 'text-[#c7a44c] border-[#c7a44c]/30 bg-[#c7a44c]/10' : CATEGORY_COLORS[categoria.value];
+          return (
+            <button
+              key={categoria.value}
+              type="button"
+              aria-pressed={ativo}
+              onClick={() => setFiltroCategoria(categoria.value)}
+              className={`shrink-0 rounded-full border px-3 py-1.5 text-[10px] font-black uppercase tracking-widest transition-all ${cor} ${ativo ? 'ring-1 ring-current shadow-lg opacity-100' : 'opacity-55 hover:opacity-100'}`}
+            >
+              {categoria.label}
+            </button>
+          );
+        })}
       </div>
 
       {/* LISTAS POR LOCAL */}
@@ -539,7 +604,7 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
                   <Reorder.Item
                     value={item}
                     key={item.id}
-                    className={`${conf.bg} border ${conf.border} ${conf.glow} rounded-xl p-4 flex flex-col gap-3 transition-colors duration-300 group`}
+                    className={`relative ${conf.bg} border ${conf.border} ${conf.glow} overflow-hidden rounded-xl p-4 pl-5 flex flex-col gap-3 transition-colors duration-300 group before:absolute before:inset-y-0 before:left-0 before:w-1 ${CATEGORY_ACCENTS[item.categoria]}`}
                   >
                     <div className="flex gap-4">
                       {/* Área de Ícone, Favorito e Arraste */}
@@ -552,7 +617,7 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
                             <GripVertical size={16} />
                           </div>
                         </div>
-                        <div className={`w-14 h-14 rounded-lg bg-black/40 border ${conf.border} flex items-center justify-center ${conf.cor} shadow-inner`}>
+                        <div className={`w-14 h-14 rounded-lg border flex items-center justify-center shadow-inner ${catColor}`}>
                           {getIconForType(item.categoria)}
                         </div>
                         <button 
@@ -573,10 +638,10 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
                           <div className="flex-1">
                             <h4 className="text-white font-bold text-base leading-tight mb-1">{item.nome}</h4>
                             <div className="flex gap-2 items-center flex-wrap">
-                              <span className={`text-[9px] px-1.5 py-0.5 bg-black/40 rounded border border-white/5 uppercase font-bold tracking-wider ${conf.cor}`}>
+                              <span className={`text-[9px] px-2 py-1 rounded border uppercase font-black tracking-wider ${conf.cor} ${conf.border} ${conf.bg}`}>
                                 {rotuloRaridadeChave(item.raridade)}
                               </span>
-                              <span className={`text-[9px] px-1.5 py-0.5 rounded border uppercase font-bold tracking-wider ${catColor}`}>
+                              <span className={`text-[9px] px-2 py-1 rounded border uppercase font-black tracking-wider ${catColor}`}>
                                 {item.categoria}
                               </span>
                             </div>
@@ -642,20 +707,15 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
                           {item.defesa != null && item.defesa > 0 && <div className="text-xs text-gray-300 bg-black/30 border border-white/5 px-2 py-1 rounded">Defesa: <span className="font-mono text-blue-400">+{item.defesa}</span></div>}
                         </div>
 
-                        {/* Modificações */}
-                        {item.modificacoes && item.modificacoes.length > 0 && (
-                          <div className="mt-3 flex flex-col gap-1.5">
-                            {item.modificacoes.map(mod => (
-                              <div key={mod.id} className={`flex items-start gap-2 text-xs p-1.5 rounded bg-black/20 border ${mod.tipo === 'especial' ? 'border-[#c7a44c]/30' : 'border-white/5'}`}>
-                                {mod.tipo === 'especial' ? <Sparkles size={12} className="text-[#c7a44c] mt-0.5 shrink-0" /> : <Wrench size={12} className="text-gray-500 mt-0.5 shrink-0" />}
-                                <div>
-                                  <span className={`font-bold mr-1 ${mod.tipo === 'especial' ? 'text-[#c7a44c]' : 'text-gray-300'}`}>{mod.nome}:</span>
-                                  <span className="text-gray-400">{mod.efeito}</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                        {item.modificacoes.length > 0 ? (
+                          <button
+                            type="button"
+                            onClick={() => setItemModificacoesVisivel(item)}
+                            className="mt-3 flex w-fit items-center gap-2 rounded-lg border border-[#c7a44c]/20 bg-[#c7a44c]/5 px-3 py-2 text-xs font-bold text-[#c7a44c] transition-colors hover:bg-[#c7a44c]/10"
+                          >
+                            <SlidersHorizontal size={13} /> Ver modificações ({item.modificacoes.length})
+                          </button>
+                        ) : null}
 
                         {item.descricao && <p className="text-xs text-gray-500 italic mt-3 line-clamp-2">{item.descricao}</p>}
 
@@ -681,11 +741,12 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
         isOpen={modalAberto}
         onClose={fecharModal}
         title={editandoId ? 'Editar Item' : 'Novo Item'}
+        size="lg"
       >
         <div className="flex flex-col gap-4">
           <LabeledInput label="Nome do Item" value={form.nome} placeholder="Ex.: Espada Longa, Corda 10m" onChange={(v: string) => setCampo('nome', v)} />
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="flex flex-col gap-1">
               <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Raridade</label>
               <Select
@@ -720,54 +781,32 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <LabeledInput label="Local de Armazenamento" value={form.localArmazenamento} placeholder="Ex.: Mochila, Mão Direita" onChange={(v: string) => setCampo('localArmazenamento', v)} />
-            <div className="flex gap-2">
-              <LabeledInput
-                label="Quantidade"
-                value={String(form.quantidade ?? '')}
-                readOnly={quantidadeSomenteLeitura}
-                onChange={(v: string) => setCampo('quantidade', v)}
-              />
-              <LabeledInput label="Peso (Kg)" value={String(form.espacos ?? '')} onChange={(v: string) => setCampo('espacos', v)} />
-            </div>
+            <LabeledInput
+              label="Quantidade"
+              type="number"
+              value={String(form.quantidade ?? '')}
+              readOnly={quantidadeSomenteLeitura}
+              onChange={(v: string) => setCampo('quantidade', v)}
+            />
+            <LabeledInput label="Peso (kg)" type="number" value={String(form.espacos ?? '')} onChange={(v: string) => setCampo('espacos', v)} />
           </div>
 
-          <div className="grid grid-cols-2 gap-3 border-t border-white/5 pt-4 mt-2">
-            <LabeledInput label="Durabilidade Máxima (0 = infinito)" value={String(form.durabilidadeMaxima ?? '')} onChange={(v: string) => setCampo('durabilidadeMaxima', v)} />
-            <LabeledInput label="Durabilidade Atual" value={String(form.durabilidadeAtual ?? '')} onChange={(v: string) => setCampo('durabilidadeAtual', v)} />
+          <div className="mt-2 grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2">
+            <LabeledInput label="Durabilidade Máxima (0 = infinito)" type="number" value={String(form.durabilidadeMaxima ?? '')} onChange={(v: string) => setCampo('durabilidadeMaxima', v)} />
+            <LabeledInput label="Durabilidade Atual" type="number" value={String(form.durabilidadeAtual ?? '')} onChange={(v: string) => setCampo('durabilidadeAtual', v)} />
           </div>
 
           {/* CAMPOS ESPECÍFICOS */}
           {form.categoria === 'arma' && (
-            <div className="border-t border-white/5 pt-4 grid grid-cols-2 md:grid-cols-5 gap-3">
+            <div className="grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2 lg:grid-cols-3">
               <LabeledInput label="Dano" value={form.dano || ''} placeholder="Ex.: 1d8+2" onChange={(v: string) => setCampo('dano', v)} />
-              <LabeledInput label="Munição Atual" value={String(form.municaoAtual ?? '')} onChange={(v: string) => setCampo('municaoAtual', v)} />
-              <LabeledInput label="Munição Máx." value={String(form.municaoMaxima ?? '')} onChange={(v: string) => setCampo('municaoMaxima', v)} />
-              <div>
-                <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1 block">Margem</label>
-                <Select
-                  value={String(form.margemAmeaca ?? 20)}
-                  onChange={(v) => setForm((prev) => ({
-                    ...prev,
-                    margemAmeaca: Number(v),
-                    multiplicadorCritico: v === '20' ? prev.multiplicadorCritico : 2,
-                  }))}
-                  options={['20', '19', '18'].map((value) => ({ value, label: value === '20' ? '20' : `${value}-20` }))}
-                />
-              </div>
-              <div>
-                <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1 block">Crítico</label>
-                <Select
-                  value={String(form.multiplicadorCritico ?? 2)}
-                  onChange={(v) => setForm((prev) => ({
-                    ...prev,
-                    multiplicadorCritico: Number(v),
-                    margemAmeaca: v === '2' ? prev.margemAmeaca : 20,
-                  }))}
-                  options={['2', '3', '4'].map((value) => ({ value, label: `x${value}` }))}
-                />
-              </div>
+              <LabeledInput label="Munição Atual" type="number" value={String(form.municaoAtual ?? '')} onChange={(v: string) => setCampo('municaoAtual', v)} />
+              <LabeledInput label="Munição Máx." type="number" value={String(form.municaoMaxima ?? '')} onChange={(v: string) => setCampo('municaoMaxima', v)} />
+              <LabeledInput label="Margem de ameaça" type="number" value={String(form.margemAmeaca ?? 20)} placeholder="Ex.: 18" onChange={(v: string) => setCampo('margemAmeaca', v)} />
+              <LabeledInput label="Multiplicador crítico" type="number" value={String(form.multiplicadorCritico ?? 2)} placeholder="Ex.: 5" onChange={(v: string) => setCampo('multiplicadorCritico', v)} />
+              <p className="self-end pb-2 text-xs text-gray-600">Aceita valores especiais definidos pelo Mestre.</p>
             </div>
           )}
 
@@ -784,49 +823,21 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
             </div>
           )}
 
-          {/* MODIFICAÇÕES */}
-          <div className="border-t border-white/5 pt-4">
-            <div className="flex justify-between items-center mb-3">
-              <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Modificações ({form.modificacoes.length})</label>
-              <button onClick={addModificacao} className="text-xs font-bold text-[#c7a44c] hover:text-white transition-colors flex items-center gap-1">
-                <Plus size={12} /> Adicionar
-              </button>
-            </div>
-            
-            <div className="flex flex-col gap-3">
-              {form.modificacoes.map((mod) => (
-                <div key={mod.id} className="bg-black/30 border border-white/5 rounded-lg p-3 flex gap-3 items-start">
-                  <div className="flex-1 flex flex-col gap-2">
-                    <div className="flex gap-2">
-                      <div className="flex-1">
-                         <LabeledInput label="Nome do Mod" value={mod.nome} placeholder="Ex: Cano Longo" onChange={(v: string) => updateModificacao(mod.id, 'nome', v)} />
-                      </div>
-                      <div className="w-32">
-                        <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1 block">Tipo</label>
-                        <Select
-                          value={mod.tipo}
-                          onChange={(v) => updateModificacao(mod.id, 'tipo', v)}
-                          className="w-full text-xs"
-                          options={[
-                            { value: 'comum', label: 'Comum' },
-                            { value: 'especial', label: 'Especial' },
-                          ]}
-                        />
-                      </div>
-                    </div>
-                    <LabeledInput label="Efeito Descritivo" value={mod.efeito} placeholder="Ex: +1 dado de dano de fogo" onChange={(v: string) => updateModificacao(mod.id, 'efeito', v)} />
-                  </div>
-                  <button onClick={() => removeModificacao(mod.id)} className="w-7 h-7 rounded bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 flex items-center justify-center shrink-0 mt-[22px]">
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              ))}
-              {form.modificacoes.length === 0 && (
-                <div className="text-center text-gray-600 text-xs py-4 border border-dashed border-white/5 rounded-lg">
-                  Nenhuma modificação neste item.
-                </div>
-              )}
-            </div>
+          <div className="grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2">
+            <button type="button" onClick={() => setSubmodal('modificacoes')} className="flex items-center justify-between rounded-xl border border-white/5 bg-black/20 p-4 text-left transition-colors hover:border-[#c7a44c]/30">
+              <span>
+                <strong className="block text-sm text-white">Ver modificações</strong>
+                <span className="mt-1 block text-xs text-gray-600">{form.modificacoes.length} configuradas</span>
+              </span>
+              <SlidersHorizontal size={18} className="text-[#c7a44c]" />
+            </button>
+            <button type="button" onClick={() => setSubmodal('raridade')} className="flex items-center justify-between rounded-xl border border-white/5 bg-black/20 p-4 text-left transition-colors hover:border-[#c7a44c]/30">
+              <span>
+                <strong className="block text-sm text-white">Raridade e vantagens</strong>
+                <span className="mt-1 block text-xs text-gray-600">{form.efeitosRaridade.length} efeitos automáticos</span>
+              </span>
+              <Star size={18} className="text-[#c7a44c]" />
+            </button>
           </div>
 
           <div className="flex flex-col gap-1 border-t border-white/5 pt-4">
@@ -857,6 +868,37 @@ export const AbaInventario = ({ character }: { character: any; onUpdate?: any })
           </div>
         </div>
       </FichaModal>
+
+      <ModificacoesItemModal
+        isOpen={submodal === 'modificacoes'}
+        onClose={() => setSubmodal(null)}
+        modificacoes={form.modificacoes}
+        onChange={(modificacoes) => setForm((atual) => ({ ...atual, modificacoes }))}
+        pericias={periciasDisponiveis}
+        itemNome={form.nome || undefined}
+        raridade={form.raridade}
+      />
+
+      <RaridadeItemModal
+        isOpen={submodal === 'raridade'}
+        onClose={() => setSubmodal(null)}
+        raridade={form.raridade}
+        efeitos={form.efeitosRaridade}
+        onRaridadeChange={(raridade) => setForm((atual) => ({ ...atual, raridade: normalizarRaridadeChave(raridade) }))}
+        onEfeitosChange={(efeitosRaridade) => setForm((atual) => ({ ...atual, efeitosRaridade }))}
+        pericias={periciasDisponiveis}
+        categoria={form.categoria}
+      />
+
+      <ModificacoesItemModal
+        isOpen={itemModificacoesVisivel !== null}
+        onClose={() => setItemModificacoesVisivel(null)}
+        modificacoes={itemModificacoesVisivel?.modificacoes || []}
+        pericias={periciasDisponiveis}
+        itemNome={itemModificacoesVisivel?.nome}
+        raridade={itemModificacoesVisivel?.raridade}
+        readOnly
+      />
 
     </div>
   );

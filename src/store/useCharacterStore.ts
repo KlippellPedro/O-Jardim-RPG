@@ -19,6 +19,9 @@ import {
 import { useAuthStore } from './useAuthStore';
 import type { ICharacter } from '../types/character';
 import type { ICreateCharacterPayload, IUpdateCharacterPayload } from '../types/personagem';
+import { ATRIBUTOS, calcularDerivadosComClasses } from '../services/calculoService';
+import { CLASSES_CATALOGO, RACAS_CATALOGO } from '../services/catalogoService';
+import { ajusteOrigem, chaveAjuste, totalAjustesManuais } from '../services/ajustesFichaService';
 
 export type CharacterSaveDomain = 'sheet' | 'economy';
 export type CharacterSavePhase = 'idle' | 'pending' | 'saving' | 'saved' | 'error' | 'conflict';
@@ -267,6 +270,49 @@ function sheetValues(record: PersonagemApiRecord): Pick<SheetSnapshot, 'nome' | 
   };
 }
 
+function recalcularDerivadosSalvos(fichaOriginal: Record<string, any>): Record<string, any> {
+  const atributos = isRecord(fichaOriginal.atributosFinais)
+    ? fichaOriginal.atributosFinais
+    : null;
+  if (!atributos) return fichaOriginal;
+
+  const classes = Array.isArray(fichaOriginal.classes) && fichaOriginal.classes.length
+    ? fichaOriginal.classes
+    : fichaOriginal.classeId
+      ? [{ classeId: fichaOriginal.classeId, nivel: Number(fichaOriginal.nivel) || 1 }]
+      : [];
+  if (!classes.length) return fichaOriginal;
+
+  const nivelTotal = classes.reduce(
+    (total, classe) => total + Math.max(0, Math.trunc(Number(classe?.nivel) || 0)),
+    0,
+  );
+  const atributosParaCalculo = Object.fromEntries(ATRIBUTOS.map((atributo) => [
+    atributo,
+    Number(atributos[atributo] ?? 10)
+      + ajusteOrigem(fichaOriginal, 'atributo', atributo)
+      + totalAjustesManuais(fichaOriginal, chaveAjuste('atributo', atributo)),
+  ]));
+  const raca = RACAS_CATALOGO.find((item) => item.id === fichaOriginal.racaId) || null;
+  const derivados = calcularDerivadosComClasses(
+    atributosParaCalculo,
+    raca,
+    classes,
+    CLASSES_CATALOGO,
+    Math.max(1, nivelTotal),
+    fichaOriginal.escolhaRacial,
+  );
+
+  if (!derivados.recursosDefinidos) return fichaOriginal;
+  return {
+    ...fichaOriginal,
+    derivados: {
+      ...(isRecord(fichaOriginal.derivados) ? fichaOriginal.derivados : {}),
+      ...derivados,
+    },
+  };
+}
+
 function economyValues(record: PersonagemApiRecord): CharacterEconomy {
   return {
     carteira: Array.isArray(record.carteira) ? record.carteira : [],
@@ -275,7 +321,7 @@ function economyValues(record: PersonagemApiRecord): CharacterEconomy {
 }
 
 function normalizeCharacter(record: PersonagemApiRecord): ICharacter {
-  const ficha = isRecord(record.ficha) ? record.ficha : {};
+  const ficha = recalcularDerivadosSalvos(isRecord(record.ficha) ? record.ficha : {});
   return {
     id: record.id,
     nome: record.nome,
@@ -313,19 +359,20 @@ function withSheetDomain(
   version: number,
   updatedAt?: string,
 ): ICharacter {
+  const fichaAtualizada = recalcularDerivadosSalvos(ficha);
   return {
     ...character,
     nome,
-    ficha,
+    ficha: fichaAtualizada,
     versao: version,
-    nivel: typeof ficha.nivel === 'number' ? ficha.nivel : 1,
-    racaId: ficha.racaId,
-    classeId: ficha.classes?.[0]?.classeId ?? ficha.classeId,
-    arvoreId: ficha.arvoreId,
-    classes: Array.isArray(ficha.classes) ? ficha.classes : [],
-    foto: ficha.foto ?? null,
-    derivados: ficha.derivados ?? { vida: 0, mana: 0, movimento: 0 },
-    atributosFinais: ficha.atributosFinais,
+    nivel: typeof fichaAtualizada.nivel === 'number' ? fichaAtualizada.nivel : 1,
+    racaId: fichaAtualizada.racaId,
+    classeId: fichaAtualizada.classes?.[0]?.classeId ?? fichaAtualizada.classeId,
+    arvoreId: fichaAtualizada.arvoreId,
+    classes: Array.isArray(fichaAtualizada.classes) ? fichaAtualizada.classes : [],
+    foto: fichaAtualizada.foto ?? null,
+    derivados: fichaAtualizada.derivados ?? { vida: 0, mana: 0, movimento: 0 },
+    atributosFinais: fichaAtualizada.atributosFinais,
     atualizadoEm: updatedAt ?? character.atualizadoEm,
   };
 }

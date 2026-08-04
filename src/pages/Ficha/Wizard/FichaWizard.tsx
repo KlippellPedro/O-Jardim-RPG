@@ -8,6 +8,7 @@ import { useAuthStore } from '../../../store/useAuthStore';
 import { X, ChevronRight, ChevronLeft, Dices, Shield, Sword, Sparkles, ListOrdered, SlidersHorizontal, Minus, Plus } from 'lucide-react';
 import {
   rolarAtributos,
+  rolagemAtributosPermitida,
   normalizarAtributosIniciais,
   calcularDerivadosComClasses,
   ATRIBUTOS,
@@ -24,8 +25,9 @@ import {
   compraPontosValida,
   conjuntoAtributosValido,
 } from '../../../services/calculoService';
-import { descreverOpcaoRacial, escolhaRacialEstaCompleta, obterGruposEscolhaRacial } from '../../../services/racaService';
-import { ARVORES, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao } from '../../../data/arvoresCatalog';
+import { descreverOpcaoRacial, escolhaRacialEstaCompleta, obterGruposEscolhaRacial, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
+import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao } from '../../../../data/mundo/arvoresCatalog';
+import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
 
 interface WizardProps {
   onClose: () => void;
@@ -51,6 +53,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
   const [nome, setNome] = useState('');
   const [arvoreId, setArvoreId] = useState('');
   const [racaId, setRacaId] = useState<string | null>(null);
+  const [racaNomePersonalizado, setRacaNomePersonalizado] = useState('');
   const [escolhaRacial, setEscolhaRacial] = useState<Record<string, string>>({});
   const [classeId, setClasseId] = useState<string | null>(null);
   const [divindade, setDivindade] = useState('');
@@ -99,6 +102,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
   }, [arvoreId]);
 
   const handleRolar = () => {
+    if (!rolagemAtributosPermitida(isMestre)) return;
     const rolados = rolarAtributos();
     setMetodoAtributos('rolado');
     setValoresDisponiveis(rolados);
@@ -178,6 +182,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
       pericias: Object.fromEntries(periciasIniciais.map(id => [id, 'aprendiz'])),
       inventarioInicial: [{ titulo: itemInicial.trim(), quantidade: 1 }],
       escolhaRacial: escolhaRacialFinal,
+      ...(racaId === RACA_PERSONALIZADA_ID ? { racaNomePersonalizado: racaNomePersonalizado.trim() } : {}),
     };
 
     const success = await createCharacter(payload);
@@ -201,17 +206,33 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
     const currentRaca = catalogo?.racas.find(r => r.id === racaId);
     const gruposEscolhaRacial = obterGruposEscolhaRacial(currentRaca);
     const arvoreSelecionada = ARVORES.find(a => a.id === arvoreId);
+    const semArvore = arvoreId === SEM_ARVORE_ID;
 
-    // Raça/Classe exclusivas de outra Árvore, ou especiais não liberadas
-    // pelo mestre, não aparecem como opção: mestre/assistente vê tudo.
-    const racasDisponiveis = isMestre
+    // Raça/Classe exclusivas de outra Árvore, ou especiais não liberadas pelo
+    // mestre (pra campanha inteira ou só pra este jogador), não aparecem como
+    // opção. Mestre/assistente vê tudo, inclusive pra criar NPCs fora da
+    // curva - a mesma regra que o backend já aplica (ver
+    // characters.py::create_character, que só valida jogador comum).
+    //
+    // ANTES disto filtrava de novo por `categoria === 'padrao'`, o que
+    // escondia QUALQUER raça/classe "esquecida" do wizard mesmo liberada -
+    // travando a promessa do próprio painel do mestre ("aparecem na
+    // criação/edição de fichas depois de liberadas aqui"). `filtrarPorLiberacao`
+    // já resolve isso: deixa passar raça/classe especial só se liberada.
+    const racasFiltradas = isMestre
       ? (catalogo?.racas || [])
-      : filtrarPorLiberacao(filtrarPorArvore(catalogo?.racas || [], arvoreId), config.racas_liberadas || []);
-    const racasFiltradas = racasDisponiveis.filter(raca => raca.categoria === 'padrao');
-    const classesDisponiveis = isMestre
+      : filtrarPorLiberacao(
+          filtrarPorArvore(catalogo?.racas || [], arvoreId),
+          config.racas_liberadas || [],
+          (usuario?.id && config.racas_liberadas_membros?.[usuario.id]) || [],
+        );
+    const classesFiltradas = isMestre
       ? (catalogo?.classes || [])
-      : filtrarPorLiberacao(filtrarPorArvore(catalogo?.classes || [], arvoreId), config.classes_liberadas || []);
-    const classesFiltradas = classesDisponiveis.filter(classe => classe.categoria === 'padrao');
+      : filtrarPorLiberacao(
+          filtrarPorArvore(catalogo?.classes || [], arvoreId),
+          config.classes_liberadas || [],
+          (usuario?.id && config.classes_liberadas_membros?.[usuario.id]) || [],
+        );
     const pontosGastos = calcularPontosAtributos(atribuicao);
     const pontosRestantes = COMPRA_PONTOS_ORCAMENTO - pontosGastos;
     const opcoesDoConjunto = [...new Set(valoresDisponiveis)].sort((a, b) => b - a);
@@ -236,9 +257,18 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-4">Escolha sua Árvore de Origem</label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <button
+                  type="button"
+                  onClick={() => setArvoreId(SEM_ARVORE_ID)}
+                  className={`p-6 rounded-2xl border text-left transition-all ${arvoreId === SEM_ARVORE_ID ? 'border-primary/50 bg-gradient-to-br from-gray-400/20 to-slate-300/5 shadow-[0_0_20px_rgba(var(--color-primary),0.2)]' : 'border-white/5 bg-black/30 hover:border-white/20'}`}
+                >
+                  <h3 className="text-xl font-bold text-white" style={{fontFamily: 'Cinzel, serif'}}>Sem Árvore</h3>
+                  <p className="text-xs text-gray-500 mt-1">Sem patrono - restrito às raças e classes gerais.</p>
+                </button>
                 {arvoresDisponiveis.map(arvore => (
                   <button
                     key={arvore.id}
+                    type="button"
                     onClick={() => setArvoreId(arvore.id)}
                     className={`p-6 rounded-2xl border text-left transition-all ${arvoreId === arvore.id ? 'border-primary/50 bg-gradient-to-br shadow-[0_0_20px_rgba(var(--color-primary),0.2)] ' + arvore.cor : 'border-white/5 bg-black/30 hover:border-white/20'}`}
                   >
@@ -247,8 +277,13 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                   </button>
                 ))}
               </div>
+              {arvoreId === 'mulher-carmesim' && (
+                <p className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm leading-relaxed text-amber-200">
+                  {AVISO_FLUXO_FIM}
+                </p>
+              )}
               {arvoresDisponiveis.length === 0 && (
-                <p className="text-sm text-gray-500 italic">Nenhuma Árvore liberada nesta campanha ainda. Peça ao mestre para revelar ao menos uma.</p>
+                <p className="text-sm text-gray-500 italic">Nenhuma Árvore liberada nesta campanha ainda: você pode seguir sem Árvore, ou pedir ao mestre pra revelar uma.</p>
               )}
             </div>
           </motion.div>
@@ -277,7 +312,20 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                 <>
                   <h3 className="text-2xl font-bold text-primary mb-2" style={{fontFamily: 'Cinzel, serif'}}>{currentRaca.titulo}</h3>
                   <p className="text-sm text-gray-300 mb-6">{currentRaca.descricao}</p>
-                  
+
+                  {racaId === RACA_PERSONALIZADA_ID && (
+                    <div className="mb-6">
+                      <label className="block text-xs text-gray-500 mb-1 ml-1">Nome da raça personalizada</label>
+                      <input
+                        type="text"
+                        value={racaNomePersonalizado}
+                        onChange={e => setRacaNomePersonalizado(e.target.value)}
+                        placeholder="Escreva o nome da raça/origem do personagem"
+                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary/50 transition-colors"
+                      />
+                    </div>
+                  )}
+
                   {gruposEscolhaRacial.map(grupo => (
                     <div key={grupo.campo} className="mb-6 last:mb-0">
                       <h4 className="text-sm font-bold text-white mb-1">Escolha: {grupo.rotulo}</h4>
@@ -291,7 +339,9 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                             className={`w-full p-3 rounded-xl border text-left transition-all ${escolhaRacial[grupo.campo] === opcao.id ? 'border-green-500 bg-green-500/10' : 'border-white/10 bg-black/30 hover:border-white/30'}`}
                           >
                             <span className="text-white font-bold block">{opcao.titulo}</span>
-                            <span className="text-xs text-gray-400 block mt-1">{descreverOpcaoRacial(opcao)}</span>
+                            {grupo.campo !== 'linhagemId' && (
+                              <span className="text-xs text-gray-400 block mt-1">{descreverOpcaoRacial(opcao)}</span>
+                            )}
                           </button>
                         ))}
                       </div>
@@ -333,20 +383,26 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="flex flex-col items-center justify-center max-h-[60vh]">
             <h2 className="text-3xl font-bold text-white mb-6" style={{fontFamily: 'Cinzel, serif'}}>A Divindade</h2>
             <p className="text-gray-400 mb-8 max-w-lg text-center">
-              Como nascido da Árvore de <strong>{arvoreSelecionada?.nome}</strong>, você pode cultuar a Deidade principal ou jurar lealdade a um outro poder.
+              {semArvore
+                ? 'Sem uma Árvore de origem, seu Herói não tem uma Deidade padroeira: descreva livremente quem (ou o quê) ele cultua, se cultua algo.'
+                : <>Como nascido da Árvore de <strong>{arvoreSelecionada?.nome}</strong>, você pode cultuar a Deidade principal ou jurar lealdade a um outro poder.</>}
             </p>
-            
+
             <div className="w-full max-w-md space-y-4">
-              <button
-                onClick={() => setDivindade(arvoreSelecionada?.deidadeTitulo || '')}
-                className={`w-full p-4 rounded-xl border text-left transition-all ${divindade === arvoreSelecionada?.deidadeTitulo ? 'border-primary bg-primary/20' : 'border-white/10 bg-black/40 hover:border-white/30'}`}
-              >
-                <span className="text-sm text-gray-400 block mb-1">Deidade Padroeira da sua Árvore</span>
-                <span className="text-xl text-white font-bold" style={{fontFamily: 'Cinzel, serif'}}>{arvoreSelecionada?.deidadeTitulo}</span>
-              </button>
+              {!semArvore && (
+                <button
+                  onClick={() => setDivindade(arvoreSelecionada?.deidadeTitulo || '')}
+                  className={`w-full p-4 rounded-xl border text-left transition-all ${divindade === arvoreSelecionada?.deidadeTitulo ? 'border-primary bg-primary/20' : 'border-white/10 bg-black/40 hover:border-white/30'}`}
+                >
+                  <span className="text-sm text-gray-400 block mb-1">Deidade Padroeira da sua Árvore</span>
+                  <span className="text-xl text-white font-bold" style={{fontFamily: 'Cinzel, serif'}}>{arvoreSelecionada?.deidadeTitulo}</span>
+                </button>
+              )}
 
               <div className="relative">
-                <label className="block text-xs text-gray-500 mb-1 ml-1">Ou especifique outra entidade/divindade menor</label>
+                <label className="block text-xs text-gray-500 mb-1 ml-1">
+                  {semArvore ? 'Nome da entidade/divindade (opcional)' : 'Ou especifique outra entidade/divindade menor'}
+                </label>
                 <input
                   type="text"
                   value={divindade !== arvoreSelecionada?.deidadeTitulo ? divindade : ''}
@@ -374,13 +430,19 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                   <ListOrdered size={18} />
                   Organizar padrão
                 </button>
-                <button
-                  onClick={handleRolar}
-                  className={`px-4 py-2.5 rounded-full border font-bold tracking-wide flex items-center gap-2 transition-all ${metodoAtributos === 'rolado' ? 'bg-amber-600 text-white border-amber-500' : 'bg-amber-500/10 text-amber-400 border-amber-500/40 hover:bg-amber-500/20'}`}
-                >
-                  <Dices size={18} />
-                  Rolar 7d20
-                </button>
+                {rolagemAtributosPermitida(isMestre) ? (
+                  <button
+                    onClick={handleRolar}
+                    className={`px-4 py-2.5 rounded-full border font-bold tracking-wide flex items-center gap-2 transition-all ${metodoAtributos === 'rolado' ? 'bg-amber-600 text-white border-amber-500' : 'bg-amber-500/10 text-amber-400 border-amber-500/40 hover:bg-amber-500/20'}`}
+                  >
+                    <Dices size={18} />
+                    Rolar 7d20
+                  </button>
+                ) : (
+                  <span className="flex items-center gap-2 rounded-full border border-amber-500/15 bg-amber-500/5 px-4 py-2.5 text-xs font-bold text-amber-300/70" title="A variante aleatória precisa ser criada ou autorizada pelo Mestre.">
+                    <Dices size={18} /> Rolagem: somente Mestre
+                  </span>
+                )}
                 <button
                   onClick={handleCompraPontos}
                   className={`px-4 py-2.5 rounded-full border font-bold tracking-wide flex items-center gap-2 transition-all ${metodoAtributos === 'pontos' ? 'bg-blue-600 text-white border-blue-500' : 'bg-blue-500/10 text-blue-400 border-blue-500/40 hover:bg-blue-500/20'}`}
@@ -462,9 +524,17 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             return [...atuais, periciaId];
           });
         };
+        // O passo 6 é o mais alto do wizard: em vez de somar alturas fixas (que
+        // estouravam o modal e escondiam o campo do item atrás do rodapé), só a
+        // grade de perícias encolhe e rola.
         return (
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-            <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="flex flex-1 min-h-0 flex-col gap-4"
+          >
+            <div className="shrink-0 bg-black/30 p-4 rounded-2xl border border-white/5">
               <h3 className="text-xl text-white font-bold">Perícias e equipamento inicial</h3>
               <p className="text-sm text-gray-400 mt-1">
                 Escolha exatamente {limitePericias} perícias para começar em Aprendiz e informe um item comum aprovado pelo Mestre.
@@ -474,24 +544,26 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-[38vh] overflow-y-auto pr-2 custom-scrollbar">
-              {(catalogo?.pericias || []).map(pericia => {
-                const selecionada = periciasIniciais.includes(pericia.id);
-                return (
-                  <button
-                    type="button"
-                    key={pericia.id}
-                    onClick={() => alternarPericia(pericia.id)}
-                    className={`p-3 rounded-xl border text-left transition-all ${selecionada ? 'border-green-500 bg-green-500/10' : 'border-white/10 bg-black/30 hover:border-white/30'}`}
-                  >
-                    <span className="text-sm text-white font-bold block">{pericia.titulo}</span>
-                    <span className="text-[10px] text-gray-500 uppercase tracking-wider">{pericia.atributo}</span>
-                  </button>
-                );
-              })}
+            <div className="min-h-[4rem] flex-1 overflow-y-auto pr-3 custom-scrollbar">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 auto-rows-min">
+                {(catalogo?.pericias || []).map(pericia => {
+                  const selecionada = periciasIniciais.includes(pericia.id);
+                  return (
+                    <button
+                      type="button"
+                      key={pericia.id}
+                      onClick={() => alternarPericia(pericia.id)}
+                      className={`p-3 rounded-xl border text-left transition-all ${selecionada ? 'border-green-500 bg-green-500/10' : 'border-white/10 bg-black/30 hover:border-white/30'}`}
+                    >
+                      <span className="text-sm text-white font-bold block">{pericia.titulo}</span>
+                      <span className="text-[10px] text-gray-500 uppercase tracking-wider">{pericia.atributo}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-            <div>
+            <div className="shrink-0">
               <label className="block text-sm font-medium text-gray-400 mb-2">Seu item comum inicial</label>
               <input
                 type="text"
@@ -525,7 +597,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             <Sparkles className="text-primary mb-4" size={40} />
             <h2 className="text-4xl text-white font-bold mb-2" style={{fontFamily: 'Cinzel, serif'}}>{nome}</h2>
             <p className="text-lg text-gray-400 mb-8 capitalize">
-              {previewRaca?.titulo} · {previewClasse?.titulo} · {arvoreSelecionada?.nome}
+              {nomeExibicaoRaca(racaId || undefined, racaNomePersonalizado, previewRaca?.titulo)} · {previewClasse?.titulo} · {arvoreSelecionada?.nome || 'Sem Árvore'}
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-3xl mb-8">
@@ -566,10 +638,12 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
     if (step === 2) {
       const currentRaca = catalogo?.racas.find(r => r.id === racaId);
       if (!currentRaca) return true;
+      if (racaId === RACA_PERSONALIZADA_ID && racaNomePersonalizado.trim().length === 0) return true;
       if (!escolhaRacialEstaCompleta(currentRaca, escolhaRacial)) return true;
     }
     if (step === 3) return !classeId;
-    if (step === 4) return divindade.trim().length === 0;
+    // Sem Árvore não tem Deidade padroeira pra forçar escolha: o campo fica opcional.
+    if (step === 4) return arvoreId !== SEM_ARVORE_ID && divindade.trim().length === 0;
     if (step === 5) {
       return metodoAtributos === 'pontos'
         ? !compraPontosValida(atribuicao)
@@ -610,7 +684,10 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
         </div>
 
         {/* Body */}
-        <div className="flex-1 p-6 md:p-8 overflow-hidden flex flex-col relative bg-gradient-to-b from-transparent to-black/40">
+        {/* min-h-0 deixa o corpo encolher dentro do max-h do modal (sem isso o
+            conteúdo do passo vaza por baixo do rodapé); o overflow-y-auto é a
+            última garantia em telas muito baixas, quando nem encolhendo cabe */}
+        <div className="flex-1 min-h-0 p-6 md:p-8 overflow-y-auto custom-scrollbar flex flex-col relative bg-gradient-to-b from-transparent to-black/40">
           <AnimatePresence mode="wait">
             {renderStepContent()}
           </AnimatePresence>

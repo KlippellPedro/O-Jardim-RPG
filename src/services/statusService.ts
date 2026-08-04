@@ -10,6 +10,79 @@ export interface IStatusVital {
   [key: string]: unknown;
 }
 
+function normalizarIdentificador(valor: unknown): string {
+  return String(valor ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .toLocaleLowerCase('pt-BR');
+}
+
+function idsCondicoes(condicoes: unknown): Set<string> {
+  if (!Array.isArray(condicoes)) return new Set();
+  return new Set(condicoes.flatMap((item) => {
+    if (typeof item === 'string') return [normalizarIdentificador(item)];
+    if (!item || typeof item !== 'object') return [];
+    const condicao = item as Record<string, unknown>;
+    return [condicao.id, condicao.nome, condicao.titulo]
+      .map(normalizarIdentificador)
+      .filter(Boolean);
+  }));
+}
+
+export function obterStatusFicha(ficha: Record<string, any> | null | undefined): IStatusVital {
+  const legado = ficha?.recursos && typeof ficha.recursos === 'object' ? ficha.recursos : {};
+  const atual = ficha?.status && typeof ficha.status === 'object' ? ficha.status : {};
+  return { ...legado, ...atual };
+}
+
+export function condicaoAtiva(condicoes: unknown, id: string): boolean {
+  return idsCondicoes(condicoes).has(normalizarIdentificador(id));
+}
+
+export function penalidadeDefesaCondicoes(condicoes: unknown): number {
+  const ids = idsCondicoes(condicoes);
+  let penalidade = 0;
+  if (ids.has('exposto')) penalidade += 2;
+  if (ids.has('atordoado')) penalidade += 5;
+  if (ids.has('inconsciente')) penalidade += 5;
+  if (ids.has('furia') || ids.has('crise-furia')) penalidade += 2;
+  return penalidade;
+}
+
+export function penalidadeIniciativaCondicoes(condicoes: unknown): number {
+  return condicaoAtiva(condicoes, 'surpreendido') ? -5 : 0;
+}
+
+export function bonusIniciativaFicha(ficha: Record<string, any> | null | undefined): number {
+  const recursos = obterStatusFicha(ficha);
+  let total = Number(recursos.bonusIniciativa) || 0;
+  total += (Array.isArray(recursos.ajustesIniciativa) ? recursos.ajustesIniciativa : [])
+    .reduce((soma: number, item: any) => soma + (Number(item?.valor) || 0), 0);
+
+  const ativos = ficha?.efeitosAtivos && typeof ficha.efeitosAtivos === 'object' ? ficha.efeitosAtivos : {};
+  for (const colecao of ['poderes', 'habilidades', 'magias']) {
+    for (const item of Array.isArray(ficha?.[colecao]) ? ficha[colecao] : []) {
+      for (const efeito of Array.isArray(item?.efeitos) ? item.efeitos : []) {
+        const ativo = efeito?.modo === 'sempre' || ativos[String(item?.id)] === true;
+        if (ativo && efeito?.tipo === 'combate' && efeito?.alvo === 'iniciativa') {
+          total += Number(efeito?.valor) || 0;
+        }
+      }
+    }
+  }
+  return total;
+}
+
+export function penalidadeAtaqueCondicoes(condicoes: unknown): number {
+  return condicaoAtiva(condicoes, 'caido') ? -2 : 0;
+}
+
+export function movimentoBloqueadoPorCondicao(condicoes: unknown): boolean {
+  const ids = idsCondicoes(condicoes);
+  return ids.has('agarrado') || ids.has('imobilizado') || ids.has('inconsciente');
+}
+
 export function limiteMorrendo(constituicao: unknown): 3 | 4 {
   return Number(constituicao) >= 20 ? 4 : 3;
 }
@@ -70,6 +143,16 @@ export function penalidadeCansacoTeste(cansaco: unknown, testeFisico: boolean): 
 
 export function penalidadeCansacoIniciativa(cansaco: unknown): number {
   return Math.max(0, Math.trunc(Number(cansaco) || 0)) >= 2 ? -1 : 0;
+}
+
+export function desvantagensAutomaticasTeste(
+  cansaco: unknown,
+  testeFisico: boolean,
+  sobrecarregado = false,
+): number {
+  if (!testeFisico) return 0;
+  const porCansaco = Math.max(0, Math.trunc(Number(cansaco) || 0)) >= 4 ? 1 : 0;
+  return porCansaco + (sobrecarregado ? 1 : 0);
 }
 
 export function multiplicadorMovimentoCansaco(cansaco: unknown): number {

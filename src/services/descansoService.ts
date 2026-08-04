@@ -17,6 +17,10 @@ export const REGRAS_DESCANSO: IRegraDescanso[] = [
   { id: 'excelente', titulo: 'Excelente', recuperacao: 1, recuperacaoSanidade: 0.35, reduzCansaco: 99, criterio: 'Santuário protegido com conforto e cuidado médico ou sobrenatural. Exige autorização do mestre.' },
 ];
 
+export function descansoPermitido(qualidade: QualidadeDescanso, isMestre: boolean): boolean {
+  return qualidade !== 'excelente' || Boolean(isMestre);
+}
+
 const limitar = (valor: number, minimo: number, maximo: number) => Math.max(minimo, Math.min(maximo, valor));
 
 export function aplicarDescansoCompleto(

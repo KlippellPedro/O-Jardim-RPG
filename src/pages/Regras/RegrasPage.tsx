@@ -1,30 +1,190 @@
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, BookOpen, ShieldAlert, Sparkles, ChevronRight, ArrowRight, ArrowLeft } from 'lucide-react';
-import { REGRAS_OFICIAIS } from '../../data/regras';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ChevronDown,
+  ChevronRight,
+  Library,
+  Menu,
+  Search,
+  ShieldAlert,
+  Sparkles,
+  X,
+} from 'lucide-react';
+import { REGRAS_OFICIAIS } from '../../../data/regras/regras';
 import { CLASSES_CATALOGO, RACAS_CATALOGO } from '../../services/catalogoService';
-import { GridRacas } from './components/GridRacas';
-import { GridClasses } from './components/GridClasses';
-import { RegrasContent } from './components/RegrasContent';
 import { useAuthStore } from '../../store/useAuthStore';
+import { CatalogoLegados } from './components/CatalogoLegados';
+import { CatalogoMagico } from './components/CatalogoMagico';
+import { GridClasses } from './components/GridClasses';
+import { GridRacas } from './components/GridRacas';
+import { RegrasContent } from './components/RegrasContent';
+import { NotasInternasMestre } from './components/NotasInternasMestre';
 
-const formatTitle = (key: string) => {
-  return key
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+const TITULOS_TOPICOS: Record<string, string> = {
+  'sistema-base': 'Sistema Base',
+  pericias: 'Perícias',
+  combate: 'Combate',
+  distancias: 'Distâncias',
+  ferimentos: 'Ferimentos',
+  coreografia: 'Coreografia',
+  descanso: 'Descanso',
+  treinar: 'Treinamento',
+  xp: 'Experiência e Níveis',
+  legados: 'Legados',
+  equipamentos: 'Equipamentos',
+  'magia-fluxo': 'Magia e Fluxo',
+  condicoes: 'Condições',
+  classes: 'Classes',
+  racas: 'Raças',
+  mestre: 'Guia do Mestre',
+};
+
+const tituloTopico = (key: string) => TITULOS_TOPICOS[key] || key
+  .split('-')
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(' ');
+
+interface ChapterNavigationProps {
+  activeTopic: string;
+  busca: string;
+  groupedKeys: Record<string, string[]>;
+  onBuscaChange: (value: string) => void;
+  onSelectTopic: (topic: string) => void;
+  onClose?: () => void;
+}
+
+const ChapterNavigation = ({
+  activeTopic,
+  busca,
+  groupedKeys,
+  onBuscaChange,
+  onSelectTopic,
+  onClose,
+}: ChapterNavigationProps) => {
+  const [categoriasAbertas, setCategoriasAbertas] = useState<Set<string>>(
+    () => new Set(Object.keys(groupedKeys)),
+  );
+
+  const alternarCategoria = (categoria: string) => {
+    setCategoriasAbertas((atuais) => {
+      const proximas = new Set(atuais);
+      if (proximas.has(categoria)) proximas.delete(categoria);
+      else proximas.add(categoria);
+      return proximas;
+    });
+  };
+
+  return (
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="flex items-start justify-between border-b border-white/10 px-5 pb-5 pt-1">
+        <div>
+          <span className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.28em] text-[#c7a44c]">
+            <Library size={14} /> Biblioteca
+          </span>
+          <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>Livro de Regras</h2>
+          <p className="mt-1 text-xs text-gray-500">Capítulos oficiais de O Jardim</p>
+        </div>
+        {onClose ? (
+          <button type="button" onClick={onClose} aria-label="Fechar capítulos" className="rounded-lg border border-white/10 p-2 text-gray-400 hover:text-white">
+            <X size={18} />
+          </button>
+        ) : null}
+      </div>
+
+      <label className="relative mx-5 my-4 block">
+        <span className="sr-only">Buscar capítulo</span>
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
+        <input
+          type="search"
+          value={busca}
+          onChange={(event) => onBuscaChange(event.target.value)}
+          placeholder="Buscar capítulo..."
+          className="w-full rounded-xl border border-white/10 bg-black/25 py-2.5 pl-9 pr-3 text-sm text-white outline-none transition-colors placeholder:text-gray-600 focus:border-[#c7a44c]/50"
+        />
+      </label>
+
+      <nav className="custom-scrollbar min-h-0 flex-1 overflow-y-auto px-3 pb-6" aria-label="Capítulos do livro de regras">
+        {Object.keys(groupedKeys).length ? Object.entries(groupedKeys).map(([categoria, keys]) => {
+          const aberta = busca.trim().length > 0 || categoriasAbertas.has(categoria);
+          return (
+            <section key={categoria} className="mb-3">
+              <button
+                type="button"
+                onClick={() => alternarCategoria(categoria)}
+                aria-expanded={aberta}
+                className="flex w-full items-center justify-between rounded-lg px-2 py-2 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 hover:text-gray-300"
+              >
+                {categoria}
+                <ChevronDown size={14} className={`transition-transform ${aberta ? '' : '-rotate-90'}`} />
+              </button>
+              {aberta ? (
+                <div className="mt-1 space-y-1 border-l border-white/10 pl-2">
+                  {keys.map((key) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => {
+                        onSelectTopic(key);
+                        onClose?.();
+                      }}
+                      aria-current={activeTopic === key ? 'page' : undefined}
+                      className={`group flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${activeTopic === key
+                        ? 'bg-[#c7a44c]/10 text-[#e1c77e]'
+                        : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
+                    >
+                      <span>{tituloTopico(key)}</span>
+                      {activeTopic === key ? <ChevronRight size={15} className="text-[#c7a44c]" /> : null}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </section>
+          );
+        }) : (
+          <p className="px-3 py-8 text-center text-sm text-gray-600">Nenhum capítulo encontrado.</p>
+        )}
+      </nav>
+    </div>
+  );
 };
 
 export const RegrasPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [busca, setBusca] = useState('');
+  const [menuAberto, setMenuAberto] = useState(false);
   const { usuario, campanhaAtiva } = useAuthStore();
-  const isMestre = usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador' || usuario?.papel_plataforma === 'mestre' || campanhaAtiva?.papel === 'mestre' || campanhaAtiva?.papel === 'assistente';
+  const isMestre = usuario?.papel_plataforma === 'admin'
+    || usuario?.papel_plataforma === 'criador'
+    || campanhaAtiva?.papel === 'mestre'
+    || campanhaAtiva?.papel === 'assistente';
+  const config = campanhaAtiva?.configuracoes ?? {};
+  const racasLiberadas = useMemo(() => new Set([
+    ...(config.racas_liberadas ?? []),
+    ...((usuario?.id && config.racas_liberadas_membros?.[usuario.id]) ?? []),
+  ]), [config.racas_liberadas, config.racas_liberadas_membros, usuario?.id]);
+  const classesLiberadas = useMemo(() => new Set([
+    ...(config.classes_liberadas ?? []),
+    ...((usuario?.id && config.classes_liberadas_membros?.[usuario.id]) ?? []),
+  ]), [config.classes_liberadas, config.classes_liberadas_membros, usuario?.id]);
 
   const catalogKeys = useMemo(
-    () => Object.keys(REGRAS_OFICIAIS).filter(key => key !== 'mestre' || isMestre),
+    () => Object.keys(REGRAS_OFICIAIS).filter((key) => key !== 'mestre' || isMestre),
     [isMestre],
+  );
+  const racasVisiveis = useMemo(
+    () => isMestre
+      ? RACAS_CATALOGO
+      : RACAS_CATALOGO.filter((raca) => !raca.indisponivel && (raca.categoria !== 'esquecida' || racasLiberadas.has(raca.id))),
+    [isMestre, racasLiberadas],
+  );
+  const classesVisiveis = useMemo(
+    () => isMestre
+      ? CLASSES_CATALOGO
+      : CLASSES_CATALOGO.filter((classe) => !classe.indisponivel && (classe.categoria !== 'esquecida' || classesLiberadas.has(classe.id))),
+    [isMestre, classesLiberadas],
   );
   const topicoSolicitado = searchParams.get('topico');
   const activeTopic = topicoSolicitado && catalogKeys.includes(topicoSolicitado)
@@ -35,198 +195,165 @@ export const RegrasPage = () => {
     const proximosParametros = new URLSearchParams(searchParams);
     proximosParametros.set('topico', topico);
     setSearchParams(proximosParametros, { replace: true });
+    document.getElementById('regra-leitor')?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const filteredKeys = useMemo(() => {
-    if (!busca.trim()) return catalogKeys;
-    const lowerBusca = busca.toLowerCase();
-    return catalogKeys.filter(key => {
+    const termo = busca.trim().toLocaleLowerCase('pt-BR');
+    if (!termo) return catalogKeys;
+    return catalogKeys.filter((key) => {
       const topic = REGRAS_OFICIAIS[key];
-      const matchTitle = formatTitle(key).toLowerCase().includes(lowerBusca);
-      const matchResumo = topic.resumo.toLowerCase().includes(lowerBusca);
-      return matchTitle || matchResumo;
+      return tituloTopico(key).toLocaleLowerCase('pt-BR').includes(termo)
+        || topic.resumo.toLocaleLowerCase('pt-BR').includes(termo);
     });
   }, [busca, catalogKeys]);
 
   const groupedKeys = useMemo(() => {
-    const groups: Record<string, string[]> = {
-      'Livro do Jogador': [],
-      'Combate e Mecânicas': [],
-      'Guia do Mestre': [],
-      'Gerais': []
-    };
-    filteredKeys.forEach(key => {
-      const cat = REGRAS_OFICIAIS[key].categoria || 'Gerais';
-      if (!groups[cat]) groups[cat] = [];
-      groups[cat].push(key);
-    });
-    // Remove empty groups
-    Object.keys(groups).forEach(k => {
-      if (groups[k].length === 0) delete groups[k];
+    const groups: Record<string, string[]> = {};
+    filteredKeys.forEach((key) => {
+      const categoria = REGRAS_OFICIAIS[key].categoria || 'Gerais';
+      if (!groups[categoria]) groups[categoria] = [];
+      groups[categoria].push(key);
     });
     return groups;
   }, [filteredKeys]);
 
   const topicData = REGRAS_OFICIAIS[activeTopic];
-
   const activeIndex = catalogKeys.indexOf(activeTopic);
   const prevTopic = activeIndex > 0 ? catalogKeys[activeIndex - 1] : null;
   const nextTopic = activeIndex >= 0 && activeIndex < catalogKeys.length - 1 ? catalogKeys[activeIndex + 1] : null;
+  const conteudoAmplo = ['classes', 'racas', 'magia-fluxo', 'legados'].includes(activeTopic);
 
   return (
-    <div className="pl-24 lg:pl-32 p-6 lg:p-12 relative z-10 w-full min-h-screen flex flex-col md:flex-row gap-8 max-w-[1600px] mx-auto">
-      
-      {/* SIDEBAR DE NAVEGAÇÃO */}
-      <div className="w-full md:w-72 flex-shrink-0 flex flex-col gap-6 pt-12 md:pt-0">
-        <div>
-          <h2 className="text-4xl text-primary font-bold mb-2 flex items-center gap-3" style={{ fontFamily: 'Cinzel, serif' }}>
-            <BookOpen size={32} className="text-yellow-600" />
-            Regras
-          </h2>
-          <p className="text-gray-400 text-sm">O compêndio de mecânicas oficiais.</p>
+    <div className="relative z-10 mx-auto flex h-[100dvh] w-full max-w-[1800px] gap-4 overflow-hidden p-4 pl-24 lg:gap-6 lg:p-6 lg:pl-32">
+      <aside className="hidden h-full min-h-0 w-72 shrink-0 overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#0d0c12]/95 py-5 shadow-2xl backdrop-blur-xl md:block">
+        <ChapterNavigation
+          activeTopic={activeTopic}
+          busca={busca}
+          groupedKeys={groupedKeys}
+          onBuscaChange={setBusca}
+          onSelectTopic={setActiveTopic}
+        />
+      </aside>
+
+      <section className="regra-reader-shell flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#111017]/95 shadow-2xl">
+        <div className="flex shrink-0 items-center gap-3 border-b border-white/10 bg-[#0d0c12]/95 px-4 py-3 md:hidden">
+          <button
+            type="button"
+            onClick={() => setMenuAberto(true)}
+            aria-label="Abrir capítulos"
+            className="rounded-lg border border-white/10 p-2 text-[#d8bd75]"
+          >
+            <Menu size={19} />
+          </button>
+          <div className="min-w-0">
+            <span className="block text-[9px] font-bold uppercase tracking-[0.2em] text-gray-500">Capítulo {activeIndex + 1}</span>
+            <strong className="block truncate text-sm text-white">{tituloTopico(activeTopic)}</strong>
+          </div>
         </div>
 
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-          <input 
-            type="text" 
-            placeholder="Buscar regra..."
-            value={busca}
-            onChange={e => setBusca(e.target.value)}
-            className="w-full bg-[#0f0e15]/80 backdrop-blur-md border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:border-yellow-600/50 outline-none text-sm shadow-xl"
-          />
-        </div>
+        <main id="regra-leitor" className="custom-scrollbar min-h-0 flex-1 overflow-y-auto scroll-smooth">
+          <AnimatePresence mode="wait">
+            {topicData ? (
+              <motion.article
+                key={activeTopic}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.22 }}
+                className={`regra-book-page mx-auto min-h-full px-5 py-8 sm:px-8 lg:px-12 lg:py-12 ${conteudoAmplo ? 'max-w-[1320px]' : 'max-w-[1120px]'}`}
+              >
+                <header className="mb-10 border-b border-[#c7a44c]/20 pb-8">
+                  <div className="mb-5 flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[0.22em]">
+                    <span className="text-[#c7a44c]">Capítulo {activeIndex + 1} de {catalogKeys.length}</span>
+                    <span className="text-gray-700">◆</span>
+                    <span className="text-gray-500">{topicData.categoria || 'Regras gerais'}</span>
+                    <span className="ml-auto flex items-center gap-1.5 rounded-full border border-[#c7a44c]/20 bg-[#c7a44c]/10 px-3 py-1 text-[#c7a44c]">
+                      <Sparkles size={11} /> {topicData.status}
+                    </span>
+                  </div>
+                  <h1 className="text-3xl font-bold leading-tight text-[#f2ead7] sm:text-4xl lg:text-5xl" style={{ fontFamily: 'Cinzel, serif' }}>
+                    {tituloTopico(activeTopic)}
+                  </h1>
+                  <p className="mt-5 max-w-[76ch] text-base leading-8 text-gray-400 sm:text-lg">
+                    {topicData.resumo}
+                  </p>
+                </header>
 
-        <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-2 pr-2 pb-24">
-          {Object.keys(groupedKeys).length === 0 ? (
-            <div className="text-center py-8 text-gray-500 text-sm">
-              Nenhum tópico encontrado.
-            </div>
-          ) : (
-            Object.entries(groupedKeys).map(([categoria, keys]) => (
-              <div key={categoria} className="mb-4">
-                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 pl-2">
-                  {categoria}
-                </h3>
-                <div className="flex flex-col gap-1">
-                  {keys.map(key => (
-                    <button
-                      key={key}
-                      onClick={() => setActiveTopic(key)}
-                      className={`text-left px-4 py-2.5 rounded-xl transition-all duration-300 border flex items-center justify-between group ${
-                        activeTopic === key
-                          ? 'bg-yellow-600/10 border-yellow-600/50 shadow-[0_0_15px_rgba(202,138,4,0.15)]'
-                          : 'bg-[#0f0e15]/50 border-white/5 hover:border-white/20 hover:bg-[#15141b]/80'
-                      }`}
-                    >
-                      <span className={`font-bold text-sm ${activeTopic === key ? 'text-yellow-500' : 'text-gray-300 group-hover:text-white'}`}>
-                        {formatTitle(key)}
-                      </span>
-                      {activeTopic === key && (
-                        <motion.div layoutId="activeIndicator">
-                          <ChevronRight size={16} className="text-yellow-600" />
-                        </motion.div>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-
-      {/* ÁREA PRINCIPAL DE LEITURA */}
-      <div className="flex-1 bg-[#0f0e15]/60 backdrop-blur-xl border border-white/5 rounded-3xl p-6 lg:p-12 overflow-y-auto custom-scrollbar shadow-2xl relative">
-        <AnimatePresence mode="wait">
-          {topicData ? (
-            <motion.div
-              key={activeTopic}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className={activeTopic === 'classes' || activeTopic === 'racas' ? 'max-w-none' : 'max-w-4xl'}
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <span className="px-3 py-1 rounded-full bg-yellow-600/20 border border-yellow-600/30 text-yellow-500 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                  <Sparkles size={12} />
-                  {topicData.status}
-                </span>
-              </div>
-              
-              <h1 className="text-5xl font-bold text-white mb-6" style={{ fontFamily: 'Cinzel, serif' }}>
-                {formatTitle(activeTopic)}
-              </h1>
-              
-              <p className="text-xl text-gray-300 mb-10 leading-relaxed font-light">
-                {topicData.resumo}
-              </p>
-
-              {topicData.destaques && topicData.destaques.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-                  {topicData.destaques.map((d, i) => (
-                    <div key={i} className="bg-black/40 border border-white/5 rounded-xl p-4 flex flex-col items-center text-center">
-                      <span className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-1">{d[0]}</span>
-                      <span className="text-yellow-600 font-bold text-lg">{d[1]}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {activeTopic === 'racas' ? (
-                <GridRacas racas={RACAS_CATALOGO} />
-              ) : activeTopic === 'classes' ? (
-                <GridClasses classes={CLASSES_CATALOGO} />
-              ) : (
-                <RegrasContent htmlContent={topicData.corpo} />
-              )}
-
-              {/* CONTROLES DE PÁGINA */}
-              <div className="mt-16 pt-8 border-t border-white/10 flex justify-between items-center gap-4">
-                {prevTopic ? (
-                  <button
-                    onClick={() => setActiveTopic(prevTopic)}
-                    className="flex-1 max-w-[250px] bg-white/5 border border-white/10 hover:border-yellow-600/50 hover:bg-yellow-600/10 p-4 rounded-xl flex items-center justify-start gap-4 transition-all group"
-                  >
-                    <div className="p-2 bg-black/50 rounded-lg group-hover:bg-yellow-600/20 text-gray-400 group-hover:text-yellow-500 transition-colors">
-                      <ArrowLeft size={20} />
-                    </div>
-                    <div className="text-left flex flex-col overflow-hidden">
-                      <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Anterior</span>
-                      <span className="text-sm font-bold text-gray-300 group-hover:text-yellow-400 truncate">{formatTitle(prevTopic)}</span>
-                    </div>
-                  </button>
+                {activeTopic === 'racas' ? (
+                  <GridRacas racas={racasVisiveis} />
+                ) : activeTopic === 'classes' ? (
+                  <GridClasses classes={classesVisiveis} />
+                ) : activeTopic === 'magia-fluxo' ? (
+                  <>
+                    <RegrasContent htmlContent={topicData.corpo} />
+                    <CatalogoMagico />
+                  </>
+                ) : activeTopic === 'legados' ? (
+                  <>
+                    <RegrasContent htmlContent={topicData.corpo} />
+                    <CatalogoLegados />
+                  </>
+                ) : activeTopic === 'mestre' ? (
+                  <>
+                    <RegrasContent htmlContent={topicData.corpo} />
+                    <NotasInternasMestre campanhaId={campanhaAtiva?.id} />
+                  </>
                 ) : (
-                  <div className="flex-1 max-w-[250px]"></div>
+                  <RegrasContent htmlContent={topicData.corpo} />
                 )}
 
-                {nextTopic && (
-                  <button
-                    onClick={() => setActiveTopic(nextTopic)}
-                    className="flex-1 max-w-[250px] bg-white/5 border border-white/10 hover:border-yellow-600/50 hover:bg-yellow-600/10 p-4 rounded-xl flex items-center justify-end gap-4 transition-all group"
-                  >
-                    <div className="text-right flex flex-col overflow-hidden">
-                      <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Próximo</span>
-                      <span className="text-sm font-bold text-gray-300 group-hover:text-yellow-400 truncate">{formatTitle(nextTopic)}</span>
-                    </div>
-                    <div className="p-2 bg-black/50 rounded-lg group-hover:bg-yellow-600/20 text-gray-400 group-hover:text-yellow-500 transition-colors">
-                      <ArrowRight size={20} />
-                    </div>
-                  </button>
-                )}
+                <footer className="mt-16 flex items-stretch justify-between gap-3 border-t border-[#c7a44c]/20 pt-7">
+                  {prevTopic ? (
+                    <button type="button" onClick={() => setActiveTopic(prevTopic)} className="group flex min-w-0 flex-1 items-center gap-3 rounded-xl border border-white/10 bg-black/20 p-3 text-left transition-colors hover:border-[#c7a44c]/40 hover:bg-[#c7a44c]/5 sm:max-w-[300px]">
+                      <ArrowLeft size={18} className="shrink-0 text-gray-600 group-hover:text-[#c7a44c]" />
+                      <span className="min-w-0"><small className="block text-[9px] font-bold uppercase tracking-widest text-gray-600">Capítulo anterior</small><strong className="mt-1 block truncate text-xs text-gray-300 sm:text-sm">{tituloTopico(prevTopic)}</strong></span>
+                    </button>
+                  ) : <div className="flex-1 sm:max-w-[300px]" />}
+                  {nextTopic ? (
+                    <button type="button" onClick={() => setActiveTopic(nextTopic)} className="group flex min-w-0 flex-1 items-center justify-end gap-3 rounded-xl border border-white/10 bg-black/20 p-3 text-right transition-colors hover:border-[#c7a44c]/40 hover:bg-[#c7a44c]/5 sm:max-w-[300px]">
+                      <span className="min-w-0"><small className="block text-[9px] font-bold uppercase tracking-widest text-gray-600">Próximo capítulo</small><strong className="mt-1 block truncate text-xs text-gray-300 sm:text-sm">{tituloTopico(nextTopic)}</strong></span>
+                      <ArrowRight size={18} className="shrink-0 text-gray-600 group-hover:text-[#c7a44c]" />
+                    </button>
+                  ) : null}
+                </footer>
+              </motion.article>
+            ) : (
+              <div className="flex min-h-[420px] flex-col items-center justify-center text-gray-600">
+                <ShieldAlert size={54} className="mb-4" />
+                <p>Selecione um capítulo para ler.</p>
               </div>
+            )}
+          </AnimatePresence>
+        </main>
+      </section>
 
-            </motion.div>
-          ) : (
-            <div className="flex flex-col items-center justify-center h-full text-gray-500 opacity-50 min-h-[400px]">
-              <ShieldAlert size={64} className="mb-4" />
-              <p>Selecione um tópico para ler as regras.</p>
-            </div>
-          )}
-        </AnimatePresence>
-      </div>
-
+      <AnimatePresence>
+        {menuAberto ? (
+          <motion.div className="fixed inset-0 z-[80] md:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <button type="button" aria-label="Fechar capítulos" onClick={() => setMenuAberto(false)} className="absolute inset-0 bg-black/75 backdrop-blur-sm" />
+            <motion.aside
+              role="dialog"
+              aria-modal="true"
+              aria-label="Capítulos do livro de regras"
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 260 }}
+              className="absolute inset-y-0 left-0 w-[min(88vw,340px)] border-r border-white/10 bg-[#0d0c12] py-5 shadow-2xl"
+            >
+              <ChapterNavigation
+                activeTopic={activeTopic}
+                busca={busca}
+                groupedKeys={groupedKeys}
+                onBuscaChange={setBusca}
+                onSelectTopic={setActiveTopic}
+                onClose={() => setMenuAberto(false)}
+              />
+            </motion.aside>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 };

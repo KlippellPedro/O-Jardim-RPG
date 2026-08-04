@@ -15,13 +15,20 @@ import { motion } from 'framer-motion';
 import { registrosApi } from '../../../services/registrosApi';
 import {
   MAGIAS_CATALOGO,
+  FLUXOS_CATALOGO,
+  FLUXOS_POR_ID,
   circuloRotulo,
+  dtConjuracaoPorCirculo,
   magiaElegivelParaAprender,
   magiasDaFicha,
   obterPerfilMagico,
   podeConjurarMagia,
+  temaDoFluxo,
+  type FluxoMagicoId,
   type IMagiaCatalogo,
 } from '../../../services/magiaService';
+import { obterStatusFicha, penalidadeCansacoTeste } from '../../../services/statusService';
+import { resumirEquipamentos } from '../../../services/equipamentoService';
 import { useAuthStore } from '../../../store/useAuthStore';
 
 interface IMagiaAntiga {
@@ -38,13 +45,22 @@ const CIRCULO_CORES: Record<string, string> = {
   '3': 'border-purple-500/30 bg-purple-500/10 text-purple-300',
   '4': 'border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-300',
   '5': 'border-amber-500/30 bg-amber-500/10 text-amber-300',
+  '6': 'border-orange-500/30 bg-orange-500/10 text-orange-300',
+  '7': 'border-red-500/30 bg-red-500/10 text-red-300',
+  '8': 'border-rose-500/30 bg-rose-500/10 text-rose-300',
+  '9': 'border-white/30 bg-white/10 text-white',
+  '10': 'border-cyan-200/40 bg-cyan-100/10 text-cyan-100',
   ritual: 'border-red-500/30 bg-red-500/10 text-red-300',
 };
 
 const formatarBonus = (valor: number) => valor >= 0 ? `+${valor}` : String(valor);
 
+const CIRCULOS_DISPONIVEIS = Array.from({ length: 10 }, (_, indice) => indice + 1);
+
 export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: any }) => {
   const [busca, setBusca] = useState('');
+  const [filtroFluxo, setFiltroFluxo] = useState<FluxoMagicoId | 'nativo' | 'todos'>('nativo');
+  const [filtroCirculo, setFiltroCirculo] = useState<'alcancaveis' | 'todos' | number>('alcancaveis');
   const [mostrarCatalogo, setMostrarCatalogo] = useState(false);
   const [defesasAlvo, setDefesasAlvo] = useState<Record<string, string>>({});
   const [mensagem, setMensagem] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
@@ -53,17 +69,21 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   const campanha = useAuthStore((state) => state.campanhaAtiva);
   const usuario = useAuthStore((state) => state.usuario);
   const ficha = character.ficha || {};
-  const status = ficha.status || {};
-  const perfil = useMemo(() => obterPerfilMagico(ficha), [ficha]);
-  const magiasConhecidas = useMemo(() => magiasDaFicha(ficha), [ficha]);
+  const inventarioCentral = character.inventarioCentral || [];
+  const status = obterStatusFicha(ficha);
+  const perfil = useMemo(() => obterPerfilMagico(ficha, inventarioCentral), [ficha, inventarioCentral]);
+  const resumoEquipamento = useMemo(() => resumirEquipamentos(inventarioCentral, ficha), [ficha, inventarioCentral]);
+  const magiasConhecidas = useMemo(() => magiasDaFicha(ficha, inventarioCentral), [ficha, inventarioCentral]);
   const magiasAntigas: IMagiaAntiga[] = Array.isArray(ficha.magias) ? ficha.magias : [];
   const isMestre = usuario?.papel_plataforma === 'admin'
     || usuario?.papel_plataforma === 'criador'
     || campanha?.papel === 'mestre'
     || campanha?.papel === 'assistente';
-  const manaMaxima = Math.max(0, Number(character.derivados?.mana || ficha.derivados?.mana) || 0);
+  const manaMaxima = Math.max(0, (Number(ficha.derivados?.mana || character.derivados?.mana) || 0) + (resumoEquipamento.bonusRecursos.manaMaxima || 0));
   const manaAtual = Math.max(0, Number(status.manaAtual ?? manaMaxima));
   const concentracaoAtiva = status.concentracaoAtiva as { magiaId?: string; titulo?: string } | null | undefined;
+  const bonusConjuracaoFinal = perfil.bonusConjuracao + penalidadeCansacoTeste(status.cansacoAtual, false);
+  const temaFluxoNativo = perfil.fluxoNativoId ? temaDoFluxo(perfil.fluxoNativoId) : null;
 
   useEffect(() => {
     if (!mensagem) return undefined;
@@ -71,12 +91,21 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     return () => window.clearTimeout(timer);
   }, [mensagem]);
 
-  const catalogoVisivel = MAGIAS_CATALOGO.filter((magia) => {
-    const termo = busca.trim().toLocaleLowerCase('pt-BR');
-    if (!termo) return true;
-    return [magia.titulo, magia.tradicao, magia.efeito, circuloRotulo(magia.circulo)]
-      .some((valor) => valor.toLocaleLowerCase('pt-BR').includes(termo));
-  });
+  const catalogoVisivel = useMemo(() => {
+    const fluxoEscolhido = filtroFluxo === 'nativo' ? perfil.fluxoNativoId : filtroFluxo;
+    const tetoAlcancavel = perfil.circuloMaximo || 1;
+    return MAGIAS_CATALOGO.filter((magia) => {
+      if (fluxoEscolhido && fluxoEscolhido !== 'todos' && magia.fluxo !== fluxoEscolhido) return false;
+      if (typeof magia.circulo === 'number') {
+        if (filtroCirculo === 'alcancaveis' && magia.circulo > tetoAlcancavel) return false;
+        if (typeof filtroCirculo === 'number' && magia.circulo !== filtroCirculo) return false;
+      }
+      const termo = busca.trim().toLocaleLowerCase('pt-BR');
+      if (!termo) return true;
+      return [magia.titulo, magia.tradicao, magia.papel, magia.efeito, circuloRotulo(magia.circulo)]
+        .some((valor) => valor.toLocaleLowerCase('pt-BR').includes(termo));
+    });
+  }, [busca, filtroCirculo, filtroFluxo, perfil.circuloMaximo, perfil.fluxoNativoId]);
 
   const aprenderOuConceder = (magia: IMagiaCatalogo) => {
     if (isMestre) {
@@ -93,7 +122,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       return;
     }
 
-    const avaliacao = magiaElegivelParaAprender(ficha, magia);
+    const avaliacao = magiaElegivelParaAprender(ficha, magia, inventarioCentral);
     if (!avaliacao.permitido) {
       setMensagem({ tipo: 'erro', texto: avaliacao.motivo || 'Esta magia ainda não pode ser aprendida.' });
       return;
@@ -109,7 +138,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   };
 
   const conjurar = async (magia: IMagiaCatalogo) => {
-    const avaliacao = podeConjurarMagia(ficha, magia);
+    const avaliacao = podeConjurarMagia(ficha, magia, inventarioCentral);
     if (!avaliacao.permitido) {
       setMensagem({ tipo: 'erro', texto: avaliacao.motivo || 'Não é possível conjurar esta magia.' });
       return;
@@ -118,8 +147,8 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       setMensagem({ tipo: 'erro', texto: `Mana insuficiente. ${magia.titulo} custa ${magia.custo_mana}.` });
       return;
     }
-    if (magia.defesa && !campanha?.id) {
-      setMensagem({ tipo: 'erro', texto: 'Ative uma campanha para realizar o teste de conjuração no servidor.' });
+    if (magia.circulo === 'ritual') {
+      setMensagem({ tipo: 'erro', texto: 'Rituais não são conjurados por esta ação e não podem ser usados em combate.' });
       return;
     }
     if (
@@ -136,20 +165,24 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     }
 
     try {
-      if (campanha?.id && magia.defesa) {
+      if (campanha?.id) {
         const defesaInformada = Number(defesasAlvo[magia.id]);
+        const dtCirculo = dtConjuracaoPorCirculo(magia.circulo);
+        const dtAlvo = Number.isFinite(defesaInformada) && defesaInformada > 0 ? defesaInformada : 0;
         const resposta = await registrosApi.rolar({
           campanhaId: campanha.id,
           personagemId: character.id,
           titulo: `Conjuração: ${magia.titulo}`,
-          bonus: perfil.bonusConjuracao,
-          dt: Number.isFinite(defesaInformada) && defesaInformada > 0 ? defesaInformada : null,
+          bonus: bonusConjuracaoFinal,
+          vantagens: perfil.vantagensConjuracao,
+          desvantagens: perfil.desvantagensConjuracao,
+          dt: Math.max(dtCirculo, dtAlvo),
           origem: {
             tipo: 'magia',
             magia_id: magia.id,
             circulo: magia.circulo,
             defesa: magia.defesa,
-            dt_magia: perfil.dtMagia,
+            dt_magia: dtCirculo,
             custo_mana: magia.custo_mana,
             concentracao: magia.concentracao,
           },
@@ -159,25 +192,10 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
           tipo: 'sucesso',
           texto: resultado === null
             ? `${magia.titulo} conjurada.`
-            : `${magia.titulo}: resultado ${resultado}. Compare com ${magia.defesa}${defesaInformada > 0 ? ` ${defesaInformada}` : ''}.`,
+            : `${magia.titulo}: resultado ${resultado}. DT do círculo ${dtCirculo}${magia.defesa ? `; compare também com ${magia.defesa}${dtAlvo > 0 ? ` ${dtAlvo}` : ''}` : ''}.`,
         });
-      } else if (campanha?.id) {
-        await registrosApi.registrarUso({
-          campanhaId: campanha.id,
-          personagemId: character.id,
-          tipo: 'magia',
-          titulo: magia.titulo,
-          detalhes: {
-            magia_id: magia.id,
-            circulo: magia.circulo,
-            custo_mana: magia.custo_mana,
-            dt_magia: perfil.dtMagia,
-            concentracao: magia.concentracao,
-          },
-        });
-        setMensagem({ tipo: 'sucesso', texto: `${magia.titulo} conjurada e registrada.` });
       } else {
-        setMensagem({ tipo: 'sucesso', texto: `${magia.titulo} conjurada. Custo aplicado à ficha.` });
+        setMensagem({ tipo: 'sucesso', texto: `${magia.titulo}: custo aplicado. Faça o teste de conjuração contra DT ${dtConjuracaoPorCirculo(magia.circulo)}.` });
       }
     } catch {
       setMensagem({ tipo: 'erro', texto: 'O custo foi aplicado, mas o servidor não registrou a conjuração.' });
@@ -189,12 +207,22 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   const renderMagia = (magia: IMagiaCatalogo, modoCatalogo = false) => {
     const conhecida = perfil.conhecidasIds.includes(magia.id);
     const concedida = perfil.concedidasIds.includes(magia.id);
-    const avaliacao = magiaElegivelParaAprender(ficha, magia);
+    const avaliacao = magiaElegivelParaAprender(ficha, magia, inventarioCentral);
     const podeAprender = isMestre || avaliacao.permitido;
     const cor = CIRCULO_CORES[String(magia.circulo)] || CIRCULO_CORES.ritual;
+    const tema = temaDoFluxo(magia.fluxo);
+    const fluxoTitulo = FLUXOS_POR_ID.get(magia.fluxo)?.titulo || magia.tradicao;
 
     return (
-      <article key={`${modoCatalogo ? 'catalogo' : 'ficha'}:${magia.id}`} className="rounded-2xl border border-white/5 bg-[#121118] p-5">
+      <article
+        key={`${modoCatalogo ? 'catalogo' : 'ficha'}:${magia.id}`}
+        className="rounded-2xl border p-5"
+        style={{
+          borderColor: tema.borda,
+          background: `linear-gradient(135deg, ${tema.fundo}, #121118 38%)`,
+          boxShadow: `0 0 18px ${tema.brilho}`,
+        }}
+      >
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
@@ -202,8 +230,12 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
               <span className={`rounded border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${cor}`}>
                 {circuloRotulo(magia.circulo)}
               </span>
-              <span className="rounded border border-white/5 bg-black/30 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                {magia.tradicao}
+              <span
+                className="rounded border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                style={{ backgroundColor: tema.fundo, borderColor: tema.borda, color: tema.texto }}
+                title={`${fluxoTitulo} · ${tema.arvore}`}
+              >
+                {fluxoTitulo}
               </span>
               {magia.concentracao && <span className="rounded border border-violet-500/30 bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-violet-300">Concentração</span>}
               {concedida && <span className="rounded border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-amber-300">Concedida</span>}
@@ -288,11 +320,21 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
           </button>
         </div>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Fonte</span><strong className="mt-1 block text-sm text-white">{perfil.fontes.join(', ') || 'Nenhuma'}</strong></div>
+          <div
+            className="rounded-xl border bg-black/20 p-3"
+            style={{
+              borderColor: temaFluxoNativo?.borda || 'rgba(255,255,255,.05)',
+              background: temaFluxoNativo ? `linear-gradient(135deg, ${temaFluxoNativo.fundo}, rgba(0,0,0,.2))` : undefined,
+            }}
+          >
+            <span className="text-[10px] font-bold uppercase text-gray-500">Fluxo nativo</span>
+            <strong className="mt-1 block text-sm" style={{ color: temaFluxoNativo?.texto || '#d1d5db' }}>{perfil.fluxoNativoTitulo || 'Escolha uma Árvore'}</strong>
+          </div>
           <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Fluxo</span><strong className="mt-1 block text-sm text-white">{perfil.fluxo} ({formatarBonus(perfil.modificadorFluxo)})</strong></div>
-          <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Teste</span><strong className="mt-1 block text-sm text-sky-300">d20 {formatarBonus(perfil.bonusConjuracao)}</strong></div>
-          <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">DT de magia</span><strong className="mt-1 block text-sm text-sky-300">{perfil.dtMagia}</strong></div>
+          <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Teste</span><strong className="mt-1 block text-sm text-sky-300">d20 {formatarBonus(bonusConjuracaoFinal)}</strong></div>
+          <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">DT do maior círculo</span><strong className="mt-1 block text-sm text-sky-300">{perfil.dtMagia || 'Indisponível'}</strong></div>
           <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Círculo e vagas</span><strong className="mt-1 block text-sm text-white">{perfil.circuloMaximo || 0}º, {perfil.conhecidasIds.length}/{perfil.vagasConhecidas}</strong></div>
         </div>
 
@@ -302,6 +344,12 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
           <span>Fluxo libera até o {perfil.circuloDoFluxo || 0}º círculo.</span>
           <span>Sua fonte libera até o {perfil.circuloDaFonte || 0}º.</span>
         </div>
+        {perfil.avisoFluxo && (
+          <div className="mt-3 flex items-start gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-xs leading-relaxed text-amber-200">
+            <AlertCircle size={16} className="mt-0.5 shrink-0" />
+            <span>{perfil.avisoFluxo}</span>
+          </div>
+        )}
       </header>
 
       {mensagem && (
@@ -322,8 +370,38 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
         <section className="space-y-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-            <input value={busca} onChange={(event) => setBusca(event.target.value)} placeholder="Buscar por nome, círculo, tradição ou efeito" className="w-full rounded-xl border border-white/5 bg-[#0f0e15] py-3 pl-10 pr-4 text-sm text-white outline-none focus:border-sky-500/40" />
+            <input type="search" aria-label="Buscar no catálogo de magias" value={busca} onChange={(event) => setBusca(event.target.value)} placeholder="Buscar por nome, círculo, Fluxo ou efeito" className="w-full rounded-xl border border-white/5 bg-[#0f0e15] py-3 pl-10 pr-4 text-sm text-white outline-none focus:border-sky-500/40" />
           </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <label className="block">
+              <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Fluxo</span>
+              <select
+                value={filtroFluxo}
+                onChange={(event) => setFiltroFluxo(event.target.value as FluxoMagicoId | 'nativo' | 'todos')}
+                className="w-full rounded-xl border border-white/5 bg-[#0f0e15] px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-sky-500/40"
+              >
+                <option value="nativo">{perfil.fluxoNativoTitulo ? `Fluxo nativo (${perfil.fluxoNativoTitulo})` : 'Fluxo nativo (não definido)'}</option>
+                <option value="todos">Todos os Fluxos</option>
+                {FLUXOS_CATALOGO.map((fluxo) => <option key={fluxo.id} value={fluxo.id}>{fluxo.titulo}</option>)}
+              </select>
+            </label>
+            <label className="block">
+              <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Círculo</span>
+              <select
+                value={String(filtroCirculo)}
+                onChange={(event) => {
+                  const valor = event.target.value;
+                  setFiltroCirculo(valor === 'alcancaveis' || valor === 'todos' ? valor : Number(valor));
+                }}
+                className="w-full rounded-xl border border-white/5 bg-[#0f0e15] px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-sky-500/40"
+              >
+                <option value="alcancaveis">Até o {perfil.circuloMaximo || 1}º círculo (alcançáveis)</option>
+                <option value="todos">Todos os círculos</option>
+                {CIRCULOS_DISPONIVEIS.map((circulo) => <option key={circulo} value={circulo}>{circuloRotulo(circulo as IMagiaCatalogo['circulo'])}</option>)}
+              </select>
+            </label>
+          </div>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-gray-600">{catalogoVisivel.length} de {MAGIAS_CATALOGO.length} magias</p>
           <div className="space-y-3">{catalogoVisivel.map((magia) => renderMagia(magia, true))}</div>
         </section>
       ) : (

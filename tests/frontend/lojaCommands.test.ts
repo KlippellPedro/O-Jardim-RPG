@@ -6,11 +6,13 @@ import assert from 'node:assert/strict';
 const { hasVerifiableShopOrigin, lojaApi, prepareCheckoutAttempt } = await import('../../src/services/lojaApi.ts');
 const {
   calcularValorRevenda,
+  itemCorrespondeBusca,
+  itemCorrespondeSubfiltro,
   mapearCatalogoLoja,
   normalizarRaridadeChave,
   rotuloRaridadeChave,
   somarPrecosNativos,
-} = await import('../../src/data/lojaCatalog.ts');
+} = await import('../../src/services/lojaCatalogService.ts');
 const { reivindicarRecompensa, resolverRecompensa } = await import('../../src/services/bountiesApi.ts');
 
 function jsonResponse(payload: unknown): Response {
@@ -129,6 +131,99 @@ test('raridade de relíquia da criação aceita grafia canônica e acentuada', (
   assert.equal(normalizarRaridadeChave('Relíquia da Criação'), 'reliquia da criacao');
   assert.equal(normalizarRaridadeChave('reliquia da criacao'), 'reliquia da criacao');
   assert.equal(rotuloRaridadeChave('reliquia da criacao'), 'Relíquia da Criação');
+});
+
+test('subfiltros reconhecem veículos pelo tipo real e Frutos pelos marcadores', () => {
+  const [veiculoCompleto, modulo, frutoElemental, frutoMutacao] = mapearCatalogoLoja([
+    {
+      id: 'moto', tipo: 'veiculo-completo', titulo: 'Moto',
+      conteudo: { preco: 100, raridade: 'incomum', subtipo: 'completo' },
+      preco: { moeda: 'Solares', valor: 100 },
+    },
+    {
+      id: 'motor', tipo: 'veiculo', titulo: 'Motor',
+      conteudo: { preco: 50, raridade: 'comum', sistema: 'Núcleo', subtipo: 'Estável' },
+      preco: { moeda: 'Solares', valor: 50 },
+    },
+    {
+      id: 'chamas', tipo: 'fruto-eden', titulo: 'Chamas',
+      conteudo: { preco: 10, raridade: 'raro', atributos: ['Sobrenatural', 'Elemental'] },
+      preco: { moeda: 'Fragmentos de Estrela', valor: 10 },
+    },
+    {
+      id: 'dragao', tipo: 'fruto-eden', titulo: 'Dragão',
+      conteudo: { preco: 20, raridade: 'raro', atributos: ['Mutação', 'Mitológico'] },
+      preco: { moeda: 'Fragmentos de Estrela', valor: 20 },
+    },
+  ]);
+
+  assert.equal(itemCorrespondeSubfiltro(veiculoCompleto, 'Veículos', 'Veículos Completos'), true);
+  assert.equal(itemCorrespondeSubfiltro(veiculoCompleto, 'Veículos', 'Peças e Módulos'), false);
+  assert.equal(itemCorrespondeSubfiltro(modulo, 'Veículos', 'Peças e Módulos'), true);
+  assert.equal(itemCorrespondeSubfiltro(frutoElemental, 'Frutos do Éden', 'Elemental'), true);
+  assert.equal(itemCorrespondeSubfiltro(frutoElemental, 'Frutos do Éden', 'Mutação'), false);
+  assert.equal(itemCorrespondeSubfiltro(frutoMutacao, 'Frutos do Éden', 'Mutação'), true);
+});
+
+test('selos aparecem pelo subfiltro e pela busca no plural', () => {
+  const [selo] = mapearCatalogoLoja([{
+    id: 'selo-teste', tipo: 'consumivel', titulo: 'Selo: Teste',
+    conteudo: {
+      preco: 120,
+      raridade: 'incomum',
+      subtipo: 'selo',
+      atributos: ['Selo', 'Fluxo: Origem'],
+      descricao: 'Selo consumível para testes.',
+    },
+    preco: { moeda: 'Solares', valor: 120 },
+  }]);
+
+  assert.equal(selo.categoria, 'Consumíveis');
+  assert.equal(itemCorrespondeSubfiltro(selo, 'Consumíveis', 'Selos'), true);
+  assert.equal(itemCorrespondeBusca(selo, 'selos'), true);
+});
+
+test('equipamentos mágicos não são classificados como consumíveis', () => {
+  const [manto, pocao, corda] = mapearCatalogoLoja([
+    {
+      id: 'manto-das-sombras', tipo: 'equipamento', titulo: 'Manto das Sombras',
+      conteudo: { preco: 250, raridade: 'epico', categoria_loja: 'Artefatos Mágicos', material: 'Seda Sombria' },
+      preco: { moeda: 'Solares', valor: 250 },
+    },
+    {
+      id: 'pocao-cura-menor', tipo: 'equipamento', titulo: 'Poção de Cura Menor',
+      conteudo: { preco: 20, raridade: 'comum', descricao: 'Restaura Vida. (1 uso)' },
+      preco: { moeda: 'Solares', valor: 20 },
+    },
+    {
+      id: 'corda-de-escalada', tipo: 'equipamento', titulo: 'Corda de Escalada',
+      conteudo: { preco: 10, raridade: 'comum', material: 'Cânhamo' },
+      preco: { moeda: 'Solares', valor: 10 },
+    },
+  ]);
+
+  assert.equal(manto.categoria, 'Artefatos Mágicos');
+  assert.equal(pocao.categoria, 'Consumíveis');
+  assert.equal(corda.categoria, 'Outros');
+});
+
+test('promoção só aparece quando preço anterior e moeda são válidos', () => {
+  const [promocional, inconsistente] = mapearCatalogoLoja([
+    {
+      id: 'oferta', tipo: 'arma', titulo: 'Oferta',
+      conteudo: { preco: 80, preco_original: 100, promocao: { ativa: true, rotulo: 'Oferta real' } },
+      preco: { moeda: 'Solares', valor: 80 },
+    },
+    {
+      id: 'forjado', tipo: 'arma', titulo: 'Forjado',
+      conteudo: { preco: 80, preco_original: { Lunaris: 100 }, promocao: { ativa: true } },
+      preco: { moeda: 'Solares', valor: 80 },
+    },
+  ]);
+
+  assert.equal(promocional.precoAnterior, 100);
+  assert.deepEqual(promocional.promocao, { rotulo: 'Oferta real', descontoPercentual: 20 });
+  assert.equal(inconsistente.promocao, undefined);
 });
 
 test('recompensas enviam identidade e decisão, mas nunca o valor exibido', async () => {

@@ -1,5 +1,17 @@
 import type { ICaracteristicaRacial, IOpcaoRacial, IRaca } from '../types/catalogo';
 
+/** Raça mecanicamente vazia (data/ficha/racas.json) pra quem não encontra
+ * nada no catálogo que sirva: sem bônus, o jogador escreve o nome livremente
+ * na ficha (`ficha.racaNomePersonalizado`). */
+export const RACA_PERSONALIZADA_ID = 'raca-personalizada';
+
+/** Nome da raça pra exibição: o texto livre do jogador quando a raça é a
+ * personalizada, senão o título do catálogo. */
+export function nomeExibicaoRaca(racaId: string | undefined, nomePersonalizado: string | undefined, tituloCatalogo: string | undefined): string {
+  if (racaId === RACA_PERSONALIZADA_ID && nomePersonalizado?.trim()) return nomePersonalizado.trim();
+  return tituloCatalogo || '';
+}
+
 export type CampoEscolhaRacial = 'varianteId' | 'linhagemId' | 'condicaoAncestralId';
 
 export interface GrupoEscolhaRacial {
@@ -31,7 +43,7 @@ export function obterGruposEscolhaRacial(raca: IRaca | null | undefined): GrupoE
     grupos.push({
       campo: 'linhagemId',
       rotulo: 'Linhagem Élfica',
-      descricao: 'Escolha uma das sete Linhagens Élficas.',
+      descricao: 'Escolha uma das seis Linhagens Élficas.',
       opcoes: raca.linhagens,
     });
   }

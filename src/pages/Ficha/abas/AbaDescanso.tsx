@@ -1,11 +1,17 @@
 import { useState } from 'react';
 import { BedDouble, Brain, HeartPulse, ShieldAlert } from 'lucide-react';
-import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../data/condicoes';
-import { aplicarDescansoCompleto, aplicarRelaxamento, REGRAS_DESCANSO, type QualidadeDescanso } from '../../../services/descansoService';
+import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../../data/regras/condicoes';
+import { aplicarDescansoCompleto, aplicarRelaxamento, descansoPermitido, REGRAS_DESCANSO, type QualidadeDescanso } from '../../../services/descansoService';
+import { useAuthStore } from '../../../store/useAuthStore';
+import { obterStatusFicha } from '../../../services/statusService';
 
 export const AbaDescanso = ({ character, onUpdate }: { character: any; onUpdate: any }) => {
   const ficha = character.ficha || {};
-  const status = ficha.status || {};
+  const status = obterStatusFicha(ficha);
+  const usuario = useAuthStore((state) => state.usuario);
+  const campanha = useAuthStore((state) => state.campanhaAtiva);
+  const isMestre = usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador'
+    || campanha?.papel === 'mestre' || campanha?.papel === 'assistente';
   const atributos = ficha.atributosFinais || character.atributosFinais || {};
   const derivados = character.derivados || ficha.derivados || {};
   const [qualidade, setQualidade] = useState<QualidadeDescanso>('boa');
@@ -13,6 +19,10 @@ export const AbaDescanso = ({ character, onUpdate }: { character: any; onUpdate:
   const [mensagem, setMensagem] = useState('');
 
   const descansar = () => {
+    if (!descansoPermitido(qualidade, isMestre)) {
+      setMensagem('Descanso Excelente exige que o Mestre aplique ou autorize o resultado pela ficha.');
+      return;
+    }
     if (status.morto) {
       setMensagem('Personagens mortos não podem receber descanso completo. Somente uma regra explícita de retorno pode alterar esse estado.');
       return;
@@ -52,7 +62,7 @@ export const AbaDescanso = ({ character, onUpdate }: { character: any; onUpdate:
         <h3 className="mb-4 font-bold text-white">Descanso completo</h3>
         <div className="grid gap-3 md:grid-cols-5">
           {REGRAS_DESCANSO.map((regra) => (
-            <button key={regra.id} type="button" onClick={() => setQualidade(regra.id)} className={`rounded-xl border p-3 text-left transition-colors ${qualidade === regra.id ? 'border-[#c7a44c]/60 bg-[#c7a44c]/10' : 'border-white/5 bg-black/20'}`}>
+            <button key={regra.id} type="button" disabled={!descansoPermitido(regra.id, isMestre)} title={!descansoPermitido(regra.id, isMestre) ? 'Exige aplicação ou autorização do Mestre.' : undefined} onClick={() => setQualidade(regra.id)} className={`rounded-xl border p-3 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${qualidade === regra.id ? 'border-[#c7a44c]/60 bg-[#c7a44c]/10' : 'border-white/5 bg-black/20'}`}>
               <strong className="text-sm text-white">{regra.titulo}</strong>
               <p className="mt-1 text-xs text-[#c7a44c]">{Math.round(regra.recuperacao * 100)}% de PV e Mana</p>
               <p className="mt-2 text-[11px] leading-relaxed text-gray-500">{regra.criterio}</p>

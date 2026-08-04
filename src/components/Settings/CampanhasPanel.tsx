@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore, ICampanha } from '../../store/useAuthStore';
-import { Swords, Check, Loader2, PlusCircle, LogIn } from 'lucide-react';
+import { Swords, Check, Loader2, PlusCircle, LogIn, Trash2 } from 'lucide-react';
 import { campanhasApi } from '../../services/campanhasApi';
 
 export const CampanhasPanel: React.FC = () => {
@@ -9,6 +9,7 @@ export const CampanhasPanel: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [excluindoId, setExcluindoId] = useState<string | null>(null);
 
   // Entrar com código de convite
   const [showJoinForm, setShowJoinForm] = useState(false);
@@ -24,6 +25,21 @@ export const CampanhasPanel: React.FC = () => {
       const e = err as { message?: string };
       setError(e?.message || 'Erro ao trocar de campanha');
       setIsLoading(false);
+    }
+  };
+
+  const handleExcluirCampanha = async (campanha: ICampanha) => {
+    if (!window.confirm(`Excluir a mesa "${campanha.nome}"? Fichas e histórico continuam salvos, mas a mesa some do acesso normal.`)) return;
+    setExcluindoId(campanha.id);
+    setError(null);
+    try {
+      await campanhasApi.arquivar(campanha.id);
+      await initContexto();
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError(e?.message || 'Erro ao excluir a mesa');
+    } finally {
+      setExcluindoId(null);
     }
   };
 
@@ -90,18 +106,22 @@ export const CampanhasPanel: React.FC = () => {
           <AnimatePresence>
             {campanhas.map((campanha: ICampanha) => {
               const isActive = campanhaAtiva?.id === campanha.id;
+              const podeExcluir = campanha.papel.toLowerCase() === 'mestre';
+              const excluindo = excluindoId === campanha.id;
               return (
-                <motion.button
+                <motion.div
                   key={campanha.id}
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => handleSelectCampanha(campanha.id)}
-                  disabled={isLoading}
-                  className={`w-full text-left p-4 rounded-xl border transition-all ${
+                  onKeyDown={(e) => { if (e.key === 'Enter') handleSelectCampanha(campanha.id); }}
+                  className={`w-full text-left p-4 rounded-xl border transition-all cursor-pointer ${
                     isActive
                       ? 'bg-primary/10 border-primary/40 shadow-[0_0_12px_rgba(196,160,82,0.15)]'
                       : 'bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20'
-                  }`}
+                  } ${isLoading || excluindo ? 'pointer-events-none opacity-60' : ''}`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 min-w-0">
@@ -122,9 +142,20 @@ export const CampanhasPanel: React.FC = () => {
                         {roleLabel(campanha.papel)}
                       </span>
                       {isActive && <Check size={16} className="text-primary" />}
+                      {podeExcluir && (
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); handleExcluirCampanha(campanha); }}
+                          disabled={excluindo}
+                          className="p-1.5 rounded-lg hover:bg-red-500/20 text-gray-500 hover:text-red-400 transition-colors pointer-events-auto"
+                          title="Excluir mesa"
+                        >
+                          {excluindo ? <Loader2 size={15} className="animate-spin" /> : <Trash2 size={15} />}
+                        </button>
+                      )}
                     </div>
                   </div>
-                </motion.button>
+                </motion.div>
               );
             })}
           </AnimatePresence>

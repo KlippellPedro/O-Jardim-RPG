@@ -18,6 +18,9 @@ export const adminApi = {
   auditoria(limite = 80) {
     return api(`/admin/auditoria?limite=${encodeURIComponent(limite)}`);
   },
+  limparAuditoria() {
+    return api('/admin/auditoria', { method: 'DELETE' });
+  },
   backupAutomatico() {
     return api('/admin/backup-automatico');
   },

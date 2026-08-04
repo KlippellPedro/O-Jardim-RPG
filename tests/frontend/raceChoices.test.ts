@@ -11,7 +11,7 @@ const racas = JSON.parse(
 
 const casosEsperados = [
   ['animalia', 'varianteId', 3],
-  ['elfo', 'linhagemId', 7],
+  ['elfo', 'linhagemId', 6],
   ['desperto', 'condicaoAncestralId', 6],
   ['automato', 'varianteId', 8],
   ['clone', 'varianteId', 4],

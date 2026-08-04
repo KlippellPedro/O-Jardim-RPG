@@ -62,12 +62,21 @@ export const MestrePanel: React.FC = () => {
     setIsCreating(true);
     setError(null);
     try {
-      await campanhasApi.criarConvite(campanhaAtiva.id, {
+      const criado = await campanhasApi.criarConvite(campanhaAtiva.id, {
         papel,
         max_usos: usos,
         expira_em_dias: dias,
-      });
+      }) as Pick<IConvite, 'id' | 'codigo' | 'expira_em' | 'papel'>;
+      if (!criado?.id || !criado.codigo) {
+        throw new Error('A plataforma criou o convite, mas não devolveu o código.');
+      }
       await fetchConvites(); // Sem signal aqui - ação intencional do usuário
+      setConvites((atuais) => [{
+        ...criado,
+        usos: 0,
+        max_usos: usos,
+        revogado_em: null,
+      }, ...atuais.filter((convite) => convite.id !== criado.id)]);
     } catch (err: unknown) {
       const error = err as { message?: string };
       setError(error?.message || 'Erro ao criar convite');
@@ -87,7 +96,8 @@ export const MestrePanel: React.FC = () => {
     }
   };
 
-  const copyToClipboard = (codigo: string) => {
+  const copyToClipboard = (codigo?: string) => {
+    if (!codigo) return;
     navigator.clipboard.writeText(codigo);
     setCopiedId(codigo);
     setTimeout(() => setCopiedId(null), 2000);
@@ -240,7 +250,7 @@ export const MestrePanel: React.FC = () => {
                               <code className="text-sm font-mono bg-black/50 px-2 py-0.5 rounded text-white tracking-widest">
                                 {convite.codigo || 'Oculto'}
                               </code>
-                              {isActive && (
+                              {isActive && convite.codigo && (
                                 <button
                                   onClick={() => copyToClipboard(convite.codigo)}
                                   className="text-gray-400 hover:text-primary transition-colors"

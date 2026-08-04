@@ -19,7 +19,7 @@ export interface IAdminResumo {
 
 export interface IConvite {
   id: string;
-  codigo: string;
+  codigo?: string;
   papel: string;
   usos: number;
   max_usos: number;

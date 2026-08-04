@@ -105,7 +105,6 @@ export const SettingsMenu: React.FC = () => {
     (campanhaAtiva.papel === 'mestre' || campanhaAtiva.papel === 'assistente');
 
   const canSeeAdmin =
-    usuario.admin_plataforma ||
     usuario.papel_plataforma === 'admin' ||
     usuario.papel_plataforma === 'criador';
 
@@ -128,7 +127,7 @@ export const SettingsMenu: React.FC = () => {
       <button
         id="settings-btn"
         onClick={() => setIsDropdownOpen((v) => !v)}
-        className="relative p-3 bg-surface/50 backdrop-blur-md rounded-full border border-white/5 hover:bg-white/10 transition-colors shadow-lg group"
+        className="relative p-3 bg-[#0b0a12]/80 backdrop-blur-md rounded-full border border-white/10 hover:bg-white/10 transition-colors shadow-lg group"
         aria-label="Configurações"
         aria-expanded={isDropdownOpen}
         aria-haspopup="true"

@@ -4,21 +4,18 @@ export const MULTIPLICADOR_CRITICO_PADRAO = 2;
 export function normalizarMargemAmeaca(valor: unknown): number {
   const numero = Math.trunc(Number(valor));
   if (!Number.isFinite(numero)) return MARGEM_AMEACA_PADRAO;
-  return Math.min(20, Math.max(18, numero));
+  return Math.min(20, Math.max(1, numero));
 }
 
 export function normalizarMultiplicadorCritico(valor: unknown): number {
   const numero = Math.trunc(Number(valor));
   if (!Number.isFinite(numero)) return MULTIPLICADOR_CRITICO_PADRAO;
-  return Math.min(4, Math.max(2, numero));
+  return Math.min(999, Math.max(1, numero));
 }
 
 export function normalizarCriticoBalanceado(margem: unknown, multiplicador: unknown) {
-  let inicio = normalizarMargemAmeaca(margem);
+  const inicio = normalizarMargemAmeaca(margem);
   const vezes = normalizarMultiplicadorCritico(multiplicador);
-  // Margem ampliada e multiplicador ampliado juntos crescem rápido demais.
-  // x3/x4 ficam restritos ao 20; margens 18/19 usam x2.
-  if (vezes > 2) inicio = 20;
   return { margemAmeaca: inicio, multiplicadorCritico: vezes };
 }
 

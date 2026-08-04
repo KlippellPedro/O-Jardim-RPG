@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   useCharacterStore,
   flushEconomyWithKeepalive,
@@ -8,6 +8,9 @@ import {
   type CharacterSaveDomain,
 } from '../../store/useCharacterStore';
 import { HelpCircle, Eye, EyeOff } from 'lucide-react';
+import { carregarCatalogo } from '../../services/catalogoService';
+import { ICatalogo } from '../../types/catalogo';
+import { nomeExibicaoRaca } from '../../services/racaService';
 import { ModalInfoFicha } from './components/ModalInfoFicha';
 import { AbaFicha } from './abas/AbaFicha';
 import { AbaPericias } from './abas/AbaPericias';
@@ -22,7 +25,7 @@ import { AbaProgressao } from './abas/AbaProgressao';
 import { AbaDescanso } from './abas/AbaDescanso';
 
 
-const TABS = ['Ficha', 'Progressão', 'Perícias', 'Inventário', 'Poderes', 'Habilidades', 'Ataques', 'Descanso', 'Magias', 'Aliados', 'Notas'];
+const TABS = ['Ficha', 'Perícias', 'Inventário', 'Habilidades', 'Poderes', 'Magias', 'Ataques', 'Aliados', 'Progressão', 'Descanso', 'Notas'];
 
 const EMPTY_SAVE_STATE: CharacterDomainSaveState = { phase: 'idle' };
 
@@ -61,9 +64,15 @@ export const PersonagemSheet: React.FC = () => {
   } = useCharacterStore();
 
   const [activeTab, setActiveTab] = useState(() => {
-    return localStorage.getItem(`rpg_active_tab_${id}`) || 'Ficha';
+    const savedTab = localStorage.getItem(`rpg_active_tab_${id}`);
+    return savedTab && TABS.includes(savedTab) ? savedTab : 'Ficha';
   });
   const [showAjuda, setShowAjuda] = useState(false);
+  const [catalogo, setCatalogo] = useState<ICatalogo | null>(null);
+
+  useEffect(() => {
+    carregarCatalogo().then(setCatalogo);
+  }, []);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -225,7 +234,17 @@ export const PersonagemSheet: React.FC = () => {
             {character.nome?.toUpperCase() || 'DESCONHECIDO'}
           </h1>
           <p className="text-gray-400 text-sm">
-            Nível {character.nivel} • {character.ficha?.racaId || 'Sem Raça'} • {character.ficha?.classes?.[0]?.classeId || character.ficha?.classeId || 'Sem Classe'}
+            {(() => {
+              const racaId = character.ficha?.racaId;
+              const classeId = character.ficha?.classes?.[0]?.classeId || character.ficha?.classeId;
+              const racaCatalogo = catalogo?.racas.find((r) => r.id === racaId);
+              const classeCatalogo = catalogo?.classes.find((c) => c.id === classeId);
+              const nomeRaca = racaId
+                ? nomeExibicaoRaca(racaId, character.ficha?.racaNomePersonalizado, racaCatalogo?.titulo) || 'Sem Raça'
+                : 'Sem Raça';
+              const nomeClasse = classeCatalogo?.titulo || (classeId ? classeId : 'Sem Classe');
+              return `Nível ${character.nivel} • ${nomeRaca} • ${nomeClasse}`;
+            })()}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -328,17 +347,7 @@ export const PersonagemSheet: React.FC = () => {
         {renderAjuda()}
         {renderTabs()}
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-          >
-            {renderActiveTab()}
-          </motion.div>
-        </AnimatePresence>
+        <div>{renderActiveTab()}</div>
       </div>
     </motion.div>
   );

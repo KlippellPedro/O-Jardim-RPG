@@ -15,6 +15,9 @@ import {
 import { carregarCatalogo } from '../../../services/catalogoService';
 import { aplicarAjustesAtributosRaciais, BONUS_GRAU, modificador, obterAjustesPericiasRaciais } from '../../../services/calculoService';
 import type { ICatalogo } from '../../../types/catalogo';
+import { resumirEquipamentos } from '../../../services/equipamentoService';
+import { desvantagensAutomaticasTeste, obterStatusFicha, penalidadeAtaqueCondicoes, penalidadeCansacoTeste } from '../../../services/statusService';
+import { ajusteOrigem, chaveAjuste, totalAjustesManuais } from '../../../services/ajustesFichaService';
 
 interface IAtaque {
   id: string;
@@ -106,11 +109,20 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
   const ordemAtaques: string[] = character.ficha?.ordemAtaques || [];
   const ataques: IAtaque[] = [...armasEquipadas, ...ataquesManuais];
   const ficha = character.ficha || {};
+  const status = obterStatusFicha(ficha);
+  const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], ficha);
   const racaAtual = catalogo?.racas.find(raca => raca.id === ficha.racaId) || null;
   const atributosBase = ficha.atributosFinais || character.atributosFinais || {};
+  const atributosAntesRaca = Object.fromEntries(['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'fluxo'].map((atributo) => [
+    atributo,
+    Number(atributosBase[atributo] ?? 10)
+      + ajusteOrigem(ficha, 'atributo', atributo)
+      + totalAjustesManuais(ficha, chaveAjuste('atributo', atributo))
+      + (resumoEquipamento.bonusAtributos[atributo] || 0),
+  ]));
   const atributos = racaAtual
-    ? aplicarAjustesAtributosRaciais(atributosBase, racaAtual, ficha.escolhaRacial)
-    : atributosBase;
+    ? aplicarAjustesAtributosRaciais(atributosAntesRaca, racaAtual, ficha.escolhaRacial)
+    : atributosAntesRaca;
   const ajustesRaciaisPericias = obterAjustesPericiasRaciais(racaAtual, ficha.escolhaRacial);
   const metadeNivel = Math.floor(Math.max(1, Number(character.nivel) || 1) / 2);
   const proficiencias = new Set((Array.isArray(ficha.proficiencias) ? ficha.proficiencias : []).map((item: unknown) => String(item).toLocaleLowerCase('pt-BR')));
@@ -129,9 +141,22 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
       + metadeNivel
       + (BONUS_GRAU[grau] || 0)
       + (ajustesRaciaisPericias[periciaId] || 0)
+      + ajusteOrigem(ficha, 'pericia', periciaId)
+      + totalAjustesManuais(ficha, chaveAjuste('pericia', periciaId))
+      + (resumoEquipamento.bonusPericias[periciaId] || 0)
+      + (resumoEquipamento.bonusCombate.ataque || 0)
       + (Number(item.bonusAcerto) || 0)
-      + penalidadeFaltaProficiencia(item);
+      + penalidadeFaltaProficiencia(item)
+      + penalidadeCansacoTeste(status.cansacoAtual, true)
+      + penalidadeAtaqueCondicoes(ficha.condicoesAtivas);
   };
+
+  const desvantagensAutomaticasAtaque = desvantagensAutomaticasTeste(
+    status.cansacoAtual,
+    true,
+    resumoEquipamento.sobrecarregado,
+  );
+  const periciaDoAtaque = (item: IAtaque) => item.tipo === 'Corpo a Corpo' ? 'luta' : 'pontaria';
 
   const ataquesVisiveis = ataques
     .filter((a: any) => !busca || a.nome?.toLowerCase().includes(busca.toLowerCase()))
@@ -290,6 +315,8 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
         personagemId: character.id,
         titulo: `Ataque: ${item.nome}`,
         bonus: calcularBonusAtaque(item),
+        vantagens: resumoEquipamento.vantagensPericias[periciaDoAtaque(item)] || 0,
+        desvantagens: desvantagensAutomaticasAtaque + (resumoEquipamento.desvantagensPericias[periciaDoAtaque(item)] || 0),
         dt: defesaInformada ? defesa : null,
         origem: {
           tipo: 'ataque',
@@ -588,30 +615,24 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
             placeholder="Ex: 1,5m ou 18m"
             onChange={(v: string) => setForm(f => ({ ...f, alcance: v }))}
           />
-          <div className="grid grid-cols-2 gap-4">
-            <LabeledModalSelect
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <LabeledInput
               label="Margem de Ameaça"
+              type="number"
               value={form.margemAmeaca}
-              options={['20', '19', '18']}
-              onChange={(v: string) => setForm(f => ({
-                ...f,
-                margemAmeaca: v,
-                multiplicadorCritico: v === '20' ? f.multiplicadorCritico : '2',
-              }))}
+              placeholder="Ex.: 18"
+              onChange={(v: string) => setForm(f => ({ ...f, margemAmeaca: v }))}
             />
-            <LabeledModalSelect
+            <LabeledInput
               label="Multiplicador Crítico"
+              type="number"
               value={form.multiplicadorCritico}
-              options={['2', '3', '4']}
-              onChange={(v: string) => setForm(f => ({
-                ...f,
-                multiplicadorCritico: v,
-                margemAmeaca: v === '2' ? f.margemAmeaca : '20',
-              }))}
+              placeholder="Ex.: 5"
+              onChange={(v: string) => setForm(f => ({ ...f, multiplicadorCritico: v }))}
             />
           </div>
           <p className="text-xs text-gray-500">
-            Margens 18 e 19 usam x2. Multiplicadores x3 e x4 exigem margem 20.
+            Use qualquer margem entre 1 e 20 e o multiplicador definido pelo Mestre.
             No crítico, apenas os dados da arma são multiplicados; bônus fixos entram uma vez.
           </p>
 

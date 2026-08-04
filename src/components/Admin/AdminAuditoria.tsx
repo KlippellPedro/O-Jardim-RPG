@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { adminApi } from '../../services/adminApi';
-import { ScrollText, Loader2, RefreshCw } from 'lucide-react';
+import { ScrollText, Loader2, RefreshCw, Trash2 } from 'lucide-react';
 
 interface IEventoAuditoria {
   id: string;
@@ -17,6 +17,7 @@ interface IEventoAuditoria {
 export const AdminAuditoria: React.FC = () => {
   const [eventos, setEventos] = useState<IEventoAuditoria[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isClearing, setIsClearing] = useState(false);
   const [limite, setLimite] = useState(150);
 
   const carregar = useCallback(async (lim: number) => {
@@ -36,6 +37,19 @@ export const AdminAuditoria: React.FC = () => {
     carregar(limite);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleLimpar = async () => {
+    if (!window.confirm('Apagar todo o histórico de auditoria da plataforma? Essa ação não pode ser desfeita.')) return;
+    setIsClearing(true);
+    try {
+      await adminApi.limparAuditoria();
+      await carregar(limite);
+    } catch (e) {
+      console.error('Erro ao limpar auditoria da plataforma', e);
+    } finally {
+      setIsClearing(false);
+    }
+  };
 
   return (
     <div className="bg-[#0b0a12]/80 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
@@ -65,6 +79,14 @@ export const AdminAuditoria: React.FC = () => {
             title="Atualizar"
           >
             <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
+          </button>
+          <button
+            onClick={handleLimpar}
+            disabled={isClearing || eventos.length === 0}
+            className="p-2 rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-50"
+            title="Limpar auditoria"
+          >
+            {isClearing ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
           </button>
         </div>
       </div>

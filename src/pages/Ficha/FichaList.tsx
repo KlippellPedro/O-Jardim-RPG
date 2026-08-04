@@ -1,25 +1,125 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useCharacterStore } from '../../store/useCharacterStore';
+import { useAuthStore } from '../../store/useAuthStore';
 import { Search, Plus, Trash2, Camera, HelpCircle, Shield, Sword } from 'lucide-react';
+import { carregarCatalogo } from '../../services/catalogoService';
+import { ICatalogo } from '../../types/catalogo';
+import { nomeExibicaoRaca } from '../../services/racaService';
 
 import { FichaWizard } from './Wizard/FichaWizard';
 
+const TIPOS_FOTO_ACEITOS = new Set(['image/jpeg', 'image/png', 'image/webp']);
+const TAMANHO_MAXIMO_FOTO = 10 * 1024 * 1024;
+const RESOLUCAO_FOTO = 512;
+
+const carregarImagem = (file: File): Promise<HTMLImageElement> => new Promise((resolve, reject) => {
+  const objectUrl = URL.createObjectURL(file);
+  const image = new Image();
+  image.onload = () => {
+    URL.revokeObjectURL(objectUrl);
+    resolve(image);
+  };
+  image.onerror = () => {
+    URL.revokeObjectURL(objectUrl);
+    reject(new Error('Não foi possível abrir a imagem selecionada.'));
+  };
+  image.src = objectUrl;
+});
+
+const prepararFotoPersonagem = async (file: File): Promise<string> => {
+  if (!TIPOS_FOTO_ACEITOS.has(file.type)) {
+    throw new Error('Escolha uma imagem JPG, PNG ou WebP.');
+  }
+  if (file.size > TAMANHO_MAXIMO_FOTO) {
+    throw new Error('A imagem precisa ter no máximo 10 MB.');
+  }
+
+  const image = await carregarImagem(file);
+  const recorte = Math.min(image.naturalWidth, image.naturalHeight);
+  if (!recorte) throw new Error('A imagem selecionada não possui dimensões válidas.');
+
+  const tamanho = Math.min(RESOLUCAO_FOTO, recorte);
+  const canvas = document.createElement('canvas');
+  canvas.width = tamanho;
+  canvas.height = tamanho;
+  const context = canvas.getContext('2d');
+  if (!context) throw new Error('O navegador não conseguiu preparar a imagem.');
+
+  const origemX = (image.naturalWidth - recorte) / 2;
+  const origemY = (image.naturalHeight - recorte) / 2;
+  context.drawImage(image, origemX, origemY, recorte, recorte, 0, 0, tamanho, tamanho);
+  return canvas.toDataURL('image/webp', 0.82);
+};
+
 const FichaList: React.FC = () => {
   const navigate = useNavigate();
-  const { characters, isLoading, error, fetchCharacters, archiveCharacter } = useCharacterStore();
+  const {
+    characters,
+    isLoading,
+    error,
+    fetchCharacters,
+    archiveCharacter,
+    patchCharacter,
+    flushCharacterSaves,
+  } = useCharacterStore();
+  const { usuario } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [showHelp, setShowHelp] = useState(false);
   const [showWizard, setShowWizard] = useState(false);
+  const [catalogo, setCatalogo] = useState<ICatalogo | null>(null);
+  const [salvandoFotoId, setSalvandoFotoId] = useState<string | null>(null);
+  const [mensagemFoto, setMensagemFoto] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
+  const fotoInputsRef = useRef<Record<string, HTMLInputElement | null>>({});
 
   useEffect(() => {
     fetchCharacters();
   }, [fetchCharacters]);
 
-  const filteredCharacters = characters.filter(char => 
+  useEffect(() => {
+    carregarCatalogo().then(setCatalogo);
+  }, []);
+
+  // A ficha é pessoal: personagens de outros jogadores só aparecem no Painel do Mestre.
+  const ownCharacters = characters.filter(char => char.donoUsuarioId === usuario?.id);
+
+  const filteredCharacters = ownCharacters.filter(char =>
     char.nome.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const escolherFoto = (event: React.MouseEvent<HTMLButtonElement>, personagemId: string) => {
+    event.stopPropagation();
+    fotoInputsRef.current[personagemId]?.click();
+  };
+
+  const trocarFoto = async (event: React.ChangeEvent<HTMLInputElement>, personagemId: string) => {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+
+    setSalvandoFotoId(personagemId);
+    setMensagemFoto(null);
+    try {
+      const foto = await prepararFotoPersonagem(file);
+      if (!patchCharacter(personagemId, ['ficha', 'foto'], foto)) {
+        throw new Error('O personagem não foi encontrado para receber a foto.');
+      }
+      const sincronizada = await flushCharacterSaves(personagemId);
+      if (!sincronizada) {
+        throw new Error('A foto foi aplicada localmente, mas não foi sincronizada. Tente novamente.');
+      }
+      setMensagemFoto({ tipo: 'sucesso', texto: 'Foto do personagem atualizada.' });
+    } catch (photoError) {
+      setMensagemFoto({
+        tipo: 'erro',
+        texto: photoError instanceof Error ? photoError.message : 'Não foi possível atualizar a foto.',
+      });
+    } finally {
+      setSalvandoFotoId(null);
+    }
+  };
 
   return (
     <motion.div 
@@ -92,10 +192,16 @@ const FichaList: React.FC = () => {
         </div>
         <div className="flex items-center gap-4 w-full md:w-auto">
           <span className="text-gray-500 text-sm whitespace-nowrap">
-            {filteredCharacters.length} de {characters.length} encontrados
+            {filteredCharacters.length} de {ownCharacters.length} encontrados
           </span>
         </div>
       </div>
+
+      {mensagemFoto ? (
+        <div role="status" className={`mb-6 rounded-xl border px-4 py-3 text-sm ${mensagemFoto.tipo === 'sucesso' ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300' : 'border-red-500/30 bg-red-500/10 text-red-300'}`}>
+          {mensagemFoto.texto}
+        </div>
+      ) : null}
 
       {/* Content */}
       {isLoading ? (
@@ -110,7 +216,7 @@ const FichaList: React.FC = () => {
             Tentar Novamente
           </button>
         </div>
-      ) : characters.length === 0 ? (
+      ) : ownCharacters.length === 0 ? (
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -173,7 +279,14 @@ const FichaList: React.FC = () => {
                       {char.nome}
                     </h3>
                     <p className="text-sm text-gray-400 truncate mt-1">
-                      {char.racaId || 'Raça a definir'} · {char.classeId || 'Classe'}
+                      {(() => {
+                        const racaCatalogo = catalogo?.racas.find((r) => r.id === char.racaId);
+                        const classeCatalogo = catalogo?.classes.find((c) => c.id === char.classeId);
+                        const nomeRaca = char.racaId
+                          ? nomeExibicaoRaca(char.racaId, char.ficha?.racaNomePersonalizado, racaCatalogo?.titulo) || 'Raça a definir'
+                          : 'Raça a definir';
+                        return `${nomeRaca} · ${classeCatalogo?.titulo || char.classeId || 'Classe'}`;
+                      })()}
                     </p>
                   </div>
                 </div>
@@ -197,10 +310,27 @@ const FichaList: React.FC = () => {
                     </span>
                     
                     <div className="flex items-center gap-2">
-                      <button className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors" title="Trocar Foto">
+                      <input
+                        ref={(node) => { fotoInputsRef.current[char.id] = node; }}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        className="sr-only"
+                        aria-label={`Escolher foto de ${char.nome}`}
+                        onClick={(event) => event.stopPropagation()}
+                        onChange={(event) => void trocarFoto(event, char.id)}
+                      />
+                      <button
+                        type="button"
+                        onClick={(event) => escolherFoto(event, char.id)}
+                        disabled={salvandoFotoId === char.id}
+                        className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors disabled:cursor-wait disabled:opacity-50"
+                        title={salvandoFotoId === char.id ? 'Salvando foto...' : 'Trocar foto'}
+                        aria-label={salvandoFotoId === char.id ? `Salvando foto de ${char.nome}` : `Trocar foto de ${char.nome}`}
+                      >
                         <Camera size={18} />
                       </button>
                       <button 
+                        type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           if (window.confirm(`Excluir ${char.nome}?`)) {

@@ -1,6 +1,6 @@
 import type { IClasse } from '../../../types/catalogo';
 import { classeTemProgressaoPublicada, formatarRecompensaClasse } from '../../../services/classeService';
-import { ARVORES } from '../../../data/arvoresCatalog';
+import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
 
 interface DetalhesClasseProps {
   classe: IClasse;
@@ -31,13 +31,8 @@ export const DetalhesClasse = ({ classe }: DetalhesClasseProps) => {
         <p className="font-bold uppercase tracking-wider">{especial ? 'Classe especial' : 'Classe comum'}</p>
         <p className="mt-1">
           {especial
-            ? `Patamar de conquista, mais forte por natureza e restrito às Árvores: ${arvores || 'não publicadas'}. Exige liberação do Mestre.`
-            : 'Patamar-base disponível para personagens de qualquer Árvore.'}
-        </p>
-        <p className="mt-2 text-xs text-gray-400">
-          {classe.origem_conteudo === 'proposta_original_balanceada'
-            ? 'Conteúdo proposto para completar uma classe sem documento próprio no material enviado.'
-            : 'Conteúdo preservado do material enviado, com limites, custos e linguagem revisados para o sistema atual.'}
+            ? `Não se escolhe na criação: se conquista. Mais forte que o patamar-base, presa às Árvores ${arvores || 'que o Mestre definir'}, e o Mestre precisa liberar antes.`
+            : 'É o patamar-base. Serve a personagem de qualquer Árvore, sem depender de ninguém liberar.'}
         </p>
       </div>
 
@@ -118,7 +113,7 @@ export const DetalhesClasse = ({ classe }: DetalhesClasseProps) => {
       {(classe.poderes || []).length > 0 && (
         <section>
           <h2 className="mb-2 text-3xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>Poderes da Classe</h2>
-          <p className="mb-5 text-sm text-gray-400">Os custos foram publicados em Mana e revisados pelo impacto do efeito. Custo 0 indica um poder passivo.</p>
+          <p className="mb-5 text-sm text-gray-400">Custo 0 indica um poder passivo.</p>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             {classe.poderes?.map(poder => (
               <article key={poder.id} className="rounded-2xl border border-violet-500/20 bg-violet-500/5 p-6">

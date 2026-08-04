@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { LoreEntry } from '../../../data/mundoCatalog';
+import { LoreEntry } from '../../../../data/gerado/mundoCatalog';
 import { ShieldAlert } from 'lucide-react';
 import { useAuthStore } from '../../../store/useAuthStore';
 

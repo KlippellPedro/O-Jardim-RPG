@@ -13,7 +13,7 @@ export default function GlassMenu() {
   ];
 
   return (
-    <nav className="fixed left-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-6 p-4 rounded-3xl bg-surface/50 backdrop-blur-xl border border-white/5 shadow-2xl">
+    <nav className="fixed left-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-6 p-4 rounded-3xl bg-[#0b0a12]/80 backdrop-blur-xl border border-white/10 shadow-2xl">
       {menuItems.map((item) => (
         <NavLink
           key={item.name}

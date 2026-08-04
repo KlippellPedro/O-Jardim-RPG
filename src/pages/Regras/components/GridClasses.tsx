@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Sword } from 'lucide-react';
+import { ArrowRight, Search, Sparkles, Sword, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { IClasse } from '../../../types/catalogo';
-import { ARVORES } from '../../../data/arvoresCatalog';
+import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
 import { classeTemProgressaoPublicada, formatarResumoClasse } from '../../../services/classeService';
+import { PremiumCard } from '../../../redesign/components/premium/PremiumCard';
+import { obterTemaPorId } from '../../../redesign/themeMap';
 
 interface GridClassesProps {
   classes: IClasse[];
@@ -18,73 +20,139 @@ const nomesArvores = (classe: IClasse) => {
     .join(' · ');
 };
 
+const correspondeABusca = (classe: IClasse, termo: string) => {
+  const alvo = [classe.titulo, classe.descricao, nomesArvores(classe)]
+    .filter(Boolean)
+    .join(' ')
+    .toLocaleLowerCase('pt-BR');
+  return alvo.includes(termo);
+};
+
 export const GridClasses: React.FC<GridClassesProps> = ({ classes }) => {
   const navigate = useNavigate();
-  const grupos = [
-    {
-      id: 'comuns',
-      titulo: 'Classes Comuns',
-      descricao: 'Disponíveis para personagens de qualquer Árvore. Seguem o patamar-base de progressão.',
-      classes: classes.filter(classe => classe.categoria === 'padrao'),
-      especial: false,
-    },
-    {
-      id: 'especiais',
-      titulo: 'Classes Especiais',
-      descricao: 'Mais fortes por natureza, restritas às Árvores indicadas e liberadas pelo Mestre como conteúdo de conquista.',
-      classes: classes.filter(classe => classe.categoria !== 'padrao'),
-      especial: true,
-    },
-  ];
+  const [busca, setBusca] = useState('');
+  const termo = busca.trim().toLocaleLowerCase('pt-BR');
+
+  const grupos = useMemo(() => {
+    const base = [
+      {
+        id: 'comuns',
+        titulo: 'Classes Comuns',
+        descricao: 'Abertas a personagem de qualquer Árvore. É o patamar-base de progressão: tudo o mais no jogo é medido a partir daqui.',
+        classes: classes.filter(classe => classe.categoria === 'padrao'),
+        especial: false,
+      },
+      {
+        id: 'especiais',
+        titulo: 'Classes Especiais',
+        descricao: 'Mais fortes que o patamar-base, presas às Árvores indicadas e liberadas pelo Mestre. Exigem nível total 15 e alguma coisa acontecida na história.',
+        classes: classes.filter(classe => classe.categoria !== 'padrao'),
+        especial: true,
+      },
+    ];
+    if (!termo) return base;
+    return base.map(grupo => ({
+      ...grupo,
+      classes: grupo.classes.filter(classe => correspondeABusca(classe, termo)),
+    }));
+  }, [classes, termo]);
+
+  const totalEncontrado = grupos.reduce((total, grupo) => total + grupo.classes.length, 0);
 
   return (
     <div className="mt-10 space-y-14">
-      {grupos.map(grupo => (
+      <label className="relative mx-auto block max-w-md">
+        <span className="sr-only">Buscar classe</span>
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
+        <input
+          type="search"
+          value={busca}
+          onChange={(event) => setBusca(event.target.value)}
+          placeholder="Buscar classe por nome, árvore ou descrição..."
+          className="w-full rounded-xl border border-white/10 bg-black/25 py-2.5 pl-9 pr-9 text-sm text-white outline-none transition-colors placeholder:text-gray-600 focus:border-[#c7a44c]/50"
+        />
+        {busca ? (
+          <button
+            type="button"
+            onClick={() => setBusca('')}
+            aria-label="Limpar busca"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-gray-500 hover:text-white"
+          >
+            <X size={14} />
+          </button>
+        ) : null}
+      </label>
+
+      {termo && totalEncontrado === 0 ? (
+        <p className="py-10 text-center text-sm text-gray-500">Nenhuma classe encontrada para "{busca.trim()}".</p>
+      ) : null}
+
+      {grupos.map((grupo, grupoIdx) => grupo.classes.length ? (
         <section key={grupo.id}>
-          <div className="mb-6 border-l-2 border-yellow-600/60 pl-4">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.35, delay: grupoIdx * 0.08 }}
+            className="mb-6 border-l-2 border-yellow-600/60 pl-4"
+          >
             <h2 className="flex items-center gap-2 text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>
               {grupo.especial && <Sparkles size={20} className="text-violet-400" />}
               {grupo.titulo}
             </h2>
             <p className="mt-1 max-w-3xl text-sm leading-relaxed text-gray-400">{grupo.descricao}</p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {grupo.classes.map(classe => {
+            {grupo.classes.map((classe, idx) => {
               const arvores = nomesArvores(classe);
+              const tema = obterTemaPorId(classe.id);
+
               return (
-                <motion.button
-                  type="button"
-                  whileHover={{ y: -5 }}
+                <PremiumCard
                   key={classe.id}
+                  glowColor={tema.glow}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.28, delay: Math.min(idx * 0.03, 0.24) }}
                   onClick={() => navigate(`/regras/classes/${classe.id}`)}
-                  className={`relative flex min-h-[180px] h-full flex-col justify-between overflow-hidden rounded-2xl border p-6 text-left shadow-lg backdrop-blur-sm transition-all ${grupo.especial ? 'border-violet-500/20 bg-violet-950/20 hover:border-violet-400/50' : 'border-white/10 bg-black/60 hover:border-yellow-600/50'}`}
+                  className={`cursor-pointer min-h-[180px] p-6 text-left shadow-lg border ${tema.border} ${tema.bg}`}
                 >
-                  <div className="absolute right-0 top-0 -mr-10 -mt-10 h-32 w-32 rounded-full bg-blue-600/10 blur-2xl" />
-                  <div className="relative">
-                    <h3 className="mb-2 flex items-center gap-2 text-xl font-bold text-yellow-500" style={{ fontFamily: 'Cinzel, serif' }}>
-                      <Sword size={20} className="text-yellow-600/60" />
+                  {/* Background glow blob */}
+                  <div
+                    className="absolute right-0 top-0 -mr-10 -mt-10 h-32 w-32 rounded-full blur-2xl pointer-events-none"
+                    style={{ backgroundColor: tema.glow.replace(/,[\d.]+\)/, ',0.2)') }}
+                  />
+
+                  <div className="relative flex-1">
+                    <h3
+                      className={`mb-2 flex items-center gap-2 text-xl font-bold ${tema.text}`}
+                      style={{ fontFamily: 'Cinzel, serif' }}
+                    >
+                      <Sword size={20} className={tema.icon} />
                       {classe.titulo}
                     </h3>
                     <p className="mb-3 text-sm text-gray-400">{formatarResumoClasse(classe)}</p>
                     {grupo.especial && arvores && (
-                      <p className="mb-3 text-xs font-bold uppercase tracking-wider text-violet-300">Árvores: {arvores}</p>
+                      <p className={`mb-3 text-xs font-bold uppercase tracking-wider ${tema.tag}`}>
+                        Árvores: {arvores}
+                      </p>
                     )}
                     {classeTemProgressaoPublicada(classe) && (
                       <span className="inline-flex rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                        Progressão publicada
+                        Progressão completa
                       </span>
                     )}
                   </div>
-                  <div className="relative mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-yellow-600/80">
+
+                  <div className={`mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest ${tema.icon}`}>
                     Explorar progressão <ArrowRight size={14} />
                   </div>
-                </motion.button>
+                </PremiumCard>
               );
             })}
           </div>
         </section>
-      ))}
+      ) : null)}
     </div>
   );
 };

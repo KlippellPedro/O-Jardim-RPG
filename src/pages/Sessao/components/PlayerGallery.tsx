@@ -1,70 +1,117 @@
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useMemo } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Heart, Shield, Sparkles, User, Users, Zap } from 'lucide-react';
 import { useCharacterStore } from '../../../store/useCharacterStore';
-import { Shield, Heart, Zap, User } from 'lucide-react';
+import { useSessaoStore } from '../../../store/useSessaoStore';
 
 export const PlayerGallery: React.FC = () => {
-  const { characters, fetchCharacters } = useCharacterStore();
+  const characters = useCharacterStore((state) => state.characters);
+  const iniciativa = useSessaoStore((state) => state.iniciativa);
+  const comando = useSessaoStore((state) => state.comando);
+  const reduceMotion = useReducedMotion();
 
-  useEffect(() => {
-    fetchCharacters();
-  }, [fetchCharacters]);
+  const charactersById = useMemo(
+    () => new Map(characters.map((character) => [character.id, character])),
+    [characters],
+  );
+
+  if (!iniciativa.length) {
+    return (
+      <div className="mx-auto flex max-w-lg flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02] px-8 py-14 text-center">
+        <Users className="mb-4 text-[#c7a44c]/60" size={38} strokeWidth={1.5} />
+        <h2 className="text-lg font-semibold text-white">A mesa ainda não tem participantes</h2>
+        <p className="mt-2 max-w-sm text-sm leading-6 text-white/45">
+          {comando
+            ? 'Use o painel de iniciativa para adicionar aliados ou inimigos. Personagens ativos entram automaticamente quando a sessão é aberta.'
+            : 'O mestre ainda está preparando os participantes desta sessão.'}
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none pb-24">
-      <div className="w-[60%] h-[75%] max-h-[800px] pointer-events-auto overflow-y-auto custom-scrollbar p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {characters.map((char, index) => (
-            <motion.div
-              key={char.id}
-              initial={{ opacity: 0, y: 20 }}
+    <section aria-labelledby="session-party-title">
+      <div className="mb-5 flex items-end justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-[#c7a44c]">
+            <Sparkles size={17} />
+            <p className="text-xs font-semibold uppercase tracking-[0.18em]">Preparação</p>
+          </div>
+          <h2 id="session-party-title" className="mt-2 text-2xl font-semibold text-white">Participantes da cena</h2>
+          <p className="mt-1 text-sm text-white/45">Revise o grupo e a iniciativa antes do primeiro turno.</p>
+        </div>
+        <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/50">
+          {iniciativa.length} {iniciativa.length === 1 ? 'participante' : 'participantes'}
+        </span>
+      </div>
+
+      <div className="grid grid-cols-1 gap-3 2xl:grid-cols-2">
+        {iniciativa.map((entity, index) => {
+          const character = entity.personagemId ? charactersById.get(entity.personagemId) : undefined;
+          const hpMax = entity.hpTotal ?? character?.derivados?.vida;
+          const hpCurrent = entity.hpAtual ?? hpMax;
+          const mana = character?.derivados?.mana;
+          const defense = character?.derivados?.defesaNatural;
+
+          return (
+            <motion.article
+              key={entity.id}
+              initial={reduceMotion ? false : { opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-black/60 backdrop-blur-md border border-white/10 rounded-2xl p-5 flex flex-col gap-4 shadow-xl hover:border-[#c7a44c]/50 hover:shadow-[0_0_20px_rgba(199,164,76,0.2)] transition-all"
+              transition={{ delay: reduceMotion ? 0 : Math.min(index * 0.035, 0.2) }}
+              className="rounded-xl border border-white/[0.08] bg-black/25 p-4 transition-colors hover:border-[#c7a44c]/25"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full border-2 border-[#c7a44c]/50 bg-black/40 overflow-hidden flex items-center justify-center flex-shrink-0">
-                  {char.foto ? (
-                    <img src={char.foto} alt={char.nome} className="w-full h-full object-cover" />
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-black/40">
+                  {character?.foto ? (
+                    <img src={character.foto} alt="" className="h-full w-full object-cover" />
                   ) : (
-                    <User size={32} className="text-[#c7a44c]/50" />
+                    <User size={22} className="text-white/30" />
                   )}
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white tracking-wide" style={{ fontFamily: 'Cinzel, serif' }}>{char.nome}</h3>
-                  <p className="text-sm text-gray-400 mt-1">
-                    Nível {char.nivel} • {char.racaId || 'Raça'}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <h3 className="truncate font-semibold text-white">{entity.nome}</h3>
+                    <span
+                      className="h-2 w-2 shrink-0 rounded-full"
+                      style={{ backgroundColor: entity.cor }}
+                      title={entity.tipo}
+                    />
+                  </div>
+                  <p className="mt-0.5 text-xs capitalize text-white/40">
+                    {entity.tipo} · Iniciativa {entity.iniciativa}
                   </p>
                 </div>
               </div>
-              
-              <div className="grid grid-cols-3 gap-2 mt-2">
-                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-2 flex flex-col items-center justify-center">
-                  <Heart size={16} className="text-red-400 mb-1" />
-                  <span className="text-[10px] uppercase tracking-wider text-gray-400">HP Max</span>
-                  <span className="text-sm font-bold text-white">{char.derivados?.vida || 0}</span>
+
+              <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
+                <div className="rounded-lg bg-red-400/[0.07] p-2 text-red-200/80">
+                  <Heart size={13} className="mb-1" />
+                  <span className="block truncate">{hpCurrent !== undefined ? `${hpCurrent}/${hpMax ?? '?'}` : entity.estado_vida ?? 'N/D'}</span>
                 </div>
-                <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-2 flex flex-col items-center justify-center">
-                  <Zap size={16} className="text-blue-400 mb-1" />
-                  <span className="text-[10px] uppercase tracking-wider text-gray-400">Mana</span>
-                  <span className="text-sm font-bold text-white">{char.derivados?.mana || 0}</span>
+                <div className="rounded-lg bg-sky-400/[0.07] p-2 text-sky-200/80">
+                  <Zap size={13} className="mb-1" />
+                  <span>{mana ?? 'N/D'}</span>
                 </div>
-                <div className="bg-gray-500/10 border border-gray-500/20 rounded-lg p-2 flex flex-col items-center justify-center">
-                  <Shield size={16} className="text-gray-400 mb-1" />
-                  <span className="text-[10px] uppercase tracking-wider text-gray-400">Defesa</span>
-                  <span className="text-sm font-bold text-white">{char.derivados?.defesaNatural || 10}</span>
+                <div className="rounded-lg bg-white/[0.04] p-2 text-white/60">
+                  <Shield size={13} className="mb-1" />
+                  <span>{defense ?? 'N/D'}</span>
                 </div>
               </div>
-            </motion.div>
-          ))}
-          {characters.length === 0 && (
-            <div className="col-span-full flex flex-col items-center justify-center text-gray-500 mt-20 opacity-50">
-              <User size={48} className="mb-4" />
-              <p>Nenhum jogador na campanha.</p>
-            </div>
-          )}
-        </div>
+
+              {entity.condicoes.length ? (
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {entity.condicoes.map((condition) => (
+                    <span key={`${condition.nome}-${condition.turnos ?? 'p'}`} className="rounded-full border border-amber-300/15 bg-amber-300/[0.06] px-2 py-0.5 text-[10px] text-amber-100/70">
+                      {condition.nome}{condition.turnos ? ` · ${condition.turnos}` : ''}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+            </motion.article>
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 };

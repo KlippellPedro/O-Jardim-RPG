@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import legadosRegrasData from '../../data/ficha/legados-regras-v1.json';
 import { CLASSES_CATALOGO, LEGADOS_CATALOGO } from '../../src/services/catalogoService';
-import { aplicarDescansoCompleto, aplicarRelaxamento, combateFoiIntenso } from '../../src/services/descansoService';
+import { aplicarDescansoCompleto, aplicarRelaxamento, combateFoiIntenso, descansoPermitido } from '../../src/services/descansoService';
 import { aplicarResistencia, capacidadeCarga, resumirEquipamentos } from '../../src/services/equipamentoService';
 import { avaliarLegado, habilidadesAutomaticas, podeSelecionarPoder, vagasLegado, vagasPoderDaClasse } from '../../src/services/progressaoFichaService';
 
@@ -20,7 +21,7 @@ test('progressão calcula habilidades, vagas de poder e Legados pelos marcos', (
   assert.equal(vagasPoderDaClasse(guerreiro, 6), 2);
   assert.equal(vagasPoderDaClasse(guerreiro, 20), 8);
   assert.ok(habilidadesAutomaticas(fichaBase).some((item) => item.titulo === 'Implacável' && item.nivel === 10));
-  assert.equal(vagasLegado(fichaBase), 2);
+  assert.equal(vagasLegado(fichaBase), 3);
 });
 
 test('Legado respeita atributo, nível e limite de vagas', () => {
@@ -29,7 +30,18 @@ test('Legado respeita atributo, nível e limite de vagas', () => {
   assert.equal(avaliarLegado(esquiva as any, fichaBase, []).permitido, true);
   const semDestreza = { ...fichaBase, atributosFinais: { ...fichaBase.atributosFinais, destreza: 13 } };
   assert.equal(avaliarLegado(esquiva as any, semDestreza, []).permitido, false);
-  assert.equal(avaliarLegado(esquiva as any, fichaBase, ['to-ficando-bom', 'ainda-nao']).permitido, false);
+  assert.equal(avaliarLegado(esquiva as any, fichaBase, ['to-ficando-bom', 'ainda-nao', 'rapidinho']).permitido, false);
+});
+
+test('catálogo atual incorpora as regras de Legados revisadas no frontend antigo', () => {
+  const regrasMigradas = Object.keys(legadosRegrasData.regras);
+  assert.equal(regrasMigradas.length, 36);
+  assert.ok(regrasMigradas.every((id) => LEGADOS_CATALOGO.find((item: any) => item.id === id)?.versaoRegras === '1.0'));
+
+  const esquiva = LEGADOS_CATALOGO.find((item: any) => item.id === 'esquiva');
+  const magico = LEGADOS_CATALOGO.find((item: any) => item.id === 'magico-exclamacao');
+  assert.match(esquiva?.descricao || '', /\+1 na Defesa e \+1 em Reflexos/);
+  assert.deepEqual(magico?.pre_requisitos, [{ nivel_personagem: 7 }]);
 });
 
 test('poder dependente exige o poder anterior', () => {
@@ -41,6 +53,9 @@ test('poder dependente exige o poder anterior', () => {
 });
 
 test('descanso recupera percentuais, Sanidade, Cansaço e trata Ferido uma vez', () => {
+  assert.equal(descansoPermitido('excelente', false), false);
+  assert.equal(descansoPermitido('excelente', true), true);
+  assert.equal(descansoPermitido('boa', false), true);
   const resultado = aplicarDescansoCompleto(
     { vidaAtual: 10, manaAtual: 0, sanidadeAtual: 40, cansacoAtual: 5, ferido: 2 },
     { vida: 100, mana: 40, sanidade: 100 },

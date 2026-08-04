@@ -5,12 +5,20 @@ import { FichaModal } from '../../pages/Ficha/components/FichaModal';
 interface TransferirModalProps {
   isOpen: boolean;
   onClose: () => void;
-  tipo: 'item' | 'moeda';
+  /** 'banco' é o Cofre bancário do Banqueiro — mesma mecânica de moeda, mas
+   * de outro estoque, então a tela precisa dizer de onde o saldo está saindo. */
+  tipo: 'item' | 'moeda' | 'banco';
   titulo: string;
   disponivel: number;
   personagemNome: string;
   onConfirm: (quantidade: number) => Promise<void>;
 }
+
+const ROTULO_ORIGEM: Record<TransferirModalProps['tipo'], string> = {
+  item: 'Disponível no cofre',
+  moeda: 'Disponível no cofre',
+  banco: 'Disponível no cofre bancário',
+};
 
 export const TransferirModal: React.FC<TransferirModalProps> = ({
   isOpen,
@@ -49,15 +57,21 @@ export const TransferirModal: React.FC<TransferirModalProps> = ({
   };
 
   return (
-    <FichaModal isOpen={isOpen} onClose={onClose} title={`Transferir ${tipo === 'moeda' ? 'moeda' : 'item'}`}>
+    <FichaModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={tipo === 'banco' ? 'Sacar do cofre bancário' : `Transferir ${tipo === 'moeda' ? 'moeda' : 'item'}`}
+    >
       <div className="flex flex-col gap-5">
         <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl p-4">
           <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
-            {tipo === 'moeda' ? <Gem size={18} /> : <Package size={18} />}
+            {tipo === 'item' ? <Package size={18} /> : <Gem size={18} />}
           </div>
           <div className="min-w-0">
             <p className="text-white font-bold truncate">{titulo}</p>
-            <p className="text-gray-500 text-xs">Disponível no cofre: {disponivel}</p>
+            <p className="text-gray-500 text-xs">
+              {ROTULO_ORIGEM[tipo]}: {disponivel.toLocaleString('pt-BR')}
+            </p>
           </div>
         </div>
 
@@ -100,7 +114,7 @@ export const TransferirModal: React.FC<TransferirModalProps> = ({
               onClick={() => setQuantidade(disponivel)}
               className="self-start text-xs text-primary/80 hover:text-primary transition-colors"
             >
-              Transferir tudo ({disponivel})
+              Transferir tudo ({disponivel.toLocaleString('pt-BR')})
             </button>
           )}
         </div>
@@ -125,7 +139,7 @@ export const TransferirModal: React.FC<TransferirModalProps> = ({
             className="px-5 py-2.5 rounded-lg bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 text-sm font-bold transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {enviando ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
-            Transferir
+            {tipo === 'banco' ? 'Sacar' : 'Transferir'}
           </button>
         </div>
       </div>

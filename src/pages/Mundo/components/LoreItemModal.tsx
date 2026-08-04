@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LoreEntry } from '../../../data/mundoCatalog';
+import { LoreEntry } from '../../../../data/gerado/mundoCatalog';
 import { ShieldAlert, Info, Map as MapIcon, Calendar, User } from 'lucide-react';
 
 interface LoreItemModalProps {

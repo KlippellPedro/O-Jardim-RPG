@@ -1,28 +1,42 @@
 import { useState, useEffect } from 'react';
-import { HelpCircle, X, Dices } from 'lucide-react';
-import { SectionTitle, LabeledInput, LabeledModalSelect, ResourceBar } from '../components/SharedFichaComponents';
+import { HelpCircle, X } from 'lucide-react';
+import { SectionTitle, LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
 import { ModalInfoFicha } from '../components/ModalInfoFicha';
 import { carregarCatalogo } from '../../../services/catalogoService';
 import { ICatalogo } from '../../../types/catalogo';
-import { ATRIBUTOS, ATRIBUTO_VALOR_MINIMO, ATRIBUTO_VALOR_MAXIMO, calcularDerivadosComClasses, modificador, TABELA_XP, nivelPorXp, TAtributo } from '../../../services/calculoService';
-import { limparEscolhasPrincipaisRaciais, obterGruposEscolhaRacial } from '../../../services/racaService';
+import { aplicarAjustesAtributosRaciais, ATRIBUTOS, ATRIBUTO_VALOR_MINIMO, bonusTesteAtributo, calcularDerivadosComClasses, TABELA_XP, nivelPorXp, TAtributo } from '../../../services/calculoService';
+import { limparEscolhasPrincipaisRaciais, obterGruposEscolhaRacial, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { ARVORES, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao } from '../../../data/arvoresCatalog';
-import { ProgressaoClasses } from '../components/ProgressaoClasses';
-import { atualizarStatusVital, multiplicadorMovimentoCansaco, penalidadeCansacoIniciativa } from '../../../services/statusService';
+import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao } from '../../../../data/mundo/arvoresCatalog';
+import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
+import {
+  atualizarStatusVital,
+  bonusIniciativaFicha,
+  desvantagensAutomaticasTeste,
+  movimentoBloqueadoPorCondicao,
+  multiplicadorMovimentoCansaco,
+  obterStatusFicha,
+  penalidadeCansacoIniciativa,
+  penalidadeCansacoTeste,
+  penalidadeDefesaCondicoes,
+  penalidadeIniciativaCondicoes,
+} from '../../../services/statusService';
 import { resumirEquipamentos } from '../../../services/equipamentoService';
-import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../data/condicoes';
-
-const NOMES_ATRIBUTOS: Record<TAtributo, string> = {
-  forca: 'Força',
-  destreza: 'Destreza',
-  constituicao: 'Constituição',
-  inteligencia: 'Inteligência',
-  sabedoria: 'Sabedoria',
-  carisma: 'Carisma',
-  fluxo: 'Fluxo',
-};
+import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../../data/regras/condicoes';
+import { ORIGENS_EXEMPLO, obterOrigemExemplo } from '../../../../data/ficha/origensData';
+import { AjusteButton, AjustesFichaModal } from '../components/AjustesFichaModal';
+import { ModalPortal } from '../components/ModalPortal';
+import {
+  ajusteOrigem,
+  chaveAjuste,
+  nomeAjusteOrigem,
+  obterAjustesManuais,
+  totalAjustesManuais,
+  type IAjusteFicha,
+} from '../../../services/ajustesFichaService';
+import { AtributosSection, NOMES_ATRIBUTOS } from '../components/AtributosSection';
+import { StatusVitaisSection } from '../components/StatusVitaisSection';
 
 interface IClasseSlot {
   classeId: string;
@@ -31,50 +45,149 @@ interface IClasseSlot {
 
 export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: any }) => {
   const f = character.ficha || {};
-  const status = f.status || {};
-  const maxVida = character.derivados?.vida || 10;
-  const maxMana = character.derivados?.mana || 10;
-  const maxSanidade = status.sanidadeMaxima || 100;
-  const maxCansaco = status.cansacoMaximo || 6;
-  const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], f);
-  const defesaNatural = Number(character.derivados?.defesaNatural ?? f.derivados?.defesaNatural) || 10;
-  const estaExposto = (f.condicoesAtivas || []).some((item: any) => String(item?.id || item?.nome || '').toLocaleLowerCase('pt-BR') === 'exposto');
-  const penalidadeDefesa = estaExposto ? 2 : 0;
-  const defesaTotal = defesaNatural + resumoEquipamento.defesaEquipamento - penalidadeDefesa;
-  const iniciativaBase = Number(character.derivados?.iniciativa ?? f.derivados?.iniciativa) || 10;
-  const penalidadeIniciativa = penalidadeCansacoIniciativa(status.cansacoAtual);
-  const iniciativaFinal = iniciativaBase + penalidadeIniciativa;
-  const movimentoBase = Number(character.derivados?.movimento ?? f.derivados?.movimento) || 9;
-  const penalidadeSobrecarga = resumoEquipamento.sobrecarregado ? 3 : 0;
-  const movimentoFinal = Math.max(0, (movimentoBase - penalidadeSobrecarga) * multiplicadorMovimentoCansaco(status.cansacoAtual));
-
-  const vAtual = status.vidaAtual ?? maxVida;
-  const mAtual = status.manaAtual ?? maxMana;
-  const sAtual = status.sanidadeAtual ?? maxSanidade;
-  const cAtual = status.cansacoAtual ?? 0;
-
   const [activeModal, setActiveModal] = useState<any>(null);
+  const [ajusteModal, setAjusteModal] = useState<{
+    chave: string;
+    titulo: string;
+    automaticos: Array<{ nome: string; valor: number }>;
+  } | null>(null);
   const [catalogo, setCatalogo] = useState<ICatalogo | null>(null);
 
   useEffect(() => {
     carregarCatalogo().then(setCatalogo);
   }, []);
 
-  const attrs = f.atributosFinais || character.atributosFinais || { forca:10, destreza:10, constituicao:10, inteligencia:10, sabedoria:10, carisma:10, fluxo:10 };
+  const status = obterStatusFicha(f);
+  const racaAtual = catalogo?.racas.find(raca => raca.id === f.racaId) || null;
+  const origemAtual = obterOrigemExemplo(f.origemId);
+  const classes: IClasseSlot[] = f.classes?.length
+    ? f.classes
+    : (f.classeId ? [{ classeId: f.classeId, nivel: character.nivel || 1 }] : []);
+  const nivelTotalClasses = classes.reduce((sum, classe) => sum + (Number(classe.nivel) || 1), 0) || 1;
+  const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], f);
+  const attrsNaturais = (f.atributosFinais || character.atributosFinais || { forca:10, destreza:10, constituicao:10, inteligencia:10, sabedoria:10, carisma:10, fluxo:10 }) as Record<TAtributo, number>;
+  const attrsAntesRacaSemEquipamento = Object.fromEntries(ATRIBUTOS.map((attr) => [
+    attr,
+    Number(attrsNaturais[attr] ?? 10)
+      + ajusteOrigem(f, 'atributo', attr)
+      + totalAjustesManuais(f, chaveAjuste('atributo', attr)),
+  ])) as Record<TAtributo, number>;
+  const attrsAntesRaca = Object.fromEntries(ATRIBUTOS.map((attr) => [
+    attr,
+    attrsAntesRacaSemEquipamento[attr] + (resumoEquipamento.bonusAtributos[attr] || 0),
+  ])) as Record<TAtributo, number>;
+  const attrs = (racaAtual
+    ? aplicarAjustesAtributosRaciais(attrsAntesRaca, racaAtual, f.escolhaRacial)
+    : attrsAntesRaca) as Record<TAtributo, number>;
+  const derivadosSemEquipamento = catalogo
+    ? calcularDerivadosComClasses(attrsAntesRacaSemEquipamento, racaAtual, classes, catalogo.classes, nivelTotalClasses, f.escolhaRacial)
+    : null;
+  const derivadosComEquipamento = catalogo
+    ? calcularDerivadosComClasses(attrsAntesRaca, racaAtual, classes, catalogo.classes, nivelTotalClasses, f.escolhaRacial)
+    : null;
+  const deltaDerivado = (campo: 'vida' | 'mana' | 'defesaNatural' | 'iniciativa' | 'movimento') => (
+    Number(derivadosComEquipamento?.[campo] || 0) - Number(derivadosSemEquipamento?.[campo] || 0)
+  );
+  const maxVidaBase = Number(f.derivados?.vida ?? character.derivados?.vida) || 10;
+  const maxManaBase = Number(f.derivados?.mana ?? character.derivados?.mana) || 10;
+  const maxVida = Math.max(1, maxVidaBase + deltaDerivado('vida') + ajusteOrigem(f, 'vidaMaxima') + totalAjustesManuais(f, chaveAjuste('recurso', 'vidaMaxima')) + (resumoEquipamento.bonusRecursos.vidaMaxima || 0));
+  const maxMana = Math.max(1, maxManaBase + deltaDerivado('mana') + ajusteOrigem(f, 'manaMaxima') + totalAjustesManuais(f, chaveAjuste('recurso', 'manaMaxima')) + (resumoEquipamento.bonusRecursos.manaMaxima || 0));
+  const maxSanidadeBase = Math.max(1, Number(status.sanidadeMaxima) || 100);
+  const maxSanidade = Math.max(1, maxSanidadeBase + ajusteOrigem(f, 'sanidadeMaxima') + totalAjustesManuais(f, chaveAjuste('recurso', 'sanidadeMaxima')) + (resumoEquipamento.bonusRecursos.sanidadeMaxima || 0));
+  const maxCansacoBase = Math.max(1, Number(status.cansacoMaximo) || 6);
+  const maxCansaco = Math.max(1, maxCansacoBase + totalAjustesManuais(f, chaveAjuste('recurso', 'cansacoMaximo')) + (resumoEquipamento.bonusRecursos.cansacoMaximo || 0));
+  const defesaNatural = (Number(f.derivados?.defesaNatural ?? character.derivados?.defesaNatural) || 10) + deltaDerivado('defesaNatural');
+  const penalidadeDefesa = penalidadeDefesaCondicoes(f.condicoesAtivas);
+  const ajusteDefesa = totalAjustesManuais(f, chaveAjuste('combate', 'defesa'));
+  const defesaTotal = defesaNatural + resumoEquipamento.defesaEquipamento + (resumoEquipamento.bonusCombate.defesa || 0) - penalidadeDefesa + ajusteDefesa;
+  const iniciativaBase = (Number(f.derivados?.iniciativa ?? character.derivados?.iniciativa) || 10) + deltaDerivado('iniciativa');
+  const penalidadeIniciativa = penalidadeCansacoIniciativa(status.cansacoAtual)
+    + penalidadeIniciativaCondicoes(f.condicoesAtivas);
+  const bonusIniciativa = bonusIniciativaFicha(f);
+  const ajusteIniciativa = totalAjustesManuais(f, chaveAjuste('combate', 'iniciativa'));
+  const iniciativaFinal = iniciativaBase + bonusIniciativa + penalidadeIniciativa + ajusteIniciativa + (resumoEquipamento.bonusCombate.iniciativa || 0);
+  const movimentoBase = (Number(f.derivados?.movimento ?? character.derivados?.movimento) || 9) + deltaDerivado('movimento');
+  const penalidadeSobrecarga = resumoEquipamento.sobrecarregado ? 3 : 0;
+  const ajusteMovimento = ajusteOrigem(f, 'movimento') + totalAjustesManuais(f, chaveAjuste('combate', 'movimento'));
+  const movimentoFinal = movimentoBloqueadoPorCondicao(f.condicoesAtivas)
+    ? 0
+    : Math.max(0, (movimentoBase + ajusteMovimento + (resumoEquipamento.bonusCombate.movimento || 0) - penalidadeSobrecarga) * multiplicadorMovimentoCansaco(status.cansacoAtual));
+
+  const vAtual = Number(status.vidaAtual ?? maxVida);
+  const mAtual = Number(status.manaAtual ?? maxMana);
+  const sAtual = Number(status.sanidadeAtual ?? maxSanidade);
+  const cAtual = Number(status.cansacoAtual ?? 0);
+  const efeitosCansaco = [
+    cAtual >= 1 ? 'Testes físicos: penalidade ativa' : null,
+    cAtual >= 2 ? 'Iniciativa: −1' : null,
+    cAtual >= 3 ? 'Todos os testes: −2' : null,
+    cAtual >= 4 ? 'Testes físicos: 1 desvantagem' : null,
+    cAtual >= 5 ? 'Movimento: metade' : null,
+    cAtual >= 6 ? 'Colapso' : null,
+  ].filter(Boolean) as string[];
 
   const handleStatus = (field: string, change: number, max: number) => {
     const proximoStatus = atualizarStatusVital(status, field, change, max, attrs.constituicao);
     onUpdate(['ficha', 'status'], proximoStatus);
   };
 
+  const handleSanidadeMaxima = (novoMaximoTotal: number) => {
+    const ajustesExternos = ajusteOrigem(f, 'sanidadeMaxima')
+      + totalAjustesManuais(f, chaveAjuste('recurso', 'sanidadeMaxima'))
+      + (resumoEquipamento.bonusRecursos.sanidadeMaxima || 0);
+    const novaBase = Math.max(1, Math.trunc(novoMaximoTotal - ajustesExternos));
+    const novoTotal = Math.max(1, novaBase + ajustesExternos);
+    onUpdate(['ficha', 'status'], {
+      ...status,
+      sanidadeMaxima: novaBase,
+      sanidadeAtual: Math.min(Number(status.sanidadeAtual ?? novoTotal), novoTotal),
+    });
+  };
+
+  const abrirAjustes = (
+    chave: string,
+    titulo: string,
+    automaticos: Array<{ nome: string; valor: number }> = [],
+  ) => setAjusteModal({ chave, titulo, automaticos: automaticos.filter((item) => item.valor !== 0) });
+
+  const atributosParaDerivados = (base: Record<string, number>, ficha: any) => Object.fromEntries(
+    ATRIBUTOS.map((attr) => [
+      attr,
+      Number(base[attr] ?? 10)
+        + ajusteOrigem(ficha, 'atributo', attr)
+        + totalAjustesManuais(ficha, chaveAjuste('atributo', attr)),
+    ]),
+  );
+
+  const salvarAjustes = (chave: string, ajustes: IAjusteFicha[]) => {
+    const novosAjustes = { ...(f.ajustesFicha || {}), [chave]: ajustes };
+    const novaFicha = { ...f, ajustesFicha: novosAjustes };
+    if (chave.startsWith('atributo.') && catalogo) {
+      novaFicha.derivados = calcularDerivadosComClasses(
+        atributosParaDerivados(attrsNaturais, novaFicha),
+        racaAtual,
+        classes,
+        catalogo.classes,
+        nivelTotalClasses,
+        f.escolhaRacial,
+      );
+    }
+    onUpdate(['ficha'], novaFicha);
+  };
+
   // BUG-FIX: valores dos atributos eram só leitura; agora dá pra ajustar
-  // direto na ficha digitando o número (clamp 1-20).
-  const handleAttrChange = (attr: TAtributo, novoValor: number) => {
-    const novo = Math.max(ATRIBUTO_VALOR_MINIMO, Math.min(ATRIBUTO_VALOR_MAXIMO, novoValor));
-    const novosAtributos = { ...attrs, [attr]: novo };
+  // direto na ficha digitando o número.
+  // O teto de 20 (ATRIBUTO_VALOR_MAXIMO) só vale pra criação (Wizard,
+  // regras oficiais): a ficha de um personagem já em jogo pode passar disso
+  // por bênção, mutação ou qualquer coisa negociada com o mestre - só o piso
+  // de 1 continua valendo aqui, pra não deixar salvar atributo negativo.
+  const handleAttrChange = (attr: TAtributo, novoValorEfetivo: number) => {
+    const ajustesExternos = Number(attrs[attr] ?? 10) - Number(attrsNaturais[attr] ?? 10);
+    const novo = Math.max(ATRIBUTO_VALOR_MINIMO, novoValorEfetivo - ajustesExternos);
+    const novosAtributos = { ...attrsNaturais, [attr]: novo };
     const derivados = catalogo
       ? calcularDerivadosComClasses(
-          novosAtributos,
+          atributosParaDerivados(novosAtributos, f),
           racaAtual,
           classes,
           catalogo.classes,
@@ -86,33 +199,44 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
   };
 
   // BUG-FIX: "Rolar Teste" mostrava só Força/Destreza com bônus fixo (+2/+0)
-  // que não refletia os atributos reais. Agora lista os 7 atributos com o
+  // que não refletia os atributos reais. Lista os 7 atributos com o
   // modificador calculado ao vivo e rola de verdade no servidor.
+  //
+  // Vive dentro do modal "?" de cada atributo (não um card fixo na tela):
+  // um resultado só faz sentido pro atributo cujo modal está aberto, daí
+  // `resultadoTeste` guardar o atributo junto.
   const campanhaAtiva = useAuthStore((s) => s.campanhaAtiva);
   const usuario = useAuthStore((s) => s.usuario);
   const isMestre = usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador'
     || campanhaAtiva?.papel === 'mestre' || campanhaAtiva?.papel === 'assistente';
   const configCampanha = campanhaAtiva?.configuracoes || {};
   const arvoresDisponiveis = ARVORES.filter(a => arvoreVisivel(a.id, configCampanha, isMestre));
-  const [atributoTeste, setAtributoTeste] = useState<TAtributo>('forca');
   const [rolandoTeste, setRolandoTeste] = useState(false);
-  const [resultadoTeste, setResultadoTeste] = useState<{ resultado: number | null; detalhes: any } | null>(null);
-  const modTeste = modificador(attrs[atributoTeste]);
+  const [resultadoTeste, setResultadoTeste] = useState<{ atributo: TAtributo; resultado: number | null } | null>(null);
 
-  const handleRolarTeste = async () => {
+  const modificadorTeste = (attr: TAtributo) => {
+    const fisico = ['forca', 'destreza', 'constituicao'].includes(attr);
+    return bonusTesteAtributo(attrs[attr], penalidadeCansacoTeste(status.cansacoAtual, fisico));
+  };
+
+  const handleRolarTeste = async (attr: TAtributo) => {
     if (!campanhaAtiva?.id) {
       alert('Nenhuma campanha ativa. Selecione uma campanha para rolar dados.');
       return;
     }
+    const fisico = ['forca', 'destreza', 'constituicao'].includes(attr);
+    const desvantagens = desvantagensAutomaticasTeste(status.cansacoAtual, fisico, resumoEquipamento.sobrecarregado);
     setRolandoTeste(true);
+    setResultadoTeste(null);
     try {
       const { registro } = await registrosApi.rolar({
         campanhaId: campanhaAtiva.id,
         personagemId: character.id,
-        titulo: `Teste de ${NOMES_ATRIBUTOS[atributoTeste]}`,
-        bonus: modTeste + Math.floor(Math.max(1, Number(character.nivel) || 1) / 2),
+        titulo: `Teste de ${NOMES_ATRIBUTOS[attr]}`,
+        bonus: modificadorTeste(attr),
+        desvantagens,
       });
-      setResultadoTeste({ resultado: registro.resultado, detalhes: registro.detalhes });
+      setResultadoTeste({ atributo: attr, resultado: registro.resultado });
     } catch (e: any) {
       alert(e?.message || 'Falha ao rolar o teste.');
     } finally {
@@ -189,10 +313,6 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
   // Classe" funcionavam. Agora é uma lista de verdade (ficha.classes),
   // mantendo ficha.classeId em dia com a primeira classe (compatibilidade
   // com FichaList.tsx, que ainda lê esse campo pro card do personagem).
-  const classes: IClasseSlot[] = f.classes?.length
-    ? f.classes
-    : (f.classeId ? [{ classeId: f.classeId, nivel: character.nivel || 1 }] : []);
-
   // Raça/classe exclusivas de outra Árvore, ou especiais não liberadas pelo
   // mestre, não aparecem como opção: mestre/assistente vê tudo, e a opção
   // já escolhida antes sempre continua na lista (senão o campo fica com um
@@ -203,24 +323,50 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
     return atual ? [...lista, atual] : lista;
   };
 
+  const liberadosRacaJogador = (usuario?.id && configCampanha.racas_liberadas_membros?.[usuario.id]) || [];
+  const liberadosClasseJogador = (usuario?.id && configCampanha.classes_liberadas_membros?.[usuario.id]) || [];
+
   const racasFiltradas = isMestre
     ? (catalogo?.racas || [])
     : manterEscolhaAtual(
-        filtrarPorLiberacao(filtrarPorArvore(catalogo?.racas || [], f.arvoreId), configCampanha.racas_liberadas || []),
+        filtrarPorLiberacao(
+          filtrarPorArvore(catalogo?.racas || [], f.arvoreId),
+          configCampanha.racas_liberadas || [],
+          liberadosRacaJogador,
+        ),
         catalogo?.racas || [],
         f.racaId,
       );
   const classesFiltradas = isMestre
     ? (catalogo?.classes || [])
-    : filtrarPorLiberacao(filtrarPorArvore(catalogo?.classes || [], f.arvoreId), configCampanha.classes_liberadas || []);
+    : filtrarPorLiberacao(
+        filtrarPorArvore(catalogo?.classes || [], f.arvoreId),
+        configCampanha.classes_liberadas || [],
+        liberadosClasseJogador,
+      );
 
-  const racaAtual = catalogo?.racas.find(raca => raca.id === f.racaId) || null;
+  // Jogador comum pode TROCAR a própria raça/classe pra uma opção que o
+  // mestre liberou (pra ele ou pra campanha inteira) - uma "transformação"
+  // sob controle do mestre, nunca respec livre entre duas raças/classes
+  // comuns (o backend também recusa isso: ver
+  // plataforma/core/character_summary.py::validar_regras_ficha). A opção
+  // atual, seja qual for, sempre continua selecionável (senão o campo
+  // trava sem conseguir salvar mais nada).
+  const racasEditaveisPeloJogador = racasFiltradas.filter(
+    raca => raca.categoria !== 'padrao' || raca.id === f.racaId,
+  );
+  const classesEditaveisPeloJogador = (classeIdAtual: string) => (
+    classeIdAtual
+      ? classesFiltradas.filter(classe => classe.categoria !== 'padrao' || classe.id === classeIdAtual)
+      : classesFiltradas // slot vazio (classe nova): adicionar não é trocar, sem essa restrição
+  );
+
   const gruposEscolhaRacial = obterGruposEscolhaRacial(racaAtual);
 
   const salvarIdentidadeRacial = (novaRacaId: string, novaEscolhaRacial: Record<string, any>) => {
     const novaRaca = catalogo?.racas.find(raca => raca.id === novaRacaId) || null;
     const derivados = novaRaca && catalogo
-      ? calcularDerivadosComClasses(attrs, novaRaca, classes, catalogo.classes, nivelTotalClasses, novaEscolhaRacial)
+      ? calcularDerivadosComClasses(atributosParaDerivados(attrsNaturais, f), novaRaca, classes, catalogo.classes, nivelTotalClasses, novaEscolhaRacial)
       : f.derivados;
     onUpdate(['ficha'], {
       ...f,
@@ -242,6 +388,26 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
     });
   };
 
+  const handleOrigemChange = (origemId: string) => {
+    const origem = obterOrigemExemplo(origemId);
+    const novaFicha = {
+      ...f,
+      origemId,
+      origem: origem?.titulo || (origemId === 'personalizada' ? '' : f.origem || ''),
+    };
+    if (catalogo) {
+      novaFicha.derivados = calcularDerivadosComClasses(
+        atributosParaDerivados(attrsNaturais, novaFicha),
+        racaAtual,
+        classes,
+        catalogo.classes,
+        nivelTotalClasses,
+        f.escolhaRacial,
+      );
+    }
+    onUpdate(['ficha'], novaFicha);
+  };
+
   // BUG-FIX: chamar onUpdate duas vezes seguidas aqui causava uma corrida:
   // a segunda chamada usava um "character" desatualizado (fechamento antigo
   // de handleUpdate em PersonagemSheet, que só se renova depois que a
@@ -251,7 +417,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
   const salvarClasses = (novaLista: IClasseSlot[]) => {
     const nivelTotal = novaLista.reduce((sum, c) => sum + (Number(c.nivel) || 1), 0) || 1;
     const derivados = catalogo
-      ? calcularDerivadosComClasses(attrs, racaAtual, novaLista, catalogo.classes, nivelTotal, f.escolhaRacial)
+      ? calcularDerivadosComClasses(atributosParaDerivados(attrsNaturais, f), racaAtual, novaLista, catalogo.classes, nivelTotal, f.escolhaRacial)
       : f.derivados;
     onUpdate(['ficha'], {
       ...f,
@@ -262,16 +428,15 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
     });
   };
 
-  const nivelTotalClasses = classes.reduce((sum, c) => sum + (Number(c.nivel) || 1), 0) || 1;
   const classesAtuaisCatalogo = classes
     .map(slot => ({ slot, classe: catalogo?.classes.find(item => item.id === slot.classeId) }))
     .filter(item => item.classe);
   const comunsAtuais = classesAtuaisCatalogo.filter(item => item.classe?.categoria === 'padrao');
   const possuiEspecial = classesAtuaisCatalogo.some(item => item.classe?.categoria !== 'padrao');
   const classesDisponiveisMulticlasse = classesFiltradas.filter(classe => {
-    if (classes.some(slot => slot.classeId === classe.id) || nivelTotalClasses >= 40) return false;
-    if (classe.categoria !== 'padrao') return !possuiEspecial && nivelTotalClasses >= 15;
-    return comunsAtuais.length < 2 && comunsAtuais.some(item => Number(item.slot.nivel) >= 20);
+    if (classes.some(slot => slot.classeId === classe.id) || nivelTotalClasses >= 60) return false;
+    if (classe.categoria !== 'padrao') return !possuiEspecial && nivelTotalClasses >= 20;
+    return comunsAtuais.length < 2;
   });
 
   const handleAdicionarClasse = () => {
@@ -305,17 +470,38 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
             <LabeledModalSelect
               label="Árvore"
               value={f.arvoreId}
-              options={(isMestre ? ARVORES : arvoresDisponiveis).map(arvore => ({ value: arvore.id, label: arvore.nome }))}
+              options={[
+                { value: SEM_ARVORE_ID, label: 'Sem Árvore' },
+                ...(isMestre ? ARVORES : arvoresDisponiveis).map(arvore => ({ value: arvore.id, label: arvore.nome })),
+              ]}
               onChange={(v:any) => onUpdate(['ficha', 'arvoreId'], v)}
               disabled={!isMestre}
             />
             <LabeledModalSelect
               label="Raça"
               value={f.racaId}
-              options={catalogo ? racasFiltradas.map(raca => ({ value: raca.id, label: raca.titulo })) : [{ value: '', label: 'Carregando...' }]}
+              options={catalogo
+                ? (isMestre ? racasFiltradas : racasEditaveisPeloJogador).map(raca => ({
+                    value: raca.id,
+                    // A raça personalizada mostra o nome que o jogador escreveu,
+                    // não o rótulo genérico do catálogo.
+                    label: raca.id === RACA_PERSONALIZADA_ID
+                      ? nomeExibicaoRaca(raca.id, f.racaNomePersonalizado, raca.titulo)
+                      : raca.titulo,
+                  }))
+                : [{ value: '', label: 'Carregando...' }]}
               onChange={handleRacaChange}
-              disabled={!isMestre}
+              disabled={!catalogo}
             />
+
+            {f.racaId === RACA_PERSONALIZADA_ID && (
+              <LabeledInput
+                label="Nome da raça personalizada"
+                value={f.racaNomePersonalizado || ''}
+                placeholder="Escreva o nome da raça/origem do personagem"
+                onChange={(v: any) => onUpdate(['ficha', 'racaNomePersonalizado'], v)}
+              />
+            )}
 
             {gruposEscolhaRacial.map(grupo => (
               <LabeledModalSelect
@@ -328,11 +514,33 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               />
             ))}
             
-            <LabeledInput label="Origem" value={f.origem} placeholder="Ex: Jornalista" onChange={(v:any) => onUpdate(['ficha', 'origem'], v)} />
+            <LabeledModalSelect
+              label="Origem"
+              value={f.origemId || (f.origem ? 'personalizada' : '')}
+              options={[
+                { value: '', label: 'Sem origem' },
+                ...ORIGENS_EXEMPLO.map((origem) => ({ value: origem.id, label: `${origem.titulo}: ${origem.ajuste.rotulo}` })),
+                { value: 'personalizada', label: 'Outra / personalizada' },
+              ]}
+              onChange={handleOrigemChange}
+            />
+            {origemAtual ? (
+              <p className="self-end rounded-md border border-[#c7a44c]/10 bg-[#c7a44c]/5 px-3 py-2 text-xs leading-relaxed text-gray-400" title={origemAtual.ajuste.rotulo}>
+                {origemAtual.descricao}
+              </p>
+            ) : null}
+            {(f.origemId === 'personalizada' || (!f.origemId && f.origem)) && (
+              <LabeledInput label="Nome da origem" value={f.origem || ''} placeholder="Ex.: Jornalista" onChange={(v:any) => onUpdate(['ficha', 'origem'], v)} />
+            )}
             <LabeledInput label="Título" value={f.titulo} placeholder="Ex: O Assassino" onChange={(v:any) => onUpdate(['ficha', 'titulo'], v)} />
             <LabeledInput label="Nível Total" value={nivelTotalClasses} readOnly={true} type="number" />
             <LabeledInput label="Tamanho" value={f.tamanho} placeholder="Ex: Normal" onChange={(v:any) => onUpdate(['ficha', 'tamanho'], v)} />
           </div>
+          {f.arvoreId === 'mulher-carmesim' && (
+            <p className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-xs leading-relaxed text-amber-200">
+              {AVISO_FLUXO_FIM}
+            </p>
+          )}
         </div>
 
         {/* CLASSE */}
@@ -346,9 +554,11 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                   <LabeledModalSelect
                     label=""
                     value={classeSlot.classeId}
-                    options={catalogo ? classesFiltradas.map(classe => ({ value: classe.id, label: classe.titulo })) : [{ value: '', label: 'Carregando...' }]}
+                    options={catalogo
+                      ? (isMestre ? classesFiltradas : classesEditaveisPeloJogador(classeSlot.classeId)).map(classe => ({ value: classe.id, label: classe.titulo }))
+                      : [{ value: '', label: 'Carregando...' }]}
                     onChange={(v: any) => handleClasseChange(index, v)}
-                    disabled={!isMestre}
+                    disabled={!catalogo}
                   />
                 </div>
                 <div className="w-20">
@@ -389,121 +599,39 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
 
       </div>
 
-      {catalogo && <ProgressaoClasses classes={classes} catalogoClasses={catalogo.classes} />}
+      <AtributosSection
+        ficha={f}
+        racaTitulo={racaAtual?.titulo}
+        naturais={attrsNaturais}
+        antesDaRaca={attrsAntesRaca}
+        efetivos={attrs}
+        bonusEquipamento={resumoEquipamento.bonusAtributos as Record<TAtributo, number>}
+        onChange={handleAttrChange}
+        onRoll={handleRolarTeste}
+        onOpenInfo={setActiveModal}
+        onOpenAdjust={abrirAjustes}
+      />
 
-      {/* LINHA 2: ATRIBUTOS */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6">
-        <SectionTitle title="Atributos" />
-        <div className="flex flex-wrap justify-center gap-4">
-          {ATRIBUTOS.map(attr => {
-            const val = attrs[attr] ?? 10;
-            const mod = modificador(val);
-            const modStr = mod >= 0 ? `+${mod}` : `${mod}`;
-            return (
-              <div key={attr} className="w-24 bg-[#121118] border border-white/5 rounded-xl flex flex-col items-center p-3 relative group hover:border-[#c7a44c]/30">
-                <HelpCircle
-                  size={14}
-                  className="absolute top-2 right-2 text-[#c7a44c] opacity-50 cursor-pointer hover:opacity-100 transition-opacity"
-                  onClick={() => setActiveModal({
-                    title: `ATRIBUTO: ${attr.toUpperCase()}`,
-                    description: 'Atributos definem a capacidade natural básica do personagem. O modificador é calculado subtraindo 10 do valor e dividindo por 2, arredondado para baixo. Ele é a base de todas as rolagens.',
-                    items: [
-                      { label: 'Valor do Atributo', value: val },
-                      { label: 'Cálculo', value: `floor((${val} - 10) / 2)` }
-                    ],
-                    total: { label: 'Modificador', value: modStr, color: mod >= 0 ? 'text-green-400' : 'text-red-400' }
-                  })}
-                />
-                <span className="text-[10px] font-bold text-gray-500 uppercase">{attr.substring(0,3)}</span>
-                <input
-                  type="number"
-                  min={ATRIBUTO_VALOR_MINIMO}
-                  max={ATRIBUTO_VALOR_MAXIMO}
-                  value={val}
-                  onChange={(e) => handleAttrChange(attr, parseInt(e.target.value) || 10)}
-                  className="w-16 bg-transparent text-2xl font-serif text-white my-1 text-center focus:outline-none focus:bg-white/5 rounded"
-                />
-                <div className="w-full py-1 text-center bg-[#c7a44c]/10 border border-[#c7a44c]/20 rounded text-[#c7a44c] font-bold text-sm mb-2 mt-1">
-                  {modStr}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* LINHA 3: ROLAR TESTE */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6">
-        <SectionTitle title="Rolar Teste" />
-        <p className="text-xs text-gray-500 mb-4">d20 + modificador do atributo. O resultado é sorteado no servidor.</p>
-        <div className="flex gap-4">
-          <select
-            value={atributoTeste}
-            onChange={(e) => { setAtributoTeste(e.target.value as TAtributo); setResultadoTeste(null); }}
-            className="flex-1 bg-[#121118] border border-white/5 rounded-md px-4 py-3 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 appearance-none"
-          >
-            {ATRIBUTOS.map(attr => {
-              const m = modificador(attrs[attr] ?? 10);
-              return (
-                <option key={attr} value={attr}>
-                  {NOMES_ATRIBUTOS[attr]} ({m >= 0 ? `+${m}` : m})
-                </option>
-              );
-            })}
-          </select>
-          <button
-            onClick={handleRolarTeste}
-            disabled={rolandoTeste}
-            className="px-6 py-3 rounded-md border border-[#c7a44c]/30 text-[#c7a44c] hover:bg-[#c7a44c]/10 font-bold text-sm flex items-center gap-2 disabled:opacity-50"
-          >
-            <Dices size={16} /> {rolandoTeste ? 'Rolando...' : 'Rolar'}
-          </button>
-        </div>
-        {resultadoTeste && (
-          <div className="mt-4 bg-black/30 border border-[#c7a44c]/20 rounded-lg p-4 flex items-center justify-between">
-            <span className="text-sm text-gray-400">Resultado de {NOMES_ATRIBUTOS[atributoTeste]}</span>
-            <span className="text-2xl font-bold text-[#c7a44c]">{resultadoTeste.resultado}</span>
-          </div>
-        )}
-      </div>
-
-      {/* LINHA 4: STATUS VITAIS */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6">
-        <SectionTitle title="Status Vitais" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-          <ResourceBar label="Vida" color="vermelho" current={vAtual} max={maxVida} onAdd={(v:number)=>handleStatus('vidaAtual', v, maxVida)} onSub={(v:number)=>handleStatus('vidaAtual', -v, maxVida)} onHelpClick={() => setActiveModal({
-            title: 'PONTOS DE VIDA',
-            description: 'Representa a vitalidade e saúde física. Chegar a 0 significa cair morrendo.',
-            items: [{ label: 'Vida Máxima (Base)', value: maxVida }]
-          })} />
-          <ResourceBar label="Mana" color="azul" current={mAtual} max={maxMana} onAdd={(v:number)=>handleStatus('manaAtual', v, maxMana)} onSub={(v:number)=>handleStatus('manaAtual', -v, maxMana)} onHelpClick={() => setActiveModal({
-            title: 'PONTOS DE MANA',
-            description: 'A energia arcana e espiritual. Usada para magias e habilidades especiais.',
-            items: [{ label: 'Mana Máxima (Base)', value: maxMana }]
-          })} />
-          <ResourceBar label="Sanidade" color="roxo" current={sAtual} max={maxSanidade} onAdd={(v:number)=>handleStatus('sanidadeAtual', v, maxSanidade)} onSub={(v:number)=>handleStatus('sanidadeAtual', -v, maxSanidade)} onHelpClick={() => setActiveModal({
-            title: 'PONTOS DE SANIDADE',
-            description: 'A integridade mental do personagem. Ver horrores drena a sanidade.',
-            items: [{ label: 'Sanidade Máxima (Base)', value: maxSanidade }]
-          })} />
-          <ResourceBar label="Cansaço" color="cinza" current={cAtual} max={maxCansaco} onAdd={(v:number)=>handleStatus('cansacoAtual', v, maxCansaco)} onSub={(v:number)=>handleStatus('cansacoAtual', -v, maxCansaco)} onHelpClick={() => setActiveModal({
-            title: 'PONTOS DE CANSAÇO',
-            description: 'O acúmulo de estresse físico. Funciona ao contrário: aumenta de 0 até o limite. Chegar ao limite causa exaustão extrema.',
-            items: [{ label: 'Cansaço Máximo (Limite)', value: maxCansaco }]
-          })} />
-        </div>
-        <div className="mt-6 grid grid-cols-1 gap-3 border-t border-white/5 pt-5 md:grid-cols-4">
-          <LabeledInput label="Morrendo" type="number" value={status.morrendo ?? 0} onChange={(valor: string) => onUpdate(['ficha', 'status'], { ...status, morrendo: Math.max(0, Math.min(Number(attrs.constituicao) >= 20 ? 4 : 3, Math.trunc(Number(valor) || 0))) })} />
-          <LabeledInput label="Ferido" type="number" value={status.ferido ?? 0} onChange={(valor: string) => onUpdate(['ficha', 'status'], { ...status, ferido: Math.max(0, Math.trunc(Number(valor) || 0)) })} />
-          <label className="flex items-center gap-3 rounded-xl border border-white/5 bg-[#121118] px-4 py-3 text-sm text-gray-300">
-            <input type="checkbox" checked={Boolean(status.estabilizado)} onChange={(evento) => onUpdate(['ficha', 'status'], { ...status, estabilizado: evento.target.checked })} />
-            Estabilizado
-          </label>
-          <div className={`flex items-center rounded-xl border px-4 py-3 text-sm font-bold ${status.morto ? 'border-red-500/40 bg-red-500/10 text-red-300' : vAtual <= 0 ? 'border-amber-500/30 bg-amber-500/10 text-amber-300' : 'border-emerald-500/20 bg-emerald-500/5 text-emerald-300'}`}>
-            {status.morto ? 'Morto' : vAtual <= 0 ? `Déficit de Vida: ${Math.abs(vAtual)}` : 'Consciente'}
-          </div>
-        </div>
-      </div>
+      <StatusVitaisSection
+        atual={{ vida: vAtual, mana: mAtual, sanidade: sAtual, cansaco: cAtual }}
+        maximo={{ vida: maxVida, mana: maxMana, sanidade: maxSanidade, cansaco: maxCansaco }}
+        efeitosCansaco={efeitosCansaco}
+        ajusteOrigem={{
+          vida: { nome: nomeAjusteOrigem(f, 'vidaMaxima') || 'Origem', valor: ajusteOrigem(f, 'vidaMaxima') },
+          mana: { nome: nomeAjusteOrigem(f, 'manaMaxima') || 'Origem', valor: ajusteOrigem(f, 'manaMaxima') },
+          sanidade: { nome: nomeAjusteOrigem(f, 'sanidadeMaxima') || 'Origem', valor: ajusteOrigem(f, 'sanidadeMaxima') },
+        }}
+        ajusteEquipamento={{
+          vida: deltaDerivado('vida') + (resumoEquipamento.bonusRecursos.vidaMaxima || 0),
+          mana: deltaDerivado('mana') + (resumoEquipamento.bonusRecursos.manaMaxima || 0),
+          sanidade: resumoEquipamento.bonusRecursos.sanidadeMaxima || 0,
+          cansaco: resumoEquipamento.bonusRecursos.cansacoMaximo || 0,
+        }}
+        onStatusChange={handleStatus}
+        onSanidadeMaximaChange={handleSanidadeMaxima}
+        onOpenInfo={setActiveModal}
+        onOpenAdjust={abrirAjustes}
+      />
 
       {/* LINHA 5: COMBATE */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6">
@@ -514,16 +642,21 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
           <div className="bg-[#121118] border border-white/5 rounded-xl p-4">
             <div className="flex justify-between mb-4">
               <span className="text-xs font-bold uppercase text-gray-500">Defesa</span>
-              <HelpCircle size={14} className="text-[#c7a44c] cursor-pointer hover:opacity-100 opacity-50 transition-opacity" onClick={() => setActiveModal({
-                title: 'DEFESA',
-                description: 'A dificuldade para acertar ataques contra você. Baseia-se na agilidade e equipamentos.',
-                items: [
-                  { label: 'Defesa Natural', value: defesaNatural },
-                  { label: 'Armadura e escudo', value: `+ ${resumoEquipamento.defesaEquipamento}` },
-                  { label: 'Condições', value: `- ${penalidadeDefesa}` }
-                ],
-                total: { label: 'Defesa Total', value: defesaTotal }
-              })} />
+              <div className="flex items-center gap-1">
+                <HelpCircle size={14} className="text-[#c7a44c] cursor-pointer hover:opacity-100 opacity-50 transition-opacity" onClick={() => setActiveModal({
+                  title: 'DEFESA',
+                  description: 'A dificuldade para acertar ataques contra você. Baseia-se na agilidade e equipamentos.',
+                  items: [
+                    { label: 'Defesa Natural', value: defesaNatural },
+                    { label: 'Armadura e escudo', value: resumoEquipamento.defesaEquipamento },
+                    { label: 'Modificações e raridade', value: resumoEquipamento.bonusCombate.defesa || 0 },
+                    { label: 'Condições', value: -penalidadeDefesa },
+                    { label: 'Outros ajustes', value: ajusteDefesa },
+                  ],
+                  total: { label: 'Defesa Total', value: defesaTotal },
+                })} />
+                <AjusteButton label="Defesa" onClick={() => abrirAjustes(chaveAjuste('combate', 'defesa'), 'Defesa')} />
+              </div>
             </div>
             <input type="text" value={defesaTotal} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
             <LabeledInput label="Armadura e Escudo" value={String(resumoEquipamento.defesaEquipamento)} onChange={()=>{}} />
@@ -533,33 +666,44 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
           <div className="bg-[#121118] border border-white/5 rounded-xl p-4">
             <div className="flex justify-between mb-4">
               <span className="text-xs font-bold uppercase text-gray-500">Iniciativa</span>
-              <HelpCircle size={14} className="text-[#c7a44c] cursor-pointer hover:opacity-100 opacity-50 transition-opacity" onClick={() => setActiveModal({
-                title: 'INICIATIVA',
-                description: 'Sua velocidade de reação. Determina quem age primeiro em combate.',
-                items: [
-                  { label: 'Iniciativa Base', value: iniciativaBase },
-                  { label: 'Cansaço', value: penalidadeIniciativa }
-                ],
-                total: { label: 'Iniciativa Final', value: iniciativaFinal }
-              })} />
+              <div className="flex items-center gap-1">
+                <HelpCircle size={14} className="text-[#c7a44c] cursor-pointer hover:opacity-100 opacity-50 transition-opacity" onClick={() => setActiveModal({
+                  title: 'INICIATIVA',
+                  description: 'Sua velocidade de reação. Determina quem age primeiro em combate.',
+                  items: [
+                    { label: 'Iniciativa Base', value: iniciativaBase },
+                    { label: 'Efeitos ativos', value: bonusIniciativa },
+                    { label: 'Cansaço e condições', value: penalidadeIniciativa },
+                    { label: 'Outros ajustes', value: ajusteIniciativa },
+                    { label: 'Itens equipados', value: resumoEquipamento.bonusCombate.iniciativa || 0 },
+                  ],
+                  total: { label: 'Iniciativa Final', value: iniciativaFinal },
+                })} />
+                <AjusteButton label="Iniciativa" onClick={() => abrirAjustes(chaveAjuste('combate', 'iniciativa'), 'Iniciativa')} />
+              </div>
             </div>
             <input type="text" value={iniciativaFinal} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
-            <LabeledInput label="Bônus / Penalidade" value={String(penalidadeIniciativa)} onChange={()=>{}} />
+            <LabeledInput label="Bônus / Penalidade" value={String(bonusIniciativa + penalidadeIniciativa)} onChange={()=>{}} />
           </div>
 
           <div className="bg-[#121118] border border-white/5 rounded-xl p-4">
             <div className="flex justify-between mb-4">
               <span className="text-xs font-bold uppercase text-gray-500">Movimento</span>
-              <HelpCircle size={14} className="text-[#c7a44c] cursor-pointer hover:opacity-100 opacity-50 transition-opacity" onClick={() => setActiveModal({
-                title: 'MOVIMENTO',
-                description: 'Distância (em metros) que você pode se deslocar durante o combate.',
-                items: [
-                  { label: 'Deslocamento Base', value: `${movimentoBase}m` },
-                  { label: 'Sobrecarga', value: `-${penalidadeSobrecarga}m` },
-                  { label: 'Cansaço 5+', value: multiplicadorMovimentoCansaco(status.cansacoAtual) === 0.5 ? 'metade' : 'sem redução' }
-                ],
-                total: { label: 'Movimento Final', value: `${movimentoFinal}m` }
-              })} />
+              <div className="flex items-center gap-1">
+                <HelpCircle size={14} className="text-[#c7a44c] cursor-pointer hover:opacity-100 opacity-50 transition-opacity" onClick={() => setActiveModal({
+                  title: 'MOVIMENTO',
+                  description: 'Distância (em metros) que você pode se deslocar durante o combate.',
+                  items: [
+                    { label: 'Deslocamento Base', value: movimentoBase },
+                    { label: 'Ajustes', value: ajusteMovimento },
+                    { label: 'Sobrecarga', value: -penalidadeSobrecarga },
+                    { label: 'Cansaço 5+', value: multiplicadorMovimentoCansaco(status.cansacoAtual) === 0.5 ? 'metade' : '' },
+                    { label: 'Condições', value: movimentoBloqueadoPorCondicao(f.condicoesAtivas) ? 'movimento 0' : '' },
+                  ],
+                  total: { label: 'Movimento Final', value: `${movimentoFinal}m` },
+                })} />
+                <AjusteButton label="Movimento" onClick={() => abrirAjustes(chaveAjuste('combate', 'movimento'), 'Movimento', [{ nome: nomeAjusteOrigem(f, 'movimento') || 'Origem', valor: ajusteOrigem(f, 'movimento') }])} />
+              </div>
             </div>
             <input type="text" value={`${movimentoFinal} m`} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
             <LabeledInput label="Penalidade de Movimento" value={String(penalidadeSobrecarga)} onChange={()=>{}} />
@@ -657,17 +801,21 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
       {activeModal && !activeModal.isCondicaoModal && !activeModal.isLevelUpModal && (
         <ModalInfoFicha
           isOpen={true}
-          onClose={() => setActiveModal(null)}
+          onClose={() => { setActiveModal(null); setResultadoTeste(null); }}
           title={activeModal.title}
           description={activeModal.description}
           items={activeModal.items}
           total={activeModal.total}
+          onRolar={activeModal.onRolar}
+          rolando={rolandoTeste}
+          resultado={resultadoTeste && activeModal.atributo === resultadoTeste.atributo ? resultadoTeste.resultado : null}
         />
       )}
 
       {activeModal && activeModal.isCondicaoModal && (
+        <ModalPortal>
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
           onClick={() => setActiveModal(null)}
         >
           <div 
@@ -736,11 +884,13 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
             </form>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {activeModal && activeModal.isLevelUpModal && (
+        <ModalPortal>
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
           onClick={() => setActiveModal(null)}
         >
           <div 
@@ -769,7 +919,11 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                         <button
                           key={i}
                           onClick={() => handleSubirNivel({ tipo: 'existente', index: i })}
-                          disabled={c.nivel >= 20 || nivelTotalClasses >= 40}
+                          disabled={
+                            c.nivel >= 20
+                            || nivelTotalClasses >= 60
+                            || (c.nivel === 19 && !classes.some((outra, j) => j !== i && Number(outra.nivel) >= 10))
+                          }
                           className="flex justify-between items-center w-full p-3 rounded-lg border border-white/10 hover:border-[#c7a44c]/50 hover:bg-[#c7a44c]/10 transition-colors text-left disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                           <span className="text-white font-bold">{classeObj?.titulo || 'Classe'}</span>
@@ -806,13 +960,25 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                   </button>
                 </form>
                 {classesDisponiveisMulticlasse.length === 0 && (
-                  <p className="mt-2 text-xs text-gray-500">A segunda classe comum exige uma classe comum no nível 20. Uma classe especial exige nível total 15 e liberação do Mestre.</p>
+                  <p className="mt-2 text-xs text-gray-500">Uma classe só chega ao nível 20 se outra já tiver nível 10. Classe especial exige nível total 20 e liberação do Mestre.</p>
                 )}
               </div>
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
+
+      {ajusteModal ? (
+        <AjustesFichaModal
+          isOpen={true}
+          onClose={() => setAjusteModal(null)}
+          titulo={ajusteModal.titulo}
+          automaticos={ajusteModal.automaticos}
+          ajustes={obterAjustesManuais(f, ajusteModal.chave)}
+          onChange={(ajustes) => salvarAjustes(ajusteModal.chave, ajustes)}
+        />
+      ) : null}
 
     </div>
   );

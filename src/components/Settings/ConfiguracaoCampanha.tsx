@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 import { campanhasApi } from '../../services/campanhasApi';
-import { MUNDO_CATALOG } from '../../data/mundoCatalog';
-import { ARVORES, arvoreInicialmenteRevelada } from '../../data/arvoresCatalog';
+import { MUNDO_CATALOG } from '../../../data/gerado/mundoCatalog';
+import { ARVORES, arvoreInicialmenteRevelada } from '../../../data/mundo/arvoresCatalog';
 import { carregarCatalogo } from '../../services/catalogoService';
 import { ICatalogo } from '../../types/catalogo';
-import { Globe, ShoppingBag, Save, Eye, EyeOff, Loader2, TreePine, Sparkles, PenSquare, AlertTriangle, Archive } from 'lucide-react';
+import { Select } from '../ui/Select';
+import { Globe, ShoppingBag, Save, Eye, EyeOff, Loader2, TreePine, Sparkles, UserCog, PenSquare, AlertTriangle, Archive } from 'lucide-react';
 
 export const ConfiguracaoCampanha: React.FC = () => {
   const navigate = useNavigate();
-  const { campanhaAtiva, atualizarConfiguracoes, atualizarIdentidade } = useAuthStore();
+  const { campanhaAtiva, membrosCampanha, atualizarConfiguracoes, atualizarIdentidade } = useAuthStore();
   const config = campanhaAtiva?.configuracoes || {};
   const isMaster = campanhaAtiva?.papel === 'mestre';
 
@@ -21,6 +22,9 @@ export const ConfiguracaoCampanha: React.FC = () => {
   const [locaisOcultos, setLocaisOcultos] = useState<number[]>(config.locais_ocultos || [3, 4]); // Padrão: Mercado Negro e Banco Lunar ocultos
   const [racasLiberadas, setRacasLiberadas] = useState<string[]>(config.racas_liberadas || []);
   const [classesLiberadas, setClassesLiberadas] = useState<string[]>(config.classes_liberadas || []);
+  const [racasLiberadasMembros, setRacasLiberadasMembros] = useState<Record<string, string[]>>(config.racas_liberadas_membros || {});
+  const [classesLiberadasMembros, setClassesLiberadasMembros] = useState<Record<string, string[]>>(config.classes_liberadas_membros || {});
+  const [membroSelecionado, setMembroSelecionado] = useState<string>('');
   const [catalogo, setCatalogo] = useState<ICatalogo | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -87,6 +91,9 @@ export const ConfiguracaoCampanha: React.FC = () => {
 
   const racasEspeciais = (catalogo?.racas || []).filter((r: any) => r.categoria === 'esquecida' && !r.indisponivel);
   const classesEspeciais = (catalogo?.classes || []).filter((c: any) => c.categoria === 'esquecida' && !c.indisponivel);
+  // Mestre/assistente já vê tudo (bypassa liberação): liberação individual
+  // só faz sentido pra jogador comum.
+  const jogadoresDaCampanha = membrosCampanha.filter((membro) => membro.papel === 'jogador');
 
   const handleToggleLore = (id: string, initiallyRevealed: boolean) => {
     if (initiallyRevealed) {
@@ -124,6 +131,22 @@ export const ConfiguracaoCampanha: React.FC = () => {
     setClassesLiberadas(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
 
+  const handleToggleRacaMembro = (membroId: string, id: string) => {
+    setRacasLiberadasMembros(prev => {
+      const atual = prev[membroId] || [];
+      const nova = atual.includes(id) ? atual.filter(i => i !== id) : [...atual, id];
+      return { ...prev, [membroId]: nova };
+    });
+  };
+
+  const handleToggleClasseMembro = (membroId: string, id: string) => {
+    setClassesLiberadasMembros(prev => {
+      const atual = prev[membroId] || [];
+      const nova = atual.includes(id) ? atual.filter(i => i !== id) : [...atual, id];
+      return { ...prev, [membroId]: nova };
+    });
+  };
+
   const handleSave = async () => {
     setIsSaving(true);
     await atualizarConfiguracoes({
@@ -134,6 +157,8 @@ export const ConfiguracaoCampanha: React.FC = () => {
       locais_ocultos: locaisOcultos,
       racas_liberadas: racasLiberadas,
       classes_liberadas: classesLiberadas,
+      racas_liberadas_membros: racasLiberadasMembros,
+      classes_liberadas_membros: classesLiberadasMembros,
     });
     setIsSaving(false);
     setSaved(true);
@@ -340,6 +365,91 @@ export const ConfiguracaoCampanha: React.FC = () => {
               {classesEspeciais.length === 0 && <p className="text-xs text-gray-600 italic">Nenhuma classe especial no catálogo.</p>}
             </div>
           </div>
+        )}
+      </section>
+
+      {/* SEÇÃO LIBERAÇÃO INDIVIDUAL */}
+      <section>
+        <div className="flex items-center gap-2 mb-4">
+          <UserCog className="text-purple-400" size={20} />
+          <h3 className="text-lg font-bold text-white">Liberação Individual</h3>
+        </div>
+        <p className="text-xs text-gray-400 mb-4">
+          Libere uma raça ou classe especial só pra um jogador específico - pra recompensas e transformações que não valem pra mesa inteira. Some com o que já está liberado pra campanha acima.
+        </p>
+
+        {jogadoresDaCampanha.length === 0 ? (
+          <p className="text-xs text-gray-600 italic">Nenhum jogador na campanha ainda.</p>
+        ) : (
+          <>
+            <Select
+              value={membroSelecionado}
+              onChange={setMembroSelecionado}
+              placeholder="Selecione um jogador"
+              options={jogadoresDaCampanha.map((membro) => ({ value: membro.id, label: membro.nome_exibicao }))}
+              className="w-full md:w-72 mb-4"
+            />
+
+            {!membroSelecionado ? (
+              <p className="text-xs text-gray-600 italic">Selecione um jogador acima pra liberar raças/classes só pra ele.</p>
+            ) : !catalogo ? (
+              <div className="text-gray-500 text-sm flex items-center gap-2"><Loader2 size={14} className="animate-spin" /> Carregando catálogo...</div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-black/40 rounded-2xl border border-white/5 p-4 max-h-[280px] overflow-y-auto custom-scrollbar flex flex-col gap-2">
+                  <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">
+                    Raças ({(racasLiberadasMembros[membroSelecionado] || []).length}/{racasEspeciais.length} liberadas)
+                  </h4>
+                  {racasEspeciais.map((raca: any) => {
+                    const isLiberada = (racasLiberadasMembros[membroSelecionado] || []).includes(raca.id);
+                    return (
+                      <div key={raca.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
+                        <span className="text-white text-sm font-medium">{raca.titulo}</span>
+                        <button
+                          onClick={() => handleToggleRacaMembro(membroSelecionado, raca.id)}
+                          disabled={!isMaster}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+                            isLiberada
+                              ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                              : 'bg-white/5 text-gray-500 border border-white/10'
+                          }`}
+                        >
+                          {isLiberada ? 'Liberada' : 'Bloqueada'}
+                        </button>
+                      </div>
+                    );
+                  })}
+                  {racasEspeciais.length === 0 && <p className="text-xs text-gray-600 italic">Nenhuma raça especial no catálogo.</p>}
+                </div>
+
+                <div className="bg-black/40 rounded-2xl border border-white/5 p-4 max-h-[280px] overflow-y-auto custom-scrollbar flex flex-col gap-2">
+                  <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">
+                    Classes ({(classesLiberadasMembros[membroSelecionado] || []).length}/{classesEspeciais.length} liberadas)
+                  </h4>
+                  {classesEspeciais.map((classe: any) => {
+                    const isLiberada = (classesLiberadasMembros[membroSelecionado] || []).includes(classe.id);
+                    return (
+                      <div key={classe.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
+                        <span className="text-white text-sm font-medium">{classe.titulo}</span>
+                        <button
+                          onClick={() => handleToggleClasseMembro(membroSelecionado, classe.id)}
+                          disabled={!isMaster}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+                            isLiberada
+                              ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                              : 'bg-white/5 text-gray-500 border border-white/10'
+                          }`}
+                        >
+                          {isLiberada ? 'Liberada' : 'Bloqueada'}
+                        </button>
+                      </div>
+                    );
+                  })}
+                  {classesEspeciais.length === 0 && <p className="text-xs text-gray-600 italic">Nenhuma classe especial no catálogo.</p>}
+                </div>
+              </div>
+            )}
+          </>
         )}
       </section>
 

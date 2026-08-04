@@ -6,6 +6,7 @@ import { LabeledInput, LabeledModalSelect } from '../components/SharedFichaCompo
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { caracteristicasRaciaisAutomaticas, habilidadesAutomaticas } from '../../../services/progressaoFichaService';
+import { obterStatusFicha } from '../../../services/statusService';
 
 // ---------------------------------------------------------------------------
 // Tipos locais da entidade "habilidade" (traços raciais, talentos, competências)
@@ -109,7 +110,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
     ...caracteristicasRaciaisAutomaticas(character.ficha || {}),
     ...habilidadesAutomaticas(character.ficha || {}),
   ];
-  const status = character.ficha?.status || {};
+  const status = obterStatusFicha(character.ficha);
 
   const habilidadesVisiveis = habilidades
     .filter((h: IHabilidade) => !busca || h.nome?.toLowerCase().includes(busca.toLowerCase()))
@@ -188,8 +189,8 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
 
     if (recurso && recurso !== 'nenhum' && valor > 0) {
       const campoAtual = CAMPO_STATUS[recurso];
-      const maxVida = character.derivados?.vida || 10;
-      const maxMana = character.derivados?.mana || 10;
+      const maxVida = character.ficha?.derivados?.vida || character.derivados?.vida || 10;
+      const maxMana = character.ficha?.derivados?.mana || character.derivados?.mana || 10;
       const atual = recurso === 'vida'
         ? Number(status.vidaAtual ?? maxVida)
         : recurso === 'mana'

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, X, Plus, Minus, Trash2 } from 'lucide-react';
-import { LojaItem, getCurrencySymbol, somarPrecosNativos } from '../../../data/lojaCatalog';
+import { LojaItem, getCurrencySymbol, somarPrecosNativos } from '../../../services/lojaCatalogService';
 import { MAX_SHOP_UNITS } from '../../../services/lojaApi';
 
 export interface CartItem {

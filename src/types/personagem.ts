@@ -4,6 +4,10 @@ export interface ICreateCharacterPayload {
   nome: string;
   arvoreId: string;
   racaId: string;
+  /** Nome livre pra quando racaId é a raça personalizada (ver
+   * services/racaService.ts::RACA_PERSONALIZADA_ID) - nenhuma raça do
+   * catálogo tem bônus zerados o bastante pra servir de "raça em branco". */
+  racaNomePersonalizado?: string;
   classeId: string;
   classes: Array<{ classeId: string; nivel: number }>;
   nivel: number;

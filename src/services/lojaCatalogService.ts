@@ -1,4 +1,4 @@
-import type { LojaCatalogEntry } from '../services/lojaApi';
+import type { LojaCatalogEntry } from './lojaApi';
 
 export type ItemCategoria = 'Relíquias da Criação' | 'Armas' | 'Armaduras e Escudos' | 'Consumíveis' | 'Veículos' | 'Mercenários' | 'Componentes' | 'Frutos do Éden' | 'Implantes Cibernéticos' | 'Artefatos Mágicos' | 'Outros';
 export type ItemRaridade = 'Comum' | 'Incomum' | 'Raro' | 'Épico' | 'Lendário' | 'Relíquia' | 'Relíquia da Criação';
@@ -8,6 +8,7 @@ export type MoedaTipo = 'Solares' | 'Lunaris' | 'Fragmentos de Estrela' | 'Créd
 
 export interface LojaItem {
   id: string;
+  tipoOrigem: string;
   nome: string;
   categoria: ItemCategoria;
   raridade: ItemRaridade;
@@ -20,6 +21,11 @@ export interface LojaItem {
   requisitoClasse?: string[];
   dadosBrutos?: any;
   quantidadeDisponivel?: number;
+  precoAnterior?: number;
+  promocao?: {
+    rotulo: string;
+    descontoPercentual: number;
+  };
 }
 
 export interface PrecoNativoLoja {
@@ -99,13 +105,59 @@ export const getCurrencyTheme = (moedaExibicao: MoedaTipo | string): CurrencyThe
   }
 };
 
+const CATEGORIAS_LOJA = new Set<ItemCategoria>([
+  'Relíquias da Criação', 'Armas', 'Armaduras e Escudos', 'Consumíveis',
+  'Veículos', 'Mercenários', 'Componentes', 'Frutos do Éden',
+  'Implantes Cibernéticos', 'Artefatos Mágicos', 'Outros',
+]);
+
+const normalizarTexto = (valor: unknown): string => String(valor ?? '')
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .trim()
+  .toLocaleLowerCase('pt-BR');
+
+const EQUIPAMENTOS_CONSUMIVEIS = new Set([
+  'pomada-restauradora', 'racao-de-viagem', 'pingente-lunar',
+  'flor-da-noite-eterna', 'semente-da-noite', 'pocao-cura-menor',
+  'antidoto', 'pocao-cura-maior', 'pergaminho-teleporte',
+]);
+
+const mapCategoriaEquipamento = (item: any): ItemCategoria => {
+  const declarada = String(item.conteudo?.categoria_loja ?? '').trim() as ItemCategoria;
+  if (CATEGORIAS_LOJA.has(declarada)) return declarada;
+
+  if (item.conteudo?.consumivel === true || EQUIPAMENTOS_CONSUMIVEIS.has(item.id)) {
+    return 'Consumíveis';
+  }
+
+  const raridade = normalizarRaridadeChave(item.conteudo?.raridade);
+  const textoMagico = normalizarTexto([
+    item.titulo,
+    item.conteudo?.material,
+    item.conteudo?.descricao,
+  ].filter(Boolean).join(' '));
+  const marcadoresMagicos = [
+    'arcano', 'magico', 'fluxo', 'sombr', 'eter', 'alma', 'espectral',
+    'runa', 'element', 'golem', 'eclipse', 'ilus', 'telepat', 'encant',
+  ];
+  if (
+    ['epico', 'lendario', 'reliquia', 'reliquia da criacao'].includes(raridade)
+    || marcadoresMagicos.some((marcador) => textoMagico.includes(marcador))
+  ) {
+    return 'Artefatos Mágicos';
+  }
+
+  return 'Outros';
+};
+
 const mapCategoria = (item: any): ItemCategoria => {
   if (item.conteudo?.subtipo === 'reliquia-criacao') return 'Relíquias da Criação';
   
   switch (item.tipo) {
     case 'arma': return 'Armas';
     case 'armadura': return 'Armaduras e Escudos';
-    case 'equipamento': return 'Consumíveis';
+    case 'equipamento': return mapCategoriaEquipamento(item);
     case 'consumivel': return 'Consumíveis';
     case 'veiculo': 
     case 'veiculo-completo': return 'Veículos';
@@ -165,15 +217,109 @@ const mapNivelLoja = (item: any, categoria: ItemCategoria, raridade: ItemRaridad
   return 1;
 };
 
+const normalizarMarcador = (valor: unknown): string => String(valor ?? '')
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .trim()
+  .toLocaleLowerCase('pt-BR');
+
+export function itemCorrespondeBusca(item: LojaItem, termo: string): boolean {
+  const busca = normalizarMarcador(termo);
+  if (!busca) return true;
+
+  const dados = item.dadosBrutos || {};
+  const alvo = normalizarMarcador([
+    item.nome,
+    item.descricao,
+    item.categoria,
+    dados.subtipo,
+    ...(Array.isArray(dados.atributos) ? dados.atributos : []),
+  ].filter(Boolean).join(' '));
+
+  if (alvo.includes(busca)) return true;
+  const singular = busca.endsWith('s') && busca.length > 3 ? busca.slice(0, -1) : busca;
+  return singular !== busca && alvo.includes(singular);
+}
+
+const marcadoresDoItem = (item: LojaItem): Set<string> => {
+  const dados = item.dadosBrutos || {};
+  const atributos = Array.isArray(dados.atributos) ? dados.atributos : [];
+  return new Set([
+    item.tipoOrigem,
+    dados.subtipo,
+    dados.natureza,
+    dados.sistema,
+    ...atributos,
+  ].map(normalizarMarcador).filter(Boolean));
+};
+
+export function itemCorrespondeSubfiltro(
+  item: LojaItem,
+  categoria: ItemCategoria | 'Todos',
+  subfiltro: string,
+): boolean {
+  if (subfiltro === 'Todos') return true;
+
+  const dados = item.dadosBrutos || {};
+  const descricao = normalizarMarcador(item.descricao);
+  const modo = normalizarMarcador(dados.modo);
+  const marcadores = marcadoresDoItem(item);
+
+  if (categoria === 'Armas') {
+    if (subfiltro === 'Corpo a Corpo') return modo === 'corpo a corpo';
+    if (subfiltro === 'À Distância') return modo === 'a distancia';
+    if (subfiltro === 'Mágicas') return ['magica', 'magia', 'runa'].some((termo) => descricao.includes(termo));
+  }
+
+  if (categoria === 'Armaduras e Escudos') {
+    const escudo = marcadores.has('escudo') || descricao.includes('escudo');
+    if (subfiltro === 'Escudos') return escudo;
+    if (subfiltro === 'Armaduras') return !escudo;
+  }
+
+  if (categoria === 'Veículos') {
+    const completo = item.tipoOrigem === 'veiculo-completo' || marcadores.has('completo');
+    if (subfiltro === 'Veículos Completos') return completo;
+    if (subfiltro === 'Peças e Módulos') return !completo;
+  }
+
+  if (categoria === 'Consumíveis') {
+    const pocao = ['pocao', 'elixir', 'frasco', 'cura'].some((termo) => descricao.includes(termo));
+    const selo = marcadores.has('selo');
+    const ritual = !selo && ['ritual', 'pergaminho'].some((termo) => descricao.includes(termo));
+    if (subfiltro === 'Poções') return pocao;
+    if (subfiltro === 'Selos') return selo;
+    if (subfiltro === 'Rituais') return ritual;
+    if (subfiltro === 'Ferramentas') return !pocao && !selo && !ritual;
+  }
+
+  if (categoria === 'Frutos do Éden') {
+    return marcadores.has(normalizarMarcador(subfiltro));
+  }
+
+  return true;
+}
+
 export const mapearItemLoja = (entrada: LojaCatalogEntry): LojaItem => {
   const c = entrada.conteudo || {};
   const { moedaPreco, valorOriginal } = parsePrecoDetalhado(entrada.preco.moeda, entrada.preco.valor);
   const categoria = mapCategoria(entrada);
   const raridade = rotuloRaridadeChave(c.raridade);
   const nivelLoja = mapNivelLoja(entrada, categoria, raridade, moedaPreco);
+  const promocaoBruta = c.promocao && typeof c.promocao === 'object' && !Array.isArray(c.promocao)
+    ? c.promocao as Record<string, unknown>
+    : null;
+  const precoAnteriorLido = lerPrecoNativoLoja(c.preco_original);
+  const promocaoValida = promocaoBruta?.ativa === true
+    && precoAnteriorLido?.moedaPreco === moedaPreco
+    && precoAnteriorLido.valorOriginal > valorOriginal;
+  const descontoPercentual = promocaoValida
+    ? Math.round((1 - (valorOriginal / precoAnteriorLido.valorOriginal)) * 100)
+    : 0;
   
   return {
     id: entrada.id,
+    tipoOrigem: entrada.tipo,
     nome: entrada.titulo || 'Item Desconhecido',
     categoria,
     raridade,
@@ -189,6 +335,13 @@ export const mapearItemLoja = (entrada: LojaCatalogEntry): LojaItem => {
         ? [c.requisitoClasse]
         : undefined,
     dadosBrutos: c,
+    precoAnterior: promocaoValida ? precoAnteriorLido.valorOriginal : undefined,
+    promocao: promocaoValida ? {
+      rotulo: typeof promocaoBruta.rotulo === 'string' && promocaoBruta.rotulo.trim()
+        ? promocaoBruta.rotulo.trim().slice(0, 40)
+        : 'Oferta especial',
+      descontoPercentual,
+    } : undefined,
   };
 };
 

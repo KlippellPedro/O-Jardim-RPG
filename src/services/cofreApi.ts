@@ -20,20 +20,30 @@ export interface ICofreTierInfo {
   nome: string;
   capacidade: number;
   capacidade_moeda: number;
-  custo?: number;
+  custos: Record<string, number>;
+  custos_base: Record<string, number>;
+  limite_pratico?: boolean;
+  reputacao_exigida: number;
 }
 
 export interface ICofreSegurancaInfo {
   id: string;
   nome: string;
   defesa: number;
-  custo?: number;
+  custos: Record<string, number>;
+  custos_base: Record<string, number>;
+  reputacao_exigida: number;
 }
 
 export interface ICofreNivel {
   vinculado: boolean;
+  reputacao_bancaria?: number;
+  tier_nivel?: number;
+  tier_total?: number;
   tier?: ICofreTierInfo;
   proximo_tier?: ICofreTierInfo | null;
+  seguranca_nivel?: number;
+  seguranca_total?: number;
   seguranca?: ICofreSegurancaInfo;
   proxima_seguranca?: ICofreSegurancaInfo | null;
   saldos_guardados?: { moeda: string; saldo: number }[];
@@ -58,6 +68,14 @@ export const cofreApi = {
   },
   transferirMoeda(campanhaId: string, personagemId: string, moeda: string, quantidade: number) {
     return api('/cofre/transferir-moeda', {
+      method: 'POST',
+      body: { campanha_id: campanhaId, personagem_id: personagemId, moeda, quantidade },
+    });
+  },
+  /** Saca do Cofre bancário do Banqueiro (saldos_guardados, tabela do bot)
+   * direto pro personagem — é outro estoque, não o cofre de recompensas. */
+  sacarDoBanco(campanhaId: string, personagemId: string, moeda: string, quantidade: number) {
+    return api('/cofre/sacar-banco', {
       method: 'POST',
       body: { campanha_id: campanhaId, personagem_id: personagemId, moeda, quantidade },
     });

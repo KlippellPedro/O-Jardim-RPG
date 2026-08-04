@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { ARVORES, filtrarPorArvore } from '../../src/data/arvoresCatalog';
-import { REGRAS_OFICIAIS } from '../../src/data/regras';
+import { ARVORES, filtrarPorArvore } from '../../data/mundo/arvoresCatalog';
+import { REGRAS_OFICIAIS } from '../../data/regras/regras';
 import {
   contarRecompensasPorTipo,
   formatarRecompensaClasse,
@@ -20,8 +20,8 @@ const obterClasse = (id: string) => {
   return classe;
 };
 
-test('publica as 24 classes com orçamento base consistente', () => {
-  assert.equal(classes.length, 24);
+test('publica as 27 classes com orçamento base consistente', () => {
+  assert.equal(classes.length, 27);
   for (const classe of classes) {
     assert.equal(classe.vida + classe.mana, 7, `Orçamento inválido em ${classe.titulo}`);
     assert.equal(classe.recursos_provisorios, false, `Classe provisória: ${classe.titulo}`);
@@ -44,11 +44,11 @@ test('todas as classes possuem progressão completa e sem níveis duplicados', (
   }
 });
 
-test('separa 13 classes comuns e 11 especiais por Árvore', () => {
+test('separa 16 classes comuns e 11 especiais por Árvore', () => {
   const common = classes.filter(classe => classe.categoria === 'padrao');
   const special = classes.filter(classe => classe.categoria !== 'padrao');
 
-  assert.equal(common.length, 13);
+  assert.equal(common.length, 16);
   assert.equal(special.length, 11);
   assert.ok(common.every(classe => classe.disponibilidade === 'geral' && classe.arvore === null));
   assert.ok(common.every(classe => !classe.arvores?.length));
@@ -58,7 +58,7 @@ test('separa 13 classes comuns e 11 especiais por Árvore', () => {
 
   for (const tree of ARVORES) {
     const available = filtrarPorArvore(classes, tree.id);
-    assert.equal(available.filter(classe => classe.categoria === 'padrao').length, 13);
+    assert.equal(available.filter(classe => classe.categoria === 'padrao').length, 16);
     assert.ok(
       available.some(classe => classe.categoria !== 'padrao'),
       `Árvore sem classe especial: ${tree.nome}`,
@@ -68,16 +68,16 @@ test('separa 13 classes comuns e 11 especiais por Árvore', () => {
 
 test('mantém o mapa temático das classes especiais', () => {
   const expected: Record<string, string[]> = {
-    aethel: ['invocador'],
-    ousias: ['decodificador'],
-    keryx: ['codificador'],
-    haemus: ['cacador-de-entidades'],
-    ignis: ['elementarista', 'viajante-classe'],
-    moros: ['campeao-dimensional'],
-    aperion: ['guia-dimensional', 'viajante-classe'],
-    chronus: ['cartista-arcano', 'viajante-classe'],
-    erebus: ['pirata-amaldicoado'],
-    'mulher-carmesim': ['escritor-de-contos'],
+    aethel: ['cartista-arcano', 'invocador'],
+    ousias: ['cartista-arcano', 'decodificador', 'invocador'],
+    keryx: ['cartista-arcano', 'codificador', 'interceptador', 'invocador'],
+    haemus: ['cacador-de-entidades', 'cartista-arcano', 'invocador'],
+    ignis: ['cartista-arcano', 'invocador', 'viajante-classe'],
+    moros: ['campeao-dimensional', 'cartista-arcano', 'invocador'],
+    aperion: ['cartista-arcano', 'guia-dimensional', 'invocador', 'viajante-classe'],
+    chronus: ['cartista-arcano', 'invocador', 'viajante-classe'],
+    erebus: ['cartista-arcano', 'invocador', 'pirata-amaldicoado'],
+    'mulher-carmesim': ['cartista-arcano', 'escritor-de-contos', 'invocador'],
   };
 
   for (const [treeId, ids] of Object.entries(expected)) {
@@ -125,19 +125,23 @@ test('distingue material enviado de propostas originais', () => {
   const revised = classes.filter(classe => classe.origem_conteudo === 'material_enviado_revisado');
   const proposed = classes.filter(classe => classe.origem_conteudo === 'proposta_original_balanceada');
 
-  assert.equal(revised.length, 15);
-  assert.equal(proposed.length, 9);
+  assert.equal(revised.length, 14);
+  assert.equal(proposed.length, 13);
   assert.deepEqual(
     proposed.map(classe => classe.id).sort(),
     [
       'alquimista',
       'cacador-de-entidades',
+      'canalizador',
       'codificador',
       'comerciante',
       'decodificador',
       'escritor-de-contos',
       'guia-dimensional',
+      'interceptador',
       'invocador',
+      'ritualista',
+      'sintonizador',
       'viajante-classe',
     ],
   );
@@ -160,8 +164,33 @@ test('preserva os marcos das duas classes previamente publicadas', () => {
   assert.equal(obterProximaProgressao(obterClasse('ninja'), 20), null);
 });
 
-test('remove o modelo provisório depois da publicação das 24 classes', () => {
+test('remove Elementarista e publica as novas classes mágicas', () => {
+  assert.equal(classes.some(classe => classe.id === 'elementarista'), false);
+  for (const id of ['canalizador', 'sintonizador', 'ritualista', 'interceptador']) obterClasse(id);
   assert.doesNotMatch(REGRAS_OFICIAIS.xp.corpo, /Modelo de progressão de classe/i);
   assert.doesNotMatch(REGRAS_OFICIAIS.xp.corpo, /classes que ainda não receberam progressão própria/i);
-  assert.match(REGRAS_OFICIAIS.xp.corpo, /Classes comuns podem ser escolhidas em qualquer Árvore/);
+  // Prende a REGRA (classe comum não é restrita a Árvore), não a redação exata:
+  // o texto do capítulo é reescrito de tempos em tempos e a frase muda de forma.
+  assert.match(REGRAS_OFICIAIS.xp.corpo, /Classes? comu(m|ns)[^.]{0,60}qualquer Árvore/i);
+});
+
+test('livro público não expõe notas editoriais preservadas na área protegida do mestre', () => {
+  const conteudoPublico = JSON.stringify(Object.fromEntries(
+    Object.entries(REGRAS_OFICIAIS).filter(([id]) => id !== 'mestre'),
+  ));
+  assert.doesNotMatch(conteudoPublico, /Elementarista foi removido/i);
+  assert.doesNotMatch(conteudoPublico, /playtest/i);
+  assert.doesNotMatch(conteudoPublico, /tabela antiga/i);
+  assert.doesNotMatch(conteudoPublico, /proposta original|material enviado/i);
+  assert.doesNotMatch(conteudoPublico, /\badiad[ao]\b/i);
+  assert.doesNotMatch(conteudoPublico, /catálogo estruturado possui/i);
+
+  const regrasMestre = JSON.parse(
+    readFileSync(new URL('../../data/regras/mestre-v1.json', import.meta.url), 'utf8'),
+  ) as { secoes?: Array<{ id?: string; itens?: string[] }> };
+  const notas = regrasMestre.secoes?.find((secao) => secao.id === 'notas-editoriais')?.itens?.join(' ') || '';
+  assert.match(notas, /Elementarista foi removido/i);
+  assert.match(notas, /tabela antiga de XP/i);
+  assert.match(notas, /Alquimista, Comerciante, Guia Dimensional/i);
+  assert.match(notas, /raça Entidade permanece deliberadamente adiada/i);
 });

@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
 import { BookOpen, Crown, LockKeyhole, Sparkles, Swords, Users } from 'lucide-react';
-import { LEGADOS_CATALOGO, RACAS_CATALOGO } from '../../../services/catalogoService';
+import { LEGADOS_CATALOGO, RACAS_CATALOGO, CLASSES_CATALOGO } from '../../../services/catalogoService';
 import { capacidadeModificacoesRaciais } from '../../../services/calculoService';
 import { useAuthStore } from '../../../store/useAuthStore';
+import { ProgressaoClasses } from '../components/ProgressaoClasses';
 import {
   avaliarLegado,
   caracteristicasRaciaisAutomaticas,
@@ -43,6 +44,12 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
   const campanha = useAuthStore((state) => state.campanhaAtiva);
   const isMestre = usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador' || campanha?.papel === 'mestre' || campanha?.papel === 'assistente';
   const classes = classesDaFicha(ficha);
+  // ProgressaoClasses quer os slots crus ({classeId, nivel}), não os já
+  // resolvidos de classesDaFicha - mesmo fallback de AbaFicha.tsx pra ficha
+  // legada sem `classes` (só o `classeId` antigo).
+  const classeSlots: { classeId: string; nivel: number }[] = ficha.classes?.length
+    ? ficha.classes
+    : (ficha.classeId ? [{ classeId: ficha.classeId, nivel: ficha.nivel || 1 }] : []);
   const selecoesPoder = selecoesPoderValidas(ficha);
   const idsLegados: string[] = Array.isArray(ficha.legadosSelecionados) ? ficha.legadosSelecionados : [];
   const tracos = caracteristicasRaciaisAutomaticas(ficha);
@@ -109,6 +116,8 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
         <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>Progressão</h2>
         <p className="mt-1 text-sm text-gray-400">Características raciais e habilidades de classe aparecem automaticamente. Você escolhe apenas os poderes e Legados liberados.</p>
       </header>
+
+      <ProgressaoClasses classes={classeSlots} catalogoClasses={CLASSES_CATALOGO} />
 
       <Secao titulo="Características raciais" icone={<Users size={18} className="text-emerald-400" />}>
         <div className="grid gap-3 lg:grid-cols-2">

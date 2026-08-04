@@ -8,14 +8,19 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test:autosave": "node --import ./tests/frontend/registerTsLoader.mjs --test tests/frontend/autosaveQueue.test.ts tests/frontend/characterAutosave.integration.test.ts",
-    "test:frontend": "node --import ./tests/frontend/registerTsLoader.mjs --test tests/frontend/autosaveQueue.test.ts tests/frontend/characterAutosave.integration.test.ts tests/frontend/lojaCommands.test.ts tests/frontend/economyOperations.test.ts tests/frontend/raceChoices.test.ts tests/frontend/classProgression.test.ts tests/frontend/mundoVisibility.test.ts tests/frontend/attributeGeneration.test.ts tests/frontend/criticalRules.test.ts tests/frontend/statusRules.test.ts tests/frontend/progressionAndRecovery.test.ts tests/frontend/magicRules.test.ts",
+    "test:frontend": "node --import ./tests/frontend/registerTsLoader.mjs --test tests/frontend/autosaveQueue.test.ts tests/frontend/characterAutosave.integration.test.ts tests/frontend/lojaCommands.test.ts tests/frontend/economyOperations.test.ts tests/frontend/raceChoices.test.ts tests/frontend/classProgression.test.ts tests/frontend/mundoVisibility.test.ts tests/frontend/worldChronicles.test.ts tests/frontend/attributeGeneration.test.ts tests/frontend/criticalRules.test.ts tests/frontend/equipmentEffects.test.ts tests/frontend/statusRules.test.ts tests/frontend/progressionAndRecovery.test.ts tests/frontend/magicRules.test.ts tests/frontend/sessionUtils.test.ts",
     "generate:rules": "node --import ./tests/frontend/registerTsLoader.mjs tools/generate-public-rules.mjs",
     "check:rules-source": "node --import ./tests/frontend/registerTsLoader.mjs tools/generate-public-rules.mjs --check",
+    "build:mundo": "python scripts/buildMundo.py",
+    "check:mundo": "python scripts/buildMundo.py --check",
     "normalize:arsenal": "node tools/normalize-arsenal-balance.mjs",
     "audit:balance": "node tools/audit-balance.mjs",
     "check:typography": "node tools/check-site-typography.mjs",
     "fix:typography": "node tools/check-site-typography.mjs --fix",
-    "fix:weapon-criticals": "node tools/normalize-weapon-criticals.mjs"
+    "fix:weapon-criticals": "node tools/normalize-weapon-criticals.mjs",
+    "obsidian:import": "node tools/obsidian-content.mjs import",
+    "obsidian:export": "node tools/obsidian-content.mjs export",
+    "obsidian:check": "node tools/obsidian-content.mjs check"
   },
   "dependencies": {
     "@react-three/drei": "^9.108.0",
@@ -41,6 +46,7 @@
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.5.3",
-    "vite": "^5.3.3"
+    "vite": "^5.3.3",
+    "yaml": "^2.8.1"
   }
 }
