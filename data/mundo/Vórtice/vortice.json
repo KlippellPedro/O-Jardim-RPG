@@ -33,48 +33,48 @@
     },
 
     {
-      "_secao": "2 de 4 - FLUXO (rascunho - ver _origem abaixo)",
+      "_secao": "2 de 4 - FLUXO",
       "tipo": "fluxo",
       "id": "fluxo-da-inconstancia",
       "titulo": "Fluxo da Inconstância",
       "conteudo": {
         "arvore": "Vórtice",
-        "descricao": "[RASCUNHO - PRECISA SER REVISADO] O Fluxo que rege a mudança constante e a entropia - o mesmo domínio da deidade Ignis, já que Árvore, Deidade e Fluxo são a mesma entidade."
+        "descricao": "O Fluxo que recusa que as coisas continuem como estão. Não destrói: troca. Uma armadura vira ferrugem, a ferrugem vira brasa, a brasa vira vento - e nada volta ao que era. É o único Fluxo que não pode ser repetido de propósito: o mesmo gesto, feito duas vezes, dá dois resultados diferentes, e quem canaliza a Inconstância aprende a apostar em vez de planejar. Com Ignis paralisado, o mundo vem ficando teimosamente igual a si mesmo - e há quem diga que essa estagnação, e não a A.X.I.S, é a verdadeira doença do Jardim.",
+        "marca_corporal": "Uma marca alaranjada que nunca amanhece no mesmo lugar do corpo."
       },
 
-      "_origem": "PLACEHOLDER - nenhuma fonte específica sobre o Fluxo em si foi lida ainda. Texto inferido a partir do domínio já conhecido de Ignis.",
+      "_origem": "Domínio de Ignis (antigo data/world/panteon.json) + tabela 'Estrutura do Jardim' (cor Laranja, gênero Masculino). Reescrito em 2026-07-29; a ideia da estagnação vem da própria descrição da Deidade ('ironicamente, o próprio Fluxo da mudança está estacionado').",
       "_pronto_para_importar": true,
-      "_o_que_falta": "Reescrever 'descricao' com material de origem de verdade, se existir.",
       "_quando_revelar": "Geralmente revelado depois da Deidade em si."
     },
 
     {
-      "_secao": "3 de 4 - GALHO (placeholder - ver _origem)",
+      "_secao": "3 de 4 - GALHO",
       "tipo": "galho",
-      "id": "vortice-galho-1",
-      "titulo": "Galho de Vórtice (placeholder)",
+      "id": "espiral",
+      "titulo": "Espiral",
       "conteudo": {
         "arvore": "ignis",
-        "descricao": "[PLACEHOLDER] Ainda não existe um Galho definido pra Árvore de Vórtice em nenhuma fonte. Substitua id/titulo/descricao por um Galho de verdade quando decidir o que existe aqui."
+        "descricao": "O Galho que nunca era o mesmo duas vezes. Espiral não tinha mapa porque não fazia sentido ter: montanha virava planície, rio virava estrada, e quem passasse por ali duas vezes não reconhecia nada da primeira. Era o Galho onde nada apodrecia, porque nada durava o suficiente.\n\nHoje está parado. Desde que Ignis foi silenciado, Espiral congelou na última forma que assumiu - e é a coisa mais perturbadora do Jardim inteiro, porque essa forma não era pra ser final. Ficou uma paisagem no meio de virar outra coisa, e assim permanece.",
+        "nota": "É o argumento mais forte de que a paralisia é uma ferida e não uma trégua: o Fluxo da mudança estacionado é o único dano que se enxerga a olho nu."
       },
-
-      "_origem": "PLACEHOLDER puro - nenhuma fonte definiu Galhos pra esta Árvore.",
-      "_pronto_para_importar": false,
-      "_proximo_passo": "Escreva o(s) Galho(s) reais - duplique este bloco com ids diferentes se precisar de mais de um."
+      "_origem": "ESCRITO DO ZERO em 2026-07-29. Ancorado numa frase que já era canônica na descrição da Deidade: 'ironicamente, o próprio Fluxo da mudança está estacionado'. O Galho foi escrito pra tornar essa ironia visível.",
+      "_pronto_para_importar": true
     },
 
     {
-      "_secao": "4 de 4 - DIMENSÃO (placeholder - ver _origem)",
+      "_secao": "4 de 4 - DIMENSÃO",
       "tipo": "dimensao",
-      "id": "vortice-dimensao-1",
-      "titulo": "Dimensão de Vórtice (placeholder)",
+      "id": "fornalha-parada",
+      "titulo": "A Fornalha Parada",
       "conteudo": {
-        "galho": "vortice-galho-1",
-        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro do Galho acima. Substitua quando tiver o conteúdo de verdade."
+        "galho": "espiral",
+        "descricao": "O centro de Espiral, de onde a mudança se espalhava pro resto do Galho. Era fogo que não queimava nada: só transformava - o que entrasse saía sendo outra coisa, e ninguém, nem Ignis, decidia o quê.\n\nAgora está acesa e não consome. As chamas continuam de pé na mesma posição, na mesma altura, com a mesma cor, e não esquentam. Quem chega perto sente frio.",
+        "caracteristicas": "Fogo laranja imóvel. Não queima, não ilumina direito, e não pode ser apagado."
       },
-
-      "_origem": "PLACEHOLDER puro - mesmo caso do Galho acima.",
-      "_pronto_para_importar": false
+      "_origem": "ESCRITO DO ZERO em 2026-07-29, junto com o Galho acima.",
+      "_nota_mesa": "Reacender a Fornalha é o gancho mais direto pra libertar Ignis - e provavelmente o mais perigoso, já que a coisa que ela faz é transformar sem que ninguém escolha no quê.",
+      "_pronto_para_importar": true
     }
   ]
 }

@@ -1,0 +1,164 @@
+{
+  "pacote": "realidade-0-reinos",
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e_esse_arquivo": "Os Locais da Dimensão Padrão (tipo 'reino', conteudo.dimensao = 'padrao'). A Dimensão Padrão já listava todos eles por nome na própria descrição - Salém, o Império, Astraluna, Emberhold, Lionês, o Reino dos Anões - mas nenhum tinha entrada, então o nível de Local da cascata nunca existiu de fato no site. O data/mundo/_padrao.json marcava esse exemplo como o que faltava pra fechar a cascata inteira.",
+    "origem_do_conteudo": "Transcrito das notas do Obsidian em 'O Jardim/Gênese/Realidade 0/Dimensões/Padrão/Reinos/' (cada reino tinha as sub-notas Função, Governo e Idade) e 'Padrão/Locais Importantes/'. Astraluna vem de 'O Jardim/A.X.I.S/Astraluna/', que no cofre estava arquivada sob a Árvore A.X.I.S - ver '_nota_hierarquia' na entrada dela.",
+    "linha_do_tempo": "As notas 'Idade.md' dão o ano de fundação de 4 reinos: Astraluna 1.188, Império 1.261, Emberhold 1.510, Lionês 1.595. Salém é anterior ao ano 0. Nadalon, Întuneric, Reino dos Anões e Iwagakure não têm data, e o ano ATUAL da campanha não está declarado em lugar nenhum do cofre - é a maior lacuna de cronologia que sobrou.",
+    "o_ano_zero": "Definido em 'Reinos/Salém/Idade.md': Salém já existia muito antes, mas uma magia que deu errado devastou o mundo em morte e caos; quando o mundo voltou ao normal, ele foi 'criado' de novo e a contagem dos anos começou. Ou seja, o ano 0 é o pós-cataclismo, e Salém é o único reino que atravessou os dois lados."
+  },
+  "entradas": [
+    {
+      "_secao": "REINO - Salém",
+      "tipo": "reino",
+      "id": "salem",
+      "titulo": "Salém",
+      "conteudo": {
+        "dimensao": "padrao",
+        "descricao": "Uma nação isolada e mística, governada por um conselho de dez bruxas ancestrais conhecidas como as Irmãs da Noite. Cada uma representa um arquétipo mágico distinto e detém autoridade sobre diferentes aspectos da política, da magia e da vida cotidiana; juntas, compõem o mais alto domínio de Fluxo e sabedoria do reino, sendo simultaneamente rainhas.\n\nSalém é território exclusivamente feminino - homens não entram sob nenhuma circunstância, a não ser como prisioneiros ou oferendas em rituais. A sociedade é matriarcal, mística e profundamente ritualística: mulheres que desejam viver ali devem provar sua aptidão com o Fluxo ou servir a alguma causa do reino, e as não mágicas podem ser acolhidas, mas ocupam posições inferiores e precisam jurar lealdade ao coven.\n\nO reino mantém política de isolamento. Raros são os que ousam provocar sua ira, porque os exércitos de Salém não marcham: eles amaldiçoam, invocam, envenenam. Espiãs e emissárias do coven atuam nas sombras, monitorando ameaças e coletando segredos, e bruxas exiladas ou renegadas de Salém costumam ser temidas em todos os cantos do mundo.\n\nDiferente de outras nações, o Fluxo é a base do governo, da justiça e da diplomacia: tudo é regido por rituais e profecias, e disputas políticas se resolvem em duelos místicos sancionados pelas Irmãs. O tempo ali parece fluir mais devagar que o comum - consequência das antigas magias que protegem suas fronteiras.\n\nÉ também o maior centro de comércio mágico do mundo conhecido. Sua influência atravessa fronteiras e realidades, porque ninguém domina as artes do Fluxo como as bruxas de Salém.",
+        "fundacao": "Anterior ao ano 0 - Salém é o único reino que existia antes do cataclismo que reiniciou a contagem dos anos.",
+        "governo": "Conselho das Irmãs da Noite - dez Cadeiras equivalentes entre si. A posição é passada adiante por linhagem ou escolha ritualística. Em caso de empate, a mais antiga das bruxas é chamada pra desempatar por um ritual que só as Irmãs conhecem."
+      },
+      "_origem": "Conteúdo REAL - transcrito de 'Reinos/Salém/Salém.md', 'Função.md' e 'Idade.md'.",
+      "_retraducao_2026-07-29": "A nota original diz 'o mais alto domínio da arkania' e 'provar sua aptidão mágica'; retraduzido pra Fluxo, já que Arkania é conceito descontinuado. A lista de Soberanos chama Salém de 'Soberanas da Arkania' - vira 'Soberanas dos Fluxos' (ver realidade-0-soberanos.json).",
+      "_pronto_para_importar": true
+    },
+    {
+      "_secao": "FACÇÃO de Salém - as Irmãs da Noite",
+      "tipo": "personagem",
+      "id": "irmas-da-noite",
+      "titulo": "Irmãs da Noite",
+      "conteudo": {
+        "epiteto": "As dez Cadeiras de Salém",
+        "descricao": "O conselho que governa Salém. Cada bruxa ocupa uma das Cadeiras, e a posição é passada adiante por linhagem ou escolha ritualística. As Cadeiras são equivalentes entre si; havendo empate, a mais antiga das bruxas é chamada pro desempate, por um ritual que só as Irmãs conhecem.\n\nCibele (nível 40, Decodificadora e Codificadora) e Marilia (nível 40, Decodificadora e Codificadora) são as duas mais altas - Cibele canaliza o Fluxo da Origem, Marilia o Divino. Beldam (30, Decodificadora e Ninja) canaliza o Fluxo do Sangue. Serie (25, Canalizador e Codificadora) domina Luz e Miranda (25, Canalizador) o Fogo Astral. As quatro seguintes são canalizadores de nível 20: Luminus (Raio), Beatrix (Fogo, também Lutadora), Elizabeth (Água, também Pop Star) e Sarah (Terra, também Guardiã).\n\nA décima Cadeira, a do Ar, está vaga.",
+        "status": "ativa"
+      },
+      "_origem": "Conteúdo REAL - transcrito da tabela em 'Reinos/Salém/Irmãs da Noite.md'.",
+      "_retraducao_2026-07-29": "Os 'Tipos' da tabela original eram: Arkania Primordial (Cibele) → Fluxo da Origem; Arkania de Sangue (Beldam) → Fluxo do Sangue; Divina (Marilia) → mantido como está, porque não é Arkania e não tem definição em lugar nenhum; os demais (Luz, Fogo Astral, Raio, Fogo, Água, Terra, Ar) são elementos do Fluxo do Físico - conferem com a tabela de 7 elementos em data/mundo/Baluarte/baluarte.json, exceto 'Fogo Astral', que não está lá.",
+      "_decisao_decima_cadeira": "A tabela original tem 10 linhas, mas a última está SEM NOME (nível 20, Canalizador/Atirador, Ar). Em vez de inventar uma bruxa, transformei a lacuna em lore: a Cadeira do Ar está vaga. Combina com o texto de Salém dizer que Cadeiras são passadas por linhagem ou escolha ritualística - uma vaga aberta é um gancho de mesa pronto. Se você tinha um nome em mente, é só preencher.",
+      "_conflito_nao_resolvido": "Existem DUAS Mirandas: esta (Irmã da Noite, nível 25, Fogo Astral) e a do Orfanato de Ofélia (água e sangue, curandeira). Não está declarado em lugar nenhum se são a mesma pessoa. Deixei separadas e não inventei ligação - decisão sua.",
+      "_nota_classes": "Decodificador, Codificador, Canalizador, Ninja, Lutadora, Pop Star, Guardião e Atirador aparecem aqui como classes de sistema. Decodificador, Codificador e Canalizador existem em data/ficha/classes.json (ligadas a Ousias, Keryx e Ignis). As outras não existem na Ficha - podem ser classes antigas ou apenas descritivas.",
+      "_pronto_para_importar": true
+    },
+    {
+      "_secao": "REINO - Império",
+      "tipo": "reino",
+      "id": "imperio",
+      "titulo": "Império",
+      "conteudo": {
+        "dimensao": "padrao",
+        "descricao": "O maior fornecedor de guardas e proteção do mundo conhecido, além de centro de mineração e da máquina de conquista de territórios que sustenta as duas coisas.\n\nÉ governado por um imperador, e o trono se chama Kaiser. Quem o ocupa hoje é Augusto I, portador do título de Deus da Guerra e senhor das batalhas - um Campeão Dimensional, a classe exclusiva da Árvore de Baluarte.\n\nO exército imperial conta com 6 mil guerreiros imperiais, 15 mil escravos de guerra e 6 mil comerciantes que mantêm mantimentos e suprimentos em campanha: 27 mil membros ao todo. A proporção diz quase tudo sobre o Império - pra cada soldado livre há mais de dois cativos em campo.",
+        "fundacao": "Ano 1.261.",
+        "governo": "Imperial. O trono é o Kaiser; o ocupante atual é Augusto I."
+      },
+      "_origem": "Conteúdo REAL - transcrito de 'Reinos/Império/Função.md', 'Governo.md', 'Exercito.md' e 'Idade.md'.",
+      "_conflito_resolvido": "O cofre usa três nomes que pareciam ser a mesma figura: 'Augusto I' (em Governo.md), 'Kaiser' (arquivo vazio na pasta do Império, e na lista de Soberanos como 'Soberano da Guerra'). Resolvido assim: Kaiser é o TÍTULO/trono, Augusto I é quem senta nele. Isso deixa a lista de Soberanos correta (a Cadeira da Guerra é do Kaiser, não de um indivíduo) sem descartar o nome próprio.",
+      "_nota_ficha": "'Campeão Dimensional' é uma classe real do jogo - data/ficha/classes.json a lista como classe exclusiva da Árvore de Moros (Baluarte). O imperador é, portanto, um canalizador do Fluxo do Físico.",
+      "_pronto_para_importar": true
+    },
+    {
+      "_secao": "REINO - Astraluna",
+      "tipo": "reino",
+      "id": "astraluna",
+      "titulo": "Astraluna",
+      "conteudo": {
+        "dimensao": "padrao",
+        "descricao": "O maior centro de tecnologia arcana do mundo, reconhecido como o berço da fusão perfeita entre magia e máquina. Suas oficinas e laboratórios produzem artefatos tão avançados que sustentam civilizações inteiras, o que torna o reino indispensável ao equilíbrio do continente. Cercado por barreiras poderosas e protocolos rigorosos de segurança, Astraluna guarda seus segredos com rigidez, impedindo que suas inovações caiam em mãos erradas. Misterioso e grandioso, é ao mesmo tempo um farol de progresso e um guardião ciumento das próprias maravilhas.\n\nÉ a sede da AstraTech e a base de operações de Jota Macedo, seu presidente - e é daqui que a A.X.I.S se espalhou pelo mundo. Pra Astraluna e seus habitantes, a A.X.I.S representa a esperança de que a energia do mundo enfim possa ser compreendida, reproduzida e evoluída por mãos mortais.",
+        "fundacao": "Ano 1.188 - o mais antigo dos reinos com data registrada.",
+        "governo": "Corporativo. Presidido por Jota Macedo, através da AstraTech."
+      },
+      "_origem": "Conteúdo REAL - transcrito de 'A.X.I.S/Astraluna/Astraluna.md' e 'Função.md'. O 2º parágrafo amarra com o que já estava em data/mundo/Parley (subjulgado)/parley-axis.json.",
+      "_nota_hierarquia": "No cofre, Astraluna está arquivada dentro da pasta da Árvore A.X.I.S, o que dava a entender que seria um Galho ou Dimensão dela. Mantive Astraluna como REINO da Dimensão Padrão, porque é onde a própria Dimensão Padrão já a listava e porque ela é um lugar físico do mundo mortal, não uma camada cósmica. A A.X.I.S continua sendo a Árvore; Astraluna é a cidade de onde ela é operada.",
+      "_frase_truncada_no_cofre": "'A.X.I.S/Astraluna/Idade.md' termina no meio: 'O reino de Astraluna foi construído em 1.188 e ' - a frase nunca foi terminada. Usei só a data.",
+      "_pronto_para_importar": true
+    },
+    {
+      "_secao": "ARTEFATO de Astraluna - as Máscaras",
+      "tipo": "reino",
+      "id": "mascaras-astratech",
+      "titulo": "Máscaras da AstraTech",
+      "conteudo": {
+        "dimensao": "padrao",
+        "descricao": "Forjadas a partir do Arkan'vel, a tecnologia avançada desenvolvida em Astraluna, as máscaras são artefatos tão poderosos quanto temidos. Criadas nas profundezas dos laboratórios, onde ciência e feitiçaria se misturaram, reluzem como veias azuis neon, pulsando como se respirassem.\n\nAo serem colocadas, conectam-se diretamente à Força Vital e à mente do usuário, concedendo habilidades que ultrapassam os limites comuns - aumento de atributos físicos e da percepção como um todo.\n\nMas as máscaras não apenas canalizam poder: elas reescrevem o portador. Cada comando, cada pensamento é filtrado pelas camadas encantadas de código vivo e, com o tempo, a máscara passa a decidir por si. Muitos usuários perdem gradualmente a própria identidade, tornando-se extensões da vontade de Astraluna.\n\nJota Macedo trabalha em segredo numa máscara biomecânica maior que todas as outras, projetada pra conter e estabilizar o maior e mais puro fragmento de A.X.I.S existente - uma relíquia que lhe permitiria usar o poder de uma deidade, desde que ela estivesse num de seus estoques."
+      },
+      "_origem": "Conteúdo REAL - transcrito de 'A.X.I.S/Astraluna/AstraTech/Máscaras.md'; o último parágrafo, de 'A.X.I.S/Jota Macedo.md'.",
+      "_nota_tipo": "Entrou como 'reino' porque é o único tipo de Local que o schema tem - a cascata do Mundo não prevê um tipo 'artefato'. Se quiser, dá pra mover pra uma entrada tipo 'personagem' sem perder nada.",
+      "_termos_orfaos": "'Arkan'vel' e 'Força Vital' aparecem UMA única vez no cofre inteiro, aqui, sem definição em lugar nenhum. Mantive os dois: 'Arkan'vel' é claramente um material/tecnologia (e a raiz 'Ark' também está em Arkarin, então não cai junto com Arkania), e 'Força Vital' é genérico o bastante pra ficar. Ambos merecem uma definição própria em algum momento.",
+      "_gancho": "'Estoques/prisões de poder' é citado uma vez em Jota Macedo.md e nunca explicado. É o mecanismo pelo qual Jota pretende usar o poder de uma deidade - provavelmente a coisa mais importante ainda indefinida da campanha.",
+      "_pronto_para_importar": true
+    },
+    {
+      "_secao": "REINO - Emberhold",
+      "tipo": "reino",
+      "id": "emberhold",
+      "titulo": "Emberhold",
+      "conteudo": {
+        "dimensao": "padrao",
+        "descricao": "O principal fabricante e fornecedor de armas e armaduras do mundo conhecido - e, por consequência, o reino que arma todos os outros, inclusive os que estão em guerra entre si.\n\nNão tem rei. O governo é o conselho dos cinco líderes das cinco guildas de aventureiros mais famosas do reino: Asas de Prata, liderada por Valerius Orléans; Aurora Escarlate, por Mérida Doyle; Titãs da Guerra, por Brutus Guigs; Reis da Favela, por Pompom; e Trupe Fantasma, por Rick Albert.\n\nÉ também onde Erick, um dos filhos de Ofélia, trabalha hoje numa oficina de armas e armaduras.",
+        "fundacao": "Ano 1.510.",
+        "governo": "Conselho das cinco guildas."
+      },
+      "_origem": "Conteúdo REAL - transcrito de 'Reinos/Emberhold/Função.md', 'Governo.md' e 'Idade.md'. A menção a Erick vem de 'Locais Importantes/Orfanato.md'.",
+      "_nota_mesa": "Um reino governado por guildas de aventureiros é o gancho mais direto pra personagens de jogadores terem posição política sem serem nobres.",
+      "_pronto_para_importar": true
+    },
+    {
+      "_secao": "REINO - Lionês",
+      "tipo": "reino",
+      "id": "liones",
+      "titulo": "Lionês",
+      "conteudo": {
+        "dimensao": "padrao",
+        "descricao": "O principal fabricante e fornecedor de alimentos, bebidas e plantações - o reino que alimenta os outros. Numa Realidade 0 onde o Império conquista, Emberhold arma e Astraluna maquina, Lionês é o único que ninguém pode se dar ao luxo de atacar.\n\nÉ governado pelo rei e seus conselheiros reais. O soberano de Lionês é Augustos Castilla, que ocupa a Cadeira do Comércio na assembleia dos dez Soberanos.",
+        "fundacao": "Ano 1.595 - o mais novo dos reinos com data registrada.",
+        "governo": "Monárquico, com conselho real."
+      },
+      "_origem": "Conteúdo PARCIAL - 'Reinos/Lionês/Função.md', 'Governo.md' e 'Idade.md' têm uma linha cada, e são tudo o que existe. A segunda frase do 1º parágrafo e a ligação com a Cadeira do Comércio são minhas, inferidas do papel econômico do reino e da lista de Soberanos.",
+      "_nota_arquivo_vazio": "'Reinos/Lionês/Liones.md' e 'Augustos Castilla.md' estão vazios no cofre.",
+      "_pronto_para_importar": true
+    },
+    {
+      "_secao": "REINO - Reino dos Anões",
+      "tipo": "reino",
+      "id": "reino-dos-anoes",
+      "titulo": "Reino dos Anões",
+      "conteudo": {
+        "dimensao": "padrao",
+        "descricao": "O reino subterrâneo, e o mais fechado da Dimensão Padrão depois de Salém. Governado por Durin II, que ocupa a Cadeira da Forja entre os dez Soberanos.\n\nSe Emberhold fabrica em escala, o Reino dos Anões forja em profundidade: o que sai dali não é produzido, é feito - peça por peça, e quase nunca pra vender. Os anões falam Nórdico Antigo entre si e raramente qualquer outra língua com estrangeiros, mesmo quando a entendem.",
+        "fundacao": "Não registrada.",
+        "governo": "Monárquico. Durin II, Soberano da Forja."
+      },
+      "_origem": "ESCRITO DO ZERO em 2026-07-29. No cofre, este reino é só uma pasta com um arquivo vazio ('Durin II.md') - não há nota do reino, nem Função, Governo ou Idade. Os únicos fatos reais aproveitados: o nome de Durin II, o título 'Soberano da Forja' (de Soberanos.md) e o idioma Nórdico Antigo (de Idiomas.md). O resto é proposta minha.",
+      "_pronto_para_importar": true
+    },
+    {
+      "_secao": "LOCAL - Iwagakure (vila ninja)",
+      "tipo": "reino",
+      "id": "iwagakure",
+      "titulo": "Iwagakure",
+      "conteudo": {
+        "dimensao": "padrao",
+        "descricao": "\"Sempre o mesmo, não importa o adversário. Quebre-os até que estejam quebrados - tal é a maneira de Iwagakure.\"\n\nNa aldeia, as crianças são obrigadas a passar pelo treinamento ninja: as formas de matar, a resistência, e o aprendizado de abandonar os valores da vida. Uma das etapas é inalar a droga estimulante da dor e suportá-la por três dias e noites, até finalmente se acostumarem com ela - menos de uma em cada dez crianças sobrevive a essa parte sozinha. Matar entre pares é permitido, não importa o motivo, e qualquer disputa entre shinobi se resolve em luta até a morte.\n\nComo diz a lei shinobi, é proibido abandonar a aldeia: qualquer ação ou pensamento nesse sentido é punido com a morte. A principal razão pra querer sair sempre foi a mesma - querer viver uma vida normal. Iwagakure também proíbe seus moradores de circular livremente, a menos que seja em missão.\n\nAs demais leis: ninjas devem suprimir sentimentos, apego e humanidade, tornando-se vazios pra servirem como ferramentas de assassinato; a missão continua a qualquer custo, com quaisquer táticas necessárias; e a filosofia da vila é que a vida de um ninja não tem valor se ele não estiver servindo ao propósito de matar.\n\nO shinobi mais forte de Iwagakure é Gabimaru.",
+        "governo": "Lei shinobi. A sucessão não está definida."
+      },
+      "_origem": "Conteúdo REAL - transcrito de 'Padrão/Vilas Ninjas/Iwagakure/Cultura.md', 'Regras Ninja.md' e 'Gabimaru.md'.",
+      "_nota_duplicata": "As regras 6 e 7 de 'Regras Ninja.md' são o MESMO texto, palavra por palavra ('Disputas internas e testes de força entre os próprios ninjas são comuns...'). Incluí uma vez só, e ela já estava coberta pelo 2º parágrafo (matar entre pares é permitido), então não repeti.",
+      "_o_que_falta": "'Iwagakure/Sucessão.md' está vazio no cofre - quem sucede quem, e como, não existe.",
+      "_pronto_para_importar": true
+    },
+    {
+      "_secao": "LOCAL - Orfanato de Ofélia",
+      "tipo": "reino",
+      "id": "orfanato-de-ofelia",
+      "titulo": "Orfanato de Ofélia",
+      "conteudo": {
+        "dimensao": "padrao",
+        "descricao": "Um orfanato criado por Ofélia, ex-bruxa das Irmãs da Noite que foi expulsa e banida de Salém e de todas as suas instituições por causa do que chamavam de pensamento liberal. Banida, ela passou a perseguir seus objetivos por conta própria - o que resultou neste orfanato, para crianças escolhidas.\n\nOfélia teve muitos aprendizes, e cinco a quem chamava de filhos e filhas.\n\nJota sempre foi muito inteligente e curioso, e por isso criou aptidão pra usar o Fluxo com facilidade; o que impressionava Ofélia era que ele conseguia usá-lo numa forma pura e poderosa demais pra idade. Hoje é presidente de Astraluna e deseja criar seu próprio tipo de Fluxo.\n\nCirce sempre foi muito impaciente, e por isso vivia se metendo em confusão; ao contrário de Jota, não manipulava o Fluxo tão bem. Hoje tenta seguir o sonho de Ofélia e, ao mesmo tempo, parar os planos de Jota.\n\nMiranda aprendeu cedo a manipular o Fluxo do Físico, mas o que a tornava especial era conseguir manipular a água e o sangue das pessoas, o que lhe deu ótima aptidão pra curar. Hoje só queria ter sua família de volta - mas o tempo não pode voltar.\n\nYennefer teve desde cedo aptidão com o Fluxo da Origem e sempre se preocupou com os irmãos, ajudando e orientando quem tinha dúvidas. Tudo mudou quando a figura mais próxima de uma mãe morreu: ela ficou quebrada, destruída, mas algo dentro dela não aceitou - e o rosa primordial virou o sangue escarlate, que a transformou numa mulher poderosa e temida por todos que a encontram. Hoje vaga pelo Sangue, buscando uma forma de voltar ao mundo dos vivos e procurar o responsável por arruinar sua vida.\n\nErick mostrava, quando criança, aptidão enorme com o Fluxo do Físico na vertente da Terra, e por isso se tornou muito resistente e forte. Hoje está em Emberhold, trabalhando numa oficina de armas e armaduras."
+      },
+      "_origem": "Conteúdo REAL - transcrito de 'Padrão/Locais Importantes/Orfanato.md', incluindo a tabela dos cinco filhos (convertida em prosa).",
+      "_por_que_isso_importa": "É a peça que amarra o antagonista ao mundo. Jota Macedo não é um vilão externo: é um órfão de Salém que virou presidente de Astraluna e subjugou uma deidade. E Circe é a antagonista natural dele, criada pela mesma pessoa, com o objetivo declarado de detê-lo. Até agora nada disso aparecia no site.",
+      "_retraducao_2026-07-29": "Arkania → Fluxo em todo o texto. 'Arkania primordial' (Yennefer) → Fluxo da Origem; 'arkania elemental' (Miranda) e 'arkania de terra' (Erick) → Fluxo do Físico. A frase 'o rosa primordial virou o sangue escarlate' foi mantida LITERAL, porque é ela que prova que a retradução está certa: Gênese é Rosa e Limiar é Vermelho vinho na tabela 'Estrutura do Jardim', e o Fluxo do Sangue é descrito em data/mundo/Limiar/limiar.json como a Origem transformada pela dor. A lore já dizia isso sem nomear.",
+      "_personagens_sem_nota": "Ofélia e Circe são citadas aqui e em nenhum outro lugar do cofre - nenhuma das duas tem nota própria, apesar de Ofélia ser a origem de tudo e Circe ser a contraparte declarada do vilão.",
+      "_pronto_para_importar": true
+    }
+  ]
+}

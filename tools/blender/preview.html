@@ -62,7 +62,7 @@ const voltarBtn = document.getElementById('voltar');
 const log = (msg) => { statusEl.textContent = msg; console.log('[preview]', msg); };
 
 const params = new URLSearchParams(location.search);
-const modelUrl = params.get('model') || '../../assets/3d/arvores/aethel.glb';
+const modelUrl = params.get('model') || '../../public/models/trees/aethel.glb';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x12141a);

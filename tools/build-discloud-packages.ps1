@@ -128,7 +128,7 @@ try {
 
     $platformData = Join-Path $platformStage 'data'
     New-Item -ItemType Directory -Path $platformData -Force | Out-Null
-    @('data\ficha', 'data\mundo', 'data\regras') |
+    @('data\ficha', 'data\mundo', 'data\regras', 'data\loja') |
       ForEach-Object { Copy-ProjectItem $_ $platformData }
   }
 
@@ -136,7 +136,6 @@ try {
   @(
     'bots\banqueiro\cogs',
     'bots\banqueiro\core',
-    'bots\banqueiro\data',
     'bots\banqueiro\main.py',
     'bots\banqueiro\requirements.txt',
     'bots\banqueiro\discloud.config',
@@ -145,6 +144,17 @@ try {
     'bots\banqueiro\.env.example',
     'bots\banqueiro\README.md'
   ) | ForEach-Object { Copy-ProjectItem $_ $banqueiroStage }
+
+  # No repositório a Loja tem uma única fonte em data/loja. No ZIP, o bot
+  # recebe os arquivos em data/ para manter o caminho simples em produção.
+  $banqueiroData = Join-Path $banqueiroStage 'data'
+  New-Item -ItemType Directory -Path $banqueiroData -Force | Out-Null
+  @(
+    'data\loja\catalogo.json',
+    'data\loja\bestiario_precos.json',
+    'data\loja\veiculos_sistema.json',
+    'data\loja\INSTRUCOES_CATALOGO.md'
+  ) | ForEach-Object { Copy-ProjectItem $_ $banqueiroData }
 
   @(
     'bots\jornalista\cogs',
@@ -172,13 +182,13 @@ try {
 
   # O Gerente leva uma cópia somente das fontes publicadas para jogadores.
   # data/regras/mestre-v1.json é protegido e não entra no pacote.
-  $gerenteDocs = Join-Path $gerenteStage 'fontes\docs\regras'
+  $gerenteRegras = Join-Path $gerenteStage 'fontes\data\regras'
   $gerenteFicha = Join-Path $gerenteStage 'fontes\data\ficha'
-  New-Item -ItemType Directory -Path $gerenteDocs, $gerenteFicha -Force | Out-Null
+  New-Item -ItemType Directory -Path $gerenteRegras, $gerenteFicha -Force | Out-Null
 
   @(
-    'docs\regras\regras-publicas-v1.md'
-  ) | ForEach-Object { Copy-ProjectItem $_ $gerenteDocs }
+    'data\regras\regras-publicas-v1.md'
+  ) | ForEach-Object { Copy-ProjectItem $_ $gerenteRegras }
 
   @(
     'data\ficha\classes.json',

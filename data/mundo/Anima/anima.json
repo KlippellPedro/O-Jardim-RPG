@@ -33,48 +33,47 @@
     },
 
     {
-      "_secao": "2 de 4 - FLUXO (rascunho - ver _origem abaixo)",
+      "_secao": "2 de 4 - FLUXO",
       "tipo": "fluxo",
       "id": "fluxo-da-vitalidade",
       "titulo": "Fluxo da Vitalidade",
       "conteudo": {
         "arvore": "Anima",
-        "descricao": "[RASCUNHO - PRECISA SER REVISADO] O Fluxo que rege o ciclo selvagem da vida - o mesmo domínio da deidade Haemus, já que Árvore, Deidade e Fluxo são a mesma entidade."
+        "descricao": "O Fluxo do corpo vivo e faminto. Acelera o que já está acontecendo: fecha carne, força um coração parado a bater de novo, apodrece uma ferida em minutos, faz mato subir por cima de um campo de batalha numa noite. Não distingue cura de infestação - as duas são vida se espalhando -, e é por isso que Anima é o Fluxo mais fácil de despertar e o mais difícil de segurar. Haemus não escolhe lados: o que come e o que é comido fluem por ela do mesmo jeito.",
+        "marca_corporal": "Cabelo e unhas crescem depressa demais, e um pulso verde fica visível sob a pele do pescoço enquanto o Fluxo é usado."
       },
 
-      "_origem": "PLACEHOLDER - nenhuma fonte específica sobre o Fluxo em si foi lida ainda. Texto inferido a partir do domínio já conhecido de Haemus.",
+      "_origem": "Domínio de Haemus (antigo data/world/panteon.json) + tabela 'Estrutura do Jardim' (cor Verde, gênero Ambos). Reescrito em 2026-07-29.",
       "_pronto_para_importar": true,
-      "_o_que_falta": "Reescrever 'descricao' com material de origem de verdade, se existir.",
       "_quando_revelar": "Geralmente revelado depois da Deidade em si."
     },
 
     {
-      "_secao": "3 de 4 - GALHO (placeholder - ver _origem)",
+      "_secao": "3 de 4 - GALHO",
       "tipo": "galho",
-      "id": "anima-galho-1",
-      "titulo": "Galho de Anima (placeholder)",
+      "id": "viveiro",
+      "titulo": "Viveiro",
       "conteudo": {
         "arvore": "haemus",
-        "descricao": "[PLACEHOLDER] Ainda não existe um Galho definido pra Árvore de Anima em nenhuma fonte. Substitua id/titulo/descricao por um Galho de verdade quando decidir o que existe aqui."
+        "descricao": "O Galho mais cheio de todos, e o mais difícil de atravessar. O Viveiro não tem estações, dia nem clima: tem apenas crescimento. Tudo ali nasce grande demais, rápido demais, e morre do mesmo jeito - a mata cobre em uma noite o que outra mata levaria um século pra tomar, e por baixo dela apodrece a mata anterior.\n\nCom Haemus paralisada, nada disso parou. O Viveiro é o único Galho em que a ausência da deidade não travou o Fluxo: ele continua sozinho, sem ninguém pra regular, e por isso vem engolindo as próprias fronteiras.",
+        "nota": "Haemus não escolhe lados entre o que come e o que é comido. Um Galho regido por essa lógica sem supervisão nenhuma é a coisa mais perigosa do Jardim que não tem intenção nenhuma de fazer mal."
       },
-
-      "_origem": "PLACEHOLDER puro - nenhuma fonte definiu Galhos pra esta Árvore.",
-      "_pronto_para_importar": false,
-      "_proximo_passo": "Escreva o(s) Galho(s) reais - duplique este bloco com ids diferentes se precisar de mais de um."
+      "_origem": "ESCRITO DO ZERO em 2026-07-29. Ancorado no domínio de Haemus (o ciclo selvagem da vida, energia bruta e instintiva) e no fato de que ela é a deidade cujo Fluxo menos depende de decisão consciente - daí a escolha de fazer deste o único Galho que a paralisia não travou.",
+      "_pronto_para_importar": true
     },
 
     {
-      "_secao": "4 de 4 - DIMENSÃO (placeholder - ver _origem)",
+      "_secao": "4 de 4 - DIMENSÃO",
       "tipo": "dimensao",
-      "id": "anima-dimensao-1",
-      "titulo": "Dimensão de Anima (placeholder)",
+      "id": "ventre",
+      "titulo": "O Ventre",
       "conteudo": {
-        "galho": "anima-galho-1",
-        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro do Galho acima. Substitua quando tiver o conteúdo de verdade."
+        "galho": "viveiro",
+        "descricao": "O fundo do Viveiro, abaixo de todas as camadas de mata que já morreram umas por cima das outras. Não é caverna nem subsolo: é matéria viva, quente, que respira num compasso lento o bastante pra confundir com o próprio pulso de quem está lá dentro.\n\nÉ do Ventre que sobe tudo o que cresce no Galho. E é pra ele que desce tudo o que morreu ali - inteiro, sem apodrecer no caminho.",
+        "caracteristicas": "Sem luz, sem frio e sem silêncio. A temperatura é sempre a mesma de um corpo vivo."
       },
-
-      "_origem": "PLACEHOLDER puro - mesmo caso do Galho acima.",
-      "_pronto_para_importar": false
+      "_origem": "ESCRITO DO ZERO em 2026-07-29, junto com o Galho acima.",
+      "_pronto_para_importar": true
     }
   ]
 }

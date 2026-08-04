@@ -1,6 +1,5 @@
 {
   "pacote": "arvore-baluarte",
-
   "_LEIA_ISSO_PRIMEIRO": {
     "o_que_e_esse_arquivo": "Pacote da Árvore de Baluarte - mesmo formato de data/mundo/Gênese/genese.json. Deidade e Fluxo têm conteúdo REAL (recuperado do antigo data/world/panteon.json). Galho e Dimensão são PLACEHOLDERS PUROS. NÃO importe essas duas como estão.",
     "ordem_de_revelacao_sugerida": [
@@ -10,7 +9,6 @@
       "4. Dimensão - PLACEHOLDER, substitua antes de importar."
     ]
   },
-
   "entradas": [
     {
       "_secao": "1 de 4 - DEIDADE",
@@ -25,55 +23,51 @@
         "fluxo": "fluxo-do-fisico",
         "status": "paralisada"
       },
-
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão (lá o epíteto era 'Aquele que flui na Matéria'; ajustei pra 'Físico' pra bater com a tabela mais recente 'Estrutura do Jardim' - mesmo domínio, nome atualizado).",
       "_pronto_para_importar": true,
       "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Baluarte."
     },
-
     {
-      "_secao": "2 de 4 - FLUXO (rascunho - ver _origem abaixo)",
+      "_secao": "2 de 4 - FLUXO",
       "tipo": "fluxo",
       "id": "fluxo-do-fisico",
       "titulo": "Fluxo do Físico",
       "conteudo": {
         "arvore": "Baluarte",
-        "descricao": "[RASCUNHO - PRECISA SER REVISADO] O Fluxo que rege peso, gravidade e substância física - o mesmo domínio da deidade Moros, já que Árvore, Deidade e Fluxo são a mesma entidade."
+        "descricao": "A manifestação dos elementos primordiais - a forma mais comum e palpável de interagir com o mundo, e o ponto de partida natural pra maioria das pessoas que despertam seu Fluxo. Foca na manipulação da matéria bruta e da energia tangível: o portador desenvolve aptidão com uma força específica e, com tempo, alcança a derivação natural dela. São sete pares - Terra (derivação Areia, conceito Estabilidade), Água (Gelo, Curiosidade), Fogo (Magma, Destruição), Ar (Fumaça, Liberdade), Raio (Plasma, Impulsividade), Luz (Pureza, Ordem) e Escuridão (Trevas, Esquecimento). A essência do Fluxo do Físico pode ser imbuída diretamente em armas e armaduras pra conferir propriedades elementais ao combate; encontrar itens assim é raridade extrema, o que inflaciona severamente o preço deles no mercado. Em combate, as derivações guardam uma propriedade perigosa: resistência a um elemento base cai pela metade contra a derivação dele - quem tem 10 de resistência a Luz e sofre um ataque de Pureza absorve apenas 5 de dano, o que torna as derivações uma vantagem estratégica brutal.",
+        "marca_corporal": "Placas minerais endurecem sobre as juntas e o dorso das mãos, na cor do elemento despertado."
       },
-
-      "_origem": "PLACEHOLDER - nenhuma fonte específica sobre o Fluxo em si foi lida ainda. Texto inferido a partir do domínio já conhecido de Moros.",
+      "_origem": "Conteúdo REAL - transcrito da nota do Obsidian 'O Jardim/Baluarte/Fluxo.md' (tabela de 7 elementos, regra de imbuir em armas, regra de resistência pela metade).",
+      "_correcao_2026-07-29": "A nota original chama a Árvore de 'Alicerce' - nome antigo, não atualizado lá. Aqui usei 'Baluarte', que é o nome na tabela 'Estrutura do Jardim', na pasta do Obsidian e em todo o código.",
       "_pronto_para_importar": true,
-      "_o_que_falta": "Reescrever 'descricao' com material de origem de verdade, se existir.",
-      "_quando_revelar": "Geralmente revelado depois da Deidade em si."
+      "_quando_revelar": "Este é provavelmente o primeiro Fluxo que qualquer mesa encosta - é o elementarismo comum. Pode ser revelado cedo."
     },
-
     {
-      "_secao": "3 de 4 - GALHO (placeholder - ver _origem)",
+      "_secao": "3 de 4 - GALHO",
       "tipo": "galho",
-      "id": "baluarte-galho-1",
-      "titulo": "Galho de Baluarte (placeholder)",
+      "id": "alicerce",
+      "titulo": "Alicerce",
       "conteudo": {
         "arvore": "moros",
-        "descricao": "[PLACEHOLDER] Ainda não existe um Galho definido pra Árvore de Baluarte em nenhuma fonte. Substitua id/titulo/descricao por um Galho de verdade quando decidir o que existe aqui."
+        "descricao": "O Galho que sustenta o peso dos outros. Alicerce não tem paisagem no sentido comum: é rocha maciça até onde a vista alcança, e mais rocha abaixo dela, sem fim conhecido. A gravidade ali é várias vezes a de qualquer outro lugar do Jardim, e cada passo custa o que custaria carregar outra pessoa.\n\nNão foi feito pra ser habitado - foi feito pra ser fundo. Sem Alicerce, e sem Moros segurando Alicerce, nada em Árvore nenhuma seria sólido: tudo colapsaria em éter.\n\nCom Moros paralisado, o Galho continua de pé por inércia. Ninguém sabe por quanto tempo inércia basta.",
+        "nota": "É o único Galho cuja função é estrutural e não narrativa: ele existe pra os outros existirem."
       },
-
-      "_origem": "PLACEHOLDER puro - nenhuma fonte definiu Galhos pra esta Árvore.",
-      "_pronto_para_importar": false,
-      "_proximo_passo": "Escreva o(s) Galho(s) reais - duplique este bloco com ids diferentes se precisar de mais de um."
+      "_origem": "ESCRITO DO ZERO em 2026-07-29, mas o NOME é resgatado: a nota do Obsidian 'O Jardim/Baluarte/Fluxo.md' chamava a Árvore de 'Alicerce', nome antigo que nunca foi atualizado por lá. Em vez de descartar, virou o nome do Galho - a Árvore é Baluarte, o Galho é Alicerce. Aproveita o termo que já existia sem contradizer a tabela 'Estrutura do Jardim'.",
+      "_pronto_para_importar": true
     },
-
     {
-      "_secao": "4 de 4 - DIMENSÃO (placeholder - ver _origem)",
+      "_secao": "4 de 4 - DIMENSÃO",
       "tipo": "dimensao",
-      "id": "baluarte-dimensao-1",
-      "titulo": "Dimensão de Baluarte (placeholder)",
+      "id": "sete-saloes",
+      "titulo": "Os Sete Salões",
       "conteudo": {
-        "galho": "baluarte-galho-1",
-        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro do Galho acima. Substitua quando tiver o conteúdo de verdade."
+        "galho": "alicerce",
+        "descricao": "Escavados na rocha de Alicerce, sete salões, um pra cada elemento primordial - Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Cada um contém o elemento em estado puro, antes de qualquer derivação, e é dali que o Fluxo do Físico chega ao resto do Jardim.\n\nOs salões não são cofres: são nascentes. Não guardam o elemento, produzem. E quem entra num deles sem o elemento correspondente já desperto não sai - não por armadilha, mas porque um lugar feito inteiramente de fogo puro não precisa de armadilha.",
+        "caracteristicas": "Sete câmaras elementais. O acesso a cada uma exige afinidade prévia com aquele elemento."
       },
-
-      "_origem": "PLACEHOLDER puro - mesmo caso do Galho acima.",
-      "_pronto_para_importar": false
+      "_origem": "ESCRITO DO ZERO em 2026-07-29, mas ancorado em conteúdo real: os sete elementos e suas derivações vêm da tabela em 'O Jardim/Baluarte/Fluxo.md', transcrita na entrada 2 deste mesmo arquivo.",
+      "_nota_mesa": "Cada salão é uma sessão pronta, e a regra de acesso já vem do próprio sistema - o personagem precisa ter aquele elemento desperto. Serve bem como progressão de campanha pra um Canalizador do Fluxo Físico.",
+      "_pronto_para_importar": true
     }
   ]
 }

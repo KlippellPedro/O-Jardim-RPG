@@ -43,18 +43,19 @@
     },
 
     {
-      "_secao": "2 de 4 - FLUXO (rascunho - ver _origem abaixo)",
+      "_secao": "2 de 4 - FLUXO",
       "tipo": "fluxo",
       "id": "fluxo-da-origem",
       "titulo": "Fluxo da Origem",
       "conteudo": {
         "arvore": "Gênese",
-        "descricao": "O Fluxo que rege a criação de novos Galhos, a luz e a ordem o mesmo domínio da deidade Aethel, já que Árvore, Deidade e Fluxo são a mesma entidade."
+        "descricao": "O Fluxo do que ainda não existe. Quem o canaliza não faz matéria surgir do nada - abre espaço pra que algo nasça: um vínculo, uma cura que o corpo ainda não sabia fazer, uma rota onde não havia caminho. É o mais generoso e o mais lento dos Fluxos, porque exige que o portador queira de verdade que aquilo exista, e recusa quem só quer o resultado. Por isso é o Fluxo dos invocadores e das parteiras, não o dos conquistadores. Aethel é a única deidade que nunca foi silenciada pela A.X.I.S - é por isso que coisas novas continuam nascendo mesmo com o Jardim inteiro isolado.",
+        "marca_corporal": "Um rosa pálido acende sob a pele das palmas e do peito diante de algo prestes a nascer, e some sem deixar cicatriz."
       },
 
-      "_origem": "PLACEHOLDER - nenhum PDF ou nota específica sobre o Fluxo da Origem foi lida ainda (diferente do Fluxo do Vazio, que já tinha um exemplo pronto). O texto de 'descricao' acima foi inferido a partir do domínio já conhecido da deidade Aethel, só pra não deixar o campo vazio - não é conteúdo oficial.",
+      "_origem": "Domínio de Aethel (antigo data/world/panteon.json) + tabela 'Estrutura do Jardim' (Fluxo 'Criação', cor Rosa). Reescrito em 2026-07-29 pra responder como um mortal canaliza o Fluxo, não só o que a deidade governa.",
+      "_nota_nome": "A tabela do Obsidian chama este Fluxo de 'Criação'; mantido 'Origem' porque é o nome já usado no código e na característica 'Fluxo da Origem' da raça elfo (data/ficha/racas.json).",
       "_pronto_para_importar": true,
-      "_o_que_falta": "Reescrever 'descricao' com o material de origem de verdade (se existir um PDF/nota específica sobre o Fluxo em si, distinto da deidade). Considerar se vale a pena um campo 'marca_corporal' - o Fluxo do Vazio tinha um ('Estrelas no pulso'), pode ser um padrão pra todos os Fluxos.",
       "_quando_revelar": "Geralmente o Fluxo é um detalhe mais técnico/abstrato que os players descobrem depois da Deidade em si - não precisa ser revelado junto."
     },
 
@@ -65,7 +66,7 @@
       "titulo": "Realidade 0",
       "conteudo": {
         "arvore": "aethel",
-        "descricao": "O Galho principal da Árvore de Gênese. É onde se passa a campanha 'O Último Eclipse'. Contém a Dimensão Padrão (com todos os reinos), além de Nadalon, Espelhos, Sonhar, Întuneric, Êtuneric e Coliseu.",
+        "descricao": "O Galho principal da Árvore de Gênese, e o único Galho habitado que se conhece. É onde se passa a campanha 'O Último Eclipse'. Contém seis Dimensões: a Padrão (com todos os reinos mortais), Nadalon, Întuneric, Sonhar, Espelhos e o Coliseu.",
         "nota": "\"Realidade\" e \"Galho\" são sinônimos - \"Realidade 0\" é o rótulo imersivo preferido para este Galho específico."
       },
 

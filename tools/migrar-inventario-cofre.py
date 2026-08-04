@@ -201,7 +201,17 @@ def main() -> int:
 
     opcoes_conexao = {"row_factory": dict_row, "connect_timeout": 10}
     if argumentos.dry_run:
-        opcoes_conexao["options"] = "-c default_transaction_read_only=on"
+        # Passar `options` como kwarg SUBSTITUI o que veio na DATABASE_URL, em
+        # vez de somar. Numa URL que carrega `-c search_path=...` isso jogava a
+        # conexão pro schema errado e o --dry-run acusava "tabela ausente" pra
+        # tudo — logo no passo que existe pra dar confiança antes de aplicar.
+        # Concatenar preserva o que a URL já pedia.
+        opcoes_conexao["options"] = " ".join(
+            filter(None, [
+                psycopg.conninfo.conninfo_to_dict(dsn).get("options", ""),
+                "-c default_transaction_read_only=on",
+            ])
+        )
 
     connection = psycopg.connect(dsn, autocommit=True, **opcoes_conexao)
     try:

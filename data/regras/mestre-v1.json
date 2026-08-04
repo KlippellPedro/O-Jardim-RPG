@@ -1,6 +1,6 @@
 {
   "tipo": "regras-mestre",
-  "versao": "1.1",
+  "versao": "1.2",
   "titulo": "Ferramentas do Mestre",
   "resumo": "Referências matemáticas para DTs, encontros, dano, progressão e pressão de recursos da versão técnica atual.",
   "destaques": [
@@ -134,7 +134,7 @@
         "Ao adquirir uma raça especial, ela substitui o pacote racial anterior; características de duas raças não se acumulam.",
         "O Elfo possui origem natural em Nadalon, na Árvore de Gênese, mas pode surgir por transformação narrativa em qualquer Árvore.",
         "Somente o bônus racial do Elfo pode elevar Inteligência acima de 20, até 24; nenhum outro atributo recebe essa permissão.",
-        "As sete Linhagens Élficas possuem efeitos publicados; cada Elfo escolhe somente uma Linhagem e não acumula seus benefícios com os de outra.",
+        "As seis Linhagens Élficas possuem efeitos publicados; cada Elfo escolhe somente uma Linhagem e não acumula seus benefícios com os de outra.",
         "O Desperto morreu, passou por Arkarin e retornou; por isso pode surgir em qualquer Árvore mediante autorização ou transformação narrativa.",
         "O Desperto escolhe somente uma das seis Condições Ancestrais publicadas e recebe obrigatoriamente tanto sua dádiva quanto sua cicatriz.",
         "A Auleth é uma raça especial geral de origem espacial ou dimensional; seus bônus de Inteligência e Sabedoria respeitam o limite natural 20.",
@@ -164,6 +164,23 @@
         "A Bruxa conhece três Maldições Tecidas; Grimório aumenta esse total para cinco, enquanto os demais Instrumentos não alteram o limite.",
         "Apenas uma Maldição Tecida da mesma Bruxa pode afetar uma criatura; aplicar outra substitui a anterior.",
         "A raça Entidade permanece adiada e indisponível para escolha até receber um pacote próprio completo."
+      ]
+    },
+    {
+      "id": "notas-editoriais",
+      "titulo": "Notas editoriais e histórico de decisões",
+      "tipo": "lista",
+      "itens": [
+        "Elementarista foi removido porque elementos passaram a ser manifestações dos Fluxos, principalmente do Físico, e não uma classe genérica.",
+        "As classes mágicas foram projetadas considerando os Fluxos plenamente funcionais. Eventos temporários da lore mudam a disponibilidade em campanha, mas não exigem reescrever as classes.",
+        "O catálogo mágico atual possui 33 magias de 1º círculo, três por Fluxo, além de 11 rituais, 11 selos, 11 encantamentos e 11 assinaturas de fusão.",
+        "Os limites de raridade e modificações são a base inicial de balanceamento e devem ser avaliados novamente depois de uso real em campanha.",
+        "A tabela antiga de XP desviava 1.000 XP a partir do nível 24; a fórmula atual corrige esse histórico.",
+        "Legados, classes, raças e o novo sistema mágico continuam sob observação interna de mesa, embora a página pública apresente somente as regras atualmente válidas.",
+        "Alquimista, Comerciante, Guia Dimensional, Caçador de Entidades, Escritor de Contos, Invocador, Viajante, Decodificador, Codificador, Canalizador, Sintonizador, Ritualista e Interceptador receberam propostas originais balanceadas para completar classes que não tinham documento próprio no material enviado.",
+        "As demais classes preservam o material enviado, com custos, limites e linguagem adaptados ao sistema atual.",
+        "A raça Entidade permanece deliberadamente adiada e deve ficar invisível para jogadores até receber um pacote jogável completo.",
+        "A página pública não deve exibir justificativas de remoção, origem editorial, versões de playtest, conteúdo adiado ou comparações com tabelas antigas. Essas informações pertencem somente a esta área do Mestre."
       ]
     },
     {

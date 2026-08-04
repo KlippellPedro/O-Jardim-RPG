@@ -32,48 +32,48 @@
     },
 
     {
-      "_secao": "2 de 4 - FLUXO (rascunho - ver _origem abaixo)",
+      "_secao": "2 de 4 - FLUXO",
       "tipo": "fluxo",
       "id": "fluxo-do-tempo",
       "titulo": "Fluxo do Tempo",
       "conteudo": {
         "arvore": "Éon",
-        "descricao": "[RASCUNHO - PRECISA SER REVISADO] O Fluxo que rege a linha sucessiva de eventos - o mesmo domínio da deidade Chronus, já que Árvore, Deidade e Fluxo são a mesma entidade."
+        "descricao": "O Fluxo da ordem dos acontecimentos. Não volta no tempo e não mostra o futuro - Chronus existe justamente pra impedir as duas coisas. O que ele concede é peso sobre a sequência: agir antes de quem era mais rápido, fazer um veneno levar uma hora em vez de um segundo, sustentar de pé uma ruína que já devia ter caído. Todo uso cobra do próprio portador o tempo que ele poupou de outra coisa, e ninguém canaliza Éon por muitos anos sem parecer ter vivido o dobro deles.",
+        "marca_corporal": "Uma parte do corpo envelhece fora de compasso com o resto - uma mecha branca, uma mão de velho num rosto jovem."
       },
 
-      "_origem": "PLACEHOLDER - nenhuma fonte específica sobre o Fluxo em si foi lida ainda. Texto inferido a partir do domínio já conhecido de Chronus.",
+      "_origem": "Domínio de Chronus (antigo data/world/panteon.json) + tabela 'Estrutura do Jardim' (cor Dourado envelhecido). Reescrito em 2026-07-29. O 'não volta no tempo' é deliberado: a descrição da Deidade diz que ele garante que passado, presente e futuro jamais se misturem, então viagem no tempo não é um poder do Fluxo dele.",
       "_pronto_para_importar": true,
-      "_o_que_falta": "Reescrever 'descricao' com material de origem de verdade, se existir.",
       "_quando_revelar": "Geralmente revelado depois da Deidade em si."
     },
 
     {
-      "_secao": "3 de 4 - GALHO (placeholder - ver _origem)",
+      "_secao": "3 de 4 - GALHO",
       "tipo": "galho",
-      "id": "eon-galho-1",
-      "titulo": "Galho de Éon (placeholder)",
+      "id": "sucessao",
+      "titulo": "Sucessão",
       "conteudo": {
         "arvore": "chronus",
-        "descricao": "[PLACEHOLDER] Ainda não existe um Galho definido pra Árvore de Éon em nenhuma fonte. Substitua id/titulo/descricao por um Galho de verdade quando decidir o que existe aqui."
+        "descricao": "O Galho onde os acontecimentos ficam em fila. Sucessão é uma linha - literalmente uma linha, estendida sem largura por uma extensão que não se mede em distância e sim em ordem. Cada ponto dela é um instante que já aconteceu em alguma Árvore, encaixado atrás do anterior e à frente do seguinte, e é esse encaixe que impede o passado, o presente e o futuro de se misturarem.\n\nChronus caminha a linha. Sempre no mesmo sentido, sempre no mesmo passo, e nunca a percorreu duas vezes.\n\nCom ele paralisado, a fila não se desfez - mas parou de ser conferida. E já apareceram, em Dimensões distantes, coisas acontecendo levemente fora de ordem: um eco antes do som, uma ferida antes do golpe.",
+        "nota": "Nada em Sucessão pode ser revisitado. O Galho registra a ordem dos eventos, não os eventos - não há nada pra ver ali, só pra confirmar."
       },
-
-      "_origem": "PLACEHOLDER puro - nenhuma fonte definiu Galhos pra esta Árvore.",
-      "_pronto_para_importar": false,
-      "_proximo_passo": "Escreva o(s) Galho(s) reais - duplique este bloco com ids diferentes se precisar de mais de um."
+      "_origem": "ESCRITO DO ZERO em 2026-07-29. Ancorado no domínio de Chronus, que já era canônico ('a linha sucessiva e imutável de eventos', 'garante que passado, presente e futuro jamais se misturem') - e deliberadamente escrito pra NÃO permitir viagem no tempo, coerente com a descrição do Fluxo do Tempo na entrada 2 deste arquivo.",
+      "_pronto_para_importar": true
     },
 
     {
-      "_secao": "4 de 4 - DIMENSÃO (placeholder - ver _origem)",
+      "_secao": "4 de 4 - DIMENSÃO",
       "tipo": "dimensao",
-      "id": "eon-dimensao-1",
-      "titulo": "Dimensão de Éon (placeholder)",
+      "id": "o-passo",
+      "titulo": "O Passo",
       "conteudo": {
-        "galho": "eon-galho-1",
-        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro do Galho acima. Substitua quando tiver o conteúdo de verdade."
+        "galho": "sucessao",
+        "descricao": "O único ponto de Sucessão que não está parado: o lugar exato onde Chronus está agora, avançando. Tudo atrás do Passo é imutável; tudo à frente ainda não existe o bastante pra ter forma.\n\nÉ a Dimensão mais estreita do Jardim - cabe um só ocupante - e a única que muda de endereço a cada instante. Chegar ao Passo é impossível por deslocamento: só se chega estando lá quando ele chega.\n\nDesde a paralisia, o Passo não avança. E é por isso que ninguém consegue dizer que horas são no Jardim.",
+        "caracteristicas": "Um único ponto móvel. Ocupação máxima: um. Atualmente imóvel."
       },
-
-      "_origem": "PLACEHOLDER puro - mesmo caso do Galho acima.",
-      "_pronto_para_importar": false
+      "_origem": "ESCRITO DO ZERO em 2026-07-29, junto com o Galho acima.",
+      "_nota_mesa": "O Passo parado é a explicação de por que a paralisia não 'passa' - literalmente não há tempo correndo pra ela passar. Também é o gancho mais forte de Éon: alcançar o Passo exige estar no lugar certo no instante certo, o que é um enigma e não um combate.",
+      "_pronto_para_importar": true
     }
   ]
 }

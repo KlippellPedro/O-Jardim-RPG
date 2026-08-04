@@ -1,0 +1,42 @@
+{
+  "pacote": "jardim-transversal",
+
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e_esse_arquivo": "Conteúdo que não pertence a nenhuma Árvore específica - a estrutura do Jardim inteiro e os idiomas dos povos. Por isso mora numa pasta própria ('Jardim') em vez de numa pasta de Árvore.",
+
+    "por_que_a_hierarquia_importa": "A categoria 'Cosmologia' desenha o diagrama da hierarquia a partir da entrada com id EXATO 'hierarquia-do-jardim' e do array em conteudo.ordem.",
+
+    "tipos_usados": "'cosmologia' e 'idioma' são tipos válidos no LoreType e no catálogo React gerado em data/gerado/mundoCatalog.ts."
+  },
+
+  "entradas": [
+    {
+      "_secao": "COSMOLOGIA - o diagrama da hierarquia",
+      "tipo": "cosmologia",
+      "id": "hierarquia-do-jardim",
+      "titulo": "A Hierarquia do Jardim",
+      "conteudo": {
+        "ordem": ["Jardim", "Árvore", "Galho", "Dimensão", "Reino"],
+        "descricao": "O Jardim é o todo. Dentro dele crescem dez Árvores, e cada Árvore é ao mesmo tempo três coisas: a Árvore em si, a Deidade que a habita e o Fluxo que ela rege - não são entidades distintas que se associam, são a mesma entidade vista de três ângulos.\n\nDe cada Árvore saem Galhos, também chamados de Realidades. Dentro de cada Galho abrem-se Dimensões, e dentro de cada Dimensão existem Reinos e outros Locais. É essa a cascata inteira, e é por ela que a exploração no Códice acontece: descobrir uma Árvore não revela seus Galhos, descobrir um Galho não revela suas Dimensões.\n\nDuas Árvores fogem do padrão. Limiar tem um único Galho (Arkarin), porque é chegada e não origem - todas as outras Árvores desembocam nela. E Parley é a única Árvore com duas identidades sobrepostas: a original, de Keryx, e a A.X.I.S que Jota Macedo instalou por cima.\n\nFora da cascata existem três camadas soltas: Personagens (soberanos, NPCs), Eventos e Idiomas. Elas se ligam ao mundo, mas não se penduram em nenhum Galho."
+      },
+      "_origem": "ESCRITO em 2026-07-29 a partir da estrutura documentada em data/mundo/_padrao.json e usada pelo catálogo React.",
+      "_nota_id": "O id 'hierarquia-do-jardim' NÃO pode ser alterado - a view procura por ele literalmente (cosmologiaView.js, linha 67).",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "IDIOMA - a tabela dos povos",
+      "tipo": "idioma",
+      "id": "idiomas-do-jardim",
+      "titulo": "Os Idiomas do Jardim",
+      "conteudo": {
+        "descricao": "Treze povos, treze línguas. O Universal é falado por todos e foi criado por Auleth. O Romeno é dos Vampiros, criado por Davinor. O Finlandês é dos Elfos, criado pelos Finwë.\n\nOs demais não têm criador registrado: Grego entre os Gigantes, Alemão entre os Goblins, Nórdico Antigo entre os Anões, Libras entre os Golens, Enoquiano entre os Espíritos, Latim entre as Sereias, Sumeriano entre os Animálias, Ao Contrário entre os Clones, Inglês entre os Autômatos e Celta entre as Bruxas.",
+        "nota": "Que um idioma tenha criador conhecido diz algo sobre o povo: Vampiros e Elfos sabem quem lhes deu a língua. Os outros dez não."
+      },
+      "_origem": "Conteúdo REAL - transcrito da tabela em 'O Jardim/Gênese/Realidade 0/Idiomas.md'. Corrigidas apenas as grafias do cofre: 'Goblim' → Goblins, 'Anãos' → Anões, 'Espiritos' → Espíritos, 'Animalias' → Animálias.",
+      "_por_que_isso_importa": "É a ÚNICA lista de raças que existe no cofre inteiro, e as 13 conversam parcialmente com data/ficha/racas.json (Autômato e Elfo já existem lá como raças jogáveis, ligadas a keryx e aethel respectivamente). Nenhuma das 13 tem nota própria no Obsidian.",
+      "_o_que_falta": "'Auleth' - o criador do idioma Universal - aparece UMA vez no cofre inteiro, aqui, e nunca mais. É graficamente parecido com 'Aethel' (a deidade da Gênese), mas não é o mesmo nome, e nada indica que sejam a mesma figura. Vale decidir: é erro de digitação de Aethel, ou é outra entidade? Note que existe uma raça chamada 'auleth' em data/ficha/racas.json, o que sugere que é mesmo alguém à parte.",
+      "_pronto_para_importar": true
+    }
+  ]
+}

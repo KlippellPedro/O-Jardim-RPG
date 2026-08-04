@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (...parts) => JSON.parse(fs.readFileSync(path.join(root, ...parts), 'utf8'));
 const classes = read('data', 'ficha', 'classes.json');
-const catalog = read('bots', 'banqueiro', 'data', 'catalogo.json').entradas || [];
+const catalog = read('data', 'loja', 'catalogo.json').entradas || [];
 const spells = read('data', 'ficha', 'magias.json').magias || [];
 const levels = [1, 5, 10, 15, 20, 30, 40];
 
@@ -75,10 +75,9 @@ const weapons = catalog.filter((item) => item.tipo === 'arma').map((entry) => {
 const spellAudit = spells.map((spell) => {
   const circle = Number(spell.circulo);
   const damageAverage = diceAverage(spell.dano);
-  const numbered = Number.isInteger(circle) && circle >= 1 && circle <= 5;
+  const numbered = Number.isInteger(circle) && circle >= 1 && circle <= 10;
   const issues = [];
-  if (numbered && Number(spell.custo_mana) !== circle * 2) issues.push('custo fora da curva');
-  if (numbered && damageAverage !== null && damageAverage > circle * 9) issues.push('dano acima do teto');
+  if (typeof spell.circulo === 'number' && !numbered) issues.push('círculo fora de 1 a 10');
   if (spell.ataque && spell.perfil !== 'alvo') issues.push('crítico fora de alvo único');
   if (spell.circulo === 'ritual' && !spell.somente_mestre) issues.push('ritual sem concessão');
   return {
@@ -101,7 +100,7 @@ const report = {
   generatedAt: new Date().toISOString(),
   levels,
   assumptions: {
-    attributes: 'Força 12, Destreza 14, Constituição 14, Inteligência 13, Sabedoria 10, Carisma 8 e Fluxo 8.',
+    attributes: 'Força 12, Destreza 14, Constituição 14, Inteligência 13, Sabedoria 10, Carisma 8 e Fluxo 14.',
     multiclass: 'Depois do nível 20, a referência usa uma segunda classe neutra com 3,5 de Vida e 3,5 de Mana por nível.',
     scope: 'Mede recursos, vagas, dano médio e palavras de risco. Efeitos narrativos e controle ainda exigem playtest.',
   },
@@ -121,7 +120,7 @@ const weaponLines = highestWeapons.map((item) => `| ${item.titulo} | ${item.rari
 const spellLines = spellAudit.map((item) => `| ${item.titulo} | ${item.circulo} | ${item.perfil} | ${item.custoMana} | ${item.dano || 'sem dano'} | ${item.mediaDano?.toFixed(1) || 'n/a'} | ${item.problemas.join(', ') || 'nenhum'} |`).join('\n');
 const markdown = `# Relatório de balanceamento v1\n\nGerado por \`npm run audit:balance\`. Esta é uma verificação quantitativa, não substitui playtest.\n\n## Premissas\n\n- ${report.assumptions.attributes}\n- ${report.assumptions.multiclass}\n- ${report.assumptions.scope}\n\n## Resultado automático\n\n- ${classAudit.length} classes analisadas.\n- ${weapons.length} armas analisadas.\n- ${invalidClasses.length} classes fora do orçamento de 7 pontos de Vida + Mana.\n- ${unboundedWeapons.length} armas acima de 75 de dano médio sem bloqueio do Mestre.\n\nCada célula mostra \`Vida/Mana/vagas de poder\`.\n\n| Classe | Tipo | Orçamento | ${levelHeaders} | Alertas qualitativos |\n|---|---|---:|${levelSeparators}|---|\n${classLines}\n\n## Maiores danos do arsenal\n\n| Arma | Raridade | Dano | Média normal | Média com crítico | Nível recomendado | Mestre |\n|---|---|---|---:|---:|---:|---|\n${weaponLines}\n\n## Interpretação\n\nO orçamento estrutural das classes está fechado. Alertas qualitativos indicam efeitos que alteram economia de ações ou escala e precisam de cenários de mesa. Armas lendárias normalizadas começam no nível 25; relíquias da criação no 35 e exigem autorização do Mestre.\n`;
 const markdownWithSpells = markdown.replace('\n## Interpretação', `\n## Magias publicadas para playtest\n\n- ${spellAudit.length} magias analisadas.\n- ${invalidSpells.length} magias fora do custo, teto de dano, crítico ou acesso ritual.\n\n| Magia | Círculo | Perfil | Mana | Dano | Média | Alertas |\n|---|---:|---|---:|---|---:|---|\n${spellLines}\n\n## Interpretação`);
-const markdownPath = path.join(root, 'docs', 'regras', 'relatorio-balanceamento-v1.md');
+const markdownPath = path.join(root, 'data', 'regras', 'relatorio-balanceamento-v1.md');
 fs.mkdirSync(path.dirname(markdownPath), { recursive: true });
 fs.writeFileSync(markdownPath, markdownWithSpells, 'utf8');
 

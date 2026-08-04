@@ -32,48 +32,48 @@
     },
 
     {
-      "_secao": "2 de 4 - FLUXO (rascunho - ver _origem abaixo)",
+      "_secao": "2 de 4 - FLUXO",
       "tipo": "fluxo",
       "id": "fluxo-do-espaco",
       "titulo": "Fluxo do Espaço",
       "conteudo": {
         "arvore": "Matriz",
-        "descricao": "[RASCUNHO - PRECISA SER REVISADO] O Fluxo que rege distâncias, dimensões e fronteiras - o mesmo domínio da deidade Aperion, já que Árvore, Deidade e Fluxo são a mesma entidade."
+        "descricao": "O Fluxo da distância. Encurta, estica, dobra e tranca: um passo que cobre uma légua, uma porta que não leva a lugar nenhum, uma sala maior por dentro do que por fora, uma fronteira que exército nenhum atravessa. É o Fluxo dos guias dimensionais e das Âncoras, e o único que permite atravessar de um Galho a outro sem morrer no caminho. Com Aperion paralisada, as fronteiras que ela sustentava vêm cedendo sozinhas - é por isso que fendas e rachaduras entre Dimensões têm aparecido onde nunca houve nada.",
+        "marca_corporal": "A sombra do portador chega um instante atrasada, e nunca no ângulo certo."
       },
 
-      "_origem": "PLACEHOLDER - nenhuma fonte específica sobre o Fluxo em si foi lida ainda. Texto inferido a partir do domínio já conhecido de Aperion.",
+      "_origem": "Domínio de Aperion (antigo data/world/panteon.json) + tabela 'Estrutura do Jardim' (cor Roxo). Reescrito em 2026-07-29; 'Âncora' e 'guia dimensional' vêm de data/ficha/racas.json e data/ficha/classes.json, que já existiam. As fendas conversam com o evento Noite Rubra do Obsidian.",
       "_pronto_para_importar": true,
-      "_o_que_falta": "Reescrever 'descricao' com material de origem de verdade, se existir.",
       "_quando_revelar": "Geralmente revelado depois da Deidade em si."
     },
 
     {
-      "_secao": "3 de 4 - GALHO (placeholder - ver _origem)",
+      "_secao": "3 de 4 - GALHO",
       "tipo": "galho",
-      "id": "matriz-galho-1",
-      "titulo": "Galho de Matriz (placeholder)",
+      "id": "intersticio",
+      "titulo": "Interstício",
       "conteudo": {
         "arvore": "aperion",
-        "descricao": "[PLACEHOLDER] Ainda não existe um Galho definido pra Árvore de Matriz em nenhuma fonte. Substitua id/titulo/descricao por um Galho de verdade quando decidir o que existe aqui."
+        "descricao": "O Galho que existe entre os outros Galhos - o vão que Aperion abriu pra que as Árvores pudessem crescer sem se colidirem. Não tem chão, céu nem direção: tem distância, e a distância ali é a única matéria de que as coisas são feitas.\n\nÉ o caminho. Toda travessia entre Galhos passa por Interstício, saiba o viajante disso ou não, e a maioria não sabe - o Fluxo do Espaço costuma atravessá-lo tão rápido que a pessoa nunca chega a perceber que esteve em lugar nenhum.\n\nCom Aperion paralisada, as distâncias pararam de ser mantidas. Trechos que separavam Galhos inteiros encolheram; outros esticaram até virar intransponíveis. É de Interstício que saem as fendas e rachaduras que vêm aparecendo pelas Dimensões.",
+        "nota": "Se algum dia duas Árvores se tocarem, terá sido aqui."
       },
-
-      "_origem": "PLACEHOLDER puro - nenhuma fonte definiu Galhos pra esta Árvore.",
-      "_pronto_para_importar": false,
-      "_proximo_passo": "Escreva o(s) Galho(s) reais - duplique este bloco com ids diferentes se precisar de mais de um."
+      "_origem": "ESCRITO DO ZERO em 2026-07-29. Ancorado no domínio de Aperion, que já era canônico ('molda os vazios necessários para que existam Árvores e Galhos sem se colidirem'), e conectado ao evento Noite Rubra do Obsidian, onde portais e fendas aparecem pelo mundo.",
+      "_pronto_para_importar": true
     },
 
     {
-      "_secao": "4 de 4 - DIMENSÃO (placeholder - ver _origem)",
+      "_secao": "4 de 4 - DIMENSÃO",
       "tipo": "dimensao",
-      "id": "matriz-dimensao-1",
-      "titulo": "Dimensão de Matriz (placeholder)",
+      "id": "os-vaos",
+      "titulo": "Os Vãos",
       "conteudo": {
-        "galho": "matriz-galho-1",
-        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro do Galho acima. Substitua quando tiver o conteúdo de verdade."
+        "galho": "intersticio",
+        "descricao": "Os pontos de Interstício onde a distância cedeu por completo, e dois lugares que nunca deveriam se tocar ficaram encostados. Cada Vão é uma junção: de um lado, um trecho de alguma Dimensão conhecida; do outro, um trecho de outra qualquer - e a fronteira entre eles é só uma linha no chão que ninguém desenhou.\n\nOs Vãos são a razão de haver criaturas de Întuneric aparecendo em lugares que nunca ouviram falar de vampiros, e de haver aldeias inteiras da Dimensão Padrão que amanheceram com um céu que não é o delas. Não são portais: portais se abrem e se fecham. Um Vão simplesmente está.",
+        "caracteristicas": "Junções instáveis entre Dimensões. Sem controle, sem aviso e sem porta - a travessia é dar um passo."
       },
-
-      "_origem": "PLACEHOLDER puro - mesmo caso do Galho acima.",
-      "_pronto_para_importar": false
+      "_origem": "ESCRITO DO ZERO em 2026-07-29, junto com o Galho acima.",
+      "_nota_mesa": "É a explicação estrutural pra encontros fora de contexto - um Strigl de Întuneric num campo de Lionês não precisa mais de justificativa caso a caso.",
+      "_pronto_para_importar": true
     }
   ]
 }

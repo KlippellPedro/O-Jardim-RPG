@@ -1,0 +1,191 @@
+{
+  "pacote": "realidade-0-soberanos",
+
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e_esse_arquivo": "Os dez Soberanos da Realidade 0, como entradas tipo 'personagem'.",
+
+    "SOBERANOS_NAO_SAO_DEIDADES": "Decisão canônica (2026-07-29): os Soberanos são habitantes de UM Galho - a Realidade 0, da Árvore Gênese. Não se comparam às Deidades e não têm nada a ver com a cascata Árvore/Fluxo. São os maiores poderes MORTAIS de um único Galho, e só. Por isso entram como 'personagem', que é a camada solta do schema, e nunca como 'deidade'. Antes disso o cofre tinha dois sistemas de poder paralelos sem nenhuma explicação de como se relacionavam.",
+
+    "origem_do_conteudo": "A lista dos dez, com títulos e cores, vem de 'O Jardim/Gênese/Realidade 0/Soberanos.md'. Quatro tinham lore de verdade em notas próprias (Jota Macedo, Noemi Finwë, Davinor Întuneric, e Salém coletivamente); Grimm tinha duas linhas; os cinco restantes (Kaiser, Amadheus Colona, Netuno Laufey, Durin II, Augustos Castilla) eram arquivos de 0 byte. Os escritos do zero estão marcados.",
+
+    "assembleia": "Os 10 se juntam uma vez por ano para a assembleia da criação, onde discutem assuntos que envolvem o universo - novas ameaças surgindo, guerras frequentes e afins."
+  },
+
+  "entradas": [
+    {
+      "_secao": "SOBERANO 1 - Cadeira da Guerra",
+      "tipo": "personagem",
+      "id": "kaiser",
+      "titulo": "Kaiser",
+      "conteudo": {
+        "epiteto": "Soberano da Guerra",
+        "genero": "Masculino",
+        "descricao": "A Cadeira da Guerra na assembleia da criação não pertence a uma pessoa: pertence ao trono do Império. Kaiser é o título, e quem o carrega hoje é Augusto I, portador do título de Deus da Guerra e senhor das batalhas - um Campeão Dimensional, canalizador do Fluxo do Físico.\n\nÉ o único dos dez Soberanos cuja cadeira é herdada em vez de conquistada, o que é motivo recorrente de atrito na assembleia: os outros nove chegaram onde estão por si mesmos.",
+        "cor": "Laranja",
+        "status": "ativo"
+      },
+      "_origem": "PARCIAL - o título e a cor vêm de 'Soberanos.md'; Augusto I e o Campeão Dimensional, de 'Reinos/Império/Governo.md'. O arquivo 'Império/Kaiser.md' está vazio no cofre. O 2º parágrafo é meu.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "SOBERANO 2 - Cadeira dos Fluxos",
+      "tipo": "personagem",
+      "id": "soberanas-de-salem",
+      "titulo": "As Irmãs da Noite",
+      "conteudo": {
+        "epiteto": "Soberanas dos Fluxos",
+        "genero": "Feminino",
+        "descricao": "A única Cadeira ocupada por um coletivo: as dez Irmãs da Noite de Salém falam com uma só voz na assembleia. Quem comparece varia conforme o assunto e o ritual, e nenhuma das outras nove Cadeiras jamais soube ao certo quantas Irmãs de fato existem.\n\nSalém é o maior centro de comércio mágico do mundo conhecido, e sua influência atravessa fronteiras e realidades - ninguém domina as artes do Fluxo como suas bruxas.",
+        "cor": "Branco",
+        "status": "ativo"
+      },
+      "_origem": "PARCIAL - 'Soberanos.md' lista '[[Salém]] (Soberanas da Arkania)'; o resto vem de 'Reinos/Salém/Salém.md' e 'Função.md'. O 1º parágrafo é meu.",
+      "_retraducao_2026-07-29": "'Soberanas da Arkania' → 'Soberanas dos Fluxos'.",
+      "_nota_cor": "Em 'Soberanos.md' a cor de Salém está escrita como 'Branco #' - o '#' solto sugere um código hex que nunca foi preenchido. Registrei só 'Branco'.",
+      "_ver_tambem": "A composição das dez Cadeiras está em realidade-0-reinos.json, entrada 'irmas-da-noite'.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "SOBERANO 3 - Cadeira dos Pesadelos",
+      "tipo": "personagem",
+      "id": "grimm",
+      "titulo": "Grimm",
+      "conteudo": {
+        "epiteto": "Soberano dos Pesadelos",
+        "genero": "Masculino",
+        "descricao": "O soberano de Sonhar é um ser intrigante: admira todas as espécies de vida e gosta muito de seres que tenham um objetivo muito forte e aparente.\n\nÉ o único dos dez que não governa um território que se possa marcar num mapa - sua dimensão muda de forma toda vez que alguém a visita. Os outros nove o chamam de Soberano dos Pesadelos; ele próprio não faz distinção entre as duas metades da dimensão que governa.",
+        "cor": "Preto",
+        "status": "ativo"
+      },
+      "_origem": "PARCIAL - a primeira frase é transcrição literal de 'Dimensões/Sonhar/Grimm.md' (as únicas duas linhas que existem sobre ele). O 2º parágrafo é meu.",
+      "_conflito_resolvido": "A nota dele diz 'soberano dos sonhos'; 'Soberanos.md' diz 'Soberano dos Pesadelos'. Resolvido em realidade-0-dimensoes.json: ele governa Sonhar inteira, e 'dos Pesadelos' é como os outros o chamam.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "SOBERANO 4 - Cadeira da Tecnologia",
+      "tipo": "personagem",
+      "id": "jota-macedo",
+      "titulo": "Jota Macedo",
+      "conteudo": {
+        "epiteto": "Soberano da Tecnologia",
+        "genero": "Masculino",
+        "descricao": "Aclamado como o grande gênio da ciência moderna. É o criador da A.X.I.S e fundador da AstraTech, a maior corporação tecnológica já estabelecida na história. Mas o verdadeiro objetivo de Jota vai muito além do progresso industrial ou do sucesso empresarial: ele busca um feito inédito pra humanidade - quebrar as limitações mortais e ascender ao mesmo patamar de poder das deidades.\n\nPra alcançar esse ápice, trabalha secretamente numa máscara biomecânica, projetada pra conter e estabilizar o maior e mais puro fragmento de A.X.I.S existente: uma relíquia que lhe permite usar o poder de uma deidade, desde que ela esteja num de seus estoques.\n\nEle já conseguiu uma vez. Convenceu Keryx, o antigo Fluxo da Comunicação e guardião das leis e pactos entre as Árvores, a assinar um contrato que se revelou uma prisão - Keryx não foi derrotado pela força, foi enganado pela diplomacia, a arma em que mais confiava. É por causa disso que quase todas as deidades do Jardim estão paralisadas e incomunicáveis.\n\nAntes de tudo isso, Jota foi um menino do orfanato de Ofélia: inteligente, curioso, e capaz de usar o Fluxo numa forma pura e poderosa demais pra idade.",
+        "cor": "Azul",
+        "status": "ativo"
+      },
+      "_origem": "Conteúdo REAL - parágrafos 1 e 2 transcritos de 'A.X.I.S/Jota Macedo.md'; o 3º vem da entrada de Deidade em data/mundo/Parley (subjulgado)/parley-axis.json; o 4º, de 'Padrão/Locais Importantes/Orfanato.md'.",
+      "_por_que_isso_importa": "É o antagonista da campanha e o motivo de 8 das 10 Deidades estarem paralisadas - e até agora não existia nenhuma entrada dele no site.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "SOBERANO 5 - Cadeira dos Cosmos",
+      "tipo": "personagem",
+      "id": "amadheus-colona",
+      "titulo": "Amadheus Colona",
+      "conteudo": {
+        "epiteto": "Soberano dos Cosmos",
+        "genero": "Masculino",
+        "descricao": "O Soberano dos Cosmos preside o Banco Lunar - a única instituição da Realidade 0 que opera em todas as dimensões ao mesmo tempo, e a única que nenhum reino ousou nacionalizar.\n\nAmadheus não comanda exército nem território. Comanda dívida, e por isso é o Soberano que menos aparece e o que menos precisa aparecer: numa assembleia de dez, ele costuma ser o único que já sabe o que os outros nove vão pedir.",
+        "cor": "Verde",
+        "status": "ativo"
+      },
+      "_origem": "ESCRITO DO ZERO em 2026-07-29. O cofre tem apenas 'Padrão/Banco Lunar/Amadheus Colona.md', um arquivo VAZIO, e a linha em 'Soberanos.md'. O nome 'Banco Lunar' é da pasta que continha o arquivo - foi a única pista real. Todo o resto é proposta minha.",
+      "_nota_projeto": "Se essa direção agradar, ela conversa direto com o bot Banqueiro (bots/banqueiro/) e com a Loja - o Banco Lunar seria a ficção por trás da economia que já existe implementada no projeto.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "SOBERANO 6 - Cadeira da Noite",
+      "tipo": "personagem",
+      "id": "noemi-finwe",
+      "titulo": "Noemi Finwë",
+      "conteudo": {
+        "epiteto": "Soberana da Noite",
+        "genero": "Feminino",
+        "descricao": "Noemi não governa pelo medo, mas pela clarividência e pela empatia. Carrega o sobrenome Finwë, de uma linhagem ancestral de alta nobreza e imenso poder.\n\nDepois de séculos de guerras e dificuldades em outras dimensões, fundou Nadalon com a ajuda das Irmãs da Noite, por acreditar que os elfos só atingirão seu potencial máximo se abandonarem a arrogância e focarem na ascensão coletiva.\n\nCarrega o Cetro de Ametista, artefato que canaliza a energia vital da dimensão e lhe permite curar a terra e seus súditos apenas com a própria presença.\n\n\"O verdadeiro poder de um povo não reside nas muralhas que constrói, mas na paz que consegue manter dentro de si.\"",
+        "cor": "Roxo",
+        "status": "ativo"
+      },
+      "_origem": "Conteúdo REAL - transcrito de 'Dimensões/Nadalon/Noemi Finwë.md', incluindo a citação.",
+      "_conflito_registrado": "Ela é a 'Soberana da NOITE', mas Nadalon é descrita como tendo primavera infinita e 'sem noite total'. Não resolvi isso no texto pra não inventar cânone. A leitura mais elegante seria que o título vem justamente de ela ter acabado com a noite em Nadalon - mas isso é palpite meu, então fica registrado aqui e não no conteúdo. Outra leitura possível: o título vem da ligação dela com as Irmãs da NOITE, que a ajudaram a fundar Nadalon. Essa segunda é a que o texto mais sustenta.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "SOBERANO 7 - Cadeira das Montanhas",
+      "tipo": "personagem",
+      "id": "netuno-laufey",
+      "titulo": "Netuno Laufey",
+      "conteudo": {
+        "epiteto": "Soberano das Montanhas",
+        "genero": "Masculino",
+        "descricao": "O Soberano das Montanhas governa o que existe acima da linha onde nada mais cresce. Não há cidade, corte nem exército - o território dele é a altitude em si, e as poucas passagens que atravessam o continente pelo alto.\n\nQuem quer levar mercadoria de um reino a outro sem contornar meio mundo passa pelas montanhas de Laufey, e paga por isso. É o que dá a ele uma cadeira na assembleia sem ter um único súdito.",
+        "cor": "Verde água",
+        "status": "ativo"
+      },
+      "_origem": "ESCRITO DO ZERO em 2026-07-29. O cofre tem apenas 'Padrão/Montanhas/Netuno Laufey.md', VAZIO, e a linha em 'Soberanos.md'. A pasta 'Montanhas' foi a única pista real. Tudo aqui é proposta minha.",
+      "_nota_nome": "'Laufey' é nome da mitologia nórdica (mãe de Loki) e combina com o Nórdico Antigo que os anões falam - pode valer uma ligação entre as Montanhas e o Reino dos Anões, mas não inventei uma.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "SOBERANO 8 - Cadeira do Sangue",
+      "tipo": "personagem",
+      "id": "davinor-intuneric",
+      "titulo": "Davinor Întuneric",
+      "conteudo": {
+        "epiteto": "Soberano do Sangue",
+        "genero": "Masculino",
+        "descricao": "No centro do caos de Întuneric e no topo da hierarquia predatória está Davinor. Não é um rei que busca expansão ou glória: é uma força da natureza indiferente.\n\nÉ o ápice da apatia. Raramente interfere nos massacres diários de sua dimensão - pra ele, se você é fraco demais pra sobreviver, sua morte é apenas um processo natural. Governa pelo silêncio e pelo medo: não existem leis escritas, apenas a vontade do sangue. Se algo ameaça a estabilidade da dimensão, ele elimina o problema com brutalidade impiedosa e volta ao isolamento.\n\n\"Não me peça para salvar o que nasceu apenas para morrer. O grito de sua vida é breve; já a minha paz é eterna.\"",
+        "falas": [
+          "Sobre perda: \"Você fala de perda como se houvesse algo neste mundo que realmente valesse a pena possuir.\"",
+          "Sobre falta de ordem: \"A ordem é uma ilusão que vocês criaram para não enlouquecerem no escuro. Se as feras estão com fome, que comam. Se os humanos são fracos, que morram. Întuneric sempre encontra seu equilíbrio no sangue derramado.\"",
+          "Sobre governar: \"Você chama este lugar de 'meu domínio', mas Întuneric pertence apenas ao esquecimento. Eu não governo as vidas, eu apenas observo o fim delas.\""
+        ],
+        "cor": "Vermelho",
+        "status": "ativo"
+      },
+      "_origem": "Conteúdo REAL - transcrito de 'Dimensões/Întuneric/Davinor Întuneric.md', incluindo a citação e as três falas prontas.",
+      "_nota_mesa": "É o único NPC do cofre inteiro com falas prontas pra mesa - por isso mantive a seção 'falas' como campo próprio, em vez de diluir na descrição.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "SOBERANO 9 - Cadeira da Forja",
+      "tipo": "personagem",
+      "id": "durin-ii",
+      "titulo": "Durin II",
+      "conteudo": {
+        "epiteto": "Soberano da Forja",
+        "genero": "Masculino",
+        "descricao": "Rei do Reino dos Anões e o segundo a carregar o nome. Governa a forja mais profunda da Dimensão Padrão - e a distinção que ele faz questão de repetir na assembleia é que Emberhold fabrica, enquanto o Reino dos Anões forja.\n\nÉ o Soberano que menos fala e o que mais é procurado: quase toda arma de valor histórico da Realidade 0 saiu, em algum ponto de sua linhagem, das mãos de um anão.",
+        "cor": "Amarelo",
+        "status": "ativo"
+      },
+      "_origem": "ESCRITO DO ZERO em 2026-07-29. O cofre tem 'Reinos/Reino dos anões/Durin II.md' VAZIO e a linha em 'Soberanos.md'. Só o nome e o título são reais.",
+      "_nota_nome": "'Durin II' implica um Durin I - uma linhagem, não um indivíduo isolado. Aproveitei isso, mas não inventei história pro primeiro.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "SOBERANO 10 - Cadeira do Comércio",
+      "tipo": "personagem",
+      "id": "augustos-castilla",
+      "titulo": "Augustos Castilla",
+      "conteudo": {
+        "epiteto": "Soberano do Comércio",
+        "genero": "Masculino",
+        "descricao": "Rei de Lionês, o reino que alimenta os outros. Governa com seus conselheiros reais e é, entre os dez, o que tem o poder mais silencioso e o mais difícil de contestar: ninguém declara guerra a quem planta a comida de todo mundo.\n\nSe Amadheus Colona controla a dívida e Durin II controla o aço, Augustos controla a única coisa que nenhum dos dois consegue estocar por muito tempo.",
+        "cor": "Rosa",
+        "status": "ativo"
+      },
+      "_origem": "ESCRITO DO ZERO em 2026-07-29. 'Reinos/Lionês/Augustos Castilla.md' está VAZIO no cofre. Reais são apenas: o nome, o título 'Soberano do Comércio', a cor Rosa, e a função de Lionês ('principal fabricante e fornecedor de alimentos, bebidas e plantações').",
+      "_nota_nome": "Cuidado pra não confundir com 'Augusto I', o imperador (Cadeira da Guerra). São dois nomes muito parecidos, para duas pessoas diferentes, e isso já está assim no cofre - não foi introduzido aqui.",
+      "_pronto_para_importar": true
+    }
+  ]
+}

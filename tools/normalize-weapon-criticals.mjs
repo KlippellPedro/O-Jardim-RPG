@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 
-const catalogUrl = new URL('../bots/banqueiro/data/catalogo.json', import.meta.url);
+const catalogUrl = new URL('../data/loja/catalogo.json', import.meta.url);
 const catalog = JSON.parse(await fs.readFile(catalogUrl, 'utf8'));
 
 function parseLegacyCritical(value) {

@@ -5,6 +5,20 @@
 
   "estrutura_de_pastas": "data/mundo/{Nome-da-Árvore}/{slug}.json - UM arquivo por Árvore, com um array 'entradas' contendo todas as camadas já escritas (Deidade, Fluxo, Galho, Dimensão, e opcionalmente Personagem). A pasta usa o nome de exibição da Árvore (ex.: 'Gênese', 'Alétheia'); o arquivo usa uma versão em minúsculas sem acento do mesmo nome (ex.: genese.json, aletheia.json). Os campos 'id' dentro de cada entrada continuam usando o slug da deidade (aethel, ousias, keryx...) - é esse id que aparece nas rotas /deidades/{id}, no localStorage e nos nomes dos .glb.",
 
+  "_atualizado_2026-07-29": {
+    "o_que_mudou": "Todas as 10 Árvores foram completadas: os 10 Fluxos foram reescritos (7 eram texto-template) e os 8 Galhos e 9 Dimensões que eram [PLACEHOLDER] viraram conteúdo real. Não sobrou nenhum placeholder em data/mundo. Além disso, todo o material que existia só no Obsidian (Arkarin, Întuneric, Nadalon, os reinos, os Soberanos, os eventos) foi migrado pra cá - o JSON agora é a fonte canônica, e o cofre do Obsidian passa a ser rascunho.",
+
+    "excecao_ao_um_arquivo_por_arvore": "A Gênese estourou a regra de UM arquivo por Árvore: por ser a única com um Galho habitado (Realidade 0), ela concentra dimensões, reinos, soberanos e eventos. Em vez de um genese.json gigante, foi dividida por camada - genese.json (a cascata principal), realidade-0-dimensoes.json, realidade-0-reinos.json, realidade-0-soberanos.json e realidade-0-eventos.json. Existe também data/mundo/Jardim/jardim.json, pra conteúdo transversal que não pertence a Árvore nenhuma (a hierarquia do Jardim e os idiomas). O import e o gerador não se importam: ambos varrem os .json recursivamente e só procuram um array 'entradas'.",
+
+    "gerador": "scripts/buildMundo.py transforma tudo isto em data/gerado/mundoCatalog.ts, que é o que o app React consome. Rode 'npm run build:mundo' depois de qualquer alteração aqui, ou 'npm run check:mundo' para apenas verificar. O gerador também valida as referências da cascata e falha se alguma apontar para um id inexistente ou para o tipo errado.",
+
+    "campos_novos": "'marca_corporal' (nos 10 Fluxos) - a marca física que denuncia quem carrega aquele Fluxo, base da perícia Ressonância. 'era' e 'envolvidos' (nos eventos) - dois campos que LoreItemModal.tsx já sabia renderizar e que nenhum dado preenchia. 'mandamentos' (Arkarin) e 'falas' (Davinor) são arrays, então o tipo de conteudo no TS virou Record<string, string | string[]>.",
+
+    "conceito_descontinuado": "'Arkania' NÃO existe mais - nome e ideia foram apagados. Toda a lore migrada do Obsidian foi retraduzida: Arkania → Fluxo; Arkania Primordial → Fluxo da Origem (Aethel); Arkania de Sangue → Fluxo do Sangue (vertente do Fluxo do Fim). Ao trazer qualquer coisa nova do cofre, aplique a mesma retradução. As variáveis CSS --arkania continuam existindo, mas são só nome de cor roxa, não lore.",
+
+    "soberanos_nao_sao_deidades": "Os 10 Soberanos são habitantes de UM Galho (a Realidade 0) e não se comparam às Deidades. Entram sempre como tipo 'personagem', nunca 'deidade'."
+  },
+
   "tipos_de_entrada": [
     {
       "tipo": "deidade",
@@ -43,13 +57,13 @@
   "arvore_de_referencia_completa": "data/mundo/Gênese/genese.json - primeira Árvore organizada nesse padrão, do início (Deidade) até uma Dimensão, com o guia mais detalhado de como importar tudo de uma vez ou separar entrada por entrada. Use como modelo.",
 
   "status_das_arvores": {
-    "com_deidade_e_fluxo_reais": [
-      "aethel (Gênese)", "ousias (Alétheia)", "keryx (Parley/A.X.I.S)", "haemus (Anima)",
-      "ignis (Vórtice)", "moros (Baluarte)", "aperion (Matriz)", "chronus (Éon)",
-      "erebus (Abismo)", "mulher-carmesim (Limiar)"
+    "resumo": "As 10 Árvores estão completas - Deidade, Fluxo, pelo menos 1 Galho e pelo menos 1 Dimensão, todos com conteúdo real. Nenhum '_pronto_para_importar': false restante.",
+    "com_a_cascata_ate_o_nivel_de_LOCAL": [
+      "mulher-carmesim (Limiar): Arkarin → Castelo Carmesim → Tribunal, Biblioteca",
+      "aethel (Gênese): Realidade 0 → 6 Dimensões → 12 Locais (reinos, vila ninja, orfanato, artefatos)"
     ],
-    "com_galho_real_tambem": ["aethel (Realidade 0)", "mulher-carmesim (Arkarin)"],
-    "todas_as_outras": "Têm Galho e Dimensão só como PLACEHOLDER (marcados '_pronto_para_importar': false) - substitua pelo conteúdo de verdade antes de importar essas duas camadas especificamente."
+    "com_a_cascata_ate_DIMENSAO": "As outras 8 Árvores - cada uma com 1 Galho e 1 Dimensão. Elas não têm Locais porque estão paralisadas: são lugares parados, não habitados. Se algum dia forem reabertas, é aí que ganham Locais.",
+    "quanto_do_conteudo_e_do_autor": "Fluxo do Físico, Fluxo da Tecnologia, Fluxo do Fim, Arkarin inteira, Întuneric inteira, Nadalon, Salém, Império, Astraluna, Emberhold, Iwagakure, o Orfanato, Chuva Roxa, Noite Rubra e o Baile das Estações são transcrição do Obsidian. Os 7 Fluxos restantes, os 8 Galhos/Dimensões das Árvores paralisadas, o Coliseu, Espelhos, Sonhar, o Reino dos Anões e 5 dos 10 Soberanos foram escritos do zero - todos marcados com '_origem': 'ESCRITO DO ZERO' na própria entrada, pra ficar claro o que é seu e o que é proposta."
   },
 
   "nota_mulher_carmesim": "A Árvore da Mulher Carmesim é um caso especial - ela só tem 1 Galho (Arkarin), não vários, e ele já tem conteúdo real (ver limiar.json)."

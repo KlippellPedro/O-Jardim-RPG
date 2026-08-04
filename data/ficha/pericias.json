@@ -11,34 +11,34 @@
   ],
 
   "pericias": [
-    { "id": "atletismo",         "titulo": "Atletismo",         "atributo": "forca",          "origem": "Tormenta" },
-    { "id": "luta",              "titulo": "Luta",              "atributo": "forca",          "origem": "Tormenta", "uso": "Ataques corpo a corpo; usada no Contra-Ataque" },
-    { "id": "fortitude",         "titulo": "Fortitude",         "atributo": "constituicao",   "origem": "Tormenta", "descricao": "Resistência física contra doenças, venenos e exaustão" },
-    { "id": "acrobacia",         "titulo": "Acrobacia",         "atributo": "destreza",       "origem": "Tormenta" },
-    { "id": "cavalgar",          "titulo": "Cavalgar",          "atributo": "destreza",       "origem": "Tormenta" },
-    { "id": "furtividade",       "titulo": "Furtividade",       "atributo": "destreza",       "origem": "Tormenta" },
-    { "id": "ladinagem",         "titulo": "Ladinagem",         "atributo": "destreza",       "origem": "Tormenta" },
-    { "id": "pilotagem",         "titulo": "Pilotagem",         "atributo": "destreza",       "origem": "Tormenta" },
-    { "id": "pontaria",          "titulo": "Pontaria",          "atributo": "destreza",       "origem": "Tormenta", "uso": "Ataques à distância" },
-    { "id": "reflexos",          "titulo": "Reflexos",          "atributo": "destreza",       "origem": "Tormenta", "descricao": "Resistência a ataques evitáveis, incluindo armadilhas, explosões e efeitos de área" },
-    { "id": "conhecimento",      "titulo": "Conhecimento",      "atributo": "inteligencia",   "origem": "Tormenta" },
-    { "id": "guerra",            "titulo": "Guerra",            "atributo": "inteligencia",   "origem": "Tormenta" },
-    { "id": "investigacao",      "titulo": "Investigação",      "atributo": "inteligencia",   "origem": "Tormenta" },
-    { "id": "misticismo",        "titulo": "Misticismo",        "atributo": "inteligencia",   "origem": "Tormenta" },
-    { "id": "nobreza",           "titulo": "Nobreza",           "atributo": "inteligencia",   "origem": "Tormenta" },
-    { "id": "oficio",            "titulo": "Ofício",            "atributo": "inteligencia",   "origem": "Tormenta", "nota": "Artesanato geral, distinto de Tecnologia" },
-    { "id": "cura",              "titulo": "Cura",              "atributo": "sabedoria",      "origem": "Tormenta" },
-    { "id": "intuicao",          "titulo": "Intuição",          "atributo": "sabedoria",      "origem": "Tormenta" },
-    { "id": "percepcao",         "titulo": "Percepção",         "atributo": "sabedoria",      "origem": "Tormenta" },
-    { "id": "religiao",          "titulo": "Religião",          "atributo": "sabedoria",      "origem": "Tormenta" },
-    { "id": "sobrevivencia",     "titulo": "Sobrevivência",     "atributo": "sabedoria",      "origem": "Tormenta" },
-    { "id": "vontade",           "titulo": "Vontade",           "atributo": "sabedoria",      "origem": "Tormenta", "descricao": "Resistência mental contra ilusões, encantamentos, medo e perda de sanidade" },
-    { "id": "atuacao",           "titulo": "Atuação",           "atributo": "carisma",        "origem": "Tormenta" },
-    { "id": "diplomacia",        "titulo": "Diplomacia",        "atributo": "carisma",        "origem": "Tormenta" },
-    { "id": "enganacao",         "titulo": "Enganação",         "atributo": "carisma",        "origem": "Tormenta" },
-    { "id": "intimidacao",       "titulo": "Intimidação",       "atributo": "carisma",        "origem": "Tormenta" },
-    { "id": "jogatina",          "titulo": "Jogatina",          "atributo": "carisma",        "origem": "Tormenta" },
-    { "id": "adestramento",     "titulo": "Adestramento",       "atributo": "carisma",        "origem": "Tormenta" },
+    { "id": "atletismo",         "titulo": "Atletismo",         "atributo": "forca",          "origem": "Tormenta", "descricao": "Realizar esforços físicos como correr, saltar, escalar, nadar, empurrar ou sustentar peso." },
+    { "id": "luta",              "titulo": "Luta",              "atributo": "forca",          "origem": "Tormenta", "uso": "Ataques corpo a corpo; usada no Contra-Ataque", "descricao": "Atacar e executar manobras em combate corpo a corpo, incluindo agarrar, derrubar e contra-atacar." },
+    { "id": "fortitude",         "titulo": "Fortitude",         "atributo": "constituicao",   "origem": "Tormenta", "descricao": "Resistir a doenças, venenos, exaustão, dor e outros efeitos que ameaçam o corpo." },
+    { "id": "acrobacia",         "titulo": "Acrobacia",         "atributo": "destreza",       "origem": "Tormenta", "descricao": "Manter o equilíbrio, amortecer quedas, atravessar espaços difíceis e realizar movimentos acrobáticos." },
+    { "id": "cavalgar",          "titulo": "Cavalgar",          "atributo": "destreza",       "origem": "Tormenta", "descricao": "Conduzir montarias, permanecer montado sob pressão e executar manobras durante uma cavalgada." },
+    { "id": "furtividade",       "titulo": "Furtividade",       "atributo": "destreza",       "origem": "Tormenta", "descricao": "Mover-se sem ser percebido, esconder-se e evitar deixar sinais óbvios de sua passagem." },
+    { "id": "ladinagem",         "titulo": "Ladinagem",         "atributo": "destreza",       "origem": "Tormenta", "descricao": "Abrir fechaduras, desarmar mecanismos, bater carteiras e manipular objetos com precisão discreta." },
+    { "id": "pilotagem",         "titulo": "Pilotagem",         "atributo": "destreza",       "origem": "Tormenta", "descricao": "Conduzir veículos, controlar máquinas em movimento e reagir a manobras ou terrenos perigosos." },
+    { "id": "pontaria",          "titulo": "Pontaria",          "atributo": "destreza",       "origem": "Tormenta", "uso": "Ataques à distância", "descricao": "Atacar com armas de disparo ou arremesso e acertar alvos a distância." },
+    { "id": "reflexos",          "titulo": "Reflexos",          "atributo": "destreza",       "origem": "Tormenta", "descricao": "Reagir rapidamente para evitar armadilhas, explosões, efeitos de área e outros perigos súbitos." },
+    { "id": "conhecimento",      "titulo": "Conhecimento",      "atributo": "inteligencia",   "origem": "Tormenta", "descricao": "Recordar informações acadêmicas sobre história, geografia, ciências, culturas e assuntos gerais." },
+    { "id": "guerra",            "titulo": "Guerra",            "atributo": "inteligencia",   "origem": "Tormenta", "descricao": "Analisar batalhas, reconhecer táticas, comandar tropas e avaliar vantagens militares." },
+    { "id": "investigacao",      "titulo": "Investigação",      "atributo": "inteligencia",   "origem": "Tormenta", "descricao": "Examinar pistas, relacionar evidências, pesquisar arquivos e reconstruir acontecimentos." },
+    { "id": "misticismo",        "titulo": "Misticismo",        "atributo": "inteligencia",   "origem": "Tormenta", "descricao": "Identificar magias, criaturas e fenômenos sobrenaturais, além de compreender teoria arcana." },
+    { "id": "nobreza",           "titulo": "Nobreza",           "atributo": "inteligencia",   "origem": "Tormenta", "descricao": "Conhecer linhagens, brasões, etiqueta, política, leis e relações entre casas de poder." },
+    { "id": "oficio",            "titulo": "Ofício",            "atributo": "inteligencia",   "origem": "Tormenta", "nota": "Artesanato geral, distinto de Tecnologia", "descricao": "Produzir, avaliar e reparar itens de um ofício escolhido, como culinária, forja, marcenaria ou alquimia comum." },
+    { "id": "cura",              "titulo": "Cura",              "atributo": "sabedoria",      "origem": "Tormenta", "descricao": "Prestar primeiros socorros, diagnosticar males, estabilizar feridos e acompanhar tratamentos." },
+    { "id": "intuicao",          "titulo": "Intuição",          "atributo": "sabedoria",      "origem": "Tormenta", "descricao": "Perceber intenções, emoções, mentiras por comportamento e quando algo em uma situação parece errado." },
+    { "id": "percepcao",         "titulo": "Percepção",         "atributo": "sabedoria",      "origem": "Tormenta", "descricao": "Notar sons, movimentos, detalhes escondidos, emboscadas e mudanças no ambiente." },
+    { "id": "religiao",          "titulo": "Religião",          "atributo": "sabedoria",      "origem": "Tormenta", "descricao": "Conhecer divindades, cultos, símbolos, dogmas, cerimônias e tradições religiosas." },
+    { "id": "sobrevivencia",     "titulo": "Sobrevivência",     "atributo": "sabedoria",      "origem": "Tormenta", "descricao": "Orientar-se, rastrear, encontrar abrigo e recursos e reconhecer perigos naturais." },
+    { "id": "vontade",           "titulo": "Vontade",           "atributo": "sabedoria",      "origem": "Tormenta", "descricao": "Resistir a medo, coerção, ilusões, encantamentos e outros efeitos que tentam dominar a mente." },
+    { "id": "atuacao",           "titulo": "Atuação",           "atributo": "carisma",        "origem": "Tormenta", "descricao": "Entreter ou emocionar uma plateia por música, dança, interpretação, oratória ou outra arte performática." },
+    { "id": "diplomacia",        "titulo": "Diplomacia",        "atributo": "carisma",        "origem": "Tormenta", "descricao": "Negociar, persuadir, mediar conflitos, pedir favores e melhorar a atitude de outras pessoas." },
+    { "id": "enganacao",         "titulo": "Enganação",         "atributo": "carisma",        "origem": "Tormenta", "descricao": "Mentir, blefar, disfarçar intenções, imitar comportamentos e criar distrações convincentes." },
+    { "id": "intimidacao",       "titulo": "Intimidação",       "atributo": "carisma",        "origem": "Tormenta", "descricao": "Pressionar alguém por ameaça, presença ou demonstração de força para obter cooperação." },
+    { "id": "jogatina",          "titulo": "Jogatina",          "atributo": "carisma",        "origem": "Tormenta", "descricao": "Entender jogos de azar, blefar durante apostas e reconhecer trapaças ou padrões de outros jogadores." },
+    { "id": "adestramento",      "titulo": "Adestramento",      "atributo": "carisma",        "origem": "Tormenta", "descricao": "Acalmar, treinar, conduzir e ensinar comandos a animais ou criaturas domesticáveis." },
 
     {
       "id": "ressonancia",
@@ -46,7 +46,7 @@
       "atributo": "sabedoria",
       "origem": "O Jardim",
       "status": "aprovada",
-      "descricao": "Perceber, identificar e resistir a efeitos de Fluxos alheios; sentir qual Fluxo alguém carrega. Preenche uma lacuna real: nenhuma perícia do Tormenta cobre os Fluxos especificamente."
+      "descricao": "Sentir Fluxos, reconhecer sua natureza e origem, identificar interferências e resistir à influência direta de Fluxos alheios."
     },
     {
       "id": "tecnologia",
@@ -54,7 +54,7 @@
       "atributo": "inteligencia",
       "origem": "O Jardim",
       "status": "aprovada",
-      "descricao": "Operar, reparar e entender itens A.X.I.S e maquinário avançado. Ao contrário de Ofício, que cobre o artesanato geral, Tecnologia dá identidade mecânica própria a quem segue a linha de Jota Macedo."
+      "descricao": "Operar, diagnosticar, programar e reparar itens A.X.I.S, sistemas eletrônicos e maquinário avançado; Ofício cobre artesanato comum."
     },
     {
       "id": "ritos-de-arkarin",
@@ -62,7 +62,7 @@
       "atributo": "sabedoria",
       "origem": "O Jardim",
       "status": "aprovada",
-      "descricao": "Rituais ligados à morte, ao Fluxo do Sangue, à Mulher Carmesim. Relevante para Despertos e classes ligadas à morte."
+      "descricao": "Reconhecer, preparar e executar rituais de Arkarin ligados à morte, ao Fluxo do Sangue e à Mulher Carmesim."
     },
     {
       "id": "sanidade",
@@ -70,7 +70,7 @@
       "atributo": "sabedoria",
       "origem": "O Jardim",
       "status": "aprovada",
-      "descricao": "Perícia usada quando a Trilha de Sanidade é abalada. A mecânica completa está na seção Condições Especiais da página de Regras."
+      "descricao": "Manter a lucidez diante de horrores e traumas, reconhecer crises mentais e resistir aos efeitos da perda de Sanidade."
     }
   ],
 

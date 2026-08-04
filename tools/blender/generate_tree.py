@@ -1,7 +1,7 @@
 """Gera uma árvore low-poly + globo de vidro (dome) e exporta para .glb.
 
 Roda em modo headless, sem GUI:
-    blender --background --python generate_tree.py -- --slug aethel --color 201,162,39 --seed 1 --out ../../assets/3d/arvores/aethel.glb
+    blender --background --python generate_tree.py -- --slug aethel --color 201,162,39 --seed 1 --out ../../public/models/trees/aethel.glb
 
 Hierarquia exportada (nomes usados depois pelo Three.js para achar o dome e
 animar a opacidade dele):
@@ -21,7 +21,7 @@ plataforma metálica angular e campo de contenção (em vez de ilha/vidro
 orgânicos). Os nomes Dome_Base/Dome_Glass são mantidos mesmo nesse modo só
 pra o Three.js (que procura "Dome_Glass" por nome pra animar opacidade e
 medir o raio) continuar funcionando sem precisar de nenhum caso especial:
-    blender --background --python generate_tree.py -- --mode axis --slug axis --out ../../assets/3d/arvores/axis.glb
+    blender --background --python generate_tree.py -- --mode axis --slug axis --out ../../public/models/trees/axis.glb
 
 Notas de compatibilidade (Blender 5.1, node names em PT-BR neste ambiente):
   - Nós são buscados por `bl_idname` (não por nome de exibição, que vem

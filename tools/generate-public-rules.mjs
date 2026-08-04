@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { REGRAS_OFICIAIS } from '../src/data/regras.ts';
+import { REGRAS_OFICIAIS } from '../data/regras/regras.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const checkOnly = process.argv.includes('--check');
@@ -20,8 +20,8 @@ const decodeEntities = (value) => value
 
 function htmlToMarkdown(html) {
   let text = String(html)
-    .replace(/<!--\s*CLASSES_DATA\s*-->/g, 'Consulte o catálogo estruturado em `data/ficha/classes.json`.')
-    .replace(/<!--\s*RACAS_DATA\s*-->/g, 'Consulte o catálogo estruturado em `data/ficha/racas.json`.')
+    .replace(/<!--\s*CLASSES_DATA\s*-->/g, 'Consulte o catálogo de classes na página de regras.')
+    .replace(/<!--\s*RACAS_DATA\s*-->/g, 'Consulte o catálogo de raças na página de regras.')
     .replace(/<h3[^>]*>([\s\S]*?)<\/h3>/gi, '\n### $1\n')
     .replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, '\n$1\n')
     .replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, '\n- $1')
@@ -45,7 +45,7 @@ function htmlToMarkdown(html) {
 const markdown = [
   '# Regras públicas de O Jardim RPG',
   '',
-  '> Arquivo gerado de `src/data/regras.ts`. Não edite manualmente.',
+  '> Arquivo gerado de `data/regras/regras.ts`. Não edite manualmente.',
   '',
   ...Object.entries(publicRules).flatMap(([id, topic]) => [
     `## ${id}`,
@@ -61,13 +61,8 @@ const markdown = [
   ]),
 ].join('\n').trimEnd() + '\n';
 
-const legacyModule = `// Arquivo gerado por tools/generate-public-rules.mjs. Não edite manualmente.\n`
-  + `export const REGRAS_OFICIAIS = ${JSON.stringify(publicRules, null, 2)};\n\n`
-  + `export function regraOficialPorId(id) {\n  return REGRAS_OFICIAIS[id] || null;\n}\n`;
-
 const outputs = new Map([
-  [path.join(root, 'docs', 'regras', 'regras-publicas-v1.md'), markdown],
-  [path.join(root, 'legacy-vanilla', 'src', 'regras', 'config', 'regrasOficiais.js'), legacyModule],
+  [path.join(root, 'data', 'regras', 'regras-publicas-v1.md'), markdown],
 ]);
 
 let stale = false;

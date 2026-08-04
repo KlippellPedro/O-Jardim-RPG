@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-29T08:34:02.750Z",
+  "generatedAt": "2026-08-04T13:28:02.391Z",
   "levels": [
     1,
     5,
@@ -10,14 +10,14 @@
     40
   ],
   "assumptions": {
-    "attributes": "Força 12, Destreza 14, Constituição 14, Inteligência 13, Sabedoria 10, Carisma 8 e Fluxo 8.",
+    "attributes": "Força 12, Destreza 14, Constituição 14, Inteligência 13, Sabedoria 10, Carisma 8 e Fluxo 14.",
     "multiclass": "Depois do nível 20, a referência usa uma segunda classe neutra com 3,5 de Vida e 3,5 de Mana por nível.",
     "scope": "Mede recursos, vagas, dano médio e palavras de risco. Efeitos narrativos e controle ainda exigem playtest."
   },
   "summary": {
-    "classes": 24,
+    "classes": 27,
     "weapons": 87,
-    "spells": 28,
+    "spells": 330,
     "invalidResourceBudgets": 0,
     "unboundedWeapons": 0,
     "invalidSpells": 0
@@ -1544,78 +1544,6 @@
       "alertasTexto": []
     },
     {
-      "id": "elementarista",
-      "titulo": "Elementarista",
-      "categoria": "especial",
-      "recursosPorNivel": 7,
-      "referencias": [
-        {
-          "nivel": 1,
-          "vida": 16,
-          "mana": 8,
-          "defesaNatural": 11,
-          "poderes": 0,
-          "grausTreinamento": 1,
-          "habilidades": 1
-        },
-        {
-          "nivel": 5,
-          "vida": 36,
-          "mana": 24,
-          "defesaNatural": 13,
-          "poderes": 1,
-          "grausTreinamento": 1,
-          "habilidades": 3
-        },
-        {
-          "nivel": 10,
-          "vida": 61,
-          "mana": 44,
-          "defesaNatural": 16,
-          "poderes": 3,
-          "grausTreinamento": 2,
-          "habilidades": 5
-        },
-        {
-          "nivel": 15,
-          "vida": 86,
-          "mana": 64,
-          "defesaNatural": 18,
-          "poderes": 5,
-          "grausTreinamento": 3,
-          "habilidades": 7
-        },
-        {
-          "nivel": 20,
-          "vida": 111,
-          "mana": 84,
-          "defesaNatural": 21,
-          "poderes": 8,
-          "grausTreinamento": 4,
-          "habilidades": 11
-        },
-        {
-          "nivel": 30,
-          "vida": 166,
-          "mana": 119,
-          "defesaNatural": 26,
-          "poderes": 8,
-          "grausTreinamento": 4,
-          "habilidades": 11
-        },
-        {
-          "nivel": 40,
-          "vida": 221,
-          "mana": 154,
-          "defesaNatural": 31,
-          "poderes": 8,
-          "grausTreinamento": 4,
-          "habilidades": 11
-        }
-      ],
-      "alertasTexto": []
-    },
-    {
       "id": "decodificador",
       "titulo": "Decodificador",
       "categoria": "especial",
@@ -1758,32 +1686,352 @@
         }
       ],
       "alertasTexto": []
+    },
+    {
+      "id": "canalizador",
+      "titulo": "Canalizador",
+      "categoria": "comum",
+      "recursosPorNivel": 7,
+      "referencias": [
+        {
+          "nivel": 1,
+          "vida": 16,
+          "mana": 8,
+          "defesaNatural": 11,
+          "poderes": 0,
+          "grausTreinamento": 1,
+          "habilidades": 1
+        },
+        {
+          "nivel": 5,
+          "vida": 36,
+          "mana": 24,
+          "defesaNatural": 13,
+          "poderes": 1,
+          "grausTreinamento": 1,
+          "habilidades": 3
+        },
+        {
+          "nivel": 10,
+          "vida": 61,
+          "mana": 44,
+          "defesaNatural": 16,
+          "poderes": 3,
+          "grausTreinamento": 2,
+          "habilidades": 5
+        },
+        {
+          "nivel": 15,
+          "vida": 86,
+          "mana": 64,
+          "defesaNatural": 18,
+          "poderes": 5,
+          "grausTreinamento": 3,
+          "habilidades": 7
+        },
+        {
+          "nivel": 20,
+          "vida": 111,
+          "mana": 84,
+          "defesaNatural": 21,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 30,
+          "vida": 166,
+          "mana": 119,
+          "defesaNatural": 26,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 40,
+          "vida": 221,
+          "mana": 154,
+          "defesaNatural": 31,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        }
+      ],
+      "alertasTexto": []
+    },
+    {
+      "id": "sintonizador",
+      "titulo": "Sintonizador",
+      "categoria": "comum",
+      "recursosPorNivel": 7,
+      "referencias": [
+        {
+          "nivel": 1,
+          "vida": 16,
+          "mana": 8,
+          "defesaNatural": 11,
+          "poderes": 0,
+          "grausTreinamento": 1,
+          "habilidades": 1
+        },
+        {
+          "nivel": 5,
+          "vida": 36,
+          "mana": 24,
+          "defesaNatural": 13,
+          "poderes": 1,
+          "grausTreinamento": 1,
+          "habilidades": 3
+        },
+        {
+          "nivel": 10,
+          "vida": 61,
+          "mana": 44,
+          "defesaNatural": 16,
+          "poderes": 3,
+          "grausTreinamento": 2,
+          "habilidades": 5
+        },
+        {
+          "nivel": 15,
+          "vida": 86,
+          "mana": 64,
+          "defesaNatural": 18,
+          "poderes": 5,
+          "grausTreinamento": 3,
+          "habilidades": 7
+        },
+        {
+          "nivel": 20,
+          "vida": 111,
+          "mana": 84,
+          "defesaNatural": 21,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 30,
+          "vida": 166,
+          "mana": 119,
+          "defesaNatural": 26,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 40,
+          "vida": 221,
+          "mana": 154,
+          "defesaNatural": 31,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        }
+      ],
+      "alertasTexto": []
+    },
+    {
+      "id": "ritualista",
+      "titulo": "Ritualista",
+      "categoria": "comum",
+      "recursosPorNivel": 7,
+      "referencias": [
+        {
+          "nivel": 1,
+          "vida": 16,
+          "mana": 8,
+          "defesaNatural": 11,
+          "poderes": 0,
+          "grausTreinamento": 1,
+          "habilidades": 1
+        },
+        {
+          "nivel": 5,
+          "vida": 36,
+          "mana": 24,
+          "defesaNatural": 13,
+          "poderes": 1,
+          "grausTreinamento": 1,
+          "habilidades": 3
+        },
+        {
+          "nivel": 10,
+          "vida": 61,
+          "mana": 44,
+          "defesaNatural": 16,
+          "poderes": 3,
+          "grausTreinamento": 2,
+          "habilidades": 5
+        },
+        {
+          "nivel": 15,
+          "vida": 86,
+          "mana": 64,
+          "defesaNatural": 18,
+          "poderes": 5,
+          "grausTreinamento": 3,
+          "habilidades": 7
+        },
+        {
+          "nivel": 20,
+          "vida": 111,
+          "mana": 84,
+          "defesaNatural": 21,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 30,
+          "vida": 166,
+          "mana": 119,
+          "defesaNatural": 26,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 40,
+          "vida": 221,
+          "mana": 154,
+          "defesaNatural": 31,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        }
+      ],
+      "alertasTexto": [
+        "Âncora Ritual"
+      ]
+    },
+    {
+      "id": "interceptador",
+      "titulo": "Interceptador",
+      "categoria": "especial",
+      "recursosPorNivel": 7,
+      "referencias": [
+        {
+          "nivel": 1,
+          "vida": 16,
+          "mana": 8,
+          "defesaNatural": 11,
+          "poderes": 0,
+          "grausTreinamento": 1,
+          "habilidades": 1
+        },
+        {
+          "nivel": 5,
+          "vida": 36,
+          "mana": 24,
+          "defesaNatural": 13,
+          "poderes": 1,
+          "grausTreinamento": 1,
+          "habilidades": 3
+        },
+        {
+          "nivel": 10,
+          "vida": 61,
+          "mana": 44,
+          "defesaNatural": 16,
+          "poderes": 3,
+          "grausTreinamento": 2,
+          "habilidades": 5
+        },
+        {
+          "nivel": 15,
+          "vida": 86,
+          "mana": 64,
+          "defesaNatural": 18,
+          "poderes": 5,
+          "grausTreinamento": 3,
+          "habilidades": 7
+        },
+        {
+          "nivel": 20,
+          "vida": 111,
+          "mana": 84,
+          "defesaNatural": 21,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 30,
+          "vida": 166,
+          "mana": 119,
+          "defesaNatural": 26,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 40,
+          "vida": 221,
+          "mana": 154,
+          "defesaNatural": 31,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        }
+      ],
+      "alertasTexto": []
     }
   ],
   "spells": [
     {
-      "id": "projetil-elemental",
-      "titulo": "Projétil Elemental",
+      "id": "centelha-de-possibilidade",
+      "titulo": "Centelha de Possibilidade",
       "circulo": 1,
       "perfil": "alvo",
       "custoMana": 2,
-      "dano": "2d8",
-      "mediaDano": 9,
+      "dano": null,
+      "mediaDano": null,
       "problemas": []
     },
     {
-      "id": "surto-elemental",
-      "titulo": "Surto Elemental",
+      "id": "recomeco-instintivo",
+      "titulo": "Recomeço Instintivo",
       "circulo": 1,
-      "perfil": "area",
+      "perfil": "alvo",
       "custoMana": 2,
-      "dano": "2d6",
-      "mediaDano": 7,
+      "dano": null,
+      "mediaDano": null,
       "problemas": []
     },
     {
-      "id": "bastiao-elemental",
-      "titulo": "Bastião Elemental",
+      "id": "forma-nascente",
+      "titulo": "Forma Nascente",
+      "circulo": 1,
+      "perfil": "controle",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "leitura-essencial",
+      "titulo": "Leitura Essencial",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "lamina-da-verdade",
+      "titulo": "Lâmina da Verdade",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": "1d8 + Mod. Fluxo",
+      "mediaDano": 4.5,
+      "problemas": []
+    },
+    {
+      "id": "ancora-de-identidade",
+      "titulo": "Âncora de Identidade",
       "circulo": 1,
       "perfil": "defesa",
       "custoMana": 2,
@@ -1792,8 +2040,88 @@
       "problemas": []
     },
     {
-      "id": "passo-elemental",
-      "titulo": "Passo Elemental",
+      "id": "fio-prateado",
+      "titulo": "Fio Prateado",
+      "circulo": 1,
+      "perfil": "controle",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "acordo-breve",
+      "titulo": "Acordo Breve",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ruido-de-canal",
+      "titulo": "Ruído de Canal",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": "1d8",
+      "mediaDano": 4.5,
+      "problemas": []
+    },
+    {
+      "id": "pulso-regenerador",
+      "titulo": "Pulso Regenerador",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "esporo-febril",
+      "titulo": "Esporo Febril",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": "1d8 + Mod. Fluxo",
+      "mediaDano": 4.5,
+      "problemas": []
+    },
+    {
+      "id": "raizes-famintas",
+      "titulo": "Raízes Famintas",
+      "circulo": 1,
+      "perfil": "area",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "propriedade-errante",
+      "titulo": "Propriedade Errante",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "rajada-improvavel",
+      "titulo": "Rajada Improvável",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": "1d6 + Mod. Fluxo",
+      "mediaDano": 3.5,
+      "problemas": []
+    },
+    {
+      "id": "troca-repentina",
+      "titulo": "Troca Repentina",
       "circulo": 1,
       "perfil": "movimento",
       "custoMana": 2,
@@ -1802,11 +2130,991 @@
       "problemas": []
     },
     {
-      "id": "amarras-elementais",
-      "titulo": "Amarras Elementais",
+      "id": "impacto-elemental",
+      "titulo": "Impacto Elemental",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": "1d10 + Mod. Fluxo",
+      "mediaDano": 5.5,
+      "problemas": []
+    },
+    {
+      "id": "escudo-material",
+      "titulo": "Escudo Material",
+      "circulo": 1,
+      "perfil": "defesa",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "moldar-elemento",
+      "titulo": "Moldar Elemento",
       "circulo": 1,
       "perfil": "controle",
       "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "salto-curto",
+      "titulo": "Salto Curto",
+      "circulo": 1,
+      "perfil": "movimento",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "distancia-hostil",
+      "titulo": "Distância Hostil",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "dobra-protetora",
+      "titulo": "Dobra Protetora",
+      "circulo": 1,
+      "perfil": "defesa",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "passo-adiantado",
+      "titulo": "Passo Adiantado",
+      "circulo": 1,
+      "perfil": "movimento",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "atraso-de-instante",
+      "titulo": "Atraso de Instante",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "suspensao-breve",
+      "titulo": "Suspensão Breve",
+      "circulo": 1,
+      "perfil": "controle",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "toque-nulo",
+      "titulo": "Toque Nulo",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": "1d10 + Mod. Fluxo",
+      "mediaDano": 5.5,
+      "problemas": []
+    },
+    {
+      "id": "ausencia-sonora",
+      "titulo": "Ausência Sonora",
+      "circulo": 1,
+      "perfil": "area",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "lacuna-de-sensacao",
+      "titulo": "Lacuna de Sensação",
+      "circulo": 1,
+      "perfil": "defesa",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ultimo-ponto",
+      "titulo": "Último Ponto",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": "1d10 + Mod. Fluxo",
+      "mediaDano": 5.5,
+      "problemas": []
+    },
+    {
+      "id": "encerrar-impulso",
+      "titulo": "Encerrar Impulso",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ponto-final",
+      "titulo": "Ponto Final",
+      "circulo": 1,
+      "perfil": "controle",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "varredura-de-padrao",
+      "titulo": "Varredura de Padrão",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "pulso-de-interferencia",
+      "titulo": "Pulso de Interferência",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": "1d8 + Mod. Fluxo",
+      "mediaDano": 4.5,
+      "problemas": []
+    },
+    {
+      "id": "rotina-assistida",
+      "titulo": "Rotina Assistida",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "broto-rompente",
+      "titulo": "Broto Rompente",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": "2d8 + Mod. Fluxo",
+      "mediaDano": 9,
+      "problemas": []
+    },
+    {
+      "id": "servical-germinado",
+      "titulo": "Serviçal Germinado",
+      "circulo": 2,
+      "perfil": "controle",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "broto-de-vigor",
+      "titulo": "Broto de Vigor",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "verdade-cortante",
+      "titulo": "Verdade Cortante",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": "2d8 + Mod. Fluxo",
+      "mediaDano": 9,
+      "problemas": []
+    },
+    {
+      "id": "dissipar-falsidade",
+      "titulo": "Dissipar Falsidade",
+      "circulo": 2,
+      "perfil": "controle",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "olho-da-natureza",
+      "titulo": "Olho da Natureza",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "estatica-mental",
+      "titulo": "Estática Mental",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": "2d8",
+      "mediaDano": 9,
+      "problemas": []
+    },
+    {
+      "id": "voz-emprestada",
+      "titulo": "Voz Emprestada",
+      "circulo": 2,
+      "perfil": "controle",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "rede-de-sinais",
+      "titulo": "Rede de Sinais",
+      "circulo": 2,
+      "perfil": "area",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "praga-menor",
+      "titulo": "Praga Menor",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": "2d8 + Mod. Fluxo",
+      "mediaDano": 9,
+      "problemas": []
+    },
+    {
+      "id": "crescer-desmedido",
+      "titulo": "Crescer Desmedido",
+      "circulo": 2,
+      "perfil": "controle",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "mao-curativa",
+      "titulo": "Mão Curativa",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "golpe-instavel",
+      "titulo": "Golpe Instável",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": "2d8 + Mod. Fluxo",
+      "mediaDano": 9,
+      "problemas": []
+    },
+    {
+      "id": "sorte-trocada",
+      "titulo": "Sorte Trocada",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "mutacao-passageira",
+      "titulo": "Mutação Passageira",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "rajada-elemental",
+      "titulo": "Rajada Elemental",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": "2d8 + Mod. Fluxo",
+      "mediaDano": 9,
+      "problemas": []
+    },
+    {
+      "id": "muralha-menor",
+      "titulo": "Muralha Menor",
+      "circulo": 2,
+      "perfil": "controle",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "armadura-de-materia",
+      "titulo": "Armadura de Matéria",
+      "circulo": 2,
+      "perfil": "defesa",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "fenda-cortante",
+      "titulo": "Fenda Cortante",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": "2d8 + Mod. Fluxo",
+      "mediaDano": 9,
+      "problemas": []
+    },
+    {
+      "id": "passo-longo",
+      "titulo": "Passo Longo",
+      "circulo": 2,
+      "perfil": "movimento",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "fronteira-menor",
+      "titulo": "Fronteira Menor",
+      "circulo": 2,
+      "perfil": "controle",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "peso-das-horas",
+      "titulo": "Peso das Horas",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": "2d8 + Mod. Fluxo",
+      "mediaDano": 9,
+      "problemas": []
+    },
+    {
+      "id": "aceleracao-menor",
+      "titulo": "Aceleração Menor",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "conservar",
+      "titulo": "Conservar",
+      "circulo": 2,
+      "perfil": "controle",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "mordida-do-nada",
+      "titulo": "Mordida do Nada",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": "2d8 + Mod. Fluxo",
+      "mediaDano": 9,
+      "problemas": []
+    },
+    {
+      "id": "apagar-presenca",
+      "titulo": "Apagar Presença",
+      "circulo": 2,
+      "perfil": "defesa",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sumidouro-menor",
+      "titulo": "Sumidouro Menor",
+      "circulo": 2,
+      "perfil": "defesa",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ferida-terminal",
+      "titulo": "Ferida Terminal",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": "2d8 + Mod. Fluxo",
+      "mediaDano": 9,
+      "problemas": []
+    },
+    {
+      "id": "encerrar-efeito-menor",
+      "titulo": "Encerrar Efeito Menor",
+      "circulo": 2,
+      "perfil": "controle",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "marca-do-limiar",
+      "titulo": "Marca do Limiar",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "descarga-de-sistema",
+      "titulo": "Descarga de Sistema",
+      "circulo": 2,
+      "perfil": "alvo",
+      "custoMana": 4,
+      "dano": "2d8 + Mod. Fluxo",
+      "mediaDano": 9,
+      "problemas": []
+    },
+    {
+      "id": "interceptar-comando",
+      "titulo": "Interceptar Comando",
+      "circulo": 2,
+      "perfil": "controle",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "rotina-automatizada",
+      "titulo": "Rotina Automatizada",
+      "circulo": 2,
+      "perfil": "controle",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "campo-germinal",
+      "titulo": "Campo Germinal",
+      "circulo": 3,
+      "perfil": "area",
+      "custoMana": 6,
+      "dano": "3d6",
+      "mediaDano": 10.5,
+      "problemas": []
+    },
+    {
+      "id": "genese-menor",
+      "titulo": "Gênese Menor",
+      "circulo": 3,
+      "perfil": "controle",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "vinculo-inaugural",
+      "titulo": "Vínculo Inaugural",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "julgamento-essencial",
+      "titulo": "Julgamento Essencial",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 6,
+      "dano": "3d8 + Mod. Fluxo",
+      "mediaDano": 13.5,
+      "problemas": []
+    },
+    {
+      "id": "anular-aparencia",
+      "titulo": "Anular Aparência",
+      "circulo": 3,
+      "perfil": "area",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sinceridade-compelida",
+      "titulo": "Sinceridade Compelida",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "grito-dissonante",
+      "titulo": "Grito Dissonante",
+      "circulo": 3,
+      "perfil": "area",
+      "custoMana": 6,
+      "dano": "3d6",
+      "mediaDano": 10.5,
+      "problemas": []
+    },
+    {
+      "id": "interceptar-mensagem",
+      "titulo": "Interceptar Mensagem",
+      "circulo": 3,
+      "perfil": "controle",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "comando-combinado",
+      "titulo": "Comando Combinado",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sopro-pestilento",
+      "titulo": "Sopro Pestilento",
+      "circulo": 3,
+      "perfil": "area",
+      "custoMana": 6,
+      "dano": "3d6",
+      "mediaDano": 10.5,
+      "problemas": []
+    },
+    {
+      "id": "metabolismo-alterado",
+      "titulo": "Metabolismo Alterado",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "regeneracao-continua",
+      "titulo": "Regeneração Contínua",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "onda-caotica",
+      "titulo": "Onda Caótica",
+      "circulo": 3,
+      "perfil": "area",
+      "custoMana": 6,
+      "dano": "3d6",
+      "mediaDano": 10.5,
+      "problemas": []
+    },
+    {
+      "id": "embaralhar-resultado",
+      "titulo": "Embaralhar Resultado",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "transmutar-materia",
+      "titulo": "Transmutar Matéria",
+      "circulo": 3,
+      "perfil": "controle",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "explosao-elemental",
+      "titulo": "Explosão Elemental",
+      "circulo": 3,
+      "perfil": "area",
+      "custoMana": 6,
+      "dano": "3d6",
+      "mediaDano": 10.5,
+      "problemas": []
+    },
+    {
+      "id": "mao-de-forca",
+      "titulo": "Mão de Força",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "muralha-elemental",
+      "titulo": "Muralha Elemental",
+      "circulo": 3,
+      "perfil": "controle",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "dobra-esmagadora",
+      "titulo": "Dobra Esmagadora",
+      "circulo": 3,
+      "perfil": "area",
+      "custoMana": 6,
+      "dano": "3d6",
+      "mediaDano": 10.5,
+      "problemas": []
+    },
+    {
+      "id": "portal-curto",
+      "titulo": "Portal Curto",
+      "circulo": 3,
+      "perfil": "movimento",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "distancia-roubada",
+      "titulo": "Distância Roubada",
+      "circulo": 3,
+      "perfil": "area",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "campo-lento",
+      "titulo": "Campo Lento",
+      "circulo": 3,
+      "perfil": "area",
+      "custoMana": 6,
+      "dano": "3d6",
+      "mediaDano": 10.5,
+      "problemas": []
+    },
+    {
+      "id": "antecipar",
+      "titulo": "Antecipar",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "eco-curto",
+      "titulo": "Eco Curto",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "onda-de-ausencia",
+      "titulo": "Onda de Ausência",
+      "circulo": 3,
+      "perfil": "area",
+      "custoMana": 6,
+      "dano": "3d6",
+      "mediaDano": 10.5,
+      "problemas": []
+    },
+    {
+      "id": "consumir-energia",
+      "titulo": "Consumir Energia",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "nada-pessoal",
+      "titulo": "Nada Pessoal",
+      "circulo": 3,
+      "perfil": "defesa",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sopro-do-limiar",
+      "titulo": "Sopro do Limiar",
+      "circulo": 3,
+      "perfil": "area",
+      "custoMana": 6,
+      "dano": "3d6",
+      "mediaDano": 10.5,
+      "problemas": []
+    },
+    {
+      "id": "romper-vinculo",
+      "titulo": "Romper Vínculo",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "deterioracao",
+      "titulo": "Deterioração",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sobrecarga-em-cadeia",
+      "titulo": "Sobrecarga em Cadeia",
+      "circulo": 3,
+      "perfil": "area",
+      "custoMana": 6,
+      "dano": "3d6",
+      "mediaDano": 10.5,
+      "problemas": []
+    },
+    {
+      "id": "firewall",
+      "titulo": "Firewall",
+      "circulo": 3,
+      "perfil": "defesa",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "registrar-padrao",
+      "titulo": "Registrar Padrão",
+      "circulo": 3,
+      "perfil": "controle",
+      "custoMana": 6,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "lanca-do-primeiro-broto",
+      "titulo": "Lança do Primeiro Broto",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": "4d8 + Mod. Fluxo",
+      "mediaDano": 18,
+      "problemas": []
+    },
+    {
+      "id": "ninhada-nascente",
+      "titulo": "Ninhada Nascente",
+      "circulo": 4,
+      "perfil": "controle",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "renascer-da-ferida",
+      "titulo": "Renascer da Ferida",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "lamina-do-que-e",
+      "titulo": "Lâmina do Que É",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": "4d8 + Mod. Fluxo",
+      "mediaDano": 18,
+      "problemas": []
+    },
+    {
+      "id": "revelacao-de-corrupcao",
+      "titulo": "Revelação de Corrupção",
+      "circulo": 4,
+      "perfil": "area",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ancora-maior-de-identidade",
+      "titulo": "Âncora Maior de Identidade",
+      "circulo": 4,
+      "perfil": "area",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sobrecarga-de-canal",
+      "titulo": "Sobrecarga de Canal",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": "4d8",
+      "mediaDano": 18,
+      "problemas": []
+    },
+    {
+      "id": "elo-de-sentidos",
+      "titulo": "Elo de Sentidos",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "pacto-vinculante",
+      "titulo": "Pacto Vinculante",
+      "circulo": 4,
+      "perfil": "controle",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "corrosao-sanguinea",
+      "titulo": "Corrosão Sanguínea",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": "4d8 + Mod. Fluxo",
+      "mediaDano": 18,
+      "problemas": []
+    },
+    {
+      "id": "dominio-da-carne",
+      "titulo": "Domínio da Carne",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "purificar-corpo",
+      "titulo": "Purificar Corpo",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "lanca-do-acaso",
+      "titulo": "Lança do Acaso",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": "4d8 + Mod. Fluxo",
+      "mediaDano": 18,
+      "problemas": []
+    },
+    {
+      "id": "instabilidade-corporal",
+      "titulo": "Instabilidade Corporal",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "roleta-de-fluxo",
+      "titulo": "Roleta de Fluxo",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -1814,229 +3122,2159 @@
     {
       "id": "lanca-elemental",
       "titulo": "Lança Elemental",
-      "circulo": 2,
+      "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 4,
-      "dano": "4d8",
+      "custoMana": 8,
+      "dano": "4d8 + Mod. Fluxo",
       "mediaDano": 18,
       "problemas": []
     },
     {
-      "id": "erupcao-elemental",
-      "titulo": "Erupção Elemental",
-      "circulo": 2,
+      "id": "terremoto-menor",
+      "titulo": "Terremoto Menor",
+      "circulo": 4,
       "perfil": "area",
-      "custoMana": 4,
+      "custoMana": 8,
       "dano": "4d6",
       "mediaDano": 14,
       "problemas": []
     },
     {
-      "id": "muralha-elemental",
-      "titulo": "Muralha Elemental",
-      "circulo": 2,
+      "id": "pele-de-aco",
+      "titulo": "Pele de Aço",
+      "circulo": 4,
       "perfil": "defesa",
-      "custoMana": 4,
+      "custoMana": 8,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
-      "id": "travessia-elemental",
-      "titulo": "Travessia Elemental",
-      "circulo": 2,
+      "id": "lamina-dimensional",
+      "titulo": "Lâmina Dimensional",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": "4d8 + Mod. Fluxo",
+      "mediaDano": 18,
+      "problemas": []
+    },
+    {
+      "id": "prisao-de-fronteira",
+      "titulo": "Prisão de Fronteira",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "salto-coletivo",
+      "titulo": "Salto Coletivo",
+      "circulo": 4,
       "perfil": "movimento",
-      "custoMana": 4,
+      "custoMana": 8,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
-      "id": "prisao-elemental",
-      "titulo": "Prisão Elemental",
-      "circulo": 2,
+      "id": "desgaste-acelerado",
+      "titulo": "Desgaste Acelerado",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": "4d8 + Mod. Fluxo",
+      "mediaDano": 18,
+      "problemas": []
+    },
+    {
+      "id": "aceleracao",
+      "titulo": "Aceleração",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "parada-de-instante",
+      "titulo": "Parada de Instante",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "corte-nulo",
+      "titulo": "Corte Nulo",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": "4d8 + Mod. Fluxo",
+      "mediaDano": 18,
+      "problemas": []
+    },
+    {
+      "id": "apagar-vestigios",
+      "titulo": "Apagar Vestígios",
+      "circulo": 4,
       "perfil": "controle",
-      "custoMana": 4,
+      "custoMana": 8,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
-      "id": "ruptura-elemental",
-      "titulo": "Ruptura Elemental",
-      "circulo": 3,
+      "id": "bolha-de-ausencia",
+      "titulo": "Bolha de Ausência",
+      "circulo": 4,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "golpe-terminal",
+      "titulo": "Golpe Terminal",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": "4d8 + Mod. Fluxo",
+      "mediaDano": 18,
+      "problemas": []
+    },
+    {
+      "id": "fechar-ciclo",
+      "titulo": "Fechar Ciclo",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "desgaste-fatal",
+      "titulo": "Desgaste Fatal",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "lanca-de-ions",
+      "titulo": "Lança de Íons",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 8,
+      "dano": "4d8 + Mod. Fluxo",
+      "mediaDano": 18,
+      "problemas": []
+    },
+    {
+      "id": "interceptacao-ativa",
+      "titulo": "Interceptação Ativa",
+      "circulo": 4,
+      "perfil": "defesa",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "automato-assistente",
+      "titulo": "Autômato Assistente",
+      "circulo": 4,
+      "perfil": "controle",
+      "custoMana": 8,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "eclosao",
+      "titulo": "Eclosão",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": "5d6",
+      "mediaDano": 17.5,
+      "problemas": []
+    },
+    {
+      "id": "segunda-chance",
+      "titulo": "Segunda Chance",
+      "circulo": 5,
+      "perfil": "alvo",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "jardim-nascente",
+      "titulo": "Jardim Nascente",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sentenca-de-verdade",
+      "titulo": "Sentença de Verdade",
+      "circulo": 5,
+      "perfil": "alvo",
+      "custoMana": 10,
+      "dano": "5d8 + Mod. Fluxo",
+      "mediaDano": 22.5,
+      "problemas": []
+    },
+    {
+      "id": "desmascarar",
+      "titulo": "Desmascarar",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "custodia-da-alma",
+      "titulo": "Custódia da Alma",
+      "circulo": 5,
+      "perfil": "alvo",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "coro-dissonante",
+      "titulo": "Coro Dissonante",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": "5d6",
+      "mediaDano": 17.5,
+      "problemas": []
+    },
+    {
+      "id": "silenciar-rede",
+      "titulo": "Silenciar Rede",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "concordancia",
+      "titulo": "Concordância",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "peste-ramificada",
+      "titulo": "Peste Ramificada",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": "5d6",
+      "mediaDano": 17.5,
+      "problemas": []
+    },
+    {
+      "id": "forma-bestial",
+      "titulo": "Forma Bestial",
+      "circulo": 5,
+      "perfil": "alvo",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "folego-de-vida",
+      "titulo": "Fôlego de Vida",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "vortice-menor",
+      "titulo": "Vórtice Menor",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": "5d6",
+      "mediaDano": 17.5,
+      "problemas": []
+    },
+    {
+      "id": "troca-de-propriedades",
+      "titulo": "Troca de Propriedades",
+      "circulo": 5,
+      "perfil": "alvo",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "salto-improvavel",
+      "titulo": "Salto Improvável",
+      "circulo": 5,
+      "perfil": "movimento",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "torrente-dos-sete-saloes",
+      "titulo": "Torrente dos Sete Salões",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": "5d6",
+      "mediaDano": 17.5,
+      "problemas": []
+    },
+    {
+      "id": "peso-do-mundo",
+      "titulo": "Peso do Mundo",
+      "circulo": 5,
+      "perfil": "alvo",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "baluarte",
+      "titulo": "Baluarte",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "colapso-espacial",
+      "titulo": "Colapso Espacial",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": "5d6",
+      "mediaDano": 17.5,
+      "problemas": []
+    },
+    {
+      "id": "selar-fronteira",
+      "titulo": "Selar Fronteira",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "passo-entre-lugares",
+      "titulo": "Passo Entre Lugares",
+      "circulo": 5,
+      "perfil": "movimento",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "erosao-do-momento",
+      "titulo": "Erosão do Momento",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": "5d6",
+      "mediaDano": 17.5,
+      "problemas": []
+    },
+    {
+      "id": "adiantar-o-golpe",
+      "titulo": "Adiantar o Golpe",
+      "circulo": 5,
+      "perfil": "controle",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "conservacao-maior",
+      "titulo": "Conservação Maior",
+      "circulo": 5,
+      "perfil": "alvo",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "colapso-do-nada",
+      "titulo": "Colapso do Nada",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": "5d6",
+      "mediaDano": 17.5,
+      "problemas": []
+    },
+    {
+      "id": "devorar-magia",
+      "titulo": "Devorar Magia",
+      "circulo": 5,
+      "perfil": "defesa",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ausencia-de-si",
+      "titulo": "Ausência de Si",
+      "circulo": 5,
+      "perfil": "defesa",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "onda-do-fim",
+      "titulo": "Onda do Fim",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": "5d6",
+      "mediaDano": 17.5,
+      "problemas": []
+    },
+    {
+      "id": "selo-do-termino",
+      "titulo": "Selo do Término",
+      "circulo": 5,
+      "perfil": "alvo",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ultima-palavra",
+      "titulo": "Última Palavra",
+      "circulo": 5,
+      "perfil": "alvo",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "detonacao-de-nucleo",
+      "titulo": "Detonação de Núcleo",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": "5d6",
+      "mediaDano": 17.5,
+      "problemas": []
+    },
+    {
+      "id": "bloqueio-de-fluxo",
+      "titulo": "Bloqueio de Fluxo",
+      "circulo": 5,
+      "perfil": "alvo",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "rede-axis",
+      "titulo": "Rede A.X.I.S",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "semente-voraz",
+      "titulo": "Semente Voraz",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
+      "dano": "6d8 + Mod. Fluxo",
+      "mediaDano": 27,
+      "problemas": []
+    },
+    {
+      "id": "guardiao-germinado",
+      "titulo": "Guardião Germinado",
+      "circulo": 6,
+      "perfil": "controle",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "alvorada-do-vinculo",
+      "titulo": "Alvorada do Vínculo",
+      "circulo": 6,
+      "perfil": "area",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "verdade-que-fere",
+      "titulo": "Verdade Que Fere",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
+      "dano": "6d8 + Mod. Fluxo",
+      "mediaDano": 27,
+      "problemas": []
+    },
+    {
+      "id": "campo-veridico",
+      "titulo": "Campo Verídico",
+      "circulo": 6,
+      "perfil": "area",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "leitura-profunda",
+      "titulo": "Leitura Profunda",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "cascata-de-ruido",
+      "titulo": "Cascata de Ruído",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
       "dano": "6d8",
       "mediaDano": 27,
       "problemas": []
     },
     {
-      "id": "tempestade-elemental",
-      "titulo": "Tempestade Elemental",
-      "circulo": 3,
+      "id": "espelho-de-sentidos",
+      "titulo": "Espelho de Sentidos",
+      "circulo": 6,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "testemunha-distante",
+      "titulo": "Testemunha Distante",
+      "circulo": 6,
+      "perfil": "controle",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "necrose-fulminante",
+      "titulo": "Necrose Fulminante",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
+      "dano": "6d8 + Mod. Fluxo",
+      "mediaDano": 27,
+      "problemas": []
+    },
+    {
+      "id": "vigor-desmedido",
+      "titulo": "Vigor Desmedido",
+      "circulo": 6,
+      "perfil": "area",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "restaurar-carne",
+      "titulo": "Restaurar Carne",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "colapso-aleatorio",
+      "titulo": "Colapso Aleatório",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
+      "dano": "6d8 + Mod. Fluxo",
+      "mediaDano": 27,
+      "problemas": []
+    },
+    {
+      "id": "campo-de-inconstancia",
+      "titulo": "Campo de Inconstância",
+      "circulo": 6,
+      "perfil": "area",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "mutabilidade",
+      "titulo": "Mutabilidade",
+      "circulo": 6,
+      "perfil": "defesa",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ariete-elemental",
+      "titulo": "Aríete Elemental",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
+      "dano": "6d8 + Mod. Fluxo",
+      "mediaDano": 27,
+      "problemas": []
+    },
+    {
+      "id": "erupcao",
+      "titulo": "Erupção",
+      "circulo": 6,
+      "perfil": "area",
+      "custoMana": 13,
       "dano": "6d6",
       "mediaDano": 21,
       "problemas": []
     },
     {
-      "id": "manto-elemental",
-      "titulo": "Manto Elemental",
-      "circulo": 3,
+      "id": "forma-elemental",
+      "titulo": "Forma Elemental",
+      "circulo": 6,
       "perfil": "defesa",
-      "custoMana": 6,
+      "custoMana": 13,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
-      "id": "asas-elementais",
-      "titulo": "Asas Elementais",
-      "circulo": 3,
-      "perfil": "movimento",
-      "custoMana": 6,
-      "dano": null,
-      "mediaDano": null,
-      "problemas": []
-    },
-    {
-      "id": "contrafluxo-elemental",
-      "titulo": "Contrafluxo Elemental",
-      "circulo": 3,
-      "perfil": "controle",
-      "custoMana": 6,
-      "dano": null,
-      "mediaDano": null,
-      "problemas": []
-    },
-    {
-      "id": "impacto-primordial",
-      "titulo": "Impacto Primordial",
-      "circulo": 4,
+      "id": "corte-de-distancia",
+      "titulo": "Corte de Distância",
+      "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 13,
+      "dano": "6d8 + Mod. Fluxo",
+      "mediaDano": 27,
+      "problemas": []
+    },
+    {
+      "id": "labirinto-dobrado",
+      "titulo": "Labirinto Dobrado",
+      "circulo": 6,
+      "perfil": "area",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "refugio-de-bolso",
+      "titulo": "Refúgio de Bolso",
+      "circulo": 6,
+      "perfil": "controle",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "seculos-em-um-golpe",
+      "titulo": "Séculos em Um Golpe",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
+      "dano": "6d8 + Mod. Fluxo",
+      "mediaDano": 27,
+      "problemas": []
+    },
+    {
+      "id": "zona-acelerada",
+      "titulo": "Zona Acelerada",
+      "circulo": 6,
+      "perfil": "area",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "eco-de-batalha",
+      "titulo": "Eco de Batalha",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "fome-do-abismo",
+      "titulo": "Fome do Abismo",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
+      "dano": "6d8 + Mod. Fluxo",
+      "mediaDano": 27,
+      "problemas": []
+    },
+    {
+      "id": "silencio-absoluto",
+      "titulo": "Silêncio Absoluto",
+      "circulo": 6,
+      "perfil": "area",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "apagar-do-mapa",
+      "titulo": "Apagar do Mapa",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sentenca-do-limiar",
+      "titulo": "Sentença do Limiar",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
+      "dano": "6d8 + Mod. Fluxo",
+      "mediaDano": 27,
+      "problemas": []
+    },
+    {
+      "id": "encerramento-maior",
+      "titulo": "Encerramento Maior",
+      "circulo": 6,
+      "perfil": "area",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "separar-vinculos",
+      "titulo": "Separar Vínculos",
+      "circulo": 6,
+      "perfil": "area",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "feixe-perfurante",
+      "titulo": "Feixe Perfurante",
+      "circulo": 6,
+      "perfil": "alvo",
+      "custoMana": 13,
+      "dano": "6d8 + Mod. Fluxo",
+      "mediaDano": 27,
+      "problemas": []
+    },
+    {
+      "id": "contramedida-total",
+      "titulo": "Contramedida Total",
+      "circulo": 6,
+      "perfil": "area",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "reproducao-limitada",
+      "titulo": "Reprodução Limitada",
+      "circulo": 6,
+      "perfil": "controle",
+      "custoMana": 13,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "floresta-insurgente",
+      "titulo": "Floresta Insurgente",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": "7d6",
+      "mediaDano": 24.5,
+      "problemas": []
+    },
+    {
+      "id": "origem-emprestada",
+      "titulo": "Origem Emprestada",
+      "circulo": 7,
+      "perfil": "alvo",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "reinicio-do-corpo",
+      "titulo": "Reinício do Corpo",
+      "circulo": 7,
+      "perfil": "alvo",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "corte-ontologico",
+      "titulo": "Corte Ontológico",
+      "circulo": 7,
+      "perfil": "alvo",
+      "custoMana": 16,
+      "dano": "7d8 + Mod. Fluxo",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "selo-da-essencia",
+      "titulo": "Selo da Essência",
+      "circulo": 7,
+      "perfil": "alvo",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "verdade-compartilhada",
+      "titulo": "Verdade Compartilhada",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sentenca-dissonante",
+      "titulo": "Sentença Dissonante",
+      "circulo": 7,
+      "perfil": "alvo",
+      "custoMana": 16,
+      "dano": "7d8",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "rede-de-guerra",
+      "titulo": "Rede de Guerra",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "mediacao-imposta",
+      "titulo": "Mediação Imposta",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "chuva-de-esporos",
+      "titulo": "Chuva de Esporos",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": "7d6",
+      "mediaDano": 24.5,
+      "problemas": []
+    },
+    {
+      "id": "reescrever-o-corpo",
+      "titulo": "Reescrever o Corpo",
+      "circulo": 7,
+      "perfil": "alvo",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "coracao-incansavel",
+      "titulo": "Coração Incansável",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "tempestade-vortice",
+      "titulo": "Tempestade Vórtice",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": "7d6",
+      "mediaDano": 24.5,
+      "problemas": []
+    },
+    {
+      "id": "reescrita-instavel",
+      "titulo": "Reescrita Instável",
+      "circulo": 7,
+      "perfil": "alvo",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sorte-roubada",
+      "titulo": "Sorte Roubada",
+      "circulo": 7,
+      "perfil": "alvo",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "cataclismo-menor",
+      "titulo": "Cataclismo Menor",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": "7d6",
+      "mediaDano": 24.5,
+      "problemas": []
+    },
+    {
+      "id": "controle-de-massa",
+      "titulo": "Controle de Massa",
+      "circulo": 7,
+      "perfil": "controle",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "fortaleza-instantanea",
+      "titulo": "Fortaleza Instantânea",
+      "circulo": 7,
+      "perfil": "controle",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "implosao-dimensional",
+      "titulo": "Implosão Dimensional",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": "7d6",
+      "mediaDano": 24.5,
+      "problemas": []
+    },
+    {
+      "id": "portal-maior",
+      "titulo": "Portal Maior",
+      "circulo": 7,
+      "perfil": "movimento",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "passo-constante",
+      "titulo": "Passo Constante",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sentenca-do-relogio",
+      "titulo": "Sentença do Relógio",
+      "circulo": 7,
+      "perfil": "alvo",
+      "custoMana": 16,
+      "dano": "7d8 + Mod. Fluxo",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "dominio-do-ritmo",
+      "titulo": "Domínio do Ritmo",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "antecipacao-tatica",
+      "titulo": "Antecipação Tática",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sentenca-nula",
+      "titulo": "Sentença Nula",
+      "circulo": 7,
+      "perfil": "alvo",
+      "custoMana": 16,
+      "dano": "7d8 + Mod. Fluxo",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "zona-de-consumo",
+      "titulo": "Zona de Consumo",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "escudo-do-vazio",
+      "titulo": "Escudo do Vazio",
+      "circulo": 7,
+      "perfil": "defesa",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "colheita",
+      "titulo": "Colheita",
+      "circulo": 7,
+      "perfil": "alvo",
+      "custoMana": 16,
+      "dano": "7d8 + Mod. Fluxo",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "zona-de-deterioracao",
+      "titulo": "Zona de Deterioração",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": "7d6",
+      "mediaDano": 24.5,
+      "problemas": []
+    },
+    {
+      "id": "limiar-guardiao",
+      "titulo": "Limiar Guardião",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "salva-de-precisao",
+      "titulo": "Salva de Precisão",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": "7d6",
+      "mediaDano": 24.5,
+      "problemas": []
+    },
+    {
+      "id": "dominio-de-sistemas",
+      "titulo": "Domínio de Sistemas",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "blindagem-adaptativa",
+      "titulo": "Blindagem Adaptativa",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 16,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "verbo-inaugural",
+      "titulo": "Verbo Inaugural",
+      "circulo": 8,
+      "perfil": "alvo",
+      "custoMana": 20,
+      "dano": "8d8 + Mod. Fluxo",
+      "mediaDano": 36,
+      "problemas": []
+    },
+    {
+      "id": "ecossistema-convocado",
+      "titulo": "Ecossistema Convocado",
+      "circulo": 8,
+      "perfil": "area",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ressurgir",
+      "titulo": "Ressurgir",
+      "circulo": 8,
+      "perfil": "alvo",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "julgamento-absoluto",
+      "titulo": "Julgamento Absoluto",
+      "circulo": 8,
+      "perfil": "alvo",
+      "custoMana": 20,
+      "dano": "8d8 + Mod. Fluxo",
+      "mediaDano": 36,
+      "problemas": []
+    },
+    {
+      "id": "dissipacao-veridica",
+      "titulo": "Dissipação Verídica",
+      "circulo": 8,
+      "perfil": "area",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ancorar-o-real",
+      "titulo": "Ancorar o Real",
+      "circulo": 8,
+      "perfil": "area",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ruina-de-sinal",
+      "titulo": "Ruína de Sinal",
+      "circulo": 8,
+      "perfil": "alvo",
+      "custoMana": 20,
       "dano": "8d8",
       "mediaDano": 36,
       "problemas": []
     },
     {
-      "id": "cataclismo-elemental",
-      "titulo": "Cataclismo Elemental",
-      "circulo": 4,
+      "id": "malha-de-consciencias",
+      "titulo": "Malha de Consciências",
+      "circulo": 8,
       "perfil": "area",
-      "custoMana": 8,
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "convocacao-de-vozes",
+      "titulo": "Convocação de Vozes",
+      "circulo": 8,
+      "perfil": "controle",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "praga-devoradora",
+      "titulo": "Praga Devoradora",
+      "circulo": 8,
+      "perfil": "alvo",
+      "custoMana": 20,
+      "dano": "8d8 + Mod. Fluxo",
+      "mediaDano": 36,
+      "problemas": []
+    },
+    {
+      "id": "grande-crescimento",
+      "titulo": "Grande Crescimento",
+      "circulo": 8,
+      "perfil": "area",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "imunidade-vital",
+      "titulo": "Imunidade Vital",
+      "circulo": 8,
+      "perfil": "area",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "detonacao-improvavel",
+      "titulo": "Detonação Improvável",
+      "circulo": 8,
+      "perfil": "alvo",
+      "custoMana": 20,
+      "dano": "8d8 + Mod. Fluxo",
+      "mediaDano": 36,
+      "problemas": []
+    },
+    {
+      "id": "lei-suspensa",
+      "titulo": "Lei Suspensa",
+      "circulo": 8,
+      "perfil": "area",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "corpo-inconstante",
+      "titulo": "Corpo Inconstante",
+      "circulo": 8,
+      "perfil": "defesa",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "julgamento-dos-elementos",
+      "titulo": "Julgamento dos Elementos",
+      "circulo": 8,
+      "perfil": "alvo",
+      "custoMana": 20,
+      "dano": "8d8 + Mod. Fluxo",
+      "mediaDano": 36,
+      "problemas": []
+    },
+    {
+      "id": "tempestade-elemental",
+      "titulo": "Tempestade Elemental",
+      "circulo": 8,
+      "perfil": "area",
+      "custoMana": 20,
       "dano": "8d6",
       "mediaDano": 28,
       "problemas": []
     },
     {
-      "id": "fortaleza-elemental",
-      "titulo": "Fortaleza Elemental",
-      "circulo": 4,
+      "id": "armadura-absoluta",
+      "titulo": "Armadura Absoluta",
+      "circulo": 8,
       "perfil": "defesa",
-      "custoMana": 8,
+      "custoMana": 20,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
-      "id": "avatar-elemental-menor",
-      "titulo": "Avatar Elemental Menor",
-      "circulo": 4,
-      "perfil": "defesa",
-      "custoMana": 8,
-      "dano": null,
-      "mediaDano": null,
-      "problemas": []
-    },
-    {
-      "id": "estase-elemental",
-      "titulo": "Estase Elemental",
-      "circulo": 4,
-      "perfil": "controle",
-      "custoMana": 8,
-      "dano": null,
-      "mediaDano": null,
-      "problemas": []
-    },
-    {
-      "id": "extincao-elemental",
-      "titulo": "Extinção Elemental",
-      "circulo": 5,
+      "id": "sentenca-do-vao",
+      "titulo": "Sentença do Vão",
+      "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 10,
-      "dano": "10d8",
-      "mediaDano": 45,
+      "custoMana": 20,
+      "dano": "8d8 + Mod. Fluxo",
+      "mediaDano": 36,
       "problemas": []
     },
     {
-      "id": "horizonte-devastado",
-      "titulo": "Horizonte Devastado",
-      "circulo": 5,
+      "id": "fronteira-selada",
+      "titulo": "Fronteira Selada",
+      "circulo": 8,
       "perfil": "area",
-      "custoMana": 10,
-      "dano": "10d6",
-      "mediaDano": 35,
-      "problemas": []
-    },
-    {
-      "id": "cidadela-elemental",
-      "titulo": "Cidadela Elemental",
-      "circulo": 5,
-      "perfil": "defesa",
-      "custoMana": 10,
+      "custoMana": 20,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
-      "id": "ascensao-primordial",
-      "titulo": "Ascensão Primordial",
-      "circulo": 5,
-      "perfil": "defesa",
-      "custoMana": 10,
+      "id": "dobra-de-exercito",
+      "titulo": "Dobra de Exército",
+      "circulo": 8,
+      "perfil": "movimento",
+      "custoMana": 20,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
-      "id": "dominio-elemental-absoluto",
-      "titulo": "Domínio Elemental Absoluto",
-      "circulo": 5,
+      "id": "colapso-temporal",
+      "titulo": "Colapso Temporal",
+      "circulo": 8,
+      "perfil": "alvo",
+      "custoMana": 20,
+      "dano": "8d8 + Mod. Fluxo",
+      "mediaDano": 36,
+      "problemas": []
+    },
+    {
+      "id": "estase-de-campo",
+      "titulo": "Estase de Campo",
+      "circulo": 8,
+      "perfil": "area",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "tempo-emprestado",
+      "titulo": "Tempo Emprestado",
+      "circulo": 8,
       "perfil": "controle",
-      "custoMana": 10,
+      "custoMana": 20,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
-      "id": "ritual-do-limiar-seguro",
-      "titulo": "Ritual do Limiar Seguro",
-      "circulo": "ritual",
-      "perfil": "ritual",
-      "custoMana": 8,
+      "id": "aniquilacao-parcial",
+      "titulo": "Aniquilação Parcial",
+      "circulo": 8,
+      "perfil": "alvo",
+      "custoMana": 20,
+      "dano": "8d8 + Mod. Fluxo",
+      "mediaDano": 36,
+      "problemas": []
+    },
+    {
+      "id": "apagar-efeito",
+      "titulo": "Apagar Efeito",
+      "circulo": 8,
+      "perfil": "controle",
+      "custoMana": 20,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
-      "id": "ritual-da-leitura-de-residuos",
-      "titulo": "Ritual da Leitura de Resíduos",
-      "circulo": "ritual",
-      "perfil": "ritual",
-      "custoMana": 8,
+      "id": "manto-de-nao-ser",
+      "titulo": "Manto de Não-Ser",
+      "circulo": 8,
+      "perfil": "area",
+      "custoMana": 20,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
-      "id": "ritual-da-passagem-preparada",
-      "titulo": "Ritual da Passagem Preparada",
-      "circulo": "ritual",
-      "perfil": "ritual",
-      "custoMana": 12,
+      "id": "ponto-de-nao-retorno",
+      "titulo": "Ponto de Não Retorno",
+      "circulo": 8,
+      "perfil": "alvo",
+      "custoMana": 20,
+      "dano": "8d8 + Mod. Fluxo",
+      "mediaDano": 36,
+      "problemas": []
+    },
+    {
+      "id": "fim-do-encantamento",
+      "titulo": "Fim do Encantamento",
+      "circulo": 8,
+      "perfil": "area",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "conduzir-ao-termino",
+      "titulo": "Conduzir ao Término",
+      "circulo": 8,
+      "perfil": "alvo",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "aniquilador-de-padroes",
+      "titulo": "Aniquilador de Padrões",
+      "circulo": 8,
+      "perfil": "alvo",
+      "custoMana": 20,
+      "dano": "8d8 + Mod. Fluxo",
+      "mediaDano": 36,
+      "problemas": []
+    },
+    {
+      "id": "jaula-de-interferencia",
+      "titulo": "Jaula de Interferência",
+      "circulo": 8,
+      "perfil": "area",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "fabrica-de-campo",
+      "titulo": "Fábrica de Campo",
+      "circulo": 8,
+      "perfil": "controle",
+      "custoMana": 20,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "primavera-devastadora",
+      "titulo": "Primavera Devastadora",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": "9d6",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "linhagem-nascente",
+      "titulo": "Linhagem Nascente",
+      "circulo": 9,
+      "perfil": "controle",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "aurora-da-especie",
+      "titulo": "Aurora da Espécie",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "nome-verdadeiro",
+      "titulo": "Nome Verdadeiro",
+      "circulo": 9,
+      "perfil": "alvo",
+      "custoMana": 25,
+      "dano": "9d8 + Mod. Fluxo",
+      "mediaDano": 40.5,
+      "problemas": []
+    },
+    {
+      "id": "revelacao-do-mundo",
+      "titulo": "Revelação do Mundo",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "custodia-inviolavel",
+      "titulo": "Custódia Inviolável",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "tempestade-de-vozes",
+      "titulo": "Tempestade de Vozes",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": "9d6",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "decreto-registrado",
+      "titulo": "Decreto Registrado",
+      "circulo": 9,
+      "perfil": "controle",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "onipresenca-de-sentidos",
+      "titulo": "Onipresença de Sentidos",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "pandemia",
+      "titulo": "Pandemia",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": "9d6",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "refazer-a-especie",
+      "titulo": "Refazer a Espécie",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sopro-de-anima",
+      "titulo": "Sopro de Anima",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ciclone-dos-possiveis",
+      "titulo": "Ciclone dos Possíveis",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": "9d6",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "transmutacao-maior",
+      "titulo": "Transmutação Maior",
+      "circulo": 9,
+      "perfil": "controle",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "reviravolta",
+      "titulo": "Reviravolta",
+      "circulo": 9,
+      "perfil": "controle",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "furia-primordial",
+      "titulo": "Fúria Primordial",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": "9d6",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "dominio-dos-sete",
+      "titulo": "Domínio dos Sete",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "muralha-do-baluarte",
+      "titulo": "Muralha do Baluarte",
+      "circulo": 9,
+      "perfil": "controle",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ruptura-espacial",
+      "titulo": "Ruptura Espacial",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": "9d6",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "dominio-da-matriz",
+      "titulo": "Domínio da Matriz",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "santuario-fora-do-mundo",
+      "titulo": "Santuário Fora do Mundo",
+      "circulo": 9,
+      "perfil": "controle",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "erosao-de-eon",
+      "titulo": "Erosão de Éon",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": "9d6",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "ancoragem-do-instante",
+      "titulo": "Ancoragem do Instante",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "restaurar-o-estado",
+      "titulo": "Restaurar o Estado",
+      "circulo": 9,
+      "perfil": "alvo",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "abismo-aberto",
+      "titulo": "Abismo Aberto",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": "9d6",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "silenciar-fluxo",
+      "titulo": "Silenciar Fluxo",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ausencia-regional",
+      "titulo": "Ausência Regional",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ceifa",
+      "titulo": "Ceifa",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": "9d6",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "termino-regional",
+      "titulo": "Término Regional",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "limiar-selado",
+      "titulo": "Limiar Selado",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "tempestade-de-ions",
+      "titulo": "Tempestade de Íons",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": "9d6",
+      "mediaDano": 31.5,
+      "problemas": []
+    },
+    {
+      "id": "interceptacao-regional",
+      "titulo": "Interceptação Regional",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "nucleo-de-comando",
+      "titulo": "Núcleo de Comando",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "detonacao-seminal",
+      "titulo": "Detonação Seminal",
+      "circulo": 10,
+      "perfil": "alvo",
+      "custoMana": 30,
+      "dano": "10d10 + Mod. Fluxo",
+      "mediaDano": 55,
+      "problemas": []
+    },
+    {
+      "id": "genese",
+      "titulo": "Gênese",
+      "circulo": 10,
+      "perfil": "controle",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "recomeco-absoluto",
+      "titulo": "Recomeço Absoluto",
+      "circulo": 10,
+      "perfil": "alvo",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sentenca-ontologica",
+      "titulo": "Sentença Ontológica",
+      "circulo": 10,
+      "perfil": "alvo",
+      "custoMana": 30,
+      "dano": "10d10 + Mod. Fluxo",
+      "mediaDano": 55,
+      "problemas": []
+    },
+    {
+      "id": "aletheia",
+      "titulo": "Alétheia",
+      "circulo": 10,
+      "perfil": "controle",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ancora-do-ser",
+      "titulo": "Âncora do Ser",
+      "circulo": 10,
+      "perfil": "controle",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "dissonancia-final",
+      "titulo": "Dissonância Final",
+      "circulo": 10,
+      "perfil": "alvo",
+      "custoMana": 30,
+      "dano": "10d10",
+      "mediaDano": 55,
+      "problemas": []
+    },
+    {
+      "id": "concilio-do-mundo",
+      "titulo": "Concílio do Mundo",
+      "circulo": 10,
+      "perfil": "controle",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "pacto-inquebrantavel",
+      "titulo": "Pacto Inquebrantável",
+      "circulo": 10,
+      "perfil": "controle",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "colapso-biologico",
+      "titulo": "Colapso Biológico",
+      "circulo": 10,
+      "perfil": "alvo",
+      "custoMana": 30,
+      "dano": "10d10 + Mod. Fluxo",
+      "mediaDano": 55,
+      "problemas": []
+    },
+    {
+      "id": "eden",
+      "titulo": "Éden",
+      "circulo": 10,
+      "perfil": "area",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "ciclo-perfeito",
+      "titulo": "Ciclo Perfeito",
+      "circulo": 10,
+      "perfil": "alvo",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "entropia-vortice",
+      "titulo": "Entropia Vórtice",
+      "circulo": 10,
+      "perfil": "alvo",
+      "custoMana": 30,
+      "dano": "10d10 + Mod. Fluxo",
+      "mediaDano": 55,
+      "problemas": []
+    },
+    {
+      "id": "mundo-instavel",
+      "titulo": "Mundo Instável",
+      "circulo": 10,
+      "perfil": "area",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "improbabilidade-absoluta",
+      "titulo": "Improbabilidade Absoluta",
+      "circulo": 10,
+      "perfil": "controle",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "impacto-colossal",
+      "titulo": "Impacto Colossal",
+      "circulo": 10,
+      "perfil": "alvo",
+      "custoMana": 30,
+      "dano": "10d10 + Mod. Fluxo",
+      "mediaDano": 55,
+      "problemas": []
+    },
+    {
+      "id": "reformar-o-terreno",
+      "titulo": "Reformar o Terreno",
+      "circulo": 10,
+      "perfil": "controle",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "egide-de-moros",
+      "titulo": "Égide de Moros",
+      "circulo": 10,
+      "perfil": "area",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "fenda-absoluta",
+      "titulo": "Fenda Absoluta",
+      "circulo": 10,
+      "perfil": "alvo",
+      "custoMana": 30,
+      "dano": "10d10 + Mod. Fluxo",
+      "mediaDano": 55,
+      "problemas": []
+    },
+    {
+      "id": "reescrever-distancias",
+      "titulo": "Reescrever Distâncias",
+      "circulo": 10,
+      "perfil": "area",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "portal-permanente",
+      "titulo": "Portal Permanente",
+      "circulo": 10,
+      "perfil": "movimento",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sentenca-dos-eons",
+      "titulo": "Sentença dos Éons",
+      "circulo": 10,
+      "perfil": "alvo",
+      "custoMana": 30,
+      "dano": "10d10 + Mod. Fluxo",
+      "mediaDano": 55,
+      "problemas": []
+    },
+    {
+      "id": "parada-do-mundo",
+      "titulo": "Parada do Mundo",
+      "circulo": 10,
+      "perfil": "area",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "conservacao-absoluta",
+      "titulo": "Conservação Absoluta",
+      "circulo": 10,
+      "perfil": "controle",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "toque-do-abismo",
+      "titulo": "Toque do Abismo",
+      "circulo": 10,
+      "perfil": "alvo",
+      "custoMana": 30,
+      "dano": "10d10 + Mod. Fluxo",
+      "mediaDano": 55,
+      "problemas": []
+    },
+    {
+      "id": "apagar-do-mundo",
+      "titulo": "Apagar do Mundo",
+      "circulo": 10,
+      "perfil": "controle",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "nada-absoluto",
+      "titulo": "Nada Absoluto",
+      "circulo": 10,
+      "perfil": "area",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sentenca-final",
+      "titulo": "Sentença Final",
+      "circulo": 10,
+      "perfil": "alvo",
+      "custoMana": 30,
+      "dano": "10d10 + Mod. Fluxo",
+      "mediaDano": 55,
+      "problemas": []
+    },
+    {
+      "id": "fim-de-todos-os-ciclos",
+      "titulo": "Fim de Todos os Ciclos",
+      "circulo": 10,
+      "perfil": "area",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "encerramento",
+      "titulo": "Encerramento",
+      "circulo": 10,
+      "perfil": "controle",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sentenca-do-axis",
+      "titulo": "Sentença do A.X.I.S",
+      "circulo": 10,
+      "perfil": "alvo",
+      "custoMana": 30,
+      "dano": "10d10 + Mod. Fluxo",
+      "mediaDano": 55,
+      "problemas": []
+    },
+    {
+      "id": "reprogramar-regiao",
+      "titulo": "Reprogramar Região",
+      "circulo": 10,
+      "perfil": "area",
+      "custoMana": 30,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "reproducao-total",
+      "titulo": "Reprodução Total",
+      "circulo": 10,
+      "perfil": "controle",
+      "custoMana": 30,
       "dano": null,
       "mediaDano": null,
       "problemas": []

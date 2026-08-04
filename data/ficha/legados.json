@@ -1,9 +1,8 @@
 {
-  "descricao": "Sistema de bônus adicionais escolhidos ao longo da progressão do personagem. Nenhuma raça recebe um Legado adicional automaticamente na versão técnica atual.",
+  "descricao": "Sistema de bônus permanentes escolhidos ao longo da progressão. Humanos e raças especiais recebem um Legado adicional por sua raça.",
   "onde_aparece": "A lista e as regras de balanceamento aparecem em Regras. A escolha do personagem também será mostrada na Ficha, na parte de Poderes.",
   "total_pdfs": 7,
   "nota": "Os 36 Legados apresentados nos PDFs 2 a 7 foram conferidos e catalogados. O primeiro PDF é a página introdutória da seção e não contém um conjunto adicional de Legados.",
-
   "legados": [
     {
       "id": "to-ficando-bom",
@@ -17,7 +16,10 @@
       "titulo": "Esquiva",
       "descricao": "Você aprimora significativamente sua agilidade, recebendo +2 em Defesa e Reflexos.",
       "pre_requisitos": [
-        { "atributo": "destreza", "valor_minimo": 14 }
+        {
+          "atributo": "destreza",
+          "valor_minimo": 14
+        }
       ],
       "fonte": "Legado 2 (lido)"
     },
@@ -33,7 +35,10 @@
       "titulo": "Mãos Leves",
       "descricao": "Você ganha a capacidade de sacar qualquer item como ação livre.",
       "pre_requisitos": [
-        { "atributo": "destreza", "valor_minimo": 16 }
+        {
+          "atributo": "destreza",
+          "valor_minimo": 16
+        }
       ],
       "fonte": "Legado 2 (lido)"
     },
@@ -42,11 +47,21 @@
       "titulo": "Artista Marcial",
       "descricao": "Você recebe proficiência em armas ou armaduras marciais; caso escolha uma segunda vez, recebe a outra que não foi escolhida.",
       "pre_requisitos": [
-        { "ou": [
-          { "pericia": "luta",    "nivel": "Mestre" },
-          { "pericia": "pontaria","nivel": "Mestre" }
-        ]},
-        { "nivel_personagem": 7 }
+        {
+          "ou": [
+            {
+              "pericia": "luta",
+              "nivel": "Mestre"
+            },
+            {
+              "pericia": "pontaria",
+              "nivel": "Mestre"
+            }
+          ]
+        },
+        {
+          "nivel_personagem": 7
+        }
       ],
       "fonte": "Legado 2 (lido)"
     },
@@ -57,7 +72,6 @@
       "pre_requisitos": [],
       "fonte": "Legado 2 (lido)"
     },
-
     {
       "id": "nao-e-tao-pesado",
       "titulo": "Não é Tão Pesado",
@@ -100,7 +114,6 @@
       "pre_requisitos": [],
       "fonte": "Legado 3 (lido)"
     },
-
     {
       "id": "sem-chance",
       "titulo": "Sem Chance",
@@ -113,7 +126,10 @@
       "titulo": "Rapidinho",
       "descricao": "Aumenta seu deslocamento em 2m. Escolhendo uma segunda vez, aumenta em 6m adicionais.",
       "pre_requisitos": [
-        { "atributo": "destreza", "valor_minimo": 16 }
+        {
+          "atributo": "destreza",
+          "valor_minimo": 16
+        }
       ],
       "fonte": "Legado 4 (lido)"
     },
@@ -145,13 +161,14 @@
       "pre_requisitos": [],
       "fonte": "Legado 4 (lido)"
     },
-
     {
       "id": "ainda-nao",
       "titulo": "Ainda Não",
       "descricao": "Você tem vantagem em testes de Constituição caso entre em \"morrendo\" ou tome dano massivo.",
       "pre_requisitos": [
-        { "nivel_personagem": 5 }
+        {
+          "nivel_personagem": 5
+        }
       ],
       "fonte": "Legado 5 (lido)"
     },
@@ -160,7 +177,9 @@
       "titulo": "Desonroso",
       "descricao": "Se estiver enfrentando um oponente desarmado, tem vantagem em testes de ataque e recebe +4 para desviar de qualquer ataque.",
       "pre_requisitos": [
-        { "nivel_personagem": 6 }
+        {
+          "nivel_personagem": 6
+        }
       ],
       "fonte": "Legado 5 (lido)"
     },
@@ -169,7 +188,9 @@
       "titulo": "Código de Ética",
       "descricao": "Você se torna incapaz de atacar seres desarmados. Porém, se o oponente estiver armado, seus ataques causam dano adicional igual ao seu nível e você sempre age antes dele na iniciativa.",
       "pre_requisitos": [
-        { "nivel_personagem": 6 }
+        {
+          "nivel_personagem": 6
+        }
       ],
       "fonte": "Legado 5 (lido)"
     },
@@ -178,7 +199,9 @@
       "titulo": "Monstro",
       "descricao": "Você passa a dobrar seu modificador de Força em ataques corpo a corpo.",
       "pre_requisitos": [
-        { "nivel_personagem": 10 }
+        {
+          "nivel_personagem": 10
+        }
       ],
       "fonte": "Legado 5 (lido)"
     },
@@ -187,7 +210,9 @@
       "titulo": "Ossos Duros",
       "descricao": "Recebe 5 de redução a danos físicos.",
       "pre_requisitos": [
-        { "nivel_personagem": 6 }
+        {
+          "nivel_personagem": 6
+        }
       ],
       "fonte": "Legado 5 (lido)"
     },
@@ -196,17 +221,20 @@
       "titulo": "Bruto",
       "descricao": "Se não estiver usando armadura, você recebe metade do seu modificador de Força como bônus de Defesa.",
       "pre_requisitos": [
-        { "nivel_personagem": 4 }
+        {
+          "nivel_personagem": 4
+        }
       ],
       "fonte": "Legado 5 (lido)"
     },
-
     {
       "id": "flexivel",
       "titulo": "Flexível",
       "descricao": "Você treina muito sua mobilidade e por conta disso tem +1 ação de reação por turno.",
       "pre_requisitos": [
-        { "nivel_personagem": 10 }
+        {
+          "nivel_personagem": 10
+        }
       ],
       "fonte": "Legado 6 (lido)"
     },
@@ -215,7 +243,9 @@
       "titulo": "Instinto Animal",
       "descricao": "Você recebe +3 na Iniciativa fixa e nunca pode ser surpreendido em combate.",
       "pre_requisitos": [
-        { "nivel_personagem": 12 }
+        {
+          "nivel_personagem": 12
+        }
       ],
       "fonte": "Legado 6 (lido)"
     },
@@ -224,7 +254,9 @@
       "titulo": "Mão Pesada",
       "descricao": "Se acertar um ataque corpo a corpo crítico, o alvo é empurrado 3m para longe e cai no chão.",
       "pre_requisitos": [
-        { "nivel_personagem": 5 }
+        {
+          "nivel_personagem": 5
+        }
       ],
       "fonte": "Legado 6 (lido)"
     },
@@ -233,7 +265,9 @@
       "titulo": "Quebra Dente",
       "descricao": "Ataques corpo a corpo causam −2 na Defesa do inimigo até o fim do combate (acumulativo até −6).",
       "pre_requisitos": [
-        { "nivel_personagem": 7 }
+        {
+          "nivel_personagem": 7
+        }
       ],
       "fonte": "Legado 6 (lido)"
     },
@@ -242,7 +276,9 @@
       "titulo": "Sem Tempo Irmão",
       "descricao": "Você pode realizar uma ação de movimento extra no início do combate, antes de qualquer outro agir.",
       "pre_requisitos": [
-        { "nivel_personagem": 4 }
+        {
+          "nivel_personagem": 4
+        }
       ],
       "fonte": "Legado 6 (lido)"
     },
@@ -251,11 +287,12 @@
       "titulo": "Tô de Pé Ainda",
       "descricao": "Enquanto estiver com menos da metade da vida, você recebe +2 na Defesa e resistência a danos físicos.",
       "pre_requisitos": [
-        { "nivel_personagem": 7 }
+        {
+          "nivel_personagem": 7
+        }
       ],
       "fonte": "Legado 6 (lido)"
     },
-
     {
       "id": "sortudo-pra-cacete",
       "titulo": "Sortudo pra Cacete",
@@ -282,7 +319,9 @@
       "titulo": "Posturado",
       "descricao": "Você não pode ser derrubado ou empurrado enquanto estiver consciente. Caso morra, morre de pé.",
       "pre_requisitos": [
-        { "nivel_personagem": 8 }
+        {
+          "nivel_personagem": 8
+        }
       ],
       "fonte": "Legado 7 (lido)"
     },

@@ -12,7 +12,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Combatente de linha de frente que converte risco em pressão, protege um batalhão e domina equipamentos de guerra.",
+    "descricao": "Fica na frente porque alguém tem que ficar. Aguenta pancada, puxa o inimigo pra si e comanda um batalhão que luta melhor perto dele.",
     "progressao": [
       {
         "nivel": 1,
@@ -376,7 +376,7 @@
     "mana": 3,
     "recursos_provisorios": false,
     "progressao_publicada": true,
-    "descricao": "Especialista em veículos, pilotagem e tecnologia embarcada. Sua progressão combina melhorias no veículo, poderes de piloto, graus de perícia e convites para eventos.",
+    "descricao": "Não vai a pé. Luta de dentro de um veículo que ele mesmo melhora peça por peça, e o veículo cresce junto com o personagem.",
     "progressao": [
       {
         "nivel": 1,
@@ -745,7 +745,7 @@
     "mana": 3,
     "recursos_provisorios": false,
     "progressao_publicada": true,
-    "descricao": "Combatente furtivo treinado por uma organização ninja. Sua progressão combina hierarquia, armas ninja, técnicas especiais, graus de perícia e missões do clã.",
+    "descricao": "Foi treinado por um clã e ainda deve satisfação a ele. Sobe na hierarquia, ganha armas e técnicas conforme o clã vai confiando, e rende muito mais quando ninguém sabe que ele está ali.",
     "progressao": [
       {
         "nivel": 1,
@@ -1138,7 +1138,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Especialista social que transforma fama, presença e performance em apoio, distração e acesso narrativo.",
+    "descricao": "Resolve com plateia o que os outros resolvem no braço. Fama abre porta, presença segura atenção, e uma boa apresentação costuma valer mais que uma ameaça.",
     "progressao": [
       {
         "nivel": 1,
@@ -1510,7 +1510,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Duelista técnico que vincula sua progressão a uma espada, alterna talentos e encadeia golpes precisos.",
+    "descricao": "Uma espada, a vida inteira. Troca de postura no meio da luta e encadeia golpes que só fazem sentido em sequência: errar um estraga os outros.",
     "progressao": [
       {
         "nivel": 1,
@@ -1888,7 +1888,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Combatente desarmado que controla ritmo, acumula marcas e transforma resistência física em pressão.",
+    "descricao": "Sem arma, sem armadura, sem desculpa. Marca o inimigo golpe a golpe e ganha a briga no fôlego, não no primeiro impacto.",
     "progressao": [
       {
         "nivel": 1,
@@ -2263,7 +2263,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Especialista em alcance, posicionamento e munição; recompensa preparação sem permitir execuções automáticas.",
+    "descricao": "Trabalha longe e chega preparado. Posição, munição e paciência valem mais que reflexo, e ele sempre sabe quantos tiros ainda tem.",
     "progressao": [
       {
         "nivel": 1,
@@ -2629,7 +2629,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Suporte de campo que diagnostica, estabiliza e restaura aliados sem substituir risco, descanso ou consequências graves.",
+    "descricao": "Mantém o grupo de pé. Diagnostica, estabiliza quem caiu e devolve gente pra luta. O que ele não faz é desfazer o que já aconteceu.",
     "progressao": [
       {
         "nivel": 1,
@@ -2995,7 +2995,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Defensor que cria vínculos, força escolhas táticas e absorve dano com limites por reação e por cena.",
+    "descricao": "Escolhe alguém pra proteger e leva a sério. Cria vínculo, obriga o inimigo a decidir em quem bater e absorve o que vier, até onde a reação e a cena aguentarem.",
     "progressao": [
       {
         "nivel": 1,
@@ -3373,7 +3373,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Rastreador preparado que estuda categorias de presas, usa armadilhas e cresce pela informação, não por bônus universais.",
+    "descricao": "Estuda a presa antes de encostar nela. Cada tipo de criatura pede um método, e o que ele aprende sobre uma vale pra todas daquela família.",
     "progressao": [
       {
         "nivel": 1,
@@ -3630,7 +3630,7 @@
       {
         "id": "agencia-dos-cacadores",
         "titulo": "Agência dos Caçadores",
-        "descricao": "Escolha um benefício por estágio: contratos exclusivos, +10% no valor narrativo de troféus, apoio logístico uma vez por sessão ou acesso a arquivos de criaturas. Benefícios econômicos não se acumulam.",
+        "descricao": "Escolha um benefício por estágio: contratos exclusivos, +10% no valor narrativo de troféus, apoio logístico uma vez por sessão, acesso a arquivos de criaturas ou acesso a bases seguras da Guilda espalhadas pelas cidades, para descanso e reabastecimento sem custo. Benefícios econômicos não se acumulam.",
         "niveis": [
           3,
           8,
@@ -3742,7 +3742,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Inventor que prepara criações temporárias, melhora equipamento e assume risco calculado ao sobrecarregar máquinas.",
+    "descricao": "Chega com as coisas montadas. Prepara invenções que duram pouco, melhora o equipamento do grupo e força a máquina além do limite quando a hora pede, sabendo o que isso vai custar.",
     "progressao": [
       {
         "nivel": 1,
@@ -4111,7 +4111,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Preparador versátil que transforma ingredientes em elixires limitados por descanso, impedindo estoque e economia infinitos.",
+    "descricao": "Transforma o que encontra pelo caminho em elixir. O estoque zera no descanso, então cada frasco é uma decisão: usa agora ou guarda pro que vem depois.",
     "progressao": [
       {
         "nivel": 1,
@@ -4477,7 +4477,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Negociador de suporte que converte informação, contatos e estoque limitado em vantagem sem fabricar moeda.",
+    "descricao": "Ganha a briga antes dela começar. Contato certo, informação na hora e estoque bem escolhido resolvem mais que dado. E não, ele não fabrica dinheiro.",
     "progressao": [
       {
         "nivel": 1,
@@ -4848,7 +4848,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Classe especial de Baluarte. É fisicamente superior, mas seus picos têm uso limitado e não concedem imortalidade automática.",
+    "descricao": "Classe especial de Baluarte. Corpo acima do que um corpo deveria aguentar. Os picos de poder são curtos e contados, e nenhum deles impede de morrer.",
     "progressao": [
       {
         "nivel": 1,
@@ -5223,7 +5223,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Classe especial do Abismo que comanda marés espectrais, maldições curtas e uma tripulação condenada.",
+    "descricao": "Classe especial do Abismo. Comanda maré espectral e maldição de curta duração, à frente de uma tripulação que já morreu e ainda não aceitou.",
     "progressao": [
       {
         "nivel": 1,
@@ -5583,9 +5583,18 @@
     "titulo": "Cartista Arcano",
     "categoria": "esquecida",
     "disponibilidade": "restrita",
-    "arvore": "chronus",
+    "arvore": null,
     "arvores": [
-      "chronus"
+      "aethel",
+      "ousias",
+      "keryx",
+      "haemus",
+      "ignis",
+      "moros",
+      "aperion",
+      "chronus",
+      "erebus",
+      "mulher-carmesim"
     ],
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
@@ -5597,13 +5606,23 @@
     "versao_balanceamento": "2026-07-28",
     "progressao_magia": {
       "fonte": "Baralho Arcano",
-      "tradicoes": ["Elemental"],
+      "tradicoes": [
+        "Cartomancia de Fluxo"
+      ],
       "marcos": [
-        { "nivel": 10, "circulo": 1, "vagas": 3 },
-        { "nivel": 15, "circulo": 2, "vagas": 4 }
+        {
+          "nivel": 10,
+          "circulo": 1,
+          "vagas": 3
+        },
+        {
+          "nivel": 15,
+          "circulo": 2,
+          "vagas": 4
+        }
       ]
     },
-    "descricao": "Classe especial de Éon que manipula probabilidades com um baralho vivo sem escolher resultados ilimitadamente.",
+    "descricao": "Classe especial, aberta a qualquer Árvore. Conjura por cartas preparadas antes: o baralho decide o que você tem em mãos hoje, e o Fluxo nativo decide o que cada carta faz.",
     "progressao": [
       {
         "nivel": 1,
@@ -5849,11 +5868,11 @@
           },
           {
             "nivel": 10,
-            "descricao": "Escolha três magias elementais de primeiro círculo que podem ser canalizadas pelas cartas."
+            "descricao": "Escolha três magias do Fluxo nativo de primeiro círculo que podem ser canalizadas pelas cartas."
           },
           {
             "nivel": 15,
-            "descricao": "Aprenda uma magia elemental de segundo círculo. Uma vez por combate, use duas cartas de primeiro círculo ou uma de segundo círculo com uma ação completa."
+            "descricao": "Aprenda uma magia do Fluxo nativo de segundo círculo. Uma vez por combate, use duas cartas de primeiro círculo ou uma de segundo círculo com uma ação completa."
           },
           {
             "nivel": 20,
@@ -5978,7 +5997,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Navegador da Matriz que domina rotas, portais e âncoras espaciais para conduzir o grupo por caminhos impossíveis.",
+    "descricao": "Classe especial da Matriz. Conhece rota, portal e âncora: é por causa dele que o grupo chega em lugar onde não existe estrada.",
     "progressao": [
       {
         "nivel": 1,
@@ -6216,7 +6235,7 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Você sempre sabe a direção da última âncora dimensional que marcou e recebe +2 em Sobrevivência para navegar."
+            "descricao": "Você sempre sabe a direção da última âncora dimensional que marcou, sempre sabe onde é o Norte e a hora do dia, e nunca se perde em ambientes naturais ou masmorras que já mapeou. Recebe +2 em Sobrevivência para navegar; ao ler uma planta baixa ou sentir os fluxos de mana do ambiente, o Mestre revela um detalhe oculto do local."
           },
           {
             "nivel": 5,
@@ -6353,7 +6372,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Investigador de Anima especializado em possessões e em caçar seres que atacam o corpo, a alma ou a memória.",
+    "descricao": "Classe especial de Anima. Caça o que ataca por dentro: possessão, coisa que come memória, coisa que veste corpo alheio.",
     "progressao": [
       {
         "nivel": 1,
@@ -6728,7 +6747,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Tecelão do Limiar que transforma histórias, presságios e pequenas verdades narrativas em apoio para o grupo.",
+    "descricao": "Classe especial do Limiar. Transforma história, presságio e verdade pequena em apoio pro grupo. O que ele conta tem uma tendência incômoda a acontecer.",
     "progressao": [
       {
         "nivel": 1,
@@ -7091,9 +7110,18 @@
     "titulo": "Invocador",
     "categoria": "esquecida",
     "disponibilidade": "restrita",
-    "arvore": "aethel",
+    "arvore": null,
     "arvores": [
-      "aethel"
+      "aethel",
+      "ousias",
+      "keryx",
+      "haemus",
+      "ignis",
+      "moros",
+      "aperion",
+      "chronus",
+      "erebus",
+      "mulher-carmesim"
     ],
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
@@ -7103,14 +7131,14 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Condutor de Gênese que cria vínculos com manifestações vivas e alterna entre formas de ataque, cura e proteção.",
+    "descricao": "Classe especial, aberta a qualquer Árvore. Não luta sozinho: chama. O que atende depende inteiramente do Fluxo nativo, e nem sempre é o que ele esperava.",
     "progressao": [
       {
         "nivel": 1,
         "recompensas": [
           {
             "tipo": "habilidade",
-            "titulo": "Pacto de Gênese",
+            "titulo": "Pacto de Fluxo nativo",
             "estagio": 1
           },
           {
@@ -7153,7 +7181,7 @@
         "recompensas": [
           {
             "tipo": "habilidade",
-            "titulo": "Pacto de Gênese",
+            "titulo": "Pacto de Fluxo nativo",
             "estagio": 2
           }
         ]
@@ -7205,7 +7233,7 @@
         "recompensas": [
           {
             "tipo": "habilidade",
-            "titulo": "Pacto de Gênese",
+            "titulo": "Pacto de Fluxo nativo",
             "estagio": 3
           }
         ]
@@ -7257,7 +7285,7 @@
         "recompensas": [
           {
             "tipo": "habilidade",
-            "titulo": "Pacto de Gênese",
+            "titulo": "Pacto de Fluxo nativo",
             "estagio": 4
           }
         ]
@@ -7312,7 +7340,7 @@
         "recompensas": [
           {
             "tipo": "habilidade",
-            "titulo": "Pacto de Gênese",
+            "titulo": "Pacto de Fluxo nativo",
             "estagio": 5
           },
           {
@@ -7330,7 +7358,7 @@
     "habilidades": [
       {
         "id": "pacto-de-genese",
-        "titulo": "Pacto de Gênese",
+        "titulo": "Pacto de Fluxo nativo",
         "niveis": [
           1,
           5,
@@ -7451,7 +7479,7 @@
       },
       {
         "id": "avatar-de-aethel",
-        "titulo": "Avatar de Aethel",
+        "titulo": "Avatar de sua Deidade",
         "custo_mana": 9,
         "descricao": "Uma vez por sessão, por três rodadas, a função da manifestação recebe +2 dados e ela age com sua ação de movimento sem custo de Mana.",
         "pre_requisitos": [
@@ -7480,7 +7508,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-07-28",
-    "descricao": "Classe especial da Matriz, Éon ou Vórtice: sobrevive entre Árvores e dimensões e transforma experiência de viagem em adaptação.",
+    "descricao": "Classe especial da Matriz, de Éon ou de Vórtice. Vive entre Árvores e dimensões, e converte estrada rodada em capacidade de se virar em qualquer lugar.",
     "progressao": [
       {
         "nivel": 1,
@@ -7838,394 +7866,6 @@
     ]
   },
   {
-    "id": "elementarista",
-    "tipo": "classe",
-    "titulo": "Elementarista",
-    "categoria": "esquecida",
-    "disponibilidade": "restrita",
-    "arvore": "ignis",
-    "arvores": [
-      "ignis"
-    ],
-    "patamar": "conquista",
-    "requer_autorizacao_mestre": true,
-    "vida": 3,
-    "mana": 4,
-    "recursos_provisorios": false,
-    "progressao_publicada": true,
-    "origem_conteudo": "material_enviado_revisado",
-    "versao_balanceamento": "2026-07-28",
-    "progressao_magia": {
-      "fonte": "Magias Elementais",
-      "tradicoes": ["Elemental"],
-      "marcos": [
-        { "nivel": 3, "circulo": 1, "vagas": 2 },
-        { "nivel": 8, "circulo": 2, "vagas": 4 },
-        { "nivel": 14, "circulo": 3, "vagas": 6 },
-        { "nivel": 20, "circulo": 4, "vagas": 8 }
-      ]
-    },
-    "descricao": "Conjurador do Vórtice que domina um elemento, descobre derivações e altera o campo de batalha com manifestações naturais.",
-    "progressao": [
-      {
-        "nivel": 1,
-        "recompensas": [
-          {
-            "tipo": "habilidade",
-            "titulo": "Núcleo Elemental",
-            "estagio": 1
-          },
-          {
-            "tipo": "grau_pericia",
-            "titulo": "Grau de perícia",
-            "quantidade": 2
-          }
-        ]
-      },
-      {
-        "nivel": 2,
-        "recompensas": [
-          {
-            "tipo": "poder",
-            "titulo": "Poder de Elementarista"
-          }
-        ]
-      },
-      {
-        "nivel": 3,
-        "recompensas": [
-          {
-            "tipo": "habilidade",
-            "titulo": "Magias Elementais",
-            "estagio": 1
-          }
-        ]
-      },
-      {
-        "nivel": 4,
-        "recompensas": [
-          {
-            "tipo": "evento",
-            "titulo": "Convergência Elemental"
-          }
-        ]
-      },
-      {
-        "nivel": 5,
-        "recompensas": [
-          {
-            "tipo": "habilidade",
-            "titulo": "Núcleo Elemental",
-            "estagio": 2
-          }
-        ]
-      },
-      {
-        "nivel": 6,
-        "recompensas": [
-          {
-            "tipo": "poder",
-            "titulo": "Poder de Elementarista"
-          },
-          {
-            "tipo": "grau_pericia",
-            "titulo": "Grau de perícia",
-            "quantidade": 2
-          }
-        ]
-      },
-      {
-        "nivel": 7,
-        "recompensas": [
-          {
-            "tipo": "evento",
-            "titulo": "Convergência Elemental"
-          }
-        ]
-      },
-      {
-        "nivel": 8,
-        "recompensas": [
-          {
-            "tipo": "habilidade",
-            "titulo": "Magias Elementais",
-            "estagio": 2
-          }
-        ]
-      },
-      {
-        "nivel": 9,
-        "recompensas": [
-          {
-            "tipo": "poder",
-            "titulo": "Poder de Elementarista"
-          }
-        ]
-      },
-      {
-        "nivel": 10,
-        "recompensas": [
-          {
-            "tipo": "habilidade",
-            "titulo": "Núcleo Elemental",
-            "estagio": 3
-          }
-        ]
-      },
-      {
-        "nivel": 11,
-        "recompensas": [
-          {
-            "tipo": "poder",
-            "titulo": "Poder de Elementarista"
-          },
-          {
-            "tipo": "grau_pericia",
-            "titulo": "Grau de perícia",
-            "quantidade": 2
-          }
-        ]
-      },
-      {
-        "nivel": 12,
-        "recompensas": [
-          {
-            "tipo": "evento",
-            "titulo": "Convergência Elemental"
-          }
-        ]
-      },
-      {
-        "nivel": 13,
-        "recompensas": [
-          {
-            "tipo": "poder",
-            "titulo": "Poder de Elementarista"
-          }
-        ]
-      },
-      {
-        "nivel": 14,
-        "recompensas": [
-          {
-            "tipo": "habilidade",
-            "titulo": "Magias Elementais",
-            "estagio": 3
-          }
-        ]
-      },
-      {
-        "nivel": 15,
-        "recompensas": [
-          {
-            "tipo": "habilidade",
-            "titulo": "Núcleo Elemental",
-            "estagio": 4
-          }
-        ]
-      },
-      {
-        "nivel": 16,
-        "recompensas": [
-          {
-            "tipo": "poder",
-            "titulo": "Poder de Elementarista"
-          }
-        ]
-      },
-      {
-        "nivel": 17,
-        "recompensas": [
-          {
-            "tipo": "poder",
-            "titulo": "Poder de Elementarista"
-          },
-          {
-            "tipo": "grau_pericia",
-            "titulo": "Grau de perícia",
-            "quantidade": 2
-          }
-        ]
-      },
-      {
-        "nivel": 18,
-        "recompensas": [
-          {
-            "tipo": "evento",
-            "titulo": "Convergência Elemental"
-          },
-          {
-            "tipo": "habilidade",
-            "titulo": "Evolução"
-          }
-        ]
-      },
-      {
-        "nivel": 19,
-        "recompensas": [
-          {
-            "tipo": "poder",
-            "titulo": "Poder de Elementarista"
-          }
-        ]
-      },
-      {
-        "nivel": 20,
-        "recompensas": [
-          {
-            "tipo": "habilidade",
-            "titulo": "Núcleo Elemental",
-            "estagio": 5
-          },
-          {
-            "tipo": "habilidade",
-            "titulo": "Magias Elementais",
-            "estagio": 4
-          },
-          {
-            "tipo": "habilidade_final",
-            "titulo": "Avatar Elemental"
-          }
-        ]
-      }
-    ],
-    "habilidades": [
-      {
-        "id": "nucleo-elemental",
-        "titulo": "Núcleo Elemental",
-        "niveis": [
-          1,
-          5,
-          10,
-          15,
-          20
-        ],
-        "estagios": [
-          {
-            "nivel": 1,
-            "descricao": "Escolha fogo, água, terra ou ar; conheça duas manifestações básicas e receba Resistência 5 ao elemento."
-          },
-          {
-            "nivel": 5,
-            "descricao": "Seu primeiro dano elemental por turno recebe +1d6 e você aprende uma terceira manifestação."
-          },
-          {
-            "nivel": 10,
-            "descricao": "Escolha derivação coerente, como gelo, raio, metal ou fumaça; ela muda o tipo, não soma dano."
-          },
-          {
-            "nivel": 15,
-            "descricao": "Sua Resistência sobe para 10 e você ignora terreno criado pelo próprio elemento."
-          },
-          {
-            "nivel": 20,
-            "descricao": "Uma vez por sessão, por três rodadas, transforme-se: voo ou escavação igual ao Movimento, Resistência 15 e +1 dado nas manifestações."
-          }
-        ]
-      },
-      {
-        "id": "magias-elementais",
-        "titulo": "Magias Elementais",
-        "descricao": "Aprenda duas manifestações por estágio: projétil 2d8, área 2d6 em 3 m, barreira de 15 Vida, movimento de 9 m ou controle que exige teste. Defina o elemento ao aprender.",
-        "niveis": [
-          3,
-          8,
-          14,
-          20
-        ]
-      },
-      {
-        "id": "evolucao",
-        "titulo": "Evolução",
-        "descricao": "Após descanso, altere uma manifestação para uma derivação aprovada. Derivações raras exigem descoberta narrativa, não uma rolagem aleatória permanente.",
-        "niveis": [
-          18
-        ]
-      }
-    ],
-    "eventos": [
-      {
-        "id": "convergencia-elemental",
-        "titulo": "Convergência Elemental",
-        "descricao": "Uma tempestade, vulcão ou ruptura oferece treino e risco. Sucesso pode liberar derivação, foco ou contato elemental.",
-        "niveis": [
-          4,
-          7,
-          12,
-          18
-        ]
-      }
-    ],
-    "poderes": [
-      {
-        "id": "sobrecarga",
-        "titulo": "Sobrecarga",
-        "custo_mana": 5,
-        "descricao": "Uma manifestação de dano recebe +2 dados; depois você perde 2 Mana adicionais."
-      },
-      {
-        "id": "escudo-elemental",
-        "titulo": "Escudo Elemental",
-        "custo_mana": 4,
-        "descricao": "Use reação para receber Resistência 10 contra um ataque; escolha seu elemento ou derivação."
-      },
-      {
-        "id": "passo-do-elemento",
-        "titulo": "Passo do Elemento",
-        "custo_mana": 4,
-        "descricao": "Mova-se até 9 m por chama, água, terra ou ar sem provocar reações de movimento."
-      },
-      {
-        "id": "forma-fluida",
-        "titulo": "Forma Fluida",
-        "custo_mana": 3,
-        "descricao": "Por uma rodada, passe por abertura mínima e receba vantagem para escapar de agarrão."
-      },
-      {
-        "id": "contragolpe-natural",
-        "titulo": "Contragolpe Natural",
-        "custo_mana": 4,
-        "descricao": "Ao sofrer dano corpo a corpo, use reação para causar 1d8 elemental ao atacante."
-      },
-      {
-        "id": "campo-instavel",
-        "titulo": "Campo Instável",
-        "custo_mana": 6,
-        "descricao": "Crie área de 6 m por três rodadas; ela é terreno difícil e causa 1d6 a inimigos que entram pela primeira vez no turno."
-      },
-      {
-        "id": "absorcao",
-        "titulo": "Absorção",
-        "custo_mana": 5,
-        "descricao": "Uma vez por cena, ao sofrer seu tipo elemental, reduza o dano em 10 e recupere 3 Mana."
-      },
-      {
-        "id": "mistura-elemental",
-        "titulo": "Mistura Elemental",
-        "custo_mana": 0,
-        "descricao": "Passivo. Aprenda uma segunda derivação, mas escolha apenas uma ativa após cada descanso.",
-        "pre_requisitos": [
-          "Nível 8 de Elementarista"
-        ]
-      },
-      {
-        "id": "ruptura",
-        "titulo": "Ruptura",
-        "custo_mana": 7,
-        "descricao": "Linha de 12 m causa 3d10 elemental; Reflexos reduz à metade."
-      },
-      {
-        "id": "olho-da-tempestade",
-        "titulo": "Olho da Tempestade",
-        "custo_mana": 8,
-        "descricao": "Por três rodadas, aliados a 3 m recebem Resistência 5 ao seu elemento e inimigos sofrem −2 Defesa.",
-        "pre_requisitos": [
-          "Nível 10 de Elementarista"
-        ]
-      }
-    ]
-  },
-  {
     "id": "decodificador",
     "tipo": "classe",
     "titulo": "Decodificador",
@@ -8244,7 +7884,7 @@
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-07-28",
     "nome_provisorio": true,
-    "descricao": "Analista de Alétheia que revela padrões, fraquezas, códigos e falsidades antes de convertê-los em vantagem tática.",
+    "descricao": "Classe especial de Alétheia. Lê padrão, código e mentira antes de qualquer um, e guarda o que descobriu até a hora em que aquilo vira vantagem.",
     "progressao": [
       {
         "nivel": 1,
@@ -8620,7 +8260,7 @@
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-07-28",
     "nome_provisorio": true,
-    "descricao": "Especialista de A.X.I.S que escreve protocolos temporários na realidade para proteger, aprimorar e controlar o campo.",
+    "descricao": "Classe especial da A.X.I.S. Escreve protocolo temporário direto na realidade pra proteger, melhorar e controlar o terreno da luta.",
     "progressao": [
       {
         "nivel": 1,
@@ -8973,6 +8613,1557 @@
         "descricao": "Uma vez por sessão, por duas rodadas, receba +4 em testes contra construtos e efeitos tecnológicos e ignore 10 de Resistência deles.",
         "pre_requisitos": [
           "Nível 12 de Codificador"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "canalizador",
+    "tipo": "classe",
+    "titulo": "Canalizador",
+    "categoria": "padrao",
+    "disponibilidade": "geral",
+    "arvore": null,
+    "vida": 3,
+    "mana": 4,
+    "recursos_provisorios": false,
+    "progressao_publicada": true,
+    "origem_conteudo": "proposta_original_balanceada",
+    "versao_balanceamento": "2026-08-01",
+    "progressao_magia": {
+      "fonte": "Canalização Nativa",
+      "tradicoes": [
+        "Canalização"
+      ],
+      "marcos": [
+        {
+          "nivel": 1,
+          "circulo": 2,
+          "vagas": 2
+        },
+        {
+          "nivel": 5,
+          "circulo": 4,
+          "vagas": 4
+        },
+        {
+          "nivel": 10,
+          "circulo": 6,
+          "vagas": 6
+        },
+        {
+          "nivel": 15,
+          "circulo": 8,
+          "vagas": 8
+        },
+        {
+          "nivel": 20,
+          "circulo": 10,
+          "vagas": 10
+        }
+      ]
+    },
+    "descricao": "Fluxo puro, direto, sem intermediário nenhum. É a forma mais simples de conjurar e a mais difícil de fazer bem.",
+    "progressao": [
+      {
+        "nivel": 1,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Canalização Nativa",
+            "estagio": 1
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 1
+          }
+        ]
+      },
+      {
+        "nivel": 2,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Canalizador"
+          }
+        ]
+      },
+      {
+        "nivel": 3,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Forma do Fluxo",
+            "estagio": 1
+          }
+        ]
+      },
+      {
+        "nivel": 4,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Prova do Fluxo"
+          }
+        ]
+      },
+      {
+        "nivel": 5,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Canalização Nativa",
+            "estagio": 2
+          }
+        ]
+      },
+      {
+        "nivel": 6,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Canalizador"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 1
+          }
+        ]
+      },
+      {
+        "nivel": 7,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Prova do Fluxo"
+          }
+        ]
+      },
+      {
+        "nivel": 8,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Forma do Fluxo",
+            "estagio": 2
+          }
+        ]
+      },
+      {
+        "nivel": 9,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Canalizador"
+          }
+        ]
+      },
+      {
+        "nivel": 10,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Canalização Nativa",
+            "estagio": 3
+          }
+        ]
+      },
+      {
+        "nivel": 11,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Canalizador"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 1
+          }
+        ]
+      },
+      {
+        "nivel": 12,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Prova do Fluxo"
+          }
+        ]
+      },
+      {
+        "nivel": 13,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Canalizador"
+          }
+        ]
+      },
+      {
+        "nivel": 14,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Forma do Fluxo",
+            "estagio": 3
+          }
+        ]
+      },
+      {
+        "nivel": 15,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Canalização Nativa",
+            "estagio": 4
+          }
+        ]
+      },
+      {
+        "nivel": 16,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Canalizador"
+          }
+        ]
+      },
+      {
+        "nivel": 17,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Canalizador"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 1
+          }
+        ]
+      },
+      {
+        "nivel": 18,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Prova do Fluxo"
+          },
+          {
+            "tipo": "habilidade",
+            "titulo": "Voz da Deidade"
+          }
+        ]
+      },
+      {
+        "nivel": 19,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Canalizador"
+          }
+        ]
+      },
+      {
+        "nivel": 20,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Canalização Nativa",
+            "estagio": 5
+          },
+          {
+            "tipo": "habilidade",
+            "titulo": "Forma do Fluxo",
+            "estagio": 4
+          },
+          {
+            "tipo": "habilidade_final",
+            "titulo": "Voz da Deidade"
+          }
+        ]
+      }
+    ],
+    "habilidades": [
+      {
+        "id": "canalizacao-nativa",
+        "titulo": "Canalização Nativa",
+        "niveis": [
+          1,
+          5,
+          10,
+          15,
+          20
+        ],
+        "estagios": [
+          {
+            "nivel": 1,
+            "descricao": "Aprenda duas magias compatíveis com seu Fluxo e use Misticismo para conjurá-las."
+          },
+          {
+            "nivel": 5,
+            "descricao": "Uma vez por cena, receba +2 num teste de conjuração depois de rolar."
+          },
+          {
+            "nivel": 10,
+            "descricao": "Ao superar a DT por 5 ou mais, reduza o custo em 1 Mana, mínimo 1, uma vez por turno."
+          },
+          {
+            "nivel": 15,
+            "descricao": "Uma vez por cena, repita um teste de conjuração."
+          },
+          {
+            "nivel": 20,
+            "descricao": "Uma vez por sessão, trate o d20 de uma conjuração como 15."
+          }
+        ]
+      },
+      {
+        "id": "forma-do-fluxo",
+        "titulo": "Forma do Fluxo",
+        "descricao": "Escolha por estágio alvo, área, defesa ou movimento. Uma vez por cena, uma magia da forma recebe +2.",
+        "niveis": [
+          3,
+          8,
+          14,
+          20
+        ]
+      },
+      {
+        "id": "voz-da-deidade",
+        "titulo": "Voz da Deidade",
+        "descricao": "Uma vez por sessão, por três rodadas, conjurações custam 2 Mana a menos, mínimo 1, e recebem +2.",
+        "niveis": [
+          18
+        ]
+      }
+    ],
+    "eventos": [
+      {
+        "id": "prova-do-fluxo",
+        "titulo": "Prova do Fluxo",
+        "descricao": "Seu Fluxo se manifesta fora de controle e exige domínio e consequência; nunca concede um segundo Fluxo nativo.",
+        "niveis": [
+          4,
+          7,
+          12,
+          18
+        ]
+      }
+    ],
+    "poderes": [
+      {
+        "id": "pulso-nativo",
+        "titulo": "Pulso Nativo",
+        "custo_mana": 3,
+        "descricao": "Receba +2 no próximo teste de conjuração."
+      },
+      {
+        "id": "economia-arcana",
+        "titulo": "Economia Arcana",
+        "custo_mana": 0,
+        "descricao": "Passivo. Uma vez por cena, reduza em 1 o custo de uma magia, mínimo 1."
+      },
+      {
+        "id": "conjuracao-defensiva",
+        "titulo": "Conjuração Defensiva",
+        "custo_mana": 3,
+        "descricao": "Use reação para receber +4 no teste de Vontade que mantém concentração."
+      },
+      {
+        "id": "alcance-expandido",
+        "titulo": "Alcance Expandido",
+        "custo_mana": 4,
+        "descricao": "Aumente em 6 m o alcance de uma magia."
+      },
+      {
+        "id": "fluxo-persistente",
+        "titulo": "Fluxo Persistente",
+        "custo_mana": 5,
+        "descricao": "Uma vez por cena, repita um teste de concentração."
+      },
+      {
+        "id": "contrafluxo",
+        "titulo": "Contrafluxo",
+        "custo_mana": 4,
+        "descricao": "Use reação para receber +3 na Defesa contra uma magia."
+      },
+      {
+        "id": "manifestacao-moldada",
+        "titulo": "Manifestação Moldada",
+        "custo_mana": 5,
+        "descricao": "Altere a forma de uma área sem aumentar tamanho ou dano."
+      },
+      {
+        "id": "canalizacao-rapida",
+        "titulo": "Canalização Rápida",
+        "custo_mana": 6,
+        "descricao": "Uma vez por cena, reduza a execução até o mínimo de ação padrão."
+      },
+      {
+        "id": "reserva-interior",
+        "titulo": "Reserva Interior",
+        "custo_mana": 0,
+        "descricao": "Passivo. Sua Mana máxima aumenta em 2."
+      },
+      {
+        "id": "apice-do-fluxo",
+        "titulo": "Ápice do Fluxo",
+        "custo_mana": 8,
+        "descricao": "Uma vez por sessão, considere 15 o resultado natural de uma conjuração.",
+        "pre_requisitos": [
+          "Nível 12 de Canalizador"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sintonizador",
+    "tipo": "classe",
+    "titulo": "Sintonizador",
+    "categoria": "padrao",
+    "disponibilidade": "geral",
+    "arvore": null,
+    "vida": 3,
+    "mana": 4,
+    "recursos_provisorios": false,
+    "progressao_publicada": true,
+    "origem_conteudo": "proposta_original_balanceada",
+    "versao_balanceamento": "2026-08-01",
+    "progressao_magia": {
+      "fonte": "Sintonia por Catalisador",
+      "tradicoes": [
+        "Sintonia"
+      ],
+      "marcos": [
+        {
+          "nivel": 1,
+          "circulo": 2,
+          "vagas": 2
+        },
+        {
+          "nivel": 5,
+          "circulo": 4,
+          "vagas": 4
+        },
+        {
+          "nivel": 10,
+          "circulo": 6,
+          "vagas": 6
+        },
+        {
+          "nivel": 15,
+          "circulo": 8,
+          "vagas": 8
+        },
+        {
+          "nivel": 20,
+          "circulo": 10,
+          "vagas": 10
+        }
+      ]
+    },
+    "descricao": "Alinha o Fluxo nativo a catalisadores de fora pra fazer o que ele sozinho não faria. Nada disso passa a morar na alma: é sempre empréstimo.",
+    "progressao": [
+      {
+        "nivel": 1,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Sintonia Catalisada",
+            "estagio": 1
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 1
+          }
+        ]
+      },
+      {
+        "nivel": 2,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Sintonizador"
+          }
+        ]
+      },
+      {
+        "nivel": 3,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Fusão Controlada",
+            "estagio": 1
+          }
+        ]
+      },
+      {
+        "nivel": 4,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Ressonância Improvável"
+          }
+        ]
+      },
+      {
+        "nivel": 5,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Sintonia Catalisada",
+            "estagio": 2
+          }
+        ]
+      },
+      {
+        "nivel": 6,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Sintonizador"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 1
+          }
+        ]
+      },
+      {
+        "nivel": 7,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Ressonância Improvável"
+          }
+        ]
+      },
+      {
+        "nivel": 8,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Fusão Controlada",
+            "estagio": 2
+          }
+        ]
+      },
+      {
+        "nivel": 9,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Sintonizador"
+          }
+        ]
+      },
+      {
+        "nivel": 10,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Sintonia Catalisada",
+            "estagio": 3
+          }
+        ]
+      },
+      {
+        "nivel": 11,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Sintonizador"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 1
+          }
+        ]
+      },
+      {
+        "nivel": 12,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Ressonância Improvável"
+          }
+        ]
+      },
+      {
+        "nivel": 13,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Sintonizador"
+          }
+        ]
+      },
+      {
+        "nivel": 14,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Fusão Controlada",
+            "estagio": 3
+          }
+        ]
+      },
+      {
+        "nivel": 15,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Sintonia Catalisada",
+            "estagio": 4
+          }
+        ]
+      },
+      {
+        "nivel": 16,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Sintonizador"
+          }
+        ]
+      },
+      {
+        "nivel": 17,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Sintonizador"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 1
+          }
+        ]
+      },
+      {
+        "nivel": 18,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Ressonância Improvável"
+          },
+          {
+            "tipo": "habilidade",
+            "titulo": "Convergência Segura"
+          }
+        ]
+      },
+      {
+        "nivel": 19,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Sintonizador"
+          }
+        ]
+      },
+      {
+        "nivel": 20,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Sintonia Catalisada",
+            "estagio": 5
+          },
+          {
+            "tipo": "habilidade",
+            "titulo": "Fusão Controlada",
+            "estagio": 4
+          },
+          {
+            "tipo": "habilidade_final",
+            "titulo": "Convergência Segura"
+          }
+        ]
+      }
+    ],
+    "habilidades": [
+      {
+        "id": "sintonia-catalisada",
+        "titulo": "Sintonia Catalisada",
+        "niveis": [
+          1,
+          5,
+          10,
+          15,
+          20
+        ],
+        "estagios": [
+          {
+            "nivel": 1,
+            "descricao": "Vincule-se a um catalisador após dez minutos; ele não altera seu Fluxo nativo."
+          },
+          {
+            "nivel": 5,
+            "descricao": "Mantenha dois catalisadores preparados."
+          },
+          {
+            "nivel": 10,
+            "descricao": "Uma vez por cena, uma magia pelo catalisador recebe +2 e ignora 2 de Resistência."
+          },
+          {
+            "nivel": 15,
+            "descricao": "Mantenha três catalisadores e troque o ativo como ação livre uma vez por turno."
+          },
+          {
+            "nivel": 20,
+            "descricao": "Uma vez por sessão, sustente dois catalisadores ativos por três rodadas."
+          }
+        ]
+      },
+      {
+        "id": "fusao-controlada",
+        "titulo": "Fusão Controlada",
+        "descricao": "Escolha por estágio uma fusão. Ela muda tipo, forma ou utilidade, mas não aumenta o dano base.",
+        "niveis": [
+          3,
+          8,
+          14,
+          20
+        ]
+      },
+      {
+        "id": "convergencia-segura",
+        "titulo": "Convergência Segura",
+        "descricao": "Uma vez por sessão, por três rodadas, fusões não exigem troca e recebem +2 em conjuração e Defesa.",
+        "niveis": [
+          18
+        ]
+      }
+    ],
+    "eventos": [
+      {
+        "id": "ressonancia-improvavel",
+        "titulo": "Ressonância Improvável",
+        "descricao": "Um catalisador raro reage ao seu Fluxo e pode liberar uma fusão, contato ou complicação.",
+        "niveis": [
+          4,
+          7,
+          12,
+          18
+        ]
+      }
+    ],
+    "poderes": [
+      {
+        "id": "troca-instantanea",
+        "titulo": "Troca Instantânea",
+        "custo_mana": 2,
+        "descricao": "Troque o catalisador ativo como ação livre."
+      },
+      {
+        "id": "aterramento",
+        "titulo": "Aterramento",
+        "custo_mana": 3,
+        "descricao": "Use reação para reduzir em 8 o dano ligado ao catalisador."
+      },
+      {
+        "id": "dupla-frequencia",
+        "titulo": "Dupla Frequência",
+        "custo_mana": 5,
+        "descricao": "Por uma rodada, trate dois catalisadores como ativos."
+      },
+      {
+        "id": "ressonancia-compartilhada",
+        "titulo": "Ressonância Compartilhada",
+        "custo_mana": 4,
+        "descricao": "Um aliado recebe +2 na Defesa contra magia."
+      },
+      {
+        "id": "foco-reserva",
+        "titulo": "Foco Reserva",
+        "custo_mana": 0,
+        "descricao": "Passivo. Prepare um catalisador adicional."
+      },
+      {
+        "id": "descarga-do-catalisador",
+        "titulo": "Descarga do Catalisador",
+        "custo_mana": 5,
+        "descricao": "Cause +1 dado e desative o catalisador até o descanso."
+      },
+      {
+        "id": "sintonia-distante",
+        "titulo": "Sintonia Distante",
+        "custo_mana": 4,
+        "descricao": "Ative um catalisador preparado a até 12 m."
+      },
+      {
+        "id": "frequencia-protetora",
+        "titulo": "Frequência Protetora",
+        "custo_mana": 4,
+        "descricao": "Receba Resistência 5 ao tipo do catalisador."
+      },
+      {
+        "id": "leitura-de-artefato",
+        "titulo": "Leitura de Artefato",
+        "custo_mana": 3,
+        "descricao": "Descubra Fluxo, função geral e um risco de um catalisador."
+      },
+      {
+        "id": "fusao-perfeita",
+        "titulo": "Fusão Perfeita",
+        "custo_mana": 8,
+        "descricao": "Uma vez por sessão, use uma fusão sem desativar o catalisador.",
+        "pre_requisitos": [
+          "Nível 12 de Sintonizador"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ritualista",
+    "tipo": "classe",
+    "titulo": "Ritualista",
+    "categoria": "padrao",
+    "disponibilidade": "geral",
+    "arvore": null,
+    "vida": 3,
+    "mana": 4,
+    "recursos_provisorios": false,
+    "progressao_publicada": true,
+    "origem_conteudo": "proposta_original_balanceada",
+    "versao_balanceamento": "2026-08-01",
+    "descricao": "Trabalha fora do combate. Ritual não tem círculo, cobra tempo e compromete a Mana desde o primeiro minuto: se interromperem, a Mana já foi.",
+    "progressao": [
+      {
+        "nivel": 1,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Livro de Rituais",
+            "estagio": 1
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 1
+          }
+        ]
+      },
+      {
+        "nivel": 2,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Ritualista"
+          }
+        ]
+      },
+      {
+        "nivel": 3,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Círculo Preparado",
+            "estagio": 1
+          }
+        ]
+      },
+      {
+        "nivel": 4,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Pacto Antigo"
+          }
+        ]
+      },
+      {
+        "nivel": 5,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Livro de Rituais",
+            "estagio": 2
+          }
+        ]
+      },
+      {
+        "nivel": 6,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Ritualista"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 1
+          }
+        ]
+      },
+      {
+        "nivel": 7,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Pacto Antigo"
+          }
+        ]
+      },
+      {
+        "nivel": 8,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Círculo Preparado",
+            "estagio": 2
+          }
+        ]
+      },
+      {
+        "nivel": 9,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Ritualista"
+          }
+        ]
+      },
+      {
+        "nivel": 10,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Livro de Rituais",
+            "estagio": 3
+          }
+        ]
+      },
+      {
+        "nivel": 11,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Ritualista"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 1
+          }
+        ]
+      },
+      {
+        "nivel": 12,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Pacto Antigo"
+          }
+        ]
+      },
+      {
+        "nivel": 13,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Ritualista"
+          }
+        ]
+      },
+      {
+        "nivel": 14,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Círculo Preparado",
+            "estagio": 3
+          }
+        ]
+      },
+      {
+        "nivel": 15,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Livro de Rituais",
+            "estagio": 4
+          }
+        ]
+      },
+      {
+        "nivel": 16,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Ritualista"
+          }
+        ]
+      },
+      {
+        "nivel": 17,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Ritualista"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 1
+          }
+        ]
+      },
+      {
+        "nivel": 18,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Pacto Antigo"
+          },
+          {
+            "tipo": "habilidade",
+            "titulo": "Grande Oficiante"
+          }
+        ]
+      },
+      {
+        "nivel": 19,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Ritualista"
+          }
+        ]
+      },
+      {
+        "nivel": 20,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Livro de Rituais",
+            "estagio": 5
+          },
+          {
+            "tipo": "habilidade",
+            "titulo": "Círculo Preparado",
+            "estagio": 4
+          },
+          {
+            "tipo": "habilidade_final",
+            "titulo": "Grande Oficiante"
+          }
+        ]
+      }
+    ],
+    "habilidades": [
+      {
+        "id": "livro-de-rituais",
+        "titulo": "Livro de Rituais",
+        "niveis": [
+          1,
+          5,
+          10,
+          15,
+          20
+        ],
+        "estagios": [
+          {
+            "nivel": 1,
+            "descricao": "Aprenda dois rituais. A Mana é comprometida quando cada ritual começa."
+          },
+          {
+            "nivel": 5,
+            "descricao": "Aprenda outro ritual e reduza em 25% o tempo, sem permitir uso em combate."
+          },
+          {
+            "nivel": 10,
+            "descricao": "Até dois participantes reduzem em 1 a Mana paga por você cada, mínimo 1."
+          },
+          {
+            "nivel": 15,
+            "descricao": "Aprenda outro ritual e obtenha vantagem contra a primeira interrupção."
+          },
+          {
+            "nivel": 20,
+            "descricao": "Uma vez por sessão, ignore componentes comuns."
+          }
+        ]
+      },
+      {
+        "id": "circulo-preparado",
+        "titulo": "Círculo Preparado",
+        "descricao": "Escolha por estágio proteção, precisão, duração ou ocultação antes do ritual começar.",
+        "niveis": [
+          3,
+          8,
+          14,
+          20
+        ]
+      },
+      {
+        "id": "grande-oficiante",
+        "titulo": "Grande Oficiante",
+        "descricao": "Uma vez por sessão, dobre participantes úteis e receba +4 contra interrupção.",
+        "niveis": [
+          18
+        ]
+      }
+    ],
+    "eventos": [
+      {
+        "id": "pacto-antigo",
+        "titulo": "Pacto Antigo",
+        "descricao": "Uma tradição oferece um ritual cujo aprendizado exige custo, consequência e consentimento do Mestre.",
+        "niveis": [
+          4,
+          7,
+          12,
+          18
+        ]
+      }
+    ],
+    "poderes": [
+      {
+        "id": "componentes-organizados",
+        "titulo": "Componentes Organizados",
+        "custo_mana": 0,
+        "descricao": "Passivo. Componentes comuns ocupam dois espaços a menos."
+      },
+      {
+        "id": "vigilia",
+        "titulo": "Vigília",
+        "custo_mana": 3,
+        "descricao": "Ignore a primeira penalidade de Cansaço durante um ritual."
+      },
+      {
+        "id": "circulo-de-protecao",
+        "titulo": "Círculo de Proteção",
+        "custo_mana": 4,
+        "descricao": "Participantes recebem +2 na Defesa contra ameaças externas."
+      },
+      {
+        "id": "leitura-de-pacto",
+        "titulo": "Leitura de Pacto",
+        "custo_mana": 3,
+        "descricao": "Identifique obrigações, partes e uma consequência provável."
+      },
+      {
+        "id": "assistente-treinado",
+        "titulo": "Assistente Treinado",
+        "custo_mana": 0,
+        "descricao": "Passivo. Um participante sem Misticismo ajuda como Aprendiz."
+      },
+      {
+        "id": "preparacao-discreta",
+        "titulo": "Preparação Discreta",
+        "custo_mana": 3,
+        "descricao": "O círculo recebe +4 contra Percepção ou Investigação."
+      },
+      {
+        "id": "ancora-ritual",
+        "titulo": "Âncora Ritual",
+        "custo_mana": 5,
+        "descricao": "Uma interrupção ambiental não encerra o ritual automaticamente."
+      },
+      {
+        "id": "recuperar-componente",
+        "titulo": "Recuperar Componente",
+        "custo_mana": 4,
+        "descricao": "Preserve um componente comum, uma vez por descanso."
+      },
+      {
+        "id": "contrato-claro",
+        "titulo": "Contrato Claro",
+        "custo_mana": 3,
+        "descricao": "Receba vantagem para negociar antes de firmar um pacto."
+      },
+      {
+        "id": "rito-memoravel",
+        "titulo": "Rito Memorável",
+        "custo_mana": 8,
+        "descricao": "Uma vez por sessão, repita um teste falho no ritual.",
+        "pre_requisitos": [
+          "Nível 12 de Ritualista"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "interceptador",
+    "tipo": "classe",
+    "titulo": "Interceptador",
+    "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "arvore": "keryx",
+    "arvores": [
+      "keryx"
+    ],
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "vida": 3,
+    "mana": 4,
+    "recursos_provisorios": false,
+    "progressao_publicada": true,
+    "origem_conteudo": "proposta_original_balanceada",
+    "versao_balanceamento": "2026-08-01",
+    "descricao": "Classe especial da A.X.I.S. Entra na Malha pra derrubar a magia dos outros. Não conjura Fluxo natural, atrapalha quem conjura.",
+    "progressao": [
+      {
+        "nivel": 1,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Acesso à Malha",
+            "estagio": 1
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 2
+          }
+        ]
+      },
+      {
+        "nivel": 2,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Interceptador"
+          }
+        ]
+      },
+      {
+        "nivel": 3,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Hackear Fluxo",
+            "estagio": 1
+          }
+        ]
+      },
+      {
+        "nivel": 4,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Falha na Malha"
+          }
+        ]
+      },
+      {
+        "nivel": 5,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Acesso à Malha",
+            "estagio": 2
+          }
+        ]
+      },
+      {
+        "nivel": 6,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Interceptador"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 2
+          }
+        ]
+      },
+      {
+        "nivel": 7,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Falha na Malha"
+          }
+        ]
+      },
+      {
+        "nivel": 8,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Hackear Fluxo",
+            "estagio": 2
+          }
+        ]
+      },
+      {
+        "nivel": 9,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Interceptador"
+          }
+        ]
+      },
+      {
+        "nivel": 10,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Acesso à Malha",
+            "estagio": 3
+          }
+        ]
+      },
+      {
+        "nivel": 11,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Interceptador"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 2
+          }
+        ]
+      },
+      {
+        "nivel": 12,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Falha na Malha"
+          }
+        ]
+      },
+      {
+        "nivel": 13,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Interceptador"
+          }
+        ]
+      },
+      {
+        "nivel": 14,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Hackear Fluxo",
+            "estagio": 3
+          }
+        ]
+      },
+      {
+        "nivel": 15,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Acesso à Malha",
+            "estagio": 4
+          }
+        ]
+      },
+      {
+        "nivel": 16,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Interceptador"
+          }
+        ]
+      },
+      {
+        "nivel": 17,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Interceptador"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 2
+          }
+        ]
+      },
+      {
+        "nivel": 18,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Falha na Malha"
+          },
+          {
+            "tipo": "habilidade",
+            "titulo": "Acesso Administrador"
+          }
+        ]
+      },
+      {
+        "nivel": 19,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Interceptador"
+          }
+        ]
+      },
+      {
+        "nivel": 20,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Acesso à Malha",
+            "estagio": 5
+          },
+          {
+            "tipo": "habilidade",
+            "titulo": "Hackear Fluxo",
+            "estagio": 4
+          },
+          {
+            "tipo": "habilidade_final",
+            "titulo": "Acesso Administrador"
+          }
+        ]
+      }
+    ],
+    "habilidades": [
+      {
+        "id": "acesso-a-malha",
+        "titulo": "Acesso à Malha",
+        "niveis": [
+          1,
+          5,
+          10,
+          15,
+          20
+        ],
+        "estagios": [
+          {
+            "nivel": 1,
+            "descricao": "Detecte conjurações naturais a até 12 m."
+          },
+          {
+            "nivel": 5,
+            "descricao": "Identifique círculo, Fluxo e alvo sem gastar ação."
+          },
+          {
+            "nivel": 10,
+            "descricao": "Receba +2 para interceptar magia, ritual, encantamento ou selo natural."
+          },
+          {
+            "nivel": 15,
+            "descricao": "Seu alcance aumenta para 24 m."
+          },
+          {
+            "nivel": 20,
+            "descricao": "Uma vez por sessão, por três rodadas, magias percebidas revelam seus dados."
+          }
+        ]
+      },
+      {
+        "id": "hackear-fluxo",
+        "titulo": "Hackear Fluxo",
+        "descricao": "Escolha por estágio anular, atrasar, redirecionar ou isolar uma manifestação percebida.",
+        "niveis": [
+          3,
+          8,
+          14,
+          20
+        ]
+      },
+      {
+        "id": "acesso-administrador",
+        "titulo": "Acesso Administrador",
+        "descricao": "Uma vez por sessão, por três rodadas, receba +4 em interceptações e reduza seu custo em 2, mínimo 1.",
+        "niveis": [
+          18
+        ]
+      }
+    ],
+    "eventos": [
+      {
+        "id": "falha-na-malha",
+        "titulo": "Falha na Malha",
+        "descricao": "A A.X.I.S apresenta uma brecha, atualização ou ordem contraditória.",
+        "niveis": [
+          4,
+          7,
+          12,
+          18
+        ]
+      }
+    ],
+    "poderes": [
+      {
+        "id": "pacote-descartado",
+        "titulo": "Pacote Descartado",
+        "custo_mana": 4,
+        "descricao": "Use reação e Misticismo contra a DT do círculo; em sucesso, a magia falha."
+      },
+      {
+        "id": "latencia",
+        "titulo": "Latência",
+        "custo_mana": 3,
+        "descricao": "Atrase uma magia até o fim do turno do conjurador."
+      },
+      {
+        "id": "firewall-de-fluxo",
+        "titulo": "Firewall de Fluxo",
+        "custo_mana": 4,
+        "descricao": "Um alvo recebe +3 na Defesa contra magia natural."
+      },
+      {
+        "id": "rastrear-assinatura",
+        "titulo": "Rastrear Assinatura",
+        "custo_mana": 2,
+        "descricao": "Identifique a direção do conjurador por uma cena."
+      },
+      {
+        "id": "quarentena-arcana",
+        "titulo": "Quarentena Arcana",
+        "custo_mana": 5,
+        "descricao": "Magias naturais numa área de 3 m sofrem −2."
+      },
+      {
+        "id": "desmontar-selo",
+        "titulo": "Desmontar Selo",
+        "custo_mana": 4,
+        "descricao": "Suprima um selo por uma cena com Misticismo."
+      },
+      {
+        "id": "cortar-concentracao",
+        "titulo": "Cortar Concentração",
+        "custo_mana": 5,
+        "descricao": "Force Vontade; em falha, a concentração termina."
+      },
+      {
+        "id": "proxy",
+        "titulo": "Proxy",
+        "custo_mana": 6,
+        "descricao": "Ao ser alvo único, intercepte para escolher outro alvo válido."
+      },
+      {
+        "id": "registro-forense",
+        "titulo": "Registro Forense",
+        "custo_mana": 0,
+        "descricao": "Passivo. A Malha preserva dados das magias percebidas."
+      },
+      {
+        "id": "apagao-local",
+        "titulo": "Apagão Local",
+        "custo_mana": 9,
+        "descricao": "Uma vez por sessão, crie zona que dificulta conjurações naturais.",
+        "pre_requisitos": [
+          "Nível 12 de Interceptador"
         ]
       }
     ]

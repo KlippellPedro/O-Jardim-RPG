@@ -5,8 +5,6 @@ const projectRoot = path.resolve(import.meta.dirname, '..');
 const roots = [
   'index.html',
   'src',
-  'legacy-vanilla/src',
-  'legacy-vanilla/templates',
   'data/ficha',
   'data/regras',
   'data/mundo',

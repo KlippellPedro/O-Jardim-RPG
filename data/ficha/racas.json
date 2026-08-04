@@ -10,7 +10,10 @@
     "mana": 0,
     "movimento": 0,
     "pericias_iniciais_adicionais": 1,
-    "fisiologia": ["Tamanho Normal."],
+    "descricao": "Não nasce com dom nenhum, e é exatamente esse o ponto. Aprende uma coisa a mais que todo mundo na largada e cabe em qualquer Árvore, qualquer classe, qualquer mesa.",
+    "fisiologia": [
+      "Tamanho Normal."
+    ],
     "caracteristicas": [
       {
         "id": "adaptabilidade-humana",
@@ -20,7 +23,8 @@
         "automatizada": true
       }
     ],
-    "recursos_provisorios": false
+    "recursos_provisorios": false,
+    "legados_adicionais": 1
   },
   {
     "id": "vampiro",
@@ -32,7 +36,10 @@
     "vida": 1,
     "mana": 0,
     "movimento": 0,
-    "fisiologia": ["Enxerga normalmente em escuridão natural, mas não através de escuridão criada por magia ou Fluxo."],
+    "descricao": "Enxerga no escuro natural, fecha ferida bebendo sangue e paga caro quando fica sem. O povo é de Întuneric e fala Romeno. A dimensão inteira gira em torno de uma cadeia alimentar que termina neles.",
+    "fisiologia": [
+      "Enxerga normalmente em escuridão natural, mas não através de escuridão criada por magia ou Fluxo."
+    ],
     "caracteristicas": [
       {
         "id": "hemofagia",
@@ -61,7 +68,10 @@
     "vida": -1,
     "mana": 1,
     "movimento": 1.5,
-    "fisiologia": ["Tamanho Pequeno."],
+    "descricao": "Pequeno, rápido e com um talento incômodo pra vender qualquer coisa por mais do que ela vale, de preferência coisa que já era dele. Fala Alemão entre os seus.",
+    "fisiologia": [
+      "Tamanho Pequeno."
+    ],
     "caracteristicas": [
       {
         "id": "passos-ligeiros",
@@ -90,7 +100,10 @@
     "vida": 2,
     "mana": 0,
     "movimento": 0,
-    "fisiologia": ["Tamanho Pequeno."],
+    "descricao": "Baixo, duro de derrubar e melhor que qualquer um com uma ferramenta na mão. Constrói, conserta e erra menos na segunda tentativa. Fala Nórdico Antigo, e o Reino dos Anões forja o que os outros reinos apenas fabricam.",
+    "fisiologia": [
+      "Tamanho Pequeno."
+    ],
     "caracteristicas": [
       {
         "id": "maos-de-oficio",
@@ -112,6 +125,7 @@
     "vida": 5,
     "mana": -2,
     "movimento": 0,
+    "descricao": "Corpo construído, grande ou enorme, que não respira, não come e não adoece. Quem cuida dele não é médico, é artesão, e nenhuma armadura de prateleira serve sem ajuste antes. Fala Libras.",
     "fisiologia": [
       "Tamanho Grande ou Enorme, definido na criação.",
       "Não precisa respirar, comer ou beber e não contrai doenças comuns."
@@ -144,6 +158,7 @@
     "vida": -2,
     "mana": 3,
     "movimento": 0,
+    "descricao": "Não tem corpo pra alimentar nem pulmão pra encher. Enxerga no escuro, atravessa parede quando tem Mana pra gastar, e não veste armadura comum porque não há o que vestir. Fala Enoquiano.",
     "fisiologia": [
       "Não precisa respirar, comer ou beber.",
       "Enxerga normalmente em escuridão natural.",
@@ -170,7 +185,10 @@
     "vida": 4,
     "mana": -1,
     "movimento": 0,
-    "fisiologia": ["Tamanho Grande; equipamentos precisam ter tamanho compatível."],
+    "descricao": "Grande a ponto de nada feito pros outros servir nele. Carrega o dobro, não sai do lugar quando tentam empurrar, e vive esbarrando em porta de tamanho normal. Fala Grego.",
+    "fisiologia": [
+      "Tamanho Grande; equipamentos precisam ter tamanho compatível."
+    ],
     "caracteristicas": [
       {
         "id": "porte-colossal",
@@ -192,7 +210,10 @@
     "vida": 0,
     "mana": 0,
     "movimento": 0,
-    "fisiologia": ["O tamanho e a aparência são definidos pelo animal representado e pela morfologia escolhida."],
+    "descricao": "Gente com corpo de bicho. Qual bicho é escolha sua, e a morfologia decide se ele sai ágil, robusto ou místico. Troca ideia simples com animais, o que está longe de significar que eles obedeçam. Fala Sumeriano.",
+    "fisiologia": [
+      "O tamanho e a aparência são definidos pelo animal representado e pela morfologia escolhida."
+    ],
     "caracteristicas": [
       {
         "id": "voz-da-fauna",
@@ -264,7 +285,10 @@
     "vida": -1,
     "mana": 2,
     "movimento": 0,
-    "fisiologia": ["Anfíbio: respira no ar e na água; seu deslocamento de natação é igual ao Movimento terrestre."],
+    "descricao": "Respira dentro e fora d'água, e nada tão rápido quanto anda em terra. O canto segura quem escuta pelo tempo exato de mudar uma cena, ou de sair dela viva. Fala Latim.",
+    "fisiologia": [
+      "Anfíbio: respira no ar e na água; seu deslocamento de natação é igual ao Movimento terrestre."
+    ],
     "caracteristicas": [
       {
         "id": "canto-fascinante",
@@ -286,6 +310,7 @@
     "vida": 1,
     "mana": 1,
     "movimento": 0,
+    "descricao": "Fungo que virou gente. Come como qualquer um, mas também puxa o que precisa direto do solo fértil enquanto descansa. Deixa esporo em quem confia pra conversar sem falar, e lê o chão pra saber quem passou por ali antes.",
     "fisiologia": [
       "Organismo fúngico: alimenta-se como um ser vivo comum, mas também consegue absorver nutrientes ao permanecer em contato com solo fértil durante um descanso."
     ],
@@ -317,6 +342,7 @@
     "vida": 3,
     "mana": -2,
     "movimento": 0,
+    "descricao": "Corpo semissólido, sem osso e sem órgão em lugar fixo. Passa por qualquer fresta de 15 cm, amassa queda que quebraria outro e escorrega de agarrão, mas nada rígido veste ele sem adaptação.",
     "fisiologia": [
       "Corpo semissólido: não possui ossos nem órgãos em posições fixas.",
       "Armaduras e vestimentas rígidas precisam ser adaptadas ao corpo do Slime."
@@ -349,7 +375,10 @@
     "vida": -2,
     "mana": 4,
     "movimento": 0,
-    "fisiologia": ["Tamanho Pequeno ou Normal, definido na criação."],
+    "descricao": "Pequeno ou normal, e com Mana muito acima do que o tamanho sugere. Faz truque sensorial o tempo todo, de graça, e ilusão grande quando resolve levar a sério. Nada disso machuca: o estrago é sempre o que a vítima faz com a informação errada.",
+    "fisiologia": [
+      "Tamanho Pequeno ou Normal, definido na criação."
+    ],
     "caracteristicas": [
       {
         "id": "truque-feerico",
@@ -376,8 +405,13 @@
     "disponibilidade": "restrita",
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
-    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
-    "arvores": ["aethel"],
+    "formas_aquisicao": [
+      "criacao_autorizada",
+      "transformacao_narrativa"
+    ],
+    "arvores": [
+      "aethel"
+    ],
     "arvore": null,
     "origem_natural": {
       "arvore_id": "aethel",
@@ -399,6 +433,7 @@
       "itens_comuns_total": 2,
       "retroativos_em_transformacao": false
     },
+    "descricao": "Não envelhece e não esquece: são séculos de leitura empilhados num Intelecto que passa do teto que vale pra todo mundo. Vem de Nadalon, fala Finlandês, e escolhe uma das seis Linhagens: é isso que separa um Elfo de Sombras de um Elfo de Tempestades.",
     "fisiologia": [
       "Não envelhece e é imune a envelhecimento sobrenatural."
     ],
@@ -431,7 +466,7 @@
         "id": "linhagem-elfica",
         "titulo": "Linhagem Élfica",
         "tipo": "escolha",
-        "descricao": "Escolha uma das sete Linhagens Élficas. Você recebe apenas as características da Linhagem escolhida e não pode acumular efeitos de duas Linhagens.",
+        "descricao": "Escolha uma das seis Linhagens Élficas. Você recebe apenas as características da Linhagem escolhida e não pode acumular efeitos de duas Linhagens.",
         "automatizada": false
       }
     ],
@@ -554,48 +589,6 @@
         ]
       },
       {
-        "id": "fluxo-da-origem",
-        "titulo": "Fluxo da Origem",
-        "efeito_pendente": false,
-        "caracteristicas": [
-          {
-            "id": "eco-da-primeira-centelha",
-            "titulo": "Eco da Primeira Centelha",
-            "tipo": "passiva",
-            "descricao": "Você recebe vantagem em Ressonância ou Misticismo para identificar a origem, a natureza ou o funcionamento de um Fluxo ou efeito sobrenatural. Uma vez por cena, ao gastar Mana em uma característica, Habilidade ou Poder, reduza esse custo em 2 Mana, até o mínimo de 1.",
-            "automatizada": false
-          },
-          {
-            "id": "mandato-da-origem",
-            "titulo": "Mandato da Origem",
-            "tipo": "acao",
-            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para impor um Mandato da Origem em um ponto ou criatura a até 15 m. Escolha Gerar, Restaurar ou Desfazer; apenas uma opção pode ser usada por ativação.",
-            "usos": 1,
-            "recuperacao": "cena",
-            "custo_mana": 6,
-            "alcance_m": 15,
-            "automatizada": false,
-            "opcoes": [
-              {
-                "id": "gerar",
-                "titulo": "Gerar",
-                "descricao": "Crie um objeto comum, não mágico e sem mecanismos complexos, com no máximo 3 m em qualquer dimensão. Ele não pode conter material raro, substância consumível nem valor monetário e desaparece ao final da cena."
-              },
-              {
-                "id": "restaurar",
-                "titulo": "Restaurar",
-                "descricao": "Uma criatura recupera 3d6 + Mod.Inteligência de Vida e encerra uma condição prejudicial com duração definida. Isso não remove morte, ferimento permanente, transformação, maldição ou consequência narrativa."
-              },
-              {
-                "id": "desfazer",
-                "titulo": "Desfazer",
-                "descricao": "Faça um teste de Misticismo contra a Fortitude de uma criatura. Em falha, ela sofre 3d6 + Mod.Inteligência de dano que ignora Redução e um efeito sobrenatural ativo escolhido fica suprimido até o final do próximo turno dela. Em sucesso, sofre metade do dano e nenhum efeito é suprimido. Isso não suprime raça, classe, transformação permanente ou efeito narrativo."
-              }
-            ]
-          }
-        ]
-      },
-      {
         "id": "noite-eterna",
         "titulo": "Noite Eterna",
         "efeito_pendente": false,
@@ -661,8 +654,22 @@
     "disponibilidade": "restrita",
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
-    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
-    "arvores": ["aethel", "ousias", "keryx", "haemus", "ignis", "moros", "aperion", "chronus", "erebus", "mulher-carmesim"],
+    "formas_aquisicao": [
+      "criacao_autorizada",
+      "transformacao_narrativa"
+    ],
+    "arvores": [
+      "aethel",
+      "ousias",
+      "keryx",
+      "haemus",
+      "ignis",
+      "moros",
+      "aperion",
+      "chronus",
+      "erebus",
+      "mulher-carmesim"
+    ],
     "arvore": null,
     "origem_sobrenatural": {
       "arvore_id": "mulher-carmesim",
@@ -682,6 +689,7 @@
       "itens_comuns_total": 0,
       "retroativos_em_transformacao": false
     },
+    "descricao": "Morreu, foi parar em Arkarin e voltou. Carrega um Fragmento de Arkarin preso à alma, que vibra perto de espírito preso e de qualquer coisa mexida pela morte. Quanto mais tempo passou do outro lado, mais ele trouxe de volta, e a Condição Ancestral escolhida explica por que a Mulher Carmesim deixou ele sair.",
     "fisiologia": [
       "Continua sendo um ser vivo, salvo alteração declarada pela Condição Ancestral escolhida.",
       "Carrega um Fragmento de Arkarin ligado à própria alma."
@@ -876,8 +884,22 @@
     "disponibilidade": "restrita",
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
-    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
-    "arvores": ["aethel", "ousias", "keryx", "haemus", "ignis", "moros", "aperion", "chronus", "erebus", "mulher-carmesim"],
+    "formas_aquisicao": [
+      "criacao_autorizada",
+      "transformacao_narrativa"
+    ],
+    "arvores": [
+      "aethel",
+      "ousias",
+      "keryx",
+      "haemus",
+      "ignis",
+      "moros",
+      "aperion",
+      "chronus",
+      "erebus",
+      "mulher-carmesim"
+    ],
     "arvore": null,
     "origem_dimensional": {
       "tipo": "ser-do-espaco",
@@ -904,7 +926,13 @@
       "itens_comuns_total": 0,
       "retroativos_em_transformacao": false
     },
-    "tamanhos_permitidos": ["Minúsculo", "Pequeno", "Normal", "Grande", "Enorme"],
+    "tamanhos_permitidos": [
+      "Minúsculo",
+      "Pequeno",
+      "Normal",
+      "Grande",
+      "Enorme"
+    ],
     "fisiologia": [
       "Não precisa comer, beber ou dormir. Para concluir um descanso, medita pelo tempo normal e pode perceber os arredores, mas qualquer atividade além de observação simples interrompe a recuperação.",
       "É imune a doenças comuns ou sobrenaturais, mas não a venenos ou outras condições que apenas produzam sintomas semelhantes.",
@@ -917,7 +945,14 @@
         "tipo": "escolha",
         "descricao": "Escolha duas áreas de estudo aprovadas pelo mestre, cada uma mais estreita que uma Árvore ou Fluxo inteiro e mais ampla que um único indivíduo. Quando um teste de Conhecimento, Investigação, Misticismo, Ressonância, Tecnologia ou Ritos de Arkarin tratar diretamente de uma área escolhida, você recebe vantagem. Uma vez por sessão para cada área, depois de falhar em um desses testes, pode rerrolá-lo e deve manter o novo resultado. Isso não revela segredos sem pistas nem informações que nenhuma fonte acessível poderia fornecer.",
         "escolhas": 2,
-        "pericias_aplicaveis": ["conhecimento", "investigacao", "misticismo", "ressonancia", "tecnologia", "ritos-de-arkarin"],
+        "pericias_aplicaveis": [
+          "conhecimento",
+          "investigacao",
+          "misticismo",
+          "ressonancia",
+          "tecnologia",
+          "ritos-de-arkarin"
+        ],
         "rerrolagens_por_escolha": 1,
         "recuperacao": "sessao",
         "automatizada": false
@@ -948,8 +983,13 @@
     "disponibilidade": "restrita",
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
-    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
-    "arvores": ["keryx"],
+    "formas_aquisicao": [
+      "criacao_autorizada",
+      "transformacao_narrativa"
+    ],
+    "arvores": [
+      "keryx"
+    ],
     "arvore": "keryx",
     "arvore_titulo": "A.X.I.S",
     "vida": 0,
@@ -962,6 +1002,7 @@
       "nivel_por_slot": 2,
       "formula": "1 + piso(Nível Total / 2)"
     },
+    "descricao": "Construto consciente saído da A.X.I.S, com núcleo próprio e vontade própria: não deve obediência a criador nenhum. Cura não funciona nele: quem conserta é engenheiro. O chassi, bípede ou quadrúpede, é decisão de criação. Fala Inglês.",
     "fisiologia": [
       "Construto consciente da A.X.I.S; Constituição representa Integridade Estrutural, mas continua sendo usada normalmente nas fórmulas e em Fortitude.",
       "Não precisa respirar, comer, beber ou dormir. Para concluir um descanso, permanece inativo ou em recarga pelo tempo normal.",
@@ -980,7 +1021,15 @@
         "titulo": "Corpo Artificial",
         "tipo": "passiva",
         "descricao": "Você é imune a atordoamento, doenças, encantamentos, enjoo, fadiga, sono e venenos. Não precisa respirar, comer, beber ou dormir. Essas imunidades são perdidas enquanto Máquina Viva estiver instalada.",
-        "imunidades": ["atordoamento", "doenca", "encantamento", "enjoo", "fadiga", "sono", "veneno"],
+        "imunidades": [
+          "atordoamento",
+          "doenca",
+          "encantamento",
+          "enjoo",
+          "fadiga",
+          "sono",
+          "veneno"
+        ],
         "automatizada": false
       },
       {
@@ -1021,16 +1070,24 @@
         "vida": 3,
         "mana": 0,
         "movimento_fixo": 6,
-        "ajustes_atributos": { "forca": -2, "destreza": 2 },
-        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "ajustes_atributos": {
+          "forca": -2,
+          "destreza": 2
+        },
+        "limites_atributos": {
+          "forca": 20,
+          "destreza": 20
+        },
         "dano_natural": "1d6",
-        "caracteristicas": [{
-          "id": "chassi-bipede-pequeno",
-          "titulo": "Estrutura Bípede Pequena",
-          "tipo": "passiva",
-          "descricao": "Tamanho Pequeno, aproximadamente 3 m, Movimento 6 m e arma natural com dano-base 1d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
-          "automatizada": false
-        }]
+        "caracteristicas": [
+          {
+            "id": "chassi-bipede-pequeno",
+            "titulo": "Estrutura Bípede Pequena",
+            "tipo": "passiva",
+            "descricao": "Tamanho Pequeno, aproximadamente 3 m, Movimento 6 m e arma natural com dano-base 1d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+            "automatizada": false
+          }
+        ]
       },
       {
         "id": "bipede-normal",
@@ -1041,16 +1098,24 @@
         "vida": 5,
         "mana": 0,
         "movimento_fixo": 9,
-        "ajustes_atributos": { "forca": 2, "destreza": 1 },
-        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "ajustes_atributos": {
+          "forca": 2,
+          "destreza": 1
+        },
+        "limites_atributos": {
+          "forca": 20,
+          "destreza": 20
+        },
         "dano_natural": "1d8",
-        "caracteristicas": [{
-          "id": "chassi-bipede-normal",
-          "titulo": "Estrutura Bípede Normal",
-          "tipo": "passiva",
-          "descricao": "Tamanho Normal, aproximadamente 4,5 m, Movimento 9 m e arma natural com dano-base 1d8. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
-          "automatizada": false
-        }]
+        "caracteristicas": [
+          {
+            "id": "chassi-bipede-normal",
+            "titulo": "Estrutura Bípede Normal",
+            "tipo": "passiva",
+            "descricao": "Tamanho Normal, aproximadamente 4,5 m, Movimento 9 m e arma natural com dano-base 1d8. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+            "automatizada": false
+          }
+        ]
       },
       {
         "id": "bipede-grande",
@@ -1061,16 +1126,24 @@
         "vida": 8,
         "mana": 0,
         "movimento_fixo": 12,
-        "ajustes_atributos": { "forca": 4, "destreza": 0 },
-        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "ajustes_atributos": {
+          "forca": 4,
+          "destreza": 0
+        },
+        "limites_atributos": {
+          "forca": 20,
+          "destreza": 20
+        },
         "dano_natural": "2d6",
-        "caracteristicas": [{
-          "id": "chassi-bipede-grande",
-          "titulo": "Estrutura Bípede Grande",
-          "tipo": "passiva",
-          "descricao": "Tamanho Grande, aproximadamente 6 m, Movimento 12 m e arma natural com dano-base 2d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
-          "automatizada": false
-        }]
+        "caracteristicas": [
+          {
+            "id": "chassi-bipede-grande",
+            "titulo": "Estrutura Bípede Grande",
+            "tipo": "passiva",
+            "descricao": "Tamanho Grande, aproximadamente 6 m, Movimento 12 m e arma natural com dano-base 2d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+            "automatizada": false
+          }
+        ]
       },
       {
         "id": "bipede-enorme",
@@ -1081,16 +1154,24 @@
         "vida": 10,
         "mana": 0,
         "movimento_fixo": 12,
-        "ajustes_atributos": { "forca": 5, "destreza": -2 },
-        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "ajustes_atributos": {
+          "forca": 5,
+          "destreza": -2
+        },
+        "limites_atributos": {
+          "forca": 20,
+          "destreza": 20
+        },
         "dano_natural": "3d6",
-        "caracteristicas": [{
-          "id": "chassi-bipede-enorme",
-          "titulo": "Estrutura Bípede Enorme",
-          "tipo": "passiva",
-          "descricao": "Tamanho Enorme, aproximadamente 9 m, Movimento 12 m e arma natural com dano-base 3d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
-          "automatizada": false
-        }]
+        "caracteristicas": [
+          {
+            "id": "chassi-bipede-enorme",
+            "titulo": "Estrutura Bípede Enorme",
+            "tipo": "passiva",
+            "descricao": "Tamanho Enorme, aproximadamente 9 m, Movimento 12 m e arma natural com dano-base 3d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+            "automatizada": false
+          }
+        ]
       },
       {
         "id": "quadrupede-pequeno",
@@ -1101,16 +1182,24 @@
         "vida": 3,
         "mana": 0,
         "movimento_fixo": 9,
-        "ajustes_atributos": { "forca": -3, "destreza": 4 },
-        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "ajustes_atributos": {
+          "forca": -3,
+          "destreza": 4
+        },
+        "limites_atributos": {
+          "forca": 20,
+          "destreza": 20
+        },
         "dano_natural": "1d4",
-        "caracteristicas": [{
-          "id": "chassi-quadrupede-pequeno",
-          "titulo": "Estrutura Quadrúpede Pequena",
-          "tipo": "limitacao",
-          "descricao": "Tamanho Pequeno, aproximadamente 0,7 m, Movimento 9 m e arma natural com dano-base 1d4. Não possui manipuladores para empunhar armas ou ferramentas convencionais.",
-          "automatizada": false
-        }]
+        "caracteristicas": [
+          {
+            "id": "chassi-quadrupede-pequeno",
+            "titulo": "Estrutura Quadrúpede Pequena",
+            "tipo": "limitacao",
+            "descricao": "Tamanho Pequeno, aproximadamente 0,7 m, Movimento 9 m e arma natural com dano-base 1d4. Não possui manipuladores para empunhar armas ou ferramentas convencionais.",
+            "automatizada": false
+          }
+        ]
       },
       {
         "id": "quadrupede-normal",
@@ -1121,16 +1210,24 @@
         "vida": 5,
         "mana": 0,
         "movimento_fixo": 12,
-        "ajustes_atributos": { "forca": 0, "destreza": 3 },
-        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "ajustes_atributos": {
+          "forca": 0,
+          "destreza": 3
+        },
+        "limites_atributos": {
+          "forca": 20,
+          "destreza": 20
+        },
         "dano_natural": "1d6",
-        "caracteristicas": [{
-          "id": "chassi-quadrupede-normal",
-          "titulo": "Estrutura Quadrúpede Normal",
-          "tipo": "limitacao",
-          "descricao": "Tamanho Normal, aproximadamente 1,5 m, Movimento 12 m e arma natural com dano-base 1d6. Não possui manipuladores para empunhar armas ou ferramentas convencionais.",
-          "automatizada": false
-        }]
+        "caracteristicas": [
+          {
+            "id": "chassi-quadrupede-normal",
+            "titulo": "Estrutura Quadrúpede Normal",
+            "tipo": "limitacao",
+            "descricao": "Tamanho Normal, aproximadamente 1,5 m, Movimento 12 m e arma natural com dano-base 1d6. Não possui manipuladores para empunhar armas ou ferramentas convencionais.",
+            "automatizada": false
+          }
+        ]
       },
       {
         "id": "quadrupede-grande",
@@ -1141,16 +1238,24 @@
         "vida": 8,
         "mana": 0,
         "movimento_fixo": 15,
-        "ajustes_atributos": { "forca": 3, "destreza": 2 },
-        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "ajustes_atributos": {
+          "forca": 3,
+          "destreza": 2
+        },
+        "limites_atributos": {
+          "forca": 20,
+          "destreza": 20
+        },
         "dano_natural": "1d8",
-        "caracteristicas": [{
-          "id": "chassi-quadrupede-grande",
-          "titulo": "Estrutura Quadrúpede Grande",
-          "tipo": "limitacao",
-          "descricao": "Tamanho Grande, aproximadamente 3 m, Movimento 15 m e arma natural com dano-base 1d8. Não possui manipuladores para empunhar armas ou ferramentas convencionais.",
-          "automatizada": false
-        }]
+        "caracteristicas": [
+          {
+            "id": "chassi-quadrupede-grande",
+            "titulo": "Estrutura Quadrúpede Grande",
+            "tipo": "limitacao",
+            "descricao": "Tamanho Grande, aproximadamente 3 m, Movimento 15 m e arma natural com dano-base 1d8. Não possui manipuladores para empunhar armas ou ferramentas convencionais.",
+            "automatizada": false
+          }
+        ]
       },
       {
         "id": "quadrupede-enorme",
@@ -1161,16 +1266,24 @@
         "vida": 10,
         "mana": 0,
         "movimento_fixo": 15,
-        "ajustes_atributos": { "forca": 5, "destreza": 0 },
-        "limites_atributos": { "forca": 20, "destreza": 20 },
+        "ajustes_atributos": {
+          "forca": 5,
+          "destreza": 0
+        },
+        "limites_atributos": {
+          "forca": 20,
+          "destreza": 20
+        },
         "dano_natural": "2d6",
-        "caracteristicas": [{
-          "id": "chassi-quadrupede-enorme",
-          "titulo": "Estrutura Quadrúpede Enorme",
-          "tipo": "limitacao",
-          "descricao": "Tamanho Enorme, aproximadamente 4,5 m, Movimento 15 m e arma natural com dano-base 2d6. Não possui manipuladores para empunhar armas ou ferramentas convencionais.",
-          "automatizada": false
-        }]
+        "caracteristicas": [
+          {
+            "id": "chassi-quadrupede-enorme",
+            "titulo": "Estrutura Quadrúpede Enorme",
+            "tipo": "limitacao",
+            "descricao": "Tamanho Enorme, aproximadamente 4,5 m, Movimento 15 m e arma natural com dano-base 2d6. Não possui manipuladores para empunhar armas ou ferramentas convencionais.",
+            "automatizada": false
+          }
+        ]
       }
     ],
     "modificacoes": [
@@ -1189,7 +1302,12 @@
         "categoria": "passiva",
         "nivel_minimo": 1,
         "descricao": "Placas metálicas reforçam o chassi. Receba +2 Defesa se for Pequeno, +3 se for Normal, +4 se for Grande ou +6 se for Enorme.",
-        "defesa_por_tamanho": { "Pequeno": 2, "Normal": 3, "Grande": 4, "Enorme": 6 },
+        "defesa_por_tamanho": {
+          "Pequeno": 2,
+          "Normal": 3,
+          "Grande": 4,
+          "Enorme": 6
+        },
         "automatizada": true
       },
       {
@@ -1370,7 +1488,8 @@
         "automatizada": false
       }
     ],
-    "recursos_provisorios": false
+    "recursos_provisorios": false,
+    "legados_adicionais": 1
   },
   {
     "id": "clone",
@@ -1380,15 +1499,44 @@
     "disponibilidade": "restrita",
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
-    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
-    "arvores": ["aethel", "ousias", "keryx", "haemus", "mulher-carmesim"],
+    "formas_aquisicao": [
+      "criacao_autorizada",
+      "transformacao_narrativa"
+    ],
+    "arvores": [
+      "aethel",
+      "ousias",
+      "keryx",
+      "haemus",
+      "mulher-carmesim"
+    ],
     "arvore": null,
     "origens_compativeis": [
-      { "arvore_id": "aethel", "titulo": "Gênese", "metodo": "reconstrução pela Origem" },
-      { "arvore_id": "ousias", "titulo": "Alétheia", "metodo": "reprodução da Essência" },
-      { "arvore_id": "keryx", "titulo": "A.X.I.S", "metodo": "clonagem tecnológica" },
-      { "arvore_id": "haemus", "titulo": "Anima", "metodo": "cultivo de um corpo vivo" },
-      { "arvore_id": "mulher-carmesim", "titulo": "Limiar", "metodo": "reconstrução pelo sangue" }
+      {
+        "arvore_id": "aethel",
+        "titulo": "Gênese",
+        "metodo": "reconstrução pela Origem"
+      },
+      {
+        "arvore_id": "ousias",
+        "titulo": "Alétheia",
+        "metodo": "reprodução da Essência"
+      },
+      {
+        "arvore_id": "keryx",
+        "titulo": "A.X.I.S",
+        "metodo": "clonagem tecnológica"
+      },
+      {
+        "arvore_id": "haemus",
+        "titulo": "Anima",
+        "metodo": "cultivo de um corpo vivo"
+      },
+      {
+        "arvore_id": "mulher-carmesim",
+        "titulo": "Limiar",
+        "metodo": "reconstrução pelo sangue"
+      }
     ],
     "transformacao_em_qualquer_arvore": true,
     "vida": 3,
@@ -1405,6 +1553,7 @@
     "legados_adicionais": 1,
     "rotulo_variante": "Projeto de Clonagem",
     "descricao_variantes": "Escolha um único Projeto. Ele representa a finalidade para a qual o Clone foi criado.",
+    "descricao": "Foi feito à imagem de outra pessoa, e sabe disso. Copia aparência, voz, digital e retina do Original, e de vez em quando lembra de alguma coisa que nunca viveu. O Projeto que motivou a clonagem decide o resto. Fala Ao Contrário.",
     "fisiologia": [
       "É biologicamente vivo e precisa respirar, alimentar-se, dormir e descansar normalmente.",
       "A aparência pode reproduzir outra raça, mas o Clone possui somente as características raciais deste pacote."
@@ -1534,8 +1683,22 @@
     "disponibilidade": "restrita",
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
-    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
-    "arvores": ["aethel", "ousias", "keryx", "haemus", "ignis", "moros", "aperion", "chronus", "erebus", "mulher-carmesim"],
+    "formas_aquisicao": [
+      "criacao_autorizada",
+      "transformacao_narrativa"
+    ],
+    "arvores": [
+      "aethel",
+      "ousias",
+      "keryx",
+      "haemus",
+      "ignis",
+      "moros",
+      "aperion",
+      "chronus",
+      "erebus",
+      "mulher-carmesim"
+    ],
     "arvore": null,
     "origem_externa": true,
     "acesso_duplo_classes_exclusivas": true,
@@ -1552,15 +1715,25 @@
     },
     "legados_adicionais": 1,
     "campos_origem": [
-      { "id": "rpgOrigem", "titulo": "Mundo ou RPG de origem" },
-      { "id": "campanhaOrigem", "titulo": "Campanha de origem" },
-      { "id": "arvoreOrigemId", "titulo": "Árvore de origem equivalente" }
+      {
+        "id": "rpgOrigem",
+        "titulo": "Mundo ou RPG de origem"
+      },
+      {
+        "id": "campanhaOrigem",
+        "titulo": "Campanha de origem"
+      },
+      {
+        "id": "arvoreOrigemId",
+        "titulo": "Árvore de origem equivalente"
+      }
     ],
     "escolha_pericias": {
       "total": 3,
       "campo": "periciasMemoria",
       "titulo": "Perícia das Memórias"
     },
+    "descricao": "É um personagem de outra campanha que atravessou pra esta. Mantém nome, cara, memória e reputação; perde nível e ficha. O que sobrou de lá volta como uma Assinatura (uma técnica marcante, renomeada e convertida) e um Legado a mais.",
     "caracteristicas": [
       {
         "id": "identidade-preservada",
@@ -1666,13 +1839,34 @@
       }
     ],
     "conversao": [
-      { "origem": "Nível e experiência", "destino": "Ajustados ao Nível Total da campanha atual" },
-      { "origem": "Atributos", "destino": "Redistribuídos pelas regras atuais" },
-      { "origem": "Raça antiga", "destino": "Aparência preservada; somente as mecânicas do Errante funcionam" },
-      { "origem": "Classe antiga", "destino": "Representada pelas classes atuais" },
-      { "origem": "Poder marcante", "destino": "Convertido em uma Assinatura Remanescente" },
-      { "origem": "Item importante", "destino": "Pode ser representado pelo Legado adicional" },
-      { "origem": "Dinheiro e equipamentos", "destino": "Ajustados pelo mestre à campanha atual" }
+      {
+        "origem": "Nível e experiência",
+        "destino": "Ajustados ao Nível Total da campanha atual"
+      },
+      {
+        "origem": "Atributos",
+        "destino": "Redistribuídos pelas regras atuais"
+      },
+      {
+        "origem": "Raça antiga",
+        "destino": "Aparência preservada; somente as mecânicas do Errante funcionam"
+      },
+      {
+        "origem": "Classe antiga",
+        "destino": "Representada pelas classes atuais"
+      },
+      {
+        "origem": "Poder marcante",
+        "destino": "Convertido em uma Assinatura Remanescente"
+      },
+      {
+        "origem": "Item importante",
+        "destino": "Pode ser representado pelo Legado adicional"
+      },
+      {
+        "origem": "Dinheiro e equipamentos",
+        "destino": "Ajustados pelo mestre à campanha atual"
+      }
     ],
     "recursos_provisorios": false
   },
@@ -1684,16 +1878,45 @@
     "disponibilidade": "restrita",
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
-    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
-    "arvores": ["aethel", "haemus", "ignis", "erebus", "mulher-carmesim"],
+    "formas_aquisicao": [
+      "criacao_autorizada",
+      "transformacao_narrativa"
+    ],
+    "arvores": [
+      "aethel",
+      "haemus",
+      "ignis",
+      "erebus",
+      "mulher-carmesim"
+    ],
     "arvore": null,
     "transformacao_em_qualquer_arvore": true,
     "origens_compativeis": [
-      { "arvore_id": "aethel", "titulo": "Gênese", "metodo": "fusão pela Origem" },
-      { "arvore_id": "haemus", "titulo": "Anima", "metodo": "fusão de organismos vivos" },
-      { "arvore_id": "ignis", "titulo": "Vórtice", "metodo": "convergência pela inconstância" },
-      { "arvore_id": "erebus", "titulo": "Abismo", "metodo": "união de existências corrompidas pelo Vazio" },
-      { "arvore_id": "mulher-carmesim", "titulo": "Limiar", "metodo": "fusão de corpos, sangue ou almas" }
+      {
+        "arvore_id": "aethel",
+        "titulo": "Gênese",
+        "metodo": "fusão pela Origem"
+      },
+      {
+        "arvore_id": "haemus",
+        "titulo": "Anima",
+        "metodo": "fusão de organismos vivos"
+      },
+      {
+        "arvore_id": "ignis",
+        "titulo": "Vórtice",
+        "metodo": "convergência pela inconstância"
+      },
+      {
+        "arvore_id": "erebus",
+        "titulo": "Abismo",
+        "metodo": "união de existências corrompidas pelo Vazio"
+      },
+      {
+        "arvore_id": "mulher-carmesim",
+        "titulo": "Limiar",
+        "metodo": "fusão de corpos, sangue ou almas"
+      }
     ],
     "vida": 5,
     "mana": 1,
@@ -1712,6 +1935,7 @@
       "expressos": 2,
       "surto_adicional": 1
     },
+    "descricao": "Um corpo só, montado com mais de uma criatura. Não herda o pacote racial de nenhuma das partes: herda a mistura: aguenta melhor o que ataca a carne, aguenta melhor o que ataca a cabeça, e conhece Fragmentos que consegue expressar por algumas rodadas antes de o corpo cobrar a conta.",
     "fisiologia": [
       "É um ser vivo e pode ser tratado normalmente com Medicina.",
       "Seu corpo reúne diferentes criaturas, corpos, almas ou essências, mas não acumula os pacotes raciais das partes que o formaram."
@@ -1819,11 +2043,14 @@
         "id": "massa-colossal",
         "titulo": "Massa Colossal",
         "descricao": "Receba +4 em Fortitude, capacidade de carga dobrada e vantagem contra empurrões e quedas provocadas por outras criaturas.",
-        "ajustes_pericias": { "fortitude": 4 },
+        "ajustes_pericias": {
+          "fortitude": 4
+        },
         "automatizada": true
       }
     ],
-    "recursos_provisorios": false
+    "recursos_provisorios": false,
+    "legados_adicionais": 1
   },
   {
     "id": "bruxa",
@@ -1833,17 +2060,51 @@
     "disponibilidade": "restrita",
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
-    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
-    "arvores": ["ousias", "haemus", "ignis", "chronus", "erebus", "mulher-carmesim"],
+    "formas_aquisicao": [
+      "criacao_autorizada",
+      "transformacao_narrativa"
+    ],
+    "arvores": [
+      "ousias",
+      "haemus",
+      "ignis",
+      "chronus",
+      "erebus",
+      "mulher-carmesim"
+    ],
     "arvore": null,
     "transformacao_em_qualquer_arvore": true,
     "origens_compativeis": [
-      { "arvore_id": "ousias", "titulo": "Alétheia", "metodo": "pacto firmado pela Essência" },
-      { "arvore_id": "haemus", "titulo": "Anima", "metodo": "bruxaria ligada à vitalidade" },
-      { "arvore_id": "ignis", "titulo": "Vórtice", "metodo": "transformação pela inconstância" },
-      { "arvore_id": "chronus", "titulo": "Éon", "metodo": "ritual ou pacto através do tempo" },
-      { "arvore_id": "erebus", "titulo": "Abismo", "metodo": "contato prolongado com o Vazio" },
-      { "arvore_id": "mulher-carmesim", "titulo": "Limiar", "metodo": "pacto, ritual ou força ligada ao sangue e à morte" }
+      {
+        "arvore_id": "ousias",
+        "titulo": "Alétheia",
+        "metodo": "pacto firmado pela Essência"
+      },
+      {
+        "arvore_id": "haemus",
+        "titulo": "Anima",
+        "metodo": "bruxaria ligada à vitalidade"
+      },
+      {
+        "arvore_id": "ignis",
+        "titulo": "Vórtice",
+        "metodo": "transformação pela inconstância"
+      },
+      {
+        "arvore_id": "chronus",
+        "titulo": "Éon",
+        "metodo": "ritual ou pacto através do tempo"
+      },
+      {
+        "arvore_id": "erebus",
+        "titulo": "Abismo",
+        "metodo": "contato prolongado com o Vazio"
+      },
+      {
+        "arvore_id": "mulher-carmesim",
+        "titulo": "Limiar",
+        "metodo": "pacto, ritual ou força ligada ao sangue e à morte"
+      }
     ],
     "vida": 1,
     "mana": 5,
@@ -1866,6 +2127,7 @@
       "conhecidas_base": 3,
       "campo": "maldicoesConhecidasIds"
     },
+    "descricao": "Não é profissão nem gênero: é uma natureza mágica que se adquire e não se devolve. Enxerga maldição, pacto e possessão a distância, tece maldição própria, e quando falta Mana paga com Vida. Fala Celta, e ninguém domina as artes do Fluxo como as de Salém.",
     "fisiologia": [
       "Bruxa é uma natureza mágica adquirida, não uma profissão nem uma identidade de gênero.",
       "Permanece um ser vivo, salvo transformação narrativa posterior declarada pelo mestre."
@@ -2029,13 +2291,32 @@
     "disponibilidade": "restrita",
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
-    "formas_aquisicao": ["criacao_autorizada", "transformacao_narrativa"],
+    "formas_aquisicao": [
+      "criacao_autorizada",
+      "transformacao_narrativa"
+    ],
     "arvores": [],
     "arvore": null,
     "vida": 0,
     "mana": 0,
     "indisponivel": true,
     "motivo_indisponivel": "Raça deliberadamente adiada por exigir um pacote próprio mais complexo antes de poder ser escolhida.",
-    "recursos_provisorios": true
+    "recursos_provisorios": true,
+    "legados_adicionais": 1
+  },
+  {
+    "id": "raca-personalizada",
+    "tipo": "raca",
+    "titulo": "Outra coisa (personalizada)",
+    "categoria": "padrao",
+    "disponibilidade": "geral",
+    "arvore": null,
+    "vida": 0,
+    "mana": 0,
+    "movimento": 0,
+    "fisiologia": [],
+    "caracteristicas": [],
+    "recursos_provisorios": false,
+    "descricao": "Nenhuma raça do catálogo serve? Escolha esta e escreva o nome livremente na ficha. Sem bônus ou característica própria: mecanicamente é uma raça em branco; o que ela representa fica a critério do mestre."
   }
 ]

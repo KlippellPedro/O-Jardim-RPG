@@ -1,0 +1,139 @@
+{
+  "pacote": "realidade-0-dimensoes",
+
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e_esse_arquivo": "As outras Dimensões do Galho 'Realidade 0' (Árvore Gênese), fora a Dimensão Padrão - essa continua em genese.json, junto com a cascata principal da Árvore. O Galho 'realidade-0' já citava todas elas por nome desde sempre ('Contém a Dimensão Padrão, além de Nadalon, Espelhos, Sonhar, Întuneric e Coliseu'), mas nenhuma tinha entrada própria, então nunca apareceram no site.",
+
+    "por_que_um_arquivo_separado": "O padrão original (data/mundo/_padrao.json) é UM arquivo por Árvore. A Gênese estourou esse padrão: ela é a única Árvore com um Galho habitado, então concentra dimensões, reinos, soberanos e eventos. Em vez de um genese.json de mais de mil linhas, o conteúdo da Realidade 0 foi dividido por camada (realidade-0-dimensoes.json, realidade-0-reinos.json, realidade-0-soberanos.json, realidade-0-eventos.json). O import não se importa: ele só procura um array 'entradas' em cada arquivo. As outras 9 Árvores seguem com um arquivo só.",
+
+    "origem_do_conteudo": "Tudo transcrito das notas do Obsidian em 'O Jardim/Gênese/Realidade 0/Dimensões/', exceto onde marcado com '_escrito_do_zero'. Arkarin também estava arquivada lá, mas NÃO entra aqui - ela é o Galho da Árvore de Limiar, e está em data/mundo/Limiar/limiar.json.",
+
+    "estrutura": "Cada Dimensão vem seguida dos seus Locais (tipo 'reino', conteudo.dimensao apontando pra ela) - assim dá pra ler a cascata de cima pra baixo."
+  },
+
+  "entradas": [
+    {
+      "_secao": "DIMENSÃO - Nadalon",
+      "tipo": "dimensao",
+      "id": "nadalon",
+      "titulo": "Nadalon",
+      "conteudo": {
+        "galho": "realidade-0",
+        "descricao": "Uma dimensão cujo ecossistema reage ao estado de espírito de seus habitantes. Diferente da Dimensão Padrão, as leis da física aqui são ditadas pela Essência e pela harmonia.\n\nO céu é um gradiente constante de violeta e âmbar, sem noite total, e o clima é uma primavera infinita - a temperatura é regulada pela vontade de Noemi Finwë, pra garantir o conforto de todos. A geografia é feita de ilhas flutuantes conectadas por pontes de Luz, e de florestas com todos os tipos de árvore que se pode imaginar, cada uma com uma mensagem a transmitir sobre o passado, o presente ou o futuro.\n\nTodos os seres vivem em harmonia com a vida: por uma habilidade de Noemi, cresce ali um fruto chamado Miruvor, que provê todos os nutrientes de que os elfos precisam. As criaturas falantes da dimensão se comunicam por um idioma comum, o Finlandês.",
+        "caracteristicas": "Dimensão élfica. Sem noite, sem fome, sem inverno - e sem privacidade emocional, já que o ambiente responde ao que os habitantes sentem."
+      },
+
+      "_origem": "Conteúdo REAL - transcrito de 'Dimensões/Nadalon/Nadalon.md'.",
+      "_nota_conexao": "A nota original diz que as leis da física ali são ditadas pela 'Essência' - que é exatamente o Fluxo da Árvore de Alétheia (Ousias). A nota nunca declara isso explicitamente, mas a ligação está no texto. Vale decidir se é coincidência de vocabulário ou se Nadalon é de fato um lugar onde o Fluxo da Essência vaza pra dentro da Realidade 0.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "LOCAL de Nadalon - Alfarn",
+      "tipo": "reino",
+      "id": "alfarn",
+      "titulo": "Alfarn",
+      "conteudo": {
+        "dimensao": "nadalon",
+        "descricao": "Não apenas a capital de Nadalon: o coração da dimensão e o ápice da visão de Noemi Finwë. Diferente das cidades humanas, Alfarn não foi construída sobre a terra - parece ter brotado dela, como uma flor de cristal e luz.\n\nA ilha flutua no ponto mais alto da dimensão, onde a gravidade é suave e o ar tem um leve perfume de pétalas de jasmim; o solo é de rocha branca translúcida que emite uma luminescência fraca. Cascatas de água pura caem das bordas pro vazio abaixo, mas antes de desaparecerem viram névoa dourada, que retorna às outras ilhas em forma de chuva com propriedades curativas e férteis - as Águas de Cristal.\n\nNo ponto mais alto fica o Palácio, sem portas trancadas: uma estrutura de arcos abertos onde o vento circula livre, e o trono de Noemi é esculpido numa única peça de ametista que parece pulsar. A Biblioteca de Luz não guarda informação em papel, e sim em cristais flutuantes - ao tocar um cristal, o elfo recebe o conhecimento direto na mente, o que permite compartilhar a sabedoria de milênios instantaneamente.\n\nAlfarn é protegida por uma frequência sonora: qualquer ser que chegue à ilha com intenções violentas sente uma sonolência profunda e paz, perdendo a vontade de lutar antes mesmo de desembarcar."
+      },
+
+      "_origem": "Conteúdo REAL - transcrito de 'Dimensões/Nadalon/Alfarn.md'.",
+      "_nota_mesa": "O Escudo é a coisa mais útil desta entrada pra mesa: é uma defesa que não pode ser vencida por força, só por chegar sem intenção violenta. Vale como enigma de acesso.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "DIMENSÃO - Întuneric",
+      "tipo": "dimensao",
+      "id": "intuneric",
+      "titulo": "Întuneric",
+      "conteudo": {
+        "galho": "realidade-0",
+        "descricao": "Esta não é uma dimensão comum: todos vivem num estado de agonia que não acaba. O céu é coberto por nuvens cor de fuligem que bloqueiam qualquer resquício de luz, e a única iluminação vem de uma lua pálida que nunca se põe.\n\nO ar é espesso, com cheiro de terra úmida e ferro. A vegetação são árvores retorcidas e secas, que parecem garras tentando perfurar o que quer que se aproxime. Pra um humano ou ser despreparado, a expectativa de vida é medida em minutos: se o frio sobrenatural não congelar seus pulmões, o som do próprio batimento cardíaco serve de sino de jantar pro que espreita na névoa.\n\nNão há agricultura - tudo o que cresce se alimenta da decomposição, e a cadeia alimentar começa nos monstros e termina nos Vampiros. As criaturas falantes se comunicam por um idioma comum, o Romeno.",
+        "caracteristicas": "Dimensão vampírica. Economia inteira baseada em sangue humano de colônias. Governada por Davinor Întuneric pelo silêncio e pelo medo."
+      },
+
+      "_origem": "Conteúdo REAL - transcrito de 'Dimensões/Întuneric/Întuneric.md'.",
+      "_correcao_2026-07-29": "O Galho 'realidade-0' em genese.json listava 'Întuneric, Êtuneric' como se fossem duas dimensões diferentes. É a mesma palavra digitada duas vezes - corrigido lá pra uma só.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "LOCAL de Întuneric - Transilvânia",
+      "tipo": "reino",
+      "id": "transilvania",
+      "titulo": "Transilvânia",
+      "conteudo": {
+        "dimensao": "intuneric",
+        "descricao": "No coração da região conhecida como Transilvânia, o castelo de Davinor é uma construção colossal de obsidiana e ossos petrificados. Não tem guardas visíveis: a própria estrutura parece viva, reagindo aos intrusos - dizem que as paredes bebem o sangue de quem tenta invadir.\n\nAté ali chegam os Trens de Osso: enormes locomotivas feitas de metal fundido com esqueletos de gigantes, que correm sobre trilhos parecidos com veias pulsantes, transportando os barris de sangue das colônias distantes. O barulho que emitem não é de vapor, e sim um guincho metálico que soa como um grito.\n\nA Catedral funciona como um imenso filtro biológico, que tenta purificar todo o sangue sujo pra que o castelo de Davinor permaneça puro - e o deixe mais forte a cada morte que acontece."
+      },
+
+      "_origem": "Conteúdo REAL - transcrito de 'Dimensões/Întuneric/Transilvânia.md'.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "LOCAL de Întuneric - as Colônias",
+      "tipo": "reino",
+      "id": "colonias-de-intuneric",
+      "titulo": "Colônias de Întuneric",
+      "conteudo": {
+        "dimensao": "intuneric",
+        "descricao": "Fazendas humanas. Diferente de cidades normais, as colônias são construídas de forma vertical e claustrofóbica, pra facilitar o monitoramento.\n\nOs dormitórios são estruturas de concreto bruto sem janelas, onde os humanos dormem em beliches de ferro empilhados até o teto; o ar é pesado, filtrado por máquinas que emitem um zumbido constante pra mascarar o som das conversas e impedir conspirações. Todas as ruas são levemente inclinadas em direção ao centro - não pra drenar chuva, que raramente cai, mas pra garantir que qualquer sangue derramado em incidentes ou execuções seja canalizado pros reservatórios subterrâneos. São as Calhas de Sangue.\n\nDentro de uma colônia os humanos não são iguais: são classificados pelo Mestre da Colheita local. Doadores Ativos são os saudáveis entre 18 e 40 anos, de sangue de alta qualidade. Matrizes são os selecionados pra reprodução contínua. Quebrados são doentes e idosos, que servem só pra trabalho pesado ou como ração pras criaturas. Vigilantes são humanos traidores, que ajudam os vampiros em troca de regalias.\n\nUma vez por mês, cada setor é levado às Estações de Sangria, onde válvulas orgânicas são conectadas diretamente às artérias. Cada humano deve entregar uma quantidade fixa - o Imposto Pela Vida - e, se o corpo não produz o suficiente por fraqueza, a punição é a retirada de um membro pra compensar o volume em carne."
+      },
+
+      "_origem": "Conteúdo REAL - transcrito de 'Dimensões/Întuneric/Colônias.md', incluindo a tabela de hierarquia (convertida em prosa).",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "É o material mais pesado do cofre. Vale combinar tom com a mesa antes de pôr em jogo."
+    },
+
+    {
+      "_secao": "DIMENSÃO - Sonhar",
+      "tipo": "dimensao",
+      "id": "sonhar",
+      "titulo": "Sonhar",
+      "conteudo": {
+        "galho": "realidade-0",
+        "descricao": "A dimensão que ninguém atravessa acordado. Sonhar não tem geografia fixa: é feita do que os viventes das outras dimensões deixam escapar quando dormem, e por isso muda de forma toda vez que alguém a visita. Divide-se em duas metades que se tocam sem fronteira clara - os Sonhos, onde o que se deseja ganha corpo, e os Pesadelos, onde ganha corpo o que se teme. Um viajante raramente escolhe em qual dos dois vai parar.\n\nSeu soberano é Grimm, um ser intrigante que admira todas as espécies de vida e gosta especialmente de seres com um objetivo muito forte e aparente - o que faz dele um anfitrião generoso e um colecionador perigoso, porque objetivo forte é justamente o que dá forma às duas metades da dimensão dele.",
+        "caracteristicas": "Sem geografia estável. Acesso pelo sono, não por portal. Contém Sonhos e Pesadelos."
+      },
+
+      "_origem": "PARCIAL - a única fonte era 'Dimensões/Sonhar/Grimm.md', com duas linhas sobre Grimm, mais as pastas vazias 'Sonhos' e 'Pesadelos'. O resto foi escrito do zero em 2026-07-29 a partir desses três indícios.",
+      "_conflito_resolvido": "A nota do cofre chama Grimm de 'soberano dos sonhos'; a lista de Soberanos o chama de 'Soberano dos Pesadelos'. Resolvido assim: ele é soberano de Sonhar inteira, que contém as duas metades - e 'Soberano dos Pesadelos' é como os OUTROS soberanos o chamam. Usa as duas fontes sem contradizer nenhuma. Se preferir o contrário, é só inverter aqui.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "DIMENSÃO - Espelhos",
+      "tipo": "dimensao",
+      "id": "espelhos",
+      "titulo": "Espelhos",
+      "conteudo": {
+        "galho": "realidade-0",
+        "descricao": "Exatamente igual a tudo que existe nas outras dimensões - e é justamente isso que a torna insuportável. Espelhos reproduz cada dimensão da Realidade 0 nos mínimos detalhes: as mesmas cidades, as mesmas pessoas, as mesmas conversas acontecendo no mesmo instante. Nada ali é falso, e nada ali é original.\n\nO problema nunca foi encontrar a diferença. É que quase não há nenhuma, e as poucas que existem não se anunciam: uma decisão tomada ao contrário, uma pessoa que ali continua viva, uma porta que do outro lado nunca foi construída. Viajantes que passam tempo demais em Espelhos param de conseguir dizer de qual dos lados vieram.",
+        "caracteristicas": "Cópia integral das outras dimensões, com divergências raras e não sinalizadas."
+      },
+
+      "_origem": "PARCIAL - a única fonte era 'Dimensões/Espelhos/Conceito.md', com uma frase: 'É exatamente igual a tudo que tem nas outras dimensões'. O arquivo 'Espelhos.md' estava vazio. O resto foi escrito do zero em 2026-07-29, mantendo a frase original como primeira linha.",
+      "_nota_loja": "Há um item no catálogo da Loja (data/loja/catalogo.json) que 'abre um portal para a dimensão espelhada' - era a única referência a esta dimensão em qualquer lugar do projeto. Agora tem lore por trás.",
+      "_pronto_para_importar": true
+    },
+
+    {
+      "_secao": "DIMENSÃO - Coliseu",
+      "tipo": "dimensao",
+      "id": "coliseu",
+      "titulo": "Coliseu",
+      "conteudo": {
+        "galho": "realidade-0",
+        "descricao": "A menor das dimensões da Realidade 0, e a única construída de propósito. O Coliseu não tem povo, cidade nem clima: é uma arena suspensa no vazio, cercada por arquibancadas que se estendem além do alcance da vista e que nunca são vistas cheias nem vazias - só ocupadas o bastante pra que o barulho não pare nunca.\n\nQualquer um pode entrar; ninguém sabe explicar como se sai. O que se disputa ali raramente é dinheiro: são favores, passagens, dívidas, títulos e nomes. Diz-se que a arena aceita qualquer aposta desde que o apostador tenha o que apostou - e que já houve quem apostasse a própria morte e perdesse.",
+        "caracteristicas": "Arena dimensional neutra. Entrada livre, saída negociada. Combate como moeda."
+      },
+
+      "_origem": "ESCRITO DO ZERO em 2026-07-29. O Coliseu era citado apenas por nome, uma vez, na descrição do Galho 'realidade-0' em genese.json - não existe nenhuma nota sobre ele no Obsidian. Tudo aqui é proposta minha; sinta-se livre pra descartar inteiro.",
+      "_por_que_essa_direcao": "Escrito como espaço neutro de encontro entre dimensões, porque é a única das 6 que não tem povo nem soberano - servia melhor como lugar onde personagens de dimensões diferentes se cruzam sem precisar de uma guerra pra justificar.",
+      "_pronto_para_importar": true
+    }
+  ]
+}

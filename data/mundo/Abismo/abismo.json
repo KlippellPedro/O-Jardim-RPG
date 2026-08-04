@@ -32,48 +32,49 @@
     },
 
     {
-      "_secao": "2 de 4 - FLUXO (rascunho - ver _origem abaixo)",
+      "_secao": "2 de 4 - FLUXO",
       "tipo": "fluxo",
       "id": "fluxo-do-vazio",
       "titulo": "Fluxo do Vazio",
       "conteudo": {
         "arvore": "Abismo",
-        "descricao": "[RASCUNHO - PRECISA SER REVISADO] O Fluxo que rege o nada absoluto - o mesmo domínio da deidade Erebus, já que Árvore, Deidade e Fluxo são a mesma entidade."
+        "descricao": "O Fluxo do que não está. Apaga em vez de destruir: o som some antes de chegar ao ouvido, a dor não é sentida, o nome de alguém deixa de ocorrer a quem o conhecia. É o mais silencioso e o mais temido de todos, porque não deixa ruína nenhuma pra provar que houve algo ali. Erebus não guarda a morte - isso é do Limiar - e sim a saída definitiva: o que passa pelo Vazio não vai a lugar nenhum, simplesmente deixa de ter existido, e nem a Biblioteca de Arkarin fica com um livro pra contar.",
+        "marca_corporal": "Estrelas no pulso - pontos brancos e frios sob a pele, que não refletem luz nenhuma."
       },
 
-      "_origem": "PLACEHOLDER - o antigo data/mundo/aethel/aethel.json (removido nesta sessão, recuperado do histórico do git) menciona de passagem que 'o Fluxo do Vazio já tinha um exemplo pronto' e cogitava um campo 'marca_corporal' (\"Estrelas no pulso\") como padrão pra todos os Fluxos - mas o texto original desse exemplo não sobreviveu em nenhum arquivo ainda existente ou recuperável do histórico. Se você tiver essa nota/PDF original em algum lugar, é só colar a 'descricao' de verdade aqui e adicionar 'marca_corporal': 'Estrelas no pulso' (ou o que for) ao 'conteudo'.",
+      "_origem": "Domínio de Erebus (antigo data/world/panteon.json) + tabela 'Estrutura do Jardim' (cor Preto). A marca 'Estrelas no pulso' era a única marca_corporal já registrada no repo (citada no antigo data/mundo/aethel/aethel.json); foi mantida literalmente e virou o padrão adotado pelos 10 Fluxos. Descrição reescrita em 2026-07-29.",
       "_pronto_para_importar": true,
-      "_o_que_falta": "Reescrever 'descricao' com o material de origem de verdade, se você ainda tiver acesso a ele. Considerar adicionar 'marca_corporal' como padrão pra todos os Fluxos, não só este.",
+      "_nota_distincao": "Vazio (Erebus) e Fim (Mulher Carmesim) são coisas diferentes de propósito: o Fim encerra e arquiva - toda vida vira um livro na Biblioteca de Arkarin; o Vazio apaga sem registro. É o que torna o Abismo mais temido que o Limiar.",
       "_quando_revelar": "Geralmente revelado depois da Deidade em si."
     },
 
     {
-      "_secao": "3 de 4 - GALHO (placeholder - ver _origem)",
+      "_secao": "3 de 4 - GALHO",
       "tipo": "galho",
-      "id": "abismo-galho-1",
-      "titulo": "Galho de Abismo (placeholder)",
+      "id": "bordo",
+      "titulo": "Bordo",
       "conteudo": {
         "arvore": "erebus",
-        "descricao": "[PLACEHOLDER] Ainda não existe um Galho definido pra Árvore de Abismo em nenhuma fonte. Substitua id/titulo/descricao por um Galho de verdade quando decidir o que existe aqui."
+        "descricao": "O último Galho, e o único de onde não se volta. Bordo é a borda do Jardim: a faixa onde a existência ainda alcança, e depois da qual não alcança mais. Não é escuro - escuridão é uma coisa, e ali não há coisa nenhuma. Quem olha pra frente em Bordo não vê preto: não vê.\n\nErebus fica sentado nessa borda, de costas pro Jardim, e é a única deidade que nunca precisou de um lugar habitável. Ele não guarda Bordo contra invasores - guarda contra saídas.\n\nA paralisia não o afetou como às outras. Erebus continua onde sempre esteve, fazendo o que sempre fez, e é impossível dizer se ele chegou a notar que as demais pararam de falar.",
+        "nota": "Bordo é o único Galho que não tem fronteira com nenhum outro. Ele faz fronteira com o fato de não haver mais nada."
       },
-
-      "_origem": "PLACEHOLDER puro - nenhuma fonte definiu Galhos pra esta Árvore.",
-      "_pronto_para_importar": false,
-      "_proximo_passo": "Escreva o(s) Galho(s) reais - duplique este bloco com ids diferentes se precisar de mais de um."
+      "_origem": "ESCRITO DO ZERO em 2026-07-29. Ancorado no domínio de Erebus, já canônico ('o nada absoluto', 'guarda a saída definitiva da existência', 'o mais temido, neutro e enigmático de todos').",
+      "_pronto_para_importar": true
     },
 
     {
-      "_secao": "4 de 4 - DIMENSÃO (placeholder - ver _origem)",
+      "_secao": "4 de 4 - DIMENSÃO",
       "tipo": "dimensao",
-      "id": "abismo-dimensao-1",
-      "titulo": "Dimensão de Abismo (placeholder)",
+      "id": "a-saida",
+      "titulo": "A Saída",
       "conteudo": {
-        "galho": "abismo-galho-1",
-        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro do Galho acima. Substitua quando tiver o conteúdo de verdade."
+        "galho": "bordo",
+        "descricao": "O ponto de Bordo onde a borda se abre. Não tem porta, moldura nem limiar marcado - é apenas o lugar onde alguém pode deixar de existir por escolha própria, e o único lugar do Jardim onde isso é possível.\n\nA Mulher Carmesim recebe todos os que acabam, e cada um deles vira um livro na Biblioteca de Arkarin. Quem atravessa a Saída não vira livro. Não vira nada, e não deixa nada - nem lembrança em quem ficou.\n\nErebus não impede ninguém. Ele apenas pergunta uma vez, e nunca duas.",
+        "caracteristicas": "Irreversível e sem registro. Não há como saber quem já passou por aqui, porque não sobra quem soubesse."
       },
-
-      "_origem": "PLACEHOLDER puro - mesmo caso do Galho acima.",
-      "_pronto_para_importar": false
+      "_origem": "ESCRITO DO ZERO em 2026-07-29, junto com o Galho acima.",
+      "_nota_conexao": "É o que fecha a distinção entre as duas Árvores do fim, já registrada em '_nota_distincao' na entrada 2: o Limiar encerra e arquiva, o Abismo apaga. A Biblioteca de Arkarin tem um livro pra cada existência que acabou - e nenhum pros que passaram pela Saída.",
+      "_pronto_para_importar": true
     }
   ]
 }

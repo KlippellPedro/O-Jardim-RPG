@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const catalogPath = path.join(root, 'bots', 'banqueiro', 'data', 'catalogo.json');
+const catalogPath = path.join(root, 'data', 'loja', 'catalogo.json');
 const document = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
 const profiles = {
   excalibur: ['6d10+12', 25, 'lendario'],

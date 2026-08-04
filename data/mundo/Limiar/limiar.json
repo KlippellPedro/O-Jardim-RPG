@@ -2,12 +2,15 @@
   "pacote": "arvore-limiar",
 
   "_LEIA_ISSO_PRIMEIRO": {
-    "o_que_e_esse_arquivo": "Pacote da Árvore de Limiar - mesmo formato de data/mundo/Gênese/genese.json. Caso especial: Deidade, Fluxo E Galho (Arkarin) têm conteúdo REAL aqui, recuperado do antigo data/world/panteon.json - é a segunda Árvore (depois de Gênese) a ter um Galho de verdade. Só a Dimensão continua PLACEHOLDER. Outra particularidade: Limiar só tem ESTE Galho (Arkarin), diferente das outras Árvores que tendem a ter vários - reflexo da natureza dela (ela é o fim de tudo, não uma entre múltiplas origens).",
+    "o_que_e_esse_arquivo": "Pacote da Árvore de Limiar - mesmo formato de data/mundo/Gênese/genese.json. É a Árvore mais completa do repo: TODAS as 6 entradas têm conteúdo real, e é a primeira a fechar a cascata inteira até o nível de Local (Árvore → Fluxo → Galho → Dimensão → Reino), o exemplo que o data/mundo/_padrao.json marcava como faltante. Particularidade: Limiar só tem ESTE Galho (Arkarin), diferente das outras Árvores que tendem a ter vários - reflexo da natureza dela (ela é o fim de tudo, não uma entre múltiplas origens).",
+    "atualizado_2026-07-29": "Galho, Dimensão e Locais foram escritos/expandidos a partir das notas do Obsidian (pasta 'O Jardim/Gênese/Realidade 0/Dimensões/Arkarin'), que estavam fora do site até agora. O Fluxo foi renomeado de 'Fluxo do Sangue' pra 'Fluxo do Fim' (id inalterado) - ver '_nota_titulo_vs_id' na entrada 2.",
     "ordem_de_revelacao_sugerida": [
       "1. Deidade (Mulher Carmesim) - pronta pra importar.",
-      "2. Fluxo (Fluxo do Sangue) - rascunho, mas coerente.",
-      "3. Galho (Arkarin) - conteúdo real, pronto pra importar.",
-      "4. Dimensão - PLACEHOLDER, substitua antes de importar."
+      "2. Fluxo (Fluxo do Fim, com a vertente do Sangue) - pronto pra importar.",
+      "3. Galho (Arkarin) + os 5 Mandamentos - pronto pra importar.",
+      "4. Dimensão (Castelo Carmesim) - pronta pra importar.",
+      "5. Local (Tribunal de Arkarin) - pronto pra importar.",
+      "6. Local (Biblioteca de Arkarin) - pronto pra importar."
     ]
   },
 
@@ -32,19 +35,21 @@
     },
 
     {
-      "_secao": "2 de 4 - FLUXO (rascunho - ver _origem abaixo)",
+      "_secao": "2 de 4 - FLUXO",
       "tipo": "fluxo",
       "id": "fluxo-do-sangue",
-      "titulo": "Fluxo do Sangue",
+      "titulo": "Fluxo do Fim",
       "conteudo": {
         "arvore": "Limiar",
-        "descricao": "[RASCUNHO - PRECISA SER REVISADO] O Fluxo ligado à morte, ao julgamento dos mortos e ao fim de toda existência - o mesmo domínio da Mulher Carmesim, já que Árvore, Deidade e Fluxo são a mesma entidade. Ver também a perícia \"Ritos de Arkarin\" em src/regras/regrasData.js, que já cita este Fluxo."
+        "descricao": "O Fluxo do término de todas as eras e ciclos. Nas mãos da Mulher Carmesim ele encerra: fecha histórias, sela o que acabou e transforma o fim em solo pro recomeço. Mortal nenhum canaliza o Fim inteiro - o que se alcança é sua única vertente praticável, o Sangue.\n\nO Sangue é a manifestação do Fluxo da Origem transformada pela dor, pela perda e pela obsessão - nascida do final dos sonhos e da reconstrução cruel dos objetivos. Ele não é aprendido, ele é sentido por aqueles que foram quebrados e que, em seu desespero, escolheram sacrificar tudo pra renascer com novos propósitos. Não existe mais o que era ou seria: quem manipula esse Fluxo sabe que tudo é extremo, os sentimentos se intensificam, os objetivos se reconstroem e a história passa a ser moldada pelo sangue carmesim. Os que tocam o Sangue nunca mais serão os mesmos - uma vez que ele entra, contamina e transforma a alma em algo totalmente novo.\n\nTodos que usam o Sangue estão ligados a Arkarin, o berço do fim, porque o fim às vezes significa recomeço - e é a Mulher Carmesim quem concede esse privilégio aos escolhidos.",
+        "marca_corporal": "Carmesim sob as unhas e nas dobras das mãos, que não sai com água; com o tempo, linhas de escrita que ninguém consegue ler."
       },
 
-      "_origem": "PLACEHOLDER - nenhuma fonte específica sobre o Fluxo em si (distinto da deidade) foi lida ainda, mas o id 'fluxo-do-sangue' já é usado/temático no código (styles/core/variables.css → --blood, src/mundo/config/temas.js → símbolo ✥), então já está pronto pra herdar essa cor/símbolo assim que importado.",
+      "_origem": "Conteúdo REAL - transcrito da nota do Obsidian 'O Jardim/Gênese/Realidade 0/Dimensões/Arkarin/Sangue.md'.",
+      "_retraducao_2026-07-29": "A nota original chamava isso de 'Arkania de Sangue', manifestação da 'Arkania Primordial'. Arkania é um conceito descontinuado (ver data/loja/INSTRUCOES_CATALOGO.md, que já registra a remoção). Retraduzido: Arkania → Fluxo, e Arkania Primordial → Fluxo da Origem (Aethel/Gênese). O encaixe é da própria lore: a nota do Orfanato de Ofélia descreve Yennefer como alguém em quem 'o rosa primordial virou o sangue escarlate' - e Gênese é Rosa, Limiar é Vermelho vinho na tabela 'Estrutura do Jardim'.",
+      "_nota_titulo_vs_id": "O título virou 'Fluxo do Fim' (é o Fluxo da Árvore, como na tabela 'Estrutura do Jardim'), mas o id continua 'fluxo-do-sangue' de propósito - esse id já está espalhado pelo código (styles/core/variables.css → --blood, src/mundo/config/temas.js → símbolo ✥, e a perícia 'Ritos de Arkarin' em data/ficha/pericias.json). Sangue agora é a VERTENTE mortal do Fluxo do Fim, o que resolve a divergência sem quebrar nada.",
       "_pronto_para_importar": true,
-      "_o_que_falta": "Reescrever 'descricao' com material de origem de verdade, se existir.",
-      "_quando_revelar": "Geralmente revelado depois da Deidade em si."
+      "_quando_revelar": "Geralmente revelado depois da Deidade em si. O segundo e o terceiro parágrafos (o Sangue em si) podem ser segurados até algum personagem de fato tocar essa vertente."
     },
 
     {
@@ -54,28 +59,72 @@
       "titulo": "Arkarin",
       "conteudo": {
         "arvore": "mulher-carmesim",
-        "descricao": "O único Galho da Árvore de Limiar - o destino final de toda existência. Sedia o Tribunal de Arkarin, onde a Mulher Carmesim julga os mortos. É o ponto de convergência de todas as outras Árvores: não uma origem, mas a chegada.",
+        "descricao": "O único Galho da Árvore de Limiar, e o ponto inevitável onde todas as existências convergem depois da morte. Representa o fim absoluto, o encerramento dos ciclos, o limite intransponível da vida. Não é céu, não é inferno, nem purgatório: Arkarin é simplesmente o lugar onde a existência acaba - um plano feito de silêncio, vazio e eternidade, onde tempo, espaço e realidade se desfazem lentamente, até restar apenas aquilo que foi. Não importa quão poderoso, divino ou insignificante: todos um dia estarão diante dos portões de Arkarin. É a chegada de todas as outras Árvores, não a origem de nenhuma.",
+        "mandamentos": [
+          "1º - Ninguém entra em Arkarin, a não ser com a permissão da Mulher Carmesim.",
+          "2º - Ninguém sai de Arkarin, a não ser com a permissão da Mulher Carmesim.",
+          "3º - Nenhuma existência está acima da autoridade dela em Arkarin.",
+          "4º - Toda existência à beira de seu fim é notada pela Mulher Carmesim.",
+          "5º - Mulher Carmesim é um título, não uma pessoa, e de tempos em tempos deve ser escolhida uma nova mulher para esse posto."
+        ],
         "nota": "Diferente das outras Árvores (que costumam ter vários Galhos), Limiar tem só este - reflexo de sua natureza: ela é o fim, não um entre múltiplos começos."
       },
 
-      "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json (campo descricao/nota_narracao da entrada mulher-carmesim) antes de ele ser removido nesta sessão.",
+      "_origem": "Conteúdo REAL - descrição transcrita da nota do Obsidian 'O Jardim/Gênese/Realidade 0/Dimensões/Arkarin/Arkarin.md'; os 5 mandamentos, de 'Arkarin/Mandamentos.md'. A versão anterior desta entrada vinha do antigo data/world/panteon.json e era um resumo de duas linhas.",
+      "_nota_hierarquia": "No Obsidian, Arkarin está arquivada como uma Dimensão dentro da Realidade 0 (pasta Gênese/Realidade 0/Dimensões/Arkarin). Aqui ela é o GALHO de Limiar, que é o que o repo já tinha decidido e o que faz sentido na cosmologia: Arkarin não fica pendurada na Árvore de Aethel, ela é a Árvore da Mulher Carmesim. A pasta do Obsidian é só resquício de organização.",
+      "_gancho_5o_mandamento": "O 5º mandamento (o título é rotativo) é o maior gancho não desenvolvido do cofre inteiro - nenhuma nota diz quem escolhe, com que critério, nem quem foi a Mulher Carmesim anterior. Deixado como está, de propósito.",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Quando os players chegam a Arkarin.",
-      "_proximo_passo": "Falta a Dimensão dentro de Arkarin (ver entrada 4 deste mesmo arquivo) - e, depois dela, os Locais (Reinos/Mundos) que existirem lá dentro."
+      "_quando_revelar": "Quando os players chegam a Arkarin. Os mandamentos podem ser revelados junto ou depois - são o tipo de coisa que se aprende errando."
     },
 
     {
-      "_secao": "4 de 4 - DIMENSÃO (placeholder - ver _origem)",
+      "_secao": "4 de 6 - DIMENSÃO",
       "tipo": "dimensao",
-      "id": "limiar-dimensao-1",
-      "titulo": "Dimensão de Arkarin (placeholder)",
+      "id": "castelo-carmesim",
+      "titulo": "Castelo Carmesim",
       "conteudo": {
         "galho": "arkarin",
-        "descricao": "[PLACEHOLDER] Ainda não existe uma Dimensão definida dentro de Arkarin. Substitua quando tiver o conteúdo de verdade - provavelmente algo como \"o Salão do Tribunal\" ou similar, mas isso é um chute meu, não conteúdo oficial."
+        "descricao": "No centro de Arkarin ergue-se o Castelo Carmesim, uma colossal construção de pedra negra e cristal escarlate pulsante. Suas torres perfuram o vazio da dimensão como lanças cravadas na carne da própria existência. Correntes etéreas flutuam entre os pilares, segurando fragmentos de realidades esquecidas, memórias de mundos extintos e ecos de eras passadas. O castelo não é apenas um local: é o símbolo do limite intransponível, da linha que separa a existência do fim absoluto.",
+        "caracteristicas": "É a única parte de Arkarin que tem forma, endereço e portas. Todo o resto da dimensão é silêncio e vazio se desfazendo. Quem chega a Arkarin com permissão chega aqui."
       },
 
-      "_origem": "PLACEHOLDER puro - nenhuma fonte descreve a Dimensão dentro de Arkarin ainda, só o Galho em si.",
-      "_pronto_para_importar": false
+      "_origem": "Conteúdo REAL - transcrito da nota do Obsidian 'Arkarin/Castelo Carmesim.md'. O campo 'caracteristicas' é meu, pra justificar por que o Castelo é a Dimensão e não um Local solto no vazio.",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "Quando os players efetivamente entram em Arkarin - na prática, é impossível chegar lá e não ver o Castelo."
+    },
+
+    {
+      "_secao": "5 de 6 - LOCAL (Reino/Mundo dentro da Dimensão)",
+      "tipo": "reino",
+      "id": "tribunal-de-arkarin",
+      "titulo": "Tribunal de Arkarin",
+      "conteudo": {
+        "dimensao": "castelo-carmesim",
+        "descricao": "No coração do Castelo Carmesim, uma sala monumental onde o silêncio pesa mais que qualquer som. Sob um trono de ossos cristalizados e veludo carmesim, a Mulher Carmesim julga aqueles que ousaram se opor à ordem suprema - os que tentaram negar o fim.\n\nEsses julgamentos não são frequentes: poucos são insanos, poderosos ou tolos o bastante pra tentar fugir do que foi escrito. Mas quando ocorre, o tribunal se acende com chamas escarlates e sinos de bronze negro tocam em toda Arkarin, anunciando o início do julgamento.\n\nO tribunal é frio, impiedoso e absoluto. Nele não há espaço pra mentiras ou manipulações: diante da Mulher Carmesim a verdade de cada ser se revela por completo, pois ela detém seus livros, suas histórias, seus segredos, seus pecados e suas dores.\n\nQuando um ser não apenas desafia sua autoridade, mas representa ameaça direta à própria realidade, ao equilíbrio dos planos ou à existência dos ciclos, a Mulher Carmesim convoca o Conselho da Existência - formado por ela e pelos Arautos dos Fluxos, entidades poderosas vinculadas à própria realidade. São mestres que controlam o tecido existencial, mantenedores da ordem dos conceitos, das leis universais e dos fundamentos que mantêm tudo funcionando."
+      },
+
+      "_origem": "Conteúdo REAL - transcrito da nota do Obsidian 'Arkarin/Tribunal.md'.",
+      "_retraducao_2026-07-29": "A nota original diz 'os Arautos da Arkania'. Arkania é conceito descontinuado; retraduzido pra 'Arautos dos Fluxos'.",
+      "_o_que_falta": "Os Arautos e o Conselho da Existência são citados só nesta nota, uma única vez, e não têm nenhuma definição em lugar nenhum - quantos são, quem são, se um Arauto por Fluxo (o que daria 10). Deixado em aberto de propósito; quando decidir, cada Arauto vira uma entrada tipo 'personagem'.",
+      "_pronto_para_importar": true,
+      "_quando_revelar": "Quando alguém é julgado - ou quando os players descobrem que existe julgamento."
+    },
+
+    {
+      "_secao": "6 de 6 - LOCAL (Reino/Mundo dentro da Dimensão)",
+      "tipo": "reino",
+      "id": "biblioteca-de-arkarin",
+      "titulo": "Biblioteca de Arkarin",
+      "conteudo": {
+        "dimensao": "castelo-carmesim",
+        "descricao": "Nos níveis mais profundos do Castelo Carmesim, um espaço que não conhece limites, começo ou fim. Estende-se além do que a mente pode compreender: um oceano infinito de prateleiras feitas de matéria primordial, sustentadas por colunas de energia viva.\n\nAqui repousam todos os livros que a Mulher Carmesim já escreveu e que ainda irá escrever. Cada livro é a vida de um ser - não importa quão pequeno, insignificante, grandioso ou cósmico, sua história está ali. Cada livro é único: tamanho, formato e aparência refletem a natureza da existência que ele representa. Alguns são tomos imensos, com milhares de páginas douradas que brilham como estrelas; outros são pequenos, frágeis, quase efêmeros, escritos em folhas finas como névoa.\n\nNinguém além da Mulher Carmesim compreende inteiramente a organização da Biblioteca - não é linear, nem segue alfabetos, datas ou espécies. Ela existe não apenas como arquivo, mas como ferramenta de balanço, consulta e, às vezes, julgamento: quando um ser é trazido ao Tribunal, seu livro surge flutuando diante dela, que lê e sentencia com base no que está ali, na verdade pura, nua, sem interpretações.\n\nÉ dito que, em algum lugar da Biblioteca, existem livros que nunca foram abertos, cujos títulos não podem ser pronunciados. Livros que, se abertos, não mostram uma vida - mostram o próprio fim de tudo. Nem mesmo a Mulher Carmesim toca neles, a não ser que o fim do próprio universo assim o exija."
+      },
+
+      "_origem": "Conteúdo REAL - transcrito da nota do Obsidian 'Arkarin/Biblioteca.md'.",
+      "_pronto_para_importar": true,
+      "_gancho": "Os livros que não podem ser abertos são o gancho de campanha mais direto do cofre inteiro.",
+      "_nota_conexao": "A Biblioteca é o que distingue o Fim (Limiar) do Vazio (Abismo): tudo que acaba vira um livro aqui; o que passa pelo Fluxo do Vazio não deixa livro nenhum. Ver '_nota_distincao' em data/mundo/Abismo/abismo.json.",
+      "_quando_revelar": "Só faz sentido depois de o Castelo estar revelado."
     }
   ]
 }
