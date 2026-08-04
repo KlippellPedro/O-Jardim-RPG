@@ -36,3 +36,10 @@ __pycache__/
 # Pacotes de deploy: sao gerados por tools/build-discloud-packages.ps1 a partir
 # do codigo, entao versiona-los so incharia o repositorio.
 *-discloud.zip
+
+# Cache do pytest
+.pytest_cache/
+
+# Rascunhos e anexos deixados por sessoes de agente. Nada aqui e fonte.
+.codex-remote-attachments/
+UsersPedroAppDataLocalTemp*.json
