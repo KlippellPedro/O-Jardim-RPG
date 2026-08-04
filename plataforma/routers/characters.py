@@ -136,6 +136,7 @@ def create_character(
                 payload.ficha,
                 campanha_row["configuracoes"] if campanha_row else None,
                 criacao=True,
+                usuario_id=owner_id,
             )
             if erro_catalogo:
                 raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=erro_catalogo)
@@ -379,6 +380,7 @@ def update_character(
                 payload.ficha,
                 campanha_row["configuracoes"] if campanha_row else None,
                 ficha_anterior=current["ficha"],
+                usuario_id=current["dono_usuario_id"],
             )
             if erro_regras:
                 raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=erro_regras)

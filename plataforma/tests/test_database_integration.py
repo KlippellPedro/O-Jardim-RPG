@@ -23,10 +23,10 @@ from routers.admin import list_users
 from routers.characters import create_character
 from routers.context import bootstrap_context
 from routers.internal import _lock_resource, deposit_discord_reward
-from routers.sessions import abrir_sessao, sincronizar_iniciativa
+from routers.sessions import abrir_sessao, atualizar_participante, sincronizar_iniciativa
 from routers.shop import get_shop_catalog
 from routers.vault import get_vault_bank_tier
-from schemas import CharacterCreateInput, DiscordVaultDepositInput, SessionOpenInput
+from schemas import CharacterCreateInput, DiscordVaultDepositInput, ParticipantUpdateInput, SessionOpenInput
 
 
 TEST_DSN = (os.getenv("TEST_DATABASE_URL") or "").strip()
@@ -133,6 +133,7 @@ class DatabaseMigrationTests(unittest.TestCase):
         ficha = {
             "derivados": {"iniciativa": 14, "vida": 20},
             "recursos": {"bonusIniciativa": 2, "vidaAtual": 20},
+            "status": {"vidaAtual": 0},
         }
         with self.database.connection() as connection:
             connection.execute(
@@ -177,6 +178,22 @@ class DatabaseMigrationTests(unittest.TestCase):
         )
         sessao_id = estado["sessao"]["id"]
         self.assertEqual(estado["participantes"][0]["iniciativa"], 16)
+        self.assertEqual(estado["participantes"][0]["vida_atual"], 0)
+
+        atualizar_participante(
+            sessao_id,
+            estado["participantes"][0]["id"],
+            ParticipantUpdateInput(cura=5),
+            user=actor,
+            database=self.database,
+        )
+        with self.database.connection() as connection:
+            ficha_atualizada = connection.execute(
+                "SELECT ficha FROM personagens WHERE id=%s",
+                (personagem_id,),
+            ).fetchone()["ficha"]
+        self.assertEqual(ficha_atualizada["status"]["vidaAtual"], 5)
+        self.assertEqual(ficha_atualizada["recursos"]["vidaAtual"], 5)
 
         with self.database.connection() as connection:
             connection.execute(
@@ -403,6 +420,15 @@ class DatabaseMigrationTests(unittest.TestCase):
             )
             connection.execute(
                 """
+                CREATE TABLE IF NOT EXISTS cartao (
+                    guild_id TEXT NOT NULL, user_id TEXT NOT NULL,
+                    credito INTEGER NOT NULL DEFAULT 1, tier TEXT NOT NULL DEFAULT 'comum',
+                    PRIMARY KEY (guild_id, user_id)
+                )
+                """
+            )
+            connection.execute(
+                """
                 CREATE TABLE IF NOT EXISTS inventario (
                     guild_id TEXT NOT NULL, user_id TEXT NOT NULL, item_id TEXT NOT NULL,
                     quantidade INTEGER NOT NULL DEFAULT 0,
@@ -438,6 +464,10 @@ class DatabaseMigrationTests(unittest.TestCase):
                 (discord_guild_id, discord_user_id),
             )
             connection.execute(
+                "INSERT INTO cartao (guild_id, user_id, credito, tier) VALUES (%s, %s, 175, 'prata')",
+                (discord_guild_id, discord_user_id),
+            )
+            connection.execute(
                 "INSERT INTO cofre_saldo (guild_id, user_id, moeda, saldo) VALUES (%s, %s, 'Lunaris', 450)",
                 (discord_guild_id, discord_user_id),
             )
@@ -466,8 +496,14 @@ class DatabaseMigrationTests(unittest.TestCase):
         resultado = get_vault_bank_tier(campanha_id=campanha_id, user=actor, database=self.database)
         self.assertTrue(resultado["vinculado"])
         self.assertEqual(resultado["tier"]["id"], "prata")
-        self.assertEqual(resultado["proximo_tier"]["id"], "dourado")
+        self.assertEqual(resultado["proximo_tier"]["id"], "aco")
         self.assertEqual(resultado["seguranca"]["id"], "fechadura")
+        self.assertEqual(resultado["reputacao_bancaria"], 175)
+        self.assertEqual(resultado["tier_nivel"], 3)
+        self.assertEqual(resultado["tier_total"], 15)
+        self.assertEqual(resultado["proximo_tier"]["reputacao_exigida"], 100)
+        self.assertEqual(resultado["seguranca_nivel"], 4)
+        self.assertEqual(resultado["seguranca_total"], 15)
         self.assertEqual(resultado["saldos_guardados"], [{"moeda": "Lunaris", "saldo": 450}])
         # A linha legada tem 3, mas o cofre unificado (fonte usada pelo bot
         # para contas vinculadas) tem 2. A página precisa mostrar os mesmos 2.
@@ -518,6 +554,8 @@ class DatabaseMigrationTests(unittest.TestCase):
 
     def test_create_character_permite_combinacao_valida(self):
         """Raça/classe gerais cabem em qualquer Árvore — não deve bloquear."""
+        from tests.test_character_rules import _ficha_criacao
+
         carregar_catalogos(Path("..") / "data")
         usuario_id = uuid.uuid4()
         campanha_id = uuid.uuid4()
@@ -550,7 +588,10 @@ class DatabaseMigrationTests(unittest.TestCase):
         payload = CharacterCreateInput(
             campanha_id=campanha_id,
             nome="Herói Certo",
-            ficha={"arvoreId": "aethel", "racaId": "humano", "classeId": "guerreiro"},
+            # Usa a mesma ficha oficial mínima dos testes de regras. O objetivo
+            # deste caso é validar a persistência de uma combinação permitida,
+            # não contornar os campos obrigatórios de criação.
+            ficha=_ficha_criacao(),
         )
         resultado = create_character(payload=payload, user=actor, database=self.database)
         self.assertEqual(resultado["nome"], "Herói Certo")

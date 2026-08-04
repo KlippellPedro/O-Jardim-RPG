@@ -244,7 +244,8 @@ def visible_content(
         access = campaign_access(connection, campanha_id, user.id)
         rows = connection.execute(
             """
-            SELECT id, chave_recurso, titulo, dados_completos, acesso_padrao
+            SELECT id, chave_recurso, titulo, resumo_rumor,
+                   dados_parciais, dados_completos, acesso_padrao
             FROM informacoes_campanha
             WHERE campanha_id=%s AND tipo=%s AND acesso_padrao <> 'oculto'
             ORDER BY titulo
@@ -253,10 +254,22 @@ def visible_content(
         ).fetchall()
         # Liberações mais específicas continuam sendo resolvidas pelo endpoint
         # /conhecimento. Esta rota cobre a publicação padrão para a campanha.
+    entries = []
+    for row in rows:
+        if access.manages_content or row["acesso_padrao"] == "completo":
+            entries.append(row["dados_completos"])
+        elif row["acesso_padrao"] == "parcial":
+            entries.append(row["dados_parciais"])
+        else:
+            entries.append({
+                "titulo": row["titulo"],
+                "resumo": row["resumo_rumor"],
+                "acesso": "rumor",
+            })
     return {
         "modulo": modulo,
         "papel": access.role,
-        "entradas": [row["dados_completos"] for row in rows],
+        "entradas": entries,
     }
 
 

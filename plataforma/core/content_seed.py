@@ -11,6 +11,94 @@ from .database import Database
 
 log = logging.getLogger("jardim-plataforma")
 
+_SHOP_TYPES = {
+    "arma", "armadura", "artefato", "consumivel", "drop", "equipamento",
+    "fruto-eden", "implante", "monstro", "veiculo", "veiculo-completo",
+}
+_SHOP_RARITIES = {
+    "comum", "incomum", "raro", "epico", "lendario", "reliquia",
+    "reliquia da criacao",
+}
+
+
+def _normalize_catalog_value(value: object) -> str:
+    import unicodedata
+
+    text = unicodedata.normalize("NFD", str(value or ""))
+    return "".join(char for char in text if unicodedata.category(char) != "Mn").strip().lower()
+
+
+def sync_shop_catalog(database: Database, data_root: Path) -> int:
+    """Publica o catálogo versionado no PostgreSQL durante cada deploy.
+
+    A leitura e a validação acontecem antes da transação. Assim, um JSON
+    incompleto nunca substitui parcialmente o catálogo que já está ativo.
+    Itens retirados da fonte são desativados, não apagados, preservando o
+    histórico de inventários que ainda referenciam seus ids.
+    """
+    catalog_path = data_root / "loja" / "catalogo.json"
+    if not catalog_path.is_file():
+        log.warning("Catálogo da loja ausente em %s", catalog_path)
+        return 0
+
+    try:
+        payload = json.loads(catalog_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"não foi possível ler o catálogo da loja: {catalog_path}") from exc
+
+    candidates = payload.get("entradas") if isinstance(payload, dict) else None
+    if not isinstance(candidates, list) or not candidates:
+        raise RuntimeError("catálogo da loja não possui uma lista de entradas válida")
+
+    entries: list[dict] = []
+    seen_ids: set[str] = set()
+    for index, item in enumerate(candidates, start=1):
+        if not isinstance(item, dict):
+            raise RuntimeError(f"entrada {index} do catálogo não é um objeto")
+        item_id = str(item.get("id") or "").strip()
+        item_type = str(item.get("tipo") or "").strip()
+        title = str(item.get("titulo") or "").strip()
+        content = item.get("conteudo")
+        if not item_id or item_id in seen_ids:
+            raise RuntimeError(f"entrada {index} possui id ausente ou duplicado: {item_id!r}")
+        if item_type not in _SHOP_TYPES:
+            raise RuntimeError(f"entrada {item_id!r} possui tipo desconhecido: {item_type!r}")
+        if not title or not isinstance(content, dict):
+            raise RuntimeError(f"entrada {item_id!r} não possui título/conteúdo válido")
+        rarity = content.get("raridade")
+        if rarity is not None and _normalize_catalog_value(rarity) not in _SHOP_RARITIES:
+            raise RuntimeError(f"entrada {item_id!r} possui raridade desconhecida: {rarity!r}")
+        seen_ids.add(item_id)
+        entries.append({"id": item_id, "tipo": item_type, "titulo": title, "conteudo": content})
+
+    with database.connection() as connection:
+        for item in entries:
+            connection.execute(
+                """
+                INSERT INTO catalogo_itens
+                    (id, tipo, titulo, conteudo, ativo, atualizado_em)
+                VALUES (%s, %s, %s, %s, TRUE, CURRENT_TIMESTAMP)
+                ON CONFLICT (id) DO UPDATE SET
+                    tipo=EXCLUDED.tipo,
+                    titulo=EXCLUDED.titulo,
+                    conteudo=EXCLUDED.conteudo,
+                    ativo=TRUE,
+                    atualizado_em=CURRENT_TIMESTAMP
+                """,
+                (item["id"], item["tipo"], item["titulo"], Jsonb(item["conteudo"])),
+            )
+        connection.execute(
+            """
+            UPDATE catalogo_itens
+            SET ativo=FALSE, atualizado_em=CURRENT_TIMESTAMP
+            WHERE ativo=TRUE AND NOT (id = ANY(%s))
+            """,
+            (list(seen_ids),),
+        )
+
+    log.info("Catálogo oficial da loja sincronizado: %s itens ativos.", len(entries))
+    return len(entries)
+
 
 def seed_world_library(database: Database, data_root: Path) -> int:
     """Carrega a biblioteca de Mundo empacotada, sem liberar nada a jogadores."""

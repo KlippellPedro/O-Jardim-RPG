@@ -26,7 +26,8 @@ from core.backup import (
 )
 from core.automatic_backup import salvar_backup_automatico
 from core import limites
-from core.character_summary import carregar_catalogos, iniciativa_fixa, resumir_ficha
+from core.character_summary import carregar_catalogos, iniciativa_fixa, resumir_ficha, sabedoria_desempate
+from core.campaign_visibility import visible_campaign_config
 from core.dados import _classificar, rolar_formula, rolar_teste
 from core.config import load_settings
 from core.notifications import notify
@@ -40,7 +41,7 @@ from core.security import (
     verify_password,
 )
 from routers.characters import _sheet_without_central_fields
-from routers.sessions import _estado_da_vida
+from routers.sessions import _estado_bloqueado, _estado_da_vida
 from core.dependencies import AuthenticatedUser
 from schemas import (
     AdminUserUpdateInput,
@@ -264,6 +265,14 @@ class CharacterSummaryTests(unittest.TestCase):
         resumo = resumir_ficha({"derivados": {"vida": 52}, "recursos": {"vidaAtual": 12}})
         self.assertEqual((resumo["vida_atual"], resumo["vida_maxima"]), (12, 52))
 
+    def test_status_atual_prevalece_sobre_recursos_legados(self):
+        resumo = resumir_ficha({
+            "derivados": {"vida": 52},
+            "recursos": {"vidaAtual": 12},
+            "status": {"vidaAtual": 7},
+        })
+        self.assertEqual((resumo["vida_atual"], resumo["vida_maxima"]), (7, 52))
+
     def test_ficha_sem_vida_nao_inventa_numero(self):
         self.assertNotIn("vida_maxima", resumir_ficha({"nivel": 1}))
 
@@ -307,6 +316,17 @@ class CharacterSummaryTests(unittest.TestCase):
             }],
         }
         self.assertEqual(iniciativa_fixa(ficha), 21)
+
+    def test_iniciativa_fixa_aplica_cansaco_e_surpreendido(self):
+        ficha = {
+            "derivados": {"iniciativa": 14},
+            "status": {"cansacoAtual": 2},
+            "condicoesAtivas": [{"nome": "Surpreendido"}],
+        }
+        self.assertEqual(iniciativa_fixa(ficha), 8)
+
+    def test_sabedoria_desempata_com_modificador(self):
+        self.assertEqual(sabedoria_desempate({"atributosFinais": {"sabedoria": 15}}), 2)
 
 
 class BackupTests(unittest.TestCase):
@@ -461,6 +481,34 @@ class BackupTests(unittest.TestCase):
             )
 
 
+class CampaignVisibilityTests(unittest.TestCase):
+    def test_jogador_recebe_apenas_a_propria_liberacao_individual(self):
+        user_id = UUID("11111111-1111-1111-1111-111111111111")
+        other_id = "22222222-2222-2222-2222-222222222222"
+        visible = visible_campaign_config(
+            {
+                "lore_oculto": ["segredo"],
+                "racas_liberadas_membros": {
+                    str(user_id): ["raca-propria"],
+                    other_id: ["raca-alheia"],
+                },
+                "nota_privada": "não pode sair",
+            },
+            role="jogador",
+            user_id=user_id,
+        )
+        self.assertEqual(visible["lore_oculto"], ["segredo"])
+        self.assertEqual(visible["racas_liberadas_membros"], {str(user_id): ["raca-propria"]})
+        self.assertNotIn("nota_privada", visible)
+
+    def test_mestre_recebe_configuracao_completa(self):
+        config = {"nota_privada": "texto", "lore_oculto": ["segredo"]}
+        self.assertEqual(
+            visible_campaign_config(config, role="mestre", user_id=UUID(int=1)),
+            config,
+        )
+
+
 class SessaoAoVivoTests(unittest.TestCase):
     """Regras que decidem o que o jogador enxerga durante a sessão."""
 
@@ -475,6 +523,13 @@ class SessaoAoVivoTests(unittest.TestCase):
         self.assertEqual(_estado_da_vida(13, 50), "Muito ferido")   # 26%
         self.assertEqual(_estado_da_vida(12, 50), "Quase morto")    # 24%
         self.assertEqual(_estado_da_vida(1, 50), "Quase morto")     # 2%
+
+    def test_preparacao_de_jogador_nao_vaza_estado(self):
+        estado = _estado_bloqueado("jogador")
+        self.assertTrue(estado["bloqueada"])
+        self.assertIsNone(estado["sessao"])
+        self.assertEqual(estado["participantes"], [])
+        self.assertFalse(estado["comando"])
 
     def test_vida_zerada_ou_negativa_sai_de_combate(self):
         self.assertEqual(_estado_da_vida(0, 30), "Fora de combate")

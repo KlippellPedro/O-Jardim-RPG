@@ -105,9 +105,8 @@ A plataforma e o PostgreSQL são aplicações separadas na mesma VLAN:
    ser exatamente `jardim-db`, hostnames de template às vezes vêm com
    sufixo automático).
 2. Plataforma: esta pasta, com `VLAN=true` e **hostname interno `jardimapi`
-   (sem hífen)** — o `discloud.config` pede `jardim-api`, mas o hostname
-   configurado de fato no painel da Discloud é `jardimapi`; use sempre o
-   valor real do painel, não o do `discloud.config`, se divergirem.
+   (sem hífen)**, igual ao valor atual de `HOSTNAME` no `discloud.config`.
+   Se o painel tiver um hostname diferente, use sempre o valor real exibido lá.
 3. Banqueiro/Jornalista: bots separados na VLAN, chamando
    `http://jardimapi:8080/api/v1/interno`. (O Barista foi descontinuado —
    dados agora é o Rollem/Rollen externo, música é por compartilhamento de

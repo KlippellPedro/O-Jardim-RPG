@@ -302,6 +302,22 @@ def list_platform_audit(
     return {"eventos": [dict(row) for row in rows]}
 
 
+@router.delete("/auditoria", status_code=status.HTTP_204_NO_CONTENT)
+def clear_platform_audit(
+    user: AuthenticatedUser = Depends(_require_admin_csrf),
+    database: Database = Depends(get_database),
+):
+    """Apaga todo o historico de auditoria da plataforma."""
+    with database.connection() as connection:
+        connection.execute("DELETE FROM eventos_auditoria")
+        record_audit(
+            connection,
+            action="auditoria.limpa",
+            actor_user_id=user.id,
+        )
+    return None
+
+
 @router.put("/usuarios/{user_id}")
 def update_user(
     user_id: UUID,

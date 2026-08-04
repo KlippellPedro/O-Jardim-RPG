@@ -6,7 +6,7 @@ pelo console. O bônus continua vindo da ficha — validá-lo exigiria reimpleme
 todo o cálculo de perícias em Python —, mas ele é gravado junto com a origem
 declarada, então o mestre vê de onde cada número saiu.
 
-Regra do sistema (docs/regras/regras-publicas-v1.md):
+Regra do sistema (data/regras/regras-publicas-v1.md):
 
     Teste = d20 + Mod.Atributo + piso(Nível Total / 2) + bônus do Grau
 

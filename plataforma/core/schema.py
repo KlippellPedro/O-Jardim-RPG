@@ -619,4 +619,33 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        13,
+        "preparacao_privada_da_sessao",
+        (
+            # A mesa pode existir enquanto o Mestre prepara a iniciativa, mas
+            # só o estado `aberta` é público para jogadores/observadores.
+            """
+            ALTER TABLE sessoes_mesa
+            DROP CONSTRAINT IF EXISTS sessoes_mesa_status_check
+            """,
+            """
+            ALTER TABLE sessoes_mesa
+            ADD CONSTRAINT sessoes_mesa_status_check
+            CHECK (status IN ('preparacao', 'aberta', 'encerrada'))
+            """,
+            """
+            ALTER TABLE sessoes_mesa
+            ALTER COLUMN status SET DEFAULT 'preparacao'
+            """,
+            """
+            DROP INDEX IF EXISTS sessoes_mesa_aberta_unica
+            """,
+            """
+            CREATE UNIQUE INDEX IF NOT EXISTS sessoes_mesa_ativa_unica
+            ON sessoes_mesa (campanha_id)
+            WHERE status IN ('preparacao', 'aberta')
+            """,
+        ),
+    ),
 )

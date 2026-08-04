@@ -16,7 +16,7 @@ from core import live_session
 from core.automatic_backup import AutomaticBackup
 from core.character_summary import carregar_catalogos
 from core.config import load_settings
-from core.content_seed import seed_world_library
+from core.content_seed import seed_world_library, sync_shop_catalog
 from core.database import Database
 from routers import (
     admin,
@@ -93,6 +93,7 @@ async def lifespan(app: FastAPI):
         log.warning(
             "Conta criador ainda nao encontrada; o cargo sera aplicado quando ela existir."
         )
+    sync_shop_catalog(database, _DATA_ROOT)
     seed_world_library(database, _DATA_ROOT)
     carregar_catalogos(_DATA_ROOT)
     # As rotas são síncronas e rodam em threadpool; o canal de eventos precisa

@@ -8,7 +8,7 @@ from fastapi.responses import StreamingResponse
 from psycopg.types.json import Jsonb
 
 from core.audit import record_audit
-from core.character_summary import iniciativa_fixa
+from core.character_summary import iniciativa_fixa, sabedoria_desempate
 from core.condicoes import decrementar_condicoes, normalizar_condicoes
 from core.database import Database
 from core.dependencies import (
@@ -54,13 +54,13 @@ def _estado_da_vida(atual: int, maximo: int) -> str:
     return "Quase morto"
 
 
-def _sessao_aberta(connection, campaign_id: UUID):
+def _sessao_ativa(connection, campaign_id: UUID):
     return connection.execute(
         """
         SELECT id, campanha_id, titulo, status, rodada, turno_indice,
                em_combate, versao, aberta_por, iniciada_em
         FROM sessoes_mesa
-        WHERE campanha_id=%s AND status='aberta'
+        WHERE campanha_id=%s AND status IN ('preparacao', 'aberta')
         """,
         (campaign_id,),
     ).fetchone()
@@ -155,6 +155,7 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
             "id": sessao["id"],
             "campanha_id": sessao["campanha_id"],
             "titulo": sessao["titulo"],
+            "status": sessao["status"],
             "rodada": sessao["rodada"],
             "em_combate": sessao["em_combate"],
             "versao": sessao["versao"],
@@ -164,6 +165,18 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
         "participantes": visiveis,
         "meu_papel": papel,
         "comando": manda,
+        "bloqueada": False,
+    }
+
+
+def _estado_bloqueado(papel: str) -> dict:
+    """Resposta mínima: confirma o bloqueio sem vazar a preparação da cena."""
+    return {
+        "sessao": None,
+        "participantes": [],
+        "meu_papel": papel,
+        "comando": False,
+        "bloqueada": True,
     }
 
 
@@ -176,14 +189,17 @@ def obter_sessao(
     """Estado atual da mesa. Sem sessão aberta, devolve `sessao: null`."""
     with database.connection() as connection:
         acesso = campaign_access(connection, campanha_id, user.id)
-        sessao = _sessao_aberta(connection, campanha_id)
+        sessao = _sessao_ativa(connection, campanha_id)
         if not sessao:
             return {
                 "sessao": None,
                 "participantes": [],
                 "meu_papel": acesso.role,
                 "comando": acesso.manages_content,
+                "bloqueada": not acesso.manages_content,
             }
+        if sessao["status"] == "preparacao" and not acesso.manages_content:
+            return _estado_bloqueado(acesso.role)
         return _montar_estado(connection, sessao, acesso.role, user.id)
 
 
@@ -193,19 +209,19 @@ def abrir_sessao(
     user: AuthenticatedUser = Depends(require_csrf),
     database: Database = Depends(get_database),
 ):
-    """Abre a sessão já com os personagens ativos da campanha na lista."""
+    """Cria a mesa em preparação privada com os personagens ativos."""
     sessao_id = uuid4()
     with database.connection() as connection:
-        require_campaign_manager(connection, payload.campanha_id, user.id)
-        if _sessao_aberta(connection, payload.campanha_id):
+        access = require_campaign_manager(connection, payload.campanha_id, user.id)
+        if _sessao_ativa(connection, payload.campanha_id):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="ja existe uma sessao aberta nesta campanha",
+                detail="ja existe uma sessao ativa nesta campanha",
             )
         connection.execute(
             """
-            INSERT INTO sessoes_mesa (id, campanha_id, titulo, aberta_por)
-            VALUES (%s, %s, %s, %s)
+            INSERT INTO sessoes_mesa (id, campanha_id, titulo, aberta_por, status)
+            VALUES (%s, %s, %s, %s, 'preparacao')
             """,
             (sessao_id, payload.campanha_id, payload.titulo.strip(), user.id),
         )
@@ -216,7 +232,10 @@ def abrir_sessao(
                 SELECT id, nome,
                        ficha,
                        COALESCE((ficha->'derivados'->>'vida')::int, 0) AS vida_maxima,
-                       COALESCE((ficha->'recursos'->>'vidaAtual')::int, 0) AS vida_atual
+                       COALESCE(
+                           (ficha->'status'->>'vidaAtual')::int,
+                           (ficha->'recursos'->>'vidaAtual')::int
+                       ) AS vida_atual
                 FROM personagens
                 WHERE campanha_id=%s AND status='ativo'
                 ORDER BY nome
@@ -225,39 +244,83 @@ def abrir_sessao(
             ).fetchall()
             for ordem, personagem in enumerate(personagens):
                 maximo = max(0, int(personagem["vida_maxima"] or 0))
-                atual = int(personagem["vida_atual"] or 0) or maximo
+                atual = maximo if personagem["vida_atual"] is None else int(personagem["vida_atual"])
                 connection.execute(
                     """
                     INSERT INTO sessao_participantes
                         (id, sessao_id, personagem_id, nome, tipo,
-                         iniciativa, vida_atual, vida_maxima, ordem)
-                    VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s)
+                         iniciativa, vida_atual, vida_maxima, condicoes, ordem)
+                    VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s, %s)
                     """,
                     (uuid4(), sessao_id, personagem["id"], personagem["nome"],
                      iniciativa_fixa(personagem["ficha"]),
-                     min(atual, maximo) if maximo else atual, maximo, ordem),
+                     min(atual, maximo) if maximo else atual, maximo,
+                     Jsonb(normalizar_condicoes(personagem["ficha"].get("condicoesAtivas"))), ordem),
                 )
 
-        notify(
-            connection,
-            user_ids=campaign_member_ids(connection, payload.campanha_id),
-            category="campanha",
-            title="A sessão começou",
-            message=payload.titulo.strip() or "O mestre abriu a mesa ao vivo.",
-            campaign_id=payload.campanha_id,
-            actor_user_id=user.id,
-        )
         record_audit(
             connection,
-            action="sessao.aberta",
+            action="sessao.preparada",
             actor_user_id=user.id,
             campaign_id=payload.campanha_id,
             target_type="sessao",
             target_id=str(sessao_id),
         )
-        sessao = _sessao_aberta(connection, payload.campanha_id)
-        estado = _montar_estado(connection, sessao, "mestre", user.id)
-    live_session.publicar(payload.campanha_id, "sessao_aberta", estado["sessao"]["versao"])
+        sessao = _sessao_ativa(connection, payload.campanha_id)
+        estado = _montar_estado(connection, sessao, access.role, user.id)
+    live_session.publicar(payload.campanha_id, "sessao_preparada", estado["sessao"]["versao"])
+    return estado
+
+
+@router.post("/{sessao_id}/ao-vivo")
+def publicar_sessao(
+    sessao_id: UUID,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Torna pública uma sessão preparada; somente então jogadores recebem a mesa."""
+    with database.connection() as connection:
+        sessao = connection.execute(
+            """
+            SELECT id, campanha_id, status FROM sessoes_mesa
+            WHERE id=%s AND status IN ('preparacao', 'aberta')
+            FOR UPDATE
+            """,
+            (sessao_id,),
+        ).fetchone()
+        if not sessao:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="sessao nao encontrada")
+        access = require_campaign_manager(connection, sessao["campanha_id"], user.id)
+        if sessao["status"] == "preparacao":
+            connection.execute(
+                """
+                UPDATE sessoes_mesa
+                SET status='aberta', versao=versao+1,
+                    iniciada_em=CURRENT_TIMESTAMP, atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s
+                """,
+                (sessao_id,),
+            )
+            notify(
+                connection,
+                user_ids=campaign_member_ids(connection, sessao["campanha_id"]),
+                category="sessao",
+                title="A sessão começou",
+                message="O Mestre liberou a mesa ao vivo.",
+                campaign_id=sessao["campanha_id"],
+                actor_user_id=user.id,
+            )
+            record_audit(
+                connection,
+                action="sessao.aberta",
+                actor_user_id=user.id,
+                campaign_id=sessao["campanha_id"],
+                target_type="sessao",
+                target_id=str(sessao_id),
+            )
+        atualizada = _sessao_ativa(connection, sessao["campanha_id"])
+        estado = _montar_estado(connection, atualizada, access.role, user.id)
+    live_session.publicar(sessao["campanha_id"], "sessao_aberta", estado["sessao"]["versao"])
     return estado
 
 
@@ -269,7 +332,7 @@ def encerrar_sessao(
 ):
     with database.connection() as connection:
         sessao = connection.execute(
-            "SELECT campanha_id, versao FROM sessoes_mesa WHERE id=%s AND status='aberta'",
+            "SELECT campanha_id, versao FROM sessoes_mesa WHERE id=%s AND status IN ('preparacao', 'aberta')",
             (sessao_id,),
         ).fetchone()
         if not sessao:
@@ -298,16 +361,18 @@ def encerrar_sessao(
 
 
 def _sessao_sob_comando(connection, sessao_id: UUID, user_id: UUID):
-    sessao = connection.execute(
+    row = connection.execute(
         """
         SELECT id, campanha_id, rodada, turno_indice, em_combate, versao
-        FROM sessoes_mesa WHERE id=%s AND status='aberta'
+        FROM sessoes_mesa WHERE id=%s AND status IN ('preparacao', 'aberta')
         """,
         (sessao_id,),
     ).fetchone()
-    if not sessao:
+    if not row:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="sessao nao encontrada")
-    require_campaign_manager(connection, sessao["campanha_id"], user_id)
+    sessao = dict(row)
+    access = require_campaign_manager(connection, sessao["campanha_id"], user_id)
+    sessao["_papel_comando"] = access.role
     return sessao
 
 
@@ -414,6 +479,30 @@ def atualizar_participante(
                 sessao_id,
             ),
         ).fetchone()
+        alterou_vida = payload.vida_atual is not None or bool(payload.dano) or bool(payload.cura)
+        if atual["personagem_id"] and alterou_vida:
+            connection.execute(
+                """
+                UPDATE personagens
+                SET ficha=jsonb_set(
+                        jsonb_set(
+                            ficha,
+                            '{status}',
+                            COALESCE(ficha->'status', '{}'::jsonb)
+                                || jsonb_build_object('vidaAtual', %s),
+                            true
+                        ),
+                        '{recursos}',
+                        COALESCE(ficha->'recursos', '{}'::jsonb)
+                            || jsonb_build_object('vidaAtual', %s),
+                        true
+                    ),
+                    versao=versao+1,
+                    atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s AND status='ativo'
+                """,
+                (vida_atual, vida_atual, atual["personagem_id"]),
+            )
         versao = _tocar(connection, sessao_id)
         campanha_id = sessao["campanha_id"]
     live_session.publicar(campanha_id, "participante_atualizado", versao)
@@ -563,8 +652,8 @@ def controlar_turno(
         )
         if nova_rodada:
             _passar_rodada_condicoes(connection, sessao_id)
-        atualizada = _sessao_aberta(connection, sessao["campanha_id"])
-        estado = _montar_estado(connection, atualizada, "mestre", user.id)
+        atualizada = _sessao_ativa(connection, sessao["campanha_id"])
+        estado = _montar_estado(connection, atualizada, sessao["_papel_comando"], user.id)
         campanha_id = sessao["campanha_id"]
     live_session.publicar(campanha_id, "turno", estado["sessao"]["versao"])
     return estado
@@ -584,7 +673,7 @@ def sincronizar_iniciativa(
         sessao = _sessao_sob_comando(connection, sessao_id, user.id)
         participantes = connection.execute(
             """
-            SELECT sp.id, sp.nome, sp.personagem_id, sp.iniciativa, p.ficha
+            SELECT sp.id, sp.nome, sp.tipo, sp.personagem_id, sp.iniciativa, sp.condicoes, p.ficha
             FROM sessao_participantes sp
             LEFT JOIN personagens p ON p.id=sp.personagem_id
             WHERE sp.sessao_id=%s
@@ -600,13 +689,22 @@ def sincronizar_iniciativa(
         iniciativas = []
         for participante in participantes:
             valor = (
-                iniciativa_fixa(participante["ficha"])
+                iniciativa_fixa(participante["ficha"], condicoes=participante["condicoes"])
                 if participante["personagem_id"] and participante["ficha"]
                 else int(participante["iniciativa"])
             )
-            iniciativas.append({"linha": participante, "valor": valor})
-        # Maior iniciativa começa; empate mantém a ordem alfabética do nome.
-        iniciativas.sort(key=lambda item: (-item["valor"], item["linha"]["nome"]))
+            iniciativas.append({
+                "linha": participante,
+                "valor": valor,
+                "sabedoria": sabedoria_desempate(participante["ficha"]),
+            })
+        # Empate: maior Sabedoria; persistindo, personagens agem antes de NPCs.
+        iniciativas.sort(key=lambda item: (
+            -item["valor"],
+            -item["sabedoria"],
+            0 if item["linha"]["tipo"] == "jogador" else 1,
+            item["linha"]["nome"],
+        ))
 
         for posicao, item in enumerate(iniciativas):
             connection.execute(
@@ -638,8 +736,8 @@ def sincronizar_iniciativa(
                 "origem": "valor_fixo_da_ficha",
             },
         )
-        atualizada = _sessao_aberta(connection, sessao["campanha_id"])
-        estado = _montar_estado(connection, atualizada, "mestre", user.id)
+        atualizada = _sessao_ativa(connection, sessao["campanha_id"])
+        estado = _montar_estado(connection, atualizada, sessao["_papel_comando"], user.id)
         campanha_id = sessao["campanha_id"]
     live_session.publicar(campanha_id, "iniciativa", estado["sessao"]["versao"])
     return estado

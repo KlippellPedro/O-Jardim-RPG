@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from psycopg.types.json import Jsonb
 
 from core.audit import record_audit
+from core.campaign_visibility import visible_campaign_config
 from core.database import Database
 from core.dependencies import (
     AuthenticatedUser,
@@ -148,8 +149,14 @@ def get_campaign(
                 """,
                 (campaign_id,),
             ).fetchall()
+    campaign_data = dict(campaign)
+    campaign_data["configuracoes"] = visible_campaign_config(
+        campaign_data.get("configuracoes"),
+        role=access.role,
+        user_id=user.id,
+    )
     return {
-        "campanha": dict(campaign),
+        "campanha": campaign_data,
         "meu_papel": access.role,
         "discord": dict(discord_link) if discord_link else None,
         "membros": [dict(row) for row in members],

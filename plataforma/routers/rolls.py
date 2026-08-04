@@ -23,13 +23,23 @@ router = APIRouter(prefix="/registros", tags=["registros-da-mesa"])
 
 def _sessao_atual(connection, campanha_id: UUID):
     linha = connection.execute(
-        "SELECT id FROM sessoes_mesa WHERE campanha_id=%s AND status='aberta'",
+        """
+        SELECT id, status FROM sessoes_mesa
+        WHERE campanha_id=%s AND status IN ('preparacao', 'aberta')
+        """,
         (campanha_id,),
     ).fetchone()
-    return linha["id"] if linha else None
+    return linha
 
 
-def _autor(connection, campanha_id: UUID, personagem_id: UUID | None, user: AuthenticatedUser):
+def _autor(
+    connection,
+    campanha_id: UUID,
+    personagem_id: UUID | None,
+    user: AuthenticatedUser,
+    *,
+    permitir_personagem_alheio: bool,
+):
     """Nome que aparece no log: o personagem quando houver, senão a conta."""
     if personagem_id is None:
         return None, user.nome_exibicao
@@ -44,6 +54,11 @@ def _autor(connection, campanha_id: UUID, personagem_id: UUID | None, user: Auth
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="personagem nao pertence a esta campanha",
+        )
+    if not permitir_personagem_alheio and linha["dono_usuario_id"] != user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="jogador so pode rolar como um personagem proprio",
         )
     return linha["id"], linha["nome"]
 
@@ -78,7 +93,13 @@ def rolar(
         acesso = campaign_access(connection, payload.campanha_id, user.id)
         if acesso.role == "observador":
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="observadores nao rolam dados")
-        personagem_id, autor_nome = _autor(connection, payload.campanha_id, payload.personagem_id, user)
+        personagem_id, autor_nome = _autor(
+            connection,
+            payload.campanha_id,
+            payload.personagem_id,
+            user,
+            permitir_personagem_alheio=acesso.manages_content,
+        )
 
         if payload.formula:
             try:
@@ -96,10 +117,11 @@ def rolar(
             tipo = "rolagem"
             formula_usada = f"d20{payload.bonus:+d}" if payload.bonus else "d20"
 
+        sessao = _sessao_atual(connection, payload.campanha_id)
         registro = _gravar(
             connection,
             campanha_id=payload.campanha_id,
-            sessao_id=_sessao_atual(connection, payload.campanha_id),
+            sessao_id=sessao["id"] if sessao else None,
             user=user,
             personagem_id=personagem_id,
             autor_nome=autor_nome,
@@ -124,11 +146,18 @@ def registrar_uso(
         acesso = campaign_access(connection, payload.campanha_id, user.id)
         if acesso.role == "observador":
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="observadores nao registram usos")
-        personagem_id, autor_nome = _autor(connection, payload.campanha_id, payload.personagem_id, user)
+        personagem_id, autor_nome = _autor(
+            connection,
+            payload.campanha_id,
+            payload.personagem_id,
+            user,
+            permitir_personagem_alheio=acesso.manages_content,
+        )
+        sessao = _sessao_atual(connection, payload.campanha_id)
         registro = _gravar(
             connection,
             campanha_id=payload.campanha_id,
-            sessao_id=_sessao_atual(connection, payload.campanha_id),
+            sessao_id=sessao["id"] if sessao else None,
             user=user,
             personagem_id=personagem_id,
             autor_nome=autor_nome,
@@ -157,9 +186,10 @@ def listar(
     """
     with database.connection() as connection:
         acesso = campaign_access(connection, campanha_id, user.id)
-        sessao_id = _sessao_atual(connection, campanha_id) if apenas_sessao else None
-        if apenas_sessao and sessao_id is None:
+        sessao = _sessao_atual(connection, campanha_id) if apenas_sessao else None
+        if apenas_sessao and (sessao is None or (sessao["status"] == "preparacao" and not acesso.manages_content)):
             return {"registros": [], "comando": acesso.manages_content}
+        sessao_id = sessao["id"] if sessao else None
 
         linhas = connection.execute(
             """

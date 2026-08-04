@@ -5,6 +5,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 
 from core.character_summary import resumir_ficha
+from core.campaign_visibility import visible_campaign_config
 from core.database import Database
 from core.dependencies import AuthenticatedUser, campaign_access, get_current_user, get_database
 
@@ -52,6 +53,12 @@ def bootstrap_context(
             ).fetchall()
 
         campanhas = [dict(row) for row in campanhas]
+        for campanha in campanhas:
+            campanha["configuracoes"] = visible_campaign_config(
+                campanha.get("configuracoes"),
+                role=campanha["papel"],
+                user_id=user.id,
+            )
         escolhida = None
         if campanhas:
             if campanha_id is not None:
@@ -99,10 +106,12 @@ def bootstrap_context(
                     SELECT p.id, p.campanha_id, p.dono_usuario_id, p.nome,
                            jsonb_build_object(
                                'racaId', p.ficha->'racaId',
+                               'racaNomePersonalizado', p.ficha->'racaNomePersonalizado',
                                'classes', COALESCE(p.ficha->'classes', '[]'::jsonb),
                                'nivel', p.ficha->'nivel',
                                'derivados', jsonb_build_object('vida', p.ficha->'derivados'->'vida'),
-                               'recursos', jsonb_build_object('vidaAtual', p.ficha->'recursos'->'vidaAtual')
+                               'status', jsonb_build_object('vidaAtual', COALESCE(p.ficha->'status'->'vidaAtual', p.ficha->'recursos'->'vidaAtual')),
+                               'recursos', jsonb_build_object('vidaAtual', COALESCE(p.ficha->'status'->'vidaAtual', p.ficha->'recursos'->'vidaAtual'))
                            ) AS ficha,
                            p.versao, p.economia_versao, p.status,
                            p.atualizado_em, u.nome_exibicao AS dono_nome
@@ -120,10 +129,12 @@ def bootstrap_context(
                     SELECT p.id, p.campanha_id, p.dono_usuario_id, p.nome,
                            jsonb_build_object(
                                'racaId', p.ficha->'racaId',
+                               'racaNomePersonalizado', p.ficha->'racaNomePersonalizado',
                                'classes', COALESCE(p.ficha->'classes', '[]'::jsonb),
                                'nivel', p.ficha->'nivel',
                                'derivados', jsonb_build_object('vida', p.ficha->'derivados'->'vida'),
-                               'recursos', jsonb_build_object('vidaAtual', p.ficha->'recursos'->'vidaAtual')
+                               'status', jsonb_build_object('vidaAtual', COALESCE(p.ficha->'status'->'vidaAtual', p.ficha->'recursos'->'vidaAtual')),
+                               'recursos', jsonb_build_object('vidaAtual', COALESCE(p.ficha->'status'->'vidaAtual', p.ficha->'recursos'->'vidaAtual'))
                            ) AS ficha,
                            p.versao, p.economia_versao, p.status,
                            p.atualizado_em, u.nome_exibicao AS dono_nome
