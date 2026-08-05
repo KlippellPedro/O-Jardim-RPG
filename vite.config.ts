@@ -7,7 +7,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        // A plataforma roda na 8080 tanto em dev (.claude/launch.json) quanto
+        // em produção (plataforma/discloud.config).
+        target: 'http://localhost:8080',
         changeOrigin: true,
       }
     }

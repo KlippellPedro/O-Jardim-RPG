@@ -8,7 +8,7 @@ from fastapi.responses import StreamingResponse
 from psycopg.types.json import Jsonb
 
 from core.audit import record_audit
-from core.character_summary import iniciativa_fixa, sabedoria_desempate
+from core.character_summary import iniciativa_fixa, sabedoria_desempate, xp_por_vd
 from core.condicoes import decrementar_condicoes, normalizar_condicoes
 from core.database import Database
 from core.dependencies import (
@@ -20,9 +20,11 @@ from core.dependencies import (
     require_csrf,
 )
 from core import live_session
-from core.notifications import campaign_member_ids, notify
+from core.notifications import campaign_member_ids, character_owner_ids, notify
 from schemas import (
+    DistributeXpInput,
     ParticipantCreateInput,
+    ParticipantReorderInput,
     ParticipantUpdateInput,
     SessionOpenInput,
     SessionTurnInput,
@@ -40,6 +42,24 @@ _ESTADOS_VIDA = (
     (0.25, "Muito ferido"),
     (0.0001, "Quase morto"),
 )
+
+
+_NOME_GENERICO_POR_TIPO = {
+    "inimigo": "Inimigo Desconhecido",
+    "aliado": "Aliado Desconhecido",
+    "jogador": "Alguém Desconhecido",
+}
+
+
+def _inteiro_do_catalogo(valor) -> int | None:
+    """Alguns itens antigos do catálogo guardam pv/defesa como texto ("120")
+    em vez de número; aceita os dois formatos sem quebrar."""
+    if valor is None:
+        return None
+    try:
+        return int(valor)
+    except (TypeError, ValueError):
+        return None
 
 
 def _estado_da_vida(atual: int, maximo: int) -> str:
@@ -70,7 +90,8 @@ def _participantes(connection, sessao_id: UUID):
     return connection.execute(
         """
         SELECT id, personagem_id, nome, tipo, iniciativa, vida_atual,
-               vida_maxima, condicoes, anotacao, visivel, vida_visivel, ordem
+               vida_maxima, condicoes, anotacao, visibilidade, ordem, defesa,
+               mana_atual, mana_maxima, ataques, vd, pericias
         FROM sessao_participantes
         WHERE sessao_id=%s
         ORDER BY ordem, iniciativa DESC, nome
@@ -112,40 +133,57 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
     for indice, linha in enumerate(linhas):
         item = dict(linha)
         proprio = item["personagem_id"] in meus_personagens
-        if not manda and not item["visivel"]:
+        nivel = item["visibilidade"]
+        # Quatro degraus, do mais fechado ao mais aberto:
+        #   oculto       nem entra na lista
+        #   desconhecido entra, mas sem nome nem número — a emboscada clássica
+        #   parcial      nome e estado qualitativo ("Ferido"), sem número
+        #   total        tudo, inclusive o número exato de Vida
+        # Quem comanda a mesa e o dono do personagem sempre veem tudo, não
+        # importa o degrau — o segredo é só entre o mestre e o resto da mesa.
+        revela_tudo = manda or proprio
+        if not revela_tudo and nivel == "oculto":
             continue
+
+        mostra_identidade = revela_tudo or nivel in ("parcial", "total")
+        mostra_numero = revela_tudo or nivel == "total"
+
         publico = {
             "id": item["id"],
-            "nome": item["nome"],
+            "nome": item["nome"] if mostra_identidade else _NOME_GENERICO_POR_TIPO.get(item["tipo"], "Desconhecido"),
             "tipo": item["tipo"],
             "iniciativa": item["iniciativa"],
-            "condicoes": normalizar_condicoes(item["condicoes"]),
+            "condicoes": normalizar_condicoes(item["condicoes"]) if mostra_identidade else [],
             "ordem": item["ordem"],
             "indice": indice,
             "e_meu": proprio,
+            "visibilidade": nivel if revela_tudo else None,
         }
-        # Números exatos: sempre para quem comanda, e sempre no próprio
-        # personagem. Para o resto, só se o mestre deixou visível.
-        if manda or proprio or item["vida_visivel"]:
+        if mostra_numero:
             publico["vida_atual"] = item["vida_atual"]
             publico["vida_maxima"] = item["vida_maxima"]
-        publico["estado_vida"] = _estado_da_vida(item["vida_atual"], item["vida_maxima"])
+            publico["defesa"] = item["defesa"]
+            publico["mana_atual"] = item["mana_atual"]
+            publico["mana_maxima"] = item["mana_maxima"]
+            publico["ataques"] = item["ataques"]
+            publico["pericias"] = item["pericias"]
+        if manda:
+            publico["vd"] = item["vd"]
+        if mostra_identidade:
+            publico["estado_vida"] = _estado_da_vida(item["vida_atual"], item["vida_maxima"])
         # O id da ficha abre o atalho "Abrir ficha": vai para quem comanda e
         # para o dono do personagem, nunca para quem não pode ver aquela ficha.
-        if manda or proprio:
+        if revela_tudo:
             publico["personagem_id"] = item["personagem_id"]
         if manda:
-            publico["visivel"] = item["visivel"]
-            publico["vida_visivel"] = item["vida_visivel"]
             publico["anotacao"] = item["anotacao"]
         participantes.append(publico)
 
-    visiveis = [p for p in participantes if p is not None]
     turno_de = None
     if sessao["em_combate"] and linhas:
         indice = sessao["turno_indice"] % len(linhas)
         atual = dict(linhas[indice])
-        if manda or atual["visivel"]:
+        if manda or atual["visibilidade"] in ("parcial", "total"):
             turno_de = {"id": atual["id"], "nome": atual["nome"], "indice": indice}
         else:
             turno_de = {"id": None, "nome": "Alguém que você não vê", "indice": indice}
@@ -162,7 +200,7 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
             "iniciada_em": sessao["iniciada_em"],
             "turno_de": turno_de,
         },
-        "participantes": visiveis,
+        "participantes": participantes,
         "meu_papel": papel,
         "comando": manda,
         "bloqueada": False,
@@ -395,8 +433,9 @@ def adicionar_participante(
             """
             INSERT INTO sessao_participantes
                 (id, sessao_id, nome, tipo, iniciativa, vida_atual, vida_maxima,
-                 visivel, vida_visivel, ordem)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                 visibilidade, ordem, defesa, mana_atual, mana_maxima, ataques, vd,
+                 pericias)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 participante_id,
@@ -406,9 +445,14 @@ def adicionar_participante(
                 payload.iniciativa,
                 vida,
                 vida,
-                payload.visivel,
-                payload.vida_visivel,
+                payload.visibilidade,
                 proxima_ordem,
+                payload.defesa,
+                payload.mana_maxima,
+                payload.mana_maxima,
+                Jsonb(payload.ataques),
+                payload.vd,
+                Jsonb(payload.pericias),
             ),
         )
         versao = _tocar(connection, sessao_id)
@@ -458,10 +502,15 @@ def atualizar_participante(
                 iniciativa=COALESCE(%s, iniciativa),
                 vida_atual=%s,
                 vida_maxima=%s,
+                mana_atual=COALESCE(%s, mana_atual),
+                mana_maxima=COALESCE(%s, mana_maxima),
                 condicoes=COALESCE(%s, condicoes),
+                ataques=COALESCE(%s, ataques),
                 anotacao=COALESCE(%s, anotacao),
-                visivel=COALESCE(%s, visivel),
-                vida_visivel=COALESCE(%s, vida_visivel),
+                visibilidade=COALESCE(%s, visibilidade),
+                defesa=COALESCE(%s, defesa),
+                vd=COALESCE(%s, vd),
+                pericias=COALESCE(%s, pericias),
                 atualizado_em=CURRENT_TIMESTAMP
             WHERE id=%s AND sessao_id=%s
             RETURNING id, nome, vida_atual, vida_maxima
@@ -471,10 +520,15 @@ def atualizar_participante(
                 payload.iniciativa,
                 vida_atual,
                 vida_maxima,
+                payload.mana_atual,
+                payload.mana_maxima,
                 Jsonb(payload.condicoes) if payload.condicoes is not None else None,
+                Jsonb(payload.ataques) if payload.ataques is not None else None,
                 payload.anotacao,
-                payload.visivel,
-                payload.vida_visivel,
+                payload.visibilidade,
+                payload.defesa,
+                payload.vd,
+                Jsonb(payload.pericias) if payload.pericias is not None else None,
                 participante_id,
                 sessao_id,
             ),
@@ -530,6 +584,136 @@ def remover_participante(
     return None
 
 
+@router.post("/{sessao_id}/participantes/ordem")
+def reordenar_participantes(
+    sessao_id: UUID,
+    payload: ParticipantReorderInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Reordena a fila na mão (arrastar e soltar) — não mexe na iniciativa."""
+    with database.connection() as connection:
+        sessao = _sessao_sob_comando(connection, sessao_id, user.id)
+        existentes = {
+            row["id"]
+            for row in connection.execute(
+                "SELECT id FROM sessao_participantes WHERE sessao_id=%s",
+                (sessao_id,),
+            ).fetchall()
+        }
+        if set(payload.ordem) != existentes:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="a lista precisa conter exatamente os participantes da cena",
+            )
+        for posicao, participante_id in enumerate(payload.ordem):
+            connection.execute(
+                "UPDATE sessao_participantes SET ordem=%s WHERE id=%s AND sessao_id=%s",
+                (posicao, participante_id, sessao_id),
+            )
+        versao = _tocar(connection, sessao_id)
+        campanha_id = sessao["campanha_id"]
+    live_session.publicar(campanha_id, "participantes_reordenados", versao)
+    return {"versao": versao}
+
+
+@router.post("/{sessao_id}/xp")
+def distribuir_xp(
+    sessao_id: UUID,
+    payload: DistributeXpInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Soma o XP (pelo VD) dos inimigos escolhidos e reparte entre os
+    personagens de jogador presentes nesta sessão."""
+    with database.connection() as connection:
+        sessao = _sessao_sob_comando(connection, sessao_id, user.id)
+        inimigos = connection.execute(
+            """
+            SELECT id, vd FROM sessao_participantes
+            WHERE sessao_id=%s AND id = ANY(%s) AND tipo='inimigo'
+            """,
+            (sessao_id, payload.participante_ids),
+        ).fetchall()
+        if not inimigos:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="nenhum inimigo valido selecionado",
+            )
+        total_xp = sum(xp_por_vd(row["vd"]) for row in inimigos)
+        if total_xp <= 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="os inimigos selecionados nao tem VD definido",
+            )
+
+        jogadores = connection.execute(
+            """
+            SELECT DISTINCT personagem_id FROM sessao_participantes
+            WHERE sessao_id=%s AND tipo='jogador' AND personagem_id IS NOT NULL
+            """,
+            (sessao_id,),
+        ).fetchall()
+        personagem_ids = [row["personagem_id"] for row in jogadores]
+        if not personagem_ids:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="nenhum personagem de jogador nesta sessao",
+            )
+
+        xp_por_personagem = total_xp // len(personagem_ids)
+        if xp_por_personagem <= 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="xp insuficiente para distribuir entre os presentes",
+            )
+
+        atualizados = connection.execute(
+            """
+            UPDATE personagens SET
+                ficha = jsonb_set(
+                    ficha, '{xp}',
+                    to_jsonb(COALESCE((ficha->>'xp')::int, 0) + %s),
+                    true
+                ),
+                versao = versao + 1,
+                atualizado_em = CURRENT_TIMESTAMP
+            WHERE id = ANY(%s) AND status='ativo'
+            RETURNING id, nome, (ficha->>'xp')::int AS xp
+            """,
+            (xp_por_personagem, personagem_ids),
+        ).fetchall()
+
+        notify(
+            connection,
+            user_ids=character_owner_ids(connection, sessao["campanha_id"], personagem_ids),
+            category="sessao",
+            title="XP distribuído",
+            message=f"Sua ficha recebeu {xp_por_personagem} de XP pela sessão.",
+            campaign_id=sessao["campanha_id"],
+            actor_user_id=user.id,
+        )
+        record_audit(
+            connection,
+            action="sessao.xp_distribuido",
+            actor_user_id=user.id,
+            campaign_id=sessao["campanha_id"],
+            target_type="sessao",
+            target_id=str(sessao_id),
+            details={
+                "total_xp": total_xp,
+                "xp_por_personagem": xp_por_personagem,
+                "personagens": len(personagem_ids),
+            },
+        )
+        resultado = [dict(row) for row in atualizados]
+    return {
+        "total_xp": total_xp,
+        "xp_por_personagem": xp_por_personagem,
+        "personagens": resultado,
+    }
+
+
 @router.get("/bestiario")
 def listar_bestiario(
     campanha_id: UUID,
@@ -550,13 +734,24 @@ def listar_bestiario(
     monstros = []
     for linha in linhas:
         conteudo = linha["conteudo"] or {}
+        vd = conteudo.get("vd")
         monstros.append(
             {
                 "id": linha["id"],
                 "titulo": linha["titulo"],
                 "nivel": conteudo.get("nivel"),
                 "classe": conteudo.get("classe"),
+                "categoria": conteudo.get("categoria"),
                 "descricao": conteudo.get("descricao"),
+                "vd": vd,
+                "xp": xp_por_vd(vd),
+                "pv": _inteiro_do_catalogo(conteudo.get("pv")),
+                "defesa": _inteiro_do_catalogo(conteudo.get("defesa")),
+                "mana": _inteiro_do_catalogo(conteudo.get("mana")),
+                "iniciativa": _inteiro_do_catalogo(conteudo.get("iniciativa")),
+                "ataques": conteudo.get("ataques") or [],
+                "pericias": conteudo.get("pericias") or [],
+                "habilidades": conteudo.get("habilidades") or [],
             }
         )
     return {"monstros": monstros}

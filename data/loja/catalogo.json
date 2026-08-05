@@ -1,5 +1,5 @@
 {
-  "_nota": "Catálogo da Loja: armas (inclui Obstinadas), armaduras, equipamentos, veículos (tiers), bestiário (monstro, preço por fórmula) e drops de seres. Arkania foi removido e substituído.",
+  "_nota": "Catálogo da Loja: armas (inclui Obstinadas), armaduras, equipamentos, modificações de equipamento, veículos (tiers), bestiário (monstro, preço por fórmula) e drops de seres. Arkania foi removido e substituído.",
   "entradas": [
     {
       "tipo": "arma",
@@ -3402,7 +3402,42 @@
         "descricao": "Predador de matilha; ataca em grupo e persegue presas feridas.",
         "preco": 15,
         "raridade": "comum",
+        "categoria": "Animal",
+        "pv": 95,
         "nivel": 5,
+        "vd": 1,
+        "defesa": 12,
+        "iniciativa": 17,
+        "deslocamento": "12m",
+        "atributos": {
+          "forca": 3,
+          "agilidade": 5,
+          "vigor": 3,
+          "presenca": 1,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +9",
+          "Fortitude +9",
+          "Reflexos +11",
+          "Vontade +7",
+          "Percepção +1"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordida",
+            "detalhe": "+9, 1d8+2 perfurante, vantagem no primeiro golpe"
+          },
+          {
+            "nome": "Investida em Grupo",
+            "detalhe": "+9, 1d6+1 cortante (com aliado adjacente)"
+          }
+        ],
+        "habilidades": [],
+        "loot": [
+          "Pelego de Lobo (10 Solares)",
+          "Presas Afiadas (6 Solares)"
+        ],
         "classe": "Criatura"
       }
     },
@@ -3414,7 +3449,42 @@
         "descricao": "Fera territorial e resistente, ótima na exploração de covis.",
         "preco": 62,
         "raridade": "incomum",
+        "categoria": "Animal",
+        "pv": 265,
         "nivel": 12,
+        "vd": 3,
+        "defesa": 16,
+        "iniciativa": 17,
+        "deslocamento": "9m",
+        "atributos": {
+          "forca": 7,
+          "agilidade": 1,
+          "vigor": 7,
+          "presenca": 1,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +19",
+          "Fortitude +19",
+          "Reflexos +13",
+          "Vontade +13",
+          "Intimidação +6"
+        ],
+        "ataques": [
+          {
+            "nome": "Garrada",
+            "detalhe": "+19, 2d10+5 cortante"
+          },
+          {
+            "nome": "Abraço Esmagador",
+            "detalhe": "+19, 2d8+4 contundente (agarra o alvo)"
+          }
+        ],
+        "habilidades": [],
+        "loot": [
+          "Pele de Urso (25 Solares)",
+          "Garras de Urso (12 Solares)"
+        ],
         "classe": "Criatura"
       }
     },
@@ -3426,7 +3496,42 @@
         "descricao": "Tece teias e injeta veneno paralisante nas presas.",
         "preco": 83,
         "raridade": "incomum",
+        "categoria": "Animal",
+        "pv": 380,
         "nivel": 18,
+        "vd": 4,
+        "defesa": 18,
+        "iniciativa": 26,
+        "deslocamento": "9m (Escalar)",
+        "atributos": {
+          "forca": 4,
+          "agilidade": 7,
+          "vigor": 4,
+          "presenca": 1,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +21",
+          "Fortitude +21",
+          "Reflexos +24",
+          "Vontade +18",
+          "Furtividade +11"
+        ],
+        "ataques": [
+          {
+            "nome": "Picada Venenosa",
+            "detalhe": "+21, 2d8+4 perfurante + veneno (Fraqueza por 1d4 rodadas), vantagem no primeiro golpe"
+          },
+          {
+            "nome": "Teia",
+            "detalhe": "+21, Fortitude ou o alvo fica preso"
+          }
+        ],
+        "habilidades": [],
+        "loot": [
+          "Glândula de Veneno (30 Solares)",
+          "Seda de Teia (18 Solares)"
+        ],
         "classe": "Criatura"
       }
     },
@@ -3438,7 +3543,41 @@
         "descricao": "Seu olhar petrifica; caçá-lo exige espelhos e cuidado.",
         "preco": 318,
         "raridade": "raro",
+        "categoria": "Monstro",
+        "pv": 670,
         "nivel": 28,
+        "vd": 6,
+        "defesa": 22,
+        "iniciativa": 26,
+        "deslocamento": "6m",
+        "atributos": {
+          "forca": 6,
+          "agilidade": 2,
+          "vigor": 7,
+          "presenca": 3,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +30",
+          "Fortitude +31",
+          "Reflexos +26",
+          "Vontade +27",
+          "Intimidação +18"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordida Venenosa",
+            "detalhe": "+30, 3d8+6 perfurante + veneno grave"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)",
+          "Olhar Petrificante (Vontade ou o alvo fica petrificado por uma cena)"
+        ],
+        "loot": [
+          "Olho Petrificado (80 Solares)",
+          "Escamas de Basilisco (60 Solares)"
+        ],
         "classe": "Criatura"
       }
     },
@@ -3450,7 +3589,45 @@
         "descricao": "Híbrido de leão, cabra e dragão que cospe fogo.",
         "preco": 823,
         "raridade": "epico",
+        "categoria": "Monstro",
+        "pv": 1040,
         "nivel": 38,
+        "vd": 8,
+        "defesa": 26,
+        "iniciativa": 33,
+        "deslocamento": "9m (Voo 12m)",
+        "mana": 111,
+        "atributos": {
+          "forca": 8,
+          "agilidade": 4,
+          "vigor": 8,
+          "presenca": 4,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +39",
+          "Fortitude +39",
+          "Reflexos +35",
+          "Vontade +35",
+          "Intimidação +26"
+        ],
+        "ataques": [
+          {
+            "nome": "Sopro Flamejante",
+            "detalhe": "+39, 4d10+9 fogo, em cone"
+          },
+          {
+            "nome": "Investida Tríplice",
+            "detalhe": "+39, 4d10+9 (mordida, chifrada e rabo de serpente)"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)"
+        ],
+        "loot": [
+          "Escama Ígnea (150 Solares)",
+          "Presas Tríplices (90 Solares)"
+        ],
         "classe": "Criatura"
       }
     },
@@ -3462,7 +3639,40 @@
         "descricao": "Vê no escuro e sussurra segredos ao seu vínculo.",
         "preco": 80,
         "raridade": "incomum",
+        "categoria": "Monstro",
+        "pv": 170,
         "nivel": 6,
+        "vd": 2,
+        "defesa": 14,
+        "iniciativa": 19,
+        "deslocamento": "12m (Voo)",
+        "mana": 39,
+        "atributos": {
+          "forca": 0,
+          "agilidade": 6,
+          "vigor": 1,
+          "presenca": 3,
+          "intelecto": 5
+        },
+        "pericias": [
+          "Luta +7",
+          "Fortitude +8",
+          "Reflexos +13",
+          "Vontade +10",
+          "Percepção +3"
+        ],
+        "ataques": [
+          {
+            "nome": "Garras Silenciosas",
+            "detalhe": "+7, 1d6+2 perfurante"
+          }
+        ],
+        "habilidades": [
+          "Sussurro Arcano (concede Vantagem em 1 teste de Intelecto do vínculo, 1/cena)"
+        ],
+        "loot": [
+          "Pena Arcana (20 Solares)"
+        ],
         "classe": "Familiar"
       }
     },
@@ -3474,7 +3684,40 @@
         "descricao": "Atravessa paredes e avisa de perigos invisíveis.",
         "preco": 220,
         "raridade": "raro",
+        "categoria": "Espírito",
+        "pv": 265,
         "nivel": 14,
+        "vd": 3,
+        "defesa": 16,
+        "iniciativa": 25,
+        "deslocamento": "9m (Atravessar paredes)",
+        "mana": 51,
+        "atributos": {
+          "forca": 1,
+          "agilidade": 8,
+          "vigor": 2,
+          "presenca": 4,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +16",
+          "Fortitude +17",
+          "Reflexos +23",
+          "Vontade +19",
+          "Furtividade +10"
+        ],
+        "ataques": [
+          {
+            "nome": "Garras Etéreas",
+            "detalhe": "+16, 2d6+4 (ignora armadura física), vantagem no primeiro golpe"
+          }
+        ],
+        "habilidades": [
+          "Aviso Espectral (concede +2 de Defesa ao vínculo contra o próximo ataque surpresa)"
+        ],
+        "loot": [
+          "Fragmento Etéreo (45 Solares)"
+        ],
         "classe": "Familiar"
       }
     },
@@ -3486,7 +3729,42 @@
         "descricao": "Pequeno dragão leal; cospe brasas e defende o dono.",
         "preco": 478,
         "raridade": "epico",
+        "categoria": "Monstro",
+        "pv": 515,
         "nivel": 22,
+        "vd": 5,
+        "defesa": 20,
+        "iniciativa": 27,
+        "deslocamento": "15m (Voo)",
+        "mana": 75,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 6,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +25",
+          "Fortitude +25",
+          "Reflexos +27",
+          "Vontade +24",
+          "Percepção +16"
+        ],
+        "ataques": [
+          {
+            "nome": "Baforada de Brasas",
+            "detalhe": "+25, 2d10+6 fogo, em cone curto"
+          },
+          {
+            "nome": "Mordida",
+            "detalhe": "+25, 2d8+5 perfurante"
+          }
+        ],
+        "habilidades": [],
+        "loot": [
+          "Escama de Dragonete (100 Solares)"
+        ],
         "classe": "Familiar"
       }
     },
@@ -3498,7 +3776,42 @@
         "descricao": "Renasce das cinzas uma vez por dia e cura aliados.",
         "preco": 1598,
         "raridade": "lendario",
+        "categoria": "Monstro",
+        "pv": 845,
         "nivel": 35,
+        "vd": 7,
+        "defesa": 24,
+        "iniciativa": 33,
+        "deslocamento": "15m (Voo)",
+        "mana": 99,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 6,
+          "vigor": 5,
+          "presenca": 7,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +32",
+          "Fortitude +34",
+          "Reflexos +35",
+          "Vontade +36",
+          "Religião +24"
+        ],
+        "ataques": [
+          {
+            "nome": "Chamas Renascentes",
+            "detalhe": "+32, 3d10+8 fogo"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)",
+          "Renascer das Cinzas (1/dia: se cai a 0 PV, volta com metade da Vida)"
+        ],
+        "loot": [
+          "Pena Incandescente (300 Solares)",
+          "Cinzas Renascentes (150 Solares)"
+        ],
         "classe": "Familiar"
       }
     },
@@ -3510,7 +3823,40 @@
         "descricao": "Morto-vivo obediente que empunha a arma com que caiu.",
         "preco": 26,
         "raridade": "comum",
+        "categoria": "Morto-Vivo",
+        "pv": 95,
         "nivel": 4,
+        "vd": 1,
+        "defesa": 13,
+        "iniciativa": 14,
+        "deslocamento": "9m",
+        "atributos": {
+          "forca": 4,
+          "agilidade": 2,
+          "vigor": 2,
+          "presenca": 0,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +10",
+          "Fortitude +8",
+          "Reflexos +8",
+          "Vontade +6",
+          "Intimidação +1"
+        ],
+        "ataques": [
+          {
+            "nome": "Golpe de Espada Enferrujada",
+            "detalhe": "+10, 1d8+2 cortante"
+          }
+        ],
+        "habilidades": [
+          "Aparar (+2 de Defesa até o próximo turno)"
+        ],
+        "loot": [
+          "Ossos Antigos (5 Solares)",
+          "Arma Enferrujada (8 Solares)"
+        ],
         "classe": "Servo"
       }
     },
@@ -3522,7 +3868,41 @@
         "descricao": "Lento, mas absurdamente resistente e incansável.",
         "preco": 26,
         "raridade": "comum",
+        "categoria": "Morto-Vivo",
+        "pv": 170,
         "nivel": 10,
+        "vd": 2,
+        "defesa": 13,
+        "iniciativa": 15,
+        "deslocamento": "6m",
+        "atributos": {
+          "forca": 6,
+          "agilidade": 0,
+          "vigor": 6,
+          "presenca": 0,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +17",
+          "Fortitude +17",
+          "Reflexos +11",
+          "Vontade +11",
+          "Intimidação +5"
+        ],
+        "ataques": [
+          {
+            "nome": "Golpe Brutal",
+            "detalhe": "+17, 2d6+4 contundente"
+          },
+          {
+            "nome": "Agarrão Podre",
+            "detalhe": "+17, Fortitude ou o alvo fica preso"
+          }
+        ],
+        "habilidades": [],
+        "loot": [
+          "Carne Podre (3 Solares)"
+        ],
         "classe": "Servo"
       }
     },
@@ -3534,7 +3914,39 @@
         "descricao": "Rastreador macabro que fareja sangue a quilômetros.",
         "preco": 102,
         "raridade": "incomum",
+        "categoria": "Morto-Vivo",
+        "pv": 380,
         "nivel": 16,
+        "vd": 4,
+        "defesa": 17,
+        "iniciativa": 23,
+        "deslocamento": "12m",
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 1,
+          "intelecto": 1
+        },
+        "pericias": [
+          "Luta +21",
+          "Fortitude +21",
+          "Reflexos +21",
+          "Vontade +17",
+          "Percepção +10"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordida Faminta",
+            "detalhe": "+21, 2d8+5 perfurante, vantagem no primeiro golpe"
+          }
+        ],
+        "habilidades": [
+          "Faro de Sangue (Vantagem em testes pra rastrear alvos feridos)"
+        ],
+        "loot": [
+          "Garras Necróticas (20 Solares)"
+        ],
         "classe": "Servo"
       }
     },
@@ -3546,7 +3958,42 @@
         "descricao": "Campeão caído reerguido; comanda outros mortos-vivos.",
         "preco": 290,
         "raridade": "raro",
+        "categoria": "Morto-Vivo",
+        "pv": 670,
         "nivel": 30,
+        "vd": 6,
+        "defesa": 23,
+        "iniciativa": 28,
+        "deslocamento": "9m",
+        "mana": 87,
+        "atributos": {
+          "forca": 7,
+          "agilidade": 3,
+          "vigor": 6,
+          "presenca": 5,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +34",
+          "Fortitude +33",
+          "Reflexos +30",
+          "Vontade +32",
+          "Intimidação +22"
+        ],
+        "ataques": [
+          {
+            "nome": "Espada Amaldiçoada",
+            "detalhe": "+34, 3d10+7 cortante + drena 1d6 PV"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)",
+          "Comando aos Mortos (invoca 1d4 Esqueletos Guerreiros por uma cena)"
+        ],
+        "loot": [
+          "Armadura Amaldiçoada (120 Solares)",
+          "Espada Amaldiçoada (200 Solares)"
+        ],
         "classe": "Servo"
       }
     },
@@ -3558,7 +4005,40 @@
         "descricao": "Chama viva conjurada; incendeia tudo que toca por pouco tempo.",
         "preco": 46,
         "raridade": "comum",
+        "categoria": "Elemental",
+        "pv": 170,
         "nivel": 8,
+        "vd": 2,
+        "defesa": 14,
+        "iniciativa": 18,
+        "deslocamento": "9m",
+        "mana": 39,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 4,
+          "vigor": 3,
+          "presenca": 0,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +13",
+          "Fortitude +13",
+          "Reflexos +14",
+          "Vontade +10",
+          "Misticismo +4"
+        ],
+        "ataques": [
+          {
+            "nome": "Toque Flamejante",
+            "detalhe": "+13, 1d10+3 fogo"
+          }
+        ],
+        "habilidades": [
+          "Explosão ao Cair (1d6 fogo em área ao ser destruído)"
+        ],
+        "loot": [
+          "Núcleo Flamejante (15 Solares)"
+        ],
         "classe": "Invocação"
       }
     },
@@ -3570,7 +4050,39 @@
         "descricao": "Guardião de pedra invocado para barrar passagens.",
         "preco": 190,
         "raridade": "raro",
+        "categoria": "Constructo",
+        "pv": 380,
         "nivel": 18,
+        "vd": 4,
+        "defesa": 20,
+        "iniciativa": 19,
+        "deslocamento": "6m",
+        "atributos": {
+          "forca": 8,
+          "agilidade": 0,
+          "vigor": 8,
+          "presenca": 0,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +25",
+          "Fortitude +25",
+          "Reflexos +17",
+          "Vontade +17",
+          "Misticismo +11"
+        ],
+        "ataques": [
+          {
+            "nome": "Punho de Pedra",
+            "detalhe": "+25, 2d10+5 contundente"
+          }
+        ],
+        "habilidades": [
+          "Postura Inabalável (imune a ser empurrado ou derrubado)"
+        ],
+        "loot": [
+          "Fragmento de Núcleo (60 Solares)"
+        ],
         "classe": "Invocação"
       }
     },
@@ -3582,7 +4094,42 @@
         "descricao": "Servo do abismo trazido por pacto; cobra um preço ao fim.",
         "preco": 856,
         "raridade": "epico",
+        "categoria": "Aberração",
+        "pv": 670,
         "nivel": 26,
+        "vd": 6,
+        "defesa": 22,
+        "iniciativa": 28,
+        "deslocamento": "9m (Voo curto)",
+        "mana": 87,
+        "atributos": {
+          "forca": 6,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 6,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +29",
+          "Fortitude +28",
+          "Reflexos +28",
+          "Vontade +29",
+          "Enganação +18"
+        ],
+        "ataques": [
+          {
+            "nome": "Garras Infernais",
+            "detalhe": "+29, 3d8+7 escuridão"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)",
+          "Tentação (Vontade ou o alvo fica Enfraquecido por uma cena)"
+        ],
+        "loot": [
+          "Chifre Infernal (100 Solares)",
+          "Contrato Rasgado (150 Solares)"
+        ],
         "classe": "Invocação"
       }
     },
@@ -3594,7 +4141,41 @@
         "descricao": "Presença celestial que protege e cura por uma cena.",
         "preco": 1345,
         "raridade": "lendario",
+        "categoria": "Espírito",
+        "pv": 1040,
         "nivel": 40,
+        "vd": 8,
+        "defesa": 27,
+        "iniciativa": 35,
+        "deslocamento": "15m (Voo)",
+        "mana": 111,
+        "atributos": {
+          "forca": 6,
+          "agilidade": 5,
+          "vigor": 6,
+          "presenca": 9,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +38",
+          "Fortitude +38",
+          "Reflexos +37",
+          "Vontade +41",
+          "Religião +28"
+        ],
+        "ataques": [
+          {
+            "nome": "Lâmina de Luz",
+            "detalhe": "+38, 4d10+9 luz"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)",
+          "Escudo Celestial (concede +4 de Defesa a um aliado por uma cena)"
+        ],
+        "loot": [
+          "Pena Celestial (400 Solares)"
+        ],
         "classe": "Invocação"
       }
     },
@@ -3606,7 +4187,38 @@
         "descricao": "Espadachim barato disposto a qualquer trabalho sujo.",
         "preco": 35,
         "raridade": "comum",
+        "categoria": "Humanoide",
+        "pv": 95,
         "nivel": 3,
+        "vd": 1,
+        "defesa": 13,
+        "iniciativa": 14,
+        "deslocamento": "9m",
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 2,
+          "presenca": 1,
+          "intelecto": 1
+        },
+        "pericias": [
+          "Luta +8",
+          "Fortitude +7",
+          "Reflexos +8",
+          "Vontade +6",
+          "Enganação +1"
+        ],
+        "ataques": [
+          {
+            "nome": "Golpe de Espada",
+            "detalhe": "+8, 1d8+2 cortante"
+          }
+        ],
+        "habilidades": [],
+        "loot": [
+          "Espada Simples (10 Solares)",
+          "Bolsa de Moedas (15 Solares)"
+        ],
         "classe": "Ajudante"
       }
     },
@@ -3618,7 +4230,40 @@
         "descricao": "Trata ferimentos e doenças em viagem.",
         "preco": 52,
         "raridade": "incomum",
+        "categoria": "Humanoide",
+        "pv": 170,
         "nivel": 10,
+        "vd": 2,
+        "defesa": 13,
+        "iniciativa": 17,
+        "deslocamento": "9m",
+        "mana": 39,
+        "atributos": {
+          "forca": 1,
+          "agilidade": 2,
+          "vigor": 3,
+          "presenca": 4,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +12",
+          "Fortitude +14",
+          "Reflexos +13",
+          "Vontade +15",
+          "Cura +6"
+        ],
+        "ataques": [
+          {
+            "nome": "Cajado Reforçado",
+            "detalhe": "+12, 1d6+1 contundente"
+          }
+        ],
+        "habilidades": [
+          "Curativo de Campo (cura 2d6+2 PV de um aliado, 1/cena)"
+        ],
+        "loot": [
+          "Kit Médico (20 Solares)"
+        ],
         "classe": "Ajudante"
       }
     },
@@ -3630,7 +4275,39 @@
         "descricao": "Protetor treinado que intercepta ataques ao contratante.",
         "preco": 110,
         "raridade": "incomum",
+        "categoria": "Humanoide",
+        "pv": 380,
         "nivel": 16,
+        "vd": 4,
+        "defesa": 19,
+        "iniciativa": 22,
+        "deslocamento": "9m",
+        "atributos": {
+          "forca": 6,
+          "agilidade": 4,
+          "vigor": 6,
+          "presenca": 2,
+          "intelecto": 1
+        },
+        "pericias": [
+          "Luta +22",
+          "Fortitude +22",
+          "Reflexos +20",
+          "Vontade +18",
+          "Percepção +10"
+        ],
+        "ataques": [
+          {
+            "nome": "Golpe de Escudo",
+            "detalhe": "+22, 2d6+5 contundente"
+          }
+        ],
+        "habilidades": [
+          "Interceptar (sofre o ataque no lugar de um aliado adjacente)"
+        ],
+        "loot": [
+          "Escudo Reforçado (35 Solares)"
+        ],
         "classe": "Ajudante"
       }
     },
@@ -3642,7 +4319,39 @@
         "descricao": "Forja e repara equipamento em campo.",
         "preco": 258,
         "raridade": "raro",
+        "categoria": "Humanoide",
+        "pv": 515,
         "nivel": 22,
+        "vd": 5,
+        "defesa": 18,
+        "iniciativa": 23,
+        "deslocamento": "6m",
+        "atributos": {
+          "forca": 5,
+          "agilidade": 2,
+          "vigor": 5,
+          "presenca": 2,
+          "intelecto": 5
+        },
+        "pericias": [
+          "Luta +26",
+          "Fortitude +26",
+          "Reflexos +23",
+          "Vontade +23",
+          "Ofício +17"
+        ],
+        "ataques": [
+          {
+            "nome": "Martelo de Forja",
+            "detalhe": "+26, 2d8+5 contundente"
+          }
+        ],
+        "habilidades": [
+          "Reparo de Campo (restaura uma peça de equipamento danificada, 1/cena)"
+        ],
+        "loot": [
+          "Ferramentas de Forja (50 Solares)"
+        ],
         "classe": "Ajudante"
       }
     },
@@ -3654,7 +4363,45 @@
         "descricao": "Wyrm milenar cuja sombra escurece vales inteiros.",
         "preco": 8545,
         "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 1040,
         "nivel": 40,
+        "vd": 8,
+        "defesa": 28,
+        "iniciativa": 34,
+        "deslocamento": "18m (Voo)",
+        "mana": 111,
+        "atributos": {
+          "forca": 9,
+          "agilidade": 4,
+          "vigor": 9,
+          "presenca": 7,
+          "intelecto": 6
+        },
+        "pericias": [
+          "Luta +41",
+          "Fortitude +41",
+          "Reflexos +36",
+          "Vontade +39",
+          "Intimidação +29"
+        ],
+        "ataques": [
+          {
+            "nome": "Sopro Ancião",
+            "detalhe": "+41, 5d10+10 fogo, em área"
+          },
+          {
+            "nome": "Garras e Mordida",
+            "detalhe": "+41, 4d12+9 cortante"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)"
+        ],
+        "loot": [
+          "Escama Ancestral (2000 Solares)",
+          "Dente de Dragão (800 Solares)"
+        ],
         "classe": "Ser Lendário"
       }
     },
@@ -3666,7 +4413,40 @@
         "descricao": "Serpente dos abismos que engole navios.",
         "preco": 17150,
         "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 1255,
         "nivel": 45,
+        "vd": 9,
+        "defesa": 29,
+        "iniciativa": 35,
+        "deslocamento": "15m (Nado)",
+        "atributos": {
+          "forca": 10,
+          "agilidade": 3,
+          "vigor": 10,
+          "presenca": 5,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +44",
+          "Fortitude +44",
+          "Reflexos +37",
+          "Vontade +39",
+          "Intimidação +29"
+        ],
+        "ataques": [
+          {
+            "nome": "Engolir",
+            "detalhe": "+44, 5d12+11 (agarra e engole o alvo)"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)",
+          "Maremoto (empurra e derruba todos em área)"
+        ],
+        "loot": [
+          "Couro de Leviatã (3000 Solares)"
+        ],
         "classe": "Ser Lendário"
       }
     },
@@ -3678,7 +4458,41 @@
         "descricao": "A chama eterna; sua presença reacende os caídos.",
         "preco": 18100,
         "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 1490,
         "nivel": 50,
+        "vd": 10,
+        "defesa": 30,
+        "iniciativa": 42,
+        "deslocamento": "18m (Voo)",
+        "mana": 135,
+        "atributos": {
+          "forca": 7,
+          "agilidade": 7,
+          "vigor": 8,
+          "presenca": 10,
+          "intelecto": 6
+        },
+        "pericias": [
+          "Luta +44",
+          "Fortitude +45",
+          "Reflexos +44",
+          "Vontade +47",
+          "Religião +34"
+        ],
+        "ataques": [
+          {
+            "nome": "Chama Eterna",
+            "detalhe": "+44, 6d12+12 fogo"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)",
+          "Renascimento Absoluto (ao morrer, ressurge com Vida cheia, 1/campanha)"
+        ],
+        "loot": [
+          "Chama Eterna Engarrafada (5000 Solares)"
+        ],
         "classe": "Ser Lendário"
       }
     },
@@ -3690,7 +4504,41 @@
         "descricao": "Terror de tentáculos que arrasta cidades costeiras ao mar.",
         "preco": 15215,
         "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 1255,
         "nivel": 42,
+        "vd": 9,
+        "defesa": 29,
+        "iniciativa": 35,
+        "deslocamento": "12m (Nado)",
+        "atributos": {
+          "forca": 10,
+          "agilidade": 4,
+          "vigor": 9,
+          "presenca": 4,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +43",
+          "Fortitude +42",
+          "Reflexos +37",
+          "Vontade +37",
+          "Intimidação +28"
+        ],
+        "ataques": [
+          {
+            "nome": "Tentáculo Esmagador",
+            "detalhe": "+43, 5d10+11 contundente, vantagem no primeiro golpe"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)",
+          "Arrastar às Profundezas (agarra o alvo; Fortitude ou ele começa a sufocar)"
+        ],
+        "loot": [
+          "Tentáculo Seco (2500 Solares)",
+          "Tinta Negra (1000 Solares)"
+        ],
         "classe": "Ser Lendário"
       }
     },
@@ -4425,11 +5273,15 @@
       "id": "merc-automato",
       "titulo": "Autômato de Guarda",
       "conteudo": {
+        "descricao": "Um ser mecânico básico utilizado para vigilância e proteção primária de áreas.",
         "preco": 1500,
         "raridade": "incomum",
+        "categoria": "Constructo",
         "pv": "120",
         "nivel": 3,
+        "vd": 1,
         "defesa": "15",
+        "iniciativa": 12,
         "deslocamento": "6m",
         "atributos": {
           "forca": 4,
@@ -4441,14 +5293,24 @@
         "pericias": [
           "Luta +5",
           "Fortitude +5",
-          "Percepção +2"
+          "Percepção +2",
+          "Reflexos +3",
+          "Vontade +2"
         ],
         "habilidades": [
-          "Golpe Metálico (Dano: 1d10+4)",
           "Escudo de Chassi (Reduz 2 de dano físico)"
         ],
-        "descricao": "Um ser mecânico básico utilizado para vigilância e proteção primária de áreas.",
-        "subtipo": "merc-basico"
+        "loot": [
+          "Placas de Chassi (200 Solares)"
+        ],
+        "classe": "Constructo",
+        "subtipo": "merc-basico",
+        "ataques": [
+          {
+            "nome": "Golpe Metálico",
+            "detalhe": "+5, 1d10+4 contundente"
+          }
+        ]
       }
     },
     {
@@ -4456,11 +5318,15 @@
       "id": "merc-aethel",
       "titulo": "Espírito Guardião de Aethel",
       "conteudo": {
+        "descricao": "Manifestação luminosa do plano superior de Aethel, um anjo guardião devotado à proteção de seu contratante.",
         "preco": 8000,
         "raridade": "épico",
+        "categoria": "Espírito",
         "pv": "350",
         "nivel": 8,
+        "vd": 2,
         "defesa": "22",
+        "iniciativa": 19,
         "deslocamento": "12m (Voo)",
         "atributos": {
           "forca": 2,
@@ -4472,15 +5338,25 @@
         "pericias": [
           "Vontade +10",
           "Iniciativa +8",
-          "Religião +8"
+          "Religião +8",
+          "Luta +6",
+          "Percepção +7"
         ],
         "habilidades": [
-          "Raio Luminoso (Dano: 3d8 Luz)",
           "Cura Divina (Cura 20 PV aliados)",
           "Aura de Paz (+2 Defesa em área)"
         ],
-        "descricao": "Manifestação luminosa do plano superior de Aethel, um anjo guardião devotado à proteção de seu contratante.",
-        "subtipo": "merc-avancado"
+        "loot": [
+          "Núcleo de Luz (900 Solares)"
+        ],
+        "classe": "Espírito",
+        "subtipo": "merc-avancado",
+        "ataques": [
+          {
+            "nome": "Raio Luminoso",
+            "detalhe": "+6, 3d8 luz"
+          }
+        ]
       }
     },
     {
@@ -4488,11 +5364,15 @@
       "id": "merc-umbral",
       "titulo": "Besta do Umbral Maior",
       "conteudo": {
+        "descricao": "Uma abominação letal das profundezas do Umbral, domada por contratos profanos.",
         "preco": 15000,
         "raridade": "lendário",
+        "categoria": "Aberração",
         "pv": "600",
         "nivel": 12,
+        "vd": 3,
         "defesa": "28",
+        "iniciativa": 22,
         "deslocamento": "15m",
         "atributos": {
           "forca": 8,
@@ -4504,15 +5384,25 @@
         "pericias": [
           "Luta +15",
           "Intimidação +10",
-          "Furtividade +8"
+          "Furtividade +8",
+          "Fortitude +10",
+          "Vontade +8"
         ],
         "habilidades": [
-          "Garras das Sombras (Dano: 4d12+8 Escuridão)",
           "Frenesi Sangrento (Ganha ataque extra)",
           "Manto do Abismo (Invisível no escuro)"
         ],
-        "descricao": "Uma abominação letal das profundezas do Umbral, domada por contratos profanos.",
-        "subtipo": "merc-mestre"
+        "loot": [
+          "Essência Umbral (1800 Solares)"
+        ],
+        "classe": "Aberração",
+        "subtipo": "merc-mestre",
+        "ataques": [
+          {
+            "nome": "Garras das Sombras",
+            "detalhe": "+15, 4d12+8 escuridão"
+          }
+        ]
       }
     },
     {
@@ -5300,6 +6190,2383 @@
         "consumivel": true,
         "origem_magica": "diagnostico",
         "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-afiada",
+      "titulo": "Afiada",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "afiada",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "+1 dado de dano da arma (mesmo tipo do dado base).",
+        "atributos": ["Aplica em: Armas", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-perfurante",
+      "titulo": "Perfurante",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "perfurante",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "O dano da arma ignora metade da Resistência do tipo correspondente do alvo.",
+        "atributos": ["Aplica em: Armas", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-margem-ampla",
+      "titulo": "Margem Ampla",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "margem-ampla",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "Amplia a Margem de Ameaça em 2 (uma 20/x2 vira 18-20/x2). Só entra em arma de multiplicador x2, pra não furar a regra de margem larga com multiplicador alto.",
+        "atributos": ["Aplica em: Armas", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-coreografada",
+      "titulo": "Coreografada",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "coreografada",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "Ao falhar numa Coreografia de risco Ousado ou maior com esta arma, sofra a consequência do risco imediatamente abaixo. Não vale para Tudo ou Nada.",
+        "atributos": ["Aplica em: Armas", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-drenante",
+      "titulo": "Drenante",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "drenante",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "Uma vez por turno, ao acertar, o alvo perde 1d4 de Mana.",
+        "atributos": ["Aplica em: Armas", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-assombrada",
+      "titulo": "Assombrada",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "assombrada",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "Uma vez por cena, force o alvo a repetir um teste de resistência que já tenha passado contra um efeito de medo seu.",
+        "atributos": ["Aplica em: Armas", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-balanceada",
+      "titulo": "Balanceada",
+      "conteudo": {
+        "preco": { "Lunaris": 25 },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "balanceada",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "Ignora a penalidade de peso pesado ao empunhar com uma mão só.",
+        "atributos": ["Aplica em: Armas", "Nível Comum", "Técnica"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-leve-arma",
+      "titulo": "Leve",
+      "conteudo": {
+        "preco": { "Lunaris": 25 },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "leve-arma",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "Reduz em 1 os espaços de carga que a arma ocupa, mínimo 1.",
+        "atributos": ["Aplica em: Armas", "Nível Comum", "Técnica"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-silenciosa-arma",
+      "titulo": "Silenciosa",
+      "conteudo": {
+        "preco": { "Lunaris": 25 },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "silenciosa-arma",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "Não produz som perceptível ao ser usada em um ataque.",
+        "atributos": ["Aplica em: Armas", "Nível Comum", "Técnica"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-devastadora",
+      "titulo": "Devastadora",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "devastadora",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "+2 dados de dano da arma.",
+        "atributos": ["Aplica em: Armas", "Nível Marcial", "Valor 2", "Pré-requisito: Força 14, ou Destreza 14 em arma de disparo"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Força 14, ou Destreza 14 em arma de disparo"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-elemental",
+      "titulo": "Elemental",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "elemental",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "+1d6 de dano de um tipo elemental escolhido na criação do item. Esse dado extra também multiplica no crítico.",
+        "atributos": ["Aplica em: Armas", "Nível Marcial", "Valor 2"],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-sedenta",
+      "titulo": "Sedenta",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "sedenta",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "No crítico, o alvo passa a sangrar: sofre 1 dado de dano da arma no início de cada turno até ser tratado. Não acumula com outra Sedenta.",
+        "atributos": ["Aplica em: Armas", "Nível Marcial", "Valor 2"],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-vampirica",
+      "titulo": "Vampírica",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "vampirica",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Uma vez por turno, ao causar dano, role um dado do tipo da arma e recupere esse tanto de PV.",
+        "atributos": ["Aplica em: Armas", "Nível Marcial", "Valor 2", "Pré-requisito: Nível total 7"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Nível total 7"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-sintonizada",
+      "titulo": "Sintonizada",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "sintonizada",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "O dano da arma passa a usar o Mod. Fluxo no lugar de Força ou Destreza.",
+        "atributos": ["Aplica em: Armas", "Nível Marcial", "Valor 2", "Pré-requisito: Fluxo 14"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Fluxo 14"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-exaustiva",
+      "titulo": "Exaustiva",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "exaustiva",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "No crítico, o alvo ganha 1 ponto de Cansaço. Uma vez por cena por alvo.",
+        "atributos": ["Aplica em: Armas", "Nível Marcial", "Valor 2", "Pré-requisito: Nível total 7"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Nível total 7"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-assinatura-de-arvore",
+      "titulo": "Assinatura de Árvore",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "assinatura-de-arvore",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "A arma se liga a uma Árvore na criação. Contra criaturas de qualquer outra Árvore, +1 dado de dano.",
+        "atributos": ["Aplica em: Armas", "Nível Marcial", "Valor 2"],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-misericordia",
+      "titulo": "Golpe de Misericórdia",
+      "conteudo": {
+        "preco": { "Lunaris": 450 },
+        "raridade": "epico",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "misericordia",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 3,
+        "descricao": "Contra alvo que já esteja em Morrendo, seus ataques com esta arma acertam como crítico automático.",
+        "atributos": ["Aplica em: Armas", "Nível Marcial", "Valor 3", "Pré-requisito: Nível total 10"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Nível total 10"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-implacavel",
+      "titulo": "Implacável",
+      "conteudo": {
+        "preco": { "Lunaris": 450 },
+        "raridade": "epico",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "implacavel",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 3,
+        "descricao": "Uma vez por cena, transforme um acerto em crítico, sem precisar cair na Margem de Ameaça. Não combina com a Coreografia Tudo ou Nada no mesmo ataque.",
+        "atributos": ["Aplica em: Armas", "Nível Marcial", "Valor 3", "Pré-requisito: Nível total 10"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Nível total 10"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-reforcada",
+      "titulo": "Reforçada",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "reforcada",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "+1 de Defesa.",
+        "atributos": ["Aplica em: Armaduras", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-isolante",
+      "titulo": "Isolante",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "isolante",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "Resistência 2 contra um tipo de dano elemental escolhido na criação do item.",
+        "atributos": ["Aplica em: Armaduras", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-camuflada",
+      "titulo": "Camuflada",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "camuflada",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "Vantagem em Furtividade em terreno compatível com o padrão da armadura.",
+        "atributos": ["Aplica em: Armaduras", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-trilha-serena",
+      "titulo": "Trilha Serena",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "trilha-serena",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "Ao terminar um descanso completo vestindo a armadura, reduza 1 ponto de Cansaço além do que a qualidade do descanso já tira.",
+        "atributos": ["Aplica em: Armaduras", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-flexivel",
+      "titulo": "Flexível",
+      "conteudo": {
+        "preco": { "Lunaris": 25 },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "flexivel",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "Reduz em 1 a penalidade de armadura sobre Acrobacia, Atletismo e Furtividade.",
+        "atributos": ["Aplica em: Armaduras", "Nível Comum", "Técnica"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-ajustavel",
+      "titulo": "Ajustável",
+      "conteudo": {
+        "preco": { "Lunaris": 25 },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "ajustavel",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "Se adapta automaticamente ao corpo de quem veste, sem custo de reforma.",
+        "atributos": ["Aplica em: Armaduras", "Nível Comum", "Técnica"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-bastiao",
+      "titulo": "Bastião",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "bastiao",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Reduza 1d4 do dano físico recebido a cada ataque, aplicado depois da Resistência.",
+        "atributos": ["Aplica em: Armaduras", "Nível Marcial", "Valor 2", "Pré-requisito: Constituição 14"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Constituição 14"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-regenerativa",
+      "titulo": "Regenerativa",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "regenerativa",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Quem veste recupera 1d4 PV no início do próprio turno, uma vez por rodada.",
+        "atributos": ["Aplica em: Armaduras", "Nível Marcial", "Valor 2", "Pré-requisito: Nível total 7"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Nível total 7"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-estabilizadora",
+      "titulo": "Estabilizadora",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "estabilizadora",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Vantagem em testes para resistir a ser derrubado, empurrado ou agarrado.",
+        "atributos": ["Aplica em: Armaduras", "Nível Marcial", "Valor 2"],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-ancora-de-sanidade",
+      "titulo": "Âncora de Sanidade",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "ancora-de-sanidade",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Resistência 3 contra dano Mental e vantagem nos testes para não perder Sanidade.",
+        "atributos": ["Aplica em: Armaduras", "Nível Marcial", "Valor 2", "Pré-requisito: Sabedoria 14"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Sabedoria 14"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-retaliadora",
+      "titulo": "Retaliadora",
+      "conteudo": {
+        "preco": { "Lunaris": 450 },
+        "raridade": "epico",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "retaliadora",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 3,
+        "descricao": "Ao sofrer um crítico, quem veste devolve 1 dado de dano de impacto no atacante, sem gastar reação.",
+        "atributos": ["Aplica em: Armaduras", "Nível Marcial", "Valor 3", "Pré-requisito: Constituição 14"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Constituição 14"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-casca-do-fim",
+      "titulo": "Casca do Fim",
+      "conteudo": {
+        "preco": { "Lunaris": 450 },
+        "raridade": "epico",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "casca-do-fim",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 3,
+        "descricao": "Enquanto estiver em Morrendo, a DT dos seus testes de Morrendo cai 3.",
+        "atributos": ["Aplica em: Armaduras", "Nível Marcial", "Valor 3", "Pré-requisito: Nível total 10"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Nível total 10"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-reforcado-escudo",
+      "titulo": "Reforçado",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "reforcado-escudo",
+        "aplicacao": "Escudos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "+1d4 na redução de dano da reação Bloqueio.",
+        "atributos": ["Aplica em: Escudos", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-espinhado",
+      "titulo": "Espinhado",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "espinhado",
+        "aplicacao": "Escudos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "Quem te acerta em combate corpo a corpo sofre 1d4 de dano perfurante.",
+        "atributos": ["Aplica em: Escudos", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-leve-escudo",
+      "titulo": "Leve",
+      "conteudo": {
+        "preco": { "Lunaris": 25 },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "leve-escudo",
+        "aplicacao": "Escudos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "Não soma penalidade de armadura sobre Acrobacia.",
+        "atributos": ["Aplica em: Escudos", "Nível Comum", "Técnica"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-retratil",
+      "titulo": "Retrátil",
+      "conteudo": {
+        "preco": { "Lunaris": 25 },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "retratil",
+        "aplicacao": "Escudos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "Pode ser guardado ou sacado como uma ação livre.",
+        "atributos": ["Aplica em: Escudos", "Nível Comum", "Técnica"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-amplo",
+      "titulo": "Amplo",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "amplo",
+        "aplicacao": "Escudos",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "A reação Proteger passa a cobrir dois aliados adjacentes em vez de um.",
+        "atributos": ["Aplica em: Escudos", "Nível Marcial", "Valor 2"],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-repulsor",
+      "titulo": "Repulsor",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "repulsor",
+        "aplicacao": "Escudos",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Ao usar Bloqueio com sucesso, empurre o atacante 1,5 m para longe de você.",
+        "atributos": ["Aplica em: Escudos", "Nível Marcial", "Valor 2"],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-vingativo",
+      "titulo": "Vingativo",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "vingativo",
+        "aplicacao": "Escudos",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Ao usar Bloqueio, cause 1d6 de dano de impacto no atacante, sem gastar ação extra.",
+        "atributos": ["Aplica em: Escudos", "Nível Marcial", "Valor 2"],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-guarda-de-fluxo",
+      "titulo": "Guarda de Fluxo",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "guarda-de-fluxo",
+        "aplicacao": "Escudos",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Bloqueio passa a funcionar também contra dano de Energia, incluindo o que vem de Fluxos.",
+        "atributos": ["Aplica em: Escudos", "Nível Marcial", "Valor 2", "Pré-requisito: Fluxo 12"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Fluxo 12"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-contratempo",
+      "titulo": "Contratempo",
+      "conteudo": {
+        "preco": { "Lunaris": 450 },
+        "raridade": "epico",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "contratempo",
+        "aplicacao": "Escudos",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 3,
+        "descricao": "Depois de um Contra-Ataque bem-sucedido, recupere sua reação. Uma vez por rodada.",
+        "atributos": ["Aplica em: Escudos", "Nível Marcial", "Valor 3", "Pré-requisito: Nível total 10"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Nível total 10"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-vinculado",
+      "titulo": "Vinculado",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "vinculado",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "Só funciona plenamente nas mãos de quem o item reconhece como dono. Qualquer outro sofre −2 ao usá-lo.",
+        "atributos": ["Aplica em: Itens gerais e mágicos", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-ressonante",
+      "titulo": "Ressonante",
+      "conteudo": {
+        "preco": { "Lunaris": 60 },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "ressonante",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "+1 numa perícia específica, ligada à função do item.",
+        "atributos": ["Aplica em: Itens gerais e mágicos", "Nível Comum", "Valor 1"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-portatil",
+      "titulo": "Portátil",
+      "conteudo": {
+        "preco": { "Lunaris": 25 },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "portatil",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "Reduz em 1 os espaços de carga que o item ocupa, mínimo 1.",
+        "atributos": ["Aplica em: Itens gerais e mágicos", "Nível Comum", "Técnica"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-autoidentificavel",
+      "titulo": "Autoidentificável",
+      "conteudo": {
+        "preco": { "Lunaris": 25 },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "autoidentificavel",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "Revela sozinho suas propriedades na primeira vez que é empunhado ou vestido.",
+        "atributos": ["Aplica em: Itens gerais e mágicos", "Nível Comum", "Técnica"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-recarregavel",
+      "titulo": "Recarregável",
+      "conteudo": {
+        "preco": { "Lunaris": 25 },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "recarregavel",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "Se tiver cargas, recupera todas elas após um descanso completo.",
+        "atributos": ["Aplica em: Itens gerais e mágicos", "Nível Comum", "Técnica"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-sensivel-a-fluxo",
+      "titulo": "Sensível a Fluxo",
+      "conteudo": {
+        "preco": { "Lunaris": 25 },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "sensivel-a-fluxo",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "Brilha, vibra ou esquenta perto de magia ou de um Fluxo específico escolhido na criação.",
+        "atributos": ["Aplica em: Itens gerais e mágicos", "Nível Comum", "Técnica"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-instavel",
+      "titulo": "Instável",
+      "conteudo": {
+        "preco": { "Lunaris": 25 },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "instavel",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "5% de chance de gerar um efeito colateral menor a cada uso. O Mestre define qual.",
+        "atributos": ["Aplica em: Itens gerais e mágicos", "Nível Comum", "Técnica"],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-protetor",
+      "titulo": "Protetor",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "protetor",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Resistência 4 contra um tipo de dano escolhido na criação do item, enquanto estiver equipado.",
+        "atributos": ["Aplica em: Itens gerais e mágicos", "Nível Marcial", "Valor 2"],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-vitalicio",
+      "titulo": "Vitalício",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "vitalicio",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Uma vez por dia, ao chegar a 0 PV, recupere 1d6 PV automaticamente antes de cair inconsciente.",
+        "atributos": ["Aplica em: Itens gerais e mágicos", "Nível Marcial", "Valor 2"],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-amplificador",
+      "titulo": "Amplificador",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "amplificador",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Uma vez por cena, role com vantagem um teste de perícia específico ligado à função do item.",
+        "atributos": ["Aplica em: Itens gerais e mágicos", "Nível Marcial", "Valor 2"],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-reserva-de-fluxo",
+      "titulo": "Reserva de Fluxo",
+      "conteudo": {
+        "preco": { "Lunaris": 180 },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "reserva-de-fluxo",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Guarda até 5 de Mana. Você pode gastar dessa reserva no lugar da sua, e ela enche de novo a cada descanso completo.",
+        "atributos": ["Aplica em: Itens gerais e mágicos", "Nível Marcial", "Valor 2", "Pré-requisito: Fluxo 12"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Fluxo 12"
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-selado",
+      "titulo": "Selado",
+      "conteudo": {
+        "preco": { "Lunaris": 450 },
+        "raridade": "epico",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "selado",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 3,
+        "descricao": "O item carrega um Selo inscrito, escolhido na criação. Uma vez por dia ele dispara sem gastar Mana nem exigir teste de inscrição.",
+        "atributos": ["Aplica em: Itens gerais e mágicos", "Nível Marcial", "Valor 3", "Pré-requisito: Nível total 10 e Misticismo treinado"],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Nível total 10 e Misticismo treinado"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "corvo-arauto",
+      "titulo": "Corvo Arauto",
+      "conteudo": {
+        "descricao": "Mensageiro alado que carrega avisos entre vínculos distantes.",
+        "preco": 18,
+        "raridade": "comum",
+        "categoria": "Monstro",
+        "pv": 70,
+        "nivel": 3,
+        "vd": 1,
+        "defesa": 13,
+        "iniciativa": 17,
+        "deslocamento": "15m (Voo)",
+        "mana": 27,
+        "atributos": {
+          "forca": 0,
+          "agilidade": 6,
+          "vigor": 1,
+          "presenca": 2,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +5",
+          "Fortitude +6",
+          "Reflexos +11",
+          "Vontade +7",
+          "Percepção +1"
+        ],
+        "ataques": [
+          {
+            "nome": "Bicada",
+            "detalhe": "+5, 1d4+1 perfurante"
+          }
+        ],
+        "habilidades": [
+          "Grito de Alarme (avisa o vínculo de perigo próximo, 1/cena)"
+        ],
+        "loot": [
+          "Pena de Corvo (8 Solares)"
+        ],
+        "classe": "Familiar"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "javali-selvagem",
+      "titulo": "Javali Selvagem",
+      "conteudo": {
+        "descricao": "Investe sem aviso contra quem chega perto demais do seu território.",
+        "preco": 20,
+        "raridade": "comum",
+        "categoria": "Animal",
+        "pv": 100,
+        "nivel": 3,
+        "vd": 1,
+        "defesa": 12,
+        "iniciativa": 13,
+        "deslocamento": "12m",
+        "atributos": {
+          "forca": 5,
+          "agilidade": 2,
+          "vigor": 4,
+          "presenca": 0,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +10",
+          "Fortitude +9",
+          "Reflexos +7",
+          "Vontade +5",
+          "Intimidação +1"
+        ],
+        "ataques": [
+          {
+            "nome": "Investida",
+            "detalhe": "+10, 1d10+3 perfurante (derruba se acertar)"
+          },
+          {
+            "nome": "Presas",
+            "detalhe": "+10, 1d6+2 cortante"
+          }
+        ],
+        "habilidades": [],
+        "loot": [
+          "Presas de Javali (10 Solares)",
+          "Couro Grosso (15 Solares)"
+        ],
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "enxame-de-ratos",
+      "titulo": "Enxame de Ratos",
+      "conteudo": {
+        "descricao": "Enxame faminto que ataca em massa e foge ao primeiro sinal de fogo.",
+        "preco": 12,
+        "raridade": "comum",
+        "categoria": "Animal",
+        "pv": 60,
+        "nivel": 3,
+        "vd": 1,
+        "defesa": 10,
+        "iniciativa": 16,
+        "deslocamento": "9m",
+        "atributos": {
+          "forca": 1,
+          "agilidade": 5,
+          "vigor": 2,
+          "presenca": 0,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +6",
+          "Fortitude +7",
+          "Reflexos +10",
+          "Vontade +5",
+          "Furtividade +1"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordidas em Massa",
+            "detalhe": "+6, 2d4 perfurante (difícil de acertar de volta)"
+          }
+        ],
+        "habilidades": [
+          "Dispersar (o enxame se espalha e evita 1 ataque em área)"
+        ],
+        "loot": [
+          "Caudas de Rato (2 Solares)"
+        ],
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "cultista-fanatico",
+      "titulo": "Cultista Fanático",
+      "conteudo": {
+        "descricao": "Serve um culto obscuro e luta até o fim por fé cega.",
+        "preco": 40,
+        "raridade": "comum",
+        "categoria": "Humanoide",
+        "pv": 150,
+        "nivel": 8,
+        "vd": 2,
+        "defesa": 13,
+        "iniciativa": 16,
+        "deslocamento": "9m",
+        "mana": 39,
+        "atributos": {
+          "forca": 2,
+          "agilidade": 2,
+          "vigor": 3,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +12",
+          "Fortitude +13",
+          "Reflexos +12",
+          "Vontade +13",
+          "Religião +5"
+        ],
+        "ataques": [
+          {
+            "nome": "Adaga Ritual",
+            "detalhe": "+12, 1d6+2 perfurante + sangra 1d4"
+          }
+        ],
+        "habilidades": [
+          "Cântico Sombrio (concede +2 em Vontade a outro cultista, 1/cena)"
+        ],
+        "loot": [
+          "Adaga Ritual (25 Solares)",
+          "Tomo Corrompido (40 Solares)"
+        ],
+        "classe": "Servo"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "hiena-risonha",
+      "titulo": "Hiena Risonha",
+      "conteudo": {
+        "descricao": "Caça em bando e ri enquanto cerca a presa ferida.",
+        "preco": 45,
+        "raridade": "comum",
+        "categoria": "Animal",
+        "pv": 170,
+        "nivel": 8,
+        "vd": 2,
+        "defesa": 14,
+        "iniciativa": 19,
+        "deslocamento": "12m",
+        "atributos": {
+          "forca": 4,
+          "agilidade": 5,
+          "vigor": 3,
+          "presenca": 0,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +14",
+          "Fortitude +13",
+          "Reflexos +15",
+          "Vontade +10",
+          "Intimidação +4"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordida Trituradora",
+            "detalhe": "+14, 1d10+3 perfurante, vantagem no primeiro golpe"
+          }
+        ],
+        "habilidades": [
+          "Cerco em Bando (+2 no ataque quando há outra hiena adjacente ao alvo)"
+        ],
+        "loot": [
+          "Pele Manchada (12 Solares)"
+        ],
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "sombra-sussurrante",
+      "titulo": "Sombra Sussurrante",
+      "conteudo": {
+        "descricao": "Espírito menor que planta dúvidas na mente de quem se aproxima.",
+        "preco": 90,
+        "raridade": "incomum",
+        "categoria": "Espírito",
+        "pv": 140,
+        "nivel": 8,
+        "vd": 2,
+        "defesa": 16,
+        "iniciativa": 18,
+        "deslocamento": "9m (Atravessar paredes)",
+        "mana": 39,
+        "atributos": {
+          "forca": 0,
+          "agilidade": 4,
+          "vigor": 1,
+          "presenca": 5,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +10",
+          "Fortitude +11",
+          "Reflexos +14",
+          "Vontade +15",
+          "Furtividade +5"
+        ],
+        "ataques": [
+          {
+            "nome": "Toque Gélido",
+            "detalhe": "+10, 1d8+3 frio, vantagem no primeiro golpe"
+          }
+        ],
+        "habilidades": [
+          "Sussurro de Dúvida (Vontade ou o alvo age com desvantagem no próximo teste)"
+        ],
+        "loot": [
+          "Resíduo Sombrio (35 Solares)"
+        ],
+        "classe": "Servo"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "lamia-encantadora",
+      "titulo": "Lamia Encantadora",
+      "conteudo": {
+        "descricao": "Metade serpente, metade sedução; hipnotiza antes de atacar.",
+        "preco": 150,
+        "raridade": "incomum",
+        "categoria": "Monstro",
+        "pv": 250,
+        "nivel": 13,
+        "vd": 3,
+        "defesa": 17,
+        "iniciativa": 20,
+        "deslocamento": "9m",
+        "mana": 51,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 6,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +17",
+          "Fortitude +18",
+          "Reflexos +18",
+          "Vontade +20",
+          "Enganação +9"
+        ],
+        "ataques": [
+          {
+            "nome": "Cauda de Serpente",
+            "detalhe": "+17, 2d8+4 perfurante"
+          }
+        ],
+        "habilidades": [
+          "Olhar Sedutor (Vontade ou o alvo fica Enfeitiçado por uma cena)"
+        ],
+        "loot": [
+          "Escamas de Lamia (70 Solares)"
+        ],
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "troll-regenerador",
+      "titulo": "Troll Regenerador",
+      "conteudo": {
+        "descricao": "Fecha ferimentos quase tão rápido quanto os recebe, menos os de fogo.",
+        "preco": 240,
+        "raridade": "raro",
+        "categoria": "Monstro",
+        "pv": 420,
+        "nivel": 18,
+        "vd": 4,
+        "defesa": 18,
+        "iniciativa": 21,
+        "deslocamento": "12m",
+        "atributos": {
+          "forca": 7,
+          "agilidade": 2,
+          "vigor": 8,
+          "presenca": 0,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +24",
+          "Fortitude +25",
+          "Reflexos +19",
+          "Vontade +17",
+          "Intimidação +11"
+        ],
+        "ataques": [
+          {
+            "nome": "Garras Longas",
+            "detalhe": "+24, 2d10+5 cortante"
+          }
+        ],
+        "habilidades": [
+          "Regeneração (cura 2d8 PV no início do turno, a menos que tenha sofrido dano de fogo)"
+        ],
+        "loot": [
+          "Sangue Regenerativo (100 Solares)"
+        ],
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "arauto-do-vazio",
+      "titulo": "Arauto do Vazio",
+      "conteudo": {
+        "descricao": "Mensageiro do Fim; sua presença corrói a realidade ao redor.",
+        "preco": 260,
+        "raridade": "raro",
+        "categoria": "Aberração",
+        "pv": 380,
+        "nivel": 18,
+        "vd": 4,
+        "defesa": 19,
+        "iniciativa": 22,
+        "deslocamento": "9m (Flutuar)",
+        "mana": 63,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 4,
+          "presenca": 4,
+          "intelecto": 6
+        },
+        "pericias": [
+          "Luta +20",
+          "Fortitude +21",
+          "Reflexos +20",
+          "Vontade +21",
+          "Misticismo +14"
+        ],
+        "ataques": [
+          {
+            "nome": "Toque do Vazio",
+            "detalhe": "+20, 2d10+5 (ignora Defesa; exige autorização do Mestre)"
+          }
+        ],
+        "habilidades": [
+          "Silêncio Absoluto (cria uma área onde magias falham por uma rodada)"
+        ],
+        "loot": [
+          "Fragmento do Vazio (200 Solares)"
+        ],
+        "classe": "Invocação"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "harpia-tempestuosa",
+      "titulo": "Harpia Tempestuosa",
+      "conteudo": {
+        "descricao": "Mergulha das alturas trazendo vento e garras afiadas.",
+        "preco": 180,
+        "raridade": "incomum",
+        "categoria": "Monstro",
+        "pv": 360,
+        "nivel": 18,
+        "vd": 4,
+        "defesa": 19,
+        "iniciativa": 26,
+        "deslocamento": "15m (Voo)",
+        "atributos": {
+          "forca": 4,
+          "agilidade": 7,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 1
+        },
+        "pericias": [
+          "Luta +21",
+          "Fortitude +20",
+          "Reflexos +24",
+          "Vontade +19",
+          "Percepção +11"
+        ],
+        "ataques": [
+          {
+            "nome": "Mergulho de Garras",
+            "detalhe": "+21, 2d10+5 cortante (bônus se atacar em queda), vantagem no primeiro golpe"
+          }
+        ],
+        "habilidades": [
+          "Grito Agudo (Fortitude ou o alvo fica Atordoado por 1 turno)"
+        ],
+        "loot": [
+          "Penas de Tempestade (60 Solares)"
+        ],
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "golem-de-ferro",
+      "titulo": "Golem de Ferro",
+      "conteudo": {
+        "descricao": "Construto de guerra pesado, feito pra derrubar portas e exércitos.",
+        "preco": 420,
+        "raridade": "raro",
+        "categoria": "Constructo",
+        "pv": 600,
+        "nivel": 23,
+        "vd": 5,
+        "defesa": 23,
+        "iniciativa": 21,
+        "deslocamento": "6m",
+        "atributos": {
+          "forca": 10,
+          "agilidade": 0,
+          "vigor": 10,
+          "presenca": 0,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +31",
+          "Fortitude +31",
+          "Reflexos +21",
+          "Vontade +21",
+          "Intimidação +15"
+        ],
+        "ataques": [
+          {
+            "nome": "Punho Demolidor",
+            "detalhe": "+31, 3d10+7 contundente (destrói obstáculos)"
+          }
+        ],
+        "habilidades": [
+          "Postura de Muralha (reduz em 3 todo dano físico recebido até o próximo turno)"
+        ],
+        "loot": [
+          "Placas de Ferro Encantado (250 Solares)"
+        ],
+        "classe": "Invocação"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "necromante-decadente",
+      "titulo": "Necromante Decadente",
+      "conteudo": {
+        "descricao": "Erudito caído que trocou a vida pelo controle sobre a morte.",
+        "preco": 400,
+        "raridade": "raro",
+        "categoria": "Humanoide",
+        "pv": 460,
+        "nivel": 23,
+        "vd": 5,
+        "defesa": 19,
+        "iniciativa": 23,
+        "deslocamento": "9m",
+        "mana": 75,
+        "atributos": {
+          "forca": 1,
+          "agilidade": 2,
+          "vigor": 3,
+          "presenca": 5,
+          "intelecto": 7
+        },
+        "pericias": [
+          "Luta +22",
+          "Fortitude +24",
+          "Reflexos +23",
+          "Vontade +26",
+          "Misticismo +18"
+        ],
+        "ataques": [
+          {
+            "nome": "Drenar Vida",
+            "detalhe": "+22, 2d10+6 (cura o necromante pela metade do dano)"
+          }
+        ],
+        "habilidades": [
+          "Erguer Servo (invoca 1 Zumbi Bruto ou 2 Esqueletos Guerreiros por cena)"
+        ],
+        "loot": [
+          "Grimório Decadente (180 Solares)"
+        ],
+        "classe": "Servo"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "wyvern-das-montanhas",
+      "titulo": "Wyvern das Montanhas",
+      "conteudo": {
+        "descricao": "Predador alado territorial com ferrão peçonhento na cauda.",
+        "preco": 520,
+        "raridade": "epico",
+        "categoria": "Monstro",
+        "pv": 560,
+        "nivel": 23,
+        "vd": 5,
+        "defesa": 21,
+        "iniciativa": 27,
+        "deslocamento": "18m (Voo)",
+        "atributos": {
+          "forca": 6,
+          "agilidade": 6,
+          "vigor": 5,
+          "presenca": 1,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +27",
+          "Fortitude +26",
+          "Reflexos +27",
+          "Vontade +22",
+          "Percepção +15"
+        ],
+        "ataques": [
+          {
+            "nome": "Ferroada Venenosa",
+            "detalhe": "+27, 2d10+6 perfurante + veneno (Fraqueza 1d6), vantagem no primeiro golpe"
+          },
+          {
+            "nome": "Garras em Voo",
+            "detalhe": "+27, 2d8+5 cortante"
+          }
+        ],
+        "habilidades": [],
+        "loot": [
+          "Ferrão de Wyvern (220 Solares)",
+          "Asas de Wyvern (150 Solares)"
+        ],
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "espectro-vingativo",
+      "titulo": "Espectro Vingativo",
+      "conteudo": {
+        "descricao": "Alma presa por um rancor que não descansa até ser vingado.",
+        "preco": 480,
+        "raridade": "epico",
+        "categoria": "Espírito",
+        "pv": 480,
+        "nivel": 23,
+        "vd": 5,
+        "defesa": 22,
+        "iniciativa": 26,
+        "deslocamento": "9m (Atravessar paredes)",
+        "mana": 75,
+        "atributos": {
+          "forca": 0,
+          "agilidade": 5,
+          "vigor": 2,
+          "presenca": 6,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +21",
+          "Fortitude +23",
+          "Reflexos +26",
+          "Vontade +27",
+          "Intimidação +16"
+        ],
+        "ataques": [
+          {
+            "nome": "Lâmina Espectral",
+            "detalhe": "+21, 3d8+6 (ignora armadura física)"
+          }
+        ],
+        "habilidades": [
+          "Grito de Rancor (todos em área fazem Vontade ou ficam Apavorados)"
+        ],
+        "loot": [
+          "Corrente Espectral (180 Solares)"
+        ],
+        "classe": "Servo"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "minotauro-guardiao",
+      "titulo": "Minotauro Guardião",
+      "conteudo": {
+        "descricao": "Guarda labirintos e ruínas, forte demais pra ser ignorado.",
+        "preco": 350,
+        "raridade": "raro",
+        "categoria": "Monstro",
+        "pv": 700,
+        "nivel": 28,
+        "vd": 6,
+        "defesa": 23,
+        "iniciativa": 27,
+        "deslocamento": "9m",
+        "atributos": {
+          "forca": 9,
+          "agilidade": 3,
+          "vigor": 7,
+          "presenca": 2,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +33",
+          "Fortitude +31",
+          "Reflexos +27",
+          "Vontade +26",
+          "Intimidação +18"
+        ],
+        "ataques": [
+          {
+            "nome": "Machado de Guerra",
+            "detalhe": "+33, 3d10+7 cortante"
+          },
+          {
+            "nome": "Investida com Chifres",
+            "detalhe": "+33, 3d8+6 (derruba e empurra 3m)"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)"
+        ],
+        "loot": [
+          "Chifres de Minotauro (150 Solares)"
+        ],
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "hidra-de-duas-cabecas",
+      "titulo": "Hidra de Duas Cabeças",
+      "conteudo": {
+        "descricao": "Corta uma cabeça e outra nasce, a menos que o corte seja selado.",
+        "preco": 900,
+        "raridade": "epico",
+        "categoria": "Monstro",
+        "pv": 720,
+        "nivel": 28,
+        "vd": 6,
+        "defesa": 21,
+        "iniciativa": 27,
+        "deslocamento": "9m (Nado)",
+        "atributos": {
+          "forca": 8,
+          "agilidade": 3,
+          "vigor": 9,
+          "presenca": 1,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +32",
+          "Fortitude +33",
+          "Reflexos +27",
+          "Vontade +25",
+          "Percepção +18"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordidas Duplas",
+            "detalhe": "+32, dois ataques, 2d10+6 perfurante cada"
+          }
+        ],
+        "habilidades": [
+          "Regeneração de Cabeça (uma cabeça cortada renasce no início do turno, a menos que seja cauterizada)"
+        ],
+        "loot": [
+          "Cabeça Regenerativa (400 Solares)"
+        ],
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "efreeti-do-deserto",
+      "titulo": "Efreeti do Deserto",
+      "conteudo": {
+        "descricao": "Espírito do fogo preso a uma lâmpada ou anel, servo relutante.",
+        "preco": 1400,
+        "raridade": "epico",
+        "categoria": "Elemental",
+        "pv": 800,
+        "nivel": 33,
+        "vd": 7,
+        "defesa": 24,
+        "iniciativa": 29,
+        "deslocamento": "12m (Voo)",
+        "mana": 99,
+        "atributos": {
+          "forca": 6,
+          "agilidade": 3,
+          "vigor": 6,
+          "presenca": 5,
+          "intelecto": 5
+        },
+        "pericias": [
+          "Luta +34",
+          "Fortitude +34",
+          "Reflexos +31",
+          "Vontade +33",
+          "Misticismo +24"
+        ],
+        "ataques": [
+          {
+            "nome": "Cimitarra Flamejante",
+            "detalhe": "+34, 4d8+9 fogo"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)",
+          "Tempestade de Areia (cega todos em área por uma rodada)"
+        ],
+        "loot": [
+          "Cinza de Efreeti (600 Solares)"
+        ],
+        "classe": "Invocação"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "behemoth-das-planicies",
+      "titulo": "Behemoth das Planícies",
+      "conteudo": {
+        "descricao": "Colosso herbívoro que esmaga tudo em seu caminho por instinto, não malícia.",
+        "preco": 1300,
+        "raridade": "epico",
+        "categoria": "Monstro",
+        "pv": 900,
+        "nivel": 33,
+        "vd": 7,
+        "defesa": 23,
+        "iniciativa": 27,
+        "deslocamento": "12m",
+        "atributos": {
+          "forca": 10,
+          "agilidade": 1,
+          "vigor": 10,
+          "presenca": 0,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +38",
+          "Fortitude +38",
+          "Reflexos +29",
+          "Vontade +28",
+          "Intimidação +22"
+        ],
+        "ataques": [
+          {
+            "nome": "Pisoteio",
+            "detalhe": "+38, 4d10+9 contundente, em área"
+          },
+          {
+            "nome": "Chifrada Colossal",
+            "detalhe": "+38, 4d10+9 (derruba qualquer alvo menor)"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)"
+        ],
+        "loot": [
+          "Chifre Colossal (500 Solares)",
+          "Couro Colossal (700 Solares)"
+        ],
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "arconte-da-ordem",
+      "titulo": "Arconte da Ordem",
+      "conteudo": {
+        "descricao": "Emissário de uma lei superior; julga antes de agir.",
+        "preco": 2600,
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 845,
+        "nivel": 33,
+        "vd": 7,
+        "defesa": 26,
+        "iniciativa": 31,
+        "deslocamento": "15m (Voo)",
+        "mana": 99,
+        "atributos": {
+          "forca": 6,
+          "agilidade": 5,
+          "vigor": 6,
+          "presenca": 8,
+          "intelecto": 7
+        },
+        "pericias": [
+          "Luta +34",
+          "Fortitude +34",
+          "Reflexos +33",
+          "Vontade +36",
+          "Religião +25"
+        ],
+        "ataques": [
+          {
+            "nome": "Lâmina da Sentença",
+            "detalhe": "+34, 4d10+9 luz"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)",
+          "Julgamento (Vontade ou o alvo fica Paralisado por uma rodada)"
+        ],
+        "loot": [
+          "Lâmina Celestial Fragmentada (1200 Solares)"
+        ],
+        "classe": "Ser Lendário"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "titan-de-gelo",
+      "titulo": "Titã de Gelo",
+      "conteudo": {
+        "descricao": "Desperta das geleiras uma vez a cada era, e o mundo sente o frio.",
+        "preco": 3800,
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 1100,
+        "nivel": 38,
+        "vd": 8,
+        "defesa": 27,
+        "iniciativa": 30,
+        "deslocamento": "9m",
+        "atributos": {
+          "forca": 10,
+          "agilidade": 1,
+          "vigor": 10,
+          "presenca": 3,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +41",
+          "Fortitude +41",
+          "Reflexos +32",
+          "Vontade +34",
+          "Intimidação +26"
+        ],
+        "ataques": [
+          {
+            "nome": "Punho Congelante",
+            "detalhe": "+41, 4d12+9 frio (reduz o deslocamento do alvo)"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)",
+          "Nevasca (dano em área e cria terreno gelado (Reflexos ou escorrega))"
+        ],
+        "loot": [
+          "Núcleo de Gelo Eterno (2200 Solares)"
+        ],
+        "classe": "Criatura"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "avatar-das-sombras",
+      "titulo": "Avatar das Sombras",
+      "conteudo": {
+        "descricao": "Fragmento consciente da escuridão entre os planos.",
+        "preco": 9500,
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 1255,
+        "nivel": 43,
+        "vd": 9,
+        "defesa": 28,
+        "iniciativa": 37,
+        "deslocamento": "12m (Atravessar paredes)",
+        "mana": 123,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 6,
+          "vigor": 6,
+          "presenca": 8,
+          "intelecto": 8
+        },
+        "pericias": [
+          "Luta +38",
+          "Fortitude +39",
+          "Reflexos +39",
+          "Vontade +41",
+          "Furtividade +31"
+        ],
+        "ataques": [
+          {
+            "nome": "Consumir Luz",
+            "detalhe": "+38, 5d10+10 escuridão (cega o alvo por uma rodada), vantagem no primeiro golpe"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)",
+          "Multiplicar Sombras (cria 2 sombras menores que atacam junto por uma cena)"
+        ],
+        "loot": [
+          "Fragmento de Sombra Pura (4000 Solares)"
+        ],
+        "classe": "Ser Lendário"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "devorador-de-mundos",
+      "titulo": "Devorador de Mundos",
+      "conteudo": {
+        "descricao": "Entidade que já engoliu reinos inteiros; poucos sobrevivem pra descrever.",
+        "preco": 20000,
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 1600,
+        "nivel": 48,
+        "vd": 10,
+        "defesa": 32,
+        "iniciativa": 39,
+        "deslocamento": "12m (Voo)",
+        "mana": 150,
+        "atributos": {
+          "forca": 10,
+          "agilidade": 5,
+          "vigor": 10,
+          "presenca": 8,
+          "intelecto": 8
+        },
+        "pericias": [
+          "Luta +46",
+          "Fortitude +46",
+          "Reflexos +41",
+          "Vontade +44",
+          "Intimidação +34"
+        ],
+        "ataques": [
+          {
+            "nome": "Fome Sem Fim",
+            "detalhe": "+46, 6d12+13 (cura o Devorador pela metade do dano)"
+          }
+        ],
+        "habilidades": [
+          "Multiataque (usa dois dos ataques listados na mesma rodada)",
+          "Colapso da Realidade (exige autorização do Mestre; dano em área que ignora Defesa)"
+        ],
+        "loot": [
+          "Fragmento de Realidade Devorada (10000 Solares)"
+        ],
+        "classe": "Ser Lendário"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "universal-vd-1",
+      "titulo": "Ameaça Genérica (VD 1)",
+      "conteudo": {
+        "descricao": "Modelo pronto pra montar uma ameaça na hora: troque o nome, ajuste uma perícia ou traço e está pronto pra mesa.",
+        "preco": 0,
+        "raridade": "comum",
+        "categoria": "Universal",
+        "pv": 95,
+        "nivel": 3,
+        "vd": 1,
+        "defesa": 12,
+        "iniciativa": 12,
+        "deslocamento": "9m",
+        "mana": 27,
+        "atributos": {
+          "forca": 1,
+          "agilidade": 1,
+          "vigor": 1,
+          "presenca": 0,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +6",
+          "Fortitude +6",
+          "Reflexos +6",
+          "Vontade +5",
+          "Percepção +1"
+        ],
+        "ataques": [
+          {
+            "nome": "Ataque Corpo a Corpo",
+            "detalhe": "+6, 1d8+2 (troque o tipo de dano ao reskinar)"
+          },
+          {
+            "nome": "Ataque à Distância",
+            "detalhe": "+6, 1d8+2 (opcional; remova se não fizer sentido)"
+          }
+        ],
+        "habilidades": [
+          "Traço Marcante (defina um efeito especial ao reskinar: resistência, aura, condição etc)"
+        ],
+        "loot": [
+          "Material genérico (defina ao reskinar)"
+        ],
+        "classe": "Universal"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "universal-vd-2",
+      "titulo": "Ameaça Genérica (VD 2)",
+      "conteudo": {
+        "descricao": "Modelo pronto pra montar uma ameaça na hora: troque o nome, ajuste uma perícia ou traço e está pronto pra mesa.",
+        "preco": 0,
+        "raridade": "comum",
+        "categoria": "Universal",
+        "pv": 170,
+        "nivel": 8,
+        "vd": 2,
+        "defesa": 14,
+        "iniciativa": 16,
+        "deslocamento": "9m",
+        "mana": 39,
+        "atributos": {
+          "forca": 2,
+          "agilidade": 2,
+          "vigor": 2,
+          "presenca": 1,
+          "intelecto": 1
+        },
+        "pericias": [
+          "Luta +12",
+          "Fortitude +12",
+          "Reflexos +12",
+          "Vontade +11",
+          "Percepção +4"
+        ],
+        "ataques": [
+          {
+            "nome": "Ataque Corpo a Corpo",
+            "detalhe": "+12, 1d10+3 (troque o tipo de dano ao reskinar)"
+          },
+          {
+            "nome": "Ataque à Distância",
+            "detalhe": "+12, 1d10+3 (opcional; remova se não fizer sentido)"
+          }
+        ],
+        "habilidades": [
+          "Traço Marcante (defina um efeito especial ao reskinar: resistência, aura, condição etc)"
+        ],
+        "loot": [
+          "Material genérico (defina ao reskinar)"
+        ],
+        "classe": "Universal"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "universal-vd-3",
+      "titulo": "Ameaça Genérica (VD 3)",
+      "conteudo": {
+        "descricao": "Modelo pronto pra montar uma ameaça na hora: troque o nome, ajuste uma perícia ou traço e está pronto pra mesa.",
+        "preco": 0,
+        "raridade": "comum",
+        "categoria": "Universal",
+        "pv": 265,
+        "nivel": 13,
+        "vd": 3,
+        "defesa": 16,
+        "iniciativa": 18,
+        "deslocamento": "9m",
+        "mana": 51,
+        "atributos": {
+          "forca": 2,
+          "agilidade": 2,
+          "vigor": 2,
+          "presenca": 1,
+          "intelecto": 1
+        },
+        "pericias": [
+          "Luta +16",
+          "Fortitude +16",
+          "Reflexos +16",
+          "Vontade +15",
+          "Percepção +8"
+        ],
+        "ataques": [
+          {
+            "nome": "Ataque Corpo a Corpo",
+            "detalhe": "+16, 2d6+4 (troque o tipo de dano ao reskinar)"
+          },
+          {
+            "nome": "Ataque à Distância",
+            "detalhe": "+16, 2d6+4 (opcional; remova se não fizer sentido)"
+          }
+        ],
+        "habilidades": [
+          "Traço Marcante (defina um efeito especial ao reskinar: resistência, aura, condição etc)"
+        ],
+        "loot": [
+          "Material genérico (defina ao reskinar)"
+        ],
+        "classe": "Universal"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "universal-vd-4",
+      "titulo": "Ameaça Genérica (VD 4)",
+      "conteudo": {
+        "descricao": "Modelo pronto pra montar uma ameaça na hora: troque o nome, ajuste uma perícia ou traço e está pronto pra mesa.",
+        "preco": 0,
+        "raridade": "incomum",
+        "categoria": "Universal",
+        "pv": 380,
+        "nivel": 18,
+        "vd": 4,
+        "defesa": 18,
+        "iniciativa": 22,
+        "deslocamento": "9m",
+        "mana": 63,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +20",
+          "Fortitude +20",
+          "Reflexos +20",
+          "Vontade +19",
+          "Percepção +12"
+        ],
+        "ataques": [
+          {
+            "nome": "Ataque Corpo a Corpo",
+            "detalhe": "+20, 2d8+5 (troque o tipo de dano ao reskinar)"
+          },
+          {
+            "nome": "Ataque à Distância",
+            "detalhe": "+20, 2d8+5 (opcional; remova se não fizer sentido)"
+          }
+        ],
+        "habilidades": [
+          "Traço Marcante (defina um efeito especial ao reskinar: resistência, aura, condição etc)"
+        ],
+        "loot": [
+          "Material genérico (defina ao reskinar)"
+        ],
+        "classe": "Universal"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "universal-vd-5",
+      "titulo": "Ameaça Genérica (VD 5)",
+      "conteudo": {
+        "descricao": "Modelo pronto pra montar uma ameaça na hora: troque o nome, ajuste uma perícia ou traço e está pronto pra mesa.",
+        "preco": 0,
+        "raridade": "incomum",
+        "categoria": "Universal",
+        "pv": 515,
+        "nivel": 23,
+        "vd": 5,
+        "defesa": 20,
+        "iniciativa": 24,
+        "deslocamento": "9m",
+        "mana": 75,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +24",
+          "Fortitude +24",
+          "Reflexos +24",
+          "Vontade +23",
+          "Percepção +16"
+        ],
+        "ataques": [
+          {
+            "nome": "Ataque Corpo a Corpo",
+            "detalhe": "+24, 2d10+6 (troque o tipo de dano ao reskinar)"
+          },
+          {
+            "nome": "Ataque à Distância",
+            "detalhe": "+24, 2d10+6 (opcional; remova se não fizer sentido)"
+          }
+        ],
+        "habilidades": [
+          "Traço Marcante (defina um efeito especial ao reskinar: resistência, aura, condição etc)"
+        ],
+        "loot": [
+          "Material genérico (defina ao reskinar)"
+        ],
+        "classe": "Universal"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "universal-vd-6",
+      "titulo": "Ameaça Genérica (VD 6)",
+      "conteudo": {
+        "descricao": "Modelo pronto pra montar uma ameaça na hora: troque o nome, ajuste uma perícia ou traço e está pronto pra mesa.",
+        "preco": 0,
+        "raridade": "raro",
+        "categoria": "Universal",
+        "pv": 670,
+        "nivel": 28,
+        "vd": 6,
+        "defesa": 22,
+        "iniciativa": 28,
+        "deslocamento": "9m",
+        "mana": 87,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +28",
+          "Fortitude +28",
+          "Reflexos +28",
+          "Vontade +27",
+          "Percepção +19"
+        ],
+        "ataques": [
+          {
+            "nome": "Ataque Corpo a Corpo",
+            "detalhe": "+28, 3d8+7 (troque o tipo de dano ao reskinar)"
+          },
+          {
+            "nome": "Ataque à Distância",
+            "detalhe": "+28, 3d8+7 (opcional; remova se não fizer sentido)"
+          }
+        ],
+        "habilidades": [
+          "Traço Marcante (defina um efeito especial ao reskinar: resistência, aura, condição etc)",
+          "Multiataque (usa os dois ataques abaixo na mesma rodada)"
+        ],
+        "loot": [
+          "Material genérico (defina ao reskinar)"
+        ],
+        "classe": "Universal"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "universal-vd-7",
+      "titulo": "Ameaça Genérica (VD 7)",
+      "conteudo": {
+        "descricao": "Modelo pronto pra montar uma ameaça na hora: troque o nome, ajuste uma perícia ou traço e está pronto pra mesa.",
+        "preco": 0,
+        "raridade": "raro",
+        "categoria": "Universal",
+        "pv": 845,
+        "nivel": 33,
+        "vd": 7,
+        "defesa": 24,
+        "iniciativa": 30,
+        "deslocamento": "9m",
+        "mana": 99,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +32",
+          "Fortitude +32",
+          "Reflexos +32",
+          "Vontade +31",
+          "Percepção +23"
+        ],
+        "ataques": [
+          {
+            "nome": "Ataque Corpo a Corpo",
+            "detalhe": "+32, 3d10+8 (troque o tipo de dano ao reskinar)"
+          },
+          {
+            "nome": "Ataque à Distância",
+            "detalhe": "+32, 3d10+8 (opcional; remova se não fizer sentido)"
+          }
+        ],
+        "habilidades": [
+          "Traço Marcante (defina um efeito especial ao reskinar: resistência, aura, condição etc)",
+          "Multiataque (usa os dois ataques abaixo na mesma rodada)"
+        ],
+        "loot": [
+          "Material genérico (defina ao reskinar)"
+        ],
+        "classe": "Universal"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "universal-vd-8",
+      "titulo": "Ameaça Genérica (VD 8)",
+      "conteudo": {
+        "descricao": "Modelo pronto pra montar uma ameaça na hora: troque o nome, ajuste uma perícia ou traço e está pronto pra mesa.",
+        "preco": 0,
+        "raridade": "epico",
+        "categoria": "Universal",
+        "pv": 1040,
+        "nivel": 38,
+        "vd": 8,
+        "defesa": 26,
+        "iniciativa": 34,
+        "deslocamento": "9m",
+        "mana": 111,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 4,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +36",
+          "Fortitude +36",
+          "Reflexos +36",
+          "Vontade +35",
+          "Percepção +27"
+        ],
+        "ataques": [
+          {
+            "nome": "Ataque Corpo a Corpo",
+            "detalhe": "+36, 4d8+9 (troque o tipo de dano ao reskinar)"
+          },
+          {
+            "nome": "Ataque à Distância",
+            "detalhe": "+36, 4d8+9 (opcional; remova se não fizer sentido)"
+          }
+        ],
+        "habilidades": [
+          "Traço Marcante (defina um efeito especial ao reskinar: resistência, aura, condição etc)",
+          "Multiataque (usa os dois ataques abaixo na mesma rodada)"
+        ],
+        "loot": [
+          "Material genérico (defina ao reskinar)"
+        ],
+        "classe": "Universal"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "universal-vd-9",
+      "titulo": "Ameaça Genérica (VD 9)",
+      "conteudo": {
+        "descricao": "Modelo pronto pra montar uma ameaça na hora: troque o nome, ajuste uma perícia ou traço e está pronto pra mesa.",
+        "preco": 0,
+        "raridade": "epico",
+        "categoria": "Universal",
+        "pv": 1255,
+        "nivel": 43,
+        "vd": 9,
+        "defesa": 28,
+        "iniciativa": 36,
+        "deslocamento": "9m",
+        "mana": 123,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 4,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +38",
+          "Fortitude +38",
+          "Reflexos +38",
+          "Vontade +37",
+          "Percepção +29"
+        ],
+        "ataques": [
+          {
+            "nome": "Ataque Corpo a Corpo",
+            "detalhe": "+38, 4d10+10 (troque o tipo de dano ao reskinar)"
+          },
+          {
+            "nome": "Ataque à Distância",
+            "detalhe": "+38, 4d10+10 (opcional; remova se não fizer sentido)"
+          }
+        ],
+        "habilidades": [
+          "Traço Marcante (defina um efeito especial ao reskinar: resistência, aura, condição etc)",
+          "Multiataque (usa os dois ataques abaixo na mesma rodada)"
+        ],
+        "loot": [
+          "Material genérico (defina ao reskinar)"
+        ],
+        "classe": "Universal"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "universal-vd-10",
+      "titulo": "Ameaça Genérica (VD 10)",
+      "conteudo": {
+        "descricao": "Modelo pronto pra montar uma ameaça na hora: troque o nome, ajuste uma perícia ou traço e está pronto pra mesa.",
+        "preco": 0,
+        "raridade": "lendario",
+        "categoria": "Universal",
+        "pv": 1490,
+        "nivel": 48,
+        "vd": 10,
+        "defesa": 30,
+        "iniciativa": 40,
+        "deslocamento": "9m",
+        "mana": 135,
+        "atributos": {
+          "forca": 6,
+          "agilidade": 6,
+          "vigor": 6,
+          "presenca": 5,
+          "intelecto": 5
+        },
+        "pericias": [
+          "Luta +42",
+          "Fortitude +42",
+          "Reflexos +42",
+          "Vontade +41",
+          "Percepção +32"
+        ],
+        "ataques": [
+          {
+            "nome": "Ataque Corpo a Corpo",
+            "detalhe": "+42, 5d10+12 (troque o tipo de dano ao reskinar)"
+          },
+          {
+            "nome": "Ataque à Distância",
+            "detalhe": "+42, 5d10+12 (opcional; remova se não fizer sentido)"
+          }
+        ],
+        "habilidades": [
+          "Traço Marcante (defina um efeito especial ao reskinar: resistência, aura, condição etc)",
+          "Multiataque (usa os dois ataques abaixo na mesma rodada)"
+        ],
+        "loot": [
+          "Material genérico (defina ao reskinar)"
+        ],
+        "classe": "Universal"
       }
     }
   ]

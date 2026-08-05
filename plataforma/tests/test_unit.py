@@ -26,7 +26,7 @@ from core.backup import (
 )
 from core.automatic_backup import salvar_backup_automatico
 from core import limites
-from core.character_summary import carregar_catalogos, iniciativa_fixa, resumir_ficha, sabedoria_desempate
+from core.character_summary import carregar_catalogos, iniciativa_fixa, resumir_ficha, sabedoria_desempate, xp_por_vd
 from core.campaign_visibility import visible_campaign_config
 from core.dados import _classificar, rolar_formula, rolar_teste
 from core.config import load_settings
@@ -41,15 +41,17 @@ from core.security import (
     verify_password,
 )
 from routers.characters import _sheet_without_central_fields
-from routers.sessions import _estado_bloqueado, _estado_da_vida
+from routers.sessions import _estado_bloqueado, _estado_da_vida, _inteiro_do_catalogo
 from core.dependencies import AuthenticatedUser
 from schemas import (
     AdminUserUpdateInput,
     CampaignUpdateInput,
     CharacterCreateInput,
     EconomyReplaceInput,
+    DistributeXpInput,
     NotificationReadInput,
     ParticipantCreateInput,
+    ParticipantReorderInput,
     ParticipantUpdateInput,
     PasswordChangeInput,
     PasswordHelpInput,
@@ -562,12 +564,101 @@ class SessaoAoVivoTests(unittest.TestCase):
         with self.assertRaises(ValidationError):
             ParticipantUpdateInput()
 
-    def test_participante_nasce_com_vida_escondida(self):
-        # O padrão protege o mestre: o número do monstro só aparece se ele quiser.
+    def test_participante_nasce_visivel_mas_com_vida_escondida(self):
+        # O padrão protege o mestre: o número do monstro só aparece se ele
+        # quiser. "parcial" é nome e estado visíveis, sem o número exato.
         novo = ParticipantCreateInput(nome="Ogro")
-        self.assertFalse(novo.vida_visivel)
-        self.assertTrue(novo.visivel)
+        self.assertEqual(novo.visibilidade, "parcial")
         self.assertEqual(novo.tipo, "inimigo")
+
+    def test_visibilidade_recusa_nivel_fora_dos_quatro(self):
+        with self.assertRaises(ValidationError):
+            ParticipantCreateInput(nome="Ogro", visibilidade="invisivel-de-verdade")
+
+    def test_defesa_e_opcional_e_segue_a_mesma_faixa_da_iniciativa(self):
+        # Sem ficha vinculada (NPC, monstro), a Defesa é o que o mestre digita.
+        self.assertIsNone(ParticipantCreateInput(nome="Ogro").defesa)
+        self.assertEqual(ParticipantCreateInput(nome="Ogro", defesa=15).defesa, 15)
+        with self.assertRaises(ValidationError):
+            ParticipantCreateInput(nome="Ogro", defesa=-1)
+
+    def test_pericias_nasce_vazia_e_nao_duplica(self):
+        vazia = ParticipantCreateInput(nome="Ogro")
+        self.assertEqual(vazia.pericias, [])
+        com_pericias = ParticipantCreateInput(
+            nome="Ogro",
+            pericias=["Luta +12", "  Luta +12  ", "Fortitude +10", ""],
+        )
+        self.assertEqual(com_pericias.pericias, ["Luta +12", "Fortitude +10"])
+
+    def test_ataques_nasce_vazio_e_aceita_nome_mais_detalhe(self):
+        vazio = ParticipantCreateInput(nome="Ogro")
+        self.assertEqual(vazio.ataques, [])
+        com_ataques = ParticipantCreateInput(
+            nome="Ogro",
+            ataques=[{"nome": "Garra", "detalhe": "+7, 2d8+4 cortante"}, {"nome": "Mordida"}],
+        )
+        self.assertEqual(
+            com_ataques.ataques,
+            [{"nome": "Garra", "detalhe": "+7, 2d8+4 cortante"}, {"nome": "Mordida", "detalhe": ""}],
+        )
+
+    def test_ataques_descarta_entradas_sem_nome_e_nao_duplica(self):
+        entrada = ParticipantUpdateInput(ataques=[
+            {"nome": "Garra", "detalhe": "1d6"},
+            {"nome": "  ", "detalhe": "ignorado"},
+            {"nome": "garra", "detalhe": "repetido, ignora"},
+        ])
+        self.assertEqual(entrada.ataques, [{"nome": "Garra", "detalhe": "1d6"}])
+
+    def test_mana_e_opcional_igual_a_defesa(self):
+        novo = ParticipantCreateInput(nome="Ogro", mana_maxima=40)
+        self.assertEqual(novo.mana_maxima, 40)
+        with self.assertRaises(ValidationError):
+            ParticipantCreateInput(nome="Ogro", mana_maxima=-1)
+
+    def test_vd_aceita_um_a_dez_e_recusa_fora_da_faixa(self):
+        self.assertIsNone(ParticipantCreateInput(nome="Ogro").vd)
+        self.assertEqual(ParticipantCreateInput(nome="Ogro", vd=7).vd, 7)
+        with self.assertRaises(ValidationError):
+            ParticipantCreateInput(nome="Ogro", vd=0)
+        with self.assertRaises(ValidationError):
+            ParticipantCreateInput(nome="Ogro", vd=11)
+
+    def test_xp_por_vd_cresce_com_a_dificuldade_e_ignora_vd_vazio(self):
+        self.assertEqual(xp_por_vd(None), 0)
+        self.assertEqual(xp_por_vd(1), 200)
+        self.assertEqual(xp_por_vd(10), 11000)
+        # A tabela só cobre 1-10; fora da faixa, satura nas pontas em vez de
+        # estourar (defensivo contra dado sujo vindo do catálogo).
+        self.assertEqual(xp_por_vd(0), xp_por_vd(1))
+        self.assertEqual(xp_por_vd(99), xp_por_vd(10))
+        anterior = 0
+        for vd in range(1, 11):
+            atual = xp_por_vd(vd)
+            self.assertGreater(atual, anterior)
+            anterior = atual
+
+    def test_distribuir_xp_exige_ao_menos_um_participante(self):
+        with self.assertRaises(ValidationError):
+            DistributeXpInput(participante_ids=[])
+
+    def test_inteiro_do_catalogo_aceita_texto_ou_numero(self):
+        # Entradas antigas do catálogo guardam pv/defesa como texto ("120");
+        # as novas já usam número — o Bestiário precisa aceitar os dois.
+        self.assertEqual(_inteiro_do_catalogo("120"), 120)
+        self.assertEqual(_inteiro_do_catalogo(95), 95)
+        self.assertIsNone(_inteiro_do_catalogo(None))
+        self.assertIsNone(_inteiro_do_catalogo("sem numero"))
+
+    def test_reordenar_exige_ao_menos_um_participante(self):
+        with self.assertRaises(ValidationError):
+            ParticipantReorderInput(ordem=[])
+
+    def test_reordenar_aceita_a_lista_de_ids_na_nova_ordem(self):
+        primeiro, segundo = UUID(int=1), UUID(int=2)
+        entrada = ParticipantReorderInput(ordem=[segundo, primeiro])
+        self.assertEqual(entrada.ordem, [segundo, primeiro])
 
 
 class DadosTests(unittest.TestCase):

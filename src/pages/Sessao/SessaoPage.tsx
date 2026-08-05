@@ -4,6 +4,7 @@ import {
   AlertTriangle,
   LockKeyhole,
   PanelLeft,
+  PanelLeftClose,
   PanelRight,
   Radio,
   RefreshCw,
@@ -15,19 +16,19 @@ import {
 import { ActiveTurnCard } from './components/ActiveTurnCard';
 import { InitiativeTracker } from './InitiativeTracker';
 import { SessionLogPanel } from './components/SessionLogPanel';
-import { useSessaoStore, type SessionRollRequest } from '../../store/useSessaoStore';
+import { useSessaoStore } from '../../store/useSessaoStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import { roleLabel } from './sessionUtils';
 
 export const SessaoPage: React.FC = () => {
-  const [isRolling, setIsRolling] = useState(false);
   const [isChangingLive, setIsChangingLive] = useState(false);
   const [liveActionError, setLiveActionError] = useState<string | null>(null);
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
   const [rightDrawerOpen, setRightDrawerOpen] = useState(false);
+  // O histórico é útil, mas ocupa uma coluna inteira — dá pra recolher.
+  const [historyPanelOpen, setHistoryPanelOpen] = useState(true);
   const reduceMotion = useReducedMotion();
   const {
-    rolarDados,
     conectarSSE,
     desconectarSSE,
     fetchEstadoSessao,
@@ -67,18 +68,6 @@ export const SessaoPage: React.FC = () => {
       </div>
     );
   }
-
-  const handleRequestRoll = async (request: SessionRollRequest) => {
-    if (isRolling) return;
-    setIsRolling(true);
-    try {
-      await rolarDados(request);
-    } catch {
-      // A mensagem contextual é mantida no store e exibida no alerta da página.
-    } finally {
-      setIsRolling(false);
-    }
-  };
 
   const handleLiveToggle = async () => {
     if (isChangingLive) return;
@@ -142,7 +131,11 @@ export const SessaoPage: React.FC = () => {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_52%_18%,rgba(199,164,76,0.10),transparent_46%)]" />
 
       <div className="relative z-10 h-full pl-24">
-        <div className="grid h-full min-h-0 grid-rows-[76px_minmax(0,1fr)] xl:grid-cols-[320px_minmax(0,1fr)_340px]">
+        <div
+          className={`grid h-full min-h-0 grid-rows-[76px_minmax(0,1fr)] ${
+            historyPanelOpen ? 'xl:grid-cols-[320px_minmax(0,1fr)_340px]' : 'xl:grid-cols-[minmax(0,1fr)_340px]'
+          }`}
+        >
           <header className="col-span-full flex min-w-0 items-center justify-between border-b border-white/10 bg-[#0b0a10]/95 pl-4 pr-20 backdrop-blur-xl sm:pl-6 sm:pr-24">
             <div className="flex min-w-0 items-center gap-3">
               <div className="min-w-0">
@@ -173,6 +166,16 @@ export const SessaoPage: React.FC = () => {
                 aria-label="Abrir histórico"
               >
                 <PanelLeft size={18} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setHistoryPanelOpen((current) => !current)}
+                className="hidden rounded-lg border border-white/10 p-2 text-white/70 hover:border-[#c7a44c]/40 hover:text-white xl:inline-flex"
+                aria-pressed={historyPanelOpen}
+                aria-label={historyPanelOpen ? 'Recolher histórico' : 'Mostrar histórico'}
+                title={historyPanelOpen ? 'Recolher histórico' : 'Mostrar histórico'}
+              >
+                <PanelLeftClose size={18} className={historyPanelOpen ? '' : 'rotate-180'} />
               </button>
               <button
                 type="button"
@@ -216,9 +219,11 @@ export const SessaoPage: React.FC = () => {
             </div>
           </header>
 
-          <aside className="hidden min-h-0 border-r border-white/10 xl:block">
-            <SessionLogPanel />
-          </aside>
+          {historyPanelOpen ? (
+            <aside className="hidden min-h-0 border-r border-white/10 xl:block">
+              <SessionLogPanel />
+            </aside>
+          ) : null}
 
           <main className="relative min-h-0 min-w-0 overflow-hidden">
             {isLoading ? (
@@ -227,7 +232,7 @@ export const SessaoPage: React.FC = () => {
                 Preparando a mesa…
               </div>
             ) : (
-              <ActiveTurnCard onRequestRoll={handleRequestRoll} isRollDisabled={isRolling} />
+              <ActiveTurnCard />
             )}
           </main>
 

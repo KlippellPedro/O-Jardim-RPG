@@ -1,5 +1,14 @@
 import { api } from './apiClient';
 
+/** oculto: nem aparece. desconhecido: aparece sem nome nem número (emboscada).
+ * parcial: nome e estado qualitativo ("Ferido"), sem número. total: tudo. */
+export type NivelVisibilidade = 'oculto' | 'desconhecido' | 'parcial' | 'total';
+
+export interface AtaquePayload {
+  nome: string;
+  detalhe?: string;
+}
+
 export interface ParticipantePayload {
   nome?: string;
   tipo?: 'jogador' | 'aliado' | 'inimigo';
@@ -8,10 +17,18 @@ export interface ParticipantePayload {
   vida_maxima?: number;
   dano?: number;
   cura?: number;
+  mana_atual?: number | null;
+  mana_maxima?: number | null;
   condicoes?: Array<string | { nome: string; turnos: number | null }>;
+  ataques?: AtaquePayload[];
   anotacao?: string;
-  visivel?: boolean;
-  vida_visivel?: boolean;
+  visibilidade?: NivelVisibilidade;
+  /** Só usado por quem não tem ficha (NPCs, monstros). */
+  defesa?: number | null;
+  /** Valor de Desafio (1-10) — de onde vem o XP ao distribuir. */
+  vd?: number | null;
+  /** Referência rápida ("Luta +12"); não valida nada. */
+  pericias?: string[];
 }
 
 export interface SessaoParticipanteResponse {
@@ -26,8 +43,42 @@ export interface SessaoParticipanteResponse {
   ordem?: number;
   estado_vida?: string;
   e_meu?: boolean;
-  visivel?: boolean;
-  vida_visivel?: boolean;
+  /** Só vem preenchido para quem comanda a mesa ou para o dono do próprio
+   * personagem — é o segredo do mestre, não algo que o resto da mesa lê. */
+  visibilidade?: NivelVisibilidade | null;
+  /** Mesma regra da Vida: só aparece para quem pode ver o número exato. */
+  defesa?: number | null;
+  mana_atual?: number | null;
+  mana_maxima?: number | null;
+  ataques?: AtaquePayload[];
+  /** Só vem preenchido para quem comanda a mesa — é uso interno de XP. */
+  vd?: number | null;
+  pericias?: string[];
+}
+
+export interface BestiarioMonstro {
+  id: string;
+  titulo: string;
+  nivel: number | null;
+  classe: string | null;
+  /** Grupo pra organizar o seletor (Animal, Humanoide, Monstro, Universal…). */
+  categoria: string | null;
+  descricao: string | null;
+  vd: number | null;
+  xp: number;
+  pv: number | null;
+  defesa: number | null;
+  mana: number | null;
+  iniciativa: number | null;
+  ataques: AtaquePayload[];
+  pericias: string[];
+  habilidades: string[];
+}
+
+export interface DistribuirXpResponse {
+  total_xp: number;
+  xp_por_personagem: number;
+  personagens: Array<{ id: string; nome: string; xp: number }>;
 }
 
 export interface SessaoResponse {
@@ -95,5 +146,23 @@ export const sessaoApi = {
 
   sincronizarIniciativa(sessaoId: string) {
     return api(`/sessao/${sessaoId}/iniciativa`, { method: 'POST' });
+  },
+
+  reordenarParticipantes(sessaoId: string, ordem: string[]) {
+    return api(`/sessao/${sessaoId}/participantes/ordem`, {
+      method: 'POST',
+      body: { ordem },
+    });
+  },
+
+  listarBestiario(campanhaId: string) {
+    return api<{ monstros: BestiarioMonstro[] }>(`/sessao/bestiario?campanha_id=${campanhaId}`);
+  },
+
+  distribuirXp(sessaoId: string, participanteIds: string[]) {
+    return api<DistribuirXpResponse>(`/sessao/${sessaoId}/xp`, {
+      method: 'POST',
+      body: { participante_ids: participanteIds },
+    });
   },
 };

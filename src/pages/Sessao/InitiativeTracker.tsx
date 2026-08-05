@@ -1,20 +1,31 @@
 import React, { useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion, Reorder, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
+  Award,
   ArrowLeft,
   ArrowRight,
+  CheckSquare,
   Eye,
+  Gauge,
+  GripVertical,
+  HeartPulse,
   Pencil,
   Plus,
   RefreshCw,
+  Shield,
+  Skull,
   Sword,
   Trash2,
   UserRound,
   X,
+  Zap,
 } from 'lucide-react';
-import { useSessaoStore } from '../../store/useSessaoStore';
+import { useSessaoStore, type EntidadeIniciativa } from '../../store/useSessaoStore';
 import { EntityEditor } from './components/EntityEditor';
+import { BestiarioPicker } from './components/BestiarioPicker';
+import type { BestiarioMonstro, NivelVisibilidade } from '../../services/sessaoApi';
+import { OPCOES_VISIBILIDADE, rotuloVisibilidade } from './sessionUtils';
 
 interface InitiativeTrackerProps {
   onClose?: () => void;
@@ -22,6 +33,7 @@ interface InitiativeTrackerProps {
 
 export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose }) => {
   const {
+    campanhaId,
     iniciativa,
     turnoAtualId,
     emCombate,
@@ -35,6 +47,9 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
     turnoAnterior,
     ordenarIniciativa,
     sincronizarIniciativa,
+    reordenarIniciativa,
+    aplicarEmMassa,
+    distribuirXp,
   } = useSessaoStore();
   const navigate = useNavigate();
   const reduceMotion = useReducedMotion();
@@ -42,13 +57,25 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
   const [name, setName] = useState('');
   const [initiativeValue, setInitiativeValue] = useState(10);
   const [hpMax, setHpMax] = useState('');
+  const [defenseValue, setDefenseValue] = useState('');
+  const [manaValue, setManaValue] = useState('');
   const [type, setType] = useState<'aliado' | 'inimigo'>('inimigo');
-  const [hpVisible, setHpVisible] = useState(true);
+  // O padrão protege o mestre: o número do monstro só aparece se ele escolher.
+  const [visibilidade, setVisibilidade] = useState<NivelVisibilidade>('parcial');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [removingId, setRemovingId] = useState<string | null>(null);
   const [confirmEnd, setConfirmEnd] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [batchMode, setBatchMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [batchAmount, setBatchAmount] = useState(1);
+  const [showBestiario, setShowBestiario] = useState(false);
+  const [xpMessage, setXpMessage] = useState<string | null>(null);
+
+  // Arrastar só faz sentido antes do combate começar — durante a luta a
+  // ordem é a da iniciativa, não uma decisão manual do mestre.
+  const canReorder = comando && !emCombate && !batchMode;
 
   const runAction = async (action: () => Promise<void>, errorMessage: string) => {
     if (busy) return;
@@ -56,8 +83,11 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
     setMessage(null);
     try {
       await action();
-    } catch {
-      setMessage(errorMessage);
+    } catch (error) {
+      // O servidor manda o motivo exato (ex.: "nenhum personagem de jogador
+      // nesta sessao"); mostrar isso em vez de um texto genérico poupa o
+      // mestre de adivinhar o que deu errado.
+      setMessage(error instanceof Error && error.message ? error.message : errorMessage);
     } finally {
       setBusy(false);
     }
@@ -81,15 +111,210 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
         iniciativa: initiativeValue,
         vida_maxima: parsedHp,
         tipo: type,
-        visivel: true,
-        vida_visivel: hpVisible,
+        visibilidade,
+        defesa: defenseValue.trim() === '' ? undefined : Math.max(0, Math.min(999, Number(defenseValue) || 0)),
+        mana_maxima: manaValue.trim() === '' ? undefined : Math.max(0, Math.min(99999, Number(manaValue) || 0)),
       });
       setName('');
       setInitiativeValue(10);
       setHpMax('');
+      setDefenseValue('');
+      setManaValue('');
       setType('inimigo');
+      setVisibilidade('parcial');
       setIsAdding(false);
     }, 'Não foi possível adicionar a entidade.');
+  };
+
+  const toggleSelected = (id: string) => {
+    setSelectedIds((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const applyBatch = (field: 'dano' | 'cura') => {
+    if (!selectedIds.size || !batchAmount) return;
+    void runAction(async () => {
+      await aplicarEmMassa(Array.from(selectedIds), { [field]: batchAmount });
+      setSelectedIds(new Set());
+    }, field === 'dano' ? 'Não foi possível aplicar o dano.' : 'Não foi possível aplicar a cura.');
+  };
+
+  const pickFromBestiario = async (monstro: BestiarioMonstro) => {
+    const iniciativaBase = monstro.iniciativa ?? 10;
+    const base = {
+      tipo: 'inimigo' as const,
+      vida_maxima: monstro.pv ?? 0,
+      visibilidade: 'parcial' as const,
+      vd: monstro.vd ?? undefined,
+      defesa: monstro.defesa ?? undefined,
+      mana_maxima: monstro.mana ?? undefined,
+      ataques: monstro.ataques,
+      pericias: monstro.pericias,
+    };
+    await adicionarEntidade({ ...base, nome: monstro.titulo, iniciativa: iniciativaBase });
+
+    // Multiataque age duas vezes por rodada: a segunda entrada some 10 da
+    // iniciativa pra não ficar colada na primeira na fila.
+    const temMultiataque = monstro.habilidades.some((habilidade) => habilidade.startsWith('Multiataque'));
+    if (temMultiataque) {
+      await adicionarEntidade({
+        ...base,
+        nome: `${monstro.titulo} (2º turno)`,
+        iniciativa: Math.max(-99, iniciativaBase - 10),
+      });
+    }
+    setShowBestiario(false);
+  };
+
+  const distributeXp = () => {
+    if (!selectedIds.size) return;
+    setXpMessage(null);
+    void runAction(async () => {
+      const resultado = await distribuirXp(Array.from(selectedIds));
+      const quantos = resultado.personagens.length;
+      setXpMessage(
+        `${resultado.total_xp} XP distribuído entre ${quantos} personagem${quantos === 1 ? '' : 's'} (${resultado.xp_por_personagem} cada).`,
+      );
+      setSelectedIds(new Set());
+    }, 'Não foi possível distribuir o XP. Confirme que os selecionados têm VD e que há jogadores na cena.');
+  };
+
+  const renderCard = (entity: EntidadeIniciativa, index: number) => {
+    const active = emCombate && entity.id === turnoAtualId;
+    const hpRatio = entity.hpTotal && entity.hpAtual !== undefined
+      ? Math.max(0, Math.min(100, (entity.hpAtual / entity.hpTotal) * 100))
+      : null;
+    return (
+      <motion.article
+        layout={!reduceMotion}
+        className={`overflow-hidden rounded-xl border ${
+          active
+            ? 'border-[#c7a44c]/55 bg-[#c7a44c]/[0.09]'
+            : 'border-white/[0.07] bg-black/25'
+        }`}
+      >
+        <div className="flex items-center gap-3 p-3">
+          {canReorder ? <GripVertical size={14} className="shrink-0 cursor-grab text-white/20 active:cursor-grabbing" /> : null}
+          {batchMode && comando ? (
+            <input
+              type="checkbox"
+              checked={selectedIds.has(entity.id)}
+              onChange={() => toggleSelected(entity.id)}
+              className="h-4 w-4 shrink-0 rounded border-white/20 bg-black/30 accent-[#c7a44c]"
+              aria-label={`Selecionar ${entity.nome}`}
+            />
+          ) : null}
+          <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border bg-black/30 font-mono text-sm font-bold" style={{ borderColor: `${entity.cor}80`, color: entity.cor }}>
+            {entity.iniciativa}
+            <span className="absolute -left-1 -top-1 rounded-full bg-[#17151c] px-1 text-[8px] font-normal text-white/35">{index + 1}</span>
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <h3 className="truncate text-sm font-semibold text-white/90">{entity.nome}</h3>
+              {active ? <span className="rounded-full bg-[#c7a44c]/15 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[#e2c465]">Turno</span> : null}
+              {comando && entity.visibilidade && entity.visibilidade !== 'total' ? (
+                <span
+                  className="shrink-0 rounded-full border border-white/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white/40"
+                  title="Só quem comanda a mesa vê este selo — é o que os jogadores enxergam desta entidade."
+                >
+                  {rotuloVisibilidade(entity.visibilidade)}
+                </span>
+              ) : null}
+            </div>
+            <div className="mt-0.5 flex items-center gap-1.5 text-[10px] capitalize text-white/40">
+              <span>{entity.tipo}</span>
+              <span>•</span>
+              <span>{entity.hpAtual !== undefined ? `${entity.hpAtual}/${entity.hpTotal ?? '?' } PV` : entity.estado_vida ?? 'PV ocultos'}</span>
+            </div>
+            {entity.manaAtual != null || entity.manaTotal != null || entity.defesa != null || (comando && entity.vd != null) ? (
+              <div className="mt-1 flex items-center gap-2.5 text-[10px] text-white/40">
+                {entity.manaAtual != null || entity.manaTotal != null ? (
+                  <span className="flex items-center gap-0.5" title="Mana">
+                    <Zap size={10} className="text-sky-300/70" /> {entity.manaAtual ?? entity.manaTotal}/{entity.manaTotal ?? '?'}
+                  </span>
+                ) : null}
+                {entity.defesa != null ? (
+                  <span className="flex items-center gap-0.5" title="Defesa">
+                    <Shield size={10} /> {entity.defesa}
+                  </span>
+                ) : null}
+                {comando && entity.vd != null ? (
+                  <span className="flex items-center gap-0.5" title="Valor de Desafio">
+                    <Gauge size={10} /> {entity.vd}
+                  </span>
+                ) : null}
+              </div>
+            ) : null}
+            {hpRatio !== null ? (
+              <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-white/[0.06]">
+                <div className="h-full rounded-full bg-red-400/65" style={{ width: `${hpRatio}%` }} />
+              </div>
+            ) : null}
+          </div>
+          {entity.personagemId ? (
+            <button type="button" onClick={() => navigate(`/ficha/${entity.personagemId}`)} className="p-1.5 text-white/35 hover:text-white" aria-label={`Abrir ficha de ${entity.nome}`}>
+              <Eye size={14} />
+            </button>
+          ) : null}
+          {comando ? (
+            <button type="button" onClick={() => setEditingId(editingId === entity.id ? null : entity.id)} className="p-1.5 text-white/35 hover:text-[#d9bb63]" aria-label={`Editar ${entity.nome}`}>
+              <Pencil size={14} />
+            </button>
+          ) : null}
+        </div>
+
+        {entity.condicoes.length && editingId !== entity.id ? (
+          <div className="flex flex-wrap gap-1 border-t border-white/[0.06] px-3 py-2">
+            {entity.condicoes.map((condition) => (
+              <span key={`${condition.nome}-${condition.turnos ?? 'p'}`} className="rounded-full bg-amber-300/[0.07] px-2 py-0.5 text-[9px] text-amber-100/65">
+                {condition.nome}{condition.turnos ? ` · ${condition.turnos}` : ''}
+              </span>
+            ))}
+          </div>
+        ) : null}
+
+        {editingId === entity.id && comando ? (
+          <EntityEditor
+            entity={entity}
+            busy={busy}
+            onCancel={() => setEditingId(null)}
+            onSave={async (payload) => {
+              await runAction(async () => {
+                await atualizarEntidade(entity.id, payload);
+                setEditingId(null);
+              }, `Não foi possível atualizar ${entity.nome}.`);
+            }}
+          />
+        ) : null}
+
+        {comando ? (
+          <div className="border-t border-white/[0.06] px-3 py-1.5 text-right">
+            {removingId === entity.id ? (
+              <div className="flex items-center justify-end gap-2 text-[10px] text-white/50">
+                <span>Remover?</span>
+                <button type="button" onClick={() => setRemovingId(null)} className="px-1 py-1 hover:text-white">Cancelar</button>
+                <button
+                  type="button"
+                  onClick={() => void runAction(async () => {
+                    await removerEntidade(entity.id);
+                    setRemovingId(null);
+                  }, `Não foi possível remover ${entity.nome}.`)}
+                  className="flex items-center gap-1 px-1 py-1 text-red-300 hover:text-red-200"
+                >
+                  <Trash2 size={11} /> Confirmar
+                </button>
+              </div>
+            ) : (
+              <button type="button" onClick={() => setRemovingId(entity.id)} className="text-[10px] text-white/25 hover:text-red-300">Remover da cena</button>
+            )}
+          </div>
+        ) : null}
+      </motion.article>
+    );
   };
 
   return (
@@ -103,6 +328,36 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
             </p>
           </div>
           <div className="flex items-center gap-1">
+            {comando && iniciativa.length > 0 ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setBatchMode((current) => !current);
+                  setSelectedIds(new Set());
+                }}
+                className={`rounded-md border p-2 ${
+                  batchMode
+                    ? 'border-[#c7a44c]/50 bg-[#c7a44c]/10 text-[#d7b85c]'
+                    : 'border-white/10 text-white/50 hover:text-white'
+                }`}
+                aria-pressed={batchMode}
+                aria-label={batchMode ? 'Sair da seleção em massa' : 'Selecionar vários para aplicar dano ou cura'}
+                title="Aplicar dano ou cura em vários participantes de uma vez"
+              >
+                <CheckSquare size={17} />
+              </button>
+            ) : null}
+            {comando && campanhaId ? (
+              <button
+                type="button"
+                onClick={() => setShowBestiario(true)}
+                className="rounded-md border border-white/10 p-2 text-white/50 hover:border-[#c7a44c]/40 hover:text-white"
+                aria-label="Abrir o Bestiário"
+                title="Adicionar criatura do Bestiário"
+              >
+                <Skull size={17} />
+              </button>
+            ) : null}
             {comando ? (
               <button
                 type="button"
@@ -136,7 +391,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
               autoFocus
               className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none focus:border-[#c7a44c]/50"
             />
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               <label className="text-[10px] uppercase tracking-wider text-white/40">
                 Iniciativa
                 <input
@@ -149,7 +404,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
                 />
               </label>
               <label className="text-[10px] uppercase tracking-wider text-white/40">
-                PV máximo · opcional
+                PV máximo
                 <input
                   type="number"
                   min={0}
@@ -157,6 +412,30 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
                   value={hpMax}
                   onChange={(event) => setHpMax(event.target.value)}
                   placeholder="Sem PV"
+                  className="mt-1 w-full rounded-md border border-white/10 bg-black/30 px-2 py-2 text-sm text-white outline-none"
+                />
+              </label>
+              <label className="text-[10px] uppercase tracking-wider text-white/40">
+                Defesa
+                <input
+                  type="number"
+                  min={0}
+                  max={999}
+                  value={defenseValue}
+                  onChange={(event) => setDefenseValue(event.target.value)}
+                  placeholder="—"
+                  className="mt-1 w-full rounded-md border border-white/10 bg-black/30 px-2 py-2 text-sm text-white outline-none"
+                />
+              </label>
+              <label className="text-[10px] uppercase tracking-wider text-white/40">
+                Mana
+                <input
+                  type="number"
+                  min={0}
+                  max={99999}
+                  value={manaValue}
+                  onChange={(event) => setManaValue(event.target.value)}
+                  placeholder="—"
                   className="mt-1 w-full rounded-md border border-white/10 bg-black/30 px-2 py-2 text-sm text-white outline-none"
                 />
               </label>
@@ -179,18 +458,92 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
                 </button>
               ))}
             </div>
-            <label className="flex items-center gap-2 py-1 text-xs text-white/50">
-              <input type="checkbox" checked={hpVisible} onChange={(event) => setHpVisible(event.target.checked)} />
-              Mostrar PV aos jogadores
-            </label>
+            <div>
+              <span className="text-[10px] uppercase tracking-wider text-white/40">Visibilidade para os jogadores</span>
+              <div className="mt-1.5 grid grid-cols-2 gap-1.5">
+                {OPCOES_VISIBILIDADE.map((opcao) => (
+                  <button
+                    key={opcao.valor}
+                    type="button"
+                    onClick={() => setVisibilidade(opcao.valor)}
+                    title={opcao.descricao}
+                    aria-pressed={visibilidade === opcao.valor}
+                    className={`rounded-md border px-2 py-1.5 text-[11px] font-medium ${
+                      visibilidade === opcao.valor
+                        ? 'border-[#c7a44c]/50 bg-[#c7a44c]/15 text-[#e7c76f]'
+                        : 'border-white/10 text-white/45 hover:border-white/20 hover:text-white/70'
+                    }`}
+                  >
+                    {opcao.rotulo}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <p className="text-[10px] text-white/30">Ataques e outros detalhes dão pra completar depois, no editor (ícone de lápis).</p>
             <button type="submit" disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-md bg-[#c7a44c] py-2 text-xs font-bold text-black disabled:opacity-50">
               {busy ? <RefreshCw className="animate-spin" size={14} /> : <Plus size={14} />} Adicionar à cena
             </button>
           </motion.form>
         ) : null}
 
+        {batchMode && comando ? (
+          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-white/[0.08] bg-black/25 p-2.5">
+            <span className="shrink-0 text-[10px] uppercase tracking-wider text-white/40">
+              {selectedIds.size} selecionado{selectedIds.size === 1 ? '' : 's'}
+            </span>
+            <input
+              type="number"
+              min={0}
+              max={99999}
+              value={batchAmount}
+              onChange={(event) => setBatchAmount(Math.max(0, Math.min(99999, Number(event.target.value) || 0)))}
+              className="w-20 rounded-md border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-[#c7a44c]/50"
+              aria-label="Quantidade de dano ou cura"
+            />
+            <button
+              type="button"
+              disabled={busy || selectedIds.size === 0 || !batchAmount}
+              onClick={() => applyBatch('dano')}
+              className="flex items-center gap-1 rounded-md border border-red-400/30 px-2 py-1.5 text-xs font-medium text-red-200 hover:bg-red-400/10 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <Sword size={13} /> Dano
+            </button>
+            <button
+              type="button"
+              disabled={busy || selectedIds.size === 0 || !batchAmount}
+              onClick={() => applyBatch('cura')}
+              className="flex items-center gap-1 rounded-md border border-emerald-400/30 px-2 py-1.5 text-xs font-medium text-emerald-200 hover:bg-emerald-400/10 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <HeartPulse size={13} /> Cura
+            </button>
+            <button
+              type="button"
+              disabled={busy || selectedIds.size === 0}
+              onClick={distributeXp}
+              title="Soma o XP (pelo VD) dos selecionados e reparte entre os jogadores da cena"
+              className="flex items-center gap-1 rounded-md border border-[#c7a44c]/30 px-2 py-1.5 text-xs font-medium text-[#e3c363] hover:bg-[#c7a44c]/10 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <Award size={13} /> Distribuir XP
+            </button>
+            {selectedIds.size > 0 ? (
+              <button type="button" onClick={() => setSelectedIds(new Set())} className="text-[10px] text-white/35 hover:text-white/60">
+                Limpar seleção
+              </button>
+            ) : null}
+          </div>
+        ) : null}
+
+        {xpMessage ? <p className="mt-3 rounded-md bg-[#c7a44c]/10 px-3 py-2 text-xs text-[#e3c363]" role="status">{xpMessage}</p> : null}
         {message ? <p className="mt-3 rounded-md bg-red-400/10 px-3 py-2 text-xs text-red-200" role="alert">{message}</p> : null}
       </div>
+
+      {showBestiario && campanhaId ? (
+        <BestiarioPicker
+          campanhaId={campanhaId}
+          onCancel={() => setShowBestiario(false)}
+          onPick={pickFromBestiario}
+        />
+      ) : null}
 
       <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto p-3">
         {emCombate && !turnoAtualId ? (
@@ -201,106 +554,26 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
             <UserRound size={32} strokeWidth={1.5} />
             <p className="mt-3 text-sm">{comando ? 'Adicione participantes para preparar o combate.' : 'O mestre ainda está preparando esta cena.'}</p>
           </div>
+        ) : canReorder ? (
+          <Reorder.Group
+            as="div"
+            axis="y"
+            values={iniciativa}
+            onReorder={(newOrder) => void reordenarIniciativa(newOrder.map((entity) => entity.id))}
+            className="space-y-2"
+          >
+            {iniciativa.map((entity, index) => (
+              <Reorder.Item key={entity.id} value={entity} as="div">
+                {renderCard(entity, index)}
+              </Reorder.Item>
+            ))}
+          </Reorder.Group>
         ) : (
           <div className="space-y-2">
             <AnimatePresence initial={false}>
-              {iniciativa.map((entity, index) => {
-                const active = emCombate && entity.id === turnoAtualId;
-                const hpRatio = entity.hpTotal && entity.hpAtual !== undefined
-                  ? Math.max(0, Math.min(100, (entity.hpAtual / entity.hpTotal) * 100))
-                  : null;
-                return (
-                  <motion.article
-                    key={entity.id}
-                    layout={!reduceMotion}
-                    className={`overflow-hidden rounded-xl border ${
-                      active
-                        ? 'border-[#c7a44c]/55 bg-[#c7a44c]/[0.09]'
-                        : 'border-white/[0.07] bg-black/25'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 p-3">
-                      <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border bg-black/30 font-mono text-sm font-bold" style={{ borderColor: `${entity.cor}80`, color: entity.cor }}>
-                        {entity.iniciativa}
-                        <span className="absolute -left-1 -top-1 rounded-full bg-[#17151c] px-1 text-[8px] font-normal text-white/35">{index + 1}</span>
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2">
-                          <h3 className="truncate text-sm font-semibold text-white/90">{entity.nome}</h3>
-                          {active ? <span className="rounded-full bg-[#c7a44c]/15 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[#e2c465]">Turno</span> : null}
-                        </div>
-                        <div className="mt-0.5 flex items-center gap-1.5 text-[10px] capitalize text-white/40">
-                          <span>{entity.tipo}</span>
-                          <span>•</span>
-                          <span>{entity.hpAtual !== undefined ? `${entity.hpAtual}/${entity.hpTotal ?? '?' } PV` : entity.estado_vida ?? 'PV ocultos'}</span>
-                        </div>
-                        {hpRatio !== null ? (
-                          <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-white/[0.06]">
-                            <div className="h-full rounded-full bg-red-400/65" style={{ width: `${hpRatio}%` }} />
-                          </div>
-                        ) : null}
-                      </div>
-                      {entity.personagemId ? (
-                        <button type="button" onClick={() => navigate(`/ficha/${entity.personagemId}`)} className="p-1.5 text-white/35 hover:text-white" aria-label={`Abrir ficha de ${entity.nome}`}>
-                          <Eye size={14} />
-                        </button>
-                      ) : null}
-                      {comando ? (
-                        <button type="button" onClick={() => setEditingId(editingId === entity.id ? null : entity.id)} className="p-1.5 text-white/35 hover:text-[#d9bb63]" aria-label={`Editar ${entity.nome}`}>
-                          <Pencil size={14} />
-                        </button>
-                      ) : null}
-                    </div>
-
-                    {entity.condicoes.length && editingId !== entity.id ? (
-                      <div className="flex flex-wrap gap-1 border-t border-white/[0.06] px-3 py-2">
-                        {entity.condicoes.map((condition) => (
-                          <span key={`${condition.nome}-${condition.turnos ?? 'p'}`} className="rounded-full bg-amber-300/[0.07] px-2 py-0.5 text-[9px] text-amber-100/65">
-                            {condition.nome}{condition.turnos ? ` · ${condition.turnos}` : ''}
-                          </span>
-                        ))}
-                      </div>
-                    ) : null}
-
-                    {editingId === entity.id && comando ? (
-                      <EntityEditor
-                        entity={entity}
-                        busy={busy}
-                        onCancel={() => setEditingId(null)}
-                        onSave={async (payload) => {
-                          await runAction(async () => {
-                            await atualizarEntidade(entity.id, payload);
-                            setEditingId(null);
-                          }, `Não foi possível atualizar ${entity.nome}.`);
-                        }}
-                      />
-                    ) : null}
-
-                    {comando ? (
-                      <div className="border-t border-white/[0.06] px-3 py-1.5 text-right">
-                        {removingId === entity.id ? (
-                          <div className="flex items-center justify-end gap-2 text-[10px] text-white/50">
-                            <span>Remover?</span>
-                            <button type="button" onClick={() => setRemovingId(null)} className="px-1 py-1 hover:text-white">Cancelar</button>
-                            <button
-                              type="button"
-                              onClick={() => void runAction(async () => {
-                                await removerEntidade(entity.id);
-                                setRemovingId(null);
-                              }, `Não foi possível remover ${entity.nome}.`)}
-                              className="flex items-center gap-1 px-1 py-1 text-red-300 hover:text-red-200"
-                            >
-                              <Trash2 size={11} /> Confirmar
-                            </button>
-                          </div>
-                        ) : (
-                          <button type="button" onClick={() => setRemovingId(entity.id)} className="text-[10px] text-white/25 hover:text-red-300">Remover da cena</button>
-                        )}
-                      </div>
-                    ) : null}
-                  </motion.article>
-                );
-              })}
+              {iniciativa.map((entity, index) => (
+                <React.Fragment key={entity.id}>{renderCard(entity, index)}</React.Fragment>
+              ))}
             </AnimatePresence>
           </div>
         )}

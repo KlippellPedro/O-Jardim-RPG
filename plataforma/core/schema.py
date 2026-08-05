@@ -648,4 +648,124 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        14,
+        "quatro_niveis_de_visibilidade_na_sessao",
+        (
+            # As duas booleanas (visivel, vida_visivel) só davam 3 estados: não
+            # existia "aparece na iniciativa, mas sem nome nem número" — a
+            # emboscada clássica, em que o jogador sabe que tem algo ali sem
+            # saber o quê. Um enum de 4 níveis substitui as duas colunas.
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS visibilidade TEXT
+            """,
+            """
+            UPDATE sessao_participantes
+            SET visibilidade = CASE
+                WHEN NOT visivel THEN 'oculto'
+                WHEN vida_visivel THEN 'total'
+                ELSE 'parcial'
+            END
+            WHERE visibilidade IS NULL
+            """,
+            """
+            ALTER TABLE sessao_participantes
+            ALTER COLUMN visibilidade SET NOT NULL
+            """,
+            """
+            ALTER TABLE sessao_participantes
+            ALTER COLUMN visibilidade SET DEFAULT 'total'
+            """,
+            """
+            ALTER TABLE sessao_participantes
+            ADD CONSTRAINT sessao_participantes_visibilidade_check
+            CHECK (visibilidade IN ('oculto', 'desconhecido', 'parcial', 'total'))
+            """,
+            """
+            ALTER TABLE sessao_participantes
+            DROP COLUMN IF EXISTS visivel
+            """,
+            """
+            ALTER TABLE sessao_participantes
+            DROP COLUMN IF EXISTS vida_visivel
+            """,
+        ),
+    ),
+    (
+        15,
+        "defesa_dos_participantes_da_sessao",
+        (
+            # NPCs e monstros sem ficha vinculada não tinham como mostrar a
+            # Defesa no HUD de combate; o mestre define o valor na mão aqui.
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS defesa INTEGER
+            """,
+        ),
+    ),
+    (
+        16,
+        "categoria_de_aviso_sessao",
+        (
+            # "Iniciar ao vivo" sempre tentou avisar a mesa com a categoria
+            # "sessao", mas ela nunca esteve na lista permitida — todo aviso
+            # de sessão quebrava com erro 500.
+            """
+            ALTER TABLE notificacoes
+            DROP CONSTRAINT IF EXISTS notificacoes_categoria_check
+            """,
+            """
+            ALTER TABLE notificacoes
+            ADD CONSTRAINT notificacoes_categoria_check
+            CHECK (categoria IN ('conta', 'campanha', 'conteudo', 'economia', 'sessao'))
+            """,
+        ),
+    ),
+    (
+        17,
+        "mana_e_ataques_dos_participantes_da_sessao",
+        (
+            # As rolagens saíram do site (agora são feitas no Discord); o que
+            # falta aqui é referência rápida — Mana e a lista de ataques do
+            # NPC/monstro, pra quem está narrando não precisar abrir a ficha.
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS mana_atual INTEGER
+            """,
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS mana_maxima INTEGER
+            """,
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS ataques JSONB NOT NULL DEFAULT '[]'::jsonb
+            """,
+        ),
+    ),
+    (
+        18,
+        "vd_dos_participantes_da_sessao",
+        (
+            # VD (Valor de Desafio) do Bestiário: carregado junto quando a
+            # criatura entra na cena, pra distribuir XP sem contar na mão.
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS vd INTEGER
+            """,
+        ),
+    ),
+    (
+        19,
+        "pericias_dos_participantes_da_sessao",
+        (
+            # As 4-5 perícias mais usadas em combate (Luta, Fortitude,
+            # Reflexos, Vontade + uma de destaque), pra não precisar abrir o
+            # Bestiário de novo no meio da cena.
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS pericias JSONB NOT NULL DEFAULT '[]'::jsonb
+            """,
+        ),
+    ),
 )

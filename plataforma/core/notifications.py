@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 from psycopg.types.json import Jsonb
 
 
-CATEGORIES = ("conta", "campanha", "conteudo", "economia")
+CATEGORIES = ("conta", "campanha", "conteudo", "economia", "sessao")
 
 
 def notify(

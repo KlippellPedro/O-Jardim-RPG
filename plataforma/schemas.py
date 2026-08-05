@@ -463,18 +463,79 @@ class SessionOpenInput(BaseModel):
     incluir_personagens: bool = True
 
 
+NivelVisibilidade = Literal["oculto", "desconhecido", "parcial", "total"]
+
+
+def _normalizar_ataques(value: list[Any]) -> list[dict]:
+    """Lista de referência rápida (nome + detalhe livre); sem duplicar nomes."""
+    ataques: list[dict] = []
+    vistos: set[str] = set()
+    for item in value:
+        if not isinstance(item, dict):
+            continue
+        nome = " ".join(str(item.get("nome", "")).strip().split())
+        if not nome:
+            continue
+        chave = nome.lower()
+        if chave in vistos:
+            continue
+        vistos.add(chave)
+        detalhe = " ".join(str(item.get("detalhe", "")).strip().split())
+        ataques.append({"nome": nome[:60], "detalhe": detalhe[:160]})
+    return ataques
+
+
+def _normalizar_pericias(value: list[Any]) -> list[str]:
+    """Lista curta de referência ("Luta +12"); sem duplicar e sem vazios."""
+    pericias: list[str] = []
+    vistas: set[str] = set()
+    for item in value:
+        texto = " ".join(str(item).strip().split())
+        if not texto:
+            continue
+        chave = texto.lower()
+        if chave in vistas:
+            continue
+        vistas.add(chave)
+        pericias.append(texto[:40])
+    return pericias
+
+
 class ParticipantCreateInput(BaseModel):
     nome: str = Field(min_length=1, max_length=80)
     tipo: Literal["jogador", "aliado", "inimigo"] = "inimigo"
     iniciativa: int = Field(default=0, ge=-99, le=999)
     vida_maxima: int = Field(default=0, ge=0, le=99_999)
-    visivel: bool = True
-    vida_visivel: bool = False
+    # O padrão protege o mestre: o número do monstro só aparece se ele quiser.
+    # Quem entra automaticamente ao abrir a sessão (os próprios personagens)
+    # não passa por aqui — pega o DEFAULT 'total' da coluna, no schema.py.
+    visibilidade: NivelVisibilidade = "parcial"
+    # Só usado por quem não tem ficha (NPCs, monstros) — personagens pegam a
+    # Defesa e a Mana da própria ficha.
+    defesa: int | None = Field(default=None, ge=0, le=999)
+    mana_maxima: int | None = Field(default=None, ge=0, le=99_999)
+    ataques: list[Any] = Field(default_factory=list, max_length=12)
+    # VD (Valor de Desafio, 1 a 10): vem do Bestiário quando a criatura entra
+    # pela lista; usado depois pra somar o XP da luta sem contar na mão.
+    vd: int | None = Field(default=None, ge=1, le=10)
+    # Referência rápida ("Luta +12"); não valida nada, só evita reabrir o
+    # Bestiário no meio da cena.
+    pericias: list[Any] = Field(default_factory=list, max_length=8)
 
     @field_validator("nome")
     @classmethod
     def clean_name(cls, value: str) -> str:
         return " ".join(value.strip().split())
+
+    @field_validator("ataques")
+    @classmethod
+    def clean_attacks(cls, value: list[Any]) -> list[dict]:
+        return _normalizar_ataques(value)
+
+    @field_validator("pericias")
+    @classmethod
+    def clean_pericias(cls, value: list[Any]) -> list[str]:
+        return _normalizar_pericias(value)
 
 
 class ParticipantUpdateInput(BaseModel):
@@ -486,10 +547,15 @@ class ParticipantUpdateInput(BaseModel):
     vida_maxima: int | None = Field(default=None, ge=0, le=99_999)
     dano: int | None = Field(default=None, ge=0, le=99_999)
     cura: int | None = Field(default=None, ge=0, le=99_999)
+    mana_atual: int | None = Field(default=None, ge=0, le=99_999)
+    mana_maxima: int | None = Field(default=None, ge=0, le=99_999)
     condicoes: list[Any] | None = Field(default=None, max_length=20)
+    ataques: list[Any] | None = Field(default=None, max_length=12)
     anotacao: str | None = Field(default=None, max_length=500)
-    visivel: bool | None = None
-    vida_visivel: bool | None = None
+    visibilidade: NivelVisibilidade | None = None
+    defesa: int | None = Field(default=None, ge=0, le=999)
+    vd: int | None = Field(default=None, ge=1, le=10)
+    pericias: list[Any] | None = Field(default=None, max_length=8)
 
     @field_validator("condicoes")
     @classmethod
@@ -499,11 +565,38 @@ class ParticipantUpdateInput(BaseModel):
             return None
         return normalizar_condicoes(value)
 
+    @field_validator("ataques")
+    @classmethod
+    def clean_attacks(cls, value: list[Any] | None) -> list[dict] | None:
+        if value is None:
+            return None
+        return _normalizar_ataques(value)
+
+    @field_validator("pericias")
+    @classmethod
+    def clean_pericias(cls, value: list[Any] | None) -> list[str] | None:
+        if value is None:
+            return None
+        return _normalizar_pericias(value)
+
     @model_validator(mode="after")
     def require_change(self):
         if not self.model_fields_set:
             raise ValueError("informe ao menos uma alteracao")
         return self
+
+
+class ParticipantReorderInput(BaseModel):
+    """Nova ordem manual da fila (arrastar e soltar), sem mexer na iniciativa."""
+
+    ordem: list[UUID] = Field(min_length=1, max_length=200)
+
+
+class DistributeXpInput(BaseModel):
+    """Os inimigos derrotados; o XP de cada um vem do VD, somado e repartido
+    entre os personagens de jogador presentes nesta sessão."""
+
+    participante_ids: list[UUID] = Field(min_length=1, max_length=60)
 
 
 class SessionTurnInput(BaseModel):

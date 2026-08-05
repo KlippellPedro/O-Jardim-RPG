@@ -50,8 +50,9 @@ export const PlayerGallery: React.FC = () => {
           const character = entity.personagemId ? charactersById.get(entity.personagemId) : undefined;
           const hpMax = entity.hpTotal ?? character?.derivados?.vida;
           const hpCurrent = entity.hpAtual ?? hpMax;
-          const mana = character?.derivados?.mana;
-          const defense = character?.derivados?.defesaNatural;
+          const manaMax = entity.manaTotal ?? character?.derivados?.mana;
+          const manaCurrent = entity.manaAtual ?? manaMax;
+          const defense = entity.defesa ?? character?.derivados?.defesaNatural;
 
           return (
             <motion.article
@@ -91,7 +92,7 @@ export const PlayerGallery: React.FC = () => {
                 </div>
                 <div className="rounded-lg bg-sky-400/[0.07] p-2 text-sky-200/80">
                   <Zap size={13} className="mb-1" />
-                  <span>{mana ?? 'N/D'}</span>
+                  <span>{manaCurrent !== undefined ? `${manaCurrent}/${manaMax ?? '?'}` : 'N/D'}</span>
                 </div>
                 <div className="rounded-lg bg-white/[0.04] p-2 text-white/60">
                   <Shield size={13} className="mb-1" />

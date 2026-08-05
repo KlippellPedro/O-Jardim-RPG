@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import {
   sessaoApi,
+  type DistribuirXpResponse,
+  type NivelVisibilidade,
   type ParticipantePayload,
   type SessaoParticipanteResponse,
 } from '../services/sessaoApi';
@@ -11,6 +13,11 @@ export interface SessionCondition {
   turnos: number | null;
 }
 
+export interface SessionAttack {
+  nome: string;
+  detalhe: string;
+}
+
 export interface EntidadeIniciativa {
   id: string;
   personagemId?: string | null;
@@ -18,28 +25,24 @@ export interface EntidadeIniciativa {
   iniciativa: number;
   hpAtual?: number;
   hpTotal?: number;
+  manaAtual?: number;
+  manaTotal?: number;
+  defesa?: number | null;
+  ataques?: SessionAttack[];
+  pericias?: string[];
+  /** Só chega para quem comanda a mesa — usado pra distribuir XP. */
+  vd?: number | null;
   tipo: 'jogador' | 'aliado' | 'inimigo';
   cor?: string;
   estado_vida?: string;
-  visivel?: boolean;
-  vidaVisivel?: boolean;
+  /** Só chega para quem comanda a mesa ou para o dono do personagem. */
+  visibilidade?: NivelVisibilidade | null;
   eMeu?: boolean;
   ordem?: number;
   condicoes: SessionCondition[];
 }
 
 export type SessionConnectionStatus = 'connecting' | 'online' | 'offline';
-
-export interface SessionRollRequest {
-  titulo: string;
-  personagemId?: string | null;
-  bonus?: number;
-  vantagens?: number;
-  desvantagens?: number;
-  dt?: number | null;
-  formula?: string | null;
-  origem?: Record<string, unknown>;
-}
 
 function normalizeConditions(value: unknown): SessionCondition[] {
   if (!Array.isArray(value)) return [];
@@ -59,6 +62,24 @@ function normalizeConditions(value: unknown): SessionCondition[] {
   });
 }
 
+function normalizeAttacks(value: unknown): SessionAttack[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((attack) => {
+    if (!attack || typeof attack !== 'object') return [];
+    const item = attack as Record<string, unknown>;
+    if (typeof item.nome !== 'string' || !item.nome.trim()) return [];
+    return [{
+      nome: item.nome.trim(),
+      detalhe: typeof item.detalhe === 'string' ? item.detalhe.trim() : '',
+    }];
+  });
+}
+
+function normalizePericias(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => (typeof item === 'string' && item.trim() ? [item.trim()] : []));
+}
+
 function mapParticipantes(participantes: SessaoParticipanteResponse[]): EntidadeIniciativa[] {
   return participantes.map((participante) => {
     const tipo = participante.tipo === 'jogador' || participante.tipo === 'aliado'
@@ -71,11 +92,16 @@ function mapParticipantes(participantes: SessaoParticipanteResponse[]): Entidade
       iniciativa: Number(participante.iniciativa) || 0,
       hpAtual: typeof participante.vida_atual === 'number' ? participante.vida_atual : undefined,
       hpTotal: typeof participante.vida_maxima === 'number' ? participante.vida_maxima : undefined,
+      manaAtual: typeof participante.mana_atual === 'number' ? participante.mana_atual : undefined,
+      manaTotal: typeof participante.mana_maxima === 'number' ? participante.mana_maxima : undefined,
+      defesa: typeof participante.defesa === 'number' ? participante.defesa : null,
+      ataques: normalizeAttacks(participante.ataques),
+      pericias: normalizePericias(participante.pericias),
+      vd: typeof participante.vd === 'number' ? participante.vd : null,
       tipo,
       cor: tipo === 'jogador' ? '#4FD1C5' : tipo === 'aliado' ? '#34d399' : '#ef4444',
       estado_vida: typeof participante.estado_vida === 'string' ? participante.estado_vida : undefined,
-      visivel: typeof participante.visivel === 'boolean' ? participante.visivel : undefined,
-      vidaVisivel: typeof participante.vida_visivel === 'boolean' ? participante.vida_visivel : undefined,
+      visibilidade: participante.visibilidade ?? null,
       eMeu: !!participante.e_meu,
       ordem: typeof participante.ordem === 'number' ? participante.ordem : undefined,
       condicoes: normalizeConditions(participante.condicoes),
@@ -107,6 +133,8 @@ interface SessaoState {
   conectarSSE: (campanhaId: string) => void;
   desconectarSSE: () => void;
   fetchEstadoSessao: () => Promise<void>;
+  /** Uso interno: o corpo de fetchEstadoSessao, sem a trava de deduplicação. */
+  _buscarEstadoSessao: () => Promise<void>;
   fetchRolagens: () => Promise<void>;
   publicarAoVivo: () => Promise<void>;
   encerrarSessao: () => Promise<void>;
@@ -120,10 +148,18 @@ interface SessaoState {
   ordenarIniciativa: () => Promise<void>;
   sincronizarIniciativa: () => Promise<void>;
   atualizarEntidade: (id: string, payload: ParticipantePayload) => Promise<void>;
+  reordenarIniciativa: (ordem: string[]) => Promise<void>;
+  aplicarEmMassa: (ids: string[], payload: ParticipantePayload) => Promise<void>;
+  distribuirXp: (participanteIds: string[]) => Promise<DistribuirXpResponse>;
 
-  rolarDados: (payload: SessionRollRequest) => Promise<IRegistro | null>;
   clearError: () => void;
 }
+
+// O SSE avisa "algo mudou" pro dono da própria ação também, então uma
+// chamada explícita e o eco do SSE podem cair ao mesmo tempo. Sem essa trava,
+// os dois viam "sem sessão ativa" e disputavam a recriação da preparação —
+// um criava, o outro batia num 409.
+let buscaEstadoEmVoo: Promise<void> | null = null;
 
 export const useSessaoStore = create<SessaoState>((set, get) => ({
   campanhaId: null,
@@ -200,6 +236,14 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
   },
 
   fetchEstadoSessao: async () => {
+    if (buscaEstadoEmVoo) return buscaEstadoEmVoo;
+    buscaEstadoEmVoo = get()._buscarEstadoSessao().finally(() => {
+      buscaEstadoEmVoo = null;
+    });
+    return buscaEstadoEmVoo;
+  },
+
+  _buscarEstadoSessao: async () => {
     const { campanhaId, sessaoId } = get();
     if (!campanhaId) return;
     const isInitialLoad = !sessaoId;
@@ -325,8 +369,7 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
     if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
     await sessaoApi.adicionarParticipante(sessaoId, {
       ...entidade,
-      visivel: entidade.visivel ?? true,
-      vida_visivel: entidade.vida_visivel ?? true,
+      visibilidade: entidade.visibilidade ?? 'parcial',
     });
     await get().fetchEstadoSessao();
   },
@@ -387,17 +430,33 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
     await get().fetchEstadoSessao();
   },
 
-  rolarDados: async (payload) => {
-    const { campanhaId } = get();
-    if (!campanhaId) return null;
+  reordenarIniciativa: async (ordem) => {
+    const { sessaoId, iniciativa } = get();
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
+    const porId = new Map(iniciativa.map((entidade) => [entidade.id, entidade]));
+    const reordenada = ordem
+      .map((id) => porId.get(id))
+      .filter((entidade): entidade is EntidadeIniciativa => !!entidade);
+    set({ iniciativa: reordenada });
     try {
-      const response = await registrosApi.rolar({ ...payload, campanhaId });
-      return response.registro;
+      await sessaoApi.reordenarParticipantes(sessaoId, ordem);
     } catch (error) {
-      console.error('Falha ao rolar', error);
-      set({ error: 'A rolagem falhou. Verifique a expressão e tente novamente.' });
+      await get().fetchEstadoSessao();
       throw error;
     }
+  },
+
+  aplicarEmMassa: async (ids, payload) => {
+    const { sessaoId } = get();
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
+    await Promise.all(ids.map((id) => sessaoApi.atualizarParticipante(sessaoId, id, payload)));
+    await get().fetchEstadoSessao();
+  },
+
+  distribuirXp: async (participanteIds) => {
+    const { sessaoId } = get();
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
+    return sessaoApi.distribuirXp(sessaoId, participanteIds);
   },
 
   clearError: () => set({ error: null }),
