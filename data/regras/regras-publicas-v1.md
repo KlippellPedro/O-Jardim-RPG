@@ -1037,6 +1037,190 @@ Magia grande não sai de graça. A partir do 5º círculo, o Fluxo começa a dei
 
 A ficha aplica as Marcas sozinha, porque elas saem do seu Fluxo e do seu círculo. A Cicatriz é sorteada na hora de aprender a magia e fica registrada.
 
+### Marcas por Fluxo (5º ao 9º círculo)
+
+Gênese
+
+- Círculo | Marca | Ganho | Ônus
+
+- 5º | Seiva no Sangue | A cura natural durante um descanso completo rende 50% a mais. | A pele ganha textura de casca. Desvantagem em testes sociais com quem te vê pela primeira vez.
+
+- 6º | Primeira Vez Eterna | +2 na primeira rolagem que você faz em cada cena. | A segunda rolagem do mesmo tipo na mesma cena sai com -1.
+
+- 7º | Germinação Involuntária | Onde você dorme, brota vida: comida simples e água limpa para o grupo, todo dia. | Você deixa um rastro verde por onde passa, e qualquer um consegue seguir.
+
+- 8º | Ninhada | Uma vez por dia, um broto seu absorve um golpe inteiro dirigido a você. | Você come e bebe o dobro. Passar o dia sem comer já rende 1 Cansaço.
+
+- 9º | Fonte Viva | +10 de Vida máxima e você estabiliza sozinho ao chegar a 0. | Cura mágica vinda de outro Fluxo que não o seu rende metade.
+
+Alétheia
+
+- Círculo | Marca | Ganho | Ônus
+
+- 5º | Olho Aberto | Você enxerga disfarce, ilusão e invisibilidade de até 3º círculo sem precisar testar. | Mentir cobra caro: testes de Enganação saem com desvantagem.
+
+- 6º | Nome à Mostra | Ao tocar uma criatura, você sabe o nome verdadeiro dela. | A recíproca vale: quem toca em você sabe o seu.
+
+- 7º | Peso da Verdade | +5 em testes contra ilusão, transformação e troca de identidade. | Ilusão que você percebe e não desfaz te causa 1d6 de dano mental por cena.
+
+- 8º | Transparência | Nada te possui, copia ou apaga tua memória. | Você também não pode ser disfarçado nem ocultado por magia, nem a de aliado.
+
+- 9º | Verbo Fixo | Tua forma é inalterável: nenhuma transformação forçada pega em você. | Transformação benéfica também não pega, inclusive a que você mesmo quiser.
+
+Parley
+
+- Círculo | Marca | Ganho | Ônus
+
+- 5º | Ouvido Fino | Você escuta conversas a até 30 m, mesmo através de parede fina. | Lugar movimentado atrapalha teu sono: descanso em cidade ou acampamento cheio rende 1 Cansaço a menos de recuperação.
+
+- 6º | Boca do Fluxo | Todo mundo entende o que você diz, em qualquer idioma. | Sob pressão, você fala o que está pensando em voz alta.
+
+- 7º | Rede Aberta | Aliados a até 25 m compartilham tua Iniciativa se ela for melhor que a deles. | Dano mental sofrido por um aliado vinculado também te atinge pela metade.
+
+- 8º | Coro | Uma vez por cena, uma ordem sua vira ação livre para um aliado que te escute. | Silêncio absoluto te sufoca: cada hora nele rende 1 Cansaço.
+
+- 9º | Voz de Muitos | Você fala com qualquer pessoa que já conheceu, a qualquer distância na mesma realidade. | Você não consegue guardar segredo de quem está vinculado a você: o que você sabe, eles sentem.
+
+Anima
+
+- Círculo | Marca | Ganho | Ônus
+
+- 5º | Excesso | +5 de Vida máxima. | Você come e bebe o dobro, e passar fome te dá Cansaço mais rápido que os outros.
+
+- 6º | Carne Que Não Para | Abaixo da metade da Vida, você recupera 1d6 ao começar o turno. | Toda cicatriz vira crescimento estranho. Desvantagem em testes sociais com estranhos.
+
+- 7º | Imunidade Bruta | Você fica imune a doença mundana e a veneno comum. | Remédio, poção e antídoto rendem metade em você.
+
+- 8º | Metabolismo Voraz | Você aguenta três dias sem dormir sem sofrer penalidade. | Teu descanso completo exige 12 horas, não 8.
+
+- 9º | Coração Duplo | Uma vez por dia, ao chegar a 0 de Vida, você volta com metade da Vida máxima. | Cada uso te dá 2 Cansaço na hora.
+
+Vórtice
+
+- Círculo | Marca | Ganho | Ônus
+
+- 5º | Nunca Igual | Uma vez por cena, você repete um teste já resolvido. | Você aceita o novo resultado, mesmo que seja pior.
+
+- 6º | Pele Instável | No começo de cada cena, role 1d6 para uma resistência sorteada até o fim dela. | Role de novo: você também ganha uma vulnerabilidade sorteada.
+
+- 7º | Sorte Torta | Tua margem de ameaça aumenta em 1 em tudo o que você faz. | A margem de falha crítica aumenta em 1 junto.
+
+- 8º | Forma Errante | Uma vez por dia, uma característica física sua muda para algo útil na situação. | Você não escolhe qual, e a mudança dura até o próximo descanso completo.
+
+- 9º | Roleta Viva | Uma vez por cena, você copia uma habilidade simples que tenha visto naquela cena. | Uma habilidade sua, sorteada, fica indisponível até o fim da cena.
+
+Baluarte
+
+- Círculo | Marca | Ganho | Ônus
+
+- 5º | Elemento na Pele | Resistência 3 contra o teu elemento despertado. | Vulnerabilidade 3 ao elemento oposto, definido pelo Mestre na primeira vez.
+
+- 6º | Peso de Pedra | +2 contra empurrão, agarrão e queda. | -3 m de deslocamento.
+
+- 7º | Mão Pesada | +1 dado de dano em ataques corpo a corpo. | Trabalho delicado, de fechadura a caligrafia, sai com desvantagem.
+
+- 8º | Corpo Mineral | Redução 3 contra dano físico. | Você afunda: nadar e escalar saem com desvantagem.
+
+- 9º | Elemento Vivo | Uma vez por cena, você vira o elemento despertado por uma rodada e fica imune a dano físico. | Enquanto estiver assim, você não age, não fala e não conjura.
+
+Matriz
+
+- Círculo | Marca | Ganho | Ônus
+
+- 5º | Passo Curto | Uma vez por cena, você teleporta 4,5 m com a ação de movimento. | A chegada embrulha: -1 em testes até o fim do teu próximo turno.
+
+- 6º | Senso de Lugar | Você sempre sabe onde está e qual o caminho de volta, mesmo sem referência. | Entrar em lugar selado ou dobrado te causa 1d6 de dano mental.
+
+- 7º | Distância Elástica | O alcance das tuas magias aumenta em 50%. | Magia de toque exige um teste de conjuração extra para funcionar.
+
+- 8º | Presença Dobrada | Para efeitos de alcance, você ocupa dois espaços à tua escolha, a até 9 m um do outro. | Efeito de área que pegue qualquer um dos dois pega você.
+
+- 9º | Fora do Mapa | Nenhuma barreira mundana te prende: você sempre acha a saída. | Teleporte e portal de outra pessoa não conseguem te levar junto.
+
+Éon
+
+- Círculo | Marca | Ganho | Ônus
+
+- 5º | Descompasso | +2 em Iniciativa. | Noite mal dormida te dá 1 Cansaço a mais que aos outros.
+
+- 6º | Eco Curto | Uma vez por cena, você repete a ação de movimento que acabou de fazer. | Ao fim da cena em que usar, 1 Cansaço.
+
+- 7º | Anos Emprestados | +1 em todos os testes. | Você envelhece um ano a cada mês de campanha.
+
+- 8º | Pausa Interna | Uma vez por dia, você ignora um turno inteiro de um efeito contínuo sobre você. | Você perde o teu turno seguinte.
+
+- 9º | Fora da Contagem | Você age primeiro em toda rodada, antes de qualquer criatura. | Cura e regeneração em você rendem metade: para elas, teu tempo não passa.
+
+Abismo
+
+- Círculo | Marca | Ganho | Ônus
+
+- 5º | Ausência | +2 em Furtividade e ninguém te ouve chegar. | Cura mágica em você rende metade.
+
+- 6º | Sumidouro | Uma vez por cena, você absorve uma magia de até 3º círculo dirigida a você. | Magia benéfica de aliado é absorvida do mesmo jeito, e você não escolhe.
+
+- 7º | Fome Interna | Ao reduzir uma criatura a 0 de Vida, você recupera 1d6 de Mana. | Descanso curto não te devolve Mana nenhuma.
+
+- 8º | Silêncio Que Anda | Os sons ao teu redor somem quando você quiser, num raio de 3 m. | Você não conjura nada que dependa de voz, palavra ou comando falado.
+
+- 9º | Quase Nada | Uma vez por dia, você deixa de existir por uma rodada: nada te atinge. | Ao voltar, ninguém se lembra de você por um minuto, aliados incluídos.
+
+Limiar
+
+- Círculo | Marca | Ganho | Ônus
+
+- 5º | Toque Final | +1d6 de dano contra alvo com metade ou menos da Vida máxima. | Efeito benéfico sobre você dura uma rodada a menos.
+
+- 6º | Olho do Fim | Você enxerga quem está perto da morte, e quanto perto. | Os moribundos enxergam você também, e procuram você.
+
+- 7º | Ciclo Curto | Uma vez por cena, você encerra um efeito temporário ao toque. | O teu próprio efeito de concentração cai junto.
+
+- 8º | Peso do Limiar | Você fica imune a medo e a qualquer efeito que dependa de esperança. | Recuperação de Sanidade em você rende metade.
+
+- 9º | Marca do Término | Quem você reduz a 0 de Vida não estabiliza sozinho. | Você também não: sem mão alheia, você não volta.
+
+A.X.I.S
+
+- Círculo | Marca | Ganho | Ônus
+
+- 5º | Leitura Constante | Você identifica dispositivo, Autômato e item energizado de imediato. | Precisa de um módulo A.X.I.S em mãos. Sem ele, -2 em testes de conjuração.
+
+- 6º | Interferência | +2 em testes contra magia de Fluxo natural. | -2 em testes contra dano e efeitos tecnológicos.
+
+- 7º | Registro | Magia que já te acertou uma vez te acerta com -2 nas próximas. | A A.X.I.S registra por onde você passa, e quem tem acesso à Malha consegue te rastrear.
+
+- 8º | Carcaça | Redução 3 contra dano de energia. | Pulso eletromagnético te derruba como derruba máquina.
+
+- 9º | Protocolo Vivo | Uma vez por cena, você intercepta uma magia de até 6º círculo com a reação. | Em área sem energia, você conjura com desvantagem.
+
+### Cicatrizes (10º círculo)
+
+- Cicatriz | Ganho | Ônus
+
+- Peso da Fonte | +15 de Mana máxima. | Você só recupera Mana em descanso completo. Descanso curto não devolve nada.
+
+- Olhos Abertos Demais | Você enxerga o invisível e o oculto a até 30 m, sempre. | Luz forte e súbita te cega por uma rodada.
+
+- Corpo Emprestado | +10 de Vida máxima. | Toda cura mágica em você rende metade.
+
+- Nome Escrito | +5 em testes de resistência contra magia. | Criaturas nascidas de Fluxo te reconhecem de longe, e vêm atrás.
+
+- Voz Rachada | As tuas magias de área ficam 3 m maiores. | Você não consegue mais falar baixo. Furtividade que dependa de silêncio está fora.
+
+- Mão Que Não Fecha | +2 dados de dano nas tuas magias de alvo único. | Você não consegue empunhar arma marcial nem exótica.
+
+- Passo Fora | Uma vez por cena, você teleporta 9 m com a ação de movimento. | Nenhuma magia alheia consegue te transportar junto.
+
+- Sono Curto | Teu descanso completo leva 4 horas. | Você sonha com o Fluxo. O Mestre pode dar visões, e nem todas são gentis.
+
+- Segunda Sombra | Uma vez por dia, um duplo teu absorve um golpe inteiro. | O duplo age por conta própria, e nem sempre a teu favor.
+
+- Pele de Fluxo | Redução 5 contra o tipo de dano do teu Fluxo nativo. | Vulnerabilidade 5 ao tipo oposto, definido pelo Mestre.
+
+- Marca Visível | +5 em testes de presença e intimidação. | Você não passa despercebido em lugar nenhum, nunca mais.
+
+- Reserva Rachada | Uma vez por cena, você conjura uma magia sem gastar Mana. | Ao fim dessa cena, 2 Cansaço.
+
 ### Concentração
 
 - Uma magia ou efeito de concentração por vez. Começar outro encerra o anterior na hora, sem aviso.
