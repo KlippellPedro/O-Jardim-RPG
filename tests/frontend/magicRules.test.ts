@@ -8,13 +8,27 @@ import {
   FLUXO_TEMAS,
   FUSOES_CATALOGO,
   MAGIAS_CATALOGO,
+  MAGIAS_UNIVERSAIS,
+  MARCAS_POR_FLUXO,
+  CICATRIZES_CATALOGO,
+  SIMBOLOS_DOS_SETE,
+  SIMBOLOS_POR_ID,
+  RITO_DOS_SETE_PECADOS_ID,
+  RITO_DAS_SETE_VIRTUDES_ID,
   RITUAIS_CATALOGO,
   SELOS_CATALOGO,
   circuloPermitidoPorFluxo,
+  cicatrizesDevidas,
   dtConjuracaoPorCirculo,
+  marcasDaFicha,
+  simboloDaFicha,
+  simbolosDoRito,
+  sortearCicatriz,
+  efeitoDaMagia,
   magiaElegivelParaAprender,
   obterPerfilMagico,
   temaDoFluxo,
+  variantesDaMagia,
 } from '../../src/services/magiaService.ts';
 
 const ficha = (classeId: string, nivel: number, fluxo: number, arvoreId = 'aethel') => ({
@@ -111,21 +125,250 @@ test('item equipado altera Fluxo, Misticismo e vantagens de conjuração', () =>
   assert.equal(perfil.vantagensConjuracao, 1);
 });
 
+// A grade de 3 por Fluxo é piso, não teto: garante que nenhum Fluxo fica órfão,
+// mas não impede um Fluxo de receber uma magia a mais quando o conceito pede.
 test('catálogo novo publica todas as manifestações planejadas', () => {
   assert.equal(magiasData.versao, '3.1');
   assert.equal(magiasData.regras.circulos.length, 10);
   assert.equal(FLUXOS_CATALOGO.length, 11);
-  assert.equal(MAGIAS_CATALOGO.length, 330);
-  assert.equal(RITUAIS_CATALOGO.length, 33);
+  assert.ok(MAGIAS_CATALOGO.length >= 330, `catálogo encolheu: ${MAGIAS_CATALOGO.length}`);
+  // Rituais universais, como os ritos dos Sete, entram por cima dos 33 da grade.
+  assert.ok(RITUAIS_CATALOGO.length >= 33, `rituais encolheram: ${RITUAIS_CATALOGO.length}`);
   assert.equal(SELOS_CATALOGO.length, 33);
   assert.equal(ENCANTAMENTOS_CATALOGO.length, 33);
   assert.equal(FUSOES_CATALOGO.length, 11);
   FLUXOS_CATALOGO.forEach((fluxoCatalogo) => {
-    assert.equal(MAGIAS_CATALOGO.filter((magia) => magia.fluxo === fluxoCatalogo.id).length, 30);
+    const doFluxo = MAGIAS_CATALOGO.filter((magia) => magia.fluxo === fluxoCatalogo.id).length;
+    assert.ok(doFluxo >= 30, `${fluxoCatalogo.titulo} ficou com ${doFluxo} magias`);
     [RITUAIS_CATALOGO, SELOS_CATALOGO, ENCANTAMENTOS_CATALOGO].forEach((catalogo) => {
       assert.equal(catalogo.filter((item) => item.fluxo === fluxoCatalogo.id).length, 3);
     });
   });
+});
+
+test('Marca aparece sozinha do 5º ao 9º e some se o círculo cair', () => {
+  // Fluxo 30 e Canalizador 10 dão 5º círculo: uma Marca, a do 5º.
+  const noQuinto = marcasDaFicha(ficha('canalizador', 10, 30, 'erebus'));
+  assert.equal(noQuinto.length, 1);
+  assert.equal(noQuinto[0].circulo, 5);
+
+  // Fluxo 46 e Canalizador 20 dão 9º: as cinco Marcas, na ordem.
+  const noNono = marcasDaFicha(ficha('canalizador', 20, 46, 'erebus'));
+  assert.deepEqual(noNono.map((marca) => marca.circulo), [5, 6, 7, 8, 9]);
+  noNono.forEach((marca) => {
+    assert.ok(marca.bonus.trim() && marca.onus.trim(), `${marca.id} sem os dois lados`);
+  });
+
+  // Abaixo do 5º não há Marca nenhuma, e perder o círculo tira a Marca.
+  assert.deepEqual(marcasDaFicha(ficha('canalizador', 5, 26, 'erebus')), []);
+
+  // A Marca vem do Fluxo nativo: Árvores diferentes, Marcas diferentes.
+  const doVazio = marcasDaFicha(ficha('canalizador', 20, 46, 'erebus'));
+  const daGenese = marcasDaFicha(ficha('canalizador', 20, 46, 'aethel'));
+  assert.notEqual(doVazio[0].id, daGenese[0].id);
+});
+
+test('todo Fluxo tem as cinco Marcas, e a tabela de Cicatrizes é utilizável', () => {
+  FLUXOS_CATALOGO.forEach((fluxo) => {
+    const escada = MARCAS_POR_FLUXO[fluxo.id];
+    assert.ok(escada, `${fluxo.titulo} sem escada de Marcas`);
+    assert.deepEqual(escada.map((marca) => marca.circulo), [5, 6, 7, 8, 9], fluxo.titulo);
+    escada.forEach((marca) => assert.ok(marca.bonus.trim() && marca.onus.trim()));
+  });
+
+  assert.ok(CICATRIZES_CATALOGO.length >= 12);
+  CICATRIZES_CATALOGO.forEach((cicatriz) => {
+    assert.ok(cicatriz.bonus.trim() && cicatriz.onus.trim(), `${cicatriz.id} sem os dois lados`);
+  });
+
+  const ids = [
+    ...Object.values(MARCAS_POR_FLUXO).flat().map((marca) => marca.id),
+    ...CICATRIZES_CATALOGO.map((cicatriz) => cicatriz.id),
+  ];
+  assert.equal(new Set(ids).size, ids.length, 'id repetido entre Marcas e Cicatrizes');
+});
+
+test('Cicatriz é devida por magia de 10º círculo e o sorteio não repete', () => {
+  const base = ficha('canalizador', 20, 50, 'erebus');
+  assert.equal(cicatrizesDevidas(base), 0);
+
+  const decimo = MAGIAS_CATALOGO.filter((magia) => magia.circulo === 10).slice(0, 2);
+  const comDuas = { ...base, magiasConhecidasIds: decimo.map((magia) => magia.id) };
+  assert.equal(cicatrizesDevidas(comDuas), 2);
+
+  // Concessão do Mestre não gera Cicatriz: não foi conquista.
+  const concedida = { ...base, magiasConcedidasIds: [decimo[0].id] };
+  assert.equal(cicatrizesDevidas(concedida), 0);
+
+  // O sorteio nunca devolve o que a ficha já carrega.
+  const quaseCheia = { ...base, cicatrizesIds: CICATRIZES_CATALOGO.slice(0, -1).map((item) => item.id) };
+  const sorteada = sortearCicatriz(quaseCheia);
+  assert.ok(sorteada);
+  assert.equal(sorteada.id, CICATRIZES_CATALOGO[CICATRIZES_CATALOGO.length - 1].id);
+
+  const cheia = { ...base, cicatrizesIds: CICATRIZES_CATALOGO.map((item) => item.id) };
+  assert.equal(sortearCicatriz(cheia), null);
+});
+
+test('os catorze Símbolos dos Sete se emparelham e cobram dos dois lados', () => {
+  const pecados = SIMBOLOS_DOS_SETE.filter((item) => item.natureza === 'pecado');
+  const virtudes = SIMBOLOS_DOS_SETE.filter((item) => item.natureza === 'virtude');
+  assert.equal(pecados.length, 7);
+  assert.equal(virtudes.length, 7);
+
+  // "muitos buffs e debuffs": nenhum Símbolo sai com um lado só, nem com um item só.
+  SIMBOLOS_DOS_SETE.forEach((simbolo) => {
+    assert.ok(simbolo.bonus.length >= 2, `${simbolo.id} com poucos bônus`);
+    assert.ok(simbolo.onus.length >= 2, `${simbolo.id} com poucos ônus`);
+    assert.ok([...simbolo.bonus, ...simbolo.onus].every((texto) => texto.trim()));
+  });
+
+  // O par tem que fechar dos dois lados: Soberba aponta para Humildade e vice-versa.
+  SIMBOLOS_DOS_SETE.forEach((simbolo) => {
+    const oposto = SIMBOLOS_POR_ID.get(simbolo.opostoId);
+    assert.ok(oposto, `${simbolo.id} aponta para um oposto inexistente`);
+    assert.notEqual(oposto.natureza, simbolo.natureza);
+    assert.equal(oposto.opostoId, simbolo.id, `${simbolo.id} e ${oposto.id} não se apontam`);
+  });
+
+  const ids = SIMBOLOS_DOS_SETE.map((item) => item.id);
+  assert.equal(new Set(ids).size, ids.length);
+
+  const titulos = SIMBOLOS_DOS_SETE.map((item) => item.titulo);
+  assert.equal(new Set(titulos).size, titulos.length, 'título repetido entre os catorze Símbolos');
+});
+
+test('Avareza e Temperança usam o nome popular, mas o id fica estável', () => {
+  // Id não muda: uma ficha já pode ter simboloId salvo, e o servidor valida por
+  // id (ver plataforma/core/character_summary.py). Só o título exibido muda.
+  const ganancia = SIMBOLOS_POR_ID.get('pecado-avareza');
+  const moderacao = SIMBOLOS_POR_ID.get('virtude-temperanca');
+  assert.equal(ganancia?.titulo, 'Ganância');
+  assert.equal(moderacao?.titulo, 'Moderação');
+  assert.ok(!SIMBOLOS_DOS_SETE.some((item) => item.titulo === 'Avareza' || item.titulo === 'Temperança'));
+});
+
+test('simbolosDoRito devolve os sete Símbolos certos, e nada para outro ritual', () => {
+  const doPecados = simbolosDoRito(RITO_DOS_SETE_PECADOS_ID);
+  const dasVirtudes = simbolosDoRito(RITO_DAS_SETE_VIRTUDES_ID);
+  assert.equal(doPecados.length, 7);
+  assert.ok(doPecados.every((item) => item.natureza === 'pecado'));
+  assert.equal(dasVirtudes.length, 7);
+  assert.ok(dasVirtudes.every((item) => item.natureza === 'virtude'));
+  assert.deepEqual(simbolosDoRito('rito-que-nao-existe'), []);
+});
+
+test('os dois ritos dos Sete são universais e exigem sete pessoas', () => {
+  const ritos = RITUAIS_CATALOGO.filter((ritual) => (ritual.fluxo as string) === 'universal');
+  assert.equal(ritos.length, 2);
+  ritos.forEach((rito) => {
+    assert.equal(rito.complexidade, 'monumental');
+    assert.match(rito.requisito, /[Ss]ete participantes/);
+    assert.ok(rito.falha.trim());
+  });
+
+  // Sendo universais, eles não entram na grade de três por Fluxo.
+  FLUXOS_CATALOGO.forEach((fluxo) => {
+    assert.equal(RITUAIS_CATALOGO.filter((r) => r.fluxo === fluxo.id).length, 3);
+  });
+
+  assert.ok(simboloDaFicha({ simboloId: 'pecado-ira' }));
+  assert.equal(simboloDaFicha({ simboloId: 'nao-existe' }), null);
+  assert.equal(simboloDaFicha({}), null);
+});
+
+test('cada círculo publica pelo menos duas universais', () => {
+  for (let circulo = 1; circulo <= 10; circulo += 1) {
+    const doCirculo = MAGIAS_UNIVERSAIS.filter((magia) => magia.circulo === circulo);
+    assert.ok(doCirculo.length >= 2, `${circulo}º círculo tem ${doCirculo.length} universais`);
+  }
+});
+
+test('magia universal é aprendível por qualquer Fluxo e tem as onze manifestações', () => {
+  assert.ok(MAGIAS_UNIVERSAIS.length >= 20);
+  assert.ok(MAGIAS_UNIVERSAIS.every((magia) => magia.fluxo === 'universal'));
+
+  MAGIAS_UNIVERSAIS.forEach((magia) => {
+    const variantes = variantesDaMagia(magia);
+    assert.equal(variantes.length, FLUXOS_CATALOGO.length, `${magia.id} não cobre todos os Fluxos`);
+    variantes.forEach((variante) => assert.ok(variante.efeito.trim(), `${magia.id}: ${variante.fluxo.id} vazio`));
+  });
+
+  // O Fluxo nativo decide o texto, não o acesso: duas Árvores diferentes
+  // aprendem a mesma magia e leem efeitos diferentes.
+  const universal = MAGIAS_UNIVERSAIS[0];
+  const doVazio = efeitoDaMagia(universal, 'vazio');
+  const doFisico = efeitoDaMagia(universal, 'fisico');
+  assert.notEqual(doVazio, doFisico);
+  assert.ok(doVazio.startsWith(universal.efeito), 'a variante soma ao texto comum');
+  assert.equal(efeitoDaMagia(universal, null), universal.efeito);
+
+  // A prova real: duas Árvores opostas aprendem a mesma universal, enquanto uma
+  // magia de Fluxo alheio continua barrada para as duas.
+  const clone = MAGIAS_CATALOGO.find((magia) => magia.id === 'clone-de-fluxo');
+  assert.ok(clone);
+  const daGenese = ficha('canalizador', 10, 34, 'aethel');
+  const doAbismo = ficha('canalizador', 10, 34, 'erebus');
+  assert.equal(magiaElegivelParaAprender(daGenese, clone).permitido, true);
+  assert.equal(magiaElegivelParaAprender(doAbismo, clone).permitido, true);
+  assert.notEqual(efeitoDaMagia(clone, 'origem'), efeitoDaMagia(clone, 'vazio'));
+
+  const magiaDoVazio = MAGIAS_CATALOGO.find((magia) => magia.fluxo === 'vazio' && magia.circulo === 1);
+  assert.ok(magiaDoVazio);
+  assert.equal(magiaElegivelParaAprender(daGenese, magiaDoVazio).permitido, false);
+});
+
+test('Singularidade do Vazio é o buraco negro, e o Buraco Negro é a versão menor', () => {
+  const singularidade = MAGIAS_CATALOGO.find((magia) => magia.id === 'singularidade');
+  assert.ok(singularidade);
+  assert.equal(singularidade.circulo, 10);
+  assert.match(efeitoDaMagia(singularidade, 'vazio'), /buraco negro/i);
+
+  // O 9º círculo do Vazio é o mesmo conceito em escala menor, e leva o nome.
+  const buracoNegro = MAGIAS_CATALOGO.find((magia) => magia.id === 'abismo-aberto');
+  assert.ok(buracoNegro);
+  assert.equal(buracoNegro.titulo, 'Buraco Negro');
+  assert.equal(buracoNegro.circulo, 9);
+});
+
+test('os títulos não caem em fôrma repetida', () => {
+  const titulos = MAGIAS_CATALOGO.map((magia) => magia.titulo);
+
+  // "Sentença X" tinha virado onze magias, e "X Absoluto" oito. Fôrma repetida
+  // denuncia nome gerado em série, não nome de magia.
+  const formas: Array<[string, RegExp, number]> = [
+    ['Sentença', /^Sentença\b/, 2],
+    ['Absoluto', /\bAbsolut[ao]\b/, 2],
+    ['Canalizado', /\bCanalizad[ao]\b/, 1],
+  ];
+  formas.forEach(([nome, padrao, teto]) => {
+    const quantos = titulos.filter((titulo) => padrao.test(titulo)).length;
+    assert.ok(quantos <= teto, `${quantos} títulos com "${nome}", teto é ${teto}`);
+  });
+
+  // Nenhuma primeira palavra deve dominar o catálogo.
+  const porPrimeiraPalavra = new Map<string, number>();
+  titulos.forEach((titulo) => {
+    const primeira = titulo.split(' ')[0];
+    porPrimeiraPalavra.set(primeira, (porPrimeiraPalavra.get(primeira) || 0) + 1);
+  });
+  porPrimeiraPalavra.forEach((quantos, palavra) => {
+    assert.ok(quantos <= 6, `"${palavra}" abre ${quantos} títulos`);
+  });
+});
+
+test('Passo de Órbita anda uma casa e o Véu do Nada quebra ao agir', () => {
+  const passo = MAGIAS_CATALOGO.find((magia) => magia.id === 'passo-de-orbita');
+  assert.ok(passo);
+  assert.equal(passo.fluxo, 'espaco');
+  assert.equal(passo.circulo, 9);
+  assert.match(passo.efeito, /nunca o Abismo/i);
+
+  const veu = MAGIAS_CATALOGO.find((magia) => magia.id === 'veu-do-nada');
+  assert.ok(veu);
+  assert.equal(veu.fluxo, 'vazio');
+  assert.equal(veu.circulo, 3);
+  assert.match(veu.efeito, /encerra o efeito/i);
 });
 
 test('rituais, selos e encantamentos cobrem várias faixas de poder', () => {
@@ -190,12 +433,35 @@ test('a escala de DT, Mana e tempo é a mesma dentro de cada faixa', () => {
   assert.equal(Math.max(...ENCANTAMENTOS_CATALOGO.map((item) => item.grau)), capacidadeMaxima);
 });
 
-test('todo Fluxo cobre os dez círculos com três magias cada', () => {
+test('todo Fluxo cobre os dez círculos com pelo menos três magias', () => {
   FLUXOS_CATALOGO.forEach((fluxoCatalogo) => {
     for (let circulo = 1; circulo <= 10; circulo += 1) {
       const doCirculo = MAGIAS_CATALOGO.filter((magia) => magia.fluxo === fluxoCatalogo.id && magia.circulo === circulo);
-      assert.equal(doCirculo.length, 3, `${fluxoCatalogo.titulo} no ${circulo}º círculo`);
+      assert.ok(doCirculo.length >= 3, `${fluxoCatalogo.titulo} no ${circulo}º círculo: ${doCirculo.length}`);
     }
+  });
+});
+
+test('toda universal ocupa um círculo válido e nenhuma some da grade', () => {
+  MAGIAS_UNIVERSAIS.forEach((magia) => {
+    assert.ok(typeof magia.circulo === 'number' && magia.circulo >= 1 && magia.circulo <= 10);
+    // Universal não conta para nenhum Fluxo: a grade por Fluxo ignora ela.
+    assert.ok(!FLUXOS_CATALOGO.some((fluxo) => fluxo.id === (magia.fluxo as string)));
+  });
+});
+
+test('a curva de Mana mantém a magia máxima como decisão, não como rotina', () => {
+  const mana = magiasData.regras.circulos.map((item) => item.mana_base);
+  assert.deepEqual(mana, [2, 4, 7, 10, 14, 19, 25, 32, 42, 55]);
+
+  // Reserva de um conjurador no nível em que destrava cada círculo, tirada de
+  // data/regras/balanceamento-referencia-v1.json. Se a curva ficar barata
+  // demais, o topo vira rotina; cara demais, o personagem não conjura.
+  const reservaPorCirculoMaximo: Array<[number, number]> = [[2, 8], [4, 24], [6, 44], [8, 64], [10, 84]];
+  reservaPorCirculoMaximo.forEach(([circulo, reserva]) => {
+    const conjuracoes = reserva / mana[circulo - 1];
+    assert.ok(conjuracoes >= 1.4, `${circulo}º círculo: só ${conjuracoes.toFixed(1)} conjurações`);
+    assert.ok(conjuracoes <= 2.6, `${circulo}º círculo: ${conjuracoes.toFixed(1)} conjurações, barato demais`);
   });
 });
 

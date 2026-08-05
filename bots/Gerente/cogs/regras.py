@@ -109,7 +109,26 @@ def _circulo_rotulo(circulo) -> str:
     return "Ritual" if circulo == "ritual" else f"{circulo if circulo is not None else '?'}º círculo"
 
 
-def _embed_magia(m) -> discord.Embed:
+def _campos_por_limite(nome: str, linhas: list[str], limite: int = 1024):
+    """Quebra uma lista de linhas em campos que cabem no limite do Discord.
+    Onze manifestações não cabem num campo só, e truncar cortaria Fluxos fora."""
+    blocos: list[str] = []
+    atual = ""
+    for linha in linhas:
+        candidato = f"{atual}\n{linha}" if atual else linha
+        if len(candidato) > limite and atual:
+            blocos.append(atual)
+            atual = linha
+        else:
+            atual = candidato
+    if atual:
+        blocos.append(atual)
+    for indice, bloco in enumerate(blocos):
+        rotulo = nome if indice == 0 else f"{nome} (cont.)"
+        yield rotulo, bloco[:limite]
+
+
+def _embed_magia(m, nav=None) -> discord.Embed:
     circulo = _circulo_rotulo(m.get("circulo"))
     e = ui.embed(f"🔮 {m.get('titulo', 'Magia')}", (m.get("efeito") or "Sem efeito publicado.").strip()[:4000])
     e.add_field(name="Círculo e tradição", value=f"{circulo} · {m.get('tradicao', 'Não informada')}", inline=True)
@@ -123,6 +142,17 @@ def _embed_magia(m) -> discord.Embed:
         e.add_field(name="Dano", value=str(m["dano"]), inline=True)
     if m.get("concentracao"):
         e.add_field(name="Concentração", value="Sim. Só um efeito pode ser mantido por vez.", inline=False)
+    # Universal não tem Fluxo: o efeito muda conforme quem canaliza, então as
+    # onze manifestações entram no embed em vez de uma descrição só.
+    variantes = m.get("efeitos_por_fluxo")
+    if isinstance(variantes, dict) and variantes:
+        titulos = {f.get("id"): f.get("titulo") for f in (nav.fluxos if nav else [])}
+        linhas = [
+            f"**{titulos.get(fluxo) or str(fluxo).capitalize()}:** {texto}"
+            for fluxo, texto in variantes.items()
+        ]
+        for rotulo, bloco in _campos_por_limite("Canalizada por cada Fluxo", linhas):
+            e.add_field(name=rotulo, value=bloco, inline=False)
     return e
 
 
@@ -150,7 +180,7 @@ def _embed_item(nav, categoria, item) -> discord.Embed:
         "classes": _embed_classe,
         "legados": _embed_legado,
         "pericias": _embed_pericia,
-        "magias": _embed_magia,
+        "magias": lambda item: _embed_magia(item, nav),
         "fundamentos": _embed_fundamento,
     }.get(categoria, lambda x: ui.embed(x.get("titulo", "?")))(item)
 

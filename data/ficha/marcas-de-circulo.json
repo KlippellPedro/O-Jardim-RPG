@@ -1,0 +1,112 @@
+{
+  "versao": "1.0",
+  "status": "oficial",
+  "descricao": "O que a magia cobra de quem sobe de círculo. Do 5º ao 9º, cada círculo alcançado imprime uma Marca fixa do Fluxo nativo, com um lado bom e um lado ruim. No 10º, cada magia aprendida sorteia uma Cicatriz na tabela comum.",
+  "regras": {
+    "circulo_inicial": 5,
+    "circulo_final_das_marcas": 9,
+    "circulo_da_cicatriz": 10,
+    "marca_e_derivada": true,
+    "cicatriz_e_sorteada": true,
+    "notas": [
+      "Marca não se escolhe: ela vem do Fluxo nativo e do maior círculo que a ficha alcança, e aparece sozinha.",
+      "Perder acesso ao círculo, por perda de Fluxo ou de nível, também tira a Marca correspondente.",
+      "Cicatriz é uma por magia de 10º círculo aprendida, sorteada na tabela e registrada na ficha.",
+      "A mesma Cicatriz não sai duas vezes para o mesmo personagem: repetiu, sorteia de novo.",
+      "Marca e Cicatriz valem na mesa como um Legado: o texto manda, e o Mestre arbitra o caso duvidoso."
+    ]
+  },
+  "por_fluxo": {
+    "origem": [
+      { "circulo": 5, "id": "origem-seiva-no-sangue", "titulo": "Seiva no Sangue", "bonus": "A cura natural durante um descanso completo rende 50% a mais.", "onus": "A pele ganha textura de casca. Desvantagem em testes sociais com quem te vê pela primeira vez." },
+      { "circulo": 6, "id": "origem-primeira-vez-eterna", "titulo": "Primeira Vez Eterna", "bonus": "+2 na primeira rolagem que você faz em cada cena.", "onus": "A segunda rolagem do mesmo tipo na mesma cena sai com -1." },
+      { "circulo": 7, "id": "origem-germinacao-involuntaria", "titulo": "Germinação Involuntária", "bonus": "Onde você dorme, brota vida: comida simples e água limpa para o grupo, todo dia.", "onus": "Você deixa um rastro verde por onde passa, e qualquer um consegue seguir." },
+      { "circulo": 8, "id": "origem-ninhada", "titulo": "Ninhada", "bonus": "Uma vez por dia, um broto seu absorve um golpe inteiro dirigido a você.", "onus": "Você come e bebe o dobro. Passar o dia sem comer já rende 1 Cansaço." },
+      { "circulo": 9, "id": "origem-fonte-viva", "titulo": "Fonte Viva", "bonus": "+10 de Vida máxima e você estabiliza sozinho ao chegar a 0.", "onus": "Cura mágica vinda de outro Fluxo que não o seu rende metade." }
+    ],
+    "essencia": [
+      { "circulo": 5, "id": "essencia-olho-aberto", "titulo": "Olho Aberto", "bonus": "Você enxerga disfarce, ilusão e invisibilidade de até 3º círculo sem precisar testar.", "onus": "Mentir cobra caro: testes de Enganação saem com desvantagem." },
+      { "circulo": 6, "id": "essencia-nome-a-mostra", "titulo": "Nome à Mostra", "bonus": "Ao tocar uma criatura, você sabe o nome verdadeiro dela.", "onus": "A recíproca vale: quem toca em você sabe o seu." },
+      { "circulo": 7, "id": "essencia-peso-da-verdade", "titulo": "Peso da Verdade", "bonus": "+5 em testes contra ilusão, transformação e troca de identidade.", "onus": "Ilusão que você percebe e não desfaz te causa 1d6 de dano mental por cena." },
+      { "circulo": 8, "id": "essencia-transparencia", "titulo": "Transparência", "bonus": "Nada te possui, copia ou apaga tua memória.", "onus": "Você também não pode ser disfarçado nem ocultado por magia, nem a de aliado." },
+      { "circulo": 9, "id": "essencia-verbo-fixo", "titulo": "Verbo Fixo", "bonus": "Tua forma é inalterável: nenhuma transformação forçada pega em você.", "onus": "Transformação benéfica também não pega, inclusive a que você mesmo quiser." }
+    ],
+    "comunicacao": [
+      { "circulo": 5, "id": "comunicacao-ouvido-fino", "titulo": "Ouvido Fino", "bonus": "Você escuta conversas a até 30 m, mesmo através de parede fina.", "onus": "Lugar movimentado atrapalha teu sono: descanso em cidade ou acampamento cheio rende 1 Cansaço a menos de recuperação." },
+      { "circulo": 6, "id": "comunicacao-boca-do-fluxo", "titulo": "Boca do Fluxo", "bonus": "Todo mundo entende o que você diz, em qualquer idioma.", "onus": "Sob pressão, você fala o que está pensando em voz alta." },
+      { "circulo": 7, "id": "comunicacao-rede-aberta", "titulo": "Rede Aberta", "bonus": "Aliados a até 25 m compartilham tua Iniciativa se ela for melhor que a deles.", "onus": "Dano mental sofrido por um aliado vinculado também te atinge pela metade." },
+      { "circulo": 8, "id": "comunicacao-coro", "titulo": "Coro", "bonus": "Uma vez por cena, uma ordem sua vira ação livre para um aliado que te escute.", "onus": "Silêncio absoluto te sufoca: cada hora nele rende 1 Cansaço." },
+      { "circulo": 9, "id": "comunicacao-voz-de-muitos", "titulo": "Voz de Muitos", "bonus": "Você fala com qualquer pessoa que já conheceu, a qualquer distância na mesma realidade.", "onus": "Você não consegue guardar segredo de quem está vinculado a você: o que você sabe, eles sentem." }
+    ],
+    "vitalidade": [
+      { "circulo": 5, "id": "vitalidade-excesso", "titulo": "Excesso", "bonus": "+5 de Vida máxima.", "onus": "Você come e bebe o dobro, e passar fome te dá Cansaço mais rápido que os outros." },
+      { "circulo": 6, "id": "vitalidade-carne-que-nao-para", "titulo": "Carne Que Não Para", "bonus": "Abaixo da metade da Vida, você recupera 1d6 ao começar o turno.", "onus": "Toda cicatriz vira crescimento estranho. Desvantagem em testes sociais com estranhos." },
+      { "circulo": 7, "id": "vitalidade-imunidade-bruta", "titulo": "Imunidade Bruta", "bonus": "Você fica imune a doença mundana e a veneno comum.", "onus": "Remédio, poção e antídoto rendem metade em você." },
+      { "circulo": 8, "id": "vitalidade-metabolismo-voraz", "titulo": "Metabolismo Voraz", "bonus": "Você aguenta três dias sem dormir sem sofrer penalidade.", "onus": "Teu descanso completo exige 12 horas, não 8." },
+      { "circulo": 9, "id": "vitalidade-coracao-duplo", "titulo": "Coração Duplo", "bonus": "Uma vez por dia, ao chegar a 0 de Vida, você volta com metade da Vida máxima.", "onus": "Cada uso te dá 2 Cansaço na hora." }
+    ],
+    "inconstancia": [
+      { "circulo": 5, "id": "inconstancia-nunca-igual", "titulo": "Nunca Igual", "bonus": "Uma vez por cena, você repete um teste já resolvido.", "onus": "Você aceita o novo resultado, mesmo que seja pior." },
+      { "circulo": 6, "id": "inconstancia-pele-instavel", "titulo": "Pele Instável", "bonus": "No começo de cada cena, role 1d6 para uma resistência sorteada até o fim dela.", "onus": "Role de novo: você também ganha uma vulnerabilidade sorteada." },
+      { "circulo": 7, "id": "inconstancia-sorte-torta", "titulo": "Sorte Torta", "bonus": "Tua margem de ameaça aumenta em 1 em tudo o que você faz.", "onus": "A margem de falha crítica aumenta em 1 junto." },
+      { "circulo": 8, "id": "inconstancia-forma-errante", "titulo": "Forma Errante", "bonus": "Uma vez por dia, uma característica física sua muda para algo útil na situação.", "onus": "Você não escolhe qual, e a mudança dura até o próximo descanso completo." },
+      { "circulo": 9, "id": "inconstancia-roleta-viva", "titulo": "Roleta Viva", "bonus": "Uma vez por cena, você copia uma habilidade simples que tenha visto naquela cena.", "onus": "Uma habilidade sua, sorteada, fica indisponível até o fim da cena." }
+    ],
+    "fisico": [
+      { "circulo": 5, "id": "fisico-elemento-na-pele", "titulo": "Elemento na Pele", "bonus": "Resistência 3 contra o teu elemento despertado.", "onus": "Vulnerabilidade 3 ao elemento oposto, definido pelo Mestre na primeira vez." },
+      { "circulo": 6, "id": "fisico-peso-de-pedra", "titulo": "Peso de Pedra", "bonus": "+2 contra empurrão, agarrão e queda.", "onus": "-3 m de deslocamento." },
+      { "circulo": 7, "id": "fisico-mao-pesada", "titulo": "Mão Pesada", "bonus": "+1 dado de dano em ataques corpo a corpo.", "onus": "Trabalho delicado, de fechadura a caligrafia, sai com desvantagem." },
+      { "circulo": 8, "id": "fisico-corpo-mineral", "titulo": "Corpo Mineral", "bonus": "Redução 3 contra dano físico.", "onus": "Você afunda: nadar e escalar saem com desvantagem." },
+      { "circulo": 9, "id": "fisico-elemento-vivo", "titulo": "Elemento Vivo", "bonus": "Uma vez por cena, você vira o elemento despertado por uma rodada e fica imune a dano físico.", "onus": "Enquanto estiver assim, você não age, não fala e não conjura." }
+    ],
+    "espaco": [
+      { "circulo": 5, "id": "espaco-passo-curto", "titulo": "Passo Curto", "bonus": "Uma vez por cena, você teleporta 4,5 m com a ação de movimento.", "onus": "A chegada embrulha: -1 em testes até o fim do teu próximo turno." },
+      { "circulo": 6, "id": "espaco-senso-de-lugar", "titulo": "Senso de Lugar", "bonus": "Você sempre sabe onde está e qual o caminho de volta, mesmo sem referência.", "onus": "Entrar em lugar selado ou dobrado te causa 1d6 de dano mental." },
+      { "circulo": 7, "id": "espaco-distancia-elastica", "titulo": "Distância Elástica", "bonus": "O alcance das tuas magias aumenta em 50%.", "onus": "Magia de toque exige um teste de conjuração extra para funcionar." },
+      { "circulo": 8, "id": "espaco-presenca-dobrada", "titulo": "Presença Dobrada", "bonus": "Para efeitos de alcance, você ocupa dois espaços à tua escolha, a até 9 m um do outro.", "onus": "Efeito de área que pegue qualquer um dos dois pega você." },
+      { "circulo": 9, "id": "espaco-fora-do-mapa", "titulo": "Fora do Mapa", "bonus": "Nenhuma barreira mundana te prende: você sempre acha a saída.", "onus": "Teleporte e portal de outra pessoa não conseguem te levar junto." }
+    ],
+    "tempo": [
+      { "circulo": 5, "id": "tempo-descompasso", "titulo": "Descompasso", "bonus": "+2 em Iniciativa.", "onus": "Noite mal dormida te dá 1 Cansaço a mais que aos outros." },
+      { "circulo": 6, "id": "tempo-eco-curto", "titulo": "Eco Curto", "bonus": "Uma vez por cena, você repete a ação de movimento que acabou de fazer.", "onus": "Ao fim da cena em que usar, 1 Cansaço." },
+      { "circulo": 7, "id": "tempo-anos-emprestados", "titulo": "Anos Emprestados", "bonus": "+1 em todos os testes.", "onus": "Você envelhece um ano a cada mês de campanha." },
+      { "circulo": 8, "id": "tempo-pausa-interna", "titulo": "Pausa Interna", "bonus": "Uma vez por dia, você ignora um turno inteiro de um efeito contínuo sobre você.", "onus": "Você perde o teu turno seguinte." },
+      { "circulo": 9, "id": "tempo-fora-da-contagem", "titulo": "Fora da Contagem", "bonus": "Você age primeiro em toda rodada, antes de qualquer criatura.", "onus": "Cura e regeneração em você rendem metade: para elas, teu tempo não passa." }
+    ],
+    "vazio": [
+      { "circulo": 5, "id": "vazio-ausencia", "titulo": "Ausência", "bonus": "+2 em Furtividade e ninguém te ouve chegar.", "onus": "Cura mágica em você rende metade." },
+      { "circulo": 6, "id": "vazio-sumidouro", "titulo": "Sumidouro", "bonus": "Uma vez por cena, você absorve uma magia de até 3º círculo dirigida a você.", "onus": "Magia benéfica de aliado é absorvida do mesmo jeito, e você não escolhe." },
+      { "circulo": 7, "id": "vazio-fome-interna", "titulo": "Fome Interna", "bonus": "Ao reduzir uma criatura a 0 de Vida, você recupera 1d6 de Mana.", "onus": "Descanso curto não te devolve Mana nenhuma." },
+      { "circulo": 8, "id": "vazio-silencio-que-anda", "titulo": "Silêncio Que Anda", "bonus": "Os sons ao teu redor somem quando você quiser, num raio de 3 m.", "onus": "Você não conjura nada que dependa de voz, palavra ou comando falado." },
+      { "circulo": 9, "id": "vazio-quase-nada", "titulo": "Quase Nada", "bonus": "Uma vez por dia, você deixa de existir por uma rodada: nada te atinge.", "onus": "Ao voltar, ninguém se lembra de você por um minuto, aliados incluídos." }
+    ],
+    "fim": [
+      { "circulo": 5, "id": "fim-toque-final", "titulo": "Toque Final", "bonus": "+1d6 de dano contra alvo com metade ou menos da Vida máxima.", "onus": "Efeito benéfico sobre você dura uma rodada a menos." },
+      { "circulo": 6, "id": "fim-olho-do-fim", "titulo": "Olho do Fim", "bonus": "Você enxerga quem está perto da morte, e quanto perto.", "onus": "Os moribundos enxergam você também, e procuram você." },
+      { "circulo": 7, "id": "fim-ciclo-curto", "titulo": "Ciclo Curto", "bonus": "Uma vez por cena, você encerra um efeito temporário ao toque.", "onus": "O teu próprio efeito de concentração cai junto." },
+      { "circulo": 8, "id": "fim-peso-do-limiar", "titulo": "Peso do Limiar", "bonus": "Você fica imune a medo e a qualquer efeito que dependa de esperança.", "onus": "Recuperação de Sanidade em você rende metade." },
+      { "circulo": 9, "id": "fim-marca-do-termino", "titulo": "Marca do Término", "bonus": "Quem você reduz a 0 de Vida não estabiliza sozinho.", "onus": "Você também não: sem mão alheia, você não volta." }
+    ],
+    "tecnologia": [
+      { "circulo": 5, "id": "tecnologia-leitura-constante", "titulo": "Leitura Constante", "bonus": "Você identifica dispositivo, Autômato e item energizado de imediato.", "onus": "Precisa de um módulo A.X.I.S em mãos. Sem ele, -2 em testes de conjuração." },
+      { "circulo": 6, "id": "tecnologia-interferencia", "titulo": "Interferência", "bonus": "+2 em testes contra magia de Fluxo natural.", "onus": "-2 em testes contra dano e efeitos tecnológicos." },
+      { "circulo": 7, "id": "tecnologia-registro", "titulo": "Registro", "bonus": "Magia que já te acertou uma vez te acerta com -2 nas próximas.", "onus": "A A.X.I.S registra por onde você passa, e quem tem acesso à Malha consegue te rastrear." },
+      { "circulo": 8, "id": "tecnologia-carcaca", "titulo": "Carcaça", "bonus": "Redução 3 contra dano de energia.", "onus": "Pulso eletromagnético te derruba como derruba máquina." },
+      { "circulo": 9, "id": "tecnologia-protocolo-vivo", "titulo": "Protocolo Vivo", "bonus": "Uma vez por cena, você intercepta uma magia de até 6º círculo com a reação.", "onus": "Em área sem energia, você conjura com desvantagem." }
+    ]
+  },
+  "cicatrizes": [
+    { "id": "cicatriz-peso-da-fonte", "titulo": "Peso da Fonte", "bonus": "+15 de Mana máxima.", "onus": "Você só recupera Mana em descanso completo. Descanso curto não devolve nada." },
+    { "id": "cicatriz-olhos-abertos-demais", "titulo": "Olhos Abertos Demais", "bonus": "Você enxerga o invisível e o oculto a até 30 m, sempre.", "onus": "Luz forte e súbita te cega por uma rodada." },
+    { "id": "cicatriz-corpo-emprestado", "titulo": "Corpo Emprestado", "bonus": "+10 de Vida máxima.", "onus": "Toda cura mágica em você rende metade." },
+    { "id": "cicatriz-nome-escrito", "titulo": "Nome Escrito", "bonus": "+5 em testes de resistência contra magia.", "onus": "Criaturas nascidas de Fluxo te reconhecem de longe, e vêm atrás." },
+    { "id": "cicatriz-voz-rachada", "titulo": "Voz Rachada", "bonus": "As tuas magias de área ficam 3 m maiores.", "onus": "Você não consegue mais falar baixo. Furtividade que dependa de silêncio está fora." },
+    { "id": "cicatriz-mao-que-nao-fecha", "titulo": "Mão Que Não Fecha", "bonus": "+2 dados de dano nas tuas magias de alvo único.", "onus": "Você não consegue empunhar arma marcial nem exótica." },
+    { "id": "cicatriz-passo-fora", "titulo": "Passo Fora", "bonus": "Uma vez por cena, você teleporta 9 m com a ação de movimento.", "onus": "Nenhuma magia alheia consegue te transportar junto." },
+    { "id": "cicatriz-sono-curto", "titulo": "Sono Curto", "bonus": "Teu descanso completo leva 4 horas.", "onus": "Você sonha com o Fluxo. O Mestre pode dar visões, e nem todas são gentis." },
+    { "id": "cicatriz-segunda-sombra", "titulo": "Segunda Sombra", "bonus": "Uma vez por dia, um duplo teu absorve um golpe inteiro.", "onus": "O duplo age por conta própria, e nem sempre a teu favor." },
+    { "id": "cicatriz-pele-de-fluxo", "titulo": "Pele de Fluxo", "bonus": "Redução 5 contra o tipo de dano do teu Fluxo nativo.", "onus": "Vulnerabilidade 5 ao tipo oposto, definido pelo Mestre." },
+    { "id": "cicatriz-marca-visivel", "titulo": "Marca Visível", "bonus": "+5 em testes de presença e intimidação.", "onus": "Você não passa despercebido em lugar nenhum, nunca mais." },
+    { "id": "cicatriz-reserva-rachada", "titulo": "Reserva Rachada", "bonus": "Uma vez por cena, você conjura uma magia sem gastar Mana.", "onus": "Ao fim dessa cena, 2 Cansaço." }
+  ]
+}

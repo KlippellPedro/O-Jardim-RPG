@@ -17,7 +17,9 @@ def test_carrega_todas_as_categorias():
     assert nav.classes, "classes vazia"
     assert nav.pericias, "pericias vazia"
     assert nav.legados, "legados vazia (base + novos)"
-    assert len(nav.magias) == 330  # 11 Fluxos × 10 círculos × 3 magias
+    # 11 Fluxos × 10 círculos × 3 magias é o piso; universais e magias extras
+    # de um Fluxo entram por cima disso.
+    assert len(nav.magias) >= 330
     assert len(nav.fluxos) == 11
     assert nav.fundamentos, "nenhuma seção de fundamentos"
 
@@ -78,8 +80,23 @@ def test_magias_podem_ser_navegadas_e_buscadas():
 def test_magias_sao_filtradas_por_fluxo_para_caber_no_menu():
     nav = Navegacao()
     do_fisico = nav.magias_do_fluxo("fisico")
-    assert len(do_fisico) == 30
+    assert len(do_fisico) >= 30
     assert {m["circulo"] for m in do_fisico} == set(range(1, 11))
     # A lista sai ordenada por círculo, que é como o menu apresenta.
     assert [m["circulo"] for m in do_fisico] == sorted(m["circulo"] for m in do_fisico)
     assert nav.magias_do_fluxo("inexistente") == []
+
+
+def test_universais_aparecem_na_lista_de_todo_fluxo():
+    """Universal é aprendida por qualquer Fluxo, então o menu de cada um precisa
+    mostrá-la: quem tem Vórtice não pode deixar de ver a Singularidade."""
+    nav = Navegacao()
+    universais = {m["id"] for m in nav.magias if m.get("fluxo") == "universal"}
+    assert universais, "nenhuma magia universal publicada"
+
+    for fluxo in nav.fluxos:
+        ids = {m["id"] for m in nav.magias_do_fluxo(fluxo["id"])}
+        assert universais <= ids, f'{fluxo["titulo"]} não lista as universais'
+
+    # Mas elas não pertencem a Fluxo nenhum na fonte.
+    assert all(m["fluxo"] == "universal" for m in nav.magias if m["id"] in universais)

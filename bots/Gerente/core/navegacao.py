@@ -115,13 +115,24 @@ class Navegacao:
         return None
 
     def magias_do_fluxo(self, fluxo_id: str) -> list[dict]:
-        """Magias de um Fluxo, ordenadas por círculo. O catálogo tem 330 entradas,
-        então o menu do /regras desce por Fluxo antes de listar."""
+        """Magias de um Fluxo, ordenadas por círculo. O catálogo passa de 330
+        entradas, então o menu do /regras desce por Fluxo antes de listar.
+
+        As universais entram na lista de todo Fluxo: elas são aprendidas por
+        qualquer um, e o que muda é o efeito de quem canaliza."""
+        if self.fluxo(fluxo_id) is None:
+            # Fluxo desconhecido não devolve nada: nem as universais, senão um
+            # id errado no menu passaria despercebido.
+            return []
+
         def chave(magia: dict):
             circulo = magia.get("circulo")
             return (circulo if isinstance(circulo, int) else 99, str(magia.get("titulo", "")))
 
-        return sorted((m for m in self.magias if m.get("fluxo") == fluxo_id), key=chave)
+        return sorted(
+            (m for m in self.magias if m.get("fluxo") in (fluxo_id, "universal")),
+            key=chave,
+        )
 
     def fluxo(self, fluxo_id: str) -> Optional[dict]:
         for item in self.fluxos:

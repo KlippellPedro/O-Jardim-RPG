@@ -1,0 +1,232 @@
+{
+  "versao": "1.0",
+  "status": "oficial",
+  "descricao": "Os catorze Símbolos dos dois grandes ritos. Sete pessoas fecham o círculo e cada uma sai marcada por um Símbolo diferente, que dá muito e cobra muito. Ninguém carrega dois Símbolos ao mesmo tempo.",
+  "regras": {
+    "participantes_exigidos": 7,
+    "simbolos_por_pessoa": 1,
+    "simbolos_repetidos_no_rito": false,
+    "notas": [
+      "Cada participante escolhe o próprio Símbolo, e dois participantes não podem escolher o mesmo.",
+      "Faltando gente, o rito não acontece: são sete ou nenhum.",
+      "O Símbolo é permanente. Sai por rito oposto, por magia do Fim de 9º círculo ou superior, ou por decisão do Mestre.",
+      "A Virtude oposta apaga o Pecado correspondente e ocupa o lugar dele. O contrário também vale.",
+      "Símbolo é concessão do Mestre na ficha: o rito acontece na mesa, não no botão.",
+      "Símbolo vale como Legado. O texto manda, e o Mestre arbitra o caso duvidoso."
+    ]
+  },
+  "pecados": [
+    {
+      "id": "pecado-soberba",
+      "titulo": "Soberba",
+      "virtude_oposta": "virtude-humildade",
+      "bonus": [
+        "+3 em qualquer teste que você faça sozinho, sem auxílio de ninguém.",
+        "Você fica imune a Amedrontado.",
+        "Uma vez por cena, refaça um teste que tenha falhado na frente de outras pessoas."
+      ],
+      "onus": [
+        "Você não consegue aceitar auxílio: todo bônus de ajuda alheia vira zero.",
+        "Cura vinda de outra pessoa rende metade em você.",
+        "Desvantagem em qualquer teste feito em conjunto com o grupo."
+      ]
+    },
+    {
+      "id": "pecado-avareza",
+      "titulo": "Ganância",
+      "virtude_oposta": "virtude-caridade",
+      "bonus": [
+        "+5 em testes de negociação, avaliação e para farejar valor.",
+        "Você compra por 25% menos e vende por 25% mais.",
+        "Você sente metal precioso e objeto de valor a até 30 m, mesmo escondido."
+      ],
+      "onus": [
+        "Você não consegue dar nem emprestar nada de valor por vontade própria.",
+        "Perder um item de valor te dá 1 Cansaço na hora.",
+        "Desvantagem em testes sociais com quem sabe que você recusou ajuda por dinheiro."
+      ]
+    },
+    {
+      "id": "pecado-luxuria",
+      "titulo": "Luxúria",
+      "virtude_oposta": "virtude-castidade",
+      "bonus": [
+        "+5 em testes de persuasão, seducão e leitura de intenção.",
+        "Uma vez por cena, quem falhar em Vontade contra você age com desvantagem contra você naquela rodada.",
+        "Você reconhece o desejo mais evidente de qualquer pessoa que encarar."
+      ],
+      "onus": [
+        "Desvantagem para resistir a encantamento, tentação e promessa.",
+        "Você não recusa um convite direto sem passar em Vontade DT 15.",
+        "Quem descobre o seu Símbolo tem +2 para te manipular."
+      ]
+    },
+    {
+      "id": "pecado-inveja",
+      "titulo": "Inveja",
+      "virtude_oposta": "virtude-gratidao",
+      "bonus": [
+        "Uma vez por cena, copie uma habilidade simples que tenha visto um aliado usar naquela cena.",
+        "+3 em testes para imitar, falsificar e se passar por outra pessoa.",
+        "Você sabe, olhando, quem no recinto é mais capaz que você em alguma coisa."
+      ],
+      "onus": [
+        "Quando um aliado tira um crítico, você sofre 1d6 de dano mental.",
+        "Desvantagem em qualquer teste feito para ajudar outra pessoa.",
+        "Você não consegue elogiar ninguém em voz alta sem passar em Vontade."
+      ]
+    },
+    {
+      "id": "pecado-gula",
+      "titulo": "Gula",
+      "virtude_oposta": "virtude-temperanca",
+      "bonus": [
+        "+10 de Vida máxima.",
+        "Comer ou beber com calma recupera 2d6 de Vida, uma vez por cena.",
+        "Você fica imune a veneno ingerido e a comida estragada."
+      ],
+      "onus": [
+        "Você come e bebe o triplo de uma pessoa comum.",
+        "Um dia sem comer o suficiente te dá 2 Cansaço, não 1.",
+        "Diante de banquete ou fartura, você precisa passar em Vontade para fazer outra coisa antes de comer."
+      ]
+    },
+    {
+      "id": "pecado-ira",
+      "titulo": "Ira",
+      "virtude_oposta": "virtude-paciencia",
+      "bonus": [
+        "+2 dados de dano em ataques corpo a corpo.",
+        "+3 em Iniciativa e imunidade a medo.",
+        "Quando você sofre dano, seu próximo ataque na mesma rodada causa +1d6."
+      ],
+      "onus": [
+        "-3 de Defesa, sempre.",
+        "Você precisa atacar a ameaça mais próxima se puder, ou passar em Vontade DT 15.",
+        "Você não consegue negociar depois que a violência começa."
+      ]
+    },
+    {
+      "id": "pecado-preguica",
+      "titulo": "Preguiça",
+      "virtude_oposta": "virtude-diligencia",
+      "bonus": [
+        "Descanso completo devolve Vida e Mana em dobro.",
+        "Você não acumula Cansaço por esforço físico.",
+        "Uma vez por dia, ignore uma consequência por ter demorado a agir."
+      ],
+      "onus": [
+        "-3 m de deslocamento.",
+        "Desvantagem em Iniciativa.",
+        "Você não corre duas rodadas seguidas: a segunda exige Vontade DT 15."
+      ]
+    }
+  ],
+  "virtudes": [
+    {
+      "id": "virtude-humildade",
+      "titulo": "Humildade",
+      "pecado_oposto": "pecado-soberba",
+      "bonus": [
+        "Auxílio que você recebe concede +4 em vez de +2.",
+        "Auxílio que você presta também concede +4.",
+        "+3 em qualquer teste feito em conjunto com o grupo."
+      ],
+      "onus": [
+        "-2 em testes que você faça sozinho, sem ninguém por perto.",
+        "Você não consegue reivindicar crédito pelo que fez: ganhos de reputação vão para o grupo.",
+        "Desvantagem em testes de intimidação."
+      ]
+    },
+    {
+      "id": "virtude-caridade",
+      "titulo": "Caridade",
+      "pecado_oposto": "pecado-avareza",
+      "bonus": [
+        "Cura que você aplica em outra pessoa rende 50% a mais.",
+        "Ao dar algo de valor real, receba +2 no próximo teste que fizer.",
+        "Estranhos te tratam bem: +3 em testes sociais com quem nunca te viu."
+      ],
+      "onus": [
+        "Você precisa doar boa parte do que ganha, ou perde os bônus até compensar.",
+        "Você não consegue acumular mais do que precisa sem passar em Vontade.",
+        "Desvantagem em testes de negociação para o seu próprio lucro."
+      ]
+    },
+    {
+      "id": "virtude-castidade",
+      "titulo": "Castidade",
+      "pecado_oposto": "pecado-luxuria",
+      "bonus": [
+        "Você fica imune a encantamento, sedução e tentação mágica.",
+        "+5 em Vontade.",
+        "Você percebe na hora quando alguém tenta te manipular."
+      ],
+      "onus": [
+        "Você não usa atração como ferramenta: testes sociais desse tipo falham.",
+        "Desvantagem em Enganação.",
+        "Você não consegue fingir interesse que não tem."
+      ]
+    },
+    {
+      "id": "virtude-gratidao",
+      "titulo": "Gratidão",
+      "pecado_oposto": "pecado-inveja",
+      "bonus": [
+        "Quando um aliado tira um crítico, você recebe +2 no seu próximo teste.",
+        "Aliados a até 9 m de você recebem +1 em tudo.",
+        "Uma vez por cena, transfira um bônus seu para um aliado à vista."
+      ],
+      "onus": [
+        "Você não consegue atacar quem te ajudou naquela cena.",
+        "Desvantagem em testes contra aliados, mesmo sob controle mental.",
+        "Você não guarda rancor: efeitos que dependem de vingança não funcionam em você."
+      ]
+    },
+    {
+      "id": "virtude-temperanca",
+      "titulo": "Moderação",
+      "pecado_oposto": "pecado-gula",
+      "bonus": [
+        "Você fica imune a veneno, doença e a qualquer excesso.",
+        "Você consome metade de comida, água e recursos.",
+        "+3 contra qualquer efeito que dependa de vício, fome ou compulsão."
+      ],
+      "onus": [
+        "Poção, comida mágica e estimulante rendem metade em você.",
+        "Você não mantém mais de um efeito benéfico de magia por vez.",
+        "Desvantagem em testes que dependam de força bruta momentânea."
+      ]
+    },
+    {
+      "id": "virtude-paciencia",
+      "titulo": "Paciência",
+      "pecado_oposto": "pecado-ira",
+      "bonus": [
+        "+3 de Defesa, sempre.",
+        "Se você não atacar numa rodada, o próximo ataque causa +2 dados de dano.",
+        "Você fica imune a provocação e a efeitos que forcem você a atacar."
+      ],
+      "onus": [
+        "Você age por último na primeira rodada de todo combate.",
+        "Desvantagem em testes para agir rápido ou por impulso.",
+        "Você não consegue atacar primeiro sem passar em Vontade DT 15."
+      ]
+    },
+    {
+      "id": "virtude-diligencia",
+      "titulo": "Diligência",
+      "pecado_oposto": "pecado-preguica",
+      "bonus": [
+        "+6 m de deslocamento e uma ação de movimento adicional por turno.",
+        "Você ignora as penalidades do primeiro ponto de Cansaço.",
+        "Trabalho longo rende o dobro: qualquer tarefa demorada leva metade do tempo."
+      ],
+      "onus": [
+        "Seu descanso completo exige 12 horas, e você custa a parar.",
+        "Ficar parado te deixa inquieto: desvantagem em Furtividade em emboscada.",
+        "Você não consegue delegar: testes para deixar outra pessoa resolver falham."
+      ]
+    }
+  ]
+}

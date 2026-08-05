@@ -20,10 +20,18 @@ import {
   circuloRotulo,
   dtConjuracaoPorCirculo,
   magiaElegivelParaAprender,
+  cicatrizesDaFicha,
+  cicatrizesDevidas,
+  efeitoDaMagia,
+  magiaEhUniversal,
+  marcasDaFicha,
+  simboloDaFicha,
+  sortearCicatriz,
   magiasDaFicha,
   obterPerfilMagico,
   podeConjurarMagia,
   temaDoFluxo,
+  type FluxoDeMagia,
   type FluxoMagicoId,
   type IMagiaCatalogo,
 } from '../../../services/magiaService';
@@ -59,7 +67,7 @@ const CIRCULOS_DISPONIVEIS = Array.from({ length: 10 }, (_, indice) => indice + 
 
 export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: any }) => {
   const [busca, setBusca] = useState('');
-  const [filtroFluxo, setFiltroFluxo] = useState<FluxoMagicoId | 'nativo' | 'todos'>('nativo');
+  const [filtroFluxo, setFiltroFluxo] = useState<FluxoDeMagia | 'nativo' | 'todos'>('nativo');
   const [filtroCirculo, setFiltroCirculo] = useState<'alcancaveis' | 'todos' | number>('alcancaveis');
   const [mostrarCatalogo, setMostrarCatalogo] = useState(false);
   const [defesasAlvo, setDefesasAlvo] = useState<Record<string, string>>({});
@@ -75,6 +83,10 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   const resumoEquipamento = useMemo(() => resumirEquipamentos(inventarioCentral, ficha), [ficha, inventarioCentral]);
   const magiasConhecidas = useMemo(() => magiasDaFicha(ficha, inventarioCentral), [ficha, inventarioCentral]);
   const magiasAntigas: IMagiaAntiga[] = Array.isArray(ficha.magias) ? ficha.magias : [];
+  const marcas = useMemo(() => marcasDaFicha(ficha, inventarioCentral), [ficha, inventarioCentral]);
+  const cicatrizes = useMemo(() => cicatrizesDaFicha(ficha), [ficha]);
+  const cicatrizesPendentes = Math.max(0, cicatrizesDevidas(ficha, inventarioCentral) - cicatrizes.length);
+  const simbolo = useMemo(() => simboloDaFicha(ficha), [ficha]);
   const isMestre = usuario?.papel_plataforma === 'admin'
     || usuario?.papel_plataforma === 'criador'
     || campanha?.papel === 'mestre'
@@ -95,7 +107,10 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     const fluxoEscolhido = filtroFluxo === 'nativo' ? perfil.fluxoNativoId : filtroFluxo;
     const tetoAlcancavel = perfil.circuloMaximo || 1;
     return MAGIAS_CATALOGO.filter((magia) => {
-      if (fluxoEscolhido && fluxoEscolhido !== 'todos' && magia.fluxo !== fluxoEscolhido) return false;
+      // Universal atravessa o filtro de Fluxo: ela é aprendível por todos.
+      const passaNoFluxo = !fluxoEscolhido || fluxoEscolhido === 'todos'
+        || magia.fluxo === fluxoEscolhido || magiaEhUniversal(magia);
+      if (!passaNoFluxo) return false;
       if (typeof magia.circulo === 'number') {
         if (filtroCirculo === 'alcancaveis' && magia.circulo > tetoAlcancavel) return false;
         if (typeof filtroCirculo === 'number' && magia.circulo !== filtroCirculo) return false;
@@ -130,6 +145,16 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     if (!window.confirm(`Aprender ${magia.titulo}? A escolha só poderá ser removida pelo Mestre.`)) return;
     onUpdate(['ficha', 'magiasConhecidasIds'], [...perfil.conhecidasIds, magia.id]);
     setMensagem({ tipo: 'sucesso', texto: `${magia.titulo} foi aprendida.` });
+  };
+
+  const sortearProximaCicatriz = () => {
+    const cicatriz = sortearCicatriz(ficha);
+    if (!cicatriz) {
+      setMensagem({ tipo: 'erro', texto: 'A tabela de cicatrizes já se esgotou para esta ficha.' });
+      return;
+    }
+    onUpdate(['ficha', 'cicatrizesIds'], [...cicatrizes.map((item) => item.id), cicatriz.id]);
+    setMensagem({ tipo: 'sucesso', texto: `O Fluxo cobrou: ${cicatriz.titulo}.` });
   };
 
   const encerrarConcentracao = () => {
@@ -211,7 +236,10 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     const podeAprender = isMestre || avaliacao.permitido;
     const cor = CIRCULO_CORES[String(magia.circulo)] || CIRCULO_CORES.ritual;
     const tema = temaDoFluxo(magia.fluxo);
-    const fluxoTitulo = FLUXOS_POR_ID.get(magia.fluxo)?.titulo || magia.tradicao;
+    const universal = magiaEhUniversal(magia);
+    const fluxoTitulo = universal ? 'Universal' : (FLUXOS_POR_ID.get(magia.fluxo as FluxoMagicoId)?.titulo || magia.tradicao);
+    // Universal só ganha texto definitivo quando um Fluxo a canaliza.
+    const efeitoNaFicha = efeitoDaMagia(magia, perfil.fluxoNativoId);
 
     return (
       <article
@@ -237,6 +265,11 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
               >
                 {fluxoTitulo}
               </span>
+              {universal && perfil.fluxoNativoTitulo && (
+                <span className="rounded border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-300">
+                  Canalizada por {perfil.fluxoNativoTitulo}
+                </span>
+              )}
               {magia.concentracao && <span className="rounded border border-violet-500/30 bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-violet-300">Concentração</span>}
               {concedida && <span className="rounded border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-amber-300">Concedida</span>}
             </div>
@@ -246,7 +279,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
               <span><strong className="text-gray-400">Alcance:</strong> {magia.alcance}</span>
               <span><strong className="text-gray-400">Duração:</strong> {magia.duracao}</span>
             </div>
-            <p className="mt-3 text-sm leading-relaxed text-gray-300">{magia.efeito}</p>
+            <p className="mt-3 text-sm leading-relaxed text-gray-300">{efeitoNaFicha}</p>
             {(magia.dano || magia.defesa) && (
               <div className="mt-3 flex flex-wrap gap-2 text-xs font-bold">
                 {magia.dano && <span className="rounded-lg bg-red-500/10 px-2.5 py-1 text-red-300">Dano {magia.dano}</span>}
@@ -352,6 +385,97 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
         )}
       </header>
 
+      {simbolo && (
+        <section
+          className={`rounded-2xl border p-5 ${simbolo.natureza === 'pecado'
+            ? 'border-red-500/30 bg-red-500/5'
+            : 'border-emerald-500/30 bg-emerald-500/5'}`}
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-bold text-white">{simbolo.titulo}</h3>
+            <span className={`rounded border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${simbolo.natureza === 'pecado'
+              ? 'border-red-500/40 text-red-300'
+              : 'border-emerald-500/40 text-emerald-300'}`}
+            >
+              {simbolo.natureza === 'pecado' ? 'Pecado' : 'Virtude'}
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">Símbolo dos Sete</span>
+          </div>
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">O que dá</span>
+              <ul className="mt-2 space-y-1.5">
+                {simbolo.bonus.map((texto) => (
+                  <li key={texto} className="text-xs leading-relaxed text-emerald-200">{texto}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-red-400">O que cobra</span>
+              <ul className="mt-2 space-y-1.5">
+                {simbolo.onus.map((texto) => (
+                  <li key={texto} className="text-xs leading-relaxed text-red-200">{texto}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <p className="mt-4 text-[11px] leading-relaxed text-gray-500">
+            Só o Mestre troca o Símbolo, porque o rito exige sete pessoas e acontece na mesa.
+          </p>
+        </section>
+      )}
+
+      {(marcas.length > 0 || cicatrizes.length > 0 || cicatrizesPendentes > 0) && (
+        <section className="rounded-2xl border border-white/10 bg-black/20 p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h3 className="flex items-center gap-2 font-bold text-white">
+              <Sparkles size={16} className="text-[#c7a44c]" /> O que a magia cobrou
+            </h3>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">
+              {marcas.length} marca(s) · {cicatrizes.length} cicatriz(es)
+            </span>
+          </div>
+          <p className="mt-2 text-xs leading-relaxed text-gray-500">
+            Marca vem sozinha do teu Fluxo a cada círculo do 5º ao 9º, e some se você perder o círculo.
+            Cicatriz é sorteada a cada magia de 10º círculo aprendida.
+          </p>
+
+          <div className="mt-4 grid gap-3 md:grid-cols-2">
+            {[...marcas.map((marca) => ({ chave: marca.id, etiqueta: `${marca.circulo}º círculo`, ...marca })),
+              ...cicatrizes.map((cicatriz) => ({ chave: cicatriz.id, etiqueta: 'Cicatriz', ...cicatriz }))]
+              .map((item) => (
+                <article key={item.chave} className="rounded-xl border border-white/5 bg-[#0f0e15] p-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <strong className="text-sm text-white">{item.titulo}</strong>
+                    <span className="rounded border border-white/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-gray-400">
+                      {item.etiqueta}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-xs leading-relaxed text-emerald-300">{item.bonus}</p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-red-300">{item.onus}</p>
+                </article>
+              ))}
+          </div>
+
+          {cicatrizesPendentes > 0 && (
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3">
+              <span className="text-xs leading-relaxed text-amber-200">
+                {cicatrizesPendentes === 1
+                  ? 'Uma magia de 10º círculo ainda não cobrou o preço dela.'
+                  : `${cicatrizesPendentes} magias de 10º círculo ainda não cobraram o preço delas.`}
+              </span>
+              <button
+                type="button"
+                onClick={sortearProximaCicatriz}
+                className="rounded-xl border border-amber-500/40 bg-amber-500/20 px-4 py-2 text-xs font-bold text-amber-100"
+              >
+                Sortear cicatriz
+              </button>
+            </div>
+          )}
+        </section>
+      )}
+
       {mensagem && (
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className={`flex items-center gap-2 rounded-xl border px-4 py-3 text-sm font-bold ${mensagem.tipo === 'sucesso' ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300' : 'border-red-500/30 bg-red-500/10 text-red-300'}`}>
           {mensagem.tipo === 'sucesso' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
@@ -377,11 +501,12 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
               <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Fluxo</span>
               <select
                 value={filtroFluxo}
-                onChange={(event) => setFiltroFluxo(event.target.value as FluxoMagicoId | 'nativo' | 'todos')}
+                onChange={(event) => setFiltroFluxo(event.target.value as FluxoDeMagia | 'nativo' | 'todos')}
                 className="w-full rounded-xl border border-white/5 bg-[#0f0e15] px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-sky-500/40"
               >
                 <option value="nativo">{perfil.fluxoNativoTitulo ? `Fluxo nativo (${perfil.fluxoNativoTitulo})` : 'Fluxo nativo (não definido)'}</option>
                 <option value="todos">Todos os Fluxos</option>
+                <option value="universal">Só as universais</option>
                 {FLUXOS_CATALOGO.map((fluxo) => <option key={fluxo.id} value={fluxo.id}>{fluxo.titulo}</option>)}
               </select>
             </label>

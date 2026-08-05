@@ -1,4 +1,6 @@
 import magiasData from '../../data/ficha/magias.json';
+import marcasData from '../../data/ficha/marcas-de-circulo.json';
+import setesData from '../../data/ficha/pecados-e-virtudes.json';
 import { ARVORES } from '../../data/mundo/arvoresCatalog';
 import { BONUS_GRAU, aplicarAjustesAtributosRaciais, modificador, obterAjustesPericiasRaciais } from './calculoService';
 import { CLASSES_CATALOGO, RACAS_CATALOGO } from './catalogoService';
@@ -8,6 +10,11 @@ import { resumirEquipamentos } from './equipamentoService';
 export type CirculoMagia = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 'ritual';
 export type FluxoMagicoId = 'origem' | 'essencia' | 'comunicacao' | 'vitalidade' | 'inconstancia'
   | 'fisico' | 'espaco' | 'tempo' | 'vazio' | 'fim' | 'tecnologia';
+
+/** Uma magia universal não pertence a Fluxo nenhum: qualquer Fluxo a aprende e o
+ * efeito muda conforme quem canaliza. Por isso ela não entra em FLUXO_TEMAS nem
+ * na contagem por Fluxo do catálogo. */
+export type FluxoDeMagia = FluxoMagicoId | 'universal';
 
 export interface FluxoTema {
   arvore: string;
@@ -81,8 +88,15 @@ export const FLUXO_TEMAS: Record<FluxoMagicoId, FluxoTema> = {
   },
 };
 
-export function temaDoFluxo(fluxoId: FluxoMagicoId): FluxoTema {
-  return FLUXO_TEMAS[fluxoId];
+/** Magia universal não tem Árvore, então não herda paleta de nenhuma: usa um
+ * prisma neutro, que é como ela aparece antes de um Fluxo canalizá-la. */
+export const TEMA_UNIVERSAL: FluxoTema = {
+  arvore: 'Universal', base: '#c9c4d6', destaque: '#e7e2f2', texto: '#f1eef8',
+  fundo: 'rgba(201, 196, 214, 0.12)', borda: 'rgba(201, 196, 214, 0.45)', brilho: 'rgba(201, 196, 214, 0.22)',
+};
+
+export function temaDoFluxo(fluxoId: FluxoDeMagia): FluxoTema {
+  return fluxoId === 'universal' ? TEMA_UNIVERSAL : FLUXO_TEMAS[fluxoId];
 }
 
 export interface IFluxoMagico {
@@ -143,7 +157,9 @@ export interface IMagiaCatalogo {
   titulo: string;
   circulo: CirculoMagia;
   tradicao: string;
-  fluxo: FluxoMagicoId;
+  fluxo: FluxoDeMagia;
+  /** Só nas universais: o efeito que cada Fluxo produz ao canalizar a magia. */
+  efeitos_por_fluxo?: Record<FluxoMagicoId, string>;
   fontes_permitidas: string[];
   papel: string;
   perfil: 'alvo' | 'area' | 'defesa' | 'movimento' | 'controle' | 'ritual';
@@ -192,6 +208,28 @@ export const RITUAIS_CATALOGO = magiasData.rituais as unknown as IRitualCatalogo
 export const SELOS_CATALOGO = magiasData.selos as unknown as ISeloCatalogo[];
 export const ENCANTAMENTOS_CATALOGO = magiasData.encantamentos as unknown as IEncantamentoCatalogo[];
 export const AVISO_FLUXO_FIM = magiasData.regras.acesso_fim.aviso;
+export const MAGIAS_UNIVERSAIS = MAGIAS_CATALOGO.filter((magia) => magia.fluxo === 'universal');
+
+export function magiaEhUniversal(magia: IMagiaCatalogo): boolean {
+  return magia.fluxo === 'universal';
+}
+
+/** O texto que vale na mesa para esta ficha. Universal muda conforme o Fluxo que
+ * canaliza; sem Fluxo definido, sobra só a descrição comum da magia. */
+export function efeitoDaMagia(magia: IMagiaCatalogo, fluxoId: FluxoMagicoId | null): string {
+  if (!magiaEhUniversal(magia) || !fluxoId) return magia.efeito;
+  const variante = magia.efeitos_por_fluxo?.[fluxoId];
+  return variante ? `${magia.efeito} ${variante}` : magia.efeito;
+}
+
+/** As onze manifestações de uma universal, para o Grimório mostrar lado a lado. */
+export function variantesDaMagia(magia: IMagiaCatalogo): Array<{ fluxo: IFluxoMagico; efeito: string }> {
+  if (!magiaEhUniversal(magia) || !magia.efeitos_por_fluxo) return [];
+  return FLUXOS_CATALOGO.flatMap((fluxo) => {
+    const efeito = magia.efeitos_por_fluxo?.[fluxo.id];
+    return efeito ? [{ fluxo, efeito }] : [];
+  });
+}
 
 const FLUXO_POR_ARVORE: Record<string, FluxoMagicoId> = {
   aethel: 'origem',
@@ -332,7 +370,8 @@ export function magiaElegivelParaAprender(ficha: any, magia: IMagiaCatalogo, inv
   if (magia.circulo > perfil.circuloDaFonte) return { permitido: false, motivo: 'A fonte de magia ainda não libera este círculo.' };
   if (magia.circulo > perfil.circuloDoFluxo) return { permitido: false, motivo: `Fluxo insuficiente para o ${magia.circulo}º círculo.` };
   if (!perfil.fluxoNativoId) return { permitido: false, motivo: 'Escolha uma Árvore para definir o Fluxo nativo da ficha.' };
-  if (magia.fluxo !== perfil.fluxoNativoId) {
+  // Universal é de todo mundo: o Fluxo nativo decide o efeito, não o acesso.
+  if (!magiaEhUniversal(magia) && magia.fluxo !== perfil.fluxoNativoId) {
     return { permitido: false, motivo: `Esta magia pertence ao Fluxo ${magia.tradicao}; seu Fluxo nativo é ${perfil.fluxoNativoTitulo}.` };
   }
   const fontesDaFicha = referenciasClasse(ficha).flatMap(({ id, nivel }) => {
@@ -346,6 +385,108 @@ export function magiaElegivelParaAprender(ficha: any, magia: IMagiaCatalogo, inv
     return { permitido: false, motivo: 'Sua classe ainda não oferece uma fonte compatível com esta magia.' };
   }
   return { permitido: true };
+}
+
+export interface IMarcaDeCirculo {
+  circulo: number;
+  id: string;
+  titulo: string;
+  bonus: string;
+  onus: string;
+}
+
+export interface ICicatriz {
+  id: string;
+  titulo: string;
+  bonus: string;
+  onus: string;
+}
+
+export const MARCAS_REGRAS = marcasData.regras;
+export const MARCAS_POR_FLUXO = marcasData.por_fluxo as unknown as Record<FluxoMagicoId, IMarcaDeCirculo[]>;
+export const CICATRIZES_CATALOGO = marcasData.cicatrizes as unknown as ICicatriz[];
+export const CICATRIZES_POR_ID = new Map(CICATRIZES_CATALOGO.map((item) => [item.id, item]));
+
+/** As Marcas que a ficha carrega hoje. Não são guardadas em lugar nenhum: saem
+ * do Fluxo nativo e do maior círculo alcançado, então não há como forjar uma
+ * nem esquecer de aplicar. Perdeu o círculo, perdeu a Marca. */
+export function marcasDaFicha(ficha: any, inventarioCentral: any[] = []): IMarcaDeCirculo[] {
+  const perfil = obterPerfilMagico(ficha, inventarioCentral);
+  if (!perfil.fluxoNativoId) return [];
+  const doFluxo = MARCAS_POR_FLUXO[perfil.fluxoNativoId] || [];
+  return doFluxo.filter((marca) => perfil.circuloMaximo >= marca.circulo);
+}
+
+/** Quantas Cicatrizes a ficha tem direito: uma por magia de 10º círculo
+ * aprendida. Concessão do Mestre não conta, porque não foi conquista. */
+export function cicatrizesDevidas(ficha: any, inventarioCentral: any[] = []): number {
+  const perfil = obterPerfilMagico(ficha, inventarioCentral);
+  return perfil.conhecidasIds.filter((id) => MAGIAS_POR_ID.get(id)?.circulo === 10).length;
+}
+
+export function cicatrizesDaFicha(ficha: any): ICicatriz[] {
+  return idsUnicos(ficha?.cicatrizesIds).flatMap((id) => {
+    const cicatriz = CICATRIZES_POR_ID.get(id);
+    return cicatriz ? [cicatriz] : [];
+  });
+}
+
+/** Sorteia a próxima Cicatriz, sem repetir o que a ficha já carrega. */
+export function sortearCicatriz(ficha: any): ICicatriz | null {
+  const jaTem = new Set(idsUnicos(ficha?.cicatrizesIds));
+  const disponiveis = CICATRIZES_CATALOGO.filter((item) => !jaTem.has(item.id));
+  if (!disponiveis.length) return null;
+  return disponiveis[Math.floor(Math.random() * disponiveis.length)];
+}
+
+export interface ISimboloDosSete {
+  id: string;
+  titulo: string;
+  bonus: string[];
+  onus: string[];
+  natureza: 'pecado' | 'virtude';
+  opostoId: string;
+}
+
+const montarSimbolos = (): ISimboloDosSete[] => [
+  ...setesData.pecados.map((item: any) => ({
+    id: item.id,
+    titulo: item.titulo,
+    bonus: item.bonus,
+    onus: item.onus,
+    natureza: 'pecado' as const,
+    opostoId: item.virtude_oposta,
+  })),
+  ...setesData.virtudes.map((item: any) => ({
+    id: item.id,
+    titulo: item.titulo,
+    bonus: item.bonus,
+    onus: item.onus,
+    natureza: 'virtude' as const,
+    opostoId: item.pecado_oposto,
+  })),
+];
+
+export const SIMBOLOS_DOS_SETE = montarSimbolos();
+export const SIMBOLOS_POR_ID = new Map(SIMBOLOS_DOS_SETE.map((item) => [item.id, item]));
+export const SETES_REGRAS = setesData.regras;
+
+/** O Símbolo que a ficha carrega, se carregar algum. É um só: os ritos marcam
+ * uma pessoa por vez, e a Virtude oposta substitui o Pecado em vez de somar. */
+export function simboloDaFicha(ficha: any): ISimboloDosSete | null {
+  const id = String(ficha?.simboloId || '').trim();
+  return id ? SIMBOLOS_POR_ID.get(id) || null : null;
+}
+
+export const RITO_DOS_SETE_PECADOS_ID = 'rito-dos-sete-pecados';
+export const RITO_DAS_SETE_VIRTUDES_ID = 'rito-das-sete-virtudes';
+
+/** Os sete Símbolos que aquele rito concede, para o Grimório mostrar o que dá e
+ * o que cobra junto do próprio ritual, em vez de numa página à parte. */
+export function simbolosDoRito(ritualId: string): ISimboloDosSete[] {
+  if (ritualId === RITO_DOS_SETE_PECADOS_ID) return SIMBOLOS_DOS_SETE.filter((item) => item.natureza === 'pecado');
+  if (ritualId === RITO_DAS_SETE_VIRTUDES_ID) return SIMBOLOS_DOS_SETE.filter((item) => item.natureza === 'virtude');
+  return [];
 }
 
 export function magiasDaFicha(ficha: any, inventarioCentral: any[] = []): IMagiaCatalogo[] {
@@ -362,7 +503,7 @@ export function podeConjurarMagia(ficha: any, magia: IMagiaCatalogo, inventarioC
   const aprendida = perfil.conhecidasIds.includes(magia.id);
   const concedida = perfil.concedidasIds.includes(magia.id);
   if (!aprendida && !concedida) return { permitido: false, motivo: 'A magia não está registrada como conhecida.' };
-  if (!concedida && perfil.fluxoNativoId && magia.fluxo !== perfil.fluxoNativoId) {
+  if (!concedida && !magiaEhUniversal(magia) && perfil.fluxoNativoId && magia.fluxo !== perfil.fluxoNativoId) {
     return { permitido: false, motivo: `A magia não pertence ao Fluxo nativo ${perfil.fluxoNativoTitulo}.` };
   }
   if (typeof magia.circulo === 'number' && magia.circulo > perfil.circuloDoFluxo) {

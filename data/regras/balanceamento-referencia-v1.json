@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T13:28:02.391Z",
+  "generatedAt": "2026-08-05T03:30:05.220Z",
   "levels": [
     1,
     5,
@@ -17,7 +17,7 @@
   "summary": {
     "classes": 27,
     "weapons": 87,
-    "spells": 330,
+    "spells": 352,
     "invalidResourceBudgets": 0,
     "unboundedWeapons": 0,
     "invalidSpells": 0
@@ -2310,6 +2310,26 @@
       "problemas": []
     },
     {
+      "id": "toque-do-fluxo",
+      "titulo": "Toque do Fluxo",
+      "circulo": 1,
+      "perfil": "alvo",
+      "custoMana": 2,
+      "dano": "1d10 + Mod. Fluxo",
+      "mediaDano": 5.5,
+      "problemas": []
+    },
+    {
+      "id": "sinal-do-fluxo",
+      "titulo": "Sinal do Fluxo",
+      "circulo": 1,
+      "perfil": "controle",
+      "custoMana": 2,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
       "id": "broto-rompente",
       "titulo": "Broto Rompente",
       "circulo": 2,
@@ -2640,11 +2660,31 @@
       "problemas": []
     },
     {
+      "id": "egide-de-fluxo",
+      "titulo": "Escudo de Fluxo",
+      "circulo": 2,
+      "perfil": "defesa",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "passo-canalizado",
+      "titulo": "Passo Rápido",
+      "circulo": 2,
+      "perfil": "movimento",
+      "custoMana": 4,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
       "id": "campo-germinal",
       "titulo": "Campo Germinal",
       "circulo": 3,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": "3d6",
       "mediaDano": 10.5,
       "problemas": []
@@ -2654,17 +2694,17 @@
       "titulo": "Gênese Menor",
       "circulo": 3,
       "perfil": "controle",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "vinculo-inaugural",
-      "titulo": "Vínculo Inaugural",
+      "titulo": "Laço de Ajuda",
       "circulo": 3,
       "perfil": "alvo",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2674,7 +2714,7 @@
       "titulo": "Julgamento Essencial",
       "circulo": 3,
       "perfil": "alvo",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": "3d8 + Mod. Fluxo",
       "mediaDano": 13.5,
       "problemas": []
@@ -2684,7 +2724,7 @@
       "titulo": "Anular Aparência",
       "circulo": 3,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2694,7 +2734,7 @@
       "titulo": "Sinceridade Compelida",
       "circulo": 3,
       "perfil": "alvo",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2704,7 +2744,7 @@
       "titulo": "Grito Dissonante",
       "circulo": 3,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": "3d6",
       "mediaDano": 10.5,
       "problemas": []
@@ -2714,7 +2754,7 @@
       "titulo": "Interceptar Mensagem",
       "circulo": 3,
       "perfil": "controle",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2724,7 +2764,7 @@
       "titulo": "Comando Combinado",
       "circulo": 3,
       "perfil": "alvo",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2734,7 +2774,7 @@
       "titulo": "Sopro Pestilento",
       "circulo": 3,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": "3d6",
       "mediaDano": 10.5,
       "problemas": []
@@ -2744,7 +2784,7 @@
       "titulo": "Metabolismo Alterado",
       "circulo": 3,
       "perfil": "alvo",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2754,7 +2794,7 @@
       "titulo": "Regeneração Contínua",
       "circulo": 3,
       "perfil": "alvo",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2764,7 +2804,7 @@
       "titulo": "Onda Caótica",
       "circulo": 3,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": "3d6",
       "mediaDano": 10.5,
       "problemas": []
@@ -2774,7 +2814,7 @@
       "titulo": "Embaralhar Resultado",
       "circulo": 3,
       "perfil": "alvo",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2784,7 +2824,7 @@
       "titulo": "Transmutar Matéria",
       "circulo": 3,
       "perfil": "controle",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2794,7 +2834,7 @@
       "titulo": "Explosão Elemental",
       "circulo": 3,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": "3d6",
       "mediaDano": 10.5,
       "problemas": []
@@ -2804,7 +2844,7 @@
       "titulo": "Mão de Força",
       "circulo": 3,
       "perfil": "alvo",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2814,7 +2854,7 @@
       "titulo": "Muralha Elemental",
       "circulo": 3,
       "perfil": "controle",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2824,7 +2864,7 @@
       "titulo": "Dobra Esmagadora",
       "circulo": 3,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": "3d6",
       "mediaDano": 10.5,
       "problemas": []
@@ -2834,7 +2874,7 @@
       "titulo": "Portal Curto",
       "circulo": 3,
       "perfil": "movimento",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2844,7 +2884,7 @@
       "titulo": "Distância Roubada",
       "circulo": 3,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2854,7 +2894,7 @@
       "titulo": "Campo Lento",
       "circulo": 3,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": "3d6",
       "mediaDano": 10.5,
       "problemas": []
@@ -2864,7 +2904,7 @@
       "titulo": "Antecipar",
       "circulo": 3,
       "perfil": "alvo",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2874,7 +2914,7 @@
       "titulo": "Eco Curto",
       "circulo": 3,
       "perfil": "alvo",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2884,7 +2924,7 @@
       "titulo": "Onda de Ausência",
       "circulo": 3,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": "3d6",
       "mediaDano": 10.5,
       "problemas": []
@@ -2894,7 +2934,7 @@
       "titulo": "Consumir Energia",
       "circulo": 3,
       "perfil": "alvo",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2904,7 +2944,17 @@
       "titulo": "Nada Pessoal",
       "circulo": 3,
       "perfil": "defesa",
-      "custoMana": 6,
+      "custoMana": 7,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "veu-do-nada",
+      "titulo": "Véu do Nada",
+      "circulo": 3,
+      "perfil": "defesa",
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2914,7 +2964,7 @@
       "titulo": "Sopro do Limiar",
       "circulo": 3,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": "3d6",
       "mediaDano": 10.5,
       "problemas": []
@@ -2924,7 +2974,7 @@
       "titulo": "Romper Vínculo",
       "circulo": 3,
       "perfil": "alvo",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2934,7 +2984,7 @@
       "titulo": "Deterioração",
       "circulo": 3,
       "perfil": "alvo",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2944,7 +2994,7 @@
       "titulo": "Sobrecarga em Cadeia",
       "circulo": 3,
       "perfil": "area",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": "3d6",
       "mediaDano": 10.5,
       "problemas": []
@@ -2954,7 +3004,7 @@
       "titulo": "Firewall",
       "circulo": 3,
       "perfil": "defesa",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2964,9 +3014,29 @@
       "titulo": "Registrar Padrão",
       "circulo": 3,
       "perfil": "controle",
-      "custoMana": 6,
+      "custoMana": 7,
       "dano": null,
       "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "marca-canalizada",
+      "titulo": "Marca de Caça",
+      "circulo": 3,
+      "perfil": "alvo",
+      "custoMana": 7,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sopro-do-fluxo",
+      "titulo": "Sopro do Fluxo",
+      "circulo": 3,
+      "perfil": "area",
+      "custoMana": 7,
+      "dano": "3d6",
+      "mediaDano": 10.5,
       "problemas": []
     },
     {
@@ -2974,7 +3044,7 @@
       "titulo": "Lança do Primeiro Broto",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": "4d8 + Mod. Fluxo",
       "mediaDano": 18,
       "problemas": []
@@ -2984,7 +3054,7 @@
       "titulo": "Ninhada Nascente",
       "circulo": 4,
       "perfil": "controle",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -2994,7 +3064,7 @@
       "titulo": "Renascer da Ferida",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3004,7 +3074,7 @@
       "titulo": "Lâmina do Que É",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": "4d8 + Mod. Fluxo",
       "mediaDano": 18,
       "problemas": []
@@ -3014,7 +3084,7 @@
       "titulo": "Revelação de Corrupção",
       "circulo": 4,
       "perfil": "area",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3024,7 +3094,7 @@
       "titulo": "Âncora Maior de Identidade",
       "circulo": 4,
       "perfil": "area",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3034,7 +3104,7 @@
       "titulo": "Sobrecarga de Canal",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": "4d8",
       "mediaDano": 18,
       "problemas": []
@@ -3044,7 +3114,7 @@
       "titulo": "Elo de Sentidos",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3054,7 +3124,7 @@
       "titulo": "Pacto Vinculante",
       "circulo": 4,
       "perfil": "controle",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3064,7 +3134,7 @@
       "titulo": "Corrosão Sanguínea",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": "4d8 + Mod. Fluxo",
       "mediaDano": 18,
       "problemas": []
@@ -3074,7 +3144,7 @@
       "titulo": "Domínio da Carne",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3084,7 +3154,7 @@
       "titulo": "Purificar Corpo",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3094,7 +3164,7 @@
       "titulo": "Lança do Acaso",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": "4d8 + Mod. Fluxo",
       "mediaDano": 18,
       "problemas": []
@@ -3104,7 +3174,7 @@
       "titulo": "Instabilidade Corporal",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3114,7 +3184,7 @@
       "titulo": "Roleta de Fluxo",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3124,7 +3194,7 @@
       "titulo": "Lança Elemental",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": "4d8 + Mod. Fluxo",
       "mediaDano": 18,
       "problemas": []
@@ -3134,7 +3204,7 @@
       "titulo": "Terremoto Menor",
       "circulo": 4,
       "perfil": "area",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": "4d6",
       "mediaDano": 14,
       "problemas": []
@@ -3144,7 +3214,7 @@
       "titulo": "Pele de Aço",
       "circulo": 4,
       "perfil": "defesa",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3154,7 +3224,7 @@
       "titulo": "Lâmina Dimensional",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": "4d8 + Mod. Fluxo",
       "mediaDano": 18,
       "problemas": []
@@ -3164,7 +3234,7 @@
       "titulo": "Prisão de Fronteira",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3174,7 +3244,7 @@
       "titulo": "Salto Coletivo",
       "circulo": 4,
       "perfil": "movimento",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3184,7 +3254,7 @@
       "titulo": "Desgaste Acelerado",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": "4d8 + Mod. Fluxo",
       "mediaDano": 18,
       "problemas": []
@@ -3194,7 +3264,7 @@
       "titulo": "Aceleração",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3204,7 +3274,7 @@
       "titulo": "Parada de Instante",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3214,7 +3284,7 @@
       "titulo": "Corte Nulo",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": "4d8 + Mod. Fluxo",
       "mediaDano": 18,
       "problemas": []
@@ -3224,7 +3294,7 @@
       "titulo": "Apagar Vestígios",
       "circulo": 4,
       "perfil": "controle",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3234,7 +3304,7 @@
       "titulo": "Bolha de Ausência",
       "circulo": 4,
       "perfil": "area",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3244,7 +3314,7 @@
       "titulo": "Golpe Terminal",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": "4d8 + Mod. Fluxo",
       "mediaDano": 18,
       "problemas": []
@@ -3254,7 +3324,7 @@
       "titulo": "Fechar Ciclo",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3264,7 +3334,7 @@
       "titulo": "Desgaste Fatal",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3274,7 +3344,7 @@
       "titulo": "Lança de Íons",
       "circulo": 4,
       "perfil": "alvo",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": "4d8 + Mod. Fluxo",
       "mediaDano": 18,
       "problemas": []
@@ -3284,7 +3354,7 @@
       "titulo": "Interceptação Ativa",
       "circulo": 4,
       "perfil": "defesa",
-      "custoMana": 8,
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3294,7 +3364,27 @@
       "titulo": "Autômato Assistente",
       "circulo": 4,
       "perfil": "controle",
-      "custoMana": 8,
+      "custoMana": 10,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "arma-de-fluxo",
+      "titulo": "Arma de Fluxo",
+      "circulo": 4,
+      "perfil": "alvo",
+      "custoMana": 10,
+      "dano": "4d8 + Mod. Fluxo",
+      "mediaDano": 18,
+      "problemas": []
+    },
+    {
+      "id": "muralha-canalizada",
+      "titulo": "Muralha de Fluxo",
+      "circulo": 4,
+      "perfil": "controle",
+      "custoMana": 10,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3304,7 +3394,7 @@
       "titulo": "Eclosão",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": "5d6",
       "mediaDano": 17.5,
       "problemas": []
@@ -3314,7 +3404,7 @@
       "titulo": "Segunda Chance",
       "circulo": 5,
       "perfil": "alvo",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3324,17 +3414,17 @@
       "titulo": "Jardim Nascente",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "sentenca-de-verdade",
-      "titulo": "Sentença de Verdade",
+      "titulo": "Fixar Forma",
       "circulo": 5,
       "perfil": "alvo",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": "5d8 + Mod. Fluxo",
       "mediaDano": 22.5,
       "problemas": []
@@ -3344,7 +3434,7 @@
       "titulo": "Desmascarar",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3354,7 +3444,7 @@
       "titulo": "Custódia da Alma",
       "circulo": 5,
       "perfil": "alvo",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3364,7 +3454,7 @@
       "titulo": "Coro Dissonante",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": "5d6",
       "mediaDano": 17.5,
       "problemas": []
@@ -3374,7 +3464,7 @@
       "titulo": "Silenciar Rede",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3384,7 +3474,7 @@
       "titulo": "Concordância",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3394,7 +3484,7 @@
       "titulo": "Peste Ramificada",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": "5d6",
       "mediaDano": 17.5,
       "problemas": []
@@ -3404,7 +3494,7 @@
       "titulo": "Forma Bestial",
       "circulo": 5,
       "perfil": "alvo",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3414,7 +3504,7 @@
       "titulo": "Fôlego de Vida",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3424,7 +3514,7 @@
       "titulo": "Vórtice Menor",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": "5d6",
       "mediaDano": 17.5,
       "problemas": []
@@ -3434,7 +3524,7 @@
       "titulo": "Troca de Propriedades",
       "circulo": 5,
       "perfil": "alvo",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3444,7 +3534,7 @@
       "titulo": "Salto Improvável",
       "circulo": 5,
       "perfil": "movimento",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3454,7 +3544,7 @@
       "titulo": "Torrente dos Sete Salões",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": "5d6",
       "mediaDano": 17.5,
       "problemas": []
@@ -3464,7 +3554,7 @@
       "titulo": "Peso do Mundo",
       "circulo": 5,
       "perfil": "alvo",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3474,7 +3564,7 @@
       "titulo": "Baluarte",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3484,7 +3574,7 @@
       "titulo": "Colapso Espacial",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": "5d6",
       "mediaDano": 17.5,
       "problemas": []
@@ -3494,7 +3584,7 @@
       "titulo": "Selar Fronteira",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3504,7 +3594,7 @@
       "titulo": "Passo Entre Lugares",
       "circulo": 5,
       "perfil": "movimento",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3514,7 +3604,7 @@
       "titulo": "Erosão do Momento",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": "5d6",
       "mediaDano": 17.5,
       "problemas": []
@@ -3524,7 +3614,7 @@
       "titulo": "Adiantar o Golpe",
       "circulo": 5,
       "perfil": "controle",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3534,7 +3624,7 @@
       "titulo": "Conservação Maior",
       "circulo": 5,
       "perfil": "alvo",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3544,7 +3634,7 @@
       "titulo": "Colapso do Nada",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": "5d6",
       "mediaDano": 17.5,
       "problemas": []
@@ -3554,7 +3644,7 @@
       "titulo": "Devorar Magia",
       "circulo": 5,
       "perfil": "defesa",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3564,7 +3654,7 @@
       "titulo": "Ausência de Si",
       "circulo": 5,
       "perfil": "defesa",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3574,7 +3664,7 @@
       "titulo": "Onda do Fim",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": "5d6",
       "mediaDano": 17.5,
       "problemas": []
@@ -3584,7 +3674,7 @@
       "titulo": "Selo do Término",
       "circulo": 5,
       "perfil": "alvo",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3594,7 +3684,7 @@
       "titulo": "Última Palavra",
       "circulo": 5,
       "perfil": "alvo",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3604,7 +3694,7 @@
       "titulo": "Detonação de Núcleo",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": "5d6",
       "mediaDano": 17.5,
       "problemas": []
@@ -3614,7 +3704,7 @@
       "titulo": "Bloqueio de Fluxo",
       "circulo": 5,
       "perfil": "alvo",
-      "custoMana": 10,
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3624,7 +3714,27 @@
       "titulo": "Rede A.X.I.S",
       "circulo": 5,
       "perfil": "area",
-      "custoMana": 10,
+      "custoMana": 14,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "campo-do-fluxo",
+      "titulo": "Campo do Fluxo",
+      "circulo": 5,
+      "perfil": "area",
+      "custoMana": 14,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "elo-canalizado",
+      "titulo": "Elo de Fluxo",
+      "circulo": 5,
+      "perfil": "alvo",
+      "custoMana": 14,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3634,7 +3744,7 @@
       "titulo": "Semente Voraz",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": "6d8 + Mod. Fluxo",
       "mediaDano": 27,
       "problemas": []
@@ -3644,7 +3754,7 @@
       "titulo": "Guardião Germinado",
       "circulo": 6,
       "perfil": "controle",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3654,7 +3764,7 @@
       "titulo": "Alvorada do Vínculo",
       "circulo": 6,
       "perfil": "area",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3664,7 +3774,7 @@
       "titulo": "Verdade Que Fere",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": "6d8 + Mod. Fluxo",
       "mediaDano": 27,
       "problemas": []
@@ -3674,7 +3784,7 @@
       "titulo": "Campo Verídico",
       "circulo": 6,
       "perfil": "area",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3684,7 +3794,7 @@
       "titulo": "Leitura Profunda",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3694,7 +3804,7 @@
       "titulo": "Cascata de Ruído",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": "6d8",
       "mediaDano": 27,
       "problemas": []
@@ -3704,7 +3814,7 @@
       "titulo": "Espelho de Sentidos",
       "circulo": 6,
       "perfil": "area",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3714,7 +3824,7 @@
       "titulo": "Testemunha Distante",
       "circulo": 6,
       "perfil": "controle",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3724,7 +3834,7 @@
       "titulo": "Necrose Fulminante",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": "6d8 + Mod. Fluxo",
       "mediaDano": 27,
       "problemas": []
@@ -3734,7 +3844,7 @@
       "titulo": "Vigor Desmedido",
       "circulo": 6,
       "perfil": "area",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3744,7 +3854,7 @@
       "titulo": "Restaurar Carne",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3754,7 +3864,7 @@
       "titulo": "Colapso Aleatório",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": "6d8 + Mod. Fluxo",
       "mediaDano": 27,
       "problemas": []
@@ -3764,7 +3874,7 @@
       "titulo": "Campo de Inconstância",
       "circulo": 6,
       "perfil": "area",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3774,7 +3884,7 @@
       "titulo": "Mutabilidade",
       "circulo": 6,
       "perfil": "defesa",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3784,7 +3894,7 @@
       "titulo": "Aríete Elemental",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": "6d8 + Mod. Fluxo",
       "mediaDano": 27,
       "problemas": []
@@ -3794,7 +3904,7 @@
       "titulo": "Erupção",
       "circulo": 6,
       "perfil": "area",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": "6d6",
       "mediaDano": 21,
       "problemas": []
@@ -3804,7 +3914,7 @@
       "titulo": "Forma Elemental",
       "circulo": 6,
       "perfil": "defesa",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3814,7 +3924,7 @@
       "titulo": "Corte de Distância",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": "6d8 + Mod. Fluxo",
       "mediaDano": 27,
       "problemas": []
@@ -3824,7 +3934,7 @@
       "titulo": "Labirinto Dobrado",
       "circulo": 6,
       "perfil": "area",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3834,7 +3944,7 @@
       "titulo": "Refúgio de Bolso",
       "circulo": 6,
       "perfil": "controle",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3844,7 +3954,7 @@
       "titulo": "Séculos em Um Golpe",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": "6d8 + Mod. Fluxo",
       "mediaDano": 27,
       "problemas": []
@@ -3854,7 +3964,7 @@
       "titulo": "Zona Acelerada",
       "circulo": 6,
       "perfil": "area",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3864,7 +3974,7 @@
       "titulo": "Eco de Batalha",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3874,17 +3984,17 @@
       "titulo": "Fome do Abismo",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": "6d8 + Mod. Fluxo",
       "mediaDano": 27,
       "problemas": []
     },
     {
       "id": "silencio-absoluto",
-      "titulo": "Silêncio Absoluto",
+      "titulo": "Silêncio Total",
       "circulo": 6,
       "perfil": "area",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3894,17 +4004,17 @@
       "titulo": "Apagar do Mapa",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "sentenca-do-limiar",
-      "titulo": "Sentença do Limiar",
+      "titulo": "Golpe Mortal",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": "6d8 + Mod. Fluxo",
       "mediaDano": 27,
       "problemas": []
@@ -3914,7 +4024,7 @@
       "titulo": "Encerramento Maior",
       "circulo": 6,
       "perfil": "area",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3924,7 +4034,7 @@
       "titulo": "Separar Vínculos",
       "circulo": 6,
       "perfil": "area",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3934,7 +4044,7 @@
       "titulo": "Feixe Perfurante",
       "circulo": 6,
       "perfil": "alvo",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": "6d8 + Mod. Fluxo",
       "mediaDano": 27,
       "problemas": []
@@ -3944,7 +4054,7 @@
       "titulo": "Contramedida Total",
       "circulo": 6,
       "perfil": "area",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3954,9 +4064,29 @@
       "titulo": "Reprodução Limitada",
       "circulo": 6,
       "perfil": "controle",
-      "custoMana": 13,
+      "custoMana": 19,
       "dano": null,
       "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "clone-de-fluxo",
+      "titulo": "Clone de Fluxo",
+      "circulo": 6,
+      "perfil": "controle",
+      "custoMana": 19,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "erupcao-do-fluxo",
+      "titulo": "Erupção do Fluxo",
+      "circulo": 6,
+      "perfil": "area",
+      "custoMana": 19,
+      "dano": "6d6",
+      "mediaDano": 21,
       "problemas": []
     },
     {
@@ -3964,7 +4094,7 @@
       "titulo": "Floresta Insurgente",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": "7d6",
       "mediaDano": 24.5,
       "problemas": []
@@ -3974,7 +4104,7 @@
       "titulo": "Origem Emprestada",
       "circulo": 7,
       "perfil": "alvo",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -3984,17 +4114,17 @@
       "titulo": "Reinício do Corpo",
       "circulo": 7,
       "perfil": "alvo",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "corte-ontologico",
-      "titulo": "Corte Ontológico",
+      "titulo": "Corte Dissipador",
       "circulo": 7,
       "perfil": "alvo",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": "7d8 + Mod. Fluxo",
       "mediaDano": 31.5,
       "problemas": []
@@ -4004,7 +4134,7 @@
       "titulo": "Selo da Essência",
       "circulo": 7,
       "perfil": "alvo",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4014,17 +4144,17 @@
       "titulo": "Verdade Compartilhada",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "sentenca-dissonante",
-      "titulo": "Sentença Dissonante",
+      "titulo": "Grito Mental",
       "circulo": 7,
       "perfil": "alvo",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": "7d8",
       "mediaDano": 31.5,
       "problemas": []
@@ -4034,7 +4164,7 @@
       "titulo": "Rede de Guerra",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4044,7 +4174,7 @@
       "titulo": "Mediação Imposta",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4054,7 +4184,7 @@
       "titulo": "Chuva de Esporos",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": "7d6",
       "mediaDano": 24.5,
       "problemas": []
@@ -4064,7 +4194,7 @@
       "titulo": "Reescrever o Corpo",
       "circulo": 7,
       "perfil": "alvo",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4074,7 +4204,7 @@
       "titulo": "Coração Incansável",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4084,7 +4214,7 @@
       "titulo": "Tempestade Vórtice",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": "7d6",
       "mediaDano": 24.5,
       "problemas": []
@@ -4094,7 +4224,7 @@
       "titulo": "Reescrita Instável",
       "circulo": 7,
       "perfil": "alvo",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4104,7 +4234,7 @@
       "titulo": "Sorte Roubada",
       "circulo": 7,
       "perfil": "alvo",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4114,7 +4244,7 @@
       "titulo": "Cataclismo Menor",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": "7d6",
       "mediaDano": 24.5,
       "problemas": []
@@ -4124,7 +4254,7 @@
       "titulo": "Controle de Massa",
       "circulo": 7,
       "perfil": "controle",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4134,7 +4264,7 @@
       "titulo": "Fortaleza Instantânea",
       "circulo": 7,
       "perfil": "controle",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4144,7 +4274,7 @@
       "titulo": "Implosão Dimensional",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": "7d6",
       "mediaDano": 24.5,
       "problemas": []
@@ -4154,7 +4284,7 @@
       "titulo": "Portal Maior",
       "circulo": 7,
       "perfil": "movimento",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4164,17 +4294,17 @@
       "titulo": "Passo Constante",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "sentenca-do-relogio",
-      "titulo": "Sentença do Relógio",
+      "titulo": "Roubar Turno",
       "circulo": 7,
       "perfil": "alvo",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": "7d8 + Mod. Fluxo",
       "mediaDano": 31.5,
       "problemas": []
@@ -4184,7 +4314,7 @@
       "titulo": "Domínio do Ritmo",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4194,17 +4324,17 @@
       "titulo": "Antecipação Tática",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "sentenca-nula",
-      "titulo": "Sentença Nula",
+      "titulo": "Anular Magia",
       "circulo": 7,
       "perfil": "alvo",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": "7d8 + Mod. Fluxo",
       "mediaDano": 31.5,
       "problemas": []
@@ -4214,7 +4344,7 @@
       "titulo": "Zona de Consumo",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4224,7 +4354,7 @@
       "titulo": "Escudo do Vazio",
       "circulo": 7,
       "perfil": "defesa",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4234,7 +4364,7 @@
       "titulo": "Colheita",
       "circulo": 7,
       "perfil": "alvo",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": "7d8 + Mod. Fluxo",
       "mediaDano": 31.5,
       "problemas": []
@@ -4244,7 +4374,7 @@
       "titulo": "Zona de Deterioração",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": "7d6",
       "mediaDano": 24.5,
       "problemas": []
@@ -4254,7 +4384,7 @@
       "titulo": "Limiar Guardião",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4264,7 +4394,7 @@
       "titulo": "Salva de Precisão",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": "7d6",
       "mediaDano": 24.5,
       "problemas": []
@@ -4274,7 +4404,7 @@
       "titulo": "Domínio de Sistemas",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4284,17 +4414,37 @@
       "titulo": "Blindagem Adaptativa",
       "circulo": 7,
       "perfil": "area",
-      "custoMana": 16,
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "forma-de-fluxo",
+      "titulo": "Forma de Fluxo",
+      "circulo": 7,
+      "perfil": "defesa",
+      "custoMana": 25,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "territorio-do-fluxo",
+      "titulo": "Território do Fluxo",
+      "circulo": 7,
+      "perfil": "area",
+      "custoMana": 25,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "verbo-inaugural",
-      "titulo": "Verbo Inaugural",
+      "titulo": "Golpe Inédito",
       "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": "8d8 + Mod. Fluxo",
       "mediaDano": 36,
       "problemas": []
@@ -4304,7 +4454,7 @@
       "titulo": "Ecossistema Convocado",
       "circulo": 8,
       "perfil": "area",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4314,17 +4464,17 @@
       "titulo": "Ressurgir",
       "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "julgamento-absoluto",
-      "titulo": "Julgamento Absoluto",
+      "titulo": "Quebrar Defesas",
       "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": "8d8 + Mod. Fluxo",
       "mediaDano": 36,
       "problemas": []
@@ -4334,7 +4484,7 @@
       "titulo": "Dissipação Verídica",
       "circulo": 8,
       "perfil": "area",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4344,7 +4494,7 @@
       "titulo": "Ancorar o Real",
       "circulo": 8,
       "perfil": "area",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4354,7 +4504,7 @@
       "titulo": "Ruína de Sinal",
       "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": "8d8",
       "mediaDano": 36,
       "problemas": []
@@ -4364,7 +4514,7 @@
       "titulo": "Malha de Consciências",
       "circulo": 8,
       "perfil": "area",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4374,7 +4524,7 @@
       "titulo": "Convocação de Vozes",
       "circulo": 8,
       "perfil": "controle",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4384,7 +4534,7 @@
       "titulo": "Praga Devoradora",
       "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": "8d8 + Mod. Fluxo",
       "mediaDano": 36,
       "problemas": []
@@ -4394,7 +4544,7 @@
       "titulo": "Grande Crescimento",
       "circulo": 8,
       "perfil": "area",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4404,7 +4554,7 @@
       "titulo": "Imunidade Vital",
       "circulo": 8,
       "perfil": "area",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4414,7 +4564,7 @@
       "titulo": "Detonação Improvável",
       "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": "8d8 + Mod. Fluxo",
       "mediaDano": 36,
       "problemas": []
@@ -4424,7 +4574,7 @@
       "titulo": "Lei Suspensa",
       "circulo": 8,
       "perfil": "area",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4434,7 +4584,7 @@
       "titulo": "Corpo Inconstante",
       "circulo": 8,
       "perfil": "defesa",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4444,7 +4594,7 @@
       "titulo": "Julgamento dos Elementos",
       "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": "8d8 + Mod. Fluxo",
       "mediaDano": 36,
       "problemas": []
@@ -4454,27 +4604,27 @@
       "titulo": "Tempestade Elemental",
       "circulo": 8,
       "perfil": "area",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": "8d6",
       "mediaDano": 28,
       "problemas": []
     },
     {
       "id": "armadura-absoluta",
-      "titulo": "Armadura Absoluta",
+      "titulo": "Corpo Inquebrável",
       "circulo": 8,
       "perfil": "defesa",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "sentenca-do-vao",
-      "titulo": "Sentença do Vão",
+      "titulo": "Banimento",
       "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": "8d8 + Mod. Fluxo",
       "mediaDano": 36,
       "problemas": []
@@ -4484,7 +4634,7 @@
       "titulo": "Fronteira Selada",
       "circulo": 8,
       "perfil": "area",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4494,7 +4644,7 @@
       "titulo": "Dobra de Exército",
       "circulo": 8,
       "perfil": "movimento",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4504,7 +4654,7 @@
       "titulo": "Colapso Temporal",
       "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": "8d8 + Mod. Fluxo",
       "mediaDano": 36,
       "problemas": []
@@ -4514,7 +4664,7 @@
       "titulo": "Estase de Campo",
       "circulo": 8,
       "perfil": "area",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4524,7 +4674,7 @@
       "titulo": "Tempo Emprestado",
       "circulo": 8,
       "perfil": "controle",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4534,7 +4684,7 @@
       "titulo": "Aniquilação Parcial",
       "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": "8d8 + Mod. Fluxo",
       "mediaDano": 36,
       "problemas": []
@@ -4544,7 +4694,7 @@
       "titulo": "Apagar Efeito",
       "circulo": 8,
       "perfil": "controle",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4554,7 +4704,7 @@
       "titulo": "Manto de Não-Ser",
       "circulo": 8,
       "perfil": "area",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4564,7 +4714,7 @@
       "titulo": "Ponto de Não Retorno",
       "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": "8d8 + Mod. Fluxo",
       "mediaDano": 36,
       "problemas": []
@@ -4574,7 +4724,7 @@
       "titulo": "Fim do Encantamento",
       "circulo": 8,
       "perfil": "area",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4584,7 +4734,7 @@
       "titulo": "Conduzir ao Término",
       "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4594,7 +4744,7 @@
       "titulo": "Aniquilador de Padrões",
       "circulo": 8,
       "perfil": "alvo",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": "8d8 + Mod. Fluxo",
       "mediaDano": 36,
       "problemas": []
@@ -4604,7 +4754,7 @@
       "titulo": "Jaula de Interferência",
       "circulo": 8,
       "perfil": "area",
-      "custoMana": 20,
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4614,7 +4764,27 @@
       "titulo": "Fábrica de Campo",
       "circulo": 8,
       "perfil": "controle",
-      "custoMana": 20,
+      "custoMana": 32,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "sentenca-do-fluxo",
+      "titulo": "Represália",
+      "circulo": 8,
+      "perfil": "alvo",
+      "custoMana": 32,
+      "dano": "8d8 + Mod. Fluxo",
+      "mediaDano": 36,
+      "problemas": []
+    },
+    {
+      "id": "convocacao-do-fluxo",
+      "titulo": "Convocação do Fluxo",
+      "circulo": 8,
+      "perfil": "controle",
+      "custoMana": 32,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4624,7 +4794,7 @@
       "titulo": "Primavera Devastadora",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": "9d6",
       "mediaDano": 31.5,
       "problemas": []
@@ -4634,17 +4804,17 @@
       "titulo": "Linhagem Nascente",
       "circulo": 9,
       "perfil": "controle",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "aurora-da-especie",
-      "titulo": "Aurora da Espécie",
+      "titulo": "Bênção da Espécie",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4654,7 +4824,7 @@
       "titulo": "Nome Verdadeiro",
       "circulo": 9,
       "perfil": "alvo",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": "9d8 + Mod. Fluxo",
       "mediaDano": 40.5,
       "problemas": []
@@ -4664,17 +4834,17 @@
       "titulo": "Revelação do Mundo",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "custodia-inviolavel",
-      "titulo": "Custódia Inviolável",
+      "titulo": "Guarda Inviolável",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4684,7 +4854,7 @@
       "titulo": "Tempestade de Vozes",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": "9d6",
       "mediaDano": 31.5,
       "problemas": []
@@ -4694,17 +4864,17 @@
       "titulo": "Decreto Registrado",
       "circulo": 9,
       "perfil": "controle",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "onipresenca-de-sentidos",
-      "titulo": "Onipresença de Sentidos",
+      "titulo": "Sentidos Ampliados",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4714,7 +4884,7 @@
       "titulo": "Pandemia",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": "9d6",
       "mediaDano": 31.5,
       "problemas": []
@@ -4724,7 +4894,7 @@
       "titulo": "Refazer a Espécie",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4734,7 +4904,7 @@
       "titulo": "Sopro de Anima",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4744,7 +4914,7 @@
       "titulo": "Ciclone dos Possíveis",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": "9d6",
       "mediaDano": 31.5,
       "problemas": []
@@ -4754,7 +4924,7 @@
       "titulo": "Transmutação Maior",
       "circulo": 9,
       "perfil": "controle",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4764,17 +4934,17 @@
       "titulo": "Reviravolta",
       "circulo": 9,
       "perfil": "controle",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "furia-primordial",
-      "titulo": "Fúria Primordial",
+      "titulo": "Fúria dos Elementos",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": "9d6",
       "mediaDano": 31.5,
       "problemas": []
@@ -4784,7 +4954,7 @@
       "titulo": "Domínio dos Sete",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4794,7 +4964,7 @@
       "titulo": "Muralha do Baluarte",
       "circulo": 9,
       "perfil": "controle",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4804,7 +4974,7 @@
       "titulo": "Ruptura Espacial",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": "9d6",
       "mediaDano": 31.5,
       "problemas": []
@@ -4814,7 +4984,7 @@
       "titulo": "Domínio da Matriz",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4824,7 +4994,17 @@
       "titulo": "Santuário Fora do Mundo",
       "circulo": 9,
       "perfil": "controle",
-      "custoMana": 25,
+      "custoMana": 42,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "passo-de-orbita",
+      "titulo": "Passo de Órbita",
+      "circulo": 9,
+      "perfil": "movimento",
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4834,17 +5014,17 @@
       "titulo": "Erosão de Éon",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": "9d6",
       "mediaDano": 31.5,
       "problemas": []
     },
     {
       "id": "ancoragem-do-instante",
-      "titulo": "Ancoragem do Instante",
+      "titulo": "Congelar o Instante",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4854,17 +5034,17 @@
       "titulo": "Restaurar o Estado",
       "circulo": 9,
       "perfil": "alvo",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "abismo-aberto",
-      "titulo": "Abismo Aberto",
+      "titulo": "Buraco Negro",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": "9d6",
       "mediaDano": 31.5,
       "problemas": []
@@ -4874,7 +5054,7 @@
       "titulo": "Silenciar Fluxo",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4884,7 +5064,7 @@
       "titulo": "Ausência Regional",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4894,7 +5074,7 @@
       "titulo": "Ceifa",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": "9d6",
       "mediaDano": 31.5,
       "problemas": []
@@ -4904,7 +5084,7 @@
       "titulo": "Término Regional",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4914,7 +5094,7 @@
       "titulo": "Limiar Selado",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4924,7 +5104,7 @@
       "titulo": "Tempestade de Íons",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": "9d6",
       "mediaDano": 31.5,
       "problemas": []
@@ -4934,7 +5114,7 @@
       "titulo": "Interceptação Regional",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -4944,17 +5124,37 @@
       "titulo": "Núcleo de Comando",
       "circulo": 9,
       "perfil": "area",
-      "custoMana": 25,
+      "custoMana": 42,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "avatar-do-fluxo",
+      "titulo": "Avatar do Fluxo",
+      "circulo": 9,
+      "perfil": "defesa",
+      "custoMana": 42,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "lei-do-fluxo",
+      "titulo": "Lei do Fluxo",
+      "circulo": 9,
+      "perfil": "area",
+      "custoMana": 42,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "detonacao-seminal",
-      "titulo": "Detonação Seminal",
+      "titulo": "Semente Explosiva",
       "circulo": 10,
       "perfil": "alvo",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": "10d10 + Mod. Fluxo",
       "mediaDano": 55,
       "problemas": []
@@ -4964,27 +5164,27 @@
       "titulo": "Gênese",
       "circulo": 10,
       "perfil": "controle",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "recomeco-absoluto",
-      "titulo": "Recomeço Absoluto",
+      "titulo": "Renascer",
       "circulo": 10,
       "perfil": "alvo",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "sentenca-ontologica",
-      "titulo": "Sentença Ontológica",
+      "titulo": "Verdade Nua",
       "circulo": 10,
       "perfil": "alvo",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": "10d10 + Mod. Fluxo",
       "mediaDano": 55,
       "problemas": []
@@ -4994,7 +5194,7 @@
       "titulo": "Alétheia",
       "circulo": 10,
       "perfil": "controle",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -5004,17 +5204,17 @@
       "titulo": "Âncora do Ser",
       "circulo": 10,
       "perfil": "controle",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "dissonancia-final",
-      "titulo": "Dissonância Final",
+      "titulo": "Cortar Vínculos",
       "circulo": 10,
       "perfil": "alvo",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": "10d10",
       "mediaDano": 55,
       "problemas": []
@@ -5024,7 +5224,7 @@
       "titulo": "Concílio do Mundo",
       "circulo": 10,
       "perfil": "controle",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -5034,7 +5234,7 @@
       "titulo": "Pacto Inquebrantável",
       "circulo": 10,
       "perfil": "controle",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -5044,7 +5244,7 @@
       "titulo": "Colapso Biológico",
       "circulo": 10,
       "perfil": "alvo",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": "10d10 + Mod. Fluxo",
       "mediaDano": 55,
       "problemas": []
@@ -5054,7 +5254,7 @@
       "titulo": "Éden",
       "circulo": 10,
       "perfil": "area",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -5064,17 +5264,17 @@
       "titulo": "Ciclo Perfeito",
       "circulo": 10,
       "perfil": "alvo",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "entropia-vortice",
-      "titulo": "Entropia Vórtice",
+      "titulo": "Desfazer Padrão",
       "circulo": 10,
       "perfil": "alvo",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": "10d10 + Mod. Fluxo",
       "mediaDano": 55,
       "problemas": []
@@ -5084,17 +5284,17 @@
       "titulo": "Mundo Instável",
       "circulo": 10,
       "perfil": "area",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "improbabilidade-absoluta",
-      "titulo": "Improbabilidade Absoluta",
+      "titulo": "Virar o Jogo",
       "circulo": 10,
       "perfil": "controle",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -5104,7 +5304,7 @@
       "titulo": "Impacto Colossal",
       "circulo": 10,
       "perfil": "alvo",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": "10d10 + Mod. Fluxo",
       "mediaDano": 55,
       "problemas": []
@@ -5114,7 +5314,7 @@
       "titulo": "Reformar o Terreno",
       "circulo": 10,
       "perfil": "controle",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -5124,17 +5324,17 @@
       "titulo": "Égide de Moros",
       "circulo": 10,
       "perfil": "area",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "fenda-absoluta",
-      "titulo": "Fenda Absoluta",
+      "titulo": "Exílio",
       "circulo": 10,
       "perfil": "alvo",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": "10d10 + Mod. Fluxo",
       "mediaDano": 55,
       "problemas": []
@@ -5144,7 +5344,7 @@
       "titulo": "Reescrever Distâncias",
       "circulo": 10,
       "perfil": "area",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -5154,17 +5354,17 @@
       "titulo": "Portal Permanente",
       "circulo": 10,
       "perfil": "movimento",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "sentenca-dos-eons",
-      "titulo": "Sentença dos Éons",
+      "titulo": "Exílio Temporal",
       "circulo": 10,
       "perfil": "alvo",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": "10d10 + Mod. Fluxo",
       "mediaDano": 55,
       "problemas": []
@@ -5174,17 +5374,17 @@
       "titulo": "Parada do Mundo",
       "circulo": 10,
       "perfil": "area",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "conservacao-absoluta",
-      "titulo": "Conservação Absoluta",
+      "titulo": "Estase",
       "circulo": 10,
       "perfil": "controle",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -5194,7 +5394,7 @@
       "titulo": "Toque do Abismo",
       "circulo": 10,
       "perfil": "alvo",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": "10d10 + Mod. Fluxo",
       "mediaDano": 55,
       "problemas": []
@@ -5204,27 +5404,27 @@
       "titulo": "Apagar do Mundo",
       "circulo": 10,
       "perfil": "controle",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "nada-absoluto",
-      "titulo": "Nada Absoluto",
+      "titulo": "Zona Morta",
       "circulo": 10,
       "perfil": "area",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "sentenca-final",
-      "titulo": "Sentença Final",
+      "titulo": "Palavra de Morte",
       "circulo": 10,
       "perfil": "alvo",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": "10d10 + Mod. Fluxo",
       "mediaDano": 55,
       "problemas": []
@@ -5234,7 +5434,7 @@
       "titulo": "Fim de Todos os Ciclos",
       "circulo": 10,
       "perfil": "area",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -5244,17 +5444,17 @@
       "titulo": "Encerramento",
       "circulo": 10,
       "perfil": "controle",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
     },
     {
       "id": "sentenca-do-axis",
-      "titulo": "Sentença do A.X.I.S",
+      "titulo": "Formatar",
       "circulo": 10,
       "perfil": "alvo",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": "10d10 + Mod. Fluxo",
       "mediaDano": 55,
       "problemas": []
@@ -5264,7 +5464,7 @@
       "titulo": "Reprogramar Região",
       "circulo": 10,
       "perfil": "area",
-      "custoMana": 30,
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []
@@ -5274,7 +5474,27 @@
       "titulo": "Reprodução Total",
       "circulo": 10,
       "perfil": "controle",
-      "custoMana": 30,
+      "custoMana": 55,
+      "dano": null,
+      "mediaDano": null,
+      "problemas": []
+    },
+    {
+      "id": "singularidade",
+      "titulo": "Singularidade",
+      "circulo": 10,
+      "perfil": "area",
+      "custoMana": 55,
+      "dano": "10d8",
+      "mediaDano": 45,
+      "problemas": []
+    },
+    {
+      "id": "verbo-do-fluxo",
+      "titulo": "Ordem do Mundo",
+      "circulo": 10,
+      "perfil": "controle",
+      "custoMana": 55,
       "dano": null,
       "mediaDano": null,
       "problemas": []

@@ -196,6 +196,61 @@ class TestCharacterRules:
         erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
         assert "abaixo de 1" in erro
 
+    def test_cicatriz_exige_magia_de_decimo_circulo_e_id_valido(self):
+        """Marca do 5o ao 9o e derivada e nao precisa de guarda. Cicatriz fica
+        na ficha e concede beneficio, entao o servidor confere."""
+        anterior = _ficha_criacao()
+        anterior["arvoreId"] = "ignis"
+        anterior["classeId"] = "canalizador"
+        anterior["classes"] = [{"classeId": "canalizador", "nivel": 20}]
+        anterior["nivel"] = 20
+        anterior["xp"] = 190000
+
+        # Sem magia de 10o circulo, nenhuma cicatriz e devida.
+        atual = deepcopy(anterior)
+        atual["cicatrizesIds"] = ["cicatriz-peso-da-fonte"]
+        assert "mais cicatrizes" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+        # Id inventado nao passa.
+        atual = deepcopy(anterior)
+        atual["cicatrizesIds"] = ["cicatriz-que-eu-inventei"]
+        assert "cicatriz inexistente" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+        # Repetida nao passa.
+        atual = deepcopy(anterior)
+        atual["cicatrizesIds"] = ["cicatriz-peso-da-fonte", "cicatriz-peso-da-fonte"]
+        assert "duas vezes" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+    def test_simbolo_dos_sete_e_concessao_do_mestre(self):
+        """O rito exige sete pessoas e acontece na mesa, entao o jogador nao
+        se marca sozinho nem inventa um simbolo."""
+        anterior = _ficha_criacao()
+
+        # Id inventado nao passa nem para o mestre.
+        atual = deepcopy(anterior)
+        atual["simboloId"] = "pecado-que-eu-inventei"
+        assert "simbolo dos Sete inexistente" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+        # Simbolo valido, mas o jogador nao pode se marcar sozinho.
+        atual = deepcopy(anterior)
+        atual["simboloId"] = "pecado-ira"
+        assert "somente o mestre" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+        # Nem tirar o que o mestre pos.
+        com_simbolo = deepcopy(anterior)
+        com_simbolo["simboloId"] = "virtude-paciencia"
+        sem_simbolo = deepcopy(com_simbolo)
+        sem_simbolo["simboloId"] = None
+        assert "somente o mestre" in validar_regras_ficha(sem_simbolo, {}, ficha_anterior=com_simbolo)
+
+        # Mantendo o mesmo simbolo, a ficha salva normalmente.
+        assert validar_regras_ficha(deepcopy(com_simbolo), {}, ficha_anterior=com_simbolo) is None
+
+        # E ninguem comeca marcado.
+        criacao = _ficha_criacao()
+        criacao["simboloId"] = "pecado-gula"
+        assert "nao comeca com um simbolo" in validar_regras_ficha(criacao, {}, criacao=True)
+
     def test_players_cannot_change_master_grants_or_old_magic_records(self):
         anterior = _ficha_criacao()
         atual = deepcopy(anterior)

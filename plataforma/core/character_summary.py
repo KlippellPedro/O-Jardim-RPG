@@ -12,6 +12,10 @@ log = logging.getLogger("jardim-plataforma")
 _NOMES: dict[str, dict[str, str]] = {"raca": {}, "classe": {}, "pericia": {}, "legado": {}, "magia": {}}
 # (fluxo_minimo, circulo) em ordem decrescente, lido de data/ficha/magias.json.
 _CIRCULOS_POR_FLUXO: list[tuple[int, int]] = []
+# Ids validos de cicatriz, lidos de data/ficha/marcas-de-circulo.json.
+_CICATRIZES: set[str] = set()
+# Ids validos de Simbolo, lidos de data/ficha/pecados-e-virtudes.json.
+_SIMBOLOS: set[str] = set()
 _CATALOGO: dict[str, dict[str, dict]] = {"raca": {}, "classe": {}, "pericia": {}, "legado": {}, "magia": {}}
 _ATRIBUTOS = ("forca", "destreza", "constituicao", "inteligencia", "sabedoria", "carisma", "fluxo")
 _VALORES_PADRAO = sorted((15, 14, 13, 12, 10, 8, 8))
@@ -108,6 +112,37 @@ def carregar_catalogos(data_root: Path) -> None:
     except (OSError, json.JSONDecodeError, AttributeError):
         log.exception("Falha ao ler catalogo de magias em %s", caminho_magias)
 
+    # Marcas do 5o ao 9o circulo sao derivadas do Fluxo e do circulo alcancado,
+    # entao nao precisam de validacao. Cicatriz e guardada na ficha e concede
+    # beneficio, entao o servidor confere id e quantidade.
+    caminho_marcas = data_root / "ficha" / "marcas-de-circulo.json"
+    try:
+        documento = json.loads(caminho_marcas.read_text(encoding="utf-8"))
+        cicatrizes = documento.get("cicatrizes", []) if isinstance(documento, dict) else []
+        _CICATRIZES.clear()
+        _CICATRIZES.update(
+            str(item.get("id"))
+            for item in cicatrizes
+            if isinstance(item, dict) and item.get("id")
+        )
+    except (OSError, json.JSONDecodeError, AttributeError):
+        log.exception("Falha ao ler marcas de circulo em %s", caminho_marcas)
+
+    # Simbolo dos Sete: concede muito, entao o servidor confere o id e so o
+    # mestre troca, porque o rito acontece na mesa e exige sete pessoas.
+    caminho_setes = data_root / "ficha" / "pecados-e-virtudes.json"
+    try:
+        documento = json.loads(caminho_setes.read_text(encoding="utf-8"))
+        _SIMBOLOS.clear()
+        for chave in ("pecados", "virtudes"):
+            _SIMBOLOS.update(
+                str(item.get("id"))
+                for item in documento.get(chave, [])
+                if isinstance(item, dict) and item.get("id")
+            )
+    except (OSError, json.JSONDecodeError, AttributeError):
+        log.exception("Falha ao ler pecados e virtudes em %s", caminho_setes)
+
 
 _CHAVES_LIBERACAO = {
     "raca": ("racas_liberadas", "racas_liberadas_membros"),
@@ -190,6 +225,22 @@ def _nivel_por_xp(xp: int) -> int:
             break
         nivel = candidato
     return nivel
+
+
+# VD (Valor de Desafio): classifica a dificuldade das criaturas do Bestiário
+# em 10 graus (mesma contagem dos círculos dos Fluxos). O XP de cada grau já
+# vem pronto aqui — o mestre só escolhe o VD da criatura, sem inventar XP na
+# mão pra cada uma.
+XP_POR_VD: dict[int, int] = {
+    1: 200, 2: 600, 3: 1200, 4: 2000, 5: 3000,
+    6: 4200, 7: 5600, 8: 7200, 9: 9000, 10: 11000,
+}
+
+
+def xp_por_vd(vd: int | None) -> int:
+    if vd is None:
+        return 0
+    return XP_POR_VD.get(max(1, min(10, int(vd))), 0)
 
 
 def _graus_de_treinamento(classes: list[tuple[dict, int]]) -> int:
@@ -458,6 +509,33 @@ def _validar_magias(
         permitidas = {str(item) for item in magia.get("fontes_permitidas") or []}
         if permitidas and not (permitidas & tradicoes):
             return "a fonte da ficha nao ensina a tradicao de uma magia conhecida"
+
+    # Uma cicatriz por magia de 10o circulo aprendida, sem repetir e sem id
+    # inventado. Concessao do mestre nao gera cicatriz.
+    cicatrizes = ficha.get("cicatrizesIds") or []
+    if not isinstance(cicatrizes, list) or any(not isinstance(item, str) for item in cicatrizes):
+        return "cicatrizesIds deve ser uma lista de ids"
+    if len(cicatrizes) != len(set(cicatrizes)):
+        return "a mesma cicatriz nao pode aparecer duas vezes"
+    if any(item not in _CICATRIZES for item in cicatrizes):
+        return "a ficha contem uma cicatriz inexistente"
+    decimo_circulo = sum(
+        1
+        for magia_id in conhecidas
+        if _inteiro((_CATALOGO["magia"].get(magia_id) or {}).get("circulo")) == 10
+    )
+    if len(cicatrizes) > decimo_circulo:
+        return "a ficha possui mais cicatrizes do que magias de 10o circulo aprendidas"
+
+    # O Simbolo dos Sete vem de um rito com sete pessoas, conduzido na mesa.
+    simbolo = ficha.get("simboloId")
+    if simbolo is not None:
+        if not isinstance(simbolo, str) or simbolo.strip() not in _SIMBOLOS:
+            return "a ficha contem um simbolo dos Sete inexistente"
+    if criacao and simbolo:
+        return "a criacao comum nao comeca com um simbolo dos Sete"
+    if anterior and simbolo != anterior.get("simboloId"):
+        return "somente o mestre pode alterar o simbolo dos Sete"
 
     if criacao and (conhecidas or concedidas or ficha.get("magias")):
         return "a criacao comum nao comeca com magias"

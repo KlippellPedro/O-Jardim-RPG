@@ -1,10 +1,14 @@
 
+import magiasData from '../ficha/magias.json';
+import marcasCirculoData from '../ficha/marcas-de-circulo.json';
 import {
   CATEGORIAS_MODIFICACAO,
   DONS_RARIDADE_POR_CATEGORIA,
   MODIFICACOES_EQUIPAMENTO,
+  PRECO_MODIFICACAO_POR_VALOR,
   RARIDADES_EQUIPAMENTO,
   REGRAS_MODIFICACOES_EQUIPAMENTO,
+  ROTULO_RARIDADE_MINIMA_MODIFICACAO,
 } from './raridadesEquipamentos';
 
 export interface RegraTopic {
@@ -47,28 +51,90 @@ const donsRaridadeEquipamento = Object.entries(DONS_RARIDADE_POR_CATEGORIA).map(
   </details>
 `).join('');
 
+/** Sai de data/ficha/magias.json para o quadro publicado nunca divergir do
+ * custo que a ficha cobra de verdade. */
+const tabelaCirculos = magiasData.regras.circulos.map((circulo) => `
+  <tr>
+    <td>${circulo.circulo}º</td>
+    <td>${circulo.fluxo_minimo}</td>
+    <td>${circulo.dt_conjuracao}</td>
+    <td>${circulo.mana_base}</td>
+  </tr>
+`).join('');
+
+/** Mesmo rótulo de Árvore usado em FLUXO_TEMAS (src/services/magiaService.ts),
+ * repetido aqui para não puxar o front inteiro só por um nome de exibição. */
+const NOME_ARVORE_POR_FLUXO: Record<string, string> = {
+  origem: 'Gênese', essencia: 'Alétheia', comunicacao: 'Parley', vitalidade: 'Anima',
+  inconstancia: 'Vórtice', fisico: 'Baluarte', espaco: 'Matriz', tempo: 'Éon',
+  vazio: 'Abismo', fim: 'Limiar', tecnologia: 'A.X.I.S',
+};
+
+const tabelaMarcasPorFluxo = Object.entries(marcasCirculoData.por_fluxo).map(([fluxoId, marcas]) => `
+  <details class="regras-details">
+    <summary>${NOME_ARVORE_POR_FLUXO[fluxoId] ?? fluxoId}</summary>
+    <div class="regras-table-wrap"><table class="regras-table">
+      <thead><tr><th>Círculo</th><th>Marca</th><th>Ganho</th><th>Ônus</th></tr></thead>
+      <tbody>
+        ${marcas.map((marca) => `
+          <tr>
+            <td>${marca.circulo}º</td>
+            <td>${marca.titulo}</td>
+            <td>${marca.bonus}</td>
+            <td>${marca.onus}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table></div>
+  </details>
+`).join('');
+
+const tabelaCicatrizes = marcasCirculoData.cicatrizes.map((cicatriz) => `
+  <tr>
+    <td>${cicatriz.titulo}</td>
+    <td>${cicatriz.bonus}</td>
+    <td>${cicatriz.onus}</td>
+  </tr>
+`).join('');
+
 const ROTULO_NIVEL_MODIFICACAO = { comum: 'Comum', marcial: 'Marcial' } as const;
 const ORDEM_NIVEL_MODIFICACAO = { comum: 0, marcial: 1 } as const;
 
-const tabelaModificacoesEquipamento = CATEGORIAS_MODIFICACAO.map(({ id, titulo }) => `
-  <h3 class="regras-subtitle">${titulo}</h3>
-  <div class="regras-table-wrap"><table class="regras-table">
-    <thead><tr><th>Modificação</th><th>Nível</th><th>Valor</th><th>Pré-requisito</th><th>Efeito</th></tr></thead>
-    <tbody>
-      ${MODIFICACOES_EQUIPAMENTO
-        .filter((modificacao) => modificacao.categoria === id)
-        .sort((a, b) => ORDEM_NIVEL_MODIFICACAO[a.nivel] - ORDEM_NIVEL_MODIFICACAO[b.nivel])
-        .map((modificacao) => `
+/** Cada categoria fica recolhida: são 51 modificações, e ninguém precisa
+ * atravessar as quatro listas para achar a da própria arma. */
+const tabelaModificacoesEquipamento = CATEGORIAS_MODIFICACAO.map(({ id, titulo }) => {
+  const daCategoria = MODIFICACOES_EQUIPAMENTO
+    .filter((modificacao) => modificacao.categoria === id)
+    .sort((a, b) => ORDEM_NIVEL_MODIFICACAO[a.nivel] - ORDEM_NIVEL_MODIFICACAO[b.nivel]);
+  const comuns = daCategoria.filter((modificacao) => modificacao.nivel === 'comum').length;
+  return `
+  <details class="regras-details">
+    <summary>${titulo} <span class="regras-details-contagem">${daCategoria.length} modificações · ${comuns} comuns · ${daCategoria.length - comuns} marciais</span></summary>
+    <div class="regras-table-wrap"><table class="regras-table">
+      <thead><tr><th>Modificação</th><th>Nível</th><th>Valor</th><th>Preço</th><th>Pré-requisito</th><th>Efeito</th></tr></thead>
+      <tbody>
+        ${daCategoria.map((modificacao) => `
         <tr>
           <td><strong>${modificacao.titulo}</strong></td>
           <td>${ROTULO_NIVEL_MODIFICACAO[modificacao.nivel]}</td>
           <td>${modificacao.valor > 0 ? modificacao.valor : 'Técnica'}</td>
+          <td>${PRECO_MODIFICACAO_POR_VALOR[modificacao.valor as 0 | 1 | 2 | 3]} L</td>
           <td>${modificacao.preRequisito || 'Nenhum'}</td>
           <td>${modificacao.efeito}</td>
         </tr>
       `).join('')}
-    </tbody>
-  </table></div>
+      </tbody>
+    </table></div>
+  </details>
+`;
+}).join('');
+
+const tabelaPrecoModificacoes = Object.entries(PRECO_MODIFICACAO_POR_VALOR).map(([valor, preco]) => `
+  <tr>
+    <td><strong>${Number(valor) > 0 ? `Valor ${valor}` : 'Técnica'}</strong></td>
+    <td>${preco} Lunaris</td>
+    <td>${ROTULO_RARIDADE_MINIMA_MODIFICACAO[Number(valor) as 0 | 1 | 2 | 3]}</td>
+  </tr>
 `).join('');
 
 export const REGRAS_OFICIAIS: RegrasCatalog = {
@@ -232,6 +298,22 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Energia:</strong> elemental, tecnologia e Fluxos.</li>
         <li><strong>Mental:</strong> tira Sanidade ou Vida, dependendo de onde vem.</li>
       </ul>
+
+      <h3 class="regras-subtitle">Dano elemental</h3>
+      <p class="regras-lead">São estes sete, e não existe um oitavo. Quem conjura pelo Fluxo do Físico escolhe um deles ao aprender a magia: é o <strong>elemento despertado</strong>, e ele vale para todas as magias de Físico daquela ficha. Modificação de arma, encantamento e Selo que pedem "um elemento" puxam da mesma lista.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Elemento</th><th>Como costuma se manifestar</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Terra</strong></td><td>Pedra, areia e metal bruto. Bom para barreira, terreno difícil e derrubar.</td></tr>
+          <tr><td><strong>Água</strong></td><td>Líquido, gelo e vapor. Empurra, prende e apaga fogo.</td></tr>
+          <tr><td><strong>Fogo</strong></td><td>Chama e brasa. É o elemento que mais deixa dano persistente para trás.</td></tr>
+          <tr><td><strong>Ar</strong></td><td>Vento e pressão. Move criaturas e objetos, e limpa nuvem e gás.</td></tr>
+          <tr><td><strong>Raio</strong></td><td>Descarga elétrica. Salta entre alvos próximos e desliga o que é energizado.</td></tr>
+          <tr><td><strong>Luz</strong></td><td>Claridade que revela. Atinge o que se esconde e cega quem olha de perto.</td></tr>
+          <tr><td><strong>Escuridão</strong></td><td>Sombra que engole. Esconde, confunde e apaga a luz mundana da área.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: quem resiste a Fogo não resiste a Raio. Trocar o elemento despertado depois exige aval do Mestre.</p>
     `,
   },
 
@@ -519,7 +601,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   equipamentos: {
     categoria: 'Combate e Mecânicas',
     status: 'Regra oficial',
-    resumo: 'Quanto você carrega, o que dá para vestir junto, como a Resistência entra na conta do dano e até onde cada raridade pode ir.',
+    resumo: 'Quanto você carrega, o que dá para vestir junto e como a Resistência entra na conta do dano. Raridade e modificação ficam no capítulo seguinte.',
     destaques: [
       ['Carga', '10 + 2 × Mod.Força positivo + metade do nível'],
       ['Armadura', '1 principal, 1 malha e 1 escudo'],
@@ -560,23 +642,46 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Trocar um carregador usa a ação de movimento. Munição avulsa e arma pesada podem cobrar ação padrão quando a arma declarar isso.</li>
       </ul>
 
+      <p class="regras-note">Raridade, orçamento de poder e o catálogo de modificações ficam no capítulo <strong>Raridades e Modificações</strong>, logo em seguida.</p>
+    `,
+  },
+
+  'raridades-modificacoes': {
+    categoria: 'Combate e Mecânicas',
+    status: 'Regra oficial',
+    resumo: 'Até onde cada raridade pode ir, como uma modificação entra na ficha e as 51 modificações prontas, com preço de encomenda.',
+    destaques: [
+      ['Raridade', 'é orçamento, não bônus fixo'],
+      ['Modificação', '1 efeito automático cada'],
+      ['Catálogo', '51 modificações com preço']
+    ],
+    corpo: `
       <h3 class="regras-subtitle">Raridades e orçamento de poder</h3>
       <p class="regras-lead">Raridade não é um bônus fixo que todo item da mesma faixa recebe. Ela é um <strong>orçamento</strong>: diz quantas modificações, efeitos automáticos e dons aquele objeto aguenta carregar. É o que impede a ficha de virar uma pilha de +1 sem fim.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Raridade</th><th>Mods.</th><th>Efeitos próprios</th><th>Valor por efeito</th><th>Regra</th></tr></thead>
         <tbody>${tabelaRaridadesEquipamento}</tbody>
       </table></div>
+
       <h3 class="regras-subtitle">Modificações e efeitos na ficha</h3>
       <ul class="regras-list">${REGRAS_MODIFICACOES_EQUIPAMENTO.map((regra) => `<li>${regra}</li>`).join('')}</ul>
       <p class="regras-note">Na prática: uma modificação pode dar Vida máxima, Defesa, Ataque, atributo ou bônus numa perícia. Guardou ou desequipou o item, a ficha tira esses valores sozinha, você não precisa lembrar.</p>
 
-      <h3 class="regras-subtitle">Catálogo de modificações</h3>
-      <p class="regras-lead">Lista pronta, para ninguém precisar inventar do zero. Toda modificação cai em um de dois níveis. <strong>Comum</strong> entra em qualquer item. <strong>Marcial</strong> bate mais forte e só entra em arma marcial ou exótica, armadura pesada e item Raro ou melhor.</p>
+      <h3 class="regras-subtitle">Como ler uma modificação</h3>
       <ul class="regras-list">
+        <li><strong>Nível:</strong> <strong>Comum</strong> entra em qualquer item. <strong>Marcial</strong> bate mais forte e só entra em arma marcial ou exótica, armadura pesada e item Raro ou melhor.</li>
         <li><strong>Valor:</strong> o peso do efeito automático. Compare com a coluna "Valor por efeito" da tabela ali em cima para saber de qual raridade o item precisa ser.</li>
         <li><strong>Técnica:</strong> não tem efeito automático. Ocupa espaço de modificação, mas não gasta o orçamento de efeito da raridade.</li>
         <li><strong>Pré-requisito:</strong> cobra de <em>quem usa</em>, não do item. Perdeu o requisito, a modificação desliga até você cumprir de novo.</li>
       </ul>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Faixa</th><th>Preço de encomenda</th><th>Raridade mínima do item</th></tr></thead>
+        <tbody>${tabelaPrecoModificacoes}</tbody>
+      </table></div>
+      <p class="regras-note">A Loja vende cada uma delas na categoria <strong>Modificações</strong>, com o preço já aplicado. Marcial só aparece a partir da Metrópole.</p>
+
+      <h3 class="regras-subtitle">Catálogo de modificações</h3>
+      <p class="regras-lead">São ${MODIFICACOES_EQUIPAMENTO.length} modificações prontas, para ninguém precisar inventar do zero. Abra só a categoria do equipamento que você está montando.</p>
       ${tabelaModificacoesEquipamento}
       <p class="regras-note">Isso aqui é ponto de partida, não lista fechada. Modificação nova passa, desde que respeite o valor máximo por efeito da raridade e o nível condizente com o equipamento.</p>
 
@@ -633,20 +738,28 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Círculos, Fluxo e DT</h3>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Círculo</th><th>Fluxo mínimo</th><th>DT</th><th>Mana base</th></tr></thead>
-        <tbody>
-          <tr><td>1º</td><td>14</td><td>10</td><td>2</td></tr>
-          <tr><td>2º</td><td>18</td><td>13</td><td>4</td></tr>
-          <tr><td>3º</td><td>22</td><td>16</td><td>6</td></tr>
-          <tr><td>4º</td><td>26</td><td>19</td><td>8</td></tr>
-          <tr><td>5º</td><td>30</td><td>22</td><td>10</td></tr>
-          <tr><td>6º</td><td>34</td><td>25</td><td>13</td></tr>
-          <tr><td>7º</td><td>38</td><td>28</td><td>16</td></tr>
-          <tr><td>8º</td><td>42</td><td>31</td><td>20</td></tr>
-          <tr><td>9º</td><td>46</td><td>34</td><td>25</td></tr>
-          <tr><td>10º</td><td>50</td><td>37</td><td>30</td></tr>
-        </tbody>
+        <tbody>${tabelaCirculos}</tbody>
       </table></div>
       <p class="regras-note">Esses custos são a referência do círculo. Cada entrada do catálogo declara o custo final dela, que é o que vale na mesa.</p>
+
+      <h3 class="regras-subtitle">O preço dos círculos altos</h3>
+      <p class="regras-lead">Magia grande não sai de graça. A partir do 5º círculo, o Fluxo começa a deixar marca em quem o carrega, e no 10º ele cobra por magia aprendida. Todo preço tem os dois lados: um ganho concreto e um ônus concreto.</p>
+      <ul class="regras-list">
+        <li><strong>Marca do Fluxo (5º ao 9º):</strong> ao alcançar cada um desses círculos, você recebe a Marca daquele círculo no seu Fluxo nativo. Ela não se escolhe e não se rola: é fixa por Fluxo, então dá para saber de antemão o que te espera. Perdeu o círculo, perdeu a Marca.</li>
+        <li><strong>Cicatriz (10º):</strong> cada magia de 10º círculo aprendida sorteia uma Cicatriz na tabela comum. Ela é mais pesada dos dois lados, e a mesma não sai duas vezes para o mesmo personagem.</li>
+        <li>Marca e Cicatriz valem como Legado: o texto manda, e o Mestre arbitra o caso duvidoso.</li>
+        <li>Concessão do Mestre não gera Cicatriz. Só conta magia de 10º que você aprendeu.</li>
+      </ul>
+      <p class="regras-note">A ficha aplica as Marcas sozinha, porque elas saem do seu Fluxo e do seu círculo. A Cicatriz é sorteada na hora de aprender a magia e fica registrada.</p>
+
+      <h3 class="regras-subtitle">Marcas por Fluxo (5º ao 9º círculo)</h3>
+      ${tabelaMarcasPorFluxo}
+
+      <h3 class="regras-subtitle">Cicatrizes (10º círculo)</h3>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Cicatriz</th><th>Ganho</th><th>Ônus</th></tr></thead>
+        <tbody>${tabelaCicatrizes}</tbody>
+      </table></div>
 
       <h3 class="regras-subtitle">Concentração</h3>
       <ul class="regras-list">

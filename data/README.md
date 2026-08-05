@@ -34,6 +34,39 @@ Escalas usadas pelas outras formas — os testes cobram DT, Mana e tempo por fai
   tempo de 1 hora a 7 dias. O grau 5 é o teto porque um item lendário comporta no
   máximo cinco encantamentos.
 
+A grade de três por Fluxo é **piso, não teto**: ela garante que nenhum Fluxo fica
+órfão, mas não impede um Fluxo de receber uma magia a mais quando o conceito
+pede. Os testes cobram "pelo menos 3", não "exatamente 3".
+
+### Magias universais
+
+Uma magia com `"fluxo": "universal"` não pertence a Fluxo nenhum: qualquer Fluxo
+a aprende, e o efeito muda conforme quem canaliza. Ela declara `efeitos_por_fluxo`
+com uma entrada para **cada um dos onze Fluxos** — os testes recusam variante
+faltando ou vazia.
+
+- Na **ficha**, o jogador lê o texto comum somado à variante do Fluxo nativo dele.
+- No **Grimório** e no `/regras` do Gerente, aparecem as onze manifestações, porque
+  ali é livro de referência.
+- Ela não conta na grade por Fluxo, e o filtro de Fluxo sempre a inclui.
+
+São duas por círculo, vinte no total.
+
+### Marcas e Cicatrizes
+
+`ficha/marcas-de-circulo.json` guarda o preço dos círculos altos.
+
+- **Marca (5º ao 9º)** vive em `por_fluxo`: cinco por Fluxo, uma por círculo. Ela é
+  **derivada**, nunca guardada na ficha — sai do Fluxo nativo e do círculo máximo,
+  então não há como forjar nem esquecer de aplicar, e perder o círculo tira a Marca.
+- **Cicatriz (10º)** vive em `cicatrizes`: tabela comum a todos os Fluxos, sorteada
+  uma vez por magia de 10º círculo aprendida. Essa **fica guardada** em
+  `cicatrizesIds`, e por isso o servidor confere id, repetição e quantidade.
+
+Toda Marca e toda Cicatriz declara `bonus` e `onus`, e os testes recusam qualquer
+uma que venha só com um dos lados. Elas valem como Legado: texto, sem motor de
+efeitos automáticos.
+
 Ao acrescentar ou revisar magias, mantenha as convenções que os testes verificam:
 
 - custo de Mana igual ao `mana_base` do círculo (2, 4, 6, 8, 10, 13, 16, 20, 25 e 30);

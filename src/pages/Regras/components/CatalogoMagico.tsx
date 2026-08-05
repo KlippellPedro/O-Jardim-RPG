@@ -9,9 +9,12 @@ import {
   MAGIAS_CATALOGO,
   RITUAIS_CATALOGO,
   SELOS_CATALOGO,
+  SIMBOLOS_POR_ID,
   circuloRotulo,
+  simbolosDoRito,
   temaDoFluxo,
-  type FluxoMagicoId,
+  variantesDaMagia,
+  type FluxoDeMagia,
 } from '../../../services/magiaService';
 
 type AbaCatalogo = 'magias' | 'rituais' | 'selos' | 'encantamentos' | 'fusoes';
@@ -21,10 +24,18 @@ interface CampoGrimorio {
   valor: string | number;
 }
 
+interface LinhaSimbolo {
+  id: string;
+  titulo: string;
+  relacao: string;
+  bonus: string[];
+  onus: string[];
+}
+
 interface GrimorioItem {
   id: string;
   titulo: string;
-  fluxoId: FluxoMagicoId;
+  fluxoId: FluxoDeMagia;
   categoria: string;
   chamada: string;
   efeito: string;
@@ -32,6 +43,9 @@ interface GrimorioItem {
   complemento?: CampoGrimorio[];
   aviso?: string;
   circulo?: number;
+  /** Só nos dois ritos dos Sete: o que cada Símbolo concedido por aquele rito
+   * dá e cobra. Fica junto do ritual em vez de numa página de regras à parte. */
+  simbolos?: LinhaSimbolo[];
 }
 
 const CIRCULOS = Array.from({ length: 10 }, (_, indice) => indice + 1);
@@ -52,7 +66,15 @@ const ITENS_POR_ABA: Record<AbaCatalogo, GrimorioItem[]> = {
       { rotulo: 'Concentração', valor: item.concentracao ? 'Sim' : 'Não' },
       { rotulo: 'Defesa', valor: item.defesa || 'Nenhuma' },
     ],
-    complemento: item.dano ? [{ rotulo: 'Dano', valor: item.dano }] : undefined,
+    complemento: [
+      ...(item.dano ? [{ rotulo: 'Dano', valor: item.dano }] : []),
+      // No livro de referência a universal mostra as onze manifestações; na
+      // ficha aparece só a do Fluxo de quem conjura.
+      ...variantesDaMagia(item).map((variante) => ({
+        rotulo: `Canalizada por ${variante.fluxo.titulo}`,
+        valor: variante.efeito,
+      })),
+    ],
     aviso: item.aviso_mestre,
     circulo: typeof item.circulo === 'number' ? item.circulo : undefined,
   })),
@@ -74,6 +96,15 @@ const ITENS_POR_ABA: Record<AbaCatalogo, GrimorioItem[]> = {
       { rotulo: 'Falha', valor: item.falha },
     ],
     aviso: item.aviso_mestre,
+    simbolos: simbolosDoRito(item.id).map((simbolo) => ({
+      id: simbolo.id,
+      titulo: simbolo.titulo,
+      relacao: simbolo.natureza === 'pecado'
+        ? `Apagado por ${SIMBOLOS_POR_ID.get(simbolo.opostoId)?.titulo || '?'}`
+        : `Apaga ${SIMBOLOS_POR_ID.get(simbolo.opostoId)?.titulo || '?'}`,
+      bonus: simbolo.bonus,
+      onus: simbolo.onus,
+    })),
   })),
   selos: SELOS_CATALOGO.map((item) => ({
     id: item.id,
@@ -128,8 +159,13 @@ const ABAS: Array<{ id: AbaCatalogo; titulo: string }> = [
   { id: 'fusoes', titulo: 'Fusões' },
 ];
 
-const FluxoBadge = ({ fluxoId }: { fluxoId: FluxoMagicoId }) => {
+const rotuloDoFluxo = (fluxoId: FluxoDeMagia): string => (fluxoId === 'universal'
+  ? 'Universal'
+  : FLUXOS_POR_ID.get(fluxoId)?.titulo || fluxoId);
+
+const FluxoBadge = ({ fluxoId }: { fluxoId: FluxoDeMagia }) => {
   const tema = temaDoFluxo(fluxoId);
+  const rotulo = rotuloDoFluxo(fluxoId);
   return (
     <span
       className="inline-flex rounded-full border px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em]"
@@ -139,9 +175,11 @@ const FluxoBadge = ({ fluxoId }: { fluxoId: FluxoMagicoId }) => {
         color: tema.texto,
         boxShadow: `0 0 14px ${tema.brilho}`,
       }}
-      title={`Fluxo de ${FLUXOS_POR_ID.get(fluxoId)?.titulo || fluxoId} · ${tema.arvore}`}
+      title={fluxoId === 'universal'
+        ? 'Magia universal: qualquer Fluxo aprende, e o efeito muda conforme quem canaliza'
+        : `Fluxo de ${rotulo} · ${tema.arvore}`}
     >
-      {FLUXOS_POR_ID.get(fluxoId)?.titulo || fluxoId}
+      {rotulo}
     </span>
   );
 };
@@ -187,6 +225,45 @@ const GrimorioDetail = ({ item, compacto = false }: { item: GrimorioItem; compac
         </section>
       ))}
 
+      {item.simbolos?.length ? (
+        <section className="mt-6">
+          <h4 className="mb-3 text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: tema.destaque }}>
+            O que cada Símbolo dá e cobra
+          </h4>
+          <div className="overflow-x-auto rounded-xl border border-white/10">
+            <table className="w-full min-w-[520px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-white/10 bg-white/5 text-[9px] font-bold uppercase tracking-widest text-gray-500">
+                  <th className="p-3">Símbolo</th>
+                  <th className="p-3">O que dá</th>
+                  <th className="p-3">O que cobra</th>
+                </tr>
+              </thead>
+              <tbody>
+                {item.simbolos.map((simbolo) => (
+                  <tr key={simbolo.id} className="border-b border-white/5 align-top last:border-0">
+                    <td className="p-3">
+                      <strong className="text-sm text-white">{simbolo.titulo}</strong>
+                      <span className="mt-1 block text-[10px] text-gray-500">{simbolo.relacao}</span>
+                    </td>
+                    <td className="p-3">
+                      <ul className="space-y-1.5">
+                        {simbolo.bonus.map((texto) => <li key={texto} className="text-xs leading-relaxed text-emerald-300">{texto}</li>)}
+                      </ul>
+                    </td>
+                    <td className="p-3">
+                      <ul className="space-y-1.5">
+                        {simbolo.onus.map((texto) => <li key={texto} className="text-xs leading-relaxed text-red-300">{texto}</li>)}
+                      </ul>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ) : null}
+
       {item.aviso ? (
         <p className="mt-6 rounded-xl border border-amber-500/25 bg-amber-500/10 p-3 text-xs leading-relaxed text-amber-200">{item.aviso}</p>
       ) : null}
@@ -218,7 +295,7 @@ const GrimorioListItem = ({ active, item, onSelect }: GrimorioListItemProps) => 
     <span className="min-w-0 flex-1">
       <strong className={`block truncate text-sm ${active ? '' : 'text-gray-300 group-hover:text-white'}`} style={{ color: active ? tema.texto : undefined }}>{item.titulo}</strong>
       <small className="mt-1 block truncate text-[10px] uppercase tracking-wider text-gray-600">
-        {FLUXOS_POR_ID.get(item.fluxoId)?.titulo} · {item.categoria}
+        {rotuloDoFluxo(item.fluxoId)} · {item.categoria}
       </small>
     </span>
     <ChevronRight size={15} className={active ? '' : 'text-gray-700 group-hover:text-gray-400'} style={{ color: active ? tema.destaque : undefined }} />
@@ -229,7 +306,7 @@ const GrimorioListItem = ({ active, item, onSelect }: GrimorioListItemProps) => 
 export const CatalogoMagico = () => {
   const [aba, setAba] = useState<AbaCatalogo>('magias');
   const [busca, setBusca] = useState('');
-  const [fluxo, setFluxo] = useState<FluxoMagicoId | 'todos'>('todos');
+  const [fluxo, setFluxo] = useState<FluxoDeMagia | 'todos'>('todos');
   const [circulo, setCirculo] = useState<number | 'todos'>('todos');
   const [selecionadoId, setSelecionadoId] = useState('');
   const [detalheMovelAberto, setDetalheMovelAberto] = useState(false);
@@ -237,7 +314,7 @@ export const CatalogoMagico = () => {
   const itensAba = ITENS_POR_ABA[aba];
 
   const itensVisiveis = useMemo(() => itensAba.filter((item) => {
-    if (fluxo !== 'todos' && item.fluxoId !== fluxo) return false;
+    if (fluxo !== 'todos' && item.fluxoId !== fluxo && item.fluxoId !== 'universal') return false;
     if (circulo !== 'todos' && item.circulo !== circulo) return false;
     if (!buscaAdiada) return true;
     const texto = [
@@ -319,11 +396,12 @@ export const CatalogoMagico = () => {
             <SlidersHorizontal className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" size={15} />
             <select
               value={fluxo}
-              onChange={(event) => setFluxo(event.target.value as FluxoMagicoId | 'todos')}
+              onChange={(event) => setFluxo(event.target.value as FluxoDeMagia | 'todos')}
               className="w-full appearance-none rounded-lg border border-white/10 bg-[#0c0b10] py-2.5 pl-9 pr-8 text-sm text-gray-300 outline-none focus:border-[#c7a44c]/40"
             >
               <option value="todos">Todos os Fluxos</option>
               {FLUXOS_CATALOGO.map((item) => <option key={item.id} value={item.id}>{item.titulo}</option>)}
+              <option value="universal">Universal</option>
             </select>
           </label>
           {aba === 'magias' ? (

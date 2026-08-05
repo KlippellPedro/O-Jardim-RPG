@@ -198,6 +198,28 @@ Você tem uma reação por rodada e recupera ela no começo do seu próprio turn
 
 - **Mental:** tira Sanidade ou Vida, dependendo de onde vem.
 
+### Dano elemental
+
+São estes sete, e não existe um oitavo. Quem conjura pelo Fluxo do Físico escolhe um deles ao aprender a magia: é o **elemento despertado**, e ele vale para todas as magias de Físico daquela ficha. Modificação de arma, encantamento e Selo que pedem "um elemento" puxam da mesma lista.
+
+- Elemento | Como costuma se manifestar
+
+- Terra | Pedra, areia e metal bruto. Bom para barreira, terreno difícil e derrubar.
+
+- Água | Líquido, gelo e vapor. Empurra, prende e apaga fogo.
+
+- Fogo | Chama e brasa. É o elemento que mais deixa dano persistente para trás.
+
+- Ar | Vento e pressão. Move criaturas e objetos, e limpa nuvem e gás.
+
+- Raio | Descarga elétrica. Salta entre alvos próximos e desliga o que é energizado.
+
+- Luz | Claridade que revela. Atinge o que se esconde e cega quem olha de perto.
+
+- Escuridão | Sombra que engole. Esconde, confunde e apaga a luz mundana da área.
+
+Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: quem resiste a Fogo não resiste a Raio. Trocar o elemento despertado depois exige aval do Mestre.
+
 ## distancias
 
 **Categoria:** Combate e Mecânicas
@@ -634,7 +656,7 @@ A cada cinco níveis totais, ou seja, no 5, no 10, no 15 e assim por diante até
 
 **Status:** Regra oficial
 
-Quanto você carrega, o que dá para vestir junto, como a Resistência entra na conta do dano e até onde cada raridade pode ir.
+Quanto você carrega, o que dá para vestir junto e como a Resistência entra na conta do dano. Raridade e modificação ficam no capítulo seguinte.
 
 ### Carga e espaços
 
@@ -680,6 +702,16 @@ Resistência física geral cobre corte, perfuração e impacto. Balístico fica 
 
 - Trocar um carregador usa a ação de movimento. Munição avulsa e arma pesada podem cobrar ação padrão quando a arma declarar isso.
 
+Raridade, orçamento de poder e o catálogo de modificações ficam no capítulo **Raridades e Modificações**, logo em seguida.
+
+## raridades-modificacoes
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Até onde cada raridade pode ir, como uma modificação entra na ficha e as 51 modificações prontas, com preço de encomenda.
+
 ### Raridades e orçamento de poder
 
 Raridade não é um bônus fixo que todo item da mesma faixa recebe. Ela é um **orçamento**: diz quantas modificações, efeitos automáticos e dons aquele objeto aguenta carregar. É o que impede a ficha de virar uma pilha de +1 sem fim.
@@ -712,9 +744,9 @@ Raridade não é um bônus fixo que todo item da mesma faixa recebe. Ela é um *
 
 Na prática: uma modificação pode dar Vida máxima, Defesa, Ataque, atributo ou bônus numa perícia. Guardou ou desequipou o item, a ficha tira esses valores sozinha, você não precisa lembrar.
 
-### Catálogo de modificações
+### Como ler uma modificação
 
-Lista pronta, para ninguém precisar inventar do zero. Toda modificação cai em um de dois níveis. **Comum** entra em qualquer item. **Marcial** bate mais forte e só entra em arma marcial ou exótica, armadura pesada e item Raro ou melhor.
+- **Nível:** **Comum** entra em qualquer item. **Marcial** bate mais forte e só entra em arma marcial ou exótica, armadura pesada e item Raro ou melhor.
 
 - **Valor:** o peso do efeito automático. Compare com a coluna "Valor por efeito" da tabela ali em cima para saber de qual raridade o item precisa ser.
 
@@ -722,123 +754,143 @@ Lista pronta, para ninguém precisar inventar do zero. Toda modificação cai em
 
 - **Pré-requisito:** cobra de *quem usa*, não do item. Perdeu o requisito, a modificação desliga até você cumprir de novo.
 
-### Armas
+- Faixa | Preço de encomenda | Raridade mínima do item
 
-- Modificação | Nível | Valor | Pré-requisito | Efeito
+- Técnica | 25 Lunaris | Qualquer item
 
-- Afiada | Comum | 1 | Nenhum | +1 dado de dano da arma (mesmo tipo do dado base).
+- Valor 1 | 60 Lunaris | Comum
 
-- Perfurante | Comum | 1 | Nenhum | O dano da arma ignora metade da Resistência do tipo correspondente do alvo.
+- Valor 2 | 180 Lunaris | Raro
 
-- Margem Ampla | Comum | 1 | Nenhum | Amplia a Margem de Ameaça em 2 (uma 20/x2 vira 18-20/x2). Só entra em arma de multiplicador x2, pra não furar a regra de margem larga com multiplicador alto.
+- Valor 3 | 450 Lunaris | Épico
 
-- Coreografada | Comum | 1 | Nenhum | Ao falhar numa Coreografia de risco Ousado ou maior com esta arma, sofra a consequência do risco imediatamente abaixo. Não vale para Tudo ou Nada.
+A Loja vende cada uma delas na categoria **Modificações**, com o preço já aplicado. Marcial só aparece a partir da Metrópole.
 
-- Drenante | Comum | 1 | Nenhum | Uma vez por turno, ao acertar, o alvo perde 1d4 de Mana.
+### Catálogo de modificações
 
-- Assombrada | Comum | 1 | Nenhum | Uma vez por cena, force o alvo a repetir um teste de resistência que já tenha passado contra um efeito de medo seu.
+São 51 modificações prontas, para ninguém precisar inventar do zero. Abra só a categoria do equipamento que você está montando.
 
-- Balanceada | Comum | Técnica | Nenhum | Ignora a penalidade de peso pesado ao empunhar com uma mão só.
+Armas
+18 modificações · 9 comuns · 9 marciais
 
-- Leve | Comum | Técnica | Nenhum | Reduz em 1 os espaços de carga que a arma ocupa, mínimo 1.
+- Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
-- Silenciosa | Comum | Técnica | Nenhum | Não produz som perceptível ao ser usada em um ataque.
+- Afiada | Comum | 1 | 60 L | Nenhum | +1 dado de dano da arma (mesmo tipo do dado base).
 
-- Devastadora | Marcial | 2 | Força 14, ou Destreza 14 em arma de disparo | +2 dados de dano da arma.
+- Perfurante | Comum | 1 | 60 L | Nenhum | O dano da arma ignora metade da Resistência do tipo correspondente do alvo.
 
-- Elemental | Marcial | 2 | Nenhum | +1d6 de dano de um tipo elemental escolhido na criação do item. Esse dado extra também multiplica no crítico.
+- Margem Ampla | Comum | 1 | 60 L | Nenhum | Amplia a Margem de Ameaça em 2 (uma 20/x2 vira 18-20/x2). Só entra em arma de multiplicador x2, pra não furar a regra de margem larga com multiplicador alto.
 
-- Sedenta | Marcial | 2 | Nenhum | No crítico, o alvo passa a sangrar: sofre 1 dado de dano da arma no início de cada turno até ser tratado. Não acumula com outra Sedenta.
+- Coreografada | Comum | 1 | 60 L | Nenhum | Ao falhar numa Coreografia de risco Ousado ou maior com esta arma, sofra a consequência do risco imediatamente abaixo. Não vale para Tudo ou Nada.
 
-- Vampírica | Marcial | 2 | Nível total 7 | Uma vez por turno, ao causar dano, role um dado do tipo da arma e recupere esse tanto de PV.
+- Drenante | Comum | 1 | 60 L | Nenhum | Uma vez por turno, ao acertar, o alvo perde 1d4 de Mana.
 
-- Sintonizada | Marcial | 2 | Fluxo 14 | O dano da arma passa a usar o Mod. Fluxo no lugar de Força ou Destreza.
+- Assombrada | Comum | 1 | 60 L | Nenhum | Uma vez por cena, force o alvo a repetir um teste de resistência que já tenha passado contra um efeito de medo seu.
 
-- Exaustiva | Marcial | 2 | Nível total 7 | No crítico, o alvo ganha 1 ponto de Cansaço. Uma vez por cena por alvo.
+- Balanceada | Comum | Técnica | 25 L | Nenhum | Ignora a penalidade de peso pesado ao empunhar com uma mão só.
 
-- Assinatura de Árvore | Marcial | 2 | Nenhum | A arma se liga a uma Árvore na criação. Contra criaturas de qualquer outra Árvore, +1 dado de dano.
+- Leve | Comum | Técnica | 25 L | Nenhum | Reduz em 1 os espaços de carga que a arma ocupa, mínimo 1.
 
-- Golpe de Misericórdia | Marcial | 3 | Nível total 10 | Contra alvo que já esteja em Morrendo, seus ataques com esta arma acertam como crítico automático.
+- Silenciosa | Comum | Técnica | 25 L | Nenhum | Não produz som perceptível ao ser usada em um ataque.
 
-- Implacável | Marcial | 3 | Nível total 10 | Uma vez por cena, transforme um acerto em crítico, sem precisar cair na Margem de Ameaça. Não combina com a Coreografia Tudo ou Nada no mesmo ataque.
+- Devastadora | Marcial | 2 | 180 L | Força 14, ou Destreza 14 em arma de disparo | +2 dados de dano da arma.
 
-### Armaduras
+- Elemental | Marcial | 2 | 180 L | Nenhum | +1d6 de dano de um tipo elemental escolhido na criação do item. Esse dado extra também multiplica no crítico.
 
-- Modificação | Nível | Valor | Pré-requisito | Efeito
+- Sedenta | Marcial | 2 | 180 L | Nenhum | No crítico, o alvo passa a sangrar: sofre 1 dado de dano da arma no início de cada turno até ser tratado. Não acumula com outra Sedenta.
 
-- Reforçada | Comum | 1 | Nenhum | +1 de Defesa.
+- Vampírica | Marcial | 2 | 180 L | Nível total 7 | Uma vez por turno, ao causar dano, role um dado do tipo da arma e recupere esse tanto de PV.
 
-- Isolante | Comum | 1 | Nenhum | Resistência 2 contra um tipo de dano elemental escolhido na criação do item.
+- Sintonizada | Marcial | 2 | 180 L | Fluxo 14 | O dano da arma passa a usar o Mod. Fluxo no lugar de Força ou Destreza.
 
-- Camuflada | Comum | 1 | Nenhum | Vantagem em Furtividade em terreno compatível com o padrão da armadura.
+- Exaustiva | Marcial | 2 | 180 L | Nível total 7 | No crítico, o alvo ganha 1 ponto de Cansaço. Uma vez por cena por alvo.
 
-- Trilha Serena | Comum | 1 | Nenhum | Ao terminar um descanso completo vestindo a armadura, reduza 1 ponto de Cansaço além do que a qualidade do descanso já tira.
+- Assinatura de Árvore | Marcial | 2 | 180 L | Nenhum | A arma se liga a uma Árvore na criação. Contra criaturas de qualquer outra Árvore, +1 dado de dano.
 
-- Flexível | Comum | Técnica | Nenhum | Reduz em 1 a penalidade de armadura sobre Acrobacia, Atletismo e Furtividade.
+- Golpe de Misericórdia | Marcial | 3 | 450 L | Nível total 10 | Contra alvo que já esteja em Morrendo, seus ataques com esta arma acertam como crítico automático.
 
-- Ajustável | Comum | Técnica | Nenhum | Se adapta automaticamente ao corpo de quem veste, sem custo de reforma.
+- Implacável | Marcial | 3 | 450 L | Nível total 10 | Uma vez por cena, transforme um acerto em crítico, sem precisar cair na Margem de Ameaça. Não combina com a Coreografia Tudo ou Nada no mesmo ataque.
 
-- Bastião | Marcial | 2 | Constituição 14 | Reduza 1d4 do dano físico recebido a cada ataque, aplicado depois da Resistência.
+Armaduras
+12 modificações · 6 comuns · 6 marciais
 
-- Regenerativa | Marcial | 2 | Nível total 7 | Quem veste recupera 1d4 PV no início do próprio turno, uma vez por rodada.
+- Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
-- Estabilizadora | Marcial | 2 | Nenhum | Vantagem em testes para resistir a ser derrubado, empurrado ou agarrado.
+- Reforçada | Comum | 1 | 60 L | Nenhum | +1 de Defesa.
 
-- Âncora de Sanidade | Marcial | 2 | Sabedoria 14 | Resistência 3 contra dano Mental e vantagem nos testes para não perder Sanidade.
+- Isolante | Comum | 1 | 60 L | Nenhum | Resistência 2 contra um tipo de dano elemental escolhido na criação do item.
 
-- Retaliadora | Marcial | 3 | Constituição 14 | Ao sofrer um crítico, quem veste devolve 1 dado de dano de impacto no atacante, sem gastar reação.
+- Camuflada | Comum | 1 | 60 L | Nenhum | Vantagem em Furtividade em terreno compatível com o padrão da armadura.
 
-- Casca do Fim | Marcial | 3 | Nível total 10 | Enquanto estiver em Morrendo, a DT dos seus testes de Morrendo cai 3.
+- Trilha Serena | Comum | 1 | 60 L | Nenhum | Ao terminar um descanso completo vestindo a armadura, reduza 1 ponto de Cansaço além do que a qualidade do descanso já tira.
 
-### Escudos
+- Flexível | Comum | Técnica | 25 L | Nenhum | Reduz em 1 a penalidade de armadura sobre Acrobacia, Atletismo e Furtividade.
 
-- Modificação | Nível | Valor | Pré-requisito | Efeito
+- Ajustável | Comum | Técnica | 25 L | Nenhum | Se adapta automaticamente ao corpo de quem veste, sem custo de reforma.
 
-- Reforçado | Comum | 1 | Nenhum | +1d4 na redução de dano da reação Bloqueio.
+- Bastião | Marcial | 2 | 180 L | Constituição 14 | Reduza 1d4 do dano físico recebido a cada ataque, aplicado depois da Resistência.
 
-- Espinhado | Comum | 1 | Nenhum | Quem te acerta em combate corpo a corpo sofre 1d4 de dano perfurante.
+- Regenerativa | Marcial | 2 | 180 L | Nível total 7 | Quem veste recupera 1d4 PV no início do próprio turno, uma vez por rodada.
 
-- Leve | Comum | Técnica | Nenhum | Não soma penalidade de armadura sobre Acrobacia.
+- Estabilizadora | Marcial | 2 | 180 L | Nenhum | Vantagem em testes para resistir a ser derrubado, empurrado ou agarrado.
 
-- Retrátil | Comum | Técnica | Nenhum | Pode ser guardado ou sacado como uma ação livre.
+- Âncora de Sanidade | Marcial | 2 | 180 L | Sabedoria 14 | Resistência 3 contra dano Mental e vantagem nos testes para não perder Sanidade.
 
-- Amplo | Marcial | 2 | Nenhum | A reação Proteger passa a cobrir dois aliados adjacentes em vez de um.
+- Retaliadora | Marcial | 3 | 450 L | Constituição 14 | Ao sofrer um crítico, quem veste devolve 1 dado de dano de impacto no atacante, sem gastar reação.
 
-- Repulsor | Marcial | 2 | Nenhum | Ao usar Bloqueio com sucesso, empurre o atacante 1,5 m para longe de você.
+- Casca do Fim | Marcial | 3 | 450 L | Nível total 10 | Enquanto estiver em Morrendo, a DT dos seus testes de Morrendo cai 3.
 
-- Vingativo | Marcial | 2 | Nenhum | Ao usar Bloqueio, cause 1d6 de dano de impacto no atacante, sem gastar ação extra.
+Escudos
+9 modificações · 4 comuns · 5 marciais
 
-- Guarda de Fluxo | Marcial | 2 | Fluxo 12 | Bloqueio passa a funcionar também contra dano de Energia, incluindo o que vem de Fluxos.
+- Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
-- Contratempo | Marcial | 3 | Nível total 10 | Depois de um Contra-Ataque bem-sucedido, recupere sua reação. Uma vez por rodada.
+- Reforçado | Comum | 1 | 60 L | Nenhum | +1d4 na redução de dano da reação Bloqueio.
 
-### Itens gerais e mágicos
+- Espinhado | Comum | 1 | 60 L | Nenhum | Quem te acerta em combate corpo a corpo sofre 1d4 de dano perfurante.
 
-- Modificação | Nível | Valor | Pré-requisito | Efeito
+- Leve | Comum | Técnica | 25 L | Nenhum | Não soma penalidade de armadura sobre Acrobacia.
 
-- Vinculado | Comum | 1 | Nenhum | Só funciona plenamente nas mãos de quem o item reconhece como dono. Qualquer outro sofre −2 ao usá-lo.
+- Retrátil | Comum | Técnica | 25 L | Nenhum | Pode ser guardado ou sacado como uma ação livre.
 
-- Ressonante | Comum | 1 | Nenhum | +1 numa perícia específica, ligada à função do item.
+- Amplo | Marcial | 2 | 180 L | Nenhum | A reação Proteger passa a cobrir dois aliados adjacentes em vez de um.
 
-- Portátil | Comum | Técnica | Nenhum | Reduz em 1 os espaços de carga que o item ocupa, mínimo 1.
+- Repulsor | Marcial | 2 | 180 L | Nenhum | Ao usar Bloqueio com sucesso, empurre o atacante 1,5 m para longe de você.
 
-- Autoidentificável | Comum | Técnica | Nenhum | Revela sozinho suas propriedades na primeira vez que é empunhado ou vestido.
+- Vingativo | Marcial | 2 | 180 L | Nenhum | Ao usar Bloqueio, cause 1d6 de dano de impacto no atacante, sem gastar ação extra.
 
-- Recarregável | Comum | Técnica | Nenhum | Se tiver cargas, recupera todas elas após um descanso completo.
+- Guarda de Fluxo | Marcial | 2 | 180 L | Fluxo 12 | Bloqueio passa a funcionar também contra dano de Energia, incluindo o que vem de Fluxos.
 
-- Sensível a Fluxo | Comum | Técnica | Nenhum | Brilha, vibra ou esquenta perto de magia ou de um Fluxo específico escolhido na criação.
+- Contratempo | Marcial | 3 | 450 L | Nível total 10 | Depois de um Contra-Ataque bem-sucedido, recupere sua reação. Uma vez por rodada.
 
-- Instável | Comum | Técnica | Nenhum | 5% de chance de gerar um efeito colateral menor a cada uso. O Mestre define qual.
+Itens gerais e mágicos
+12 modificações · 7 comuns · 5 marciais
 
-- Protetor | Marcial | 2 | Nenhum | Resistência 4 contra um tipo de dano escolhido na criação do item, enquanto estiver equipado.
+- Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
-- Vitalício | Marcial | 2 | Nenhum | Uma vez por dia, ao chegar a 0 PV, recupere 1d6 PV automaticamente antes de cair inconsciente.
+- Vinculado | Comum | 1 | 60 L | Nenhum | Só funciona plenamente nas mãos de quem o item reconhece como dono. Qualquer outro sofre −2 ao usá-lo.
 
-- Amplificador | Marcial | 2 | Nenhum | Uma vez por cena, role com vantagem um teste de perícia específico ligado à função do item.
+- Ressonante | Comum | 1 | 60 L | Nenhum | +1 numa perícia específica, ligada à função do item.
 
-- Reserva de Fluxo | Marcial | 2 | Fluxo 12 | Guarda até 5 de Mana. Você pode gastar dessa reserva no lugar da sua, e ela enche de novo a cada descanso completo.
+- Portátil | Comum | Técnica | 25 L | Nenhum | Reduz em 1 os espaços de carga que o item ocupa, mínimo 1.
 
-- Selado | Marcial | 3 | Nível total 10 e Misticismo treinado | O item carrega um Selo inscrito, escolhido na criação. Uma vez por dia ele dispara sem gastar Mana nem exigir teste de inscrição.
+- Autoidentificável | Comum | Técnica | 25 L | Nenhum | Revela sozinho suas propriedades na primeira vez que é empunhado ou vestido.
+
+- Recarregável | Comum | Técnica | 25 L | Nenhum | Se tiver cargas, recupera todas elas após um descanso completo.
+
+- Sensível a Fluxo | Comum | Técnica | 25 L | Nenhum | Brilha, vibra ou esquenta perto de magia ou de um Fluxo específico escolhido na criação.
+
+- Instável | Comum | Técnica | 25 L | Nenhum | 5% de chance de gerar um efeito colateral menor a cada uso. O Mestre define qual.
+
+- Protetor | Marcial | 2 | 180 L | Nenhum | Resistência 4 contra um tipo de dano escolhido na criação do item, enquanto estiver equipado.
+
+- Vitalício | Marcial | 2 | 180 L | Nenhum | Uma vez por dia, ao chegar a 0 PV, recupere 1d6 PV automaticamente antes de cair inconsciente.
+
+- Amplificador | Marcial | 2 | 180 L | Nenhum | Uma vez por cena, role com vantagem um teste de perícia específico ligado à função do item.
+
+- Reserva de Fluxo | Marcial | 2 | 180 L | Fluxo 12 | Guarda até 5 de Mana. Você pode gastar dessa reserva no lugar da sua, e ela enche de novo a cada descanso completo.
+
+- Selado | Marcial | 3 | 450 L | Nível total 10 e Misticismo treinado | O item carrega um Selo inscrito, escolhido na criação. Uma vez por dia ele dispara sem gastar Mana nem exigir teste de inscrição.
 
 Isso aqui é ponto de partida, não lista fechada. Modificação nova passa, desde que respeite o valor máximo por efeito da raridade e o nível condizente com o equipamento.
 
@@ -953,23 +1005,37 @@ DT de conjuração = 7 + (3 × círculo)
 
 - 2º | 18 | 13 | 4
 
-- 3º | 22 | 16 | 6
+- 3º | 22 | 16 | 7
 
-- 4º | 26 | 19 | 8
+- 4º | 26 | 19 | 10
 
-- 5º | 30 | 22 | 10
+- 5º | 30 | 22 | 14
 
-- 6º | 34 | 25 | 13
+- 6º | 34 | 25 | 19
 
-- 7º | 38 | 28 | 16
+- 7º | 38 | 28 | 25
 
-- 8º | 42 | 31 | 20
+- 8º | 42 | 31 | 32
 
-- 9º | 46 | 34 | 25
+- 9º | 46 | 34 | 42
 
-- 10º | 50 | 37 | 30
+- 10º | 50 | 37 | 55
 
 Esses custos são a referência do círculo. Cada entrada do catálogo declara o custo final dela, que é o que vale na mesa.
+
+### O preço dos círculos altos
+
+Magia grande não sai de graça. A partir do 5º círculo, o Fluxo começa a deixar marca em quem o carrega, e no 10º ele cobra por magia aprendida. Todo preço tem os dois lados: um ganho concreto e um ônus concreto.
+
+- **Marca do Fluxo (5º ao 9º):** ao alcançar cada um desses círculos, você recebe a Marca daquele círculo no seu Fluxo nativo. Ela não se escolhe e não se rola: é fixa por Fluxo, então dá para saber de antemão o que te espera. Perdeu o círculo, perdeu a Marca.
+
+- **Cicatriz (10º):** cada magia de 10º círculo aprendida sorteia uma Cicatriz na tabela comum. Ela é mais pesada dos dois lados, e a mesma não sai duas vezes para o mesmo personagem.
+
+- Marca e Cicatriz valem como Legado: o texto manda, e o Mestre arbitra o caso duvidoso.
+
+- Concessão do Mestre não gera Cicatriz. Só conta magia de 10º que você aprendeu.
+
+A ficha aplica as Marcas sozinha, porque elas saem do seu Fluxo e do seu círculo. A Cicatriz é sorteada na hora de aprender a magia e fica registrada.
 
 ### Concentração
 
