@@ -25,8 +25,9 @@ Cada item é um objeto assim (o mesmo schema do site, em `data/loja`):
 }
 ```
 
-- **tipo:** um de `arma`, `armadura`, `equipamento`, `consumivel`, `artefato`,
-  `fruto-eden`, `implante`, `veiculo`, `veiculo-completo`, `monstro` ou `drop`.
+- **tipo:** um de `arma`, `armadura`, `equipamento`, `modificacao`, `consumivel`,
+  `artefato`, `fruto-eden`, `implante`, `veiculo`, `veiculo-completo`, `monstro`
+  ou `drop`.
 - **id:** slug único (minúsculas, com hífens). IDs repetidos são rejeitados na publicação.
 - **preco:** número (preço nativo em **Solares**) **ou** objeto `{"Lunaris": 40, "Solares": 5}` para definir preços em moedas específicas.
 - **preco_original + promocao:** para uma oferta real, `preco` guarda o valor
@@ -62,6 +63,13 @@ ele não publica mudanças feitas no JSON.
 - **Equipamentos:** 56 (o material que vazava pro fim do `descricao` foi movido
   pro campo `material`; descrições e typos revisados).
 - **Armaduras e escudos:** 52 (com `bonus`, `penalidade`, `material`).
+- **Modificações:** 51 (`tipo: "modificacao"`). São as mesmas de
+  `data/regras/raridadesEquipamentos.ts`, uma entrada por modificação, com
+  `modificacao_id` apontando para a fonte. O preço sai de
+  `PRECO_MODIFICACAO_POR_VALOR` — 25, 60, 180 e 450 Lunaris para técnica, valor
+  1, 2 e 3 — e as marciais só aparecem da Metrópole para cima
+  (`nivelMinimoLoja: 2`). Ao acrescentar uma modificação nas regras, replique a
+  entrada aqui com o mesmo preço da faixa.
 - **Veículos:** 55 — 49 sistemas e 6 veículos completos.
 - **Bestiário:** 28 seres (`tipo: "monstro"`, preço por fórmula).
 - **Drops:** 22 partes de seres (`tipo: "drop"`).

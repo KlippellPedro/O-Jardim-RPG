@@ -51,15 +51,21 @@ def test_sync_shop_catalog_upserts_and_deactivates_missing_items(tmp_path):
             "titulo": "Manto",
             "conteudo": {"preco": 20, "raridade": "épico"},
         },
+        {
+            "id": "mod-afiada",
+            "tipo": "modificacao",
+            "titulo": "Afiada",
+            "conteudo": {"preco": 60, "raridade": "incomum", "categoria_loja": "Modificações"},
+        },
     ])
     database = FakeDatabase()
 
-    assert sync_shop_catalog(database, tmp_path) == 2
+    assert sync_shop_catalog(database, tmp_path) == 3
     assert database.opened == 1
-    assert len(database.connection_value.calls) == 3
+    assert len(database.connection_value.calls) == 4
     assert "ON CONFLICT (id) DO UPDATE" in database.connection_value.calls[0][0]
     assert "NOT (id = ANY(%s))" in database.connection_value.calls[-1][0]
-    assert set(database.connection_value.calls[-1][1][0]) == {"selo-teste", "manto"}
+    assert set(database.connection_value.calls[-1][1][0]) == {"selo-teste", "manto", "mod-afiada"}
 
 
 def test_sync_shop_catalog_rejects_invalid_source_before_opening_transaction(tmp_path):

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ShoppingBag, CheckCircle, XCircle, LayoutGrid, Sword, Shield, FlaskConical, CarFront, Users, Gem, Archive, Heart, ArrowRightLeft, Sparkles, Cpu, Wand2, Apple, MapPin, Building2, Skull, Globe2 } from 'lucide-react';
+import { Search, ShoppingBag, CheckCircle, XCircle, LayoutGrid, Sword, Shield, FlaskConical, CarFront, Users, Gem, Archive, Heart, ArrowRightLeft, Sparkles, Cpu, Wand2, Wrench, Apple, MapPin, Building2, Skull, Globe2 } from 'lucide-react';
 import { calcularValorRevenda, LojaItem, ItemCategoria, ItemRaridade, getCurrencySymbol, itemCorrespondeBusca, itemCorrespondeSubfiltro, lerPrecoNativoLoja, mapearCatalogoLoja, somarPrecosNativos } from '../../services/lojaCatalogService';
 import { ItemCard } from './components/ItemCard';
 import { LojaItemModal } from './components/LojaItemModal';
@@ -47,6 +47,7 @@ const CATEGORIAS_ICONES = {
   'Todos': LayoutGrid,
   'Armas': Sword,
   'Armaduras e Escudos': Shield,
+  'Modificações': Wrench,
   'Consumíveis': FlaskConical,
   'Veículos': CarFront,
   'Implantes Cibernéticos': Cpu,
@@ -70,6 +71,7 @@ const RARIDADES_CORES = {
 const SUBFILTROS_POR_CATEGORIA: Partial<Record<ItemCategoria, readonly string[]>> = {
   'Armas': ['Todos', 'Corpo a Corpo', 'À Distância', 'Mágicas'],
   'Armaduras e Escudos': ['Todos', 'Armaduras', 'Escudos'],
+  'Modificações': ['Todos', 'Comuns', 'Marciais', 'Armas', 'Armaduras', 'Escudos', 'Itens gerais e mágicos'],
   'Veículos': ['Todos', 'Veículos Completos', 'Peças e Módulos'],
   'Consumíveis': ['Todos', 'Poções', 'Selos', 'Rituais', 'Ferramentas'],
   'Frutos do Éden': ['Todos', 'Sobrenatural', 'Mutação', 'Elemental'],

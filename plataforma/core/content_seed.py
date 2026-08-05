@@ -13,7 +13,8 @@ log = logging.getLogger("jardim-plataforma")
 
 _SHOP_TYPES = {
     "arma", "armadura", "artefato", "consumivel", "drop", "equipamento",
-    "fruto-eden", "implante", "monstro", "veiculo", "veiculo-completo",
+    "fruto-eden", "implante", "modificacao", "monstro", "veiculo",
+    "veiculo-completo",
 }
 _SHOP_RARITIES = {
     "comum", "incomum", "raro", "epico", "lendario", "reliquia",

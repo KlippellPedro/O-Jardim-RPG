@@ -183,6 +183,66 @@ test('selos aparecem pelo subfiltro e pela busca no plural', () => {
   assert.equal(itemCorrespondeBusca(selo, 'selos'), true);
 });
 
+// Espelha plataforma/core/economy_commands.py::resolve_catalog_price: um número
+// puro em conteudo.preco vira Solares; só um objeto de uma chave declara outra
+// moeda. É o único lugar que decide a moeda — testar com um preco fabricado
+// (como {moeda:'Lunaris', valor:N}) esconderia um conteudo.preco errado.
+const resolverPrecoComoBackend = (conteudoPreco: unknown): { moeda: string; valor: number } => {
+  if (typeof conteudoPreco === 'number' && Number.isInteger(conteudoPreco) && conteudoPreco > 0) {
+    return { moeda: 'Solares', valor: conteudoPreco };
+  }
+  if (conteudoPreco && typeof conteudoPreco === 'object' && Object.keys(conteudoPreco).length === 1) {
+    const [moeda, valor] = Object.entries(conteudoPreco as Record<string, unknown>)[0];
+    if (typeof valor === 'number' && Number.isInteger(valor) && valor > 0) return { moeda, valor };
+  }
+  throw new Error(`preço de catálogo inválido: ${JSON.stringify(conteudoPreco)}`);
+};
+
+test('modificações viram categoria própria, com nível de loja pelo tipo da modificação', async () => {
+  const catalogo = (await import('../../data/loja/catalogo.json', { with: { type: 'json' } })).default as any;
+  const entradas = catalogo.entradas
+    .filter((entrada: any) => entrada.tipo === 'modificacao')
+    .map((entrada: any) => ({ ...entrada, preco: resolverPrecoComoBackend(entrada.conteudo.preco) }));
+  const modificacoes = mapearCatalogoLoja(entradas);
+
+  assert.equal(modificacoes.length, 51);
+  assert.ok(modificacoes.every((item) => item.categoria === 'Modificações'));
+  assert.ok(modificacoes.every((item) => item.valorOriginal > 0 && item.moedaPreco === 'Lunaris'));
+
+  // Marcial mexe em número grande e só se acha da Metrópole para cima.
+  const marciais = modificacoes.filter((item) => item.dadosBrutos?.nivel_modificacao === 'marcial');
+  assert.ok(marciais.every((item) => item.nivelLoja === 2));
+  assert.ok(modificacoes
+    .filter((item) => item.dadosBrutos?.nivel_modificacao === 'comum')
+    .every((item) => item.nivelLoja === 1));
+
+  const afiada = modificacoes.find((item) => item.id === 'mod-afiada');
+  assert.ok(afiada);
+  assert.equal(afiada.valorOriginal, 60);
+  assert.match(afiada.descricao, /dado de dano/);
+  assert.equal(itemCorrespondeSubfiltro(afiada, 'Modificações', 'Armas'), true);
+  assert.equal(itemCorrespondeSubfiltro(afiada, 'Modificações', 'Escudos'), false);
+  assert.equal(itemCorrespondeSubfiltro(afiada, 'Modificações', 'Comuns'), true);
+  assert.equal(itemCorrespondeSubfiltro(afiada, 'Modificações', 'Marciais'), false);
+});
+
+test('preço da Loja acompanha a faixa de valor publicada nas regras, em Lunaris', async () => {
+  const { PRECO_MODIFICACAO_POR_VALOR } = await import('../../data/regras/raridadesEquipamentos.ts');
+  const catalogo = (await import('../../data/loja/catalogo.json', { with: { type: 'json' } })).default as any;
+  const modificacoes = catalogo.entradas.filter((entrada: any) => entrada.tipo === 'modificacao');
+
+  modificacoes.forEach((entrada: any) => {
+    // Precisa ser objeto {"Lunaris": N}: um número puro no catálogo vira
+    // Solares por convenção do servidor (resolve_catalog_price), o que já
+    // aconteceu aqui uma vez e só apareceu testando contra a API real.
+    assert.deepEqual(
+      entrada.conteudo.preco,
+      { Lunaris: PRECO_MODIFICACAO_POR_VALOR[entrada.conteudo.valor_efeito as 0 | 1 | 2 | 3] },
+      `${entrada.id} fora da faixa de preço ou não declarado em Lunaris`,
+    );
+  });
+});
+
 test('equipamentos mágicos não são classificados como consumíveis', () => {
   const [manto, pocao, corda] = mapearCatalogoLoja([
     {

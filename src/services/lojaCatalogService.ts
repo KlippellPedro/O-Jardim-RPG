@@ -1,6 +1,6 @@
 import type { LojaCatalogEntry } from './lojaApi';
 
-export type ItemCategoria = 'Relíquias da Criação' | 'Armas' | 'Armaduras e Escudos' | 'Consumíveis' | 'Veículos' | 'Mercenários' | 'Componentes' | 'Frutos do Éden' | 'Implantes Cibernéticos' | 'Artefatos Mágicos' | 'Outros';
+export type ItemCategoria = 'Relíquias da Criação' | 'Armas' | 'Armaduras e Escudos' | 'Modificações' | 'Consumíveis' | 'Veículos' | 'Mercenários' | 'Componentes' | 'Frutos do Éden' | 'Implantes Cibernéticos' | 'Artefatos Mágicos' | 'Outros';
 export type ItemRaridade = 'Comum' | 'Incomum' | 'Raro' | 'Épico' | 'Lendário' | 'Relíquia' | 'Relíquia da Criação';
 export type ItemRaridadeChave = 'comum' | 'incomum' | 'raro' | 'epico' | 'lendario' | 'reliquia' | 'reliquia da criacao';
 
@@ -106,8 +106,8 @@ export const getCurrencyTheme = (moedaExibicao: MoedaTipo | string): CurrencyThe
 };
 
 const CATEGORIAS_LOJA = new Set<ItemCategoria>([
-  'Relíquias da Criação', 'Armas', 'Armaduras e Escudos', 'Consumíveis',
-  'Veículos', 'Mercenários', 'Componentes', 'Frutos do Éden',
+  'Relíquias da Criação', 'Armas', 'Armaduras e Escudos', 'Modificações',
+  'Consumíveis', 'Veículos', 'Mercenários', 'Componentes', 'Frutos do Éden',
   'Implantes Cibernéticos', 'Artefatos Mágicos', 'Outros',
 ]);
 
@@ -157,6 +157,7 @@ const mapCategoria = (item: any): ItemCategoria => {
   switch (item.tipo) {
     case 'arma': return 'Armas';
     case 'armadura': return 'Armaduras e Escudos';
+    case 'modificacao': return 'Modificações';
     case 'equipamento': return mapCategoriaEquipamento(item);
     case 'consumivel': return 'Consumíveis';
     case 'veiculo': 
@@ -275,6 +276,14 @@ export function itemCorrespondeSubfiltro(
     const escudo = marcadores.has('escudo') || descricao.includes('escudo');
     if (subfiltro === 'Escudos') return escudo;
     if (subfiltro === 'Armaduras') return !escudo;
+  }
+
+  if (categoria === 'Modificações') {
+    // "Comum" e "Marcial" filtram pelo nível da modificação; o resto filtra pelo
+    // tipo de equipamento que a recebe.
+    if (subfiltro === 'Comuns') return normalizarMarcador(dados.nivel_modificacao) === 'comum';
+    if (subfiltro === 'Marciais') return normalizarMarcador(dados.nivel_modificacao) === 'marcial';
+    return normalizarMarcador(dados.aplicacao) === normalizarMarcador(subfiltro);
   }
 
   if (categoria === 'Veículos') {

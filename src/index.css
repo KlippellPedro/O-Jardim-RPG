@@ -51,6 +51,42 @@
     @apply my-7 rounded-xl border border-[#c7a44c]/25 bg-black/25 p-4 text-center font-mono text-base font-bold leading-7 text-[#d8bd75] shadow-inner sm:text-lg;
   }
 
+  /* Blocos recolhidos: catálogos longos ficam disponíveis sem virar parede de
+     texto na primeira leitura. */
+  .regras-content details.regras-details {
+    @apply my-4 overflow-hidden rounded-xl border border-white/10 bg-black/20;
+  }
+  .regras-content details.regras-details > summary {
+    @apply flex cursor-pointer list-none flex-wrap items-center gap-x-3 gap-y-1 px-5 py-4 text-base font-bold text-[#d8bd75] transition-colors hover:bg-white/5;
+    font-family: 'Cinzel', serif;
+  }
+  .regras-content details.regras-details > summary::-webkit-details-marker {
+    display: none;
+  }
+  .regras-content details.regras-details > summary::before {
+    content: '▸';
+    @apply text-sm text-[#c7a44c]/70 transition-transform;
+  }
+  .regras-content details.regras-details[open] > summary::before {
+    content: '▾';
+  }
+  .regras-content details.regras-details[open] > summary {
+    @apply border-b border-white/10;
+  }
+  .regras-content details.regras-details .regras-details-contagem {
+    @apply text-[10px] font-semibold uppercase tracking-[0.06em] text-gray-500 sm:tracking-[0.14em];
+    font-family: 'Inter', sans-serif;
+  }
+  .regras-content details.regras-details > *:not(summary) {
+    @apply px-5;
+  }
+  .regras-content details.regras-details .regras-table-wrap {
+    @apply my-4 border-0 bg-transparent shadow-none;
+  }
+  .regras-content details.regras-details ul.regras-list {
+    @apply pb-2;
+  }
+
   .regras-content .regras-table-wrap {
     @apply my-8 overflow-x-auto rounded-xl border border-white/10 bg-black/20 shadow-lg;
   }

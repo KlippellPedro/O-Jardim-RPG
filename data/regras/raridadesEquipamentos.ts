@@ -374,3 +374,20 @@ export const CATEGORIAS_MODIFICACAO: Array<{ id: CategoriaModificacaoId; titulo:
   { id: 'escudo', titulo: 'Escudos' },
   { id: 'item', titulo: 'Itens gerais e mágicos' },
 ];
+
+/** Preço de encomenda de uma modificação, em Lunaris, pelo peso do efeito.
+ * É a mesma faixa que a Loja cobra na categoria Modificações. */
+export const PRECO_MODIFICACAO_POR_VALOR: Record<0 | 1 | 2 | 3, number> = {
+  0: 25,
+  1: 60,
+  2: 180,
+  3: 450,
+};
+
+/** Raridade mínima que o item precisa ter para bancar aquele valor de efeito. */
+export const ROTULO_RARIDADE_MINIMA_MODIFICACAO: Record<0 | 1 | 2 | 3, string> = {
+  0: 'Qualquer item',
+  1: 'Comum',
+  2: 'Raro',
+  3: 'Épico',
+};

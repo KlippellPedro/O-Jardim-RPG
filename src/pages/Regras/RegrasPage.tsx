@@ -35,6 +35,7 @@ const TITULOS_TOPICOS: Record<string, string> = {
   xp: 'Experiência e Níveis',
   legados: 'Legados',
   equipamentos: 'Equipamentos',
+  'raridades-modificacoes': 'Raridades e Modificações',
   'magia-fluxo': 'Magia e Fluxo',
   condicoes: 'Condições',
   classes: 'Classes',

@@ -28,6 +28,7 @@ TIPOS_VALIDOS = {
     "equipamento",
     "fruto-eden",
     "implante",
+    "modificacao",
     "monstro",
     "veiculo",
     "veiculo-completo",
@@ -55,11 +56,12 @@ ROTULO_RARIDADE = {
 CATEGORIA_DE = {
     "arma": "arsenal", "armadura": "arsenal", "equipamento": "arsenal",
     "artefato": "arsenal", "consumivel": "arsenal", "fruto-eden": "arsenal",
-    "implante": "arsenal", "veiculo": "veiculos", "veiculo-completo": "veiculos",
+    "implante": "arsenal", "modificacao": "modificacoes",
+    "veiculo": "veiculos", "veiculo-completo": "veiculos",
     "monstro": "bestiario", "drop": "drops",
 }
 ACAO_DA_CATEGORIA = {
-    "arsenal": "Comprar", "veiculos": "Comprar",
+    "arsenal": "Comprar", "veiculos": "Comprar", "modificacoes": "Encomendar",
     "drops": "Comprar", "bestiario": "Contratar",
 }
 
