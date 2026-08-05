@@ -1,16 +1,16 @@
-// Lore-fonte: Obsidian "01 - Lore/Árvores/Gênese/Realidade 0/Dimensões/
-// Padrão/Banco Lunar/Amadheus Colona.md" — ainda não migrada pro
-// data/mundo/**/*.json (ver scripts/buildMundo.py), então fica hardcoded
-// aqui até essa entrada existir no Códice.
+// Lore-fonte: Obsidian "01 - Lore/Árvores/Banco Lunar/Amadheus Colona.md",
+// preenchida pelo autor. O mesmo personagem vive no Códice, em
+// data/mundo/Gênese/realidade-0-soberanos.json (id amadheus-colona). Aqui fica
+// a versão curta que cabe no card da cena 3D, e as duas precisam concordar.
 export const BANCO_LUNAR_INFO = {
   nome: 'Banco Lunar',
   cor: '#4ade80',
   descricao:
-    'A única instituição da Realidade 0 que opera em todas as dimensões ao mesmo tempo — e a única que nenhum reino jamais ousou nacionalizar.',
+    'A única instituição que opera em todas as Árvores ao mesmo tempo, e a única que nenhum ser jamais ousou nacionalizar.',
   responsavel: {
     nome: 'Amadheus Colona',
     epiteto: 'Soberano dos Cosmos',
     descricao:
-      'Não comanda exército nem território. Comanda dívida — numa assembleia de dez Soberanos, costuma ser o único que já sabe o que os outros nove vão pedir.',
+      'Preside o Banco Lunar. Não comanda exército nem território: administra o dinheiro de quem quer os próprios bens guardados, seguros e investidos. Foi um ser comum da Gênese até virar sócio de Jota Macedo, e os dois ascenderam juntos. Desde então se mantém imparcial e assiste ao caos de fora, fornecendo a qualquer lado o que pedirem, desde que tenham com que pagar.',
   },
 };

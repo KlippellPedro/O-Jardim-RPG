@@ -737,7 +737,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "conteudo": {
         "epiteto": "Soberano dos Cosmos",
         "genero": "Masculino",
-        "descricao": "O Soberano dos Cosmos preside o Banco Lunar - a única instituição da Realidade 0 que opera em todas as dimensões ao mesmo tempo, e a única que nenhum reino ousou nacionalizar.\n\nAmadheus não comanda exército nem território. Comanda dívida, e por isso é o Soberano que menos aparece e o que menos precisa aparecer: numa assembleia de dez, ele costuma ser o único que já sabe o que os outros nove vão pedir.",
+        "descricao": "O Soberano dos Cosmos preside o Banco Lunar, a única instituição que opera em todas as Árvores ao mesmo tempo e a única que nenhum ser jamais ousou nacionalizar.\n\nAmadheus não comanda exército nem território. Ele administra o dinheiro de todos os seres que querem os próprios bens guardados, seguros e investidos.\n\nJá foi um ser comum da Gênese. Ao se tornar sócio de Jota Macedo, os dois ascenderam e alcançaram o que queriam: ser livres e governar a si mesmos. Amadheus apenas expandiu os negócios para todas as Árvores. Desde então mantém posição imparcial e assiste ao caos de fora, fornecendo a qualquer um dos lados os recursos que pedirem, desde que tenham com que pagar.",
         "cor": "Verde",
         "status": "ativo"
       }
@@ -802,7 +802,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "conteudo": {
         "epiteto": "Soberano do Comércio",
         "genero": "Masculino",
-        "descricao": "Rei de Lionês, o reino que alimenta os outros. Governa com seus conselheiros reais e é, entre os dez, o que tem o poder mais silencioso e o mais difícil de contestar: ninguém declara guerra a quem planta a comida de todo mundo.\n\nSe Amadheus Colona controla a dívida e Durin II controla o aço, Augustos controla a única coisa que nenhum dos dois consegue estocar por muito tempo.",
+        "descricao": "Rei de Lionês, o reino que alimenta os outros. Governa com seus conselheiros reais e é, entre os dez, o que tem o poder mais silencioso e o mais difícil de contestar: ninguém declara guerra a quem planta a comida de todo mundo.\n\nSe Amadheus Colona guarda a riqueza e Durin II controla o aço, Augustos controla a única coisa que nenhum dos dois consegue estocar por muito tempo.",
         "cor": "Rosa",
         "status": "ativo"
       }
