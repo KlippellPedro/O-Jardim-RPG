@@ -121,6 +121,83 @@ class TestCharacterRules:
         erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
         assert "mais Legados" in erro
 
+    def test_legado_repetivel_aceita_ate_o_limite_e_bloqueia_depois(self):
+        # Decisão de balanceamento 2026-08: "Não é Tão Pesado" descreve uma
+        # 2ª e 3ª escolha no texto — o dado precisa refletir isso (repetivel
+        # + limite:3), senão o validador bloqueava a 2ª escolha mesmo com o
+        # texto publicado permitindo.
+        # Nível 20 dá 4 vagas (20 // 5) — acima do limite:3 do próprio
+        # Legado, pra isolar o erro de "limite por Legado" do erro de "vagas
+        # totais" (que dispara antes, na validação, se as duas faltarem juntas).
+        anterior = _ficha_criacao()
+        anterior["classes"][0]["nivel"] = 20
+        anterior["nivel"] = 20
+        anterior["xp"] = 120000
+        dentro_do_limite = deepcopy(anterior)
+        dentro_do_limite["legadosSelecionados"] = ["nao-e-tao-pesado"] * 3
+        assert validar_regras_ficha(dentro_do_limite, {}, ficha_anterior=anterior) is None
+
+        alem_do_limite = deepcopy(anterior)
+        alem_do_limite["legadosSelecionados"] = ["nao-e-tao-pesado"] * 4
+        erro = validar_regras_ficha(alem_do_limite, {}, ficha_anterior=anterior)
+        assert "mais vezes que o permitido" in erro
+
+    def test_legado_repetivel_com_pre_requisito_respeita_o_limite_de_2(self):
+        # Nível 20 dá 4 vagas — acima do limite:2 do próprio Legado, pelo
+        # mesmo motivo do teste anterior.
+        anterior = _ficha_criacao()
+        anterior["classes"][0]["nivel"] = 20
+        anterior["nivel"] = 20
+        anterior["xp"] = 120000
+        anterior["atributosFinais"]["destreza"] = 16
+        dentro_do_limite = deepcopy(anterior)
+        dentro_do_limite["legadosSelecionados"] = ["rapidinho", "rapidinho"]
+        assert validar_regras_ficha(dentro_do_limite, {}, ficha_anterior=anterior) is None
+
+        alem_do_limite = deepcopy(anterior)
+        alem_do_limite["legadosSelecionados"] = ["rapidinho", "rapidinho", "rapidinho"]
+        erro = validar_regras_ficha(alem_do_limite, {}, ficha_anterior=anterior)
+        assert "mais vezes que o permitido" in erro
+
+    def test_legados_sem_pre_requisito_agora_exigem_nivel_5(self):
+        # Decisão de balanceamento 2026-08: Bala Ágil, Tô ficando bom e
+        # Mágico? não tinham pré-requisito nenhum — ficavam disponíveis já no
+        # nível 1, desproporcionais aos outros Legados do mesmo custo.
+        for legado_id in ("bala-agil", "to-ficando-bom", "magico-interrogacao"):
+            anterior = _ficha_criacao()
+            # Humano dá 1 vaga extra (legados_adicionais) — assim a ficha tem
+            # vaga disponível mesmo abaixo do nível 5, isolando o erro de
+            # "pré-requisito do Legado" do erro (diferente) de "sem vaga".
+            anterior["racaId"] = "humano"
+            anterior["classes"][0]["nivel"] = 4
+            anterior["nivel"] = 4
+            anterior["xp"] = 6000
+            abaixo_do_nivel = deepcopy(anterior)
+            abaixo_do_nivel["legadosSelecionados"] = [legado_id]
+            erro = validar_regras_ficha(abaixo_do_nivel, {}, ficha_anterior=anterior)
+            assert erro is not None and "pre-requisitos" in erro, (legado_id, erro)
+
+            anterior["classes"][0]["nivel"] = 5
+            anterior["nivel"] = 5
+            anterior["xp"] = 10000
+            no_nivel_5 = deepcopy(anterior)
+            no_nivel_5["legadosSelecionados"] = [legado_id]
+            assert validar_regras_ficha(no_nivel_5, {}, ficha_anterior=anterior) is None, legado_id
+
+    def test_codigo_de_etica_tem_teto_de_escala_documentado(self):
+        # Decisão de balanceamento 2026-08: a fórmula antiga ("+nível") não
+        # tinha teto e ultrapassava o dano de uma arma-relíquia no nível 60.
+        import json
+
+        legados = json.loads((DATA_ROOT / "ficha" / "legados.json").read_text(encoding="utf-8"))
+        codigo_de_etica = next(l for l in legados["legados"] if l["id"] == "codigo-de-etica")
+        assert "metade do seu nível" in codigo_de_etica["descricao"]
+        # +30, não +33: nível máximo do sistema é 60, e metade de 60 é 30 —
+        # o texto precisa bater com o maior valor que a fórmula de fato produz
+        # (corrigido na revisão pós-implementação de 2026-08).
+        assert "+30" in codigo_de_etica["descricao"]
+        assert "+33" not in codigo_de_etica["descricao"]
+
     def test_rejects_class_power_without_required_power(self):
         anterior = _ficha_criacao()
         anterior["classeId"] = "espadachim"

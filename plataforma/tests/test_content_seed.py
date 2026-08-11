@@ -55,7 +55,7 @@ def test_sync_shop_catalog_upserts_and_deactivates_missing_items(tmp_path):
             "id": "mod-afiada",
             "tipo": "modificacao",
             "titulo": "Afiada",
-            "conteudo": {"preco": 60, "raridade": "incomum", "categoria_loja": "Modificações"},
+            "conteudo": {"preco": 60, "raridade": "incomum", "categoria_loja": "Modificações", "aplicacao": "Armas"},
         },
     ])
     database = FakeDatabase()
@@ -82,4 +82,34 @@ def test_sync_shop_catalog_rejects_invalid_source_before_opening_transaction(tmp
     with pytest.raises(RuntimeError, match="tipo desconhecido"):
         sync_shop_catalog(database, tmp_path)
     assert database.opened == 0
+
+
+def test_sync_shop_catalog_rejects_modification_with_unknown_aplicacao(tmp_path):
+    write_catalog(tmp_path, [
+        {
+            "id": "mod-quebrada",
+            "tipo": "modificacao",
+            "titulo": "Quebrada",
+            "conteudo": {"preco": 60, "raridade": "incomum", "aplicacao": "arma"},
+        },
+    ])
+    database = FakeDatabase()
+
+    with pytest.raises(RuntimeError, match="aplicacao desconhecida"):
+        sync_shop_catalog(database, tmp_path)
+    assert database.opened == 0
+
+
+def test_sync_shop_catalog_accepts_modification_aplicacao_case_and_accent_insensitive(tmp_path):
+    write_catalog(tmp_path, [
+        {
+            "id": "mod-ok",
+            "tipo": "modificacao",
+            "titulo": "Ok",
+            "conteudo": {"preco": 60, "raridade": "incomum", "aplicacao": "ITENS GERAIS E MÁGICOS"},
+        },
+    ])
+    database = FakeDatabase()
+
+    assert sync_shop_catalog(database, tmp_path) == 1
 

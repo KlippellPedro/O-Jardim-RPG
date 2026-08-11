@@ -9,7 +9,7 @@ from psycopg.errors import UniqueViolation
 from core.audit import record_audit
 from core.config import Settings
 from core.database import Database
-from core import limites
+from core import rate_limit_auth as limites
 from core.dependencies import (
     AuthenticatedUser,
     get_current_user,

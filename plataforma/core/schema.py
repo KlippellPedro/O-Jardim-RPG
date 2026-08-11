@@ -768,4 +768,165 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        20,
+        "veiculos_e_propriedades_hibridos",
+        (
+            """
+            CREATE TABLE IF NOT EXISTS campanha_veiculos (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                proprietario_personagem_id UUID REFERENCES personagens(id) ON DELETE SET NULL,
+                origem_item_id TEXT,
+                origem_personagem_id UUID,
+                
+                nome TEXT NOT NULL,
+                imagem_url TEXT,
+                descricao TEXT DEFAULT '',
+                
+                vida_atual INTEGER NOT NULL DEFAULT 0 CHECK (vida_atual >= 0 AND vida_atual <= vida_maxima),
+                vida_maxima INTEGER NOT NULL DEFAULT 0 CHECK (vida_maxima >= 0),
+                combustivel_atual INTEGER NOT NULL DEFAULT 0 CHECK (combustivel_atual >= 0 AND combustivel_atual <= combustivel_maximo),
+                combustivel_maximo INTEGER NOT NULL DEFAULT 0 CHECK (combustivel_maximo >= 0),
+                defesa INTEGER NOT NULL DEFAULT 0,
+                resistencia INTEGER NOT NULL DEFAULT 0,
+                deslocamento INTEGER NOT NULL DEFAULT 0,
+                manobrabilidade INTEGER NOT NULL DEFAULT 0,
+                cobertura TEXT NOT NULL DEFAULT 'nenhuma',
+                capacidade INTEGER NOT NULL DEFAULT 0 CHECK (capacidade >= 0),
+                tripulacao_minima INTEGER NOT NULL DEFAULT 1 CHECK (tripulacao_minima >= 0),
+                sistemas_ativos_maximos INTEGER NOT NULL DEFAULT 1 CHECK (sistemas_ativos_maximos >= 0),
+                espacos_modulos_maximos INTEGER NOT NULL DEFAULT 1 CHECK (espacos_modulos_maximos >= 0),
+                espacos_base INTEGER NOT NULL DEFAULT 1 CHECK (espacos_base >= 0),
+                
+                nivel_acesso_campanha TEXT NOT NULL DEFAULT 'nenhum' 
+                    CHECK (nivel_acesso_campanha IN ('nenhum', 'visualizar', 'utilizar')),
+                
+                versao INTEGER NOT NULL DEFAULT 1,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                
+                UNIQUE (origem_item_id, origem_personagem_id)
+            )
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS campanha_veiculo_permissoes (
+                veiculo_id UUID NOT NULL REFERENCES campanha_veiculos(id) ON DELETE CASCADE,
+                personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                nivel_permissao TEXT NOT NULL 
+                    CHECK (nivel_permissao IN ('visualizar', 'utilizar', 'gerenciar')),
+                PRIMARY KEY (veiculo_id, personagem_id)
+            )
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS campanha_veiculo_ocupantes (
+                id UUID PRIMARY KEY,
+                veiculo_id UUID NOT NULL REFERENCES campanha_veiculos(id) ON DELETE CASCADE,
+                personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                papel TEXT NOT NULL,
+                tipo TEXT NOT NULL CHECK (tipo IN ('tripulacao', 'passageiro')),
+                UNIQUE(veiculo_id, personagem_id)
+            )
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS campanha_veiculo_modulos (
+                id UUID PRIMARY KEY,
+                veiculo_id UUID NOT NULL REFERENCES campanha_veiculos(id) ON DELETE CASCADE,
+                nome TEXT NOT NULL,
+                descricao TEXT DEFAULT '',
+                ativo BOOLEAN NOT NULL DEFAULT FALSE,
+                espacos_ocupados INTEGER NOT NULL DEFAULT 1 CHECK (espacos_ocupados > 0),
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS campanha_veiculo_inventario (
+                id UUID PRIMARY KEY,
+                veiculo_id UUID NOT NULL REFERENCES campanha_veiculos(id) ON DELETE CASCADE,
+                item_id TEXT NOT NULL,
+                nome TEXT NOT NULL,
+                categoria TEXT NOT NULL,
+                quantidade INTEGER NOT NULL DEFAULT 1 CHECK (quantidade > 0),
+                espacos INTEGER NOT NULL DEFAULT 1,
+                descricao TEXT DEFAULT '',
+                dados JSONB NOT NULL DEFAULT '{}'::jsonb,
+                adicionado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS campanha_propriedades (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                proprietario_personagem_id UUID REFERENCES personagens(id) ON DELETE SET NULL,
+                origem_item_id TEXT,
+                origem_personagem_id UUID,
+                
+                nome TEXT NOT NULL,
+                tipo TEXT NOT NULL,
+                localizacao TEXT DEFAULT '',
+                descricao TEXT DEFAULT '',
+                qualidade_quartos TEXT NOT NULL DEFAULT 'nenhuma',
+                patamar TEXT DEFAULT '',
+                
+                valor_aquisicao INTEGER NOT NULL DEFAULT 0,
+                manutencao INTEGER NOT NULL DEFAULT 0,
+                
+                nivel_acesso_campanha TEXT NOT NULL DEFAULT 'nenhum' 
+                    CHECK (nivel_acesso_campanha IN ('nenhum', 'visualizar', 'utilizar')),
+                
+                versao INTEGER NOT NULL DEFAULT 1,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                
+                UNIQUE (origem_item_id, origem_personagem_id)
+            )
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS campanha_propriedade_permissoes (
+                propriedade_id UUID NOT NULL REFERENCES campanha_propriedades(id) ON DELETE CASCADE,
+                personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                nivel_permissao TEXT NOT NULL 
+                    CHECK (nivel_permissao IN ('visualizar', 'utilizar', 'gerenciar')),
+                PRIMARY KEY (propriedade_id, personagem_id)
+            )
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS campanha_propriedade_instalacoes (
+                id UUID PRIMARY KEY,
+                propriedade_id UUID NOT NULL REFERENCES campanha_propriedades(id) ON DELETE CASCADE,
+                nome TEXT NOT NULL,
+                nivel INTEGER NOT NULL DEFAULT 1 CHECK (nivel > 0),
+                espacos_ocupados INTEGER NOT NULL DEFAULT 1 CHECK (espacos_ocupados > 0)
+            )
+            """,
+        ),
+    ),
+    (
+        21,
+        "infracoes_de_requisito_na_loja",
+        (
+            """
+            CREATE TABLE IF NOT EXISTS infracoes_loja (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                operacao_id UUID NOT NULL REFERENCES comandos_economia(id) ON DELETE CASCADE,
+                item_id TEXT NOT NULL,
+                tipo_infracao TEXT NOT NULL,
+                requisito TEXT NOT NULL,
+                valor_exigido TEXT NOT NULL DEFAULT '',
+                valor_personagem TEXT NOT NULL DEFAULT '',
+                dados JSONB NOT NULL DEFAULT '{}'::jsonb,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS infracoes_loja_personagem_idx
+            ON infracoes_loja (campanha_id, personagem_id, criado_em DESC)
+            """,
+        ),
+    ),
 )

@@ -13,13 +13,18 @@ log = logging.getLogger("jardim-plataforma")
 
 _SHOP_TYPES = {
     "arma", "armadura", "artefato", "consumivel", "drop", "equipamento",
-    "fruto-eden", "implante", "modificacao", "monstro", "veiculo",
-    "veiculo-completo",
+    "fruto-eden", "implante", "modificacao", "monstro", "propriedade",
+    "veiculo", "veiculo-completo",
 }
 _SHOP_RARITIES = {
     "comum", "incomum", "raro", "epico", "lendario", "reliquia",
-    "reliquia da criacao",
+    "reliquia da criacao", "mitico",
 }
+# conteudo.aplicacao de toda entrada tipo "modificacao" (liga a modificacao ao
+# tipo de item base). Validado aqui pelo mesmo motivo de _SHOP_TYPES/_SHOP_RARITIES:
+# sem isso, um valor digitado errado nunca dá erro, só faz a modificação nunca
+# casar com nenhum item no filtro da loja (ver achado 11 da auditoria de 2026-08).
+_MODIFICATION_APPLICATIONS = {"armas", "armaduras", "escudos", "itens gerais e magicos"}
 
 
 def _normalize_catalog_value(value: object) -> str:
@@ -69,6 +74,10 @@ def sync_shop_catalog(database: Database, data_root: Path) -> int:
         rarity = content.get("raridade")
         if rarity is not None and _normalize_catalog_value(rarity) not in _SHOP_RARITIES:
             raise RuntimeError(f"entrada {item_id!r} possui raridade desconhecida: {rarity!r}")
+        if item_type == "modificacao":
+            application = content.get("aplicacao")
+            if _normalize_catalog_value(application) not in _MODIFICATION_APPLICATIONS:
+                raise RuntimeError(f"modificacao {item_id!r} possui aplicacao desconhecida: {application!r}")
         seen_ids.add(item_id)
         entries.append({"id": item_id, "tipo": item_type, "titulo": title, "conteudo": content})
 

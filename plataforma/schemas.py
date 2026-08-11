@@ -232,6 +232,25 @@ class InventoryTransactionInput(BaseModel):
     dados: dict[str, Any] = Field(default_factory=dict)
 
 
+class CampaignVehicleInput(BaseModel):
+    nome: str = Field(min_length=1, max_length=100)
+    imagem_url: str | None = None
+    descricao: str = ""
+    vida_maxima: int = Field(default=0, ge=0)
+    combustivel_maximo: int = Field(default=0, ge=0)
+    defesa: int = Field(default=0)
+    resistencia: int = Field(default=0)
+    deslocamento: int = Field(default=0)
+    manobrabilidade: int = Field(default=0)
+    cobertura: str = Field(default="nenhuma")
+    capacidade: int = Field(default=0, ge=0)
+    tripulacao_minima: int = Field(default=1, ge=0)
+    sistemas_ativos_maximos: int = Field(default=1, ge=0)
+    espacos_modulos_maximos: int = Field(default=1, ge=0)
+    espacos_base: int = Field(default=1, ge=0)
+    nivel_acesso_campanha: str = Field(default="nenhum")
+
+
 class EconomyWalletItem(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
 
@@ -328,6 +347,7 @@ class StrictCommandInput(BaseModel):
 class ShopCommandItemInput(StrictCommandInput):
     item_id: str = Field(min_length=1, max_length=160)
     quantidade: StrictInt = Field(default=1, ge=1, le=500)
+    alvo_item_id: str | None = Field(default=None, max_length=160)
 
     @field_validator("item_id")
     @classmethod
@@ -342,6 +362,7 @@ class ShopBatchCommandInput(StrictCommandInput):
     campanha_id: UUID
     personagem_id: UUID
     economia_versao_esperada: StrictInt = Field(ge=1)
+    localizacao_loja: StrictInt | None = Field(default=None, ge=1, le=4)
     idempotencia: str = Field(
         min_length=8,
         max_length=128,
@@ -677,3 +698,89 @@ class ContentPublishInput(BaseModel):
         if not cleaned:
             raise ValueError("nenhuma chave valida")
         return cleaned
+
+class CampaignVehicleDeltaInput(BaseModel):
+    versao: int
+    delta_vida: int | None = None
+    delta_combustivel: int | None = None
+
+class CampaignVehicleMigrationInput(BaseModel):
+    personagem_id: UUID
+    item_id: str
+    compartilhar_campanha: bool = False
+
+class CampaignPropertyInput(BaseModel):
+    nome: str = Field(min_length=1, max_length=100)
+    tipo: str = Field(min_length=1, max_length=50)
+    localizacao: str = ""
+    descricao: str = ""
+    qualidade_quartos: str = Field(default="nenhuma")
+    patamar: str = ""
+    valor_aquisicao: int = Field(default=0, ge=0)
+    manutencao: int = Field(default=0, ge=0)
+    nivel_acesso_campanha: str = Field(default="nenhum")
+
+class CampaignPropertyInstallationLegacyInput(BaseModel):
+    nome: str = Field(default="Instalação", max_length=100)
+    nivel: int = Field(default=1, ge=1)
+    espacos: int = Field(default=1, ge=1)
+
+
+class CampaignPropertyMigrationInput(BaseModel):
+    """Propriedades não são itens de loja: nascem direto em `ficha.propriedades`
+    (ver IPropriedadeFicha no frontend). Migrar pra campanha recebe os dados já
+    prontos, em vez de procurar um item de inventário que nunca existiria."""
+
+    personagem_id: UUID
+    propriedade_local_id: str = Field(min_length=1, max_length=160)
+    nome: str = Field(min_length=1, max_length=100)
+    tipo: str = Field(default="Base", max_length=50)
+    localizacao: str = ""
+    descricao: str = ""
+    qualidade_quartos: str = Field(default="nenhuma")
+    patamar: str = ""
+    valor_aquisicao: int = Field(default=0, ge=0)
+    manutencao: int = Field(default=0, ge=0)
+    instalacoes: list[CampaignPropertyInstallationLegacyInput] = Field(default_factory=list)
+    compartilhar_campanha: bool = False
+
+
+class CampaignPermissionGrantInput(BaseModel):
+    personagem_id: UUID
+    nivel_permissao: Literal["visualizar", "utilizar", "gerenciar"]
+
+
+class CampaignVehicleOccupantInput(BaseModel):
+    personagem_id: UUID
+    papel: str = Field(min_length=1, max_length=80)
+    tipo: Literal["tripulacao", "passageiro"]
+
+
+class CampaignVehicleModuleInput(BaseModel):
+    nome: str = Field(min_length=1, max_length=100)
+    descricao: str = ""
+    espacos_ocupados: int = Field(default=1, ge=1)
+
+
+class CampaignVehicleModuleToggleInput(BaseModel):
+    ativo: bool
+
+
+class CampaignVehicleInventoryItemInput(BaseModel):
+    nome: str = Field(min_length=1, max_length=100)
+    categoria: str = Field(default="geral", max_length=60)
+    quantidade: int = Field(default=1, ge=1)
+    espacos: int = Field(default=1, ge=0)
+    descricao: str = ""
+    dados: dict[str, Any] = Field(default_factory=dict)
+
+
+class CampaignVehicleInventoryQuantityInput(BaseModel):
+    quantidade: int = Field(ge=1)
+
+
+class CampaignPropertyInstallationInput(BaseModel):
+    nome: str = Field(min_length=1, max_length=100)
+    nivel: int = Field(default=1, ge=1)
+    espacos_ocupados: int = Field(default=1, ge=1)
+

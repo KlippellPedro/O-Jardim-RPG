@@ -25,7 +25,7 @@ from core.backup import (
     nome_do_arquivo,
 )
 from core.automatic_backup import salvar_backup_automatico
-from core import limites
+from core import rate_limit_auth as limites
 from core.character_summary import carregar_catalogos, iniciativa_fixa, resumir_ficha, sabedoria_desempate, xp_por_vd
 from core.campaign_visibility import visible_campaign_config
 from core.dados import _classificar, rolar_formula, rolar_teste
@@ -326,6 +326,36 @@ class CharacterSummaryTests(unittest.TestCase):
             "condicoesAtivas": [{"nome": "Surpreendido"}],
         }
         self.assertEqual(iniciativa_fixa(ficha), 8)
+
+    def test_iniciativa_fixa_aceita_efeito_criado_pelo_editor_de_poderes(self):
+        ficha = {
+            "derivados": {"iniciativa": 14},
+            "poderes": [{
+                "id": "aura",
+                "efeitos": [{
+                    "categoria": "combate",
+                    "alvo": "iniciativa",
+                    "valor": 3,
+                    "modo": "bonus",
+                }],
+            }],
+        }
+        self.assertEqual(iniciativa_fixa(ficha), 17)
+
+    def test_iniciativa_fixa_limita_efeitos_do_editor_de_poderes(self):
+        ficha = {
+            "derivados": {"iniciativa": 14},
+            "poderes": [{
+                "id": "aura",
+                "efeitos": [{
+                    "categoria": "combate",
+                    "alvo": "iniciativa",
+                    "valor": 100,
+                    "modo": "bonus",
+                } for _ in range(6)],
+            }],
+        }
+        self.assertEqual(iniciativa_fixa(ficha), 114)
 
     def test_sabedoria_desempata_com_modificador(self):
         self.assertEqual(sabedoria_desempate({"atributosFinais": {"sabedoria": 15}}), 2)

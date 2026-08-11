@@ -1,4 +1,11 @@
-"""Limite de tentativas por ação, guardado no banco.
+"""Limite de tentativas por ação de autenticação, guardado no banco.
+
+Escopo: só login/cadastro/troca de senha (rate-limit de segurança da
+plataforma web). Não tem relação com limites de recursos de personagem
+(usos de poder por sessão, cooldown de habilidade etc.) — esse é um sistema
+diferente, hoje só descrito em texto em cada poder/magia (ver auditoria
+2026-08, achado 16; o nome antigo deste arquivo, `limites.py`, já causou essa
+confusão).
 
 O limitador nasceu dentro do login e ficou só lá. Cadastro e pedido de senha
 eram rotas públicas sem freio nenhum: dava para criar conta em massa ou encher

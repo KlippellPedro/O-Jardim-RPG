@@ -34,6 +34,8 @@ from routers import (
     shop,
     vault,
     bounties,
+    vehicles,
+    properties,
 )
 
 
@@ -193,10 +195,12 @@ for api_router in (
     rolls.router,
     sessions.router,
     shop.router,
-    vault.router,
-    bounties.router,
 ):
     app.include_router(api_router, prefix="/api/v1")
+app.include_router(vault.router, prefix="/api/v1")
+app.include_router(bounties.router, prefix="/api/v1")
+app.include_router(vehicles.router, prefix="/api/v1")
+app.include_router(properties.router, prefix="/api/v1")
 
 
 class _EstaticosDeDesenvolvimento(StaticFiles):

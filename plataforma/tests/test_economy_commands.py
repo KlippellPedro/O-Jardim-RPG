@@ -27,7 +27,13 @@ from routers.bounties import (
     reivindicar_recompensa,
     resolver_recompensa,
 )
-from routers.shop import get_shop_catalog, purchase_batch, sell_batch
+from routers.shop import (
+    _catalog_shop_level,
+    _inventory_category,
+    get_shop_catalog,
+    purchase_batch,
+    sell_batch,
+)
 from schemas import (
     BountyClaimCommandInput,
     BountyResolveCommandInput,
@@ -112,6 +118,25 @@ class EconomyCommandUnitTests(unittest.TestCase):
                     ],
                 }
             )
+        for invalid_location in (True, 0, 5, "2"):
+            with self.subTest(location=invalid_location), self.assertRaises(ValidationError):
+                ShopBatchCommandInput(**base, localizacao_loja=invalid_location)
+
+    def test_shop_level_and_vehicle_inventory_category_are_server_authoritative(self):
+        self.assertEqual(_inventory_category("veiculo"), "modulo-veicular")
+        self.assertEqual(_inventory_category("veiculo-completo"), "veiculo")
+        self.assertEqual(
+            _catalog_shop_level({"tipo": "arma", "conteudo": {"raridade": "comum", "preco": 1}}),
+            1,
+        )
+        self.assertEqual(
+            _catalog_shop_level({"tipo": "veiculo", "conteudo": {"raridade": "incomum", "preco": 1}}),
+            2,
+        )
+        self.assertEqual(
+            _catalog_shop_level({"tipo": "arma", "conteudo": {"raridade": "inválida", "preco": 1}}),
+            4,
+        )
 
     def test_bounty_schema_rejects_client_reward_value(self):
         with self.assertRaises(ValidationError):
@@ -370,11 +395,12 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
             csrf_hash="hash",
         )
 
-    def _purchase_payload(self, *, key="checkout-12345678", version=1, quantity=1):
+    def _purchase_payload(self, *, key="checkout-12345678", version=1, quantity=1, location=1):
         return ShopBatchCommandInput(
             campanha_id=self.campaign_id,
             personagem_id=self.hunter_id,
             economia_versao_esperada=version,
+            localizacao_loja=location,
             idempotencia=key,
             itens=[{"item_id": "adaga", "quantidade": quantity}],
         )
@@ -501,6 +527,53 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
         with self.assertRaises(HTTPException) as raised:
             purchase_batch(self._purchase_payload(), user=self.player, database=self.database)
         self.assertEqual(raised.exception.status_code, 403)
+
+    def test_purchase_enforces_catalog_level_and_hidden_location_on_server(self):
+        with self.database.connection() as connection:
+            connection.execute(
+                "UPDATE catalogo_itens SET conteudo=conteudo || %s WHERE id='adaga'",
+                (Jsonb({"nivelMinimoLoja": 2}),),
+            )
+        with self.assertRaises(HTTPException) as raised:
+            purchase_batch(
+                self._purchase_payload(key="checkout-low-location", location=1),
+                user=self.player,
+                database=self.database,
+            )
+        self.assertEqual(raised.exception.status_code, 403)
+        purchase_batch(
+            self._purchase_payload(key="checkout-valid-location", location=2),
+            user=self.player,
+            database=self.database,
+        )
+
+        with self.database.connection() as connection:
+            connection.execute(
+                "UPDATE campanhas SET configuracoes=%s WHERE id=%s",
+                (Jsonb({"locais_ocultos": [2]}), self.campaign_id),
+            )
+        with self.assertRaises(HTTPException) as hidden:
+            purchase_batch(
+                self._purchase_payload(key="checkout-hidden-location", version=2, location=2),
+                user=self.player,
+                database=self.database,
+            )
+        self.assertEqual(hidden.exception.status_code, 403)
+
+    def test_purchase_enforces_master_authorization_flag(self):
+        with self.database.connection() as connection:
+            connection.execute(
+                "UPDATE catalogo_itens SET conteudo=conteudo || %s WHERE id='adaga'",
+                (Jsonb({"requer_autorizacao_mestre": True}),),
+            )
+        with self.assertRaises(HTTPException) as raised:
+            purchase_batch(
+                self._purchase_payload(key="checkout-master-only"),
+                user=self.player,
+                database=self.database,
+            )
+        self.assertEqual(raised.exception.status_code, 403)
+        self.assertIn("Mestre", str(raised.exception.detail))
 
     def test_insufficient_balance_rolls_back_every_economic_change(self):
         with self.assertRaises(HTTPException) as raised:

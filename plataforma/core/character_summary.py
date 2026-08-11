@@ -9,14 +9,20 @@ from pathlib import Path
 
 log = logging.getLogger("jardim-plataforma")
 
-_NOMES: dict[str, dict[str, str]] = {"raca": {}, "classe": {}, "pericia": {}, "legado": {}, "magia": {}}
+_NOMES: dict[str, dict[str, str]] = {
+    "raca": {}, "classe": {}, "pericia": {}, "legado": {}, "magia": {},
+    "ritual": {}, "selo": {}, "encantamento": {},
+}
 # (fluxo_minimo, circulo) em ordem decrescente, lido de data/ficha/magias.json.
 _CIRCULOS_POR_FLUXO: list[tuple[int, int]] = []
 # Ids validos de cicatriz, lidos de data/ficha/marcas-de-circulo.json.
 _CICATRIZES: set[str] = set()
 # Ids validos de Simbolo, lidos de data/ficha/pecados-e-virtudes.json.
 _SIMBOLOS: set[str] = set()
-_CATALOGO: dict[str, dict[str, dict]] = {"raca": {}, "classe": {}, "pericia": {}, "legado": {}, "magia": {}}
+_CATALOGO: dict[str, dict[str, dict]] = {
+    "raca": {}, "classe": {}, "pericia": {}, "legado": {}, "magia": {},
+    "ritual": {}, "selo": {}, "encantamento": {},
+}
 _ATRIBUTOS = ("forca", "destreza", "constituicao", "inteligencia", "sabedoria", "carisma", "fluxo")
 _VALORES_PADRAO = sorted((15, 14, 13, 12, 10, 8, 8))
 _GRAUS = ("iniciante", "aprendiz", "treinado", "especialista", "mestre", "veterano", "renomado")
@@ -101,6 +107,18 @@ def carregar_catalogos(data_root: Path) -> None:
             for item in magias
             if isinstance(item, dict) and item.get("id")
         }
+        for chave, chave_plural in (("ritual", "rituais"), ("selo", "selos"), ("encantamento", "encantamentos")):
+            itens = documento.get(chave_plural, []) if isinstance(documento, dict) else []
+            _NOMES[chave] = {
+                str(item.get("id")): str(item.get("titulo") or item.get("id"))
+                for item in itens
+                if isinstance(item, dict) and item.get("id")
+            }
+            _CATALOGO[chave] = {
+                str(item.get("id")): item
+                for item in itens
+                if isinstance(item, dict) and item.get("id")
+            }
         regras = documento.get("regras", {}) if isinstance(documento, dict) else {}
         circulos = [
             (_inteiro(item.get("fluxo_minimo")) or 0, _inteiro(item.get("circulo")) or 0)
@@ -177,7 +195,10 @@ def _compativel_com_arvore(tipo: str, item_id, arvore_id, liberados: list) -> st
     arvore = item.get("arvore")
     arvores = item.get("arvores") or []
     compativel_arvore = (
-        disponibilidade == "geral"
+        not arvore_id
+        or arvore_id == "sem-arvore"
+        or arvore_id == "universal"
+        or disponibilidade == "geral"
         or arvore == arvore_id
         or (isinstance(arvores, list) and arvore_id in arvores)
     )
@@ -220,7 +241,7 @@ def _classes_da_ficha(ficha: dict) -> list[dict]:
 
 def _nivel_por_xp(xp: int) -> int:
     nivel = 1
-    for candidato in range(2, 41):
+    for candidato in range(2, 101):
         if xp < 500 * candidato * (candidato - 1):
             break
         nivel = candidato
@@ -457,6 +478,87 @@ def _circulo_por_fluxo(fluxo: int) -> int:
     return 0
 
 
+def _validar_manifestacao_magica(
+    ficha: dict,
+    anterior: dict,
+    classes: list[tuple[dict, int]],
+    *,
+    chave_catalogo: str,
+    rotulo_plural: str,
+    campo_conhecidos: str,
+    campo_concedidos: str,
+    campo_progressao: str,
+    criacao: bool,
+) -> str | None:
+    """Rituais, Selos e Encantamentos nao tem circulo nem 'fontes_permitidas'
+    (ver data/ficha/magias.json.regras.formas) - so vagas por nivel de classe,
+    concessao do mestre e o mesmo travamento pos-criacao que ja vale pra
+    magiasConhecidasIds/magiasConcedidasIds."""
+    conhecidos = ficha.get(campo_conhecidos) or []
+    concedidos = ficha.get(campo_concedidos) or []
+    if not isinstance(conhecidos, list) or any(not isinstance(item, str) for item in conhecidos):
+        return f"{campo_conhecidos} deve ser uma lista de ids"
+    if not isinstance(concedidos, list) or any(not isinstance(item, str) for item in concedidos):
+        return f"{campo_concedidos} deve ser uma lista de ids"
+    if len(conhecidos) != len(set(conhecidos)) or len(concedidos) != len(set(concedidos)):
+        return f"{rotulo_plural} conhecidos e concedidos nao podem repetir ids"
+    catalogo = _CATALOGO[chave_catalogo]
+    if any(item not in catalogo for item in conhecidos + concedidos):
+        return f"a ficha contem um {chave_catalogo} inexistente"
+
+    vagas = 0
+    for classe, nivel in classes:
+        fonte = classe.get(campo_progressao) if isinstance(classe.get(campo_progressao), dict) else {}
+        marcos = [
+            marco for marco in fonte.get("marcos") or []
+            if isinstance(marco, dict) and (_inteiro(marco.get("nivel")) or 99) <= nivel
+        ]
+        if not marcos:
+            continue
+        marco = max(marcos, key=lambda item: _inteiro(item.get("nivel")) or 0)
+        vagas += max(0, _inteiro(marco.get("vagas")) or 0)
+
+    if len(conhecidos) > vagas:
+        return f"a ficha possui mais {rotulo_plural} conhecidos do que as vagas liberadas"
+
+    if criacao and (conhecidos or concedidos):
+        return f"a criacao comum nao comeca com {rotulo_plural}"
+    if anterior:
+        anteriores = anterior.get(campo_conhecidos) or []
+        if any(item not in conhecidos for item in anteriores if isinstance(item, str)):
+            return f"{rotulo_plural} aprendidos so podem ser removidos pelo mestre"
+        if concedidos != (anterior.get(campo_concedidos) or []):
+            return f"somente o mestre pode alterar {rotulo_plural} concedidos"
+    return None
+
+
+def _validar_rituais_selos_encantamentos(
+    ficha: dict,
+    anterior: dict,
+    classes: list[tuple[dict, int]],
+    *,
+    criacao: bool,
+) -> str | None:
+    especificacoes = (
+        ("ritual", "rituais", "rituaisConhecidosIds", "rituaisConcedidosIds", "progressao_rituais"),
+        ("selo", "selos", "selosConhecidosIds", "selosConcedidosIds", "progressao_selos"),
+        ("encantamento", "encantamentos", "encantamentosConhecidosIds", "encantamentosConcedidosIds", "progressao_encantamentos"),
+    )
+    for chave_catalogo, rotulo_plural, campo_conhecidos, campo_concedidos, campo_progressao in especificacoes:
+        erro = _validar_manifestacao_magica(
+            ficha, anterior, classes,
+            chave_catalogo=chave_catalogo,
+            rotulo_plural=rotulo_plural,
+            campo_conhecidos=campo_conhecidos,
+            campo_concedidos=campo_concedidos,
+            campo_progressao=campo_progressao,
+            criacao=criacao,
+        )
+        if erro:
+            return erro
+    return None
+
+
 def _validar_magias(
     ficha: dict,
     anterior: dict,
@@ -633,8 +735,8 @@ def validar_regras_ficha(
     comuns = [(classe, nivel) for classe, nivel in classes if classe.get("categoria") == "padrao"]
     especiais = [(classe, nivel) for classe, nivel in classes if classe.get("categoria") != "padrao"]
     nivel_total = sum(nivel for _, nivel in classes)
-    if nivel_total > 40:
-        return "o nivel total nao pode passar de 40"
+    if nivel_total > 60:
+        return "o nivel total nao pode passar de 60"
     if len(comuns) > 2 or len(especiais) > 1:
         return "o limite e duas classes comuns e uma classe especial"
     if criacao:
@@ -648,14 +750,14 @@ def validar_regras_ficha(
     if len(comuns) == 2 and not any(nivel == 20 for _, nivel in comuns):
         return "a segunda classe comum so pode ser escolhida depois de uma classe chegar ao nivel 20"
     if especiais and comuns:
-        # O nível 15 só é pré-requisito quando a especial vem MULTICLASSANDO
+        # O nível 20 só é pré-requisito quando a especial vem MULTICLASSANDO
         # sobre uma base comum já em progresso. Uma ficha que É a especial
         # liberada desde a criação (sem base comum) não tem "antes" nenhum
         # pra exigir - senão a própria exceção de criação acima não faria
-        # sentido: ela nunca teria 15 níveis pra mostrar no nível 1.
+        # sentido: ela nunca teria 20 níveis pra mostrar no nível 1.
         nivel_sem_especial = nivel_total - especiais[0][1]
-        if nivel_sem_especial < 15:
-            return "uma classe especial exige nivel total 15 antes de ser adquirida"
+        if nivel_sem_especial < 20:
+            return "uma classe especial exige nivel total 20 antes de ser adquirida"
     if str(ficha.get("classeId") or "") != ids[0]:
         return "classeId deve identificar a primeira classe da ficha"
     nivel_declarado = _inteiro(ficha.get("nivel"))
@@ -698,7 +800,7 @@ def validar_regras_ficha(
     if not criacao and xp != xp_anterior:
         return "somente o mestre pode alterar o XP"
     nivel_anterior = sum(_inteiro(item.get("nivel")) or 0 for item in _classes_da_ficha(anterior))
-    if "xp" in anterior and nivel_total > _nivel_por_xp(xp):
+    if "xp" in anterior and nivel_total > _nivel_por_xp(xp) and (criacao or nivel_total > nivel_anterior):
         return "o XP registrado nao permite esse nivel total"
     if not criacao and "xp" not in anterior and nivel_total > nivel_anterior:
         return "o mestre precisa registrar o XP antes de aumentar o nivel"
@@ -777,6 +879,9 @@ def validar_regras_ficha(
     erro_magias = _validar_magias(ficha, anterior, classes, raca, criacao=criacao)
     if erro_magias:
         return erro_magias
+    erro_manifestacoes = _validar_rituais_selos_encantamentos(ficha, anterior, classes, criacao=criacao)
+    if erro_manifestacoes:
+        return erro_manifestacoes
 
     if criacao:
         if _inteiro(ficha.get("lunarisInicial")) != 20:
@@ -897,15 +1002,30 @@ def iniciativa_fixa(ficha: dict | None, *, condicoes=None) -> int:
 
     ativos = ficha.get("efeitosAtivos") if isinstance(ficha.get("efeitosAtivos"), dict) else {}
     for colecao in ("poderes", "habilidades", "magias"):
-        for item in ficha.get(colecao) or []:
+        itens = ficha.get(colecao)
+        if not isinstance(itens, list):
+            continue
+        for item in itens:
             if not isinstance(item, dict):
                 continue
-            for efeito in item.get("efeitos") or []:
+            efeitos = item.get("efeitos")
+            if not isinstance(efeitos, list):
+                continue
+            for indice, efeito in enumerate(efeitos):
                 if not isinstance(efeito, dict):
                     continue
-                ativo = efeito.get("modo") == "sempre" or ativos.get(str(item.get("id"))) is True
-                if ativo and efeito.get("tipo") == "combate" and efeito.get("alvo") == "iniciativa":
-                    total += _numero(efeito.get("valor"))
+                formato_editor = "categoria" in efeito
+                if formato_editor and indice >= 5:
+                    continue
+                ativo = (
+                    formato_editor
+                    or efeito.get("modo") == "sempre"
+                    or ativos.get(str(item.get("id"))) is True
+                )
+                categoria = efeito.get("categoria") if formato_editor else efeito.get("tipo")
+                if ativo and categoria == "combate" and efeito.get("alvo") == "iniciativa":
+                    valor = _numero(efeito.get("valor"))
+                    total += max(-20, min(20, valor)) if formato_editor else valor
     return total
 
 

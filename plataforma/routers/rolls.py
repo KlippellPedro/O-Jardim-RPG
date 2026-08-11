@@ -135,6 +135,48 @@ def rolar(
     return {"registro": registro}
 
 
+def _tocar_sessao(connection, sessao_id) -> int:
+    """Sobe sessoes_mesa.versao — mesma ideia de sessions.py::_tocar (duplicado
+    aqui de propósito: rotas deste arquivo não importam de routers/sessions.py,
+    seguindo o padrão já usado por _sessao_atual acima)."""
+    linha = connection.execute(
+        "UPDATE sessoes_mesa SET versao=versao+1, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s RETURNING versao",
+        (sessao_id,),
+    ).fetchone()
+    return int(linha["versao"])
+
+
+def _descontar_mana_na_sessao(connection, *, sessao_id, personagem_id, custo: int) -> int | None:
+    """Quando um poder/habilidade/magia com custo em Mana é registrado
+    (ver AbaPoderes.tsx / AbaHabilidades.tsx, que já descontam da ficha), e o
+    personagem está em cena numa sessão ao vivo, desconta o mesmo valor do HUD
+    de combate — senão o número que o mestre vê em sessão fica parado enquanto
+    a ficha já gastou a Mana (auditoria 2026-08, achados 8-9). Só desconta;
+    nunca deixa negativo, e nunca bloqueia o uso por falta de saldo aqui — essa
+    checagem já aconteceu no cliente antes de registrar.
+
+    Devolve a nova versão da sessão quando algo mudou (pra quem chamou saber
+    que precisa publicar "participante_atualizado" e não só "registro" — sem
+    isso o HUD ao vivo do mestre não atualizava sozinho; achado descoberto na
+    validação pós-correção), ou None se não havia participante pra descontar."""
+    linha = connection.execute(
+        """
+        SELECT id, mana_atual FROM sessao_participantes
+        WHERE sessao_id=%s AND personagem_id=%s
+        FOR UPDATE
+        """,
+        (sessao_id, personagem_id),
+    ).fetchone()
+    if not linha or linha["mana_atual"] is None:
+        return None
+    novo_valor = max(0, int(linha["mana_atual"]) - custo)
+    connection.execute(
+        "UPDATE sessao_participantes SET mana_atual=%s, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s",
+        (novo_valor, linha["id"]),
+    )
+    return _tocar_sessao(connection, sessao_id)
+
+
 @router.post("/uso", status_code=status.HTTP_201_CREATED)
 def registrar_uso(
     payload: UsageInput,
@@ -167,7 +209,22 @@ def registrar_uso(
             resultado=None,
             detalhes=payload.detalhes,
         )
+        nova_versao_sessao = None
+        if sessao and personagem_id and payload.detalhes.get("recurso") == "mana":
+            custo = payload.detalhes.get("custo")
+            if isinstance(custo, (int, float)) and not isinstance(custo, bool) and custo > 0:
+                nova_versao_sessao = _descontar_mana_na_sessao(
+                    connection,
+                    sessao_id=sessao["id"],
+                    personagem_id=personagem_id,
+                    custo=int(custo),
+                )
     live_session.publicar(payload.campanha_id, "registro", 0)
+    if nova_versao_sessao is not None:
+        # Sem isso, o HUD da sessão só atualizava com uma ação manual do
+        # mestre — "registro" só refresca o log de rolagens/usos, não os
+        # participantes (achado descoberto na validação pós-correção, 2026-08).
+        live_session.publicar(payload.campanha_id, "participante_atualizado", nova_versao_sessao)
     return {"registro": registro}
 
 

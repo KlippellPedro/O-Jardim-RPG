@@ -56,11 +56,14 @@ def _entregar(campanha_id: UUID, mensagem: str) -> None:
             log.debug("Fila de eventos cheia na campanha %s", campanha_id)
 
 
-def publicar(campanha_id: UUID, tipo: str, versao: int) -> None:
+def publicar(campanha_id: UUID, tipo: str, versao: int, detalhes: dict | None = None) -> None:
     """Chamado de dentro de uma rota síncrona, depois de gravar no banco."""
     if not _assinantes.get(campanha_id):
         return
-    mensagem = json.dumps({"tipo": tipo, "versao": versao}, ensure_ascii=False)
+    corpo = {"tipo": tipo, "versao": versao}
+    if detalhes:
+        corpo.update(detalhes)
+    mensagem = json.dumps(corpo, ensure_ascii=False)
     if _loop is None:
         _entregar(campanha_id, mensagem)
         return

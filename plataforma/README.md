@@ -53,7 +53,7 @@ convite, e o mestre é avisado. A conta de `CREATOR_EMAIL` se cadastra em
 qualquer modo — sem isso o primeiro acesso ficaria travado, já que não existe
 campanha para convidar ninguém antes da primeira conta.
 
-Rotas públicas têm limite de tentativas por origem (`core/limites.py`): 3
+Rotas públicas têm limite de tentativas por origem (`core/rate_limit_auth.py`): 3
 cadastros e 5 pedidos de senha por hora, 5 logins por 15 minutos. A contagem
 fica no banco, então reiniciar o app não zera nada.
 

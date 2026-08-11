@@ -139,7 +139,20 @@ def create_character(
                 usuario_id=owner_id,
             )
             if erro_catalogo:
-                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=erro_catalogo)
+                from core import notifications
+                managers = notifications.campaign_member_ids(
+                    connection, payload.campanha_id, roles=("mestre", "assistente")
+                )
+                notifications.notify(
+                    connection,
+                    user_ids=managers,
+                    category="campanha",
+                    title="Alerta de Regras na Criação",
+                    message=f"O jogador {user.nome_exibicao} criou a ficha '{payload.nome}' fora das regras: {erro_catalogo}.",
+                    campaign_id=payload.campanha_id,
+                    actor_user_id=user.id,
+                    details={"personagem_id": str(character_id)},
+                )
         owner = connection.execute(
             """
             SELECT 1 FROM membros_campanha
@@ -383,7 +396,27 @@ def update_character(
                 usuario_id=current["dono_usuario_id"],
             )
             if erro_regras:
-                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=erro_regras)
+                erro_anterior = validar_regras_ficha(
+                    current["ficha"],
+                    campanha_row["configuracoes"] if campanha_row else None,
+                    ficha_anterior=current["ficha"],
+                    usuario_id=current["dono_usuario_id"],
+                )
+                if erro_regras != erro_anterior:
+                    from core import notifications
+                    managers = notifications.campaign_member_ids(
+                        connection, current["campanha_id"], roles=("mestre", "assistente")
+                    )
+                    notifications.notify(
+                        connection,
+                        user_ids=managers,
+                        category="campanha",
+                        title="Alerta de Regras na Ficha",
+                        message=f"A ficha '{name}' salvou uma alteração fora das regras: {erro_regras}.",
+                        campaign_id=current["campanha_id"],
+                        actor_user_id=user.id,
+                        details={"personagem_id": str(character_id)},
+                    )
         row = connection.execute(
             """
             UPDATE personagens
@@ -912,3 +945,132 @@ def archive_character(
             target_id=str(character_id),
         )
     return None
+
+
+@router.post(
+    "/{character_id}/inventario/{item_id}/desinstalar-modificacao",
+    status_code=status.HTTP_200_OK,
+)
+def uninstall_modification(
+    character_id: UUID,
+    item_id: str,
+    modificacao_id: str,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Remove uma modificação instalada de um equipamento e devolve ao inventário avulso.
+
+    A operação é completamente transacional: se a inserção no inventário falhar,
+    a remoção do equipamento é revertida. Se a modificação tiver `destruida_ao_remover`
+    definido como true, ela não retorna para o inventário. Modificações com `removivel`
+    definido como false não podem ser desinstaladas.
+    """
+    with database.connection() as connection:
+        # Valida que o usuário autenticado controla este personagem
+        character = _authorized_character(connection, character_id, user.id)
+        campaign_id = character["campanha_id"]
+
+        # Bloqueia a linha do item para evitar condições de corrida
+        inv_row = connection.execute(
+            """
+            SELECT item_id, titulo, quantidade, dados
+            FROM inventario_personagem
+            WHERE campanha_id=%s AND personagem_id=%s AND item_id=%s
+            FOR UPDATE
+            """,
+            (campaign_id, character_id, item_id),
+        ).fetchone()
+        if not inv_row:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="item nao encontrado no inventario",
+            )
+
+        dados = inv_row["dados"] if isinstance(inv_row["dados"], dict) else {}
+        modificacoes: list[dict] = dados.get("modificacoes", [])
+
+        # Encontra a instância pelo ID único de instalação
+        alvo_idx = next(
+            (i for i, m in enumerate(modificacoes) if m.get("id") == modificacao_id),
+            None,
+        )
+        if alvo_idx is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="modificacao nao encontrada neste item",
+            )
+
+        modificacao = modificacoes[alvo_idx]
+
+        # Hard block: modificação declarada como não removível
+        if not modificacao.get("removivel", True):
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="esta modificacao nao pode ser removida",
+            )
+
+        # Remove a modificação do array
+        novas_mods = [m for m in modificacoes if m.get("id") != modificacao_id]
+        dados["modificacoes"] = novas_mods
+
+        connection.execute(
+            """
+            UPDATE inventario_personagem
+            SET dados=%s, atualizado_em=CURRENT_TIMESTAMP
+            WHERE campanha_id=%s AND personagem_id=%s AND item_id=%s
+            """,
+            (Jsonb(dados), campaign_id, character_id, item_id),
+        )
+
+        # Retorna ao inventário como item avulso (se não for destruída ao remover)
+        item_avulso_id = modificacao.get("catalogo_item_id") or f"mod_{modificacao_id}"
+        retornou_ao_inventario = False
+
+        if not modificacao.get("destruida_ao_remover", False):
+            titulo_avulso = modificacao.get("nome", "Modificação")
+            dados_avulsos = {
+                "origem": "desinstalacao",
+                "catalogo_item_id": modificacao.get("catalogo_item_id"),
+                "efeitos": modificacao.get("efeitos", []),
+                "removivel": modificacao.get("removivel", True),
+                "destruida_ao_remover": modificacao.get("destruida_ao_remover", False),
+                "grupo_exclusividade": modificacao.get("grupo_exclusividade", ""),
+                "slots_ocupados": modificacao.get("slots_ocupados", 1),
+                "desinstalado_de": item_id,
+                "desinstalado_em": "now",
+            }
+            connection.execute(
+                """
+                INSERT INTO inventario_personagem
+                    (campanha_id, personagem_id, item_id, titulo, quantidade, dados)
+                VALUES (%s, %s, %s, %s, 1, %s)
+                ON CONFLICT (campanha_id, personagem_id, item_id) DO UPDATE SET
+                    quantidade=inventario_personagem.quantidade + 1,
+                    atualizado_em=CURRENT_TIMESTAMP
+                """,
+                (campaign_id, character_id, item_avulso_id, titulo_avulso, Jsonb(dados_avulsos)),
+            )
+            retornou_ao_inventario = True
+
+        record_audit(
+            connection,
+            action="inventario.desinstalar_modificacao",
+            actor_user_id=user.id,
+            campaign_id=campaign_id,
+            target_type="personagem",
+            target_id=str(character_id),
+            details={
+                "item_id": item_id,
+                "modificacao_id": modificacao_id,
+                "modificacao_nome": modificacao.get("nome"),
+                "retornou_ao_inventario": retornou_ao_inventario,
+                "item_avulso_id": item_avulso_id if retornou_ao_inventario else None,
+            },
+        )
+
+    return {
+        "modificacao_id": modificacao_id,
+        "modificacao_nome": modificacao.get("nome"),
+        "retornou_ao_inventario": retornou_ao_inventario,
+        "item_avulso_id": item_avulso_id if retornou_ao_inventario else None,
+    }

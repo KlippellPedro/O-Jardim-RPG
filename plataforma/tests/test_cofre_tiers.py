@@ -1,17 +1,35 @@
+import json
 import unittest
 import importlib.util
 from pathlib import Path
 
 from core.cofre_tiers import (
+    COFRE_TIER_INICIAL,
     COFRE_TIERS,
     REPUTACAO_POR_COFRE_TIER,
     REPUTACAO_POR_SEGURANCA_TIER,
+    SEGURANCA_TIER_INICIAL,
     SEGURANCA_TIERS,
     custos_upgrade,
     posicao_tier,
     proximo_tier,
     tier_com_reputacao,
 )
+
+
+def _carregar_modulo_avulso(nome: str, caminho: Path):
+    """Carrega um .py fora do pacote `core`, do jeito que main.py de produção
+    nunca faria — só existe pra provar, num teste, que o módulo publicado de
+    outro bot bate com o que a plataforma expõe, sem precisar de um pacote
+    Python compartilhado entre bots/plataforma (que viram ZIPs separados)."""
+    spec = importlib.util.spec_from_file_location(nome, caminho)
+    assert spec is not None and spec.loader is not None
+    modulo = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(modulo)
+    return modulo
+
+
+_RAIZ_REPO = Path(__file__).resolve().parents[2]
 
 
 class CofreTierTests(unittest.TestCase):
@@ -59,12 +77,8 @@ class CofreTierTests(unittest.TestCase):
         })
 
     def test_espelho_permanece_identico_ao_banqueiro(self):
-        caminho = Path(__file__).resolve().parents[2] / "bots" / "banqueiro" / "core" / "economia.py"
-        spec = importlib.util.spec_from_file_location("economia_banqueiro_contrato", caminho)
-        self.assertIsNotNone(spec)
-        self.assertIsNotNone(spec.loader)
-        modulo = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(modulo)
+        caminho = _RAIZ_REPO / "bots" / "banqueiro" / "core" / "economia.py"
+        modulo = _carregar_modulo_avulso("economia_banqueiro_contrato", caminho)
 
         self.assertEqual(COFRE_TIERS, modulo.COFRE_TIERS)
         self.assertEqual(SEGURANCA_TIERS, modulo.SEGURANCA_TIERS)
@@ -73,6 +87,42 @@ class CofreTierTests(unittest.TestCase):
             REPUTACAO_POR_SEGURANCA_TIER,
             modulo.REPUTACAO_POR_SEGURANCA_TIER,
         )
+
+    def test_espelho_permanece_identico_ao_jornalista(self):
+        # Terceira cópia descoberta na validação pós-correção (achado 10,
+        # escopo ampliado): o Jornalista só precisa de COFRE_TIERS, mas lia
+        # sua própria tabela hardcoded até esta correção.
+        caminho = _RAIZ_REPO / "bots" / "jornalista" / "core" / "economia.py"
+        modulo = _carregar_modulo_avulso("economia_jornalista_contrato", caminho)
+
+        self.assertEqual(COFRE_TIERS, modulo.COFRE_TIERS)
+        self.assertEqual(COFRE_TIER_INICIAL, modulo.COFRE_TIER_INICIAL)
+
+    def test_nenhum_dos_tres_modulos_reintroduziu_uma_tabela_propria(self):
+        """Guarda-costas contra divergência futura: banqueiro, plataforma e
+        jornalista precisam bater exatamente com o JSON compartilhado — não
+        só entre si (o que passaria mesmo se os três copiassem o mesmo valor
+        errado por coincidência)."""
+        caminho_json = _RAIZ_REPO / "data" / "economia" / "cofre_seguranca_tiers.json"
+        fonte = json.loads(caminho_json.read_text(encoding="utf-8"))
+
+        self.assertEqual(COFRE_TIERS, fonte["cofre"]["tiers"])
+        self.assertEqual(COFRE_TIER_INICIAL, fonte["cofre"]["tier_inicial"])
+        self.assertEqual(SEGURANCA_TIERS, fonte["seguranca"]["tiers"])
+        self.assertEqual(SEGURANCA_TIER_INICIAL, fonte["seguranca"]["tier_inicial"])
+        self.assertEqual(REPUTACAO_POR_COFRE_TIER, fonte["reputacao_por_cofre_tier"])
+        self.assertEqual(REPUTACAO_POR_SEGURANCA_TIER, fonte["reputacao_por_seguranca_tier"])
+
+        banqueiro = _carregar_modulo_avulso(
+            "economia_banqueiro_json_contrato",
+            _RAIZ_REPO / "bots" / "banqueiro" / "core" / "economia.py",
+        )
+        jornalista = _carregar_modulo_avulso(
+            "economia_jornalista_json_contrato",
+            _RAIZ_REPO / "bots" / "jornalista" / "core" / "economia.py",
+        )
+        self.assertEqual(banqueiro.COFRE_TIERS, fonte["cofre"]["tiers"])
+        self.assertEqual(jornalista.COFRE_TIERS, fonte["cofre"]["tiers"])
 
 
 if __name__ == "__main__":

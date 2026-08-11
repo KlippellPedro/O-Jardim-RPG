@@ -57,6 +57,15 @@ TABELAS: tuple[str, ...] = (
     "sessao_participantes",
     "registros_mesa",
     "eventos_auditoria",
+    "campanha_veiculos",
+    "campanha_veiculo_permissoes",
+    "campanha_veiculo_ocupantes",
+    "campanha_veiculo_modulos",
+    "campanha_veiculo_inventario",
+    "campanha_propriedades",
+    "campanha_propriedade_permissoes",
+    "campanha_propriedade_instalacoes",
+    "infracoes_loja",
 
     # Tabelas dos bots (Banqueiro/Jornalista/Barista) — mesmo Postgres central,
     # schema próprio deles (ver bots/*/core/db.py). Sem FK pra usuarios/campanhas
