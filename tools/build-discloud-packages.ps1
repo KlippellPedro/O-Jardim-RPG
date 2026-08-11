@@ -128,7 +128,7 @@ try {
 
     $platformData = Join-Path $platformStage 'data'
     New-Item -ItemType Directory -Path $platformData -Force | Out-Null
-    @('data\ficha', 'data\mundo', 'data\regras', 'data\loja') |
+    @('data\ficha', 'data\mundo', 'data\regras', 'data\loja', 'data\economia') |
       ForEach-Object { Copy-ProjectItem $_ $platformData }
   }
 
@@ -153,7 +153,8 @@ try {
     'data\loja\catalogo.json',
     'data\loja\bestiario_precos.json',
     'data\loja\veiculos_sistema.json',
-    'data\loja\INSTRUCOES_CATALOGO.md'
+    'data\loja\INSTRUCOES_CATALOGO.md',
+    'data\economia\cofre_seguranca_tiers.json'
   ) | ForEach-Object { Copy-ProjectItem $_ $banqueiroData }
 
   @(
@@ -167,6 +168,15 @@ try {
     'bots\jornalista\.env.example',
     'bots\jornalista\README.md'
   ) | ForEach-Object { Copy-ProjectItem $_ $jornalistaStage }
+
+  # Mesma fonte única de tiers de Cofre que o Banqueiro usa (data/economia) —
+  # o Jornalista só lê capacidade, mas precisa do mesmo arquivo pra não voltar
+  # a divergir (ver auditoria 2026-08, achado 10).
+  $jornalistaData = Join-Path $jornalistaStage 'data'
+  New-Item -ItemType Directory -Path $jornalistaData -Force | Out-Null
+  @(
+    'data\economia\cofre_seguranca_tiers.json'
+  ) | ForEach-Object { Copy-ProjectItem $_ $jornalistaData }
 
   @(
     'bots\Gerente\cogs',

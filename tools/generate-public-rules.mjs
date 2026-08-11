@@ -20,8 +20,6 @@ const decodeEntities = (value) => value
 
 function htmlToMarkdown(html) {
   let text = String(html)
-    .replace(/<!--\s*CLASSES_DATA\s*-->/g, 'Consulte o catálogo de classes na página de regras.')
-    .replace(/<!--\s*RACAS_DATA\s*-->/g, 'Consulte o catálogo de raças na página de regras.')
     .replace(/<h3[^>]*>([\s\S]*?)<\/h3>/gi, '\n### $1\n')
     .replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, '\n$1\n')
     .replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, '\n- $1')

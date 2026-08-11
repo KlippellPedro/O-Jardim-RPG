@@ -6,6 +6,8 @@ const roots = [
   'index.html',
   'src',
   'data/ficha',
+  'data/gerado',
+  'data/loja',
   'data/regras',
   'data/mundo',
 ];

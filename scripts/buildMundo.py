@@ -157,7 +157,7 @@ def main() -> int:
         print(f"OK - {len(entradas)} entradas, sincronizado.")
         return 0
 
-    DESTINO.write_text(saida, encoding="utf-8")
+    DESTINO.write_text(saida, encoding="utf-8", newline="\n")
     contagem: dict[str, int] = {}
     for entrada in entradas:
         contagem[entrada["tipo"]] = contagem.get(entrada["tipo"], 0) + 1
