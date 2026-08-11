@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { HelpCircle, X } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { HelpCircle, X, Pencil } from 'lucide-react';
 import { SectionTitle, LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
 import { ModalInfoFicha } from '../components/ModalInfoFicha';
 import { carregarCatalogo } from '../../../services/catalogoService';
@@ -37,6 +37,8 @@ import {
 } from '../../../services/ajustesFichaService';
 import { AtributosSection, NOMES_ATRIBUTOS } from '../components/AtributosSection';
 import { StatusVitaisSection } from '../components/StatusVitaisSection';
+import { FamaPrestigioSection } from '../components/FamaPrestigioSection';
+import { FrutoEdenSection } from '../components/FrutoEdenSection';
 
 interface IClasseSlot {
   classeId: string;
@@ -56,6 +58,12 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
   useEffect(() => {
     carregarCatalogo().then(setCatalogo);
   }, []);
+
+  const [proficienciasTexto, setProficienciasTexto] = useState(() => (f.proficiencias || []).join(', '));
+  const proficienciasEmFocoRef = useRef(false);
+  useEffect(() => {
+    if (!proficienciasEmFocoRef.current) setProficienciasTexto((f.proficiencias || []).join(', '));
+  }, [f.proficiencias]);
 
   const status = obterStatusFicha(f);
   const racaAtual = catalogo?.racas.find(raca => raca.id === f.racaId) || null;
@@ -434,9 +442,13 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
   const comunsAtuais = classesAtuaisCatalogo.filter(item => item.classe?.categoria === 'padrao');
   const possuiEspecial = classesAtuaisCatalogo.some(item => item.classe?.categoria !== 'padrao');
   const classesDisponiveisMulticlasse = classesFiltradas.filter(classe => {
-    if (classes.some(slot => slot.classeId === classe.id) || nivelTotalClasses >= 60) return false;
-    if (classe.categoria !== 'padrao') return !possuiEspecial && nivelTotalClasses >= 20;
-    return comunsAtuais.length < 2;
+    if (classes.some(slot => slot.classeId === classe.id)) return false;
+    if (!isMestre) {
+      if (nivelTotalClasses >= 60) return false;
+      if (classe.categoria !== 'padrao') return !possuiEspecial && nivelTotalClasses >= 20;
+      return comunsAtuais.length < 2;
+    }
+    return true;
   });
 
   const handleAdicionarClasse = () => {
@@ -599,6 +611,8 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
 
       </div>
 
+      <FrutoEdenSection character={character} />
+
       <AtributosSection
         ficha={f}
         racaTitulo={racaAtual?.titulo}
@@ -720,7 +734,20 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Proficiências</label>
-            <textarea readOnly={!isMestre} value={(f.proficiencias || []).join(', ')} onChange={(event) => onUpdate(['ficha', 'proficiencias'], event.target.value.split(/[,\n]/).map((item) => item.trim().toLocaleLowerCase('pt-BR')).filter(Boolean))} placeholder="Ex.: armas marciais, armaduras leves..." className="bg-[#121118] border border-white/5 rounded-md p-3 text-sm text-gray-300 min-h-[100px] resize-none focus:border-[#c7a44c]/50 read-only:cursor-not-allowed read-only:opacity-70"></textarea>
+            <textarea
+              readOnly={!isMestre}
+              value={proficienciasTexto}
+              onFocus={() => { proficienciasEmFocoRef.current = true; }}
+              onChange={(event) => setProficienciasTexto(event.target.value)}
+              onBlur={(event) => {
+                proficienciasEmFocoRef.current = false;
+                const lista = event.target.value.split(/[,\n]/).map((item) => item.trim().toLocaleLowerCase('pt-BR')).filter(Boolean);
+                setProficienciasTexto(lista.join(', '));
+                onUpdate(['ficha', 'proficiencias'], lista);
+              }}
+              placeholder="Ex.: armas marciais, armaduras leves..."
+              className="bg-[#121118] border border-white/5 rounded-md p-3 text-sm text-gray-300 min-h-[100px] resize-none focus:border-[#c7a44c]/50 read-only:cursor-not-allowed read-only:opacity-70"
+            ></textarea>
           </div>
           <div className="flex flex-col gap-2 relative">
             <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Condições Ativas</label>
@@ -732,13 +759,18 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                     <div className="text-gray-400 text-xs mt-1">{c.descricao}</div>
                     <div className="text-gray-500 text-[10px] mt-1 italic">Afeta: {c.afeta}</div>
                   </div>
-                  <button onClick={() => {
-                    const next = [...(f.condicoesAtivas || [])];
-                    next.splice(i, 1);
-                    onUpdate(['ficha', 'condicoesAtivas'], next);
-                  }} className="text-gray-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <X size={14} />
-                  </button>
+                  <div className="flex gap-1">
+                    <button onClick={() => setActiveModal({ isCondicaoModal: true, condicao: c, editIndex: i })} className="text-gray-600 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Pencil size={14} />
+                    </button>
+                    <button onClick={() => {
+                      const next = [...(f.condicoesAtivas || [])];
+                      next.splice(i, 1);
+                      onUpdate(['ficha', 'condicoesAtivas'], next);
+                    }} className="text-gray-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <X size={14} />
+                    </button>
+                  </div>
                 </div>
               ))}
               <button 
@@ -751,6 +783,8 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
           </div>
         </div>
       </div>
+
+      <FamaPrestigioSection ficha={f} onUpdate={onUpdate} />
 
       {/* LINHA 6: EXPERIÊNCIA */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col gap-4 mb-20">
@@ -823,31 +857,35 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-red-500 font-bold tracking-widest uppercase">Nova Condição</h3>
+              <h3 className="text-red-500 font-bold tracking-widest uppercase">
+                {activeModal.editIndex !== undefined ? 'Editar Condição' : 'Nova Condição'}
+              </h3>
               <button onClick={() => setActiveModal(null)} className="text-gray-500 hover:text-white transition-colors">
                 <X size={20} />
               </button>
             </div>
-            <div className="mb-5">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-gray-500">Aplicar condição oficial</p>
-              <div className="grid max-h-44 grid-cols-2 gap-2 overflow-y-auto pr-1">
-                {[...CONDICOES_OFICIAIS, ...CRISES_SANIDADE].map((regra) => (
-                  <button key={regra.id} type="button" onClick={() => {
-                    const next = [...(f.condicoesAtivas || []), {
-                      id: regra.id,
-                      nome: regra.titulo,
-                      descricao: regra.efeitos.join(' '),
-                      afeta: regra.categoria,
-                      duracao: regra.duracao,
-                    }];
-                    onUpdate(['ficha', 'condicoesAtivas'], next);
-                    setActiveModal(null);
-                  }} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-left text-xs font-bold text-gray-300 hover:border-red-500/30 hover:text-red-300">
-                    {regra.titulo}
-                  </button>
-                ))}
+            {activeModal.editIndex === undefined && (
+              <div className="mb-5">
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-gray-500">Aplicar condição oficial</p>
+                <div className="grid max-h-44 grid-cols-2 gap-2 overflow-y-auto pr-1">
+                  {[...CONDICOES_OFICIAIS, ...CRISES_SANIDADE].map((regra) => (
+                    <button key={regra.id} type="button" onClick={() => {
+                      const next = [...(f.condicoesAtivas || []), {
+                        id: regra.id,
+                        nome: regra.titulo,
+                        descricao: regra.efeitos.join(' '),
+                        afeta: regra.categoria,
+                        duracao: regra.duracao,
+                      }];
+                      onUpdate(['ficha', 'condicoesAtivas'], next);
+                      setActiveModal(null);
+                    }} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-left text-xs font-bold text-gray-300 hover:border-red-500/30 hover:text-red-300">
+                      {regra.titulo}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
             
             <form onSubmit={(e) => {
               e.preventDefault();
@@ -857,7 +895,12 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               const afeta = (form.elements.namedItem('afeta') as HTMLInputElement).value;
               
               if (nome) {
-                const next = [...(f.condicoesAtivas || []), { nome, descricao, afeta }];
+                const next = [...(f.condicoesAtivas || [])];
+                if (activeModal.editIndex !== undefined) {
+                  next[activeModal.editIndex] = { ...next[activeModal.editIndex], nome, descricao, afeta };
+                } else {
+                  next.push({ nome, descricao, afeta });
+                }
                 onUpdate(['ficha', 'condicoesAtivas'], next);
                 setActiveModal(null);
               }
@@ -865,21 +908,21 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Nome da Condição</label>
-                <input name="nome" type="text" required placeholder="Ex: Perna Ferida" className="bg-[#121118] border border-white/5 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50" />
+                <input name="nome" type="text" defaultValue={activeModal.condicao?.nome || ''} required placeholder="Ex: Perna Ferida" className="bg-[#121118] border border-white/5 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50" />
               </div>
               
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Descrição</label>
-                <textarea name="descricao" rows={3} placeholder="Ex: O personagem perdeu muito sangue e não consegue correr..." className="bg-[#121118] border border-white/5 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50 resize-none"></textarea>
+                <textarea name="descricao" rows={3} defaultValue={activeModal.condicao?.descricao || ''} placeholder="Ex: O personagem perdeu muito sangue e não consegue correr..." className="bg-[#121118] border border-white/5 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50 resize-none"></textarea>
               </div>
 
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Penalidade / Afeta o quê?</label>
-                <input name="afeta" type="text" placeholder="Ex: Destreza -2, Movimento reduzido pela metade" className="bg-[#121118] border border-white/5 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50" />
+                <input name="afeta" type="text" defaultValue={activeModal.condicao?.afeta || ''} placeholder="Ex: Destreza -2, Movimento reduzido pela metade" className="bg-[#121118] border border-white/5 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50" />
               </div>
 
               <button type="submit" className="mt-4 w-full py-3 bg-red-500/20 text-red-400 border border-red-500/50 font-bold uppercase tracking-widest rounded-lg hover:bg-red-500/30 transition-colors">
-                Adicionar Condição
+                {activeModal.editIndex !== undefined ? 'Salvar Condição' : 'Adicionar Condição'}
               </button>
             </form>
           </div>
@@ -921,8 +964,8 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                           onClick={() => handleSubirNivel({ tipo: 'existente', index: i })}
                           disabled={
                             c.nivel >= 20
-                            || nivelTotalClasses >= 60
-                            || (c.nivel === 19 && !classes.some((outra, j) => j !== i && Number(outra.nivel) >= 10))
+                            || (!isMestre && nivelTotalClasses >= 60)
+                            || (!isMestre && c.nivel === 19 && !classes.some((outra, j) => j !== i && Number(outra.nivel) >= 10))
                           }
                           className="flex justify-between items-center w-full p-3 rounded-lg border border-white/10 hover:border-[#c7a44c]/50 hover:bg-[#c7a44c]/10 transition-colors text-left disabled:opacity-40 disabled:cursor-not-allowed"
                         >

@@ -8,8 +8,14 @@ const {
   calcularValorRevenda,
   itemCorrespondeBusca,
   itemCorrespondeSubfiltro,
+  itemEhVeiculoCompleto,
+  lerRaridadeChave,
   mapearCatalogoLoja,
+  normalizarCategoriaInventarioLoja,
   normalizarRaridadeChave,
+  obterBonusDefesaCatalogo,
+  personagemAtendeRequisitosLoja,
+  personagemPodeAdquirirItemLoja,
   rotuloRaridadeChave,
   somarPrecosNativos,
 } = await import('../../src/services/lojaCatalogService.ts');
@@ -41,8 +47,8 @@ test('retry da mesma compra preserva payload e idempotência; alteração cria n
   assert.strictEqual(retry, first);
   assert.equal(first.payload.idempotencia, 'loja-compra:fixed-1');
   assert.deepEqual(first.payload.itens, [
-    { item_id: 'potion', quantidade: 2 },
-    { item_id: 'sword', quantidade: 3 },
+    { item_id: 'potion', quantidade: 2, alvo_item_id: undefined },
+    { item_id: 'sword', quantidade: 3, alvo_item_id: undefined },
   ]);
   assert.deepEqual(Object.keys(first.payload).sort(), [
     'campanha_id',
@@ -58,6 +64,18 @@ test('retry da mesma compra preserva payload e idempotência; alteração cria n
   }, createId);
   assert.notEqual(changed.payload.idempotencia, first.payload.idempotencia);
   assert.equal(generated, 2);
+});
+
+test('localização integra a assinatura idempotente e aceita somente os quatro locais', () => {
+  const base = {
+    campanha_id: 'campaign-1', personagem_id: 'character-1', economia_versao_esperada: 7,
+    localizacao_loja: 2, itens: [{ item_id: 'sword', quantidade: 1 }],
+  };
+  const first = prepareCheckoutAttempt(null, 'compra', base, () => 'first');
+  const changed = prepareCheckoutAttempt(first, 'compra', { ...base, localizacao_loja: 3 }, () => 'second');
+  assert.equal(first.payload.localizacao_loja, 2);
+  assert.notEqual(first.payload.idempotencia, changed.payload.idempotencia);
+  assert.throws(() => prepareCheckoutAttempt(null, 'compra', { ...base, localizacao_loja: 5 }), /localização/i);
 });
 
 test('compra e venda enviam apenas comandos; nunca carteira, inventário, preço ou total', async () => {
@@ -133,6 +151,46 @@ test('raridade de relíquia da criação aceita grafia canônica e acentuada', (
   assert.equal(rotuloRaridadeChave('reliquia da criacao'), 'Relíquia da Criação');
 });
 
+test('raridade mítica mantém compatibilidade com a antiga chave relíquia', () => {
+  assert.equal(normalizarRaridadeChave('Mítico'), 'reliquia');
+  assert.equal(normalizarRaridadeChave('Relíquia'), 'reliquia');
+  assert.equal(rotuloRaridadeChave('reliquia'), 'Mítico');
+});
+
+test('raridade desconhecida fica explícita e não é rebaixada visualmente para Comum', () => {
+  assert.equal(lerRaridadeChave('ultrarraro'), null);
+  assert.equal(rotuloRaridadeChave('ultrarraro'), 'Desconhecida');
+  const [item] = mapearCatalogoLoja([{
+    id: 'estranho', tipo: 'equipamento', titulo: 'Estranho',
+    conteudo: { preco: 1, raridade: 'ultrarraro' }, preco: { moeda: 'Solares', valor: 1 },
+  }]);
+  assert.equal(item.raridade, 'Desconhecida');
+  assert.equal(item.nivelLoja, 4);
+});
+
+test('armadura lê bonus, veículos completos e módulos mantêm identidades distintas', () => {
+  assert.equal(obterBonusDefesaCatalogo({ bonus: '+4' }), '+4');
+  assert.equal(obterBonusDefesaCatalogo({ defesa: 2 }), 2);
+  assert.equal(normalizarCategoriaInventarioLoja({ tipo: 'veiculo' }), 'modulo-veicular');
+  assert.equal(normalizarCategoriaInventarioLoja({ tipo: 'veiculo-completo' }), 'veiculo');
+  assert.equal(itemEhVeiculoCompleto({ tipoOrigem: 'veiculo-completo', dadosBrutos: {} }), true);
+  assert.equal(itemEhVeiculoCompleto({ tipoOrigem: 'veiculo', dadosBrutos: { subtipo: 'Estável' } }), false);
+});
+
+test('requisitos explícitos consideram nível e todas as classes do comprador', () => {
+  const item = { requisitoNivel: 5, requisitoClasse: ['Piloto'] };
+  assert.equal(personagemAtendeRequisitosLoja(item, { nivel: 5, classes: [{ id: 'piloto' }] }), true);
+  assert.equal(personagemAtendeRequisitosLoja(item, { nivel: 4, classes: [{ id: 'piloto' }] }), false);
+  assert.equal(personagemAtendeRequisitosLoja(item, { nivel: 8, classes: [{ id: 'guerreiro' }] }), false);
+});
+
+test('itens com autorização do Mestre só entram no carrinho para gestores', () => {
+  const item = { dadosBrutos: { requer_autorizacao_mestre: true } };
+  const personagem = { nivel: 10, classes: [{ id: 'piloto' }] };
+  assert.equal(personagemPodeAdquirirItemLoja(item, personagem, false), false);
+  assert.equal(personagemPodeAdquirirItemLoja(item, personagem, true), true);
+});
+
 test('subfiltros reconhecem veículos pelo tipo real e Frutos pelos marcadores', () => {
   const [veiculoCompleto, modulo, frutoElemental, frutoMutacao] = mapearCatalogoLoja([
     {
@@ -157,12 +215,22 @@ test('subfiltros reconhecem veículos pelo tipo real e Frutos pelos marcadores',
     },
   ]);
 
-  assert.equal(itemCorrespondeSubfiltro(veiculoCompleto, 'Veículos', 'Veículos Completos'), true);
-  assert.equal(itemCorrespondeSubfiltro(veiculoCompleto, 'Veículos', 'Peças e Módulos'), false);
-  assert.equal(itemCorrespondeSubfiltro(modulo, 'Veículos', 'Peças e Módulos'), true);
+  assert.equal(itemCorrespondeSubfiltro(veiculoCompleto, 'Bens', 'Veículos Completos'), true);
+  assert.equal(itemCorrespondeSubfiltro(veiculoCompleto, 'Bens', 'Peças e Módulos'), false);
+  assert.equal(itemCorrespondeSubfiltro(modulo, 'Bens', 'Peças e Módulos'), true);
   assert.equal(itemCorrespondeSubfiltro(frutoElemental, 'Frutos do Éden', 'Elemental'), true);
   assert.equal(itemCorrespondeSubfiltro(frutoElemental, 'Frutos do Éden', 'Mutação'), false);
   assert.equal(itemCorrespondeSubfiltro(frutoMutacao, 'Frutos do Éden', 'Mutação'), true);
+});
+
+test('arma híbrida aparece tanto no subfiltro corpo a corpo quanto à distância', () => {
+  const [hibrida] = mapearCatalogoLoja([{
+    id: 'rhaast', tipo: 'arma', titulo: 'Rhaast',
+    conteudo: { preco: 1, raridade: 'lendario', modo: 'Híbrida' },
+    preco: { moeda: 'Solares', valor: 1 },
+  }]);
+  assert.equal(itemCorrespondeSubfiltro(hibrida, 'Armas', 'Corpo a Corpo'), true);
+  assert.equal(itemCorrespondeSubfiltro(hibrida, 'Armas', 'À Distância'), true);
 });
 
 test('selos aparecem pelo subfiltro e pela busca no plural', () => {

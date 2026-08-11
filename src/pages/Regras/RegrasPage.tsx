@@ -18,14 +18,18 @@ import { CLASSES_CATALOGO, RACAS_CATALOGO } from '../../services/catalogoService
 import { useAuthStore } from '../../store/useAuthStore';
 import { CatalogoLegados } from './components/CatalogoLegados';
 import { CatalogoMagico } from './components/CatalogoMagico';
+import { CatalogoBestiario } from './components/CatalogoBestiario';
 import { GridClasses } from './components/GridClasses';
 import { GridRacas } from './components/GridRacas';
 import { RegrasContent } from './components/RegrasContent';
 import { NotasInternasMestre } from './components/NotasInternasMestre';
 
 const TITULOS_TOPICOS: Record<string, string> = {
+  'criacao-personagem': 'Criação de Personagem',
   'sistema-base': 'Sistema Base',
   pericias: 'Perícias',
+  'acoes-coletivas': 'Ações Coletivas',
+  'ataques-combinados': 'Ataques Combinados',
   combate: 'Combate',
   distancias: 'Distâncias',
   ferimentos: 'Ferimentos',
@@ -38,8 +42,14 @@ const TITULOS_TOPICOS: Record<string, string> = {
   'raridades-modificacoes': 'Raridades e Modificações',
   'magia-fluxo': 'Magia e Fluxo',
   condicoes: 'Condições',
+  crafting: 'Criação, Forja e Alquimia',
+  veiculos: 'Condução e Combate Veicular',
+  aflicoes: 'Venenos, Doenças e Vícios',
   classes: 'Classes',
   racas: 'Raças',
+  bestiario: 'Bestiário',
+  bases: 'Propriedades e Bases',
+  'mundo-faccoes': 'Prestígio e Fama',
   mestre: 'Guia do Mestre',
 };
 
@@ -294,6 +304,11 @@ export const RegrasPage = () => {
                   <>
                     <RegrasContent htmlContent={topicData.corpo} />
                     <CatalogoLegados />
+                  </>
+                ) : activeTopic === 'bestiario' ? (
+                  <>
+                    <RegrasContent htmlContent={topicData.corpo} />
+                    <CatalogoBestiario />
                   </>
                 ) : activeTopic === 'mestre' ? (
                   <>

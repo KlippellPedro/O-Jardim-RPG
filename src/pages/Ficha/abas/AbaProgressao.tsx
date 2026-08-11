@@ -8,6 +8,7 @@ import {
   avaliarLegado,
   caracteristicasRaciaisAutomaticas,
   classesDaFicha,
+  descreverPreRequisitos,
   eventosDesbloqueados,
   habilidadesAutomaticas,
   legadosSelecionados,
@@ -216,6 +217,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
         <div className="grid max-h-[32rem] gap-2 overflow-y-auto pr-1 lg:grid-cols-2">
           {catalogoLegados.map((legado) => {
             const avaliacao = avaliarLegado(legado, ficha, idsLegados);
+            const preRequisitos = descreverPreRequisitos(legado.pre_requisitos);
             return (
               <div key={legado.id} className="rounded-lg border border-white/5 bg-[#121118] p-3">
                 <div className="flex items-start justify-between gap-3">
@@ -225,6 +227,11 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
                   </button>
                 </div>
                 <p className="mt-2 text-xs leading-relaxed text-gray-400">{legado.descricao}</p>
+                {!!preRequisitos.length && (
+                  <p className="mt-2 text-[11px] text-gray-500">
+                    <span className="font-bold uppercase tracking-wider">Pré-requisitos:</span> {preRequisitos.join(', ')}
+                  </p>
+                )}
                 {!avaliacao.permitido && avaliacao.motivo !== 'Todas as vagas de Legado já foram preenchidas.' && <p className="mt-2 text-[11px] text-amber-300">{avaliacao.motivo}</p>}
               </div>
             );

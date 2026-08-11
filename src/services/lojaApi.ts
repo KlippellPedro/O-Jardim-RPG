@@ -11,11 +11,13 @@ export interface LojaCatalogEntry {
     moeda: string;
     valor: number;
   };
+  nivel_loja?: number;
 }
 
 export interface LojaCommandItem {
   item_id: string;
   quantidade: number;
+  alvo_item_id?: string;
 }
 
 export interface LojaCommandInput {
@@ -23,6 +25,7 @@ export interface LojaCommandInput {
   personagem_id: string;
   economia_versao_esperada: number;
   idempotencia: string;
+  localizacao_loja?: number;
   itens: LojaCommandItem[];
 }
 
@@ -30,6 +33,7 @@ export interface LojaCommandBase {
   campanha_id: string;
   personagem_id: string;
   economia_versao_esperada: number;
+  localizacao_loja?: number;
   itens: LojaCommandItem[];
 }
 
@@ -50,6 +54,9 @@ export interface LojaCommandResult {
   }>;
   debitos?: LojaBalanceDelta[];
   creditos?: LojaBalanceDelta[];
+  /** Requisito de nível/classe que a compra ignorou — não bloqueia a compra,
+   * mas o mestre já é notificado, então quem comprou também deveria ver. */
+  infracoes?: Array<{ item_id: string; mensagem: string }>;
 }
 
 export interface CheckoutAttempt {
@@ -79,18 +86,22 @@ export function createIdempotencyKey(scope: string): string {
 }
 
 function normalizeItems(items: readonly LojaCommandItem[]): LojaCommandItem[] {
-  const quantities = new Map<string, number>();
+  const quantities = new Map<string, { quantidade: number; alvo_item_id?: string }>();
   for (const item of items) {
     const itemId = item.item_id.trim();
     if (!itemId) throw new TypeError('O item da operação não possui identificador.');
     if (!Number.isSafeInteger(item.quantidade) || item.quantidade < 1 || item.quantidade > MAX_SHOP_UNITS) {
       throw new TypeError(`Quantidade inválida para o item ${itemId}.`);
     }
-    quantities.set(itemId, (quantities.get(itemId) ?? 0) + item.quantidade);
+    const key = item.alvo_item_id ? `${itemId}::${item.alvo_item_id}` : itemId;
+    const current = quantities.get(key) ?? { quantidade: 0, alvo_item_id: item.alvo_item_id };
+    quantities.set(key, { ...current, quantidade: current.quantidade + item.quantidade });
   }
   if (!quantities.size) throw new TypeError('A operação precisa conter ao menos um item.');
-  const normalized = Array.from(quantities, ([item_id, quantidade]) => ({ item_id, quantidade }))
-    .sort((left, right) => left.item_id.localeCompare(right.item_id));
+  const normalized = Array.from(quantities, ([key, data]) => {
+    const [item_id] = key.split('::');
+    return { item_id, quantidade: data.quantidade, alvo_item_id: data.alvo_item_id };
+  }).sort((left, right) => left.item_id.localeCompare(right.item_id));
   if (normalized.length > 50 || normalized.reduce((total, item) => total + item.quantidade, 0) > MAX_SHOP_UNITS) {
     throw new TypeError(`O lote não pode exceder ${MAX_SHOP_UNITS} unidades ou 50 itens diferentes.`);
   }
@@ -114,10 +125,14 @@ export function prepareCheckoutAttempt(
     campanha_id: command.campanha_id.trim(),
     personagem_id: command.personagem_id.trim(),
     economia_versao_esperada: command.economia_versao_esperada,
+    ...(command.localizacao_loja === undefined ? {} : { localizacao_loja: command.localizacao_loja }),
     itens: normalizeItems(command.itens),
   };
   if (!normalized.campanha_id || !normalized.personagem_id) {
     throw new TypeError('Campanha e personagem são obrigatórios.');
+  }
+  if (normalized.localizacao_loja !== undefined && ![1, 2, 3, 4].includes(normalized.localizacao_loja)) {
+    throw new TypeError('A localização da loja é inválida.');
   }
   const signature = `${operation}:${JSON.stringify(normalized)}`;
   if (previous?.signature === signature) return previous;

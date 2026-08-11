@@ -1,6 +1,7 @@
 import { useDeferredValue, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { BookMarked, ChevronRight, Search, SlidersHorizontal, Sparkles, X } from 'lucide-react';
+import catalogoLoja from '../../../../data/loja/catalogo.json';
 import {
   ENCANTAMENTOS_CATALOGO,
   FLUXOS_CATALOGO,
@@ -15,9 +16,45 @@ import {
   temaDoFluxo,
   variantesDaMagia,
   type FluxoDeMagia,
+  type IIngredienteRitual,
 } from '../../../services/magiaService';
+import { getCurrencySymbol, lerPrecoNativoLoja, rotuloRaridadeChave } from '../../../services/lojaCatalogService';
 
 type AbaCatalogo = 'magias' | 'rituais' | 'selos' | 'encantamentos' | 'fusoes';
+
+/** Só os itens tipo "drop" (categoria Componentes da loja) servem de ingrediente
+ * de ritual - são o que existe hoje pra "partes de seres" e reagentes avulsos. */
+const COMPONENTES_POR_ID = new Map(
+  (catalogoLoja.entradas as Array<{ id: string; titulo: string; tipo: string; conteudo: Record<string, unknown> }>)
+    .filter((entrada) => entrada.tipo === 'drop')
+    .map((entrada) => [entrada.id, entrada]),
+);
+
+interface IngredienteResolvido {
+  id: string;
+  titulo: string;
+  quantidade: number;
+  precoTexto: string;
+  raridade: string;
+}
+
+/** Resolve os ids gravados no ritual contra o catálogo da loja, pra sempre
+ * mostrar preço e raridade atuais em vez de duplicar esse dado no rito. */
+function resolverIngredientes(ingredientes?: IIngredienteRitual[]): IngredienteResolvido[] {
+  if (!ingredientes?.length) return [];
+  return ingredientes.flatMap((ingrediente) => {
+    const entrada = COMPONENTES_POR_ID.get(ingrediente.item_id);
+    if (!entrada) return [];
+    const preco = lerPrecoNativoLoja(entrada.conteudo.preco);
+    return [{
+      id: ingrediente.item_id,
+      titulo: entrada.titulo,
+      quantidade: ingrediente.quantidade,
+      precoTexto: preco ? `${preco.valorOriginal.toLocaleString('pt-BR')} ${getCurrencySymbol(preco.moedaPreco)}` : '?',
+      raridade: rotuloRaridadeChave(entrada.conteudo.raridade),
+    }];
+  });
+}
 
 interface CampoGrimorio {
   rotulo: string;
@@ -46,6 +83,8 @@ interface GrimorioItem {
   /** Só nos dois ritos dos Sete: o que cada Símbolo concedido por aquele rito
    * dá e cobra. Fica junto do ritual em vez de numa página de regras à parte. */
   simbolos?: LinhaSimbolo[];
+  /** Só nos rituais: materiais compráveis na Loja (Componentes) que o rito consome. */
+  ingredientes?: IngredienteResolvido[];
 }
 
 const CIRCULOS = Array.from({ length: 10 }, (_, indice) => indice + 1);
@@ -96,6 +135,7 @@ const ITENS_POR_ABA: Record<AbaCatalogo, GrimorioItem[]> = {
       { rotulo: 'Falha', valor: item.falha },
     ],
     aviso: item.aviso_mestre,
+    ingredientes: resolverIngredientes(item.ingredientes),
     simbolos: simbolosDoRito(item.id).map((simbolo) => ({
       id: simbolo.id,
       titulo: simbolo.titulo,
@@ -224,6 +264,29 @@ const GrimorioDetail = ({ item, compacto = false }: { item: GrimorioItem; compac
           <p className="text-sm leading-6 text-gray-300">{campo.valor}</p>
         </section>
       ))}
+
+      {item.ingredientes?.length ? (
+        <section className="mt-6">
+          <h4 className="mb-3 text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: tema.destaque }}>
+            Ingredientes (Componentes da Loja)
+          </h4>
+          <ul className="space-y-1.5">
+            {item.ingredientes.map((ingrediente) => (
+              <li
+                key={ingrediente.id}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs"
+              >
+                <span className="text-gray-300">
+                  {ingrediente.titulo} <span className="text-gray-600">×{ingrediente.quantidade}</span>
+                </span>
+                <span className="whitespace-nowrap text-[10px] uppercase tracking-wide text-gray-500">
+                  {ingrediente.precoTexto} · {ingrediente.raridade}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {item.simbolos?.length ? (
         <section className="mt-6">

@@ -190,6 +190,46 @@ function grauPericia(ficha: any, id: string): number {
   return ordem.indexOf(normalizar(ficha?.pericias?.[id]));
 }
 
+const NOMES_ATRIBUTOS: Record<string, string> = {
+  forca: 'Força',
+  destreza: 'Destreza',
+  constituicao: 'Constituição',
+  inteligencia: 'Inteligência',
+  sabedoria: 'Sabedoria',
+  carisma: 'Carisma',
+  fluxo: 'Fluxo',
+};
+
+const NOMES_GRAUS_PERICIA: Record<string, string> = {
+  iniciante: 'Iniciante',
+  aprendiz: 'Aprendiz',
+  treinado: 'Treinado',
+  especialista: 'Especialista',
+  mestre: 'Mestre',
+  veterano: 'Veterano',
+  renomado: 'Renomado',
+};
+
+export function descreverRequisito(requisito: any): string {
+  if (!requisito || typeof requisito !== 'object') return '';
+  if (Array.isArray(requisito.ou)) return requisito.ou.map(descreverRequisito).filter(Boolean).join(' ou ');
+  if (requisito.nivel_personagem) return `Nível de personagem ${requisito.nivel_personagem}+`;
+  if (requisito.atributo) {
+    const nome = NOMES_ATRIBUTOS[normalizar(requisito.atributo)] || requisito.atributo;
+    return `${nome} ${requisito.valor_minimo || 0}+`;
+  }
+  if (requisito.pericia) {
+    const nomeGrau = NOMES_GRAUS_PERICIA[normalizar(requisito.nivel)] || requisito.nivel;
+    const nomePericia = String(requisito.pericia).charAt(0).toUpperCase() + String(requisito.pericia).slice(1);
+    return `${nomePericia} (${nomeGrau})`;
+  }
+  return '';
+}
+
+export function descreverPreRequisitos(pre_requisitos?: unknown[]): string[] {
+  return (pre_requisitos || []).map(descreverRequisito).filter(Boolean);
+}
+
 function atendeRequisito(requisito: any, ficha: any): boolean {
   if (!requisito || typeof requisito !== 'object') return true;
   if (Array.isArray(requisito.ou)) return requisito.ou.some((item: any) => atendeRequisito(item, ficha));

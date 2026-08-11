@@ -45,8 +45,9 @@ export const COSMIC_TREES: TreeData[] = [
 // Posição global para a câmera seguir
 const globalTargetPosition = new THREE.Vector3(0, 0, 0);
 
-const GlowSprite = ({ color, isSelected }: { color: string, isSelected: boolean }) => {
-  const texture = useMemo(() => {
+let sharedGlowTexture: THREE.CanvasTexture | null = null;
+const getGlowTexture = () => {
+  if (!sharedGlowTexture) {
     const canvas = document.createElement('canvas');
     canvas.width = 128;
     canvas.height = 128;
@@ -59,8 +60,13 @@ const GlowSprite = ({ color, isSelected }: { color: string, isSelected: boolean 
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, 128, 128);
     }
-    return new THREE.CanvasTexture(canvas);
-  }, []);
+    sharedGlowTexture = new THREE.CanvasTexture(canvas);
+  }
+  return sharedGlowTexture;
+};
+
+const GlowSprite = ({ color, isSelected }: { color: string, isSelected: boolean }) => {
+  const texture = useMemo(() => getGlowTexture(), []);
 
   return (
     <sprite scale={isSelected ? [7, 7, 1] : [4, 4, 1]} position={[0, 1.2, 0]}>
@@ -92,7 +98,7 @@ const EasterEggUniverses = () => {
     <group position={[350, -100, 400]}>
       {/* Mundo Congelado */}
       <mesh ref={frozenRef} position={[0, 0, 0]}>
-        <sphereGeometry args={[15, 64, 64]} />
+        <sphereGeometry args={[15, 32, 32]} />
         <meshStandardMaterial 
           color="#d0f4ff" 
           emissive="#0a2a3a" 
@@ -101,7 +107,7 @@ const EasterEggUniverses = () => {
         />
         {/* Camada de "Gelo" por cima */}
         <mesh>
-          <sphereGeometry args={[15.2, 64, 64]} />
+          <sphereGeometry args={[15.2, 32, 32]} />
           <meshPhysicalMaterial 
             color="#ffffff" 
             transparent 
@@ -121,7 +127,7 @@ const EasterEggUniverses = () => {
 
       {/* Bolha do RPG do Amigo */}
       <mesh ref={bubbleRef} position={[40, 20, -30]}>
-        <sphereGeometry args={[10, 64, 64]} />
+        <sphereGeometry args={[10, 32, 32]} />
         <meshPhysicalMaterial 
           color="#ffb6ff"
           emissive="#ff0088"
@@ -165,7 +171,7 @@ const MoonBankModel = () => {
 };
 
 /**
- * O Banco Lunar (ver bancoLunarInfo.ts) não é uma Árvore — não tem
+ * O Banco Lunar (ver bancoLunarInfo.ts) não é uma Árvore - não tem
  * deidadeId nem participa da seleção/foco de câmera das Árvores. Orbita
  * sozinho, bem por fora da órbita mais distante (Abismo, radius 40) e um
  * pouco acima do plano delas, pra ler como algo que sobrevoa o conjunto
@@ -361,7 +367,7 @@ export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({ selectedDeid
       >
         <color attach="background" args={['#050508']} />
         <ambientLight intensity={0.5} />
-        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+        <Stars radius={100} depth={50} count={1500} factor={4} saturation={0} fade speed={1} />
         
         {COSMIC_TREES.map(tree => {
           const isLocked = lockedDeidades.includes(tree.deidadeId);

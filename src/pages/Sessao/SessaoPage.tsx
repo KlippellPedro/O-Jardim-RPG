@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   AlertTriangle,
+  Car,
   LockKeyhole,
   PanelLeft,
   PanelLeftClose,
@@ -16,6 +17,7 @@ import {
 import { ActiveTurnCard } from './components/ActiveTurnCard';
 import { InitiativeTracker } from './InitiativeTracker';
 import { SessionLogPanel } from './components/SessionLogPanel';
+import { FrotaBasesPanel } from './components/FrotaBasesPanel';
 import { useSessaoStore } from '../../store/useSessaoStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import { roleLabel } from './sessionUtils';
@@ -25,7 +27,8 @@ export const SessaoPage: React.FC = () => {
   const [liveActionError, setLiveActionError] = useState<string | null>(null);
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
   const [rightDrawerOpen, setRightDrawerOpen] = useState(false);
-  // O histórico é útil, mas ocupa uma coluna inteira — dá pra recolher.
+  const [frotaDrawerOpen, setFrotaDrawerOpen] = useState(false);
+  // O histórico é útil, mas ocupa uma coluna inteira - dá pra recolher.
   const [historyPanelOpen, setHistoryPanelOpen] = useState(true);
   const reduceMotion = useReducedMotion();
   const {
@@ -185,6 +188,15 @@ export const SessaoPage: React.FC = () => {
               >
                 <PanelRight size={18} />
               </button>
+              <button
+                type="button"
+                onClick={() => setFrotaDrawerOpen(true)}
+                className="rounded-lg border border-white/10 p-2 text-white/70 hover:border-amber-400/40 hover:text-white"
+                aria-label="Abrir frota e bases da campanha"
+                title="Frota & Bases"
+              >
+                <Car size={18} />
+              </button>
 
               <span className="hidden rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-white/60 md:inline">
                 {roleLabel(meuPapel)}
@@ -260,6 +272,17 @@ export const SessaoPage: React.FC = () => {
             onClick={(event) => event.stopPropagation()}
           >
             <InitiativeTracker onClose={() => setRightDrawerOpen(false)} />
+          </aside>
+        </div>
+      ) : null}
+
+      {frotaDrawerOpen ? (
+        <div className="fixed inset-0 z-40 flex justify-end bg-black/70 pl-24" role="presentation" onClick={() => setFrotaDrawerOpen(false)}>
+          <aside
+            className="h-full w-[min(380px,calc(100vw-6rem))] border-l border-white/10 bg-[#0b0a10]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <FrotaBasesPanel onClose={() => setFrotaDrawerOpen(false)} />
           </aside>
         </div>
       ) : null}

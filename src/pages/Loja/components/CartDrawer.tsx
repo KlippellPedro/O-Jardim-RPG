@@ -7,14 +7,16 @@ import { MAX_SHOP_UNITS } from '../../../services/lojaApi';
 export interface CartItem {
   item: LojaItem;
   quantidade: number;
+  alvoItemId?: string;
+  alvoItemNome?: string;
 }
 
 interface CartDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   cart: CartItem[];
-  onUpdateQuantity: (itemId: string, delta: number) => void;
-  onRemoveItem: (itemId: string) => void;
+  onRemoveItem: (cartKey: string) => void;
+  onUpdateQuantity: (cartKey: string, delta: number) => void;
   onCheckout: () => void;
   isVenda?: boolean;
   isProcessing?: boolean;
@@ -65,32 +67,40 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <p className="uppercase tracking-widest text-sm font-bold">Vazio</p>
                 </div>
               ) : (
-                cart.map(({ item, quantidade }) => (
-                  <div key={item.id} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-4">
+                cart.map(({ item, quantidade, alvoItemId, alvoItemNome }) => {
+                  const cartKey = alvoItemId ? `${item.id}::${alvoItemId}` : item.id;
+                  return (
+                  <div key={cartKey} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-4">
                     <div className="flex-1">
                       <div className="text-xs uppercase tracking-widest text-gray-500 mb-1">{item.categoria}</div>
-                      <h4 className="text-white font-bold mb-2">{item.nome}</h4>
+                      <h4 className="text-white font-bold mb-1">{item.nome}</h4>
+                      {alvoItemNome && (
+                        <div className="text-[10px] text-fuchsia-400 font-bold uppercase tracking-widest mb-2 border border-fuchsia-500/20 bg-fuchsia-900/20 px-2 py-0.5 rounded-md inline-block">
+                          Para: {alvoItemNome}
+                        </div>
+                      )}
                       <div className="flex items-center gap-1 text-lg font-bold text-yellow-400">
                         {(item.valorOriginal * quantidade).toLocaleString('pt-BR')} <span className="text-xs">{getCurrencySymbol(item.moedaPreco)}</span>
                       </div>
                     </div>
                     
                     <div className="flex flex-col items-end justify-between">
-                      <button onClick={() => onRemoveItem(item.id)} disabled={isProcessing} aria-label={`Remover ${item.nome}`} className="text-gray-500 hover:text-red-400 transition-colors p-1 disabled:opacity-50">
+                      <button onClick={() => onRemoveItem(cartKey)} disabled={isProcessing} aria-label={`Remover ${item.nome}`} className="text-gray-500 hover:text-red-400 transition-colors p-1 disabled:opacity-50">
                         <Trash2 size={16} />
                       </button>
                       <div className="flex items-center gap-3 bg-black/50 rounded-xl p-1 border border-white/10">
-                        <button onClick={() => onUpdateQuantity(item.id, -1)} disabled={isProcessing} aria-label={`Diminuir quantidade de ${item.nome}`} className="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-white/10 text-white disabled:opacity-50">
+                        <button onClick={() => onUpdateQuantity(cartKey, -1)} disabled={isProcessing || !!alvoItemId} aria-label={`Diminuir quantidade de ${item.nome}`} className="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-white/10 text-white disabled:opacity-50">
                           <Minus size={14} />
                         </button>
                         <span className="text-sm font-bold w-4 text-center text-white">{quantidade}</span>
-                        <button onClick={() => onUpdateQuantity(item.id, 1)} disabled={isProcessing || quantidade >= Math.min(item.quantidadeDisponivel ?? MAX_SHOP_UNITS, MAX_SHOP_UNITS)} aria-label={`Aumentar quantidade de ${item.nome}`} className="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-white/10 text-white disabled:opacity-50">
+                        <button onClick={() => onUpdateQuantity(cartKey, 1)} disabled={isProcessing || !!alvoItemId || quantidade >= Math.min(item.quantidadeDisponivel ?? MAX_SHOP_UNITS, MAX_SHOP_UNITS)} aria-label={`Aumentar quantidade de ${item.nome}`} className="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-white/10 text-white disabled:opacity-50">
                           <Plus size={14} />
                         </button>
                       </div>
                     </div>
                   </div>
-                ))
+                  );
+                })
               )}
             </div>
 

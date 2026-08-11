@@ -72,7 +72,7 @@ export const ContaPanel: React.FC = () => {
       setCodigoCopiado(true);
       setTimeout(() => setCodigoCopiado(false), 2000);
     } catch {
-      // Clipboard indisponível (ex.: contexto não seguro) — o código já está visível para copiar manualmente.
+      // Clipboard indisponível (ex.: contexto não seguro) - o código já está visível para copiar manualmente.
     }
   };
 
@@ -187,7 +187,7 @@ export const ContaPanel: React.FC = () => {
               {codigoGerado ? (
                 <div className="space-y-2">
                   <p className="text-gray-400 text-sm">
-                    Copie só o código abaixo e envie <span className="text-white font-mono">/vincular</span> no Discord com ele — não copie esta frase inteira.
+                    Copie só o código abaixo e envie <span className="text-white font-mono">/vincular</span> no Discord com ele - não copie esta frase inteira.
                   </p>
                   <div className="flex items-center gap-2 bg-black/40 border border-primary/40 rounded-xl pl-4 pr-2 py-2">
                     <span className="flex-1 text-white font-mono font-bold tracking-widest text-lg select-all">

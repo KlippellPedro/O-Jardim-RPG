@@ -11,7 +11,7 @@ import { TransferirModal } from '../../components/Cofre/TransferirModal';
 type Alvo =
   | { tipo: 'moeda'; moeda: string; saldo: number }
   // 'banco' é o Cofre bancário do Banqueiro (tabela do bot, à esquerda na
-  // tela): outro estoque, outra rota — não some do cofre de recompensas.
+  // tela): outro estoque, outra rota - não some do cofre de recompensas.
   | { tipo: 'banco'; moeda: string; saldo: number }
   | { tipo: 'item'; itemId: string; titulo: string; quantidade: number };
 
@@ -189,8 +189,8 @@ export function CofrePage() {
                       <p className="text-gray-500">
                         Exige {nivel.proximo_tier.reputacao_exigida.toLocaleString('pt-BR')} de reputação
                         {(nivel.reputacao_bancaria ?? 1) >= nivel.proximo_tier.reputacao_exigida
-                          ? ' — requisito atingido.'
-                          : ` — faltam ${(nivel.proximo_tier.reputacao_exigida - (nivel.reputacao_bancaria ?? 1)).toLocaleString('pt-BR')}.`}
+                          ? ' - requisito atingido.'
+                          : ` - faltam ${(nivel.proximo_tier.reputacao_exigida - (nivel.reputacao_bancaria ?? 1)).toLocaleString('pt-BR')}.`}
                       </p>
                     </div>
                   </div>

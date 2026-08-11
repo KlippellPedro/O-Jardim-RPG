@@ -25,7 +25,7 @@ export interface ParticipantePayload {
   visibilidade?: NivelVisibilidade;
   /** Só usado por quem não tem ficha (NPCs, monstros). */
   defesa?: number | null;
-  /** Valor de Desafio (1-10) — de onde vem o XP ao distribuir. */
+  /** Valor de Desafio (1-10) - de onde vem o XP ao distribuir. */
   vd?: number | null;
   /** Referência rápida ("Luta +12"); não valida nada. */
   pericias?: string[];
@@ -44,14 +44,14 @@ export interface SessaoParticipanteResponse {
   estado_vida?: string;
   e_meu?: boolean;
   /** Só vem preenchido para quem comanda a mesa ou para o dono do próprio
-   * personagem — é o segredo do mestre, não algo que o resto da mesa lê. */
+   * personagem - é o segredo do mestre, não algo que o resto da mesa lê. */
   visibilidade?: NivelVisibilidade | null;
   /** Mesma regra da Vida: só aparece para quem pode ver o número exato. */
   defesa?: number | null;
   mana_atual?: number | null;
   mana_maxima?: number | null;
   ataques?: AtaquePayload[];
-  /** Só vem preenchido para quem comanda a mesa — é uso interno de XP. */
+  /** Só vem preenchido para quem comanda a mesa - é uso interno de XP. */
   vd?: number | null;
   pericias?: string[];
 }

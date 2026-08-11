@@ -1,27 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { LojaItem, getCurrencySymbol } from '../../../services/lojaCatalogService';
+import { Select } from '../../../components/ui/Select';
+import { LojaItem, getCurrencySymbol, itemEhVeiculoCompleto, obterBonusDefesaCatalogo, personagemAtendeRequisitosLoja } from '../../../services/lojaCatalogService';
 import { X, ShoppingCart, Info, Swords, Activity, Skull, Sparkles, AlertTriangle } from 'lucide-react';
 import { ICharacter } from '../../../types/character';
 
 interface LojaItemModalProps {
   item: LojaItem;
   onClose: () => void;
-  onBuy: (item: LojaItem) => void;
+  onBuy: (item: LojaItem, alvoItemId?: string, alvoItemNome?: string) => void;
   podeComprar: boolean;
   modoLoja?: 'Comprar' | 'Vender';
   compradorAtivo?: ICharacter;
 }
 
 export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onBuy, podeComprar, modoLoja = 'Comprar', compradorAtivo }) => {
+  const [alvoItemId, setAlvoItemId] = useState<string>('');
   const { dadosBrutos = {} } = item;
+  const veiculoCompleto = itemEhVeiculoCompleto(item);
+  const bonusDefesa = obterBonusDefesaCatalogo(dadosBrutos);
   
   // Validação de Requisitos
-  const meetsNivel = !item.requisitoNivel || (compradorAtivo && compradorAtivo.nivel >= item.requisitoNivel);
-  const meetsClasse = !item.requisitoClasse || item.requisitoClasse.length === 0 || (compradorAtivo && item.requisitoClasse.some(reqClasse => 
-    (compradorAtivo.classes || []).some(c => c.id.toLowerCase() === reqClasse.toLowerCase()) || 
-    (compradorAtivo.classeId && compradorAtivo.classeId.toLowerCase() === reqClasse.toLowerCase())
-  ));
+  const meetsNivel = !item.requisitoNivel || Boolean(compradorAtivo && compradorAtivo.nivel >= item.requisitoNivel);
+  const meetsClasse = !item.requisitoClasse?.length || personagemAtendeRequisitosLoja(
+    { requisitoClasse: item.requisitoClasse },
+    compradorAtivo,
+  );
   
   const hasWarning = (!meetsNivel || !meetsClasse) && modoLoja === 'Comprar';
 
@@ -82,28 +86,103 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
           </div>
         );
 
-      case 'Veículos':
+      case 'Bens': {
+        const propriedade = item.tipoOrigem === 'propriedade';
+        if (propriedade) {
+          const especificacoesPropriedade = [
+            ['Tipo', dadosBrutos.tipoPropriedade],
+            ['Localização', dadosBrutos.localizacao],
+            ['Patamar', dadosBrutos.patamar],
+            ['Qualidade dos Alojamentos', dadosBrutos.qualidadeQuartos],
+            ['Manutenção mensal', dadosBrutos.manutencao != null && dadosBrutos.manutencao !== '' ? `${dadosBrutos.manutencao} L$/mês` : undefined],
+          ].filter(([, valor]) => valor !== undefined && valor !== null && valor !== '');
+          const instalacoes = Array.isArray(dadosBrutos.instalacoes) ? dadosBrutos.instalacoes : [];
+          return (
+            <div className="mt-6 flex flex-col gap-4 border-t border-white/10 pt-6">
+              <h4 className="mb-2 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gray-500">
+                <Info size={16} /> Ficha da propriedade
+              </h4>
+              {especificacoesPropriedade.length > 0 ? (
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {especificacoesPropriedade.map(([rotulo, valor]) => (
+                    <div key={String(rotulo)} className="rounded-xl border border-white/10 bg-white/5 p-3 text-center">
+                      <div className="text-[10px] uppercase tracking-widest text-gray-400">{String(rotulo)}</div>
+                      <div className="mt-1 text-sm font-bold capitalize text-white">{String(valor)}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-400">As especificações completas estão publicadas na descrição acima.</p>
+              )}
+              {instalacoes.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {instalacoes.map((instalacao: any, indice: number) => (
+                    <span key={indice} className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs text-emerald-300">
+                      {instalacao?.nome} {instalacao?.nivel ? `(Nível ${instalacao.nivel})` : ''}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <p className="text-xs text-gray-500">Ao comprar, a propriedade entra pronta e editável na aba Bens da ficha.</p>
+            </div>
+          );
+        }
+        if (veiculoCompleto) {
+          const especificacoes = [
+            ['Categoria', dadosBrutos.categoria],
+            ['Tamanho', dadosBrutos.tamanho],
+            ['Vida', dadosBrutos.vidaMaxima ?? dadosBrutos.vida],
+            ['Defesa', dadosBrutos.defesa],
+            ['Resistência', dadosBrutos.resistencia],
+            ['Deslocamento', dadosBrutos.deslocamentoMetros != null ? `${dadosBrutos.deslocamentoMetros} m` : undefined],
+            ['Manobrabilidade', dadosBrutos.manobrabilidade],
+            ['Capacidade', dadosBrutos.capacidade],
+            ['Cobertura', dadosBrutos.coberturaOcupantes],
+            ['Tripulação mínima', dadosBrutos.tripulacaoMinima],
+            ['Sistemas ativos', dadosBrutos.sistemasAtivosMaximos],
+            ['Espaços de base', dadosBrutos.espacosBase],
+          ].filter(([, valor]) => valor !== undefined && valor !== null && valor !== '');
+          const atributos = Array.isArray(dadosBrutos.atributos) ? dadosBrutos.atributos.map(String) : [];
+          return (
+            <div className="mt-6 flex flex-col gap-4 border-t border-white/10 pt-6">
+              <h4 className="mb-2 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gray-500">
+                <Info size={16} /> Ficha do veículo
+              </h4>
+              {especificacoes.length > 0 ? (
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {especificacoes.map(([rotulo, valor]) => (
+                    <div key={String(rotulo)} className="rounded-xl border border-white/10 bg-white/5 p-3 text-center">
+                      <div className="text-[10px] uppercase tracking-widest text-gray-400">{String(rotulo)}</div>
+                      <div className="mt-1 text-sm font-bold capitalize text-white">{String(valor)}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-400">As especificações completas estão publicadas na descrição acima.</p>
+              )}
+              {atributos.length > 0 ? <p className="text-sm text-blue-200">{atributos.join(' · ')}</p> : null}
+            </div>
+          );
+        }
+        const camposSistema = [
+          ['Sistema', dadosBrutos.sistema],
+          ['Subtipo', dadosBrutos.subtipo],
+          ['Tier', dadosBrutos.tier],
+        ].filter(([, valor]) => valor !== undefined && valor !== null && valor !== '');
         return (
           <div className="flex flex-col gap-4 mt-6 border-t border-white/10 pt-6">
             <h4 className="text-sm uppercase tracking-widest text-gray-500 font-bold mb-2 flex items-center gap-2">
-              <Info size={16} /> Especificações do Sistema
+              <Info size={16} /> Peça ou módulo veicular
             </h4>
-            <div className="grid grid-cols-3 gap-3">
-              <div className="bg-white/5 p-3 rounded-xl border border-white/10 flex flex-col items-center justify-center text-center">
-                <div className="text-[10px] text-gray-400 uppercase tracking-widest">Sistema</div>
-                <div className="text-sm text-white font-bold">{dadosBrutos.sistema || '-'}</div>
-              </div>
-              <div className="bg-white/5 p-3 rounded-xl border border-white/10 flex flex-col items-center justify-center text-center">
-                <div className="text-[10px] text-gray-400 uppercase tracking-widest">Subtipo</div>
-                <div className="text-sm text-blue-300 font-bold">{dadosBrutos.subtipo || '-'}</div>
-              </div>
-              <div className="bg-white/5 p-3 rounded-xl border border-white/10 flex flex-col items-center justify-center text-center">
-                <div className="text-[10px] text-gray-400 uppercase tracking-widest">Tier</div>
-                <div className="text-sm text-purple-300 font-bold">{dadosBrutos.tier || '-'}</div>
-              </div>
-            </div>
+            {camposSistema.length > 0 ? <div className="grid grid-cols-3 gap-3">
+              {camposSistema.map(([rotulo, valor]) => <div key={String(rotulo)} className="flex flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 p-3 text-center">
+                <div className="text-[10px] uppercase tracking-widest text-gray-400">{String(rotulo)}</div>
+                <div className="text-sm font-bold text-white">{String(valor)}</div>
+              </div>)}
+            </div> : <p className="text-sm text-gray-400">Os detalhes do módulo estão publicados na descrição acima.</p>}
           </div>
         );
+      }
 
       case 'Armas':
       case 'Armaduras e Escudos':
@@ -133,10 +212,10 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
                   <div className="text-xl text-yellow-400 font-bold">{dadosBrutos.critico}</div>
                 </div>
               )}
-              {dadosBrutos.defesa && (
+              {bonusDefesa !== undefined && bonusDefesa !== null && bonusDefesa !== '' && (
                 <div className="bg-white/5 p-4 rounded-xl border border-white/10">
                   <div className="text-xs text-gray-400 uppercase">Defesa</div>
-                  <div className="text-xl text-blue-400 font-bold">+{dadosBrutos.defesa}</div>
+                  <div className="text-xl text-blue-400 font-bold">{String(bonusDefesa).startsWith('-') ? '' : '+'}{String(bonusDefesa).replace(/^\+/, '')}</div>
                 </div>
               )}
               {dadosBrutos.alcance && (
@@ -169,12 +248,13 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
   let accentColor = '';
   switch (item.raridade) {
     case 'Comum': accentColor = 'text-gray-300 border-gray-500 shadow-[0_0_20px_rgba(107,114,128,0.2)] bg-gray-500/10'; break;
-    case 'Incomum': accentColor = 'text-blue-400 border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.2)] bg-blue-500/10'; break;
-    case 'Raro': accentColor = 'text-purple-400 border-purple-500 shadow-[0_0_20px_rgba(168,85,247,0.2)] bg-purple-500/10'; break;
-    case 'Épico': accentColor = 'text-yellow-400 border-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.2)] bg-yellow-500/10'; break;
-    case 'Lendário': accentColor = 'text-orange-400 border-orange-500 shadow-[0_0_20px_rgba(249,115,22,0.2)] bg-orange-500/10'; break;
-    case 'Relíquia': accentColor = 'text-red-400 border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.3)] bg-red-500/10'; break;
-    case 'Relíquia da Criação': accentColor = 'text-fuchsia-300 border-fuchsia-500 shadow-[0_0_35px_rgba(217,70,239,0.35)] bg-fuchsia-500/10'; break;
+    case 'Incomum': accentColor = 'text-emerald-400 border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)] bg-emerald-500/10'; break;
+    case 'Raro': accentColor = 'text-blue-400 border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.2)] bg-blue-500/10'; break;
+    case 'Épico': accentColor = 'text-purple-400 border-purple-500 shadow-[0_0_20px_rgba(168,85,247,0.2)] bg-purple-500/10'; break;
+    case 'Lendário': accentColor = 'text-amber-400 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.2)] bg-amber-500/10'; break;
+    case 'Mítico': accentColor = 'text-red-400 border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.3)] bg-red-500/10'; break;
+    case 'Relíquia da Criação': accentColor = 'text-white border-white/70 shadow-[0_0_35px_rgba(255,255,255,0.3)] bg-gradient-to-br from-cyan-500/10 via-white/10 to-fuchsia-500/10'; break;
+    case 'Desconhecida': accentColor = 'text-rose-300 border-rose-500/60 shadow-[0_0_25px_rgba(244,63,94,0.2)] bg-rose-500/10'; break;
     default: accentColor = 'text-gray-400 border-white/20 bg-white/5'; break;
   }
 
@@ -241,11 +321,20 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
                   Seu personagem atual não atende aos requisitos para equipar/usar este item perfeitamente. 
                   {!meetsNivel && ` Exige Nível ${item.requisitoNivel}.`}
                   {!meetsClasse && ` Exige Classe: ${item.requisitoClasse?.join(', ')}.`}
-                  <br/><span className="italic text-xs opacity-75">(Você ainda pode comprar para entregar a um aliado ou guardar).</span>
+                  <br/><span className="italic text-xs opacity-75 font-bold">Se você prosseguir com a compra, uma notificação de infração será enviada ao Mestre da campanha.</span>
                 </p>
               </div>
             </div>
           )}
+          {dadosBrutos.requer_autorizacao_mestre === true ? (
+            <div className="mb-6 flex items-start gap-3 rounded-xl border border-amber-500/40 bg-amber-900/20 p-4">
+              <AlertTriangle className="mt-0.5 shrink-0 text-amber-400" size={20} />
+              <div>
+                <h4 className="mb-1 text-sm font-bold uppercase tracking-wide text-amber-300">Autorização do Mestre</h4>
+                <p className="text-sm text-amber-100/75">Este item é restrito e exige autorização do mestre. Se você prosseguir, uma notificação de infração será enviada ao mestre da campanha.</p>
+              </div>
+            </div>
+          ) : null}
           <p className="text-gray-300 text-lg leading-relaxed italic border-l-2 border-[#c7a44c]/50 pl-4">
             "{item.descricao}"
           </p>
@@ -260,6 +349,30 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
                 <Sparkles size={14} /> {dadosBrutos.subtipo === 'selo' ? 'Efeito do selo' : 'Poder Primordial'}
               </span>
               <p className="text-fuchsia-100/90 text-sm leading-relaxed">{dadosBrutos.efeito}</p>
+            </div>
+          </div>
+        )}
+
+        {/* SELEÇÃO DE ALVO PARA MODIFICAÇÕES */}
+        {modoLoja === 'Comprar' && item.categoria === 'Modificações' && compradorAtivo && (
+          <div className="px-6 pb-6">
+            <div className="bg-white/5 border border-white/10 p-4 rounded-xl flex flex-col">
+              <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold mb-2">Instalar modificação em:</span>
+              <Select
+                value={alvoItemId}
+                onChange={setAlvoItemId}
+                placeholder="Nenhum (Comprar avulso)"
+                options={[
+                  { value: '', label: 'Nenhum (Comprar avulso)' },
+                  ...(compradorAtivo.inventarioCentral
+                    ?.filter(invItem => invItem.dados?.categoria === 'arma' || invItem.dados?.categoria === 'armadura' || invItem.dados?.categoria === 'veiculo')
+                    .map(invItem => ({
+                      value: invItem.item_id,
+                      label: invItem.titulo,
+                    })) || [])
+                ]}
+              />
+              <p className="text-xs text-gray-500 mt-2">Opcional. Se selecionado, a modificação será aplicada diretamente ao item e a quantidade comprada será fixada em 1.</p>
             </div>
           </div>
         )}
@@ -282,16 +395,21 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
             </div>
 
             <button
-              onClick={() => onBuy(item)}
+              onClick={() => {
+                const alvoItemNome = alvoItemId
+                  ? compradorAtivo?.inventarioCentral?.find(i => i.item_id === alvoItemId)?.titulo
+                  : undefined;
+                onBuy(item, alvoItemId || undefined, alvoItemNome);
+              }}
               disabled={!podeComprar}
               className={`flex items-center gap-2 px-8 py-3 rounded-xl font-bold tracking-widest uppercase transition-all shadow-xl ${
-                podeComprar
+                  podeComprar
                   ? 'bg-[#c7a44c] hover:bg-yellow-400 text-black hover:scale-105'
                   : 'bg-gray-800 text-gray-500 cursor-not-allowed'
               }`}
             >
               <ShoppingCart size={20} />
-              {podeComprar ? (modoLoja === 'Comprar' ? 'Adicionar ao carrinho' : 'Adicionar à venda') : 'Selecione um personagem'}
+              {!podeComprar ? 'Selecione um personagem' : (modoLoja === 'Comprar' ? 'Adicionar ao carrinho' : 'Adicionar à venda')}
             </button>
           </div>
         </div>

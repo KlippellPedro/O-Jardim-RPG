@@ -45,7 +45,7 @@ export const GridClasses: React.FC<GridClassesProps> = ({ classes }) => {
       {
         id: 'especiais',
         titulo: 'Classes Especiais',
-        descricao: 'Mais fortes que o patamar-base, presas às Árvores indicadas e liberadas pelo Mestre. Exigem nível total 15 e alguma coisa acontecida na história.',
+        descricao: 'Mais fortes que o patamar-base, presas às Árvores indicadas e liberadas pelo Mestre. Exigem nível total 20 e alguma coisa acontecida na história, salvo exceção explícita.',
         classes: classes.filter(classe => classe.categoria !== 'padrao'),
         especial: true,
       },

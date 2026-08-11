@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { HelpCircle, Search, Dices } from 'lucide-react';
+import { HelpCircle, Search, Dices, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { carregarCatalogo } from '../../../services/catalogoService';
 import { registrosApi } from '../../../services/registrosApi';
@@ -70,9 +70,10 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
   const penalidadeCansacoDaPericia = (atributo: string) => penalidadeCansacoTeste(status.cansacoAtual, periciaFisica(atributo));
   const desvantagensAutomaticasDaPericia = (periciaId: string, atributo: string) => (
     desvantagensAutomaticasTeste(status.cansacoAtual, periciaFisica(atributo), resumoEquipamento.sobrecarregado)
-    + (resumoEquipamento.desvantagensPericias[periciaId] || 0)
+    + (resumoEquipamento.desvantagens[periciaId] || 0)
+    + (resumoEquipamento.desvantagens['testes'] || 0)
   );
-  const bonusExtraDaPericia = (periciaId: string) => ajusteOrigem(f, 'pericia', periciaId)
+  const bonusExtraDaPericia = (periciaId: string, tituloPericia?: string) => ajusteOrigem(f, 'pericia', periciaId, tituloPericia)
     + totalAjustesManuais(f, chaveAjuste('pericia', periciaId))
     + (resumoEquipamento.bonusPericias[periciaId] || 0);
 
@@ -126,8 +127,29 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
 
   const [activeModal, setActiveModal] = useState<{ type: 'vantagens' | 'calculo' | 'ajustes' | 'nova' | 'resultado', periciaId: string, registro?: any } | null>(null);
 
-  const periciasCustomizadas = f.periciasCustomizadas || [];
-  const todasPericias = [...periciasCatalogo, ...periciasCustomizadas];
+  const periciasCustomizadas = Array.isArray(f.periciasCustomizadas)
+    ? f.periciasCustomizadas.filter((pericia: unknown): pericia is IPericiaCatalogo => Boolean(
+      pericia
+      && typeof pericia === 'object'
+      && typeof (pericia as IPericiaCatalogo).id === 'string'
+      && typeof (pericia as IPericiaCatalogo).titulo === 'string'
+      && typeof (pericia as IPericiaCatalogo).atributo === 'string',
+    ))
+    : [];
+  const todasPericias = Array.from(new Map(
+    [...periciasCustomizadas, ...periciasCatalogo].map((pericia) => [pericia.id, pericia]),
+  ).values());
+  const periciasFavoritas = Array.from(new Set(Array.isArray(f.periciasFavoritas)
+    ? f.periciasFavoritas.filter((id: unknown): id is string => typeof id === 'string' && Boolean(id.trim()))
+    : []));
+  const idsFavoritos = new Set(periciasFavoritas);
+
+  const toggleFavorita = (periciaId: string) => {
+    const proximas = idsFavoritos.has(periciaId)
+      ? periciasFavoritas.filter((id) => id !== periciaId)
+      : [...periciasFavoritas, periciaId];
+    onUpdate(['ficha', 'periciasFavoritas'], proximas);
+  };
 
   const activePericiaObj = activeModal ? todasPericias.find(p => p.id === activeModal.periciaId) : null;
   const activeRolagem = activeModal ? (rolagens[activeModal.periciaId] || { vantagens: 0, desvantagens: 0 }) : { vantagens: 0, desvantagens: 0 };
@@ -136,14 +158,17 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
   const activeMod = Math.floor((activeAttr - 10) / 2);
   const activeBonusGrau = BONUS_GRAU[activeGrau] || 0;
   const activeBonusRacial = activePericiaObj ? (ajustesRaciaisPericias[activePericiaObj.id] || 0) : 0;
-  const activeBonusExtra = activePericiaObj ? bonusExtraDaPericia(activePericiaObj.id) : 0;
+  const activeBonusExtra = activePericiaObj ? bonusExtraDaPericia(activePericiaObj.id, activePericiaObj.titulo) : 0;
   const activeDesvantagensAutomaticas = desvantagensAutomaticasDaPericia(activePericiaObj?.id || '', activePericiaObj?.atributo || '');
   const activeTotal = activeMod + metadeNivelCalculado + activeBonusGrau + activeBonusRacial + activeBonusExtra - penalidadeDaPericia(activePericiaObj?.id || '') + penalidadeCansacoDaPericia(activePericiaObj?.atributo || '');
 
   const periciasVisiveis = todasPericias
     .filter(p => !busca || p.titulo.toLowerCase().includes(busca.toLowerCase()))
     .filter(p => !filtroAtributo || p.atributo === filtroAtributo)
-    .sort((a, b) => a.titulo.localeCompare(b.titulo));
+    .sort((a, b) => {
+      const diferencaFavorito = Number(idsFavoritos.has(b.id)) - Number(idsFavoritos.has(a.id));
+      return diferencaFavorito || a.titulo.localeCompare(b.titulo, 'pt-BR');
+    });
 
   const contagemGraus = GRAUS_PERICIA.slice(1).map(g => ({
     grau: g,
@@ -207,12 +232,13 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
             const mod = Math.floor((attrVal - 10) / 2);
             const bonusG = BONUS_GRAU[grauAtual] || 0;
             const bonusRacial = ajustesRaciaisPericias[p.id] || 0;
-            const bonusExtra = bonusExtraDaPericia(p.id);
+            const bonusExtra = bonusExtraDaPericia(p.id, p.titulo);
             const penalidadeEquipamento = penalidadeDaPericia(p.id);
             const penalidadeCansaco = penalidadeCansacoDaPericia(p.atributo);
-            const desvantagensAutomaticas = desvantagensAutomaticasDaPericia(p.id, p.atributo);
-            const vantagensEquipamento = resumoEquipamento.vantagensPericias[p.id] || 0;
+            const vantagensEquipamento = (resumoEquipamento.vantagens[p.id] || 0) + (resumoEquipamento.vantagens['testes'] || 0);
+            const desvantagensEquipamento = (resumoEquipamento.desvantagens[p.id] || 0) + (resumoEquipamento.desvantagens['testes'] || 0);
             const total = mod + metadeNivelCalculado + bonusG + bonusRacial + bonusExtra - penalidadeEquipamento + penalidadeCansaco;
+            const desvantagensAutomaticas = desvantagensAutomaticasDaPericia(p.id, p.atributo) + desvantagensEquipamento;
             const totalStr = total >= 0 ? `+${total}` : `${total}`;
 
             const rolagem = rolagens[p.id] || { vantagens: 0, desvantagens: 0 };
@@ -228,12 +254,25 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
               >
                 <div className="flex justify-between items-start mb-1">
                   <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => toggleFavorita(p.id)}
+                      aria-label={idsFavoritos.has(p.id) ? `Desfavoritar ${p.titulo}` : `Favoritar ${p.titulo}`}
+                      aria-pressed={idsFavoritos.has(p.id)}
+                      title={idsFavoritos.has(p.id) ? 'Remover dos favoritos' : 'Favoritar perícia'}
+                      className={`transition-colors ${idsFavoritos.has(p.id) ? 'text-yellow-400' : 'text-gray-600 hover:text-yellow-300'}`}
+                    >
+                      <Star size={15} fill={idsFavoritos.has(p.id) ? 'currentColor' : 'none'} />
+                    </button>
                     <span className="text-white font-bold">{p.titulo}</span>
-                    <HelpCircle 
-                      size={14} 
-                      className="text-[#c7a44c] opacity-50 hover:opacity-100 transition-opacity cursor-pointer" 
+                    <button
+                      type="button"
                       onClick={() => setActiveModal({ type: 'calculo', periciaId: p.id })}
-                    />
+                      aria-label={`Ver cálculo de ${p.titulo}`}
+                      className="text-[#c7a44c] opacity-50 transition-opacity hover:opacity-100"
+                    >
+                      <HelpCircle size={14} />
+                    </button>
                     <AjusteButton label={p.titulo} onClick={() => setActiveModal({ type: 'ajustes', periciaId: p.id })} />
                   </div>
                   <span className="text-2xl font-bold text-[#c7a44c] leading-none drop-shadow-md">{totalStr}</span>
@@ -363,7 +402,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
           titulo={activePericiaObj.titulo}
           automaticos={[
             { nome: 'Raça', valor: Number(ajustesRaciaisPericias[activePericiaObj.id]) || 0 },
-            { nome: nomeAjusteOrigem(f, 'pericia', activePericiaObj.id) || 'Origem', valor: ajusteOrigem(f, 'pericia', activePericiaObj.id) },
+            { nome: nomeAjusteOrigem(f, 'pericia', activePericiaObj.id, activePericiaObj.titulo) || 'Origem', valor: ajusteOrigem(f, 'pericia', activePericiaObj.id, activePericiaObj.titulo) },
             { nome: 'Itens equipados', valor: resumoEquipamento.bonusPericias[activePericiaObj.id] || 0 },
           ]}
           ajustes={obterAjustesManuais(f, chaveAjuste('pericia', activePericiaObj.id))}
@@ -396,7 +435,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
               
               if (titulo && atributo) {
                 const newId = 'custom_' + Date.now();
-                const nextCustom = [...(f.periciasCustomizadas || []), { id: newId, titulo, atributo, descricao: 'Perícia/Ofício customizado.' }];
+                const nextCustom = [...periciasCustomizadas, { id: newId, titulo: titulo.trim(), atributo, descricao: 'Perícia/Ofício customizado.' }];
                 onUpdate(['ficha', 'periciasCustomizadas'], nextCustom);
                 
                 const novasPericias = { ...pericias, [newId]: 'aprendiz' };

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ShoppingBag, CheckCircle, XCircle, LayoutGrid, Sword, Shield, FlaskConical, CarFront, Users, Gem, Archive, Heart, ArrowRightLeft, Sparkles, Cpu, Wand2, Wrench, Apple, MapPin, Building2, Skull, Globe2 } from 'lucide-react';
-import { calcularValorRevenda, LojaItem, ItemCategoria, ItemRaridade, getCurrencySymbol, itemCorrespondeBusca, itemCorrespondeSubfiltro, lerPrecoNativoLoja, mapearCatalogoLoja, somarPrecosNativos } from '../../services/lojaCatalogService';
+import { Search, ShoppingBag, CheckCircle, XCircle, LayoutGrid, Sword, Shield, FlaskConical, Users, Gem, Archive, Heart, ArrowRightLeft, Sparkles, Cpu, Wand2, Wrench, Apple, MapPin, Building2, Skull, Globe2 } from 'lucide-react';
+import { calcularValorRevenda, LojaItem, ItemCategoria, ItemRaridade, getCurrencySymbol, itemCorrespondeBusca, itemCorrespondeSubfiltro, itemEhVeiculoCompleto, lerPrecoNativoLoja, mapearCatalogoLoja, rotuloRaridadeChave, somarPrecosNativos } from '../../services/lojaCatalogService';
 import { ItemCard } from './components/ItemCard';
 import { LojaItemModal } from './components/LojaItemModal';
 import { CartDrawer, CartItem } from './components/CartDrawer';
@@ -49,7 +49,7 @@ const CATEGORIAS_ICONES = {
   'Armaduras e Escudos': Shield,
   'Modificações': Wrench,
   'Consumíveis': FlaskConical,
-  'Veículos': CarFront,
+  'Bens': Building2,
   'Implantes Cibernéticos': Cpu,
   'Artefatos Mágicos': Wand2,
   'Mercenários': Users,
@@ -60,19 +60,20 @@ const CATEGORIAS_ICONES = {
 const RARIDADES_CORES = {
   'Todas': 'hover:bg-white/10 text-gray-400',
   'Comum': 'hover:bg-gray-500/20 text-gray-300',
-  'Incomum': 'hover:bg-blue-500/20 text-blue-400',
-  'Raro': 'hover:bg-purple-500/20 text-purple-400',
-  'Épico': 'hover:bg-yellow-500/20 text-yellow-400',
-  'Lendário': 'hover:bg-orange-500/20 text-orange-400',
-  'Relíquia': 'hover:bg-red-500/20 text-red-400',
-  'Relíquia da Criação': 'hover:bg-fuchsia-500/20 text-fuchsia-400',
+  'Incomum': 'hover:bg-emerald-500/20 text-emerald-400',
+  'Raro': 'hover:bg-blue-500/20 text-blue-400',
+  'Épico': 'hover:bg-purple-500/20 text-purple-400',
+  'Lendário': 'hover:bg-amber-500/20 text-amber-400',
+  'Mítico': 'hover:bg-red-500/20 text-red-400',
+  'Relíquia da Criação': 'hover:bg-white/10 text-white',
+  'Desconhecida': 'hover:bg-rose-500/20 text-rose-300',
 } as const;
 
 const SUBFILTROS_POR_CATEGORIA: Partial<Record<ItemCategoria, readonly string[]>> = {
   'Armas': ['Todos', 'Corpo a Corpo', 'À Distância', 'Mágicas'],
   'Armaduras e Escudos': ['Todos', 'Armaduras', 'Escudos'],
   'Modificações': ['Todos', 'Comuns', 'Marciais', 'Armas', 'Armaduras', 'Escudos', 'Itens gerais e mágicos'],
-  'Veículos': ['Todos', 'Veículos Completos', 'Peças e Módulos'],
+  'Bens': ['Todos', 'Propriedades', 'Veículos Completos', 'Peças e Módulos'],
   'Consumíveis': ['Todos', 'Poções', 'Selos', 'Rituais', 'Ferramentas'],
   'Frutos do Éden': ['Todos', 'Sobrenatural', 'Mutação', 'Elemental'],
 };
@@ -265,25 +266,35 @@ export const LojaPage: React.FC = () => {
     }, 3000);
   };
 
-  const handleAddToCart = (item: LojaItem) => {
+  const handleAddToCart = (item: LojaItem, alvoItemId?: string, alvoItemNome?: string) => {
     if (!compradorAtivo) {
       showToast('Selecione um comprador primeiro.', 'error');
       return;
     }
     setCart(prev => {
-      const existing = prev.find(i => i.item.id === item.id);
-      if (existing) {
+      // Itens com alvo não devem ser agrupados a menos que tenham o mesmo alvo.
+      // Como o alvo fixa quantidade em 1 por via das regras, tratamos sempre como entrada única ou agrupada pelo alvo.
+      const existingIdx = prev.findIndex(i => i.item.id === item.id && i.alvoItemId === alvoItemId);
+      if (existingIdx !== -1) {
         const maximo = Math.min(item.quantidadeDisponivel ?? MAX_SHOP_UNITS, MAX_SHOP_UNITS);
-        return prev.map(i => i.item.id === item.id ? { ...i, quantidade: Math.min(maximo, i.quantidade + 1) } : i);
+        const newCart = [...prev];
+        // Se tiver alvo, não deixa aumentar a qtd, pois o item alvo só recebe 1
+        if (!alvoItemId) {
+          newCart[existingIdx].quantidade = Math.min(maximo, newCart[existingIdx].quantidade + 1);
+        }
+        return newCart;
       }
-      return [...prev, { item, quantidade: 1 }];
+      return [...prev, { item, quantidade: 1, alvoItemId, alvoItemNome }];
     });
     showToast(`${item.nome} adicionado ao lote!`, 'success');
   };
 
-  const updateCartQuantity = (itemId: string, delta: number) => {
+  const podeAdicionarItem = (_item?: LojaItem) => Boolean(compradorAtivo);
+
+  const updateCartQuantity = (cartKey: string, delta: number) => {
     setCart(prev => prev.map(i => {
-      if (i.item.id === itemId) {
+      const key = i.alvoItemId ? `${i.item.id}::${i.alvoItemId}` : i.item.id;
+      if (key === cartKey) {
         const novaQtd = Math.min(i.item.quantidadeDisponivel ?? MAX_SHOP_UNITS, MAX_SHOP_UNITS, Math.max(1, i.quantidade + delta));
         return { ...i, quantidade: novaQtd };
       }
@@ -291,8 +302,11 @@ export const LojaPage: React.FC = () => {
     }));
   };
 
-  const removeCartItem = (itemId: string) => {
-    setCart(prev => prev.filter(i => i.item.id !== itemId));
+  const removeCartItem = (cartKey: string) => {
+    setCart(prev => prev.filter(i => {
+      const key = i.alvoItemId ? `${i.item.id}::${i.alvoItemId}` : i.item.id;
+      return key !== cartKey;
+    }));
   };
 
   const trocarModoLoja = (novoModo: 'Comprar' | 'Vender' | 'Recompensas') => {
@@ -394,13 +408,28 @@ export const LojaPage: React.FC = () => {
         campanha_id: campanhaAtiva.id,
         personagem_id: personagemAtual.id,
         economia_versao_esperada: personagemAtual.economiaVersao,
-        itens: cart.map(({ item, quantidade }) => ({ item_id: item.id, quantidade })),
+        ...(operation === 'compra' ? { localizacao_loja: localizacaoAtual } : {}),
+        itens: cart.map(({ item, quantidade, alvoItemId }) => ({ item_id: item.id, quantidade, alvo_item_id: alvoItemId })),
       });
+      // Veículo completo e propriedade não viram entidade jogável (PV, combustível,
+      // instalações...) só por serem comprados: ainda precisam da migração em
+      // Frota/Bens da campanha. Avisa aqui pra isso não passar despercebido.
+      const comprouAtivavel = operation === 'compra' && cart.some(({ item }) => itemEhVeiculoCompleto(item) || item.tipoOrigem === 'propriedade');
       checkoutAttemptRef.current = attempt;
-      if (operation === 'compra') await lojaApi.comprar(attempt.payload);
-      else await lojaApi.vender(attempt.payload);
+      const resultado = operation === 'compra' ? await lojaApi.comprar(attempt.payload) : await lojaApi.vender(attempt.payload);
       await fetchCharacters();
-      showToast(operation === 'compra' ? 'Compra do lote finalizada com sucesso!' : 'Lote vendido com sucesso!', 'success');
+      if (operation === 'compra' && resultado.infracoes?.length) {
+        // Requisito de nível/classe não bloqueia a compra (o mestre já é avisado
+        // por notificação), mas quem comprou precisa saber que ficou registrado.
+        showToast(
+          `Compra concluída, mas com pré-requisito ignorado: ${resultado.infracoes.map((inf) => inf.mensagem).join('; ')}. O mestre foi notificado.`,
+          'error',
+        );
+      } else if (comprouAtivavel) {
+        showToast('Compra concluída! Para usar o veículo/propriedade em jogo, ative-o em Frota & Bases da campanha.', 'success');
+      } else {
+        showToast(operation === 'compra' ? 'Compra do lote finalizada com sucesso!' : 'Lote vendido com sucesso!', 'success');
+      }
       setCart([]);
       checkoutAttemptRef.current = null;
       setShowCheckoutModal(false);
@@ -431,7 +460,7 @@ export const LojaPage: React.FC = () => {
         tipoOrigem: original?.tipoOrigem ?? 'inventario',
         nome: invItem.titulo,
         categoria: original?.categoria ?? 'Outros',
-        raridade: (invItem.dados?.raridade as ItemRaridade) || 'Comum',
+        raridade: rotuloRaridadeChave(invItem.dados?.raridade),
         moedaPreco: precoOriginal.moedaPreco,
         valorOriginal: valorRevenda,
         nivelLoja: original?.nivelLoja ?? 1,
@@ -451,7 +480,7 @@ export const LojaPage: React.FC = () => {
       const matchCat = selectedCategoria === 'Todos' || item.categoria === selectedCategoria;
       const matchRar = selectedRaridade === 'Todas' || item.raridade === selectedRaridade;
       // Cumulativo: cada localização mostra o que é dela mais tudo que já
-      // apareceria nas anteriores — é o que o texto "Acesso irrestrito a
+      // apareceria nas anteriores - é o que o texto "Acesso irrestrito a
       // todos os artefatos da criação" do Banco Lunar promete. Com `===`
       // (comparação antiga) cada local só mostrava os itens exatamente
       // daquele nível, então o Banco Lunar (nível 4, onde caem relíquias e
@@ -662,7 +691,7 @@ export const LojaPage: React.FC = () => {
                 item={item}
                 onView={setItemSelecionado}
                 onBuy={handleAddToCart}
-                podeComprar={Boolean(compradorAtivo)}
+                podeComprar={podeAdicionarItem(item)}
                 isWishlisted={wishlist.includes(item.id)}
                 onToggleWishlist={() => toggleWishlist(item.id)}
               />
@@ -704,10 +733,10 @@ export const LojaPage: React.FC = () => {
           </div>
         </div>
         
-        <div className="flex flex-col xl:flex-row gap-6 justify-between">
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
           
           {/* CATEGORIAS PILLS */}
-          <div className="flex-1">
+          <div className="min-w-0">
             <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-3 pl-1">Categorias</div>
             <div className="flex flex-wrap gap-2">
               {(Object.keys(CATEGORIAS_ICONES) as Array<ItemCategoria | 'Todos'>).map(cat => {
@@ -721,8 +750,8 @@ export const LojaPage: React.FC = () => {
                     onClick={() => setSelectedCategoria(cat)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition-all ${
                       isSelected 
-                        ? (cat === 'Relíquias da Criação' ? 'bg-fuchsia-500/20 border-fuchsia-400 text-fuchsia-400 shadow-[0_0_20px_rgba(232,121,249,0.4)]' : 'bg-[#c7a44c]/20 border-[#c7a44c]/50 text-[#c7a44c] shadow-[0_0_15px_rgba(199,164,76,0.2)]')
-                        : (cat === 'Relíquias da Criação' ? 'bg-black/40 border-fuchsia-500/30 text-fuchsia-500/70 hover:border-fuchsia-400 hover:text-fuchsia-400' : 'bg-black/40 border-white/5 text-gray-400 hover:border-white/20 hover:text-white')
+                        ? (cat === 'Relíquias da Criação' ? 'bg-gradient-to-r from-cyan-500/15 via-white/15 to-fuchsia-500/15 border-white/70 text-white shadow-[0_0_20px_rgba(255,255,255,0.3)]' : 'bg-[#c7a44c]/20 border-[#c7a44c]/50 text-[#c7a44c] shadow-[0_0_15px_rgba(199,164,76,0.2)]')
+                        : (cat === 'Relíquias da Criação' ? 'bg-black/40 border-white/30 text-white/70 hover:border-white/70 hover:text-white' : 'bg-black/40 border-white/5 text-gray-400 hover:border-white/20 hover:text-white')
                     }`}
                   >
                     <Icon size={16} />
@@ -760,7 +789,7 @@ export const LojaPage: React.FC = () => {
           </div>
 
           {/* RARIDADES PILLS */}
-          <div>
+          <div className="min-w-0">
             <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-3 pl-1">Raridade</div>
             <div className="flex flex-wrap gap-2">
               {(Object.keys(RARIDADES_CORES) as Array<ItemRaridade | 'Todas'>).map(rar => {
@@ -770,12 +799,13 @@ export const LojaPage: React.FC = () => {
                 if (isSelected) {
                   switch (rar) {
                     case 'Comum': activeClass = 'bg-gray-500/20 border-gray-500 text-white shadow-[0_0_15px_rgba(107,114,128,0.3)]'; break;
-                    case 'Incomum': activeClass = 'bg-blue-500/20 border-blue-500 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.3)]'; break;
-                    case 'Raro': activeClass = 'bg-purple-500/20 border-purple-500 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.3)]'; break;
-                    case 'Épico': activeClass = 'bg-yellow-500/20 border-yellow-500 text-yellow-300 shadow-[0_0_15px_rgba(234,179,8,0.3)]'; break;
-                    case 'Lendário': activeClass = 'bg-orange-500/20 border-orange-500 text-orange-300 shadow-[0_0_15px_rgba(249,115,22,0.3)]'; break;
-                    case 'Relíquia': activeClass = 'bg-red-500/20 border-red-500 text-red-300 shadow-[0_0_15px_rgba(239,68,68,0.3)]'; break;
-                    case 'Relíquia da Criação': activeClass = 'bg-fuchsia-500/20 border-fuchsia-500 text-fuchsia-300 shadow-[0_0_20px_rgba(232,121,249,0.5)]'; break;
+                    case 'Incomum': activeClass = 'bg-emerald-500/20 border-emerald-500 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.3)]'; break;
+                    case 'Raro': activeClass = 'bg-blue-500/20 border-blue-500 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.3)]'; break;
+                    case 'Épico': activeClass = 'bg-purple-500/20 border-purple-500 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.3)]'; break;
+                    case 'Lendário': activeClass = 'bg-amber-500/20 border-amber-500 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.3)]'; break;
+                    case 'Mítico': activeClass = 'bg-red-500/20 border-red-500 text-red-300 shadow-[0_0_15px_rgba(239,68,68,0.3)]'; break;
+                    case 'Relíquia da Criação': activeClass = 'bg-gradient-to-r from-cyan-500/15 via-white/15 to-fuchsia-500/15 border-white/70 text-white shadow-[0_0_22px_rgba(255,255,255,0.35)]'; break;
+                    case 'Desconhecida': activeClass = 'bg-rose-500/20 border-rose-500 text-rose-200 shadow-[0_0_15px_rgba(244,63,94,0.25)]'; break;
                     default: activeClass = 'bg-white/10 border-white/30 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]'; break;
                   }
                 }
@@ -811,7 +841,7 @@ export const LojaPage: React.FC = () => {
               item={item} 
               onView={(it) => setItemSelecionado(it)}
               onBuy={handleAddToCart} 
-              podeComprar={Boolean(compradorAtivo)}
+              podeComprar={podeAdicionarItem(item)}
               isWishlisted={modoLoja === 'Comprar' ? wishlist.includes(item.id) : undefined}
               onToggleWishlist={modoLoja === 'Comprar' ? () => toggleWishlist(item.id) : undefined}
             />
@@ -1113,7 +1143,7 @@ export const LojaPage: React.FC = () => {
             item={itemSelecionado}
             onClose={() => setItemSelecionado(null)}
             onBuy={handleAddToCart}
-            podeComprar={Boolean(compradorAtivo)}
+            podeComprar={podeAdicionarItem(itemSelecionado)}
             modoLoja={modoLoja as 'Comprar' | 'Vender'}
             compradorAtivo={compradorAtivo}
           />

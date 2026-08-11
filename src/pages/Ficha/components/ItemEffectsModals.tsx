@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Plus, Sparkles, Trash2, Wrench } from 'lucide-react';
 import { Select } from '../../../components/ui/Select';
 import type {
@@ -8,6 +9,7 @@ import type {
 } from '../../../services/equipamentoService';
 import { FichaModal } from './FichaModal';
 import { LabeledInput } from './SharedFichaComponents';
+import { classeTextoRaridade } from '../../../services/lojaCatalogService';
 import {
   DONS_RARIDADE_POR_CATEGORIA,
   EFEITOS_POR_MODIFICACAO_MAXIMOS,
@@ -42,6 +44,9 @@ const ALVOS_FIXOS: Record<Exclude<TCategoriaEfeitoEquipamento, 'pericia'>, Array
     { value: 'iniciativa', label: 'Iniciativa' },
     { value: 'movimento', label: 'Movimento' },
     { value: 'ataque', label: 'Todos os ataques' },
+    { value: 'dano', label: 'Dano Corpo a Corpo/Distância' },
+    { value: 'margemAmeaca', label: 'Margem de Ameaça' },
+    { value: 'multiplicadorCritico', label: 'Multiplicador Crítico' },
   ],
 };
 
@@ -52,13 +57,17 @@ const CATEGORIAS = [
   { value: 'pericia', label: 'Perícia' },
 ];
 
-const MODOS_PERICIA = [
+const MODOS_APLICACAO = [
   { value: 'bonus', label: 'Bônus / penalidade' },
   { value: 'vantagem', label: 'Vantagem' },
   { value: 'desvantagem', label: 'Desvantagem' },
 ];
 
-const RARIDADES = RARIDADES_EQUIPAMENTO.map((raridade) => ({ value: raridade.id, label: raridade.titulo }));
+const RARIDADES = RARIDADES_EQUIPAMENTO.map((raridade) => ({
+  value: raridade.id,
+  label: raridade.titulo,
+  labelClassName: classeTextoRaridade(raridade.id),
+}));
 
 function gerarId(prefixo: string) {
   return `${prefixo}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
@@ -73,13 +82,14 @@ function rotuloAlvo(efeito: IEfeitoEquipamento, pericias: IPericiaOpcao[]) {
   return alvosDaCategoria(efeito.categoria, pericias).find((opcao) => opcao.value === efeito.alvo)?.label || efeito.alvo;
 }
 
-function EditorEfeitos({
+export function EditorEfeitos({
   efeitos,
   onChange,
   pericias,
   readOnly = false,
   maxEfeitos,
   valorMaximo = 1,
+  contexto = 'item',
 }: {
   efeitos: IEfeitoEquipamento[];
   onChange?: (efeitos: IEfeitoEquipamento[]) => void;
@@ -87,7 +97,9 @@ function EditorEfeitos({
   readOnly?: boolean;
   maxEfeitos?: number;
   valorMaximo?: number;
+  contexto?: 'item' | 'poder' | 'habilidade';
 }) {
+  const [modalAberto, setModalAberto] = useState(false);
   const atingiuLimite = maxEfeitos !== undefined && efeitos.length >= maxEfeitos;
   const adicionar = () => {
     if (atingiuLimite) return;
@@ -109,12 +121,15 @@ function EditorEfeitos({
         proximo.alvo = opcoes[0]?.value || '';
         proximo.modo = 'bonus';
       }
+      if (atualizacao.modo && atualizacao.modo !== 'bonus') {
+        proximo.valor = Math.max(1, Math.abs(proximo.valor) || 1);
+      }
       return proximo;
     }));
   };
 
-  if (readOnly) {
-    return efeitos.length > 0 ? (
+  const renderResumo = () => (
+    efeitos.length > 0 ? (
       <div className="flex flex-col gap-2">
         {efeitos.map((efeito) => (
           <div key={efeito.id} className="rounded-lg border border-white/5 bg-black/20 px-3 py-2 text-xs text-gray-300">
@@ -127,7 +142,11 @@ function EditorEfeitos({
           </div>
         ))}
       </div>
-    ) : <p className="text-xs italic text-gray-600">Nenhum efeito automático configurado.</p>;
+    ) : <p className="text-xs italic text-gray-600">Nenhum efeito automático configurado.</p>
+  );
+
+  if (readOnly) {
+    return renderResumo();
   }
 
   return (
@@ -135,62 +154,96 @@ function EditorEfeitos({
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Efeitos automáticos</p>
-          <p className="mt-1 text-xs text-gray-600">Só ficam ativos enquanto o item estiver equipado.</p>
+          <p className="mt-1 text-xs text-gray-600">
+            {contexto === 'poder'
+              ? 'Ficam ativos enquanto o poder permanecer na ficha.'
+              : contexto === 'habilidade'
+                ? 'Ficam ativos enquanto a habilidade permanecer na ficha.'
+                : 'Só ficam ativos enquanto o item estiver equipado.'}
+          </p>
         </div>
-        <button type="button" onClick={adicionar} disabled={atingiuLimite} className="flex shrink-0 items-center gap-1 text-xs font-bold text-[#c7a44c] hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
-          <Plus size={13} /> Efeito
+        <button type="button" onClick={() => setModalAberto(true)} className="flex shrink-0 items-center gap-1 rounded-md border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-3 py-1.5 text-xs font-bold text-[#c7a44c] hover:bg-[#c7a44c]/20 hover:text-white">
+          <Wrench size={13} /> {efeitos.length > 0 ? 'Editar Efeitos' : 'Configurar'}
         </button>
       </div>
 
-      {efeitos.map((efeito) => {
-        const alvos = alvosDaCategoria(efeito.categoria, pericias);
-        return (
-          <div key={efeito.id} className="grid min-w-0 grid-cols-1 gap-2 rounded-lg border border-white/5 bg-black/20 p-3 sm:grid-cols-[1fr_1.35fr_1fr_88px_32px] sm:items-end">
-            <div className="min-w-0">
-              <label className="mb-1 block text-[9px] font-bold uppercase tracking-widest text-gray-600">Área</label>
-              <Select value={efeito.categoria} options={CATEGORIAS} onChange={(valor) => atualizar(efeito.id, { categoria: valor as TCategoriaEfeitoEquipamento })} className="w-full" />
-            </div>
-            <div className="min-w-0">
-              <label className="mb-1 block text-[9px] font-bold uppercase tracking-widest text-gray-600">Alvo</label>
-              <Select value={efeito.alvo} options={alvos} onChange={(valor) => atualizar(efeito.id, { alvo: valor })} className="w-full" />
-            </div>
-            <div className="min-w-0">
-              <label className="mb-1 block text-[9px] font-bold uppercase tracking-widest text-gray-600">Aplicação</label>
-              {efeito.categoria === 'pericia' ? (
-                <Select value={efeito.modo} options={MODOS_PERICIA} onChange={(valor) => atualizar(efeito.id, { modo: valor as TModoEfeitoEquipamento })} className="w-full" />
-              ) : (
-                <div className="rounded-md border border-white/5 bg-[#121118] px-3 py-2.5 text-xs text-gray-500">Bônus</div>
-              )}
-            </div>
-            <LabeledInput
-              label="Valor"
-              type="number"
-              value={String(efeito.valor)}
-              onChange={(valor: string) => {
-                const informado = Math.trunc(Number(valor)) || 0;
-                atualizar(efeito.id, { valor: Math.max(-valorMaximo, Math.min(valorMaximo, informado)) });
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => onChange?.(efeitos.filter((item) => item.id !== efeito.id))}
-              aria-label="Remover efeito"
-              className="flex h-9 w-8 items-center justify-center rounded border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20"
-            >
-              <Trash2 size={13} />
+      {efeitos.length > 0 && renderResumo()}
+
+      <FichaModal isOpen={modalAberto} onClose={() => setModalAberto(false)} title="Efeitos Automáticos" nested size="md">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-gray-400">Configure os bônus automáticos gerados por este {contexto}.</p>
+            <button type="button" onClick={adicionar} disabled={atingiuLimite} className="flex shrink-0 items-center gap-1 text-xs font-bold text-[#c7a44c] hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
+              <Plus size={13} /> Efeito
             </button>
           </div>
-        );
-      })}
 
-      {efeitos.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-white/5 py-5 text-center text-xs text-gray-600">
-          Nenhum efeito automático.
+          <div className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto pr-1">
+            {efeitos.map((efeito, indice) => {
+              const alvos = alvosDaCategoria(efeito.categoria, pericias);
+              const efeitoDeRolagem = efeito.modo !== 'bonus';
+              return (
+                <div key={efeito.id} className="rounded-xl border border-white/5 bg-black/20 p-4">
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <strong className="text-xs uppercase tracking-widest text-gray-500">Efeito {indice + 1}</strong>
+                    <button
+                      type="button"
+                      onClick={() => onChange?.(efeitos.filter((item) => item.id !== efeito.id))}
+                      aria-label={`Remover efeito ${indice + 1}`}
+                      className="flex h-8 w-8 items-center justify-center rounded border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20"
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
+                  <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div className="min-w-0">
+                      <label className="mb-1 block text-[9px] font-bold uppercase tracking-widest text-gray-600">Área</label>
+                      <Select value={efeito.categoria} options={CATEGORIAS} onChange={(valor) => atualizar(efeito.id, { categoria: valor as TCategoriaEfeitoEquipamento })} className="w-full" />
+                    </div>
+                    <div className="min-w-0">
+                      <label className="mb-1 block text-[9px] font-bold uppercase tracking-widest text-gray-600">Alvo</label>
+                      <Select value={efeito.alvo} options={alvos} onChange={(valor) => atualizar(efeito.id, { alvo: valor })} className="w-full" />
+                    </div>
+                    <div className="min-w-0">
+                      <label className="mb-1 block text-[9px] font-bold uppercase tracking-widest text-gray-600">Aplicação</label>
+                      <Select value={efeito.modo} options={MODOS_APLICACAO} onChange={(valor) => atualizar(efeito.id, { modo: valor as TModoEfeitoEquipamento })} className="w-full" />
+                    </div>
+                    <LabeledInput
+                      label={efeitoDeRolagem ? 'Quantidade' : 'Valor'}
+                      type="number"
+                      value={String(efeito.valor)}
+                      onChange={(valor: string) => {
+                        const informado = Math.trunc(Number(valor)) || 0;
+                        const limitado = Math.max(-valorMaximo, Math.min(valorMaximo, informado));
+                        atualizar(efeito.id, { valor: efeitoDeRolagem ? Math.max(1, Math.abs(limitado)) : limitado });
+                      }}
+                    />
+                  </div>
+                  <p className="mt-3 text-[11px] leading-relaxed text-gray-600">
+                    Bônus/penalidade altera o total (use valor positivo ou negativo). Vantagens e desvantagens adicionam dados e se anulam uma a uma.
+                  </p>
+                </div>
+              );
+            })}
+
+            {efeitos.length === 0 ? (
+              <div className="rounded-lg border border-dashed border-white/5 py-5 text-center text-xs text-gray-600">
+                Nenhum efeito automático. Clique em "+ Efeito" para adicionar.
+              </div>
+            ) : null}
+          </div>
+
+          {maxEfeitos !== undefined ? (
+            <p className="text-[10px] text-gray-600">
+              {contexto === 'poder'
+                ? 'Limite do poder'
+                : contexto === 'habilidade'
+                  ? 'Limite da habilidade'
+                  : 'Limite desta raridade'}: {maxEfeitos} efeito(s), com valor entre -{valorMaximo} e +{valorMaximo}.
+            </p>
+          ) : null}
         </div>
-      ) : null}
-      {maxEfeitos !== undefined ? (
-        <p className="text-[10px] text-gray-600">Limite desta raridade: {maxEfeitos} efeito(s), com valor entre -{valorMaximo} e +{valorMaximo}.</p>
-      ) : null}
+      </FichaModal>
     </div>
   );
 }

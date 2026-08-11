@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingCart, Zap, Heart, Eye } from 'lucide-react';
-import { LojaItem, getCurrencySymbol } from '../../../services/lojaCatalogService';
+import { LojaItem, classeTextoRaridade, getCurrencySymbol } from '../../../services/lojaCatalogService';
 
 interface ItemCardProps {
   item: LojaItem;
@@ -17,18 +17,32 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onBuy, onView, podeCom
   const getRarityColor = () => {
     switch (item.raridade) {
       case 'Comum': return 'border-gray-500 shadow-[0_0_15px_rgba(107,114,128,0.2)] text-gray-300';
-      case 'Incomum': return 'border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.3)] text-blue-300';
-      case 'Raro': return 'border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.4)] text-purple-300';
-      case 'Épico': return 'border-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.5)] text-yellow-300';
-      case 'Lendário': return 'shadow-[0_0_20px_rgba(249,115,22,0.2)] border-orange-500/40 hover:border-orange-500/60';
-      case 'Relíquia': return 'shadow-[0_0_20px_rgba(239,68,68,0.25)] border-red-500/50 hover:border-red-500/70';
-      case 'Relíquia da Criação': return 'shadow-[0_0_30px_rgba(232,121,249,0.4)] border-fuchsia-500/60 hover:shadow-[0_0_50px_rgba(232,121,249,0.6)] hover:border-fuchsia-400';
+      case 'Incomum': return 'border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.25)] text-emerald-300';
+      case 'Raro': return 'border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)] text-blue-300';
+      case 'Épico': return 'border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.35)] text-purple-300';
+      case 'Lendário': return 'shadow-[0_0_20px_rgba(245,158,11,0.25)] border-amber-500/50 hover:border-amber-400 text-amber-300';
+      case 'Mítico': return 'shadow-[0_0_20px_rgba(239,68,68,0.3)] border-red-500/60 hover:border-red-400 text-red-300';
+      case 'Relíquia da Criação': return 'shadow-[0_0_30px_rgba(255,255,255,0.3)] border-white/70 hover:shadow-[0_0_50px_rgba(165,243,252,0.4)] hover:border-cyan-100 text-white';
+      case 'Desconhecida': return 'border-rose-500/60 shadow-[0_0_20px_rgba(244,63,94,0.25)] text-rose-300';
       default: return 'border-white/10 hover:border-white/20';
     }
   };
 
   const rarityColor = getRarityColor();
-  const isSpecial = ['Raro', 'Épico', 'Lendário', 'Relíquia'].includes(item.raridade);
+  const rarityBadgeColor = (() => {
+    switch (item.raridade) {
+      case 'Incomum': return 'border-emerald-500/50 bg-emerald-500/10';
+      case 'Raro': return 'border-blue-500/50 bg-blue-500/10';
+      case 'Épico': return 'border-purple-500/50 bg-purple-500/10';
+      case 'Lendário': return 'border-amber-500/50 bg-amber-500/10';
+      case 'Mítico': return 'border-red-500/60 bg-red-500/10';
+      case 'Relíquia da Criação': return 'border-white/70 bg-white/5';
+      case 'Desconhecida': return 'border-rose-500/60 bg-rose-500/10';
+      case 'Comum':
+      default: return 'border-slate-500/40 bg-slate-500/10';
+    }
+  })();
+  const isSpecial = ['Raro', 'Épico', 'Lendário', 'Mítico'].includes(item.raridade);
 
   return (
     <motion.div
@@ -40,7 +54,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onBuy, onView, podeCom
       className={`relative group bg-[#0b0a12]/80 backdrop-blur-md rounded-3xl border flex flex-col h-full overflow-hidden transition-all hover:scale-[1.02] ${rarityColor}`}
     >
       {item.raridade === 'Relíquia da Criação' && (
-        <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/10 via-red-500/5 to-transparent pointer-events-none rounded-3xl mix-blend-screen animate-pulse" />
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-300/10 via-white/10 to-fuchsia-300/10 pointer-events-none rounded-3xl mix-blend-screen animate-pulse" />
       )}
       {item.promocao ? (
         <div className="relative z-[1] flex items-center justify-between gap-3 border-b border-rose-400/30 bg-gradient-to-r from-rose-600/30 to-orange-500/10 px-6 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-rose-200">
@@ -72,7 +86,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onBuy, onView, podeCom
           </h3>
         </div>
         <div className="flex gap-2 items-center mb-4">
-          <span className={`text-[10px] uppercase tracking-widest font-bold bg-white/5 px-2 py-1 rounded-md border ${rarityColor.split(' ')[0]}`}>
+          <span className={`text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md border ${rarityBadgeColor} ${classeTextoRaridade(item.raridade)}`}>
             {item.raridade}
           </span>
           <span className="text-[10px] uppercase tracking-widest font-bold px-2 py-1 bg-white/5 border border-white/10 rounded-md text-gray-400">

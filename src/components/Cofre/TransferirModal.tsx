@@ -5,7 +5,7 @@ import { FichaModal } from '../../pages/Ficha/components/FichaModal';
 interface TransferirModalProps {
   isOpen: boolean;
   onClose: () => void;
-  /** 'banco' é o Cofre bancário do Banqueiro — mesma mecânica de moeda, mas
+  /** 'banco' é o Cofre bancário do Banqueiro - mesma mecânica de moeda, mas
    * de outro estoque, então a tela precisa dizer de onde o saldo está saindo. */
   tipo: 'item' | 'moeda' | 'banco';
   titulo: string;

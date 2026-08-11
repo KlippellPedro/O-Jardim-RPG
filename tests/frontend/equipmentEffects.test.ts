@@ -47,7 +47,7 @@ test('efeitos de modificações e raridade só funcionam com o item equipado', (
   assert.equal(ativo.bonusAtributos.constituicao, 2);
   assert.equal(ativo.bonusCombate.defesa, undefined);
   assert.equal(ativo.bonusPericias.fortitude, 2);
-  assert.equal(ativo.vantagensPericias.fortitude, 1);
+  assert.equal(ativo.vantagens.fortitude, 1);
   assert.equal(ativo.efeitosAtivos.length, 4);
 
   const inativo = resumirEquipamentos([item(false)], { atributosFinais: { forca: 10 }, nivel: 1 });
@@ -91,6 +91,22 @@ test('raridade limita mods, quantidade de efeitos e valor aplicado', () => {
   assert.match(resumo.conflitos[0], /excede os limites de Incomum/);
 });
 
+test('rótulo Mítico salvo na ficha usa os limites da antiga chave relíquia', () => {
+  const resumo = resumirEquipamentos([{
+    item_id: 'item-mitico',
+    titulo: 'Artefato Mítico',
+    dados: {
+      categoria: 'geral',
+      equipado: true,
+      raridade: 'Mítico',
+      efeitosRaridade: [efeito('e-mitico', 'atributo', 'forca', 5)],
+    },
+  }], { atributosFinais: { forca: 10 }, nivel: 1 });
+
+  assert.equal(resumo.bonusAtributos.forca, 5);
+  assert.equal(resumo.conflitos.length, 0);
+});
+
 test('efeitos inválidos não contaminam os totais da ficha', () => {
   const resumo = resumirEquipamentos([{
     item_id: 'item-invalido',
@@ -107,5 +123,50 @@ test('efeitos inválidos não contaminam os totais da ficha', () => {
   }], { atributosFinais: { forca: 10 }, nivel: 1 });
 
   assert.deepEqual(resumo.bonusRecursos, {});
+  assert.equal(resumo.efeitosAtivos.length, 0);
+});
+
+test('veículos não ocupam carga pessoal nem aplicam bônus ao personagem', () => {
+  const resumo = resumirEquipamentos([{
+    item_id: 'rover',
+    titulo: 'Rover Tatu',
+    quantidade: 1,
+    dados: {
+      categoria: 'veiculo',
+      equipado: true,
+      espacos: 80,
+      raridade: 'raro',
+      efeitosRaridade: [efeito('blindagem', 'combate', 'defesa', 2)],
+    },
+  }], { atributosFinais: { forca: 10 }, nivel: 1 });
+
+  assert.equal(resumo.espacosUsados, 0);
+  assert.equal(resumo.sobrecarregado, false);
+  assert.deepEqual(resumo.bonusCombate, {});
+  assert.equal(resumo.efeitosAtivos.length, 0);
+});
+
+test('efeitos de poderes respeitam os limites publicados pelo editor', () => {
+  const efeitos = Array.from({ length: 6 }, (_, indice) => (
+    efeito(`poder-${indice}`, 'combate', 'iniciativa', 100)
+  ));
+  const resumo = resumirEquipamentos([], {
+    atributosFinais: { forca: 10 },
+    nivel: 1,
+    poderes: [{ id: 'aura', nome: 'Aura', efeitos }],
+  });
+
+  assert.equal(resumo.bonusCombate.iniciativa, 100);
+  assert.equal(resumo.efeitosAtivos.length, 5);
+});
+
+test('poderes incompletos não interrompem o cálculo da ficha', () => {
+  const resumo = resumirEquipamentos([], {
+    atributosFinais: { forca: 10 },
+    nivel: 1,
+    poderes: [null, {}, { efeitos: 'inválido' }],
+  });
+
+  assert.deepEqual(resumo.bonusCombate, {});
   assert.equal(resumo.efeitosAtivos.length, 0);
 });

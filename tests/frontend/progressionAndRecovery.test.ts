@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import legadosNovosData from '../../data/ficha/legados-novos.json';
 import legadosRegrasData from '../../data/ficha/legados-regras-v1.json';
 import { CLASSES_CATALOGO, LEGADOS_CATALOGO } from '../../src/services/catalogoService';
 import { aplicarDescansoCompleto, aplicarRelaxamento, combateFoiIntenso, descansoPermitido } from '../../src/services/descansoService';
@@ -42,6 +43,18 @@ test('catálogo atual incorpora as regras de Legados revisadas no frontend antig
   const magico = LEGADOS_CATALOGO.find((item: any) => item.id === 'magico-exclamacao');
   assert.match(esquiva?.descricao || '', /\+1 na Defesa e \+1 em Reflexos/);
   assert.deepEqual(magico?.pre_requisitos, [{ nivel_personagem: 7 }]);
+});
+
+test('Legados novos não são marcados como revisados: nunca passaram pela mesma revisão balanceada dos 36 originais', () => {
+  const idsNovos = (legadosNovosData as any).novos.map((legado: any) => legado.id);
+  assert.ok(idsNovos.length > 0);
+  for (const id of idsNovos) {
+    assert.equal(
+      LEGADOS_CATALOGO.find((item: any) => item.id === id)?.versaoRegras,
+      'fonte',
+      `${id} não deveria aparecer como revisado (versaoRegras '1.0') sem ter passado pela revisão`,
+    );
+  }
 });
 
 test('poder dependente exige o poder anterior', () => {

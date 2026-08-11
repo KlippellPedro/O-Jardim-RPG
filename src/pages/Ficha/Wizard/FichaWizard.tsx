@@ -207,6 +207,9 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
     const gruposEscolhaRacial = obterGruposEscolhaRacial(currentRaca);
     const arvoreSelecionada = ARVORES.find(a => a.id === arvoreId);
     const semArvore = arvoreId === SEM_ARVORE_ID;
+    // Sem Árvore não tem Deidade padroeira; Universal transcende todas elas e
+    // também não tem uma única - os dois deixam o campo livre/opcional.
+    const semDeidadeFixa = semArvore || arvoreId === 'universal';
 
     // Raça/Classe exclusivas de outra Árvore, ou especiais não liberadas pelo
     // mestre (pra campanha inteira ou só pra este jogador), não aparecem como
@@ -263,7 +266,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                   className={`p-6 rounded-2xl border text-left transition-all ${arvoreId === SEM_ARVORE_ID ? 'border-primary/50 bg-gradient-to-br from-gray-400/20 to-slate-300/5 shadow-[0_0_20px_rgba(var(--color-primary),0.2)]' : 'border-white/5 bg-black/30 hover:border-white/20'}`}
                 >
                   <h3 className="text-xl font-bold text-white" style={{fontFamily: 'Cinzel, serif'}}>Sem Árvore</h3>
-                  <p className="text-xs text-gray-500 mt-1">Sem patrono - restrito às raças e classes gerais.</p>
+                  <p className="text-xs text-gray-500 mt-1">Árvore oculta ou indefinida - libera o acesso a todas as opções do compêndio.</p>
                 </button>
                 {arvoresDisponiveis.map(arvore => (
                   <button
@@ -385,11 +388,13 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             <p className="text-gray-400 mb-8 max-w-lg text-center">
               {semArvore
                 ? 'Sem uma Árvore de origem, seu Herói não tem uma Deidade padroeira: descreva livremente quem (ou o quê) ele cultua, se cultua algo.'
+                : arvoreId === 'universal'
+                ? 'Transcendendo todas as Árvores, seu Herói não responde a uma única Deidade padroeira: descreva livremente quem (ou o quê) ele cultua, se cultua algo.'
                 : <>Como nascido da Árvore de <strong>{arvoreSelecionada?.nome}</strong>, você pode cultuar a Deidade principal ou jurar lealdade a um outro poder.</>}
             </p>
 
             <div className="w-full max-w-md space-y-4">
-              {!semArvore && (
+              {!semDeidadeFixa && (
                 <button
                   onClick={() => setDivindade(arvoreSelecionada?.deidadeTitulo || '')}
                   className={`w-full p-4 rounded-xl border text-left transition-all ${divindade === arvoreSelecionada?.deidadeTitulo ? 'border-primary bg-primary/20' : 'border-white/10 bg-black/40 hover:border-white/30'}`}
@@ -401,7 +406,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
 
               <div className="relative">
                 <label className="block text-xs text-gray-500 mb-1 ml-1">
-                  {semArvore ? 'Nome da entidade/divindade (opcional)' : 'Ou especifique outra entidade/divindade menor'}
+                  {semDeidadeFixa ? 'Nome da entidade/divindade (opcional)' : 'Ou especifique outra entidade/divindade menor'}
                 </label>
                 <input
                   type="text"
@@ -642,8 +647,8 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
       if (!escolhaRacialEstaCompleta(currentRaca, escolhaRacial)) return true;
     }
     if (step === 3) return !classeId;
-    // Sem Árvore não tem Deidade padroeira pra forçar escolha: o campo fica opcional.
-    if (step === 4) return arvoreId !== SEM_ARVORE_ID && divindade.trim().length === 0;
+    // Sem Árvore e Universal não tem uma Deidade padroeira fixa pra forçar escolha: o campo fica opcional.
+    if (step === 4) return arvoreId !== SEM_ARVORE_ID && arvoreId !== 'universal' && divindade.trim().length === 0;
     if (step === 5) {
       return metodoAtributos === 'pontos'
         ? !compraPontosValida(atribuicao)

@@ -30,7 +30,7 @@ export interface EntidadeIniciativa {
   defesa?: number | null;
   ataques?: SessionAttack[];
   pericias?: string[];
-  /** Só chega para quem comanda a mesa — usado pra distribuir XP. */
+  /** Só chega para quem comanda a mesa - usado pra distribuir XP. */
   vd?: number | null;
   tipo: 'jogador' | 'aliado' | 'inimigo';
   cor?: string;
@@ -157,7 +157,7 @@ interface SessaoState {
 
 // O SSE avisa "algo mudou" pro dono da própria ação também, então uma
 // chamada explícita e o eco do SSE podem cair ao mesmo tempo. Sem essa trava,
-// os dois viam "sem sessão ativa" e disputavam a recriação da preparação —
+// os dois viam "sem sessão ativa" e disputavam a recriação da preparação -
 // um criava, o outro batia num 409.
 let buscaEstadoEmVoo: Promise<void> | null = null;
 

@@ -15,11 +15,18 @@ import { motion } from 'framer-motion';
 import { registrosApi } from '../../../services/registrosApi';
 import {
   MAGIAS_CATALOGO,
+  RITUAIS_CATALOGO,
+  SELOS_CATALOGO,
+  ENCANTAMENTOS_CATALOGO,
   FLUXOS_CATALOGO,
   FLUXOS_POR_ID,
   circuloRotulo,
   dtConjuracaoPorCirculo,
   magiaElegivelParaAprender,
+  ritualElegivelParaAprender,
+  seloElegivelParaAprender,
+  encantamentoElegivelParaAprender,
+  podeRealizarRitual,
   cicatrizesDaFicha,
   cicatrizesDevidas,
   efeitoDaMagia,
@@ -28,12 +35,18 @@ import {
   simboloDaFicha,
   sortearCicatriz,
   magiasDaFicha,
+  rituaisDaFicha,
+  selosDaFicha,
+  encantamentosDaFicha,
   obterPerfilMagico,
   podeConjurarMagia,
   temaDoFluxo,
   type FluxoDeMagia,
   type FluxoMagicoId,
   type IMagiaCatalogo,
+  type IRitualCatalogo,
+  type ISeloCatalogo,
+  type IEncantamentoCatalogo,
 } from '../../../services/magiaService';
 import { obterStatusFicha, penalidadeCansacoTeste } from '../../../services/statusService';
 import { resumirEquipamentos } from '../../../services/equipamentoService';
@@ -65,11 +78,28 @@ const formatarBonus = (valor: number) => valor >= 0 ? `+${valor}` : String(valor
 
 const CIRCULOS_DISPONIVEIS = Array.from({ length: 10 }, (_, indice) => indice + 1);
 
+type TipoManifestacao = 'magia' | 'ritual' | 'selo' | 'encantamento';
+
+const ROTULO_TIPO: Record<TipoManifestacao, string> = {
+  magia: 'Magias',
+  ritual: 'Rituais',
+  selo: 'Selos',
+  encantamento: 'Encantamentos',
+};
+
+const ROTULO_TIPO_SINGULAR: Record<TipoManifestacao, string> = {
+  magia: 'magia',
+  ritual: 'ritual',
+  selo: 'selo',
+  encantamento: 'encantamento',
+};
+
 export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: any }) => {
   const [busca, setBusca] = useState('');
   const [filtroFluxo, setFiltroFluxo] = useState<FluxoDeMagia | 'nativo' | 'todos'>('nativo');
   const [filtroCirculo, setFiltroCirculo] = useState<'alcancaveis' | 'todos' | number>('alcancaveis');
   const [mostrarCatalogo, setMostrarCatalogo] = useState(false);
+  const [tipoAtivo, setTipoAtivo] = useState<TipoManifestacao>('magia');
   const [defesasAlvo, setDefesasAlvo] = useState<Record<string, string>>({});
   const [mensagem, setMensagem] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
   const [conjurandoId, setConjurandoId] = useState<string | null>(null);
@@ -82,6 +112,9 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   const perfil = useMemo(() => obterPerfilMagico(ficha, inventarioCentral), [ficha, inventarioCentral]);
   const resumoEquipamento = useMemo(() => resumirEquipamentos(inventarioCentral, ficha), [ficha, inventarioCentral]);
   const magiasConhecidas = useMemo(() => magiasDaFicha(ficha, inventarioCentral), [ficha, inventarioCentral]);
+  const rituaisConhecidos = useMemo(() => rituaisDaFicha(ficha, inventarioCentral), [ficha, inventarioCentral]);
+  const selosConhecidos = useMemo(() => selosDaFicha(ficha, inventarioCentral), [ficha, inventarioCentral]);
+  const encantamentosConhecidos = useMemo(() => encantamentosDaFicha(ficha, inventarioCentral), [ficha, inventarioCentral]);
   const magiasAntigas: IMagiaAntiga[] = Array.isArray(ficha.magias) ? ficha.magias : [];
   const marcas = useMemo(() => marcasDaFicha(ficha, inventarioCentral), [ficha, inventarioCentral]);
   const cicatrizes = useMemo(() => cicatrizesDaFicha(ficha), [ficha]);
@@ -122,6 +155,21 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     });
   }, [busca, filtroCirculo, filtroFluxo, perfil.circuloMaximo, perfil.fluxoNativoId]);
 
+  /** Rituais/Selos/Encantamentos não têm círculo pra filtrar - só Fluxo e
+   * busca por texto, igual ao catálogo de magia sem a parte de círculo. */
+  const catalogoManifestacaoVisivel = useMemo(() => {
+    if (tipoAtivo === 'magia') return [];
+    const catalogo = tipoAtivo === 'ritual' ? RITUAIS_CATALOGO : tipoAtivo === 'selo' ? SELOS_CATALOGO : ENCANTAMENTOS_CATALOGO;
+    const fluxoEscolhido = filtroFluxo === 'nativo' ? perfil.fluxoNativoId : filtroFluxo;
+    return catalogo.filter((item) => {
+      const passaNoFluxo = !fluxoEscolhido || fluxoEscolhido === 'todos' || fluxoEscolhido === 'universal' || item.fluxo === fluxoEscolhido;
+      if (!passaNoFluxo) return false;
+      const termo = busca.trim().toLocaleLowerCase('pt-BR');
+      if (!termo) return true;
+      return [item.titulo, item.efeito].some((valor) => valor.toLocaleLowerCase('pt-BR').includes(termo));
+    });
+  }, [busca, filtroFluxo, perfil.fluxoNativoId, tipoAtivo]);
+
   const aprenderOuConceder = (magia: IMagiaCatalogo) => {
     if (isMestre) {
       const atuais = perfil.concedidasIds;
@@ -145,6 +193,98 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     if (!window.confirm(`Aprender ${magia.titulo}? A escolha só poderá ser removida pelo Mestre.`)) return;
     onUpdate(['ficha', 'magiasConhecidasIds'], [...perfil.conhecidasIds, magia.id]);
     setMensagem({ tipo: 'sucesso', texto: `${magia.titulo} foi aprendida.` });
+  };
+
+  const CAMPOS_MANIFESTACAO = {
+    ritual: {
+      campoConhecidos: 'rituaisConhecidosIds', conhecidosIds: perfil.rituaisConhecidosIds, concedidosIds: perfil.rituaisConcedidosIds,
+      campoConcedidos: 'rituaisConcedidosIds', rotulo: 'Ritual', elegivel: ritualElegivelParaAprender,
+    },
+    selo: {
+      campoConhecidos: 'selosConhecidosIds', conhecidosIds: perfil.selosConhecidosIds, concedidosIds: perfil.selosConcedidosIds,
+      campoConcedidos: 'selosConcedidosIds', rotulo: 'Selo', elegivel: seloElegivelParaAprender,
+    },
+    encantamento: {
+      campoConhecidos: 'encantamentosConhecidosIds', conhecidosIds: perfil.encantamentosConhecidosIds, concedidosIds: perfil.encantamentosConcedidosIds,
+      campoConcedidos: 'encantamentosConcedidosIds', rotulo: 'Encantamento', elegivel: encantamentoElegivelParaAprender,
+    },
+  } as const;
+
+  const aprenderOuConcederManifestacao = (
+    tipo: 'ritual' | 'selo' | 'encantamento',
+    item: IRitualCatalogo | ISeloCatalogo | IEncantamentoCatalogo,
+  ) => {
+    const config = CAMPOS_MANIFESTACAO[tipo];
+    if (isMestre) {
+      const jaConcedido = config.concedidosIds.includes(item.id);
+      onUpdate(
+        ['ficha', config.campoConcedidos],
+        jaConcedido ? config.concedidosIds.filter((id) => id !== item.id) : [...config.concedidosIds, item.id],
+      );
+      setMensagem({
+        tipo: 'sucesso',
+        texto: jaConcedido ? `${item.titulo} removido(a) das concessões.` : `${item.titulo} concedido(a) pelo Mestre.`,
+      });
+      return;
+    }
+
+    const avaliacao = config.elegivel(ficha, item as any, inventarioCentral);
+    if (!avaliacao.permitido) {
+      setMensagem({ tipo: 'erro', texto: avaliacao.motivo || `Este(a) ${config.rotulo.toLowerCase()} ainda não pode ser aprendido(a).` });
+      return;
+    }
+    if (!window.confirm(`Aprender ${item.titulo}? A escolha só poderá ser removida pelo Mestre.`)) return;
+    onUpdate(['ficha', config.campoConhecidos], [...config.conhecidosIds, item.id]);
+    setMensagem({ tipo: 'sucesso', texto: `${item.titulo} foi aprendido(a).` });
+  };
+
+  const realizarRitual = async (ritual: IRitualCatalogo) => {
+    const avaliacao = podeRealizarRitual(ficha, ritual, inventarioCentral);
+    if (!avaliacao.permitido) {
+      setMensagem({ tipo: 'erro', texto: avaliacao.motivo || 'Não é possível realizar este ritual.' });
+      return;
+    }
+    if (manaAtual < ritual.custo_mana) {
+      setMensagem({ tipo: 'erro', texto: `Mana insuficiente. ${ritual.titulo} custa ${ritual.custo_mana}.` });
+      return;
+    }
+
+    setConjurandoId(ritual.id);
+    onUpdate(['ficha', 'status', 'manaAtual'], manaAtual - ritual.custo_mana);
+
+    try {
+      if (campanha?.id) {
+        const resposta = await registrosApi.rolar({
+          campanhaId: campanha.id,
+          personagemId: character.id,
+          titulo: `Ritual: ${ritual.titulo}`,
+          bonus: bonusConjuracaoFinal,
+          vantagens: perfil.vantagensConjuracao,
+          desvantagens: perfil.desvantagensConjuracao,
+          dt: ritual.dt,
+          origem: {
+            tipo: 'ritual',
+            ritual_id: ritual.id,
+            dt_ritual: ritual.dt,
+            custo_mana: ritual.custo_mana,
+            tempo: ritual.tempo,
+          },
+        });
+        const resultado = resposta.registro.resultado;
+        setMensagem({
+          tipo: 'sucesso',
+          texto: resultado === null
+            ? `${ritual.titulo} realizado.`
+            : `${ritual.titulo}: resultado ${resultado}. DT ${ritual.dt}.`,
+        });
+      } else {
+        setMensagem({ tipo: 'sucesso', texto: `${ritual.titulo}: custo aplicado. Faça o teste de Misticismo contra DT ${ritual.dt}.` });
+      }
+    } catch {
+      setMensagem({ tipo: 'erro', texto: 'O custo foi aplicado, mas o servidor não registrou o ritual.' });
+    } finally {
+      setConjurandoId(null);
+    }
   };
 
   const sortearProximaCicatriz = () => {
@@ -332,6 +472,152 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     );
   };
 
+  const renderRitual = (ritual: IRitualCatalogo, modoCatalogo = false) => {
+    const conhecido = perfil.rituaisConhecidosIds.includes(ritual.id);
+    const concedido = perfil.rituaisConcedidosIds.includes(ritual.id);
+    const avaliacao = ritualElegivelParaAprender(ficha, ritual, inventarioCentral);
+    const podeAprender = isMestre || avaliacao.permitido;
+    const tema = temaDoFluxo(ritual.fluxo);
+    const fluxoTitulo = FLUXOS_POR_ID.get(ritual.fluxo)?.titulo || ritual.fluxo;
+
+    return (
+      <article
+        key={`${modoCatalogo ? 'catalogo' : 'ficha'}:ritual:${ritual.id}`}
+        className="rounded-2xl border p-5"
+        style={{
+          borderColor: tema.borda,
+          background: `linear-gradient(135deg, ${tema.fundo}, #121118 38%)`,
+          boxShadow: `0 0 18px ${tema.brilho}`,
+        }}
+      >
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-lg font-bold text-white">{ritual.titulo}</h3>
+              <span className={`rounded border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${CIRCULO_CORES.ritual}`}>Ritual</span>
+              <span
+                className="rounded border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                style={{ backgroundColor: tema.fundo, borderColor: tema.borda, color: tema.texto }}
+                title={`${fluxoTitulo} · ${tema.arvore}`}
+              >
+                {fluxoTitulo}
+              </span>
+              <span className="rounded border border-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">{ritual.complexidade}</span>
+              {concedido && <span className="rounded border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-amber-300">Concedido</span>}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs text-gray-500">
+              <span><strong className="text-gray-400">Custo:</strong> {ritual.custo_mana} Mana</span>
+              <span><strong className="text-gray-400">Tempo:</strong> {ritual.tempo}</span>
+              <span><strong className="text-gray-400">DT:</strong> {ritual.dt}</span>
+            </div>
+            <p className="mt-3 text-sm leading-relaxed text-gray-300">{ritual.efeito}</p>
+            <p className="mt-2 text-xs leading-relaxed text-gray-500"><strong className="text-gray-400">Requisito:</strong> {ritual.requisito}</p>
+            <p className="mt-1 text-xs leading-relaxed text-red-300/80"><strong className="text-red-300">Em falha:</strong> {ritual.falha}</p>
+          </div>
+
+          {modoCatalogo ? (
+            <div className="w-full md:w-48">
+              <button
+                type="button"
+                onClick={() => aprenderOuConcederManifestacao('ritual', ritual)}
+                disabled={!isMestre && (conhecido || !podeAprender)}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-4 py-2.5 text-xs font-bold text-[#d7bb72] transition-colors hover:bg-[#c7a44c]/20 disabled:cursor-not-allowed disabled:border-white/5 disabled:bg-white/5 disabled:text-gray-600"
+              >
+                {!podeAprender && !conhecido ? <LockKeyhole size={14} /> : <BookOpen size={14} />}
+                {isMestre ? (concedido ? 'Remover concessão' : 'Conceder') : (conhecido ? 'Já conhecido' : 'Aprender')}
+              </button>
+              {!isMestre && !avaliacao.permitido && !conhecido && <p className="mt-2 text-center text-[10px] leading-relaxed text-gray-600">{avaliacao.motivo}</p>}
+            </div>
+          ) : (
+            <div className="w-full space-y-2 md:w-48">
+              <button
+                type="button"
+                onClick={() => void realizarRitual(ritual)}
+                disabled={conjurandoId === ritual.id}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-sky-500/30 bg-sky-500/10 px-4 py-2.5 text-xs font-bold text-sky-300 transition-colors hover:bg-sky-500/20 disabled:opacity-50"
+              >
+                <Dices size={14} /> {conjurandoId === ritual.id ? 'Realizando...' : 'Realizar'}
+              </button>
+              <p className="text-center text-[10px] leading-relaxed text-gray-600">Fora de combate, sem círculo.</p>
+            </div>
+          )}
+        </div>
+      </article>
+    );
+  };
+
+  const renderSeloOuEncantamento = (tipo: 'selo' | 'encantamento', item: ISeloCatalogo | IEncantamentoCatalogo, modoCatalogo = false) => {
+    const conhecidosIds = tipo === 'selo' ? perfil.selosConhecidosIds : perfil.encantamentosConhecidosIds;
+    const concedidosIds = tipo === 'selo' ? perfil.selosConcedidosIds : perfil.encantamentosConcedidosIds;
+    const conhecido = conhecidosIds.includes(item.id);
+    const concedido = concedidosIds.includes(item.id);
+    const avaliacao = tipo === 'selo'
+      ? seloElegivelParaAprender(ficha, item as ISeloCatalogo, inventarioCentral)
+      : encantamentoElegivelParaAprender(ficha, item as IEncantamentoCatalogo, inventarioCentral);
+    const podeAprender = isMestre || avaliacao.permitido;
+    const tema = temaDoFluxo(item.fluxo);
+    const fluxoTitulo = FLUXOS_POR_ID.get(item.fluxo)?.titulo || item.fluxo;
+    const dt = tipo === 'selo' ? (item as ISeloCatalogo).dt_inscricao : (item as IEncantamentoCatalogo).dt;
+    const aplicacaoOuAtivacao = tipo === 'selo' ? (item as ISeloCatalogo).ativacao : (item as IEncantamentoCatalogo).aplicacao;
+    const rotuloDt = tipo === 'selo' ? 'DT de inscrição' : 'DT';
+    const rotuloUso = tipo === 'selo' ? 'Ativação' : 'Aplicação';
+    const rotuloTipo = tipo === 'selo' ? 'Selo' : 'Encantamento';
+
+    return (
+      <article
+        key={`${modoCatalogo ? 'catalogo' : 'ficha'}:${tipo}:${item.id}`}
+        className="rounded-2xl border p-5"
+        style={{
+          borderColor: tema.borda,
+          background: `linear-gradient(135deg, ${tema.fundo}, #121118 38%)`,
+          boxShadow: `0 0 18px ${tema.brilho}`,
+        }}
+      >
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-lg font-bold text-white">{item.titulo}</h3>
+              <span className="rounded border border-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">{rotuloTipo} · Grau {item.grau}</span>
+              <span
+                className="rounded border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                style={{ backgroundColor: tema.fundo, borderColor: tema.borda, color: tema.texto }}
+                title={`${fluxoTitulo} · ${tema.arvore}`}
+              >
+                {fluxoTitulo}
+              </span>
+              {concedido && <span className="rounded border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-amber-300">Concedido</span>}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs text-gray-500">
+              <span><strong className="text-gray-400">Custo pra fazer:</strong> {item.custo_mana} Mana</span>
+              <span><strong className="text-gray-400">Tempo:</strong> {item.tempo}</span>
+              <span><strong className="text-gray-400">{rotuloDt}:</strong> {dt}</span>
+              <span><strong className="text-gray-400">{rotuloUso}:</strong> {aplicacaoOuAtivacao}</span>
+            </div>
+            <p className="mt-3 text-sm leading-relaxed text-gray-300">{item.efeito}</p>
+            {!modoCatalogo && conhecido && (
+              <p className="mt-2 text-[11px] leading-relaxed text-gray-600">Técnica conhecida. A aplicação num item, criatura ou lugar acontece na mesa, com o Mestre.</p>
+            )}
+          </div>
+
+          {modoCatalogo && (
+            <div className="w-full md:w-48">
+              <button
+                type="button"
+                onClick={() => aprenderOuConcederManifestacao(tipo, item)}
+                disabled={!isMestre && (conhecido || !podeAprender)}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-4 py-2.5 text-xs font-bold text-[#d7bb72] transition-colors hover:bg-[#c7a44c]/20 disabled:cursor-not-allowed disabled:border-white/5 disabled:bg-white/5 disabled:text-gray-600"
+              >
+                {!podeAprender && !conhecido ? <LockKeyhole size={14} /> : <BookOpen size={14} />}
+                {isMestre ? (concedido ? 'Remover concessão' : 'Conceder') : (conhecido ? 'Já conhecido' : 'Aprender')}
+              </button>
+              {!isMestre && !avaliacao.permitido && !conhecido && <p className="mt-2 text-center text-[10px] leading-relaxed text-gray-600">{avaliacao.motivo}</p>}
+            </div>
+          )}
+        </div>
+      </article>
+    );
+  };
+
   return (
     <div className="space-y-6">
       <header className="rounded-2xl border border-white/5 bg-[#0f0e15] p-6">
@@ -349,10 +635,27 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             onClick={() => setMostrarCatalogo((valor) => !valor)}
             className="rounded-xl border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-5 py-3 text-sm font-bold text-[#d7bb72] hover:bg-[#c7a44c]/20"
           >
-            {mostrarCatalogo ? 'Voltar às conhecidas' : isMestre ? 'Abrir catálogo e concessões' : 'Aprender magia'}
+            {mostrarCatalogo ? 'Voltar às conhecidas' : isMestre ? 'Abrir catálogo e concessões' : `Aprender ${ROTULO_TIPO_SINGULAR[tipoAtivo]}`}
           </button>
         </div>
 
+        <div className="mt-4 flex flex-wrap gap-2">
+          {(['magia', 'ritual', 'selo', 'encantamento'] as TipoManifestacao[]).map((tipo) => (
+            <button
+              key={tipo}
+              type="button"
+              onClick={() => setTipoAtivo(tipo)}
+              className={`rounded-lg border px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${tipoAtivo === tipo
+                ? 'border-sky-500/40 bg-sky-500/15 text-sky-300'
+                : 'border-white/10 bg-black/20 text-gray-500 hover:border-white/20 hover:text-gray-300'}`}
+            >
+              {ROTULO_TIPO[tipo]}
+            </button>
+          ))}
+        </div>
+
+        {tipoAtivo === 'magia' && (
+        <>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Fonte</span><strong className="mt-1 block text-sm text-white">{perfil.fontes.join(', ') || 'Nenhuma'}</strong></div>
           <div
@@ -381,6 +684,23 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
           <div className="mt-3 flex items-start gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-xs leading-relaxed text-amber-200">
             <AlertCircle size={16} className="mt-0.5 shrink-0" />
             <span>{perfil.avisoFluxo}</span>
+          </div>
+        )}
+        </>
+        )}
+
+        {tipoAtivo !== 'magia' && (
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Fluxo nativo</span><strong className="mt-1 block text-sm" style={{ color: temaFluxoNativo?.texto || '#d1d5db' }}>{perfil.fluxoNativoTitulo || 'Escolha uma Árvore'}</strong></div>
+            <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Mana</span><strong className="mt-1 block text-sm text-white">{manaAtual}/{manaMaxima}</strong></div>
+            <div className="rounded-xl border border-white/5 bg-black/20 p-3">
+              <span className="text-[10px] font-bold uppercase text-gray-500">Vagas de {ROTULO_TIPO[tipoAtivo].toLowerCase()}</span>
+              <strong className="mt-1 block text-sm text-white">
+                {tipoAtivo === 'ritual' && `${perfil.rituaisConhecidosIds.length}/${perfil.vagasRituais}`}
+                {tipoAtivo === 'selo' && `${perfil.selosConhecidosIds.length}/${perfil.vagasSelos}`}
+                {tipoAtivo === 'encantamento' && `${perfil.encantamentosConhecidosIds.length}/${perfil.vagasEncantamentos}`}
+              </strong>
+            </div>
           </div>
         )}
       </header>
@@ -490,7 +810,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
         </section>
       )}
 
-      {mostrarCatalogo ? (
+      {tipoAtivo === 'magia' && (mostrarCatalogo ? (
         <section className="space-y-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
@@ -536,9 +856,60 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             <div className="rounded-2xl border border-dashed border-white/10 bg-[#0f0e15] py-14 text-center"><Flame size={42} className="mx-auto mb-3 text-gray-700" /><p className="font-bold text-gray-500">Nenhuma magia oficial conhecida</p><p className="mt-2 text-xs text-gray-600">{perfil.possuiFonte ? 'Use Aprender magia para preencher as vagas liberadas.' : 'Uma classe, habilidade ou concessão do Mestre precisa fornecer acesso.'}</p></div>
           )}
         </section>
-      )}
+      ))}
 
-      {magiasAntigas.length > 0 && !mostrarCatalogo && (
+      {tipoAtivo !== 'magia' && (() => {
+        const rotulo = ROTULO_TIPO[tipoAtivo];
+        const rotuloSingular = ROTULO_TIPO_SINGULAR[tipoAtivo];
+        const conhecidosAtivos = tipoAtivo === 'ritual' ? rituaisConhecidos : tipoAtivo === 'selo' ? selosConhecidos : encantamentosConhecidos;
+        const renderItem = (item: IRitualCatalogo | ISeloCatalogo | IEncantamentoCatalogo, modoCatalogo = false) => (
+          tipoAtivo === 'ritual'
+            ? renderRitual(item as IRitualCatalogo, modoCatalogo)
+            : renderSeloOuEncantamento(tipoAtivo, item as ISeloCatalogo | IEncantamentoCatalogo, modoCatalogo)
+        );
+        return mostrarCatalogo ? (
+          <section className="space-y-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+              <input
+                type="search"
+                aria-label={`Buscar no catálogo de ${rotulo.toLowerCase()}`}
+                value={busca}
+                onChange={(event) => setBusca(event.target.value)}
+                placeholder="Buscar por nome, Fluxo ou efeito"
+                className="w-full rounded-xl border border-white/5 bg-[#0f0e15] py-3 pl-10 pr-4 text-sm text-white outline-none focus:border-sky-500/40"
+              />
+            </div>
+            <label className="block sm:max-w-xs">
+              <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Fluxo</span>
+              <select
+                value={filtroFluxo}
+                onChange={(event) => setFiltroFluxo(event.target.value as FluxoDeMagia | 'nativo' | 'todos')}
+                className="w-full rounded-xl border border-white/5 bg-[#0f0e15] px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-sky-500/40"
+              >
+                <option value="nativo">{perfil.fluxoNativoTitulo ? `Fluxo nativo (${perfil.fluxoNativoTitulo})` : 'Fluxo nativo (não definido)'}</option>
+                <option value="todos">Todos os Fluxos</option>
+                {FLUXOS_CATALOGO.map((fluxo) => <option key={fluxo.id} value={fluxo.id}>{fluxo.titulo}</option>)}
+              </select>
+            </label>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-600">{catalogoManifestacaoVisivel.length} {rotulo.toLowerCase()}</p>
+            <div className="space-y-3">{catalogoManifestacaoVisivel.map((item) => renderItem(item, true))}</div>
+          </section>
+        ) : (
+          <section className="space-y-4">
+            <div className="flex items-center justify-between"><h3 className="font-bold text-white">{rotulo} conhecidos</h3><span className="text-xs text-gray-500">{conhecidosAtivos.length} conhecidos</span></div>
+            {conhecidosAtivos.length > 0 ? <div className="space-y-3">{conhecidosAtivos.map((item) => renderItem(item))}</div> : (
+              <div className="rounded-2xl border border-dashed border-white/10 bg-[#0f0e15] py-14 text-center">
+                <Flame size={42} className="mx-auto mb-3 text-gray-700" />
+                <p className="font-bold text-gray-500">Nenhum(a) {rotuloSingular} conhecido(a)</p>
+                <p className="mt-2 text-xs text-gray-600">Use Aprender {rotuloSingular} para preencher as vagas liberadas pela classe.</p>
+              </div>
+            )}
+          </section>
+        );
+      })()}
+
+      {tipoAtivo === 'magia' && magiasAntigas.length > 0 && !mostrarCatalogo && (
         <section className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-5">
           <h3 className="flex items-center gap-2 font-bold text-amber-200"><AlertCircle size={17} /> Registros anteriores</h3>
           <p className="mt-2 text-xs leading-relaxed text-gray-400">Estas anotações foram preservadas, mas não usam custos, círculos ou testes oficiais. O Mestre pode conceder a versão correspondente pelo catálogo.</p>

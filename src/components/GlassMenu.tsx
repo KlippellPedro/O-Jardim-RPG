@@ -8,7 +8,7 @@ export default function GlassMenu() {
     { name: 'Ficha', path: '/ficha', icon: <Shield size={22} /> },
     { name: 'Loja', path: '/loja', icon: <ShoppingBag size={22} /> },
     { name: 'Mundo', path: '/mundo', icon: <Globe size={22} /> },
-    { name: 'Regras', path: '/regras', icon: <BookOpen size={22} /> },
+    { name: 'Livro', path: '/regras', icon: <BookOpen size={22} /> },
     { name: 'Sessão', path: '/sessao', icon: <Swords size={22} /> },
   ];
 

@@ -127,11 +127,21 @@ interface IManifestacaoMagicaBase {
   efeito: string;
 }
 
+/** Item comprável na Loja (categoria "Componentes", tipo `drop`) que o ritual consome. */
+export interface IIngredienteRitual {
+  item_id: string;
+  quantidade: number;
+}
+
 export interface IRitualCatalogo extends IManifestacaoMagicaBase {
   complexidade: string;
   dt: number;
   tempo: string;
   requisito: string;
+  /** Materiais compráveis que o rito consome, além do que `requisito` já narra
+   * (participantes, tempo, consentimento). Vazio quando o rito usa só o que já
+   * está em cena (o próprio alvo, um vestígio, uma âncora feita por outro rito). */
+  ingredientes?: IIngredienteRitual[];
   falha: string;
   aviso_mestre?: string;
 }
@@ -197,6 +207,15 @@ export interface IPerfilMagico {
   vagasConhecidas: number;
   conhecidasIds: string[];
   concedidasIds: string[];
+  vagasRituais: number;
+  rituaisConhecidosIds: string[];
+  rituaisConcedidosIds: string[];
+  vagasSelos: number;
+  selosConhecidosIds: string[];
+  selosConcedidosIds: string[];
+  vagasEncantamentos: number;
+  encantamentosConhecidosIds: string[];
+  encantamentosConcedidosIds: string[];
 }
 
 export const MAGIAS_CATALOGO = (magiasData.magias as unknown as IMagiaCatalogo[]);
@@ -205,8 +224,11 @@ export const FLUXOS_CATALOGO = magiasData.fluxos as unknown as IFluxoMagico[];
 export const FLUXOS_POR_ID = new Map(FLUXOS_CATALOGO.map((fluxo) => [fluxo.id, fluxo]));
 export const FUSOES_CATALOGO = magiasData.fusoes as unknown as IFusaoFluxo[];
 export const RITUAIS_CATALOGO = magiasData.rituais as unknown as IRitualCatalogo[];
+export const RITUAIS_POR_ID = new Map(RITUAIS_CATALOGO.map((ritual) => [ritual.id, ritual]));
 export const SELOS_CATALOGO = magiasData.selos as unknown as ISeloCatalogo[];
+export const SELOS_POR_ID = new Map(SELOS_CATALOGO.map((selo) => [selo.id, selo]));
 export const ENCANTAMENTOS_CATALOGO = magiasData.encantamentos as unknown as IEncantamentoCatalogo[];
+export const ENCANTAMENTOS_POR_ID = new Map(ENCANTAMENTOS_CATALOGO.map((encantamento) => [encantamento.id, encantamento]));
 export const AVISO_FLUXO_FIM = magiasData.regras.acesso_fim.aviso;
 export const MAGIAS_UNIVERSAIS = MAGIAS_CATALOGO.filter((magia) => magia.fluxo === 'universal');
 
@@ -290,6 +312,23 @@ export function dtConjuracaoPorCirculo(circulo: CirculoMagia | number): number {
   return CIRCULOS_CONFIG.find((item) => item.circulo === Number(circulo))?.dt_conjuracao || 0;
 }
 
+/** Rituais, Selos e Encantamentos não têm círculo nem fonte com "vagas" no
+ * mesmo formato de progressao_magia - só marcos de nível com `vagas` direto,
+ * lidos de `progressao_rituais`/`progressao_selos`/`progressao_encantamentos`
+ * na classe (ver data/ficha/classes.json). Espelha o loop de vagasConhecidas
+ * abaixo, mas sem círculo/fonte/tradições. */
+function contarVagasPorProgressao(classes: Array<{ id: string; nivel: number }>, campo: string): number {
+  let total = 0;
+  classes.forEach(({ id, nivel }) => {
+    const classe = CLASSES_CATALOGO.find((item) => item.id === id);
+    const fonte = (classe as any)?.[campo];
+    if (!fonte || !Array.isArray(fonte.marcos)) return;
+    const marco = [...fonte.marcos].reverse().find((item: any) => nivel >= Number(item.nivel));
+    if (marco) total += Math.max(0, Number(marco.vagas) || 0);
+  });
+  return total;
+}
+
 export function obterPerfilMagico(ficha: any, inventarioCentral: any[] = []): IPerfilMagico {
   const classes = referenciasClasse(ficha);
   const nivelTotal = classes.reduce((total, item) => total + item.nivel, 0);
@@ -333,20 +372,25 @@ export function obterPerfilMagico(ficha: any, inventarioCentral: any[] = []): IP
   });
   const circuloDoFluxo = circuloPermitidoPorFluxo(fluxo);
   const fluxoNativo = obterFluxoNativo(ficha);
+  // Universal transcende os Fluxos: não tem um `fluxoNativoId` (nenhum dos
+  // dez é "o" nativo, e magiaElegivelParaAprender/podeConjurarMagia já
+  // liberam tudo via isUniversalTree) - mas o título ainda aparece na ficha
+  // pra não sobrar "Escolha uma Árvore"/"não definido" pra quem já escolheu.
+  const isUniversalTree = ficha?.arvoreId === 'universal';
 
   return {
     possuiFonte: fontes.length > 0,
     fontes,
     fluxoNativoId: fluxoNativo?.id || null,
-    fluxoNativoTitulo: fluxoNativo?.titulo || null,
+    fluxoNativoTitulo: fluxoNativo?.titulo || (isUniversalTree ? 'Universal' : null),
     avisoFluxo: fluxoNativo?.id === 'fim' ? AVISO_FLUXO_FIM : fluxoNativo?.aviso_mestre,
     nivelTotal,
     fluxo,
     modificadorFluxo: modificador(fluxo),
     grauMisticismo,
     bonusConjuracao,
-    vantagensConjuracao: resumoEquipamento.vantagensPericias.misticismo || 0,
-    desvantagensConjuracao: resumoEquipamento.desvantagensPericias.misticismo || 0,
+    vantagensConjuracao: resumoEquipamento.vantagens.misticismo || 0,
+    desvantagensConjuracao: resumoEquipamento.desvantagens.misticismo || 0,
     dtMagia: dtConjuracaoPorCirculo(Math.min(circuloDaFonte, circuloDoFluxo)),
     circuloDaFonte,
     circuloDoFluxo,
@@ -354,6 +398,15 @@ export function obterPerfilMagico(ficha: any, inventarioCentral: any[] = []): IP
     vagasConhecidas,
     conhecidasIds: idsUnicos(ficha?.magiasConhecidasIds),
     concedidasIds: idsUnicos(ficha?.magiasConcedidasIds),
+    vagasRituais: contarVagasPorProgressao(classes, 'progressao_rituais'),
+    rituaisConhecidosIds: idsUnicos(ficha?.rituaisConhecidosIds),
+    rituaisConcedidosIds: idsUnicos(ficha?.rituaisConcedidosIds),
+    vagasSelos: contarVagasPorProgressao(classes, 'progressao_selos'),
+    selosConhecidosIds: idsUnicos(ficha?.selosConhecidosIds),
+    selosConcedidosIds: idsUnicos(ficha?.selosConcedidosIds),
+    vagasEncantamentos: contarVagasPorProgressao(classes, 'progressao_encantamentos'),
+    encantamentosConhecidosIds: idsUnicos(ficha?.encantamentosConhecidosIds),
+    encantamentosConcedidosIds: idsUnicos(ficha?.encantamentosConcedidosIds),
   };
 }
 
@@ -369,10 +422,13 @@ export function magiaElegivelParaAprender(ficha: any, magia: IMagiaCatalogo, inv
   if (magia.circulo === 'ritual' || magia.somente_mestre) return { permitido: false, motivo: 'Rituais e concessões especiais dependem do Mestre.' };
   if (magia.circulo > perfil.circuloDaFonte) return { permitido: false, motivo: 'A fonte de magia ainda não libera este círculo.' };
   if (magia.circulo > perfil.circuloDoFluxo) return { permitido: false, motivo: `Fluxo insuficiente para o ${magia.circulo}º círculo.` };
-  if (!perfil.fluxoNativoId) return { permitido: false, motivo: 'Escolha uma Árvore para definir o Fluxo nativo da ficha.' };
-  // Universal é de todo mundo: o Fluxo nativo decide o efeito, não o acesso.
-  if (!magiaEhUniversal(magia) && magia.fluxo !== perfil.fluxoNativoId) {
-    return { permitido: false, motivo: `Esta magia pertence ao Fluxo ${magia.tradicao}; seu Fluxo nativo é ${perfil.fluxoNativoTitulo}.` };
+  const isUniversalTree = ficha?.arvoreId === 'universal';
+  if (!isUniversalTree) {
+    if (!perfil.fluxoNativoId) return { permitido: false, motivo: 'Escolha uma Árvore para definir o Fluxo nativo da ficha.' };
+    // Universal é de todo mundo: o Fluxo nativo decide o efeito, não o acesso.
+    if (!magiaEhUniversal(magia) && magia.fluxo !== perfil.fluxoNativoId) {
+      return { permitido: false, motivo: `Esta magia pertence ao Fluxo ${magia.tradicao}; seu Fluxo nativo é ${perfil.fluxoNativoTitulo}.` };
+    }
   }
   const fontesDaFicha = referenciasClasse(ficha).flatMap(({ id, nivel }) => {
     const fonte = CLASSES_CATALOGO.find((item) => item.id === id)?.progressao_magia;
@@ -384,6 +440,84 @@ export function magiaElegivelParaAprender(ficha: any, magia: IMagiaCatalogo, inv
   if (!magia.fontes_permitidas.some((fonte) => fontesDaFicha.includes(fonte))) {
     return { permitido: false, motivo: 'Sua classe ainda não oferece uma fonte compatível com esta magia.' };
   }
+  return { permitido: true };
+}
+
+/** Rituais, Selos e Encantamentos não têm "fontes_permitidas" nem círculo -
+ * só Fluxo, então a elegibilidade é mais simples que a de Magia: vaga livre
+ * e Fluxo compatível (Universal atravessa, igual a magiaElegivelParaAprender). */
+function manifestacaoElegivelParaAprender(
+  ficha: any,
+  manifestacao: IManifestacaoMagicaBase,
+  perfil: IPerfilMagico,
+  conhecidosIds: string[],
+  vagas: number,
+  rotuloSingular: string,
+): { permitido: boolean; motivo?: string } {
+  if (conhecidosIds.includes(manifestacao.id)) return { permitido: false, motivo: `${rotuloSingular} já conhecido(a).` };
+  if (conhecidosIds.length >= vagas) return { permitido: false, motivo: `Todas as vagas de ${rotuloSingular.toLowerCase()} já foram preenchidas.` };
+  const isUniversalTree = ficha?.arvoreId === 'universal';
+  if (!isUniversalTree) {
+    if (!perfil.fluxoNativoId) return { permitido: false, motivo: 'Escolha uma Árvore para definir o Fluxo nativo da ficha.' };
+    if (manifestacao.fluxo !== perfil.fluxoNativoId) {
+      const fluxoTitulo = FLUXOS_POR_ID.get(manifestacao.fluxo)?.titulo || manifestacao.fluxo;
+      return { permitido: false, motivo: `${rotuloSingular} pertence ao Fluxo ${fluxoTitulo}; seu Fluxo nativo é ${perfil.fluxoNativoTitulo}.` };
+    }
+  }
+  return { permitido: true };
+}
+
+export function ritualElegivelParaAprender(ficha: any, ritual: IRitualCatalogo, inventarioCentral: any[] = []): { permitido: boolean; motivo?: string } {
+  const perfil = obterPerfilMagico(ficha, inventarioCentral);
+  return manifestacaoElegivelParaAprender(ficha, ritual, perfil, perfil.rituaisConhecidosIds, perfil.vagasRituais, 'Ritual');
+}
+
+export function seloElegivelParaAprender(ficha: any, selo: ISeloCatalogo, inventarioCentral: any[] = []): { permitido: boolean; motivo?: string } {
+  const perfil = obterPerfilMagico(ficha, inventarioCentral);
+  return manifestacaoElegivelParaAprender(ficha, selo, perfil, perfil.selosConhecidosIds, perfil.vagasSelos, 'Selo');
+}
+
+export function encantamentoElegivelParaAprender(ficha: any, encantamento: IEncantamentoCatalogo, inventarioCentral: any[] = []): { permitido: boolean; motivo?: string } {
+  const perfil = obterPerfilMagico(ficha, inventarioCentral);
+  return manifestacaoElegivelParaAprender(ficha, encantamento, perfil, perfil.encantamentosConhecidosIds, perfil.vagasEncantamentos, 'Encantamento');
+}
+
+export function rituaisDaFicha(ficha: any, inventarioCentral: any[] = []): IRitualCatalogo[] {
+  const perfil = obterPerfilMagico(ficha, inventarioCentral);
+  return [...new Set([...perfil.rituaisConhecidosIds, ...perfil.rituaisConcedidosIds])]
+    .flatMap((id) => {
+      const ritual = RITUAIS_POR_ID.get(id);
+      return ritual ? [ritual] : [];
+    });
+}
+
+export function selosDaFicha(ficha: any, inventarioCentral: any[] = []): ISeloCatalogo[] {
+  const perfil = obterPerfilMagico(ficha, inventarioCentral);
+  return [...new Set([...perfil.selosConhecidosIds, ...perfil.selosConcedidosIds])]
+    .flatMap((id) => {
+      const selo = SELOS_POR_ID.get(id);
+      return selo ? [selo] : [];
+    });
+}
+
+export function encantamentosDaFicha(ficha: any, inventarioCentral: any[] = []): IEncantamentoCatalogo[] {
+  const perfil = obterPerfilMagico(ficha, inventarioCentral);
+  return [...new Set([...perfil.encantamentosConhecidosIds, ...perfil.encantamentosConcedidosIds])]
+    .flatMap((id) => {
+      const encantamento = ENCANTAMENTOS_POR_ID.get(id);
+      return encantamento ? [encantamento] : [];
+    });
+}
+
+/** Ritual é a única das três manifestações que se "realiza" direto pela
+ * ficha (Selo é inscrito num item e Encantamento é aplicado a um item,
+ * criatura ou lugar - fora do escopo desta aba). Fora de combate, sem
+ * defesa/dano: só o teste de Misticismo contra o `dt` do rito. */
+export function podeRealizarRitual(ficha: any, ritual: IRitualCatalogo, inventarioCentral: any[] = []): { permitido: boolean; motivo?: string } {
+  const perfil = obterPerfilMagico(ficha, inventarioCentral);
+  const conhecido = perfil.rituaisConhecidosIds.includes(ritual.id);
+  const concedido = perfil.rituaisConcedidosIds.includes(ritual.id);
+  if (!conhecido && !concedido) return { permitido: false, motivo: 'O ritual não está registrado como conhecido.' };
   return { permitido: true };
 }
 
@@ -503,7 +637,8 @@ export function podeConjurarMagia(ficha: any, magia: IMagiaCatalogo, inventarioC
   const aprendida = perfil.conhecidasIds.includes(magia.id);
   const concedida = perfil.concedidasIds.includes(magia.id);
   if (!aprendida && !concedida) return { permitido: false, motivo: 'A magia não está registrada como conhecida.' };
-  if (!concedida && !magiaEhUniversal(magia) && perfil.fluxoNativoId && magia.fluxo !== perfil.fluxoNativoId) {
+  const isUniversalTree = ficha?.arvoreId === 'universal';
+  if (!concedida && !magiaEhUniversal(magia) && !isUniversalTree && perfil.fluxoNativoId && magia.fluxo !== perfil.fluxoNativoId) {
     return { permitido: false, motivo: `A magia não pertence ao Fluxo nativo ${perfil.fluxoNativoTitulo}.` };
   }
   if (typeof magia.circulo === 'number' && magia.circulo > perfil.circuloDoFluxo) {

@@ -40,6 +40,25 @@ export function condicaoAtiva(condicoes: unknown, id: string): boolean {
   return idsCondicoes(condicoes).has(normalizarIdentificador(id));
 }
 
+/**
+ * Cobertura de automação mecânica das condições oficiais (data/regras/condicoes.ts)
+ * neste arquivo — mapa de quem tem efeito numérico aplicado automaticamente
+ * aqui vs. quem depende de leitura manual do texto da condição. Registrado
+ * explicitamente por pedido de auditoria (2026-08): nenhuma automação nova foi
+ * criada, isto só documenta o que já existia.
+ *
+ * Automatizadas aqui (Defesa/Iniciativa/movimento/ataque):
+ *  - Atordoado, Inconsciente, Exposto, crise Fúria → penalidadeDefesaCondicoes
+ *  - Surpreendido → penalidadeIniciativaCondicoes
+ *  - Caído → penalidadeAtaqueCondicoes
+ *  - Agarrado, Imobilizado, Inconsciente → movimentoBloqueadoPorCondicao
+ *
+ * Só informativas aqui (efeito descrito em condicoes.ts, aplicado na mesa,
+ * não calculado por nenhuma função deste arquivo):
+ *  - Sangramento (dano periódico), Cego (desvantagem em teste visual),
+ *    Concentrando (teste de Vontade ao sofrer dano), Amedrontado, Caído
+ *    (efeito sobre quem ataca você), e as 5 crises de sanidade além de Fúria.
+ */
 export function penalidadeDefesaCondicoes(condicoes: unknown): number {
   const ids = idsCondicoes(condicoes);
   let penalidade = 0;

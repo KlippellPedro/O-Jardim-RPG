@@ -14,7 +14,7 @@ import {
   distribuirValoresAtributos,
   rolagemAtributosPermitida,
 } from '../../src/services/calculoService.ts';
-import { ajusteOrigem, chaveAjuste, totalAjustesManuais } from '../../src/services/ajustesFichaService.ts';
+import { ajusteOrigem, chaveAjuste, nomeAjusteOrigem, totalAjustesManuais } from '../../src/services/ajustesFichaService.ts';
 
 test('os três métodos de atributos ficam disponíveis para jogadores e Mestres', () => {
   assert.equal(rolagemAtributosPermitida(false), true);
@@ -39,6 +39,21 @@ test('origens e ajustes nomeados permanecem pequenos e somam pela fonte', () => 
   };
   assert.equal(ajusteOrigem(ficha, 'pericia', 'conhecimento'), 1);
   assert.equal(totalAjustesManuais(ficha, chaveAjuste('pericia', 'conhecimento')), 2);
+});
+
+test('origem Artesão aplica o bônus de Ofício a uma perícia personalizada pelo título, já que Ofício não tem id fixo', () => {
+  const ficha = { origemId: 'artesao' };
+  // Ofício foi removido do catálogo fixo (ver data/ficha/pericias.json): toda
+  // perícia de Ofício nasce personalizada com id gerado por timestamp, nunca
+  // literalmente "oficio" — então ajusteOrigem precisa casar pelo título.
+  const idPersonalizado = 'custom_1735000000000';
+  assert.equal(ajusteOrigem(ficha, 'pericia', idPersonalizado, 'Ofício'), 1);
+  assert.equal(ajusteOrigem(ficha, 'pericia', idPersonalizado, 'Ofício (Ferreiro)'), 0);
+  assert.equal(nomeAjusteOrigem(ficha, 'pericia', idPersonalizado, 'Ofício'), 'Origem: Artesão');
+  // Uma perícia sem relação nenhuma com Ofício não deve ganhar o bônus.
+  assert.equal(ajusteOrigem(ficha, 'pericia', idPersonalizado, 'Furtividade'), 0);
+  // Compatibilidade: se algum dia "oficio" voltar a ser um id fixo, o match direto continua valendo.
+  assert.equal(ajusteOrigem(ficha, 'pericia', 'oficio'), 1);
 });
 
 test('conjunto padrão equivale exatamente à compra de 24 pontos', () => {

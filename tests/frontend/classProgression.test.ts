@@ -30,6 +30,20 @@ test('publica as 27 classes com orçamento base consistente', () => {
   }
 });
 
+test('toda classe com progressao_magia libera a primeira magia cedo, não só perto do fim da progressão', () => {
+  for (const classe of classes) {
+    const marcos = classe.progressao_magia?.marcos || [];
+    if (!marcos.length) continue;
+    const primeiroNivel = Math.min(...marcos.map((marco: { nivel: number }) => marco.nivel));
+    assert.ok(
+      primeiroNivel <= 5,
+      `${classe.titulo} só libera a primeira magia no nível ${primeiroNivel}: uma classe de magia não deveria ficar tantos níveis sem conjurar nada`,
+    );
+  }
+  const cartista = obterClasse('cartista-arcano');
+  assert.equal(cartista.progressao_magia?.marcos?.[0]?.nivel, 1, 'Cartista Arcano deve conjurar desde o nível 1, como as demais classes de magia');
+});
+
 test('todas as classes possuem progressão completa e sem níveis duplicados', () => {
   const expected = Array.from({ length: 20 }, (_, index) => index + 1);
   for (const classe of classes) {
@@ -42,6 +56,57 @@ test('todas as classes possuem progressão completa e sem níveis duplicados', (
     );
     assert.equal(contarRecompensasPorTipo(classe, 20, 'poder'), 8, `Escolhas de poder inválidas em ${classe.titulo}`);
   }
+});
+
+test('toda recompensa final resolve para uma habilidade completa de nível 20', () => {
+  for (const classe of classes) {
+    const finais = classe.progressao
+      ?.find(item => item.nivel === 20)
+      ?.recompensas.filter(item => item.tipo === 'habilidade_final') || [];
+
+    assert.equal(finais.length, 1, `Quantidade de finais inválida em ${classe.titulo}`);
+    assert.doesNotMatch(finais[0].titulo, /^Habilidade Final$/i, `Final genérica em ${classe.titulo}`);
+
+    const correspondencias = classe.habilidades?.filter(item => item.titulo === finais[0].titulo) || [];
+    assert.equal(correspondencias.length, 1, `Final sem definição única em ${classe.titulo}`);
+
+    const habilidade = correspondencias[0];
+    assert.ok(habilidade.niveis?.includes(20), `Final fora do nível 20 em ${classe.titulo}`);
+    const descricao = habilidade.descricao || '';
+    assert.ok(descricao, `Final sem descrição em ${classe.titulo}`);
+    assert.match(descricao, /uma vez por sessão/i, `Final sem limite por sessão em ${classe.titulo}`);
+    assert.doesNotMatch(
+      descricao,
+      /a critério do mestre|aprovação do mestre|definid[ao] pelo mestre|o mestre arbitra/i,
+      `Final depende de arbitragem aberta em ${classe.titulo}`,
+    );
+  }
+});
+
+test('Pop Star mantém a maior progressão garantida de Fama', () => {
+  const popStar = obterClasse('pop-star');
+  const fama = popStar.habilidades?.find(item => item.id === 'fama');
+  assert.ok(fama?.estagios);
+
+  for (const nivel of [1, 5, 10, 15, 20]) {
+    const indice = [1, 5, 10, 15, 20].indexOf(nivel) + 1;
+    const descricao = fama.estagios.find(item => item.nivel === nivel)?.descricao || '';
+    assert.match(descricao, new RegExp(`Fama mínima (?:é|sobe para) ${indice}`, 'i'));
+    assert.match(descricao, new RegExp(`(?:\\+${indice} em Atuação|Atuação sobe para \\+${indice})`, 'i'));
+  }
+
+  const estrela = popStar.habilidades?.find(item => item.id === 'estrela-eterna');
+  assert.ok(estrela);
+  const descricaoEstrela = estrela.descricao || '';
+  assert.match(descricaoEstrela, /8 de Mana temporária/i);
+  assert.match(descricaoEstrela, /três rodadas/i);
+  assert.match(descricaoEstrela, /permanece com 1 de Vida/i);
+});
+
+test('Ação Completa usada pelas habilidades possui custo definido', () => {
+  const combate = REGRAS_OFICIAIS.combate;
+  assert.ok(combate);
+  assert.match(combate.corpo, /Ação Completa:<\/strong> consome a Ação Padrão e a Ação de Movimento/i);
 });
 
 test('separa 16 classes comuns e 11 especiais por Árvore', () => {
@@ -174,6 +239,32 @@ test('remove Elementarista e publica as novas classes mágicas', () => {
   assert.match(REGRAS_OFICIAIS.xp.corpo, /Classes? comu(m|ns)[^.]{0,60}qualquer Árvore/i);
 });
 
+test('guia de criação acompanha o assistente e fixa classe especial no nível total 20', () => {
+  const guia = REGRAS_OFICIAIS['criacao-personagem'];
+  assert.ok(guia);
+  assert.match(guia.corpo, /1\. Nome e Árvore de origem/i);
+  assert.match(guia.corpo, /7\. Conferência da ficha/i);
+  assert.match(guia.corpo, /seis perícias/i);
+  assert.match(guia.corpo, /20 Lunaris/i);
+  assert.match(guia.corpo, /Sanidade[\s\S]{0,80}100 de 100/i);
+  assert.match(guia.corpo, /Cansaço[\s\S]{0,80}0 de 6/i);
+
+  const livroPublico = JSON.stringify(Object.fromEntries(
+    Object.entries(REGRAS_OFICIAIS).filter(([id]) => id !== 'mestre'),
+  ));
+  assert.match(livroPublico, /Classe especial exige[^.]{0,80}nível total 20/i);
+  assert.doesNotMatch(livroPublico, /Classe especial exige[^.]{0,80}nível total 15/i);
+});
+
+test('publica Ajudar e Testes de Grupo sem permitir somar dano', () => {
+  const coletivas = REGRAS_OFICIAIS['acoes-coletivas'];
+  assert.ok(coletivas);
+  assert.match(coletivas.corpo, /Ajudar/);
+  assert.match(coletivas.corpo, /No máximo <strong>dois ajudantes<\/strong>/i);
+  assert.match(coletivas.corpo, /pelo menos metade dos participantes/i);
+  assert.match(coletivas.corpo, /Ajudar não permite somar dano/i);
+});
+
 test('livro público não expõe notas editoriais preservadas na área protegida do mestre', () => {
   const conteudoPublico = JSON.stringify(Object.fromEntries(
     Object.entries(REGRAS_OFICIAIS).filter(([id]) => id !== 'mestre'),
@@ -184,6 +275,7 @@ test('livro público não expõe notas editoriais preservadas na área protegida
   assert.doesNotMatch(conteudoPublico, /proposta original|material enviado/i);
   assert.doesNotMatch(conteudoPublico, /\badiad[ao]\b/i);
   assert.doesNotMatch(conteudoPublico, /catálogo estruturado possui/i);
+  assert.doesNotMatch(conteudoPublico, /o texto manda|o Mestre arbitra/i);
 
   const regrasMestre = JSON.parse(
     readFileSync(new URL('../../data/regras/mestre-v1.json', import.meta.url), 'utf8'),

@@ -73,7 +73,7 @@ export const cofreApi = {
     });
   },
   /** Saca do Cofre bancário do Banqueiro (saldos_guardados, tabela do bot)
-   * direto pro personagem — é outro estoque, não o cofre de recompensas. */
+   * direto pro personagem - é outro estoque, não o cofre de recompensas. */
   sacarDoBanco(campanhaId: string, personagemId: string, moeda: string, quantidade: number) {
     return api('/cofre/sacar-banco', {
       method: 'POST',

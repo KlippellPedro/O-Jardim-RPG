@@ -25,7 +25,10 @@ export const LEGADOS_CATALOGO = [
     ...(REGRAS_LEGADOS[legado.id] || {}),
     versaoRegras: REGRAS_LEGADOS[legado.id] ? legadosRegrasData.versao : 'fonte',
   })),
-  ...(legadosNovosData as any).novos.map((legado: any) => ({ ...legado, versaoRegras: '1.0' })),
+  // Os 6 Legados novos nunca passaram pela revisão balanceada que os 36
+  // originais receberam em legados-regras-v1.json (achado 13 da auditoria
+  // 2026-08) — marcar como '1.0' seria mentir sobre a procedência do texto.
+  ...(legadosNovosData as any).novos.map((legado: any) => ({ ...legado, versaoRegras: 'fonte' })),
 ];
 
 export async function carregarCatalogo(): Promise<ICatalogo> {

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { authApi } from '../services/authApi';
+import { campanhasApi } from '../services/campanhasApi';
 
 export interface IUser {
   id: string;
@@ -173,9 +174,6 @@ export const useAuthStore = create<AuthState>()(
         set({ campanhaAtiva: { ...campanhaAtiva, configuracoes: mergedConfig } });
 
         try {
-          // Usa dynamic import ou importa diretamente. Como não importamos campanhasApi no topo,
-          // vamos fazer dinâmico para não quebrar dependências circulares.
-          const { campanhasApi } = await import('../services/campanhasApi');
           await campanhasApi.editar(campanhaAtiva.id, { configuracoes: mergedConfig });
         } catch (e) {
           console.error("Falha ao salvar configurações no servidor", e);
@@ -196,7 +194,6 @@ export const useAuthStore = create<AuthState>()(
         set({ campanhaAtiva: { ...campanhaAtiva, ...dados } });
 
         try {
-          const { campanhasApi } = await import('../services/campanhasApi');
           await campanhasApi.editar(campanhaAtiva.id, dados);
         } catch (e) {
           set((state) => ({

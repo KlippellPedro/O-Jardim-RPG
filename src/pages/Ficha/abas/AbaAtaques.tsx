@@ -315,15 +315,15 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
         personagemId: character.id,
         titulo: `Ataque: ${item.nome}`,
         bonus: calcularBonusAtaque(item),
-        vantagens: resumoEquipamento.vantagensPericias[periciaDoAtaque(item)] || 0,
-        desvantagens: desvantagensAutomaticasAtaque + (resumoEquipamento.desvantagensPericias[periciaDoAtaque(item)] || 0),
+        vantagens: (resumoEquipamento.vantagens[periciaDoAtaque(item)] || 0) + (resumoEquipamento.vantagens['ataque'] || 0),
+        desvantagens: desvantagensAutomaticasAtaque + (resumoEquipamento.desvantagens[periciaDoAtaque(item)] || 0) + (resumoEquipamento.desvantagens['ataque'] || 0),
         dt: defesaInformada ? defesa : null,
         origem: {
           tipo: 'ataque',
           ataque_id: item.id,
           defesa_alvo: defesaInformada ? defesa : null,
-          margem_ameaca: item.margemAmeaca,
-          multiplicador_critico: item.multiplicadorCritico,
+          margem_ameaca: Math.max(2, item.margemAmeaca - (resumoEquipamento.bonusCombate.margemAmeaca || 0)),
+          multiplicador_critico: item.multiplicadorCritico + (resumoEquipamento.bonusCombate.multiplicadorCritico || 0),
         },
       });
       if (item.isInventory && Number(item.municaoMaxima) > 0) {
@@ -351,9 +351,13 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
     const natural = resultado?.ataqueId === item.id && resultado.tipo === 'acerto'
       ? resultado.detalhes?.natural
       : null;
-    const critico = ameacaCritico(natural, item.margemAmeaca);
-    const formulaCritica = critico ? formulaDanoCritico(item.dano, item.multiplicadorCritico) : null;
-    const formula = formulaCritica || item.dano;
+    const margemEfetiva = Math.max(2, item.margemAmeaca - (resumoEquipamento.bonusCombate.margemAmeaca || 0));
+    const multiplicadorEfetivo = item.multiplicadorCritico + (resumoEquipamento.bonusCombate.multiplicadorCritico || 0);
+    const critico = ameacaCritico(natural, margemEfetiva);
+    const bonusDano = resumoEquipamento.bonusCombate.dano || 0;
+    const formulaExtra = item.dano && bonusDano ? `${item.dano}${bonusDano > 0 ? '+' : ''}${bonusDano}` : item.dano;
+    const formulaCritica = critico ? formulaDanoCritico(formulaExtra, multiplicadorEfetivo) : null;
+    const formula = formulaCritica || formulaExtra;
     setRolando(`${item.id}-dano`);
     try {
       const { registro } = await registrosApi.rolar({
@@ -364,9 +368,9 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
         origem: {
           tipo: critico ? 'dano_critico' : 'dano',
           ataque_id: item.id,
-          formula_base: item.dano,
-          margem_ameaca: item.margemAmeaca,
-          multiplicador_critico: item.multiplicadorCritico,
+          formula_base: formulaExtra,
+          margem_ameaca: margemEfetiva,
+          multiplicador_critico: multiplicadorEfetivo,
         },
       });
       setResultado({ ataqueId: item.id, tipo: 'dano', resultado: registro.resultado, detalhes: registro.detalhes });
@@ -429,8 +433,9 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
         <Reorder.Group axis="y" values={ataquesVisiveis} onReorder={handleReorder} className="flex flex-col gap-4">
           {ataquesVisiveis.map((a: IAtaque) => {
             const resultadoAtual = resultado?.ataqueId === a.id ? resultado : null;
+            const margemEfetiva = Math.max(2, a.margemAmeaca - (resumoEquipamento.bonusCombate.margemAmeaca || 0));
             const criticoAtual = resultadoAtual?.tipo === 'acerto'
-              && ameacaCritico(resultadoAtual.detalhes?.natural, a.margemAmeaca);
+              && ameacaCritico(resultadoAtual.detalhes?.natural, margemEfetiva);
             const defesaUsada = Number(resultadoAtual?.detalhes?.dt);
             const temDefesa = resultadoAtual?.tipo === 'acerto' && Number.isFinite(defesaUsada) && defesaUsada >= 1;
             const naturalAtual = Number(resultadoAtual?.detalhes?.natural);
@@ -504,17 +509,22 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
                       </div>
                       <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
                         <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Dano</span>
-                        <span className="text-lg font-bold text-red-400 font-mono">{a.dano || 'Não informado'}</span>
+                        <span className="text-lg font-bold text-red-400 font-mono">
+                          {a.dano ? `${a.dano}${resumoEquipamento.bonusCombate.dano ? (resumoEquipamento.bonusCombate.dano > 0 ? `+${resumoEquipamento.bonusCombate.dano}` : resumoEquipamento.bonusCombate.dano) : ''}` : 'Não informado'}
+                        </span>
                       </div>
                       <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
                         <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Margem</span>
                         <span className="text-lg font-bold text-yellow-400 font-mono">
-                          {a.margemAmeaca === 20 ? '20' : `${a.margemAmeaca}-20`}
+                          {(() => {
+                            const margemEfetiva = Math.max(2, a.margemAmeaca - (resumoEquipamento.bonusCombate.margemAmeaca || 0));
+                            return margemEfetiva === 20 ? '20' : `${margemEfetiva}-20`;
+                          })()}
                         </span>
                       </div>
                       <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
                         <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Multiplicador</span>
-                        <span className="text-lg font-bold text-yellow-400 font-mono">x{a.multiplicadorCritico}</span>
+                        <span className="text-lg font-bold text-yellow-400 font-mono">x{a.multiplicadorCritico + (resumoEquipamento.bonusCombate.multiplicadorCritico || 0)}</span>
                       </div>
                     </div>
 

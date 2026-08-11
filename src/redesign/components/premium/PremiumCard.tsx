@@ -65,12 +65,13 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
+      whileHover={{ scale: 1.02, zIndex: 20 }}
       style={{
         rotateX,
         rotateY,
         transformStyle: "preserve-3d",
       }}
-      className={`relative overflow-hidden transition-all duration-300 ${isHovered ? 'z-20 scale-[1.02]' : 'z-0 scale-100'} ${className}`}
+      className={`relative overflow-hidden ${className}`}
       {...rest}
     >
       {/* Glare effect removed as per user request */}

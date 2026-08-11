@@ -73,7 +73,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
   const [showBestiario, setShowBestiario] = useState(false);
   const [xpMessage, setXpMessage] = useState<string | null>(null);
 
-  // Arrastar só faz sentido antes do combate começar — durante a luta a
+  // Arrastar só faz sentido antes do combate começar - durante a luta a
   // ordem é a da iniciativa, não uma decisão manual do mestre.
   const canReorder = comando && !emCombate && !batchMode;
 
@@ -219,7 +219,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
               {comando && entity.visibilidade && entity.visibilidade !== 'total' ? (
                 <span
                   className="shrink-0 rounded-full border border-white/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white/40"
-                  title="Só quem comanda a mesa vê este selo — é o que os jogadores enxergam desta entidade."
+                  title="Só quem comanda a mesa vê este selo - é o que os jogadores enxergam desta entidade."
                 >
                   {rotuloVisibilidade(entity.visibilidade)}
                 </span>
@@ -423,7 +423,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
                   max={999}
                   value={defenseValue}
                   onChange={(event) => setDefenseValue(event.target.value)}
-                  placeholder="—"
+                  placeholder="-"
                   className="mt-1 w-full rounded-md border border-white/10 bg-black/30 px-2 py-2 text-sm text-white outline-none"
                 />
               </label>
@@ -435,7 +435,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
                   max={99999}
                   value={manaValue}
                   onChange={(event) => setManaValue(event.target.value)}
-                  placeholder="—"
+                  placeholder="-"
                   className="mt-1 w-full rounded-md border border-white/10 bg-black/30 px-2 py-2 text-sm text-white outline-none"
                 />
               </label>

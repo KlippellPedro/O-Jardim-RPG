@@ -4,7 +4,7 @@ import type { NivelVisibilidade } from '../../services/sessaoApi';
 export type RollTone = 'critical' | 'failure' | 'neutral';
 export type RollFilter = 'todos' | 'rolagem' | 'dano' | 'uso';
 
-/** Do mais fechado ao mais aberto — é a ordem que aparece nos seletores. */
+/** Do mais fechado ao mais aberto - é a ordem que aparece nos seletores. */
 export const OPCOES_VISIBILIDADE: Array<{ valor: NivelVisibilidade; rotulo: string; descricao: string }> = [
   { valor: 'oculto', rotulo: 'Oculto', descricao: 'Não aparece na cena. Ideal para emboscadas.' },
   { valor: 'desconhecido', rotulo: 'Desconhecido', descricao: 'Aparece sem nome nem número, só a posição na iniciativa.' },

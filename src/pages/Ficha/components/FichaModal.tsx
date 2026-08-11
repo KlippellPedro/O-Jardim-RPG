@@ -1,6 +1,5 @@
 import React, { useEffect, useId, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
 interface FichaModalProps {
@@ -39,52 +38,50 @@ export const FichaModal: React.FC<FichaModalProps> = ({ isOpen, onClose, title, 
     };
   }, [isOpen]);
 
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
   useEffect(() => {
     if (!isOpen) return undefined;
     modalStack.push(modalId);
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && modalStack[modalStack.length - 1] === modalId) onClose();
+      if (event.key === 'Escape' && modalStack[modalStack.length - 1] === modalId) onCloseRef.current();
     };
     document.addEventListener('keydown', handleKeyDown);
-    window.requestAnimationFrame(() => closeButtonRef.current?.focus());
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       const indice = modalStack.lastIndexOf(modalId);
       if (indice >= 0) modalStack.splice(indice, 1);
     };
-  }, [isOpen, modalId, onClose]);
+  }, [isOpen, modalId]);
 
   if (typeof document === 'undefined') return null;
 
   return createPortal(
-    <AnimatePresence>
+    <>
       {isOpen && (
         <div className={`fixed inset-0 ${nested ? 'z-[120]' : 'z-[100]'} flex items-center justify-center p-3 sm:p-4`}>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             onClick={onClose}
             className="absolute inset-0 bg-black/85 backdrop-blur-sm"
           />
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          <div
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
             onClick={(event) => event.stopPropagation()}
             className={`relative w-full ${MODAL_WIDTH[size]} min-w-0 bg-[#0f0e15] border border-[#c7a44c]/30 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]`}
           >
-            <div className="p-6 border-b border-white/5 flex justify-between items-start">
-              <h2 id={titleId} className="text-xl text-[#c7a44c] font-serif uppercase tracking-wider">{title}</h2>
+            <div className="p-6 border-b border-white/5 flex justify-between items-start gap-3">
+              <h2 id={titleId} className="min-w-0 flex-1 break-words text-xl text-[#c7a44c] font-serif uppercase tracking-wider">{title}</h2>
               <button
                 ref={closeButtonRef}
                 type="button"
                 onClick={onClose}
                 aria-label={`Fechar ${title}`}
-                className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/30 transition-colors"
+                className="w-8 h-8 shrink-0 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/30 transition-colors"
               >
                 <X size={16} />
               </button>
@@ -92,10 +89,10 @@ export const FichaModal: React.FC<FichaModalProps> = ({ isOpen, onClose, title, 
             <div className="p-6 overflow-y-auto custom-scrollbar">
               {children}
             </div>
-          </motion.div>
+          </div>
         </div>
       )}
-    </AnimatePresence>,
+    </>,
     document.body,
   );
 };

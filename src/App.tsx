@@ -1,27 +1,36 @@
-import { useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import AtmosphericBackground from './AtmosphericBackground';
-import GlassMenu from './components/GlassMenu';
-import Home from './pages/Home';
-import FichaList from './pages/Ficha/FichaList';
-import { Login } from './pages/Auth/Login';
-import { Cadastro } from './pages/Auth/Cadastro';
-import { CampanhasList } from './pages/Campanhas/CampanhasList';
-import { AdminDashboard } from './pages/Admin/AdminDashboard';
-import { PersonagemSheet } from './pages/Ficha/PersonagemSheet';
-import { SettingsMenu } from './components/Settings/SettingsMenu';
-import { AnimatePresence } from 'framer-motion';
 import { useAuthStore } from './store/useAuthStore';
-import { RegrasPage } from './pages/Regras/RegrasPage';
-import { RegraDetalhesPage } from './pages/Regras/RegraDetalhesPage';
-import { SessaoPage } from './pages/Sessao/SessaoPage';
-import { MundoPage } from './pages/Mundo/MundoPage';
-import { LojaPage } from './pages/Loja/LojaPage';
-import { MasterPage } from './pages/Mestre/MasterPage';
-import { CofrePage } from './pages/Cofre/CofrePage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { resetAllCharacterData } from './store/useCharacterStore';
-import { PreviewGallery } from './redesign/PreviewGallery';
+
+const AtmosphericBackground = lazy(() => import('./AtmosphericBackground'));
+const GlassMenu = lazy(() => import('./components/GlassMenu'));
+const Home = lazy(() => import('./pages/Home'));
+const FichaList = lazy(() => import('./pages/Ficha/FichaList'));
+const PreviewGallery = lazy(() => import('./redesign/PreviewGallery'));
+const Login = lazy(() => import('./pages/Auth/Login').then((module) => ({ default: module.Login })));
+const Cadastro = lazy(() => import('./pages/Auth/Cadastro').then((module) => ({ default: module.Cadastro })));
+const CampanhasList = lazy(() => import('./pages/Campanhas/CampanhasList').then((module) => ({ default: module.CampanhasList })));
+const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard'));
+const PersonagemSheet = lazy(() => import('./pages/Ficha/PersonagemSheet').then((module) => ({ default: module.PersonagemSheet })));
+const SettingsMenu = lazy(() => import('./components/Settings/SettingsMenu').then((module) => ({ default: module.SettingsMenu })));
+const RegrasPage = lazy(() => import('./pages/Regras/RegrasPage').then((module) => ({ default: module.RegrasPage })));
+const RegraDetalhesPage = lazy(() => import('./pages/Regras/RegraDetalhesPage').then((module) => ({ default: module.RegraDetalhesPage })));
+const SessaoPage = lazy(() => import('./pages/Sessao/SessaoPage').then((module) => ({ default: module.SessaoPage })));
+const MundoPage = lazy(() => import('./pages/Mundo/MundoPage').then((module) => ({ default: module.MundoPage })));
+const LojaPage = lazy(() => import('./pages/Loja/LojaPage').then((module) => ({ default: module.LojaPage })));
+const MasterPage = lazy(() => import('./pages/Mestre/MasterPage'));
+const CofrePage = lazy(() => import('./pages/Cofre/CofrePage').then((module) => ({ default: module.CofrePage })));
+
+const PageLoading = () => (
+  <div className="flex min-h-[50vh] items-center justify-center text-white">
+    <div className="flex flex-col items-center gap-4">
+      <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
+      <p className="text-sm text-gray-400">Carregando página...</p>
+    </div>
+  </div>
+);
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ProtectedRoute - guarda de rota unificada
@@ -130,13 +139,23 @@ function App() {
       <Router>
         <div className="relative min-h-screen w-full bg-background text-white font-sans selection:bg-primary/30">
 
-          <AtmosphericBackground />
+          <Suspense fallback={<div className="fixed inset-0 z-0 bg-background" />}>
+            <AtmosphericBackground />
+          </Suspense>
 
-          {usuario && <GlassMenu />}
+          {usuario && (
+            <Suspense fallback={null}>
+              <GlassMenu />
+            </Suspense>
+          )}
 
-          {usuario && <SettingsMenu />}
+          {usuario && (
+            <Suspense fallback={null}>
+              <SettingsMenu />
+            </Suspense>
+          )}
 
-          <AnimatePresence mode="wait">
+          <Suspense fallback={<PageLoading />}>
             <Routes>
               {/* Rota de teste do redesign (desprotegida) */}
               <Route path="/redesign-preview" element={<PreviewGallery />} />
@@ -257,7 +276,7 @@ function App() {
                 }
               />
             </Routes>
-          </AnimatePresence>
+          </Suspense>
         </div>
       </Router>
     </ErrorBoundary>

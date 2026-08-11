@@ -1,7 +1,7 @@
 import type { LojaCatalogEntry } from './lojaApi';
 
-export type ItemCategoria = 'Relíquias da Criação' | 'Armas' | 'Armaduras e Escudos' | 'Modificações' | 'Consumíveis' | 'Veículos' | 'Mercenários' | 'Componentes' | 'Frutos do Éden' | 'Implantes Cibernéticos' | 'Artefatos Mágicos' | 'Outros';
-export type ItemRaridade = 'Comum' | 'Incomum' | 'Raro' | 'Épico' | 'Lendário' | 'Relíquia' | 'Relíquia da Criação';
+export type ItemCategoria = 'Relíquias da Criação' | 'Armas' | 'Armaduras e Escudos' | 'Modificações' | 'Consumíveis' | 'Bens' | 'Mercenários' | 'Componentes' | 'Frutos do Éden' | 'Implantes Cibernéticos' | 'Artefatos Mágicos' | 'Outros';
+export type ItemRaridade = 'Comum' | 'Incomum' | 'Raro' | 'Épico' | 'Lendário' | 'Mítico' | 'Relíquia da Criação' | 'Desconhecida';
 export type ItemRaridadeChave = 'comum' | 'incomum' | 'raro' | 'epico' | 'lendario' | 'reliquia' | 'reliquia da criacao';
 
 export type MoedaTipo = 'Solares' | 'Lunaris' | 'Fragmentos de Estrela' | 'Créditos Sombrios';
@@ -27,6 +27,10 @@ export interface LojaItem {
     descontoPercentual: number;
   };
 }
+
+const RARIDADES_CONHECIDAS = new Set<ItemRaridadeChave>([
+  'comum', 'incomum', 'raro', 'epico', 'lendario', 'reliquia', 'reliquia da criacao',
+]);
 
 export interface PrecoNativoLoja {
   moedaPreco: MoedaTipo;
@@ -107,7 +111,7 @@ export const getCurrencyTheme = (moedaExibicao: MoedaTipo | string): CurrencyThe
 
 const CATEGORIAS_LOJA = new Set<ItemCategoria>([
   'Relíquias da Criação', 'Armas', 'Armaduras e Escudos', 'Modificações',
-  'Consumíveis', 'Veículos', 'Mercenários', 'Componentes', 'Frutos do Éden',
+  'Consumíveis', 'Bens', 'Mercenários', 'Componentes', 'Frutos do Éden',
   'Implantes Cibernéticos', 'Artefatos Mágicos', 'Outros',
 ]);
 
@@ -160,8 +164,9 @@ const mapCategoria = (item: any): ItemCategoria => {
     case 'modificacao': return 'Modificações';
     case 'equipamento': return mapCategoriaEquipamento(item);
     case 'consumivel': return 'Consumíveis';
-    case 'veiculo': 
-    case 'veiculo-completo': return 'Veículos';
+    case 'veiculo':
+    case 'veiculo-completo':
+    case 'propriedade': return 'Bens';
     case 'monstro': return 'Mercenários';
     case 'drop': return 'Componentes';
     case 'fruto-eden': return 'Frutos do Éden';
@@ -180,10 +185,23 @@ export const normalizarRaridadeChave = (raridade: unknown): ItemRaridadeChave =>
   if (val === 'incomum' || val === 'raro' || val === 'epico' || val === 'lendario' || val === 'reliquia') {
     return val;
   }
-  if (val === 'reliquia da criacao' || val === 'mitico' || val === 'mitica') {
+  if (val === 'mitico' || val === 'mitica') return 'reliquia';
+  if (val === 'reliquia da criacao') {
     return 'reliquia da criacao';
   }
   return 'comum';
+};
+
+export const lerRaridadeChave = (raridade: unknown): ItemRaridadeChave | null => {
+  const val = String(raridade ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .toLowerCase();
+  const compatibilidade = val === 'mitico' || val === 'mitica' ? 'reliquia' : val;
+  return RARIDADES_CONHECIDAS.has(compatibilidade as ItemRaridadeChave)
+    ? compatibilidade as ItemRaridadeChave
+    : null;
 };
 
 export const rotuloRaridadeChave = (raridade: unknown): ItemRaridade => {
@@ -193,18 +211,75 @@ export const rotuloRaridadeChave = (raridade: unknown): ItemRaridade => {
     raro: 'Raro',
     epico: 'Épico',
     lendario: 'Lendário',
-    reliquia: 'Relíquia',
+    reliquia: 'Mítico',
     'reliquia da criacao': 'Relíquia da Criação',
   };
-  return rotulos[normalizarRaridadeChave(raridade)];
+  const chave = lerRaridadeChave(raridade);
+  return chave ? rotulos[chave] : 'Desconhecida';
 };
 
+export const classeTextoRaridade = (raridade: unknown): string => {
+  switch (lerRaridadeChave(raridade)) {
+    case 'incomum': return '!text-emerald-400';
+    case 'raro': return '!text-blue-400';
+    case 'epico': return '!text-purple-400';
+    case 'lendario': return '!text-amber-400';
+    case 'reliquia': return '!text-red-400';
+    case 'reliquia da criacao': return 'bg-gradient-to-r from-cyan-200 via-white to-fuchsia-200 bg-clip-text !text-transparent drop-shadow-[0_0_6px_rgba(255,255,255,0.45)]';
+    case 'comum': return '!text-slate-300';
+    default: return '!text-rose-300';
+  }
+};
+
+export const itemEhVeiculoCompleto = (item: Pick<LojaItem, 'tipoOrigem' | 'dadosBrutos'>): boolean => (
+  item.tipoOrigem === 'veiculo-completo'
+  || normalizarMarcador(item.dadosBrutos?.subtipo) === 'completo'
+);
+
+export const normalizarCategoriaInventarioLoja = (dados: Record<string, unknown> | null | undefined): 'veiculo' | 'modulo-veicular' | null => {
+  const tipo = normalizarMarcador(dados?.tipo);
+  if (tipo === 'veiculo-completo') return 'veiculo';
+  if (tipo === 'veiculo') return 'modulo-veicular';
+  const categoria = normalizarMarcador(dados?.categoria);
+  if (categoria === 'veiculo') return 'veiculo';
+  if (categoria === 'modulo-veicular') return 'modulo-veicular';
+  return null;
+};
+
+export const obterBonusDefesaCatalogo = (dados: Record<string, unknown>): unknown => (
+  dados.bonus ?? dados.defesa
+);
+
+export const personagemAtendeRequisitosLoja = (
+  item: Pick<LojaItem, 'requisitoNivel' | 'requisitoClasse'>,
+  personagem?: { nivel?: number; classes?: Array<{ id?: string; classeId?: string }>; classeId?: string },
+): boolean => {
+  if (!personagem) return false;
+  if (item.requisitoNivel && Number(personagem.nivel ?? 0) < item.requisitoNivel) return false;
+  if (!item.requisitoClasse?.length) return true;
+  const classes = new Set([
+    personagem.classeId,
+    ...(personagem.classes ?? []).map((classe) => classe.id ?? classe.classeId),
+  ].map(normalizarMarcador).filter(Boolean));
+  return item.requisitoClasse.some((classe) => classes.has(normalizarMarcador(classe)));
+};
+
+export const personagemPodeAdquirirItemLoja = (
+  item: Pick<LojaItem, 'requisitoNivel' | 'requisitoClasse' | 'dadosBrutos'>,
+  personagem: Parameters<typeof personagemAtendeRequisitosLoja>[1],
+  podeGerenciarConteudo: boolean,
+): boolean => personagemAtendeRequisitosLoja(item, personagem)
+  && (item.dadosBrutos?.requer_autorizacao_mestre !== true || podeGerenciarConteudo);
+
 const mapNivelLoja = (item: any, categoria: ItemCategoria, raridade: ItemRaridade, moeda: MoedaTipo): number => {
+  if (Number.isSafeInteger(item.nivel_loja) && item.nivel_loja >= 1 && item.nivel_loja <= 4) {
+    return item.nivel_loja;
+  }
   if (item.conteudo?.nivelMinimoLoja !== undefined) {
     return Number(item.conteudo.nivelMinimoLoja);
   }
   
-  if (raridade === 'Relíquia' || raridade === 'Relíquia da Criação') return 4;
+  if (raridade === 'Mítico' || raridade === 'Relíquia da Criação' || raridade === 'Desconhecida') return 4;
   if (categoria === 'Frutos do Éden' || categoria === 'Artefatos Mágicos') return 4;
   
   if (categoria === 'Implantes Cibernéticos' || moeda === 'Créditos Sombrios') return 3;
@@ -212,7 +287,7 @@ const mapNivelLoja = (item: any, categoria: ItemCategoria, raridade: ItemRaridad
   const desc = (item.conteudo?.descricao || '').toLowerCase();
   if (desc.includes('ilegal') || desc.includes('contrabando') || desc.includes('veneno') || desc.includes('mercado negro')) return 3;
   
-  if (categoria === 'Veículos') return 2;
+  if (categoria === 'Bens') return 2;
   if (raridade === 'Raro' || raridade === 'Épico') return 2;
   
   return 1;
@@ -267,8 +342,8 @@ export function itemCorrespondeSubfiltro(
   const marcadores = marcadoresDoItem(item);
 
   if (categoria === 'Armas') {
-    if (subfiltro === 'Corpo a Corpo') return modo === 'corpo a corpo';
-    if (subfiltro === 'À Distância') return modo === 'a distancia';
+    if (subfiltro === 'Corpo a Corpo') return modo === 'corpo a corpo' || modo === 'hibrida';
+    if (subfiltro === 'À Distância') return modo === 'a distancia' || modo === 'hibrida';
     if (subfiltro === 'Mágicas') return ['magica', 'magia', 'runa'].some((termo) => descricao.includes(termo));
   }
 
@@ -286,10 +361,12 @@ export function itemCorrespondeSubfiltro(
     return normalizarMarcador(dados.aplicacao) === normalizarMarcador(subfiltro);
   }
 
-  if (categoria === 'Veículos') {
-    const completo = item.tipoOrigem === 'veiculo-completo' || marcadores.has('completo');
+  if (categoria === 'Bens') {
+    const propriedade = item.tipoOrigem === 'propriedade';
+    const completo = !propriedade && itemEhVeiculoCompleto(item);
+    if (subfiltro === 'Propriedades') return propriedade;
     if (subfiltro === 'Veículos Completos') return completo;
-    if (subfiltro === 'Peças e Módulos') return !completo;
+    if (subfiltro === 'Peças e Módulos') return !completo && !propriedade;
   }
 
   if (categoria === 'Consumíveis') {

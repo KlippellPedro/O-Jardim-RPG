@@ -7,6 +7,14 @@ import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { caracteristicasRaciaisAutomaticas, habilidadesAutomaticas } from '../../../services/progressaoFichaService';
 import { obterStatusFicha } from '../../../services/statusService';
+import { EditorEfeitos } from '../components/ItemEffectsModals';
+import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
+import {
+  EFEITOS_FICHA_MAXIMOS,
+  normalizarEfeitosFicha,
+  VALOR_EFEITO_FICHA_MAXIMO,
+  type IEfeitoEquipamento,
+} from '../../../services/equipamentoService';
 
 // ---------------------------------------------------------------------------
 // Tipos locais da entidade "habilidade" (traços raciais, talentos, competências)
@@ -32,6 +40,7 @@ interface IHabilidade {
   descricao: string;
   ordem?: number;
   favorito?: boolean;
+  efeitos?: IEfeitoEquipamento[];
 }
 
 const TIPOS_HABILIDADE: TipoHabilidade[] = ['Ativa', 'Passiva', 'Reação', 'Sustentada', 'Outro'];
@@ -91,6 +100,7 @@ const habilidadeVazia = (): IHabilidade => ({
   descricao: '',
   ordem: 0,
   favorito: false,
+  efeitos: [],
 });
 
 export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpdate: any }) => {
@@ -145,7 +155,12 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
 
   const abrirEditar = (item: IHabilidade) => {
     setEditandoId(item.id);
-    setForm({ ...item, custo: { ...item.custo } });
+    setForm({
+      ...habilidadeVazia(),
+      ...item,
+      custo: { ...habilidadeVazia().custo, ...(item.custo || {}) },
+      efeitos: normalizarEfeitosFicha(item.efeitos),
+    });
     setErroForm('');
     setModalAberto(true);
   };
@@ -162,13 +177,19 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
       return;
     }
 
+    const habilidadeNormalizada = {
+      ...form,
+      nome: nomeLimpo,
+      efeitos: normalizarEfeitosFicha(form.efeitos),
+    };
+
     if (editandoId) {
       const novaLista = habilidades.map((h: IHabilidade) =>
-        h.id === editandoId ? { ...form, nome: nomeLimpo, id: editandoId } : h
+        h.id === editandoId ? { ...habilidadeNormalizada, id: editandoId } : h
       );
       onUpdate(['ficha', 'habilidades'], novaLista);
     } else {
-      const novoItem: IHabilidade = { ...form, nome: nomeLimpo, id: gerarId('habilidade') };
+      const novoItem: IHabilidade = { ...habilidadeNormalizada, id: gerarId('habilidade') };
       onUpdate(['ficha', 'habilidades'], [...habilidades, novoItem]);
     }
     fecharModal();
@@ -377,6 +398,11 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                         {h.acao}
                       </span>
                     ) : null}
+                    {h.efeitos && h.efeitos.length > 0 ? (
+                      <span className="flex items-center gap-1 rounded border border-purple-500/30 bg-purple-900/30 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-purple-400">
+                        Efeitos: {h.efeitos.length}
+                      </span>
+                    ) : null}
                   </div>
                   <p className="text-gray-400 text-sm leading-relaxed">{h.descricao || 'Sem descrição cadastrada.'}</p>
 
@@ -409,92 +435,111 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
         isOpen={modalAberto}
         onClose={fecharModal}
         title={editandoId ? 'Editar Habilidade' : 'Nova Habilidade'}
+        size="xl"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="md:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Esquerda */}
+          <div className="flex flex-col gap-4">
             <LabeledInput
               label="Nome"
               value={form.nome}
               placeholder="Nome da habilidade"
               onChange={(v: string) => setForm({ ...form, nome: v })}
             />
+
+            <div className="grid grid-cols-2 gap-4">
+              <LabeledInput
+                label="Origem"
+                value={form.origem}
+                placeholder="Ex.: Raça, Talento..."
+                onChange={(v: string) => setForm({ ...form, origem: v })}
+              />
+              <LabeledModalSelect
+                label="Tipo"
+                value={form.tipo}
+                options={TIPOS_HABILIDADE.map(t => ({ value: t, label: t }))}
+                onChange={(v: string) => setForm({ ...form, tipo: v as TipoHabilidade })}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <LabeledInput
+                label="Nível Adquirido"
+                value={String(form.nivelAdquirido ?? 0)}
+                placeholder="0"
+                onChange={(v: string) => setForm({ ...form, nivelAdquirido: Math.max(0, Math.trunc(Number(v) || 0)) })}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <LabeledModalSelect
+                label="Recurso do Custo"
+                value={form.custo.recurso}
+                options={RECURSOS}
+                onChange={(v: string) => setForm({ ...form, custo: { ...form.custo, recurso: v as RecursoCusto } })}
+              />
+              <LabeledInput
+                label="Valor do Custo"
+                value={String(form.custo.valor ?? 0)}
+                placeholder="0"
+                onChange={(v: string) => setForm({ ...form, custo: { ...form.custo, valor: Math.max(0, Math.trunc(Number(v) || 0)) } })}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <LabeledInput
+                label="Ação"
+                value={form.acao}
+                placeholder="Ex.: Ação padrão..."
+                onChange={(v: string) => setForm({ ...form, acao: v })}
+              />
+              <LabeledInput
+                label="Duração"
+                value={form.duracao}
+                placeholder="Ex.: Instantânea..."
+                onChange={(v: string) => setForm({ ...form, duracao: v })}
+              />
+              <LabeledInput
+                label="Alcance"
+                value={form.alcance}
+                placeholder="Ex.: Pessoal..."
+                onChange={(v: string) => setForm({ ...form, alcance: v })}
+              />
+            </div>
           </div>
 
-          <LabeledInput
-            label="Origem"
-            value={form.origem}
-            placeholder="Ex.: Raça, Talento, Item..."
-            onChange={(v: string) => setForm({ ...form, origem: v })}
-          />
+          {/* Direita */}
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Descrição</label>
+              <textarea
+                value={form.descricao}
+                onChange={e => setForm({ ...form, descricao: e.target.value })}
+                rows={4}
+                placeholder="Descreva o efeito e as condições de uso."
+                className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors placeholder:text-gray-700 resize-none h-32"
+              />
+            </div>
 
-          <LabeledModalSelect
-            label="Tipo"
-            value={form.tipo}
-            options={TIPOS_HABILIDADE.map(t => ({ value: t, label: t }))}
-            onChange={(v: string) => setForm({ ...form, tipo: v as TipoHabilidade })}
-          />
-
-          <LabeledInput
-            label="Nível Adquirido"
-            value={String(form.nivelAdquirido ?? 0)}
-            placeholder="0"
-            onChange={(v: string) => setForm({ ...form, nivelAdquirido: Math.max(0, Math.trunc(Number(v) || 0)) })}
-          />
-
-          <div className="grid grid-cols-2 gap-2">
-            <LabeledModalSelect
-              label="Recurso do Custo"
-              value={form.custo.recurso}
-              options={RECURSOS}
-              onChange={(v: string) => setForm({ ...form, custo: { ...form.custo, recurso: v as RecursoCusto } })}
-            />
-            <LabeledInput
-              label="Valor do Custo"
-              value={String(form.custo.valor ?? 0)}
-              placeholder="0"
-              onChange={(v: string) => setForm({ ...form, custo: { ...form.custo, valor: Math.max(0, Math.trunc(Number(v) || 0)) } })}
-            />
-          </div>
-
-          <LabeledInput
-            label="Ação"
-            value={form.acao}
-            placeholder="Ex.: Ação padrão, reação..."
-            onChange={(v: string) => setForm({ ...form, acao: v })}
-          />
-
-          <LabeledInput
-            label="Duração"
-            value={form.duracao}
-            placeholder="Ex.: Instantânea, 3 rodadas..."
-            onChange={(v: string) => setForm({ ...form, duracao: v })}
-          />
-
-          <LabeledInput
-            label="Alcance"
-            value={form.alcance}
-            placeholder="Ex.: Pessoal, 9 m..."
-            onChange={(v: string) => setForm({ ...form, alcance: v })}
-          />
-
-          <div className="md:col-span-2 flex flex-col gap-1">
-            <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Descrição</label>
-            <textarea
-              value={form.descricao}
-              onChange={e => setForm({ ...form, descricao: e.target.value })}
-              rows={5}
-              placeholder="Descreva o efeito e as condições de uso."
-              className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors placeholder:text-gray-700 resize-none"
-            />
+            <div className="pt-2 flex-1">
+              <EditorEfeitos
+                efeitos={form.efeitos || []}
+                onChange={(efeitos) => setForm((atual) => ({ ...atual, efeitos }))}
+                pericias={PERICIAS_CATALOGO.map((pericia) => ({ id: pericia.id, titulo: pericia.titulo }))}
+                maxEfeitos={EFEITOS_FICHA_MAXIMOS}
+                valorMaximo={VALOR_EFEITO_FICHA_MAXIMO}
+                contexto="habilidade"
+              />
+            </div>
           </div>
 
           {erroForm && (
-            <div className="md:col-span-2 text-red-400 text-xs font-bold bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
+            <div className="lg:col-span-2 text-red-400 text-xs font-bold bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
               {erroForm}
             </div>
           )}
 
-          <div className="md:col-span-2 flex justify-end gap-3 pt-2">
+          <div className="lg:col-span-2 flex justify-end gap-3 pt-4 border-t border-white/5">
             <button
               onClick={fecharModal}
               className="px-4 py-2.5 rounded-xl border border-white/10 text-gray-400 text-sm font-bold hover:text-white hover:border-white/30 transition-colors"

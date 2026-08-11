@@ -7,6 +7,14 @@ import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { legadosSelecionados, poderesSelecionados } from '../../../services/progressaoFichaService';
 import { obterStatusFicha } from '../../../services/statusService';
+import { EditorEfeitos } from '../components/ItemEffectsModals';
+import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
+import {
+  EFEITOS_FICHA_MAXIMOS,
+  normalizarEfeitosFicha,
+  VALOR_EFEITO_FICHA_MAXIMO,
+  type IEfeitoEquipamento,
+} from '../../../services/equipamentoService';
 
 interface ICustoPoder {
   recurso: 'nenhum' | 'mana' | 'vida' | 'sanidade' | 'cansaco';
@@ -26,6 +34,7 @@ interface IPoder {
   descricao: string;
   ordem?: number;
   favorito?: boolean;
+  efeitos?: IEfeitoEquipamento[];
 }
 
 const TIPOS_PODER = ['Ativa', 'Passiva', 'Reação', 'Sustentada', 'Outro'];
@@ -69,6 +78,7 @@ const criarPoderVazio = (): IPoder => ({
   descricao: '',
   ordem: 0,
   favorito: false,
+  efeitos: [],
 });
 
 function custoTexto(custo?: ICustoPoder) {
@@ -151,12 +161,14 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     if (!modalItem) return;
     const nomeLimpo = (modalItem.nome || '').trim();
     if (!nomeLimpo) return;
+    const efeitos = normalizarEfeitosFicha(modalItem.efeitos);
+    const itemNormalizado = { ...modalItem, nome: nomeLimpo, efeitos };
 
     const jaExiste = poderes.some((p) => p.id === modalItem.id);
     if (jaExiste) {
-      salvarLista(poderes.map((p) => (p.id === modalItem.id ? { ...modalItem, nome: nomeLimpo } : p)));
+      salvarLista(poderes.map((p) => (p.id === modalItem.id ? itemNormalizado : p)));
     } else {
-      const novoItem: IPoder = { ...modalItem, nome: nomeLimpo, id: gerarId() };
+      const novoItem: IPoder = { ...itemNormalizado, id: gerarId() };
       salvarLista([...poderes, novoItem]);
     }
     fecharModal();
@@ -362,6 +374,11 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                     <span className="text-[10px] px-2 py-0.5 bg-[#c7a44c]/10 rounded border border-[#c7a44c]/30 text-[#c7a44c] font-bold uppercase tracking-wider">
                       {custoTexto(p.custo)}
                     </span>
+                    {(p.efeitos && p.efeitos.length > 0) && (
+                      <span className="text-[10px] px-2 py-0.5 bg-purple-900/30 rounded border border-purple-500/30 text-purple-400 font-bold uppercase tracking-wider flex items-center gap-1">
+                        Efeitos: {p.efeitos.length}
+                      </span>
+                    )}
                   </div>
                   <p className="text-gray-400 text-sm leading-relaxed mb-3">{p.descricao || 'Sem descrição cadastrada.'}</p>
 
@@ -399,60 +416,79 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
       </div>
 
       {/* MODAL CRIAR/EDITAR */}
-      <FichaModal isOpen={!!modalItem} onClose={fecharModal} title={ehNovo ? 'Novo Poder' : 'Editar Poder'}>
+      <FichaModal isOpen={!!modalItem} onClose={fecharModal} title={ehNovo ? 'Novo Poder' : 'Editar Poder'} size="xl">
         {modalItem && (
-          <div className="flex flex-col gap-4">
-            <LabeledInput label="Nome" value={modalItem.nome} onChange={(v: string) => atualizarCampoModal('nome', v)} placeholder="Ex.: Lâmina Espectral" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Esquerda: Campos */}
+            <div className="flex flex-col gap-4">
+              <LabeledInput label="Nome" value={modalItem.nome} onChange={(v: string) => atualizarCampoModal('nome', v)} placeholder="Ex.: Lâmina Espectral" />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <LabeledModalSelect
+                  label="Tipo"
+                  value={modalItem.tipo}
+                  options={TIPOS_PODER}
+                  onChange={(v: string) => atualizarCampoModal('tipo', v)}
+                />
+                <LabeledInput label="Fonte" value={modalItem.fonte} onChange={(v: string) => atualizarCampoModal('fonte', v)} placeholder="Ex.: Árvore, Raça..." />
+              </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <LabeledModalSelect
-                label="Tipo"
-                value={modalItem.tipo}
-                options={TIPOS_PODER}
-                onChange={(v: string) => atualizarCampoModal('tipo', v)}
-              />
-              <LabeledInput label="Fonte" value={modalItem.fonte} onChange={(v: string) => atualizarCampoModal('fonte', v)} placeholder="Ex.: Árvore, Raça, Classe..." />
+              <div className="grid grid-cols-2 gap-4">
+                <LabeledInput label="Nível Adquirido" value={modalItem.nivelAdquirido} onChange={(v: string) => atualizarCampoModal('nivelAdquirido', v)} placeholder="Ex.: 1" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <LabeledModalSelect
+                  label="Recurso do Custo"
+                  value={modalItem.custo.recurso}
+                  options={RECURSOS_CUSTO}
+                  onChange={(v: string) => atualizarCustoModal('recurso', v)}
+                />
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Valor do Custo</label>
+                  <input
+                    type="number"
+                    min={0}
+                    value={modalItem.custo.valor}
+                    onChange={(e) => atualizarCustoModal('valor', Math.max(0, Number(e.target.value) || 0))}
+                    className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <LabeledInput label="Ação" value={modalItem.acao} onChange={(v: string) => atualizarCampoModal('acao', v)} placeholder="Ação padrão..." />
+                <LabeledInput label="Duração" value={modalItem.duracao} onChange={(v: string) => atualizarCampoModal('duracao', v)} placeholder="Instantânea..." />
+                <LabeledInput label="Alcance" value={modalItem.alcance} onChange={(v: string) => atualizarCampoModal('alcance', v)} placeholder="Pessoal, 9m..." />
+              </div>
             </div>
 
-            <LabeledInput label="Nível Adquirido" value={modalItem.nivelAdquirido} onChange={(v: string) => atualizarCampoModal('nivelAdquirido', v)} placeholder="Ex.: 1" />
-
-            <div className="grid grid-cols-2 gap-4">
-              <LabeledModalSelect
-                label="Recurso do Custo"
-                value={modalItem.custo.recurso}
-                options={RECURSOS_CUSTO}
-                onChange={(v: string) => atualizarCustoModal('recurso', v)}
-              />
+            {/* Direita: Descrição e Efeitos */}
+            <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1">
-                <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Valor do Custo</label>
-                <input
-                  type="number"
-                  min={0}
-                  value={modalItem.custo.valor}
-                  onChange={(e) => atualizarCustoModal('valor', Math.max(0, Number(e.target.value) || 0))}
-                  className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors"
+                <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Descrição</label>
+                <textarea
+                  value={modalItem.descricao}
+                  onChange={(e) => atualizarCampoModal('descricao', e.target.value)}
+                  rows={4}
+                  className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors resize-none h-32"
+                  placeholder="Descreva o efeito do poder..."
+                />
+              </div>
+
+              <div className="pt-2 flex-1">
+                <EditorEfeitos
+                  efeitos={modalItem.efeitos || []}
+                  onChange={(efeitos) => atualizarCampoModal('efeitos', efeitos)}
+                  pericias={PERICIAS_CATALOGO.map(p => ({ id: p.id, titulo: p.titulo }))}
+                  maxEfeitos={EFEITOS_FICHA_MAXIMOS}
+                  valorMaximo={VALOR_EFEITO_FICHA_MAXIMO}
+                  contexto="poder"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-              <LabeledInput label="Ação" value={modalItem.acao} onChange={(v: string) => atualizarCampoModal('acao', v)} placeholder="Ação padrão..." />
-              <LabeledInput label="Duração" value={modalItem.duracao} onChange={(v: string) => atualizarCampoModal('duracao', v)} placeholder="Instantânea..." />
-              <LabeledInput label="Alcance" value={modalItem.alcance} onChange={(v: string) => atualizarCampoModal('alcance', v)} placeholder="Pessoal, 9m..." />
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Descrição</label>
-              <textarea
-                value={modalItem.descricao}
-                onChange={(e) => atualizarCampoModal('descricao', e.target.value)}
-                rows={4}
-                className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors resize-none"
-                placeholder="Descreva o efeito do poder..."
-              />
-            </div>
-
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="lg:col-span-2 flex justify-end gap-3 pt-4 border-t border-white/5">
               <button
                 onClick={fecharModal}
                 className="px-5 py-2.5 rounded-lg border border-white/10 text-gray-400 hover:text-white hover:border-white/30 transition-colors text-sm font-bold"

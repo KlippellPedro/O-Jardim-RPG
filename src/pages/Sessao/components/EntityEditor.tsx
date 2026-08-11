@@ -10,6 +10,9 @@ import type {
 } from '../../../store/useSessaoStore';
 import type { NivelVisibilidade, ParticipantePayload } from '../../../services/sessaoApi';
 import { OPCOES_VISIBILIDADE } from '../sessionUtils';
+import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../../data/regras/condicoes';
+
+const CONDICOES_RAPIDAS = [...CONDICOES_OFICIAIS, ...CRISES_SANIDADE];
 
 interface EntityEditorProps {
   entity: EntidadeIniciativa;
@@ -37,17 +40,19 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
   const [pericias, setPericias] = useState<string[]>(entity.pericias ?? []);
   const [periciaTexto, setPericiaTexto] = useState('');
 
-  const addCondition = () => {
-    const name = conditionName.trim();
-    if (!name || conditions.some((condition) => condition.nome.toLocaleLowerCase('pt-BR') === name.toLocaleLowerCase('pt-BR'))) return;
+  const addConditionNamed = (name: string) => {
+    const nome = name.trim();
+    if (!nome || conditions.some((condition) => condition.nome.toLocaleLowerCase('pt-BR') === nome.toLocaleLowerCase('pt-BR'))) return;
     const parsedTurns = conditionTurns ? Math.max(1, Math.trunc(Number(conditionTurns))) : null;
     setConditions((current) => [...current, {
-      nome: name,
+      nome,
       turnos: Number.isFinite(parsedTurns) ? parsedTurns : null,
     }]);
     setConditionName('');
     setConditionTurns('');
   };
+
+  const addCondition = () => addConditionNamed(conditionName);
 
   const addAttack = () => {
     const name = attackName.trim();
@@ -145,7 +150,7 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
               min={0}
               max={99999}
               value={manaCurrent}
-              placeholder="—"
+              placeholder="-"
               onChange={(event) => setManaCurrent(event.target.value)}
               className="mt-1 w-full rounded-md border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-[#c7a44c]/50"
             />
@@ -157,7 +162,7 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
               min={0}
               max={99999}
               value={manaMax}
-              placeholder="—"
+              placeholder="-"
               onChange={(event) => setManaMax(event.target.value)}
               className="mt-1 w-full rounded-md border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-[#c7a44c]/50"
             />
@@ -169,7 +174,7 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
               min={0}
               max={999}
               value={defense}
-              placeholder="—"
+              placeholder="-"
               onChange={(event) => setDefense(event.target.value)}
               className="mt-1 w-full rounded-md border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-[#c7a44c]/50"
             />
@@ -181,9 +186,9 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
               min={1}
               max={10}
               value={vd}
-              placeholder="—"
+              placeholder="-"
               onChange={(event) => setVd(event.target.value)}
-              title="Valor de Desafio (1-10) — de onde vem o XP ao distribuir"
+              title="Valor de Desafio (1-10) - de onde vem o XP ao distribuir"
               className="mt-1 w-full rounded-md border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-[#c7a44c]/50"
             />
           </label>
@@ -206,12 +211,25 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
               ))}
             </div>
           ) : null}
+          <div className="mt-2 flex flex-wrap gap-1">
+            {CONDICOES_RAPIDAS.map((regra) => (
+              <button
+                key={regra.id}
+                type="button"
+                onClick={() => addConditionNamed(regra.titulo)}
+                title={regra.efeitos.join(' ')}
+                className="rounded-full border border-white/10 bg-black/20 px-2 py-0.5 text-[10px] text-white/50 hover:border-[#c7a44c]/40 hover:text-[#c7a44c]"
+              >
+                {regra.titulo}
+              </button>
+            ))}
+          </div>
           <div className="mt-2 flex gap-1.5">
             <input
               value={conditionName}
               maxLength={80}
               onChange={(event) => setConditionName(event.target.value)}
-              placeholder="Nova condição"
+              placeholder="Nova condição (ou personalizada)"
               className="min-w-0 flex-1 rounded-md border border-white/10 bg-black/30 px-2 py-1.5 text-xs text-white outline-none focus:border-[#c7a44c]/50"
             />
             <input

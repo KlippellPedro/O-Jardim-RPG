@@ -27,16 +27,39 @@ export function totalAjustesManuais(ficha: any, chave: string): number {
   return obterAjustesManuais(ficha, chave).reduce((total, item) => total + item.valor, 0);
 }
 
-export function ajusteOrigem(ficha: any, alvo: string, chave?: string): number {
+function normalizarTexto(valor: string): string {
+  return valor
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .trim();
+}
+
+/** Uma origem cuja `chave` aponta pra uma perícia sem id fixo no catálogo (ex.:
+ * "oficio", que hoje só existe como perícia personalizada com id gerado por
+ * timestamp) casa pelo título normalizado da perícia em vez do id. */
+function origemCasaComPericia(chave: string, periciaId?: string, tituloPericia?: string): boolean {
+  if (periciaId && chave === periciaId) return true;
+  if (tituloPericia && normalizarTexto(tituloPericia) === normalizarTexto(chave)) return true;
+  return false;
+}
+
+export function ajusteOrigem(ficha: any, alvo: string, chave?: string, tituloAlvo?: string): number {
   const origem = obterOrigemExemplo(ficha?.origemId);
   if (!origem || origem.ajuste.alvo !== alvo) return 0;
-  if (chave && origem.ajuste.chave !== chave) return 0;
+  if (!chave) return origem.ajuste.valor;
+  const chaveOrigem = origem.ajuste.chave;
+  if (!chaveOrigem) return 0;
+  if (alvo === 'pericia' ? !origemCasaComPericia(chaveOrigem, chave, tituloAlvo) : chaveOrigem !== chave) return 0;
   return origem.ajuste.valor;
 }
 
-export function nomeAjusteOrigem(ficha: any, alvo: string, chave?: string): string | null {
+export function nomeAjusteOrigem(ficha: any, alvo: string, chave?: string, tituloAlvo?: string): string | null {
   const origem = obterOrigemExemplo(ficha?.origemId);
   if (!origem || origem.ajuste.alvo !== alvo) return null;
-  if (chave && origem.ajuste.chave !== chave) return null;
+  if (!chave) return `Origem: ${origem.titulo}`;
+  const chaveOrigem = origem.ajuste.chave;
+  if (!chaveOrigem) return null;
+  if (alvo === 'pericia' ? !origemCasaComPericia(chaveOrigem, chave, tituloAlvo) : chaveOrigem !== chave) return null;
   return `Origem: ${origem.titulo}`;
 }

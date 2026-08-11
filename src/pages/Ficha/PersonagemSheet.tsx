@@ -23,9 +23,10 @@ import { AbaAliados } from './abas/AbaAliados';
 import { AbaNotas } from './abas/AbaNotas';
 import { AbaProgressao } from './abas/AbaProgressao';
 import { AbaDescanso } from './abas/AbaDescanso';
+import { AbaBens } from './abas/AbaBens';
 
 
-const TABS = ['Ficha', 'Perícias', 'Inventário', 'Habilidades', 'Poderes', 'Magias', 'Ataques', 'Aliados', 'Progressão', 'Descanso', 'Notas'];
+const TABS = ['Ficha', 'Perícias', 'Inventário', 'Bens', 'Habilidades', 'Poderes', 'Magias', 'Ataques', 'Aliados', 'Progressão', 'Descanso', 'Notas'];
 
 const EMPTY_SAVE_STATE: CharacterDomainSaveState = { phase: 'idle' };
 
@@ -283,11 +284,12 @@ export const PersonagemSheet: React.FC = () => {
       title="Como usar a Ficha"
       description="As edições aparecem imediatamente e são sincronizadas em sequência. Se houver falha ou conflito, a ficha mostra como recuperar os dados."
       items={[
-        { label: 'Ficha', value: 'Identidade, classe, atributos, status vitais e experiência' },
+        { label: 'Ficha', value: 'Identidade, classe, Fama, Prestígio, atributos, status vitais e experiência' },
         { label: 'Progressão', value: 'Características raciais, habilidades e eventos automáticos, poderes de classe e Legados' },
         { label: 'Descanso', value: 'Recuperação, Cansaço, condições e crises de Sanidade' },
         { label: 'Perícias', value: 'Graus, vantagens/desvantagens e rolagens' },
         { label: 'Inventário', value: 'Itens e moedas (sincronizados com o servidor)' },
+        { label: 'Bens', value: 'Propriedades e veículos' },
         { label: 'Poderes / Habilidades / Magias', value: 'Escolher progressão, consultar efeitos, conjurar pelo catálogo oficial e registrar na mesa' },
         { label: 'Ataques', value: 'Criar, editar e rolar acerto/dano no servidor' },
         { label: 'Aliados', value: 'Companheiros e seguidores' },
@@ -322,6 +324,7 @@ export const PersonagemSheet: React.FC = () => {
       case 'Progressão': return <AbaProgressao {...props} />;
       case 'Perícias': return <AbaPericias {...props} />;
       case 'Inventário': return <AbaInventario {...props} />;
+      case 'Bens': return <AbaBens {...props} />;
       case 'Poderes': return <AbaPoderes {...props} />;
       case 'Habilidades': return <AbaHabilidades {...props} />;
       case 'Ataques': return <AbaAtaques {...props} />;

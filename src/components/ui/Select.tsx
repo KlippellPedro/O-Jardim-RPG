@@ -6,6 +6,7 @@ export interface SelectOption {
   value: string;
   label: string;
   disabled?: boolean;
+  labelClassName?: string;
 }
 
 interface SelectProps {
@@ -89,11 +90,13 @@ export const Select: React.FC<SelectProps> = ({
         ref={triggerRef}
         onClick={() => (isOpen ? setIsOpen(false) : handleOpen())}
         disabled={disabled}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
         className={`flex items-center justify-between gap-2 bg-black/50 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-left focus:outline-none focus:border-primary/60 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
           isOpen ? 'border-primary/60' : ''
         } ${className}`}
       >
-        <span className={`truncate ${selected ? 'text-white' : 'text-gray-500'}`}>
+        <span className={`truncate ${selected ? `text-white ${selected.labelClassName || ''}` : 'text-gray-500'}`}>
           {selected ? selected.label : placeholder}
         </span>
         <ChevronDown
@@ -106,6 +109,7 @@ export const Select: React.FC<SelectProps> = ({
         createPortal(
           <div
             ref={panelRef}
+            role="listbox"
             style={{ position: 'fixed', top: coords.top, left: coords.left, minWidth: coords.width }}
             className="z-[9999] max-h-64 overflow-y-auto bg-[#17151f] border border-white/10 rounded-xl shadow-2xl shadow-black/60 py-1 custom-scrollbar"
           >
@@ -116,6 +120,8 @@ export const Select: React.FC<SelectProps> = ({
               <button
                 key={option.value}
                 type="button"
+                role="option"
+                aria-selected={option.value === value}
                 disabled={option.disabled}
                 onClick={() => handleSelect(option)}
                 className={`w-full flex items-center justify-between gap-2 px-3 py-2 text-sm text-left transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
@@ -124,7 +130,7 @@ export const Select: React.FC<SelectProps> = ({
                     : 'text-gray-300 hover:bg-white/5 hover:text-white'
                 }`}
               >
-                <span className="truncate">{option.label}</span>
+                <span className={`truncate ${option.labelClassName || ''}`}>{option.label}</span>
                 {option.value === value && <Check size={14} className="shrink-0" />}
               </button>
             ))}

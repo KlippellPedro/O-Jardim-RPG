@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Search, Users, Heart, Shield, Footprints, Zap, Sword, Pencil, Trash2, AlertTriangle, Link, GripVertical, Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Search, Users, Heart, Shield, Footprints, Zap, Sword, Pencil, Trash2, AlertTriangle, Link, GripVertical, Star, ExternalLink, Droplet } from 'lucide-react';
 import { motion, Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput } from '../components/SharedFichaComponents';
@@ -55,6 +56,7 @@ const ALIADO_VAZIO: FormAliado = {
 const sinal = (valor: number) => (valor >= 0 ? `+${valor}` : `${valor}`);
 
 export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: any }) => {
+  const navigate = useNavigate();
   const [busca, setBusca] = useState('');
   const [modalAberto, setModalAberto] = useState(false);
   const [editandoId, setEditandoId] = useState<string | null>(null);
@@ -277,6 +279,15 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
                   </div>
 
                   <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {isComplexo && charVinculado && (
+                      <button
+                        onClick={() => navigate(`/ficha/${charVinculado.id}`)}
+                        className="w-8 h-8 rounded-lg bg-black/40 border border-white/5 text-[#c7a44c] hover:bg-[#c7a44c]/10 hover:border-[#c7a44c]/30 flex items-center justify-center transition-colors mr-1"
+                        title="Ver ficha completa"
+                      >
+                        <ExternalLink size={14} />
+                      </button>
+                    )}
                     <button
                       onClick={() => abrirEdicao(a)}
                       className="w-8 h-8 rounded-lg bg-black/40 border border-white/5 text-gray-400 hover:text-[#c7a44c] hover:border-[#c7a44c]/30 flex items-center justify-center transition-colors"
@@ -347,11 +358,21 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
                   </div>
                 )}
                 {isComplexo && (
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="bg-[#c7a44c]/10 rounded-lg py-2 px-3 flex items-center justify-between gap-2 border border-[#c7a44c]/20">
-                      <span className="text-[10px] uppercase text-[#c7a44c] font-bold tracking-widest flex items-center gap-1">
-                        <Zap size={12} /> Inic. (Sync)
-                      </span>
+                  <div className="grid grid-cols-4 gap-2">
+                    <div className="bg-[#c7a44c]/10 rounded-lg py-2 px-1 flex flex-col items-center gap-0.5 border border-[#c7a44c]/20">
+                      <span className="text-[9px] uppercase text-[#c7a44c] font-bold tracking-widest flex items-center gap-1"><Droplet size={10} /> Mana</span>
+                      <span className="text-xs font-mono text-[#c7a44c]">{Number((statusVinculado.manaAtual ?? charVinculado?.derivados?.mana) || 0)} / {Number((charVinculado?.derivados?.mana ?? fichaVinculada?.derivados?.mana) || 0)}</span>
+                    </div>
+                    <div className="bg-[#c7a44c]/10 rounded-lg py-2 px-1 flex flex-col items-center gap-0.5 border border-[#c7a44c]/20">
+                      <span className="text-[9px] uppercase text-[#c7a44c] font-bold tracking-widest flex items-center gap-1"><Shield size={10} /> Def</span>
+                      <span className="text-xs font-mono text-[#c7a44c]">{Number(charVinculado?.derivados?.defesaNatural ?? fichaVinculada?.derivados?.defesaNatural) || 0}</span>
+                    </div>
+                    <div className="bg-[#c7a44c]/10 rounded-lg py-2 px-1 flex flex-col items-center gap-0.5 border border-[#c7a44c]/20">
+                      <span className="text-[9px] uppercase text-[#c7a44c] font-bold tracking-widest flex items-center gap-1"><Footprints size={10} /> Mov</span>
+                      <span className="text-xs font-mono text-[#c7a44c]">{Number(charVinculado?.derivados?.movimento ?? fichaVinculada?.derivados?.movimento) || 9}m</span>
+                    </div>
+                    <div className="bg-[#c7a44c]/10 rounded-lg py-2 px-1 flex flex-col items-center gap-0.5 border border-[#c7a44c]/20">
+                      <span className="text-[9px] uppercase text-[#c7a44c] font-bold tracking-widest flex items-center gap-1"><Zap size={10} /> Inic</span>
                       <span className="text-xs font-mono text-[#c7a44c]">{sinal(iniciativa)}</span>
                     </div>
                   </div>

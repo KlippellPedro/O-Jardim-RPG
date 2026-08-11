@@ -242,7 +242,7 @@ export function aplicarAjustesAtributosRaciais(atributosFinais: Record<string, n
 }
 
 export const TABELA_XP = Array.from(
-  { length: 60 },
+  { length: 100 },
   (_, indice) => 500 * (indice + 1) * indice,
 );
 

@@ -32,7 +32,7 @@ export default function Home() {
       path: '/mundo',
     },
     {
-      title: 'Regras',
+      title: 'Livro',
       description: 'Mecânicas, atributos, testes e rituais.',
       iconUrl: '/assets/img/icons/menu/regras.webp',
       path: '/regras',
