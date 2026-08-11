@@ -1,3 +1,14 @@
+/**
+ * Fonte única das condições oficiais — ficha (AbaFicha.tsx) e sessão ao vivo
+ * (EntityEditor.tsx) selecionam a partir daqui, então o nome nunca diverge
+ * entre as duas telas.
+ *
+ * Nem todo `efeito` listado abaixo é aplicado automaticamente em algum
+ * lugar do código: parte é sempre lida e aplicada manualmente pelo mestre.
+ * A automação parcial que existe (Defesa, Iniciativa, bloqueio de
+ * movimento) está documentada em src/services/statusService.ts, logo antes
+ * de `penalidadeDefesaCondicoes`.
+ */
 export interface ICondicaoRegra {
   id: string;
   titulo: string;
@@ -12,11 +23,11 @@ export const CONDICOES_OFICIAIS: ICondicaoRegra[] = [
   { id: 'exposto', titulo: 'Exposto', categoria: 'combate', duracao: 'Até o começo do próximo turno.', efeitos: ['Defesa reduzida em 2.', 'Exposto não acumula consigo mesmo.'], remocao: 'Termina automaticamente no começo do próximo turno.' },
   { id: 'caido', titulo: 'Caído', categoria: 'física', duracao: 'Até se levantar.', efeitos: ['Ataques corpo a corpo contra você recebem +2.', 'Seus ataques sofrem -2.', 'Levantar consome a ação de movimento e provoca reações.'], remocao: 'Gaste a ação de movimento para levantar.' },
   { id: 'sangramento', titulo: 'Sangramento', categoria: 'física', duracao: 'Até ser tratado.', efeitos: ['Sofra 1d6 de dano no fim do turno.', 'Novas aplicações aumentam o dano em +1, até +5, mas não adicionam dados.'], remocao: 'Cura DT 15 com ação padrão ou qualquer cura de pelo menos 1 PV.' },
-  { id: 'atordoado', titulo: 'Atordoado', categoria: 'física', duracao: 'Até o fim do próximo turno, salvo indicação diferente.', efeitos: ['Não pode usar ações nem reações.', 'Defesa reduzida em 5.'], remocao: 'Termina ao fim da duração. Uma nova aplicação apenas renova a duração.' },
+  { id: 'atordoado', titulo: 'Atordoado', categoria: 'física', duracao: 'Até o fim do próximo turno, salvo indicação diferente.', efeitos: ['Não pode usar ações nem reações.', 'Defesa reduzida em 5.', 'Veja também Inconsciente: mesmo efeito de base, mas para quando a causa for perder toda a Vida, não um efeito temporário.'], remocao: 'Termina ao fim da duração. Uma nova aplicação apenas renova a duração.' },
   { id: 'agarrado', titulo: 'Agarrado', categoria: 'física', duracao: 'Enquanto o agarrão for mantido.', efeitos: ['Movimento 0.', 'Ataques contra alvos que não participam do agarrão sofrem -2.'], remocao: 'Ação padrão e teste oposto de Atletismo ou Acrobacia.' },
   { id: 'cego', titulo: 'Cego', categoria: 'física', duracao: 'Conforme a fonte.', efeitos: ['Desvantagem em testes que dependem de visão.', 'Ataques contra você recebem +2 se o atacante puder vê-lo.'], remocao: 'Remova ou supere a fonte da cegueira.' },
   { id: 'imobilizado', titulo: 'Imobilizado', categoria: 'física', duracao: 'Conforme a fonte.', efeitos: ['Movimento 0.', 'Não pode usar ações que exijam deslocamento.'], remocao: 'Teste indicado pela fonte como ação padrão.' },
-  { id: 'inconsciente', titulo: 'Inconsciente', categoria: 'física', duracao: 'Enquanto persistir a causa.', efeitos: ['Não pode agir nem reagir.', 'Defesa reduzida em 5 e falha automaticamente em testes de Força e Destreza.'], remocao: 'Recupere-se da causa. Em Morrendo, volte a pelo menos 1 PV.' },
+  { id: 'inconsciente', titulo: 'Inconsciente', categoria: 'física', duracao: 'Enquanto persistir a causa.', efeitos: ['Não pode agir nem reagir.', 'Defesa reduzida em 5 e falha automaticamente em testes de Força e Destreza.', 'Veja também Atordoado: use Atordoado para efeitos temporários que não vêm de perder toda a Vida.'], remocao: 'Recupere-se da causa. Em Morrendo, volte a pelo menos 1 PV.' },
   { id: 'surpreendido', titulo: 'Surpreendido', categoria: 'combate', duracao: 'Primeira rodada.', efeitos: ['Iniciativa reduzida em 5 na primeira rodada.', 'Sem reação até realizar o primeiro turno.'], remocao: 'Termina depois do primeiro turno.' },
   { id: 'concentrando', titulo: 'Concentrando', categoria: 'mental', duracao: 'Enquanto mantiver o efeito.', efeitos: ['Só pode manter um efeito de concentração por vez.', 'Ao sofrer dano, teste Vontade DT 10 ou metade do dano, o que for maior. Falha encerra o efeito.'], remocao: 'Encerre voluntariamente, fique incapacitado ou falhe no teste de concentração.' },
 ];

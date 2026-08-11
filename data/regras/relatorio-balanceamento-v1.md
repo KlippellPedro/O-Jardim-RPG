@@ -25,7 +25,7 @@ Cada célula mostra `Vida/Mana/vagas de poder`.
 | Pop Star | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | Publi |
 | Espadachim | comum | 7 | 16/8/0 | 44/16/1 | 79/26/3 | 114/36/5 | 149/46/8 | 204/81/8 | 259/116/8 | nenhum |
 | Lutador | comum | 7 | 16/8/0 | 44/16/1 | 79/26/3 | 114/36/5 | 149/46/8 | 204/81/8 | 259/116/8 | Não Levanta |
-| Atirador | comum | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
+| Atirador | comum | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | Um Só Disparo |
 | Médico | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 | Guardião | comum | 7 | 16/8/0 | 44/16/1 | 79/26/3 | 114/36/5 | 149/46/8 | 204/81/8 | 259/116/8 | nenhum |
 | Caçador | comum | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
@@ -54,18 +54,18 @@ Cada célula mostra `Vida/Mana/vagas de poder`.
 | Excalibur | relíquia da criação | 8d12+20 | 72.0 | 82.8 | 35 | sim |
 | Mjolnir | relíquia da criação | 8d12+18 | 70.0 | 80.5 | 35 | sim |
 | Martelo das Chamas | relíquia da criação | 8d12+16 | 68.0 | 78.2 | 35 | sim |
+| Murasame | relíquia da criação | 8d12+16 | 68.0 | 71.4 | 35 | sim |
 | Gungnir | relíquia da criação | 8d12+14 | 66.0 | 75.9 | 35 | sim |
 | Masamune | relíquia da criação | 10d10+10 | 65.0 | 74.8 | 35 | sim |
 | Rhaast | relíquia da criação | 8d12+12 | 64.0 | 73.6 | 35 | sim |
 | Triceratops | relíquia da criação | 10d10+8 | 63.0 | 72.4 | 35 | sim |
 | Zangetsu | relíquia da criação | 8d12+10 | 62.0 | 71.3 | 35 | sim |
-| Bazuca | lendario | 10d8+4d4 | 55.0 | 60.5 | não definido | não |
+| Bazuca | lendario | 10d8+4d4 | 55.0 | 60.5 | 25 | sim |
 | Excalibur | lendario | 6d10+12 | 45.0 | 51.7 | 25 | sim |
 | Mjölnir | lendario | 6d10+12 | 45.0 | 51.7 | 25 | sim |
 | Martelo das Chamas | lendario | 6d10+10 | 43.0 | 49.4 | 25 | sim |
 | Masamune | lendario | 6d10+10 | 43.0 | 49.4 | 25 | sim |
 | Rhaast | lendario | 5d12+10 | 42.5 | 48.9 | 25 | sim |
-| Triceratops | lendario | 6d10+8 | 41.0 | 47.1 | 25 | sim |
 
 ## Magias publicadas para playtest
 

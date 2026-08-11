@@ -2,35 +2,109 @@
 
 > Arquivo gerado de `data/regras/regras.ts`. Não edite manualmente.
 
+## criacao-personagem
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+Um roteiro completo para criar um personagem de nível 1, escolher suas opções e conferir todos os valores da ficha.
+
+O assistente de criação da ficha segue estas sete etapas. Faça as escolhas na ordem apresentada: opções posteriores dependem da Árvore, da raça e da classe escolhidas antes.
+
+### Antes de começar
+
+- Combine com o Mestre o tom da campanha, o nível inicial e quais opções especiais foram liberadas.
+
+- Crie um conceito curto: quem é o personagem, o que ele procura e por que aceita se aventurar com o grupo.
+
+- Na criação padrão, o personagem começa no **nível 1**, com uma classe comum. Raças ou classes especiais só entram por liberação explícita do Mestre ou por uma exceção escrita na própria opção.
+
+### 1. Nome e Árvore de origem
+
+Escolha o nome do personagem e a Árvore à qual ele pertence. A Árvore determina quais opções exclusivas podem aparecer. Se a campanha permitir um personagem sem Árvore (para manter sua origem oculta, por exemplo), ele tem acesso a todas as opções do compêndio.
+
+### 2. Raça e variante
+
+- Escolha uma raça disponível para sua Árvore. A raça define fisiologia, características raciais e ajustes próprios.
+
+- Se a raça oferecer variante, linhagem ou outra escolha obrigatória, registre uma delas antes de avançar.
+
+- Uma opção especial precisa estar liberada para esse personagem. Estar visível no catálogo não concede acesso automático.
+
+### 3. Classe inicial
+
+- Escolha uma classe comum disponível. Ela concede as recompensas do nível 1 e define os ganhos de Vida e Mana por nível.
+
+- A classe inicial começa no nível 1. Entrar em outra classe depois segue as regras de progressão e multiclasse.
+
+- Classe especial exige **nível total 20**, liberação do Mestre e um acontecimento na história, salvo uma exceção explícita que permita começar com ela.
+
+### 4. Divindade
+
+Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo; não concede poderes além dos declarados por raça, classe, item ou outra regra.
+
+### 5. Atributos
+
+Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo. Depois disso, a ficha aplica os ajustes raciais.
+
+- **Conjunto padrão:** 15, 14, 13, 12, 10, 8 e 8. Cada número é usado uma vez.
+
+- **Compra por pontos:** todos começam em 8; distribua exatamente 24 pontos, pagando 1 ponto por cada +1. Nenhum atributo passa de 15 antes dos ajustes raciais.
+
+- **Variante aleatória:** role 7d20 e distribua os sete resultados, cada dado uma vez. Esse método não é equivalente aos anteriores e só deve ser usado com concordância da mesa.
+
+### 6. Perícias e equipamento inicial
+
+- Escolha exatamente **seis perícias** para começar em Aprendiz. Humano escolhe sete por Adaptabilidade.
+
+- Escolha um item comum aprovado pelo Mestre. Ele entra no inventário como item de criação e não possui preço de revenda.
+
+- Registre **20 Lunaris**. Nenhuma nova classe escolhida no futuro concede outro equipamento ou dinheiro inicial.
+
+### 7. Conferência da ficha
+
+- **Nível e XP:** nível total 1 e 0 XP
+
+- **Vida máxima:** máx. 1, (4 × Mod.Constituição) + Vida da classe, depois ajustes raciais
+
+- **Mana máxima:** máx. 1, (3 × Mod.Sabedoria) + Mana da classe, depois ajustes raciais
+
+- **Sanidade:** 100 de 100
+
+- **Cansaço:** 0 de 6
+
+- **Defesa Natural:** 10 + ⌊Nível total ÷ 2⌋ + Mod.Destreza + ajustes raciais ou naturais
+
+- **Defesa Total:** Defesa Natural + armadura, escudo, modificações e outros ajustes ativos
+
+- **Movimento:** 9 m + (1,5 m × Mod.Destreza) + ajuste racial ou morfológico, mínimo 4,5 m
+
+- **Iniciativa:** 10 + ⌊Nível total ÷ 2⌋ + Mod.Destreza + bônus
+
+**Não some ajustes duas vezes:** a ficha calcula os derivados e aplica raça e equipamento automaticamente. Use ajustes manuais apenas para efeitos que ainda não estejam representados no sistema.
+
+### Checklist final
+
+- Nome, raça, variante e classe estão preenchidos. Árvore e divindade podem ficar vazias quando a campanha permitir personagem sem Árvore.
+
+- Os sete atributos usam um método válido e os ajustes raciais aparecem uma única vez.
+
+- Seis perícias estão em Aprendiz, ou sete se o personagem for Humano.
+
+- Vida, Mana, Sanidade, Cansaço, Defesa, Movimento e Iniciativa conferem com o resumo.
+
+- O inventário contém um item comum de criação e a carteira contém 20 Lunaris.
+
+- O personagem possui um motivo para participar da campanha e trabalhar com o grupo.
+
 ## sistema-base
 
 **Categoria:** Livro do Jogador
 
 **Status:** Regra oficial
 
-Como montar um personagem do zero: atributos, Vida, Mana e as contas que você vai usar pelo resto do jogo.
-
-### Criação de personagem
-
-- **Distribua os atributos** pelo conjunto padrão ou comprando por pontos. Os dois métodos estão logo abaixo e dão no mesmo total.
-
-- **Escolha uma raça** comum e, se ela pedir, a variante. É a raça que diz como seu corpo funciona e o que ele já sabe fazer sozinho.
-
-- **Escolha seis perícias** para começar em Aprendiz. Humano escolhe sete, por Adaptabilidade.
-
-- **Escolha uma classe** comum. É dela que vêm os ganhos de Vida e Mana de cada nível daqui pra frente.
-
-- **Pegue** um item comum e 20 Lunaris. É com isso que você começa.
-
-### Métodos de atributos
-
-- **Conjunto padrão:** 15, 14, 13, 12, 10, 8 e 8, distribuídos como você quiser entre os sete atributos. Cada número é usado uma vez só.
-
-- **Compra por pontos:** os sete atributos começam em 8 e você distribui exatamente 24 pontos, na base de 1 ponto para cada +1. Nenhum atributo passa de 15 antes dos ajustes raciais.
-
-- **Os dois dão no mesmo:** o conjunto padrão também custa exatamente 24 pontos. A diferença é só que a compra deixa você especializar mais e ficar pior nos outros.
-
-**Variante aleatória:** role 7d20 e organize os sete resultados, cada dado usado uma vez. Isso **não** é equivalente aos dois métodos acima: sai personagem muito acima ou muito abaixo da média, e você só descobre qual depois de rolar. Combine com a mesa antes de usar.
+As fórmulas fundamentais, limites de nível, multiclasse, maestrias e o papel do atributo Fluxo.
 
 ### Fórmulas fundamentais
 
@@ -48,7 +122,7 @@ Como montar um personagem do zero: atributos, Vida, Mana e as contas que você v
 
 - **Ajustes raciais:** bônus raciais de Vida e Mana são somados depois do cálculo correspondente
 
-- **Defesa Natural:** 10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + equipamento
+- **Defesa Natural:** 10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + ajustes raciais ou naturais
 
 - **Movimento:** 9 m + (1,5 m × Mod.Destreza) + ajuste da raça ou morfologia, mínimo 4,5 m
 
@@ -62,9 +136,9 @@ Como montar um personagem do zero: atributos, Vida, Mana e as contas que você v
 
 - Você pode ter no máximo **duas classes comuns e uma especial**.
 
-- Dá para intercalar os níveis à vontade. Mas para levar uma classe até o 20 você precisa ter pelo menos nível 10 em outra. Ninguém chega ao topo sem ter feito outra coisa no caminho.
+- Os níveis podem ser intercalados. Para levar uma classe ao nível 20, o personagem precisa ter pelo menos nível 10 em outra classe.
 
-- Classe especial exige nível total 15 e um acontecimento na história que justifique, a não ser que a própria classe abra exceção.
+- Classe especial exige nível total 20, liberação do Mestre e um acontecimento na história que justifique, a não ser que a própria classe abra uma exceção explícita.
 
 - Classe geral serve a qualquer Árvore. Classe exclusiva só se você pertencer à Árvore indicada.
 
@@ -138,6 +212,190 @@ d20 + Mod. de Atributo + ⌊Nível total ÷ 2⌋ + bônus do Grau
 
 - O que sobrar decide: qualquer saldo positivo vira *uma* vantagem, qualquer saldo negativo vira *uma* desvantagem. Não existe vantagem dupla.
 
+### Catálogo de perícias
+
+Luta, Pontaria, Fortitude, Reflexos e Vontade são perícias. Fortitude, Reflexos e Vontade também fornecem as respectivas Defesas passivas.
+
+- Perícia | Atributo | Cobre
+
+- Atletismo | Força | Realizar esforços físicos como correr, saltar, escalar, nadar, empurrar ou sustentar peso.
+
+- Luta | Força | Atacar e executar manobras em combate corpo a corpo, incluindo agarrar, derrubar e contra-atacar.
+
+- Fortitude | Constituição | Resistir a doenças, venenos, exaustão, dor e outros efeitos que ameaçam o corpo.
+
+- Acrobacia | Destreza | Manter o equilíbrio, amortecer quedas, atravessar espaços difíceis e realizar movimentos acrobáticos.
+
+- Cavalgar | Destreza | Conduzir montarias, permanecer montado sob pressão e executar manobras durante uma cavalgada.
+
+- Furtividade | Destreza | Mover-se sem ser percebido, esconder-se e evitar deixar sinais óbvios de sua passagem.
+
+- Ladinagem | Destreza | Abrir fechaduras, desarmar mecanismos, bater carteiras e manipular objetos com precisão discreta.
+
+- Pilotagem | Destreza | Conduzir veículos, controlar máquinas em movimento e reagir a manobras ou terrenos perigosos.
+
+- Pontaria | Destreza | Atacar com armas de disparo ou arremesso e acertar alvos a distância.
+
+- Reflexos | Destreza | Reagir rapidamente para evitar armadilhas, explosões, efeitos de área e outros perigos súbitos.
+
+- Conhecimento | Inteligência | Recordar informações acadêmicas sobre história, geografia, ciências, culturas e assuntos gerais.
+
+- Guerra | Inteligência | Analisar batalhas, reconhecer táticas, comandar tropas e avaliar vantagens militares.
+
+- Investigação | Inteligência | Examinar pistas, relacionar evidências, pesquisar arquivos e reconstruir acontecimentos.
+
+- Misticismo | Inteligência | Identificar magias, criaturas e fenômenos sobrenaturais, além de compreender teoria arcana.
+
+- Nobreza | Inteligência | Conhecer linhagens, brasões, etiqueta, política, leis e relações entre casas de poder.
+
+- Cura | Sabedoria | Prestar primeiros socorros, diagnosticar males, estabilizar feridos e acompanhar tratamentos.
+
+- Intuição | Sabedoria | Perceber intenções, emoções, mentiras por comportamento e quando algo em uma situação parece errado.
+
+- Percepção | Sabedoria | Notar sons, movimentos, detalhes escondidos, emboscadas e mudanças no ambiente.
+
+- Religião | Sabedoria | Conhecer divindades, cultos, símbolos, dogmas, cerimônias e tradições religiosas.
+
+- Sobrevivência | Sabedoria | Orientar-se, rastrear, encontrar abrigo e recursos e reconhecer perigos naturais.
+
+- Vontade | Sabedoria | Resistir a medo, coerção, ilusões, encantamentos e outros efeitos que tentam dominar a mente.
+
+- Atuação | Carisma | Entreter ou emocionar uma plateia por música, dança, interpretação, oratória ou outra arte performática.
+
+- Diplomacia | Carisma | Negociar, persuadir, mediar conflitos, pedir favores e melhorar a atitude de outras pessoas.
+
+- Enganação | Carisma | Mentir, blefar, disfarçar intenções, imitar comportamentos e criar distrações convincentes.
+
+- Intimidação | Carisma | Pressionar alguém por ameaça, presença ou demonstração de força para obter cooperação.
+
+- Jogatina | Carisma | Entender jogos de azar, blefar durante apostas e reconhecer trapaças ou padrões de outros jogadores.
+
+- Adestramento | Carisma | Acalmar, treinar, conduzir e ensinar comandos a animais ou criaturas domesticáveis.
+
+- Ressonância | Sabedoria | Sentir Fluxos, reconhecer sua natureza e origem, identificar interferências e resistir à influência direta de Fluxos alheios.
+
+- Tecnologia | Inteligência | Operar, diagnosticar, programar e reparar itens A.X.I.S, sistemas eletrônicos e maquinário avançado; Ofício cobre artesanato comum.
+
+- Sanidade | Sabedoria | Manter a lucidez diante de horrores e traumas, reconhecer crises mentais e resistir aos efeitos da perda de Sanidade.
+
+## acoes-coletivas
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Como ajudar outro personagem e como resolver situações em que o grupo inteiro precisa passar pelo mesmo desafio.
+
+Nem toda ação coletiva usa a mesma resolução. Se uma pessoa executa a tarefa e as outras dão suporte, use **Ajudar**. Se todos estão expostos ao mesmo desafio e cada integrante importa, use um **Teste de Grupo**.
+
+### Ajudar
+
+- Antes da rolagem principal, o ajudante descreve uma contribuição concreta e escolhe uma perícia adequada. Ela pode ser a mesma do líder ou outra que realmente ajude naquela situação.
+
+- Em combate, ajudar gasta uma **Ação Padrão**. Fora de combate, gasta tempo compatível com a tarefa.
+
+- O ajudante faz seu teste contra DT 10 em uma tarefa fixa. Em um desafio que escala por nível, use DT 10 + ⌊nível do desafio ÷ 2⌋.
+
+- Em sucesso, o teste principal recebe +2. Em sucesso crítico, recebe vantagem em vez de +2.
+
+- Falha não concede bônus. Falha crítica também não impõe penalidade automática, mas pode produzir uma complicação quando a tentativa já envolvia risco real.
+
+- No máximo **dois ajudantes** concedem bônus ao mesmo teste. Dois sucessos comuns chegam a +4.
+
+- Cada contribuição precisa ser diferente e possível na ficção. Repetir a mesma ideia com mais pessoas não multiplica o bônus.
+
+- O líder precisa aceitar a ajuda e só rola depois que os ajudantes resolverem suas tentativas.
+
+- O Mestre pode dispensar o teste do ajudante quando a contribuição é automática, mas ela continua ocupando ação ou tempo.
+
+- Ajudar não transfere proficiência, poder, imunidade ou permissão especial ao líder.
+
+### Teste de Grupo
+
+Use quando todos precisam atravessar o mesmo perigo: o grupo inteiro se esgueirando, escalando, resistindo a uma tempestade ou mantendo uma história convincente diante de vários observadores.
+
+- Todos os participantes expostos fazem o teste indicado contra a mesma DT.
+
+- O grupo vence se pelo menos metade dos participantes, arredondada para cima, obtiver sucesso.
+
+- Cada sucesso crítico conta como dois sucessos. Cada falha crítica cancela um sucesso antes da contagem.
+
+- Se o grupo falhar, a consequência atinge o grupo ou apenas quem falhou, conforme a natureza do perigo. O Mestre informa qual leitura vale antes das rolagens.
+
+**Exemplo:** quatro personagens fazem Furtividade. O grupo precisa de dois sucessos. Se conseguir dois sucessos comuns e uma falha crítica, a falha crítica cancela um deles e o grupo falha.
+
+### Quando não usar Teste de Grupo
+
+- Se só uma pessoa precisa executar a tarefa, escolha um líder e use Ajudar.
+
+- Se cada falha gera uma consequência individual independente, resolva os testes separadamente.
+
+- Se a ação exige treinamento ou permissão que parte do grupo não possui, quem não cumpre o requisito não pode ser escondido dentro da média.
+
+- Não combine Ajudar e Teste de Grupo na mesma resolução, salvo quando uma habilidade disser expressamente que pode.
+
+### Ações coletivas maiores
+
+Projetos de vários dias usam as regras da atividade correspondente, como treinamento, ritual ou fabricação. Ataques sincronizados usam o capítulo **Ataques Combinados**. Ajudar não permite somar dano, fundir magias nem transferir efeitos entre personagens.
+
+## ataques-combinados
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Regras para sincronizar ataques contra um alvo sem criar ações, recursos ou efeitos adicionais.
+
+Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo tempo. Cada participante continua usando sua própria arma, magia, teste e recurso.
+
+### Requisitos
+
+- Participam de 2 a 4 criaturas voluntárias que possam perceber e atingir o mesmo alvo.
+
+- Cada participante precisa ter uma Ação Padrão e uma reação disponíveis.
+
+- Somente ataques que causam dano a um único alvo podem entrar. Cura, área, invocação e controle são resolvidos separadamente.
+
+- O grupo escolhe um líder apenas para definir o momento da resolução. O líder não empresta bônus aos demais.
+
+### Preparação e resolução
+
+- No próprio turno, cada participante declara a contribuição, reserva a Ação Padrão e gasta a reação. Mana e custos que a ação exige na declaração são pagos nesse momento. Quem já gastou uma dessas ações não pode participar.
+
+- O ataque é resolvido no primeiro turno do líder depois que todos se prepararem. A preparação de um participante expira no início do próximo turno dele. Alcance, linha de efeito e alvo precisam continuar válidos.
+
+- Na resolução, cada participante consome munição ou carga usada pelo ataque e faz a própria rolagem. Nenhum custo é pago duas vezes.
+
+- Cada acerto causa o dano normal da contribuição. Cada erro não causa dano e não devolve ações ou recursos.
+
+- Aplique vulnerabilidade, redução percentual e Resistência separadamente a cada contribuição. Depois, some o dano final dos acertos.
+
+### Críticos, reações e efeitos
+
+- Cada contribuição verifica a própria margem de ameaça e o próprio multiplicador. O crítico de um participante não multiplica o dano dos demais.
+
+- O alvo usa as reações que tiver disponíveis. Cada reação afeta apenas a contribuição que acionou seu gatilho, salvo texto expresso em contrário.
+
+- Efeitos adicionais de acerto são resolvidos por contribuição, mas efeitos iguais não acumulam além do limite da própria condição.
+
+- Se todas as contribuições errarem, o Ataque Combinado falha. Custos e ações permanecem gastos.
+
+### Interrupção
+
+- Uma contribuição é perdida se o participante ficar inconsciente, incapaz de agir ou sem um ataque válido antes da resolução.
+
+- Se o líder perder a contribuição, outro participante preparado assume a liderança. Se nenhum puder, o ataque é cancelado.
+
+- Quando o ataque é cancelado antes da resolução, ações, reações e custos pagos na declaração continuam gastos. Munição e cargas ainda não usadas são preservadas.
+
+### Magias e Fluxos
+
+- Cada magia precisa alcançar a própria DT de conjuração e a defesa do alvo normalmente.
+
+- Somar danos não altera tipo, alcance, área, duração ou efeito das magias.
+
+- Ataque Combinado entre personagens não é Fusão de Fluxos. Ele não cria um novo efeito.
+
 ## combate
 
 **Categoria:** Combate e Mecânicas
@@ -152,7 +410,9 @@ O que você faz no seu turno, como acertar, quando dá para reagir e de que jeit
 
 - **Ação de Movimento:** se deslocar, levantar, sacar algo ou mexer num objeto que importe na cena.
 
-- **Ação Livre:** um gesto ou uma frase curta. Se começar a virar vantagem mecânica repetida, o Mestre corta.
+- **Ação Completa:** consome a Ação Padrão e a Ação de Movimento do turno. Não pode ser iniciada depois que uma dessas ações foi gasta.
+
+- **Ação Livre:** um gesto, uma fala curta ou soltar um objeto. Não realiza testes, ataques nem ativa habilidades, salvo quando uma regra específica permitir.
 
 - Dá para trocar sua Ação Padrão por uma segunda Ação de Movimento. Correr custa o ataque.
 
@@ -496,7 +756,7 @@ Toda vez que você sobe de nível, escolhe uma das suas classes e aumenta o nív
 
 XP total do nível N = 500 × N × (N − 1)
 
-Na prática: sair do nível N e chegar ao N+1 custa N × 1.000 XP.
+Sair do nível N e chegar ao N+1 custa N × 1.000 XP.
 
 ### Tabela completa
 
@@ -650,6 +910,51 @@ A cada cinco níveis totais, ou seja, no 5, no 10, no 15 e assim por diante até
 
 - O Mestre só autoriza troca em dois casos: erro de criação ou mudança oficial nas regras.
 
+### Catálogo
+
+- **Tô ficando bom:** Recebe +1 no modificador de um atributo à escolha (Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma).
+- **Esquiva:** Você aprimora significativamente sua agilidade, recebendo +2 em Defesa e Reflexos.
+- **Leitura Labial:** Permite interpretar falas de pessoas a uma certa distância, desde que consiga ver a boca do ser.
+- **Mãos Leves:** Você ganha a capacidade de sacar qualquer item como ação livre.
+- **Artista Marcial:** Você recebe proficiência em armas ou armaduras marciais; caso escolha uma segunda vez, recebe a outra que não foi escolhida.
+- **Kit Diverso:** Você pode escolher um kit de qualquer coisa. Ele é renovado quando você gasta uma ação de descanso, mas ocupa +1 espaço no inventário.
+- **Não é Tão Pesado:** Reduz a penalidade de armadura ou escudo em 1. Escolhendo uma segunda vez, a penalidade reduz em 3; escolhendo uma terceira vez, conta para ambos.
+- **Correntes:** Você pode arremessar suas armas e puxá-las de volta no mesmo turno como ação de movimento (o dano é o mesmo).
+- **Bala Ágil:** Você adiciona seu modificador de Destreza no dano de armas à distância.
+- **Sempre no x1:** Sempre que estiver em 1x1, você causa mais dano no ser (teste de Furtividade).
+- **Mágico?:** Você recebe vantagem para resistir ou conjurar magias.
+- **Mágico!:** Você se concentra 1 turno a menos para realizar magias.
+- **Sem Chance:** Uma vez por descanso, ao ter desastre natural, repita o d20 e mantenha o novo resultado.
+- **Rapidinho:** Aumenta seu deslocamento em 2m. Escolhendo uma segunda vez, aumenta em 6m adicionais.
+- **Sou Bom Nisso:** Você recebe +2 ou vantagem em Luta ou Pontaria.
+- **Cozinheiro:** Recebe o ofício Cozinhar. Quem comer sua comida recupera 0,5 de cansaço e melhora a condição do local em 1 (máx: Boa).
+- **Mais Potente:** Caso use duas mãos para atacar com uma arma de uma mão, você recebe +4 no ataque dessa arma (apenas armas corpo a corpo).
+- **Sempre Foi Assim:** Armas que já são de duas mãos passam a dar +1 dado de dano (apenas armas corpo a corpo).
+- **Ainda Não:** Você tem vantagem em testes de Constituição caso entre em "morrendo" ou tome dano massivo.
+- **Desonroso:** Se estiver enfrentando um oponente desarmado, tem vantagem em testes de ataque e recebe +4 para desviar de qualquer ataque.
+- **Código de Ética:** Você se torna incapaz de atacar seres desarmados. Porém, se o oponente estiver armado, seus ataques causam dano adicional igual à metade do seu nível (arredondado para baixo, até um máximo de +30) e você sempre age antes dele na iniciativa.
+- **Monstro:** Você passa a dobrar seu modificador de Força em ataques corpo a corpo.
+- **Ossos Duros:** Recebe 5 de redução a danos físicos.
+- **Bruto:** Se não estiver usando armadura, você recebe metade do seu modificador de Força como bônus de Defesa.
+- **Flexível:** Você treina muito sua mobilidade e por conta disso tem +1 ação de reação por turno.
+- **Instinto Animal:** Você recebe +3 na Iniciativa fixa e nunca pode ser surpreendido em combate.
+- **Mão Pesada:** Se acertar um ataque corpo a corpo crítico, o alvo é empurrado 3m para longe e cai no chão.
+- **Quebra Dente:** Ataques corpo a corpo causam −2 na Defesa do inimigo até o fim do combate (acumulativo até −6).
+- **Sem Tempo Irmão:** Você pode realizar uma ação de movimento extra no início do combate, antes de qualquer outro agir.
+- **Tô de Pé Ainda:** Enquanto estiver com menos da metade da vida, você recebe +2 na Defesa e resistência a danos físicos.
+- **Sortudo pra Cacete:** Eventos ruins têm menos chance de acontecer com você.
+- **Mentiroso Nato:** Você tem vantagem em testes de Enganação, e mentiras simples nunca levantam suspeita.
+- **Veterano de Guerra:** Você recupera o dobro de P.V. ou F.V. em cenas de descanso.
+- **Posturado:** Você não pode ser derrubado ou empurrado enquanto estiver consciente. Caso morra, morre de pé.
+- **Já fui CLT:** Você não se cansa tão fácil e não recebe o efeito de cansaço leve.
+- **Selvagem:** Animais e criaturas irracionais não te atacam a menos que sejam provocados.
+- **Eco do Fluxo:** Uma vez por cena, após gastar pelo menos 5 Mana em uma única habilidade, recupere 2 Mana no fim do turno. Não ativa com habilidades de custo reduzido para menos de 3 Mana.
+- **Passo Entre Galhos:** Uma vez por turno, depois de obter sucesso em Acrobacia ou Furtividade, mova 2 m sem provocar reações. Esse movimento não atravessa obstáculos.
+- **Memória do Eclipse:** Uma vez por sessão, peça ao mestre uma pista verdadeira sobre algo que o personagem já presenciou ou role Investigação ou Conhecimento com vantagem.
+- **Vínculo Lunar:** Quando um aliado a até 15 m for alvo de um ataque, use sua reação e gaste 2 Mana para conceder +4 na Defesa contra somente esse ataque.
+- **Segundo Tempo:** Uma vez por descanso, quando sair de Morrendo por receber cura, recupere 1d6 de Vida adicional e reduza 1 Cansaço.
+- **Âncora da Árvore:** Uma vez por cena, quando for teleportado, banido ou deslocado dimensionalmente contra a vontade, use sua reação e gaste 2 Mana para permanecer onde está.
+
 ## equipamentos
 
 **Categoria:** Combate e Mecânicas
@@ -728,7 +1033,7 @@ Raridade não é um bônus fixo que todo item da mesma faixa recebe. Ela é um *
 
 - LendárioAprovação do Mestre | 5 | 2 | ±4 | Pode ser senciente. Os poderes e os dois efeitos de valor 4 passam pelo Mestre.
 
-- RelíquiaAprovação do Mestre | 6 | 3 | ±5 | Ninguém reproduz e nada mundano destrói. Todo poder passa pelo Mestre.
+- MíticoAprovação do Mestre | 6 | 3 | ±5 | Ninguém reproduz e nada mundano destrói. Todo poder passa pelo Mestre.
 
 - Relíquia da CriaçãoAprovação do Mestre | 7 | 3 | ±7 | Sempre única. Quebra regra comum só até onde o Mestre deixar.
 
@@ -740,9 +1045,9 @@ Raridade não é um bônus fixo que todo item da mesma faixa recebe. Ela é um *
 - O teto de valor vale por efeito, não no total. Vantagem ou desvantagem sempre conta como 1 efeito.
 - Efeitos iguais de itens diferentes somam, mas o Mestre pode barrar quando as duas fontes não fizerem sentido juntas.
 - Consumível aplica o efeito quando é usado. Guardado, ele não dá bônus nenhum.
-- Lendário, Relíquia e Relíquia da Criação passam pelo Mestre antes de entrar em jogo.
+- Lendário, Mítico e Relíquia da Criação passam pelo Mestre antes de entrar em jogo.
 
-Na prática: uma modificação pode dar Vida máxima, Defesa, Ataque, atributo ou bônus numa perícia. Guardou ou desequipou o item, a ficha tira esses valores sozinha, você não precisa lembrar.
+Uma modificação pode conceder Vida máxima, Defesa, Ataque, atributo ou bônus em perícia. Ao guardar ou desequipar o item, a ficha remove os ajustes automaticamente.
 
 ### Como ler uma modificação
 
@@ -768,7 +1073,7 @@ A Loja vende cada uma delas na categoria **Modificações**, com o preço já ap
 
 ### Catálogo de modificações
 
-São 51 modificações prontas, para ninguém precisar inventar do zero. Abra só a categoria do equipamento que você está montando.
+O catálogo contém 51 modificações, agrupadas pela categoria do equipamento.
 
 Armas
 18 modificações · 9 comuns · 9 marciais
@@ -797,7 +1102,7 @@ Armas
 
 - Elemental | Marcial | 2 | 180 L | Nenhum | +1d6 de dano de um tipo elemental escolhido na criação do item. Esse dado extra também multiplica no crítico.
 
-- Sedenta | Marcial | 2 | 180 L | Nenhum | No crítico, o alvo passa a sangrar: sofre 1 dado de dano da arma no início de cada turno até ser tratado. Não acumula com outra Sedenta.
+- Sedenta | Marcial | 2 | 180 L | Nenhum | No crítico, o alvo recebe a condição Sangramento (usa o dado de dano da arma no lugar do 1d6 padrão, no fim de cada turno). Reaplicar segue a regra normal de Sangramento: +1 de dano por aplicação, até +5, sem novos dados. Remove-se como qualquer Sangramento: Cura DT 15 ou qualquer cura de pelo menos 1 PV.
 
 - Vampírica | Marcial | 2 | 180 L | Nível total 7 | Uma vez por turno, ao causar dano, role um dado do tipo da arma e recupere esse tanto de PV.
 
@@ -896,7 +1201,7 @@ Isso aqui é ponto de partida, não lista fechada. Modificação nova passa, des
 
 ### Dons definidos por categoria
 
-Além dos números, cada raridade se manifesta de um jeito que combina com a categoria do item. O texto do item pode dar personalidade a essa manifestação, desde que não aumente o efeito mecânico.
+Cada raridade também possui uma manifestação por categoria. A descrição pode alterar aparência e comportamento, sem aumentar o efeito mecânico.
 
 Arma
 
@@ -904,7 +1209,7 @@ Arma
 - **Raro:** Voz desperta: fala ou passa impulsos simples, e com o tempo cria personalidade.
 - **Épico:** Instinto de confronto: sente hostilidade por perto e tenta avisar quem a carrega.
 - **Lendário:** Vontade de lenda: tem objetivos próprios e um poder único, do jeito que a descrição do item mandar.
-- **Relíquia:** Golpe soberano: faz uma coisa impossível, ligada à história dela, com custo e limite que o Mestre aprova.
+- **Mítico:** Golpe soberano: faz uma coisa impossível, ligada à história dela, com custo e limite que o Mestre aprova.
 - **Relíquia da Criação:** Corte de princípio: mexe com uma lei da realidade, escolhida quando a relíquia foi criada.
 
 Armadura
@@ -913,7 +1218,7 @@ Armadura
 - **Raro:** Memória de forma: some com arranhão de superfície durante um descanso. Durabilidade perdida não volta.
 - **Épico:** Guarda desperta: reage ao perigo antes de você. Se mexe, brilha ou avisa de algum jeito.
 - **Lendário:** Bastião consciente: conversa com quem a veste e tem uma defesa única, descrita no item.
-- **Relíquia:** Corpo soberano: nada mundano a destrói enquanto a condição da história dela continuar de pé.
+- **Mítico:** Corpo soberano: nada mundano a destrói enquanto a condição da história dela continuar de pé.
 - **Relíquia da Criação:** Lei de proteção: impõe uma condição absoluta de defesa, combinada com o Mestre.
 
 Consumivel
@@ -922,7 +1227,7 @@ Consumivel
 - **Raro:** Dose responsiva: muda de sabor, cor ou temperatura para avisar se é seguro para aquela pessoa.
 - **Épico:** Efeito excepcional: carrega uma propriedade a mais, descrita no item, gasta junto com ele.
 - **Lendário:** Receita viva: se comunica por sinais e cobra uma condição especial para aceitar ser usada.
-- **Relíquia:** Essência soberana: produz um efeito que só ela produz, e ninguém consegue copiar.
+- **Mítico:** Essência soberana: produz um efeito que só ela produz, e ninguém consegue copiar.
 - **Relíquia da Criação:** Semente de princípio: ao ser consumida, muda alguma coisa para sempre. O que muda, o Mestre define.
 
 Veiculo
@@ -931,7 +1236,7 @@ Veiculo
 - **Raro:** Navegador instintivo: guarda as rotas que já percorreu e sabe apontá-las de volta.
 - **Épico:** Resposta desperta: ajusta sistemas e postura sozinho quando o perigo aparece, do jeito descrito no veículo.
 - **Lendário:** Companheiro de jornada: tem personalidade e um jeito extraordinário de se deslocar.
-- **Relíquia:** Travessia soberana: passa por um obstáculo que não deveria dar para passar, sob condição aprovada pelo Mestre.
+- **Mítico:** Travessia soberana: passa por um obstáculo que não deveria dar para passar, sob condição aprovada pelo Mestre.
 - **Relíquia da Criação:** Caminho impossível: chega a um tipo de destino que veículo nenhum alcança.
 
 Geral
@@ -940,8 +1245,304 @@ Geral
 - **Raro:** Eco de uso: guarda impressões simples de quem já o usou, e revela por sinais.
 - **Épico:** Função desperta: faz sozinho uma tarefa simples e bem delimitada.
 - **Lendário:** Personalidade própria: fala, e tem um poder único que combina com a função dele.
-- **Relíquia:** Autoridade soberana: manda em um assunto estreito, definido na história do objeto.
+- **Mítico:** Autoridade soberana: manda em um assunto estreito, definido na história do objeto.
 - **Relíquia da Criação:** Objeto de princípio: representa um conceito e interfere nele. Qual conceito, você decide com o Mestre.
+
+## crafting
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+Regras para fabricar, programar e reparar itens com materiais, ferramentas e tempo de trabalho.
+
+A fabricação segue uma receita ou um projeto e exige materiais, ferramenta, tempo e um teste final.
+
+### Procedimento
+
+- Escolha uma receita ou registre um projeto.
+
+- Defina preço de referência, raridade, quantidade, materiais, ferramenta e perícia.
+
+- Pague o custo de materiais. Componentes específicos são consumidos quando o trabalho começa.
+
+- Complete os dias de trabalho. Cada dia possui **6 horas**.
+
+- As mesmas horas não contam como descanso, relaxamento ou treinamento. Cada personagem completa um bloco por dia e ganha 1 Cansaço ao final.
+
+- Faça um teste da perícia indicada contra a DT da raridade.
+
+Trabalho interrompido mantém o progresso e os materiais já investidos. Trocar o responsável pelo teste exige acesso ao projeto, às ferramentas e ao trabalho realizado.
+
+### Receitas e projetos
+
+- Receita registra resultado, raridade, quantidade, materiais, ferramenta, perícia, DT e tempo.
+- Projeto é obrigatório para item novo. O efeito e o preço de referência são definidos antes do primeiro gasto.
+- Copiar um item exige uma receita válida. Possuir ou desmontar o item não concede a receita automaticamente.
+- Toda mudança de efeito, quantidade ou raridade cria outro projeto e exige nova aprovação quando aplicável.
+
+### Raridade, DT, tempo e materiais
+
+- Raridade | DT | Trabalho | Materiais | Requisito
+
+- Comum | 10 | 1 dia | 50% | Receita ou projeto e ferramentas adequadas.
+
+- Incomum | 15 | 3 dias | 60% | Receita ou projeto e ferramentas adequadas.
+
+- Raro | 20 | 7 dias | 70% | A receita indica ao menos um material específico.
+
+- Épico | 25 | 14 dias | 80% | Receita e ao menos um material raro ligado ao efeito.
+
+- Lendário | 30 | 30 dias | 90% | Projeto de campanha, instalação adequada e materiais únicos definidos antes do trabalho.
+
+- Mítico | Projeto de campanha | Projeto de campanha | Definido no projeto | Não pode ser reproduzida por crafting. Criação ou restauração ocorre como projeto de campanha.
+
+- Relíquia da Criação | Projeto de campanha | Projeto de campanha | Definido no projeto | Não pode ser fabricada, copiada ou convertida a partir de outro item.
+
+O custo de materiais é uma porcentagem do preço normal do item, arredondada para cima. Promoções não reduzem esse custo.
+
+### Perícias e ferramentas
+
+- Categoria | Perícia | Ferramenta | Aplicação
+
+- Forja e artesanato | Ofício (A especialidade deve corresponder ao objeto fabricado.) | Kit de Ofício | Armas, armaduras, ferramentas, munição e objetos mundanos. Efeitos, modificações e limites continuam sujeitos à raridade do item.
+
+- Alquimia | Ofício (Alquimia) | Laboratório Alquímico | Poções, remédios, ácidos, venenos e outros preparados consumíveis. A receita define doses, validade, forma de uso e efeito de cada dose.
+
+- Tecnologia A.X.I.S | Tecnologia | Oficina A.X.I.S | Dispositivos A.X.I.S, sistemas eletrônicos, programação e maquinário avançado. Software exige hardware compatível e não concede efeito que o projeto não possua.
+
+- Cibernéticos | Tecnologia | Sala de Implante | Fabricação, configuração e instalação de implantes cibernéticos. A instalação não ignora compatibilidade, limite de implantes nem pré-requisito do item.
+
+Sem a ferramenta exigida, o trabalho não começa. Ofício é uma perícia personalizada; a especialidade deve corresponder à tarefa. Tecnologia cobre sistemas A.X.I.S e maquinário avançado.
+
+### Resultado do teste
+
+- **Sucesso crítico:** Conclui uma unidade. Preserve componentes comuns de valor máximo igual a 10% do custo de materiais. Não aumenta raridade, quantidade ou efeito.
+- **Sucesso:** Conclui uma unidade conforme a receita ou o projeto.
+- **Falha:** O item não é concluído. O progresso permanece; uma nova tentativa exige um dia e materiais adicionais.
+- **Falha crítica:** O item não é concluído. A correção exige dois dias e materiais adicionais. O projeto não é destruído automaticamente.
+
+Materiais adicionais são calculados sobre o custo inicial do projeto. Cada nova tentativa ocorre após o tempo adicional e o pagamento indicado.
+
+### Reparos
+
+- O reparo usa a mesma perícia e ferramenta da fabricação.
+
+- A DT é a DT da raridade menos 5, no mínimo 10.
+
+- O custo é 10% do preço normal do item, arredondado para cima.
+
+- Itens comuns e incomuns exigem 2 horas. Itens raros e épicos exigem 6 horas.
+
+- O reparo restaura a Durabilidade atual até a Durabilidade máxima. Não recupera consumíveis, cargas gastas ou item destruído e não acrescenta efeito ou modificação.
+
+- Item lendário, Mítico ou Relíquia da Criação não usa reparo comum. Um projeto especial precisa registrar custo, tempo, ferramenta e DT antes do primeiro gasto.
+
+### Alquimia
+
+- Cada preparo produz a quantidade de doses indicada na receita. Sem quantidade expressa, produz uma dose.
+- Dose expirada ou usada não pode ser recuperada por reparo ou desmontagem.
+- Uma fórmula de Alquimista preparada após descanso é temporária e não conta como item fabricado.
+- Substância com efeito não publicado exige aprovação antes da fabricação.
+
+### Tecnologia e cibernéticos
+
+- Tecnologia substitui Ofício apenas para item A.X.I.S, sistema eletrônico ou maquinário avançado.
+- Programação altera funções previstas pelo projeto; não cria magia, poder de classe ou bônus sem suporte do item.
+- Implante exige fabricação e instalação. A instalação dura 6 horas em sala-de-implante e exige testes simultâneos de Tecnologia e Cura contra a DT da raridade.
+- Se qualquer teste de instalação falhar, o implante não concede efeito. O paciente sofre 1d6 de dano físico, e outra tentativa exige um dia e 10% do custo inicial em materiais.
+
+### Materiais, Drops e comércio
+
+- O custo usa o preço normal, sem promoção. Item sem preço usa o valor de um item publicado de mesma raridade e função; sem comparável, o projeto não começa.
+- Materiais específicos e Drops só substituem parte do custo quando a receita permitir. Cada material é consumido uma vez e vale no máximo seu preço registrado.
+- Um Drop não pode ser usado, vendido e recuperado no mesmo projeto. Desmontagem nunca devolve mais valor do que foi consumido.
+- Item criado para uso próprio não possui lucro ou comprador automático. Revenda depende da economia local e não gera valor acima do gasto sem contrato ou demanda definidos antes da fabricação.
+- Efeitos de classe que preparam fórmulas ou engenhocas temporárias seguem a própria classe. Eles não produzem estoque permanente nem removem custos deste capítulo.
+- Cada personagem completa no máximo um bloco de 6 horas de crafting por dia, mesmo que trabalhe em projetos diferentes. Ao fim do bloco, ganha 1 Cansaço.
+
+**Classes:** Alquimista e Engenheiro usam as habilidades descritas nas próprias progressões. Nenhuma classe é obrigatória para fabricar itens comuns, desde que o personagem cumpra os requisitos da receita.
+
+## veiculos
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Regras de condução, perseguição, combate, colisão, avarias, reparo e montarias.
+
+### Ficha veicular
+
+Registre categoria, tamanho, Vida, Defesa, Resistência geral, resistências por tipo, deslocamento em metros, Manobrabilidade, capacidade, cobertura, tripulação mínima, sistemas, espaços de base, armas e avarias. O chassi genérico começa com Vida 10, Defesa 10, Resistência 0, deslocamento 4,5 m, Manobrabilidade 0, cobertura nenhuma, tripulação mínima 1 e nenhum espaço de base. Valores publicados no veículo prevalecem.
+
+### Escala de Vida e dano
+
+- Veículos, montarias, personagens e criaturas usam a mesma escala de Vida e dano.
+
+- Role o dano indicado pela arma. Subtraia a Resistência geral e a resistência específica ao tipo do dano. O restante reduz a Vida.
+
+- Não multiplique dano por causa do tipo do alvo. Uma arma precisa informar dados, bônus, tipo, alcance e crítico antes de entrar em combate.
+
+- O valor antigo chamado Dano nas peças veiculares indica o patamar da arma. Ele não é dano fixo e não substitui a fórmula de dano da arma.
+
+### Condução e tripulação
+
+- Veículos usam **Pilotagem**. Montarias usam **Cavalgar**. Adestramento pode acalmar ou ensinar uma montaria, mas não substitui Cavalgar durante uma manobra.
+
+- Qualquer personagem treinado na perícia adequada pode conduzir. A classe Piloto concede benefícios próprios, mas não é pré-requisito para comprar ou conduzir um veículo.
+
+- Um personagem sem treinamento pode conduzir em situação rotineira. Sob pressão, faz o teste com desvantagem e não pode Acelerar, usar Evasão, Fechar passagem, Abalroar nem Preparar abordagem.
+
+- Some a Manobrabilidade da ficha aos testes de Pilotagem feitos com o veículo. Uma montaria só altera Cavalgar quando sua ficha declarar um modificador.
+
+- O veículo não recebe ações próprias. Condutor, artilheiros, operadores e passageiros gastam as ações dos próprios turnos.
+
+- Papel | Função | Regra
+
+- Condutor | Move o veículo e executa manobras com Pilotagem. Em montaria, usa Cavalgar. | O veículo precisa de um condutor para mudar direção ou velocidade durante combate e perseguição.
+- Artilheiro | Opera uma arma instalada e faz os ataques exigidos por ela. | Cada ataque consome a ação do artilheiro. A arma não concede uma ação adicional ao veículo.
+- Operador | Ativa sensores, escudos, comunicações e outros sistemas. | O sistema informa a ação e o teste necessários. Sistemas ativos respeitam o limite do Núcleo.
+- Passageiro | Age normalmente e pode usar equipamentos que não façam parte do veículo. | Atacar de um veículo em movimento segue as regras de alcance e cobertura.
+
+### Turno veicular
+
+- Todos rolam Iniciativa normalmente. O movimento do veículo ocorre no turno do condutor.
+
+- Conduzir custa uma Ação de Movimento. Sem essa ação, o veículo mantém curso e velocidade; parado, permanece parado.
+
+- Cada arma ou sistema é usado por um tripulante. Uma mesma pessoa pode ocupar mais de um papel, mas não recebe ações adicionais.
+
+- A tripulação mínima indica quantas pessoas são necessárias para preencher os postos obrigatórios. Sem condutor, o veículo não manobra; sem operador ou artilheiro, o respectivo sistema não é usado.
+
+- Uma arma instalada só ataca mais de uma vez no turno quando sua descrição permitir.
+
+### Perseguições
+
+No fim de cada rodada, o fugitivo e o perseguidor fazem um teste oposto de Pilotagem ou Cavalgar. Quem tiver o maior deslocamento recebe +2 nesse teste. O fugitivo aumenta a distância quando vence; o perseguidor reduz quando vence. Empate mantém a faixa. Uma diferença de 10 ou mais altera duas faixas; qualquer outra vitória altera uma. Nenhum resultado altera mais de duas faixas.
+
+- Faixa | Efeito
+
+- Contato | Até 1,5 m. Permite colisão e abordagem.
+
+- Curta | Até 5 m. Use a faixa Curto das regras de distância.
+
+- Média | Até 15 m. Use a faixa Médio das regras de distância.
+
+- Longa | Até 25 m. Use a faixa Longo das regras de distância.
+
+- Escapou | O alvo saiu da perseguição e não pode ser alcançado nesta cena.
+
+Terreno, clima, avarias e manobras podem conceder vantagem ou desvantagem. Se mais de um veículo persegue o mesmo alvo, cada perseguidor mantém sua própria faixa.
+
+### Manobras
+
+- Manobra | Teste | Sucesso | Falha
+
+- ConduzirAção movimento | Sem teste em condições normais; Pilotagem ou Cavalgar DT 15 sob perigo, salvo DT expressa da fonte. | Mova até o deslocamento e altere a direção do veículo ou da montaria. | O veículo mantém o curso anterior e o condutor não executa outra manobra neste turno.
+
+- AcelerarAção padrão | Pilotagem ou Cavalgar, DT 15. | Mova metade do deslocamento adicional ou receba vantagem no próximo teste de perseguição desta rodada. | Não recebe o benefício e sofre −2 de Defesa até o início do próximo turno do condutor.
+
+- EvasãoAção padrão | Pilotagem ou Cavalgar, DT 15. | Receba +2 de Defesa até o início do próximo turno do condutor. | Sofra −2 de Defesa pelo mesmo período.
+
+- Fechar passagemAção padrão | Teste oposto de Pilotagem ou Cavalgar. | O alvo não pode aumentar a distância na resolução desta rodada. | O alvo recebe vantagem no teste de perseguição desta rodada.
+
+- AbalroarAção padrão | Pilotagem ou Cavalgar contra a Defesa do veículo ou os Reflexos da criatura. | Aplique a colisão aos dois envolvidos. O condutor escolhe encerrar ou manter o Contato. | O alvo não sofre dano. O atacante sofre −2 de Defesa até o início do próximo turno do condutor.
+
+- Preparar abordagemAção padrão | Teste oposto de Pilotagem ou Cavalgar. | Mantenha o Contato até o início do próximo turno do condutor. A travessia usa o movimento de cada ocupante. | A distância muda para Curta.
+
+- Recuperar controleAção movimento | Pilotagem ou Cavalgar, DT 15. | Remova a perda de controle e escolha a direção do movimento restante. | O veículo mantém direção e velocidade até o próximo turno do condutor.
+
+### Ataques e ocupantes
+
+- Armas instaladas usam Pontaria, salvo indicação diferente. O ataque é feito contra a Defesa do alvo e segue alcance, crítico e Resistência normais.
+
+- Um ataque localizado contra um sistema sofre −5. Se for crítico e causar pelo menos 1 de dano depois da Resistência, gera uma avaria escolhida pelo atacante. Se o mesmo ataque cruzar um limite de Vida, escolha essa avaria em vez de rolar outra.
+
+- Ocupante sem cobertura pode ser alvo normalmente. Cobertura parcial concede +2 de Defesa. Cobertura total impede ataque direto enquanto o ocupante permanecer protegido.
+
+- Dano causado ao veículo não atinge os ocupantes, salvo quando o efeito declarar área, invasão da cabine ou dano aos ocupantes.
+
+### Colisões
+
+- Abalroar exige a faixa Contato. Colidir com obstáculo imóvel não exige ataque quando não houver como evitá-lo.
+
+- Cada envolvido sofre o dano correspondente ao tamanho do outro. Role separadamente e aplique Resistência.
+
+- Velocidade não altera os dados da tabela. Uma manobra, queda ou perigo só altera o dano quando sua própria regra informar os novos dados.
+
+- Ocupante sem fixação faz Reflexos DT 15. Em falha, sofre metade do dano causado ao veículo, arredondado para baixo. Cinto, sela ou fixação adequada concede vantagem.
+
+- **Pequeno:** 1d6
+- **Médio:** 2d6
+- **Grande:** 4d6
+- **Enorme:** 6d6
+- **Colossal:** 8d6
+
+### Dano e avarias
+
+- Ao passar de mais da metade da Vida para metade ou menos, role uma avaria.
+
+- Ao chegar a 0 de Vida, o veículo fica incapacitado e sofre outra avaria. Ele não usa Morrendo.
+
+- Dano não reduz a Vida abaixo de 0. O veículo permanece Incapacitado até ser reparado. Só um efeito que declare destruição pode torná-lo irrecuperável.
+
+- Uma avaria repetida aplica o efeito indicado na última coluna. Um veículo mantém no máximo seis tipos de avaria ativos.
+
+- d6 | Avaria | Efeito | Repetição
+
+- 1 | Controles | Desvantagem em Pilotagem até o reparo. | O veículo perde o controle e precisa da manobra Recuperar controle.
+
+- 2 | Propulsão | Reduza o deslocamento à metade até o reparo. | O veículo não pode se mover por propulsão própria.
+
+- 3 | Armamento | Uma arma instalada, escolhida aleatoriamente, fica inoperante. | Outra arma instalada fica inoperante. Sem outra arma, repita a rolagem de avaria.
+
+- 4 | Defesas | Sofra −2 de Defesa até o reparo. | Reduza a Resistência em 2, mínimo 0, até o reparo.
+
+- 5 | Núcleo | Um sistema ativo, escolhido aleatoriamente, é desligado. | Reduza em 1 o limite de sistemas ativos, mínimo 0, até o reparo.
+
+- 6 | Casco | A cobertura dos ocupantes cai um grau: total para parcial ou parcial para nenhuma. | O próximo dano recebido ignora a Resistência; depois, remova esta repetição.
+
+### Reparo
+
+- **Reparo emergencial:** adjacente ao componente, ferramentas adequadas, Ação Padrão e Tecnologia ou Ofício apropriado contra DT 15. Sucesso suspende uma avaria até o fim da cena. Cada avaria aceita uma tentativa por cena.
+
+- **Manutenção:** seis horas, ferramentas, local de trabalho e materiais no valor de 10% do preço do veículo. Faça Tecnologia ou Ofício apropriado contra DT 10 + número de avarias ativas. Sucesso remove uma avaria e restaura 10% da Vida máxima, arredondado para baixo, mínimo 1.
+
+- Um veículo incapacitado volta a operar quando fica com pelo menos 1 de Vida e remove ao menos uma avaria adquirida ao chegar a 0.
+
+- Habilidades, oficinas e sistemas de reparo que indiquem outro tempo ou valor substituem esta regra.
+
+### Montarias
+
+- A montaria mantém sua própria Vida, Defesa, Resistências e condições. Ela não recebe avarias veiculares.
+
+- Montaria treinada age na Iniciativa do cavaleiro. O cavaleiro gasta sua Ação de Movimento para conduzi-la. Atacar com a montaria gasta a Ação Padrão do cavaleiro.
+
+- Montaria inteligente que age sem comando mantém sua própria Iniciativa e ações. O cavaleiro não controla as decisões dela com Cavalgar.
+
+- Montaria terrestre respeita terreno e espaço. Montaria voadora precisa manter o deslocamento exigido por sua ficha; se perder o controle, começa a cair até recuperar o controle ou pousar.
+
+- Montaria e cavaleiro são alvos separados. O cavaleiro recebe cobertura apenas quando a anatomia ou o equipamento da montaria declarar isso.
+
+### Tiers dos componentes
+
+- Tier | Acesso | Uso
+
+- T0 | Base | Chassi ou sistema sem melhoria.
+
+- T1 | Regular | Primeiro patamar funcional do componente.
+
+- T2 | Avançado | Componente especializado.
+
+- T3 | Superior | Componente de alto desempenho.
+
+- T4 | Restrito | Exige liberação do Mestre e descrição completa do componente.
+
+- Núcleo define sistemas ativos; Estrutura ajusta deslocamento e Resistência; Armas precisam de perfil completo; Utilidades aplicam o efeito descrito.
+
+- Os preços existentes permanecem no catálogo. Esta regra não cria preço para T4 nem altera preços publicados.
+
+- Deslocamento escrito em metros no veículo completo prevalece sobre índices antigos de chassi ou componente.
 
 ## magia-fluxo
 
@@ -1031,7 +1632,7 @@ Magia grande não sai de graça. A partir do 5º círculo, o Fluxo começa a dei
 
 - **Cicatriz (10º):** cada magia de 10º círculo aprendida sorteia uma Cicatriz na tabela comum. Ela é mais pesada dos dois lados, e a mesma não sai duas vezes para o mesmo personagem.
 
-- Marca e Cicatriz valem como Legado: o texto manda, e o Mestre arbitra o caso duvidoso.
+- Marca e Cicatriz contam como Legado para efeitos que citem Legados. Elas não ocupam vaga de Legado.
 
 - Concessão do Mestre não gera Cicatriz. Só conta magia de 10º que você aprendeu.
 
@@ -1293,31 +1894,51 @@ d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 
 ### Crises
 
-- Em Ruptura, cada nova perda cobra Vontade DT 15. Falhou, vem Pânico, Dissociação, Paranoia, Catatonia, Compulsão ou Fúria.
-
-- Pânico, Dissociação, Catatonia e Fúria duram 1d4 rodadas, com Vontade DT 15 no fim do turno para sair antes.
-
-- Paranoia vai até o fim da cena. Compulsão dá Vontade DT 15 no começo do turno para você agir normalmente.
+- Em Ruptura, cada nova perda de Sanidade cobra Vontade DT 15; falhou, vem uma das crises abaixo.
 
 - Em Sanidade 0 a crise é imediata, sem teste. Passada a cena, o personagem continua em 0 até descansar e ser tratado em segurança.
 
 - A condição permanente da Quebra é definida junto com o jogador, e só muda por resolução na história ou tratamento longo.
 
+- Crise | Duração | Efeito | Remoção
+
+- Pânico | 1d4 rodadas. | Fique Amedrontado pela fonte e use o movimento para se afastar dela. | Vontade DT 15 no fim de cada turno encerra a crise.
+
+- Dissociação | 1d4 rodadas. | Não pode usar reações e sofre -2 em testes de percepção e interação. | Vontade DT 15 no fim de cada turno encerra a crise.
+
+- Paranoia | Até o fim da cena. | Não recebe bônus de ajuda e testa Vontade DT 15 para aceitar cura de outra criatura. | Termina em segurança ao fim da cena.
+
+- Catatonia | 1d4 rodadas. | Fique Atordoado, mas receba +5 contra empurrões e agarrões. | Um aliado pode usar ação padrão e Medicina ou Persuasão DT 15.
+
+- Compulsão | Até cumprir uma ação simples ou superar a crise. | No turno, deve realizar a ação compulsiva definida pela fonte antes de outras ações. | Vontade DT 15 no começo do turno permite agir normalmente.
+
+- Fúria | 1d4 rodadas. | Receba +2 no dano corpo a corpo e -2 Defesa. Deve atacar uma ameaça visível se puder. | Vontade DT 15 no fim do turno encerra a crise.
+
 ### Condições gerais
 
 - Condição | Efeito principal | Remoção
 
-- Amedrontado | Desvantagem contra a fonte e não se aproxima dela. | Vontade contra a DT da fonte no fim do turno.
+- Amedrontado | Desvantagem em testes contra a fonte do medo. Não pode se aproximar voluntariamente da fonte. | No fim do turno, Vontade contra a DT da fonte encerra a condição.
 
-- Exposto | -2 Defesa. | Começo do próximo turno.
+- Exposto | Defesa reduzida em 2. Exposto não acumula consigo mesmo. | Termina automaticamente no começo do próximo turno.
 
-- Caído | -2 em ataques; ataques corpo a corpo contra você recebem +2. | Ação de movimento para levantar.
+- Caído | Ataques corpo a corpo contra você recebem +2. Seus ataques sofrem -2. Levantar consome a ação de movimento e provoca reações. | Gaste a ação de movimento para levantar.
 
-- Sangramento | 1d6 de dano no fim do turno; aplicações extras dão +1, até +5. | Cura DT 15 ou recuperar pelo menos 1 PV.
+- Sangramento | Sofra 1d6 de dano no fim do turno. Novas aplicações aumentam o dano em +1, até +5, mas não adicionam dados. | Cura DT 15 com ação padrão ou qualquer cura de pelo menos 1 PV.
 
-- Atordoado | Sem ações ou reações e -5 Defesa. | Fim da duração.
+- Atordoado | Não pode usar ações nem reações. Defesa reduzida em 5. Veja também Inconsciente: mesmo efeito de base, mas para quando a causa for perder toda a Vida, não um efeito temporário. | Termina ao fim da duração. Uma nova aplicação apenas renova a duração.
 
-- Concentrando | Mantém um efeito; dano exige Vontade DT 10 ou metade do dano. | Falha no teste, incapacidade ou encerramento voluntário.
+- Agarrado | Movimento 0. Ataques contra alvos que não participam do agarrão sofrem -2. | Ação padrão e teste oposto de Atletismo ou Acrobacia.
+
+- Cego | Desvantagem em testes que dependem de visão. Ataques contra você recebem +2 se o atacante puder vê-lo. | Remova ou supere a fonte da cegueira.
+
+- Imobilizado | Movimento 0. Não pode usar ações que exijam deslocamento. | Teste indicado pela fonte como ação padrão.
+
+- Inconsciente | Não pode agir nem reagir. Defesa reduzida em 5 e falha automaticamente em testes de Força e Destreza. Veja também Atordoado: use Atordoado para efeitos temporários que não vêm de perder toda a Vida. | Recupere-se da causa. Em Morrendo, volte a pelo menos 1 PV.
+
+- Surpreendido | Iniciativa reduzida em 5 na primeira rodada. Sem reação até realizar o primeiro turno. | Termina depois do primeiro turno.
+
+- Concentrando | Só pode manter um efeito de concentração por vez. Ao sofrer dano, teste Vontade DT 10 ou metade do dano, o que for maior. Falha encerra o efeito. | Encerre voluntariamente, fique incapacitado ou falhe no teste de concentração.
 
 ### Iniciativa estática
 
@@ -1335,6 +1956,117 @@ Iniciativa aqui não se rola: é um número da ficha, igual à Defesa. Você cal
 
 - Quando você resiste ativamente a um perigo, role o d20 com esse mesmo bônus.
 
+## aflicoes
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Exposição, progressão, estágios e tratamento de venenos, doenças e vícios.
+
+### Aplicação
+
+- Ao sofrer exposição, teste Fortitude contra a DT da aflição. Sucesso ou sucesso crítico evita a aflição. Falha aplica o estágio 1 depois da incubação; falha crítica aplica o estágio 2.
+
+- No fim de cada intervalo, faça outro teste. Sucesso crítico reduz 1 estágio; sucesso mantém; falha aumenta 1; falha crítica aumenta 2.
+
+- O estágio não passa do maior valor do catálogo. Seus efeitos não se acumulam com os de estágios anteriores, salvo indicação expressa.
+
+- Ao chegar ao estágio 0, remova a aflição e restaure qualquer atributo drenado conforme a recuperação indicada.
+
+### Exposições repetidas
+
+Uma nova exposição à mesma aflição exige Fortitude. Falha aumenta 1 estágio imediatamente. Esse aumento ocorre no máximo uma vez por cena. Aflições diferentes são acompanhadas separadamente.
+
+### Tratamento
+
+- Cura usa a DT, o tempo e o limite registrados na aflição. Sucesso reduz 1 estágio.
+
+- O Antídoto da loja encerra um veneno ativo. Preparos específicos que citam doença também podem encerrá-la.
+
+- Cansaço recebido ao entrar em um estágio permanece até ser reduzido pelas regras de descanso.
+
+- Drenagem de atributo é temporária, não acumula entre estágios e não pode passar de −3 por aflição.
+
+### Imunidades
+
+Use a extensão exata da característica racial. Golem não contrai doenças comuns. Auleth é imune a doenças comuns e sobrenaturais. Autômato é imune a doenças e venenos enquanto não possuir Máquina Viva. Outras fisiologias só recebem imunidade quando o próprio texto determinar.
+
+### Dependência e abstinência
+
+- Um vício só começa quando seu gatilho de dependência for cumprido e o teste indicado falhar.
+
+- Durante abstinência, aplique apenas os efeitos mecânicos do estágio. O jogador continua decidindo as ações do personagem.
+
+- Usar a substância pode suspender efeitos conforme o catálogo, mas não reduz o estágio nem substitui tratamento.
+
+### Catálogo de aflições
+
+Toxina Paralisante
+
+**veneno** comum · Fortitude DT 15 · incubação imediata · intervalo 1 rodada
+
+**Exposição:** Contato da toxina com o sangue ou ingestão de uma dose.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** Movimento reduzido pela metade.
+- **Estágio 2:** Movimento 0. Desvantagem em testes de Força e Destreza.
+- **Estágio 3:** Fica Imobilizado. Não pode usar reações.
+
+**Tratamento:** Cura DT 15; Ação padrão. Reduza o estágio em 1. Uma tentativa por intervalo.
+
+Peçonha Hemorrágica
+
+**veneno** comum · Fortitude DT 16 · incubação imediata · intervalo 1 rodada
+
+**Exposição:** Ferimento causado por presa, ferrão ou arma contaminada.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** Sofra 1d6 de dano de veneno no fim do intervalo.
+- **Estágio 2:** Sofra 2d6 de dano de veneno no fim do intervalo.
+- **Estágio 3:** Sofra 3d6 de dano de veneno no fim do intervalo.
+
+**Tratamento:** Cura DT 16; Ação padrão. Reduza o estágio em 1. Uma tentativa por intervalo.
+
+Febre dos Esporos
+
+**doenca** comum · Fortitude DT 14 · incubação 6 horas · intervalo 1 dia
+
+**Exposição:** Uma hora em área contaminada sem proteção respiratória.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** −1 em testes físicos.
+- **Estágio 2:** −2 em testes físicos. Ganhe 1 Cansaço.
+- **Estágio 3:** Desvantagem em testes físicos. Descanso recupera uma categoria abaixo do normal, mínimo Péssima. Ganhe 1 Cansaço.
+
+**Tratamento:** Cura DT 14; 1 hora. Reduza o estágio em 1. Uma tentativa por dia.
+
+Definhamento Arcano
+
+**doenca** sobrenatural · Fortitude DT 20 · incubação 1 dia · intervalo 1 dia
+
+**Exposição:** Contato direto com foco infeccioso sobrenatural.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** −1 em Fortitude.
+- **Estágio 2:** −1 em Fortitude. Drenagem temporária: −1 Constituição.
+- **Estágio 3:** Desvantagem em Fortitude. Drenagem temporária: −2 Constituição.
+
+**Tratamento:** Cura DT 20; 1 hora e um reagente mágico de 50 Lunaris, consumido na tentativa. Reduza o estágio em 1. Uma tentativa por dia.
+
+Dependência de Estimulante
+
+**vicio** comum · Fortitude DT 15 · incubação imediata · intervalo 1 dia
+
+**Exposição:** Uso repetido conforme o gatilho de dependência.
+
+- **Estágio 0:** Sem efeito.
+- **Estágio 1:** −1 em Iniciativa durante abstinência.
+- **Estágio 2:** −2 em Iniciativa e em testes de Inteligência durante abstinência.
+- **Estágio 3:** Desvantagem em testes de Inteligência durante abstinência. Ganhe 1 Cansaço.
+
+**Tratamento:** Cura DT 15; 1 hora de acompanhamento durante um descanso. Reduza o estágio em 1. Uma tentativa por dia.
+
 ## classes
 
 **Categoria:** Livro do Jogador
@@ -1343,7 +2075,35 @@ Iniciativa aqui não se rola: é um número da ficha, igual à Defesa. Você cal
 
 Classe comum serve a qualquer Árvore. Classe especial é mais forte, só aparece nas Árvores indicadas e depende do Mestre liberar.
 
-Consulte o catálogo de classes na página de regras.
+Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes e eventos por nível) fica no catálogo interativo da página de Regras, que lê o mesmo arquivo.
+
+- **Guerreiro** (comum) — Fica na frente porque alguém tem que ficar. Aguenta pancada, puxa o inimigo pra si e comanda um batalhão que luta melhor perto dele.
+- **Piloto** (comum) — Não vai a pé. Luta de dentro de um veículo que ele mesmo melhora peça por peça, e o veículo cresce junto com o personagem.
+- **Ninja** (comum) — Foi treinado por um clã e ainda deve satisfação a ele. Sobe na hierarquia, ganha armas e técnicas conforme o clã vai confiando, e rende muito mais quando ninguém sabe que ele está ali.
+- **Pop Star** (comum) — Resolve com plateia o que os outros resolvem no braço. Fama abre porta, presença segura atenção, e uma boa apresentação costuma valer mais que uma ameaça.
+- **Espadachim** (comum) — Uma espada, a vida inteira. Troca de postura no meio da luta e encadeia golpes que só fazem sentido em sequência: errar um estraga os outros.
+- **Lutador** (comum) — Sem arma, sem armadura, sem desculpa. Marca o inimigo golpe a golpe e ganha a briga no fôlego, não no primeiro impacto.
+- **Atirador** (comum) — Trabalha longe e chega preparado. Posição, munição e paciência valem mais que reflexo, e ele sempre sabe quantos tiros ainda tem.
+- **Médico** (comum) — Mantém o grupo de pé. Diagnostica, estabiliza quem caiu e devolve gente pra luta. O que ele não faz é desfazer o que já aconteceu.
+- **Guardião** (comum) — Escolhe alguém pra proteger e leva a sério. Cria vínculo, obriga o inimigo a decidir em quem bater e absorve o que vier, até onde a reação e a cena aguentarem.
+- **Caçador** (comum) — Estuda a presa antes de encostar nela. Cada tipo de criatura pede um método, e o que ele aprende sobre uma vale pra todas daquela família.
+- **Engenheiro** (comum) — Chega com as coisas montadas. Prepara invenções que duram pouco, melhora o equipamento do grupo e força a máquina além do limite quando a hora pede, sabendo o que isso vai custar.
+- **Alquimista** (comum) — Transforma o que encontra pelo caminho em elixir. O estoque zera no descanso, então cada frasco é uma decisão: usa agora ou guarda pro que vem depois.
+- **Comerciante** (comum) — Ganha a briga antes dela começar. Contato certo, informação na hora e estoque bem escolhido resolvem mais que dado. E não, ele não fabrica dinheiro.
+- **Campeão Dimensional** (especial) — Classe especial de Baluarte. Corpo acima do que um corpo deveria aguentar. Os picos de poder são curtos e contados, e nenhum deles impede de morrer.
+- **Pirata Amaldiçoado** (especial) — Classe especial do Abismo. Comanda maré espectral e maldição de curta duração, à frente de uma tripulação que já morreu e ainda não aceitou.
+- **Cartista Arcano** (especial) — Classe especial, aberta a qualquer Árvore. Conjura por cartas preparadas antes: o baralho decide o que você tem em mãos hoje, e o Fluxo nativo decide o que cada carta faz.
+- **Guia Dimensional** (especial) — Classe especial da Matriz. Conhece rota, portal e âncora: é por causa dele que o grupo chega em lugar onde não existe estrada.
+- **Caçador de Entidades** (especial) — Classe especial de Anima. Caça o que ataca por dentro: possessão, coisa que come memória, coisa que veste corpo alheio.
+- **Escritor de Contos** (especial) — Classe especial do Limiar. Transforma história, presságio e verdade pequena em apoio pro grupo. O que ele conta tem uma tendência incômoda a acontecer.
+- **Invocador** (especial) — Classe especial, aberta a qualquer Árvore. Não luta sozinho: chama. O que atende depende inteiramente do Fluxo nativo, e nem sempre é o que ele esperava.
+- **Viajante** (especial) — Classe especial da Matriz, de Éon ou de Vórtice. Vive entre Árvores e dimensões, e converte estrada rodada em capacidade de se virar em qualquer lugar.
+- **Decodificador** (especial) — Classe especial de Alétheia. Lê padrão, código e mentira antes de qualquer um, e guarda o que descobriu até a hora em que aquilo vira vantagem.
+- **Codificador** (especial) — Classe especial da A.X.I.S. Escreve protocolo temporário direto na realidade pra proteger, melhorar e controlar o terreno da luta.
+- **Canalizador** (comum) — Fluxo puro, direto, sem intermediário nenhum. É a forma mais simples de conjurar e a mais difícil de fazer bem.
+- **Sintonizador** (comum) — Alinha o Fluxo nativo a catalisadores de fora pra fazer o que ele sozinho não faria. Nada disso passa a morar na alma: é sempre empréstimo.
+- **Ritualista** (comum) — Trabalha fora do combate. Ritual não tem círculo, cobra tempo e compromete a Mana desde o primeiro minuto: se interromperem, a Mana já foi.
+- **Interceptador** (especial) — Classe especial da A.X.I.S. Entra na Malha pra derrubar a magia dos outros. Não conjura Fluxo natural, atrapalha quem conjura.
 
 ## racas
 
@@ -1353,4 +2113,419 @@ Consulte o catálogo de classes na página de regras.
 
 Raça comum pode nascer em qualquer Árvore. Raça especial é mais forte e só existe nas Árvores compatíveis.
 
-Consulte o catálogo de raças na página de regras.
+Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologia, traços e variantes completos ficam no catálogo interativo da página de Regras, que lê o mesmo arquivo.
+
+- **Humano** (comum) — Vida +0, Mana +0
+- **Vampiro** (comum) — Vida +1, Mana +0
+- **Goblim** (comum) — Vida -1, Mana +1, Movimento +1.5 m
+- **Anão** (comum) — Vida +2, Mana +0
+- **Golem** (comum) — Vida +5, Mana -2
+- **Espírito** (comum) — Vida -2, Mana +3
+- **Gigante** (comum) — Vida +4, Mana -1
+- **Animália** (comum) — Vida +0, Mana +0
+- **Sereia / Tritão** (comum) — Vida -1, Mana +2
+- **Miceliano** (comum) — Vida +1, Mana +1
+- **Slime** (comum) — Vida +3, Mana -2
+- **Feérico** (comum) — Vida -2, Mana +4
+- **Elfo** (especial) — Vida +2, Mana +4
+- **Desperto** (especial) — Vida +4, Mana +2
+- **Auleth** (especial) — Vida +2, Mana +0
+- **Autômato** (especial) — Vida +0, Mana +0
+- **Clone** (especial) — Vida +3, Mana +3
+- **Errante** (especial) — Vida +3, Mana +3
+- **Amálgamo** (especial) — Vida +5, Mana +1
+- **Bruxa** (especial) — Vida +1, Mana +5
+
+## bestiario
+
+**Categoria:** Guia do Mestre
+
+**Status:** Regra oficial
+
+Catálogo de seres, familiares, servos, invocações e preços por fórmula.
+
+Bestiário: preços por FÓRMULA (faixa de nível × traços), não lista fixa. Para vender ou contratar uma criatura específica, o mestre cria uma entrada do tipo 'monstro' com o preço calculado por essas tabelas.
+
+### Criaturas
+
+Animais, monstros ou seres naturais capturados, domesticados ou criados em cativeiro. Variam desde feras pequenas até predadores perigosos. Suas habilidades geralmente vêm de sua natureza física ou de seu habitat.
+
+- Nível | Espécie | Classe
+
+- 1 a 10 | +6 L / nível | +4 L / nível
+
+- 11 a 20 | +8 L / nível | +6 L / nível
+
+- 21 a 30 | +15 L / nível | +15 L / nível
+
+- 31 a 40 | +40 L / nível | +40 L / nível
+
+- 41 a 50 | +52 L / nível | +52 L / nível
+
+- 50+ | +62 L / nível | +62 L / nível
+
+Extras: Arma +15 L, Perícia +12 L, Poder Ass +120 L, Legado +18 L, Variável +70 L.
+
+### Familiares
+
+Entidades pequenas e espirituais ou criaturas inteligentes que formam um vínculo mágico com seu dono. Oferecem suporte tático, percepção aprimorada e habilidades úteis fora de combate. São leais e sensíveis.
+
+- Nível | Espécie | Função
+
+- 1 a 10 | +24 L / nível | +20 L / nível
+
+- 11 a 20 | +30 L / nível | +26 L / nível
+
+- 21 a 30 | +42 L / nível | +38 L / nível
+
+- 31 a 40 | +56 L / nível | +52 L / nível
+
+- 41 a 50 | +68 L / nível | +65 L / nível
+
+- 50+ | +84 L / nível | +80 L / nível
+
+Extras: Arma +46 L, Perícia +24 L, Poder Ass +650 L, Legado +52 L, Variável +250 L.
+
+### Servos
+
+Seres criados ou treinados para cumprir tarefas. Geralmente possuem sanidade abalada (começam com 50% de sanidade e 2 traumas aleatórios). Estão ligados à alma do dono e não podem trair diretamente.
+
+- Nível | Raça Comum | Classe Comum
+
+- 1 a 10 | +4 L / nível | +2 L / nível
+
+- 11 a 20 | +8 L / nível | +6 L / nível
+
+- 21 a 30 | +12 L / nível | +10 L / nível
+
+- 31 a 40 | +25 L / nível | +25 L / nível
+
+- 41 a 50 | +35 L / nível | +35 L / nível
+
+- 50+ | +50 L / nível | +50 L / nível
+
+Extras: Arma +12 L, Perícia +8 L, Pet +14 L, Poder Ass +230 L, Legado +16 L, Variável +52 L.
+
+### Invocações
+
+Seres temporários trazidos por magia, rituais ou dispositivos tecnológicos. Surgem para cumprir função, proteção ou utilidade e desaparecem após certo tempo.
+
+- Nível | Raça | Classe
+
+- 1 a 10 | +8 L / nível | +6 L / nível
+
+- 11 a 20 | +12 L / nível | +10 L / nível
+
+- 21 a 30 | +18 L / nível | +14 L / nível
+
+- 31 a 40 | +32 L / nível | +28 L / nível
+
+- 41 a 50 | +48 L / nível | +38 L / nível
+
+- 50+ | +60 L / nível | +46 L / nível
+
+Extras: Arma +24 L, Perícia +14 L, Poder Ass +460 L, Legado +25 L, Variável +65 L.
+
+### Ajudantes
+
+Seres que oferecem seus serviços, conscientes e capazes de tomar decisões. Vistos no dia a dia, auxiliam em missões, carregam itens, curam ou lutam.
+
+- Nível | Raça | Classe
+
+- 1 a 10 | +6 L / nível | +4 L / nível
+
+- 11 a 20 | +8 L / nível | +6 L / nível
+
+- 21 a 30 | +14 L / nível | +12 L / nível
+
+- 31 a 40 | +32 L / nível | +30 L / nível
+
+- 41 a 50 | +50 L / nível | +48 L / nível
+
+- 50+ | +75 L / nível | +70 L / nível
+
+Extras: Arma +16 L, Perícia +12 L, Pet +28 L, Poder Ass +450 L, Legado +20 L, Variável +60 L.
+
+### Seres Lendários
+
+Criaturas raras, únicas ou extremamente poderosas. Exigem rituais complexos ou condições especiais. Servem como aliados excepcionais que mudam batalhas.
+
+- Nível | Raça/Espécie | Classe/Função
+
+- 1 a 10 | - | -
+
+- 11 a 20 | +160 L / nível | +160 L / nível
+
+- 21 a 30 | +240 L / nível | +240 L / nível
+
+- 31 a 40 | +320 L / nível | +320 L / nível
+
+- 41 a 50 | +450 L / nível | +450 L / nível
+
+- 50+ | +650 L / nível | +650 L / nível
+
+Extras: Arma +225 L, Perícia +36 L, Pet +210 L, Poder Ass +1.200 L, Legado +80 L, Variável +650 L.
+
+### Drops de Seres
+
+Preços que mercados pagam por partes de seres. Sem os materiais adequados o preço cai em 75%.
+
+- Raça | Carne | Órgãos | Essência
+
+- Humano | 10 S | 15 S | 25 S
+
+- Vampiro | - | 80 S | 150 S
+
+- Goblin | 5 S | 8 S | -
+
+- Anão | 20 S | 30 S | 40 S
+
+- Golem | - | 60 S | 120 S
+
+- Espírito | - | - | 200 S
+
+- Gigante | 120 S | 180 S | 250 S
+
+- Animália | 20 S | 35 S | 25 S
+
+- Sereia/Tritão | 35 S | 70 S | 90 S
+
+- **Carne:** Fresca (Padrão), Conservada (-20%), Corrompida (-50% ou inutilizável).
+
+- **Qualidade do Abate:** Abate limpo (+20%), Abate brutal (-15%).
+
+- **Ser lendário:** x2 ou x3 no valor.
+
+## economia
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+Como funcionam as moedas de O Jardim, o câmbio entre elas e as regras de segurança e espaço do Cofre Bancário.
+
+### Moedas Correntes
+
+- **Lunaris (☾):** A moeda base. Cristalizada a partir da luz pálida, é usada nas transações comuns.
+
+- **Solares (☉):** Moeda de alto valor. Brilhante e quente ao toque.
+
+- **Fragmentos de Estrela (✧):** Moeda rara, utilizada para transações de nível celestial ou itens muito exóticos.
+
+- **Créditos Sombrios (♆):** Moeda do submundo, usada no mercado negro e para fins escusos.
+
+### Taxas de Câmbio
+
+O Banqueiro realiza a conversão das moedas no Discord (valores sujeitos a taxas do sistema).
+
+- Moeda Origem | Moeda Destino | Taxa Padrão
+
+- 100 Lunaris | 1 Solar | 100:1
+
+Essa taxa serve para o dia a dia — trocar Lunaris por Solares (ou o contrário) numa transação comum. Ela não torna categorias inteiras de item comparáveis entre si: um veículo precificado em Lunaris e uma arma lendária precificada em Solares seguem economias próprias, cada uma pensada pro ritmo da sua categoria, não uma equivalência de valor de jogo.
+
+Fragmentos de Estrela e Créditos Sombrios não têm câmbio automático com nenhuma outra moeda. São obtidos por fonte própria — relíquias e artefatos concedidos pelo Mestre, mercado negro, ou outra origem narrativa — nunca só acumulando e convertendo Lunaris ou Solares.
+
+### O Cofre Bancário
+
+O Banco gerido pelo Banqueiro reúne depósito, reputação e segurança.
+
+- **Reputação Bancária:** Ao depositar com frequência e participar da economia, você ganha reputação que destrava novos níveis de cofre.
+
+- **Espaço e Limites:** O cofre possui níveis (tiers) que definem a capacidade máxima de itens e a quantidade de saldo de cada moeda que pode ser guardada. No nível máximo, esse limite se torna ilimitado.
+
+- **Segurança:** O seu cofre pode ser alvo de roubos (eventos do bot). Evoluir a segurança do cofre aumenta a porcentagem de chance de frustrar essas tentativas.
+
+- **Transferências:** Através da página do Cofre, você pode sacar suas economias diretamente para a ficha do seu personagem quando necessário.
+
+## bases
+
+**Categoria:** Guia do Mestre
+
+**Status:** Regra oficial
+
+Aquisição, espaços, instalações, melhorias e manutenção de propriedades imóveis ou móveis.
+
+### Registro da base
+
+- Registre nome, tipo, patamar, localização, responsáveis, espaços ocupados e instalações.
+
+- Uma base imóvel permanece no local registrado. Uma base móvel depende de uma plataforma ou veículo já capaz de transportá-la.
+
+- Estas regras não concedem deslocamento, Vida, Defesa, armas, tripulação nem componentes veiculares.
+
+### Espaços e instalações
+
+- A soma dos espaços ocupados não pode superar os espaços do patamar.
+
+- O nível da instalação não pode superar o limite do patamar.
+
+- Cada instalação ocupa apenas os espaços do nível atual. Uma melhoria substitui o nível anterior.
+
+- Instalações de mesmo id não acumulam. Use apenas o maior nível ativo.
+
+- Uma instalação inativa ocupa espaços, mas não concede efeitos.
+
+- O limite de ocupantes indica quantas criaturas recebem serviços e descanso da base ao mesmo tempo. Excedentes não recebem benefícios de instalações.
+
+- Patamar | Espaços | Ocupantes | Nível máximo | Aquisição | Manutenção
+
+- Posto | 3 | 4 | 1 | 1 | 1
+- Sede | 6 | 12 | 2 | 3 | 2
+- Complexo | 10 | 30 | 3 | 6 | 4
+- Fortaleza | 16 | 60 | 3 | 10 | 7
+
+- Instalação | Nível | Espaços | Aquisição | Manutenção | Efeito
+
+- Dormitório | 1 | 1 | 1 | 1 | Permite descanso de qualidade Boa para até 4 ocupantes.
+- Dormitório | 2 | 2 | 2 | 2 | Permite descanso de qualidade Maravilhosa para até 8 ocupantes.
+- Dormitório | 3 | 3 | 4 | 3 | Permite descanso de qualidade Excelente para até 12 ocupantes se Área Médica 2 ou superior estiver ativa; sem ela, a qualidade é Maravilhosa.
+- Área Médica | 1 | 1 | 1 | 1 | Concede +2 em Cura para tratar um paciente por vez.
+- Área Médica | 2 | 2 | 2 | 2 | Concede vantagem em Cura para tratar até 2 pacientes por vez; não aplique o +2 do nível 1.
+- Área Médica | 3 | 3 | 4 | 3 | Concede vantagem e +2 em Cura para tratar até 4 pacientes por vez.
+- Oficina | 1 | 1 | 1 | 1 | Equivale a um Kit de Ofício fixo e mantém 1 projeto mecânico em andamento.
+- Oficina | 2 | 2 | 2 | 2 | Também equivale a uma Oficina A.X.I.S e mantém até 2 projetos mecânicos em andamento.
+- Oficina | 3 | 3 | 4 | 3 | Mantém até 3 projetos mecânicos em andamento com Kit de Ofício ou Oficina A.X.I.S.
+- Laboratório | 1 | 1 | 1 | 1 | Na especialidade Alquimia, equivale a um Laboratório Alquímico e mantém 1 projeto.
+- Laboratório | 2 | 2 | 2 | 2 | Mantém até 2 projetos da especialidade em andamento.
+- Laboratório | 3 | 3 | 4 | 3 | Com Área Médica 2 ou superior, também equivale a uma Sala de Implante e mantém até 3 projetos.
+- Armazém | 1 | 1 | 1 | 1 | Armazena até 15 itens.
+- Armazém | 2 | 2 | 2 | 2 | Armazena até 30 itens.
+- Armazém | 3 | 3 | 4 | 3 | Armazena até 60 itens.
+- Hangar ou Estábulo | 1 | 1 | 1 | 1 | Abriga 1 veículo pequeno ou até 2 montarias.
+- Hangar ou Estábulo | 2 | 2 | 2 | 2 | Abriga 1 veículo médio, 2 pequenos ou até 4 montarias.
+- Hangar ou Estábulo | 3 | 3 | 4 | 3 | Abriga 2 veículos médios, 4 pequenos ou até 8 montarias.
+- Segurança | 1 | 1 | 1 | 1 | DT 12: Ladinagem para acesso físico, Tecnologia para acesso eletrônico ou Ofício adequado para sabotagem.
+- Segurança | 2 | 2 | 2 | 2 | DT 16: Ladinagem para acesso físico, Tecnologia para acesso eletrônico ou Ofício adequado para sabotagem.
+- Segurança | 3 | 3 | 4 | 3 | DT 20: Ladinagem para acesso físico, Tecnologia para acesso eletrônico ou Ofício adequado para sabotagem.
+
+### Aquisição e melhoria
+
+- Uma Unidade de Aquisição vale 1.000 Lunaris. Uma Unidade de Manutenção vale 100 Lunaris por mês.
+
+- Para adquirir uma base, some o fator do patamar aos fatores das instalações iniciais.
+
+- Para melhorar patamar ou instalação, pague somente a diferença positiva entre os fatores antigos e novos.
+
+- Remover uma instalação libera seus espaços e não concede reembolso automático.
+
+### Descanso e produção
+
+- Dormitório define o limite de qualidade; duração, interrupções, alimento, água e demais requisitos continuam aplicáveis.
+
+- Cada personagem recebe os benefícios de um único descanso. Dormitórios e efeitos equivalentes não se acumulam.
+
+- Oficina e Laboratório apenas atendem requisitos e limitam projetos simultâneos. Materiais, tempo, testes e falhas seguem as regras do projeto.
+
+### Manutenção
+
+- Calcule a manutenção uma vez por mês com o fator do patamar e das instalações ativas.
+
+- Com um pagamento atrasado, a base fica pendente e não pode iniciar melhorias.
+
+- Com dois pagamentos atrasados, o proprietário escolhe uma instalação para ficar inativa.
+
+- A cada novo atraso, o proprietário escolhe mais uma instalação ativa para ficar inativa.
+
+- Quitar os atrasos reativa as instalações em 24 horas. A inadimplência não transfere nem confisca a propriedade automaticamente.
+
+### Bases móveis
+
+A ficha da plataforma precisa informar quantos espaços de base suporta; sem esse campo, ela não recebe instalações de base. Quando uma peça veicular e uma instalação forem equivalentes, use o efeito publicado da peça e não aplique o efeito-base. Movimento, perseguição, colisão, dano e reparo continuam sob as regras da plataforma.
+
+## mundo-faccoes
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+Regras de Prestígio, Fama, acesso e reação para organizações de qualquer Árvore.
+
+Estas regras podem ser usadas com qualquer organização da campanha, independentemente da Árvore. Cada facção registra seu próprio Prestígio; Fama continua sendo uma medida geral de visibilidade.
+
+### Facções documentadas
+
+Banco Lunar e AstraTech pertencem ao cenário atual. As outras três organizações são propostas e ainda não fazem parte do cânone.
+
+- Facção | Tipo | Alcance | Atuação pública | Estado
+
+- Banco Lunar | instituicao financeira | Todas as Árvores | Guarda, administra e investe bens. Também fornece recursos a clientes capazes de pagar. | Canônica
+
+- AstraTech | corporacao tecnologica | Múltiplas Árvores | Desenvolve tecnologia arcana e mantém projetos capazes de operar além de Astraluna. | Canônica
+
+- Caravana do Limiar | rede de transporte | Rotas acessíveis entre Árvores | Transporta pessoas, cargas e mensagens por passagens dimensionais conhecidas. Não atravessa rotas seladas. | Proposta
+
+- Vigília das Raízes | ordem de contencao | Todas as Árvores alcançáveis | Investiga rupturas dimensionais, evacua áreas ameaçadas e contém criaturas que atravessam fronteiras entre Árvores. | Proposta
+
+- Arquivo Prismático | instituicao de pesquisa | Núcleos em diferentes Árvores | Preserva registros, identifica artefatos e reúne informações verificadas sobre fenômenos de diferentes Árvores. | Proposta
+
+### Prestígio
+
+Prestígio registra a relação de um personagem ou grupo com uma facção específica. O valor inicial é 0.
+
+- Nível | Estado | Reação | Acesso | Teste social | Desconto
+
+- -3 | Inimigo | A facção recusa cooperação e pode agir contra o personagem quando tiver motivo e meios. | negado | -2 | 0%
+
+- -2 | Adversário | A facção restringe contato e exige garantias para qualquer acordo. | negado | -1 | 0%
+
+- -1 | Sob desconfiança | A facção mantém distância e verifica pedidos antes de responder. | publico | -1 | 0%
+
+- 0 | Neutro | A facção trata o personagem pelas regras comuns do local. | publico | 0 | 0%
+
+- +1 | Reconhecido | A facção aceita contato e oferece serviços de rotina quando disponíveis. | rotina | +1 | 0%
+
+- +2 | Aliado | A facção permite solicitar recursos restritos compatíveis com a relação. | restrito | +1 | 5%
+
+- +3 | Confiança | A facção permite contato interno e pedidos compatíveis com seus interesses. | interno | +2 | 10%
+
+- Prestígio começa em 0 e é registrado separadamente para cada facção.
+- Prestígio mede relação. Ele não mede fama, cargo, riqueza nem reputação bancária.
+- O ajuste social só vale em teste no qual a relação com a facção seja relevante.
+- Acesso permite solicitar. Não garante estoque, aprovação, informação sigilosa ou ordem obedecida.
+- Desconto vale apenas em bem ou serviço fornecido pela própria facção. Descontos de facção não se acumulam entre si.
+- Nenhum nível obriga uma criatura a obedecer, acreditar, perdoar ou agir contra os próprios interesses.
+- Prestígio negativo não inicia combate automaticamente. A reação depende da situação e dos recursos da facção.
+
+### Alterar Prestígio
+
+- **+1:** Concluir compromisso aceito que produza benefício relevante para a facção. No máximo uma vez pelo mesmo compromisso.
+- **+2:** Resolver ameaça ou objetivo central da facção em um marco de campanha. Exige consequência duradoura e não se acumula com serviço relevante pelo mesmo fato.
+- **-1:** Romper compromisso aceito ou causar prejuízo relevante à facção. A mesma consequência é registrada uma vez.
+- **-2:** Atacar deliberadamente um objetivo central ou usar acesso concedido contra a facção. Não se acumula com quebra de compromisso pelo mesmo fato.
+
+Depois de aplicar a mudança, limite o resultado entre -3 e +3. Um mesmo fato não gera dois ajustes.
+
+### Fama
+
+Fama registra visibilidade pública. Ela usa uma escala única e não substitui a relação com cada facção.
+
+- Nível | Título | Alcance | Anonimato
+
+- 0 | Desconhecido | Sem reconhecimento recorrente. | +2
+
+- 1 | Local | Reconhecido em uma comunidade ou público específico. | +1
+
+- 2 | Regional | Reconhecido em uma região ou setor de atividade. | 0
+
+- 3 | Ampla | Reconhecido em diferentes regiões ligadas por comunicação. | -1
+
+- 4 | Mundial | Reconhecido na maior parte da Dimensão Padrão com acesso a notícias. | -2
+
+- 5 | Histórica | Nome e imagem permanecem registrados além da presença atual. | -2
+
+- Fama mede visibilidade pública de 0 a 5. Ela não indica aprovação.
+- Fama só produz reconhecimento onde testemunho, registro ou comunicação possam ter chegado.
+- O ajuste de anonimato vale para ocultar identidade ou passar sem reconhecimento. Ele não altera outros testes sociais.
+- Reconhecimento não concede acesso, desconto, Prestígio ou controle sobre quem reconheceu o personagem.
+- Quando uma habilidade de classe concede Fama mínima, use o maior valor entre a Fama atual e o valor da habilidade. Os demais efeitos permanecem na descrição da classe e não se somam a esta tabela.
+
+### Alterar Fama
+
+- **+1:** Realizar feito relevante diante de testemunhas ou registro verificável. Repetir o mesmo feito para o mesmo público não aumenta Fama.
+- **+2:** Um marco de campanha recebe circulação pública em várias regiões. Não se acumula com feito público pelo mesmo acontecimento.
+- **-1:** Um acontecimento de campanha remove registros e interrompe a associação pública com a identidade. Passagem de tempo sem exposição não reduz Fama por si só.
+
+Depois de aplicar a mudança, limite o resultado entre 0 e 5.
+
+**Sistemas separados:** Reputação Bancária continua sendo o valor do Banco usado para cofres, cartão e loja. Prestígio e Fama não alteram esse valor.

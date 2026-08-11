@@ -21,6 +21,13 @@
         "tipo": "criacao",
         "descricao": "Na criação, escolha uma perícia adicional para começar em Aprendiz. Assim, um Humano começa com sete perícias em Aprendiz, em vez de seis.",
         "automatizada": true
+      },
+      {
+        "id": "versatilidade-humana",
+        "titulo": "Versatilidade",
+        "tipo": "aquisicao",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional.",
+        "automatizada": false
       }
     ],
     "recursos_provisorios": false,
@@ -736,6 +743,13 @@
         "tipo": "escolha",
         "descricao": "Escolha uma Condição Ancestral baseada no motivo do retorno. Você recebe somente a dádiva e a cicatriz da Condição escolhida.",
         "automatizada": false
+      },
+      {
+        "id": "heranca-do-retorno",
+        "titulo": "Herança do Retorno",
+        "tipo": "aquisicao",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional — algo que atravessou com você a fronteira que deveria ter sido definitiva.",
+        "automatizada": false
       }
     ],
     "condicoes_ancestrais": [
@@ -971,6 +985,13 @@
         "tipo": "limitacao",
         "descricao": "Além do ajuste de -3 em Carisma, você sofre desvantagem em Intuição para interpretar emoções e em Diplomacia para consolar, inspirar ou criar um vínculo emocional. A limitação não se aplica a negociações objetivas, análise lógica, Enganação ou Intimidação.",
         "automatizada": false
+      },
+      {
+        "id": "origem-distante",
+        "titulo": "Origem Distante",
+        "tipo": "aquisicao",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional, fruto de uma percepção que este mundo não teria moldado sozinho.",
+        "automatizada": false
       }
     ],
     "recursos_provisorios": false
@@ -1057,6 +1078,13 @@
         "titulo": "Arquitetura Modular",
         "tipo": "escolha",
         "descricao": "Seu limite de modificações instaladas é 1 + piso do Nível Total dividido por 2. Uma modificação ativa exige pelo menos três passivas instaladas, além dos demais pré-requisitos. Instalar uma modificação exige um dia de trabalho de alguém capaz de realizar Ofício (Engenharia); custos e obtenção de peças são resolvidos pelo mestre.",
+        "automatizada": false
+      },
+      {
+        "id": "modulo-adicional",
+        "titulo": "Módulo Adicional",
+        "tipo": "aquisicao",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional — mais um componente instalado em sua arquitetura.",
         "automatizada": false
       }
     ],
@@ -1599,6 +1627,13 @@
         "tipo": "escolha",
         "descricao": "Escolha Réplica Perfeita, Arquivo Vivo, Organismo Otimizado ou Série Contínua. Você recebe somente as características do Projeto escolhido.",
         "automatizada": false
+      },
+      {
+        "id": "desvio-do-original",
+        "titulo": "Desvio do Original",
+        "tipo": "aquisicao",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional — moldado pelas suas próprias adaptações, não copiado do Original.",
+        "automatizada": false
       }
     ],
     "variantes": [
@@ -1987,6 +2022,13 @@
         "custo_mana": 6,
         "duracao_rodadas": 3,
         "automatizada": false
+      },
+      {
+        "id": "residuo-da-fusao",
+        "titulo": "Resíduo da Fusão",
+        "tipo": "aquisicao",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional — resquício das partes que se fundiram em você.",
+        "automatizada": false
       }
     ],
     "fragmentos": [
@@ -2174,6 +2216,13 @@
         "custo_mana": 8,
         "alcance_m": 15,
         "teste": "misticismo_vs_vontade",
+        "automatizada": false
+      },
+      {
+        "id": "dadiva-do-pacto",
+        "titulo": "Dádiva do Pacto",
+        "tipo": "aquisicao",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional — parte do que o pacto concede a quem se torna Bruxa.",
         "automatizada": false
       }
     ],

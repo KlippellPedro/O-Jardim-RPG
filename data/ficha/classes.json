@@ -284,6 +284,14 @@
         "niveis": [
           15
         ]
+      },
+      {
+        "id": "senhor-da-guerra",
+        "titulo": "Senhor da Guerra",
+        "descricao": "Uma vez por sessão, use uma Ação Padrão para comandar por três rodadas. Você e até quatro aliados do Batalhão em alcance de 12 metros recebem +2 em Ataque e Defesa, imunidade a medo e +1 dado de dano no primeiro acerto de cada turno.",
+        "niveis": [
+          20
+        ]
       }
     ],
     "eventos": [
@@ -591,7 +599,7 @@
           },
           {
             "tipo": "habilidade_final",
-            "titulo": "Habilidade Final"
+            "titulo": "Ás Impossível"
           }
         ]
       }
@@ -622,11 +630,11 @@
           },
           {
             "nivel": 15,
-            "descricao": "O bônus em Pilotagem aumenta para +4. O veículo recebe uma utilidade adicional e o reparo automático recupera 1 ponto de Vida do veículo por cena de descanso."
+            "descricao": "O bônus em Pilotagem aumenta para +4. O veículo recebe uma utilidade adicional. Cada manutenção bem-sucedida restaura 1 ponto de Vida adicional."
           },
           {
             "nivel": 20,
-            "descricao": "O bônus em Pilotagem aumenta para +5. Uma vez por sessão, você pode ativar o modo sobrevivente por uma cena, dobrando os bônus do veículo e ignorando penalidades de terreno."
+            "descricao": "O bônus em Pilotagem aumenta para +5. Uma vez por sessão, ative o modo sobrevivente por uma cena: o veículo recebe +2 de Defesa e vantagem em perseguições e ignora penalidades de terreno."
           }
         ]
       },
@@ -647,6 +655,14 @@
         "descricao": "Caso tenha um veículo quebrado ou com defeitos, você pode levá-lo a um mecânico e recebe um martelinho de ouro que restaura o veículo como se fosse 0 km.",
         "niveis": [
           15
+        ]
+      },
+      {
+        "id": "as-impossivel",
+        "titulo": "Ás Impossível",
+        "descricao": "Uma vez por sessão, enquanto conduz um veículo ou montaria, ative esta habilidade sem gastar ação. Por três rodadas, o veículo recebe +4 em Defesa, Resistência 5 contra todo dano e ignora terreno difícil. Em cada um de seus turnos, você recebe uma Ação de Movimento adicional exclusiva para manobras veiculares. Na primeira vez que o veículo chegaria a 0 de Vida durante o efeito, ele permanece com 1 de Vida.",
+        "niveis": [
+          20
         ]
       }
     ],
@@ -722,7 +738,7 @@
         "id": "reparo-rapido",
         "titulo": "Reparo Rápido",
         "custo_mana": 5,
-        "descricao": "Se o veículo estiver danificado, gaste uma ação de descanso para recuperar 2 pontos de Vida do veículo."
+        "descricao": "Uma vez por cena, adjacente ao veículo e com ferramentas adequadas, gaste uma Ação Padrão para restaurar 2 pontos de Vida."
       },
       {
         "id": "sistema-fantasma",
@@ -960,7 +976,7 @@
           },
           {
             "tipo": "habilidade_final",
-            "titulo": "Habilidade Final"
+            "titulo": "Sombra Suprema"
           }
         ]
       }
@@ -1000,7 +1016,7 @@
           {
             "nivel": 20,
             "titulo": "Kage",
-            "descricao": "Você ocupa o topo da hierarquia e recebe respeito absoluto. Pode declarar guerras, formar alianças, convocar ninjas e decidir o destino das vilas."
+            "descricao": "Você alcança o posto máximo. Uma vez por sessão, pode requisitar informação, abrigo ou apoio de até quatro ninjas disponíveis. A requisição não obriga ações suicidas nem concede controle político sobre uma vila."
           }
         ]
       },
@@ -1012,6 +1028,14 @@
           3,
           8,
           14,
+          20
+        ]
+      },
+      {
+        "id": "sombra-suprema",
+        "titulo": "Sombra Suprema",
+        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, seu deslocamento não provoca reações e o primeiro ataque que realizar em cada turno recebe vantagem e +2 dados de dano. No início de cada turno, até realizar uma ação hostil, você não pode ser escolhido como alvo direto por criaturas que não consigam detectá-lo por um sentido especial. Uma vez durante o efeito, use uma Reação para transformar um acerto contra você em erro.",
+        "niveis": [
           20
         ]
       }
@@ -1372,23 +1396,23 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Sua fama é local; receba +1 em Atuação e pode conseguir ajuda cotidiana de fãs, a critério do mestre."
+            "descricao": "Sua Fama mínima é 1 e você recebe +1 em Atuação. Fama obtida na campanha acima desse valor não é reduzida."
           },
           {
             "nivel": 5,
-            "descricao": "Sua fama é regional; o bônus de Atuação sobe para +2 e você pode acalmar ou animar uma pequena multidão."
+            "descricao": "Sua Fama mínima sobe para 2 e o bônus em Atuação sobe para +2. Você pode acalmar ou animar uma pequena multidão com um teste de Atuação."
           },
           {
             "nivel": 10,
-            "descricao": "Você é um ícone; o bônus sobe para +3 e autoridades comuns reconhecem sua imagem, sem obrigação de obedecer."
+            "descricao": "Sua Fama mínima sobe para 3 e o bônus em Atuação sobe para +3. Autoridades comuns reconhecem sua imagem, sem obrigação de obedecer."
           },
           {
             "nivel": 15,
-            "descricao": "Você é uma lenda viva; uma vez por sessão, consiga uma audiência, contato ou palco plausível na região."
+            "descricao": "Sua Fama mínima sobe para 4 e o bônus em Atuação sobe para +4. Uma vez por sessão, consiga uma audiência, um contato ou um palco disponível na região."
           },
           {
             "nivel": 20,
-            "descricao": "Sua obra se torna eterna; uma vez por sessão, aliados que vejam sua performance recebem vantagem no próximo teste e 4 Mana temporária."
+            "descricao": "Sua Fama mínima sobe para 5 e o bônus em Atuação sobe para +5. Sua identidade pública é reconhecida em qualquer região que receba informação sobre sua carreira."
           }
         ]
       },
@@ -1409,6 +1433,14 @@
         "descricao": "Você recebe uma equipe profissional. Uma vez por sessão, ela pode preparar um evento, conter uma crise de imagem ou localizar um contato, desde que haja comunicação possível.",
         "niveis": [
           18
+        ]
+      },
+      {
+        "id": "estrela-eterna",
+        "titulo": "Estrela Eterna",
+        "descricao": "Uma vez por sessão, use uma Ação Completa para iniciar uma apresentação que dura três rodadas. Todos os aliados que possam ver ou ouvir você recebem 8 de Mana temporária, vantagem no primeiro teste de cada turno e imunidade a medo enquanto durar a apresentação. Uma vez durante o efeito, quando um desses aliados cair a 0 de Vida, ele permanece com 1 de Vida. A Mana temporária desaparece ao fim da cena e não se acumula.",
+        "niveis": [
+          20
         ]
       }
     ],
@@ -1781,6 +1813,14 @@
         "descricao": "Uma vez por combate, após acertar, faça um segundo ataque. Se ele acertar, faça um terceiro com metade do dano; o alvo então sofre −2 Defesa até o fim da rodada seguinte.",
         "niveis": [
           18
+        ]
+      },
+      {
+        "id": "espirito-da-espada",
+        "titulo": "Espírito da Espada",
+        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação enquanto empunha uma espada escolhida por Maestria em Espada. Por três rodadas, seus ataques com ela ignoram metade da Resistência do alvo, recebem +2 dados de dano e permitem mover 3 metros após cada acerto sem provocar reações. Uma vez por rodada, você pode repetir um ataque que errou.",
+        "niveis": [
+          20
         ]
       }
     ],
@@ -2160,6 +2200,14 @@
         "niveis": [
           18
         ]
+      },
+      {
+        "id": "kokusen",
+        "titulo": "Kokusen",
+        "descricao": "Uma vez por sessão, ative esta habilidade após acertar um ataque desarmado, sem gastar ação. Por três rodadas, seus ataques desarmados recebem +2 dados de dano, ignoram metade da Resistência do alvo e obtêm acerto crítico com resultado natural 19 ou 20. O primeiro acerto crítico de cada rodada recupera 2 de Mana.",
+        "niveis": [
+          20
+        ]
       }
     ],
     "eventos": [
@@ -2535,6 +2583,14 @@
         "niveis": [
           15
         ]
+      },
+      {
+        "id": "um-so-disparo",
+        "titulo": "Um Só Disparo",
+        "descricao": "Uma vez por sessão, use uma Ação Completa para realizar um ataque à distância contra um alvo que possa perceber. Esse ataque recebe vantagem, ignora cobertura e Resistência, dobra a quantidade de dados de dano da arma e considera o valor máximo em todos esses dados. O ataque ainda exige munição e pode errar.",
+        "niveis": [
+          20
+        ]
       }
     ],
     "eventos": [
@@ -2901,6 +2957,14 @@
         "niveis": [
           18
         ]
+      },
+      {
+        "id": "mestre-da-vida",
+        "titulo": "Mestre da Vida",
+        "descricao": "Uma vez por sessão, use uma Ação Completa e gaste 10 de Mana. Você e até cinco aliados em alcance de 12 metros recuperam metade da Vida máxima e metade da Mana máxima e encerram uma condição que Cura possa tratar. Um alvo a 0 de Vida primeiro retorna com 1 de Vida e então recebe a recuperação. Esta habilidade não ressuscita mortos.",
+        "niveis": [
+          20
+        ]
       }
     ],
     "eventos": [
@@ -3266,6 +3330,14 @@
         "descricao": "Uma vez por descanso longo, gaste 8 Mana e permaneça imóvel por três rodadas. Aliados a 6 m recebem +2 Defesa e você pode redirecionar para si um ataque por rodada.",
         "niveis": [
           18
+        ]
+      },
+      {
+        "id": "coracao-unificado",
+        "titulo": "Coração Unificado",
+        "descricao": "Uma vez por sessão, use uma Ação Padrão para proteger você e até cinco aliados em alcance de 12 metros por três rodadas. Os alvos recebem Resistência 10 contra todo dano. Uma vez por rodada, você pode usar uma Reação para receber no lugar de um desses aliados todo o dano de um ataque. Na primeira vez que cada alvo chegaria a 0 de Vida durante o efeito, ele permanece com 1 de Vida.",
+        "niveis": [
+          20
         ]
       }
     ],
@@ -3645,6 +3717,14 @@
         "niveis": [
           18
         ]
+      },
+      {
+        "id": "predador-perfeito",
+        "titulo": "Predador Perfeito",
+        "descricao": "Uma vez por sessão, use uma Ação de Movimento para marcar uma criatura que possa perceber. Por três rodadas, seus ataques contra ela recebem +2 dados de dano, obtêm acerto crítico com resultado natural 18, 19 ou 20 e ignoram até 10 pontos de Resistência. Durante o efeito, você conhece a direção e a distância do alvo enquanto ele permanecer na mesma dimensão.",
+        "niveis": [
+          20
+        ]
       }
     ],
     "eventos": [
@@ -4013,6 +4093,14 @@
         "descricao": "Uma vez por descanso longo, gaste ação completa e 8 Mana para erguer uma estrutura de cobertura, mobilidade ou suporte em uma área de 6 m por cinco rodadas.",
         "niveis": [
           18
+        ]
+      },
+      {
+        "id": "engenho-divino",
+        "titulo": "Engenho Divino",
+        "descricao": "Uma vez por sessão, use uma Ação Completa para montar um engenho em um espaço livre a até 6 metros. Ele dura três rodadas, tem Defesa igual à sua e Vida igual a 10 vezes seu nível. Ao criá-lo, escolha um modo: Artilharia causa 4d12 de dano de Energia a um alvo em até 24 metros no fim de cada um de seus turnos; Bastião concede +4 de Defesa e Resistência 10 a aliados em até 6 metros; Reparação recupera 3d10 de Vida de até três itens, construtos ou veículos em até 6 metros no fim de cada um de seus turnos.",
+        "niveis": [
+          20
         ]
       }
     ],
@@ -4383,6 +4471,14 @@
         "niveis": [
           18
         ]
+      },
+      {
+        "id": "pedra-filosofal",
+        "titulo": "Pedra Filosofal",
+        "descricao": "Uma vez por sessão, use uma Ação Completa para produzir um dos efeitos: Panaceia faz até cinco criaturas em alcance de 12 metros recuperarem metade da Vida máxima e metade da Mana máxima e encerra uma condição de cada uma; Reconstrução devolve à vida uma criatura que morreu desde o fim de seu turno anterior, com metade da Vida máxima, 0 de Mana e 2 de Cansaço; Transmutação transforma até 3 metros cúbicos de matéria mundana em outra matéria mundana até o fim da sessão, sem criar dinheiro, seres vivos, relíquias ou materiais únicos.",
+        "niveis": [
+          20
+        ]
       }
     ],
     "eventos": [
@@ -4748,6 +4844,14 @@
         "descricao": "Uma vez por sessão, redija um acordo claro. Partes voluntárias recebem +2 em testes para cumprir o objetivo; quebrá-lo causa perda de Status, nunca controle mental.",
         "niveis": [
           18
+        ]
+      },
+      {
+        "id": "mercado-mundial",
+        "titulo": "Mercado Mundial",
+        "descricao": "Uma vez por sessão, use uma Ação Completa para receber até quatro itens publicados de raridade Rara ou inferior, com preço total máximo de 20.000 Lunaris. Os itens chegam em um espaço livre adjacente e permanecem até o fim da sessão. Eles não podem ser vendidos, desmontados, usados como material de fabricação nem depositados; itens consumidos desaparecem normalmente e os demais retornam ao fornecedor ao fim da sessão.",
+        "niveis": [
+          20
         ]
       }
     ],
@@ -5124,6 +5228,14 @@
         "niveis": [
           18
         ]
+      },
+      {
+        "id": "pilar-da-dimensao",
+        "titulo": "Pilar da Dimensão",
+        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você recebe +4 em Ataque e Defesa, Resistência 10 contra todo dano e +2 dados de dano físico. Você não pode ser derrubado nem movido contra a vontade. Na primeira vez que chegaria a 0 de Vida durante o efeito, permanece com 1 de Vida.",
+        "niveis": [
+          20
+        ]
       }
     ],
     "eventos": [
@@ -5499,6 +5611,14 @@
         "niveis": [
           18
         ]
+      },
+      {
+        "id": "senhor-das-profundezas",
+        "titulo": "Senhor das Profundezas",
+        "descricao": "Uma vez por sessão, use uma Ação Padrão para criar uma tempestade de 12 metros de raio centrada em você por três rodadas. Inimigos na área sofrem 4d12 de dano de Água no início de cada turno e fazem Fortitude contra sua DT; em falha, ficam Caídos. Aliados são imunes à tempestade. Você recupera Vida igual à metade do dano de Água causado por ela, limitado a 20 de Vida por rodada.",
+        "niveis": [
+          20
+        ]
       }
     ],
     "eventos": [
@@ -5611,15 +5731,37 @@
       ],
       "marcos": [
         {
-          "nivel": 10,
+          "nivel": 1,
+          "circulo": 1,
+          "vagas": 1
+        },
+        {
+          "nivel": 5,
           "circulo": 1,
           "vagas": 3
         },
         {
-          "nivel": 15,
+          "nivel": 10,
           "circulo": 2,
           "vagas": 4
+        },
+        {
+          "nivel": 15,
+          "circulo": 2,
+          "vagas": 5
         }
+      ]
+    },
+    "progressao_selos": {
+      "marcos": [
+        { "nivel": 1, "vagas": 1 },
+        { "nivel": 10, "vagas": 2 }
+      ]
+    },
+    "progressao_encantamentos": {
+      "marcos": [
+        { "nivel": 1, "vagas": 1 },
+        { "nivel": 10, "vagas": 2 }
       ]
     },
     "descricao": "Classe especial, aberta a qualquer Árvore. Conjura por cartas preparadas antes: o baralho decide o que você tem em mãos hoje, e o Fluxo nativo decide o que cada carta faz.",
@@ -5860,19 +6002,19 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Receba +2 em Misticismo, Percepção e Enganação ao usar o baralho como foco."
+            "descricao": "Receba +2 em Misticismo, Percepção e Enganação ao usar o baralho como foco. Escolha uma magia do Fluxo nativo de primeiro círculo que pode ser canalizada pelas cartas."
           },
           {
             "nivel": 5,
-            "descricao": "Uma vez por rodada, dê +1d4 a um teste seu ou de aliado a 10 m antes da rolagem."
+            "descricao": "Uma vez por rodada, dê +1d4 a um teste seu ou de aliado a 10 m antes da rolagem. Escolha mais duas magias do Fluxo nativo de primeiro círculo, três no total."
           },
           {
             "nivel": 10,
-            "descricao": "Escolha três magias do Fluxo nativo de primeiro círculo que podem ser canalizadas pelas cartas."
+            "descricao": "Aprenda uma magia do Fluxo nativo de segundo círculo. Uma vez por combate, use duas cartas de primeiro círculo ou uma de segundo círculo com uma ação completa."
           },
           {
             "nivel": 15,
-            "descricao": "Aprenda uma magia do Fluxo nativo de segundo círculo. Uma vez por combate, use duas cartas de primeiro círculo ou uma de segundo círculo com uma ação completa."
+            "descricao": "Escolha mais uma magia do Fluxo nativo de primeiro ou segundo círculo, cinco no total."
           },
           {
             "nivel": 20,
@@ -5897,6 +6039,14 @@
         "descricao": "Uma vez por sessão, depois de ver uma rolagem, substitua o d20 por 10 antes dos modificadores. Não escolhe crítico, desastre ou resultado arbitrário.",
         "niveis": [
           18
+        ]
+      },
+      {
+        "id": "arcano-absoluto",
+        "titulo": "Arcano Absoluto",
+        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você escolhe as cartas que compra, pode jogar duas cartas em cada turno e a primeira carta jogada no turno custa 0 de Mana. Uma vez por turno, uma carta jogada retorna à sua mão em vez de ser descartada. Ataques concedidos por cartas obtêm acerto crítico com resultado natural 19 ou 20.",
+        "niveis": [
+          20
         ]
       }
     ],
@@ -6273,6 +6423,14 @@
         "niveis": [
           18
         ]
+      },
+      {
+        "id": "caminho-impossivel",
+        "titulo": "Caminho Impossível",
+        "descricao": "Uma vez por sessão, use uma Ação Completa para abrir por três rodadas um portal até um local conhecido na mesma dimensão ou até uma âncora dimensional ativa em outra dimensão. Você, seus aliados e os equipamentos carregados podem atravessá-lo. Selos e efeitos que bloqueiem viagem dimensional impedem a abertura.",
+        "niveis": [
+          20
+        ]
       }
     ],
     "eventos": [
@@ -6648,6 +6806,14 @@
         "niveis": [
           18
         ]
+      },
+      {
+        "id": "veredito-de-haemus",
+        "titulo": "Veredito de Haemus",
+        "descricao": "Uma vez por sessão, use uma Ação Padrão para marcar uma entidade que possa perceber por três rodadas. Ela se torna corpórea, não pode possuir, teleportar nem assumir forma incorpórea. Ataques de você e de seus aliados contra ela ignoram até 15 pontos de Resistência e recebem +2 no teste de ataque ou de conjuração.",
+        "niveis": [
+          20
+        ]
       }
     ],
     "eventos": [
@@ -7022,6 +7188,14 @@
         "descricao": "Uma vez por sessão, depois que uma criatura a 12 m rolar, faça-a rerrolar e usar o novo resultado. Críticos e desastres também podem mudar.",
         "niveis": [
           18
+        ]
+      },
+      {
+        "id": "ultimo-capitulo",
+        "titulo": "Último Capítulo",
+        "descricao": "Uma vez por sessão, use uma Ação Padrão para conduzir a cena por três rodadas. Você e até cinco aliados em alcance de 12 metros recebem vantagem no primeiro teste de cada turno. Uma vez por rodada, depois que um desses alvos falhar em um teste, você pode usar uma Reação para considerar o resultado natural do d20 como 15 antes dos modificadores. Na primeira vez que um alvo chegaria a 0 de Vida durante o efeito, ele permanece com 1 de Vida.",
+        "niveis": [
+          20
         ]
       }
     ],
@@ -7407,6 +7581,14 @@
         "niveis": [
           18
         ]
+      },
+      {
+        "id": "convergencia-primordial",
+        "titulo": "Convergência Primordial",
+        "descricao": "Uma vez por sessão, use uma Ação Completa para manifestar simultaneamente todas as suas formas vinculadas por três rodadas. Em sua Iniciativa, cada forma pode executar uma de suas funções publicadas sem consumir suas ações, mas não pode repetir uma função já usada por outra forma no mesmo turno. Você mantém suas ações normalmente e paga os custos de Mana das funções ativadas.",
+        "niveis": [
+          20
+        ]
       }
     ],
     "eventos": [
@@ -7784,6 +7966,14 @@
         "niveis": [
           18
         ]
+      },
+      {
+        "id": "sem-fronteiras",
+        "titulo": "Sem Fronteiras",
+        "descricao": "Uma vez por sessão, use uma Ação Padrão para afetar você e até cinco aliados por uma cena. Os alvos ignoram terreno difícil, recebem +6 metros de Movimento e ficam imunes a dano e condições causados apenas pelo ambiente. Uma vez durante o efeito, cada alvo pode se teleportar até 12 metros para um espaço que possa perceber, sem gastar ação.",
+        "niveis": [
+          20
+        ]
       }
     ],
     "eventos": [
@@ -8159,6 +8349,14 @@
         "descricao": "Uma vez por combate, marque por três rodadas um alvo analisado; o primeiro acerto de cada rodada contra ele causa +1d6.",
         "niveis": [
           18
+        ]
+      },
+      {
+        "id": "chave-de-aletheia",
+        "titulo": "Chave de Alétheia",
+        "descricao": "Uma vez por sessão, use uma Ação Padrão para decodificar uma criatura ou efeito que possa perceber por três rodadas. Você conhece Defesa, Resistências, imunidades e recursos atuais do alvo. Você e seus aliados recebem +2 em ataques e DT contra ele, ignoram até 15 pontos de Resistência e têm vantagem em testes de resistência causados por ele.",
+        "niveis": [
+          20
         ]
       }
     ],
@@ -8536,6 +8734,14 @@
         "niveis": [
           18
         ]
+      },
+      {
+        "id": "compilacao-perfeita",
+        "titulo": "Compilação Perfeita",
+        "descricao": "Uma vez por sessão, use uma Ação Padrão para aplicar simultaneamente todos os seus Protocolos a você e a até cinco aliados em alcance de 12 metros por três rodadas. Em cada um de seus turnos, você pode executar uma Rotina como Ação Livre. Custos de Mana e limites próprios das Rotinas continuam valendo.",
+        "niveis": [
+          20
+        ]
       }
     ],
     "eventos": [
@@ -8661,6 +8867,24 @@
           "circulo": 10,
           "vagas": 10
         }
+      ]
+    },
+    "progressao_selos": {
+      "marcos": [
+        { "nivel": 1, "vagas": 1 },
+        { "nivel": 5, "vagas": 2 },
+        { "nivel": 10, "vagas": 3 },
+        { "nivel": 15, "vagas": 4 },
+        { "nivel": 20, "vagas": 5 }
+      ]
+    },
+    "progressao_encantamentos": {
+      "marcos": [
+        { "nivel": 1, "vagas": 1 },
+        { "nivel": 5, "vagas": 2 },
+        { "nivel": 10, "vagas": 3 },
+        { "nivel": 15, "vagas": 4 },
+        { "nivel": 20, "vagas": 5 }
       ]
     },
     "descricao": "Fluxo puro, direto, sem intermediário nenhum. É a forma mais simples de conjurar e a mais difícil de fazer bem.",
@@ -8935,9 +9159,9 @@
       {
         "id": "voz-da-deidade",
         "titulo": "Voz da Deidade",
-        "descricao": "Uma vez por sessão, por três rodadas, conjurações custam 2 Mana a menos, mínimo 1, e recebem +2.",
+        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, suas conjurações custam 3 de Mana a menos, mínimo 1, e recebem +3 no teste de conjuração e na DT. A primeira falha de Concentração em cada rodada é considerada um sucesso.",
         "niveis": [
-          18
+          20
         ]
       }
     ],
@@ -9064,6 +9288,24 @@
           "circulo": 10,
           "vagas": 10
         }
+      ]
+    },
+    "progressao_selos": {
+      "marcos": [
+        { "nivel": 1, "vagas": 1 },
+        { "nivel": 5, "vagas": 2 },
+        { "nivel": 10, "vagas": 3 },
+        { "nivel": 15, "vagas": 4 },
+        { "nivel": 20, "vagas": 5 }
+      ]
+    },
+    "progressao_encantamentos": {
+      "marcos": [
+        { "nivel": 1, "vagas": 1 },
+        { "nivel": 5, "vagas": 2 },
+        { "nivel": 10, "vagas": 3 },
+        { "nivel": 15, "vagas": 4 },
+        { "nivel": 20, "vagas": 5 }
       ]
     },
     "descricao": "Alinha o Fluxo nativo a catalisadores de fora pra fazer o que ele sozinho não faria. Nada disso passa a morar na alma: é sempre empréstimo.",
@@ -9338,9 +9580,9 @@
       {
         "id": "convergencia-segura",
         "titulo": "Convergência Segura",
-        "descricao": "Uma vez por sessão, por três rodadas, fusões não exigem troca e recebem +2 em conjuração e Defesa.",
+        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você pode sustentar dois Catalisadores ao mesmo tempo, suas Fusões não exigem troca nem desativam outra Fusão, custam 3 de Mana a menos, mínimo 1, e recebem +3 em conjuração e Defesa.",
         "niveis": [
-          18
+          20
         ]
       }
     ],
@@ -9436,6 +9678,27 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-01",
+    "progressao_rituais": {
+      "marcos": [
+        { "nivel": 1, "vagas": 2 },
+        { "nivel": 5, "vagas": 3 },
+        { "nivel": 15, "vagas": 4 }
+      ]
+    },
+    "progressao_selos": {
+      "marcos": [
+        { "nivel": 1, "vagas": 1 },
+        { "nivel": 5, "vagas": 2 },
+        { "nivel": 15, "vagas": 3 }
+      ]
+    },
+    "progressao_encantamentos": {
+      "marcos": [
+        { "nivel": 1, "vagas": 1 },
+        { "nivel": 5, "vagas": 2 },
+        { "nivel": 15, "vagas": 3 }
+      ]
+    },
     "descricao": "Trabalha fora do combate. Ritual não tem círculo, cobra tempo e compromete a Mana desde o primeiro minuto: se interromperem, a Mana já foi.",
     "progressao": [
       {
@@ -9708,9 +9971,9 @@
       {
         "id": "grande-oficiante",
         "titulo": "Grande Oficiante",
-        "descricao": "Uma vez por sessão, dobre participantes úteis e receba +4 contra interrupção.",
+        "descricao": "Uma vez por sessão, escolha um ritual conhecido ao iniciá-lo. Sua execução dura três rodadas, se normalmente exigiria mais tempo, e você conta como quatro participantes úteis adicionais. Você recebe +5 contra interrupção e não consome componentes Comuns; custos de Mana e componentes de raridade superior continuam valendo.",
         "niveis": [
-          18
+          20
         ]
       }
     ],
@@ -10083,9 +10346,9 @@
       {
         "id": "acesso-administrador",
         "titulo": "Acesso Administrador",
-        "descricao": "Uma vez por sessão, por três rodadas, receba +4 em interceptações e reduza seu custo em 2, mínimo 1.",
+        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você recebe +5 em interceptações, reduz o custo delas em 3 de Mana, mínimo 0, e pode realizar uma interceptação por turno sem consumir sua Reação. Em uma interceptação bem-sucedida, escolha cancelar, redirecionar para um alvo válido ou suspender o efeito até o início do próximo turno da fonte.",
         "niveis": [
-          18
+          20
         ]
       }
     ],

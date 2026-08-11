@@ -26,7 +26,6 @@
     { "id": "investigacao",      "titulo": "Investigação",      "atributo": "inteligencia",   "origem": "Tormenta", "descricao": "Examinar pistas, relacionar evidências, pesquisar arquivos e reconstruir acontecimentos." },
     { "id": "misticismo",        "titulo": "Misticismo",        "atributo": "inteligencia",   "origem": "Tormenta", "descricao": "Identificar magias, criaturas e fenômenos sobrenaturais, além de compreender teoria arcana." },
     { "id": "nobreza",           "titulo": "Nobreza",           "atributo": "inteligencia",   "origem": "Tormenta", "descricao": "Conhecer linhagens, brasões, etiqueta, política, leis e relações entre casas de poder." },
-    { "id": "oficio",            "titulo": "Ofício",            "atributo": "inteligencia",   "origem": "Tormenta", "nota": "Artesanato geral, distinto de Tecnologia", "descricao": "Produzir, avaliar e reparar itens de um ofício escolhido, como culinária, forja, marcenaria ou alquimia comum." },
     { "id": "cura",              "titulo": "Cura",              "atributo": "sabedoria",      "origem": "Tormenta", "descricao": "Prestar primeiros socorros, diagnosticar males, estabilizar feridos e acompanhar tratamentos." },
     { "id": "intuicao",          "titulo": "Intuição",          "atributo": "sabedoria",      "origem": "Tormenta", "descricao": "Perceber intenções, emoções, mentiras por comportamento e quando algo em uma situação parece errado." },
     { "id": "percepcao",         "titulo": "Percepção",         "atributo": "sabedoria",      "origem": "Tormenta", "descricao": "Notar sons, movimentos, detalhes escondidos, emboscadas e mudanças no ambiente." },
@@ -57,14 +56,6 @@
       "descricao": "Operar, diagnosticar, programar e reparar itens A.X.I.S, sistemas eletrônicos e maquinário avançado; Ofício cobre artesanato comum."
     },
     {
-      "id": "ritos-de-arkarin",
-      "titulo": "Ritos de Arkarin",
-      "atributo": "sabedoria",
-      "origem": "O Jardim",
-      "status": "aprovada",
-      "descricao": "Reconhecer, preparar e executar rituais de Arkarin ligados à morte, ao Fluxo do Sangue e à Mulher Carmesim."
-    },
-    {
       "id": "sanidade",
       "titulo": "Sanidade",
       "atributo": "sabedoria",
@@ -75,8 +66,8 @@
   ],
 
   "totais": {
-    "tormenta_base": 28,
-    "o_jardim_aprovadas": 4,
-    "nota": "As 4 perícias de O Jardim foram aprovadas por Pedro e não são mais propostas. Iniciativa foi removida desta lista porque não é uma perícia. Fortitude, Reflexos e Vontade contam no total do Tormenta (28 = 25 + as 3 reclassificadas de Resistências)."
+    "tormenta_base": 27,
+    "o_jardim_aprovadas": 3,
+    "nota": "As 3 perícias de O Jardim foram aprovadas por Pedro e não são mais propostas. Iniciativa foi removida desta lista porque não é uma perícia. Ofício foi removida da lista fixa porque agora é sempre criada como perícia personalizada (botão \"Adicionar Ofício ou perícia personalizado\"). Ritos de Arkarin foi removida por não existir mais na campanha. Fortitude, Reflexos e Vontade contam no total do Tormenta (27 = 24 + as 3 reclassificadas de Resistências)."
   }
 }

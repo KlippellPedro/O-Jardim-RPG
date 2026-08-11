@@ -14,7 +14,7 @@
     "sempre-no-x1": { "descricao": "Uma vez por turno, cause +2 de dano contra um alvo sem aliados adjacentes. Não exige teste extra de Furtividade." },
     "magico-interrogacao": { "descricao": "Ao escolher o Legado, selecione conjuração ou resistência mágica. Uma vez por cena, role com vantagem no tipo escolhido." },
     "magico-exclamacao": { "descricao": "Uma vez por cena, reduza em uma ação o tempo de concentração de uma magia, com mínimo de uma ação. Exige nível 7 e não afeta rituais.", "pre_requisitos": [{ "nivel_personagem": 7 }] },
-    "sem-chance": { "descricao": "Uma vez por descanso, ao obter 1 natural, repita o d20 e mantenha o novo resultado. Isso não remove falhas críticas do jogo." },
+    "sem-chance": { "descricao": "Uma vez por descanso, ao ter desastre natural, repita o d20 e mantenha o novo resultado." },
     "rapidinho": { "descricao": "Aumente o movimento em 1,5 m. Pode ser escolhido uma segunda vez para mais 1,5 m." },
     "sou-bom-nisso": { "descricao": "Escolha Luta ou Pontaria e receba +2. Não concede vantagem e não pode ser escolhido para as duas perícias." },
     "cozinheiro": { "descricao": "Durante um descanso, prepare alimento para até seis criaturas. Cada uma reduz 1 Cansaço e melhora sua recuperação em uma categoria, no máximo Boa. Uma criatura recebe esse benefício apenas uma vez por dia." },

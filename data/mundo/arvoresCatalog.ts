@@ -47,6 +47,7 @@ export const ARVORES: ArvoreEntry[] = [
   { id: 'chronus', nome: 'Éon', deidadeTitulo: 'Chronus', rgb: '168,138,72', cor: 'from-yellow-700/25 to-amber-600/5' },
   { id: 'erebus', nome: 'Abismo', deidadeTitulo: 'Erebus', rgb: '34,30,40', cor: 'from-zinc-800/40 to-neutral-900/10' },
   { id: 'mulher-carmesim', nome: 'Limiar', deidadeTitulo: 'Mulher Carmesim', rgb: '134,28,48', cor: 'from-red-900/30 to-rose-800/5' },
+  { id: 'universal', nome: 'Universal', deidadeTitulo: 'Universal', rgb: '201,196,214', cor: 'from-gray-400/20 to-slate-300/5' },
 ];
 
 /** Retorna a cor canônica de uma Árvore como "r,g,b". */
@@ -55,8 +56,8 @@ export function corDaArvore(arvoreId: string): string {
 }
 
 /** Sentinela pra "Sem Árvore": não é uma das 10 Árvores reais (não entra em
- * `ARVORES`), é uma origem narrativa válida por si só - um personagem sem
- * patrono só pode escolher raças/classes de `disponibilidade: 'geral'`. */
+ * `ARVORES`), é usada quando a Árvore do jogador não quer ser revelada ainda.
+ * Um personagem sem Árvore tem acesso a todas as raças e classes disponíveis. */
 export const SEM_ARVORE_ID = 'sem-arvore';
 
 export interface CampanhaVisibilidadeConfig {
@@ -82,6 +83,7 @@ export function arvoreInicialmenteRevelada(arvoreId: string): boolean {
 }
 
 export function arvoreVisivel(arvoreId: string, config: CampanhaVisibilidadeConfig, isMestre: boolean): boolean {
+  if (arvoreId === 'universal') return isMestre;
   if (isMestre) return true;
   const oculto = config.arvores_oculto || [];
   const revelado = config.arvores_revelado || [];
@@ -103,12 +105,13 @@ interface FiltravelPorArvore {
  * escolhida bater com `arvore` (singular) ou estiver em `arvores` (lista).
  *
  * `arvoreId` vazio/nulo é o estado transitório "ainda não escolheu" (mostra
- * tudo, sem filtrar) - diferente de `SEM_ARVORE_ID`, a escolha deliberada de
- * "não tenho Árvore", que só some `disponibilidade !== 'geral'` (o `arvore`/
- * `arvores` de nenhum item bate com o sentinela, então a comparação abaixo já
- * resolve isso sozinha sem um `if` a mais). */
+ * tudo, sem filtrar) - assim como `SEM_ARVORE_ID`, que é usado para ocultar a
+ * árvore verdadeira de um jogador e, por isso, libera todas as opções para não
+ * restringi-lo. `'universal'` recebe o mesmo tratamento: é a Árvore especial
+ * de personagens com acesso a tudo (espelha `_compativel_com_arvore` em
+ * plataforma/core/character_summary.py, que já bypassa a checagem pra ambos). */
 export function filtrarPorArvore<T extends FiltravelPorArvore>(lista: T[], arvoreId: string | null): T[] {
-  if (!arvoreId) return lista;
+  if (!arvoreId || arvoreId === SEM_ARVORE_ID || arvoreId === 'universal') return lista;
   return lista.filter((item) => (
     item.disponibilidade === 'geral'
     || item.arvore === arvoreId

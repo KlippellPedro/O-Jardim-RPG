@@ -1,5 +1,5 @@
 {
-  "_nota": "Sistema de veículos do RPG (tiers de upgrade: Núcleo/Estrutura/Armas/Utilidades: e chassis em Veículos). NÃO é lista de itens simples; ver INSTRUCOES_CATALOGO.md pra converter em itens 'veiculo' da loja.",
+  "_nota": "Transcrição histórica da tabela veicular. Os perfis jogáveis vigentes ficam em catalogo.json e as regras em data/regras/veiculosCombate.ts. Valores sem unidade ou perfil completo nesta transcrição não são usados em jogo.",
   "fontes": {
     "Núcleo": {
       "linhas": [
@@ -156,7 +156,7 @@
         "-/-",
         "A armas são divididas em duas categorias as leves e pesadas cada",
         "uma tendo suas formas de causar estragos em outros veículos,",
-        "porém se for em seres cada ponto é equivalente a 10 de dano fixo."
+        "O valor de Dano indica o patamar da arma. Cada arma instalada precisa informar dados, bônus, tipo, alcance e crítico. Não existe conversão por tipo de alvo."
       ]
     },
     "Utilidades": {
@@ -239,7 +239,7 @@
     "Veículos": {
       "linhas": [
         "Veículos",
-        "Pré-requisito: Classe Piloto",
+        "Pilotagem treinada é recomendada; a classe Piloto não é pré-requisito.",
         "Descrição",
         "Todo veículo possui sistemas fundamentais que determinam seu desempenho,",
         "resistência e utilidade. Esses sistemas podem ser modificados, aprimorados ou",

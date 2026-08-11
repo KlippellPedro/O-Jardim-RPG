@@ -8,7 +8,11 @@
       "id": "to-ficando-bom",
       "titulo": "Tô ficando bom",
       "descricao": "Recebe +1 no modificador de um atributo à escolha (Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma).",
-      "pre_requisitos": [],
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 5
+        }
+      ],
       "fonte": "Legado 2 (lido)"
     },
     {
@@ -63,6 +67,8 @@
           "nivel_personagem": 7
         }
       ],
+      "repetivel": true,
+      "limite": 2,
       "fonte": "Legado 2 (lido)"
     },
     {
@@ -77,6 +83,8 @@
       "titulo": "Não é Tão Pesado",
       "descricao": "Reduz a penalidade de armadura ou escudo em 1. Escolhendo uma segunda vez, a penalidade reduz em 3; escolhendo uma terceira vez, conta para ambos.",
       "pre_requisitos": [],
+      "repetivel": true,
+      "limite": 3,
       "fonte": "Legado 3 (lido)"
     },
     {
@@ -90,7 +98,11 @@
       "id": "bala-agil",
       "titulo": "Bala Ágil",
       "descricao": "Você adiciona seu modificador de Destreza no dano de armas à distância.",
-      "pre_requisitos": [],
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 5
+        }
+      ],
       "fonte": "Legado 3 (lido)"
     },
     {
@@ -104,7 +116,11 @@
       "id": "magico-interrogacao",
       "titulo": "Mágico?",
       "descricao": "Você recebe vantagem para resistir ou conjurar magias.",
-      "pre_requisitos": [],
+      "pre_requisitos": [
+        {
+          "nivel_personagem": 5
+        }
+      ],
       "fonte": "Legado 3 (lido)"
     },
     {
@@ -117,7 +133,7 @@
     {
       "id": "sem-chance",
       "titulo": "Sem Chance",
-      "descricao": "Você se torna incapaz de tirar desastres em seus dados.",
+      "descricao": "Uma vez por descanso, ao ter desastre natural, repita o d20 e mantenha o novo resultado.",
       "pre_requisitos": [],
       "fonte": "Legado 4 (lido)"
     },
@@ -131,6 +147,8 @@
           "valor_minimo": 16
         }
       ],
+      "repetivel": true,
+      "limite": 2,
       "fonte": "Legado 4 (lido)"
     },
     {
@@ -186,7 +204,7 @@
     {
       "id": "codigo-de-etica",
       "titulo": "Código de Ética",
-      "descricao": "Você se torna incapaz de atacar seres desarmados. Porém, se o oponente estiver armado, seus ataques causam dano adicional igual ao seu nível e você sempre age antes dele na iniciativa.",
+      "descricao": "Você se torna incapaz de atacar seres desarmados. Porém, se o oponente estiver armado, seus ataques causam dano adicional igual à metade do seu nível (arredondado para baixo, até um máximo de +30) e você sempre age antes dele na iniciativa.",
       "pre_requisitos": [
         {
           "nivel_personagem": 6

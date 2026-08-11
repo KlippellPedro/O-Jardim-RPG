@@ -13,7 +13,7 @@ Cada item é um objeto assim (o mesmo schema do site, em `data/loja`):
   "id": "espada-longa",
   "titulo": "Espada Longa",
   "conteudo": {
-    "descricao": "texto de abertura (opcional)",
+    "descricao": "texto de abertura obrigatório",
     "preco": 10,
     "raridade": "comum",
     "atributos": ["1d8 de dano", "Crítico 18-20/x2"],
@@ -29,13 +29,16 @@ Cada item é um objeto assim (o mesmo schema do site, em `data/loja`):
   `artefato`, `fruto-eden`, `implante`, `veiculo`, `veiculo-completo`, `monstro`
   ou `drop`.
 - **id:** slug único (minúsculas, com hífens). IDs repetidos são rejeitados na publicação.
-- **preco:** número (preço nativo em **Solares**) **ou** objeto `{"Lunaris": 40, "Solares": 5}` para definir preços em moedas específicas.
+- **preco:** número (preço nativo em **Solares**) **ou** objeto com exatamente
+  uma moeda, como `{"Lunaris": 40}`. Nunca declare duas moedas no mesmo preço.
 - **preco_original + promocao:** para uma oferta real, `preco` guarda o valor
   atual validado pelo servidor, `preco_original` usa a mesma moeda e
   `promocao` recebe `{ "ativa": true, "rotulo": "Nome da oferta" }`. O site
   calcula a porcentagem; não confie em desconto informado pelo navegador.
-- **raridade:** `comum | incomum | raro | epico | lendario | reliquia |
-  reliquia da criacao` (acentos e maiúsculas também são aceitos).
+- **raridade:** `comum | incomum | raro | epico | lendario | mitico |
+  reliquia da criacao` (acentos e maiúsculas também são aceitos; `reliquia`
+  permanece como chave legada de `mitico`). Valor ausente ou desconhecido é
+  rejeitado pela auditoria e aparece como `Desconhecida` na interface.
 - **margem_ameaca:** menor resultado natural que gera crítico (`18`, `19` ou `20`).
 - **multiplicador_critico:** quantas vezes os dados da arma são rolados (`2`, `3` ou `4`).
 - Margens `18` e `19` usam `x2`; multiplicadores `x3` e `x4` exigem margem `20`.
@@ -57,12 +60,14 @@ ele não publica mudanças feitas no JSON.
 
 ## O que já está feito
 
-- **Armas:** 87 (com `subtipo` `simples`/`marcial` e `modo`
+- **Armas:** 87, todas com descrição, dano rolável, crítico e modo
+  (`subtipo` `simples`/`marcial` e `modo`
   `Corpo a corpo`/`À distância`, margem de ameaça e multiplicador crítico;
   inclui Obstinadas e Relíquias da Criação).
-- **Equipamentos:** 56 (o material que vazava pro fim do `descricao` foi movido
-  pro campo `material`; descrições e typos revisados).
-- **Armaduras e escudos:** 52 (com `bonus`, `penalidade`, `material`).
+- **Equipamentos:** 56 (descrição e `espacos` explícitos; material e efeitos
+  revisados quando havia fonte ou comparação segura).
+- **Armaduras e escudos:** 52 (com `bonus`, `penalidade`, `espacos` e material
+  quando aplicável).
 - **Modificações:** 51 (`tipo: "modificacao"`). São as mesmas de
   `data/regras/raridadesEquipamentos.ts`, uma entrada por modificação, com
   `modificacao_id` apontando para a fonte. O preço sai de
@@ -70,13 +75,35 @@ ele não publica mudanças feitas no JSON.
   1, 2 e 3 — e as marciais só aparecem da Metrópole para cima
   (`nivelMinimoLoja: 2`). Ao acrescentar uma modificação nas regras, replique a
   entrada aqui com o mesmo preço da faixa.
-- **Veículos:** 55 — 49 sistemas e 6 veículos completos.
-- **Bestiário:** 28 seres (`tipo: "monstro"`, preço por fórmula).
+- **Veículos:** 65, sendo 49 sistemas/peças e 16 veículos completos, todos com
+  ficha estruturada e efeitos veiculares completos.
+- **Bestiário:** 60 seres (`tipo: "monstro"`, preço por fórmula).
 - **Drops:** 22 partes de seres (`tipo: "drop"`).
 - **Especiais:** 5 Frutos do Éden, 10 Implantes, 8 Artefatos Mágicos e 11 Selos
   consumíveis sincronizados com o catálogo mágico.
 
-Total: **334 entradas**.
+Total: **427 entradas**.
+
+## Política econômica
+
+O câmbio oficial é de **100 Lunaris para 1 Solar**. Lunaris são a moeda de uso
+cotidiano; Solares representam compras de alto valor. Para evitar que um preço
+como `15` transforme por engano uma algema em um item de 1.500 Lunaris, siga
+estas faixas:
+
+- **Equipamentos cotidianos:** 1–60 Lunaris. Algemas custam 5 Lunaris.
+- **Armas convencionais até Raro:** 5–70 Lunaris.
+- **Armaduras e escudos convencionais até Raro:** 5–95 Lunaris.
+- **Modificações:** 25–450 Lunaris, conforme o valor do efeito.
+- **Peças e veículos completos:** Lunaris; os valores altos representam bens,
+  máquinas e naves, mas não devem ser interpretados como Solares.
+- **Solares:** equipamentos mágicos, armamentos militares ou tecnológicos de
+  alto nível, criaturas, drops e outros bens realmente valiosos.
+- **Fragmentos de Estrela:** Relíquias da Criação e transações celestiais.
+- **Créditos Sombrios:** implantes e mercado negro.
+
+Ao usar Lunaris, sempre escreva `{"Lunaris": valor}`. Um número sem objeto é
+interpretado pelo servidor como Solares.
 
 Arkania foi **removido** (conceito descontinuado) e substituído por itens
 equivalentes usando conceitos vivos: `anel-do-fluxo`, `couraca-primordial`,
@@ -101,7 +128,7 @@ não entrou na loja; fica citado na descrição do chassi como liberação do me
 
 Convertidos de `data/loja/bestiario_precos.json`.
 
-**Bestiário (`tipo: "monstro"`, 25 seres):** preço calculado pela fórmula
+**Bestiário (`tipo: "monstro"`, 60 seres):** preço calculado pela fórmula
 
 ```text
 preço = (PreçoPorLevel[faixa] × nível) + Espécie[faixa] + Classe[faixa] + Σ(extras)

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-05T03:30:05.220Z",
+  "generatedAt": "2026-08-08T23:59:36.129Z",
   "levels": [
     1,
     5,
@@ -529,7 +529,9 @@
           "habilidades": 11
         }
       ],
-      "alertasTexto": []
+      "alertasTexto": [
+        "Um Só Disparo"
+      ]
     },
     {
       "id": "medico",
@@ -5532,6 +5534,16 @@
       "autorizacaoMestre": true
     },
     {
+      "id": "reliquia-murasame",
+      "titulo": "Murasame",
+      "raridade": "relíquia da criação",
+      "dano": "8d12+16",
+      "mediaNormal": 68,
+      "mediaComCritico": 71.4,
+      "nivelRecomendado": 35,
+      "autorizacaoMestre": true
+    },
+    {
       "id": "reliquia-gungnir",
       "titulo": "Gungnir",
       "raridade": "relíquia da criação",
@@ -5588,8 +5600,8 @@
       "dano": "10d8+4d4",
       "mediaNormal": 55,
       "mediaComCritico": 60.50000000000001,
-      "nivelRecomendado": null,
-      "autorizacaoMestre": false
+      "nivelRecomendado": 25,
+      "autorizacaoMestre": true
     },
     {
       "id": "excalibur",
@@ -5638,16 +5650,6 @@
       "dano": "5d12+10",
       "mediaNormal": 42.5,
       "mediaComCritico": 48.87499999999999,
-      "nivelRecomendado": 25,
-      "autorizacaoMestre": true
-    },
-    {
-      "id": "triceratops",
-      "titulo": "Triceratops",
-      "raridade": "lendario",
-      "dano": "6d10+8",
-      "mediaNormal": 41,
-      "mediaComCritico": 47.15,
       "nivelRecomendado": 25,
       "autorizacaoMestre": true
     }

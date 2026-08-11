@@ -1,39 +1,42 @@
 {
-  "descricao": "Convenção de campos pra conteúdo da Loja (arsenal, veículos, bestiário, drops). Como no Mundo, isso é anotação minha pra você — não é importável como está (não tem tipo/id/titulo/conteudo no nível raiz). Pra importar de verdade, crie um arquivo com uma entrada só ({tipo,id,titulo,conteudo}) ou um pacote ({\"entradas\":[...]}), no formato de cada exemplo em '_exemplos' abaixo.",
+  "descricao": "Convenção de campos pra conteúdo da Loja (arsenal, veículos, bestiário, drops). Como no Mundo, isso é anotação minha pra você - não é importável como está (não tem tipo/id/titulo/conteudo no nível raiz). Pra importar de verdade, crie um arquivo com uma entrada só ({tipo,id,titulo,conteudo}) ou um pacote ({\"entradas\":[...]}), no formato de cada exemplo em '_exemplos' abaixo.",
 
   "schema_base": {
-    "tipo": "um de: arma, armadura, equipamento (→ Arsenal) · veiculo (→ Veículos) · monstro (→ Bestiário) · drop (→ Drops)",
-    "id": "identificador único, slug (ex.: 'espada-de-longinus') — usado na URL e em cross-links de outras entradas",
+    "tipo": "um de: arma, armadura, equipamento, modificacao, consumivel, artefato, fruto-eden, implante, veiculo, veiculo-completo, monstro ou drop",
+    "id": "identificador único, slug (ex.: 'espada-de-longinus') - usado na URL e em cross-links de outras entradas",
     "titulo": "nome exibido no card e no modal",
-    "conteudo": "objeto livre — qualquer campo vira uma linha genérica no modal, exceto os curados abaixo"
+    "conteudo": "objeto livre - qualquer campo vira uma linha genérica no modal, exceto os curados abaixo"
   },
 
   "campos_curados_em_conteudo": {
-    "descricao": "Prosa de abertura do modal (sem rótulo). Se ausente, o modal não mostra parágrafo nenhum ali — só os campos genéricos.",
+    "descricao": "Prosa obrigatória de abertura do card e do modal. Entrada sem descrição reprova na auditoria do catálogo.",
     "imagem": "URL ou caminho relativo (ex.: '../assets/img/loja/espada-longinus.png') pra ilustração do item. Ausente → o card/modal mostra um símbolo da categoria num fundo com brilho, em vez de imagem quebrada.",
-    "raridade": "comum | incomum | raro | epico | lendario | reliquia | reliquia da criacao (aceita com ou sem acento e em qualquer caixa). Ausente ou valor desconhecido cai em 'comum'. A raridade colore os cards e, quando o item entra na ficha, limita modificações, efeitos automáticos e dons conforme data/regras/raridadesEquipamentos.ts.",
-    "preco": "número (preço nativo em Solares) OU objeto { \"NomeDaMoeda\": valor, ... } para aceitar moedas específicas (ex.: { \"Lunaris\": 450, \"Solares\": 60 } — nomes batem sem acento/caixa com as moedas cadastradas na carteira, ver 'nota_moedas' abaixo). Ausente, ou objeto sem a moeda ativa como chave → card mostra '—' e modal mostra 'Preço a definir'. O Banqueiro segue o mesmo contrato para impedir que um valor numérico seja comprado ou vendido arbitrariamente em qualquer moeda.",
+    "raridade": "comum | incomum | raro | epico | lendario | mitico | reliquia da criacao (aceita com ou sem acento e em qualquer caixa; 'reliquia' continua aceito como nome antigo de 'mitico'). Valor ausente ou desconhecido reprova na auditoria e aparece como 'Desconhecida', sem cair silenciosamente em Comum.",
+    "preco": "inteiro positivo (preço nativo em Solares) OU objeto com exatamente uma moeda conhecida e um inteiro positivo, por exemplo { \"Lunaris\": 450 }. Objetos com várias moedas, moeda desconhecida, zero ou valor fracionário são inválidos.",
     "atributos": "array de 1–2 strings curtas pro resumo que aparece no CARD, abaixo do título (ex.: [\"+15 Ataque Físico\", \"Queima por 3 turnos\"]). Ausente → o card cai pra um trecho truncado de 'descricao'.",
-    "nivel": "string ou número, vira selo 'Nv. X' no card e no modal. Faz sentido em qualquer categoria (não só Bestiário) — ex. um veículo pode pedir nível mínimo de pilotagem.",
+    "nivel": "string ou número, vira selo 'Nv. X' no card e no modal. Faz sentido em qualquer categoria (não só Bestiário) - ex. um veículo pode pedir nível mínimo de pilotagem.",
     "classe": "string curta, vira selo próprio no card e no modal (ex. classe de uma criatura do Bestiário). Também não é exclusivo de nenhuma categoria."
   },
 
   "acao_por_categoria": "A interface atual usa os modos Comprar, Vender e Recompensas. A categoria é normalizada pelo adaptador src/services/lojaCatalogService.ts, enquanto preços e transações são validados pelo backend.",
 
-  "nota_moedas": "A carteira no topo da Loja não mostra mais só 'Lunaris' fixo — é um seletor (clique no nome da moeda, ao lado do valor) pra trocar qual está ativa ou remover uma já cadastrada. Lunaris vem por padrão; moeda nova NÃO se digita na interface — chega pelo mesmo botão 'Importar conteúdo' dos itens, como conteúdo descoberto (ver 'schema_moedas' e '_exemplo_moedas' abaixo). Não dá pra remover a única moeda cadastrada. A moeda ativa decide qual preço de 'preco' aparece em cada item — ver o campo acima.",
+  "nota_moedas": "A Loja exibe separadamente os saldos de Solares, Lunaris, Fragmentos de Estrela e Créditos Sombrios. Cada item possui uma única moeda nativa, definida no catálogo e validada novamente pelo servidor na compra e na revenda.",
+  "politica_precos": "100 Lunaris equivalem a 1 Solar. Use Lunaris para equipamentos cotidianos, armas e armaduras convencionais até Raro, modificações e veículos; use Solares para bens mágicos, militares ou tecnológicos de alto valor; preserve Fragmentos de Estrela e Créditos Sombrios para seus mercados especiais.",
 
   "schema_moedas": {
-    "descricao": "Formato de import só pra moeda — não tem tipo/categoria (não é uma 'entrada' da Loja), então é um arquivo à parte dos itens (ou as duas chaves juntas no mesmo pacote, ver '_exemplo_moedas').",
-    "nome": "nome da moeda, o único campo obrigatório — aparece na carteira e ao lado do preço de cada item",
-    "simbolo": "1-2 caracteres pro ícone da carteira. Ausente → cai num símbolo genérico ('◈').",
-    "saldo": "número — quanto os jogadores já têm dessa moeda, hoje só o valor mostrado na carteira (mesmo aviso do resto da carteira: é visual, a gestão de verdade ainda vai ser pelo Banqueiro). Ausente → 0.",
-    "duplicidade": "nome já cadastrado (sem diferenciar acento/caixa, ex. 'Solares' == 'SOLARES') é ignorado na importação, não sobrescreve nem duplica."
+    "descricao": "Referência das moedas aceitas pelo catálogo e pela carteira. Moedas não são importadas pela Loja.",
+    "nome": "Solares | Lunaris | Fragmentos de Estrela | Créditos Sombrios",
+    "simbolo": "SOL | LUN | FRG | CRD",
+    "saldo": "Inteiro não negativo mantido pelo backend econômico.",
+    "duplicidade": "Cada personagem possui no máximo um saldo por moeda e campanha."
   },
 
   "_exemplo_moedas": {
     "moedas": [
-      { "nome": "Solares", "simbolo": "☉", "saldo": 15 },
-      { "nome": "Ecos", "simbolo": "♪" }
+      { "nome": "Solares", "simbolo": "SOL", "saldo": 15 },
+      { "nome": "Lunaris", "simbolo": "LUN", "saldo": 40 },
+      { "nome": "Fragmentos de Estrela", "simbolo": "FRG", "saldo": 2 },
+      { "nome": "Créditos Sombrios", "simbolo": "CRD", "saldo": 0 }
     ]
   },
 
@@ -70,7 +73,7 @@
       "id": "sombra-de-erebus",
       "titulo": "Sombra de Erebus",
       "conteudo": {
-        "descricao": "Não tem corpo — só a ausência de um. Segue quem já teve medo uma vez.",
+        "descricao": "Não tem corpo - só a ausência de um. Segue quem já teve medo uma vez.",
         "raridade": "epico",
         "preco": 620,
         "nivel": 8,
@@ -85,12 +88,12 @@
       "conteudo": {
         "descricao": "Ainda instável. Precisa ser lapidado antes de alimentar qualquer Fluxo.",
         "raridade": "incomum",
-        "preco": { "Lunaris": 40, "Solares": 5 }
+        "preco": { "Lunaris": 40 }
       }
     }
   ],
 
-  "campos_com_underscore": "Qualquer campo começando com '_' (como este e '_exemplos') é anotação minha pra você — não faz parte do schema de import. O sistema ignora se importar do jeito que está.",
+  "campos_com_underscore": "Qualquer campo começando com '_' (como este e '_exemplos') é anotação minha pra você - não faz parte do schema de import. O sistema ignora se importar do jeito que está.",
 
-  "nota_bestiario": "Bestiário tecnicamente já é a categoria de 'seres contratáveis' — a descrição da categoria (categorias.js) fala em 'criaturas, monstros e ameaças', mas o botão 'Contratar' e os campos nivel/classe tratam essas entradas como aliados/invocações que se juntam ao grupo, não só como enciclopédia de ameaças."
+  "nota_bestiario": "Bestiário tecnicamente já é a categoria de 'seres contratáveis' - a descrição da categoria (categorias.js) fala em 'criaturas, monstros e ameaças', mas o botão 'Contratar' e os campos nivel/classe tratam essas entradas como aliados/invocações que se juntam ao grupo, não só como enciclopédia de ameaças."
 }

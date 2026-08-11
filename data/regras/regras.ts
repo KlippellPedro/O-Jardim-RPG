@@ -1,6 +1,17 @@
 
+import classesData from '../ficha/classes.json';
+import legadosData from '../ficha/legados.json';
+import legadosNovosData from '../ficha/legados-novos.json';
 import magiasData from '../ficha/magias.json';
 import marcasCirculoData from '../ficha/marcas-de-circulo.json';
+import periciasData from '../ficha/pericias.json';
+import racasData from '../ficha/racas.json';
+import { REGRA_AFLICOES } from './aflicoes';
+import { REGRA_ATAQUES_COMBINADOS } from './ataquesCombinados';
+import { REGRA_BASES } from './bases';
+import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from './condicoes';
+import { REGRA_CRAFTING } from './crafting';
+import { REGRA_MUNDO_FACCOES } from './faccoes';
 import {
   CATEGORIAS_MODIFICACAO,
   DONS_RARIDADE_POR_CATEGORIA,
@@ -10,6 +21,7 @@ import {
   REGRAS_MODIFICACOES_EQUIPAMENTO,
   ROTULO_RARIDADE_MINIMA_MODIFICACAO,
 } from './raridadesEquipamentos';
+import { REGRA_VEICULOS } from './veiculosCombate';
 
 export interface RegraTopic {
   status: string;
@@ -50,6 +62,60 @@ const donsRaridadeEquipamento = Object.entries(DONS_RARIDADE_POR_CATEGORIA).map(
     </ul>
   </details>
 `).join('');
+
+/** Gerado de data/regras/condicoes.ts para o livro público nunca divergir do
+ * que a ficha e a sessão ao vivo realmente aplicam. */
+const tabelaCondicoesGerais = CONDICOES_OFICIAIS.map((condicao) => `
+  <tr>
+    <td><strong>${condicao.titulo}</strong></td>
+    <td>${condicao.efeitos.join(' ')}</td>
+    <td>${condicao.remocao}</td>
+  </tr>
+`).join('');
+
+const tabelaCrisesSanidade = CRISES_SANIDADE.map((crise) => `
+  <tr>
+    <td><strong>${crise.titulo}</strong></td>
+    <td>${crise.duracao}</td>
+    <td>${crise.efeitos.join(' ')}</td>
+    <td>${crise.remocao}</td>
+  </tr>
+`).join('');
+
+/** Geradas de data/ficha/classes.json e racas.json: o livro público lista nome,
+ * tipo e conceito de cada entrada em vez de repetir a progressão inteira, que
+ * já vive no catálogo interativo da página de Regras. */
+const listaClassesPublicas = classesData
+  .map((classe) => `<li><strong>${classe.titulo}</strong> (${classe.categoria === 'esquecida' ? 'especial' : 'comum'}) — ${classe.descricao}</li>`)
+  .join('');
+
+const listaRacasPublicas = racasData
+  .filter((raca) => !raca.indisponivel && raca.id !== 'raca-personalizada')
+  .map((raca) => `<li><strong>${raca.titulo}</strong> (${raca.categoria === 'esquecida' ? 'especial' : 'comum'}) — Vida ${raca.vida >= 0 ? '+' : ''}${raca.vida}, Mana ${raca.mana >= 0 ? '+' : ''}${raca.mana}${raca.movimento ? `, Movimento +${raca.movimento} m` : ''}</li>`)
+  .join('');
+
+const listaLegadosPublicos = [...(legadosData.legados || []), ...(legadosNovosData.novos || [])]
+  .map((legado) => `<li><strong>${legado.titulo}:</strong> ${legado.descricao}</li>`)
+  .join('');
+
+const NOME_ATRIBUTO_PERICIA: Record<string, string> = {
+  forca: 'Força',
+  destreza: 'Destreza',
+  constituicao: 'Constituição',
+  inteligencia: 'Inteligência',
+  sabedoria: 'Sabedoria',
+  carisma: 'Carisma',
+  fluxo: 'Fluxo',
+};
+
+const tabelaPericiasPublicas = (periciasData.pericias || [])
+  .map((pericia) => `
+    <tr>
+      <td><strong>${pericia.titulo}</strong></td>
+      <td>${NOME_ATRIBUTO_PERICIA[pericia.atributo] || pericia.atributo}</td>
+      <td>${pericia.descricao}</td>
+    </tr>
+  `).join('');
 
 /** Sai de data/ficha/magias.json para o quadro publicado nunca divergir do
  * custo que a ficha cobra de verdade. */
@@ -100,8 +166,7 @@ const tabelaCicatrizes = marcasCirculoData.cicatrizes.map((cicatriz) => `
 const ROTULO_NIVEL_MODIFICACAO = { comum: 'Comum', marcial: 'Marcial' } as const;
 const ORDEM_NIVEL_MODIFICACAO = { comum: 0, marcial: 1 } as const;
 
-/** Cada categoria fica recolhida: são 51 modificações, e ninguém precisa
- * atravessar as quatro listas para achar a da própria arma. */
+/** As modificações ficam agrupadas por categoria para reduzir a extensão inicial da página. */
 const tabelaModificacoesEquipamento = CATEGORIAS_MODIFICACAO.map(({ id, titulo }) => {
   const daCategoria = MODIFICACOES_EQUIPAMENTO
     .filter((modificacao) => modificacao.categoria === id)
@@ -138,32 +203,96 @@ const tabelaPrecoModificacoes = Object.entries(PRECO_MODIFICACAO_POR_VALOR).map(
 `).join('');
 
 export const REGRAS_OFICIAIS: RegrasCatalog = {
+  'criacao-personagem': {
+    categoria: 'Livro do Jogador',
+    status: 'Regra oficial',
+    resumo: 'Um roteiro completo para criar um personagem de nível 1, escolher suas opções e conferir todos os valores da ficha.',
+    destaques: [
+      ['Etapas', '7 passos'],
+      ['Perícias', '6 em Aprendiz'],
+      ['Recursos', '1 item comum + 20 Lunaris'],
+    ],
+    corpo: `
+      <p class="regras-lead">O assistente de criação da ficha segue estas sete etapas. Faça as escolhas na ordem apresentada: opções posteriores dependem da Árvore, da raça e da classe escolhidas antes.</p>
+
+      <h3 class="regras-subtitle">Antes de começar</h3>
+      <ul class="regras-list">
+        <li>Combine com o Mestre o tom da campanha, o nível inicial e quais opções especiais foram liberadas.</li>
+        <li>Crie um conceito curto: quem é o personagem, o que ele procura e por que aceita se aventurar com o grupo.</li>
+        <li>Na criação padrão, o personagem começa no <strong>nível 1</strong>, com uma classe comum. Raças ou classes especiais só entram por liberação explícita do Mestre ou por uma exceção escrita na própria opção.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">1. Nome e Árvore de origem</h3>
+      <p>Escolha o nome do personagem e a Árvore à qual ele pertence. A Árvore determina quais opções exclusivas podem aparecer. Se a campanha permitir um personagem sem Árvore (para manter sua origem oculta, por exemplo), ele tem acesso a todas as opções do compêndio.</p>
+
+      <h3 class="regras-subtitle">2. Raça e variante</h3>
+      <ul class="regras-list">
+        <li>Escolha uma raça disponível para sua Árvore. A raça define fisiologia, características raciais e ajustes próprios.</li>
+        <li>Se a raça oferecer variante, linhagem ou outra escolha obrigatória, registre uma delas antes de avançar.</li>
+        <li>Uma opção especial precisa estar liberada para esse personagem. Estar visível no catálogo não concede acesso automático.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">3. Classe inicial</h3>
+      <ul class="regras-list">
+        <li>Escolha uma classe comum disponível. Ela concede as recompensas do nível 1 e define os ganhos de Vida e Mana por nível.</li>
+        <li>A classe inicial começa no nível 1. Entrar em outra classe depois segue as regras de progressão e multiclasse.</li>
+        <li>Classe especial exige <strong>nível total 20</strong>, liberação do Mestre e um acontecimento na história, salvo uma exceção explícita que permita começar com ela.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">4. Divindade</h3>
+      <p>Registre a Deidade associada à sua Árvore ou outra entidade que o personagem cultue. Um personagem sem Árvore pode deixar esse campo vazio. Escolher uma divindade descreve crença e vínculo narrativo; não concede poderes além dos declarados por raça, classe, item ou outra regra.</p>
+
+      <h3 class="regras-subtitle">5. Atributos</h3>
+      <p>Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo. Depois disso, a ficha aplica os ajustes raciais.</p>
+      <ul class="regras-list">
+        <li><strong>Conjunto padrão:</strong> 15, 14, 13, 12, 10, 8 e 8. Cada número é usado uma vez.</li>
+        <li><strong>Compra por pontos:</strong> todos começam em 8; distribua exatamente 24 pontos, pagando 1 ponto por cada +1. Nenhum atributo passa de 15 antes dos ajustes raciais.</li>
+        <li><strong>Variante aleatória:</strong> role 7d20 e distribua os sete resultados, cada dado uma vez. Esse método não é equivalente aos anteriores e só deve ser usado com concordância da mesa.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">6. Perícias e equipamento inicial</h3>
+      <ul class="regras-list">
+        <li>Escolha exatamente <strong>seis perícias</strong> para começar em Aprendiz. Humano escolhe sete por Adaptabilidade.</li>
+        <li>Escolha um item comum aprovado pelo Mestre. Ele entra no inventário como item de criação e não possui preço de revenda.</li>
+        <li>Registre <strong>20 Lunaris</strong>. Nenhuma nova classe escolhida no futuro concede outro equipamento ou dinheiro inicial.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">7. Conferência da ficha</h3>
+      <dl class="regras-kv regras-kv--boxed">
+        <dt>Nível e XP</dt><dd>nível total 1 e 0 XP</dd>
+        <dt>Vida máxima</dt><dd>máx. 1, (4 × Mod.Constituição) + Vida da classe, depois ajustes raciais</dd>
+        <dt>Mana máxima</dt><dd>máx. 1, (3 × Mod.Sabedoria) + Mana da classe, depois ajustes raciais</dd>
+        <dt>Sanidade</dt><dd>100 de 100</dd>
+        <dt>Cansaço</dt><dd>0 de 6</dd>
+        <dt>Defesa Natural</dt><dd>10 + ⌊Nível total ÷ 2⌋ + Mod.Destreza + ajustes raciais ou naturais</dd>
+        <dt>Defesa Total</dt><dd>Defesa Natural + armadura, escudo, modificações e outros ajustes ativos</dd>
+        <dt>Movimento</dt><dd>9 m + (1,5 m × Mod.Destreza) + ajuste racial ou morfológico, mínimo 4,5 m</dd>
+        <dt>Iniciativa</dt><dd>10 + ⌊Nível total ÷ 2⌋ + Mod.Destreza + bônus</dd>
+      </dl>
+      <p class="regras-note"><strong>Não some ajustes duas vezes:</strong> a ficha calcula os derivados e aplica raça e equipamento automaticamente. Use ajustes manuais apenas para efeitos que ainda não estejam representados no sistema.</p>
+
+      <h3 class="regras-subtitle">Checklist final</h3>
+      <ul class="regras-list">
+        <li>Nome, raça, variante e classe estão preenchidos. Árvore e divindade podem ficar vazias quando a campanha permitir personagem sem Árvore.</li>
+        <li>Os sete atributos usam um método válido e os ajustes raciais aparecem uma única vez.</li>
+        <li>Seis perícias estão em Aprendiz, ou sete se o personagem for Humano.</li>
+        <li>Vida, Mana, Sanidade, Cansaço, Defesa, Movimento e Iniciativa conferem com o resumo.</li>
+        <li>O inventário contém um item comum de criação e a carteira contém 20 Lunaris.</li>
+        <li>O personagem possui um motivo para participar da campanha e trabalhar com o grupo.</li>
+      </ul>
+    `,
+  },
+
   'sistema-base': {
     categoria: 'Livro do Jogador',
     status: 'Regra oficial',
-    resumo: 'Como montar um personagem do zero: atributos, Vida, Mana e as contas que você vai usar pelo resto do jogo.',
+    resumo: 'As fórmulas fundamentais, limites de nível, multiclasse, maestrias e o papel do atributo Fluxo.',
     destaques: [
       ['Teste', 'd20 + bônus vs. DT'],
-      ['Atributos', 'Padrão ou 24 pontos'],
-      ['Níveis', '1–40 no total'],
+      ['Classes', '2 comuns + 1 especial'],
+      ['Teto', '40 / 60 níveis totais'],
     ],
     corpo: `
-      <h3 class="regras-subtitle">Criação de personagem</h3>
-      <ol class="regras-steps">
-        <li><strong>Distribua os atributos</strong> pelo conjunto padrão ou comprando por pontos. Os dois métodos estão logo abaixo e dão no mesmo total.</li>
-        <li><strong>Escolha uma raça</strong> comum e, se ela pedir, a variante. É a raça que diz como seu corpo funciona e o que ele já sabe fazer sozinho.</li>
-        <li><strong>Escolha seis perícias</strong> para começar em Aprendiz. Humano escolhe sete, por Adaptabilidade.</li>
-        <li><strong>Escolha uma classe</strong> comum. É dela que vêm os ganhos de Vida e Mana de cada nível daqui pra frente.</li>
-        <li><strong>Pegue</strong> um item comum e 20 Lunaris. É com isso que você começa.</li>
-      </ol>
-      <h3 class="regras-subtitle">Métodos de atributos</h3>
-      <ul class="regras-list">
-        <li><strong>Conjunto padrão:</strong> 15, 14, 13, 12, 10, 8 e 8, distribuídos como você quiser entre os sete atributos. Cada número é usado uma vez só.</li>
-        <li><strong>Compra por pontos:</strong> os sete atributos começam em 8 e você distribui exatamente 24 pontos, na base de 1 ponto para cada +1. Nenhum atributo passa de 15 antes dos ajustes raciais.</li>
-        <li><strong>Os dois dão no mesmo:</strong> o conjunto padrão também custa exatamente 24 pontos. A diferença é só que a compra deixa você especializar mais e ficar pior nos outros.</li>
-      </ul>
-      <p class="regras-note"><strong>Variante aleatória:</strong> role 7d20 e organize os sete resultados, cada dado usado uma vez. Isso <strong>não</strong> é equivalente aos dois métodos acima: sai personagem muito acima ou muito abaixo da média, e você só descobre qual depois de rolar. Combine com a mesa antes de usar.</p>
-
       <h3 class="regras-subtitle">Fórmulas fundamentais</h3>
       <dl class="regras-kv regras-kv--boxed">
         <dt>Modificador</dt><dd>⌊(Atributo − 10) ÷ 2⌋</dd>
@@ -173,7 +302,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <dt>Mana no nível 1</dt><dd>máx. 1, (3 × Mod.Sabedoria) + Mana da classe</dd>
         <dt>Mana por nível posterior</dt><dd>ganho de Mana da classe do nível adquirido, mínimo 1</dd>
         <dt>Ajustes raciais</dt><dd>bônus raciais de Vida e Mana são somados depois do cálculo correspondente</dd>
-        <dt>Defesa Natural</dt><dd>10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + equipamento</dd>
+        <dt>Defesa Natural</dt><dd>10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + ajustes raciais ou naturais</dd>
         <dt>Movimento</dt><dd>9 m + (1,5 m × Mod.Destreza) + ajuste da raça ou morfologia, mínimo 4,5 m</dd>
         <dt>Iniciativa</dt><dd>10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + bônus</dd>
       </dl>
@@ -183,8 +312,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Nível total</strong> é a soma dos níveis de todas as suas classes, incluindo as especiais.</li>
         <li>Cada classe vai até o <strong>nível 20</strong>. Só com classes comuns, o teto é <strong>40 níveis totais</strong>; com uma classe especial, sobe para <strong>60</strong>.</li>
         <li>Você pode ter no máximo <strong>duas classes comuns e uma especial</strong>.</li>
-        <li>Dá para intercalar os níveis à vontade. Mas para levar uma classe até o 20 você precisa ter pelo menos nível 10 em outra. Ninguém chega ao topo sem ter feito outra coisa no caminho.</li>
-        <li>Classe especial exige nível total 15 e um acontecimento na história que justifique, a não ser que a própria classe abra exceção.</li>
+        <li>Os níveis podem ser intercalados. Para levar uma classe ao nível 20, o personagem precisa ter pelo menos nível 10 em outra classe.</li>
+        <li>Classe especial exige nível total 20, liberação do Mestre e um acontecimento na história que justifique, a não ser que a própria classe abra uma exceção explícita.</li>
         <li>Classe geral serve a qualquer Árvore. Classe exclusiva só se você pertencer à Árvore indicada.</li>
       </ul>
 
@@ -246,8 +375,68 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Anote cada fonte de vantagem e cada fonte de desvantagem. Elas se cancelam uma a uma, não em bloco.</li>
         <li>O que sobrar decide: qualquer saldo positivo vira <em>uma</em> vantagem, qualquer saldo negativo vira <em>uma</em> desvantagem. Não existe vantagem dupla.</li>
       </ul>
+
+      <h3 class="regras-subtitle">Catálogo de perícias</h3>
+      <p class="regras-lead">${periciasData.nota}</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Perícia</th><th>Atributo</th><th>Cobre</th></tr></thead>
+        <tbody>${tabelaPericiasPublicas}</tbody>
+      </table></div>
     `,
   },
+
+  'acoes-coletivas': {
+    categoria: 'Combate e Mecânicas',
+    status: 'Regra oficial',
+    resumo: 'Como ajudar outro personagem e como resolver situações em que o grupo inteiro precisa passar pelo mesmo desafio.',
+    destaques: [
+      ['Ajudar', '+2, máximo +4'],
+      ['Teste de Grupo', 'metade do grupo'],
+      ['Declaração', 'antes da rolagem'],
+    ],
+    corpo: `
+      <p class="regras-lead">Nem toda ação coletiva usa a mesma resolução. Se uma pessoa executa a tarefa e as outras dão suporte, use <strong>Ajudar</strong>. Se todos estão expostos ao mesmo desafio e cada integrante importa, use um <strong>Teste de Grupo</strong>.</p>
+
+      <h3 class="regras-subtitle">Ajudar</h3>
+      <ol class="regras-steps">
+        <li>Antes da rolagem principal, o ajudante descreve uma contribuição concreta e escolhe uma perícia adequada. Ela pode ser a mesma do líder ou outra que realmente ajude naquela situação.</li>
+        <li>Em combate, ajudar gasta uma <strong>Ação Padrão</strong>. Fora de combate, gasta tempo compatível com a tarefa.</li>
+        <li>O ajudante faz seu teste contra DT 10 em uma tarefa fixa. Em um desafio que escala por nível, use DT 10 + ⌊nível do desafio ÷ 2⌋.</li>
+        <li>Em sucesso, o teste principal recebe +2. Em sucesso crítico, recebe vantagem em vez de +2.</li>
+        <li>Falha não concede bônus. Falha crítica também não impõe penalidade automática, mas pode produzir uma complicação quando a tentativa já envolvia risco real.</li>
+      </ol>
+      <ul class="regras-list">
+        <li>No máximo <strong>dois ajudantes</strong> concedem bônus ao mesmo teste. Dois sucessos comuns chegam a +4.</li>
+        <li>Cada contribuição precisa ser diferente e possível na ficção. Repetir a mesma ideia com mais pessoas não multiplica o bônus.</li>
+        <li>O líder precisa aceitar a ajuda e só rola depois que os ajudantes resolverem suas tentativas.</li>
+        <li>O Mestre pode dispensar o teste do ajudante quando a contribuição é automática, mas ela continua ocupando ação ou tempo.</li>
+        <li>Ajudar não transfere proficiência, poder, imunidade ou permissão especial ao líder.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Teste de Grupo</h3>
+      <p>Use quando todos precisam atravessar o mesmo perigo: o grupo inteiro se esgueirando, escalando, resistindo a uma tempestade ou mantendo uma história convincente diante de vários observadores.</p>
+      <ol class="regras-steps">
+        <li>Todos os participantes expostos fazem o teste indicado contra a mesma DT.</li>
+        <li>O grupo vence se pelo menos metade dos participantes, arredondada para cima, obtiver sucesso.</li>
+        <li>Cada sucesso crítico conta como dois sucessos. Cada falha crítica cancela um sucesso antes da contagem.</li>
+        <li>Se o grupo falhar, a consequência atinge o grupo ou apenas quem falhou, conforme a natureza do perigo. O Mestre informa qual leitura vale antes das rolagens.</li>
+      </ol>
+      <p class="regras-note"><strong>Exemplo:</strong> quatro personagens fazem Furtividade. O grupo precisa de dois sucessos. Se conseguir dois sucessos comuns e uma falha crítica, a falha crítica cancela um deles e o grupo falha.</p>
+
+      <h3 class="regras-subtitle">Quando não usar Teste de Grupo</h3>
+      <ul class="regras-list">
+        <li>Se só uma pessoa precisa executar a tarefa, escolha um líder e use Ajudar.</li>
+        <li>Se cada falha gera uma consequência individual independente, resolva os testes separadamente.</li>
+        <li>Se a ação exige treinamento ou permissão que parte do grupo não possui, quem não cumpre o requisito não pode ser escondido dentro da média.</li>
+        <li>Não combine Ajudar e Teste de Grupo na mesma resolução, salvo quando uma habilidade disser expressamente que pode.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Ações coletivas maiores</h3>
+      <p class="regras-note">Projetos de vários dias usam as regras da atividade correspondente, como treinamento, ritual ou fabricação. Ataques sincronizados usam o capítulo <strong>Ataques Combinados</strong>. Ajudar não permite somar dano, fundir magias nem transferir efeitos entre personagens.</p>
+    `,
+  },
+
+  'ataques-combinados': REGRA_ATAQUES_COMBINADOS,
 
   combate: {
     categoria: 'Combate e Mecânicas',
@@ -263,7 +452,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li><strong>Ação Padrão:</strong> atacar, usar uma habilidade, ajudar alguém ou tentar uma manobra.</li>
         <li><strong>Ação de Movimento:</strong> se deslocar, levantar, sacar algo ou mexer num objeto que importe na cena.</li>
-        <li><strong>Ação Livre:</strong> um gesto ou uma frase curta. Se começar a virar vantagem mecânica repetida, o Mestre corta.</li>
+        <li><strong>Ação Completa:</strong> consome a Ação Padrão e a Ação de Movimento do turno. Não pode ser iniciada depois que uma dessas ações foi gasta.</li>
+        <li><strong>Ação Livre:</strong> um gesto, uma fala curta ou soltar um objeto. Não realiza testes, ataques nem ativa habilidades, salvo quando uma regra específica permitir.</li>
         <li>Dá para trocar sua Ação Padrão por uma segunda Ação de Movimento. Correr custa o ataque.</li>
       </ul>
 
@@ -562,7 +752,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Fórmula de progressão</h3>
       <div class="regras-formula">XP total do nível N = 500 × N × (N − 1)</div>
-      <p class="regras-note">Na prática: sair do nível N e chegar ao N+1 custa N × 1.000 XP.</p>
+      <p class="regras-note">Sair do nível N e chegar ao N+1 custa N × 1.000 XP.</p>
 
       <h3 class="regras-subtitle">Tabela completa</h3>
       <div class="regras-xp-grid regras-xp-grid--revised">${tabelaXP}</div>
@@ -582,7 +772,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     status: 'Regra oficial',
     resumo: 'A cada cinco níveis totais você escolhe um Legado. É escolha permanente, e a ficha confere os pré-requisitos na hora.',
     destaques: [
-      ['Catálogo', '42 Legados'],
+      ['Catálogo', `${(legadosData.legados?.length || 0) + (legadosNovosData.novos?.length || 0)} Legados`],
       ['Marco', 'a cada 5 níveis'],
       ['Escolha', 'permanente']
     ],
@@ -595,6 +785,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Nível, atributo e perícia são conferidos no momento da escolha. Perder o requisito depois não tira o Legado.</li>
         <li>O Mestre só autoriza troca em dois casos: erro de criação ou mudança oficial nas regras.</li>
       </ul>
+
+      <h3 class="regras-subtitle">Catálogo</h3>
+      <ul class="regras-list">${listaLegadosPublicos}</ul>
     `,
   },
 
@@ -665,7 +858,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Modificações e efeitos na ficha</h3>
       <ul class="regras-list">${REGRAS_MODIFICACOES_EQUIPAMENTO.map((regra) => `<li>${regra}</li>`).join('')}</ul>
-      <p class="regras-note">Na prática: uma modificação pode dar Vida máxima, Defesa, Ataque, atributo ou bônus numa perícia. Guardou ou desequipou o item, a ficha tira esses valores sozinha, você não precisa lembrar.</p>
+      <p class="regras-note">Uma modificação pode conceder Vida máxima, Defesa, Ataque, atributo ou bônus em perícia. Ao guardar ou desequipar o item, a ficha remove os ajustes automaticamente.</p>
 
       <h3 class="regras-subtitle">Como ler uma modificação</h3>
       <ul class="regras-list">
@@ -681,15 +874,19 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p class="regras-note">A Loja vende cada uma delas na categoria <strong>Modificações</strong>, com o preço já aplicado. Marcial só aparece a partir da Metrópole.</p>
 
       <h3 class="regras-subtitle">Catálogo de modificações</h3>
-      <p class="regras-lead">São ${MODIFICACOES_EQUIPAMENTO.length} modificações prontas, para ninguém precisar inventar do zero. Abra só a categoria do equipamento que você está montando.</p>
+      <p class="regras-lead">O catálogo contém ${MODIFICACOES_EQUIPAMENTO.length} modificações, agrupadas pela categoria do equipamento.</p>
       ${tabelaModificacoesEquipamento}
       <p class="regras-note">Isso aqui é ponto de partida, não lista fechada. Modificação nova passa, desde que respeite o valor máximo por efeito da raridade e o nível condizente com o equipamento.</p>
 
       <h3 class="regras-subtitle">Dons definidos por categoria</h3>
-      <p>Além dos números, cada raridade se manifesta de um jeito que combina com a categoria do item. O texto do item pode dar personalidade a essa manifestação, desde que não aumente o efeito mecânico.</p>
+      <p>Cada raridade também possui uma manifestação por categoria. A descrição pode alterar aparência e comportamento, sem aumentar o efeito mecânico.</p>
       ${donsRaridadeEquipamento}
     `,
   },
+
+  crafting: REGRA_CRAFTING,
+
+  veiculos: REGRA_VEICULOS,
 
   'magia-fluxo': {
     categoria: 'Livro do Jogador',
@@ -747,7 +944,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li><strong>Marca do Fluxo (5º ao 9º):</strong> ao alcançar cada um desses círculos, você recebe a Marca daquele círculo no seu Fluxo nativo. Ela não se escolhe e não se rola: é fixa por Fluxo, então dá para saber de antemão o que te espera. Perdeu o círculo, perdeu a Marca.</li>
         <li><strong>Cicatriz (10º):</strong> cada magia de 10º círculo aprendida sorteia uma Cicatriz na tabela comum. Ela é mais pesada dos dois lados, e a mesma não sai duas vezes para o mesmo personagem.</li>
-        <li>Marca e Cicatriz valem como Legado: o texto manda, e o Mestre arbitra o caso duvidoso.</li>
+        <li>Marca e Cicatriz contam como Legado para efeitos que citem Legados. Elas não ocupam vaga de Legado.</li>
         <li>Concessão do Mestre não gera Cicatriz. Só conta magia de 10º que você aprendeu.</li>
       </ul>
       <p class="regras-note">A ficha aplica as Marcas sozinha, porque elas saem do seu Fluxo e do seu círculo. A Cicatriz é sorteada na hora de aprender a magia e fica registrada.</p>
@@ -803,8 +1000,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     resumo: 'Sanidade, crises e as condições que ficam grudadas no personagem, cada uma com o que faz e como sai.',
     destaques: [
       ['Sanidade', '0–100'],
-      ['Iniciativa', 'valor estático'],
-      ['Defesa passiva', '10 + bônus'],
+      ['Condições', `${CONDICOES_OFICIAIS.length} oficiais`],
+      ['Crises', `${CRISES_SANIDADE.length} catalogadas`],
     ],
     corpo: `
       <h3 class="regras-subtitle">Sanidade</h3>
@@ -826,24 +1023,19 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Crises</h3>
       <ul class="regras-list">
-        <li>Em Ruptura, cada nova perda cobra Vontade DT 15. Falhou, vem Pânico, Dissociação, Paranoia, Catatonia, Compulsão ou Fúria.</li>
-        <li>Pânico, Dissociação, Catatonia e Fúria duram 1d4 rodadas, com Vontade DT 15 no fim do turno para sair antes.</li>
-        <li>Paranoia vai até o fim da cena. Compulsão dá Vontade DT 15 no começo do turno para você agir normalmente.</li>
+        <li>Em Ruptura, cada nova perda de Sanidade cobra Vontade DT 15; falhou, vem uma das crises abaixo.</li>
         <li>Em Sanidade 0 a crise é imediata, sem teste. Passada a cena, o personagem continua em 0 até descansar e ser tratado em segurança.</li>
         <li>A condição permanente da Quebra é definida junto com o jogador, e só muda por resolução na história ou tratamento longo.</li>
       </ul>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Crise</th><th>Duração</th><th>Efeito</th><th>Remoção</th></tr></thead>
+        <tbody>${tabelaCrisesSanidade}</tbody>
+      </table></div>
 
       <h3 class="regras-subtitle">Condições gerais</h3>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Condição</th><th>Efeito principal</th><th>Remoção</th></tr></thead>
-        <tbody>
-          <tr><td>Amedrontado</td><td>Desvantagem contra a fonte e não se aproxima dela.</td><td>Vontade contra a DT da fonte no fim do turno.</td></tr>
-          <tr><td>Exposto</td><td>-2 Defesa.</td><td>Começo do próximo turno.</td></tr>
-          <tr><td>Caído</td><td>-2 em ataques; ataques corpo a corpo contra você recebem +2.</td><td>Ação de movimento para levantar.</td></tr>
-          <tr><td>Sangramento</td><td>1d6 de dano no fim do turno; aplicações extras dão +1, até +5.</td><td>Cura DT 15 ou recuperar pelo menos 1 PV.</td></tr>
-          <tr><td>Atordoado</td><td>Sem ações ou reações e -5 Defesa.</td><td>Fim da duração.</td></tr>
-          <tr><td>Concentrando</td><td>Mantém um efeito; dano exige Vontade DT 10 ou metade do dano.</td><td>Falha no teste, incapacidade ou encerramento voluntário.</td></tr>
-        </tbody>
+        <tbody>${tabelaCondicoesGerais}</tbody>
       </table></div>
 
       <h3 class="regras-subtitle">Iniciativa estática</h3>
@@ -862,6 +1054,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     `,
   },
 
+  aflicoes: REGRA_AFLICOES,
+
   classes: {
     categoria: 'Livro do Jogador',
     status: 'Catálogo oficial',
@@ -871,7 +1065,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Comuns / especiais', '16 / 11'],
       ['Progressões completas', '27']
     ],
-    corpo: `<!-- CLASSES_DATA -->`
+    corpo: `
+      <p class="regras-lead">Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes e eventos por nível) fica no catálogo interativo da página de Regras, que lê o mesmo arquivo.</p>
+      <ul class="regras-list">${listaClassesPublicas}</ul>
+    `
   },
 
   racas: {
@@ -883,8 +1080,180 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Comuns / especiais', '12 / 9'],
       ['Ajustes', 'Vida, Mana e Mov.']
     ],
-    corpo: `<!-- RACAS_DATA -->`
+    corpo: `
+      <p class="regras-lead">Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologia, traços e variantes completos ficam no catálogo interativo da página de Regras, que lê o mesmo arquivo.</p>
+      <ul class="regras-list">${listaRacasPublicas}</ul>
+    `
   },
+
+  bestiario: {
+    categoria: 'Guia do Mestre',
+    status: 'Regra oficial',
+    resumo: 'Catálogo de seres, familiares, servos, invocações e preços por fórmula.',
+    destaques: [
+      ['Tipos', 'Criaturas, Servos, etc.'],
+      ['Preços', 'Calculados por nível'],
+    ],
+    corpo: `
+      <p class="regras-lead">Bestiário: preços por FÓRMULA (faixa de nível × traços), não lista fixa. Para vender ou contratar uma criatura específica, o mestre cria uma entrada do tipo 'monstro' com o preço calculado por essas tabelas.</p>
+
+      <h3 class="regras-subtitle">Criaturas</h3>
+      <p>Animais, monstros ou seres naturais capturados, domesticados ou criados em cativeiro. Variam desde feras pequenas até predadores perigosos. Suas habilidades geralmente vêm de sua natureza física ou de seu habitat.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Nível</th><th>Espécie</th><th>Classe</th></tr></thead>
+        <tbody>
+          <tr><td>1 a 10</td><td>+6 L / nível</td><td>+4 L / nível</td></tr>
+          <tr><td>11 a 20</td><td>+8 L / nível</td><td>+6 L / nível</td></tr>
+          <tr><td>21 a 30</td><td>+15 L / nível</td><td>+15 L / nível</td></tr>
+          <tr><td>31 a 40</td><td>+40 L / nível</td><td>+40 L / nível</td></tr>
+          <tr><td>41 a 50</td><td>+52 L / nível</td><td>+52 L / nível</td></tr>
+          <tr><td>50+</td><td>+62 L / nível</td><td>+62 L / nível</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Extras: Arma +15 L, Perícia +12 L, Poder Ass +120 L, Legado +18 L, Variável +70 L.</p>
+
+      <h3 class="regras-subtitle">Familiares</h3>
+      <p>Entidades pequenas e espirituais ou criaturas inteligentes que formam um vínculo mágico com seu dono. Oferecem suporte tático, percepção aprimorada e habilidades úteis fora de combate. São leais e sensíveis.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Nível</th><th>Espécie</th><th>Função</th></tr></thead>
+        <tbody>
+          <tr><td>1 a 10</td><td>+24 L / nível</td><td>+20 L / nível</td></tr>
+          <tr><td>11 a 20</td><td>+30 L / nível</td><td>+26 L / nível</td></tr>
+          <tr><td>21 a 30</td><td>+42 L / nível</td><td>+38 L / nível</td></tr>
+          <tr><td>31 a 40</td><td>+56 L / nível</td><td>+52 L / nível</td></tr>
+          <tr><td>41 a 50</td><td>+68 L / nível</td><td>+65 L / nível</td></tr>
+          <tr><td>50+</td><td>+84 L / nível</td><td>+80 L / nível</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Extras: Arma +46 L, Perícia +24 L, Poder Ass +650 L, Legado +52 L, Variável +250 L.</p>
+
+      <h3 class="regras-subtitle">Servos</h3>
+      <p>Seres criados ou treinados para cumprir tarefas. Geralmente possuem sanidade abalada (começam com 50% de sanidade e 2 traumas aleatórios). Estão ligados à alma do dono e não podem trair diretamente.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Nível</th><th>Raça Comum</th><th>Classe Comum</th></tr></thead>
+        <tbody>
+          <tr><td>1 a 10</td><td>+4 L / nível</td><td>+2 L / nível</td></tr>
+          <tr><td>11 a 20</td><td>+8 L / nível</td><td>+6 L / nível</td></tr>
+          <tr><td>21 a 30</td><td>+12 L / nível</td><td>+10 L / nível</td></tr>
+          <tr><td>31 a 40</td><td>+25 L / nível</td><td>+25 L / nível</td></tr>
+          <tr><td>41 a 50</td><td>+35 L / nível</td><td>+35 L / nível</td></tr>
+          <tr><td>50+</td><td>+50 L / nível</td><td>+50 L / nível</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Extras: Arma +12 L, Perícia +8 L, Pet +14 L, Poder Ass +230 L, Legado +16 L, Variável +52 L.</p>
+
+      <h3 class="regras-subtitle">Invocações</h3>
+      <p>Seres temporários trazidos por magia, rituais ou dispositivos tecnológicos. Surgem para cumprir função, proteção ou utilidade e desaparecem após certo tempo.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Nível</th><th>Raça</th><th>Classe</th></tr></thead>
+        <tbody>
+          <tr><td>1 a 10</td><td>+8 L / nível</td><td>+6 L / nível</td></tr>
+          <tr><td>11 a 20</td><td>+12 L / nível</td><td>+10 L / nível</td></tr>
+          <tr><td>21 a 30</td><td>+18 L / nível</td><td>+14 L / nível</td></tr>
+          <tr><td>31 a 40</td><td>+32 L / nível</td><td>+28 L / nível</td></tr>
+          <tr><td>41 a 50</td><td>+48 L / nível</td><td>+38 L / nível</td></tr>
+          <tr><td>50+</td><td>+60 L / nível</td><td>+46 L / nível</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Extras: Arma +24 L, Perícia +14 L, Poder Ass +460 L, Legado +25 L, Variável +65 L.</p>
+
+      <h3 class="regras-subtitle">Ajudantes</h3>
+      <p>Seres que oferecem seus serviços, conscientes e capazes de tomar decisões. Vistos no dia a dia, auxiliam em missões, carregam itens, curam ou lutam.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Nível</th><th>Raça</th><th>Classe</th></tr></thead>
+        <tbody>
+          <tr><td>1 a 10</td><td>+6 L / nível</td><td>+4 L / nível</td></tr>
+          <tr><td>11 a 20</td><td>+8 L / nível</td><td>+6 L / nível</td></tr>
+          <tr><td>21 a 30</td><td>+14 L / nível</td><td>+12 L / nível</td></tr>
+          <tr><td>31 a 40</td><td>+32 L / nível</td><td>+30 L / nível</td></tr>
+          <tr><td>41 a 50</td><td>+50 L / nível</td><td>+48 L / nível</td></tr>
+          <tr><td>50+</td><td>+75 L / nível</td><td>+70 L / nível</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Extras: Arma +16 L, Perícia +12 L, Pet +28 L, Poder Ass +450 L, Legado +20 L, Variável +60 L.</p>
+
+      <h3 class="regras-subtitle">Seres Lendários</h3>
+      <p>Criaturas raras, únicas ou extremamente poderosas. Exigem rituais complexos ou condições especiais. Servem como aliados excepcionais que mudam batalhas.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Nível</th><th>Raça/Espécie</th><th>Classe/Função</th></tr></thead>
+        <tbody>
+          <tr><td>1 a 10</td><td>-</td><td>-</td></tr>
+          <tr><td>11 a 20</td><td>+160 L / nível</td><td>+160 L / nível</td></tr>
+          <tr><td>21 a 30</td><td>+240 L / nível</td><td>+240 L / nível</td></tr>
+          <tr><td>31 a 40</td><td>+320 L / nível</td><td>+320 L / nível</td></tr>
+          <tr><td>41 a 50</td><td>+450 L / nível</td><td>+450 L / nível</td></tr>
+          <tr><td>50+</td><td>+650 L / nível</td><td>+650 L / nível</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Extras: Arma +225 L, Perícia +36 L, Pet +210 L, Poder Ass +1.200 L, Legado +80 L, Variável +650 L.</p>
+
+      <h3 class="regras-subtitle">Drops de Seres</h3>
+      <p>Preços que mercados pagam por partes de seres. Sem os materiais adequados o preço cai em 75%.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Raça</th><th>Carne</th><th>Órgãos</th><th>Essência</th></tr></thead>
+        <tbody>
+          <tr><td>Humano</td><td>10 S</td><td>15 S</td><td>25 S</td></tr>
+          <tr><td>Vampiro</td><td>-</td><td>80 S</td><td>150 S</td></tr>
+          <tr><td>Goblin</td><td>5 S</td><td>8 S</td><td>-</td></tr>
+          <tr><td>Anão</td><td>20 S</td><td>30 S</td><td>40 S</td></tr>
+          <tr><td>Golem</td><td>-</td><td>60 S</td><td>120 S</td></tr>
+          <tr><td>Espírito</td><td>-</td><td>-</td><td>200 S</td></tr>
+          <tr><td>Gigante</td><td>120 S</td><td>180 S</td><td>250 S</td></tr>
+          <tr><td>Animália</td><td>20 S</td><td>35 S</td><td>25 S</td></tr>
+          <tr><td>Sereia/Tritão</td><td>35 S</td><td>70 S</td><td>90 S</td></tr>
+        </tbody>
+      </table></div>
+      <ul class="regras-list">
+        <li><strong>Carne:</strong> Fresca (Padrão), Conservada (-20%), Corrompida (-50% ou inutilizável).</li>
+        <li><strong>Qualidade do Abate:</strong> Abate limpo (+20%), Abate brutal (-15%).</li>
+        <li><strong>Ser lendário:</strong> x2 ou x3 no valor.</li>
+      </ul>
+    `
+  },
+
+  economia: {
+    categoria: 'Livro do Jogador',
+    status: 'Regra oficial',
+    resumo: 'Como funcionam as moedas de O Jardim, o câmbio entre elas e as regras de segurança e espaço do Cofre Bancário.',
+    destaques: [
+      ['Moedas', 'Lunaris, Solares, Fragmentos, Créditos'],
+      ['Câmbio', 'Conversão via Banqueiro'],
+      ['Cofre', 'Proteção e limite de itens'],
+    ],
+    corpo: `
+      <h3 class="regras-subtitle">Moedas Correntes</h3>
+      <ul class="regras-sublist regras-sublist--grid">
+        <li><strong>Lunaris (☾):</strong> A moeda base. Cristalizada a partir da luz pálida, é usada nas transações comuns.</li>
+        <li><strong>Solares (☉):</strong> Moeda de alto valor. Brilhante e quente ao toque.</li>
+        <li><strong>Fragmentos de Estrela (✧):</strong> Moeda rara, utilizada para transações de nível celestial ou itens muito exóticos.</li>
+        <li><strong>Créditos Sombrios (♆):</strong> Moeda do submundo, usada no mercado negro e para fins escusos.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Taxas de Câmbio</h3>
+      <p class="regras-note">O Banqueiro realiza a conversão das moedas no Discord (valores sujeitos a taxas do sistema).</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Moeda Origem</th><th>Moeda Destino</th><th>Taxa Padrão</th></tr></thead>
+        <tbody>
+          <tr><td>100 Lunaris</td><td>1 Solar</td><td>100:1</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Essa taxa serve para o dia a dia — trocar Lunaris por Solares (ou o contrário) numa transação comum. Ela não torna categorias inteiras de item comparáveis entre si: um veículo precificado em Lunaris e uma arma lendária precificada em Solares seguem economias próprias, cada uma pensada pro ritmo da sua categoria, não uma equivalência de valor de jogo.</p>
+      <p class="regras-note">Fragmentos de Estrela e Créditos Sombrios não têm câmbio automático com nenhuma outra moeda. São obtidos por fonte própria — relíquias e artefatos concedidos pelo Mestre, mercado negro, ou outra origem narrativa — nunca só acumulando e convertendo Lunaris ou Solares.</p>
+
+      <h3 class="regras-subtitle">O Cofre Bancário</h3>
+      <p class="regras-lead">O Banco gerido pelo Banqueiro reúne depósito, reputação e segurança.</p>
+      <ul class="regras-list">
+        <li><strong>Reputação Bancária:</strong> Ao depositar com frequência e participar da economia, você ganha reputação que destrava novos níveis de cofre.</li>
+        <li><strong>Espaço e Limites:</strong> O cofre possui níveis (tiers) que definem a capacidade máxima de itens e a quantidade de saldo de cada moeda que pode ser guardada. No nível máximo, esse limite se torna ilimitado.</li>
+        <li><strong>Segurança:</strong> O seu cofre pode ser alvo de roubos (eventos do bot). Evoluir a segurança do cofre aumenta a porcentagem de chance de frustrar essas tentativas.</li>
+        <li><strong>Transferências:</strong> Através da página do Cofre, você pode sacar suas economias diretamente para a ficha do seu personagem quando necessário.</li>
+      </ul>
+    `
+  },
+
+  bases: REGRA_BASES,
+
+  'mundo-faccoes': REGRA_MUNDO_FACCOES,
 
   mestre: {
     categoria: 'Guia do Mestre',
@@ -896,7 +1265,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     corpo: `
       <p class="regras-lead">Daqui para baixo é só para quem conduz a mesa.</p>
       <h3 class="regras-subtitle">Dificuldades de Teste</h3>
-      <p class="regras-note">Para desafios que não dependem do nível de ninguém, use 5, 10, 15, 20, 25, 30 e 40. Para ameaças que crescem junto com os personagens, use a tabela abaixo.</p>
+      <p class="regras-note">Para desafios de DT fixa, use 5, 10, 15, 20, 25, 30 e 40. Para ameaças que escalam com os personagens, use a tabela abaixo.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Dificuldade</th><th>DT</th><th>Uso</th></tr></thead>
         <tbody>

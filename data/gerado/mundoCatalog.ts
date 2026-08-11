@@ -250,7 +250,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "conteudo": {
         "arvore": "A.X.I.S",
         "descricao": "Uma ramificação artificial desenvolvida a partir do Fluxo original, resultado direto das ambições de Jota Macedo - um homem determinado a desvendar e replicar os mistérios cósmicos usando apenas os princípios da ciência e da razão. Diferente do despertar tradicional das outras vertentes, que exige fé, emoção ou pactos divinos, a A.X.I.S é inteiramente construída sobre experimentação, lógica e precisão matemática.\n\nA cor predominante é o azul neon artificial, refletindo uma natureza fria, racional e calculadamente estável. Sua estética é marcada por estruturas geométricas perfeitas, cristais simétricos e artefatos forjados com uma exatidão espetacular.\n\nPra Astraluna e seus habitantes, a A.X.I.S representa a esperança de que a energia do mundo possa enfim ser compreendida, reproduzida e evoluída por mãos mortais. Virou o símbolo de uma nova era, provando que os Fluxos das velhas deidades não são mais os únicos capazes de sustentar a realidade. O que quase ninguém sabe é o preço: essa mesma malha é o que intercepta e bloqueia a comunicação entre as demais Árvores, e é por isso que quase todas as deidades estão paralisadas.",
-        "citacao": "Se o fluir das árvores é visto como um milagre, então a A.X.I.S é a prova de que milagres podem ser replicados. — Jota Macedo",
+        "citacao": "Se o fluir das árvores é visto como um milagre, então a A.X.I.S é a prova de que milagres podem ser replicados. - Jota Macedo",
         "marca_corporal": "Veias de azul neon acendem sob a pele e pulsam como se respirassem - não é marca de nascença, é instalada."
       }
     },

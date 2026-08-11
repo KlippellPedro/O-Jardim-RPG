@@ -47,7 +47,7 @@ export const RARIDADES_EQUIPAMENTO: IRegraRaridadeEquipamento[] = [
     principio: 'Pode ser senciente. Os poderes e os dois efeitos de valor 4 passam pelo Mestre.',
   },
   {
-    id: 'reliquia', titulo: 'Relíquia', resumo: 'Existe uma só, e ela está presa a um evento, a uma entidade ou a um povo.',
+    id: 'reliquia', titulo: 'Mítico', resumo: 'Existe uma só, e ela está presa a um evento, a uma entidade ou a um povo.',
     modificacoesMaximas: 6, efeitosRaridadeMaximos: 3, valorMaximoPorEfeito: 5, requerMestre: true,
     principio: 'Ninguém reproduz e nada mundano destrói. Todo poder passa pelo Mestre.',
   },
@@ -113,13 +113,21 @@ export const REGRAS_MODIFICACOES_EQUIPAMENTO = [
   'O teto de valor vale por efeito, não no total. Vantagem ou desvantagem sempre conta como 1 efeito.',
   'Efeitos iguais de itens diferentes somam, mas o Mestre pode barrar quando as duas fontes não fizerem sentido juntas.',
   'Consumível aplica o efeito quando é usado. Guardado, ele não dá bônus nenhum.',
-  'Lendário, Relíquia e Relíquia da Criação passam pelo Mestre antes de entrar em jogo.',
+  'Lendário, Mítico e Relíquia da Criação passam pelo Mestre antes de entrar em jogo.',
 ];
 
 export const EFEITOS_POR_MODIFICACAO_MAXIMOS = 1;
 
 export function obterRegraRaridade(raridade: string): IRegraRaridadeEquipamento {
-  return RARIDADES_EQUIPAMENTO.find((item) => item.id === raridade) || RARIDADES_EQUIPAMENTO[0];
+  const valorNormalizado = String(raridade ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .toLocaleLowerCase('pt-BR');
+  const idNormalizado = valorNormalizado === 'mitico' || valorNormalizado === 'mitica'
+    ? 'reliquia'
+    : valorNormalizado;
+  return RARIDADES_EQUIPAMENTO.find((item) => item.id === idNormalizado) || RARIDADES_EQUIPAMENTO[0];
 }
 
 export type CategoriaModificacaoId = 'arma' | 'armadura' | 'escudo' | 'item';
@@ -188,7 +196,7 @@ export const MODIFICACOES_EQUIPAMENTO: IModificacaoEquipamento[] = [
   },
   {
     id: 'sedenta', titulo: 'Sedenta', categoria: 'arma', nivel: 'marcial', valor: 2,
-    efeito: 'No crítico, o alvo passa a sangrar: sofre 1 dado de dano da arma no início de cada turno até ser tratado. Não acumula com outra Sedenta.',
+    efeito: 'No crítico, o alvo recebe a condição Sangramento (usa o dado de dano da arma no lugar do 1d6 padrão, no fim de cada turno). Reaplicar segue a regra normal de Sangramento: +1 de dano por aplicação, até +5, sem novos dados. Remove-se como qualquer Sangramento: Cura DT 15 ou qualquer cura de pelo menos 1 PV.',
   },
   {
     id: 'vampirica', titulo: 'Vampírica', categoria: 'arma', nivel: 'marcial', valor: 2,

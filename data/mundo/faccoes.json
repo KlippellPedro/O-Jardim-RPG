@@ -1,0 +1,62 @@
+{
+  "_versao": "2.0",
+  "_criterio_publicacao": "Inclui apenas organizações cuja atuação pode alcançar personagens de qualquer Árvore.",
+  "_nota_aprovacao": "Banco Lunar e AstraTech pertencem ao cenário atual. Caravana do Limiar, Vigília das Raízes e Arquivo Prismático são propostas aguardando aprovação.",
+  "faccoes": [
+    {
+      "id": "banco-lunar",
+      "titulo": "Banco Lunar",
+      "tipo": "instituicao-financeira",
+      "alcance": "Todas as Árvores",
+      "atuacao_publica": "Guarda, administra e investe bens. Também fornece recursos a clientes capazes de pagar.",
+      "estado": "canonica",
+      "fontes": [
+        {
+          "arquivo": "data/mundo/Gênese/realidade-0-soberanos.json",
+          "entrada_id": "amadheus-colona"
+        }
+      ]
+    },
+    {
+      "id": "astratech",
+      "titulo": "AstraTech",
+      "tipo": "corporacao-tecnologica",
+      "alcance": "Múltiplas Árvores",
+      "atuacao_publica": "Desenvolve tecnologia arcana e mantém projetos capazes de operar além de Astraluna.",
+      "estado": "canonica",
+      "fontes": [
+        {
+          "arquivo": "data/mundo/Gênese/realidade-0-reinos.json",
+          "entrada_id": "astraluna"
+        }
+      ]
+    },
+    {
+      "id": "caravana-do-limiar",
+      "titulo": "Caravana do Limiar",
+      "tipo": "rede-de-transporte",
+      "alcance": "Rotas acessíveis entre Árvores",
+      "atuacao_publica": "Transporta pessoas, cargas e mensagens por passagens dimensionais conhecidas. Não atravessa rotas seladas.",
+      "estado": "proposta",
+      "fontes": []
+    },
+    {
+      "id": "vigilia-das-raizes",
+      "titulo": "Vigília das Raízes",
+      "tipo": "ordem-de-contencao",
+      "alcance": "Todas as Árvores alcançáveis",
+      "atuacao_publica": "Investiga rupturas dimensionais, evacua áreas ameaçadas e contém criaturas que atravessam fronteiras entre Árvores.",
+      "estado": "proposta",
+      "fontes": []
+    },
+    {
+      "id": "arquivo-prismatico",
+      "titulo": "Arquivo Prismático",
+      "tipo": "instituicao-de-pesquisa",
+      "alcance": "Núcleos em diferentes Árvores",
+      "atuacao_publica": "Preserva registros, identifica artefatos e reúne informações verificadas sobre fenômenos de diferentes Árvores.",
+      "estado": "proposta",
+      "fontes": []
+    }
+  ]
+}
