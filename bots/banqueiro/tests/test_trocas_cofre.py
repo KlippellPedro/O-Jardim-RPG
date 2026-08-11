@@ -29,6 +29,7 @@ class _DB:
         self.cofres = {}  # user_id -> [ {item_id, titulo, quantidade, dados} ]
         self.baus = baus or {}
         self.chamadas = []
+        self.custodias = {}
 
     def garantir_jogador(self, g, u):
         pass
@@ -82,6 +83,27 @@ class _DB:
 
     def registrar_extrato(self, *a, **k):
         pass
+
+    def reservar_custodia_moeda(self, chave, g, u, moeda, quantia, descricao):
+        self.debitar(g, u, moeda, quantia)
+        self.custodias[chave] = (g, u, moeda, quantia)
+        return {"chave": chave, "quantia": quantia}
+
+    def devolver_custodia_moeda(self, chave, descricao):
+        custodia = self.custodias.pop(chave, None)
+        if custodia is None:
+            return None
+        g, u, moeda, quantia = custodia
+        self.creditar(g, u, moeda, quantia)
+        return {"chave": chave, "quantia": quantia}
+
+    def transferir_custodia_moeda(self, chave, destino, descricao):
+        custodia = self.custodias.pop(chave, None)
+        if custodia is None:
+            return None
+        g, _u, moeda, quantia = custodia
+        self.creditar(g, destino, moeda, quantia)
+        return {"chave": chave, "quantia": quantia}
 
     def listar_baus_estoque(self, g, u):
         return []

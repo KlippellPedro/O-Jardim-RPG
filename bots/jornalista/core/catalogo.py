@@ -30,6 +30,7 @@ TIPOS_VALIDOS = {
     "implante",
     "modificacao",
     "monstro",
+    "propriedade",
     "veiculo",
     "veiculo-completo",
 }
@@ -48,16 +49,23 @@ ROTULO_RARIDADE = {
     "raro": "Raro",
     "epico": "Épico",
     "lendario": "Lendário",
-    "reliquia": "Relíquia",
+    # O id persistido continua sendo ``reliquia`` por compatibilidade com
+    # fichas e catálogos antigos, mas o nome público atual é Mítico.
+    "reliquia": "Mítico",
     "reliquia da criacao": "Relíquia da Criação",
 }
 
-# tipo -> categoria (mesmo mapa de src/loja/config/categorias.js)
+_ALIASES_RARIDADE = {
+    "mitico": "reliquia",
+    "mitica": "reliquia",
+}
+
+# tipo -> categoria compatível com src/services/lojaCatalogService.ts
 CATEGORIA_DE = {
     "arma": "arsenal", "armadura": "arsenal", "equipamento": "arsenal",
     "artefato": "arsenal", "consumivel": "arsenal", "fruto-eden": "arsenal",
     "implante": "arsenal", "modificacao": "modificacoes",
-    "veiculo": "veiculos", "veiculo-completo": "veiculos",
+    "veiculo": "veiculos", "veiculo-completo": "veiculos", "propriedade": "veiculos",
     "monstro": "bestiario", "drop": "drops",
 }
 ACAO_DA_CATEGORIA = {
@@ -68,6 +76,7 @@ ACAO_DA_CATEGORIA = {
 
 def normalizar_raridade(valor: object) -> str:
     n = normalizar(valor)
+    n = _ALIASES_RARIDADE.get(n, n)
     return n if n in RARIDADES else "comum"
 
 
@@ -133,7 +142,7 @@ def validar_entrada(e: object) -> Optional[str]:
     if not isinstance(e.get("conteudo"), dict):
         return 'faltando "conteudo"'
     raridade = e["conteudo"].get("raridade")
-    if raridade is not None and normalizar(raridade) not in RARIDADES:
+    if raridade is not None and normalizar_raridade(raridade) == "comum" and normalizar(raridade) != "comum":
         return f'raridade desconhecida: "{raridade}"'
     return None
 

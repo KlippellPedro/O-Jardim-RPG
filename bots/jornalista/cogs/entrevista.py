@@ -14,6 +14,7 @@ from discord import app_commands
 from discord.ext import commands, tasks
 
 from core import entrevista_perguntas as perguntas_mod
+from core import publicacoes
 from core import ui
 from core.tasks_util import registrar_reinicio_em_erro
 
@@ -41,6 +42,9 @@ class RespostaEntrevistaModal(discord.ui.Modal, title="Responder à Entrevista")
         super().__init__()
         self.cog = cog
         self.entrevista = entrevista
+        # Quem usa o comando como fallback de DM precisa enxergar a pergunta
+        # dentro do próprio modal; antes aparecia apenas "Sua resposta".
+        self.resposta.placeholder = str(entrevista.get("pergunta") or "")[:100]
 
     async def on_submit(self, interaction: discord.Interaction):
         resposta = str(self.resposta.value).strip()
@@ -50,7 +54,8 @@ class RespostaEntrevistaModal(discord.ui.Modal, title="Responder à Entrevista")
             )
             return
         await interaction.response.send_message(
-            "✅ Recebi sua resposta! Já vou publicar no jornal do servidor. Obrigado!", ephemeral=True
+            "✅ Recebi sua resposta! Ela será publicada assim que o canal do jornal estiver disponível.",
+            ephemeral=True,
         )
         await self.cog._publicar(
             self.entrevista["id"],
@@ -74,6 +79,8 @@ class Entrevista(commands.Cog):
     async def ciclo(self):
         for guild in self.bot.guilds:
             gid = str(guild.id)
+            if not self.bot.db.automacao_ativa(gid, "entrevistas", True):
+                continue
             try:
                 await self._recuperar_pendentes(guild)
             except Exception:
@@ -117,10 +124,21 @@ class Entrevista(commands.Cog):
         if not candidatos:
             return
         ja_entrevistados = set(db.usuarios_ja_entrevistados(gid))
-        novos = [m for m in candidatos if str(m.id) not in ja_entrevistados]
-        alvo = random.choice(novos) if novos else random.choice(candidatos)
+        pendentes = set(db.usuarios_com_entrevista_pendente(gid))
+        recusaram = set(db.usuarios_fora_das_entrevistas(gid))
+        disponiveis = [
+            m for m in candidatos
+            if str(m.id) not in pendentes and str(m.id) not in recusaram
+        ]
+        if not disponiveis:
+            return
+        novos = [m for m in disponiveis if str(m.id) not in ja_entrevistados]
+        alvo = random.choice(novos) if novos else random.choice(disponiveis)
 
         pergunta = perguntas_mod.sortear_pergunta()
+        # Persiste antes da tentativa de DM para o fallback
+        # /entrevista_responder existir de verdade quando a DM estiver fechada.
+        entrevista_id = db.criar_entrevista(gid, str(alvo.id), pergunta)
         try:
             await alvo.send(
                 "👋 Olá! Sou o Jornalista do Jornal Lunar. Pergunta da semana:\n\n"
@@ -128,8 +146,36 @@ class Entrevista(commands.Cog):
             )
         except (discord.Forbidden, discord.HTTPException):
             log.info("nao consegui mandar DM de entrevista pra %s", alvo.id)
-            return
-        db.criar_entrevista(gid, str(alvo.id), pergunta)
+            await self._avisar_entrevista_sem_dm(
+                guild, alvo, pergunta, entrevista_id
+            )
+
+    async def _avisar_entrevista_sem_dm(
+        self, guild: discord.Guild, alvo: discord.Member, pergunta: str,
+        entrevista_id: int,
+    ) -> None:
+        canal_id = self.bot.db.get_canal_categoria(str(guild.id), "noticia")
+        canal = guild.get_channel(int(canal_id)) if canal_id else None
+        emb = ui.embed(
+            "🎙️ Entrevista da semana",
+            categoria="noticia",
+            descricao=(
+                f"{alvo.mention}, não consegui entregar sua entrevista por DM. "
+                "Use `/entrevista_responder` neste servidor.\n\n"
+                f"**Pergunta:** {pergunta}"
+            ),
+        )
+        await publicacoes.publicar_ou_enfileirar(
+            self.bot,
+            guild_id=str(guild.id),
+            embed=emb,
+            origem="convite_entrevista",
+            dedupe_key=f"convite-entrevista:{entrevista_id}",
+            categoria="noticia",
+            canal_id=str(canal.id) if isinstance(canal, discord.TextChannel) else None,
+            automacao="entrevistas",
+            mencoes="usuarios",
+        )
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
@@ -159,7 +205,10 @@ class Entrevista(commands.Cog):
         description="Responde à entrevista pendente do Jornal Lunar (use se sua DM estiver fechada).",
     )
     async def entrevista_responder(self, interaction: discord.Interaction):
-        entrevista = self.bot.db.entrevista_pendente_do_usuario(str(interaction.user.id))
+        guild_id = str(interaction.guild_id) if interaction.guild_id else None
+        entrevista = self.bot.db.entrevista_pendente_do_usuario(
+            str(interaction.user.id), guild_id
+        )
         if entrevista is None:
             await interaction.response.send_message(
                 "Você não tem nenhuma entrevista pendente no momento.", ephemeral=True
@@ -167,26 +216,44 @@ class Entrevista(commands.Cog):
             return
         await interaction.response.send_modal(RespostaEntrevistaModal(self, entrevista))
 
+    @app_commands.command(
+        name="entrevista_participar",
+        description="Escolhe se você pode ser sorteado para entrevistas do Jornal Lunar.",
+    )
+    @app_commands.guild_only()
+    async def entrevista_participar(
+        self, interaction: discord.Interaction, participar: bool
+    ):
+        self.bot.db.set_participacao_entrevista(
+            str(interaction.guild_id), str(interaction.user.id), participar
+        )
+        await interaction.response.send_message(
+            "✅ Você voltou a participar das entrevistas."
+            if participar else
+            "⏸️ Você não será mais sorteado; entrevistas pendentes foram canceladas.",
+            ephemeral=True,
+        )
+
     async def _publicar(self, entrevista_id: int, guild_id: str, autor, pergunta: str, resposta: str) -> None:
         canal_id = self.bot.db.get_canal_categoria(guild_id, "noticia")
-        if not canal_id:
-            return
         guild = self.bot.get_guild(int(guild_id))
-        if guild is None:
-            return
-        canal = guild.get_channel(int(canal_id))
-        if not isinstance(canal, discord.TextChannel):
-            return
+        canal = guild.get_channel(int(canal_id)) if guild and canal_id else None
         emb = ui.embed(
             _titulo_entrevista(autor), categoria="noticia",
             descricao=f"**P:** {pergunta}\n\n**R:** {resposta}",
         )
         emb.set_author(name=getattr(autor, "display_name", str(autor)))
-        try:
-            await canal.send(embed=emb)
-            self.bot.db.marcar_entrevista_publicada(entrevista_id)
-        except discord.HTTPException:
-            log.exception("falha ao publicar entrevista no canal %s", canal_id)
+        await publicacoes.publicar_ou_enfileirar(
+            self.bot,
+            guild_id=guild_id,
+            embed=emb,
+            origem="entrevista",
+            referencia=str(entrevista_id),
+            dedupe_key=f"entrevista:{entrevista_id}",
+            categoria="noticia",
+            canal_id=str(canal.id) if isinstance(canal, discord.TextChannel) else None,
+            automacao="entrevistas",
+        )
 
 
 async def setup(bot: commands.Bot):

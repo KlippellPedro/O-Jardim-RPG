@@ -30,6 +30,7 @@ EXTENSOES = (
     "cogs.investimentos",
     "cogs.emprestimos",
     "cogs.loteria",
+    "cogs.servicos",
     "cogs.ajuda",
 )
 

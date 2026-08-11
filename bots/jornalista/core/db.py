@@ -22,6 +22,7 @@ class DatabaseUnavailable(RuntimeError):
 # ZIPs deployados separados, sem pacote Python compartilhado entre eles.
 LOTERIA_PRECO_BILHETE_PADRAO = 25
 LOTERIA_CORTE_CASA_PADRAO = 0.10
+ORCAMENTO_EDITORIAL_PADRAO = 1000
 
 
 # Mesmo PostgreSQL central do Banqueiro (VLAN da Discloud). O Jornalista só
@@ -101,10 +102,9 @@ _SCHEMA = (
         proximo_drop TEXT
     )
     """,
-    # NULL nas três colunas abaixo significa "usa o padrão do código"
-    # (core/loot.py): chance de baú trancado e faixa de Lunaris por baú
-    # eram constantes fixas pro Jardim inteiro; /bau_config passa a poder
-    # ajustar por servidor.
+    # A faixa-base de Lunaris pode ser ajustada por servidor. A coluna de
+    # chance de enigma é mantida para compatibilidade com bancos antigos;
+    # agora enigma e dificuldade são definidos pela raridade do baú.
     """
     ALTER TABLE baus_config ADD COLUMN IF NOT EXISTS chance_enigma_percent INTEGER
     """,
@@ -193,8 +193,8 @@ _SCHEMA = (
         PRIMARY KEY (guild_id, arvore_id)
     )
     """,
-    # Painéis de auto-registro configuráveis (estilo Zira, com botões). Cada
-    # painel tem N opções; cada opção é um botão que dá/tira um cargo. `unico`
+    # Painéis de auto-registro configuráveis (estilo Zira, com reações). Cada
+    # painel tem N opções; cada opção é uma reação que dá/tira um cargo. `unico`
     # = só um cargo do painel por vez (ex.: +18/-18, ele/ela).
     """
     CREATE TABLE IF NOT EXISTS registro_paineis (
@@ -303,8 +303,12 @@ _SCHEMA = (
         resposta TEXT NOT NULL,
         recompensa INTEGER NOT NULL,
         resolvido_por TEXT,
+        resolvido_em TIMESTAMPTZ,
         criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
+    """,
+    """
+    ALTER TABLE jornal_desafios ADD COLUMN IF NOT EXISTS resolvido_em TIMESTAMPTZ
     """,
     # Baú agendado por /jornal rumor: antes era só um asyncio.sleep numa task
     # solta, perdido pra sempre se o bot reiniciasse durante a espera (até
@@ -332,8 +336,12 @@ _SCHEMA = (
         status TEXT NOT NULL DEFAULT 'pendente'
             CHECK (status IN ('pendente', 'respondida', 'publicada', 'expirada')),
         criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        respondido_em TIMESTAMPTZ
+        respondido_em TIMESTAMPTZ,
+        publicado_em TIMESTAMPTZ
     )
+    """,
+    """
+    ALTER TABLE entrevistas ADD COLUMN IF NOT EXISTS publicado_em TIMESTAMPTZ
     """,
     # Mesma tabela que o Banqueiro usa pra vender bilhetes (bots/banqueiro/cogs/loteria.py);
     # o Jornalista sorteia, paga o vencedor e limpa a rodada.
@@ -357,6 +365,103 @@ _SCHEMA = (
         executado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (guild_id, ciclo)
     )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS jornal_automacoes (
+        guild_id TEXT NOT NULL,
+        tipo TEXT NOT NULL,
+        ativo BOOLEAN NOT NULL,
+        atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, tipo)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS entrevista_preferencias (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        participar BOOLEAN NOT NULL DEFAULT TRUE,
+        atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, user_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS jornal_orcamento_config (
+        guild_id TEXT PRIMARY KEY,
+        limite_mensal INTEGER NOT NULL DEFAULT 1000 CHECK (limite_mensal >= 0),
+        atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS jornal_orcamento_movimentos (
+        id BIGSERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        chave TEXT NOT NULL,
+        categoria TEXT NOT NULL,
+        valor INTEGER NOT NULL CHECK (valor > 0),
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (guild_id, chave)
+    )
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS jornal_orcamento_mes_idx
+    ON jornal_orcamento_movimentos (guild_id, criado_em DESC)
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS jornal_pautas (
+        id BIGSERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        canal_id TEXT,
+        autor_id TEXT NOT NULL,
+        titulo TEXT NOT NULL,
+        resumo TEXT NOT NULL DEFAULT '',
+        corpo TEXT NOT NULL,
+        autoria TEXT NOT NULL DEFAULT '',
+        imagem_url TEXT NOT NULL DEFAULT '',
+        status TEXT NOT NULL DEFAULT 'rascunho'
+            CHECK (status IN ('rascunho', 'agendada', 'fila', 'publicada', 'cancelada')),
+        publicar_em TIMESTAMPTZ,
+        mensagem_id TEXT,
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        publicada_em TIMESTAMPTZ
+    )
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS jornal_pautas_agendadas_idx
+    ON jornal_pautas (publicar_em) WHERE status='agendada'
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS jornal_publicacoes (
+        id BIGSERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        canal_id TEXT,
+        categoria TEXT NOT NULL DEFAULT 'noticia',
+        origem TEXT NOT NULL,
+        referencia TEXT,
+        automacao TEXT,
+        dedupe_key TEXT NOT NULL,
+        payload JSONB NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pendente'
+            CHECK (status IN ('pendente', 'entregue', 'falha', 'cancelada')),
+        tentativas INTEGER NOT NULL DEFAULT 0,
+        proxima_tentativa TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        reivindicado_em TIMESTAMPTZ,
+        ultimo_erro TEXT,
+        mensagem_id TEXT,
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        entregue_em TIMESTAMPTZ,
+        UNIQUE (guild_id, dedupe_key)
+    )
+    """,
+    """
+    ALTER TABLE jornal_publicacoes
+    ADD COLUMN IF NOT EXISTS reivindicado_em TIMESTAMPTZ
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS jornal_publicacoes_pendentes_idx
+    ON jornal_publicacoes (proxima_tentativa)
+    WHERE status='pendente'
     """,
 )
 
@@ -524,8 +629,7 @@ class Database:
         return row["nome"] if row else economia.ESTACAO_PADRAO
 
     def set_estacao(self, guild_id: str, nome: str) -> None:
-        """Escrita movida do Banqueiro pro Jornalista (docs/Plano_Jornalista.md,
-        Decisão 2): /jornal estacao_definir chama isso agora."""
+        """A estação pertence ao Jornalista porque determina o loot sazonal."""
         with self._conn() as con:
             con.execute(
                 """
@@ -535,7 +639,7 @@ class Database:
                 (guild_id, nome),
             )
 
-    # ── Canal de registro (mapeamento de cargo por Árvore, Passo 5) ─────────
+    # ── Canal de registro e mapeamento de cargo por Árvore ──────────────────
     def get_registro_canal(self, guild_id: str):
         with self._conn() as con:
             row = con.execute(
@@ -553,7 +657,7 @@ class Database:
                 (guild_id, canal_id),
             )
 
-    # ── Cargos de Árvore (registro cosmético, Passo 5) ──────────────────────
+    # ── Cargos de Árvore (registro cosmético) ────────────────────────────────
     def set_cargo_arvore(self, guild_id: str, arvore_id: str, cargo_id: str) -> None:
         with self._conn() as con:
             con.execute(
@@ -768,7 +872,7 @@ class Database:
                 """
                 INSERT INTO config
                     (guild_id, cambio_rate, cambio_taxa, jornal_canal_id)
-                VALUES (%s, 10, 0.02, %s)
+                VALUES (%s, 100, 0.02, %s)
                 ON CONFLICT (guild_id) DO UPDATE SET
                     jornal_canal_id = EXCLUDED.jornal_canal_id
                 """,
@@ -788,7 +892,7 @@ class Database:
             con.execute(
                 """
                 INSERT INTO config (guild_id, cambio_rate, cambio_taxa, clima_auto)
-                VALUES (%s, 10, 0.02, %s)
+                VALUES (%s, 100, 0.02, %s)
                 ON CONFLICT (guild_id) DO UPDATE SET clima_auto = EXCLUDED.clima_auto
                 """,
                 (guild_id, ativo),
@@ -928,9 +1032,7 @@ class Database:
 
     @staticmethod
     def _resolver_config_bau(cfg: dict) -> dict:
-        """chance_enigma/lunaris_min/lunaris_max sempre voltam resolvidos
-        (nunca None), mesmo guardados como NULL no banco: quem chama não
-        precisa saber se veio do /bau_config ou do padrão do código."""
+        """Resolve valores-base e mantém chance_enigma apenas como legado."""
         cfg["chance_enigma"] = (
             cfg["chance_enigma_percent"] / 100
             if cfg.get("chance_enigma_percent") is not None
@@ -1500,6 +1602,7 @@ class Database:
                 "ganhos": ganhos,
                 "destino": "carteira do Banqueiro",
                 "confirmado": True,
+                "bau": dict(premio.get("bau") or {}),
             }
             con.execute(
                 """
@@ -1527,8 +1630,8 @@ class Database:
     ) -> None:
         # min_hora/max_hora/itens_por_bau/etc. não têm conceito de "não
         # definido" (a coluna é NOT NULL): usam o valor atual quando quem
-        # chamou não informa nada. Já chance_enigma_percent/lunaris_min/max
-        # são NULL = "usa o padrão do código" e por isso usam COALESCE no
+        # chamou não informa nada. chance_enigma_percent é legado; Lunaris
+        # NULL significa "usa o padrão do código" e por isso usa COALESCE no
         # SQL em vez de passar pelo valor já resolvido por get_baus_config
         # (senão qualquer chamada a /bau_config fixaria esses três campos
         # no valor padrão pra sempre, mesmo sem o mestre ter pedido isso).
@@ -1638,7 +1741,7 @@ class Database:
             con.execute(
                 """
                 INSERT INTO config (guild_id, cambio_rate, cambio_taxa, estacao_auto)
-                VALUES (%s, 10, 0.02, %s)
+                VALUES (%s, 100, 0.02, %s)
                 ON CONFLICT (guild_id) DO UPDATE SET estacao_auto = EXCLUDED.estacao_auto
                 """,
                 (guild_id, ativo),
@@ -1675,6 +1778,35 @@ class Database:
                 (guild_id, ciclo),
             )
 
+    # ── Controles centrais das publicações automáticas ─────────────────────
+    def automacao_ativa(self, guild_id: str, tipo: str, padrao: bool = True) -> bool:
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT ativo FROM jornal_automacoes WHERE guild_id=%s AND tipo=%s",
+                (guild_id, tipo),
+            ).fetchone()
+        return bool(row["ativo"]) if row else bool(padrao)
+
+    def set_automacao(self, guild_id: str, tipo: str, ativo: bool) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO jornal_automacoes (guild_id, tipo, ativo)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (guild_id, tipo) DO UPDATE SET
+                    ativo=EXCLUDED.ativo, atualizado_em=CURRENT_TIMESTAMP
+                """,
+                (guild_id, tipo, bool(ativo)),
+            )
+
+    def listar_automacoes(self, guild_id: str) -> Dict[str, bool]:
+        with self._conn() as con:
+            rows = con.execute(
+                "SELECT tipo, ativo FROM jornal_automacoes WHERE guild_id=%s",
+                (guild_id,),
+            ).fetchall()
+        return {row["tipo"]: bool(row["ativo"]) for row in rows}
+
     # ── Horóscopo do Jardim ─────────────────────────────────────────────────
     def set_horoscopo(self, guild_id: str, arvore_id: str) -> None:
         with self._conn() as con:
@@ -1704,16 +1836,26 @@ class Database:
             ).fetchone()
         return int(row["id"])
 
-    def entrevista_pendente_do_usuario(self, user_id: str):
+    def entrevista_pendente_do_usuario(self, user_id: str, guild_id: str = None):
         with self._conn() as con:
-            row = con.execute(
-                """
-                SELECT * FROM entrevistas
-                WHERE user_id=%s AND status='pendente'
-                ORDER BY criado_em DESC LIMIT 1
-                """,
-                (user_id,),
-            ).fetchone()
+            if guild_id is None:
+                row = con.execute(
+                    """
+                    SELECT * FROM entrevistas
+                    WHERE user_id=%s AND status='pendente'
+                    ORDER BY criado_em DESC LIMIT 1
+                    """,
+                    (user_id,),
+                ).fetchone()
+            else:
+                row = con.execute(
+                    """
+                    SELECT * FROM entrevistas
+                    WHERE user_id=%s AND guild_id=%s AND status='pendente'
+                    ORDER BY criado_em DESC LIMIT 1
+                    """,
+                    (user_id, guild_id),
+                ).fetchone()
         return dict(row) if row else None
 
     def responder_entrevista(self, entrevista_id: int, resposta: str) -> bool:
@@ -1730,7 +1872,13 @@ class Database:
 
     def marcar_entrevista_publicada(self, entrevista_id: int) -> None:
         with self._conn() as con:
-            con.execute("UPDATE entrevistas SET status='publicada' WHERE id=%s", (int(entrevista_id),))
+            con.execute(
+                """
+                UPDATE entrevistas SET status='publicada', publicado_em=CURRENT_TIMESTAMP
+                WHERE id=%s
+                """,
+                (int(entrevista_id),),
+            )
 
     def expirar_entrevistas_antigas(self, guild_id: str, antes_de) -> None:
         with self._conn() as con:
@@ -1758,23 +1906,138 @@ class Database:
             ).fetchall()
         return [row["user_id"] for row in rows]
 
-    # ── /jornal desafio (persistido: sobrevive a restart até ser resolvido) ──
-    def criar_desafio(
-        self, token: str, guild_id: str, canal_id: str, autor_id: str,
-        pergunta: str, resposta: str, recompensa: int,
+    def usuarios_com_entrevista_pendente(self, guild_id: str) -> List[str]:
+        """Evita selecionar de novo quem ainda nem respondeu à entrevista atual."""
+        with self._conn() as con:
+            rows = con.execute(
+                "SELECT DISTINCT user_id FROM entrevistas WHERE guild_id=%s AND status='pendente'",
+                (guild_id,),
+            ).fetchall()
+        return [row["user_id"] for row in rows]
+
+    def set_participacao_entrevista(
+        self, guild_id: str, user_id: str, participar: bool
     ) -> None:
         with self._conn() as con:
             con.execute(
                 """
-                INSERT INTO jornal_desafios (token, guild_id, canal_id, autor_id, pergunta, resposta, recompensa)
+                INSERT INTO entrevista_preferencias (guild_id, user_id, participar)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (guild_id, user_id) DO UPDATE SET
+                    participar=EXCLUDED.participar, atualizado_em=CURRENT_TIMESTAMP
+                """,
+                (guild_id, user_id, bool(participar)),
+            )
+            if not participar:
+                con.execute(
+                    """
+                    UPDATE entrevistas SET status='expirada'
+                    WHERE guild_id=%s AND user_id=%s AND status='pendente'
+                    """,
+                    (guild_id, user_id),
+                )
+
+    def usuarios_fora_das_entrevistas(self, guild_id: str) -> List[str]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT user_id FROM entrevista_preferencias
+                WHERE guild_id=%s AND participar=FALSE
+                """,
+                (guild_id,),
+            ).fetchall()
+        return [row["user_id"] for row in rows]
+
+    # ── /jornal desafio (persistido: sobrevive a restart até ser resolvido) ──
+    @staticmethod
+    def _orcamento_status_con(con, guild_id: str) -> dict:
+        cfg = con.execute(
+            "SELECT limite_mensal FROM jornal_orcamento_config WHERE guild_id=%s",
+            (guild_id,),
+        ).fetchone()
+        limite = int(cfg["limite_mensal"]) if cfg else ORCAMENTO_EDITORIAL_PADRAO
+        gasto = con.execute(
+            """
+            SELECT COALESCE(SUM(valor), 0) AS total
+            FROM jornal_orcamento_movimentos
+            WHERE guild_id=%s
+              AND criado_em >= date_trunc('month', CURRENT_TIMESTAMP)
+            """,
+            (guild_id,),
+        ).fetchone()
+        reservado = con.execute(
+            """
+            SELECT COALESCE(SUM(recompensa), 0) AS total
+            FROM jornal_desafios
+            WHERE guild_id=%s AND resolvido_por IS NULL
+              AND criado_em >= date_trunc('month', CURRENT_TIMESTAMP)
+            """,
+            (guild_id,),
+        ).fetchone()
+        gasto_val = int(gasto["total"])
+        reservado_val = int(reservado["total"])
+        return {
+            "limite": limite,
+            "gasto": gasto_val,
+            "reservado": reservado_val,
+            "disponivel": max(0, limite - gasto_val - reservado_val),
+        }
+
+    def get_orcamento_editorial(self, guild_id: str) -> dict:
+        with self._conn() as con:
+            return self._orcamento_status_con(con, guild_id)
+
+    def set_orcamento_editorial(self, guild_id: str, limite_mensal: int) -> dict:
+        limite_mensal = int(limite_mensal)
+        if limite_mensal < 0:
+            raise ValueError("o orçamento não pode ser negativo")
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO jornal_orcamento_config (guild_id, limite_mensal)
+                VALUES (%s, %s)
+                ON CONFLICT (guild_id) DO UPDATE SET
+                    limite_mensal=EXCLUDED.limite_mensal,
+                    atualizado_em=CURRENT_TIMESTAMP
+                """,
+                (guild_id, limite_mensal),
+            )
+            return self._orcamento_status_con(con, guild_id)
+
+    def criar_desafio_com_orcamento(
+        self, token: str, guild_id: str, canal_id: str, autor_id: str,
+        pergunta: str, resposta: str, recompensa: int,
+    ) -> dict:
+        """Cria e reserva um desafio sem ultrapassar o teto editorial mensal."""
+        recompensa = int(recompensa)
+        with self._conn() as con:
+            con.execute(
+                "SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))",
+                (f"orcamento-editorial:{guild_id}",),
+            )
+            status = self._orcamento_status_con(con, guild_id)
+            if recompensa > status["disponivel"]:
+                return {"criado": False, **status}
+            con.execute(
+                """
+                INSERT INTO jornal_desafios
+                    (token, guild_id, canal_id, autor_id, pergunta, resposta, recompensa)
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
                 """,
-                (token, guild_id, canal_id, autor_id, pergunta, resposta, int(recompensa)),
+                (token, guild_id, canal_id, autor_id, pergunta, resposta, recompensa),
             )
+            return {"criado": True, **self._orcamento_status_con(con, guild_id)}
 
     def set_desafio_mensagem(self, token: str, mensagem_id: str) -> None:
         with self._conn() as con:
             con.execute("UPDATE jornal_desafios SET mensagem_id=%s WHERE token=%s", (mensagem_id, token))
+
+    def cancelar_desafio_aberto(self, token: str) -> None:
+        with self._conn() as con:
+            con.execute(
+                "DELETE FROM jornal_desafios WHERE token=%s AND resolvido_por IS NULL",
+                (token,),
+            )
 
     def get_desafio_ativo(self, token: str):
         with self._conn() as con:
@@ -1783,18 +2046,61 @@ class Database:
             ).fetchone()
         return dict(row) if row else None
 
-    def reivindicar_desafio(self, token: str, user_id: str):
-        """UPDATE atômico: só o primeiro a acertar consegue travar o desafio."""
+    def reivindicar_e_premiar_desafio(self, token: str, user_id: str):
+        """Fecha o desafio, credita Lunaris e grava o extrato numa transação.
+
+        Se qualquer etapa falhar, o contexto da conexão desfaz também o
+        ``resolvido_por``. Assim o botão não fica encerrado sem pagar o vencedor.
+        """
         with self._conn() as con:
             row = con.execute(
                 """
-                UPDATE jornal_desafios SET resolvido_por=%s
+                UPDATE jornal_desafios SET resolvido_por=%s, resolvido_em=CURRENT_TIMESTAMP
                 WHERE token=%s AND resolvido_por IS NULL
                 RETURNING *
                 """,
                 (user_id, token),
             ).fetchone()
-        return dict(row) if row else None
+            if row is None:
+                return None
+            ganho = dict(row)
+            guild_id = str(ganho["guild_id"])
+            recompensa = int(ganho["recompensa"])
+            self._garantir_jogador(con, guild_id, user_id)
+            con.execute(
+                """
+                INSERT INTO carteira (guild_id, user_id, moeda, saldo)
+                VALUES (%s, %s, 'Lunaris', %s)
+                ON CONFLICT (guild_id, user_id, moeda)
+                DO UPDATE SET saldo = carteira.saldo + EXCLUDED.saldo
+                """,
+                (guild_id, user_id, recompensa),
+            )
+            con.execute(
+                """
+                INSERT INTO extrato (guild_id, user_id, delta, moeda, descricao)
+                VALUES (%s, %s, %s, 'Lunaris', %s)
+                """,
+                (
+                    guild_id,
+                    user_id,
+                    recompensa,
+                    "Venceu um desafio do Jornal Lunar",
+                ),
+            )
+            con.execute(
+                """
+                INSERT INTO jornal_orcamento_movimentos
+                    (guild_id, chave, categoria, valor, criado_em)
+                VALUES (%s, %s, 'desafio', %s, %s)
+                ON CONFLICT (guild_id, chave) DO NOTHING
+                """,
+                (
+                    guild_id, f"desafio:{token}", recompensa,
+                    ganho["criado_em"],
+                ),
+            )
+        return ganho
 
     # ── Baú agendado por /jornal rumor (sobrevive a restart) ────────────────
     def agendar_rumor_bau(self, guild_id: str, dropar_em) -> None:
@@ -1817,6 +2123,304 @@ class Database:
             con.execute(
                 "UPDATE jornal_rumores_agendados SET processado=TRUE WHERE id=%s", (int(rumor_id),)
             )
+
+    # ── Pautas e fila resiliente de publicações ─────────────────────────────
+    def criar_pauta(
+        self, guild_id: str, canal_id: Optional[str], autor_id: str,
+        titulo: str, resumo: str, corpo: str, autoria: str, imagem_url: str,
+    ) -> int:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                INSERT INTO jornal_pautas
+                    (guild_id, canal_id, autor_id, titulo, resumo, corpo, autoria, imagem_url)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                RETURNING id
+                """,
+                (guild_id, canal_id, autor_id, titulo, resumo, corpo, autoria, imagem_url),
+            ).fetchone()
+        return int(row["id"])
+
+    def get_pauta(self, guild_id: str, pauta_id: int):
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT * FROM jornal_pautas WHERE guild_id=%s AND id=%s",
+                (guild_id, int(pauta_id)),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def listar_pautas(self, guild_id: str, limite: int = 15) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT * FROM jornal_pautas WHERE guild_id=%s
+                ORDER BY criado_em DESC LIMIT %s
+                """,
+                (guild_id, max(1, min(50, int(limite)))),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def agendar_pauta(self, guild_id: str, pauta_id: int, publicar_em) -> bool:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE jornal_pautas SET status='agendada', publicar_em=%s,
+                    atualizado_em=CURRENT_TIMESTAMP
+                WHERE guild_id=%s AND id=%s AND status IN ('rascunho', 'agendada')
+                RETURNING id
+                """,
+                (publicar_em, guild_id, int(pauta_id)),
+            ).fetchone()
+        return row is not None
+
+    def cancelar_pauta(self, guild_id: str, pauta_id: int) -> bool:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE jornal_pautas SET status='cancelada', atualizado_em=CURRENT_TIMESTAMP
+                WHERE guild_id=%s AND id=%s AND status IN ('rascunho', 'agendada')
+                RETURNING id
+                """,
+                (guild_id, int(pauta_id)),
+            ).fetchone()
+        return row is not None
+
+    def listar_pautas_devidas(self, agora, limite: int = 25) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT * FROM jornal_pautas
+                WHERE status='agendada' AND publicar_em <= %s
+                ORDER BY publicar_em LIMIT %s
+                """,
+                (agora, max(1, min(100, int(limite)))),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def marcar_pauta_na_fila(self, pauta_id: int) -> bool:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE jornal_pautas SET status='fila', atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s AND status IN ('rascunho', 'agendada')
+                RETURNING id
+                """,
+                (int(pauta_id),),
+            ).fetchone()
+        return row is not None
+
+    def enfileirar_publicacao(
+        self, guild_id: str, *, canal_id: Optional[str], categoria: str,
+        origem: str, referencia: Optional[str], automacao: Optional[str],
+        dedupe_key: str, payload: dict, proxima_tentativa=None,
+    ) -> dict:
+        proxima_tentativa = proxima_tentativa or datetime.now(timezone.utc)
+        with self._conn() as con:
+            row = con.execute(
+                """
+                INSERT INTO jornal_publicacoes
+                    (guild_id, canal_id, categoria, origem, referencia, automacao,
+                     dedupe_key, payload, proxima_tentativa)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (guild_id, dedupe_key) DO UPDATE SET
+                    proxima_tentativa = CASE
+                        WHEN jornal_publicacoes.status='falha' THEN EXCLUDED.proxima_tentativa
+                        ELSE jornal_publicacoes.proxima_tentativa END,
+                    status = CASE
+                        WHEN jornal_publicacoes.status='falha' THEN 'pendente'
+                        ELSE jornal_publicacoes.status END,
+                    atualizado_em=CURRENT_TIMESTAMP
+                RETURNING *
+                """,
+                (
+                    guild_id, canal_id, categoria, origem, referencia, automacao,
+                    dedupe_key, Jsonb(payload), proxima_tentativa,
+                ),
+            ).fetchone()
+        return dict(row)
+
+    def listar_publicacoes_devidas(self, agora, limite: int = 25) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT * FROM jornal_publicacoes
+                WHERE status='pendente' AND proxima_tentativa <= %s
+                  AND (
+                    reivindicado_em IS NULL OR
+                    reivindicado_em < CURRENT_TIMESTAMP - INTERVAL '5 minutes'
+                  )
+                ORDER BY proxima_tentativa, id LIMIT %s
+                """,
+                (agora, max(1, min(100, int(limite)))),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def reivindicar_publicacao(self, publicacao_id: int):
+        """Só uma instância obtém a concessão de envio pelos próximos 5 minutos."""
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE jornal_publicacoes SET reivindicado_em=CURRENT_TIMESTAMP,
+                    atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s AND status='pendente'
+                  AND proxima_tentativa <= CURRENT_TIMESTAMP
+                  AND (
+                    reivindicado_em IS NULL OR
+                    reivindicado_em < CURRENT_TIMESTAMP - INTERVAL '5 minutes'
+                  )
+                RETURNING *
+                """,
+                (int(publicacao_id),),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def marcar_publicacao_entregue(self, publicacao_id: int, mensagem_id: str) -> None:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE jornal_publicacoes SET status='entregue', mensagem_id=%s,
+                    entregue_em=CURRENT_TIMESTAMP, atualizado_em=CURRENT_TIMESTAMP,
+                    ultimo_erro=NULL, reivindicado_em=NULL
+                WHERE id=%s AND status='pendente' AND reivindicado_em IS NOT NULL
+                RETURNING origem, referencia
+                """,
+                (mensagem_id, int(publicacao_id)),
+            ).fetchone()
+            if row and row["origem"] == "pauta" and row["referencia"]:
+                con.execute(
+                    """
+                    UPDATE jornal_pautas SET status='publicada', mensagem_id=%s,
+                        publicada_em=CURRENT_TIMESTAMP, atualizado_em=CURRENT_TIMESTAMP
+                    WHERE id=%s AND status='fila'
+                    """,
+                    (mensagem_id, int(row["referencia"])),
+                )
+            if row and row["origem"] == "entrevista" and row["referencia"]:
+                con.execute(
+                    """
+                    UPDATE entrevistas SET status='publicada', publicado_em=CURRENT_TIMESTAMP
+                    WHERE id=%s AND status='respondida'
+                    """,
+                    (int(row["referencia"]),),
+                )
+
+    def marcar_publicacao_falha(self, publicacao_id: int, erro: str) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                UPDATE jornal_publicacoes SET
+                    tentativas=tentativas + 1,
+                    status=CASE WHEN tentativas + 1 >= 12 THEN 'falha' ELSE 'pendente' END,
+                    proxima_tentativa=CURRENT_TIMESTAMP
+                        + make_interval(mins => LEAST(360, (2 ^ LEAST(tentativas + 1, 8))::int)),
+                    ultimo_erro=%s,
+                    reivindicado_em=NULL,
+                    atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s AND status='pendente' AND reivindicado_em IS NOT NULL
+                """,
+                (str(erro)[:1000], int(publicacao_id)),
+            )
+
+    def adiar_publicacao(self, publicacao_id: int, minutos: int = 30) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                UPDATE jornal_publicacoes SET
+                    proxima_tentativa=CURRENT_TIMESTAMP + make_interval(mins => %s),
+                    reivindicado_em=NULL,
+                    atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s AND status='pendente'
+                """,
+                (max(1, min(1440, int(minutos))), int(publicacao_id)),
+            )
+
+    def listar_publicacoes_problematicas(self, guild_id: str, limite: int = 15) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT * FROM jornal_publicacoes
+                WHERE guild_id=%s AND status IN ('pendente', 'falha')
+                ORDER BY criado_em DESC LIMIT %s
+                """,
+                (guild_id, max(1, min(50, int(limite)))),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def reprocessar_publicacao(self, guild_id: str, publicacao_id: int) -> bool:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE jornal_publicacoes SET status='pendente', tentativas=0,
+                    proxima_tentativa=CURRENT_TIMESTAMP, ultimo_erro=NULL,
+                    reivindicado_em=NULL,
+                    atualizado_em=CURRENT_TIMESTAMP
+                WHERE guild_id=%s AND id=%s AND status IN ('pendente', 'falha')
+                RETURNING id
+                """,
+                (guild_id, int(publicacao_id)),
+            ).fetchone()
+        return row is not None
+
+    def acordar_publicacoes_automacao(self, guild_id: str, automacao: str) -> int:
+        """Ao religar uma automação, não obriga sua fila a esperar mais 30 min."""
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                UPDATE jornal_publicacoes SET
+                    proxima_tentativa=CURRENT_TIMESTAMP,
+                    atualizado_em=CURRENT_TIMESTAMP
+                WHERE guild_id=%s AND automacao=%s AND status='pendente'
+                RETURNING id
+                """,
+                (guild_id, automacao),
+            ).fetchall()
+        return len(rows)
+
+    def resumo_semanal(self, guild_id: str, desde) -> dict:
+        with self._conn() as con:
+            economia_row = con.execute(
+                """
+                SELECT COALESCE(SUM(CASE WHEN delta > 0 THEN delta ELSE 0 END), 0) AS entradas,
+                       COALESCE(SUM(CASE WHEN delta < 0 THEN -delta ELSE 0 END), 0) AS saidas,
+                       COUNT(DISTINCT user_id) AS jogadores
+                FROM extrato
+                WHERE guild_id=%s AND moeda='Lunaris' AND criado_em >= %s
+                """,
+                (guild_id, desde),
+            ).fetchone()
+            baus = con.execute(
+                """
+                SELECT COUNT(*) AS total, COUNT(DISTINCT vencedor_user_id) AS vencedores
+                FROM baus_entregas
+                WHERE guild_id=%s AND status='entregue' AND entregue_em >= %s
+                """,
+                (guild_id, desde),
+            ).fetchone()
+            desafios = con.execute(
+                """
+                SELECT COUNT(*) AS total, COALESCE(SUM(recompensa), 0) AS premios
+                FROM jornal_desafios
+                WHERE guild_id=%s AND resolvido_por IS NOT NULL AND resolvido_em >= %s
+                """,
+                (guild_id, desde),
+            ).fetchone()
+            entrevistas = con.execute(
+                """
+                SELECT COUNT(*) AS total FROM entrevistas
+                WHERE guild_id=%s AND status='publicada' AND publicado_em >= %s
+                """,
+                (guild_id, desde),
+            ).fetchone()
+        return {
+            "entradas": int(economia_row["entradas"]),
+            "saidas": int(economia_row["saidas"]),
+            "jogadores": int(economia_row["jogadores"]),
+            "baus": int(baus["total"]),
+            "vencedores_baus": int(baus["vencedores"]),
+            "desafios": int(desafios["total"]),
+            "premios_desafios": int(desafios["premios"]),
+            "entrevistas": int(entrevistas["total"]),
+        }
 
     # ── Loteria Dominical (bilhetes vendidos pelo Banqueiro; sorteio aqui) ──
     def listar_bilhetes_loteria(self, guild_id: str) -> List[dict]:

@@ -7,13 +7,15 @@ O restante da economia (câmbio, Cartão Lunar, baús compráveis, roubo) mora
 só no Banqueiro: o Jornalista não mexe em nada disso, só entrega prêmio de
 baú achado no mundo.
 
-Convenção de nomes de moeda: comparações ignoram acento e caixa, igual ao
-site (src/loja/services/moedasService.js): "Solares" == "SOLARES" == "solares".
+Convenção de nomes de moeda: comparações ignoram acento e caixa, compatível
+com src/services/lojaCatalogService.ts.
 """
 
 from __future__ import annotations
 
+import json
 import unicodedata
+from pathlib import Path
 from typing import Dict, List, Optional
 
 NOME_BOT = "Jornalista"
@@ -22,26 +24,35 @@ NOME_BOT = "Jornalista"
 # só é usado aqui se o Jornalista for o primeiro bot a ver esse jogador).
 SALDO_INICIAL: Dict[str, int] = {"Lunaris": 20, "Solares": 0}
 
-# Cofre / Armazém: precisa bater com bots/banqueiro/core/economia.py, já
-# que os dois bots leem a mesma tabela `cofre` no Postgres central.
-COFRE_TIERS: List[Dict] = [
-    {"id": "comum", "nome": "Cofre Comum", "capacidade": 10, "capacidade_moeda": 500, "custos": {"Lunaris": 100}},
-    {"id": "cobre", "nome": "Cofre de Cobre", "capacidade": 15, "capacidade_moeda": 900, "custos": {"Lunaris": 150}},
-    {"id": "prata", "nome": "Cofre de Prata", "capacidade": 20, "capacidade_moeda": 1500, "custos": {"Lunaris": 250}},
-    {"id": "aco", "nome": "Cofre de Aço", "capacidade": 30, "capacidade_moeda": 2800, "custos": {"Lunaris": 375}},
-    {"id": "dourado", "nome": "Cofre Dourado", "capacidade": 40, "capacidade_moeda": 5000, "custos": {"Lunaris": 500}},
-    {"id": "obsidiana", "nome": "Cofre de Obsidiana", "capacidade": 50, "capacidade_moeda": 9000, "custos": {"Lunaris": 350, "Solares": 30}},
-    {"id": "arcano", "nome": "Cofre Arcano", "capacidade": 60, "capacidade_moeda": 15000, "custos": {"Lunaris": 400, "Solares": 40}},
-    {"id": "runico", "nome": "Cofre Rúnico", "capacidade": 80, "capacidade_moeda": 30000, "custos": {"Lunaris": 600, "Solares": 60}},
-    {"id": "eterno", "nome": "Cofre Eterno", "capacidade": 200, "capacidade_moeda": 50000, "custos": {"Lunaris": 1000, "Solares": 100}},
-    {"id": "astral", "nome": "Cofre Astral", "capacidade": 300, "capacidade_moeda": 100000, "custos": {"Solares": 200, "Fragmentos de Estrela": 5}},
-    {"id": "lunar", "nome": "Cofre Lunar", "capacidade": 500, "capacidade_moeda": 250000, "custos": {"Solares": 300, "Fragmentos de Estrela": 10}},
-    {"id": "soberano", "nome": "Cofre Soberano", "capacidade": 800, "capacidade_moeda": 750000, "custos": {"Solares": 450, "Fragmentos de Estrela": 20}},
-    {"id": "dimensional", "nome": "Cofre Dimensional", "capacidade": 1200, "capacidade_moeda": 2000000, "custos": {"Solares": 500, "Fragmentos de Estrela": 30, "Créditos Sombrios": 500}},
-    {"id": "paradoxal", "nome": "Cofre Paradoxal", "capacidade": 2500, "capacidade_moeda": 10000000, "custos": {"Solares": 750, "Fragmentos de Estrela": 50, "Créditos Sombrios": 1500}},
-    {"id": "sem-fim", "nome": "Cofre Sem-Fim", "capacidade": 1000000, "capacidade_moeda": 9000000000000, "custos": {"Lunaris": 5000, "Solares": 1000, "Fragmentos de Estrela": 100, "Créditos Sombrios": 3000}, "limite_pratico": True},
-]
-COFRE_TIER_INICIAL = "comum"
+
+def _localizar_cofre_seguranca_tiers() -> Path:
+    """Mesma fonte que bots/banqueiro/core/economia.py e
+    plataforma/core/cofre_tiers.py leem (data/economia/cofre_seguranca_tiers.json):
+    era uma tabela hardcoded própria aqui, que só um comentário lembrava de
+    manter sincronizada com o Banqueiro à mão (achado 10 da auditoria 2026-08,
+    escopo ampliado depois de descoberta na validação pós-correção)."""
+    import os
+
+    env = os.getenv("COFRE_SEGURANCA_TIERS_PATH")
+    if env:
+        return Path(env)
+    base_dir = Path(__file__).resolve().parent.parent  # bots/jornalista
+    repositorio = base_dir.parent.parent / "data" / "economia" / "cofre_seguranca_tiers.json"
+    if repositorio.is_file():
+        return repositorio
+    return base_dir / "data" / "cofre_seguranca_tiers.json"
+
+
+def _carregar_cofre_seguranca_tiers() -> dict:
+    return json.loads(_localizar_cofre_seguranca_tiers().read_text(encoding="utf-8"))
+
+
+_TIERS_DATA = _carregar_cofre_seguranca_tiers()
+
+# Cofre / Armazém: o Jornalista só usa capacidade (pra saber se um baú cabe),
+# mas lê a mesma fonte que o Banqueiro pra nunca mais divergir.
+COFRE_TIERS: List[Dict] = _TIERS_DATA["cofre"]["tiers"]
+COFRE_TIER_INICIAL = _TIERS_DATA["cofre"]["tier_inicial"]
 
 
 def normalizar(texto: object) -> str:
@@ -72,8 +83,8 @@ def pode_guardar(itens_atuais: int, quantidade: int, tier_id: str) -> bool:
 
 
 # ─────────────────────── Estações do Jardim (mudam o loot) ───────────────────
-# Redesenhado em 17/07/2026 (docs/Plano_Jornalista.md, Decisão 2): 4 estações
-# normais (calendário clássico) + 2 especiais (Noite Eterna, Eclipse), cada
+# Mecânica própria do Jornalista: 4 estações normais (calendário clássico) +
+# 2 especiais (Noite Eterna, Eclipse), cada
 # uma com peso de raridade de loot e um clima exclusivo (ver core/clima.py).
 # Esse conjunto SUBSTITUI o antigo (Equilíbrio/Florada/Colheita/Estiagem/
 # Eclipse) que morava no Banqueiro: agora o Jornalista é o dono, porque é

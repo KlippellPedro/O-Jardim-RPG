@@ -115,6 +115,7 @@ def test_bonus_do_horoscopo_dispara_com_o_mapa_populado():
                 "DB",
                 (),
                 {
+                    "automacao_ativa": lambda self, gid, tipo, padrao=True: True,
                     "get_horoscopo": lambda self, gid: "aethel",
                     "get_cargos_arvore": db.get_cargos_arvore,
                 },

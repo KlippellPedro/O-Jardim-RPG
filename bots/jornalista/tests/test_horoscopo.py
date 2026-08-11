@@ -45,6 +45,9 @@ class _DB:
         self.horoscopo = horoscopo
         self.cargos_arvore = cargos_arvore or {}
 
+    def automacao_ativa(self, guild_id, tipo, padrao=True):
+        return True
+
     def get_horoscopo(self, guild_id):
         return self.horoscopo
 

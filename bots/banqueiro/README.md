@@ -1,7 +1,9 @@
 # Banqueiro — O Jardim RPG
 
 Bot de economia do RPG: carteira, cofre (itens **e** dinheiro guardado),
-cartão de crédito, loja, câmbio, roubo e trocas entre jogadores. O Banqueiro
+cartão de crédito, baús, câmbio, roubo e trocas entre jogadores. A compra e a
+revenda direta de itens ficam exclusivamente na **Loja do site**; os comandos
+`/loja`, `/comprar` e `/vender` não são mais publicados pelo bot. O Banqueiro
 cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
 (baús automáticos) é anunciado por outro bot, o **Jornalista**
 (`bots/jornalista`), que lê/grava a mesma base.
@@ -9,10 +11,10 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
 ## Mecânicas
 
 - **Reputação bancária e Cartão Lunar** — são valores diferentes. A reputação
-  é a confiança do Banqueiro no jogador: ela libera raridades da loja, baús,
+  é a confiança do Banqueiro no jogador: ela libera raridades da Loja do site, baús,
   níveis de cartão, cofre e segurança, além de benefícios como descontos,
   cashback e aumento de limite. Itens Comuns são livres; Incomum exige 100,
-  Raro 250, Épico 450, Lendário 700, Relíquia 1.000 e Relíquia da Criação
+  Raro 250, Épico 450, Lendário 700, Mítico 1.000 e Relíquia da Criação
   1.500 pontos. O **limite do cartão** é o teto em Lunaris que
   pode financiar uma compra quando a carteira não cobre o preço. A parte já
   usada vira fatura; portanto,
@@ -30,14 +32,15 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
   pode se recuperar até zero depois da quitação; reputação positiva só é ganha
   mantendo faturas em dia.
 - **Carteira** (`/carteira`) — dinheiro "vivo". Recebe o Lunaris dos baús,
-  compras, vendas etc. `/roubar <membro>` abre uma tentativa pública e a
-  vítima tem **5 segundos** para clicar em `Impedir o roubo`. Se o prazo
+  pagamentos, recompensas etc. `/roubar <membro>` responde apenas ao ladrão e
+  manda a defesa por **DM** para a vítima, que tem **5 segundos** para clicar
+  em `Impedir o roubo` (10 segundos com Alarme Mágico). Se o prazo
   acabar, o ladrão leva 100% do saldo exposto (`ROUBO_CARTEIRA_PERCENT`). A
   tentativa consome o cooldown mesmo quando é impedida. Depois de ser roubada,
-  a vítima fica um tempo protegida
-  contra novo roubo de carteira (`ROUBO_PROTECAO_VITIMA_HORAS`) e recebe uma
-  DM avisando quanto foi levado e por quem (silenciosamente ignorado se a
-  vítima tiver DM fechada).
+  a vítima fica um tempo protegida contra os dois tipos de roubo
+  (`ROUBO_PROTECAO_VITIMA_HORAS`) e recebe uma DM. Se a defesa privada não
+  puder ser entregue, a tentativa é cancelada, o cooldown é liberado e um
+  Alarme Mágico eventualmente consumido é devolvido. Nada é publicado no canal.
 - **Cofre** (`/cofre`) — guarda itens (limitados pelo tier) e dinheiro
   (`/cofre_depositar`, `/cofre_sacar` — saque cobra uma taxa pequena). O
   tamanho possui 15 níveis e termina no Cofre Sem-Fim, sem limite prático.
@@ -47,8 +50,8 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
   Sombrios, até o pacote final com as quatro moedas. A cobrança é atômica:
   se faltar qualquer material, nenhum saldo ou nível é alterado. Descontos
   de reputação alcançam Lunaris e Solares, mas não os materiais raros. O dinheiro guardado é
-  **defensável**: `/roubar_cofre` também dá 5 segundos
-  para a vítima impedir. Sem reação, tenta arrombar e, se der certo, leva 50%
+  **defensável**: `/roubar_cofre` usa a mesma defesa privada por DM.
+  Sem reação, tenta arrombar e, se der certo, leva 50%
   fixo do saldo guardado (`ROUBO_COFRE_PERCENT`) — mas a *chance* de dar certo
   depende da **Segurança** que o dono comprou
   (`/cofre_seguranca_melhorar`). Segurança Básica (de fábrica) defende 50%
@@ -57,6 +60,26 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
   `core/economia.py`). Se o roubo falhar, o ladrão paga multa pro alvo. O
   cofre também pode render juros (`/juros_cofre`, comando de mestre, tipo
   timeskip de fim de sessão) — só o saldo guardado, nunca a carteira.
+- **Proteções consumíveis** — `/protecao_comprar` mantém defesas específicas
+  do banco, sem criar itens duplicados no inventário. O Cão de Guarda bloqueia
+  automaticamente uma tentativa; o Alarme Mágico amplia a reação de 5 para
+  10 segundos. Se houver os dois, o Cão é consumido primeiro. `/protecao_ver`
+  mostra quantidades, efeitos e essa prioridade antes de qualquer compra nova.
+- **Planejamento, abordagens e Calor** — `/roubo_planejar` mostra em privado
+  apenas faixas de recursos e risco, sem expor saldos. Roubo Cuidadoso gera
+  menos Calor, Rápido encurta a reação com multa maior e Disfarçado oculta a
+  identidade até o resultado, reduz o saque e consome um Kit de Disfarce.
+  `/preparo_roubo_comprar` compra o kit e `/preparos_roubo` mostra estoque e
+  Calor. O Calor decai com o tempo, amplia o cooldown e reduz a chance de
+  arrombamento.
+- **Alertas e seguro** — `/alertas_banco` controla DMs de pagamentos, mercado,
+  empréstimos, rendimentos e resultados de segurança. A defesa interativa do
+  roubo permanece obrigatória. `/seguro_cofre` cobre 30% do valor roubado,
+  até 200 Lunaris por sinistro e no máximo uma vez a cada sete dias; a
+  assinatura de 30 dias pode renovar automaticamente.
+- **Baús** — `/loja_baus` é a única loja mantida no Discord. Baús nunca
+  sorteiam veículos, monstros, drops comerciais ou modificações, que possuem
+  sistemas e preços próprios no site. IDs e estoques antigos permanecem válidos.
 - **Proteção do mestre** — `/mestre_proteger <membro>` define uma única conta
   imune aos dois tipos de roubo no servidor; chamar o comando sem membro remove
   a proteção. Tentar roubar essa conta consome o cooldown e queima no máximo
@@ -78,16 +101,28 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
   cabeça de outro (`/recompensa_colocar`, pago da própria carteira). Some
   com recompensas do sistema se houver. `/recompensa_ver` mostra quem tá
   mais procurado no servidor.
-- **Extrato** (`/extrato [membro]`) — histórico das últimas 15 transações de
-  qualquer jogador: compras, vendas, câmbio, depósito/saque do cofre,
+- **Extrato** (`/extrato [membro]`) — histórico paginado das últimas 100
+  transações, mostrado de forma privada. Cada jogador vê o próprio extrato e
+  somente mestres com `Gerenciar Servidor` podem consultar o de outra pessoa:
+  compras e vendas históricas, baús, câmbio, depósito/saque do cofre,
   roubos (dos dois lados), multas, recompensas, pagamentos, juros de
   dívida e ações de mestre. Serve pra resolver "quem mexeu no meu dinheiro"
   numa disputa de mesa. Praticamente toda operação que move qualquer moeda
   grava uma linha via `db.registrar_extrato(...)`.
+- **Custódia e diagnóstico** — lances, empréstimos e ofertas pagas reservam o
+  dinheiro antes da conclusão e devolvem a reserva quando a operação falha,
+  é recusada ou expira. `/economia_diagnostico` dá ao mestre uma visão
+  privada de circulação, dívida, concentração, fluxo, roubos e reservas.
 
 Todas essas constantes (chances, percentuais, prazos) vivem em
 `core/economia.py`, fáceis de ajustar. O mestre também pode sobrescrever as
 regras de `/roubar_cofre` por servidor com `/setroubo`, sem editar código.
+O câmbio padrão acompanha a regra pública: **100 Lunaris = 1 Solar**. Na
+primeira inicialização desta versão, configurações antigas ainda no padrão
+10:1 migram uma única vez para 100:1; taxas personalizadas são preservadas.
+O ajuste automático flutua dentro da banda de **50 a 200 Lunaris por Solar**;
+a banda legada de 5 a 20 foi removida porque podia derrubar a taxa 100:1 para
+20:1 em um único ciclo.
 
 ## Arquitetura atual
 
@@ -221,7 +256,7 @@ bots/banqueiro/
 │   ├── loot.py            # só o sorteio (sortear_bau); agendamento é do Jornalista
 │   └── ui.py               # marca, cores, barra de progresso — toda embed usa isso
 ├── cogs/
-│   ├── economia.py         # carteira, loja, cofre (itens + dinheiro), cartão, roubo
+│   ├── economia.py         # carteira, baús, cofre (itens + dinheiro), cartão, roubo
 │   ├── recompensas.py       # dívida crescente, procurados, recompensas entre jogadores
 │   ├── admin.py             # comandos de mestre, incluindo /juros_cofre e /setroubo
 │   ├── ajuda.py             # /ajuda (por categoria) e /comandos (lista tudo)

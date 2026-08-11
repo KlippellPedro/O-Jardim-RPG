@@ -13,6 +13,7 @@ import discord
 from discord.ext import commands, tasks
 
 from core import ui
+from core import publicacoes
 from core.loot import TZ
 from core.tasks_util import registrar_reinicio_em_erro
 
@@ -77,18 +78,26 @@ class Loteria(commands.Cog):
 
         canal_id = db.get_canal_categoria(gid, "dinheiro")
         canal = guild.get_channel(int(canal_id)) if canal_id else None
-        if isinstance(canal, discord.TextChannel):
-            emb = ui.embed(
-                "🎟️ Loteria Dominical: resultado!", categoria="noticia",
-                descricao=(
-                    f"{total_bilhetes} bilhete(s) vendido(s) entre {len(bilhetes)} participante(s) essa semana.\n\n"
-                    f"🏆 <@{vencedor_id}> levou ☾ **{premio} Lunaris**!"
-                ),
-            )
-            try:
-                await canal.send(embed=emb, allowed_mentions=discord.AllowedMentions(users=True))
-            except discord.HTTPException:
-                log.exception("falha ao publicar resultado da loteria no canal %s", canal_id)
+        if not db.automacao_ativa(gid, "loteria_resultado", True):
+            return
+        emb = ui.embed(
+            "🎟️ Loteria Dominical: resultado!", categoria="noticia",
+            descricao=(
+                f"{total_bilhetes} bilhete(s) vendido(s) entre {len(bilhetes)} participante(s) essa semana.\n\n"
+                f"🏆 <@{vencedor_id}> levou ☾ **{premio} Lunaris**!"
+            ),
+        )
+        await publicacoes.publicar_ou_enfileirar(
+            self.bot,
+            guild_id=gid,
+            embed=emb,
+            origem="loteria_resultado",
+            dedupe_key=f"loteria:{gid}:{datetime.now().date().isoformat()}",
+            categoria="dinheiro",
+            canal_id=str(canal.id) if isinstance(canal, discord.TextChannel) else None,
+            automacao="loteria_resultado",
+            mencoes="usuarios",
+        )
 
 
 async def setup(bot: commands.Bot):

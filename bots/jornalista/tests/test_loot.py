@@ -38,6 +38,24 @@ def test_sortear_bau_catalogo_vazio():
     assert 5 <= premio["lunaris"] <= 40
 
 
+def test_bau_com_varios_itens_nao_repete_o_mesmo_premio():
+    catalogo = Catalogo()
+    total, erros = catalogo.carregar_dados({
+        "entradas": [
+            {"tipo": "equipamento", "id": "a", "titulo": "A", "conteudo": {"raridade": "comum"}},
+            {"tipo": "equipamento", "id": "b", "titulo": "B", "conteudo": {"raridade": "comum"}},
+        ],
+    })
+    assert total == 2 and erros == []
+
+    premio = loot.sortear_bau(
+        catalogo, qtd_itens=5, rng=random.Random(4), pesos={"comum": 1}
+    )
+    ids = [item.id for item in premio["itens"]]
+    assert len(ids) == 2
+    assert len(ids) == len(set(ids))
+
+
 def test_estacao_nao_sorteia_raridade_que_nao_declarou():
     catalogo = Catalogo()
     total, erros = catalogo.carregar_dados({
@@ -69,6 +87,27 @@ def test_catalogo_publicado_aceita_tipos_e_raridades_da_loja():
     assert catalogo.get("fruto-chamas").tipo == "fruto-eden"
     assert catalogo.get("selo-nova-tentativa").tipo == "consumivel"
     assert catalogo.get("reliquia-manto-abismo").tipo == "artefato"
+    assert catalogo.get("artefato-calice-sangue").raridade == "reliquia"
+    assert catalogo.get("artefato-calice-sangue").raridade_rotulo == "Mítico"
+
+
+def test_bau_nao_entrega_bens_veiculos_nem_contratos_de_monstro():
+    catalogo = Catalogo()
+    total, erros = catalogo.carregar_dados({
+        "entradas": [
+            {"tipo": "veiculo", "id": "motor", "titulo": "Motor", "conteudo": {"raridade": "comum"}},
+            {"tipo": "veiculo-completo", "id": "moto", "titulo": "Moto", "conteudo": {"raridade": "comum"}},
+            {"tipo": "monstro", "id": "lobo", "titulo": "Lobo", "conteudo": {"raridade": "comum"}},
+            {"tipo": "equipamento", "id": "corda", "titulo": "Corda", "conteudo": {"raridade": "comum"}},
+        ],
+    })
+    assert total == 4 and erros == []
+
+    item = loot.sortear_item(catalogo, rng=random.Random(0), pesos={"comum": 1})
+    assert item.id == "corda"
+    assert loot.sortear_item(
+        catalogo, rng=random.Random(0), pesos={"comum": 1}, tipos=["veiculo"]
+    ) is None
 
 
 def test_agendar_proximo_futuro():

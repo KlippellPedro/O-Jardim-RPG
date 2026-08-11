@@ -16,6 +16,7 @@ from discord.ext import commands, tasks
 from core import economia, ui
 from core.db import SaldoInsuficiente
 from core.tasks_util import registrar_reinicio_em_erro
+from cogs.servicos import enviar_alerta_banco
 
 log = logging.getLogger("banqueiro")
 
@@ -49,23 +50,32 @@ class Investimentos(commands.Cog):
         sid, uid = _sid(interaction), str(interaction.user.id)
         db = self.bot.db
         db.garantir_jogador(sid, uid)
+        vence_em = datetime.now(timezone.utc) + timedelta(days=economia.INVESTIMENTO_DIAS)
         try:
-            db.debitar(sid, uid, moeda_nome, valor)
+            db.comprar_investimento(sid, uid, moeda_nome, valor, vence_em)
         except SaldoInsuficiente as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
-        vence_em = datetime.now(timezone.utc) + timedelta(days=economia.INVESTIMENTO_DIAS)
-        db.criar_investimento(sid, uid, moeda_nome, valor, vence_em)
-        db.registrar_extrato(sid, uid, -valor, moeda_nome, "Investido num Título do Jardim")
         em_crise = db.get_crise_economica(sid)
-        taxa = economia.INVESTIMENTO_TAXA_CRISE if em_crise else economia.INVESTIMENTO_TAXA_NORMAL
         simb = ui.simbolo_moeda(moeda_nome)
+        if em_crise:
+            previsao = (
+                f"Rendimento previsto se vencer agora: **{int(economia.INVESTIMENTO_TAXA_CRISE * 100)}%** "
+                "(⚠️ servidor em Crise Econômica)."
+            )
+        else:
+            chance_ganho = int(economia.INVESTIMENTO_CHANCE_GANHO * 100)
+            previsao = (
+                f"Título de risco: **{chance_ganho}%** de chance de vencer com "
+                f"**+{int(economia.INVESTIMENTO_TAXA_GANHO * 100)}%**, "
+                f"**{100 - chance_ganho}%** de chance de vencer com "
+                f"**{int(economia.INVESTIMENTO_TAXA_PERDA * 100)}%**. O resultado só é sorteado no vencimento."
+            )
         emb = ui.embed(
             "📜 Título do Jardim emitido!", categoria="economia",
             descricao=(
                 f"Você travou {simb} **{valor} {moeda_nome}** por {economia.INVESTIMENTO_DIAS} dias.\n"
-                f"Rendimento previsto se vencer agora: **{'+' if taxa >= 0 else ''}{int(taxa * 100)}%** "
-                f"({'⚠️ servidor em Crise Econômica' if em_crise else 'condições normais'}).\n"
+                f"{previsao}\n"
                 f"Vence {discord.utils.format_dt(vence_em, style='R')}."
             ),
         )
@@ -138,19 +148,20 @@ class Investimentos(commands.Cog):
         db = self.bot.db
         em_crise = db.get_crise_economica(inv["guild_id"])
         final = economia.valor_maturado_investimento(inv["valor"], em_crise)
-        db.creditar(inv["guild_id"], inv["user_id"], inv["moeda"], final)
-        db.registrar_extrato(inv["guild_id"], inv["user_id"], final, inv["moeda"], "Título do Jardim vencido")
-        db.maturar_investimento(inv["id"])
+        processado = db.pagar_investimento_maturado(inv["id"], final)
+        if processado is None:
+            return
         ganho = final - inv["valor"]
         usuario = self.bot.get_user(int(inv["user_id"]))
         if usuario is not None:
-            try:
-                await usuario.send(
-                    f"📜 Seu Título do Jardim venceu: {inv['valor']} → **{final} {inv['moeda']}** "
-                    f"({'+' if ganho >= 0 else ''}{ganho})."
-                )
-            except (discord.Forbidden, discord.HTTPException):
-                log.info("nao consegui avisar %s sobre o titulo vencido", inv["user_id"])
+            await enviar_alerta_banco(
+                self.bot,
+                inv["guild_id"],
+                usuario,
+                "rendimentos",
+                f"📜 Seu Título do Jardim venceu: {inv['valor']} → **{final} {inv['moeda']}** "
+                f"({'+' if ganho >= 0 else ''}{ganho}).",
+            )
 
 
 async def setup(bot):

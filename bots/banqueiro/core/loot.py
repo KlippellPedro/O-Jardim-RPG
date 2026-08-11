@@ -11,7 +11,7 @@ PESOS_RARIDADE: Dict[str, int] = {
     "raro": 10,
     "epico": 4,
     "lendario": 1,
-    "reliquia": 1,
+    "mitico": 1,
     "reliquia da criacao": 1,
 }
 LUNARIS_MIN, LUNARIS_MAX = 5, 40

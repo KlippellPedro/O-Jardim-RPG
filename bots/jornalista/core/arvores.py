@@ -1,9 +1,9 @@
 """
-As 10 Árvores do Jardim: nome e cor oficiais, mesma fonte que
-src/mundo/config/arvores.js usa pra cena 3D (RGB convertido pra hex aqui).
+As 10 Árvores do Jardim: nome e cor oficiais, sincronizados com
+data/mundo/arvoresCatalog.ts (RGB convertido pra hex aqui).
 
-Usado pelo registro por Árvore (Passo 5 do docs/Plano_Jornalista.md, Decisão 1):
-puramente cosmético, "qual Árvore você é": sem ligação com classe/ficha.
+Usado pelo registro por Árvore. O cargo é cosmético e não altera classe,
+raça, Fluxo nem qualquer escolha da ficha.
 """
 
 from __future__ import annotations

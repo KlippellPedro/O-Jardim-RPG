@@ -28,6 +28,9 @@ class _DBFake:
         self.rotas_consultadas = []
         self.publicados = []
 
+    def automacao_ativa(self, guild_id, tipo, padrao=True):
+        return True
+
     def get_canal_categoria(self, guild_id, categoria):
         self.rotas_consultadas.append((guild_id, categoria))
         return self.canal_id

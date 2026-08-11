@@ -29,11 +29,11 @@ def test_resolver_preco():
 
 
 def test_converter():
-    # 100 Lunaris -> Solares (1 Solares = 10 Lunaris, taxa 2%): 100/10=10, *0.98=9.8 -> 9
-    rec, taxa = economia.converter(100, "Lunaris", "Solares", 10, 0.02)
-    assert rec == 9, (rec, taxa)
-    # 10 Solares -> Lunaris: 10*10=100, *0.98=98, taxa 2
-    rec, taxa = economia.converter(10, "Solares", "Lunaris", 10, 0.02)
+    # Câmbio oficial: 100 Lunaris = 1 Solar; a taxa de 2% e o arredondamento
+    # impedem converter apenas 100 Lunaris em uma unidade inteira.
+    rec, taxa = economia.converter(200, "Lunaris", "Solares")
+    assert rec == 1 and taxa == 1, (rec, taxa)
+    rec, taxa = economia.converter(1, "Solares", "Lunaris")
     assert rec == 98 and taxa == 2, (rec, taxa)
     for entrada in [(-1, "Lunaris", "Solares"), (10, "Lunaris", "Lunaris"), (10, "Ecos", "Lunaris")]:
         try:
@@ -41,6 +41,25 @@ def test_converter():
             raise AssertionError(f"deveria ter falhado: {entrada}")
         except ValueError:
             pass
+
+
+def test_valor_maturado_investimento_em_crise_e_deterministico():
+    # Crise é evento do mestre, sem sorteio — sempre o mesmo prejuízo.
+    assert economia.valor_maturado_investimento(1000, em_crise=True) == 980  # -2%
+
+
+def test_valor_maturado_investimento_normal_tem_risco_e_recompensa(monkeypatch):
+    # Decisão de balanceamento 2026-08: taxa fixa fazia Investimento perder
+    # de goleada pro Cofre em qualquer prazo — agora tem risco de verdade.
+    monkeypatch.setattr(economia.random, "random", lambda: 0.0)          # sorteia o lado bom
+    assert economia.valor_maturado_investimento(1000, em_crise=False) == 1080  # +8%
+
+    monkeypatch.setattr(economia.random, "random", lambda: 0.99)         # sorteia o lado ruim
+    assert economia.valor_maturado_investimento(1000, em_crise=False) == 970   # -3%
+
+    # A fronteira é a própria chance de ganho: exatamente nela ainda cai no ramo ruim.
+    monkeypatch.setattr(economia.random, "random", lambda: economia.INVESTIMENTO_CHANCE_GANHO)
+    assert economia.valor_maturado_investimento(1000, em_crise=False) == 970
 
 
 def test_cofre():
@@ -147,7 +166,7 @@ def test_db():
     assert db.get_cofre_tier(g, u) == "comum"
     db.set_cofre_tier(g, u, "prata")
     assert db.get_cofre_tier(g, u) == "prata"
-    assert db.get_cambio(g) == (10, 0.02)
+    assert db.get_cambio(g) == (100, 0.02)
     db.set_cambio(g, 8, 0.05)
     assert db.get_cambio(g) == (8, 0.05)
 
@@ -225,6 +244,54 @@ def test_db_cofre_saldo_e_roubo():
     assert proxima is not None and proxima > datetime.now(timezone.utc)
 
 
+def test_db_juros_cofre_respeita_o_teto():
+    # Decisão de balanceamento 2026-08: sem teto, 2%/dia composto sem limite
+    # dominava estritamente o rendimento de /investir em qualquer prazo —
+    # acima do teto, o saldo guardado continua seguro mas para de render
+    # juros automáticos.
+    db = novo_db()
+    g, u = "guild-juros-teto", "user-juros-teto"
+    db.garantir_jogador(g, u)
+    db.creditar_cofre(g, u, "Lunaris", 2000)
+
+    afetados = db.aplicar_juros_cofre(g, 0.10, teto=1000)
+    assert afetados == 1
+    # Só os primeiros 1000 rendem: 2000 + floor(1000*0.10) = 2100, não 2200.
+    assert db.get_saldo_cofre(g, u, "Lunaris") == 2100
+
+    # Um teto maior que o saldo guardado não muda o comportamento de antes.
+    db2, g2, u2 = novo_db(), "guild-juros-sem-teto", "user-juros-sem-teto"
+    db2.garantir_jogador(g2, u2)
+    db2.creditar_cofre(g2, u2, "Lunaris", 500)
+    db2.aplicar_juros_cofre(g2, 0.10, teto=1000)
+    assert db2.get_saldo_cofre(g2, u2, "Lunaris") == 550                 # 500 + floor(500*0.10)
+
+    # Sem passar teto, usa o padrão de core/economia.py (JUROS_COFRE_TETO).
+    db3, g3, u3 = novo_db(), "guild-juros-teto-padrao", "user-juros-teto-padrao"
+    db3.garantir_jogador(g3, u3)
+    db3.creditar_cofre(g3, u3, "Lunaris", economia.JUROS_COFRE_TETO + 500)
+    db3.aplicar_juros_cofre(g3, 0.10)
+    esperado = economia.JUROS_COFRE_TETO + 500 + int(economia.JUROS_COFRE_TETO * 0.10)
+    assert db3.get_saldo_cofre(g3, u3, "Lunaris") == esperado
+
+
+def test_db_juros_cofre_sem_teto_ignora_o_limite():
+    # Revisão pós-implementação 2026-08: o bônus manual /juros_cofre do
+    # mestre é intervenção discricionária, não rendimento passivo — só o
+    # ciclo automático diário respeita o teto de 1000.
+    db = novo_db()
+    g, u = "guild-juros-sem-teto-mestre", "user-juros-sem-teto-mestre"
+    db.garantir_jogador(g, u)
+    db.creditar_cofre(g, u, "Lunaris", economia.JUROS_COFRE_TETO + 4000)
+
+    afetados = db.aplicar_juros_cofre(g, 0.10, sem_teto=True)
+    assert afetados == 1
+    saldo_inicial = economia.JUROS_COFRE_TETO + 4000
+    esperado = saldo_inicial + int(saldo_inicial * 0.10)          # sobre o saldo integral, sem LEAST
+    assert db.get_saldo_cofre(g, u, "Lunaris") == esperado
+    assert db.get_saldo_cofre(g, u, "Lunaris") != saldo_inicial + int(economia.JUROS_COFRE_TETO * 0.10)
+
+
 def test_db_seguranca_e_reset():
     db = novo_db()
     g, u = "guild3", "user3"
@@ -283,6 +350,9 @@ def test_db_reserva_cooldown_e_protecao_do_mestre():
         g, ladrao, agora, agora + timedelta(hours=2)
     )
     assert reservado is False and salvo == proxima
+    assert db.liberar_tentativa_roubo(g, ladrao, agora + timedelta(hours=2)) is False
+    assert db.liberar_tentativa_roubo(g, ladrao, proxima) is True
+    assert db.get_proxima_tentativa_roubo(g, ladrao) is None
 
     saldo_antes = db.get_saldo(g, ladrao, "Lunaris")
     assert db.penalizar_tentativa_contra_mestre(g, ladrao, mestre) == 1
@@ -420,12 +490,19 @@ def test_db_roubo_de_cofre_e_multa_transferem_atomicamente():
     db.garantir_jogador(g, alvo)
     db.creditar_cofre(g, alvo, "Lunaris", 60)
 
+    protegido_ate = datetime.now(timezone.utc) + timedelta(hours=6)
     resultado = db.executar_roubo_cofre(
-        g, ladrao, alvo, "Ladrão", "Alvo"
+        g,
+        ladrao,
+        alvo,
+        "Ladrão",
+        "Alvo",
+        protegido_ate,
     )
     assert resultado["valor"] == 30
     assert db.get_saldo_cofre(g, alvo, "Lunaris") == 30
     assert db.get_saldo(g, ladrao, "Lunaris") == 50
+    assert db.get_protecao_vitima(g, alvo) == protegido_ate
 
     multa = db.transferir_multa_roubo(
         g, ladrao, alvo, 0.20, "Ladrão", "Alvo"
@@ -433,6 +510,36 @@ def test_db_roubo_de_cofre_e_multa_transferem_atomicamente():
     assert multa == 10
     assert db.get_saldo(g, ladrao, "Lunaris") == 40
     assert db.get_saldo(g, alvo, "Lunaris") == 30
+
+
+def test_db_pagamento_move_saldos_e_extratos_atomicamente():
+    db = novo_db()
+    g, origem, destino = "guild_pagamento", "origem", "destino"
+    db.garantir_jogador(g, origem)
+    db.garantir_jogador(g, destino)
+
+    resultado = db.transferir_carteira(
+        g,
+        origem,
+        destino,
+        "Lunaris",
+        5,
+        "Pagamento pra Destino",
+        "Pagamento de Origem",
+    )
+    assert resultado == {"saldo_origem": 15, "saldo_destino": 25}
+    assert db.listar_extrato(g, origem)[0]["delta"] == -5
+    assert db.listar_extrato(g, destino)[0]["delta"] == 5
+
+    try:
+        db.transferir_carteira(
+            g, origem, destino, "Lunaris", 999, "falha", "falha"
+        )
+        raise AssertionError("saldo insuficiente deveria cancelar o pagamento")
+    except SaldoInsuficiente:
+        pass
+    assert db.get_saldo(g, origem, "Lunaris") == 15
+    assert db.get_saldo(g, destino, "Lunaris") == 25
 
 
 def test_db_recompensa():

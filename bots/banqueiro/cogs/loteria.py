@@ -32,12 +32,10 @@ class Loteria(commands.Cog):
         preco_bilhete = db.get_economia_config(sid)["loteria_preco_bilhete"]
         custo = preco_bilhete * quantidade
         try:
-            db.debitar(sid, uid, "Lunaris", custo)
+            total = db.comprar_bilhetes_loteria(sid, uid, quantidade, custo)
         except SaldoInsuficiente as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
-        total = db.comprar_bilhete_loteria(sid, uid, quantidade)
-        db.registrar_extrato(sid, uid, -custo, "Lunaris", f"Comprou {quantidade} bilhete(s) da Loteria Dominical")
         emb = ui.embed(
             "🎟️ Bilhetes comprados!", categoria="economia",
             descricao=(

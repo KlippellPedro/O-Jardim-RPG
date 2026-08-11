@@ -1,5 +1,5 @@
 """Cog Avisos: publica no canal de dinheiro os avisos que o Banqueiro
-enfileira (recompensas colocadas, jogadores procurados por dívida, capturas).
+enfileira (recompensas, procurados, quitações e eventos econômicos).
 O Banqueiro só escreve na fila (`avisos_pendentes`); quem publica é sempre
 o Jornalista, pra manter a separação: Banqueiro cuida de dinheiro, Jornalista
 anuncia pro servidor. Sem rota específica, usa o canal principal do jornal."""
@@ -41,6 +41,8 @@ class Avisos(commands.Cog):
 
     async def _publicar_guild(self, guild_id: str):
         db = self.bot.db
+        if not db.automacao_ativa(guild_id, "avisos_economicos", True):
+            return
         canal_id = db.get_canal_categoria(guild_id, "dinheiro")
         if not canal_id:
             return
@@ -49,7 +51,7 @@ class Avisos(commands.Cog):
             return
         for aviso in db.listar_avisos_pendentes(guild_id):
             # A mensagem já vem pronta do Banqueiro (recompensa, procurado,
-            # dívida quitada, captura...) sem categoria estruturada — usa a
+            # dívida quitada, leilão...) sem categoria estruturada — usa a
             # cor neutra do design system em vez de laranja fixo pra tudo.
             emb = ui.embed("", categoria="noticia", descricao=aviso["mensagem"])
             emb.title = None

@@ -2,8 +2,8 @@
 O Jardim RPG: bot Jornalista.
 Anuncia baús que aparecem sozinhos pelo servidor (loot aleatório) e publica
 os avisos que o Banqueiro enfileira (recompensas, procurados por dívida,
-capturas) no canal do jornal. Toda a economia (carteira, loja, cofre,
-cartão, roubo) mora no Banqueiro; o Jornalista só entrega/anuncia.
+capturas) no canal do jornal. Carteira, cofre, cartão e roubo moram no
+Banqueiro; compras de itens ficam no site. O Jornalista só entrega/anuncia.
 Ponto de entrada. Roda com: python main.py  (com o .env preenchido).
 """
 
@@ -25,6 +25,7 @@ log = logging.getLogger("jornalista")
 EXTENSOES = (
     "cogs.baus",
     "cogs.avisos",
+    "cogs.publicacoes",
     "cogs.jornal",
     "cogs.registro",
     "cogs.boasvindas",
@@ -36,7 +37,7 @@ EXTENSOES = (
 
 
 async def on_app_command_error(interaction: discord.Interaction, error: discord.app_commands.AppCommandError) -> None:
-    """Sem isso, uma checagem falhando (ex.: /setroubo sem permissão) mostra
+    """Sem isso, uma checagem falhando (ex.: /bau_config sem permissão) mostra
     pro usuário só o genérico "The application did not respond"."""
     if isinstance(error, discord.app_commands.MissingPermissions):
         mensagem = "⚠️ Você precisa da permissão **Gerenciar Servidor** pra usar esse comando."
@@ -59,8 +60,8 @@ async def on_app_command_error(interaction: discord.Interaction, error: discord.
 class Jornalista(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
-        # Privilegiada: precisa pra on_member_join/on_member_remove (Passo 4)
-        # e pra checar cargos do jogador no registro por Árvore (Passo 5).
+        # Privilegiada: precisa para on_member_join/on_member_remove e para
+        # checar cargos do jogador no registro por Árvore.
         # Também precisa ser ligada no Developer Portal (Bot > Privileged
         # Gateway Intents > Server Members Intent), senão o bot recusa
         # conectar: mesma pegadinha do Barista com Message Content.

@@ -21,8 +21,8 @@ from core import entrega as entrega_mod
 from core import loot as loot_mod
 from core import ui
 from core.db import AlvoProtegido, SaldoInsuficiente, UpgradeDesatualizado
-from core.inventario import CofreCheio, CofreIndisponivel, ItemIndisponivel
 from core.tasks_util import registrar_reinicio_em_erro
+from cogs.servicos import enviar_alerta_banco
 
 log = logging.getLogger("banqueiro")
 
@@ -35,6 +35,14 @@ MOEDAS_CHOICES = ui.MOEDAS_CHOICES
 CAMBIO_CHOICES = [
     app_commands.Choice(name="Lunaris ☾", value="Lunaris"),
     app_commands.Choice(name="Solares ☉", value="Solares"),
+]
+ROUBO_ABORDAGEM_CHOICES = [
+    app_commands.Choice(name=info["nome"], value=abordagem_id)
+    for abordagem_id, info in economia.ROUBO_ABORDAGENS.items()
+]
+PREPARO_ROUBO_CHOICES = [
+    app_commands.Choice(name=info["nome"], value=preparo_id)
+    for preparo_id, info in economia.PREPAROS_ROUBO.items()
 ]
 
 
@@ -161,8 +169,7 @@ def embed_confirmacao_financiamento(descricao: str, cotacao: dict) -> discord.Em
 
 
 def _tag_item(it) -> str:
-    """Resumo curto pro /loja: arma mostra simples/marcial + corpo a corpo/à
-    distância; os demais tipos mostram um rótulo próprio."""
+    """Resumo curto de catálogo usado nas consultas e fluxos legados."""
     c = it.conteudo
     if it.tipo == "arma":
         modo = c.get("modo") or "Corpo a corpo"
@@ -214,7 +221,7 @@ def _embed_item(it) -> discord.Embed:
         )
     if it.imagem:
         emb.set_thumbnail(url=it.imagem)
-    emb.set_footer(text=f"{ui.MARCA} · id: {it.id} · {it.acao.lower()} com /comprar {it.id}")
+    emb.set_footer(text=f"{ui.MARCA} · id: {it.id} · compras e revendas são feitas na Loja do site")
     return emb
 
 
@@ -229,6 +236,7 @@ class DefesaRouboView(discord.ui.View):
         self._duracao = timeout
         self._prazo: Optional[float] = None
         self._resolvido = asyncio.Event()
+        self.impedir.label = f"Impedir o roubo ({int(timeout)}s)"
 
     def iniciar_prazo(self) -> None:
         self._prazo = time.monotonic() + self._duracao
@@ -276,7 +284,7 @@ class DefesaRouboView(discord.ui.View):
             or time.monotonic() > self._prazo
         ):
             await interaction.response.send_message(
-                "Tarde demais: os 5 segundos já acabaram.", ephemeral=True
+                f"Tarde demais: os {int(self._duracao)} segundos já acabaram.", ephemeral=True
             )
             self.desabilitar()
             self._resolvido.set()
@@ -348,103 +356,6 @@ class ConfirmarFinanciamentoView(discord.ui.View):
         self.stop()
 
 
-class LojaView(discord.ui.View):
-    """Loja navegável: ◀ ▶ pra paginar e um menu pra comprar direto (mesma
-    lógica de dinheiro do /comprar, via cog._executar_compra)."""
-
-    def __init__(self, cog, itens, *, autor_id: int, moeda: str = "Lunaris", reputacao: int = 0, timeout: float = 180):
-        super().__init__(timeout=timeout)
-        self.cog = cog
-        self.autor_id = autor_id
-        self.moeda = moeda
-        self.reputacao = int(reputacao)
-        self.paginas = ui.paginar(itens, 20)
-        self.total = sum(len(p) for p in self.paginas)
-        self.indice = 0
-        self._montar()
-
-    async def interaction_check(self, interaction: discord.Interaction) -> bool:
-        if interaction.user.id != self.autor_id:
-            await interaction.response.send_message(
-                "Essa loja é de quem abriu o comando. Use `/loja` pra abrir a sua.", ephemeral=True
-            )
-            return False
-        return True
-
-    def _itens_pagina(self):
-        return self.paginas[self.indice] if self.paginas else []
-
-    def embed_atual(self) -> discord.Embed:
-        emb = ui.embed(
-            f"🏪 Loja do {economia.NOME_BOT}",
-            categoria="loja",
-            descricao=f"{self.total} item(ns) à venda: escolha no menu pra comprar com {self.moeda}.",
-        )
-        for it in self._itens_pagina():
-            requisito = economia.reputacao_minima_raridade(it.raridade)
-            acesso = (
-                f"🏦 reputação {requisito}"
-                if requisito > 0 and requisito > self.reputacao
-                else ("✅ acesso livre" if requisito <= 0 else f"✅ acesso · reputação {requisito}")
-            )
-            emb.add_field(
-                name=f"{ui.icone_raridade(it.raridade)} {it.titulo}  ·  {_tag_item(it)}",
-                value=f"`{it.id}`: {fmt_preco(it.preco)} · {acesso}",
-                inline=False,
-            )
-        if len(self.paginas) > 1:
-            emb.set_footer(
-                text=f"{ui.MARCA} · Página {self.indice + 1}/{len(self.paginas)} · "
-                "/comprar <id> <moeda> pra pagar com Solares"
-            )
-        return emb
-
-    def _montar(self) -> None:
-        self.clear_items()
-        if len(self.paginas) > 1:
-            anterior = discord.ui.Button(
-                label="◀", style=discord.ButtonStyle.secondary, disabled=self.indice == 0
-            )
-            anterior.callback = self._anterior
-            proximo = discord.ui.Button(
-                label="▶",
-                style=discord.ButtonStyle.secondary,
-                disabled=self.indice >= len(self.paginas) - 1,
-            )
-            proximo.callback = self._proximo
-            self.add_item(anterior)
-            self.add_item(proximo)
-        itens = self._itens_pagina()
-        if itens:
-            menu = discord.ui.Select(
-                placeholder=f"🛒 Comprar um item desta página ({self.moeda})…",
-                options=[
-                    discord.SelectOption(
-                        label=it.titulo[:100],
-                        value=it.id,
-                        description=fmt_preco(it.preco)[:100],
-                    )
-                    for it in itens[:25]
-                ],
-            )
-            menu.callback = self._comprar_selecionado
-            self.add_item(menu)
-
-    async def _anterior(self, interaction: discord.Interaction) -> None:
-        self.indice = max(0, self.indice - 1)
-        self._montar()
-        await interaction.response.edit_message(embed=self.embed_atual(), view=self)
-
-    async def _proximo(self, interaction: discord.Interaction) -> None:
-        self.indice = min(len(self.paginas) - 1, self.indice + 1)
-        self._montar()
-        await interaction.response.edit_message(embed=self.embed_atual(), view=self)
-
-    async def _comprar_selecionado(self, interaction: discord.Interaction) -> None:
-        item_id = interaction.data["values"][0]
-        await self.cog._executar_compra(interaction, item_id, self.moeda)
-
-
 class Economia(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -488,10 +399,24 @@ class Economia(commands.Cog):
         itens = cat.buscar(current, limite=25) if current else cat.listar()[:25]
         return [app_commands.Choice(name=i.titulo[:100], value=i.id) for i in itens]
 
+    @staticmethod
+    def _pode_ver_financas(interaction: discord.Interaction, alvo: discord.Member) -> bool:
+        """O próprio jogador e mestres podem consultar dados financeiros."""
+        if alvo.id == interaction.user.id:
+            return True
+        permissoes = getattr(interaction.user, "guild_permissions", None)
+        return bool(getattr(permissoes, "manage_guild", False))
+
     @app_commands.command(description="Mostra carteira, cofre, cartão e reputação bancária.")
     @app_commands.describe(membro="Ver de outra pessoa (opcional).")
     async def carteira(self, interaction, membro: Optional[discord.Member] = None):
         alvo = membro or interaction.user
+        if not self._pode_ver_financas(interaction, alvo):
+            await interaction.response.send_message(
+                "🔒 A carteira de outro jogador é privada. Somente o próprio jogador e mestres podem consultá-la.",
+                ephemeral=True,
+            )
+            return
         db = self.bot.db
         sid, uid = _sid(interaction), str(alvo.id)
         db.garantir_jogador(sid, uid)
@@ -542,10 +467,10 @@ class Economia(commands.Cog):
             text=(
                 f"{ui.MARCA} · Conta protegida contra roubos"
                 if protegido
-                else f"{ui.MARCA} · Em um roubo, você tem 5 segundos para reagir"
+                else f"{ui.MARCA} · A defesa contra roubo chega por mensagem privada"
             )
         )
-        await interaction.response.send_message(embed=emb)
+        await interaction.response.send_message(embed=emb, ephemeral=True)
 
     @app_commands.command(description="Transfere dinheiro da sua carteira pra de outro jogador.")
     @app_commands.describe(membro="Pra quem pagar.", quantia="Quanto transferir.", moeda="Moeda (padrão Lunaris).")
@@ -563,17 +488,29 @@ class Economia(commands.Cog):
         db.garantir_jogador(sid, uid)
         db.garantir_jogador(sid, str(membro.id))
         try:
-            db.debitar(sid, uid, moeda_nome, quantia)
+            db.transferir_carteira(
+                sid,
+                uid,
+                str(membro.id),
+                moeda_nome,
+                quantia,
+                f"Pagamento pra {membro.display_name}",
+                f"Pagamento de {interaction.user.display_name}",
+            )
         except SaldoInsuficiente as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
-        db.creditar(sid, str(membro.id), moeda_nome, quantia)
-        db.registrar_extrato(sid, uid, -quantia, moeda_nome, f"Pagamento pra {membro.display_name}")
-        db.registrar_extrato(sid, str(membro.id), quantia, moeda_nome, f"Pagamento de {interaction.user.display_name}")
         simb = SIMBOLO.get(economia.normalizar(moeda_nome), "")
         emb = ui.embed("💸 Pagamento feito!", categoria="economia",
             descricao=f"{interaction.user.mention} pagou {simb} **{quantia} {moeda_nome}** pra {membro.mention}.")
         await interaction.response.send_message(embed=emb)
+        await enviar_alerta_banco(
+            self.bot,
+            sid,
+            membro,
+            "pagamentos",
+            f"💸 Em **{interaction.guild.name}**, você recebeu {simb} **{quantia} {moeda_nome}** de {interaction.user.display_name}.",
+        )
 
     RANKING_CATEGORIAS = [
         app_commands.Choice(name="Carteira", value="carteira"),
@@ -642,6 +579,12 @@ class Economia(commands.Cog):
     @app_commands.describe(membro="Ver o extrato de outra pessoa (opcional).")
     async def extrato(self, interaction, membro: Optional[discord.Member] = None):
         alvo = membro or interaction.user
+        if not self._pode_ver_financas(interaction, alvo):
+            await interaction.response.send_message(
+                "🔒 O extrato de outro jogador é privado. Somente o próprio jogador e mestres podem consultá-lo.",
+                ephemeral=True,
+            )
+            return
         sid, uid = _sid(interaction), str(alvo.id)
         registros = self.bot.db.listar_extrato(sid, uid, limite=100)
         if not registros:
@@ -663,15 +606,21 @@ class Economia(commands.Cog):
             paginas.append(emb)
 
         if len(paginas) == 1:
-            await interaction.response.send_message(embed=paginas[0])
+            await interaction.response.send_message(embed=paginas[0], ephemeral=True)
             return
         view = ui.Paginador(paginas, autor_id=interaction.user.id)
-        await interaction.response.send_message(embed=view.pagina_atual, view=view)
+        await interaction.response.send_message(embed=view.pagina_atual, view=view, ephemeral=True)
 
     @app_commands.command(description="Mostra o perfil econômico de alguém: patrimônio, itens e histórico.")
     @app_commands.describe(membro="Ver o perfil de outra pessoa (opcional).")
     async def perfil(self, interaction, membro: Optional[discord.Member] = None):
         alvo = membro or interaction.user
+        if not self._pode_ver_financas(interaction, alvo):
+            await interaction.response.send_message(
+                "🔒 O perfil econômico detalhado de outro jogador é privado. Somente o próprio jogador e mestres podem consultá-lo.",
+                ephemeral=True,
+            )
+            return
         sid, uid = _sid(interaction), str(alvo.id)
         db = self.bot.db
         db.garantir_jogador(sid, uid)
@@ -696,7 +645,7 @@ class Economia(commands.Cog):
         emb.add_field(name="Roubou de outros", value=f"☾ {resumo['roubou']}", inline=True)
         emb.add_field(name="Foi roubado", value=f"☾ {resumo['foi_roubado']}", inline=True)
         emb.set_footer(text=f"{ui.MARCA} · /extrato mostra o histórico completo de transações")
-        await interaction.response.send_message(embed=emb)
+        await interaction.response.send_message(embed=emb, ephemeral=True)
 
     async def _autocomplete_catalogo(self, interaction, current: str, tipo: Optional[str] = None):
         achados = self.bot.catalogo.buscar(current or "", limite=25)
@@ -753,15 +702,11 @@ class Economia(commands.Cog):
     async def _ac_monstro(self, interaction, current: str):
         return await self._autocomplete_catalogo(interaction, current, tipo="monstro")
 
-    @app_commands.command(description="Lista o que o Banqueiro tem à venda.")
-    @app_commands.describe(categoria="Filtra por categoria.")
-    @app_commands.choices(categoria=[
-        app_commands.Choice(name="Tudo", value="todos"),
-        app_commands.Choice(name="Arsenal", value="arsenal"),
-        app_commands.Choice(name="Veículos", value="veiculos"),
-        app_commands.Choice(name="Bestiário", value="bestiario"),
-        app_commands.Choice(name="Drops", value="drops")])
-    async def loja(self, interaction, categoria: Optional[app_commands.Choice[str]] = None):
+    # Implementação antiga mantida privada por uma versão para facilitar a
+    # leitura de históricos e um rollback sem tocar nos inventários. Sem o
+    # decorator ela não é publicada como slash command: a Loja do site é a
+    # única origem de compra e revenda direta de itens.
+    async def _loja_legada(self, interaction, categoria: Optional[app_commands.Choice[str]] = None):
         itens = self.bot.catalogo.listar()
         alvo = categoria.value if categoria else "todos"
         if alvo != "todos":
@@ -772,18 +717,17 @@ class Economia(commands.Cog):
         sid, uid = _sid(interaction), str(interaction.user.id)
         self.bot.db.garantir_jogador(sid, uid)
         reputacao = self.bot.db.get_cartao(sid, uid)["credito"]
-        view = LojaView(self, itens, autor_id=interaction.user.id, reputacao=reputacao)
-        await interaction.response.send_message(embed=view.embed_atual(), view=view)
+        await interaction.response.send_message(
+            "A loja de itens do Discord foi desativada. Use a Loja do site.",
+            ephemeral=True,
+        )
 
-    @app_commands.command(description="Compra um item da loja.")
-    @app_commands.describe(item="Item.", moeda="Moeda pra pagar (padrão Lunaris).")
-    @app_commands.choices(moeda=MOEDAS_CHOICES)
-    async def comprar(self, interaction, item: str, moeda: Optional[app_commands.Choice[str]] = None):
+    async def _comprar_legado(self, interaction, item: str, moeda: Optional[app_commands.Choice[str]] = None):
         moeda_nome = moeda.value if moeda else "Lunaris"
         await self._executar_compra(interaction, item, moeda_nome)
 
     async def _executar_compra(self, interaction, item: str, moeda_nome: str):
-        """Fluxo de compra compartilhado pelo /comprar e pelos botões do /loja."""
+        """Fluxo legado privado, preservado temporariamente para compatibilidade."""
         it = self.bot.catalogo.get(item)
         if it is None:
             await interaction.response.send_message(f"Não achei o item `{item}`.", ephemeral=True)
@@ -964,14 +908,7 @@ class Economia(commands.Cog):
                         descricao="\n".join(linhas), cor=ui.cor_raridade(it.raridade))
         await interaction.followup.send(embed=emb, ephemeral=pagamento["financiado"] > 0)
 
-    @comprar.autocomplete("item")
-    async def comprar_ac(self, interaction, current: str):
-        return await self._ac_itens(interaction, current)
-
-    @app_commands.command(description="Vende um item do inventário de volta pra loja.")
-    @app_commands.describe(item="Item.", moeda="Moeda pra receber (padrão Lunaris).")
-    @app_commands.choices(moeda=MOEDAS_CHOICES)
-    async def vender(self, interaction, item: str, moeda: Optional[app_commands.Choice[str]] = None):
+    async def _vender_legado(self, interaction, item: str, moeda: Optional[app_commands.Choice[str]] = None):
         moeda_nome = moeda.value if moeda else "Lunaris"
         it = self.bot.catalogo.get(item)
         if it is None:
@@ -1006,10 +943,6 @@ class Economia(commands.Cog):
             descricao=f"Você vendeu **{it.titulo}** por {simb} {reembolso} {moeda_nome} ({int(venda_ratio*100)}%).")
         await interaction.followup.send(embed=emb)
 
-    @vender.autocomplete("item")
-    async def vender_ac(self, interaction, current: str):
-        return await self._ac_itens(interaction, current)
-
     @app_commands.command(description="Mostra seu inventário.")
     @app_commands.describe(membro="Ver de outra pessoa (opcional).")
     async def inventario(self, interaction, membro: Optional[discord.Member] = None):
@@ -1041,20 +974,26 @@ class Economia(commands.Cog):
             await interaction.response.send_message("Quantia baixa demais pra converter. Aumente.", ephemeral=True)
             return
         self.bot.db.garantir_jogador(sid, uid)
+        direcao_fluxo = (
+            "compra_solares"
+            if economia.mesma_moeda(de.value, "Lunaris")
+            else "venda_solares"
+        )
+        fluxo_lunaris = quantia if direcao_fluxo == "compra_solares" else recebido
         try:
-            self.bot.db.debitar(sid, uid, de.value, quantia)
+            self.bot.db.executar_cambio(
+                sid,
+                uid,
+                de.value,
+                quantia,
+                para.value,
+                recebido,
+                direcao_fluxo,
+                fluxo_lunaris,
+            )
         except SaldoInsuficiente as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
-        self.bot.db.creditar(sid, uid, para.value, recebido)
-        self.bot.db.registrar_extrato(sid, uid, -quantia, de.value, f"Câmbio: trocado por {para.value}")
-        self.bot.db.registrar_extrato(sid, uid, recebido, para.value, f"Câmbio: recebido de {de.value}")
-        # Alimenta o câmbio flutuante (cogs/mercado.py): sempre em Lunaris
-        # equivalente, pra comparar demanda nos dois sentidos igualzinho.
-        if economia.mesma_moeda(de.value, "Lunaris"):
-            self.bot.db.registrar_fluxo_cambio(sid, "compra_solares", quantia)
-        else:
-            self.bot.db.registrar_fluxo_cambio(sid, "venda_solares", recebido)
         s_de = SIMBOLO.get(economia.normalizar(de.value), "")
         s_para = SIMBOLO.get(economia.normalizar(para.value), "")
         emb = ui.embed("💱 Câmbio no Banco Lunar", categoria="economia",
@@ -1340,12 +1279,22 @@ class Economia(commands.Cog):
                 ephemeral=True)
             return
         try:
-            db.debitar(sid, uid, moeda_nome, quantia)
+            novo = db.depositar_dinheiro_cofre(
+                sid,
+                uid,
+                moeda_nome,
+                quantia,
+                economia.capacidade_moeda_do_cofre(tier),
+            )
         except SaldoInsuficiente as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
-        novo = db.creditar_cofre(sid, uid, moeda_nome, quantia)
-        db.registrar_extrato(sid, uid, -quantia, moeda_nome, "Depositado no cofre")
+        except ValueError:
+            await interaction.response.send_message(
+                "A capacidade do cofre mudou antes do depósito. Consulte `/cofre_melhorias`.",
+                ephemeral=True,
+            )
+            return
         simb = SIMBOLO.get(economia.normalizar(moeda_nome), "")
         emb = ui.embed("🔒 Guardado no cofre!", categoria="cofre",
             descricao=f"Você guardou {simb} **{quantia} {moeda_nome}**. Saldo guardado: {simb} {novo} {moeda_nome}.")
@@ -1358,31 +1307,36 @@ class Economia(commands.Cog):
         moeda_nome = moeda.value if moeda else "Lunaris"
         sid, uid = _sid(interaction), str(interaction.user.id)
         db = self.bot.db
+        saque_taxa = self.bot.db.get_economia_config(sid)["cofre_saque_taxa"]
         try:
-            db.debitar_cofre(sid, uid, moeda_nome, quantia)
+            resultado = db.sacar_dinheiro_cofre(
+                sid, uid, moeda_nome, quantia, saque_taxa
+            )
         except SaldoInsuficiente as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
-        saque_taxa = self.bot.db.get_economia_config(sid)["cofre_saque_taxa"]
-        taxa = math.floor(quantia * saque_taxa)
-        recebido = quantia - taxa
-        novo = db.creditar(sid, uid, moeda_nome, recebido)
-        db.registrar_extrato(sid, uid, -quantia, moeda_nome, "Sacado do cofre")
-        db.registrar_extrato(sid, uid, recebido, moeda_nome, f"Recebido na carteira (taxa de {int(saque_taxa*100)}%)")
+        taxa = resultado["taxa"]
+        recebido = resultado["recebido"]
         simb = SIMBOLO.get(economia.normalizar(moeda_nome), "")
         linhas = [f"Você sacou {simb} **{recebido} {moeda_nome}** pra carteira (taxa de {int(saque_taxa*100)}%: {simb} {taxa})."]
         linhas.append("⚠️ Dinheiro na carteira pode ser roubado.")
         emb = ui.embed("🔓 Saque do cofre!", categoria="cofre", descricao="\n".join(linhas))
         await interaction.response.send_message(embed=emb)
 
-    @staticmethod
-    async def _avisar_vitima(membro: discord.Member, guild_nome: str, texto: str) -> None:
-        """DM pra vítima de um roubo. Gente pode ter DM fechada ou ter
-        bloqueado o bot: isso não pode derrubar o comando, só loga e segue."""
-        try:
-            await membro.send(f"🥷 Em **{guild_nome}**: {texto}")
-        except (discord.Forbidden, discord.HTTPException):
-            log.info("nao consegui mandar DM de aviso de roubo pra %s", membro.id)
+    async def _avisar_vitima(
+        self,
+        membro: discord.Member,
+        guild_id: str,
+        guild_nome: str,
+        texto: str,
+    ) -> None:
+        await enviar_alerta_banco(
+            self.bot,
+            guild_id,
+            membro,
+            "seguranca",
+            f"🥷 Em **{guild_nome}**: {texto}",
+        )
 
     @staticmethod
     def _fmt_espera(proxima, agora) -> str:
@@ -1409,52 +1363,89 @@ class Economia(commands.Cog):
         origem: str,
         *,
         timeout: float = economia.DEFESA_ROUBO_TIMEOUT_PADRAO,
-        silencioso: bool = False,
-    ) -> bool:
+        ocultar_identidade: bool = False,
+    ) -> str:
+        """Abre a defesa exclusivamente na DM da vítima.
+
+        Retorna ``impedido``, ``prosseguir`` ou ``indisponivel``. O último
+        estado cancela a tentativa: roubo nenhum pode continuar se o alvo não
+        teve como receber sua janela de reação privada.
+        """
         view = DefesaRouboView(membro.id, timeout=timeout)
-        emb = ui.embed(
+        guild_nome = getattr(interaction.guild, "name", "este servidor")
+        identidade = (
+            "uma figura disfarçada"
+            if ocultar_identidade
+            else f"**{interaction.user.display_name}**"
+        )
+        emb_vitima = ui.embed(
             "🥷 Tentativa de roubo!",
             categoria="economia",
             cor=0xE67E22,
             descricao=(
-                f"{interaction.user.mention} está tentando roubar {origem} de "
-                f"{membro.mention}.\n\n{membro.mention}, você tem **{int(timeout)} segundos** "
-                "para impedir no botão abaixo."
+                f"Em **{guild_nome}**, {identidade} está tentando "
+                f"roubar {origem} de você.\n\nVocê tem **{int(timeout)} segundos** "
+                "para impedir no botão abaixo. Esta defesa é privada."
             ),
         )
-        await interaction.response.send_message(
-            content=None if silencioso else membro.mention,
-            embed=emb,
-            view=view,
-            allowed_mentions=discord.AllowedMentions(
-                users=not silencioso, roles=False, everyone=False
+        if not interaction.response.is_done():
+            await interaction.response.defer(ephemeral=True, thinking=True)
+        aguardando = ui.embed(
+            "🥷 Tentativa enviada em privado",
+            categoria="economia",
+            descricao=(
+                f"Aguardando **{membro.display_name}** reagir por mensagem privada "
+                f"durante **{int(timeout)} segundos**. Nada foi publicado no servidor."
             ),
         )
+        await interaction.edit_original_response(embed=aguardando, view=None)
+        try:
+            mensagem_vitima = await membro.send(embed=emb_vitima, view=view)
+        except (discord.Forbidden, discord.HTTPException):
+            log.info("nao consegui abrir a defesa privada de roubo pra %s", membro.id)
+            erro = ui.embed(
+                "📭 Tentativa cancelada",
+                categoria="erro",
+                descricao=(
+                    f"Não consegui enviar a defesa privada para **{membro.display_name}**. "
+                    "Nenhum dinheiro foi movido e seu cooldown não será consumido."
+                ),
+            )
+            await interaction.edit_original_response(embed=erro, view=None)
+            return "indisponivel"
         view.iniciar_prazo()
         await view.aguardar()
         view.desabilitar()
         if view.impedido:
-            fim = ui.embed(
+            fim_vitima = ui.embed(
                 "🛡️ Roubo impedido!",
                 categoria="cofre",
-                descricao=(
-                    f"{membro.mention} percebeu a tentativa a tempo e barrou "
-                    f"{interaction.user.mention}. O cooldown do ladrão foi consumido."
-                ),
+                descricao=f"Você percebeu a tentativa de **{interaction.user.display_name}** e impediu o roubo.",
             )
+            fim_ladrao = ui.embed(
+                "🛡️ Roubo impedido!",
+                categoria="erro",
+                descricao=f"**{membro.display_name}** reagiu a tempo. Seu cooldown foi consumido.",
+            )
+            resultado = "impedido"
         else:
-            fim = ui.embed(
+            fim_vitima = ui.embed(
                 "⌛ A defesa não veio a tempo",
                 categoria="economia",
-                descricao="Os 5 segundos acabaram. Resolvendo a tentativa…",
+                descricao=f"Os {int(timeout)} segundos acabaram. A tentativa será resolvida agora.",
             )
+            fim_ladrao = ui.embed(
+                "⌛ A defesa não veio a tempo",
+                categoria="economia",
+                descricao=f"Os {int(timeout)} segundos acabaram. Resolvendo a tentativa…",
+            )
+            resultado = "prosseguir"
         try:
-            await interaction.edit_original_response(
-                content=None, embed=fim, view=view
-            )
+            await mensagem_vitima.edit(embed=fim_vitima, view=view)
         except discord.HTTPException:
-            log.info("nao consegui atualizar a janela de defesa do roubo %s", interaction.id)
-        return view.impedido
+            log.info("nao consegui atualizar a DM de defesa do roubo %s", getattr(interaction, "id", "?"))
+        await interaction.edit_original_response(content=None, embed=fim_ladrao, view=None)
+        return resultado
 
     @staticmethod
     async def _mostrar_resultado_roubo(
@@ -1463,7 +1454,7 @@ class Economia(commands.Cog):
         try:
             await interaction.edit_original_response(content=None, embed=emb, view=None)
         except discord.HTTPException:
-            await interaction.followup.send(embed=emb)
+            await interaction.followup.send(embed=emb, ephemeral=True)
 
     async def _punir_tentativa_contra_mestre(
         self,
@@ -1491,14 +1482,123 @@ class Economia(commands.Cog):
         if interaction.response.is_done():
             await self._mostrar_resultado_roubo(interaction, emb)
         else:
-            await interaction.response.send_message(embed=emb)
+            await interaction.response.send_message(embed=emb, ephemeral=True)
 
-    @app_commands.command(description="Tenta esvaziar a carteira; o alvo tem 5 segundos para impedir.")
+    @staticmethod
+    def _faixa_recurso(valor: int) -> str:
+        if valor <= 0:
+            return "vazio"
+        if valor < 50:
+            return "baixo"
+        if valor < 200:
+            return "médio"
+        return "alto"
+
+    @app_commands.command(
+        name="roubo_planejar",
+        description="Analisa em privado o risco de roubar alguém, sem revelar saldos exatos.",
+    )
+    @app_commands.describe(membro="Alvo que você quer observar.")
+    async def roubo_planejar(
+        self, interaction: discord.Interaction, membro: discord.Member
+    ):
+        if membro.id == interaction.user.id or membro.bot:
+            await interaction.response.send_message(
+                "Escolha outro jogador válido como alvo.", ephemeral=True
+            )
+            return
+        sid, uid, alvo_id = _sid(interaction), str(interaction.user.id), str(membro.id)
+        db = self.bot.db
+        db.garantir_jogador(sid, uid)
+        db.garantir_jogador(sid, alvo_id)
+        calor = db.get_calor_roubo(sid, uid)
+        carteira = self._faixa_recurso(db.get_saldo(sid, alvo_id, "Lunaris"))
+        cofre = self._faixa_recurso(db.get_saldo_cofre(sid, alvo_id, "Lunaris"))
+        chance = economia.chance_com_calor(
+            economia.chance_roubo_cofre(
+                db.get_seguranca_tier(sid, alvo_id),
+                db.get_config_roubo(sid)["chance_base"],
+            ),
+            calor,
+        )
+        risco = "baixo" if chance >= 0.60 else "médio" if chance >= 0.25 else "alto"
+        abordagens = "\n".join(
+            f"• **{info['nome']}** — {info['descricao']}"
+            for info in economia.ROUBO_ABORDAGENS.values()
+        )
+        emb = ui.embed(
+            f"🗺️ Planejamento: {membro.display_name}",
+            categoria="economia",
+            descricao=(
+                f"Carteira aparente: **{carteira}**\n"
+                f"Cofre aparente: **{cofre}**\n"
+                f"Risco do arrombamento: **{risco}**\n"
+                f"Seu Calor atual: **{calor}/{economia.ROUBO_CALOR_MAXIMO}**\n\n"
+                f"{abordagens}\n\nO planejamento não consome cooldown nem revela valores exatos."
+            ),
+        )
+        try:
+            await interaction.user.send(embed=emb)
+            await interaction.response.send_message(
+                "🗺️ Enviei o planejamento para sua DM.", ephemeral=True
+            )
+        except (discord.Forbidden, discord.HTTPException):
+            await interaction.response.send_message(embed=emb, ephemeral=True)
+
+    @app_commands.command(
+        name="preparo_roubo_comprar",
+        description="Compra um consumível usado por abordagens especiais de roubo.",
+    )
+    @app_commands.describe(tipo="Preparo que você quer comprar.")
+    @app_commands.choices(tipo=PREPARO_ROUBO_CHOICES)
+    async def preparo_roubo_comprar(
+        self, interaction: discord.Interaction, tipo: app_commands.Choice[str]
+    ):
+        info = economia.PREPAROS_ROUBO[tipo.value]
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        try:
+            saldo = self.bot.db.comprar_preparo_roubo(
+                sid, uid, tipo.value, info["custo"]
+            )
+        except SaldoInsuficiente as exc:
+            await interaction.response.send_message(f"💸 {exc}", ephemeral=True)
+            return
+        await interaction.response.send_message(
+            f"✅ **{info['nome']}** comprado por ☾ {info['custo']}. Saldo: ☾ {saldo}.",
+            ephemeral=True,
+        )
+
+    @app_commands.command(
+        name="preparos_roubo",
+        description="Mostra seus consumíveis e seu Calor de roubo.",
+    )
+    async def preparos_roubo(self, interaction: discord.Interaction):
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        preparos = self.bot.db.listar_preparos_roubo(sid, uid)
+        linhas = [
+            f"• **{info['nome']}** ×{preparos.get(tipo, 0)} — {info['descricao']}"
+            for tipo, info in economia.PREPAROS_ROUBO.items()
+        ]
+        calor = self.bot.db.get_calor_roubo(sid, uid)
+        emb = ui.embed(
+            "🎭 Preparos de roubo",
+            categoria="economia",
+            descricao="\n".join(linhas) + f"\n\n🔥 Calor: **{calor}/{economia.ROUBO_CALOR_MAXIMO}**",
+        )
+        await interaction.response.send_message(embed=emb, ephemeral=True)
+
+    @app_commands.command(description="Tenta roubar uma carteira; a defesa acontece por DM.")
     @app_commands.describe(
         membro="De quem você quer roubar.",
-        furtivo=f"Pague ☾ {economia.CUSTO_FURTIVIDADE} pra não avisar o alvo publicamente (padrão: não).",
+        abordagem="Como executar a tentativa (padrão: Cuidadosa).",
     )
-    async def roubar(self, interaction, membro: discord.Member, furtivo: Optional[bool] = False):
+    @app_commands.choices(abordagem=ROUBO_ABORDAGEM_CHOICES)
+    async def roubar(
+        self,
+        interaction,
+        membro: discord.Member,
+        abordagem: Optional[app_commands.Choice[str]] = None,
+    ):
         sid, uid = _sid(interaction), str(interaction.user.id)
         db = self.bot.db
         if membro.id == interaction.user.id:
@@ -1510,11 +1610,25 @@ class Economia(commands.Cog):
         alvo_id = str(membro.id)
         db.garantir_jogador(sid, uid)
         db.garantir_jogador(sid, alvo_id)
+        abordagem_id = abordagem.value if abordagem else "cuidadosa"
+        dados_abordagem = economia.abordagem_roubo(abordagem_id)
+        preparo_exigido = dados_abordagem["requer_preparo"]
+        if preparo_exigido and db.listar_preparos_roubo(sid, uid).get(preparo_exigido, 0) < 1:
+            preparo_info = economia.PREPAROS_ROUBO[preparo_exigido]
+            await interaction.response.send_message(
+                f"🎭 A abordagem **{dados_abordagem['nome']}** exige **{preparo_info['nome']}**. "
+                "Compre com `/preparo_roubo_comprar`.",
+                ephemeral=True,
+            )
+            return
 
         # /setroubo cooldown_horas descreve "as regras de /roubar_cofre neste
         # servidor", mas o cooldown sempre valeu pros dois comandos — só
         # /roubar ignorava a configuração e usava a constante do código.
-        cooldown_horas = db.get_config_roubo(sid)["cooldown_horas"]
+        calor_atual = db.get_calor_roubo(sid, uid)
+        cooldown_horas = economia.cooldown_com_calor(
+            db.get_config_roubo(sid)["cooldown_horas"], calor_atual
+        )
         agora = datetime.now(timezone.utc)
         mestre_protegido = db.get_mestre_protegido(sid)
         if mestre_protegido == alvo_id:
@@ -1559,11 +1673,12 @@ class Economia(commands.Cog):
             return
 
         try:
+            cooldown_ate = agora + timedelta(hours=cooldown_horas)
             reservado, proxima = db.reservar_tentativa_roubo(
                 sid,
                 uid,
                 agora,
-                agora + timedelta(hours=cooldown_horas),
+                cooldown_ate,
             )
             if not reservado:
                 await interaction.response.send_message(
@@ -1572,35 +1687,64 @@ class Economia(commands.Cog):
                 )
                 return
 
-            furtivo_aplicado = False
-            if furtivo:
-                try:
-                    db.debitar(sid, uid, "Lunaris", economia.CUSTO_FURTIVIDADE)
-                    db.registrar_extrato(sid, uid, -economia.CUSTO_FURTIVIDADE, "Lunaris", "Roubo furtivo (sem aviso à vítima)")
-                    furtivo_aplicado = True
-                except SaldoInsuficiente:
-                    pass
+            preparo_consumido = False
+            if preparo_exigido:
+                preparo_consumido = db.consumir_preparo_roubo(
+                    sid, uid, preparo_exigido
+                )
+                if not preparo_consumido:
+                    db.liberar_tentativa_roubo(sid, uid, cooldown_ate)
+                    await interaction.response.send_message(
+                        "Seu preparo já foi usado por outra tentativa. O cooldown foi liberado.",
+                        ephemeral=True,
+                    )
+                    return
 
             protecao = self._consumir_melhor_protecao(sid, alvo_id)
             if protecao == "cao_de_guarda":
+                novo_calor = db.adicionar_calor_roubo(
+                    sid, uid, dados_abordagem["calor"]
+                )
                 emb = ui.embed(
                     "🐕 Um Cão de Guarda latiu!",
                     categoria="erro",
                     descricao=(
                         f"{membro.mention} tinha um **Cão de Guarda** de prontidão: a tentativa de "
-                        f"{interaction.user.mention} foi barrada antes mesmo de começar. O item foi consumido."
+                        f"{interaction.user.mention} foi barrada antes mesmo de começar. O item foi consumido.\n"
+                        f"🔥 Calor atual: **{novo_calor}/{economia.ROUBO_CALOR_MAXIMO}**."
                     ),
                 )
-                await interaction.response.send_message(embed=emb)
+                await interaction.response.send_message(embed=emb, ephemeral=True)
+                await self._avisar_vitima(
+                    membro,
+                    sid,
+                    interaction.guild.name,
+                    f"Seu **Cão de Guarda** impediu uma tentativa de roubo de {interaction.user.display_name}. O item foi consumido.",
+                )
                 return
             timeout_defesa = (
                 economia.DEFESA_ROUBO_TIMEOUT_ALARME
                 if protecao == "alarme_magico"
                 else economia.DEFESA_ROUBO_TIMEOUT_PADRAO
+            ) * dados_abordagem["timeout_mult"]
+            defesa = await self._abrir_defesa_roubo(
+                interaction,
+                membro,
+                "a carteira",
+                timeout=timeout_defesa,
+                ocultar_identidade=dados_abordagem["oculta_identidade"],
             )
-            if await self._abrir_defesa_roubo(
-                interaction, membro, "a carteira", timeout=timeout_defesa, silencioso=furtivo_aplicado
-            ):
+            if defesa == "indisponivel":
+                if protecao == "alarme_magico":
+                    db.adicionar_protecao(sid, alvo_id, "alarme_magico")
+                if preparo_consumido:
+                    db.adicionar_preparo_roubo(sid, uid, preparo_exigido)
+                db.liberar_tentativa_roubo(sid, uid, cooldown_ate)
+                return
+            novo_calor = db.adicionar_calor_roubo(
+                sid, uid, dados_abordagem["calor"]
+            )
+            if defesa == "impedido":
                 return
 
             # O saldo pode mudar durante os cinco segundos. Recalcula antes da
@@ -1623,6 +1767,8 @@ class Economia(commands.Cog):
                     membro.display_name,
                     datetime.now(timezone.utc)
                     + timedelta(hours=economia.ROUBO_PROTECAO_VITIMA_HORAS),
+                    economia.ROUBO_CARTEIRA_PERCENT
+                    * dados_abordagem["saque_mult"],
                 )
             except AlvoProtegido:
                 await self._punir_tentativa_contra_mestre(
@@ -1639,14 +1785,13 @@ class Economia(commands.Cog):
                 return
 
             valor = int(resultado["valor"])
-            linhas = [f"{interaction.user.mention} roubou ☾ **{valor} Lunaris** da carteira de {membro.mention}!"]
+            linhas = [
+                f"{interaction.user.mention} roubou ☾ **{valor} Lunaris** da carteira de {membro.mention}!",
+                f"🎭 Abordagem: **{dados_abordagem['nome']}** · 🔥 Calor: **{novo_calor}/{economia.ROUBO_CALOR_MAXIMO}**",
+            ]
             recompensa = int(resultado["recompensa"]["valor"])
             if recompensa:
                 linhas.append(f"🎯 {membro.mention} tinha recompensa na cabeça: {interaction.user.mention} coletou mais ☾ **{recompensa} Lunaris**!")
-                try:
-                    db.criar_aviso(sid, f"🎯 {membro.mention} foi capturado! {interaction.user.mention} coletou a recompensa.")
-                except Exception:
-                    log.exception("recompensa paga, mas o aviso nao foi enfileirado")
                 try:
                     await cargos_mod.conceder_cacador(self.bot, interaction.guild, uid)
                     await cargos_mod.sincronizar_mais_procurado(self.bot)
@@ -1655,7 +1800,7 @@ class Economia(commands.Cog):
             emb = ui.embed("🥷 Roubo bem-sucedido!", categoria="economia", cor=0x2ECC71, descricao="\n".join(linhas))
             await self._mostrar_resultado_roubo(interaction, emb)
             await self._avisar_vitima(
-                membro, interaction.guild.name,
+                membro, sid, interaction.guild.name,
                 f"{interaction.user.display_name} roubou ☾ **{valor} Lunaris** da sua carteira. "
                 "Guarde no cofre com `/cofre_depositar` pra ficar mais seguro.",
             )
@@ -1665,12 +1810,18 @@ class Economia(commands.Cog):
             except Exception:
                 log.exception("nao consegui liberar a reserva de roubo de %s", alvo_id)
 
-    @app_commands.command(description="Tenta arrombar um cofre; o alvo tem 5 segundos para impedir.")
+    @app_commands.command(description="Tenta arrombar um cofre; a defesa acontece por DM.")
     @app_commands.describe(
         membro="De quem você quer roubar o cofre.",
-        furtivo=f"Pague ☾ {economia.CUSTO_FURTIVIDADE} pra não avisar o alvo publicamente (padrão: não).",
+        abordagem="Como executar a tentativa (padrão: Cuidadosa).",
     )
-    async def roubar_cofre(self, interaction, membro: discord.Member, furtivo: Optional[bool] = False):
+    @app_commands.choices(abordagem=ROUBO_ABORDAGEM_CHOICES)
+    async def roubar_cofre(
+        self,
+        interaction,
+        membro: discord.Member,
+        abordagem: Optional[app_commands.Choice[str]] = None,
+    ):
         sid, uid = _sid(interaction), str(interaction.user.id)
         db = self.bot.db
         if membro.id == interaction.user.id:
@@ -1682,16 +1833,31 @@ class Economia(commands.Cog):
         alvo_id = str(membro.id)
         db.garantir_jogador(sid, uid)
         db.garantir_jogador(sid, alvo_id)
+        abordagem_id = abordagem.value if abordagem else "cuidadosa"
+        dados_abordagem = economia.abordagem_roubo(abordagem_id)
+        preparo_exigido = dados_abordagem["requer_preparo"]
+        if preparo_exigido and db.listar_preparos_roubo(sid, uid).get(preparo_exigido, 0) < 1:
+            preparo_info = economia.PREPAROS_ROUBO[preparo_exigido]
+            await interaction.response.send_message(
+                f"🎭 A abordagem **{dados_abordagem['nome']}** exige **{preparo_info['nome']}**. "
+                "Compre com `/preparo_roubo_comprar`.",
+                ephemeral=True,
+            )
+            return
 
         agora = datetime.now(timezone.utc)
         cfg = db.get_config_roubo(sid)
+        calor_atual = db.get_calor_roubo(sid, uid)
+        cooldown_horas = economia.cooldown_com_calor(
+            cfg["cooldown_horas"], calor_atual
+        )
         mestre_protegido = db.get_mestre_protegido(sid)
         if mestre_protegido == alvo_id:
             reservado, proxima = db.reservar_tentativa_roubo_cofre(
                 sid,
                 uid,
                 agora,
-                agora + timedelta(hours=cfg["cooldown_horas"]),
+                agora + timedelta(hours=cooldown_horas),
             )
             if not reservado:
                 await interaction.response.send_message(
@@ -1701,6 +1867,14 @@ class Economia(commands.Cog):
                 return
             await self._punir_tentativa_contra_mestre(
                 interaction, membro, sid, uid
+            )
+            return
+
+        protecao_vitima = db.get_protecao_vitima(sid, alvo_id)
+        if protecao_vitima is not None and protecao_vitima > agora:
+            await interaction.response.send_message(
+                f"{membro.display_name} acabou de ser roubado e está de guarda alta: espere mais {self._fmt_espera(protecao_vitima, agora)}.",
+                ephemeral=True,
             )
             return
 
@@ -1721,11 +1895,12 @@ class Economia(commands.Cog):
             return
 
         try:
+            cooldown_ate = agora + timedelta(hours=cooldown_horas)
             reservado, proxima = db.reservar_tentativa_roubo_cofre(
                 sid,
                 uid,
                 agora,
-                agora + timedelta(hours=cfg["cooldown_horas"]),
+                cooldown_ate,
             )
             if not reservado:
                 await interaction.response.send_message(
@@ -1734,35 +1909,64 @@ class Economia(commands.Cog):
                 )
                 return
 
-            furtivo_aplicado = False
-            if furtivo:
-                try:
-                    db.debitar(sid, uid, "Lunaris", economia.CUSTO_FURTIVIDADE)
-                    db.registrar_extrato(sid, uid, -economia.CUSTO_FURTIVIDADE, "Lunaris", "Roubo furtivo (sem aviso à vítima)")
-                    furtivo_aplicado = True
-                except SaldoInsuficiente:
-                    pass
+            preparo_consumido = False
+            if preparo_exigido:
+                preparo_consumido = db.consumir_preparo_roubo(
+                    sid, uid, preparo_exigido
+                )
+                if not preparo_consumido:
+                    db.liberar_tentativa_roubo_cofre(sid, uid, cooldown_ate)
+                    await interaction.response.send_message(
+                        "Seu preparo já foi usado por outra tentativa. O cooldown foi liberado.",
+                        ephemeral=True,
+                    )
+                    return
 
             protecao = self._consumir_melhor_protecao(sid, alvo_id)
             if protecao == "cao_de_guarda":
+                novo_calor = db.adicionar_calor_roubo(
+                    sid, uid, dados_abordagem["calor"]
+                )
                 emb = ui.embed(
                     "🐕 Um Cão de Guarda latiu!",
                     categoria="erro",
                     descricao=(
                         f"{membro.mention} tinha um **Cão de Guarda** de prontidão: a tentativa de "
-                        f"{interaction.user.mention} foi barrada antes mesmo de começar. O item foi consumido."
+                        f"{interaction.user.mention} foi barrada antes mesmo de começar. O item foi consumido.\n"
+                        f"🔥 Calor atual: **{novo_calor}/{economia.ROUBO_CALOR_MAXIMO}**."
                     ),
                 )
-                await interaction.response.send_message(embed=emb)
+                await interaction.response.send_message(embed=emb, ephemeral=True)
+                await self._avisar_vitima(
+                    membro,
+                    sid,
+                    interaction.guild.name,
+                    f"Seu **Cão de Guarda** impediu uma tentativa de arrombamento de {interaction.user.display_name}. O item foi consumido.",
+                )
                 return
             timeout_defesa = (
                 economia.DEFESA_ROUBO_TIMEOUT_ALARME
                 if protecao == "alarme_magico"
                 else economia.DEFESA_ROUBO_TIMEOUT_PADRAO
+            ) * dados_abordagem["timeout_mult"]
+            defesa = await self._abrir_defesa_roubo(
+                interaction,
+                membro,
+                "o cofre",
+                timeout=timeout_defesa,
+                ocultar_identidade=dados_abordagem["oculta_identidade"],
             )
-            if await self._abrir_defesa_roubo(
-                interaction, membro, "o cofre", timeout=timeout_defesa, silencioso=furtivo_aplicado
-            ):
+            if defesa == "indisponivel":
+                if protecao == "alarme_magico":
+                    db.adicionar_protecao(sid, alvo_id, "alarme_magico")
+                if preparo_consumido:
+                    db.adicionar_preparo_roubo(sid, uid, preparo_exigido)
+                db.liberar_tentativa_roubo_cofre(sid, uid, cooldown_ate)
+                return
+            novo_calor = db.adicionar_calor_roubo(
+                sid, uid, dados_abordagem["calor"]
+            )
+            if defesa == "impedido":
                 return
 
             saldo_alvo = db.get_saldo_cofre(sid, alvo_id, "Lunaris")
@@ -1775,7 +1979,10 @@ class Economia(commands.Cog):
                 await self._mostrar_resultado_roubo(interaction, emb)
                 return
             seg_tier = db.get_seguranca_tier(sid, alvo_id)
-            chance = economia.chance_roubo_cofre(seg_tier, cfg["chance_base"])
+            chance = economia.chance_com_calor(
+                economia.chance_roubo_cofre(seg_tier, cfg["chance_base"]),
+                calor_atual,
+            )
 
             if random.random() < chance:
                 try:
@@ -1785,6 +1992,10 @@ class Economia(commands.Cog):
                         alvo_id,
                         interaction.user.display_name,
                         membro.display_name,
+                        datetime.now(timezone.utc)
+                        + timedelta(hours=economia.ROUBO_PROTECAO_VITIMA_HORAS),
+                        economia.ROUBO_COFRE_PERCENT
+                        * dados_abordagem["saque_mult"],
                     )
                 except AlvoProtegido:
                     await self._punir_tentativa_contra_mestre(
@@ -1800,29 +2011,41 @@ class Economia(commands.Cog):
                     await self._mostrar_resultado_roubo(interaction, emb)
                     return
                 valor = int(resultado["valor"])
-                linhas = [f"{interaction.user.mention} arrombou o cofre de {membro.mention} e levou ☾ **{valor} Lunaris**!"]
+                linhas = [
+                    f"{interaction.user.mention} arrombou o cofre de {membro.mention} e levou ☾ **{valor} Lunaris**!",
+                    f"🎭 Abordagem: **{dados_abordagem['nome']}** · 🔥 Calor: **{novo_calor}/{economia.ROUBO_CALOR_MAXIMO}**",
+                ]
                 recompensa = int(resultado["recompensa"]["valor"])
                 if recompensa:
                     linhas.append(f"🎯 {membro.mention} tinha recompensa na cabeça: {interaction.user.mention} coletou mais ☾ **{recompensa} Lunaris**!")
-                    try:
-                        db.criar_aviso(sid, f"🎯 {membro.mention} foi capturado! {interaction.user.mention} coletou a recompensa.")
-                    except Exception:
-                        log.exception("recompensa paga, mas o aviso nao foi enfileirado")
                     try:
                         await cargos_mod.conceder_cacador(self.bot, interaction.guild, uid)
                         await cargos_mod.sincronizar_mais_procurado(self.bot)
                     except Exception:
                         log.exception("falha ao sincronizar cargos dinamicos apos captura")
+                seguro = int(resultado.get("seguro", 0))
+                if seguro:
+                    linhas.append(
+                        f"🛡️ O seguro indenizou a vítima em ☾ **{seguro} Lunaris**."
+                    )
                 emb = ui.embed("🥷 Cofre arrombado!", categoria="economia", cor=0x2ECC71, descricao="\n".join(linhas))
                 await self._mostrar_resultado_roubo(interaction, emb)
                 await self._avisar_vitima(
-                    membro, interaction.guild.name,
+                    membro, sid, interaction.guild.name,
                     f"{interaction.user.display_name} arrombou seu cofre e levou ☾ **{valor} Lunaris** guardados. "
-                    "Considere melhorar a segurança com `/cofre_seguranca_melhorar`.",
+                    + (f"Seu seguro devolveu ☾ **{seguro} Lunaris**. " if seguro else "")
+                    + "Considere melhorar a segurança com `/cofre_seguranca_melhorar`.",
                 )
                 return
 
-            percentual_multa = random.uniform(economia.ROUBO_MULTA_PERCENT_MIN, economia.ROUBO_MULTA_PERCENT_MAX)
+            percentual_multa = min(
+                1.0,
+                random.uniform(
+                    economia.ROUBO_MULTA_PERCENT_MIN,
+                    economia.ROUBO_MULTA_PERCENT_MAX,
+                )
+                * dados_abordagem["multa_mult"],
+            )
             try:
                 multa = db.transferir_multa_roubo(
                     sid,
@@ -1843,6 +2066,13 @@ class Economia(commands.Cog):
                 descricao=f"{interaction.user.mention} tentou arrombar o cofre de {membro.mention} e a segurança pegou!"
                           + (f"\nPagou ☾ **{multa} Lunaris** de multa pro alvo." if multa else "\nNão tinha nada na carteira pra pagar multa."))
             await self._mostrar_resultado_roubo(interaction, emb)
+            await self._avisar_vitima(
+                membro,
+                sid,
+                interaction.guild.name,
+                f"A segurança do seu cofre frustrou a tentativa de {interaction.user.display_name}."
+                + (f" Você recebeu ☾ **{multa} Lunaris** de multa." if multa else ""),
+            )
         finally:
             try:
                 db.liberar_alvo_roubo(sid, alvo_id, reserva_ate)
@@ -2013,6 +2243,7 @@ class Economia(commands.Cog):
                         limite_atual,
                         f"Compra: {b['nome']}",
                         f"bau:{compra_id}",
+                        entrega_bau={"id": b["id"], "nome": b["nome"]},
                     )
                 except SaldoInsuficiente as exc:
                     await interacao_botao.followup.send(f"💸 {exc}", ephemeral=True)
@@ -2023,7 +2254,11 @@ class Economia(commands.Cog):
                     )
                     return
                 await self._finalizar_compra_bau(
-                    interacao_botao, b, pagamento, resposta_ja_deferida=True
+                    interacao_botao,
+                    b,
+                    pagamento,
+                    resposta_ja_deferida=True,
+                    estoque_ja_creditado=True,
                 )
 
             view = ConfirmarFinanciamentoView(
@@ -2037,7 +2272,9 @@ class Economia(commands.Cog):
             )
             return
         try:
-            saldo_novo = db.debitar(sid, uid, "Lunaris", b["preco"])
+            saldo_novo = db.comprar_bau_dinheiro(
+                sid, uid, b["id"], b["nome"], b["preco"]
+            )
         except SaldoInsuficiente as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
@@ -2050,13 +2287,23 @@ class Economia(commands.Cog):
                 "financiado": 0,
                 "vence_em": None,
             },
+            estoque_ja_creditado=True,
         )
 
-    async def _finalizar_compra_bau(self, interaction, b: dict, pagamento: dict, *, resposta_ja_deferida: bool = False):
+    async def _finalizar_compra_bau(
+        self,
+        interaction,
+        b: dict,
+        pagamento: dict,
+        *,
+        resposta_ja_deferida: bool = False,
+        estoque_ja_creditado: bool = False,
+    ):
         sid, uid = _sid(interaction), str(interaction.user.id)
         db = self.bot.db
-        db.add_bau(sid, uid, b["id"], 1)
-        db.registrar_extrato(sid, uid, -b["preco"], "Lunaris", f"Comprou {b['nome']}")
+        if not estoque_ja_creditado:
+            db.add_bau(sid, uid, b["id"], 1)
+            db.registrar_extrato(sid, uid, -b["preco"], "Lunaris", f"Comprou {b['nome']}")
         msg = f"Você comprou um **{b['nome']}** por ☾ {b['preco']}. Abra com `/abrir_bau`."
         if pagamento["financiado"] > 0:
             vence_ts = int(pagamento["vence_em"].timestamp())
@@ -2134,8 +2381,8 @@ class Economia(commands.Cog):
         ganhos = [f"☾ {premio['lunaris']} Lunaris"]
         ganhos.extend(f"**{it.titulo}** ({it.raridade_rotulo})" for it in premio["itens"])
         try:
-            # Lunaris de baú vai sempre pra carteira local (gastável em /loja,
-            # mas roubável — é o que a carteira é pra isso). Só os itens usam
+            # Lunaris de baú vai sempre pra carteira local (inclusive para a
+            # economia integrada ao site), mas é roubável. Só os itens usam
             # o cofre da conta no site: é ele que fica protegido e que a
             # ficha enxerga.
             destino_entrega = await entrega_mod.entregar_no_cofre(

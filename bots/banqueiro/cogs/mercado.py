@@ -16,6 +16,7 @@ from core import economia, ui
 from core.db import SaldoInsuficiente
 from core.inventario import CofreIndisponivel, ItemIndisponivel
 from core.tasks_util import registrar_reinicio_em_erro
+from cogs.servicos import enviar_alerta_banco
 
 log = logging.getLogger("banqueiro")
 
@@ -308,20 +309,23 @@ class Mercado(commands.Cog):
             await interaction.response.send_message("Você não pode dar lance no seu próprio leilão.", ephemeral=True)
             return
         db.garantir_jogador(sid, uid)
-        saldo = db.get_saldo(sid, uid, leilao["moeda"])
-        if saldo < valor:
-            await interaction.response.send_message(
-                f"💸 Você só tem {saldo} {leilao['moeda']}: não cobre esse lance se você vencer.", ephemeral=True
+        try:
+            atualizado = db.dar_lance_leilao_com_custodia(
+                leilao_id, sid, uid, valor
             )
+        except SaldoInsuficiente as exc:
+            await interaction.response.send_message(f"💸 {exc}", ephemeral=True)
             return
-        atualizado = db.dar_lance_leilao(leilao_id, sid, uid, valor)
         if atualizado is None:
             await interaction.response.send_message(
                 "⚠️ Esse lance não superou o lance atual (ou o mínimo). Tente um valor maior.", ephemeral=True
             )
             return
         simb = ui.simbolo_moeda(leilao["moeda"])
-        await interaction.response.send_message(f"✅ Lance registrado: {simb} {valor} {leilao['moeda']}!", ephemeral=True)
+        await interaction.response.send_message(
+            f"✅ Lance registrado e reservado em custódia: {simb} {valor} {leilao['moeda']}!",
+            ephemeral=True,
+        )
         try:
             canal = interaction.guild.get_channel(int(atualizado["canal_id"])) if interaction.guild else None
             if isinstance(canal, discord.TextChannel) and atualizado.get("mensagem_id"):
@@ -354,9 +358,27 @@ class Mercado(commands.Cog):
             db.encerrar_leilao(leilao["id"], "sem_lances")
             resultado = dict(leilao, status="sem_lances")
         else:
-            try:
-                db.debitar(leilao["guild_id"], leilao["vencedor_id"], leilao["moeda"], leilao["lance_atual"])
-            except SaldoInsuficiente:
+            corte = db.get_economia_config(leilao["guild_id"])["leilao_corte"]
+            liquidacao = db.liquidar_leilao_com_custodia(leilao["id"], corte)
+            pago = liquidacao is not None
+            if not pago:
+                # Compatibilidade com leilões ativos criados antes da versão
+                # de custódia: eles ainda cobram no encerramento uma vez.
+                try:
+                    db.transferir_carteira_com_taxa(
+                        leilao["guild_id"],
+                        leilao["vencedor_id"],
+                        leilao["vendedor_id"],
+                        leilao["moeda"],
+                        leilao["lance_atual"],
+                        economia.valor_liquido_leilao(leilao["lance_atual"], taxa=corte),
+                        f"Venceu o leilão de {leilao['titulo']}",
+                        f"Vendeu {leilao['titulo']} em leilão",
+                    )
+                    pago = True
+                except SaldoInsuficiente:
+                    pago = False
+            if not pago:
                 await self._entregar_posse(leilao, leilao["vendedor_id"])
                 db.encerrar_leilao(leilao["id"], "sem_lances")
                 db.criar_aviso(
@@ -366,17 +388,6 @@ class Mercado(commands.Cog):
                 )
                 resultado = dict(leilao, status="sem_lances")
             else:
-                corte = db.get_economia_config(leilao["guild_id"])["leilao_corte"]
-                liquido = economia.valor_liquido_leilao(leilao["lance_atual"], taxa=corte)
-                db.creditar(leilao["guild_id"], leilao["vendedor_id"], leilao["moeda"], liquido)
-                db.registrar_extrato(
-                    leilao["guild_id"], leilao["vencedor_id"], -leilao["lance_atual"], leilao["moeda"],
-                    f"Venceu o leilão de {leilao['titulo']}",
-                )
-                db.registrar_extrato(
-                    leilao["guild_id"], leilao["vendedor_id"], liquido, leilao["moeda"],
-                    f"Vendeu {leilao['titulo']} em leilão",
-                )
                 # Aqui o dinheiro JÁ trocou de mãos: diferente dos outros
                 # dois ramos, deixar a exceção propagar faria o ciclo
                 # reprocessar (e debitar/creditar de novo) no minuto
@@ -405,6 +416,26 @@ class Mercado(commands.Cog):
                     f"por {leilao['lance_atual']} {leilao['moeda']}!",
                 )
                 resultado = dict(leilao, status="encerrado")
+
+        if resultado["status"] == "encerrado":
+            vencedor = self.bot.get_user(int(leilao["vencedor_id"]))
+            vendedor = self.bot.get_user(int(leilao["vendedor_id"]))
+            if vencedor:
+                await enviar_alerta_banco(
+                    self.bot,
+                    leilao["guild_id"],
+                    vencedor,
+                    "mercado",
+                    f"🔨 Você venceu o leilão de **{leilao['titulo']}** por {leilao['lance_atual']} {leilao['moeda']}.",
+                )
+            if vendedor:
+                await enviar_alerta_banco(
+                    self.bot,
+                    leilao["guild_id"],
+                    vendedor,
+                    "mercado",
+                    f"🔨 Seu leilão de **{leilao['titulo']}** foi concluído.",
+                )
 
         guild = self.bot.get_guild(int(leilao["guild_id"]))
         if guild is not None and leilao.get("mensagem_id"):

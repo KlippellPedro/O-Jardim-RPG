@@ -39,16 +39,20 @@ class Protecao(commands.Cog):
         db = self.bot.db
         db.garantir_jogador(sid, uid)
         try:
-            db.debitar(sid, uid, "Lunaris", info["custo"])
+            quantidade = db.comprar_protecao(
+                sid, uid, tipo.value, info["custo"], info["nome"]
+            )
         except SaldoInsuficiente as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
-        db.adicionar_protecao(sid, uid, tipo.value, 1)
-        db.registrar_extrato(sid, uid, -info["custo"], "Lunaris", f"Comprou {info['nome']}")
         emb = ui.embed(
             f"🛡️ {info['nome']} comprado!",
             categoria="cofre",
-            descricao=f"{info['descricao']}\nFica guardado até ser consumido automaticamente na próxima tentativa de roubo.",
+            descricao=(
+                f"{info['descricao']}\n"
+                f"Você tem **{quantidade}** unidade(s). Fica guardado até uma tentativa de roubo.\n\n"
+                "**Prioridade automática:** Cão de Guarda primeiro; Alarme Mágico só é gasto quando não há cão disponível."
+            ),
         )
         await interaction.response.send_message(embed=emb, ephemeral=True)
 
@@ -57,15 +61,22 @@ class Protecao(commands.Cog):
         sid, uid = _sid(interaction), str(interaction.user.id)
         ativos = self.bot.db.listar_protecoes(sid, uid)
         if not ativos:
+            opcoes = "\n".join(
+                f"• **{info['nome']}** — ☾ {info['custo']}: {info['descricao']}"
+                for info in economia.PROTECAO_TIPOS.values()
+            )
             await interaction.response.send_message(
-                "Você não tem nenhuma proteção ativa. Use `/protecao_comprar`.", ephemeral=True
+                f"Você não tem proteção ativa.\n\n{opcoes}\n\nUse `/protecao_comprar` para adquirir uma.",
+                ephemeral=True,
             )
             return
         linhas = []
         for tipo_id, qtd in ativos.items():
             info = economia.protecao_por_id(tipo_id)
             nome = info["nome"] if info else tipo_id
-            linhas.append(f"• **{nome}** ×{qtd}")
+            efeito = f" — {info['descricao']}" if info else ""
+            linhas.append(f"• **{nome}** ×{qtd}{efeito}")
+        linhas.append("\n**Ordem de uso:** Cão de Guarda → Alarme Mágico.")
         emb = ui.embed("🛡️ Suas proteções ativas", categoria="cofre", descricao="\n".join(linhas))
         await interaction.response.send_message(embed=emb, ephemeral=True)
 

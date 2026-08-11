@@ -46,18 +46,18 @@ class _DB:
             return None
         return dict(self.desafio)
 
-    def reivindicar_desafio(self, token, user_id):
+    def reivindicar_e_premiar_desafio(self, token, user_id):
         if self.desafio is None or self.desafio.get("resolvido_por"):
             return None
         self.desafio["resolvido_por"] = user_id
         self.reivindicados.append((token, user_id))
+        recompensa = int(self.desafio["recompensa"])
+        guild_id = str(self.desafio["guild_id"])
+        self.creditos.append((guild_id, user_id, "Lunaris", recompensa))
+        self.extratos.append(
+            (guild_id, user_id, recompensa, "Lunaris", "Venceu um desafio do Jornal Lunar")
+        )
         return dict(self.desafio)
-
-    def creditar(self, gid, uid, moeda, quantia):
-        self.creditos.append((gid, uid, moeda, quantia))
-
-    def registrar_extrato(self, gid, uid, delta, moeda, descricao):
-        self.extratos.append((gid, uid, delta, moeda, descricao))
 
     def marcar_rumor_bau_processado(self, rumor_id):
         self.rumores_processados.append(rumor_id)
@@ -172,6 +172,7 @@ def test_soltar_bau_de_rumor_marca_processado_e_chama_dropar():
     class _BausCog:
         async def _dropar(self, cfg):
             dropados.append(cfg)
+            return object()
 
     cog = _cog(db)
     cog.bot.get_cog = lambda nome: _BausCog() if nome == "Baus" else None
@@ -190,7 +191,22 @@ def test_soltar_bau_de_rumor_sem_cog_baus_nao_quebra():
 
     _rodar(cog._soltar_bau_de_rumor({"id": 2, "guild_id": "100"}))
 
-    assert db.rumores_processados == [2]
+    assert db.rumores_processados == []
+
+
+def test_soltar_bau_de_rumor_sem_canal_mantem_agendamento_para_retry():
+    db = _DB()
+
+    class _BausSemDestino:
+        async def _dropar(self, cfg):
+            return None
+
+    cog = _cog(db)
+    cog.bot.get_cog = lambda nome: _BausSemDestino() if nome == "Baus" else None
+
+    _rodar(cog._soltar_bau_de_rumor({"id": 3, "guild_id": "100"}))
+
+    assert db.rumores_processados == []
 
 
 if __name__ == "__main__":

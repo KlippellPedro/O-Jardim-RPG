@@ -18,6 +18,7 @@ from core import cargos as cargos_mod
 from core import economia, ui
 from core.db import SaldoInsuficiente
 from core.tasks_util import registrar_reinicio_em_erro
+from cogs.servicos import enviar_alerta_banco
 
 log = logging.getLogger("banqueiro")
 
@@ -56,7 +57,9 @@ class EmprestimoView(discord.ui.View):
 
     async def on_timeout(self):
         if not self.resolvido:
-            self.cog.bot.db.fechar_emprestimo(self.emprestimo_id, "recusado")
+            self.cog.bot.db.recusar_emprestimo_com_devolucao(
+                self.guild_id, self.emprestimo_id, str(self.devedor_id)
+            )
             await self._fechar()
 
     @discord.ui.button(label="Aceitar ✅", style=discord.ButtonStyle.success)
@@ -71,24 +74,29 @@ class EmprestimoView(discord.ui.View):
             await self._fechar()
             await interaction.response.send_message("Essa proposta não está mais disponível.", ephemeral=True)
             return
-        try:
-            db.debitar(self.guild_id, str(self.credor_id), emp["moeda"], emp["valor_original"])
-        except SaldoInsuficiente:
-            db.fechar_emprestimo(self.emprestimo_id, "recusado")
+        resultado = db.aceitar_emprestimo_com_custodia(
+            self.guild_id, self.emprestimo_id, str(self.devedor_id)
+        )
+        if resultado is None:
             await self._fechar()
             await interaction.response.send_message(
-                "⚠️ Quem propôs não tem mais esse valor disponível. Empréstimo cancelado.", ephemeral=True
+                "⚠️ A proposta ou a custódia não está mais disponível.", ephemeral=True
             )
             return
-        db.creditar(self.guild_id, str(self.devedor_id), emp["moeda"], emp["valor_original"])
-        db.aceitar_emprestimo(self.guild_id, self.emprestimo_id, str(self.devedor_id))
-        db.registrar_extrato(self.guild_id, str(self.credor_id), -emp["valor_original"], emp["moeda"], f"Emprestou pra <@{self.devedor_id}>")
-        db.registrar_extrato(self.guild_id, str(self.devedor_id), emp["valor_original"], emp["moeda"], f"Empréstimo recebido de <@{self.credor_id}>")
         await self._fechar()
         await interaction.response.send_message(
             f"✅ Empréstimo aceito! Você recebeu **{emp['valor_original']} {emp['moeda']}**: "
             f"juros de {emp['juros_diarios'] * 100:.1f}%/dia até pagar."
         )
+        credor = self.cog.bot.get_user(self.credor_id)
+        if credor:
+            await enviar_alerta_banco(
+                self.cog.bot,
+                self.guild_id,
+                credor,
+                "emprestimos",
+                f"🤝 Seu empréstimo #{self.emprestimo_id} foi aceito; a custódia foi entregue ao devedor.",
+            )
 
     @discord.ui.button(label="Recusar ❌", style=discord.ButtonStyle.danger)
     async def recusar(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -96,7 +104,9 @@ class EmprestimoView(discord.ui.View):
             await interaction.response.send_message("Essa proposta já foi resolvida.", ephemeral=True)
             return
         self.resolvido = True
-        self.cog.bot.db.recusar_emprestimo(self.guild_id, self.emprestimo_id, str(self.devedor_id))
+        self.cog.bot.db.recusar_emprestimo_com_devolucao(
+            self.guild_id, self.emprestimo_id, str(self.devedor_id)
+        )
         await self._fechar()
         await interaction.response.send_message("Empréstimo recusado.", ephemeral=True)
 
@@ -105,10 +115,35 @@ class Emprestimos(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         registrar_reinicio_em_erro(self.ciclo_juros, "ciclo_juros", log)
+        registrar_reinicio_em_erro(
+            self.ciclo_propostas, "ciclo_propostas_emprestimo", log
+        )
         self.ciclo_juros.start()
+        self.ciclo_propostas.start()
 
     def cog_unload(self):
         self.ciclo_juros.cancel()
+        self.ciclo_propostas.cancel()
+
+    @tasks.loop(minutes=1)
+    async def ciclo_propostas(self):
+        expiradas = self.bot.db.expirar_propostas_emprestimo(
+            datetime.now(timezone.utc)
+        )
+        for emp in expiradas:
+            credor = self.bot.get_user(int(emp["credor_id"]))
+            if credor:
+                await enviar_alerta_banco(
+                    self.bot,
+                    emp["guild_id"],
+                    credor,
+                    "emprestimos",
+                    f"⌛ A proposta de empréstimo #{emp['id']} expirou; o valor reservado voltou para sua carteira.",
+                )
+
+    @ciclo_propostas.before_loop
+    async def _antes_propostas(self):
+        await self.bot.wait_until_ready()
 
     @app_commands.command(name="emprestar_para", description="Propõe um empréstimo a outro jogador (ele precisa aceitar).")
     @app_commands.describe(
@@ -143,17 +178,36 @@ class Emprestimos(commands.Cog):
                 f"💸 Você só tem {saldo} {moeda_nome}: não dá pra emprestar {valor}.", ephemeral=True
             )
             return
-        emp = db.criar_emprestimo(sid, uid, str(membro.id), moeda_nome, valor, juros_diarios_percent / 100, prazo_dias)
+        try:
+            emp = db.criar_emprestimo_com_custodia(
+                sid,
+                uid,
+                str(membro.id),
+                moeda_nome,
+                valor,
+                juros_diarios_percent / 100,
+                prazo_dias,
+            )
+        except SaldoInsuficiente as exc:
+            await interaction.response.send_message(f"💸 {exc}", ephemeral=True)
+            return
         view = EmprestimoView(self, sid, emp["id"], interaction.user.id, membro.id)
         emb = ui.embed(
             "🤝 Proposta de empréstimo", categoria="economia",
             descricao=(
                 f"{interaction.user.mention} oferece emprestar {ui.simbolo_moeda(moeda_nome)} **{valor} {moeda_nome}** "
                 f"pra {membro.mention}.\nJuros: **{juros_diarios_percent}%/dia** (compostos) · "
-                f"cobrança automática em **{prazo_dias} dias** se não for pago antes.\n{membro.mention}, aceita?"
+                f"cobrança automática em **{prazo_dias} dias** se não for pago antes.\n"
+                f"O valor já está reservado em custódia. {membro.mention}, aceita?"
             ),
         )
-        await interaction.response.send_message(content=membro.mention, embed=emb, view=view)
+        try:
+            await interaction.response.send_message(content=membro.mention, embed=emb, view=view)
+        except (discord.Forbidden, discord.HTTPException):
+            # A proposta não chegou ao devedor: devolve a custódia agora,
+            # sem esperar o coletor de propostas expiradas.
+            db.recusar_emprestimo_com_devolucao(sid, emp["id"], str(membro.id))
+            raise
         view.message = await interaction.original_response()
 
     @app_commands.command(name="emprestimo_pagar", description="Paga parte (ou tudo) de um empréstimo ativo que você deve.")
@@ -169,35 +223,28 @@ class Emprestimos(commands.Cog):
             return
         pago_alvo = min(valor, emp["valor_devido"])
         try:
-            db.debitar(sid, uid, emp["moeda"], pago_alvo)
+            resultado = db.pagar_emprestimo_atomico(
+                sid, emprestimo_id, uid, pago_alvo
+            )
         except SaldoInsuficiente as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
             return
-        resultado = db.pagar_emprestimo(sid, emprestimo_id, pago_alvo)
         if resultado is None:
-            db.creditar(sid, uid, emp["moeda"], pago_alvo)
             await interaction.response.send_message("⚠️ Esse empréstimo não está mais ativo. Nada foi cobrado.", ephemeral=True)
             return
-        db.creditar(sid, resultado["credor_id"], resultado["moeda"], resultado["pago"])
-        db.registrar_extrato(sid, uid, -resultado["pago"], resultado["moeda"], f"Pagamento do empréstimo #{emprestimo_id}")
-        db.registrar_extrato(
-            sid, resultado["credor_id"], resultado["pago"], resultado["moeda"],
-            f"Recebeu pagamento do empréstimo #{emprestimo_id}",
-        )
         txt = "quitado! ✅" if resultado["quitado"] else f"restam {resultado['restante']} {resultado['moeda']}"
         await interaction.response.send_message(
             f"✅ Você pagou {resultado['pago']} {resultado['moeda']} do empréstimo #{emprestimo_id}: {txt}", ephemeral=True
         )
-        if resultado["quitado"]:
-            credor = self.bot.get_user(int(resultado["credor_id"]))
-            if credor is not None:
-                try:
-                    await credor.send(
-                        f"✅ <@{uid}> quitou o empréstimo #{emprestimo_id}: você recebeu "
-                        f"{resultado['pago']} {resultado['moeda']} agora."
-                    )
-                except (discord.Forbidden, discord.HTTPException):
-                    pass
+        credor_alerta = self.bot.get_user(int(resultado["credor_id"]))
+        if credor_alerta:
+            await enviar_alerta_banco(
+                self.bot,
+                sid,
+                credor_alerta,
+                "emprestimos",
+                f"💰 Você recebeu {resultado['pago']} {resultado['moeda']} do empréstimo #{emprestimo_id}.",
+            )
 
     @app_commands.command(name="emprestimos_ver", description="Mostra seus empréstimos (como credor ou devedor).")
     @app_commands.describe(historico="Incluir empréstimos já quitados, recusados ou inadimplentes.")
@@ -275,7 +322,12 @@ class Emprestimos(commands.Cog):
         if atual is None or atual["status"] != "ativo":
             return
         try:
-            db.debitar(atual["guild_id"], atual["devedor_id"], atual["moeda"], atual["valor_devido"])
+            resultado = db.pagar_emprestimo_atomico(
+                atual["guild_id"],
+                atual["id"],
+                atual["devedor_id"],
+                atual["valor_devido"],
+            )
         except SaldoInsuficiente:
             db.fechar_emprestimo(atual["id"], "inadimplente")
             valor_lunaris = self._valor_recompensa_em_lunaris(
@@ -299,16 +351,8 @@ class Emprestimos(commands.Cog):
             except Exception:
                 log.exception("falha ao sincronizar cargo de mais procurado apos emprestimo vencido")
             return
-        db.creditar(atual["guild_id"], atual["credor_id"], atual["moeda"], atual["valor_devido"])
-        db.registrar_extrato(
-            atual["guild_id"], atual["devedor_id"], -atual["valor_devido"], atual["moeda"],
-            f"Cobrança automática do empréstimo #{atual['id']}",
-        )
-        db.registrar_extrato(
-            atual["guild_id"], atual["credor_id"], atual["valor_devido"], atual["moeda"],
-            f"Recebeu cobrança do empréstimo #{atual['id']}",
-        )
-        db.fechar_emprestimo(atual["id"], "quitado")
+        if resultado is None:
+            return
         db.criar_aviso(
             atual["guild_id"],
             f"✅ O empréstimo #{atual['id']} venceu e foi cobrado automaticamente: "

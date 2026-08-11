@@ -40,8 +40,9 @@ COR_RARIDADE = {
     "raro": 0x3498DB,
     "epico": 0x9B59B6,
     "lendario": 0xF1C40F,
-    "reliquia": 0xE74C3C,
-    "reliquia da criacao": 0xE879F9,
+    "mitico": 0xE74C3C,
+    "reliquia": 0xE74C3C,  # alias legado
+    "reliquia da criacao": 0xF8FAFC,
 }
 
 ICONE_RARIDADE = {
@@ -50,7 +51,8 @@ ICONE_RARIDADE = {
     "raro": "🔵",
     "epico": "🟣",
     "lendario": "🟡",
-    "reliquia": "🔴",
+    "mitico": "🔴",
+    "reliquia": "🔴",  # alias legado
     "reliquia da criacao": "💠",
 }
 

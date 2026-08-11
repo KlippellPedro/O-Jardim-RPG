@@ -11,18 +11,15 @@ from core import ui
 CATEGORIAS = {
     "economia": {
         "rotulo": "💰 Economia",
-        "descricao": "Carteira, loja, câmbio e Cartão Lunar.",
+        "descricao": "Carteira, câmbio, cofre e Cartão Lunar. Itens são comprados na Loja do site.",
         "comandos": [
-            ("/carteira", "Mostra carteira, cofre, limite do cartão e reputação bancária."),
-            ("/perfil [membro]", "Mostra o perfil econômico: patrimônio, itens, roubos e recompensas."),
+            ("/carteira [membro]", "Mostra seus dados financeiros em privado; só mestres podem consultar outra pessoa."),
+            ("/perfil [membro]", "Mostra o perfil econômico em privado; só mestres podem consultar outra pessoa."),
             ("/pagar <membro> <quantia>", "Transfere dinheiro da sua carteira pra de outro jogador."),
             ("/ranking [categoria]", "Top 10 do servidor: carteira, patrimônio, poupança, roubos, recompensas ou leilão."),
-            ("/extrato [membro]", "Mostra o histórico de transações (paginado)."),
-            ("/loja [categoria]", "Lista preços e requisitos de reputação dos itens."),
-            ("/comprar <item>", "Compra um item; se faltar saldo, pede confirmação antes de usar o limite."),
-            ("/item <busca>", "Mostra os detalhes de um item do catálogo."),
+            ("/extrato [membro]", "Mostra o histórico em privado; só mestres podem consultar outra pessoa."),
+            ("/item <busca>", "Consulta os detalhes de um item; compras e revendas ficam na Loja do site."),
             ("/monstro <busca>", "Mostra a ficha de um monstro do bestiário."),
-            ("/vender <item>", "Vende um item de volta pra loja."),
             ("/inventario", "Mostra seu inventário."),
             ("/cambio <de> <para> <quantia>", "Troca Lunaris ⇄ Solares."),
             ("/cambio_ver", "Mostra a taxa de câmbio atual e se o ajuste automático está ligado."),
@@ -42,10 +39,13 @@ CATEGORIAS = {
     },
     "roubo": {
         "rotulo": "🥷 Roubo",
-        "descricao": "Risco e recompensa entre jogadores. O alvo tem 5 segundos para perceber e impedir a tentativa.",
+        "descricao": "Risco e recompensa entre jogadores. O ladrão recebe respostas privadas e a defesa chega por DM ao alvo.",
         "comandos": [
-            ("/roubar <membro> [furtivo]", "Tenta levar 100% da carteira exposta; o alvo tem 5 segundos para impedir. Furtivo suprime o aviso público."),
-            ("/roubar_cofre <membro> [furtivo]", "Tenta arrombar o cofre após 5 segundos. A chance depende da segurança; falha cobra multa."),
+            ("/roubo_planejar <membro>", "Envia por DM faixas de riqueza, risco, abordagens e seu Calor, sem revelar saldos exatos."),
+            ("/roubar <membro> [abordagem]", "Tenta roubar a carteira com abordagem Cuidadosa, Rápida ou Disfarçada."),
+            ("/roubar_cofre <membro> [abordagem]", "Tenta arrombar o cofre; segurança, Calor e abordagem afetam o resultado."),
+            ("/preparo_roubo_comprar <tipo>", "Compra consumíveis para abordagens especiais, como o Kit de Disfarce."),
+            ("/preparos_roubo", "Mostra consumíveis de roubo e seu Calor atual."),
             ("/recompensa_colocar <membro> <valor>", "Coloca recompensa na cabeça de outro jogador (pago da sua carteira)."),
             ("/recompensa_ver [membro]", "Mostra a recompensa em alguém, ou os mais procurados do servidor."),
             ("/protecao_comprar <tipo>", "Compra um item de defesa passiva (Cão de Guarda ou Alarme Mágico) contra roubo."),
@@ -54,7 +54,7 @@ CATEGORIAS = {
     },
     "baus": {
         "rotulo": "🎁 Baús",
-        "descricao": "Baús compráveis na loja. Os baús que aparecem sozinhos pelo servidor são anunciados pelo Jornalista.",
+        "descricao": "Baús do Banqueiro. Os baús automáticos do servidor são anunciados pelo Jornalista.",
         "comandos": [
             ("/loja_baus", "Baús que dá pra comprar e abrir."),
             ("/comprar_bau <tipo>", "Compra um baú de loot."),
@@ -89,6 +89,8 @@ CATEGORIAS = {
         "comandos": [
             ("/investir <valor>", "Trava um valor por alguns dias num Título do Jardim; rende ao vencer."),
             ("/investir_ver", "Mostra seus Títulos do Jardim ativos."),
+            ("/alertas_banco [categoria] [ligar]", "Configura DMs de pagamentos, segurança, mercado, empréstimos e rendimentos."),
+            ("/seguro_cofre <ação>", "Assina ou consulta a cobertura renovável contra arrombamento do cofre."),
             ("/emprestar_para <membro> <valor> <juros_diarios_percent> <prazo_dias>", "Propõe um empréstimo a outro jogador (ele precisa aceitar)."),
             ("/emprestimo_pagar <emprestimo_id> <valor>", "Paga parte ou tudo de um empréstimo ativo que você deve."),
             ("/emprestimos_ver", "Mostra seus empréstimos (como credor ou devedor)."),
@@ -122,6 +124,7 @@ CATEGORIAS = {
             ("/mestre_proteger [membro]", "Protege uma conta contra roubos; sem membro, remove a proteção."),
             ("/juros_cofre <taxa_percent>", "Bônus extra de juros no cofre (o cofre já rende automaticamente todo dia)."),
             ("/seteconomia", "Ajusta taxas de venda, saque, juros, leilão e loteria deste servidor."),
+            ("/economia_diagnostico", "Painel privado com circulação, concentração, dívida, atividade e custódia."),
             ("/catalogo_recarregar", "Recarrega o catálogo salvo no banco central."),
             ("/catalogo_republicar", "Re-semeia o catálogo do arquivo (publica adições/edições e desativa removidos)."),
         ],
@@ -132,8 +135,10 @@ CATEGORIAS = {
 def _pagina(chave: str, rodape: str = "Escolha outra categoria no menu abaixo") -> discord.Embed:
     info = CATEGORIAS[chave]
     emb = ui.embed(info["rotulo"], categoria="ajuda", descricao=info["descricao"])
-    corpo = "\n".join(f"**{cmd}**\n{desc}" for cmd, desc in info["comandos"])
-    emb.add_field(name="Comandos", value=corpo[:1024], inline=False)
+    # Um campo por comando evita o corte silencioso em 1.024 caracteres que
+    # escondia o fim de categorias grandes como Economia e Mestre.
+    for cmd, desc in info["comandos"]:
+        emb.add_field(name=cmd, value=desc, inline=False)
     emb.set_footer(text=f"{ui.MARCA} · {rodape}")
     return emb
 

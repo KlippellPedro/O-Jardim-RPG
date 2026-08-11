@@ -2,11 +2,11 @@
 modo "cofre" (cofre da conta na plataforma, fonte da verdade) ou "legado"
 (tabela `inventario` deste bot, pra quem nunca vinculou a conta).
 
-Por que existe: com a integração da plataforma ligada, `/comprar` e
-`/abrir_bau` já depositavam no cofre do site, mas `/vender`, `/inventario`,
-`/oferecer`, `/trocar` e `/leilao_iniciar` continuavam lendo só a tabela
-local: item comprado ficava invisível e intransferível. Esta fachada
-substitui os dois conjuntos de chamadas por um só.
+Por que existe: durante a integração inicial, compras e `/abrir_bau` já
+depositavam no cofre do site, mas `/inventario`, `/oferecer`, `/trocar` e
+`/leilao_iniciar` continuavam lendo só a tabela local. Esta fachada preserva
+inventários antigos e oferece uma única leitura de posse. A compra e a revenda
+direta de itens hoje pertencem exclusivamente à Loja do site.
 
 Regra de fallback: ENTRADA pode cair pro legado, SAÍDA falha fechada:
 
@@ -17,10 +17,10 @@ Regra de fallback: ENTRADA pode cair pro legado, SAÍDA falha fechada:
 `dar()` está criando valor do nada: cair pro cofre local do Banqueiro nunca
 duplica nada. `tirar()`/`mover()`/`reservar()` estão gastando posse que o
 cofre da plataforma é quem sabe se existe de verdade; um fallback aqui
-afirmaria posse a partir de um estoque que já se sabe desatualizado (ex.:
-`/vender` acharia uma linha velha de antes da migração e pagaria por um item
-que o jogador ainda tem na ficha do site). Por isso a saída aborta o comando
-inteiro em vez de arriscar duplicar ou destruir item.
+afirmaria posse a partir de um estoque que já se sabe desatualizado (por
+exemplo, uma troca poderia encontrar uma linha antiga mesmo depois de o item
+ter sido movido na ficha do site). Por isso a saída aborta o comando inteiro
+em vez de arriscar duplicar ou destruir item.
 """
 
 from __future__ import annotations

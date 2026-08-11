@@ -1,6 +1,4 @@
-"""/seteconomia: taxas econômicas que eram constantes fixas no código
-(venda, saque do cofre, juros automático, corte do leilão, preço e corte
-da Loteria) passam a poder ser ajustadas por servidor."""
+"""/seteconomia: taxas do cofre, leilão e Loteria por servidor."""
 
 from __future__ import annotations
 
@@ -38,8 +36,6 @@ class _DB:
 
     def set_economia_config(self, guild_id, **kwargs):
         self.chamadas_set.append((guild_id, kwargs))
-        if kwargs.get("venda_ratio_percent") is not None:
-            self.config["venda_ratio"] = kwargs["venda_ratio_percent"] / 100
         if kwargs.get("cofre_saque_taxa_percent") is not None:
             self.config["cofre_saque_taxa"] = kwargs["cofre_saque_taxa_percent"] / 100
         if kwargs.get("juros_cofre_taxa_percent") is not None:
@@ -73,17 +69,15 @@ def test_seteconomia_atualiza_so_os_campos_informados():
     _rodar(
         Admin.seteconomia.callback(
             cog, interacao,
-            venda_ratio_percent=70, cofre_saque_taxa_percent=None,
-            juros_cofre_taxa_percent=None, leilao_corte_percent=None,
+            cofre_saque_taxa_percent=7, juros_cofre_taxa_percent=None, leilao_corte_percent=None,
             loteria_preco_bilhete=None, loteria_corte_percent=None,
         )
     )
 
     guild_id, kwargs = db.chamadas_set[0]
     assert guild_id == "100"
-    assert kwargs["venda_ratio_percent"] == 70
-    assert kwargs["cofre_saque_taxa_percent"] is None
-    assert db.config["venda_ratio"] == 0.7
+    assert kwargs["cofre_saque_taxa_percent"] == 7
+    assert db.config["cofre_saque_taxa"] == 0.07
 
 
 def test_seteconomia_responde_com_o_resumo_atualizado():
@@ -94,8 +88,7 @@ def test_seteconomia_responde_com_o_resumo_atualizado():
     _rodar(
         Admin.seteconomia.callback(
             cog, interacao,
-            venda_ratio_percent=None, cofre_saque_taxa_percent=10,
-            juros_cofre_taxa_percent=None, leilao_corte_percent=None,
+            cofre_saque_taxa_percent=10, juros_cofre_taxa_percent=None, leilao_corte_percent=None,
             loteria_preco_bilhete=50, loteria_corte_percent=None,
         )
     )

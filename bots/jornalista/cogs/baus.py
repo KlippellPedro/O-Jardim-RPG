@@ -27,7 +27,10 @@ from core.tasks_util import registrar_reinicio_em_erro
 log = logging.getLogger("jornalista")
 RETRY_DROP_MINUTOS = 15
 RETRY_ENTREGA_MINUTOS = 10  # intervalo do recovery automático de baús pendentes
-CHANCE_BAU_ENIGMA = loot_mod.CHANCE_BAU_ENIGMA  # padrão: /bau_config sobrescreve por servidor
+BAU_RARIDADE_CHOICES = [
+    app_commands.Choice(name=perfil["nome"], value=raridade)
+    for raridade, perfil in loot_mod.BAU_RARIDADES.items()
+]
 
 # Enfeite visual do baú por estação: (emoji, cor). Estações "normais" mantêm o
 # dourado do baú (Decisão 3 do Plano_Jornalista); as especiais ganham um roxo
@@ -44,9 +47,13 @@ _ESTACAO_ENFEITE = {
 }
 _RARIDADE_ROTULO = {
     "comum": "Comum", "incomum": "Incomum", "raro": "Raro",
-    "epico": "Épico", "lendario": "Lendário",
+    "epico": "Épico", "lendario": "Lendário", "reliquia": "Mítico",
+    "reliquia da criacao": "Relíquia da Criação",
 }
-_ORDEM_RARIDADE = ("lendario", "epico", "raro", "incomum", "comum")
+_ORDEM_RARIDADE = (
+    "reliquia da criacao", "reliquia", "lendario", "epico", "raro",
+    "incomum", "comum",
+)
 
 
 def _melhor_raridade(pesos: dict) -> str:
@@ -106,7 +113,15 @@ def serializar_premio_bau(premio: dict) -> dict:
                 "quantidade": quantidade,
             }
         )
-    return {"lunaris": lunaris, "itens": itens}
+    resultado = {"lunaris": lunaris, "itens": itens}
+    if isinstance(premio.get("bau"), dict):
+        resultado["bau"] = {
+            "raridade": str(premio["bau"].get("raridade") or "comum"),
+            "nome": str(premio["bau"].get("nome") or "Baú Comum"),
+            "dificuldade_enigma": premio["bau"].get("dificuldade_enigma"),
+            "expira_minutos": int(premio["bau"].get("expira_minutos") or 15),
+        }
+    return resultado
 
 
 def _ganhos_do_premio(premio: dict) -> list[str]:
@@ -260,6 +275,8 @@ class Baus(commands.Cog):
         """Se o Horóscopo do Jardim de hoje (cogs/horoscopo.py) apontar pra
         Árvore do jogador que abriu o baú, dobra o Lunaris do prêmio. Não mexe
         nos itens: só na sorte em dinheiro do dia."""
+        if not self.bot.db.automacao_ativa(guild_id, "horoscopo", True):
+            return premio, False
         arvore_id = self.bot.db.get_horoscopo(guild_id)
         if not arvore_id:
             return premio, False
@@ -300,8 +317,8 @@ class Baus(commands.Cog):
             }
             for item in premio["itens"]
         ]
-        # Lunaris de baú vai pra carteira local (gastável em /loja, mas roubável —
-        # é o que a carteira é pra isso). Só os itens usam o cofre da conta no
+        # Lunaris de baú vai pra carteira local (integrada à economia do site,
+        # mas roubável). Só os itens usam o cofre da conta no
         # site: é ele que fica protegido e que a ficha enxerga.
         lunaris = premio["lunaris"]
 
@@ -357,6 +374,7 @@ class Baus(commands.Cog):
             "ganhos": _ganhos_do_premio(premio),
             "destino": "Lunaris na carteira · itens no cofre da conta no site",
             "confirmado": True,
+            "bau": dict(premio.get("bau") or {}),
         }
         self.bot.db.marcar_bau_entrega_entregue(
             guild_id, mensagem_id, resultado,
@@ -485,6 +503,7 @@ class Baus(commands.Cog):
             "ganhos": _ganhos_do_premio(entrega.get("premio") or {}),
             "destino": "entrega pendente de reprocessamento",
             "confirmado": False,
+            "bau": dict((entrega.get("premio") or {}).get("bau") or {}),
             "aviso": (
                 "⚠️ A entrega ficou pendente e continua reservada para o primeiro vencedor. "
                 "Um mestre pode usar `/bau_reprocessar`."
@@ -495,8 +514,11 @@ class Baus(commands.Cog):
     @staticmethod
     def embed_recibo_privado(vencedor_user_id: str, resultado: dict) -> discord.Embed:
         destino = str(resultado.get("destino") or "cofre")
+        bau = resultado.get("bau") or {}
+        perfil = loot_mod.perfil_bau(str(bau.get("raridade") or "comum"))
+        nome_bau = str(bau.get("nome") or perfil["nome"])
         return discord.Embed(
-            title="🎁 Baú aberto!",
+            title=f"{perfil['emoji']} {nome_bau} aberto!",
             description=(
                 f"<@{vencedor_user_id}> abriu o baú e achou:\n"
                 + "\n".join(
@@ -504,7 +526,7 @@ class Baus(commands.Cog):
                 )
                 + f"\n\nEntregue na **{destino}**."
             ),
-            color=0xF1C40F,
+            color=perfil["cor"],
         )
 
     @staticmethod
@@ -514,9 +536,13 @@ class Baus(commands.Cog):
         mencao = usuario if isinstance(usuario, str) else usuario.mention
         ganhos = resultado.get("ganhos") or ["Recompensa reservada"]
         confirmado = bool(resultado.get("confirmado"))
+        bau = resultado.get("bau") or {}
+        perfil = loot_mod.perfil_bau(str(bau.get("raridade") or "comum"))
+        nome_bau = str(bau.get("nome") or perfil["nome"])
         emb = ui.embed(
-            "🔓 Baú conquistado!" if confirmado else "🔐 Baú reivindicado",
+            f"🔓 {nome_bau} conquistado!" if confirmado else f"🔐 {nome_bau} reivindicado",
             categoria="bau",
+            cor=perfil["cor"],
             descricao=f"{mencao} foi a primeira pessoa a abrir este baú.",
         )
         emb.add_field(
@@ -653,8 +679,8 @@ class Baus(commands.Cog):
     # ── Expiração de baús no ar (ninguém abriu a tempo) ─────────────────────
     # Como as views agora são persistentes (sem timeout próprio: sobrevivem a
     # reinício), o antigo View.on_timeout não roda mais. Esse ciclo é quem
-    # fecha o baú depois de 24h sem reivindicação.
-    @tasks.loop(minutes=5)
+    # fecha o baú no prazo definido por sua raridade.
+    @tasks.loop(minutes=1)
     async def ciclo_expiracao_baus(self):
         agora = datetime.now(timezone.utc)
         for row in self.bot.db.listar_baus_no_ar_expirados(agora):
@@ -682,8 +708,10 @@ class Baus(commands.Cog):
         if not isinstance(canal, discord.TextChannel):
             return
         trancado = bool(row.get("enigma_pergunta"))
+        bau_info = (row.get("premio") or {}).get("bau") or {}
+        nome_bau = str(bau_info.get("nome") or "Baú")
         emb = ui.embed(
-            "🍂 O baú trancado desapareceu" if trancado else "🍂 O baú desapareceu",
+            f"🍂 O {nome_bau} trancado desapareceu" if trancado else f"🍂 O {nome_bau} desapareceu",
             categoria="bau",
             descricao=(
                 "Ninguém acertou o enigma a tempo. O Jardim levou o mistério de volta."
@@ -701,31 +729,63 @@ class Baus(commands.Cog):
         self,
         cfg: dict,
         canal_forcado: Optional[discord.TextChannel] = None,
+        raridade_forcada: Optional[str] = None,
     ):
         canal = self._sortear_canal_valido(cfg["guild_id"], canal_forcado)
         if canal is None:
             log.warning("nenhum canal válido de baú na guild %s", cfg["guild_id"])
             return None
         info_estacao = economia.estacao_info(self.bot.db.get_estacao(cfg["guild_id"]))
-        pesos = info_estacao["pesos"]
-        qtd = cfg.get("itens_por_bau", 1)
+        pesos_estacao = info_estacao["pesos"]
+        especial = info_estacao.get("tipo") == "especial"
+        raridade_bau = (
+            raridade_forcada
+            if raridade_forcada in loot_mod.BAU_RARIDADES
+            else loot_mod.sortear_raridade_bau(random, evento_especial=especial)
+        )
+        perfil = loot_mod.perfil_bau(raridade_bau)
+        parametros = loot_mod.parametros_premio_bau(
+            raridade_bau,
+            cfg.get("itens_por_bau", 1),
+            cfg.get("lunaris_min", loot_mod.LUNARIS_MIN),
+            cfg.get("lunaris_max", loot_mod.LUNARIS_MAX),
+        )
+        qtd = parametros["qtd_itens"]
         tema = self.bot.db.get_bau_canal_tema(cfg["guild_id"], str(canal.id))
+        if tema and tema not in loot_mod.TIPOS_PERMITIDOS_BAU:
+            # Configs antigas podiam escolher veículos. Não apagamos o dado
+            # automaticamente, mas evitamos um baú sem itens e usamos a
+            # seleção padrão até o mestre trocar/remover o tema.
+            log.warning(
+                "tema de bau obsoleto %r na guild %s; usando loot padrao",
+                tema, cfg["guild_id"],
+            )
+            tema = None
         tipos = [tema] if tema else None
-        lunaris_min = cfg.get("lunaris_min", loot_mod.LUNARIS_MIN)
-        lunaris_max = cfg.get("lunaris_max", loot_mod.LUNARIS_MAX)
+        pesos_itens = loot_mod.pesos_itens_do_bau(raridade_bau, pesos_estacao)
         premio = loot_mod.sortear_bau(
-            self.bot.catalogo, qtd_itens=qtd, rng=random, pesos=pesos, tipos=tipos,
-            lunaris_min=lunaris_min, lunaris_max=lunaris_max,
+            self.bot.catalogo, qtd_itens=qtd, rng=random, pesos=pesos_itens, tipos=tipos,
+            lunaris_min=parametros["lunaris_min"],
+            lunaris_max=parametros["lunaris_max"],
         )
 
         rotulo = info_estacao.get("rotulo", "Jardim")
-        emoji, cor = _ESTACAO_ENFEITE.get(rotulo, ("✦", _COR_BAU))
-        especial = info_estacao.get("tipo") == "especial"
-
-        # Baús de evento (estação especial) nunca vêm trancados: já são
-        # raros o bastante; enigma é só pro fluxo normal do dia a dia.
-        chance_enigma = cfg.get("chance_enigma", CHANCE_BAU_ENIGMA)
-        enigma = enigmas_mod.sortear_enigma() if not especial and random.random() < chance_enigma else None
+        emoji_estacao, _cor_estacao = _ESTACAO_ENFEITE.get(rotulo, ("✦", _COR_BAU))
+        dificuldade = perfil["dificuldade_enigma"]
+        enigma = (
+            enigmas_mod.sortear_enigma(rng=random, dificuldade=dificuldade)
+            if dificuldade
+            else None
+        )
+        expira_em = datetime.now(timezone.utc) + timedelta(
+            minutes=parametros["expira_minutos"]
+        )
+        premio["bau"] = {
+            "raridade": raridade_bau,
+            "nome": perfil["nome"],
+            "dificuldade_enigma": dificuldade,
+            "expira_minutos": parametros["expira_minutos"],
+        }
         premio_serializado = serializar_premio_bau(premio)
         # Token gerado ANTES de enviar: o custom_id do botão precisa existir
         # já na primeira mensagem, mas o id da mensagem só existe depois de
@@ -735,36 +795,41 @@ class Baus(commands.Cog):
 
         if enigma is not None:
             view = _view_bau_enigma(self, token)
-            titulo = "🔒  Um baú TRANCADO surgiu  🔒"
+            titulo = f"🔒 {perfil['emoji']} {perfil['nome']} trancado surgiu!"
             descricao = (
                 f"_{info_estacao.get('descricao', '')}_\n\n"
-                f"**Enigma:** {enigma.pergunta}\n\n"
+                f"**Enigma {dificuldade.upper()} · {enigma.categoria}:**\n{enigma.pergunta}\n\n"
                 "Responda certo pra destrancar: **só o primeiro acerto leva a recompensa.**"
             )
-            cor_embed = _COR_BAU_ESPECIAL
+            cor_embed = perfil["cor"]
             rodape_acao = "Primeiro acerto vence"
         else:
             view = _view_bau_abrir(self, token)
-            titulo = (
-                f"{emoji}  EVENTO {rotulo.upper()}: baú raro no ar  {emoji}"
-                if especial
-                else f"{emoji}  Um baú do {rotulo} surgiu  {emoji}"
-            )
+            titulo = f"{emoji_estacao} {perfil['emoji']} {perfil['nome']} surgiu!"
             descricao = (
                 f"_{info_estacao.get('descricao', '')}_\n\n"
                 "As folhas se afastam e revelam um tesouro. "
                 "**Só a primeira pessoa a abrir leva a recompensa.**"
             )
-            cor_embed = cor
+            cor_embed = perfil["cor"]
             rodape_acao = "Primeiro clique válido vence"
 
         emb = ui.embed(titulo, categoria="bau", cor=cor_embed, descricao=descricao)
         emb.add_field(
             name="🎁 O que pode haver dentro",
             value=(
-                f"Lunaris e até **{qtd} item(ns)** do Jardim: "
-                f"nesta estação pode vir até **{_melhor_raridade(pesos)}**."
+                f"**{parametros['lunaris_min']}–{parametros['lunaris_max']} Lunaris** e "
+                f"até **{qtd} item(ns)**. O perfil deste baú favorece itens de até "
+                f"**{_melhor_raridade(perfil['pesos_itens'])}**."
                 + (f" Tema do canal: **{tema}**." if tema else "")
+            ),
+            inline=False,
+        )
+        emb.add_field(
+            name="⏳ Tempo para conquistar",
+            value=(
+                f"Desaparece <t:{int(expira_em.timestamp())}:R> "
+                f"(<t:{int(expira_em.timestamp())}:t>)."
             ),
             inline=False,
         )
@@ -774,7 +839,9 @@ class Baus(commands.Cog):
                 value="A chance de itens raros está **muito acima do normal**. Corra!",
                 inline=False,
             )
-        emb.set_footer(text=f"{ui.MARCA} · Evento aleatório · {rodape_acao}")
+        emb.set_footer(
+            text=f"{ui.MARCA} · {perfil['nome']} · Evento aleatório · {rodape_acao}"
+        )
         emb.timestamp = discord.utils.utcnow()
         try:
             mensagem = await canal.send(
@@ -786,7 +853,6 @@ class Baus(commands.Cog):
             log.exception("falha ao enviar baú no canal %s", canal.id)
             return None
 
-        expira_em = datetime.now(timezone.utc) + timedelta(hours=24)
         self.bot.db.criar_bau_no_ar(
             token, cfg["guild_id"], str(canal.id), str(mensagem.id), premio_serializado, expira_em, enigma=enigma
         )
@@ -821,29 +887,37 @@ class Baus(commands.Cog):
         ativo="Liga (True) ou desliga (False) os baús.",
         min_hora="Hora mínima da janela (0-23).",
         max_hora="Hora máxima da janela (0-23).",
-        itens_por_bau="Quantos itens por baú (1-5).",
-        chance_enigma_percent="Chance de um baú nascer trancado com enigma, em % (0-100).",
-        lunaris_min="Menor quantidade de Lunaris que um baú pode dar.",
-        lunaris_max="Maior quantidade de Lunaris que um baú pode dar.",
+        itens_por_bau="Quantidade-base; raridades altas recebem itens extras (1-5 no total).",
+        lunaris_min="Base mínima de Lunaris; a raridade aplica um multiplicador.",
+        lunaris_max="Base máxima de Lunaris; a raridade aplica um multiplicador.",
     )
     async def bau_config(self, interaction: discord.Interaction,
                          canal: discord.TextChannel = None, ativo: bool = None,
                          min_hora: app_commands.Range[int, 0, 23] = None,
                          max_hora: app_commands.Range[int, 0, 23] = None,
                          itens_por_bau: app_commands.Range[int, 1, 5] = None,
-                         chance_enigma_percent: app_commands.Range[int, 0, 100] = None,
                          lunaris_min: app_commands.Range[int, 0] = None,
                          lunaris_max: app_commands.Range[int, 0] = None):
         gid = str(interaction.guild_id)
+        cfg_atual = self.bot.db.get_baus_config(gid)
         if canal is not None and not _canal_aceita_bau(canal):
             await interaction.response.send_message(
                 "⚠️ Preciso de **Ver canal**, **Enviar mensagens** e **Inserir links** nesse canal.",
                 ephemeral=True,
             )
             return
-        if lunaris_min is not None and lunaris_max is not None and lunaris_min > lunaris_max:
+        hora_min_efetiva = cfg_atual["min_hora"] if min_hora is None else min_hora
+        hora_max_efetiva = cfg_atual["max_hora"] if max_hora is None else max_hora
+        if hora_min_efetiva > hora_max_efetiva:
             await interaction.response.send_message(
-                "⚠️ lunaris_min não pode ser maior que lunaris_max.", ephemeral=True
+                "⚠️ A hora mínima não pode ser maior que a hora máxima.", ephemeral=True
+            )
+            return
+        lunaris_min_efetivo = cfg_atual["lunaris_min"] if lunaris_min is None else lunaris_min
+        lunaris_max_efetivo = cfg_atual["lunaris_max"] if lunaris_max is None else lunaris_max
+        if lunaris_min_efetivo > lunaris_max_efetivo:
+            await interaction.response.send_message(
+                "⚠️ O mínimo de Lunaris não pode ser maior que o máximo.", ephemeral=True
             )
             return
         if canal is not None:
@@ -858,7 +932,7 @@ class Baus(commands.Cog):
             gid,
             canal_id=(str(canal.id) if canal else None),
             ativo=ativo, min_hora=min_hora, max_hora=max_hora, itens_por_bau=itens_por_bau,
-            chance_enigma_percent=chance_enigma_percent, lunaris_min=lunaris_min, lunaris_max=lunaris_max,
+            lunaris_min=lunaris_min, lunaris_max=lunaris_max,
         )
         cfg = self.bot.db.get_baus_config(gid)
         canais = self.bot.db.listar_baus_canais(gid)
@@ -871,9 +945,11 @@ class Baus(commands.Cog):
             f"🎁 **Baús:** {'ligados ✅' if cfg['ativo'] else 'desligados ⛔'}\n"
             f"Canais da rotação: {canal_txt}\n"
             f"Janela: {cfg['min_hora']}h–{cfg['max_hora']}h · "
-            f"{cfg['itens_por_bau']} item(ns)/baú\n"
-            f"Lunaris por baú: {cfg['lunaris_min']}–{cfg['lunaris_max']} · "
-            f"chance de vir trancado: {round(cfg['chance_enigma']*100)}%\n"
+            f"{cfg['itens_por_bau']} item(ns) de base\n"
+            f"Lunaris-base: {cfg['lunaris_min']}–{cfg['lunaris_max']}\n"
+            "Raridades automáticas: **Comum, Incomum, Raro, Épico, Lendário e "
+            "Mítico**. Raro ou superior vem trancado; a dificuldade e a recompensa "
+            "crescem, mas o prazo diminui conforme a raridade.\n"
             f"Próximo: {cfg.get('proximo_drop') or 'Não agendado'}",
             ephemeral=True,
         )
@@ -950,7 +1026,8 @@ class Baus(commands.Cog):
         app_commands.Choice(name="Arma (ex.: campo de treino)", value="arma"),
         app_commands.Choice(name="Armadura", value="armadura"),
         app_commands.Choice(name="Equipamento", value="equipamento"),
-        app_commands.Choice(name="Veículo", value="veiculo"),
+        app_commands.Choice(name="Consumível", value="consumivel"),
+        app_commands.Choice(name="Modificação", value="modificacao"),
         app_commands.Choice(name="Drop (ex.: local de caça/pesca)", value="drop"),
     ])
     async def bau_canal_tema(
@@ -1074,8 +1151,17 @@ class Baus(commands.Cog):
     @app_commands.command(name="bau_agora", description="[Mestre] Solta um baú agora (pra testar).")
     @app_commands.default_permissions(manage_guild=True)
     @app_commands.checks.has_permissions(manage_guild=True)
-    @app_commands.describe(canal="Canal onde soltar (padrão: o configurado).")
-    async def bau_agora(self, interaction: discord.Interaction, canal: discord.TextChannel = None):
+    @app_commands.describe(
+        canal="Canal onde soltar (padrão: um canal da rotação).",
+        raridade="Forçar uma raridade para teste; vazio mantém o sorteio.",
+    )
+    @app_commands.choices(raridade=BAU_RARIDADE_CHOICES)
+    async def bau_agora(
+        self,
+        interaction: discord.Interaction,
+        canal: discord.TextChannel = None,
+        raridade: Optional[app_commands.Choice[str]] = None,
+    ):
         gid = str(interaction.guild_id)
         cfg = dict(self.bot.db.get_baus_config(gid))
         if canal:
@@ -1089,7 +1175,11 @@ class Baus(commands.Cog):
                 "Adicione um canal com `/bau_canal_adicionar` primeiro (ou passe um canal aqui).", ephemeral=True)
             return
         await interaction.response.defer(ephemeral=True, thinking=True)
-        destino = await self._dropar(cfg, canal_forcado=canal)
+        destino = await self._dropar(
+            cfg,
+            canal_forcado=canal,
+            raridade_forcada=raridade.value if raridade else None,
+        )
         if destino is None:
             await interaction.followup.send(
                 "⚠️ Nenhum canal configurado está acessível ao bot.", ephemeral=True

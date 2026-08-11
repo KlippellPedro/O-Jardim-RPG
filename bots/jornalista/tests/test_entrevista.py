@@ -29,7 +29,8 @@ class _Resposta:
 
 
 class _Interacao:
-    def __init__(self, user_id):
+    def __init__(self, user_id, guild_id=100):
+        self.guild_id = guild_id
         self.user = type("Usuario", (), {"id": user_id, "display_name": f"User{user_id}"})()
         self.response = _Resposta()
 
@@ -55,8 +56,9 @@ class _DB:
         self.pendentes_nao_publicadas = pendentes_nao_publicadas or []
         self.respostas = []
         self.publicadas = []
+        self.preferencias = []
 
-    def entrevista_pendente_do_usuario(self, user_id):
+    def entrevista_pendente_do_usuario(self, user_id, guild_id=None):
         return self.pendente
 
     def responder_entrevista(self, entrevista_id, resposta):
@@ -68,6 +70,9 @@ class _DB:
 
     def marcar_entrevista_publicada(self, entrevista_id):
         self.publicadas.append(entrevista_id)
+
+    def set_participacao_entrevista(self, guild_id, user_id, participar):
+        self.preferencias.append((guild_id, user_id, participar))
 
 
 def _cog(db):
@@ -102,6 +107,18 @@ def test_entrevista_responder_com_pendente_abre_o_modal():
 
     assert isinstance(interacao.response.modal, RespostaEntrevistaModal)
     assert interacao.response.modal.entrevista["id"] == 5
+    assert "Qual sua Árvore?" in interacao.response.modal.resposta.placeholder
+
+
+def test_jogador_pode_sair_dos_sorteios_de_entrevista():
+    db = _DB()
+    cog = _cog(db)
+    interacao = _Interacao(7)
+
+    _rodar(Entrevista.entrevista_participar.callback(cog, interacao, False))
+
+    assert db.preferencias == [("100", "7", False)]
+    assert "não será mais sorteado" in interacao.response.mensagens[0][0]
 
 
 # ── RespostaEntrevistaModal.on_submit ────────────────────────────────────
@@ -177,6 +194,49 @@ def test_recuperar_pendentes_sem_nada_preso_nao_chama_publicar():
     guild = _Guild(100)
 
     _rodar(cog._recuperar_pendentes(guild))
+
+
+def test_nova_entrevista_nao_duplica_quem_ja_tem_pendente():
+    enviados = []
+
+    class _Candidato:
+        bot = False
+
+        def __init__(self, user_id):
+            self.id = user_id
+
+        async def send(self, mensagem):
+            enviados.append((self.id, mensagem))
+
+    class _DBSelecao:
+        def __init__(self):
+            self.criadas = []
+
+        def expirar_entrevistas_antigas(self, *_args):
+            pass
+
+        def usuarios_ja_entrevistados(self, _gid):
+            return []
+
+        def usuarios_com_entrevista_pendente(self, _gid):
+            return ["1"]
+
+        def usuarios_fora_das_entrevistas(self, _gid):
+            return []
+
+        def criar_entrevista(self, gid, uid, pergunta):
+            self.criadas.append((gid, uid, pergunta))
+            return 1
+
+    guild = _Guild(100)
+    guild.members = [_Candidato(1), _Candidato(2)]
+    db = _DBSelecao()
+    cog = _cog(db)
+
+    _rodar(cog._nova_entrevista(guild))
+
+    assert db.criadas and db.criadas[0][1] == "2"
+    assert enviados and enviados[0][0] == 2
 
 
 if __name__ == "__main__":

@@ -234,12 +234,24 @@ class Trocas(commands.Cog):
             return False, f"Você não tem {preco} {moeda} pra fechar a troca."
         if kind == "item" and not await self.bot.inventario.cabe(guild_id, comprador_id, 1):
             return False, "Seu cofre está cheio. Use `/cofre_melhorar` antes de receber o item."
+        custodia_chave = f"troca:{chave}"
         try:
-            db.debitar(guild_id, comprador_id, moeda, preco)  # sem linha de crédito em troca P2P
+            db.reservar_custodia_moeda(
+                custodia_chave,
+                guild_id,
+                comprador_id,
+                moeda,
+                preco,
+                f"Valor reservado para comprar {titulo}",
+            )
         except SaldoInsuficiente as e:
             return False, str(e)
         if kind == "bau":
-            db.remover_bau(guild_id, vendedor_id, ref, 1)
+            if not db.remover_bau(guild_id, vendedor_id, ref, 1):
+                db.devolver_custodia_moeda(
+                    custodia_chave, "Troca cancelada: custódia devolvida"
+                )
+                return False, "O ofertante não tem mais esse baú."
             db.add_bau(guild_id, comprador_id, ref, 1)
         else:
             try:
@@ -249,16 +261,18 @@ class Trocas(commands.Cog):
             except (ItemIndisponivel, CofreIndisponivel) as exc:
                 # O item não saiu do lugar (tirar() aborta antes de escrever
                 # qualquer coisa): devolve o dinheiro já debitado.
-                db.creditar(guild_id, comprador_id, moeda, preco)
+                db.devolver_custodia_moeda(
+                    custodia_chave, "Troca cancelada: custódia devolvida"
+                )
                 mensagem = (
                     "O ofertante não tem mais esse item."
                     if isinstance(exc, ItemIndisponivel)
                     else "O cofre central não respondeu. A troca não foi feita: tente de novo em instantes."
                 )
                 return False, mensagem
-        db.creditar(guild_id, vendedor_id, moeda, preco)
-        db.registrar_extrato(guild_id, comprador_id, -preco, moeda, f"Troca: comprou {titulo}")
-        db.registrar_extrato(guild_id, vendedor_id, preco, moeda, f"Troca: vendeu {titulo}")
+        db.transferir_custodia_moeda(
+            custodia_chave, vendedor_id, f"Troca: vendeu {titulo}"
+        )
         simb = SIMBOLO.get(economia.normalizar(moeda), "")
         return True, f"✅ Troca fechada! **{titulo}** por {simb} {preco} {moeda}."
 

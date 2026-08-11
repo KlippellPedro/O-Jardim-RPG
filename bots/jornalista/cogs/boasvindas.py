@@ -1,6 +1,6 @@
 """
-Cog Boas-vindas: narra chegada e partida de membros do servidor (Passo 4
-do docs/Plano_Jornalista.md). Precisa da intent privilegiada `members` (main.py)
+Cog Boas-vindas: narra chegada e partida de membros do servidor. Precisa da
+intent privilegiada `members` (main.py)
 ligada também no Developer Portal, senão os eventos nunca disparam.
 """
 
@@ -8,11 +8,13 @@ from __future__ import annotations
 
 import logging
 import random
+from datetime import datetime, timezone
 
 import discord
 from discord.ext import commands
 
 from core import ui
+from core import publicacoes
 
 log = logging.getLogger("jornalista")
 
@@ -76,9 +78,10 @@ class Boasvindas(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
-        canal = self._canal(member.guild.id, "chegada")
-        if canal is None:
+        gid = str(member.guild.id)
+        if not self.bot.db.automacao_ativa(gid, "boas_vindas", True):
             return
+        canal = self._canal(member.guild.id, "chegada")
 
         texto = self._texto(
             member.guild.id, "chegada", _CHEGADA,
@@ -94,16 +97,25 @@ class Boasvindas(commands.Cog):
             descricao=texto,
         )
         self._decorar(emb, member.guild.id, "chegada")
-        try:
-            await canal.send(embed=emb)
-        except discord.HTTPException:
-            log.exception("falha ao anunciar chegada de membro (guild %s)", member.guild.id)
+        instante = member.joined_at or datetime.now(timezone.utc)
+        await publicacoes.publicar_ou_enfileirar(
+            self.bot,
+            guild_id=gid,
+            embed=emb,
+            origem="boas_vindas",
+            dedupe_key=f"entrada:{member.id}:{int(instante.timestamp())}",
+            categoria="chegada",
+            canal_id=str(canal.id) if isinstance(canal, discord.TextChannel) else None,
+            automacao="boas_vindas",
+            mencoes="usuarios",
+        )
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: discord.Member):
-        canal = self._canal(member.guild.id, "partida")
-        if canal is None:
+        gid = str(member.guild.id)
+        if not self.bot.db.automacao_ativa(gid, "despedidas", True):
             return
+        canal = self._canal(member.guild.id, "partida")
 
         texto = self._texto(
             member.guild.id, "partida", _PARTIDA,
@@ -116,10 +128,18 @@ class Boasvindas(commands.Cog):
         )
         self._decorar(emb, member.guild.id, "partida")
         emb.set_footer(text=f"ID do usuário: {member.id}")
-        try:
-            await canal.send(embed=emb)
-        except discord.HTTPException:
-            log.exception("falha ao anunciar partida de membro (guild %s)", member.guild.id)
+        await publicacoes.publicar_ou_enfileirar(
+            self.bot,
+            guild_id=gid,
+            embed=emb,
+            origem="despedida",
+            dedupe_key=(
+                f"saida:{member.id}:{int(datetime.now(timezone.utc).timestamp())}"
+            ),
+            categoria="partida",
+            canal_id=str(canal.id) if isinstance(canal, discord.TextChannel) else None,
+            automacao="despedidas",
+        )
 
 
 async def setup(bot: commands.Bot):

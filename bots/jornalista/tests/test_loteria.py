@@ -48,6 +48,10 @@ class _DBFake:
         self.chamadas.append(("canal", guild_id, categoria))
         return None  # sem canal: o anúncio é pulado, o sorteio não
 
+    def automacao_ativa(self, guild_id, tipo, padrao=True):
+        # Estes testes isolam pagamento/encerramento da rodada, não publicação.
+        return False
+
 
 class _Guild:
     def __init__(self, guild_id=100):

@@ -37,6 +37,15 @@ def test_sortear_bau_catalogo_vazio():
     assert 5 <= premio["lunaris"] <= 40
 
 
+def test_bau_geral_nao_entrega_veiculo_monstro_drop_ou_modificacao():
+    from core import economia
+
+    proibidos = {"veiculo", "veiculo-completo", "monstro", "drop", "modificacao"}
+    geral = economia.bau_compravel_por_id("geral-lendario")
+    assert geral is not None
+    assert proibidos.isdisjoint(geral["tipos"])
+
+
 def test_perfil_nao_sorteia_raridade_que_nao_declarou():
     catalogo = Catalogo()
     total, erros = catalogo.carregar_dados({

@@ -27,6 +27,7 @@ EXTENSOES = (
     "cogs.investimentos",
     "cogs.emprestimos",
     "cogs.loteria",
+    "cogs.servicos",
     "cogs.ajuda",
 )
 
@@ -34,6 +35,7 @@ COMANDOS_ESPERADOS = {
     "abrir_bau",
     "abrir_todos",
     "ajuda",
+    "alertas_banco",
     "cambio_auto",
     "cambio_ver",
     "campanha_vincular",
@@ -50,7 +52,6 @@ COMANDOS_ESPERADOS = {
     "cofre_sacar",
     "cofre_seguranca_melhorar",
     "comandos",
-    "comprar",
     "comprar_bau",
     "crise_declarar",
     "dar",
@@ -58,6 +59,7 @@ COMANDOS_ESPERADOS = {
     "divida",
     "divida_pagar",
     "emprestar_para",
+    "economia_diagnostico",
     "emprestimo_pagar",
     "emprestimos_ver",
     "extrato",
@@ -71,7 +73,6 @@ COMANDOS_ESPERADOS = {
     "leilao_cancelar",
     "leilao_iniciar",
     "leilao_ver",
-    "loja",
     "loja_baus",
     "loteria_bolo",
     "loteria_comprar",
@@ -85,6 +86,8 @@ COMANDOS_ESPERADOS = {
     "perfil",
     "protecao_comprar",
     "protecao_ver",
+    "preparo_roubo_comprar",
+    "preparos_roubo",
     "ranking",
     "recompensa_colocar",
     "recompensa_ver",
@@ -92,6 +95,8 @@ COMANDOS_ESPERADOS = {
     "resetjogador",
     "roubar",
     "roubar_cofre",
+    "roubo_planejar",
+    "seguro_cofre",
     "setcambio",
     "setcredito",
     "setreputacao",
@@ -100,7 +105,6 @@ COMANDOS_ESPERADOS = {
     "tirar",
     "tirar_item",
     "trocar",
-    "vender",
     "vincular",
 }
 
@@ -236,64 +240,7 @@ def test_juros_automatico_nao_avisa_cofre_vazio():
     assert db.avisos == []  # cofre vazio: aplica sem spam de aviso
 
 
-class _ItemFake:
-    def __init__(self, id, titulo, preco=10):
-        self.id = id
-        self.titulo = titulo
-        self.tipo = "arma"
-        self.conteudo = {"raridade": "comum", "preco": preco, "modo": "Corpo a corpo", "subtipo": "espada"}
-        self.raridade = "comum"
-        self.preco = preco
-
-
-def test_loja_view_pagina_e_monta_menu_de_compra():
-    from cogs.economia import LojaView
-
-    itens = [_ItemFake(f"i{n}", f"Item {n}") for n in range(45)]  # 3 páginas (20/20/5)
-    view = LojaView(cog=object(), itens=itens, autor_id=1)
-    try:
-        assert view.total == 45
-        assert len(view.paginas) == 3
-        selects = [c for c in view.children if isinstance(c, discord.ui.Select)]
-        assert len(selects) == 1
-        assert [o.value for o in selects[0].options] == [f"i{n}" for n in range(20)]
-        # navega pra página 2: o menu passa a listar os itens de lá
-        view.indice = 1
-        view._montar()
-        selects = [c for c in view.children if isinstance(c, discord.ui.Select)]
-        assert selects[0].options[0].value == "i20"
-        assert view.embed_atual().footer.text is not None
-    finally:
-        view.stop()
-
-
-def test_loja_view_menu_compra_usa_o_fluxo_compartilhado():
-    from cogs.economia import LojaView
-
-    chamado = []
-
-    class _FakeCog:
-        async def _executar_compra(self, interaction, item_id, moeda):
-            chamado.append((item_id, moeda))
-
-    view = LojaView(cog=_FakeCog(), itens=[_ItemFake("i1", "Espada")], autor_id=1, moeda="Lunaris")
-    try:
-        inter = type("I", (), {"data": {"values": ["i1"]}})()
-        asyncio.run(view._comprar_selecionado(inter))
-        assert chamado == [("i1", "Lunaris")]
-    finally:
-        view.stop()
-
-
-def test_comprar_delega_para_o_fluxo_compartilhado():
-    from cogs import economia as cog_economia
-
-    chamado = []
-
-    async def fake_exec(interaction, item, moeda):
-        chamado.append((item, moeda))
-
-    cog = object.__new__(cog_economia.Economia)
-    cog._executar_compra = fake_exec
-    asyncio.run(cog_economia.Economia.comprar.callback(cog, object(), "espada", None))
-    assert chamado == [("espada", "Lunaris")]  # sem moeda => Lunaris
+def test_loja_direta_de_itens_nao_e_publicada_no_discord():
+    comandos = asyncio.run(_inventario_real())
+    assert {"loja", "comprar", "vender"}.isdisjoint(comandos)
+    assert {"loja_baus", "comprar_bau", "meus_baus", "abrir_bau"} <= comandos

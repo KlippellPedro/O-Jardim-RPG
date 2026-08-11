@@ -3,9 +3,8 @@ Núcleo de clima do Jornalista: clima mensal sorteado, restrito pela estação
 atual (ver core/economia.py:ESTACOES). Puro (sem discord.py): devolve o
 clima sorteado pra quem chama decidir como mostrar.
 
-Efeitos são só flavor narrativo (ver docs/Plano_Jornalista.md): o Jornalista não
-tem acesso à ficha nem ao motor de rolagem, então não aplica bônus sozinho
-em nenhum teste; cada efeito pressupõe "combine com o mestre".
+Efeitos são sugestões narrativas próprias do bot. O Jornalista não acessa a
+ficha nem altera rolagens; cada efeito pressupõe aprovação do mestre.
 """
 
 from __future__ import annotations

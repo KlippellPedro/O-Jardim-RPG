@@ -31,6 +31,9 @@ class _DB:
     def debitar(self, guild_id, user_id, moeda, quantia):
         raise SaldoInsuficiente("sem saldo pra pagar")
 
+    def pagar_emprestimo_atomico(self, guild_id, emprestimo_id, devedor_id, quantia):
+        raise SaldoInsuficiente("sem saldo pra pagar")
+
     def fechar_emprestimo(self, emprestimo_id, status):
         self.fechados.append((emprestimo_id, status))
 

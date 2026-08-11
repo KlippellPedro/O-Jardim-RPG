@@ -366,7 +366,10 @@ class Admin(commands.Cog):
     @app_commands.checks.has_permissions(manage_guild=True)
     @app_commands.describe(taxa_percent="Juros em % sobre o saldo guardado (1 a 50).")
     async def juros_cofre(self, interaction, taxa_percent: app_commands.Range[int, 1, 50]):
-        afetados = self.bot.db.aplicar_juros_cofre(str(interaction.guild_id), taxa_percent / 100)
+        # Intervenção discricionária do mestre, não rendimento passivo — não
+        # respeita o teto do juro automático diário (decisão de balanceamento
+        # 2026-08, revisão pós-implementação).
+        afetados = self.bot.db.aplicar_juros_cofre(str(interaction.guild_id), taxa_percent / 100, sem_teto=True)
         auto = int(self.bot.db.get_economia_config(str(interaction.guild_id))["juros_cofre_taxa"] * 100)
         await interaction.response.send_message(
             f"✅ Bônus de juros de {taxa_percent}% aplicado sobre o dinheiro guardado no cofre. "
@@ -377,12 +380,11 @@ class Admin(commands.Cog):
 
     @app_commands.command(
         name="seteconomia",
-        description="[Mestre] Ajusta taxas econômicas deste servidor (venda, saque, juros, leilão, loteria).",
+        description="[Mestre] Ajusta taxas econômicas deste servidor (cofre, leilão e loteria).",
     )
     @app_commands.default_permissions(manage_guild=True)
     @app_commands.checks.has_permissions(manage_guild=True)
     @app_commands.describe(
-        venda_ratio_percent="% do preço de compra devolvido ao vender um item (1-100).",
         cofre_saque_taxa_percent="Taxa cobrada ao sacar do cofre pra carteira (0-50).",
         juros_cofre_taxa_percent="Juros automáticos diários do cofre, em % (0-50).",
         leilao_corte_percent="Corte da casa sobre venda em leilão, em % (0-50).",
@@ -392,7 +394,6 @@ class Admin(commands.Cog):
     async def seteconomia(
         self,
         interaction,
-        venda_ratio_percent: app_commands.Range[int, 1, 100] = None,
         cofre_saque_taxa_percent: app_commands.Range[int, 0, 50] = None,
         juros_cofre_taxa_percent: app_commands.Range[int, 0, 50] = None,
         leilao_corte_percent: app_commands.Range[int, 0, 50] = None,
@@ -401,7 +402,6 @@ class Admin(commands.Cog):
     ):
         self.bot.db.set_economia_config(
             str(interaction.guild_id),
-            venda_ratio_percent=venda_ratio_percent,
             cofre_saque_taxa_percent=cofre_saque_taxa_percent,
             juros_cofre_taxa_percent=juros_cofre_taxa_percent,
             leilao_corte_percent=leilao_corte_percent,
@@ -411,7 +411,6 @@ class Admin(commands.Cog):
         cfg = self.bot.db.get_economia_config(str(interaction.guild_id))
         await interaction.response.send_message(
             "✅ Economia deste servidor:\n"
-            f"• Venda devolve {int(cfg['venda_ratio']*100)}% do preço de compra\n"
             f"• Saque do cofre cobra {int(cfg['cofre_saque_taxa']*100)}%\n"
             f"• Cofre rende {int(cfg['juros_cofre_taxa']*100)}%/dia sozinho\n"
             f"• Leilão: casa fica com {int(cfg['leilao_corte']*100)}%\n"

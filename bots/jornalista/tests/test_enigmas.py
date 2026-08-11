@@ -15,7 +15,7 @@ BASE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE))
 
 from core import economia
-from core.enigmas import ENIGMAS, checar_resposta, normalizar
+from core.enigmas import DIFICULDADES, ENIGMAS, checar_resposta, enigmas_da_dificuldade, normalizar
 
 
 def _enigma_das_estacoes():
@@ -49,3 +49,14 @@ def test_todos_os_enigmas_tem_pelo_menos_uma_resposta_normalizavel():
                 f"('{normalizar(resposta)}'): checar_resposta ainda funciona, "
                 "mas é sinal de inconsistência no cadastro"
             )
+
+
+def test_todas_as_dificuldades_tem_variedade_suficiente():
+    for dificuldade in DIFICULDADES:
+        assert len(enigmas_da_dificuldade(dificuldade)) >= 8
+
+
+def test_banco_mistura_rpg_vida_charadas_e_logica():
+    categorias = {enigma.categoria for enigma in ENIGMAS}
+    assert {"O Jardim", "Economia", "Vida cotidiana", "Charada clássica", "Lógica"} <= categorias
+    assert len(ENIGMAS) >= 50

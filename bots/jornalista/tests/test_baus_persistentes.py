@@ -90,7 +90,7 @@ def _rodar(coro):
 # ── _dropar persiste o estado antes de qualquer clique ──────────────────────
 
 def test_dropar_persiste_bau_normal_com_token_no_custom_id(monkeypatch):
-    monkeypatch.setattr(baus_mod.random, "random", lambda: 0.99)  # nunca sorteia enigma
+    monkeypatch.setattr(baus_mod.loot_mod, "sortear_raridade_bau", lambda *a, **k: "comum")
     db = _DB()
     cog = _cog(db)
 
@@ -101,6 +101,9 @@ def test_dropar_persiste_bau_normal_com_token_no_custom_id(monkeypatch):
     token, row = next(iter(db.baus_no_ar.items()))
     assert row["mensagem_id"] == "999"
     assert row["enigma_pergunta"] is None
+    assert row["premio"]["bau"]["raridade"] == "comum"
+    restante = row["expira_em"] - datetime.now(timezone.utc)
+    assert timedelta(minutes=179) < restante <= timedelta(minutes=180)
 
     view = canal.enviados[0]["view"]
     button = view.children[0]
@@ -109,7 +112,7 @@ def test_dropar_persiste_bau_normal_com_token_no_custom_id(monkeypatch):
 
 
 def test_dropar_bau_trancado_persiste_enigma(monkeypatch):
-    monkeypatch.setattr(baus_mod.random, "random", lambda: 0.0)  # sempre sorteia enigma
+    monkeypatch.setattr(baus_mod.loot_mod, "sortear_raridade_bau", lambda *a, **k: "raro")
     db = _DB()
     cog = _cog(db)
 
@@ -118,6 +121,9 @@ def test_dropar_bau_trancado_persiste_enigma(monkeypatch):
     token, row = next(iter(db.baus_no_ar.items()))
     assert row["enigma_pergunta"]
     assert row["enigma_respostas"]
+    assert row["premio"]["bau"]["dificuldade_enigma"] == "facil"
+    restante = row["expira_em"] - datetime.now(timezone.utc)
+    assert timedelta(minutes=89) < restante <= timedelta(minutes=90)
 
     view = canal.enviados[0]["view"]
     button = view.children[0]

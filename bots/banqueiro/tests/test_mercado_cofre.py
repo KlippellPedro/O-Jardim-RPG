@@ -115,6 +115,17 @@ class _DB:
     def registrar_extrato(self, *a, **k):
         pass
 
+    def liquidar_leilao_com_custodia(self, leilao_id, corte):
+        # Estes cenarios representam leiloes legados, anteriores a custodia.
+        return None
+
+    def transferir_carteira_com_taxa(
+        self, g, origem, destino, moeda, bruto, liquido, descricao_origem, descricao_destino
+    ):
+        self.debitar(g, origem, moeda, bruto)
+        self.creditar(g, destino, moeda, liquido)
+        return {"bruto": bruto, "liquido": liquido, "taxa": bruto - liquido}
+
     def criar_aviso(self, guild_id, mensagem):
         self.chamadas.append(("aviso", guild_id, mensagem))
 
@@ -170,6 +181,7 @@ def _cog(db):
     bot.platform = _Platform(db)
     bot.inventario = Inventario(bot)
     bot.get_guild = lambda guild_id: None  # sem servidor real -> pula a edição de mensagem final
+    bot.get_user = lambda user_id: None  # sem Discord real -> pula alertas privados
     cog = object.__new__(Mercado)
     cog.bot = bot
     return cog

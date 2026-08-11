@@ -2,8 +2,7 @@
 Apresentação (embeds) do Jornalista.
 
 Objetivo: centralizar a "cara" do bot num lugar só: mesmo espírito do
-core/ui.py do Banqueiro/Barista. Cores e ícones por categoria seguem a
-Decisão 3 do docs/Plano_Jornalista.md (aprovada em 17/07/2026): cada tipo de
+core/ui.py do Banqueiro/Barista. Cada tipo de
 conteúdo (chegada/partida de membro, registro, recompensa, procurado,
 capturado, dívida quitada, baú, clima, notícia do mestre) tem sua própria
 cor/ícone, pra diferenciar visualmente os avisos publicados no jornal.

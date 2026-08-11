@@ -18,6 +18,7 @@ from cogs.ajuda import CATEGORIAS
 EXTENSOES = (
     "cogs.baus",
     "cogs.avisos",
+    "cogs.publicacoes",
     "cogs.jornal",
     "cogs.registro",
     "cogs.boasvindas",
@@ -38,11 +39,24 @@ COMANDOS_ESPERADOS = {
     "bau_pendentes",
     "bau_reprocessar",
     "entrevista_responder",
+    "entrevista_participar",
     "estacao",
     "horoscopo",
     "jornal avancar_mes",
     "jornal canais",
     "jornal clima_auto",
+    "jornal configurar",
+    "jornal automacao",
+    "jornal automacoes",
+    "jornal fila",
+    "jornal fila_reprocessar",
+    "jornal orcamento",
+    "jornal pauta agendar",
+    "jornal pauta cancelar",
+    "jornal pauta criar",
+    "jornal pauta listar",
+    "jornal pauta publicar",
+    "jornal pauta ver",
     "jornal estacao_auto",
     "jornal rumor",
     "jornal desafio",
@@ -54,6 +68,7 @@ COMANDOS_ESPERADOS = {
     "jornal mensagem_ver",
     "jornal principal",
     "jornal publicar",
+    "jornal status",
     "registro apagar",
     "registro canal",
     "registro criar",
@@ -109,6 +124,10 @@ def test_inventario_de_comandos_nao_regride():
 
 def test_ajuda_lista_todos_os_comandos_publicos():
     assert _inventario_ajuda() == COMANDOS_ESPERADOS - {"ajuda"}
+
+
+def test_paginas_da_ajuda_respeitam_limite_de_25_campos_do_discord():
+    assert all(len(categoria["comandos"]) <= 25 for categoria in CATEGORIAS.values())
 
 
 def test_ciclo_clima_publica_nas_guilds_optantes():

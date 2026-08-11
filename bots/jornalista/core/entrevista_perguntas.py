@@ -6,7 +6,7 @@ import random
 from typing import Optional
 
 PERGUNTAS = (
-    "Qual foi o monstro mais difícil que sua party já enfrentou?",
+    "Qual foi o monstro mais difícil que seu grupo já enfrentou?",
     "Se pudesse escolher outra Árvore pro seu personagem, qual seria e por quê?",
     "Qual foi a decisão mais arriscada que seu personagem já tomou numa sessão?",
     "Tem algum NPC do Jardim que você adoraria ver de novo?",

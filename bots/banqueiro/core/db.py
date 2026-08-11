@@ -214,6 +214,9 @@ _SCHEMA = (
     ALTER TABLE config ADD COLUMN IF NOT EXISTS loteria_corte_percent INTEGER
     """,
     """
+    ALTER TABLE config ADD COLUMN IF NOT EXISTS cambio_padrao_100_migrado BOOLEAN NOT NULL DEFAULT FALSE
+    """,
+    """
     ALTER TABLE cofre ADD COLUMN IF NOT EXISTS seguranca_tier TEXT NOT NULL DEFAULT 'basica'
     """,
     """
@@ -371,6 +374,58 @@ _SCHEMA = (
         PRIMARY KEY (guild_id, ciclo)
     )
     """,
+    """
+    CREATE TABLE IF NOT EXISTS roubo_calor (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        pontos INTEGER NOT NULL DEFAULT 0 CHECK (pontos >= 0),
+        atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, user_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS preparos_roubo (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        tipo TEXT NOT NULL,
+        quantidade INTEGER NOT NULL DEFAULT 0 CHECK (quantidade >= 0),
+        PRIMARY KEY (guild_id, user_id, tipo)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS alertas_banco (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        categoria TEXT NOT NULL,
+        ativo BOOLEAN NOT NULL DEFAULT TRUE,
+        PRIMARY KEY (guild_id, user_id, categoria)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS seguro_cofre (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        ativo BOOLEAN NOT NULL DEFAULT TRUE,
+        auto_renovar BOOLEAN NOT NULL DEFAULT TRUE,
+        valido_ate TIMESTAMPTZ NOT NULL,
+        ultimo_sinistro_em TIMESTAMPTZ,
+        PRIMARY KEY (guild_id, user_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS custodia_moeda (
+        chave TEXT PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        moeda TEXT NOT NULL,
+        valor INTEGER NOT NULL CHECK (valor > 0),
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS custodia_moeda_usuario_idx
+    ON custodia_moeda (guild_id, user_id)
+    """,
 )
 
 
@@ -424,6 +479,21 @@ class Database:
         with self._conn() as con:
             for ddl in _SCHEMA:
                 con.execute(ddl)
+            # Migração única: servidores que ainda guardavam o antigo padrão
+            # 10:1 passam ao câmbio oficial 100:1. Valores personalizados não
+            # são alterados, e o marcador impede sobrescrever uma escolha
+            # futura do mestre por 10:1.
+            con.execute(
+                """
+                UPDATE config
+                SET cambio_rate = CASE WHEN cambio_rate = 10 THEN 100 ELSE cambio_rate END,
+                    cambio_padrao_100_migrado = TRUE
+                WHERE cambio_padrao_100_migrado = FALSE
+                """
+            )
+            con.execute(
+                "ALTER TABLE config ALTER COLUMN cambio_padrao_100_migrado SET DEFAULT TRUE"
+            )
             # Migração única do modelo antigo, em que a dívida era um saldo
             # negativo na carteira. A dívida passa a viver separada para que
             # receber Lunaris não a quite automaticamente.
@@ -576,6 +646,7 @@ class Database:
         descricao: str,
         chave: str,
         prazo_dias: int = economia.FATURA_PRAZO_DIAS,
+        entrega_bau: Optional[dict] = None,
     ) -> dict:
         """Cobra a carteira e financia somente o restante em fatura.
 
@@ -684,6 +755,21 @@ class Database:
                     ),
                 ).fetchone()
                 fatura_id = int(fatura["id"])
+            if entrega_bau is not None:
+                bau_id = str(entrega_bau["id"])
+                nome_bau = str(entrega_bau["nome"])
+                con.execute(
+                    """
+                    INSERT INTO baus_estoque (guild_id, user_id, bau_id, quantidade)
+                    VALUES (%s, %s, %s, 1)
+                    ON CONFLICT (guild_id, user_id, bau_id)
+                    DO UPDATE SET quantidade=baus_estoque.quantidade+1
+                    """,
+                    (guild_id, user_id, bau_id),
+                )
+                self._registrar_extrato_tx(
+                    con, guild_id, user_id, -quantia, "Lunaris", f"Comprou {nome_bau}"
+                )
         return {
             "saldo": novo_saldo,
             "carteira_usada": carteira_usada,
@@ -1098,6 +1184,395 @@ class Database:
                 )
         return int(row["saldo"])
 
+    def transferir_carteira(
+        self,
+        guild_id: str,
+        origem_user_id: str,
+        destino_user_id: str,
+        moeda: str,
+        quantia: int,
+        descricao_origem: str,
+        descricao_destino: str,
+    ) -> dict:
+        """Move saldo e grava os dois extratos em uma única transação."""
+        if origem_user_id == destino_user_id:
+            raise ValueError("origem e destino devem ser diferentes")
+        if quantia <= 0:
+            raise ValueError("a quantia deve ser positiva")
+        with self._conn() as con:
+            nomes = {}
+            saldos = {}
+            # Ordem global reduz o risco de deadlock em pagamentos cruzados.
+            for user_id in sorted({origem_user_id, destino_user_id}):
+                self._garantir_jogador(con, guild_id, user_id)
+                nome = self._nome_moeda_real(con, guild_id, user_id, moeda)
+                nomes[user_id] = nome
+                row = con.execute(
+                    """
+                    SELECT saldo FROM carteira
+                    WHERE guild_id=%s AND user_id=%s AND moeda=%s
+                    FOR UPDATE
+                    """,
+                    (guild_id, user_id, nome),
+                ).fetchone()
+                saldos[user_id] = int(row["saldo"]) if row else 0
+
+            saldo_origem = saldos[origem_user_id]
+            if saldo_origem < quantia:
+                raise SaldoInsuficiente(
+                    f"tem {saldo_origem}, mas precisa de {quantia} {nomes[origem_user_id]}"
+                )
+            origem = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (
+                    int(quantia),
+                    guild_id,
+                    origem_user_id,
+                    nomes[origem_user_id],
+                    int(quantia),
+                ),
+            ).fetchone()
+            if origem is None:
+                raise SaldoInsuficiente("o saldo mudou antes da transferência")
+            destino = con.execute(
+                """
+                INSERT INTO carteira (guild_id, user_id, moeda, saldo)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (guild_id, user_id, moeda)
+                DO UPDATE SET saldo=carteira.saldo+EXCLUDED.saldo
+                RETURNING saldo
+                """,
+                (
+                    guild_id,
+                    destino_user_id,
+                    nomes[destino_user_id],
+                    int(quantia),
+                ),
+            ).fetchone()
+            self._registrar_extrato_tx(
+                con,
+                guild_id,
+                origem_user_id,
+                -int(quantia),
+                nomes[origem_user_id],
+                descricao_origem,
+            )
+            self._registrar_extrato_tx(
+                con,
+                guild_id,
+                destino_user_id,
+                int(quantia),
+                nomes[destino_user_id],
+                descricao_destino,
+            )
+        return {
+            "saldo_origem": int(origem["saldo"]),
+            "saldo_destino": int(destino["saldo"]),
+        }
+
+    def transferir_carteira_com_taxa(
+        self,
+        guild_id: str,
+        origem_user_id: str,
+        destino_user_id: str,
+        moeda: str,
+        valor_bruto: int,
+        valor_liquido: int,
+        descricao_origem: str,
+        descricao_destino: str,
+    ) -> dict:
+        if not 0 <= valor_liquido <= valor_bruto or valor_bruto <= 0:
+            raise ValueError("valores da transferencia taxada invalidos")
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, origem_user_id)
+            self._garantir_jogador(con, guild_id, destino_user_id)
+            origem = self._nome_moeda_real(con, guild_id, origem_user_id, moeda)
+            destino = self._nome_moeda_real(con, guild_id, destino_user_id, moeda)
+            saldo = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (valor_bruto, guild_id, origem_user_id, origem, valor_bruto),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"saldo insuficiente em {origem}")
+            saldo_destino = self._creditar_carteira_tx(
+                con, guild_id, destino_user_id, destino, valor_liquido
+            )
+            self._registrar_extrato_tx(
+                con, guild_id, origem_user_id, -valor_bruto, origem,
+                descricao_origem,
+            )
+            self._registrar_extrato_tx(
+                con, guild_id, destino_user_id, valor_liquido, destino,
+                descricao_destino,
+            )
+        return {"saldo_origem": int(saldo["saldo"]), "saldo_destino": saldo_destino}
+
+    def reservar_custodia_moeda(
+        self,
+        chave: str,
+        guild_id: str,
+        user_id: str,
+        moeda: str,
+        valor: int,
+        descricao: str,
+    ) -> dict:
+        if not chave or valor <= 0:
+            raise ValueError("custodia invalida")
+        with self._conn() as con:
+            existente = con.execute(
+                "SELECT * FROM custodia_moeda WHERE chave=%s FOR UPDATE",
+                (chave,),
+            ).fetchone()
+            if existente:
+                if (
+                    existente["guild_id"] == guild_id
+                    and existente["user_id"] == user_id
+                    and existente["moeda"] == moeda
+                    and int(existente["valor"]) == int(valor)
+                ):
+                    return dict(existente)
+                raise ValueError("chave de custodia ja utilizada")
+            self._garantir_jogador(con, guild_id, user_id)
+            nome = self._nome_moeda_real(con, guild_id, user_id, moeda)
+            saldo = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (valor, guild_id, user_id, nome, valor),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"saldo insuficiente em {nome}")
+            custodia = con.execute(
+                """
+                INSERT INTO custodia_moeda (chave, guild_id, user_id, moeda, valor)
+                VALUES (%s, %s, %s, %s, %s) RETURNING *
+                """,
+                (chave, guild_id, user_id, nome, valor),
+            ).fetchone()
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, -valor, nome, descricao
+            )
+        return dict(custodia)
+
+    def devolver_custodia_moeda(self, chave: str, descricao: str) -> Optional[dict]:
+        with self._conn() as con:
+            custodia = con.execute(
+                "DELETE FROM custodia_moeda WHERE chave=%s RETURNING *",
+                (chave,),
+            ).fetchone()
+            if custodia is None:
+                return None
+            saldo = self._creditar_carteira_tx(
+                con,
+                custodia["guild_id"],
+                custodia["user_id"],
+                custodia["moeda"],
+                int(custodia["valor"]),
+            )
+            self._registrar_extrato_tx(
+                con,
+                custodia["guild_id"],
+                custodia["user_id"],
+                int(custodia["valor"]),
+                custodia["moeda"],
+                descricao,
+            )
+        return {**dict(custodia), "saldo": saldo}
+
+    def transferir_custodia_moeda(
+        self, chave: str, destino_user_id: str, descricao_destino: str
+    ) -> Optional[dict]:
+        with self._conn() as con:
+            custodia = con.execute(
+                "DELETE FROM custodia_moeda WHERE chave=%s RETURNING *",
+                (chave,),
+            ).fetchone()
+            if custodia is None:
+                return None
+            saldo = self._creditar_carteira_tx(
+                con,
+                custodia["guild_id"],
+                destino_user_id,
+                custodia["moeda"],
+                int(custodia["valor"]),
+            )
+            self._registrar_extrato_tx(
+                con,
+                custodia["guild_id"],
+                destino_user_id,
+                int(custodia["valor"]),
+                custodia["moeda"],
+                descricao_destino,
+            )
+        return {**dict(custodia), "saldo_destino": saldo}
+
+    def executar_cambio(
+        self,
+        guild_id: str,
+        user_id: str,
+        moeda_origem: str,
+        quantia_origem: int,
+        moeda_destino: str,
+        quantia_destino: int,
+        direcao_fluxo: str,
+        fluxo_lunaris: int,
+    ) -> dict:
+        if quantia_origem <= 0 or quantia_destino <= 0:
+            raise ValueError("quantias do cambio devem ser positivas")
+        if direcao_fluxo not in {"compra_solares", "venda_solares"}:
+            raise ValueError("direcao de fluxo invalida")
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            origem = self._nome_moeda_real(con, guild_id, user_id, moeda_origem)
+            destino = self._nome_moeda_real(con, guild_id, user_id, moeda_destino)
+            saldo_origem = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (quantia_origem, guild_id, user_id, origem, quantia_origem),
+            ).fetchone()
+            if saldo_origem is None:
+                atual = con.execute(
+                    """SELECT saldo FROM carteira
+                    WHERE guild_id=%s AND user_id=%s AND moeda=%s""",
+                    (guild_id, user_id, origem),
+                ).fetchone()
+                raise SaldoInsuficiente(
+                    f"tem {int(atual['saldo']) if atual else 0}, mas precisa de {quantia_origem} {origem}"
+                )
+            saldo_destino = con.execute(
+                """
+                INSERT INTO carteira (guild_id, user_id, moeda, saldo)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (guild_id, user_id, moeda)
+                DO UPDATE SET saldo=carteira.saldo+EXCLUDED.saldo
+                RETURNING saldo
+                """,
+                (guild_id, user_id, destino, quantia_destino),
+            ).fetchone()
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, -quantia_origem, origem,
+                f"Câmbio: trocado por {destino}",
+            )
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, quantia_destino, destino,
+                f"Câmbio: recebido de {origem}",
+            )
+            con.execute(
+                """
+                INSERT INTO cambio_fluxo (guild_id, direcao, quantia)
+                VALUES (%s, %s, %s)
+                """,
+                (guild_id, direcao_fluxo, int(fluxo_lunaris)),
+            )
+        return {
+            "saldo_origem": int(saldo_origem["saldo"]),
+            "saldo_destino": int(saldo_destino["saldo"]),
+        }
+
+    def depositar_dinheiro_cofre(
+        self, guild_id: str, user_id: str, moeda: str, quantia: int, capacidade: int
+    ) -> int:
+        if quantia <= 0 or capacidade <= 0:
+            raise ValueError("deposito ou capacidade invalida")
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            nome_carteira = self._nome_moeda_real(con, guild_id, user_id, moeda)
+            nome_cofre = self._nome_moeda_real_cofre(con, guild_id, user_id, moeda)
+            guardado = con.execute(
+                """
+                SELECT saldo FROM cofre_saldo
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s FOR UPDATE
+                """,
+                (guild_id, user_id, nome_cofre),
+            ).fetchone()
+            atual = int(guardado["saldo"]) if guardado else 0
+            if atual + quantia > capacidade:
+                raise ValueError("capacidade do cofre excedida")
+            carteira = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (quantia, guild_id, user_id, nome_carteira, quantia),
+            ).fetchone()
+            if carteira is None:
+                raise SaldoInsuficiente(f"saldo insuficiente em {nome_carteira}")
+            novo = con.execute(
+                """
+                INSERT INTO cofre_saldo (guild_id, user_id, moeda, saldo)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (guild_id, user_id, moeda)
+                DO UPDATE SET saldo=cofre_saldo.saldo+EXCLUDED.saldo
+                RETURNING saldo
+                """,
+                (guild_id, user_id, nome_cofre, quantia),
+            ).fetchone()
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, -quantia, nome_carteira,
+                "Depositado no cofre",
+            )
+        return int(novo["saldo"])
+
+    def sacar_dinheiro_cofre(
+        self, guild_id: str, user_id: str, moeda: str, quantia: int, taxa: float
+    ) -> dict:
+        if quantia <= 0 or not 0 <= taxa < 1:
+            raise ValueError("saque ou taxa invalida")
+        taxa_valor = math.floor(quantia * taxa)
+        recebido = quantia - taxa_valor
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            nome_cofre = self._nome_moeda_real_cofre(con, guild_id, user_id, moeda)
+            nome_carteira = self._nome_moeda_real(con, guild_id, user_id, moeda)
+            restante = con.execute(
+                """
+                UPDATE cofre_saldo SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (quantia, guild_id, user_id, nome_cofre, quantia),
+            ).fetchone()
+            if restante is None:
+                raise SaldoInsuficiente(f"saldo guardado insuficiente em {nome_cofre}")
+            carteira = con.execute(
+                """
+                INSERT INTO carteira (guild_id, user_id, moeda, saldo)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (guild_id, user_id, moeda)
+                DO UPDATE SET saldo=carteira.saldo+EXCLUDED.saldo
+                RETURNING saldo
+                """,
+                (guild_id, user_id, nome_carteira, recebido),
+            ).fetchone()
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, -quantia, nome_cofre,
+                "Sacado do cofre",
+            )
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, recebido, nome_carteira,
+                f"Recebido na carteira (taxa de {int(taxa * 100)}%)",
+            )
+        return {
+            "recebido": recebido,
+            "taxa": taxa_valor,
+            "saldo_carteira": int(carteira["saldo"]),
+            "saldo_cofre": int(restante["saldo"]),
+        }
+
     def estornar_debito(
         self,
         guild_id: str,
@@ -1222,21 +1697,46 @@ class Database:
                 )
         return int(row["saldo"])
 
-    def aplicar_juros_cofre(self, guild_id: str, taxa: float) -> int:
-        """Soma `taxa` (ex.: 0.05 = 5%) a todo saldo guardado no cofre do
-        servidor. Retorna quantas linhas (jogador+moeda) foram afetadas."""
+    def aplicar_juros_cofre(self, guild_id: str, taxa: float, teto: int = None, sem_teto: bool = False) -> int:
+        """Soma `taxa` (ex.: 0.05 = 5%) ao saldo guardado no cofre do servidor,
+        até o teto (`economia.JUROS_COFRE_TETO` por padrão): o que passar do
+        teto continua guardado com segurança, só para de render juros
+        automáticos — sem isso, o juro composto diário não tinha limite e
+        dominava estritamente o rendimento de Investimentos em qualquer prazo
+        (ver docs/decisao-design-balanceamento-2026-08.md). Retorna quantas
+        linhas (jogador+moeda) foram afetadas.
+
+        `sem_teto=True` ignora o teto e calcula sobre o saldo integral — só o
+        rendimento automático diário (`ciclo_juros_cofre`) respeita o teto; o
+        bônus manual `/juros_cofre` do mestre é intervenção discricionária,
+        não rendimento passivo, e continua incidindo sobre tudo (decisão de
+        balanceamento 2026-08, revisão pós-implementação)."""
         if not (0 < taxa < 1):
             raise ValueError("a taxa de juros deve estar entre 0 e 1 (exclusive)")
         with self._conn() as con:
-            rows = con.execute(
-                """
-                UPDATE cofre_saldo
-                SET saldo = saldo + FLOOR(saldo * %s)::INTEGER
-                WHERE guild_id=%s AND saldo > 0
-                RETURNING 1
-                """,
-                (taxa, guild_id),
-            ).fetchall()
+            if sem_teto:
+                rows = con.execute(
+                    """
+                    UPDATE cofre_saldo
+                    SET saldo = saldo + FLOOR(saldo * %s)::INTEGER
+                    WHERE guild_id=%s AND saldo > 0
+                    RETURNING 1
+                    """,
+                    (taxa, guild_id),
+                ).fetchall()
+            else:
+                teto_efetivo = economia.JUROS_COFRE_TETO if teto is None else teto
+                if teto_efetivo <= 0:
+                    raise ValueError("o teto de juros deve ser positivo")
+                rows = con.execute(
+                    """
+                    UPDATE cofre_saldo
+                    SET saldo = saldo + FLOOR(LEAST(saldo, %s) * %s)::INTEGER
+                    WHERE guild_id=%s AND saldo > 0
+                    RETURNING 1
+                    """,
+                    (teto_efetivo, taxa, guild_id),
+                ).fetchall()
         return len(rows)
 
     def aplicar_juros_divida(self, guild_id: str, user_id: str, taxa: float) -> int:
@@ -1956,6 +2456,36 @@ class Database:
                 (guild_id, user_id, bau_id, int(qtd)),
             )
 
+    def comprar_bau_dinheiro(
+        self, guild_id: str, user_id: str, bau_id: str, nome_bau: str, preco: int
+    ) -> int:
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            moeda = self._nome_moeda_real(con, guild_id, user_id, "Lunaris")
+            saldo = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (preco, guild_id, user_id, moeda, preco),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"precisa de {preco} Lunaris")
+            con.execute(
+                """
+                INSERT INTO baus_estoque (guild_id, user_id, bau_id, quantidade)
+                VALUES (%s, %s, %s, 1)
+                ON CONFLICT (guild_id, user_id, bau_id)
+                DO UPDATE SET quantidade=baus_estoque.quantidade+1
+                """,
+                (guild_id, user_id, bau_id),
+            )
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, -preco, moeda, f"Comprou {nome_bau}"
+            )
+        return int(saldo["saldo"])
+
     def contar_bau(self, guild_id: str, user_id: str, bau_id: str) -> int:
         with self._conn() as con:
             row = con.execute(
@@ -2034,6 +2564,13 @@ class Database:
             "roubo_cooldown", guild_id, user_id, agora, proxima_tentativa
         )
 
+    def liberar_tentativa_roubo(
+        self, guild_id: str, user_id: str, proxima_tentativa
+    ) -> bool:
+        return self._liberar_cooldown_roubo(
+            "roubo_cooldown", guild_id, user_id, proxima_tentativa
+        )
+
     def get_proxima_tentativa_roubo_cofre(self, guild_id: str, user_id: str):
         with self._conn() as con:
             row = con.execute(
@@ -2059,6 +2596,13 @@ class Database:
     ):
         return self._reservar_cooldown_roubo(
             "roubo_cofre_cooldown", guild_id, user_id, agora, proxima_tentativa
+        )
+
+    def liberar_tentativa_roubo_cofre(
+        self, guild_id: str, user_id: str, proxima_tentativa
+    ) -> bool:
+        return self._liberar_cooldown_roubo(
+            "roubo_cofre_cooldown", guild_id, user_id, proxima_tentativa
         )
 
     def _reservar_cooldown_roubo(
@@ -2094,6 +2638,28 @@ class Database:
                 (guild_id, user_id),
             ).fetchone()
         return False, (atual["proxima_tentativa"] if atual else None)
+
+    def _liberar_cooldown_roubo(
+        self, tabela: str, guild_id: str, user_id: str, proxima_tentativa
+    ) -> bool:
+        """Desfaz somente a reserva criada por uma tentativa específica.
+
+        É usado quando a vítima não pode receber a defesa privada por DM. A
+        comparação com ``proxima_tentativa`` impede uma interação antiga de
+        apagar um cooldown mais novo criado pelo mesmo jogador.
+        """
+        if tabela not in {"roubo_cooldown", "roubo_cofre_cooldown"}:
+            raise ValueError("tabela de cooldown invalida")
+        with self._conn() as con:
+            row = con.execute(
+                f"""
+                DELETE FROM {tabela}
+                WHERE guild_id=%s AND user_id=%s AND proxima_tentativa=%s
+                RETURNING 1
+                """,
+                (guild_id, user_id, proxima_tentativa),
+            ).fetchone()
+        return row is not None
 
     def reservar_alvo_roubo(
         self, guild_id: str, user_id: str, agora, reservado_ate
@@ -2319,6 +2885,49 @@ class Database:
             "divida_perdoada": perdoado,
         }
 
+    def _indenizar_seguro_cofre_tx(
+        self, con, guild_id: str, user_id: str, valor_roubado: int, agora
+    ) -> int:
+        seguro = con.execute(
+            """
+            SELECT ativo, valido_ate, ultimo_sinistro_em FROM seguro_cofre
+            WHERE guild_id=%s AND user_id=%s FOR UPDATE
+            """,
+            (guild_id, user_id),
+        ).fetchone()
+        if not seguro or not seguro["ativo"] or seguro["valido_ate"] <= agora:
+            return 0
+        ultimo = seguro["ultimo_sinistro_em"]
+        if ultimo is not None and ultimo + timedelta(
+            days=economia.SEGURO_COFRE_CARENCIA_DIAS
+        ) > agora:
+            return 0
+        indenizacao = min(
+            economia.SEGURO_COFRE_LIMITE,
+            max(0, math.floor(int(valor_roubado) * economia.SEGURO_COFRE_COBERTURA)),
+        )
+        if indenizacao <= 0:
+            return 0
+        self._creditar_carteira_tx(
+            con, guild_id, user_id, "Lunaris", indenizacao
+        )
+        self._registrar_extrato_tx(
+            con,
+            guild_id,
+            user_id,
+            indenizacao,
+            "Lunaris",
+            "Indenização do seguro após arrombamento do cofre",
+        )
+        con.execute(
+            """
+            UPDATE seguro_cofre SET ultimo_sinistro_em=%s
+            WHERE guild_id=%s AND user_id=%s
+            """,
+            (agora, guild_id, user_id),
+        )
+        return int(indenizacao)
+
     def _verificar_mestre_protegido_tx(
         self, con, guild_id: str, alvo_user_id: str
     ) -> None:
@@ -2355,6 +2964,7 @@ class Database:
         nome_ladrao: str,
         nome_alvo: str,
         protegido_ate,
+        percentual_saque: float = economia.ROUBO_CARTEIRA_PERCENT,
     ) -> dict:
         """Transfere roubo, extratos, protecao e recompensa atomicamente."""
         with self._conn() as con:
@@ -2366,7 +2976,9 @@ class Database:
             saldo_alvo = carteiras[alvo_user_id]["saldo"]
             if saldo_alvo <= 0:
                 raise SaldoInsuficiente("a carteira da vitima esta vazia")
-            quantia = economia.valor_roubo_carteira(saldo_alvo)
+            quantia = economia.valor_roubo_carteira(
+                saldo_alvo, percentual=percentual_saque
+            )
             row = con.execute(
                 """
                 UPDATE carteira SET saldo=saldo-%s
@@ -2417,8 +3029,10 @@ class Database:
         alvo_user_id: str,
         nome_ladrao: str,
         nome_alvo: str,
+        protegido_ate,
+        percentual_saque: float = economia.ROUBO_COFRE_PERCENT,
     ) -> dict:
-        """Transfere o saque do cofre e a recompensa atomicamente."""
+        """Transfere saque, recompensa e proteção da vítima atomicamente."""
         with self._conn() as con:
             self._verificar_mestre_protegido_tx(con, guild_id, alvo_user_id)
             self._bloquear_carteiras_lunaris_tx(
@@ -2438,9 +3052,9 @@ class Database:
             saldo_alvo = int(saldo_row["saldo"]) if saldo_row else 0
             if saldo_alvo <= 0:
                 raise SaldoInsuficiente("o cofre da vitima esta vazio")
-            quantia = max(
-                1, math.floor(saldo_alvo * economia.ROUBO_COFRE_PERCENT)
-            )
+            if not 0 < percentual_saque <= 1:
+                raise ValueError("percentual de saque invalido")
+            quantia = max(1, math.floor(saldo_alvo * percentual_saque))
             row = con.execute(
                 """
                 UPDATE cofre_saldo SET saldo=saldo-%s
@@ -2470,10 +3084,26 @@ class Database:
                 "Lunaris",
                 f"Cofre arrombado por {nome_ladrao}",
             )
+            con.execute(
+                """
+                INSERT INTO roubo_protecao_vitima (guild_id, user_id, protegido_ate)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (guild_id, user_id)
+                DO UPDATE SET protegido_ate=EXCLUDED.protegido_ate
+                """,
+                (guild_id, alvo_user_id, protegido_ate),
+            )
+            seguro = self._indenizar_seguro_cofre_tx(
+                con, guild_id, alvo_user_id, quantia, datetime.now(timezone.utc)
+            )
             recompensa = self._resgatar_recompensa_tx(
                 con, guild_id, ladrao_user_id, alvo_user_id, nome_alvo
             )
-        return {"valor": int(quantia), "recompensa": recompensa}
+        return {
+            "valor": int(quantia),
+            "recompensa": recompensa,
+            "seguro": int(seguro),
+        }
 
     def transferir_multa_roubo(
         self,
@@ -2762,11 +3392,21 @@ class Database:
     def resetar_jogador(self, guild_id: str, user_id: str) -> None:
         """[Mestre] apaga carteira, cofre (itens e saldo), inventário e cartão de um jogador."""
         with self._conn() as con:
-            for tabela in ("carteira", "inventario", "cofre_saldo", "baus_estoque", "divida_cartao", "faturas_cartao"):
+            for tabela in (
+                "carteira", "inventario", "cofre_saldo", "baus_estoque",
+                "divida_cartao", "faturas_cartao", "protecoes_ativas",
+                "roubo_cooldown", "roubo_cofre_cooldown",
+                "roubo_protecao_vitima", "roubo_alvo_reserva", "roubo_calor",
+                "preparos_roubo", "alertas_banco", "seguro_cofre",
+            ):
                 con.execute(
                     f"DELETE FROM {tabela} WHERE guild_id=%s AND user_id=%s",
                     (guild_id, user_id),
                 )
+            con.execute(
+                "DELETE FROM custodia_moeda WHERE guild_id=%s AND user_id=%s",
+                (guild_id, user_id),
+            )
             con.execute(
                 "UPDATE cofre SET tier=%s, seguranca_tier=%s WHERE guild_id=%s AND user_id=%s",
                 (economia.COFRE_TIER_INICIAL, economia.SEGURANCA_TIER_INICIAL, guild_id, user_id),
@@ -2796,7 +3436,13 @@ class Database:
             resultado = {}
             for tabela in (
                 "carteira", "inventario", "cofre_saldo", "baus_estoque",
-                "divida_cartao", "faturas_cartao", "loteria_bilhetes", "investimentos", "emprestimos",
+                "divida_cartao", "faturas_cartao", "loteria_bilhetes",
+                "investimentos", "emprestimos", "recompensa",
+                "protecoes_ativas", "cacador_recompensa", "cambio_fluxo",
+                "roubo_cooldown", "roubo_cofre_cooldown",
+                "roubo_protecao_vitima", "roubo_alvo_reserva", "roubo_calor",
+                "preparos_roubo", "alertas_banco", "seguro_cofre",
+                "custodia_moeda", "ciclos_guild", "avisos_pendentes",
             ):
                 cur = con.execute(f"DELETE FROM {tabela} WHERE guild_id=%s", (guild_id,))
                 resultado[tabela] = cur.rowcount
@@ -2916,6 +3562,37 @@ class Database:
                 (guild_id, user_id, tipo, int(qtd)),
             )
 
+    def comprar_protecao(
+        self, guild_id: str, user_id: str, tipo: str, custo: int, nome_item: str
+    ) -> int:
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            moeda = self._nome_moeda_real(con, guild_id, user_id, "Lunaris")
+            saldo = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (custo, guild_id, user_id, moeda, custo),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"precisa de {custo} Lunaris")
+            protecao = con.execute(
+                """
+                INSERT INTO protecoes_ativas (guild_id, user_id, tipo, quantidade)
+                VALUES (%s, %s, %s, 1)
+                ON CONFLICT (guild_id, user_id, tipo) DO UPDATE SET
+                    quantidade=protecoes_ativas.quantidade+1
+                RETURNING quantidade
+                """,
+                (guild_id, user_id, tipo),
+            ).fetchone()
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, -custo, moeda, f"Comprou {nome_item}"
+            )
+        return int(protecao["quantidade"])
+
     def consumir_protecao(self, guild_id: str, user_id: str, tipo: str) -> bool:
         with self._conn() as con:
             row = con.execute(
@@ -2938,6 +3615,423 @@ class Database:
                 (guild_id, user_id),
             ).fetchall()
         return {row["tipo"]: int(row["quantidade"]) for row in rows}
+
+    # ── Planejamento e exposição de roubo ────────────────────────────────
+    @staticmethod
+    def _calor_decaido(pontos: int, atualizado_em, agora) -> int:
+        horas = max(0, int((agora - atualizado_em).total_seconds() // 3600))
+        return max(
+            0,
+            int(pontos) - horas * economia.ROUBO_CALOR_DECAIMENTO_POR_HORA,
+        )
+
+    def get_calor_roubo(self, guild_id: str, user_id: str, agora=None) -> int:
+        agora = agora or datetime.now(timezone.utc)
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT pontos, atualizado_em FROM roubo_calor
+                WHERE guild_id=%s AND user_id=%s
+                """,
+                (guild_id, user_id),
+            ).fetchone()
+            if row is None:
+                return 0
+            atual = self._calor_decaido(row["pontos"], row["atualizado_em"], agora)
+            if atual != int(row["pontos"]):
+                con.execute(
+                    """
+                    UPDATE roubo_calor SET pontos=%s, atualizado_em=%s
+                    WHERE guild_id=%s AND user_id=%s
+                    """,
+                    (atual, agora, guild_id, user_id),
+                )
+        return atual
+
+    def adicionar_calor_roubo(
+        self, guild_id: str, user_id: str, pontos: int, agora=None
+    ) -> int:
+        if pontos <= 0:
+            raise ValueError("pontos de calor devem ser positivos")
+        agora = agora or datetime.now(timezone.utc)
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT pontos, atualizado_em FROM roubo_calor
+                WHERE guild_id=%s AND user_id=%s FOR UPDATE
+                """,
+                (guild_id, user_id),
+            ).fetchone()
+            atual = (
+                self._calor_decaido(row["pontos"], row["atualizado_em"], agora)
+                if row
+                else 0
+            )
+            novo = min(economia.ROUBO_CALOR_MAXIMO, atual + int(pontos))
+            con.execute(
+                """
+                INSERT INTO roubo_calor (guild_id, user_id, pontos, atualizado_em)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (guild_id, user_id) DO UPDATE SET
+                    pontos=EXCLUDED.pontos, atualizado_em=EXCLUDED.atualizado_em
+                """,
+                (guild_id, user_id, novo, agora),
+            )
+        return novo
+
+    def adicionar_preparo_roubo(
+        self, guild_id: str, user_id: str, tipo: str, quantidade: int = 1
+    ) -> None:
+        if quantidade <= 0:
+            raise ValueError("quantidade deve ser positiva")
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO preparos_roubo (guild_id, user_id, tipo, quantidade)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (guild_id, user_id, tipo) DO UPDATE SET
+                    quantidade=preparos_roubo.quantidade+EXCLUDED.quantidade
+                """,
+                (guild_id, user_id, tipo, int(quantidade)),
+            )
+
+    def comprar_preparo_roubo(
+        self, guild_id: str, user_id: str, tipo: str, custo: int
+    ) -> int:
+        if custo <= 0:
+            raise ValueError("custo deve ser positivo")
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            nome = self._nome_moeda_real(con, guild_id, user_id, "Lunaris")
+            saldo = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (int(custo), guild_id, user_id, nome, int(custo)),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"precisa de {custo} Lunaris")
+            con.execute(
+                """
+                INSERT INTO preparos_roubo (guild_id, user_id, tipo, quantidade)
+                VALUES (%s, %s, %s, 1)
+                ON CONFLICT (guild_id, user_id, tipo) DO UPDATE SET
+                    quantidade=preparos_roubo.quantidade+1
+                """,
+                (guild_id, user_id, tipo),
+            )
+            self._registrar_extrato_tx(
+                con,
+                guild_id,
+                user_id,
+                -int(custo),
+                "Lunaris",
+                f"Comprou preparo de roubo: {tipo}",
+            )
+        return int(saldo["saldo"])
+
+    def consumir_preparo_roubo(self, guild_id: str, user_id: str, tipo: str) -> bool:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE preparos_roubo SET quantidade=quantidade-1
+                WHERE guild_id=%s AND user_id=%s AND tipo=%s AND quantidade > 0
+                RETURNING quantidade
+                """,
+                (guild_id, user_id, tipo),
+            ).fetchone()
+        return row is not None
+
+    def listar_preparos_roubo(self, guild_id: str, user_id: str) -> Dict[str, int]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT tipo, quantidade FROM preparos_roubo
+                WHERE guild_id=%s AND user_id=%s AND quantidade > 0
+                """,
+                (guild_id, user_id),
+            ).fetchall()
+        return {row["tipo"]: int(row["quantidade"]) for row in rows}
+
+    # ── Preferências de alertas bancários ────────────────────────────────
+    def alerta_banco_ativo(
+        self, guild_id: str, user_id: str, categoria: str, padrao: bool = True
+    ) -> bool:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT ativo FROM alertas_banco
+                WHERE guild_id=%s AND user_id=%s AND categoria=%s
+                """,
+                (guild_id, user_id, categoria),
+            ).fetchone()
+        return bool(row["ativo"]) if row else bool(padrao)
+
+    def set_alerta_banco(
+        self, guild_id: str, user_id: str, categoria: str, ativo: bool
+    ) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO alertas_banco (guild_id, user_id, categoria, ativo)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (guild_id, user_id, categoria)
+                DO UPDATE SET ativo=EXCLUDED.ativo
+                """,
+                (guild_id, user_id, categoria, bool(ativo)),
+            )
+
+    def listar_alertas_banco(self, guild_id: str, user_id: str) -> Dict[str, bool]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT categoria, ativo FROM alertas_banco
+                WHERE guild_id=%s AND user_id=%s
+                """,
+                (guild_id, user_id),
+            ).fetchall()
+        return {row["categoria"]: bool(row["ativo"]) for row in rows}
+
+    # ── Seguro do cofre ──────────────────────────────────────────────────
+    def get_seguro_cofre(self, guild_id: str, user_id: str) -> Optional[dict]:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT ativo, auto_renovar, valido_ate, ultimo_sinistro_em
+                FROM seguro_cofre WHERE guild_id=%s AND user_id=%s
+                """,
+                (guild_id, user_id),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def contratar_seguro_cofre(
+        self, guild_id: str, user_id: str, agora=None
+    ) -> dict:
+        agora = agora or datetime.now(timezone.utc)
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            nome = self._nome_moeda_real(con, guild_id, user_id, "Lunaris")
+            row = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (
+                    economia.SEGURO_COFRE_CUSTO,
+                    guild_id,
+                    user_id,
+                    nome,
+                    economia.SEGURO_COFRE_CUSTO,
+                ),
+            ).fetchone()
+            if row is None:
+                raise SaldoInsuficiente(
+                    f"precisa de {economia.SEGURO_COFRE_CUSTO} Lunaris para o seguro"
+                )
+            atual = con.execute(
+                """
+                SELECT valido_ate FROM seguro_cofre
+                WHERE guild_id=%s AND user_id=%s FOR UPDATE
+                """,
+                (guild_id, user_id),
+            ).fetchone()
+            inicio = max(agora, atual["valido_ate"]) if atual else agora
+            valido_ate = inicio + timedelta(days=economia.SEGURO_COFRE_DIAS)
+            con.execute(
+                """
+                INSERT INTO seguro_cofre
+                    (guild_id, user_id, ativo, auto_renovar, valido_ate)
+                VALUES (%s, %s, TRUE, TRUE, %s)
+                ON CONFLICT (guild_id, user_id) DO UPDATE SET
+                    ativo=TRUE, auto_renovar=TRUE, valido_ate=EXCLUDED.valido_ate
+                """,
+                (guild_id, user_id, valido_ate),
+            )
+            self._registrar_extrato_tx(
+                con,
+                guild_id,
+                user_id,
+                -economia.SEGURO_COFRE_CUSTO,
+                "Lunaris",
+                "Mensalidade do seguro do cofre",
+            )
+        return {"valido_ate": valido_ate, "saldo": int(row["saldo"])}
+
+    def set_seguro_auto_renovar(
+        self, guild_id: str, user_id: str, ativo: bool
+    ) -> bool:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE seguro_cofre SET auto_renovar=%s
+                WHERE guild_id=%s AND user_id=%s
+                RETURNING 1
+                """,
+                (bool(ativo), guild_id, user_id),
+            ).fetchone()
+        return row is not None
+
+    def renovar_seguros_vencidos(self, agora=None) -> dict:
+        agora = agora or datetime.now(timezone.utc)
+        renovados, encerrados = [], []
+        with self._conn() as con:
+            candidatos = con.execute(
+                """
+                SELECT guild_id, user_id FROM seguro_cofre
+                WHERE ativo=TRUE AND valido_ate <= %s
+                """,
+                (agora,),
+            ).fetchall()
+        for candidato in candidatos:
+            guild_id, user_id = candidato["guild_id"], candidato["user_id"]
+            with self._conn() as con:
+                seguro = con.execute(
+                    """
+                    SELECT ativo, auto_renovar, valido_ate FROM seguro_cofre
+                    WHERE guild_id=%s AND user_id=%s FOR UPDATE
+                    """,
+                    (guild_id, user_id),
+                ).fetchone()
+                if not seguro or not seguro["ativo"] or seguro["valido_ate"] > agora:
+                    continue
+                if not seguro["auto_renovar"]:
+                    con.execute(
+                        """
+                        UPDATE seguro_cofre SET ativo=FALSE
+                        WHERE guild_id=%s AND user_id=%s
+                        """,
+                        (guild_id, user_id),
+                    )
+                    encerrados.append((guild_id, user_id))
+                    continue
+                self._garantir_jogador(con, guild_id, user_id)
+                nome = self._nome_moeda_real(con, guild_id, user_id, "Lunaris")
+                saldo = con.execute(
+                    """
+                    UPDATE carteira SET saldo=saldo-%s
+                    WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                    RETURNING saldo
+                    """,
+                    (
+                        economia.SEGURO_COFRE_CUSTO,
+                        guild_id,
+                        user_id,
+                        nome,
+                        economia.SEGURO_COFRE_CUSTO,
+                    ),
+                ).fetchone()
+                if saldo is None:
+                    con.execute(
+                        """
+                        UPDATE seguro_cofre SET ativo=FALSE
+                        WHERE guild_id=%s AND user_id=%s
+                        """,
+                        (guild_id, user_id),
+                    )
+                    encerrados.append((guild_id, user_id))
+                    continue
+                valido_ate = agora + timedelta(days=economia.SEGURO_COFRE_DIAS)
+                con.execute(
+                    """
+                    UPDATE seguro_cofre SET valido_ate=%s
+                    WHERE guild_id=%s AND user_id=%s
+                    """,
+                    (valido_ate, guild_id, user_id),
+                )
+                self._registrar_extrato_tx(
+                    con,
+                    guild_id,
+                    user_id,
+                    -economia.SEGURO_COFRE_CUSTO,
+                    "Lunaris",
+                    "Renovação automática do seguro do cofre",
+                )
+                renovados.append((guild_id, user_id, valido_ate))
+        return {"renovados": renovados, "encerrados": encerrados}
+
+    def diagnostico_economia(self, guild_id: str) -> dict:
+        """Agregados privados para o mestre ajustar a economia com dados."""
+        with self._conn() as con:
+            saldos = con.execute(
+                """
+                SELECT
+                    COALESCE((SELECT SUM(saldo) FROM carteira
+                        WHERE guild_id=%s AND LOWER(moeda)='lunaris'), 0) AS carteira,
+                    COALESCE((SELECT SUM(saldo) FROM cofre_saldo
+                        WHERE guild_id=%s AND LOWER(moeda)='lunaris'), 0) AS cofre,
+                    COALESCE((SELECT SUM(valor) FROM divida_cartao
+                        WHERE guild_id=%s), 0) AS divida
+                """,
+                (guild_id, guild_id, guild_id),
+            ).fetchone()
+            jogadores = con.execute(
+                """
+                SELECT COUNT(DISTINCT user_id) AS total FROM carteira
+                WHERE guild_id=%s
+                """,
+                (guild_id,),
+            ).fetchone()
+            top = con.execute(
+                """
+                SELECT COALESCE(SUM(total), 0) AS total FROM (
+                    SELECT user_id, SUM(saldo) AS total FROM (
+                        SELECT user_id, saldo FROM carteira
+                        WHERE guild_id=%s AND LOWER(moeda)='lunaris'
+                        UNION ALL
+                        SELECT user_id, saldo FROM cofre_saldo
+                        WHERE guild_id=%s AND LOWER(moeda)='lunaris'
+                    ) patrimonio_por_local
+                    GROUP BY user_id ORDER BY total DESC LIMIT 5
+                ) t
+                """,
+                (guild_id, guild_id),
+            ).fetchone()
+            fluxo = con.execute(
+                """
+                SELECT
+                    COALESCE(SUM(CASE WHEN delta > 0 THEN delta ELSE 0 END), 0) AS entradas,
+                    COALESCE(SUM(CASE WHEN delta < 0 THEN -delta ELSE 0 END), 0) AS saidas,
+                    COUNT(*) FILTER (
+                        WHERE descricao LIKE 'Roubado por%%'
+                           OR descricao LIKE 'Cofre arrombado por%%'
+                    ) AS roubos
+                FROM extrato
+                WHERE guild_id=%s AND LOWER(moeda)='lunaris'
+                  AND criado_em >= CURRENT_TIMESTAMP - INTERVAL '7 days'
+                """,
+                (guild_id,),
+            ).fetchone()
+            sistemas = con.execute(
+                """
+                SELECT
+                    (SELECT COUNT(*) FROM leiloes WHERE guild_id=%s AND status='ativo') AS leiloes,
+                    (SELECT COUNT(*) FROM emprestimos WHERE guild_id=%s AND status='ativo') AS emprestimos,
+                    (SELECT COUNT(*) FROM investimentos WHERE guild_id=%s AND status='ativo') AS investimentos,
+                    COALESCE((SELECT SUM(valor) FROM custodia_moeda
+                        WHERE guild_id=%s AND LOWER(moeda)='lunaris'), 0) AS custodia
+                """,
+                (guild_id, guild_id, guild_id, guild_id),
+            ).fetchone()
+        patrimonio = int(saldos["carteira"]) + int(saldos["cofre"])
+        concentracao = (int(top["total"]) / patrimonio) if patrimonio > 0 else 0.0
+        return {
+            "jogadores": int(jogadores["total"]),
+            "carteira": int(saldos["carteira"]),
+            "cofre": int(saldos["cofre"]),
+            "patrimonio": patrimonio,
+            "divida": int(saldos["divida"]),
+            "top5_percent": concentracao,
+            "entradas_7d": int(fluxo["entradas"]),
+            "saidas_7d": int(fluxo["saidas"]),
+            "roubos_7d": int(fluxo["roubos"]),
+            "leiloes": int(sistemas["leiloes"]),
+            "emprestimos": int(sistemas["emprestimos"]),
+            "investimentos": int(sistemas["investimentos"]),
+            "custodia": int(sistemas["custodia"]),
+        }
 
     # ── Cargo dinâmico "Mais Procurado" / "Caçador de Recompensas" ──────────
     def get_cargo_procurado(self, guild_id: str):
@@ -3113,6 +4207,136 @@ class Database:
             ).fetchone()
         return dict(row) if row else None
 
+    def dar_lance_leilao_com_custodia(
+        self, leilao_id: int, guild_id: str, user_id: str, valor: int
+    ):
+        chave = f"leilao:{int(leilao_id)}"
+        with self._conn() as con:
+            leilao = con.execute(
+                """
+                SELECT * FROM leiloes
+                WHERE id=%s AND guild_id=%s FOR UPDATE
+                """,
+                (int(leilao_id), guild_id),
+            ).fetchone()
+            if (
+                leilao is None
+                or leilao["status"] != "ativo"
+                or int(valor) <= int(leilao["lance_atual"])
+                or int(valor) < int(leilao["lance_minimo"])
+                or user_id == leilao["vendedor_id"]
+            ):
+                return None
+            atual = con.execute(
+                "SELECT * FROM custodia_moeda WHERE chave=%s FOR UPDATE",
+                (chave,),
+            ).fetchone()
+            self._garantir_jogador(con, guild_id, user_id)
+            moeda = self._nome_moeda_real(con, guild_id, user_id, leilao["moeda"])
+            debitar = int(valor)
+            if atual is not None:
+                if atual["user_id"] == user_id:
+                    debitar = int(valor) - int(atual["valor"])
+                else:
+                    self._creditar_carteira_tx(
+                        con,
+                        atual["guild_id"],
+                        atual["user_id"],
+                        atual["moeda"],
+                        int(atual["valor"]),
+                    )
+                    self._registrar_extrato_tx(
+                        con,
+                        atual["guild_id"],
+                        atual["user_id"],
+                        int(atual["valor"]),
+                        atual["moeda"],
+                        f"Lance superado no leilão #{leilao_id}",
+                    )
+            if debitar > 0:
+                saldo = con.execute(
+                    """
+                    UPDATE carteira SET saldo=saldo-%s
+                    WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                    RETURNING saldo
+                    """,
+                    (debitar, guild_id, user_id, moeda, debitar),
+                ).fetchone()
+                if saldo is None:
+                    raise SaldoInsuficiente(f"saldo insuficiente em {moeda}")
+                self._registrar_extrato_tx(
+                    con,
+                    guild_id,
+                    user_id,
+                    -debitar,
+                    moeda,
+                    f"Valor reservado no leilão #{leilao_id}",
+                )
+            con.execute("DELETE FROM custodia_moeda WHERE chave=%s", (chave,))
+            con.execute(
+                """
+                INSERT INTO custodia_moeda (chave, guild_id, user_id, moeda, valor)
+                VALUES (%s, %s, %s, %s, %s)
+                """,
+                (chave, guild_id, user_id, moeda, int(valor)),
+            )
+            atualizado = con.execute(
+                """
+                UPDATE leiloes SET lance_atual=%s, vencedor_id=%s
+                WHERE id=%s RETURNING *
+                """,
+                (int(valor), user_id, int(leilao_id)),
+            ).fetchone()
+        return dict(atualizado)
+
+    def liquidar_leilao_com_custodia(
+        self, leilao_id: int, taxa: float
+    ) -> Optional[dict]:
+        if not 0 <= taxa < 1:
+            raise ValueError("taxa de leilao invalida")
+        chave = f"leilao:{int(leilao_id)}"
+        with self._conn() as con:
+            leilao = con.execute(
+                "SELECT * FROM leiloes WHERE id=%s FOR UPDATE",
+                (int(leilao_id),),
+            ).fetchone()
+            if leilao is None or leilao["status"] != "ativo" or not leilao["vencedor_id"]:
+                return None
+            custodia = con.execute(
+                "SELECT * FROM custodia_moeda WHERE chave=%s FOR UPDATE",
+                (chave,),
+            ).fetchone()
+            if (
+                custodia is None
+                or custodia["user_id"] != leilao["vencedor_id"]
+                or int(custodia["valor"]) < int(leilao["lance_atual"])
+            ):
+                return None
+            liquido = economia.valor_liquido_leilao(
+                int(leilao["lance_atual"]), taxa=taxa
+            )
+            con.execute("DELETE FROM custodia_moeda WHERE chave=%s", (chave,))
+            self._creditar_carteira_tx(
+                con,
+                leilao["guild_id"],
+                leilao["vendedor_id"],
+                leilao["moeda"],
+                liquido,
+            )
+            self._registrar_extrato_tx(
+                con,
+                leilao["guild_id"],
+                leilao["vendedor_id"],
+                liquido,
+                leilao["moeda"],
+                f"Vendeu {leilao['titulo']} em leilão",
+            )
+            con.execute(
+                "UPDATE leiloes SET status='encerrado' WHERE id=%s",
+                (int(leilao_id),),
+            )
+        return {"liquido": liquido, "leilao": dict(leilao)}
+
     def listar_leiloes_ativos(self, guild_id: str) -> List[dict]:
         with self._conn() as con:
             rows = con.execute(
@@ -3146,6 +4370,35 @@ class Database:
             ).fetchone()
         return dict(row)
 
+    def comprar_investimento(
+        self, guild_id: str, user_id: str, moeda: str, valor: int, vence_em
+    ) -> dict:
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            nome = self._nome_moeda_real(con, guild_id, user_id, moeda)
+            saldo = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (valor, guild_id, user_id, nome, valor),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"saldo insuficiente em {nome}")
+            investimento = con.execute(
+                """
+                INSERT INTO investimentos (guild_id, user_id, moeda, valor, vence_em)
+                VALUES (%s, %s, %s, %s, %s) RETURNING *
+                """,
+                (guild_id, user_id, nome, int(valor), vence_em),
+            ).fetchone()
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, -valor, nome,
+                "Investido num Título do Jardim",
+            )
+        return dict(investimento)
+
     def listar_investimentos_usuario(self, guild_id: str, user_id: str, incluir_historico: bool = False) -> List[dict]:
         filtro_status = "" if incluir_historico else "AND status='ativo'"
         with self._conn() as con:
@@ -3173,6 +4426,30 @@ class Database:
                 "UPDATE investimentos SET status='maturado' WHERE id=%s", (int(investimento_id),)
             )
 
+    def pagar_investimento_maturado(self, investimento_id: int, valor_final: int):
+        with self._conn() as con:
+            inv = con.execute(
+                """
+                SELECT * FROM investimentos
+                WHERE id=%s AND status='ativo' FOR UPDATE
+                """,
+                (int(investimento_id),),
+            ).fetchone()
+            if inv is None:
+                return None
+            con.execute(
+                "UPDATE investimentos SET status='maturado' WHERE id=%s",
+                (int(investimento_id),),
+            )
+            self._creditar_carteira_tx(
+                con, inv["guild_id"], inv["user_id"], inv["moeda"], valor_final
+            )
+            self._registrar_extrato_tx(
+                con, inv["guild_id"], inv["user_id"], valor_final, inv["moeda"],
+                "Título do Jardim vencido",
+            )
+        return dict(inv)
+
     # ── Empréstimos P2P ───────────────────────────────────────────────────
     def criar_emprestimo(
         self, guild_id: str, credor_id: str, devedor_id: str, moeda: str,
@@ -3193,6 +4470,50 @@ class Database:
                 ),
             ).fetchone()
         return dict(row)
+
+    def criar_emprestimo_com_custodia(
+        self, guild_id: str, credor_id: str, devedor_id: str, moeda: str,
+        valor: int, juros_diarios: float, prazo_dias: int,
+    ) -> dict:
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, credor_id)
+            nome = self._nome_moeda_real(con, guild_id, credor_id, moeda)
+            saldo = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (valor, guild_id, credor_id, nome, valor),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"saldo insuficiente em {nome}")
+            emp = con.execute(
+                """
+                INSERT INTO emprestimos
+                    (guild_id, credor_id, devedor_id, moeda, valor_original,
+                     valor_devido, juros_diarios, vence_em)
+                VALUES (%s, %s, %s, %s, %s, %s, %s,
+                        CURRENT_TIMESTAMP + (%s || ' days')::interval)
+                RETURNING *
+                """,
+                (
+                    guild_id, credor_id, devedor_id, nome, int(valor), int(valor),
+                    float(juros_diarios), int(prazo_dias),
+                ),
+            ).fetchone()
+            con.execute(
+                """
+                INSERT INTO custodia_moeda (chave, guild_id, user_id, moeda, valor)
+                VALUES (%s, %s, %s, %s, %s)
+                """,
+                (f"emprestimo:{emp['id']}", guild_id, credor_id, nome, int(valor)),
+            )
+            self._registrar_extrato_tx(
+                con, guild_id, credor_id, -valor, nome,
+                f"Valor reservado para empréstimo #{emp['id']}",
+            )
+        return dict(emp)
 
     def get_emprestimo(self, guild_id: str, emprestimo_id: int):
         with self._conn() as con:
@@ -3215,6 +4536,51 @@ class Database:
             ).fetchone()
         return dict(row) if row else None
 
+    def aceitar_emprestimo_com_custodia(
+        self, guild_id: str, emprestimo_id: int, devedor_id: str
+    ):
+        chave = f"emprestimo:{int(emprestimo_id)}"
+        with self._conn() as con:
+            emp = con.execute(
+                """
+                SELECT * FROM emprestimos
+                WHERE id=%s AND guild_id=%s AND devedor_id=%s
+                  AND status='pendente_aceite' FOR UPDATE
+                """,
+                (int(emprestimo_id), guild_id, devedor_id),
+            ).fetchone()
+            if emp is None:
+                return None
+            custodia = con.execute(
+                "SELECT * FROM custodia_moeda WHERE chave=%s FOR UPDATE",
+                (chave,),
+            ).fetchone()
+            if (
+                custodia is None
+                or custodia["guild_id"] != guild_id
+                or custodia["user_id"] != emp["credor_id"]
+                or not economia.mesma_moeda(custodia["moeda"], emp["moeda"])
+                or int(custodia["valor"]) != int(emp["valor_original"])
+            ):
+                return None
+            con.execute("DELETE FROM custodia_moeda WHERE chave=%s", (chave,))
+            self._creditar_carteira_tx(
+                con, guild_id, devedor_id, emp["moeda"], int(custodia["valor"])
+            )
+            self._registrar_extrato_tx(
+                con, guild_id, devedor_id, int(custodia["valor"]), emp["moeda"],
+                f"Empréstimo #{emprestimo_id} recebido de <@{emp['credor_id']}>",
+            )
+            atualizado = con.execute(
+                """
+                UPDATE emprestimos SET status='ativo', aceito_em=CURRENT_TIMESTAMP,
+                    ultimo_juros_em=CURRENT_TIMESTAMP
+                WHERE id=%s RETURNING *
+                """,
+                (int(emprestimo_id),),
+            ).fetchone()
+        return dict(atualizado)
+
     def recusar_emprestimo(self, guild_id: str, emprestimo_id: int, devedor_id: str) -> bool:
         with self._conn() as con:
             row = con.execute(
@@ -3226,6 +4592,35 @@ class Database:
                 (int(emprestimo_id), guild_id, devedor_id),
             ).fetchone()
         return row is not None
+
+    def recusar_emprestimo_com_devolucao(
+        self, guild_id: str, emprestimo_id: int, devedor_id: str
+    ) -> bool:
+        chave = f"emprestimo:{int(emprestimo_id)}"
+        with self._conn() as con:
+            emp = con.execute(
+                """
+                UPDATE emprestimos SET status='recusado'
+                WHERE id=%s AND guild_id=%s AND devedor_id=%s
+                  AND status='pendente_aceite' RETURNING *
+                """,
+                (int(emprestimo_id), guild_id, devedor_id),
+            ).fetchone()
+            if emp is None:
+                return False
+            custodia = con.execute(
+                "DELETE FROM custodia_moeda WHERE chave=%s RETURNING *",
+                (chave,),
+            ).fetchone()
+            if custodia:
+                self._creditar_carteira_tx(
+                    con, guild_id, emp["credor_id"], emp["moeda"], int(custodia["valor"])
+                )
+                self._registrar_extrato_tx(
+                    con, guild_id, emp["credor_id"], int(custodia["valor"]), emp["moeda"],
+                    f"Empréstimo #{emprestimo_id} recusado: custódia devolvida",
+                )
+        return True
 
     def pagar_emprestimo(self, guild_id: str, emprestimo_id: int, valor: int):
         with self._conn() as con:
@@ -3253,6 +4648,58 @@ class Database:
             "quitado": restante <= 0,
         }
 
+    def pagar_emprestimo_atomico(
+        self, guild_id: str, emprestimo_id: int, devedor_id: str, valor: int
+    ):
+        with self._conn() as con:
+            emp = con.execute(
+                """
+                SELECT * FROM emprestimos
+                WHERE id=%s AND guild_id=%s AND devedor_id=%s
+                  AND status='ativo' FOR UPDATE
+                """,
+                (int(emprestimo_id), guild_id, devedor_id),
+            ).fetchone()
+            if emp is None:
+                return None
+            pago = min(int(valor), int(emp["valor_devido"]))
+            self._garantir_jogador(con, guild_id, devedor_id)
+            moeda_devedor = self._nome_moeda_real(con, guild_id, devedor_id, emp["moeda"])
+            saldo = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (pago, guild_id, devedor_id, moeda_devedor, pago),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"saldo insuficiente em {moeda_devedor}")
+            self._creditar_carteira_tx(
+                con, guild_id, emp["credor_id"], emp["moeda"], pago
+            )
+            restante = int(emp["valor_devido"]) - pago
+            quitado = restante <= 0
+            con.execute(
+                "UPDATE emprestimos SET valor_devido=%s, status=%s WHERE id=%s",
+                (restante, "quitado" if quitado else "ativo", int(emprestimo_id)),
+            )
+            self._registrar_extrato_tx(
+                con, guild_id, devedor_id, -pago, emp["moeda"],
+                f"Pagamento do empréstimo #{emprestimo_id}",
+            )
+            self._registrar_extrato_tx(
+                con, guild_id, emp["credor_id"], pago, emp["moeda"],
+                f"Recebeu pagamento do empréstimo #{emprestimo_id}",
+            )
+        return {
+            "pago": pago,
+            "restante": restante,
+            "credor_id": emp["credor_id"],
+            "moeda": emp["moeda"],
+            "quitado": quitado,
+        }
+
     def listar_emprestimos_ativos(self, guild_id: Optional[str] = None) -> List[dict]:
         with self._conn() as con:
             if guild_id:
@@ -3269,6 +4716,40 @@ class Database:
                 "SELECT * FROM emprestimos WHERE status='ativo' AND vence_em <= %s", (agora,)
             ).fetchall()
         return [dict(row) for row in rows]
+
+    def expirar_propostas_emprestimo(self, agora) -> List[dict]:
+        expiradas = []
+        with self._conn() as con:
+            propostas = con.execute(
+                """
+                SELECT * FROM emprestimos
+                WHERE status='pendente_aceite'
+                  AND criado_em <= %s - INTERVAL '5 minutes'
+                FOR UPDATE SKIP LOCKED
+                """,
+                (agora,),
+            ).fetchall()
+            for emp in propostas:
+                con.execute(
+                    "UPDATE emprestimos SET status='recusado' WHERE id=%s",
+                    (emp["id"],),
+                )
+                custodia = con.execute(
+                    "DELETE FROM custodia_moeda WHERE chave=%s RETURNING *",
+                    (f"emprestimo:{emp['id']}",),
+                ).fetchone()
+                if custodia:
+                    self._creditar_carteira_tx(
+                        con, emp["guild_id"], emp["credor_id"], emp["moeda"],
+                        int(custodia["valor"]),
+                    )
+                    self._registrar_extrato_tx(
+                        con, emp["guild_id"], emp["credor_id"],
+                        int(custodia["valor"]), emp["moeda"],
+                        f"Proposta #{emp['id']} expirou: custódia devolvida",
+                    )
+                expiradas.append(dict(emp))
+        return expiradas
 
     def listar_emprestimos_usuario(self, guild_id: str, user_id: str, incluir_historico: bool = False) -> List[dict]:
         filtro_status = "" if incluir_historico else "AND status IN ('pendente_aceite', 'ativo')"
@@ -3312,6 +4793,40 @@ class Database:
                 (guild_id, user_id, int(quantidade)),
             ).fetchone()
         return int(row["quantidade"])
+
+    def comprar_bilhetes_loteria(
+        self, guild_id: str, user_id: str, quantidade: int, custo: int
+    ) -> int:
+        if quantidade <= 0 or custo <= 0:
+            raise ValueError("quantidade ou custo invalido")
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            moeda = self._nome_moeda_real(con, guild_id, user_id, "Lunaris")
+            saldo = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (custo, guild_id, user_id, moeda, custo),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"precisa de {custo} Lunaris")
+            total = con.execute(
+                """
+                INSERT INTO loteria_bilhetes (guild_id, user_id, quantidade)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (guild_id, user_id)
+                DO UPDATE SET quantidade=loteria_bilhetes.quantidade+EXCLUDED.quantidade
+                RETURNING quantidade
+                """,
+                (guild_id, user_id, int(quantidade)),
+            ).fetchone()
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, -custo, moeda,
+                f"Comprou {quantidade} bilhete(s) da Loteria Dominical",
+            )
+        return int(total["quantidade"])
 
     def meus_bilhetes_loteria(self, guild_id: str, user_id: str) -> int:
         with self._conn() as con:

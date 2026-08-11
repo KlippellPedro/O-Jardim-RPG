@@ -1,7 +1,9 @@
 """
 O Jardim RPG: Banqueiro
-Lógica PURA da economia: sem Discord, sem banco de dados, sem I/O.
-Fácil de testar isoladamente (ver tests/test_economia.py).
+Lógica PURA da economia: sem Discord, sem banco de dados. A única exceção é
+uma leitura de arquivo na importação (tiers de Cofre/Segurança, compartilhada
+com a plataforma — ver _carregar_cofre_seguranca_tiers); toda função continua
+determinística e fácil de testar isoladamente (ver tests/test_economia.py).
 
 Moedas do sistema:
   - Lunaris (☾): moeda oficial. Todo jogador começa com 20.
@@ -15,12 +17,43 @@ site (src/loja/services/moedasService.js): "Solares" == "SOLARES" == "solares".
 
 from __future__ import annotations
 
+import json
 import math
+import os
 import random
 import unicodedata
+from pathlib import Path
 from typing import Optional, Union, Tuple, List, Dict
 
 Numero = Union[int, float]
+
+
+def _localizar_cofre_seguranca_tiers() -> Path:
+    """Resolve sem depender de import relativo (este módulo às vezes é
+    carregado avulso via importlib, fora do pacote `core`, por
+    plataforma/tests/test_cofre_tiers.py — ver test_espelho_permanece_identico_ao_banqueiro).
+    Mesma ideia de core/config.py::DATA_DIR: `data/economia` no repositório,
+    ou `data/` (empacotado, ao lado do bot) no ZIP de deploy."""
+    env = os.getenv("COFRE_SEGURANCA_TIERS_PATH")
+    if env:
+        return Path(env)
+    base_dir = Path(__file__).resolve().parent.parent  # bots/banqueiro
+    repositorio = base_dir.parent.parent / "data" / "economia" / "cofre_seguranca_tiers.json"
+    if repositorio.is_file():
+        return repositorio
+    return base_dir / "data" / "cofre_seguranca_tiers.json"
+
+
+def _carregar_cofre_seguranca_tiers() -> dict:
+    """Única leitura de arquivo deste módulo: os tiers de Cofre/Segurança vêm
+    de data/economia/cofre_seguranca_tiers.json, a mesma fonte que
+    plataforma/core/cofre_tiers.py lê. Evita manter duas tabelas hardcoded
+    sincronizadas à mão entre o bot e a plataforma (ver auditoria 2026-08,
+    achado 10). O resto deste módulo continua lógica pura de economia."""
+    return json.loads(_localizar_cofre_seguranca_tiers().read_text(encoding="utf-8"))
+
+
+_TIERS_DATA = _carregar_cofre_seguranca_tiers()
 
 # ─────────────────────────── Constantes do sistema ───────────────────────────
 
@@ -31,12 +64,13 @@ SIMBOLOS = {"lunaris": "☾", "solares": "☉", "fragmentos de estrela": "✧", 
 # Saldo inicial da carteira (bate com "Receba um item comum e 20 Lunaris").
 SALDO_INICIAL: Dict[str, int] = {"Lunaris": 20, "Solares": 0, "Fragmentos de Estrela": 0, "Créditos Sombrios": 0}
 
-# Câmbio padrão (configurável por servidor no banco). 1 Solares = 10 Lunaris.
-CAMBIO_RATE_PADRAO = 10          # quantos Lunaris valem 1 Solares
+# Câmbio oficial das regras e da loja. Continua configurável por servidor.
+CAMBIO_RATE_PADRAO = 100         # quantos Lunaris valem 1 Solar
 CAMBIO_TAXA_PADRAO = 0.02        # 2% de taxa do banco (vibe da "Transferência 2%")
 
-# Ao vender um item de volta pro Banqueiro, o jogador recebe esta fração do preço.
-VENDA_RATIO = 0.5                # 50% do valor de compra
+# Mantido apenas para ler configurações antigas. A compra e a revenda direta de
+# itens foram retiradas do Discord; a Loja do site é a fonte única desse fluxo.
+VENDA_RATIO = 0.5
 
 # /abrir_todos abre no máximo isso por vez (cada baú é uma chamada de rede pra
 # entrega central): evita travar numa fila enorme e passar do prazo de
@@ -47,24 +81,8 @@ ABRIR_TODOS_LIMITE = 25
 # Os cinco IDs antigos foram preservados para não rebaixar cofres já comprados.
 # O último nível usa limites técnicos muito altos e é exibido como "sem limite
 # prático": o PostgreSQL ainda precisa armazenar quantidades como inteiros.
-COFRE_TIERS: List[Dict] = [
-    {"id": "comum",      "nome": "Cofre Comum",       "capacidade": 10,      "capacidade_moeda": 500,           "custos": {"Lunaris": 100}},
-    {"id": "cobre",      "nome": "Cofre de Cobre",     "capacidade": 15,      "capacidade_moeda": 900,           "custos": {"Lunaris": 150}},
-    {"id": "prata",      "nome": "Cofre de Prata",     "capacidade": 20,      "capacidade_moeda": 1500,          "custos": {"Lunaris": 250}},
-    {"id": "aco",        "nome": "Cofre de Aço",       "capacidade": 30,      "capacidade_moeda": 2800,          "custos": {"Lunaris": 375}},
-    {"id": "dourado",    "nome": "Cofre Dourado",      "capacidade": 40,      "capacidade_moeda": 5000,          "custos": {"Lunaris": 500}},
-    {"id": "obsidiana",  "nome": "Cofre de Obsidiana", "capacidade": 50,      "capacidade_moeda": 9000,          "custos": {"Lunaris": 350, "Solares": 30}},
-    {"id": "arcano",     "nome": "Cofre Arcano",       "capacidade": 60,      "capacidade_moeda": 15000,         "custos": {"Lunaris": 400, "Solares": 40}},
-    {"id": "runico",     "nome": "Cofre Rúnico",       "capacidade": 80,      "capacidade_moeda": 30000,         "custos": {"Lunaris": 600, "Solares": 60}},
-    {"id": "eterno",     "nome": "Cofre Eterno",       "capacidade": 200,     "capacidade_moeda": 50000,         "custos": {"Lunaris": 1000, "Solares": 100}},
-    {"id": "astral",     "nome": "Cofre Astral",       "capacidade": 300,     "capacidade_moeda": 100000,        "custos": {"Solares": 200, "Fragmentos de Estrela": 5}},
-    {"id": "lunar",      "nome": "Cofre Lunar",        "capacidade": 500,     "capacidade_moeda": 250000,        "custos": {"Solares": 300, "Fragmentos de Estrela": 10}},
-    {"id": "soberano",   "nome": "Cofre Soberano",     "capacidade": 800,     "capacidade_moeda": 750000,        "custos": {"Solares": 450, "Fragmentos de Estrela": 20}},
-    {"id": "dimensional", "nome": "Cofre Dimensional",  "capacidade": 1200,    "capacidade_moeda": 2000000,       "custos": {"Solares": 500, "Fragmentos de Estrela": 30, "Créditos Sombrios": 500}},
-    {"id": "paradoxal",  "nome": "Cofre Paradoxal",    "capacidade": 2500,    "capacidade_moeda": 10000000,      "custos": {"Solares": 750, "Fragmentos de Estrela": 50, "Créditos Sombrios": 1500}},
-    {"id": "sem-fim",    "nome": "Cofre Sem-Fim",      "capacidade": 1000000, "capacidade_moeda": 9000000000000, "custos": {"Lunaris": 5000, "Solares": 1000, "Fragmentos de Estrela": 100, "Créditos Sombrios": 3000}, "limite_pratico": True},
-]
-COFRE_TIER_INICIAL = "comum"
+COFRE_TIERS: List[Dict] = _TIERS_DATA["cofre"]["tiers"]
+COFRE_TIER_INICIAL = _TIERS_DATA["cofre"]["tier_inicial"]
 COFRE_SAQUE_TAXA = 0.03  # taxa cobrada ao sacar do cofre pra carteira (custódia não é de graça)
 
 
@@ -202,24 +220,8 @@ def pode_guardar_moeda(saldo_atual: int, quantidade: int, tier_id: str) -> bool:
 # esse jogador. Todo jogador começa na Segurança Básica (defesa "de fábrica",
 # sem comprar nada). Cada tier comprado é um patamar fixo de defesa: não é
 # um bônus somado, é o nível de proteção que aquele cofre garante.
-SEGURANCA_TIERS: List[Dict] = [
-    {"id": "basica",       "nome": "Segurança Básica",       "defesa": 0.50, "custos": {}},
-    {"id": "tranca-dupla", "nome": "Tranca Dupla",           "defesa": 0.58, "custos": {"Lunaris": 75}},
-    {"id": "alarme",       "nome": "Alarme Mecânico",        "defesa": 0.64, "custos": {"Lunaris": 110}},
-    {"id": "fechadura",    "nome": "Fechadura Reforçada",    "defesa": 0.70, "custos": {"Lunaris": 150}},
-    {"id": "runas",        "nome": "Runas de Vigilância",     "defesa": 0.74, "custos": {"Lunaris": 220}},
-    {"id": "sentinela",    "nome": "Sentinela Lunar",         "defesa": 0.77, "custos": {"Lunaris": 140, "Solares": 14}},
-    {"id": "cofre-forte",  "nome": "Cofre-Forte",             "defesa": 0.80, "custos": {"Lunaris": 180, "Solares": 17}},
-    {"id": "selos",        "nome": "Selos Antiviolação",      "defesa": 0.83, "custos": {"Lunaris": 235, "Solares": 24}},
-    {"id": "barreira",     "nome": "Barreira Etérea",         "defesa": 0.86, "custos": {"Lunaris": 300, "Solares": 30}},
-    {"id": "blindado",     "nome": "Blindagem Arcana",        "defesa": 0.88, "custos": {"Solares": 50, "Fragmentos de Estrela": 3}},
-    {"id": "labirinto",    "nome": "Labirinto Dimensional",   "defesa": 0.90, "custos": {"Solares": 60, "Fragmentos de Estrela": 5}},
-    {"id": "guardiao",     "nome": "Guardião Astral",         "defesa": 0.92, "custos": {"Solares": 70, "Fragmentos de Estrela": 8}},
-    {"id": "maximo",       "nome": "Segurança Máxima",        "defesa": 0.94, "custos": {"Solares": 70, "Fragmentos de Estrela": 12, "Créditos Sombrios": 200}},
-    {"id": "soberana",     "nome": "Proteção Soberana",       "defesa": 0.97, "custos": {"Solares": 100, "Fragmentos de Estrela": 20, "Créditos Sombrios": 600}},
-    {"id": "absoluta",     "nome": "Proteção Absoluta",       "defesa": 0.99, "custos": {"Lunaris": 500, "Solares": 150, "Fragmentos de Estrela": 40, "Créditos Sombrios": 1500}},
-]
-SEGURANCA_TIER_INICIAL = "basica"
+SEGURANCA_TIERS: List[Dict] = _TIERS_DATA["seguranca"]["tiers"]
+SEGURANCA_TIER_INICIAL = _TIERS_DATA["seguranca"]["tier_inicial"]
 
 
 def seguranca_por_id(tier_id: str) -> Optional[Dict]:
@@ -260,13 +262,83 @@ ROUBO_COFRE_PERCENT = 0.50           # /roubar_cofre bem-sucedido leva 50% fixo 
 ROUBO_MULTA_PERCENT_MIN = 0.10       # se falhar o /roubar_cofre, paga essa faixa da PRÓPRIA carteira...
 ROUBO_MULTA_PERCENT_MAX = 0.25       # ...de multa pro alvo (flagrado tentando arrombar o cofre)
 
+# Calor é uma medida privada de exposição do ladrão. Decai sozinho e torna
+# novas tentativas mais lentas/caras, sem alterar permanentemente a ficha.
+ROUBO_CALOR_MAXIMO = 100
+ROUBO_CALOR_DECAIMENTO_POR_HORA = 5
+ROUBO_CALOR_COOLDOWN_MAX_BONUS = 0.50
+ROUBO_CALOR_CHANCE_MAX_PENALIDADE = 0.20
 
-def valor_roubo_carteira(saldo: int) -> int:
+ROUBO_ABORDAGENS: Dict[str, Dict] = {
+    "cuidadosa": {
+        "nome": "Cuidadosa",
+        "timeout_mult": 1.40,
+        "calor": 10,
+        "multa_mult": 1.0,
+        "saque_mult": 1.0,
+        "oculta_identidade": False,
+        "requer_preparo": None,
+        "descricao": "Mais tempo para a vítima reagir, mas gera menos Calor.",
+    },
+    "rapida": {
+        "nome": "Rápida",
+        "timeout_mult": 0.60,
+        "calor": 25,
+        "multa_mult": 1.50,
+        "saque_mult": 1.0,
+        "oculta_identidade": False,
+        "requer_preparo": None,
+        "descricao": "Janela curta; gera muito Calor e aumenta a multa do cofre.",
+    },
+    "disfarcada": {
+        "nome": "Disfarçada",
+        "timeout_mult": 1.0,
+        "calor": 12,
+        "multa_mult": 1.0,
+        "saque_mult": 0.70,
+        "oculta_identidade": True,
+        "requer_preparo": "kit_disfarce",
+        "descricao": "Oculta o nome até o resultado, reduz o saque e consome um Kit de Disfarce.",
+    },
+}
+
+PREPAROS_ROUBO: Dict[str, Dict] = {
+    "kit_disfarce": {
+        "nome": "Kit de Disfarce",
+        "custo": 20,
+        "descricao": "Consumido ao iniciar uma abordagem Disfarçada.",
+    }
+}
+
+SEGURO_COFRE_CUSTO = 25
+SEGURO_COFRE_DIAS = 30
+SEGURO_COFRE_COBERTURA = 0.30
+SEGURO_COFRE_LIMITE = 200
+SEGURO_COFRE_CARENCIA_DIAS = 7
+
+
+def valor_roubo_carteira(saldo: int, percentual: float = ROUBO_CARTEIRA_PERCENT) -> int:
     """Valor exposto transferido por um roubo de carteira bem-sucedido."""
     saldo_inteiro = int(saldo)
     if saldo_inteiro <= 0:
         return 0
-    return max(1, math.floor(saldo_inteiro * ROUBO_CARTEIRA_PERCENT))
+    if not 0 < percentual <= 1:
+        raise ValueError("percentual de roubo invalido")
+    return max(1, math.floor(saldo_inteiro * percentual))
+
+
+def abordagem_roubo(abordagem_id: str) -> Dict:
+    return ROUBO_ABORDAGENS.get(normalizar(abordagem_id), ROUBO_ABORDAGENS["cuidadosa"])
+
+
+def cooldown_com_calor(horas_base: int, calor: int) -> float:
+    bonus = min(ROUBO_CALOR_COOLDOWN_MAX_BONUS, max(0, int(calor)) / 200)
+    return max(1.0, float(horas_base) * (1 + bonus))
+
+
+def chance_com_calor(chance_base: float, calor: int) -> float:
+    penalidade = min(ROUBO_CALOR_CHANCE_MAX_PENALIDADE, max(0, int(calor)) / 500)
+    return max(ROUBO_COFRE_CHANCE_MINIMA, float(chance_base) - penalidade)
 
 
 def chance_roubo_cofre(seguranca_tier_alvo: str, chance_base: Optional[float] = None) -> float:
@@ -294,6 +366,13 @@ DIVIDA_TAXA_CRESCIMENTO = 0.08       # a dívida cresce 8% a cada tick
 # bônus extra a qualquer momento com /juros_cofre.
 JUROS_COFRE_TICK_HORAS = 24          # aplica juros do cofre uma vez por dia
 JUROS_COFRE_TAXA = 0.02              # +2% por dia no que está guardado no cofre
+# Acima deste valor guardado (por moeda), o excedente continua seguro no
+# cofre mas para de render juros automáticos — sem teto, 2%/dia composto sem
+# limite dominava estritamente o rendimento de /investir em qualquer prazo
+# igual ou maior que uma semana (decisão de balanceamento 2026-08). O valor
+# reaproveita a Unidade de Aquisição já usada em bases.ts (1.000 Lunaris),
+# em vez de inventar uma escala nova.
+JUROS_COFRE_TETO = 1000
 DIVIDA_PENALIDADE_REPUTACAO = 15     # reputação cai isso a cada tick em dívida
 DIVIDA_REPUTACAO_MINIMA = -200       # reputação não desce de -200 só por dívida
 REPUTACAO_RECUPERACAO_TICK = 10      # recuperação de reputação negativa pra quem quitou as dívidas
@@ -326,7 +405,8 @@ REPUTACAO_POR_RARIDADE = {
     "raro": 250,
     "epico": 450,
     "lendario": 700,
-    "reliquia": 1000,
+    "mitico": 1000,
+    "reliquia": 1000,  # alias legado
     "reliquia da criacao": 1500,
 }
 
@@ -338,41 +418,8 @@ REPUTACAO_POR_CARTAO_TIER = {
     "eterno": 800,
 }
 
-REPUTACAO_POR_COFRE_TIER = {
-    "comum": 0,
-    "cobre": 0,
-    "prata": 50,
-    "aco": 100,
-    "dourado": 150,
-    "obsidiana": 200,
-    "arcano": 250,
-    "runico": 300,
-    "eterno": 350,
-    "astral": 450,
-    "lunar": 550,
-    "soberano": 650,
-    "dimensional": 800,
-    "paradoxal": 1000,
-    "sem-fim": 1250,
-}
-
-REPUTACAO_POR_SEGURANCA_TIER = {
-    "basica": 0,
-    "tranca-dupla": 0,
-    "alarme": 50,
-    "fechadura": 100,
-    "runas": 150,
-    "sentinela": 200,
-    "cofre-forte": 250,
-    "selos": 300,
-    "barreira": 350,
-    "blindado": 450,
-    "labirinto": 550,
-    "guardiao": 650,
-    "maximo": 800,
-    "soberana": 1000,
-    "absoluta": 1250,
-}
+REPUTACAO_POR_COFRE_TIER = _TIERS_DATA["reputacao_por_cofre_tier"]
+REPUTACAO_POR_SEGURANCA_TIER = _TIERS_DATA["reputacao_por_seguranca_tier"]
 
 REPUTACAO_POR_BAU = {
     "comum": 0,
@@ -540,11 +587,18 @@ _PESOS_BAU = {
     "lendario": {"comum": 0,  "incomum": 15, "raro": 35, "epico": 35, "lendario": 15},
 }
 # (id, rótulo, tiers de item que podem sair; None = qualquer)
+ITENS_ELEGIVEIS_BAU = [
+    "arma", "armadura", "equipamento", "consumivel", "artefato",
+    "fruto-eden", "implante",
+]
+
 _CATS_BAU = [
-    ("geral", "Geral", None),
+    # Nunca sorteia veículos, modificações, monstros ou drops comerciais. Isso
+    # evita que um baú barato contorne sistemas e preços próprios da Loja.
+    ("geral", "Geral", ITENS_ELEGIVEIS_BAU),
     ("armas", "de Armas", ["arma"]),
     ("armaduras", "de Armaduras", ["armadura"]),
-    ("itens", "de Itens", ["equipamento"]),
+    ("itens", "de Itens", ["equipamento", "consumivel"]),
 ]
 # raridade -> (preco, itens, lunaris_min, lunaris_max, rotulo)
 _TIER_BAU = {
@@ -583,10 +637,6 @@ def bau_compravel_por_id(bau_id):
 # Decisão 2. /jornal estacao_definir substitui o antigo /estacao_definir.
 
 
-# ─────────────────────────── Furtividade no roubo ─────────────────────────────
-CUSTO_FURTIVIDADE = 15  # Lunaris pra suprimir o ping da vítima em /roubar e /roubar_cofre
-
-
 # ─────────────────────── Itens de defesa passiva (consumíveis) ────────────────
 # Comprados com /protecao_comprar, consumidos automaticamente na próxima vez
 # que alguém tenta roubar o dono. Não passam pelo catálogo central (não são
@@ -599,7 +649,7 @@ PROTECAO_TIPOS: Dict[str, Dict] = {
     },
     "alarme_magico": {
         "nome": "Alarme Mágico",
-        "custo": 50,
+        "custo": 30,
         "descricao": "Estende sua janela de defesa de 5s para 10s na próxima tentativa de roubo.",
     },
 }
@@ -619,8 +669,11 @@ CARGO_CACADOR_PADRAO = "🏹 Caçador de Recompensas"
 
 # ──────────────────────────────── Câmbio flutuante ─────────────────────────────
 CAMBIO_AUTO_AJUSTE_MAX = 0.05     # variação máxima por ciclo (5%)
-CAMBIO_RATE_MINIMO = 5
-CAMBIO_RATE_MAXIMO = 20
+# A banda antiga (5–20) pertencia à economia 10:1 e derrubava imediatamente
+# a taxa atual de 100:1 quando o ajuste automático rodava. Mantemos espaço
+# para flutuação sem permitir que um único ciclo volte à escala legada.
+CAMBIO_RATE_MINIMO = 50
+CAMBIO_RATE_MAXIMO = 200
 CAMBIO_FLUXO_LIMIAR = 500         # abaixo disso o fluxo do dia é considerado ruído, não pressão real
 
 
@@ -654,12 +707,26 @@ def valor_liquido_leilao(lance: int, taxa: float = None) -> int:
 
 # ──────────────────────── Investimentos (Títulos do Jardim) ───────────────────
 INVESTIMENTO_DIAS = 7
-INVESTIMENTO_TAXA_NORMAL = 0.05   # rendimento ao vencer, em condições normais
-INVESTIMENTO_TAXA_CRISE = -0.02   # rendimento se a guild estiver em Crise Econômica
+INVESTIMENTO_TAXA_CRISE = -0.02   # rendimento se a guild estiver em Crise Econômica (evento do mestre, sem variância)
+# Condições normais: risco/recompensa real em vez de um retorno fixo — com
+# taxa fixa, Investimento era estritamente pior que só guardar no Cofre em
+# qualquer prazo (juros do Cofre, mesmo com o novo teto, seguem previsíveis
+# e sem risco; ver docs/decisao-design-balanceamento-2026-08.md). O valor
+# esperado (0,7×8% + 0,3×(-3%) ≈ 4,7%) fica perto do antigo +5% fixo, mas
+# agora com dispersão de verdade: dá pra perder.
+INVESTIMENTO_CHANCE_GANHO = 0.70   # chance de o título vencer com o retorno bom
+INVESTIMENTO_TAXA_GANHO = 0.08     # retorno se vencer bem
+INVESTIMENTO_TAXA_PERDA = -0.03    # retorno se vencer mal
 
 
 def valor_maturado_investimento(valor: int, em_crise: bool) -> int:
-    taxa = INVESTIMENTO_TAXA_CRISE if em_crise else INVESTIMENTO_TAXA_NORMAL
+    """Resolve o rendimento na hora da maturação (não antes) — em crise é
+    sempre o mesmo prejuízo controlado pelo mestre; fora de crise, sorteia
+    entre o retorno bom e o ruim a cada título que vence."""
+    if em_crise:
+        taxa = INVESTIMENTO_TAXA_CRISE
+    else:
+        taxa = INVESTIMENTO_TAXA_GANHO if random.random() < INVESTIMENTO_CHANCE_GANHO else INVESTIMENTO_TAXA_PERDA
     return max(0, int(valor) + math.floor(valor * taxa))
 
 

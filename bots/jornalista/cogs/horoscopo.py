@@ -6,12 +6,14 @@ from __future__ import annotations
 
 import logging
 import random
+from datetime import datetime, timezone
 
 import discord
 from discord import app_commands
 from discord.ext import commands, tasks
 
 from core import arvores as arvores_mod
+from core import publicacoes
 from core import ui
 from core.tasks_util import registrar_reinicio_em_erro
 
@@ -33,14 +35,17 @@ class Horoscopo(commands.Cog):
     async def ciclo(self):
         for guild in self.bot.guilds:
             gid = str(guild.id)
+            if not self.bot.db.automacao_ativa(gid, "horoscopo", True):
+                continue
             # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
             # isto, todo restart (cada deploy na Discloud) sorteava um novo
             # horoscopo do dia, mesmo horas depois do ultimo.
             if not self.bot.db.ciclo_guild_devido(gid, "horoscopo", HOROSCOPO_INTERVALO_HORAS):
                 continue
             try:
-                await self._publicar(guild)
-                self.bot.db.marcar_ciclo_guild(gid, "horoscopo")
+                resultado = await self._publicar(guild)
+                if resultado in {"entregue", "falha", "adiada", "agendada"}:
+                    self.bot.db.marcar_ciclo_guild(gid, "horoscopo")
             except Exception:
                 log.exception("erro no ciclo do horoscopo (guild %s)", guild.id)
 
@@ -61,26 +66,38 @@ class Horoscopo(commands.Cog):
             cor=arvore.cor,
         )
 
-    async def _publicar(self, guild: discord.Guild) -> None:
+    async def _publicar(self, guild: discord.Guild) -> str:
         gid = str(guild.id)
-        arvore = random.choice(arvores_mod.ARVORES)
+        data_utc = datetime.now(timezone.utc).date().isoformat()
+        # Determinístico por guild/dia: duas instâncias durante um deploy não
+        # podem anunciar uma Árvore e deixar outra salva como bônus vigente.
+        arvore = random.Random(f"{gid}:{data_utc}").choice(arvores_mod.ARVORES)
         self.bot.db.set_horoscopo(gid, arvore.id)
         canal_id = self.bot.db.get_canal_categoria(gid, "noticia")
-        if not canal_id:
-            return
-        canal = guild.get_channel(int(canal_id))
-        if not isinstance(canal, discord.TextChannel):
-            return
         emb = self._montar_embed(gid, arvore)
-        try:
-            await canal.send(embed=emb, allowed_mentions=discord.AllowedMentions.none())
-        except discord.HTTPException:
-            log.exception("falha ao publicar horoscopo no canal %s", canal_id)
+        return await publicacoes.publicar_ou_enfileirar(
+            self.bot,
+            guild_id=gid,
+            embed=emb,
+            origem="horoscopo",
+            dedupe_key=(
+                f"horoscopo:{gid}:{data_utc}"
+            ),
+            categoria="noticia",
+            canal_id=canal_id,
+            automacao="horoscopo",
+        )
 
     @app_commands.command(name="horoscopo", description="Mostra a Árvore favorecida pelas estrelas hoje.")
     @app_commands.guild_only()
     async def horoscopo(self, interaction: discord.Interaction):
         gid = str(interaction.guild_id)
+        if not self.bot.db.automacao_ativa(gid, "horoscopo", True):
+            await interaction.response.send_message(
+                "⏸️ O horóscopo está desativado neste servidor; o bônus nos baús também não se aplica.",
+                ephemeral=True,
+            )
+            return
         arvore_id = self.bot.db.get_horoscopo(gid)
         arvore = arvores_mod.obter(arvore_id) if arvore_id else None
         if arvore is None:

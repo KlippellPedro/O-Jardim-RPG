@@ -1,14 +1,7 @@
-"""
-Cog Jornal: comandos de conteúdo do Jornalista, agrupados em /jornal.
+"""Conteúdo e configuração do Jornalista, agrupados em ``/jornal``.
 
-Passo 1 (17/07/2026): /jornal publicar.
-Passo 3 (17/07/2026): /jornal estacao_definir + /jornal avancar_mes: a
-estação (docs/Plano_Jornalista.md, Decisão 2) e o clima do mês, que ela restringe.
-/estacao é a versão de leitura, fora do grupo (qualquer jogador pode ver,
-não só o mestre: o grupo /jornal inteiro é master-only).
-
-O registro por Árvore/idade/pronomes virou um sistema próprio, configurável
-por botões (estilo Zira), em cogs/registro.py (grupo /registro).
+O grupo é administrativo; ``/estacao`` permanece público. O registro por
+Árvore, idade e pronomes vive em ``cogs/registro.py`` e usa reações persistidas.
 """
 
 from __future__ import annotations
@@ -18,6 +11,7 @@ import uuid
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 from urllib.parse import urlparse
+from zoneinfo import ZoneInfo
 
 import discord
 from discord import app_commands
@@ -26,6 +20,7 @@ from discord.ext import commands, tasks
 from core import clima as clima_mod
 from core import economia
 from core import enigmas as enigmas_mod
+from core import publicacoes
 from core import ui
 from core.tasks_util import registrar_reinicio_em_erro
 
@@ -50,6 +45,28 @@ CATEGORIAS_CANAL = [
     app_commands.Choice(name="Clima e estação", value="clima"),
     app_commands.Choice(name="Dinheiro e economia", value="dinheiro"),
 ]
+
+AUTOMACOES = {
+    "entrevistas": ("Entrevistas semanais", True),
+    "horoscopo": ("Horóscopo e bônus nos baús", True),
+    "avisos_economicos": ("Avisos econômicos do Banqueiro", True),
+    "loteria_resultado": ("Resultado da Loteria Dominical", True),
+    "boas_vindas": ("Boas-vindas", True),
+    "despedidas": ("Despedidas", True),
+    "resumo_semanal": ("Resumo semanal da campanha", False),
+    "pautas_agendadas": ("Pautas agendadas", True),
+    "rumores_baus": ("Baús agendados por rumores", True),
+    "clima_auto": ("Clima automático", False),
+    "estacao_auto": ("Rotação automática de estação", False),
+    "baus_auto": ("Baús automáticos", False),
+}
+
+AUTOMACAO_CHOICES = [
+    app_commands.Choice(name=rotulo, value=chave)
+    for chave, (rotulo, _padrao) in AUTOMACOES.items()
+]
+
+TZ_SAO_PAULO = ZoneInfo("America/Sao_Paulo")
 
 
 def _url_imagem_valida(url: str) -> bool:
@@ -308,6 +325,66 @@ class NoticiaModal(discord.ui.Modal, title="Criar notícia do Jardim"):
             await interaction.response.send_message(mensagem, ephemeral=True)
 
 
+class PautaModal(discord.ui.Modal, title="Criar pauta do Jornal Lunar"):
+    titulo_pauta = discord.ui.TextInput(label="Título", min_length=1, max_length=200)
+    resumo = discord.ui.TextInput(
+        label="Resumo", required=False, max_length=450
+    )
+    corpo = discord.ui.TextInput(
+        label="Corpo da notícia", style=discord.TextStyle.paragraph,
+        min_length=1, max_length=3500,
+    )
+    autoria = discord.ui.TextInput(label="Autoria", required=False, max_length=100)
+    imagem_url = discord.ui.TextInput(
+        label="URL HTTPS da imagem", required=False, max_length=500
+    )
+
+    def __init__(self, *, bot, guild_id: str, canal_id: str, autor_id: int):
+        super().__init__(timeout=300)
+        self.bot = bot
+        self.guild_id = guild_id
+        self.canal_id = canal_id
+        self.autor_id = autor_id
+
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        return interaction.user.id == self.autor_id and _usuario_e_mestre(interaction)
+
+    async def on_submit(self, interaction: discord.Interaction) -> None:
+        imagem = str(self.imagem_url.value).strip()
+        if not _url_imagem_valida(imagem):
+            await interaction.response.send_message(
+                "⚠️ A imagem precisa ser uma URL HTTPS válida.", ephemeral=True
+            )
+            return
+        pauta_id = self.bot.db.criar_pauta(
+            self.guild_id,
+            self.canal_id,
+            str(interaction.user.id),
+            str(self.titulo_pauta.value).strip(),
+            str(self.resumo.value).strip(),
+            str(self.corpo.value).strip(),
+            str(self.autoria.value).strip(),
+            imagem,
+        )
+        await interaction.response.send_message(
+            f"✅ Pauta **#{pauta_id}** salva como rascunho. "
+            f"Revise com `/jornal pauta ver` e aprove com `/jornal pauta publicar` "
+            "ou `/jornal pauta agendar`.",
+            ephemeral=True,
+        )
+
+
+def _parse_agendamento(valor: str) -> Optional[datetime]:
+    texto = str(valor or "").strip()
+    for formato in ("%d/%m/%Y %H:%M", "%Y-%m-%d %H:%M"):
+        try:
+            local = datetime.strptime(texto, formato).replace(tzinfo=TZ_SAO_PAULO)
+            return local.astimezone(timezone.utc)
+        except ValueError:
+            continue
+    return None
+
+
 # A cada quanto tempo (quando ligado) o Jornal Lunar publica o clima sazonal.
 CLIMA_AUTO_INTERVALO_HORAS = 48
 
@@ -375,6 +452,11 @@ class Jornal(commands.Cog):
         description="Comandos de conteúdo do jornal do Jardim.",
         default_permissions=discord.Permissions(manage_guild=True),
     )
+    pauta = app_commands.Group(
+        name="pauta",
+        description="Rascunhos, aprovação e agendamento de notícias.",
+        parent=jornal,
+    )
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -382,14 +464,103 @@ class Jornal(commands.Cog):
         registrar_reinicio_em_erro(self.ciclo_clima, "ciclo_clima", log)
         registrar_reinicio_em_erro(self.ciclo_estacao_auto, "ciclo_estacao_auto", log)
         registrar_reinicio_em_erro(self.ciclo_rumores, "ciclo_rumores", log)
+        registrar_reinicio_em_erro(self.ciclo_pautas, "ciclo_pautas", log)
+        registrar_reinicio_em_erro(self.ciclo_resumo, "ciclo_resumo", log)
         self.ciclo_clima.start()
         self.ciclo_estacao_auto.start()
         self.ciclo_rumores.start()
+        self.ciclo_pautas.start()
+        self.ciclo_resumo.start()
 
     def cog_unload(self):
         self.ciclo_clima.cancel()
         self.ciclo_estacao_auto.cancel()
         self.ciclo_rumores.cancel()
+        self.ciclo_pautas.cancel()
+        self.ciclo_resumo.cancel()
+
+    # ── Pautas agendadas e resumo semanal ──────────────────────────────────
+    @tasks.loop(minutes=1)
+    async def ciclo_pautas(self):
+        agora = datetime.now(timezone.utc)
+        for pauta in self.bot.db.listar_pautas_devidas(agora):
+            gid = str(pauta["guild_id"])
+            if not self.bot.db.automacao_ativa(gid, "pautas_agendadas", True):
+                continue
+            try:
+                await self._enfileirar_pauta(pauta, agendada=True)
+            except Exception:
+                log.exception("erro ao publicar pauta agendada %s", pauta.get("id"))
+
+    @ciclo_pautas.before_loop
+    async def _antes_ciclo_pautas(self):
+        await self.bot.wait_until_ready()
+
+    def _montar_resumo_semanal(self, gid: str) -> discord.Embed:
+        dados = self.bot.db.resumo_semanal(
+            gid, datetime.now(timezone.utc) - timedelta(days=7)
+        )
+        emb = ui.embed(
+            "🗞️ A semana no Jardim", categoria="noticia",
+            descricao="Um resumo dos movimentos registrados nos últimos sete dias.",
+        )
+        emb.add_field(
+            name="Exploração",
+            value=(
+                f"• Baús abertos: **{dados['baus']}**\n"
+                f"• Exploradores premiados: **{dados['vencedores_baus']}**\n"
+                f"• Desafios resolvidos: **{dados['desafios']}**"
+            ),
+            inline=True,
+        )
+        emb.add_field(
+            name="Economia registrada",
+            value=(
+                f"• Entradas: ☾ **{dados['entradas']}**\n"
+                f"• Saídas: ☾ **{dados['saidas']}**\n"
+                f"• Jogadores ativos: **{dados['jogadores']}**"
+            ),
+            inline=True,
+        )
+        emb.add_field(
+            name="Jornal Lunar",
+            value=(
+                f"• Entrevistas publicadas: **{dados['entrevistas']}**\n"
+                f"• Prêmios editoriais: ☾ **{dados['premios_desafios']}**"
+            ),
+            inline=False,
+        )
+        emb.set_footer(text="Somente atividades registradas pelos bots entram neste resumo.")
+        return emb
+
+    @tasks.loop(hours=1)
+    async def ciclo_resumo(self):
+        agora = datetime.now(timezone.utc)
+        iso = agora.isocalendar()
+        for guild in self.bot.guilds:
+            gid = str(guild.id)
+            if not self.bot.db.automacao_ativa(gid, "resumo_semanal", False):
+                continue
+            if not self.bot.db.ciclo_guild_devido(gid, "resumo_semanal", 168):
+                continue
+            try:
+                resultado = await publicacoes.publicar_ou_enfileirar(
+                    self.bot,
+                    guild_id=gid,
+                    embed=self._montar_resumo_semanal(gid),
+                    origem="resumo_semanal",
+                    dedupe_key=f"resumo:{iso.year}:{iso.week}",
+                    categoria="noticia",
+                    automacao="resumo_semanal",
+                )
+                if resultado in {"entregue", "falha", "adiada", "agendada"}:
+                    self.bot.db.marcar_ciclo_guild(gid, "resumo_semanal")
+            except Exception:
+                log.exception("erro ao preparar resumo semanal (guild %s)", gid)
+
+    @ciclo_resumo.before_loop
+    async def _antes_ciclo_resumo(self):
+        await self.bot.wait_until_ready()
 
     # ── Clima sazonal automático (opt-in por guild via /jornal clima_auto) ────
     @tasks.loop(hours=CLIMA_AUTO_INTERVALO_HORAS)
@@ -401,8 +572,9 @@ class Jornal(commands.Cog):
             if not self.bot.db.ciclo_guild_devido(gid, "clima_auto", CLIMA_AUTO_INTERVALO_HORAS):
                 continue
             try:
-                await self._publicar_clima_auto(gid)
-                self.bot.db.marcar_ciclo_guild(gid, "clima_auto")
+                publicou = await self._publicar_clima_auto(gid)
+                if publicou:
+                    self.bot.db.marcar_ciclo_guild(gid, "clima_auto")
             except Exception:
                 log.exception("erro no ciclo de clima automatico (guild %s)", gid)
 
@@ -420,8 +592,9 @@ class Jornal(commands.Cog):
             if not self.bot.db.ciclo_guild_devido(gid, "estacao_auto", ESTACAO_AUTO_INTERVALO_HORAS):
                 continue
             try:
-                await self._avancar_estacao_auto(gid)
-                self.bot.db.marcar_ciclo_guild(gid, "estacao_auto")
+                resultado = await self._avancar_estacao_auto(gid)
+                if resultado in {"entregue", "falha", "adiada", "agendada"}:
+                    self.bot.db.marcar_ciclo_guild(gid, "estacao_auto")
             except Exception:
                 log.exception("erro no ciclo de rotacao automatica de estacao (guild %s)", gid)
 
@@ -429,29 +602,28 @@ class Jornal(commands.Cog):
     async def _antes_ciclo_estacao_auto(self):
         await self.bot.wait_until_ready()
 
-    async def _avancar_estacao_auto(self, gid: str) -> None:
+    async def _avancar_estacao_auto(self, gid: str) -> str:
         atual = self.bot.db.get_estacao(gid)
         proxima = economia.proxima_estacao_normal(atual)
         self.bot.db.set_estacao(gid, proxima)
         info = economia.estacao_info(proxima)
         canal_id = self.bot.db.get_canal_categoria(gid, "clima")
-        if not canal_id:
-            return
-        guild = self.bot.get_guild(int(gid))
-        if guild is None:
-            return
-        canal = guild.get_channel(int(canal_id))
-        if not isinstance(canal, discord.TextChannel):
-            return
         emb = ui.embed(
             f"{ui.icone_categoria('clima')} A estação do Jardim mudou sozinha: {info['rotulo']}",
             categoria="clima",
             descricao=info["descricao"],
         )
-        try:
-            await canal.send(embed=emb)
-        except discord.HTTPException:
-            log.exception("falha ao publicar rotacao automatica de estacao no canal %s", canal_id)
+        iso = datetime.now(timezone.utc).isocalendar()
+        return await publicacoes.publicar_ou_enfileirar(
+            self.bot,
+            guild_id=gid,
+            embed=emb,
+            origem="estacao_auto",
+            dedupe_key=f"estacao:{gid}:{iso.year}:{iso.week}",
+            categoria="clima",
+            canal_id=canal_id,
+            automacao="estacao_auto",
+        )
 
     def _montar_embed_clima(self, guild_id: str) -> discord.Embed:
         """Boletim do Jornal Lunar para o clima da estação atual."""
@@ -466,20 +638,20 @@ class Jornal(commands.Cog):
         emb.set_footer(text=f"{ui.MARCA} · Efeito narrativo: combine com o mestre")
         return emb
 
-    async def _publicar_clima_auto(self, gid: str) -> None:
+    async def _publicar_clima_auto(self, gid: str) -> bool:
         canal_id = self.bot.db.get_canal_categoria(gid, "clima")
-        if not canal_id:
-            return
-        guild = self.bot.get_guild(int(gid))
-        if guild is None:
-            return
-        canal = guild.get_channel(int(canal_id))
-        if not isinstance(canal, discord.TextChannel):
-            return
-        try:
-            await canal.send(embed=self._montar_embed_clima(gid))
-        except discord.HTTPException:
-            log.exception("falha ao publicar clima automatico no canal %s", canal_id)
+        agora = datetime.now(timezone.utc)
+        resultado = await publicacoes.publicar_ou_enfileirar(
+            self.bot,
+            guild_id=gid,
+            embed=self._montar_embed_clima(gid),
+            origem="clima_auto",
+            dedupe_key=f"clima:{gid}:{agora.year}:{agora.timetuple().tm_yday}",
+            categoria="clima",
+            canal_id=canal_id,
+            automacao="clima_auto",
+        )
+        return resultado in {"entregue", "falha", "adiada", "agendada"}
 
     async def _canal_do_jornal(
         self, interaction: discord.Interaction, categoria: str = "noticia"
@@ -522,6 +694,159 @@ class Jornal(commands.Cog):
             NoticiaModal(canal=canal, autor_id=interaction.user.id)
         )
 
+    def _embed_pauta(self, pauta: dict) -> discord.Embed:
+        return montar_embed_noticia(
+            pauta["titulo"], pauta.get("resumo") or "", pauta["corpo"],
+            pauta.get("autoria") or "", pauta.get("imagem_url") or "",
+        )
+
+    async def _enfileirar_pauta(self, pauta: dict, *, agendada: bool) -> str:
+        automacao = "pautas_agendadas" if agendada else None
+        publicacao = publicacoes.enfileirar_embed(
+            self.bot,
+            str(pauta["guild_id"]),
+            embed=self._embed_pauta(pauta),
+            origem="pauta",
+            referencia=str(pauta["id"]),
+            dedupe_key=f"pauta:{pauta['id']}",
+            categoria="noticia",
+            canal_id=pauta.get("canal_id"),
+            automacao=automacao,
+            mencoes="nenhuma",
+        )
+        if not self.bot.db.marcar_pauta_na_fila(int(pauta["id"])):
+            return "ignorada"
+        if publicacao.get("status") == "pendente":
+            return await publicacoes.tentar_publicacao(self.bot, publicacao)
+        return str(publicacao.get("status") or "ignorada")
+
+    @pauta.command(name="criar", description="Cria um rascunho de notícia sem publicar.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    @app_commands.describe(canal="Destino da pauta; vazio usa o canal de notícias.")
+    async def pauta_criar(
+        self, interaction: discord.Interaction, canal: discord.TextChannel = None
+    ):
+        destino = canal or await self._canal_do_jornal(interaction, "noticia")
+        if destino is None:
+            return
+        if not _bot_pode_publicar(destino):
+            await interaction.response.send_message(
+                f"⚠️ Não consigo publicar em {destino.mention}.", ephemeral=True
+            )
+            return
+        await interaction.response.send_modal(
+            PautaModal(
+                bot=self.bot,
+                guild_id=str(interaction.guild_id),
+                canal_id=str(destino.id),
+                autor_id=interaction.user.id,
+            )
+        )
+
+    @pauta.command(name="listar", description="Lista rascunhos e pautas recentes.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def pauta_listar(self, interaction: discord.Interaction):
+        if not interaction.guild_id:
+            await interaction.response.send_message(
+                "⚠️ Isso só funciona em um servidor.", ephemeral=True
+            )
+            return
+        pautas = self.bot.db.listar_pautas(str(interaction.guild_id))
+        if not pautas:
+            await interaction.response.send_message(
+                "Nenhuma pauta foi criada ainda.", ephemeral=True
+            )
+            return
+        icones = {
+            "rascunho": "📝", "agendada": "🕒", "fila": "📤",
+            "publicada": "✅", "cancelada": "✖️",
+        }
+        linhas = []
+        for item in pautas:
+            quando = ""
+            if item.get("publicar_em"):
+                quando = f" · <t:{int(item['publicar_em'].timestamp())}:f>"
+            linhas.append(
+                f"{icones.get(item['status'], '•')} **#{item['id']}** "
+                f"{item['titulo'][:80]} · `{item['status']}`{quando}"
+            )
+        emb = ui.embed(
+            "🗂️ Pautas do Jornal Lunar", categoria="noticia",
+            descricao="\n".join(linhas)[:4000],
+        )
+        await interaction.response.send_message(embed=emb, ephemeral=True)
+
+    @pauta.command(name="ver", description="Mostra a prévia privada de uma pauta.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def pauta_ver(self, interaction: discord.Interaction, pauta_id: int):
+        pauta = self.bot.db.get_pauta(str(interaction.guild_id), pauta_id)
+        if pauta is None:
+            await interaction.response.send_message("Pauta não encontrada.", ephemeral=True)
+            return
+        await interaction.response.send_message(
+            content=f"**Pauta #{pauta_id}** · `{pauta['status']}`",
+            embed=self._embed_pauta(pauta), ephemeral=True,
+            allowed_mentions=discord.AllowedMentions.none(),
+        )
+
+    @pauta.command(name="publicar", description="Aprova uma pauta e publica agora.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def pauta_publicar(self, interaction: discord.Interaction, pauta_id: int):
+        pauta = self.bot.db.get_pauta(str(interaction.guild_id), pauta_id)
+        if pauta is None or pauta["status"] not in {"rascunho", "agendada"}:
+            await interaction.response.send_message(
+                "A pauta não existe ou já foi finalizada.", ephemeral=True
+            )
+            return
+        await interaction.response.defer(ephemeral=True, thinking=True)
+        resultado = await self._enfileirar_pauta(pauta, agendada=False)
+        texto = (
+            "✅ Pauta publicada." if resultado == "entregue"
+            else "📤 Pauta aprovada e guardada na fila de entrega; o bot continuará tentando."
+        )
+        await interaction.followup.send(texto, ephemeral=True)
+
+    @pauta.command(name="agendar", description="Aprova uma pauta para publicação futura.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    @app_commands.describe(
+        quando="Horário de São Paulo: DD/MM/AAAA HH:MM ou AAAA-MM-DD HH:MM."
+    )
+    async def pauta_agendar(
+        self, interaction: discord.Interaction, pauta_id: int, quando: str
+    ):
+        instante = _parse_agendamento(quando)
+        if instante is None or instante <= datetime.now(timezone.utc):
+            await interaction.response.send_message(
+                "⚠️ Informe uma data futura em `DD/MM/AAAA HH:MM`, no horário de São Paulo.",
+                ephemeral=True,
+            )
+            return
+        if not self.bot.db.agendar_pauta(str(interaction.guild_id), pauta_id, instante):
+            await interaction.response.send_message(
+                "Pauta não encontrada ou já finalizada.", ephemeral=True
+            )
+            return
+        pausada = not self.bot.db.automacao_ativa(
+            str(interaction.guild_id), "pautas_agendadas", True
+        )
+        await interaction.response.send_message(
+            f"🕒 Pauta **#{pauta_id}** aprovada para <t:{int(instante.timestamp())}:F>."
+            + (
+                " Ela ficará pausada até **Pautas agendadas** ser ligada em "
+                "`/jornal automacao`." if pausada else ""
+            ),
+            ephemeral=True,
+        )
+
+    @pauta.command(name="cancelar", description="Cancela um rascunho ou agendamento.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def pauta_cancelar(self, interaction: discord.Interaction, pauta_id: int):
+        ok = self.bot.db.cancelar_pauta(str(interaction.guild_id), pauta_id)
+        await interaction.response.send_message(
+            "✖️ Pauta cancelada." if ok else "Pauta não encontrada ou já enviada para publicação.",
+            ephemeral=True,
+        )
+
     @jornal.command(name="principal", description="Define o canal principal do Jornalista.")
     @app_commands.describe(canal="Fallback para notícias, clima, avisos e boas-vindas.")
     @app_commands.checks.has_permissions(manage_guild=True)
@@ -542,6 +867,292 @@ class Jornal(commands.Cog):
         self.bot.db.set_jornal_canal(str(interaction.guild_id), str(canal.id))
         await interaction.response.send_message(
             f"📰 Canal principal do Jornalista definido como {canal.mention}.",
+            ephemeral=True,
+        )
+
+    @jornal.command(
+        name="configurar",
+        description="Configura os canais principais do Jornalista de uma vez.",
+    )
+    @app_commands.checks.has_permissions(manage_guild=True)
+    @app_commands.describe(
+        principal="Canal principal e fallback obrigatório.",
+        noticias="Canal separado para notícias, rumores e entrevistas.",
+        clima="Canal separado para clima e estação.",
+        dinheiro="Canal separado para avisos econômicos e loteria.",
+        chegadas="Canal separado para boas-vindas.",
+        saidas="Canal separado para despedidas.",
+        baus="Canal que entra na rotação de baús automáticos.",
+    )
+    async def configurar(
+        self,
+        interaction: discord.Interaction,
+        principal: discord.TextChannel,
+        noticias: discord.TextChannel = None,
+        clima: discord.TextChannel = None,
+        dinheiro: discord.TextChannel = None,
+        chegadas: discord.TextChannel = None,
+        saidas: discord.TextChannel = None,
+        baus: discord.TextChannel = None,
+    ):
+        if not interaction.guild_id:
+            await interaction.response.send_message(
+                "⚠️ Isso só funciona dentro de um servidor.", ephemeral=True
+            )
+            return
+        canais = [
+            canal for canal in
+            (principal, noticias, clima, dinheiro, chegadas, saidas, baus)
+            if canal is not None
+        ]
+        sem_permissao = [canal for canal in canais if not _bot_pode_publicar(canal)]
+        if sem_permissao:
+            await interaction.response.send_message(
+                "⚠️ Não consigo publicar nestes canais: "
+                + ", ".join(canal.mention for canal in sem_permissao)
+                + ". Preciso de **Ver canal**, **Enviar mensagens** e **Inserir links**.",
+                ephemeral=True,
+            )
+            return
+
+        gid = str(interaction.guild_id)
+        self.bot.db.set_jornal_canal(gid, str(principal.id))
+        rotas = {
+            "noticia": noticias,
+            "clima": clima,
+            "dinheiro": dinheiro,
+            "chegada": chegadas,
+            "partida": saidas,
+        }
+        for categoria, canal in rotas.items():
+            if canal is not None:
+                self.bot.db.set_canal_categoria(gid, categoria, str(canal.id))
+        if baus is not None:
+            self.bot.db.adicionar_bau_canal(gid, str(baus.id))
+
+        linhas = [f"• Canal principal: {principal.mention}"]
+        linhas.extend(
+            f"• {categoria}: {canal.mention}"
+            for categoria, canal in rotas.items()
+            if canal is not None
+        )
+        if baus is not None:
+            linhas.append(f"• Rotação de baús: {baus.mention}")
+        await interaction.response.send_message(
+            "✅ Configuração básica concluída.\n"
+            + "\n".join(linhas)
+            + "\n\nUse `/jornal status` para conferir tudo. Clima, estação e baús "
+              "não são ativados por este comando; use os comandos próprios quando quiser ligá-los.",
+            ephemeral=True,
+        )
+
+    @jornal.command(
+        name="status",
+        description="Mostra canais, automações, estação e baús configurados.",
+    )
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def status(self, interaction: discord.Interaction):
+        if not interaction.guild_id or not interaction.guild:
+            await interaction.response.send_message(
+                "⚠️ Isso só funciona dentro de um servidor.", ephemeral=True
+            )
+            return
+        gid = str(interaction.guild_id)
+        guild = interaction.guild
+        principal_id = self.bot.db.get_jornal_canal(gid)
+        rotas = self.bot.db.listar_canais_categoria(gid)
+
+        def descrever_canal(canal_id: Optional[str], *, fallback: bool = True) -> str:
+            efetivo = canal_id or (principal_id if fallback else None)
+            if not efetivo:
+                return "⚠️ não configurado"
+            try:
+                canal = guild.get_channel(int(efetivo))
+            except (TypeError, ValueError):
+                canal = None
+            if not isinstance(canal, discord.TextChannel):
+                return f"⚠️ canal ausente (`{efetivo}`)"
+            sufixo = " · fallback" if canal_id is None and fallback else ""
+            if not _bot_pode_publicar(canal):
+                return f"{canal.mention}{sufixo} · ⚠️ sem permissões"
+            return f"{canal.mention}{sufixo} · ✅"
+
+        linhas_canais = [f"**Principal:** {descrever_canal(principal_id, fallback=False)}"]
+        for escolha in CATEGORIAS_CANAL:
+            linhas_canais.append(
+                f"**{escolha.name}:** {descrever_canal(rotas.get(escolha.value))}"
+            )
+
+        cfg_baus = self.bot.db.get_baus_config(gid)
+        canais_baus = self.bot.db.listar_baus_canais(gid)
+        canais_baus_validos = 0
+        for canal_id in canais_baus:
+            try:
+                canal = guild.get_channel(int(canal_id))
+            except (TypeError, ValueError):
+                canal = None
+            if isinstance(canal, discord.TextChannel) and _bot_pode_publicar(canal):
+                canais_baus_validos += 1
+        estacao = economia.estacao_info(self.bot.db.get_estacao(gid))
+        linhas_automacoes = [
+            f"{'✅' if self._automacao_ativa(gid, chave) else '⏸️'} {rotulo}"
+            for chave, (rotulo, _padrao) in AUTOMACOES.items()
+        ]
+        fila = self.bot.db.listar_publicacoes_problematicas(gid)
+        emb = ui.embed(
+            "🧭 Painel do Jornalista",
+            categoria="noticia",
+            descricao="Diagnóstico da configuração atual deste servidor.",
+        )
+        emb.add_field(name="Canais", value="\n".join(linhas_canais), inline=False)
+        emb.add_field(
+            name="Automações",
+            value="\n".join(linhas_automacoes),
+            inline=False,
+        )
+        emb.add_field(
+            name="Estação e baús",
+            value=(
+                f"• Estação: **{estacao['rotulo']}**\n"
+                f"• Baús automáticos: {'✅ ligados' if cfg_baus.get('ativo') else '⏸️ desligados'}\n"
+                f"• Canais válidos: **{canais_baus_validos}/{len(canais_baus)}**\n"
+                f"• Janela: **{cfg_baus.get('min_hora', 9)}h–{cfg_baus.get('max_hora', 22)}h** · "
+                f"itens por baú: **{cfg_baus.get('itens_por_bau', 1)}**\n"
+                f"• Publicações aguardando/requerendo atenção: **{len(fila)}**"
+            ),
+            inline=False,
+        )
+        pendencias = []
+        if not principal_id:
+            pendencias.append("definir o canal principal com `/jornal configurar`")
+        if not canais_baus:
+            pendencias.append("adicionar ao menos um canal de baú")
+        if canais_baus and canais_baus_validos < len(canais_baus):
+            pendencias.append("corrigir canais de baú apagados ou sem permissão")
+        if pendencias:
+            emb.add_field(
+                name="Próximos ajustes",
+                value="\n".join(f"• {item}" for item in pendencias),
+                inline=False,
+            )
+        await interaction.response.send_message(embed=emb, ephemeral=True)
+
+    def _automacao_ativa(self, gid: str, tipo: str) -> bool:
+        if tipo == "clima_auto":
+            return self.bot.db.get_clima_auto(gid)
+        if tipo == "estacao_auto":
+            return self.bot.db.get_estacao_auto(gid)
+        if tipo == "baus_auto":
+            return bool(self.bot.db.get_baus_config(gid).get("ativo"))
+        return self.bot.db.automacao_ativa(gid, tipo, AUTOMACOES[tipo][1])
+
+    @jornal.command(name="automacao", description="Liga ou desliga uma publicação automática.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    @app_commands.describe(tipo="O que controlar.", ligar="True liga; False desliga.")
+    @app_commands.choices(tipo=AUTOMACAO_CHOICES)
+    async def automacao(
+        self, interaction: discord.Interaction, tipo: app_commands.Choice[str], ligar: bool
+    ):
+        if not interaction.guild_id:
+            await interaction.response.send_message(
+                "⚠️ Isso só funciona em um servidor.", ephemeral=True
+            )
+            return
+        gid = str(interaction.guild_id)
+        chave = tipo.value
+        if chave == "clima_auto":
+            self.bot.db.set_clima_auto(gid, ligar)
+        elif chave == "estacao_auto":
+            self.bot.db.set_estacao_auto(gid, ligar)
+        elif chave == "baus_auto":
+            if ligar and not self.bot.db.listar_baus_canais(gid):
+                await interaction.response.send_message(
+                    "⚠️ Adicione um canal com `/bau_canal_adicionar` antes de ligar os baús.",
+                    ephemeral=True,
+                )
+                return
+            self.bot.db.atualizar_baus_config(gid, ativo=ligar)
+        else:
+            self.bot.db.set_automacao(gid, chave, ligar)
+        retomadas = (
+            self.bot.db.acordar_publicacoes_automacao(gid, chave) if ligar else 0
+        )
+        await interaction.response.send_message(
+            f"{'✅' if ligar else '⏸️'} **{AUTOMACOES[chave][0]}** "
+            f"{'ligado(a)' if ligar else 'desligado(a)' }."
+            + (f" **{retomadas}** publicação(ões) retomada(s)." if retomadas else ""),
+            ephemeral=True,
+        )
+
+    @jornal.command(name="automacoes", description="Mostra tudo que o Jornalista envia automaticamente.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def automacoes(self, interaction: discord.Interaction):
+        gid = str(interaction.guild_id)
+        linhas = [
+            f"{'✅' if self._automacao_ativa(gid, chave) else '⏸️'} **{rotulo}**"
+            for chave, (rotulo, _padrao) in AUTOMACOES.items()
+        ]
+        emb = ui.embed(
+            "⚙️ Automações do Jornalista", categoria="noticia",
+            descricao="\n".join(linhas),
+        )
+        emb.set_footer(text="Use /jornal automacao para alterar qualquer item.")
+        await interaction.response.send_message(embed=emb, ephemeral=True)
+
+    @jornal.command(name="orcamento", description="Consulta ou altera o teto mensal de recompensas editoriais.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    @app_commands.describe(limite="Novo teto mensal em Lunaris; vazio apenas consulta.")
+    async def orcamento(
+        self, interaction: discord.Interaction,
+        limite: app_commands.Range[int, 0, 100000] = None,
+    ):
+        gid = str(interaction.guild_id)
+        dados = (
+            self.bot.db.set_orcamento_editorial(gid, limite)
+            if limite is not None else self.bot.db.get_orcamento_editorial(gid)
+        )
+        emb = ui.embed(
+            "💰 Orçamento editorial mensal", categoria="dinheiro",
+            descricao=(
+                f"• Teto: ☾ **{dados['limite']}**\n"
+                f"• Já pago: ☾ **{dados['gasto']}**\n"
+                f"• Reservado em desafios abertos: ☾ **{dados['reservado']}**\n"
+                f"• Disponível: ☾ **{dados['disponivel']}**"
+            ),
+        )
+        emb.set_footer(text="Loteria é financiada por bilhetes; baús são loot e não consomem este teto.")
+        await interaction.response.send_message(embed=emb, ephemeral=True)
+
+    @jornal.command(name="fila", description="Lista mensagens automáticas aguardando entrega.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def fila(self, interaction: discord.Interaction):
+        itens = self.bot.db.listar_publicacoes_problematicas(str(interaction.guild_id))
+        if not itens:
+            await interaction.response.send_message(
+                "✅ A fila de publicações está vazia.", ephemeral=True
+            )
+            return
+        linhas = []
+        for item in itens:
+            erro = str(item.get("ultimo_erro") or "aguardando tentativa")[:100]
+            linhas.append(
+                f"• **#{item['id']}** `{item['origem']}` · `{item['status']}` · "
+                f"{item['tentativas']} tentativa(s)\n  {erro}"
+            )
+        emb = ui.embed(
+            "📤 Fila de publicações", categoria="noticia",
+            descricao="\n".join(linhas)[:4000],
+        )
+        await interaction.response.send_message(embed=emb, ephemeral=True)
+
+    @jornal.command(name="fila_reprocessar", description="Reativa imediatamente uma publicação com falha.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def fila_reprocessar(self, interaction: discord.Interaction, publicacao_id: int):
+        ok = self.bot.db.reprocessar_publicacao(
+            str(interaction.guild_id), publicacao_id
+        )
+        await interaction.response.send_message(
+            "✅ Publicação recolocada na fila." if ok else "Publicação pendente não encontrada.",
             ephemeral=True,
         )
 
@@ -690,6 +1301,12 @@ class Jornal(commands.Cog):
         if not interaction.guild_id:
             await interaction.response.send_message("⚠️ Isso só funciona dentro de um servidor.", ephemeral=True)
             return
+        if not _bot_pode_publicar(canal):
+            await interaction.response.send_message(
+                "⚠️ Preciso de **Ver canal**, **Enviar mensagens** e **Inserir links** nesse canal.",
+                ephemeral=True,
+            )
+            return
         self.bot.db.set_canal_categoria(str(interaction.guild_id), categoria.value, str(canal.id))
         await interaction.response.send_message(
             f"✅ **{categoria.name}** agora é publicado em {canal.mention}.", ephemeral=True
@@ -780,6 +1397,13 @@ class Jornal(commands.Cog):
         if canal_pub is None:
             return
         gid = str(interaction.guild_id)
+        if not self.bot.db.automacao_ativa(gid, "rumores_baus", True):
+            await interaction.response.send_message(
+                "⏸️ Os baús de rumor estão desligados. Ligue **Baús agendados por rumores** "
+                "em `/jornal automacao` antes de criar o rumor.",
+                ephemeral=True,
+            )
+            return
         if self.bot.get_cog("Baus") is None or not self.bot.db.listar_baus_canais(gid):
             await interaction.response.send_message(
                 "⚠️ Nenhum canal de baú configurado ainda. Use `/bau_canal_adicionar` primeiro.", ephemeral=True
@@ -805,6 +1429,10 @@ class Jornal(commands.Cog):
     async def ciclo_rumores(self):
         agora = datetime.now(timezone.utc)
         for rumor_row in self.bot.db.listar_rumores_baus_pendentes(agora):
+            if not self.bot.db.automacao_ativa(
+                str(rumor_row["guild_id"]), "rumores_baus", True
+            ):
+                continue
             try:
                 await self._soltar_bau_de_rumor(rumor_row)
             except Exception:
@@ -816,16 +1444,18 @@ class Jornal(commands.Cog):
 
     async def _soltar_bau_de_rumor(self, rumor_row: dict) -> None:
         guild_id = str(rumor_row["guild_id"])
-        # Marca processado ANTES de soltar: se _dropar falhar, o baú desse
-        # rumor simplesmente não sai (igual ao comportamento antigo, que
-        # também não tinha retry) em vez de tentar de novo sem parar.
-        self.bot.db.marcar_rumor_bau_processado(rumor_row["id"])
         baus_cog = self.bot.get_cog("Baus")
         if baus_cog is None:
-            log.warning("cog Baus indisponível: baú do rumor %s não foi solto", rumor_row["id"])
+            log.warning("rumor %s continua pendente: cog Baus indisponível", rumor_row["id"])
             return
         cfg = self.bot.db.get_baus_config(guild_id)
-        await baus_cog._dropar(cfg)
+        destino = await baus_cog._dropar(cfg)
+        if destino is None:
+            log.warning("rumor %s continua pendente: nenhum canal recebeu o baú", rumor_row["id"])
+            return
+        # Só encerra o agendamento depois de o Discord confirmar o envio.
+        # Canal/permissão/rede indisponível vira retry, não perda silenciosa.
+        self.bot.db.marcar_rumor_bau_processado(rumor_row["id"])
 
     # ── /jornal desafio (botão + modal: confere a resposta de verdade) ──────
     @jornal.command(
@@ -847,17 +1477,30 @@ class Jornal(commands.Cog):
             await interaction.response.send_message("Use isso num canal de texto do servidor.", ephemeral=True)
             return
         token = uuid.uuid4().hex
+        gid = str(interaction.guild_id)
+        reserva = self.bot.db.criar_desafio_com_orcamento(
+            token, gid, str(interaction.channel.id), str(interaction.user.id),
+            pergunta, resposta, recompensa,
+        )
+        if not reserva["criado"]:
+            await interaction.response.send_message(
+                f"⚠️ O orçamento editorial não comporta esse prêmio. "
+                f"Disponível neste mês: ☾ **{reserva['disponivel']}**. "
+                "Consulte `/jornal orcamento`.",
+                ephemeral=True,
+            )
+            return
         emb = ui.embed(
             "🎲 Desafio do Jornal Lunar", categoria="noticia",
             descricao=f"{pergunta}\n\n🏆 Clique no botão e responda: quem acertar primeiro ganha ☾ **{recompensa} Lunaris**!",
         )
         view = _view_desafio(self, token)
-        await interaction.response.send_message(embed=emb, view=view)
+        try:
+            await interaction.response.send_message(embed=emb, view=view)
+        except discord.HTTPException:
+            self.bot.db.cancelar_desafio_aberto(token)
+            raise
         mensagem = await interaction.original_response()
-        gid = str(interaction.guild_id)
-        self.bot.db.criar_desafio(
-            token, gid, str(interaction.channel.id), str(interaction.user.id), pergunta, resposta, recompensa
-        )
         self.bot.db.set_desafio_mensagem(token, str(mensagem.id))
 
     async def abrir_modal_desafio(self, interaction: discord.Interaction, token: str) -> None:
@@ -884,15 +1527,11 @@ class Jornal(commands.Cog):
                 "❌ Resposta errada. Clique no botão e tente de novo!", ephemeral=True
             )
             return
-        ganho = self.bot.db.reivindicar_desafio(token, str(interaction.user.id))
+        ganho = self.bot.db.reivindicar_e_premiar_desafio(token, str(interaction.user.id))
         if ganho is None:
             await interaction.response.send_message("Alguém já acertou esse desafio! 😅", ephemeral=True)
             return
         gid, recompensa = str(ganho["guild_id"]), int(ganho["recompensa"])
-        self.bot.db.creditar(gid, str(interaction.user.id), "Lunaris", recompensa)
-        self.bot.db.registrar_extrato(
-            gid, str(interaction.user.id), recompensa, "Lunaris", "Venceu um desafio do Jornal Lunar"
-        )
         try:
             await interaction.response.send_message(
                 f"🏆 Você acertou e ganhou ☾ **{recompensa} Lunaris**!", ephemeral=True

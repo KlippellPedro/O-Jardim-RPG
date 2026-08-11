@@ -55,6 +55,9 @@ class _DB:
     def get_config_roubo(self, guild_id):
         return {"chance_base": 0.5, "cooldown_horas": self.cooldown_horas}
 
+    def get_calor_roubo(self, *_args):
+        return 0
+
     def get_mestre_protegido(self, guild_id):
         return "999"  # igual ao alvo: força o ramo de punição (early return)
 
@@ -83,7 +86,7 @@ def test_roubar_usa_o_cooldown_configurado_por_setroubo():
     membro = _Membro(999)
 
     antes = datetime.now(timezone.utc)
-    _rodar(Economia.roubar.callback(cog, interacao, membro, furtivo=False))
+    _rodar(Economia.roubar.callback(cog, interacao, membro))
     depois = datetime.now(timezone.utc)
 
     assert len(db.chamadas_reserva) == 1
@@ -99,7 +102,7 @@ def test_roubar_respeita_cooldown_diferente_por_servidor():
     interacao = _Interacao(100, 1)
     membro = _Membro(999)
 
-    _rodar(Economia.roubar.callback(cog, interacao, membro, furtivo=False))
+    _rodar(Economia.roubar.callback(cog, interacao, membro))
 
     agora, proxima = db.chamadas_reserva[0]
     assert (proxima - agora) == timedelta(hours=3)
