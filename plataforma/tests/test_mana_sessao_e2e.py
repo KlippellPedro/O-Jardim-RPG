@@ -25,8 +25,9 @@ from core import live_session
 from core.database import Database
 from core.dependencies import AuthenticatedUser
 from routers.rolls import registrar_uso
+from routers.characters import update_character
 from routers.sessions import abrir_sessao, atualizar_participante
-from schemas import ParticipantUpdateInput, SessionOpenInput, UsageInput
+from schemas import CharacterUpdateInput, ParticipantUpdateInput, SessionOpenInput, UsageInput
 
 
 TEST_DSN = (os.getenv("TEST_DATABASE_URL") or "").strip()
@@ -138,6 +139,50 @@ class ManaSessaoE2ETests(unittest.TestCase):
             user=actor,
             database=self.database,
         )
+
+    def test_abrir_sessao_inicializa_mana_com_os_valores_da_ficha(self):
+        _, campanha_id, _, actor = self._campanha_com_personagem(
+            email="mana-abertura@example.com", mana_ficha=17
+        )
+
+        estado = abrir_sessao(
+            SessionOpenInput(campanha_id=campanha_id, titulo="Sessao Mana", incluir_personagens=True),
+            user=actor,
+            database=self.database,
+        )
+
+        participante = estado["participantes"][0]
+        self.assertEqual(participante["mana_atual"], 17)
+        self.assertEqual(participante["mana_maxima"], 17)
+        self.assertEqual(self._mana_atual_no_banco(participante["id"]), 17)
+
+    def test_salvar_ficha_sincroniza_mana_do_participante_ativo(self):
+        _, campanha_id, personagem_id, actor = self._campanha_com_personagem(
+            email="mana-ficha-sessao@example.com", mana_ficha=20
+        )
+        estado = abrir_sessao(
+            SessionOpenInput(campanha_id=campanha_id, titulo="Sessao Mana", incluir_personagens=True),
+            user=actor,
+            database=self.database,
+        )
+        participante_id = estado["participantes"][0]["id"]
+
+        update_character(
+            personagem_id,
+            CharacterUpdateInput(
+                versao_esperada=1,
+                nome="Heroina",
+                ficha={
+                    "derivados": {"vida": 10, "mana": 20},
+                    "status": {"vidaAtual": 10, "manaAtual": 7},
+                    "recursos": {"vidaAtual": 10},
+                },
+            ),
+            user=actor,
+            database=self.database,
+        )
+
+        self.assertEqual(self._mana_atual_no_banco(participante_id), 7)
 
     # -- 1. uso normal ------------------------------------------------------
 

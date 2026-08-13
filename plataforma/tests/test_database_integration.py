@@ -13,8 +13,6 @@ from psycopg import sql
 from psycopg.conninfo import make_conninfo
 from psycopg.types.json import Jsonb
 
-from fastapi import HTTPException
-
 from core.backup import TABELAS, TABELAS_IGNORADAS, gerar_backup, restaurar_backup
 from core.character_summary import carregar_catalogos
 from core.database import Database
@@ -509,32 +507,38 @@ class DatabaseMigrationTests(unittest.TestCase):
         # para contas vinculadas) tem 2. A página precisa mostrar os mesmos 2.
         self.assertEqual(resultado["itens_no_inventario"], 2)
 
-    def test_create_character_bloqueia_raca_fora_da_arvore(self):
-        """Regressão: nada validava raça/classe contra a Árvore escolhida nem
-        contra liberação do mestre — um jogador podia criar qualquer
-        combinação via API direta, ignorando a regra por completo."""
+    def test_create_character_permite_raca_fora_da_arvore_e_notifica_mestre(self):
+        """A Árvore orienta as regras do RPG, mas não bloqueia a liberdade do
+        jogador na ficha. Configurações fora das regras são permitidas e devem
+        ser comunicadas ao Mestre para avaliação."""
         carregar_catalogos(Path("..") / "data")
-        usuario_id = uuid.uuid4()
+        jogador_id = uuid.uuid4()
+        mestre_id = uuid.uuid4()
         campanha_id = uuid.uuid4()
         with self.database.connection() as connection:
             connection.execute(
                 """
                 INSERT INTO usuarios (id, email, nome_exibicao, senha_hash, papel_plataforma)
-                VALUES (%s, 'jogador-arvore@example.com', 'Jogador', 'hash', 'player')
+                VALUES
+                    (%s, 'jogador-arvore@example.com', 'Jogador', 'hash', 'player'),
+                    (%s, 'mestre-arvore@example.com', 'Mestre', 'hash', 'player')
                 """,
-                (usuario_id,),
+                (jogador_id, mestre_id),
             )
             connection.execute(
                 "INSERT INTO campanhas (id, dono_id, nome) VALUES (%s, %s, 'Mesa')",
-                (campanha_id, usuario_id),
+                (campanha_id, mestre_id),
             )
             connection.execute(
-                "INSERT INTO membros_campanha (campanha_id, usuario_id, papel) VALUES (%s, %s, 'jogador')",
-                (campanha_id, usuario_id),
+                """
+                INSERT INTO membros_campanha (campanha_id, usuario_id, papel)
+                VALUES (%s, %s, 'jogador'), (%s, %s, 'mestre')
+                """,
+                (campanha_id, jogador_id, campanha_id, mestre_id),
             )
 
         actor = AuthenticatedUser(
-            id=usuario_id,
+            id=jogador_id,
             email="jogador-arvore@example.com",
             nome_exibicao="Jogador",
             admin_plataforma=False,
@@ -548,9 +552,38 @@ class DatabaseMigrationTests(unittest.TestCase):
             nome="Herói Errado",
             ficha={"arvoreId": "erebus", "racaId": "elfo", "classeId": "guerreiro"},
         )
-        with self.assertRaises(HTTPException) as ctx:
-            create_character(payload=payload, user=actor, database=self.database)
-        self.assertEqual(ctx.exception.status_code, 422)
+        resultado = create_character(payload=payload, user=actor, database=self.database)
+
+        self.assertEqual(resultado["nome"], "Herói Errado")
+        self.assertEqual(resultado["dono_usuario_id"], jogador_id)
+        with self.database.connection() as connection:
+            personagem = connection.execute(
+                "SELECT dono_usuario_id, nome, ficha FROM personagens WHERE id=%s",
+                (resultado["id"],),
+            ).fetchone()
+            avisos = connection.execute(
+                """
+                SELECT usuario_id, origem_usuario_id, categoria, titulo, mensagem,
+                       dados->>'personagem_id' AS personagem_id
+                FROM notificacoes
+                WHERE campanha_id=%s
+                ORDER BY criado_em, id
+                """,
+                (campanha_id,),
+            ).fetchall()
+
+        self.assertIsNotNone(personagem)
+        self.assertEqual(personagem["dono_usuario_id"], jogador_id)
+        self.assertEqual(personagem["nome"], "Herói Errado")
+        self.assertEqual(personagem["ficha"]["arvoreId"], "erebus")
+        self.assertEqual(len(avisos), 1)
+        aviso = avisos[0]
+        self.assertEqual(aviso["usuario_id"], mestre_id)
+        self.assertEqual(aviso["origem_usuario_id"], jogador_id)
+        self.assertEqual(aviso["categoria"], "campanha")
+        self.assertEqual(aviso["titulo"], "Alerta de Regras na Criação")
+        self.assertIn("fora das regras", aviso["mensagem"])
+        self.assertEqual(aviso["personagem_id"], str(resultado["id"]))
 
     def test_create_character_permite_combinacao_valida(self):
         """Raça/classe gerais cabem em qualquer Árvore — não deve bloquear."""
@@ -558,22 +591,28 @@ class DatabaseMigrationTests(unittest.TestCase):
 
         carregar_catalogos(Path("..") / "data")
         usuario_id = uuid.uuid4()
+        mestre_id = uuid.uuid4()
         campanha_id = uuid.uuid4()
         with self.database.connection() as connection:
             connection.execute(
                 """
                 INSERT INTO usuarios (id, email, nome_exibicao, senha_hash, papel_plataforma)
-                VALUES (%s, 'jogador-arvore-ok@example.com', 'Jogador', 'hash', 'player')
+                VALUES
+                    (%s, 'jogador-arvore-ok@example.com', 'Jogador', 'hash', 'player'),
+                    (%s, 'mestre-arvore-ok@example.com', 'Mestre', 'hash', 'player')
                 """,
-                (usuario_id,),
+                (usuario_id, mestre_id),
             )
             connection.execute(
                 "INSERT INTO campanhas (id, dono_id, nome) VALUES (%s, %s, 'Mesa')",
-                (campanha_id, usuario_id),
+                (campanha_id, mestre_id),
             )
             connection.execute(
-                "INSERT INTO membros_campanha (campanha_id, usuario_id, papel) VALUES (%s, %s, 'jogador')",
-                (campanha_id, usuario_id),
+                """
+                INSERT INTO membros_campanha (campanha_id, usuario_id, papel)
+                VALUES (%s, %s, 'jogador'), (%s, %s, 'mestre')
+                """,
+                (campanha_id, usuario_id, campanha_id, mestre_id),
             )
 
         actor = AuthenticatedUser(
@@ -595,6 +634,18 @@ class DatabaseMigrationTests(unittest.TestCase):
         )
         resultado = create_character(payload=payload, user=actor, database=self.database)
         self.assertEqual(resultado["nome"], "Herói Certo")
+        with self.database.connection() as connection:
+            personagem = connection.execute(
+                "SELECT dono_usuario_id, nome FROM personagens WHERE id=%s",
+                (resultado["id"],),
+            ).fetchone()
+            total_avisos = connection.execute(
+                "SELECT COUNT(*) AS total FROM notificacoes WHERE campanha_id=%s",
+                (campanha_id,),
+            ).fetchone()["total"]
+        self.assertEqual(personagem["dono_usuario_id"], usuario_id)
+        self.assertEqual(personagem["nome"], "Herói Certo")
+        self.assertEqual(total_avisos, 0)
 
     def test_restaurar_recusa_arquivo_estranho(self):
         import gzip as _gzip

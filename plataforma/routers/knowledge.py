@@ -88,12 +88,12 @@ def grant_knowledge(
 
         if payload.destinatario_tipo == "papel":
             if payload.destinatario_id not in {"mestre", "assistente", "jogador", "observador"}:
-                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="papel invalido")
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail="papel invalido")
         elif payload.destinatario_tipo == "usuario":
             try:
                 recipient_uuid = UUID(payload.destinatario_id)
             except ValueError:
-                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="usuario invalido") from None
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail="usuario invalido") from None
             exists = connection.execute(
                 """
                 SELECT 1 FROM membros_campanha
@@ -102,12 +102,12 @@ def grant_knowledge(
                 (campaign_id, recipient_uuid),
             ).fetchone()
             if not exists:
-                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="usuario nao pertence a campanha")
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail="usuario nao pertence a campanha")
         else:
             try:
                 recipient_uuid = UUID(payload.destinatario_id)
             except ValueError:
-                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="personagem invalido") from None
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail="personagem invalido") from None
             exists = connection.execute(
                 """
                 SELECT 1 FROM personagens
@@ -116,7 +116,7 @@ def grant_knowledge(
                 (campaign_id, recipient_uuid),
             ).fetchone()
             if not exists:
-                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="personagem nao pertence a campanha")
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail="personagem nao pertence a campanha")
 
         grant_id = uuid4()
         row = connection.execute(

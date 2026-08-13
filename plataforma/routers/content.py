@@ -95,7 +95,7 @@ def publish_content(
         missing = [key for key in payload.chaves if key not in by_key]
         if missing:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail=f"conteudo inexistente: {missing[0]}",
             )
         for key in payload.chaves:

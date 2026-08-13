@@ -124,13 +124,14 @@ class SaqueCofreBancarioTests(unittest.TestCase):
                 )
         return usuario_id, campanha_id, personagem_id
 
-    def _sacar(self, quantidade: int, *, moeda: str = "Lunaris", personagem_id=None):
+    def _sacar(self, quantidade: int, *, moeda: str = "Lunaris", personagem_id=None, idempotencia=None):
         return withdraw_bank_vault_to_character(
             payload=VaultTransferCurrencyInput(
                 campanha_id=self.campanha_id,
                 personagem_id=personagem_id or self.personagem_id,
                 moeda=moeda,
                 quantidade=quantidade,
+                idempotencia=idempotencia or f"saque:{uuid.uuid4().hex}",
             ),
             user=_Usuario(self.usuario_id),
             database=self.database,
@@ -213,6 +214,32 @@ class SaqueCofreBancarioTests(unittest.TestCase):
 
         with self.assertRaises(HTTPException) as erro:
             self._sacar(10)
+
+        self.assertEqual(erro.exception.status_code, 409)
+
+    # ── idempotencia (P2-1) ─────────────────────────────────────────────
+
+    def test_saque_repetido_com_mesma_chave_nao_debita_duas_vezes(self):
+        """Reenviar a mesma chave (retry de rede, duplo-clique) precisa
+        devolver o resultado original em vez de sacar o banco de novo."""
+        chave = f"saque:{uuid.uuid4().hex}"
+
+        primeira = self._sacar(150, idempotencia=chave)
+        segunda = self._sacar(150, idempotencia=chave)
+
+        self.assertFalse(primeira["repetida"])
+        self.assertTrue(segunda["repetida"])
+        self.assertEqual(primeira["restante"], segunda["restante"])
+        self.assertEqual(primeira["economia_versao"], segunda["economia_versao"])
+        # Só um saque de verdade aconteceu — 500 - 150, não 500 - 300.
+        self.assertEqual(self._saldos(), (350, 150))
+
+    def test_mesma_chave_com_payload_diferente_devolve_409(self):
+        chave = f"saque:{uuid.uuid4().hex}"
+        self._sacar(100, idempotencia=chave)
+
+        with self.assertRaises(HTTPException) as erro:
+            self._sacar(200, idempotencia=chave)
 
         self.assertEqual(erro.exception.status_code, 409)
 

@@ -134,6 +134,22 @@ class EconomyCommandUnitTests(unittest.TestCase):
             2,
         )
         self.assertEqual(
+            _catalog_shop_level({"tipo": "arma", "conteudo": {"raridade": "comum", "subtipo": "marcial", "preco": 1}}),
+            2,
+        )
+        self.assertEqual(
+            _catalog_shop_level({"tipo": "artefato", "conteudo": {"raridade": "epico", "preco": 1}}),
+            3,
+        )
+        self.assertEqual(
+            _catalog_shop_level({"tipo": "arma", "conteudo": {"raridade": "lendario", "preco": 1}}),
+            4,
+        )
+        self.assertEqual(
+            _catalog_shop_level({"tipo": "arma", "conteudo": {"raridade": "comum", "preco": 1, "nivelMinimoLoja": 3}}),
+            3,
+        )
+        self.assertEqual(
             _catalog_shop_level({"tipo": "arma", "conteudo": {"raridade": "inválida", "preco": 1}}),
             4,
         )

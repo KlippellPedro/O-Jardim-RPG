@@ -191,7 +191,7 @@ def update_campaign(
             (
                 payload.nome if payload.nome is not None else current["nome"],
                 payload.descricao if payload.descricao is not None else current["descricao"],
-                Jsonb(payload.configuracoes) if payload.configuracoes is not None else current["configuracoes"],
+                Jsonb(payload.configuracoes) if payload.configuracoes is not None else Jsonb(current["configuracoes"]),
                 campaign_id,
             ),
         ).fetchone()
@@ -274,7 +274,7 @@ def set_active_character(
         ).fetchone()
         if not character:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail="selecione um personagem seu desta campanha",
             )
         connection.execute(
@@ -596,12 +596,12 @@ def transfer_campaign_ownership(
         ).fetchone()
         if not target:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail="o novo dono precisa ser membro ativo da campanha",
             )
         if target["papel_plataforma"] not in {"mestre", "criador"}:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail="altere primeiro o cargo global da conta para mestre",
             )
         connection.execute(

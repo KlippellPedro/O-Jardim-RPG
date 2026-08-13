@@ -1009,7 +1009,7 @@ def apply_wallet_transaction(
     database: Database = Depends(get_database),
 ):
     if payload.delta == 0:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="delta nao pode ser zero")
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail="delta nao pode ser zero")
     with database.connection() as connection:
         character = _character_in_campaign(
             connection,
@@ -1124,7 +1124,7 @@ def apply_inventory_transaction(
     database: Database = Depends(get_database),
 ):
     if payload.delta == 0:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="delta nao pode ser zero")
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail="delta nao pode ser zero")
     with database.connection() as connection:
         character = _character_in_campaign(
             connection,

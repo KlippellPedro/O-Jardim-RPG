@@ -95,7 +95,7 @@ def _credit_lunaris(connection, campaign_id: UUID, character_id: UUID, amount: i
     new_balance = current + amount
     if new_balance > MAX_ECONOMY_AMOUNT:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail="a recompensa excederia o limite de saldo em Lunaris",
         )
     currency = lunaris[0]["moeda"] if lunaris else "Lunaris"
@@ -202,7 +202,7 @@ def reivindicar_recompensa(
         target = locked_characters.get(payload.alvo_personagem_id)
         if not hunter or hunter["status"] != "ativo" or hunter["dono_usuario_id"] != user.id:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail="o cacador precisa ser um personagem ativo seu desta campanha",
             )
         if not target or target["status"] != "ativo":
@@ -212,7 +212,7 @@ def reivindicar_recompensa(
             )
         if hunter["id"] == target["id"] or hunter["dono_usuario_id"] == target["dono_usuario_id"]:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail="nao e permitido reivindicar recompensa contra si mesmo",
             )
 
@@ -376,7 +376,7 @@ def resolver_recompensa(
             target_id = UUID(str(pre_data["alvo_personagem_id"]))
         except (KeyError, TypeError, ValueError) as exc:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail="reivindicacao sem personagens validos",
             ) from exc
 
@@ -427,7 +427,7 @@ def resolver_recompensa(
             locked_target_id = UUID(str(data["alvo_personagem_id"]))
         except (KeyError, TypeError, ValueError) as exc:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail="reivindicacao sem personagens validos",
             ) from exc
         if locked_hunter_id != hunter_id or locked_target_id != target_id:

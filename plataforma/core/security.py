@@ -15,6 +15,14 @@ def hash_password(password: str) -> str:
     return _password_hash.hash(password)
 
 
+# Hash "de mentira" usado quando não há usuário/hash real para comparar (ex.:
+# email não cadastrado). Rodar verify_password contra ele mantém o custo de
+# CPU igual ao de uma tentativa com conta existente, evitando um oráculo de
+# timing que revelaria se o email está cadastrado. Calculado uma vez no
+# import — o valor em si nunca é usado como senha válida de ninguém.
+DUMMY_PASSWORD_HASH = _password_hash.hash("timing-attack-mitigation-placeholder")
+
+
 def verify_password(password: str, password_hash: str) -> bool:
     try:
         return _password_hash.verify(password, password_hash)

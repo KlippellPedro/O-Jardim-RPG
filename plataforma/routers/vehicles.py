@@ -29,6 +29,33 @@ from schemas import (
 
 router = APIRouter(prefix="/campanhas/{campaign_id}/veiculos", tags=["veiculos-campanha"])
 
+
+def _vehicle_int_field(dados: dict, *keys: str, default: int) -> int:
+    """Le o primeiro valor presente (nao-None) entre `keys` em `dados`,
+    aceitando mais de uma chave porque o nome do campo mudou ao longo do
+    tempo (ex.: deslocamento -> deslocamentoMetros, quando o fluxo da Loja
+    passou a gravar as chaves planas do catalogo). Zero explicito em
+    qualquer uma das chaves e um valor real e nao vira `default`."""
+    for key in keys:
+        value = dados.get(key)
+        if value is not None:
+            return int(value)
+    return default
+
+
+def _vehicle_nested_int(dados: dict, outer_key: str, inner_key: str) -> int | None:
+    """Le dados[outer_key][inner_key] quando `outer_key` for um dict —
+    formato legado de item de veiculo (ex. dados['vida']['maximo']), usado
+    por itens inseridos antes do fluxo atual da Loja passar a gravar chaves
+    planas. Devolve None se a estrutura nao existir, para o chamador decidir
+    o fallback (nao confundir com zero explicito)."""
+    outer = dados.get(outer_key)
+    if not isinstance(outer, dict):
+        return None
+    value = outer.get(inner_key)
+    return int(value) if value is not None else None
+
+
 def _require_vehicle_permission(connection, campaign_id: UUID, vehicle_id: UUID, user_id: UUID, required_level: str):
     """
     Validates if the user has permission to access the vehicle.
@@ -248,11 +275,16 @@ def update_vehicle(
     with database.connection() as connection:
         _require_vehicle_permission(connection, campaign_id, vehicle_id, user.id, "gerenciar")
         
+        # vida_atual/combustivel_atual tem CHECK <= vida_maxima/combustivel_maximo
+        # (core/schema.py). Baixar o maximo aqui sem tambem clampar o atual
+        # violaria o CHECK sempre que o atual ja registrado (por dano/consumo
+        # via update_vehicle_delta) ficasse acima do novo maximo.
         row = connection.execute(
             """
             UPDATE campanha_veiculos SET
                 nome=%s, imagem_url=%s, descricao=%s,
-                vida_maxima=%s, combustivel_maximo=%s,
+                vida_maxima=%s, vida_atual=LEAST(vida_atual, %s),
+                combustivel_maximo=%s, combustivel_atual=LEAST(combustivel_atual, %s),
                 defesa=%s, resistencia=%s, deslocamento=%s, manobrabilidade=%s, cobertura=%s,
                 capacidade=%s, tripulacao_minima=%s, sistemas_ativos_maximos=%s, espacos_modulos_maximos=%s, espacos_base=%s,
                 nivel_acesso_campanha=%s,
@@ -263,7 +295,8 @@ def update_vehicle(
             """,
             (
                 payload.nome, payload.imagem_url, payload.descricao,
-                payload.vida_maxima, payload.combustivel_maximo,
+                payload.vida_maxima, payload.vida_maxima,
+                payload.combustivel_maximo, payload.combustivel_maximo,
                 payload.defesa, payload.resistencia, payload.deslocamento, payload.manobrabilidade, payload.cobertura,
                 payload.capacidade, payload.tripulacao_minima, payload.sistemas_ativos_maximos, payload.espacos_modulos_maximos, payload.espacos_base,
                 payload.nivel_acesso_campanha,
@@ -399,8 +432,39 @@ def migrate_vehicle(
         nome = item["titulo"] or "Veículo"
         dados = item["dados"] or {}
 
+        # O fluxo atual da Loja (routers/shop.py) grava os campos do catalogo
+        # em `dados` usando chaves planas (vidaMaxima, deslocamentoMetros,
+        # coberturaOcupantes, espacosBase...). Itens inseridos antes dessa
+        # convenção usam uma estrutura aninhada para vida/combustivel
+        # (dados["vida"]["maximo"], dados["combustivel"]["atual"]...) — ver
+        # test_vehicles_properties.py::_item_legado_veiculo. Aceitamos os
+        # dois formatos para nao quebrar veiculos legados nem os do fluxo
+        # atual (nenhuma das 16 entradas veiculo-completo do catalogo hoje
+        # usa a estrutura aninhada nem modela combustivel).
+        vida_maxima = _vehicle_nested_int(dados, "vida", "maximo")
+        if vida_maxima is None:
+            vida_maxima = _vehicle_int_field(dados, "vidaMaxima", default=0)
+        vida_atual = _vehicle_nested_int(dados, "vida", "atual")
+        if vida_atual is None:
+            vida_atual = vida_maxima  # formato atual nao separa atual/maximo (sem dano previo)
+
+        combustivel_maximo = _vehicle_nested_int(dados, "combustivel", "maximo")
+        combustivel_maximo = combustivel_maximo if combustivel_maximo is not None else 0
+        combustivel_atual = _vehicle_nested_int(dados, "combustivel", "atual")
+        combustivel_atual = combustivel_atual if combustivel_atual is not None else 0
+
+        defesa = _vehicle_int_field(dados, "defesa", default=0)
+        resistencia = _vehicle_int_field(dados, "resistencia", default=0)
+        deslocamento = _vehicle_int_field(dados, "deslocamentoMetros", "deslocamento", default=0)
+        manobrabilidade = _vehicle_int_field(dados, "manobrabilidade", default=0)
+        cobertura = dados.get("coberturaOcupantes", dados.get("cobertura", "nenhuma"))
+        capacidade = _vehicle_int_field(dados, "capacidade", default=0)
+        tripulacao_minima = _vehicle_int_field(dados, "tripulacaoMinima", default=1)
+        sistemas_ativos_maximos = _vehicle_int_field(dados, "sistemasAtivosMaximos", default=1)
+        espacos_base = _vehicle_int_field(dados, "espacosBase", default=1)
+
         vehicle_id = uuid4()
-        
+
         # Insert
         connection.execute(
             """
@@ -420,21 +484,11 @@ def migrate_vehicle(
             """,
             (
                 vehicle_id, campaign_id, payload.personagem_id, payload.item_id, payload.personagem_id,
-                nome, 
-                int(dados.get("vida", {}).get("maximo") or 0),
-                int(dados.get("vida", {}).get("atual") or 0),
-                int(dados.get("combustivel", {}).get("maximo") or 0),
-                int(dados.get("combustivel", {}).get("atual") or 0),
-                int(dados.get("defesa") or 0),
-                int(dados.get("resistencia") or 0),
-                int(dados.get("deslocamento") or 0),
-                int(dados.get("manobrabilidade") or 0),
-                dados.get("cobertura", "nenhuma"),
-                int(dados.get("capacidade") or 0),
-                int(dados.get("tripulacaoMinima") or 1),
-                int(dados.get("sistemasAtivosMaximos") or 1),
-                int(dados.get("sistemasAtivosMaximos") or 1), # fallback for espacos_modulos_maximos
-                int(dados.get("espacosBase") or 1),
+                nome,
+                vida_maxima, vida_atual, combustivel_maximo, combustivel_atual,
+                defesa, resistencia, deslocamento, manobrabilidade, cobertura,
+                capacidade, tripulacao_minima, sistemas_ativos_maximos, sistemas_ativos_maximos,
+                espacos_base,
                 "utilizar" if payload.compartilhar_campanha else "nenhum"
             )
         )
@@ -650,8 +704,14 @@ def add_vehicle_module(
     with database.connection() as connection:
         _require_vehicle_permission(connection, campaign_id, vehicle_id, user.id, "gerenciar")
 
+        # FOR UPDATE trava a linha do veiculo ate o fim da transacao: duas
+        # chamadas concorrentes a esta rota serializam aqui, entao a soma de
+        # espacos_ocupados abaixo so e lida depois que a anterior confirmou
+        # (ou desfez) seu INSERT — sem isso, ambas podiam ler o mesmo total
+        # antes de qualquer insercao e ultrapassar espacos_modulos_maximos
+        # (mesmo padrao de routers/shop.py para saldo/estoque).
         vehicle = connection.execute(
-            "SELECT espacos_modulos_maximos FROM campanha_veiculos WHERE id=%s", (vehicle_id,)
+            "SELECT espacos_modulos_maximos FROM campanha_veiculos WHERE id=%s FOR UPDATE", (vehicle_id,)
         ).fetchone()
         if not vehicle:
             raise HTTPException(status_code=404, detail="Veículo não encontrado.")
@@ -696,8 +756,11 @@ def toggle_vehicle_module(
         _require_vehicle_permission(connection, campaign_id, vehicle_id, user.id, "utilizar")
 
         if payload.ativo:
+            # Mesmo motivo do FOR UPDATE em add_vehicle_module: serializa
+            # toggles concorrentes no mesmo veiculo antes de contar quantos
+            # modulos ja estao ativos.
             vehicle = connection.execute(
-                "SELECT sistemas_ativos_maximos FROM campanha_veiculos WHERE id=%s", (vehicle_id,)
+                "SELECT sistemas_ativos_maximos FROM campanha_veiculos WHERE id=%s FOR UPDATE", (vehicle_id,)
             ).fetchone()
             if not vehicle:
                 raise HTTPException(status_code=404, detail="Veículo não encontrado.")

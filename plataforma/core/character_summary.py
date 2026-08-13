@@ -239,15 +239,6 @@ def _classes_da_ficha(ficha: dict) -> list[dict]:
     return [item for item in bruto if isinstance(item, dict)]
 
 
-def _nivel_por_xp(xp: int) -> int:
-    nivel = 1
-    for candidato in range(2, 101):
-        if xp < 500 * candidato * (candidato - 1):
-            break
-        nivel = candidato
-    return nivel
-
-
 # VD (Valor de Desafio): classifica a dificuldade das criaturas do Bestiário
 # em 10 graus (mesma contagem dos círculos dos Fluxos). O XP de cada grau já
 # vem pronto aqui — o mestre só escolhe o VD da criatura, sem inventar XP na
@@ -764,46 +755,19 @@ def validar_regras_ficha(
     if nivel_declarado != nivel_total:
         return "o nivel da ficha deve ser a soma dos niveis de classe"
 
-    anteriores = {
-        str(item.get("classeId") or item.get("id") or ""): _inteiro(item.get("nivel")) or 0
-        for item in _classes_da_ficha(anterior)
-    }
-    if not criacao:
-        atuais = {classe_id: nivel for classe_id, (_, nivel) in zip(ids, classes)}
-        removidas = [
-            (classe_id, nivel_anterior) for classe_id, nivel_anterior in anteriores.items()
-            if classe_id not in atuais or atuais[classe_id] < nivel_anterior
-        ]
-        if removidas:
-            # Mesma lógica da raça: só tolera uma classe "sumir" da lista se
-            # ela era comum E entrou uma classe especial liberada no lugar -
-            # uma troca de transformação, nunca perda de progresso real.
-            trocas_liberadas = [
-                classe_id for classe_id in atuais
-                if classe_id not in anteriores
-                and _CATALOGO["classe"].get(classe_id, {}).get("categoria") == "esquecida"
-                and classe_id in liberados_classe
-            ]
-            todas_comuns = all(
-                _CATALOGO["classe"].get(classe_id, {}).get("categoria") == "padrao"
-                for classe_id, _ in removidas
-            )
-            if not todas_comuns or len(trocas_liberadas) < len(removidas):
-                return "jogador nao pode remover classes nem reduzir niveis adquiridos"
+    # O jogador pode adicionar/remover classes, trocar a escolhida e ajustar
+    # o nível e o XP livremente pela própria ficha - o router
+    # (characters.py::update_character) avisa o mestre/assistente sempre que
+    # um jogador mexe nisso, então a revisão acontece depois, não como
+    # bloqueio aqui. Só as regras de catálogo acima (nível 1-20, sem classe
+    # repetida, compatibilidade de árvore, limite de 60 níveis, duas comuns +
+    # uma especial e a ordem de multiclasse) continuam valendo pra todo mundo.
 
     xp = _inteiro(ficha.get("xp", 0))
     if xp is None or xp < 0:
         return "XP deve ser um numero inteiro nao negativo"
     if criacao and xp != 0:
         return "personagens comecam com 0 XP"
-    xp_anterior = _inteiro(anterior.get("xp", 0)) or 0
-    if not criacao and xp != xp_anterior:
-        return "somente o mestre pode alterar o XP"
-    nivel_anterior = sum(_inteiro(item.get("nivel")) or 0 for item in _classes_da_ficha(anterior))
-    if "xp" in anterior and nivel_total > _nivel_por_xp(xp) and (criacao or nivel_total > nivel_anterior):
-        return "o XP registrado nao permite esse nivel total"
-    if not criacao and "xp" not in anterior and nivel_total > nivel_anterior:
-        return "o mestre precisa registrar o XP antes de aumentar o nivel"
 
     metodo = ficha.get("metodoAtributos")
     base = ficha.get("atributosBase")

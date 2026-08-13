@@ -20,7 +20,13 @@ from core.cofre_tiers import (
     tier_info as _tier_info,
 )
 from core.database import Database
-from core.economy_commands import MAX_ECONOMY_AMOUNT
+from core.economy_commands import (
+    MAX_ECONOMY_AMOUNT,
+    begin_economy_command,
+    command_fingerprint,
+    complete_economy_command,
+    get_economy_command_replay,
+)
 from core.dependencies import (
     AuthenticatedUser,
     campaign_access,
@@ -49,7 +55,7 @@ def _owned_character(connection, user_id, campaign_id, character_id):
     ).fetchone()
     if not row:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail="escolha um personagem seu desta campanha",
         )
     return row
@@ -208,9 +214,30 @@ def transfer_item(
     database: Database = Depends(get_database),
 ):
     with database.connection() as connection:
+        fingerprint = command_fingerprint(payload)
+        replay = get_economy_command_replay(
+            connection,
+            campaign_id=payload.campanha_id,
+            user_id=user.id,
+            command_type="cofre.transferir_item",
+            idempotency_key=payload.idempotencia,
+            fingerprint=fingerprint,
+        )
+        if replay is not None:
+            return replay.replay_result
         character = _owned_character(
             connection, user.id, payload.campanha_id, payload.personagem_id
         )
+        command = begin_economy_command(
+            connection,
+            campaign_id=payload.campanha_id,
+            user_id=user.id,
+            command_type="cofre.transferir_item",
+            idempotency_key=payload.idempotencia,
+            fingerprint=fingerprint,
+        )
+        if command.replay_result is not None:
+            return command.replay_result
         row = connection.execute(
             """
             SELECT titulo, quantidade, dados
@@ -314,11 +341,14 @@ def transfer_item(
                 "economia_versao": int(version_row["economia_versao"]),
             },
         )
-    return {
-        "personagem": character,
-        "restante": remaining,
-        "economia_versao": int(version_row["economia_versao"]),
-    }
+        result = {
+            "personagem": {"id": str(character["id"]), "nome": character["nome"]},
+            "restante": remaining,
+            "economia_versao": int(version_row["economia_versao"]),
+            "repetida": False,
+        }
+        complete_economy_command(connection, command.id, result)
+    return result
 
 
 @router.post("/transferir-moeda")
@@ -328,9 +358,30 @@ def transfer_currency(
     database: Database = Depends(get_database),
 ):
     with database.connection() as connection:
+        fingerprint = command_fingerprint(payload)
+        replay = get_economy_command_replay(
+            connection,
+            campaign_id=payload.campanha_id,
+            user_id=user.id,
+            command_type="cofre.transferir_moeda",
+            idempotency_key=payload.idempotencia,
+            fingerprint=fingerprint,
+        )
+        if replay is not None:
+            return replay.replay_result
         character = _owned_character(
             connection, user.id, payload.campanha_id, payload.personagem_id
         )
+        command = begin_economy_command(
+            connection,
+            campaign_id=payload.campanha_id,
+            user_id=user.id,
+            command_type="cofre.transferir_moeda",
+            idempotency_key=payload.idempotencia,
+            fingerprint=fingerprint,
+        )
+        if command.replay_result is not None:
+            return command.replay_result
         row = connection.execute(
             """
             SELECT saldo FROM cofre_saldos_usuario
@@ -424,12 +475,15 @@ def transfer_currency(
                 "economia_versao": int(version_row["economia_versao"]),
             },
         )
-    return {
-        "personagem": character,
-        "restante": remaining,
-        "saldo_personagem": balance["saldo"],
-        "economia_versao": int(version_row["economia_versao"]),
-    }
+        result = {
+            "personagem": {"id": str(character["id"]), "nome": character["nome"]},
+            "restante": remaining,
+            "saldo_personagem": balance["saldo"],
+            "economia_versao": int(version_row["economia_versao"]),
+            "repetida": False,
+        }
+        complete_economy_command(connection, command.id, result)
+    return result
 
 
 def _discord_pair(connection, user_id, campaign_id) -> tuple[str, str]:
@@ -475,9 +529,30 @@ def withdraw_bank_vault_to_character(
     saque em `/extrato` no Discord, não só na ficha.
     """
     with database.connection() as connection:
+        fingerprint = command_fingerprint(payload)
+        replay = get_economy_command_replay(
+            connection,
+            campaign_id=payload.campanha_id,
+            user_id=user.id,
+            command_type="cofre.sacar_banco",
+            idempotency_key=payload.idempotencia,
+            fingerprint=fingerprint,
+        )
+        if replay is not None:
+            return replay.replay_result
         character = _owned_character(
             connection, user.id, payload.campanha_id, payload.personagem_id
         )
+        command = begin_economy_command(
+            connection,
+            campaign_id=payload.campanha_id,
+            user_id=user.id,
+            command_type="cofre.sacar_banco",
+            idempotency_key=payload.idempotencia,
+            fingerprint=fingerprint,
+        )
+        if command.replay_result is not None:
+            return command.replay_result
         discord_guild_id, discord_user_id = _discord_pair(
             connection, user.id, payload.campanha_id
         )
@@ -585,12 +660,15 @@ def withdraw_bank_vault_to_character(
                 "economia_versao": int(version_row["economia_versao"]),
             },
         )
-    return {
-        "personagem": character,
-        "restante": remaining,
-        "saldo_personagem": balance["saldo"],
-        "economia_versao": int(version_row["economia_versao"]),
-    }
+        result = {
+            "personagem": {"id": str(character["id"]), "nome": character["nome"]},
+            "restante": remaining,
+            "saldo_personagem": balance["saldo"],
+            "economia_versao": int(version_row["economia_versao"]),
+            "repetida": False,
+        }
+        complete_economy_command(connection, command.id, result)
+    return result
 
 
 @router.post("/comprar", deprecated=True)

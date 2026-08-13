@@ -66,7 +66,7 @@ class TestCharacterRules:
         ficha["pericias"]["cura"] = "aprendiz"
         assert "exatamente 6" in validar_regras_ficha(ficha, {}, criacao=True)
 
-    def test_rejects_level_without_xp_and_early_second_common_class(self):
+    def test_rejects_early_second_common_class(self):
         anterior = _ficha_criacao()
         atual = deepcopy(anterior)
         atual["classes"] = [
@@ -77,11 +77,17 @@ class TestCharacterRules:
         erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
         assert "segunda classe comum" in erro
 
+    def test_player_can_raise_class_level_without_matching_xp(self):
+        # Decisão de design 2026-08: o jogador ganhou o controle de
+        # nível/classe/XP na própria ficha (era exclusivo do mestre); o
+        # router (characters.py::update_character) avisa o mestre/assistente
+        # sempre que um jogador mexe nisso, então a checagem virou aviso
+        # pós-fato, não mais um bloqueio aqui.
+        anterior = _ficha_criacao()
         atual = deepcopy(anterior)
         atual["classes"][0]["nivel"] = 2
         atual["nivel"] = 2
-        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
-        assert "XP registrado" in erro
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
 
     def test_rejects_early_or_unearned_training_degree(self):
         anterior = _ficha_criacao()
@@ -90,12 +96,13 @@ class TestCharacterRules:
         erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
         assert "nivel total" in erro
 
-    def test_players_cannot_award_themselves_xp(self):
+    def test_players_can_award_themselves_xp(self):
+        # Decisão de design 2026-08: idem ao nível de classe - o jogador
+        # agora define o próprio XP, e o mestre é avisado pelo router.
         anterior = _ficha_criacao()
         atual = deepcopy(anterior)
         atual["xp"] = 1000
-        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
-        assert "somente o mestre" in erro
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
 
     def test_rejects_powers_beyond_class_slots(self):
         anterior = _ficha_criacao()
@@ -418,13 +425,14 @@ class TestLiberacaoDeRacaEClasseEspecial:
         config = {"classes_liberadas": ["invocador"]}
         assert validar_regras_ficha(atual, config, ficha_anterior=anterior) is None
 
-    def test_player_cannot_drop_a_common_class_without_a_liberated_replacement(self):
+    def test_player_can_drop_a_common_class_without_a_liberated_replacement(self):
+        # Decisão de design 2026-08: idem acima - trocar/remover classe
+        # deixou de ser exclusivo do mestre; o router avisa quando acontece.
         anterior = _ficha_criacao()
         atual = deepcopy(anterior)
         atual["classeId"] = "ninja"
         atual["classes"] = [{"classeId": "ninja", "nivel": 1}]
-        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
-        assert "remover classes" in erro
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
 
 
 class TestRacaPersonalizada:

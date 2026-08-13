@@ -134,19 +134,27 @@ def _catalog_shop_level(row: dict[str, Any]) -> int:
         "mitico", "mitica", "reliquia da criacao",
     }:
         return 4
-    if rarity in {"reliquia", "mitico", "mitica", "reliquia da criacao"}:
+    if rarity in {"lendario", "reliquia", "mitico", "mitica", "reliquia da criacao"}:
         return 4
-    if catalog_type in {"fruto-eden", "artefato"}:
+    if catalog_type == "fruto-eden":
         return 4
     price = resolve_catalog_price(content)
     description = normalize_catalog_filter(content.get("descricao", ""))
-    if catalog_type == "implante" or (price and normalize_currency(price.moeda) == normalize_currency("Créditos Sombrios")):
+    if price and normalize_currency(price.moeda) == normalize_currency("Fragmentos de Estrela"):
+        return 4
+    if rarity == "epico":
+        return 3
+    if catalog_type in {"implante", "artefato"} or (price and normalize_currency(price.moeda) == normalize_currency("Créditos Sombrios")):
         return 3
     if any(marker in description for marker in ("ilegal", "contrabando", "veneno", "mercado negro")):
         return 3
     if catalog_type in {"veiculo", "veiculo-completo", "propriedade"}:
         return 2
-    if rarity in {"raro", "epico"}:
+    if rarity == "raro":
+        return 2
+    if catalog_type == "arma" and normalize_catalog_filter(content.get("subtipo", "")) == "marcial":
+        return 2
+    if catalog_type == "consumivel" and normalize_catalog_filter(content.get("subtipo", "")) == "selo":
         return 2
     return 1
 
@@ -224,7 +232,7 @@ def _owned_character(connection, campaign_id: UUID, character_id: UUID, user_id:
     ).fetchone()
     if not row:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail="escolha um personagem ativo seu desta campanha",
         )
     return row
@@ -345,7 +353,7 @@ def _add_total(totals: dict[str, dict[str, Any]], currency: str, value: int) -> 
     new_value = int(totals[normalized]["valor"]) + int(value)
     if new_value > MAX_ECONOMY_AMOUNT:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail=f"o total em {currency} excede o limite economico",
         )
     totals[normalized]["valor"] = new_value
@@ -579,7 +587,7 @@ def purchase_batch(
             price = resolve_catalog_price(item["conteudo"])
             if price is None:
                 raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                     detail=f"{item['titulo']} possui preco invalido no catalogo",
                 )
             _add_total(totals, price.moeda, price.valor * line.quantidade)
@@ -680,7 +688,7 @@ def purchase_batch(
                 
                 if not alvo and not alvo_veiculo:
                     raise HTTPException(
-                        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                         detail="o item alvo da modificacao nao existe ou nao pertence a voce",
                     )
 
@@ -701,7 +709,7 @@ def purchase_batch(
                         for requisito in pre_requisitos
                     ):
                         raise HTTPException(
-                            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                             detail=f"{item['titulo']} exige um pre-requisito que este personagem nao atende",
                         )
                 categorias_alvo = item_content.get("categorias_alvo") or item_content.get("tipos_alvo_permitidos") or []
@@ -720,7 +728,7 @@ def purchase_batch(
                     allowed_norms = [normalize_catalog_filter(c) for c in categorias_alvo]
                     if alvo_categoria_norm not in allowed_norms and "veiculo" not in allowed_norms: # fallback provisorio
                         raise HTTPException(
-                            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                             detail=f"modificacao incompativel com este tipo de alvo ({alvo_categoria})"
                         )
 
@@ -760,7 +768,7 @@ def purchase_batch(
                     and alvo_categoria_norm not in _ALVOS_POR_APLICACAO[aplicacao_mod]
                 ):
                     raise HTTPException(
-                        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                         detail=f"{item['titulo']} (aplicacao: {item_content.get('aplicacao')}) nao e compativel com este tipo de item ({alvo_categoria})",
                     )
 
@@ -775,7 +783,7 @@ def purchase_batch(
                     
                     if limite_modificacoes is not None and len(modificacoes) + line.quantidade > int(limite_modificacoes):
                         raise HTTPException(
-                            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                             detail="o limite de modificacoes do item alvo foi excedido"
                         )
                     
@@ -783,7 +791,7 @@ def purchase_batch(
                         total_slots_used = sum(int(m.get("slots_ocupados", 1)) for m in modificacoes)
                         if total_slots_used + slots_ocupados_nova > int(slots_modificacao):
                             raise HTTPException(
-                                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                                 detail="os slots de modificacao do item alvo foram excedidos"
                             )
                             
@@ -791,12 +799,12 @@ def purchase_batch(
                         m_exclusividade = normalize_catalog_filter(m.get("grupo_exclusividade", ""))
                         if m_exclusividade and grupo_exclusividade == m_exclusividade:
                             raise HTTPException(
-                                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                                 detail=f"conflito de exclusividade: ja existe uma modificacao do grupo {grupo_exclusividade}"
                             )
                         if not permite_duplicata and m.get("catalogo_item_id") == item["id"]:
                             raise HTTPException(
-                                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                                 detail=f"esta modificacao nao permite duplicatas no mesmo item"
                             )
                     
@@ -845,7 +853,7 @@ def purchase_batch(
                     # quando a modelagem de módulos JSONB do veículo for finalizada.
                     # Por enquanto, impedimos a instalação silenciosa.
                     raise HTTPException(
-                        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                         detail="a instalacao direta em veiculos compartilhados requer a API de modulos",
                     )
             
@@ -854,7 +862,7 @@ def purchase_batch(
             new_quantity = existing_quantity + line.quantidade
             if new_quantity > 1_000_000:
                 raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                     detail=f"a quantidade de {item['titulo']} excede o limite do inventario",
                 )
             existing_data = existing.get("dados") if isinstance(existing.get("dados"), dict) else {}
@@ -1060,7 +1068,7 @@ def sell_batch(
                 or data.get("catalogo_item_id") != item_id
             ):
                 raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                     detail=f"o item {item_id} nao possui origem de loja verificavel",
                 )
 
@@ -1071,7 +1079,7 @@ def sell_batch(
         missing_catalog = next((item_id for item_id in requested_ids if item_id not in catalog), None)
         if missing_catalog:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail=f"o item {missing_catalog} nao existe mais no catalogo ativo",
             )
 
@@ -1084,7 +1092,7 @@ def sell_batch(
             if mods_instaladas and int(stock["quantidade"]) <= line.quantidade:
                 # Bloqueia venda do ultimo exemplar se houver modificacoes instaladas
                 raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                     detail={
                         "mensagem": "este equipamento possui modificacoes instaladas; remova-as antes de vender",
                         "item_id": line.item_id,
@@ -1104,7 +1112,7 @@ def sell_batch(
             price = resolve_catalog_price(catalog_item["conteudo"])
             if price is None:
                 raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                     detail=f"{catalog_item['titulo']} possui preco invalido no catalogo",
                 )
             reward = resale_value(price)
@@ -1124,7 +1132,7 @@ def sell_batch(
             new_balance = current + int(total["valor"])
             if new_balance > MAX_ECONOMY_AMOUNT:
                 raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                     detail=f"o saldo em {total['moeda']} excederia o limite economico",
                 )
             row = connection.execute(

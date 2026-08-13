@@ -248,7 +248,7 @@ class CampaignVehicleInput(BaseModel):
     sistemas_ativos_maximos: int = Field(default=1, ge=0)
     espacos_modulos_maximos: int = Field(default=1, ge=0)
     espacos_base: int = Field(default=1, ge=0)
-    nivel_acesso_campanha: str = Field(default="nenhum")
+    nivel_acesso_campanha: Literal["nenhum", "visualizar", "utilizar"] = Field(default="nenhum")
 
 
 class EconomyWalletItem(BaseModel):
@@ -315,11 +315,19 @@ class EconomyReplaceInput(BaseModel):
         return self
 
 
+_IDEMPOTENCY_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$"
+
+
 class VaultTransferItemInput(BaseModel):
     campanha_id: UUID
     personagem_id: UUID
     item_id: str = Field(min_length=1, max_length=160)
     quantidade: int = Field(default=1, ge=1, le=1_000_000)
+    idempotencia: str = Field(
+        min_length=8,
+        max_length=128,
+        pattern=_IDEMPOTENCY_PATTERN,
+    )
 
 
 class VaultTransferCurrencyInput(BaseModel):
@@ -327,6 +335,11 @@ class VaultTransferCurrencyInput(BaseModel):
     personagem_id: UUID
     moeda: str = Field(min_length=1, max_length=40)
     quantidade: int = Field(ge=1, le=9_000_000_000)
+    idempotencia: str = Field(
+        min_length=8,
+        max_length=128,
+        pattern=_IDEMPOTENCY_PATTERN,
+    )
 
     @field_validator("moeda")
     @classmethod
@@ -335,9 +348,6 @@ class VaultTransferCurrencyInput(BaseModel):
         if not cleaned:
             raise ValueError("moeda nao pode ser vazia")
         return cleaned
-
-
-_IDEMPOTENCY_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$"
 
 
 class StrictCommandInput(BaseModel):
@@ -372,9 +382,9 @@ class ShopBatchCommandInput(StrictCommandInput):
 
     @model_validator(mode="after")
     def validate_batch(self):
-        item_ids = [item.item_id for item in self.itens]
-        if len(item_ids) != len(set(item_ids)):
-            raise ValueError("o lote contem item_id duplicado")
+        keys = [(item.item_id, item.alvo_item_id) for item in self.itens]
+        if len(keys) != len(set(keys)):
+            raise ValueError("o lote contem item_id duplicado para o mesmo alvo")
         if sum(item.quantidade for item in self.itens) > 500:
             raise ValueError("o lote excede 500 unidades")
         return self
@@ -718,7 +728,7 @@ class CampaignPropertyInput(BaseModel):
     patamar: str = ""
     valor_aquisicao: int = Field(default=0, ge=0)
     manutencao: int = Field(default=0, ge=0)
-    nivel_acesso_campanha: str = Field(default="nenhum")
+    nivel_acesso_campanha: Literal["nenhum", "visualizar", "utilizar"] = Field(default="nenhum")
 
 class CampaignPropertyInstallationLegacyInput(BaseModel):
     nome: str = Field(default="Instalação", max_length=100)

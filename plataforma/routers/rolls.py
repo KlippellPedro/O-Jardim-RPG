@@ -52,7 +52,7 @@ def _autor(
     ).fetchone()
     if not linha:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail="personagem nao pertence a esta campanha",
         )
     if not permitir_personagem_alheio and linha["dono_usuario_id"] != user.id:
@@ -105,7 +105,7 @@ def rolar(
             try:
                 dados = rolar_formula(payload.formula)
             except ValueError as erro:
-                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(erro)) from None
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(erro)) from None
             tipo, formula_usada = "dano", dados["formula"]
         else:
             dados = rolar_teste(

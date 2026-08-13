@@ -273,7 +273,12 @@ def abrir_sessao(
                        COALESCE(
                            (ficha->'status'->>'vidaAtual')::int,
                            (ficha->'recursos'->>'vidaAtual')::int
-                       ) AS vida_atual
+                       ) AS vida_atual,
+                       COALESCE((ficha->'derivados'->>'mana')::int, 0) AS mana_maxima,
+                       COALESCE(
+                           (ficha->'status'->>'manaAtual')::int,
+                           (ficha->'recursos'->>'manaAtual')::int
+                       ) AS mana_atual
                 FROM personagens
                 WHERE campanha_id=%s AND status='ativo'
                 ORDER BY nome
@@ -283,16 +288,24 @@ def abrir_sessao(
             for ordem, personagem in enumerate(personagens):
                 maximo = max(0, int(personagem["vida_maxima"] or 0))
                 atual = maximo if personagem["vida_atual"] is None else int(personagem["vida_atual"])
+                mana_maxima = max(0, int(personagem["mana_maxima"] or 0))
+                mana_atual = (
+                    mana_maxima
+                    if personagem["mana_atual"] is None
+                    else max(0, min(int(personagem["mana_atual"]), mana_maxima))
+                )
                 connection.execute(
                     """
                     INSERT INTO sessao_participantes
                         (id, sessao_id, personagem_id, nome, tipo,
-                         iniciativa, vida_atual, vida_maxima, condicoes, ordem)
-                    VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s, %s)
+                         iniciativa, vida_atual, vida_maxima, mana_atual,
+                         mana_maxima, condicoes, ordem)
+                    VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s, %s, %s, %s)
                     """,
                     (uuid4(), sessao_id, personagem["id"], personagem["nome"],
                      iniciativa_fixa(personagem["ficha"]),
                      min(atual, maximo) if maximo else atual, maximo,
+                     mana_atual, mana_maxima,
                      Jsonb(normalizar_condicoes(personagem["ficha"].get("condicoesAtivas"))), ordem),
                 )
 

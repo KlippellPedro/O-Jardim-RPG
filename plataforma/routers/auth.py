@@ -18,6 +18,7 @@ from core.dependencies import (
     require_csrf,
 )
 from core.security import (
+    DUMMY_PASSWORD_HASH,
     hash_password,
     hash_token,
     new_secret_token,
@@ -291,7 +292,15 @@ def login(
             """,
             (email,),
         ).fetchone()
-        if not user or not user["ativo"] or not verify_password(payload.senha, user["senha_hash"]):
+        # Sempre roda verify_password, mesmo sem usuário/conta ativa, contra um
+        # hash "de mentira" nesses casos — senão o curto-circuito do "or" pula
+        # o hashing caro (Argon2id) e cria um oráculo de timing que denuncia
+        # se o email está cadastrado (ver DUMMY_PASSWORD_HASH em core/security.py).
+        senha_hash_para_conferir = (
+            user["senha_hash"] if user and user["ativo"] else DUMMY_PASSWORD_HASH
+        )
+        senha_confere = verify_password(payload.senha, senha_hash_para_conferir)
+        if not user or not user["ativo"] or not senha_confere:
             limites.registrar(connection, limites.LOGIN, limit_key)
             login_failed = True
         else:

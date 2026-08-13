@@ -763,6 +763,64 @@ class ModificacoesLojaTests(unittest.TestCase):
             )
         self.assertEqual(ctx.exception.status_code, 403)
 
+    # -- regressao P1-6: mesmo item_id, alvos diferentes no mesmo lote ----
+
+    def test_mesma_modificacao_em_dois_alvos_no_mesmo_lote_e_aceita(self):
+        """A checagem de duplicidade do lote (schemas.ShopBatchCommandInput.
+        validate_batch) usava só item_id, ignorando alvo_item_id — um lote
+        legítimo com a mesma modificação instalada em dois itens diferentes
+        (mesmo item_id, alvo_item_id distintos) era rejeitado com
+        'o lote contem item_id duplicado' antes desta correção."""
+        _, campanha_id, personagem_id, actor = self._personagem(email="mod-dois-alvos@example.com")
+        self._dar_saldo(campanha_id, personagem_id, "Lunaris", 1000)
+        self._catalogo_item_real("mod-portatil")  # "Itens gerais e mágicos": sem alvo restrito
+        self._inventario_direto(campanha_id, personagem_id, "espada-teste", categoria="arma")
+        self._inventario_direto(campanha_id, personagem_id, "peitoral-teste", categoria="armadura")
+
+        payload = ShopBatchCommandInput(
+            campanha_id=campanha_id,
+            personagem_id=personagem_id,
+            economia_versao_esperada=1,
+            idempotencia="teste-mesma-mod-dois-alvos",
+            itens=[
+                ShopCommandItemInput(item_id="mod-portatil", quantidade=1, alvo_item_id="espada-teste"),
+                ShopCommandItemInput(item_id="mod-portatil", quantidade=1, alvo_item_id="peitoral-teste"),
+            ],
+        )
+        resultado = purchase_batch(payload=payload, user=actor, database=self.database)
+        self.assertFalse(resultado["repetida"])
+
+        with self.database.connection() as connection:
+            espada = connection.execute(
+                "SELECT dados FROM inventario_personagem WHERE campanha_id=%s AND personagem_id=%s AND item_id=%s",
+                (campanha_id, personagem_id, "espada-teste"),
+            ).fetchone()
+            peitoral = connection.execute(
+                "SELECT dados FROM inventario_personagem WHERE campanha_id=%s AND personagem_id=%s AND item_id=%s",
+                (campanha_id, personagem_id, "peitoral-teste"),
+            ).fetchone()
+        self.assertEqual(len(espada["dados"]["modificacoes"]), 1)
+        self.assertEqual(len(peitoral["dados"]["modificacoes"]), 1)
+        self.assertEqual(espada["dados"]["modificacoes"][0]["catalogo_item_id"], "mod-portatil")
+        self.assertEqual(peitoral["dados"]["modificacoes"][0]["catalogo_item_id"], "mod-portatil")
+
+    def test_mesmo_item_id_e_alvo_repetidos_no_lote_ainda_e_rejeitado(self):
+        """A correção troca a chave de duplicidade de item_id isolado para
+        (item_id, alvo_item_id) — repetir exatamente o mesmo par continua
+        bloqueado, só o par distinto passou a ser aceito."""
+        with self.assertRaises(Exception) as ctx:
+            ShopBatchCommandInput(
+                campanha_id=uuid.uuid4(),
+                personagem_id=uuid.uuid4(),
+                economia_versao_esperada=1,
+                idempotencia="teste-mesmo-par-repetido",
+                itens=[
+                    ShopCommandItemInput(item_id="mod-portatil", quantidade=1, alvo_item_id="espada-teste"),
+                    ShopCommandItemInput(item_id="mod-portatil", quantidade=1, alvo_item_id="espada-teste"),
+                ],
+            )
+        self.assertIn("item_id duplicado", str(ctx.exception))
+
 
 if __name__ == "__main__":
     unittest.main()

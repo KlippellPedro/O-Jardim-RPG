@@ -5,8 +5,9 @@ from uuid import UUID, uuid4
 from fastapi import APIRouter, Depends, HTTPException, status
 from psycopg.types.json import Jsonb
 
+from core import live_session
 from core.audit import record_audit
-from core.character_summary import validar_regras_ficha
+from core.character_summary import _classes_da_ficha, _nome, validar_regras_ficha
 from core.database import Database
 from core.economy_commands import MAX_ECONOMY_AMOUNT
 from core.economy_models import (
@@ -57,6 +58,41 @@ def _sheet_without_central_fields(sheet: dict) -> dict:
     return {key: value for key, value in sheet.items() if key not in _CENTRAL_FIELDS}
 
 
+def _session_resources(sheet: dict) -> dict[str, int | None]:
+    """Extrai apenas os recursos que a ficha e o HUD da sessao compartilham."""
+    derivados = sheet.get("derivados") if isinstance(sheet.get("derivados"), dict) else {}
+    status_ficha = sheet.get("status") if isinstance(sheet.get("status"), dict) else {}
+    recursos = sheet.get("recursos") if isinstance(sheet.get("recursos"), dict) else {}
+
+    def inteiro(value) -> int | None:
+        return int(value) if isinstance(value, (int, float)) and not isinstance(value, bool) else None
+
+    vida_maxima = inteiro(derivados.get("vida"))
+    vida_atual = inteiro(status_ficha.get("vidaAtual"))
+    if vida_atual is None:
+        vida_atual = inteiro(recursos.get("vidaAtual"))
+    mana_maxima = inteiro(derivados.get("mana"))
+    mana_atual = inteiro(status_ficha.get("manaAtual"))
+    if mana_atual is None:
+        mana_atual = inteiro(recursos.get("manaAtual"))
+
+    if vida_maxima is not None:
+        vida_maxima = max(0, vida_maxima)
+        if vida_atual is not None:
+            vida_atual = min(vida_atual, vida_maxima)
+    if mana_maxima is not None:
+        mana_maxima = max(0, mana_maxima)
+        if mana_atual is not None:
+            mana_atual = max(0, min(mana_atual, mana_maxima))
+
+    return {
+        "vida_atual": vida_atual,
+        "vida_maxima": vida_maxima,
+        "mana_atual": mana_atual,
+        "mana_maxima": mana_maxima,
+    }
+
+
 def _is_protected_inventory_data_key(key: str) -> bool:
     normalized = str(key).strip().casefold()
     protected_prefixes = (
@@ -72,17 +108,47 @@ def _is_protected_inventory_data_key(key: str) -> bool:
     return normalized.startswith(protected_prefixes) or normalized in _PROTECTED_INVENTORY_DATA_KEYS
 
 
-def _editable_inventory_data(desired: dict, current: dict | None = None) -> dict:
-    """Aceita metadados de UI sem deixar o cliente reescrever proveniencia/preco."""
-    result = {
-        key: value
-        for key, value in desired.items()
-        if not _is_protected_inventory_data_key(key)
-    }
-    for key, value in (current or {}).items():
+# Unica chave de `dados` com evidencia concreta de edicao legitima por
+# jogador comum em item de origem loja (ver test_economy_writers.py,
+# test_owner_edits_and_consumes_but_cannot_forge_provenance). Deliberadamente
+# curta: nao inventar campos "cosmeticos" hipoteticos sem evidencia no
+# codigo atual — na duvida, o campo fica travado no valor atual.
+_LOJA_PLAYER_EDITABLE_KEYS = frozenset({"equipado"})
+
+
+def _editable_inventory_data(
+    desired: dict, current: dict | None = None, *, restrict_mechanical: bool = False
+) -> dict:
+    """Aceita metadados de UI sem deixar o cliente reescrever proveniencia/preco.
+
+    restrict_mechanical=True e usado quando um jogador comum (nao gestor) edita
+    um item de origem loja: alem das chaves sempre protegidas, qualquer outra
+    chave que nao esteja em `_LOJA_PLAYER_EDITABLE_KEYS` tambem fica travada no
+    valor atual. A lista fixa de chaves protegidas nao cobre campos mecanicos
+    do catalogo (raridade, modificacoes, efeitosRaridade, defesa, etc.), e a
+    maioria dos campos de um item de loja descreve o que ele FAZ, nao metadados
+    de UI — entao, sem uma allowlist explicita, o jogador poderia reescrever
+    qualquer um deles sem passar pelas validacoes economicas da Loja.
+    """
+    current = current or {}
+
+    def _locked(key: str) -> bool:
         if _is_protected_inventory_data_key(key):
+            return True
+        return restrict_mechanical and key not in _LOJA_PLAYER_EDITABLE_KEYS
+
+    result = {key: value for key, value in desired.items() if not _locked(key)}
+    for key, value in current.items():
+        if _locked(key):
             result[key] = value
     return result
+
+
+def _is_loja_origin_item(data: dict | None) -> bool:
+    """True quando o item veio do fluxo pago da Loja (nunca a partir do que o
+    cliente envia em `desired` — sempre a partir do registro atual no banco)."""
+    data = data or {}
+    return bool(data.get("catalogo_item_id")) or data.get("origem") == "loja"
 
 
 def _is_manual_inventory_item(item: dict) -> bool:
@@ -127,8 +193,9 @@ def create_character(
         if owner_id != user.id and not access.manages_content:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="jogador so pode criar o proprio personagem")
         if not access.manages_content:
-            # Mestre/assistente pode criar qualquer combinação (NPCs, testes);
-            # jogador comum fica preso à Árvore escolhida e ao que foi liberado.
+            # A Árvore orienta as regras do RPG, mas não bloqueia a liberdade do
+            # jogador na ficha. Configurações fora das regras seguem permitidas
+            # e geram um aviso aos gestores da campanha para avaliação.
             campanha_row = connection.execute(
                 "SELECT configuracoes FROM campanhas WHERE id=%s", (payload.campanha_id,)
             ).fetchone()
@@ -161,7 +228,7 @@ def create_character(
             (payload.campanha_id, owner_id),
         ).fetchone()
         if not owner:
-            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="o dono deve ser membro da campanha")
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail="o dono deve ser membro da campanha")
         connection.execute(
             """
             INSERT INTO personagens
@@ -382,6 +449,7 @@ def update_character(
     user: AuthenticatedUser = Depends(require_csrf),
     database: Database = Depends(get_database),
 ):
+    session_event: tuple[UUID, int] | None = None
     with database.connection() as connection:
         current = _authorized_character(connection, character_id, user.id)
         name = payload.nome or current["nome"]
@@ -417,6 +485,44 @@ def update_character(
                         actor_user_id=user.id,
                         details={"personagem_id": str(character_id)},
                     )
+
+            # O jogador controla classe/nível/XP da própria ficha (decisão de
+            # design 2026-08), mas o mestre/assistente precisa ficar sabendo
+            # quando isso muda - aqui é aviso, não bloqueio.
+            classes_antes = _classes_da_ficha(current["ficha"])
+            classes_depois = _classes_da_ficha(payload.ficha)
+            xp_antes = current["ficha"].get("xp") or 0
+            xp_depois = payload.ficha.get("xp") or 0
+            if classes_antes != classes_depois or xp_antes != xp_depois:
+                from core import notifications
+
+                def _resumo_classes(lista):
+                    partes = [
+                        f"{_nome('classe', item.get('classeId') or item.get('id')) or item.get('classeId')} {item.get('nivel')}"
+                        for item in lista
+                    ]
+                    return ", ".join(partes) if partes else "nenhuma"
+
+                mudancas = []
+                if classes_antes != classes_depois:
+                    mudancas.append(
+                        f"classes de [{_resumo_classes(classes_antes)}] para [{_resumo_classes(classes_depois)}]"
+                    )
+                if xp_antes != xp_depois:
+                    mudancas.append(f"XP de {xp_antes} para {xp_depois}")
+                managers = notifications.campaign_member_ids(
+                    connection, current["campanha_id"], roles=("mestre", "assistente")
+                )
+                notifications.notify(
+                    connection,
+                    user_ids=managers,
+                    category="campanha",
+                    title="Jogador alterou classe/XP na ficha",
+                    message=f"A ficha '{name}' teve " + " e ".join(mudancas) + ".",
+                    campaign_id=current["campanha_id"],
+                    actor_user_id=user.id,
+                    details={"personagem_id": str(character_id)},
+                )
         row = connection.execute(
             """
             UPDATE personagens
@@ -454,6 +560,50 @@ def update_character(
             target_id=str(character_id),
             details={"versao": row["versao"]},
         )
+        active_session = connection.execute(
+            """
+            SELECT id FROM sessoes_mesa
+            WHERE campanha_id=%s AND status IN ('preparacao', 'aberta')
+            """,
+            (current["campanha_id"],),
+        ).fetchone()
+        if active_session:
+            resources = _session_resources(row["ficha"])
+            participant = connection.execute(
+                """
+                UPDATE sessao_participantes
+                SET nome=%s,
+                    vida_atual=COALESCE(%s, vida_atual),
+                    vida_maxima=COALESCE(%s, vida_maxima),
+                    mana_atual=COALESCE(%s, mana_atual),
+                    mana_maxima=COALESCE(%s, mana_maxima),
+                    atualizado_em=CURRENT_TIMESTAMP
+                WHERE sessao_id=%s AND personagem_id=%s
+                RETURNING id
+                """,
+                (
+                    name,
+                    resources["vida_atual"],
+                    resources["vida_maxima"],
+                    resources["mana_atual"],
+                    resources["mana_maxima"],
+                    active_session["id"],
+                    character_id,
+                ),
+            ).fetchone()
+            if participant:
+                session_version = connection.execute(
+                    """
+                    UPDATE sessoes_mesa
+                    SET versao=versao+1, atualizado_em=CURRENT_TIMESTAMP
+                    WHERE id=%s
+                    RETURNING versao
+                    """,
+                    (active_session["id"],),
+                ).fetchone()
+                session_event = (current["campanha_id"], int(session_version["versao"]))
+    if session_event:
+        live_session.publicar(session_event[0], "personagem_atualizado", session_event[1])
     return {"personagem": dict(row)}
 
 
@@ -579,7 +729,13 @@ def apply_character_economy_operations(
                     **item,
                     "titulo": operation.titulo or item["titulo"],
                     "dados": (
-                        _editable_inventory_data(operation.dados, current_data)
+                        _editable_inventory_data(
+                            operation.dados,
+                            current_data,
+                            restrict_mechanical=(
+                                not is_manager and _is_loja_origin_item(current_data)
+                            ),
+                        )
                         if operation.dados is not None
                         else current_data
                     ),
@@ -1005,7 +1161,7 @@ def uninstall_modification(
         # Hard block: modificação declarada como não removível
         if not modificacao.get("removivel", True):
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail="esta modificacao nao pode ser removida",
             )
 

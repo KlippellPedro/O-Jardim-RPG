@@ -4,9 +4,10 @@ import contextlib
 import unittest
 from types import SimpleNamespace
 from unittest import mock
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from fastapi import HTTPException
+from psycopg.types.json import Jsonb
 from pydantic import ValidationError
 
 from core.economy_models import EconomyOperationsInput
@@ -30,9 +31,10 @@ def _sql(statement: str) -> str:
 
 
 class _Result:
-    def __init__(self, row=None, rows=None):
+    def __init__(self, row=None, rows=None, rowcount=1):
         self._row = row
         self._rows = rows or []
+        self.rowcount = rowcount
 
     def fetchone(self):
         return self._row
@@ -358,6 +360,10 @@ class VaultEconomyWriterTests(unittest.TestCase):
 
     def test_item_transfer_locks_character_before_vault_and_increments_version(self):
         def responder(sql, _params):
+            if "INSERT INTO comandos_economia" in sql:
+                return {"id": uuid4()}
+            if "FROM comandos_economia" in sql:
+                return None
             if "FROM personagens" in sql:
                 return self._character()
             if "FROM cofre_itens_usuario" in sql:
@@ -372,6 +378,7 @@ class VaultEconomyWriterTests(unittest.TestCase):
             personagem_id=CHARACTER_ID,
             item_id="pocao",
             quantidade=1,
+            idempotencia="teste-item-transfer-001",
         )
         with (
             mock.patch.object(vault, "campaign_access"),
@@ -393,6 +400,10 @@ class VaultEconomyWriterTests(unittest.TestCase):
 
     def test_currency_transfer_locks_character_before_vault_and_increments_version(self):
         def responder(sql, _params):
+            if "INSERT INTO comandos_economia" in sql:
+                return {"id": uuid4()}
+            if "FROM comandos_economia" in sql:
+                return None
             if "FROM personagens" in sql:
                 return self._character()
             if "FROM cofre_saldos_usuario" in sql:
@@ -409,6 +420,7 @@ class VaultEconomyWriterTests(unittest.TestCase):
             personagem_id=CHARACTER_ID,
             moeda="Lunaris",
             quantidade=5,
+            idempotencia="teste-currency-transfer-001",
         )
         with (
             mock.patch.object(vault, "campaign_access"),
@@ -430,6 +442,10 @@ class VaultEconomyWriterTests(unittest.TestCase):
 
     def test_vault_transfers_reject_destination_aggregate_limits(self):
         def responder(sql, _params):
+            if "INSERT INTO comandos_economia" in sql:
+                return {"id": uuid4()}
+            if "FROM comandos_economia" in sql:
+                return None
             if "FROM personagens" in sql:
                 return self._character()
             if "FROM cofre_itens_usuario" in sql:
@@ -450,6 +466,7 @@ class VaultEconomyWriterTests(unittest.TestCase):
                     personagem_id=CHARACTER_ID,
                     item_id="pocao",
                     quantidade=1,
+                    idempotencia="teste-limite-item-001",
                 ),
             ),
             (
@@ -459,6 +476,7 @@ class VaultEconomyWriterTests(unittest.TestCase):
                     personagem_id=CHARACTER_ID,
                     moeda="Lunaris",
                     quantidade=1,
+                    idempotencia="teste-limite-moeda-001",
                 ),
             ),
         )
@@ -474,6 +492,71 @@ class VaultEconomyWriterTests(unittest.TestCase):
             self.assertFalse(
                 any("SET economia_versao" in sql for sql, _ in connection.statements)
             )
+
+    def test_currency_transfer_replays_second_call_with_same_idempotency_key(self):
+        """P2-1: reenviar a mesma chave (retry de rede, duplo clique) tem
+        que devolver o resultado já concluído em vez de debitar/creditar de
+        novo — a rota nunca chamava begin_economy_command/get_economy_command_replay
+        antes desta correção."""
+
+        comandos: dict[tuple, dict] = {}
+        vault_touches = []
+
+        def responder(sql, params):
+            if "INSERT INTO comandos_economia" in sql:
+                command_id, campanha_id, usuario_id, tipo, idempotencia, fingerprint = params
+                key = (campanha_id, usuario_id, tipo, idempotencia)
+                if key in comandos:
+                    return None  # ON CONFLICT DO NOTHING: nenhuma linha inserida
+                comandos[key] = {"id": command_id, "requisicao_hash": fingerprint, "resultado": None}
+                return {"id": command_id}
+            if sql.startswith("SELECT id, requisicao_hash, resultado"):
+                campanha_id, usuario_id, tipo, idempotencia = params
+                entry = comandos.get((campanha_id, usuario_id, tipo, idempotencia))
+                return dict(entry) if entry else None
+            if sql.startswith("UPDATE comandos_economia"):
+                resultado, command_id = params
+                for entry in comandos.values():
+                    if entry["id"] == command_id:
+                        entry["resultado"] = resultado.obj if isinstance(resultado, Jsonb) else resultado
+                return None
+            if "FROM personagens" in sql:
+                return self._character()
+            if "FROM cofre_saldos_usuario" in sql:
+                vault_touches.append(sql)
+                return {"saldo": 20}
+            if "INSERT INTO saldos_personagem" in sql:
+                vault_touches.append(sql)
+                return {"saldo": 15}
+            if "UPDATE personagens" in sql:
+                return {"economia_versao": 8}
+            return None
+
+        payload = VaultTransferCurrencyInput(
+            campanha_id=CAMPAIGN_ID,
+            personagem_id=CHARACTER_ID,
+            moeda="Lunaris",
+            quantidade=5,
+            idempotencia="teste-replay-moeda-001",
+        )
+
+        with (
+            mock.patch.object(vault, "campaign_access"),
+            mock.patch.object(vault, "record_audit"),
+        ):
+            primeira = vault.transfer_currency(
+                payload, user=self.user, database=_Database(_RecordingConnection(responder))
+            )
+            segunda = vault.transfer_currency(
+                payload, user=self.user, database=_Database(_RecordingConnection(responder))
+            )
+
+        self.assertFalse(primeira["repetida"])
+        self.assertTrue(segunda["repetida"])
+        self.assertEqual(primeira["economia_versao"], segunda["economia_versao"])
+        self.assertEqual(primeira["saldo_personagem"], segunda["saldo_personagem"])
+        # A carteira só pode ter sido tocada pela primeira chamada.
+        self.assertEqual(len(vault_touches), 2)
 
 
 class CharacterReplacementWriterTests(unittest.TestCase):
@@ -662,6 +745,197 @@ class CharacterEconomyOperationTests(unittest.TestCase):
         self.assertEqual(result["economia_versao"], 8)
         self.assertEqual(
             sum("SET economia_versao=economia_versao+1" in sql for sql, _ in connection.statements),
+            1,
+        )
+
+    def test_common_player_cannot_forge_mechanical_fields_on_loja_item(self):
+        connection = self._connection(
+            inventory=[
+                {
+                    "item_id": "catalogo:espada-amaldicoada",
+                    "titulo": "Espada Amaldicoada",
+                    "quantidade": 1,
+                    "dados": {
+                        "origem": "loja",
+                        "catalogo_item_id": "espada-amaldicoada",
+                        "preco": 500,
+                        "raridade": "comum",
+                        "modificacoes": [],
+                        "efeitosRaridade": [],
+                        "equipado": False,
+                    },
+                }
+            ],
+        )
+        payload = EconomyOperationsInput(
+            versao_esperada=7,
+            operacoes=[
+                {
+                    "tipo": "editar_item",
+                    "item_id": "catalogo:espada-amaldicoada",
+                    "dados": {
+                        "raridade": "lendaria",
+                        "modificacoes": [
+                            {"id": "forjado-pelo-cliente", "efeito": "+99 dano"}
+                        ],
+                        "efeitosRaridade": [{"bonus": "dano", "valor": 99}],
+                        "equipado": True,
+                    },
+                }
+            ],
+        )
+        self._apply(connection, payload)
+
+        inventory_insert = next(
+            params
+            for sql, params in connection.statements
+            if "INSERT INTO inventario_personagem" in sql
+        )
+        saved_data = inventory_insert[5].obj
+        self.assertEqual(saved_data["raridade"], "comum")
+        self.assertEqual(saved_data["modificacoes"], [])
+        self.assertEqual(saved_data["efeitosRaridade"], [])
+        # campo com evidencia de edicao legitima (ver teste acima) continua liberado
+        self.assertTrue(saved_data["equipado"])
+
+    def test_manager_can_still_edit_mechanical_fields_on_loja_item(self):
+        connection = self._connection(
+            role="mestre",
+            inventory=[
+                {
+                    "item_id": "catalogo:espada-amaldicoada",
+                    "titulo": "Espada Amaldicoada",
+                    "quantidade": 1,
+                    "dados": {
+                        "origem": "loja",
+                        "catalogo_item_id": "espada-amaldicoada",
+                        "preco": 500,
+                        "raridade": "comum",
+                        "modificacoes": [],
+                    },
+                }
+            ],
+        )
+        payload = EconomyOperationsInput(
+            versao_esperada=7,
+            operacoes=[
+                {
+                    "tipo": "editar_item",
+                    "item_id": "catalogo:espada-amaldicoada",
+                    "dados": {
+                        "raridade": "lendaria",
+                        "modificacoes": [
+                            {"id": "presente-do-mestre", "efeito": "+2 dano"}
+                        ],
+                    },
+                }
+            ],
+        )
+        self._apply(connection, payload)
+
+        inventory_insert = next(
+            params
+            for sql, params in connection.statements
+            if "INSERT INTO inventario_personagem" in sql
+        )
+        saved_data = inventory_insert[5].obj
+        self.assertEqual(saved_data["raridade"], "lendaria")
+        self.assertEqual(
+            saved_data["modificacoes"],
+            [{"id": "presente-do-mestre", "efeito": "+2 dano"}],
+        )
+
+    def test_common_player_can_edit_mechanical_fields_on_non_loja_item(self):
+        connection = self._connection(
+            inventory=[
+                {
+                    "item_id": "item-caseiro",
+                    "titulo": "Item caseiro",
+                    "quantidade": 1,
+                    "dados": {
+                        "origem": "manual",
+                        "raridade": "comum",
+                        "modificacoes": [],
+                    },
+                }
+            ],
+        )
+        payload = EconomyOperationsInput(
+            versao_esperada=7,
+            operacoes=[
+                {
+                    "tipo": "editar_item",
+                    "item_id": "item-caseiro",
+                    "dados": {
+                        "origem": "manual",
+                        "raridade": "lendaria",
+                        "modificacoes": [{"id": "casa", "efeito": "brilha no escuro"}],
+                    },
+                }
+            ],
+        )
+        self._apply(connection, payload)
+
+        inventory_insert = next(
+            params
+            for sql, params in connection.statements
+            if "INSERT INTO inventario_personagem" in sql
+        )
+        saved_data = inventory_insert[5].obj
+        self.assertEqual(saved_data["raridade"], "lendaria")
+        self.assertEqual(
+            saved_data["modificacoes"], [{"id": "casa", "efeito": "brilha no escuro"}]
+        )
+
+    def test_mechanical_edit_block_has_no_side_effects_on_other_items(self):
+        connection = self._connection(
+            inventory=[
+                {
+                    "item_id": "catalogo:espada",
+                    "titulo": "Espada",
+                    "quantidade": 1,
+                    "dados": {
+                        "origem": "loja",
+                        "catalogo_item_id": "espada",
+                        "raridade": "comum",
+                    },
+                },
+                {
+                    "item_id": "item-caseiro",
+                    "titulo": "Anel caseiro",
+                    "quantidade": 1,
+                    "dados": {"origem": "manual", "raridade": "epica"},
+                },
+            ],
+            balances=[{"moeda": "Lunaris", "saldo": 10}],
+        )
+        payload = EconomyOperationsInput(
+            versao_esperada=7,
+            operacoes=[
+                {
+                    "tipo": "editar_item",
+                    "item_id": "catalogo:espada",
+                    "dados": {"raridade": "lendaria"},
+                }
+            ],
+        )
+        result = self._apply(connection, payload)
+
+        inserts = [
+            params
+            for sql, params in connection.statements
+            if "INSERT INTO inventario_personagem" in sql
+        ]
+        # somente o item da operacao deve ter sido reescrito
+        self.assertEqual({params[2] for params in inserts}, {"catalogo:espada"})
+        saved_data = inserts[0][5].obj
+        self.assertEqual(saved_data["raridade"], "comum")
+        self.assertEqual(result["economia_versao"], 8)
+        self.assertEqual(
+            sum(
+                "SET economia_versao=economia_versao+1" in sql
+                for sql, _ in connection.statements
+            ),
             1,
         )
 
