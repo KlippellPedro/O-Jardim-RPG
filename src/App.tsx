@@ -2,9 +2,10 @@ import { lazy, Suspense, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { resetAllCharacterData } from './store/useCharacterStore';
+import { useGlobalSfx } from './hooks/useGlobalSfx';
+import { PerformancePreferencesBridge } from './hooks/usePerformance';
+import AtmosphericBackground from './AtmosphericBackground';
 
-const AtmosphericBackground = lazy(() => import('./AtmosphericBackground'));
 const GlassMenu = lazy(() => import('./components/GlassMenu'));
 const Home = lazy(() => import('./pages/Home'));
 const FichaList = lazy(() => import('./pages/Ficha/FichaList'));
@@ -51,12 +52,14 @@ const ProtectedRoute = ({
   requireAdmin = false,
   requireCampaignManager = false,
 }: ProtectedRouteProps) => {
-  const { usuario, isInitialized, campanhaAtiva } = useAuthStore();
+  const usuario = useAuthStore((state) => state.usuario);
+  const isInitialized = useAuthStore((state) => state.isInitialized);
+  const campanhaAtiva = useAuthStore((state) => state.campanhaAtiva);
 
   // Aguarda a inicialização do contexto (rehidratação via API)
   if (!isInitialized) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center text-white">
+      <div className="flex min-h-[100dvh] items-center justify-center bg-background text-white">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
           <p className="text-gray-400 text-sm">Verificando sessão...</p>
@@ -91,11 +94,21 @@ const ProtectedRoute = ({
 // App
 // ──────────────────────────────────────────────────────────────────────────────
 function App() {
-  const { initContexto, isInitialized, usuario, logout } = useAuthStore();
+  const initContexto = useAuthStore((state) => state.initContexto);
+  const isInitialized = useAuthStore((state) => state.isInitialized);
+  const usuario = useAuthStore((state) => state.usuario);
+  const logout = useAuthStore((state) => state.logout);
   const prevUsuarioRef = useRef(usuario);
+  const didInitContextRef = useRef(false);
+
+  useGlobalSfx();
 
   useEffect(() => {
-    initContexto();
+    // O StrictMode repete efeitos no desenvolvimento. O contexto precisa ser
+    // inicializado uma vez por montagem do App, independentemente da latência.
+    if (didInitContextRef.current) return;
+    didInitContextRef.current = true;
+    void initContexto();
   }, [initContexto]);
 
   // C1 - Limpa dados de personagens quando o usuário faz logout
@@ -104,7 +117,11 @@ function App() {
     const prev = prevUsuarioRef.current;
     prevUsuarioRef.current = usuario;
     if (prev !== null && usuario === null) {
-      resetAllCharacterData();
+      // O store de ficha importa catálogos grandes. Ele só é carregado aqui se
+      // houver um logout real, em vez de engrossar a tela inicial para todos.
+      void import('./store/useCharacterStore').then(({ resetAllCharacterData }) => {
+        resetAllCharacterData();
+      });
     }
   }, [usuario]);
 
@@ -125,7 +142,7 @@ function App() {
 
   if (!isInitialized) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center text-white">
+      <div className="flex min-h-[100dvh] items-center justify-center bg-background text-white">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
           <p className="text-gray-400 text-sm">Carregando O Jardim...</p>
@@ -136,12 +153,11 @@ function App() {
 
   return (
     <ErrorBoundary>
+      <PerformancePreferencesBridge />
       <Router>
-        <div className="relative min-h-screen w-full bg-background text-white font-sans selection:bg-primary/30">
+        <div className="relative min-h-[100dvh] w-full min-w-0 bg-background font-sans text-white selection:bg-primary/30">
 
-          <Suspense fallback={<div className="fixed inset-0 z-0 bg-background" />}>
-            <AtmosphericBackground />
-          </Suspense>
+          <AtmosphericBackground />
 
           {usuario && (
             <Suspense fallback={null}>

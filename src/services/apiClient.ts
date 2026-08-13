@@ -44,7 +44,11 @@ interface ApiOptions {
   keepalive?: boolean;
 }
 
-export async function api<T = any>(
+// Componentes montados ao mesmo tempo podem pedir o mesmo recurso. Compartilhar
+// apenas GETs simultâneos remove tráfego duplicado sem introduzir cache stale.
+const inFlightGets = new Map<string, Promise<unknown>>();
+
+async function executeRequest<T>(
   caminho: string,
   { method = 'GET', body, signal, keepalive }: ApiOptions = {},
 ): Promise<T> {
@@ -87,4 +91,25 @@ export async function api<T = any>(
     throw new ApiError(extrairMensagem(detalhe, response.status), response.status, detalhe);
   }
   return semCorpo ? (null as any) : payload;
+}
+
+export async function api<T = any>(
+  caminho: string,
+  options: ApiOptions = {},
+): Promise<T> {
+  const method = (options.method ?? 'GET').toUpperCase();
+  const canDedupe = method === 'GET' && options.body === undefined && options.signal === undefined;
+  if (!canDedupe) return executeRequest<T>(caminho, options);
+
+  const key = `${method}:${caminho}`;
+  const existing = inFlightGets.get(key);
+  if (existing) return existing as Promise<T>;
+
+  const request = executeRequest<T>(caminho, options);
+  inFlightGets.set(key, request);
+  try {
+    return await request;
+  } finally {
+    if (inFlightGets.get(key) === request) inFlightGets.delete(key);
+  }
 }

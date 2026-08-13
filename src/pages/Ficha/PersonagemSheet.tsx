@@ -125,7 +125,7 @@ export const PersonagemSheet: React.FC = () => {
 
   if (isLoading && !character) {
     return (
-      <div className="pl-32 pr-12 pt-12 pb-24 relative z-10 w-full min-h-screen flex items-center justify-center">
+      <div className="app-page flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-yellow-600/20 border-t-yellow-600 rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Carregando Grimório...</p>
@@ -138,7 +138,7 @@ export const PersonagemSheet: React.FC = () => {
   if (!character) {
     const isNetworkError = !isLoading && Boolean(error);
     return (
-      <div className="pl-32 pr-12 pt-12 pb-24 relative z-10 w-full min-h-screen flex items-center justify-center">
+      <div className="app-page flex items-center justify-center">
         <div className="text-center space-y-4">
           {isNetworkError ? (
             <>
@@ -231,7 +231,7 @@ export const PersonagemSheet: React.FC = () => {
           <h4 className="text-yellow-600 text-xs font-bold tracking-widest uppercase mb-2">
             Personagem da Campanha Atual
           </h4>
-          <h1 className="text-4xl text-white mb-2" style={{ fontFamily: 'Cinzel, serif' }}>
+          <h1 className="mb-2 text-[clamp(2rem,8vw,2.25rem)] leading-tight text-white" style={{ fontFamily: 'Cinzel, serif' }}>
             {character.nome?.toUpperCase() || 'DESCONHECIDO'}
           </h1>
           <p className="text-gray-400 text-sm">
@@ -299,12 +299,15 @@ export const PersonagemSheet: React.FC = () => {
   );
 
   const renderTabs = () => (
-    <div className="flex flex-wrap items-center gap-3 mb-8 border-b border-white/5 pb-8">
+    <div className="horizontal-scroll mb-8 flex items-center gap-3 overflow-x-auto border-b border-white/5 pb-5 custom-scrollbar sm:flex-wrap sm:overflow-x-visible sm:pb-8">
       {TABS.map(tab => (
         <button
           key={tab}
           onClick={() => handleTabChange(tab)}
-          className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${
+          data-sfx="select"
+          role="tab"
+          aria-selected={activeTab === tab}
+          className={`shrink-0 px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${
             activeTab === tab 
               ? 'bg-[#D4AF37] text-black shadow-[0_0_15px_rgba(212,175,55,0.4)]' 
               : 'bg-[#15141b] text-gray-400 border border-white/5 hover:border-white/20'
@@ -339,7 +342,8 @@ export const PersonagemSheet: React.FC = () => {
   return (
     <motion.div 
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      className="pl-24 md:pl-32 pr-4 md:pr-12 pt-8 md:pt-12 pb-24 relative w-full min-h-screen bg-[#07060a] overflow-x-hidden"
+      role="main"
+      className="app-page w-full overflow-x-hidden bg-[#07060a]"
     >
       <div className="max-w-6xl mx-auto">
         <button onClick={() => navigate('/ficha')} className="text-gray-500 hover:text-white mb-6 text-sm font-bold uppercase tracking-wider flex items-center gap-2">

@@ -17,7 +17,7 @@ export const Miceliano = ({ raca }: MicelianoProps) => {
       {/* Background Image */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
-        style={{ backgroundImage: "url('/assets/img/miceliano_bg.jpg')" }}
+        style={{ backgroundImage: "url('/assets/img/miceliano_bg.webp')" }}
       >
         <div className="absolute inset-0 bg-slate-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0d0914]/40 via-transparent to-[#0d0914]/90" />

@@ -46,8 +46,9 @@ export const TimelineHistory: React.FC<TimelineHistoryProps> = ({ onSelectEvent 
               <div className="absolute left-8 md:left-1/2 w-4 h-4 rounded-full bg-yellow-600 border-4 border-[#0a090e] shadow-[0_0_15px_rgba(202,138,4,0.8)] transform -translate-x-1/2 z-20"></div>
               
               {/* Conteúdo do Evento */}
-              <div 
-                className="w-full pl-20 md:pl-0 md:w-5/12 cursor-pointer group"
+              <button
+                type="button"
+                className="group w-full cursor-pointer pl-20 text-left md:w-5/12 md:pl-0"
                 onClick={() => onSelectEvent(evento)}
               >
                 <div className={`bg-black/60 backdrop-blur-md border border-white/5 rounded-2xl p-6 hover:border-yellow-600/50 hover:bg-[#15141b]/80 transition-all shadow-xl group-hover:-translate-y-1 ${isLeft ? 'md:text-right' : 'md:text-left'}`}>
@@ -72,7 +73,7 @@ export const TimelineHistory: React.FC<TimelineHistoryProps> = ({ onSelectEvent 
                     </p>
                   )}
                 </div>
-              </div>
+              </button>
             </motion.div>
           );
         })}

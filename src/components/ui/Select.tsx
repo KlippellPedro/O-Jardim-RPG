@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useId, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronDown, Check } from 'lucide-react';
 
@@ -33,18 +33,39 @@ export const Select: React.FC<SelectProps> = ({
   disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [coords, setCoords] = useState({ top: 0, left: 0, width: 0 });
+  const [coords, setCoords] = useState({ top: 0, left: 0, width: 0, maxHeight: 256 });
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const listboxId = useId();
 
   const selected = options.find((o) => o.value === value);
 
   const updateCoords = useCallback(() => {
     const rect = triggerRef.current?.getBoundingClientRect();
     if (rect) {
-      setCoords({ top: rect.bottom + 6, left: rect.left, width: rect.width });
+      const viewportWidth = document.documentElement.clientWidth;
+      const viewportHeight = document.documentElement.clientHeight;
+      const edge = 8;
+      const width = Math.max(0, Math.min(rect.width, viewportWidth - edge * 2));
+      const maxHeight = Math.max(96, Math.min(256, viewportHeight - edge * 2));
+      const measuredHeight = Math.min(panelRef.current?.scrollHeight ?? maxHeight, maxHeight);
+      const left = Math.max(edge, Math.min(rect.left, viewportWidth - width - edge));
+      const below = rect.bottom + 6;
+      const above = rect.top - measuredHeight - 6;
+      const preferredTop = below + measuredHeight <= viewportHeight - edge || above < edge ? below : above;
+      const top = Math.max(edge, Math.min(preferredTop, viewportHeight - measuredHeight - edge));
+      setCoords({ top, left, width, maxHeight });
     }
   }, []);
+
+  useLayoutEffect(() => {
+    if (!isOpen) return;
+    updateCoords();
+    const selectedIndex = options.findIndex((option) => option.value === value && !option.disabled);
+    const firstEnabledIndex = options.findIndex((option) => !option.disabled);
+    optionRefs.current[selectedIndex >= 0 ? selectedIndex : firstEnabledIndex]?.focus();
+  }, [isOpen, options, updateCoords, value]);
 
   const handleOpen = () => {
     if (disabled) return;
@@ -81,6 +102,42 @@ export const Select: React.FC<SelectProps> = ({
     if (option.disabled) return;
     onChange(option.value);
     setIsOpen(false);
+    triggerRef.current?.focus();
+  };
+
+  const handleListKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const enabled = optionRefs.current.filter((option): option is HTMLButtonElement => Boolean(option && !option.disabled));
+    if (!enabled.length) return;
+    const currentIndex = Math.max(0, enabled.findIndex((option) => option === document.activeElement));
+    let nextIndex = currentIndex;
+    if (event.key === 'ArrowDown') nextIndex = (currentIndex + 1) % enabled.length;
+    else if (event.key === 'ArrowUp') nextIndex = (currentIndex - 1 + enabled.length) % enabled.length;
+    else if (event.key === 'Home') nextIndex = 0;
+    else if (event.key === 'End') nextIndex = enabled.length - 1;
+    else if (event.key === 'Escape') {
+      event.preventDefault();
+      setIsOpen(false);
+      triggerRef.current?.focus();
+      return;
+    } else if (event.key === 'Tab') {
+      event.preventDefault();
+      const trigger = triggerRef.current;
+      const focusable = Array.from(document.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      )).filter((element) => {
+        if (panelRef.current?.contains(element)) return false;
+        const style = window.getComputedStyle(element);
+        return style.display !== 'none' && style.visibility !== 'hidden';
+      });
+      const triggerIndex = trigger ? focusable.indexOf(trigger) : -1;
+      const nextIndex = event.shiftKey ? triggerIndex - 1 : triggerIndex + 1;
+      const next = focusable[nextIndex] ?? trigger;
+      setIsOpen(false);
+      window.requestAnimationFrame(() => next?.focus());
+      return;
+    } else return;
+    event.preventDefault();
+    enabled[nextIndex]?.focus();
   };
 
   return (
@@ -92,7 +149,14 @@ export const Select: React.FC<SelectProps> = ({
         disabled={disabled}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        className={`flex items-center justify-between gap-2 bg-black/50 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-left focus:outline-none focus:border-primary/60 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
+        aria-controls={isOpen ? listboxId : undefined}
+        onKeyDown={(event) => {
+          if (!isOpen && ['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) {
+            event.preventDefault();
+            handleOpen();
+          }
+        }}
+        className={`flex min-h-11 min-w-0 items-center justify-between gap-2 bg-black/50 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-left focus:outline-none focus:border-primary/60 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
           isOpen ? 'border-primary/60' : ''
         } ${className}`}
       >
@@ -109,16 +173,19 @@ export const Select: React.FC<SelectProps> = ({
         createPortal(
           <div
             ref={panelRef}
+            id={listboxId}
             role="listbox"
-            style={{ position: 'fixed', top: coords.top, left: coords.left, minWidth: coords.width }}
-            className="z-[9999] max-h-64 overflow-y-auto bg-[#17151f] border border-white/10 rounded-xl shadow-2xl shadow-black/60 py-1 custom-scrollbar"
+            onKeyDown={handleListKeyDown}
+            style={{ position: 'fixed', top: coords.top, left: coords.left, width: coords.width, maxHeight: coords.maxHeight }}
+            className="z-[9999] overflow-y-auto overscroll-contain rounded-xl border border-white/10 bg-[#17151f] py-1 shadow-2xl shadow-black/60 custom-scrollbar"
           >
             {options.length === 0 && (
               <div className="px-3 py-2 text-xs text-gray-500">Nenhuma opção disponível.</div>
             )}
-            {options.map((option) => (
+            {options.map((option, index) => (
               <button
                 key={option.value}
+                ref={(element) => { optionRefs.current[index] = element; }}
                 type="button"
                 role="option"
                 aria-selected={option.value === value}

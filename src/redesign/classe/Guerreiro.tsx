@@ -11,7 +11,7 @@ export const Guerreiro = ({ classe }: { classe: IClasse }) => {
   return (
     <div className="min-h-screen text-orange-50 p-8 selection:bg-orange-500/30 overflow-hidden relative">
       {/* 3D WebGL Background */}
-      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/guerreiro_bg.jpg')" }} />
+      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/guerreiro_bg.webp')" }} />
 
       {/* Tactical / War Background Effects */}
       <div className="fixed inset-0 pointer-events-none z-0">

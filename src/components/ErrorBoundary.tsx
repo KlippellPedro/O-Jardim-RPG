@@ -41,7 +41,7 @@ export class ErrorBoundary extends Component<Props, State> {
     if (!this.state.hasError) return this.props.children;
 
     return (
-      <div className="min-h-screen bg-[#050508] flex items-center justify-center text-white p-8">
+      <div className="modal-viewport flex min-h-[100dvh] items-center justify-center bg-[#050508] text-white">
         <div className="max-w-md w-full text-center space-y-6">
           <div className="w-16 h-16 mx-auto rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center">
             <span className="text-red-400 text-2xl">!</span>

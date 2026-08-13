@@ -160,6 +160,7 @@ export const AdminUsuarios: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
             <input
               type="text"
+              aria-label="Buscar usuários"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
               placeholder="Buscar por e-mail ou nome..."

@@ -11,7 +11,7 @@ export const Ritualista = ({ classe }: { classe: IClasse }) => {
   return (
     <div className="min-h-screen text-purple-50 p-8 selection:bg-purple-500/30 overflow-hidden relative">
       {/* 3D WebGL Background */}
-      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/ritualista_bg.jpg')" }} />
+      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/ritualista_bg.webp')" }} />
 
       {/* Ritual Background Effects */}
       <div className="fixed inset-0 pointer-events-none z-0">

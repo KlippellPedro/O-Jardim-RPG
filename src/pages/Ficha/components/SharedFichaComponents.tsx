@@ -69,20 +69,20 @@ export const LabeledModalSelect = ({ label, value, options, onChange, placeholde
           type="button"
           onClick={() => { if (!disabled) setIsOpen(true); }}
           aria-disabled={disabled}
-          className={`bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 transition-colors flex justify-between items-center text-left ${disabled ? 'cursor-not-allowed opacity-60' : 'hover:border-[#c7a44c]/50 cursor-pointer'}`}
+          className={`flex min-w-0 items-center justify-between rounded-md border border-white/5 bg-[#121118] px-3 py-2.5 text-left text-sm text-gray-300 transition-colors ${disabled ? 'cursor-not-allowed opacity-60' : 'hover:border-[#c7a44c]/50 cursor-pointer'}`}
         >
-          <span className={!value ? 'text-gray-600' : 'text-gray-300'}>{selectedLabel}</span>
+          <span className={`min-w-0 truncate ${!value ? 'text-gray-600' : 'text-gray-300'}`}>{selectedLabel}</span>
           <span className="text-gray-600 text-[10px] font-mono">▼</span>
         </button>
       </div>
 
       {isOpen && (
-        <ModalPortal>
-        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4" onClick={fechar}>
-          <div className="bg-[#0f0e15] border border-[#c7a44c]/30 rounded-2xl p-6 w-full max-w-md shadow-[0_0_50px_rgba(199,164,76,0.1)] flex flex-col max-h-[80vh]" onClick={(event) => event.stopPropagation()}>
+        <ModalPortal onClose={fechar}>
+        <div className="modal-viewport fixed inset-0 z-[110] flex items-center justify-center bg-black/85 backdrop-blur-sm" onClick={fechar}>
+          <div role="dialog" aria-modal="true" aria-label={`Selecionar ${label || 'opção'}`} className="modal-surface flex w-full max-w-md flex-col rounded-2xl border border-[#c7a44c]/30 bg-[#0f0e15] p-4 shadow-[0_0_50px_rgba(199,164,76,0.1)] sm:p-6" onClick={(event) => event.stopPropagation()}>
             <div className="flex justify-between items-center mb-4 shrink-0">
               <h3 className="text-[#c7a44c] font-bold tracking-widest uppercase">Selecione {label || 'uma opção'}</h3>
-              <button type="button" onClick={fechar} className="text-gray-500 hover:text-white transition-colors" aria-label="Fechar opções">
+              <button type="button" onClick={fechar} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-white/10 hover:text-white" aria-label="Fechar opções">
                 <X size={20} />
               </button>
             </div>
@@ -90,6 +90,7 @@ export const LabeledModalSelect = ({ label, value, options, onChange, placeholde
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
               <input
                 autoFocus
+                aria-label={`Pesquisar ${String(label || 'opção').toLocaleLowerCase('pt-BR')}`}
                 value={busca}
                 onChange={(event) => setBusca(event.target.value)}
                 placeholder={`Pesquisar ${String(label || 'opção').toLocaleLowerCase('pt-BR')}...`}
@@ -157,7 +158,7 @@ export const ResourceBar = ({ label, color, current, max, onAdd, onSub, onHelpCl
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between items-center">
-        <span className="text-xs font-bold uppercase tracking-widest" style={{ color: color === 'vermelho' ? '#e53935' : color === 'azul' ? '#29b6f6' : color === 'roxo' ? '#7e57c2' : '#9e9e9e' }}>{label}</span>
+        <span className="text-xs font-bold uppercase tracking-widest" style={{ color: color === 'vermelho' ? '#e53935' : color === 'azul' ? '#29b6f6' : color === 'roxo' ? '#b39ddb' : '#9e9e9e' }}>{label}</span>
         <div className="flex items-center gap-1">
           <button type="button" className="opacity-50 transition-opacity hover:opacity-100" onClick={onHelpClick} aria-label={`Ajuda sobre ${label}`}>
             <HelpCircle size={14} className="text-[#c7a44c]" />

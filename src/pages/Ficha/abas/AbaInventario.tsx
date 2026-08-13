@@ -712,7 +712,7 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
               return (
                 <div
                   key={item.id}
-                  className={`rounded-xl border p-4 transition-colors ${item.equipado ? 'border-cyan-400/50 bg-cyan-500/5 shadow-[0_0_15px_rgba(34,211,238,0.15)]' : 'border-white/5 bg-black/30'}`}
+                  className={`content-auto-list-item rounded-xl border p-4 transition-colors ${item.equipado ? 'border-cyan-400/50 bg-cyan-500/5 shadow-[0_0_15px_rgba(34,211,238,0.15)]' : 'border-white/5 bg-black/30'}`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <h4 className="font-bold text-white">{item.nome}</h4>
@@ -778,7 +778,7 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
                   <Reorder.Item
                     value={item}
                     key={item.id}
-                    className={`relative ${conf.bg} border ${conf.border} ${conf.glow} overflow-hidden rounded-xl p-4 pl-5 flex flex-col gap-3 transition-colors duration-300 group before:absolute before:inset-y-0 before:left-0 before:w-1 ${CATEGORY_ACCENTS[item.categoria]}`}
+                    className={`content-auto-list-item relative ${conf.bg} border ${conf.border} ${conf.glow} overflow-hidden rounded-xl p-4 pl-5 flex flex-col gap-3 transition-colors duration-300 group before:absolute before:inset-y-0 before:left-0 before:w-1 ${CATEGORY_ACCENTS[item.categoria]}`}
                   >
                     <div className="flex gap-4">
                       {/* Área de Ícone, Favorito e Arraste */}

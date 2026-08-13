@@ -115,7 +115,7 @@ export const GridClasses: React.FC<GridClassesProps> = ({ classes }) => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.28, delay: Math.min(idx * 0.03, 0.24) }}
                   onClick={() => navigate(`/regras/classes/${classe.id}`)}
-                  className={`cursor-pointer min-h-[180px] p-6 text-left shadow-lg border ${tema.border} ${tema.bg}`}
+                  className={`content-auto-list-item cursor-pointer min-h-[180px] p-6 text-left shadow-lg border ${tema.border} ${tema.bg}`}
                 >
                   {/* Background glow blob */}
                   <div

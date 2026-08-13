@@ -477,7 +477,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                 {/* Ícone / Imagem */}
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-amber-900/30">
                   {v.imagem_url
-                    ? <img src={v.imagem_url} alt={v.nome} className="h-10 w-10 rounded object-cover" />
+                    ? <img src={v.imagem_url} alt={v.nome} loading="lazy" decoding="async" className="h-10 w-10 rounded object-cover" />
                     : <Car size={24} className="text-amber-400" />
                   }
                 </div>
@@ -565,7 +565,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                         ].map(({ label, value, icon }) => (
                           <div key={label} className="rounded-lg bg-black/30 p-2 text-center">
                             <p className="text-[10px] text-gray-500 flex items-center justify-center gap-0.5">{icon}{label}</p>
-                            <p className="font-bold text-sm text-white">{value ?? '—'}</p>
+                            <p className="font-bold text-sm text-white">{value ?? '-'}</p>
                           </div>
                         ))}
                       </div>

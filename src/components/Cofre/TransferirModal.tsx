@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Minus, Plus, Send, Loader2, User, Gem, Package } from 'lucide-react';
 import { FichaModal } from '../../pages/Ficha/components/FichaModal';
+import { sfx } from '../../utils/audioSynth';
 
 interface TransferirModalProps {
   isOpen: boolean;
@@ -51,6 +52,7 @@ export const TransferirModal: React.FC<TransferirModalProps> = ({
     } catch (err: unknown) {
       const e = err as { message?: string };
       setErro(e?.message || 'Não foi possível concluir a transferência.');
+      sfx.play('error');
     } finally {
       setEnviando(false);
     }
@@ -129,6 +131,7 @@ export const TransferirModal: React.FC<TransferirModalProps> = ({
           <button
             onClick={onClose}
             disabled={enviando}
+            data-sfx="cancel"
             className="px-5 py-2.5 rounded-lg border border-white/10 text-gray-400 hover:text-white hover:border-white/30 text-sm font-bold transition-colors disabled:opacity-40"
           >
             Cancelar
@@ -136,6 +139,7 @@ export const TransferirModal: React.FC<TransferirModalProps> = ({
           <button
             onClick={handleConfirmar}
             disabled={enviando || disponivel <= 0}
+            data-sfx="confirm"
             className="px-5 py-2.5 rounded-lg bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 text-sm font-bold transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {enviando ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}

@@ -33,7 +33,7 @@ export const MasterPage = () => {
 
   if (!isMestre) {
     return (
-      <div className="min-h-screen pt-24 px-6 flex items-center justify-center">
+      <div className="app-page flex items-center justify-center">
         <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-6 rounded-2xl flex flex-col items-center">
           <Shield size={48} className="mb-4 opacity-50" />
           <h2 className="text-xl font-bold mb-2">Acesso Negado</h2>
@@ -51,10 +51,10 @@ export const MasterPage = () => {
   );
 
   return (
-    <div className="relative z-10 min-h-screen pt-24 px-6 lg:px-12 pb-12 max-w-7xl mx-auto">
+    <div role="main" className="app-page mx-auto max-w-7xl">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
         <div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 flex items-center gap-4" style={{ fontFamily: 'Cinzel, serif' }}>
+          <h1 className="mb-3 flex items-center gap-3 text-[clamp(2rem,7vw,3rem)] font-bold leading-tight text-white sm:gap-4" style={{ fontFamily: 'Cinzel, serif' }}>
             <Shield className="text-primary" size={40} />
             Painel do Mestre
           </h1>
@@ -64,7 +64,7 @@ export const MasterPage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div className="mb-10 grid grid-cols-[repeat(auto-fit,minmax(min(100%,14rem),1fr))] gap-4 sm:gap-6">
         <div className="bg-white/5 border border-white/10 rounded-2xl p-6 flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
             <Users size={24} />
@@ -94,7 +94,7 @@ export const MasterPage = () => {
         </div>
       </div>
 
-      <div className="flex gap-4 mb-6 border-b border-white/10 pb-1 overflow-x-auto custom-scrollbar">
+      <div className="horizontal-scroll mb-6 flex gap-4 overflow-x-auto border-b border-white/10 pb-1 custom-scrollbar">
         <button
           onClick={() => setActiveTab('personagens')}
           className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
@@ -139,6 +139,7 @@ export const MasterPage = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
             <input
               type="text"
+              aria-label="Buscar personagem"
               placeholder="Buscar personagem..."
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
@@ -191,7 +192,7 @@ export const MasterPage = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="bg-[#0a090e] border border-white/10 rounded-3xl shadow-2xl relative min-h-[600px] flex flex-col"
+            className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] shadow-2xl"
           >
             <div className="flex-1 w-full h-full p-2 md:p-6">
               <CofrePanel />
@@ -205,7 +206,7 @@ export const MasterPage = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="bg-[#0a090e] border border-white/10 rounded-3xl shadow-2xl relative min-h-[600px] flex flex-col"
+            className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] shadow-2xl"
           >
             {/* Reusing the MestrePanel directly but rendering it natively inside the page container */}
             <div className="flex-1 w-full h-full p-2 md:p-6">

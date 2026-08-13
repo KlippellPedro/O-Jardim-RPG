@@ -1,4 +1,5 @@
 import { api } from './apiClient';
+import { createIdempotencyKey } from './lojaApi';
 
 export interface ICofreItem {
   item_id: string;
@@ -63,13 +64,25 @@ export const cofreApi = {
   transferirItem(campanhaId: string, personagemId: string, itemId: string, quantidade = 1) {
     return api('/cofre/transferir-item', {
       method: 'POST',
-      body: { campanha_id: campanhaId, personagem_id: personagemId, item_id: itemId, quantidade },
+      body: {
+        campanha_id: campanhaId,
+        personagem_id: personagemId,
+        item_id: itemId,
+        quantidade,
+        idempotencia: createIdempotencyKey('cofre-transferir-item'),
+      },
     });
   },
   transferirMoeda(campanhaId: string, personagemId: string, moeda: string, quantidade: number) {
     return api('/cofre/transferir-moeda', {
       method: 'POST',
-      body: { campanha_id: campanhaId, personagem_id: personagemId, moeda, quantidade },
+      body: {
+        campanha_id: campanhaId,
+        personagem_id: personagemId,
+        moeda,
+        quantidade,
+        idempotencia: createIdempotencyKey('cofre-transferir-moeda'),
+      },
     });
   },
   /** Saca do Cofre bancário do Banqueiro (saldos_guardados, tabela do bot)
@@ -77,7 +90,13 @@ export const cofreApi = {
   sacarDoBanco(campanhaId: string, personagemId: string, moeda: string, quantidade: number) {
     return api('/cofre/sacar-banco', {
       method: 'POST',
-      body: { campanha_id: campanhaId, personagem_id: personagemId, moeda, quantidade },
+      body: {
+        campanha_id: campanhaId,
+        personagem_id: personagemId,
+        moeda,
+        quantidade,
+        idempotencia: createIdempotencyKey('cofre-sacar-banco'),
+      },
     });
   },
 };

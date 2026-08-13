@@ -412,8 +412,8 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                         {[
-                          { label: 'Patamar', value: detalhe.patamar || '—' },
-                          { label: 'Qualidade', value: detalhe.qualidade_quartos || '—' },
+                          { label: 'Patamar', value: detalhe.patamar || '-' },
+                          { label: 'Qualidade', value: detalhe.qualidade_quartos || '-' },
                           { label: 'Aquisição', value: `${detalhe.valor_aquisicao.toLocaleString('pt-BR')} L$` },
                           { label: 'Manutenção', value: `${detalhe.manutencao.toLocaleString('pt-BR')} L$/mês` },
                         ].map(({ label, value }) => (

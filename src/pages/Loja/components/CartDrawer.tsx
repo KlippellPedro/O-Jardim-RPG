@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, X, Plus, Minus, Trash2 } from 'lucide-react';
 import { LojaItem, getCurrencySymbol, somarPrecosNativos } from '../../../services/lojaCatalogService';
 import { MAX_SHOP_UNITS } from '../../../services/lojaApi';
+import { useModalSfx } from '../../../hooks/useSfx';
+import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 
 export interface CartItem {
   item: LojaItem;
@@ -26,6 +28,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   isOpen, onClose, cart, onUpdateQuantity, onRemoveItem, onCheckout, isVenda = false, isProcessing = false
 }) => {
   const totais = somarPrecosNativos(cart);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useModalSfx(isOpen);
+  useDialogAccessibility({ open: isOpen, dialogRef, initialFocusRef: closeButtonRef, onClose });
 
   return (
     <AnimatePresence>
@@ -39,28 +46,29 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90]"
           />
           <motion.div
+            ref={dialogRef}
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed top-0 right-0 h-full w-full max-w-md bg-[#0b0a12] border-l border-white/10 z-[100] shadow-2xl flex flex-col"
+            className="cart-drawer settings-panel fixed bottom-0 right-0 top-0 z-[100] flex w-full max-w-md flex-col border-l border-white/10 bg-[#0b0a12] shadow-2xl"
             role="dialog"
             aria-modal="true"
             aria-labelledby="loja-cart-title"
           >
             {/* Header */}
-            <div className="p-6 border-b border-white/10 flex items-center justify-between bg-black/40">
-              <h2 id="loja-cart-title" className="text-2xl font-bold tracking-widest text-[#c7a44c] flex items-center gap-3 uppercase" style={{fontFamily: 'Cinzel, serif'}}>
+            <div className="flex items-center justify-between border-b border-white/10 bg-black/40 p-4 sm:p-6">
+              <h2 id="loja-cart-title" className="flex min-w-0 items-center gap-2 text-xl font-bold uppercase tracking-widest text-[#c7a44c] sm:gap-3 sm:text-2xl" style={{fontFamily: 'Cinzel, serif'}}>
                 <ShoppingCart size={24} />
                 {isVenda ? 'Lote de Venda' : 'Carrinho'}
               </h2>
-              <button onClick={onClose} aria-label="Fechar carrinho" className="p-2 text-gray-500 hover:text-white hover:bg-white/10 rounded-full transition-colors">
+              <button ref={closeButtonRef} onClick={onClose} aria-label="Fechar carrinho" data-sfx="off" className="p-2 text-gray-500 hover:text-white hover:bg-white/10 rounded-full transition-colors">
                 <X size={24} />
               </button>
             </div>
 
             {/* Items */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
+            <div className="flex-1 space-y-4 overflow-y-auto p-4 custom-scrollbar sm:p-6">
               {cart.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-gray-500">
                   <ShoppingCart size={48} className="mb-4 opacity-20" />
@@ -71,7 +79,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   const cartKey = alvoItemId ? `${item.id}::${alvoItemId}` : item.id;
                   return (
                   <div key={cartKey} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-4">
-                    <div className="flex-1">
+                    <div className="min-w-0 flex-1">
                       <div className="text-xs uppercase tracking-widest text-gray-500 mb-1">{item.categoria}</div>
                       <h4 className="text-white font-bold mb-1">{item.nome}</h4>
                       {alvoItemNome && (
@@ -106,7 +114,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
             {/* Footer */}
             {cart.length > 0 && (
-              <div className="p-6 border-t border-white/10 bg-black/60 backdrop-blur-xl">
+              <div className="border-t border-white/10 bg-black/60 p-4 backdrop-blur-xl sm:p-6">
                 <div className="flex justify-between items-end mb-6">
                   <div className="text-gray-400 uppercase tracking-widest text-xs font-bold">Estimativa</div>
                   <div className="flex flex-col items-end gap-1 text-xl font-bold text-gray-200">
@@ -121,6 +129,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <button
                   onClick={onCheckout}
                   disabled={isProcessing}
+                  data-sfx="confirm"
                   className={`w-full py-4 rounded-xl font-bold tracking-widest uppercase transition-all shadow-xl flex items-center justify-center gap-2 ${
                     isProcessing
                       ? 'bg-gray-800 text-gray-500 cursor-wait'

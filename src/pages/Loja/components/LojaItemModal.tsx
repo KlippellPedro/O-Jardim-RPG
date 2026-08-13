@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Select } from '../../../components/ui/Select';
 import { LojaItem, getCurrencySymbol, itemEhVeiculoCompleto, obterBonusDefesaCatalogo, personagemAtendeRequisitosLoja } from '../../../services/lojaCatalogService';
 import { X, ShoppingCart, Info, Swords, Activity, Skull, Sparkles, AlertTriangle } from 'lucide-react';
 import { ICharacter } from '../../../types/character';
+import { useModalSfx } from '../../../hooks/useSfx';
+import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 
 interface LojaItemModalProps {
   item: LojaItem;
@@ -16,6 +18,11 @@ interface LojaItemModalProps {
 
 export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onBuy, podeComprar, modoLoja = 'Comprar', compradorAtivo }) => {
   const [alvoItemId, setAlvoItemId] = useState<string>('');
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  // Só existe montado enquanto aberto - equivale a isOpen sempre true.
+  useModalSfx(true);
+  useDialogAccessibility({ open: true, dialogRef, initialFocusRef: closeButtonRef, onClose });
   const { dadosBrutos = {} } = item;
   const veiculoCompleto = itemEhVeiculoCompleto(item);
   const bonusDefesa = obterBonusDefesaCatalogo(dadosBrutos);
@@ -260,10 +267,11 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
 
   return (
     <motion.div
+      ref={dialogRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+      className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -273,13 +281,13 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
         initial={{ scale: 0.9, y: 30 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 30 }}
-        className="bg-[#0b0a12] border border-white/10 rounded-3xl max-w-2xl w-full shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]"
+        className="modal-surface relative flex w-full max-w-2xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0b0a12] shadow-2xl"
         onClick={e => e.stopPropagation()}
       >
         {/* CABEÇALHO DO MODAL */}
-        <div className={`p-8 border-b ${accentColor.split(' ').slice(1).join(' ')} flex justify-between items-start`}>
-          <div>
-            <div className="flex items-center gap-3 mb-2">
+        <div className={`flex items-start justify-between gap-3 border-b p-4 sm:p-8 ${accentColor.split(' ').slice(1).join(' ')}`}>
+          <div className="min-w-0">
+            <div className="mb-2 flex flex-wrap items-center gap-2 sm:gap-3">
               <span className={`text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md border ${accentColor.split(' ')[0]} border-current`}>
                 {item.raridade}
               </span>
@@ -297,21 +305,23 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
                 </span>
               ) : null}
             </div>
-            <h2 id="loja-item-modal-title" className="text-3xl font-bold text-white tracking-wide mt-2" style={{ fontFamily: 'Cinzel, serif' }}>
+            <h2 id="loja-item-modal-title" className="mt-2 text-[clamp(1.75rem,7vw,1.875rem)] font-bold leading-tight tracking-wide text-white" style={{ fontFamily: 'Cinzel, serif' }}>
               {item.nome}
             </h2>
           </div>
-          <button 
+          <button
+            ref={closeButtonRef}
             onClick={onClose}
             aria-label="Fechar detalhes do item"
-            className="p-2 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+            data-sfx="off"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
           >
             <X size={24} />
           </button>
         </div>
 
         {/* CORPO DO MODAL */}
-        <div className="p-8 overflow-y-auto custom-scrollbar flex-1">
+        <div className="flex-1 overflow-y-auto p-4 custom-scrollbar sm:p-8">
           {hasWarning && (
             <div className="mb-6 p-4 rounded-xl bg-red-900/30 border border-red-500/50 flex items-start gap-3">
               <AlertTriangle className="text-red-400 shrink-0 mt-0.5" size={20} />
@@ -378,8 +388,8 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
         )}
 
         {/* RODAPÉ E COMPRA */}
-        <div className="p-6 border-t border-white/10 bg-black/40 flex justify-end items-center relative overflow-hidden">
-          <div className="flex gap-6 items-center">
+        <div className="relative flex items-center justify-end overflow-hidden border-t border-white/10 bg-black/40 p-4 sm:p-6">
+          <div className="responsive-action-row flex w-full items-center justify-end gap-4 sm:w-auto sm:gap-6">
             <div className="flex flex-col items-end">
               <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Preço estimado</span>
               {item.precoAnterior ? (
@@ -402,7 +412,7 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
                 onBuy(item, alvoItemId || undefined, alvoItemNome);
               }}
               disabled={!podeComprar}
-              className={`flex items-center gap-2 px-8 py-3 rounded-xl font-bold tracking-widest uppercase transition-all shadow-xl ${
+              className={`flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold tracking-widest uppercase transition-all shadow-xl sm:px-8 ${
                   podeComprar
                   ? 'bg-[#c7a44c] hover:bg-yellow-400 text-black hover:scale-105'
                   : 'bg-gray-800 text-gray-500 cursor-not-allowed'

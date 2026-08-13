@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -11,6 +11,7 @@ import type {
 import type { NivelVisibilidade, ParticipantePayload } from '../../../services/sessaoApi';
 import { OPCOES_VISIBILIDADE } from '../sessionUtils';
 import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../../data/regras/condicoes';
+import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 
 const CONDICOES_RAPIDAS = [...CONDICOES_OFICIAIS, ...CRISES_SANIDADE];
 
@@ -22,6 +23,8 @@ interface EntityEditorProps {
 }
 
 export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCancel, onSave }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
   const [initiative, setInitiative] = useState(entity.iniciativa);
   const [hpCurrent, setHpCurrent] = useState(entity.hpAtual ?? 0);
@@ -39,6 +42,7 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
   const [attackDetail, setAttackDetail] = useState('');
   const [pericias, setPericias] = useState<string[]>(entity.pericias ?? []);
   const [periciaTexto, setPericiaTexto] = useState('');
+  useDialogAccessibility({ open: true, dialogRef, initialFocusRef: closeButtonRef, onClose: onCancel });
 
   const addConditionNamed = (name: string) => {
     const nome = name.trim();
@@ -76,10 +80,11 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
 
   return createPortal(
     <motion.div
+      ref={dialogRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4"
+      className="modal-viewport fixed inset-0 z-[110] flex items-center justify-center bg-black/75"
       onClick={onCancel}
       role="dialog"
       aria-modal="true"
@@ -90,11 +95,11 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.96, y: 12 }}
         onClick={(event) => event.stopPropagation()}
-        className="custom-scrollbar max-h-[88vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-white/10 bg-[#0d0c12] p-5 shadow-2xl"
+        className="modal-surface custom-scrollbar w-full max-w-lg overflow-y-auto rounded-2xl border border-white/10 bg-[#0d0c12] p-4 shadow-2xl sm:p-5"
       >
         <div className="flex items-center justify-between gap-3">
           <h3 id="entity-editor-title" className="text-base font-semibold text-white">Editar {entity.nome}</h3>
-          <button type="button" onClick={onCancel} className="rounded-md p-1.5 text-white/40 hover:bg-white/5 hover:text-white" aria-label="Fechar">
+          <button ref={closeButtonRef} type="button" onClick={onCancel} className="flex min-h-11 min-w-11 items-center justify-center rounded-md text-white/40 hover:bg-white/5 hover:text-white" aria-label="Fechar">
             <X size={16} />
           </button>
         </div>

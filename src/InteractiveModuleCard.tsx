@@ -14,7 +14,7 @@ export default function InteractiveModuleCard({ title, description, iconUrl }: {
         <div className="mb-4">
           <img src={iconUrl} alt={title} className="w-12 h-12 object-contain filter drop-shadow-[0_0_15px_rgba(196,160,82,0.5)]" />
         </div>
-        <h3 className="text-xl font-semibold mb-2">{title}</h3>
+        <h2 className="text-xl font-semibold mb-2">{title}</h2>
         <p className="text-sm text-gray-400">{description}</p>
       </div>
     </motion.div>

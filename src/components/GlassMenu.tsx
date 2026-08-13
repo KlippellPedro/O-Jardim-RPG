@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, Shield, Globe, BookOpen, Swords, ShoppingBag } from 'lucide-react';
+import { sfx } from '../utils/audioSynth';
 
 export default function GlassMenu() {
   const menuItems = [
@@ -13,16 +14,18 @@ export default function GlassMenu() {
   ];
 
   return (
-    <nav className="fixed left-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-6 p-4 rounded-3xl bg-[#0b0a12]/80 backdrop-blur-xl border border-white/10 shadow-2xl">
+    <nav className="app-navigation" aria-label="NavegaÃ§Ã£o principal">
       {menuItems.map((item) => (
         <NavLink
           key={item.name}
           to={item.path}
+          onMouseEnter={() => sfx.play('hover')}
+          data-sfx="navigate"
           className={({ isActive }) =>
-            `relative p-3 rounded-2xl flex items-center justify-center transition-all duration-300 group
+            `app-nav-link group transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70
             ${isActive ? 'text-primary' : 'text-gray-300 hover:text-white hover:bg-white/10'}`
           }
-          title={item.name}
+          aria-label={item.name}
         >
           {({ isActive }) => (
             <>
@@ -36,9 +39,9 @@ export default function GlassMenu() {
               )}
               
               <span className="relative z-10">{item.icon}</span>
+              <span className="app-nav-label relative z-10">{item.name}</span>
               
-              {/* Tooltip Elegante */}
-              <div className="absolute left-full ml-6 px-4 py-2 bg-[#0b0a12]/90 backdrop-blur-md text-sm rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none border border-white/10 whitespace-nowrap shadow-xl transform translate-x-[-10px] group-hover:translate-x-0">
+              <div className="app-nav-tooltip text-sm">
                 {item.name}
               </div>
             </>

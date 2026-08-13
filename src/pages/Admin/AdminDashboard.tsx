@@ -58,19 +58,21 @@ export const AdminDashboard: React.FC = () => {
   ];
 
   return (
-    <div className="relative z-10 min-h-screen pt-24 px-8 pb-12 w-full max-w-[1400px] mx-auto">
+    <div role="main" className="app-page mx-auto max-w-[87.5rem]">
 
       {/* HEADER */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
+      <div className="mb-8 flex items-start justify-between">
+        <div className="flex min-w-0 items-start gap-3 sm:items-center sm:gap-4">
           <button
+            type="button"
             onClick={() => navigate(-1)}
+            aria-label="Voltar"
             className="p-3 bg-white/5 border border-white/10 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
           >
             <ArrowLeft size={20} />
           </button>
           <div>
-            <h1 className="text-4xl font-bold text-white flex items-center gap-3" style={{ fontFamily: 'Cinzel, serif' }}>
+            <h1 className="flex items-center gap-3 text-[clamp(1.75rem,6vw,2.25rem)] font-bold leading-tight text-white" style={{ fontFamily: 'Cinzel, serif' }}>
               <Shield className="text-purple-500" size={32} />
               Central de Administração
             </h1>
@@ -80,7 +82,7 @@ export const AdminDashboard: React.FC = () => {
       </div>
 
       {/* CARDS DE RESUMO */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="mb-8 grid grid-cols-[repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-4 sm:gap-6">
         <div className="bg-[#0b0a12]/60 backdrop-blur-xl border border-white/5 p-6 rounded-3xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/20 rounded-full blur-3xl group-hover:bg-purple-500/30 transition-colors" />
           <Users className="text-purple-400 mb-4" size={28} />
@@ -111,7 +113,7 @@ export const AdminDashboard: React.FC = () => {
       </div>
 
       {/* ABAS */}
-      <div className="flex gap-4 mb-6 border-b border-white/10 pb-1 overflow-x-auto custom-scrollbar">
+      <div className="horizontal-scroll mb-6 flex gap-4 overflow-x-auto border-b border-white/10 pb-1 custom-scrollbar">
         {ABAS.map((item) => (
           <button
             key={item.id}

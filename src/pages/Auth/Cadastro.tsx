@@ -74,17 +74,19 @@ export const Cadastro: React.FC = () => {
   };
 
   return (
-    <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
+    <main className="modal-viewport relative z-10 flex min-h-[100dvh] items-center justify-center">
       
       {/* Toast Notification */}
-      <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+      <div className="fixed left-1/2 top-[max(0.75rem,env(safe-area-inset-top))] z-[110] w-[min(34rem,calc(100vw-1.5rem))] -translate-x-1/2">
         <AnimatePresence>
           {toast && (
             <motion.div
+              role={toast.type === 'error' ? 'alert' : 'status'}
+              aria-live={toast.type === 'error' ? 'assertive' : 'polite'}
               initial={{ opacity: 0, y: -20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.9 }}
-              className={`flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl backdrop-blur-xl border ${
+              className={`flex w-full items-start gap-3 rounded-2xl border px-4 py-3 shadow-2xl backdrop-blur-xl sm:items-center sm:px-6 sm:py-4 ${
                 toast.type === 'error' 
                   ? 'bg-red-500/10 border-red-500/20 text-red-200' 
                   : 'bg-green-500/10 border-green-500/20 text-green-200'
@@ -100,14 +102,16 @@ export const Cadastro: React.FC = () => {
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md bg-[#0b0a12]/70 backdrop-blur-2xl border border-white/10 p-8 rounded-[2rem] shadow-2xl relative overflow-hidden"
+        className="relative w-full max-w-md overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0b0a12]/70 p-5 shadow-2xl backdrop-blur-2xl sm:rounded-[2rem] sm:p-8"
       >
         {/* Glow de Fundo */}
         <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/20 rounded-full blur-[80px] pointer-events-none"></div>
 
         <div className="text-center mb-8 relative z-10">
-          <h1 className="text-4xl font-bold text-white mb-2" style={{fontFamily: 'Cinzel, serif'}}>Forjar Destino</h1>
-          <p className="text-gray-400 text-sm">Crie sua conta e junte-se à mesa.</p>
+          <h1 className="mb-2 text-[clamp(2rem,9vw,2.25rem)] font-bold leading-tight text-white" style={{fontFamily: 'Cinzel, serif'}}>Forjar Destino</h1>
+          <p className="text-sm leading-6 text-gray-400">
+            Participe de campanhas de RPG, crie fichas e acesse inventário, loja, Mundo, Regras e sessões. Depois do cadastro, escolha uma campanha para continuar.
+          </p>
         </div>
 
         {modoCadastro === 'loading' ? (
@@ -119,14 +123,17 @@ export const Cadastro: React.FC = () => {
             <Lock size={48} className="text-gray-600 mx-auto mb-4" />
             <h3 className="text-xl font-bold text-white mb-2">Cadastros Fechados</h3>
             <p className="text-gray-500 mb-6 text-sm">O Mestre desta instância desativou a criação de novas contas no momento.</p>
-            <Link to="/login" className="text-primary hover:text-primary-light font-medium transition-colors">Voltar para o Login</Link>
+            <Link to="/login" className="inline-flex min-h-11 items-center text-primary hover:text-primary-light font-medium transition-colors">Voltar para o Login</Link>
           </div>
         ) : (
           <form onSubmit={handleRegister} className="space-y-4 relative z-10">
             <div className="relative group">
+              <label htmlFor="register-name" className="sr-only">Nome de exibição</label>
               <User size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-primary transition-colors" />
               <input 
+                id="register-name"
                 type="text" 
+                autoComplete="name"
                 value={nome}
                 onChange={e => setNome(e.target.value)}
                 placeholder="Como deseja ser chamado?"
@@ -136,9 +143,12 @@ export const Cadastro: React.FC = () => {
             </div>
 
             <div className="relative group">
+              <label htmlFor="register-email" className="sr-only">E-mail</label>
               <Mail size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-primary transition-colors" />
               <input 
+                id="register-email"
                 type="email" 
+                autoComplete="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="E-mail"
@@ -148,9 +158,12 @@ export const Cadastro: React.FC = () => {
             </div>
 
             <div className="relative group">
+              <label htmlFor="register-password" className="sr-only">Senha</label>
               <Lock size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-primary transition-colors" />
               <input 
+                id="register-password"
                 type="password" 
+                autoComplete="new-password"
                 value={senha}
                 onChange={e => setSenha(e.target.value)}
                 placeholder="Senha (mínimo 8 caracteres)"
@@ -161,9 +174,12 @@ export const Cadastro: React.FC = () => {
             </div>
 
             <div className="relative group">
+              <label htmlFor="register-password-confirmation" className="sr-only">Confirmar senha</label>
               <Lock size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-primary transition-colors" />
               <input 
+                id="register-password-confirmation"
                 type="password" 
+                autoComplete="new-password"
                 value={confirmarSenha}
                 onChange={e => setConfirmarSenha(e.target.value)}
                 placeholder="Confirmar Senha"
@@ -181,9 +197,12 @@ export const Cadastro: React.FC = () => {
                   exit={{ opacity: 0, height: 0, marginTop: 0 }}
                   className="relative group overflow-hidden"
                 >
+                  <label htmlFor="register-invite" className="sr-only">Código de convite da campanha</label>
                   <KeyRound size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-primary transition-colors z-10" />
                   <input 
+                    id="register-invite"
                     type="text" 
+                    autoComplete="off"
                     value={codigoConvite}
                     onChange={e => setCodigoConvite(e.target.value)}
                     placeholder="Código de Convite da Campanha"
@@ -207,10 +226,10 @@ export const Cadastro: React.FC = () => {
 
         <div className="mt-8 text-center text-sm text-gray-500 relative z-10">
           Já faz parte do Jardim? {' '}
-          <Link to="/login" className="text-primary hover:text-white transition-colors font-medium">Faça seu Login</Link>
+          <Link to="/login" className="inline-flex min-h-11 items-center text-primary hover:text-white transition-colors font-medium">Faça seu Login</Link>
         </div>
 
       </motion.div>
-    </div>
+    </main>
   );
 };

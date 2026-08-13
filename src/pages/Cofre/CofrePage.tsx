@@ -90,21 +90,21 @@ export function CofrePage() {
 
   if (!campanhaAtiva) {
     return (
-      <div className="pl-32 pr-12 pt-32 relative z-10 w-full min-h-screen flex items-center justify-center text-gray-400">
+      <div className="app-page flex items-center justify-center text-gray-400">
         Selecione uma campanha ativa para ver o cofre.
       </div>
     );
   }
 
   return (
-    <div className="pl-32 pr-12 pt-12 pb-24 relative z-10 w-full min-h-screen flex flex-col max-w-[1400px] mx-auto">
+    <div role="main" className="app-page mx-auto flex max-w-[87.5rem] flex-col">
 
-      <div className="flex items-center justify-between gap-6 mb-10 border-b border-white/5 pb-8">
+      <div className="mb-10 flex items-start justify-between gap-4 border-b border-white/5 pb-8 sm:items-center sm:gap-6">
         <div>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-wider mb-3 flex items-center gap-4 text-primary" style={{ fontFamily: 'Cinzel, serif' }}>
+          <h1 className="mb-3 flex items-center gap-3 text-[clamp(2rem,7vw,3rem)] font-bold leading-tight tracking-wider text-primary sm:gap-4" style={{ fontFamily: 'Cinzel, serif' }}>
             <Vault size={40} />
             Cofre
-          </h2>
+          </h1>
           <p className="text-gray-400 max-w-2xl">
             Recompensas do Discord esperando entrega e o status do seu Cofre bancário no Banqueiro.
           </p>
@@ -276,21 +276,21 @@ export function CofrePage() {
                 </div>
               </div>
               {personagens.length > 0 && (
-                <div className="flex items-center gap-3">
+                <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
                   <span className="text-sm text-gray-400 shrink-0">Transferir para:</span>
                   <Select
                     value={selectedPersonagemId}
                     onChange={setSelectedPersonagemId}
                     placeholder="Selecione um personagem"
                     options={personagens.map((p) => ({ value: p.id, label: p.nome }))}
-                    className="w-56"
+                    className="w-full sm:w-56"
                   />
                 </div>
               )}
             </div>
 
             {moedas.length > 0 && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+              <div className="mb-6 grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
                 {moedas.map((m) => (
                   <div
                     key={m.moeda}

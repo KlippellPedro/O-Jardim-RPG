@@ -205,6 +205,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
           <input 
             type="text" 
+            aria-label="Buscar perícia"
             placeholder="Buscar perícia..."
             value={busca}
             onChange={e => setBusca(e.target.value)}
@@ -212,6 +213,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
           />
         </div>
         <select 
+          aria-label="Filtrar perícias por atributo"
           value={filtroAtributo}
           onChange={e => setFiltroAtributo(e.target.value)}
           className="bg-[#0f0e15] border border-white/5 rounded-xl py-3 px-4 text-white focus:border-[#c7a44c]/50 outline-none text-sm appearance-none md:min-w-[200px]"
@@ -293,6 +295,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                   {vantagensEquipamento > 0 && <span className="text-[10px] font-bold text-emerald-300">Item {vantagensEquipamento}V</span>}
                   
                   <select
+                    aria-label={`Grau da perícia ${p.titulo}`}
                     value={grauAtual}
                     onChange={e => handleGrauChange(p.id, e.target.value)}
                     className={`text-[10px] px-3 py-1.5 rounded-full border appearance-none text-center cursor-pointer font-bold uppercase tracking-wider outline-none transition-colors ${
@@ -344,7 +347,8 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
             );
           })}
 
-          <motion.div 
+          <motion.button
+            type="button"
             layout
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             onClick={() => setActiveModal({ type: 'nova', periciaId: '' })}
@@ -354,7 +358,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
               <span className="text-2xl text-gray-500 group-hover:text-[#c7a44c] mb-1">+</span>
             </div>
             <span className="text-xs font-bold text-gray-500 group-hover:text-[#c7a44c] uppercase tracking-widest text-center mt-2">Nova Perícia <br/> ou Ofício</span>
-          </motion.div>
+          </motion.button>
         </div>
         {periciasVisiveis.length === 0 && (
           <div className="p-8 text-center text-gray-500">Nenhuma perícia encontrada com esses filtros.</div>
@@ -411,18 +415,18 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
       )}
 
       {activeModal?.type === 'nova' && (
-        <ModalPortal>
+        <ModalPortal onClose={() => setActiveModal(null)}>
         <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
+          className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm"
           onClick={() => setActiveModal(null)}
         >
           <div 
-            className="bg-[#0f0e15] border border-[#c7a44c]/50 rounded-2xl p-6 w-full max-w-md shadow-[0_0_50px_rgba(199,164,76,0.2)]"
+            className="modal-surface bg-[#0f0e15] border border-[#c7a44c]/50 rounded-2xl p-4 sm:p-6 w-full max-w-md overflow-y-auto shadow-[0_0_50px_rgba(199,164,76,0.2)]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-[#c7a44c] font-bold tracking-widest uppercase">Nova Perícia / Ofício</h3>
-              <button onClick={() => setActiveModal(null)} className="text-gray-500 hover:text-white transition-colors">
+              <button type="button" aria-label="Fechar" onClick={() => setActiveModal(null)} className="flex min-h-11 min-w-11 items-center justify-center text-gray-500 hover:text-white transition-colors">
                 ✕
               </button>
             </div>
@@ -467,13 +471,13 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
       )}
 
       {activeModal?.type === 'resultado' && activeModal.registro && (
-        <ModalPortal>
+        <ModalPortal onClose={() => setActiveModal(null)}>
         <div 
-          className="fixed inset-0 z-[110] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
+          className="modal-viewport fixed inset-0 z-[110] flex items-center justify-center bg-black/85 backdrop-blur-sm"
           onClick={() => setActiveModal(null)}
         >
           <div 
-            className="bg-[#0f0e15] border border-[#c7a44c]/50 rounded-2xl p-6 w-full max-w-sm shadow-[0_0_50px_rgba(199,164,76,0.2)] flex flex-col items-center text-center"
+            className="modal-surface bg-[#0f0e15] border border-[#c7a44c]/50 rounded-2xl p-4 sm:p-6 w-full max-w-sm overflow-y-auto shadow-[0_0_50px_rgba(199,164,76,0.2)] flex flex-col items-center text-center"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-gray-400 font-bold tracking-widest uppercase mb-2">{activeModal.registro.titulo}</h3>

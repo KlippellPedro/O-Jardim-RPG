@@ -279,16 +279,19 @@ const mapNivelLoja = (item: any, categoria: ItemCategoria, raridade: ItemRaridad
     return Number(item.conteudo.nivelMinimoLoja);
   }
   
-  if (raridade === 'Mítico' || raridade === 'Relíquia da Criação' || raridade === 'Desconhecida') return 4;
-  if (categoria === 'Frutos do Éden' || categoria === 'Artefatos Mágicos') return 4;
+  if (raridade === 'Lendário' || raridade === 'Mítico' || raridade === 'Relíquia da Criação' || raridade === 'Desconhecida') return 4;
+  if (categoria === 'Frutos do Éden') return 4;
   
-  if (categoria === 'Implantes Cibernéticos' || moeda === 'Créditos Sombrios') return 3;
+  if (raridade === 'Épico') return 3;
+  if (categoria === 'Implantes Cibernéticos' || categoria === 'Artefatos Mágicos' || moeda === 'Créditos Sombrios') return 3;
   
   const desc = (item.conteudo?.descricao || '').toLowerCase();
   if (desc.includes('ilegal') || desc.includes('contrabando') || desc.includes('veneno') || desc.includes('mercado negro')) return 3;
   
   if (categoria === 'Bens') return 2;
-  if (raridade === 'Raro' || raridade === 'Épico') return 2;
+  if (raridade === 'Raro') return 2;
+  if (item.tipo === 'arma' && normalizarMarcador(item.conteudo?.subtipo) === 'marcial') return 2;
+  if (item.tipo === 'consumivel' && normalizarMarcador(item.conteudo?.subtipo) === 'selo') return 2;
   
   return 1;
 };

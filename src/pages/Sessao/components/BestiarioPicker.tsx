@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { Plus, RefreshCw, Search, Skull, Sparkles, X } from 'lucide-react';
 import { sessaoApi, type BestiarioMonstro } from '../../../services/sessaoApi';
+import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 
 interface BestiarioPickerProps {
   campanhaId: string;
@@ -16,6 +17,8 @@ const ORDEM_CATEGORIAS = [
 ];
 
 export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, onCancel, onPick }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
   const [monstros, setMonstros] = useState<BestiarioMonstro[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,6 +26,7 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
   const [search, setSearch] = useState('');
   const [aba, setAba] = useState<'criaturas' | 'universais'>('criaturas');
   const [categoriaFiltro, setCategoriaFiltro] = useState<string | null>(null);
+  useDialogAccessibility({ open: true, dialogRef, initialFocusRef: searchRef, onClose: onCancel });
 
   useEffect(() => {
     let cancelado = false;
@@ -75,10 +79,11 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
 
   return createPortal(
     <motion.div
+      ref={dialogRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4"
+      className="modal-viewport fixed inset-0 z-[110] flex items-center justify-center bg-black/75"
       onClick={onCancel}
       role="dialog"
       aria-modal="true"
@@ -89,7 +94,7 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.96, y: 12 }}
         onClick={(event) => event.stopPropagation()}
-        className="flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0d0c12] shadow-2xl"
+        className="modal-surface flex w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0d0c12] shadow-2xl"
       >
         <div className="flex items-center justify-between gap-3 border-b border-white/[0.08] p-4">
           <h3 id="bestiario-picker-title" className="flex items-center gap-2 text-base font-semibold text-white">
@@ -119,10 +124,10 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
           <div className="relative">
             <Search size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-white/30" />
             <input
+              ref={searchRef}
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Buscar criatura..."
-              autoFocus
               className="w-full rounded-md border border-white/10 bg-black/30 py-2 pl-8 pr-3 text-sm text-white outline-none focus:border-[#c7a44c]/50"
             />
           </div>

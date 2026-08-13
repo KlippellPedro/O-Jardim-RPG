@@ -14,8 +14,6 @@ export default defineConfig({
           if (id.includes('/node_modules/three/')) return 'vendor-three'
           if (id.includes('/node_modules/@react-three/fiber/')) return 'vendor-react-three'
           if (id.includes('/node_modules/@react-three/drei/')) return 'vendor-react-three-drei'
-          if (id.includes('/node_modules/@react-three/postprocessing/')) return 'vendor-react-three-postprocessing'
-          if (id.includes('/node_modules/postprocessing/')) return 'vendor-postprocessing'
           if (id.includes('/node_modules/@react-three/rapier/')) return 'vendor-react-three-rapier'
           if (id.includes('/node_modules/@dimforge/rapier3d-compat/')) return 'vendor-rapier'
           if (id.includes('/node_modules/react-reconciler/')) return 'vendor-react-three'

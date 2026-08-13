@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -23,6 +23,7 @@ import { GridClasses } from './components/GridClasses';
 import { GridRacas } from './components/GridRacas';
 import { RegrasContent } from './components/RegrasContent';
 import { NotasInternasMestre } from './components/NotasInternasMestre';
+import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
 
 const TITULOS_TOPICOS: Record<string, string> = {
   'criacao-personagem': 'Criação de Personagem',
@@ -166,11 +167,17 @@ export const RegrasPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [busca, setBusca] = useState('');
   const [menuAberto, setMenuAberto] = useState(false);
+  const mobileMenuRef = useRef<HTMLElement>(null);
   const { usuario, campanhaAtiva } = useAuthStore();
   const isMestre = usuario?.papel_plataforma === 'admin'
     || usuario?.papel_plataforma === 'criador'
     || campanhaAtiva?.papel === 'mestre'
     || campanhaAtiva?.papel === 'assistente';
+  useDialogAccessibility({
+    open: menuAberto,
+    dialogRef: mobileMenuRef,
+    onClose: () => setMenuAberto(false),
+  });
   const config = campanhaAtiva?.configuracoes ?? {};
   const racasLiberadas = useMemo(() => new Set([
     ...(config.racas_liberadas ?? []),
@@ -205,7 +212,7 @@ export const RegrasPage = () => {
   const setActiveTopic = (topico: string) => {
     const proximosParametros = new URLSearchParams(searchParams);
     proximosParametros.set('topico', topico);
-    setSearchParams(proximosParametros, { replace: true });
+    setSearchParams(proximosParametros);
     document.getElementById('regra-leitor')?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -236,7 +243,7 @@ export const RegrasPage = () => {
   const conteudoAmplo = ['classes', 'racas', 'magia-fluxo', 'legados'].includes(activeTopic);
 
   return (
-    <div className="relative z-10 mx-auto flex h-[100dvh] w-full max-w-[1800px] gap-4 overflow-hidden p-4 pl-24 lg:gap-6 lg:p-6 lg:pl-32">
+    <div className="app-viewport mx-auto flex max-w-[112.5rem] gap-3 overflow-hidden sm:gap-4 lg:gap-6">
       <aside className="hidden h-full min-h-0 w-72 shrink-0 overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#0d0c12]/95 py-5 shadow-2xl backdrop-blur-xl md:block">
         <ChapterNavigation
           activeTopic={activeTopic}
@@ -272,12 +279,12 @@ export const RegrasPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.22 }}
-                className={`regra-book-page mx-auto min-h-full px-5 py-8 sm:px-8 lg:px-12 lg:py-12 ${conteudoAmplo ? 'max-w-[1320px]' : 'max-w-[1120px]'}`}
+                className={`regra-book-page mx-auto min-h-full px-5 py-8 sm:px-8 lg:px-12 lg:py-12 ${conteudoAmplo ? 'max-w-[82.5rem]' : 'max-w-[70rem]'}`}
               >
                 <header className="mb-10 border-b border-[#c7a44c]/20 pb-8">
                   <div className="mb-5 flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[0.22em]">
                     <span className="text-[#c7a44c]">Capítulo {activeIndex + 1} de {catalogKeys.length}</span>
-                    <span className="text-gray-700">◆</span>
+                    <span aria-hidden="true" className="text-gray-700">◆</span>
                     <span className="text-gray-500">{topicData.categoria || 'Regras gerais'}</span>
                     <span className="ml-auto flex items-center gap-1.5 rounded-full border border-[#c7a44c]/20 bg-[#c7a44c]/10 px-3 py-1 text-[#c7a44c]">
                       <Sparkles size={11} /> {topicData.status}
@@ -346,9 +353,10 @@ export const RegrasPage = () => {
 
       <AnimatePresence>
         {menuAberto ? (
-          <motion.div className="fixed inset-0 z-[80] md:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div className="modal-viewport fixed inset-0 z-[80] md:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <button type="button" aria-label="Fechar capítulos" onClick={() => setMenuAberto(false)} className="absolute inset-0 bg-black/75 backdrop-blur-sm" />
             <motion.aside
+              ref={mobileMenuRef}
               role="dialog"
               aria-modal="true"
               aria-label="Capítulos do livro de regras"
@@ -356,7 +364,7 @@ export const RegrasPage = () => {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 260 }}
-              className="absolute inset-y-0 left-0 w-[min(88vw,340px)] border-r border-white/10 bg-[#0d0c12] py-5 shadow-2xl"
+              className="absolute bottom-0 left-0 top-0 w-[min(88vw,340px)] overflow-hidden border-r border-white/10 bg-[#0d0c12] py-5 shadow-2xl"
             >
               <ChapterNavigation
                 activeTopic={activeTopic}

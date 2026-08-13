@@ -11,7 +11,7 @@ export const Espadachim = ({ classe }: { classe: IClasse }) => {
   return (
     <div className="min-h-screen text-blue-50 p-8 selection:bg-blue-500/30 overflow-hidden relative">
       {/* 3D WebGL Background */}
-      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/espadachim_bg.jpg')" }} />
+      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/espadachim_bg.webp')" }} />
 
       {/* Blade Slashes Background */}
       <div className="fixed inset-0 pointer-events-none z-0">

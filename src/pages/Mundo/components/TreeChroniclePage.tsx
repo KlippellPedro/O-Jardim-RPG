@@ -1,27 +1,41 @@
 import React from 'react';
 import { ArrowLeft, BookOpen, Compass, History, MapPin, Sparkles } from 'lucide-react';
 import { ChronicleTimeline } from './ChronicleTimeline';
-import { TreeChronicle } from '../worldChronicles';
+import { getTreeChronicle } from '../worldChronicles';
 
 interface TreeChroniclePageProps {
-  chronicle: TreeChronicle;
+  treeId: string;
   color: string;
   onBack: () => void;
   onOpenGlobalTimeline: () => void;
 }
 
-const sectionClass = 'scroll-mt-28 rounded-3xl border border-white/10 bg-[#0d0c12]/80 p-6 shadow-2xl backdrop-blur-xl md:p-9';
+const sectionClass = 'content-auto-section performance-expensive-effects scroll-mt-28 rounded-3xl border border-white/10 bg-[#0d0c12]/80 p-6 shadow-2xl backdrop-blur-xl md:p-9';
 
 export const TreeChroniclePage: React.FC<TreeChroniclePageProps> = ({
-  chronicle,
+  treeId,
   color,
   onBack,
   onOpenGlobalTimeline,
 }) => {
+  const chronicle = getTreeChronicle(treeId);
   const rgbGlow = `${color}33`;
 
+  if (!chronicle) {
+    return (
+      <main className="app-detail-page relative z-10 flex min-h-screen items-center justify-center px-5 text-center">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Crônica não encontrada</h1>
+          <button type="button" onClick={onBack} className="mt-5 rounded-full border border-white/10 px-4 py-2 text-sm text-gray-300 hover:text-white">
+            Voltar às órbitas
+          </button>
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <main className="relative z-10 min-h-screen overflow-x-hidden pb-24 pl-20 md:pl-28">
+    <main className="app-detail-page relative z-10 min-h-screen overflow-x-hidden">
       <div
         className="pointer-events-none fixed inset-0 opacity-80"
         style={{ background: `radial-gradient(circle at 72% 8%, ${rgbGlow}, transparent 36%), linear-gradient(180deg, #08070b 0%, #050508 100%)` }}
@@ -59,7 +73,7 @@ export const TreeChroniclePage: React.FC<TreeChroniclePageProps> = ({
             </p>
           </div>
 
-          <aside className="rounded-3xl border border-white/10 bg-black/35 p-6 backdrop-blur-xl">
+          <aside className="performance-expensive-effects rounded-3xl border border-white/10 bg-black/35 p-6 backdrop-blur-xl">
             <dl className="space-y-5 text-sm">
               <div>
                 <dt className="text-[10px] font-bold uppercase tracking-[0.22em] text-gray-600">Deidade</dt>
@@ -77,7 +91,7 @@ export const TreeChroniclePage: React.FC<TreeChroniclePageProps> = ({
           </aside>
         </div>
 
-        <nav className="sticky top-3 z-30 mt-12 flex gap-2 overflow-x-auto rounded-2xl border border-white/10 bg-[#09080d]/90 p-2 shadow-2xl backdrop-blur-xl" aria-label="Capítulos desta crônica">
+        <nav className="performance-expensive-effects sticky top-3 z-30 mt-12 flex gap-2 overflow-x-auto rounded-2xl border border-white/10 bg-[#09080d]/90 p-2 shadow-2xl backdrop-blur-xl" aria-label="Capítulos desta crônica">
           {[
             ['essencia', 'Essência'],
             ['historia', 'História'],
@@ -156,4 +170,3 @@ export const TreeChroniclePage: React.FC<TreeChroniclePageProps> = ({
     </main>
   );
 };
-

@@ -80,8 +80,8 @@ function normalizePericias(value: unknown): string[] {
   return value.flatMap((item) => (typeof item === 'string' && item.trim() ? [item.trim()] : []));
 }
 
-function mapParticipantes(participantes: SessaoParticipanteResponse[]): EntidadeIniciativa[] {
-  return participantes.map((participante) => {
+function mapParticipantes(participantes: SessaoParticipanteResponse[] | undefined): EntidadeIniciativa[] {
+  return (Array.isArray(participantes) ? participantes : []).map((participante) => {
     const tipo = participante.tipo === 'jogador' || participante.tipo === 'aliado'
       ? participante.tipo
       : 'inimigo';
@@ -324,7 +324,7 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
     }
     try {
       const response = await registrosApi.listar(campanhaId, { apenasSessao: true, limite: 80 });
-      set({ rolagens: response.registros });
+      set({ rolagens: Array.isArray(response?.registros) ? response.registros : [] });
     } catch (error) {
       console.error('Falha ao buscar registros', error);
       set({ error: 'Não foi possível atualizar o histórico de rolagens.' });

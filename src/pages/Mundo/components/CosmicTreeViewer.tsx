@@ -1,92 +1,174 @@
-import React, { useRef, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Stars, Float, Text, Billboard, useGLTF } from '@react-three/drei';
+import React, { Suspense, memo, useEffect, useMemo, useRef, useState } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Billboard, OrbitControls, Stars, Text, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { BANCO_LUNAR_INFO } from '../bancoLunarInfo';
+import {
+  BANCO_LUNAR_HEIGHT,
+  BANCO_LUNAR_MODEL_PATH,
+  BANCO_LUNAR_RADIUS,
+  BANCO_LUNAR_SPEED,
+  COSMIC_TREES,
+  TreeData,
+} from '../cosmicTrees';
+import { usePerformanceProfile } from '../../../hooks/usePerformance';
 
-const BANCO_LUNAR_MODEL_PATH = '/models/props/banco-lunar.glb';
-const BANCO_LUNAR_RADIUS = 50; // Fora da órbita da Árvore mais distante (Abismo, radius 40)
-const BANCO_LUNAR_SPEED = 0.025;
-const BANCO_LUNAR_HEIGHT = 6; // Halo acima do plano das Árvores
+export { COSMIC_TREES } from '../cosmicTrees';
 
-export interface TreeData {
-  id: string;
-  deidadeId: string;
-  name: string;
-  color: string;
-  radius: number; // Distância do centro
-  speed: number;  // Velocidade de órbita
-  modelPath: string; // Caminho pro modelo GLB
+const BANK_MODEL_KEY = 'banco-lunar';
+const globalTargetPosition = new THREE.Vector3();
+
+function simplifyTransmissiveMaterials(scene: THREE.Object3D) {
+  scene.traverse((object) => {
+    if (!(object as THREE.Mesh).isMesh) return;
+    const mesh = object as THREE.Mesh;
+    const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    for (const material of materials) {
+      if (!(material as THREE.MeshPhysicalMaterial).isMeshPhysicalMaterial) continue;
+      const physicalMaterial = material as THREE.MeshPhysicalMaterial;
+      if (physicalMaterial.transmission <= 0) continue;
+
+      // Os GLBs já trazem alpha blend (0,12–0,32), suficiente para manter a
+      // leitura de vidro. Transmission fazia passes extras da cena inteira:
+      // ~182 mil triângulos dos modelos viravam ~470 mil por frame.
+      physicalMaterial.transmission = 0;
+      physicalMaterial.thickness = 0;
+      physicalMaterial.needsUpdate = true;
+    }
+  });
+  return scene;
 }
 
-/**
- * As cores aqui são a paleta CANÔNICA da tabela "Estrutura do Jardim", a mesma
- * de data/mundo/arvoresCatalog.ts (campo `rgb`) e
- * bots/jornalista/core/arvores.py. Este arquivo tinha uma paleta
- * própria e divergente - Gênese saía dourada em vez de rosa, Abismo roxo em vez
- * de preto, Baluarte azul-acinzentado em vez de marrom.
- *
- * Limiar fica no centro (radius 0) de propósito: ela é a chegada de todas as
- * outras Árvores, não uma entre múltiplas origens.
- */
-export const COSMIC_TREES: TreeData[] = [
-  { id: 'limiar', deidadeId: 'mulher-carmesim', name: 'Limiar', color: '#861c30', radius: 0, speed: 0, modelPath: '/models/trees/mulher-carmesim.glb' }, // Vermelho vinho - Centro
-  { id: 'genese', deidadeId: 'aethel', name: 'Gênese', color: '#d6789c', radius: 8, speed: 0.1, modelPath: '/models/trees/aethel.glb' }, // Rosa
-  { id: 'eon', deidadeId: 'chronus', name: 'Éon', color: '#a88a48', radius: 12, speed: 0.05, modelPath: '/models/trees/chronus.glb' }, // Dourado envelhecido
-  { id: 'aletheia', deidadeId: 'ousias', name: 'Alétheia', color: '#dec658', radius: 15, speed: 0.12, modelPath: '/models/trees/ousias.glb' }, // Amarelo
-  { id: 'anima', deidadeId: 'haemus', name: 'Anima', color: '#56ac5c', radius: 18, speed: 0.09, modelPath: '/models/trees/haemus.glb' }, // Verde
-  { id: 'baluarte', deidadeId: 'moros', name: 'Baluarte', color: '#745234', radius: 22, speed: 0.07, modelPath: '/models/trees/moros.glb' }, // Marrom
-  { id: 'matriz', deidadeId: 'aperion', name: 'Matriz', color: '#8454bc', radius: 26, speed: 0.06, modelPath: '/models/trees/aperion.glb' }, // Roxo
-  { id: 'axis', deidadeId: 'keryx', name: 'A.X.I.S', color: '#35d8ec', radius: 30, speed: 0.15, modelPath: '/models/trees/axis.glb' }, // Azul-neon artificial
-  { id: 'vortice', deidadeId: 'ignis', name: 'Vórtice', color: '#de722a', radius: 35, speed: 0.2, modelPath: '/models/trees/ignis.glb' }, // Laranja
-  { id: 'abismo', deidadeId: 'erebus', name: 'Abismo', color: '#221e28', radius: 40, speed: 0.08, modelPath: '/models/trees/erebus.glb' }, // Preto - Última órbita
-];
-
-// Posição global para a câmera seguir
-const globalTargetPosition = new THREE.Vector3(0, 0, 0);
-
 let sharedGlowTexture: THREE.CanvasTexture | null = null;
-const getGlowTexture = () => {
-  if (!sharedGlowTexture) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 128;
-    canvas.height = 128;
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-      grad.addColorStop(0, 'rgba(255,255,255,1)');
-      grad.addColorStop(0.4, 'rgba(255,255,255,0.35)');
-      grad.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 128, 128);
-    }
-    sharedGlowTexture = new THREE.CanvasTexture(canvas);
+function getGlowTexture() {
+  if (sharedGlowTexture) return sharedGlowTexture;
+  const canvas = document.createElement('canvas');
+  canvas.width = 64;
+  canvas.height = 64;
+  const context = canvas.getContext('2d');
+  if (context) {
+    const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gradient.addColorStop(0, 'rgba(255,255,255,1)');
+    gradient.addColorStop(0.4, 'rgba(255,255,255,0.35)');
+    gradient.addColorStop(1, 'rgba(255,255,255,0)');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, 64, 64);
   }
+  sharedGlowTexture = new THREE.CanvasTexture(canvas);
   return sharedGlowTexture;
-};
+}
 
-const GlowSprite = ({ color, isSelected }: { color: string, isSelected: boolean }) => {
-  const texture = useMemo(() => getGlowTexture(), []);
-
+const GlowSprite = memo(({ color, isSelected }: { color: string; isSelected: boolean }) => {
+  const texture = useMemo(getGlowTexture, []);
   return (
     <sprite scale={isSelected ? [7, 7, 1] : [4, 4, 1]} position={[0, 1.2, 0]}>
-      <spriteMaterial 
-        map={texture} 
-        color={color} 
-        transparent={true} 
-        opacity={isSelected ? 0.9 : 0.5} 
-        blending={THREE.AdditiveBlending} 
-        depthWrite={false} 
+      <spriteMaterial
+        map={texture}
+        color={color}
+        transparent
+        opacity={isSelected ? 0.8 : 0.42}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
       />
     </sprite>
   );
-};
+});
 
-const EasterEggUniverses = () => {
+const TreePlaceholder = memo(({ color }: { color: string }) => (
+  <group dispose={null}>
+    <mesh position={[0, 0.55, 0]}>
+      <cylinderGeometry args={[0.16, 0.22, 1.1, 7]} />
+      <meshStandardMaterial color="#3b2c24" roughness={0.9} />
+    </mesh>
+    <mesh position={[0, 1.45, 0]}>
+      <coneGeometry args={[0.9, 1.9, 9]} />
+      <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.16} roughness={0.75} />
+    </mesh>
+  </group>
+));
+
+const TreeModel = memo(({ tree }: { tree: TreeData }) => {
+  const { scene: sourceScene } = useGLTF(tree.modelPath);
+  const scene = useMemo(() => simplifyTransmissiveMaterials(sourceScene), [sourceScene]);
+  // Cada arquivo representa uma única árvore na cena; clonar duplicava toda a
+  // hierarquia sem oferecer isolamento útil de geometria ou materiais.
+  return <primitive object={scene} dispose={null} />;
+});
+
+const MoonBankModel = memo(() => {
+  const { scene: sourceScene } = useGLTF(BANCO_LUNAR_MODEL_PATH);
+  const scene = useMemo(() => simplifyTransmissiveMaterials(sourceScene), [sourceScene]);
+  return <primitive object={scene} scale={2.2} dispose={null} />;
+});
+
+function useProgressiveModels(performanceMode: boolean, selectedDeidadeId: string | null) {
+  const [loadedModels, setLoadedModels] = useState<Set<string>>(
+    () => new Set([COSMIC_TREES[0].deidadeId]),
+  );
+
+  useEffect(() => {
+    if (!selectedDeidadeId) return;
+    setLoadedModels((current) => {
+      if (current.has(selectedDeidadeId)) return current;
+      const next = new Set(current);
+      next.add(selectedDeidadeId);
+      return next;
+    });
+  }, [selectedDeidadeId]);
+
+  useEffect(() => {
+    if (performanceMode) return undefined;
+    const idleWindow = window as unknown as {
+      requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    const queue = [
+      ...COSMIC_TREES.slice(1).map((tree) => tree.deidadeId),
+      BANK_MODEL_KEY,
+    ];
+    let index = 0;
+    let timeoutId: number | undefined;
+    let idleId: number | undefined;
+    let cancelled = false;
+
+    const loadNext = () => {
+      if (cancelled || index >= queue.length) return;
+      const modelId = queue[index++];
+      setLoadedModels((current) => {
+        if (current.has(modelId)) return current;
+        const next = new Set(current);
+        next.add(modelId);
+        return next;
+      });
+      timeoutId = window.setTimeout(scheduleNext, 320);
+    };
+
+    const scheduleNext = () => {
+      if (cancelled || index >= queue.length) return;
+      if (idleWindow.requestIdleCallback) {
+        idleId = idleWindow.requestIdleCallback(loadNext, { timeout: 1200 });
+      } else {
+        timeoutId = window.setTimeout(loadNext, 500);
+      }
+    };
+
+    timeoutId = window.setTimeout(scheduleNext, 450);
+    return () => {
+      cancelled = true;
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+      if (idleId !== undefined) idleWindow.cancelIdleCallback?.(idleId);
+    };
+  }, [performanceMode]);
+
+  return loadedModels;
+}
+
+const EasterEggUniverses = memo(({ animate }: { animate: boolean }) => {
   const frozenRef = useRef<THREE.Mesh>(null);
   const bubbleRef = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
+    if (!animate) return;
     if (frozenRef.current) frozenRef.current.rotation.y = state.clock.elapsedTime * 0.05;
     if (bubbleRef.current) {
       bubbleRef.current.rotation.y = state.clock.elapsedTime * 0.08;
@@ -96,98 +178,65 @@ const EasterEggUniverses = () => {
 
   return (
     <group position={[350, -100, 400]}>
-      {/* Mundo Congelado */}
-      <mesh ref={frozenRef} position={[0, 0, 0]}>
-        <sphereGeometry args={[15, 32, 32]} />
-        <meshStandardMaterial 
-          color="#d0f4ff" 
-          emissive="#0a2a3a" 
-          roughness={0.4} 
-          metalness={0.1}
-        />
-        {/* Camada de "Gelo" por cima */}
+      <mesh ref={frozenRef}>
+        <sphereGeometry args={[15, 24, 24]} />
+        <meshStandardMaterial color="#d0f4ff" emissive="#0a2a3a" roughness={0.4} metalness={0.1} />
         <mesh>
-          <sphereGeometry args={[15.2, 32, 32]} />
-          <meshPhysicalMaterial 
-            color="#ffffff" 
-            transparent 
-            opacity={0.4} 
-            roughness={0.1} 
-            transmission={0.8} 
-            thickness={2} 
-            clearcoat={1}
-          />
+          <sphereGeometry args={[15.2, 24, 24]} />
+          <meshPhysicalMaterial color="#ffffff" transparent opacity={0.35} roughness={0.15} transmission={0.65} thickness={1.5} />
         </mesh>
         <Billboard position={[0, 22, 0]}>
-          <Text fontSize={3} color="#a0e6ff" anchorX="center" anchorY="middle" fillOpacity={0.6}>
-            O Mundo Gélido
-          </Text>
+          <Text fontSize={3} color="#a0e6ff" anchorX="center" anchorY="middle" fillOpacity={0.6}>O Mundo Gélido</Text>
         </Billboard>
       </mesh>
 
-      {/* Bolha do RPG do Amigo */}
       <mesh ref={bubbleRef} position={[40, 20, -30]}>
-        <sphereGeometry args={[10, 32, 32]} />
-        <meshPhysicalMaterial 
+        <sphereGeometry args={[10, 24, 24]} />
+        <meshPhysicalMaterial
           color="#ffb6ff"
           emissive="#ff0088"
-          emissiveIntensity={0.15}
-          transparent={true}
-          opacity={0.25}
-          metalness={0.1}
-          roughness={0}
-          ior={1.1}
-          specularIntensity={2}
-          clearcoat={1}
-          iridescence={1}
-          iridescenceIOR={1.3}
-          iridescenceThicknessRange={[100, 400]}
+          emissiveIntensity={0.12}
+          transparent
+          opacity={0.22}
+          roughness={0.05}
+          clearcoat={0.7}
           side={THREE.DoubleSide}
         />
         <Billboard position={[0, 15, 0]}>
-          <Text fontSize={2.5} color="#ffb6ff" anchorX="center" anchorY="middle" fillOpacity={0.6}>
-            Universo Bolha
-          </Text>
+          <Text fontSize={2.5} color="#ffb6ff" anchorX="center" anchorY="middle" fillOpacity={0.6}>Universo Bolha</Text>
         </Billboard>
       </mesh>
     </group>
   );
-};
+});
 
-const TreeModel = ({ tree }: { tree: TreeData }) => {
-  const { scene } = useGLTF(tree.modelPath);
-  const clone = useMemo(() => scene.clone(), [scene]);
-
-  return (
-    <primitive object={clone} />
-  );
-};
-
-const MoonBankModel = () => {
-  const { scene } = useGLTF(BANCO_LUNAR_MODEL_PATH);
-  const clone = useMemo(() => scene.clone(), [scene]);
-
-  return <primitive object={clone} scale={2.2} />;
-};
-
-/**
- * O Banco Lunar (ver bancoLunarInfo.ts) não é uma Árvore - não tem
- * deidadeId nem participa da seleção/foco de câmera das Árvores. Orbita
- * sozinho, bem por fora da órbita mais distante (Abismo, radius 40) e um
- * pouco acima do plano delas, pra ler como algo que sobrevoa o conjunto
- * inteiro em vez de pertencer a uma Árvore específica.
- */
-const MoonBankNode = ({ onClick }: { onClick: () => void }) => {
+const MoonBankNode = memo(({
+  onClick,
+  detailed,
+  animate,
+  showGlow,
+}: {
+  onClick: () => void;
+  detailed: boolean;
+  animate: boolean;
+  showGlow: boolean;
+}) => {
   const groupRef = useRef<THREE.Group>(null);
+  const visualRef = useRef<THREE.Group>(null);
   const offset = useMemo(() => Math.random() * Math.PI * 2, []);
 
   useFrame((state) => {
+    if (!animate) return;
+    const time = state.clock.elapsedTime;
+    const angle = time * BANCO_LUNAR_SPEED + offset;
     if (groupRef.current) {
-      const time = state.clock.elapsedTime;
-      const angle = time * BANCO_LUNAR_SPEED + offset;
       groupRef.current.position.x = Math.cos(angle) * BANCO_LUNAR_RADIUS;
       groupRef.current.position.z = Math.sin(angle) * BANCO_LUNAR_RADIUS;
-      groupRef.current.position.y = BANCO_LUNAR_HEIGHT + Math.sin(time * 0.3) * 1.2;
+      groupRef.current.position.y = BANCO_LUNAR_HEIGHT;
+    }
+    if (visualRef.current) {
+      visualRef.current.position.y = Math.sin(time * 0.8 + offset) * 0.45;
+      visualRef.current.rotation.y = Math.sin(time * 0.4 + offset) * 0.18;
     }
   });
 
@@ -195,134 +244,168 @@ const MoonBankNode = ({ onClick }: { onClick: () => void }) => {
     <group
       ref={groupRef}
       position={[Math.cos(offset) * BANCO_LUNAR_RADIUS, BANCO_LUNAR_HEIGHT, Math.sin(offset) * BANCO_LUNAR_RADIUS]}
-      onClick={(e) => { e.stopPropagation(); onClick(); }}
+      onClick={(event) => { event.stopPropagation(); onClick(); }}
     >
-      <Float speed={1.5} rotationIntensity={0.4} floatIntensity={0.8}>
-        <GlowSprite color={BANCO_LUNAR_INFO.cor} isSelected={false} />
-
-        {/* Hitbox maior invisível para facilitar o clique */}
+      <group ref={visualRef}>
+        {showGlow && <GlowSprite color={BANCO_LUNAR_INFO.cor} isSelected={false} />}
         <mesh>
-          <sphereGeometry args={[2, 16, 16]} />
+          <sphereGeometry args={[2, 10, 10]} />
           <meshBasicMaterial visible={false} />
         </mesh>
-
-        <MoonBankModel />
-      </Float>
-
+        <Suspense fallback={<TreePlaceholder color={BANCO_LUNAR_INFO.cor} />}>
+          {detailed ? <MoonBankModel /> : <TreePlaceholder color={BANCO_LUNAR_INFO.cor} />}
+        </Suspense>
+      </group>
       <Billboard position={[0, 2.6, 0]}>
-        <Text fontSize={0.5} color={BANCO_LUNAR_INFO.cor} anchorX="center" anchorY="middle">
-          {BANCO_LUNAR_INFO.nome}
-        </Text>
+        <Text fontSize={0.5} color={BANCO_LUNAR_INFO.cor} anchorX="center" anchorY="middle">{BANCO_LUNAR_INFO.nome}</Text>
       </Billboard>
     </group>
   );
-};
+});
 
 interface CosmicNodeProps {
   tree: TreeData;
+  isLocked: boolean;
   isSelected: boolean;
+  detailed: boolean;
+  animate: boolean;
+  showGlow: boolean;
   onClick: () => void;
-  onDoubleClickNode: () => void;
+  onOpenInfo: () => void;
 }
 
-const CosmicNode = ({ tree, isSelected, onClick, onDoubleClickNode }: CosmicNodeProps) => {
+const CosmicNode = memo(({
+  tree,
+  isLocked,
+  isSelected,
+  detailed,
+  animate,
+  showGlow,
+  onClick,
+  onOpenInfo,
+}: CosmicNodeProps) => {
   const groupRef = useRef<THREE.Group>(null);
+  const visualRef = useRef<THREE.Group>(null);
   const offset = useMemo(() => Math.random() * Math.PI * 2, []);
+  const color = isLocked ? '#444444' : tree.color;
+  const name = isLocked ? 'Desconhecida' : tree.name;
 
   useFrame((state) => {
-    if (groupRef.current) {
-      if (!isSelected) {
-        if (tree.radius > 0) {
-          const time = state.clock.elapsedTime;
-          const angle = time * tree.speed + offset;
-          groupRef.current.position.x = Math.cos(angle) * tree.radius;
-          groupRef.current.position.z = Math.sin(angle) * tree.radius;
-        }
-      } else {
-        // Se a árvore está selecionada, define ela como alvo da câmera
-        globalTargetPosition.copy(groupRef.current.position);
-      }
+    const group = groupRef.current;
+    if (!group) return;
+    if (animate && !isSelected && tree.radius > 0) {
+      const angle = state.clock.elapsedTime * tree.speed + offset;
+      group.position.x = Math.cos(angle) * tree.radius;
+      group.position.z = Math.sin(angle) * tree.radius;
     }
+    if (animate && visualRef.current) {
+      visualRef.current.position.y = Math.sin(state.clock.elapsedTime * 1.1 + offset) * 0.35;
+      visualRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.45 + offset) * 0.22;
+    }
+    if (isSelected) globalTargetPosition.copy(group.position);
   });
 
   return (
-    <group 
-      ref={groupRef} 
-      position={tree.radius === 0 ? [0,0,0] : [Math.cos(offset) * tree.radius, 0, Math.sin(offset) * tree.radius]}
-      onClick={(e) => { 
-        e.stopPropagation(); 
-        if (isSelected) {
-          onDoubleClickNode();
-        } else {
-          onClick(); 
-        }
+    <group
+      ref={groupRef}
+      position={tree.radius === 0 ? [0, 0, 0] : [Math.cos(offset) * tree.radius, 0, Math.sin(offset) * tree.radius]}
+      onClick={(event) => {
+        event.stopPropagation();
+        if (isSelected) onOpenInfo();
+        else onClick();
       }}
     >
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-        {/* Glow de fundo */}
-        <GlowSprite color={tree.color} isSelected={isSelected} />
-        
-        {/* Hitbox maior invisível para facilitar o clique */}
+      <group ref={visualRef}>
+        {showGlow && <GlowSprite color={color} isSelected={isSelected} />}
         <mesh>
-          <sphereGeometry args={[1.5, 16, 16]} />
+          <sphereGeometry args={[1.5, 10, 10]} />
           <meshBasicMaterial visible={false} />
         </mesh>
-
-        {/* Modelo 3D Oficial do Blender */}
-        <TreeModel tree={tree} />
-      </Float>
-
+        <Suspense fallback={<TreePlaceholder color={color} />}>
+          {detailed ? <TreeModel tree={tree} /> : <TreePlaceholder color={color} />}
+        </Suspense>
+      </group>
       <Billboard position={[0, isSelected ? 3.5 : 2, 0]}>
-        <Text
-          fontSize={isSelected ? 0.8 : 0.4}
-          color={tree.color}
-          anchorX="center"
-          anchorY="middle"
-        >
-          {tree.name}
-        </Text>
+        <Text fontSize={isSelected ? 0.8 : 0.4} color={color} anchorX="center" anchorY="middle">{name}</Text>
       </Billboard>
     </group>
   );
-};
+});
 
-// Componente que controla a câmera suavemente
 type OrbitControlsRef = React.ElementRef<typeof OrbitControls>;
 
-interface CameraRigProps {
+const CameraRig = memo(({
+  selectedDeidadeId,
+  controlsRef,
+  animate,
+}: {
   selectedDeidadeId: string | null;
   controlsRef: React.RefObject<OrbitControlsRef>;
-}
+  animate: boolean;
+}) => {
+  const scratch = useMemo(() => new THREE.Vector3(), []);
 
-const CameraRig = ({ selectedDeidadeId, controlsRef }: CameraRigProps) => {
   useFrame((state, delta) => {
-    if (controlsRef.current) {
+    const controls = controlsRef.current;
+    if (!controls) return;
+    const cameraPosition = state.camera.position;
+    if (!animate) {
       if (!selectedDeidadeId) {
         globalTargetPosition.set(0, 0, 0);
-        
-        // Retorna a câmera para a visão geral se estiver muito perto
-        const camPos = state.camera.position;
-        if (camPos.distanceTo(globalTargetPosition) < 30) {
-          camPos.lerp(new THREE.Vector3(0, 20, 40), delta * 1.5);
-        }
+        cameraPosition.set(0, 20, 40);
       } else {
-        // Se tem uma árvore selecionada, dá zoom suave nela
-        const camPos = state.camera.position;
-        const dist = camPos.distanceTo(globalTargetPosition);
-        if (dist > 15) {
-          // Aproxima a câmera mantendo o ângulo
-          const dir = camPos.clone().sub(globalTargetPosition).normalize();
-          camPos.lerp(globalTargetPosition.clone().add(dir.multiplyScalar(15)), delta * 2);
-        }
+        scratch.copy(cameraPosition).sub(globalTargetPosition).normalize().multiplyScalar(15).add(globalTargetPosition);
+        cameraPosition.copy(scratch);
       }
-      
-      // Move o ponto de foco (target) da câmera suavemente
-      controlsRef.current.target.lerp(globalTargetPosition, delta * 3);
-      controlsRef.current.update();
+      controls.target.copy(globalTargetPosition);
+      controls.update();
+      return;
     }
+    const step = Math.min(delta, 1 / 20);
+
+    if (!selectedDeidadeId) {
+      globalTargetPosition.set(0, 0, 0);
+      if (cameraPosition.distanceToSquared(globalTargetPosition) < 900) {
+        scratch.set(0, 20, 40);
+        cameraPosition.lerp(scratch, step * 1.5);
+      }
+    } else if (cameraPosition.distanceToSquared(globalTargetPosition) > 225) {
+      scratch.copy(cameraPosition).sub(globalTargetPosition).normalize().multiplyScalar(15).add(globalTargetPosition);
+      cameraPosition.lerp(scratch, step * 2);
+    }
+
+    controls.target.lerp(globalTargetPosition, step * 3);
+    controls.update();
   });
   return null;
-};
+});
+
+const FrameScheduler = memo(({ targetFps }: { targetFps: number }) => {
+  const invalidate = useThree((state) => state.invalidate);
+  const advance = useThree((state) => state.advance);
+
+  useEffect(() => {
+    invalidate();
+    if (targetFps <= 0) return undefined;
+    const interval = 1000 / targetFps;
+    let lastFrame = performance.now();
+    let frameId = 0;
+    const tick = (now: number) => {
+      const elapsed = now - lastFrame;
+      if (elapsed >= interval) {
+        lastFrame = now - (elapsed % interval);
+        // O modo `never` ignora invalidações internas do OrbitControls. Assim,
+        // o renderer respeita de fato o teto, em vez de voltar a 60 Hz.
+        advance(now);
+      }
+      frameId = window.requestAnimationFrame(tick);
+    };
+    frameId = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frameId);
+  }, [advance, invalidate, targetFps]);
+
+  return null;
+});
 
 interface CosmicTreeViewerProps {
   selectedDeidadeId: string | null;
@@ -332,93 +415,104 @@ interface CosmicTreeViewerProps {
   lockedDeidades?: string[];
 }
 
-export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({ selectedDeidadeId, onSelectDeidade, onOpenInfo, onOpenBancoLunar, lockedDeidades = [] }) => {
+export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({
+  selectedDeidadeId,
+  onSelectDeidade,
+  onOpenInfo,
+  onOpenBancoLunar,
+  lockedDeidades = [],
+}) => {
   const controlsRef = useRef<OrbitControlsRef>(null);
+  const { performanceMode, world } = usePerformanceProfile();
+  const loadedModels = useProgressiveModels(performanceMode, selectedDeidadeId);
+  const lockedSet = useMemo(() => new Set(lockedDeidades), [lockedDeidades]);
 
   return (
-    <div className="w-full h-full min-h-[500px] lg:min-h-[700px] rounded-3xl overflow-hidden border border-white/10 relative shadow-[0_0_50px_rgba(0,0,0,0.8)]">
-      <div className="absolute top-4 left-4 z-10 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 text-xs text-primary uppercase tracking-widest pointer-events-none">
+    <div className="performance-expensive-effects relative h-full min-h-[500px] w-full overflow-hidden rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] lg:min-h-[700px]">
+      <div className="absolute left-4 top-4 z-10 rounded-full border border-white/10 bg-black/70 px-4 py-2 text-xs uppercase tracking-widest text-primary pointer-events-none">
         Projeção Astral das Árvores
       </div>
-      
-      <div className="absolute bottom-4 left-4 z-10 bg-black/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/5 text-xs text-gray-400 pointer-events-none">
-        <p className="font-bold text-gray-300 mb-1">Dicas de Controle:</p>
-        <ul className="list-disc pl-4 space-y-1">
-          <li><strong>Clique Esquerdo (Arraste):</strong> Rotacionar câmera</li>
-          <li><strong>Scroll do Mouse:</strong> Dar Zoom (Afastar/Aproximar)</li>
-          <li><strong>Clique Esquerdo na Árvore:</strong> Focar câmera</li>
-          <li><strong>Segundo clique na Árvore:</strong> Abrir o resumo</li>
-          <li><strong>Clique fora das árvores:</strong> Voltar para visão geral</li>
+      <div className="absolute bottom-4 left-4 z-10 hidden rounded-xl border border-white/5 bg-black/75 px-4 py-2 text-xs text-gray-400 pointer-events-none sm:block">
+        <p className="mb-1 font-bold text-gray-300">Dicas de Controle:</p>
+        <ul className="list-disc space-y-1 pl-4">
+          <li><strong>Arraste:</strong> rotacionar câmera</li>
+          <li><strong>Scroll:</strong> aproximar ou afastar</li>
+          <li><strong>Clique na Árvore:</strong> focar; clique novamente para abrir</li>
         </ul>
       </div>
-      
+
       {selectedDeidadeId && (
-        <button 
-          onClick={(e) => { e.stopPropagation(); onSelectDeidade(null); }}
-          className="absolute top-4 right-4 z-10 bg-primary/20 hover:bg-primary/40 backdrop-blur-md px-4 py-2 rounded-full border border-primary/50 text-xs text-white uppercase tracking-widest transition-colors cursor-pointer"
+        <button
+          type="button"
+          onClick={(event) => { event.stopPropagation(); onSelectDeidade(null); }}
+          className="absolute right-4 top-4 z-10 cursor-pointer rounded-full border border-primary/50 bg-[#2a2134] px-4 py-2 text-xs uppercase tracking-widest text-white transition-colors hover:bg-primary/40"
         >
           Visão Geral
         </button>
       )}
 
-      <Canvas 
+      <Canvas
+        key={performanceMode ? 'performance' : 'complete'}
         camera={{ position: [0, 20, 40], fov: 45 }}
+        dpr={world.dpr}
+        frameloop={world.targetFps > 0 ? 'never' : 'demand'}
+        gl={{ antialias: !performanceMode, alpha: false, powerPreference: 'high-performance', stencil: false }}
         onPointerMissed={() => onSelectDeidade(null)}
       >
+        <FrameScheduler targetFps={world.targetFps} />
         <color attach="background" args={['#050508']} />
         <ambientLight intensity={0.5} />
-        <Stars radius={100} depth={50} count={1500} factor={4} saturation={0} fade speed={1} />
-        
-        {COSMIC_TREES.map(tree => {
-          const isLocked = lockedDeidades.includes(tree.deidadeId);
-          return (
-            <CosmicNode 
-              key={tree.id} 
-              tree={isLocked ? { ...tree, name: 'Desconhecida', color: '#444444' } : tree} 
-              isSelected={selectedDeidadeId === tree.deidadeId}
-              onClick={() => onSelectDeidade(tree.deidadeId)}
-              onDoubleClickNode={() => onOpenInfo(tree.deidadeId)}
-            />
-          );
-        })}
+        {world.starCount > 0 && (
+          <Stars radius={100} depth={50} count={world.starCount} factor={3.5} saturation={0} fade speed={world.animate ? 0.35 : 0} />
+        )}
 
-        {COSMIC_TREES.map(tree => tree.radius > 0 && (
+        {COSMIC_TREES.map((tree) => (
+          <CosmicNode
+            key={tree.id}
+            tree={tree}
+            isLocked={lockedSet.has(tree.deidadeId)}
+            isSelected={selectedDeidadeId === tree.deidadeId}
+            detailed={loadedModels.has(tree.deidadeId)}
+            animate={world.animate}
+            showGlow={world.showDecorations}
+            onClick={() => onSelectDeidade(tree.deidadeId)}
+            onOpenInfo={() => onOpenInfo(tree.deidadeId)}
+          />
+        ))}
+
+        {COSMIC_TREES.map((tree) => tree.radius > 0 && (
           <mesh key={`orbit-${tree.id}`} rotation={[-Math.PI / 2, 0, 0]}>
-            <ringGeometry args={[tree.radius - 0.05, tree.radius + 0.05, 64]} />
+            <ringGeometry args={[tree.radius - 0.04, tree.radius + 0.04, performanceMode ? 32 : 48]} />
             <meshBasicMaterial color={tree.color} transparent opacity={0.1} side={THREE.DoubleSide} />
           </mesh>
         ))}
 
         <mesh position={[0, BANCO_LUNAR_HEIGHT, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[BANCO_LUNAR_RADIUS - 0.05, BANCO_LUNAR_RADIUS + 0.05, 64]} />
+          <ringGeometry args={[BANCO_LUNAR_RADIUS - 0.04, BANCO_LUNAR_RADIUS + 0.04, performanceMode ? 32 : 48]} />
           <meshBasicMaterial color={BANCO_LUNAR_INFO.cor} transparent opacity={0.12} side={THREE.DoubleSide} />
         </mesh>
 
-        <MoonBankNode onClick={onOpenBancoLunar} />
+        <MoonBankNode
+          onClick={onOpenBancoLunar}
+          detailed={loadedModels.has(BANK_MODEL_KEY)}
+          animate={world.animate}
+          showGlow={world.showDecorations}
+        />
 
         <OrbitControls
           ref={controlsRef}
-          enableZoom={true} 
-          enablePan={true} 
-          autoRotate={!selectedDeidadeId} 
-          autoRotateSpeed={0.2} 
+          enableZoom
+          enablePan
+          autoRotate={world.animate && !selectedDeidadeId}
+          autoRotateSpeed={0.2}
           maxPolarAngle={Math.PI / 1.5}
           maxDistance={800}
         />
-        
-        <CameraRig selectedDeidadeId={selectedDeidadeId} controlsRef={controlsRef} />
-        
-        {/* Mundos Secretos - Easter Eggs */}
-        <EasterEggUniverses />
+        <CameraRig selectedDeidadeId={selectedDeidadeId} controlsRef={controlsRef} animate={world.animate} />
+        {world.showDecorations && <EasterEggUniverses animate={world.animate} />}
       </Canvas>
     </div>
   );
 };
 
 export default CosmicTreeViewer;
-
-// Preload dos modelos GLTF
-COSMIC_TREES.forEach(tree => {
-  useGLTF.preload(tree.modelPath);
-});
-useGLTF.preload(BANCO_LUNAR_MODEL_PATH);

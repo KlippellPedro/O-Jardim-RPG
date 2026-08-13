@@ -12,7 +12,7 @@ export const Desperto = ({ raca }: { raca: IRaca }) => {
       {/* Calm Ethereal Background */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-[#060b10]"
-        style={{ backgroundImage: "url('/assets/img/desperto_gate_bg.jpg')" }}
+        style={{ backgroundImage: "url('/assets/img/desperto_gate_bg.webp')" }}
       >
         <div className="absolute inset-0 bg-slate-950/60 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#060b10]/40 via-transparent to-[#060b10]/90" />

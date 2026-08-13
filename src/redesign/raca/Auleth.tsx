@@ -12,7 +12,7 @@ export const Auleth = ({ raca }: { raca: IRaca }) => {
       {/* Cosmic Ethereal Background */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-[#020512]"
-        style={{ backgroundImage: "url('/assets/img/auleth_bg.jpg')" }}
+        style={{ backgroundImage: "url('/assets/img/auleth_bg.webp')" }}
       >
         <div className="absolute inset-0 bg-slate-950/70 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#020512]/40 via-transparent to-[#020512]/90" />

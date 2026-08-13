@@ -42,7 +42,7 @@ export function condicaoAtiva(condicoes: unknown, id: string): boolean {
 
 /**
  * Cobertura de automação mecânica das condições oficiais (data/regras/condicoes.ts)
- * neste arquivo — mapa de quem tem efeito numérico aplicado automaticamente
+ * neste arquivo - mapa de quem tem efeito numérico aplicado automaticamente
  * aqui vs. quem depende de leitura manual do texto da condição. Registrado
  * explicitamente por pedido de auditoria (2026-08): nenhuma automação nova foi
  * criada, isto só documenta o que já existia.

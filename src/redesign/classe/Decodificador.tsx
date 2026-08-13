@@ -11,7 +11,7 @@ export const Decodificador = ({ classe }: { classe: IClasse }) => {
   return (
     <div className={`min-h-screen ${tema.text} p-8 selection:bg-orange-500/30 overflow-hidden relative`}>
       {/* 3D WebGL Background */}
-      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/decodificador_bg.jpg')" }} />
+      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/decodificador_bg.webp')" }} />
 
       {/* Matrix / Data Analysis Background Effects */}
       <div className="fixed inset-0 pointer-events-none z-0">

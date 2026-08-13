@@ -13,7 +13,7 @@ export const Espirito = ({ raca }: { raca: IRaca }) => {
       {/* Ethereal Background */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
-        style={{ backgroundImage: "url('/assets/img/espirito_bg.jpg')" }}
+        style={{ backgroundImage: "url('/assets/img/espirito_bg.webp')" }}
       >
         <div className="absolute inset-0 bg-cyan-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/40 via-transparent to-[#020617]/90" />

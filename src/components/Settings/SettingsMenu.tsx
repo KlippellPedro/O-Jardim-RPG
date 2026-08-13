@@ -1,19 +1,24 @@
-import { useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Settings, X, User, Crown, Bell, Swords, Gem, Shield,
+  Settings, X, User, Crown, Bell, Swords, Gem, Shield, Volume2,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
-import { ContaPanel } from './ContaPanel';
-import { MestrePanel } from './MestrePanel';
-import { AvisosPanel } from './AvisosPanel';
-import { CampanhasPanel } from './CampanhasPanel';
 import { useNavigate } from 'react-router-dom';
+import { useModalSfx } from '../../hooks/useSfx';
+import { usePerformanceProfile } from '../../hooks/usePerformance';
+import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
+
+const ContaPanel = lazy(() => import('./ContaPanel').then((module) => ({ default: module.ContaPanel })));
+const MestrePanel = lazy(() => import('./MestrePanel').then((module) => ({ default: module.MestrePanel })));
+const AvisosPanel = lazy(() => import('./AvisosPanel').then((module) => ({ default: module.AvisosPanel })));
+const CampanhasPanel = lazy(() => import('./CampanhasPanel').then((module) => ({ default: module.CampanhasPanel })));
+const PreferenciasPanel = lazy(() => import('./PreferenciasPanel').then((module) => ({ default: module.PreferenciasPanel })));
 
 // ────────────────────────────────────────────────────────────
 // Tipos
 // ────────────────────────────────────────────────────────────
-type PanelType = 'conta' | 'avisos' | 'campanhas' | 'mestre' | null;
+type PanelType = 'conta' | 'avisos' | 'campanhas' | 'mestre' | 'preferencias' | null;
 
 // ────────────────────────────────────────────────────────────
 // Role Badge
@@ -37,27 +42,32 @@ const RoleBadge = ({ role }: { role?: string }) => {
 // ────────────────────────────────────────────────────────────
 const PANELS: Record<
   NonNullable<PanelType>,
-  { title: string; icon: React.ReactNode; component: React.ReactNode }
+  { title: string; icon: React.ReactNode; component: React.ComponentType }
 > = {
   conta: {
     title: 'Minha Conta',
     icon: <User className="text-primary" size={20} />,
-    component: <ContaPanel />,
+    component: ContaPanel,
   },
   avisos: {
     title: 'Avisos',
     icon: <Bell className="text-yellow-400" size={20} />,
-    component: <AvisosPanel />,
+    component: AvisosPanel,
   },
   campanhas: {
     title: 'Mesas e Campanhas',
     icon: <Swords className="text-blue-400" size={20} />,
-    component: <CampanhasPanel />,
+    component: CampanhasPanel,
   },
   mestre: {
     title: 'Painel do Mestre',
     icon: <Crown className="text-red-400" size={20} />,
-    component: <MestrePanel />,
+    component: MestrePanel,
+  },
+  preferencias: {
+    title: 'Preferências',
+    icon: <Volume2 className="text-primary" size={20} />,
+    component: PreferenciasPanel,
   },
 };
 
@@ -77,6 +87,7 @@ const DropdownItem = ({
 }) => (
   <button
     onClick={onClick}
+    data-sfx={danger ? 'cancel' : 'select'}
     className={`flex justify-between items-center w-full p-3 rounded-xl text-left text-sm transition-colors ${
       danger
         ? 'hover:bg-red-500/10 text-red-400 mt-1 border-t border-white/5'
@@ -94,9 +105,19 @@ const DropdownItem = ({
 export const SettingsMenu: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activePanel, setActivePanel] = useState<PanelType>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const panelCloseRef = useRef<HTMLButtonElement>(null);
 
-  const { usuario, campanhaAtiva, avisosNaoLidos, logout } = useAuthStore();
+  const usuario = useAuthStore((state) => state.usuario);
+  const campanhaAtiva = useAuthStore((state) => state.campanhaAtiva);
+  const avisosNaoLidos = useAuthStore((state) => state.avisosNaoLidos);
+  const logout = useAuthStore((state) => state.logout);
+  const { reduceMotion } = usePerformanceProfile();
   const navigate = useNavigate();
+
+  // Dropdown e painel formam uma única superfície: trocar entre eles não deve
+  // sobrepor os sons de fechar e abrir ao som de seleção do item.
+  useModalSfx(isDropdownOpen || Boolean(activePanel));
 
   if (!usuario) return null;
 
@@ -119,14 +140,40 @@ export const SettingsMenu: React.FC = () => {
   };
 
   const panelConfig = activePanel ? PANELS[activePanel] : null;
+  const ActivePanelComponent = panelConfig?.component;
+
+  useDialogAccessibility({
+    open: Boolean(activePanel),
+    dialogRef: panelRef,
+    initialFocusRef: panelCloseRef,
+    onClose: () => setActivePanel(null),
+  });
+
+  useEffect(() => {
+    if (!isDropdownOpen && !activePanel) return undefined;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      if (activePanel) return;
+      setIsDropdownOpen(false);
+      window.requestAnimationFrame(() => document.getElementById('settings-btn')?.focus());
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      if (activePanel) {
+        window.requestAnimationFrame(() => document.getElementById('settings-btn')?.focus());
+      }
+    };
+  }, [activePanel, isDropdownOpen]);
 
   return (
-    <div className="fixed top-6 right-6 z-50">
+    <div className="settings-anchor fixed z-50">
 
       {/* ── Botão de Engrenagem ─────────────────────────────── */}
       <button
         id="settings-btn"
         onClick={() => setIsDropdownOpen((v) => !v)}
+        data-sfx="off"
         className="relative p-3 bg-[#0b0a12]/80 backdrop-blur-md rounded-full border border-white/10 hover:bg-white/10 transition-colors shadow-lg group"
         aria-label="Configurações"
         aria-expanded={isDropdownOpen}
@@ -136,7 +183,7 @@ export const SettingsMenu: React.FC = () => {
 
         {/* Badge de avisos não lidos */}
         {avisosNaoLidos > 0 && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center shadow-lg">
+          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-600 text-white text-[10px] font-bold flex items-center justify-center shadow-lg">
             {avisosNaoLidos > 9 ? '9+' : avisosNaoLidos}
           </span>
         )}
@@ -156,7 +203,9 @@ export const SettingsMenu: React.FC = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.96 }}
               transition={{ duration: 0.15 }}
-              className="absolute top-16 right-0 w-72 bg-[#0b0a12]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-2 flex flex-col gap-0.5 z-[50]"
+              className="absolute right-0 top-14 z-[50] flex max-h-[calc(100dvh-4.5rem)] w-[min(18rem,calc(100vw-1.5rem))] flex-col gap-0.5 overflow-y-auto rounded-2xl border border-white/10 bg-[#0b0a12]/95 p-2 shadow-2xl backdrop-blur-xl custom-scrollbar"
+              role="group"
+              aria-label="Menu da conta"
             >
               {/* Cabeçalho com nome */}
               <div className="px-3 py-2 border-b border-white/5 mb-1">
@@ -176,7 +225,7 @@ export const SettingsMenu: React.FC = () => {
                 label="Avisos"
                 badge={
                   avisosNaoLidos > 0 ? (
-                    <span className="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold">
+                    <span className="bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full font-bold">
                       {avisosNaoLidos}
                     </span>
                   ) : undefined
@@ -217,6 +266,8 @@ export const SettingsMenu: React.FC = () => {
                 />
               )}
 
+              <DropdownItem label="Preferências" badge={<Volume2 size={14} className="text-primary/60" />} onClick={() => openPanel('preferencias')} />
+
               <DropdownItem label="Sair" onClick={handleLogout} danger />
             </motion.div>
           </>
@@ -225,7 +276,7 @@ export const SettingsMenu: React.FC = () => {
 
       {/* ── Painel Lateral (offcanvas) ─────────────────────────── */}
       <AnimatePresence>
-        {activePanel && panelConfig && (
+        {activePanel && panelConfig && ActivePanelComponent && (
           <>
             {/* Backdrop */}
             <motion.div
@@ -238,11 +289,15 @@ export const SettingsMenu: React.FC = () => {
 
             {/* Painel */}
             <motion.div
+              ref={panelRef}
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-              className="fixed top-0 right-0 bottom-0 w-full max-w-md bg-[#0b0a12]/97 backdrop-blur-2xl border-l border-white/10 shadow-2xl z-[70] flex flex-col"
+              transition={reduceMotion ? { duration: 0 } : { type: 'spring', damping: 28, stiffness: 220 }}
+              className="settings-panel performance-expensive-effects fixed bottom-0 right-0 top-0 z-[70] flex w-full max-w-md flex-col border-l border-white/10 bg-[#0b0a12]/97 shadow-2xl backdrop-blur-2xl"
+              role="dialog"
+              aria-modal="true"
+              aria-label={panelConfig.title}
             >
               {/* Header do painel */}
               <div className="flex items-center justify-between px-6 py-5 border-b border-white/5 shrink-0">
@@ -265,7 +320,9 @@ export const SettingsMenu: React.FC = () => {
                   </div>
                 </div>
                 <button
+                  ref={panelCloseRef}
                   onClick={() => setActivePanel(null)}
+                  data-sfx="off"
                   className="p-2 hover:bg-white/10 rounded-full text-gray-400 hover:text-white transition-colors"
                   aria-label="Fechar painel"
                 >
@@ -275,7 +332,9 @@ export const SettingsMenu: React.FC = () => {
 
               {/* Corpo do painel */}
               <div className="flex-1 overflow-hidden">
-                {panelConfig.component}
+                <Suspense fallback={<div className="flex h-full items-center justify-center text-sm text-gray-500">Carregando preferências...</div>}>
+                  <ActivePanelComponent />
+                </Suspense>
               </div>
             </motion.div>
           </>

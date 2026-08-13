@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 /**
  * Assina o mesmo fluxo SSE da Sessão ao Vivo (`/api/v1/sessao/{campanha_id}/eventos`)
  * fora do contexto de uma sessão aberta. O endpoint só exige ser membro da
- * campanha — não depende de haver uma sessão ativa — então serve para
+ * campanha - não depende de haver uma sessão ativa - então serve para
  * qualquer tela que precise saber "algo mudou" (veículos, propriedades) sem
  * duplicar o estado pesado de iniciativa/turno do useSessaoStore.
  */

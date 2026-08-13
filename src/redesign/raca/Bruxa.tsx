@@ -13,7 +13,7 @@ export const Bruxa = ({ raca }: { raca: IRaca }) => {
       {/* Witchcraft Background */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
-        style={{ backgroundImage: "url('/assets/img/bruxa_bg.jpg')" }}
+        style={{ backgroundImage: "url('/assets/img/bruxa_bg.webp')" }}
       >
         <div className="absolute inset-0 bg-purple-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0206]/40 via-transparent to-[#0a0206]/90" />

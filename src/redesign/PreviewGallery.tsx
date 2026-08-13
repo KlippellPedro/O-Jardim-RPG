@@ -37,22 +37,22 @@ export const PreviewGallery = () => {
   const ClassePage = type === 'classe' ? CLASSE_PAGES[currentId] : undefined;
 
   return (
-    <div className="relative min-h-screen bg-black overflow-hidden">
+    <div className="preview-gallery relative overflow-hidden bg-black">
       {/* Navigation Overlay (fixed on top of the components) */}
-      <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-4">
+      <div className="preview-toolbar fixed left-1/2 top-4 z-50 flex -translate-x-1/2 flex-col items-center gap-4">
 
         {/* Type Switcher */}
         <div className="flex bg-zinc-900/80 p-1 rounded-full border border-zinc-700/50 backdrop-blur-md">
           <button
             onClick={() => switchType('raca')}
-            className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition-all ${type === 'raca' ? 'bg-white text-black' : 'text-zinc-400 hover:text-white'}`}
+            className={`flex min-h-11 items-center gap-2 px-6 py-2 rounded-full font-medium transition-all ${type === 'raca' ? 'bg-white text-black' : 'text-zinc-400 hover:text-white'}`}
           >
             <User size={18} />
             Raças ({racaIds.length})
           </button>
           <button
             onClick={() => switchType('classe')}
-            className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition-all ${type === 'classe' ? 'bg-white text-black' : 'text-zinc-400 hover:text-white'}`}
+            className={`flex min-h-11 items-center gap-2 px-6 py-2 rounded-full font-medium transition-all ${type === 'classe' ? 'bg-white text-black' : 'text-zinc-400 hover:text-white'}`}
           >
             <Layers size={18} />
             Classes ({classeIds.length})
@@ -60,16 +60,16 @@ export const PreviewGallery = () => {
         </div>
 
         {/* Item Navigation */}
-        <div className="flex items-center gap-4 bg-zinc-900/80 px-4 py-2 rounded-full border border-zinc-700/50 backdrop-blur-md">
-          <button onClick={handlePrev} className="p-2 hover:bg-zinc-800 rounded-full transition-colors text-white">
+        <div className="preview-item-navigation flex items-center gap-4 bg-zinc-900/80 px-4 py-2 rounded-full border border-zinc-700/50 backdrop-blur-md">
+          <button onClick={handlePrev} aria-label="Item anterior" className="flex min-h-11 min-w-11 items-center justify-center hover:bg-zinc-800 rounded-full transition-colors text-white">
             <ChevronLeft size={24} />
           </button>
 
-          <span className="min-w-[200px] text-center font-bold text-xl text-white tracking-wider">
+          <span className="preview-item-title min-w-[200px] text-center font-bold text-xl text-white tracking-wider">
             {raca?.titulo || classe?.titulo || currentId}
           </span>
 
-          <button onClick={handleNext} className="p-2 hover:bg-zinc-800 rounded-full transition-colors text-white">
+          <button onClick={handleNext} aria-label="Próximo item" className="flex min-h-11 min-w-11 items-center justify-center hover:bg-zinc-800 rounded-full transition-colors text-white">
             <ChevronRight size={24} />
           </button>
         </div>
@@ -83,7 +83,7 @@ export const PreviewGallery = () => {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
           transition={{ duration: 0.3 }}
-          className="absolute inset-0 overflow-y-auto"
+          className="preview-stage absolute inset-0 overflow-y-auto overscroll-contain custom-scrollbar"
         >
           {RacaPage && raca
             ? <RacaPage raca={raca} />

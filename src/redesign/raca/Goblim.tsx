@@ -17,7 +17,7 @@ export const Goblim = ({ raca }: GoblimProps) => {
       {/* Goblim Background */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
-        style={{ backgroundImage: "url('/assets/img/goblim_bg.jpg')" }}
+        style={{ backgroundImage: "url('/assets/img/goblim_bg.webp')" }}
       >
         <div className="absolute inset-0 bg-lime-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#080d08]/40 via-transparent to-[#080d08]/90" />

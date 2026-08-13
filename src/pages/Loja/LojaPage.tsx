@@ -12,6 +12,7 @@ import { useWishlist } from '../../hooks/useWishlist';
 import { listarRecompensas, reivindicarRecompensa, resolverRecompensa, Recompensa } from '../../services/bountiesApi';
 import { api } from '../../services/apiClient';
 import { CheckoutAttempt, createIdempotencyKey, hasVerifiableShopOrigin, lojaApi, MAX_SHOP_UNITS, prepareCheckoutAttempt } from '../../services/lojaApi';
+import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
 
 interface RecompensaAviso {
   id: string;
@@ -147,6 +148,7 @@ export const LojaPage: React.FC = () => {
   const [checkoutInProgress, setCheckoutInProgress] = useState(false);
   const [claimInProgress, setClaimInProgress] = useState(false);
   const [resolvingClaimId, setResolvingClaimId] = useState<string | null>(null);
+  const quantidadeCarrinho = cart.reduce((total, item) => total + item.quantidade, 0);
 
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const checkoutAttemptRef = useRef<CheckoutAttempt | null>(null);
@@ -155,6 +157,21 @@ export const LojaPage: React.FC = () => {
   const claimInFlightRef = useRef(false);
   const resolveAttemptsRef = useRef(new Map<string, string>());
   const resolvingClaimsRef = useRef(new Set<string>());
+  const checkoutDialogRef = useRef<HTMLDivElement>(null);
+  const gmDialogRef = useRef<HTMLDivElement>(null);
+  const claimDialogRef = useRef<HTMLDivElement>(null);
+
+  useDialogAccessibility({
+    open: showCheckoutModal,
+    dialogRef: checkoutDialogRef,
+    onClose: () => { if (!checkoutInProgress) setShowCheckoutModal(false); },
+  });
+  useDialogAccessibility({ open: showGmPanel, dialogRef: gmDialogRef, onClose: () => setShowGmPanel(false) });
+  useDialogAccessibility({
+    open: Boolean(reivindicacaoAlvo),
+    dialogRef: claimDialogRef,
+    onClose: () => { if (!claimInProgress) setReivindicacaoAlvo(null); },
+  });
 
   const { wishlist, toggleWishlist } = useWishlist(compradorId);
 
@@ -515,11 +532,25 @@ export const LojaPage: React.FC = () => {
     setItemsToShow(24);
   }, [searchTerm, selectedRaridade, subfiltro, modoLoja, mostrarWishlist, localizacaoAtual]);
 
+  useEffect(() => {
+    if (!showCheckoutModal && !showGmPanel && !reivindicacaoAlvo && !itemSelecionado && !isCartOpen) return undefined;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      if (itemSelecionado) setItemSelecionado(null);
+      else if (reivindicacaoAlvo) setReivindicacaoAlvo(null);
+      else if (showGmPanel) setShowGmPanel(false);
+      else if (showCheckoutModal && !checkoutInProgress) setShowCheckoutModal(false);
+      else if (isCartOpen && !checkoutInProgress) setIsCartOpen(false);
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [checkoutInProgress, isCartOpen, itemSelecionado, reivindicacaoAlvo, showCheckoutModal, showGmPanel]);
+
   return (
-    <div className="pl-32 pr-12 pt-12 pb-24 relative z-10 w-full min-h-screen flex flex-col max-w-[1600px] mx-auto">
+    <div role="main" className="app-page mx-auto flex max-w-[100rem] flex-col">
       
       {/* HEADER DA LOJA & LOCALIZAÇÃO */}
-      <div className={`flex flex-col xl:flex-row justify-between items-start xl:items-end mb-12 gap-6 border-b pb-8 transition-colors duration-500 rounded-3xl p-8 backdrop-blur-md shadow-2xl ${
+      <div className={`mb-12 flex flex-col items-start justify-between gap-6 rounded-3xl border-b p-4 pb-6 shadow-2xl backdrop-blur-md transition-colors duration-500 sm:p-6 sm:pb-8 xl:flex-row xl:items-end xl:p-8 ${
         localizacaoAtual === 1 ? 'bg-amber-900/20 border-amber-800/30' :
         localizacaoAtual === 2 ? 'bg-blue-900/20 border-blue-500/30 shadow-[0_0_30px_rgba(59,130,246,0.1)]' :
         localizacaoAtual === 3 ? 'bg-purple-900/20 border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.1)]' :
@@ -534,7 +565,7 @@ export const LojaPage: React.FC = () => {
             {(!locaisOcultos.includes(4) || podeGerenciarRecompensas) && <button onClick={() => trocarLocalizacao(4)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border transition-all ${localizacaoAtual === 4 ? 'bg-yellow-600/30 text-yellow-300 border-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.6)]' : 'bg-black/40 text-gray-500 border-white/5 hover:bg-white/10'}`}><Globe2 size={14}/> Banco Lunar</button>}
           </div>
 
-          <h2 className={`text-4xl md:text-5xl font-bold tracking-wider mb-4 flex items-center gap-4 transition-colors ${
+          <h1 className={`mb-4 flex items-center gap-3 text-[clamp(2rem,8vw,3rem)] font-bold leading-tight tracking-wider transition-colors sm:gap-4 ${
             localizacaoAtual === 1 ? 'text-amber-500' :
             localizacaoAtual === 2 ? 'text-blue-400' :
             localizacaoAtual === 3 ? 'text-red-500' :
@@ -546,7 +577,7 @@ export const LojaPage: React.FC = () => {
              localizacaoAtual === 2 ? 'Mercado da Metrópole' :
              localizacaoAtual === 3 ? 'Mercado Negro do Umbral' :
              'Banco Lunar Central'}
-          </h2>
+          </h1>
           
           <p className="text-gray-300 text-lg max-w-2xl font-medium">
             {localizacaoAtual === 1 ? 'Uma feira pacata vendendo suprimentos básicos, alimentos e ferramentas.' :
@@ -556,25 +587,27 @@ export const LojaPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex flex-col items-end gap-4">
+        <div className="flex w-full flex-col items-stretch gap-4 sm:items-end xl:w-auto">
           {/* BOTOES CARRINHO E MODO */}
-          <div className="flex gap-4 items-center">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-end sm:gap-4">
             <button
+              type="button"
               onClick={() => setIsCartOpen(true)}
+              aria-label={`Abrir carrinho com ${quantidadeCarrinho} ${quantidadeCarrinho === 1 ? 'item' : 'itens'}`}
               className="relative px-4 py-2 bg-black/40 border border-white/10 rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center text-gray-300"
             >
               <ShoppingBag size={20} />
               {cart.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg">
-                  {cart.reduce((acc, c) => acc + c.quantidade, 0)}
+                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg">
+                  {quantidadeCarrinho}
                 </span>
               )}
             </button>
 
-            <div className="flex bg-[#0b0a12]/80 backdrop-blur-md rounded-2xl border border-white/10 p-1 shadow-lg">
+            <div className="grid w-full grid-cols-3 rounded-2xl border border-white/10 bg-[#0b0a12]/80 p-1 shadow-lg backdrop-blur-md sm:w-auto">
               <button 
                 onClick={() => trocarModoLoja('Comprar')}
-                className={`px-6 py-2 rounded-xl font-bold tracking-widest text-sm uppercase transition-all ${
+                className={`min-w-0 px-2 py-2 rounded-xl font-bold tracking-wide text-xs uppercase transition-all sm:px-4 sm:text-sm sm:tracking-widest ${
                   modoLoja === 'Comprar' ? 'bg-[#c7a44c] text-black shadow-lg' : 'text-gray-500 hover:text-white'
                 }`}
               >
@@ -582,16 +615,16 @@ export const LojaPage: React.FC = () => {
               </button>
               <button 
                 onClick={() => trocarModoLoja('Vender')}
-                className={`px-6 py-2 rounded-xl font-bold tracking-widest text-sm uppercase transition-all ${
-                  modoLoja === 'Vender' ? 'bg-red-500 text-white shadow-lg' : 'text-gray-500 hover:text-white'
+                className={`min-w-0 px-2 py-2 rounded-xl font-bold tracking-wide text-xs uppercase transition-all sm:px-4 sm:text-sm sm:tracking-widest ${
+                  modoLoja === 'Vender' ? 'bg-red-600 text-white shadow-lg' : 'text-gray-500 hover:text-white'
                 }`}
               >
                 Vender
               </button>
               <button 
                 onClick={() => trocarModoLoja('Recompensas')}
-                className={`px-6 py-2 rounded-xl font-bold tracking-widest text-sm uppercase transition-all ${
-                  modoLoja === 'Recompensas' ? 'bg-orange-500 text-white shadow-lg' : 'text-gray-500 hover:text-white'
+                className={`min-w-0 px-2 py-2 rounded-xl font-bold tracking-wide text-xs uppercase transition-all sm:px-4 sm:text-sm sm:tracking-widest ${
+                  modoLoja === 'Recompensas' ? 'bg-orange-700 text-white shadow-lg' : 'text-gray-500 hover:text-white'
                 }`}
               >
                 Caçadores
@@ -601,14 +634,15 @@ export const LojaPage: React.FC = () => {
 
           {/* SELETOR DE COMPRADOR E CARTEIRA (GLASSMORPHISM) */}
           {personagensDoUsuario.length > 0 && (
-            <div className="flex flex-col items-end gap-2 bg-[#0b0a12]/80 backdrop-blur-md p-4 rounded-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+            <div className="flex w-full flex-col items-stretch gap-2 rounded-3xl border border-white/10 bg-[#0b0a12]/80 p-4 shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-md sm:w-auto sm:items-end">
               
-              <div className="flex items-center gap-4 w-full">
-                <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Comprador</div>
+              <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+                <label htmlFor="shop-buyer" className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Comprador</label>
                 <select
+                  id="shop-buyer"
                   value={compradorId}
                   onChange={(e) => trocarComprador(e.target.value)}
-                  className="bg-black/60 border border-white/10 rounded-xl p-2 text-white outline-none focus:border-[#c7a44c] transition-colors cursor-pointer w-48 text-sm font-bold"
+                  className="w-full cursor-pointer rounded-xl border border-white/10 bg-black/60 p-2 text-sm font-bold text-white outline-none transition-colors focus:border-[#c7a44c] sm:w-48"
                 >
                   {personagensDoUsuario.map(c => (
                     <option key={c.id} value={c.id}>{c.nome}</option>
@@ -618,7 +652,7 @@ export const LojaPage: React.FC = () => {
 
               <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-1"></div>
 
-              <div className="flex gap-3 justify-between w-full">
+              <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
                 <div className="flex flex-col items-center p-2 rounded-xl border bg-black/40 border-white/5">
                   <span className="text-[9px] uppercase tracking-wider text-gray-400">Solares</span>
                   <span className="text-sm font-bold text-yellow-400">{saldos.sol} SOL</span>
@@ -648,7 +682,7 @@ export const LojaPage: React.FC = () => {
             >
               Recompensas da Campanha
               {notificacoesGM.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full animate-bounce">
+                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full animate-bounce">
                   {notificacoesGM.length}
                 </span>
               )}
@@ -681,10 +715,10 @@ export const LojaPage: React.FC = () => {
               </h2>
             </div>
             <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-rose-300">
-              {itensEmPromocao.length} itens
+              {itensEmPromocao.length} {itensEmPromocao.length === 1 ? 'item' : 'itens'}
             </span>
           </div>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,18rem),1fr))] gap-5 sm:gap-8">
             {itensEmPromocao.map((item) => (
               <ItemCard
                 key={`promocao:${item.id}`}
@@ -701,7 +735,7 @@ export const LojaPage: React.FC = () => {
       ) : null}
 
       {/* FILTROS DE INTERFACE (PILLS) */}
-      <div className="flex flex-col gap-6 mb-12 bg-[#0b0a12]/50 backdrop-blur-md p-6 rounded-3xl border border-white/5 shadow-xl">
+      <div className="mb-12 flex flex-col gap-6 rounded-3xl border border-white/5 bg-[#0b0a12]/50 p-4 shadow-xl backdrop-blur-md sm:p-6">
         
         {/* BUSCA, ORDENAÇÃO E TOGGLES RÁPIDOS */}
         <div className="flex flex-col lg:flex-row gap-4 w-full">
@@ -709,6 +743,7 @@ export const LojaPage: React.FC = () => {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
             <input 
               type="search" 
+              aria-label="Buscar itens da loja"
               placeholder="Buscar por nome ou descrição..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -833,7 +868,7 @@ export const LojaPage: React.FC = () => {
       </div>
 
       {/* GRID DE ITENS */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,18rem),1fr))] gap-5 sm:gap-8">
         <AnimatePresence>
           {visibleItems.map((item) => (
             <ItemCard 
@@ -881,15 +916,14 @@ export const LojaPage: React.FC = () => {
 
       {/* VIEW DE RECOMPENSAS */}
       {modoLoja === 'Recompensas' && (
-        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] gap-5 sm:gap-8">
           <AnimatePresence>
             {recompensas.map(recompensa => (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 key={recompensa.personagem_id}
-                className="relative bg-[#0b0a12] border border-orange-900/50 rounded-lg p-6 flex flex-col items-center justify-between shadow-[0_0_30px_rgba(154,52,18,0.2)] overflow-hidden"
-                style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/aged-paper.png")' }}
+                className="aged-paper-texture content-auto-list-item relative bg-[#0b0a12] border border-orange-900/50 rounded-lg p-6 flex flex-col items-center justify-between shadow-[0_0_30px_rgba(154,52,18,0.2)] overflow-hidden"
               >
                 <div className="absolute inset-0 bg-orange-950/20 mix-blend-multiply pointer-events-none"></div>
                 <div className="relative z-10 w-full text-center border-b border-orange-900/30 pb-4 mb-4">
@@ -939,7 +973,7 @@ export const LojaPage: React.FC = () => {
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             role={toast.type === 'error' ? 'alert' : 'status'}
             aria-live="polite"
-            className={`fixed bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 rounded-full backdrop-blur-xl border shadow-2xl ${
+            className={`app-toast fixed left-1/2 z-[130] flex w-[min(36rem,calc(100vw-1.5rem))] -translate-x-1/2 items-start gap-3 rounded-2xl border px-4 py-3 shadow-2xl backdrop-blur-xl sm:w-auto sm:items-center sm:rounded-full sm:px-6 sm:py-4 ${
               toast.type === 'success' 
                 ? 'bg-[#c7a44c]/20 border-[#c7a44c]/50 text-white shadow-[0_0_30px_rgba(199,164,76,0.3)]' 
                 : 'bg-red-500/20 border-red-500/50 text-white shadow-[0_0_30px_rgba(239,68,68,0.3)]'
@@ -955,10 +989,11 @@ export const LojaPage: React.FC = () => {
       <AnimatePresence>
         {showCheckoutModal && (
           <motion.div
+            ref={checkoutDialogRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            className="modal-viewport fixed inset-0 z-[110] flex items-center justify-center bg-black/80 backdrop-blur-sm"
             role="dialog"
             aria-modal="true"
             aria-labelledby="checkout-title"
@@ -967,13 +1002,13 @@ export const LojaPage: React.FC = () => {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="bg-[#0b0a12] border border-[#c7a44c]/30 rounded-2xl p-6 max-w-md w-full shadow-[0_0_40px_rgba(199,164,76,0.15)] relative overflow-hidden"
+              className="modal-surface relative w-full max-w-md overflow-y-auto rounded-2xl border border-[#c7a44c]/30 bg-[#0b0a12] p-4 shadow-[0_0_40px_rgba(199,164,76,0.15)] custom-scrollbar sm:p-6"
             >
               <h3 id="checkout-title" className={`text-2xl font-bold tracking-wider mb-2 ${modoLoja === 'Comprar' ? 'text-[#c7a44c]' : 'text-red-400'}`} style={{fontFamily: 'Cinzel, serif'}}>
                 {modoLoja === 'Comprar' ? 'Finalizar Compra do Lote' : 'Vender Lote'}
               </h3>
               <div className="text-gray-300 mb-6">
-                Você tem <strong>{cart.reduce((a,c) => a + c.quantidade, 0)} itens</strong> no carrinho. 
+                Você tem <strong>{quantidadeCarrinho} {quantidadeCarrinho === 1 ? 'item' : 'itens'}</strong> no carrinho.
                 <div className="mt-3 flex flex-wrap gap-2">
                   {cartTotals.map((total) => (
                     <strong key={total.moeda} className="rounded-lg bg-white/5 px-3 py-1 text-white">
@@ -984,7 +1019,7 @@ export const LojaPage: React.FC = () => {
                 <p className="mt-3 text-sm text-gray-400">O servidor confirmará preços, disponibilidade e saldo antes de efetivar a operação.</p>
               </div>
               
-              <div className="flex justify-end gap-4">
+              <div className="responsive-action-row flex justify-end gap-3 sm:gap-4">
                 <button 
                   onClick={() => setShowCheckoutModal(false)}
                   disabled={checkoutInProgress}
@@ -1010,10 +1045,11 @@ export const LojaPage: React.FC = () => {
       <AnimatePresence>
         {showGmPanel && (
           <motion.div
+            ref={gmDialogRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[120] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            className="modal-viewport fixed inset-0 z-[120] flex items-center justify-center bg-black/80 backdrop-blur-sm"
             role="dialog"
             aria-modal="true"
             aria-labelledby="recompensas-gm-title"
@@ -1022,7 +1058,7 @@ export const LojaPage: React.FC = () => {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="bg-[#0b0a12] border border-purple-500/50 rounded-2xl p-6 max-w-md w-full shadow-[0_0_40px_rgba(168,85,247,0.2)]"
+              className="modal-surface w-full max-w-md overflow-y-auto rounded-2xl border border-purple-500/50 bg-[#0b0a12] p-4 shadow-[0_0_40px_rgba(168,85,247,0.2)] custom-scrollbar sm:p-6"
             >
               <h3 id="recompensas-gm-title" className="text-2xl font-bold tracking-wider mb-4 text-purple-400" style={{fontFamily: 'Cinzel, serif'}}>
                 Recompensas Pendentes
@@ -1093,10 +1129,11 @@ export const LojaPage: React.FC = () => {
       <AnimatePresence>
         {reivindicacaoAlvo && (
           <motion.div
+            ref={claimDialogRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            className="modal-viewport fixed inset-0 z-[110] flex items-center justify-center bg-black/80 backdrop-blur-sm"
             role="dialog"
             aria-modal="true"
             aria-labelledby="recompensa-claim-title"
@@ -1105,7 +1142,7 @@ export const LojaPage: React.FC = () => {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="bg-[#0b0a12] border border-red-500/50 rounded-2xl p-6 max-w-md w-full shadow-[0_0_40px_rgba(239,68,68,0.2)]"
+              className="modal-surface w-full max-w-md overflow-y-auto rounded-2xl border border-red-500/50 bg-[#0b0a12] p-4 shadow-[0_0_40px_rgba(239,68,68,0.2)] custom-scrollbar sm:p-6"
             >
               <h3 id="recompensa-claim-title" className="text-2xl font-bold tracking-wider mb-2 text-red-500" style={{fontFamily: 'Cinzel, serif'}}>
                 Confirmar Caçada
@@ -1115,7 +1152,7 @@ export const LojaPage: React.FC = () => {
                 <br /><br />
                 O valor de <strong>{reivindicacaoAlvo.valor_total.toLocaleString()} LUN</strong> será depositado em sua conta após aprovação.
               </p>
-              <div className="flex justify-end gap-4">
+              <div className="responsive-action-row flex justify-end gap-3 sm:gap-4">
                 <button 
                   onClick={() => setReivindicacaoAlvo(null)}
                   disabled={claimInProgress}

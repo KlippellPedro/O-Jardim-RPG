@@ -54,7 +54,7 @@ export interface LojaCommandResult {
   }>;
   debitos?: LojaBalanceDelta[];
   creditos?: LojaBalanceDelta[];
-  /** Requisito de nível/classe que a compra ignorou — não bloqueia a compra,
+  /** Requisito de nível/classe que a compra ignorou - não bloqueia a compra,
    * mas o mestre já é notificado, então quem comprou também deveria ver. */
   infracoes?: Array<{ item_id: string; mensagem: string }>;
 }

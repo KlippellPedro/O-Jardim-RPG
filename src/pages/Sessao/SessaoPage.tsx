@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   AlertTriangle,
@@ -21,6 +21,7 @@ import { FrotaBasesPanel } from './components/FrotaBasesPanel';
 import { useSessaoStore } from '../../store/useSessaoStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import { roleLabel } from './sessionUtils';
+import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
 
 export const SessaoPage: React.FC = () => {
   const [isChangingLive, setIsChangingLive] = useState(false);
@@ -28,6 +29,9 @@ export const SessaoPage: React.FC = () => {
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
   const [rightDrawerOpen, setRightDrawerOpen] = useState(false);
   const [frotaDrawerOpen, setFrotaDrawerOpen] = useState(false);
+  const leftDrawerRef = useRef<HTMLElement>(null);
+  const rightDrawerRef = useRef<HTMLElement>(null);
+  const frotaDrawerRef = useRef<HTMLElement>(null);
   // O histórico é útil, mas ocupa uma coluna inteira - dá pra recolher.
   const [historyPanelOpen, setHistoryPanelOpen] = useState(true);
   const reduceMotion = useReducedMotion();
@@ -55,6 +59,10 @@ export const SessaoPage: React.FC = () => {
   const { campanhaAtiva } = useAuthStore();
   const activeCampaignId = campanhaAtiva?.id;
 
+  useDialogAccessibility({ open: leftDrawerOpen, dialogRef: leftDrawerRef, onClose: () => setLeftDrawerOpen(false) });
+  useDialogAccessibility({ open: rightDrawerOpen, dialogRef: rightDrawerRef, onClose: () => setRightDrawerOpen(false) });
+  useDialogAccessibility({ open: frotaDrawerOpen, dialogRef: frotaDrawerRef, onClose: () => setFrotaDrawerOpen(false) });
+
   useEffect(() => {
     if (!activeCampaignId) return undefined;
     conectarSSE(activeCampaignId);
@@ -63,7 +71,7 @@ export const SessaoPage: React.FC = () => {
 
   if (!activeCampaignId) {
     return (
-      <div className="absolute inset-0 flex items-center justify-center bg-[#07070b] px-6 text-center text-white">
+      <div className="app-screen flex items-center justify-center bg-[#07070b] px-6 text-center text-white">
         <div>
           <Users className="mx-auto mb-4 text-[#c7a44c]" size={36} />
           <h2 className="text-xl font-semibold">Selecione uma campanha para abrir a mesa.</h2>
@@ -99,10 +107,10 @@ export const SessaoPage: React.FC = () => {
       <motion.div
         initial={reduceMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="absolute inset-0 z-10 overflow-hidden bg-[#07070b] pl-24 text-white"
+        className="app-screen overflow-hidden bg-[#07070b] text-white"
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_36%,rgba(199,164,76,0.12),transparent_42%)]" />
-        <main className="relative flex h-full items-center justify-center px-6">
+        <main className="relative flex h-full items-center justify-center px-4 sm:px-6">
           <section className="w-full max-w-xl rounded-3xl border border-[#c7a44c]/20 bg-[#0d0c12]/95 p-8 text-center shadow-2xl backdrop-blur-xl sm:p-12" aria-labelledby="sessao-bloqueada-titulo">
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-[#c7a44c]/25 bg-[#c7a44c]/10 text-[#d9b95f]">
               <LockKeyhole size={34} aria-hidden="true" />
@@ -129,11 +137,11 @@ export const SessaoPage: React.FC = () => {
       initial={reduceMotion ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={reduceMotion ? undefined : { opacity: 0 }}
-      className="absolute inset-0 z-10 overflow-hidden bg-[#07070b] text-white"
+      className="app-screen overflow-hidden bg-[#07070b] text-white"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_52%_18%,rgba(199,164,76,0.10),transparent_46%)]" />
 
-      <div className="relative z-10 h-full pl-24">
+      <div className="relative z-10 h-full">
         <div
           className={`grid h-full min-h-0 grid-rows-[76px_minmax(0,1fr)] ${
             historyPanelOpen ? 'xl:grid-cols-[320px_minmax(0,1fr)_340px]' : 'xl:grid-cols-[minmax(0,1fr)_340px]'
@@ -149,7 +157,7 @@ export const SessaoPage: React.FC = () => {
                   <h1 className="truncate text-base font-semibold text-white sm:text-lg">
                     {tituloSessao ?? 'Aguardando sessão'}
                   </h1>
-                  <span className="hidden text-xs text-white/30 sm:inline">•</span>
+                  <span aria-hidden="true" className="hidden text-xs text-white/30 sm:inline">•</span>
                   <span className="hidden whitespace-nowrap text-xs text-white/55 sm:inline">
                     {sessaoStatus === 'aberta'
                       ? emCombate
@@ -255,9 +263,13 @@ export const SessaoPage: React.FC = () => {
       </div>
 
       {leftDrawerOpen ? (
-        <div className="fixed inset-0 z-40 bg-black/70 pl-24 xl:hidden" role="presentation" onClick={() => setLeftDrawerOpen(false)}>
+        <div className="modal-viewport fixed inset-0 z-[70] bg-black/70 xl:hidden" role="presentation" onClick={() => setLeftDrawerOpen(false)}>
           <aside
-            className="h-full w-[min(360px,calc(100vw-6rem))] border-r border-white/10 bg-[#0b0a10]"
+            ref={leftDrawerRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Histórico da sessão"
+            className="h-full w-[min(360px,100%)] border-r border-white/10 bg-[#0b0a10]"
             onClick={(event) => event.stopPropagation()}
           >
             <SessionLogPanel onClose={() => setLeftDrawerOpen(false)} />
@@ -266,9 +278,13 @@ export const SessaoPage: React.FC = () => {
       ) : null}
 
       {rightDrawerOpen ? (
-        <div className="fixed inset-0 z-40 flex justify-end bg-black/70 pl-24 xl:hidden" role="presentation" onClick={() => setRightDrawerOpen(false)}>
+        <div className="modal-viewport fixed inset-0 z-[70] flex justify-end bg-black/70 xl:hidden" role="presentation" onClick={() => setRightDrawerOpen(false)}>
           <aside
-            className="h-full w-[min(380px,calc(100vw-6rem))] border-l border-white/10 bg-[#0b0a10]"
+            ref={rightDrawerRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Ordem de iniciativa"
+            className="h-full w-[min(380px,100%)] border-l border-white/10 bg-[#0b0a10]"
             onClick={(event) => event.stopPropagation()}
           >
             <InitiativeTracker onClose={() => setRightDrawerOpen(false)} />
@@ -277,9 +293,13 @@ export const SessaoPage: React.FC = () => {
       ) : null}
 
       {frotaDrawerOpen ? (
-        <div className="fixed inset-0 z-40 flex justify-end bg-black/70 pl-24" role="presentation" onClick={() => setFrotaDrawerOpen(false)}>
+        <div className="modal-viewport fixed inset-0 z-[70] flex justify-end bg-black/70" role="presentation" onClick={() => setFrotaDrawerOpen(false)}>
           <aside
-            className="h-full w-[min(380px,calc(100vw-6rem))] border-l border-white/10 bg-[#0b0a10]"
+            ref={frotaDrawerRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Frota e bases"
+            className="h-full w-[min(380px,100%)] border-l border-white/10 bg-[#0b0a10]"
             onClick={(event) => event.stopPropagation()}
           >
             <FrotaBasesPanel onClose={() => setFrotaDrawerOpen(false)} />
@@ -288,7 +308,7 @@ export const SessaoPage: React.FC = () => {
       ) : null}
 
       {error ? (
-        <div className="fixed bottom-5 left-1/2 z-50 flex w-[min(560px,calc(100vw-2rem))] -translate-x-1/2 items-start gap-3 rounded-xl border border-amber-400/25 bg-[#17120b]/95 p-4 text-sm text-amber-100 shadow-2xl backdrop-blur-xl" role="alert">
+        <div className="app-toast fixed left-1/2 z-[80] flex w-[min(560px,calc(100vw-2rem))] -translate-x-1/2 flex-wrap items-start gap-3 rounded-xl border border-amber-400/25 bg-[#17120b]/95 p-4 text-sm text-amber-100 shadow-2xl backdrop-blur-xl" role="alert">
           <AlertTriangle className="mt-0.5 shrink-0 text-amber-300" size={18} />
           <p className="flex-1">{error}</p>
           <button type="button" onClick={clearError} className="text-amber-100/60 hover:text-white" aria-label="Fechar alerta">
@@ -307,7 +327,7 @@ export const SessaoPage: React.FC = () => {
       ) : null}
 
       {liveActionError ? (
-        <div className="fixed bottom-5 left-1/2 z-50 flex w-[min(560px,calc(100vw-2rem))] -translate-x-1/2 items-start gap-3 rounded-xl border border-red-400/25 bg-[#1b0d0f]/95 p-4 text-sm text-red-100 shadow-2xl backdrop-blur-xl" role="alert">
+        <div className="app-toast fixed left-1/2 z-[80] flex w-[min(560px,calc(100vw-2rem))] -translate-x-1/2 flex-wrap items-start gap-3 rounded-xl border border-red-400/25 bg-[#1b0d0f]/95 p-4 text-sm text-red-100 shadow-2xl backdrop-blur-xl" role="alert">
           <AlertTriangle className="mt-0.5 shrink-0 text-red-300" size={18} />
           <p className="flex-1">{liveActionError}</p>
           <button type="button" onClick={() => setLiveActionError(null)} className="text-red-100/60 hover:text-white" aria-label="Fechar alerta">

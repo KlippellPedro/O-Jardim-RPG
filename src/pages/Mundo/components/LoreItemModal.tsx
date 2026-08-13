@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LoreEntry } from '../../../../data/gerado/mundoCatalog';
 import { ShieldAlert, Info, Map as MapIcon, Calendar, User } from 'lucide-react';
+import { useModalSfx } from '../../../hooks/useSfx';
+import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 
 interface LoreItemModalProps {
   entry: LoreEntry;
@@ -10,9 +12,15 @@ interface LoreItemModalProps {
 }
 
 export const LoreItemModal: React.FC<LoreItemModalProps> = ({ entry, onClose, isLocked }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  // Só existe montado enquanto aberto - equivale a isOpen sempre true.
+  useModalSfx(true);
+  useDialogAccessibility({ open: true, dialogRef, initialFocusRef: closeButtonRef, onClose });
+
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div ref={dialogRef} className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="lore-item-modal-title">
         {/* Overlay Blur */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -27,13 +35,16 @@ export const LoreItemModal: React.FC<LoreItemModalProps> = ({ entry, onClose, is
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="relative w-full max-w-2xl bg-[#0a090e]/80 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] z-10 max-h-[85vh] flex flex-col"
+          className="modal-surface relative z-10 flex w-full max-w-2xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0a090e]/90 shadow-[0_20px_50px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
         >
           {/* Header */}
-          <div className="relative p-8 border-b border-white/5 bg-gradient-to-br from-white/5 to-transparent flex-shrink-0">
-            <button 
+          <div className="relative flex-shrink-0 border-b border-white/5 bg-gradient-to-br from-white/5 to-transparent p-4 sm:p-8">
+            <button
+              ref={closeButtonRef}
               onClick={onClose}
-              className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
+              data-sfx="off"
+              className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center rounded-full text-2xl text-gray-500 transition-colors hover:bg-white/10 hover:text-white sm:right-6 sm:top-6"
+              aria-label="Fechar detalhes"
             >
               &times;
             </button>
@@ -50,7 +61,7 @@ export const LoreItemModal: React.FC<LoreItemModalProps> = ({ entry, onClose, is
               )}
             </div>
 
-            <h2 className="text-4xl font-bold text-white mb-2" style={{ fontFamily: 'Cinzel, serif' }}>
+            <h2 id="lore-item-modal-title" className="mb-2 pr-10 text-[clamp(2rem,8vw,2.25rem)] font-bold leading-tight text-white" style={{ fontFamily: 'Cinzel, serif' }}>
               {isLocked ? 'Fragmento Desconhecido' : entry.titulo}
             </h2>
             {!isLocked && entry.conteudo.epiteto && (
@@ -59,7 +70,7 @@ export const LoreItemModal: React.FC<LoreItemModalProps> = ({ entry, onClose, is
           </div>
 
           {/* Body */}
-          <div className="p-8 overflow-y-auto custom-scrollbar flex-1 relative">
+          <div className="relative flex-1 overflow-y-auto p-4 custom-scrollbar sm:p-8">
             {isLocked ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-8 opacity-60">
                 <ShieldAlert size={64} className="mb-4 text-red-500/50" />

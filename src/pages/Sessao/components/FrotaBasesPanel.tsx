@@ -126,7 +126,7 @@ export const FrotaBasesPanel = ({ onClose }: FrotaBasesPanelProps) => {
               <div key={v.id} className="rounded-lg border border-amber-500/15 bg-amber-950/10 p-3">
                 <div className="flex items-center gap-2">
                   {v.imagem_url
-                    ? <img src={v.imagem_url} alt={v.nome} className="h-8 w-8 flex-shrink-0 rounded object-cover" />
+                    ? <img src={v.imagem_url} alt={v.nome} loading="lazy" decoding="async" className="h-8 w-8 flex-shrink-0 rounded object-cover" />
                     : <Car size={18} className="flex-shrink-0 text-amber-400" />
                   }
                   <span className="min-w-0 flex-1 truncate text-sm font-bold text-white">{v.nome}</span>

@@ -277,12 +277,14 @@ test('modificações viram categoria própria, com nível de loja pelo tipo da m
   assert.ok(modificacoes.every((item) => item.categoria === 'Modificações'));
   assert.ok(modificacoes.every((item) => item.valorOriginal > 0 && item.moedaPreco === 'Lunaris'));
 
-  // Marcial mexe em número grande e só se acha da Metrópole para cima.
+  // Marcial mexe em número grande e só se acha da Metrópole para cima;
+  // efeitos épicos ou proibidos avançam ao Mercado Negro.
   const marciais = modificacoes.filter((item) => item.dadosBrutos?.nivel_modificacao === 'marcial');
-  assert.ok(marciais.every((item) => item.nivelLoja === 2));
-  assert.ok(modificacoes
-    .filter((item) => item.dadosBrutos?.nivel_modificacao === 'comum')
-    .every((item) => item.nivelLoja === 1));
+  assert.ok(marciais.every((item) => item.nivelLoja >= 2));
+  assert.equal(modificacoes.find((item) => item.id === 'mod-balanceada')?.nivelLoja, 1);
+  assert.equal(modificacoes.find((item) => item.id === 'mod-assombrada')?.nivelLoja, 2);
+  assert.equal(modificacoes.find((item) => item.id === 'mod-vampirica')?.nivelLoja, 3);
+  assert.equal(modificacoes.find((item) => item.id === 'mod-selado')?.nivelLoja, 3);
 
   const afiada = modificacoes.find((item) => item.id === 'mod-afiada');
   assert.ok(afiada);
@@ -292,6 +294,36 @@ test('modificações viram categoria própria, com nível de loja pelo tipo da m
   assert.equal(itemCorrespondeSubfiltro(afiada, 'Modificações', 'Escudos'), false);
   assert.equal(itemCorrespondeSubfiltro(afiada, 'Modificações', 'Comuns'), true);
   assert.equal(itemCorrespondeSubfiltro(afiada, 'Modificações', 'Marciais'), false);
+});
+
+test('todo item declara a loja mínima e a Vila fica restrita ao catálogo simples', async () => {
+  const catalogo = (await import('../../data/loja/catalogo.json', { with: { type: 'json' } })).default as any;
+  const entradas = catalogo.entradas as any[];
+  const nivel = (item: any) => item.conteudo?.nivelMinimoLoja;
+  const normalizar = (valor: unknown) => String(valor ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
+  assert.equal(entradas.length, 461);
+  assert.ok(entradas.every((item) => Number.isInteger(nivel(item)) && nivel(item) >= 1 && nivel(item) <= 4));
+  assert.ok([1, 2, 3, 4].every((loja) => entradas.some((item) => nivel(item) === loja)));
+
+  const vila = entradas.filter((item) => nivel(item) === 1);
+  assert.ok(vila.filter((item) => item.tipo === 'arma').every((item) => item.conteudo.subtipo === 'simples'));
+  assert.ok(vila.filter((item) => item.tipo === 'monstro').every((item) => ['Criatura', 'Ajudante'].includes(item.conteudo.classe)));
+  assert.ok(vila.every((item) => !['artefato', 'fruto-eden', 'implante', 'propriedade', 'veiculo', 'veiculo-completo'].includes(item.tipo)));
+  assert.ok(vila.every((item) => !/(plasma|antimateria|monomolecular|contrabando|mercado negro)/.test(normalizar([
+    item.titulo,
+    item.conteudo?.descricao,
+    item.conteudo?.material,
+  ].join(' ')))));
+
+  assert.equal(nivel(entradas.find((item) => item.id === 'arma-chicote-plasma')), 3);
+  assert.equal(nivel(entradas.find((item) => item.id === 'arma-sniper-antimateria')), 4);
+  assert.ok(entradas.filter((item) => item.tipo === 'fruto-eden').every((item) => nivel(item) === 4));
+  assert.ok(entradas.filter((item) => normalizar(item.conteudo?.raridade) === 'lendario').every((item) => nivel(item) === 4));
+  assert.ok(entradas.filter((item) => ['veiculo', 'veiculo-completo'].includes(item.tipo)).every((item) => nivel(item) >= 2));
 });
 
 test('preço da Loja acompanha a faixa de valor publicada nas regras, em Lunaris', async () => {

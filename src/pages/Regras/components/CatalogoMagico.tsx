@@ -1,7 +1,8 @@
-import { useDeferredValue, useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { BookMarked, ChevronRight, Search, SlidersHorizontal, Sparkles, X } from 'lucide-react';
 import catalogoLoja from '../../../../data/loja/catalogo.json';
+import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 import {
   ENCANTAMENTOS_CATALOGO,
   FLUXOS_CATALOGO,
@@ -341,14 +342,14 @@ interface GrimorioListItemProps {
   onSelect: (id: string) => void;
 }
 
-const GrimorioListItem = ({ active, item, onSelect }: GrimorioListItemProps) => {
+const GrimorioListItem = memo(({ active, item, onSelect }: GrimorioListItemProps) => {
   const tema = temaDoFluxo(item.fluxoId);
   return (
   <button
     type="button"
     onClick={() => onSelect(item.id)}
     aria-pressed={active}
-    className="group flex w-full items-center gap-3 border-b border-white/5 px-4 py-3.5 text-left transition-colors hover:bg-white/5"
+    className="content-auto-list-item group flex w-full items-center gap-3 border-b border-white/5 px-4 py-3.5 text-left transition-colors hover:bg-white/5"
     style={{ backgroundColor: active ? tema.fundo : undefined }}
   >
     <span
@@ -364,15 +365,23 @@ const GrimorioListItem = ({ active, item, onSelect }: GrimorioListItemProps) => 
     <ChevronRight size={15} className={active ? '' : 'text-gray-700 group-hover:text-gray-400'} style={{ color: active ? tema.destaque : undefined }} />
   </button>
   );
-};
+});
 
 export const CatalogoMagico = () => {
+  const mobileDialogRef = useRef<HTMLDivElement>(null);
+  const mobileCloseRef = useRef<HTMLButtonElement>(null);
   const [aba, setAba] = useState<AbaCatalogo>('magias');
   const [busca, setBusca] = useState('');
   const [fluxo, setFluxo] = useState<FluxoDeMagia | 'todos'>('todos');
   const [circulo, setCirculo] = useState<number | 'todos'>('todos');
   const [selecionadoId, setSelecionadoId] = useState('');
   const [detalheMovelAberto, setDetalheMovelAberto] = useState(false);
+  useDialogAccessibility({
+    open: detalheMovelAberto,
+    dialogRef: mobileDialogRef,
+    initialFocusRef: mobileCloseRef,
+    onClose: () => setDetalheMovelAberto(false),
+  });
   const buscaAdiada = useDeferredValue(busca.trim().toLocaleLowerCase('pt-BR'));
   const itensAba = ITENS_POR_ABA[aba];
 
@@ -401,10 +410,10 @@ export const CatalogoMagico = () => {
     return () => window.removeEventListener('keydown', fecharComEscape);
   }, [detalheMovelAberto]);
 
-  const selecionar = (id: string) => {
+  const selecionar = useCallback((id: string) => {
     setSelecionadoId(id);
     setDetalheMovelAberto(true);
-  };
+  }, []);
 
   const trocarAba = (novaAba: AbaCatalogo) => {
     setAba(novaAba);
@@ -504,10 +513,10 @@ export const CatalogoMagico = () => {
       )}
 
       {detalheMovelAberto && selecionado ? createPortal(
-        <div className="fixed inset-0 z-[100] flex items-end bg-black/80 p-3 backdrop-blur-sm md:hidden" role="dialog" aria-modal="true" aria-labelledby="detalhe-grimorio-titulo">
+        <div ref={mobileDialogRef} className="modal-viewport fixed inset-0 z-[100] flex items-end bg-black/80 backdrop-blur-sm md:hidden" role="dialog" aria-modal="true" aria-labelledby="detalhe-grimorio-titulo">
           <button type="button" aria-label="Fechar detalhes" onClick={() => setDetalheMovelAberto(false)} className="absolute inset-0" />
-          <div className="custom-scrollbar relative z-10 max-h-[88dvh] w-full overflow-y-auto rounded-2xl">
-            <button type="button" onClick={() => setDetalheMovelAberto(false)} aria-label="Fechar detalhes" className="absolute right-4 top-4 z-20 rounded-full border border-white/10 bg-black/50 p-2 text-gray-300"><X size={17} /></button>
+          <div className="modal-surface custom-scrollbar relative z-10 w-full overflow-y-auto rounded-2xl">
+            <button ref={mobileCloseRef} type="button" onClick={() => setDetalheMovelAberto(false)} aria-label="Fechar detalhes" className="absolute right-4 top-4 z-20 flex min-h-11 min-w-11 items-center justify-center rounded-full border border-white/10 bg-black/50 text-gray-300"><X size={17} /></button>
             <div id="detalhe-grimorio-titulo" className="sr-only">Detalhes de {selecionado.titulo}</div>
             <GrimorioDetail item={selecionado} compacto />
           </div>

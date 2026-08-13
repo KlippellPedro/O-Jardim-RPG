@@ -13,7 +13,7 @@ export const Errante = ({ raca }: { raca: IRaca }) => {
       {/* Multiverse Background */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
-        style={{ backgroundImage: "url('/assets/img/errante_bg.jpg')" }}
+        style={{ backgroundImage: "url('/assets/img/errante_bg.webp')" }}
       >
         <div className="absolute inset-0 bg-gray-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/40 via-transparent to-[#050505]/90" />

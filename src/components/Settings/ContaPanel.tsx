@@ -4,6 +4,7 @@ import { authApi } from '../../services/authApi';
 import { discordApi, type IDiscordVinculo } from '../../services/discordApi';
 import { User, Lock, Loader2, AlertCircle, CheckCircle2, MessageSquare, Link2, Unlink, Copy, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { sfx } from '../../utils/audioSynth';
 
 export const ContaPanel: React.FC = () => {
   const { usuario } = useAuthStore();
@@ -103,12 +104,14 @@ export const ContaPanel: React.FC = () => {
     try {
       await authApi.alterarSenha(senhaAtual, novaSenha);
       setMessage({ text: 'Senha alterada com sucesso!', type: 'success' });
+      sfx.play('confirm');
       setSenhaAtual('');
       setNovaSenha('');
       setConfirmarSenha('');
     } catch (err: unknown) {
       const error = err as { message?: string };
       setMessage({ text: error?.message || 'Erro ao alterar a senha.', type: 'error' });
+      sfx.play('error');
     } finally {
       setIsLoading(false);
     }

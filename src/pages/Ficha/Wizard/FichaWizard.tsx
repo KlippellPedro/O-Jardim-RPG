@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { carregarCatalogo } from '../../../services/catalogoService';
 import { ICatalogo } from '../../../types/catalogo';
@@ -39,6 +39,8 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
   const isMestre = usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador'
     || campanhaAtiva?.papel === 'mestre' || campanhaAtiva?.papel === 'assistente';
   const config = campanhaAtiva?.configuracoes || {};
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 
   const arvoresDisponiveis = useMemo(
     () => ARVORES.filter(a => arvoreVisivel(a.id, config, isMestre)),
@@ -69,6 +71,40 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
 
   // BUG-11: adicionar estado de erro para o carregamento do catálogo
   const [catalogoError, setCatalogoError] = useState<string | null>(null);
+
+  useEffect(() => {
+    previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (event.key !== 'Tab' || !dialogRef.current) return;
+      const focusable = Array.from(dialogRef.current.querySelectorAll<HTMLElement>(
+        'button:not([disabled]):not([aria-hidden="true"]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+      )).filter((element) => element.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previouslyFocusedRef.current?.focus();
+    };
+  }, [onClose]);
 
   useEffect(() => {
     carregarCatalogo()
@@ -250,7 +286,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                 type="text" 
                 value={nome} 
                 onChange={e => setNome(e.target.value)}
-                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-2xl text-white font-bold focus:outline-none focus:border-primary/50 transition-colors shadow-inner"
+                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-lg text-white font-bold focus:outline-none focus:border-primary/50 transition-colors shadow-inner sm:text-2xl"
                 placeholder="Ex: Kael Sombraverde"
                 autoFocus
                 style={{fontFamily: 'Cinzel, serif'}}
@@ -259,13 +295,13 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-4">Escolha sua Árvore de Origem</label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
                 <button
                   type="button"
                   onClick={() => setArvoreId(SEM_ARVORE_ID)}
-                  className={`p-6 rounded-2xl border text-left transition-all ${arvoreId === SEM_ARVORE_ID ? 'border-primary/50 bg-gradient-to-br from-gray-400/20 to-slate-300/5 shadow-[0_0_20px_rgba(var(--color-primary),0.2)]' : 'border-white/5 bg-black/30 hover:border-white/20'}`}
+                  className={`rounded-2xl border p-4 text-left transition-all sm:p-6 ${arvoreId === SEM_ARVORE_ID ? 'border-primary/50 bg-gradient-to-br from-gray-400/20 to-slate-300/5 shadow-[0_0_20px_rgba(var(--color-primary),0.2)]' : 'border-white/5 bg-black/30 hover:border-white/20'}`}
                 >
-                  <h3 className="text-xl font-bold text-white" style={{fontFamily: 'Cinzel, serif'}}>Sem Árvore</h3>
+                  <h3 className="text-lg font-bold text-white sm:text-xl" style={{fontFamily: 'Cinzel, serif'}}>Sem Árvore</h3>
                   <p className="text-xs text-gray-500 mt-1">Árvore oculta ou indefinida - libera o acesso a todas as opções do compêndio.</p>
                 </button>
                 {arvoresDisponiveis.map(arvore => (
@@ -273,9 +309,9 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                     key={arvore.id}
                     type="button"
                     onClick={() => setArvoreId(arvore.id)}
-                    className={`p-6 rounded-2xl border text-left transition-all ${arvoreId === arvore.id ? 'border-primary/50 bg-gradient-to-br shadow-[0_0_20px_rgba(var(--color-primary),0.2)] ' + arvore.cor : 'border-white/5 bg-black/30 hover:border-white/20'}`}
+                    className={`rounded-2xl border p-4 text-left transition-all sm:p-6 ${arvoreId === arvore.id ? 'border-primary/50 bg-gradient-to-br shadow-[0_0_20px_rgba(var(--color-primary),0.2)] ' + arvore.cor : 'border-white/5 bg-black/30 hover:border-white/20'}`}
                   >
-                    <h3 className="text-xl font-bold text-white" style={{fontFamily: 'Cinzel, serif'}}>{arvore.nome}</h3>
+                    <h3 className="text-lg font-bold text-white sm:text-xl" style={{fontFamily: 'Cinzel, serif'}}>{arvore.nome}</h3>
                     <p className="text-xs text-gray-500 mt-1">Deidade: {arvore.deidadeTitulo}</p>
                   </button>
                 ))}
@@ -475,7 +511,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
               )}
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-h-[50vh] overflow-y-auto custom-scrollbar pr-2">
+            <div className="grid grid-cols-1 gap-4 max-h-[50vh] overflow-y-auto custom-scrollbar pr-2 min-[380px]:grid-cols-2 md:grid-cols-4">
               {ATRIBUTOS.map((attr) => (
                 <div key={attr} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-3">
                   <span className="text-sm text-gray-300 font-bold uppercase tracking-widest">{ROTULOS_ATRIBUTOS[attr]}</span>
@@ -663,27 +699,31 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050508]/90 backdrop-blur-xl p-4 md:p-8">
-      <motion.div 
+    <div className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center bg-[#050508]/90 backdrop-blur-xl">
+      <motion.div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="character-wizard-title"
         initial={{ opacity: 0, y: 50, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 50, scale: 0.95 }}
-        className="w-full max-w-5xl bg-[#0b0a12]/80 backdrop-blur-3xl border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col h-[95vh] md:h-auto md:max-h-[85vh] ring-1 ring-white/5"
+        className="modal-surface flex w-full max-w-5xl flex-col overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0b0a12]/90 shadow-2xl ring-1 ring-white/5 backdrop-blur-3xl sm:rounded-[2rem]"
       >
         {/* Header */}
-        <div className="p-6 md:p-8 border-b border-white/5 flex justify-between items-center relative overflow-hidden">
+        <div className="relative flex items-center justify-between overflow-hidden border-b border-white/5 p-4 sm:p-6 md:p-8">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-transparent opacity-50"></div>
           <div className="relative z-10 flex flex-col gap-3">
-            <div className="flex gap-2">
+            <div className="grid w-full grid-cols-7 gap-1 sm:gap-2">
               {[1, 2, 3, 4, 5, 6, 7].map(i => (
-                <div key={i} className={`h-1.5 w-10 md:w-12 rounded-full transition-colors ${i < step ? 'bg-primary' : i === step ? 'bg-primary/50 animate-pulse shadow-[0_0_10px_rgba(var(--color-primary),0.8)]' : 'bg-white/10'}`} />
+                <div key={i} className={`h-1.5 min-w-0 rounded-full transition-colors ${i < step ? 'bg-primary' : i === step ? 'bg-primary/50 animate-pulse shadow-[0_0_10px_rgba(var(--color-primary),0.8)]' : 'bg-white/10'}`} />
               ))}
             </div>
-            <h2 className="text-2xl text-white font-bold tracking-wider" style={{fontFamily: 'Cinzel, serif'}}>
+            <h2 id="character-wizard-title" className="text-xl font-bold leading-tight tracking-wider text-white sm:text-2xl" style={{fontFamily: 'Cinzel, serif'}}>
               O Despertar do Herói
             </h2>
           </div>
-          <button onClick={onClose} className="relative z-10 p-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
+          <button type="button" onClick={onClose} aria-label="Fechar assistente" className="relative z-10 flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
             <X size={24} />
           </button>
         </div>
@@ -692,17 +732,19 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
         {/* min-h-0 deixa o corpo encolher dentro do max-h do modal (sem isso o
             conteúdo do passo vaza por baixo do rodapé); o overflow-y-auto é a
             última garantia em telas muito baixas, quando nem encolhendo cabe */}
-        <div className="flex-1 min-h-0 p-6 md:p-8 overflow-y-auto custom-scrollbar flex flex-col relative bg-gradient-to-b from-transparent to-black/40">
+        <div className="relative flex min-h-0 flex-1 flex-col overflow-y-auto bg-gradient-to-b from-transparent to-black/40 p-4 custom-scrollbar sm:p-6 md:p-8">
           <AnimatePresence mode="wait">
             {renderStepContent()}
           </AnimatePresence>
         </div>
 
         {/* Footer */}
-        <div className="p-6 md:p-8 border-t border-white/5 flex justify-between items-center bg-black/40 backdrop-blur-xl">
+        <div className="flex items-center justify-between gap-2 border-t border-white/5 bg-black/40 p-4 backdrop-blur-xl sm:p-6 md:p-8">
           <button 
             onClick={() => setStep(s => Math.max(1, s - 1))}
-            className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-colors ${step === 1 ? 'opacity-0 pointer-events-none' : 'text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/5'}`}
+            aria-hidden={step === 1}
+            tabIndex={step === 1 ? -1 : 0}
+            className={`flex items-center gap-1 rounded-full px-3 py-3 font-medium transition-colors sm:gap-2 sm:px-6 ${step === 1 ? 'invisible pointer-events-none' : 'text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/5'}`}
           >
             <ChevronLeft size={20} /> Retornar
           </button>
@@ -711,14 +753,14 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             <button 
               onClick={() => setStep(s => s + 1)}
               disabled={isNextDisabled()}
-              className="flex items-center gap-2 px-8 py-3 rounded-full bg-primary hover:bg-primary/80 text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-[0_0_20px_rgba(var(--color-primary),0.2)]"
+              className="flex items-center gap-1 rounded-full bg-primary px-4 py-3 text-white font-bold hover:bg-primary/80 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-[0_0_20px_rgba(var(--color-primary),0.2)] sm:gap-2 sm:px-8"
             >
               Avançar <ChevronRight size={20} />
             </button>
           ) : (
             <button 
               onClick={handleCreate}
-              className="flex items-center gap-2 px-10 py-4 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white font-bold transition-all shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:scale-105"
+              className="flex items-center gap-1 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 px-4 py-4 text-white font-bold transition-all hover:from-green-400 hover:to-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:scale-105 sm:gap-2 sm:px-10"
             >
               <Sparkles size={20} />
               Finalizar Criação

@@ -52,19 +52,19 @@ export default function Home() {
   ];
 
   return (
-    <main className="relative z-10 p-8 flex flex-col items-center justify-center min-h-screen w-full pl-32 max-w-[1600px] mx-auto">
+    <main className="app-page mx-auto flex max-w-[100rem] flex-col items-center justify-center">
 
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
-        className="text-center mb-20"
+        className="mb-10 text-center sm:mb-16 xl:mb-20"
       >
-        <span className="uppercase tracking-[0.3em] text-primary/70 text-sm font-semibold mb-4 block">
+        <span className="uppercase tracking-[0.3em] text-primary/80 text-sm font-semibold mb-4 block">
           Plataforma de visualização de
         </span>
         <h1
-          className="text-6xl md:text-8xl font-bold mb-6 text-white drop-shadow-[0_0_30px_rgba(196,160,82,0.15)] tracking-wide"
+          className="mb-6 text-[clamp(2.5rem,10vw,6rem)] font-bold leading-[1.05] tracking-wide text-white drop-shadow-[0_0_30px_rgba(196,160,82,0.15)]"
           style={{ fontFamily: 'Cinzel, serif' }}
         >
           O <span className="text-primary">Jardim</span> RPG
@@ -79,21 +79,23 @@ export default function Home() {
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6 w-full"
+        className="grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-4 sm:gap-6"
       >
         {modulos.map((mod) => (
-          <motion.div
+          <motion.button
+            type="button"
             key={mod.path}
             variants={itemVariants}
             onClick={() => navigate(mod.path)}
-            className="h-full"
+            className="h-full w-full text-left"
+            aria-label={`Abrir ${mod.title}`}
           >
             <InteractiveModuleCard
               title={mod.title}
               description={mod.description}
               iconUrl={mod.iconUrl}
             />
-          </motion.div>
+          </motion.button>
         ))}
       </motion.div>
     </main>

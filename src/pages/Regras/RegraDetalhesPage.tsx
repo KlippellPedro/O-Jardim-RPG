@@ -73,7 +73,7 @@ export const RegraDetalhesPage = () => {
 
   if (!item) {
     return (
-      <div className="min-h-screen text-white flex flex-col items-center justify-center p-6 relative bg-[#07060d]">
+      <div role="main" className="app-page flex flex-col items-center justify-center bg-[#07060d] text-white">
         <div className="absolute inset-0 bg-gradient-to-br from-yellow-600/10 to-transparent" />
         <div className="relative z-10 flex flex-col items-center text-center max-w-md bg-black/60 backdrop-blur-md p-8 rounded-2xl border border-white/5">
           <ShieldAlert size={64} className="text-yellow-600 mb-6" />
@@ -96,12 +96,12 @@ export const RegraDetalhesPage = () => {
 
   if (RacaPage || ClassePage) {
     return (
-      <div className="relative min-h-screen">
+      <div role="main" className="app-detail-page relative min-h-screen">
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={() => navigate(rotaRetorno)}
-          className="fixed left-4 top-4 z-50 flex items-center gap-2 rounded-full border border-white/10 bg-black/60 px-4 py-2 text-sm font-bold uppercase tracking-wider text-gray-300 backdrop-blur-md transition-colors hover:text-white sm:left-8 sm:top-8"
+          className="detail-back-button fixed z-[60] flex items-center gap-2 rounded-full border border-white/10 bg-black/60 px-4 py-2 text-sm font-bold uppercase tracking-wider text-gray-300 backdrop-blur-md transition-colors hover:text-white"
         >
           <ArrowLeft size={16} />
           Voltar
@@ -112,7 +112,7 @@ export const RegraDetalhesPage = () => {
   }
 
   return (
-    <div className="min-h-screen w-full text-white relative bg-[#07060d]">
+    <div role="main" className="app-detail-page relative min-h-screen w-full bg-[#07060d] text-white">
       <div className="absolute inset-0 opacity-20" style={{ background: `radial-gradient(circle at center, ${particleColor}, transparent)` }} />
 
       {/* Gradient overlay para legibilidade */}

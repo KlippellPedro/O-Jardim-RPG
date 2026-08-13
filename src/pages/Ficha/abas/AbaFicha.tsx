@@ -578,7 +578,6 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                     type="number"
                     min={1}
                     max={20}
-                    readOnly={!isMestre}
                     value={classeSlot.nivel}
                     onChange={(e) => handleClasseNivelChange(index, parseInt(e.target.value) || 1)}
                     className="w-full bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors text-center"
@@ -587,8 +586,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                 <div className="flex items-center">
                   <button
                     onClick={() => handleRemoverClasse(index)}
-                    disabled={!isMestre}
-                    className="text-gray-600 hover:text-red-500 transition-colors disabled:hidden"
+                    className="text-gray-600 hover:text-red-500 transition-colors"
                     title="Remover classe"
                   >
                     <X size={16} />
@@ -602,7 +600,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
           </div>
           <button
             onClick={handleAdicionarClasse}
-            disabled={!isMestre || classes.length >= 3}
+            disabled={classes.length >= 3}
             className="w-full py-3 rounded-lg border border-yellow-600/30 text-yellow-600 text-xs font-bold uppercase tracking-widest hover:bg-yellow-600/10 transition-colors border-dashed disabled:cursor-not-allowed disabled:opacity-40"
           >
             + Adicionar Classe
@@ -657,7 +655,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
             <div className="flex justify-between mb-4">
               <span className="text-xs font-bold uppercase text-gray-500">Defesa</span>
               <div className="flex items-center gap-1">
-                <HelpCircle size={14} className="text-[#c7a44c] cursor-pointer hover:opacity-100 opacity-50 transition-opacity" onClick={() => setActiveModal({
+                <button type="button" aria-label="Entender cálculo da Defesa" className="rounded text-[#c7a44c] opacity-50 transition-opacity hover:opacity-100" onClick={() => setActiveModal({
                   title: 'DEFESA',
                   description: 'A dificuldade para acertar ataques contra você. Baseia-se na agilidade e equipamentos.',
                   items: [
@@ -668,11 +666,13 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                     { label: 'Outros ajustes', value: ajusteDefesa },
                   ],
                   total: { label: 'Defesa Total', value: defesaTotal },
-                })} />
+                })}>
+                  <HelpCircle size={14} />
+                </button>
                 <AjusteButton label="Defesa" onClick={() => abrirAjustes(chaveAjuste('combate', 'defesa'), 'Defesa')} />
               </div>
             </div>
-            <input type="text" value={defesaTotal} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
+            <input type="text" aria-label="Defesa total" value={defesaTotal} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
             <LabeledInput label="Armadura e Escudo" value={String(resumoEquipamento.defesaEquipamento)} onChange={()=>{}} />
             <div className="mt-2"><LabeledInput label="Penalidade da Defesa" value={String(penalidadeDefesa)} onChange={()=>{}} /></div>
           </div>
@@ -681,7 +681,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
             <div className="flex justify-between mb-4">
               <span className="text-xs font-bold uppercase text-gray-500">Iniciativa</span>
               <div className="flex items-center gap-1">
-                <HelpCircle size={14} className="text-[#c7a44c] cursor-pointer hover:opacity-100 opacity-50 transition-opacity" onClick={() => setActiveModal({
+                <button type="button" aria-label="Entender cálculo da Iniciativa" className="rounded text-[#c7a44c] opacity-50 transition-opacity hover:opacity-100" onClick={() => setActiveModal({
                   title: 'INICIATIVA',
                   description: 'Sua velocidade de reação. Determina quem age primeiro em combate.',
                   items: [
@@ -692,11 +692,13 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                     { label: 'Itens equipados', value: resumoEquipamento.bonusCombate.iniciativa || 0 },
                   ],
                   total: { label: 'Iniciativa Final', value: iniciativaFinal },
-                })} />
+                })}>
+                  <HelpCircle size={14} />
+                </button>
                 <AjusteButton label="Iniciativa" onClick={() => abrirAjustes(chaveAjuste('combate', 'iniciativa'), 'Iniciativa')} />
               </div>
             </div>
-            <input type="text" value={iniciativaFinal} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
+            <input type="text" aria-label="Iniciativa final" value={iniciativaFinal} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
             <LabeledInput label="Bônus / Penalidade" value={String(bonusIniciativa + penalidadeIniciativa)} onChange={()=>{}} />
           </div>
 
@@ -704,7 +706,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
             <div className="flex justify-between mb-4">
               <span className="text-xs font-bold uppercase text-gray-500">Movimento</span>
               <div className="flex items-center gap-1">
-                <HelpCircle size={14} className="text-[#c7a44c] cursor-pointer hover:opacity-100 opacity-50 transition-opacity" onClick={() => setActiveModal({
+                <button type="button" aria-label="Entender cálculo do Movimento" className="rounded text-[#c7a44c] opacity-50 transition-opacity hover:opacity-100" onClick={() => setActiveModal({
                   title: 'MOVIMENTO',
                   description: 'Distância (em metros) que você pode se deslocar durante o combate.',
                   items: [
@@ -715,11 +717,13 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                     { label: 'Condições', value: movimentoBloqueadoPorCondicao(f.condicoesAtivas) ? 'movimento 0' : '' },
                   ],
                   total: { label: 'Movimento Final', value: `${movimentoFinal}m` },
-                })} />
+                })}>
+                  <HelpCircle size={14} />
+                </button>
                 <AjusteButton label="Movimento" onClick={() => abrirAjustes(chaveAjuste('combate', 'movimento'), 'Movimento', [{ nome: nomeAjusteOrigem(f, 'movimento') || 'Origem', valor: ajusteOrigem(f, 'movimento') }])} />
               </div>
             </div>
-            <input type="text" value={`${movimentoFinal} m`} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
+            <input type="text" aria-label="Movimento final" value={`${movimentoFinal} m`} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
             <LabeledInput label="Penalidade de Movimento" value={String(penalidadeSobrecarga)} onChange={()=>{}} />
           </div>
         </div>
@@ -730,11 +734,12 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="flex flex-col gap-2">
             <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Resistências</label>
-            <textarea readOnly={!isMestre} value={f.resistenciasTexto || ''} onChange={(event) => onUpdate(['ficha', 'resistenciasTexto'], event.target.value)} placeholder="Ex.: Fogo 5, Corte 3..." className="bg-[#121118] border border-white/5 rounded-md p-3 text-sm text-gray-300 min-h-[100px] resize-none focus:border-[#c7a44c]/50 read-only:cursor-not-allowed read-only:opacity-70"></textarea>
+            <textarea aria-label="Resistências" readOnly={!isMestre} value={f.resistenciasTexto || ''} onChange={(event) => onUpdate(['ficha', 'resistenciasTexto'], event.target.value)} placeholder="Ex.: Fogo 5, Corte 3..." className="bg-[#121118] border border-white/5 rounded-md p-3 text-sm text-gray-300 min-h-[100px] resize-none focus:border-[#c7a44c]/50 read-only:cursor-not-allowed read-only:opacity-70"></textarea>
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Proficiências</label>
             <textarea
+              aria-label="Proficiências"
               readOnly={!isMestre}
               value={proficienciasTexto}
               onFocus={() => { proficienciasEmFocoRef.current = true; }}
@@ -760,14 +765,14 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                     <div className="text-gray-500 text-[10px] mt-1 italic">Afeta: {c.afeta}</div>
                   </div>
                   <div className="flex gap-1">
-                    <button onClick={() => setActiveModal({ isCondicaoModal: true, condicao: c, editIndex: i })} className="text-gray-600 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => setActiveModal({ isCondicaoModal: true, condicao: c, editIndex: i })} className="text-gray-600 opacity-0 transition-opacity hover:text-white group-hover:opacity-100" aria-label={`Editar condiÃ§Ã£o ${c.nome}`}>
                       <Pencil size={14} />
                     </button>
                     <button onClick={() => {
                       const next = [...(f.condicoesAtivas || [])];
                       next.splice(i, 1);
                       onUpdate(['ficha', 'condicoesAtivas'], next);
-                    }} className="text-gray-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                    }} className="text-gray-600 opacity-0 transition-opacity hover:text-red-500 group-hover:opacity-100" aria-label={`Remover condiÃ§Ã£o ${c.nome}`}>
                       <X size={14} />
                     </button>
                   </div>
@@ -775,7 +780,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               ))}
               <button 
                 onClick={() => setActiveModal({ isCondicaoModal: true })}
-                className="w-full py-2 border border-dashed border-red-500/30 text-red-500/70 hover:bg-red-500/10 hover:text-red-400 rounded-md text-xs uppercase font-bold transition-colors mt-auto"
+                className="w-full py-2 border border-dashed border-red-500/30 text-red-300 hover:bg-red-500/10 hover:text-red-200 rounded-md text-xs uppercase font-bold transition-colors mt-auto"
               >
                 + Adicionar Condição
               </button>
@@ -789,23 +794,23 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
       {/* LINHA 6: EXPERIÊNCIA */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col gap-4 mb-20">
         <SectionTitle title="Experiência" />
-        <div className="flex items-center gap-4">
-           <div className="flex gap-2">
-              <button onClick={() => handleXp(-100)} disabled={!isMestre || xpAtual <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-100</button>
-              <button onClick={() => handleXp(-10)} disabled={!isMestre || xpAtual <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-10</button>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+           <div className="grid grid-cols-2 gap-2 sm:flex">
+              <button onClick={() => handleXp(-100)} disabled={xpAtual <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-100</button>
+              <button onClick={() => handleXp(-10)} disabled={xpAtual <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-10</button>
            </div>
            <div className="flex-1 h-6 bg-[#050508] border border-white/10 rounded-lg relative overflow-hidden flex items-center justify-center group shadow-inner ring-1 ring-inset ring-white/5">
               {/* Verde estilo Minecraft com Gradiente e Glow */}
-              <div 
-                className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-[#059669] to-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all duration-500 ease-out" 
-                style={{ width: `${percentXp}%` }} 
+              <div
+                className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-[#059669] to-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all duration-500 ease-out"
+                style={{ width: `${percentXp}%` }}
               >
                 <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent"></div>
               </div>
               <div className="relative z-10 flex items-center text-white font-bold text-xs font-mono drop-shadow-md">
-                <input 
+                <input
                   type="text"
-                  readOnly={!isMestre}
+                  aria-label="Experiência atual"
                   className="bg-transparent border-none outline-none text-right w-16 text-white font-bold placeholder-white/70 group-hover:bg-white/10 rounded transition-colors"
                   value={xpInput !== undefined ? xpInput : xpAtual}
                   onChange={(e) => setXpInput(e.target.value)}
@@ -816,12 +821,12 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                 <span>{xpProximoNivel ?? xpAtual}</span>
               </div>
            </div>
-           <div className="flex gap-2">
-              <button onClick={() => handleXp(10)} disabled={!isMestre} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">+10</button>
-              <button onClick={() => handleXp(100)} disabled={!isMestre} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">+100</button>
+           <div className="grid grid-cols-2 gap-2 sm:flex">
+              <button onClick={() => handleXp(10)} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">+10</button>
+              <button onClick={() => handleXp(100)} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">+100</button>
            </div>
         </div>
-        {!isMestre && <p className="text-xs text-gray-500">O Mestre registra a experiência. Quando houver XP suficiente, você escolhe em qual classe aplicar o novo nível.</p>}
+        {!isMestre && <p className="text-xs text-gray-500">Você pode registrar seu próprio XP e nível de classe aqui - o Mestre é avisado quando isso muda.</p>}
         {podeSubirNivel && (
           <button
             onClick={() => setActiveModal({ isLevelUpModal: true })}
@@ -847,20 +852,20 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
       )}
 
       {activeModal && activeModal.isCondicaoModal && (
-        <ModalPortal>
+        <ModalPortal onClose={() => setActiveModal(null)}>
         <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
+          className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm"
           onClick={() => setActiveModal(null)}
         >
           <div 
-            className="bg-[#0f0e15] border border-red-500/30 rounded-2xl p-6 w-full max-w-md shadow-[0_0_50px_rgba(239,68,68,0.1)]"
+            className="modal-surface w-full max-w-md overflow-y-auto rounded-2xl border border-red-500/30 bg-[#0f0e15] p-4 shadow-[0_0_50px_rgba(239,68,68,0.1)] custom-scrollbar sm:p-6"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-red-500 font-bold tracking-widest uppercase">
                 {activeModal.editIndex !== undefined ? 'Editar Condição' : 'Nova Condição'}
               </h3>
-              <button onClick={() => setActiveModal(null)} className="text-gray-500 hover:text-white transition-colors">
+              <button type="button" aria-label="Fechar" onClick={() => setActiveModal(null)} className="text-gray-500 hover:text-white transition-colors">
                 <X size={20} />
               </button>
             </div>
@@ -931,18 +936,18 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
       )}
 
       {activeModal && activeModal.isLevelUpModal && (
-        <ModalPortal>
+        <ModalPortal onClose={() => setActiveModal(null)}>
         <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
+          className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm"
           onClick={() => setActiveModal(null)}
         >
           <div 
-            className="bg-[#0f0e15] border border-[#c7a44c]/50 rounded-2xl p-6 w-full max-w-md shadow-[0_0_50px_rgba(199,164,76,0.2)]"
+            className="modal-surface w-full max-w-md overflow-y-auto rounded-2xl border border-[#c7a44c]/50 bg-[#0f0e15] p-4 shadow-[0_0_50px_rgba(199,164,76,0.2)] custom-scrollbar sm:p-6"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-[#c7a44c] font-bold tracking-widest uppercase">Evolução de Nível</h3>
-              <button onClick={() => setActiveModal(null)} className="text-gray-500 hover:text-white transition-colors">
+              <button type="button" aria-label="Fechar" onClick={() => setActiveModal(null)} className="text-gray-500 hover:text-white transition-colors">
                 <X size={20} />
               </button>
             </div>
@@ -962,11 +967,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                         <button
                           key={i}
                           onClick={() => handleSubirNivel({ tipo: 'existente', index: i })}
-                          disabled={
-                            c.nivel >= 20
-                            || (!isMestre && nivelTotalClasses >= 60)
-                            || (!isMestre && c.nivel === 19 && !classes.some((outra, j) => j !== i && Number(outra.nivel) >= 10))
-                          }
+                          disabled={c.nivel >= 20 || nivelTotalClasses >= 60}
                           className="flex justify-between items-center w-full p-3 rounded-lg border border-white/10 hover:border-[#c7a44c]/50 hover:bg-[#c7a44c]/10 transition-colors text-left disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                           <span className="text-white font-bold">{classeObj?.titulo || 'Classe'}</span>

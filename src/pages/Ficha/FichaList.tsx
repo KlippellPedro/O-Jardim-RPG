@@ -9,6 +9,7 @@ import { ICatalogo } from '../../types/catalogo';
 import { nomeExibicaoRaca } from '../../services/racaService';
 
 import { FichaWizard } from './Wizard/FichaWizard';
+import { ModalPortal } from './components/ModalPortal';
 
 const TIPOS_FOTO_ACEITOS = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const TAMANHO_MAXIMO_FOTO = 10 * 1024 * 1024;
@@ -123,27 +124,32 @@ const FichaList: React.FC = () => {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, x: 20 }} 
-      animate={{ opacity: 1, x: 0 }} 
-      exit={{ opacity: 0, x: -20 }} 
-      className="pl-32 pr-12 pt-12 pb-24 relative z-10 w-full min-h-screen flex flex-col max-w-[1600px] mx-auto"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      role="main"
+      className="app-page mx-auto flex max-w-[100rem] flex-col overflow-x-hidden"
     >
       <AnimatePresence>
-        {showWizard && <FichaWizard onClose={() => setShowWizard(false)} />}
+        {showWizard && (
+          <ModalPortal manageFocus={false}>
+            <FichaWizard onClose={() => setShowWizard(false)} />
+          </ModalPortal>
+        )}
       </AnimatePresence>
       
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+      <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
         <div>
-          <h2 className="text-5xl text-primary font-bold tracking-wider mb-2" style={{fontFamily: 'Cinzel, serif'}}>
+          <h1 className="mb-2 text-[clamp(2.25rem,8vw,3rem)] font-bold leading-tight tracking-wider text-primary" style={{fontFamily: 'Cinzel, serif'}}>
             Seus Personagens
-          </h2>
+          </h1>
           <p className="text-gray-400 text-lg max-w-xl">
             Abra uma ficha existente ou crie um novo personagem para a campanha atual.
           </p>
         </div>
         
-        <div className="flex gap-4 items-center">
+        <div className="responsive-action-row flex items-center gap-3 sm:gap-4">
           <button 
             onClick={() => setShowWizard(true)}
             className="relative group px-6 py-3 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/30 transition-all shadow-[0_0_20px_rgba(var(--color-primary),0.1)] hover:shadow-[0_0_30px_rgba(var(--color-primary),0.3)] overflow-hidden flex items-center gap-2"
@@ -154,7 +160,10 @@ const FichaList: React.FC = () => {
           </button>
           
           <button 
+            type="button"
             onClick={() => setShowHelp(!showHelp)}
+            aria-label={showHelp ? 'Ocultar ajuda' : 'Mostrar ajuda'}
+            aria-expanded={showHelp}
             className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors text-gray-400 hover:text-white"
           >
             <HelpCircle size={20} />
@@ -184,6 +193,7 @@ const FichaList: React.FC = () => {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
           <input 
             type="search" 
+            aria-label="Buscar personagens"
             placeholder="Buscar por nome, raça, classe ou árvore..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -243,17 +253,27 @@ const FichaList: React.FC = () => {
           </button>
         </motion.div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,18rem),1fr))] gap-5 sm:gap-8">
           <AnimatePresence>
             {filteredCharacters.map((char, index) => (
               <motion.div
                 key={char.id}
                 onClick={() => navigate(`/ficha/${char.id}`)}
+                role="link"
+                tabIndex={0}
+                aria-label={`Abrir ficha de ${char.nome}`}
+                onKeyDown={(event) => {
+                  if (event.target !== event.currentTarget) return;
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    navigate(`/ficha/${char.id}`);
+                  }
+                }}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4, delay: Math.min(index * 0.1, 0.5) }}
-                className="group flex flex-col bg-[#0b0a12]/60 backdrop-blur-xl border border-white/10 hover:border-primary/40 rounded-3xl overflow-hidden shadow-xl hover:shadow-[0_0_30px_rgba(var(--color-primary),0.15)] transition-all cursor-pointer relative"
+                className="content-auto-list-item performance-expensive-effects group flex flex-col bg-[#0b0a12]/60 backdrop-blur-xl border border-white/10 hover:border-primary/40 rounded-3xl overflow-hidden shadow-xl hover:shadow-[0_0_30px_rgba(var(--color-primary),0.15)] transition-all cursor-pointer relative"
               >
                 {/* Glow Effect */}
                 <div className="absolute -inset-0.5 bg-gradient-to-br from-primary/0 via-primary/10 to-purple-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
@@ -261,7 +281,7 @@ const FichaList: React.FC = () => {
                 <div className="p-6 relative z-10 flex gap-6 items-center border-b border-white/5">
                   <div className="w-20 h-20 rounded-2xl bg-black/50 border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-inner">
                     {char.foto ? (
-                      <img src={char.foto} alt={char.nome} className="w-full h-full object-cover" />
+                      <img src={char.foto} alt={char.nome} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                     ) : (
                       <span className="text-3xl font-bold text-gray-500" style={{fontFamily: 'Cinzel, serif'}}>
                         {char.nome.charAt(0).toUpperCase()}
@@ -275,9 +295,9 @@ const FichaList: React.FC = () => {
                         NV. {char.nivel}
                       </span>
                     </div>
-                    <h3 className="text-2xl font-bold text-white truncate group-hover:text-primary transition-colors" style={{fontFamily: 'Cinzel, serif'}}>
+                    <h2 className="text-2xl font-bold text-white truncate group-hover:text-primary transition-colors" style={{fontFamily: 'Cinzel, serif'}}>
                       {char.nome}
-                    </h3>
+                    </h2>
                     <p className="text-sm text-gray-400 truncate mt-1">
                       {(() => {
                         const racaCatalogo = catalogo?.racas.find((r) => r.id === char.racaId);
@@ -338,6 +358,7 @@ const FichaList: React.FC = () => {
                           }
                         }}
                         className="p-2 rounded-lg hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-colors" title="Excluir"
+                        aria-label={`Excluir ${char.nome}`}
                       >
                         <Trash2 size={18} />
                       </button>

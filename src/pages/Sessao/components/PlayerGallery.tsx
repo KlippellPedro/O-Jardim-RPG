@@ -60,12 +60,12 @@ export const PlayerGallery: React.FC = () => {
               initial={reduceMotion ? false : { opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: reduceMotion ? 0 : Math.min(index * 0.035, 0.2) }}
-              className="rounded-xl border border-white/[0.08] bg-black/25 p-4 transition-colors hover:border-[#c7a44c]/25"
+              className="content-auto-list-item rounded-xl border border-white/[0.08] bg-black/25 p-4 transition-colors hover:border-[#c7a44c]/25"
             >
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-black/40">
                   {character?.foto ? (
-                    <img src={character.foto} alt="" className="h-full w-full object-cover" />
+                    <img src={character.foto} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
                   ) : (
                     <User size={22} className="text-white/30" />
                   )}

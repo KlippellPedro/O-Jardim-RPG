@@ -1,7 +1,8 @@
-import { useDeferredValue, useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { BookMarked, ChevronRight, Search, Sparkles, X } from 'lucide-react';
 import catalogo from '../../../../data/loja/catalogo.json';
+import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 
 interface MonstroEntry {
   id: string;
@@ -110,13 +111,13 @@ const BestiarioDetail = ({ item, compacto = false }: { item: MonstroEntry; compa
   );
 };
 
-const BestiarioListItem = ({ active, item, onSelect }: { active: boolean; item: MonstroEntry; onSelect: (id: string) => void }) => {
+const BestiarioListItem = memo(({ active, item, onSelect }: { active: boolean; item: MonstroEntry; onSelect: (id: string) => void }) => {
   return (
     <button
       type="button"
       onClick={() => onSelect(item.id)}
       aria-pressed={active}
-      className="group flex w-full items-center gap-3 border-b border-white/5 px-4 py-3.5 text-left transition-colors hover:bg-white/5"
+      className="content-auto-list-item group flex w-full items-center gap-3 border-b border-white/5 px-4 py-3.5 text-left transition-colors hover:bg-white/5"
       style={{ backgroundColor: active ? 'rgba(239, 68, 68, 0.1)' : undefined }}
     >
       <span
@@ -132,12 +133,20 @@ const BestiarioListItem = ({ active, item, onSelect }: { active: boolean; item: 
       <ChevronRight size={15} className={active ? 'text-red-400' : 'text-gray-700 group-hover:text-gray-400'} />
     </button>
   );
-};
+});
 
 export const CatalogoBestiario = () => {
+  const mobileDialogRef = useRef<HTMLDivElement>(null);
+  const mobileCloseRef = useRef<HTMLButtonElement>(null);
   const [busca, setBusca] = useState('');
   const [selecionadoId, setSelecionadoId] = useState('');
   const [detalheMovelAberto, setDetalheMovelAberto] = useState(false);
+  useDialogAccessibility({
+    open: detalheMovelAberto,
+    dialogRef: mobileDialogRef,
+    initialFocusRef: mobileCloseRef,
+    onClose: () => setDetalheMovelAberto(false),
+  });
   const buscaAdiada = useDeferredValue(busca.trim().toLocaleLowerCase('pt-BR'));
 
   const itensVisiveis = useMemo(() => BESTIARIO_COMPLETO.filter((item) => {
@@ -163,10 +172,10 @@ export const CatalogoBestiario = () => {
     return () => window.removeEventListener('keydown', fecharComEscape);
   }, [detalheMovelAberto]);
 
-  const selecionar = (id: string) => {
+  const selecionar = useCallback((id: string) => {
     setSelecionadoId(id);
     setDetalheMovelAberto(true);
-  };
+  }, []);
 
   return (
     <section className="mt-16 border-t border-[#c7a44c]/20 pt-10" aria-labelledby="catalogo-bestiario-titulo">
@@ -216,10 +225,10 @@ export const CatalogoBestiario = () => {
       )}
 
       {detalheMovelAberto && selecionado ? createPortal(
-        <div className="fixed inset-0 z-[100] flex items-end bg-black/80 p-3 backdrop-blur-sm md:hidden" role="dialog" aria-modal="true" aria-labelledby="detalhe-bestiario-titulo">
+        <div ref={mobileDialogRef} className="modal-viewport fixed inset-0 z-[100] flex items-end bg-black/80 backdrop-blur-sm md:hidden" role="dialog" aria-modal="true" aria-labelledby="detalhe-bestiario-titulo">
           <button type="button" aria-label="Fechar detalhes" onClick={() => setDetalheMovelAberto(false)} className="absolute inset-0" />
-          <div className="custom-scrollbar relative z-10 max-h-[88dvh] w-full overflow-y-auto rounded-2xl">
-            <button type="button" onClick={() => setDetalheMovelAberto(false)} aria-label="Fechar detalhes" className="absolute right-4 top-4 z-20 rounded-full border border-white/10 bg-black/50 p-2 text-gray-300"><X size={17} /></button>
+          <div className="modal-surface custom-scrollbar relative z-10 w-full overflow-y-auto rounded-2xl">
+            <button ref={mobileCloseRef} type="button" onClick={() => setDetalheMovelAberto(false)} aria-label="Fechar detalhes" className="absolute right-4 top-4 z-20 flex min-h-11 min-w-11 items-center justify-center rounded-full border border-white/10 bg-black/50 text-gray-300"><X size={17} /></button>
             <div id="detalhe-bestiario-titulo" className="sr-only">Detalhes de {selecionado.titulo}</div>
             <BestiarioDetail item={selecionado} compacto />
           </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { ArrowLeft, BookOpen, GitBranch, History } from 'lucide-react';
 import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
 import { ChronicleEvent, WORLD_CHRONICLES } from '../worldChronicles';
@@ -11,19 +11,19 @@ interface GlobalChroniclePageProps {
 }
 
 export const GlobalChroniclePage: React.FC<GlobalChroniclePageProps> = ({ visibleTreeIds, onBack, onOpenTree }) => {
-  const visible = new Set(visibleTreeIds);
-  const events = WORLD_CHRONICLES.linha_tempo_geral.filter((event) => (
+  const visible = useMemo(() => new Set(visibleTreeIds), [visibleTreeIds]);
+  const events = useMemo(() => WORLD_CHRONICLES.linha_tempo_geral.filter((event) => (
     !event.arvores?.length || event.arvores.every((treeId) => visible.has(treeId))
-  ));
+  )), [visible]);
 
-  const labelForTrees = (event: ChronicleEvent) => (event.arvores || [])
+  const labelForTrees = useCallback((event: ChronicleEvent) => (event.arvores || [])
     .filter((id) => visible.has(id))
     .map((id) => ARVORES.find((tree) => tree.id === id)?.nome)
     .filter(Boolean)
-    .join(' · ');
+    .join(' · '), [visible]);
 
   return (
-    <main className="relative z-10 min-h-screen overflow-x-hidden pb-24 pl-20 md:pl-28">
+    <main className="app-detail-page relative z-10 min-h-screen overflow-x-hidden">
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_70%_0%,rgba(202,138,4,0.16),transparent_34%),linear-gradient(180deg,#08070b_0%,#050508_100%)]" />
       <header className="relative mx-auto max-w-6xl px-5 pb-14 pt-8 md:px-10 md:pb-20 md:pt-12">
         <button type="button" onClick={onBack} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-gray-300 transition hover:border-white/30 hover:text-white">
@@ -43,11 +43,11 @@ export const GlobalChroniclePage: React.FC<GlobalChroniclePageProps> = ({ visibl
       </header>
 
       <div className="relative mx-auto grid max-w-6xl gap-8 px-5 md:px-10 lg:grid-cols-[minmax(0,1fr)_280px]">
-        <section className="rounded-3xl border border-white/10 bg-[#0d0c12]/80 p-6 shadow-2xl backdrop-blur-xl md:p-9">
+        <section className="performance-expensive-effects rounded-3xl border border-white/10 bg-[#0d0c12]/80 p-6 shadow-2xl backdrop-blur-xl md:p-9">
           <ChronicleTimeline events={events} color="#d6ae43" eventMeta={labelForTrees} />
         </section>
 
-        <aside className="h-fit rounded-3xl border border-white/10 bg-[#0d0c12]/80 p-5 backdrop-blur-xl lg:sticky lg:top-6">
+        <aside className="performance-expensive-effects h-fit rounded-3xl border border-white/10 bg-[#0d0c12]/80 p-5 backdrop-blur-xl lg:sticky lg:top-6">
           <div className="mb-5 flex items-center gap-2 text-yellow-500">
             <GitBranch size={18} />
             <h2 className="font-bold text-white">Crônicas individuais</h2>
