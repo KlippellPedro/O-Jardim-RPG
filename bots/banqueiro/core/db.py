@@ -4192,21 +4192,6 @@ class Database:
                 "UPDATE leiloes SET mensagem_id=%s WHERE id=%s", (mensagem_id, int(leilao_id))
             )
 
-    def dar_lance_leilao(self, leilao_id: int, guild_id: str, user_id: str, valor: int):
-        """UPDATE atômico: só aplica se `valor` bater o lance atual e o mínimo."""
-        with self._conn() as con:
-            row = con.execute(
-                """
-                UPDATE leiloes
-                SET lance_atual=%s, vencedor_id=%s
-                WHERE id=%s AND guild_id=%s AND status='ativo'
-                  AND %s > lance_atual AND %s >= lance_minimo
-                RETURNING *
-                """,
-                (int(valor), user_id, int(leilao_id), guild_id, int(valor), int(valor)),
-            ).fetchone()
-        return dict(row) if row else None
-
     def dar_lance_leilao_com_custodia(
         self, leilao_id: int, guild_id: str, user_id: str, valor: int
     ):
@@ -4358,18 +4343,6 @@ class Database:
             con.execute("UPDATE leiloes SET status=%s WHERE id=%s", (status, int(leilao_id)))
 
     # ── Investimentos (Títulos do Jardim) ────────────────────────────────────
-    def criar_investimento(self, guild_id: str, user_id: str, moeda: str, valor: int, vence_em) -> dict:
-        with self._conn() as con:
-            row = con.execute(
-                """
-                INSERT INTO investimentos (guild_id, user_id, moeda, valor, vence_em)
-                VALUES (%s, %s, %s, %s, %s)
-                RETURNING *
-                """,
-                (guild_id, user_id, moeda, int(valor), vence_em),
-            ).fetchone()
-        return dict(row)
-
     def comprar_investimento(
         self, guild_id: str, user_id: str, moeda: str, valor: int, vence_em
     ) -> dict:
@@ -4451,26 +4424,6 @@ class Database:
         return dict(inv)
 
     # ── Empréstimos P2P ───────────────────────────────────────────────────
-    def criar_emprestimo(
-        self, guild_id: str, credor_id: str, devedor_id: str, moeda: str,
-        valor: int, juros_diarios: float, prazo_dias: int,
-    ) -> dict:
-        with self._conn() as con:
-            row = con.execute(
-                """
-                INSERT INTO emprestimos
-                    (guild_id, credor_id, devedor_id, moeda, valor_original, valor_devido,
-                     juros_diarios, vence_em)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP + (%s || ' days')::interval)
-                RETURNING *
-                """,
-                (
-                    guild_id, credor_id, devedor_id, moeda,
-                    int(valor), int(valor), float(juros_diarios), int(prazo_dias),
-                ),
-            ).fetchone()
-        return dict(row)
-
     def criar_emprestimo_com_custodia(
         self, guild_id: str, credor_id: str, devedor_id: str, moeda: str,
         valor: int, juros_diarios: float, prazo_dias: int,
@@ -4523,19 +4476,6 @@ class Database:
             ).fetchone()
         return dict(row) if row else None
 
-    def aceitar_emprestimo(self, guild_id: str, emprestimo_id: int, devedor_id: str):
-        with self._conn() as con:
-            row = con.execute(
-                """
-                UPDATE emprestimos
-                SET status='ativo', aceito_em=CURRENT_TIMESTAMP, ultimo_juros_em=CURRENT_TIMESTAMP
-                WHERE id=%s AND guild_id=%s AND devedor_id=%s AND status='pendente_aceite'
-                RETURNING *
-                """,
-                (int(emprestimo_id), guild_id, devedor_id),
-            ).fetchone()
-        return dict(row) if row else None
-
     def aceitar_emprestimo_com_custodia(
         self, guild_id: str, emprestimo_id: int, devedor_id: str
     ):
@@ -4581,18 +4521,6 @@ class Database:
             ).fetchone()
         return dict(atualizado)
 
-    def recusar_emprestimo(self, guild_id: str, emprestimo_id: int, devedor_id: str) -> bool:
-        with self._conn() as con:
-            row = con.execute(
-                """
-                UPDATE emprestimos SET status='recusado'
-                WHERE id=%s AND guild_id=%s AND devedor_id=%s AND status='pendente_aceite'
-                RETURNING id
-                """,
-                (int(emprestimo_id), guild_id, devedor_id),
-            ).fetchone()
-        return row is not None
-
     def recusar_emprestimo_com_devolucao(
         self, guild_id: str, emprestimo_id: int, devedor_id: str
     ) -> bool:
@@ -4621,32 +4549,6 @@ class Database:
                     f"Empréstimo #{emprestimo_id} recusado: custódia devolvida",
                 )
         return True
-
-    def pagar_emprestimo(self, guild_id: str, emprestimo_id: int, valor: int):
-        with self._conn() as con:
-            atual = con.execute(
-                """
-                SELECT valor_devido, credor_id, moeda FROM emprestimos
-                WHERE id=%s AND guild_id=%s AND status='ativo' FOR UPDATE
-                """,
-                (int(emprestimo_id), guild_id),
-            ).fetchone()
-            if atual is None:
-                return None
-            pago = min(int(valor), int(atual["valor_devido"]))
-            restante = int(atual["valor_devido"]) - pago
-            novo_status = "quitado" if restante <= 0 else "ativo"
-            con.execute(
-                "UPDATE emprestimos SET valor_devido=%s, status=%s WHERE id=%s",
-                (restante, novo_status, int(emprestimo_id)),
-            )
-        return {
-            "pago": pago,
-            "restante": restante,
-            "credor_id": atual["credor_id"],
-            "moeda": atual["moeda"],
-            "quitado": restante <= 0,
-        }
 
     def pagar_emprestimo_atomico(
         self, guild_id: str, emprestimo_id: int, devedor_id: str, valor: int

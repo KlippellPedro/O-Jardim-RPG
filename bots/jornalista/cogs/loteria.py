@@ -47,7 +47,7 @@ class Loteria(commands.Cog):
             return
         for guild in self.bot.guilds:
             try:
-                await self._sortear_guild(guild)
+                await self._sortear_guild(guild, agora)
             except Exception:
                 log.exception("erro no sorteio da loteria (guild %s)", guild.id)
 
@@ -55,7 +55,7 @@ class Loteria(commands.Cog):
     async def _antes(self):
         await self.bot.wait_until_ready()
 
-    async def _sortear_guild(self, guild: discord.Guild) -> None:
+    async def _sortear_guild(self, guild: discord.Guild, agora: datetime) -> None:
         gid = str(guild.id)
         db = self.bot.db
         bilhetes = db.listar_bilhetes_loteria(gid)
@@ -92,7 +92,7 @@ class Loteria(commands.Cog):
             guild_id=gid,
             embed=emb,
             origem="loteria_resultado",
-            dedupe_key=f"loteria:{gid}:{datetime.now().date().isoformat()}",
+            dedupe_key=f"loteria:{gid}:{agora.date().isoformat()}",
             categoria="dinheiro",
             canal_id=str(canal.id) if isinstance(canal, discord.TextChannel) else None,
             automacao="loteria_resultado",

@@ -53,7 +53,7 @@ AUTOMACOES = {
     "loteria_resultado": ("Resultado da Loteria Dominical", True),
     "boas_vindas": ("Boas-vindas", True),
     "despedidas": ("Despedidas", True),
-    "resumo_semanal": ("Resumo semanal da campanha", False),
+    "resumo_semanal": ("Resumo semanal da campanha", True),
     "pautas_agendadas": ("Pautas agendadas", True),
     "rumores_baus": ("Baús agendados por rumores", True),
     "clima_auto": ("Clima automático", False),
@@ -539,7 +539,7 @@ class Jornal(commands.Cog):
         iso = agora.isocalendar()
         for guild in self.bot.guilds:
             gid = str(guild.id)
-            if not self.bot.db.automacao_ativa(gid, "resumo_semanal", False):
+            if not self.bot.db.automacao_ativa(gid, "resumo_semanal", AUTOMACOES["resumo_semanal"][1]):
                 continue
             if not self.bot.db.ciclo_guild_devido(gid, "resumo_semanal", 168):
                 continue

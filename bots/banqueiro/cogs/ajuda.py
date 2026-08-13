@@ -125,6 +125,7 @@ CATEGORIAS = {
             ("/juros_cofre <taxa_percent>", "Bônus extra de juros no cofre (o cofre já rende automaticamente todo dia)."),
             ("/seteconomia", "Ajusta taxas de venda, saque, juros, leilão e loteria deste servidor."),
             ("/economia_diagnostico", "Painel privado com circulação, concentração, dívida, atividade e custódia."),
+            ("/banco_status", "Painel privado com câmbio, roubo, taxas e catálogo configurados neste servidor."),
             ("/catalogo_recarregar", "Recarrega o catálogo salvo no banco central."),
             ("/catalogo_republicar", "Re-semeia o catálogo do arquivo (publica adições/edições e desativa removidos)."),
         ],

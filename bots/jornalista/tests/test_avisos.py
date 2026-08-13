@@ -1,4 +1,10 @@
-"""Roteamento dos avisos econômicos recebidos do Banqueiro."""
+"""Roteamento dos avisos econômicos recebidos do Banqueiro.
+
+P14 da auditoria 2026-08: a entrega deixou de ser `canal.send()` direto e
+passou a ser `publicacoes.publicar_ou_enfileirar` (fila durável) — os testes
+que inspecionavam o canal diretamente passaram a inspecionar a chamada à
+fila. O comportamento da fila em si (retry, backoff, dedupe) já tem
+cobertura própria em test_novas_automacoes.py e test_loteria.py."""
 
 from __future__ import annotations
 
@@ -9,6 +15,7 @@ from pathlib import Path
 BASE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE))
 
+import cogs.avisos as avisos_mod
 from cogs.avisos import Avisos
 from cogs.jornal import CATEGORIAS_CANAL
 from core import ui
@@ -59,7 +66,15 @@ def test_categoria_dinheiro_aparece_no_jornal_canal():
     )
 
 
-def test_avisos_do_banqueiro_usam_o_canal_de_dinheiro():
+def test_avisos_do_banqueiro_usam_o_canal_de_dinheiro(monkeypatch):
+    chamadas = []
+
+    async def _fake_publicar_ou_enfileirar(bot, **kwargs):
+        chamadas.append(kwargs)
+        return "entregue"
+
+    monkeypatch.setattr(avisos_mod.publicacoes, "publicar_ou_enfileirar", _fake_publicar_ou_enfileirar)
+
     db = _DBFake()
     canal = _CanalFake()
     cog = _criar_cog(db, canal)
@@ -68,19 +83,31 @@ def test_avisos_do_banqueiro_usam_o_canal_de_dinheiro():
 
     assert db.rotas_consultadas == [("123", "dinheiro")]
     assert db.publicados == [7]
-    assert len(canal.embeds) == 1
+    assert len(chamadas) == 1
+    assert chamadas[0]["guild_id"] == "123"
+    assert chamadas[0]["categoria"] == "dinheiro"
+    assert chamadas[0]["dedupe_key"] == "aviso:7"
+    assert chamadas[0]["automacao"] == "avisos_economicos"
 
 
-def test_aviso_usa_o_design_system_em_vez_de_embed_cru():
+def test_aviso_usa_o_design_system_em_vez_de_embed_cru(monkeypatch):
     """Regressão: avisos.py montava discord.Embed() cru com laranja fixo e
     repetia a marca do bot na mão em vez de usar ui.embed()/ui.MARCA."""
+    chamadas = []
+
+    async def _fake_publicar_ou_enfileirar(bot, **kwargs):
+        chamadas.append(kwargs)
+        return "entregue"
+
+    monkeypatch.setattr(avisos_mod.publicacoes, "publicar_ou_enfileirar", _fake_publicar_ou_enfileirar)
+
     db = _DBFake()
     canal = _CanalFake()
     cog = _criar_cog(db, canal)
 
     asyncio.run(cog._publicar_guild("123"))
 
-    emb = canal.embeds[0]
+    emb = chamadas[0]["embed"]
     assert emb.footer.text == ui.MARCA
     assert emb.description == "O cofre rendeu juros."
     assert not emb.title
@@ -96,3 +123,24 @@ def test_sem_destino_avisos_continuam_pendentes():
     assert db.rotas_consultadas == [("123", "dinheiro")]
     assert db.publicados == []
     assert canal.embeds == []
+
+
+def test_falha_ao_enfileirar_nao_marca_aviso_como_publicado(monkeypatch):
+    """P14: durabilidade exige que marcar_aviso_publicado só rode depois que
+    a fila aceitar o aviso — se o enfileiramento em si falhar (ex.: banco
+    fora do ar), o aviso tem que continuar pendente pro próximo minuto
+    tentar de novo, nunca sumir como se tivesse sido publicado."""
+    async def _fake_publicar_ou_enfileirar_com_falha(bot, **kwargs):
+        raise RuntimeError("o PostgreSQL nao respondeu")
+
+    monkeypatch.setattr(
+        avisos_mod.publicacoes, "publicar_ou_enfileirar", _fake_publicar_ou_enfileirar_com_falha
+    )
+
+    db = _DBFake()
+    canal = _CanalFake()
+    cog = _criar_cog(db, canal)
+
+    asyncio.run(cog._publicar_guild("123"))
+
+    assert db.publicados == []

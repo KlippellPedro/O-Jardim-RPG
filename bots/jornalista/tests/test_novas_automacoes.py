@@ -23,7 +23,11 @@ def test_agendamento_aceita_formatos_documentados_e_converte_para_utc():
     assert jornal_mod._parse_agendamento("amanhã à noite") is None
 
 
-def test_resumo_semanal_comeca_desligado_e_entrevista_ligada():
+def test_resumo_semanal_comeca_ligado_por_padrao_igual_entrevista():
+    """B2/2026-08: resumo semanal deixou de ser a única automação desligada
+    por padrão — é a única automação 100% baseada em eventos reais
+    (extrato/baús/desafios/entrevistas agregados), então liga junto com o
+    resto. O mestre continua podendo desligar via /jornal automacao."""
     class _DB:
         def get_clima_auto(self, _gid):
             return False
@@ -40,7 +44,7 @@ def test_resumo_semanal_comeca_desligado_e_entrevista_ligada():
     cog = object.__new__(jornal_mod.Jornal)
     cog.bot = type("Bot", (), {"db": _DB()})()
     assert cog._automacao_ativa("1", "entrevistas") is True
-    assert cog._automacao_ativa("1", "resumo_semanal") is False
+    assert cog._automacao_ativa("1", "resumo_semanal") is True
 
 
 def test_publicacao_desativada_fica_pausada_sem_contar_como_falha():
@@ -64,6 +68,31 @@ def test_publicacao_desativada_fica_pausada_sem_contar_como_falha():
     }
     assert asyncio.run(publicacoes.tentar_publicacao(bot, item)) == "adiada"
     assert db.adiadas == [(7, 30)]
+
+
+def test_resumo_semanal_e_entregue_por_padrao_na_fila_nao_fica_adiado():
+    """B2/2026-08, 3º ponto da regra: `tentar_publicacao` tinha um caso
+    especial hardcoded (`padrao=(automacao != "resumo_semanal")`) que
+    mantinha resumo_semanal desligado por padrão na fila mesmo depois de
+    AUTOMACOES["resumo_semanal"] virar True — só esse ponto ficando
+    desatualizado já bastava pra nenhum resumo ser publicado de verdade,
+    mesmo com /jornal automacoes mostrando "ligado". Sem override registrado
+    pra essa guild (padrao é o que decide), a publicação não pode cair em
+    "adiada"."""
+    class _DB:
+        def automacao_ativa(self, _gid, _tipo, padrao=True):
+            return padrao  # sem override: usa o default que tentar_publicacao mandou
+
+        def reivindicar_publicacao(self, _publicacao_id):
+            return None  # corta aqui: só precisamos provar que passou do gate de ativação
+
+    bot = type("Bot", (), {"db": _DB()})()
+    item = {
+        "id": 9, "guild_id": "1", "automacao": "resumo_semanal", "payload": {},
+    }
+    resultado = asyncio.run(publicacoes.tentar_publicacao(bot, item))
+    assert resultado != "adiada"
+    assert resultado == "ocupada"
 
 
 def test_publicacao_ja_reivindicada_nao_e_enviada_duas_vezes():

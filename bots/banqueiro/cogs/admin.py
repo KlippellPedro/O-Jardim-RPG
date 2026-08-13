@@ -344,20 +344,6 @@ class Admin(commands.Cog):
             ephemeral=True,
         )
 
-    async def cog_app_command_error(
-        self,
-        interaction: discord.Interaction,
-        error: app_commands.AppCommandError,
-    ) -> None:
-        if isinstance(error, app_commands.MissingPermissions):
-            mensagem = "Esse comando exige a permissão **Gerenciar Servidor**."
-            if interaction.response.is_done():
-                await interaction.followup.send(mensagem, ephemeral=True)
-            else:
-                await interaction.response.send_message(mensagem, ephemeral=True)
-            return
-        raise error
-
     @app_commands.command(
         name="juros_cofre",
         description="[Mestre] Bônus extra de juros no cofre, além do rendimento automático diário.",
@@ -474,6 +460,55 @@ class Admin(commands.Cog):
             ),
             view=None,
         )
+
+    @app_commands.command(
+        name="banco_status",
+        description="[Mestre] Painel de diagnóstico: câmbio, roubo, taxas e catálogo configurados neste servidor.",
+    )
+    @app_commands.default_permissions(manage_guild=True)
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def banco_status(self, interaction):
+        sid = str(interaction.guild_id)
+        db = self.bot.db
+
+        rate, taxa_cambio = db.get_cambio(sid)
+        cambio_auto = db.get_cambio_auto(sid)
+        linhas_cambio = [
+            f"☉ 1 Solares = ☾ **{rate} Lunaris** · taxa de conversão **{round(taxa_cambio * 100, 1)}%**",
+            f"Ajuste automático: {'🟢 ligado' if cambio_auto else '🔴 desligado'}",
+        ]
+
+        roubo = db.get_config_roubo(sid)
+        linhas_roubo = [
+            f"Chance base contra Segurança Básica: **{round(roubo['chance_base'] * 100, 1)}%**",
+            f"Cooldown entre tentativas: **{roubo['cooldown_horas']}h**",
+        ]
+
+        cfg = db.get_economia_config(sid)
+        linhas_taxas = [
+            f"Saque do cofre: **{int(cfg['cofre_saque_taxa'] * 100)}%**",
+            f"Rendimento automático do cofre: **{int(cfg['juros_cofre_taxa'] * 100)}%/dia**",
+            f"Corte do leilão: **{int(cfg['leilao_corte'] * 100)}%**",
+            f"Loteria: bilhete ☾ **{cfg['loteria_preco_bilhete']}** · corte **{int(cfg['loteria_corte'] * 100)}%**",
+        ]
+
+        total_itens = len(self.bot.catalogo.listar()) if self.bot.catalogo else 0
+        linhas_catalogo = [
+            f"Itens ativos carregados: **{total_itens}**",
+            "Recarregue com `/catalogo_recarregar` (do banco) ou `/catalogo_republicar` (do arquivo) "
+            "para atualizar este número.",
+        ]
+
+        emb = ui.embed(
+            "🏦 Status do Banco Lunar", categoria="economia",
+            descricao="Painel de leitura: nenhum valor aqui é alterado por este comando.",
+        )
+        emb.add_field(name="💱 Câmbio", value="\n".join(linhas_cambio), inline=False)
+        emb.add_field(name="🥷 Roubo", value="\n".join(linhas_roubo), inline=False)
+        emb.add_field(name="💰 Taxas", value="\n".join(linhas_taxas), inline=False)
+        emb.add_field(name="📦 Catálogo", value="\n".join(linhas_catalogo), inline=False)
+        await interaction.response.send_message(embed=emb, ephemeral=True)
+
 
 async def setup(bot):
     await bot.add_cog(Admin(bot))

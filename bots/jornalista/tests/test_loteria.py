@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import asyncio
 import sys
+from datetime import datetime
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
@@ -17,6 +18,7 @@ sys.path.insert(0, str(BASE))
 
 from cogs.loteria import Loteria, sortear_vencedor
 from core.db import Database, LOTERIA_CORTE_CASA_PADRAO, LOTERIA_PRECO_BILHETE_PADRAO
+from core.loot import TZ
 
 LOTERIA_PRECO_BILHETE = LOTERIA_PRECO_BILHETE_PADRAO
 LOTERIA_CORTE_CASA = LOTERIA_CORTE_CASA_PADRAO
@@ -64,7 +66,8 @@ class _Guild:
 def _rodar_sorteio(db):
     cog = object.__new__(Loteria)
     cog.bot = type("Bot", (), {"db": db})()
-    asyncio.run(cog._sortear_guild(_Guild()))
+    agora = datetime.now(TZ) if TZ else datetime.now()
+    asyncio.run(cog._sortear_guild(_Guild(), agora))
 
 
 def test_database_do_jornalista_expoe_registrar_extrato():
@@ -109,6 +112,43 @@ def test_sorteio_sem_bilhetes_nao_faz_nada():
     db = _DBFake([])
     _rodar_sorteio(db)
     assert db.chamadas == []
+
+
+def test_dedupe_key_usa_o_mesmo_fuso_do_sorteio_nao_a_hora_local_ingenua():
+    """P16 da auditoria 2026-08: a dedupe_key usava datetime.now() (hora
+    local ingênua do host) enquanto o ciclo decide "é domingo?" com
+    datetime.now(TZ) (America/Sao_Paulo). Perto da meia-noite, um host
+    rodando em UTC podia gerar uma dedupe_key com a data errada. Agora as
+    duas vêm do mesmo `agora`, então isso não pode mais divergir."""
+    import cogs.loteria as loteria_mod
+
+    db = _DBFake([{"user_id": "42", "quantidade": 1}])
+
+    def _automacao_ativa(guild_id, tipo, padrao=True):
+        return True
+
+    db.automacao_ativa = _automacao_ativa
+    db.get_canal_categoria = lambda guild_id, categoria: None
+
+    chamadas = []
+
+    async def _fake_publicar_ou_enfileirar(*args, **kwargs):
+        chamadas.append(kwargs)
+
+    original = loteria_mod.publicacoes.publicar_ou_enfileirar
+    loteria_mod.publicacoes.publicar_ou_enfileirar = _fake_publicar_ou_enfileirar
+    try:
+        cog = object.__new__(Loteria)
+        cog.bot = type("Bot", (), {"db": db})()
+        # Domingo às 23h59 em São Paulo: se a dedupe_key usasse hora UTC
+        # ingênua do host, cairia em segunda-feira de madrugada em UTC.
+        agora = datetime(2026, 8, 9, 23, 59, tzinfo=TZ) if TZ else datetime(2026, 8, 9, 23, 59)
+        asyncio.run(cog._sortear_guild(_Guild(), agora))
+    finally:
+        loteria_mod.publicacoes.publicar_ou_enfileirar = original
+
+    assert len(chamadas) == 1
+    assert chamadas[0]["dedupe_key"] == "loteria:100:2026-08-09"
 
 
 def test_vencedor_e_ponderado_pela_quantidade_de_bilhetes():

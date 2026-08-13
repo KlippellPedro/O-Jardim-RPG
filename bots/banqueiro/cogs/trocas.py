@@ -20,6 +20,7 @@ from discord.ext import commands
 from core import economia, ui
 from core.db import SaldoInsuficiente
 from core.inventario import CofreIndisponivel, ItemIndisponivel
+from cogs.servicos import enviar_alerta_banco
 
 SIMBOLO = ui.SIMBOLO_MOEDA
 MOEDAS_CHOICES = ui.MOEDAS_CHOICES
@@ -328,6 +329,14 @@ class Trocas(commands.Cog):
                                  f"por {simb} **{preco} {moeda_nome}**.\n{para.mention}, aceita?")
         await interaction.response.send_message(content=para.mention, embed=emb, view=view)
         view.message = await interaction.original_response()
+        await enviar_alerta_banco(
+            self.bot,
+            g,
+            para,
+            "mercado",
+            f"🤝 Em **{interaction.guild.name}**: {interaction.user.display_name} quer te vender "
+            f"**{titulo}** por {simb} **{preco} {moeda_nome}**. Responda no canal onde a oferta foi feita.",
+        )
 
     @oferecer.autocomplete("o_que")
     async def oferecer_ac(self, interaction, current: str):
@@ -499,6 +508,14 @@ class Trocas(commands.Cog):
         )
         await interaction.response.send_message(content=membro.mention, embed=emb, view=view)
         view.message = await interaction.original_response()
+        await enviar_alerta_banco(
+            self.bot,
+            g,
+            membro,
+            "mercado",
+            f"🤝 Em **{interaction.guild.name}**: {interaction.user.display_name} propôs trocar "
+            f"**{meu_titulo}** por **{dele_titulo}** com você. Responda no canal onde a proposta foi feita.",
+        )
 
     @trocar.autocomplete("meu_item")
     async def trocar_meu_ac(self, interaction, current: str):

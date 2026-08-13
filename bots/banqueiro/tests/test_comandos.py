@@ -36,6 +36,7 @@ COMANDOS_ESPERADOS = {
     "abrir_todos",
     "ajuda",
     "alertas_banco",
+    "banco_status",
     "cambio_auto",
     "cambio_ver",
     "campanha_vincular",

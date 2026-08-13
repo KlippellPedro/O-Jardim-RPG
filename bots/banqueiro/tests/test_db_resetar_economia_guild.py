@@ -54,7 +54,7 @@ def test_reseta_toda_a_economia_local_do_servidor_sem_tocar_em_outro():
     db.creditar_cofre(g1, u1, "Lunaris", 30)
     db.set_cofre_tier(g1, u1, "avancado")
     leilao = db.criar_leilao(g1, u1, "item", "espada", "Espada", "Lunaris", 10, "111", agora + timedelta(hours=1))
-    db.criar_investimento(g1, u1, "Lunaris", 50, agora + timedelta(days=1))
+    db.comprar_investimento(g1, u1, "Lunaris", 50, agora + timedelta(days=1))
     saldo_g2_antes = db.get_saldo(g2, u2, "Lunaris")
     with db._conn() as con:
         con.execute(

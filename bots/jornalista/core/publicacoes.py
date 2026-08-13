@@ -92,9 +92,11 @@ async def tentar_publicacao(bot, publicacao: dict) -> str:
     elif automacao == "baus_auto":
         ativa = bool(bot.db.get_baus_config(gid).get("ativo"))
     else:
-        ativa = not automacao or bot.db.automacao_ativa(
-            gid, automacao, padrao=(automacao != "resumo_semanal")
-        )
+        # Todas as automações que chegam aqui (fora de clima_auto/estacao_auto/
+        # baus_auto, tratadas acima) vêm ligadas por padrão em AUTOMACOES
+        # (cogs/jornal.py) — inclusive resumo_semanal, que era a única exceção
+        # até B2/2026-08 e por isso tinha um caso especial aqui.
+        ativa = not automacao or bot.db.automacao_ativa(gid, automacao, padrao=True)
     if not ativa:
         bot.db.adiar_publicacao(publicacao["id"], 30)
         return "adiada"

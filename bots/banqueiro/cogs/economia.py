@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import asyncio
 import logging
-import math
 import random
 import time
 from datetime import datetime, timedelta, timezone
@@ -701,247 +700,6 @@ class Economia(commands.Cog):
     @monstro.autocomplete("busca")
     async def _ac_monstro(self, interaction, current: str):
         return await self._autocomplete_catalogo(interaction, current, tipo="monstro")
-
-    # Implementação antiga mantida privada por uma versão para facilitar a
-    # leitura de históricos e um rollback sem tocar nos inventários. Sem o
-    # decorator ela não é publicada como slash command: a Loja do site é a
-    # única origem de compra e revenda direta de itens.
-    async def _loja_legada(self, interaction, categoria: Optional[app_commands.Choice[str]] = None):
-        itens = self.bot.catalogo.listar()
-        alvo = categoria.value if categoria else "todos"
-        if alvo != "todos":
-            itens = [i for i in itens if i.categoria == alvo]
-        if not itens:
-            await interaction.response.send_message("Nada à venda nessa categoria ainda.", ephemeral=True)
-            return
-        sid, uid = _sid(interaction), str(interaction.user.id)
-        self.bot.db.garantir_jogador(sid, uid)
-        reputacao = self.bot.db.get_cartao(sid, uid)["credito"]
-        await interaction.response.send_message(
-            "A loja de itens do Discord foi desativada. Use a Loja do site.",
-            ephemeral=True,
-        )
-
-    async def _comprar_legado(self, interaction, item: str, moeda: Optional[app_commands.Choice[str]] = None):
-        moeda_nome = moeda.value if moeda else "Lunaris"
-        await self._executar_compra(interaction, item, moeda_nome)
-
-    async def _executar_compra(self, interaction, item: str, moeda_nome: str):
-        """Fluxo legado privado, preservado temporariamente para compatibilidade."""
-        it = self.bot.catalogo.get(item)
-        if it is None:
-            await interaction.response.send_message(f"Não achei o item `{item}`.", ephemeral=True)
-            return
-        preco = economia.resolver_preco(it.preco, moeda_nome)
-        if preco is None:
-            await interaction.response.send_message(f"**{it.titulo}** não tem preço em {moeda_nome}. Preço: {fmt_preco(it.preco)}.", ephemeral=True)
-            return
-        sid, uid = _sid(interaction), str(interaction.user.id)
-        db = self.bot.db
-        db.garantir_jogador(sid, uid)
-        cartao = db.get_cartao(sid, uid)
-        requisito = economia.reputacao_minima_raridade(it.raridade)
-        if requisito > 0 and cartao["credito"] < requisito:
-            await interaction.response.send_message(
-                f"🔒 **{it.titulo}** é {it.raridade_rotulo} e exige **{requisito} de reputação bancária**. "
-                f"Sua reputação atual é **{cartao['credito']}**. Pague faturas no prazo para evoluir.",
-                ephemeral=True,
-            )
-            return
-        # Capacidade agora vale igual nos dois modos: antes só era checada
-        # sem integração ligada, deixando o cofre da plataforma efetivamente
-        # ilimitado por compra. É uma checagem consultiva (o depósito em si
-        # não recusa por capacidade), mas fecha a inconsistência com /trocar,
-        # que já respeitava capacidade nos dois modos.
-        if not await self.bot.inventario.cabe(sid, uid, 1):
-            tier = db.get_cofre_tier(sid, uid)
-            await interaction.response.send_message(f"Seu cofre ({economia.cofre_por_id(tier)['nome']}) está cheio. Use `/cofre_melhorar`.", ephemeral=True)
-            return
-        benef = economia.beneficios_reputacao(cartao["credito"])
-        if economia.mesma_moeda(moeda_nome, "Lunaris"):
-            db.converter_faturas_vencidas(sid)
-            limite = economia.limite_efetivo(cartao["tier"], cartao["credito"])
-            pendente = db.get_total_faturas_pendentes(sid, uid)
-            cotacao = economia.cotar_pagamento(
-                preco,
-                db.get_saldo(sid, uid, "Lunaris"),
-                limite,
-                db.get_divida(sid, uid),
-                pendente,
-            )
-            if not cotacao["pode_comprar"]:
-                await interaction.response.send_message(
-                    f"💸 A compra custa ☾ **{preco}**, mas você tem ☾ **{cotacao['saldo_carteira']}** "
-                    f"na carteira e ☾ **{cotacao['limite_disponivel']}** de limite disponível. "
-                    "Carteira + limite não cobrem o valor inteiro.",
-                    ephemeral=True,
-                )
-                return
-            if cotacao["precisa_confirmacao"]:
-                compra_id = str(interaction.id)
-
-                async def confirmar(interacao_botao: discord.Interaction):
-                    cartao_atual = db.get_cartao(sid, uid)
-                    if requisito > 0 and cartao_atual["credito"] < requisito:
-                        await interacao_botao.followup.send(
-                            "🔒 Sua reputação mudou e não permite mais esta compra.", ephemeral=True
-                        )
-                        return
-                    if not await self.bot.inventario.cabe(sid, uid, 1):
-                        await interacao_botao.followup.send(
-                            "Seu cofre ficou cheio antes da confirmação. Nada foi cobrado.", ephemeral=True
-                        )
-                        return
-                    limite_atual = economia.limite_efetivo(
-                        cartao_atual["tier"], cartao_atual["credito"]
-                    )
-                    try:
-                        pagamento = db.cobrar_compra_com_fatura(
-                            sid,
-                            uid,
-                            preco,
-                            limite_atual,
-                            f"Compra: {it.titulo}",
-                            f"item:{compra_id}",
-                        )
-                    except SaldoInsuficiente as exc:
-                        await interacao_botao.followup.send(f"💸 {exc}", ephemeral=True)
-                        return
-                    if pagamento["repetido"]:
-                        await interacao_botao.followup.send(
-                            "Esta compra já tinha sido processada.", ephemeral=True
-                        )
-                        return
-                    await self._finalizar_compra_item(
-                        interacao_botao,
-                        it,
-                        moeda_nome,
-                        preco,
-                        benef,
-                        pagamento,
-                        compra_id=compra_id,
-                        resposta_ja_deferida=True,
-                    )
-
-                view = ConfirmarFinanciamentoView(
-                    autor_id=interaction.user.id,
-                    executar=confirmar,
-                )
-                await interaction.response.send_message(
-                    embed=embed_confirmacao_financiamento(f"Compra de {it.titulo}", cotacao),
-                    view=view,
-                    ephemeral=True,
-                )
-                return
-
-        try:
-            saldo = db.debitar(sid, uid, moeda_nome, preco)
-        except SaldoInsuficiente as e:
-            await interaction.response.send_message(f"💸 {e}", ephemeral=True)
-            return
-        await self._finalizar_compra_item(
-            interaction,
-            it,
-            moeda_nome,
-            preco,
-            benef,
-            {
-                "saldo": saldo,
-                "carteira_usada": preco,
-                "financiado": 0,
-                "vence_em": None,
-            },
-            compra_id=str(interaction.id),
-        )
-
-    async def _finalizar_compra_item(
-        self,
-        interaction,
-        it,
-        moeda_nome: str,
-        preco: int,
-        benef: dict,
-        pagamento: dict,
-        *,
-        compra_id: str,
-        resposta_ja_deferida: bool = False,
-    ):
-        sid, uid = _sid(interaction), str(interaction.user.id)
-        db = self.bot.db
-        # A entrega no cofre central é uma chamada HTTP que pode passar dos 3s.
-        if not resposta_ja_deferida:
-            await interaction.response.defer()
-        # Inventario.dar() nunca falha de um jeito que exija estorno: cai pro
-        # cofre local em qualquer problema da plataforma (mesma regra do
-        # Jornalista pra recompensa de baú): o dinheiro já debitado sempre
-        # corresponde a um item entregue em algum lugar.
-        destino = await self.bot.inventario.dar(
-            sid, uid, it.id, it.titulo, it.tipo, 1,
-            dados={**it.conteudo, "raridade": it.raridade, "origem": "loja-discord"},
-            motivo=f"Compra de {it.titulo} no Banqueiro",
-            chave=f"compra-item:{compra_id}",
-        )
-        db.registrar_extrato(sid, uid, -preco, moeda_nome, f"Compra: {it.titulo}")
-        destino_central = destino == "cofre"
-        cashback = 0
-        if benef["cashback"] > 0 and economia.mesma_moeda(moeda_nome, "Lunaris"):
-            cashback = math.floor(preco * benef["cashback"])
-            if cashback > 0:
-                db.creditar(sid, uid, "Lunaris", cashback)
-                db.registrar_extrato(sid, uid, cashback, "Lunaris", "Cashback do Cartão Lunar")
-        simb = SIMBOLO.get(economia.normalizar(moeda_nome), "")
-        linhas = [f"Você {'contratou' if it.acao == 'Contratar' else 'comprou'} **{it.titulo}** por {simb} {preco} {moeda_nome}."]
-        linhas.append(
-            "O item foi para o cofre da sua conta; escolha o personagem no site."
-            if destino_central
-            else "O item foi para o cofre antigo do bot; vincule sua conta para usar a ficha."
-        )
-        if cashback:
-            linhas.append(f"💳 Cashback: +{cashback} Lunaris.")
-        if pagamento["financiado"] > 0:
-            vence_ts = int(pagamento["vence_em"].timestamp())
-            linhas.append(
-                f"🧾 Fatura criada: ☾ **{pagamento['financiado']} Lunaris** · vence <t:{vence_ts}:R>. "
-                "Pague com `/fatura_pagar` para ganhar reputação."
-            )
-        emb = ui.embed(f"{ui.icone_raridade(it.raridade)} Compra realizada!", categoria="loja",
-                        descricao="\n".join(linhas), cor=ui.cor_raridade(it.raridade))
-        await interaction.followup.send(embed=emb, ephemeral=pagamento["financiado"] > 0)
-
-    async def _vender_legado(self, interaction, item: str, moeda: Optional[app_commands.Choice[str]] = None):
-        moeda_nome = moeda.value if moeda else "Lunaris"
-        it = self.bot.catalogo.get(item)
-        if it is None:
-            await interaction.response.send_message(f"Não achei o item `{item}` no catálogo.", ephemeral=True)
-            return
-        preco = economia.resolver_preco(it.preco, moeda_nome)
-        if preco is None:
-            await interaction.response.send_message(f"**{it.titulo}** não tem preço em {moeda_nome}.", ephemeral=True)
-            return
-        sid, uid = _sid(interaction), str(interaction.user.id)
-        # Retirar ANTES de creditar: a ordem inversa pagaria por um item que,
-        # em modo "cofre" (chamada HTTP), pode nunca ter saído de fato.
-        await interaction.response.defer()
-        try:
-            await self.bot.inventario.tirar(
-                sid, uid, it.id, 1, motivo=f"Venda: {it.titulo}", chave=f"venda-item:{interaction.id}"
-            )
-        except ItemIndisponivel:
-            await interaction.followup.send(f"Você não tem **{it.titulo}** no inventário.", ephemeral=True)
-            return
-        except CofreIndisponivel:
-            await interaction.followup.send(
-                "O cofre central não respondeu. Nada foi vendido: tente de novo em instantes.", ephemeral=True
-            )
-            return
-        venda_ratio = self.bot.db.get_economia_config(sid)["venda_ratio"]
-        reembolso = math.floor(preco * venda_ratio)
-        self.bot.db.creditar(sid, uid, moeda_nome, reembolso)
-        self.bot.db.registrar_extrato(sid, uid, reembolso, moeda_nome, f"Venda: {it.titulo}")
-        simb = SIMBOLO.get(economia.normalizar(moeda_nome), "")
-        emb = ui.embed("Venda realizada!", categoria="loja",
-            descricao=f"Você vendeu **{it.titulo}** por {simb} {reembolso} {moeda_nome} ({int(venda_ratio*100)}%).")
-        await interaction.followup.send(embed=emb)
 
     @app_commands.command(description="Mostra seu inventário.")
     @app_commands.describe(membro="Ver de outra pessoa (opcional).")
@@ -2490,6 +2248,11 @@ class Economia(commands.Cog):
                 continue
             for _ in range(min(entrada["quantidade"], restantes)):
                 if not db.remover_bau(sid, uid, b["id"], 1):
+                    # Estoque mudou entre a listagem e a abertura (corrida com
+                    # outro /abrir_todos ou /abrir_bau): nada foi retirado
+                    # aqui, então não há o que repor — só para de tentar esse
+                    # tipo em vez de repetir contra um estoque que já mudou.
+                    interrompeu = True
                     break
                 ganhos, destino, ok, lunaris = await self._abrir_um_bau(interaction, sid, uid, b, indice)
                 indice += 1
@@ -2511,8 +2274,8 @@ class Economia(commands.Cog):
             linhas.append("Entregue em " + ", ".join(f"**{d}**" for d in sorted(destinos)) + ".")
         if interrompeu:
             linhas.append(
-                "⚠️ O banco parou de responder no meio: o baú que faltou entregar voltou "
-                "pro estoque e o resto continua com você. Rode `/abrir_todos` de novo em instantes."
+                "⚠️ Parou no meio: um baú não pôde ser aberto agora (o estoque mudou ou o "
+                "banco não respondeu) e o resto continua com você. Rode `/abrir_todos` de novo em instantes."
             )
         if not interrompeu and total_no_estoque > economia.ABRIR_TODOS_LIMITE:
             linhas.append(f"Você tinha mais baús do que o limite de {economia.ABRIR_TODOS_LIMITE} por vez: rode `/abrir_todos` de novo pro resto.")

@@ -28,19 +28,20 @@ class Enigma:
 
 
 ENIGMAS = (
-    # Fáceis: conhecimento do Jardim e charadas populares diretas.
+    # Fáceis: ainda exigem lembrar uma regra específica ou pensar um pouco
+    # (nada que dê pra resolver só olhando o nome dos bots no servidor).
     Enigma("Quantas Árvores existem no Jardim?", ("10", "dez"), "facil", "O Jardim"),
     Enigma("Quantos Lunaris equivalem a 1 Solar?", ("100", "cem"), "facil", "Economia"),
-    Enigma("Qual bot cuida da economia: Banqueiro ou Jornalista?", ("banqueiro", "o banqueiro"), "facil", "Bots"),
-    Enigma("Qual bot publica as notícias do Jardim?", ("jornalista", "o jornalista"), "facil", "Bots"),
+    Enigma("Qual comando privado do Banqueiro mostra seu histórico de transações?", ("extrato", "/extrato"), "facil", "Banqueiro"),
     Enigma("Quantas estações existem no ciclo completo do Jardim?", ("6", "seis"), "facil", "O Jardim"),
     Enigma("Qual comando mostra um planejamento privado de roubo?", ("roubo_planejar", "/roubo_planejar"), "facil", "Banqueiro"),
-    Enigma("Quantos dias formam uma semana?", ("7", "sete"), "facil", "Vida cotidiana"),
     Enigma("Tenho dentes, mas não mordo. O que sou?", ("pente", "um pente"), "facil", "Charada clássica"),
     Enigma("Quanto mais seco, mais molhado fico. O que sou?", ("toalha", "uma toalha"), "facil", "Charada clássica"),
     Enigma("Tenho ponteiros, mas não tenho braços. O que sou?", ("relogio", "um relogio"), "facil", "Objetos"),
-    Enigma("O que sobe e nunca volta a descer?", ("idade", "a idade", "sua idade"), "facil", "Vida cotidiana"),
     Enigma("Qual mês tem 28 dias?", ("todos", "todos os meses"), "facil", "Pegadinha"),
+    Enigma("Não tenho vida, mas posso morrer. O que sou?", ("bateria", "uma bateria"), "facil", "Charada clássica"),
+    Enigma("Quanto mais eu tiro, maior fico. O que sou?", ("buraco", "um buraco"), "facil", "Charada clássica"),
+    Enigma("Passo de mão em mão sem nunca ser usado. O que sou?", ("dinheiro", "o dinheiro", "moeda", "uma moeda"), "facil", "Charada clássica"),
 
     # Médios: regras atuais, linguagem e deduções curtas.
     Enigma("Qual estação normalmente traz mais loot raro: Verão ou Inverno?", ("verao",), "medio", "O Jardim"),
