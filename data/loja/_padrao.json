@@ -13,6 +13,7 @@
     "imagem": "URL ou caminho relativo (ex.: '../assets/img/loja/espada-longinus.png') pra ilustração do item. Ausente → o card/modal mostra um símbolo da categoria num fundo com brilho, em vez de imagem quebrada.",
     "raridade": "comum | incomum | raro | epico | lendario | mitico | reliquia da criacao (aceita com ou sem acento e em qualquer caixa; 'reliquia' continua aceito como nome antigo de 'mitico'). Valor ausente ou desconhecido reprova na auditoria e aparece como 'Desconhecida', sem cair silenciosamente em Comum.",
     "preco": "inteiro positivo (preço nativo em Solares) OU objeto com exatamente uma moeda conhecida e um inteiro positivo, por exemplo { \"Lunaris\": 450 }. Objetos com várias moedas, moeda desconhecida, zero ou valor fracionário são inválidos.",
+    "nivelMinimoLoja": "inteiro obrigatório de 1 a 4: 1 Feira de Vila, 2 Metrópole, 3 Mercado Negro, 4 Banco Lunar. A disponibilidade é cumulativa.",
     "atributos": "array de 1–2 strings curtas pro resumo que aparece no CARD, abaixo do título (ex.: [\"+15 Ataque Físico\", \"Queima por 3 turnos\"]). Ausente → o card cai pra um trecho truncado de 'descricao'.",
     "nivel": "string ou número, vira selo 'Nv. X' no card e no modal. Faz sentido em qualquer categoria (não só Bestiário) - ex. um veículo pode pedir nível mínimo de pilotagem.",
     "classe": "string curta, vira selo próprio no card e no modal (ex. classe de uma criatura do Bestiário). Também não é exclusivo de nenhuma categoria."
@@ -50,6 +51,7 @@
         "imagem": "../assets/img/loja/espada-de-longinus.png",
         "raridade": "lendario",
         "preco": 450,
+        "nivelMinimoLoja": 4,
         "atributos": ["+15 Ataque Físico", "Causa queimadura por 3 turnos"],
         "dano": "2d8 + 15",
         "tipo_de_dano": "Perfurante / Fogo"
@@ -63,6 +65,7 @@
         "descricao": "Engrenagens de Keryx sob um couro sintético que imita a respiração de um animal de verdade.",
         "raridade": "raro",
         "preco": 180,
+        "nivelMinimoLoja": 2,
         "nivel": 3,
         "atributos": ["Velocidade x2 em terreno aberto"],
         "capacidade": "1 piloto + 1 passageiro"
@@ -76,6 +79,7 @@
         "descricao": "Não tem corpo - só a ausência de um. Segue quem já teve medo uma vez.",
         "raridade": "epico",
         "preco": 620,
+        "nivelMinimoLoja": 3,
         "nivel": 8,
         "classe": "Aberração do Vazio",
         "atributos": ["Invisível no escuro", "Imune a dano físico"]
@@ -88,7 +92,8 @@
       "conteudo": {
         "descricao": "Ainda instável. Precisa ser lapidado antes de alimentar qualquer Fluxo.",
         "raridade": "incomum",
-        "preco": { "Lunaris": 40 }
+        "preco": { "Lunaris": 40 },
+        "nivelMinimoLoja": 1
       }
     }
   ],

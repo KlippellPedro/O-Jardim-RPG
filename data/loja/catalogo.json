@@ -22,7 +22,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 19,
         "multiplicador_critico": 2,
-        "descricao": "Lâmina curta de uso simples, feita para combate próximo e transporte discreto."
+        "descricao": "Lâmina curta de uso simples, feita para combate próximo e transporte discreto.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -46,7 +47,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 19,
         "multiplicador_critico": 2,
-        "descricao": "Proteção rígida para os punhos que transforma golpes desarmados em ataques de impacto."
+        "descricao": "Proteção rígida para os punhos que transforma golpes desarmados em ataques de impacto.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -70,7 +72,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 18,
         "multiplicador_critico": 2,
-        "descricao": "Machado compacto de uma mão, comum entre viajantes, lenhadores e combatentes."
+        "descricao": "Machado compacto de uma mão, comum entre viajantes, lenhadores e combatentes.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -94,7 +97,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
-        "descricao": "Arma de impacto simples, robusta e fácil de manter mesmo longe de uma oficina."
+        "descricao": "Arma de impacto simples, robusta e fácil de manter mesmo longe de uma oficina.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -118,7 +122,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
-        "descricao": "Bastão pesado e reforçado, usado para concentrar força em golpes de impacto."
+        "descricao": "Bastão pesado e reforçado, usado para concentrar força em golpes de impacto.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -142,7 +147,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 19,
         "multiplicador_critico": 2,
-        "descricao": "Espada compacta de lâmina reta, adequada a espaços estreitos e combate próximo."
+        "descricao": "Espada compacta de lâmina reta, adequada a espaços estreitos e combate próximo.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -166,7 +172,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 18,
         "multiplicador_critico": 2,
-        "descricao": "Espada marcial equilibrada, com lâmina longa e guarda feita para duelos prolongados."
+        "descricao": "Espada marcial equilibrada, com lâmina longa e guarda feita para duelos prolongados.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -190,7 +197,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
-        "descricao": "Haste de madeira com ponta reforçada, usada tanto por caçadores quanto por guardas."
+        "descricao": "Haste de madeira com ponta reforçada, usada tanto por caçadores quanto por guardas.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -214,7 +222,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 19,
         "multiplicador_critico": 2,
-        "descricao": "Arma de haste terminada em três pontas, útil para perfurar e controlar o espaço à frente."
+        "descricao": "Arma de haste terminada em três pontas, útil para perfurar e controlar o espaço à frente.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -238,7 +247,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
-        "descricao": "Martelo compacto de combate, com cabeça metálica preparada para golpes rápidos de impacto."
+        "descricao": "Martelo compacto de combate, com cabeça metálica preparada para golpes rápidos de impacto.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -262,7 +272,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
-        "descricao": "Foice de cabo curto adaptada para combate, com lâmina curva voltada para cortes próximos."
+        "descricao": "Foice de cabo curto adaptada para combate, com lâmina curva voltada para cortes próximos.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -286,7 +297,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 18,
         "multiplicador_critico": 2,
-        "descricao": "Duas hastes curtas ligadas por corrente, cujo uso exige ritmo e controle do movimento."
+        "descricao": "Duas hastes curtas ligadas por corrente, cujo uso exige ritmo e controle do movimento.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -310,7 +322,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 18,
         "multiplicador_critico": 2,
-        "descricao": "Espada curva de fio único, produzida com cuidado para cortes limpos e movimentos precisos."
+        "descricao": "Espada curva de fio único, produzida com cuidado para cortes limpos e movimentos precisos.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -334,7 +347,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 19,
         "multiplicador_critico": 2,
-        "descricao": "Manopla marcial reforçada com placas densas para concentrar o peso de cada golpe."
+        "descricao": "Manopla marcial reforçada com placas densas para concentrar o peso de cada golpe.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -358,7 +372,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
-        "descricao": "Lança marcial de haste alongada, construída para manter o inimigo além do alcance imediato."
+        "descricao": "Lança marcial de haste alongada, construída para manter o inimigo além do alcance imediato.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -382,7 +397,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 18,
         "multiplicador_critico": 2,
-        "descricao": "Tridente de haste longa e três pontas reforçadas, usado para dominar corredores e formações."
+        "descricao": "Tridente de haste longa e três pontas reforçadas, usado para dominar corredores e formações.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -406,7 +422,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 18,
         "multiplicador_critico": 2,
-        "descricao": "Martelo marcial de cabeça pesada, criado para transferir força através de proteções rígidas."
+        "descricao": "Martelo marcial de cabeça pesada, criado para transferir força através de proteções rígidas.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -430,7 +447,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
-        "descricao": "Machado marcial de lâmina larga, cuja construção privilegia golpes decisivos."
+        "descricao": "Machado marcial de lâmina larga, cuja construção privilegia golpes decisivos.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -454,7 +472,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 18,
         "multiplicador_critico": 2,
-        "descricao": "Espada de grandes proporções, empunhada com espaço e força para executar cortes amplos."
+        "descricao": "Espada de grandes proporções, empunhada com espaço e força para executar cortes amplos.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -478,7 +497,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 4,
-        "descricao": "Foice marcial de cabo longo, com lâmina curva pesada preparada para cortes extensos."
+        "descricao": "Foice marcial de cabo longo, com lâmina curva pesada preparada para cortes extensos.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -502,7 +522,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
-        "descricao": "Arma de impacto com cabo longo e cabeça maciça, adaptada de uma ferramenta de demolição."
+        "descricao": "Arma de impacto com cabo longo e cabeça maciça, adaptada de uma ferramenta de demolição.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -526,7 +547,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
-        "descricao": "Machado largo e pesado associado a guerreiros taurinos e investidas de força bruta."
+        "descricao": "Machado largo e pesado associado a guerreiros taurinos e investidas de força bruta.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -550,7 +572,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
-        "descricao": "Versão reforçada do nunchaku, com hastes densas e corrente preparada para impactos severos."
+        "descricao": "Versão reforçada do nunchaku, com hastes densas e corrente preparada para impactos severos.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -574,7 +597,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 19,
         "multiplicador_critico": 2,
-        "descricao": "Tira flexível de combate que exige técnica para conduzir a ponta e controlar sua trajetória."
+        "descricao": "Tira flexível de combate que exige técnica para conduzir a ponta e controlar sua trajetória.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -598,7 +622,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 18,
         "multiplicador_critico": 2,
-        "descricao": "Katana de lâmina alongada, construída para combatentes treinados em cortes de grande amplitude."
+        "descricao": "Katana de lâmina alongada, construída para combatentes treinados em cortes de grande amplitude.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -625,7 +650,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Arco compacto de madeira e fibra, apropriado para disparos em ambientes com pouco espaço."
+        "descricao": "Arco compacto de madeira e fibra, apropriado para disparos em ambientes com pouco espaço.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -652,7 +678,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Arma de disparo mecânica que lança virotes por meio de uma corda tensionada."
+        "descricao": "Arma de disparo mecânica que lança virotes por meio de uma corda tensionada.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -679,7 +706,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Projétil leve e equilibrado para arremesso, simples de carregar e substituir."
+        "descricao": "Projétil leve e equilibrado para arremesso, simples de carregar e substituir.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -706,7 +734,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 12,
         "municao_atual": 12,
-        "descricao": "Arma de fogo compacta alimentada por carregador, comum entre agentes e viajantes armados."
+        "descricao": "Arma de fogo compacta alimentada por carregador, comum entre agentes e viajantes armados.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -733,7 +762,8 @@
         "multiplicador_critico": 3,
         "municao_maxima": 6,
         "municao_atual": 6,
-        "descricao": "Arma de fogo de tambor, reconhecida pela construção resistente e pelo mecanismo direto."
+        "descricao": "Arma de fogo de tambor, reconhecida pela construção resistente e pelo mecanismo direto.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -760,7 +790,8 @@
         "multiplicador_critico": 3,
         "municao_maxima": 30,
         "municao_atual": 30,
-        "descricao": "Arma automática compacta com carregador amplo, projetada para confrontos a curta distância."
+        "descricao": "Arma automática compacta com carregador amplo, projetada para confrontos a curta distância.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -787,7 +818,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Arma de fogo longa e tradicional, carregada para um disparo antes de cada recarga."
+        "descricao": "Arma de fogo longa e tradicional, carregada para um disparo antes de cada recarga.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -814,7 +846,8 @@
         "multiplicador_critico": 3,
         "municao_maxima": 5,
         "municao_atual": 5,
-        "descricao": "Fuzil longo usado por caçadores, com coronha firme e mecanismo preparado para tiros controlados."
+        "descricao": "Fuzil longo usado por caçadores, com coronha firme e mecanismo preparado para tiros controlados.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -841,7 +874,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Lâmina metálica equilibrada para arremesso e fácil de ocultar entre outros equipamentos."
+        "descricao": "Lâmina metálica equilibrada para arremesso e fácil de ocultar entre outros equipamentos.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -868,7 +902,8 @@
         "multiplicador_critico": 3,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Lâmina curta e pontiaguda que pode ser empunhada ou lançada conforme a situação."
+        "descricao": "Lâmina curta e pontiaguda que pode ser empunhada ou lançada conforme a situação.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -895,7 +930,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Tubo leve que impulsiona pequenos projéteis com o sopro do usuário."
+        "descricao": "Tubo leve que impulsiona pequenos projéteis com o sopro do usuário.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -922,7 +958,8 @@
         "multiplicador_critico": 3,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Arco marcial de grande envergadura, construído para aproveitar uma puxada longa e estável."
+        "descricao": "Arco marcial de grande envergadura, construído para aproveitar uma puxada longa e estável.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -949,7 +986,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Besta reforçada de grande tensão, com estrutura robusta para lançar virotes pesados."
+        "descricao": "Besta reforçada de grande tensão, com estrutura robusta para lançar virotes pesados.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -978,7 +1016,8 @@
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
         "municao_maxima": 1,
-        "municao_atual": 1
+        "municao_atual": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1005,7 +1044,8 @@
         "multiplicador_critico": 3,
         "municao_maxima": 8,
         "municao_atual": 8,
-        "descricao": "Arma de fogo de cano largo, criada para concentrar grande poder em confrontos próximos."
+        "descricao": "Arma de fogo de cano largo, criada para concentrar grande poder em confrontos próximos.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -1032,7 +1072,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 30,
         "municao_atual": 30,
-        "descricao": "Fuzil automático de uso militar, equilibrado para fogo sustentado e mobilidade."
+        "descricao": "Fuzil automático de uso militar, equilibrado para fogo sustentado e mobilidade.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -1059,7 +1100,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Shuriken reforçada e maior que o modelo comum, feita para arremessos de maior impacto."
+        "descricao": "Shuriken reforçada e maior que o modelo comum, feita para arremessos de maior impacto.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -1086,7 +1128,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Kunai de lâmina espessa e corpo pesado, preparada para perfurações mais violentas."
+        "descricao": "Kunai de lâmina espessa e corpo pesado, preparada para perfurações mais violentas.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -1111,7 +1154,8 @@
         "multiplicador_critico": 3,
         "municao_maxima": 30,
         "municao_atual": 30,
-        "descricao": "Submetralhadora de construção clássica, com coronha sólida e carregador de alta capacidade."
+        "descricao": "Submetralhadora de construção clássica, com coronha sólida e carregador de alta capacidade.",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1136,7 +1180,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 100,
         "municao_atual": 100,
-        "descricao": "Arma automática de múltiplos canos, pesada e alimentada por uma grande reserva de munição."
+        "descricao": "Arma automática de múltiplos canos, pesada e alimentada por uma grande reserva de munição.",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1161,7 +1206,8 @@
         "multiplicador_critico": 3,
         "municao_maxima": 5,
         "municao_atual": 5,
-        "descricao": "Fuzil de precisão de ferrolho, construído para disparos potentes a longa distância."
+        "descricao": "Fuzil de precisão de ferrolho, construído para disparos potentes a longa distância.",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1203,7 +1249,8 @@
           "Lunaris": 25
         },
         "raridade": "incomum",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1216,7 +1263,8 @@
           "Lunaris": 40
         },
         "raridade": "raro",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -1230,7 +1278,8 @@
         },
         "raridade": "incomum",
         "material": "Couro",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1244,7 +1293,8 @@
         },
         "raridade": "raro",
         "material": "Couro Bom",
-        "espacos": 2
+        "espacos": 2,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -1258,7 +1308,8 @@
         },
         "raridade": "incomum",
         "material": "Ferro",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1272,7 +1323,8 @@
         },
         "raridade": "incomum",
         "material": "Madeira",
-        "espacos": 2
+        "espacos": 2,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1286,7 +1338,8 @@
         },
         "raridade": "incomum",
         "material": "Ervas",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1299,7 +1352,8 @@
           "Lunaris": 20
         },
         "raridade": "comum",
-        "espacos": 2
+        "espacos": 2,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1313,7 +1367,8 @@
         },
         "raridade": "comum",
         "material": "Metal/Vidro",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1327,7 +1382,8 @@
         },
         "raridade": "comum",
         "material": "Couro",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1341,7 +1397,8 @@
         },
         "raridade": "comum",
         "material": "Carne Seca",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1355,7 +1412,8 @@
         },
         "raridade": "comum",
         "material": "Couro/Algodão",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1369,7 +1427,8 @@
         },
         "raridade": "incomum",
         "material": "Tecido",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1383,7 +1442,8 @@
         },
         "raridade": "raro",
         "material": "Tecido Excelente",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -1397,7 +1457,8 @@
         },
         "raridade": "comum",
         "material": "Couro",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1409,7 +1470,8 @@
         "preco": 120,
         "raridade": "epico",
         "material": "Essência Lunar",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1421,7 +1483,8 @@
         "preco": 150,
         "raridade": "epico",
         "material": "Cristal Arcano",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1437,7 +1500,8 @@
         "ativacao": "Sem gastar ação, no próprio turno",
         "frequencia": "1/cena",
         "custo": "1 Cansaço ao fim da cena",
-        "efeito": "Uma Ação de Movimento adicional exclusiva para deslocamento"
+        "efeito": "Uma Ação de Movimento adicional exclusiva para deslocamento",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1450,7 +1514,8 @@
         "raridade": "epico",
         "categoria_loja": "Artefatos Mágicos",
         "material": "Seda Sombria",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1462,7 +1527,8 @@
         "preco": 300,
         "raridade": "epico",
         "material": "Ouro Arcano",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1474,7 +1540,8 @@
         "preco": 220,
         "raridade": "epico",
         "material": "Couro Espectral",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1486,7 +1553,8 @@
         "preco": 230,
         "raridade": "epico",
         "material": "Fluorita",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1498,7 +1566,8 @@
         "preco": 260,
         "raridade": "epico",
         "material": "Couro Etéreo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1510,7 +1579,8 @@
         "preco": 260,
         "raridade": "epico",
         "material": "Osso Polido",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1522,7 +1592,8 @@
         "preco": 350,
         "raridade": "lendario",
         "material": "Essência Sombria",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -1534,7 +1605,8 @@
         "preco": 300,
         "raridade": "epico",
         "material": "Prata Pura",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1546,7 +1618,8 @@
         "preco": 280,
         "raridade": "epico",
         "material": "Pedra Viva",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1564,7 +1637,8 @@
           "Dois atributos escolhidos: +4",
           "Exige aprovação do Mestre"
         ],
-        "efeito": "+4 em dois atributos escolhidos na criação"
+        "efeito": "+4 em dois atributos escolhidos na criação",
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -1576,7 +1650,8 @@
         "preco": 800,
         "raridade": "lendario",
         "material": "Lágrima do Sol",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -1588,7 +1663,8 @@
         "preco": 310,
         "raridade": "lendario",
         "material": "Essência Noturna",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -1600,7 +1676,8 @@
         "preco": 200,
         "raridade": "epico",
         "material": "Chama da Salamandra",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1612,7 +1689,8 @@
         "preco": 360,
         "raridade": "lendario",
         "material": "Aço Vivo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -1624,7 +1702,8 @@
         "preco": 270,
         "raridade": "epico",
         "material": "Ouro Clonado",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1636,7 +1715,8 @@
         "preco": 310,
         "raridade": "lendario",
         "material": "Madeira Negra",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -1648,7 +1728,8 @@
         "preco": 320,
         "raridade": "lendario",
         "material": "Quartzo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -1660,7 +1741,8 @@
         "preco": 200,
         "raridade": "epico",
         "material": "Obsidiana",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1672,7 +1754,8 @@
         "preco": 420,
         "raridade": "lendario",
         "material": "Madeira Viva",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -1684,7 +1767,8 @@
         "preco": 320,
         "raridade": "lendario",
         "material": "Metal",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -1696,7 +1780,8 @@
         "preco": 400,
         "raridade": "lendario",
         "material": "Osso de Gigante",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -1708,7 +1793,8 @@
         "preco": 280,
         "raridade": "epico",
         "material": "Penas de Grifo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -1720,7 +1806,8 @@
         "preco": 450,
         "raridade": "lendario",
         "material": "Vidro Encantado",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -1732,7 +1819,8 @@
         "preco": 800,
         "raridade": "lendario",
         "material": "Essência de Harpia",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -1746,7 +1834,8 @@
         },
         "raridade": "comum",
         "espacos": 1,
-        "material": "Pedra"
+        "material": "Pedra",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1762,7 +1851,8 @@
         "bonus": "+2",
         "penalidade": "-1",
         "material": "Animal",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1778,7 +1868,8 @@
         "bonus": "+2",
         "penalidade": "0",
         "material": "Penas e malha",
-        "espacos": 2
+        "espacos": 2,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1794,13 +1885,14 @@
         "bonus": "+2",
         "penalidade": "-1",
         "material": "Couro",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
       "tipo": "armadura",
       "id": "padrao",
-      "titulo": "Padrão",
+      "titulo": "Couro Batido",
       "conteudo": {
         "descricao": "Concede Resistência 2 contra Corte ou Perfuração, escolhido na criação do item.",
         "preco": {
@@ -1810,7 +1902,8 @@
         "bonus": "+3",
         "penalidade": "-2",
         "material": "Couro Batido",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1826,13 +1919,14 @@
         "bonus": "+3",
         "penalidade": "-1",
         "material": "Malha",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
       "tipo": "armadura",
       "id": "espacosa",
-      "titulo": "Espaçosa",
+      "titulo": "Malha Revestida",
       "conteudo": {
         "descricao": "+3 espaços no inventário.",
         "preco": {
@@ -1842,13 +1936,14 @@
         "bonus": "+3",
         "penalidade": "-2",
         "material": "Malha Revestida",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
       "tipo": "armadura",
       "id": "boa",
-      "titulo": "Boa",
+      "titulo": "Couro Bom",
       "conteudo": {
         "descricao": "Recebe 4 de resistência a corte ou Perfuração",
         "preco": {
@@ -1858,7 +1953,8 @@
         "bonus": "+4",
         "penalidade": "-2",
         "material": "Couro Bom",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1874,7 +1970,8 @@
         "bonus": "+4",
         "penalidade": "-2",
         "material": "Ossos",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1890,7 +1987,8 @@
         "bonus": "+5",
         "penalidade": "-3",
         "material": "Kevlar",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -1906,7 +2004,8 @@
         "bonus": "+6",
         "penalidade": "-3",
         "material": "Ferro",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1922,7 +2021,8 @@
         "bonus": "+7",
         "penalidade": "-4",
         "material": "Aço",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -1941,13 +2041,14 @@
         "frequencia": "1/cena",
         "duracao": "3 rodadas",
         "custo": "6 Mana",
-        "efeito": "Resistência 10 contra Corte, Perfuração e Impacto com restrição de interação"
+        "efeito": "Resistência 10 contra Corte, Perfuração e Impacto com restrição de interação",
+        "nivelMinimoLoja": 4
       }
     },
     {
       "tipo": "armadura",
       "id": "luxuosa",
-      "titulo": "Luxuosa",
+      "titulo": "Armadura Luxuosa",
       "conteudo": {
         "descricao": "+1 no modificador de Carisma e vantagem em testes de convencimento.",
         "preco": {
@@ -1957,7 +2058,8 @@
         "bonus": "+5",
         "penalidade": "-5",
         "material": "Ouro",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -1976,13 +2078,14 @@
         "espacos": 1,
         "ativacao": "Ação de Movimento durante uma queda",
         "duracao": "Até pousar ou percorrer 50 m horizontalmente",
-        "efeito": "Planagem controlada, sem ganho de altitude"
+        "efeito": "Planagem controlada, sem ganho de altitude",
+        "nivelMinimoLoja": 2
       }
     },
     {
       "tipo": "armadura",
       "id": "excelente",
-      "titulo": "Excelente",
+      "titulo": "Couro Excelente",
       "conteudo": {
         "descricao": "Concede Resistência 10 contra Corte ou Perfuração, escolhido na criação do item.",
         "preco": {
@@ -1992,7 +2095,8 @@
         "bonus": "+6",
         "penalidade": "-4",
         "material": "Couro Excelente",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2008,7 +2112,8 @@
         "bonus": "+8",
         "penalidade": "-5",
         "material": "Titânio",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2026,7 +2131,8 @@
         "ativacao": "Depois de gastar a Reação",
         "frequencia": "1/cena",
         "custo": "1 Cansaço ao fim da cena",
-        "efeito": "Recupera uma Reação"
+        "efeito": "Recupera uma Reação",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2042,7 +2148,8 @@
         "bonus": "+10",
         "penalidade": "-5",
         "material": "Núcleo de Golem",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2058,7 +2165,8 @@
         "bonus": "+10",
         "penalidade": "-5",
         "material": "Fibras",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2074,7 +2182,8 @@
         "bonus": "+13",
         "penalidade": "-6",
         "material": "Aço Reforçado",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2088,7 +2197,8 @@
         "bonus": "+15",
         "penalidade": "-6",
         "material": "Aço Juramentado",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2102,7 +2212,8 @@
         "bonus": "+20",
         "penalidade": "-8",
         "material": "Dimeritium",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2122,7 +2233,8 @@
         "duracao": "3 rodadas",
         "custo": "1 carga",
         "recarga": "Todas após descanso completo e 1 hora em fonte A.X.I.S",
-        "efeito": "Voo igual ao Movimento"
+        "efeito": "Voo igual ao Movimento",
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2139,7 +2251,8 @@
         "penalidade": "-2",
         "material": "Sucata",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -2156,7 +2269,8 @@
         "penalidade": "0",
         "material": "Madeira Bruta",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -2173,7 +2287,8 @@
         "penalidade": "0",
         "material": "Madeira Reforçada",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -2190,7 +2305,8 @@
         "penalidade": "-1",
         "material": "Madeira e folhas",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -2207,7 +2323,8 @@
         "penalidade": "-1",
         "material": "Osso",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -2224,7 +2341,8 @@
         "penalidade": "-1",
         "material": "Ferro",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2241,7 +2359,8 @@
         "penalidade": "-1",
         "material": "Metal",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2258,13 +2377,14 @@
         "penalidade": "-2",
         "material": "Liga de Aço",
         "subtipo": "escudo",
-        "espacos": 2
+        "espacos": 2,
+        "nivelMinimoLoja": 2
       }
     },
     {
       "tipo": "armadura",
       "id": "luxuoso",
-      "titulo": "Luxuoso",
+      "titulo": "Escudo Luxuoso",
       "conteudo": {
         "descricao": "+1 no Mod de Carisma, Vantagem em testes de convencimento",
         "preco": {
@@ -2275,7 +2395,8 @@
         "penalidade": "-4",
         "material": "Ouro",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2292,7 +2413,8 @@
         "penalidade": "-5",
         "material": "Ferro e Aço",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2309,7 +2431,8 @@
         "penalidade": "-5",
         "material": "Grafeno",
         "subtipo": "escudo",
-        "espacos": 2
+        "espacos": 2,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2326,7 +2449,8 @@
         "penalidade": "-4",
         "material": "Titânio",
         "subtipo": "escudo",
-        "espacos": 2
+        "espacos": 2,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2341,7 +2465,8 @@
         "penalidade": "-4",
         "material": "Aço Juramentado",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2356,7 +2481,8 @@
         "penalidade": "-5",
         "material": "Dimeritium",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2371,7 +2497,8 @@
         "penalidade": "-6",
         "material": "Restos de Auleth",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2391,7 +2518,8 @@
         "ativacao": "Reação durante uma queda",
         "custo": "1 carga",
         "recarga": "Todas após descanso completo e 1 hora em fonte A.X.I.S",
-        "efeito": "Reduz em 30 m a distância efetiva de uma queda"
+        "efeito": "Reduz em 30 m a distância efetiva de uma queda",
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2403,7 +2531,8 @@
         "preco": 600,
         "raridade": "lendario",
         "material": "Cristal de Fluxo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2422,7 +2551,8 @@
           "Defesa +4",
           "Resistência 4 contra todo dano",
           "Exige aprovação do Mestre"
-        ]
+        ],
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2443,7 +2573,8 @@
           "Defesa +4",
           "Resistência 4 contra todo dano",
           "Exige aprovação do Mestre"
-        ]
+        ],
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2473,7 +2604,8 @@
         "sistemasAtivosMaximos": 0,
         "espacosBase": 0,
         "armas": [],
-        "sistemas": []
+        "sistemas": [],
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2489,7 +2621,8 @@
         "sistema": "Núcleo",
         "subtipo": "Estável",
         "tier": "T1",
-        "sistemasAtivosMaximos": 2
+        "sistemasAtivosMaximos": 2,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2505,7 +2638,8 @@
         "sistema": "Núcleo",
         "subtipo": "Estável",
         "tier": "T2",
-        "sistemasAtivosMaximos": 3
+        "sistemasAtivosMaximos": 3,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2521,7 +2655,8 @@
         "sistema": "Núcleo",
         "subtipo": "Estável",
         "tier": "T3",
-        "sistemasAtivosMaximos": 4
+        "sistemasAtivosMaximos": 4,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2538,7 +2673,8 @@
         "subtipo": "Sobrecarga",
         "tier": "T1",
         "sistemasAtivosMaximos": 3,
-        "sistemasDesligadosPorFalha": 1
+        "sistemasDesligadosPorFalha": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2555,7 +2691,8 @@
         "subtipo": "Sobrecarga",
         "tier": "T2",
         "sistemasAtivosMaximos": 5,
-        "sistemasDesligadosPorFalha": 2
+        "sistemasDesligadosPorFalha": 2,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2572,7 +2709,8 @@
         "subtipo": "Sobrecarga",
         "tier": "T3",
         "sistemasAtivosMaximos": 6,
-        "sistemasDesligadosPorFalha": 3
+        "sistemasDesligadosPorFalha": 3,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2589,7 +2727,8 @@
         "subtipo": "Leve",
         "tier": "T1",
         "ajusteDeslocamentoMetros": 1.5,
-        "ajusteResistencia": 0
+        "ajusteResistencia": 0,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2606,7 +2745,8 @@
         "subtipo": "Leve",
         "tier": "T2",
         "ajusteDeslocamentoMetros": 3,
-        "ajusteResistencia": -1
+        "ajusteResistencia": -1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2623,7 +2763,8 @@
         "subtipo": "Leve",
         "tier": "T3",
         "ajusteDeslocamentoMetros": 4.5,
-        "ajusteResistencia": -2
+        "ajusteResistencia": -2,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2640,7 +2781,8 @@
         "subtipo": "Pesada",
         "tier": "T1",
         "ajusteDeslocamentoMetros": 0,
-        "ajusteResistencia": 1
+        "ajusteResistencia": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2657,7 +2799,8 @@
         "subtipo": "Pesada",
         "tier": "T2",
         "ajusteDeslocamentoMetros": -1.5,
-        "ajusteResistencia": 2
+        "ajusteResistencia": 2,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2674,7 +2817,8 @@
         "subtipo": "Pesada",
         "tier": "T3",
         "ajusteDeslocamentoMetros": -3,
-        "ajusteResistencia": 3
+        "ajusteResistencia": 3,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2698,7 +2842,8 @@
         "margemAmeaca": 20,
         "multiplicadorCritico": 2,
         "disparosPorAcao": 2,
-        "acao": "padrão"
+        "acao": "padrão",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2722,7 +2867,8 @@
         "margemAmeaca": 20,
         "multiplicadorCritico": 2,
         "disparosPorAcao": 2,
-        "acao": "padrão"
+        "acao": "padrão",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2746,7 +2892,8 @@
         "margemAmeaca": 20,
         "multiplicadorCritico": 2,
         "disparosPorAcao": 2,
-        "acao": "padrão"
+        "acao": "padrão",
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2770,7 +2917,8 @@
         "margemAmeaca": 20,
         "multiplicadorCritico": 2,
         "disparosPorAcao": 1,
-        "acao": "padrão"
+        "acao": "padrão",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2794,7 +2942,8 @@
         "margemAmeaca": 20,
         "multiplicadorCritico": 2,
         "disparosPorAcao": 1,
-        "acao": "padrão"
+        "acao": "padrão",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2818,7 +2967,8 @@
         "margemAmeaca": 20,
         "multiplicadorCritico": 2,
         "disparosPorAcao": 1,
-        "acao": "padrão"
+        "acao": "padrão",
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2836,7 +2986,8 @@
         "tier": "T1",
         "capacidadePorcoes": 15,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2855,7 +3006,8 @@
         "capacidadePorcoes": 30,
         "producaoPorHora": 1,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2874,7 +3026,8 @@
         "capacidadePorcoes": 60,
         "producaoPorHora": 2,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2892,7 +3045,8 @@
         "tier": "T1",
         "capacidadeLitrosPorHora": 15,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2911,7 +3065,8 @@
         "capacidadeLitrosPorHora": 30,
         "producaoLitrosPorHora": 1,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2930,7 +3085,8 @@
         "capacidadeLitrosPorHora": 60,
         "producaoLitrosPorHora": 2,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -2950,7 +3106,8 @@
         "capacidade": 4,
         "espacosBaseConsumidos": 1,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -2970,7 +3127,8 @@
         "capacidade": 8,
         "espacosBaseConsumidos": 2,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -2991,7 +3149,8 @@
         "espacosBaseConsumidos": 3,
         "consomeSistemaAtivo": 1,
         "requer": "Área Médica T2 ou T3 ativa para qualidade Excelente",
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -3010,7 +3169,8 @@
         "capacidade": 1,
         "bonusManaRelaxar": 0,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3029,7 +3189,8 @@
         "capacidade": 1,
         "bonusManaRelaxar": 2,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -3048,7 +3209,8 @@
         "capacidade": 1,
         "bonusManaRelaxar": "1d8",
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -3067,7 +3229,8 @@
         "capacidade": 1,
         "horasPorDiaTreino": 6,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3086,7 +3249,8 @@
         "capacidade": 1,
         "horasPorDiaTreino": 5,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -3105,7 +3269,8 @@
         "capacidade": 1,
         "horasPorDiaTreino": 4,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -3126,7 +3291,8 @@
         "capacidade": 1,
         "espacosBaseConsumidos": 1,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3147,7 +3313,8 @@
         "capacidade": 2,
         "espacosBaseConsumidos": 2,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -3168,7 +3335,8 @@
         "capacidade": 4,
         "espacosBaseConsumidos": 3,
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -3187,7 +3355,8 @@
         "capacidadeItens": 15,
         "espacosBaseConsumidos": 1,
         "consomeSistemaAtivo": 0,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3206,7 +3375,8 @@
         "capacidadeItens": 30,
         "espacosBaseConsumidos": 2,
         "consomeSistemaAtivo": 0,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -3225,7 +3395,8 @@
         "capacidadeItens": 60,
         "espacosBaseConsumidos": 3,
         "consomeSistemaAtivo": 0,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -3245,7 +3416,8 @@
         "resistenciaEscudo": 0,
         "acaoAtivacao": "padrão",
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3265,7 +3437,8 @@
         "resistenciaEscudo": 0,
         "acaoAtivacao": "padrão",
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -3285,7 +3458,8 @@
         "resistenciaEscudo": 0,
         "acaoAtivacao": "padrão",
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -3311,7 +3485,8 @@
         "manobrabilidade": 0,
         "coberturaOcupantes": "total",
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3337,7 +3512,8 @@
         "manobrabilidade": 0,
         "coberturaOcupantes": "total",
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -3363,7 +3539,8 @@
         "manobrabilidade": 0,
         "coberturaOcupantes": "total",
         "consomeSistemaAtivo": 1,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -3384,7 +3561,8 @@
           "1 pequeno"
         ],
         "consomeSistemaAtivo": 0,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3406,7 +3584,8 @@
           "2 pequenos"
         ],
         "consomeSistemaAtivo": 0,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -3428,7 +3607,8 @@
           "4 pequenos"
         ],
         "consomeSistemaAtivo": 0,
-        "naoAcumula": true
+        "naoAcumula": true,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -3452,7 +3632,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 2,
-        "descricao": "Haste longa e resistente que serve como apoio de viagem e arma simples de impacto."
+        "descricao": "Haste longa e resistente que serve como apoio de viagem e arma simples de impacto.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -3476,7 +3657,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 19,
         "multiplicador_critico": 2,
-        "descricao": "Faca de caça robusta, útil no acampamento e em confrontos a curta distância."
+        "descricao": "Faca de caça robusta, útil no acampamento e em confrontos a curta distância.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -3503,7 +3685,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Tira de couro ou tecido usada para lançar pequenas pedras e projéteis preparados."
+        "descricao": "Tira de couro ou tecido usada para lançar pequenas pedras e projéteis preparados.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -3527,7 +3710,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 18,
         "multiplicador_critico": 2,
-        "descricao": "Ferramenta agrícola de uma mão adaptada para golpes curvos em combate próximo."
+        "descricao": "Ferramenta agrícola de uma mão adaptada para golpes curvos em combate próximo.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -3551,7 +3735,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 2,
-        "descricao": "Arma improvisada de ponta rígida presa a uma haste curta, simples e direta."
+        "descricao": "Arma improvisada de ponta rígida presa a uma haste curta, simples e direta.",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -3575,7 +3760,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 19,
         "multiplicador_critico": 2,
-        "descricao": "Espada marcial de duas mãos, longa e pesada, feita para cortes amplos."
+        "descricao": "Espada marcial de duas mãos, longa e pesada, feita para cortes amplos.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3599,7 +3785,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 18,
         "multiplicador_critico": 2,
-        "descricao": "Espada estreita de duelo, com guarda elaborada e lâmina voltada para estocadas."
+        "descricao": "Espada estreita de duelo, com guarda elaborada e lâmina voltada para estocadas.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3623,7 +3810,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 18,
         "multiplicador_critico": 2,
-        "descricao": "Espada curva de um fio, reconhecida pela lâmina larga próxima à ponta."
+        "descricao": "Espada curva de um fio, reconhecida pela lâmina larga próxima à ponta.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3647,7 +3835,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
-        "descricao": "Arma marcial com cabeça de impacto presa ao cabo por corrente ou articulação."
+        "descricao": "Arma marcial com cabeça de impacto presa ao cabo por corrente ou articulação.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3671,7 +3860,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
-        "descricao": "Arma de haste que combina ponta de lança, lâmina de machado e gancho metálico."
+        "descricao": "Arma de haste que combina ponta de lança, lâmina de machado e gancho metálico.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3695,7 +3885,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 19,
         "multiplicador_critico": 2,
-        "descricao": "Machado marcial de duas lâminas opostas, pesado e difícil de manejar sem treinamento."
+        "descricao": "Machado marcial de duas lâminas opostas, pesado e difícil de manejar sem treinamento.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3719,7 +3910,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 20,
         "multiplicador_critico": 3,
-        "descricao": "Lança longa e robusta, tradicionalmente usada em cargas montadas."
+        "descricao": "Lança longa e robusta, tradicionalmente usada em cargas montadas.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3746,7 +3938,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Arco moderno de polias e cabos, construído para manter a tensão de forma controlada."
+        "descricao": "Arco moderno de polias e cabos, construído para manter a tensão de forma controlada.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3773,7 +3966,8 @@
         "multiplicador_critico": 3,
         "municao_maxima": 2,
         "municao_atual": 2,
-        "descricao": "Espingarda de dois canos paralelos, preparada para dois disparos antes da recarga."
+        "descricao": "Espingarda de dois canos paralelos, preparada para dois disparos antes da recarga.",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3798,7 +3992,8 @@
         "multiplicador_critico": 3,
         "municao_maxima": 5,
         "municao_atual": 5,
-        "descricao": "Rifle especializado com óptica e estrutura estável para tiros calculados a longa distância."
+        "descricao": "Rifle especializado com óptica e estrutura estável para tiros calculados a longa distância.",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -3823,7 +4018,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 10,
         "municao_atual": 10,
-        "descricao": "Projetor incendiário alimentado por um reservatório próprio, usado para lançar chamas concentradas."
+        "descricao": "Projetor incendiário alimentado por um reservatório próprio, usado para lançar chamas concentradas.",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -3848,7 +4044,8 @@
         "multiplicador_critico": 2,
         "municao_maxima": 1,
         "municao_atual": 1,
-        "descricao": "Arma de fogo de grande calibre, compacta para sua potência e construída para um único disparo por carga."
+        "descricao": "Arma de fogo de grande calibre, compacta para sua potência e construída para um único disparo por carga.",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -3871,7 +4068,8 @@
         "modo": "Corpo a corpo",
         "margem_ameaca": 18,
         "multiplicador_critico": 2,
-        "descricao": "Arma tecnológica cuja empunhadura sustenta uma lâmina de plasma para combate próximo."
+        "descricao": "Arma tecnológica cuja empunhadura sustenta uma lâmina de plasma para combate próximo.",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -3913,7 +4111,8 @@
         "bonus": "+1",
         "penalidade": "0",
         "material": "Tecido Acolchoado",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -3929,7 +4128,8 @@
         "bonus": "+5",
         "penalidade": "-2",
         "material": "Placas e Couro",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -3945,7 +4145,8 @@
         "bonus": "+6",
         "penalidade": "-3",
         "material": "Aço",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3961,7 +4162,8 @@
         "bonus": "+12",
         "penalidade": "-6",
         "material": "Aço Forjado",
-        "espacos": 2
+        "espacos": 2,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -3975,7 +4177,8 @@
         "bonus": "+10",
         "penalidade": "-1",
         "material": "Mithril",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -3989,7 +4192,8 @@
         "bonus": "+22",
         "penalidade": "-8",
         "material": "Lágrima do Sol",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -4006,7 +4210,8 @@
         "penalidade": "0",
         "material": "Madeira e Metal",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -4023,7 +4228,8 @@
         "penalidade": "-3",
         "material": "Madeira Reforçada",
         "subtipo": "escudo",
-        "espacos": 2
+        "espacos": 2,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -4038,7 +4244,8 @@
         "penalidade": "-4",
         "material": "Prata Polida",
         "subtipo": "escudo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -4050,7 +4257,8 @@
         "preco": 5,
         "raridade": "comum",
         "material": "Cânhamo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -4062,7 +4270,8 @@
         "preco": 2,
         "raridade": "comum",
         "material": "Madeira e Breu",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -4074,7 +4283,8 @@
         "preco": 15,
         "raridade": "comum",
         "material": "Metal",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -4086,7 +4296,8 @@
         "preco": 20,
         "raridade": "incomum",
         "material": "Ervas Alquímicas",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -4098,7 +4309,8 @@
         "preco": 18,
         "raridade": "incomum",
         "material": "Ervas Alquímicas",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -4110,7 +4322,8 @@
         "preco": 45,
         "raridade": "raro",
         "material": "Ervas Raras",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -4122,7 +4335,8 @@
         "preco": 80,
         "raridade": "raro",
         "material": "Papel Rúnico",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -4134,7 +4348,8 @@
         "preco": 280,
         "raridade": "epico",
         "material": "Seda Etérea",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -4146,7 +4361,8 @@
         "preco": 220,
         "raridade": "epico",
         "material": "Prata Rúnica",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -4158,7 +4374,8 @@
         "preco": 350,
         "raridade": "lendario",
         "material": "Cristal Elemental",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -4170,7 +4387,8 @@
         "preco": 500,
         "raridade": "lendario",
         "material": "Núcleo de Fluxo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -4182,7 +4400,8 @@
         "preco": 700,
         "raridade": "lendario",
         "material": "Ouro Vivo",
-        "espacos": 1
+        "espacos": 1,
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -4229,7 +4448,8 @@
           "Pelego de Lobo (10 Solares)",
           "Presas Afiadas (6 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -4276,7 +4496,8 @@
           "Pele de Urso (25 Solares)",
           "Garras de Urso (12 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -4323,7 +4544,8 @@
           "Glândula de Veneno (30 Solares)",
           "Seda de Teia (18 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -4368,7 +4590,8 @@
           "Olho Petrificado (80 Solares)",
           "Escamas de Basilisco (60 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -4418,7 +4641,8 @@
           "Escama Ígnea (150 Solares)",
           "Presas Tríplices (90 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -4463,7 +4687,8 @@
         "loot": [
           "Pena Arcana (20 Solares)"
         ],
-        "classe": "Familiar"
+        "classe": "Familiar",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -4508,7 +4733,8 @@
         "loot": [
           "Fragmento Etéreo (45 Solares)"
         ],
-        "classe": "Familiar"
+        "classe": "Familiar",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -4555,7 +4781,8 @@
         "loot": [
           "Escama de Dragonete (100 Solares)"
         ],
-        "classe": "Familiar"
+        "classe": "Familiar",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -4648,7 +4875,8 @@
           "Ossos Antigos (5 Solares)",
           "Arma Enferrujada (8 Solares)"
         ],
-        "classe": "Servo"
+        "classe": "Servo",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -4694,7 +4922,8 @@
         "loot": [
           "Carne Podre (3 Solares)"
         ],
-        "classe": "Servo"
+        "classe": "Servo",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -4738,7 +4967,8 @@
         "loot": [
           "Garras Necróticas (20 Solares)"
         ],
-        "classe": "Servo"
+        "classe": "Servo",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -4784,7 +5014,8 @@
           "Armadura Amaldiçoada (120 Solares)",
           "Espada Amaldiçoada (200 Solares)"
         ],
-        "classe": "Servo"
+        "classe": "Servo",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -4829,7 +5060,8 @@
         "loot": [
           "Núcleo Flamejante (15 Solares)"
         ],
-        "classe": "Invocação"
+        "classe": "Invocação",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -4873,7 +5105,8 @@
         "loot": [
           "Fragmento de Núcleo (60 Solares)"
         ],
-        "classe": "Invocação"
+        "classe": "Invocação",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -4919,7 +5152,8 @@
           "Chifre Infernal (100 Solares)",
           "Contrato Rasgado (150 Solares)"
         ],
-        "classe": "Invocação"
+        "classe": "Invocação",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5009,7 +5243,8 @@
           "Espada Simples (10 Solares)",
           "Bolsa de Moedas (15 Solares)"
         ],
-        "classe": "Ajudante"
+        "classe": "Ajudante",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5054,7 +5289,8 @@
         "loot": [
           "Kit Médico (20 Solares)"
         ],
-        "classe": "Ajudante"
+        "classe": "Ajudante",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5098,7 +5334,8 @@
         "loot": [
           "Escudo Reforçado (35 Solares)"
         ],
-        "classe": "Ajudante"
+        "classe": "Ajudante",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -5142,7 +5379,8 @@
         "loot": [
           "Ferramentas de Forja (50 Solares)"
         ],
-        "classe": "Ajudante"
+        "classe": "Ajudante",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -5347,7 +5585,8 @@
         "preco": 10,
         "raridade": "comum",
         "parte": "Carne",
-        "especie": "Humano"
+        "especie": "Humano",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5359,7 +5598,8 @@
         "preco": 15,
         "raridade": "comum",
         "parte": "Órgãos",
-        "especie": "Humano"
+        "especie": "Humano",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5371,7 +5611,8 @@
         "preco": 25,
         "raridade": "comum",
         "parte": "Essência",
-        "especie": "Humano"
+        "especie": "Humano",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5383,7 +5624,8 @@
         "preco": 80,
         "raridade": "incomum",
         "parte": "Órgãos",
-        "especie": "Vampiro"
+        "especie": "Vampiro",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5395,7 +5637,8 @@
         "preco": 150,
         "raridade": "raro",
         "parte": "Essência",
-        "especie": "Vampiro"
+        "especie": "Vampiro",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5407,7 +5650,8 @@
         "preco": 5,
         "raridade": "comum",
         "parte": "Carne",
-        "especie": "Goblim"
+        "especie": "Goblim",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -5419,7 +5663,8 @@
         "preco": 8,
         "raridade": "comum",
         "parte": "Órgãos",
-        "especie": "Goblim"
+        "especie": "Goblim",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -5431,7 +5676,8 @@
         "preco": 20,
         "raridade": "comum",
         "parte": "Carne",
-        "especie": "Anão"
+        "especie": "Anão",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5443,7 +5689,8 @@
         "preco": 30,
         "raridade": "comum",
         "parte": "Órgãos",
-        "especie": "Anão"
+        "especie": "Anão",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5455,7 +5702,8 @@
         "preco": 40,
         "raridade": "comum",
         "parte": "Essência",
-        "especie": "Anão"
+        "especie": "Anão",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5467,7 +5715,8 @@
         "preco": 60,
         "raridade": "incomum",
         "parte": "Órgãos",
-        "especie": "Golem"
+        "especie": "Golem",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -5479,7 +5728,8 @@
         "preco": 120,
         "raridade": "incomum",
         "parte": "Essência",
-        "especie": "Golem"
+        "especie": "Golem",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -5491,7 +5741,8 @@
         "preco": 200,
         "raridade": "raro",
         "parte": "Essência",
-        "especie": "Espírito"
+        "especie": "Espírito",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5503,7 +5754,8 @@
         "preco": 120,
         "raridade": "incomum",
         "parte": "Carne",
-        "especie": "Gigante"
+        "especie": "Gigante",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -5515,7 +5767,8 @@
         "preco": 180,
         "raridade": "raro",
         "parte": "Órgãos",
-        "especie": "Gigante"
+        "especie": "Gigante",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -5527,7 +5780,8 @@
         "preco": 250,
         "raridade": "raro",
         "parte": "Essência",
-        "especie": "Gigante"
+        "especie": "Gigante",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -5539,7 +5793,8 @@
         "preco": 20,
         "raridade": "comum",
         "parte": "Carne",
-        "especie": "Animália"
+        "especie": "Animália",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5551,7 +5806,8 @@
         "preco": 35,
         "raridade": "comum",
         "parte": "Órgãos",
-        "especie": "Animália"
+        "especie": "Animália",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5563,7 +5819,8 @@
         "preco": 25,
         "raridade": "comum",
         "parte": "Essência",
-        "especie": "Animália"
+        "especie": "Animália",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5575,7 +5832,8 @@
         "preco": 35,
         "raridade": "comum",
         "parte": "Carne",
-        "especie": "Sereia/Tritão"
+        "especie": "Sereia/Tritão",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5587,7 +5845,8 @@
         "preco": 70,
         "raridade": "incomum",
         "parte": "Órgãos",
-        "especie": "Sereia/Tritão"
+        "especie": "Sereia/Tritão",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5599,7 +5858,8 @@
         "preco": 90,
         "raridade": "incomum",
         "parte": "Essência",
-        "especie": "Sereia/Tritão"
+        "especie": "Sereia/Tritão",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5612,7 +5872,8 @@
           "Lunaris": 1
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5625,7 +5886,8 @@
           "Lunaris": 3
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5638,7 +5900,8 @@
           "Lunaris": 2
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5651,7 +5914,8 @@
           "Lunaris": 1
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5664,7 +5928,8 @@
           "Lunaris": 60
         },
         "raridade": "raro",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -5677,7 +5942,8 @@
           "Lunaris": 4
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5690,7 +5956,8 @@
           "Lunaris": 2
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5703,7 +5970,8 @@
           "Lunaris": 6
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5716,7 +5984,8 @@
           "Lunaris": 25
         },
         "raridade": "incomum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5729,7 +5998,8 @@
           "Lunaris": 8
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5742,7 +6012,8 @@
           "Lunaris": 3
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5755,7 +6026,8 @@
           "Lunaris": 8
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5768,7 +6040,8 @@
           "Lunaris": 15
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5781,7 +6054,8 @@
           "Lunaris": 5
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5790,9 +6064,12 @@
       "titulo": "Amostra Elemental",
       "conteudo": {
         "descricao": "Fragmento capturado de Terra, Água, Fogo, Ar, Raio, Luz ou Escuridão em estado puro, estável o bastante para ser manuseado. Ingrediente da Convergência dos Sete Salões e da Forja de Baluarte; escolha o elemento na compra.",
-        "preco": 12,
+        "preco": {
+          "Lunaris": 24
+        },
         "raridade": "raro",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -5805,7 +6082,8 @@
           "Lunaris": 35
         },
         "raridade": "incomum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5818,7 +6096,8 @@
           "Lunaris": 30
         },
         "raridade": "incomum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5831,7 +6110,8 @@
           "Lunaris": 8
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5844,7 +6124,8 @@
           "Lunaris": 10
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5857,7 +6138,8 @@
           "Lunaris": 10
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5870,7 +6152,8 @@
           "Lunaris": 5
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5883,7 +6166,8 @@
           "Lunaris": 6
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5892,9 +6176,12 @@
       "titulo": "Vestígio Material de uma Ameaça",
       "conteudo": {
         "descricao": "Fragmento arrancado de uma praga, maldição ou invocação sem fim: uma escama, um pedaço de corrente, uma gota do que a sustenta. Ingrediente do Rito do Ponto Final.",
-        "preco": 20,
+        "preco": {
+          "Lunaris": 40
+        },
         "raridade": "raro",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5907,7 +6194,8 @@
           "Lunaris": 10
         },
         "raridade": "comum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5916,9 +6204,12 @@
       "titulo": "Núcleo Tecnológico A.X.I.S",
       "conteudo": {
         "descricao": "Componente central de qualquer construção sob o protocolo A.X.I.S, necessário para isolar ou animar um dispositivo. Ingrediente do Protocolo de Isolamento e da Montagem de Autômato.",
-        "preco": 30,
+        "preco": {
+          "Lunaris": 60
+        },
         "raridade": "raro",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5931,7 +6222,8 @@
           "Lunaris": 20
         },
         "raridade": "incomum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5944,7 +6236,8 @@
           "Lunaris": 30
         },
         "raridade": "incomum",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -5953,9 +6246,12 @@
       "titulo": "Símbolo de Pecado Gravado",
       "conteudo": {
         "descricao": "Símbolo entalhado sob rito próprio, único para cada um dos Sete Pecados, sem repetição possível no mesmo círculo. Ingrediente do Rito dos Sete Pecados.",
-        "preco": 40,
+        "preco": {
+          "Lunaris": 120
+        },
         "raridade": "epico",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -5964,9 +6260,12 @@
       "titulo": "Símbolo de Virtude Gravado",
       "conteudo": {
         "descricao": "Símbolo entalhado sob rito próprio, único para cada uma das Sete Virtudes, sem repetição possível no mesmo círculo. Ingrediente do Rito das Sete Virtudes.",
-        "preco": 40,
+        "preco": {
+          "Lunaris": 120
+        },
         "raridade": "epico",
-        "parte": "Material Ritualístico"
+        "parte": "Material Ritualístico",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -6541,7 +6840,8 @@
             "nome": "Golpe Metálico",
             "detalhe": "+6, 1d8+2 impacto"
           }
-        ]
+        ],
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -6587,7 +6887,8 @@
             "nome": "Raio Luminoso",
             "detalhe": "+11, 1d10+3 luz"
           }
-        ]
+        ],
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -6633,7 +6934,8 @@
             "nome": "Garras das Sombras",
             "detalhe": "+18, 2d8+4 escuridão"
           }
-        ]
+        ],
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -6753,7 +7055,8 @@
         "sistemasAtivosMaximos": 2,
         "espacosBase": 0,
         "armas": [],
-        "sistemas": []
+        "sistemas": [],
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -6802,7 +7105,8 @@
             "acao": "padrão"
           }
         ],
-        "sistemas": []
+        "sistemas": [],
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -6868,7 +7172,8 @@
             "cargas": 2
           }
         ],
-        "sistemas": []
+        "sistemas": [],
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -6938,7 +7243,8 @@
           "acaoAtivacao": "padrão",
           "consomeSistemaAtivo": 1,
           "reparo": "manutenção bem-sucedida"
-        }
+        },
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -6997,7 +7303,8 @@
         "frequencia": "1/dia",
         "custo": "10 Mana",
         "defesa": "Fortitude reduz à metade",
-        "efeito": "Desintegração Menor: 4d8 de Vazio"
+        "efeito": "Desintegração Menor: 4d8 de Vazio",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -7016,7 +7323,8 @@
         "subtipo": "magico",
         "ativacao": "Automática ao ser reduzido a 0 de Vida",
         "frequencia": "Uso único",
-        "efeito": "Permanece com 1 de Vida, teleporta até 10 m e destrói o anel"
+        "efeito": "Permanece com 1 de Vida, teleporta até 10 m e destrói o anel",
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -7076,7 +7384,8 @@
         "alcance": "Longo",
         "tipo_de_dano": "Balístico",
         "subtipo": "marcial",
-        "material": "Tecnologia"
+        "material": "Tecnologia",
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -7093,7 +7402,7 @@
         },
         "promocao": {
           "ativa": true,
-          "rotulo": "Oferta da Metrópole"
+          "rotulo": "Oferta do Mercado Negro"
         },
         "raridade": "incomum",
         "atributos": [
@@ -7111,7 +7420,8 @@
         "alcance": "Médio",
         "tipo_de_dano": "Fogo",
         "subtipo": "marcial",
-        "material": "Tecnologia"
+        "material": "Tecnologia",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -7134,7 +7444,8 @@
         ],
         "subtipo": "armadura",
         "espacos": 1,
-        "material": "Malha A.X.I.S"
+        "material": "Malha A.X.I.S",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -7160,7 +7471,8 @@
         "custo": "1 carga",
         "recarga": "Todas após descanso completo e 1 hora em fonte A.X.I.S",
         "defesa": "Reflexos reduz à metade",
-        "efeito": "4d8 de dano Balístico"
+        "efeito": "4d8 de dano Balístico",
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -7250,7 +7562,8 @@
         "frequencia": "1/cena",
         "custo": "5 Mana",
         "defesa": "Misticismo contra o teste de conjuração do atacante",
-        "efeito": "Em sucesso, devolve a magia ao conjurador original"
+        "efeito": "Em sucesso, devolve a magia ao conjurador original",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -7292,7 +7605,8 @@
             "2 pequenos"
           ],
           "integrado": true
-        }
+        },
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -7326,7 +7640,8 @@
         "sistemasAtivosMaximos": 0,
         "espacosBase": 0,
         "armas": [],
-        "sistemas": []
+        "sistemas": [],
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -7360,7 +7675,8 @@
         "sistemasAtivosMaximos": 0,
         "espacosBase": 0,
         "armas": [],
-        "sistemas": []
+        "sistemas": [],
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -7400,7 +7716,8 @@
         "armazenamentoIntegrado": {
           "capacidadeItens": 8,
           "consomeSistemaAtivo": 0
-        }
+        },
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -7434,7 +7751,8 @@
         "sistemasAtivosMaximos": 0,
         "espacosBase": 0,
         "armas": [],
-        "sistemas": []
+        "sistemas": [],
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -7468,7 +7786,8 @@
         "sistemasAtivosMaximos": 1,
         "espacosBase": 1,
         "armas": [],
-        "sistemas": []
+        "sistemas": [],
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -7509,7 +7828,8 @@
           "bonusCura": 2,
           "capacidadePacientes": 1,
           "consomeSistemaAtivo": 1
-        }
+        },
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -7546,7 +7866,8 @@
         "sistemasAtivosMaximos": 2,
         "espacosBase": 1,
         "armas": [],
-        "sistemas": []
+        "sistemas": [],
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -7587,7 +7908,8 @@
           "capacidadeItens": 15,
           "espacosBaseConsumidos": 1,
           "consomeSistemaAtivo": 0
-        }
+        },
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -7636,7 +7958,8 @@
             "acao": "padrão"
           }
         ],
-        "sistemas": []
+        "sistemas": [],
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -7677,7 +8000,8 @@
           "bonusCura": 2,
           "capacidadePacientes": 1,
           "consomeSistemaAtivo": 1
-        }
+        },
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -7715,7 +8039,8 @@
         "sistemasAtivosMaximos": 4,
         "espacosBase": 1,
         "armas": [],
-        "sistemas": []
+        "sistemas": [],
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -8005,7 +8330,8 @@
         "ativacao": "Após falhar num teste não combativo",
         "efeito": "Permite repetir o teste usando abordagem diferente; consequências já produzidas permanecem.",
         "consumivel": true,
-        "origem_magica": "nova-tentativa"
+        "origem_magica": "nova-tentativa",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -8030,7 +8356,8 @@
         "ativacao": "Ação Padrão, alcance Curto",
         "efeito": "Revela natureza sobrenatural geral de objeto ou disfarce; contra criatura usa Vontade.",
         "consumivel": true,
-        "origem_magica": "autenticidade"
+        "origem_magica": "autenticidade",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -8055,7 +8382,8 @@
         "ativacao": "Quebrar o selo",
         "efeito": "Envia mensagem gravada de até 25 palavras a pessoa nomeada na mesma realidade.",
         "consumivel": true,
-        "origem_magica": "mensagem-prateada"
+        "origem_magica": "mensagem-prateada",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -8080,7 +8408,8 @@
         "ativacao": "Ação Padrão, toque",
         "efeito": "Recupera 1d6 + 2 de Vida de uma criatura viva.",
         "consumivel": true,
-        "origem_magica": "primeiros-socorros"
+        "origem_magica": "primeiros-socorros",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -8105,7 +8434,8 @@
         "ativacao": "Ação Padrão, toque",
         "efeito": "Por uma cena, objeto pequeno torna-se leve, pesado, flexível ou rígido, determinado por 1d4.",
         "consumivel": true,
-        "origem_magica": "quatro-mudancas"
+        "origem_magica": "quatro-mudancas",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -8130,7 +8460,8 @@
         "ativacao": "Ação Padrão, alcance Curto",
         "efeito": "Produz elemento mínimo para tarefa cotidiana; contra criatura causa 1d6 e usa Reflexos.",
         "consumivel": true,
-        "origem_magica": "centelha-elemental"
+        "origem_magica": "centelha-elemental",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -8155,7 +8486,8 @@
         "ativacao": "Ação Padrão",
         "efeito": "Teleporta o usuário ao ponto de inscrição a até 15 m, salvo fronteira selada.",
         "consumivel": true,
-        "origem_magica": "retorno-marcado"
+        "origem_magica": "retorno-marcado",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -8180,7 +8512,8 @@
         "ativacao": "Colar no objeto",
         "efeito": "Conserva alimento, remédio ou amostra mundana por 24 horas.",
         "consumivel": true,
-        "origem_magica": "conservacao"
+        "origem_magica": "conservacao",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -8205,7 +8538,8 @@
         "ativacao": "Ação Padrão, colocar no chão",
         "efeito": "Suprime sons numa área de 1,5 m por três rodadas.",
         "consumivel": true,
-        "origem_magica": "silencio"
+        "origem_magica": "silencio",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -8374,7 +8708,7 @@
           "Nível Comum",
           "Valor 1"
         ],
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -8397,7 +8731,7 @@
           "Nível Comum",
           "Valor 1"
         ],
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -8493,10 +8827,18 @@
         "nivelMinimoLoja": 2,
         "pre_requisito": "Força 14, ou Destreza 14 em arma de disparo",
         "pre_requisitos": [
-          { "ou": [
-            { "atributo": "forca", "valor_minimo": 14 },
-            { "atributo": "destreza", "valor_minimo": 14 }
-          ] }
+          {
+            "ou": [
+              {
+                "atributo": "forca",
+                "valor_minimo": 14
+              },
+              {
+                "atributo": "destreza",
+                "valor_minimo": 14
+              }
+            ]
+          }
         ]
       }
     },
@@ -8543,7 +8885,7 @@
           "Nível Marcial",
           "Valor 2"
         ],
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -8567,10 +8909,12 @@
           "Valor 2",
           "Pré-requisito: Nível total 7"
         ],
-        "nivelMinimoLoja": 2,
+        "nivelMinimoLoja": 3,
         "pre_requisito": "Nível total 7",
         "pre_requisitos": [
-          { "nivel_personagem": 7 }
+          {
+            "nivel_personagem": 7
+          }
         ]
       }
     },
@@ -8598,7 +8942,10 @@
         "nivelMinimoLoja": 2,
         "pre_requisito": "Fluxo 14",
         "pre_requisitos": [
-          { "atributo": "fluxo", "valor_minimo": 14 }
+          {
+            "atributo": "fluxo",
+            "valor_minimo": 14
+          }
         ]
       }
     },
@@ -8626,7 +8973,9 @@
         "nivelMinimoLoja": 2,
         "pre_requisito": "Nível total 7",
         "pre_requisitos": [
-          { "nivel_personagem": 7 }
+          {
+            "nivel_personagem": 7
+          }
         ]
       }
     },
@@ -8674,10 +9023,12 @@
           "Valor 3",
           "Pré-requisito: Nível total 10"
         ],
-        "nivelMinimoLoja": 2,
+        "nivelMinimoLoja": 3,
         "pre_requisito": "Nível total 10",
         "pre_requisitos": [
-          { "nivel_personagem": 10 }
+          {
+            "nivel_personagem": 10
+          }
         ]
       }
     },
@@ -8702,10 +9053,12 @@
           "Valor 3",
           "Pré-requisito: Nível total 10"
         ],
-        "nivelMinimoLoja": 2,
+        "nivelMinimoLoja": 3,
         "pre_requisito": "Nível total 10",
         "pre_requisitos": [
-          { "nivel_personagem": 10 }
+          {
+            "nivel_personagem": 10
+          }
         ]
       }
     },
@@ -8871,7 +9224,10 @@
         "nivelMinimoLoja": 2,
         "pre_requisito": "Constituição 14",
         "pre_requisitos": [
-          { "atributo": "constituicao", "valor_minimo": 14 }
+          {
+            "atributo": "constituicao",
+            "valor_minimo": 14
+          }
         ]
       }
     },
@@ -8899,7 +9255,9 @@
         "nivelMinimoLoja": 2,
         "pre_requisito": "Nível total 7",
         "pre_requisitos": [
-          { "nivel_personagem": 7 }
+          {
+            "nivel_personagem": 7
+          }
         ]
       }
     },
@@ -8950,7 +9308,10 @@
         "nivelMinimoLoja": 2,
         "pre_requisito": "Sabedoria 14",
         "pre_requisitos": [
-          { "atributo": "sabedoria", "valor_minimo": 14 }
+          {
+            "atributo": "sabedoria",
+            "valor_minimo": 14
+          }
         ]
       }
     },
@@ -8975,10 +9336,13 @@
           "Valor 3",
           "Pré-requisito: Constituição 14"
         ],
-        "nivelMinimoLoja": 2,
+        "nivelMinimoLoja": 3,
         "pre_requisito": "Constituição 14",
         "pre_requisitos": [
-          { "atributo": "constituicao", "valor_minimo": 14 }
+          {
+            "atributo": "constituicao",
+            "valor_minimo": 14
+          }
         ]
       }
     },
@@ -9003,10 +9367,12 @@
           "Valor 3",
           "Pré-requisito: Nível total 10"
         ],
-        "nivelMinimoLoja": 2,
+        "nivelMinimoLoja": 3,
         "pre_requisito": "Nível total 10",
         "pre_requisitos": [
-          { "nivel_personagem": 10 }
+          {
+            "nivel_personagem": 10
+          }
         ]
       }
     },
@@ -9195,7 +9561,10 @@
         "nivelMinimoLoja": 2,
         "pre_requisito": "Fluxo 12",
         "pre_requisitos": [
-          { "atributo": "fluxo", "valor_minimo": 12 }
+          {
+            "atributo": "fluxo",
+            "valor_minimo": 12
+          }
         ]
       }
     },
@@ -9220,10 +9589,12 @@
           "Valor 3",
           "Pré-requisito: Nível total 10"
         ],
-        "nivelMinimoLoja": 2,
+        "nivelMinimoLoja": 3,
         "pre_requisito": "Nível total 10",
         "pre_requisitos": [
-          { "nivel_personagem": 10 }
+          {
+            "nivel_personagem": 10
+          }
         ]
       }
     },
@@ -9247,7 +9618,7 @@
           "Nível Comum",
           "Valor 1"
         ],
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -9270,7 +9641,7 @@
           "Nível Comum",
           "Valor 1"
         ],
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -9316,7 +9687,7 @@
           "Nível Comum",
           "Técnica"
         ],
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -9339,7 +9710,7 @@
           "Nível Comum",
           "Técnica"
         ],
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -9362,7 +9733,7 @@
           "Nível Comum",
           "Técnica"
         ],
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -9385,7 +9756,7 @@
           "Nível Comum",
           "Técnica"
         ],
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -9481,7 +9852,10 @@
         "nivelMinimoLoja": 2,
         "pre_requisito": "Fluxo 12",
         "pre_requisitos": [
-          { "atributo": "fluxo", "valor_minimo": 12 }
+          {
+            "atributo": "fluxo",
+            "valor_minimo": 12
+          }
         ]
       }
     },
@@ -9506,10 +9880,12 @@
           "Valor 3",
           "Pré-requisito: Nível total 10 e Misticismo treinado"
         ],
-        "nivelMinimoLoja": 2,
+        "nivelMinimoLoja": 3,
         "pre_requisito": "Nível total 10 e Misticismo treinado",
         "pre_requisitos": [
-          { "nivel_personagem": 10 }
+          {
+            "nivel_personagem": 10
+          }
         ]
       }
     },
@@ -9555,7 +9931,8 @@
         "loot": [
           "Pena de Corvo (8 Solares)"
         ],
-        "classe": "Familiar"
+        "classe": "Familiar",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -9602,7 +9979,8 @@
           "Presas de Javali (10 Solares)",
           "Couro Grosso (15 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -9646,7 +10024,8 @@
         "loot": [
           "Caudas de Rato (2 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -9692,7 +10071,8 @@
           "Adaga Ritual (25 Solares)",
           "Tomo Corrompido (40 Solares)"
         ],
-        "classe": "Servo"
+        "classe": "Servo",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -9736,7 +10116,8 @@
         "loot": [
           "Pele Manchada (12 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -9781,7 +10162,8 @@
         "loot": [
           "Resíduo Sombrio (35 Solares)"
         ],
-        "classe": "Servo"
+        "classe": "Servo",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -9826,7 +10208,8 @@
         "loot": [
           "Escamas de Lamia (70 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -9870,7 +10253,8 @@
         "loot": [
           "Sangue Regenerativo (100 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -9915,7 +10299,8 @@
         "loot": [
           "Fragmento do Vazio (200 Solares)"
         ],
-        "classe": "Invocação"
+        "classe": "Invocação",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -9959,7 +10344,8 @@
         "loot": [
           "Penas de Tempestade (60 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -10003,7 +10389,8 @@
         "loot": [
           "Placas de Ferro Encantado (250 Solares)"
         ],
-        "classe": "Invocação"
+        "classe": "Invocação",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -10048,7 +10435,8 @@
         "loot": [
           "Grimório Decadente (180 Solares)"
         ],
-        "classe": "Servo"
+        "classe": "Servo",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -10095,7 +10483,8 @@
           "Ferrão de Wyvern (220 Solares)",
           "Asas de Wyvern (150 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -10140,7 +10529,8 @@
         "loot": [
           "Corrente Espectral (180 Solares)"
         ],
-        "classe": "Servo"
+        "classe": "Servo",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -10188,7 +10578,8 @@
         "loot": [
           "Chifres de Minotauro (150 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -10232,7 +10623,8 @@
         "loot": [
           "Cabeça Regenerativa (400 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -10277,7 +10669,8 @@
         "loot": [
           "Cinza de Efreeti (600 Solares)"
         ],
-        "classe": "Invocação"
+        "classe": "Invocação",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -10326,7 +10719,8 @@
           "Chifre Colossal (500 Solares)",
           "Couro Colossal (700 Solares)"
         ],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -10558,7 +10952,8 @@
         ],
         "habilidades": [],
         "loot": [],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -10603,7 +10998,8 @@
         ],
         "habilidades": [],
         "loot": [],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 1
       }
     },
     {
@@ -10648,7 +11044,8 @@
         ],
         "habilidades": [],
         "loot": [],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -10693,7 +11090,8 @@
         ],
         "habilidades": [],
         "loot": [],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2
       }
     },
     {
@@ -10738,7 +11136,8 @@
         ],
         "habilidades": [],
         "loot": [],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -10785,7 +11184,8 @@
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
         ],
         "loot": [],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -10832,7 +11232,8 @@
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
         ],
         "loot": [],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -10879,7 +11280,8 @@
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
         ],
         "loot": [],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -10926,7 +11328,8 @@
           "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
         ],
         "loot": [],
-        "classe": "Criatura"
+        "classe": "Criatura",
+        "nivelMinimoLoja": 4
       }
     },
     {
@@ -10994,7 +11397,10 @@
         "qualidadeQuartos": "boa",
         "manutencao": 100,
         "instalacoes": [],
-        "atributos": ["Bem Imóvel", "Residência"],
+        "atributos": [
+          "Bem Imóvel",
+          "Residência"
+        ],
         "nivelMinimoLoja": 2
       }
     },
@@ -11014,7 +11420,10 @@
         "qualidadeQuartos": "boa",
         "manutencao": 100,
         "instalacoes": [],
-        "atributos": ["Bem Imóvel", "Apartamento"],
+        "atributos": [
+          "Bem Imóvel",
+          "Apartamento"
+        ],
         "nivelMinimoLoja": 2
       }
     },
@@ -11034,7 +11443,10 @@
         "qualidadeQuartos": "",
         "manutencao": 50,
         "instalacoes": [],
-        "atributos": ["Bem Imóvel", "Terreno"],
+        "atributos": [
+          "Bem Imóvel",
+          "Terreno"
+        ],
         "nivelMinimoLoja": 2
       }
     },
@@ -11054,7 +11466,10 @@
         "qualidadeQuartos": "",
         "manutencao": 200,
         "instalacoes": [],
-        "atributos": ["Bem Imóvel", "Comércio"],
+        "atributos": [
+          "Bem Imóvel",
+          "Comércio"
+        ],
         "nivelMinimoLoja": 2
       }
     },
@@ -11074,9 +11489,17 @@
         "qualidadeQuartos": "boa",
         "manutencao": 400,
         "instalacoes": [
-          { "nome": "Dormitório", "nivel": 1, "espacosOcupados": 1 }
+          {
+            "nome": "Dormitório",
+            "nivel": 1,
+            "espacosOcupados": 1
+          }
         ],
-        "atributos": ["Bem Imóvel", "Base", "Fortificado"],
+        "atributos": [
+          "Bem Imóvel",
+          "Base",
+          "Fortificado"
+        ],
         "nivelMinimoLoja": 3
       }
     }

@@ -1,7 +1,7 @@
 # Como completar o catálogo do Banqueiro
 
-Este guia explica o formato do catálogo e o que ainda falta converter (veículos e
-bestiário), pra você ou uma IA continuarem depois.
+Este guia explica o formato, a disponibilidade por local e a manutenção do
+catálogo da Loja.
 
 ## Formato de um item (schema da Loja)
 
@@ -16,6 +16,7 @@ Cada item é um objeto assim (o mesmo schema do site, em `data/loja`):
     "descricao": "texto de abertura obrigatório",
     "preco": 10,
     "raridade": "comum",
+    "nivelMinimoLoja": 1,
     "atributos": ["1d8 de dano", "Crítico 18-20/x2"],
     "dano": "1d8",
     "margem_ameaca": 18,
@@ -39,6 +40,8 @@ Cada item é um objeto assim (o mesmo schema do site, em `data/loja`):
   reliquia da criacao` (acentos e maiúsculas também são aceitos; `reliquia`
   permanece como chave legada de `mitico`). Valor ausente ou desconhecido é
   rejeitado pela auditoria e aparece como `Desconhecida` na interface.
+- **nivelMinimoLoja:** inteiro obrigatório de `1` a `4`. É a primeira loja em
+  que o item aparece; lojas posteriores acumulam o catálogo das anteriores.
 - **margem_ameaca:** menor resultado natural que gera crítico (`18`, `19` ou `20`).
 - **multiplicador_critico:** quantas vezes os dados da arma são rolados (`2`, `3` ou `4`).
 - Margens `18` e `19` usam `x2`; multiplicadores `x3` e `x4` exigem margem `20`.
@@ -46,6 +49,28 @@ Cada item é um objeto assim (o mesmo schema do site, em `data/loja`):
 
 O PostgreSQL guarda o mesmo objeto no campo `conteudo` (JSONB), mas o item
 completo vive na tabela `catalogo_itens`.
+
+## Progressão por local
+
+1. **Feira de Vila:** itens cotidianos e simples — armas simples, proteção
+   convencional, ferramentas, suprimentos e criaturas mundanas de baixo nível.
+2. **Metrópole:** armas marciais, proteção rara, selos básicos, propriedades,
+   veículos civis/T1, especialistas e criaturas intermediárias.
+3. **Mercado Negro:** contrabando, venenos, armamento militar ou tecnológico,
+   implantes, artefatos épicos, materiais de origem proibida, veículos T2 e
+   criaturas perigosas, servos ou ameaças de alto nível.
+4. **Banco Lunar:** itens lendários, míticos e Relíquias da Criação, Frutos do
+   Éden, tecnologia extrema, veículos T3/estelares e seres lendários.
+
+A raridade define a base (`comum/incomum` → 1, `raro` → 2, `epico` → 3 e
+`lendario/mitico/reliquia da criacao` → 4), mas a natureza do item pode elevar
+o nível. Por exemplo, uma arma marcial começa na Metrópole e tecnologia de
+plasma começa no Mercado Negro mesmo quando sua raridade é Incomum.
+
+Todas as entradas publicadas possuem `nivelMinimoLoja` explícito. Ao adicionar
+ou alterar itens, execute `node tools/classify-shop-locations.mjs`, revise o
+resultado semântico e rode os testes; o script nunca deve substituir a revisão
+manual de exceções narrativas.
 
 ## Como adicionar itens
 
@@ -73,16 +98,18 @@ ele não publica mudanças feitas no JSON.
   `modificacao_id` apontando para a fonte. O preço sai de
   `PRECO_MODIFICACAO_POR_VALOR` — 25, 60, 180 e 450 Lunaris para técnica, valor
   1, 2 e 3 — e as marciais só aparecem da Metrópole para cima
-  (`nivelMinimoLoja: 2`). Ao acrescentar uma modificação nas regras, replique a
+  (`nivelMinimoLoja >= 2`); efeitos épicos ou proibidos avançam ao Mercado
+  Negro. Ao acrescentar uma modificação nas regras, replique a
   entrada aqui com o mesmo preço da faixa.
 - **Veículos:** 65, sendo 49 sistemas/peças e 16 veículos completos, todos com
   ficha estruturada e efeitos veiculares completos.
 - **Bestiário:** 60 seres (`tipo: "monstro"`, preço por fórmula).
-- **Drops:** 22 partes de seres (`tipo: "drop"`).
+- **Componentes e drops:** 51 entradas (`tipo: "drop"`), incluindo partes de
+  seres e materiais ritualísticos.
 - **Especiais:** 5 Frutos do Éden, 10 Implantes, 8 Artefatos Mágicos e 11 Selos
   consumíveis sincronizados com o catálogo mágico.
 
-Total: **427 entradas**.
+Total: **461 entradas**.
 
 ## Política econômica
 
@@ -139,9 +166,10 @@ Poder Ass/Legado/Variável. Há seres dos seis sub-tipos (Criatura, Familiar, Se
 Invocação, Ajudante, Ser Lendário), guardados em `conteudo` com `nivel` e `classe`
 (o sub-tipo). Pra adicionar mais criaturas, use a mesma fórmula por sub-tipo.
 
-**Drops (`tipo: "drop"`, 22 itens):** uma entrada por par espécie×parte com preço
-(Carne/Órgãos/Essência); pares com ❌ na tabela foram ignorados. A descrição já cita os
-modificadores (conservação, qualidade do abate, ser lendário, falta de material).
+**Drops (`tipo: "drop"`, 51 itens):** 22 entradas por par espécie×parte com preço
+(Carne/Órgãos/Essência) e 29 componentes ritualísticos. Pares com ❌ na tabela
+foram ignorados. A descrição já cita os modificadores (conservação, qualidade
+do abate, ser lendário, falta de material).
 
 **Obstinadas:** as armas-artefato (Excalibur, Mjölnir, Gungnir…) viraram armas lendárias
 (`tipo: "arma"`, `material: "Obstinada"`), com a habilidade na descrição.

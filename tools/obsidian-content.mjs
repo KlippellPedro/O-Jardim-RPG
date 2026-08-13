@@ -74,6 +74,7 @@ const FIELD_LABELS = {
   margem_ameaca: 'Margem de ameaça',
   multiplicador_critico: 'Multiplicador crítico',
   nivel: 'Nível',
+  nivelMinimoLoja: 'Loja mínima',
   origem_conteudo: 'Origem do conteúdo',
   pre_requisitos: 'Pré-requisitos',
   progressao: 'Progressão',
@@ -89,15 +90,17 @@ function parseArguments() {
   const [command = 'check', ...args] = process.argv.slice(2);
   let vault = process.env.JARDIM_OBSIDIAN_VAULT || DEFAULT_VAULT;
   let force = false;
+  let source = null;
   for (let index = 0; index < args.length; index += 1) {
     if (args[index] === '--vault') vault = args[++index];
+    else if (args[index] === '--source') source = args[++index]?.replaceAll('\\', '/');
     else if (args[index] === '--force') force = true;
     else throw new Error(`Argumento desconhecido: ${args[index]}`);
   }
   if (!['import', 'export', 'check'].includes(command)) {
-    throw new Error('Uso: node tools/obsidian-content.mjs <import|export|check> [--vault CAMINHO] [--force]');
+    throw new Error('Uso: node tools/obsidian-content.mjs <import|export|check> [--vault CAMINHO] [--source FONTE] [--force]');
   }
-  return { command, vault: path.resolve(vault), force };
+  return { command, vault: path.resolve(vault), force, source };
 }
 
 function readJson(relativePath) {
@@ -298,11 +301,19 @@ function renderFullSourceView(config, data) {
 function renderBundleView(config, entries) {
   const records = entries.map(({ registro }) => registro);
   if (config.renderer === 'shop') {
+    const locationLabels = {
+      1: 'Feira de Vila',
+      2: 'Metrópole',
+      3: 'Mercado Negro',
+      4: 'Banco Lunar',
+    };
     return markdownTable(
       ['Item', 'Preço', 'Raridade', 'Detalhes'],
       records.map((record) => {
         const content = record.conteudo || {};
-        const details = Object.fromEntries(Object.entries(content).filter(([key]) => !['preco', 'raridade'].includes(key)));
+        const details = Object.fromEntries(Object.entries(content)
+          .filter(([key]) => !['preco', 'raridade'].includes(key))
+          .map(([key, value]) => [key, key === 'nivelMinimoLoja' ? locationLabels[value] ?? value : value]));
         return [record.titulo, content.preco, content.raridade, details];
       }),
     );
@@ -625,29 +636,35 @@ function compileSource(vault, config) {
   return result;
 }
 
-function importMirrors(vault, force) {
-  for (const mirror of MIRRORS) {
+function importMirrors(vault, force, source) {
+  const selected = source ? MIRRORS.filter((mirror) => mirror.source === source) : MIRRORS;
+  for (const mirror of selected) {
     const sourceText = fs.readFileSync(path.join(REPOSITORY_ROOT, mirror.source), 'utf8');
     const warning = `<!-- Espelho de ${mirror.source}. Edite a fonte indicada ou use o fluxo documentado; esta cópia não é exportada. -->\n\n`;
     writeFileSafely(path.join(vault, mirror.target), warning + sourceText, force);
   }
+  return selected.length;
 }
 
-function importAll(vault, force) {
+function importAll(vault, force, source) {
   if (!fs.existsSync(vault)) throw new Error(`Cofre não encontrado: ${vault}`);
   let total = 0;
-  for (const config of SOURCES) {
+  const selected = source ? SOURCES.filter((config) => config.source === source) : SOURCES;
+  for (const config of selected) {
     const count = importSource(vault, config, force);
     console.log(`Importado ${config.source}: ${count} nota(s)`);
     total += count;
   }
-  importMirrors(vault, force);
-  console.log(`Importação concluída: ${total} notas de dados e ${MIRRORS.length} espelhos Markdown.`);
+  const mirrorCount = importMirrors(vault, force, source);
+  if (source && selected.length === 0 && mirrorCount === 0) throw new Error(`Fonte desconhecida: ${source}`);
+  console.log(`Importação concluída: ${total} notas de dados e ${mirrorCount} espelhos Markdown.`);
 }
 
-function exportAll(vault, checkOnly) {
+function exportAll(vault, checkOnly, source) {
   let checked = 0;
-  for (const config of SOURCES) {
+  const selected = source ? SOURCES.filter((config) => config.source === source) : SOURCES;
+  if (source && selected.length === 0) throw new Error(`Fonte JSON desconhecida: ${source}`);
+  for (const config of selected) {
     const compiled = compileSource(vault, config);
     const destination = path.join(REPOSITORY_ROOT, config.source);
     if (checkOnly) {
@@ -662,9 +679,9 @@ function exportAll(vault, checkOnly) {
   console.log(`${checkOnly ? 'Validação' : 'Exportação'} concluída: ${checked} fontes.`);
 }
 
-const { command, vault, force } = parseArguments();
-if (command === 'import') importAll(vault, force);
+const { command, vault, force, source } = parseArguments();
+if (command === 'import') importAll(vault, force, source);
 else if (command === 'export' && fs.existsSync(path.join(vault, '02 - Sistema', 'Ficha', 'Legados oficiais.md'))) {
   throw new Error('Exportação automática bloqueada: o cofre usa notas consolidadas que o adaptador legado ainda não recompõe com segurança. Sincronize pelo Codex.');
 }
-else exportAll(vault, command === 'check');
+else exportAll(vault, command === 'check', source);

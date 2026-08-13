@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-08T23:59:36.129Z",
+  "generatedAt": "2026-08-12T01:51:47.205Z",
   "levels": [
     1,
     5,
@@ -5506,7 +5506,7 @@
     {
       "id": "reliquia-excalibur",
       "titulo": "Excalibur",
-      "raridade": "relíquia da criação",
+      "raridade": "reliquia da criacao",
       "dano": "8d12+20",
       "mediaNormal": 72,
       "mediaComCritico": 82.8,
@@ -5516,7 +5516,7 @@
     {
       "id": "reliquia-mjolnir",
       "titulo": "Mjolnir",
-      "raridade": "relíquia da criação",
+      "raridade": "reliquia da criacao",
       "dano": "8d12+18",
       "mediaNormal": 70,
       "mediaComCritico": 80.5,
@@ -5526,7 +5526,7 @@
     {
       "id": "reliquia-martelo-chamas",
       "titulo": "Martelo das Chamas",
-      "raridade": "relíquia da criação",
+      "raridade": "reliquia da criacao",
       "dano": "8d12+16",
       "mediaNormal": 68,
       "mediaComCritico": 78.19999999999999,
@@ -5536,7 +5536,7 @@
     {
       "id": "reliquia-murasame",
       "titulo": "Murasame",
-      "raridade": "relíquia da criação",
+      "raridade": "reliquia da criacao",
       "dano": "8d12+16",
       "mediaNormal": 68,
       "mediaComCritico": 71.4,
@@ -5546,7 +5546,7 @@
     {
       "id": "reliquia-gungnir",
       "titulo": "Gungnir",
-      "raridade": "relíquia da criação",
+      "raridade": "reliquia da criacao",
       "dano": "8d12+14",
       "mediaNormal": 66,
       "mediaComCritico": 75.89999999999999,
@@ -5556,7 +5556,7 @@
     {
       "id": "reliquia-masamune",
       "titulo": "Masamune",
-      "raridade": "relíquia da criação",
+      "raridade": "reliquia da criacao",
       "dano": "10d10+10",
       "mediaNormal": 65,
       "mediaComCritico": 74.75,
@@ -5566,7 +5566,7 @@
     {
       "id": "reliquia-rhaast",
       "titulo": "Rhaast",
-      "raridade": "relíquia da criação",
+      "raridade": "reliquia da criacao",
       "dano": "8d12+12",
       "mediaNormal": 64,
       "mediaComCritico": 73.6,
@@ -5576,7 +5576,7 @@
     {
       "id": "reliquia-triceratops",
       "titulo": "Triceratops",
-      "raridade": "relíquia da criação",
+      "raridade": "reliquia da criacao",
       "dano": "10d10+8",
       "mediaNormal": 63,
       "mediaComCritico": 72.44999999999999,
@@ -5586,7 +5586,7 @@
     {
       "id": "reliquia-zangetsu",
       "titulo": "Zangetsu",
-      "raridade": "relíquia da criação",
+      "raridade": "reliquia da criacao",
       "dano": "8d12+10",
       "mediaNormal": 62,
       "mediaComCritico": 71.3,

@@ -51,15 +51,15 @@ Cada célula mostra `Vida/Mana/vagas de poder`.
 
 | Arma | Raridade | Dano | Média normal | Média com crítico | Nível recomendado | Mestre |
 |---|---|---|---:|---:|---:|---|
-| Excalibur | relíquia da criação | 8d12+20 | 72.0 | 82.8 | 35 | sim |
-| Mjolnir | relíquia da criação | 8d12+18 | 70.0 | 80.5 | 35 | sim |
-| Martelo das Chamas | relíquia da criação | 8d12+16 | 68.0 | 78.2 | 35 | sim |
-| Murasame | relíquia da criação | 8d12+16 | 68.0 | 71.4 | 35 | sim |
-| Gungnir | relíquia da criação | 8d12+14 | 66.0 | 75.9 | 35 | sim |
-| Masamune | relíquia da criação | 10d10+10 | 65.0 | 74.8 | 35 | sim |
-| Rhaast | relíquia da criação | 8d12+12 | 64.0 | 73.6 | 35 | sim |
-| Triceratops | relíquia da criação | 10d10+8 | 63.0 | 72.4 | 35 | sim |
-| Zangetsu | relíquia da criação | 8d12+10 | 62.0 | 71.3 | 35 | sim |
+| Excalibur | reliquia da criacao | 8d12+20 | 72.0 | 82.8 | 35 | sim |
+| Mjolnir | reliquia da criacao | 8d12+18 | 70.0 | 80.5 | 35 | sim |
+| Martelo das Chamas | reliquia da criacao | 8d12+16 | 68.0 | 78.2 | 35 | sim |
+| Murasame | reliquia da criacao | 8d12+16 | 68.0 | 71.4 | 35 | sim |
+| Gungnir | reliquia da criacao | 8d12+14 | 66.0 | 75.9 | 35 | sim |
+| Masamune | reliquia da criacao | 10d10+10 | 65.0 | 74.8 | 35 | sim |
+| Rhaast | reliquia da criacao | 8d12+12 | 64.0 | 73.6 | 35 | sim |
+| Triceratops | reliquia da criacao | 10d10+8 | 63.0 | 72.4 | 35 | sim |
+| Zangetsu | reliquia da criacao | 8d12+10 | 62.0 | 71.3 | 35 | sim |
 | Bazuca | lendario | 10d8+4d4 | 55.0 | 60.5 | 25 | sim |
 | Excalibur | lendario | 6d10+12 | 45.0 | 51.7 | 25 | sim |
 | Mjölnir | lendario | 6d10+12 | 45.0 | 51.7 | 25 | sim |

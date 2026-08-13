@@ -748,7 +748,7 @@
         "id": "heranca-do-retorno",
         "titulo": "Herança do Retorno",
         "tipo": "aquisicao",
-        "descricao": "Ao adquirir esta raça, receba um Legado adicional — algo que atravessou com você a fronteira que deveria ter sido definitiva.",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional - algo que atravessou com você a fronteira que deveria ter sido definitiva.",
         "automatizada": false
       }
     ],
@@ -1084,7 +1084,7 @@
         "id": "modulo-adicional",
         "titulo": "Módulo Adicional",
         "tipo": "aquisicao",
-        "descricao": "Ao adquirir esta raça, receba um Legado adicional — mais um componente instalado em sua arquitetura.",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional - mais um componente instalado em sua arquitetura.",
         "automatizada": false
       }
     ],
@@ -1632,7 +1632,7 @@
         "id": "desvio-do-original",
         "titulo": "Desvio do Original",
         "tipo": "aquisicao",
-        "descricao": "Ao adquirir esta raça, receba um Legado adicional — moldado pelas suas próprias adaptações, não copiado do Original.",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional - moldado pelas suas próprias adaptações, não copiado do Original.",
         "automatizada": false
       }
     ],
@@ -2027,7 +2027,7 @@
         "id": "residuo-da-fusao",
         "titulo": "Resíduo da Fusão",
         "tipo": "aquisicao",
-        "descricao": "Ao adquirir esta raça, receba um Legado adicional — resquício das partes que se fundiram em você.",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional - resquício das partes que se fundiram em você.",
         "automatizada": false
       }
     ],
@@ -2222,7 +2222,7 @@
         "id": "dadiva-do-pacto",
         "titulo": "Dádiva do Pacto",
         "tipo": "aquisicao",
-        "descricao": "Ao adquirir esta raça, receba um Legado adicional — parte do que o pacto concede a quem se torna Bruxa.",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional - parte do que o pacto concede a quem se torna Bruxa.",
         "automatizada": false
       }
     ],

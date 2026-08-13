@@ -86,12 +86,12 @@ const tabelaCrisesSanidade = CRISES_SANIDADE.map((crise) => `
  * tipo e conceito de cada entrada em vez de repetir a progressão inteira, que
  * já vive no catálogo interativo da página de Regras. */
 const listaClassesPublicas = classesData
-  .map((classe) => `<li><strong>${classe.titulo}</strong> (${classe.categoria === 'esquecida' ? 'especial' : 'comum'}) — ${classe.descricao}</li>`)
+  .map((classe) => `<li><strong>${classe.titulo}</strong> (${classe.categoria === 'esquecida' ? 'especial' : 'comum'}) - ${classe.descricao}</li>`)
   .join('');
 
 const listaRacasPublicas = racasData
   .filter((raca) => !raca.indisponivel && raca.id !== 'raca-personalizada')
-  .map((raca) => `<li><strong>${raca.titulo}</strong> (${raca.categoria === 'esquecida' ? 'especial' : 'comum'}) — Vida ${raca.vida >= 0 ? '+' : ''}${raca.vida}, Mana ${raca.mana >= 0 ? '+' : ''}${raca.mana}${raca.movimento ? `, Movimento +${raca.movimento} m` : ''}</li>`)
+  .map((raca) => `<li><strong>${raca.titulo}</strong> (${raca.categoria === 'esquecida' ? 'especial' : 'comum'}) - Vida ${raca.vida >= 0 ? '+' : ''}${raca.vida}, Mana ${raca.mana >= 0 ? '+' : ''}${raca.mana}${raca.movimento ? `, Movimento +${raca.movimento} m` : ''}</li>`)
   .join('');
 
 const listaLegadosPublicos = [...(legadosData.legados || []), ...(legadosNovosData.novos || [])]
@@ -1237,8 +1237,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>100 Lunaris</td><td>1 Solar</td><td>100:1</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">Essa taxa serve para o dia a dia — trocar Lunaris por Solares (ou o contrário) numa transação comum. Ela não torna categorias inteiras de item comparáveis entre si: um veículo precificado em Lunaris e uma arma lendária precificada em Solares seguem economias próprias, cada uma pensada pro ritmo da sua categoria, não uma equivalência de valor de jogo.</p>
-      <p class="regras-note">Fragmentos de Estrela e Créditos Sombrios não têm câmbio automático com nenhuma outra moeda. São obtidos por fonte própria — relíquias e artefatos concedidos pelo Mestre, mercado negro, ou outra origem narrativa — nunca só acumulando e convertendo Lunaris ou Solares.</p>
+      <p class="regras-note">Essa taxa serve para o dia a dia - trocar Lunaris por Solares (ou o contrário) numa transação comum. Ela não torna categorias inteiras de item comparáveis entre si: um veículo precificado em Lunaris e uma arma lendária precificada em Solares seguem economias próprias, cada uma pensada pro ritmo da sua categoria, não uma equivalência de valor de jogo.</p>
+      <p class="regras-note">Fragmentos de Estrela e Créditos Sombrios não têm câmbio automático com nenhuma outra moeda. São obtidos por fonte própria - relíquias e artefatos concedidos pelo Mestre, mercado negro, ou outra origem narrativa - nunca só acumulando e convertendo Lunaris ou Solares.</p>
 
       <h3 class="regras-subtitle">O Cofre Bancário</h3>
       <p class="regras-lead">O Banco gerido pelo Banqueiro reúne depósito, reputação e segurança.</p>

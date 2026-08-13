@@ -2077,33 +2077,33 @@ Classe comum serve a qualquer Árvore. Classe especial é mais forte, só aparec
 
 Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes e eventos por nível) fica no catálogo interativo da página de Regras, que lê o mesmo arquivo.
 
-- **Guerreiro** (comum) — Fica na frente porque alguém tem que ficar. Aguenta pancada, puxa o inimigo pra si e comanda um batalhão que luta melhor perto dele.
-- **Piloto** (comum) — Não vai a pé. Luta de dentro de um veículo que ele mesmo melhora peça por peça, e o veículo cresce junto com o personagem.
-- **Ninja** (comum) — Foi treinado por um clã e ainda deve satisfação a ele. Sobe na hierarquia, ganha armas e técnicas conforme o clã vai confiando, e rende muito mais quando ninguém sabe que ele está ali.
-- **Pop Star** (comum) — Resolve com plateia o que os outros resolvem no braço. Fama abre porta, presença segura atenção, e uma boa apresentação costuma valer mais que uma ameaça.
-- **Espadachim** (comum) — Uma espada, a vida inteira. Troca de postura no meio da luta e encadeia golpes que só fazem sentido em sequência: errar um estraga os outros.
-- **Lutador** (comum) — Sem arma, sem armadura, sem desculpa. Marca o inimigo golpe a golpe e ganha a briga no fôlego, não no primeiro impacto.
-- **Atirador** (comum) — Trabalha longe e chega preparado. Posição, munição e paciência valem mais que reflexo, e ele sempre sabe quantos tiros ainda tem.
-- **Médico** (comum) — Mantém o grupo de pé. Diagnostica, estabiliza quem caiu e devolve gente pra luta. O que ele não faz é desfazer o que já aconteceu.
-- **Guardião** (comum) — Escolhe alguém pra proteger e leva a sério. Cria vínculo, obriga o inimigo a decidir em quem bater e absorve o que vier, até onde a reação e a cena aguentarem.
-- **Caçador** (comum) — Estuda a presa antes de encostar nela. Cada tipo de criatura pede um método, e o que ele aprende sobre uma vale pra todas daquela família.
-- **Engenheiro** (comum) — Chega com as coisas montadas. Prepara invenções que duram pouco, melhora o equipamento do grupo e força a máquina além do limite quando a hora pede, sabendo o que isso vai custar.
-- **Alquimista** (comum) — Transforma o que encontra pelo caminho em elixir. O estoque zera no descanso, então cada frasco é uma decisão: usa agora ou guarda pro que vem depois.
-- **Comerciante** (comum) — Ganha a briga antes dela começar. Contato certo, informação na hora e estoque bem escolhido resolvem mais que dado. E não, ele não fabrica dinheiro.
-- **Campeão Dimensional** (especial) — Classe especial de Baluarte. Corpo acima do que um corpo deveria aguentar. Os picos de poder são curtos e contados, e nenhum deles impede de morrer.
-- **Pirata Amaldiçoado** (especial) — Classe especial do Abismo. Comanda maré espectral e maldição de curta duração, à frente de uma tripulação que já morreu e ainda não aceitou.
-- **Cartista Arcano** (especial) — Classe especial, aberta a qualquer Árvore. Conjura por cartas preparadas antes: o baralho decide o que você tem em mãos hoje, e o Fluxo nativo decide o que cada carta faz.
-- **Guia Dimensional** (especial) — Classe especial da Matriz. Conhece rota, portal e âncora: é por causa dele que o grupo chega em lugar onde não existe estrada.
-- **Caçador de Entidades** (especial) — Classe especial de Anima. Caça o que ataca por dentro: possessão, coisa que come memória, coisa que veste corpo alheio.
-- **Escritor de Contos** (especial) — Classe especial do Limiar. Transforma história, presságio e verdade pequena em apoio pro grupo. O que ele conta tem uma tendência incômoda a acontecer.
-- **Invocador** (especial) — Classe especial, aberta a qualquer Árvore. Não luta sozinho: chama. O que atende depende inteiramente do Fluxo nativo, e nem sempre é o que ele esperava.
-- **Viajante** (especial) — Classe especial da Matriz, de Éon ou de Vórtice. Vive entre Árvores e dimensões, e converte estrada rodada em capacidade de se virar em qualquer lugar.
-- **Decodificador** (especial) — Classe especial de Alétheia. Lê padrão, código e mentira antes de qualquer um, e guarda o que descobriu até a hora em que aquilo vira vantagem.
-- **Codificador** (especial) — Classe especial da A.X.I.S. Escreve protocolo temporário direto na realidade pra proteger, melhorar e controlar o terreno da luta.
-- **Canalizador** (comum) — Fluxo puro, direto, sem intermediário nenhum. É a forma mais simples de conjurar e a mais difícil de fazer bem.
-- **Sintonizador** (comum) — Alinha o Fluxo nativo a catalisadores de fora pra fazer o que ele sozinho não faria. Nada disso passa a morar na alma: é sempre empréstimo.
-- **Ritualista** (comum) — Trabalha fora do combate. Ritual não tem círculo, cobra tempo e compromete a Mana desde o primeiro minuto: se interromperem, a Mana já foi.
-- **Interceptador** (especial) — Classe especial da A.X.I.S. Entra na Malha pra derrubar a magia dos outros. Não conjura Fluxo natural, atrapalha quem conjura.
+- **Guerreiro** (comum) - Fica na frente porque alguém tem que ficar. Aguenta pancada, puxa o inimigo pra si e comanda um batalhão que luta melhor perto dele.
+- **Piloto** (comum) - Não vai a pé. Luta de dentro de um veículo que ele mesmo melhora peça por peça, e o veículo cresce junto com o personagem.
+- **Ninja** (comum) - Foi treinado por um clã e ainda deve satisfação a ele. Sobe na hierarquia, ganha armas e técnicas conforme o clã vai confiando, e rende muito mais quando ninguém sabe que ele está ali.
+- **Pop Star** (comum) - Resolve com plateia o que os outros resolvem no braço. Fama abre porta, presença segura atenção, e uma boa apresentação costuma valer mais que uma ameaça.
+- **Espadachim** (comum) - Uma espada, a vida inteira. Troca de postura no meio da luta e encadeia golpes que só fazem sentido em sequência: errar um estraga os outros.
+- **Lutador** (comum) - Sem arma, sem armadura, sem desculpa. Marca o inimigo golpe a golpe e ganha a briga no fôlego, não no primeiro impacto.
+- **Atirador** (comum) - Trabalha longe e chega preparado. Posição, munição e paciência valem mais que reflexo, e ele sempre sabe quantos tiros ainda tem.
+- **Médico** (comum) - Mantém o grupo de pé. Diagnostica, estabiliza quem caiu e devolve gente pra luta. O que ele não faz é desfazer o que já aconteceu.
+- **Guardião** (comum) - Escolhe alguém pra proteger e leva a sério. Cria vínculo, obriga o inimigo a decidir em quem bater e absorve o que vier, até onde a reação e a cena aguentarem.
+- **Caçador** (comum) - Estuda a presa antes de encostar nela. Cada tipo de criatura pede um método, e o que ele aprende sobre uma vale pra todas daquela família.
+- **Engenheiro** (comum) - Chega com as coisas montadas. Prepara invenções que duram pouco, melhora o equipamento do grupo e força a máquina além do limite quando a hora pede, sabendo o que isso vai custar.
+- **Alquimista** (comum) - Transforma o que encontra pelo caminho em elixir. O estoque zera no descanso, então cada frasco é uma decisão: usa agora ou guarda pro que vem depois.
+- **Comerciante** (comum) - Ganha a briga antes dela começar. Contato certo, informação na hora e estoque bem escolhido resolvem mais que dado. E não, ele não fabrica dinheiro.
+- **Campeão Dimensional** (especial) - Classe especial de Baluarte. Corpo acima do que um corpo deveria aguentar. Os picos de poder são curtos e contados, e nenhum deles impede de morrer.
+- **Pirata Amaldiçoado** (especial) - Classe especial do Abismo. Comanda maré espectral e maldição de curta duração, à frente de uma tripulação que já morreu e ainda não aceitou.
+- **Cartista Arcano** (especial) - Classe especial, aberta a qualquer Árvore. Conjura por cartas preparadas antes: o baralho decide o que você tem em mãos hoje, e o Fluxo nativo decide o que cada carta faz.
+- **Guia Dimensional** (especial) - Classe especial da Matriz. Conhece rota, portal e âncora: é por causa dele que o grupo chega em lugar onde não existe estrada.
+- **Caçador de Entidades** (especial) - Classe especial de Anima. Caça o que ataca por dentro: possessão, coisa que come memória, coisa que veste corpo alheio.
+- **Escritor de Contos** (especial) - Classe especial do Limiar. Transforma história, presságio e verdade pequena em apoio pro grupo. O que ele conta tem uma tendência incômoda a acontecer.
+- **Invocador** (especial) - Classe especial, aberta a qualquer Árvore. Não luta sozinho: chama. O que atende depende inteiramente do Fluxo nativo, e nem sempre é o que ele esperava.
+- **Viajante** (especial) - Classe especial da Matriz, de Éon ou de Vórtice. Vive entre Árvores e dimensões, e converte estrada rodada em capacidade de se virar em qualquer lugar.
+- **Decodificador** (especial) - Classe especial de Alétheia. Lê padrão, código e mentira antes de qualquer um, e guarda o que descobriu até a hora em que aquilo vira vantagem.
+- **Codificador** (especial) - Classe especial da A.X.I.S. Escreve protocolo temporário direto na realidade pra proteger, melhorar e controlar o terreno da luta.
+- **Canalizador** (comum) - Fluxo puro, direto, sem intermediário nenhum. É a forma mais simples de conjurar e a mais difícil de fazer bem.
+- **Sintonizador** (comum) - Alinha o Fluxo nativo a catalisadores de fora pra fazer o que ele sozinho não faria. Nada disso passa a morar na alma: é sempre empréstimo.
+- **Ritualista** (comum) - Trabalha fora do combate. Ritual não tem círculo, cobra tempo e compromete a Mana desde o primeiro minuto: se interromperem, a Mana já foi.
+- **Interceptador** (especial) - Classe especial da A.X.I.S. Entra na Malha pra derrubar a magia dos outros. Não conjura Fluxo natural, atrapalha quem conjura.
 
 ## racas
 
@@ -2115,26 +2115,26 @@ Raça comum pode nascer em qualquer Árvore. Raça especial é mais forte e só 
 
 Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologia, traços e variantes completos ficam no catálogo interativo da página de Regras, que lê o mesmo arquivo.
 
-- **Humano** (comum) — Vida +0, Mana +0
-- **Vampiro** (comum) — Vida +1, Mana +0
-- **Goblim** (comum) — Vida -1, Mana +1, Movimento +1.5 m
-- **Anão** (comum) — Vida +2, Mana +0
-- **Golem** (comum) — Vida +5, Mana -2
-- **Espírito** (comum) — Vida -2, Mana +3
-- **Gigante** (comum) — Vida +4, Mana -1
-- **Animália** (comum) — Vida +0, Mana +0
-- **Sereia / Tritão** (comum) — Vida -1, Mana +2
-- **Miceliano** (comum) — Vida +1, Mana +1
-- **Slime** (comum) — Vida +3, Mana -2
-- **Feérico** (comum) — Vida -2, Mana +4
-- **Elfo** (especial) — Vida +2, Mana +4
-- **Desperto** (especial) — Vida +4, Mana +2
-- **Auleth** (especial) — Vida +2, Mana +0
-- **Autômato** (especial) — Vida +0, Mana +0
-- **Clone** (especial) — Vida +3, Mana +3
-- **Errante** (especial) — Vida +3, Mana +3
-- **Amálgamo** (especial) — Vida +5, Mana +1
-- **Bruxa** (especial) — Vida +1, Mana +5
+- **Humano** (comum) - Vida +0, Mana +0
+- **Vampiro** (comum) - Vida +1, Mana +0
+- **Goblim** (comum) - Vida -1, Mana +1, Movimento +1.5 m
+- **Anão** (comum) - Vida +2, Mana +0
+- **Golem** (comum) - Vida +5, Mana -2
+- **Espírito** (comum) - Vida -2, Mana +3
+- **Gigante** (comum) - Vida +4, Mana -1
+- **Animália** (comum) - Vida +0, Mana +0
+- **Sereia / Tritão** (comum) - Vida -1, Mana +2
+- **Miceliano** (comum) - Vida +1, Mana +1
+- **Slime** (comum) - Vida +3, Mana -2
+- **Feérico** (comum) - Vida -2, Mana +4
+- **Elfo** (especial) - Vida +2, Mana +4
+- **Desperto** (especial) - Vida +4, Mana +2
+- **Auleth** (especial) - Vida +2, Mana +0
+- **Autômato** (especial) - Vida +0, Mana +0
+- **Clone** (especial) - Vida +3, Mana +3
+- **Errante** (especial) - Vida +3, Mana +3
+- **Amálgamo** (especial) - Vida +5, Mana +1
+- **Bruxa** (especial) - Vida +1, Mana +5
 
 ## bestiario
 
@@ -2322,9 +2322,9 @@ O Banqueiro realiza a conversão das moedas no Discord (valores sujeitos a taxas
 
 - 100 Lunaris | 1 Solar | 100:1
 
-Essa taxa serve para o dia a dia — trocar Lunaris por Solares (ou o contrário) numa transação comum. Ela não torna categorias inteiras de item comparáveis entre si: um veículo precificado em Lunaris e uma arma lendária precificada em Solares seguem economias próprias, cada uma pensada pro ritmo da sua categoria, não uma equivalência de valor de jogo.
+Essa taxa serve para o dia a dia - trocar Lunaris por Solares (ou o contrário) numa transação comum. Ela não torna categorias inteiras de item comparáveis entre si: um veículo precificado em Lunaris e uma arma lendária precificada em Solares seguem economias próprias, cada uma pensada pro ritmo da sua categoria, não uma equivalência de valor de jogo.
 
-Fragmentos de Estrela e Créditos Sombrios não têm câmbio automático com nenhuma outra moeda. São obtidos por fonte própria — relíquias e artefatos concedidos pelo Mestre, mercado negro, ou outra origem narrativa — nunca só acumulando e convertendo Lunaris ou Solares.
+Fragmentos de Estrela e Créditos Sombrios não têm câmbio automático com nenhuma outra moeda. São obtidos por fonte própria - relíquias e artefatos concedidos pelo Mestre, mercado negro, ou outra origem narrativa - nunca só acumulando e convertendo Lunaris ou Solares.
 
 ### O Cofre Bancário
 

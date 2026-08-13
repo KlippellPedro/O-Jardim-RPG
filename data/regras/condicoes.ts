@@ -1,5 +1,5 @@
 /**
- * Fonte única das condições oficiais — ficha (AbaFicha.tsx) e sessão ao vivo
+ * Fonte única das condições oficiais - ficha (AbaFicha.tsx) e sessão ao vivo
  * (EntityEditor.tsx) selecionam a partir daqui, então o nome nunca diverge
  * entre as duas telas.
  *
