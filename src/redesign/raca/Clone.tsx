@@ -155,64 +155,56 @@ export const Clone = ({ raca }: { raca: IRaca }) => {
                 <p className="text-emerald-200/60 text-lg">{grupo.descricao}</p>
               </motion.div>
 
-              <div className="overflow-x-auto rounded-none border border-emerald-800/40 bg-emerald-950/20 backdrop-blur-md shadow-lg shadow-emerald-900/10">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-emerald-800/40 bg-emerald-950/60">
-                      <th className="p-6 font-bold text-emerald-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Cadeia Genética</th>
-                      {mostraDescricao && <th className="p-6 font-bold text-emerald-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Fenótipo</th>}
-                      <th className="p-6 font-bold text-emerald-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Mutações Adicionais</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grupo.opcoes.map((opcao) => {
-                      const tracos = obterTracosOpcaoRacial(opcao);
-                      const titleLower = opcao.titulo.toLowerCase();
-                      
-                      // Custom colors for different clone lineages
-                      let lineageStyle = { glow: tema.glow, text: tema.text, border: tema.border, bg: 'hover:bg-emerald-900/20' };
-                      if (titleLower.includes('soldado') || titleLower.includes('combate') || titleLower.includes('agressivo')) {
-                        lineageStyle = { glow: 'rgba(239,68,68,0.25)', text: 'text-red-400', border: 'border-red-500/50', bg: 'hover:bg-red-950/30' };
-                      } else if (titleLower.includes('mente') || titleLower.includes('psíquico') || titleLower.includes('neural')) {
-                        lineageStyle = { glow: 'rgba(168,85,247,0.25)', text: 'text-purple-400', border: 'border-purple-500/50', bg: 'hover:bg-purple-950/30' };
-                      } else if (titleLower.includes('resistente') || titleLower.includes('adaptável') || titleLower.includes('sobrevivente')) {
-                        lineageStyle = { glow: 'rgba(245,158,11,0.25)', text: 'text-amber-400', border: 'border-amber-500/50', bg: 'hover:bg-amber-950/30' };
-                      } else if (titleLower.includes('infiltrador') || titleLower.includes('camuflagem')) {
-                        lineageStyle = { glow: 'rgba(6,182,212,0.25)', text: 'text-cyan-400', border: 'border-cyan-500/50', bg: 'hover:bg-cyan-950/30' };
-                      }
+              <div className="grid grid-cols-1 gap-6">
+                {grupo.opcoes.map((opcao, opcaoIdx) => {
+                  const tracos = obterTracosOpcaoRacial(opcao);
+                  const titleLower = opcao.titulo.toLowerCase();
 
-                      return (
-                        <tr 
-                          key={opcao.id} 
-                          className={`border-b border-emerald-800/20 transition-colors ${lineageStyle.bg}`}
-                        >
-                          <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
-                            <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
-                          </td>
-                          {mostraDescricao && (
-                            <td className="p-6 align-top text-emerald-100/70 text-sm leading-relaxed w-1/3">
-                              {descreverOpcaoRacial(opcao)}
-                            </td>
-                          )}
-                          <td className="p-6 align-top">
-                            {tracos.length > 0 ? (
-                              <div className="space-y-4">
-                                {tracos.map(traco => (
-                                  <div key={traco.id} className="bg-black/20 p-3 rounded-none border border-emerald-900/30">
-                                    <h4 className="text-sm font-bold text-emerald-100 mb-1">{traco.titulo}</h4>
-                                    {traco.descricao && <p className="text-xs text-emerald-200/50 leading-relaxed">{traco.descricao}</p>}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-emerald-500/30 italic text-sm">Sem mutações adicionais.</span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                  // Custom colors for different clone lineages
+                  let lineageStyle = { glow: tema.glow, text: tema.text, border: tema.border, bg: tema.bg };
+                  if (titleLower.includes('soldado') || titleLower.includes('combate') || titleLower.includes('agressivo')) {
+                    lineageStyle = { glow: 'rgba(239,68,68,0.25)', text: 'text-red-400', border: 'border-red-500/50', bg: 'bg-red-950/30' };
+                  } else if (titleLower.includes('mente') || titleLower.includes('psíquico') || titleLower.includes('neural')) {
+                    lineageStyle = { glow: 'rgba(168,85,247,0.25)', text: 'text-purple-400', border: 'border-purple-500/50', bg: 'bg-purple-950/30' };
+                  } else if (titleLower.includes('resistente') || titleLower.includes('adaptável') || titleLower.includes('sobrevivente')) {
+                    lineageStyle = { glow: 'rgba(245,158,11,0.25)', text: 'text-amber-400', border: 'border-amber-500/50', bg: 'bg-amber-950/30' };
+                  } else if (titleLower.includes('infiltrador') || titleLower.includes('camuflagem')) {
+                    lineageStyle = { glow: 'rgba(6,182,212,0.25)', text: 'text-cyan-400', border: 'border-cyan-500/50', bg: 'bg-cyan-950/30' };
+                  }
+
+                  return (
+                    <PremiumCard
+                      key={opcao.id}
+                      glowColor={lineageStyle.glow}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.06 * opcaoIdx }}
+                      className={`flex flex-col p-8 rounded-none ${lineageStyle.bg} border-l-2 ${lineageStyle.border} backdrop-blur-md transition-colors`}
+                    >
+                      <h3 className={`text-2xl font-bold mb-4 ${lineageStyle.text}`} style={{ fontFamily: 'Cinzel, serif' }}>
+                        {opcao.titulo}
+                      </h3>
+                      {mostraDescricao && (
+                        <p className="text-emerald-100/70 leading-relaxed text-sm mb-4">
+                          {descreverOpcaoRacial(opcao)}
+                        </p>
+                      )}
+                      {tracos.length > 0 ? (
+                        <div className="space-y-4 flex-1 mt-2">
+                          {tracos.map(traco => (
+                            <div key={traco.id} className="bg-black/20 p-3 rounded-none border border-emerald-900/30">
+                              <h4 className="text-sm font-bold text-emerald-100 mb-1">{traco.titulo}</h4>
+                              {traco.descricao && <p className="text-xs text-emerald-200/50 leading-relaxed">{traco.descricao}</p>}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-emerald-500/30 italic text-sm">Sem mutações adicionais.</span>
+                      )}
+                    </PremiumCard>
+                  );
+                })}
               </div>
             </section>
             );
