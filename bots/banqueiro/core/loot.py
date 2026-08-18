@@ -12,8 +12,9 @@ PESOS_RARIDADE: Dict[str, int] = {
     "epico": 4,
     "lendario": 1,
     "mitico": 1,
-    "reliquia da criacao": 1,
 }
+# Relíquias da Criação (inclui Frutos do Éden) nunca entram aqui: são únicas
+# e só chegam por evento/compra com Fragmentos de Estrela, nunca por baú.
 LUNARIS_MIN, LUNARIS_MAX = 5, 40
 
 

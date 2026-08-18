@@ -187,7 +187,12 @@ class BaseConhecimento:
         fonte_racas = "data/ficha/racas.json"
         for raca in self._ler_json(fonte_racas):
             titulo_raca = raca.get("titulo", raca.get("id", "Raça"))
-            self._adicionar(fonte_racas, titulo_raca, _campos_texto(raca, {"caracteristicas"}), "raça")
+            self._adicionar(
+                fonte_racas,
+                titulo_raca,
+                _campos_texto(raca, {"caracteristicas", "variantes", "linhagens", "condicoes_ancestrais", "estagios"}),
+                "raça",
+            )
             for caracteristica in raca.get("caracteristicas", []):
                 titulo = caracteristica.get("titulo", caracteristica.get("id", "Característica"))
                 self._adicionar(
@@ -196,6 +201,26 @@ class BaseConhecimento:
                     _campos_texto(caracteristica),
                     "raça",
                 )
+            # Sub-raças, linhagens e estágios (a Cor da Alma e os degraus do
+            # Espírito, por exemplo) entram como trechos próprios: sem isso o
+            # jogador não acha "Espírito Vermelho" nem "Fúria Carmesim".
+            for colecao in ("variantes", "linhagens", "condicoes_ancestrais", "estagios"):
+                for opcao in raca.get(colecao, []) or []:
+                    titulo_opcao = opcao.get("titulo", opcao.get("id", "Opção"))
+                    self._adicionar(
+                        fonte_racas,
+                        f"{titulo_raca} › {titulo_opcao}",
+                        _campos_texto(opcao, {"caracteristicas"}),
+                        "raça",
+                    )
+                    for caracteristica in opcao.get("caracteristicas", []) or []:
+                        titulo = caracteristica.get("titulo", caracteristica.get("id", "Característica"))
+                        self._adicionar(
+                            fonte_racas,
+                            f"{titulo_raca} › {titulo_opcao} › {titulo}",
+                            _campos_texto(caracteristica),
+                            "raça",
+                        )
 
         fonte_legados = "data/ficha/legados.json"
         legados = self._ler_json(fonte_legados)

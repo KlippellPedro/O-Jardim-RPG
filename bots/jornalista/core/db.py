@@ -96,8 +96,8 @@ _SCHEMA = (
         guild_id TEXT PRIMARY KEY,
         canal_id TEXT,
         ativo INTEGER NOT NULL DEFAULT 0,
-        min_hora INTEGER NOT NULL DEFAULT 10,
-        max_hora INTEGER NOT NULL DEFAULT 22,
+        min_hora INTEGER NOT NULL DEFAULT 0,
+        max_hora INTEGER NOT NULL DEFAULT 23,
         itens_por_bau INTEGER NOT NULL DEFAULT 1,
         proximo_drop TEXT
     )
@@ -167,7 +167,8 @@ _SCHEMA = (
     ALTER TABLE config ADD COLUMN IF NOT EXISTS jornal_canal_id TEXT
     """,
     """
-    ALTER TABLE config ADD COLUMN IF NOT EXISTS clima_auto BOOLEAN NOT NULL DEFAULT FALSE
+    ALTER TABLE config ADD COLUMN IF NOT EXISTS clima_auto BOOLEAN NOT NULL DEFAULT FALSE;
+    ALTER TABLE config ADD COLUMN IF NOT EXISTS modificador_clima TEXT DEFAULT NULL;
     """,
     # Preço do bilhete e corte da casa da Loteria Dominical: configurados
     # pelo Banqueiro (/seteconomia), lidos aqui pro sorteio. Mesma coluna da
@@ -462,6 +463,23 @@ _SCHEMA = (
     CREATE INDEX IF NOT EXISTS jornal_publicacoes_pendentes_idx
     ON jornal_publicacoes (proxima_tentativa)
     WHERE status='pendente'
+    """,
+    """
+    UPDATE baus_config
+    SET min_hora = 0, max_hora = 23
+    WHERE min_hora = 10 AND max_hora = 22
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS fofocas (
+        id SERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        texto_fofoca TEXT NOT NULL,
+        suborno_valor INTEGER NOT NULL,
+        prazo TIMESTAMPTZ NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pendente' CHECK (status IN ('pendente', 'subornada', 'publicada', 'notificada')),
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
     """,
 )
 
@@ -1021,8 +1039,8 @@ class Database:
     _BAUS_DEFAULT = {
         "canal_id": None,
         "ativo": 0,
-        "min_hora": 10,
-        "max_hora": 22,
+        "min_hora": 0,
+        "max_hora": 23,
         "itens_por_bau": 1,
         "proximo_drop": None,
         "chance_enigma_percent": None,
@@ -1688,7 +1706,7 @@ class Database:
                 INSERT INTO baus_config
                     (guild_id, canal_id, ativo, min_hora, max_hora,
                      itens_por_bau, proximo_drop)
-                VALUES (%s, NULL, 0, 10, 22, 1, %s)
+                VALUES (%s, NULL, 0, 0, 23, 1, %s)
                 ON CONFLICT (guild_id) DO UPDATE SET
                     proximo_drop = EXCLUDED.proximo_drop
                 """,
@@ -2451,3 +2469,54 @@ class Database:
     def limpar_bilhetes_loteria(self, guild_id: str) -> None:
         with self._conn() as con:
             con.execute("DELETE FROM loteria_bilhetes WHERE guild_id=%s", (guild_id,))
+
+    def listar_fofocas_pendentes(self, agora: datetime) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                "SELECT * FROM fofocas WHERE status='pendente' AND prazo <= %s",
+                (agora,)
+            ).fetchall()
+        return [dict(r) for r in rows]
+
+    def get_fofoca_pendente_usuario(self, guild_id: str, user_id: str) -> Optional[dict]:
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT * FROM fofocas WHERE guild_id=%s AND user_id=%s AND status='pendente' LIMIT 1",
+                (guild_id, user_id)
+            ).fetchone()
+        return dict(row) if row else None
+
+    def atualizar_status_fofoca(self, fofoca_id: int, novo_status: str) -> None:
+        with self._conn() as con:
+            con.execute("UPDATE fofocas SET status=%s WHERE id=%s", (novo_status, fofoca_id))
+
+    def debitar(self, guild_id: str, user_id: str, moeda: str, quantia: int) -> bool:
+        if quantia <= 0:
+            return False
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE carteira SET saldo = saldo - %s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (quantia, guild_id, user_id, moeda, quantia)
+            ).fetchone()
+        return row is not None
+
+
+    def get_modificador_clima(self, guild_id: str) -> Optional[str]:
+        with self._conn() as con:
+            row = con.execute("SELECT modificador_clima FROM config WHERE guild_id=%s", (guild_id,)).fetchone()
+        return row["modificador_clima"] if row else None
+
+    def set_modificador_clima(self, guild_id: str, modificador: Optional[str]) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO config (guild_id, modificador_clima)
+                VALUES (%s, %s)
+                ON CONFLICT (guild_id) DO UPDATE SET modificador_clima=EXCLUDED.modificador_clima
+                """,
+                (guild_id, modificador)
+            )

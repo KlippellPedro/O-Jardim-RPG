@@ -135,13 +135,8 @@ def converter(
     rate_solares_para_lunaris: int = CAMBIO_RATE_PADRAO,
     taxa: float = CAMBIO_TAXA_PADRAO,
 ) -> Tuple[int, int]:
-    """Converte entre Lunaris e Solares.
-
+    """Converte entre moedas.
     Retorna (recebido, taxa_cobrada), ambos na moeda de destino (inteiros).
-    A taxa do banco é descontada do valor convertido. `quantia` é debitada
-    integralmente da moeda de origem por quem chama.
-
-    Levanta ValueError em entrada inválida (deixa o chamador tratar a mensagem).
     """
     if not isinstance(quantia, int) or isinstance(quantia, bool) or quantia <= 0:
         raise ValueError("A quantia precisa ser um número inteiro positivo.")
@@ -153,13 +148,24 @@ def converter(
     d, p = normalizar(de), normalizar(para)
     if d == p:
         raise ValueError("As moedas de origem e destino são iguais.")
-    if {d, p} != {"lunaris", "solares"}:
-        raise ValueError("Por enquanto o câmbio só funciona entre Lunaris e Solares.")
 
-    if d == "solares":                      # Solares -> Lunaris
-        bruto = quantia * rate_solares_para_lunaris
-    else:                                   # Lunaris -> Solares
-        bruto = quantia / rate_solares_para_lunaris
+    # Taxas relativas a Solares
+    # 1 Solar = rate_solares_para_lunaris Lunaris
+    # 1 Fragmento = 50 Solares
+    # 1 Crédito Sombrio = 2 Solares
+    taxas_solares = {
+        "lunaris": 1 / rate_solares_para_lunaris,
+        "solares": 1.0,
+        "fragmentos de estrela": 50.0,
+        "creditos sombrios": 2.0
+    }
+    
+    if d not in taxas_solares or p not in taxas_solares:
+        raise ValueError("Moeda não reconhecida no câmbio.")
+
+    # Converte de -> Solares -> Para
+    valor_em_solares = quantia * taxas_solares[d]
+    bruto = valor_em_solares / taxas_solares[p]
 
     recebido = math.floor(bruto * (1 - taxa))
     taxa_cobrada = math.floor(bruto) - recebido
@@ -599,6 +605,7 @@ _CATS_BAU = [
     ("armas", "de Armas", ["arma"]),
     ("armaduras", "de Armaduras", ["armadura"]),
     ("itens", "de Itens", ["equipamento", "consumivel"]),
+    ("sombrio", "Sombrio", ITENS_ELEGIVEIS_BAU),
 ]
 # raridade -> (preco, itens, lunaris_min, lunaris_max, rotulo)
 _TIER_BAU = {

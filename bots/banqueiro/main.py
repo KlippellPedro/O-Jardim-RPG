@@ -32,6 +32,8 @@ EXTENSOES = (
     "cogs.loteria",
     "cogs.servicos",
     "cogs.ajuda",
+    "cogs.mercado_negro",
+    "cogs.mestre",
 )
 
 
@@ -142,6 +144,14 @@ class Banqueiro(commands.Bot):
 
     async def on_ready(self):
         log.info("Banqueiro online como %s.", self.user)
+
+    async def on_interaction(self, interaction: discord.Interaction):
+        await super().on_interaction(interaction)
+        if interaction.type == discord.InteractionType.application_command and interaction.guild_id:
+            try:
+                self.db.adicionar_reputacao(str(interaction.guild_id), str(interaction.user.id), 1)
+            except Exception:
+                pass
 
     async def close(self):
         try:

@@ -26,6 +26,7 @@ class ItemClima:
     efeito: str
     estacoes: Optional[List[str]]  # None = qualquer estação
     peso: int = PESO_COMUM
+    modificador_economico: Optional[str] = None
 
 
 CLIMAS: List[ItemClima] = [
@@ -60,9 +61,10 @@ CLIMAS: List[ItemClima] = [
         estacoes=["primavera"],
     ),
     ItemClima(
-        "onda_de_calor", "🔥 Onda de Calor",
-        "Desvantagem em Fortitude em esforços prolongados (marchas, trabalho pesado).",
+        "onda_de_calor", "🏜️ Onda de Calor",
+        "Desvantagem em Fortitude em esforços prolongados (marchas, trabalho pesado). A seca aumenta a procura por mantimentos: **Loja e Mercado Negro ficam 20% mais caros.**",
         estacoes=["verao"],
+        modificador_economico="inflacao_loja"
     ),
     ItemClima(
         "ventania_de_folhas", "🍂 Ventania de Folhas",
@@ -71,8 +73,9 @@ CLIMAS: List[ItemClima] = [
     ),
     ItemClima(
         "nevasca", "❄️ Nevasca",
-        "Desvantagem em Percepção à distância; terreno difícil.",
+        "Desvantagem em Percepção à distância; terreno difícil. Comerciantes querem queimar estoque: **Desconto de 15% na Loja.**",
         estacoes=["inverno"],
+        modificador_economico="deflacao_loja"
     ),
 
     # Exclusivos das estações especiais.
@@ -100,9 +103,10 @@ CLIMAS: List[ItemClima] = [
         estacoes=None, peso=PESO_RARO,
     ),
     ItemClima(
-        "estrelas_cadentes", "✨ Estrelas Cadentes",
-        "+1 narrativo num teste à escolha do jogador nessa sessão (fez um pedido).",
+        "estrelas_cadentes", "🌠 Estrelas Cadentes",
+        "+1 narrativo num teste à escolha do jogador nessa sessão (fez um pedido). A chuva estelar traz sorte: **Todos os baús têm o dobro de chance de dropar Fragmentos de Estrela.**",
         estacoes=None, peso=PESO_RARO,
+        modificador_economico="loot_up"
     ),
 ]
 

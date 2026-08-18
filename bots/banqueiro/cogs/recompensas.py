@@ -6,6 +6,9 @@ leva o valor junto: ver core.economia.Economia._resgatar_recompensa."""
 from __future__ import annotations
 
 import logging
+import asyncio
+import random
+import time
 from typing import Optional
 
 import discord
@@ -21,6 +24,58 @@ log = logging.getLogger("banqueiro")
 
 
 def _sid(interaction): return str(interaction.guild_id)
+
+
+class CacadorView(discord.ui.View):
+    def __init__(self, autor_id: int, acao_correta: str, timeout: float):
+        super().__init__(timeout=timeout)
+        self.autor_id = autor_id
+        self.acao_correta = acao_correta
+        self.venceu = False
+        self.encerrado = False
+        self._prazo = time.monotonic() + timeout
+        self._resolvido = asyncio.Event()
+
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        if interaction.user.id != self.autor_id:
+            await interaction.response.send_message("Essa caçada não é sua!", ephemeral=True)
+            return False
+        return True
+
+    def desabilitar(self):
+        self.encerrado = True
+        for item in self.children:
+            item.disabled = True
+
+    async def _processar_clique(self, interaction: discord.Interaction, acao: str):
+        if self.encerrado or time.monotonic() > self._prazo:
+            await interaction.response.send_message("Tempo esgotado!", ephemeral=True)
+            self.desabilitar()
+            self._resolvido.set()
+            self.stop()
+            return
+
+        if acao == self.acao_correta:
+            self.venceu = True
+        else:
+            self.venceu = False
+
+        self.desabilitar()
+        self._resolvido.set()
+        await interaction.response.defer()
+        self.stop()
+
+    @discord.ui.button(label="👣 Rastrear", style=discord.ButtonStyle.primary)
+    async def btn_rastrear(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await self._processar_clique(interaction, "rastrear")
+
+    @discord.ui.button(label="🥷 Emboscar", style=discord.ButtonStyle.success)
+    async def btn_emboscar(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await self._processar_clique(interaction, "emboscar")
+
+    @discord.ui.button(label="⚔️ Atacar", style=discord.ButtonStyle.danger)
+    async def btn_atacar(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await self._processar_clique(interaction, "atacar")
 
 
 class Recompensas(commands.Cog):
@@ -378,6 +433,105 @@ class Recompensas(commands.Cog):
         ]
         emb = ui.embed("🎯 Mais procurados", categoria="economia", descricao="\n".join(linhas))
         await interaction.response.send_message(embed=emb)
+
+    @app_commands.command(name="cacar", description="Caça um jogador que tem recompensa na cabeça (Mini-game).")
+    @app_commands.describe(membro="O alvo que você quer caçar.")
+    async def cacar(self, interaction: discord.Interaction, membro: discord.Member):
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        if uid == str(membro.id):
+            await interaction.response.send_message("Você não pode se caçar.", ephemeral=True)
+            return
+        if membro.bot:
+            await interaction.response.send_message("Bots não tem recompensa.", ephemeral=True)
+            return
+
+        db = self.bot.db
+        rec = db.get_recompensa(sid, str(membro.id))
+        valor = rec["valor"]
+        if valor <= 0:
+            await interaction.response.send_message(f"**{membro.display_name}** não tem recompensa na cabeça.", ephemeral=True)
+            return
+
+        acoes = [("rastrear", "👣 Rastrear"), ("emboscar", "🥷 Emboscar"), ("atacar", "⚔️ Atacar")]
+        acao_correta, nome_correto = random.choice(acoes)
+        
+        timeout = max(2.5, 8.0 - (valor / 100))
+
+        view = CacadorView(interaction.user.id, acao_correta, timeout)
+        
+        emb = ui.embed(
+            "🎯 Caçada Iniciada!",
+            categoria="economia",
+            descricao=f"Você está caçando **{membro.display_name}** por ☾ {valor} Lunaris.\n"
+                      f"Rápido! Clique em **{nome_correto}** antes que o tempo acabe ({timeout:.1f}s)!"
+        )
+        await interaction.response.send_message(embed=emb, view=view)
+        
+        try:
+            await asyncio.wait_for(view._resolvido.wait(), timeout=timeout)
+        except asyncio.TimeoutError:
+            pass
+
+        view.desabilitar()
+        
+        if view.venceu:
+            try:
+                db.limpar_recompensa(sid, str(membro.id))
+                db.creditar(sid, uid, "Lunaris", valor)
+                db.registrar_extrato(sid, uid, valor, "Lunaris", f"Recompensa caçada: {membro.display_name}")
+                
+                # --- PENALIDADES PARA O CAÇADO ---
+                alvo_id = str(membro.id)
+                db.garantir_jogador(sid, alvo_id)
+                
+                # 1. Calor vai ao máximo (10)
+                db.adicionar_calor_roubo(sid, alvo_id, 10)
+                
+                # 2. Perde 20% da carteira (como se tivesse sido saqueado no chão)
+                carteira_alvo = db.get_carteira(sid, alvo_id)
+                lunaris_alvo = carteira_alvo.get("Lunaris", 0)
+                roubado = int(lunaris_alvo * 0.2)
+                if roubado > 0:
+                    db.debitar(sid, alvo_id, "Lunaris", roubado)
+                    db.registrar_extrato(sid, alvo_id, -roubado, "Lunaris", f"Perdeu após ser caçado por {interaction.user.display_name}")
+                    
+                # 3. Hospitalização forçada (6 ferimentos)
+                with db._conn() as con:
+                    con.execute(
+                        """
+                        INSERT INTO ferimentos (guild_id, user_id, pontos)
+                        VALUES (%s, %s, 5)
+                        ON CONFLICT (guild_id, user_id) DO UPDATE SET pontos = 5
+                        """,
+                        (sid, alvo_id)
+                    )
+                _, pro_hospital, pago_hosp = db.adicionar_ferimento(sid, alvo_id)
+                
+                detalhes_alvo = f"**{membro.display_name}** foi parar no hospital (pagou ☾ {pago_hosp}) e perdeu ☾ {roubado} no chão."
+                
+                win_emb = ui.embed(
+                    "🎯 Caçada Concluída!",
+                    categoria="cofre",
+                    descricao=f"Você agiu rápido e pegou **{membro.display_name}**!\nRecebeu ☾ {valor} Lunaris da recompensa.\n\n🚑 {detalhes_alvo}"
+                )
+                await interaction.edit_original_response(embed=win_emb, view=view)
+            except Exception:
+                await interaction.edit_original_response(content="Erro ao resgatar recompensa.", embed=None, view=None)
+        else:
+            pontos, pro_hospital, pago = db.adicionar_ferimento(sid, uid)
+            if pro_hospital:
+                loss_emb = ui.embed(
+                    "🚑 Caçada Falhou",
+                    categoria="erro",
+                    descricao=f"Você falhou na caçada e se machucou gravemente! Acumulou 6 pontos de ferido e pagou ☾ {pago} de hospital."
+                )
+            else:
+                loss_emb = ui.embed(
+                    "🩸 Caçada Falhou",
+                    categoria="erro",
+                    descricao=f"Você não foi rápido o suficiente ou errou a ação. O alvo escapou e você tomou 1 ponto de ferido ({pontos}/6)."
+                )
+            await interaction.edit_original_response(embed=loss_emb, view=view)
 
 
 async def setup(bot):

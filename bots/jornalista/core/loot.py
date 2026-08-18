@@ -19,7 +19,6 @@ PESOS_RARIDADE: Dict[str, int] = {
     "epico": 4,
     "lendario": 1,
     "reliquia": 1,
-    "reliquia da criacao": 1,
 }
 LUNARIS_MIN, LUNARIS_MAX = 5, 40
 CHANCE_BAU_ENIGMA = 0.25  # legado: bancos antigos ainda podem expor este valor
@@ -56,15 +55,18 @@ BAU_RARIDADES = {
         "nome": "Baú Lendário", "emoji": "👑", "cor": 0xF39C12,
         "peso": 8, "peso_especial": 90, "expira_minutos": 30,
         "dificuldade_enigma": "dificil", "bonus_itens": 1, "lunaris_mult": 4.0,
-        "pesos_itens": {"epico": 20, "lendario": 65, "reliquia": 14, "reliquia da criacao": 1},
+        "pesos_itens": {"epico": 20, "lendario": 65, "reliquia": 14},
     },
     "mitico": {
         "nome": "Baú Mítico", "emoji": "🔥", "cor": 0xE74C3C,
         "peso": 2, "peso_especial": 30, "expira_minutos": 15,
         "dificuldade_enigma": "lendario", "bonus_itens": 3, "lunaris_mult": 8.0,
-        "pesos_itens": {"lendario": 15, "reliquia": 70, "reliquia da criacao": 15},
+        "pesos_itens": {"lendario": 15, "reliquia": 70},
     },
 }
+# Relíquias da Criação (inclui Frutos do Éden) nunca entram em pesos_itens:
+# são únicas e só chegam por evento/compra com Fragmentos de Estrela, nunca
+# por baú.
 BAU_RARIDADE_ORDEM = tuple(BAU_RARIDADES)
 
 
@@ -127,6 +129,65 @@ TIPOS_PERMITIDOS_BAU = frozenset({
     "modificacao",
 })
 
+# Pesos de raridade especiais para itens do baú sombrio (mais épicos/lendários)
+PESOS_SOMBRIO = {
+    "incomum": 5,
+    "raro": 30,
+    "epico": 45,
+    "lendario": 15,
+    "mitico": 5,
+}
+
+# Créditos Sombrios que caem no baú sombrio (por raridade do baú)
+CREDITOS_SOMBRIOS_BAU = {
+    "comum":    (3,  8),
+    "raro":     (10, 25),
+    "lendario": (30, 70),
+}
+
+
+def sortear_item_sombrio(catalogo, rng=_random, excluir_ids=None):
+    """Sorteia 1 item marcado como mercado_negro no catálogo, ponderado por raridade sombria."""
+    ids_bloqueados = set(excluir_ids or ())
+    itens = [
+        it for it in catalogo.listar()
+        if it.conteudo.get("mercado_negro")
+        and it.tipo in TIPOS_PERMITIDOS_BAU
+        and it.id not in ids_bloqueados
+    ]
+    if not itens:
+        # fallback: qualquer item raro/épico/lendário normal
+        itens = [
+            it for it in catalogo.listar()
+            if it.tipo in TIPOS_PERMITIDOS_BAU
+            and it.raridade in ("raro", "epico", "lendario", "mitico")
+            and it.id not in ids_bloqueados
+        ]
+    if not itens:
+        return None
+    por_raridade: Dict[str, List] = {}
+    for it in itens:
+        por_raridade.setdefault(it.raridade, []).append(it)
+    raridades = [r for r in por_raridade if PESOS_SOMBRIO.get(r, 0) > 0]
+    if not raridades:
+        return None
+    w = [PESOS_SOMBRIO[r] for r in raridades]
+    escolhida = rng.choices(raridades, weights=w, k=1)[0]
+    return rng.choice(por_raridade[escolhida])
+
+
+def sortear_bau_sombrio(catalogo, qtd_itens: int = 2, rng=_random, raridade_bau: str = "raro") -> dict:
+    """Sorteia o loot de um baú sombrio: itens do mercado negro + Créditos Sombrios."""
+    itens = []
+    ids_sorteados = set()
+    for _ in range(max(1, qtd_itens)):
+        it = sortear_item_sombrio(catalogo, rng=rng, excluir_ids=ids_sorteados)
+        if it is not None:
+            itens.append(it)
+            ids_sorteados.add(it.id)
+    cmin, cmax = CREDITOS_SOMBRIOS_BAU.get(raridade_bau, (5, 15))
+    return {"itens": itens, "creditos_sombrios": rng.randint(cmin, cmax), "lunaris": 0}
+
 
 def sortear_item(
     catalogo,
@@ -177,7 +238,7 @@ def sortear_bau(catalogo, qtd_itens: int = 1, rng=_random,
         if it is not None:
             itens.append(it)
             ids_sorteados.add(it.id)
-    return {"itens": itens, "lunaris": rng.randint(lunaris_min, lunaris_max)}
+    return {"itens": itens, "lunaris": rng.randint(lunaris_min, lunaris_max), "creditos_sombrios": 0}
 
 
 def agendar_proximo(min_hora: int, max_hora: int, rng=_random, agora: Optional[datetime] = None) -> datetime:

@@ -304,34 +304,21 @@ class Admin(commands.Cog):
 
     @app_commands.command(
         name="mestre_proteger",
-        description="[Mestre] Protege uma conta contra roubos; sem membro, remove a proteção.",
+        description="[Mestre] Protege uma conta contra roubos.",
     )
     @app_commands.guild_only()
     @app_commands.default_permissions(manage_guild=True)
     @app_commands.checks.has_permissions(manage_guild=True)
     @app_commands.describe(
-        membro="Conta do mestre a proteger. Deixe vazio para remover a proteção atual."
+        membro="Conta do mestre a proteger."
     )
     async def mestre_proteger(
         self,
         interaction: discord.Interaction,
-        membro: Optional[discord.Member] = None,
+        membro: discord.Member,
     ):
         sid = str(interaction.guild_id)
         atual = self.bot.db.get_mestre_protegido(sid)
-        if membro is None:
-            self.bot.db.set_mestre_protegido(sid, None)
-            if atual:
-                await interaction.response.send_message(
-                    f"✅ Proteção de mestre removida de <@{atual}>.",
-                    ephemeral=True,
-                )
-            else:
-                await interaction.response.send_message(
-                    "Nenhuma conta estava protegida como mestre.",
-                    ephemeral=True,
-                )
-            return
         if membro.bot:
             await interaction.response.send_message(
                 "Escolha uma pessoa, não um bot.", ephemeral=True
@@ -343,6 +330,31 @@ class Admin(commands.Cog):
             f"🛡️ {membro.mention} agora está protegido contra roubo de carteira e cofre{troca}.",
             ephemeral=True,
         )
+
+    @app_commands.command(
+        name="mestre_desproteger",
+        description="[Mestre] Remove a proteção contra roubos da conta atualmente protegida.",
+    )
+    @app_commands.guild_only()
+    @app_commands.default_permissions(manage_guild=True)
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def mestre_desproteger(
+        self,
+        interaction: discord.Interaction,
+    ):
+        sid = str(interaction.guild_id)
+        atual = self.bot.db.get_mestre_protegido(sid)
+        self.bot.db.set_mestre_protegido(sid, None)
+        if atual:
+            await interaction.response.send_message(
+                f"✅ Proteção de mestre removida de <@{atual}>.",
+                ephemeral=True,
+            )
+        else:
+            await interaction.response.send_message(
+                "Nenhuma conta estava protegida como mestre.",
+                ephemeral=True,
+            )
 
     @app_commands.command(
         name="juros_cofre",

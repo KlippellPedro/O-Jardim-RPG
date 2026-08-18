@@ -113,7 +113,7 @@ def serializar_premio_bau(premio: dict) -> dict:
                 "quantidade": quantidade,
             }
         )
-    resultado = {"lunaris": lunaris, "itens": itens}
+    resultado = {"lunaris": lunaris, "itens": itens, "creditos_sombrios": int(premio.get("creditos_sombrios") or 0)}
     if isinstance(premio.get("bau"), dict):
         resultado["bau"] = {
             "raridade": str(premio["bau"].get("raridade") or "comum"),
@@ -125,7 +125,14 @@ def serializar_premio_bau(premio: dict) -> dict:
 
 
 def _ganhos_do_premio(premio: dict) -> list[str]:
-    ganhos = [f"☾ {int(premio.get('lunaris') or 0)} Lunaris"]
+    creditos_sombrios = int(premio.get('creditos_sombrios') or 0)
+    lunaris = int(premio.get('lunaris') or 0)
+    if creditos_sombrios > 0:
+        ganhos = [f"🕳️ {creditos_sombrios} Créditos Sombrios"]
+    elif lunaris > 0:
+        ganhos = [f"☾ {lunaris} Lunaris"]
+    else:
+        ganhos = []
     for item in premio.get("itens") or []:
         quantidade = int(item.get("quantidade") or 1)
         sufixo = f" ×{quantidade}" if quantidade > 1 else ""
@@ -321,6 +328,7 @@ class Baus(commands.Cog):
         # mas roubável). Só os itens usam o cofre da conta no
         # site: é ele que fica protegido e que a ficha enxerga.
         lunaris = premio["lunaris"]
+        creditos_sombrios = int(premio.get("creditos_sombrios") or 0)
 
         # sortear_item pode não achar nada pro tema/raridade configurado: sem
         # item nenhum não há o que depositar no cofre da conta (moedas não
@@ -344,11 +352,6 @@ class Baus(commands.Cog):
                 )
 
         if not entregue:
-            # O salto HTTP caiu, mas o cofre da conta vive no mesmo PostgreSQL
-            # que este bot já usa: escrever direto mantém o prêmio visível no
-            # site em vez de escondê-lo no cofre local. Mesma chave de
-            # idempotência do HTTP, então não credita duas vezes se a API
-            # tiver gravado antes de a resposta se perder.
             try:
                 entregue = self.bot.db.depositar_cofre_plataforma(
                     guild_id,
@@ -362,17 +365,21 @@ class Baus(commands.Cog):
                 log.exception("bau %s: entrega direta no banco falhou", mensagem_id)
 
         if not entregue:
-            # Conta não vinculada, ou nenhuma rota até o cofre da conta: a
-            # recompensa não pode ficar refém da plataforma. Cai pro cofre
-            # local do Banqueiro em vez de prender o baú esperando um mestre
-            # reprocessar manualmente.
             log.warning("bau %s caiu para o modo legado", mensagem_id)
             self.bot.db.definir_modo_bau_entrega(guild_id, mensagem_id, "legado")
             return self.bot.db.entregar_bau_legado(guild_id, mensagem_id)
 
+        # Credita a moeda correspondente ao tipo de baú
+        if creditos_sombrios > 0:
+            self.bot.db.creditar(guild_id, vencedor_user_id, "Créditos Sombrios", creditos_sombrios)
+
         resultado = {
             "ganhos": _ganhos_do_premio(premio),
-            "destino": "Lunaris na carteira · itens no cofre da conta no site",
+            "destino": (
+                "Créditos Sombrios na carteira · itens no cofre da conta no site"
+                if creditos_sombrios > 0
+                else "Lunaris na carteira · itens no cofre da conta no site"
+            ),
             "confirmado": True,
             "bau": dict(premio.get("bau") or {}),
         }
@@ -763,11 +770,21 @@ class Baus(commands.Cog):
             tema = None
         tipos = [tema] if tema else None
         pesos_itens = loot_mod.pesos_itens_do_bau(raridade_bau, pesos_estacao)
-        premio = loot_mod.sortear_bau(
-            self.bot.catalogo, qtd_itens=qtd, rng=random, pesos=pesos_itens, tipos=tipos,
-            lunaris_min=parametros["lunaris_min"],
-            lunaris_max=parametros["lunaris_max"],
-        )
+
+        # Baú Sombrio: loot especial com Créditos Sombrios
+        if tema == "sombrio":
+            premio = loot_mod.sortear_bau_sombrio(
+                self.bot.catalogo,
+                qtd_itens=max(2, qtd),
+                rng=random,
+                raridade_bau=raridade_bau,
+            )
+        else:
+            premio = loot_mod.sortear_bau(
+                self.bot.catalogo, qtd_itens=qtd, rng=random, pesos=pesos_itens, tipos=tipos,
+                lunaris_min=parametros["lunaris_min"],
+                lunaris_max=parametros["lunaris_max"],
+            )
 
         rotulo = info_estacao.get("rotulo", "Jardim")
         emoji_estacao, _cor_estacao = _ESTACAO_ENFEITE.get(rotulo, ("✦", _COR_BAU))
@@ -793,38 +810,71 @@ class Baus(commands.Cog):
         # `baus_no_ar`, e é por isso que sobrevive a reinício do bot.
         token = uuid.uuid4().hex
 
-        if enigma is not None:
-            view = _view_bau_enigma(self, token)
-            titulo = f"🔒 {perfil['emoji']} {perfil['nome']} trancado surgiu!"
-            descricao = (
-                f"_{info_estacao.get('descricao', '')}_\n\n"
-                f"**Enigma {dificuldade.upper()} · {enigma.categoria}:**\n{enigma.pergunta}\n\n"
-                "Responda certo pra destrancar: **só o primeiro acerto leva a recompensa.**"
-            )
-            cor_embed = perfil["cor"]
-            rodape_acao = "Primeiro acerto vence"
+        if tema == "sombrio":
+            # Visual especial pro baú sombrio
+            if enigma is not None:
+                view = _view_bau_enigma(self, token)
+                titulo = f"🕳️ 📜 {perfil['nome']} Sombrio surge das sombras..."
+                descricao = (
+                    "*Uma caixa sem marca, sem origem. Quem a tocou antes de você?*\n\n"
+                    f"**Enigma {dificuldade.upper()} · {enigma.categoria}:**\n{enigma.pergunta}\n\n"
+                    "Responda certo pra destrancar: **só o primeiro acerto leva a recompensa.**"
+                )
+                rodape_acao = "Primeiro acerto vence"
+            else:
+                view = _view_bau_abrir(self, token)
+                titulo = f"🕳️ {perfil['emoji']} Baú Sombrio emerge das trevas!"
+                descricao = (
+                    "*Um embrulho sem marca aparece no canal. Ninguém sabe de onde veio, "
+                    "mas todos sabem que o que está dentro não é legal.*\n\n"
+                    "**Só a primeira pessoa a abrir leva o conteúdo.**"
+                )
+                rodape_acao = "Primeiro clique válido vence"
+            cor_embed = 0x1a0a2e  # roxo escuro sombrio
         else:
-            view = _view_bau_abrir(self, token)
-            titulo = f"{emoji_estacao} {perfil['emoji']} {perfil['nome']} surgiu!"
-            descricao = (
-                f"_{info_estacao.get('descricao', '')}_\n\n"
-                "As folhas se afastam e revelam um tesouro. "
-                "**Só a primeira pessoa a abrir leva a recompensa.**"
-            )
-            cor_embed = perfil["cor"]
-            rodape_acao = "Primeiro clique válido vence"
+            if enigma is not None:
+                view = _view_bau_enigma(self, token)
+                titulo = f"🔒 {perfil['emoji']} {perfil['nome']} trancado surgiu!"
+                descricao = (
+                    f"_{info_estacao.get('descricao', '')}_\n\n"
+                    f"**Enigma {dificuldade.upper()} · {enigma.categoria}:**\n{enigma.pergunta}\n\n"
+                    "Responda certo pra destrancar: **só o primeiro acerto leva a recompensa.**"
+                )
+                cor_embed = perfil["cor"]
+                rodape_acao = "Primeiro acerto vence"
+            else:
+                view = _view_bau_abrir(self, token)
+                titulo = f"{emoji_estacao} {perfil['emoji']} {perfil['nome']} surgiu!"
+                descricao = (
+                    f"_{info_estacao.get('descricao', '')}_\n\n"
+                    "As folhas se afastam e revelam um tesouro. "
+                    "**Só a primeira pessoa a abrir leva a recompensa.**"
+                )
+                cor_embed = perfil["cor"]
+                rodape_acao = "Primeiro clique válido vence"
 
         emb = ui.embed(titulo, categoria="bau", cor=cor_embed, descricao=descricao)
-        emb.add_field(
-            name="🎁 O que pode haver dentro",
-            value=(
-                f"**{parametros['lunaris_min']}–{parametros['lunaris_max']} Lunaris** e "
-                f"até **{qtd} item(ns)**. O perfil deste baú favorece itens de até "
-                f"**{_melhor_raridade(perfil['pesos_itens'])}**."
-                + (f" Tema do canal: **{tema}**." if tema else "")
-            ),
-            inline=False,
-        )
+        if tema == "sombrio":
+            creditos = premio.get("creditos_sombrios", 0)
+            emb.add_field(
+                name="🕳️ O que pode haver dentro",
+                value=(
+                    f"**{creditos} Créditos Sombrios** e até **{max(2, qtd)} item(ns)** "
+                    "extraído(s) do mercado negro. Raridades acima do normal."
+                ),
+                inline=False,
+            )
+        else:
+            emb.add_field(
+                name="🎁 O que pode haver dentro",
+                value=(
+                    f"**{parametros['lunaris_min']}–{parametros['lunaris_max']} Lunaris** e "
+                    f"até **{qtd} item(ns)**. O perfil deste baú favorece itens de até "
+                    f"**{_melhor_raridade(perfil['pesos_itens'])}**."
+                    + (f" Tema do canal: **{tema}**." if tema else "")
+                ),
+                inline=False,
+            )
         emb.add_field(
             name="⏳ Tempo para conquistar",
             value=(
@@ -1029,6 +1079,7 @@ class Baus(commands.Cog):
         app_commands.Choice(name="Consumível", value="consumivel"),
         app_commands.Choice(name="Modificação", value="modificacao"),
         app_commands.Choice(name="Drop (ex.: local de caça/pesca)", value="drop"),
+        app_commands.Choice(name="🕳️ Sombrio (baú do mercado negro)", value="sombrio"),
     ])
     async def bau_canal_tema(
         self, interaction: discord.Interaction, canal: discord.TextChannel,

@@ -34,6 +34,8 @@ MOEDAS_CHOICES = ui.MOEDAS_CHOICES
 CAMBIO_CHOICES = [
     app_commands.Choice(name="Lunaris ☾", value="Lunaris"),
     app_commands.Choice(name="Solares ☉", value="Solares"),
+    app_commands.Choice(name="Fragmentos de Estrela ✧", value="Fragmentos de Estrela"),
+    app_commands.Choice(name="Créditos Sombrios ♆", value="Créditos Sombrios"),
 ]
 ROUBO_ABORDAGEM_CHOICES = [
     app_commands.Choice(name=info["nome"], value=abordagem_id)
@@ -235,7 +237,7 @@ class DefesaRouboView(discord.ui.View):
         self._duracao = timeout
         self._prazo: Optional[float] = None
         self._resolvido = asyncio.Event()
-        self.impedir.label = f"Impedir o roubo ({int(timeout)}s)"
+        self.impedir.label = f"🔪 Dar Facada ({int(timeout)}s)"
 
     def iniciar_prazo(self) -> None:
         self._prazo = time.monotonic() + self._duracao
@@ -268,8 +270,7 @@ class DefesaRouboView(discord.ui.View):
             child.disabled = True
 
     @discord.ui.button(
-        label="Impedir o roubo (5s)",
-        emoji="🛡️",
+        label="🔪 Dar Facada (5s)",
         style=discord.ButtonStyle.danger,
     )
     async def impedir(
@@ -715,7 +716,7 @@ class Economia(commands.Cog):
         emb.set_footer(text=f"{ui.MARCA} · Cofre: {ui.barra(await self.bot.inventario.contar(sid, uid), cap)}")
         await interaction.response.send_message(embed=emb)
 
-    @app_commands.command(description="Troca moedas (Lunaris ⇄ Solares) no banco.")
+    @app_commands.command(description="Troca moedas (Todas as Moedas) no banco.")
     @app_commands.describe(de="Moeda que dá.", para="Moeda que quer.", quantia="Quanto trocar.")
     @app_commands.choices(de=CAMBIO_CHOICES, para=CAMBIO_CHOICES)
     async def cambio(self, interaction, de: app_commands.Choice[str], para: app_commands.Choice[str], quantia: app_commands.Range[int, 1]):
@@ -1105,9 +1106,11 @@ class Economia(commands.Cog):
 
     def _consumir_melhor_protecao(self, sid: str, alvo_id: str) -> Optional[str]:
         """Consome a proteção mais forte disponível da vítima, se houver.
-        Cão de Guarda (bloqueio automático) tem prioridade sobre o Alarme
+        Guarda-Costas e Cão de Guarda (bloqueio automático) têm prioridade sobre o Alarme
         Mágico (só estende a janela de defesa)."""
         db = self.bot.db
+        if db.consumir_protecao(sid, alvo_id, "guarda_costas"):
+            return "guarda_costas"
         if db.consumir_protecao(sid, alvo_id, "cao_de_guarda"):
             return "cao_de_guarda"
         if db.consumir_protecao(sid, alvo_id, "alarme_magico"):
@@ -1175,16 +1178,37 @@ class Economia(commands.Cog):
         await view.aguardar()
         view.desabilitar()
         if view.impedido:
-            fim_vitima = ui.embed(
-                "🛡️ Roubo impedido!",
-                categoria="cofre",
-                descricao=f"Você percebeu a tentativa de **{interaction.user.display_name}** e impediu o roubo.",
-            )
-            fim_ladrao = ui.embed(
-                "🛡️ Roubo impedido!",
-                categoria="erro",
-                descricao=f"**{membro.display_name}** reagiu a tempo. Seu cooldown foi consumido.",
-            )
+            sid, uid = str(interaction.guild_id), str(interaction.user.id)
+            pontos, pro_hospital, pago = self.bot.db.adicionar_ferimento(sid, uid)
+            if pro_hospital:
+                fim_vitima = ui.embed(
+                    "🔪 Facada bem-sucedida!",
+                    categoria="cofre",
+                    descricao=f"Você reagiu a tempo e deu uma facada em **{interaction.user.display_name}**! Eles acumularam 6 ferimentos e foram parar no hospital.",
+                )
+                fim_ladrao = ui.embed(
+                    "🚑 Hospital!",
+                    categoria="erro",
+                    descricao=f"**{membro.display_name}** te deu uma facada! Você acumulou 6 ferimentos, seu roubo falhou, e você pagou ☾ {pago} de conta médica.",
+                )
+                
+                # Fofoca
+                prazo_fofoca = datetime.now(timezone.utc) + timedelta(minutes=30)
+                texto_fofoca = f"🚨 **Escândalo!** {interaction.user.mention} foi parar no hospital após tentar roubar {membro.mention} e levar uma bela facada na costela!"
+                suborno = pago * 2 if pago > 0 else 500
+                self.bot.db.adicionar_fofoca(sid, uid, texto_fofoca, suborno, prazo_fofoca)
+                fim_ladrao.description += f"\n\n📸 **Furo de Reportagem!** O Jornalista tirou uma foto sua na maca. Você tem 30 minutos para usar `/subornar_jornalista` no Jornalista pagando ☾ {suborno} Lunaris, ou ele publicará isso para todo o servidor!"
+            else:
+                fim_vitima = ui.embed(
+                    "🔪 Facada bem-sucedida!",
+                    categoria="cofre",
+                    descricao=f"Você percebeu a tentativa de **{interaction.user.display_name}** e deu uma facada neles.",
+                )
+                fim_ladrao = ui.embed(
+                    "🩸 Você tomou uma facada!",
+                    categoria="erro",
+                    descricao=f"**{membro.display_name}** reagiu a tempo com uma facada. Seu roubo falhou e você tomou 1 ponto de ferido ({pontos}/6).",
+                )
             resultado = "impedido"
         else:
             fim_vitima = ui.embed(
@@ -1459,15 +1483,17 @@ class Economia(commands.Cog):
                     return
 
             protecao = self._consumir_melhor_protecao(sid, alvo_id)
-            if protecao == "cao_de_guarda":
+            if protecao in ("cao_de_guarda", "guarda_costas"):
                 novo_calor = db.adicionar_calor_roubo(
                     sid, uid, dados_abordagem["calor"]
                 )
+                nome_protecao = "Cão de Guarda" if protecao == "cao_de_guarda" else "Guarda-Costas"
+                icone_protecao = "🐕" if protecao == "cao_de_guarda" else "🕴️"
                 emb = ui.embed(
-                    "🐕 Um Cão de Guarda latiu!",
+                    f"{icone_protecao} Um {nome_protecao} interviu!",
                     categoria="erro",
                     descricao=(
-                        f"{membro.mention} tinha um **Cão de Guarda** de prontidão: a tentativa de "
+                        f"{membro.mention} tinha um **{nome_protecao}** de prontidão: a tentativa de "
                         f"{interaction.user.mention} foi barrada antes mesmo de começar. O item foi consumido.\n"
                         f"🔥 Calor atual: **{novo_calor}/{economia.ROUBO_CALOR_MAXIMO}**."
                     ),
@@ -1477,7 +1503,7 @@ class Economia(commands.Cog):
                     membro,
                     sid,
                     interaction.guild.name,
-                    f"Seu **Cão de Guarda** impediu uma tentativa de roubo de {interaction.user.display_name}. O item foi consumido.",
+                    f"Seu **{nome_protecao}** impediu uma tentativa de roubo de {interaction.user.display_name}. O item foi consumido.",
                 )
                 return
             timeout_defesa = (
@@ -1681,15 +1707,17 @@ class Economia(commands.Cog):
                     return
 
             protecao = self._consumir_melhor_protecao(sid, alvo_id)
-            if protecao == "cao_de_guarda":
+            if protecao in ("cao_de_guarda", "guarda_costas"):
                 novo_calor = db.adicionar_calor_roubo(
                     sid, uid, dados_abordagem["calor"]
                 )
+                nome_protecao = "Cão de Guarda" if protecao == "cao_de_guarda" else "Guarda-Costas"
+                icone_protecao = "🐕" if protecao == "cao_de_guarda" else "🕴️"
                 emb = ui.embed(
-                    "🐕 Um Cão de Guarda latiu!",
+                    f"{icone_protecao} Um {nome_protecao} interviu!",
                     categoria="erro",
                     descricao=(
-                        f"{membro.mention} tinha um **Cão de Guarda** de prontidão: a tentativa de "
+                        f"{membro.mention} tinha um **{nome_protecao}** vigiando o cofre: a tentativa de "
                         f"{interaction.user.mention} foi barrada antes mesmo de começar. O item foi consumido.\n"
                         f"🔥 Calor atual: **{novo_calor}/{economia.ROUBO_CALOR_MAXIMO}**."
                     ),
@@ -1699,7 +1727,7 @@ class Economia(commands.Cog):
                     membro,
                     sid,
                     interaction.guild.name,
-                    f"Seu **Cão de Guarda** impediu uma tentativa de arrombamento de {interaction.user.display_name}. O item foi consumido.",
+                    f"Seu **{nome_protecao}** impediu uma tentativa de roubo ao seu cofre de {interaction.user.display_name}. O item foi consumido.",
                 )
                 return
             timeout_defesa = (
@@ -1929,14 +1957,30 @@ class Economia(commands.Cog):
 
 
     # ── Loja de baús (compráveis) ──
+    def _aplicar_modificador_preco(self, preco_base: int, modificador: Optional[str]) -> int:
+        if modificador == "inflacao_loja":
+            return int(preco_base * 1.2)
+        if modificador == "deflacao_loja":
+            return int(preco_base * 0.85)
+        return preco_base
+
     BAUS_CHOICES = [app_commands.Choice(name=b["nome"], value=b["id"]) for b in economia.BAUS_COMPRAVEIS]
 
     @app_commands.command(name="loja_baus", description="Baús que dá pra comprar e abrir.")
     async def loja_baus(self, interaction):
-        emb = ui.embed("🎁 Loja de Baús", categoria="bau")
+        sid = _sid(interaction)
+        modificador = self.bot.db.get_modificador_clima(sid)
+        aviso_clima = ""
+        if modificador == "inflacao_loja":
+            aviso_clima = "\n\n🏜️ *A onda de calor dificultou o transporte: os preços estão 20% mais caros!*"
+        elif modificador == "deflacao_loja":
+            aviso_clima = "\n\n❄️ *A nevasca congelou as vendas: os preços estão com 15% de desconto!*"
+            
+        emb = ui.embed("🎁 Loja de Baús", categoria="bau", descricao="Aqui você compra baús. Use /comprar_bau." + aviso_clima)
         for b in economia.BAUS_COMPRAVEIS:
             requisito = economia.reputacao_minima_bau(b["id"])
-            emb.add_field(name=f"{b['nome']}: ☾ {b['preco']} Lunaris",
+            preco_real = self._aplicar_modificador_preco(b["preco"], modificador)
+            emb.add_field(name=f"{b['nome']}: ☾ {preco_real} Lunaris",
                           value=(
                               f"`{b['id']}` · {b['itens']} item(ns) + Lunaris · "
                               f"{fmt_requisito_reputacao(requisito)}"
@@ -1953,6 +1997,9 @@ class Economia(commands.Cog):
             await interaction.response.send_message("Baú desconhecido.", ephemeral=True)
             return
         sid, uid = _sid(interaction), str(interaction.user.id)
+        
+        modificador = self.bot.db.get_modificador_clima(sid)
+        preco_real = self._aplicar_modificador_preco(b["preco"], modificador)
         db = self.bot.db
         db.garantir_jogador(sid, uid)
         cartao = db.get_cartao(sid, uid)
@@ -1967,7 +2014,7 @@ class Economia(commands.Cog):
         limite = economia.limite_efetivo(cartao["tier"], cartao["credito"])
         db.converter_faturas_vencidas(sid)
         cotacao = economia.cotar_pagamento(
-            b["preco"],
+            preco_real,
             db.get_saldo(sid, uid, "Lunaris"),
             limite,
             db.get_divida(sid, uid),
@@ -1975,7 +2022,7 @@ class Economia(commands.Cog):
         )
         if not cotacao["pode_comprar"]:
             await interaction.response.send_message(
-                f"💸 O baú custa ☾ **{b['preco']}**, mas sua carteira + limite disponível "
+                f"💸 O baú custa ☾ **{preco_real}**, mas sua carteira + limite disponível "
                 f"somam apenas ☾ **{cotacao['saldo_carteira'] + cotacao['limite_disponivel']}**.",
                 ephemeral=True,
             )
@@ -1997,7 +2044,7 @@ class Economia(commands.Cog):
                     pagamento = db.cobrar_compra_com_fatura(
                         sid,
                         uid,
-                        b["preco"],
+                        preco_real,
                         limite_atual,
                         f"Compra: {b['nome']}",
                         f"bau:{compra_id}",
@@ -2031,7 +2078,7 @@ class Economia(commands.Cog):
             return
         try:
             saldo_novo = db.comprar_bau_dinheiro(
-                sid, uid, b["id"], b["nome"], b["preco"]
+                sid, uid, b["id"], b["nome"], preco_real
             )
         except SaldoInsuficiente as e:
             await interaction.response.send_message(f"💸 {e}", ephemeral=True)
@@ -2041,7 +2088,7 @@ class Economia(commands.Cog):
             b,
             {
                 "saldo": saldo_novo,
-                "carteira_usada": b["preco"],
+                "carteira_usada": preco_real,
                 "financiado": 0,
                 "vence_em": None,
             },
@@ -2136,7 +2183,9 @@ class Economia(commands.Cog):
         db = self.bot.db
         premio = loot_mod.sortear_bau(self.bot.catalogo, qtd_itens=b["itens"], rng=random,
                                       pesos=b["pesos"], lunaris_min=b["lunaris_min"], lunaris_max=b["lunaris_max"], tipos=b.get("tipos"))
-        ganhos = [f"☾ {premio['lunaris']} Lunaris"]
+        moeda_nome = "Créditos Sombrios" if b["id"].startswith("sombrio") else "Lunaris"
+        simbolo = "♆" if moeda_nome == "Créditos Sombrios" else "☾"
+        ganhos = [f"{simbolo} {premio['lunaris']} {moeda_nome}"]
         ganhos.extend(f"**{it.titulo}** ({it.raridade_rotulo})" for it in premio["itens"])
         try:
             # Lunaris de baú vai sempre pra carteira local (inclusive para a
@@ -2283,6 +2332,109 @@ class Economia(commands.Cog):
         await interaction.followup.send(embed=emb)
 
 
+
+    # ── Lavagem de Dinheiro ──
+    @app_commands.command(name="lavar_dinheiro", description="Lava seus Créditos Sombrios em Solares limpos. Leva 24h.")
+    @app_commands.describe(quantia="Quantidade de Créditos Sombrios para lavar.")
+    async def lavar_dinheiro(self, interaction: discord.Interaction, quantia: int):
+        if quantia <= 0:
+            await interaction.response.send_message("A quantia precisa ser positiva.", ephemeral=True)
+            return
+
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        db = self.bot.db
+        
+        db.garantir_jogador(sid, uid)
+        carteira = db.get_carteira(sid, uid)
+        
+        sombrios = carteira.get("Créditos Sombrios", 0)
+        if sombrios < quantia:
+            await interaction.response.send_message(f"Você só tem ♆ {sombrios} Créditos Sombrios na carteira.", ephemeral=True)
+            return
+            
+        # Debita sombrios
+        if not db.debitar(sid, uid, "Créditos Sombrios", quantia):
+            await interaction.response.send_message("Erro ao processar a lavagem.", ephemeral=True)
+            return
+            
+        pronto_em = datetime.now(timezone.utc) + timedelta(hours=24)
+        db.adicionar_lavagem(sid, uid, quantia, pronto_em)
+        
+        pronto_ts = int(pronto_em.timestamp())
+        await interaction.response.send_message(
+            f"🕴️ **O Doleiro pegou a grana.**\n"
+            f"Você entregou ♆ {quantia} Créditos Sombrios.\n"
+            f"Eles estarão limpos e prontos para resgate em <t:{pronto_ts}:R>.\n"
+            f"Use `/lavanderia_resgatar` depois desse prazo para pegar sua parte (menos a taxa dele).",
+            ephemeral=True
+        )
+
+    @app_commands.command(name="lavanderia_resgatar", description="Resgata seu dinheiro já lavado (conversão em Solares com -15% de taxa).")
+    async def lavanderia_resgatar(self, interaction: discord.Interaction):
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        db = self.bot.db
+        
+        lavagem = db.get_lavagem(sid, uid)
+        if not lavagem or lavagem["quantia"] <= 0:
+            await interaction.response.send_message("Você não tem nenhum dinheiro lavando.", ephemeral=True)
+            return
+            
+        if datetime.now(timezone.utc) < lavagem["pronto_em"]:
+            pronto_ts = int(lavagem["pronto_em"].timestamp())
+            await interaction.response.send_message(f"Seu dinheiro ainda não está limpo. Volte <t:{pronto_ts}:R>.", ephemeral=True)
+            return
+            
+        quantia_sombrios = lavagem["quantia"]
+        
+        # Converte para Solares
+        # 1 Credito Sombrio = 2 Solares
+        solares_brutos = economia.converter(
+            "Créditos Sombrios", "Solares", quantia_sombrios, db.get_config(sid).get("cambio_rate", economia.CAMBIO_RATE_PADRAO)
+        )[0]
+        
+        # 15% taxa do doleiro
+        solares_limpos = max(1, int(solares_brutos * 0.85))
+        taxa = solares_brutos - solares_limpos
+        
+        db.creditar(sid, uid, "Solares", solares_limpos)
+        db.remover_lavagem(sid, uid)
+        
+        await interaction.response.send_message(
+            f"💼 **Maleta na mão.**\n"
+            f"O Doleiro te entregou ☉ {solares_limpos} Solares limpos.\n"
+            f"A taxa cobrada por ele foi de ☉ {taxa} Solares.",
+            ephemeral=True
+        )
+
+    @app_commands.command(name="contratar_guarda", description="Consome um contrato de guarda-costas para proteger sua carteira e cofre de um roubo.")
+    async def contratar_guarda(self, interaction: discord.Interaction):
+        sid, uid = _sid(interaction), str(interaction.user.id)
+        db = self.bot.db
+        
+        # Verifica se o usuário tem o item no inventário
+        with db._conn() as con:
+            row = con.execute("SELECT quantidade FROM inventario WHERE guild_id=%s AND user_id=%s AND item_id='contrato_guarda_costas'", (sid, uid)).fetchone()
+            
+        if not row or row["quantidade"] <= 0:
+            await interaction.response.send_message("Você não tem nenhum Contrato Guarda-Costas no inventário! Compre na loja.", ephemeral=True)
+            return
+            
+        # Remove 1 do inventário
+        db.remover_item(sid, uid, "contrato_guarda_costas", 1)
+        
+        # Adiciona proteção
+        with db._conn() as con:
+            con.execute(
+                """
+                INSERT INTO protecoes_ativas (guild_id, user_id, tipo, quantidade)
+                VALUES (%s, %s, %s, 1)
+                ON CONFLICT (guild_id, user_id, tipo) DO UPDATE SET
+                    quantidade = protecoes_ativas.quantidade + 1
+                """,
+                (sid, uid, "guarda_costas")
+            )
+            
+        await interaction.response.send_message("🕴️ **Guarda-Costas contratado!** A sua próxima tentativa de roubo (carteira ou cofre) será barrada automaticamente.", ephemeral=True)
 
 async def setup(bot):
     await bot.add_cog(Economia(bot))

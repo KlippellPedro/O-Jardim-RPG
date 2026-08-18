@@ -47,6 +47,9 @@ CATEGORIAS = {
             ("/jornal imagem <tipo> <url>", "[Mestre] Imagem fixa das boas-vindas ou da despedida."),
             ("/jornal canais_boasvindas <canal1>", "[Mestre] Canais do bloco 'Confira estes canais' das boas-vindas."),
             ("/estacao", "Mostra a estação atual do Jardim."),
+            ("/subornar_jornalista", "Paga o suborno exigido pelo Jornalista para abafar uma fofoca sua."),
+            ("/anunciar_classificado <texto> [valor]", "Paga o Jornalista para publicar um anúncio no jornal."),
+            ("/vender_furo <jogador>", "Trabalho freelance! Venda fotos e segredos de outros pro Jornalista em troca de Solares."),
         ],
     },
     "editorial": {

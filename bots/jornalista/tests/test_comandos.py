@@ -45,6 +45,9 @@ COMANDOS_ESPERADOS = {
     "jornal avancar_mes",
     "jornal canais",
     "jornal clima_auto",
+    "subornar_jornalista",
+    "anunciar_classificado",
+    "vender_furo",
     "jornal configurar",
     "jornal automacao",
     "jornal automacoes",
@@ -162,6 +165,8 @@ def test_montar_embed_clima_gera_o_jornal_lunar_da_estacao():
     class _DB:
         def get_estacao(self, guild_id):
             return "inverno"
+        def set_modificador_clima(self, guild_id, mod):
+            pass
 
     cog = object.__new__(cog_jornal.Jornal)
     cog.bot = type("Bot", (), {"db": _DB()})()

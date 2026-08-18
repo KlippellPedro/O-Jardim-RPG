@@ -630,12 +630,15 @@ class Jornal(commands.Cog):
         estacao = self.bot.db.get_estacao(guild_id)
         info_estacao = economia.estacao_info(estacao)
         item_clima = clima_mod.sortear_clima(estacao)
+        
+        self.bot.db.set_modificador_clima(guild_id, getattr(item_clima, "modificador_economico", None))
+        
         emb = ui.embed(
             f"{ui.icone_categoria('clima')} JORNAL LUNAR: {info_estacao['rotulo']}",
             categoria="clima",
             descricao=f"**Previsão do tempo: {item_clima.nome}**\n{item_clima.efeito}",
         )
-        emb.set_footer(text=f"{ui.MARCA} · Efeito narrativo: combine com o mestre")
+        emb.set_footer(text=f"{ui.MARCA} · Efeito narrativo e/ou econômico global")
         return emb
 
     async def _publicar_clima_auto(self, gid: str) -> bool:
@@ -1574,6 +1577,112 @@ class Jornal(commands.Cog):
         emb = ui.embed(f"🍂 Estação: {info['rotulo']}", categoria="clima", descricao=info["descricao"])
         await interaction.response.send_message(embed=emb)
 
+
+    @app_commands.command(name="subornar_jornalista", description="Paga o suborno exigido pelo Jornalista para abafar uma fofoca sua.")
+    async def subornar_jornalista(self, interaction: discord.Interaction):
+        if not interaction.guild_id:
+            await interaction.response.send_message("Isso só funciona em um servidor.", ephemeral=True)
+            return
+            
+        guild_id, user_id = str(interaction.guild_id), str(interaction.user.id)
+        fofoca = self.bot.db.get_fofoca_pendente_usuario(guild_id, user_id)
+        
+        if not fofoca:
+            await interaction.response.send_message("Não tenho nenhum furo de reportagem sobre você no momento. Está limpo!", ephemeral=True)
+            return
+            
+        valor = fofoca["suborno_valor"]
+        
+        if not self.bot.db.debitar(guild_id, user_id, "Lunaris", valor):
+            await interaction.response.send_message(f"Você não tem ☾ {valor} Lunaris para me pagar! Volte quando tiver dinheiro, ou sua reputação vai pra lama.", ephemeral=True)
+            return
+            
+        self.bot.db.atualizar_status_fofoca(fofoca["id"], "subornada")
+        
+        emb = ui.embed(
+            "🤐 Bico Calado",
+            categoria="cofre",
+            descricao=f"Você pagou ☾ {valor} Lunaris e eu joguei as fotos da sua vergonha no triturador. Seu segredo está a salvo!"
+        )
+        await interaction.response.send_message(embed=emb, ephemeral=True)
+
+    @app_commands.command(name="anunciar_classificado", description="Paga o Jornalista para publicar um anúncio no jornal (Ex: 'Compro Espada' ou 'Procuro guilda').")
+    @app_commands.describe(texto="O texto do seu anúncio.", valor="Gorjeta extra em Solares para dar destaque (mínimo 50).")
+    async def anunciar_classificado(self, interaction: discord.Interaction, texto: str, valor: int = 50):
+        if not interaction.guild_id:
+            await interaction.response.send_message("Isso só funciona em um servidor.", ephemeral=True)
+            return
+            
+        if valor < 50:
+            await interaction.response.send_message("O espaço no jornal é caro! O anúncio custa no mínimo ☀️ 50 Solares.", ephemeral=True)
+            return
+            
+        guild_id, user_id = str(interaction.guild_id), str(interaction.user.id)
+        
+        # Debita do jogador
+        if not self.bot.db.debitar(guild_id, user_id, "Solares", valor):
+            await interaction.response.send_message(f"Você não tem ☀️ {valor} Solares para pagar pelo anúncio.", ephemeral=True)
+            return
+            
+        # Pega o canal do jornal
+        canal_id = self.bot.db.get_canal_categoria(guild_id, "noticia")
+        
+        emb = ui.embed(
+            "📰 CLASSIFICADOS",
+            categoria="noticia",
+            descricao=f"*{texto}*\n\n— *Anúncio pago por <@{user_id}> ({valor} Solares)*"
+        )
+        
+        from core import publicacoes
+        await publicacoes.publicar_ou_enfileirar(
+            self.bot,
+            guild_id=guild_id,
+            embed=emb,
+            origem="classificados",
+            dedupe_key=f"classificado:{interaction.id}",
+            categoria="noticia",
+            canal_id=canal_id,
+            automacao="classificados"
+        )
+        
+        await interaction.response.send_message("Seu classificado foi entregue à redação e logo será publicado!", ephemeral=True)
+
+    @app_commands.command(name="vender_furo", description="Trabalho freelance! Venda fotos e segredos de outros pro Jornalista em troca de Solares.")
+    @app_commands.describe(jogador="De quem é o segredo que você está vendendo?")
+    async def vender_furo(self, interaction: discord.Interaction, jogador: discord.Member):
+        if not interaction.guild_id:
+            await interaction.response.send_message("Isso só funciona em um servidor.", ephemeral=True)
+            return
+            
+        if jogador.id == interaction.user.id:
+            await interaction.response.send_message("Você não pode vender um furo sobre si mesmo! Isso é burrice.", ephemeral=True)
+            return
+            
+        guild_id, user_id = str(interaction.guild_id), str(interaction.user.id)
+        
+        import random
+        # 30% de chance do furo ser bom
+        if random.random() < 0.30:
+            recompensa = random.randint(50, 150)
+            self.bot.db.creditar(guild_id, user_id, "Solares", recompensa)
+            
+            # Adiciona fofoca sobre a vitima!
+            alvo_id = str(jogador.id)
+            self.bot.db.adicionar_fofoca(guild_id, alvo_id, f"Vazaram segredos obscuros de <@{alvo_id}>!", suborno=recompensa*2)
+            
+            emb = ui.embed(
+                "📸 Furo Comprado!",
+                categoria="cofre",
+                descricao=f"Ótimo material! Te paguei ☀️ **{recompensa} Solares** pelas fotos compromedoras do {jogador.mention}.\nO departamento vai entrar em contato com ele pra tentar um acordo..."
+            )
+            await interaction.response.send_message(embed=emb, ephemeral=True)
+        else:
+            emb = ui.embed(
+                "🥱 História Chata",
+                categoria="erro",
+                descricao=f"Ninguém se importa com o que {jogador.mention} tomou de café da manhã. Tente encontrar um segredo mais suculento."
+            )
+            await interaction.response.send_message(embed=emb, ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Jornal(bot))

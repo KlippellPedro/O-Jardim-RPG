@@ -250,6 +250,10 @@ _SCHEMA = (
     ALTER TABLE config ADD COLUMN IF NOT EXISTS cargo_cacador_id TEXT
     """,
     """
+    ALTER TABLE config ADD COLUMN IF NOT EXISTS clima_auto BOOLEAN NOT NULL DEFAULT FALSE;
+    ALTER TABLE config ADD COLUMN IF NOT EXISTS modificador_clima TEXT DEFAULT NULL;
+    """,
+    """
     ALTER TABLE config ADD COLUMN IF NOT EXISTS cambio_auto BOOLEAN NOT NULL DEFAULT FALSE
     """,
     """
@@ -426,6 +430,35 @@ _SCHEMA = (
     CREATE INDEX IF NOT EXISTS custodia_moeda_usuario_idx
     ON custodia_moeda (guild_id, user_id)
     """,
+    """
+    CREATE TABLE IF NOT EXISTS ferimentos (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        pontos INTEGER NOT NULL DEFAULT 0 CHECK (pontos >= 0),
+        PRIMARY KEY (guild_id, user_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS lavagem_dinheiro (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        quantia INTEGER NOT NULL,
+        pronto_em TIMESTAMPTZ NOT NULL,
+        PRIMARY KEY (guild_id, user_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS fofocas (
+        id SERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        texto_fofoca TEXT NOT NULL,
+        suborno_valor INTEGER NOT NULL,
+        prazo TIMESTAMPTZ NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pendente' CHECK (status IN ('pendente', 'subornada', 'publicada', 'notificada')),
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+    """,
 )
 
 
@@ -550,6 +583,64 @@ class Database:
     def garantir_jogador(self, guild_id: str, user_id: str) -> None:
         with self._conn() as con:
             self._garantir_jogador(con, guild_id, user_id)
+
+    def get_ferimentos(self, guild_id: str, user_id: str) -> int:
+        with self._conn() as con:
+            row = con.execute("SELECT pontos FROM ferimentos WHERE guild_id=%s AND user_id=%s", (guild_id, user_id)).fetchone()
+            return row["pontos"] if row else 0
+
+    def adicionar_ferimento(self, guild_id: str, user_id: str) -> Tuple[int, bool, int]:
+        """Adiciona 1 ponto de ferido. Se chegar a 6, reseta e cobra hospital.
+        Retorna (pontos_atuais, foi_pro_hospital, valor_pago)."""
+        custo_hospital = 200 # Custo fixo
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            
+            # Verifica se tem plano de saude
+            tem_vip = con.execute("SELECT 1 FROM inventario WHERE guild_id=%s AND user_id=%s AND item_id='plano_de_saude_vip'", (guild_id, user_id)).fetchone()
+            if tem_vip:
+                custo_hospital = 50
+            else:
+                tem_basico = con.execute("SELECT 1 FROM inventario WHERE guild_id=%s AND user_id=%s AND item_id='plano_de_saude_basico'", (guild_id, user_id)).fetchone()
+                if tem_basico:
+                    custo_hospital = 100
+                    
+            row = con.execute(
+                """
+                INSERT INTO ferimentos (guild_id, user_id, pontos)
+                VALUES (%s, %s, 1)
+                ON CONFLICT (guild_id, user_id) DO UPDATE SET
+                    pontos = ferimentos.pontos + 1
+                RETURNING pontos
+                """,
+                (guild_id, user_id)
+            ).fetchone()
+            pontos = row["pontos"]
+            
+            if pontos >= 6:
+                con.execute("UPDATE ferimentos SET pontos = 0 WHERE guild_id=%s AND user_id=%s", (guild_id, user_id))
+                saldo_row = con.execute("SELECT saldo FROM carteira WHERE guild_id=%s AND user_id=%s AND moeda='Lunaris' FOR UPDATE", (guild_id, user_id)).fetchone()
+                if saldo_row:
+                    pagar = min(saldo_row["saldo"], custo_hospital)
+                    if pagar > 0:
+                        con.execute("UPDATE carteira SET saldo = saldo - %s WHERE guild_id=%s AND user_id=%s AND moeda='Lunaris'", (pagar, guild_id, user_id))
+                        con.execute("INSERT INTO extrato (guild_id, user_id, delta, moeda, descricao) VALUES (%s, %s, %s, 'Lunaris', 'Conta do Hospital')", (guild_id, user_id, -pagar))
+                        return 0, True, pagar
+                return 0, True, 0
+            
+            return pontos, False, 0
+
+    def adicionar_reputacao(self, guild_id: str, user_id: str, valor: int = 1) -> None:
+        """Aumenta o limite de crédito (reputação) do jogador."""
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            con.execute(
+                """
+                UPDATE cartao SET credito = credito + %s
+                WHERE guild_id = %s AND user_id = %s
+                """,
+                (valor, guild_id, user_id)
+            )
 
     # ── Controle de ciclos periódicos (evita reaplicar juros a cada restart) ─
     def ciclo_guild_devido(self, guild_id: str, ciclo: str, intervalo_horas: float) -> bool:
@@ -4745,3 +4836,46 @@ class Database:
                 (guild_id,),
             ).fetchall()
         return [dict(row) for row in rows]
+
+    def adicionar_lavagem(self, guild_id: str, user_id: str, quantia: int, pronto_em: datetime) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO lavagem_dinheiro (guild_id, user_id, quantia, pronto_em)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (guild_id, user_id)
+                DO UPDATE SET
+                    quantia = lavagem_dinheiro.quantia + EXCLUDED.quantia,
+                    pronto_em = EXCLUDED.pronto_em
+                """,
+                (guild_id, user_id, quantia, pronto_em),
+            )
+
+    def get_lavagem(self, guild_id: str, user_id: str) -> dict:
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT quantia, pronto_em FROM lavagem_dinheiro WHERE guild_id=%s AND user_id=%s",
+                (guild_id, user_id),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def remover_lavagem(self, guild_id: str, user_id: str) -> None:
+        with self._conn() as con:
+            con.execute(
+                "DELETE FROM lavagem_dinheiro WHERE guild_id=%s AND user_id=%s",
+                (guild_id, user_id),
+            )
+
+    def adicionar_fofoca(self, guild_id: str, user_id: str, texto_fofoca: str, suborno_valor: int, prazo: datetime) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO fofocas (guild_id, user_id, texto_fofoca, suborno_valor, prazo)
+                VALUES (%s, %s, %s, %s, %s)
+                """,
+                (guild_id, user_id, texto_fofoca, suborno_valor, prazo)
+            )
+    def get_modificador_clima(self, guild_id: str) -> Optional[str]:
+        with self._conn() as con:
+            row = con.execute("SELECT modificador_clima FROM config WHERE guild_id=%s", (guild_id,)).fetchone()
+        return row["modificador_clima"] if row else None
