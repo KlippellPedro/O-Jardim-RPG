@@ -57,6 +57,8 @@ from schemas import (
     PasswordHelpInput,
     RegisterInput,
     RollInput,
+    SessionCharactersInput,
+    SessionOpenInput,
     SessionTurnInput,
     UsageInput,
 )
@@ -342,7 +344,22 @@ class CharacterSummaryTests(unittest.TestCase):
         }
         self.assertEqual(iniciativa_fixa(ficha), 17)
 
-    def test_iniciativa_fixa_limita_efeitos_do_editor_de_poderes(self):
+    def test_iniciativa_fixa_aceita_valor_decimal_do_editor(self):
+        ficha = {
+            "derivados": {"iniciativa": 14},
+            "habilidades": [{
+                "id": "reflexo-fracionado",
+                "efeitos": [{
+                    "categoria": "combate",
+                    "alvo": "iniciativa",
+                    "valor": 1.5,
+                    "modo": "bonus",
+                }],
+            }],
+        }
+        self.assertEqual(iniciativa_fixa(ficha), 15.5)
+
+    def test_iniciativa_fixa_aceita_valor_livre_e_limita_a_cinco_efeitos(self):
         ficha = {
             "derivados": {"iniciativa": 14},
             "poderes": [{
@@ -355,7 +372,7 @@ class CharacterSummaryTests(unittest.TestCase):
                 } for _ in range(6)],
             }],
         }
-        self.assertEqual(iniciativa_fixa(ficha), 114)
+        self.assertEqual(iniciativa_fixa(ficha), 514)
 
     def test_sabedoria_desempata_com_modificador(self):
         self.assertEqual(sabedoria_desempate({"atributosFinais": {"sabedoria": 15}}), 2)
@@ -575,6 +592,18 @@ class SessaoAoVivoTests(unittest.TestCase):
             self.assertEqual(SessionTurnInput(acao=acao).acao, acao)
         with self.assertRaises(ValidationError):
             SessionTurnInput(acao="apagar-tudo")
+
+    def test_sessao_nova_nao_inclui_todos_os_personagens_por_padrao(self):
+        entrada = SessionOpenInput(campanha_id=UUID(int=1))
+        self.assertFalse(entrada.incluir_personagens)
+
+    def test_selecao_de_personagens_aceita_vazia_e_remove_duplicados(self):
+        primeiro, segundo = UUID(int=1), UUID(int=2)
+        self.assertEqual(SessionCharactersInput().personagem_ids, [])
+        self.assertEqual(
+            SessionCharactersInput(personagem_ids=[primeiro, segundo, primeiro]).personagem_ids,
+            [primeiro, segundo],
+        )
 
     def test_condicoes_repetidas_e_vazias_somem(self):
         entrada = ParticipantUpdateInput(condicoes=["Caído", " Caído ", "", "  ", "Cego"])

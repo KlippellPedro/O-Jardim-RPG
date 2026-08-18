@@ -170,6 +170,14 @@ class CharacterUpdateInput(BaseModel):
         return self
 
 
+class EdenFruitConsumeInput(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    versao_ficha_esperada: StrictInt = Field(ge=1)
+    economia_versao_esperada: StrictInt = Field(ge=1)
+    substituir: StrictBool = False
+
+
 class KnowledgeCreateInput(BaseModel):
     campanha_id: UUID
     tipo: str = Field(min_length=1, max_length=60, pattern=r"^[a-z0-9_-]+$")
@@ -491,7 +499,19 @@ class DiscordVaultReserveResolveInput(BaseModel):
 class SessionOpenInput(BaseModel):
     campanha_id: UUID
     titulo: str = Field(default="", max_length=120)
-    incluir_personagens: bool = True
+    incluir_personagens: bool = False
+
+
+class SessionCharactersInput(BaseModel):
+    """Personagens de jogador escolhidos para participar desta sessão."""
+
+    personagem_ids: list[UUID] = Field(default_factory=list, max_length=200)
+
+    @field_validator("personagem_ids")
+    @classmethod
+    def unique_character_ids(cls, value: list[UUID]) -> list[UUID]:
+        # Preserva a ordem escolhida pelo Mestre e evita participantes duplicados.
+        return list(dict.fromkeys(value))
 
 
 NivelVisibilidade = Literal["oculto", "desconhecido", "parcial", "total"]
@@ -793,4 +813,3 @@ class CampaignPropertyInstallationInput(BaseModel):
     nome: str = Field(min_length=1, max_length=100)
     nivel: int = Field(default=1, ge=1)
     espacos_ocupados: int = Field(default=1, ge=1)
-

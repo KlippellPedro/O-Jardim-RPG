@@ -49,6 +49,43 @@ def _ficha_criacao() -> dict:
     }
 
 
+class TestEscolhaRacialTardia:
+    """A Cor da Alma do Espirito nasceu depois de fichas de Espirito ja existirem.
+    Preencher um campo de escolha racial vazio e liberado uma unica vez; trocar
+    uma escolha ja feita continua sendo do mestre."""
+
+    @classmethod
+    def setup_class(cls):
+        carregar_catalogos(DATA_ROOT)
+
+    def _ficha_espirito(self, cor: str | None = None) -> dict:
+        ficha = _ficha_criacao()
+        ficha["racaId"] = "espirito"
+        if cor is not None:
+            ficha["escolhaRacial"] = {"varianteId": cor}
+        return ficha
+
+    def test_ficha_antiga_sem_cor_pode_escolher_uma(self):
+        anterior = self._ficha_espirito()
+        atual = self._ficha_espirito("vermelho")
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+    def test_cor_invalida_continua_barrada(self):
+        anterior = self._ficha_espirito()
+        atual = self._ficha_espirito("roxo-que-nao-existe")
+        assert "escolhas raciais" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+    def test_trocar_de_cor_continua_sendo_do_mestre(self):
+        anterior = self._ficha_espirito("vermelho")
+        atual = self._ficha_espirito("dourado")
+        assert "escolhas raciais" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+    def test_apagar_a_cor_escolhida_continua_barrado(self):
+        anterior = self._ficha_espirito("vermelho")
+        atual = self._ficha_espirito("")
+        assert "escolhas raciais" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+
 class TestCharacterRules:
     @classmethod
     def setup_class(cls):
@@ -251,6 +288,31 @@ class TestCharacterRules:
         excedente = deepcopy(atual)
         excedente["magiasConhecidasIds"].extend(["impacto-elemental", "escudo-material"])
         assert "mais magias" in validar_regras_ficha(excedente, {}, ficha_anterior=anterior)
+
+    def test_validates_prepared_and_active_flux_catalysts(self):
+        anterior = _ficha_criacao()
+        anterior["classeId"] = "sintonizador"
+        anterior["classes"] = [{"classeId": "sintonizador", "nivel": 15}]
+        anterior["nivel"] = 15
+
+        atual = deepcopy(anterior)
+        atual["catalisadoresFluxo"] = {
+            "preparadosIds": ["tempo", "espaco", "vazio"],
+            "ativoId": "tempo",
+        }
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+        excedente = deepcopy(atual)
+        excedente["catalisadoresFluxo"]["preparadosIds"].append("fim")
+        assert "excedem o limite" in validar_regras_ficha(excedente, {}, ficha_anterior=anterior)
+
+        ativo_invalido = deepcopy(atual)
+        ativo_invalido["catalisadoresFluxo"]["ativoId"] = "origem"
+        assert "ativo deve estar" in validar_regras_ficha(ativo_invalido, {}, ficha_anterior=anterior)
+
+        fluxo_artificial = deepcopy(atual)
+        fluxo_artificial["catalisadoresFluxo"] = {"preparadosIds": ["tecnologia"], "ativoId": "tecnologia"}
+        assert "Fluxo invalido" in validar_regras_ficha(fluxo_artificial, {}, ficha_anterior=anterior)
 
     def test_circulo_liberado_acompanha_os_limiares_publicados(self):
         """O servidor precisa enxergar os dez círculos publicados, não os cinco

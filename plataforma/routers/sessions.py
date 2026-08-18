@@ -26,6 +26,7 @@ from schemas import (
     ParticipantCreateInput,
     ParticipantReorderInput,
     ParticipantUpdateInput,
+    SessionCharactersInput,
     SessionOpenInput,
     SessionTurnInput,
 )
@@ -247,7 +248,11 @@ def abrir_sessao(
     user: AuthenticatedUser = Depends(require_csrf),
     database: Database = Depends(get_database),
 ):
-    """Cria a mesa em preparação privada com os personagens ativos."""
+    """Cria a mesa em preparação privada.
+
+    Personagens só entram automaticamente para clientes legados que enviarem
+    `incluir_personagens=true`; a interface atual exige a seleção do Mestre.
+    """
     sessao_id = uuid4()
     with database.connection() as connection:
         access = require_campaign_manager(connection, payload.campanha_id, user.id)
@@ -414,7 +419,7 @@ def encerrar_sessao(
 def _sessao_sob_comando(connection, sessao_id: UUID, user_id: UUID):
     row = connection.execute(
         """
-        SELECT id, campanha_id, rodada, turno_indice, em_combate, versao
+        SELECT id, campanha_id, status, rodada, turno_indice, em_combate, versao
         FROM sessoes_mesa WHERE id=%s AND status IN ('preparacao', 'aberta')
         """,
         (sessao_id,),
@@ -425,6 +430,129 @@ def _sessao_sob_comando(connection, sessao_id: UUID, user_id: UUID):
     access = require_campaign_manager(connection, sessao["campanha_id"], user_id)
     sessao["_papel_comando"] = access.role
     return sessao
+
+
+@router.post("/{sessao_id}/personagens")
+def selecionar_personagens(
+    sessao_id: UUID,
+    payload: SessionCharactersInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Sincroniza somente os personagens de jogador escolhidos pelo Mestre.
+
+    Aliados e inimigos já preparados são preservados. A seleção é fechada
+    antes da publicação para não trocar o elenco no meio de uma sessão ao vivo.
+    """
+    with database.connection() as connection:
+        sessao = _sessao_sob_comando(connection, sessao_id, user.id)
+        if sessao["status"] != "preparacao":
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="os personagens so podem ser selecionados durante a preparacao",
+            )
+
+        personagem_ids = payload.personagem_ids
+        personagens = []
+        if personagem_ids:
+            personagens = connection.execute(
+                """
+                SELECT id, nome, ficha,
+                       COALESCE((ficha->'derivados'->>'vida')::int, 0) AS vida_maxima,
+                       COALESCE(
+                           (ficha->'status'->>'vidaAtual')::int,
+                           (ficha->'recursos'->>'vidaAtual')::int
+                       ) AS vida_atual,
+                       COALESCE((ficha->'derivados'->>'mana')::int, 0) AS mana_maxima,
+                       COALESCE(
+                           (ficha->'status'->>'manaAtual')::int,
+                           (ficha->'recursos'->>'manaAtual')::int
+                       ) AS mana_atual
+                FROM personagens
+                WHERE campanha_id=%s AND status='ativo' AND id = ANY(%s)
+                """,
+                (sessao["campanha_id"], personagem_ids),
+            ).fetchall()
+            encontrados = {personagem["id"] for personagem in personagens}
+            ausentes = [personagem_id for personagem_id in personagem_ids if personagem_id not in encontrados]
+            if ausentes:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="a selecao contem personagem inexistente, arquivado ou de outra campanha",
+                )
+
+        if personagem_ids:
+            connection.execute(
+                """
+                DELETE FROM sessao_participantes
+                WHERE sessao_id=%s AND tipo='jogador' AND personagem_id IS NOT NULL
+                  AND NOT (personagem_id = ANY(%s))
+                """,
+                (sessao_id, personagem_ids),
+            )
+        else:
+            connection.execute(
+                """
+                DELETE FROM sessao_participantes
+                WHERE sessao_id=%s AND tipo='jogador' AND personagem_id IS NOT NULL
+                """,
+                (sessao_id,),
+            )
+
+        existentes = {
+            row["personagem_id"]
+            for row in connection.execute(
+                """
+                SELECT personagem_id FROM sessao_participantes
+                WHERE sessao_id=%s AND personagem_id IS NOT NULL
+                """,
+                (sessao_id,),
+            ).fetchall()
+        }
+        personagens_por_id = {personagem["id"]: personagem for personagem in personagens}
+        proxima_ordem = int(connection.execute(
+            "SELECT COALESCE(MAX(ordem), -1) + 1 AS proxima FROM sessao_participantes WHERE sessao_id=%s",
+            (sessao_id,),
+        ).fetchone()["proxima"])
+
+        for personagem_id in personagem_ids:
+            if personagem_id in existentes:
+                continue
+            personagem = personagens_por_id[personagem_id]
+            maximo = max(0, int(personagem["vida_maxima"] or 0))
+            atual = maximo if personagem["vida_atual"] is None else int(personagem["vida_atual"])
+            mana_maxima = max(0, int(personagem["mana_maxima"] or 0))
+            mana_atual = (
+                mana_maxima
+                if personagem["mana_atual"] is None
+                else max(0, min(int(personagem["mana_atual"]), mana_maxima))
+            )
+            connection.execute(
+                """
+                INSERT INTO sessao_participantes
+                    (id, sessao_id, personagem_id, nome, tipo,
+                     iniciativa, vida_atual, vida_maxima, mana_atual,
+                     mana_maxima, condicoes, ordem)
+                VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s, %s, %s, %s)
+                """,
+                (
+                    uuid4(), sessao_id, personagem["id"], personagem["nome"],
+                    iniciativa_fixa(personagem["ficha"]),
+                    min(atual, maximo) if maximo else atual, maximo,
+                    mana_atual, mana_maxima,
+                    Jsonb(normalizar_condicoes(personagem["ficha"].get("condicoesAtivas"))),
+                    proxima_ordem,
+                ),
+            )
+            proxima_ordem += 1
+
+        versao = _tocar(connection, sessao_id)
+        atualizada = _sessao_ativa(connection, sessao["campanha_id"])
+        estado = _montar_estado(connection, atualizada, sessao["_papel_comando"], user.id)
+        campanha_id = sessao["campanha_id"]
+
+    live_session.publicar(campanha_id, "personagens_selecionados", versao)
+    return estado
 
 
 @router.post("/{sessao_id}/participantes", status_code=status.HTTP_201_CREATED)

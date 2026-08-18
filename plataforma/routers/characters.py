@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -27,7 +28,7 @@ from core.dependencies import (
     get_database,
     require_csrf,
 )
-from schemas import CharacterCreateInput, CharacterUpdateInput, EconomyReplaceInput
+from schemas import CharacterCreateInput, CharacterUpdateInput, EdenFruitConsumeInput, EconomyReplaceInput
 
 
 router = APIRouter(prefix="/personagens", tags=["personagens"])
@@ -76,6 +77,9 @@ def _session_resources(sheet: dict) -> dict[str, int | None]:
     if mana_atual is None:
         mana_atual = inteiro(recursos.get("manaAtual"))
 
+    vida_maxima = None if vida_maxima is None else vida_maxima + _eden_fruit_resource_bonus(sheet, "vidaMaxima")
+    mana_maxima = None if mana_maxima is None else mana_maxima + _eden_fruit_resource_bonus(sheet, "manaMaxima")
+
     if vida_maxima is not None:
         vida_maxima = max(0, vida_maxima)
         if vida_atual is not None:
@@ -91,6 +95,26 @@ def _session_resources(sheet: dict) -> dict[str, int | None]:
         "mana_atual": mana_atual,
         "mana_maxima": mana_maxima,
     }
+
+
+def _eden_fruit_effects(sheet: dict) -> list[dict]:
+    fruit = sheet.get("frutoEdenConsumido") if isinstance(sheet, dict) else None
+    content = fruit.get("conteudo") if isinstance(fruit, dict) else None
+    raw = content.get("efeitosFicha") if isinstance(content, dict) else None
+    if not isinstance(raw, list):
+        return []
+    return [effect for effect in raw if isinstance(effect, dict)]
+
+
+def _eden_fruit_resource_bonus(sheet: dict, target: str) -> int:
+    total = 0
+    for effect in _eden_fruit_effects(sheet):
+        if effect.get("categoria") != "recurso" or effect.get("alvo") != target:
+            continue
+        value = effect.get("valor")
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            total += int(value)
+    return max(-1000, min(1000, total))
 
 
 def _is_protected_inventory_data_key(key: str) -> bool:
@@ -1101,6 +1125,162 @@ def archive_character(
             target_id=str(character_id),
         )
     return None
+
+
+@router.post(
+    "/{character_id}/inventario/{item_id}/consumir-fruto-eden",
+    status_code=status.HTTP_200_OK,
+)
+def consume_eden_fruit(
+    character_id: UUID,
+    item_id: str,
+    payload: EdenFruitConsumeInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Consome um Fruto do Eden e vincula seus efeitos a ficha atomicamente."""
+    with database.connection() as connection:
+        authorized = _authorized_character(connection, character_id, user.id)
+        character = connection.execute(
+            """
+            SELECT ficha, versao, economia_versao
+            FROM personagens
+            WHERE id=%s AND status='ativo'
+            FOR UPDATE
+            """,
+            (character_id,),
+        ).fetchone()
+        if not character:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="personagem nao encontrado")
+        if (
+            int(character["versao"]) != payload.versao_ficha_esperada
+            or int(character["economia_versao"]) != payload.economia_versao_esperada
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={
+                    "mensagem": "a ficha ou o inventario mudou; recarregue antes de consumir o fruto",
+                    "versao_ficha_atual": int(character["versao"]),
+                    "economia_versao_atual": int(character["economia_versao"]),
+                },
+            )
+
+        inventory = connection.execute(
+            """
+            SELECT item_id, titulo, quantidade, dados
+            FROM inventario_personagem
+            WHERE campanha_id=%s AND personagem_id=%s AND item_id=%s
+            FOR UPDATE
+            """,
+            (authorized["campanha_id"], character_id, item_id),
+        ).fetchone()
+        if not inventory:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="fruto nao encontrado no inventario")
+        inventory_data = inventory["dados"] if isinstance(inventory["dados"], dict) else {}
+        catalog_item_id = str(inventory_data.get("catalogo_item_id") or "").strip()
+        if inventory_data.get("origem") != "loja" or not catalog_item_id:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="somente um Fruto do Eden oficial adquirido pode ser consumido",
+            )
+        catalog = connection.execute(
+            """
+            SELECT id, tipo, titulo, conteudo
+            FROM catalogo_itens
+            WHERE id=%s AND ativo=TRUE
+            """,
+            (catalog_item_id,),
+        ).fetchone()
+        if not catalog or catalog["tipo"] != "fruto-eden":
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="o item selecionado nao e um Fruto do Eden ativo",
+            )
+
+        current_sheet = character["ficha"] if isinstance(character["ficha"], dict) else {}
+        previous_fruit = current_sheet.get("frutoEdenConsumido")
+        if isinstance(previous_fruit, dict) and not payload.substituir:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={
+                    "mensagem": "o personagem ja possui um Fruto do Eden; confirme a substituicao",
+                    "fruto_atual": previous_fruit.get("titulo"),
+                },
+            )
+
+        catalog_content = catalog["conteudo"] if isinstance(catalog["conteudo"], dict) else {}
+        fruit_link = {
+            "itemId": str(catalog["id"]),
+            "titulo": str(catalog["titulo"]),
+            "conteudo": catalog_content,
+            "consumidoEm": datetime.now(timezone.utc).isoformat(),
+        }
+        next_sheet = {
+            **current_sheet,
+            "frutoEdenConsumido": fruit_link,
+        }
+
+        # Mantem o recurso atual proporcional ao bonus permanente ganho ou perdido
+        # numa substituicao. Os maximos continuam derivados no frontend.
+        status_sheet = current_sheet.get("status") if isinstance(current_sheet.get("status"), dict) else {}
+        next_status = dict(status_sheet)
+        for target, field in (("vidaMaxima", "vidaAtual"), ("manaMaxima", "manaAtual")):
+            current_value = status_sheet.get(field)
+            if not isinstance(current_value, (int, float)) or isinstance(current_value, bool):
+                continue
+            delta = _eden_fruit_resource_bonus(next_sheet, target) - _eden_fruit_resource_bonus(current_sheet, target)
+            next_status[field] = max(0, int(current_value) + delta)
+        if next_status:
+            next_sheet["status"] = next_status
+
+        quantity = int(inventory["quantidade"])
+        if quantity <= 1:
+            connection.execute(
+                """
+                DELETE FROM inventario_personagem
+                WHERE campanha_id=%s AND personagem_id=%s AND item_id=%s
+                """,
+                (authorized["campanha_id"], character_id, item_id),
+            )
+        else:
+            connection.execute(
+                """
+                UPDATE inventario_personagem
+                SET quantidade=quantidade-1, atualizado_em=CURRENT_TIMESTAMP
+                WHERE campanha_id=%s AND personagem_id=%s AND item_id=%s
+                """,
+                (authorized["campanha_id"], character_id, item_id),
+            )
+
+        updated = connection.execute(
+            """
+            UPDATE personagens
+            SET ficha=%s, versao=versao+1, economia_versao=economia_versao+1,
+                atualizado_em=CURRENT_TIMESTAMP
+            WHERE id=%s
+            RETURNING versao, economia_versao
+            """,
+            (Jsonb(next_sheet), character_id),
+        ).fetchone()
+        record_audit(
+            connection,
+            action="personagem.fruto_eden_consumido",
+            actor_user_id=user.id,
+            campaign_id=authorized["campanha_id"],
+            target_type="personagem",
+            target_id=str(character_id),
+            details={
+                "item_id": catalog_item_id,
+                "titulo": str(catalog["titulo"]),
+                "substituiu": previous_fruit.get("itemId") if isinstance(previous_fruit, dict) else None,
+            },
+        )
+
+    return {
+        "fruto": fruit_link,
+        "versao": int(updated["versao"]),
+        "economia_versao": int(updated["economia_versao"]),
+    }
 
 
 @router.post(

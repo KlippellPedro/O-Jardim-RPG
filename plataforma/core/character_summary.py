@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import re
 import unicodedata
 from pathlib import Path
@@ -27,6 +28,10 @@ _ATRIBUTOS = ("forca", "destreza", "constituicao", "inteligencia", "sabedoria", 
 _VALORES_PADRAO = sorted((15, 14, 13, 12, 10, 8, 8))
 _GRAUS = ("iniciante", "aprendiz", "treinado", "especialista", "mestre", "veterano", "renomado")
 _NIVEL_MINIMO_GRAU = (1, 1, 3, 7, 13, 19, 29)
+_FLUXOS_CATALISAVEIS = {
+    "origem", "essencia", "comunicacao", "vitalidade", "inconstancia",
+    "fisico", "espaco", "tempo", "vazio", "fim",
+}
 
 # Espelha src/services/racaService.ts::RACA_PERSONALIZADA_ID.
 RACA_PERSONALIZADA_ID = "raca-personalizada"
@@ -430,6 +435,28 @@ def _validar_escolhas_progressao(ficha: dict, anterior: dict, classes: list[tupl
     return None
 
 
+def _escolha_racial_vazia(valor) -> bool:
+    """Campo de escolha racial que nunca foi preenchido."""
+    return valor is None or valor == "" or valor == [] or valor == {}
+
+
+def _opcao_racial_valida(raca: dict, campo: str, valor) -> bool:
+    """Confere se `valor` e uma opcao que a raca realmente oferece nesse campo.
+    Campos que guardam listas (a escolha de atributos raciais) so precisam vir
+    preenchidos - o conteudo deles ja e conferido em `_atributo_efetivo`."""
+    colecao = {
+        "varianteId": "variantes",
+        "linhagemId": "linhagens",
+        "condicaoAncestralId": "condicoes_ancestrais",
+    }.get(campo)
+    if colecao is None:
+        return not _escolha_racial_vazia(valor)
+    return any(
+        isinstance(item, dict) and str(item.get("id")) == str(valor)
+        for item in raca.get(colecao) or []
+    )
+
+
 def _fluxo_efetivo(ficha: dict, raca: dict) -> int:
     finais = ficha.get("atributosFinais") if isinstance(ficha.get("atributosFinais"), dict) else {}
     valor = _inteiro(finais.get("fluxo")) or 1
@@ -547,6 +574,45 @@ def _validar_rituais_selos_encantamentos(
         )
         if erro:
             return erro
+    return None
+
+
+def _validar_catalisadores_fluxo(ficha: dict, classes: list[tuple[dict, int]]) -> str | None:
+    """Valida a configuração operacional usada por Sintonizador e
+    Interceptador. Catalisador não concede fonte, círculos ou vagas; por isso
+    esta validação permanece separada de `_validar_magias`."""
+    configuracao = ficha.get("catalisadoresFluxo")
+    if configuracao is None:
+        return None
+    if not isinstance(configuracao, dict):
+        return "catalisadoresFluxo deve ser um objeto"
+
+    preparados = configuracao.get("preparadosIds") or []
+    ativo = configuracao.get("ativoId")
+    if not isinstance(preparados, list) or any(not isinstance(item, str) for item in preparados):
+        return "catalisadores preparados devem ser uma lista de ids"
+    if len(preparados) != len(set(preparados)):
+        return "o mesmo catalisador nao pode ser preparado duas vezes"
+    if any(item not in _FLUXOS_CATALISAVEIS for item in preparados):
+        return "a ficha contem um catalisador de Fluxo invalido"
+    if ativo is not None and (not isinstance(ativo, str) or ativo not in preparados):
+        return "o catalisador ativo deve estar entre os preparados"
+
+    niveis = {str(classe.get("id")): nivel for classe, nivel in classes}
+    nivel_sintonizador = niveis.get("sintonizador", 0)
+    possui_interceptador = niveis.get("interceptador", 0) > 0
+    limite_base = 3 if nivel_sintonizador >= 15 else 2 if nivel_sintonizador >= 5 else 1 if nivel_sintonizador > 0 else 0
+    foco_reserva = any(
+        isinstance(item, dict)
+        and item.get("classeId") == "sintonizador"
+        and item.get("poderId") == "foco-reserva"
+        for item in ficha.get("poderesClasseSelecionados") or []
+    )
+    limite = max(1 if possui_interceptador else 0, limite_base + (1 if foco_reserva else 0))
+    if limite == 0 and preparados:
+        return "a ficha nao possui classe capaz de preparar catalisadores"
+    if len(preparados) > limite:
+        return "os catalisadores preparados excedem o limite da classe"
     return None
 
 
@@ -698,7 +764,17 @@ def validar_regras_ficha(
         configuracao_atributos = raca.get("escolha_atributos")
         if isinstance(configuracao_atributos, dict) and configuracao_atributos.get("campo"):
             campos_fixos.add(str(configuracao_atributos["campo"]))
-        if any(escolha.get(campo) != escolha_anterior.get(campo) for campo in campos_fixos):
+        for campo in campos_fixos:
+            atual = escolha.get(campo)
+            anterior_campo = escolha_anterior.get(campo)
+            if atual == anterior_campo:
+                continue
+            # Quando uma raca ganha uma escolha que nao existia na epoca em que a
+            # ficha foi criada (a Cor da Alma do Espirito, por exemplo), o jogador
+            # preenche o campo vazio uma unica vez. Trocar um valor ja escolhido
+            # continua sendo prerrogativa do mestre.
+            if _escolha_racial_vazia(anterior_campo) and _opcao_racial_valida(raca, campo, atual):
+                continue
             return "escolhas raciais de criacao so podem ser alteradas pelo mestre"
 
     liberados_classe = _liberados_para(config, "classe", usuario_id)
@@ -840,6 +916,10 @@ def validar_regras_ficha(
     if erro_progressao:
         return erro_progressao
 
+    erro_catalisadores = _validar_catalisadores_fluxo(ficha, classes)
+    if erro_catalisadores:
+        return erro_catalisadores
+
     erro_magias = _validar_magias(ficha, anterior, classes, raca, criacao=criacao)
     if erro_magias:
         return erro_magias
@@ -941,7 +1021,7 @@ def sabedoria_desempate(ficha: dict | None) -> int:
     return (_atributo_efetivo(ficha, "sabedoria") - 10) // 2
 
 
-def iniciativa_fixa(ficha: dict | None, *, condicoes=None) -> int:
+def iniciativa_fixa(ficha: dict | None, *, condicoes=None) -> int | float:
     """Calcula a iniciativa da ficha sem dado, igual ao front-end.
 
     Iniciativa é um atributo fixo: base derivada + bônus/penalidade + ajustes
@@ -988,8 +1068,16 @@ def iniciativa_fixa(ficha: dict | None, *, condicoes=None) -> int:
                 )
                 categoria = efeito.get("categoria") if formato_editor else efeito.get("tipo")
                 if ativo and categoria == "combate" and efeito.get("alvo") == "iniciativa":
-                    valor = _numero(efeito.get("valor"))
-                    total += max(-20, min(20, valor)) if formato_editor else valor
+                    if formato_editor:
+                        try:
+                            valor = float(efeito.get("valor"))
+                        except (TypeError, ValueError, OverflowError):
+                            continue
+                        if not math.isfinite(valor):
+                            continue
+                    else:
+                        valor = _numero(efeito.get("valor"))
+                    total += valor
     return total
 
 
