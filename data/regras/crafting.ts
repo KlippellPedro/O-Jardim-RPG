@@ -1,3 +1,5 @@
+import type { RegraTopicoDe } from './tipos';
+
 export type RaridadeCraftingId =
   | 'comum'
   | 'incomum'
@@ -55,13 +57,7 @@ export interface RegraReparoCrafting {
   regra: string;
 }
 
-export interface RegraTopicoCrafting {
-  categoria: 'Livro do Jogador';
-  status: string;
-  resumo: string;
-  destaques: string[][];
-  corpo: string;
-}
+export type RegraTopicoCrafting = RegraTopicoDe<'Livro do Jogador'>;
 
 export const HORAS_POR_DIA_DE_TRABALHO = 6;
 
@@ -384,5 +380,30 @@ export const REGRA_CRAFTING: RegraTopicoCrafting = {
     <ul class="regras-list">${itens(SALVAGUARDAS_ECONOMIA_CRAFTING)}</ul>
 
     <p class="regras-note"><strong>Classes:</strong> Alquimista e Engenheiro usam as habilidades descritas nas próprias progressões. Nenhuma classe é obrigatória para fabricar itens comuns, desde que o personagem cumpra os requisitos da receita.</p>
+  `,
+  corpoMestre: `
+    <p class="regras-lead">Fabricar compete com aventurar: são dias de trabalho que o grupo não passa em campo. A regra se sustenta sozinha desde que você entregue tempo de intervalo e materiais.</p>
+
+    <h3 class="regras-subtitle">A escada de custo</h3>
+    <div class="regras-table-wrap"><table class="regras-table">
+      <thead><tr><th>Raridade</th><th>DT</th><th>Trabalho</th><th>Materiais</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Comum</strong></td><td>10</td><td>1 dia</td><td>50%</td></tr>
+        <tr><td><strong>Incomum</strong></td><td>15</td><td>3 dias</td><td>60%</td></tr>
+        <tr><td><strong>Raro</strong></td><td>20</td><td>7 dias</td><td>70%</td></tr>
+        <tr><td><strong>Épico</strong></td><td>25</td><td>14 dias</td><td>80%</td></tr>
+        <tr><td><strong>Lendário</strong></td><td>30</td><td>30 dias</td><td>90%</td></tr>
+        <tr><td><strong>Mítico e Relíquia</strong></td><td colspan="3">Projeto de campanha. Não se fabrica pelas regras normais.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="regras-note">Repare que fabricar Lendário custa 30 dias e 90% do preço. Isso não economiza dinheiro: economiza a sorte de encontrar. É por isso que crafting não desequilibra a campanha por si só.</p>
+
+    <h3 class="regras-subtitle">Conduzir um projeto</h3>
+    <ul class="regras-list">
+      <li>O teste é no fim, com a DT anunciada antes do primeiro gasto. Nunca mude a DT depois de o grupo comprar material: isso é o mesmo que mudar DT depois do dado.</li>
+      <li>Materiais raros são o seu ponto de controle real, não a DT. Um Épico pede pelo menos um material raro ligado ao efeito, e de onde ele vem é aventura.</li>
+      <li>Mítico e Relíquia viram projeto de campanha por regra. Aproveite: um item desses construído ao longo de um arco vale mais que qualquer tesouro entregue.</li>
+      <li>Cibernético exige Sala de Implante e respeita compatibilidade e pré-requisito. Fabricar não é atalho para instalar o que o corpo não comporta.</li>
+    </ul>
   `,
 };

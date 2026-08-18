@@ -1,3 +1,5 @@
+import type { RegraTopicoDe } from './tipos';
+
 export type AcaoVeicular = 'livre' | 'movimento' | 'padrão' | 'reação' | 'resolução da rodada';
 export type PericiaConducao = 'Pilotagem' | 'Cavalgar';
 export type FaixaPerseguicaoId = 'contato' | 'curta' | 'média' | 'longa' | 'escapou';
@@ -80,13 +82,7 @@ export interface IResultadoDanoVeiculo {
   avariasGeradas: number;
 }
 
-export interface IRegraVeiculos {
-  categoria: 'Combate e Mecânicas';
-  status: string;
-  resumo: string;
-  destaques: string[][];
-  corpo: string;
-}
+export type IRegraVeiculos = RegraTopicoDe<'Combate e Mecânicas'>;
 
 export const FAIXAS_PERSEGUICAO: readonly IFaixaPerseguicao[] = [
   {
@@ -445,6 +441,23 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
       <li>Núcleo define sistemas ativos; Estrutura ajusta deslocamento e Resistência; Armas precisam de perfil completo; Utilidades aplicam o efeito descrito.</li>
       <li>Os preços existentes permanecem no catálogo. Esta regra não cria preço para T4 nem altera preços publicados.</li>
       <li>Deslocamento escrito em metros no veículo completo prevalece sobre índices antigos de chassi ou componente.</li>
+    </ul>
+  `,
+  corpoMestre: `
+    <p class="regras-lead">Veículo abre um segundo tabuleiro, com escala própria de Vida e dano. Ele funciona bem quando a cena é feita para ele, e trava quando entra no meio de um combate a pé.</p>
+
+    <h3 class="regras-subtitle">Quando trazer para a mesa</h3>
+    <ul class="regras-list">
+      <li>Perseguição é a cena natural: cinco faixas, decisões por rodada e um objetivo claro. Monte a perseguição inteira antes, com o que muda em cada faixa.</li>
+      <li>Um veículo dentro de combate a pé desequilibra os dois lados: quem está dentro fica intocável e quem está fora fica sem turno. Escolha um dos dois tabuleiros por cena.</li>
+      <li>O Piloto do grupo depende disso para jogar o personagem dele. Se a campanha não tem estrada, mar ou céu, avise antes de alguém escolher a classe.</li>
+    </ul>
+
+    <h3 class="regras-subtitle">Avaria em vez de destruição</h3>
+    <ul class="regras-list">
+      <li>Prefira avariar a destruir. Um veículo quebrado é uma missão de reparo, uma peça a procurar e uma dívida; um veículo destruído é só uma compra apagada.</li>
+      <li>Colisão é a ferramenta mais barata para mudar o rumo de uma perseguição sem precisar de mais inimigos.</li>
+      <li>Componente tem tier, e tier alto pertence aos patamares altos da Loja. Segure isso junto com a liberação da Loja, ou o grupo monta um T3 antes da campanha comportar.</li>
     </ul>
   `,
 };

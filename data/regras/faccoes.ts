@@ -1,4 +1,5 @@
 import faccoesData from '../mundo/faccoes.json';
+import type { RegraTopicoDe } from './tipos';
 
 export type NivelPrestigio = -3 | -2 | -1 | 0 | 1 | 2 | 3;
 export type NivelFama = 0 | 1 | 2 | 3 | 4 | 5;
@@ -44,13 +45,7 @@ export interface FaccaoDocumentada {
   fontes: Array<{ arquivo: string; entrada_id: string }>;
 }
 
-export interface RegraTopicoFaccoes {
-  categoria: 'Livro do Jogador';
-  status: string;
-  resumo: string;
-  destaques: string[][];
-  corpo: string;
-}
+export type RegraTopicoFaccoes = RegraTopicoDe<'Livro do Jogador'>;
 
 export const PRESTIGIO_MINIMO: NivelPrestigio = -3;
 export const PRESTIGIO_MAXIMO: NivelPrestigio = 3;
@@ -302,5 +297,22 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
     <p>Depois de aplicar a mudança, limite o resultado entre ${FAMA_MINIMA} e ${FAMA_MAXIMA}.</p>
 
     <p class="regras-note"><strong>Sistemas separados:</strong> ${REPUTACAO_BANCARIA_SEPARADA}</p>
+  `,
+  corpoMestre: `
+    <p class="regras-lead">Prestígio e Fama são os dois relógios lentos da campanha. Eles quase nunca mudam dentro de uma sessão, e é isso que os torna úteis: registram o que o grupo vem fazendo há meses.</p>
+
+    <h3 class="regras-subtitle">Mover os números</h3>
+    <ul class="regras-list">
+      <li>Prestígio anda de menos 3 a mais 3 por facção. Mova um degrau por acontecimento relevante, no fim da sessão, e diga em voz alta o que mudou e por quê.</li>
+      <li>Fama vai de 0 a 5 e é uma só, para o grupo inteiro. Ela sobe por feito público: o que ninguém viu não gera Fama.</li>
+      <li>O bônus máximo é mais ou menos 2. Como número, é pequeno de propósito. O valor real está no acesso e na reação, que são coisas de ficção.</li>
+    </ul>
+
+    <h3 class="regras-subtitle">Fazer render</h3>
+    <ul class="regras-list">
+      <li>Facção inimiga vale tanto quanto aliada. Prestígio negativo fecha portas e abre perseguições, e as duas coisas rendem sessão.</li>
+      <li>Fama alta tem custo: quem é reconhecido não passa despercebido. Use isso antes de o grupo reclamar de ser famoso demais.</li>
+      <li>Agradar uma facção costuma desagradar outra. Deixe essa tensão explícita no mapa de facções, para a escolha ser informada.</li>
+    </ul>
   `,
 };

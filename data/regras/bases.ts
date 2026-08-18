@@ -199,8 +199,10 @@ export const REGRA_BASES = {
     ['Melhoria', 'Pague a diferença de fatores e substitua o nível anterior'],
     ['Manutenção', 'Cobrança mensal sem perda automática da propriedade'],
   ],
-  categoria: 'Guia do Mestre' as const,
+  categoria: 'Livro do Jogador' as const,
   corpo: `
+    <p class="regras-lead">Uma base é o lugar do grupo no mundo: o esconderijo, a oficina, o navio, a casa comprada com o dinheiro da última missão. Ela custa para adquirir, custa todo mês para manter e, em troca, muda o que o grupo consegue fazer entre uma aventura e outra.</p>
+
     <h3 class="regras-subtitle">Registro da base</h3>
     <ul class="regras-list">
       <li>Registre nome, tipo, patamar, localização, responsáveis, espaços ocupados e instalações.</li>
@@ -241,5 +243,43 @@ export const REGRA_BASES = {
     </ol>
     <h3 class="regras-subtitle">Bases móveis</h3>
     <p>A ficha da plataforma precisa informar quantos espaços de base suporta; sem esse campo, ela não recebe instalações de base. Quando uma peça veicular e uma instalação forem equivalentes, use o efeito publicado da peça e não aplique o efeito-base. Movimento, perseguição, colisão, dano e reparo continuam sob as regras da plataforma.</p>
+  `,
+  corpoMestre: `
+    <p class="regras-lead">Base é o botão de ritmo da campanha. Ela transforma tempo livre em capacidade, e é por isso que você decide quando o grupo pode comprar uma, não a carteira deles.</p>
+
+    <h3 class="regras-subtitle">Liberar uma base</h3>
+    <ul class="regras-list">
+      <li>Peça um lugar concreto no mapa e um dono. Base sem endereço vira depósito abstrato e some da ficção em duas sessões.</li>
+      <li>Base é alvo. Se o grupo tem um lugar para proteger, você ganha de graça o gancho mais confiável que existe.</li>
+      <li>Segure o patamar Fortaleza para quando a campanha realmente comportar. Ele resolve descanso, produção e abrigo de uma vez.</li>
+    </ul>
+
+    <h3 class="regras-subtitle">DTs de uma base</h3>
+    <div class="regras-table-wrap"><table class="regras-table">
+      <thead><tr><th>Situação</th><th>DT sugerida</th><th>Perícia</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Encontrar um imóvel adequado à venda</strong></td><td>Padrão</td><td>Diplomacia, Nobreza ou Investigação</td></tr>
+        <tr><td><strong>Negociar o preço para baixo</strong></td><td>Difícil</td><td>Diplomacia</td></tr>
+        <tr><td><strong>Esconder a base de quem procura</strong></td><td>Difícil</td><td>Furtividade ou Ladinagem, uma vez por mês</td></tr>
+        <tr><td><strong>Descobrir a base de outra pessoa</strong></td><td>Difícil</td><td>Investigação</td></tr>
+        <tr><td><strong>Segurar um ataque com a base preparada</strong></td><td>Padrão</td><td>Guerra, por rodada de defesa</td></tr>
+        <tr><td><strong>Reparar dano estrutural sem oficina</strong></td><td>Difícil</td><td>Ofício ou Tecnologia</td></tr>
+      </tbody>
+    </table></div>
+    <p class="regras-note">As DTs seguem a escala do Guia do Mestre: Padrão é 15 mais metade do nível, Difícil é 20 mais metade do nível.</p>
+
+    <h3 class="regras-subtitle">Manutenção como pressão</h3>
+    <ul class="regras-list">
+      <li>A conta mensal é o relógio mais barato que você tem. Ela cria motivo para aceitar trabalho sem que você precise inventar urgência.</li>
+      <li>Atraso desativa instalação, e a escolha de qual é sempre do proprietário. Não use isso para tomar a base: inadimplência aqui não confisca nada.</li>
+      <li>Se a campanha passar meses sem cobrar manutenção, avise antes de voltar a cobrar. Regra que dorme e acorda cobrando retroativo quebra confiança.</li>
+    </ul>
+
+    <h3 class="regras-subtitle">Atacar a base</h3>
+    <ul class="regras-list">
+      <li>Anuncie a ameaça antes. Base destruída sem aviso apaga uma compra cara e um punhado de sessões de investimento.</li>
+      <li>Prefira consequência a destruição: instalação inativa, ocupação inimiga, penhora, funcionário comprado. Tudo isso é reversível e rende história.</li>
+      <li>Se for destruir mesmo, deixe o grupo defender. Um ataque à base é um encontro, não um comunicado.</li>
+    </ul>
   `,
 };

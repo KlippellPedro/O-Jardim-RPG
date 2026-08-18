@@ -7,6 +7,7 @@ import {
   ChevronDown,
   ChevronRight,
   Library,
+  LockKeyhole,
   Menu,
   Search,
   ShieldAlert,
@@ -324,6 +325,23 @@ export const RegrasPage = () => {
                   </>
                 ) : (
                   <RegrasContent htmlContent={topicData.corpo} />
+                )}
+
+                {/* A mesma regra pelo lado de quem conduz. Fica no fim da própria
+                 * página em vez de virar um capítulo separado: assim a orientação
+                 * de mesa não se descola da regra que ela orienta. */}
+                {isMestre && topicData.corpoMestre && (
+                  <section className="mt-14 overflow-hidden rounded-2xl border border-[#c7a44c]/30 bg-[#c7a44c]/[0.04]">
+                    <header className="flex items-center gap-2.5 border-b border-[#c7a44c]/20 bg-[#c7a44c]/10 px-5 py-3 sm:px-7">
+                      <LockKeyhole size={14} className="text-[#cbb87e]" />
+                      <h2 className="text-[11px] font-black uppercase tracking-[0.18em] text-[#cbb87e]" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Para quem conduz a mesa
+                      </h2>
+                    </header>
+                    <div className="px-5 py-2 sm:px-7">
+                      <RegrasContent htmlContent={topicData.corpoMestre} />
+                    </div>
+                  </section>
                 )}
 
                 <footer className="mt-16 flex items-stretch justify-between gap-3 border-t border-[#c7a44c]/20 pt-7">

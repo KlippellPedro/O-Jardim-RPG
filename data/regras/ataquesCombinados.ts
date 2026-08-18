@@ -56,4 +56,25 @@ export const REGRA_ATAQUES_COMBINADOS = {
       <li>Ataque Combinado entre personagens não é Fusão de Fluxos. Ele não cria um novo efeito.</li>
     </ul>
   `,
+  corpoMestre: `
+    <p class="regras-lead">Ataque Combinado custa caro em tempo de mesa: quatro pessoas declaram, esperam, e só então resolvem. Ele se paga quando o alvo justifica a espera, e atrapalha quando vira rotina contra lacaio.</p>
+
+    <h3 class="regras-subtitle">Quando vale a pena</h3>
+    <ul class="regras-list">
+      <li>Vale contra alvo único e resistente: chefe, elite, veículo, criatura com Resistência alta. É aí que somar contribuições supera bater separado.</li>
+      <li>Não vale contra grupo de lacaios. Se a mesa começar a usar assim, o problema é que seus lacaios têm Vida demais.</li>
+      <li>Custa ação padrão e reação de cada participante. Um grupo que combina ataque numa rodada é um grupo sem reação nenhuma na rodada seguinte, e isso é uma abertura sua.</li>
+    </ul>
+
+    <h3 class="regras-subtitle">Conduzir a resolução</h3>
+    <ul class="regras-list">
+      <li>A preparação de cada participante expira no início do próximo turno dele. Deixe o relógio correr de verdade: tirar o chefe do alcance é resposta legítima, não maldade.</li>
+      <li>Cada contribuição rola sozinha, verifica a própria margem e recebe vulnerabilidade e Resistência separadamente. Some só o dano final dos acertos.</li>
+      <li>Se todas errarem, o ataque falha e os custos ficam gastos. Avise que isso é possível antes da primeira vez que a mesa tentar.</li>
+      <li>O alvo usa as reações que tiver, e cada uma afeta só a contribuição que a acionou. Um chefe com Bloqueio derruba uma contribuição, nunca a soma inteira.</li>
+    </ul>
+
+    <h3 class="regras-subtitle">O que não é</h3>
+    <p>Somar dano não é Fusão de Fluxos e não cria efeito novo. Se um jogador propuser que duas magias combinadas produzam um terceiro efeito, isso é decisão sua de mesa, tomada fora desta regra.</p>
+  `,
 };

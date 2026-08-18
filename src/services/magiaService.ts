@@ -122,6 +122,9 @@ export interface IFusaoFluxo {
 interface IManifestacaoMagicaBase {
   id: string;
   titulo: string;
+  /** O que a manifestação é e o que se faz com ela, em linguagem de mesa. Vem
+   * antes do `efeito` justamente para o jogador entender a cena antes da regra. */
+  descricao: string;
   fluxo: FluxoMagicoId;
   custo_mana: number;
   efeito: string;
@@ -165,6 +168,9 @@ export interface IEncantamentoCatalogo extends IManifestacaoMagicaBase {
 export interface IMagiaCatalogo {
   id: string;
   titulo: string;
+  /** O que a magia é e como ela aparece na mesa, antes de o `efeito` dizer a
+   * regra. Nas universais descreve o tronco comum, e não a variante do Fluxo. */
+  descricao: string;
   circulo: CirculoMagia;
   tradicao: string;
   fluxo: FluxoDeMagia;
@@ -198,13 +204,28 @@ export interface IPerfilMagico {
   modificadorFluxo: number;
   grauMisticismo: string;
   bonusConjuracao: number;
+  componentesConjuracao: {
+    modificadorFluxo: number;
+    grauMisticismo: number;
+    racial: number;
+    origem: number;
+    ajustesManuais: number;
+    equipamento: number;
+  };
   vantagensConjuracao: number;
   desvantagensConjuracao: number;
   dtMagia: number;
+  dtLimiteFluxo: number;
   circuloDaFonte: number;
   circuloDoFluxo: number;
   circuloMaximo: number;
   vagasConhecidas: number;
+  possuiInterceptacao: boolean;
+  nivelInterceptador: number;
+  nivelSintonizador: number;
+  limiteCatalisadores: number;
+  catalisadoresPreparadosIds: FluxoMagicoId[];
+  catalisadorAtivoId: FluxoMagicoId | null;
   conhecidasIds: string[];
   concedidasIds: string[];
   vagasRituais: number;
@@ -289,6 +310,34 @@ const referenciasClasse = (ficha: any): Array<{ id: string; nivel: number }> => 
   });
 };
 
+const nivelDaClasse = (classes: Array<{ id: string; nivel: number }>, classeId: string): number => (
+  classes.find((item) => item.id === classeId)?.nivel || 0
+);
+
+const FLUXOS_CATALISAVEIS = new Set<FluxoMagicoId>([
+  'origem', 'essencia', 'comunicacao', 'vitalidade', 'inconstancia',
+  'fisico', 'espaco', 'tempo', 'vazio', 'fim',
+]);
+
+/** Catalisadores ficam na ficha como uma escolha operacional, separada da
+ * fonte de magia. Para o Sintonizador eles habilitam Fusões; para o
+ * Interceptador registram para qual Fluxo natural a interface A.X.I.S. está
+ * calibrada. Em nenhum dos casos a escolha cria, sozinha, uma fonte. */
+function obterCatalisadoresDaFicha(
+  ficha: any,
+  limite: number,
+): { preparadosIds: FluxoMagicoId[]; ativoId: FluxoMagicoId | null } {
+  const configuracao = ficha?.catalisadoresFluxo;
+  const preparadosIds = idsUnicos(configuracao?.preparadosIds)
+    .filter((id): id is FluxoMagicoId => FLUXOS_CATALISAVEIS.has(id as FluxoMagicoId))
+    .slice(0, Math.max(0, limite));
+  const ativoInformado = String(configuracao?.ativoId || '') as FluxoMagicoId;
+  return {
+    preparadosIds,
+    ativoId: preparadosIds.includes(ativoInformado) ? ativoInformado : (preparadosIds[0] || null),
+  };
+}
+
 export function obterFluxoNativoId(ficha: any): FluxoMagicoId | null {
   const fluxoExplicito = String(ficha?.fluxoNativoId || '');
   if (FLUXOS_POR_ID.has(fluxoExplicito as FluxoMagicoId)) return fluxoExplicito as FluxoMagicoId;
@@ -350,12 +399,15 @@ export function obterPerfilMagico(ficha: any, inventarioCentral: any[] = []): IP
   const grauMisticismo = String(ficha?.pericias?.misticismo || 'iniciante').toLowerCase();
   const bonusGrau = BONUS_GRAU[grauMisticismo] || 0;
   const bonusRacial = raca ? (obterAjustesPericiasRaciais(raca, ficha?.escolhaRacial).misticismo || 0) : 0;
+  const bonusOrigem = ajusteOrigem(ficha, 'pericia', 'misticismo');
+  const bonusManual = totalAjustesManuais(ficha, chaveAjuste('pericia', 'misticismo'));
+  const bonusEquipamento = resumoEquipamento.bonusPericias.misticismo || 0;
   const bonusConjuracao = modificador(fluxo)
     + bonusGrau
     + bonusRacial
-    + ajusteOrigem(ficha, 'pericia', 'misticismo')
-    + totalAjustesManuais(ficha, chaveAjuste('pericia', 'misticismo'))
-    + (resumoEquipamento.bonusPericias.misticismo || 0);
+    + bonusOrigem
+    + bonusManual
+    + bonusEquipamento;
 
   let circuloDaFonte = 0;
   let vagasConhecidas = 0;
@@ -372,6 +424,14 @@ export function obterPerfilMagico(ficha: any, inventarioCentral: any[] = []): IP
   });
   const circuloDoFluxo = circuloPermitidoPorFluxo(fluxo);
   const fluxoNativo = obterFluxoNativo(ficha);
+  const nivelInterceptador = nivelDaClasse(classes, 'interceptador');
+  const nivelSintonizador = nivelDaClasse(classes, 'sintonizador');
+  const possuiInterceptacao = nivelInterceptador > 0;
+  const limiteBaseSintonizador = nivelSintonizador >= 15 ? 3 : nivelSintonizador >= 5 ? 2 : nivelSintonizador > 0 ? 1 : 0;
+  const possuiFocoReserva = (Array.isArray(ficha?.poderesClasseSelecionados) ? ficha.poderesClasseSelecionados : [])
+    .some((item: any) => item?.classeId === 'sintonizador' && item?.poderId === 'foco-reserva');
+  const limiteCatalisadores = Math.max(possuiInterceptacao ? 1 : 0, limiteBaseSintonizador + (possuiFocoReserva ? 1 : 0));
+  const catalisadores = obterCatalisadoresDaFicha(ficha, limiteCatalisadores);
   // Universal transcende os Fluxos: não tem um `fluxoNativoId` (nenhum dos
   // dez é "o" nativo, e magiaElegivelParaAprender/podeConjurarMagia já
   // liberam tudo via isUniversalTree) - mas o título ainda aparece na ficha
@@ -389,13 +449,28 @@ export function obterPerfilMagico(ficha: any, inventarioCentral: any[] = []): IP
     modificadorFluxo: modificador(fluxo),
     grauMisticismo,
     bonusConjuracao,
+    componentesConjuracao: {
+      modificadorFluxo: modificador(fluxo),
+      grauMisticismo: bonusGrau,
+      racial: bonusRacial,
+      origem: bonusOrigem,
+      ajustesManuais: bonusManual,
+      equipamento: bonusEquipamento,
+    },
     vantagensConjuracao: resumoEquipamento.vantagens.misticismo || 0,
     desvantagensConjuracao: resumoEquipamento.desvantagens.misticismo || 0,
     dtMagia: dtConjuracaoPorCirculo(Math.min(circuloDaFonte, circuloDoFluxo)),
+    dtLimiteFluxo: dtConjuracaoPorCirculo(circuloDoFluxo),
     circuloDaFonte,
     circuloDoFluxo,
     circuloMaximo: Math.min(circuloDaFonte, circuloDoFluxo),
     vagasConhecidas,
+    possuiInterceptacao,
+    nivelInterceptador,
+    nivelSintonizador,
+    limiteCatalisadores,
+    catalisadoresPreparadosIds: catalisadores.preparadosIds,
+    catalisadorAtivoId: catalisadores.ativoId,
     conhecidasIds: idsUnicos(ficha?.magiasConhecidasIds),
     concedidasIds: idsUnicos(ficha?.magiasConcedidasIds),
     vagasRituais: contarVagasPorProgressao(classes, 'progressao_rituais'),

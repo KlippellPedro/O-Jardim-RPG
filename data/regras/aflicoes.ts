@@ -302,4 +302,32 @@ export const REGRA_AFLICOES = {
     <h3 class="regras-subtitle">Catálogo de aflições</h3>
     ${catalogoPublicado}
   `,
+  corpoMestre: `
+    <p class="regras-lead">Aflição é a única mecânica do livro que anda sozinha depois de aplicada. Você aplica uma vez e ela cobra teste a cada intervalo até alguém tratar, o que a torna ótima para pressão de médio prazo e péssima como dano de rotina.</p>
+
+    <h3 class="regras-subtitle">Escolher a aflição certa</h3>
+    <ul class="regras-list">
+      <li>O que decide o peso não é a DT, é o intervalo. Veneno de combate cobra teste a cada rodada e resolve dentro da cena; doença cobra a cada dia e atravessa sessões.</li>
+      <li>O catálogo publicado anda entre DT 14 e DT 20. Fique nessa faixa: acima dela a aflição vira sentença, porque o alvo falha em quase todo intervalo.</li>
+      <li>Falha crítica na exposição já entra direto no estágio 2. Isso é duro, e é o motivo para não distribuir exposição em cena banal.</li>
+    </ul>
+
+    <h3 class="regras-subtitle">Não virar imposto</h3>
+    <ul class="regras-list">
+      <li>Uma exposição por cena, no máximo. A regra de que nova exposição sobe só 1 estágio por cena existe justamente para impedir a soma infinita.</li>
+      <li>Deixe sempre uma saída à vista: o Antídoto está na Loja, e Cura reduz um estágio por tentativa. Se o grupo não alcança nenhum dos dois, a aflição deixou de ser risco e virou punição.</li>
+      <li>Drenagem de atributo é temporária e para em menos 3 por aflição. Não improvise drenagem permanente: isso é território de maldição, que é outra coisa.</li>
+      <li>O Cansaço ganho ao entrar num estágio fica até o descanso reduzir. Some ao que a campanha já está cobrando antes de aplicar mais uma.</li>
+    </ul>
+
+    <h3 class="regras-subtitle">Respeitar as imunidades</h3>
+    <p>Use a extensão exata escrita na raça: Golem escapa de doença comum, Auleth escapa de comum e sobrenatural, Autômato escapa de doença e veneno enquanto não tiver Máquina Viva. Não estenda por analogia, e não invente imunidade para fisiologia que não a declara.</p>
+
+    <h3 class="regras-subtitle">Vício, com cuidado</h3>
+    <ul class="regras-list">
+      <li>Dependência só começa quando o gatilho é cumprido e o teste falha. Não aplique porque o personagem usou uma vez.</li>
+      <li>Na abstinência, aplique só o efeito mecânico. Quem decide o que o personagem faz continua sendo o jogador, sempre.</li>
+      <li>Este é conteúdo que pede combinação prévia. Pergunte à mesa antes de colocar vício em jogo, do mesmo jeito que perguntaria sobre qualquer tema pesado.</li>
+    </ul>
+  `,
 };

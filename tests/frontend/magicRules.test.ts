@@ -95,6 +95,42 @@ test('Ritualista não recebe círculos porque rituais ficam fora deles', () => {
   assert.equal(perfil.circuloMaximo, 0);
 });
 
+test('Interceptador separa capacidade de Fluxo, DT de interceptação e fonte de conjuração', () => {
+  const perfil = obterPerfilMagico({
+    ...ficha('interceptador', 20, 100, 'keryx'),
+    catalisadoresFluxo: { preparadosIds: ['tempo'], ativoId: 'tempo' },
+  });
+
+  assert.equal(perfil.possuiFonte, false);
+  assert.equal(perfil.possuiInterceptacao, true);
+  assert.equal(perfil.nivelInterceptador, 20);
+  assert.equal(perfil.fluxoNativoId, 'tecnologia');
+  assert.equal(perfil.circuloDoFluxo, 10);
+  assert.equal(perfil.circuloDaFonte, 0);
+  assert.equal(perfil.circuloMaximo, 0);
+  assert.equal(perfil.dtMagia, 0);
+  assert.equal(perfil.dtLimiteFluxo, 37);
+  assert.equal(perfil.limiteCatalisadores, 1);
+  assert.deepEqual(perfil.catalisadoresPreparadosIds, ['tempo']);
+  assert.equal(perfil.catalisadorAtivoId, 'tempo');
+});
+
+test('configuração de catalisadores respeita progressão e Foco Reserva do Sintonizador', () => {
+  const base = ficha('sintonizador', 15, 50);
+  const perfil = obterPerfilMagico({
+    ...base,
+    poderesClasseSelecionados: [{ classeId: 'sintonizador', poderId: 'foco-reserva' }],
+    catalisadoresFluxo: {
+      preparadosIds: ['tempo', 'espaco', 'vazio', 'fim', 'tecnologia', 'inexistente'],
+      ativoId: 'fim',
+    },
+  });
+
+  assert.equal(perfil.limiteCatalisadores, 4);
+  assert.deepEqual(perfil.catalisadoresPreparadosIds, ['tempo', 'espaco', 'vazio', 'fim']);
+  assert.equal(perfil.catalisadorAtivoId, 'fim');
+});
+
 test('item equipado altera Fluxo, Misticismo e vantagens de conjuração', () => {
   const item = {
     item_id: 'foco-magico',
@@ -369,6 +405,70 @@ test('Passo de Órbita anda uma casa e o Véu do Nada quebra ao agir', () => {
   assert.equal(veu.fluxo, 'vazio');
   assert.equal(veu.circulo, 3);
   assert.match(veu.efeito, /encerra o efeito/i);
+});
+
+// O catálogo nasceu de uma revisão de texto corrida, e sobrou fôrma de máquina:
+// toda entrada terminando em "Não X nem Y", toda falha com a mesma piada de
+// dois-pontos, nenhuma explicando o que a coisa é antes de dizer a regra. Os
+// tetos abaixo são folgados de propósito: a fôrma pode aparecer, só não pode
+// virar padrão do catálogo.
+test('toda manifestação diz o que é antes de dizer a regra', () => {
+  const MANIFESTACOES = [
+    ...MAGIAS_CATALOGO.map((item) => ({ ...item, tipo: 'magia' })),
+    ...RITUAIS_CATALOGO.map((item) => ({ ...item, tipo: 'ritual' })),
+    ...SELOS_CATALOGO.map((item) => ({ ...item, tipo: 'selo' })),
+    ...ENCANTAMENTOS_CATALOGO.map((item) => ({ ...item, tipo: 'encantamento' })),
+  ];
+
+  MANIFESTACOES.forEach((item) => {
+    assert.ok(item.descricao?.trim(), `${item.tipo} ${item.id} sem descrição`);
+    assert.ok(item.descricao.length >= 80, `${item.tipo} ${item.id}: descrição curta demais para explicar alguma coisa`);
+    assert.notEqual(item.descricao, item.efeito, `${item.tipo} ${item.id}: descrição repetindo o efeito`);
+  });
+
+  // Descrição que só parafraseia o efeito não explica nada: ela precisa trazer
+  // a cena, o uso ou o preço. Vocabulário em comum é natural (as duas falam da
+  // mesma magia), então o teto é folgado — o que ele barra é o eco literal.
+  const conteudo = (texto: string) => new Set((texto.toLocaleLowerCase('pt-BR').match(/[a-zà-ÿ]{5,}/g) || []));
+  MANIFESTACOES.forEach((item) => {
+    const daDescricao = conteudo(item.descricao);
+    const doEfeito = conteudo(item.efeito);
+    const comuns = [...daDescricao].filter((palavra) => doEfeito.has(palavra)).length;
+    const total = new Set([...daDescricao, ...doEfeito]).size;
+    assert.ok(comuns / total <= 0.45, `${item.tipo} ${item.id}: descrição só repete o efeito`);
+  });
+
+  // Descrição é texto de mesa, não ficha técnica: número solto ali é sinal de
+  // que a regra vazou para o lugar errado.
+  const comNumeroDeRegra = MANIFESTACOES.filter((item) => /\b\d+d\d+\b|\bDT\b|\+\d/.test(item.descricao));
+  assert.equal(comNumeroDeRegra.length, 0, `descrição com número de regra: ${comNumeroDeRegra.map((item) => item.id).join(', ')}`);
+
+  // Abertura repetida é o sinal mais visível de texto gerado em série. O artigo
+  // sozinho não conta: em português ele abre boa parte de qualquer frase. O que
+  // denuncia é o sujeito repetido ("O conjurador...", "O alvo...") em fila.
+  const proporcao = (quantos: number) => quantos / MANIFESTACOES.length;
+  const porAbertura = new Map<string, number>();
+  MANIFESTACOES.forEach((item) => {
+    const abertura = item.descricao.toLocaleLowerCase('pt-BR').split(' ').slice(0, 2).join(' ');
+    porAbertura.set(abertura, (porAbertura.get(abertura) || 0) + 1);
+  });
+  porAbertura.forEach((quantos, abertura) => {
+    assert.ok(proporcao(quantos) <= 0.08, `"${abertura}" abre ${quantos} das ${MANIFESTACOES.length} descrições`);
+  });
+
+  // Fecho por negação ("... Não faz X nem Y.") era o jeito padrão de limitar
+  // um efeito, e chegou a estar em metade dos rituais. Continua valendo onde o
+  // limite importa, mas não pode voltar a ser o formato padrão do catálogo.
+  const fechaNegando = MANIFESTACOES.filter((item) => /(^|\.\s)(Não|Nada|Nenhum[a]?)\b[^.]*\.$/.test(item.efeito.trim()));
+  assert.ok(
+    proporcao(fechaNegando.length) <= 0.08,
+    `${fechaNegando.length} efeitos fecham por negação: ${fechaNegando.map((item) => item.id).join(', ')}`,
+  );
+
+  // Mesma história para a falha do ritual, que vinha quase sempre como
+  // "diagnóstico curto: consequência".
+  const falhaComDoisPontos = RITUAIS_CATALOGO.filter((ritual) => /^[^.:]{0,60}:\s/.test(ritual.falha));
+  assert.ok(falhaComDoisPontos.length <= 8, `${falhaComDoisPontos.length} falhas com o mesmo formato: ${falhaComDoisPontos.map((item) => item.id).join(', ')}`);
 });
 
 test('rituais, selos e encantamentos cobrem várias faixas de poder', () => {

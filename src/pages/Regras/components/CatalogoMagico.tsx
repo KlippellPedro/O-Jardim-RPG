@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { BookMarked, ChevronRight, Search, SlidersHorizontal, Sparkles, X } from 'lucide-react';
 import catalogoLoja from '../../../../data/loja/catalogo.json';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
+import { useIsMobileViewport } from '../../../hooks/useMediaQuery';
 import {
   ENCANTAMENTOS_CATALOGO,
   FLUXOS_CATALOGO,
@@ -76,6 +77,8 @@ interface GrimorioItem {
   fluxoId: FluxoDeMagia;
   categoria: string;
   chamada: string;
+  /** O que a coisa é, antes dos números. As Fusões são a única aba sem ele. */
+  descricao?: string;
   efeito: string;
   campos: CampoGrimorio[];
   complemento?: CampoGrimorio[];
@@ -97,6 +100,7 @@ const ITENS_POR_ABA: Record<AbaCatalogo, GrimorioItem[]> = {
     fluxoId: item.fluxo,
     categoria: circuloRotulo(item.circulo),
     chamada: `${item.papel} · ${item.custo_mana} Mana`,
+    descricao: item.descricao,
     efeito: item.efeito,
     campos: [
       { rotulo: 'Execução', valor: item.execucao },
@@ -124,6 +128,7 @@ const ITENS_POR_ABA: Record<AbaCatalogo, GrimorioItem[]> = {
     fluxoId: item.fluxo,
     categoria: 'Ritual',
     chamada: `${item.complexidade} · DT ${item.dt} · ${item.custo_mana} Mana`,
+    descricao: item.descricao,
     efeito: item.efeito,
     campos: [
       { rotulo: 'Tempo', valor: item.tempo },
@@ -153,6 +158,7 @@ const ITENS_POR_ABA: Record<AbaCatalogo, GrimorioItem[]> = {
     fluxoId: item.fluxo,
     categoria: `Selo de Grau ${item.grau}`,
     chamada: `DT ${item.dt_inscricao} · ${item.custo_mana} Mana`,
+    descricao: item.descricao,
     efeito: item.efeito,
     campos: [
       { rotulo: 'Tempo de inscrição', valor: item.tempo },
@@ -169,6 +175,7 @@ const ITENS_POR_ABA: Record<AbaCatalogo, GrimorioItem[]> = {
     fluxoId: item.fluxo,
     categoria: `Encantamento de Grau ${item.grau}`,
     chamada: `DT ${item.dt} · ${item.custo_mana} Mana`,
+    descricao: item.descricao,
     efeito: item.efeito,
     campos: [
       { rotulo: 'Tempo', valor: item.tempo },
@@ -245,6 +252,12 @@ const GrimorioDetail = ({ item, compacto = false }: { item: GrimorioItem; compac
     </header>
 
     <div className="p-5 sm:p-6">
+      {item.descricao && (
+        <p className="mb-5 border-l-2 pl-4 text-sm italic leading-7 text-gray-400 sm:text-[15px]" style={{ borderColor: tema.borda }}>
+          {item.descricao}
+        </p>
+      )}
+
       <dl className="grid gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 sm:grid-cols-2">
         {item.campos.map((campo) => (
           <div key={campo.rotulo} className="bg-[#100e15] px-4 py-3">
@@ -376,8 +389,9 @@ export const CatalogoMagico = () => {
   const [circulo, setCirculo] = useState<number | 'todos'>('todos');
   const [selecionadoId, setSelecionadoId] = useState('');
   const [detalheMovelAberto, setDetalheMovelAberto] = useState(false);
+  const isMobile = useIsMobileViewport();
   useDialogAccessibility({
-    open: detalheMovelAberto,
+    open: detalheMovelAberto && isMobile,
     dialogRef: mobileDialogRef,
     initialFocusRef: mobileCloseRef,
     onClose: () => setDetalheMovelAberto(false),
@@ -393,6 +407,7 @@ export const CatalogoMagico = () => {
       item.titulo,
       item.categoria,
       item.chamada,
+      item.descricao || '',
       item.efeito,
       ...item.campos.flatMap((campo) => [campo.rotulo, campo.valor]),
     ].join(' ').toLocaleLowerCase('pt-BR');
@@ -412,8 +427,8 @@ export const CatalogoMagico = () => {
 
   const selecionar = useCallback((id: string) => {
     setSelecionadoId(id);
-    setDetalheMovelAberto(true);
-  }, []);
+    if (isMobile) setDetalheMovelAberto(true);
+  }, [isMobile]);
 
   const trocarAba = (novaAba: AbaCatalogo) => {
     setAba(novaAba);

@@ -2,6 +2,104 @@
 
 > Arquivo gerado de `data/regras/regras.ts`. Não edite manualmente.
 
+## como-jogar
+
+**Categoria:** Livro do Jogador
+
+**Status:** Comece por aqui
+
+O que é este jogo, quem faz o quê na mesa, como uma jogada se resolve e o significado das palavras que o resto do livro usa sem explicar de novo.
+
+Esta é a primeira página do livro e a única que não pressupõe nada. Se você nunca jogou RPG, ela sozinha já basta para sentar na mesa. Se você já joga há anos, pule para o Vocabulário no fim: é lá que estão as poucas palavras que O Jardim usa de um jeito próprio.
+
+### O que é um RPG de mesa
+
+Um grupo de pessoas conta uma história junta. Cada jogador controla um personagem e decide o que ele tenta fazer. Uma pessoa, o Mestre, descreve o mundo, interpreta todo o resto e diz o que acontece depois de cada escolha.
+
+Ninguém ganha e ninguém perde. O que existe é uma história que sai melhor quando todo mundo empurra junto. As regras deste livro entram só quando o resultado de uma tentativa é incerto e ninguém quer decidir no dedo: aí o dado decide.
+
+### Quem faz o quê
+
+- **Jogador:** descreve o que o personagem faz, rola os dados dele e cuida da própria ficha.
+
+- **Mestre:** descreve a cena, controla os inimigos e os personagens do mundo, escolhe a dificuldade das tentativas e narra o resultado. É juiz e narrador, não adversário.
+
+- **Ficha:** a página do seu personagem no site. Guarda os números, o inventário, as magias e o histórico. Ela faz as contas sozinha; você decide o que fazer com elas.
+
+- **Dados:** escritos como 2d6, que quer dizer "role dois dados de seis lados e some". O dado principal do jogo é o d20, de vinte lados.
+
+### Como uma jogada se resolve
+
+Quase tudo neste jogo passa pela mesma conta. Você rola um d20, soma seus bônus e compara com um número de dificuldade que o Mestre escolheu, chamado de DT.
+
+d20 + bônus do personagem contra a DT da situação
+
+- Deu igual ou mais que a DT, deu certo. Deu menos, não deu.
+
+- O bônus sai da ficha: o atributo que a tarefa pede, metade do seu nível e o quanto você treinou aquela perícia.
+
+- Um 20 no dado é sucesso crítico e um 1 é falha crítica, sem depender do bônus.
+
+- Às vezes você rola dois d20 e usa o melhor (vantagem) ou o pior (desvantagem).
+
+Exemplo: sua personagem quer arrombar uma fechadura. O Mestre diz que a DT é 15. Ela tem Destreza 16 (bônus +3), está no nível 4 (mais 2) e é Aprendiz em Ladinagem (mais 2). O bônus total é +7. Você rola o d20, tira 9, soma 7 e chega a 16. Passou de 15: a fechadura abre.
+
+### Como uma sessão anda
+
+Fora de combate o jogo é conversa: o Mestre descreve, você responde, e só se rola dado quando há risco de verdade. Quando a briga começa, o tempo é fatiado para caber todo mundo.
+
+- **Cena:** um trecho contínuo de história. A conversa com o guarda é uma cena; a emboscada logo depois é outra.
+
+- **Rodada:** dentro de um combate, o intervalo em que todo mundo age uma vez. São mais ou menos seis segundos de ficção.
+
+- **Turno:** a sua vez dentro da rodada. Você tem uma ação principal, um deslocamento e uma reação guardada para o turno dos outros.
+
+- **Iniciativa:** a ordem em que as pessoas agem. Aqui ela não se rola: é um número fixo da ficha.
+
+### Vocabulário
+
+Estas palavras aparecem no livro inteiro sem serem explicadas de novo. Se travar em alguma no meio de outro capítulo, volte aqui.
+
+- Termo | O que quer dizer
+
+- DT | Dificuldade do Teste. O número que sua rolagem precisa alcançar.
+
+- Teste | Qualquer rolagem de d20 contra uma DT.
+
+- Grau | O quanto você treinou uma perícia, de Iniciante a Renomado. Cada degrau vale um bônus fixo.
+
+- Atributo | Os sete números que descrevem o personagem: Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo.
+
+- Vida e Mana | Quanto dano você aguenta e quanto combustível mágico você tem.
+
+- Sanidade | Uma terceira barra, de 0 a 100, que cai diante de horror e trauma.
+
+- Cansaço | Uma trilha de 0 a 6 que mede desgaste acumulado. Quanto mais alto, pior você joga.
+
+- Condição | Um estado que gruda no personagem por um tempo, como Caído, Cego ou Sangramento.
+
+- Defesa | O número que um inimigo precisa alcançar para acertar você.
+
+- Fluxo | A energia que atravessa tudo neste mundo, e também o atributo que mede seu controle sobre ela. Toda magia sai de um Fluxo.
+
+- Árvore | A realidade de onde seu personagem vem. Cada Árvore tem sua deidade, seus povos e suas opções exclusivas.
+
+- Legado | Uma escolha permanente que você faz a cada cinco níveis e que muda como o personagem funciona.
+
+- NPC | Qualquer personagem controlado pelo Mestre, de um taverneiro a um dragão.
+
+- ⌊ ⌋ | Arredonde para baixo e ignore a fração. ⌊Nível ÷ 2⌋ no nível 7 dá 3, não 3,5.
+
+### Por onde continuar
+
+- **Nunca jogou:** vá para Criação de Personagem e monte um com o Mestre do lado. Depois leia Perícias e Combate, nessa ordem. O resto você consulta quando aparecer na mesa.
+
+- **Já joga RPG:** leia Sistema Base e Perícias para pegar as fórmulas, depois Combate e Ferimentos, que é onde O Jardim mais se afasta do que você já conhece.
+
+- **Vai conjurar:** Magia e Fluxos é a página mais longa do livro de propósito. Leia até "Teste e DT de magia" e volte ao resto quando subir de círculo.
+
+- **Vai mestrar:** comece pelo Guia do Mestre e tenha Condições e Ferimentos abertos na primeira sessão.
+
 ## criacao-personagem
 
 **Categoria:** Livro do Jogador
@@ -105,6 +203,8 @@ Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabe
 **Status:** Regra oficial
 
 As fórmulas fundamentais, limites de nível, multiclasse, maestrias e o papel do atributo Fluxo.
+
+Esta é a página de consulta: todas as contas que a ficha faz por você, reunidas num lugar só. Você não precisa decorar nenhuma delas para jogar. Dois avisos de leitura: ⌊ ⌋ quer dizer "arredonde para baixo", e "Mod." é o modificador de um atributo, que sai da primeira linha da tabela.
 
 ### Fórmulas fundamentais
 
@@ -479,6 +579,68 @@ São estes sete, e não existe um oitavo. Quem conjura pelo Fluxo do Físico esc
 - Escuridão | Sombra que engole. Esconde, confunde e apaga a luz mundana da área.
 
 Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: quem resiste a Fogo não resiste a Raio. Trocar o elemento despertado depois exige aval do Mestre.
+
+## mesa-ao-vivo
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Como o combate roda na tela compartilhada: ordem de iniciativa, vida em tempo real, o que cada pessoa enxerga do inimigo e por que o dado é rolado no servidor.
+
+Dá para jogar O Jardim inteiro no papel. Mas a mesa ao vivo existe para resolver as três coisas que sempre travam um combate: quem age agora, quanta vida sobrou em quem e se aquele 19 foi mesmo um 19.
+
+### Abrir a mesa
+
+- Quem conduz a campanha abre a sessão e escolhe quais personagens entram. Aliados e inimigos já preparados continuam de uma sessão para a outra.
+
+- Todo participante vira uma linha na lista: personagem, aliado ou inimigo, cada um com Vida, Defesa, Iniciativa e condições ativas.
+
+- A ordem sai da Iniciativa da ficha, que aqui não se rola. Quem comanda pode reordenar à mão quando a ficção pedir.
+
+### Turno e rodada
+
+- Passar o turno anda na lista e devolve a reação de quem está começando o próprio turno.
+
+- Ao virar a rodada, as condições com prazo contam um passo sozinhas. Ninguém precisa lembrar que o Exposto do inimigo já venceu.
+
+- Vida e Mana editadas na sessão chegam a todo mundo na hora, sem recarregar a página.
+
+### O que cada um enxerga
+
+O sigilo do inimigo é decidido no servidor, não no navegador de quem olha. Isso importa: não adianta abrir o inspetor do site para descobrir a Vida do chefe, porque o número não chega a ser enviado.
+
+- Grau | O que a mesa vê | Serve para
+
+- Oculto | Nada. A criatura nem aparece na lista. | O que ainda não entrou em cena.
+
+- Desconhecido | Uma linha sem nome e sem número. | A emboscada, o vulto no fim do corredor.
+
+- Parcial | Nome e estado por descrição, como "Ferido", sem número exato. | O padrão de quase todo combate.
+
+- Total | Tudo, inclusive a Vida exata, os ataques e as perícias. | Aliado do grupo, ou inimigo já estudado.
+
+Quem comanda a mesa vê tudo sempre, e o dono de um personagem vê o próprio personagem por inteiro, seja qual for o grau. O segredo é entre o Mestre e o resto da mesa, nunca entre o jogador e a ficha dele.
+
+### Rolagens registradas
+
+- O dado é rolado no servidor. O site mostra o resultado, mas quem o produziu foi o servidor, então nenhum lado da mesa consegue escolher o número.
+
+- Cada rolagem fica gravada com autor, personagem, título, fórmula, o que saiu em cada dado e a DT, quando havia uma.
+
+- Vantagem e desvantagem entram na própria rolagem: os dois d20 ficam registrados, e dá para conferir depois qual foi usado.
+
+- Usos de poder entram no mesmo registro das rolagens, então o histórico da sessão conta a cena em ordem.
+
+- Quem está assistindo a campanha como observador não rola dados.
+
+Rolar fora do site continua valendo: quem prefere dado físico anuncia o resultado e a mesa aceita, como sempre foi. O registro existe para quando alguém quiser conferir, não para obrigar ninguém.
+
+### Fechar a sessão
+
+- O XP do encontro é distribuído pela própria sessão e cai nas fichas escolhidas, seguindo as regras do capítulo de Experiência.
+
+- Encerrar a sessão guarda o estado. O que estava preparado continua preparado para a próxima.
 
 ## distancias
 
@@ -954,6 +1116,112 @@ A cada cinco níveis totais, ou seja, no 5, no 10, no 15 e assim por diante até
 - **Vínculo Lunar:** Quando um aliado a até 15 m for alvo de um ataque, use sua reação e gaste 2 Mana para conceder +4 na Defesa contra somente esse ataque.
 - **Segundo Tempo:** Uma vez por descanso, quando sair de Morrendo por receber cura, recupere 1d6 de Vida adicional e reduza 1 Cansaço.
 - **Âncora da Árvore:** Uma vez por cena, quando for teleportado, banido ou deslocado dimensionalmente contra a vontade, use sua reação e gaste 2 Mana para permanecer onde está.
+
+## aliados
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+Como uma criatura comprada no Bestiário vira uma ficha de aliado editável, quem manda nela e o que ela faz quando o combate começa.
+
+Nem todo mundo que luta ao seu lado é um personagem de jogador. Cavalo, cão de guarda, guarda-costas contratado, criatura invocada: tudo isso vira um aliado, e aliado neste sistema tem ficha própria, não é um parágrafo nas suas anotações.
+
+### De onde vem um aliado
+
+- **Compra:** comprar uma criatura do Bestiário na Loja cria o aliado direto na sua ficha, já com Vida, Defesa, Iniciativa, deslocamento e ataque principal preenchidos. Comprou três, aparecem três, cada um com sua ficha separada.
+
+- **História:** o Mestre pode entregar um aliado sem venda nenhuma. É a mesma ficha, criada à mão.
+
+- **Poder ou magia:** invocações e servos que um poder seu sustenta seguem o texto do próprio poder. Eles somem quando o poder acaba, então não viram entrada permanente.
+
+### A ficha do aliado
+
+Cada aliado ocupa uma entrada na aba Aliados, com os mesmos campos que o Mestre usa para qualquer criatura: nome, espécie, papel, nível, Vida atual e máxima, Defesa, Movimento, Iniciativa, ataque principal, condições ativas e observações.
+
+- Tudo ali é editável. O aliado que veio da Loja chega com os números do catálogo, e você ajusta conforme a história muda: ele treina, se fere, ganha equipamento, cria mania.
+
+- Marque quem está em cena. Aliado guardado no estábulo continua na lista sem ocupar espaço na mesa.
+
+- Vida do aliado é sua responsabilidade, não do Mestre. Se ele apanhou, anote.
+
+### Aliado em combate
+
+- Ele entra na ordem de iniciativa como qualquer criatura, com a Iniciativa da ficha dele. Não age de carona no seu turno.
+
+- Quem controla é o dono, salvo quando o Mestre disser que aquela criatura tem vontade própria naquele momento.
+
+- Um aliado age por conta: ele tem as ações dele, e não empresta ação nem reação para você.
+
+- Ele pode Ajudar, e vale a mesma regra de todo mundo: no máximo dois ajudantes por teste.
+
+- Quando cai a 0 de Vida, aplique as mesmas regras de Ferimentos. Bicho e contratado morrem igual.
+
+Um grupo com muitos aliados atrasa a mesa inteira. Combine um teto com o Mestre antes de encher a ficha: geralmente um aliado ativo por personagem já é o suficiente para o combate continuar andando.
+
+### Contratados e lealdade
+
+- Quem foi comprado foi contratado, não escravizado. O acordo vale enquanto o combinado for cumprido, e o Mestre decide o que acontece quando não for.
+
+- Salário, manutenção e alimento são assunto de mesa. Se a campanha usa esse controle, ele entra como despesa recorrente, do mesmo jeito que a manutenção de uma base.
+
+- Aliado não é item: ele não volta para a Loja, não tem preço de revenda e não entra no Cofre.
+
+## frutos-implantes
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+Duas formas de ganhar poder sem subir de nível: comer um Fruto do Éden, que se liga à alma, ou instalar um implante, que é peça de máquina no corpo.
+
+Nível e Legado são o caminho normal de ficar mais forte. Estes dois são o caminho caro: você compra, aceita o que vem junto e não desfaz depois.
+
+### Frutos do Éden
+
+São quinze frutos, cada um com um poder próprio, vendidos por Fragmentos de Estrela e classificados como relíquia da criação. Comprar é a parte fácil: o preço em Fragmentos costuma significar uma campanha inteira atrás de um.
+
+- O fruto entra no inventário como qualquer item. Comer é uma decisão à parte, feita na aba Inventário.
+
+- Ao ser consumido, ele sai do inventário e se liga à ficha para sempre. Não dá para vender, emprestar nem cuspir de volta.
+
+- Uma criatura sustenta um Fruto por vez. Comer um segundo substitui o primeiro em definitivo, e o poder antigo se perde.
+
+- Todo fruto traz uma fraqueza declarada, e água do mar aparece em quase todas. Enquanto a fraqueza estiver atuando, os poderes do fruto desligam.
+
+Os três degraus de um Fruto
+
+- **Vínculo:** a passiva que vale o tempo todo, sem custo nem ação. É o que muda o corpo do personagem, como a Resistência elemental do Fruto das Chamas.
+
+- **Técnica:** o poder ativo do dia a dia, na faixa de 3 a 4 de Mana. Custa uma ação e costuma valer uma vez por rodada.
+
+- **Despertar:** o poder grande, na faixa de 9 a 14 de Mana e quase sempre uma vez por cena. Ele fica trancado até o fruto ser despertado.
+
+Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. As técnicas normais continuam funcionando; o que muda é que o poder grande passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.
+
+Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos quinze está no catálogo da Loja.
+
+### Implantes cibernéticos
+
+Enquanto o Fruto mexe na alma, o implante mexe na carne. São dez peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.
+
+- Implante não vai na mochila. Ele fica numa seção própria do inventário, porque está instalado no corpo e ocupa uma parte dele.
+
+- Cada peça declara o que substitui: um olho, um braço, o coração, os pulmões. Duas peças que disputam a mesma parte do corpo não convivem.
+
+- O benefício vale enquanto o implante estiver funcional. Dano suficiente, campo de interferência ou sobrecarga podem desligá-lo, e a regra da peça diz quando isso acontece.
+
+- Alguns implantes cobram o próprio uso em dano interno que ignora Resistência. Esse dano é parte do preço, não um efeito colateral opcional.
+
+Créditos Sombrios não se compram com Lunaris. Um implante nunca é uma compra de rotina: é resultado de uma ida ao mercado negro, com tudo que isso costuma cobrar em história.
+
+### Os dois juntos
+
+- Fruto e implante não competem entre si: o mesmo personagem pode carregar um fruto e vários implantes.
+
+- Nenhum dos dois ocupa vaga de Legado nem conta como magia aprendida.
+
+- Os dois são visíveis para quem olhar. Braço de metal e pele de brasa mudam como o mundo trata seu personagem, e essa parte não tem número.
 
 ## equipamentos
 
@@ -2105,6 +2373,74 @@ Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes
 - **Ritualista** (comum) - Trabalha fora do combate. Ritual não tem círculo, cobra tempo e compromete a Mana desde o primeiro minuto: se interromperem, a Mana já foi.
 - **Interceptador** (especial) - Classe especial da A.X.I.S. Entra na Malha pra derrubar a magia dos outros. Não conjura Fluxo natural, atrapalha quem conjura.
 
+## poderes-habilidades
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+As cinco coisas que uma classe entrega conforme você sobe: Habilidade, Poder, Habilidade Final, Grau de perícia e Evento. O que é cada uma, qual você escolhe e qual vem pronta.
+
+Subir de nível numa classe sempre entrega alguma coisa, e essa coisa tem cinco formatos diferentes. A confusão mais comum da mesa é tratar Habilidade e Poder como sinônimos: uma vem sozinha e a outra você escolhe.
+
+### A grade de uma classe
+
+As 27 classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.
+
+- Recompensa | Nos níveis | Quantas
+
+- Habilidade | 1, 3, 5, 8, 10, 14, 15, 18 e 20 | Cerca de 10 entregas, distribuídas em 4 habilidades
+
+- Poder | 2, 6, 9, 11, 13, 16, 17 e 19 | 8 vagas
+
+- Grau de perícia | 1, 6, 11 e 17 | 4
+
+- Evento | 4, 7, 12 e 18 | 4
+
+- Habilidade Final | 20 | 1
+
+### Habilidade
+
+É a marca registrada da classe, e ela chega sozinha: não se escolhe, não se troca e não se rola nada. Cada classe tem quatro, e elas vêm em estágios espalhados pelos vinte níveis.
+
+- Um estágio novo substitui o texto do anterior quando reescreve a mesma coisa, e soma quando descreve algo novo. O texto do estágio diz qual dos dois é.
+
+- Habilidade que fala em "por estágio" cresce a cada entrega. O Batalhão do Guerreiro, por exemplo, escolhe mais um aliado a cada estágio.
+
+- Perder o nível que concedeu o estágio faz você voltar ao estágio anterior.
+
+### Poder
+
+Aqui você escolhe. Cada classe publica uma lista de dez a doze poderes, e a grade te dá oito vagas até o nível 20. Escolher todos é impossível de propósito: dois Guerreiros de mesmo nível não jogam igual.
+
+- A escolha é feita na hora que a vaga abre, e vale para sempre. Trocar depois exige uma regra que autorize ou a permissão do Mestre.
+
+- Cada poder declara o próprio custo de Mana. Custo zero quer dizer passivo: ele funciona sem você fazer nada.
+
+- Poder com custo declara também a ação que consome. Sem isso escrito, ele é uma Ação Padrão.
+
+- Só dá para escolher um poder da lista da sua própria classe, e cada um uma vez só.
+
+### Habilidade Final
+
+O fecho da classe, no nível 20, uma por classe. Ela chega sozinha como qualquer habilidade e costuma ser o efeito que define o que aquela classe virou no fim da estrada.
+
+### Grau de perícia
+
+Um degrau de graça em uma perícia à sua escolha, entregue na hora, sem cumprir tempo nem requisito. É a exceção às regras do capítulo Treinar, e os dois caminhos convivem: o grau dado pela classe sobe agora, o conquistado por treino cobra os dias da tabela.
+
+### Evento
+
+Evento não é poder. É um gancho que a classe entrega ao Mestre: uma arena que chama o Guerreiro, um clã que cobra o Ninja, um contato que procura o Comerciante. Ele não tem número, não gasta ação e não entra no cálculo de nada.
+
+- Quando o nível do evento chega, o Mestre encaixa aquilo na campanha no momento em que fizer sentido, não obrigatoriamente na mesma sessão.
+
+- O que sai dali é recompensa combinada na mesa. Evento não concede nível, dinheiro infinito nem item garantido.
+
+- Se o grupo estiver no meio de outra coisa, o evento espera. Ele é oportunidade, não interrupção.
+
+Vale conferir a lista de poderes da classe antes de escolhê-la. Duas classes com a mesma Vida e a mesma Mana podem jogar de formas completamente diferentes por causa do que está nessa lista, e é ela que decide como o personagem vai se sentir no nível 10.
+
 ## racas
 
 **Categoria:** Livro do Jogador
@@ -2138,163 +2474,35 @@ Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologi
 
 ## bestiario
 
-**Categoria:** Guia do Mestre
+**Categoria:** Livro do Jogador
 
 **Status:** Regra oficial
 
-Catálogo de seres, familiares, servos, invocações e preços por fórmula.
+As quatro formas de ter uma criatura ao seu lado, o que muda entre elas e como uma criatura comprada vira um aliado na sua ficha.
 
-Bestiário: preços por FÓRMULA (faixa de nível × traços), não lista fixa. Para vender ou contratar uma criatura específica, o mestre cria uma entrada do tipo 'monstro' com o preço calculado por essas tabelas.
+Criatura neste jogo não é item de mochila: é alguém que anda com você. O Bestiário reúne as quatro formas de ter uma criatura ao lado, e todas elas terminam do mesmo jeito, como um aliado com ficha própria.
 
-### Criaturas
+### As quatro formas
 
-Animais, monstros ou seres naturais capturados, domesticados ou criados em cativeiro. Variam desde feras pequenas até predadores perigosos. Suas habilidades geralmente vêm de sua natureza física ou de seu habitat.
+- **Criaturas:** animais, monstros e seres naturais capturados, domesticados ou criados em cativeiro. O que elas sabem fazer vem do corpo e do habitat, não de treino.
 
-- Nível | Espécie | Classe
+- **Familiares:** entidades pequenas ou criaturas inteligentes ligadas ao dono por vínculo mágico. Rendem mais fora de combate que dentro dele: percepção, apoio, recado.
 
-- 1 a 10 | +6 L / nível | +4 L / nível
+- **Servos:** seres criados ou treinados para cumprir tarefa, ligados à alma do dono e incapazes de traí-lo diretamente. Chegam com a sanidade abalada, em metade da barra e com dois traumas, e isso é parte do que eles são.
 
-- 11 a 20 | +8 L / nível | +6 L / nível
+- **Invocações:** seres temporários trazidos por magia, ritual ou dispositivo. Cumprem a função e vão embora no prazo do efeito que os chamou.
 
-- 21 a 30 | +15 L / nível | +15 L / nível
+### Como uma criatura chega até você
 
-- 31 a 40 | +40 L / nível | +40 L / nível
+- Comprar no catálogo da Loja cria o aliado direto na sua ficha, com Vida, Defesa, Iniciativa e ataque principal preenchidos. Comprou três, aparecem três fichas.
 
-- 41 a 50 | +52 L / nível | +52 L / nível
+- Daí em diante ela é sua responsabilidade: vida anotada, condições anotadas, turno próprio na iniciativa. O capítulo Aliados e Contratados explica como ela se comporta na mesa.
 
-- 50+ | +62 L / nível | +62 L / nível
+- Invocação sustentada por um poder seu não vira entrada permanente: ela existe enquanto o poder existir.
 
-Extras: Arma +15 L, Perícia +12 L, Poder Ass +120 L, Legado +18 L, Variável +70 L.
+- O que aparece à venda depende da campanha. Uma criatura que o Mestre não liberou não está no catálogo, e isso não é falha do sistema.
 
-### Familiares
-
-Entidades pequenas e espirituais ou criaturas inteligentes que formam um vínculo mágico com seu dono. Oferecem suporte tático, percepção aprimorada e habilidades úteis fora de combate. São leais e sensíveis.
-
-- Nível | Espécie | Função
-
-- 1 a 10 | +24 L / nível | +20 L / nível
-
-- 11 a 20 | +30 L / nível | +26 L / nível
-
-- 21 a 30 | +42 L / nível | +38 L / nível
-
-- 31 a 40 | +56 L / nível | +52 L / nível
-
-- 41 a 50 | +68 L / nível | +65 L / nível
-
-- 50+ | +84 L / nível | +80 L / nível
-
-Extras: Arma +46 L, Perícia +24 L, Poder Ass +650 L, Legado +52 L, Variável +250 L.
-
-### Servos
-
-Seres criados ou treinados para cumprir tarefas. Geralmente possuem sanidade abalada (começam com 50% de sanidade e 2 traumas aleatórios). Estão ligados à alma do dono e não podem trair diretamente.
-
-- Nível | Raça Comum | Classe Comum
-
-- 1 a 10 | +4 L / nível | +2 L / nível
-
-- 11 a 20 | +8 L / nível | +6 L / nível
-
-- 21 a 30 | +12 L / nível | +10 L / nível
-
-- 31 a 40 | +25 L / nível | +25 L / nível
-
-- 41 a 50 | +35 L / nível | +35 L / nível
-
-- 50+ | +50 L / nível | +50 L / nível
-
-Extras: Arma +12 L, Perícia +8 L, Pet +14 L, Poder Ass +230 L, Legado +16 L, Variável +52 L.
-
-### Invocações
-
-Seres temporários trazidos por magia, rituais ou dispositivos tecnológicos. Surgem para cumprir função, proteção ou utilidade e desaparecem após certo tempo.
-
-- Nível | Raça | Classe
-
-- 1 a 10 | +8 L / nível | +6 L / nível
-
-- 11 a 20 | +12 L / nível | +10 L / nível
-
-- 21 a 30 | +18 L / nível | +14 L / nível
-
-- 31 a 40 | +32 L / nível | +28 L / nível
-
-- 41 a 50 | +48 L / nível | +38 L / nível
-
-- 50+ | +60 L / nível | +46 L / nível
-
-Extras: Arma +24 L, Perícia +14 L, Poder Ass +460 L, Legado +25 L, Variável +65 L.
-
-### Ajudantes
-
-Seres que oferecem seus serviços, conscientes e capazes de tomar decisões. Vistos no dia a dia, auxiliam em missões, carregam itens, curam ou lutam.
-
-- Nível | Raça | Classe
-
-- 1 a 10 | +6 L / nível | +4 L / nível
-
-- 11 a 20 | +8 L / nível | +6 L / nível
-
-- 21 a 30 | +14 L / nível | +12 L / nível
-
-- 31 a 40 | +32 L / nível | +30 L / nível
-
-- 41 a 50 | +50 L / nível | +48 L / nível
-
-- 50+ | +75 L / nível | +70 L / nível
-
-Extras: Arma +16 L, Perícia +12 L, Pet +28 L, Poder Ass +450 L, Legado +20 L, Variável +60 L.
-
-### Seres Lendários
-
-Criaturas raras, únicas ou extremamente poderosas. Exigem rituais complexos ou condições especiais. Servem como aliados excepcionais que mudam batalhas.
-
-- Nível | Raça/Espécie | Classe/Função
-
-- 1 a 10 | - | -
-
-- 11 a 20 | +160 L / nível | +160 L / nível
-
-- 21 a 30 | +240 L / nível | +240 L / nível
-
-- 31 a 40 | +320 L / nível | +320 L / nível
-
-- 41 a 50 | +450 L / nível | +450 L / nível
-
-- 50+ | +650 L / nível | +650 L / nível
-
-Extras: Arma +225 L, Perícia +36 L, Pet +210 L, Poder Ass +1.200 L, Legado +80 L, Variável +650 L.
-
-### Drops de Seres
-
-Preços que mercados pagam por partes de seres. Sem os materiais adequados o preço cai em 75%.
-
-- Raça | Carne | Órgãos | Essência
-
-- Humano | 10 S | 15 S | 25 S
-
-- Vampiro | - | 80 S | 150 S
-
-- Goblin | 5 S | 8 S | -
-
-- Anão | 20 S | 30 S | 40 S
-
-- Golem | - | 60 S | 120 S
-
-- Espírito | - | - | 200 S
-
-- Gigante | 120 S | 180 S | 250 S
-
-- Animália | 20 S | 35 S | 25 S
-
-- Sereia/Tritão | 35 S | 70 S | 90 S
-
-- **Carne:** Fresca (Padrão), Conservada (-20%), Corrompida (-50% ou inutilizável).
-
-- **Qualidade do Abate:** Abate limpo (+20%), Abate brutal (-15%).
-
-- **Ser lendário:** x2 ou x3 no valor.
+Servo é o único tipo que já nasce com um problema junto. Antes de comprar um, combine com a mesa o que a sanidade abalada dele significa na sua história, porque essa parte não se resolve com número.
 
 ## economia
 
@@ -2304,47 +2512,113 @@ Preços que mercados pagam por partes de seres. Sem os materiais adequados o pre
 
 Como funcionam as moedas de O Jardim, o câmbio entre elas e as regras de segurança e espaço do Cofre Bancário.
 
-### Moedas Correntes
+São quatro moedas, e elas não são degraus da mesma escada. Cada uma circula num lugar diferente do mundo, e é por isso que nem todas se trocam entre si.
 
-- **Lunaris (☾):** A moeda base. Cristalizada a partir da luz pálida, é usada nas transações comuns.
+### As quatro moedas
 
-- **Solares (☉):** Moeda de alto valor. Brilhante e quente ao toque.
+- **Lunaris (☾):** a moeda do dia a dia, cristalizada a partir da luz pálida. É com ela que você compra quase tudo.
 
-- **Fragmentos de Estrela (✧):** Moeda rara, utilizada para transações de nível celestial ou itens muito exóticos.
+- **Solares (☉):** brilhante e quente ao toque. Aparece quando o valor da compra passa do que caberia num bolso de Lunaris.
 
-- **Créditos Sombrios (♆):** Moeda do submundo, usada no mercado negro e para fins escusos.
+- **Fragmentos de Estrela (✧):** raros. Compram o que não deveria estar à venda: relíquia, artefato, coisa de escala celestial.
 
-### Taxas de Câmbio
+- **Créditos Sombrios (♆):** a moeda do submundo. Circula no mercado negro, e quem aceita costuma cobrar mais que o preço.
 
-O Banqueiro realiza a conversão das moedas no Discord (valores sujeitos a taxas do sistema).
+### Câmbio
 
-- Moeda Origem | Moeda Destino | Taxa Padrão
+O Banqueiro converte qualquer par de moedas no Discord, sempre passando pelo Solar. Toda conversão cobra 2% de taxa do banco, arredondada a favor da casa.
 
-- 100 Lunaris | 1 Solar | 100:1
+- Moeda | Vale em Solares | Vale em Lunaris
 
-Essa taxa serve para o dia a dia - trocar Lunaris por Solares (ou o contrário) numa transação comum. Ela não torna categorias inteiras de item comparáveis entre si: um veículo precificado em Lunaris e uma arma lendária precificada em Solares seguem economias próprias, cada uma pensada pro ritmo da sua categoria, não uma equivalência de valor de jogo.
+- 1 Fragmento de Estrela ✧ | 50 Solares | 5.000 Lunaris
 
-Fragmentos de Estrela e Créditos Sombrios não têm câmbio automático com nenhuma outra moeda. São obtidos por fonte própria - relíquias e artefatos concedidos pelo Mestre, mercado negro, ou outra origem narrativa - nunca só acumulando e convertendo Lunaris ou Solares.
+- 1 Crédito Sombrio ♆ | 2 Solares | 200 Lunaris
 
-### O Cofre Bancário
+- 1 Solar ☉ | 1 Solar | 100 Lunaris
 
-O Banco gerido pelo Banqueiro reúne depósito, reputação e segurança.
+- 100 Lunaris ☾ | 1 Solar | 100 Lunaris
 
-- **Reputação Bancária:** Ao depositar com frequência e participar da economia, você ganha reputação que destrava novos níveis de cofre.
+A conta é sempre a mesma: converta para Solares, converta para a moeda de destino e desconte os 2%. Trocar 10 Fragmentos por Lunaris dá 500 Solares, ou seja 50.000 Lunaris, menos a taxa: você recebe 49.000.
 
-- **Espaço e Limites:** O cofre possui níveis (tiers) que definem a capacidade máxima de itens e a quantidade de saldo de cada moeda que pode ser guardada. No nível máximo, esse limite se torna ilimitado.
+Converter resolve o troco, e só. Um veículo cotado em Lunaris e uma arma lendária cotada em Solares seguem economias separadas, cada uma pensada para o ritmo da própria categoria. Juntar Lunaris a vida inteira não é o caminho previsto para comprar um Fruto do Éden: Fragmentos e Créditos costumam vir de relíquia concedida pelo Mestre, de negócio no mercado negro ou de pagamento de quem não usa moeda comum.
 
-- **Segurança:** O seu cofre pode ser alvo de roubos (eventos do bot). Evoluir a segurança do cofre aumenta a porcentagem de chance de frustrar essas tentativas.
+### O Cofre
 
-- **Transferências:** Através da página do Cofre, você pode sacar suas economias diretamente para a ficha do seu personagem quando necessário.
+O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
+
+- Depositar com frequência rende reputação, e reputação destrava níveis maiores de cofre.
+
+- Cada nível define quantos itens cabem e quanto saldo de cada moeda pode ficar guardado. No último nível, esse teto some.
+
+- Cofre pode ser roubado: o bot dispara esses eventos sozinho. Investir em segurança aumenta a chance de a tentativa fracassar.
+
+- Pela página do Cofre você saca o que precisar direto para a ficha do personagem.
+
+## loja
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+Os quatro lugares onde se compra em O Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
+
+O catálogo inteiro tem quase quinhentos itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+
+### Os quatro locais
+
+- Local | O que vende | Itens
+
+- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 107
+
+- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 144
+
+- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 122
+
+- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 89
+
+Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
+
+### O que decide o local de um item
+
+- A raridade dá a base: comum e incomum na Vila, raro na Metrópole, épico no Mercado Negro, lendário e acima no Banco Lunar.
+
+- A natureza do item pode subir esse piso. Arma marcial começa na Metrópole mesmo sendo comum, e tecnologia de plasma começa no Mercado Negro mesmo sendo incomum.
+
+- Qualquer coisa cotada em Fragmentos de Estrela vai para o Banco Lunar, e qualquer coisa cotada em Créditos Sombrios vai para o Mercado Negro. A moeda denuncia o balcão.
+
+- Implante, artefato e o que a descrição marca como ilegal, contrabando ou veneno caem no Mercado Negro por natureza.
+
+### Por que um item some
+
+Se um item que você viu antes não está mais lá, é uma destas três coisas, e nenhuma delas é falha do sistema:
+
+- **O local não está liberado.** Mercado Negro e Banco Lunar começam trancados por padrão em toda campanha. Abrir os dois é decisão do Mestre, e costuma custar história.
+
+- **A campanha escondeu aquela raridade.** O Mestre pode fechar uma faixa inteira de raridade, e ela some do catálogo para todo mundo.
+
+- **Aquele item específico foi escondido.** Serve para segurar uma peça até a hora dela aparecer na história.
+
+### Quando a compra não é um objeto
+
+Três categorias não terminam no inventário. Elas criam uma entrada viva na sua ficha, e a partir daí você é responsável por ela:
+
+- **Criatura:** vira um aliado com ficha própria, editável. Ver Aliados e Contratados.
+
+- **Propriedade:** vira uma base registrada, com espaços, instalações e conta mensal. Ver Bases e Propriedades.
+
+- **Fruto do Éden:** entra no inventário, mas só vale quando consumido, e aí se liga à ficha para sempre. Ver Frutos do Éden e Implantes.
+
+Antes de comprar algo caro, confirme com a mesa em que local vocês estão. O mesmo item pode estar a duas prateleiras de distância, e ir até a prateleira certa costuma ser uma sessão inteira.
 
 ## bases
 
-**Categoria:** Guia do Mestre
+**Categoria:** Livro do Jogador
 
 **Status:** Regra oficial
 
 Aquisição, espaços, instalações, melhorias e manutenção de propriedades imóveis ou móveis.
+
+Uma base é o lugar do grupo no mundo: o esconderijo, a oficina, o navio, a casa comprada com o dinheiro da última missão. Ela custa para adquirir, custa todo mês para manter e, em troca, muda o que o grupo consegue fazer entre uma aventura e outra.
 
 ### Registro da base
 

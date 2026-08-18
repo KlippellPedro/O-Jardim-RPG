@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { BookMarked, ChevronRight, Search, Sparkles, X } from 'lucide-react';
 import catalogo from '../../../../data/loja/catalogo.json';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
+import { useIsMobileViewport } from '../../../hooks/useMediaQuery';
 
 interface MonstroEntry {
   id: string;
@@ -141,8 +142,9 @@ export const CatalogoBestiario = () => {
   const [busca, setBusca] = useState('');
   const [selecionadoId, setSelecionadoId] = useState('');
   const [detalheMovelAberto, setDetalheMovelAberto] = useState(false);
+  const isMobile = useIsMobileViewport();
   useDialogAccessibility({
-    open: detalheMovelAberto,
+    open: detalheMovelAberto && isMobile,
     dialogRef: mobileDialogRef,
     initialFocusRef: mobileCloseRef,
     onClose: () => setDetalheMovelAberto(false),
@@ -174,8 +176,8 @@ export const CatalogoBestiario = () => {
 
   const selecionar = useCallback((id: string) => {
     setSelecionadoId(id);
-    setDetalheMovelAberto(true);
-  }, []);
+    if (isMobile) setDetalheMovelAberto(true);
+  }, [isMobile]);
 
   return (
     <section className="mt-16 border-t border-[#c7a44c]/20 pt-10" aria-labelledby="catalogo-bestiario-titulo">
