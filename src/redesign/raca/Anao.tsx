@@ -82,7 +82,7 @@ export const Anao = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-stone-400 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Baixo, difícil de derrubar e melhor que qualquer um com uma ferramenta na mão. Constrói pra durar, conserta o que quebrou no caminho e ainda acha jeito de melhorar a peça enquanto conserta.
+            Baixo, duro de derrubar e melhor que qualquer um com uma ferramenta na mão. Constrói, conserta e erra menos na segunda tentativa. Fala Nórdico Antigo, e o Reino dos Anões forja o que os outros reinos apenas fabricam.
           </motion.p>
         </motion.header>
 

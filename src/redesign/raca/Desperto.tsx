@@ -84,7 +84,7 @@ export const Desperto = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-red-200/60 max-w-3xl mx-auto font-medium leading-relaxed"
           >
-            Morreu, foi parar em Arkarin e voltou com um Fragmento preso à alma. A Condição Ancestral explica por que a Mulher Carmesim deixou ele sair, e é ela que decide o que ele trouxe de volta e o que ficou faltando.
+            Morreu, foi parar em Arkarin e voltou. Carrega um Fragmento de Arkarin preso à alma, que vibra perto de espírito preso e de qualquer coisa mexida pela morte. Quanto mais tempo passou do outro lado, mais ele trouxe de volta, e a Condição Ancestral escolhida explica por que a Mulher Carmesim deixou ele sair.
           </motion.p>
         </motion.header>
 

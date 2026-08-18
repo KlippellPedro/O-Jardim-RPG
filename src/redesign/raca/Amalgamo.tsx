@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Dna, ShieldAlert, Zap, Layers } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
+import { CatalogoRacial } from '../components/premium/CatalogoRacial';
 import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
 import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
@@ -70,7 +71,7 @@ export const Amalgamo = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-pink-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Corpos e almas costurados num ser só. Cada parte que entrou continua lá dentro, e é isso que segura o que ataca a carne, segura o que ataca a cabeça e deixa ele soltar por algumas rodadas o que uma das partes sabia fazer.
+            Um corpo só, montado com mais de uma criatura. O que ele herda é a mistura, e não o pacote racial das partes: aguenta melhor o que ataca a carne, aguenta melhor o que ataca a cabeça, e conhece Fragmentos que consegue expressar por algumas rodadas antes de o corpo cobrar a conta.
           </motion.p>
         </motion.header>
 
@@ -148,6 +149,14 @@ export const Amalgamo = ({ raca }: { raca: IRaca }) => {
         <EstagiosRaciais raca={raca} tema={tema} />
 
         <EscolhaRacialCards raca={raca} tema={tema} />
+
+        <CatalogoRacial
+          raca={raca}
+          tema={tema}
+          campo="fragmentos"
+          titulo="Fragmentos"
+          descricao="Traços que o Amálgamo pode conhecer. Assimilação Controlada e Surto de Convergência definem quantos ficam ativos e por quanto tempo."
+        />
       </div>
     </div>
   );

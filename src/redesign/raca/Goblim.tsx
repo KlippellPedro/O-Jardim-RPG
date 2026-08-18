@@ -82,7 +82,7 @@ export const Goblim = ({ raca }: GoblimProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-xl text-lime-100/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Pequeno, rápido e sempre com um plano. Se tem vantagem pra tirar ou barganha pra fazer, ele chega lá antes de todo mundo, de preferência vendendo alguma coisa que já era dele.
+            Pequeno, rápido e com um talento incômodo pra vender qualquer coisa por mais do que ela vale, de preferência coisa que já era dele. Fala Alemão entre os seus.
           </motion.p>
         </motion.header>
 

@@ -3353,6 +3353,7 @@
       "Grande",
       "Enorme"
     ],
+    "descricao": "Consciência vinda do espaço ou de outra dimensão, presa numa forma física que ela mesma escolhe manter fluida. Muda de tamanho e de rosto quando quer, sabe mais que qualquer especialista sobre as duas áreas que escolheu estudar, e simplesmente não entende por que os outros se importam tanto com sentimento.",
     "fisiologia": [
       "Não precisa comer, beber ou dormir. Para concluir um descanso, medita pelo tempo normal e pode perceber os arredores, mas qualquer atividade além de observação simples interrompe a recuperação.",
       "É imune a doenças comuns ou sobrenaturais, mas não a venenos ou outras condições que apenas produzam sintomas semelhantes.",
@@ -3827,7 +3828,7 @@
         "descricao": "O menor chassi com mãos. Cabe onde os outros não cabem e passa por porta feita pra gente.",
         "postura": "bipede",
         "tamanho": "Pequeno",
-        "medida_m": 3,
+        "medida_m": 3.5,
         "vida": 3,
         "mana": 0,
         "movimento_fixo": 6,
@@ -3845,7 +3846,7 @@
             "id": "chassi-bipede-pequeno",
             "titulo": "Estrutura Bípede Pequena",
             "tipo": "passiva",
-            "descricao": "Tamanho Pequeno, aproximadamente 3 m, Movimento 6 m e arma natural com dano-base 1d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+            "descricao": "Tamanho Pequeno, aproximadamente 3,5 m, Movimento 6 m e arma natural com dano-base 1d6. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
             "automatizada": false
           }
         ]
@@ -3856,7 +3857,7 @@
         "descricao": "O chassi padrão da A.X.I.S. Anda por aí sem chamar mais atenção do que um autômato já chama.",
         "postura": "bipede",
         "tamanho": "Normal",
-        "medida_m": 4.5,
+        "medida_m": 5,
         "vida": 5,
         "mana": 0,
         "movimento_fixo": 9,
@@ -3874,7 +3875,7 @@
             "id": "chassi-bipede-normal",
             "titulo": "Estrutura Bípede Normal",
             "tipo": "passiva",
-            "descricao": "Tamanho Normal, aproximadamente 4,5 m, Movimento 9 m e arma natural com dano-base 1d8. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
+            "descricao": "Tamanho Normal, aproximadamente 5 m, Movimento 9 m e arma natural com dano-base 1d8. Possui manipuladores capazes de usar ferramentas e equipamentos compatíveis.",
             "automatizada": false
           }
         ]

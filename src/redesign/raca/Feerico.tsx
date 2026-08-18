@@ -87,7 +87,7 @@ export const Feerico = ({ raca }: FeericoProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-pink-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Pequeno ou normal, e com muito mais Mana do que o tamanho sugere. Faz truque sensorial o tempo todo, de graça, e ilusão grande quando resolve levar a sério. Nada disso machuca: o estrago é o que a vítima faz com a informação errada.
+            Pequeno ou normal, e com Mana muito acima do que o tamanho sugere. Faz truque sensorial o tempo todo, de graça, e ilusão grande quando resolve levar a sério. Nada disso machuca: o estrago é sempre o que a vítima faz com a informação errada.
           </motion.p>
         </motion.header>
 

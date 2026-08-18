@@ -97,7 +97,7 @@ export const Sereia = ({ raca }: SereiaProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-cyan-100/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Respira dentro e fora d'água, e nada tão rápido quanto anda em terra. A voz é a arma principal: ela segura quem escuta pelo tempo exato de virar a cena, ou de sair dela viva.
+            Respira dentro e fora d'água, e nada tão rápido quanto anda em terra. O canto segura quem escuta pelo tempo exato de mudar uma cena, ou de sair dela viva. Fala Latim.
           </motion.p>
         </motion.header>
 
@@ -138,7 +138,7 @@ export const Sereia = ({ raca }: SereiaProps) => {
             </div>
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Canto Fascinante</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Escolha uma criatura a até 9 m que consiga te ouvir e role Carisma contra a Vontade dela. Passando, ela fica fascinada até o início do seu próximo turno, e qualquer dano que ela sofrer encerra o efeito na hora. Custa uma ação e 2 Mana, uma vez por cena.
+              Uma vez por cena, gaste uma ação e 2 Mana para fazer um teste de Carisma contra a Vontade de uma criatura a até 9 m que possa ouvir. Em sucesso, ela fica fascinada até o início do seu próximo turno. O efeito quebra se ela sofrer dano.
             </p>
           </PremiumCard>
         </div>

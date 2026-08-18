@@ -86,7 +86,7 @@ export const Auleth = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-indigo-200/60 max-w-2xl mx-auto font-light leading-relaxed"
           >
-            Uma consciência que se formou lá fora e escolheu um corpo pra caber aqui. Muda de forma e de tamanho quando quer, sabe demais sobre duas coisas muito específicas e não faz a menor ideia de como consolar alguém.
+            Consciência vinda do espaço ou de outra dimensão, presa numa forma física que ela mesma escolhe manter fluida. Muda de tamanho e de rosto quando quer, sabe mais que qualquer especialista sobre as duas áreas que escolheu estudar, e simplesmente não entende por que os outros se importam tanto com sentimento.
           </motion.p>
         </motion.header>
 
@@ -104,7 +104,7 @@ export const Auleth = ({ raca }: { raca: IRaca }) => {
             <div>
               <h3 className={`text-2xl font-light ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Forma Sem Molde</h3>
               <p className="text-indigo-200/60 leading-relaxed text-sm font-light">
-                Altere livremente sua aparência, voz e tamanho entre Minúsculo, Pequeno, Normal, Grande ou Enorme gastando ação e Movimento. A massa se condensa e se rarefaz, mantendo os mesmos atributos e PV da forma original.
+                Altere livremente sua aparência, voz e tamanho entre Minúsculo, Pequeno, Normal, Grande ou Enorme gastando ação e Movimento. A massa se condensa e se rarefaz, mantendo os mesmos atributos e a mesma Vida da forma original.
               </p>
             </div>
           </PremiumCard>

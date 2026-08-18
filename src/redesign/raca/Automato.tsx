@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Cpu, Zap, Settings, ShieldAlert, Layers } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
+import { CatalogoRacial } from '../components/premium/CatalogoRacial';
 import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
 import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
@@ -71,7 +72,7 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-cyan-200/60 max-w-2xl mx-auto font-mono leading-relaxed"
           >
-            Construto consciente saído da A.X.I.S., com um núcleo próprio no lugar do coração. Não respira, não come, não dorme e não deve obediência a criador nenhum: quem conserta ele é engenheiro, não médico.
+            Construto consciente saído da A.X.I.S, com núcleo próprio e vontade própria: não deve obediência a criador nenhum. Cura não funciona nele: quem conserta é engenheiro. O chassi, bípede ou quadrúpede, é decisão de criação. Fala Inglês.
           </motion.p>
         </motion.header>
 
@@ -141,6 +142,14 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
         <EstagiosRaciais raca={raca} tema={tema} />
 
         <EscolhaRacialCards raca={raca} tema={tema} />
+
+        <CatalogoRacial
+          raca={raca}
+          tema={tema}
+          campo="modificacoes"
+          titulo="Modificações"
+          descricao="Módulos instaláveis no chassi. O limite de modificações e os pré-requisitos ficam em Arquitetura Modular."
+        />
       </div>
     </div>
   );

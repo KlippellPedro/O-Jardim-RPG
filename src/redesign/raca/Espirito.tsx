@@ -99,7 +99,7 @@ export const Espirito = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-cyan-200/50 max-w-2xl mx-auto font-light leading-relaxed"
           >
-            Uma alma sem corpo pra alimentar nem pulmão pra encher. Passa por parede quando tem Mana pra gastar, enxerga no escuro e não veste armadura comum porque não há o que vestir.
+            Não tem corpo pra alimentar nem pulmão pra encher. Enxerga no escuro, atravessa parede quando tem Mana pra gastar, e não veste armadura comum porque não há o que vestir. Fala Enoquiano.
           </motion.p>
         </motion.header>
 

@@ -88,10 +88,6 @@ const listaRacasPublicas = racasData
   .map((raca) => `<li><strong>${raca.titulo}</strong> (${raca.categoria === 'esquecida' ? 'especial' : 'comum'}) - Vida ${raca.vida >= 0 ? '+' : ''}${raca.vida}, Mana ${raca.mana >= 0 ? '+' : ''}${raca.mana}${raca.movimento ? `, Movimento +${raca.movimento} m` : ''}</li>`)
   .join('');
 
-const listaLegadosPublicos = [...(legadosData.legados || []), ...(legadosNovosData.novos || [])]
-  .map((legado) => `<li><strong>${legado.titulo}:</strong> ${legado.descricao}</li>`)
-  .join('');
-
 const NOME_ATRIBUTO_PERICIA: Record<string, string> = {
   forca: 'Força',
   destreza: 'Destreza',
@@ -1255,9 +1251,6 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Nível, atributo e perícia são conferidos no momento da escolha. Perder o requisito depois não tira o Legado.</li>
         <li>O Mestre só autoriza troca em dois casos: erro de criação ou mudança oficial nas regras.</li>
       </ul>
-
-      <h3 class="regras-subtitle">Catálogo</h3>
-      <ul class="regras-list">${listaLegadosPublicos}</ul>
     `,
     corpoMestre: `
       <p class="regras-lead">Legado é a escolha mais pesada que o jogador faz depois da classe, e ela é permanente. A ficha confere os pré-requisitos sozinha, então o seu trabalho aqui é de ficção, não de auditoria.</p>
@@ -2231,7 +2224,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   mestre: {
     categoria: 'Guia do Mestre',
     status: 'Somente Mestre',
-    resumo: 'O que fazer na primeira sessão, como escolher a dificuldade de um teste, como montar um encontro que não trava e o que nunca deve virar segredo.',
+    resumo: 'O que fazer na primeira sessão, como escolher a dificuldade de um teste, como montar um encontro que não trava e o que nunca deve virar segredo. As tabelas de calibragem ficam na biblioteca do mestre, no fim da página.',
     destaques: [
       ['Acesso', 'Apenas Mestre'],
       ['DT padrão', '15 + metade do nível'],
@@ -2294,7 +2287,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Antes da descoberta, mostre o rótulo e uma descrição que não entregue a solução. Depois dela, entregue a informação inteira, sem parcelar.</li>
       </ul>
 
-      <p class="regras-note">As tabelas numéricas completas de calibragem, orçamento de encontro, probabilidade por perfil e histórico de decisões editoriais ficam nas Notas Internas, logo abaixo desta página. Elas exigem uma campanha selecionada e são visíveis apenas para quem conduz a mesa.</p>
+      <p class="regras-note">As tabelas completas de calibragem, orçamento de encontro, dano de inimigos, descanso, XP e vida negativa ficam na biblioteca do mestre, logo abaixo desta página. Ela é sincronizada com a campanha ativa e só aparece para quem conduz a mesa.</p>
     `
   }
 };

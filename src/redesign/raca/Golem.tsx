@@ -69,7 +69,7 @@ export const Golem = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-xl text-stone-400 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Corpo construído, grande ou enorme, que não respira, não come e não adoece. Pesado, calado e difícil de acabar: quem cuida dele é artesão, e nenhuma armadura de prateleira serve sem ajuste antes.
+            Corpo construído, grande ou enorme, que não respira, não come e não adoece. Quem cuida dele é artesão, e nenhuma armadura de prateleira serve sem ajuste antes. Fala Libras.
           </motion.p>
         </motion.header>
 

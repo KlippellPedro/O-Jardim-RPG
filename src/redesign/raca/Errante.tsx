@@ -81,7 +81,7 @@ export const Errante = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-gray-400 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Um personagem de outra campanha que atravessou pra esta. Trouxe nome, cara, memória e reputação; perdeu nível e ficha, e o que sobrou volta convertido para as regras daqui.
+            É um personagem de outra campanha que atravessou pra esta. Mantém nome, cara, memória e reputação; perde nível e ficha. O que sobrou de lá volta como uma Assinatura (uma técnica marcante, renomeada e convertida) e um Legado a mais.
           </motion.p>
         </motion.header>
 

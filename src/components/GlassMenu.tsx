@@ -14,7 +14,7 @@ export default function GlassMenu() {
   ];
 
   return (
-    <nav className="app-navigation" aria-label="NavegaÃ§Ã£o principal">
+    <nav className="app-navigation" aria-label="Navegação principal">
       {menuItems.map((item) => (
         <NavLink
           key={item.name}

@@ -151,6 +151,14 @@ export function descreverOpcaoRacial(opcao: IOpcaoRacial): string {
   return nomes.length > 0 ? nomes.join(', ') : 'Consulte os efeitos desta escolha nas regras da raça.';
 }
 
+/** Uma variante sem `descricao` ou `motivo_retorno` próprios faz
+ * `descreverOpcaoRacial` cair no fallback que só repete o nome dos traços -
+ * texto redundante ao lado do título da própria opção. Páginas com coluna ou
+ * bloco de "Descrição" devem chamar isto antes de renderizá-lo. */
+export function temDescricaoPropria(opcao: IOpcaoRacial): boolean {
+  return Boolean(opcao.descricao) || typeof opcao.motivo_retorno === 'string';
+}
+
 function numeroComSinal(valor: unknown): string {
   const numero = Number(valor) || 0;
   return `${numero >= 0 ? '+' : ''}${numero}`;

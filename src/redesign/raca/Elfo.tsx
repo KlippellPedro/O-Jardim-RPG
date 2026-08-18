@@ -56,7 +56,7 @@ export const Elfo = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-emerald-100/50 max-w-2xl mx-auto font-medium leading-relaxed font-serif"
           >
-            Não envelhece e não esquece. O que para os outros povos é uma vida inteira, para o Elfo é só mais uma temporada de leitura empilhada em cima de séculos de leitura.
+            Não envelhece e não esquece: são séculos de leitura empilhados num Intelecto que passa do teto que vale pra todo mundo. Vem de Nadalon, fala Finlandês, e escolhe uma das seis Linhagens: é isso que separa um Elfo de Sombras de um Elfo de Tempestades.
           </motion.p>
         </motion.header>
 

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Eye, Flame, TriangleAlert } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
+import { CatalogoRacial } from '../components/premium/CatalogoRacial';
 import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
 import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
@@ -87,7 +88,7 @@ export const Bruxa = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-rose-200/60 max-w-2xl mx-auto font-serif leading-relaxed"
           >
-            Bruxa não é profissão nem gênero: é uma natureza mágica que se adquire e não se devolve. Quem carrega enxerga maldição, pacto e possessão a distância, tece as próprias maldições e, quando falta Mana, paga a conta com a própria carne.
+            Bruxa não é profissão nem gênero: é uma natureza mágica que se adquire e não se devolve. Enxerga maldição, pacto e possessão a distância, tece maldição própria, e quando falta Mana paga com Vida. Fala Celta, e ninguém domina as artes do Fluxo como as de Salém.
           </motion.p>
         </motion.header>
 
@@ -142,6 +143,14 @@ export const Bruxa = ({ raca }: { raca: IRaca }) => {
         <EstagiosRaciais raca={raca} tema={tema} />
 
         <EscolhaRacialCards raca={raca} tema={tema} />
+
+        <CatalogoRacial
+          raca={raca}
+          tema={tema}
+          campo="maldicoes"
+          titulo="Maldições Conhecidas"
+          descricao="Maldição Tecida e Grande Sabá aplicam uma destas. Grimório aumenta o total conhecido de três para cinco."
+        />
       </div>
     </div>
   );

@@ -35,7 +35,7 @@ const GOBLIM: ThemeEntry = {
 const GOLEM: ThemeEntry = {
   primary: '#a8a29e', secondary: '#44403c', glow: 'rgba(168,162,158,0.25)',
   bg: 'bg-stone-900/40', border: 'border-stone-500/25 hover:border-stone-400/55',
-  text: 'text-stone-300', icon: 'text-stone-500/70', tag: 'text-stone-400',
+  text: 'text-stone-300', icon: 'text-stone-300/90', tag: 'text-stone-400',
   rationale: 'Construtos de pedra e metal: materia mineral, resistencia e peso ancestral.',
 };
 const ESPIRITO: ThemeEntry = {
@@ -47,7 +47,7 @@ const ESPIRITO: ThemeEntry = {
 const GIGANTE: ThemeEntry = {
   primary: '#78716c', secondary: '#57534e', glow: 'rgba(120,113,108,0.28)',
   bg: 'bg-stone-900/40', border: 'border-stone-600/25 hover:border-stone-400/55',
-  text: 'text-stone-300', icon: 'text-stone-500/70', tag: 'text-stone-400',
+  text: 'text-stone-300', icon: 'text-stone-300/90', tag: 'text-stone-400',
   rationale: 'Seres monumentais ligados a terra e montanhas: peso, solidez, poder sem adornos.',
 };
 const ANIMALIA: ThemeEntry = {
@@ -122,7 +122,7 @@ const CLONE: ThemeEntry = {
 const ENTIDADE: ThemeEntry = {
   primary: '#a3a3a3', secondary: '#171717', glow: 'rgba(163,163,163,0.18)',
   bg: 'bg-neutral-950/60', border: 'border-neutral-700/30 hover:border-neutral-500/55',
-  text: 'text-neutral-300', icon: 'text-neutral-600/70', tag: 'text-neutral-400',
+  text: 'text-neutral-300', icon: 'text-neutral-400/85', tag: 'text-neutral-400',
   rationale: 'Seres incompreensiveis sem forma: ausencia, vazio cosmico, alem da compreensao.',
 };
 const ERRANTE: ThemeEntry = {
@@ -140,7 +140,7 @@ const BRUXA: ThemeEntry = {
 const AMALGAMO: ThemeEntry = {
   primary: '#475569', secondary: '#1e293b', glow: 'rgba(71,85,105,0.28)',
   bg: 'bg-slate-950/40', border: 'border-slate-600/25 hover:border-slate-400/55',
-  text: 'text-slate-300', icon: 'text-slate-500/70', tag: 'text-slate-400',
+  text: 'text-slate-300', icon: 'text-slate-300/90', tag: 'text-slate-400',
   rationale: 'Quimera espiritual de almas fundidas: cinza-azulado desbotado, instavel e sombrio.',
 };
 
@@ -209,7 +209,7 @@ const DECODIFICADOR: ThemeEntry = {
 const ENGENHEIRO: ThemeEntry = {
   primary: '#94a3b8', secondary: '#1e293b', glow: 'rgba(148,163,184,0.25)',
   bg: 'bg-slate-950/30', border: 'border-slate-500/25 hover:border-slate-400/55',
-  text: 'text-slate-300', icon: 'text-slate-500/70', tag: 'text-slate-400',
+  text: 'text-slate-300', icon: 'text-slate-300/90', tag: 'text-slate-400',
   rationale: 'Construtores de maquinas: engrenagens, projetos tecnicos e racionalidade mecanica.',
 };
 const ESCRITOR_CONTOS: ThemeEntry = {
@@ -221,7 +221,7 @@ const ESCRITOR_CONTOS: ThemeEntry = {
 const ESPADACHIM: ThemeEntry = {
   primary: '#e2e8f0', secondary: '#334155', glow: 'rgba(226,232,240,0.20)',
   bg: 'bg-slate-950/30', border: 'border-slate-400/25 hover:border-slate-300/55',
-  text: 'text-slate-200', icon: 'text-slate-400/70', tag: 'text-slate-300',
+  text: 'text-slate-200', icon: 'text-slate-300/90', tag: 'text-slate-300',
   rationale: 'Elegancia do combate com lamina: metal polido, tecnica refinada e esgrima.',
 };
 const GUARDIAO: ThemeEntry = {
@@ -269,7 +269,7 @@ const MEDICO: ThemeEntry = {
 const NINJA: ThemeEntry = {
   primary: '#111827', secondary: '#64748b', glow: 'rgba(17,24,39,0.40)',
   bg: 'bg-gray-950/60', border: 'border-gray-700/30 hover:border-gray-500/55',
-  text: 'text-gray-300', icon: 'text-gray-500/70', tag: 'text-gray-400',
+  text: 'text-gray-300', icon: 'text-gray-300/90', tag: 'text-gray-400',
   rationale: 'Furtividade extrema e golpe silencioso: sombra profunda com contraste para interfaces.',
 };
 const PILOTO: ThemeEntry = {
