@@ -69,7 +69,7 @@ export const Amalgamo = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-pink-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Corpos e almas costurados em um ser só. Uma quimera biológica e espiritual, capaz de assimilar propriedades daqueles que os compõem e reconfigurar a própria anatomia quando atacados.
+            Um corpo só, montado com mais de uma criatura. Não herda o pacote racial de nenhuma das partes: herda a mistura: aguenta melhor o que ataca a carne, aguenta melhor o que ataca a cabeça, e conhece Fragmentos que consegue expressar por algumas rodadas antes de o corpo cobrar a conta.
           </motion.p>
         </motion.header>
 

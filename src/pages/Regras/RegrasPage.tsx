@@ -22,6 +22,7 @@ import { CatalogoBestiario } from './components/CatalogoBestiario';
 import { GridClasses } from './components/GridClasses';
 import { GridRacas } from './components/GridRacas';
 import { RegrasContent } from './components/RegrasContent';
+import { FerramentasMestre } from './components/FerramentasMestre';
 import { NotasInternasMestre } from './components/NotasInternasMestre';
 import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
 
@@ -320,6 +321,7 @@ export const RegrasPage = () => {
                 ) : activeTopic === 'mestre' ? (
                   <>
                     <RegrasContent htmlContent={topicData.corpo} />
+                    <FerramentasMestre campanhaId={campanhaAtiva?.id} />
                     <NotasInternasMestre campanhaId={campanhaAtiva?.id} />
                   </>
                 ) : (

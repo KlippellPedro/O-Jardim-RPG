@@ -86,7 +86,7 @@ export const Bruxa = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-rose-200/60 max-w-2xl mx-auto font-serif leading-relaxed"
           >
-            Uma natureza mágica adquirida (não uma profissão, não uma identidade de gênero), selada com sacrifícios físicos. Quem carrega essa natureza enxerga maldições invisíveis e paga o preço da magia rasgando a própria carne quando a mana escasseia.
+            Não é profissão nem gênero: é uma natureza mágica que se adquire e não se devolve. Enxerga maldição, pacto e possessão a distância, tece maldição própria, e quando falta Mana paga com Vida. Fala Celta, e ninguém domina as artes do Fluxo como as de Salém.
           </motion.p>
         </motion.header>
 

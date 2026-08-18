@@ -88,7 +88,7 @@ export const Animalia = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-green-100/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Ligados à selva por laços de sangue e espírito. Eles carregam a herança selvagem em sua fisiologia, unindo a inteligência humanóide com os instintos de uma fera.
+            Gente com corpo de bicho. Qual bicho é escolha sua, e a morfologia decide se ele sai ágil, robusto ou místico. Troca ideia simples com animais, o que está longe de significar que eles obedeçam. Fala Sumeriano.
           </motion.p>
         </motion.header>
 

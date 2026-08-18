@@ -1258,25 +1258,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   mestre: {
     categoria: 'Guia do Mestre',
     status: 'Somente Mestre',
-    resumo: 'Ferramentas de quem conduz a mesa: dificuldades, criação de NPC, tabela de XP e tesouros.',
+    resumo: 'Ferramentas de quem conduz a mesa: dificuldades de teste, orçamento de encontro, dano de inimigos, pressão de descanso, recompensas de XP e vida negativa.',
     destaques: [
       ['Acesso', 'Apenas Mestre']
     ],
     corpo: `
-      <p class="regras-lead">Daqui para baixo é só para quem conduz a mesa.</p>
-      <h3 class="regras-subtitle">Dificuldades de Teste</h3>
-      <p class="regras-note">Para desafios de DT fixa, use 5, 10, 15, 20, 25, 30 e 40. Para ameaças que escalam com os personagens, use a tabela abaixo.</p>
-      <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Dificuldade</th><th>DT</th><th>Uso</th></tr></thead>
-        <tbody>
-          <tr><td>Rotineira</td><td>10 + ⌊Nível ÷ 2⌋</td><td>Personagem preparado</td></tr>
-          <tr><td>Padrão</td><td>15 + ⌊Nível ÷ 2⌋</td><td>Desafio relevante</td></tr>
-          <tr><td>Difícil</td><td>20 + ⌊Nível ÷ 2⌋</td><td>Especialista esperado</td></tr>
-          <tr><td>Extrema</td><td>25 + ⌊Nível ÷ 2⌋</td><td>Feito excepcional</td></tr>
-        </tbody>
-      </table></div>
+      <p class="regras-lead">Daqui para baixo é só para quem conduz a mesa. Para desafios de DT fixa (sem escalar com o grupo), use 5, 10, 15, 20, 25, 30 e 40.</p>
       <p class="regras-note">A DT descreve a dificuldade da situação. Escolha antes de o jogador rolar; mudar depois de ver o dado é trapaça, mesmo quando é bem-intencionada.</p>
-      <div class="regras-formula">Em construção: tabelas de encontros, armadilhas e recompensas do mestre.</div>
+      <p class="regras-note">As tabelas de dificuldade por nível, orçamento de encontro, dano de inimigos, descanso, XP e vida negativa ficam na biblioteca protegida abaixo, sincronizada com a campanha ativa.</p>
     `
   }
 };

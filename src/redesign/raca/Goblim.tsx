@@ -81,7 +81,7 @@ export const Goblim = ({ raca }: GoblimProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-xl text-lime-100/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Pequenos, caóticos, rápidos e sempre com um plano. Se há uma vantagem a ser levada ou uma barganha a ser feita, eles chegarão lá antes de todo mundo.
+            Pequeno, rápido e com um talento incômodo pra vender qualquer coisa por mais do que ela vale, de preferência coisa que já era dele. Fala Alemão entre os seus.
           </motion.p>
         </motion.header>
 

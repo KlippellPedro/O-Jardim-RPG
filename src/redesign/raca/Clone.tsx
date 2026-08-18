@@ -68,7 +68,7 @@ export const Clone = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-emerald-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Organismos bio-sintéticos esculpidos a partir da genética de um Original. Trazem memórias fragmentadas e regeneração programada instalada diretamente em seu DNA aperfeiçoado.
+            Foi feito à imagem de outra pessoa, e sabe disso. Copia aparência, voz, digital e retina do Original, e de vez em quando lembra de alguma coisa que nunca viveu. O Projeto que motivou a clonagem decide o resto. Fala Ao Contrário.
           </motion.p>
         </motion.header>
 

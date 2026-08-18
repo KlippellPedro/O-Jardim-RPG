@@ -63,7 +63,7 @@ export const Gigante = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-xl text-stone-400 max-w-2xl mx-auto font-bold leading-relaxed"
           >
-            Uma montanha viva. O campo de batalha estremece a cada passo e a sua mera presença física é um escudo intransponível para os aliados.
+            Grande a ponto de nada feito pros outros servir nele. Carrega o dobro, não sai do lugar quando tentam empurrar, e vive esbarrando em porta de tamanho normal. Fala Grego.
           </motion.p>
         </motion.header>
 

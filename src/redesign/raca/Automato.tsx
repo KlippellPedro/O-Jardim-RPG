@@ -70,7 +70,7 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-cyan-200/60 max-w-2xl mx-auto font-mono leading-relaxed"
           >
-            Construtos conscientes da A.X.I.S. Máquinas modulares alimentadas por núcleos autônomos de energia, substituindo ossos e carne por engrenagens e protocolos lógicos absolutos.
+            Construto consciente saído da A.X.I.S, com núcleo próprio e vontade própria: não deve obediência a criador nenhum. Cura não funciona nele: quem conserta é engenheiro. O chassi, bípede ou quadrúpede, é decisão de criação. Fala Inglês.
           </motion.p>
         </motion.header>
 
