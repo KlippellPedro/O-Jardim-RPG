@@ -1076,8 +1076,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     status: 'Catálogo oficial',
     resumo: 'Raça comum pode nascer em qualquer Árvore. Raça especial é mais forte e só existe nas Árvores compatíveis.',
     destaques: [
-      ['Raças disponíveis', '20'],
-      ['Comuns / especiais', '12 / 9'],
+      ['Raças disponíveis', '23'],
+      ['Comuns / especiais', '13 / 11'],
       ['Ajustes', 'Vida, Mana e Mov.']
     ],
     corpo: `

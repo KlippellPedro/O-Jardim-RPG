@@ -16,6 +16,8 @@ const casosEsperados = [
   ['automato', 'varianteId', 8],
   ['clone', 'varianteId', 4],
   ['bruxa', 'varianteId', 4],
+  ['simbionte', 'varianteId', 4],
+  ['divino', 'varianteId', 5],
 ] as const;
 
 test('mapeia todas as sub-raças e escolhas raciais principais do catálogo', () => {
@@ -49,4 +51,13 @@ test('o cálculo racial reconhece linhagem élfica e condição ancestral', () =
     obterVarianteRacial(desperto, { condicaoAncestralId: 'juramento-inacabado' })?.titulo,
     'Juramento Inacabado',
   );
+});
+
+test('a raça Simbionte substitui o antigo Miceliano pelo tipo Colônia', () => {
+  const miceliano = racas.find(item => item.id === 'miceliano');
+  const simbionte = racas.find(item => item.id === 'simbionte');
+
+  assert.equal(miceliano, undefined);
+  assert.ok(simbionte, 'Raça ausente: simbionte');
+  assert.equal(obterVarianteRacial(simbionte, { varianteId: 'colonia' })?.titulo, 'Colônia');
 });

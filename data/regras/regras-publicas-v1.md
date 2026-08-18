@@ -2124,7 +2124,8 @@ Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologi
 - **Gigante** (comum) - Vida +4, Mana -1
 - **Animália** (comum) - Vida +0, Mana +0
 - **Sereia / Tritão** (comum) - Vida -1, Mana +2
-- **Miceliano** (comum) - Vida +1, Mana +1
+- **Mímico** (comum) - Vida -1, Mana +2
+- **Simbionte** (comum) - Vida +0, Mana +0
 - **Slime** (comum) - Vida +3, Mana -2
 - **Feérico** (comum) - Vida -2, Mana +4
 - **Elfo** (especial) - Vida +2, Mana +4
@@ -2135,6 +2136,8 @@ Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologi
 - **Errante** (especial) - Vida +3, Mana +3
 - **Amálgamo** (especial) - Vida +5, Mana +1
 - **Bruxa** (especial) - Vida +1, Mana +5
+- **Onírico** (especial) - Vida +1, Mana +4
+- **Divino** (especial) - Vida +2, Mana +4
 
 ## bestiario
 
