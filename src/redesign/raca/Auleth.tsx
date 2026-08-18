@@ -85,7 +85,7 @@ export const Auleth = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-indigo-200/60 max-w-2xl mx-auto font-light leading-relaxed"
           >
-            Consciência vinda do espaço ou de outra dimensão, presa numa forma física que ela mesma escolhe manter fluida. Muda de tamanho e de rosto quando quer, sabe mais que qualquer especialista sobre as duas áreas que escolheu estudar, e não entende — de verdade não entende — por que os outros se importam tanto com sentimento.
+            Consciência vinda do espaço ou de outra dimensão, presa numa forma física que ela mesma escolhe manter fluida. Muda de tamanho e de rosto quando quer, sabe mais que qualquer especialista sobre as duas áreas que escolheu estudar, e simplesmente não entende por que os outros se importam tanto com sentimento.
           </motion.p>
         </motion.header>
 
