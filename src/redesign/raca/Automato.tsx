@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Cpu, Zap, Settings, ShieldAlert, Layers } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial, temDescricaoPropria } from '../../services/racaService';
 import { obterTemaPorId } from '../themeMap';
 
 export const Automato = ({ raca }: { raca: IRaca }) => {
@@ -70,7 +70,7 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-cyan-200/60 max-w-2xl mx-auto font-mono leading-relaxed"
           >
-            Construtos conscientes da A.X.I.S. Máquinas modulares alimentadas por núcleos autônomos de energia, substituindo ossos e carne por engrenagens e protocolos lógicos absolutos.
+            Construto consciente saído da A.X.I.S, com núcleo próprio e vontade própria: não deve obediência a criador nenhum. Cura não funciona nele: quem conserta é engenheiro. O chassi, bípede ou quadrúpede, é decisão de criação. Fala Inglês.
           </motion.p>
         </motion.header>
 
@@ -140,7 +140,9 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
         {/* Custom Lineages for Automato */}
         {(() => {
           const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
+          return grupos.map((grupo) => {
+            const mostraDescricao = grupo.opcoes.some(temDescricaoPropria);
+            return (
             <section key={grupo.campo} className="pt-4 mb-16">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -154,71 +156,115 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
                 </h2>
                 <p className="text-cyan-200/60 text-lg">{grupo.descricao}</p>
               </motion.div>
-              
-              <div className="overflow-x-auto rounded-none border border-cyan-800/40 bg-cyan-950/20 backdrop-blur-md shadow-lg shadow-cyan-900/10">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-cyan-800/40 bg-cyan-950/60">
-                      <th className="p-6 font-bold text-cyan-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Modelo</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-cyan-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Função Primária</th>}
-                      <th className="p-6 font-bold text-cyan-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Módulos de Fábrica (Traços)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grupo.opcoes.map((opcao) => {
-                      const tracos = obterTracosOpcaoRacial(opcao);
-                      const titleLower = opcao.titulo.toLowerCase();
-                      
-                      // Custom colors for different automato lineages
-                      let lineageStyle = { glow: tema.glow, text: tema.text, border: tema.border, bg: 'hover:bg-cyan-900/20' };
-                      if (titleLower.includes('combate') || titleLower.includes('guerra') || titleLower.includes('artilharia') || titleLower.includes('assalto') || titleLower.includes('destruição')) {
-                        lineageStyle = { glow: 'rgba(239,68,68,0.25)', text: 'text-red-400', border: 'border-red-500/50', bg: 'hover:bg-red-950/30' };
-                      } else if (titleLower.includes('médico') || titleLower.includes('suporte') || titleLower.includes('reparo') || titleLower.includes('cura')) {
-                        lineageStyle = { glow: 'rgba(16,185,129,0.25)', text: 'text-emerald-400', border: 'border-emerald-500/50', bg: 'hover:bg-emerald-950/30' };
-                      } else if (titleLower.includes('infiltração') || titleLower.includes('batedor') || titleLower.includes('sombra') || titleLower.includes('reconhecimento') || titleLower.includes('furtivo')) {
-                        lineageStyle = { glow: 'rgba(168,85,247,0.25)', text: 'text-purple-400', border: 'border-purple-500/50', bg: 'hover:bg-purple-950/30' };
-                      } else if (titleLower.includes('lógica') || titleLower.includes('processamento') || titleLower.includes('análise') || titleLower.includes('mente') || titleLower.includes('conhecimento')) {
-                        lineageStyle = { glow: 'rgba(245,158,11,0.25)', text: 'text-amber-400', border: 'border-amber-500/50', bg: 'hover:bg-amber-950/30' };
-                      } else if (titleLower.includes('pesado') || titleLower.includes('forja') || titleLower.includes('titã') || titleLower.includes('blindado') || titleLower.includes('defesa')) {
-                        lineageStyle = { glow: 'rgba(120,113,108,0.25)', text: 'text-stone-400', border: 'border-stone-500/50', bg: 'hover:bg-stone-950/30' };
-                      }
 
-                      return (
-                        <tr 
-                          key={opcao.id} 
-                          className={`border-b border-cyan-800/20 transition-colors ${lineageStyle.bg}`}
-                        >
-                          <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
-                            <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
-                          </td>
-                          {grupo.campo !== 'linhagemId' && (
-                            <td className="p-6 align-top text-cyan-100/70 text-sm leading-relaxed w-1/3">
-                              {descreverOpcaoRacial(opcao)}
-                            </td>
-                          )}
-                          <td className="p-6 align-top">
-                            {tracos.length > 0 ? (
-                              <div className="space-y-4">
-                                {tracos.map(traco => (
-                                  <div key={traco.id} className="bg-black/20 p-3 rounded-none border border-cyan-900/30">
-                                    <h4 className="text-sm font-bold text-cyan-100 mb-1">{traco.titulo}</h4>
-                                    {traco.descricao && <p className="text-xs text-cyan-200/50 leading-relaxed">{traco.descricao}</p>}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-cyan-500/30 italic text-sm">Sem módulos adicionais.</span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+              <div className="grid grid-cols-1 gap-6">
+                {grupo.opcoes.map((opcao, opcaoIdx) => {
+                  const tracos = obterTracosOpcaoRacial(opcao);
+                  const titleLower = opcao.titulo.toLowerCase();
+
+                  // Custom colors for different automato lineages
+                  let lineageStyle = { glow: tema.glow, text: tema.text, border: tema.border, bg: tema.bg };
+                  if (titleLower.includes('combate') || titleLower.includes('guerra') || titleLower.includes('artilharia') || titleLower.includes('assalto') || titleLower.includes('destruição')) {
+                    lineageStyle = { glow: 'rgba(239,68,68,0.25)', text: 'text-red-400', border: 'border-red-500/50', bg: 'bg-red-950/30' };
+                  } else if (titleLower.includes('médico') || titleLower.includes('suporte') || titleLower.includes('reparo') || titleLower.includes('cura')) {
+                    lineageStyle = { glow: 'rgba(16,185,129,0.25)', text: 'text-emerald-400', border: 'border-emerald-500/50', bg: 'bg-emerald-950/30' };
+                  } else if (titleLower.includes('infiltração') || titleLower.includes('batedor') || titleLower.includes('sombra') || titleLower.includes('reconhecimento') || titleLower.includes('furtivo')) {
+                    lineageStyle = { glow: 'rgba(168,85,247,0.25)', text: 'text-purple-400', border: 'border-purple-500/50', bg: 'bg-purple-950/30' };
+                  } else if (titleLower.includes('lógica') || titleLower.includes('processamento') || titleLower.includes('análise') || titleLower.includes('mente') || titleLower.includes('conhecimento')) {
+                    lineageStyle = { glow: 'rgba(245,158,11,0.25)', text: 'text-amber-400', border: 'border-amber-500/50', bg: 'bg-amber-950/30' };
+                  } else if (titleLower.includes('pesado') || titleLower.includes('forja') || titleLower.includes('titã') || titleLower.includes('blindado') || titleLower.includes('defesa')) {
+                    lineageStyle = { glow: 'rgba(120,113,108,0.25)', text: 'text-stone-400', border: 'border-stone-500/50', bg: 'bg-stone-950/30' };
+                  }
+
+                  return (
+                    <PremiumCard
+                      key={opcao.id}
+                      glowColor={lineageStyle.glow}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.06 * opcaoIdx }}
+                      className={`flex flex-col p-8 rounded-none ${lineageStyle.bg} border-l-2 ${lineageStyle.border} backdrop-blur-md transition-colors`}
+                    >
+                      <h3 className={`text-2xl font-bold mb-4 ${lineageStyle.text}`} style={{ fontFamily: 'Cinzel, serif' }}>
+                        {opcao.titulo}
+                      </h3>
+                      {mostraDescricao && (
+                        <p className="text-cyan-100/70 leading-relaxed text-sm mb-4">
+                          {descreverOpcaoRacial(opcao)}
+                        </p>
+                      )}
+                      {tracos.length > 0 ? (
+                        <div className="space-y-4 flex-1 mt-2">
+                          {tracos.map(traco => (
+                            <div key={traco.id} className="bg-black/20 p-3 rounded-none border border-cyan-900/30">
+                              <h4 className="text-sm font-bold text-cyan-100 mb-1">{traco.titulo}</h4>
+                              {traco.descricao && <p className="text-xs text-cyan-200/50 leading-relaxed">{traco.descricao}</p>}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-cyan-500/30 italic text-sm">Sem módulos adicionais.</span>
+                      )}
+                    </PremiumCard>
+                  );
+                })}
               </div>
             </section>
-          ));
+            );
+          });
         })()}
+
+        {/* Modificações: catálogo de módulos instaláveis, ausente do resto da
+            página. Sem isso o Autômato aparecia sem a mecânica que mais o
+            diferencia das outras raças (instalar módulos passivos/ativos). */}
+        {Array.isArray(raca.modificacoes) && raca.modificacoes.length > 0 && (
+          <section className="pt-4 mb-16">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              className="mb-8"
+            >
+              <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
+                Modificações
+              </h2>
+              <p className="text-cyan-200/60 text-lg">
+                Módulos instaláveis no chassi. O limite de modificações e os pré-requisitos ficam em Arquitetura Modular.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {raca.modificacoes.map((modificacao: any, idx: number) => (
+                <PremiumCard
+                  key={modificacao.id}
+                  glowColor={tema.glow}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: Math.min(idx * 0.03, 0.3) }}
+                  className="flex flex-col p-6 rounded-none border border-cyan-800/40 bg-cyan-950/20 backdrop-blur-md"
+                >
+                  <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                    <h3 className="text-lg font-bold text-cyan-100" style={{ fontFamily: 'Cinzel, serif' }}>{modificacao.titulo}</h3>
+                    <div className="flex gap-2">
+                      <span className="rounded-full border border-cyan-700/40 bg-cyan-900/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-cyan-300">
+                        {modificacao.categoria === 'ativa' ? 'Ativa' : 'Passiva'}
+                      </span>
+                      {typeof modificacao.nivel_minimo === 'number' && (
+                        <span className="rounded-full border border-cyan-700/40 bg-cyan-900/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-cyan-300">
+                          Nível {modificacao.nivel_minimo}+
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-cyan-100/70 text-sm leading-relaxed">{modificacao.descricao}</p>
+                </PremiumCard>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

@@ -69,7 +69,7 @@ export const Humano = ({ raca }: HumanoProps) => {
             transition={{ duration: 1, delay: 0.5 }}
             className="text-lg text-blue-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Nascidos sem amarras, os humanos moldam seu próprio destino. Sua verdadeira força não está na magia inata ou em garras, mas na capacidade infinita de se adaptar e aprender.
+            Não nasce com dom nenhum, e é exatamente esse o ponto. Aprende uma coisa a mais que todo mundo na largada e cabe em qualquer Árvore, qualquer classe, qualquer mesa.
           </motion.p>
         </motion.header>
 

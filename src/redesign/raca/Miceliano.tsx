@@ -87,7 +87,7 @@ export const Miceliano = ({ raca }: MicelianoProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-purple-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Parte criatura, parte fungo. Eles se conectam à terra e aos seus aliados de formas que os seres de carne e osso mal conseguem compreender, formando redes invisíveis de informação.
+            Fungo que virou gente. Come como qualquer um, mas também puxa o que precisa direto do solo fértil enquanto descansa. Deixa esporo em quem confia pra conversar sem falar, e lê o chão pra saber quem passou por ali antes.
           </motion.p>
         </motion.header>
 

@@ -69,7 +69,7 @@ export const Amalgamo = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-pink-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Corpos e almas costurados em um ser só. Uma quimera biológica e espiritual, capaz de assimilar propriedades daqueles que os compõem e reconfigurar a própria anatomia quando atacados.
+            Um corpo só, montado com mais de uma criatura. Não herda o pacote racial de nenhuma das partes: herda a mistura: aguenta melhor o que ataca a carne, aguenta melhor o que ataca a cabeça, e conhece Fragmentos que consegue expressar por algumas rodadas antes de o corpo cobrar a conta.
           </motion.p>
         </motion.header>
 
@@ -225,6 +225,44 @@ export const Amalgamo = ({ raca }: { raca: IRaca }) => {
             </section>
           ));
         })()}
+
+        {/* Fragmentos: catálogo de traços que o Amálgamo pode conhecer,
+            ausente do resto da página apesar de ser o núcleo da raça. */}
+        {Array.isArray(raca.fragmentos) && raca.fragmentos.length > 0 && (
+          <section className="pt-4 mb-16">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              className="mb-8"
+            >
+              <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
+                Fragmentos
+              </h2>
+              <p className="text-pink-200/60 text-lg">
+                Traços que o Amálgamo pode conhecer. Assimilação Controlada e Surto de Convergência definem quantos e como expressá-los.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {raca.fragmentos.map((fragmento: any, idx: number) => (
+                <PremiumCard
+                  key={fragmento.id}
+                  glowColor={tema.glow}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: Math.min(idx * 0.03, 0.3) }}
+                  className="flex flex-col p-6 rounded-none border border-pink-800/40 bg-pink-950/20 backdrop-blur-md"
+                >
+                  <h3 className="text-lg font-bold text-pink-100 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>{fragmento.titulo}</h3>
+                  <p className="text-pink-100/70 text-sm leading-relaxed">{fragmento.descricao}</p>
+                </PremiumCard>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

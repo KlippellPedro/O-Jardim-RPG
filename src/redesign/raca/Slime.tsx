@@ -87,7 +87,7 @@ export const Slime = ({ raca }: SlimeProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-lime-100/70 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Sem ossos. Sem amarras corporais. Um organismo semissólido capaz de passar por frestas impossíveis, absorver impactos contundentes e contorcer a própria anatomia.
+            Corpo semissólido, sem osso e sem órgão em lugar fixo. Passa por qualquer fresta de 15 cm, amassa queda que quebraria outro e escorrega de agarrão, mas nada rígido veste ele sem adaptação.
           </motion.p>
         </motion.header>
 

@@ -81,7 +81,7 @@ export const Anao = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-stone-400 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Resilientes como as montanhas que habitam e precisos como os mestres de ofício que sempre foram. Criam obras para durar eras.
+            Baixo, duro de derrubar e melhor que qualquer um com uma ferramenta na mão. Constrói, conserta e erra menos na segunda tentativa. Fala Nórdico Antigo, e o Reino dos Anões forja o que os outros reinos apenas fabricam.
           </motion.p>
         </motion.header>
 

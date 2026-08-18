@@ -96,7 +96,7 @@ export const Sereia = ({ raca }: SereiaProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-cyan-100/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Reis e rainhas das profundezas. Com uma beleza fluida e vozes capazes de encantar até os marinheiros mais calejados, eles dominam os dois mundos: ar e mar.
+            Respira dentro e fora d'água, e nada tão rápido quanto anda em terra. O canto segura quem escuta pelo tempo exato de mudar uma cena, ou de sair dela viva. Fala Latim.
           </motion.p>
         </motion.header>
 
@@ -137,7 +137,7 @@ export const Sereia = ({ raca }: SereiaProps) => {
             </div>
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Canto Fascinante</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Uma vez por cena, gaste uma ação e 2 Mana para encantar uma criatura a até 9m com um teste de Carisma. Em sucesso, ela fica fascinada até o início do seu próximo turno. O efeito quebra se ela sofrer dano.
+              Uma vez por cena, gaste uma ação e 2 Mana para fazer um teste de Carisma contra a Vontade de uma criatura a até 9 m que possa ouvir. Em sucesso, ela fica fascinada até o início do seu próximo turno. O efeito quebra se ela sofrer dano.
             </p>
           </PremiumCard>
         </div>

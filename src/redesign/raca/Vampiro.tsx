@@ -83,7 +83,7 @@ export const Vampiro = ({ raca }: VampiroProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-red-200/60 max-w-2xl mx-auto font-medium leading-relaxed font-serif"
           >
-            Abençoados e amaldiçoados pela noite. Eles não são meros monstros sedentos, mas caçadores refinados que extraem a própria vida e magia de suas vítimas através do sangue.
+            Enxerga no escuro natural, fecha ferida bebendo sangue e paga caro quando fica sem. O povo é de Întuneric e fala Romeno. A dimensão inteira gira em torno de uma cadeia alimentar que termina neles.
           </motion.p>
         </motion.header>
 
