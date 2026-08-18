@@ -94,10 +94,6 @@ const listaRacasPublicas = racasData
   .map((raca) => `<li><strong>${raca.titulo}</strong> (${raca.categoria === 'esquecida' ? 'especial' : 'comum'}) - Vida ${raca.vida >= 0 ? '+' : ''}${raca.vida}, Mana ${raca.mana >= 0 ? '+' : ''}${raca.mana}${raca.movimento ? `, Movimento +${raca.movimento} m` : ''}</li>`)
   .join('');
 
-const listaLegadosPublicos = [...(legadosData.legados || []), ...(legadosNovosData.novos || [])]
-  .map((legado) => `<li><strong>${legado.titulo}:</strong> ${legado.descricao}</li>`)
-  .join('');
-
 const NOME_ATRIBUTO_PERICIA: Record<string, string> = {
   forca: 'Força',
   destreza: 'Destreza',
@@ -785,9 +781,6 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Nível, atributo e perícia são conferidos no momento da escolha. Perder o requisito depois não tira o Legado.</li>
         <li>O Mestre só autoriza troca em dois casos: erro de criação ou mudança oficial nas regras.</li>
       </ul>
-
-      <h3 class="regras-subtitle">Catálogo</h3>
-      <ul class="regras-list">${listaLegadosPublicos}</ul>
     `,
   },
 
