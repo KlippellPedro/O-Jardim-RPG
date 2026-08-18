@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Zap, Pencil, Trash2, Dices, GripVertical, Star } from 'lucide-react';
+import { Search, Zap, Pencil, Trash2, Dices, GripVertical, Star, Sparkles, Shield, Crown } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
@@ -12,9 +12,15 @@ import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
 import {
   EFEITOS_FICHA_MAXIMOS,
   normalizarEfeitosFicha,
-  VALOR_EFEITO_FICHA_MAXIMO,
   type IEfeitoEquipamento,
 } from '../../../services/equipamentoService';
+import { bonusRecursoDoFruto, obterFrutoEdenConsumido, poderesDoFruto } from '../../../services/frutoEdenService';
+import {
+  obterPersonalizacoesAutomaticas,
+  salvarPersonalizacaoAutomatica,
+  type IPersonalizacaoAutomatica,
+} from '../../../services/personalizacaoAutomaticaService';
+import { PersonalizacaoAutomaticaModal } from '../components/PersonalizacaoAutomaticaModal';
 
 interface ICustoPoder {
   recurso: 'nenhum' | 'mana' | 'vida' | 'sanidade' | 'cansaco';
@@ -35,6 +41,10 @@ interface IPoder {
   ordem?: number;
   favorito?: boolean;
   efeitos?: IEfeitoEquipamento[];
+  usavel?: boolean;
+  estagioFruto?: 'normal' | 'despertado';
+  categoriaOrigem?: 'Classe' | 'Legado' | 'Fruto do Éden';
+  origemNome?: string;
 }
 
 const TIPOS_PODER = ['Ativa', 'Passiva', 'Reação', 'Sustentada', 'Outro'];
@@ -91,11 +101,13 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
   const [modalItem, setModalItem] = useState<IPoder | null>(null);
   const [usandoId, setUsandoId] = useState<string | null>(null);
   const [ultimoUsoMsg, setUltimoUsoMsg] = useState<{ id: string; texto: string; erro?: boolean } | null>(null);
+  const [personalizando, setPersonalizando] = useState<{ id: string; titulo: string; descricao: string } | null>(null);
 
   const campanhaAtiva = useAuthStore((s) => s.campanhaAtiva);
 
   const f = character.ficha || {};
   const status = obterStatusFicha(f);
+  const personalizacoes = obterPersonalizacoesAutomaticas(f);
   const poderes: IPoder[] = f.poderes || [];
   const poderesClasse: IPoder[] = poderesSelecionados(f).map((item) => ({
     id: item.id,
@@ -108,6 +120,8 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     duracao: '',
     alcance: '',
     descricao: item.descricao,
+    categoriaOrigem: 'Classe',
+    origemNome: item.origem,
   }));
   const poderesLegado: IPoder[] = legadosSelecionados(f).map((item) => ({
     id: `legado:${item.id}`,
@@ -120,9 +134,40 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     duracao: 'Permanente',
     alcance: '',
     descricao: item.descricao,
+    categoriaOrigem: 'Legado',
+    origemNome: 'Legados de Ascensão',
   }));
+  const poderesFruto: IPoder[] = poderesDoFruto(f);
+  const frutoConsumido = obterFrutoEdenConsumido(f);
+  const termoBusca = busca.trim().toLocaleLowerCase('pt-BR');
   const poderesOficiais = [...poderesClasse, ...poderesLegado]
-    .filter((poder) => !busca || poder.nome.toLocaleLowerCase('pt-BR').includes(busca.toLocaleLowerCase('pt-BR')));
+    .filter((poder) => !termoBusca
+      || poder.nome.toLocaleLowerCase('pt-BR').includes(termoBusca)
+      || (poder.origemNome || poder.fonte).toLocaleLowerCase('pt-BR').includes(termoBusca));
+  const poderesFrutoVisiveis = poderesFruto
+    .filter((poder) => !termoBusca
+      || poder.nome.toLocaleLowerCase('pt-BR').includes(termoBusca)
+      || poder.fonte.toLocaleLowerCase('pt-BR').includes(termoBusca));
+  const poderesClassePorOrigem = [...poderesOficiais.filter((poder) => poder.categoriaOrigem === 'Classe').reduce((mapa, poder) => {
+    const origem = poder.origemNome || poder.fonte.replace(/^Classe:\s*/, '') || 'Classe';
+    mapa.set(origem, [...(mapa.get(origem) || []), poder]);
+    return mapa;
+  }, new Map<string, IPoder[]>()).entries()];
+  const paletasClasse = [
+    { borda: 'border-sky-400/30', fundo: 'bg-sky-500/[0.05]', texto: 'text-sky-300', selo: 'border-sky-400/30 bg-sky-500/10 text-sky-200' },
+    { borda: 'border-violet-400/30', fundo: 'bg-violet-500/[0.05]', texto: 'text-violet-300', selo: 'border-violet-400/30 bg-violet-500/10 text-violet-200' },
+    { borda: 'border-rose-400/30', fundo: 'bg-rose-500/[0.05]', texto: 'text-rose-300', selo: 'border-rose-400/30 bg-rose-500/10 text-rose-200' },
+  ];
+  const gruposPoderesOficiais = [
+    ...poderesClassePorOrigem.map(([origem, itens], index) => ({
+      id: `classe:${origem}`, categoria: 'Classe', titulo: origem, itens, icone: 'classe', paleta: paletasClasse[index % paletasClasse.length],
+    })),
+    ...(poderesOficiais.some((poder) => poder.categoriaOrigem === 'Legado') ? [{
+      id: 'legados', categoria: 'Legado de Ascensão', titulo: 'Legados de Ascensão',
+      itens: poderesOficiais.filter((poder) => poder.categoriaOrigem === 'Legado'), icone: 'legado',
+      paleta: { borda: 'border-amber-400/30', fundo: 'bg-amber-500/[0.05]', texto: 'text-amber-300', selo: 'border-amber-400/30 bg-amber-500/10 text-amber-200' },
+    }] : []),
+  ];
 
   const poderesVisiveis = poderes
     .filter((p) => !busca || p.nome?.toLowerCase().includes(busca.toLowerCase()))
@@ -130,6 +175,16 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
 
   const salvarLista = (novaLista: IPoder[]) => {
     onUpdate(['ficha', 'poderes'], novaLista);
+  };
+
+  const despertarFruto = () => {
+    if (!frutoConsumido || frutoConsumido.despertado) return;
+    if (!window.confirm(`Despertar ${frutoConsumido.titulo}? O estado despertado ficará salvo permanentemente nesta ficha.`)) return;
+    onUpdate(['ficha', 'frutoEdenConsumido'], {
+      ...f.frutoEdenConsumido,
+      despertado: true,
+      despertadoEm: new Date().toISOString(),
+    });
   };
 
   const handleReorder = (novosItens: IPoder[]) => {
@@ -156,6 +211,22 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
   };
 
   const fecharModal = () => setModalItem(null);
+
+  const abrirPersonalizacao = (item: { id: string; nome: string; descricao: string }) => {
+    setPersonalizando({ id: item.id, titulo: item.nome, descricao: item.descricao });
+  };
+
+  const salvarPersonalizacao = (valores: IPersonalizacaoAutomatica) => {
+    if (!personalizando) return;
+    salvarPersonalizacaoAutomatica(onUpdate, f, personalizando.id, valores);
+    setPersonalizando(null);
+  };
+
+  const restaurarPersonalizacao = () => {
+    if (!personalizando) return;
+    salvarPersonalizacaoAutomatica(onUpdate, f, personalizando.id, {});
+    setPersonalizando(null);
+  };
 
   const handleSalvar = () => {
     if (!modalItem) return;
@@ -209,8 +280,8 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
         novoValorStatus = novo;
       } else {
         const mapaCampo: Record<string, { campo: string; max: number }> = {
-          mana: { campo: 'manaAtual', max: f.derivados?.mana || character.derivados?.mana || 10 },
-          vida: { campo: 'vidaAtual', max: f.derivados?.vida || character.derivados?.vida || 10 },
+          mana: { campo: 'manaAtual', max: (f.derivados?.mana || character.derivados?.mana || 10) + bonusRecursoDoFruto(f, 'manaMaxima') },
+          vida: { campo: 'vidaAtual', max: (f.derivados?.vida || character.derivados?.vida || 10) + bonusRecursoDoFruto(f, 'vidaMaxima') },
           sanidade: { campo: 'sanidadeAtual', max: Number(status.sanidadeMaxima) || 100 },
         };
         const regra = mapaCampo[recurso];
@@ -271,7 +342,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
           <p className="text-gray-400 text-sm">Habilidades ativas, passivas e características especiais.</p>
         </div>
         <div className="flex items-center gap-3 bg-[#15141b] border border-white/5 rounded-xl px-4 py-3">
-          <span className="text-3xl font-bold text-[#c7a44c]">{poderes.length + poderesClasse.length + poderesLegado.length}</span>
+          <span className="text-3xl font-bold text-[#c7a44c]">{poderes.length + poderesClasse.length + poderesLegado.length + poderesFruto.length}</span>
           <span className="text-sm text-gray-500 uppercase tracking-widest font-bold leading-tight">Poderes<br />Conhecidos</span>
         </div>
       </div>
@@ -298,23 +369,141 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
 
       {poderesOficiais.length > 0 && (
         <section className="bg-[#0f0e15] border border-[#c7a44c]/20 rounded-2xl p-4">
-          <h3 className="mb-3 text-xs font-bold uppercase tracking-widest text-[#c7a44c]">Poderes oficiais e Legados</h3>
-          <div className="grid gap-3 lg:grid-cols-2">
-            {poderesOficiais.map((poder) => (
-              <article key={poder.id} className="rounded-xl border border-white/5 bg-[#121118] p-4">
-                <div className="flex items-start justify-between gap-3"><strong className="text-white">{poder.nome}</strong><span className="text-[10px] text-[#c7a44c]">{custoTexto(poder.custo)}</span></div>
-                <p className="mt-1 text-[11px] text-gray-500">{poder.fonte}</p>
-                <p className="mt-2 text-sm leading-relaxed text-gray-400">{poder.descricao}</p>
-                {poder.tipo !== 'Passiva' && <button type="button" onClick={() => usarPoder(poder)} disabled={usandoId === poder.id} className="mt-3 flex items-center gap-2 rounded-lg border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-3 py-2 text-xs font-bold text-[#c7a44c] disabled:opacity-50"><Dices size={14} />{usandoId === poder.id ? 'Usando...' : 'Usar'}</button>}
-                {ultimoUsoMsg?.id === poder.id && <p className={`mt-2 text-xs ${ultimoUsoMsg.erro ? 'text-red-400' : 'text-green-400'}`}>{ultimoUsoMsg.texto}</p>}
-              </article>
+          <div className="mb-4">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#c7a44c]">Poderes oficiais por origem</h3>
+            <p className="mt-1 text-xs text-gray-500">Classes e Legados ficam em blocos separados, mesmo em personagens multiclasse.</p>
+          </div>
+          <div className="space-y-4">
+            {gruposPoderesOficiais.map((grupo) => (
+              <section key={grupo.id} className={`rounded-xl border ${grupo.paleta.borda} ${grupo.paleta.fundo} p-3 sm:p-4`}>
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-3 border-b border-white/5 pb-3">
+                  <div className="flex items-center gap-3">
+                    <div className={`flex h-9 w-9 items-center justify-center rounded-lg border ${grupo.paleta.selo}`}>
+                      {grupo.icone === 'legado' ? <Crown size={17} /> : <Shield size={17} />}
+                    </div>
+                    <div>
+                      <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${grupo.paleta.texto}`}>{grupo.categoria}</p>
+                      <h4 className="font-bold text-white">{grupo.titulo}</h4>
+                    </div>
+                  </div>
+                  <span className={`rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${grupo.paleta.selo}`}>
+                    {grupo.itens.length} {grupo.itens.length === 1 ? 'poder' : 'poderes'}
+                  </span>
+                </div>
+                <div className="grid gap-3 lg:grid-cols-2">
+                  {grupo.itens.map((poder) => {
+                    const personalizacao = personalizacoes[poder.id];
+                    const nomeExibido = personalizacao?.titulo || poder.nome;
+                    const descricaoExibida = personalizacao?.texto || poder.descricao;
+                    return (
+                      <article key={poder.id} className="rounded-xl border border-white/5 bg-[#121118]/90 p-4 group relative">
+                        <div className="flex items-start justify-between gap-3">
+                          <strong className="text-white">{nomeExibido}</strong>
+                          <div className="flex items-center gap-1.5 flex-shrink-0">
+                            <span className="text-[10px] text-[#c7a44c]">{custoTexto(poder.custo)}</span>
+                            <button
+                              type="button"
+                              onClick={() => abrirPersonalizacao(poder)}
+                              title="Editar texto"
+                              className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all"
+                            >
+                              <Pencil size={12} />
+                            </button>
+                          </div>
+                        </div>
+                        <div className="mt-1 flex flex-wrap items-center gap-2">
+                          <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${grupo.paleta.selo}`}>{grupo.categoria}</span>
+                          {poder.nivelAdquirido && <span className="text-[10px] text-gray-600">Nível {poder.nivelAdquirido}</span>}
+                          {personalizacao && <span className="text-[9px] font-black uppercase tracking-wider text-[#c7a44c]/70">Editado por você</span>}
+                        </div>
+                        <p className="mt-2 text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
+                        {poder.tipo !== 'Passiva' && <button type="button" onClick={() => usarPoder(poder)} disabled={usandoId === poder.id} className="mt-3 flex items-center gap-2 rounded-lg border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-3 py-2 text-xs font-bold text-[#c7a44c] disabled:opacity-50"><Dices size={14} />{usandoId === poder.id ? 'Usando...' : 'Usar poder'}</button>}
+                        {ultimoUsoMsg?.id === poder.id && <p className={`mt-2 text-xs ${ultimoUsoMsg.erro ? 'text-red-400' : 'text-green-400'}`}>{ultimoUsoMsg.texto}</p>}
+                      </article>
+                    );
+                  })}
+                </div>
+              </section>
             ))}
+          </div>
+        </section>
+      )}
+
+      {frutoConsumido && (
+        <section className={`rounded-2xl border p-4 ${frutoConsumido.despertado ? 'border-fuchsia-400/40 bg-gradient-to-br from-fuchsia-950/30 via-[#0f0e15] to-amber-950/20 shadow-[0_0_30px_rgba(217,70,239,0.12)]' : 'border-amber-400/25 bg-[#0f0e15]'}`}>
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-xs font-black uppercase tracking-widest text-amber-300">Poderes de {frutoConsumido.titulo}</h3>
+                {frutoConsumido.despertado && (
+                  <span className="rounded-full border border-fuchsia-400/40 bg-fuchsia-500/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-fuchsia-200">Fruto despertado</span>
+                )}
+              </div>
+              <p className="mt-1 text-xs text-gray-500">
+                {frutoConsumido.despertado
+                  ? 'As técnicas normais continuam disponíveis e o poder despertado foi liberado.'
+                  : 'Use as técnicas normalmente ou desperte o fruto para liberar seu poder máximo.'}
+              </p>
+            </div>
+            {!frutoConsumido.despertado && (
+              <button
+                type="button"
+                onClick={despertarFruto}
+                className="flex shrink-0 items-center justify-center gap-2 rounded-lg border border-fuchsia-400/40 bg-fuchsia-500/10 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-fuchsia-200 transition-all hover:bg-fuchsia-500/20 hover:shadow-[0_0_18px_rgba(217,70,239,0.18)]"
+              >
+                <Sparkles size={15} /> Despertar fruto
+              </button>
+            )}
+          </div>
+          <div className="grid gap-3 lg:grid-cols-2">
+            {poderesFrutoVisiveis.map((poder) => {
+              const personalizacao = personalizacoes[poder.id];
+              const nomeExibido = personalizacao?.titulo || poder.nome;
+              const descricaoExibida = personalizacao?.texto || poder.descricao;
+              return (
+                <article key={poder.id} className={`rounded-xl border p-4 group relative ${poder.estagioFruto === 'despertado' ? 'border-fuchsia-400/30 bg-fuchsia-500/[0.06]' : 'border-amber-400/15 bg-[#121118]'}`}>
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <strong className="text-white">{nomeExibido}</strong>
+                      <p className="mt-1 text-[11px] text-gray-500">{poder.fonte}</p>
+                      {personalizacao && <span className="mt-1 inline-block text-[9px] font-black uppercase tracking-wider text-[#c7a44c]/70">Editado por você</span>}
+                    </div>
+                    <div className="flex items-start gap-1.5">
+                      <div className="flex flex-col items-end gap-1">
+                        <span className="text-[10px] font-bold text-[#c7a44c]">{custoTexto(poder.custo)}</span>
+                        <span className={`text-[9px] font-black uppercase tracking-wider ${poder.estagioFruto === 'despertado' ? 'text-fuchsia-300' : 'text-amber-300/70'}`}>
+                          {poder.estagioFruto === 'despertado' ? 'Despertado' : 'Técnica'}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => abrirPersonalizacao(poder)}
+                        title="Editar texto"
+                        className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all flex-shrink-0"
+                      >
+                        <Pencil size={12} />
+                      </button>
+                    </div>
+                  </div>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
+                  {poder.acao && <p className="mt-2 text-[11px] text-gray-500"><span className="font-bold uppercase text-gray-600">Ação:</span> {poder.acao}</p>}
+                  <button type="button" onClick={() => usarPoder(poder)} disabled={usandoId === poder.id} className={`mt-3 flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold disabled:opacity-50 ${poder.estagioFruto === 'despertado' ? 'border-fuchsia-400/30 bg-fuchsia-500/10 text-fuchsia-200' : 'border-[#c7a44c]/30 bg-[#c7a44c]/10 text-[#c7a44c]'}`}>
+                    <Dices size={14} />{usandoId === poder.id ? 'Usando...' : 'Usar poder'}
+                  </button>
+                  {ultimoUsoMsg?.id === poder.id && <p className={`mt-2 text-xs ${ultimoUsoMsg.erro ? 'text-red-400' : 'text-green-400'}`}>{ultimoUsoMsg.texto}</p>}
+                </article>
+              );
+            })}
           </div>
         </section>
       )}
 
       {/* LISTA DE PODERES */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4">
+        <div className="mb-4 border-b border-white/5 pb-3">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-gray-300">Poderes personalizados</h3>
+          <p className="mt-1 text-xs text-gray-600">Entradas criadas manualmente; a fonte informada aparece em cada cartão.</p>
+        </div>
         <Reorder.Group axis="y" values={poderesVisiveis} onReorder={handleReorder} className="flex flex-col gap-4">
           {poderesVisiveis.map((p) => (
             <Reorder.Item
@@ -482,7 +671,6 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                   onChange={(efeitos) => atualizarCampoModal('efeitos', efeitos)}
                   pericias={PERICIAS_CATALOGO.map(p => ({ id: p.id, titulo: p.titulo }))}
                   maxEfeitos={EFEITOS_FICHA_MAXIMOS}
-                  valorMaximo={VALOR_EFEITO_FICHA_MAXIMO}
                   contexto="poder"
                 />
               </div>
@@ -506,6 +694,17 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
           </div>
         )}
       </FichaModal>
+
+      {/* MODAL DE PERSONALIZAR TEXTO AUTOMÁTICO */}
+      <PersonalizacaoAutomaticaModal
+        isOpen={!!personalizando}
+        onClose={() => setPersonalizando(null)}
+        tituloOriginal={personalizando?.titulo || ''}
+        textoOriginal={personalizando?.descricao || ''}
+        personalizacao={personalizando ? personalizacoes[personalizando.id] : undefined}
+        onSalvar={salvarPersonalizacao}
+        onRestaurar={restaurarPersonalizacao}
+      />
     </div>
   );
 };

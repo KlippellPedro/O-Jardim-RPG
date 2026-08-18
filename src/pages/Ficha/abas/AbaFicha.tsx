@@ -22,7 +22,11 @@ import {
   penalidadeDefesaCondicoes,
   penalidadeIniciativaCondicoes,
 } from '../../../services/statusService';
-import { resumirEquipamentos } from '../../../services/equipamentoService';
+import {
+  detalharEfeitosAutomaticos,
+  resumirEquipamentos,
+  type IDetalheEfeitoAutomatico,
+} from '../../../services/equipamentoService';
 import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../../data/regras/condicoes';
 import { ORIGENS_EXEMPLO, obterOrigemExemplo } from '../../../../data/ficha/origensData';
 import { AjusteButton, AjustesFichaModal } from '../components/AjustesFichaModal';
@@ -44,6 +48,14 @@ interface IClasseSlot {
   classeId: string;
   nivel: number;
 }
+
+const combinarDetalhesAutomaticos = (...listas: IDetalheEfeitoAutomatico[][]): IDetalheEfeitoAutomatico[] => {
+  const totais = new Map<string, number>();
+  listas.flat().forEach(({ nome, valor }) => totais.set(nome, (totais.get(nome) || 0) + valor));
+  return [...totais.entries()]
+    .filter(([, valor]) => Number.isFinite(valor) && valor !== 0)
+    .map(([nome, valor]) => ({ nome, valor }));
+};
 
 export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: any }) => {
   const f = character.ficha || {};
@@ -133,6 +145,95 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
     cAtual >= 5 ? 'Movimento: metade' : null,
     cAtual >= 6 ? 'Colapso' : null,
   ].filter(Boolean) as string[];
+
+  // Bônus em Constituição, Sabedoria ou Destreza também alteram recursos e
+  // derivados. Calculamos a diferença fonte por fonte para que o modal mostre
+  // o nome real do item, poder, habilidade ou fruto que gerou cada parcela.
+  const detalhesDerivadosPorFonte: Record<'vida' | 'mana' | 'defesaNatural' | 'iniciativa' | 'movimento', IDetalheEfeitoAutomatico[]> = {
+    vida: [],
+    mana: [],
+    defesaNatural: [],
+    iniciativa: [],
+    movimento: [],
+  };
+  if (catalogo) {
+    const atributosPorFonte = new Map<string, Partial<Record<TAtributo, number>>>();
+    ATRIBUTOS.forEach((atributo) => {
+      detalharEfeitosAutomaticos(resumoEquipamento, 'atributo', atributo).forEach(({ nome, valor }) => {
+        const atuais = atributosPorFonte.get(nome) || {};
+        atuais[atributo] = (atuais[atributo] || 0) + valor;
+        atributosPorFonte.set(nome, atuais);
+      });
+    });
+
+    let atributosAcumulados = { ...attrsAntesRacaSemEquipamento };
+    let derivadosAnteriores = calcularDerivadosComClasses(
+      atributosAcumulados,
+      racaAtual,
+      classes,
+      catalogo.classes,
+      nivelTotalClasses,
+      f.escolhaRacial,
+    );
+    atributosPorFonte.forEach((bonus, nome) => {
+      atributosAcumulados = Object.fromEntries(ATRIBUTOS.map((atributo) => [
+        atributo,
+        Number(atributosAcumulados[atributo] || 0) + Number(bonus[atributo] || 0),
+      ])) as Record<TAtributo, number>;
+      const derivadosAtuais = calcularDerivadosComClasses(
+        atributosAcumulados,
+        racaAtual,
+        classes,
+        catalogo.classes,
+        nivelTotalClasses,
+        f.escolhaRacial,
+      );
+      (Object.keys(detalhesDerivadosPorFonte) as Array<keyof typeof detalhesDerivadosPorFonte>).forEach((campo) => {
+        const valor = Number(derivadosAtuais[campo] || 0) - Number(derivadosAnteriores[campo] || 0);
+        if (valor !== 0) detalhesDerivadosPorFonte[campo].push({ nome, valor });
+      });
+      derivadosAnteriores = derivadosAtuais;
+    });
+  }
+
+  const automaticosVida = combinarDetalhesAutomaticos(
+    detalhesDerivadosPorFonte.vida,
+    detalharEfeitosAutomaticos(resumoEquipamento, 'recurso', 'vidaMaxima'),
+    [{ nome: nomeAjusteOrigem(f, 'vidaMaxima') || 'Origem', valor: ajusteOrigem(f, 'vidaMaxima') }],
+  );
+  const automaticosMana = combinarDetalhesAutomaticos(
+    detalhesDerivadosPorFonte.mana,
+    detalharEfeitosAutomaticos(resumoEquipamento, 'recurso', 'manaMaxima'),
+    [{ nome: nomeAjusteOrigem(f, 'manaMaxima') || 'Origem', valor: ajusteOrigem(f, 'manaMaxima') }],
+  );
+  const automaticosSanidade = combinarDetalhesAutomaticos(
+    detalharEfeitosAutomaticos(resumoEquipamento, 'recurso', 'sanidadeMaxima'),
+    [{ nome: nomeAjusteOrigem(f, 'sanidadeMaxima') || 'Origem', valor: ajusteOrigem(f, 'sanidadeMaxima') }],
+  );
+  const automaticosCansaco = detalharEfeitosAutomaticos(resumoEquipamento, 'recurso', 'cansacoMaximo');
+  const automaticosDefesa = combinarDetalhesAutomaticos(
+    detalhesDerivadosPorFonte.defesaNatural,
+    resumoEquipamento.defesaItens,
+    detalharEfeitosAutomaticos(resumoEquipamento, 'combate', 'defesa'),
+    [{ nome: 'Condições ativas', valor: -penalidadeDefesa }],
+  );
+  const automaticosIniciativa = combinarDetalhesAutomaticos(
+    detalhesDerivadosPorFonte.iniciativa,
+    detalharEfeitosAutomaticos(resumoEquipamento, 'combate', 'iniciativa'),
+    [
+      { nome: 'Efeitos temporários ativos', valor: bonusIniciativa },
+      { nome: 'Cansaço e condições', valor: penalidadeIniciativa },
+    ],
+  );
+  const automaticosMovimento = combinarDetalhesAutomaticos(
+    detalhesDerivadosPorFonte.movimento,
+    detalharEfeitosAutomaticos(resumoEquipamento, 'combate', 'movimento'),
+    [
+      { nome: nomeAjusteOrigem(f, 'movimento') || 'Origem', valor: ajusteOrigem(f, 'movimento') },
+      { nome: 'Sobrecarga', valor: -penalidadeSobrecarga },
+    ],
+  );
+  const valorComSinal = (valor: number) => `${valor > 0 ? '+' : ''}${valor}`;
 
   const handleStatus = (field: string, change: number, max: number) => {
     const proximoStatus = atualizarStatusVital(status, field, change, max, attrs.constituicao);
@@ -547,6 +648,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
             <LabeledInput label="Título" value={f.titulo} placeholder="Ex: O Assassino" onChange={(v:any) => onUpdate(['ficha', 'titulo'], v)} />
             <LabeledInput label="Nível Total" value={nivelTotalClasses} readOnly={true} type="number" />
             <LabeledInput label="Tamanho" value={f.tamanho} placeholder="Ex: Normal" onChange={(v:any) => onUpdate(['ficha', 'tamanho'], v)} />
+            <LabeledInput label="Divindade" value={f.escolhaRacial?.divindade || ''} placeholder="Ex: Aion" onChange={(v:any) => handleEscolhaRacialChange('divindade', v)} />
           </div>
           {f.arvoreId === 'mulher-carmesim' && (
             <p className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-xs leading-relaxed text-amber-200">
@@ -609,8 +711,6 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
 
       </div>
 
-      <FrutoEdenSection character={character} />
-
       <AtributosSection
         ficha={f}
         racaTitulo={racaAtual?.titulo}
@@ -618,6 +718,10 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
         antesDaRaca={attrsAntesRaca}
         efetivos={attrs}
         bonusEquipamento={resumoEquipamento.bonusAtributos as Record<TAtributo, number>}
+        detalhesAutomaticos={Object.fromEntries(ATRIBUTOS.map((atributo) => [
+          atributo,
+          detalharEfeitosAutomaticos(resumoEquipamento, 'atributo', atributo),
+        ]))}
         onChange={handleAttrChange}
         onRoll={handleRolarTeste}
         onOpenInfo={setActiveModal}
@@ -628,16 +732,27 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
         atual={{ vida: vAtual, mana: mAtual, sanidade: sAtual, cansaco: cAtual }}
         maximo={{ vida: maxVida, mana: maxMana, sanidade: maxSanidade, cansaco: maxCansaco }}
         efeitosCansaco={efeitosCansaco}
-        ajusteOrigem={{
-          vida: { nome: nomeAjusteOrigem(f, 'vidaMaxima') || 'Origem', valor: ajusteOrigem(f, 'vidaMaxima') },
-          mana: { nome: nomeAjusteOrigem(f, 'manaMaxima') || 'Origem', valor: ajusteOrigem(f, 'manaMaxima') },
-          sanidade: { nome: nomeAjusteOrigem(f, 'sanidadeMaxima') || 'Origem', valor: ajusteOrigem(f, 'sanidadeMaxima') },
-        }}
-        ajusteEquipamento={{
-          vida: deltaDerivado('vida') + (resumoEquipamento.bonusRecursos.vidaMaxima || 0),
-          mana: deltaDerivado('mana') + (resumoEquipamento.bonusRecursos.manaMaxima || 0),
-          sanidade: resumoEquipamento.bonusRecursos.sanidadeMaxima || 0,
-          cansaco: resumoEquipamento.bonusRecursos.cansacoMaximo || 0,
+        composicao={{
+          vida: {
+            base: maxVidaBase,
+            automaticos: automaticosVida,
+            manuais: obterAjustesManuais(f, chaveAjuste('recurso', 'vidaMaxima')),
+          },
+          mana: {
+            base: maxManaBase,
+            automaticos: automaticosMana,
+            manuais: obterAjustesManuais(f, chaveAjuste('recurso', 'manaMaxima')),
+          },
+          sanidade: {
+            base: maxSanidadeBase,
+            automaticos: automaticosSanidade,
+            manuais: obterAjustesManuais(f, chaveAjuste('recurso', 'sanidadeMaxima')),
+          },
+          cansaco: {
+            base: maxCansacoBase,
+            automaticos: automaticosCansaco,
+            manuais: obterAjustesManuais(f, chaveAjuste('recurso', 'cansacoMaximo')),
+          },
         }}
         onStatusChange={handleStatus}
         onSanidadeMaximaChange={handleSanidadeMaxima}
@@ -659,17 +774,15 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                   title: 'DEFESA',
                   description: 'A dificuldade para acertar ataques contra você. Baseia-se na agilidade e equipamentos.',
                   items: [
-                    { label: 'Defesa Natural', value: defesaNatural },
-                    { label: 'Armadura e escudo', value: resumoEquipamento.defesaEquipamento },
-                    { label: 'Modificações e raridade', value: resumoEquipamento.bonusCombate.defesa || 0 },
-                    { label: 'Condições', value: -penalidadeDefesa },
-                    { label: 'Outros ajustes', value: ajusteDefesa },
+                    { label: 'Valor normal da ficha', value: Number(f.derivados?.defesaNatural ?? character.derivados?.defesaNatural) || 10 },
+                    ...automaticosDefesa.map((item) => ({ label: item.nome, value: valorComSinal(item.valor) })),
+                    ...obterAjustesManuais(f, chaveAjuste('combate', 'defesa')).map((item) => ({ label: `Ajuste: ${item.nome}`, value: valorComSinal(item.valor) })),
                   ],
                   total: { label: 'Defesa Total', value: defesaTotal },
                 })}>
                   <HelpCircle size={14} />
                 </button>
-                <AjusteButton label="Defesa" onClick={() => abrirAjustes(chaveAjuste('combate', 'defesa'), 'Defesa')} />
+                <AjusteButton label="Defesa" onClick={() => abrirAjustes(chaveAjuste('combate', 'defesa'), 'Defesa', automaticosDefesa)} />
               </div>
             </div>
             <input type="text" aria-label="Defesa total" value={defesaTotal} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
@@ -685,17 +798,15 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                   title: 'INICIATIVA',
                   description: 'Sua velocidade de reação. Determina quem age primeiro em combate.',
                   items: [
-                    { label: 'Iniciativa Base', value: iniciativaBase },
-                    { label: 'Efeitos ativos', value: bonusIniciativa },
-                    { label: 'Cansaço e condições', value: penalidadeIniciativa },
-                    { label: 'Outros ajustes', value: ajusteIniciativa },
-                    { label: 'Itens equipados', value: resumoEquipamento.bonusCombate.iniciativa || 0 },
+                    { label: 'Valor normal da ficha', value: Number(f.derivados?.iniciativa ?? character.derivados?.iniciativa) || 10 },
+                    ...automaticosIniciativa.map((item) => ({ label: item.nome, value: valorComSinal(item.valor) })),
+                    ...obterAjustesManuais(f, chaveAjuste('combate', 'iniciativa')).map((item) => ({ label: `Ajuste: ${item.nome}`, value: valorComSinal(item.valor) })),
                   ],
                   total: { label: 'Iniciativa Final', value: iniciativaFinal },
                 })}>
                   <HelpCircle size={14} />
                 </button>
-                <AjusteButton label="Iniciativa" onClick={() => abrirAjustes(chaveAjuste('combate', 'iniciativa'), 'Iniciativa')} />
+                <AjusteButton label="Iniciativa" onClick={() => abrirAjustes(chaveAjuste('combate', 'iniciativa'), 'Iniciativa', automaticosIniciativa)} />
               </div>
             </div>
             <input type="text" aria-label="Iniciativa final" value={iniciativaFinal} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
@@ -710,9 +821,9 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                   title: 'MOVIMENTO',
                   description: 'Distância (em metros) que você pode se deslocar durante o combate.',
                   items: [
-                    { label: 'Deslocamento Base', value: movimentoBase },
-                    { label: 'Ajustes', value: ajusteMovimento },
-                    { label: 'Sobrecarga', value: -penalidadeSobrecarga },
+                    { label: 'Valor normal da ficha', value: Number(f.derivados?.movimento ?? character.derivados?.movimento) || 9 },
+                    ...automaticosMovimento.map((item) => ({ label: item.nome, value: valorComSinal(item.valor) })),
+                    ...obterAjustesManuais(f, chaveAjuste('combate', 'movimento')).map((item) => ({ label: `Ajuste: ${item.nome}`, value: valorComSinal(item.valor) })),
                     { label: 'Cansaço 5+', value: multiplicadorMovimentoCansaco(status.cansacoAtual) === 0.5 ? 'metade' : '' },
                     { label: 'Condições', value: movimentoBloqueadoPorCondicao(f.condicoesAtivas) ? 'movimento 0' : '' },
                   ],
@@ -720,7 +831,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                 })}>
                   <HelpCircle size={14} />
                 </button>
-                <AjusteButton label="Movimento" onClick={() => abrirAjustes(chaveAjuste('combate', 'movimento'), 'Movimento', [{ nome: nomeAjusteOrigem(f, 'movimento') || 'Origem', valor: ajusteOrigem(f, 'movimento') }])} />
+                <AjusteButton label="Movimento" onClick={() => abrirAjustes(chaveAjuste('combate', 'movimento'), 'Movimento', automaticosMovimento)} />
               </div>
             </div>
             <input type="text" aria-label="Movimento final" value={`${movimentoFinal} m`} className="w-full bg-black/50 border border-[#c7a44c]/30 rounded px-4 py-3 text-white font-bold mb-4" readOnly />
@@ -790,6 +901,8 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
       </div>
 
       <FamaPrestigioSection ficha={f} onUpdate={onUpdate} />
+
+      <FrutoEdenSection character={character} />
 
       {/* LINHA 6: EXPERIÊNCIA */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col gap-4 mb-20">

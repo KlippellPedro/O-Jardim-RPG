@@ -67,6 +67,8 @@ export interface ICaracteristicaRacial {
   id: string;
   titulo: string;
   descricao?: string;
+  /** Nível total exigido para o traço valer. Ausente = vale desde o nível 1. */
+  nivel_minimo?: number;
   [key: string]: any;
 }
 
@@ -97,6 +99,8 @@ export interface IRaca {
   fisiologia?: string[];
   caracteristicas?: ICaracteristicaRacial[];
   variantes?: IOpcaoRacial[];
+  /** Escada de maturação da raça, destravada por nível total (Espírito). */
+  estagios?: IOpcaoRacial[];
   linhagens?: IOpcaoRacial[];
   condicoes_ancestrais?: IOpcaoRacial[];
   rotulo_variante?: string;

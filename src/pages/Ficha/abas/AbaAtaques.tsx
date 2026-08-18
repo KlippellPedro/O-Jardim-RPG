@@ -381,8 +381,6 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
     }
   };
 
-  const bonusStr = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
-
   return (
     <div className="space-y-6">
 
@@ -502,11 +500,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2 mb-4">
-                      <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
-                        <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Bônus de Acerto</span>
-                        <span className="text-lg font-bold text-white font-mono">{bonusStr(calcularBonusAtaque(a))}</span>
-                      </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2 mb-4">
                       <div className="bg-black/30 border border-white/5 rounded p-2 text-center">
                         <span className="block text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Dano</span>
                         <span className="text-lg font-bold text-red-400 font-mono">

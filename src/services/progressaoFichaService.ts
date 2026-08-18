@@ -1,6 +1,12 @@
 import type { ICaracteristicaRacial, IClasse, IHabilidadeClasse, IPoderClasse, IRaca } from '../types/catalogo';
 import { CLASSES_CATALOGO, LEGADOS_CATALOGO, RACAS_CATALOGO } from './catalogoService';
-import { obterTracosOpcaoRacial, obterGruposEscolhaRacial } from './racaService';
+import {
+  nivelMinimoTraco,
+  obterEstagiosRaciaisAlcancados,
+  obterTracosOpcaoRacial,
+  obterGruposEscolhaRacial,
+  tracoDisponivelNoNivel,
+} from './racaService';
 import { obterFragmentosRaciaisExpressos, obterModificacoesRaciaisInstaladas } from './calculoService';
 
 export interface IReferenciaClasseFicha {
@@ -96,12 +102,17 @@ export function eventosDesbloqueados(ficha: any): IConteudoAutomatico[] {
 export function caracteristicasRaciaisAutomaticas(ficha: any): IConteudoAutomatico[] {
   const raca: IRaca | undefined = RACAS_CATALOGO.find((item) => item.id === ficha?.racaId);
   if (!raca) return [];
+  const nivel = nivelTotalFicha(ficha);
   const tracos: ICaracteristicaRacial[] = [...(raca.caracteristicas || [])];
   for (const grupo of obterGruposEscolhaRacial(raca)) {
     const opcao = grupo.opcoes.find((item) => item.id === ficha?.escolhaRacial?.[grupo.campo]);
     if (opcao) tracos.push(...obterTracosOpcaoRacial(opcao));
   }
-  const nivel = nivelTotalFicha(ficha);
+  // Estágios raciais (Espírito Menor/Maior/Primordial) entram conforme o nível
+  // total alcançado, junto dos traços da Cor que destravam no mesmo degrau.
+  for (const estagio of obterEstagiosRaciaisAlcancados(raca, nivel)) {
+    tracos.push(...(estagio.caracteristicas || []));
+  }
   tracos.push(...obterFragmentosRaciaisExpressos(raca, ficha?.escolhaRacial).map((item: any) => ({
     ...item,
     titulo: `Fragmento: ${item.titulo}`,
@@ -110,13 +121,15 @@ export function caracteristicasRaciaisAutomaticas(ficha: any): IConteudoAutomati
     ...item,
     titulo: `Modificação: ${item.titulo}`,
   })));
-  return tracos.map((traco) => ({
-    id: `raca:${raca.id}:${traco.id}`,
-    titulo: traco.titulo,
-    descricao: traco.descricao || 'Característica racial registrada no catálogo oficial.',
-    origem: raca.titulo,
-    nivel: 1,
-  }));
+  return tracos
+    .filter((traco) => tracoDisponivelNoNivel(traco, nivel))
+    .map((traco) => ({
+      id: `raca:${raca.id}:${traco.id}`,
+      titulo: traco.titulo,
+      descricao: traco.descricao || 'Característica racial registrada no catálogo oficial.',
+      origem: raca.titulo,
+      nivel: nivelMinimoTraco(traco),
+    }));
 }
 
 export function selecoesPoderValidas(ficha: any): ISelecaoPoderClasse[] {

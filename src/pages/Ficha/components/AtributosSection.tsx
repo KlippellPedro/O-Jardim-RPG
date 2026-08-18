@@ -9,7 +9,9 @@ import {
   ajusteOrigem,
   chaveAjuste,
   nomeAjusteOrigem,
+  obterAjustesManuais,
 } from '../../../services/ajustesFichaService';
+import type { IDetalheEfeitoAutomatico } from '../../../services/equipamentoService';
 import { AjusteButton } from './AjustesFichaModal';
 import { SectionTitle } from './SharedFichaComponents';
 
@@ -31,6 +33,7 @@ interface AtributosSectionProps {
   antesDaRaca: Record<TAtributo, number>;
   efetivos: Record<TAtributo, number>;
   bonusEquipamento?: Record<TAtributo, number>;
+  detalhesAutomaticos?: Partial<Record<TAtributo, IDetalheEfeitoAutomatico[]>>;
   onChange: (atributo: TAtributo, valorEfetivo: number) => void;
   onRoll: (atributo: TAtributo) => void;
   onOpenInfo: (modal: any) => void;
@@ -52,6 +55,7 @@ export function AtributosSection({
   antesDaRaca,
   efetivos,
   bonusEquipamento = {} as Record<TAtributo, number>,
+  detalhesAutomaticos = {},
   onChange,
   onRoll,
   onOpenInfo,
@@ -64,10 +68,18 @@ export function AtributosSection({
         {ATRIBUTOS.map((atributo) => {
           const valorNatural = naturais[atributo] ?? 10;
           const valorEfetivo = efetivos[atributo] ?? 10;
-          const ajusteTotal = valorEfetivo - valorNatural;
           const mod = modificador(valorEfetivo);
           const modTexto = mod >= 0 ? `+${mod}` : String(mod);
           const bonusDoEquipamento = Number(bonusEquipamento[atributo]) || 0;
+          const origem = {
+            nome: nomeAjusteOrigem(ficha, 'atributo', atributo) || 'Origem',
+            valor: ajusteOrigem(ficha, 'atributo', atributo),
+          };
+          const automaticos = detalhesAutomaticos[atributo]
+            || (bonusDoEquipamento !== 0 ? [{ nome: 'Efeitos automáticos', valor: bonusDoEquipamento }] : []);
+          const ajusteRacial = efetivos[atributo] - antesDaRaca[atributo];
+          const manuais = obterAjustesManuais(ficha, chaveAjuste('atributo', atributo));
+          const valorComSinal = (valor: number) => `${valor > 0 ? '+' : ''}${valor}`;
 
           return (
             <div key={atributo} className="min-w-0 bg-[#121118] border border-white/5 rounded-xl flex flex-col items-center px-2 pb-3 pt-10 relative group hover:border-[#c7a44c]/30 sm:px-3">
@@ -80,8 +92,10 @@ export function AtributosSection({
                     description: 'O valor mostrado já inclui raça, origem e ajustes nomeados. O teste rola 1d20 e soma somente este modificador e as penalidades ativas.',
                     items: [
                       { label: 'Valor natural', value: valorNatural },
-                      { label: 'Ajustes', value: ajusteTotal >= 0 ? `+${ajusteTotal}` : ajusteTotal },
-                      { label: 'Equipamentos', value: bonusDoEquipamento >= 0 ? `+${bonusDoEquipamento}` : bonusDoEquipamento },
+                      { label: origem.nome, value: valorComSinal(origem.valor) },
+                      ...manuais.map((item) => ({ label: `Ajuste: ${item.nome}`, value: valorComSinal(item.valor) })),
+                      ...automaticos.map((item) => ({ label: item.nome, value: valorComSinal(item.valor) })),
+                      { label: `Raça: ${racaTitulo || 'selecionada'}`, value: valorComSinal(ajusteRacial) },
                       { label: 'Valor efetivo', value: valorEfetivo },
                       { label: 'Cálculo', value: `floor((${valorEfetivo} - 10) / 2)` },
                     ],
@@ -99,9 +113,9 @@ export function AtributosSection({
                     chaveAjuste('atributo', atributo),
                     NOMES_ATRIBUTOS[atributo],
                     [
-                      { nome: `Raça: ${racaTitulo || 'selecionada'}`, valor: efetivos[atributo] - antesDaRaca[atributo] },
-                      { nome: nomeAjusteOrigem(ficha, 'atributo', atributo) || 'Origem', valor: ajusteOrigem(ficha, 'atributo', atributo) },
-                      { nome: 'Itens equipados', valor: bonusDoEquipamento },
+                      { nome: `Raça: ${racaTitulo || 'selecionada'}`, valor: ajusteRacial },
+                      origem,
+                      ...automaticos,
                     ],
                   )}
                 />

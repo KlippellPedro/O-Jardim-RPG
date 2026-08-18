@@ -88,7 +88,7 @@ export function EditorEfeitos({
   pericias,
   readOnly = false,
   maxEfeitos,
-  valorMaximo = 1,
+  valorMaximo,
   contexto = 'item',
 }: {
   efeitos: IEfeitoEquipamento[];
@@ -96,10 +96,13 @@ export function EditorEfeitos({
   pericias: IPericiaOpcao[];
   readOnly?: boolean;
   maxEfeitos?: number;
+  /** Itens recebem o teto da raridade. Poderes e habilidades omitem este
+   * valor e aceitam qualquer número finito, positivo ou negativo. */
   valorMaximo?: number;
   contexto?: 'item' | 'poder' | 'habilidade';
 }) {
   const [modalAberto, setModalAberto] = useState(false);
+  const [rascunhosValor, setRascunhosValor] = useState<Record<string, string>>({});
   const atingiuLimite = maxEfeitos !== undefined && efeitos.length >= maxEfeitos;
   const adicionar = () => {
     if (atingiuLimite) return;
@@ -108,7 +111,7 @@ export function EditorEfeitos({
       categoria: 'recurso',
       alvo: 'vidaMaxima',
       modo: 'bonus',
-      valor: Math.min(1, valorMaximo),
+      valor: 1,
     }]);
   };
 
@@ -121,6 +124,7 @@ export function EditorEfeitos({
         proximo.alvo = opcoes[0]?.value || '';
         proximo.modo = 'bonus';
       }
+      if (proximo.categoria !== 'pericia') proximo.modo = 'bonus';
       if (atualizacao.modo && atualizacao.modo !== 'bonus') {
         proximo.valor = Math.max(1, Math.abs(proximo.valor) || 1);
       }
@@ -169,10 +173,15 @@ export function EditorEfeitos({
 
       {efeitos.length > 0 && renderResumo()}
 
-      <FichaModal isOpen={modalAberto} onClose={() => setModalAberto(false)} title="Efeitos Automáticos" nested size="md">
+      <FichaModal isOpen={modalAberto} onClose={() => setModalAberto(false)} title="Efeitos Automáticos" nested size="lg">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <p className="text-xs text-gray-400">Configure os bônus automáticos gerados por este {contexto}.</p>
+            <div>
+              <p className="text-xs text-gray-400">Configure os valores automáticos gerados por este {contexto}.</p>
+              <p className="mt-1 text-[10px] leading-relaxed text-gray-600">
+                Atributos, recursos, combate e perícias são recalculados automaticamente enquanto o efeito estiver na ficha.
+              </p>
+            </div>
             <button type="button" onClick={adicionar} disabled={atingiuLimite} className="flex shrink-0 items-center gap-1 text-xs font-bold text-[#c7a44c] hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
               <Plus size={13} /> Efeito
             </button>
@@ -181,7 +190,8 @@ export function EditorEfeitos({
           <div className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto pr-1">
             {efeitos.map((efeito, indice) => {
               const alvos = alvosDaCategoria(efeito.categoria, pericias);
-              const efeitoDeRolagem = efeito.modo !== 'bonus';
+              const efeitoDeRolagem = efeito.categoria === 'pericia' && efeito.modo !== 'bonus';
+              const modosDisponiveis = efeito.categoria === 'pericia' ? MODOS_APLICACAO : MODOS_APLICACAO.slice(0, 1);
               return (
                 <div key={efeito.id} className="rounded-xl border border-white/5 bg-black/20 p-4">
                   <div className="mb-3 flex items-center justify-between gap-3">
@@ -195,7 +205,7 @@ export function EditorEfeitos({
                       <Trash2 size={13} />
                     </button>
                   </div>
-                  <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
                     <div className="min-w-0">
                       <label className="mb-1 block text-[9px] font-bold uppercase tracking-widest text-gray-600">Área</label>
                       <Select value={efeito.categoria} options={CATEGORIAS} onChange={(valor) => atualizar(efeito.id, { categoria: valor as TCategoriaEfeitoEquipamento })} className="w-full" />
@@ -206,21 +216,38 @@ export function EditorEfeitos({
                     </div>
                     <div className="min-w-0">
                       <label className="mb-1 block text-[9px] font-bold uppercase tracking-widest text-gray-600">Aplicação</label>
-                      <Select value={efeito.modo} options={MODOS_APLICACAO} onChange={(valor) => atualizar(efeito.id, { modo: valor as TModoEfeitoEquipamento })} className="w-full" />
+                      <Select value={efeito.modo} options={modosDisponiveis} onChange={(valor) => atualizar(efeito.id, { modo: valor as TModoEfeitoEquipamento })} className="w-full" />
                     </div>
-                    <LabeledInput
-                      label={efeitoDeRolagem ? 'Quantidade' : 'Valor'}
-                      type="number"
-                      value={String(efeito.valor)}
-                      onChange={(valor: string) => {
-                        const informado = Math.trunc(Number(valor)) || 0;
-                        const limitado = Math.max(-valorMaximo, Math.min(valorMaximo, informado));
-                        atualizar(efeito.id, { valor: efeitoDeRolagem ? Math.max(1, Math.abs(limitado)) : limitado });
-                      }}
-                    />
+                    <div className="flex min-w-0 flex-col gap-1">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{efeitoDeRolagem ? 'Quantidade' : 'Valor'}</label>
+                      <input
+                        aria-label={efeitoDeRolagem ? 'Quantidade' : 'Valor'}
+                        type="text"
+                        inputMode="decimal"
+                        value={rascunhosValor[efeito.id] ?? String(efeito.valor)}
+                        onChange={(event) => {
+                          const texto = event.target.value;
+                          setRascunhosValor((atual) => ({ ...atual, [efeito.id]: texto }));
+                          if (!/^[+-]?(?:\d+(?:[.,]\d*)?|[.,]\d+)$/.test(texto.trim())) return;
+                          const convertido = Number(texto.replace(',', '.'));
+                          if (!Number.isFinite(convertido)) return;
+                          const numeroSeguro = Math.max(Number.MIN_SAFE_INTEGER, Math.min(Number.MAX_SAFE_INTEGER, convertido));
+                          const limitado = typeof valorMaximo === 'number'
+                            ? Math.max(-valorMaximo, Math.min(valorMaximo, numeroSeguro))
+                            : numeroSeguro;
+                          atualizar(efeito.id, { valor: efeitoDeRolagem ? Math.max(1, Math.trunc(Math.abs(limitado))) : limitado });
+                        }}
+                        onBlur={() => setRascunhosValor((atual) => {
+                          const proximo = { ...atual };
+                          delete proximo[efeito.id];
+                          return proximo;
+                        })}
+                        className="w-full min-w-0 rounded-md border border-white/5 bg-[#121118] px-3 py-2.5 text-sm text-gray-300 outline-none transition-colors focus:border-[#c7a44c]/50"
+                      />
+                    </div>
                   </div>
                   <p className="mt-3 text-[11px] leading-relaxed text-gray-600">
-                    Bônus/penalidade altera o total (use valor positivo ou negativo). Vantagens e desvantagens adicionam dados e se anulam uma a uma.
+                    Bônus/penalidade altera o total e aceita qualquer valor numérico positivo ou negativo. Vantagem e desvantagem ficam disponíveis somente para perícias, onde adicionam dados inteiros e se anulam uma a uma.
                   </p>
                 </div>
               );
@@ -239,7 +266,10 @@ export function EditorEfeitos({
                 ? 'Limite do poder'
                 : contexto === 'habilidade'
                   ? 'Limite da habilidade'
-                  : 'Limite desta raridade'}: {maxEfeitos} efeito(s), com valor entre -{valorMaximo} e +{valorMaximo}.
+                  : 'Limite desta raridade'}: {maxEfeitos} efeito(s)
+              {typeof valorMaximo === 'number'
+                ? `, com valor entre -${valorMaximo} e +${valorMaximo}.`
+                : '. Os valores não possuem teto fixo.'}
             </p>
           ) : null}
         </div>

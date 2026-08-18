@@ -45,6 +45,12 @@ export interface EconomiaPersonagemResponse {
   inventario: InventarioPersonagemItem[];
 }
 
+export interface ConsumirFrutoEdenPayload {
+  versaoFichaEsperada: number;
+  economiaVersaoEsperada: number;
+  substituir?: boolean;
+}
+
 export const personagensApi = {
   listar(campanhaId: string, completo = false) {
     const query = new URLSearchParams({ campanha_id: campanhaId });
@@ -88,6 +94,27 @@ export const personagensApi = {
           operacoes: payload.operacoes,
         },
         keepalive: keepalive || undefined,
+      },
+    );
+  },
+  consumirFrutoEden(
+    personagemId: string,
+    itemId: string,
+    payload: ConsumirFrutoEdenPayload,
+  ) {
+    return api<{
+      fruto: Record<string, any>;
+      versao: number;
+      economia_versao: number;
+    }>(
+      `/personagens/${encodeURIComponent(personagemId)}/inventario/${encodeURIComponent(itemId)}/consumir-fruto-eden`,
+      {
+        method: 'POST',
+        body: {
+          versao_ficha_esperada: payload.versaoFichaEsperada,
+          economia_versao_esperada: payload.economiaVersaoEsperada,
+          substituir: Boolean(payload.substituir),
+        },
       },
     );
   },

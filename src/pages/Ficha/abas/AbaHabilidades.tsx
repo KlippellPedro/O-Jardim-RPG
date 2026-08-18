@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Star, Pencil, Trash2, Dices, GripVertical } from 'lucide-react';
+import { Search, Star, Pencil, Trash2, Dices, GripVertical, Dna, Shield, Apple } from 'lucide-react';
 import { motion, Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
@@ -12,9 +12,15 @@ import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
 import {
   EFEITOS_FICHA_MAXIMOS,
   normalizarEfeitosFicha,
-  VALOR_EFEITO_FICHA_MAXIMO,
   type IEfeitoEquipamento,
 } from '../../../services/equipamentoService';
+import { bonusRecursoDoFruto, habilidadeDoFruto } from '../../../services/frutoEdenService';
+import {
+  obterPersonalizacoesAutomaticas,
+  salvarPersonalizacaoAutomatica,
+  type IPersonalizacaoAutomatica,
+} from '../../../services/personalizacaoAutomaticaService';
+import { PersonalizacaoAutomaticaModal } from '../components/PersonalizacaoAutomaticaModal';
 
 // ---------------------------------------------------------------------------
 // Tipos locais da entidade "habilidade" (traços raciais, talentos, competências)
@@ -115,11 +121,43 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
   const [usoPendenteId, setUsoPendenteId] = useState<string | null>(null);
   const [ultimoUsoMsg, setUltimoUsoMsg] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
 
+  const [personalizando, setPersonalizando] = useState<{ id: string; titulo: string; descricao: string } | null>(null);
+  const personalizacoes = obterPersonalizacoesAutomaticas(character.ficha || {});
+
   const habilidades: IHabilidade[] = character.ficha?.habilidades || [];
-  const habilidadesOficiais = [
-    ...caracteristicasRaciaisAutomaticas(character.ficha || {}),
-    ...habilidadesAutomaticas(character.ficha || {}),
+  const habilidadesRaciais = caracteristicasRaciaisAutomaticas(character.ficha || {});
+  const habilidadesClasses = habilidadesAutomaticas(character.ficha || {});
+  const habilidadesFruto = habilidadeDoFruto(character.ficha || {});
+  const habilidadesOficiais = [...habilidadesRaciais, ...habilidadesClasses, ...habilidadesFruto];
+  const termoBusca = busca.trim().toLocaleLowerCase('pt-BR');
+  const filtrarOficiais = (itens: typeof habilidadesOficiais) => itens.filter((item) => (
+    !termoBusca
+    || item.titulo.toLocaleLowerCase('pt-BR').includes(termoBusca)
+    || item.origem.toLocaleLowerCase('pt-BR').includes(termoBusca)
+  ));
+  const classesPorOrigem = [...habilidadesClasses.reduce((mapa, item) => {
+    const atuais = mapa.get(item.origem) || [];
+    mapa.set(item.origem, [...atuais, item]);
+    return mapa;
+  }, new Map<string, typeof habilidadesClasses>()).entries()];
+  const paletasClasse = [
+    { borda: 'border-sky-400/30', fundo: 'bg-sky-500/[0.05]', texto: 'text-sky-300', selo: 'border-sky-400/30 bg-sky-500/10 text-sky-200' },
+    { borda: 'border-violet-400/30', fundo: 'bg-violet-500/[0.05]', texto: 'text-violet-300', selo: 'border-violet-400/30 bg-violet-500/10 text-violet-200' },
+    { borda: 'border-rose-400/30', fundo: 'bg-rose-500/[0.05]', texto: 'text-rose-300', selo: 'border-rose-400/30 bg-rose-500/10 text-rose-200' },
   ];
+  const gruposOficiais = [
+    ...(habilidadesRaciais.length ? [{
+      id: 'raca', categoria: 'Raça', titulo: habilidadesRaciais[0].origem, itens: filtrarOficiais(habilidadesRaciais), icone: 'raca',
+      paleta: { borda: 'border-emerald-400/30', fundo: 'bg-emerald-500/[0.05]', texto: 'text-emerald-300', selo: 'border-emerald-400/30 bg-emerald-500/10 text-emerald-200' },
+    }] : []),
+    ...classesPorOrigem.map(([origem, itens], index) => ({
+      id: `classe:${origem}`, categoria: 'Classe', titulo: origem, itens: filtrarOficiais(itens), icone: 'classe', paleta: paletasClasse[index % paletasClasse.length],
+    })),
+    ...(habilidadesFruto.length ? [{
+      id: 'fruto', categoria: 'Fruto do Éden', titulo: habilidadesFruto[0].origem, itens: filtrarOficiais(habilidadesFruto), icone: 'fruto',
+      paleta: { borda: 'border-amber-400/30', fundo: 'bg-amber-500/[0.05]', texto: 'text-amber-300', selo: 'border-amber-400/30 bg-amber-500/10 text-amber-200' },
+    }] : []),
+  ].filter((grupo) => grupo.itens.length > 0);
   const status = obterStatusFicha(character.ficha);
 
   const habilidadesVisiveis = habilidades
@@ -170,6 +208,22 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
     setEditandoId(null);
   };
 
+  const abrirPersonalizacao = (item: { id: string; titulo: string; descricao: string }) => {
+    setPersonalizando({ id: item.id, titulo: item.titulo, descricao: item.descricao });
+  };
+
+  const salvarPersonalizacao = (valores: IPersonalizacaoAutomatica) => {
+    if (!personalizando) return;
+    salvarPersonalizacaoAutomatica(onUpdate, character.ficha || {}, personalizando.id, valores);
+    setPersonalizando(null);
+  };
+
+  const restaurarPersonalizacao = () => {
+    if (!personalizando) return;
+    salvarPersonalizacaoAutomatica(onUpdate, character.ficha || {}, personalizando.id, {});
+    setPersonalizando(null);
+  };
+
   const salvar = () => {
     const nomeLimpo = form.nome.trim();
     if (nomeLimpo.length < 2) {
@@ -210,8 +264,10 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
 
     if (recurso && recurso !== 'nenhum' && valor > 0) {
       const campoAtual = CAMPO_STATUS[recurso];
-      const maxVida = character.ficha?.derivados?.vida || character.derivados?.vida || 10;
-      const maxMana = character.ficha?.derivados?.mana || character.derivados?.mana || 10;
+      const maxVida = (character.ficha?.derivados?.vida || character.derivados?.vida || 10)
+        + bonusRecursoDoFruto(character.ficha, 'vidaMaxima');
+      const maxMana = (character.ficha?.derivados?.mana || character.derivados?.mana || 10)
+        + bonusRecursoDoFruto(character.ficha, 'manaMaxima');
       const atual = recurso === 'vida'
         ? Number(status.vidaAtual ?? maxVida)
         : recurso === 'mana'
@@ -285,16 +341,57 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
 
       {habilidadesOficiais.length > 0 && (
         <section className="rounded-2xl border border-[#c7a44c]/20 bg-[#0f0e15] p-4">
-          <h3 className="mb-3 text-xs font-bold uppercase tracking-widest text-[#c7a44c]">Habilidades oficiais automáticas</h3>
-          <div className="grid gap-3 lg:grid-cols-2">
-            {habilidadesOficiais.map((item) => (
-              <article key={item.id} className="rounded-xl border border-white/5 bg-[#121118] p-4">
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <strong className="text-white">{item.titulo}</strong>
-                  <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-bold uppercase text-blue-300">{item.origem}</span>
+          <div className="mb-4">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#c7a44c]">Habilidades automáticas por origem</h3>
+            <p className="mt-1 text-xs text-gray-500">Cada bloco mostra de qual raça, classe ou fruto as habilidades vieram.</p>
+          </div>
+          <div className="space-y-4">
+            {gruposOficiais.map((grupo) => (
+              <section key={grupo.id} className={`rounded-xl border ${grupo.paleta.borda} ${grupo.paleta.fundo} p-3 sm:p-4`}>
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-3 border-b border-white/5 pb-3">
+                  <div className="flex items-center gap-3">
+                    <div className={`flex h-9 w-9 items-center justify-center rounded-lg border ${grupo.paleta.selo}`}>
+                      {grupo.icone === 'raca' ? <Dna size={17} /> : grupo.icone === 'fruto' ? <Apple size={17} /> : <Shield size={17} />}
+                    </div>
+                    <div>
+                      <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${grupo.paleta.texto}`}>{grupo.categoria}</p>
+                      <h4 className="font-bold text-white">{grupo.titulo}</h4>
+                    </div>
+                  </div>
+                  <span className={`rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${grupo.paleta.selo}`}>
+                    {grupo.itens.length} {grupo.itens.length === 1 ? 'habilidade' : 'habilidades'}
+                  </span>
                 </div>
-                <p className="mt-2 text-sm leading-relaxed text-gray-400">{item.descricao}</p>
-              </article>
+                <div className="grid gap-3 lg:grid-cols-2">
+                  {grupo.itens.map((item) => {
+                    const personalizacao = personalizacoes[item.id];
+                    const tituloExibido = personalizacao?.titulo || item.titulo;
+                    const descricaoExibida = personalizacao?.texto || item.descricao;
+                    return (
+                      <article key={item.id} className="rounded-xl border border-white/5 bg-[#121118]/90 p-4 group relative">
+                        <div className="flex flex-wrap items-start justify-between gap-2">
+                          <strong className="text-white">{tituloExibido}</strong>
+                          <div className="flex items-center gap-1.5 flex-shrink-0">
+                            <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${grupo.paleta.selo}`}>{grupo.categoria}</span>
+                            <button
+                              type="button"
+                              onClick={() => abrirPersonalizacao(item)}
+                              title="Editar texto"
+                              className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all"
+                            >
+                              <Pencil size={12} />
+                            </button>
+                          </div>
+                        </div>
+                        {personalizacao && (
+                          <span className="mt-1 inline-block text-[9px] font-black uppercase tracking-wider text-[#c7a44c]/70">Editado por você</span>
+                        )}
+                        <p className="mt-2 text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
+                      </article>
+                    );
+                  })}
+                </div>
+              </section>
             ))}
           </div>
         </section>
@@ -336,6 +433,10 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
 
       {/* LISTA */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4">
+        <div className="mb-4 border-b border-white/5 pb-3">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-gray-300">Habilidades personalizadas</h3>
+          <p className="mt-1 text-xs text-gray-600">Entradas criadas manualmente; a origem informada aparece em cada cartão.</p>
+        </div>
         <Reorder.Group axis="y" values={habilidadesVisiveis} onReorder={handleReorder} className="flex flex-col gap-4">
           {habilidadesVisiveis.map((h: IHabilidade) => (
             <Reorder.Item
@@ -527,7 +628,6 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                 onChange={(efeitos) => setForm((atual) => ({ ...atual, efeitos }))}
                 pericias={PERICIAS_CATALOGO.map((pericia) => ({ id: pericia.id, titulo: pericia.titulo }))}
                 maxEfeitos={EFEITOS_FICHA_MAXIMOS}
-                valorMaximo={VALOR_EFEITO_FICHA_MAXIMO}
                 contexto="habilidade"
               />
             </div>
@@ -555,6 +655,17 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
           </div>
         </div>
       </FichaModal>
+
+      {/* MODAL DE PERSONALIZAR TEXTO AUTOMÁTICO */}
+      <PersonalizacaoAutomaticaModal
+        isOpen={!!personalizando}
+        onClose={() => setPersonalizando(null)}
+        tituloOriginal={personalizando?.titulo || ''}
+        textoOriginal={personalizando?.descricao || ''}
+        personalizacao={personalizando ? personalizacoes[personalizando.id] : undefined}
+        onSalvar={salvarPersonalizacao}
+        onRestaurar={restaurarPersonalizacao}
+      />
     </div>
   );
 };

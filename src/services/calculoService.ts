@@ -1,5 +1,9 @@
 import type { IClasse, IRaca } from '../types/catalogo';
-import { obterOpcaoRacialSelecionada } from './racaService';
+import {
+  obterEstagiosRaciaisAlcancados,
+  obterOpcaoRacialSelecionada,
+  obterTracosRaciaisDisponiveis,
+} from './racaService';
 
 export const ATRIBUTOS = ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'fluxo'] as const;
 export type TAtributo = typeof ATRIBUTOS[number];
@@ -272,18 +276,32 @@ function calcularDerivadosBase(
   const varianteRacial = obterVarianteRacial(raca, escolhaRacial);
   const fragmentosExpressos = obterFragmentosRaciaisExpressos(raca, escolhaRacial);
   
+  // Estágios raciais (Espírito Menor/Maior/Primordial) se acumulam: quem chegou
+  // no Primordial continua somando o que o Maior deu.
+  const estagiosRaciais = obterEstagiosRaciaisAlcancados(raca, nivel);
+  const somaEstagios = (campo: 'vida' | 'mana' | 'movimento' | 'defesa') => estagiosRaciais
+    .reduce((total: number, estagio: any) => total + (Number(estagio?.[campo]) || 0), 0);
+
   const baseVidaRaca = Number(raca?.vida) || 0;
   const baseVidaVariante = Number(varianteRacial?.vida) || 0;
-  const bonusVidaRacial = baseVidaRaca + baseVidaVariante;
+  const bonusVidaRacial = baseVidaRaca + baseVidaVariante + somaEstagios('vida');
 
   const baseManaRaca = Number(raca?.mana) || 0;
   const baseManaVariante = Number(varianteRacial?.mana) || 0;
-  const bonusManaRacial = baseManaRaca + baseManaVariante
+  const bonusManaRacial = baseManaRaca + baseManaVariante + somaEstagios('mana')
     + fragmentosExpressos.reduce((total, fragmento: any) => total + (Number(fragmento.mana) || 0), 0);
+
+  // Traços raciais já destravados podem declarar Defesa e Movimento (Crosta e
+  // Núcleo do Auleth Planeta, Trajetória do Cometa). Somar aqui, e não só no
+  // objeto da opção, é o que permite um estágio conceder os dois.
+  const tracosRaciais = obterTracosRaciaisDisponiveis(raca, escolhaRacial, nivel);
+  const somaTracos = (campo: 'defesa' | 'movimento') => tracosRaciais
+    .reduce((total: number, traco: any) => total + (Number(traco?.[campo]) || 0), 0);
 
   const baseMovimentoRaca = Number(raca?.movimento) || 0;
   const baseMovimentoVariante = Number(varianteRacial?.movimento) || 0;
-  const bonusMovimentoRacial = baseMovimentoRaca + baseMovimentoVariante;
+  const bonusMovimentoRacial = baseMovimentoRaca + baseMovimentoVariante
+    + somaEstagios('movimento') + somaTracos('movimento');
 
   const bonusVidaVariantePorNivel = (Number(varianteRacial?.vida_por_nivel) || 0) * Math.max(1, Number(nivel) || 1);
   const modificacoes = obterModificacoesRaciaisInstaladas(raca, escolhaRacial, nivel);
@@ -302,6 +320,10 @@ function calcularDerivadosBase(
     (total: number, fragmento: any) => total + (Number(fragmento.defesa) || 0),
     0,
   );
+  // Ectoplasma Denso do Espírito Marrom, Placas Cristalinas do Slime, Pele de
+  // Rocha do Gigante: quem não veste armadura precisa que o pacote racial
+  // apareça na Defesa Natural.
+  const bonusDefesaRacial = somaTracos('defesa');
 
   const movimentoFixo = Number(varianteRacial?.movimento_fixo);
   const movimentoBase = Number.isFinite(movimentoFixo)
@@ -315,7 +337,7 @@ function calcularDerivadosBase(
     vida: limitarRecursos ? Math.max(1, vidaBase) : vidaBase,
     mana: limitarRecursos ? Math.max(1, manaBase) : manaBase,
     movimento: Math.max(4.5, movimentoBase + bonusMovimentoModificacoes),
-    defesaNatural: 10 + metadeNivel + modDestreza + bonusDefesaModificacoes + bonusDefesaFragmentos,
+    defesaNatural: 10 + metadeNivel + modDestreza + bonusDefesaModificacoes + bonusDefesaFragmentos + bonusDefesaRacial,
     iniciativa: 10 + metadeNivel + modDestreza,
   };
 }

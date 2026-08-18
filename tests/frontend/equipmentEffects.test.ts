@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { resumirEquipamentos } from '../../src/services/equipamentoService.ts';
+import { detalharEfeitosAutomaticos, resumirEquipamentos } from '../../src/services/equipamentoService.ts';
+import { habilidadeDoFruto, obterFrutoEdenConsumido, poderesDoFruto } from '../../src/services/frutoEdenService.ts';
 
 const efeito = (id: string, categoria: string, alvo: string, valor: number, modo = 'bonus') => ({
   id,
@@ -146,7 +147,7 @@ test('veículos não ocupam carga pessoal nem aplicam bônus ao personagem', () 
   assert.equal(resumo.efeitosAtivos.length, 0);
 });
 
-test('efeitos de poderes respeitam os limites publicados pelo editor', () => {
+test('efeitos de poderes aceitam valores livres e preservam o limite de cinco efeitos', () => {
   const efeitos = Array.from({ length: 6 }, (_, indice) => (
     efeito(`poder-${indice}`, 'combate', 'iniciativa', 100)
   ));
@@ -156,8 +157,71 @@ test('efeitos de poderes respeitam os limites publicados pelo editor', () => {
     poderes: [{ id: 'aura', nome: 'Aura', efeitos }],
   });
 
-  assert.equal(resumo.bonusCombate.iniciativa, 100);
+  assert.equal(resumo.bonusCombate.iniciativa, 500);
   assert.equal(resumo.efeitosAtivos.length, 5);
+});
+
+test('efeitos de poderes e habilidades não cortam bônus ou penalidades acima de vinte', () => {
+  const resumo = resumirEquipamentos([], {
+    atributosFinais: { forca: 10 },
+    nivel: 1,
+    poderes: [{
+      id: 'vitalidade-impossivel',
+      nome: 'Vitalidade Impossível',
+      efeitos: [efeito('vida-livre', 'recurso', 'vidaMaxima', 2_500)],
+    }],
+    habilidades: [{
+      id: 'fragilidade-absoluta',
+      nome: 'Fragilidade Absoluta',
+      efeitos: [
+        efeito('defesa-livre', 'combate', 'defesa', -75),
+        efeito('movimento-fracionado', 'combate', 'movimento', 1.5),
+      ],
+    }],
+  });
+
+  assert.equal(resumo.bonusRecursos.vidaMaxima, 2_500);
+  assert.equal(resumo.bonusCombate.defesa, -75);
+  assert.equal(resumo.bonusCombate.movimento, 1.5);
+});
+
+test('detalhamento automático preserva o nome de cada item, poder e habilidade', () => {
+  const resumo = resumirEquipamentos([{
+    item_id: 'cinto',
+    titulo: 'Cinto do Colosso',
+    dados: {
+      equipado: true,
+      raridade: 'raro',
+      modificacoes: [{
+        id: 'vigor',
+        nome: 'Vigor armazenado',
+        tipo: 'especial',
+        efeitos: [efeito('vida-item', 'recurso', 'vidaMaxima', 2)],
+      }],
+    },
+  }], {
+    atributosFinais: { forca: 10 },
+    nivel: 1,
+    poderes: [{
+      id: 'coracao',
+      nome: 'Coração Infinito',
+      efeitos: [
+        efeito('vida-poder-1', 'recurso', 'vidaMaxima', 30),
+        efeito('vida-poder-2', 'recurso', 'vidaMaxima', 20),
+      ],
+    }],
+    habilidades: [{
+      id: 'fragilidade',
+      nome: 'Corpo Frágil',
+      efeitos: [efeito('vida-habilidade', 'recurso', 'vidaMaxima', -5)],
+    }],
+  });
+
+  assert.deepEqual(detalharEfeitosAutomaticos(resumo, 'recurso', 'vidaMaxima'), [
+    { nome: 'Cinto do Colosso: Vigor armazenado', valor: 2 },
+    { nome: 'Poder: Coração Infinito', valor: 50 },
+    { nome: 'Habilidade: Corpo Frágil', valor: -5 },
+  ]);
 });
 
 test('poderes incompletos não interrompem o cálculo da ficha', () => {
@@ -169,4 +233,64 @@ test('poderes incompletos não interrompem o cálculo da ficha', () => {
 
   assert.deepEqual(resumo.bonusCombate, {});
   assert.equal(resumo.efeitosAtivos.length, 0);
+});
+
+test('Fruto do Éden só aplica efeitos depois de existir um vínculo consumido na ficha', () => {
+  const comprado = resumirEquipamentos([{
+    item_id: 'fruto-instante',
+    titulo: 'Fruto do Instante',
+    quantidade: 1,
+    dados: {
+      tipo: 'fruto-eden',
+      efeitosFicha: [efeito('iniciativa', 'combate', 'iniciativa', 2)],
+    },
+  }], {});
+  assert.equal(comprado.bonusCombate.iniciativa, undefined);
+
+  const ficha = {
+    frutoEdenConsumido: {
+      itemId: 'fruto-instante',
+      titulo: 'Fruto do Instante',
+      conteudo: {
+        passivo: 'Olhar entre Segundos: Iniciativa +2.',
+        tecnica: 'Repetição Breve: refaz uma rolagem.',
+        despertar: 'Segundo Proibido: realiza um turno adicional.',
+        custo: '4 Mana na Repetição; 14 Mana no Despertar',
+        efeitosFicha: [efeito('iniciativa', 'combate', 'iniciativa', 2)],
+      },
+    },
+  };
+  const consumido = resumirEquipamentos([], ficha);
+  assert.equal(consumido.bonusCombate.iniciativa, 2);
+  assert.equal(obterFrutoEdenConsumido(ficha)?.titulo, 'Fruto do Instante');
+  assert.equal(habilidadeDoFruto(ficha)[0]?.titulo, 'Olhar entre Segundos');
+  assert.deepEqual(poderesDoFruto(ficha).map((item) => item.nome), ['Repetição Breve']);
+  assert.equal(poderesDoFruto(ficha)[0]?.custo.valor, 4);
+  assert.ok(poderesDoFruto(ficha).every((item) => item.usavel === true));
+
+  const despertada = {
+    ...ficha,
+    frutoEdenConsumido: { ...ficha.frutoEdenConsumido, despertado: true },
+  };
+  assert.deepEqual(poderesDoFruto(despertada).map((item) => item.nome), ['Repetição Breve', 'Segundo Proibido']);
+  assert.equal(poderesDoFruto(despertada)[1]?.custo.valor, 14);
+  assert.equal(poderesDoFruto(despertada)[1]?.estagioFruto, 'despertado');
+});
+
+test('Fruto do Trovão publica separadamente suas duas técnicas com custos corretos', () => {
+  const ficha = {
+    frutoEdenConsumido: {
+      itemId: 'fruto-trovao',
+      titulo: 'Fruto do Trovão',
+      conteudo: {
+        tecnica: 'Salto Voltaico e Defesa Eletromagnética',
+        despertar: 'Julgamento da Tempestade: tempestade em área.',
+      },
+    },
+  };
+  const poderes = poderesDoFruto(ficha);
+  assert.deepEqual(poderes.map((item) => [item.nome, item.custo.valor]), [
+    ['Salto Voltaico', 3],
+    ['Defesa Eletromagnética', 2],
+  ]);
 });

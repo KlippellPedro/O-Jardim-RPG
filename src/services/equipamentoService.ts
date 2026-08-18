@@ -7,6 +7,7 @@ import {
 
 export interface IResumoEquipamento {
   defesaEquipamento: number;
+  defesaItens: IDetalheEfeitoAutomatico[];
   penalidadeArmadura: number;
   espacosUsados: number;
   capacidade: number;
@@ -38,6 +39,11 @@ export interface IEfeitoEquipamentoAtivo extends IEfeitoEquipamento {
   origem: string;
 }
 
+export interface IDetalheEfeitoAutomatico {
+  nome: string;
+  valor: number;
+}
+
 export interface IModificacaoEquipamento {
   id: string;
   nome: string;
@@ -47,7 +53,6 @@ export interface IModificacaoEquipamento {
 }
 
 export const EFEITOS_FICHA_MAXIMOS = 5;
-export const VALOR_EFEITO_FICHA_MAXIMO = 20;
 
 const CATEGORIAS_EFEITO = new Set<TCategoriaEfeitoEquipamento>(['atributo', 'recurso', 'combate', 'pericia']);
 const MODOS_EFEITO = new Set<TModoEfeitoEquipamento>(['bonus', 'vantagem', 'desvantagem']);
@@ -59,7 +64,7 @@ export function normalizarEfeitosEquipamento(valor: unknown): IEfeitoEquipamento
     const alvo = String(efeito?.alvo || '').trim();
     const modoInformado = String(efeito?.modo || 'bonus') as TModoEfeitoEquipamento;
     const modo = MODOS_EFEITO.has(modoInformado) ? modoInformado : 'bonus';
-    const valorNumerico = Math.trunc(Number(efeito?.valor));
+    const valorNumerico = Number(efeito?.valor);
     if (!CATEGORIAS_EFEITO.has(categoria) || !alvo || !Number.isFinite(valorNumerico) || valorNumerico === 0) return [];
     return [{
       id: String(efeito?.id || `efeito-${indice}`),
@@ -73,11 +78,7 @@ export function normalizarEfeitosEquipamento(valor: unknown): IEfeitoEquipamento
 
 export function normalizarEfeitosFicha(valor: unknown): IEfeitoEquipamento[] {
   return normalizarEfeitosEquipamento(valor)
-    .slice(0, EFEITOS_FICHA_MAXIMOS)
-    .map((efeito) => ({
-      ...efeito,
-      valor: Math.max(-VALOR_EFEITO_FICHA_MAXIMO, Math.min(VALOR_EFEITO_FICHA_MAXIMO, efeito.valor)),
-    }));
+    .slice(0, EFEITOS_FICHA_MAXIMOS);
 }
 
 export function normalizarModificacoesEquipamento(valor: unknown): IModificacaoEquipamento[] {
@@ -96,6 +97,33 @@ export function normalizarModificacoesEquipamento(valor: unknown): IModificacaoE
 
 function somarNoMapa(mapa: Record<string, number>, alvo: string, valor: number) {
   mapa[alvo] = (mapa[alvo] || 0) + valor;
+}
+
+/**
+ * Expõe os bônus automáticos sem perder a fonte original. O resumo numérico é
+ * útil para os cálculos, enquanto esta visão detalhada alimenta os modais da
+ * ficha com nomes como "Poder: Aura" ou "Armadura: Núcleo vital".
+ */
+export function detalharEfeitosAutomaticos(
+  resumo: Pick<IResumoEquipamento, 'efeitosAtivos'>,
+  categoria: TCategoriaEfeitoEquipamento,
+  alvo: string,
+): IDetalheEfeitoAutomatico[] {
+  const totais = new Map<string, number>();
+
+  resumo.efeitosAtivos
+    .filter((efeito) => efeito.categoria === categoria && efeito.alvo === alvo)
+    .forEach((efeito) => {
+      const origemAutonoma = /^(Poder|Habilidade|Fruto do Éden):/i.test(efeito.origem);
+      const nome = origemAutonoma
+        ? efeito.origem
+        : `${efeito.itemNome}: ${efeito.origem}`;
+      totais.set(nome, (totais.get(nome) || 0) + efeito.valor);
+    });
+
+  return [...totais.entries()]
+    .filter(([, valor]) => Number.isFinite(valor) && valor !== 0)
+    .map(([nome, valor]) => ({ nome, valor }));
 }
 
 const numero = (valor: unknown) => {
@@ -177,6 +205,16 @@ export function resumirEquipamentos(inventarioCentral: any[], ficha: any): IResu
   const fontesDaFicha = [
     { itens: ficha?.poderes, rotulo: 'Poder' },
     { itens: ficha?.habilidades, rotulo: 'Habilidade' },
+    {
+      itens: ficha?.frutoEdenConsumido?.conteudo?.efeitosFicha?.length
+        ? [{
+            id: `fruto:${ficha.frutoEdenConsumido.itemId || 'eden'}`,
+            nome: ficha.frutoEdenConsumido.titulo || 'Fruto do Éden',
+            efeitos: ficha.frutoEdenConsumido.conteudo.efeitosFicha,
+          }]
+        : [],
+      rotulo: 'Fruto do Éden',
+    },
   ];
   fontesDaFicha.forEach(({ itens, rotulo }) => {
     (Array.isArray(itens) ? itens : []).forEach((item: any) => {
@@ -207,7 +245,11 @@ export function resumirEquipamentos(inventarioCentral: any[], ficha: any): IResu
   if (escudos.length > 1) conflitos.push('Equipe no máximo um escudo.');
   if (malhas.length > 1) conflitos.push('Equipe no máximo uma malha sob a armadura.');
   const validas = [principais[0], malhas[0], escudos[0]].filter(Boolean);
-  const defesaEquipamento = validas.reduce((total, item) => total + numero(item?.dados?.defesa ?? item?.dados?.bonus), 0);
+  const defesaItens = validas.flatMap((item) => {
+    const valor = numero(item?.dados?.defesa ?? item?.dados?.bonus);
+    return valor === 0 ? [] : [{ nome: String(item?.titulo || 'Armadura ou escudo'), valor }];
+  });
+  const defesaEquipamento = defesaItens.reduce((total, item) => total + item.valor, 0);
   const penalidadeArmadura = validas.reduce((total, item) => total + Math.abs(numero(item?.dados?.penalidade)), 0);
   const espacosUsados = itensPessoais.reduce((total, item) => total + Math.max(0, numero(item?.dados?.espacos ?? 1)) * Math.max(1, numero(item?.quantidade ?? 1)), 0);
   const raca = RACAS_CATALOGO.find((item) => item.id === ficha?.racaId);
@@ -217,6 +259,7 @@ export function resumirEquipamentos(inventarioCentral: any[], ficha: any): IResu
   const capacidade = capacidadeCarga((Number(atributosEfetivos.forca) || 10) + (bonusAtributos.forca || 0), Number(ficha?.nivel) || 1);
   return {
     defesaEquipamento,
+    defesaItens,
     penalidadeArmadura,
     espacosUsados,
     capacidade,

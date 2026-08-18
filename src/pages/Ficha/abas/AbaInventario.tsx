@@ -1,5 +1,5 @@
 import { useDeferredValue, useMemo, useState } from 'react';
-import { Search, Backpack, Coins, Shield, Sword, Box, Minus, Plus, Car, Trash2, Pencil, Wrench, Star, GripVertical, SlidersHorizontal, ListFilter, Cpu } from 'lucide-react';
+import { Search, Backpack, Coins, Shield, Sword, Box, Minus, Plus, Car, Trash2, Pencil, Wrench, Star, GripVertical, SlidersHorizontal, ListFilter, Cpu, Apple } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { useCharacterStore } from '../../../store/useCharacterStore';
 import { useAuthStore } from '../../../store/useAuthStore';
@@ -28,6 +28,7 @@ import {
   rotuloRaridadeChave,
 } from '../../../services/lojaCatalogService';
 import { EFEITOS_POR_MODIFICACAO_MAXIMOS, obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
+import { personagensApi } from '../../../services/personagensApi';
 
 interface IInventoryItem {
   id: string;
@@ -256,6 +257,8 @@ interface AbaInventarioProps {
 export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioProps) => {
   const modoVeiculos = modo === 'veiculos';
   const mutateEconomy = useCharacterStore((state) => state.mutateEconomy);
+  const flushCharacterSaves = useCharacterStore((state) => state.flushCharacterSaves);
+  const refreshCharacter = useCharacterStore((state) => state.refreshCharacter);
   const papelCampanha = useAuthStore((state) => state.campanhaAtiva?.papel);
   const podeGerenciarEconomia = papelCampanha === 'mestre'
     || papelCampanha === 'assistente';
@@ -268,6 +271,8 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
   const [form, setForm] = useState<typeof ITEM_VAZIO>(ITEM_VAZIO);
   const [submodal, setSubmodal] = useState<'modificacoes' | 'raridade' | null>(null);
   const [itemModificacoesVisivel, setItemModificacoesVisivel] = useState<IInventoryItem | null>(null);
+  const [frutoPendenteId, setFrutoPendenteId] = useState<string | null>(null);
+  const [feedbackFruto, setFeedbackFruto] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
 
   const periciasDisponiveis = useMemo(() => [...new Map([
     ...PERICIAS_CATALOGO,
@@ -277,6 +282,39 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
   const inventario: IInventoryItem[] = useMemo(() => (character.inventarioCentral || [])
     .map(paraUI)
     .sort((a: IInventoryItem, b: IInventoryItem) => a.ordem - b.ordem), [character.inventarioCentral]);
+
+  const consumirFruto = async (item: IInventoryItem) => {
+    if (frutoPendenteId) return;
+    const frutoAtual = character.ficha?.frutoEdenConsumido;
+    const substituir = Boolean(frutoAtual?.itemId);
+    const pergunta = substituir
+      ? `Consumir ${item.nome} substituirá permanentemente ${frutoAtual.titulo || 'o Fruto do Éden atual'}. Continuar?`
+      : `Consumir ${item.nome}? O fruto sairá do inventário e ficará vinculado permanentemente à ficha.`;
+    if (!window.confirm(pergunta)) return;
+
+    setFrutoPendenteId(item.id);
+    setFeedbackFruto(null);
+    try {
+      if (!(await flushCharacterSaves(character.id))) {
+        throw new Error('Não foi possível salvar as alterações pendentes antes do consumo.');
+      }
+      const latest = useCharacterStore.getState().characters.find((entry) => entry.id === character.id);
+      if (!latest) throw new Error('O personagem não está mais carregado.');
+      await personagensApi.consumirFrutoEden(character.id, item.id, {
+        versaoFichaEsperada: Math.max(1, Number(latest.versao) || 1),
+        economiaVersaoEsperada: Math.max(1, Number(latest.economiaVersao) || 1),
+        substituir,
+      });
+      if (!(await refreshCharacter(character.id))) {
+        throw new Error('O fruto foi consumido, mas a ficha precisa ser recarregada para mostrar o resultado.');
+      }
+      setFeedbackFruto({ tipo: 'sucesso', texto: `${item.nome} foi consumido e seus poderes foram vinculados à ficha.` });
+    } catch (error: any) {
+      setFeedbackFruto({ tipo: 'erro', texto: error?.message || 'Não foi possível consumir o fruto.' });
+    } finally {
+      setFrutoPendenteId(null);
+    }
+  };
   const resumoEquipamento = useMemo(
     () => resumirEquipamentos(character.inventarioCentral || [], character.ficha || {}),
     [character.inventarioCentral, character.ficha],
@@ -688,6 +726,12 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
         })}
       </div>}
 
+      {!modoVeiculos && feedbackFruto && (
+        <div className={`rounded-xl border px-4 py-3 text-sm font-bold ${feedbackFruto.tipo === 'sucesso' ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300' : 'border-red-500/30 bg-red-500/10 text-red-300'}`} role="status">
+          {feedbackFruto.texto}
+        </div>
+      )}
+
       {/* IMPLANTES CIBERNÉTICOS */}
       {!modoVeiculos && implantes.length > 0 && (
         <div className="relative overflow-hidden rounded-2xl border border-cyan-400/40 bg-gradient-to-br from-cyan-950/40 via-[#0a0912] to-fuchsia-950/20 p-6 shadow-[0_0_35px_rgba(34,211,238,0.12)]">
@@ -773,6 +817,7 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
                 const conf = RARIDADES_CONFIG[item.raridade] || RARIDADES_CONFIG.comum;
                 const catColor = CATEGORY_COLORS[item.categoria] || CATEGORY_COLORS.geral;
                 const moduloVeicular = item.categoria === 'modulo-veicular';
+                const frutoEden = item._dadosOriginais.tipo === 'fruto-eden';
                 
                 return (
                   <Reorder.Item
@@ -794,15 +839,20 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
                         <div className={`w-14 h-14 rounded-lg border flex items-center justify-center shadow-inner ${catColor}`}>
                           {getIconForType(item.categoria)}
                         </div>
-                        <button 
-                          onClick={() => toggleEquipar(item.id)}
+                        <button
+                          onClick={() => { if (!frutoEden) toggleEquipar(item.id); }}
+                          disabled={frutoEden}
                           className={`w-full py-1 rounded text-[9px] font-bold uppercase tracking-wider transition-all duration-300 border ${
-                            item.equipado 
+                            frutoEden
+                              ? 'cursor-default border-amber-400/30 bg-amber-500/10 text-amber-300'
+                              : item.equipado
                               ? 'bg-[#c7a44c]/20 border-[#c7a44c]/50 text-[#c7a44c] shadow-[0_0_10px_rgba(199,164,76,0.2)]' 
                               : 'bg-black/40 border-white/10 text-gray-500 hover:border-white/30 hover:text-gray-300'
                           }`}
                         >
-                          {modoVeiculos
+                          {frutoEden
+                            ? 'Não consumido'
+                            : modoVeiculos
                             ? moduloVeicular
                               ? (item.equipado ? 'Instalado' : 'Guardado')
                               : (item.equipado ? 'Em uso' : 'Parado')
@@ -908,6 +958,17 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
                         ) : null}
 
                         {item.descricao && <p className="text-xs text-gray-500 italic mt-3 line-clamp-2">{item.descricao}</p>}
+
+                        {frutoEden && (
+                          <button
+                            type="button"
+                            onClick={() => void consumirFruto(item)}
+                            disabled={frutoPendenteId !== null}
+                            className="mt-3 flex w-fit items-center gap-2 rounded-lg border border-amber-400/40 bg-amber-500/10 px-4 py-2 text-xs font-black uppercase tracking-wider text-amber-200 transition-colors hover:bg-amber-500/20 disabled:cursor-wait disabled:opacity-50"
+                          >
+                            <Apple size={14} /> {frutoPendenteId === item.id ? 'Consumindo...' : 'Consumir fruto'}
+                          </button>
+                        )}
 
                       </div>
                     </div>

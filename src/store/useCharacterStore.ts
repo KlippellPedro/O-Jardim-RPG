@@ -50,6 +50,7 @@ interface CharacterStore {
   error: string | null;
   persistence: Record<string, CharacterPersistenceState>;
   fetchCharacters: () => Promise<void>;
+  refreshCharacter: (id: string) => Promise<boolean>;
   archiveCharacter: (id: string) => Promise<boolean>;
   createCharacter: (payload: ICreateCharacterPayload) => Promise<boolean>;
   patchCharacter: (id: string, path: readonly UpdatePathSegment[], value: unknown) => boolean;
@@ -855,6 +856,32 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
         || useAuthStore.getState().campanhaAtiva?.id !== campaignId
       ) return;
       set({ error: errorMessage(error) || 'Falha ao carregar personagens.', isLoading: false });
+    }
+  },
+
+  refreshCharacter: async (id: string) => {
+    try {
+      const remote = (await personagensApi.obter(id)).personagem;
+      const normalized = normalizeCharacter(remote);
+      clearSheetCoordinator(id);
+      clearEconomyCoordinator(id);
+      economyBaseVersions.set(id, positiveInteger(normalized.economiaVersao));
+      economyServerStates.set(id, jsonClone({
+        carteira: normalized.carteira ?? [],
+        inventario: normalized.inventarioCentral ?? [],
+      }));
+      set((state) => ({
+        characters: state.characters.map((character) => character.id === id ? normalized : character),
+        persistence: {
+          ...state.persistence,
+          [id]: emptyPersistenceState(),
+        },
+        error: null,
+      }));
+      return true;
+    } catch (error) {
+      set({ error: errorMessage(error) });
+      return false;
     }
   },
 
