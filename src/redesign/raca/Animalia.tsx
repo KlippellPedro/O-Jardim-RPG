@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { PawPrint, Volume2, TreePine } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial, temDescricaoPropria } from '../../services/racaService';
 import { obterTemaPorId } from '../themeMap';
 
 export const Animalia = ({ raca }: { raca: IRaca }) => {
@@ -132,7 +132,9 @@ export const Animalia = ({ raca }: { raca: IRaca }) => {
         {/* Custom Lineages for Animália */}
         {(() => {
           const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
+          return grupos.map((grupo) => {
+            const mostraDescricao = grupo.opcoes.some(temDescricaoPropria);
+            return (
             <section key={grupo.campo} className="pt-4 mb-16">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -146,13 +148,13 @@ export const Animalia = ({ raca }: { raca: IRaca }) => {
                 </h2>
                 <p className="text-green-100/60 text-lg">{grupo.descricao}</p>
               </motion.div>
-              
+
               <div className="overflow-x-auto rounded-none border border-green-800/40 bg-green-950/20 backdrop-blur-md shadow-lg shadow-green-900/10">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-green-800/40 bg-green-950/60">
                       <th className="p-6 font-bold text-green-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Espécie/Morfologia</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-green-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Descrição</th>}
+                      {mostraDescricao && <th className="p-6 font-bold text-green-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Descrição</th>}
                       <th className="p-6 font-bold text-green-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Traços Ferais</th>
                     </tr>
                   </thead>
@@ -182,7 +184,7 @@ export const Animalia = ({ raca }: { raca: IRaca }) => {
                           <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
                             <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
                           </td>
-                          {grupo.campo !== 'linhagemId' && (
+                          {mostraDescricao && (
                             <td className="p-6 align-top text-green-100/70 text-sm leading-relaxed w-1/3">
                               {descreverOpcaoRacial(opcao)}
                             </td>
@@ -208,7 +210,8 @@ export const Animalia = ({ raca }: { raca: IRaca }) => {
                 </table>
               </div>
             </section>
-          ));
+            );
+          });
         })()}
       </div>
     </div>

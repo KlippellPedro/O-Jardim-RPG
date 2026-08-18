@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Cpu, Zap, Settings, ShieldAlert, Layers } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial, temDescricaoPropria } from '../../services/racaService';
 import { obterTemaPorId } from '../themeMap';
 
 export const Automato = ({ raca }: { raca: IRaca }) => {
@@ -140,7 +140,9 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
         {/* Custom Lineages for Automato */}
         {(() => {
           const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
+          return grupos.map((grupo) => {
+            const mostraDescricao = grupo.opcoes.some(temDescricaoPropria);
+            return (
             <section key={grupo.campo} className="pt-4 mb-16">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -154,13 +156,13 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
                 </h2>
                 <p className="text-cyan-200/60 text-lg">{grupo.descricao}</p>
               </motion.div>
-              
+
               <div className="overflow-x-auto rounded-none border border-cyan-800/40 bg-cyan-950/20 backdrop-blur-md shadow-lg shadow-cyan-900/10">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-cyan-800/40 bg-cyan-950/60">
                       <th className="p-6 font-bold text-cyan-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Modelo</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-cyan-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Função Primária</th>}
+                      {mostraDescricao && <th className="p-6 font-bold text-cyan-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Função Primária</th>}
                       <th className="p-6 font-bold text-cyan-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Módulos de Fábrica (Traços)</th>
                     </tr>
                   </thead>
@@ -191,7 +193,7 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
                           <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
                             <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
                           </td>
-                          {grupo.campo !== 'linhagemId' && (
+                          {mostraDescricao && (
                             <td className="p-6 align-top text-cyan-100/70 text-sm leading-relaxed w-1/3">
                               {descreverOpcaoRacial(opcao)}
                             </td>
@@ -217,8 +219,60 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
                 </table>
               </div>
             </section>
-          ));
+            );
+          });
         })()}
+
+        {/* Modificações: catálogo de módulos instaláveis, ausente do resto da
+            página. Sem isso o Autômato aparecia sem a mecânica que mais o
+            diferencia das outras raças (instalar módulos passivos/ativos). */}
+        {Array.isArray(raca.modificacoes) && raca.modificacoes.length > 0 && (
+          <section className="pt-4 mb-16">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              className="mb-8"
+            >
+              <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
+                Modificações
+              </h2>
+              <p className="text-cyan-200/60 text-lg">
+                Módulos instaláveis no chassi. O limite de modificações e os pré-requisitos ficam em Arquitetura Modular.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {raca.modificacoes.map((modificacao: any, idx: number) => (
+                <PremiumCard
+                  key={modificacao.id}
+                  glowColor={tema.glow}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: Math.min(idx * 0.03, 0.3) }}
+                  className="flex flex-col p-6 rounded-none border border-cyan-800/40 bg-cyan-950/20 backdrop-blur-md"
+                >
+                  <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                    <h3 className="text-lg font-bold text-cyan-100" style={{ fontFamily: 'Cinzel, serif' }}>{modificacao.titulo}</h3>
+                    <div className="flex gap-2">
+                      <span className="rounded-full border border-cyan-700/40 bg-cyan-900/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-cyan-300">
+                        {modificacao.categoria === 'ativa' ? 'Ativa' : 'Passiva'}
+                      </span>
+                      {typeof modificacao.nivel_minimo === 'number' && (
+                        <span className="rounded-full border border-cyan-700/40 bg-cyan-900/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-cyan-300">
+                          Nível {modificacao.nivel_minimo}+
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-cyan-100/70 text-sm leading-relaxed">{modificacao.descricao}</p>
+                </PremiumCard>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

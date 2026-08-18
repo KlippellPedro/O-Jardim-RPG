@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Eye, Flame, TriangleAlert } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial, temDescricaoPropria } from '../../services/racaService';
 import { obterTemaPorId } from '../themeMap';
 
 export const Bruxa = ({ raca }: { raca: IRaca }) => {
@@ -141,7 +141,9 @@ export const Bruxa = ({ raca }: { raca: IRaca }) => {
         {/* Custom Lineages for Bruxa */}
         {(() => {
           const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
+          return grupos.map((grupo) => {
+            const mostraDescricao = grupo.opcoes.some(temDescricaoPropria);
+            return (
             <section key={grupo.campo} className="pt-4 mb-16">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -155,13 +157,13 @@ export const Bruxa = ({ raca }: { raca: IRaca }) => {
                 </h2>
                 <p className="text-rose-200/60 text-lg font-serif">{grupo.descricao}</p>
               </motion.div>
-              
+
               <div className="overflow-x-auto rounded-none border border-purple-800/40 bg-purple-950/20 backdrop-blur-md shadow-lg shadow-purple-900/10">
                 <table className="w-full text-left border-collapse font-serif">
                   <thead>
                     <tr className="border-b border-purple-800/40 bg-purple-950/60 font-sans">
                       <th className="p-6 font-bold text-rose-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Tradição/Maldição</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-rose-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Descrição</th>}
+                      {mostraDescricao && <th className="p-6 font-bold text-rose-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Descrição</th>}
                       <th className="p-6 font-bold text-rose-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Manifestação (Traços)</th>
                     </tr>
                   </thead>
@@ -189,7 +191,7 @@ export const Bruxa = ({ raca }: { raca: IRaca }) => {
                           <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
                             <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
                           </td>
-                          {grupo.campo !== 'linhagemId' && (
+                          {mostraDescricao && (
                             <td className="p-6 align-top text-rose-200/70 text-sm leading-relaxed w-1/3">
                               {descreverOpcaoRacial(opcao)}
                             </td>
@@ -215,8 +217,47 @@ export const Bruxa = ({ raca }: { raca: IRaca }) => {
                 </table>
               </div>
             </section>
-          ));
+            );
+          });
         })()}
+
+        {/* Maldições: catálogo que Maldição Tecida e Grande Sabá aplicam,
+            ausente do resto da página. */}
+        {Array.isArray(raca.maldicoes) && raca.maldicoes.length > 0 && (
+          <section className="pt-4 mb-16">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              className="mb-8"
+            >
+              <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
+                Maldições Conhecidas
+              </h2>
+              <p className="text-rose-200/60 text-lg font-serif">
+                Maldição Tecida e Grande Sabá aplicam uma destas. Grimório aumenta o total conhecido de três para cinco.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {raca.maldicoes.map((maldicao: any, idx: number) => (
+                <PremiumCard
+                  key={maldicao.id}
+                  glowColor={tema.glow}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: Math.min(idx * 0.03, 0.3) }}
+                  className="flex flex-col p-6 rounded-none border border-purple-800/40 bg-purple-950/20 backdrop-blur-md font-serif"
+                >
+                  <h3 className="text-lg font-bold text-rose-200 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>{maldicao.titulo}</h3>
+                  <p className="text-rose-100/70 text-sm leading-relaxed">{maldicao.descricao}</p>
+                </PremiumCard>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
