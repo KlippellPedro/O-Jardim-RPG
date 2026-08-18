@@ -1072,51 +1072,6 @@ A cada cinco níveis totais, ou seja, no 5, no 10, no 15 e assim por diante até
 
 - O Mestre só autoriza troca em dois casos: erro de criação ou mudança oficial nas regras.
 
-### Catálogo
-
-- **Tô ficando bom:** Recebe +1 no modificador de um atributo à escolha (Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma).
-- **Esquiva:** Você aprimora significativamente sua agilidade, recebendo +2 em Defesa e Reflexos.
-- **Leitura Labial:** Permite interpretar falas de pessoas a uma certa distância, desde que consiga ver a boca do ser.
-- **Mãos Leves:** Você ganha a capacidade de sacar qualquer item como ação livre.
-- **Artista Marcial:** Você recebe proficiência em armas ou armaduras marciais; caso escolha uma segunda vez, recebe a outra que não foi escolhida.
-- **Kit Diverso:** Você pode escolher um kit de qualquer coisa. Ele é renovado quando você gasta uma ação de descanso, mas ocupa +1 espaço no inventário.
-- **Não é Tão Pesado:** Reduz a penalidade de armadura ou escudo em 1. Escolhendo uma segunda vez, a penalidade reduz em 3; escolhendo uma terceira vez, conta para ambos.
-- **Correntes:** Você pode arremessar suas armas e puxá-las de volta no mesmo turno como ação de movimento (o dano é o mesmo).
-- **Bala Ágil:** Você adiciona seu modificador de Destreza no dano de armas à distância.
-- **Sempre no x1:** Sempre que estiver em 1x1, você causa mais dano no ser (teste de Furtividade).
-- **Mágico?:** Você recebe vantagem para resistir ou conjurar magias.
-- **Mágico!:** Você se concentra 1 turno a menos para realizar magias.
-- **Sem Chance:** Uma vez por descanso, ao ter desastre natural, repita o d20 e mantenha o novo resultado.
-- **Rapidinho:** Aumenta seu deslocamento em 2m. Escolhendo uma segunda vez, aumenta em 6m adicionais.
-- **Sou Bom Nisso:** Você recebe +2 ou vantagem em Luta ou Pontaria.
-- **Cozinheiro:** Recebe o ofício Cozinhar. Quem comer sua comida recupera 0,5 de cansaço e melhora a condição do local em 1 (máx: Boa).
-- **Mais Potente:** Caso use duas mãos para atacar com uma arma de uma mão, você recebe +4 no ataque dessa arma (apenas armas corpo a corpo).
-- **Sempre Foi Assim:** Armas que já são de duas mãos passam a dar +1 dado de dano (apenas armas corpo a corpo).
-- **Ainda Não:** Você tem vantagem em testes de Constituição caso entre em "morrendo" ou tome dano massivo.
-- **Desonroso:** Se estiver enfrentando um oponente desarmado, tem vantagem em testes de ataque e recebe +4 para desviar de qualquer ataque.
-- **Código de Ética:** Você se torna incapaz de atacar seres desarmados. Porém, se o oponente estiver armado, seus ataques causam dano adicional igual à metade do seu nível (arredondado para baixo, até um máximo de +30) e você sempre age antes dele na iniciativa.
-- **Monstro:** Você passa a dobrar seu modificador de Força em ataques corpo a corpo.
-- **Ossos Duros:** Recebe 5 de redução a danos físicos.
-- **Bruto:** Se não estiver usando armadura, você recebe metade do seu modificador de Força como bônus de Defesa.
-- **Flexível:** Você treina muito sua mobilidade e por conta disso tem +1 ação de reação por turno.
-- **Instinto Animal:** Você recebe +3 na Iniciativa fixa e nunca pode ser surpreendido em combate.
-- **Mão Pesada:** Se acertar um ataque corpo a corpo crítico, o alvo é empurrado 3m para longe e cai no chão.
-- **Quebra Dente:** Ataques corpo a corpo causam −2 na Defesa do inimigo até o fim do combate (acumulativo até −6).
-- **Sem Tempo Irmão:** Você pode realizar uma ação de movimento extra no início do combate, antes de qualquer outro agir.
-- **Tô de Pé Ainda:** Enquanto estiver com menos da metade da vida, você recebe +2 na Defesa e resistência a danos físicos.
-- **Sortudo pra Cacete:** Eventos ruins têm menos chance de acontecer com você.
-- **Mentiroso Nato:** Você tem vantagem em testes de Enganação, e mentiras simples nunca levantam suspeita.
-- **Veterano de Guerra:** Você recupera o dobro de P.V. ou F.V. em cenas de descanso.
-- **Posturado:** Você não pode ser derrubado ou empurrado enquanto estiver consciente. Caso morra, morre de pé.
-- **Já fui CLT:** Você não se cansa tão fácil e não recebe o efeito de cansaço leve.
-- **Selvagem:** Animais e criaturas irracionais não te atacam a menos que sejam provocados.
-- **Eco do Fluxo:** Uma vez por cena, após gastar pelo menos 5 Mana em uma única habilidade, recupere 2 Mana no fim do turno. Não ativa com habilidades de custo reduzido para menos de 3 Mana.
-- **Passo Entre Galhos:** Uma vez por turno, depois de obter sucesso em Acrobacia ou Furtividade, mova 2 m sem provocar reações. Esse movimento não atravessa obstáculos.
-- **Memória do Eclipse:** Uma vez por sessão, peça ao mestre uma pista verdadeira sobre algo que o personagem já presenciou ou role Investigação ou Conhecimento com vantagem.
-- **Vínculo Lunar:** Quando um aliado a até 15 m for alvo de um ataque, use sua reação e gaste 2 Mana para conceder +4 na Defesa contra somente esse ataque.
-- **Segundo Tempo:** Uma vez por descanso, quando sair de Morrendo por receber cura, recupere 1d6 de Vida adicional e reduza 1 Cansaço.
-- **Âncora da Árvore:** Uma vez por cena, quando for teleportado, banido ou deslocado dimensionalmente contra a vontade, use sua reação e gaste 2 Mana para permanecer onde está.
-
 ## aliados
 
 **Categoria:** Livro do Jogador
@@ -2460,7 +2415,8 @@ Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologi
 - **Gigante** (comum) - Vida +4, Mana -1
 - **Animália** (comum) - Vida +0, Mana +0
 - **Sereia / Tritão** (comum) - Vida -1, Mana +2
-- **Miceliano** (comum) - Vida +1, Mana +1
+- **Mímico** (comum) - Vida -1, Mana +2
+- **Simbionte** (comum) - Vida +0, Mana +0
 - **Slime** (comum) - Vida +3, Mana -2
 - **Feérico** (comum) - Vida -2, Mana +4
 - **Elfo** (especial) - Vida +2, Mana +4
@@ -2471,6 +2427,8 @@ Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologi
 - **Errante** (especial) - Vida +3, Mana +3
 - **Amálgamo** (especial) - Vida +5, Mana +1
 - **Bruxa** (especial) - Vida +1, Mana +5
+- **Onírico** (especial) - Vida +1, Mana +4
+- **Divino** (especial) - Vida +2, Mana +4
 
 ## bestiario
 

@@ -25,6 +25,8 @@ const casosEsperados = [
   ['golem', 'varianteId', 6],
   ['vampiro', 'varianteId', 6],
   ['auleth', 'varianteId', 6],
+  ['simbionte', 'varianteId', 4],
+  ['divino', 'varianteId', 5],
 ] as const;
 
 test('mapeia todas as sub-raças e escolhas raciais principais do catálogo', () => {
@@ -115,4 +117,13 @@ test('cada Cor da Alma usa o nome e a tinta do Fluxo que representa', () => {
     assert.match(linha, new RegExp(`text: 'text-\\[${destaque}\\]'`), `${erro} — text`);
     assert.match(linha, new RegExp(`border: 'border-\\[${destaque}\\]/`), `${erro} — border`);
   }
+});
+
+test('a raça Simbionte substitui o antigo Miceliano pelo tipo Colônia', () => {
+  const miceliano = racas.find(item => item.id === 'miceliano');
+  const simbionte = racas.find(item => item.id === 'simbionte');
+
+  assert.equal(miceliano, undefined);
+  assert.ok(simbionte, 'Raça ausente: simbionte');
+  assert.equal(obterVarianteRacial(simbionte, { varianteId: 'colonia' })?.titulo, 'Colônia');
 });

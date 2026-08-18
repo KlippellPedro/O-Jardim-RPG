@@ -48,11 +48,17 @@
 
 - **Canto Fascinante**: Uma vez por cena, gaste uma ação e 2 Mana para fazer um teste de Carisma contra a Vontade de uma criatura a até 9 m que possa ouvir. Em sucesso, ela fica fascinada até o início do seu próximo turno; o efeito termina antes se ela sofrer dano.
 
-## Miceliano (miceliano)
-**Fisiologia:** Organismo fúngico: alimenta-se como um ser vivo comum, mas também consegue absorver nutrientes ao permanecer em contato com solo fértil durante um descanso.
+## Mímico (mimico)
+**Fisiologia:** Corpo instável, moldado por vontade consciente. Mantém um único núcleo de identidade, e perder a concentração ou ficar inconsciente faz a forma copiada se desfazer.
 
-- **Rede Micelial**: Gaste uma ação para deixar esporos em uma criatura voluntária que você toque. Até o próximo descanso, vocês podem trocar silenciosamente ideias simples enquanto estiverem a até 30 m um do outro. Uma criatura só pode carregar os esporos de um Miceliano por vez.
-- **Memória do Solo**: Depois de permanecer 1 minuto em contato com terra, madeira ou fungos de uma área, faça um teste de Sobrevivência para perceber se criaturas passaram por aquele local recentemente. O efeito revela presença e direção aproximada, não identidades.
+- **Forma Emprestada**: Uma vez por cena, gaste uma ação para copiar a aparência de uma criatura de tamanho até uma categoria acima ou abaixo da sua que você tenha tocado ou observado de perto por pelo menos 1 minuto. A cópia é só aparência: não altera atributos, Vida, Mana, Movimento, alcance ou capacidade de carga, e não concede sentidos, ataques, imunidades ou características da forma copiada. Equipamentos não se transformam. Imitar uma criatura específica de forma convincente exige Enganação contra a Intuição de quem a conheça; a forma dura até você mudá-la de novo ou até o próximo descanso.
+- **Instinto de Camuflagem**: Enquanto permanece imóvel, sua textura e coloração se fundem ao ambiente ao redor. Receba vantagem em testes de Furtividade nesses momentos.
+
+## Simbionte (simbionte)
+**Fisiologia:** Corpo formado pela união ou cooperação entre organismos distintos. Aparência, textura e comportamento variam conforme o Tipo de Simbionte escolhido (Enxame, Parasita-Simbiose, Colônia ou Assimilador).
+
+- **Metabolismo Composto**: Seu corpo reparte recursos entre os organismos que o compõem. Você pode passar o dobro do tempo normal sem comer, beber ou descansar antes de sofrer as consequências disso, e recebe vantagem em Fortitude para resistir a fome, sede ou exaustão.
+- **Tipo de Simbionte**: Escolha um dos quatro Tipos de Simbionte. Você recebe apenas as características do tipo escolhido; a Colônia é a herdeira direta do que antes era descrito como Miceliano.
 
 ## Slime (slime)
 **Fisiologia:** Corpo semissólido: não possui ossos nem órgãos em posições fixas. Armaduras e vestimentas rígidas precisam ser adaptadas ao corpo do Slime.
@@ -134,6 +140,24 @@
 - **Preço da Bruxaria**: Uma vez por cena, quando não possuir Mana suficiente para uma característica racial, substitua até 3 pontos ausentes por 2 de Vida para cada ponto. Esse custo não pode ser reduzido, ignora Resistência, não pode deixar você com menos de 1 Vida e não paga custos de classes, itens ou Legados.
 - **Maldição Tecida**: Uma vez por cena, gaste uma ação e 5 Mana para amaldiçoar uma criatura a até 15 m. Faça Misticismo contra a Vontade dela. Se a criatura falhar, a Maldição dura três rodadas; se resistir, dura somente até o final do próximo turno dela. Apenas uma Maldição Tecida da mesma Bruxa pode afetar uma criatura; uma nova substitui a anterior.
 - **Grande Sabá**: Uma vez por sessão, gaste uma ação e 8 Mana para escolher uma Maldição conhecida e até Mod.Fluxo criaturas a até 15 m, com mínimo de uma. Faça um único teste de Misticismo e compare com a Vontade de cada alvo. A duração é determinada separadamente pelo resultado de cada criatura, seguindo Maldição Tecida.
+
+## Onírico (onirico)
+**Fisiologia:** Não dorme para descansar: para concluir um descanso completo, precisa efetivamente sonhar, e fica alheio aos arredores como qualquer criatura adormecida ficaria. É imune a efeitos que dependam especificamente de forçar o sono, mas não a outras formas de nocaute ou inconsciência.
+
+- **Passo Entre-Sonhos**: Uma vez por cena, gaste uma ação e 3 Mana para se teleportar até 6 m para um espaço desocupado que consiga ver, escorregando por um instante para dentro da própria lógica dos sonhos. Isso não provoca reações.
+- **Véu do Sonhador**: Você recebe vantagem para resistir a Medo, perda de Sanidade e ilusões. Você também não pode ser localizado ou rastreado através dos sonhos de outra criatura.
+- **Leitura de Sonhos**: Uma vez por descanso, enquanto uma criatura dorme e permite, você pode tocá-la e vislumbrar fragmentos soltos do sonho atual dela: uma imagem, uma emoção ou um medo recorrente. Isso nunca revela senhas, planos completos ou segredos que a criatura não contaria mesmo dormindo.
+- **Pesadelo Manifesto**: Uma vez por cena, gaste uma ação e 5 Mana para fazer uma criatura a até 15 m enxergar, por um instante, o pior pesadelo que carrega. Faça Misticismo contra a Vontade dela; em falha, a criatura sofre desvantagem no próximo teste que fizer e não pode usar reações até o início do seu próximo turno.
+- **Ancoragem Frágil**: Se passar mais de 24 horas sem completar um descanso sonhando de verdade, seu corpo começa a perder coesão: até voltar a sonhar, sua Mana máxima fica reduzida à metade, arredondada para baixo.
+- **Sonhador Desperto**: Ao adquirir esta raça, receba um Legado adicional, moldado pelo sonho que te deu forma.
+
+## Divino (divino)
+**Fisiologia:** Não envelhece e é imune a doenças puramente mortais, mas continua vulnerável a maldições, venenos e ferimentos como qualquer outro ser vivo.
+
+- **Sangue Divino**: Receba +4 em Vontade e vantagem para resistir a efeitos que tentem controlar, subjugar ou apagar sua identidade.
+- **Presença que Pesa**: Criaturas sensíveis ao sagrado ou ao profano sentem algo diferente em você mesmo disfarçado: receba desvantagem em Furtividade e Disfarce contra quem tiver devoção ou vínculo religioso ativo. Seguidores e inimigos da sua linhagem também tendem a te notar primeiro.
+- **Herança Divina**: Ao adquirir esta raça, receba um Legado adicional, herdado do sangue que carrega.
+- **Domínio Divino**: Escolha um Domínio Divino (Criação, Vida, Guerra, Astúcia ou Limiar). Você recebe apenas a característica do Domínio escolhido.
 
 ## Entidade (entidade)
 **Fisiologia:** N/A

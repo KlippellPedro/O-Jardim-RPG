@@ -13,7 +13,8 @@ export const RACA_PAGES: Record<string, RacaPageComponent> = {
   gigante: Racas.Gigante,
   animalia: Racas.Animalia,
   sereia: Racas.Sereia,
-  miceliano: Racas.Miceliano,
+  mimico: Racas.Mimico,
+  simbionte: Racas.Simbionte,
   slime: Racas.Slime,
   feerico: Racas.Feerico,
   elfo: Racas.Elfo,
@@ -24,6 +25,8 @@ export const RACA_PAGES: Record<string, RacaPageComponent> = {
   errante: Racas.Errante,
   amalgamo: Racas.Amalgamo,
   bruxa: Racas.Bruxa,
+  onirico: Racas.Onirico,
+  divino: Racas.Divino,
   entidade: Racas.Entidade,
   'raca-personalizada': Racas.RacaPersonalizada,
 };

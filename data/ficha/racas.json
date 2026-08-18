@@ -2216,33 +2216,139 @@
     ]
   },
   {
-    "id": "miceliano",
+    "id": "mimico",
     "tipo": "raca",
-    "titulo": "Miceliano",
+    "titulo": "Mímico",
     "categoria": "padrao",
     "disponibilidade": "geral",
     "arvore": null,
-    "vida": 1,
-    "mana": 1,
+    "vida": -1,
+    "mana": 2,
     "movimento": 0,
-    "descricao": "Fungo que virou gente. Come como qualquer um, mas também puxa o que precisa direto do solo fértil enquanto descansa. Deixa esporo em quem confia pra conversar sem falar, e lê o chão pra saber quem passou por ali antes.",
+    "descricao": "Corpo sem forma verdadeira, só um jeito de ser que ele decide usar hoje. Copia rosto, roupa e trejeito de quem já observou de perto, mas por baixo da imitação continua sendo a mesma criatura magra e insegura de sempre.",
     "fisiologia": [
-      "Organismo fúngico: come como qualquer criatura viva e, além disso, puxa nutrientes do chão se passar um descanso em contato com solo fértil."
+      "Corpo instável, moldado por vontade consciente. Mantém um único núcleo de identidade, e perder a concentração ou ficar inconsciente faz a forma copiada se desfazer."
     ],
     "caracteristicas": [
       {
-        "id": "rede-micelial",
-        "titulo": "Rede Micelial",
-        "tipo": "passiva",
-        "descricao": "Gaste uma ação e toque uma criatura voluntária para deixar esporos nela. Até o próximo descanso, vocês trocam ideias simples sem falar nada, desde que estejam a até 30 m um do outro. Uma mesma criatura só carrega os esporos de um Miceliano por vez.",
+        "id": "forma-emprestada",
+        "titulo": "Forma Emprestada",
+        "tipo": "acao",
+        "descricao": "Uma vez por cena, gaste uma ação para copiar a aparência de uma criatura de tamanho até uma categoria acima ou abaixo da sua que você tenha tocado ou observado de perto por pelo menos 1 minuto. A cópia é só aparência: não altera atributos, Vida, Mana, Movimento, alcance ou capacidade de carga, e não concede sentidos, ataques, imunidades ou características da forma copiada. Equipamentos não se transformam. Imitar uma criatura específica de forma convincente exige Enganação contra a Intuição de quem a conheça; a forma dura até você mudá-la de novo ou até o próximo descanso.",
+        "usos": 1,
+        "recuperacao": "cena",
         "automatizada": false
       },
       {
-        "id": "memoria-do-solo",
-        "titulo": "Memória do Solo",
-        "tipo": "exploracao",
-        "descricao": "Fique 1 minuto em contato com a terra, a madeira ou os fungos de um lugar e faça um teste de Sobrevivência: você sente se alguma criatura passou por ali recentemente. O chão entrega a presença e a direção aproximada, nunca a identidade de quem passou.",
+        "id": "instinto-de-camuflagem",
+        "titulo": "Instinto de Camuflagem",
+        "tipo": "passiva",
+        "descricao": "Enquanto permanece imóvel, sua textura e coloração se fundem ao ambiente ao redor. Receba vantagem em testes de Furtividade nesses momentos.",
         "automatizada": false
+      }
+    ],
+    "recursos_provisorios": false
+  },
+  {
+    "id": "simbionte",
+    "tipo": "raca",
+    "titulo": "Simbionte",
+    "categoria": "padrao",
+    "disponibilidade": "geral",
+    "arvore": null,
+    "vida": 0,
+    "mana": 0,
+    "movimento": 0,
+    "descricao": "Não nasceu um: nasceu uma parceria. Um corpo só, com mais de um organismo trabalhando por baixo da mesma pele, e ninguém de fora consegue dizer com certeza onde um termina e o outro começa.",
+    "fisiologia": [
+      "Corpo formado pela união ou cooperação entre organismos distintos. Aparência, textura e comportamento variam conforme o Tipo de Simbionte escolhido."
+    ],
+    "caracteristicas": [
+      {
+        "id": "metabolismo-composto",
+        "titulo": "Metabolismo Composto",
+        "tipo": "passiva",
+        "descricao": "Seu corpo reparte recursos entre os organismos que o compõem. Você pode passar o dobro do tempo normal sem comer, beber ou descansar antes de sofrer as consequências disso, e recebe vantagem em Fortitude para resistir a fome, sede ou exaustão.",
+        "automatizada": false
+      }
+    ],
+    "rotulo_variante": "Tipo de Simbionte",
+    "descricao_variantes": "Escolha um dos quatro Tipos de Simbionte. Você recebe apenas as características do tipo escolhido.",
+    "variantes": [
+      {
+        "id": "enxame",
+        "titulo": "Enxame",
+        "vida": -1,
+        "mana": 1,
+        "movimento": 1.5,
+        "caracteristicas": [
+          {
+            "id": "corpo-em-enxame",
+            "titulo": "Corpo em Enxame",
+            "tipo": "movimento",
+            "descricao": "Seu corpo é, na prática, um agregado coordenado de organismos menores. Sem carregar equipamento rígido maior que a passagem, você pode atravessar aberturas de pelo menos 8 cm; o trecho apertado conta como terreno difícil e você não pode terminar o movimento dentro dele. Você também recebe vantagem para escapar de agarrões, já que sua massa nunca fica totalmente presa.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "parasita-simbiose",
+        "titulo": "Parasita-Simbiose",
+        "vida": 1,
+        "mana": 1,
+        "movimento": 0,
+        "caracteristicas": [
+          {
+            "id": "hospedeiro-mutuo",
+            "titulo": "Hospedeiro Mútuo",
+            "tipo": "passiva",
+            "descricao": "Um organismo interno filtra o que entra em seu corpo antes que cause dano. Receba vantagem em Fortitude contra veneno e doenças. Uma vez por cena, gaste uma ação para se alimentar do vigor de uma criatura voluntária ou incapacitada que você toque e recuperar 1d4 de Vida.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "colonia",
+        "titulo": "Colônia",
+        "vida": 1,
+        "mana": 1,
+        "movimento": 0,
+        "caracteristicas": [
+          {
+            "id": "rede-da-colonia",
+            "titulo": "Rede da Colônia",
+            "tipo": "passiva",
+            "descricao": "Gaste uma ação para deixar esporos ou brotos em uma criatura voluntária que você toque. Até o próximo descanso, vocês podem trocar silenciosamente ideias simples enquanto estiverem a até 30 m um do outro. Uma criatura só pode carregar os esporos de um Simbionte por vez.",
+            "automatizada": false
+          },
+          {
+            "id": "memoria-coletiva",
+            "titulo": "Memória Coletiva",
+            "tipo": "exploracao",
+            "descricao": "Depois de permanecer 1 minuto em contato com terra, madeira ou fungos de uma área, faça um teste de Sobrevivência para perceber, através da colônia, se criaturas passaram por ali recentemente. O efeito revela presença e direção aproximada, não identidades.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "assimilador",
+        "titulo": "Assimilador",
+        "vida": 0,
+        "mana": 2,
+        "movimento": 0,
+        "caracteristicas": [
+          {
+            "id": "assimilacao-superficial",
+            "titulo": "Assimilação Superficial",
+            "tipo": "acao",
+            "descricao": "Uma vez por descanso, gaste uma ação para tocar uma criatura voluntária, incapacitada ou recém-derrotada e assimilar temporariamente um traço superficial dela: um sentido, uma resistência ou um modo de locomoção simples, a critério do mestre. O traço assimilado equivale no máximo a um sentido especial ou a um deslocamento igual ao seu Movimento, nunca a ataques, imunidades completas ou características raciais inteiras, e dura até o final da cena.",
+            "usos": 1,
+            "recuperacao": "descanso",
+            "automatizada": false
+          }
+        ]
       }
     ],
     "recursos_provisorios": false
@@ -3353,7 +3459,7 @@
       "Grande",
       "Enorme"
     ],
-    "descricao": "Consciência vinda do espaço ou de outra dimensão, presa numa forma física que ela mesma escolhe manter fluida. Muda de tamanho e de rosto quando quer, sabe mais que qualquer especialista sobre as duas áreas que escolheu estudar, e simplesmente não entende por que os outros se importam tanto com sentimento.",
+    "descricao": "Uma consciência que se formou lá fora e escolheu um corpo para caber aqui. Muda de forma e de tamanho quando quer, sabe demais sobre duas coisas muito específicas e quase nada sobre sentir o que os outros sentem. A Origem Cósmica diz de que tipo de coisa ele nasceu (estrela, planeta, buraco negro) e o tempo neste mundo vai devolvendo o que ficou do outro lado, de Fragmento a Íntegro.",
     "fisiologia": [
       "Não precisa comer, beber ou dormir. Para concluir um descanso, medita pelo tempo normal e pode perceber os arredores, mas qualquer atividade além de observação simples interrompe a recuperação.",
       "É imune a doenças comuns ou sobrenaturais, mas não a venenos ou outras condições que apenas produzam sintomas semelhantes.",
@@ -3406,7 +3512,6 @@
       }
     ],
     "recursos_provisorios": false,
-    "descricao": "Uma consciência que se formou lá fora e escolheu um corpo para caber aqui. Muda de forma e de tamanho quando quer, sabe demais sobre duas coisas muito específicas e quase nada sobre sentir o que os outros sentem. A Origem Cósmica diz de que tipo de coisa ele nasceu (estrela, planeta, buraco negro) e o tempo neste mundo vai devolvendo o que ficou do outro lado, de Fragmento a Íntegro.",
     "rotulo_variante": "Origem Cósmica",
     "descricao_variantes": "Escolha de onde esta consciência se formou antes de vestir um corpo. As seis Origens valem igual, e cada uma trouxe uma coisa diferente de lá.",
     "variantes": [
@@ -5074,6 +5179,263 @@
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 3,
+            "automatizada": false
+          }
+        ]
+      }
+    ],
+    "recursos_provisorios": false
+  },
+  {
+    "id": "onirico",
+    "tipo": "raca",
+    "titulo": "Onírico",
+    "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "formas_aquisicao": [
+      "criacao_autorizada",
+      "transformacao_narrativa"
+    ],
+    "arvores": [
+      "aethel",
+      "ousias",
+      "keryx",
+      "haemus",
+      "ignis",
+      "moros",
+      "aperion",
+      "chronus",
+      "erebus",
+      "mulher-carmesim"
+    ],
+    "arvore": null,
+    "transformacao_em_qualquer_arvore": true,
+    "origem_onirica": {
+      "tipo": "ser-onirico",
+      "descricao": "Uma consciência nascida do véu dos sonhos que assume forma física para caminhar entre os povos das Árvores, sempre meio acordada, meio sonhando."
+    },
+    "vida": 1,
+    "mana": 4,
+    "movimento": 0,
+    "legados_adicionais": 1,
+    "descricao": "Não veio de nenhum ventre: veio de um sonho que se recusou a terminar quando o sonhador acordou. Anda entre o mundo real e a lógica solta de um pesadelo, e as duas coisas parecem sempre um pouco mais verdadeiras perto dele.",
+    "fisiologia": [
+      "Não dorme para descansar: para concluir um descanso completo, precisa efetivamente sonhar, e fica alheio aos arredores como qualquer criatura adormecida ficaria.",
+      "É imune a efeitos que dependam especificamente de forçar o sono, mas não a outras formas de nocaute ou inconsciência."
+    ],
+    "caracteristicas": [
+      {
+        "id": "passo-entre-sonhos",
+        "titulo": "Passo Entre-Sonhos",
+        "tipo": "movimento",
+        "descricao": "Uma vez por cena, gaste uma ação e 3 Mana para se teleportar até 6 m para um espaço desocupado que consiga ver, escorregando por um instante para dentro da própria lógica dos sonhos. Isso não provoca reações.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "custo_mana": 3,
+        "alcance_m": 6,
+        "automatizada": false
+      },
+      {
+        "id": "veu-do-sonhador",
+        "titulo": "Véu do Sonhador",
+        "tipo": "passiva",
+        "descricao": "Você recebe vantagem para resistir a Medo, perda de Sanidade e ilusões. Você também não pode ser localizado ou rastreado através dos sonhos de outra criatura.",
+        "automatizada": false
+      },
+      {
+        "id": "leitura-de-sonhos",
+        "titulo": "Leitura de Sonhos",
+        "tipo": "exploracao",
+        "descricao": "Uma vez por descanso, enquanto uma criatura dorme e permite, você pode tocá-la e vislumbrar fragmentos soltos do sonho atual dela: uma imagem, uma emoção ou um medo recorrente. Isso nunca revela senhas, planos completos ou segredos que a criatura não contaria mesmo dormindo.",
+        "usos": 1,
+        "recuperacao": "descanso",
+        "automatizada": false
+      },
+      {
+        "id": "pesadelo-manifesto",
+        "titulo": "Pesadelo Manifesto",
+        "tipo": "acao",
+        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para fazer uma criatura a até 15 m enxergar, por um instante, o pior pesadelo que carrega. Faça Misticismo contra a Vontade dela; em falha, a criatura sofre desvantagem no próximo teste que fizer e não pode usar reações até o início do seu próximo turno.",
+        "usos": 1,
+        "recuperacao": "cena",
+        "custo_mana": 5,
+        "alcance_m": 15,
+        "teste": "misticismo_vs_vontade",
+        "automatizada": false
+      },
+      {
+        "id": "ancoragem-fragil",
+        "titulo": "Ancoragem Frágil",
+        "tipo": "limitacao",
+        "descricao": "Se passar mais de 24 horas sem completar um descanso sonhando de verdade, seu corpo começa a perder coesão: até voltar a sonhar, sua Mana máxima fica reduzida à metade, arredondada para baixo.",
+        "automatizada": false
+      },
+      {
+        "id": "sonhador-desperto",
+        "titulo": "Sonhador Desperto",
+        "tipo": "aquisicao",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional, moldado pelo sonho que te deu forma.",
+        "automatizada": false
+      }
+    ],
+    "recursos_provisorios": false
+  },
+  {
+    "id": "divino",
+    "tipo": "raca",
+    "titulo": "Divino",
+    "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "formas_aquisicao": [
+      "criacao_autorizada",
+      "transformacao_narrativa"
+    ],
+    "arvores": [
+      "aethel",
+      "ousias",
+      "keryx",
+      "haemus",
+      "ignis",
+      "moros",
+      "aperion",
+      "chronus",
+      "erebus",
+      "mulher-carmesim"
+    ],
+    "arvore": null,
+    "transformacao_em_qualquer_arvore": true,
+    "origem_divina": {
+      "tipo": "descendencia-divina",
+      "descricao": "Um semideus ou avatar reduzido de uma divindade, grande ou pequena, conhecida ou esquecida por quase todas as Árvores. A devoção plena de um deus inteiro está muito além do alcance de um personagem jogável."
+    },
+    "vida": 2,
+    "mana": 4,
+    "movimento": 0,
+    "ajustes_atributos": {
+      "carisma": 2,
+      "fluxo": 2
+    },
+    "limites_atributos": {
+      "carisma": 20,
+      "fluxo": 20
+    },
+    "legados_adicionais": 1,
+    "descricao": "Sangue de deus correndo em corpo pequeno demais pra ele. Divindade plena está fora de alcance: o que sobra já é o suficiente pra ser temido, cultuado ou caçado, e nem sempre por quem dá valor às suas escolhas.",
+    "fisiologia": [
+      "Não envelhece e é imune a doenças puramente mortais, mas continua vulnerável a maldições, venenos e ferimentos como qualquer outro ser vivo."
+    ],
+    "caracteristicas": [
+      {
+        "id": "sangue-divino",
+        "titulo": "Sangue Divino",
+        "tipo": "passiva",
+        "descricao": "Receba +4 em Vontade e vantagem para resistir a efeitos que tentem controlar, subjugar ou apagar sua identidade.",
+        "automatizada": true
+      },
+      {
+        "id": "presenca-que-pesa",
+        "titulo": "Presença que Pesa",
+        "tipo": "limitacao",
+        "descricao": "Criaturas sensíveis ao sagrado ou ao profano sentem algo diferente em você mesmo disfarçado: receba desvantagem em Furtividade e Disfarce contra quem tiver devoção ou vínculo religioso ativo. Seguidores e inimigos da sua linhagem também tendem a te notar primeiro.",
+        "automatizada": false
+      },
+      {
+        "id": "heranca-divina",
+        "titulo": "Herança Divina",
+        "tipo": "aquisicao",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional, herdado do sangue que carrega.",
+        "automatizada": false
+      }
+    ],
+    "rotulo_variante": "Domínio Divino",
+    "descricao_variantes": "Escolha um único Domínio. Sua aparência pode variar, mas apenas a regra do Domínio escolhido funciona.",
+    "variantes": [
+      {
+        "id": "criacao",
+        "titulo": "Domínio da Criação",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "primeira-centelha",
+            "titulo": "Primeira Centelha",
+            "tipo": "passiva",
+            "descricao": "Uma vez por cena, ao tentar pela primeira vez nesta campanha algo que seu personagem nunca fez antes, receba vantagem nesse teste.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "vida",
+        "titulo": "Domínio da Vida",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "toque-que-cura",
+            "titulo": "Toque que Cura",
+            "tipo": "acao",
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para tocar uma criatura e recuperar 2d6 + Mod.Carisma de Vida.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "cura": "2d6 + Mod.Carisma",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "guerra",
+        "titulo": "Domínio da Guerra",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "furia-sagrada",
+            "titulo": "Fúria Sagrada",
+            "tipo": "passiva",
+            "descricao": "Receba vantagem no primeiro teste de ataque que fizer em cada combate.",
+            "automatizada": true
+          }
+        ]
+      },
+      {
+        "id": "astucia",
+        "titulo": "Domínio da Astúcia",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "palavras-que-convencem",
+            "titulo": "Palavras que Convencem",
+            "tipo": "rerrolagem",
+            "descricao": "Uma vez por sessão, depois de falhar em um teste de Enganação ou Diplomacia, rerrole o teste e mantenha o novo resultado.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "limiar",
+        "titulo": "Domínio do Limiar",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "ultima-palavra",
+            "titulo": "Última Palavra",
+            "tipo": "reacao",
+            "descricao": "Uma vez por sessão, quando um aliado a até 9 m chegar a 0 de Vida, use sua reação para estabilizá-lo automaticamente, sem exigir teste.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "alcance_m": 9,
             "automatizada": false
           }
         ]

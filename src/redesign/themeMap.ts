@@ -62,11 +62,17 @@ const SEREIA: ThemeEntry = {
   text: 'text-cyan-300', icon: 'text-cyan-500/70', tag: 'text-cyan-200',
   rationale: 'Habitantes dos mares: profundezas, espuma e escamas brilhantes.',
 };
-const MICELIANO: ThemeEntry = {
+const MIMICO: ThemeEntry = {
+  primary: '#c084fc', secondary: '#581c87', glow: 'rgba(192,132,252,0.28)',
+  bg: 'bg-fuchsia-950/25', border: 'border-fuchsia-500/25 hover:border-fuchsia-400/55',
+  text: 'text-fuchsia-300', icon: 'text-fuchsia-500/70', tag: 'text-fuchsia-200',
+  rationale: 'Corpo sem forma fixa que copia o que ve: iridescencia instavel entre uma cor e outra.',
+};
+const SIMBIONTE: ThemeEntry = {
   primary: '#e07a5f', secondary: '#7c2d12', glow: 'rgba(224,122,95,0.28)',
   bg: 'bg-orange-950/25', border: 'border-orange-600/25 hover:border-orange-400/55',
   text: 'text-orange-300', icon: 'text-orange-500/70', tag: 'text-orange-200',
-  rationale: 'Seres fungicos: materia organica, esporos, decomposicao e vida da terra umida.',
+  rationale: 'Uniao de organismos distintos: materia organica, esporos e vida composta (herda a paleta do extinto Miceliano).',
 };
 const FEERICO: ThemeEntry = {
   primary: '#f472b6', secondary: '#be185d', glow: 'rgba(244,114,182,0.28)',
@@ -142,6 +148,18 @@ const AMALGAMO: ThemeEntry = {
   bg: 'bg-slate-950/40', border: 'border-slate-600/25 hover:border-slate-400/55',
   text: 'text-slate-300', icon: 'text-slate-300/90', tag: 'text-slate-400',
   rationale: 'Quimera espiritual de almas fundidas: cinza-azulado desbotado, instavel e sombrio.',
+};
+const ONIRICO: ThemeEntry = {
+  primary: '#818cf8', secondary: '#312e81', glow: 'rgba(129,140,248,0.30)',
+  bg: 'bg-indigo-950/30', border: 'border-indigo-400/25 hover:border-indigo-300/55',
+  text: 'text-indigo-200', icon: 'text-indigo-400/70', tag: 'text-indigo-300',
+  rationale: 'Seres nascidos do veu dos sonhos: indigo profundo de ceu noturno e logica onirica.',
+};
+const DIVINO: ThemeEntry = {
+  primary: '#facc15', secondary: '#78350f', glow: 'rgba(250,204,21,0.32)',
+  bg: 'bg-amber-950/30', border: 'border-yellow-400/25 hover:border-yellow-300/55',
+  text: 'text-yellow-300', icon: 'text-yellow-400/70', tag: 'text-yellow-200',
+  rationale: 'Semideuses e avatares reduzidos: dourado solar, presenca que pesa e brilho divino.',
 };
 
 // ── CLASSES ───────────────────────────────────────────────────────────────────
@@ -316,10 +334,11 @@ export const THEME_MAP: Record<string, ThemeEntry> = {
   humano: HUMANO, anao: ANAO, goblim: GOBLIM, golem: GOLEM,
   espirito: ESPIRITO, gigante: GIGANTE, animalia: ANIMALIA,
   sereia: SEREIA, tritao: SEREIA, sereiaoututritao: SEREIA,
-  miceliano: MICELIANO, feerico: FEERICO, slime: SLIME, vampiro: VAMPIRO,
+  mimico: MIMICO, simbionte: SIMBIONTE, feerico: FEERICO, slime: SLIME, vampiro: VAMPIRO,
   // Racas Especiais
   elfo: ELFO, desperto: DESPERTO, auleth: AULETH, automato: AUTOMATO,
   clone: CLONE, entidade: ENTIDADE, errante: ERRANTE, bruxa: BRUXA, amalgamo: AMALGAMO,
+  onirico: ONIRICO, divino: DIVINO,
   // Classes
   alquimista: ALQUIMISTA, atirador: ATIRADOR, cacador: CACADOR,
   cacadordeentidades: CACADOR_ENTIDADES, cacadordentidades: CACADOR_ENTIDADES,
