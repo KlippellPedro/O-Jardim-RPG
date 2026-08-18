@@ -67,7 +67,9 @@ export function usePerformanceProfile() {
         // Em 4K/DPR 2, o teto 1,5 produzia 9,08 milhões de pixels. Em telas
         // largas, DPR 1 já corresponde à resolução CSS nativa e evita esse pico.
         dpr: performanceMode || largeViewport ? 1 : ([1, 1.5] as [number, number]),
-        starCount: performanceMode ? 0 : 600,
+        // Em desempenho, um campo menor e estático mantém a leitura de espaço
+        // sem exigir um loop contínuo de renderização.
+        starCount: performanceMode ? 220 : 600,
         showDecorations: !performanceMode,
       },
     };
@@ -79,13 +81,14 @@ export function usePerformanceProfile() {
  * reduzir blur/glow/animação não precisam assinar o store nem espalhar ifs.
  */
 export function PerformancePreferencesBridge() {
-  const { performanceMode, prefersReducedMotion } = usePerformanceProfile();
+  const { pageVisible, performanceMode, prefersReducedMotion } = usePerformanceProfile();
 
   useEffect(() => {
     const root = document.documentElement;
+    root.dataset.pageVisible = pageVisible ? 'true' : 'false';
     root.dataset.performanceMode = performanceMode ? 'reduced' : 'full';
     root.dataset.reducedMotion = prefersReducedMotion ? 'true' : 'false';
-  }, [performanceMode, prefersReducedMotion]);
+  }, [pageVisible, performanceMode, prefersReducedMotion]);
 
   return null;
 }

@@ -30,6 +30,7 @@ export interface EntidadeIniciativa {
   defesa?: number | null;
   ataques?: SessionAttack[];
   pericias?: string[];
+  anotacao: string;
   /** Só chega para quem comanda a mesa - usado pra distribuir XP. */
   vd?: number | null;
   tipo: 'jogador' | 'aliado' | 'inimigo';
@@ -97,6 +98,7 @@ function mapParticipantes(participantes: SessaoParticipanteResponse[] | undefine
       defesa: typeof participante.defesa === 'number' ? participante.defesa : null,
       ataques: normalizeAttacks(participante.ataques),
       pericias: normalizePericias(participante.pericias),
+      anotacao: typeof participante.anotacao === 'string' ? participante.anotacao : '',
       vd: typeof participante.vd === 'number' ? participante.vd : null,
       tipo,
       cor: tipo === 'jogador' ? '#4FD1C5' : tipo === 'aliado' ? '#34d399' : '#ef4444',
@@ -138,6 +140,7 @@ interface SessaoState {
   fetchRolagens: () => Promise<void>;
   publicarAoVivo: () => Promise<void>;
   encerrarSessao: () => Promise<void>;
+  selecionarPersonagens: (personagemIds: string[]) => Promise<void>;
 
   adicionarEntidade: (entidade: ParticipantePayload) => Promise<void>;
   removerEntidade: (id: string) => Promise<void>;
@@ -288,7 +291,7 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
       });
 
       if (response?.comando) {
-        const reopened = await sessaoApi.abrirSessao(campanhaId, 'Sessão ao vivo', true);
+        const reopened = await sessaoApi.abrirSessao(campanhaId, 'Sessão ao vivo', false);
         if (reopened?.sessao) {
           set({
             sessaoId: reopened.sessao.id,
@@ -344,6 +347,18 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
       error: null,
     });
     await get().fetchRolagens();
+  },
+
+  selecionarPersonagens: async (personagemIds) => {
+    const { sessaoId } = get();
+    if (!sessaoId) throw new Error('Nenhuma sessão preparada.');
+    const response = await sessaoApi.selecionarPersonagens(sessaoId, personagemIds);
+    if (!response.sessao) throw new Error('O servidor não retornou a preparação da sessão.');
+    set({
+      iniciativa: mapParticipantes(response.participantes),
+      sessaoVersao: response.sessao.versao ?? 0,
+      error: null,
+    });
   },
 
   encerrarSessao: async () => {

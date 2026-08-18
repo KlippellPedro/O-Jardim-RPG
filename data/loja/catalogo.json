@@ -1841,7 +1841,7 @@
     {
       "tipo": "armadura",
       "id": "escamas",
-      "titulo": "Escamas",
+      "titulo": "Armadura de Escamas",
       "conteudo": {
         "descricao": "Armadura leve feita de escamas de animal.",
         "preco": {
@@ -1858,7 +1858,7 @@
     {
       "tipo": "armadura",
       "id": "pluma",
-      "titulo": "Pluma",
+      "titulo": "Armadura de Pluma",
       "conteudo": {
         "descricao": "Aumenta o Movimento em 3 m. Ocupa 2 espaços no inventário.",
         "preco": {
@@ -1875,7 +1875,7 @@
     {
       "tipo": "armadura",
       "id": "couro",
-      "titulo": "Couro",
+      "titulo": "Armadura de Couro",
       "conteudo": {
         "descricao": "Concede Resistência 1 contra Corte ou Perfuração, escolhido na criação do item.",
         "preco": {
@@ -1892,7 +1892,7 @@
     {
       "tipo": "armadura",
       "id": "padrao",
-      "titulo": "Couro Batido",
+      "titulo": "Armadura de Couro Batido",
       "conteudo": {
         "descricao": "Concede Resistência 2 contra Corte ou Perfuração, escolhido na criação do item.",
         "preco": {
@@ -1909,7 +1909,7 @@
     {
       "tipo": "armadura",
       "id": "malha",
-      "titulo": "Malha",
+      "titulo": "Armadura de Malha",
       "conteudo": {
         "descricao": "Pode ser usada sob uma armadura principal, mas não pode receber modificações.",
         "preco": {
@@ -1926,7 +1926,7 @@
     {
       "tipo": "armadura",
       "id": "espacosa",
-      "titulo": "Malha Revestida",
+      "titulo": "Armadura de Malha Revestida",
       "conteudo": {
         "descricao": "+3 espaços no inventário.",
         "preco": {
@@ -1943,7 +1943,7 @@
     {
       "tipo": "armadura",
       "id": "boa",
-      "titulo": "Couro Bom",
+      "titulo": "Armadura de Couro Reforçado",
       "conteudo": {
         "descricao": "Recebe 4 de resistência a corte ou Perfuração",
         "preco": {
@@ -1960,7 +1960,7 @@
     {
       "tipo": "armadura",
       "id": "ossos",
-      "titulo": "Ossos",
+      "titulo": "Armadura de Ossos",
       "conteudo": {
         "descricao": "+2 em Intimidação e -1 em testes de Carisma.",
         "preco": {
@@ -1977,7 +1977,7 @@
     {
       "tipo": "armadura",
       "id": "colete",
-      "titulo": "Colete",
+      "titulo": "Armadura de Colete Balístico",
       "conteudo": {
         "descricao": "Concede Resistência 5 contra dano Balístico.",
         "preco": {
@@ -1994,7 +1994,7 @@
     {
       "tipo": "armadura",
       "id": "ferro",
-      "titulo": "Ferro",
+      "titulo": "Armadura de Ferro",
       "conteudo": {
         "descricao": "Armadura pesada de ferro batido; resistente e barata.",
         "preco": {
@@ -2011,7 +2011,7 @@
     {
       "tipo": "armadura",
       "id": "aco",
-      "titulo": "Aço",
+      "titulo": "Armadura de Aço",
       "conteudo": {
         "descricao": "Concede Resistência 2 contra Corte e Perfuração.",
         "preco": {
@@ -2028,7 +2028,7 @@
     {
       "tipo": "armadura",
       "id": "espiritual",
-      "titulo": "Espiritual",
+      "titulo": "Armadura de Energia Espiritual",
       "conteudo": {
         "descricao": "Uma vez por cena, gaste uma Ação de Movimento e 6 de Mana para ficar parcialmente incorpóreo por três rodadas. Enquanto durar, receba Resistência 10 contra Corte, Perfuração e Impacto, mas não possa atacar, agarrar, manipular objetos nem atravessar barreiras seladas.",
         "preco": 400,
@@ -2048,7 +2048,7 @@
     {
       "tipo": "armadura",
       "id": "luxuosa",
-      "titulo": "Armadura Luxuosa",
+      "titulo": "Armadura de Luxo",
       "conteudo": {
         "descricao": "+1 no modificador de Carisma e vantagem em testes de convencimento.",
         "preco": {
@@ -2065,7 +2065,7 @@
     {
       "tipo": "armadura",
       "id": "planador",
-      "titulo": "Planador",
+      "titulo": "Armadura de Planador",
       "conteudo": {
         "descricao": "Ao cair de uma altura, gaste uma Ação de Movimento para abrir o planador. Até pousar, avance horizontalmente até seu Movimento por rodada e desça 1,5 m; não pode ganhar altitude. O planador suporta no máximo 50 m de deslocamento horizontal por uso. Um pouso controlado dessa forma não causa dano de queda.",
         "preco": {
@@ -2085,7 +2085,7 @@
     {
       "tipo": "armadura",
       "id": "excelente",
-      "titulo": "Couro Excelente",
+      "titulo": "Armadura de Couro Excelente",
       "conteudo": {
         "descricao": "Concede Resistência 10 contra Corte ou Perfuração, escolhido na criação do item.",
         "preco": {
@@ -2102,7 +2102,7 @@
     {
       "tipo": "armadura",
       "id": "guerra",
-      "titulo": "Guerra",
+      "titulo": "Armadura de Guerra",
       "conteudo": {
         "descricao": "Concede Resistência 15 contra um tipo de dano escolhido na criação do item.",
         "preco": {
@@ -2119,7 +2119,7 @@
     {
       "tipo": "armadura",
       "id": "flexivel",
-      "titulo": "Flexível",
+      "titulo": "Armadura de Flexibilidade",
       "conteudo": {
         "descricao": "Uma vez por cena, depois de gastar sua Reação, recupere-a imediatamente. Ao fim da cena, ganhe 1 Cansaço.",
         "preco": 150,
@@ -2138,7 +2138,7 @@
     {
       "tipo": "armadura",
       "id": "elemental",
-      "titulo": "Elemental",
+      "titulo": "Armadura de Proteção Elemental",
       "conteudo": {
         "descricao": "Concede Resistência 10 contra um elemento oficial escolhido na criação do item.",
         "preco": {
@@ -2155,7 +2155,7 @@
     {
       "tipo": "armadura",
       "id": "tatica",
-      "titulo": "Tática",
+      "titulo": "Armadura de Combate Tático",
       "conteudo": {
         "descricao": "Aumenta em uma categoria o alcance das armas à distância usadas pelo portador.",
         "preco": {
@@ -2172,7 +2172,7 @@
     {
       "tipo": "armadura",
       "id": "vanguarda",
-      "titulo": "Vanguarda",
+      "titulo": "Armadura de Vanguarda",
       "conteudo": {
         "descricao": "Concede vantagem em testes de resistência física",
         "preco": {
@@ -2189,7 +2189,7 @@
     {
       "tipo": "armadura",
       "id": "guardiao",
-      "titulo": "Guardião",
+      "titulo": "Armadura de Guardião",
       "conteudo": {
         "descricao": "Se o portador for um Guardião, esta armadura concede +5 de Defesa adicional.",
         "preco": 200,
@@ -2204,7 +2204,7 @@
     {
       "tipo": "armadura",
       "id": "anti-magia",
-      "titulo": "Anti-mágia",
+      "titulo": "Armadura de Anti-magia",
       "conteudo": {
         "descricao": "Concede Resistência 10 contra dano mágico.",
         "preco": 1000,
@@ -2219,7 +2219,7 @@
     {
       "tipo": "armadura",
       "id": "tecnologica",
-      "titulo": "Tecnológica",
+      "titulo": "Armadura de Tecnologia",
       "conteudo": {
         "descricao": "Possui 3 cargas. Gaste uma Ação Padrão e 1 carga para receber deslocamento de voo igual ao Movimento por três rodadas. Se ainda estiver no ar ao terminar, desça em segurança até 9 m e caia pelo restante. Recupera todas as cargas após um descanso completo conectado por uma hora a uma fonte de energia A.X.I.S.",
         "preco": 2000,
@@ -2538,7 +2538,7 @@
     {
       "tipo": "armadura",
       "id": "couraca-primordial",
-      "titulo": "Couraça Primordial",
+      "titulo": "Armadura de Essência Primordial",
       "conteudo": {
         "descricao": "Concede Resistência 4 contra todos os tipos de dano enquanto estiver equipada. A peça exige aprovação do Mestre.",
         "preco": 3000,
@@ -4101,7 +4101,7 @@
     {
       "tipo": "armadura",
       "id": "gambeson",
-      "titulo": "Gambeson",
+      "titulo": "Armadura de Gambeson",
       "conteudo": {
         "descricao": "Armadura acolchoada leve e barata.",
         "preco": {
@@ -4118,7 +4118,7 @@
     {
       "tipo": "armadura",
       "id": "brigantina",
-      "titulo": "Brigantina",
+      "titulo": "Armadura de Brigantina",
       "conteudo": {
         "descricao": "Placas de metal rebitadas em couro; boa proteção com mobilidade.",
         "preco": {
@@ -4135,7 +4135,7 @@
     {
       "tipo": "armadura",
       "id": "meia-armadura",
-      "titulo": "Meia-Armadura",
+      "titulo": "Armadura de Meia Placa",
       "conteudo": {
         "descricao": "Recebe 3 de resistência a corte e perfuração.",
         "preco": {
@@ -4169,7 +4169,7 @@
     {
       "tipo": "armadura",
       "id": "malha-elfica",
-      "titulo": "Cota de Malha Élfica",
+      "titulo": "Armadura de Malha Élfica",
       "conteudo": {
         "descricao": "Leve como seda; não impõe penalidade de furtividade.",
         "preco": 150,
@@ -4184,7 +4184,7 @@
     {
       "tipo": "armadura",
       "id": "armadura-solar",
-      "titulo": "Armadura Solar",
+      "titulo": "Armadura de Energia Solar",
       "conteudo": {
         "descricao": "Ao amanhecer, restaura 3d10 de Vida do portador. +10 de RD a trevas.",
         "preco": 900,
@@ -6270,258 +6270,6 @@
     },
     {
       "tipo": "arma",
-      "id": "excalibur",
-      "titulo": "Excalibur",
-      "conteudo": {
-        "descricao": "Impossível finalizar seres com essa espada.",
-        "preco": 95000,
-        "raridade": "lendario",
-        "atributos": [
-          "6d10+12 de dano",
-          "Crítico 20/x4"
-        ],
-        "dano": "6d10+12",
-        "critico": "20/x4",
-        "alcance": "Curto",
-        "tipo_de_dano": "Pureza",
-        "subtipo": "marcial",
-        "material": "Obstinada",
-        "modo": "Corpo a corpo",
-        "margem_ameaca": 20,
-        "multiplicador_critico": 4,
-        "nivel_recomendado": 25,
-        "tier_poder": "lendario",
-        "requer_autorizacao_mestre": true,
-        "requisitoNivel": 25,
-        "nivelMinimoLoja": 4
-      }
-    },
-    {
-      "tipo": "arma",
-      "id": "martelo-das-chamas",
-      "titulo": "Martelo das Chamas",
-      "conteudo": {
-        "descricao": "Um martelo \"abençoado\" pela dama das chamas.",
-        "preco": 80000,
-        "raridade": "lendario",
-        "atributos": [
-          "6d10+10 de dano",
-          "Crítico 20/x4"
-        ],
-        "dano": "6d10+10",
-        "critico": "20/x4",
-        "alcance": "Curto",
-        "tipo_de_dano": "Fogo Astral",
-        "subtipo": "marcial",
-        "material": "Obstinada",
-        "modo": "Corpo a corpo",
-        "margem_ameaca": 20,
-        "multiplicador_critico": 4,
-        "nivel_recomendado": 25,
-        "tier_poder": "lendario",
-        "requer_autorizacao_mestre": true,
-        "requisitoNivel": 25,
-        "nivelMinimoLoja": 4
-      }
-    },
-    {
-      "tipo": "arma",
-      "id": "triceratops",
-      "titulo": "Triceratops",
-      "conteudo": {
-        "descricao": "Uma katana que pertenceu a um antigo vampiro Ventrue.",
-        "preco": 72000,
-        "raridade": "lendario",
-        "atributos": [
-          "6d10+8 de dano",
-          "Crítico 20/x4"
-        ],
-        "dano": "6d10+8",
-        "critico": "20/x4",
-        "alcance": "Curto",
-        "tipo_de_dano": "Escuridão",
-        "subtipo": "marcial",
-        "material": "Obstinada",
-        "modo": "Corpo a corpo",
-        "margem_ameaca": 20,
-        "multiplicador_critico": 4,
-        "nivel_recomendado": 25,
-        "tier_poder": "lendario",
-        "requer_autorizacao_mestre": true,
-        "requisitoNivel": 25,
-        "nivelMinimoLoja": 4
-      }
-    },
-    {
-      "tipo": "arma",
-      "id": "mjolnir",
-      "titulo": "Mjölnir",
-      "conteudo": {
-        "descricao": "Volta para o portador após arremessada; se critar, causa 25% do dano num alcance Médio.",
-        "preco": 110000,
-        "raridade": "lendario",
-        "atributos": [
-          "6d10+12 de dano",
-          "Crítico 20/x4"
-        ],
-        "dano": "6d10+12",
-        "critico": "20/x4",
-        "alcance": "Corpo a corpo / Longo",
-        "tipo_de_dano": "Raio",
-        "subtipo": "marcial",
-        "material": "Obstinada",
-        "modo": "Corpo a corpo",
-        "margem_ameaca": 20,
-        "multiplicador_critico": 4,
-        "nivel_recomendado": 25,
-        "tier_poder": "lendario",
-        "requer_autorizacao_mestre": true,
-        "requisitoNivel": 25,
-        "nivelMinimoLoja": 4
-      }
-    },
-    {
-      "tipo": "arma",
-      "id": "rhaast",
-      "titulo": "Rhaast",
-      "conteudo": {
-        "descricao": "10% do dano volta como cura para o portador.",
-        "preco": 90000,
-        "raridade": "lendario",
-        "atributos": [
-          "5d12+10 de dano",
-          "Crítico 20/x4"
-        ],
-        "dano": "5d12+10",
-        "critico": "20/x4",
-        "alcance": "Curto/Longo",
-        "tipo_de_dano": "Sangue",
-        "subtipo": "marcial",
-        "material": "Obstinada",
-        "modo": "Corpo a corpo",
-        "margem_ameaca": 20,
-        "multiplicador_critico": 4,
-        "nivel_recomendado": 25,
-        "tier_poder": "lendario",
-        "requer_autorizacao_mestre": true,
-        "requisitoNivel": 25,
-        "nivelMinimoLoja": 4
-      }
-    },
-    {
-      "tipo": "arma",
-      "id": "zangetsu",
-      "titulo": "Zangetsu",
-      "conteudo": {
-        "descricao": "A cada 2 de F.V. gasto, causa +5 de dano.",
-        "preco": 85000,
-        "raridade": "lendario",
-        "atributos": [
-          "6d10+8 de dano",
-          "Crítico 20/x4"
-        ],
-        "dano": "6d10+8",
-        "critico": "20/x4",
-        "alcance": "Curto",
-        "tipo_de_dano": "Vazio",
-        "subtipo": "marcial",
-        "material": "Obstinada",
-        "modo": "Corpo a corpo",
-        "margem_ameaca": 20,
-        "multiplicador_critico": 4,
-        "nivel_recomendado": 25,
-        "tier_poder": "lendario",
-        "requer_autorizacao_mestre": true,
-        "requisitoNivel": 25,
-        "nivelMinimoLoja": 4
-      }
-    },
-    {
-      "tipo": "arma",
-      "id": "gungnir",
-      "titulo": "Gungnir",
-      "conteudo": {
-        "descricao": "Caso quebre um juramento, a lança se volta contra o portador.",
-        "preco": 100000,
-        "raridade": "lendario",
-        "atributos": [
-          "5d10+12 de dano",
-          "Crítico 20/x4"
-        ],
-        "dano": "5d10+12",
-        "critico": "20/x4",
-        "alcance": "Médio",
-        "tipo_de_dano": "Luz Solar",
-        "subtipo": "marcial",
-        "material": "Obstinada",
-        "modo": "Corpo a corpo",
-        "margem_ameaca": 20,
-        "multiplicador_critico": 4,
-        "nivel_recomendado": 25,
-        "tier_poder": "lendario",
-        "requer_autorizacao_mestre": true,
-        "requisitoNivel": 25,
-        "nivelMinimoLoja": 4
-      }
-    },
-    {
-      "tipo": "arma",
-      "id": "masamune",
-      "titulo": "Masamune",
-      "conteudo": {
-        "descricao": "O primeiro ataque em um combate sempre acerta; se matar um ser, pode agir novamente.",
-        "preco": 120000,
-        "raridade": "lendario",
-        "atributos": [
-          "6d10+10 de dano",
-          "Crítico 20/x4"
-        ],
-        "dano": "6d10+10",
-        "critico": "20/x4",
-        "alcance": "Curto",
-        "tipo_de_dano": "Metal",
-        "subtipo": "marcial",
-        "material": "Obstinada",
-        "modo": "Corpo a corpo",
-        "margem_ameaca": 20,
-        "multiplicador_critico": 4,
-        "nivel_recomendado": 25,
-        "tier_poder": "lendario",
-        "requer_autorizacao_mestre": true,
-        "requisitoNivel": 25,
-        "nivelMinimoLoja": 4
-      }
-    },
-    {
-      "tipo": "arma",
-      "id": "murasame",
-      "titulo": "Murasame",
-      "conteudo": {
-        "descricao": "Uma vez por cena, ao atingir um alvo com no máximo 25% da Vida máxima, ele faz Fortitude DT 20. Em falha, sofre +4d10 de dano de Vazio, que não multiplica no crítico.",
-        "preco": 150000,
-        "raridade": "lendario",
-        "atributos": [
-          "6d10+8 de dano",
-          "Crítico 20/x2",
-          "Execução: Fortitude DT 20; +4d10 de Vazio em falha, uma vez por cena"
-        ],
-        "dano": "6d10+8",
-        "critico": "20/x2",
-        "alcance": "Curto",
-        "tipo_de_dano": "Vazio",
-        "subtipo": "marcial",
-        "material": "Obstinada",
-        "modo": "Corpo a corpo",
-        "margem_ameaca": 20,
-        "multiplicador_critico": 2,
-        "nivel_recomendado": 25,
-        "requisitoNivel": 25,
-        "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
-      }
-    },
-    {
-      "tipo": "arma",
       "id": "reliquia-excalibur",
       "titulo": "Excalibur",
       "conteudo": {
@@ -6941,25 +6689,30 @@
     {
       "tipo": "fruto-eden",
       "id": "fruto-chamas",
-      "titulo": "Fruto das Chamas (Ignis Ignis)",
+      "titulo": "Fruto das Chamas",
       "conteudo": {
-        "descricao": "Ao consumir este Fruto Místico, o personagem passa a criar, controlar e assumir a forma de chamas. Recebe Resistência 10 contra Fogo. Uma vez por cena, gaste uma Ação Padrão e 8 de Mana para disparar a Rajada Solar em uma linha de 12 m: criaturas na linha sofrem 4d8 de Fogo, com Reflexos reduzindo à metade. Imersão em água do mar desliga os poderes do fruto, impõe desvantagem em testes físicos e impede nadar enquanto durar.",
+        "descricao": "Corpo Ígneo: você cria, controla e assume a forma de chamas, recebe Resistência 15 contra Fogo e pode converter o dano de seus ataques naturais ou de armas empunhadas em Fogo. Passo Incandescente: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para voar até o seu Movimento até o fim do turno; esse deslocamento não provoca reações nos primeiros 6 m. Despertar, Sol Infernal: uma vez por cena, gaste uma Ação Padrão e 9 de Mana para lançar uma linha de 18 m que causa 7d8 de Fogo; Reflexos reduz à metade, e quem falhar sofre mais 2d8 de Fogo no fim do próximo turno. Água do mar desliga os poderes, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
-          "Fragmentos de Estrela": 420
+          "Fragmentos de Estrela": 560
         },
         "raridade": "reliquia da criacao",
         "atributos": [
           "Sobrenatural",
           "Elemental",
-          "Resistência 10: Fogo",
+          "Resistência 15: Fogo",
           "Fraqueza: Água do Mar"
         ],
         "subtipo": "Frutos Místicos",
-        "ativacao": "Ação Padrão, linha de 12 m",
-        "frequencia": "1/cena",
-        "custo": "8 Mana",
-        "defesa": "Reflexos reduz à metade",
-        "efeito": "4d8 de dano de Fogo",
+        "ativacao": "Ação de Movimento ou Ação Padrão, linha de 18 m",
+        "frequencia": "Passo 1/rodada; Despertar 1/cena",
+        "custo": "3 Mana no Passo; 9 Mana no Despertar",
+        "defesa": "Reflexos reduz o Despertar à metade e evita o dano tardio",
+        "efeito": "Resistência 15, voo curto e 7d8 de Fogo mais 2d8 tardios",
+        "passivo": "Corpo Ígneo: Resistência 15 contra Fogo e conversão de ataques para Fogo",
+        "tecnica": "Passo Incandescente: voo igual ao Movimento sem reações nos primeiros 6 m",
+        "despertar": "Sol Infernal: linha de 18 m, 7d8 de Fogo e 2d8 tardios",
+        "fraqueza": "Água do mar desliga os poderes; efeitos de Água ignoram a Resistência concedida",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
         "tier_poder": "reliquia",
         "nivelMinimoLoja": 4
       }
@@ -6967,26 +6720,41 @@
     {
       "tipo": "fruto-eden",
       "id": "fruto-dragao",
-      "titulo": "Fruto do Dragão (Draco Draco)",
+      "titulo": "Fruto do Dragão",
       "conteudo": {
-        "descricao": "Ao consumir este Fruto Místico, o personagem pode assumir forma híbrida ou completa de Dragão Ancião. Uma vez por sessão, gaste uma Ação Padrão e 10 de Mana para se transformar por três rodadas: receba +4 de Defesa, deslocamento de voo igual ao Movimento e ataques naturais de 2d8 de Corte ou Fogo. Se ainda estiver voando ao terminar, desça em segurança até 9 m e caia pelo restante. Armas de Gelo ou Prata ignoram a Defesa adicional. Imersão em água do mar encerra a forma, impõe desvantagem em testes físicos e impede nadar.",
+        "descricao": "Sangue Dracônico: receba Resistência 5 contra Fogo e Gelo e +2 em Fortitude contra medo, veneno e transformação forçada. Forma Híbrida: gaste uma Ação de Movimento e 3 de Mana para assumir até o fim da cena uma forma com +2 de Defesa, voo igual à metade do Movimento e ataques naturais de 2d8 de Corte ou Fogo. Despertar, Dragão Ancião: uma vez por sessão, gaste uma Ação Padrão e 12 de Mana para assumir por cinco rodadas a forma completa, substituindo a híbrida: +5 de Defesa, Resistência 10 contra dano físico, voo igual ao dobro do Movimento e ataques naturais de 3d10. Uma vez durante a forma, use uma Ação Padrão para soprar um cone de 12 m que causa 7d8 de Fogo ou Gelo, com Reflexos reduzindo à metade. Ao terminar, receba 1 Cansaço. Prata e o elemento oposto ao sopro ignoram as Resistências da forma. Água do mar encerra a transformação, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
-          "Fragmentos de Estrela": 550
+          "Fragmentos de Estrela": 700
         },
         "raridade": "reliquia da criacao",
         "atributos": [
           "Mutação",
           "Mitológico",
-          "Defesa +4",
+          "Defesa +5",
           "Voo",
           "Fraqueza: Prata/Gelo/Água"
         ],
         "subtipo": "Frutos Místicos",
-        "ativacao": "Ação Padrão",
-        "frequencia": "1/sessão",
-        "duracao": "3 rodadas",
-        "custo": "10 Mana",
-        "efeito": "+4 Defesa, voo igual ao Movimento e ataques naturais de 2d8",
+        "ativacao": "Ação de Movimento na forma híbrida; Ação Padrão no Despertar",
+        "frequencia": "Forma híbrida livre; Despertar 1/sessão",
+        "duracao": "Cena na forma híbrida; 5 rodadas no Despertar",
+        "custo": "3 Mana na forma híbrida; 12 Mana no Despertar",
+        "defesa": "Reflexos reduz o sopro à metade",
+        "efeito": "Formas dracônicas, voo, Defesa +5, Resistência 10 e sopro de 7d8",
+        "passivo": "Sangue Dracônico: Resistência 5 contra Fogo e Gelo e +2 em Fortitude situacional",
+        "efeitosFicha": [
+          {
+            "id": "fruto-dragao-fortitude",
+            "categoria": "pericia",
+            "alvo": "fortitude",
+            "modo": "bonus",
+            "valor": 2
+          }
+        ],
+        "tecnica": "Forma Híbrida: Defesa +2, voo parcial e ataques naturais de 2d8",
+        "despertar": "Dragão Ancião: cinco rodadas de forma completa e um sopro de 7d8",
+        "fraqueza": "Prata, elemento oposto ao sopro e água do mar",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
         "tier_poder": "reliquia",
         "nivelMinimoLoja": 4
       }
@@ -6994,25 +6762,39 @@
     {
       "tipo": "fruto-eden",
       "id": "fruto-tremor",
-      "titulo": "Fruto do Tremor (Quake Quake)",
+      "titulo": "Fruto do Tremor",
       "conteudo": {
-        "descricao": "Ao consumir este Fruto Místico, o personagem passa a criar vibrações no ar e na terra. Uma vez por cena, gaste uma Ação Padrão e 8 de Mana para atingir uma área de 6 m a até 15 m: criaturas sofrem 4d8 de Impacto e ficam Caídas; Reflexos reduz o dano à metade e evita a condição. Objetos e estruturas mundanas sofrem o dobro do dano. Imersão em água do mar desliga os poderes, impõe desvantagem em testes físicos e impede nadar.",
+        "descricao": "Corpo Ressonante: receba +2 em Fortitude contra efeitos que empurram, derrubam ou agarram e seus ataques ignoram Resistência de objetos e estruturas mundanas. Golpe Sísmico: uma vez por rodada, ao acertar um ataque corpo a corpo, gaste 3 de Mana para causar +2d8 de Impacto e empurrar o alvo 3 m; Fortitude evita apenas o empurrão. Despertar, Ruptura Continental: uma vez por cena, gaste uma Ação Padrão e 10 de Mana para atingir uma área de 9 m a até 18 m: criaturas sofrem 7d8 de Impacto e ficam Caídas; Reflexos reduz à metade e evita a condição. A área vira terreno difícil até o fim da cena e objetos ou estruturas mundanas sofrem o triplo do dano. Água do mar desliga os poderes, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
-          "Fragmentos de Estrela": 550
+          "Fragmentos de Estrela": 750
         },
         "raridade": "reliquia da criacao",
         "atributos": [
           "Sobrenatural",
           "Destruidor",
-          "Área: 6 m",
+          "Área: 9 m",
           "Fraqueza: Água do Mar"
         ],
         "subtipo": "Frutos Místicos",
-        "ativacao": "Ação Padrão, alcance Médio; área de 6 m",
-        "frequencia": "1/cena",
-        "custo": "8 Mana",
+        "ativacao": "Ao acertar ataque corpo a corpo ou Ação Padrão; área de 9 m",
+        "frequencia": "Golpe 1/rodada; Despertar 1/cena",
+        "custo": "3 Mana no Golpe; 10 Mana no Despertar",
         "defesa": "Reflexos reduz à metade e evita Caído",
-        "efeito": "4d8 de Impacto; dano dobrado contra objetos e estruturas mundanas",
+        "efeito": "+2d8 e empurrão ou 7d8 em área; dano triplicado contra estruturas",
+        "passivo": "Corpo Ressonante: +2 em Fortitude contra deslocamento forçado e ataques antiestrutura",
+        "efeitosFicha": [
+          {
+            "id": "fruto-tremor-fortitude",
+            "categoria": "pericia",
+            "alvo": "fortitude",
+            "modo": "bonus",
+            "valor": 2
+          }
+        ],
+        "tecnica": "Golpe Sísmico: +2d8 de Impacto e empurra 3 m",
+        "despertar": "Ruptura Continental: 7d8 em área de 9 m, Caído e terreno difícil",
+        "fraqueza": "Água do mar desliga os poderes e impede nadar",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
         "tier_poder": "reliquia",
         "nivelMinimoLoja": 4
       }
@@ -7427,7 +7209,7 @@
     {
       "tipo": "armadura",
       "id": "armadura-traje-furtivo",
-      "titulo": "Traje de Furtividade Óptica",
+      "titulo": "Armadura de Furtividade Óptica",
       "conteudo": {
         "descricao": "Uma malha tecnológica que dobra a luz ao redor do usuário, garantindo invisibilidade por até 3 rodadas em combate ou 1 hora fora dele.",
         "preco": 25500,
@@ -7451,7 +7233,7 @@
     {
       "tipo": "armadura",
       "id": "armadura-exoesqueleto-juggernaut",
-      "titulo": "Exoesqueleto de Assalto 'Juggernaut'",
+      "titulo": "Armadura de Assalto 'Juggernaut'",
       "conteudo": {
         "descricao": "Armadura pesada que concede +4 de Defesa e desvantagem em Furtividade. Possui 3 cargas. Gaste uma Ação Padrão e 1 carga para disparar o armamento dos ombros contra uma criatura a até 15 m: cause 4d8 de dano Balístico, com Reflexos reduzindo à metade. Recupera todas as cargas após um descanso completo conectado por uma hora a uma fonte de energia A.X.I.S.",
         "preco": 85000,
@@ -8046,11 +7828,11 @@
     {
       "tipo": "fruto-eden",
       "id": "fruto-gravidade",
-      "titulo": "Fruto da Gravidade (Paramecia)",
+      "titulo": "Fruto da Gravidade",
       "conteudo": {
-        "descricao": "Ao consumir este Fruto Místico, o personagem passa a manipular gravidade. Uma vez por cena, gaste uma Ação Padrão e 8 de Mana para criar por três rodadas uma área de 6 m a até 15 m, com concentração. Ao criar a área, escolha: aliados voluntários recebem voo igual à metade do Movimento; ou inimigos fazem Fortitude e, em falha, ficam Imobilizados, enquanto no sucesso tratam a área como terreno difícil. Imersão em água do mar encerra o efeito, impõe desvantagem em testes físicos e impede nadar.",
+        "descricao": "Passo Vetorial: você não sofre dano das primeiras quedas de 30 m, pode caminhar em paredes e tetos e conta como uma categoria de tamanho maior para carregar objetos. Órbita Forçada: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para mover uma criatura voluntária ou objeto solto de até 500 kg por até 9 m, desde que esteja a até 15 m. Despertar, Domínio Gravitacional: uma vez por cena, gaste uma Ação Padrão e 10 de Mana para criar por quatro rodadas, com concentração, uma área de 9 m a até 18 m. No começo de cada turno, escolha Leve, dando aos aliados voluntários voo igual ao Movimento, ou Esmagadora; inimigos que entrarem ou começarem o turno na forma Esmagadora fazem Fortitude, sofrendo 3d8 de Impacto e ficando Imobilizados até o começo do próprio próximo turno na falha, ou metade do dano e terreno difícil no sucesso. Água do mar encerra o efeito, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
-          "Fragmentos de Estrela": 450
+          "Fragmentos de Estrela": 680
         },
         "raridade": "reliquia da criacao",
         "atributos": [
@@ -8060,12 +7842,17 @@
           "Fraqueza: Água do Mar"
         ],
         "subtipo": "Frutos Místicos",
-        "ativacao": "Ação Padrão, alcance Médio; área de 6 m",
-        "frequencia": "1/cena",
-        "duracao": "3 rodadas, concentração",
-        "custo": "8 Mana",
+        "ativacao": "Ação de Movimento ou Ação Padrão; área de 9 m",
+        "frequencia": "Órbita 1/rodada; Despertar 1/cena",
+        "duracao": "4 rodadas, concentração",
+        "custo": "3 Mana na Órbita; 10 Mana no Despertar",
         "defesa": "Fortitude evita Imobilizado",
-        "efeito": "Voo igual à metade do Movimento para aliados ou controle de terreno contra inimigos",
+        "efeito": "Mobilidade gravitacional, voo para aliados ou 3d8 e Imobilizado em área",
+        "passivo": "Passo Vetorial: queda reduzida, caminhada em superfícies e carga ampliada",
+        "tecnica": "Órbita Forçada: move criatura voluntária ou objeto de até 500 kg por 9 m",
+        "despertar": "Domínio Gravitacional: alterna voo aliado e esmagamento de inimigos em área",
+        "fraqueza": "Água do mar encerra os efeitos e impede nadar",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
         "tier_poder": "reliquia",
         "nivelMinimoLoja": 4
       }
@@ -8073,25 +7860,386 @@
     {
       "tipo": "fruto-eden",
       "id": "fruto-trovao",
-      "titulo": "Fruto do Trovão (Logia)",
+      "titulo": "Fruto do Trovão",
       "conteudo": {
-        "descricao": "Ao consumir este Fruto Místico, o personagem passa a assumir a forma de eletricidade e recebe Resistência 10 contra Raio. Uma vez por rodada, antes de um ataque físico, gaste uma Reação e 2 de Mana para receber +4 de Defesa contra aquele ataque; isso não é esquiva automática. Uma vez por cena, gaste uma Ação Padrão e 8 de Mana para causar 4d8 de Raio numa área de 6 m centrada em um ponto a até 15 m, com Reflexos reduzindo à metade. Borracha ignora a Resistência deste fruto. Imersão em água do mar desliga seus poderes, impõe desvantagem em testes físicos e impede nadar.",
+        "descricao": "Corpo de Relâmpago: você assume forma elétrica, recebe Resistência 15 contra Raio e pode converter o dano de seus ataques naturais ou de armas empunhadas em Raio. Salto Voltaico: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para se teleportar até 12 m para um espaço que possa perceber. Defesa Eletromagnética: antes de um ataque físico, gaste uma Reação e 2 de Mana para receber +5 de Defesa contra ele; se o ataque errar, você pode se deslocar 3 m sem provocar reação. Despertar, Julgamento da Tempestade: uma vez por cena, gaste uma Ação Padrão e 10 de Mana para causar 7d8 de Raio numa área de 9 m centrada num ponto a até 18 m; Reflexos reduz à metade, e quem falhar fica Exposto e sem reações até o começo do próprio próximo turno. Borracha ignora a Resistência e impede o Salto Voltaico através dela. Água do mar desliga os poderes, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
         "preco": {
-          "Fragmentos de Estrela": 500
+          "Fragmentos de Estrela": 650
         },
         "raridade": "reliquia da criacao",
         "atributos": [
           "Elemental",
-          "Resistência 10: Raio",
+          "Resistência 15: Raio",
           "Defesa reativa",
           "Fraqueza: Borracha/Água"
         ],
         "subtipo": "Frutos Místicos",
-        "ativacao": "Reação defensiva ou Ação Padrão ofensiva",
-        "frequencia": "Defesa 1/rodada; descarga 1/cena",
-        "custo": "2 Mana na defesa; 8 Mana na descarga",
-        "defesa": "Reflexos reduz a descarga à metade",
-        "efeito": "+4 Defesa contra um ataque ou 4d8 de Raio em área",
+        "ativacao": "Ação de Movimento, Reação defensiva ou Ação Padrão ofensiva",
+        "frequencia": "Salto e Defesa 1/rodada; Despertar 1/cena",
+        "custo": "3 Mana no Salto; 2 Mana na Defesa; 10 Mana no Despertar",
+        "defesa": "Reflexos reduz o Despertar à metade e evita Exposto",
+        "efeito": "Resistência 15, teleporte, Defesa +5 ou 7d8 de Raio em área",
+        "passivo": "Corpo de Relâmpago: Resistência 15 contra Raio e conversão de ataques para Raio",
+        "tecnica": "Salto Voltaico e Defesa Eletromagnética",
+        "despertar": "Julgamento da Tempestade: 7d8 em área de 9 m, Exposto e sem reações",
+        "fraqueza": "Borracha ignora a Resistência; água do mar desliga os poderes",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
+        "tier_poder": "reliquia",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-gelo",
+      "titulo": "Fruto do Gelo",
+      "conteudo": {
+        "descricao": "Coração Glacial: você cria, controla e assume forma de gelo, recebe Resistência 15 contra Gelo e ignora terreno difícil causado por neve ou gelo. Muralha Perene: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para erguer a até 15 m uma muralha de 6 m de largura e 3 m de altura, dividida em três painéis com 15 de Vida e Resistência 5 cada; ela dura a cena e criar outra desfaz a anterior. Despertar, Inverno Absoluto: uma vez por cena, gaste uma Ação Padrão e 10 de Mana para congelar uma área de 9 m a até 18 m, causando 7d8 de Gelo e deixando-a como terreno difícil por três rodadas; Fortitude reduz o dano à metade e evita ficar Imobilizado até o começo do próprio próximo turno. Fogo ignora a Resistência deste fruto e causa dano dobrado às muralhas. Água do mar desliga os poderes, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "preco": {
+          "Fragmentos de Estrela": 580
+        },
+        "raridade": "reliquia da criacao",
+        "atributos": [
+          "Elemental",
+          "Controle",
+          "Resistência 15: Gelo",
+          "Fraqueza: Fogo/Água"
+        ],
+        "subtipo": "Frutos Místicos",
+        "ativacao": "Ação de Movimento ou Ação Padrão; área de 9 m",
+        "frequencia": "Muralha 1/rodada; Despertar 1/cena",
+        "duracao": "Cena na Muralha; 3 rodadas no terreno congelado",
+        "custo": "3 Mana na Muralha; 10 Mana no Despertar",
+        "defesa": "Fortitude reduz à metade e evita Imobilizado",
+        "efeito": "Resistência 15, muralha segmentada e 7d8 de Gelo em área",
+        "passivo": "Coração Glacial: Resistência 15 contra Gelo e mobilidade em neve e gelo",
+        "tecnica": "Muralha Perene: três painéis de gelo com 15 de Vida e Resistência 5",
+        "despertar": "Inverno Absoluto: 7d8 em área de 9 m, Imobilizado e terreno difícil",
+        "fraqueza": "Fogo ignora a Resistência e destrói muralhas; água do mar desliga os poderes",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
+        "tier_poder": "reliquia",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-luz",
+      "titulo": "Fruto da Luz",
+      "conteudo": {
+        "descricao": "Corpo Luminar: você cria, controla e assume forma de luz, recebe Resistência 15 contra Luz, não pode ficar Cego por claridade e pode iluminar ou apagar a própria luz num raio de 12 m. Passo Fotônico: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para viajar em linha reta até 18 m para um espaço iluminado que possa perceber; barreiras sólidas ainda bloqueiam o trajeto. Despertar, Horizonte Branco: uma vez por cena, gaste uma Ação Padrão e 11 de Mana para disparar uma linha de 30 m que causa 8d8 de Luz, ignora camuflagem e invisibilidade, mas não cobertura total; Reflexos reduz à metade, e quem falhar fica Cego até o fim do próprio próximo turno. Escuridão sobrenatural ignora a Resistência e bloqueia o Passo Fotônico. Água do mar desliga os poderes, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "preco": {
+          "Fragmentos de Estrela": 720
+        },
+        "raridade": "reliquia da criacao",
+        "atributos": [
+          "Elemental",
+          "Mobilidade",
+          "Resistência 15: Luz",
+          "Fraqueza: Escuridão/Água"
+        ],
+        "subtipo": "Frutos Místicos",
+        "ativacao": "Ação de Movimento ou Ação Padrão; linha de 30 m",
+        "frequencia": "Passo 1/rodada; Despertar 1/cena",
+        "custo": "3 Mana no Passo; 11 Mana no Despertar",
+        "defesa": "Reflexos reduz à metade e evita Cego",
+        "efeito": "Resistência 15, deslocamento de 18 m e linha de 8d8 de Luz",
+        "passivo": "Corpo Luminar: Resistência 15 contra Luz, iluminação e imunidade à cegueira por claridade",
+        "tecnica": "Passo Fotônico: deslocamento retilíneo de até 18 m",
+        "despertar": "Horizonte Branco: linha de 30 m, 8d8 de Luz e Cego",
+        "fraqueza": "Escuridão sobrenatural bloqueia o Passo; água do mar desliga os poderes",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
+        "tier_poder": "reliquia",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-sombra",
+      "titulo": "Fruto da Sombra",
+      "conteudo": {
+        "descricao": "Corpo Umbral: você cria, controla e assume forma de sombra, recebe Resistência 15 contra Escuridão, enxerga em escuridão sobrenatural e recebe vantagem em Furtividade sob luz baixa. Evasão Umbral: uma vez por rodada, quando for alvo de um ataque, gaste uma Reação e 3 de Mana para receber +5 de Defesa contra ele; depois da resolução, pode se teleportar até 6 m para uma sombra que perceba. Despertar, Noite Sem Horizonte: uma vez por cena, gaste uma Ação Padrão e 10 de Mana para criar por quatro rodadas, com concentração, uma área de escuridão de 12 m a até 18 m. Inimigos que entrarem ou começarem o turno ali fazem Vontade; na falha ficam Cegos naquele turno, e no sucesso enxergam apenas a 3 m. Enquanto estiver dentro, você pode se teleportar até 12 m como Ação de Movimento. Luz sobrenatural de poder equivalente encerra a escuridão na área sobreposta. Água do mar desliga os poderes, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "preco": {
+          "Fragmentos de Estrela": 650
+        },
+        "raridade": "reliquia da criacao",
+        "atributos": [
+          "Elemental",
+          "Furtividade",
+          "Resistência 15: Escuridão",
+          "Fraqueza: Luz/Água"
+        ],
+        "subtipo": "Frutos Místicos",
+        "ativacao": "Reação ou Ação Padrão; área de 12 m",
+        "frequencia": "Evasão 1/rodada; Despertar 1/cena",
+        "duracao": "4 rodadas, concentração",
+        "custo": "3 Mana na Evasão; 10 Mana no Despertar",
+        "defesa": "Vontade evita Cego dentro do Despertar",
+        "efeito": "Resistência 15, Defesa +5, teleporte e escuridão controladora",
+        "passivo": "Corpo Umbral: Resistência 15 contra Escuridão, visão umbral e Furtividade favorecida",
+        "efeitosFicha": [
+          {
+            "id": "fruto-sombra-furtividade",
+            "categoria": "pericia",
+            "alvo": "furtividade",
+            "modo": "vantagem",
+            "valor": 1
+          }
+        ],
+        "tecnica": "Evasão Umbral: Defesa +5 e teleporte de 6 m",
+        "despertar": "Noite Sem Horizonte: escuridão de 12 m com cegueira e teleporte",
+        "fraqueza": "Luz sobrenatural dispersa a escuridão; água do mar desliga os poderes",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
+        "tier_poder": "reliquia",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-fenix",
+      "titulo": "Fruto da Fênix",
+      "conteudo": {
+        "descricao": "Plumas da Aurora: você pode manifestar asas com voo igual à metade do Movimento, recebe Resistência 15 contra Fogo e não sofre Sangramento enquanto estiver acima de 0 de Vida. Chama Restauradora: gaste uma Ação de Movimento e 4 de Mana para tocar a si ou uma criatura e recuperar 3d8 de Vida; cada criatura só pode receber essa cura uma vez por cena. Despertar, Renascimento Solar: uma vez por sessão, quando for reduzido a 0 de Vida sem morrer instantaneamente, você pode gastar 12 de Mana sem usar ação para retornar com metade da Vida máxima, encerrar Sangramento, Caído e Atordoado sobre si e se levantar. Depois, receba 2 Cansaços. O Renascimento não funciona enquanto estiver submerso em água do mar ou sob um efeito de Gelo. Água do mar também desliga os demais poderes, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "preco": {
+          "Fragmentos de Estrela": 800
+        },
+        "raridade": "reliquia da criacao",
+        "atributos": [
+          "Mutação",
+          "Mitológico",
+          "Cura e Renascimento",
+          "Fraqueza: Gelo/Água"
+        ],
+        "subtipo": "Frutos Místicos",
+        "ativacao": "Ação de Movimento ou sem ação ao chegar a 0 de Vida",
+        "frequencia": "Cura 1/alvo/cena; Renascimento 1/sessão",
+        "custo": "4 Mana na cura; 12 Mana no Renascimento",
+        "efeito": "Voo, Resistência 15, cura de 3d8 e retorno com metade da Vida",
+        "passivo": "Plumas da Aurora: voo parcial, Resistência 15 contra Fogo e proteção contra Sangramento",
+        "tecnica": "Chama Restauradora: cura 3d8 uma vez por alvo por cena",
+        "despertar": "Renascimento Solar: retorna de 0 com metade da Vida e recebe 2 Cansaços",
+        "fraqueza": "Gelo bloqueia o Renascimento; água do mar desliga os poderes",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
+        "tier_poder": "reliquia",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-colosso",
+      "titulo": "Fruto do Colosso",
+      "conteudo": {
+        "descricao": "Sangue de Gigante: você conta como uma categoria de tamanho maior para carga, empurrão e agarrão e recebe +2 em Fortitude contra deslocamento forçado. Forma Titânica: gaste uma Ação de Movimento e 4 de Mana para crescer uma categoria até o fim da cena, recebendo alcance corpo a corpo de 3 m, +2 em testes de Força e dano corpo a corpo, mas sofrendo -2 de Defesa. Despertar, Colosso Primordial: uma vez por cena, gaste uma Ação Padrão e 10 de Mana para assumir por cinco rodadas uma forma Enorme que substitui a anterior: Resistência 10 contra dano físico, alcance de 6 m, ataques naturais de 3d10 de Impacto e imunidade a Caído e deslocamento forçado. Ao terminar, receba 1 Cansaço. Espaços apertados podem impedir ou limitar a transformação. Água do mar encerra a forma, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "preco": {
+          "Fragmentos de Estrela": 560
+        },
+        "raridade": "reliquia da criacao",
+        "atributos": [
+          "Mutação",
+          "Força",
+          "Resistência 10: Físico",
+          "Fraqueza: Espaço/Água"
+        ],
+        "subtipo": "Frutos Místicos",
+        "ativacao": "Ação de Movimento ou Ação Padrão",
+        "frequencia": "Forma Titânica livre; Despertar 1/cena",
+        "duracao": "Cena na forma comum; 5 rodadas no Despertar",
+        "custo": "4 Mana na forma comum; 10 Mana no Despertar",
+        "efeito": "Tamanho ampliado, alcance de 6 m, Resistência 10 e ataques de 3d10",
+        "passivo": "Sangue de Gigante: carga ampliada e +2 contra deslocamento forçado",
+        "efeitosFicha": [
+          {
+            "id": "fruto-colosso-fortitude",
+            "categoria": "pericia",
+            "alvo": "fortitude",
+            "modo": "bonus",
+            "valor": 2
+          }
+        ],
+        "tecnica": "Forma Titânica: tamanho maior, alcance de 3 m e Força ampliada",
+        "despertar": "Colosso Primordial: forma Enorme por cinco rodadas",
+        "fraqueza": "Espaço físico limita a forma; água do mar encerra a transformação",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
+        "tier_poder": "reliquia",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-quimera",
+      "titulo": "Fruto da Quimera",
+      "conteudo": {
+        "descricao": "Adaptação Monstruosa: após cada descanso completo, escolha uma adaptação até o próximo descanso: Asas, com voo igual à metade do Movimento; Carapaça, com Resistência 5 contra dano físico; Garras, com ataques naturais de 2d8 de Corte; ou Regeneração, recuperando 1d6 de Vida uma vez por rodada ao começar o turno com metade da Vida máxima ou menos, sem funcionar em 0 de Vida. Metamorfose: gaste uma Ação de Movimento e 3 de Mana para trocar suas escolhas e manter duas adaptações até o fim da cena. Despertar, Quimera Perfeita: uma vez por cena, gaste uma Ação Padrão e 10 de Mana para manter todas as quatro adaptações por cinco rodadas e causar +2d8 uma vez por rodada ao acertar um ataque natural. Prata ignora a Carapaça e bloqueia a Regeneração até o fim do próximo turno. Água do mar encerra adaptações temporárias, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "preco": {
+          "Fragmentos de Estrela": 620
+        },
+        "raridade": "reliquia da criacao",
+        "atributos": [
+          "Mutação",
+          "Adaptável",
+          "Voo/Armadura/Regeneração",
+          "Fraqueza: Prata/Água"
+        ],
+        "subtipo": "Frutos Místicos",
+        "ativacao": "Após descanso, Ação de Movimento ou Ação Padrão",
+        "frequencia": "Metamorfose livre; Despertar 1/cena",
+        "duracao": "Cena na Metamorfose; 5 rodadas no Despertar",
+        "custo": "3 Mana na Metamorfose; 10 Mana no Despertar",
+        "efeito": "Escolha entre voo, Resistência, garras e regeneração; Despertar reúne todas",
+        "passivo": "Adaptação Monstruosa: uma adaptação escolhida após descanso completo",
+        "tecnica": "Metamorfose: mantém duas adaptações até o fim da cena",
+        "despertar": "Quimera Perfeita: todas as adaptações e +2d8 por rodada",
+        "fraqueza": "Prata ignora Carapaça e Regeneração; água do mar encerra adaptações temporárias",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
+        "tier_poder": "reliquia",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-portais",
+      "titulo": "Fruto dos Portais",
+      "conteudo": {
+        "descricao": "Janela Impossível: você pode manter dois portais do tamanho de uma mão em superfícies que perceba a até 5 m, transmitindo luz, som e objetos de até 5 kg, mas nunca ataques ou criaturas. Travessia: uma vez por rodada, gaste uma Ação de Movimento e 3 de Mana para teleportar a si e uma criatura voluntária adjacente até 18 m para espaços que possa perceber. Despertar, Labirinto de A.X.I.S: uma vez por cena, gaste uma Ação Padrão e 10 de Mana para criar por quatro rodadas, com concentração, uma rede numa área de 18 m centrada a até 18 m. Cada aliado na área pode se teleportar até 12 m uma vez por turno como Ação de Movimento. Uma vez por rodada, você pode gastar uma Reação para mover uma criatura na área por até 6 m; uma criatura hostil evita com Reflexos. Barreiras seladas e proteções dimensionais bloqueiam todos os portais. Água do mar encerra a rede, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "preco": {
+          "Fragmentos de Estrela": 700
+        },
+        "raridade": "reliquia da criacao",
+        "atributos": [
+          "Sobrenatural",
+          "Espaço",
+          "Teleporte em Grupo",
+          "Fraqueza: Selos/Água"
+        ],
+        "subtipo": "Frutos Místicos",
+        "ativacao": "Ação de Movimento, Ação Padrão ou Reação",
+        "frequencia": "Travessia 1/rodada; Despertar 1/cena",
+        "duracao": "4 rodadas, concentração",
+        "custo": "3 Mana na Travessia; 10 Mana no Despertar",
+        "defesa": "Reflexos evita deslocamento hostil",
+        "efeito": "Portais utilitários, teleporte de 18 m e rede de mobilidade para aliados",
+        "passivo": "Janela Impossível: dois portais pequenos para percepção e objetos leves",
+        "tecnica": "Travessia: teleporta o usuário e um aliado por até 18 m",
+        "despertar": "Labirinto de A.X.I.S: rede de teleportes numa área de 18 m",
+        "fraqueza": "Selos dimensionais bloqueiam portais; água do mar encerra os poderes",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
+        "tier_poder": "reliquia",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-fios",
+      "titulo": "Fruto dos Fios",
+      "conteudo": {
+        "descricao": "Tecelão Vivo: você produz fios sobrenaturais, pode escalar ou se balançar até o seu Movimento e manipular a até 15 m objetos soltos de até 10 kg. Laço Cortante: uma vez por rodada, gaste uma Ação Padrão e 3 de Mana para atingir uma criatura a até 15 m, causando 3d8 de Corte; Reflexos reduz à metade e evita ficar Agarrado. O alvo Agarrado escapa com uma Ação Padrão e Atletismo ou Acrobacia contra sua DT de efeito. Despertar, Teatro das Marionetes: uma vez por cena, gaste uma Ação Padrão e 10 de Mana para cobrir por quatro rodadas, com concentração, uma área de 9 m a até 18 m. Inimigos que entrarem ou começarem o turno ali fazem Reflexos e ficam Imobilizados na falha. Uma vez por rodada, use uma Ação de Movimento para causar 3d8 de Corte a um inimigo Imobilizado pela área e puxá-lo até 6 m. Fogo em área desfaz os fios na parte atingida. Água do mar encerra os fios, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "preco": {
+          "Fragmentos de Estrela": 520
+        },
+        "raridade": "reliquia da criacao",
+        "atributos": [
+          "Sobrenatural",
+          "Controle",
+          "Agarrado/Imobilizado",
+          "Fraqueza: Fogo/Água"
+        ],
+        "subtipo": "Frutos Místicos",
+        "ativacao": "Ação Padrão ou Ação de Movimento; área de 9 m",
+        "frequencia": "Laço 1/rodada; Despertar 1/cena",
+        "duracao": "4 rodadas, concentração",
+        "custo": "3 Mana no Laço; 10 Mana no Despertar",
+        "defesa": "Reflexos reduz o dano e evita Agarrado ou Imobilizado",
+        "efeito": "Mobilidade por fios, 3d8 recorrentes e controle de uma área de 9 m",
+        "passivo": "Tecelão Vivo: escalada, balanço e manipulação de objetos leves",
+        "tecnica": "Laço Cortante: 3d8 de Corte e Agarrado",
+        "despertar": "Teatro das Marionetes: área de fios com Imobilizado, dano e puxão",
+        "fraqueza": "Fogo em área desfaz os fios; água do mar encerra os poderes",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
+        "tier_poder": "reliquia",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-instante",
+      "titulo": "Fruto do Instante",
+      "conteudo": {
+        "descricao": "Olhar entre Segundos: receba +2 em Iniciativa e, uma vez por cena, ignore a condição Surpreendido quando ela seria aplicada. Repetição Breve: uma vez por rodada, depois de realizar um ataque, teste ou defesa, gaste uma Reação e 4 de Mana para refazer a rolagem; o novo resultado deve ser usado. Despertar, Segundo Proibido: uma vez por sessão, imediatamente depois do seu turno, gaste 14 de Mana para realizar um turno adicional com uma Ação Padrão e uma Ação de Movimento. Nesse turno você não pode usar poderes de Fruto, reações nem efeitos limitados por cena ou sessão. Depois, receba 2 Cansaços. Efeitos de Vazio que anulam tempo impedem Repetição Breve e Segundo Proibido. Água do mar desliga os poderes, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "preco": {
+          "Fragmentos de Estrela": 800
+        },
+        "raridade": "reliquia da criacao",
+        "atributos": [
+          "Sobrenatural",
+          "Tempo",
+          "Turno Adicional",
+          "Fraqueza: Vazio/Água"
+        ],
+        "subtipo": "Frutos Místicos",
+        "ativacao": "Reação ou sem ação após o próprio turno",
+        "frequencia": "Repetição 1/rodada; Despertar 1/sessão",
+        "custo": "4 Mana na Repetição; 14 Mana no Despertar",
+        "efeito": "Iniciativa +2, rerrolagem e um turno adicional limitado",
+        "passivo": "Olhar entre Segundos: Iniciativa +2 e ignora Surpreendido uma vez por cena",
+        "efeitosFicha": [
+          {
+            "id": "fruto-instante-iniciativa",
+            "categoria": "combate",
+            "alvo": "iniciativa",
+            "modo": "bonus",
+            "valor": 2
+          }
+        ],
+        "tecnica": "Repetição Breve: refaz uma rolagem própria e usa o novo resultado",
+        "despertar": "Segundo Proibido: turno adicional limitado e 2 Cansaços",
+        "fraqueza": "Anulação temporal de Vazio e água do mar",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
+        "tier_poder": "reliquia",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "fruto-eden",
+      "id": "fruto-espelho",
+      "titulo": "Fruto do Espelho",
+      "conteudo": {
+        "descricao": "Reflexo Verdadeiro: receba +2 em Percepção e Vontade contra ilusões, disfarces e invisibilidade e possa criar reflexos visuais inofensivos de si num raio de 6 m. Troca Especular: uma vez por rodada, ao ser alvo de um ataque, gaste uma Reação e 4 de Mana para receber +5 de Defesa; se o ataque errar, você pode trocar de lugar com um reflexo e se teleportar até 6 m. Despertar, Palácio dos Mil Reflexos: uma vez por cena, gaste uma Ação Padrão e 10 de Mana para manter por três rodadas, com concentração, um domínio de espelhos num raio de 9 m. Uma vez em cada rodada, quando você ou um aliado no domínio for alvo de um ataque à distância ou magia de alvo direto, use sua Reação e faça Misticismo contra o resultado do ataque ou a DT do efeito. Em sucesso, o atacante se torna o alvo original; em falha, o efeito ocorre normalmente. Áreas, efeitos sem alvo e ataques sem trajetória visível não podem ser refletidos. Água do mar quebra o domínio, impõe desvantagem em testes físicos e impede nadar. Apenas um Fruto do Éden pode permanecer vinculado à mesma criatura; consumir outro substitui o vínculo anterior.",
+        "preco": {
+          "Fragmentos de Estrela": 650
+        },
+        "raridade": "reliquia da criacao",
+        "atributos": [
+          "Sobrenatural",
+          "Defesa",
+          "Reflexão de Ataques",
+          "Fraqueza: Áreas/Água"
+        ],
+        "subtipo": "Frutos Místicos",
+        "ativacao": "Reação ou Ação Padrão; domínio de 9 m",
+        "frequencia": "Troca 1/rodada; Despertar 1/cena",
+        "duracao": "3 rodadas, concentração",
+        "custo": "4 Mana na Troca; 10 Mana no Despertar",
+        "defesa": "Misticismo contra o ataque ou a DT para refletir",
+        "efeito": "Defesa +5, teleporte de 6 m e reflexão de um ataque por rodada",
+        "passivo": "Reflexo Verdadeiro: +2 contra enganos visuais e criação de reflexos inofensivos",
+        "efeitosFicha": [
+          {
+            "id": "fruto-espelho-percepcao",
+            "categoria": "pericia",
+            "alvo": "percepcao",
+            "modo": "bonus",
+            "valor": 2
+          },
+          {
+            "id": "fruto-espelho-vontade",
+            "categoria": "pericia",
+            "alvo": "vontade",
+            "modo": "bonus",
+            "valor": 2
+          }
+        ],
+        "tecnica": "Troca Especular: Defesa +5 e teleporte quando o ataque erra",
+        "despertar": "Palácio dos Mil Reflexos: domínio que reflete ataques de alvo direto",
+        "fraqueza": "Áreas e ataques sem trajetória não são refletidos; água do mar encerra o domínio",
+        "vinculo": "Único; outro Fruto do Éden substitui o vínculo anterior",
         "tier_poder": "reliquia",
         "nivelMinimoLoja": 4
       }
@@ -11501,6 +11649,83 @@
           "Fortificado"
         ],
         "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "mn_relogio_de_bolso_corrompido",
+      "titulo": "Relógio de Bolso Corrompido",
+      "conteudo": {
+        "descricao": "Um relógio manchado de sangue que congela o tempo por milissegundos. Útil para escapar de situações mortais.",
+        "raridade": "epico",
+        "mercado_negro": true,
+        "preco": 30
+      }
+    },
+    {
+      "tipo": "arma",
+      "id": "mn_adaga_das_sombras",
+      "titulo": "Adaga das Sombras",
+      "conteudo": {
+        "modo": "Corpo a corpo",
+        "subtipo": "Adaga",
+        "descricao": "Forjada no submundo, corta através de escudos como se fossem papel.",
+        "raridade": "lendario",
+        "mercado_negro": true,
+        "dano": "2d6+4",
+        "preco": 100
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "mn_pocao_do_esquecimento",
+      "titulo": "Poção do Esquecimento",
+      "conteudo": {
+        "descricao": "Apaga a memória recente de quem bebe. Usado frequentemente por assassinos após o serviço.",
+        "raridade": "raro",
+        "mercado_negro": true,
+        "preco": 10
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "mn_mascara_sem_rosto",
+      "titulo": "Máscara Sem Rosto",
+      "conteudo": {
+        "descricao": "Disfarça completamente a identidade do usuário. O Banqueiro não gosta dessa máscara.",
+        "raridade": "lendario",
+        "mercado_negro": true,
+        "preco": 150
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "plano_de_saude_basico",
+      "titulo": "Plano de Saúde Básico",
+      "conteudo": {
+        "descricao": "Dá um bom desconto na conta do hospital, cobrando 100 Lunaris ao invés de 200.",
+        "raridade": "incomum",
+        "preco": 500
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "plano_de_saude_vip",
+      "titulo": "Plano de Saúde VIP",
+      "conteudo": {
+        "descricao": "Atendimento emergencial excelente. A taxa de hospital cai para apenas 50 Lunaris.",
+        "raridade": "raro",
+        "preco": 2000
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "contrato_guarda_costas",
+      "titulo": "Contrato Guarda-Costas Mercenário",
+      "conteudo": {
+        "descricao": "Você pode usar /contratar_guarda para proteger sua carteira temporariamente contra roubos.",
+        "raridade": "raro",
+        "preco": 1000
       }
     }
   ]

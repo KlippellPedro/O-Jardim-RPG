@@ -104,7 +104,8 @@ class AudioSynth {
     switch (name) {
       case 'click':
         this.playSteps([
-          { type: 'triangle', freqStart: 720, freqEnd: 520, duration: 0.045, gainPeak: 0.10 },
+          { type: 'triangle', freqStart: 360, freqEnd: 300, duration: 0.045, gainPeak: 0.055 },
+          { type: 'sine', freqStart: 520, freqEnd: 440, duration: 0.05, startOffset: 0.008, gainPeak: 0.022 },
         ], volume);
         break;
       case 'hover':
@@ -114,12 +115,14 @@ class AudioSynth {
         break;
       case 'select':
         this.playSteps([
-          { type: 'triangle', freqStart: 860, freqEnd: 1040, duration: 0.06, gainPeak: 0.11 },
+          { type: 'sine', freqStart: 390, freqEnd: 330, duration: 0.055, gainPeak: 0.05 },
+          { type: 'sine', freqStart: 520, freqEnd: 460, duration: 0.06, startOffset: 0.01, gainPeak: 0.022 },
         ], volume);
         break;
       case 'navigate':
         this.playSteps([
-          { type: 'sine', freqStart: 440, freqEnd: 660, duration: 0.12, gainPeak: 0.09 },
+          { type: 'triangle', freqStart: 300, freqEnd: 260, duration: 0.065, gainPeak: 0.045 },
+          { type: 'sine', freqStart: 450, freqEnd: 390, duration: 0.075, startOffset: 0.012, gainPeak: 0.025 },
         ], volume);
         break;
       case 'open':

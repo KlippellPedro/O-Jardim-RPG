@@ -85,7 +85,7 @@ ele não publica mudanças feitas no JSON.
 
 ## O que já está feito
 
-- **Armas:** 87, todas com descrição, dano rolável, crítico e modo
+- **Armas:** 78, todas com descrição, dano rolável, crítico e modo
   (`subtipo` `simples`/`marcial` e `modo`
   `Corpo a corpo`/`À distância`, margem de ameaça e multiplicador crítico;
   inclui Obstinadas e Relíquias da Criação).
@@ -106,10 +106,26 @@ ele não publica mudanças feitas no JSON.
 - **Bestiário:** 60 seres (`tipo: "monstro"`, preço por fórmula).
 - **Componentes e drops:** 51 entradas (`tipo: "drop"`), incluindo partes de
   seres e materiais ritualísticos.
-- **Especiais:** 5 Frutos do Éden, 10 Implantes, 8 Artefatos Mágicos e 11 Selos
+- **Especiais:** 15 Frutos do Éden, 10 Implantes, 8 Artefatos Mágicos e 11 Selos
   consumíveis sincronizados com o catálogo mágico.
 
-Total: **461 entradas**.
+Total: **462 entradas**.
+
+### Frutos do Éden
+
+Os Frutos seguem uma escala própria de Relíquia da Criação, acima de um item
+mágico comum. Cada um publica cinco blocos mecânicos obrigatórios:
+
+- `passivo`: identidade permanente e benefício de exploração ou defesa;
+- `tecnica`: poder recorrente, normalmente limitado a uma vez por rodada;
+- `despertar`: efeito decisivo limitado por cena ou sessão;
+- `fraqueza`: contrajogo específico mais a fraqueza comum à água do mar;
+- `vinculo`: uma criatura mantém apenas um Vínculo do Éden por vez.
+
+Os marcadores `Sobrenatural`, `Mutação` e `Elemental` alimentam os filtros da
+Loja. Os preços atuais ficam entre 520 e 800 Fragmentos de Estrela conforme
+impacto, versatilidade e frequência; preço maior não remove custos de Mana,
+defesas, concentração, Cansaço ou limites de uso.
 
 ## Política econômica
 
@@ -171,8 +187,9 @@ Invocação, Ajudante, Ser Lendário), guardados em `conteudo` com `nivel` e `cl
 foram ignorados. A descrição já cita os modificadores (conservação, qualidade
 do abate, ser lendário, falta de material).
 
-**Obstinadas:** as armas-artefato (Excalibur, Mjölnir, Gungnir…) viraram armas lendárias
-(`tipo: "arma"`, `material: "Obstinada"`), com a habilidade na descrição.
+**Obstinadas:** as armas-artefato (Excalibur, Mjölnir, Gungnir…) existem só como
+Relíquias da Criação (`reliquia-*`), não como par duplicado numa versão lendária —
+cada artefato é único, com a habilidade na descrição.
 
 ## Dica de balanceamento
 

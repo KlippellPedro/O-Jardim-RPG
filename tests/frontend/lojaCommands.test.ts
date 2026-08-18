@@ -305,7 +305,7 @@ test('todo item declara a loja mínima e a Vila fica restrita ao catálogo simpl
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
 
-  assert.equal(entradas.length, 461);
+  assert.equal(entradas.length, 462);
   assert.ok(entradas.every((item) => Number.isInteger(nivel(item)) && nivel(item) >= 1 && nivel(item) <= 4));
   assert.ok([1, 2, 3, 4].every((loja) => entradas.some((item) => nivel(item) === loja)));
 

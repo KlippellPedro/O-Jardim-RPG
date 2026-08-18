@@ -143,7 +143,7 @@ export const CampanhasList: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              whileHover={{ scale: 1.02, y: -5 }}
+              whileHover={{ y: -6 }}
               onClick={() => handleSelectCampanha(campanha.id)}
               className="bg-[#0b0a12]/60 backdrop-blur-xl border border-white/5 p-6 rounded-3xl cursor-pointer group hover:border-primary/50 hover:bg-white/5 transition-all shadow-xl relative overflow-hidden text-left"
             >

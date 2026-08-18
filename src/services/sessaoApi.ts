@@ -54,6 +54,8 @@ export interface SessaoParticipanteResponse {
   /** Só vem preenchido para quem comanda a mesa - é uso interno de XP. */
   vd?: number | null;
   pericias?: string[];
+  /** Anotação privada de quem comanda a mesa, usada para planejar o turno. */
+  anotacao?: string;
 }
 
 export interface BestiarioMonstro {
@@ -104,7 +106,7 @@ export const sessaoApi = {
     return api<SessaoResponse>(`/sessao?campanha_id=${campanhaId}`);
   },
 
-  abrirSessao(campanhaId: string, titulo: string, incluirPersonagens: boolean = true) {
+  abrirSessao(campanhaId: string, titulo: string, incluirPersonagens: boolean = false) {
     return api<SessaoResponse>('/sessao', {
       method: 'POST',
       body: { campanha_id: campanhaId, titulo, incluir_personagens: incluirPersonagens },
@@ -117,6 +119,13 @@ export const sessaoApi = {
 
   publicarAoVivo(sessaoId: string) {
     return api<SessaoResponse>(`/sessao/${sessaoId}/ao-vivo`, { method: 'POST' });
+  },
+
+  selecionarPersonagens(sessaoId: string, personagemIds: string[]) {
+    return api<SessaoResponse>(`/sessao/${sessaoId}/personagens`, {
+      method: 'POST',
+      body: { personagem_ids: personagemIds },
+    });
   },
 
   adicionarParticipante(sessaoId: string, payload: ParticipantePayload) {

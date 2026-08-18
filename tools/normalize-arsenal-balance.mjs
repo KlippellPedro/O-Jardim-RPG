@@ -6,14 +6,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const catalogPath = path.join(root, 'data', 'loja', 'catalogo.json');
 const document = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
 const profiles = {
-  excalibur: ['6d10+12', 25, 'lendario'],
-  mjolnir: ['6d10+12', 25, 'lendario'],
-  'martelo-das-chamas': ['6d10+10', 25, 'lendario'],
-  gungnir: ['5d10+12', 25, 'lendario'],
-  masamune: ['6d10+10', 25, 'lendario'],
-  rhaast: ['5d12+10', 25, 'lendario'],
-  triceratops: ['6d10+8', 25, 'lendario'],
-  zangetsu: ['6d10+8', 25, 'lendario'],
   'reliquia-excalibur': ['8d12+20', 35, 'reliquia'],
   'reliquia-mjolnir': ['8d12+18', 35, 'reliquia'],
   'reliquia-martelo-chamas': ['8d12+16', 35, 'reliquia'],

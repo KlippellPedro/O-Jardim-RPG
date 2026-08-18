@@ -9,6 +9,7 @@ import {
   PanelRight,
   Radio,
   RefreshCw,
+  Shield,
   Users,
   Wifi,
   WifiOff,
@@ -18,6 +19,8 @@ import { ActiveTurnCard } from './components/ActiveTurnCard';
 import { InitiativeTracker } from './InitiativeTracker';
 import { SessionLogPanel } from './components/SessionLogPanel';
 import { FrotaBasesPanel } from './components/FrotaBasesPanel';
+import { MasterScreenPanel } from './components/MasterScreenPanel';
+import { SessionParticipantsDialog } from './components/SessionParticipantsDialog';
 import { useSessaoStore } from '../../store/useSessaoStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import { roleLabel } from './sessionUtils';
@@ -29,9 +32,12 @@ export const SessaoPage: React.FC = () => {
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
   const [rightDrawerOpen, setRightDrawerOpen] = useState(false);
   const [frotaDrawerOpen, setFrotaDrawerOpen] = useState(false);
+  const [masterScreenOpen, setMasterScreenOpen] = useState(false);
+  const [participantsDialogMode, setParticipantsDialogMode] = useState<'select' | 'start' | null>(null);
   const leftDrawerRef = useRef<HTMLElement>(null);
   const rightDrawerRef = useRef<HTMLElement>(null);
   const frotaDrawerRef = useRef<HTMLElement>(null);
+  const masterScreenRef = useRef<HTMLElement>(null);
   // O histórico é útil, mas ocupa uma coluna inteira - dá pra recolher.
   const [historyPanelOpen, setHistoryPanelOpen] = useState(true);
   const reduceMotion = useReducedMotion();
@@ -41,6 +47,7 @@ export const SessaoPage: React.FC = () => {
     fetchEstadoSessao,
     publicarAoVivo,
     encerrarSessao,
+    selecionarPersonagens,
     turnoAtualIndex,
     turnoAtualId,
     emCombate,
@@ -62,6 +69,7 @@ export const SessaoPage: React.FC = () => {
   useDialogAccessibility({ open: leftDrawerOpen, dialogRef: leftDrawerRef, onClose: () => setLeftDrawerOpen(false) });
   useDialogAccessibility({ open: rightDrawerOpen, dialogRef: rightDrawerRef, onClose: () => setRightDrawerOpen(false) });
   useDialogAccessibility({ open: frotaDrawerOpen, dialogRef: frotaDrawerRef, onClose: () => setFrotaDrawerOpen(false) });
+  useDialogAccessibility({ open: masterScreenOpen, dialogRef: masterScreenRef, onClose: () => setMasterScreenOpen(false) });
 
   useEffect(() => {
     if (!activeCampaignId) return undefined;
@@ -83,13 +91,31 @@ export const SessaoPage: React.FC = () => {
   const handleLiveToggle = async () => {
     if (isChangingLive) return;
     if (sessaoStatus === 'aberta' && !window.confirm('Encerrar a sessão ao vivo para todos os jogadores?')) return;
+    if (sessaoStatus !== 'aberta') {
+      setParticipantsDialogMode('start');
+      return;
+    }
     setIsChangingLive(true);
     setLiveActionError(null);
     try {
-      if (sessaoStatus === 'aberta') await encerrarSessao();
-      else await publicarAoVivo();
+      await encerrarSessao();
     } catch (actionError) {
       setLiveActionError(actionError instanceof Error ? actionError.message : 'Não foi possível alterar o estado da sessão.');
+    } finally {
+      setIsChangingLive(false);
+    }
+  };
+
+  const handleParticipantsConfirm = async (characterIds: string[]) => {
+    const shouldStartLive = participantsDialogMode === 'start';
+    setIsChangingLive(true);
+    setLiveActionError(null);
+    try {
+      await selecionarPersonagens(characterIds);
+      if (shouldStartLive) await publicarAoVivo();
+      setParticipantsDialogMode(null);
+    } catch (actionError) {
+      throw actionError instanceof Error ? actionError : new Error('Não foi possível salvar os participantes da sessão.');
     } finally {
       setIsChangingLive(false);
     }
@@ -205,6 +231,28 @@ export const SessaoPage: React.FC = () => {
               >
                 <Car size={18} />
               </button>
+              {comando ? (
+                <button
+                  type="button"
+                  onClick={() => setMasterScreenOpen(true)}
+                  className="rounded-lg border border-[#c7a44c]/20 p-2 text-[#d9b95f] hover:border-[#c7a44c]/45 hover:bg-[#c7a44c]/10"
+                  aria-label="Abrir Escudo do Mestre"
+                  title="Escudo do Mestre"
+                >
+                  <Shield size={18} />
+                </button>
+              ) : null}
+              {comando && sessaoStatus === 'preparacao' ? (
+                <button
+                  type="button"
+                  onClick={() => setParticipantsDialogMode('select')}
+                  className="rounded-lg border border-white/10 p-2 text-white/70 hover:border-[#c7a44c]/40 hover:text-white"
+                  aria-label="Selecionar participantes da sessão"
+                  title="Participantes da sessão"
+                >
+                  <Users size={18} />
+                </button>
+              ) : null}
 
               <span className="hidden rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-white/60 md:inline">
                 {roleLabel(meuPapel)}
@@ -305,6 +353,29 @@ export const SessaoPage: React.FC = () => {
             <FrotaBasesPanel onClose={() => setFrotaDrawerOpen(false)} />
           </aside>
         </div>
+      ) : null}
+
+      {masterScreenOpen && comando ? (
+        <div className="modal-viewport fixed inset-0 z-[70] flex justify-end bg-black/75" role="presentation" onClick={() => setMasterScreenOpen(false)}>
+          <aside
+            ref={masterScreenRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Escudo do Mestre"
+            className="h-full w-[min(920px,100%)] border-l border-[#c7a44c]/15 bg-[#0b0a10] shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <MasterScreenPanel onClose={() => setMasterScreenOpen(false)} />
+          </aside>
+        </div>
+      ) : null}
+
+      {participantsDialogMode && comando && sessaoStatus === 'preparacao' ? (
+        <SessionParticipantsDialog
+          startLive={participantsDialogMode === 'start'}
+          onCancel={() => setParticipantsDialogMode(null)}
+          onConfirm={handleParticipantsConfirm}
+        />
       ) : null}
 
       {error ? (

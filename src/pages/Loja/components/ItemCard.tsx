@@ -52,7 +52,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onBuy, onView, podeCom
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.3 }}
-      className={`content-auto-list-item performance-expensive-effects relative group bg-[#0b0a12]/80 backdrop-blur-md rounded-3xl border flex flex-col h-full overflow-hidden transition-all hover:scale-[1.02] ${rarityColor}`}
+      className={`content-auto-list-item performance-expensive-effects relative group bg-[#0b0a12]/80 backdrop-blur-md rounded-3xl border flex flex-col h-full overflow-hidden transition-all hover:-translate-y-1 ${rarityColor}`}
     >
       {item.raridade === 'Relíquia da Criação' && (
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-300/10 via-white/10 to-fuchsia-300/10 pointer-events-none rounded-3xl mix-blend-screen animate-pulse" />

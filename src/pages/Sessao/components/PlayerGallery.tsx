@@ -22,7 +22,7 @@ export const PlayerGallery: React.FC = () => {
         <h2 className="text-lg font-semibold text-white">A mesa ainda não tem participantes</h2>
         <p className="mt-2 max-w-sm text-sm leading-6 text-white/45">
           {comando
-            ? 'Use o painel de iniciativa para adicionar aliados ou inimigos. Personagens ativos entram automaticamente quando a sessão é aberta.'
+            ? 'Escolha os personagens no botão Participantes e use a iniciativa para adicionar aliados ou inimigos.'
             : 'O mestre ainda está preparando os participantes desta sessão.'}
         </p>
       </div>

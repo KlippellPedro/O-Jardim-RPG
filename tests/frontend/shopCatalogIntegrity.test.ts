@@ -138,6 +138,16 @@ test('armas publicam dano, modo e crítico mecanicamente coerentes', () => {
   }
 });
 
+test('armaduras usam nomes explícitos para não se confundirem com outros itens', () => {
+  const armaduras = catalogo.entradas.filter(item => (
+    item.tipo === 'armadura' && normalizar(item.conteudo.subtipo) !== 'escudo'
+  ));
+  assert.ok(armaduras.length > 0);
+  for (const armadura of armaduras) {
+    assert.match(armadura.titulo, /^Armadura de /, `${armadura.id}: título não identifica a peça como armadura`);
+  }
+});
+
 test('peças veiculares e veículos completos possuem ficha utilizável', () => {
   const pecas = catalogo.entradas.filter(item => item.tipo === 'veiculo');
   const completos = catalogo.entradas.filter(item => item.tipo === 'veiculo-completo');
@@ -183,6 +193,30 @@ test('itens especiais publicam marcadores para busca e filtros', () => {
   for (const item of especiais) {
     assert.ok(Array.isArray(item.conteudo.atributos) || item.tipo === 'drop', `${item.id}: atributos ausentes`);
     if (item.tipo !== 'drop') assert.ok(item.conteudo.atributos.length > 0, `${item.id}: marcadores vazios`);
+  }
+});
+
+test('Frutos do Éden têm escala de Relíquia, contrajogo e três níveis de poder', () => {
+  const frutos = catalogo.entradas.filter(item => item.tipo === 'fruto-eden');
+  assert.equal(frutos.length, 15);
+
+  const familias = new Set(['sobrenatural', 'mutacao', 'elemental']);
+  for (const fruto of frutos) {
+    assert.deepEqual(
+      Object.keys(fruto.conteudo.preco),
+      ['Fragmentos de Estrela'],
+      `${fruto.id}: Fruto deve usar Fragmentos de Estrela`,
+    );
+    assert.equal(normalizar(fruto.conteudo.raridade), 'reliquia da criacao');
+    assert.ok(
+      fruto.conteudo.atributos.some((atributo: unknown) => familias.has(normalizar(atributo))),
+      `${fruto.id}: família Sobrenatural, Mutação ou Elemental ausente`,
+    );
+    for (const campo of ['passivo', 'tecnica', 'despertar', 'fraqueza', 'vinculo']) {
+      assert.ok(String(fruto.conteudo[campo] ?? '').trim(), `${fruto.id}: ${campo} ausente`);
+    }
+    assert.match(fruto.conteudo.descricao, /água do mar/i, `${fruto.id}: fraqueza comum ausente`);
+    assert.match(fruto.conteudo.vinculo, /único/i, `${fruto.id}: Vínculo único ausente`);
   }
 });
 

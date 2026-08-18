@@ -3,8 +3,9 @@ import { motion } from 'framer-motion';
 export default function InteractiveModuleCard({ title, description, iconUrl }: { title: string, description: string, iconUrl: string }) {
   return (
     <motion.div
-      whileHover={{ scale: 1.03, y: -4 }}
-      whileTap={{ scale: 0.97 }}
+      // Sem `scale`: escalar borra o texto do cartao enquanto se le. So o deslocamento.
+      whileHover={{ y: -6 }}
+      whileTap={{ y: -1 }}
       transition={{ type: 'spring', stiffness: 300, damping: 22 }}
       className="relative p-[1px] rounded-2xl bg-gradient-to-b from-primary/30 to-transparent overflow-hidden group cursor-pointer h-full"
     >

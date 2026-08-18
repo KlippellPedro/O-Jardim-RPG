@@ -8,24 +8,42 @@ const REPOSITORY_ROOT = path.resolve(import.meta.dirname, '..');
 const DEFAULT_VAULT = 'C:/Users/Pedro/OneDrive/Documentos/RPG/obsidian/O Jardim - RPG';
 const SCHEMA_VERSION = 1;
 
+// Os alvos abaixo seguem os nomes que o cofre realmente usa. Renomear uma nota
+// no Obsidian sem atualizar esta lista faz a fonte perder a nota ativa e voltar
+// a divergir do site em silencio.
 const SOURCES = [
   { source: 'data/ficha/classes.json', target: '02 - Sistema/Ficha/Classes', collections: [{ key: null, mode: 'array' }] },
-  { source: 'data/ficha/racas.json', target: '02 - Sistema/Ficha', fullSourceFile: 'Raças.md', title: 'Raças', renderer: 'races', collections: [{ key: null, mode: 'array' }] },
+  { source: 'data/ficha/racas.json', target: '02 - Sistema/Ficha/Raças', fullSourceFile: 'Raças.md', title: 'Raças', renderer: 'races', collections: [{ key: null, mode: 'array' }] },
   {
     source: 'data/ficha/pericias.json',
     target: '02 - Sistema/Ficha',
-    fullSourceFile: 'Perícias.md',
-    title: 'Perícias',
+    fullSourceFile: 'Perícias e outros.md',
+    title: 'Perícias e outros',
     renderer: 'skills',
     collections: [
       { key: 'pericias', mode: 'array', folder: 'Perícias' },
       { key: 'nao_sao_pericias', mode: 'array', folder: 'Referências' },
     ],
   },
-  { source: 'data/ficha/legados.json', target: '02 - Sistema/Ficha/Legados', fullSourceFile: 'Legados originais.md', title: 'Legados originais', renderer: 'legacies', collections: [{ key: 'legados', mode: 'array' }] },
-  { source: 'data/ficha/legados-novos.json', target: '02 - Sistema/Ficha/Legados', fullSourceFile: 'Novos Legados.md', title: 'Novos Legados', renderer: 'newLegacies', collections: [{ key: 'novos', mode: 'array' }] },
-  { source: 'data/ficha/legados-regras-v1.json', target: '02 - Sistema/Ficha/Legados', fullSourceFile: 'Balanceamento dos Legados.md', title: 'Balanceamento dos Legados', renderer: 'legacyRules', collections: [{ key: 'regras', mode: 'map' }] },
-  { source: 'data/ficha/magias.json', target: '02 - Sistema/Ficha', fullSourceFile: 'Magias.md', title: 'Magias', renderer: 'spells', collections: [{ key: 'magias', mode: 'array' }] },
+  { source: 'data/ficha/legados.json', target: '02 - Sistema/Ficha', fullSourceFile: 'Legados oficiais.md', title: 'Legados oficiais', renderer: 'legacies', collections: [{ key: 'legados', mode: 'array' }] },
+  { source: 'data/ficha/legados-novos.json', target: '02 - Sistema/Ficha', fullSourceFile: 'Legados novos.md', title: 'Legados novos', renderer: 'newLegacies', collections: [{ key: 'novos', mode: 'array' }] },
+  { source: 'data/ficha/legados-regras-v1.json', target: '02 - Sistema/Ficha', fullSourceFile: 'Balanceamento dos Legados.md', title: 'Balanceamento dos Legados', renderer: 'legacyRules', collections: [{ key: 'regras', mode: 'map' }] },
+  {
+    // magias.json guarda o sistema inteiro num arquivo so. Uma nota unica com os
+    // dez circulos ficaria intragavel de ler, entao ele entra fatiado nas tres
+    // notas que o cofre ja usava para magia.
+    source: 'data/ficha/magias.json',
+    target: '02 - Sistema/Magia',
+    // A ordem das fatias reproduz a ordem das chaves no JSON, para a exportacao
+    // devolver o arquivo sem remexer nele inteiro.
+    slices: [
+      { file: 'Magias.md', title: 'Magias', keys: ['versao', 'status', 'descricao', 'regras'], renderer: 'spellRules' },
+      { file: 'Fusões de Fluxos.md', title: 'Fusões de Fluxos', keys: ['fluxos', 'vantagens_fluxos', 'fusoes'], renderer: 'flows' },
+      // As 352 magias numa nota so davam 400 KB, que o Obsidian abre mas arrasta.
+      { folder: 'Círculos', key: 'magias', bundleBy: 'circulo', titlePrefix: 'Círculo ', renderer: 'spellCircle' },
+      { file: 'Rituais, Selos e Encantamentos.md', title: 'Rituais, Selos e Encantamentos', keys: ['rituais', 'selos', 'encantamentos'], renderer: 'rites' },
+    ],
+  },
   { source: 'data/loja/catalogo.json', target: '03 - Loja/Catálogo', bundleBy: 'tipo', bundleKey: 'entradas', renderer: 'shop', collections: [{ key: 'entradas', mode: 'array' }] },
   { source: 'data/loja/bestiario_precos.json', target: '03 - Loja', fullSourceFile: 'Bestiário.md', title: 'Bestiário e preços', collections: [{ key: 'fontes', mode: 'map' }] },
   { source: 'data/loja/veiculos_sistema.json', target: '03 - Loja', fullSourceFile: 'Veículos.md', title: 'Veículos', collections: [{ key: 'fontes', mode: 'map' }] },
@@ -36,8 +54,8 @@ const SOURCES = [
 ];
 
 const MIRRORS = [
-  { source: 'data/regras/regras-publicas-v1.md', target: '02 - Sistema/Regras/Publicadas/Regras públicas.md' },
-  { source: 'data/regras/relatorio-balanceamento-v1.md', target: '02 - Sistema/Regras/Balanceamento/Relatório de balanceamento.md' },
+  { source: 'data/regras/regras-publicas-v1.md', target: '02 - Sistema/Regras/Regras públicas.md' },
+  { source: 'data/regras/relatorio-balanceamento-v1.md', target: '02 - Sistema/Regras/Relatório de balanceamento.md' },
   { source: 'data/loja/INSTRUCOES_CATALOGO.md', target: '00 - Início/GUIA - Catálogo da Loja.md' },
 ];
 
@@ -84,7 +102,47 @@ const FIELD_LABELS = {
   titulo: 'Título',
   versao: 'Versão',
   versao_balanceamento: 'Versão de balanceamento',
+  // Regras do catálogo de magias.
+  fluxos_naturais: 'Fluxos naturais',
+  fluxos_artificiais: 'Fluxos artificiais',
+  fluxos_utilizaveis: 'Fluxos utilizáveis',
+  formula_teste: 'Fórmula do teste',
+  formula_dt: 'Fórmula da DT',
+  mana_gasta_ao_declarar: 'Mana gasta ao declarar',
+  mana_devolvida_em_falha: 'Mana devolvida em falha',
+  limite_concentracao: 'Limite de concentração',
+  rituais_em_combate: 'Rituais em combate',
+  rituais_possuem_circulo: 'Rituais possuem círculo',
+  mana_ritual_comprometida_no_inicio: 'Mana do ritual comprometida no início',
+  mana_ritual_devolvida_se_interrompido: 'Mana do ritual devolvida se interrompido',
+  fusao_maximo_fluxos_secundarios_por_magia: 'Máximo de Fluxos secundários por magia',
+  requer_autorizacao_mestre: 'Requer autorização do Mestre',
+  bloquear_selecao: 'Bloquear seleção',
+  aviso: 'Aviso',
+  epico: 'Épico',
+  lendario: 'Lendário',
 };
+
+// Os Fluxos aparecem pelo id (sem acento) em magias, rituais, selos e
+// encantamentos. Sao onze e nao mudam, entao vale a tabela fixa: humanize
+// sozinho devolveria "Essencia" e "Inconstancia".
+const FLOW_LABELS = {
+  origem: 'Origem',
+  essencia: 'Essência',
+  comunicacao: 'Comunicação',
+  vitalidade: 'Vitalidade',
+  inconstancia: 'Inconstância',
+  fisico: 'Físico',
+  espaco: 'Espaço',
+  tempo: 'Tempo',
+  vazio: 'Vazio',
+  fim: 'Fim',
+  tecnologia: 'Tecnologia',
+};
+
+function flowLabel(value) {
+  return FLOW_LABELS[value] ?? humanize(value);
+}
 
 function parseArguments() {
   const [command = 'check', ...args] = process.argv.slice(2);
@@ -240,25 +298,104 @@ function renderSkills(data) {
   return [data.nota, '## Perícias', skills, '## Outros valores da ficha', references].filter(Boolean).join('\n\n');
 }
 
-function renderSpells(data) {
-  const groups = new Map();
-  for (const spell of data.magias || []) {
-    const key = spell.circulo ?? 'Ritual';
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(spell);
-  }
-  const intro = [
-    `**Versão:** ${data.versao || '—'}`,
-    `**Status:** ${humanize(data.status || '—')}`,
-  ].join('  \n');
-  const sections = [...groups.entries()].map(([circle, spells]) => {
-    const title = String(circle).toLocaleLowerCase('pt-BR') === 'ritual' ? 'Rituais' : `Círculo ${circle}`;
-    return `## ${title}\n\n${markdownTable(
-      ['Magia', 'Mana', 'Execução', 'Alcance', 'Duração', 'Defesa', 'Dano', 'Efeito'],
-      spells.map((spell) => [spell.titulo, spell.custo_mana, spell.execucao, spell.alcance, spell.duracao, spell.defesa, spell.dano, spell.efeito]),
-    )}`;
-  });
-  return [intro, ...sections].join('\n\n');
+function renderSpellRows(spells) {
+  return markdownTable(
+    ['Magia', 'Fluxo', 'Mana', 'Execução', 'Alcance', 'Duração', 'Defesa', 'Dano', 'Efeito'],
+    spells.map((spell) => [
+      spell.titulo, spell.tradicao || spell.fluxo, spell.custo_mana, spell.execucao,
+      spell.alcance, spell.duracao, spell.defesa, spell.dano, spell.efeito,
+    ]),
+  );
+}
+
+function renderSpellRules(data) {
+  const rules = data.regras || {};
+  const scalars = Object.entries(rules)
+    .filter(([, value]) => value === null || ['string', 'number', 'boolean'].includes(typeof value));
+  return [
+    [`**Versão:** ${data.versao || '—'}`, `**Status:** ${humanize(data.status || '—')}`].join('  \n'),
+    data.descricao,
+    '## Regras do sistema',
+    markdownTable(['Regra', 'Valor'], scalars.map(([key, value]) => [humanize(key), value])),
+    '### Formas de manifestação',
+    markdownTable(['Forma', 'Descrição'], (rules.formas || []).map((form) => [form.titulo, form.descricao])),
+    '### Círculos',
+    markdownTable(
+      ['Círculo', 'Fluxo mínimo', 'DT de conjuração', 'Mana base'],
+      (rules.circulos || []).map((circle) => [circle.circulo, circle.fluxo_minimo, circle.dt_conjuracao, circle.mana_base]),
+    ),
+    '### Classes mágicas',
+    (rules.classes_magicas || []).map((name) => `- ${name}`).join('\n'),
+    '### Capacidade de encantamento por raridade',
+    markdownTable(
+      ['Raridade', 'Encantamentos'],
+      Object.entries(rules.capacidade_encantamento_por_raridade || {}).map(([key, value]) => [humanize(key), value]),
+    ),
+    ...(rules.acesso_fim ? ['### Acesso ao Fluxo do Fim', markdownTable(['Campo', 'Valor'], Object.entries(rules.acesso_fim).map(([key, value]) => [humanize(key), value]))] : []),
+  ].filter(Boolean).join('\n\n');
+}
+
+function renderFlows(data) {
+  return [
+    '## Fluxos',
+    markdownTable(
+      ['Fluxo', 'Árvore', 'Deidade', 'Natureza', 'Essência', 'Possibilidades', 'Limites', 'Observação'],
+      (data.fluxos || []).map((flow) => [
+        flow.titulo, flow.arvore, flow.deidade, flow.natureza, flow.essencia,
+        flow.possibilidades, flow.limites, flow.aviso,
+      ]),
+    ),
+    '## Vantagens entre Fluxos',
+    markdownTable(
+      ['Fluxo', 'Vantagem contra', 'Desvantagem contra'],
+      (data.vantagens_fluxos || []).map((item) => [
+        flowLabel(item.fluxo),
+        (item.vantagem_contra || []).map(flowLabel),
+        (item.desvantagem_contra || []).map(flowLabel),
+      ]),
+    ),
+    '## Fusões do Sintonizador',
+    markdownTable(
+      ['Fusão', 'Fluxo secundário', 'Efeito'],
+      (data.fusoes || []).map((fusion) => [fusion.titulo, flowLabel(fusion.fluxo_secundario), fusion.efeito]),
+    ),
+  ].join('\n\n');
+}
+
+function renderRites(data) {
+  const ingredients = (list) => (list || []).map((item) => `${item.item_id} ×${item.quantidade}`).join('<br>');
+  return [
+    '## Rituais',
+    markdownTable(
+      ['Ritual', 'Fluxo', 'Complexidade', 'DT', 'Tempo', 'Mana', 'Requisito', 'Ingredientes', 'Efeito', 'Falha'],
+      (data.rituais || []).map((rite) => [
+        rite.titulo, flowLabel(rite.fluxo), rite.complexidade, rite.dt, rite.tempo, rite.custo_mana,
+        rite.requisito, ingredients(rite.ingredientes), rite.efeito, rite.falha,
+      ]),
+    ),
+    '## Selos',
+    markdownTable(
+      ['Selo', 'Fluxo', 'Grau', 'DT de inscrição', 'Mana', 'Tempo', 'Ativação', 'Efeito'],
+      (data.selos || []).map((seal) => [
+        seal.titulo, flowLabel(seal.fluxo), seal.grau, seal.dt_inscricao, seal.custo_mana, seal.tempo, seal.ativacao, seal.efeito,
+      ]),
+    ),
+    '## Encantamentos',
+    markdownTable(
+      ['Encantamento', 'Fluxo', 'Grau', 'DT', 'Mana', 'Tempo', 'Aplicação', 'Efeito'],
+      (data.encantamentos || []).map((charm) => [
+        charm.titulo, flowLabel(charm.fluxo), charm.grau, charm.dt, charm.custo_mana, charm.tempo, charm.aplicacao, charm.efeito,
+      ]),
+    ),
+  ].join('\n\n');
+}
+
+function renderSliceView(slice, data) {
+  if (slice.renderer === 'spellRules') return renderSpellRules(data);
+  if (slice.renderer === 'spellCircle') return renderSpellRows(data[slice.key] || []);
+  if (slice.renderer === 'flows') return renderFlows(data);
+  if (slice.renderer === 'rites') return renderRites(data);
+  return renderReadable(data, 2);
 }
 
 function renderRaces(data) {
@@ -290,7 +427,6 @@ function renderLegacyRules(data) {
 
 function renderFullSourceView(config, data) {
   if (config.renderer === 'skills') return renderSkills(data);
-  if (config.renderer === 'spells') return renderSpells(data);
   if (config.renderer === 'races') return renderRaces(data);
   if (config.renderer === 'legacies') return renderLegacies(data, 'legados');
   if (config.renderer === 'newLegacies') return renderLegacies(data, 'novos');
@@ -391,6 +527,51 @@ function fullSourceNoteText(config, data) {
   ].join('\n');
 }
 
+function sliceNoteText(config, slice, data) {
+  const metadata = {
+    jardim_schema: SCHEMA_VERSION,
+    jardim_fonte: config.source,
+    jardim_bundle: 'fatia',
+    jardim_fatia: slice.keys,
+    jardim_dados: data,
+  };
+  return [
+    '---',
+    stringifyYaml(metadata, { lineWidth: 0 }).trimEnd(),
+    '---',
+    '',
+    `# ${slice.title}`,
+    '',
+    '<!-- jardim:visualizacao:inicio -->',
+    renderSliceView(slice, data),
+    '<!-- jardim:visualizacao:fim -->',
+    '',
+  ].join('\n');
+}
+
+function groupedSliceNoteText(config, slice, group, entries) {
+  const metadata = {
+    jardim_schema: SCHEMA_VERSION,
+    jardim_fonte: config.source,
+    jardim_bundle: 'fatia-grupo',
+    jardim_fatia: [slice.key],
+    jardim_grupo: group,
+    jardim_itens: entries,
+  };
+  return [
+    '---',
+    stringifyYaml(metadata, { lineWidth: 0 }).trimEnd(),
+    '---',
+    '',
+    `# ${slice.titlePrefix || ''}${group}`,
+    '',
+    '<!-- jardim:visualizacao:inicio -->',
+    renderSliceView(slice, { [slice.key]: entries.map(({ registro }) => registro) }),
+    '<!-- jardim:visualizacao:fim -->',
+    '',
+  ].join('\n');
+}
+
 function bundleNoteText(config, group, entries) {
   const metadata = {
     jardim_schema: SCHEMA_VERSION,
@@ -477,8 +658,12 @@ function importSource(vault, config, force) {
     jardim_schema: SCHEMA_VERSION,
     jardim_manifesto: true,
     jardim_fonte: config.source,
-    jardim_colecoes: config.collections.map(({ key, mode }) => ({ chave: key ?? '_raiz', formato: mode })),
-    metadados: metadataFor(data, config.collections),
+    jardim_colecoes: config.slices
+      ? config.slices.map((slice) => (slice.bundleBy
+        ? { pasta: slice.folder, chaves: [slice.key], agrupado_por: slice.bundleBy }
+        : { nota: slice.file, chaves: slice.keys }))
+      : config.collections.map(({ key, mode }) => ({ chave: key ?? '_raiz', formato: mode })),
+    metadados: config.slices ? {} : metadataFor(data, config.collections),
   };
   writeFileSafely(
     manifestPath(vault, config),
@@ -488,6 +673,36 @@ function importSource(vault, config, force) {
   if (config.fullSourceFile) {
     writeFileSafely(path.join(targetRoot, config.fullSourceFile), fullSourceNoteText(config, data), force);
     return 1;
+  }
+  if (config.slices) {
+    // Sem esta conferencia, acrescentar uma chave nova ao JSON faria ela sumir
+    // do cofre sem aviso - e a exportacao devolveria o arquivo mutilado.
+    const cobertas = new Set(config.slices.flatMap((slice) => slice.keys ?? [slice.key]));
+    const descobertas = Object.keys(data).filter((key) => !cobertas.has(key));
+    assert.equal(descobertas.length, 0, `${config.source}: nenhuma fatia cobre ${descobertas.join(', ')}`);
+    let escritas = 0;
+    for (const slice of config.slices) {
+      if (slice.bundleBy) {
+        const itens = data[slice.key];
+        assert(Array.isArray(itens), `${slice.key} deveria ser array em ${config.source}`);
+        const grupos = new Map();
+        itens.forEach((registro, ordem) => {
+          const grupo = registro[slice.bundleBy] ?? 'sem-grupo';
+          if (!grupos.has(grupo)) grupos.set(grupo, []);
+          grupos.get(grupo).push({ ordem, registro });
+        });
+        for (const [grupo, entradas] of grupos) {
+          const destino = path.join(targetRoot, slice.folder, `${safeFileName(`${slice.titlePrefix || ''}${grupo}`)}.md`);
+          writeFileSafely(destino, groupedSliceNoteText(config, slice, grupo, entradas), force);
+          escritas += 1;
+        }
+        continue;
+      }
+      const parcial = Object.fromEntries(slice.keys.filter((key) => key in data).map((key) => [key, data[key]]));
+      writeFileSafely(path.join(targetRoot, slice.file), sliceNoteText(config, slice, parcial), force);
+      escritas += 1;
+    }
+    return escritas;
   }
   if (config.bundleBy) {
     const sourceItems = data[config.bundleKey];
@@ -589,6 +804,43 @@ function compileSource(vault, config) {
     );
     return note.jardim_dados;
   }
+  if (config.slices) {
+    const resultado = {};
+    for (const slice of config.slices) {
+      if (slice.bundleBy) {
+        const notas = walkFiles(path.join(targetRoot, slice.folder))
+          .filter((filePath) => filePath.endsWith('.md'))
+          .map((filePath) => ({ filePath, ...extractFrontmatter(fs.readFileSync(filePath, 'utf8'), filePath) }))
+          .filter(({ data }) => data.jardim_fonte === config.source && data.jardim_bundle === 'fatia-grupo' && data.jardim_fatia?.[0] === slice.key);
+        for (const nota of notas) {
+          assert.equal(
+            visualizationFrom(nota.body, nota.filePath),
+            renderSliceView(slice, { [slice.key]: nota.data.jardim_itens.map(({ registro }) => registro) }).trim(),
+            `A parte visível de ${nota.filePath} foi editada e precisa ser sincronizada antes da exportação`,
+          );
+        }
+        resultado[slice.key] = notas
+          .flatMap(({ data }) => data.jardim_itens)
+          .sort((a, b) => a.ordem - b.ordem)
+          .map(({ registro }) => registro);
+        continue;
+      }
+      const slicePath = path.join(targetRoot, slice.file);
+      const parsed = extractFrontmatter(fs.readFileSync(slicePath, 'utf8'), slicePath);
+      const note = parsed.data;
+      assert.equal(note.jardim_fonte, config.source, `Fonte incompatível em ${slicePath}`);
+      assert.deepEqual(note.jardim_fatia, slice.keys, `A fatia de ${slicePath} não bate com a configuração`);
+      assert.equal(
+        visualizationFrom(parsed.body, slicePath),
+        renderSliceView(slice, note.jardim_dados).trim(),
+        `A parte visível de ${slicePath} foi editada e precisa ser sincronizada antes da exportação`,
+      );
+      for (const key of slice.keys) {
+        if (key in note.jardim_dados) resultado[key] = note.jardim_dados[key];
+      }
+    }
+    return resultado;
+  }
   if (config.bundleBy) {
     const result = structuredClone(manifest.metadados || {});
     const bundleNotes = walkFiles(targetRoot)
@@ -679,9 +931,10 @@ function exportAll(vault, checkOnly, source) {
   console.log(`${checkOnly ? 'Validação' : 'Exportação'} concluída: ${checked} fontes.`);
 }
 
+// A exportacao era bloqueada aqui porque o adaptador nao sabia recompor as notas
+// consolidadas do cofre. Agora sabe: quem protege o JSON e o `check`, que compara
+// a parte visivel com o que os dados renderizam e recusa a exportacao se voce
+// editou a tabela sem sincronizar.
 const { command, vault, force, source } = parseArguments();
 if (command === 'import') importAll(vault, force, source);
-else if (command === 'export' && fs.existsSync(path.join(vault, '02 - Sistema', 'Ficha', 'Legados oficiais.md'))) {
-  throw new Error('Exportação automática bloqueada: o cofre usa notas consolidadas que o adaptador legado ainda não recompõe com segurança. Sincronize pelo Codex.');
-}
 else exportAll(vault, command === 'check', source);
