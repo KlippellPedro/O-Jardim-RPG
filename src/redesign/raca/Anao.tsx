@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import { Hammer, Pickaxe, Mountain } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 export const Anao = ({ raca }: { raca: IRaca }) => {
@@ -81,7 +82,7 @@ export const Anao = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-stone-400 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Resilientes como as montanhas que habitam e precisos como os mestres de ofício que sempre foram. Criam obras para durar eras.
+            Baixo, difícil de derrubar e melhor que qualquer um com uma ferramenta na mão. Constrói pra durar, conserta o que quebrou no caminho e ainda acha jeito de melhorar a peça enquanto conserta.
           </motion.p>
         </motion.header>
 
@@ -101,7 +102,7 @@ export const Anao = ({ raca }: { raca: IRaca }) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-2`} style={{ fontFamily: 'Cinzel, serif' }}>Fisiologia Robusta</h3>
               <p className="text-stone-400 leading-relaxed text-sm">
-                Tamanho Pequeno. Podem ser baixos, mas possuem grande densidade muscular e óssea, tornando-os tão durões quanto qualquer gigante.
+                Tamanho Pequeno. A altura engana: osso e músculo de anão são bem mais densos que os de qualquer outro povo, e é por isso que um deles aguenta tanto quanto gente do dobro do tamanho.
               </p>
             </div>
           </PremiumCard>
@@ -126,85 +127,14 @@ export const Anao = ({ raca }: { raca: IRaca }) => {
           </PremiumCard>
         </div>
 
-        {/* Custom Lineages for Anão */}
-        {(() => {
-          const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
-            <section key={grupo.campo} className="pt-4 mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="mb-8"
-              >
-                <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
-                  {grupo.rotulo}
-                </h2>
-                <p className="text-stone-400 text-lg">{grupo.descricao}</p>
-              </motion.div>
-              
-              <div className="overflow-x-auto rounded-none border border-stone-800/40 bg-stone-900/40 backdrop-blur-md shadow-lg shadow-black/30">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-stone-800/40 bg-stone-950/60">
-                      <th className="p-6 font-bold text-stone-300 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Clã/Linhagem</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-stone-300 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Especialidade</th>}
-                      <th className="p-6 font-bold text-stone-300 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Herança (Traços)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grupo.opcoes.map((opcao) => {
-                      const tracos = obterTracosOpcaoRacial(opcao);
-                      const titleLower = opcao.titulo.toLowerCase();
-                      
-                      let lineageStyle = { glow: 'rgba(168,162,158,0.25)', text: 'text-stone-400', border: 'border-stone-500/50', bg: 'hover:bg-stone-900/60' };
-                      if (titleLower.includes('forja') || titleLower.includes('fogo') || titleLower.includes('magma') || titleLower.includes('chama')) {
-                        lineageStyle = { glow: 'rgba(239,68,68,0.25)', text: 'text-red-400', border: 'border-red-500/50', bg: 'hover:bg-red-950/30' };
-                      } else if (titleLower.includes('ouro') || titleLower.includes('riqueza') || titleLower.includes('joia') || titleLower.includes('rei')) {
-                        lineageStyle = { glow: 'rgba(250,204,21,0.25)', text: 'text-yellow-400', border: 'border-yellow-500/50', bg: 'hover:bg-yellow-950/30' };
-                      } else if (titleLower.includes('ferro') || titleLower.includes('aço') || titleLower.includes('guerra') || titleLower.includes('batalha')) {
-                        lineageStyle = { glow: 'rgba(113,113,122,0.25)', text: 'text-zinc-400', border: 'border-zinc-500/50', bg: 'hover:bg-zinc-900/50' };
-                      } else if (titleLower.includes('pedra') || titleLower.includes('montanha') || titleLower.includes('terra')) {
-                        lineageStyle = { glow: 'rgba(249,115,22,0.25)', text: 'text-orange-400', border: 'border-orange-500/50', bg: 'hover:bg-orange-950/30' };
-                      }
+        <EstagiosRaciais
+          raca={raca}
+          tema={tema}
+          titulo="Maestria"
+          descricao="Ofício de anão se mede em anos de bancada. Você sobe de degrau só de ganhar nível total, sem precisar pedir nada ao mestre, e cada um libera a característica seguinte do seu Ofício de Forja."
+        />
 
-                      return (
-                        <tr 
-                          key={opcao.id} 
-                          className={`border-b border-stone-800/40 transition-colors ${lineageStyle.bg}`}
-                        >
-                          <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
-                            <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
-                          </td>
-                          {grupo.campo !== 'linhagemId' && (
-                            <td className="p-6 align-top text-stone-300/80 text-sm leading-relaxed w-1/3">
-                              {descreverOpcaoRacial(opcao)}
-                            </td>
-                          )}
-                          <td className="p-6 align-top">
-                            {tracos.length > 0 ? (
-                              <div className="space-y-4">
-                                {tracos.map(traco => (
-                                  <div key={traco.id} className="bg-black/40 p-3 rounded-none border border-stone-800/50">
-                                    <h4 className="text-sm font-bold text-stone-200 mb-1">{traco.titulo}</h4>
-                                    {traco.descricao && <p className="text-xs text-stone-400/80 leading-relaxed">{traco.descricao}</p>}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-stone-500/50 italic text-sm">Sem traços adicionais.</span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ));
-        })()}
+        <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>
   );

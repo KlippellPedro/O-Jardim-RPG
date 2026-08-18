@@ -43,7 +43,7 @@ export function obterGruposEscolhaRacial(raca: IRaca | null | undefined): GrupoE
     grupos.push({
       campo: 'linhagemId',
       rotulo: 'Linhagem Élfica',
-      descricao: 'Escolha uma das seis Linhagens Élficas.',
+      descricao: 'Escolha uma das seis Linhagens Élficas. Ela vem de berço e não muda mais; nenhuma é mais forte que as outras, e cada uma resolve a cena do seu jeito.',
       opcoes: raca.linhagens,
     });
   }
@@ -85,6 +85,54 @@ export function obterOpcaoRacialSelecionada(
     if (selecionada) return selecionada;
   }
   return null;
+}
+
+/** Nível total a partir do qual o traço passa a valer. Sem o campo, vale desde
+ * o começo - é o caso de quase todo o catálogo. */
+export function nivelMinimoTraco(traco: ICaracteristicaRacial | IOpcaoRacial): number {
+  return Math.max(1, Math.trunc(Number(traco?.nivel_minimo) || 1));
+}
+
+export function tracoDisponivelNoNivel(traco: ICaracteristicaRacial, nivel: number): boolean {
+  return Math.max(1, Math.trunc(Number(nivel) || 1)) >= nivelMinimoTraco(traco);
+}
+
+/** Escada de maturação da raça (hoje só o Espírito: Menor, Maior, Primordial),
+ * sempre em ordem crescente de nível exigido. */
+export function obterEstagiosRaciais(raca: IRaca | null | undefined): IOpcaoRacial[] {
+  if (!Array.isArray(raca?.estagios)) return [];
+  return [...raca.estagios].sort((a, b) => nivelMinimoTraco(a) - nivelMinimoTraco(b));
+}
+
+/** Estágios que o personagem já alcançou. Eles se somam: o Primordial continua
+ * com o que o Maior deu. */
+export function obterEstagiosRaciaisAlcancados(raca: IRaca | null | undefined, nivel: number): IOpcaoRacial[] {
+  const nivelTotal = Math.max(1, Math.trunc(Number(nivel) || 1));
+  return obterEstagiosRaciais(raca).filter(estagio => nivelTotal >= nivelMinimoTraco(estagio));
+}
+
+/** O estágio atual - o último já alcançado. */
+export function obterEstagioRacialAtivo(raca: IRaca | null | undefined, nivel: number): IOpcaoRacial | null {
+  const alcancados = obterEstagiosRaciaisAlcancados(raca, nivel);
+  return alcancados.length > 0 ? alcancados[alcancados.length - 1] : null;
+}
+
+/** Todos os traços que valem no nível informado: os da raça, os da opção racial
+ * escolhida (Cor da Alma, linhagem, condição ancestral) e os dos estágios já
+ * alcançados, cada um respeitando o próprio `nivel_minimo`. */
+export function obterTracosRaciaisDisponiveis(
+  raca: IRaca | null | undefined,
+  escolhaRacial: Record<string, unknown> | null | undefined,
+  nivel: number,
+): ICaracteristicaRacial[] {
+  if (!raca) return [];
+  const opcao = obterOpcaoRacialSelecionada(raca, escolhaRacial);
+  const tracos = [
+    ...(raca.caracteristicas || []),
+    ...(opcao ? obterTracosOpcaoRacial(opcao) : []),
+    ...obterEstagiosRaciaisAlcancados(raca, nivel).flatMap(estagio => estagio.caracteristicas || []),
+  ];
+  return tracos.filter(traco => tracoDisponivelNoNivel(traco, nivel));
 }
 
 export function obterTracosOpcaoRacial(opcao: IOpcaoRacial): ICaracteristicaRacial[] {

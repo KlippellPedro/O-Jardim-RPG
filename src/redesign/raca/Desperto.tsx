@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import { Skull, ShieldX, Gem, Activity } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 export const Desperto = ({ raca }: { raca: IRaca }) => {
@@ -83,7 +84,7 @@ export const Desperto = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-red-200/60 max-w-3xl mx-auto font-medium leading-relaxed"
           >
-            Aqueles que caminharam pela morte e voltaram, carregando um Fragmento de Arkarin ligado à própria alma. Cada retorno tem um motivo diferente, e cada motivo molda a Dádiva que recebem e a Cicatriz que carregam para sempre.
+            Morreu, foi parar em Arkarin e voltou com um Fragmento preso à alma. A Condição Ancestral explica por que a Mulher Carmesim deixou ele sair, e é ela que decide o que ele trouxe de volta e o que ficou faltando.
           </motion.p>
         </motion.header>
 
@@ -158,82 +159,9 @@ export const Desperto = ({ raca }: { raca: IRaca }) => {
           </PremiumCard>
         </div>
 
-        {/* Custom Lineages for Desperto */}
-        {(() => {
-          const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
-            <section key={grupo.campo} className="pt-4 mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="mb-8"
-              >
-                <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
-                  {grupo.rotulo}
-                </h2>
-                <p className="text-red-200/60 font-serif text-lg">{grupo.descricao}</p>
-              </motion.div>
-              
-              <div className="grid grid-cols-1 gap-6">
-                {grupo.opcoes.map((opcao, opcaoIdx) => {
-                  const tracos = obterTracosOpcaoRacial(opcao);
-                  const titleLower = opcao.titulo.toLowerCase();
-                  
-                  // Custom colors for different desperto lineages
-                  let lineageStyle = { glow: tema.glow, text: tema.text, border: tema.border, bg: tema.bg };
-                  if (titleLower.includes('julgado') || titleLower.includes('rejeitado') || titleLower.includes('tribunal')) {
-                    lineageStyle = { glow: 'rgba(129,140,248,0.25)', text: 'text-indigo-400', border: 'border-indigo-700/40', bg: 'bg-indigo-950/20' };
-                  } else if (titleLower.includes('chamado') || titleLower.includes('vivos') || titleLower.includes('âncora')) {
-                    lineageStyle = { glow: 'rgba(45,212,191,0.25)', text: 'text-teal-400', border: 'border-teal-700/40', bg: 'bg-teal-950/20' };
-                  } else if (titleLower.includes('corpo') || titleLower.includes('reconstruído') || titleLower.includes('carne')) {
-                    lineageStyle = { glow: 'rgba(161,161,170,0.25)', text: 'text-zinc-400', border: 'border-zinc-700/40', bg: 'bg-zinc-950/30' };
-                  } else if (titleLower.includes('pacto') || titleLower.includes('sacrifício') || titleLower.includes('sangue') || titleLower.includes('profano')) {
-                    // Retorno Profano -> Rose/Red
-                    lineageStyle = { glow: 'rgba(244,63,94,0.25)', text: 'text-rose-400', border: 'border-rose-700/40', bg: 'bg-rose-950/20' };
-                  } else if (titleLower.includes('fuga') || titleLower.includes('escondido') || titleLower.includes('sombra') || titleLower.includes('alma') || titleLower.includes('fragmentada')) {
-                    // Alma Fragmentada -> Purple
-                    lineageStyle = { glow: 'rgba(168,85,247,0.25)', text: 'text-purple-400', border: 'border-purple-700/40', bg: 'bg-purple-950/20' };
-                  } else if (titleLower.includes('vingança') || titleLower.includes('ódio') || titleLower.includes('chama')) {
-                    lineageStyle = { glow: 'rgba(239,68,68,0.25)', text: 'text-red-400', border: 'border-red-700/40', bg: 'bg-red-950/20' };
-                  }
+        <EstagiosRaciais raca={raca} tema={tema} />
 
-                  return (
-                    <PremiumCard
-                      key={opcao.id}
-                      glowColor={lineageStyle.glow}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.1 * opcaoIdx }}
-                      className={`flex flex-col p-8 rounded-none ${lineageStyle.bg} border-l-2 ${lineageStyle.border} backdrop-blur-md transition-colors`}
-                    >
-                      <h3 className={`text-2xl font-serif font-medium mb-4 ${lineageStyle.text}`} style={{ fontFamily: 'Cinzel, serif' }}>
-                        {opcao.titulo}
-                      </h3>
-                      {grupo.campo !== 'linhagemId' && (
-                        <p className="text-red-100/60 leading-relaxed font-serif text-sm mb-4">
-                          {descreverOpcaoRacial(opcao)}
-                        </p>
-                      )}
-                      {tracos.length > 0 && (
-                        <div className="space-y-6 flex-1 mt-2">
-                          {tracos.map(traco => (
-                            <div key={traco.id}>
-                              <h4 className="text-sm font-bold text-red-50 mb-1 font-serif tracking-wide">{traco.titulo}</h4>
-                              {traco.descricao && <p className="text-sm text-red-200/50 leading-relaxed font-serif">{traco.descricao}</p>}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </PremiumCard>
-                  );
-                })}
-              </div>
-            </section>
-          ));
-        })()}
+        <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>
   );

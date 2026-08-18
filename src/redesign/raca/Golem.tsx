@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import { Pickaxe, Wrench, PackageSearch } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 export const Golem = ({ raca }: { raca: IRaca }) => {
@@ -68,7 +69,7 @@ export const Golem = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-xl text-stone-400 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Uma força da natureza amarrada por selos antigos ou construtos rudimentares de pura matéria. Um corpo pesado, silencioso e virtualmente indestrutível pela passagem do tempo.
+            Corpo construído, grande ou enorme, que não respira, não come e não adoece. Pesado, calado e difícil de acabar: quem cuida dele é artesão, e nenhuma armadura de prateleira serve sem ajuste antes.
           </motion.p>
         </motion.header>
 
@@ -85,7 +86,7 @@ export const Golem = ({ raca }: { raca: IRaca }) => {
             <PackageSearch size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Tamanho e Fisiologia</h3>
             <p className="text-stone-400 leading-relaxed text-sm">
-              Tamanho Grande ou Enorme, definido na criação. Não precisa respirar, comer ou beber e não contrai doenças comuns. É puramente matéria inanimada ganhando movimento.
+              Tamanho Grande ou Enorme, decidido na criação. Não respira, não come, não bebe e não pega doença comum: é matéria bruta que ganhou movimento.
             </p>
           </PremiumCard>
 
@@ -100,90 +101,19 @@ export const Golem = ({ raca }: { raca: IRaca }) => {
             <Wrench size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Corpo Construído</h3>
             <p className="text-stone-400 leading-relaxed text-sm">
-              A perícia de Ofício substitui Medicina para tratar os ferimentos de um Golem, usando a mesma DT. Tratamentos dependentes exclusivamente de biologia viva não funcionam, afinal, ele precisa de reparos físicos pesados. Armaduras comuns exigem adaptação.
+              Quem cuida de um Golem usa Ofício no lugar de Medicina, com a mesma DT e o mesmo tempo. Tratamento que só funcione em biologia viva não faz efeito nenhum nele, e armadura comum só serve depois de adaptada ao corpo.
             </p>
           </PremiumCard>
         </div>
 
-        {/* Custom Lineages for Golem */}
-        {(() => {
-          const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
-            <section key={grupo.campo} className="pt-4 mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="mb-8"
-              >
-                <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
-                  {grupo.rotulo}
-                </h2>
-                <p className="text-stone-400 text-lg">{grupo.descricao}</p>
-              </motion.div>
-              
-              <div className="overflow-x-auto rounded-none border border-stone-800/40 bg-stone-900/40 backdrop-blur-md shadow-lg shadow-stone-900/10">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-stone-800/40 bg-stone-950/60">
-                      <th className="p-6 font-bold text-stone-300 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Opção</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-stone-300 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Descrição</th>}
-                      <th className="p-6 font-bold text-stone-300 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Traços</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grupo.opcoes.map((opcao) => {
-                      const tracos = obterTracosOpcaoRacial(opcao);
-                      const titleLower = opcao.titulo.toLowerCase();
-                      
-                      let lineageStyle = { glow: 'rgba(217,119,6,0.25)', text: 'text-amber-500', border: 'border-amber-600/50', bg: 'hover:bg-amber-950/30' };
-                      if (titleLower.includes('barro') || titleLower.includes('argila') || titleLower.includes('terra')) {
-                        lineageStyle = { glow: 'rgba(120,113,108,0.25)', text: 'text-stone-500', border: 'border-stone-600/50', bg: 'hover:bg-stone-900/40' };
-                      } else if (titleLower.includes('ferro') || titleLower.includes('aço') || titleLower.includes('metal')) {
-                        lineageStyle = { glow: 'rgba(161,161,170,0.25)', text: 'text-zinc-400', border: 'border-zinc-500/50', bg: 'hover:bg-zinc-950/30' };
-                      } else if (titleLower.includes('cristal') || titleLower.includes('vidro') || titleLower.includes('prisma')) {
-                        lineageStyle = { glow: 'rgba(45,212,191,0.25)', text: 'text-teal-400', border: 'border-teal-500/50', bg: 'hover:bg-teal-950/30' };
-                      } else if (titleLower.includes('carne') || titleLower.includes('sangue')) {
-                        lineageStyle = { glow: 'rgba(225,29,72,0.25)', text: 'text-rose-500', border: 'border-rose-600/50', bg: 'hover:bg-rose-950/30' };
-                      }
+        <EstagiosRaciais
+          raca={raca}
+          tema={tema}
+          titulo="Reforços"
+          descricao="Cada conserto deixa o Golem mais duro que antes. Os reforços entram por nível total, somando Vida e endurecendo o que já estava construído."
+        />
 
-                      return (
-                        <tr 
-                          key={opcao.id} 
-                          className={`border-b border-stone-800/20 transition-colors ${lineageStyle.bg}`}
-                        >
-                          <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
-                            <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
-                          </td>
-                          {grupo.campo !== 'linhagemId' && (
-                            <td className="p-6 align-top text-stone-300/70 text-sm leading-relaxed w-1/3">
-                              {descreverOpcaoRacial(opcao)}
-                            </td>
-                          )}
-                          <td className="p-6 align-top">
-                            {tracos.length > 0 ? (
-                              <div className="space-y-4">
-                                {tracos.map(traco => (
-                                  <div key={traco.id} className="bg-black/20 p-3 rounded-none border border-stone-800/30">
-                                    <h4 className="text-sm font-bold text-stone-200 mb-1">{traco.titulo}</h4>
-                                    {traco.descricao && <p className="text-xs text-stone-400/70 leading-relaxed">{traco.descricao}</p>}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-stone-500/30 italic text-sm">Sem traços adicionais.</span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ));
-        })()}
+        <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>
   );

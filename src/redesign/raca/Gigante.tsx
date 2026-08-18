@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import { Mountain, ShieldAlert, Weight, Expand } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 export const Gigante = ({ raca }: { raca: IRaca }) => {
@@ -63,7 +64,7 @@ export const Gigante = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-xl text-stone-400 max-w-2xl mx-auto font-bold leading-relaxed"
           >
-            Uma montanha viva. O campo de batalha estremece a cada passo e a sua mera presença física é um escudo intransponível para os aliados.
+            Grande a ponto de nada feito pros outros servir nele. Carrega o dobro, não sai do lugar quando tentam empurrar, e o grupo inteiro usa ele como parede quando a coisa aperta.
           </motion.p>
         </motion.header>
 
@@ -80,7 +81,7 @@ export const Gigante = ({ raca }: { raca: IRaca }) => {
             <Expand size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-3xl font-black ${tema.text} mb-4 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Tamanho Grande</h3>
             <p className="text-stone-400 leading-relaxed">
-              Sua estatura intimida. Você exige que armas, armaduras e equipamentos comuns tenham tamanho compatível e sejam fabricados especificamente para a sua estrutura.
+              Nada de prateleira serve em você. Armas, armaduras e equipamentos precisam ser feitos no seu tamanho para funcionarem, e isso vale de novo a cada vez que o porte sobe.
             </p>
           </PremiumCard>
 
@@ -98,92 +99,19 @@ export const Gigante = ({ raca }: { raca: IRaca }) => {
             </div>
             <h3 className={`text-3xl font-black ${tema.text} mb-4 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Porte Colossal</h3>
             <p className="text-stone-400 leading-relaxed">
-              Receba vantagem absoluta para resistir a empurrões e quedas causados por outras criaturas. Sua enorme musculatura também dobra sua capacidade de carga.
+              Tirar você do lugar dá trabalho: você tem vantagem para resistir a empurrões e quedas causados por outra criatura. E sua capacidade de carga é o dobro da normal.
             </p>
           </PremiumCard>
         </div>
 
-        {/* Custom Lineages for Gigante */}
-        {(() => {
-          const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
-            <section key={grupo.campo} className="pt-4 mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="mb-8"
-              >
-                <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
-                  {grupo.rotulo}
-                </h2>
-                <p className="text-stone-400 text-lg">{grupo.descricao}</p>
-              </motion.div>
-              
-              <div className="overflow-x-auto rounded-none border border-stone-800/40 bg-stone-900/40 backdrop-blur-md shadow-lg shadow-stone-900/10">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-stone-800/40 bg-stone-950/60">
-                      <th className="p-6 font-bold text-stone-300 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Opção</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-stone-300 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Descrição</th>}
-                      <th className="p-6 font-bold text-stone-300 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Traços</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grupo.opcoes.map((opcao) => {
-                      const tracos = obterTracosOpcaoRacial(opcao);
-                      const titleLower = opcao.titulo.toLowerCase();
-                      
-                      let lineageStyle = { glow: 'rgba(168,162,158,0.25)', text: 'text-stone-400', border: 'border-stone-500/50', bg: 'hover:bg-stone-900/30' };
-                      if (titleLower.includes('fogo') || titleLower.includes('vulcão') || titleLower.includes('infernal')) {
-                        lineageStyle = { glow: 'rgba(239,68,68,0.25)', text: 'text-red-400', border: 'border-red-500/50', bg: 'hover:bg-red-950/30' };
-                      } else if (titleLower.includes('gelo') || titleLower.includes('frio') || titleLower.includes('neve')) {
-                        lineageStyle = { glow: 'rgba(96,165,250,0.25)', text: 'text-blue-400', border: 'border-blue-500/50', bg: 'hover:bg-blue-950/30' };
-                      } else if (titleLower.includes('tempestade') || titleLower.includes('trovão') || titleLower.includes('nuvem')) {
-                        lineageStyle = { glow: 'rgba(192,132,252,0.25)', text: 'text-purple-400', border: 'border-purple-500/50', bg: 'hover:bg-purple-950/30' };
-                      } else if (titleLower.includes('pedra') || titleLower.includes('terra') || titleLower.includes('montanha')) {
-                        lineageStyle = { glow: 'rgba(120,113,108,0.25)', text: 'text-stone-500', border: 'border-stone-600/50', bg: 'hover:bg-stone-900/40' };
-                      } else if (titleLower.includes('colina') || titleLower.includes('pântano')) {
-                        lineageStyle = { glow: 'rgba(74,222,128,0.25)', text: 'text-green-500', border: 'border-green-600/50', bg: 'hover:bg-green-950/30' };
-                      }
+        <EstagiosRaciais
+          raca={raca}
+          tema={tema}
+          titulo="Porte"
+          descricao="Gigante nunca para de crescer, só cresce mais devagar. O porte sobe por nível total: Grande no começo, Enorme no nível 9 e Colossal no 18. Cada degrau traz mais Vida e o que vem junto do tamanho novo."
+        />
 
-                      return (
-                        <tr 
-                          key={opcao.id} 
-                          className={`border-b border-stone-800/20 transition-colors ${lineageStyle.bg}`}
-                        >
-                          <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
-                            <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
-                          </td>
-                          {grupo.campo !== 'linhagemId' && (
-                            <td className="p-6 align-top text-stone-300/70 text-sm leading-relaxed w-1/3">
-                              {descreverOpcaoRacial(opcao)}
-                            </td>
-                          )}
-                          <td className="p-6 align-top">
-                            {tracos.length > 0 ? (
-                              <div className="space-y-4">
-                                {tracos.map(traco => (
-                                  <div key={traco.id} className="bg-black/20 p-3 rounded-none border border-stone-800/30">
-                                    <h4 className="text-sm font-bold text-stone-200 mb-1">{traco.titulo}</h4>
-                                    {traco.descricao && <p className="text-xs text-stone-400/70 leading-relaxed">{traco.descricao}</p>}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-stone-500/30 italic text-sm">Sem traços adicionais.</span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ));
-        })()}
+        <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>
   );

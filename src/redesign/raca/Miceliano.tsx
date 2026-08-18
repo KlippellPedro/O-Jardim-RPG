@@ -3,7 +3,8 @@ import { Sprout, Wifi, Footprints } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 interface MicelianoProps {
@@ -87,7 +88,7 @@ export const Miceliano = ({ raca }: MicelianoProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-purple-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Parte criatura, parte fungo. Eles se conectam à terra e aos seus aliados de formas que os seres de carne e osso mal conseguem compreender, formando redes invisíveis de informação.
+            Parte criatura, parte fungo. Deixa esporo em quem confia pra conversar sem falar, e lê o chão pra saber quem passou por ali antes de vocês.
           </motion.p>
         </motion.header>
 
@@ -105,8 +106,8 @@ export const Miceliano = ({ raca }: MicelianoProps) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Rede Micelial</h3>
               <p className="text-purple-200/60 leading-relaxed text-sm">
-                Deixe esporos em um aliado voluntário. Até o próximo descanso, vocês podem trocar silenciosamente ideias simples enquanto estiverem a até 30 m um do outro. 
-              </p>
+                Gaste uma ação e toque um aliado voluntário para deixar esporos nele. Até o próximo descanso, vocês trocam ideias simples sem falar nada, desde que estejam a até 30 m um do outro.
+</p>
             </div>
           </PremiumCard>
 
@@ -122,7 +123,7 @@ export const Miceliano = ({ raca }: MicelianoProps) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Memória do Solo</h3>
               <p className="text-purple-200/60 leading-relaxed text-sm">
-                Após 1 minuto em contato com terra ou madeira, faça um teste de Sobrevivência para perceber através dos fungos e raízes se criaturas passaram pelo local recentemente. Revela presença e direção.
+                Fique 1 minuto em contato com a terra, a madeira ou os fungos do lugar e faça um teste de Sobrevivência: os cogumelos e as raízes contam se alguma criatura passou por ali recentemente. Você fica sabendo da presença e da direção aproximada, nunca de quem era.
               </p>
             </div>
           </PremiumCard>
@@ -139,89 +140,15 @@ export const Miceliano = ({ raca }: MicelianoProps) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Organismo Fúngico</h3>
               <p className="text-purple-200/60 leading-relaxed text-sm">
-                Alimenta-se como um ser vivo comum, mas também consegue absorver nutrientes ao permanecer em contato com solo fértil durante um descanso.
+                Come como qualquer criatura viva e, além disso, puxa nutrientes do chão se passar um descanso em contato com solo fértil.
               </p>
             </div>
           </PremiumCard>
         </div>
 
-        {/* Custom Lineages */}
-        {(() => {
-          const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
-            <section key={grupo.campo} className="pt-4 mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="mb-8"
-              >
-                <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
-                  {grupo.rotulo}
-                </h2>
-                <p className="text-purple-200/60 text-lg">{grupo.descricao}</p>
-              </motion.div>
-              
-              <div className="overflow-x-auto rounded-xl border border-purple-800/40 bg-purple-950/20 backdrop-blur-md shadow-lg shadow-purple-900/10">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-purple-800/40 bg-purple-950/60">
-                      <th className="p-6 font-bold text-purple-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Opção</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-purple-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Descrição</th>}
-                      <th className="p-6 font-bold text-purple-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Traços</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grupo.opcoes.map((opcao) => {
-                      const tracos = obterTracosOpcaoRacial(opcao);
-                      const titleLower = opcao.titulo.toLowerCase();
-                      
-                      let lineageStyle = { glow: 'rgba(168,85,247,0.25)', text: 'text-purple-400', border: 'border-purple-500/50', bg: 'hover:bg-purple-900/20' };
-                      if (titleLower.includes('veneno') || titleLower.includes('tóxico')) {
-                        lineageStyle = { glow: 'rgba(34,197,94,0.25)', text: 'text-green-400', border: 'border-green-500/50', bg: 'hover:bg-green-900/20' };
-                      } else if (titleLower.includes('cura') || titleLower.includes('vida')) {
-                        lineageStyle = { glow: 'rgba(236,72,153,0.25)', text: 'text-pink-400', border: 'border-pink-500/50', bg: 'hover:bg-pink-900/20' };
-                      } else if (titleLower.includes('brilho') || titleLower.includes('luz')) {
-                        lineageStyle = { glow: 'rgba(96,165,250,0.25)', text: 'text-blue-400', border: 'border-blue-500/50', bg: 'hover:bg-blue-900/20' };
-                      }
+        <EstagiosRaciais raca={raca} tema={tema} />
 
-                      return (
-                        <tr 
-                          key={opcao.id} 
-                          className={`border-b border-purple-800/20 transition-colors ${lineageStyle.bg}`}
-                        >
-                          <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
-                            <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
-                          </td>
-                          {grupo.campo !== 'linhagemId' && (
-                            <td className="p-6 align-top text-purple-100/70 text-sm leading-relaxed w-1/3">
-                              {descreverOpcaoRacial(opcao)}
-                            </td>
-                          )}
-                          <td className="p-6 align-top">
-                            {tracos.length > 0 ? (
-                              <div className="space-y-4">
-                                {tracos.map(traco => (
-                                  <div key={traco.id} className="bg-black/20 p-3 rounded-lg border border-purple-900/30">
-                                    <h4 className="text-sm font-bold text-purple-100 mb-1">{traco.titulo}</h4>
-                                    {traco.descricao && <p className="text-xs text-purple-200/50 leading-relaxed">{traco.descricao}</p>}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-purple-500/30 italic text-sm">Sem traços adicionais.</span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ));
-        })()}
+        <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>
   );

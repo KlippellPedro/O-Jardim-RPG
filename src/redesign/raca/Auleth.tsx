@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import { Box, ScanLine, BrainCog } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 export const Auleth = ({ raca }: { raca: IRaca }) => {
@@ -85,7 +86,7 @@ export const Auleth = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-indigo-200/60 max-w-2xl mx-auto font-light leading-relaxed"
           >
-            Uma raça puramente lógica de anatomia fluida. Sem a necessidade de sustento, eles alteram seu volume corporal ao bel prazer, acumulando hiperconhecimento à custa da mais completa desconexão emocional.
+            Uma consciência que se formou lá fora e escolheu um corpo pra caber aqui. Muda de forma e de tamanho quando quer, sabe demais sobre duas coisas muito específicas e não faz a menor ideia de como consolar alguém.
           </motion.p>
         </motion.header>
 
@@ -137,82 +138,20 @@ export const Auleth = ({ raca }: { raca: IRaca }) => {
             <div>
               <h3 className={`text-2xl font-light ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Emoção Distante</h3>
               <p className="text-indigo-200/60 leading-relaxed text-sm font-light">
-                Fisiologia imune a doenças (porém suscetível a venenos que simulem sintomas). Além de sofrer -3 em Carisma, sofre desvantagem em Intuição e Diplomacia para consolar ou interpretar sentimentos. A empatia é algo ilógico e inalcançável.
+                Fisiologia imune a doenças (porém suscetível a venenos que simulem sintomas). Além de sofrer -3 em Carisma, sofre desvantagem em Intuição e Diplomacia para consolar alguém ou entender o que a pessoa está sentindo. Sentimento continua sendo o problema que ele não consegue resolver.
               </p>
             </div>
           </PremiumCard>
         </div>
 
-        {/* Custom Lineages for Auleth */}
-        {(() => {
-          const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
-            <section key={grupo.campo} className="pt-4 mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="mb-8"
-              >
-                <h2 className={`text-4xl font-light ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
-                  {grupo.rotulo}
-                </h2>
-                <p className="text-indigo-200/60 font-light text-lg">{grupo.descricao}</p>
-              </motion.div>
-              
-              <div className="grid grid-cols-1 gap-6">
-                {grupo.opcoes.map((opcao, opcaoIdx) => {
-                  const tracos = obterTracosOpcaoRacial(opcao);
-                  const titleLower = opcao.titulo.toLowerCase();
-                  
-                  // Custom colors for different auleth lineages
-                  let lineageStyle = { glow: tema.glow, text: tema.text, border: tema.border, bg: tema.bg };
-                  if (titleLower.includes('estrela') || titleLower.includes('solar') || titleLower.includes('luz')) {
-                    lineageStyle = { glow: 'rgba(250,204,21,0.25)', text: 'text-yellow-400', border: 'border-yellow-700/40', bg: 'bg-yellow-950/20' };
-                  } else if (titleLower.includes('vazio') || titleLower.includes('negro') || titleLower.includes('abismo')) {
-                    lineageStyle = { glow: 'rgba(161,161,170,0.25)', text: 'text-zinc-400', border: 'border-zinc-700/40', bg: 'bg-zinc-950/20' };
-                  } else if (titleLower.includes('cometa') || titleLower.includes('gelo') || titleLower.includes('astral') || titleLower.includes('poeira')) {
-                    lineageStyle = { glow: 'rgba(45,212,191,0.25)', text: 'text-teal-400', border: 'border-teal-700/40', bg: 'bg-teal-950/20' };
-                  } else if (titleLower.includes('nebulosa') || titleLower.includes('gás') || titleLower.includes('matéria') || titleLower.includes('fluida')) {
-                    lineageStyle = { glow: 'rgba(217,70,239,0.25)', text: 'text-fuchsia-400', border: 'border-fuchsia-700/40', bg: 'bg-fuchsia-950/20' };
-                  }
+        <EstagiosRaciais
+          raca={raca}
+          tema={tema}
+          titulo="Reconstituição"
+          descricao="O Auleth chega aqui incompleto e vai se remontando com o tempo. Os degraus abrem por nível total, sem custo nenhum, e cada um devolve um pedaço do que tinha ficado do outro lado."
+        />
 
-                  return (
-                    <PremiumCard
-                      key={opcao.id}
-                      glowColor={lineageStyle.glow}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.1 * opcaoIdx }}
-                      className={`flex flex-col p-8 rounded-none ${lineageStyle.bg} border-l-2 ${lineageStyle.border} backdrop-blur-md transition-colors`}
-                    >
-                      <h3 className={`text-2xl font-light mb-4 ${lineageStyle.text}`} style={{ fontFamily: 'Cinzel, serif' }}>
-                        {opcao.titulo}
-                      </h3>
-                      {grupo.campo !== 'linhagemId' && (
-                        <p className="text-indigo-100/60 leading-relaxed font-light text-sm mb-4">
-                          {descreverOpcaoRacial(opcao)}
-                        </p>
-                      )}
-                      {tracos.length > 0 && (
-                        <div className="space-y-6 flex-1 mt-2">
-                          {tracos.map(traco => (
-                            <div key={traco.id}>
-                              <h4 className="text-sm font-bold text-indigo-50 mb-1 tracking-wide">{traco.titulo}</h4>
-                              {traco.descricao && <p className="text-sm text-indigo-200/50 leading-relaxed font-light">{traco.descricao}</p>}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </PremiumCard>
-                  );
-                })}
-              </div>
-            </section>
-          ));
-        })()}
+        <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>
   );

@@ -3,7 +3,8 @@ import { Droplet, Moon, Ghost } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 interface VampiroProps {
@@ -83,7 +84,7 @@ export const Vampiro = ({ raca }: VampiroProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-red-200/60 max-w-2xl mx-auto font-medium leading-relaxed font-serif"
           >
-            Abençoados e amaldiçoados pela noite. Eles não são meros monstros sedentos, mas caçadores refinados que extraem a própria vida e magia de suas vítimas através do sangue.
+            Enxerga no escuro, fecha ferida bebendo sangue e paga caro quando fica sem. Caça com método, e não com fome cega, e tira da vítima tanto vida quanto magia.
           </motion.p>
         </motion.header>
 
@@ -100,7 +101,7 @@ export const Vampiro = ({ raca }: VampiroProps) => {
             <Moon size={32} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-serif ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Visão Noturna</h3>
             <p className="text-red-200/60 leading-relaxed text-sm">
-              Sua fisiologia permite enxergar normalmente em escuridão natural, embora não funcione através de escuridão criada por magia ou Fluxo.
+              Você enxerga normalmente na escuridão natural. Escuridão criada por magia ou por Fluxo continua sendo escuridão para você.
             </p>
           </PremiumCard>
 
@@ -115,7 +116,7 @@ export const Vampiro = ({ raca }: VampiroProps) => {
             <Droplet size={32} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-serif ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Hemofagia</h3>
             <p className="text-red-200/60 leading-relaxed text-sm">
-              Uma vez por cena, gaste 1 ação para beber o sangue de um ser vivo voluntário ou incapacitado e recuperar 1d6 de Vida. Não afeta construtos, espíritos ou criaturas sem sangue.
+              Beba o sangue de um ser vivo voluntário ou incapacitado e recupere 1d6 de Vida. Custa uma ação e vale uma vez por cena. Construto, Espírito e criatura sem sangue não servem.
             </p>
           </PremiumCard>
 
@@ -130,88 +131,19 @@ export const Vampiro = ({ raca }: VampiroProps) => {
             <Ghost size={32} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-serif ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Fome de Sangue</h3>
             <p className="text-red-200/60 leading-relaxed text-sm">
-              Depois de 24 horas sem consumir sangue, os descansos recuperam apenas metade da Mana normal (mínimo 1) até que o Vampiro se alimente. A sede sempre cobra seu preço.
+              Passadas 24 horas sem consumir sangue, seus descansos passam a devolver apenas metade da Mana normal, com mínimo de 1, até você se alimentar de novo.
             </p>
           </PremiumCard>
         </div>
 
-        {/* Custom Lineages */}
-        {(() => {
-          const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
-            <section key={grupo.campo} className="pt-4 mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="mb-8"
-              >
-                <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
-                  {grupo.rotulo}
-                </h2>
-                <p className="text-red-200/60 text-lg">{grupo.descricao}</p>
-              </motion.div>
-              
-              <div className="overflow-x-auto rounded-xl border border-red-800/40 bg-red-950/20 backdrop-blur-md shadow-lg shadow-red-900/10">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-red-800/40 bg-red-950/60">
-                      <th className="p-6 font-bold text-red-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Opção</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-red-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Descrição</th>}
-                      <th className="p-6 font-bold text-red-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Traços</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grupo.opcoes.map((opcao) => {
-                      const tracos = obterTracosOpcaoRacial(opcao);
-                      const titleLower = opcao.titulo.toLowerCase();
-                      
-                      let lineageStyle = { glow: 'rgba(239,68,68,0.25)', text: 'text-red-400', border: 'border-red-500/50', bg: 'hover:bg-red-900/20' };
-                      if (titleLower.includes('nobre') || titleLower.includes('aristocrata')) {
-                        lineageStyle = { glow: 'rgba(234,179,8,0.25)', text: 'text-yellow-400', border: 'border-yellow-500/50', bg: 'hover:bg-yellow-900/20' };
-                      } else if (titleLower.includes('bestial') || titleLower.includes('selvagem')) {
-                        lineageStyle = { glow: 'rgba(249,115,22,0.25)', text: 'text-orange-400', border: 'border-orange-500/50', bg: 'hover:bg-orange-900/20' };
-                      } else if (titleLower.includes('sombra') || titleLower.includes('oculto')) {
-                        lineageStyle = { glow: 'rgba(168,85,247,0.25)', text: 'text-purple-400', border: 'border-purple-500/50', bg: 'hover:bg-purple-900/20' };
-                      }
+        <EstagiosRaciais
+          raca={raca}
+          tema={tema}
+          titulo="Idade do Sangue"
+          descricao="Quanto mais velho o vampiro, melhor o sangue rende. A idade sobe por nível total, trazendo Vida e a característica seguinte do seu Clã. No topo, a fome também cobra mais caro."
+        />
 
-                      return (
-                        <tr 
-                          key={opcao.id} 
-                          className={`border-b border-red-800/20 transition-colors ${lineageStyle.bg}`}
-                        >
-                          <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
-                            <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
-                          </td>
-                          {grupo.campo !== 'linhagemId' && (
-                            <td className="p-6 align-top text-red-100/70 text-sm leading-relaxed w-1/3">
-                              {descreverOpcaoRacial(opcao)}
-                            </td>
-                          )}
-                          <td className="p-6 align-top">
-                            {tracos.length > 0 ? (
-                              <div className="space-y-4">
-                                {tracos.map(traco => (
-                                  <div key={traco.id} className="bg-black/20 p-3 rounded-lg border border-red-900/30">
-                                    <h4 className="text-sm font-bold text-red-100 mb-1">{traco.titulo}</h4>
-                                    {traco.descricao && <p className="text-xs text-red-200/50 leading-relaxed">{traco.descricao}</p>}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-red-500/30 italic text-sm">Sem traços adicionais.</span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ));
-        })()}
+        <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>
   );

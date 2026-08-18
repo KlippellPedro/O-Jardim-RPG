@@ -68,7 +68,7 @@ export const RacaPersonalizada = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-gray-400 max-w-2xl mx-auto font-light leading-relaxed"
           >
-            Nenhuma raça do catálogo serve? Uma anomalia não classificada pelos estudiosos? Escolha esta opção e escreva o nome livremente na ficha.
+            Nenhuma raça do catálogo serve? Escolha esta e escreva o nome que quiser na ficha.
           </motion.p>
         </motion.header>
 

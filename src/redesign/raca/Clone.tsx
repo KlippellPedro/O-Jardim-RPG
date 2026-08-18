@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import { Dna, Fingerprint, BrainCircuit, ActivitySquare } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 export const Clone = ({ raca }: { raca: IRaca }) => {
@@ -68,7 +69,7 @@ export const Clone = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-emerald-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Organismos bio-sintéticos esculpidos a partir da genética de um Original. Trazem memórias fragmentadas e regeneração programada instalada diretamente em seu DNA aperfeiçoado.
+            Feito em laboratório à imagem de outra pessoa, e ciente disso. Copia aparência, voz, digital e retina do Original, fecha ferimento mais rápido que gente normal e de vez em quando lembra de alguma coisa que nunca viveu.
           </motion.p>
         </motion.header>
 
@@ -135,86 +136,9 @@ export const Clone = ({ raca }: { raca: IRaca }) => {
           </PremiumCard>
         </div>
 
-        {/* Custom Lineages for Clone */}
-        {(() => {
-          const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
-            <section key={grupo.campo} className="pt-4 mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="mb-8"
-              >
-                <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
-                  {grupo.rotulo}
-                </h2>
-                <p className="text-emerald-200/60 text-lg">{grupo.descricao}</p>
-              </motion.div>
-              
-              <div className="overflow-x-auto rounded-none border border-emerald-800/40 bg-emerald-950/20 backdrop-blur-md shadow-lg shadow-emerald-900/10">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-emerald-800/40 bg-emerald-950/60">
-                      <th className="p-6 font-bold text-emerald-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Cadeia Genética</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-emerald-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Fenótipo</th>}
-                      <th className="p-6 font-bold text-emerald-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Mutações Adicionais</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grupo.opcoes.map((opcao) => {
-                      const tracos = obterTracosOpcaoRacial(opcao);
-                      const titleLower = opcao.titulo.toLowerCase();
-                      
-                      // Custom colors for different clone lineages
-                      let lineageStyle = { glow: tema.glow, text: tema.text, border: tema.border, bg: 'hover:bg-emerald-900/20' };
-                      if (titleLower.includes('soldado') || titleLower.includes('combate') || titleLower.includes('agressivo')) {
-                        lineageStyle = { glow: 'rgba(239,68,68,0.25)', text: 'text-red-400', border: 'border-red-500/50', bg: 'hover:bg-red-950/30' };
-                      } else if (titleLower.includes('mente') || titleLower.includes('psíquico') || titleLower.includes('neural')) {
-                        lineageStyle = { glow: 'rgba(168,85,247,0.25)', text: 'text-purple-400', border: 'border-purple-500/50', bg: 'hover:bg-purple-950/30' };
-                      } else if (titleLower.includes('resistente') || titleLower.includes('adaptável') || titleLower.includes('sobrevivente')) {
-                        lineageStyle = { glow: 'rgba(245,158,11,0.25)', text: 'text-amber-400', border: 'border-amber-500/50', bg: 'hover:bg-amber-950/30' };
-                      } else if (titleLower.includes('infiltrador') || titleLower.includes('camuflagem')) {
-                        lineageStyle = { glow: 'rgba(6,182,212,0.25)', text: 'text-cyan-400', border: 'border-cyan-500/50', bg: 'hover:bg-cyan-950/30' };
-                      }
+        <EstagiosRaciais raca={raca} tema={tema} />
 
-                      return (
-                        <tr 
-                          key={opcao.id} 
-                          className={`border-b border-emerald-800/20 transition-colors ${lineageStyle.bg}`}
-                        >
-                          <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
-                            <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
-                          </td>
-                          {grupo.campo !== 'linhagemId' && (
-                            <td className="p-6 align-top text-emerald-100/70 text-sm leading-relaxed w-1/3">
-                              {descreverOpcaoRacial(opcao)}
-                            </td>
-                          )}
-                          <td className="p-6 align-top">
-                            {tracos.length > 0 ? (
-                              <div className="space-y-4">
-                                {tracos.map(traco => (
-                                  <div key={traco.id} className="bg-black/20 p-3 rounded-none border border-emerald-900/30">
-                                    <h4 className="text-sm font-bold text-emerald-100 mb-1">{traco.titulo}</h4>
-                                    {traco.descricao && <p className="text-xs text-emerald-200/50 leading-relaxed">{traco.descricao}</p>}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-emerald-500/30 italic text-sm">Sem mutações adicionais.</span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ));
-        })()}
+        <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>
   );

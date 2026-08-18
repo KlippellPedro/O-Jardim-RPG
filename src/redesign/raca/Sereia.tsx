@@ -3,7 +3,8 @@ import { Waves, Music, Shell } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 interface SereiaProps {
@@ -96,7 +97,7 @@ export const Sereia = ({ raca }: SereiaProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-cyan-100/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Reis e rainhas das profundezas. Com uma beleza fluida e vozes capazes de encantar até os marinheiros mais calejados, eles dominam os dois mundos: ar e mar.
+            Respira dentro e fora d'água, e nada tão rápido quanto anda em terra. A voz é a arma principal: ela segura quem escuta pelo tempo exato de virar a cena, ou de sair dela viva.
           </motion.p>
         </motion.header>
 
@@ -115,7 +116,7 @@ export const Sereia = ({ raca }: SereiaProps) => {
             </div>
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Fisiologia Anfíbia</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Anfíbio puro. Respira perfeitamente tanto no ar quanto na água; seu deslocamento de natação é igual ao seu Movimento terrestre.
+              Você respira no ar e na água do mesmo jeito, sem precisar subir para tomar fôlego. E nada tão rápido quanto anda: seu deslocamento de natação é igual ao seu Movimento terrestre.
             </p>
           </PremiumCard>
 
@@ -137,88 +138,19 @@ export const Sereia = ({ raca }: SereiaProps) => {
             </div>
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Canto Fascinante</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Uma vez por cena, gaste uma ação e 2 Mana para encantar uma criatura a até 9m com um teste de Carisma. Em sucesso, ela fica fascinada até o início do seu próximo turno. O efeito quebra se ela sofrer dano.
+              Escolha uma criatura a até 9 m que consiga te ouvir e role Carisma contra a Vontade dela. Passando, ela fica fascinada até o início do seu próximo turno, e qualquer dano que ela sofrer encerra o efeito na hora. Custa uma ação e 2 Mana, uma vez por cena.
             </p>
           </PremiumCard>
         </div>
 
-        {/* Custom Lineages */}
-        {(() => {
-          const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
-            <section key={grupo.campo} className="pt-4 mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="mb-8"
-              >
-                <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
-                  {grupo.rotulo}
-                </h2>
-                <p className="text-cyan-200/60 text-lg">{grupo.descricao}</p>
-              </motion.div>
-              
-              <div className="overflow-x-auto rounded-xl border border-cyan-800/40 bg-cyan-950/20 backdrop-blur-md shadow-lg shadow-cyan-900/10">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-cyan-800/40 bg-cyan-950/60">
-                      <th className="p-6 font-bold text-cyan-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Opção</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-cyan-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Descrição</th>}
-                      <th className="p-6 font-bold text-cyan-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Traços</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grupo.opcoes.map((opcao) => {
-                      const tracos = obterTracosOpcaoRacial(opcao);
-                      const titleLower = opcao.titulo.toLowerCase();
-                      
-                      let lineageStyle = { glow: 'rgba(6,182,212,0.25)', text: 'text-cyan-400', border: 'border-cyan-500/50', bg: 'hover:bg-cyan-900/20' };
-                      if (titleLower.includes('abissal') || titleLower.includes('profundeza') || titleLower.includes('trevas')) {
-                        lineageStyle = { glow: 'rgba(168,85,247,0.25)', text: 'text-purple-400', border: 'border-purple-500/50', bg: 'hover:bg-purple-900/20' };
-                      } else if (titleLower.includes('coral') || titleLower.includes('recife') || titleLower.includes('tropical')) {
-                        lineageStyle = { glow: 'rgba(236,72,153,0.25)', text: 'text-pink-400', border: 'border-pink-500/50', bg: 'hover:bg-pink-900/20' };
-                      } else if (titleLower.includes('gelo') || titleLower.includes('ártico')) {
-                        lineageStyle = { glow: 'rgba(191,219,254,0.25)', text: 'text-blue-300', border: 'border-blue-300/50', bg: 'hover:bg-blue-900/20' };
-                      }
+        <EstagiosRaciais
+          raca={raca}
+          tema={tema}
+          titulo="Profundidade"
+          descricao="Quanto mais fundo a voz aprende a descer, mais longe ela chega. A profundidade sobe por nível total: Águas Costeiras no começo, Águas Profundas no nível 8 e Águas Abissais no 16."
+        />
 
-                      return (
-                        <tr 
-                          key={opcao.id} 
-                          className={`border-b border-cyan-800/20 transition-colors ${lineageStyle.bg}`}
-                        >
-                          <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
-                            <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
-                          </td>
-                          {grupo.campo !== 'linhagemId' && (
-                            <td className="p-6 align-top text-cyan-100/70 text-sm leading-relaxed w-1/3">
-                              {descreverOpcaoRacial(opcao)}
-                            </td>
-                          )}
-                          <td className="p-6 align-top">
-                            {tracos.length > 0 ? (
-                              <div className="space-y-4">
-                                {tracos.map(traco => (
-                                  <div key={traco.id} className="bg-black/20 p-3 rounded-lg border border-cyan-900/30">
-                                    <h4 className="text-sm font-bold text-cyan-100 mb-1">{traco.titulo}</h4>
-                                    {traco.descricao && <p className="text-xs text-cyan-200/50 leading-relaxed">{traco.descricao}</p>}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-cyan-500/30 italic text-sm">Sem traços adicionais.</span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ));
-        })()}
+        <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>
   );

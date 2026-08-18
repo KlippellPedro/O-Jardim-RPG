@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import { Sparkles, Brain, ScrollText, UserCheck } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 export const Errante = ({ raca }: { raca: IRaca }) => {
@@ -80,7 +81,7 @@ export const Errante = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-gray-400 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Uma anomalia narrativa. Um herói importado de outra campanha, outro sistema ou outro mundo, mantendo suas memórias passadas e adaptando sua assinatura mágica às regras dessa nova realidade.
+            Um personagem de outra campanha que atravessou pra esta. Trouxe nome, cara, memória e reputação; perdeu nível e ficha, e o que sobrou volta convertido para as regras daqui.
           </motion.p>
         </motion.header>
 
@@ -97,7 +98,7 @@ export const Errante = ({ raca }: { raca: IRaca }) => {
             <UserCheck size={32} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-xl font-bold ${tema.text} mb-2`} style={{ fontFamily: 'Cinzel, serif' }}>Identidade Preservada</h3>
             <p className="text-gray-400 leading-relaxed text-sm">
-              Conserve nome, aparência, cicatrizes e reputação do personagem original. Os números mecânicos são reconstruídos pelas regras do novo mundo, mas sua essência persiste.
+              Conserve nome, aparência, cicatrizes e reputação do personagem original. Os números são refeitos pelas regras do novo mundo, mas o personagem continua sendo o mesmo.
             </p>
           </PremiumCard>
 
@@ -142,91 +143,14 @@ export const Errante = ({ raca }: { raca: IRaca }) => {
             <ScrollText size={32} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-xl font-bold ${tema.text} mb-2`} style={{ fontFamily: 'Cinzel, serif' }}>Legado & Sobrevivência</h3>
             <p className="text-gray-400 leading-relaxed text-sm">
-              Receba um Legado adicional representando um artefato trazido com você. Uma vez por sessão, sobreviva de forma impossível (fique com 1 de Vida em vez de 0) usando sua resiliência de protagonista.
+              Receba um Legado adicional representando um artefato trazido com você. Uma vez por sessão, escape de uma morte certa e fique com 1 de Vida em vez de 0: protagonista de campanha antiga custa a cair.
             </p>
           </PremiumCard>
         </div>
 
-        {/* Custom Lineages for Errante */}
-        {(() => {
-          const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
-            <section key={grupo.campo} className="pt-4 mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="mb-8"
-              >
-                <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ textShadow: "1px 0 red, -1px 0 cyan", fontFamily: 'Cinzel, serif' }}>
-                  {grupo.rotulo}
-                </h2>
-                <p className="text-gray-400 text-lg">{grupo.descricao}</p>
-              </motion.div>
-              
-              <div className="overflow-x-auto rounded-none border border-gray-800/40 bg-gray-950/20 backdrop-blur-md shadow-lg shadow-gray-900/10">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-gray-800/40 bg-gray-950/60">
-                      <th className="p-6 font-bold text-gray-200 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Paradigma</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-gray-200 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Conceito</th>}
-                      <th className="p-6 font-bold text-gray-200 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Adaptações Sistemáticas</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grupo.opcoes.map((opcao) => {
-                      const tracos = obterTracosOpcaoRacial(opcao);
-                      const titleLower = opcao.titulo.toLowerCase();
-                      
-                      // Custom colors for different errante lineages
-                      let lineageStyle = { glow: 'rgba(255,255,255,0.25)', text: 'text-white', border: 'border-gray-500/50', bg: 'hover:bg-gray-800/20' };
-                      if (titleLower.includes('herói') || titleLower.includes('campeão') || titleLower.includes('protagonista')) {
-                        lineageStyle = { glow: 'rgba(234,179,8,0.25)', text: 'text-yellow-400', border: 'border-yellow-500/50', bg: 'hover:bg-yellow-950/30' };
-                      } else if (titleLower.includes('isakai') || titleLower.includes('outro mundo') || titleLower.includes('viajante')) {
-                        lineageStyle = { glow: 'rgba(6,182,212,0.25)', text: 'text-cyan-400', border: 'border-cyan-500/50', bg: 'hover:bg-cyan-950/30' };
-                      } else if (titleLower.includes('caído') || titleLower.includes('vilão') || titleLower.includes('antagonista')) {
-                        lineageStyle = { glow: 'rgba(239,68,68,0.25)', text: 'text-red-500', border: 'border-red-600/50', bg: 'hover:bg-red-950/30' };
-                      } else if (titleLower.includes('suporte') || titleLower.includes('npc') || titleLower.includes('figurante')) {
-                        lineageStyle = { glow: 'rgba(168,85,247,0.25)', text: 'text-purple-400', border: 'border-purple-500/50', bg: 'hover:bg-purple-950/30' };
-                      }
+        <EstagiosRaciais raca={raca} tema={tema} />
 
-                      return (
-                        <tr 
-                          key={opcao.id} 
-                          className={`border-b border-gray-800/20 transition-colors ${lineageStyle.bg}`}
-                        >
-                          <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
-                            <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
-                          </td>
-                          {grupo.campo !== 'linhagemId' && (
-                            <td className="p-6 align-top text-gray-300 text-sm leading-relaxed w-1/3">
-                              {descreverOpcaoRacial(opcao)}
-                            </td>
-                          )}
-                          <td className="p-6 align-top">
-                            {tracos.length > 0 ? (
-                              <div className="space-y-4">
-                                {tracos.map(traco => (
-                                  <div key={traco.id} className="bg-black/20 p-3 rounded-none border border-gray-800/30">
-                                    <h4 className="text-sm font-bold text-gray-200 mb-1">{traco.titulo}</h4>
-                                    {traco.descricao && <p className="text-xs text-gray-400 leading-relaxed">{traco.descricao}</p>}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-gray-500/30 italic text-sm">Nenhuma adaptação revelada.</span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ));
-        })()}
+        <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>
   );

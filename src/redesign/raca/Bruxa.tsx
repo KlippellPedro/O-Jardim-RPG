@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import { Eye, Flame, TriangleAlert } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 export const Bruxa = ({ raca }: { raca: IRaca }) => {
@@ -86,7 +87,7 @@ export const Bruxa = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-rose-200/60 max-w-2xl mx-auto font-serif leading-relaxed"
           >
-            Uma natureza mágica adquirida (não uma profissão, não uma identidade de gênero), selada com sacrifícios físicos. Quem carrega essa natureza enxerga maldições invisíveis e paga o preço da magia rasgando a própria carne quando a mana escasseia.
+            Bruxa não é profissão nem gênero: é uma natureza mágica que se adquire e não se devolve. Quem carrega enxerga maldição, pacto e possessão a distância, tece as próprias maldições e, quando falta Mana, paga a conta com a própria carne.
           </motion.p>
         </motion.header>
 
@@ -133,90 +134,14 @@ export const Bruxa = ({ raca }: { raca: IRaca }) => {
             <TriangleAlert size={32} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-serif ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Maldição Tecida & Grande Sabá</h3>
             <p className="text-rose-200/60 leading-relaxed text-sm font-serif">
-              Gaste ações e Mana para afligir alvos com maldições severas e tecidas com misticismo. No nível avançado do Grande Sabá, quem domina essa magia adquirida afeta múltiplos inimigos simultaneamente de forma aterradora.
+              Gaste ação e Mana para jogar maldições pesadas em um alvo. No estágio avançado do Grande Sabá, a mesma maldição passa a pegar vários inimigos de uma vez.
             </p>
           </PremiumCard>
         </div>
 
-        {/* Custom Lineages for Bruxa */}
-        {(() => {
-          const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
-            <section key={grupo.campo} className="pt-4 mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="mb-8"
-              >
-                <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
-                  {grupo.rotulo}
-                </h2>
-                <p className="text-rose-200/60 text-lg font-serif">{grupo.descricao}</p>
-              </motion.div>
-              
-              <div className="overflow-x-auto rounded-none border border-purple-800/40 bg-purple-950/20 backdrop-blur-md shadow-lg shadow-purple-900/10">
-                <table className="w-full text-left border-collapse font-serif">
-                  <thead>
-                    <tr className="border-b border-purple-800/40 bg-purple-950/60 font-sans">
-                      <th className="p-6 font-bold text-rose-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Tradição/Maldição</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-rose-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Descrição</th>}
-                      <th className="p-6 font-bold text-rose-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Manifestação (Traços)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grupo.opcoes.map((opcao) => {
-                      const tracos = obterTracosOpcaoRacial(opcao);
-                      const titleLower = opcao.titulo.toLowerCase();
-                      
-                      let lineageStyle = { glow: 'rgba(147,51,234,0.25)', text: 'text-purple-400', border: 'border-purple-500/50', bg: 'hover:bg-purple-900/30' };
-                      if (titleLower.includes('sangue') || titleLower.includes('dor') || titleLower.includes('sacrifício') || titleLower.includes('escarlate') || titleLower.includes('rubro')) {
-                        lineageStyle = { glow: 'rgba(225,29,72,0.25)', text: 'text-rose-500', border: 'border-rose-600/50', bg: 'hover:bg-rose-950/30' };
-                      } else if (titleLower.includes('sombra') || titleLower.includes('noite') || titleLower.includes('pesadelo') || titleLower.includes('escuridão')) {
-                        lineageStyle = { glow: 'rgba(31,41,55,0.25)', text: 'text-gray-400', border: 'border-gray-500/50', bg: 'hover:bg-gray-900/50' };
-                      } else if (titleLower.includes('fogo') || titleLower.includes('cinzas') || titleLower.includes('inferno') || titleLower.includes('brasa')) {
-                        lineageStyle = { glow: 'rgba(239,68,68,0.25)', text: 'text-red-500', border: 'border-red-600/50', bg: 'hover:bg-red-950/30' };
-                      } else if (titleLower.includes('espírito') || titleLower.includes('alma') || titleLower.includes('fantasma') || titleLower.includes('frio') || titleLower.includes('gelo')) {
-                        lineageStyle = { glow: 'rgba(56,189,248,0.25)', text: 'text-sky-400', border: 'border-sky-500/50', bg: 'hover:bg-sky-950/30' };
-                      }
+        <EstagiosRaciais raca={raca} tema={tema} />
 
-                      return (
-                        <tr 
-                          key={opcao.id} 
-                          className={`border-b border-purple-800/20 transition-colors ${lineageStyle.bg}`}
-                        >
-                          <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
-                            <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
-                          </td>
-                          {grupo.campo !== 'linhagemId' && (
-                            <td className="p-6 align-top text-rose-200/70 text-sm leading-relaxed w-1/3">
-                              {descreverOpcaoRacial(opcao)}
-                            </td>
-                          )}
-                          <td className="p-6 align-top">
-                            {tracos.length > 0 ? (
-                              <div className="space-y-4">
-                                {tracos.map(traco => (
-                                  <div key={traco.id} className="bg-black/20 p-3 rounded-none border border-purple-900/30 font-sans">
-                                    <h4 className="text-sm font-bold text-rose-200 mb-1">{traco.titulo}</h4>
-                                    {traco.descricao && <p className="text-xs text-rose-200/50 leading-relaxed">{traco.descricao}</p>}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-purple-500/30 italic text-sm font-sans">Sem traços adicionais.</span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ));
-        })()}
+        <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>
   );

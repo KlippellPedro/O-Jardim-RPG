@@ -2,8 +2,43 @@ import { motion } from 'framer-motion';
 import { Ghost, MoveRight, Eye } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
-import { obterGruposEscolhaRacial, obterTracosOpcaoRacial, descreverOpcaoRacial } from '../../services/racaService';
+import { EscolhaRacialCards, type EstiloOpcaoRacial } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
+
+/** Uma paleta por Cor da Alma, indexada pelo id da variante em
+ * `data/ficha/racas.json`. `tinta` e a cor crua, usada no filete e no ponto que
+ * identificam o cartao.
+ *
+ * Os valores sao os mesmos `destaque` de FLUXO_TEMAS em
+ * `src/services/magiaService.ts`, que ja carrega a paleta canonica das Arvores.
+ * Cada Cor tem que bater com o Fluxo que ela representa: se a paleta de um
+ * Fluxo mudar la, ela muda aqui tambem. Ficam repetidos como literal porque o
+ * Tailwind so enxerga classe arbitraria escrita no proprio arquivo. */
+const ESTILO_POR_COR: Record<string, EstiloOpcaoRacial> = {
+  // origem / Genese
+  rosa: { tinta: 'rgb(239,159,190)', text: 'text-[#ef9fbe]', border: 'border-[#ef9fbe]/40' },
+  // essencia / Aletheia
+  amarelo: { tinta: 'rgb(240,220,120)', text: 'text-[#f0dc78]', border: 'border-[#f0dc78]/40' },
+  // comunicacao / Parley
+  prata: { tinta: 'rgb(220,225,231)', text: 'text-[#dce1e7]', border: 'border-[#dce1e7]/40' },
+  // vitalidade / Anima
+  verde: { tinta: 'rgb(121,209,127)', text: 'text-[#79d17f]', border: 'border-[#79d17f]/40' },
+  // inconstancia / Vortice
+  laranja: { tinta: 'rgb(243,149,85)', text: 'text-[#f39555]', border: 'border-[#f39555]/40' },
+  // fisico / Baluarte
+  marrom: { tinta: 'rgb(180,130,88)', text: 'text-[#b48258]', border: 'border-[#b48258]/40' },
+  // espaco / Matriz
+  roxo: { tinta: 'rgb(173,125,225)', text: 'text-[#ad7de1]', border: 'border-[#ad7de1]/40' },
+  // tempo / Eon
+  dourado: { tinta: 'rgb(207,173,99)', text: 'text-[#cfad63]', border: 'border-[#cfad63]/40' },
+  // vazio / Abismo
+  preto: { tinta: 'rgb(119,112,127)', text: 'text-[#77707f]', border: 'border-[#77707f]/40' },
+  // fim / Limiar
+  'vermelho-vinho': { tinta: 'rgb(210,75,102)', text: 'text-[#d24b66]', border: 'border-[#d24b66]/40' },
+  // tecnologia / A.X.I.S
+  'azul-neon': { tinta: 'rgb(112,237,250)', text: 'text-[#70edfa]', border: 'border-[#70edfa]/40' },
+};
 
 export const Espirito = ({ raca }: { raca: IRaca }) => {
   const tema = obterTemaPorId(raca.id);
@@ -64,7 +99,7 @@ export const Espirito = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-cyan-200/50 max-w-2xl mx-auto font-light leading-relaxed"
           >
-            Uma alma livre das amarras da carne. Sem a necessidade de respirar ou comer, eles pairam pelo mundo físico, capazes de ignorar os limites materiais que prendem os vivos.
+            Uma alma sem corpo pra alimentar nem pulmão pra encher. Passa por parede quando tem Mana pra gastar, enxerga no escuro e não veste armadura comum porque não há o que vestir.
           </motion.p>
         </motion.header>
 
@@ -82,7 +117,7 @@ export const Espirito = ({ raca }: { raca: IRaca }) => {
             <div>
               <h3 className={`text-2xl font-light ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Fisiologia Incorpórea</h3>
               <p className="text-cyan-200/50 leading-relaxed text-sm font-light">
-                Não precisa respirar, comer ou beber. Enxerga normalmente na escuridão natural. Por sua natureza etérea, não pode vestir armaduras comuns.
+                Não precisa respirar, comer nem beber, e enxerga normalmente na escuridão natural. Como não há corpo para vestir, armadura comum não serve em você.
               </p>
             </div>
           </PremiumCard>
@@ -99,92 +134,21 @@ export const Espirito = ({ raca }: { raca: IRaca }) => {
             <div>
               <h3 className={`text-2xl font-light ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Passagem Etérea</h3>
               <p className="text-cyan-200/50 leading-relaxed text-sm font-light">
-                Uma vez por cena, gaste 2 Mana durante seu movimento para atravessar até 1,5m de material sólido. Você precisa enxergar ou conhecer um espaço livre do outro lado e não pode carregar outra criatura.
+                Durante o seu movimento, atravesse até 1,5 m de material sólido. Você precisa enxergar ou já conhecer um espaço livre do outro lado, e não pode parar dentro do material nem levar outra criatura junto. Custa 2 Mana, uma vez por cena.
               </p>
             </div>
           </PremiumCard>
         </div>
 
-        {/* Custom Lineages for Espirito */}
-        {(() => {
-          const grupos = obterGruposEscolhaRacial(raca);
-          return grupos.map((grupo) => (
-            <section key={grupo.campo} className="pt-4 mb-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="mb-8"
-              >
-                <h2 className={`text-4xl font-bold ${tema.text} mb-3 uppercase tracking-wider`} style={{ fontFamily: 'Cinzel, serif' }}>
-                  {grupo.rotulo}
-                </h2>
-                <p className="text-cyan-200/60 text-lg">{grupo.descricao}</p>
-              </motion.div>
-              
-              <div className="overflow-x-auto rounded-none border border-cyan-800/40 bg-cyan-950/20 backdrop-blur-md shadow-lg shadow-cyan-900/10">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-cyan-800/40 bg-cyan-950/60">
-                      <th className="p-6 font-bold text-cyan-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Natureza Etérea</th>
-                      {grupo.campo !== 'linhagemId' && <th className="p-6 font-bold text-cyan-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Manifestação</th>}
-                      <th className="p-6 font-bold text-cyan-100 uppercase tracking-widest text-sm" style={{ fontFamily: 'Cinzel, serif' }}>Traços Sobrenaturais</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grupo.opcoes.map((opcao) => {
-                      const tracos = obterTracosOpcaoRacial(opcao);
-                      const titleLower = opcao.titulo.toLowerCase();
-                      
-                      // Custom colors for different espirito lineages
-                      let lineageStyle = { glow: 'rgba(34,211,238,0.25)', text: 'text-cyan-400', border: 'border-cyan-500/50', bg: 'hover:bg-cyan-900/20' };
-                      if (titleLower.includes('espectro') || titleLower.includes('sombra') || titleLower.includes('assombração') || titleLower.includes('pesadelo')) {
-                        lineageStyle = { glow: 'rgba(168,85,247,0.25)', text: 'text-purple-400', border: 'border-purple-500/50', bg: 'hover:bg-purple-950/30' };
-                      } else if (titleLower.includes('poltergeist') || titleLower.includes('ira') || titleLower.includes('vingativo')) {
-                        lineageStyle = { glow: 'rgba(239,68,68,0.25)', text: 'text-red-400', border: 'border-red-500/50', bg: 'hover:bg-red-950/30' };
-                      } else if (titleLower.includes('guardião') || titleLower.includes('ancestral') || titleLower.includes('protetor')) {
-                        lineageStyle = { glow: 'rgba(245,158,11,0.25)', text: 'text-amber-400', border: 'border-amber-500/50', bg: 'hover:bg-amber-950/30' };
-                      } else if (titleLower.includes('natureza') || titleLower.includes('fada') || titleLower.includes('elemental')) {
-                        lineageStyle = { glow: 'rgba(16,185,129,0.25)', text: 'text-emerald-400', border: 'border-emerald-500/50', bg: 'hover:bg-emerald-950/30' };
-                      }
+        <EstagiosRaciais
+          raca={raca}
+          tema={tema}
+          titulo="Estágios da Alma"
+          descricao="Um espírito amadurece em estágios. Cada um abre por nível total e traz Mana, uma Passagem Etérea melhor e a característica seguinte da sua Cor."
+        />
 
-                      return (
-                        <tr 
-                          key={opcao.id} 
-                          className={`border-b border-cyan-800/20 transition-colors ${lineageStyle.bg}`}
-                        >
-                          <td className={`p-6 align-top border-l-2 ${lineageStyle.border} ${lineageStyle.text} w-1/4`}>
-                            <span className="font-bold text-lg block" style={{ fontFamily: 'Cinzel, serif' }}>{opcao.titulo}</span>
-                          </td>
-                          {grupo.campo !== 'linhagemId' && (
-                            <td className="p-6 align-top text-cyan-100/70 text-sm leading-relaxed w-1/3">
-                              {descreverOpcaoRacial(opcao)}
-                            </td>
-                          )}
-                          <td className="p-6 align-top">
-                            {tracos.length > 0 ? (
-                              <div className="space-y-4">
-                                {tracos.map(traco => (
-                                  <div key={traco.id} className="bg-black/20 p-3 rounded-none border border-cyan-900/30">
-                                    <h4 className="text-sm font-bold text-cyan-100 mb-1">{traco.titulo}</h4>
-                                    {traco.descricao && <p className="text-xs text-cyan-200/50 leading-relaxed">{traco.descricao}</p>}
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-cyan-500/30 italic text-sm">Sem traços adicionais.</span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ));
-        })()}
+        <EscolhaRacialCards raca={raca} tema={tema} paleta={ESTILO_POR_COR} />
+
       </div>
     </div>
   );
