@@ -158,11 +158,20 @@ test('veículos prontos cobrem entrada, utilidade, combate e faixas de preço', 
   const porId = new Map(completos.map(item => [item.id, item]));
   for (const id of novosIds) assert.ok(porId.has(id), `${id}: opção pronta ausente`);
 
-  const precos = completos.map(item => Number(item.conteudo.preco?.Lunaris));
-  assert.ok(precos.some(preco => preco <= 1_000), 'falta veículo de entrada até 1.000 Lunaris');
-  assert.ok(precos.some(preco => preco > 1_000 && preco <= 5_000), 'falta veículo entre 1.001 e 5.000 Lunaris');
-  assert.ok(precos.some(preco => preco > 5_000 && preco <= 20_000), 'falta veículo entre 5.001 e 20.000 Lunaris');
-  assert.ok(precos.some(preco => preco > 20_000), 'falta veículo acima de 20.000 Lunaris');
+  // Veículo caro sobe de Lunaris para Solares sozinho, então a cobertura de
+  // faixa se mede em Solares equivalentes, não na moeda impressa no card.
+  const CAMBIO: Record<string, number> = {
+    Lunaris: 0.01, Solares: 1, 'Créditos Sombrios': 2, 'Fragmentos de Estrela': 50,
+  };
+  const precos = completos.map(item => {
+    const preco = item.conteudo.preco as Record<string, number>;
+    const moeda = Object.keys(preco)[0];
+    return preco[moeda] * (CAMBIO[moeda] ?? 1);
+  });
+  assert.ok(precos.some(preco => preco <= 10), 'falta veículo de entrada até 10 Solares');
+  assert.ok(precos.some(preco => preco > 10 && preco <= 50), 'falta veículo entre 10 e 50 Solares');
+  assert.ok(precos.some(preco => preco > 50 && preco <= 200), 'falta veículo entre 50 e 200 Solares');
+  assert.ok(precos.some(preco => preco > 200), 'falta veículo acima de 200 Solares');
 
   const raridades = new Set(completos.map(item => String(item.conteudo.raridade).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()));
   for (const raridade of ['comum', 'incomum', 'raro', 'epico', 'lendario']) {

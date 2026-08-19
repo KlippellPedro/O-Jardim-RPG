@@ -13,6 +13,23 @@ const catalogo = JSON.parse(
   readFileSync(new URL('../../data/loja/catalogo.json', import.meta.url), 'utf8'),
 ) as { entradas: CatalogEntry[] };
 
+const escala = JSON.parse(
+  readFileSync(new URL('../../data/economia/escala-precos-v1.json', import.meta.url), 'utf8'),
+) as {
+  cambio: Record<string, number>;
+  escada_raridade: {
+    banda: { minimo: number; maximo: number };
+    piso_comum_por_categoria?: Record<string, number>;
+    faixas: { raridade: string; referencia_lunaris: number; congelada?: boolean }[];
+  };
+  multiplicador_por_categoria: Record<string, number>;
+};
+
+const CAMBIO = escala.cambio;
+const emSolares = (preco: { moeda: string; valor: number }) => preco.valor * (CAMBIO[preco.moeda] ?? 1);
+const faixaDe = (raridade: string) => escala.escada_raridade.faixas
+  .find(faixa => normalizar(faixa.raridade) === (raridade === 'reliquia' ? 'reliquia da criacao' : raridade));
+
 const TIPOS = new Set([
   'arma', 'armadura', 'equipamento', 'modificacao', 'consumivel', 'artefato',
   'fruto-eden', 'implante', 'veiculo', 'veiculo-completo', 'monstro', 'drop',
@@ -67,58 +84,109 @@ test('catálogo possui schema básico completo e identificadores únicos', () =>
   }
 });
 
-test('promoções declaram preço anterior maior e na mesma moeda', () => {
-  for (const entrada of catalogo.entradas.filter(item => item.conteudo.promocao?.ativa === true)) {
-    const atual = lerPreco(entrada.conteudo.preco);
-    const anterior = lerPreco(entrada.conteudo.preco_original);
-    assert.ok(atual && anterior, `${entrada.id}: promoção sem preços válidos`);
-    assert.equal(anterior.moeda, atual.moeda, `${entrada.id}: promoção muda a moeda`);
-    assert.ok(anterior.valor > atual.valor, `${entrada.id}: preço promocional não é menor`);
-    assert.ok(String(entrada.conteudo.promocao.rotulo ?? '').trim(), `${entrada.id}: promoção sem rótulo`);
+test('catálogo não hardcoda promoção: a vitrine gira sozinha pelo servidor', () => {
+  // "Ofertas em destaque" é 100% calculada por plataforma/core/promotions.py
+  // a cada requisição, numa janela de 12h. Se um item nascer com `promocao`
+  // ou `preco_original` fixo no catálogo estático, ele fica em oferta pra
+  // sempre e trava a rotação - foi exatamente esse bug que motivou o cálculo
+  // dinâmico no servidor.
+  for (const entrada of catalogo.entradas) {
+    assert.equal(entrada.conteudo.promocao, undefined, `${entrada.id}: promoção não pode vir hardcoded no catálogo`);
+    assert.equal(entrada.conteudo.preco_original, undefined, `${entrada.id}: preco_original não pode vir hardcoded no catálogo`);
   }
 });
 
-test('preços usam Lunaris para bens cotidianos e Solares para alto valor', () => {
-  const precosCotidianos = new Map<string, number>([
-    ['acessorio', 25],
-    ['kit', 40],
-    ['mochila', 8],
-    ['mochilao', 18],
-    ['algemas', 5],
-    ['instrumento-musical', 12],
-    ['pomada-restauradora', 10],
-    ['kit-de-aventureiro', 20],
-    ['lampiao', 6],
-    ['odre', 2],
-    ['racao-de-viagem', 1],
-    ['saco-de-dormir', 4],
-    ['traje', 15],
-    ['traje-de-luxo', 60],
-    ['algibeira', 1],
-    ['pedra', 1],
-  ]);
-  const porId = new Map(catalogo.entradas.map(item => [item.id, item]));
-  for (const [id, valor] of precosCotidianos) {
-    const preco = lerPreco(porId.get(id)?.conteudo.preco);
-    assert.deepEqual(preco, { moeda: 'Lunaris', valor }, `${id}: preço cotidiano divergente`);
+test('todo preço cai na banda da própria raridade, pela escala oficial', () => {
+  // A escada multiplica por 4 a cada degrau e a banda vai de 0,5x a 2,0x da
+  // referência, então degraus vizinhos se encostam sem vão e sem cruzar. Se este
+  // teste quebra, ou o catálogo saiu da escala ou a escala mudou de propósito:
+  // rode `node tools/normalize-shop-prices.mjs` e confira o diff.
+  const { minimo, maximo } = escala.escada_raridade.banda;
+  const pisoComum = escala.escada_raridade.piso_comum_por_categoria ?? {};
+  for (const entrada of catalogo.entradas) {
+    const preco = lerPreco(entrada.conteudo.preco);
+    if (!preco) continue;
+    const raridade = normalizar(entrada.conteudo.raridade);
+    const faixa = faixaDe(raridade);
+    assert.ok(faixa, `${entrada.id}: raridade "${entrada.conteudo.raridade}" fora da escala`);
+    if (faixa.congelada) continue;
+
+    const multiplicador = escala.multiplicador_por_categoria[entrada.tipo] ?? 1;
+    const referencia = (faixa.referencia_lunaris / 100) * multiplicador;
+    // A faixa Comum de categorias que misturam bugiganga e bem de verdade tem o
+    // piso afrouxado. Como nada existe abaixo de Comum, isso não abre inversão.
+    const piso = raridade === 'comum' ? (pisoComum[entrada.tipo] ?? minimo) : minimo;
+    const valor = emSolares(preco);
+    assert.ok(
+      valor >= referencia * piso * 0.999 && valor <= referencia * maximo * 1.001,
+      `${entrada.id}: ${preco.valor} ${preco.moeda} fora da banda de ${entrada.tipo} ${raridade} `
+        + `(${(referencia * piso).toFixed(2)} a ${(referencia * maximo).toFixed(2)} Solares)`,
+    );
+  }
+});
+
+test('a raridade ordena o preço dentro de cada categoria, sem inversão', () => {
+  const ORDEM = ['comum', 'incomum', 'raro', 'epico', 'lendario', 'mitico', 'reliquia da criacao'];
+  const grupos = new Map<string, number[]>();
+  for (const entrada of catalogo.entradas) {
+    const preco = lerPreco(entrada.conteudo.preco);
+    if (!preco) continue;
+    const raridade = normalizar(entrada.conteudo.raridade);
+    const chave = `${entrada.tipo}|${raridade === 'reliquia' ? 'reliquia da criacao' : raridade}`;
+    if (!grupos.has(chave)) grupos.set(chave, []);
+    grupos.get(chave)!.push(emSolares(preco));
   }
 
-  const raridadesConvencionais = new Set(['comum', 'incomum', 'raro']);
+  for (const tipo of new Set(catalogo.entradas.map(item => item.tipo))) {
+    let tetoAnterior: number | null = null;
+    let raridadeAnterior = '';
+    for (const raridade of ORDEM) {
+      const valores = grupos.get(`${tipo}|${raridade}`);
+      if (!valores?.length) continue;
+      const piso = Math.min(...valores);
+      if (tetoAnterior !== null) {
+        assert.ok(
+          piso >= tetoAnterior * 0.999,
+          `${tipo}: ${raridade} começa em ${piso.toFixed(2)} Solares, abaixo do teto de ${raridadeAnterior} (${tetoAnterior.toFixed(2)})`,
+        );
+      }
+      tetoAnterior = Math.max(...valores);
+      raridadeAnterior = raridade;
+    }
+  }
+});
+
+test('a moeda acompanha o bolso: Lunaris no cotidiano, Solares no alto valor', () => {
+  const TETO_DO_BOLSO = 20; // Solares. Acima disso a regra manda cotar em Solar.
+  for (const entrada of catalogo.entradas) {
+    const preco = lerPreco(entrada.conteudo.preco);
+    if (!preco) continue;
+    // Implante e Fruto do Éden têm moeda fixa por categoria, e modificação é
+    // encomenda de oficina: os três ignoram o teto do bolso de propósito.
+    if (['implante', 'fruto-eden', 'modificacao'].includes(entrada.tipo)) continue;
+    if (preco.moeda !== 'Lunaris') continue;
+    assert.ok(
+      emSolares(preco) <= TETO_DO_BOLSO,
+      `${entrada.id}: ${preco.valor} Lunaris não cabe num bolso, devia estar em Solares`,
+    );
+  }
+
+  // Bem convencional de raridade baixa continua sendo compra de Lunaris.
   const convencionais = catalogo.entradas.filter(item => (
     (item.tipo === 'arma' || item.tipo === 'armadura')
-      && raridadesConvencionais.has(normalizar(item.conteudo.raridade))
+      && new Set(['comum', 'incomum', 'raro']).has(normalizar(item.conteudo.raridade))
   ));
+  assert.ok(convencionais.length > 0);
   for (const item of convencionais) {
     assert.equal(lerPreco(item.conteudo.preco)?.moeda, 'Lunaris', `${item.id}: bem convencional fora de Lunaris`);
   }
 
-  const veiculos = catalogo.entradas.filter(item => item.tipo === 'veiculo' || item.tipo === 'veiculo-completo');
-  for (const item of veiculos) {
-    assert.equal(lerPreco(item.conteudo.preco)?.moeda, 'Lunaris', `${item.id}: veículo fora de Lunaris`);
+  // E o topo do catálogo continua cotado nas moedas do seu próprio balcão.
+  for (const item of catalogo.entradas.filter(entrada => entrada.tipo === 'implante')) {
+    assert.equal(lerPreco(item.conteudo.preco)?.moeda, 'Créditos Sombrios', `${item.id}: implante fora do Crédito Sombrio`);
   }
-
-  for (const id of ['ampulheta-do-tempo', 'bazuca', 'arma-sniper-antimateria']) {
-    assert.equal(lerPreco(porId.get(id)?.conteudo.preco)?.moeda, 'Solares', `${id}: item de alto valor fora de Solares`);
+  for (const item of catalogo.entradas.filter(entrada => entrada.tipo === 'fruto-eden')) {
+    assert.equal(lerPreco(item.conteudo.preco)?.moeda, 'Fragmentos de Estrela', `${item.id}: Fruto fora do Fragmento`);
   }
 });
 

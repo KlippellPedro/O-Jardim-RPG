@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from typing import Any
 from uuid import UUID, uuid4
 
@@ -27,6 +28,7 @@ from core.economy_commands import (
     resale_value,
     resolve_catalog_price,
 )
+from core.promotions import resolve_promotion
 from schemas import ShopBatchCommandInput
 
 
@@ -477,20 +479,32 @@ def get_shop_catalog(
     with database.connection() as connection:
         campaign_access(connection, campanha_id, user.id)
         rows = _visible_catalog_rows(connection, campanha_id)
+    now = datetime.now(timezone.utc)
     items = []
     for row in rows:
-        price = resolve_catalog_price(row["conteudo"])
-        if price is None:
+        base_price = resolve_catalog_price(row["conteudo"])
+        if base_price is None:
             # Entrada publicada com preço inválido não pode aparecer como comprável.
             continue
+        shop_level = _catalog_shop_level(row)
+        content = row["conteudo"]
+        price = base_price
+        promotion = resolve_promotion(row["id"], row["tipo"], content, base_price, shop_level, now=now)
+        if promotion is not None:
+            price, promo = promotion
+            content = {
+                **content,
+                "preco_original": {base_price.moeda: base_price.valor},
+                "promocao": {"ativa": True, "rotulo": promo.label, "desconto_percentual": promo.discount_percent},
+            }
         items.append(
             {
                 "id": row["id"],
                 "titulo": row["titulo"],
                 "tipo": row["tipo"],
-                "conteudo": row["conteudo"],
+                "conteudo": content,
                 "preco": {"moeda": price.moeda, "valor": price.valor},
-                "nivel_loja": _catalog_shop_level(row),
+                "nivel_loja": shop_level,
             }
         )
     return {"itens": items}
@@ -582,6 +596,7 @@ def purchase_batch(
 
         totals: dict[str, dict[str, Any]] = {}
         purchased_items = []
+        now = datetime.now(timezone.utc)
         for line in payload.itens:
             item = catalog[line.item_id]
             price = resolve_catalog_price(item["conteudo"])
@@ -590,6 +605,14 @@ def purchase_batch(
                     status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                     detail=f"{item['titulo']} possui preco invalido no catalogo",
                 )
+            # Mesmo calculo da listagem (core/promotions.py): se o item esta
+            # em oferta nesta janela de 12h, cobra o preco com desconto, o
+            # mesmo que o jogador viu na vitrine.
+            promotion = resolve_promotion(
+                item["id"], item["tipo"], item["conteudo"], price, _catalog_shop_level(item), now=now,
+            )
+            if promotion is not None:
+                price, _promo = promotion
             _add_total(totals, price.moeda, price.valor * line.quantidade)
             purchased_items.append(
                 {

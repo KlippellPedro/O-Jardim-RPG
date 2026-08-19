@@ -1,7 +1,7 @@
 {
   "_versao": "2.0",
   "_criterio_publicacao": "Inclui apenas organizações cuja atuação pode alcançar personagens de qualquer Árvore.",
-  "_nota_aprovacao": "Banco Lunar e AstraTech pertencem ao cenário atual. Caravana do Limiar, Vigília das Raízes e Arquivo Prismático são propostas aguardando aprovação.",
+  "_nota_aprovacao": "Banco Lunar e AstraTech pertencem ao cenario atual. Guilda dos Cacadores e Caravana do Limiar foram promovidas a canonicas em 19/08/2026, quando ganharam economia definida em data/economia/escala-precos-v1.json (contratos por criatura, cargos e salario por classe social) - ver a secao O Vazio entre as Arvores no Livro do Mestre. Vigilia das Raizes e Arquivo Prismatico continuam como propostas aguardando aprovacao.",
   "faccoes": [
     {
       "id": "banco-lunar",
@@ -37,8 +37,13 @@
       "tipo": "rede-de-transporte",
       "alcance": "Rotas acessíveis entre Árvores",
       "atuacao_publica": "Transporta pessoas, cargas e mensagens por passagens dimensionais conhecidas. Não atravessa rotas seladas.",
-      "estado": "proposta",
-      "fontes": []
+      "estado": "canonica",
+      "fontes": [
+        {
+          "arquivo": "data/economia/escala-precos-v1.json",
+          "entrada_id": "vazio_entre_as_arvores"
+        }
+      ]
     },
     {
       "id": "vigilia-das-raizes",
@@ -57,6 +62,20 @@
       "atuacao_publica": "Preserva registros, identifica artefatos e reúne informações verificadas sobre fenômenos de diferentes Árvores.",
       "estado": "proposta",
       "fontes": []
+    },
+    {
+      "id": "guilda-dos-cacadores",
+      "titulo": "Guilda dos Caçadores",
+      "tipo": "guilda-de-cacadores",
+      "alcance": "Todas as Árvores",
+      "atuacao_publica": "Aceita contrato para capturar criminoso procurado e para abater criatura vinda do Vazio. Paga por entrega confirmada, cobra caro por serviço urgente e mantém quadro de procurados aberto a quem quiser tentar.",
+      "estado": "canonica",
+      "fontes": [
+        {
+          "arquivo": "data/economia/escala-precos-v1.json",
+          "entrada_id": "vazio_entre_as_arvores"
+        }
+      ]
     }
   ]
 }

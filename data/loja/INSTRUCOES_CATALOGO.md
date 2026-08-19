@@ -32,10 +32,16 @@ Cada item é um objeto assim (o mesmo schema do site, em `data/loja`):
 - **id:** slug único (minúsculas, com hífens). IDs repetidos são rejeitados na publicação.
 - **preco:** número (preço nativo em **Solares**) **ou** objeto com exatamente
   uma moeda, como `{"Lunaris": 40}`. Nunca declare duas moedas no mesmo preço.
-- **preco_original + promocao:** para uma oferta real, `preco` guarda o valor
-  atual validado pelo servidor, `preco_original` usa a mesma moeda e
-  `promocao` recebe `{ "ativa": true, "rotulo": "Nome da oferta" }`. O site
-  calcula a porcentagem; não confie em desconto informado pelo navegador.
+- **preco_original + promocao:** não escreva estes dois campos à mão. A
+  vitrine "Ofertas em destaque" é 100% calculada pelo servidor a cada
+  requisição (`plataforma/core/promotions.py`): a cada janela de 12h, cada
+  item elegível (arma, armadura, equipamento, modificação, consumível,
+  veículo, artefato — nunca Mítico, Relíquia da Criação, Fruto do Éden,
+  monstro, drop ou propriedade) tem uma chance determinística de entrar em
+  oferta, com desconto de 10% a 30%. `GET /loja/catalogo` já injeta
+  `preco_original` e `promocao` na resposta pros itens sorteados, e
+  `POST /loja/compras` cobra o mesmo preço com desconto que a vitrine
+  mostrou. O catálogo estático nunca deve ter esses dois campos.
 - **raridade:** `comum | incomum | raro | epico | lendario | mitico |
   reliquia da criacao` (acentos e maiúsculas também são aceitos; `reliquia`
   permanece como chave legada de `mitico`). Valor ausente ou desconhecido é
@@ -96,8 +102,8 @@ ele não publica mudanças feitas no JSON.
 - **Modificações:** 51 (`tipo: "modificacao"`). São as mesmas de
   `data/regras/raridadesEquipamentos.ts`, uma entrada por modificação, com
   `modificacao_id` apontando para a fonte. O preço sai de
-  `PRECO_MODIFICACAO_POR_VALOR` — 25, 60, 180 e 450 Lunaris para técnica, valor
-  1, 2 e 3 — e as marciais só aparecem da Metrópole para cima
+  `PRECO_MODIFICACAO_POR_VALOR` — 20, 70, 290 e 1.200 Lunaris para técnica,
+  valor 1, 2 e 3 — e as marciais só aparecem da Metrópole para cima
   (`nivelMinimoLoja >= 2`); efeitos épicos ou proibidos avançam ao Mercado
   Negro. Ao acrescentar uma modificação nas regras, replique a
   entrada aqui com o mesmo preço da faixa.
@@ -129,21 +135,51 @@ defesas, concentração, Cansaço ou limites de uso.
 
 ## Política econômica
 
-O câmbio oficial é de **100 Lunaris para 1 Solar**. Lunaris são a moeda de uso
-cotidiano; Solares representam compras de alto valor. Para evitar que um preço
-como `15` transforme por engano uma algema em um item de 1.500 Lunaris, siga
-estas faixas:
+A escala inteira vive em `data/economia/escala-precos-v1.json`, e é ela que
+manda. Não escreva preço no olho: rode `node tools/normalize-shop-prices.mjs`
+depois de mexer no catálogo, e `--check` para validar sem gravar.
 
-- **Equipamentos cotidianos:** 1–60 Lunaris. Algemas custam 5 Lunaris.
-- **Armas convencionais até Raro:** 5–70 Lunaris.
-- **Armaduras e escudos convencionais até Raro:** 5–95 Lunaris.
-- **Modificações:** 25–450 Lunaris, conforme o valor do efeito.
-- **Peças e veículos completos:** Lunaris; os valores altos representam bens,
-  máquinas e naves, mas não devem ser interpretados como Solares.
-- **Solares:** equipamentos mágicos, armamentos militares ou tecnológicos de
-  alto nível, criaturas, drops e outros bens realmente valiosos.
-- **Fragmentos de Estrela:** Relíquias da Criação e transações celestiais.
-- **Créditos Sombrios:** implantes e mercado negro.
+**A âncora é o salário mínimo: 300 Lunaris por mês**, cerca de 10 por dia. Todo
+preço é uma fração ou um múltiplo disso. O câmbio oficial continua sendo de 100
+Lunaris para 1 Solar.
+
+A escada de raridade multiplica por 4 a cada degrau. Os valores abaixo são a
+referência de uma arma ou armadura, que servem de régua para o resto:
+
+| Raridade | Referência | Banda (0,5x a 2,0x) | Moeda |
+| --- | --- | --- | --- |
+| Comum | 30 Lunaris | 15 a 60 | Lunaris |
+| Incomum | 120 Lunaris | 60 a 240 | Lunaris |
+| Raro | 480 Lunaris | 240 a 960 | Lunaris |
+| Épico | 20 Solares | 10 a 40 | Solares |
+| Lendário | 80 Solares | 40 a 160 | Solares |
+| Mítico | 100 Fragmentos | 60 a 200 | Fragmentos |
+| Relíquia da Criação | 400 Fragmentos | 280 a 800 | Fragmentos |
+
+Como a banda vai da metade ao dobro, degraus vizinhos se encostam sem deixar vão
+e sem se cruzar: uma arma rara custa sempre mais que qualquer incomum e sempre
+menos que qualquer épica.
+
+Cada categoria multiplica essa referência:
+
+| Categoria | Fator | Categoria | Fator |
+| --- | --- | --- | --- |
+| Arma, armadura | 1,0 | Veículo (peça) | 5 |
+| Artefato | 1,5 | Veículo completo | 20 |
+| Equipamento | 0,8 | Monstro | 20 |
+| Modificação | 0,6 | Implante | 25 |
+| Consumível | 0,35 | Propriedade | 40 |
+| Drop | 0,25 | Fruto do Éden | 1,0 |
+
+Moeda: implante sempre em Créditos Sombrios, Fruto do Éden sempre em Fragmentos,
+modificação sempre em Lunaris. Fora esses três, a faixa de raridade decide, com
+uma exceção: se o valor passar de 20 Solares (2.000 Lunaris), ele sobe para
+Solares mesmo numa raridade baixa. É por isso que um veículo completo raro
+aparece em Solares e não como 19.200 Lunaris.
+
+Entre Lendário (topo em 160 Solares) e Mítico (piso em 60 Fragmentos, ou 3.000
+Solares) existe um salto de quase vinte vezes. Isso é proposital, e a seção
+`economia` das regras publica esse muro para o jogador.
 
 Ao usar Lunaris, sempre escreva `{"Lunaris": valor}`. Um número sem objeto é
 interpretado pelo servidor como Solares.
@@ -193,8 +229,9 @@ cada artefato é único, com a habilidade na descrição.
 
 ## Dica de balanceamento
 
-O catálogo combina valores convertidos dos PDFs com a escala econômica atual.
-Armas lendárias usam Solares altos; Relíquias da Criação usam Fragmentos de
-Estrela e recebem preço individual conforme o impacto mecânico. Depois de uma
+Todo preço do catálogo sai da escala em `data/economia/escala-precos-v1.json`,
+aplicada por `tools/normalize-shop-prices.mjs`. Relíquias da Criação são a única
+faixa congelada: o normalizador não encosta nelas, porque já estavam coerentes e
+vivem numa economia que não se alcança por salário. Depois de uma
 mudança no arquivo, use `/catalogo_republicar`; `/catalogo_recarregar` sozinho
 não envia os novos preços ao PostgreSQL.

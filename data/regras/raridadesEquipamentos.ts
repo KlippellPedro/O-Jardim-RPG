@@ -386,10 +386,10 @@ export const CATEGORIAS_MODIFICACAO: Array<{ id: CategoriaModificacaoId; titulo:
 /** Preço de encomenda de uma modificação, em Lunaris, pelo peso do efeito.
  * É a mesma faixa que a Loja cobra na categoria Modificações. */
 export const PRECO_MODIFICACAO_POR_VALOR: Record<0 | 1 | 2 | 3, number> = {
-  0: 25,
-  1: 60,
-  2: 180,
-  3: 450,
+  0: 18,
+  1: 70,
+  2: 290,
+  3: 1200,
 };
 
 /** Raridade mínima que o item precisa ter para bancar aquele valor de efeito. */

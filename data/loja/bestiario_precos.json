@@ -1,5 +1,5 @@
 {
-  "_nota": "Bestiário: preços por FÓRMULA (faixa de nível × traços), não lista fixa. Pra vender/contratar uma criatura específica, crie uma entrada tipo 'monstro' com o preço calculado por essas tabelas. Ver INSTRUCOES_CATALOGO.md.",
+  "_nota": "Bestiario: as tabelas abaixo continuam valendo como PESO RELATIVO entre criaturas (faixa de nivel x tracos), mas nao ditam mais o preco absoluto. O valor final sai da escala em data/economia/escala-precos-v1.json, onde monstro multiplica a referencia da raridade por 20, e e gravado por tools/normalize-shop-prices.mjs. Pra vender ou contratar uma criatura nova, crie a entrada tipo 'monstro' com a raridade certa e rode o normalizador: ele posiciona o preco dentro da banda daquela raridade sem quebrar a ordem que estas tabelas estabelecem. Ver INSTRUCOES_CATALOGO.md.",
   "fontes": {
     "Criaturas": {
       "linhas": [

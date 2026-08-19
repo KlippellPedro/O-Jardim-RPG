@@ -1284,13 +1284,13 @@ Uma modificação pode conceder Vida máxima, Defesa, Ataque, atributo ou bônus
 
 - Faixa | Preço de encomenda | Raridade mínima do item
 
-- Técnica | 25 Lunaris | Qualquer item
+- Técnica | 18 Lunaris | Qualquer item
 
-- Valor 1 | 60 Lunaris | Comum
+- Valor 1 | 70 Lunaris | Comum
 
-- Valor 2 | 180 Lunaris | Raro
+- Valor 2 | 290 Lunaris | Raro
 
-- Valor 3 | 450 Lunaris | Épico
+- Valor 3 | 1200 Lunaris | Épico
 
 A Loja vende cada uma delas na categoria **Modificações**, com o preço já aplicado. Marcial só aparece a partir da Metrópole.
 
@@ -1303,122 +1303,122 @@ Armas
 
 - Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
-- Afiada | Comum | 1 | 60 L | Nenhum | +1 dado de dano da arma (mesmo tipo do dado base).
+- Afiada | Comum | 1 | 70 L | Nenhum | +1 dado de dano da arma (mesmo tipo do dado base).
 
-- Perfurante | Comum | 1 | 60 L | Nenhum | O dano da arma ignora metade da Resistência do tipo correspondente do alvo.
+- Perfurante | Comum | 1 | 70 L | Nenhum | O dano da arma ignora metade da Resistência do tipo correspondente do alvo.
 
-- Margem Ampla | Comum | 1 | 60 L | Nenhum | Amplia a Margem de Ameaça em 2 (uma 20/x2 vira 18-20/x2). Só entra em arma de multiplicador x2, pra não furar a regra de margem larga com multiplicador alto.
+- Margem Ampla | Comum | 1 | 70 L | Nenhum | Amplia a Margem de Ameaça em 2 (uma 20/x2 vira 18-20/x2). Só entra em arma de multiplicador x2, pra não furar a regra de margem larga com multiplicador alto.
 
-- Coreografada | Comum | 1 | 60 L | Nenhum | Ao falhar numa Coreografia de risco Ousado ou maior com esta arma, sofra a consequência do risco imediatamente abaixo. Não vale para Tudo ou Nada.
+- Coreografada | Comum | 1 | 70 L | Nenhum | Ao falhar numa Coreografia de risco Ousado ou maior com esta arma, sofra a consequência do risco imediatamente abaixo. Não vale para Tudo ou Nada.
 
-- Drenante | Comum | 1 | 60 L | Nenhum | Uma vez por turno, ao acertar, o alvo perde 1d4 de Mana.
+- Drenante | Comum | 1 | 70 L | Nenhum | Uma vez por turno, ao acertar, o alvo perde 1d4 de Mana.
 
-- Assombrada | Comum | 1 | 60 L | Nenhum | Uma vez por cena, force o alvo a repetir um teste de resistência que já tenha passado contra um efeito de medo seu.
+- Assombrada | Comum | 1 | 70 L | Nenhum | Uma vez por cena, force o alvo a repetir um teste de resistência que já tenha passado contra um efeito de medo seu.
 
-- Balanceada | Comum | Técnica | 25 L | Nenhum | Ignora a penalidade de peso pesado ao empunhar com uma mão só.
+- Balanceada | Comum | Técnica | 18 L | Nenhum | Ignora a penalidade de peso pesado ao empunhar com uma mão só.
 
-- Leve | Comum | Técnica | 25 L | Nenhum | Reduz em 1 os espaços de carga que a arma ocupa, mínimo 1.
+- Leve | Comum | Técnica | 18 L | Nenhum | Reduz em 1 os espaços de carga que a arma ocupa, mínimo 1.
 
-- Silenciosa | Comum | Técnica | 25 L | Nenhum | Não produz som perceptível ao ser usada em um ataque.
+- Silenciosa | Comum | Técnica | 18 L | Nenhum | Não produz som perceptível ao ser usada em um ataque.
 
-- Devastadora | Marcial | 2 | 180 L | Força 14, ou Destreza 14 em arma de disparo | +2 dados de dano da arma.
+- Devastadora | Marcial | 2 | 290 L | Força 14, ou Destreza 14 em arma de disparo | +2 dados de dano da arma.
 
-- Elemental | Marcial | 2 | 180 L | Nenhum | +1d6 de dano de um tipo elemental escolhido na criação do item. Esse dado extra também multiplica no crítico.
+- Elemental | Marcial | 2 | 290 L | Nenhum | +1d6 de dano de um tipo elemental escolhido na criação do item. Esse dado extra também multiplica no crítico.
 
-- Sedenta | Marcial | 2 | 180 L | Nenhum | No crítico, o alvo recebe a condição Sangramento (usa o dado de dano da arma no lugar do 1d6 padrão, no fim de cada turno). Reaplicar segue a regra normal de Sangramento: +1 de dano por aplicação, até +5, sem novos dados. Remove-se como qualquer Sangramento: Cura DT 15 ou qualquer cura de pelo menos 1 PV.
+- Sedenta | Marcial | 2 | 290 L | Nenhum | No crítico, o alvo recebe a condição Sangramento (usa o dado de dano da arma no lugar do 1d6 padrão, no fim de cada turno). Reaplicar segue a regra normal de Sangramento: +1 de dano por aplicação, até +5, sem novos dados. Remove-se como qualquer Sangramento: Cura DT 15 ou qualquer cura de pelo menos 1 PV.
 
-- Vampírica | Marcial | 2 | 180 L | Nível total 7 | Uma vez por turno, ao causar dano, role um dado do tipo da arma e recupere esse tanto de PV.
+- Vampírica | Marcial | 2 | 290 L | Nível total 7 | Uma vez por turno, ao causar dano, role um dado do tipo da arma e recupere esse tanto de PV.
 
-- Sintonizada | Marcial | 2 | 180 L | Fluxo 14 | O dano da arma passa a usar o Mod. Fluxo no lugar de Força ou Destreza.
+- Sintonizada | Marcial | 2 | 290 L | Fluxo 14 | O dano da arma passa a usar o Mod. Fluxo no lugar de Força ou Destreza.
 
-- Exaustiva | Marcial | 2 | 180 L | Nível total 7 | No crítico, o alvo ganha 1 ponto de Cansaço. Uma vez por cena por alvo.
+- Exaustiva | Marcial | 2 | 290 L | Nível total 7 | No crítico, o alvo ganha 1 ponto de Cansaço. Uma vez por cena por alvo.
 
-- Assinatura de Árvore | Marcial | 2 | 180 L | Nenhum | A arma se liga a uma Árvore na criação. Contra criaturas de qualquer outra Árvore, +1 dado de dano.
+- Assinatura de Árvore | Marcial | 2 | 290 L | Nenhum | A arma se liga a uma Árvore na criação. Contra criaturas de qualquer outra Árvore, +1 dado de dano.
 
-- Golpe de Misericórdia | Marcial | 3 | 450 L | Nível total 10 | Contra alvo que já esteja em Morrendo, seus ataques com esta arma acertam como crítico automático.
+- Golpe de Misericórdia | Marcial | 3 | 1200 L | Nível total 10 | Contra alvo que já esteja em Morrendo, seus ataques com esta arma acertam como crítico automático.
 
-- Implacável | Marcial | 3 | 450 L | Nível total 10 | Uma vez por cena, transforme um acerto em crítico, sem precisar cair na Margem de Ameaça. Não combina com a Coreografia Tudo ou Nada no mesmo ataque.
+- Implacável | Marcial | 3 | 1200 L | Nível total 10 | Uma vez por cena, transforme um acerto em crítico, sem precisar cair na Margem de Ameaça. Não combina com a Coreografia Tudo ou Nada no mesmo ataque.
 
 Armaduras
 12 modificações · 6 comuns · 6 marciais
 
 - Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
-- Reforçada | Comum | 1 | 60 L | Nenhum | +1 de Defesa.
+- Reforçada | Comum | 1 | 70 L | Nenhum | +1 de Defesa.
 
-- Isolante | Comum | 1 | 60 L | Nenhum | Resistência 2 contra um tipo de dano elemental escolhido na criação do item.
+- Isolante | Comum | 1 | 70 L | Nenhum | Resistência 2 contra um tipo de dano elemental escolhido na criação do item.
 
-- Camuflada | Comum | 1 | 60 L | Nenhum | Vantagem em Furtividade em terreno compatível com o padrão da armadura.
+- Camuflada | Comum | 1 | 70 L | Nenhum | Vantagem em Furtividade em terreno compatível com o padrão da armadura.
 
-- Trilha Serena | Comum | 1 | 60 L | Nenhum | Ao terminar um descanso completo vestindo a armadura, reduza 1 ponto de Cansaço além do que a qualidade do descanso já tira.
+- Trilha Serena | Comum | 1 | 70 L | Nenhum | Ao terminar um descanso completo vestindo a armadura, reduza 1 ponto de Cansaço além do que a qualidade do descanso já tira.
 
-- Flexível | Comum | Técnica | 25 L | Nenhum | Reduz em 1 a penalidade de armadura sobre Acrobacia, Atletismo e Furtividade.
+- Flexível | Comum | Técnica | 18 L | Nenhum | Reduz em 1 a penalidade de armadura sobre Acrobacia, Atletismo e Furtividade.
 
-- Ajustável | Comum | Técnica | 25 L | Nenhum | Se adapta automaticamente ao corpo de quem veste, sem custo de reforma.
+- Ajustável | Comum | Técnica | 18 L | Nenhum | Se adapta automaticamente ao corpo de quem veste, sem custo de reforma.
 
-- Bastião | Marcial | 2 | 180 L | Constituição 14 | Reduza 1d4 do dano físico recebido a cada ataque, aplicado depois da Resistência.
+- Bastião | Marcial | 2 | 290 L | Constituição 14 | Reduza 1d4 do dano físico recebido a cada ataque, aplicado depois da Resistência.
 
-- Regenerativa | Marcial | 2 | 180 L | Nível total 7 | Quem veste recupera 1d4 PV no início do próprio turno, uma vez por rodada.
+- Regenerativa | Marcial | 2 | 290 L | Nível total 7 | Quem veste recupera 1d4 PV no início do próprio turno, uma vez por rodada.
 
-- Estabilizadora | Marcial | 2 | 180 L | Nenhum | Vantagem em testes para resistir a ser derrubado, empurrado ou agarrado.
+- Estabilizadora | Marcial | 2 | 290 L | Nenhum | Vantagem em testes para resistir a ser derrubado, empurrado ou agarrado.
 
-- Âncora de Sanidade | Marcial | 2 | 180 L | Sabedoria 14 | Resistência 3 contra dano Mental e vantagem nos testes para não perder Sanidade.
+- Âncora de Sanidade | Marcial | 2 | 290 L | Sabedoria 14 | Resistência 3 contra dano Mental e vantagem nos testes para não perder Sanidade.
 
-- Retaliadora | Marcial | 3 | 450 L | Constituição 14 | Ao sofrer um crítico, quem veste devolve 1 dado de dano de impacto no atacante, sem gastar reação.
+- Retaliadora | Marcial | 3 | 1200 L | Constituição 14 | Ao sofrer um crítico, quem veste devolve 1 dado de dano de impacto no atacante, sem gastar reação.
 
-- Casca do Fim | Marcial | 3 | 450 L | Nível total 10 | Enquanto estiver em Morrendo, a DT dos seus testes de Morrendo cai 3.
+- Casca do Fim | Marcial | 3 | 1200 L | Nível total 10 | Enquanto estiver em Morrendo, a DT dos seus testes de Morrendo cai 3.
 
 Escudos
 9 modificações · 4 comuns · 5 marciais
 
 - Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
-- Reforçado | Comum | 1 | 60 L | Nenhum | +1d4 na redução de dano da reação Bloqueio.
+- Reforçado | Comum | 1 | 70 L | Nenhum | +1d4 na redução de dano da reação Bloqueio.
 
-- Espinhado | Comum | 1 | 60 L | Nenhum | Quem te acerta em combate corpo a corpo sofre 1d4 de dano perfurante.
+- Espinhado | Comum | 1 | 70 L | Nenhum | Quem te acerta em combate corpo a corpo sofre 1d4 de dano perfurante.
 
-- Leve | Comum | Técnica | 25 L | Nenhum | Não soma penalidade de armadura sobre Acrobacia.
+- Leve | Comum | Técnica | 18 L | Nenhum | Não soma penalidade de armadura sobre Acrobacia.
 
-- Retrátil | Comum | Técnica | 25 L | Nenhum | Pode ser guardado ou sacado como uma ação livre.
+- Retrátil | Comum | Técnica | 18 L | Nenhum | Pode ser guardado ou sacado como uma ação livre.
 
-- Amplo | Marcial | 2 | 180 L | Nenhum | A reação Proteger passa a cobrir dois aliados adjacentes em vez de um.
+- Amplo | Marcial | 2 | 290 L | Nenhum | A reação Proteger passa a cobrir dois aliados adjacentes em vez de um.
 
-- Repulsor | Marcial | 2 | 180 L | Nenhum | Ao usar Bloqueio com sucesso, empurre o atacante 1,5 m para longe de você.
+- Repulsor | Marcial | 2 | 290 L | Nenhum | Ao usar Bloqueio com sucesso, empurre o atacante 1,5 m para longe de você.
 
-- Vingativo | Marcial | 2 | 180 L | Nenhum | Ao usar Bloqueio, cause 1d6 de dano de impacto no atacante, sem gastar ação extra.
+- Vingativo | Marcial | 2 | 290 L | Nenhum | Ao usar Bloqueio, cause 1d6 de dano de impacto no atacante, sem gastar ação extra.
 
-- Guarda de Fluxo | Marcial | 2 | 180 L | Fluxo 12 | Bloqueio passa a funcionar também contra dano de Energia, incluindo o que vem de Fluxos.
+- Guarda de Fluxo | Marcial | 2 | 290 L | Fluxo 12 | Bloqueio passa a funcionar também contra dano de Energia, incluindo o que vem de Fluxos.
 
-- Contratempo | Marcial | 3 | 450 L | Nível total 10 | Depois de um Contra-Ataque bem-sucedido, recupere sua reação. Uma vez por rodada.
+- Contratempo | Marcial | 3 | 1200 L | Nível total 10 | Depois de um Contra-Ataque bem-sucedido, recupere sua reação. Uma vez por rodada.
 
 Itens gerais e mágicos
 12 modificações · 7 comuns · 5 marciais
 
 - Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
-- Vinculado | Comum | 1 | 60 L | Nenhum | Só funciona plenamente nas mãos de quem o item reconhece como dono. Qualquer outro sofre −2 ao usá-lo.
+- Vinculado | Comum | 1 | 70 L | Nenhum | Só funciona plenamente nas mãos de quem o item reconhece como dono. Qualquer outro sofre −2 ao usá-lo.
 
-- Ressonante | Comum | 1 | 60 L | Nenhum | +1 numa perícia específica, ligada à função do item.
+- Ressonante | Comum | 1 | 70 L | Nenhum | +1 numa perícia específica, ligada à função do item.
 
-- Portátil | Comum | Técnica | 25 L | Nenhum | Reduz em 1 os espaços de carga que o item ocupa, mínimo 1.
+- Portátil | Comum | Técnica | 18 L | Nenhum | Reduz em 1 os espaços de carga que o item ocupa, mínimo 1.
 
-- Autoidentificável | Comum | Técnica | 25 L | Nenhum | Revela sozinho suas propriedades na primeira vez que é empunhado ou vestido.
+- Autoidentificável | Comum | Técnica | 18 L | Nenhum | Revela sozinho suas propriedades na primeira vez que é empunhado ou vestido.
 
-- Recarregável | Comum | Técnica | 25 L | Nenhum | Se tiver cargas, recupera todas elas após um descanso completo.
+- Recarregável | Comum | Técnica | 18 L | Nenhum | Se tiver cargas, recupera todas elas após um descanso completo.
 
-- Sensível a Fluxo | Comum | Técnica | 25 L | Nenhum | Brilha, vibra ou esquenta perto de magia ou de um Fluxo específico escolhido na criação.
+- Sensível a Fluxo | Comum | Técnica | 18 L | Nenhum | Brilha, vibra ou esquenta perto de magia ou de um Fluxo específico escolhido na criação.
 
-- Instável | Comum | Técnica | 25 L | Nenhum | 5% de chance de gerar um efeito colateral menor a cada uso. O Mestre define qual.
+- Instável | Comum | Técnica | 18 L | Nenhum | 5% de chance de gerar um efeito colateral menor a cada uso. O Mestre define qual.
 
-- Protetor | Marcial | 2 | 180 L | Nenhum | Resistência 4 contra um tipo de dano escolhido na criação do item, enquanto estiver equipado.
+- Protetor | Marcial | 2 | 290 L | Nenhum | Resistência 4 contra um tipo de dano escolhido na criação do item, enquanto estiver equipado.
 
-- Vitalício | Marcial | 2 | 180 L | Nenhum | Uma vez por dia, ao chegar a 0 PV, recupere 1d6 PV automaticamente antes de cair inconsciente.
+- Vitalício | Marcial | 2 | 290 L | Nenhum | Uma vez por dia, ao chegar a 0 PV, recupere 1d6 PV automaticamente antes de cair inconsciente.
 
-- Amplificador | Marcial | 2 | 180 L | Nenhum | Uma vez por cena, role com vantagem um teste de perícia específico ligado à função do item.
+- Amplificador | Marcial | 2 | 290 L | Nenhum | Uma vez por cena, role com vantagem um teste de perícia específico ligado à função do item.
 
-- Reserva de Fluxo | Marcial | 2 | 180 L | Fluxo 12 | Guarda até 5 de Mana. Você pode gastar dessa reserva no lugar da sua, e ela enche de novo a cada descanso completo.
+- Reserva de Fluxo | Marcial | 2 | 290 L | Fluxo 12 | Guarda até 5 de Mana. Você pode gastar dessa reserva no lugar da sua, e ela enche de novo a cada descanso completo.
 
-- Selado | Marcial | 3 | 450 L | Nível total 10 e Misticismo treinado | O item carrega um Selo inscrito, escolhido na criação. Uma vez por dia ele dispara sem gastar Mana nem exigir teste de inscrição.
+- Selado | Marcial | 3 | 1200 L | Nível total 10 e Misticismo treinado | O item carrega um Selo inscrito, escolhido na criação. Uma vez por dia ele dispara sem gastar Mana nem exigir teste de inscrição.
 
 Isso aqui é ponto de partida, não lista fechada. Modificação nova passa, desde que respeite o valor máximo por efeito da raridade e o nível condizente com o equipamento.
 
@@ -2482,6 +2482,52 @@ São quatro moedas, e elas não são degraus da mesma escada. Cada uma circula n
 
 - **Créditos Sombrios (♆):** a moeda do submundo. Circula no mercado negro, e quem aceita costuma cobrar mais que o preço.
 
+### O que o dinheiro vale
+
+Um trabalhador comum ganha **300 Lunaris por mês**, cerca de 10 por dia. Esse é o salário mínimo do Jardim, e todo preço do catálogo pode ser lido como uma fração ou um múltiplo dele.
+
+- Gasto do cotidiano | Custo
+
+- Refeição simples | 1 Lunaris
+
+- Noite em estalagem | 3 Lunaris
+
+- Viagem de carroça, por dia | 5 Lunaris
+
+- Quarto alugado, por mês | 60 Lunaris
+
+- Casa alugada, por mês | 200 Lunaris
+
+- Salário de artesão ou soldado, por mês | 750 Lunaris
+
+- Salário de especialista ou oficial, por mês | 2.000 Lunaris
+
+### A escada dos preços
+
+Cada degrau de raridade custa quatro vezes o degrau anterior. Os valores abaixo valem para uma arma ou uma armadura, que servem de régua para o catálogo inteiro. Equipamento sai um pouco abaixo dessa régua, consumível bem abaixo, veículo e propriedade bem acima, sempre calculados a partir do mesmo número.
+
+- Raridade | Preço de referência | Em salário mínimo
+
+- Comum | 30 Lunaris | 3 dias de trabalho
+
+- Incomum | 120 Lunaris | 12 dias
+
+- Raro | 480 Lunaris | mês e meio
+
+- Épico | 20 Solares | 7 meses
+
+- Lendário | 80 Solares | 2 anos e 3 meses
+
+- Mítico | 100 Fragmentos | fora de alcance
+
+- Relíquia da Criação | 400 Fragmentos | fora de alcance
+
+Dentro de cada faixa o preço vai da metade ao dobro da referência, então os degraus se encostam sem deixar vão e sem se cruzar. Uma arma rara custa sempre mais que qualquer arma incomum, e sempre menos que qualquer arma épica.
+
+### O muro dos Fragmentos
+
+Entre o topo do Lendário, 160 Solares, e o piso do Mítico, 60 Fragmentos, existe um salto de quase vinte vezes que nenhum salário atravessa. Isso é proposital. Mítico e Relíquia da Criação circulam numa economia própria e chegam até você por recompensa do Mestre, por negócio no mercado negro ou por pagamento de quem não usa moeda comum. Acumular Lunaris a vida inteira deixa você parado diante desse muro.
+
 ### Câmbio
 
 O Banqueiro converte qualquer par de moedas no Discord, sempre passando pelo Solar. Toda conversão cobra 2% de taxa do banco, arredondada a favor da casa.
@@ -2677,19 +2723,21 @@ Estas regras podem ser usadas com qualquer organização da campanha, independen
 
 ### Facções documentadas
 
-Banco Lunar e AstraTech pertencem ao cenário atual. As outras três organizações são propostas e ainda não fazem parte do cânone.
+Organizações que atuam além de uma Árvore só, e por isso podem aparecer em qualquer campanha. Cada uma guarda o próprio Prestígio.
 
-- Facção | Tipo | Alcance | Atuação pública | Estado
+- Facção | Tipo | Alcance | Atuação pública
 
-- Banco Lunar | instituicao financeira | Todas as Árvores | Guarda, administra e investe bens. Também fornece recursos a clientes capazes de pagar. | Canônica
+- Banco Lunar | instituicao financeira | Todas as Árvores | Guarda, administra e investe bens. Também fornece recursos a clientes capazes de pagar.
 
-- AstraTech | corporacao tecnologica | Múltiplas Árvores | Desenvolve tecnologia arcana e mantém projetos capazes de operar além de Astraluna. | Canônica
+- AstraTech | corporacao tecnologica | Múltiplas Árvores | Desenvolve tecnologia arcana e mantém projetos capazes de operar além de Astraluna.
 
-- Caravana do Limiar | rede de transporte | Rotas acessíveis entre Árvores | Transporta pessoas, cargas e mensagens por passagens dimensionais conhecidas. Não atravessa rotas seladas. | Proposta
+- Caravana do Limiar | rede de transporte | Rotas acessíveis entre Árvores | Transporta pessoas, cargas e mensagens por passagens dimensionais conhecidas. Não atravessa rotas seladas.
 
-- Vigília das Raízes | ordem de contencao | Todas as Árvores alcançáveis | Investiga rupturas dimensionais, evacua áreas ameaçadas e contém criaturas que atravessam fronteiras entre Árvores. | Proposta
+- Vigília das Raízes | ordem de contencao | Todas as Árvores alcançáveis | Investiga rupturas dimensionais, evacua áreas ameaçadas e contém criaturas que atravessam fronteiras entre Árvores.
 
-- Arquivo Prismático | instituicao de pesquisa | Núcleos em diferentes Árvores | Preserva registros, identifica artefatos e reúne informações verificadas sobre fenômenos de diferentes Árvores. | Proposta
+- Arquivo Prismático | instituicao de pesquisa | Núcleos em diferentes Árvores | Preserva registros, identifica artefatos e reúne informações verificadas sobre fenômenos de diferentes Árvores.
+
+- Guilda dos Caçadores | guilda de cacadores | Todas as Árvores | Aceita contrato para capturar criminoso procurado e para abater criatura vinda do Vazio. Paga por entrega confirmada, cobra caro por serviço urgente e mantém quadro de procurados aberto a quem quiser tentar.
 
 ### Prestígio
 

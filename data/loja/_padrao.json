@@ -1,13 +1,11 @@
 {
   "descricao": "Convenção de campos pra conteúdo da Loja (arsenal, veículos, bestiário, drops). Como no Mundo, isso é anotação minha pra você - não é importável como está (não tem tipo/id/titulo/conteudo no nível raiz). Pra importar de verdade, crie um arquivo com uma entrada só ({tipo,id,titulo,conteudo}) ou um pacote ({\"entradas\":[...]}), no formato de cada exemplo em '_exemplos' abaixo.",
-
   "schema_base": {
     "tipo": "um de: arma, armadura, equipamento, modificacao, consumivel, artefato, fruto-eden, implante, veiculo, veiculo-completo, monstro ou drop",
     "id": "identificador único, slug (ex.: 'espada-de-longinus') - usado na URL e em cross-links de outras entradas",
     "titulo": "nome exibido no card e no modal",
     "conteudo": "objeto livre - qualquer campo vira uma linha genérica no modal, exceto os curados abaixo"
   },
-
   "campos_curados_em_conteudo": {
     "descricao": "Prosa obrigatória de abertura do card e do modal. Entrada sem descrição reprova na auditoria do catálogo.",
     "imagem": "URL ou caminho relativo (ex.: '../assets/img/loja/espada-longinus.png') pra ilustração do item. Ausente → o card/modal mostra um símbolo da categoria num fundo com brilho, em vez de imagem quebrada.",
@@ -18,12 +16,9 @@
     "nivel": "string ou número, vira selo 'Nv. X' no card e no modal. Faz sentido em qualquer categoria (não só Bestiário) - ex. um veículo pode pedir nível mínimo de pilotagem.",
     "classe": "string curta, vira selo próprio no card e no modal (ex. classe de uma criatura do Bestiário). Também não é exclusivo de nenhuma categoria."
   },
-
   "acao_por_categoria": "A interface atual usa os modos Comprar, Vender e Recompensas. A categoria é normalizada pelo adaptador src/services/lojaCatalogService.ts, enquanto preços e transações são validados pelo backend.",
-
-  "nota_moedas": "A Loja exibe separadamente os saldos de Solares, Lunaris, Fragmentos de Estrela e Créditos Sombrios. Cada item possui uma única moeda nativa, definida no catálogo e validada novamente pelo servidor na compra e na revenda.",
-  "politica_precos": "100 Lunaris equivalem a 1 Solar. Use Lunaris para equipamentos cotidianos, armas e armaduras convencionais até Raro, modificações e veículos; use Solares para bens mágicos, militares ou tecnológicos de alto valor; preserve Fragmentos de Estrela e Créditos Sombrios para seus mercados especiais.",
-
+  "nota_moedas": "A Loja exibe separadamente os saldos de Solares, Lunaris, Fragmentos de Estrela e Creditos Sombrios. Cada item possui uma unica moeda nativa, validada pelo servidor na compra e na revenda. Implante so existe em Creditos Sombrios, Fruto do Eden so em Fragmentos e modificacao so em Lunaris; fora esses tres, a raridade decide, e qualquer preco acima de 20 Solares (2.000 Lunaris) sobe para Solares mesmo numa raridade baixa, porque nao cabe num bolso de Lunaris.",
+  "politica_precos": "A escala oficial vive em data/economia/escala-precos-v1.json e e aplicada por tools/normalize-shop-prices.mjs. Ancora: salario minimo de 300 Lunaris por mes. A escada de raridade multiplica por 4 a cada degrau (Comum 30 Lunaris, Incomum 120, Raro 480, Epico 20 Solares, Lendario 80 Solares, Mitico 100 Fragmentos, Reliquia da Criacao 400 Fragmentos), com banda de 0,5x a 2,0x da referencia. Cada categoria multiplica esse numero: arma e armadura 1,0; equipamento 0,8; modificacao 0,6; consumivel 0,35; drop 0,25; artefato 1,5; veiculo 5; veiculo completo 20; monstro 20; implante 25; propriedade 40. Nao escreva preco no olho: rode o normalizador.",
   "schema_moedas": {
     "descricao": "Referência das moedas aceitas pelo catálogo e pela carteira. Moedas não são importadas pela Loja.",
     "nome": "Solares | Lunaris | Fragmentos de Estrela | Créditos Sombrios",
@@ -31,16 +26,30 @@
     "saldo": "Inteiro não negativo mantido pelo backend econômico.",
     "duplicidade": "Cada personagem possui no máximo um saldo por moeda e campanha."
   },
-
   "_exemplo_moedas": {
     "moedas": [
-      { "nome": "Solares", "simbolo": "SOL", "saldo": 15 },
-      { "nome": "Lunaris", "simbolo": "LUN", "saldo": 40 },
-      { "nome": "Fragmentos de Estrela", "simbolo": "FRG", "saldo": 2 },
-      { "nome": "Créditos Sombrios", "simbolo": "CRD", "saldo": 0 }
+      {
+        "nome": "Solares",
+        "simbolo": "SOL",
+        "saldo": 15
+      },
+      {
+        "nome": "Lunaris",
+        "simbolo": "LUN",
+        "saldo": 40
+      },
+      {
+        "nome": "Fragmentos de Estrela",
+        "simbolo": "FRG",
+        "saldo": 2
+      },
+      {
+        "nome": "Créditos Sombrios",
+        "simbolo": "CRD",
+        "saldo": 0
+      }
     ]
   },
-
   "_exemplos": [
     {
       "tipo": "arma",
@@ -52,7 +61,10 @@
         "raridade": "lendario",
         "preco": 450,
         "nivelMinimoLoja": 4,
-        "atributos": ["+15 Ataque Físico", "Causa queimadura por 3 turnos"],
+        "atributos": [
+          "+15 Ataque Físico",
+          "Causa queimadura por 3 turnos"
+        ],
         "dano": "2d8 + 15",
         "tipo_de_dano": "Perfurante / Fogo"
       }
@@ -67,7 +79,9 @@
         "preco": 180,
         "nivelMinimoLoja": 2,
         "nivel": 3,
-        "atributos": ["Velocidade x2 em terreno aberto"],
+        "atributos": [
+          "Velocidade x2 em terreno aberto"
+        ],
         "capacidade": "1 piloto + 1 passageiro"
       }
     },
@@ -82,7 +96,10 @@
         "nivelMinimoLoja": 3,
         "nivel": 8,
         "classe": "Aberração do Vazio",
-        "atributos": ["Invisível no escuro", "Imune a dano físico"]
+        "atributos": [
+          "Invisível no escuro",
+          "Imune a dano físico"
+        ]
       }
     },
     {
@@ -92,13 +109,13 @@
       "conteudo": {
         "descricao": "Ainda instável. Precisa ser lapidado antes de alimentar qualquer Fluxo.",
         "raridade": "incomum",
-        "preco": { "Lunaris": 40 },
+        "preco": {
+          "Lunaris": 40
+        },
         "nivelMinimoLoja": 1
       }
     }
   ],
-
   "campos_com_underscore": "Qualquer campo começando com '_' (como este e '_exemplos') é anotação minha pra você - não faz parte do schema de import. O sistema ignora se importar do jeito que está.",
-
   "nota_bestiario": "Bestiário tecnicamente já é a categoria de 'seres contratáveis' - a descrição da categoria (categorias.js) fala em 'criaturas, monstros e ameaças', mas o botão 'Contratar' e os campos nivel/classe tratam essas entradas como aliados/invocações que se juntam ao grupo, não só como enciclopédia de ameaças."
 }

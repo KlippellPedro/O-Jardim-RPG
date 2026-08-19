@@ -288,7 +288,7 @@ test('modificações viram categoria própria, com nível de loja pelo tipo da m
 
   const afiada = modificacoes.find((item) => item.id === 'mod-afiada');
   assert.ok(afiada);
-  assert.equal(afiada.valorOriginal, 60);
+  assert.equal(afiada.valorOriginal, 70);
   assert.match(afiada.descricao, /dado de dano/);
   assert.equal(itemCorrespondeSubfiltro(afiada, 'Modificações', 'Armas'), true);
   assert.equal(itemCorrespondeSubfiltro(afiada, 'Modificações', 'Escudos'), false);
@@ -305,7 +305,7 @@ test('todo item declara a loja mínima e a Vila fica restrita ao catálogo simpl
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
 
-  assert.equal(entradas.length, 462);
+  assert.equal(entradas.length, 469);
   assert.ok(entradas.every((item) => Number.isInteger(nivel(item)) && nivel(item) >= 1 && nivel(item) <= 4));
   assert.ok([1, 2, 3, 4].every((loja) => entradas.some((item) => nivel(item) === loja)));
 

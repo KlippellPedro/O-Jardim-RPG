@@ -2091,6 +2091,40 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Créditos Sombrios (♆):</strong> a moeda do submundo. Circula no mercado negro, e quem aceita costuma cobrar mais que o preço.</li>
       </ul>
 
+      <h3 class="regras-subtitle">O que o dinheiro vale</h3>
+      <p>Um trabalhador comum ganha <strong>300 Lunaris por mês</strong>, cerca de 10 por dia. Esse é o salário mínimo do Jardim, e todo preço do catálogo pode ser lido como uma fração ou um múltiplo dele.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Gasto do cotidiano</th><th>Custo</th></tr></thead>
+        <tbody>
+          <tr><td>Refeição simples</td><td>1 Lunaris</td></tr>
+          <tr><td>Noite em estalagem</td><td>3 Lunaris</td></tr>
+          <tr><td>Viagem de carroça, por dia</td><td>5 Lunaris</td></tr>
+          <tr><td>Quarto alugado, por mês</td><td>60 Lunaris</td></tr>
+          <tr><td>Casa alugada, por mês</td><td>200 Lunaris</td></tr>
+          <tr><td>Salário de artesão ou soldado, por mês</td><td>750 Lunaris</td></tr>
+          <tr><td>Salário de especialista ou oficial, por mês</td><td>2.000 Lunaris</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 class="regras-subtitle">A escada dos preços</h3>
+      <p>Cada degrau de raridade custa quatro vezes o degrau anterior. Os valores abaixo valem para uma arma ou uma armadura, que servem de régua para o catálogo inteiro. Equipamento sai um pouco abaixo dessa régua, consumível bem abaixo, veículo e propriedade bem acima, sempre calculados a partir do mesmo número.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Raridade</th><th>Preço de referência</th><th>Em salário mínimo</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Comum</strong></td><td>30 Lunaris</td><td>3 dias de trabalho</td></tr>
+          <tr><td><strong>Incomum</strong></td><td>120 Lunaris</td><td>12 dias</td></tr>
+          <tr><td><strong>Raro</strong></td><td>480 Lunaris</td><td>mês e meio</td></tr>
+          <tr><td><strong>Épico</strong></td><td>20 Solares</td><td>7 meses</td></tr>
+          <tr><td><strong>Lendário</strong></td><td>80 Solares</td><td>2 anos e 3 meses</td></tr>
+          <tr><td><strong>Mítico</strong></td><td>100 Fragmentos</td><td>fora de alcance</td></tr>
+          <tr><td><strong>Relíquia da Criação</strong></td><td>400 Fragmentos</td><td>fora de alcance</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Dentro de cada faixa o preço vai da metade ao dobro da referência, então os degraus se encostam sem deixar vão e sem se cruzar. Uma arma rara custa sempre mais que qualquer arma incomum, e sempre menos que qualquer arma épica.</p>
+
+      <h3 class="regras-subtitle">O muro dos Fragmentos</h3>
+      <p>Entre o topo do Lendário, 160 Solares, e o piso do Mítico, 60 Fragmentos, existe um salto de quase vinte vezes que nenhum salário atravessa. Isso é proposital. Mítico e Relíquia da Criação circulam numa economia própria e chegam até você por recompensa do Mestre, por negócio no mercado negro ou por pagamento de quem não usa moeda comum. Acumular Lunaris a vida inteira deixa você parado diante desse muro.</p>
+
       <h3 class="regras-subtitle">Câmbio</h3>
       <p>O Banqueiro converte qualquer par de moedas no Discord, sempre passando pelo Solar. Toda conversão cobra 2% de taxa do banco, arredondada a favor da casa.</p>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -2123,6 +2157,92 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Um Fragmento de Estrela vale 5.000 Lunaris. Entregar um punhado deles é entregar a chave do Banco Lunar, mesmo que você não tenha aberto o Banco Lunar.</li>
         <li>Um Crédito Sombrio vale 200 Lunaris e é a única porta para implante. Se você não quer implante na campanha, não distribua Créditos.</li>
         <li>A conversão funciona nos dois sentidos. Não existe recompensa em moeda alta que não vire poder de compra em moeda baixa: leve isso em conta antes de dar Fragmento como prêmio simbólico.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Quanto entregar por sessão</h3>
+      <p>A verba abaixo é por jogador, por sessão, e mira uma coisa só: quatro sessões devem pagar uma peça nova da raridade que aquela faixa de nível já deveria estar usando. Dobre num fim de arco e triplique num fim de temporada.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Nível</th><th>Raridade que o grupo usa</th><th>Por sessão, por jogador</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1 a 4</strong></td><td>Comum</td><td>10 Lunaris</td></tr>
+          <tr><td><strong>5 a 9</strong></td><td>Incomum</td><td>30 Lunaris</td></tr>
+          <tr><td><strong>10 a 14</strong></td><td>Raro</td><td>120 Lunaris</td></tr>
+          <tr><td><strong>15 a 19</strong></td><td>Raro e Épico</td><td>500 Lunaris</td></tr>
+          <tr><td><strong>20 a 24</strong></td><td>Épico</td><td>20 Solares</td></tr>
+          <tr><td><strong>25 a 29</strong></td><td>Épico e Lendário</td><td>50 Solares</td></tr>
+          <tr><td><strong>30 a 34</strong></td><td>Lendário</td><td>200 Solares</td></tr>
+          <tr><td><strong>35 a 40</strong></td><td>Lendário e acima</td><td>500 Solares</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Se o grupo está sentado numa pilha de dinheiro sem ter o que comprar, confira o patamar de Loja que você abriu antes de mexer na verba. Os dois números precisam andar juntos.</p>
+      <p>Um implante custa de 20 a 1.000 Créditos Sombrios conforme a raridade, então distribuir Crédito é decidir o ritmo de acesso ao mercado negro. Trate a mesma escada de quatro vezes por degrau ao improvisar preço de qualquer coisa que não esteja no catálogo: parta da referência da raridade e ajuste pela categoria.</p>
+
+      <h3 class="regras-subtitle">Quanto cada classe social tem</h3>
+      <p>A tabela responde uma pergunta que aparece toda sessão: quanto dinheiro esse sujeito tem no bolso. Use a coluna fixa quando precisar responder na hora, e role os dados quando quiser que o número surpreenda você também. A última coluna é tudo que a pessoa possui somado, e serve para resgate, chantagem, penhora e negócio grande.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Classe social</th><th>Ganha por mês</th><th>Tem no bolso</th><th>Rolando</th><th>Patrimônio</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Miserável</strong><br><small>mendigo, órfão, fugitivo</small></td><td>nada</td><td>5 Lunaris</td><td>1d10 Lunaris</td><td>nada</td></tr>
+          <tr><td><strong>Servo ou aprendiz</strong><br><small>criado, estagiário de oficina</small></td><td>150 Lunaris</td><td>50 Lunaris</td><td>1d100 Lunaris</td><td>200 Lunaris</td></tr>
+          <tr><td><strong>Trabalhador comum</strong><br><small>lavrador, guarda de portão, taverneiro</small></td><td>300 Lunaris</td><td>100 Lunaris</td><td>2d100 Lunaris</td><td>1.500 Lunaris</td></tr>
+          <tr><td><strong>Artesão ou soldado veterano</strong><br><small>ferreiro dono da forja, sargento</small></td><td>750 Lunaris</td><td>250 Lunaris</td><td>5d100 Lunaris</td><td>60 Solares</td></tr>
+          <tr><td><strong>Especialista ou oficial</strong><br><small>médico, capitão, alquimista com nome</small></td><td>2.000 Lunaris</td><td>7 Solares</td><td>2d6 Solares</td><td>250 Solares</td></tr>
+          <tr><td><strong>Mestre de guilda ou nobre menor</strong><br><small>senhor de vila, banqueiro local</small></td><td>8.000 Lunaris</td><td>28 Solares</td><td>5d10 Solares</td><td>1.200 Solares</td></tr>
+          <tr><td><strong>Casa nobre ou alto clero</strong><br><small>casa antiga, arcebispo</small></td><td>30.000 Lunaris</td><td>100 Solares</td><td>2d100 Solares</td><td>6.000 Solares</td></tr>
+          <tr><td><strong>Realeza de reino</strong><br><small>Durin II, Augustos Castilla, quem senta num trono</small></td><td>1.000 Solares</td><td>7 Fragmentos</td><td>2d6 Fragmentos</td><td>400 Fragmentos</td></tr>
+          <tr><td><strong>Dono de Dimensão</strong><br><small>Grimm, e quem governa uma Dimensão inteira</small></td><td>4.000 Solares</td><td>28 Fragmentos</td><td>5d10 Fragmentos</td><td>1.600 Fragmentos</td></tr>
+          <tr><td><strong>Soberano</strong><br><small>uma das dez Cadeiras da assembleia</small></td><td>o que a Cadeira mandar</td><td>100 Fragmentos</td><td>2d100 Fragmentos</td><td>não se conta</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Cada degrau tem cerca de três vezes o dinheiro do anterior, no mesmo ritmo da escada de preços. Por isso a coluna do bolso já diz o que aquela pessoa consegue comprar: o trabalhador comum fecha um item Comum, o artesão alcança um Incomum, o nobre menor banca um Épico. Os dados também têm padrão, e ele se repete a cada troca de moeda: <strong>2d6, depois 5d10, depois 2d100</strong>. Se você lembrar dessa sequência, lembra da tabela inteira.</p>
+
+      <h3 class="regras-subtitle">Onde o dinheiro para de medir</h3>
+      <p>Da Realeza para cima a tabela muda de natureza, e vale saber por quê antes de usar as três últimas linhas.</p>
+      <ul class="regras-list">
+        <li><strong>Realeza ainda tem conta bancária.</strong> Um rei guarda tesouro, cobra imposto e pode ser roubado. Os 400 Fragmentos de patrimônio compram exatamente uma Relíquia da Criação, uma vez só, e é essa a régua: o patrimônio inteiro de um reino equivale a um único objeto do topo do catálogo.</li>
+        <li><strong>Dono de Dimensão possui o chão, não a bolsa.</strong> Os 1.600 Fragmentos são o que dá para liquidar sem desmontar a Dimensão. O resto é território, e território não entra em carteira. Grimm governa uma dimensão que muda de forma a cada visita, e ninguém consegue avaliar isso em moeda.</li>
+        <li><strong>Soberano requisita.</strong> Uma das dez Cadeiras não compra o que quer, ela manda buscar. Se um Soberano precisa de algo que os jogadores têm, o preço da conversa é político, e responder com número esvazia a cena.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">O Vazio entre as Árvores</h3>
+      <p>O Vazio é o espaço entre as Árvores, e é habitado. Toda organização de alcance amplo tem sede lá, por uma razão simples de logística: quem atravessa as dez Árvores não pode morar dentro de uma delas. Morar no Vazio funciona como endereço, e por isso não aparece como degrau na tabela acima. Ele atravessa a tabela inteira, do tripulante de carga ao dono do banco.</p>
+      <p><strong>É o Vazio que faz a moeda funcionar.</strong> O Banco Lunar fica lá, e é por isso que um Solar vale a mesma coisa nas dez Árvores: existe uma casa fora de todas elas garantindo o câmbio. O quarto patamar da Loja se chama Banco Lunar exatamente por isso, e é daí que vem o Fragmento de Estrela como moeda daquele balcão. Quem está no Vazio está na câmara de compensação do Jardim inteiro.</p>
+      <p><strong>Nada nasce no Vazio.</strong> Comida, água e ar sobem de dentro das Árvores, e a Caravana do Limiar cobra pelo transporte, então todo gasto cotidiano custa o triplo lá. Ao mesmo tempo o dinheiro que circula é o dobro do normal, porque o comércio de alto valor passa por ali. Ganha-se o dobro e gasta-se o triplo, e é essa conta que explica por que caçador nenhum se aposenta.</p>
+
+      <h3 class="regras-subtitle">Quanto as facções do Vazio pagam</h3>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Facção</th><th>Cargo</th><th>Vive como</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="3"><strong>Banco Lunar</strong></td><td>Escriturário de agência</td><td>Especialista ou oficial</td></tr>
+          <tr><td>Gerente de agência</td><td>Mestre de guilda ou nobre menor</td></tr>
+          <tr><td>Cabeça da casa</td><td>Soberano <small>(Amadheus Colona ocupa uma Cadeira)</small></td></tr>
+          <tr><td rowspan="2"><strong>Guilda dos Caçadores</strong></td><td>Caçador contratado</td><td>vive de contrato, sem salário fixo</td></tr>
+          <tr><td>Mestre de quadro</td><td>Especialista ou oficial</td></tr>
+          <tr><td rowspan="2"><strong>Caravana do Limiar</strong></td><td>Tripulante</td><td>Artesão ou soldado veterano</td></tr>
+          <tr><td>Mestre de caravana</td><td>Especialista ou oficial</td></tr>
+        </tbody>
+      </table></div>
+      <p>A Guilda paga por entrega confirmada, e a conta é simples: <strong>o contrato vale metade do preço de catálogo daquela criatura</strong>, e a Guilda fica com a outra metade. Para um alvo específico, pegue o preço dele na Loja e divida por dois. A tabela abaixo mostra a criatura típica de cada raridade, para quando você precisar de um número na hora. Urgência encarece para quem contrata, e nunca barateia para quem caça.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Alvo do contrato</th><th>Paga ao caçador</th><th>Em salário mínimo</th></tr></thead>
+        <tbody>
+          <tr><td>Criatura Comum</td><td>300 Lunaris</td><td>um mês</td></tr>
+          <tr><td>Criatura Incomum</td><td>11 Solares</td><td>quase quatro meses</td></tr>
+          <tr><td>Criatura Rara</td><td>50 Solares</td><td>um ano e meio</td></tr>
+          <tr><td>Criatura Épica</td><td>240 Solares</td><td>seis anos e meio</td></tr>
+          <tr><td>Criatura Lendária</td><td>1.100 Solares</td><td>trinta anos</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Aqui está a resposta para por que um grupo de aventureiros anda com dinheiro de nobre e origem de trabalhador: um único contrato de criatura Rara paga mais de um ano de salário mínimo. A contradição é boa matéria de cena, e o custo de vida triplicado do Vazio é o freio natural dela.</p>
+      <p class="regras-note">Nenhum desses quatro degraus se alcança acumulando. A verba de aventura topa em 500 Solares por jogador por sessão, então um grupo de quatro no nível 40 junta 40 Fragmentos por sessão, e chegar aos 400 de uma Realeza exigiria dez sessões sem ninguém gastar nada. Daqui para cima o acesso vem de título, conquista, pacto ou herança.</p>
+
+      <h3 class="regras-subtitle">Usando a tabela na mesa</h3>
+      <ul class="regras-list">
+        <li><strong>Lugar muda o resultado.</strong> Multiplique o que você rolou por 0,5 numa Feira de Vila e por 1,5 num Mercado Negro. O mesmo ofício rende diferente conforme onde é exercido. O patrimônio não muda, porque terra e ferramenta valem o que valem.</li>
+        <li><strong>Batedor de carteira leva o bolso, nunca o patrimônio.</strong> Um roubo bem sucedido contra um nobre menor rende 5d10 Solares, e não os 1.200 que ele tem em terras e contratos.</li>
+        <li><strong>Suborno mira o bolso de quem paga, não de quem recebe.</strong> Um guarda de portão vira a cara por algo perto de 100 Lunaris, que é o mês inteiro de bolso dele. Oferecer 5 Lunaris ofende, e oferecer 2.000 levanta a pergunta de onde saiu.</li>
+        <li><strong>Leitura inversa, para saber como um personagem parece.</strong> Compare a carteira dele com a coluna do bolso. Quem circula numa Feira de Vila com 2.000 Lunaris carrega vinte vezes o que um trabalhador local carrega, e alguém vai reparar.</li>
+        <li><strong>Aventureiro não é classe social.</strong> Um grupo de nível 20 anda com dinheiro de nobre e origem de trabalhador, e essa contradição é boa matéria de cena. Para a verba do grupo use a tabela por sessão acima, e para o mundo em volta use esta.</li>
       </ul>
 
       <h3 class="regras-subtitle">O Cofre e o roubo</h3>

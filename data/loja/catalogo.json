@@ -7,7 +7,7 @@
       "titulo": "Adaga",
       "conteudo": {
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 15
         },
         "raridade": "comum",
         "atributos": [
@@ -32,7 +32,7 @@
       "titulo": "Manopla",
       "conteudo": {
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 15
         },
         "raridade": "comum",
         "atributos": [
@@ -57,7 +57,7 @@
       "titulo": "Machadinha",
       "conteudo": {
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 15
         },
         "raridade": "comum",
         "atributos": [
@@ -82,7 +82,7 @@
       "titulo": "Clava",
       "conteudo": {
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 40
         },
         "raridade": "comum",
         "atributos": [
@@ -107,7 +107,7 @@
       "titulo": "Porrete",
       "conteudo": {
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 40
         },
         "raridade": "comum",
         "atributos": [
@@ -132,7 +132,7 @@
       "titulo": "Espada Curta",
       "conteudo": {
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 40
         },
         "raridade": "comum",
         "atributos": [
@@ -157,7 +157,7 @@
       "titulo": "Espada Longa",
       "conteudo": {
         "preco": {
-          "Lunaris": 10
+          "Lunaris": 60
         },
         "raridade": "comum",
         "atributos": [
@@ -182,7 +182,7 @@
       "titulo": "Lança",
       "conteudo": {
         "preco": {
-          "Lunaris": 10
+          "Lunaris": 60
         },
         "raridade": "comum",
         "atributos": [
@@ -207,7 +207,7 @@
       "titulo": "Tridente",
       "conteudo": {
         "preco": {
-          "Lunaris": 10
+          "Lunaris": 60
         },
         "raridade": "comum",
         "atributos": [
@@ -232,7 +232,7 @@
       "titulo": "Martelo Leve",
       "conteudo": {
         "preco": {
-          "Lunaris": 10
+          "Lunaris": 60
         },
         "raridade": "comum",
         "atributos": [
@@ -257,7 +257,7 @@
       "titulo": "Foice Curta",
       "conteudo": {
         "preco": {
-          "Lunaris": 10
+          "Lunaris": 60
         },
         "raridade": "comum",
         "atributos": [
@@ -282,7 +282,7 @@
       "titulo": "Nunchaku",
       "conteudo": {
         "preco": {
-          "Lunaris": 10
+          "Lunaris": 60
         },
         "raridade": "comum",
         "atributos": [
@@ -307,7 +307,7 @@
       "titulo": "Katana",
       "conteudo": {
         "preco": {
-          "Lunaris": 20
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "atributos": [
@@ -332,7 +332,7 @@
       "titulo": "Manopla Pesada",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -357,7 +357,7 @@
       "titulo": "Lança Longa",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -382,7 +382,7 @@
       "titulo": "Tridente Longo",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -407,7 +407,7 @@
       "titulo": "Martelo de Guerra",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -432,7 +432,7 @@
       "titulo": "Machado de Guerra",
       "conteudo": {
         "preco": {
-          "Lunaris": 35
+          "Lunaris": 240
         },
         "raridade": "raro",
         "atributos": [
@@ -457,7 +457,7 @@
       "titulo": "Espadão",
       "conteudo": {
         "preco": {
-          "Lunaris": 35
+          "Lunaris": 240
         },
         "raridade": "raro",
         "atributos": [
@@ -482,7 +482,7 @@
       "titulo": "Foice Longa",
       "conteudo": {
         "preco": {
-          "Lunaris": 35
+          "Lunaris": 240
         },
         "raridade": "raro",
         "atributos": [
@@ -507,7 +507,7 @@
       "titulo": "Marreta",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -532,7 +532,7 @@
       "titulo": "Machado Taurino",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -557,7 +557,7 @@
       "titulo": "Nunchaku Pesado",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -582,7 +582,7 @@
       "titulo": "Chicote",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -607,7 +607,7 @@
       "titulo": "Katana Longa",
       "conteudo": {
         "preco": {
-          "Lunaris": 45
+          "Lunaris": 400
         },
         "raridade": "raro",
         "atributos": [
@@ -632,7 +632,7 @@
       "titulo": "Arco Curto",
       "conteudo": {
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 15
         },
         "raridade": "comum",
         "atributos": [
@@ -660,7 +660,7 @@
       "titulo": "Besta",
       "conteudo": {
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 15
         },
         "raridade": "comum",
         "atributos": [
@@ -688,7 +688,7 @@
       "titulo": "Dardo",
       "conteudo": {
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 15
         },
         "raridade": "comum",
         "atributos": [
@@ -716,7 +716,7 @@
       "titulo": "Pistola",
       "conteudo": {
         "preco": {
-          "Lunaris": 12
+          "Lunaris": 60
         },
         "raridade": "incomum",
         "atributos": [
@@ -744,7 +744,7 @@
       "titulo": "Revolver",
       "conteudo": {
         "preco": {
-          "Lunaris": 15
+          "Lunaris": 65
         },
         "raridade": "incomum",
         "atributos": [
@@ -772,7 +772,7 @@
       "titulo": "Submetralhadora",
       "conteudo": {
         "preco": {
-          "Lunaris": 15
+          "Lunaris": 65
         },
         "raridade": "incomum",
         "atributos": [
@@ -800,7 +800,7 @@
       "titulo": "Mosquete",
       "conteudo": {
         "preco": {
-          "Lunaris": 10
+          "Lunaris": 60
         },
         "raridade": "comum",
         "atributos": [
@@ -828,7 +828,7 @@
       "titulo": "Fuzil de caça",
       "conteudo": {
         "preco": {
-          "Lunaris": 20
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "atributos": [
@@ -856,7 +856,7 @@
       "titulo": "Shuriken",
       "conteudo": {
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 40
         },
         "raridade": "comum",
         "atributos": [
@@ -884,7 +884,7 @@
       "titulo": "Kunai",
       "conteudo": {
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 40
         },
         "raridade": "comum",
         "atributos": [
@@ -912,7 +912,7 @@
       "titulo": "Zarabatana",
       "conteudo": {
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 40
         },
         "raridade": "comum",
         "atributos": [
@@ -940,7 +940,7 @@
       "titulo": "Arco Longo",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -968,7 +968,7 @@
       "titulo": "Besta pesada",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -996,7 +996,7 @@
       "titulo": "Dardo Envenenado",
       "conteudo": {
         "preco": {
-          "Lunaris": 40
+          "Lunaris": 310
         },
         "raridade": "raro",
         "atributos": [
@@ -1026,7 +1026,7 @@
       "titulo": "Espingarda",
       "conteudo": {
         "preco": {
-          "Lunaris": 65
+          "Lunaris": 830
         },
         "raridade": "raro",
         "atributos": [
@@ -1054,7 +1054,7 @@
       "titulo": "Fuzil de assalto",
       "conteudo": {
         "preco": {
-          "Lunaris": 45
+          "Lunaris": 400
         },
         "raridade": "raro",
         "atributos": [
@@ -1082,7 +1082,7 @@
       "titulo": "Shuriken Pesada",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -1110,7 +1110,7 @@
       "titulo": "Kunai Pesada",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -1137,7 +1137,9 @@
       "id": "thompson",
       "titulo": "Thompson",
       "conteudo": {
-        "preco": 130,
+        "preco": {
+          "Solares": 10
+        },
         "raridade": "epico",
         "atributos": [
           "3d10 de dano",
@@ -1163,7 +1165,9 @@
       "id": "minigun",
       "titulo": "Minigun",
       "conteudo": {
-        "preco": 250,
+        "preco": {
+          "Solares": 12
+        },
         "raridade": "epico",
         "atributos": [
           "3d12 de dano",
@@ -1189,7 +1193,9 @@
       "id": "awp",
       "titulo": "AWP",
       "conteudo": {
-        "preco": 280,
+        "preco": {
+          "Solares": 12
+        },
         "raridade": "epico",
         "atributos": [
           "3d12 de dano",
@@ -1215,7 +1221,9 @@
       "id": "bazuca",
       "titulo": "Bazuca",
       "conteudo": {
-        "preco": 500,
+        "preco": {
+          "Solares": 55
+        },
         "raridade": "lendario",
         "atributos": [
           "10d8+4d4 de dano",
@@ -1246,7 +1254,7 @@
       "conteudo": {
         "descricao": "+1 em uma perícia escolhida na criação do item.",
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 190
         },
         "raridade": "incomum",
         "espacos": 1,
@@ -1260,7 +1268,7 @@
       "conteudo": {
         "descricao": "Concede vantagem em uma perícia à escolha. (2 usos)",
         "preco": {
-          "Lunaris": 40
+          "Lunaris": 400
         },
         "raridade": "raro",
         "espacos": 1,
@@ -1274,7 +1282,7 @@
       "conteudo": {
         "descricao": "Aumenta a capacidade de carga em 5 espaços enquanto estiver equipada. Reduz o Movimento em 1 m.",
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "material": "Couro",
@@ -1289,7 +1297,7 @@
       "conteudo": {
         "descricao": "Aumenta a capacidade de carga em 10 espaços enquanto estiver equipado. Reduz o Movimento em 3 m.",
         "preco": {
-          "Lunaris": 18
+          "Lunaris": 200
         },
         "raridade": "raro",
         "material": "Couro Bom",
@@ -1304,7 +1312,7 @@
       "conteudo": {
         "descricao": "Prende uma criatura; escapar exige um teste contra DT 30.",
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 50
         },
         "raridade": "incomum",
         "material": "Ferro",
@@ -1319,7 +1327,7 @@
       "conteudo": {
         "descricao": "Pode aumentar a condição do local em 1.",
         "preco": {
-          "Lunaris": 12
+          "Lunaris": 100
         },
         "raridade": "incomum",
         "material": "Madeira",
@@ -1334,7 +1342,7 @@
       "conteudo": {
         "descricao": "Esfregar a pasta em um ferimento é uma ação completa e cura 2d4 pontos de vida.",
         "preco": {
-          "Lunaris": 10
+          "Lunaris": 85
         },
         "raridade": "incomum",
         "material": "Ervas",
@@ -1349,7 +1357,7 @@
       "conteudo": {
         "descricao": "Contém o básico para sobreviver na floresta: saco de dormir, corda, odre e ração de viagem para uma semana.",
         "preco": {
-          "Lunaris": 20
+          "Lunaris": 45
         },
         "raridade": "comum",
         "espacos": 2,
@@ -1363,7 +1371,7 @@
       "conteudo": {
         "descricao": "Ilumina um raio de 9 m. Uma carga de óleo dura 6 horas e custa 2 Lunaris.",
         "preco": {
-          "Lunaris": 6
+          "Lunaris": 11
         },
         "raridade": "comum",
         "material": "Metal/Vidro",
@@ -1378,7 +1386,7 @@
       "conteudo": {
         "descricao": "Existe em vários tamanhos, mas o odre mais comum comporta 1 litro de líquido.",
         "preco": {
-          "Lunaris": 2
+          "Lunaris": 3
         },
         "raridade": "comum",
         "material": "Couro",
@@ -1393,7 +1401,7 @@
       "conteudo": {
         "descricao": "Perfeita para longas viagens: uma porção alimenta uma pessoa por um dia.",
         "preco": {
-          "Lunaris": 1
+          "Lunaris": 2
         },
         "raridade": "comum",
         "material": "Carne Seca",
@@ -1408,7 +1416,7 @@
       "conteudo": {
         "descricao": "Um colchão e uma coberta finos o bastante para serem enrolados e amarrados.",
         "preco": {
-          "Lunaris": 4
+          "Lunaris": 7
         },
         "raridade": "comum",
         "material": "Couro/Algodão",
@@ -1423,7 +1431,7 @@
       "conteudo": {
         "descricao": "Concede Resistência 5 contra Frio ou Calor, escolhido na criação do item.",
         "preco": {
-          "Lunaris": 15
+          "Lunaris": 120
         },
         "raridade": "incomum",
         "material": "Tecido",
@@ -1438,7 +1446,7 @@
       "conteudo": {
         "descricao": "+5 em Nobreza e +1 de Status.",
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 590
         },
         "raridade": "raro",
         "material": "Tecido Excelente",
@@ -1453,7 +1461,7 @@
       "conteudo": {
         "descricao": "Guarda até 20 Lunaris de qualquer tipo sem ocupar espaço no inventário.",
         "preco": {
-          "Lunaris": 1
+          "Lunaris": 2
         },
         "raridade": "comum",
         "material": "Couro",
@@ -1467,7 +1475,9 @@
       "titulo": "Pingente Lunar",
       "conteudo": {
         "descricao": "Restaura 2d10 de Vida de todas as criaturas em um raio de 12 m e encerra seus efeitos negativos. (1 uso)",
-        "preco": 120,
+        "preco": {
+          "Solares": 8
+        },
         "raridade": "epico",
         "material": "Essência Lunar",
         "espacos": 1,
@@ -1480,7 +1490,9 @@
       "titulo": "Lente Arcana",
       "conteudo": {
         "descricao": "Permite ler qualquer escrita ou idioma através da lente. Uma vez por cena, sem gastar ação, identifique se um texto, símbolo, objeto ou local próximo é mágico.",
-        "preco": 150,
+        "preco": {
+          "Solares": 11
+        },
         "raridade": "epico",
         "material": "Cristal Arcano",
         "espacos": 1,
@@ -1493,7 +1505,9 @@
       "titulo": "Ampulheta do Tempo",
       "conteudo": {
         "descricao": "Uma vez por cena, ative a ampulheta sem gastar ação para receber uma Ação de Movimento adicional neste turno. Ela só pode ser usada para deslocamento e não concede ataque, conjuração ou Reação. Ao fim da cena, ganhe 1 Cansaço.",
-        "preco": 300,
+        "preco": {
+          "Solares": 32
+        },
         "raridade": "epico",
         "material": "Areia das Almas",
         "espacos": 1,
@@ -1510,7 +1524,9 @@
       "titulo": "Manto das Sombras",
       "conteudo": {
         "descricao": "+2 em Furtividade e pode se ocultar totalmente por 1 turno em áreas escuras.",
-        "preco": 250,
+        "preco": {
+          "Solares": 24
+        },
         "raridade": "epico",
         "categoria_loja": "Artefatos Mágicos",
         "material": "Seda Sombria",
@@ -1524,7 +1540,9 @@
       "titulo": "Anel da duplicata",
       "conteudo": {
         "descricao": "Ao lançar uma magia, ela sai uma segunda vez com 25% do efeito.",
-        "preco": 300,
+        "preco": {
+          "Solares": 32
+        },
         "raridade": "epico",
         "material": "Ouro Arcano",
         "espacos": 1,
@@ -1537,7 +1555,9 @@
       "titulo": "Livro dos Sussurros",
       "conteudo": {
         "descricao": "Concede vantagem em testes de Conhecimento e responde 1 pergunta por dia sobre o tema do livro.",
-        "preco": 220,
+        "preco": {
+          "Solares": 20
+        },
         "raridade": "epico",
         "material": "Couro Espectral",
         "espacos": 1,
@@ -1550,7 +1570,9 @@
       "titulo": "Pedra da Memória",
       "conteudo": {
         "descricao": "Permite relembrar qualquer evento vivido nos últimos 7 dias.",
-        "preco": 230,
+        "preco": {
+          "Solares": 21
+        },
         "raridade": "epico",
         "material": "Fluorita",
         "espacos": 1,
@@ -1563,7 +1585,9 @@
       "titulo": "Botas do Vento",
       "conteudo": {
         "descricao": "+3m de movimento e ignora penalidades de terreno difícil.",
-        "preco": 260,
+        "preco": {
+          "Solares": 26
+        },
         "raridade": "epico",
         "material": "Couro Etéreo",
         "espacos": 1,
@@ -1576,7 +1600,9 @@
       "titulo": "Máscara do Enganador",
       "conteudo": {
         "descricao": "Permite copiar a voz e aparência de alguém que você matou há até 1 mês.",
-        "preco": 260,
+        "preco": {
+          "Solares": 26
+        },
         "raridade": "epico",
         "material": "Osso Polido",
         "espacos": 1,
@@ -1589,7 +1615,9 @@
       "titulo": "Flor da Noite Eterna",
       "conteudo": {
         "descricao": "Consumida diretamente, restaura 50% da Vida total de uma criatura. Usada em um alimento, restaura 25% da Vida total de até 5 criaturas. (1 uso)",
-        "preco": 350,
+        "preco": {
+          "Solares": 38
+        },
         "raridade": "lendario",
         "material": "Essência Sombria",
         "espacos": 1,
@@ -1602,7 +1630,9 @@
       "titulo": "Relicário de Prata",
       "conteudo": {
         "descricao": "Concede +3 em testes de Vontade contra medo e contra possessão espiritual. Enquanto usado, você é imune a ficar Amedrontado por fontes espirituais (fantasmas, mortos-vivos ou entidades).",
-        "preco": 300,
+        "preco": {
+          "Solares": 32
+        },
         "raridade": "epico",
         "material": "Prata Pura",
         "espacos": 1,
@@ -1615,7 +1645,9 @@
       "titulo": "Olho de Golem",
       "conteudo": {
         "descricao": "Enquanto olhar através da pedra, você enxerga normalmente através de ilusões visuais e de escuridão mágica (não física) em um raio de 9 m, sem precisar de teste.",
-        "preco": 280,
+        "preco": {
+          "Solares": 29
+        },
         "raridade": "epico",
         "material": "Pedra Viva",
         "espacos": 1,
@@ -1628,7 +1660,9 @@
       "titulo": "Coroa do Eclipse",
       "conteudo": {
         "descricao": "Na criação da coroa, escolha dois atributos. Enquanto estiver equipada, ela concede +4 a esses dois atributos. As escolhas são permanentes e a Coroa exige aprovação do Mestre.",
-        "preco": 600,
+        "preco": {
+          "Solares": 85
+        },
         "raridade": "lendario",
         "material": "Ouro Corroído",
         "espacos": 1,
@@ -1647,7 +1681,9 @@
       "titulo": "Amuleto de Solari",
       "conteudo": {
         "descricao": "Concede um escudo de 150 de Vida. O escudo se restaura após 2 sessões.",
-        "preco": 800,
+        "preco": {
+          "Solares": 125
+        },
         "raridade": "lendario",
         "material": "Lágrima do Sol",
         "espacos": 1,
@@ -1660,7 +1696,9 @@
       "titulo": "Semente da Noite",
       "conteudo": {
         "descricao": "Plantada, após 1 minuto cria uma barreira orgânica de trevas que protege por 2 turnos (ou uma noite fora de combate).",
-        "preco": 310,
+        "preco": {
+          "Solares": 32
+        },
         "raridade": "lendario",
         "material": "Essência Noturna",
         "espacos": 1,
@@ -1673,7 +1711,9 @@
       "titulo": "Lanterna do Vigia",
       "conteudo": {
         "descricao": "Projeta uma luz espectral que revela seres espirituais num raio de 10m.",
-        "preco": 200,
+        "preco": {
+          "Solares": 17
+        },
         "raridade": "epico",
         "material": "Chama da Salamandra",
         "espacos": 1,
@@ -1686,7 +1726,9 @@
       "titulo": "Lágrima de Ferro",
       "conteudo": {
         "descricao": "Uma gota metálica que flutua ao redor do portador e absorve 50% do dano do primeiro ataque físico recebido. (1/dia)",
-        "preco": 360,
+        "preco": {
+          "Solares": 40
+        },
         "raridade": "lendario",
         "material": "Aço Vivo",
         "espacos": 1,
@@ -1699,7 +1741,9 @@
       "titulo": "Moeda do Enganador",
       "conteudo": {
         "descricao": "Lançada, cria uma duplicata ilusória do usuário por 1 turno. (3 usos)",
-        "preco": 270,
+        "preco": {
+          "Solares": 27
+        },
         "raridade": "epico",
         "material": "Ouro Clonado",
         "espacos": 1,
@@ -1712,7 +1756,9 @@
       "titulo": "Caixa da Melodia",
       "conteudo": {
         "descricao": "Aberta, emite uma canção inaudível que induz sono leve em todos a 6m (DT Vontade).",
-        "preco": 310,
+        "preco": {
+          "Solares": 32
+        },
         "raridade": "lendario",
         "material": "Madeira Negra",
         "espacos": 1,
@@ -1725,7 +1771,9 @@
       "titulo": "Orbe do Silêncio",
       "conteudo": {
         "descricao": "Ativado, cria uma zona de silêncio absoluto em 8m por 2 turnos.",
-        "preco": 320,
+        "preco": {
+          "Solares": 34
+        },
         "raridade": "lendario",
         "material": "Quartzo",
         "espacos": 1,
@@ -1738,7 +1786,9 @@
       "titulo": "Anel do Gêmeo",
       "conteudo": {
         "descricao": "Permite comunicação telepática com o portador do outro anel.",
-        "preco": 200,
+        "preco": {
+          "Solares": 17
+        },
         "raridade": "epico",
         "material": "Obsidiana",
         "espacos": 1,
@@ -1751,7 +1801,9 @@
       "titulo": "Caixa do Coração",
       "conteudo": {
         "descricao": "Coloque dentro um item de raridade comum, incomum ou rara: ele \"bate\" como um coração e, após 1 hora, a caixa gera uma cópia imperfeita do objeto (mesmas propriedades, mas se desfaz em pó 24 horas depois de sair da caixa). Só funciona uma vez a cada 7 dias e nunca duplica itens épicos, lendários, míticos, relíquias, dinheiro ou uma cópia que ela mesma já gerou.",
-        "preco": 420,
+        "preco": {
+          "Solares": 50
+        },
         "raridade": "lendario",
         "material": "Madeira Viva",
         "espacos": 1,
@@ -1764,7 +1816,9 @@
       "titulo": "Chave sem Porta",
       "conteudo": {
         "descricao": "Abre qualquer fechadura mundana sem gasto de tempo ou teste. Contra fechaduras mágicas, mecanismos tecnológicos ou cofres de raridade épica ou superior, ainda exige um teste de Ladinagem contra a DT normal do mecanismo. Cada uso tem 5% de chance de abrir um portal para a dimensão espelhada.",
-        "preco": 320,
+        "preco": {
+          "Solares": 34
+        },
         "raridade": "lendario",
         "material": "Metal",
         "espacos": 1,
@@ -1777,7 +1831,9 @@
       "titulo": "Dente de Gigante",
       "conteudo": {
         "descricao": "Arremessado, ao cair cria uma onda sísmica em 5m (5d8 de dano e derruba inimigos).",
-        "preco": 400,
+        "preco": {
+          "Solares": 46
+        },
         "raridade": "lendario",
         "material": "Osso de Gigante",
         "espacos": 1,
@@ -1790,7 +1846,9 @@
       "titulo": "Botas de Pluma",
       "conteudo": {
         "descricao": "Anula dano de queda e concede +5 de deslocamento.",
-        "preco": 280,
+        "preco": {
+          "Solares": 29
+        },
         "raridade": "epico",
         "material": "Penas de Grifo",
         "espacos": 1,
@@ -1803,7 +1861,9 @@
       "titulo": "Garrafinha",
       "conteudo": {
         "descricao": "Pode conter um evento climático; ao abrir, o evento começa a acontecer.",
-        "preco": 450,
+        "preco": {
+          "Solares": 55
+        },
         "raridade": "lendario",
         "material": "Vidro Encantado",
         "espacos": 1,
@@ -1816,7 +1876,9 @@
       "titulo": "Ultimo Folego",
       "conteudo": {
         "descricao": "Concede uma reação adicional por combate.",
-        "preco": 800,
+        "preco": {
+          "Solares": 125
+        },
         "raridade": "lendario",
         "material": "Essência de Harpia",
         "espacos": 1,
@@ -1830,7 +1892,7 @@
       "conteudo": {
         "descricao": "Uma pedra comum, sem propriedade sobrenatural.",
         "preco": {
-          "Lunaris": 1
+          "Lunaris": 2
         },
         "raridade": "comum",
         "espacos": 1,
@@ -1845,7 +1907,7 @@
       "conteudo": {
         "descricao": "Armadura leve feita de escamas de animal.",
         "preco": {
-          "Lunaris": 6
+          "Lunaris": 20
         },
         "raridade": "comum",
         "bonus": "+2",
@@ -1862,7 +1924,7 @@
       "conteudo": {
         "descricao": "Aumenta o Movimento em 3 m. Ocupa 2 espaços no inventário.",
         "preco": {
-          "Lunaris": 13
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "bonus": "+2",
@@ -1879,7 +1941,7 @@
       "conteudo": {
         "descricao": "Concede Resistência 1 contra Corte ou Perfuração, escolhido na criação do item.",
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 15
         },
         "raridade": "comum",
         "bonus": "+2",
@@ -1896,7 +1958,7 @@
       "conteudo": {
         "descricao": "Concede Resistência 2 contra Corte ou Perfuração, escolhido na criação do item.",
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 40
         },
         "raridade": "comum",
         "bonus": "+3",
@@ -1913,7 +1975,7 @@
       "conteudo": {
         "descricao": "Pode ser usada sob uma armadura principal, mas não pode receber modificações.",
         "preco": {
-          "Lunaris": 12
+          "Lunaris": 60
         },
         "raridade": "incomum",
         "bonus": "+3",
@@ -1930,7 +1992,7 @@
       "conteudo": {
         "descricao": "+3 espaços no inventário.",
         "preco": {
-          "Lunaris": 15
+          "Lunaris": 85
         },
         "raridade": "incomum",
         "bonus": "+3",
@@ -1947,7 +2009,7 @@
       "conteudo": {
         "descricao": "Recebe 4 de resistência a corte ou Perfuração",
         "preco": {
-          "Lunaris": 15
+          "Lunaris": 85
         },
         "raridade": "incomum",
         "bonus": "+4",
@@ -1964,7 +2026,7 @@
       "conteudo": {
         "descricao": "+2 em Intimidação e -1 em testes de Carisma.",
         "preco": {
-          "Lunaris": 15
+          "Lunaris": 85
         },
         "raridade": "incomum",
         "bonus": "+4",
@@ -1981,7 +2043,7 @@
       "conteudo": {
         "descricao": "Concede Resistência 5 contra dano Balístico.",
         "preco": {
-          "Lunaris": 20
+          "Lunaris": 130
         },
         "raridade": "incomum",
         "bonus": "+5",
@@ -1998,7 +2060,7 @@
       "conteudo": {
         "descricao": "Armadura pesada de ferro batido; resistente e barata.",
         "preco": {
-          "Lunaris": 20
+          "Lunaris": 130
         },
         "raridade": "incomum",
         "bonus": "+6",
@@ -2015,7 +2077,7 @@
       "conteudo": {
         "descricao": "Concede Resistência 2 contra Corte e Perfuração.",
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 180
         },
         "raridade": "incomum",
         "bonus": "+7",
@@ -2031,7 +2093,9 @@
       "titulo": "Armadura de Energia Espiritual",
       "conteudo": {
         "descricao": "Uma vez por cena, gaste uma Ação de Movimento e 6 de Mana para ficar parcialmente incorpóreo por três rodadas. Enquanto durar, receba Resistência 10 contra Corte, Perfuração e Impacto, mas não possa atacar, agarrar, manipular objetos nem atravessar barreiras seladas.",
-        "preco": 400,
+        "preco": {
+          "Solares": 40
+        },
         "raridade": "lendario",
         "bonus": "+0",
         "penalidade": "-0",
@@ -2052,7 +2116,7 @@
       "conteudo": {
         "descricao": "+1 no modificador de Carisma e vantagem em testes de convencimento.",
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 240
         },
         "raridade": "incomum",
         "bonus": "+5",
@@ -2069,7 +2133,7 @@
       "conteudo": {
         "descricao": "Ao cair de uma altura, gaste uma Ação de Movimento para abrir o planador. Até pousar, avance horizontalmente até seu Movimento por rodada e desça 1,5 m; não pode ganhar altitude. O planador suporta no máximo 50 m de deslocamento horizontal por uso. Um pouso controlado dessa forma não causa dano de queda.",
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 510
         },
         "raridade": "raro",
         "bonus": "+5",
@@ -2089,7 +2153,7 @@
       "conteudo": {
         "descricao": "Concede Resistência 10 contra Corte ou Perfuração, escolhido na criação do item.",
         "preco": {
-          "Lunaris": 40
+          "Lunaris": 290
         },
         "raridade": "raro",
         "bonus": "+6",
@@ -2106,7 +2170,7 @@
       "conteudo": {
         "descricao": "Concede Resistência 15 contra um tipo de dano escolhido na criação do item.",
         "preco": {
-          "Lunaris": 50
+          "Lunaris": 390
         },
         "raridade": "raro",
         "bonus": "+8",
@@ -2122,7 +2186,9 @@
       "titulo": "Armadura de Flexibilidade",
       "conteudo": {
         "descricao": "Uma vez por cena, depois de gastar sua Reação, recupere-a imediatamente. Ao fim da cena, ganhe 1 Cansaço.",
-        "preco": 150,
+        "preco": {
+          "Solares": 11
+        },
         "raridade": "epico",
         "bonus": "+8",
         "penalidade": "-5",
@@ -2142,7 +2208,7 @@
       "conteudo": {
         "descricao": "Concede Resistência 10 contra um elemento oficial escolhido na criação do item.",
         "preco": {
-          "Lunaris": 80
+          "Lunaris": 760
         },
         "raridade": "raro",
         "bonus": "+10",
@@ -2159,7 +2225,7 @@
       "conteudo": {
         "descricao": "Aumenta em uma categoria o alcance das armas à distância usadas pelo portador.",
         "preco": {
-          "Lunaris": 90
+          "Lunaris": 890
         },
         "raridade": "raro",
         "bonus": "+10",
@@ -2176,7 +2242,7 @@
       "conteudo": {
         "descricao": "Concede vantagem em testes de resistência física",
         "preco": {
-          "Lunaris": 95
+          "Lunaris": 960
         },
         "raridade": "raro",
         "bonus": "+13",
@@ -2192,7 +2258,9 @@
       "titulo": "Armadura de Guardião",
       "conteudo": {
         "descricao": "Se o portador for um Guardião, esta armadura concede +5 de Defesa adicional.",
-        "preco": 200,
+        "preco": {
+          "Solares": 11
+        },
         "raridade": "epico",
         "bonus": "+15",
         "penalidade": "-6",
@@ -2207,7 +2275,9 @@
       "titulo": "Armadura de Anti-magia",
       "conteudo": {
         "descricao": "Concede Resistência 10 contra dano mágico.",
-        "preco": 1000,
+        "preco": {
+          "Solares": 50
+        },
         "raridade": "lendario",
         "bonus": "+20",
         "penalidade": "-8",
@@ -2222,7 +2292,9 @@
       "titulo": "Armadura de Tecnologia",
       "conteudo": {
         "descricao": "Possui 3 cargas. Gaste uma Ação Padrão e 1 carga para receber deslocamento de voo igual ao Movimento por três rodadas. Se ainda estiver no ar ao terminar, desça em segurança até 9 m e caia pelo restante. Recupera todas as cargas após um descanso completo conectado por uma hora a uma fonte de energia A.X.I.S.",
-        "preco": 2000,
+        "preco": {
+          "Solares": 60
+        },
         "raridade": "lendario",
         "bonus": "+25",
         "penalidade": "-10",
@@ -2244,7 +2316,7 @@
       "conteudo": {
         "descricao": "Concede +1 de bônus de defesa, mas -2 em ataques.",
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 15
         },
         "raridade": "comum",
         "bonus": "+1",
@@ -2262,7 +2334,7 @@
       "conteudo": {
         "descricao": "Escudo simples de madeira bruta; bloqueio básico.",
         "preco": {
-          "Lunaris": 10
+          "Lunaris": 60
         },
         "raridade": "comum",
         "bonus": "+1",
@@ -2280,7 +2352,7 @@
       "conteudo": {
         "descricao": "-1 em Furtividade.",
         "preco": {
-          "Lunaris": 15
+          "Lunaris": 85
         },
         "raridade": "incomum",
         "bonus": "+2",
@@ -2298,7 +2370,7 @@
       "conteudo": {
         "descricao": "+2 em furtividade",
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 180
         },
         "raridade": "incomum",
         "bonus": "+2",
@@ -2316,7 +2388,7 @@
       "conteudo": {
         "descricao": "+2 em Intimidação.",
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 180
         },
         "raridade": "incomum",
         "bonus": "+2",
@@ -2334,7 +2406,7 @@
       "conteudo": {
         "descricao": "Concede Resistência 2 contra dois tipos de dano comuns escolhidos na criação do item.",
         "preco": {
-          "Lunaris": 35
+          "Lunaris": 240
         },
         "raridade": "raro",
         "bonus": "+3",
@@ -2352,7 +2424,7 @@
       "conteudo": {
         "descricao": "Pode ser usado para causar 1d6 + Mod. Força de dano de Perfuração.",
         "preco": {
-          "Lunaris": 45
+          "Lunaris": 340
         },
         "raridade": "raro",
         "bonus": "+2",
@@ -2370,7 +2442,7 @@
       "conteudo": {
         "descricao": "Concede Resistência 5 contra três tipos de dano escolhidos na criação do item.",
         "preco": {
-          "Lunaris": 65
+          "Lunaris": 570
         },
         "raridade": "raro",
         "bonus": "+4",
@@ -2388,7 +2460,7 @@
       "conteudo": {
         "descricao": "+1 no Mod de Carisma, Vantagem em testes de convencimento",
         "preco": {
-          "Lunaris": 50
+          "Lunaris": 390
         },
         "raridade": "raro",
         "bonus": "+4",
@@ -2406,7 +2478,7 @@
       "conteudo": {
         "descricao": "O canhão causa 2d6 de dano Balístico e empurra o alvo 5 m.",
         "preco": {
-          "Lunaris": 85
+          "Lunaris": 820
         },
         "raridade": "raro",
         "bonus": "+4",
@@ -2424,7 +2496,7 @@
       "conteudo": {
         "descricao": "Faz com que anule completamente o dano no bloqueio. (duas mãos)",
         "preco": {
-          "Lunaris": 85
+          "Lunaris": 820
         },
         "raridade": "raro",
         "bonus": "+5",
@@ -2442,7 +2514,7 @@
       "conteudo": {
         "descricao": "Concede Resistência 5 contra dois tipos de dano escolhidos na criação do item.",
         "preco": {
-          "Lunaris": 90
+          "Lunaris": 890
         },
         "raridade": "raro",
         "bonus": "+5",
@@ -2459,7 +2531,9 @@
       "titulo": "Guardião",
       "conteudo": {
         "descricao": "Se o portador for um Guardião, este escudo concede +5 de Defesa adicional.",
-        "preco": 120,
+        "preco": {
+          "Solares": 10
+        },
         "raridade": "epico",
         "bonus": "+5",
         "penalidade": "-4",
@@ -2475,7 +2549,9 @@
       "titulo": "Anti-mágia",
       "conteudo": {
         "descricao": "Concede Resistência 5 contra dano mágico.",
-        "preco": 150,
+        "preco": {
+          "Solares": 11
+        },
         "raridade": "epico",
         "bonus": "+6",
         "penalidade": "-5",
@@ -2491,7 +2567,9 @@
       "titulo": "Lunar",
       "conteudo": {
         "descricao": "Concede duas vantagens e +5 em Fortitude durante a noite.",
-        "preco": 250,
+        "preco": {
+          "Solares": 12
+        },
         "raridade": "epico",
         "bonus": "+8",
         "penalidade": "-6",
@@ -2507,7 +2585,9 @@
       "titulo": "Tecnologico",
       "conteudo": {
         "descricao": "Possui 3 cargas. Ao sofrer uma queda, gaste uma Reação e 1 carga para reduzir em 30 m a distância efetiva usada no cálculo do dano. Recupera todas as cargas após um descanso completo conectado por uma hora a uma fonte de energia A.X.I.S.",
-        "preco": 1000,
+        "preco": {
+          "Solares": 50
+        },
         "raridade": "lendario",
         "bonus": "+15",
         "penalidade": "-8",
@@ -2528,7 +2608,9 @@
       "titulo": "Anel do Fluxo",
       "conteudo": {
         "descricao": "Seus ataques recebem +3d8 de dano de Fluxo de um elemento à sua escolha.",
-        "preco": 600,
+        "preco": {
+          "Solares": 85
+        },
         "raridade": "lendario",
         "material": "Cristal de Fluxo",
         "espacos": 1,
@@ -2541,7 +2623,9 @@
       "titulo": "Armadura de Essência Primordial",
       "conteudo": {
         "descricao": "Concede Resistência 4 contra todos os tipos de dano enquanto estiver equipada. A peça exige aprovação do Mestre.",
-        "preco": 3000,
+        "preco": {
+          "Solares": 65
+        },
         "raridade": "lendario",
         "bonus": "+4",
         "penalidade": "-4",
@@ -2561,7 +2645,9 @@
       "titulo": "Égide Primordial",
       "conteudo": {
         "descricao": "Concede Resistência 4 contra todos os tipos de dano enquanto estiver equipada. A peça exige aprovação do Mestre.",
-        "preco": 2000,
+        "preco": {
+          "Solares": 60
+        },
         "raridade": "lendario",
         "bonus": "+4",
         "penalidade": "-3",
@@ -2584,7 +2670,7 @@
       "conteudo": {
         "descricao": "Base de qualquer veículo: 10 de Vida, Defesa 10, Resistência 0, 4,5 m de deslocamento, Manobrabilidade 0, cobertura nenhuma, tripulação mínima 1 e nenhum espaço de base. A classe Piloto não é pré-requisito. Instale Núcleo, Estrutura, Armas e Utilidades para personalizá-lo. O Tier 4 exige liberação do Mestre.",
         "preco": {
-          "Lunaris": 500
+          "Lunaris": 740
         },
         "raridade": "incomum",
         "sistema": "Chassi",
@@ -2632,7 +2718,7 @@
       "conteudo": {
         "descricao": "Permite manter até 3 sistemas ativos ao mesmo tempo.",
         "preco": {
-          "Lunaris": 3500
+          "Solares": 48
         },
         "raridade": "raro",
         "sistema": "Núcleo",
@@ -2649,7 +2735,7 @@
       "conteudo": {
         "descricao": "Permite manter até 4 sistemas ativos ao mesmo tempo.",
         "preco": {
-          "Lunaris": 7500
+          "Solares": 190
         },
         "raridade": "epico",
         "sistema": "Núcleo",
@@ -2666,7 +2752,7 @@
       "conteudo": {
         "descricao": "Permite manter até 3 sistemas ativos ao mesmo tempo. Quando um teste exigido para operar um sistema ativo falha, desligue 1 sistema ativo aleatório.",
         "preco": {
-          "Lunaris": 1000
+          "Lunaris": 1100
         },
         "raridade": "incomum",
         "sistema": "Núcleo",
@@ -2684,7 +2770,7 @@
       "conteudo": {
         "descricao": "Permite manter até 5 sistemas ativos ao mesmo tempo. Quando um teste exigido para operar um sistema ativo falha, desligue 2 sistemas ativos aleatórios, ou todos se houver menos de 2 ativos.",
         "preco": {
-          "Lunaris": 3200
+          "Solares": 45
         },
         "raridade": "raro",
         "sistema": "Núcleo",
@@ -2702,7 +2788,7 @@
       "conteudo": {
         "descricao": "Permite manter até 6 sistemas ativos ao mesmo tempo. Quando um teste exigido para operar um sistema ativo falha, desligue 3 sistemas ativos aleatórios, ou todos se houver menos de 3 ativos.",
         "preco": {
-          "Lunaris": 7000
+          "Solares": 185
         },
         "raridade": "epico",
         "sistema": "Núcleo",
@@ -2720,7 +2806,7 @@
       "conteudo": {
         "descricao": "+1,5 m de deslocamento; 0 de Resistência.",
         "preco": {
-          "Lunaris": 800
+          "Lunaris": 960
         },
         "raridade": "incomum",
         "sistema": "Estrutura",
@@ -2738,7 +2824,7 @@
       "conteudo": {
         "descricao": "+3 m de deslocamento; −1 de Resistência.",
         "preco": {
-          "Lunaris": 2500
+          "Solares": 38
         },
         "raridade": "raro",
         "sistema": "Estrutura",
@@ -2756,7 +2842,7 @@
       "conteudo": {
         "descricao": "+4,5 m de deslocamento; −2 de Resistência.",
         "preco": {
-          "Lunaris": 6000
+          "Solares": 170
         },
         "raridade": "epico",
         "sistema": "Estrutura",
@@ -2774,7 +2860,7 @@
       "conteudo": {
         "descricao": "Sem ajuste de deslocamento; +1 de Resistência.",
         "preco": {
-          "Lunaris": 1000
+          "Lunaris": 1100
         },
         "raridade": "incomum",
         "sistema": "Estrutura",
@@ -2792,7 +2878,7 @@
       "conteudo": {
         "descricao": "−1,5 m de deslocamento; +2 de Resistência.",
         "preco": {
-          "Lunaris": 3000
+          "Solares": 43
         },
         "raridade": "raro",
         "sistema": "Estrutura",
@@ -2810,7 +2896,7 @@
       "conteudo": {
         "descricao": "−3 m de deslocamento; +3 de Resistência.",
         "preco": {
-          "Lunaris": 7000
+          "Solares": 185
         },
         "raridade": "epico",
         "sistema": "Estrutura",
@@ -2828,7 +2914,7 @@
       "conteudo": {
         "descricao": "2d6 perfurante, bônus de ataque +0, alcance Curto, crítico 20/×2; até 2 disparos por Ação Padrão.",
         "preco": {
-          "Lunaris": 1000
+          "Lunaris": 1100
         },
         "raridade": "incomum",
         "sistema": "Armas",
@@ -2853,7 +2939,7 @@
       "conteudo": {
         "descricao": "3d6 perfurante, bônus de ataque +0, alcance Médio, crítico 20/×2; até 2 disparos por Ação Padrão.",
         "preco": {
-          "Lunaris": 3000
+          "Solares": 43
         },
         "raridade": "raro",
         "sistema": "Armas",
@@ -2878,7 +2964,7 @@
       "conteudo": {
         "descricao": "4d6 perfurante, bônus de ataque +0, alcance Longo, crítico 20/×2; até 2 disparos por Ação Padrão.",
         "preco": {
-          "Lunaris": 7000
+          "Solares": 185
         },
         "raridade": "epico",
         "sistema": "Armas",
@@ -2928,7 +3014,7 @@
       "conteudo": {
         "descricao": "6d6 impacto, bônus de ataque +0, alcance Longo, crítico 20/×2; 1 disparo por Ação Padrão.",
         "preco": {
-          "Lunaris": 3500
+          "Solares": 48
         },
         "raridade": "raro",
         "sistema": "Armas",
@@ -2953,7 +3039,7 @@
       "conteudo": {
         "descricao": "8d6 impacto, bônus de ataque +0, alcance Longo+, crítico 20/×2; 1 disparo por Ação Padrão.",
         "preco": {
-          "Lunaris": 8000
+          "Solares": 200
         },
         "raridade": "epico",
         "sistema": "Armas",
@@ -2978,7 +3064,7 @@
       "conteudo": {
         "descricao": "Enquanto ativa, conserva até 15 rações ou porções de comida armazenadas; elas não estragam por passagem do tempo.",
         "preco": {
-          "Lunaris": 100
+          "Lunaris": 300
         },
         "raridade": "incomum",
         "sistema": "Utilidades",
@@ -2997,7 +3083,7 @@
       "conteudo": {
         "descricao": "Enquanto ativa, conserva até 30 rações ou porções. Um operador pode usar 1 hora para converter 1 kg de matéria orgânica apropriada em 1 ração; a matéria é consumida.",
         "preco": {
-          "Lunaris": 500
+          "Lunaris": 1200
         },
         "raridade": "raro",
         "sistema": "Utilidades",
@@ -3017,7 +3103,7 @@
       "conteudo": {
         "descricao": "Enquanto ativa, conserva até 60 rações ou porções. Um operador pode usar 1 hora para converter até 2 kg de matéria orgânica apropriada em até 2 rações; a matéria é consumida. Escolha sabor e aparência das rações produzidas.",
         "preco": {
-          "Lunaris": 800
+          "Solares": 50
         },
         "raridade": "epico",
         "sistema": "Utilidades",
@@ -3037,7 +3123,7 @@
       "conteudo": {
         "descricao": "Enquanto ativo, descontamina até 15 litros de água armazenada por hora. Não transforma outros líquidos em água.",
         "preco": {
-          "Lunaris": 100
+          "Lunaris": 300
         },
         "raridade": "incomum",
         "sistema": "Utilidades",
@@ -3056,7 +3142,7 @@
       "conteudo": {
         "descricao": "Enquanto ativo, descontamina até 30 litros de água por hora. Também converte 1 kg de matéria orgânica apropriada em 1 litro de água por hora; a matéria é consumida.",
         "preco": {
-          "Lunaris": 500
+          "Lunaris": 1200
         },
         "raridade": "raro",
         "sistema": "Utilidades",
@@ -3076,7 +3162,7 @@
       "conteudo": {
         "descricao": "Enquanto ativo, descontamina até 60 litros de água por hora. Também converte até 2 kg de matéria orgânica apropriada em até 2 litros de água por hora; a matéria é consumida. Escolha sabor e aparência da água produzida.",
         "preco": {
-          "Lunaris": 800
+          "Solares": 50
         },
         "raridade": "epico",
         "sistema": "Utilidades",
@@ -3096,7 +3182,7 @@
       "conteudo": {
         "descricao": "Permite descanso de qualidade Boa para até 4 ocupantes. Duração, interrupções, alimento e água continuam sendo exigidos.",
         "preco": {
-          "Lunaris": 100
+          "Lunaris": 300
         },
         "raridade": "incomum",
         "sistema": "Utilidades",
@@ -3117,7 +3203,7 @@
       "conteudo": {
         "descricao": "Permite descanso de qualidade Maravilhosa para até 8 ocupantes. Duração, interrupções, alimento e água continuam sendo exigidos.",
         "preco": {
-          "Lunaris": 500
+          "Lunaris": 1200
         },
         "raridade": "raro",
         "sistema": "Utilidades",
@@ -3138,7 +3224,7 @@
       "conteudo": {
         "descricao": "Permite descanso de qualidade Excelente para até 12 ocupantes se uma Área Médica T2 ou T3 estiver ativa; sem ela, a qualidade é Maravilhosa. Duração, interrupções, alimento e água continuam sendo exigidos.",
         "preco": {
-          "Lunaris": 800
+          "Solares": 50
         },
         "raridade": "epico",
         "sistema": "Utilidades",
@@ -3160,7 +3246,7 @@
       "conteudo": {
         "descricao": "Enquanto ativo, o Jardim conta como local de segurança relativa para uma criatura usar Relaxar. A recuperação segue a fórmula normal e o limite de uma vez entre descansos completos.",
         "preco": {
-          "Lunaris": 100
+          "Lunaris": 300
         },
         "raridade": "incomum",
         "sistema": "Utilidades",
@@ -3180,7 +3266,7 @@
       "conteudo": {
         "descricao": "Enquanto ativo, o Jardim conta como local de segurança relativa para uma criatura usar Relaxar e acrescenta +2 à Mana recuperada. Mantém o limite de uma vez entre descansos completos.",
         "preco": {
-          "Lunaris": 500
+          "Lunaris": 1200
         },
         "raridade": "raro",
         "sistema": "Utilidades",
@@ -3200,7 +3286,7 @@
       "conteudo": {
         "descricao": "Enquanto ativo, o Jardim conta como local de segurança relativa para uma criatura usar Relaxar e acrescenta +1d8 à Mana recuperada. Mantém o limite de uma vez entre descansos completos.",
         "preco": {
-          "Lunaris": 800
+          "Solares": 50
         },
         "raridade": "epico",
         "sistema": "Utilidades",
@@ -3220,7 +3306,7 @@
       "conteudo": {
         "descricao": "Enquanto ativa, a Academia atende ao requisito de local e equipamento para uma criatura cumprir um dia normal de 6 horas de treino. Não remove requisitos de nível, instrutor ou testes.",
         "preco": {
-          "Lunaris": 100
+          "Lunaris": 300
         },
         "raridade": "incomum",
         "sistema": "Utilidades",
@@ -3240,7 +3326,7 @@
       "conteudo": {
         "descricao": "Enquanto ativa, a Academia atende ao requisito de local e equipamento e reduz um dia de treino para 5 horas para uma criatura. Não remove requisitos de nível, instrutor ou testes.",
         "preco": {
-          "Lunaris": 500
+          "Lunaris": 1200
         },
         "raridade": "raro",
         "sistema": "Utilidades",
@@ -3260,7 +3346,7 @@
       "conteudo": {
         "descricao": "Enquanto ativa, a Academia atende ao requisito de local e equipamento e reduz um dia de treino para 4 horas para uma criatura. Não remove requisitos de nível, instrutor ou testes.",
         "preco": {
-          "Lunaris": 800
+          "Solares": 50
         },
         "raridade": "epico",
         "sistema": "Utilidades",
@@ -3280,7 +3366,7 @@
       "conteudo": {
         "descricao": "Enquanto ativa, concede +2 em Cura para tratar 1 paciente por vez.",
         "preco": {
-          "Lunaris": 100
+          "Lunaris": 300
         },
         "raridade": "incomum",
         "sistema": "Utilidades",
@@ -3302,7 +3388,7 @@
       "conteudo": {
         "descricao": "Enquanto ativa, concede vantagem em Cura para tratar até 2 pacientes por vez; não aplique o +2 do T1.",
         "preco": {
-          "Lunaris": 500
+          "Lunaris": 1200
         },
         "raridade": "raro",
         "sistema": "Utilidades",
@@ -3324,7 +3410,7 @@
       "conteudo": {
         "descricao": "Enquanto ativa, concede vantagem e +2 em Cura para tratar até 4 pacientes por vez.",
         "preco": {
-          "Lunaris": 800
+          "Solares": 50
         },
         "raridade": "epico",
         "sistema": "Utilidades",
@@ -3346,7 +3432,7 @@
       "conteudo": {
         "descricao": "Armazena até 15 itens registrados no inventário do veículo. Não aumenta a capacidade de carga dos ocupantes.",
         "preco": {
-          "Lunaris": 100
+          "Lunaris": 300
         },
         "raridade": "incomum",
         "sistema": "Utilidades",
@@ -3366,7 +3452,7 @@
       "conteudo": {
         "descricao": "Armazena até 30 itens registrados no inventário do veículo. Não aumenta a capacidade de carga dos ocupantes.",
         "preco": {
-          "Lunaris": 500
+          "Lunaris": 1200
         },
         "raridade": "raro",
         "sistema": "Utilidades",
@@ -3386,7 +3472,7 @@
       "conteudo": {
         "descricao": "Armazena até 60 itens registrados no inventário do veículo. Não aumenta a capacidade de carga dos ocupantes.",
         "preco": {
-          "Lunaris": 800
+          "Solares": 50
         },
         "raridade": "epico",
         "sistema": "Utilidades",
@@ -3406,7 +3492,7 @@
       "conteudo": {
         "descricao": "Um operador usa uma Ação Padrão para ativar o escudo, que consome 1 sistema ativo e possui 5 de Vida própria e Resistência 0. Dano atinge o escudo antes do veículo; excedente passa ao veículo. Ao chegar a 0, desliga e só recupera toda a Vida em uma manutenção bem-sucedida.",
         "preco": {
-          "Lunaris": 100
+          "Lunaris": 300
         },
         "raridade": "incomum",
         "sistema": "Utilidades",
@@ -3427,7 +3513,7 @@
       "conteudo": {
         "descricao": "Um operador usa uma Ação Padrão para ativar o escudo, que consome 1 sistema ativo e possui 10 de Vida própria e Resistência 0. Dano atinge o escudo antes do veículo; excedente passa ao veículo. Ao chegar a 0, desliga e só recupera toda a Vida em uma manutenção bem-sucedida.",
         "preco": {
-          "Lunaris": 500
+          "Lunaris": 1200
         },
         "raridade": "raro",
         "sistema": "Utilidades",
@@ -3448,7 +3534,7 @@
       "conteudo": {
         "descricao": "Um operador usa uma Ação Padrão para ativar o escudo, que consome 1 sistema ativo e possui 15 de Vida própria e Resistência 0. Dano atinge o escudo antes do veículo; excedente passa ao veículo. Ao chegar a 0, desliga e só recupera toda a Vida em uma manutenção bem-sucedida.",
         "preco": {
-          "Lunaris": 800
+          "Solares": 50
         },
         "raridade": "epico",
         "sistema": "Utilidades",
@@ -3469,7 +3555,7 @@
       "conteudo": {
         "descricao": "Comporta até 4 seres. Um operador usa uma Ação Padrão para lançá-la; ela se desprende, move 30 m em linha reta e para. Possui tamanho médio, Vida 10, Defesa 10, Resistência 0, Manobrabilidade 0 e cobertura total. Após lançada, exige manutenção de 6 horas para ser reinstalada.",
         "preco": {
-          "Lunaris": 100
+          "Lunaris": 300
         },
         "raridade": "incomum",
         "sistema": "Utilidades",
@@ -3496,7 +3582,7 @@
       "conteudo": {
         "descricao": "Comporta até 8 seres. Um operador usa uma Ação Padrão para lançá-la; ela se desprende, move 45 m em linha reta e para. Possui tamanho grande, Vida 20, Defesa 10, Resistência 1, Manobrabilidade 0 e cobertura total. Após lançada, exige manutenção de 6 horas para ser reinstalada.",
         "preco": {
-          "Lunaris": 500
+          "Lunaris": 1200
         },
         "raridade": "raro",
         "sistema": "Utilidades",
@@ -3523,7 +3609,7 @@
       "conteudo": {
         "descricao": "Comporta até 12 seres. Um operador usa uma Ação Padrão para lançá-la; ela se desprende, move 60 m em linha reta e para. Possui tamanho enorme, Vida 30, Defesa 10, Resistência 2, Manobrabilidade 0 e cobertura total. Após lançada, exige manutenção de 6 horas para ser reinstalada.",
         "preco": {
-          "Lunaris": 800
+          "Solares": 50
         },
         "raridade": "epico",
         "sistema": "Utilidades",
@@ -3550,7 +3636,7 @@
       "conteudo": {
         "descricao": "Ocupa 1 espaço de base e abriga 1 veículo pequeno. Não concede veículo, deslocamento, arma ou sistema adicional.",
         "preco": {
-          "Lunaris": 100
+          "Lunaris": 300
         },
         "raridade": "incomum",
         "sistema": "Utilidades",
@@ -3572,7 +3658,7 @@
       "conteudo": {
         "descricao": "Ocupa 2 espaços de base e abriga 1 veículo médio ou 2 pequenos. Não concede veículo, deslocamento, arma ou sistema adicional.",
         "preco": {
-          "Lunaris": 500
+          "Lunaris": 1200
         },
         "raridade": "raro",
         "sistema": "Utilidades",
@@ -3595,7 +3681,7 @@
       "conteudo": {
         "descricao": "Ocupa 3 espaços de base e abriga 2 veículos médios ou 4 pequenos. Não concede veículo, deslocamento, arma ou sistema adicional.",
         "preco": {
-          "Lunaris": 800
+          "Solares": 50
         },
         "raridade": "epico",
         "sistema": "Utilidades",
@@ -3617,7 +3703,7 @@
       "titulo": "Cajado",
       "conteudo": {
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 15
         },
         "raridade": "comum",
         "atributos": [
@@ -3642,7 +3728,7 @@
       "titulo": "Faca de Caça",
       "conteudo": {
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 15
         },
         "raridade": "comum",
         "atributos": [
@@ -3667,7 +3753,7 @@
       "titulo": "Funda",
       "conteudo": {
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 15
         },
         "raridade": "comum",
         "atributos": [
@@ -3695,7 +3781,7 @@
       "titulo": "Foice de Mão",
       "conteudo": {
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 40
         },
         "raridade": "comum",
         "atributos": [
@@ -3720,7 +3806,7 @@
       "titulo": "Chuço",
       "conteudo": {
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 40
         },
         "raridade": "comum",
         "atributos": [
@@ -3745,7 +3831,7 @@
       "titulo": "Montante",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -3770,7 +3856,7 @@
       "titulo": "Rapieira",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "atributos": [
@@ -3795,7 +3881,7 @@
       "titulo": "Cimitarra",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "atributos": [
@@ -3820,7 +3906,7 @@
       "titulo": "Mangual",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -3845,7 +3931,7 @@
       "titulo": "Alabarda",
       "conteudo": {
         "preco": {
-          "Lunaris": 45
+          "Lunaris": 400
         },
         "raridade": "raro",
         "atributos": [
@@ -3870,7 +3956,7 @@
       "titulo": "Machado Duplo",
       "conteudo": {
         "preco": {
-          "Lunaris": 50
+          "Lunaris": 490
         },
         "raridade": "raro",
         "atributos": [
@@ -3895,7 +3981,7 @@
       "titulo": "Lança de Cavalaria",
       "conteudo": {
         "preco": {
-          "Lunaris": 45
+          "Lunaris": 400
         },
         "raridade": "raro",
         "atributos": [
@@ -3920,7 +4006,7 @@
       "titulo": "Arco Composto",
       "conteudo": {
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 75
         },
         "raridade": "incomum",
         "atributos": [
@@ -3948,7 +4034,7 @@
       "titulo": "Espingarda de Cano Duplo",
       "conteudo": {
         "preco": {
-          "Lunaris": 70
+          "Lunaris": 960
         },
         "raridade": "raro",
         "atributos": [
@@ -3975,7 +4061,9 @@
       "id": "rifle-de-precisao",
       "titulo": "Rifle de Precisão",
       "conteudo": {
-        "preco": 260,
+        "preco": {
+          "Solares": 12
+        },
         "raridade": "epico",
         "atributos": [
           "4d10 de dano",
@@ -4001,7 +4089,9 @@
       "id": "lanca-chamas",
       "titulo": "Lança-Chamas",
       "conteudo": {
-        "preco": 200,
+        "preco": {
+          "Solares": 11
+        },
         "raridade": "epico",
         "atributos": [
           "3d8 de dano",
@@ -4027,7 +4117,9 @@
       "id": "canhao-de-mao",
       "titulo": "Canhão de Mão",
       "conteudo": {
-        "preco": 240,
+        "preco": {
+          "Solares": 12
+        },
         "raridade": "epico",
         "atributos": [
           "4d8 de dano",
@@ -4053,7 +4145,9 @@
       "id": "lamina-de-plasma",
       "titulo": "Lâmina de Plasma",
       "conteudo": {
-        "preco": 320,
+        "preco": {
+          "Solares": 12
+        },
         "raridade": "epico",
         "atributos": [
           "3d10 de dano",
@@ -4077,7 +4171,9 @@
       "id": "foice-ceifadora",
       "titulo": "Foice Ceifadora",
       "conteudo": {
-        "preco": 480,
+        "preco": {
+          "Solares": 55
+        },
         "raridade": "lendario",
         "atributos": [
           "4d8 de dano",
@@ -4105,7 +4201,7 @@
       "conteudo": {
         "descricao": "Armadura acolchoada leve e barata.",
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 15
         },
         "raridade": "comum",
         "bonus": "+1",
@@ -4122,7 +4218,7 @@
       "conteudo": {
         "descricao": "Placas de metal rebitadas em couro; boa proteção com mobilidade.",
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 180
         },
         "raridade": "incomum",
         "bonus": "+5",
@@ -4139,7 +4235,7 @@
       "conteudo": {
         "descricao": "Recebe 3 de resistência a corte e perfuração.",
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 240
         },
         "raridade": "incomum",
         "bonus": "+6",
@@ -4156,7 +4252,7 @@
       "conteudo": {
         "descricao": "Recebe 8 de resistência a dano físico.",
         "preco": {
-          "Lunaris": 90
+          "Lunaris": 890
         },
         "raridade": "raro",
         "bonus": "+12",
@@ -4172,7 +4268,9 @@
       "titulo": "Armadura de Malha Élfica",
       "conteudo": {
         "descricao": "Leve como seda; não impõe penalidade de furtividade.",
-        "preco": 150,
+        "preco": {
+          "Solares": 11
+        },
         "raridade": "epico",
         "bonus": "+10",
         "penalidade": "-1",
@@ -4187,7 +4285,9 @@
       "titulo": "Armadura de Energia Solar",
       "conteudo": {
         "descricao": "Ao amanhecer, restaura 3d10 de Vida do portador. +10 de RD a trevas.",
-        "preco": 900,
+        "preco": {
+          "Solares": 49
+        },
         "raridade": "lendario",
         "bonus": "+22",
         "penalidade": "-8",
@@ -4203,7 +4303,7 @@
       "conteudo": {
         "descricao": "Escudo pequeno; +1 de bônus sem penalidade.",
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 40
         },
         "raridade": "comum",
         "bonus": "+1",
@@ -4221,7 +4321,7 @@
       "conteudo": {
         "descricao": "Escudo alto de infantaria; +2 de RD a distância enquanto agachado.",
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 510
         },
         "raridade": "raro",
         "bonus": "+4",
@@ -4238,7 +4338,9 @@
       "titulo": "Escudo Espelhado",
       "conteudo": {
         "descricao": "Uma vez por combate, reflete uma magia à distância de volta ao lançador.",
-        "preco": 260,
+        "preco": {
+          "Solares": 12
+        },
         "raridade": "epico",
         "bonus": "+6",
         "penalidade": "-4",
@@ -4254,7 +4356,9 @@
       "titulo": "Corda de Escalada",
       "conteudo": {
         "descricao": "15m de corda resistente; vantagem em testes de Escalada.",
-        "preco": 5,
+        "preco": {
+          "Lunaris": 9
+        },
         "raridade": "comum",
         "material": "Cânhamo",
         "espacos": 1,
@@ -4267,7 +4371,9 @@
       "titulo": "Tocha",
       "conteudo": {
         "descricao": "Ilumina 6m por 1 hora. Pode ser usada como arma improvisada de fogo.",
-        "preco": 2,
+        "preco": {
+          "Lunaris": 3
+        },
         "raridade": "comum",
         "material": "Madeira e Breu",
         "espacos": 1,
@@ -4280,7 +4386,9 @@
       "titulo": "Kit de Ferramentas",
       "conteudo": {
         "descricao": "Vantagem em testes de Ofício e para desarmar mecanismos.",
-        "preco": 15,
+        "preco": {
+          "Lunaris": 35
+        },
         "raridade": "comum",
         "material": "Metal",
         "espacos": 1,
@@ -4293,7 +4401,9 @@
       "titulo": "Poção de Cura Menor",
       "conteudo": {
         "descricao": "Restaura 2d4+2 de Vida. (1 uso)",
-        "preco": 20,
+        "preco": {
+          "Lunaris": 160
+        },
         "raridade": "incomum",
         "material": "Ervas Alquímicas",
         "espacos": 1,
@@ -4306,7 +4416,9 @@
       "titulo": "Antídoto",
       "conteudo": {
         "descricao": "Encerra um efeito de veneno e concede vantagem contra o próximo. (1 uso)",
-        "preco": 18,
+        "preco": {
+          "Lunaris": 140
+        },
         "raridade": "incomum",
         "material": "Ervas Alquímicas",
         "espacos": 1,
@@ -4319,7 +4431,9 @@
       "titulo": "Poção de Cura Maior",
       "conteudo": {
         "descricao": "Restaura 4d4+4 de Vida. (1 uso)",
-        "preco": 45,
+        "preco": {
+          "Lunaris": 450
+        },
         "raridade": "raro",
         "material": "Ervas Raras",
         "espacos": 1,
@@ -4332,7 +4446,9 @@
       "titulo": "Pergaminho de Teleporte",
       "conteudo": {
         "descricao": "Teleporta o usuário e até 3 aliados adjacentes para um local visível a 60m. (1 uso)",
-        "preco": 80,
+        "preco": {
+          "Lunaris": 760
+        },
         "raridade": "raro",
         "material": "Papel Rúnico",
         "espacos": 1,
@@ -4345,7 +4461,9 @@
       "titulo": "Capa da Invisibilidade",
       "conteudo": {
         "descricao": "Torna o usuário invisível por 3 turnos ou até atacar. (1/dia)",
-        "preco": 280,
+        "preco": {
+          "Solares": 29
+        },
         "raridade": "epico",
         "material": "Seda Etérea",
         "espacos": 1,
@@ -4358,7 +4476,9 @@
       "titulo": "Anel de Proteção",
       "conteudo": {
         "descricao": "+2 de Defesa e +2 em testes de resistência.",
-        "preco": 220,
+        "preco": {
+          "Solares": 20
+        },
         "raridade": "epico",
         "material": "Prata Rúnica",
         "espacos": 1,
@@ -4371,7 +4491,9 @@
       "titulo": "Orbe dos Elementos",
       "conteudo": {
         "descricao": "Uma vez por turno, adiciona 2d6 de dano elemental (fogo, gelo ou raio) a uma magia ou ataque.",
-        "preco": 350,
+        "preco": {
+          "Solares": 38
+        },
         "raridade": "lendario",
         "material": "Cristal Elemental",
         "espacos": 1,
@@ -4384,7 +4506,9 @@
       "titulo": "Coração de Fluxo",
       "conteudo": {
         "descricao": "Recupera 1d6 de Mana no início de cada turno. Enquanto ativo, suas magias custam -1 de Mana.",
-        "preco": 500,
+        "preco": {
+          "Solares": 65
+        },
         "raridade": "lendario",
         "material": "Núcleo de Fluxo",
         "espacos": 1,
@@ -4397,7 +4521,9 @@
       "titulo": "Cálice da Vida Eterna",
       "conteudo": {
         "descricao": "Uma vez por sessão, reverte um aliado caído a 50% da Vida total.",
-        "preco": 700,
+        "preco": {
+          "Solares": 105
+        },
         "raridade": "lendario",
         "material": "Ouro Vivo",
         "espacos": 1,
@@ -4410,7 +4536,9 @@
       "titulo": "Lobo Cinzento",
       "conteudo": {
         "descricao": "Predador de matilha; ataca em grupo e persegue presas feridas.",
-        "preco": 15,
+        "preco": {
+          "Lunaris": 330
+        },
         "raridade": "comum",
         "categoria": "Animal",
         "pv": 95,
@@ -4458,7 +4586,9 @@
       "titulo": "Urso das Cavernas",
       "conteudo": {
         "descricao": "Fera territorial e resistente, ótima na exploração de covis.",
-        "preco": 62,
+        "preco": {
+          "Lunaris": 1350
+        },
         "raridade": "incomum",
         "categoria": "Animal",
         "pv": 265,
@@ -4506,7 +4636,9 @@
       "titulo": "Aranha Gigante",
       "conteudo": {
         "descricao": "Tece teias e injeta veneno paralisante nas presas.",
-        "preco": 83,
+        "preco": {
+          "Lunaris": 1600
+        },
         "raridade": "incomum",
         "categoria": "Animal",
         "pv": 380,
@@ -4554,7 +4686,9 @@
       "titulo": "Basilisco",
       "conteudo": {
         "descricao": "Seu olhar petrifica; caçá-lo exige espelhos e cuidado.",
-        "preco": 318,
+        "preco": {
+          "Solares": 90
+        },
         "raridade": "raro",
         "categoria": "Monstro",
         "pv": 670,
@@ -4600,7 +4734,9 @@
       "titulo": "Quimera",
       "conteudo": {
         "descricao": "Híbrido de leão, cabra e dragão que cospe fogo.",
-        "preco": 823,
+        "preco": {
+          "Solares": 550
+        },
         "raridade": "epico",
         "categoria": "Monstro",
         "pv": 1040,
@@ -4651,7 +4787,9 @@
       "titulo": "Coruja Arcana",
       "conteudo": {
         "descricao": "Vê no escuro e sussurra segredos ao seu vínculo.",
-        "preco": 80,
+        "preco": {
+          "Lunaris": 1550
+        },
         "raridade": "incomum",
         "categoria": "Monstro",
         "pv": 170,
@@ -4697,7 +4835,9 @@
       "titulo": "Gato Espectral",
       "conteudo": {
         "descricao": "Atravessa paredes e avisa de perigos invisíveis.",
-        "preco": 220,
+        "preco": {
+          "Solares": 60
+        },
         "raridade": "raro",
         "categoria": "Espírito",
         "pv": 265,
@@ -4743,7 +4883,9 @@
       "titulo": "Dragonete",
       "conteudo": {
         "descricao": "Pequeno dragão leal; cospe brasas e defende o dono.",
-        "preco": 478,
+        "preco": {
+          "Solares": 320
+        },
         "raridade": "epico",
         "categoria": "Monstro",
         "pv": 515,
@@ -4791,7 +4933,9 @@
       "titulo": "Fênix Menor",
       "conteudo": {
         "descricao": "Renasce das cinzas uma vez por dia e cura aliados.",
-        "preco": 1598,
+        "preco": {
+          "Solares": 890
+        },
         "raridade": "lendario",
         "categoria": "Monstro",
         "pv": 845,
@@ -4839,7 +4983,9 @@
       "titulo": "Esqueleto Guerreiro",
       "conteudo": {
         "descricao": "Morto-vivo obediente que empunha a arma com que caiu.",
-        "preco": 26,
+        "preco": {
+          "Lunaris": 450
+        },
         "raridade": "comum",
         "categoria": "Morto-Vivo",
         "pv": 95,
@@ -4885,7 +5031,9 @@
       "titulo": "Zumbi Bruto",
       "conteudo": {
         "descricao": "Lento, mas absurdamente resistente e incansável.",
-        "preco": 26,
+        "preco": {
+          "Lunaris": 450
+        },
         "raridade": "comum",
         "categoria": "Morto-Vivo",
         "pv": 170,
@@ -4932,7 +5080,9 @@
       "titulo": "Carniçal",
       "conteudo": {
         "descricao": "Rastreador macabro que fareja sangue a quilômetros.",
-        "preco": 102,
+        "preco": {
+          "Lunaris": 1800
+        },
         "raridade": "incomum",
         "categoria": "Morto-Vivo",
         "pv": 380,
@@ -4977,7 +5127,9 @@
       "titulo": "Cavaleiro da Morte",
       "conteudo": {
         "descricao": "Campeão caído reerguido; comanda outros mortos-vivos.",
-        "preco": 290,
+        "preco": {
+          "Solares": 80
+        },
         "raridade": "raro",
         "categoria": "Morto-Vivo",
         "pv": 670,
@@ -5024,7 +5176,9 @@
       "titulo": "Elemental de Fogo Menor",
       "conteudo": {
         "descricao": "Chama viva conjurada; incendeia tudo que toca por pouco tempo.",
-        "preco": 46,
+        "preco": {
+          "Lunaris": 640
+        },
         "raridade": "comum",
         "categoria": "Elemental",
         "pv": 170,
@@ -5070,7 +5224,9 @@
       "titulo": "Golem de Pedra",
       "conteudo": {
         "descricao": "Guardião de pedra invocado para barrar passagens.",
-        "preco": 190,
+        "preco": {
+          "Solares": 49
+        },
         "raridade": "raro",
         "categoria": "Constructo",
         "pv": 380,
@@ -5115,7 +5271,9 @@
       "titulo": "Demônio Menor",
       "conteudo": {
         "descricao": "Servo do abismo trazido por pacto; cobra um preço ao fim.",
-        "preco": 856,
+        "preco": {
+          "Solares": 570
+        },
         "raridade": "epico",
         "categoria": "Aberração",
         "pv": 670,
@@ -5162,7 +5320,9 @@
       "titulo": "Anjo Guardião",
       "conteudo": {
         "descricao": "Presença celestial que protege e cura por uma cena.",
-        "preco": 1345,
+        "preco": {
+          "Solares": 810
+        },
         "raridade": "lendario",
         "categoria": "Espírito",
         "pv": 1040,
@@ -5209,7 +5369,9 @@
       "titulo": "Mercenário Novato",
       "conteudo": {
         "descricao": "Espadachim barato disposto a qualquer trabalho sujo.",
-        "preco": 35,
+        "preco": {
+          "Lunaris": 540
+        },
         "raridade": "comum",
         "categoria": "Humanoide",
         "pv": 95,
@@ -5253,7 +5415,9 @@
       "titulo": "Curandeiro Errante",
       "conteudo": {
         "descricao": "Trata ferimentos e doenças em viagem.",
-        "preco": 52,
+        "preco": {
+          "Lunaris": 1200
+        },
         "raridade": "incomum",
         "categoria": "Humanoide",
         "pv": 170,
@@ -5299,7 +5463,9 @@
       "titulo": "Guarda-Costas",
       "conteudo": {
         "descricao": "Protetor treinado que intercepta ataques ao contratante.",
-        "preco": 110,
+        "preco": {
+          "Lunaris": 1900
+        },
         "raridade": "incomum",
         "categoria": "Humanoide",
         "pv": 380,
@@ -5344,7 +5510,9 @@
       "titulo": "Mestre Ferreiro",
       "conteudo": {
         "descricao": "Forja e repara equipamento em campo.",
-        "preco": 258,
+        "preco": {
+          "Solares": 70
+        },
         "raridade": "raro",
         "categoria": "Humanoide",
         "pv": 515,
@@ -5389,7 +5557,9 @@
       "titulo": "Dragão Ancião",
       "conteudo": {
         "descricao": "Wyrm milenar cuja sombra escurece vales inteiros.",
-        "preco": 8545,
+        "preco": {
+          "Solares": 2150
+        },
         "raridade": "lendario",
         "categoria": "Lendário",
         "pv": 1040,
@@ -5441,7 +5611,9 @@
       "titulo": "Leviatã",
       "conteudo": {
         "descricao": "Serpente dos abismos que engole navios.",
-        "preco": 17150,
+        "preco": {
+          "Solares": 3100
+        },
         "raridade": "lendario",
         "categoria": "Lendário",
         "pv": 1255,
@@ -5488,7 +5660,9 @@
       "titulo": "Fênix Imortal",
       "conteudo": {
         "descricao": "A chama eterna; sua presença reacende os caídos.",
-        "preco": 18100,
+        "preco": {
+          "Solares": 3200
+        },
         "raridade": "lendario",
         "categoria": "Lendário",
         "pv": 1490,
@@ -5535,7 +5709,9 @@
       "titulo": "Kraken",
       "conteudo": {
         "descricao": "Terror de tentáculos que arrasta cidades costeiras ao mar.",
-        "preco": 15215,
+        "preco": {
+          "Solares": 2900
+        },
         "raridade": "lendario",
         "categoria": "Lendário",
         "pv": 1255,
@@ -5582,7 +5758,9 @@
       "titulo": "Carne de Humano",
       "conteudo": {
         "descricao": "Carne extraída de Humano. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 10,
+        "preco": {
+          "Lunaris": 4
+        },
         "raridade": "comum",
         "parte": "Carne",
         "especie": "Humano",
@@ -5595,7 +5773,9 @@
       "titulo": "Órgãos de Humano",
       "conteudo": {
         "descricao": "Órgãos extraídos de Humano. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 15,
+        "preco": {
+          "Lunaris": 6
+        },
         "raridade": "comum",
         "parte": "Órgãos",
         "especie": "Humano",
@@ -5608,7 +5788,9 @@
       "titulo": "Essência de Humano",
       "conteudo": {
         "descricao": "Essência extraída de Humano. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 25,
+        "preco": {
+          "Lunaris": 9
+        },
         "raridade": "comum",
         "parte": "Essência",
         "especie": "Humano",
@@ -5621,7 +5803,9 @@
       "titulo": "Órgãos de Vampiro",
       "conteudo": {
         "descricao": "Órgãos extraídos de Vampiro. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 80,
+        "preco": {
+          "Lunaris": 45
+        },
         "raridade": "incomum",
         "parte": "Órgãos",
         "especie": "Vampiro",
@@ -5634,7 +5818,9 @@
       "titulo": "Essência de Vampiro",
       "conteudo": {
         "descricao": "Essência extraída de Vampiro. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 150,
+        "preco": {
+          "Lunaris": 180
+        },
         "raridade": "raro",
         "parte": "Essência",
         "especie": "Vampiro",
@@ -5647,7 +5833,9 @@
       "titulo": "Carne de Goblin",
       "conteudo": {
         "descricao": "Carne extraída de Goblim. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 5,
+        "preco": {
+          "Lunaris": 2
+        },
         "raridade": "comum",
         "parte": "Carne",
         "especie": "Goblim",
@@ -5660,7 +5848,9 @@
       "titulo": "Órgãos de Goblin",
       "conteudo": {
         "descricao": "Órgãos extraídos de Goblim. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 8,
+        "preco": {
+          "Lunaris": 3
+        },
         "raridade": "comum",
         "parte": "Órgãos",
         "especie": "Goblim",
@@ -5673,7 +5863,9 @@
       "titulo": "Carne de Anão",
       "conteudo": {
         "descricao": "Carne extraída de Anão. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 20,
+        "preco": {
+          "Lunaris": 7
+        },
         "raridade": "comum",
         "parte": "Carne",
         "especie": "Anão",
@@ -5686,7 +5878,9 @@
       "titulo": "Órgãos de Anão",
       "conteudo": {
         "descricao": "Órgãos extraídos de Anão. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 30,
+        "preco": {
+          "Lunaris": 11
+        },
         "raridade": "comum",
         "parte": "Órgãos",
         "especie": "Anão",
@@ -5699,7 +5893,9 @@
       "titulo": "Essência de Anão",
       "conteudo": {
         "descricao": "Essência extraída de Anão. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 40,
+        "preco": {
+          "Lunaris": 15
+        },
         "raridade": "comum",
         "parte": "Essência",
         "especie": "Anão",
@@ -5712,7 +5908,9 @@
       "titulo": "Órgãos de Golem",
       "conteudo": {
         "descricao": "Órgãos extraídos de Golem. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 60,
+        "preco": {
+          "Lunaris": 35
+        },
         "raridade": "incomum",
         "parte": "Órgãos",
         "especie": "Golem",
@@ -5725,7 +5923,9 @@
       "titulo": "Essência de Golem",
       "conteudo": {
         "descricao": "Essência extraída de Golem. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 120,
+        "preco": {
+          "Lunaris": 60
+        },
         "raridade": "incomum",
         "parte": "Essência",
         "especie": "Golem",
@@ -5738,7 +5938,9 @@
       "titulo": "Essência de Espírito",
       "conteudo": {
         "descricao": "Essência extraída de Espírito. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 200,
+        "preco": {
+          "Lunaris": 210
+        },
         "raridade": "raro",
         "parte": "Essência",
         "especie": "Espírito",
@@ -5751,7 +5953,9 @@
       "titulo": "Carne de Gigante",
       "conteudo": {
         "descricao": "Carne extraída de Gigante. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 120,
+        "preco": {
+          "Lunaris": 60
+        },
         "raridade": "incomum",
         "parte": "Carne",
         "especie": "Gigante",
@@ -5764,7 +5968,9 @@
       "titulo": "Órgãos de Gigante",
       "conteudo": {
         "descricao": "Órgãos extraídos de Gigante. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 180,
+        "preco": {
+          "Lunaris": 200
+        },
         "raridade": "raro",
         "parte": "Órgãos",
         "especie": "Gigante",
@@ -5777,7 +5983,9 @@
       "titulo": "Essência de Gigante",
       "conteudo": {
         "descricao": "Essência extraída de Gigante. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 250,
+        "preco": {
+          "Lunaris": 240
+        },
         "raridade": "raro",
         "parte": "Essência",
         "especie": "Gigante",
@@ -5790,7 +5998,9 @@
       "titulo": "Carne de Animália",
       "conteudo": {
         "descricao": "Carne extraída de Animália. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 20,
+        "preco": {
+          "Lunaris": 7
+        },
         "raridade": "comum",
         "parte": "Carne",
         "especie": "Animália",
@@ -5803,7 +6013,9 @@
       "titulo": "Órgãos de Animália",
       "conteudo": {
         "descricao": "Órgãos extraídos de Animália. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 35,
+        "preco": {
+          "Lunaris": 13
+        },
         "raridade": "comum",
         "parte": "Órgãos",
         "especie": "Animália",
@@ -5816,7 +6028,9 @@
       "titulo": "Essência de Animália",
       "conteudo": {
         "descricao": "Essência extraída de Animália. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 25,
+        "preco": {
+          "Lunaris": 9
+        },
         "raridade": "comum",
         "parte": "Essência",
         "especie": "Animália",
@@ -5829,7 +6043,9 @@
       "titulo": "Carne de Sereia/Tritão",
       "conteudo": {
         "descricao": "Carne extraída de Sereia/Tritão. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 35,
+        "preco": {
+          "Lunaris": 13
+        },
         "raridade": "comum",
         "parte": "Carne",
         "especie": "Sereia/Tritão",
@@ -5842,7 +6058,9 @@
       "titulo": "Órgãos de Sereia/Tritão",
       "conteudo": {
         "descricao": "Órgãos extraídos de Sereia/Tritão. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 70,
+        "preco": {
+          "Lunaris": 40
+        },
         "raridade": "incomum",
         "parte": "Órgãos",
         "especie": "Sereia/Tritão",
@@ -5855,7 +6073,9 @@
       "titulo": "Essência de Sereia/Tritão",
       "conteudo": {
         "descricao": "Essência extraída de Sereia/Tritão. Valor base para material fresco em mercado grande. Modificadores: conservação -20%; corrupção -50% ou item inutilizável; abate limpo +20%; abate brutal -15%; origem lendária multiplica o valor por 2 ou 3. Sem materiais adequados de extração, o valor cai 75%.",
-        "preco": 90,
+        "preco": {
+          "Lunaris": 50
+        },
         "raridade": "incomum",
         "parte": "Essência",
         "especie": "Sereia/Tritão",
@@ -5883,7 +6103,7 @@
       "conteudo": {
         "descricao": "Um saco de terra rica e viva, pronta para receber sementes. Ingrediente da Semeadura da Colheita Certa e de outros ritos ligados ao Fluxo da Origem.",
         "preco": {
-          "Lunaris": 3
+          "Lunaris": 1
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -5897,7 +6117,7 @@
       "conteudo": {
         "descricao": "Sementes selecionadas que germinam mesmo fora de época, desde que a terra e a água estejam certas. Ingrediente da Semeadura da Colheita Certa.",
         "preco": {
-          "Lunaris": 2
+          "Lunaris": 1
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -5925,7 +6145,7 @@
       "conteudo": {
         "descricao": "Bloco de pedra talhado para receber inscrições de fundação, pesado o bastante para marcar um lugar em definitivo. Ingrediente do Rito de Fundação.",
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 100
         },
         "raridade": "raro",
         "parte": "Material Ritualístico",
@@ -5939,7 +6159,7 @@
       "conteudo": {
         "descricao": "Qualquer item pequeno que carregue a identidade de quem o entrega: uma joia, uma carta, um botão de uniforme. Usado no Concílio da Verdade e em outros ritos que exigem um vínculo de cada participante.",
         "preco": {
-          "Lunaris": 4
+          "Lunaris": 2
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -5953,7 +6173,7 @@
       "conteudo": {
         "descricao": "Papel tratado e tinta preparada com reagentes que fixam a intenção de quem escreve. Ingrediente da Carta Que Se Lê Sozinha.",
         "preco": {
-          "Lunaris": 2
+          "Lunaris": 1
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -5967,7 +6187,7 @@
       "conteudo": {
         "descricao": "Um pequeno símbolo entalhado à mão, único para quem o carrega. Ingrediente do Pacto de Vozes Distantes e de outros ritos de comunicação.",
         "preco": {
-          "Lunaris": 6
+          "Lunaris": 2
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -5981,7 +6201,7 @@
       "conteudo": {
         "descricao": "Placa ou totem gravado com runas de recepção, capaz de captar mensagens enviadas por um Pacto de Vozes ativo. Ingrediente da Rede dos Mensageiros; cada posto exige o seu.",
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 18
         },
         "raridade": "incomum",
         "parte": "Material Ritualístico",
@@ -5995,7 +6215,7 @@
       "conteudo": {
         "descricao": "Fragmento colhido de um veneno ou de uma doença ativa, conservado o suficiente para servir de molde a um antídoto. Ingrediente do Preparo de Antídoto.",
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 3
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -6009,7 +6229,7 @@
       "conteudo": {
         "descricao": "Punhado de ervas medicinais fáceis de achar em qualquer mercado ou floresta. Ingrediente do Preparo de Antídoto e de outros remédios simples.",
         "preco": {
-          "Lunaris": 3
+          "Lunaris": 1
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -6023,7 +6243,7 @@
       "conteudo": {
         "descricao": "Ataduras, pomadas e reagentes básicos de cura, o suficiente para tratar um ferimento sério. Ingrediente da Vigília da Carne e da Reconstrução do Corpo.",
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 3
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -6037,7 +6257,7 @@
       "conteudo": {
         "descricao": "Um bem que importa de verdade para quem o entrega, exigido para ser sacrificado ao acaso sem chance de recuperação. Ingrediente da Aposta Menor.",
         "preco": {
-          "Lunaris": 15
+          "Lunaris": 6
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -6051,7 +6271,7 @@
       "conteudo": {
         "descricao": "Um punhado de materiais de origens diferentes, prontos para serem queimados juntos num único foco. Ingrediente da Mudança Irrepetível e da Roda das Mil Faces.",
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 2
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -6065,7 +6285,7 @@
       "conteudo": {
         "descricao": "Fragmento capturado de Terra, Água, Fogo, Ar, Raio, Luz ou Escuridão em estado puro, estável o bastante para ser manuseado. Ingrediente da Convergência dos Sete Salões e da Forja de Baluarte; escolha o elemento na compra.",
         "preco": {
-          "Lunaris": 24
+          "Lunaris": 60
         },
         "raridade": "raro",
         "parte": "Material Ritualístico",
@@ -6079,7 +6299,7 @@
       "conteudo": {
         "descricao": "Barras de metal de qualidade suficiente para virar arma ou armadura marcial. Ingrediente da Forja de Baluarte.",
         "preco": {
-          "Lunaris": 35
+          "Lunaris": 25
         },
         "raridade": "incomum",
         "parte": "Material Ritualístico",
@@ -6093,7 +6313,7 @@
       "conteudo": {
         "descricao": "Bloco talhado para ser cravado no solo e resistir ao próprio terreno se mover ao redor dele. Ingrediente de Assentar a Montanha; o rito exige quatro, uma para cada canto.",
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 20
         },
         "raridade": "incomum",
         "parte": "Material Ritualístico",
@@ -6107,7 +6327,7 @@
       "conteudo": {
         "descricao": "Um marco simples o bastante para ficar parado num lugar por anos sem levantar suspeita: uma pedra lascada, uma estaca, uma placa. Ingrediente do Marco de Retorno.",
         "preco": {
-          "Lunaris": 8
+          "Lunaris": 3
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -6121,7 +6341,7 @@
       "conteudo": {
         "descricao": "Caixa, baú ou jarro com tampa hermética, pronto para receber o desenho de uma fronteira dobrada por dentro. Ingrediente do Cofre Dobrado.",
         "preco": {
-          "Lunaris": 10
+          "Lunaris": 4
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -6135,7 +6355,7 @@
       "conteudo": {
         "descricao": "Ampulheta, relógio ou vela marcada com precisão suficiente para servir de âncora a um rito de tempo. Ingrediente da Ampulheta Marcada e da Hora Conservada.",
         "preco": {
-          "Lunaris": 10
+          "Lunaris": 4
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -6149,7 +6369,7 @@
       "conteudo": {
         "descricao": "Cinza que já perdeu todo o calor, colhida de uma fogueira apagada há dias. Ingrediente do Apagamento de Rastro e do Poço Silente.",
         "preco": {
-          "Lunaris": 5
+          "Lunaris": 2
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -6163,7 +6383,7 @@
       "conteudo": {
         "descricao": "Um objeto pequeno que pertenceu a quem morreu e ainda carrega a marca do uso diário. Ingrediente do Velório do Ciclo.",
         "preco": {
-          "Lunaris": 6
+          "Lunaris": 2
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -6177,7 +6397,7 @@
       "conteudo": {
         "descricao": "Fragmento arrancado de uma praga, maldição ou invocação sem fim: uma escama, um pedaço de corrente, uma gota do que a sustenta. Ingrediente do Rito do Ponto Final.",
         "preco": {
-          "Lunaris": 40
+          "Lunaris": 80
         },
         "raridade": "raro",
         "parte": "Material Ritualístico",
@@ -6191,7 +6411,7 @@
       "conteudo": {
         "descricao": "Kit básico de chaves, pinças e soldadores, suficiente para abrir e recalibrar um dispositivo comum. Ingrediente da Calibragem de Módulo.",
         "preco": {
-          "Lunaris": 10
+          "Lunaris": 4
         },
         "raridade": "comum",
         "parte": "Material Ritualístico",
@@ -6205,7 +6425,7 @@
       "conteudo": {
         "descricao": "Componente central de qualquer construção sob o protocolo A.X.I.S, necessário para isolar ou animar um dispositivo. Ingrediente do Protocolo de Isolamento e da Montagem de Autômato.",
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 100
         },
         "raridade": "raro",
         "parte": "Material Ritualístico",
@@ -6219,7 +6439,7 @@
       "conteudo": {
         "descricao": "Pequeno transmissor que projeta um campo de interferência ao redor de um núcleo tecnológico. Ingrediente do Protocolo de Isolamento; o rito exige quatro, um por emissor.",
         "preco": {
-          "Lunaris": 20
+          "Lunaris": 15
         },
         "raridade": "incomum",
         "parte": "Material Ritualístico",
@@ -6233,7 +6453,7 @@
       "conteudo": {
         "descricao": "Conjunto de engrenagens, hastes e placas prontas para montagem, compatíveis com um núcleo tecnológico. Ingrediente da Montagem de Autômato.",
         "preco": {
-          "Lunaris": 30
+          "Lunaris": 20
         },
         "raridade": "incomum",
         "parte": "Material Ritualístico",
@@ -6247,7 +6467,7 @@
       "conteudo": {
         "descricao": "Símbolo entalhado sob rito próprio, único para cada um dos Sete Pecados, sem repetição possível no mesmo círculo. Ingrediente do Rito dos Sete Pecados.",
         "preco": {
-          "Lunaris": 120
+          "Solares": 5
         },
         "raridade": "epico",
         "parte": "Material Ritualístico",
@@ -6261,7 +6481,7 @@
       "conteudo": {
         "descricao": "Símbolo entalhado sob rito próprio, único para cada uma das Sete Virtudes, sem repetição possível no mesmo círculo. Ingrediente do Rito das Sete Virtudes.",
         "preco": {
-          "Lunaris": 120
+          "Solares": 5
         },
         "raridade": "epico",
         "parte": "Material Ritualístico",
@@ -6552,7 +6772,9 @@
       "titulo": "Autômato de Guarda",
       "conteudo": {
         "descricao": "Constructo de guarda programado para vigiar uma área e proteger o contratante sem perseguir alvos fora da ordem recebida.",
-        "preco": 95,
+        "preco": {
+          "Lunaris": 980
+        },
         "raridade": "comum",
         "categoria": "Constructo",
         "pv": 95,
@@ -6598,7 +6820,9 @@
       "titulo": "Espírito Guardião de Aethel",
       "conteudo": {
         "descricao": "Manifestação luminosa de Aethel contratada para proteger e tratar um grupo por tempo limitado.",
-        "preco": 484,
+        "preco": {
+          "Solares": 48
+        },
         "raridade": "incomum",
         "categoria": "Espírito",
         "pv": 170,
@@ -6645,7 +6869,9 @@
       "titulo": "Besta do Umbral Maior",
       "conteudo": {
         "descricao": "Besta das profundezas do Umbral contida por um contrato profano. O vínculo limita seus surtos e impede ataques fora de comando.",
-        "preco": 240,
+        "preco": {
+          "Solares": 31
+        },
         "raridade": "incomum",
         "categoria": "Aberração",
         "pv": 265,
@@ -6806,14 +7032,7 @@
       "conteudo": {
         "descricao": "Veículo pequeno terrestre/hover. Vida 20; Defesa 14; Resistência 1; deslocamento 30 m; Manobrabilidade +3; capacidade 2; cobertura nenhuma; tripulação mínima 1; até 2 sistemas ativos; 0 espaços de base; sem armas integradas.",
         "preco": {
-          "Lunaris": 4250
-        },
-        "preco_original": {
-          "Lunaris": 5000
-        },
-        "promocao": {
-          "ativa": true,
-          "rotulo": "Semana da Mobilidade"
+          "Solares": 33
         },
         "raridade": "incomum",
         "atributos": [
@@ -6848,7 +7067,7 @@
       "conteudo": {
         "descricao": "Veículo grande terrestre. Vida 80; Defesa 12; Resistência 5; deslocamento 15 m; Manobrabilidade 0; capacidade total 4, incluindo tripulação; cobertura parcial; tripulação mínima 1; até 3 sistemas ativos; espaços de base: 1. Canhão laser leve: 2d6 de Fogo, bônus de ataque +0, alcance Longo, crítico 20/×2, 1 disparo por Ação Padrão.",
         "preco": {
-          "Lunaris": 15000
+          "Solares": 190
         },
         "raridade": "raro",
         "atributos": [
@@ -6898,7 +7117,7 @@
       "conteudo": {
         "descricao": "Veículo grande atmosférico/espacial. Vida 120; Defesa 15; Resistência 6; deslocamento 90 m na atmosfera e 150 m no espaço; Manobrabilidade +2; capacidade total 2, incluindo tripulação; cobertura total; tripulação mínima 1; até 4 sistemas ativos; 0 espaços de base. Metralhadoras sônicas: 4d6 de Impacto, bônus de ataque +0, alcance Longo, crítico 20/×2, até 2 disparos por Ação Padrão. Míssil térmico: 6d6 de Fogo, bônus de ataque +0, alcance Longo+, crítico 20/×2, 1 disparo por Ação Padrão e 2 cargas totais.",
         "preco": {
-          "Lunaris": 80000
+          "Solares": 800
         },
         "raridade": "epico",
         "atributos": [
@@ -6965,7 +7184,7 @@
       "conteudo": {
         "descricao": "Veículo grande mecha. Vida 200; Defesa 13; Resistência 8; deslocamento 12 m; Manobrabilidade −1; capacidade total 1, incluindo tripulação; cobertura total; tripulação mínima 1; até 4 sistemas ativos; 0 espaços de base. Um operador usa uma Ação Padrão para ativar o Escudo de Energia, que consome 1 sistema ativo, possui 50 de Vida própria e Resistência 0 e recebe dano antes do mecha; excedente passa ao mecha. Ao chegar a 0, o escudo desliga e só recupera toda a Vida em uma manutenção bem-sucedida. Espada incandescente: 8d6 de Fogo, bônus de ataque +0, alcance Adjacente, crítico 20/×2, 1 ataque por Ação Padrão. Lança-chamas: 6d6 de Fogo em cone de 6 m, Reflexos DT 18 reduz à metade, 1 uso por Ação Padrão.",
         "preco": {
-          "Lunaris": 150000
+          "Solares": 800
         },
         "raridade": "lendario",
         "atributos": [
@@ -7036,7 +7255,7 @@
       "conteudo": {
         "descricao": "Substitui um globo ocular. Concede Visão no Escuro com alcance de 18 m e +1 em testes de Percepção baseados em visão enquanto o implante estiver ativo.",
         "preco": {
-          "Créditos Sombrios": 1800
+          "Créditos Sombrios": 30
         },
         "raridade": "raro",
         "atributos": [
@@ -7055,7 +7274,7 @@
       "conteudo": {
         "descricao": "Substitui um braço inteiro. Enquanto estiver funcional, concede +2 de Força e permite causar 1d8 de Impacto com ataques desarmados feitos por esse braço. O dado substitui, em vez de somar, outro dado desarmado.",
         "preco": {
-          "Créditos Sombrios": 2500
+          "Créditos Sombrios": 85
         },
         "raridade": "raro",
         "atributos": [
@@ -7073,7 +7292,9 @@
       "titulo": "Grimório Arcanis Absoluto",
       "conteudo": {
         "descricao": "Enquanto estiver equipado, concede +2 de Inteligência. Uma vez por dia, o portador pode gastar uma Ação Padrão e 10 de Mana para lançar Desintegração Menor contra uma criatura a até 15 m: causa 4d8 de Vazio, com Fortitude reduzindo à metade. Um objeto mundano solto atingido é destruído; itens equipados e itens raros ou superiores não são destruídos.",
-        "preco": 25000,
+        "preco": {
+          "Solares": 55
+        },
         "raridade": "epico",
         "atributos": [
           "Artefato",
@@ -7095,7 +7316,9 @@
       "titulo": "Anel da Falsa Imortalidade",
       "conteudo": {
         "descricao": "Quando um dano reduzir o portador a 0 de Vida, mas não matá-lo instantaneamente, ele permanece com 1 de Vida e se teleporta para um espaço livre que possa perceber a até 10 m. O efeito não gasta Reação. Depois disso, o anel se quebra e é destruído.",
-        "preco": 50000,
+        "preco": {
+          "Solares": 240
+        },
         "raridade": "lendario",
         "atributos": [
           "Artefato",
@@ -7115,7 +7338,9 @@
       "titulo": "Lâmina Monomolecular",
       "conteudo": {
         "descricao": "Uma espada cuja lâmina tem a espessura de um único átomo. Ignora metade da Resistência física do alvo. Uma vez por cena, depois de rolar o dano, repita a rolagem e use o maior resultado.",
-        "preco": 120000,
+        "preco": {
+          "Solares": 160
+        },
         "raridade": "lendario",
         "atributos": [
           "4d10+8 de dano",
@@ -7146,7 +7371,9 @@
       "titulo": "Fuzil Sniper de Antimatéria",
       "conteudo": {
         "descricao": "Dispara projéteis condensados que causam implosões. Contra veículos e estruturas, ignora metade da Resistência geral. Produto de contrabando militar.",
-        "preco": 45000,
+        "preco": {
+          "Solares": 40
+        },
         "raridade": "epico",
         "atributos": [
           "4d10+4 de dano",
@@ -7177,14 +7404,7 @@
       "conteudo": {
         "descricao": "Uma empunhadura metálica que projeta um feixe de plasma flexível. Dano ígneo com alcance estendido.",
         "preco": {
-          "Lunaris": 2800
-        },
-        "preco_original": {
-          "Lunaris": 3500
-        },
-        "promocao": {
-          "ativa": true,
-          "rotulo": "Oferta do Mercado Negro"
+          "Lunaris": 240
         },
         "raridade": "incomum",
         "atributos": [
@@ -7212,11 +7432,8 @@
       "titulo": "Armadura de Furtividade Óptica",
       "conteudo": {
         "descricao": "Uma malha tecnológica que dobra a luz ao redor do usuário, garantindo invisibilidade por até 3 rodadas em combate ou 1 hora fora dele.",
-        "preco": 25500,
-        "preco_original": 30000,
-        "promocao": {
-          "ativa": true,
-          "rotulo": "Liquidação Óptica"
+        "preco": {
+          "Solares": 40
         },
         "raridade": "epico",
         "atributos": [
@@ -7236,7 +7453,9 @@
       "titulo": "Armadura de Assalto 'Juggernaut'",
       "conteudo": {
         "descricao": "Armadura pesada que concede +4 de Defesa e desvantagem em Furtividade. Possui 3 cargas. Gaste uma Ação Padrão e 1 carga para disparar o armamento dos ombros contra uma criatura a até 15 m: cause 4d8 de dano Balístico, com Reflexos reduzindo à metade. Recupera todas as cargas após um descanso completo conectado por uma hora a uma fonte de energia A.X.I.S.",
-        "preco": 85000,
+        "preco": {
+          "Solares": 160
+        },
         "raridade": "lendario",
         "atributos": [
           "Tecnológico",
@@ -7264,7 +7483,7 @@
       "conteudo": {
         "descricao": "Uma vez por cena, antes de se mover, sofra 1d6 de dano interno que ignora Resistência para receber uma Ação de Movimento adicional neste turno. Essa ação só pode ser usada para deslocamento e não concede ataque, conjuração ou Reação. Ao fim do turno, ganhe 1 Cansaço.",
         "preco": {
-          "Créditos Sombrios": 3000
+          "Créditos Sombrios": 100
         },
         "raridade": "raro",
         "atributos": [
@@ -7287,7 +7506,7 @@
       "conteudo": {
         "descricao": "Substitui as pernas por pistões. Ao usar uma Ação de Movimento, pode saltar horizontal ou verticalmente até seu Movimento, limitado a 9 m. Ao calcular uma queda, reduza em 9 m a distância efetiva, sem anular o dano restante. Origem ilegal do Mercado Negro.",
         "preco": {
-          "Créditos Sombrios": 2500
+          "Créditos Sombrios": 85
         },
         "raridade": "raro",
         "atributos": [
@@ -7308,7 +7527,7 @@
       "conteudo": {
         "descricao": "Uma vez a cada 24 horas, gaste uma Ação Completa para beber do cálice e recuperar metade da Vida máxima. Depois, cada outra criatura viva em um raio de 6 m sofre 2d8 de dano de Vida, com Fortitude reduzindo à metade. Esse dano não pode reduzir uma criatura abaixo de 1 de Vida e não aumenta a cura. O usuário ganha 2 Cansaços.",
         "preco": {
-          "Fragmentos de Estrela": 300
+          "Fragmentos de Estrela": 150
         },
         "raridade": "mitico",
         "atributos": [
@@ -7332,7 +7551,9 @@
       "titulo": "Espelho Quebra-Feitiços",
       "conteudo": {
         "descricao": "Uma vez por cena, quando for alvo direto de uma magia à distância, gaste uma Reação e 5 de Mana para fazer Misticismo contra o teste de conjuração do atacante. Em sucesso, a magia tem o conjurador original como alvo e usa as mesmas rolagens e efeitos; em falha, ela afeta você normalmente. Não reflete áreas nem efeitos sem alvo direto.",
-        "preco": 50000,
+        "preco": {
+          "Solares": 60
+        },
         "raridade": "epico",
         "atributos": [
           "Mágico",
@@ -7355,7 +7576,7 @@
       "conteudo": {
         "descricao": "Veículo colossal espacial. Vida 300; Defesa 10; Resistência 12; deslocamento 45 m; Manobrabilidade −3; capacidade 20; cobertura total; tripulação mínima 4; até 6 sistemas ativos; 4 espaços de base; sem armas integradas. O hangar abriga até 2 veículos pequenos.",
         "preco": {
-          "Lunaris": 250000
+          "Solares": 3200
         },
         "raridade": "lendario",
         "atributos": [
@@ -7398,7 +7619,7 @@
       "conteudo": {
         "descricao": "Veículo pequeno hover. Vida 10; Defesa 13; Resistência 0; deslocamento 25 m; Manobrabilidade +2; capacidade 1; cobertura nenhuma; tripulação mínima 1; sistemas ativos: 0; 0 espaços de base; sem armas integradas.",
         "preco": {
-          "Lunaris": 1500
+          "Lunaris": 1200
         },
         "raridade": "comum",
         "atributos": [
@@ -7433,7 +7654,7 @@
       "conteudo": {
         "descricao": "Veículo minúsculo terrestre. Vida 6; Defesa 14; Resistência 0; deslocamento 15 m; Manobrabilidade +2; capacidade total 1, incluindo tripulação; cobertura nenhuma; tripulação mínima 1; sistemas ativos: 0; 0 espaços de base; sem armas integradas.",
         "preco": {
-          "Lunaris": 700
+          "Lunaris": 300
         },
         "raridade": "comum",
         "atributos": [
@@ -7468,7 +7689,7 @@
       "conteudo": {
         "descricao": "Veículo pequeno terrestre. Vida 16; Defesa 11; Resistência 1; deslocamento 12 m; Manobrabilidade 0; capacidade total 3, incluindo tripulação; cobertura nenhuma; tripulação mínima 1; sistemas ativos: 0; 0 espaços de base; sem armas integradas. O compartimento integrado armazena até 8 itens registrados no inventário do veículo.",
         "preco": {
-          "Lunaris": 1050
+          "Lunaris": 630
         },
         "raridade": "comum",
         "atributos": [
@@ -7509,7 +7730,7 @@
       "conteudo": {
         "descricao": "Veículo pequeno terrestre. Vida 12; Defesa 13; Resistência 0; deslocamento 20 m; Manobrabilidade +2; capacidade total 2, incluindo tripulação; cobertura nenhuma; tripulação mínima 1; sistemas ativos: 0; 0 espaços de base; sem armas integradas.",
         "preco": {
-          "Lunaris": 1350
+          "Lunaris": 990
         },
         "raridade": "comum",
         "atributos": [
@@ -7544,7 +7765,7 @@
       "conteudo": {
         "descricao": "Veículo médio terrestre. Vida 35; Defesa 12; Resistência 2; deslocamento 18 m; Manobrabilidade +1; capacidade total 4, incluindo tripulação; cobertura parcial; tripulação mínima 1; sistemas ativos: 1; espaços de base: 1; sem armas integradas.",
         "preco": {
-          "Lunaris": 2800
+          "Lunaris": 1200
         },
         "raridade": "incomum",
         "atributos": [
@@ -7579,7 +7800,7 @@
       "conteudo": {
         "descricao": "Veículo médio terrestre. Vida 40; Defesa 11; Resistência 2; deslocamento 15 m; Manobrabilidade 0; capacidade total 6, incluindo tripulação; cobertura total; tripulação mínima 1; até 2 sistemas ativos; espaços de base: 1, ocupado pela Área Médica; sem armas integradas. Enquanto a Área Médica estiver ativa, concede +2 em Cura para tratar 1 paciente por vez.",
         "preco": {
-          "Lunaris": 4200
+          "Solares": 32
         },
         "raridade": "incomum",
         "atributos": [
@@ -7621,7 +7842,7 @@
       "conteudo": {
         "descricao": "Veículo médio aquático. Vida 45; Defesa 12; Resistência 2; deslocamento 24 m na água; Manobrabilidade +1; capacidade total 6, incluindo tripulação; cobertura parcial; tripulação mínima 1; até 2 sistemas ativos; espaços de base: 1; sem armas integradas.",
         "preco": {
-          "Lunaris": 5000
+          "Solares": 48
         },
         "raridade": "incomum",
         "atributos": [
@@ -7659,7 +7880,7 @@
       "conteudo": {
         "descricao": "Veículo grande terrestre. Vida 65; Defesa 10; Resistência 5; deslocamento 12 m; Manobrabilidade −1; capacidade total 6, incluindo tripulação; cobertura total; tripulação mínima 1; até 2 sistemas ativos; 2 espaços de base, com 1 ocupado pelo Armazém; sem armas integradas. O Armazém integrado guarda até 15 itens registrados no inventário do veículo.",
         "preco": {
-          "Lunaris": 7500
+          "Solares": 48
         },
         "raridade": "raro",
         "atributos": [
@@ -7701,7 +7922,7 @@
       "conteudo": {
         "descricao": "Veículo médio terrestre/hover. Vida 45; Defesa 15; Resistência 2; deslocamento 36 m; Manobrabilidade +3; capacidade total 2, incluindo tripulação; cobertura parcial; tripulação mínima 1; até 3 sistemas ativos; 0 espaços de base. Metralhadora leve: 2d6 de Perfuração, bônus de ataque +0, alcance Curto, crítico 20/×2, até 2 disparos por Ação Padrão.",
         "preco": {
-          "Lunaris": 9500
+          "Solares": 75
         },
         "raridade": "raro",
         "atributos": [
@@ -7751,7 +7972,7 @@
       "conteudo": {
         "descricao": "Veículo grande atmosférico/hover. Vida 70; Defesa 13; Resistência 3; deslocamento 45 m; Manobrabilidade +1; capacidade total 8, incluindo tripulação; cobertura total; tripulação mínima 2; até 3 sistemas ativos; espaços de base: 1, ocupado pela Área Médica; sem armas integradas. Enquanto a Área Médica estiver ativa, concede +2 em Cura para tratar 1 paciente por vez.",
         "preco": {
-          "Lunaris": 13000
+          "Solares": 145
         },
         "raridade": "raro",
         "atributos": [
@@ -7793,7 +8014,7 @@
       "conteudo": {
         "descricao": "Veículo grande atmosférico/espacial. Vida 75; Defesa 16; Resistência 3; deslocamento 60 m na atmosfera e 100 m no espaço; Manobrabilidade +3; capacidade total 4, incluindo tripulação; cobertura total; tripulação mínima 1; até 4 sistemas ativos; espaços de base: 1; sem armas integradas.",
         "preco": {
-          "Lunaris": 24000
+          "Solares": 200
         },
         "raridade": "epico",
         "atributos": [
@@ -8251,7 +8472,7 @@
       "conteudo": {
         "descricao": "Uma ponte sináptica para máquinas e Autômatos. Concede +1 em Tecnologia apenas ao diagnosticar, operar ou invadir um dispositivo conectado diretamente.",
         "preco": {
-          "Créditos Sombrios": 1800
+          "Créditos Sombrios": 30
         },
         "raridade": "incomum",
         "atributos": [
@@ -8270,7 +8491,7 @@
       "conteudo": {
         "descricao": "Capta frequências abaixo e acima da audição comum. Concede +1 em Percepção baseada em som. Ao sofrer dano Sônico sem proteção, faça Fortitude contra a DT do efeito; em falha, fique Atordoado até o fim do próximo turno.",
         "preco": {
-          "Créditos Sombrios": 900
+          "Créditos Sombrios": 10
         },
         "raridade": "incomum",
         "atributos": [
@@ -8290,7 +8511,7 @@
       "conteudo": {
         "descricao": "Permite respirar em fumaça ou ar contaminado e concede vantagem contra gases e venenos inalados. Após uma cena em ambiente contaminado, o cartucho fica gasto. Substituí-lo exige uma Ação Padrão fora de perigo e um cartucho de 100 Créditos Sombrios.",
         "preco": {
-          "Créditos Sombrios": 2500
+          "Créditos Sombrios": 85
         },
         "raridade": "raro",
         "atributos": [
@@ -8311,7 +8532,7 @@
       "conteudo": {
         "descricao": "Placas flexíveis sob a pele concedem +1 de Defesa contra ataques físicos enquanto o implante estiver funcional. A rigidez impõe -1 em Furtividade quando o teste depender de movimento silencioso.",
         "preco": {
-          "Créditos Sombrios": 3200
+          "Créditos Sombrios": 100
         },
         "raridade": "raro",
         "atributos": [
@@ -8330,7 +8551,7 @@
       "conteudo": {
         "descricao": "Estabilizadores vertebrais concedem +2 em testes para resistir a ser derrubado ou empurrado. Uma vez por rodada, levantar-se deixa de consumir Movimento.",
         "preco": {
-          "Créditos Sombrios": 6000
+          "Créditos Sombrios": 125
         },
         "raridade": "epico",
         "atributos": [
@@ -8350,7 +8571,7 @@
       "conteudo": {
         "descricao": "Uma vez por descanso completo, depois de falhar em um teste de Inteligência, Conhecimento ou Tecnologia, repita o teste e use o novo resultado. Se o novo resultado também falhar, sofra 1d4 de dano de Sanidade.",
         "preco": {
-          "Créditos Sombrios": 7000
+          "Créditos Sombrios": 500
         },
         "raridade": "epico",
         "atributos": [
@@ -8462,7 +8683,9 @@
       "titulo": "Selo: Nova Tentativa",
       "conteudo": {
         "descricao": "Selo consumível do Fluxo da Origem. Depois de uma falha não combativa, permite repetir o teste com uma abordagem diferente; consequências já produzidas permanecem.",
-        "preco": 120,
+        "preco": {
+          "Lunaris": 45
+        },
         "raridade": "incomum",
         "atributos": [
           "Selo",
@@ -8488,7 +8711,9 @@
       "titulo": "Selo: Autenticidade",
       "conteudo": {
         "descricao": "Selo consumível do Fluxo da Essência. Revela a natureza sobrenatural geral de um objeto ou disfarce; uma criatura pode resistir com Vontade.",
-        "preco": 120,
+        "preco": {
+          "Lunaris": 45
+        },
         "raridade": "incomum",
         "atributos": [
           "Selo",
@@ -8514,7 +8739,9 @@
       "titulo": "Selo: Mensagem Prateada",
       "conteudo": {
         "descricao": "Selo consumível do Fluxo da Comunicação. Ao ser quebrado, envia uma mensagem gravada de até 25 palavras a uma pessoa nomeada na mesma realidade.",
-        "preco": 120,
+        "preco": {
+          "Lunaris": 45
+        },
         "raridade": "incomum",
         "atributos": [
           "Selo",
@@ -8540,7 +8767,9 @@
       "titulo": "Selo: Primeiros Socorros",
       "conteudo": {
         "descricao": "Selo consumível do Fluxo da Vitalidade. Com uma ação padrão e toque, recupera 1d6 + 2 de Vida de uma criatura viva.",
-        "preco": 140,
+        "preco": {
+          "Lunaris": 65
+        },
         "raridade": "incomum",
         "atributos": [
           "Selo",
@@ -8566,7 +8795,9 @@
       "titulo": "Selo: Quatro Mudanças",
       "conteudo": {
         "descricao": "Selo consumível do Fluxo da Inconstância. Por uma cena, um objeto pequeno torna-se leve, pesado, flexível ou rígido, determinado por 1d4.",
-        "preco": 120,
+        "preco": {
+          "Lunaris": 45
+        },
         "raridade": "incomum",
         "atributos": [
           "Selo",
@@ -8592,7 +8823,9 @@
       "titulo": "Selo: Centelha Elemental",
       "conteudo": {
         "descricao": "Selo consumível do Fluxo Físico. Produz uma manifestação elemental mínima para uma tarefa cotidiana ou causa 1d6 de dano contra Reflexos.",
-        "preco": 140,
+        "preco": {
+          "Lunaris": 65
+        },
         "raridade": "incomum",
         "atributos": [
           "Selo",
@@ -8618,7 +8851,9 @@
       "titulo": "Selo: Retorno Marcado",
       "conteudo": {
         "descricao": "Selo consumível do Fluxo do Espaço. Teleporta o usuário ao ponto de inscrição a até 15 metros, salvo uma fronteira selada.",
-        "preco": 320,
+        "preco": {
+          "Lunaris": 330
+        },
         "raridade": "raro",
         "atributos": [
           "Selo",
@@ -8644,7 +8879,9 @@
       "titulo": "Selo: Conservação",
       "conteudo": {
         "descricao": "Selo consumível do Fluxo do Tempo. Conserva um alimento, remédio ou amostra mundana por 24 horas.",
-        "preco": 100,
+        "preco": {
+          "Lunaris": 35
+        },
         "raridade": "incomum",
         "atributos": [
           "Selo",
@@ -8670,7 +8907,9 @@
       "titulo": "Selo: Silêncio",
       "conteudo": {
         "descricao": "Selo consumível do Fluxo do Vazio. Suprime sons numa área de 1,5 metro por três rodadas.",
-        "preco": 300,
+        "preco": {
+          "Lunaris": 320
+        },
         "raridade": "raro",
         "atributos": [
           "Selo",
@@ -8697,7 +8936,7 @@
       "conteudo": {
         "descricao": "Selo raro do Fluxo do Fim. Encerra sangramento, fogo persistente ou um efeito temporário de grau ou círculo igual ou inferior. Sua compra e uso exigem autorização do Mestre.",
         "preco": {
-          "Fragmentos de Estrela": 12
+          "Lunaris": 85
         },
         "raridade": "raro",
         "atributos": [
@@ -8715,7 +8954,7 @@
         "efeito": "Encerra sangramento, fogo persistente ou efeito temporário de grau ou círculo igual ou inferior.",
         "consumivel": true,
         "origem_magica": "fechamento",
-        "nivelMinimoLoja": 4
+        "nivelMinimoLoja": 3
       }
     },
     {
@@ -8724,7 +8963,9 @@
       "titulo": "Selo: Diagnóstico",
       "conteudo": {
         "descricao": "Selo consumível do Fluxo da Tecnologia. Exibe integridade, energia, falha evidente e presença de Fluxo num dispositivo ou Autômato conectado.",
-        "preco": 160,
+        "preco": {
+          "Lunaris": 80
+        },
         "raridade": "incomum",
         "atributos": [
           "Selo",
@@ -8750,7 +8991,7 @@
       "titulo": "Afiada",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -8773,7 +9014,7 @@
       "titulo": "Perfurante",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -8796,7 +9037,7 @@
       "titulo": "Margem Ampla",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -8819,7 +9060,7 @@
       "titulo": "Coreografada",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -8842,7 +9083,7 @@
       "titulo": "Drenante",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -8865,7 +9106,7 @@
       "titulo": "Assombrada",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -8888,7 +9129,7 @@
       "titulo": "Balanceada",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 18
         },
         "raridade": "comum",
         "categoria_loja": "Modificações",
@@ -8911,7 +9152,7 @@
       "titulo": "Leve",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 18
         },
         "raridade": "comum",
         "categoria_loja": "Modificações",
@@ -8934,7 +9175,7 @@
       "titulo": "Silenciosa",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 18
         },
         "raridade": "comum",
         "categoria_loja": "Modificações",
@@ -8957,7 +9198,7 @@
       "titulo": "Devastadora",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -8996,7 +9237,7 @@
       "titulo": "Elemental",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9019,7 +9260,7 @@
       "titulo": "Sedenta",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9042,7 +9283,7 @@
       "titulo": "Vampírica",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9072,7 +9313,7 @@
       "titulo": "Sintonizada",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9103,7 +9344,7 @@
       "titulo": "Exaustiva",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9133,7 +9374,7 @@
       "titulo": "Assinatura de Árvore",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9156,7 +9397,7 @@
       "titulo": "Golpe de Misericórdia",
       "conteudo": {
         "preco": {
-          "Lunaris": 450
+          "Lunaris": 1200
         },
         "raridade": "epico",
         "categoria_loja": "Modificações",
@@ -9186,7 +9427,7 @@
       "titulo": "Implacável",
       "conteudo": {
         "preco": {
-          "Lunaris": 450
+          "Lunaris": 1200
         },
         "raridade": "epico",
         "categoria_loja": "Modificações",
@@ -9216,7 +9457,7 @@
       "titulo": "Reforçada",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -9239,7 +9480,7 @@
       "titulo": "Isolante",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -9262,7 +9503,7 @@
       "titulo": "Camuflada",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -9285,7 +9526,7 @@
       "titulo": "Trilha Serena",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -9308,7 +9549,7 @@
       "titulo": "Flexível",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 18
         },
         "raridade": "comum",
         "categoria_loja": "Modificações",
@@ -9331,7 +9572,7 @@
       "titulo": "Ajustável",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 18
         },
         "raridade": "comum",
         "categoria_loja": "Modificações",
@@ -9354,7 +9595,7 @@
       "titulo": "Bastião",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9385,7 +9626,7 @@
       "titulo": "Regenerativa",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9415,7 +9656,7 @@
       "titulo": "Estabilizadora",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9438,7 +9679,7 @@
       "titulo": "Âncora de Sanidade",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9469,7 +9710,7 @@
       "titulo": "Retaliadora",
       "conteudo": {
         "preco": {
-          "Lunaris": 450
+          "Lunaris": 1200
         },
         "raridade": "epico",
         "categoria_loja": "Modificações",
@@ -9500,7 +9741,7 @@
       "titulo": "Casca do Fim",
       "conteudo": {
         "preco": {
-          "Lunaris": 450
+          "Lunaris": 1200
         },
         "raridade": "epico",
         "categoria_loja": "Modificações",
@@ -9530,7 +9771,7 @@
       "titulo": "Reforçado",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -9553,7 +9794,7 @@
       "titulo": "Espinhado",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -9576,7 +9817,7 @@
       "titulo": "Leve",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 18
         },
         "raridade": "comum",
         "categoria_loja": "Modificações",
@@ -9599,7 +9840,7 @@
       "titulo": "Retrátil",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 18
         },
         "raridade": "comum",
         "categoria_loja": "Modificações",
@@ -9622,7 +9863,7 @@
       "titulo": "Amplo",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9645,7 +9886,7 @@
       "titulo": "Repulsor",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9668,7 +9909,7 @@
       "titulo": "Vingativo",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9691,7 +9932,7 @@
       "titulo": "Guarda de Fluxo",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9722,7 +9963,7 @@
       "titulo": "Contratempo",
       "conteudo": {
         "preco": {
-          "Lunaris": 450
+          "Lunaris": 1200
         },
         "raridade": "epico",
         "categoria_loja": "Modificações",
@@ -9752,7 +9993,7 @@
       "titulo": "Vinculado",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -9775,7 +10016,7 @@
       "titulo": "Ressonante",
       "conteudo": {
         "preco": {
-          "Lunaris": 60
+          "Lunaris": 70
         },
         "raridade": "incomum",
         "categoria_loja": "Modificações",
@@ -9798,7 +10039,7 @@
       "titulo": "Portátil",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 18
         },
         "raridade": "comum",
         "categoria_loja": "Modificações",
@@ -9821,7 +10062,7 @@
       "titulo": "Autoidentificável",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 18
         },
         "raridade": "comum",
         "categoria_loja": "Modificações",
@@ -9844,7 +10085,7 @@
       "titulo": "Recarregável",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 18
         },
         "raridade": "comum",
         "categoria_loja": "Modificações",
@@ -9867,7 +10108,7 @@
       "titulo": "Sensível a Fluxo",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 18
         },
         "raridade": "comum",
         "categoria_loja": "Modificações",
@@ -9890,7 +10131,7 @@
       "titulo": "Instável",
       "conteudo": {
         "preco": {
-          "Lunaris": 25
+          "Lunaris": 18
         },
         "raridade": "comum",
         "categoria_loja": "Modificações",
@@ -9913,7 +10154,7 @@
       "titulo": "Protetor",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9936,7 +10177,7 @@
       "titulo": "Vitalício",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9959,7 +10200,7 @@
       "titulo": "Amplificador",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -9982,7 +10223,7 @@
       "titulo": "Reserva de Fluxo",
       "conteudo": {
         "preco": {
-          "Lunaris": 180
+          "Lunaris": 290
         },
         "raridade": "raro",
         "categoria_loja": "Modificações",
@@ -10013,7 +10254,7 @@
       "titulo": "Selado",
       "conteudo": {
         "preco": {
-          "Lunaris": 450
+          "Lunaris": 1200
         },
         "raridade": "epico",
         "categoria_loja": "Modificações",
@@ -10043,7 +10284,9 @@
       "titulo": "Corvo Arauto",
       "conteudo": {
         "descricao": "Mensageiro alado que carrega avisos entre vínculos distantes.",
-        "preco": 62,
+        "preco": {
+          "Lunaris": 760
+        },
         "raridade": "comum",
         "categoria": "Monstro",
         "pv": 70,
@@ -10089,7 +10332,9 @@
       "titulo": "Javali Selvagem",
       "conteudo": {
         "descricao": "Investe sem aviso contra quem chega perto demais do seu território.",
-        "preco": 13,
+        "preco": {
+          "Lunaris": 300
+        },
         "raridade": "comum",
         "categoria": "Animal",
         "pv": 100,
@@ -10137,7 +10382,9 @@
       "titulo": "Enxame de Ratos",
       "conteudo": {
         "descricao": "Enxame faminto que ataca em massa e foge ao primeiro sinal de fogo.",
-        "preco": 133,
+        "preco": {
+          "Lunaris": 1200
+        },
         "raridade": "comum",
         "categoria": "Animal",
         "pv": 60,
@@ -10182,7 +10429,9 @@
       "titulo": "Cultista Fanático",
       "conteudo": {
         "descricao": "Serve um culto obscuro e luta até o fim por fé cega.",
-        "preco": 50,
+        "preco": {
+          "Lunaris": 670
+        },
         "raridade": "comum",
         "categoria": "Humanoide",
         "pv": 150,
@@ -10229,7 +10478,9 @@
       "titulo": "Hiena Risonha",
       "conteudo": {
         "descricao": "Caça em bando e ri enquanto cerca a presa ferida.",
-        "preco": 88,
+        "preco": {
+          "Lunaris": 940
+        },
         "raridade": "comum",
         "categoria": "Animal",
         "pv": 170,
@@ -10274,7 +10525,9 @@
       "titulo": "Sombra Sussurrante",
       "conteudo": {
         "descricao": "Espírito menor que planta dúvidas na mente de quem se aproxima.",
-        "preco": 90,
+        "preco": {
+          "Lunaris": 1700
+        },
         "raridade": "incomum",
         "categoria": "Espírito",
         "pv": 140,
@@ -10320,7 +10573,9 @@
       "titulo": "Lamia Encantadora",
       "conteudo": {
         "descricao": "Metade serpente, metade sedução; hipnotiza antes de atacar.",
-        "preco": 173,
+        "preco": {
+          "Solares": 26
+        },
         "raridade": "incomum",
         "categoria": "Monstro",
         "pv": 250,
@@ -10366,7 +10621,9 @@
       "titulo": "Troll Regenerador",
       "conteudo": {
         "descricao": "Fecha ferimentos quase tão rápido quanto os recebe, menos os de fogo.",
-        "preco": 188,
+        "preco": {
+          "Solares": 48
+        },
         "raridade": "raro",
         "categoria": "Monstro",
         "pv": 420,
@@ -10411,7 +10668,9 @@
       "titulo": "Arauto do Vazio",
       "conteudo": {
         "descricao": "Mensageiro do Fim; sua presença corrói a realidade ao redor.",
-        "preco": 626,
+        "preco": {
+          "Solares": 190
+        },
         "raridade": "raro",
         "categoria": "Aberração",
         "pv": 380,
@@ -10457,7 +10716,9 @@
       "titulo": "Harpia Tempestuosa",
       "conteudo": {
         "descricao": "Mergulha das alturas trazendo vento e garras afiadas.",
-        "preco": 188,
+        "preco": {
+          "Solares": 27
+        },
         "raridade": "incomum",
         "categoria": "Monstro",
         "pv": 360,
@@ -10502,7 +10763,9 @@
       "titulo": "Golem de Ferro",
       "conteudo": {
         "descricao": "Construto de guerra pesado, feito pra derrubar portas e exércitos.",
-        "preco": 378,
+        "preco": {
+          "Solares": 105
+        },
         "raridade": "raro",
         "categoria": "Constructo",
         "pv": 600,
@@ -10547,7 +10810,9 @@
       "titulo": "Necromante Decadente",
       "conteudo": {
         "descricao": "Erudito caído que trocou a vida pelo controle sobre a morte.",
-        "preco": 436,
+        "preco": {
+          "Solares": 125
+        },
         "raridade": "raro",
         "categoria": "Humanoide",
         "pv": 460,
@@ -10593,7 +10858,9 @@
       "titulo": "Wyvern das Montanhas",
       "conteudo": {
         "descricao": "Predador alado territorial com ferrão peçonhento na cauda.",
-        "preco": 303,
+        "preco": {
+          "Solares": 200
+        },
         "raridade": "epico",
         "categoria": "Monstro",
         "pv": 560,
@@ -10641,7 +10908,9 @@
       "titulo": "Espectro Vingativo",
       "conteudo": {
         "descricao": "Alma presa por um rancor que não descansa até ser vingado.",
-        "preco": 448,
+        "preco": {
+          "Solares": 300
+        },
         "raridade": "epico",
         "categoria": "Espírito",
         "pv": 480,
@@ -10687,7 +10956,9 @@
       "titulo": "Minotauro Guardião",
       "conteudo": {
         "descricao": "Guarda labirintos e ruínas, forte demais pra ser ignorado.",
-        "preco": 333,
+        "preco": {
+          "Solares": 95
+        },
         "raridade": "raro",
         "categoria": "Monstro",
         "pv": 700,
@@ -10736,7 +11007,9 @@
       "titulo": "Hidra de Duas Cabeças",
       "conteudo": {
         "descricao": "Corta uma cabeça e outra nasce, a menos que o corte seja selado.",
-        "preco": 388,
+        "preco": {
+          "Solares": 260
+        },
         "raridade": "epico",
         "categoria": "Monstro",
         "pv": 720,
@@ -10781,7 +11054,9 @@
       "titulo": "Efreeti do Deserto",
       "conteudo": {
         "descricao": "Espírito do fogo preso a uma lâmpada ou anel, servo relutante.",
-        "preco": 1204,
+        "preco": {
+          "Solares": 800
+        },
         "raridade": "epico",
         "categoria": "Elemental",
         "pv": 800,
@@ -10827,7 +11102,9 @@
       "titulo": "Behemoth das Planícies",
       "conteudo": {
         "descricao": "Colosso herbívoro que esmaga tudo em seu caminho por instinto, não malícia.",
-        "preco": 728,
+        "preco": {
+          "Solares": 480
+        },
         "raridade": "epico",
         "categoria": "Monstro",
         "pv": 900,
@@ -10877,7 +11154,9 @@
       "titulo": "Arconte da Ordem",
       "conteudo": {
         "descricao": "Emissário de uma lei superior; julga antes de agir.",
-        "preco": 7345,
+        "preco": {
+          "Solares": 2000
+        },
         "raridade": "lendario",
         "categoria": "Lendário",
         "pv": 845,
@@ -10924,7 +11203,9 @@
       "titulo": "Titã de Gelo",
       "conteudo": {
         "descricao": "Desperta das geleiras uma vez a cada era, e o mundo sente o frio.",
-        "preco": 7920,
+        "preco": {
+          "Solares": 2050
+        },
         "raridade": "lendario",
         "categoria": "Lendário",
         "pv": 1100,
@@ -10970,7 +11251,9 @@
       "titulo": "Avatar das Sombras",
       "conteudo": {
         "descricao": "Fragmento consciente da escuridão entre os planos.",
-        "preco": 16510,
+        "preco": {
+          "Solares": 3050
+        },
         "raridade": "lendario",
         "categoria": "Lendário",
         "pv": 1255,
@@ -11017,7 +11300,9 @@
       "titulo": "Devorador de Mundos",
       "conteudo": {
         "descricao": "Entidade que já engoliu reinos inteiros; poucos sobrevivem pra descrever.",
-        "preco": 18335,
+        "preco": {
+          "Solares": 3200
+        },
         "raridade": "lendario",
         "categoria": "Lendário",
         "pv": 1600,
@@ -11064,7 +11349,9 @@
       "titulo": "Ameaça Genérica (VD 1)",
       "conteudo": {
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
-        "preco": 13,
+        "preco": {
+          "Lunaris": 300
+        },
         "raridade": "comum",
         "categoria": "Universal",
         "pv": 95,
@@ -11110,7 +11397,9 @@
       "titulo": "Ameaça Genérica (VD 2)",
       "conteudo": {
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
-        "preco": 18,
+        "preco": {
+          "Lunaris": 360
+        },
         "raridade": "comum",
         "categoria": "Universal",
         "pv": 170,
@@ -11156,7 +11445,9 @@
       "titulo": "Ameaça Genérica (VD 3)",
       "conteudo": {
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
-        "preco": 53,
+        "preco": {
+          "Lunaris": 690
+        },
         "raridade": "comum",
         "categoria": "Universal",
         "pv": 265,
@@ -11202,7 +11493,9 @@
       "titulo": "Ameaça Genérica (VD 4)",
       "conteudo": {
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
-        "preco": 68,
+        "preco": {
+          "Lunaris": 1400
+        },
         "raridade": "incomum",
         "categoria": "Universal",
         "pv": 380,
@@ -11248,7 +11541,9 @@
       "titulo": "Ameaça Genérica (VD 5)",
       "conteudo": {
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
-        "preco": 168,
+        "preco": {
+          "Solares": 25
+        },
         "raridade": "incomum",
         "categoria": "Universal",
         "pv": 515,
@@ -11294,7 +11589,9 @@
       "titulo": "Ameaça Genérica (VD 6)",
       "conteudo": {
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
-        "preco": 198,
+        "preco": {
+          "Solares": 50
+        },
         "raridade": "raro",
         "categoria": "Universal",
         "pv": 670,
@@ -11342,7 +11639,9 @@
       "titulo": "Ameaça Genérica (VD 7)",
       "conteudo": {
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
-        "preco": 608,
+        "preco": {
+          "Solares": 185
+        },
         "raridade": "raro",
         "categoria": "Universal",
         "pv": 845,
@@ -11390,7 +11689,9 @@
       "titulo": "Ameaça Genérica (VD 8)",
       "conteudo": {
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
-        "preco": 688,
+        "preco": {
+          "Solares": 460
+        },
         "raridade": "epico",
         "categoria": "Universal",
         "pv": 1040,
@@ -11438,7 +11739,9 @@
       "titulo": "Ameaça Genérica (VD 9)",
       "conteudo": {
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
-        "preco": 1179,
+        "preco": {
+          "Solares": 780
+        },
         "raridade": "epico",
         "categoria": "Universal",
         "pv": 1255,
@@ -11486,7 +11789,9 @@
       "titulo": "Ameaça Genérica (VD 10)",
       "conteudo": {
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
-        "preco": 1304,
+        "preco": {
+          "Solares": 800
+        },
         "raridade": "lendario",
         "categoria": "Universal",
         "pv": 1490,
@@ -11536,7 +11841,7 @@
       "conteudo": {
         "descricao": "Uma residência modesta de dois cômodos, pronta para morar. Escritura em mãos assim que a compra é confirmada.",
         "preco": {
-          "Lunaris": 1000
+          "Lunaris": 1150
         },
         "raridade": "comum",
         "tipoPropriedade": "residencia",
@@ -11559,7 +11864,7 @@
       "conteudo": {
         "descricao": "Unidade compacta num prédio residencial da Metrópole, com portaria e acesso fácil ao comércio local.",
         "preco": {
-          "Lunaris": 1500
+          "Solares": 24
         },
         "raridade": "comum",
         "tipoPropriedade": "apartamento",
@@ -11582,7 +11887,7 @@
       "conteudo": {
         "descricao": "Um lote vazio, sem construção. Serve de base para erguer o que o dono quiser, do zero.",
         "preco": {
-          "Lunaris": 700
+          "Lunaris": 600
         },
         "raridade": "comum",
         "tipoPropriedade": "terreno",
@@ -11605,7 +11910,7 @@
       "conteudo": {
         "descricao": "Ponto comercial com vitrine e depósito nos fundos, pronto para abrigar um negócio.",
         "preco": {
-          "Lunaris": 3200
+          "Solares": 24
         },
         "raridade": "incomum",
         "tipoPropriedade": "comercio",
@@ -11628,7 +11933,7 @@
       "conteudo": {
         "descricao": "Base isolada e defensável, já com um dormitório básico instalado. Ideal para operações que exigem discrição.",
         "preco": {
-          "Lunaris": 6500
+          "Solares": 95
         },
         "raridade": "incomum",
         "tipoPropriedade": "base",
@@ -11653,18 +11958,26 @@
     },
     {
       "tipo": "artefato",
-      "id": "mn_relogio_de_bolso_corrompido",
+      "id": "mn-relogio-de-bolso-corrompido",
       "titulo": "Relógio de Bolso Corrompido",
       "conteudo": {
         "descricao": "Um relógio manchado de sangue que congela o tempo por milissegundos. Útil para escapar de situações mortais.",
         "raridade": "epico",
         "mercado_negro": true,
-        "preco": 30
+        "preco": {
+          "Solares": 15
+        },
+        "atributos": [
+          "Artefato",
+          "Mercado Negro",
+          "Tempo"
+        ],
+        "nivelMinimoLoja": 3
       }
     },
     {
       "tipo": "arma",
-      "id": "mn_adaga_das_sombras",
+      "id": "mn-adaga-das-sombras",
       "titulo": "Adaga das Sombras",
       "conteudo": {
         "modo": "Corpo a corpo",
@@ -11673,59 +11986,112 @@
         "raridade": "lendario",
         "mercado_negro": true,
         "dano": "2d6+4",
-        "preco": 100
+        "preco": {
+          "Solares": 40
+        },
+        "atributos": [
+          "2d6+4 de dano",
+          "Crítico 19-20/x2",
+          "Mercado Negro"
+        ],
+        "margem_ameaca": 19,
+        "multiplicador_critico": 2,
+        "critico": "19-20/x2",
+        "alcance": "Corpo a corpo",
+        "tipo_de_dano": "Perfuração",
+        "nivelMinimoLoja": 4
       }
     },
     {
       "tipo": "consumivel",
-      "id": "mn_pocao_do_esquecimento",
+      "id": "mn-pocao-do-esquecimento",
       "titulo": "Poção do Esquecimento",
       "conteudo": {
         "descricao": "Apaga a memória recente de quem bebe. Usado frequentemente por assassinos após o serviço.",
         "raridade": "raro",
         "mercado_negro": true,
-        "preco": 10
+        "preco": {
+          "Lunaris": 190
+        },
+        "atributos": [
+          "Consumível",
+          "Mercado Negro",
+          "Memória"
+        ],
+        "nivelMinimoLoja": 3
       }
     },
     {
       "tipo": "artefato",
-      "id": "mn_mascara_sem_rosto",
+      "id": "mn-mascara-sem-rosto",
       "titulo": "Máscara Sem Rosto",
       "conteudo": {
         "descricao": "Disfarça completamente a identidade do usuário. O Banqueiro não gosta dessa máscara.",
         "raridade": "lendario",
         "mercado_negro": true,
-        "preco": 150
+        "preco": {
+          "Solares": 60
+        },
+        "atributos": [
+          "Artefato",
+          "Mercado Negro",
+          "Disfarce"
+        ],
+        "nivelMinimoLoja": 4
       }
     },
     {
       "tipo": "consumivel",
-      "id": "plano_de_saude_basico",
+      "id": "plano-de-saude-basico",
       "titulo": "Plano de Saúde Básico",
       "conteudo": {
         "descricao": "Dá um bom desconto na conta do hospital, cobrando 100 Lunaris ao invés de 200.",
         "raridade": "incomum",
-        "preco": 500
+        "preco": {
+          "Lunaris": 25
+        },
+        "atributos": [
+          "Serviço",
+          "Hospital",
+          "Desconto permanente"
+        ],
+        "nivelMinimoLoja": 2
       }
     },
     {
       "tipo": "consumivel",
-      "id": "plano_de_saude_vip",
+      "id": "plano-de-saude-vip",
       "titulo": "Plano de Saúde VIP",
       "conteudo": {
         "descricao": "Atendimento emergencial excelente. A taxa de hospital cai para apenas 50 Lunaris.",
         "raridade": "raro",
-        "preco": 2000
+        "preco": {
+          "Lunaris": 330
+        },
+        "atributos": [
+          "Serviço",
+          "Hospital",
+          "Desconto permanente"
+        ],
+        "nivelMinimoLoja": 3
       }
     },
     {
       "tipo": "consumivel",
-      "id": "contrato_guarda_costas",
+      "id": "contrato-guarda-costas",
       "titulo": "Contrato Guarda-Costas Mercenário",
       "conteudo": {
         "descricao": "Você pode usar /contratar_guarda para proteger sua carteira temporariamente contra roubos.",
         "raridade": "raro",
-        "preco": 1000
+        "preco": {
+          "Lunaris": 310
+        },
+        "atributos": [
+          "Serviço",
+          "Proteção contra roubo",
+          "Consumível"
+        ],
+        "nivelMinimoLoja": 3
       }
     }
   ]

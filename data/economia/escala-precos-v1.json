@@ -1,0 +1,512 @@
+{
+  "_nota": "Fonte unica de verdade da escala economica de O Jardim. O salario minimo ancora tudo; a escada de raridade multiplica por 4 a cada degrau nas faixas mortais (Comum ate Lendario); Mitico e Reliquia da Criacao vivem numa economia separada, cotada em Fragmentos de Estrela, que nao se alcanca por salario. Aplicado ao catalogo por tools/normalize-shop-prices.mjs.",
+  "versao": 1,
+  "ancora": {
+    "descricao": "Salario minimo mensal de um trabalhador comum, em Lunaris. Todo preco do catalogo e legivel como uma fracao ou um multiplo disso.",
+    "salario_minimo_mensal": 300,
+    "salario_minimo_diario": 10,
+    "moeda": "Lunaris"
+  },
+  "custo_de_vida": {
+    "_nota": "Referencia de mesa. Nao entra no catalogo; serve pro Mestre precificar o cotidiano na hora.",
+    "refeicao_simples": 1,
+    "refeicao_farta": 3,
+    "noite_em_estalagem": 3,
+    "noite_em_quarto_bom": 12,
+    "aluguel_mensal_quarto": 60,
+    "aluguel_mensal_casa": 200,
+    "viagem_de_carroca_por_dia": 5,
+    "servico_de_cura_leve": 25,
+    "suborno_de_guarda": 50
+  },
+  "salarios_mensais": {
+    "_nota": "Quanto ganha quem nao aventura. Util pra medir o que uma recompensa significa pro mundo.",
+    "servo_ou_aprendiz": 150,
+    "trabalhador_comum": 300,
+    "artesao_ou_soldado": 750,
+    "especialista_ou_oficial": 2000,
+    "mestre_de_guilda_ou_nobre_menor": 8000,
+    "casa_nobre_ou_alto_clero": 30000
+  },
+  "classes_sociais": {
+    "_nota": "Quanto uma pessoa TEM, nao quanto ela ganha. Serve pra decidir a bolsa de um NPC, o que um batedor de carteira leva, o teto de um suborno e o quanto um personagem parece rico pros outros. 'a_mao_fixo' e o liquido disponivel agora; 'patrimonio' e tudo que a pessoa possui somado, util pra resgate, chantagem, penhora e negocio grande. Cada degrau multiplica o anterior por cerca de 3. Os dados seguem um padrao que se repete a cada moeda: 2d6, depois 5d10, depois 2d100, com bolso fixo de 7, 28 e 100. Morar no Vazio entre as Arvores nao e um degrau: e endereco, e atravessa a tabela inteira. Ver vazio_entre_as_arvores.",
+    "degraus": [
+      {
+        "classe": "Miseravel",
+        "exemplo": "mendigo, orfao, fugitivo sem nada",
+        "renda_mensal": {
+          "valor": 0,
+          "moeda": "Lunaris"
+        },
+        "a_mao_fixo": {
+          "valor": 5,
+          "moeda": "Lunaris"
+        },
+        "a_mao_dados": "1d10 Lunaris",
+        "patrimonio": {
+          "valor": 0,
+          "moeda": "Lunaris"
+        },
+        "compra_no_maximo": "a comida do dia"
+      },
+      {
+        "classe": "Servo ou aprendiz",
+        "exemplo": "criado, estagiario de oficina, soldado raso recem-alistado",
+        "renda_mensal": {
+          "valor": 150,
+          "moeda": "Lunaris"
+        },
+        "a_mao_fixo": {
+          "valor": 50,
+          "moeda": "Lunaris"
+        },
+        "a_mao_dados": "1d100 Lunaris",
+        "patrimonio": {
+          "valor": 200,
+          "moeda": "Lunaris"
+        },
+        "compra_no_maximo": "um item Comum barato"
+      },
+      {
+        "classe": "Trabalhador comum",
+        "exemplo": "lavrador, estivador, guarda de portao, taverneiro",
+        "renda_mensal": {
+          "valor": 300,
+          "moeda": "Lunaris"
+        },
+        "a_mao_fixo": {
+          "valor": 100,
+          "moeda": "Lunaris"
+        },
+        "a_mao_dados": "2d100 Lunaris",
+        "patrimonio": {
+          "valor": 1500,
+          "moeda": "Lunaris"
+        },
+        "compra_no_maximo": "um item Comum sem apertar"
+      },
+      {
+        "classe": "Artesao ou soldado veterano",
+        "exemplo": "ferreiro dono da forja, sargento, mercador de feira",
+        "renda_mensal": {
+          "valor": 750,
+          "moeda": "Lunaris"
+        },
+        "a_mao_fixo": {
+          "valor": 250,
+          "moeda": "Lunaris"
+        },
+        "a_mao_dados": "5d100 Lunaris",
+        "patrimonio": {
+          "valor": 60,
+          "moeda": "Solares"
+        },
+        "compra_no_maximo": "um item Incomum"
+      },
+      {
+        "classe": "Especialista ou oficial",
+        "exemplo": "medico, capitao, alquimista com nome, mercador de rota",
+        "renda_mensal": {
+          "valor": 2000,
+          "moeda": "Lunaris"
+        },
+        "a_mao_fixo": {
+          "valor": 7,
+          "moeda": "Solares"
+        },
+        "a_mao_dados": "2d6 Solares",
+        "patrimonio": {
+          "valor": 250,
+          "moeda": "Solares"
+        },
+        "compra_no_maximo": "varios Incomuns, ou um Raro"
+      },
+      {
+        "classe": "Mestre de guilda ou nobre menor",
+        "exemplo": "dono de guilda, senhor de vila, banqueiro local",
+        "renda_mensal": {
+          "valor": 8000,
+          "moeda": "Lunaris"
+        },
+        "a_mao_fixo": {
+          "valor": 28,
+          "moeda": "Solares"
+        },
+        "a_mao_dados": "5d10 Solares",
+        "patrimonio": {
+          "valor": 1200,
+          "moeda": "Solares"
+        },
+        "compra_no_maximo": "um item Epico"
+      },
+      {
+        "classe": "Casa nobre ou alto clero",
+        "exemplo": "casa antiga, arcebispo, cabeca de consorcio",
+        "renda_mensal": {
+          "valor": 30000,
+          "moeda": "Lunaris"
+        },
+        "a_mao_fixo": {
+          "valor": 100,
+          "moeda": "Solares"
+        },
+        "a_mao_dados": "2d100 Solares",
+        "patrimonio": {
+          "valor": 6000,
+          "moeda": "Solares"
+        },
+        "compra_no_maximo": "um item Lendario"
+      },
+      {
+        "classe": "Realeza de reino",
+        "exemplo": "Durin II no Reino dos Anoes, Augustos Castilla, uma casa que senta num trono",
+        "renda_mensal": {
+          "valor": 1000,
+          "moeda": "Solares"
+        },
+        "a_mao_fixo": {
+          "valor": 7,
+          "moeda": "Fragmentos de Estrela"
+        },
+        "a_mao_dados": "2d6 Fragmentos",
+        "patrimonio": {
+          "valor": 400,
+          "moeda": "Fragmentos de Estrela"
+        },
+        "compra_no_maximo": "uma Reliquia da Criacao, uma unica vez",
+        "governa": "um Reino dentro de uma Dimensao"
+      },
+      {
+        "classe": "Dono de Dimensao",
+        "exemplo": "Grimm, cuja dimensao muda de forma a cada visita",
+        "renda_mensal": {
+          "valor": 4000,
+          "moeda": "Solares"
+        },
+        "a_mao_fixo": {
+          "valor": 28,
+          "moeda": "Fragmentos de Estrela"
+        },
+        "a_mao_dados": "5d10 Fragmentos",
+        "patrimonio": {
+          "valor": 1600,
+          "moeda": "Fragmentos de Estrela"
+        },
+        "compra_no_maximo": "o que existir a venda",
+        "governa": "uma Dimensao inteira, com os Reinos dentro dela"
+      },
+      {
+        "classe": "Soberano",
+        "exemplo": "uma das dez Cadeiras da assembleia da criacao",
+        "renda_mensal": null,
+        "a_mao_fixo": {
+          "valor": 100,
+          "moeda": "Fragmentos de Estrela"
+        },
+        "a_mao_dados": "2d100 Fragmentos",
+        "patrimonio": null,
+        "compra_no_maximo": "nao compra, requisita",
+        "governa": "uma Cadeira, e o que a Cadeira alcanca"
+      }
+    ],
+    "modificador_por_lugar": {
+      "_nota": "Aplique ao resultado do dado, nao ao patrimonio. O mesmo oficio rende diferente conforme o lugar.",
+      "Feira de Vila": 0.5,
+      "Metropole": 1,
+      "Mercado Negro": 1.5,
+      "Banco Lunar": 2,
+      "Vazio entre as Árvores": 2
+    },
+    "leitura_inversa": "Pra saber como um personagem PARECE aos olhos dos outros, compare a carteira dele com a coluna 'a mao'. Quem anda com 2.000 Lunaris no bolso numa Feira de Vila esta carregando vinte vezes o que um trabalhador local carrega, e alguem vai notar.",
+    "teto_do_dinheiro": "Ancoragem util pra calibrar: o patrimonio inteiro de uma Realeza de reino, 400 Fragmentos, compra UMA Reliquia da Criacao. Um Dono de Dimensao compra quatro. Isso mantem o topo do catalogo coerente com o topo do mundo, e explica por que Reliquia nao se compra com salario nenhum: ver muro_dos_fragmentos.",
+    "alcance_dos_jogadores": "A verba de aventura topa em 500 Solares por sessao por jogador. Um grupo de quatro no nivel 40 junta 2.000 Solares por sessao, ou seja 40 Fragmentos. Chegar aos 400 Fragmentos de uma Realeza levaria dez sessoes com o grupo inteiro sem gastar nada. Do degrau Realeza pra cima o acesso e narrativo: titulo, conquista, pacto ou heranca, nunca acumulo.",
+    "_unidades": "Cada valor de dinheiro e um objeto {valor, moeda}. null significa que aquele degrau nao se mede em moeda."
+  },
+  "escada_raridade": {
+    "_nota": "Preco de referencia de uma ARMA ou ARMADURA daquela raridade, em Lunaris. Multiplicador entre degraus: 4. A banda vai de 0,5x a 2,0x da referencia, entao degraus vizinhos se tocam exatamente: nao existe vao nem inversao.",
+    "multiplicador_por_degrau": 4,
+    "banda": {
+      "minimo": 0.5,
+      "maximo": 2.0
+    },
+    "piso_comum_por_categoria": {
+      "_nota": "Categorias que misturam bugiganga e bem de verdade dentro da mesma faixa Comum. Uma pedra e uma mochila sao as duas 'equipamento comum', e um piso de 0,5x da referencia obrigaria a pedra a custar dia e meio de salario. So o PISO desce, e so em Comum: como nao existe raridade abaixo, isso nao cria inversao com Incomum.",
+      "equipamento": 0.05,
+      "drop": 0.05,
+      "consumivel": 0.05
+    },
+    "faixas": [
+      {
+        "raridade": "comum",
+        "referencia_lunaris": 30,
+        "moeda": "Lunaris",
+        "banda_lunaris": [
+          15,
+          60
+        ],
+        "em_salarios_minimos": 0.1
+      },
+      {
+        "raridade": "incomum",
+        "referencia_lunaris": 120,
+        "moeda": "Lunaris",
+        "banda_lunaris": [
+          60,
+          240
+        ],
+        "em_salarios_minimos": 0.4
+      },
+      {
+        "raridade": "raro",
+        "referencia_lunaris": 480,
+        "moeda": "Lunaris",
+        "banda_lunaris": [
+          240,
+          960
+        ],
+        "em_salarios_minimos": 1.6
+      },
+      {
+        "raridade": "epico",
+        "referencia_lunaris": 2000,
+        "moeda": "Solares",
+        "banda_solares": [
+          10,
+          40
+        ],
+        "em_salarios_minimos": 6.7
+      },
+      {
+        "raridade": "lendario",
+        "referencia_lunaris": 8000,
+        "moeda": "Solares",
+        "banda_solares": [
+          40,
+          160
+        ],
+        "em_salarios_minimos": 27
+      },
+      {
+        "raridade": "mitico",
+        "referencia_lunaris": 500000,
+        "moeda": "Fragmentos de Estrela",
+        "banda_fragmentos": [
+          60,
+          200
+        ],
+        "em_salarios_minimos": 1667
+      },
+      {
+        "raridade": "reliquia da criacao",
+        "referencia_lunaris": 2000000,
+        "moeda": "Fragmentos de Estrela",
+        "banda_fragmentos": [
+          280,
+          800
+        ],
+        "em_salarios_minimos": 6667,
+        "congelada": true
+      }
+    ]
+  },
+  "muro_dos_fragmentos": {
+    "_nota": "Decisao de design, nao acidente de tabela. Entre Lendario (topo em 160 Solares) e Mitico (piso em 60 Fragmentos, ou 3.000 Solares) existe um salto de ~19x que nenhum salario atravessa. Mitico e Reliquia da Criacao nao sao o proximo degrau da compra: sao outra economia. Chegam por recompensa do Mestre, negocio de mercado negro ou pagamento de quem nao usa moeda comum.",
+    "topo_lendario_solares": 160,
+    "piso_mitico_solares": 3000,
+    "salto": 18.75
+  },
+  "multiplicador_por_categoria": {
+    "_nota": "Aplicado sobre a referencia da raridade. Arma e armadura sao a regua (1,0). Dentro de uma categoria a raridade sempre ordena o preco; entre categorias o multiplicador manda.",
+    "arma": 1.0,
+    "armadura": 1.0,
+    "artefato": 1.5,
+    "equipamento": 0.8,
+    "modificacao": 0.6,
+    "consumivel": 0.35,
+    "drop": 0.25,
+    "veiculo": 5,
+    "veiculo-completo": 20,
+    "propriedade": 40,
+    "monstro": 20,
+    "implante": 25,
+    "fruto-eden": 1.0
+  },
+  "moeda_por_categoria": {
+    "_nota": "Sobrepoe a moeda da faixa de raridade. Implante so existe em Credito Sombrio e Fruto do Eden so em Fragmento: a moeda denuncia o balcao, como diz a regra da Loja. Modificacao fica em Lunaris ate no topo, porque e encomenda de oficina e a tabela publicada nas regras cota as quatro faixas na mesma moeda.",
+    "implante": "Créditos Sombrios",
+    "fruto-eden": "Fragmentos de Estrela",
+    "modificacao": "Lunaris"
+  },
+  "cambio": {
+    "_nota": "Espelha a tabela oficial da secao economia. 1 Solar = 100 Lunaris.",
+    "Lunaris": 0.01,
+    "Solares": 1,
+    "Créditos Sombrios": 2,
+    "Fragmentos de Estrela": 50
+  },
+  "verba_de_aventura": {
+    "_nota": "Quanto pagar por sessao, por jogador, para que o grupo acompanhe a propria faixa de equipamento sem estourar a escada. A conta e simples: cerca de 1/4 de um item da raridade que aquela faixa de nivel deveria estar usando, entao ~4 sessoes compram uma peca nova. Dobre num fim de arco, triplique num fim de temporada.",
+    "faixas": [
+      {
+        "niveis": "1-4",
+        "raridade_alvo": "comum",
+        "por_sessao_lunaris": 10,
+        "moeda": "Lunaris"
+      },
+      {
+        "niveis": "5-9",
+        "raridade_alvo": "incomum",
+        "por_sessao_lunaris": 30,
+        "moeda": "Lunaris"
+      },
+      {
+        "niveis": "10-14",
+        "raridade_alvo": "raro",
+        "por_sessao_lunaris": 120,
+        "moeda": "Lunaris"
+      },
+      {
+        "niveis": "15-19",
+        "raridade_alvo": "raro/epico",
+        "por_sessao_lunaris": 500,
+        "moeda": "Lunaris"
+      },
+      {
+        "niveis": "20-24",
+        "raridade_alvo": "epico",
+        "por_sessao_lunaris": 2000,
+        "moeda": "Solares",
+        "por_sessao_solares": 20
+      },
+      {
+        "niveis": "25-29",
+        "raridade_alvo": "epico/lendario",
+        "por_sessao_lunaris": 5000,
+        "moeda": "Solares",
+        "por_sessao_solares": 50
+      },
+      {
+        "niveis": "30-34",
+        "raridade_alvo": "lendario",
+        "por_sessao_lunaris": 20000,
+        "moeda": "Solares",
+        "por_sessao_solares": 200
+      },
+      {
+        "niveis": "35-40",
+        "raridade_alvo": "lendario+",
+        "por_sessao_lunaris": 50000,
+        "moeda": "Solares",
+        "por_sessao_solares": 500
+      }
+    ]
+  },
+  "carteira_inicial": {
+    "_nota": "O personagem ja comeca com o kit da classe. Isso e trocado, nao patrimonio.",
+    "lunaris": 20
+  },
+  "vazio_entre_as_arvores": {
+    "_nota": "O Vazio e o espaco entre as Arvores, e e habitado. Toda organizacao de alcance 'Todas as Arvores' tem sede la, pela razao simples de que quem atravessa as dez Arvores nao pode morar dentro de uma delas. Ver data/mundo/faccoes.json.",
+    "por_que_a_moeda_funciona": "O Banco Lunar fica no Vazio, e e por isso que Solar e Fragmento valem a mesma coisa nas dez Arvores: existe uma casa fora de todas elas garantindo o cambio. O quarto patamar da Loja se chama Banco Lunar por isso mesmo, e e por isso que Fragmento de Estrela e a moeda daquele balcao. Quem esta no Vazio esta na camara de compensacao do Jardim inteiro.",
+    "custo_de_vida": {
+      "multiplicador": 3,
+      "_nota": "Nada nasce no Vazio. Comida, agua e ar sobem de dentro das Arvores, e a Caravana do Limiar cobra pelo transporte. Todo gasto cotidiano custa o triplo la. Isso convive com o modificador_por_lugar de 2 sobre o bolso: no Vazio se ganha o dobro e se gasta o triplo, e e por isso que cacador nenhum se aposenta."
+    },
+    "faccoes_sediadas": [
+      {
+        "id": "banco-lunar",
+        "titulo": "Banco Lunar",
+        "papel_economico": "Guarda, administra e investe. Garante o cambio entre as Arvores.",
+        "cargos": [
+          {
+            "cargo": "Escriturario de agencia",
+            "classe_social": "Especialista ou oficial"
+          },
+          {
+            "cargo": "Gerente de agencia",
+            "classe_social": "Mestre de guilda ou nobre menor"
+          },
+          {
+            "cargo": "Cabeca da casa",
+            "classe_social": "Soberano",
+            "nota": "Amadheus Colona ocupa uma das dez Cadeiras."
+          }
+        ]
+      },
+      {
+        "id": "guilda-dos-cacadores",
+        "titulo": "Guilda dos Caçadores",
+        "papel_economico": "Paga por entrega confirmada de procurado ou de criatura vinda do Vazio.",
+        "regra_de_pagamento": "O contrato paga METADE do preco de catalogo daquela criatura, e a Guilda fica com a outra metade. A tabela mostra a criatura tipica de cada raridade; pra um alvo especifico, pegue o preco dele no catalogo e divida por dois. Urgencia encarece pro cliente, nunca barateia pro cacador.",
+        "contratos": [
+          {
+            "alvo": "criatura Comum",
+            "paga": {
+              "valor": 300,
+              "moeda": "Lunaris"
+            },
+            "_catalogo_tipico_solares": 6
+          },
+          {
+            "alvo": "criatura Incomum",
+            "paga": {
+              "valor": 11,
+              "moeda": "Solares"
+            },
+            "_catalogo_tipico_solares": 22
+          },
+          {
+            "alvo": "criatura Rara",
+            "paga": {
+              "valor": 50,
+              "moeda": "Solares"
+            },
+            "_catalogo_tipico_solares": 96
+          },
+          {
+            "alvo": "criatura Epica",
+            "paga": {
+              "valor": 240,
+              "moeda": "Solares"
+            },
+            "_catalogo_tipico_solares": 472
+          },
+          {
+            "alvo": "criatura Lendaria",
+            "paga": {
+              "valor": 1100,
+              "moeda": "Solares"
+            },
+            "_catalogo_tipico_solares": 2195
+          }
+        ],
+        "cargos": [
+          {
+            "cargo": "Cacador contratado",
+            "classe_social": "vive de contrato, sem salario fixo"
+          },
+          {
+            "cargo": "Mestre de quadro",
+            "classe_social": "Especialista ou oficial"
+          }
+        ]
+      },
+      {
+        "id": "caravana-do-limiar",
+        "titulo": "Caravana do Limiar",
+        "papel_economico": "Transporta pessoa, carga e mensagem pelas passagens dimensionais conhecidas.",
+        "cargos": [
+          {
+            "cargo": "Tripulante",
+            "classe_social": "Artesao ou soldado veterano"
+          },
+          {
+            "cargo": "Mestre de caravana",
+            "classe_social": "Especialista ou oficial"
+          }
+        ]
+      }
+    ],
+    "por_que_aventureiro_enriquece": "Um contrato de criatura Rara paga 50 Solares, ou 5.000 Lunaris, que e mais de um ano de salario minimo numa Arvore. E por isso que um grupo de nivel medio anda com dinheiro de nobre e origem de trabalhador. A contradicao e boa materia de cena, e o custo de vida triplicado do Vazio e o freio natural dela."
+  }
+}
