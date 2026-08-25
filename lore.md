@@ -203,17 +203,13 @@
 
 ## Guia Dimensional (guia-dimensional)
 
-## Caçador de Entidades (cacador-de-entidades)
+## Caçador das Almas (cacador-das-almas)
 
 ## Escritor de Contos (escritor-de-contos)
 
 ## Invocador (invocador)
 
 ## Viajante (viajante-classe)
-
-## Decodificador (decodificador)
-
-## Codificador (codificador)
 
 ## Canalizador (canalizador)
 

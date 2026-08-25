@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Star, Users, Megaphone } from 'lucide-react';
+import { Star, Users, Megaphone, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -87,7 +87,7 @@ export const PopStar = ({ classe }: { classe: IClasse }) => {
             <Megaphone size={36} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Publi</h3>
             <p className="text-pink-200/60 leading-relaxed text-sm">
-              Sua imagem vende. Marcas podem oferecer contratos ou itens temáticos compatíveis com a campanha em troca da sua publicidade. Isso não gera dinheiro infinito, mas sim equipamentos ou suporte tático.
+              Sua imagem vende, e tem marca disposta a pagar por ela. A cada estágio você fecha um contrato da lista: energético, cosméticos, armaria de grife, rede de estalagens, transportadora, A.X.I.S., moda, destilaria, farmacêutica ou estúdio. Cada um rende uma coisa concreta e cobra exposição pública. Nenhum deles vira dinheiro solto.
             </p>
           </PremiumCard>
 
@@ -102,7 +102,36 @@ export const PopStar = ({ classe }: { classe: IClasse }) => {
             <Users size={36} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Agência de Marketing</h3>
             <p className="text-pink-200/60 leading-relaxed text-sm">
-              Você possui uma equipe profissional te assessorando. Uma vez por sessão, a agência pode preparar um evento para o grupo, conter uma crise de imagem local ou localizar um contato vital na cidade.
+              No nível 18 você tem empresário, assessoria e produção esperando o seu recado. Uma vez por sessão a equipe monta um evento com público em uma hora, abafa um escândalo que esteja correndo sobre o grupo, ou acha uma pessoa na região. Basta existir como falar com eles.
+            </p>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+            className={`flex flex-col p-8 rounded-lg ${tema.bg} border ${tema.border} backdrop-blur-md`}
+          >
+            <Star size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>O Preço do Rosto</h3>
+            <p className="text-pink-200/60 leading-relaxed text-sm">
+              Sua Fama tem piso garantido pela carreira e sobe de Local a Histórica, na mesma tabela que o resto do mundo usa. Ela abre audiência, palco e porta de autoridade. E fecha a porta dos fundos: do nível 10 em diante, passar despercebido cobra penalidade, porque o rosto que todo mundo conhece é o seu.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.6 }}
+            className={`flex flex-col p-8 rounded-lg ${tema.bg} border ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-pink-200/60 leading-relaxed text-sm">
+              Quando um número seu obriga alguém a resistir, você rola Atuação na hora em que se apresenta, e o resultado é o que a pessoa precisa alcançar. Uma rolagem por número, valendo para a plateia inteira. Falha crítica é vexame: o número não pega e o próximo teste social da cena sai com desvantagem.
             </p>
           </PremiumCard>
         </div>

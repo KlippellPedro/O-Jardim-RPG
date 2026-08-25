@@ -16,11 +16,40 @@ import { useCampaignSSE } from '../../../hooks/useCampaignSSE';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput } from '../components/SharedFichaComponents';
 import { Select } from '../../../components/ui/Select';
+import {
+  ROTULO_RARIDADE_RECURSO,
+  custoManutencaoVeiculo,
+  type RaridadeRecursoMaterial,
+} from '../../../../data/regras/recursos-materiais';
+import {
+  PONTUACAO_NIVEL,
+  podeGerenciarRecursoResumo,
+  nivelEfetivoRecursoDetalhe,
+} from '../../../services/recursoCampanhaPermissoes';
 
 const NIVEL_PERMISSAO_OPCOES = [
   { value: 'visualizar', label: 'Visualizar' },
   { value: 'utilizar', label: 'Utilizar' },
   { value: 'gerenciar', label: 'Gerenciar' },
+];
+
+const RARIDADE_VEICULO_OPCOES = [
+  { value: 'comum', label: 'Comum' },
+  { value: 'incomum', label: 'Incomum' },
+  { value: 'raro', label: 'Raro' },
+  { value: 'epico', label: 'Épico' },
+  { value: 'lendario', label: 'Lendário' },
+];
+
+// Sugestões rápidas para os módulos de utilidade publicados no catálogo. O
+// jogador ainda confirma ou edita o nome antes de adicionar à frota.
+const MODULOS_UTILIDADE_SUGERIDOS = [
+  { nome: 'Beliche (dormitório)', espacos: 1 },
+  { nome: 'Geladeira', espacos: 1 },
+  { nome: 'Filtro de água', espacos: 1 },
+  { nome: 'Enfermaria', espacos: 1 },
+  { nome: 'Armazém extra', espacos: 1 },
+  { nome: 'Blindagem extra', espacos: 2 },
 ];
 
 const TIPO_OCUPANTE_OPCOES = [
@@ -58,6 +87,7 @@ const VidaBar = ({ atual, maximo, cor = 'bg-red-500' }: { atual: number; maximo:
 
 const FORM_VAZIO: ICampanhaVeiculoInput = {
   nome: '',
+  raridade: 'comum',
   imagem_url: null,
   descricao: '',
   vida_maxima: 0,
@@ -119,6 +149,12 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
     (id: string) => personagensCampanha.find((p) => p.id === id)?.nome || 'Personagem removido',
     [personagensCampanha],
   );
+
+  const podeGerenciarResumo = (v: ICampanhaVeiculoResumo) => podeGerenciarRecursoResumo(isMestre, character?.id, v);
+
+  const nivelDetalheAtual = nivelEfetivoRecursoDetalhe(isMestre, character?.id, detalhe);
+  const podeGerenciarDetalhe = PONTUACAO_NIVEL[nivelDetalheAtual] >= PONTUACAO_NIVEL.gerenciar;
+  const podeUtilizarDetalhe = PONTUACAO_NIVEL[nivelDetalheAtual] >= PONTUACAO_NIVEL.utilizar;
 
   useEffect(() => {
     if (!campanhaAtiva?.id) return;
@@ -211,6 +247,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
     setEditandoId(v.id);
     setForm({
       nome: v.nome,
+      raridade: v.raridade,
       imagem_url: v.imagem_url,
       descricao: v.descricao,
       vida_maxima: v.vida_maxima,
@@ -486,6 +523,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <h3 className="truncate font-bold text-white">{v.nome}</h3>
+                    <span className="rounded-full border border-indigo-400/20 bg-indigo-400/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-indigo-200">{ROTULO_RARIDADE_RECURSO[v.raridade]}</span>
                     {v.nivel_acesso_campanha === 'nenhum' && <Lock size={11} className="text-gray-600" aria-label="Privado" />}
                     {v.nivel_acesso_campanha === 'visualizar' && <Globe size={11} className="text-blue-500" aria-label="Campanha pode ver" />}
                     {v.nivel_acesso_campanha === 'utilizar' && <Zap size={11} className="text-amber-400" aria-label="Campanha pode usar" />}
@@ -520,7 +558,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                   >
                     {isExpandido ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
                   </button>
-                  {isMestre && (
+                  {podeGerenciarResumo(v) && (
                     <>
                       <button
                         type="button"
@@ -570,6 +608,16 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                         ))}
                       </div>
 
+                      <div className="rounded-xl border border-indigo-400/20 bg-indigo-400/[0.07] p-3">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-300/70">Manutenção mensal</p>
+                        <p className="mt-1 text-sm font-bold text-white">
+                          {custoManutencaoVeiculo(detalhe.modulos_utilidade_integrados + detalhe.modulos.length)} Componentes Veiculares {ROTULO_RARIDADE_RECURSO[detalhe.raridade as RaridadeRecursoMaterial]}
+                        </p>
+                        <p className="mt-1 text-[11px] leading-5 text-gray-500">
+                          1 pelo veículo + {detalhe.modulos_utilidade_integrados + detalhe.modulos.length} por {(detalhe.modulos_utilidade_integrados + detalhe.modulos.length) === 1 ? 'módulo de utilidade instalado' : 'módulos de utilidade instalados'}. Módulos integrados e desligados também contam. Só pague em meses em que o veículo foi usado.
+                        </p>
+                      </div>
+
                       {/* Ocupantes */}
                       <div>
                         <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-amber-500/60">
@@ -581,7 +629,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                             <div key={o.id} className="flex items-center gap-2 rounded-lg bg-black/20 p-2 text-xs">
                               <span className={`h-2 w-2 flex-shrink-0 rounded-full ${o.tipo === 'tripulacao' ? 'bg-amber-400' : 'bg-gray-500'}`} />
                               <span className="min-w-0 flex-1 truncate text-gray-300">{nomePersonagem(o.personagem_id)} · {o.papel}</span>
-                              {isMestre && (
+                              {podeGerenciarDetalhe && (
                                 <button type="button" onClick={() => removerOcupante(o.personagem_id)} className="flex-shrink-0 text-red-500 hover:text-red-300">
                                   <Trash2 size={11} />
                                 </button>
@@ -590,7 +638,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                           ))}
                           {detalhe.ocupantes.length === 0 && <p className="col-span-2 text-xs text-gray-600">Nenhum ocupante.</p>}
                         </div>
-                        {isMestre && (
+                        {podeGerenciarDetalhe && (
                           <div className="mt-2 flex flex-wrap gap-2">
                             <div className="min-w-[10rem] flex-1">
                               <Select value={novoOcupantePersonagemId} onChange={setNovoOcupantePersonagemId} placeholder="Personagem..." options={ocupantesDisponiveis.map(p => ({ value: p.id, label: p.nome }))} />
@@ -620,15 +668,15 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                       <div>
                         <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-cyan-500/60">
                           <Zap size={10} className="inline mr-1" />
-                          Módulos ({detalhe.modulos.filter(m => m.ativo).length}/{detalhe.sistemas_ativos_maximos} ativos)
+                          Módulos de utilidade ({detalhe.modulos.filter(m => m.ativo).length}/{detalhe.sistemas_ativos_maximos} ativos)
                         </p>
                         <div className="space-y-1">
                           {detalhe.modulos.map((m) => (
                             <div key={m.id} className="flex items-center justify-between rounded-lg bg-black/20 px-3 py-2 text-xs">
                               <button
                                 type="button"
-                                onClick={() => isMestre && alternarModulo(m.id, !m.ativo)}
-                                disabled={!isMestre}
+                                onClick={() => podeUtilizarDetalhe && alternarModulo(m.id, !m.ativo)}
+                                disabled={!podeUtilizarDetalhe}
                                 className="flex min-w-0 flex-1 items-center gap-2 text-left disabled:cursor-default"
                               >
                                 {m.ativo
@@ -639,7 +687,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                               </button>
                               <div className="flex flex-shrink-0 items-center gap-2">
                                 <span className="text-[10px] text-gray-600">{m.espacos_ocupados} esp.</span>
-                                {isMestre && (
+                                {podeGerenciarDetalhe && (
                                   <button type="button" onClick={() => removerModulo(m.id)} className="text-red-500 hover:text-red-300">
                                     <Trash2 size={11} />
                                   </button>
@@ -649,29 +697,43 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                           ))}
                           {detalhe.modulos.length === 0 && <p className="text-xs text-gray-600">Nenhum módulo instalado.</p>}
                         </div>
-                        {isMestre && (
-                          <div className="mt-2 flex gap-2">
-                            <input
-                              value={novoModuloNome}
-                              onChange={(e) => setNovoModuloNome(e.target.value)}
-                              placeholder="Nome do módulo"
-                              className="flex-1 rounded-md border border-white/5 bg-[#121118] px-3 py-1.5 text-xs text-gray-300 outline-none focus:border-cyan-500/50"
-                            />
-                            <input
-                              type="number"
-                              min={1}
-                              value={novoModuloEspacos}
-                              onChange={(e) => setNovoModuloEspacos(e.target.value)}
-                              className="w-16 rounded-md border border-white/5 bg-[#121118] px-2 py-1.5 text-xs text-gray-300 outline-none focus:border-cyan-500/50"
-                            />
-                            <button
-                              type="button"
-                              onClick={adicionarModulo}
-                              disabled={!novoModuloNome.trim()}
-                              className="flex items-center gap-1 rounded-md border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-bold text-cyan-300 disabled:opacity-40"
-                            >
-                              <Plus size={12} /> Adicionar
-                            </button>
+                        {podeGerenciarDetalhe && (
+                          <div className="mt-2 space-y-2">
+                            <div className="flex flex-wrap gap-1.5">
+                              {MODULOS_UTILIDADE_SUGERIDOS.map((sugestao) => (
+                                <button
+                                  key={sugestao.nome}
+                                  type="button"
+                                  onClick={() => { setNovoModuloNome(sugestao.nome); setNovoModuloEspacos(String(sugestao.espacos)); }}
+                                  className="rounded-full border border-cyan-500/20 bg-cyan-500/5 px-2.5 py-1 text-[10px] font-bold text-cyan-300/80 hover:bg-cyan-500/15"
+                                >
+                                  + {sugestao.nome}
+                                </button>
+                              ))}
+                            </div>
+                            <div className="flex gap-2">
+                              <input
+                                value={novoModuloNome}
+                                onChange={(e) => setNovoModuloNome(e.target.value)}
+                                placeholder="Nome do módulo"
+                                className="flex-1 rounded-md border border-white/5 bg-[#121118] px-3 py-1.5 text-xs text-gray-300 outline-none focus:border-cyan-500/50"
+                              />
+                              <input
+                                type="number"
+                                min={1}
+                                value={novoModuloEspacos}
+                                onChange={(e) => setNovoModuloEspacos(e.target.value)}
+                                className="w-16 rounded-md border border-white/5 bg-[#121118] px-2 py-1.5 text-xs text-gray-300 outline-none focus:border-cyan-500/50"
+                              />
+                              <button
+                                type="button"
+                                onClick={adicionarModulo}
+                                disabled={!novoModuloNome.trim()}
+                                className="flex items-center gap-1 rounded-md border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-bold text-cyan-300 disabled:opacity-40"
+                              >
+                                <Plus size={12} /> Adicionar
+                              </button>
+                            </div>
                           </div>
                         )}
                       </div>
@@ -687,50 +749,57 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                             <div key={item.id} className="flex items-center justify-between rounded-lg bg-black/20 px-3 py-2 text-xs">
                               <span className="min-w-0 flex-1 truncate text-gray-300">{item.nome}</span>
                               <div className="flex flex-shrink-0 items-center gap-1.5">
-                                <button type="button" onClick={() => ajustarCargaQtd(item.id, item.quantidade, -1)} className="text-gray-500 hover:text-red-300">
-                                  <Minus size={11} />
-                                </button>
+                                {podeUtilizarDetalhe && (
+                                  <button type="button" onClick={() => ajustarCargaQtd(item.id, item.quantidade, -1)} className="text-gray-500 hover:text-red-300">
+                                    <Minus size={11} />
+                                  </button>
+                                )}
                                 <span className="w-6 text-center text-gray-400">×{item.quantidade}</span>
-                                <button type="button" onClick={() => ajustarCargaQtd(item.id, item.quantidade, 1)} className="text-gray-500 hover:text-emerald-300">
-                                  <Plus size={11} />
-                                </button>
+                                {podeUtilizarDetalhe && (
+                                  <button type="button" onClick={() => ajustarCargaQtd(item.id, item.quantidade, 1)} className="text-gray-500 hover:text-emerald-300">
+                                    <Plus size={11} />
+                                  </button>
+                                )}
                               </div>
                             </div>
                           ))}
                           {detalhe.inventario.length === 0 && <p className="text-xs text-gray-600">Nenhum item na carga.</p>}
                         </div>
-                        <div className="mt-2 flex gap-2">
-                          <input
-                            value={novaCargaNome}
-                            onChange={(e) => setNovaCargaNome(e.target.value)}
-                            placeholder="Nome do item"
-                            className="flex-1 rounded-md border border-white/5 bg-[#121118] px-3 py-1.5 text-xs text-gray-300 outline-none focus:border-emerald-500/50"
-                          />
-                          <input
-                            type="number"
-                            min={1}
-                            value={novaCargaQtd}
-                            onChange={(e) => setNovaCargaQtd(e.target.value)}
-                            className="w-16 rounded-md border border-white/5 bg-[#121118] px-2 py-1.5 text-xs text-gray-300 outline-none focus:border-emerald-500/50"
-                          />
-                          <button
-                            type="button"
-                            onClick={adicionarCarga}
-                            disabled={!novaCargaNome.trim()}
-                            className="flex items-center gap-1 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-bold text-emerald-300 disabled:opacity-40"
-                          >
-                            <Plus size={12} /> Adicionar
-                          </button>
-                        </div>
+                        {podeUtilizarDetalhe && (
+                          <div className="mt-2 flex gap-2">
+                            <input
+                              value={novaCargaNome}
+                              onChange={(e) => setNovaCargaNome(e.target.value)}
+                              placeholder="Nome do item"
+                              className="flex-1 rounded-md border border-white/5 bg-[#121118] px-3 py-1.5 text-xs text-gray-300 outline-none focus:border-emerald-500/50"
+                            />
+                            <input
+                              type="number"
+                              min={1}
+                              value={novaCargaQtd}
+                              onChange={(e) => setNovaCargaQtd(e.target.value)}
+                              className="w-16 rounded-md border border-white/5 bg-[#121118] px-2 py-1.5 text-xs text-gray-300 outline-none focus:border-emerald-500/50"
+                            />
+                            <button
+                              type="button"
+                              onClick={adicionarCarga}
+                              disabled={!novaCargaNome.trim()}
+                              className="flex items-center gap-1 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-bold text-emerald-300 disabled:opacity-40"
+                            >
+                              <Plus size={12} /> Adicionar
+                            </button>
+                          </div>
+                        )}
                       </div>
 
                       {/* Permissões individuais */}
-                      {isMestre && (
+                      {podeGerenciarDetalhe && (
                         <div>
                           <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-purple-400/60">
                             <KeyRound size={10} className="inline mr-1" />
                             Acesso individual
                           </p>
+                          <p className="mb-2 text-[11px] text-gray-600">Conceda acesso a outro personagem - por exemplo, quando dois jogadores dividem o mesmo veículo.</p>
                           <div className="space-y-1">
                             {detalhe.permissoes.map((perm) => (
                               <div key={perm.personagem_id} className="flex items-center justify-between rounded-lg bg-black/20 px-3 py-2 text-xs">
@@ -768,8 +837,8 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                         <p className="text-xs leading-relaxed text-gray-500">{detalhe.descricao}</p>
                       )}
 
-                      {/* Botão editar para o Mestre */}
-                      {isMestre && (
+                      {/* Botão editar para quem gerencia (Mestre, dono ou acesso concedido) */}
+                      {podeGerenciarDetalhe && (
                         <button
                           type="button"
                           onClick={() => abrirFormEditar(detalhe)}
@@ -806,6 +875,12 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
         <div className="space-y-4">
           <LabeledInput label="Nome" value={form.nome} placeholder="Ex.: Nave A.X.I.S." onChange={(val: string) => setForm(f => ({ ...f, nome: val }))} />
           <LabeledInput label="URL da imagem (opcional)" value={form.imagem_url ?? ''} placeholder="https://..." onChange={(val: string) => setForm(f => ({ ...f, imagem_url: val || null }))} />
+
+          <div>
+            <label className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Raridade</label>
+            <Select value={form.raridade ?? 'comum'} onChange={(val) => setForm(f => ({ ...f, raridade: val as ICampanhaVeiculoInput['raridade'] }))} options={RARIDADE_VEICULO_OPCOES} />
+            <p className="mt-1 text-[11px] text-gray-600">A raridade define o lote de Componentes Veiculares exigido pela manutenção.</p>
+          </div>
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <LabeledInput label="Vida Máx." type="number" value={String(form.vida_maxima ?? 0)} onChange={(val: string) => setForm(f => ({ ...f, vida_maxima: Math.max(0, Number(val)) }))} />

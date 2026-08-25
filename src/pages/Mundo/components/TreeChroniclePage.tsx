@@ -1,11 +1,12 @@
 import React from 'react';
 import { ArrowLeft, BookOpen, Compass, History, MapPin, Sparkles } from 'lucide-react';
 import { ChronicleTimeline } from './ChronicleTimeline';
-import { getTreeChronicle } from '../worldChronicles';
+import { getTreeChronicle, type WorldChronicleCatalog } from '../worldChronicles';
 
 interface TreeChroniclePageProps {
   treeId: string;
   color: string;
+  chronicles: WorldChronicleCatalog;
   onBack: () => void;
   onOpenGlobalTimeline: () => void;
 }
@@ -15,10 +16,11 @@ const sectionClass = 'content-auto-section performance-expensive-effects scroll-
 export const TreeChroniclePage: React.FC<TreeChroniclePageProps> = ({
   treeId,
   color,
+  chronicles,
   onBack,
   onOpenGlobalTimeline,
 }) => {
-  const chronicle = getTreeChronicle(treeId);
+  const chronicle = getTreeChronicle(treeId, chronicles);
   const rgbGlow = `${color}33`;
 
   if (!chronicle) {

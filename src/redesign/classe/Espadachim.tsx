@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Crosshair, Wind, Sword } from 'lucide-react';
+import { Crosshair, Wind, Sword, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -74,39 +74,64 @@ export const Espadachim = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className={`col-span-1 md:col-span-2 flex flex-col md:flex-row gap-6 p-8 rounded-none ${tema.bg} ${tema.border} backdrop-blur-md`}
+            className={`flex flex-col p-8 rounded-none ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <Crosshair size={40} className={`${tema.icon} shrink-0`} strokeWidth={1.5} />
-            <div>
-              <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Talento de Combate</h3>
-              <p className="text-slate-400 leading-relaxed text-sm">
-                No início do combate, assuma uma postura: <span className="text-blue-300">Precisão</span> (+1 acerto), <span className="text-red-300">Devastação</span> (+2 dano em alvos abaixo de 50% de Vida), ou <span className="text-green-300">Defesa Ágil</span> (+2 Defesa). Você ganha escolhas ativas adicionais conforme avança de estágio.
-              </p>
-            </div>
+            <Sword size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Arte da Espada</h3>
+            <p className="text-slate-400 leading-relaxed text-sm">
+              Vincule-se a uma espada: ela ganha bônus de ataque e dano que só crescem com sua carreira. Uma vez por combate, use uma Reação para reduzir o dano de um golpe em seu nível, e depois de um crítico, encadeie um ataque adicional.
+            </p>
           </PremiumCard>
 
           <PremiumCard
             glowColor={tema.glow}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className={`col-span-1 md:col-span-2 flex flex-col md:flex-row gap-6 p-8 rounded-none ${tema.bg} ${tema.border} backdrop-blur-md`}
+            className={`flex flex-col p-8 rounded-none ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <Wind size={40} className={`${tema.icon} shrink-0`} strokeWidth={1.5} />
-            <div>
-              <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Combo Marcial</h3>
-              <p className="text-slate-400 leading-relaxed text-sm">
-                Uma vez por combate, se seu ataque acertar, faça um segundo ataque imediato. Se este também acertar, faça um terceiro causando metade do dano. O alvo atingido pelo combo sofre -2 na Defesa até o fim da rodada seguinte.
-              </p>
-            </div>
+            <Crosshair size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Posturas de Combate</h3>
+            <p className="text-slate-400 leading-relaxed text-sm">
+              Aprenda uma postura de combate por estágio, entre oito possíveis: <span className="text-blue-300">Precisão</span>, <span className="text-red-300">Devastação</span>, <span className="text-green-300">Defesa Ágil</span> e mais. Toda postura aprendida fica ativa o combate inteiro, ao mesmo tempo que as outras.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+            className={`flex flex-col p-8 rounded-none ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Wind size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Espírito da Espada</h3>
+            <p className="text-slate-400 leading-relaxed text-sm">
+              Uma vez por sessão, sem gastar ação: por três rodadas seus golpes com a espada vinculada ignoram metade da Resistência, causam +2 dados de dano e permitem avançar 3 m após cada acerto sem provocar reações. Um erro pode ser repetido uma vez por rodada.
+            </p>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.6 }}
+            className={`flex flex-col p-8 rounded-none ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-slate-400 leading-relaxed text-sm">
+              Toda técnica sua que obriga o alvo a resistir rola Luta no momento do golpe: o resultado vira a DT que ele precisa alcançar, valendo para todos os atingidos naquele uso.
+            </p>
           </PremiumCard>
         </div>
 

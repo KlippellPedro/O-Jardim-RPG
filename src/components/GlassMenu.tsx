@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, Shield, Globe, BookOpen, Swords, ShoppingBag } from 'lucide-react';
+import { Home, Shield, Globe, BookOpen, Swords, ShoppingBag, FlaskConical } from 'lucide-react';
 import { sfx } from '../utils/audioSynth';
 
 export default function GlassMenu() {
@@ -8,6 +8,7 @@ export default function GlassMenu() {
     { name: 'Início', path: '/', icon: <Home size={22} /> },
     { name: 'Ficha', path: '/ficha', icon: <Shield size={22} /> },
     { name: 'Loja', path: '/loja', icon: <ShoppingBag size={22} /> },
+    { name: 'Materiais', path: '/materiais', icon: <FlaskConical size={22} /> },
     { name: 'Mundo', path: '/mundo', icon: <Globe size={22} /> },
     { name: 'Livro', path: '/regras', icon: <BookOpen size={22} /> },
     { name: 'Sessão', path: '/sessao', icon: <Swords size={22} /> },

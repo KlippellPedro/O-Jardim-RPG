@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Search, Star, Pencil, Trash2, Dices, GripVertical, Dna, Shield, Apple } from 'lucide-react';
 import { motion, Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
@@ -9,6 +9,7 @@ import { caracteristicasRaciaisAutomaticas, habilidadesAutomaticas } from '../..
 import { obterStatusFicha } from '../../../services/statusService';
 import { EditorEfeitos } from '../components/ItemEffectsModals';
 import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
+import { periciasDisponiveisParaEfeitos } from '../../../services/periciasFichaService';
 import {
   EFEITOS_FICHA_MAXIMOS,
   normalizarEfeitosFicha,
@@ -21,6 +22,7 @@ import {
   type IPersonalizacaoAutomatica,
 } from '../../../services/personalizacaoAutomaticaService';
 import { PersonalizacaoAutomaticaModal } from '../components/PersonalizacaoAutomaticaModal';
+import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
 
 // ---------------------------------------------------------------------------
 // Tipos locais da entidade "habilidade" (traços raciais, talentos, competências)
@@ -119,10 +121,12 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
   const [erroForm, setErroForm] = useState('');
 
   const [usoPendenteId, setUsoPendenteId] = useState<string | null>(null);
+  const usoEmAndamento = useRef(false);
   const [ultimoUsoMsg, setUltimoUsoMsg] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
 
   const [personalizando, setPersonalizando] = useState<{ id: string; titulo: string; descricao: string } | null>(null);
   const personalizacoes = obterPersonalizacoesAutomaticas(character.ficha || {});
+  const periciasDisponiveis = periciasDisponiveisParaEfeitos(character.ficha || {}, PERICIAS_CATALOGO);
 
   const habilidades: IHabilidade[] = character.ficha?.habilidades || [];
   const habilidadesRaciais = caracteristicasRaciaisAutomaticas(character.ficha || {});
@@ -165,7 +169,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
     .sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
 
   const handleReorder = (novosItens: IHabilidade[]) => {
-    const comOrdem = novosItens.map((item, index) => ({ ...item, ordem: index }));
+    const comOrdem = mesclarOrdemFiltrada(habilidades, novosItens);
     onUpdate(['ficha', 'habilidades'], comOrdem);
   };
 
@@ -256,7 +260,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
   };
 
   const usar = async (item: IHabilidade) => {
-    if (usoPendenteId) return;
+    if (usoEmAndamento.current) return;
 
     const recurso = item.custo?.recurso;
     const valor = item.custo?.valor || 0;
@@ -295,6 +299,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
       }
     }
 
+    usoEmAndamento.current = true;
     setUsoPendenteId(item.id);
     try {
       if (statusAposUso) {
@@ -318,8 +323,11 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
       mostrarUsoMsg('sucesso', `${item.nome} foi usada${valor ? ` por ${custoTexto(item)}` : ''}.`);
     } catch (e) {
       console.error('Falha ao registrar uso da habilidade:', e);
-      mostrarUsoMsg('erro', 'Não foi possível registrar o uso na mesa.');
+      mostrarUsoMsg('erro', statusAposUso
+        ? 'O custo foi aplicado, mas o servidor não registrou o uso na mesa.'
+        : 'Não foi possível registrar o uso na mesa.');
     } finally {
+      usoEmAndamento.current = false;
       setUsoPendenteId(null);
     }
   };
@@ -377,7 +385,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                               type="button"
                               onClick={() => abrirPersonalizacao(item)}
                               title="Editar texto"
-                              className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all"
+                              className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-100 transition-all sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
                             >
                               <Pencil size={12} />
                             </button>
@@ -386,7 +394,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                         {personalizacao && (
                           <span className="mt-1 inline-block text-[9px] font-black uppercase tracking-wider text-[#c7a44c]/70">Editado por você</span>
                         )}
-                        <p className="mt-2 text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
+                        <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
                       </article>
                     );
                   })}
@@ -462,7 +470,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                 <div className="flex-1 min-w-0 pt-1">
                   <div className="flex justify-between items-start gap-3">
                     <h4 className="text-white font-bold text-lg mb-1">{h.nome || 'Habilidade Desconhecida'}</h4>
-                    <div className="flex items-center gap-1.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center gap-1.5 flex-shrink-0 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <button
                         onClick={() => abrirEditar(h)}
                         title="Editar"
@@ -511,7 +519,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                     <div className="mt-3 pt-3 border-t border-white/5 flex justify-end">
                       <button
                         onClick={() => usar(h)}
-                        disabled={usoPendenteId === h.id}
+                        disabled={usoPendenteId !== null}
                         className="px-4 py-2 rounded-lg bg-[#c7a44c]/10 border border-[#c7a44c]/30 text-[#c7a44c] hover:bg-[#c7a44c]/20 hover:scale-105 flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50 disabled:hover:scale-100"
                       >
                         <Dices size={14} /> {usoPendenteId === h.id ? 'Usando...' : 'Usar'}
@@ -626,7 +634,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
               <EditorEfeitos
                 efeitos={form.efeitos || []}
                 onChange={(efeitos) => setForm((atual) => ({ ...atual, efeitos }))}
-                pericias={PERICIAS_CATALOGO.map((pericia) => ({ id: pericia.id, titulo: pericia.titulo }))}
+                pericias={periciasDisponiveis}
                 maxEfeitos={EFEITOS_FICHA_MAXIMOS}
                 contexto="habilidade"
               />

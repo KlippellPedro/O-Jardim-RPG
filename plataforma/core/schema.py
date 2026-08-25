@@ -781,6 +781,8 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
                 origem_personagem_id UUID,
                 
                 nome TEXT NOT NULL,
+                raridade TEXT NOT NULL DEFAULT 'comum'
+                    CHECK (raridade IN ('comum', 'incomum', 'raro', 'epico', 'lendario')),
                 imagem_url TEXT,
                 descricao TEXT DEFAULT '',
                 
@@ -798,6 +800,7 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
                 sistemas_ativos_maximos INTEGER NOT NULL DEFAULT 1 CHECK (sistemas_ativos_maximos >= 0),
                 espacos_modulos_maximos INTEGER NOT NULL DEFAULT 1 CHECK (espacos_modulos_maximos >= 0),
                 espacos_base INTEGER NOT NULL DEFAULT 1 CHECK (espacos_base >= 0),
+                modulos_utilidade_integrados INTEGER NOT NULL DEFAULT 0 CHECK (modulos_utilidade_integrados >= 0),
                 
                 nivel_acesso_campanha TEXT NOT NULL DEFAULT 'nenhum' 
                     CHECK (nivel_acesso_campanha IN ('nenhum', 'visualizar', 'utilizar')),
@@ -926,6 +929,201 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """
             CREATE INDEX IF NOT EXISTS infracoes_loja_personagem_idx
             ON infracoes_loja (campanha_id, personagem_id, criado_em DESC)
+            """,
+        ),
+    ),
+    (
+        22,
+        "ids_da_loja_em_slug_com_hifen",
+        (
+            # Sete itens do catálogo entraram com id em underline
+            # (`plano_de_saude_vip`) em vez do slug com hífen que os outros 462
+            # usam. O id é chave em `cofre_itens_usuario` e em `reservas_cofre`:
+            # quem já tinha o item guardado ficaria apontando para um id que
+            # saiu do catálogo. O Banqueiro migra a tabela `inventario` dele
+            # pelo mesmo caminho.
+            """
+            UPDATE cofre_itens_usuario SET item_id = replace(item_id, '_', '-')
+            WHERE item_id IN (
+                'mn_relogio_de_bolso_corrompido', 'mn_adaga_das_sombras',
+                'mn_pocao_do_esquecimento', 'mn_mascara_sem_rosto',
+                'plano_de_saude_basico', 'plano_de_saude_vip',
+                'contrato_guarda_costas'
+            )
+            """,
+            """
+            UPDATE reservas_cofre SET item_id = replace(item_id, '_', '-')
+            WHERE item_id IN (
+                'mn_relogio_de_bolso_corrompido', 'mn_adaga_das_sombras',
+                'mn_pocao_do_esquecimento', 'mn_mascara_sem_rosto',
+                'plano_de_saude_basico', 'plano_de_saude_vip',
+                'contrato_guarda_costas'
+            )
+            """,
+        ),
+    ),
+    (
+        23,
+        "raridade_para_manutencao_veicular",
+        (
+            """
+            ALTER TABLE campanha_veiculos
+            ADD COLUMN IF NOT EXISTS raridade TEXT NOT NULL DEFAULT 'comum'
+                CHECK (raridade IN ('comum', 'incomum', 'raro', 'epico', 'lendario'))
+            """,
+            """
+            ALTER TABLE campanha_veiculos
+            ADD COLUMN IF NOT EXISTS modulos_utilidade_integrados INTEGER NOT NULL DEFAULT 0
+                CHECK (modulos_utilidade_integrados >= 0)
+            """,
+            """
+            UPDATE campanha_veiculos
+            SET raridade = CASE origem_item_id
+                WHEN 'veiculo-moto-flutuadora' THEN 'incomum'
+                WHEN 'veiculo-rover-tatu' THEN 'raro'
+                WHEN 'veiculo-caca-falcao' THEN 'epico'
+                WHEN 'veiculo-mecha-golias' THEN 'lendario'
+                WHEN 'veiculo-cruzador-baleia' THEN 'lendario'
+                WHEN 'veiculo-hoverboard-neon' THEN 'comum'
+                WHEN 'veiculo-patinete-faisca' THEN 'comum'
+                WHEN 'veiculo-triciclo-formiga' THEN 'comum'
+                WHEN 'veiculo-motoneta-andorinha' THEN 'comum'
+                WHEN 'veiculo-jipe-pioneiro' THEN 'incomum'
+                WHEN 'veiculo-ambulancia-gralha' THEN 'incomum'
+                WHEN 'veiculo-barco-arraia' THEN 'incomum'
+                WHEN 'veiculo-van-cofre' THEN 'raro'
+                WHEN 'veiculo-interceptor-vespa' THEN 'raro'
+                WHEN 'veiculo-aerobarco-albatroz' THEN 'raro'
+                WHEN 'veiculo-correio-sussurro' THEN 'epico'
+                ELSE raridade
+            END
+            WHERE origem_item_id LIKE 'veiculo-%'
+            """,
+            """
+            UPDATE campanha_veiculos
+            SET modulos_utilidade_integrados = 1
+            WHERE modulos_utilidade_integrados = 0
+              AND origem_item_id IN (
+                'veiculo-mecha-golias', 'veiculo-cruzador-baleia',
+                'veiculo-triciclo-formiga', 'veiculo-ambulancia-gralha',
+                'veiculo-van-cofre', 'veiculo-aerobarco-albatroz'
+              )
+            """,
+        ),
+    ),
+    (
+        24,
+        "edicao_versionada_de_conteudo",
+        (
+            """
+            ALTER TABLE informacoes_campanha
+            ADD COLUMN IF NOT EXISTS rascunho JSONB
+            """,
+            """
+            ALTER TABLE informacoes_campanha
+            ADD COLUMN IF NOT EXISTS versao_editorial INTEGER NOT NULL DEFAULT 1
+                CHECK (versao_editorial > 0)
+            """,
+            """
+            ALTER TABLE informacoes_campanha
+            ADD COLUMN IF NOT EXISTS rascunho_atualizado_por UUID
+                REFERENCES usuarios(id) ON DELETE SET NULL
+            """,
+            """
+            ALTER TABLE informacoes_campanha
+            ADD COLUMN IF NOT EXISTS publicado_em TIMESTAMPTZ
+            """,
+            """
+            UPDATE informacoes_campanha
+            SET publicado_em = COALESCE(publicado_em, atualizado_em)
+            WHERE publicado_em IS NULL
+              AND dados_completos <> '{}'::jsonb
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS revisoes_conteudo (
+                id UUID PRIMARY KEY,
+                informacao_id UUID NOT NULL
+                    REFERENCES informacoes_campanha(id) ON DELETE CASCADE,
+                campanha_id UUID NOT NULL
+                    REFERENCES campanhas(id) ON DELETE CASCADE,
+                versao INTEGER NOT NULL CHECK (versao > 0),
+                titulo TEXT NOT NULL,
+                dados JSONB NOT NULL,
+                criado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE (informacao_id, versao)
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS revisoes_conteudo_campanha_idx
+            ON revisoes_conteudo (campanha_id, criado_em DESC)
+            """,
+        ),
+    ),
+    (
+        25,
+        "catalogo_editavel_por_campanha",
+        (
+            """
+            CREATE TABLE IF NOT EXISTS catalogo_itens_campanha (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL
+                    REFERENCES campanhas(id) ON DELETE CASCADE,
+                item_id TEXT NOT NULL,
+                rascunho JSONB NOT NULL,
+                publicado JSONB,
+                versao INTEGER NOT NULL DEFAULT 1 CHECK (versao > 0),
+                criado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                atualizado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                publicado_em TIMESTAMPTZ,
+                UNIQUE (campanha_id, item_id)
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS catalogo_itens_campanha_publicados_idx
+            ON catalogo_itens_campanha (campanha_id, item_id)
+            WHERE publicado IS NOT NULL
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS revisoes_catalogo_campanha (
+                id UUID PRIMARY KEY,
+                catalogo_item_campanha_id UUID NOT NULL
+                    REFERENCES catalogo_itens_campanha(id) ON DELETE CASCADE,
+                campanha_id UUID NOT NULL
+                    REFERENCES campanhas(id) ON DELETE CASCADE,
+                item_id TEXT NOT NULL,
+                versao INTEGER NOT NULL CHECK (versao > 0),
+                dados JSONB NOT NULL,
+                criado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE (catalogo_item_campanha_id, versao)
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS revisoes_catalogo_campanha_item_idx
+            ON revisoes_catalogo_campanha (campanha_id, item_id, criado_em DESC)
+            """,
+        ),
+    ),
+    (
+        26,
+        "indices_para_filtros_de_auditoria",
+        (
+            """
+            CREATE INDEX IF NOT EXISTS eventos_auditoria_campanha_ator_idx
+            ON eventos_auditoria (campanha_id, ator_usuario_id, criado_em DESC)
+            WHERE ator_usuario_id IS NOT NULL
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS eventos_auditoria_campanha_alvo_idx
+            ON eventos_auditoria (campanha_id, alvo_tipo, alvo_id, criado_em DESC)
+            WHERE alvo_tipo IS NOT NULL AND alvo_id IS NOT NULL
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS eventos_auditoria_campanha_acao_idx
+            ON eventos_auditoria (campanha_id, acao, criado_em DESC)
             """,
         ),
     ),

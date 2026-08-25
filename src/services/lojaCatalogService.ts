@@ -115,6 +115,23 @@ const CATEGORIAS_LOJA = new Set<ItemCategoria>([
   'Implantes Cibernéticos', 'Artefatos Mágicos', 'Outros',
 ]);
 
+/** O que se contrata um ser para fazer. Vem de `conteudo.funcao` no catálogo,
+ * vira subfiltro no balcão de Mercenários e vira o papel do Aliado que a compra
+ * cria na ficha. Fera de combate não declara função. */
+export const FUNCOES_MERCENARIO_ROTULOS = [
+  'Guarda de local', 'Escolta', 'Tripulação', 'Ofício',
+] as const;
+export type FuncaoMercenario = typeof FUNCOES_MERCENARIO_ROTULOS[number];
+
+const FUNCOES_MERCENARIO = new Set(['guarda de local', 'escolta', 'tripulacao', 'oficio']);
+
+const SUBFILTRO_PARA_FUNCAO: Record<string, FuncaoMercenario> = {
+  'Guardas de local': 'Guarda de local',
+  'Escoltas': 'Escolta',
+  'Tripulação': 'Tripulação',
+  'Ofícios': 'Ofício',
+};
+
 const normalizarTexto = (valor: unknown): string => String(valor ?? '')
   .normalize('NFD')
   .replace(/[\u0300-\u036f]/g, '')
@@ -312,12 +329,21 @@ export function itemCorrespondeBusca(item: LojaItem, termo: string): boolean {
     item.descricao,
     item.categoria,
     dados.subtipo,
+    dados.funcao,
     ...(Array.isArray(dados.atributos) ? dados.atributos : []),
+    dados.categoria,
+    dados.origem,
+    dados.afinidade,
+    dados.estadoBase,
+    ...(Array.isArray(dados.propriedades) ? dados.propriedades : []),
+    ...(Array.isArray(dados.usos) ? dados.usos : []),
   ].filter(Boolean).join(' '));
 
-  if (alvo.includes(busca)) return true;
-  const singular = busca.endsWith('s') && busca.length > 3 ? busca.slice(0, -1) : busca;
-  return singular !== busca && alvo.includes(singular);
+  return busca.split(/\s+/).filter(Boolean).every((termoBusca) => {
+    if (alvo.includes(termoBusca)) return true;
+    const singular = termoBusca.endsWith('s') && termoBusca.length > 3 ? termoBusca.slice(0, -1) : termoBusca;
+    return singular !== termoBusca && alvo.includes(singular);
+  });
 }
 
 const marcadoresDoItem = (item: LojaItem): Set<string> => {
@@ -382,8 +408,29 @@ export function itemCorrespondeSubfiltro(
     if (subfiltro === 'Ferramentas') return !pocao && !selo && !ritual;
   }
 
+  if (categoria === 'Mercenários') {
+    // Quem é contratável declara `funcao` no catálogo; quem não declara é fera,
+    // servo ou invocação que se compra pelo que faz em combate.
+    const funcao = normalizarMarcador(dados.funcao);
+    if (subfiltro === 'Feras e Invocações') return !FUNCOES_MERCENARIO.has(funcao);
+    return funcao === normalizarMarcador(SUBFILTRO_PARA_FUNCAO[subfiltro] ?? subfiltro);
+  }
+
   if (categoria === 'Frutos do Éden') {
     return marcadores.has(normalizarMarcador(subfiltro));
+  }
+
+  if (categoria === 'Componentes') {
+    const usoPorEstoque: Record<string, string> = {
+      'Componentes Químicos': 'alquimia',
+      'Componentes Ritualísticos': 'ritual',
+      'Componentes Veiculares': 'veiculos',
+      Sucata: 'engenharia',
+      Mantimentos: 'cozinha',
+      'Matéria-prima': 'forja',
+    };
+    const uso = normalizarMarcador(usoPorEstoque[subfiltro] ?? subfiltro);
+    return Array.isArray(dados.usos) && dados.usos.some((item: unknown) => normalizarMarcador(item) === uso);
   }
 
   return true;
@@ -405,6 +452,17 @@ export const mapearItemLoja = (entrada: LojaCatalogEntry): LojaItem => {
   const descontoPercentual = promocaoValida
     ? Math.round((1 - (valorOriginal / precoAnteriorLido.valorOriginal)) * 100)
     : 0;
+  const estoquePorUso: Record<string, string> = {
+    alquimia: 'Componente Químico',
+    ritual: 'Componente Ritualístico',
+    veiculos: 'Componente Veicular',
+    engenharia: 'Sucata',
+    cozinha: 'Mantimento',
+    forja: 'Matéria-prima',
+  };
+  const conversoesMaterial = entrada.tipo === 'drop' && Array.isArray(c.usos)
+    ? [...new Set(c.usos.map((uso: unknown) => estoquePorUso[String(uso)]).filter(Boolean))]
+    : [];
   
   return {
     id: entrada.id,
@@ -416,7 +474,15 @@ export const mapearItemLoja = (entrada: LojaCatalogEntry): LojaItem => {
     valorOriginal,
     nivelLoja,
     descricao: typeof c.descricao === 'string' ? c.descricao : 'Um item peculiar de utilidade questionável.',
-    propriedades: Array.isArray(c.atributos) ? c.atributos.join(' | ') : (typeof c.atributos === 'string' ? c.atributos : ''),
+    propriedades: conversoesMaterial.length
+      ? `Pode virar: ${conversoesMaterial.join(' | ')}`
+      : Array.isArray(c.atributos)
+      ? c.atributos.join(' | ')
+      : typeof c.atributos === 'string'
+        ? c.atributos
+        : Array.isArray(c.propriedades)
+          ? c.propriedades.join(' | ')
+          : '',
     requisitoNivel: c.requisitoNivel ? Number(c.requisitoNivel) : undefined,
     requisitoClasse: Array.isArray(c.requisitoClasse)
       ? c.requisitoClasse.map(String)

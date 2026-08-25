@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-12T01:51:47.205Z",
+  "generatedAt": "2026-08-25T11:14:53.691Z",
   "levels": [
     1,
     5,
@@ -15,8 +15,8 @@
     "scope": "Mede recursos, vagas, dano médio e palavras de risco. Efeitos narrativos e controle ainda exigem playtest."
   },
   "summary": {
-    "classes": 27,
-    "weapons": 87,
+    "classes": 26,
+    "weapons": 79,
     "spells": 352,
     "invalidResourceBudgets": 0,
     "unboundedWeapons": 0,
@@ -216,7 +216,7 @@
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
-          "habilidades": 10
+          "habilidades": 11
         },
         {
           "nivel": 30,
@@ -225,7 +225,7 @@
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
-          "habilidades": 10
+          "habilidades": 11
         },
         {
           "nivel": 40,
@@ -234,7 +234,7 @@
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
-          "habilidades": 10
+          "habilidades": 11
         }
       ],
       "alertasTexto": []
@@ -309,9 +309,7 @@
           "habilidades": 11
         }
       ],
-      "alertasTexto": [
-        "Publi"
-      ]
+      "alertasTexto": []
     },
     {
       "id": "espadachim",
@@ -402,8 +400,8 @@
         },
         {
           "nivel": 5,
-          "vida": 44,
-          "mana": 16,
+          "vida": 48,
+          "mana": 12,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -411,8 +409,8 @@
         },
         {
           "nivel": 10,
-          "vida": 79,
-          "mana": 26,
+          "vida": 88,
+          "mana": 17,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -420,8 +418,8 @@
         },
         {
           "nivel": 15,
-          "vida": 114,
-          "mana": 36,
+          "vida": 128,
+          "mana": 22,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -429,8 +427,8 @@
         },
         {
           "nivel": 20,
-          "vida": 149,
-          "mana": 46,
+          "vida": 168,
+          "mana": 27,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -438,8 +436,8 @@
         },
         {
           "nivel": 30,
-          "vida": 204,
-          "mana": 81,
+          "vida": 223,
+          "mana": 62,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -447,17 +445,15 @@
         },
         {
           "nivel": 40,
-          "vida": 259,
-          "mana": 116,
+          "vida": 278,
+          "mana": 97,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
           "habilidades": 11
         }
       ],
-      "alertasTexto": [
-        "Não Levanta"
-      ]
+      "alertasTexto": []
     },
     {
       "id": "atirador",
@@ -499,7 +495,7 @@
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
-          "habilidades": 8
+          "habilidades": 7
         },
         {
           "nivel": 20,
@@ -529,9 +525,7 @@
           "habilidades": 11
         }
       ],
-      "alertasTexto": [
-        "Um Só Disparo"
-      ]
+      "alertasTexto": []
     },
     {
       "id": "medico",
@@ -819,7 +813,9 @@
           "habilidades": 11
         }
       ],
-      "alertasTexto": []
+      "alertasTexto": [
+        "Engenhocas"
+      ]
     },
     {
       "id": "alquimista",
@@ -910,8 +906,8 @@
         },
         {
           "nivel": 5,
-          "vida": 40,
-          "mana": 20,
+          "vida": 36,
+          "mana": 24,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -919,8 +915,8 @@
         },
         {
           "nivel": 10,
-          "vida": 70,
-          "mana": 35,
+          "vida": 61,
+          "mana": 44,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -928,8 +924,8 @@
         },
         {
           "nivel": 15,
-          "vida": 100,
-          "mana": 50,
+          "vida": 86,
+          "mana": 64,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -937,8 +933,8 @@
         },
         {
           "nivel": 20,
-          "vida": 130,
-          "mana": 65,
+          "vida": 111,
+          "mana": 84,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -946,8 +942,8 @@
         },
         {
           "nivel": 30,
-          "vida": 185,
-          "mana": 100,
+          "vida": 166,
+          "mana": 119,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -955,8 +951,8 @@
         },
         {
           "nivel": 40,
-          "vida": 240,
-          "mana": 135,
+          "vida": 221,
+          "mana": 154,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1035,9 +1031,7 @@
           "habilidades": 11
         }
       ],
-      "alertasTexto": [
-        "Marcha"
-      ]
+      "alertasTexto": []
     },
     {
       "id": "pirata-amaldicoado",
@@ -1181,9 +1175,7 @@
           "habilidades": 11
         }
       ],
-      "alertasTexto": [
-        "Morte"
-      ]
+      "alertasTexto": []
     },
     {
       "id": "guia-dimensional",
@@ -1258,8 +1250,8 @@
       "alertasTexto": []
     },
     {
-      "id": "cacador-de-entidades",
-      "titulo": "Caçador de Entidades",
+      "id": "cacador-das-almas",
+      "titulo": "Caçador das Almas",
       "categoria": "especial",
       "recursosPorNivel": 7,
       "referencias": [
@@ -1546,150 +1538,6 @@
       "alertasTexto": []
     },
     {
-      "id": "decodificador",
-      "titulo": "Decodificador",
-      "categoria": "especial",
-      "recursosPorNivel": 7,
-      "referencias": [
-        {
-          "nivel": 1,
-          "vida": 16,
-          "mana": 8,
-          "defesaNatural": 11,
-          "poderes": 0,
-          "grausTreinamento": 1,
-          "habilidades": 1
-        },
-        {
-          "nivel": 5,
-          "vida": 36,
-          "mana": 24,
-          "defesaNatural": 13,
-          "poderes": 1,
-          "grausTreinamento": 1,
-          "habilidades": 3
-        },
-        {
-          "nivel": 10,
-          "vida": 61,
-          "mana": 44,
-          "defesaNatural": 16,
-          "poderes": 3,
-          "grausTreinamento": 2,
-          "habilidades": 5
-        },
-        {
-          "nivel": 15,
-          "vida": 86,
-          "mana": 64,
-          "defesaNatural": 18,
-          "poderes": 5,
-          "grausTreinamento": 3,
-          "habilidades": 7
-        },
-        {
-          "nivel": 20,
-          "vida": 111,
-          "mana": 84,
-          "defesaNatural": 21,
-          "poderes": 8,
-          "grausTreinamento": 4,
-          "habilidades": 11
-        },
-        {
-          "nivel": 30,
-          "vida": 166,
-          "mana": 119,
-          "defesaNatural": 26,
-          "poderes": 8,
-          "grausTreinamento": 4,
-          "habilidades": 11
-        },
-        {
-          "nivel": 40,
-          "vida": 221,
-          "mana": 154,
-          "defesaNatural": 31,
-          "poderes": 8,
-          "grausTreinamento": 4,
-          "habilidades": 11
-        }
-      ],
-      "alertasTexto": []
-    },
-    {
-      "id": "codificador",
-      "titulo": "Codificador",
-      "categoria": "especial",
-      "recursosPorNivel": 7,
-      "referencias": [
-        {
-          "nivel": 1,
-          "vida": 16,
-          "mana": 8,
-          "defesaNatural": 11,
-          "poderes": 0,
-          "grausTreinamento": 1,
-          "habilidades": 1
-        },
-        {
-          "nivel": 5,
-          "vida": 36,
-          "mana": 24,
-          "defesaNatural": 13,
-          "poderes": 1,
-          "grausTreinamento": 1,
-          "habilidades": 3
-        },
-        {
-          "nivel": 10,
-          "vida": 61,
-          "mana": 44,
-          "defesaNatural": 16,
-          "poderes": 3,
-          "grausTreinamento": 2,
-          "habilidades": 5
-        },
-        {
-          "nivel": 15,
-          "vida": 86,
-          "mana": 64,
-          "defesaNatural": 18,
-          "poderes": 5,
-          "grausTreinamento": 3,
-          "habilidades": 7
-        },
-        {
-          "nivel": 20,
-          "vida": 111,
-          "mana": 84,
-          "defesaNatural": 21,
-          "poderes": 8,
-          "grausTreinamento": 4,
-          "habilidades": 11
-        },
-        {
-          "nivel": 30,
-          "vida": 166,
-          "mana": 119,
-          "defesaNatural": 26,
-          "poderes": 8,
-          "grausTreinamento": 4,
-          "habilidades": 11
-        },
-        {
-          "nivel": 40,
-          "vida": 221,
-          "mana": 154,
-          "defesaNatural": 31,
-          "poderes": 8,
-          "grausTreinamento": 4,
-          "habilidades": 11
-        }
-      ],
-      "alertasTexto": []
-    },
-    {
       "id": "canalizador",
       "titulo": "Canalizador",
       "categoria": "comum",
@@ -1706,8 +1554,8 @@
         },
         {
           "nivel": 5,
-          "vida": 36,
-          "mana": 24,
+          "vida": 32,
+          "mana": 28,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -1715,8 +1563,8 @@
         },
         {
           "nivel": 10,
-          "vida": 61,
-          "mana": 44,
+          "vida": 52,
+          "mana": 53,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -1724,8 +1572,8 @@
         },
         {
           "nivel": 15,
-          "vida": 86,
-          "mana": 64,
+          "vida": 72,
+          "mana": 78,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -1733,8 +1581,8 @@
         },
         {
           "nivel": 20,
-          "vida": 111,
-          "mana": 84,
+          "vida": 92,
+          "mana": 103,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1742,8 +1590,8 @@
         },
         {
           "nivel": 30,
-          "vida": 166,
-          "mana": 119,
+          "vida": 147,
+          "mana": 138,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1751,8 +1599,8 @@
         },
         {
           "nivel": 40,
-          "vida": 221,
-          "mana": 154,
+          "vida": 202,
+          "mana": 173,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1778,8 +1626,8 @@
         },
         {
           "nivel": 5,
-          "vida": 36,
-          "mana": 24,
+          "vida": 32,
+          "mana": 28,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -1787,8 +1635,8 @@
         },
         {
           "nivel": 10,
-          "vida": 61,
-          "mana": 44,
+          "vida": 52,
+          "mana": 53,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -1796,8 +1644,8 @@
         },
         {
           "nivel": 15,
-          "vida": 86,
-          "mana": 64,
+          "vida": 72,
+          "mana": 78,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -1805,8 +1653,8 @@
         },
         {
           "nivel": 20,
-          "vida": 111,
-          "mana": 84,
+          "vida": 92,
+          "mana": 103,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1814,8 +1662,8 @@
         },
         {
           "nivel": 30,
-          "vida": 166,
-          "mana": 119,
+          "vida": 147,
+          "mana": 138,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1823,8 +1671,8 @@
         },
         {
           "nivel": 40,
-          "vida": 221,
-          "mana": 154,
+          "vida": 202,
+          "mana": 173,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1850,8 +1698,8 @@
         },
         {
           "nivel": 5,
-          "vida": 36,
-          "mana": 24,
+          "vida": 32,
+          "mana": 28,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -1859,8 +1707,8 @@
         },
         {
           "nivel": 10,
-          "vida": 61,
-          "mana": 44,
+          "vida": 52,
+          "mana": 53,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -1868,8 +1716,8 @@
         },
         {
           "nivel": 15,
-          "vida": 86,
-          "mana": 64,
+          "vida": 72,
+          "mana": 78,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -1877,35 +1725,33 @@
         },
         {
           "nivel": 20,
-          "vida": 111,
-          "mana": 84,
+          "vida": 92,
+          "mana": 103,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
-          "habilidades": 11
+          "habilidades": 10
         },
         {
           "nivel": 30,
-          "vida": 166,
-          "mana": 119,
+          "vida": 147,
+          "mana": 138,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
-          "habilidades": 11
+          "habilidades": 10
         },
         {
           "nivel": 40,
-          "vida": 221,
-          "mana": 154,
+          "vida": 202,
+          "mana": 173,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
-          "habilidades": 11
+          "habilidades": 10
         }
       ],
-      "alertasTexto": [
-        "Âncora Ritual"
-      ]
+      "alertasTexto": []
     },
     {
       "id": "interceptador",
@@ -1978,6 +1824,80 @@
         }
       ],
       "alertasTexto": []
+    },
+    {
+      "id": "cozinheiro",
+      "titulo": "Chef",
+      "categoria": "comum",
+      "recursosPorNivel": 7,
+      "referencias": [
+        {
+          "nivel": 1,
+          "vida": 16,
+          "mana": 8,
+          "defesaNatural": 11,
+          "poderes": 0,
+          "grausTreinamento": 1,
+          "habilidades": 1
+        },
+        {
+          "nivel": 5,
+          "vida": 36,
+          "mana": 24,
+          "defesaNatural": 13,
+          "poderes": 1,
+          "grausTreinamento": 1,
+          "habilidades": 3
+        },
+        {
+          "nivel": 10,
+          "vida": 61,
+          "mana": 44,
+          "defesaNatural": 16,
+          "poderes": 3,
+          "grausTreinamento": 2,
+          "habilidades": 5
+        },
+        {
+          "nivel": 15,
+          "vida": 86,
+          "mana": 64,
+          "defesaNatural": 18,
+          "poderes": 5,
+          "grausTreinamento": 3,
+          "habilidades": 7
+        },
+        {
+          "nivel": 20,
+          "vida": 111,
+          "mana": 84,
+          "defesaNatural": 21,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 30,
+          "vida": 166,
+          "mana": 119,
+          "defesaNatural": 26,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 40,
+          "vida": 221,
+          "mana": 154,
+          "defesaNatural": 31,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        }
+      ],
+      "alertasTexto": [
+        "Cardápio"
+      ]
     }
   ],
   "spells": [
@@ -5604,54 +5524,54 @@
       "autorizacaoMestre": true
     },
     {
-      "id": "excalibur",
-      "titulo": "Excalibur",
+      "id": "arma-lamina-monomolecular",
+      "titulo": "Lâmina Monomolecular",
       "raridade": "lendario",
-      "dano": "6d10+12",
-      "mediaNormal": 45,
-      "mediaComCritico": 51.74999999999999,
+      "dano": "4d10+8",
+      "mediaNormal": 30,
+      "mediaComCritico": 31.5,
       "nivelRecomendado": 25,
       "autorizacaoMestre": true
     },
     {
-      "id": "mjolnir",
-      "titulo": "Mjölnir",
-      "raridade": "lendario",
-      "dano": "6d10+12",
-      "mediaNormal": 45,
-      "mediaComCritico": 51.74999999999999,
-      "nivelRecomendado": 25,
-      "autorizacaoMestre": true
+      "id": "arma-sniper-antimateria",
+      "titulo": "Fuzil Sniper de Antimatéria",
+      "raridade": "epico",
+      "dano": "4d10+4",
+      "mediaNormal": 26,
+      "mediaComCritico": 27.3,
+      "nivelRecomendado": null,
+      "autorizacaoMestre": false
     },
     {
-      "id": "martelo-das-chamas",
-      "titulo": "Martelo das Chamas",
-      "raridade": "lendario",
-      "dano": "6d10+10",
-      "mediaNormal": 43,
-      "mediaComCritico": 49.449999999999996,
-      "nivelRecomendado": 25,
-      "autorizacaoMestre": true
+      "id": "rifle-de-precisao",
+      "titulo": "Rifle de Precisão",
+      "raridade": "epico",
+      "dano": "4d10",
+      "mediaNormal": 22,
+      "mediaComCritico": 24.200000000000003,
+      "nivelRecomendado": null,
+      "autorizacaoMestre": false
     },
     {
-      "id": "masamune",
-      "titulo": "Masamune",
-      "raridade": "lendario",
-      "dano": "6d10+10",
-      "mediaNormal": 43,
-      "mediaComCritico": 49.449999999999996,
-      "nivelRecomendado": 25,
-      "autorizacaoMestre": true
+      "id": "minigun",
+      "titulo": "Minigun",
+      "raridade": "epico",
+      "dano": "3d12",
+      "mediaNormal": 19.5,
+      "mediaComCritico": 21.450000000000003,
+      "nivelRecomendado": null,
+      "autorizacaoMestre": false
     },
     {
-      "id": "rhaast",
-      "titulo": "Rhaast",
-      "raridade": "lendario",
-      "dano": "5d12+10",
-      "mediaNormal": 42.5,
-      "mediaComCritico": 48.87499999999999,
-      "nivelRecomendado": 25,
-      "autorizacaoMestre": true
+      "id": "awp",
+      "titulo": "AWP",
+      "raridade": "epico",
+      "dano": "3d12",
+      "mediaNormal": 19.5,
+      "mediaComCritico": 21.450000000000003,
+      "nivelRecomendado": null,
+      "autorizacaoMestre": false
     }
   ]
 }

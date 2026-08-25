@@ -6,7 +6,9 @@ from pathlib import Path
 from core.character_summary import (
     RACA_PERSONALIZADA_ID,
     _circulo_por_fluxo,
+    bonus_escolhas_habilidade,
     carregar_catalogos,
+    efeitos_escolhas_habilidade,
     resumir_ficha,
     validar_regras_ficha,
 )
@@ -67,7 +69,7 @@ class TestEscolhaRacialTardia:
 
     def test_ficha_antiga_sem_cor_pode_escolher_uma(self):
         anterior = self._ficha_espirito()
-        atual = self._ficha_espirito("vermelho")
+        atual = self._ficha_espirito("vermelho-vinho")
         assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
 
     def test_cor_invalida_continua_barrada(self):
@@ -76,12 +78,12 @@ class TestEscolhaRacialTardia:
         assert "escolhas raciais" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
 
     def test_trocar_de_cor_continua_sendo_do_mestre(self):
-        anterior = self._ficha_espirito("vermelho")
+        anterior = self._ficha_espirito("vermelho-vinho")
         atual = self._ficha_espirito("dourado")
         assert "escolhas raciais" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
 
     def test_apagar_a_cor_escolhida_continua_barrado(self):
-        anterior = self._ficha_espirito("vermelho")
+        anterior = self._ficha_espirito("vermelho-vinho")
         atual = self._ficha_espirito("")
         assert "escolhas raciais" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
 
@@ -147,10 +149,12 @@ class TestCharacterRules:
         anterior["nivel"] = 6
         anterior["xp"] = 15000
         atual = deepcopy(anterior)
+        # Poderes sem pre-requisito de proposito: o que esta em teste aqui e a
+        # contagem de vagas, e os poderes do Arsenal agora exigem nivel 15.
         atual["poderesClasseSelecionados"] = [
-            {"classeId": "guerreiro", "poderId": "arma-do-arsenal"},
-            {"classeId": "guerreiro", "poderId": "armadura-do-arsenal"},
-            {"classeId": "guerreiro", "poderId": "escudo-do-arsenal"},
+            {"classeId": "guerreiro", "poderId": "correndo"},
+            {"classeId": "guerreiro", "poderId": "serio-isso"},
+            {"classeId": "guerreiro", "poderId": "grito-de-batalha"},
         ]
         erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
         assert "mais poderes" in erro
@@ -522,3 +526,257 @@ class TestRacaPersonalizada:
         ficha = _ficha_criacao()
         ficha["racaId"] = RACA_PERSONALIZADA_ID
         assert resumir_ficha(ficha)["raca"] == "Outra coisa (personalizada)"
+
+
+class TestEscolhasDeHabilidade:
+    """Engenhocas do Engenheiro: o jogador escolhe na lista da habilidade a cada
+    descanso, dentro das vagas que o nivel liberou. Espelha
+    `selecoesHabilidadeValidas` em src/services/progressaoFichaService.ts."""
+
+    @classmethod
+    def setup_class(cls):
+        carregar_catalogos(DATA_ROOT)
+
+    @staticmethod
+    def _engenheiro(nivel: int, escolhas: dict) -> tuple[dict, dict]:
+        anterior = _ficha_criacao()
+        anterior["classeId"] = "engenheiro"
+        anterior["classes"] = [{"classeId": "engenheiro", "nivel": nivel}]
+        anterior["nivel"] = nivel
+        anterior["xp"] = 1000000
+        atual = deepcopy(anterior)
+        atual["escolhasHabilidade"] = escolhas
+        return atual, anterior
+
+    def test_aceita_engenhocas_dentro_das_vagas(self):
+        atual, anterior = self._engenheiro(8, {
+            "engenheiro:engenhocas": ["mina-adesiva", "mina-adesiva"],
+            "engenheiro:meus-filhos": ["robotica"],
+        })
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+    def test_rejeita_mais_engenhocas_do_que_as_vagas(self):
+        atual, anterior = self._engenheiro(3, {"engenheiro:engenhocas": ["mina-adesiva", "drone-batedor"]})
+        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        assert "mais opcoes de habilidade" in erro
+
+    def test_rejeita_opcao_fora_do_catalogo(self):
+        atual, anterior = self._engenheiro(8, {"engenheiro:engenhocas": ["canhao-de-plasma"]})
+        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        assert "opcao inexistente" in erro
+
+    def test_rejeita_especialidade_duplicada(self):
+        # Meus Filhos tem vaga unica: repetir a especialidade ja estoura as vagas
+        # antes de chegar na regra de repeticao.
+        atual, anterior = self._engenheiro(8, {"engenheiro:meus-filhos": ["robotica", "robotica"]})
+        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        assert "mais opcoes de habilidade" in erro
+
+    def test_rejeita_escolha_de_habilidade_nao_liberada(self):
+        atual, anterior = self._engenheiro(2, {"engenheiro:engenhocas": ["mina-adesiva"]})
+        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        assert "ainda nao foi liberada" in erro
+
+
+class TestPericiaConcedidaPelaClasse:
+    """O Oficio (Engenharia) chega junto da classe: ele nao ocupa uma das seis
+    pericias iniciais e nao consome Grau de Treinamento. Espelha
+    `periciasConcedidasPelaClasse` em src/services/periciasFichaService.ts."""
+
+    @classmethod
+    def setup_class(cls):
+        carregar_catalogos(DATA_ROOT)
+
+    @staticmethod
+    def _engenheiro(nivel: int = 1) -> dict:
+        ficha = _ficha_criacao()
+        ficha["classeId"] = "engenheiro"
+        ficha["classes"] = [{"classeId": "engenheiro", "nivel": nivel}]
+        ficha["nivel"] = nivel
+        if nivel > 1:
+            ficha["xp"] = 1000000
+        return ficha
+
+    def test_criacao_aceita_o_oficio_alem_das_seis_pericias(self):
+        ficha = self._engenheiro()
+        ficha["pericias"]["oficio-engenharia"] = "aprendiz"
+        assert validar_regras_ficha(ficha, {}, criacao=True) is None
+
+    def test_criacao_sem_o_oficio_continua_valendo(self):
+        assert validar_regras_ficha(self._engenheiro(), {}, criacao=True) is None
+
+    def test_grau_concedido_nao_consome_grau_de_treinamento(self):
+        # Nivel 6 da dois Graus de Treinamento. Gastar os dois e ainda carregar o
+        # Oficio em Aprendiz precisa passar: o grau da classe nao entra na conta.
+        anterior = self._engenheiro(6)
+        atual = deepcopy(anterior)
+        atual["pericias"]["atletismo"] = "treinado"
+        atual["pericias"]["luta"] = "treinado"
+        atual["pericias"]["oficio-engenharia"] = "aprendiz"
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+    def test_treinar_o_oficio_acima_do_concedido_cobra_a_diferenca(self):
+        anterior = self._engenheiro(3)
+        atual = deepcopy(anterior)
+        # Nivel 3 da um Grau de Treinamento so. Subir o Oficio ate Treinado cobra
+        # um grau alem do concedido, e ai o orcamento estoura junto de Atletismo.
+        atual["pericias"]["atletismo"] = "treinado"
+        atual["pericias"]["oficio-engenharia"] = "treinado"
+        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        assert "excedem os Graus de Treinamento" in erro
+
+    def test_classe_sem_concessao_nao_ganha_a_pericia(self):
+        anterior = _ficha_criacao()
+        atual = deepcopy(anterior)
+        atual["pericias"]["oficio-engenharia"] = "aprendiz"
+        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        assert "pericia inexistente" in erro
+
+    def test_cada_classe_concede_o_proprio_oficio(self):
+        # O Alquimista entrou depois do Engenheiro: os dois ids convivem, e a
+        # ficha so aceita o oficio da classe que ela realmente tem.
+        anterior = _ficha_criacao()
+        anterior["classeId"] = "alquimista"
+        anterior["classes"] = [{"classeId": "alquimista", "nivel": 1}]
+        atual = deepcopy(anterior)
+        atual["pericias"]["oficio-alquimia"] = "aprendiz"
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+        intruso = deepcopy(anterior)
+        intruso["pericias"]["oficio-engenharia"] = "aprendiz"
+        assert "pericia inexistente" in validar_regras_ficha(intruso, {}, ficha_anterior=anterior)
+
+
+class TestVagasPorNivel:
+    """Vaga que nao sai em todo estagio: a Rede de Negocios do Comerciante abre
+    praca nos niveis 1 e 5 e para por ai. Espelha `vagasEscolhaHabilidade` em
+    src/services/progressaoFichaService.ts."""
+
+    @classmethod
+    def setup_class(cls):
+        carregar_catalogos(DATA_ROOT)
+
+    @staticmethod
+    def _comerciante(nivel: int, escolhas: dict) -> tuple[dict, dict]:
+        anterior = _ficha_criacao()
+        anterior["classeId"] = "comerciante"
+        anterior["classes"] = [{"classeId": "comerciante", "nivel": nivel}]
+        anterior["nivel"] = nivel
+        anterior["xp"] = 1000000
+        atual = deepcopy(anterior)
+        atual["escolhasHabilidade"] = escolhas
+        return atual, anterior
+
+    def test_uma_praca_no_nivel_1(self):
+        atual, anterior = self._comerciante(1, {"comerciante:rede-de-negocios": ["feira-de-rua"]})
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+    def test_segunda_praca_so_a_partir_do_nivel_5(self):
+        escolhas = {"comerciante:rede-de-negocios": ["feira-de-rua", "casa-de-leilao"]}
+        atual, anterior = self._comerciante(4, escolhas)
+        assert "mais opcoes de habilidade" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+        atual, anterior = self._comerciante(5, escolhas)
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+    def test_a_terceira_praca_nunca_abre(self):
+        atual, anterior = self._comerciante(20, {
+            "comerciante:rede-de-negocios": ["feira-de-rua", "casa-de-leilao", "mercado-negro"],
+        })
+        assert "mais opcoes de habilidade" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+    def test_linhas_de_estoque_seguem_por_estagio(self):
+        atual, anterior = self._comerciante(8, {
+            "comerciante:estoque": ["pocoes-e-curativos", "pocoes-e-curativos"],
+        })
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+
+class TestEfeitosEscolhasDeClasse:
+    @classmethod
+    def setup_class(cls):
+        carregar_catalogos(DATA_ROOT)
+
+    @staticmethod
+    def _pirata(nivel: int) -> dict:
+        return {
+            "classes": [{"classeId": "pirata-amaldicoado", "nivel": nivel}],
+            "escolhasHabilidade": {
+                "pirata-amaldicoado:evolucao-abissal": [
+                    "pele-de-tubarao", "coracao-de-leviata",
+                ],
+            },
+        }
+
+    def test_aplica_so_o_marco_atual_da_mutacao(self):
+        nivel_8 = self._pirata(8)
+        assert bonus_escolhas_habilidade(nivel_8, "combate", "defesa") == 1
+        assert bonus_escolhas_habilidade(nivel_8, "recurso", "vidaMaxima") == 10
+
+        nivel_20 = self._pirata(20)
+        assert bonus_escolhas_habilidade(nivel_20, "combate", "defesa") == 2
+        assert bonus_escolhas_habilidade(nivel_20, "recurso", "vidaMaxima") == 20
+        assert len(efeitos_escolhas_habilidade(nivel_20)) == 2
+
+    def test_nao_aplica_mutacao_nao_escolhida(self):
+        ficha = self._pirata(20)
+        ficha["escolhasHabilidade"]["pirata-amaldicoado:evolucao-abissal"] = ["faro-de-tempestade"]
+        assert efeitos_escolhas_habilidade(ficha) == []
+
+
+class TestNivelEscolhasDeClasse:
+    @classmethod
+    def setup_class(cls):
+        carregar_catalogos(DATA_ROOT)
+
+    @staticmethod
+    def _lutador(nivel: int, com_estilo: bool = True) -> tuple[dict, dict]:
+        anterior = _ficha_criacao()
+        anterior["classeId"] = "lutador"
+        anterior["classes"] = [{"classeId": "lutador", "nivel": nivel}]
+        anterior["nivel"] = nivel
+        anterior["xp"] = 1000000
+        atual = deepcopy(anterior)
+        if com_estilo:
+            atual["escolhasHabilidade"] = {"lutador:estilo-de-combate": ["boxe"]}
+        return atual, anterior
+
+    def test_estilo_de_combate_barrado_no_nivel_8(self):
+        atual, anterior = self._lutador(8)
+        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        assert "ainda nao foi liberada" in erro
+
+    def test_estilo_de_combate_liberado_no_nivel_18(self):
+        atual, anterior = self._lutador(18)
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+
+class TestPoderesComRequisitoDeNivel:
+    """Os poderes do Arsenal Especial do Guerreiro so funcionam com a habilidade
+    que chega no nivel 15. Sem o pre-requisito, dava para gastar uma vaga no
+    nivel 2 num poder morto por treze niveis."""
+
+    @classmethod
+    def setup_class(cls):
+        carregar_catalogos(DATA_ROOT)
+
+    @staticmethod
+    def _guerreiro(nivel: int, poderes: list[str]) -> tuple[dict, dict]:
+        anterior = _ficha_criacao()
+        anterior["classes"][0]["nivel"] = nivel
+        anterior["nivel"] = nivel
+        anterior["xp"] = 1000000
+        atual = deepcopy(anterior)
+        atual["poderesClasseSelecionados"] = [
+            {"classeId": "guerreiro", "poderId": poder} for poder in poderes
+        ]
+        return atual, anterior
+
+    def test_arsenal_barrado_antes_do_nivel_15(self):
+        atual, anterior = self._guerreiro(6, ["arma-do-arsenal"])
+        erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        assert "pre-requisitos" in erro
+
+    def test_arsenal_liberado_no_nivel_15(self):
+        atual, anterior = self._guerreiro(15, ["arma-do-arsenal", "armadura-do-arsenal"])
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None

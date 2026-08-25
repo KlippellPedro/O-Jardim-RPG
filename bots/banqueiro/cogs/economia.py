@@ -185,7 +185,10 @@ def _tag_item(it) -> str:
         return "Veículo completo"
     if it.tipo == "monstro":
         classe, nivel = c.get("classe"), c.get("nivel")
-        return f"{classe} · Nv {nivel}" if classe and nivel is not None else "Ser"
+        partes = [p for p in (it.funcao, classe) if p]
+        if nivel is not None:
+            partes.append(f"Nv {nivel}")
+        return " · ".join(partes) if partes else "Ser"
     if it.tipo == "drop":
         parte, especie = c.get("parte"), c.get("especie")
         return f"{parte} · {especie}" if parte and especie else "Drop"
@@ -222,7 +225,12 @@ def _embed_item(it) -> discord.Embed:
         )
     if it.imagem:
         emb.set_thumbnail(url=it.imagem)
-    emb.set_footer(text=f"{ui.MARCA} · id: {it.id} · compras e revendas são feitas na Loja do site")
+    rodape = (
+        "compras e revendas são feitas na Loja do site"
+        if it.disponivel_na_loja
+        else "perfil de referência do bestiário; não vai a balcão"
+    )
+    emb.set_footer(text=f"{ui.MARCA} · id: {it.id} · {rodape}")
     return emb
 
 
@@ -647,10 +655,14 @@ class Economia(commands.Cog):
         emb.set_footer(text=f"{ui.MARCA} · /extrato mostra o histórico completo de transações")
         await interaction.response.send_message(embed=emb, ephemeral=True)
 
-    async def _autocomplete_catalogo(self, interaction, current: str, tipo: Optional[str] = None):
-        achados = self.bot.catalogo.buscar(current or "", limite=25)
+    async def _autocomplete_catalogo(
+        self, interaction, current: str, tipo: Optional[str] = None, somente_loja: bool = False
+    ):
+        achados = self.bot.catalogo.buscar(current or "", limite=50)
         if tipo:
             achados = [a for a in achados if a.tipo == tipo]
+        if somente_loja:
+            achados = [a for a in achados if a.disponivel_na_loja]
         return [
             app_commands.Choice(name=f"{a.titulo} ({a.id})"[:100], value=a.id)
             for a in achados[:25]
@@ -660,8 +672,15 @@ class Economia(commands.Cog):
     @app_commands.describe(busca="Nome ou id do item")
     async def item(self, interaction, busca: str):
         it = self.bot.catalogo.get(busca)
+        if it is not None and not it.disponivel_na_loja:
+            await interaction.response.send_message(
+                f"`{it.id}` é um perfil de referência do bestiário e não vai a balcão. "
+                "Consulte com `/monstro`.",
+                ephemeral=True,
+            )
+            return
         if it is None:
-            achados = self.bot.catalogo.buscar(busca, limite=8)
+            achados = [a for a in self.bot.catalogo.buscar(busca, limite=16) if a.disponivel_na_loja][:8]
             if not achados:
                 await interaction.response.send_message(f"Não achei nada com `{busca}`.", ephemeral=True)
                 return
@@ -676,7 +695,7 @@ class Economia(commands.Cog):
 
     @item.autocomplete("busca")
     async def _ac_item(self, interaction, current: str):
-        return await self._autocomplete_catalogo(interaction, current)
+        return await self._autocomplete_catalogo(interaction, current, somente_loja=True)
 
     @app_commands.command(description="Mostra a ficha de um monstro do bestiário.")
     @app_commands.describe(busca="Nome ou id do monstro")
@@ -2413,14 +2432,14 @@ class Economia(commands.Cog):
         
         # Verifica se o usuário tem o item no inventário
         with db._conn() as con:
-            row = con.execute("SELECT quantidade FROM inventario WHERE guild_id=%s AND user_id=%s AND item_id='contrato_guarda_costas'", (sid, uid)).fetchone()
+            row = con.execute("SELECT quantidade FROM inventario WHERE guild_id=%s AND user_id=%s AND item_id='contrato-guarda-costas'", (sid, uid)).fetchone()
             
         if not row or row["quantidade"] <= 0:
             await interaction.response.send_message("Você não tem nenhum Contrato Guarda-Costas no inventário! Compre na loja.", ephemeral=True)
             return
             
         # Remove 1 do inventário
-        db.remover_item(sid, uid, "contrato_guarda_costas", 1)
+        db.remover_item(sid, uid, "contrato-guarda-costas", 1)
         
         # Adiciona proteção
         with db._conn() as con:

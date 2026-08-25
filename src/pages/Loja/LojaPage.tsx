@@ -76,6 +76,8 @@ const SUBFILTROS_POR_CATEGORIA: Partial<Record<ItemCategoria, readonly string[]>
   'Modificações': ['Todos', 'Comuns', 'Marciais', 'Armas', 'Armaduras', 'Escudos', 'Itens gerais e mágicos'],
   'Bens': ['Todos', 'Propriedades', 'Veículos Completos', 'Peças e Módulos'],
   'Consumíveis': ['Todos', 'Poções', 'Selos', 'Rituais', 'Ferramentas'],
+  'Mercenários': ['Todos', 'Guardas de local', 'Escoltas', 'Tripulação', 'Ofícios', 'Feras e Invocações'],
+  'Componentes': ['Todos', 'Componentes Químicos', 'Componentes Ritualísticos', 'Componentes Veiculares', 'Sucata', 'Mantimentos', 'Matéria-prima'],
   'Frutos do Éden': ['Todos', 'Sobrenatural', 'Mutação', 'Elemental'],
 };
 
@@ -118,8 +120,13 @@ export const LojaPage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [modoLoja, setModoLoja] = useState<'Comprar' | 'Vender' | 'Recompensas'>('Comprar');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategoria, setSelectedCategoria] = useState<ItemCategoria | 'Todos'>('Todos');
+  const [searchTerm, setSearchTerm] = useState(() => searchParams.get('busca') ?? '');
+  const [selectedCategoria, setSelectedCategoria] = useState<ItemCategoria | 'Todos'>(() => {
+    const categoria = searchParams.get('categoria');
+    return categoria && categoria !== 'Todos' && Object.prototype.hasOwnProperty.call(CATEGORIAS_ICONES, categoria)
+      ? categoria as ItemCategoria
+      : 'Todos';
+  });
   const [selectedRaridade, setSelectedRaridade] = useState<ItemRaridade | 'Todas'>('Todas');
   const [subfiltro, setSubfiltro] = useState<string>('Todos');
   const [itemsToShow, setItemsToShow] = useState(24);

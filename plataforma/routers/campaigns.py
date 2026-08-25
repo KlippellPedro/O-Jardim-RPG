@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+import re
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -650,23 +651,98 @@ def transfer_campaign_ownership(
 def list_audit_events(
     campaign_id: UUID,
     limite: int = 100,
+    pagina: int = 1,
+    ator_id: UUID | None = None,
+    personagem_id: UUID | None = None,
+    categoria: str | None = None,
+    busca: str | None = None,
+    desde: datetime | None = None,
+    ate: datetime | None = None,
     user: AuthenticatedUser = Depends(get_current_user),
     database: Database = Depends(get_database),
 ):
-    limite = max(1, min(500, limite))
+    limite = max(1, min(100, limite))
+    pagina = max(1, min(10_000, pagina))
+    category = categoria.strip().lower() if isinstance(categoria, str) else None
+    if category and not re.fullmatch(r"[a-z_]{1,40}", category):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="categoria de auditoria inválida",
+        )
+    search = " ".join(busca.strip().split())[:100] if isinstance(busca, str) else ""
+    if desde and desde.tzinfo is None:
+        desde = desde.replace(tzinfo=timezone.utc)
+    if ate and ate.tzinfo is None:
+        ate = ate.replace(tzinfo=timezone.utc)
+    if desde and ate and desde > ate:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="o início do período não pode ser posterior ao fim",
+        )
+
+    clauses = ["e.campanha_id=%s"]
+    params: list[object] = [campaign_id]
+    if ator_id:
+        clauses.append("e.ator_usuario_id=%s")
+        params.append(ator_id)
+    if personagem_id:
+        clauses.append("e.alvo_tipo='personagem' AND e.alvo_id=%s")
+        params.append(str(personagem_id))
+    if category:
+        clauses.append("e.acao LIKE %s")
+        params.append(f"{category}.%")
+    if desde:
+        clauses.append("e.criado_em >= %s")
+        params.append(desde)
+    if ate:
+        clauses.append("e.criado_em <= %s")
+        params.append(ate)
+    if search:
+        clauses.append(
+            "(u.nome_exibicao ILIKE %s OR p.nome ILIKE %s OR e.acao ILIKE %s "
+            "OR COALESCE(e.detalhes->>'nome_personagem', e.detalhes->>'nome', '') ILIKE %s)"
+        )
+        pattern = f"%{search}%"
+        params.extend([pattern, pattern, pattern, pattern])
+
+    where = " AND ".join(f"({clause})" for clause in clauses)
     with database.connection() as connection:
         require_campaign_manager(connection, campaign_id, user.id)
-        rows = connection.execute(
-            """
-            SELECT e.id, e.ator_usuario_id, u.nome_exibicao AS ator_nome,
-                   e.ator_servico, e.acao, e.alvo_tipo, e.alvo_id,
-                   e.detalhes, e.criado_em
+        total = connection.execute(
+            f"""
+            SELECT count(*) AS total
             FROM eventos_auditoria e
             LEFT JOIN usuarios u ON u.id=e.ator_usuario_id
-            WHERE e.campanha_id=%s
-            ORDER BY e.criado_em DESC
-            LIMIT %s
+            LEFT JOIN personagens p
+              ON e.alvo_tipo='personagem' AND e.alvo_id=p.id::text
+            WHERE {where}
             """,
-            (campaign_id, limite),
+            tuple(params),
+        ).fetchone()["total"]
+        offset = (pagina - 1) * limite
+        rows = connection.execute(
+            f"""
+            SELECT e.id, e.ator_usuario_id, u.nome_exibicao AS ator_nome,
+                   e.ator_servico, e.acao, e.alvo_tipo, e.alvo_id,
+                   e.detalhes, e.criado_em,
+                   p.nome AS alvo_nome,
+                   p.dono_usuario_id AS alvo_dono_usuario_id,
+                   dono.nome_exibicao AS alvo_dono_nome
+            FROM eventos_auditoria e
+            LEFT JOIN usuarios u ON u.id=e.ator_usuario_id
+            LEFT JOIN personagens p
+              ON e.alvo_tipo='personagem' AND e.alvo_id=p.id::text
+            LEFT JOIN usuarios dono ON dono.id=p.dono_usuario_id
+            WHERE {where}
+            ORDER BY e.criado_em DESC, e.id DESC
+            LIMIT %s OFFSET %s
+            """,
+            (*params, limite, offset),
         ).fetchall()
-    return {"eventos": [dict(row) for row in rows]}
+    return {
+        "eventos": [dict(row) for row in rows],
+        "pagina": pagina,
+        "limite": limite,
+        "total": total,
+        "paginas": max(1, (int(total) + limite - 1) // limite),
+    }

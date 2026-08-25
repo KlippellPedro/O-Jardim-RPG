@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowLeft,
@@ -9,16 +9,20 @@ import {
   Library,
   LockKeyhole,
   Menu,
+  Pencil,
   Search,
-  ShieldAlert,
   Sparkles,
   X,
 } from 'lucide-react';
-import { REGRAS_OFICIAIS } from '../../../data/regras/regras';
-import { CLASSES_CATALOGO, RACAS_CATALOGO } from '../../services/catalogoService';
+import type { RegrasCatalog } from '../../../data/regras/regras';
+import { GRUPOS_NAVEGACAO, grupoDoTopico, ordenarTopicosPorNavegacao } from '../../../data/regras/navegacao';
+import { tituloTopico } from '../../../data/regras/titulos';
+import { useResolvedRules } from '../../hooks/useResolvedRules';
 import { useAuthStore } from '../../store/useAuthStore';
 import { CatalogoLegados } from './components/CatalogoLegados';
 import { CatalogoMagico } from './components/CatalogoMagico';
+import { CatalogoCondicoes } from './components/CatalogoCondicoes';
+import { CatalogoPericias } from './components/CatalogoPericias';
 import { CatalogoBestiario } from './components/CatalogoBestiario';
 import { GridClasses } from './components/GridClasses';
 import { GridRacas } from './components/GridRacas';
@@ -27,44 +31,88 @@ import { FerramentasMestre } from './components/FerramentasMestre';
 import { NotasInternasMestre } from './components/NotasInternasMestre';
 import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
 
-const TITULOS_TOPICOS: Record<string, string> = {
-  'criacao-personagem': 'Criação de Personagem',
-  'sistema-base': 'Sistema Base',
-  pericias: 'Perícias',
-  'acoes-coletivas': 'Ações Coletivas',
-  'ataques-combinados': 'Ataques Combinados',
-  combate: 'Combate',
-  distancias: 'Distâncias',
-  ferimentos: 'Ferimentos',
-  coreografia: 'Coreografia',
-  descanso: 'Descanso',
-  treinar: 'Treinamento',
-  xp: 'Experiência e Níveis',
-  legados: 'Legados',
-  equipamentos: 'Equipamentos',
-  'raridades-modificacoes': 'Raridades e Modificações',
-  'magia-fluxo': 'Magia e Fluxo',
-  condicoes: 'Condições',
-  crafting: 'Criação, Forja e Alquimia',
-  veiculos: 'Condução e Combate Veicular',
-  aflicoes: 'Venenos, Doenças e Vícios',
-  classes: 'Classes',
-  racas: 'Raças',
-  bestiario: 'Bestiário',
-  bases: 'Propriedades e Bases',
-  'mundo-faccoes': 'Prestígio e Fama',
-  mestre: 'Guia do Mestre',
-};
+function normalizar(valor: string) {
+  return valor.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR');
+}
 
-const tituloTopico = (key: string) => TITULOS_TOPICOS[key] || key
-  .split('-')
-  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-  .join(' ');
+function RulesLanding({
+  availableTopics,
+  regras,
+  titulos,
+  onSelectTopic,
+}: {
+  availableTopics: string[];
+  regras: RegrasCatalog;
+  titulos: Record<string, string>;
+  onSelectTopic: (topic: string) => void;
+}) {
+  const [buscaInicio, setBuscaInicio] = useState('');
+  const termo = normalizar(buscaInicio.trim());
+  const topicosDisponiveis = new Set(availableTopics);
+  const gruposVisiveis = GRUPOS_NAVEGACAO.map((grupo) => ({
+    ...grupo,
+    topicos: grupo.topicos.filter((topico) => {
+      if (!topicosDisponiveis.has(topico)) return false;
+      if (!termo) return true;
+      const regra = regras[topico];
+      const alvo = normalizar(`${tituloTopico(topico, titulos)} ${regra.resumo}`);
+      return termo.split(/\s+/).filter(Boolean).every((palavra) => alvo.includes(palavra));
+    }),
+  })).filter((grupo) => grupo.topicos.length > 0);
+
+  return (
+    <motion.div key="inicio-regras" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mx-auto w-full max-w-[82.5rem] px-5 py-8 sm:px-8 lg:px-12 lg:py-12">
+      <div className="border-b border-[#c7a44c]/20 pb-8">
+        <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#c7a44c]">Livro de Regras</span>
+        <h1 className="mt-4 font-serif text-3xl font-bold text-[#f2ead7] sm:text-5xl">O que você precisa descobrir?</h1>
+        <p className="mt-5 max-w-3xl text-base leading-8 text-gray-400">Encontre o assunto pelo grupo ou procure pelo nome e pela descrição. Todos os capítulos disponíveis para você aparecem nesta página.</p>
+        <label className="relative mt-6 block max-w-2xl">
+          <span className="sr-only">Buscar em todos os capítulos</span>
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+          <input
+            type="search"
+            value={buscaInicio}
+            onChange={(event) => setBuscaInicio(event.target.value)}
+            placeholder="Buscar classe, combate, viagem, magia..."
+            className="w-full rounded-xl border border-white/10 bg-black/25 py-3.5 pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-[#c7a44c]/50"
+          />
+        </label>
+      </div>
+      {gruposVisiveis.length ? (
+        <div className="mt-8 grid items-start gap-5 lg:grid-cols-2">
+          {gruposVisiveis.map((grupo) => (
+            <section key={grupo.id} className={`rounded-2xl border bg-gradient-to-br ${grupo.cor} to-black/20 p-5 sm:p-6`}>
+              <h2 className="font-serif text-xl font-bold text-white/90">{grupo.titulo}</h2>
+              <p className="mt-1 text-sm leading-6 text-gray-500">{grupo.descricao}</p>
+              <div className="mt-5 grid gap-2 sm:grid-cols-2">
+                {grupo.topicos.map((topico) => (
+                  <button
+                    key={topico}
+                    type="button"
+                    onClick={() => onSelectTopic(topico)}
+                    className="group flex min-h-16 items-center justify-between gap-3 rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-left transition hover:border-[#c7a44c]/35 hover:bg-black/30"
+                  >
+                    <span><strong className="block text-sm text-gray-200">{tituloTopico(topico, titulos)}</strong><span className="mt-1 line-clamp-2 block text-xs leading-5 text-gray-500">{regras[topico].resumo}</span></span>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-[#c7a44c]/55 transition group-hover:translate-x-0.5" />
+                  </button>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      ) : <p className="py-16 text-center text-sm text-gray-500">Nenhum capítulo corresponde à busca.</p>}
+      <Link to="/materiais" className="mt-5 flex items-center justify-between gap-4 rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-6 transition hover:bg-emerald-400/15">
+        <span><strong className="font-serif text-xl text-emerald-50">Materiais simplificados</strong><span className="mt-1 block text-sm text-emerald-100/50">Veja os seis estoques e o que pode virar cada recurso.</span></span><ArrowRight className="h-5 w-5 shrink-0 text-emerald-200" />
+      </Link>
+    </motion.div>
+  );
+}
 
 interface ChapterNavigationProps {
   activeTopic: string;
   busca: string;
   groupedKeys: Record<string, string[]>;
+  titulos: Record<string, string>;
   onBuscaChange: (value: string) => void;
   onSelectTopic: (topic: string) => void;
   onClose?: () => void;
@@ -74,13 +122,27 @@ const ChapterNavigation = ({
   activeTopic,
   busca,
   groupedKeys,
+  titulos,
   onBuscaChange,
   onSelectTopic,
   onClose,
 }: ChapterNavigationProps) => {
   const [categoriasAbertas, setCategoriasAbertas] = useState<Set<string>>(
-    () => new Set(Object.keys(groupedKeys)),
+    () => {
+      const grupoAtivo = activeTopic ? grupoDoTopico(activeTopic)?.titulo : null;
+      return new Set([grupoAtivo ?? GRUPOS_NAVEGACAO[0].titulo]);
+    },
   );
+
+  useEffect(() => {
+    const grupoAtivo = activeTopic ? grupoDoTopico(activeTopic)?.titulo : null;
+    if (!grupoAtivo) return;
+    setCategoriasAbertas((atuais) => new Set([...atuais, grupoAtivo]));
+  }, [activeTopic]);
+
+  useEffect(() => {
+    if (busca.trim()) setCategoriasAbertas(new Set(Object.keys(groupedKeys)));
+  }, [busca, groupedKeys]);
 
   const alternarCategoria = (categoria: string) => {
     setCategoriasAbertas((atuais) => {
@@ -149,7 +211,7 @@ const ChapterNavigation = ({
                         ? 'bg-[#c7a44c]/10 text-[#e1c77e]'
                         : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
                     >
-                      <span>{tituloTopico(key)}</span>
+                      <span>{tituloTopico(key, titulos)}</span>
                       {activeTopic === key ? <ChevronRight size={15} className="text-[#c7a44c]" /> : null}
                     </button>
                   ))}
@@ -175,6 +237,23 @@ export const RegrasPage = () => {
     || usuario?.papel_plataforma === 'criador'
     || campanhaAtiva?.papel === 'mestre'
     || campanhaAtiva?.papel === 'assistente';
+  const podeEditarConteudo = usuario?.papel_plataforma === 'criador'
+    || campanhaAtiva?.papel === 'mestre';
+  const {
+    regras: regrasCatalog,
+    titulos,
+    classes: classesCatalogo,
+    racas: racasCatalogo,
+    fluxos,
+    magias,
+    rituais,
+    selos,
+    encantamentos,
+    pericias,
+    legados,
+    condicoes,
+    crises,
+  } = useResolvedRules(campanhaAtiva?.id);
   useDialogAccessibility({
     open: menuAberto,
     dialogRef: mobileMenuRef,
@@ -191,25 +270,25 @@ export const RegrasPage = () => {
   ]), [config.classes_liberadas, config.classes_liberadas_membros, usuario?.id]);
 
   const catalogKeys = useMemo(
-    () => Object.keys(REGRAS_OFICIAIS).filter((key) => key !== 'mestre' || isMestre),
-    [isMestre],
+    () => ordenarTopicosPorNavegacao(Object.keys(regrasCatalog).filter((key) => key !== 'mestre' || isMestre)),
+    [isMestre, regrasCatalog],
   );
   const racasVisiveis = useMemo(
     () => isMestre
-      ? RACAS_CATALOGO
-      : RACAS_CATALOGO.filter((raca) => !raca.indisponivel && (raca.categoria !== 'esquecida' || racasLiberadas.has(raca.id))),
-    [isMestre, racasLiberadas],
+      ? racasCatalogo
+      : racasCatalogo.filter((raca) => !raca.indisponivel && (raca.categoria !== 'esquecida' || racasLiberadas.has(raca.id))),
+    [isMestre, racasCatalogo, racasLiberadas],
   );
   const classesVisiveis = useMemo(
     () => isMestre
-      ? CLASSES_CATALOGO
-      : CLASSES_CATALOGO.filter((classe) => !classe.indisponivel && (classe.categoria !== 'esquecida' || classesLiberadas.has(classe.id))),
-    [isMestre, classesLiberadas],
+      ? classesCatalogo
+      : classesCatalogo.filter((classe) => !classe.indisponivel && (classe.categoria !== 'esquecida' || classesLiberadas.has(classe.id))),
+    [isMestre, classesCatalogo, classesLiberadas],
   );
   const topicoSolicitado = searchParams.get('topico');
   const activeTopic = topicoSolicitado && catalogKeys.includes(topicoSolicitado)
     ? topicoSolicitado
-    : 'sistema-base';
+    : '';
 
   const setActiveTopic = (topico: string) => {
     const proximosParametros = new URLSearchParams(searchParams);
@@ -219,30 +298,43 @@ export const RegrasPage = () => {
   };
 
   const filteredKeys = useMemo(() => {
-    const termo = busca.trim().toLocaleLowerCase('pt-BR');
+    const termo = normalizar(busca.trim());
     if (!termo) return catalogKeys;
     return catalogKeys.filter((key) => {
-      const topic = REGRAS_OFICIAIS[key];
-      return tituloTopico(key).toLocaleLowerCase('pt-BR').includes(termo)
-        || topic.resumo.toLocaleLowerCase('pt-BR').includes(termo);
+      const topic = regrasCatalog[key];
+      const corpoVisivel = `${topic.corpo} ${isMestre ? topic.corpoMestre ?? '' : ''}`.replace(/<[^>]+>/g, ' ');
+      const alvo = normalizar(`${tituloTopico(key, titulos)} ${topic.resumo} ${corpoVisivel}`);
+      return termo.split(/\s+/).filter(Boolean).every((palavra) => alvo.includes(palavra));
     });
-  }, [busca, catalogKeys]);
+  }, [busca, catalogKeys, isMestre, regrasCatalog, titulos]);
 
   const groupedKeys = useMemo(() => {
     const groups: Record<string, string[]> = {};
-    filteredKeys.forEach((key) => {
-      const categoria = REGRAS_OFICIAIS[key].categoria || 'Gerais';
-      if (!groups[categoria]) groups[categoria] = [];
-      groups[categoria].push(key);
+    const filtrados = new Set(filteredKeys);
+    GRUPOS_NAVEGACAO.forEach((grupo) => {
+      const topicos = grupo.topicos.filter((topico) => filtrados.has(topico));
+      if (topicos.length) groups[grupo.titulo] = topicos;
     });
+    const mapeados = new Set(Object.values(groups).flat());
+    const outros = filteredKeys.filter((topico) => !mapeados.has(topico));
+    if (outros.length) groups.Outros = outros;
     return groups;
   }, [filteredKeys]);
 
-  const topicData = REGRAS_OFICIAIS[activeTopic];
+  const topicData = regrasCatalog[activeTopic];
   const activeIndex = catalogKeys.indexOf(activeTopic);
   const prevTopic = activeIndex > 0 ? catalogKeys[activeIndex - 1] : null;
   const nextTopic = activeIndex >= 0 && activeIndex < catalogKeys.length - 1 ? catalogKeys[activeIndex + 1] : null;
-  const conteudoAmplo = ['classes', 'racas', 'magia-fluxo', 'legados'].includes(activeTopic);
+  const conteudoAmplo = [
+    'classes',
+    'racas',
+    'legados',
+    'transporte',
+    'marcas-cicatrizes',
+    'catalogo-magico',
+    'modificacoes-equipamentos',
+    'veiculos-cenas',
+  ].includes(activeTopic);
 
   return (
     <div className="app-viewport mx-auto flex max-w-[112.5rem] gap-3 overflow-hidden sm:gap-4 lg:gap-6">
@@ -251,6 +343,7 @@ export const RegrasPage = () => {
           activeTopic={activeTopic}
           busca={busca}
           groupedKeys={groupedKeys}
+          titulos={titulos}
           onBuscaChange={setBusca}
           onSelectTopic={setActiveTopic}
         />
@@ -267,8 +360,8 @@ export const RegrasPage = () => {
             <Menu size={19} />
           </button>
           <div className="min-w-0">
-            <span className="block text-[9px] font-bold uppercase tracking-[0.2em] text-gray-500">Capítulo {activeIndex + 1}</span>
-            <strong className="block truncate text-sm text-white">{tituloTopico(activeTopic)}</strong>
+            <span className="block text-[9px] font-bold uppercase tracking-[0.2em] text-gray-500">{activeTopic ? `Capítulo ${activeIndex + 1}` : 'Livro de regras'}</span>
+            <strong className="block truncate text-sm text-white">{activeTopic ? tituloTopico(activeTopic, titulos) : 'Por onde começar'}</strong>
           </div>
         </div>
 
@@ -287,32 +380,60 @@ export const RegrasPage = () => {
                   <div className="mb-5 flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[0.22em]">
                     <span className="text-[#c7a44c]">Capítulo {activeIndex + 1} de {catalogKeys.length}</span>
                     <span aria-hidden="true" className="text-gray-700">◆</span>
-                    <span className="text-gray-500">{topicData.categoria || 'Regras gerais'}</span>
-                    <span className="ml-auto flex items-center gap-1.5 rounded-full border border-[#c7a44c]/20 bg-[#c7a44c]/10 px-3 py-1 text-[#c7a44c]">
+                    <span className="text-gray-500">{grupoDoTopico(activeTopic)?.titulo || topicData.categoria || 'Regras gerais'}</span>
+                    {podeEditarConteudo ? (
+                      <Link
+                        to={`/mestre?aba=conteudo&secao=regras&item=regra:${encodeURIComponent(activeTopic)}`}
+                        className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-gray-300 transition hover:border-[#c7a44c]/35 hover:text-[#e1c77e]"
+                      >
+                        <Pencil size={11} /> Editar
+                      </Link>
+                    ) : null}
+                    <span className={`${podeEditarConteudo ? '' : 'ml-auto'} flex items-center gap-1.5 rounded-full border border-[#c7a44c]/20 bg-[#c7a44c]/10 px-3 py-1 text-[#c7a44c]`}>
                       <Sparkles size={11} /> {topicData.status}
                     </span>
                   </div>
                   <h1 className="text-3xl font-bold leading-tight text-[#f2ead7] sm:text-4xl lg:text-5xl" style={{ fontFamily: 'Cinzel, serif' }}>
-                    {tituloTopico(activeTopic)}
+                    {tituloTopico(activeTopic, titulos)}
                   </h1>
                   <p className="mt-5 max-w-[76ch] text-base leading-8 text-gray-400 sm:text-lg">
                     {topicData.resumo}
                   </p>
                 </header>
 
+                {activeTopic === 'materiais' && (
+                  <section className="mb-9 flex flex-col gap-4 rounded-2xl border border-emerald-300/20 bg-gradient-to-r from-emerald-400/10 to-transparent p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+                    <div>
+                      <h2 className="font-serif text-xl font-bold text-emerald-50">Está procurando um material ou preparo?</h2>
+                      <p className="mt-1 text-sm leading-6 text-gray-400">Use o compêndio para consultar os materiais e ver quando algo realmente precisa entrar no inventário.</p>
+                    </div>
+                    <Link to="/materiais" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-emerald-300 px-4 py-2.5 text-sm font-black text-emerald-950 transition hover:bg-emerald-200">Abrir compêndio <ArrowRight size={16} /></Link>
+                  </section>
+                )}
+
                 {activeTopic === 'racas' ? (
                   <GridRacas racas={racasVisiveis} />
                 ) : activeTopic === 'classes' ? (
                   <GridClasses classes={classesVisiveis} />
-                ) : activeTopic === 'magia-fluxo' ? (
+                ) : activeTopic === 'catalogo-magico' ? (
                   <>
                     <RegrasContent htmlContent={topicData.corpo} />
-                    <CatalogoMagico />
+                    <CatalogoMagico fluxos={fluxos} magias={magias} rituais={rituais} selos={selos} encantamentos={encantamentos} />
                   </>
                 ) : activeTopic === 'legados' ? (
                   <>
                     <RegrasContent htmlContent={topicData.corpo} />
-                    <CatalogoLegados />
+                    <CatalogoLegados catalogo={legados} />
+                  </>
+                ) : activeTopic === 'pericias' ? (
+                  <>
+                    <RegrasContent htmlContent={topicData.corpo} />
+                    <CatalogoPericias pericias={pericias} />
+                  </>
+                ) : activeTopic === 'condicoes' ? (
+                  <>
+                    <RegrasContent htmlContent={topicData.corpo} />
+                    <CatalogoCondicoes condicoes={condicoes} crises={crises} />
                   </>
                 ) : activeTopic === 'bestiario' ? (
                   <>
@@ -350,23 +471,18 @@ export const RegrasPage = () => {
                   {prevTopic ? (
                     <button type="button" onClick={() => setActiveTopic(prevTopic)} className="group flex min-w-0 flex-1 items-center gap-3 rounded-xl border border-white/10 bg-black/20 p-3 text-left transition-colors hover:border-[#c7a44c]/40 hover:bg-[#c7a44c]/5 sm:max-w-[300px]">
                       <ArrowLeft size={18} className="shrink-0 text-gray-600 group-hover:text-[#c7a44c]" />
-                      <span className="min-w-0"><small className="block text-[9px] font-bold uppercase tracking-widest text-gray-600">Capítulo anterior</small><strong className="mt-1 block truncate text-xs text-gray-300 sm:text-sm">{tituloTopico(prevTopic)}</strong></span>
+                      <span className="min-w-0"><small className="block text-[9px] font-bold uppercase tracking-widest text-gray-600">Capítulo anterior</small><strong className="mt-1 block truncate text-xs text-gray-300 sm:text-sm">{tituloTopico(prevTopic, titulos)}</strong></span>
                     </button>
                   ) : <div className="flex-1 sm:max-w-[300px]" />}
                   {nextTopic ? (
                     <button type="button" onClick={() => setActiveTopic(nextTopic)} className="group flex min-w-0 flex-1 items-center justify-end gap-3 rounded-xl border border-white/10 bg-black/20 p-3 text-right transition-colors hover:border-[#c7a44c]/40 hover:bg-[#c7a44c]/5 sm:max-w-[300px]">
-                      <span className="min-w-0"><small className="block text-[9px] font-bold uppercase tracking-widest text-gray-600">Próximo capítulo</small><strong className="mt-1 block truncate text-xs text-gray-300 sm:text-sm">{tituloTopico(nextTopic)}</strong></span>
+                      <span className="min-w-0"><small className="block text-[9px] font-bold uppercase tracking-widest text-gray-600">Próximo capítulo</small><strong className="mt-1 block truncate text-xs text-gray-300 sm:text-sm">{tituloTopico(nextTopic, titulos)}</strong></span>
                       <ArrowRight size={18} className="shrink-0 text-gray-600 group-hover:text-[#c7a44c]" />
                     </button>
                   ) : null}
                 </footer>
               </motion.article>
-            ) : (
-              <div className="flex min-h-[420px] flex-col items-center justify-center text-gray-600">
-                <ShieldAlert size={54} className="mb-4" />
-                <p>Selecione um capítulo para ler.</p>
-              </div>
-            )}
+            ) : <RulesLanding availableTopics={catalogKeys} regras={regrasCatalog} titulos={titulos} onSelectTopic={setActiveTopic} />}
           </AnimatePresence>
         </main>
       </section>
@@ -390,6 +506,7 @@ export const RegrasPage = () => {
                 activeTopic={activeTopic}
                 busca={busca}
                 groupedKeys={groupedKeys}
+                titulos={titulos}
                 onBuscaChange={setBusca}
                 onSelectTopic={setActiveTopic}
                 onClose={() => setMenuAberto(false)}

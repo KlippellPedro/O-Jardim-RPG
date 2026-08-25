@@ -1,19 +1,25 @@
 import { useMemo, useState } from 'react';
-import { BookOpen, Crown, LockKeyhole, Sparkles, Swords, Users } from 'lucide-react';
+import { BookOpen, Crown, LockKeyhole, Sparkles, Swords, Users, Wrench } from 'lucide-react';
 import { LEGADOS_CATALOGO, RACAS_CATALOGO, CLASSES_CATALOGO } from '../../../services/catalogoService';
 import { capacidadeModificacoesRaciais } from '../../../services/calculoService';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { ProgressaoClasses } from '../components/ProgressaoClasses';
+import { FormulaIngredients } from '../../../components/materials/FormulaIngredients';
+import { CookingIngredients } from '../../../components/materials/CookingIngredients';
 import {
   avaliarLegado,
   caracteristicasRaciaisAutomaticas,
   classesDaFicha,
   descreverPreRequisitos,
+  escolhasHabilidadeDisponiveis,
   eventosDesbloqueados,
   habilidadesAutomaticas,
   legadosSelecionados,
+  podeEscolherOpcaoHabilidade,
   podeSelecionarPoder,
   poderesSelecionados,
+  resumoFichaTecnica,
+  selecoesHabilidadeValidas,
   selecoesPoderValidas,
   vagasLegado,
   vagasPoderDaClasse,
@@ -27,7 +33,7 @@ const Card = ({ titulo, origem, descricao, detalhe }: { titulo: string; origem: 
       <span className="rounded-full border border-[#c7a44c]/25 bg-[#c7a44c]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#c7a44c]">{origem}</span>
     </div>
     {detalhe && <p className="mt-2 text-xs font-bold text-emerald-300">{detalhe}</p>}
-    <p className="mt-2 text-sm leading-relaxed text-gray-400">{descricao}</p>
+    <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{descricao}</p>
   </article>
 );
 
@@ -56,7 +62,10 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
   const tracos = caracteristicasRaciaisAutomaticas(ficha);
   const raca = RACAS_CATALOGO.find((item) => item.id === ficha.racaId);
   const escolhaRacial = ficha.escolhaRacial || {};
-  const habilidades = habilidadesAutomaticas(ficha);
+  // As opções escolhidas aparecem como cartões próprios na aba Habilidades;
+  // aqui já existe a grade interativa delas logo abaixo, então evitamos repetir.
+  const habilidades = habilidadesAutomaticas(ficha).filter((item) => item.subtipo !== 'escolha');
+  const escolhasHabilidade = escolhasHabilidadeDisponiveis(ficha);
   const eventos = eventosDesbloqueados(ficha);
   const poderes = poderesSelecionados(ficha);
   const legados = legadosSelecionados(ficha);
@@ -76,6 +85,17 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
   const removerPoder = (classeId: string, poderId: string) => {
     const indice = selecoesPoder.findIndex((item) => item.classeId === classeId && item.poderId === poderId);
     onUpdate(['ficha', 'poderesClasseSelecionados'], selecoesPoder.filter((_, atual) => atual !== indice));
+  };
+  const escolherOpcaoHabilidade = (chave: string, opcaoId: string) => {
+    const atuais = selecoesHabilidadeValidas(ficha);
+    onUpdate(['ficha', 'escolhasHabilidade'], { ...atuais, [chave]: [...(atuais[chave] || []), opcaoId] });
+  };
+  const removerOpcaoHabilidade = (chave: string, opcaoId: string) => {
+    const atuais = selecoesHabilidadeValidas(ficha);
+    const lista = [...(atuais[chave] || [])];
+    const indice = lista.indexOf(opcaoId);
+    if (indice >= 0) lista.splice(indice, 1);
+    onUpdate(['ficha', 'escolhasHabilidade'], { ...atuais, [chave]: lista });
   };
   const adicionarLegado = (id: string) => {
     if (!window.confirm('A escolha de um Legado é permanente para jogadores. Confirmar?')) return;
@@ -115,7 +135,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
     <div className="space-y-6">
       <header className="rounded-2xl border border-white/5 bg-[#0f0e15] p-6">
         <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>Progressão</h2>
-        <p className="mt-1 text-sm text-gray-400">Características raciais e habilidades de classe aparecem automaticamente. Você escolhe apenas os poderes e Legados liberados.</p>
+        <p className="mt-1 text-sm text-gray-400">Características raciais e habilidades de classe aparecem automaticamente. Você escolhe os poderes, os Legados liberados e as opções das habilidades que têm catálogo próprio.</p>
       </header>
 
       <ProgressaoClasses classes={classeSlots} catalogoClasses={CLASSES_CATALOGO} />
@@ -156,6 +176,62 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
         </div>
       </Secao>
 
+      {escolhasHabilidade.length > 0 && (
+        <Secao titulo="Escolhas de habilidade" icone={<Wrench size={18} className="text-amber-400" />}>
+          <div className="space-y-4">
+            {escolhasHabilidade.map((escolha) => (
+              <div key={escolha.chave} className="rounded-xl border border-white/10 bg-black/20 p-4">
+                <div className="mb-1 flex flex-wrap items-center justify-between gap-3">
+                  <strong className="text-white">{escolha.rotulo}</strong>
+                  <span className="text-xs font-bold text-[#c7a44c]">{escolha.selecionadas.length}/{escolha.vagas} vagas · {escolha.classeTitulo}</span>
+                </div>
+                {escolha.escalonamento?.nivel ? (
+                  <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-sky-400/25 bg-sky-400/10 px-3 py-1 text-[11px] font-bold text-sky-200">
+                    {escolha.escalonamento.rotulo}: {escolha.escalonamento.nivel} de {escolha.escalonamento.teto}
+                  </div>
+                ) : null}
+                {escolha.descricao && <p className="mb-3 text-xs leading-relaxed text-gray-500">{escolha.descricao}</p>}
+                <div className="grid gap-2 md:grid-cols-2">
+                  {escolha.opcoes.map((opcao) => {
+                    const quantidade = escolha.selecionadas.filter((item) => item.id === opcao.id).length;
+                    const avaliacao = podeEscolherOpcaoHabilidade(escolha, opcao.id);
+                    return (
+                      <div key={opcao.id} className={`rounded-lg border p-3 ${quantidade ? 'border-[#c7a44c]/40 bg-[#c7a44c]/5' : 'border-white/5 bg-[#121118]'}`}>
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <strong className="text-sm text-white">{opcao.titulo}</strong>
+                            {opcao.acao && <p className="mt-1 text-xs text-gray-500">{opcao.acao}</p>}
+                          </div>
+                          <div className="flex gap-1">
+                            {quantidade > 0 && <button type="button" onClick={() => removerOpcaoHabilidade(escolha.chave, opcao.id)} className="rounded-lg border border-red-500/30 px-2 py-1 text-xs font-bold text-red-300">Tirar</button>}
+                            <button type="button" disabled={!avaliacao.permitido} title={avaliacao.motivo} onClick={() => escolherOpcaoHabilidade(escolha.chave, opcao.id)} className="rounded-lg border border-[#c7a44c]/30 px-2 py-1 text-xs font-bold text-[#c7a44c] disabled:cursor-not-allowed disabled:opacity-30">Escolher{quantidade ? ` (${quantidade})` : ''}</button>
+                          </div>
+                        </div>
+                        <p className="mt-2 text-xs leading-relaxed text-gray-400">{opcao.descricao}</p>
+                        {escolha.classeId === 'alquimista' && escolha.habilidadeId === 'formulas' && (
+                          <FormulaIngredients formulaId={opcao.id} compact nivelFormula={escolha.escalonamento?.nivel} />
+                        )}
+                        {escolha.classeId === 'cozinheiro' && escolha.habilidadeId === 'cardapio' && (
+                          <CookingIngredients recipeId={opcao.id} compact recipeLevel={escolha.escalonamento?.nivel} />
+                        )}
+                        {opcao.escalonamento && (
+                          <p className="mt-2 text-xs leading-relaxed text-sky-200/70">{opcao.escalonamento}</p>
+                        )}
+                        {resumoFichaTecnica({ ...opcao, acao: undefined }) && (
+                          <p className="mt-2 text-[11px] font-bold uppercase tracking-wider text-gray-500">
+                            {resumoFichaTecnica({ ...opcao, acao: undefined })}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Secao>
+      )}
+
       <Secao titulo="Poderes de classe" icone={<Swords size={18} className="text-orange-400" />}>
         <div className="mb-5 grid gap-3 lg:grid-cols-2">
           {poderes.map((item) => <Card key={item.id} titulo={item.titulo} origem={item.origem} detalhe={item.custoMana ? `${item.custoMana} Mana` : 'Sem custo de Mana'} descricao={item.descricao} />)}
@@ -185,6 +261,9 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
                           </div>
                         </div>
                         <p className="mt-2 text-xs leading-relaxed text-gray-400">{poder.descricao}</p>
+                        {resumoFichaTecnica(poder) && (
+                          <p className="mt-2 text-[11px] font-bold uppercase tracking-wider text-gray-500">{resumoFichaTecnica(poder)}</p>
+                        )}
                         {(poder.pre_requisitos || []).length > 0 && <p className="mt-2 text-[11px] text-amber-300">Requisito: {poder.pre_requisitos?.join('; ')}</p>}
                       </div>
                     );

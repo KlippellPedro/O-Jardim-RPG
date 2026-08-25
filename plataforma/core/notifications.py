@@ -39,24 +39,27 @@ def notify(
     if not alvos:
         return 0
 
-    for user_id in alvos:
-        connection.execute(
+    with connection.cursor() as cursor:
+        cursor.executemany(
             """
             INSERT INTO notificacoes
                 (id, usuario_id, campanha_id, origem_usuario_id,
                  categoria, titulo, mensagem, dados)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             """,
-            (
-                uuid4(),
-                user_id,
-                campaign_id,
-                actor_user_id,
-                category,
-                title[:160],
-                message[:600],
-                Jsonb(details or {}),
-            ),
+            [
+                (
+                    uuid4(),
+                    user_id,
+                    campaign_id,
+                    actor_user_id,
+                    category,
+                    title[:160],
+                    message[:600],
+                    Jsonb(details or {}),
+                )
+                for user_id in alvos
+            ],
         )
     return len(alvos)
 

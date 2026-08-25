@@ -62,6 +62,22 @@ class _RecordingConnection:
             return response
         return _Result(row=response)
 
+    @contextlib.contextmanager
+    def cursor(self):
+        yield _RecordingCursor(self)
+
+
+class _RecordingCursor:
+    def __init__(self, connection: "_RecordingConnection"):
+        self._connection = connection
+
+    def execute(self, statement, params=None):
+        return self._connection.execute(statement, params)
+
+    def executemany(self, statement, params_seq):
+        for params in params_seq:
+            self._connection.execute(statement, params)
+
 
 class _Database:
     def __init__(self, connection):

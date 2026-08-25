@@ -110,12 +110,12 @@ ele não publica mudanças feitas no JSON.
 - **Veículos:** 65, sendo 49 sistemas/peças e 16 veículos completos, todos com
   ficha estruturada e efeitos veiculares completos.
 - **Bestiário:** 60 seres (`tipo: "monstro"`, preço por fórmula).
-- **Componentes e drops:** 51 entradas (`tipo: "drop"`), incluindo partes de
-  seres e materiais ritualísticos.
+- **Componentes e drops:** 259 entradas (`tipo: "drop"`), incluindo os
+  catálogos próprios de classe, Matéria-prima e Componentes Veiculares.
 - **Especiais:** 15 Frutos do Éden, 10 Implantes, 8 Artefatos Mágicos e 11 Selos
   consumíveis sincronizados com o catálogo mágico.
 
-Total: **462 entradas**.
+Total: **708 entradas**.
 
 ### Frutos do Éden
 
@@ -203,11 +203,46 @@ Convertido de `data/loja/veiculos_sistema.json`. Cada tier de cada sistema é um
 O **Tier 4** de cada sistema tinha custo `-/-` nas tabelas (tier do mestre), então
 não entrou na loja; fica citado na descrição do chassi como liberação do mestre.
 
+## Materiais e Ingredientes — campos novos de `drop`
+
+Além dos campos já documentados acima, toda entrada `tipo: "drop"` declara dentro de
+`conteudo` os campos do sistema de Materiais e Ingredientes (`data/regras/materiais.ts`).
+Esses campos são obrigatórios para todos os materiais. O catálogo atual possui 259 entradas.
+
+- **categoria:** `Biológico | Botânico | Mineral | Espiritual | Arcano | Artificial`.
+- **origem:** texto curto — espécie, local ou processo típico de obtenção. Distinto de
+  `especie`, que continua existindo só para os drops de criatura.
+- **potencia:** `1` a `5` — intensidade das propriedades, nunca cópia de `raridade`.
+- **afinidade:** um dos sete elementos oficiais (`Terra | Água | Fogo | Ar | Raio | Luz |
+  Escuridão`), `"Nenhuma"` (padrão) ou `"Escolha na compra"`. Só use um elemento quando o
+  material tiver ligação elemental real — nunca por associação temática.
+- **propriedades:** array de `Propriedade` — lista fechada definida em `PROPRIEDADES_MATERIAL`
+  (`data/regras/materiais.ts`). Não aceita string livre.
+- **usos:** array de `ritual | alquimia | engenharia | cozinha | veiculos | forja`.
+- **estadoBase:** `bruto | processado | refinado`.
+- **materialBaseId:** agrupa variantes de estado do mesmo material — duas entradas com o mesmo
+  `materialBaseId` (uma bruta, outra refinada) representam a mesma substância em preparos
+  diferentes, com a mesma `potencia` e `propriedades`.
+
+Qualidade (`corrompida | danificada | conservada | padrao | abate-limpo | lendaria`) **não**
+é campo de catálogo — é atributo da pilha de inventário obtida, resolvido por sufixo de
+`item_id` (`idComQualidade`/`resolverMaterialBase` em `materiais.ts`), já que `item_id` é
+validado como único por personagem em `plataforma/schemas.py`. Ver o capítulo "Materiais e
+Ingredientes" nas regras para a tabela completa.
+
+O comando `npm run materiais:retrofit` reaplica a curadoria oficial dos 66 materiais e
+preenche `lootIds` de monstros somente quando o nome de um loot textual corresponde a um
+drop real. `npm run materiais:check` verifica que o catálogo está sincronizado. A auditoria
+da Fase 4 encontrou zero correspondências exatas entre os loots textuais dos 90 monstros e
+os 51 drops então existentes; a Fase 5 preserva o mesmo critério para os 66 atuais. Por isso
+nenhum `lootIds` foi inventado. Quando uma correspondência real for
+publicada, `lootIds` fica como campo irmão de `loot` e aponta apenas para ids `tipo: "drop"`.
+
 ## Bestiário e Drops — FEITO
 
 Convertidos de `data/loja/bestiario_precos.json`.
 
-**Bestiário (`tipo: "monstro"`, 60 seres):** preço calculado pela fórmula
+**Bestiário (`tipo: "monstro"`, 90 seres):** preço calculado pela fórmula
 
 ```text
 preço = (PreçoPorLevel[faixa] × nível) + Espécie[faixa] + Classe[faixa] + Σ(extras)
@@ -218,10 +253,11 @@ Poder Ass/Legado/Variável. Há seres dos seis sub-tipos (Criatura, Familiar, Se
 Invocação, Ajudante, Ser Lendário), guardados em `conteudo` com `nivel` e `classe`
 (o sub-tipo). Pra adicionar mais criaturas, use a mesma fórmula por sub-tipo.
 
-**Drops (`tipo: "drop"`, 51 itens):** 22 entradas por par espécie×parte com preço
-(Carne/Órgãos/Essência) e 29 componentes ritualísticos. Pares com ❌ na tabela
-foram ignorados. A descrição já cita os modificadores (conservação, qualidade
-do abate, ser lendário, falta de material).
+**Drops (`tipo: "drop"`, 66 itens):** 22 entradas por par espécie×parte com preço
+(Carne/Órgãos/Essência), 29 componentes ritualísticos e 15 materiais-base da
+Fase 5 (cinco Minerais, cinco Artificiais e cinco Botânicos). Pares com ❌ na
+tabela foram ignorados. A descrição já cita os modificadores (conservação,
+qualidade do abate, ser lendário, falta de material).
 
 **Obstinadas:** as armas-artefato (Excalibur, Mjölnir, Gungnir…) existem só como
 Relíquias da Criação (`reliquia-*`), não como par duplicado numa versão lendária —

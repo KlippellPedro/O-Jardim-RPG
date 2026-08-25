@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Users, Heart, Shield, Footprints, Zap, Sword, Pencil, Trash2, AlertTriangle, Link, GripVertical, Star, ExternalLink, Droplet } from 'lucide-react';
 import { motion, Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput } from '../components/SharedFichaComponents';
 import { useCharacterStore } from '../../../store/useCharacterStore';
+import { useAuthStore } from '../../../store/useAuthStore';
+import { personagensApi, type AliadoComplexoResumo } from '../../../services/personagensApi';
 import { bonusIniciativaFicha, obterStatusFicha, penalidadeCansacoIniciativa, penalidadeIniciativaCondicoes } from '../../../services/statusService';
+import { useCampaignSSE } from '../../../hooks/useCampaignSSE';
+import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
 
 interface IAliado {
   id: string;
@@ -61,10 +65,53 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
   const [modalAberto, setModalAberto] = useState(false);
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [form, setForm] = useState<FormAliado>(ALIADO_VAZIO);
+  const [resumosComplexos, setResumosComplexos] = useState<Record<string, AliadoComplexoResumo>>({});
+  const [erroVinculos, setErroVinculos] = useState('');
 
   const personagens = useCharacterStore((s) => s.characters);
+  const fetchCharacters = useCharacterStore((s) => s.fetchCharacters);
+  const usuario = useAuthStore((s) => s.usuario);
+  const campanha = useAuthStore((s) => s.campanhaAtiva);
+  const isMestre = usuario?.papel_plataforma === 'admin'
+    || usuario?.papel_plataforma === 'criador'
+    || campanha?.papel === 'mestre'
+    || campanha?.papel === 'assistente';
 
   const itens: IAliado[] = character.ficha?.aliados || [];
+  const idsComplexos = itens
+    .filter((item) => item.categoria === 'complexo' && item.personagemId)
+    .map((item) => String(item.personagemId));
+  const chaveVinculos = [...idsComplexos].sort().join('|');
+
+  const carregarVinculos = useCallback(async () => {
+    if (!character.id || !chaveVinculos) {
+      setResumosComplexos({});
+      setErroVinculos('');
+      return;
+    }
+    try {
+      const response = await personagensApi.listarAliadosComplexos(character.id);
+      setResumosComplexos(Object.fromEntries(
+        (response.aliados || []).map((resumo) => [resumo.personagem_id, resumo]),
+      ));
+      setErroVinculos('');
+    } catch (error) {
+      setErroVinculos(error instanceof Error ? error.message : 'Não foi possível sincronizar os aliados vinculados.');
+    }
+  }, [character.id, chaveVinculos]);
+
+  useEffect(() => {
+    void carregarVinculos();
+  }, [carregarVinculos]);
+
+  useCampaignSSE(campanha?.id, (tipo, payload) => {
+    if (tipo !== 'personagem_atualizado') return;
+    const personagemId = String(payload.personagem_id || '');
+    if (personagemId === character.id) void fetchCharacters();
+    if (!personagemId || personagemId === character.id || idsComplexos.includes(personagemId)) {
+      void carregarVinculos();
+    }
+  });
 
   const itensVisiveis = itens
     .filter((a) => !busca || a.nome?.toLowerCase().includes(busca.toLowerCase()))
@@ -77,8 +124,7 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
   };
 
   const handleReorder = (novosItens: IAliado[]) => {
-    const comOrdem = novosItens.map((item, index) => ({ ...item, ordem: index }));
-    commit(comOrdem);
+    commit(mesclarOrdemFiltrada(itens, novosItens));
   };
 
   const toggleFavorito = (id: string) => {
@@ -112,6 +158,7 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
   const handleSalvar = () => {
     if (!form.nome?.trim() && form.categoria !== 'complexo') return;
     if (form.categoria === 'complexo' && !form.personagemId) return;
+    if (form.categoria === 'complexo' && !isMestre) return;
 
     const vinculado = form.categoria === 'complexo' ? personagens.find(p => p.id === form.personagemId) : null;
     const nomeFinal = form.categoria === 'complexo' ? (vinculado?.nome || 'Personagem Desconhecido') : form.nome.trim();
@@ -209,27 +256,46 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
         </button>
       </div>
 
+      {erroVinculos && (
+        <div role="alert" className="flex items-start gap-2 rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          <AlertTriangle size={16} className="mt-0.5 shrink-0" />
+          <span>Não foi possível sincronizar uma ficha vinculada. {erroVinculos}</span>
+        </div>
+      )}
+
       {/* LISTA */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4">
         <Reorder.Group axis="y" values={itensVisiveis} onReorder={handleReorder} className="flex flex-col gap-4">
           {itensVisiveis.map((a) => {
             const isComplexo = a.categoria === 'complexo';
             const charVinculado = isComplexo ? personagens.find(p => p.id === a.personagemId) : null;
+            const resumoVinculado = isComplexo && a.personagemId ? resumosComplexos[a.personagemId] : null;
             const fichaVinculada = charVinculado?.ficha || {};
             const statusVinculado = obterStatusFicha(fichaVinculada);
             const vidaMaximaVinculada = Number(charVinculado?.derivados?.vida ?? fichaVinculada?.derivados?.vida) || 1;
             const iniciativaBaseVinculada = Number(charVinculado?.derivados?.iniciativa ?? fichaVinculada?.derivados?.iniciativa) || 0;
             
             // Sync status ao vivo se complexo
-            const vidaAtual = isComplexo ? Number(statusVinculado.vidaAtual ?? vidaMaximaVinculada) : a.vidaAtual;
-            const vidaMaxima = isComplexo ? vidaMaximaVinculada : a.vidaMaxima;
-            const nomeExibicao = isComplexo ? (charVinculado?.nome || a.nome) : a.nome;
+            const vidaAtual = isComplexo
+              ? Number(resumoVinculado?.vida_atual ?? statusVinculado.vidaAtual ?? vidaMaximaVinculada)
+              : a.vidaAtual;
+            const vidaMaxima = isComplexo
+              ? Number(resumoVinculado?.vida_maxima ?? vidaMaximaVinculada)
+              : a.vidaMaxima;
+            const nomeExibicao = isComplexo ? (resumoVinculado?.nome || charVinculado?.nome || a.nome) : a.nome;
             const iniciativa = isComplexo
-              ? iniciativaBaseVinculada
-                + bonusIniciativaFicha(fichaVinculada)
-                + penalidadeCansacoIniciativa(statusVinculado.cansacoAtual)
-                + penalidadeIniciativaCondicoes(fichaVinculada.condicoesAtivas)
+              ? resumoVinculado?.iniciativa ?? (
+                iniciativaBaseVinculada
+                  + bonusIniciativaFicha(fichaVinculada)
+                  + penalidadeCansacoIniciativa(statusVinculado.cansacoAtual)
+                  + penalidadeIniciativaCondicoes(fichaVinculada.condicoesAtivas)
+              )
               : a.iniciativa;
+            const manaAtual = Number(resumoVinculado?.mana_atual ?? statusVinculado.manaAtual ?? charVinculado?.derivados?.mana) || 0;
+            const manaMaxima = Number(resumoVinculado?.mana_maxima ?? charVinculado?.derivados?.mana ?? fichaVinculada?.derivados?.mana) || 0;
+            const defesaVinculada = Number(resumoVinculado?.defesa ?? charVinculado?.derivados?.defesaNatural ?? fichaVinculada?.derivados?.defesaNatural) || 0;
+            const movimentoBruto = resumoVinculado?.movimento ?? charVinculado?.derivados?.movimento ?? fichaVinculada?.derivados?.movimento ?? 9;
+            const movimentoVinculado = typeof movimentoBruto === 'number' ? `${movimentoBruto}m` : String(movimentoBruto);
 
             const percentVida = Math.min(100, Math.max(0, ((vidaAtual || 0) / (vidaMaxima || 1)) * 100));
 
@@ -278,30 +344,35 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                    {isComplexo && charVinculado && (
+                  <div className={`flex items-center gap-1 shrink-0 transition-opacity ${isComplexo ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                    {isComplexo && a.personagemId && (
                       <button
-                        onClick={() => navigate(`/ficha/${charVinculado.id}`)}
+                        onClick={() => navigate(`/ficha/${a.personagemId}`)}
                         className="w-8 h-8 rounded-lg bg-black/40 border border-white/5 text-[#c7a44c] hover:bg-[#c7a44c]/10 hover:border-[#c7a44c]/30 flex items-center justify-center transition-colors mr-1"
-                        title="Ver ficha completa"
+                        title={isMestre ? 'Abrir ficha vinculada' : 'Abrir ficha vinculada em modo somente leitura'}
+                        aria-label={`Abrir ficha de ${nomeExibicao || 'aliado vinculado'}`}
                       >
                         <ExternalLink size={14} />
                       </button>
                     )}
-                    <button
-                      onClick={() => abrirEdicao(a)}
-                      className="w-8 h-8 rounded-lg bg-black/40 border border-white/5 text-gray-400 hover:text-[#c7a44c] hover:border-[#c7a44c]/30 flex items-center justify-center transition-colors"
-                      title="Editar aliado"
-                    >
-                      <Pencil size={14} />
-                    </button>
-                    <button
-                      onClick={() => handleExcluir(a)}
-                      className="w-8 h-8 rounded-lg bg-black/40 border border-white/5 text-gray-400 hover:text-red-400 hover:border-red-500/30 flex items-center justify-center transition-colors"
-                      title="Remover aliado"
-                    >
-                      <Trash2 size={14} />
-                    </button>
+                    {(!isComplexo || isMestre) && (
+                      <>
+                        <button
+                          onClick={() => abrirEdicao(a)}
+                          className="w-8 h-8 rounded-lg bg-black/40 border border-white/5 text-gray-400 hover:text-[#c7a44c] hover:border-[#c7a44c]/30 flex items-center justify-center transition-colors"
+                          title="Editar aliado"
+                        >
+                          <Pencil size={14} />
+                        </button>
+                        <button
+                          onClick={() => handleExcluir(a)}
+                          className="w-8 h-8 rounded-lg bg-black/40 border border-white/5 text-gray-400 hover:text-red-400 hover:border-red-500/30 flex items-center justify-center transition-colors"
+                          title="Remover aliado"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
 
@@ -361,15 +432,15 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
                   <div className="grid grid-cols-4 gap-2">
                     <div className="bg-[#c7a44c]/10 rounded-lg py-2 px-1 flex flex-col items-center gap-0.5 border border-[#c7a44c]/20">
                       <span className="text-[9px] uppercase text-[#c7a44c] font-bold tracking-widest flex items-center gap-1"><Droplet size={10} /> Mana</span>
-                      <span className="text-xs font-mono text-[#c7a44c]">{Number((statusVinculado.manaAtual ?? charVinculado?.derivados?.mana) || 0)} / {Number((charVinculado?.derivados?.mana ?? fichaVinculada?.derivados?.mana) || 0)}</span>
+                      <span className="text-xs font-mono text-[#c7a44c]">{manaAtual} / {manaMaxima}</span>
                     </div>
                     <div className="bg-[#c7a44c]/10 rounded-lg py-2 px-1 flex flex-col items-center gap-0.5 border border-[#c7a44c]/20">
                       <span className="text-[9px] uppercase text-[#c7a44c] font-bold tracking-widest flex items-center gap-1"><Shield size={10} /> Def</span>
-                      <span className="text-xs font-mono text-[#c7a44c]">{Number(charVinculado?.derivados?.defesaNatural ?? fichaVinculada?.derivados?.defesaNatural) || 0}</span>
+                      <span className="text-xs font-mono text-[#c7a44c]">{defesaVinculada}</span>
                     </div>
                     <div className="bg-[#c7a44c]/10 rounded-lg py-2 px-1 flex flex-col items-center gap-0.5 border border-[#c7a44c]/20">
                       <span className="text-[9px] uppercase text-[#c7a44c] font-bold tracking-widest flex items-center gap-1"><Footprints size={10} /> Mov</span>
-                      <span className="text-xs font-mono text-[#c7a44c]">{Number(charVinculado?.derivados?.movimento ?? fichaVinculada?.derivados?.movimento) || 9}m</span>
+                      <span className="text-xs font-mono text-[#c7a44c]">{movimentoVinculado}</span>
                     </div>
                     <div className="bg-[#c7a44c]/10 rounded-lg py-2 px-1 flex flex-col items-center gap-0.5 border border-[#c7a44c]/20">
                       <span className="text-[9px] uppercase text-[#c7a44c] font-bold tracking-widest flex items-center gap-1"><Zap size={10} /> Inic</span>
@@ -437,20 +508,22 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
               className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${form.categoria === 'comum' ? 'bg-[#c7a44c] text-black' : 'text-gray-400 hover:text-white'}`}
               onClick={() => setCampo('categoria', 'comum')}
             >
-              Aliado Comum
+              Aliado Simples
             </button>
-            <button
-              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors flex justify-center items-center gap-2 ${form.categoria === 'complexo' ? 'bg-[#c7a44c] text-black' : 'text-gray-400 hover:text-white'}`}
-              onClick={() => setCampo('categoria', 'complexo')}
-            >
-              <Link size={14} /> Vínculo Complexo
-            </button>
+            {isMestre && (
+              <button
+                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors flex justify-center items-center gap-2 ${form.categoria === 'complexo' ? 'bg-[#c7a44c] text-black' : 'text-gray-400 hover:text-white'}`}
+                onClick={() => setCampo('categoria', 'complexo')}
+              >
+                <Link size={14} /> Vínculo Complexo
+              </button>
+            )}
           </div>
 
           {form.categoria === 'complexo' ? (
             <div className="flex flex-col gap-4 py-2 border-y border-white/5 my-2">
               <p className="text-xs text-[#c7a44c] bg-[#c7a44c]/10 p-3 rounded-lg border border-[#c7a44c]/20">
-                O aliado complexo cria um vínculo com outra ficha da campanha. Atributos vitais (Vida e Iniciativa) serão sincronizados automaticamente em tempo real!
+                O Mestre conecta uma ficha da campanha como aliado complexo. Vida, Mana, Defesa, Movimento e Iniciativa ficam sincronizados sem revelar o restante da ficha ao outro jogador.
               </p>
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Vincular a Personagem</label>
@@ -460,7 +533,7 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
                   className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors"
                 >
                   <option value="" disabled>Selecione um personagem da campanha</option>
-                  {personagens.map(p => (
+                  {personagens.filter((p) => p.id !== character.id).map(p => (
                     <option key={p.id} value={p.id}>{p.nome}</option>
                   ))}
                 </select>

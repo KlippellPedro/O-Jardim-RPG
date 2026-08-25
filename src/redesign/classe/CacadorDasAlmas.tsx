@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
-import { Ghost, ShieldX } from 'lucide-react';
+import { Ghost, ShieldX, Eye, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
 import { obterTemaPorId } from '../themeMap';
 
-export const CacadorDeEntidades = ({ classe }: { classe: IClasse }) => {
+export const CacadorDasAlmas = ({ classe }: { classe: IClasse }) => {
   const tema = obterTemaPorId(classe.id);
 
   return (
@@ -59,33 +59,33 @@ export const CacadorDeEntidades = ({ classe }: { classe: IClasse }) => {
                 className={`text-7xl font-bold tracking-tight ${tema.text} mb-6 uppercase`}
                 style={{ fontFamily: 'Cinzel, serif' }}
              >
-               Caçador de Entidades
+               Caçador das Almas
              </motion.h1>
           </motion.div>
-          <motion.p 
+          <motion.p
              initial={{ opacity: 0 }}
              animate={{ opacity: 1 }}
              transition={{ duration: 1, delay: 0.6 }}
              className={`text-lg ${tema.tag} opacity-80 max-w-2xl mx-auto font-medium leading-relaxed`}
           >
-            Inquisidores implacáveis do oculto. Eles se especializam em caçar e suprimir seres sobrenaturais, barrando feitiços de locomoção e expurgando possessões da alma alheia.
+            Inquisidores implacáveis do oculto. Eles se especializam em caçar e suprimir o que ataca por dentro, barrando fuga incorpórea e expurgando possessões da alma alheia.
           </motion.p>
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.5 }}
             className={`flex flex-col p-8 rounded-none ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <ShieldX size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Selos de Contenção</h3>
+            <Eye size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Leitura da Alma</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Prepare um selo após cada descanso (mais um por estágio). Aplicado em uma área de 3 m, ele impede teleporte ou incorporeidade por uma rodada em qualquer criatura que falhe em um teste de Vontade.
+              O conceito central da classe: perceba presença espiritual à distância e identifique possessão ou corrupção de cara. Com o tempo, causa mais dano contra possuidores, descobre a fraqueza deles ao estudar, e no auge marca um alvo pra queda de toda Resistência espiritual do grupo.
             </p>
           </PremiumCard>
 
@@ -94,13 +94,43 @@ export const CacadorDeEntidades = ({ classe }: { classe: IClasse }) => {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className={`flex flex-col p-8 rounded-none ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <ShieldX size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Selos de Contenção</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              Prepare um selo após cada descanso (mais um por estágio), e aprenda um Tipo de Selo por estágio: Silêncio cala o preso, Exaustão desgasta ele, Vigília avisa você a distância e Amplificado dobra a área. Aplicado em 3 m, o selo impede teleporte ou incorporeidade por uma rodada contra a sua DT.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
             className={`flex flex-col p-8 rounded-none ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
             <Ghost size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Exorcismo</h3>
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Exorcismo</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Uma vez por descanso longo, conduza um ritual de três rodadas e faça Misticismo contra a Vontade da entidade para expulsar a possessão. Em caso de falha, ao menos a suprima por uma rodada.
+              Uma vez por descanso longo, conduza um ritual de três rodadas e faça Misticismo contra a Vontade do possuidor para expulsar a possessão. Em caso de falha, ao menos a suprima por uma rodada.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className={`flex flex-col p-8 rounded-none ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              Todo efeito seu que obriga um possuidor a resistir rola Misticismo no momento em que aciona: o resultado vira a DT que ele precisa alcançar.
             </p>
           </PremiumCard>
         </div>
@@ -111,5 +141,5 @@ export const CacadorDeEntidades = ({ classe }: { classe: IClasse }) => {
   );
 };
 
-export default CacadorDeEntidades;
+export default CacadorDasAlmas;
 

@@ -44,7 +44,9 @@ export interface WorldChronicleCatalog {
 
 export const WORLD_CHRONICLES = rawChronicles as WorldChronicleCatalog;
 
-export function getTreeChronicle(treeId: string): TreeChronicle | undefined {
-  return WORLD_CHRONICLES.arvores.find((tree) => tree.id === treeId);
+export function getTreeChronicle(
+  treeId: string,
+  catalog: WorldChronicleCatalog = WORLD_CHRONICLES,
+): TreeChronicle | undefined {
+  return catalog.arvores.find((tree) => tree.id === treeId);
 }
-

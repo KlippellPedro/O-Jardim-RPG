@@ -21,6 +21,7 @@ const RegraDetalhesPage = lazy(() => import('./pages/Regras/RegraDetalhesPage').
 const SessaoPage = lazy(() => import('./pages/Sessao/SessaoPage').then((module) => ({ default: module.SessaoPage })));
 const MundoPage = lazy(() => import('./pages/Mundo/MundoPage').then((module) => ({ default: module.MundoPage })));
 const LojaPage = lazy(() => import('./pages/Loja/LojaPage').then((module) => ({ default: module.LojaPage })));
+const MateriaisPage = lazy(() => import('./pages/Materiais/MateriaisPage').then((module) => ({ default: module.MateriaisPage })));
 const MasterPage = lazy(() => import('./pages/Mestre/MasterPage'));
 const CofrePage = lazy(() => import('./pages/Cofre/CofrePage').then((module) => ({ default: module.CofrePage })));
 
@@ -252,6 +253,15 @@ function App() {
                 element={
                   <ProtectedRoute requireCampaign>
                     <LojaPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/materiais"
+                element={
+                  <ProtectedRoute>
+                    <MateriaisPage />
                   </ProtectedRoute>
                 }
               />

@@ -32,7 +32,7 @@ CATEGORIAS = {
         "comandos": [
             ("/jornal configurar <principal>", "[Mestre] Configura de uma vez os canais principais e, opcionalmente, um canal de baús."),
             ("/jornal status", "[Mestre] Diagnostica canais, permissões, automações, estação e baús."),
-            ("/jornal publicar", "[Mestre] Abre o formulário, mostra uma prévia privada e só publica após confirmação."),
+            ("/publicar_noticia", "Abre o formulário de notícia. O Mestre publica na hora; qualquer jogador pode enviar, mas vira uma pauta que o Mestre precisa aprovar."),
             ("/jornal principal <canal>", "[Mestre] Define o canal principal e fallback do Jornalista."),
             ("/jornal estacao_definir <estacao>", "[Mestre] Define a estação do Jardim (muda o loot dos baús)."),
             ("/jornal avancar_mes", "[Mestre] Sorteia o clima do mês, restrito pela estação atual."),

@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import reinosData from '../../data/mundo/Gênese/realidade-0-reinos.json';
 import soberanosData from '../../data/mundo/Gênese/realidade-0-soberanos.json';
+import escalaPrecosData from '../../data/economia/escala-precos-v1.json';
 import {
   AJUSTE_SOCIAL_MAXIMO,
   DESCONTO_FACCAO_MAXIMO_PERCENTUAL,
@@ -70,13 +71,16 @@ test('reputação bancária permanece separada', () => {
   assert.match(REPUTACAO_BANCARIA_SEPARADA, /Prestígio e Fama não alteram/);
 });
 
-test('catálogo publica duas facções canônicas e três propostas transdimensionais', () => {
+test('catálogo reúne quatro facções canônicas e duas propostas transdimensionais', () => {
   assert.deepEqual(
     FACCOES_DOCUMENTADAS.map((faccao) => faccao.id),
-    ['banco-lunar', 'astratech', 'caravana-do-limiar', 'vigilia-das-raizes', 'arquivo-prismatico'],
+    [
+      'banco-lunar', 'astratech', 'caravana-do-limiar', 'vigilia-das-raizes',
+      'arquivo-prismatico', 'guilda-dos-cacadores',
+    ],
   );
-  assert.equal(FACCOES_DOCUMENTADAS.filter((faccao) => faccao.estado === 'canonica').length, 2);
-  assert.equal(FACCOES_DOCUMENTADAS.filter((faccao) => faccao.estado === 'proposta').length, 3);
+  assert.equal(FACCOES_DOCUMENTADAS.filter((faccao) => faccao.estado === 'canonica').length, 4);
+  assert.equal(FACCOES_DOCUMENTADAS.filter((faccao) => faccao.estado === 'proposta').length, 2);
   assert.ok(FACCOES_DOCUMENTADAS.every((faccao) => /Árvore/i.test(faccao.alcance)));
 });
 
@@ -84,6 +88,7 @@ test('fontes das facções canônicas existem e propostas não fingem possuir fo
   const entradasPorArquivo: Record<string, Set<string>> = {
     'data/mundo/Gênese/realidade-0-reinos.json': new Set(reinosData.entradas.map((entrada) => entrada.id)),
     'data/mundo/Gênese/realidade-0-soberanos.json': new Set(soberanosData.entradas.map((entrada) => entrada.id)),
+    'data/economia/escala-precos-v1.json': new Set(Object.keys(escalaPrecosData)),
   };
 
   for (const faccao of FACCOES_DOCUMENTADAS) {
@@ -106,8 +111,14 @@ test('capítulo não publica cenário regional junto das facções', () => {
     /Irmãs da Noite|Asas de Prata|Aurora Escarlate|Titãs da Guerra|Reis da Favela|Trupe Fantasma/i,
   );
   assert.match(REGRA_MUNDO_FACCOES.corpo, /qualquer organização[^.]+independentemente da Árvore/i);
-  assert.match(REGRA_MUNDO_FACCOES.corpo, /Banco Lunar e AstraTech pertencem ao cenário atual/i);
-  assert.match(REGRA_MUNDO_FACCOES.corpo, /ainda não fazem parte do cânone/i);
+  // O estado (cânone/proposta) é metadado de produção e saiu da página: o
+  // jogador não precisa saber quais facções ainda esperam aprovação.
+  assert.doesNotMatch(REGRA_MUNDO_FACCOES.corpo, /Canônica|Proposta|cânone/i);
+  assert.match(
+    REGRA_MUNDO_FACCOES.corpo,
+    /<th>Facção<\/th><th>Tipo<\/th><th>Alcance<\/th><th>Atuação pública<\/th><\/tr>/,
+  );
+  assert.match(REGRA_MUNDO_FACCOES.corpo, /Guilda dos Caçadores/);
 });
 
 test('redação pública não usa citações ou falas', () => {

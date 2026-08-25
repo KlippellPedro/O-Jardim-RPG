@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Building2, MapPin, Pencil, Trash2, Plus } from 'lucide-react';
-import { PATAMARES_BASE } from '../../../../data/regras/bases';
+import { PATAMARES_BASE, INSTALACOES_BASE } from '../../../../data/regras/bases';
+
+const INSTALACAO_PERSONALIZADA = '__personalizada__';
 import { Select } from '../../../components/ui/Select';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput } from '../components/SharedFichaComponents';
@@ -35,12 +37,16 @@ export const AbaBens = ({ character, onUpdate }: { character: any; onUpdate: any
   const [propriedadeModal, setPropriedadeModal] = useState(false);
   const [propriedadeEditandoId, setPropriedadeEditandoId] = useState<string | null>(null);
   const [propriedadeForm, setPropriedadeForm] = useState(PROPRIEDADE_VAZIA);
+  const [novoTipoInstalacao, setNovoTipoInstalacao] = useState('');
+  const [novoNivelInstalacao, setNovoNivelInstalacao] = useState(1);
 
   const salvarPropriedades = (proximas: IPropriedadeFicha[]) => onUpdate(['ficha', 'propriedades'], proximas);
 
   const abrirNovaPropriedade = () => {
     setPropriedadeEditandoId(null);
     setPropriedadeForm(PROPRIEDADE_VAZIA);
+    setNovoTipoInstalacao('');
+    setNovoNivelInstalacao(1);
     setPropriedadeModal(true);
   };
 
@@ -48,7 +54,31 @@ export const AbaBens = ({ character, onUpdate }: { character: any; onUpdate: any
     const { id, ...dados } = propriedade;
     setPropriedadeEditandoId(id);
     setPropriedadeForm({ ...PROPRIEDADE_VAZIA, ...dados });
+    setNovoTipoInstalacao('');
+    setNovoNivelInstalacao(1);
     setPropriedadeModal(true);
+  };
+
+  const patamarSelecionado = PATAMARES_BASE.find((item) => item.id === propriedadeForm.patamar);
+  const nivelMaximoInstalacao = patamarSelecionado?.nivelInstalacaoMaximo ?? 3;
+  const catalogoInstalacaoSelecionado = INSTALACOES_BASE.find((item) => item.id === novoTipoInstalacao);
+  const niveisDisponiveis = (catalogoInstalacaoSelecionado?.niveis || []).filter((n) => n.nivel <= nivelMaximoInstalacao);
+
+  const adicionarInstalacaoDoCatalogo = () => {
+    if (novoTipoInstalacao === INSTALACAO_PERSONALIZADA) {
+      setPropriedadeForm((atual) => ({ ...atual, instalacoes: [...atual.instalacoes, { id: novoIdPropriedade('inst'), nome: '', nivel: 1, espacosOcupados: 1 }] }));
+    } else if (catalogoInstalacaoSelecionado) {
+      const nivelInfo = catalogoInstalacaoSelecionado.niveis.find((n) => n.nivel === novoNivelInstalacao) || niveisDisponiveis[0];
+      if (!nivelInfo) return;
+      setPropriedadeForm((atual) => ({
+        ...atual,
+        instalacoes: [...atual.instalacoes, { id: novoIdPropriedade('inst'), nome: catalogoInstalacaoSelecionado.titulo, nivel: nivelInfo.nivel, espacosOcupados: nivelInfo.espacos }],
+      }));
+    } else {
+      return;
+    }
+    setNovoTipoInstalacao('');
+    setNovoNivelInstalacao(1);
   };
 
   const salvarPropriedade = () => {
@@ -172,8 +202,42 @@ export const AbaBens = ({ character, onUpdate }: { character: any; onUpdate: any
                 <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">Instalações</p>
                 <p className="text-xs text-gray-500">Espaços usados: <strong className="text-gray-300">{calcularEspacosPropriedade(propriedadeForm as IPropriedadeFicha).espacosUsados} / {calcularEspacosPropriedade(propriedadeForm as IPropriedadeFicha).espacosTotais}</strong></p>
               </div>
-              <button type="button" onClick={() => setPropriedadeForm(atual => ({ ...atual, instalacoes: [...atual.instalacoes, { id: novoIdPropriedade('inst'), nome: '', nivel: 1, espacosOcupados: 1 }] }))} className="flex items-center gap-1 rounded border border-emerald-500/30 bg-emerald-500/10 px-2 py-1 text-xs font-bold text-emerald-300 hover:bg-emerald-500/20"><Plus size={12} /> Instalação</button>
             </div>
+            <div className="flex flex-col gap-2 rounded-lg border border-white/5 bg-black/20 p-3 sm:flex-row sm:items-end">
+              <div className="flex-1">
+                <label className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Tipo de instalação</label>
+                <Select
+                  value={novoTipoInstalacao}
+                  onChange={(valor) => { setNovoTipoInstalacao(valor); setNovoNivelInstalacao(1); }}
+                  placeholder="Ex.: Dormitório (cama), Área Médica..."
+                  options={[...INSTALACOES_BASE.map((item) => ({ value: item.id, label: item.titulo })), { value: INSTALACAO_PERSONALIZADA, label: 'Personalizada...' }]}
+                />
+              </div>
+              {catalogoInstalacaoSelecionado && (
+                <div className="sm:w-48">
+                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Nível</label>
+                  <Select
+                    value={String(novoNivelInstalacao)}
+                    onChange={(valor) => setNovoNivelInstalacao(Number(valor))}
+                    options={niveisDisponiveis.map((n) => ({ value: String(n.nivel), label: `Nível ${n.nivel} · ${n.espacos} esp.` }))}
+                  />
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={adicionarInstalacaoDoCatalogo}
+                disabled={!novoTipoInstalacao || (catalogoInstalacaoSelecionado ? niveisDisponiveis.length === 0 : false)}
+                className="flex items-center justify-center gap-1 rounded border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-300 hover:bg-emerald-500/20 disabled:opacity-40"
+              >
+                <Plus size={12} /> Adicionar
+              </button>
+            </div>
+            {catalogoInstalacaoSelecionado && niveisDisponiveis.length === 0 && (
+              <p className="text-[11px] text-amber-400">O patamar escolhido não comporta o nível desta instalação.</p>
+            )}
+            {catalogoInstalacaoSelecionado && (
+              <p className="text-[11px] leading-relaxed text-gray-500">{catalogoInstalacaoSelecionado.descricao}</p>
+            )}
             {propriedadeForm.instalacoes.map((inst) => (
               <div key={inst.id} className="grid grid-cols-[1fr_auto_auto_auto] gap-2 items-end border-b border-white/5 pb-2 last:border-0 last:pb-0">
                 <LabeledInput label="Nome da Instalação" value={inst.nome} placeholder="Ex.: Laboratório" onChange={(valor: string) => setPropriedadeForm(atual => ({ ...atual, instalacoes: atual.instalacoes.map(i => i.id === inst.id ? { ...i, nome: valor } : i) }))} />

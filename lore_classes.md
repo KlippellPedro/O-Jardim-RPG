@@ -52,7 +52,7 @@
 ## Engenheiro (engenheiro)
 - **Meus Filhos**: undefined
 - **Engenhocas**: Após um descanso, prepare uma engenhoca simples por estágio. Cada uma executa uma única função por até três rodadas e expira no descanso seguinte.
-- **Arquitetura Tech**: Uma vez por descanso longo, gaste ação completa e 8 Mana para erguer uma estrutura de cobertura, mobilidade ou suporte em uma área de 6 m por cinco rodadas.
+- **Arquitetura de Campo**: Uma vez por descanso longo, gaste ação completa e 8 de Mana para erguer uma estrutura de cobertura, mobilidade ou suporte em uma área de 6 m por cinco rodadas.
 
 ## Alquimista (alquimista)
 - **Grande Obra**: undefined
@@ -70,9 +70,9 @@
 - **Trono da Dimensão**: Uma vez por sessão, por duas rodadas, seus danos físicos ignoram 10 de Resistência e inimigos a 6 m sofrem −2 em testes físicos. Controle e execução automáticos foram removidos.
 
 ## Pirata Amaldiçoado (pirata-amaldicoado)
-- **Maldição dos Sete Mares**: undefined
-- **Evolução Abissal**: Escolha um benefício por estágio: visão no escuro, imunidade a pressão oceânica, Resistência 10 a frio ou vantagem em testes ligados ao mar.
-- **Tripulação dos Condenados**: Uma vez por combate, invoque três espectros por três rodadas. Cada um pode absorver um ataque; ao desaparecer, causa 1d6 de Água a um inimigo adjacente.
+- **Maldição dos Sete Mares**: A maldição cresce nos níveis 1, 5, 10, 15 e 20. Ela permite respirar na água, aumenta o dano, protege o corpo e termina com uma tempestade ao redor do personagem.
+- **Evolução Abissal**: Escolha quatro entre quatorze mutações nos níveis 3, 8, 14 e 20. Todas as mutações escolhidas melhoram juntas.
+- **Tripulação dos Condenados**: Uma vez por combate, invoque três espectros por três rodadas. Cada um pode receber um ataque no lugar de um aliado e causa 1d6 de Água quando desaparece.
 
 ## Cartista Arcano (cartista-arcano)
 - **Baralho Arcano**: undefined
@@ -133,4 +133,3 @@
 - **Acesso à Malha**: undefined
 - **Hackear Fluxo**: Escolha por estágio anular, atrasar, redirecionar ou isolar uma manifestação percebida.
 - **Acesso Administrador**: Uma vez por sessão, por três rodadas, receba +4 em interceptações e reduza seu custo em 2, mínimo 1.
-

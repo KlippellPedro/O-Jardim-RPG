@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Coins, Package, Scale } from 'lucide-react';
+import { Coins, Package, Scale, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -78,7 +78,7 @@ export const Comerciante = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, y: 20 }}
@@ -90,7 +90,7 @@ export const Comerciante = ({ classe }: { classe: IClasse }) => {
             <Package size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Estoque Consignado</h3>
             <p className="text-yellow-100/60 leading-relaxed text-sm">
-              Após cada descanso longo, escolha um consumível comum como estoque consignado (mais um por estágio da habilidade). Ele pode ser usado quando precisar, mas deve ser pago ou substituído antes do próximo descanso: não é um suprimento infinito.
+              Você escolhe as prateleiras que trabalha, e depois de cada descanso longo tira delas um item consignado por vaga, dentro do teto de preço do seu nível de Estoque. Poção, munição, explosivo, kit, papelada, contrabando. Usou, você paga ou repõe antes do próximo descanso, e enquanto a conta estiver aberta aquela vaga não recarrega.
             </p>
           </PremiumCard>
 
@@ -105,7 +105,21 @@ export const Comerciante = ({ classe }: { classe: IClasse }) => {
             <Scale size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Contrato Irrecusável</h3>
             <p className="text-yellow-100/60 leading-relaxed text-sm">
-              Firme um acordo verbal e apertando as mãos com uma criatura consciente. Caso ela quebre os termos do acordo (ou tente te matar durante), ela sofre penalidades cruéis no acerto, perde prestígio e o próprio universo parecerá conspirar contra ela.
+              No nível 18, um acordo escrito entre até quatro partes que aceitaram assinar. Enquanto ele vale, cada uma recebe +2 nos testes para cumprir o que prometeu. Quem quebra perde 1 de Prestígio com a facção envolvida e vira assunto nas suas praças. Nada aqui obriga ninguém: a força do contrato é a palavra dada e o preço de voltar atrás.
+            </p>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-yellow-100/60 leading-relaxed text-sm">
+              Quando alguém disputa o seu preço ou recusa a sua proposta, você rola Ofício (Comércio), o ofício que vem junto da classe, e o resultado é o número que a outra parte precisa alcançar para segurar a posição dela. Passar no teste não obriga ninguém a nada, e uma falha crítica sua encarece aquela praça até o fim da sessão.
             </p>
           </PremiumCard>
         </div>

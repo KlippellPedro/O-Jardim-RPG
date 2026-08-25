@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Target, Footprints, Scroll, BookOpen } from 'lucide-react';
+import { Target, Footprints, Scroll, BookOpen, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -79,7 +79,7 @@ export const Cacador = ({ classe }: CacadorProps) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, y: 30 }}
@@ -91,7 +91,7 @@ export const Cacador = ({ classe }: CacadorProps) => {
             <BookOpen size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Especialização</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              O conceito central da classe: você estuda categorias amplas de presas e cresce pela informação, não por bônus universais. Escolha uma categoria de criatura e receba vantagem para rastreá-la e +1 no primeiro ataque contra ela por cena. Com o tempo, você acumula mais categorias, causa dano extra contra elas, revela fraquezas conhecidas e, no auge, trata uma criatura já derrotada como especializada por uma cena.
+              O conceito central da classe: você estuda uma raça de cada vez, entre as mais de vinte que o jogo publica (Vampiro, Golem, Elfo, Bruxa e outras), e cresce pela informação, não por bônus universais. Escolha uma raça e receba vantagem para rastreá-la e +1 no primeiro ataque contra ela por cena. Com o tempo, acumula mais raças, causa dano extra contra elas e revela fraquezas conhecidas.
             </p>
           </PremiumCard>
 
@@ -121,7 +121,21 @@ export const Cacador = ({ classe }: CacadorProps) => {
             <Scroll size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Agência dos Caçadores</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Você tem um registro na Guilda. A cada estágio, escolha um benefício: contratos exclusivos de monstros procurados, +10% no valor narrativo de troféus, apoio logístico uma vez por sessão, acesso a arquivos de criaturas ou bases seguras da Guilda espalhadas pelas cidades para descanso e reabastecimento sem custo.
+              Você tem um registro na Guilda. A cada estágio, escolha um benefício entre doze publicados: contratos exclusivos, avaliação de troféus, apoio logístico, arquivo de criaturas, bases seguras e mais. Sua patente sobe junto com a carreira, e cada degrau melhora todo benefício que você já escolheu.
+            </p>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              Toda técnica sua que obriga a presa a resistir rola Sobrevivência no momento em que aciona: o resultado vira a DT que ela precisa alcançar, valendo para todos os alvos daquele uso.
             </p>
           </PremiumCard>
         </div>

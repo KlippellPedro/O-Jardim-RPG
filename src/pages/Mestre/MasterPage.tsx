@@ -1,35 +1,94 @@
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { personagensApi, PersonagemApiRecord } from '../../services/personagensApi';
-import { Shield, Users, Search, Loader2, Settings, Gem, Coins } from 'lucide-react';
+import { campanhasApi } from '../../services/campanhasApi';
+import { Shield, Users, Search, Loader2, Settings, Gem, Coins, UserCog, PackagePlus, BookOpenText, FileClock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MestrePanel } from '../../components/Settings/MestrePanel';
 import { CofrePanel } from '../../components/Settings/CofrePanel';
+import { ConcederItemModal } from '../../components/Settings/ConcederItemModal';
+import { ConteudoMestrePanel } from '../../components/Settings/ConteudoMestrePanel';
+import { LogsMestrePanel } from '../../components/Settings/LogsMestrePanel';
+import { useSearchParams } from 'react-router-dom';
+
+interface MembroCampanha {
+  id: string;
+  nome_exibicao: string;
+}
 
 export const MasterPage = () => {
+  const [searchParams] = useSearchParams();
   const { campanhaAtiva, usuario } = useAuthStore();
   const [personagens, setPersonagens] = useState<PersonagemApiRecord[]>([]);
+  const [membros, setMembros] = useState<MembroCampanha[]>([]);
   const [loading, setLoading] = useState(true);
   const [busca, setBusca] = useState('');
-  const [activeTab, setActiveTab] = useState<'personagens' | 'cofre' | 'configs'>('personagens');
+  const [activeTab, setActiveTab] = useState<'personagens' | 'cofre' | 'conteudo' | 'logs' | 'configs'>('personagens');
+  const [conteudoDirty, setConteudoDirty] = useState(false);
+  const [transferindoId, setTransferindoId] = useState<string | null>(null);
+  const [erroTransferencia, setErroTransferencia] = useState<string | null>(null);
+  const [concedendoParaId, setConcedendoParaId] = useState<string | null>(null);
 
   // Assistente também gerencia conteúdo da campanha (convites, auditoria) -
   // só ações mais sensíveis (arquivar, trocar papel, transferir dono) ficam
   // reservadas ao mestre de verdade, gated dentro de cada painel.
   const isMestre = campanhaAtiva?.papel === 'mestre' || campanhaAtiva?.papel === 'assistente'
     || usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador';
+  const podeEditarConteudo = campanhaAtiva?.papel === 'mestre' || usuario?.papel_plataforma === 'criador';
+  const abaSolicitada = searchParams.get('aba');
+  const secaoSolicitada = searchParams.get('secao');
+  const itemSolicitado = searchParams.get('item') || undefined;
+  const secaoConteudo = secaoSolicitada === 'cronologia' || secaoSolicitada === 'loja' || secaoSolicitada === 'regras'
+    ? secaoSolicitada
+    : 'lore';
+
+  const trocarAbaPrincipal = (next: typeof activeTab) => {
+    if (next === activeTab) return;
+    if (activeTab === 'conteudo' && conteudoDirty
+      && !window.confirm('Existem alterações de conteúdo não salvas. Deseja descartá-las?')) return;
+    setConteudoDirty(false);
+    setActiveTab(next);
+  };
+
+  useEffect(() => {
+    if (abaSolicitada === 'conteudo' && podeEditarConteudo) setActiveTab('conteudo');
+  }, [abaSolicitada, podeEditarConteudo]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     if (campanhaAtiva?.id && isMestre) {
-      personagensApi.listar(campanhaAtiva.id, true)
-        .then(res => setPersonagens(res.personagens || []))
+      Promise.all([
+        personagensApi.listar(campanhaAtiva.id, true),
+        campanhasApi.obter(campanhaAtiva.id) as Promise<{ membros?: MembroCampanha[] }>,
+      ])
+        .then(([personagensRes, campanhaRes]) => {
+          setPersonagens(personagensRes.personagens || []);
+          setMembros(campanhaRes.membros || []);
+        })
         .catch(err => console.error("Erro ao listar personagens", err))
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
     }
   }, [campanhaAtiva, isMestre]);
+
+  const handleTransferirDono = async (personagemId: string, novoDonoUsuarioId: string) => {
+    if (!novoDonoUsuarioId) return;
+    setTransferindoId(personagemId);
+    setErroTransferencia(null);
+    try {
+      const resultado = await personagensApi.transferirDono(personagemId, novoDonoUsuarioId);
+      setPersonagens(prev => prev.map(p => (
+        p.id === personagemId
+          ? { ...p, dono_usuario_id: resultado.dono_usuario_id, dono_nome: resultado.dono_nome }
+          : p
+      )));
+    } catch (err: any) {
+      setErroTransferencia(err?.message || 'Nao foi possivel transferir o personagem.');
+    } finally {
+      setTransferindoId(null);
+    }
+  };
 
   if (!isMestre) {
     return (
@@ -96,7 +155,7 @@ export const MasterPage = () => {
 
       <div className="horizontal-scroll mb-6 flex gap-4 overflow-x-auto border-b border-white/10 pb-1 custom-scrollbar">
         <button
-          onClick={() => setActiveTab('personagens')}
+          onClick={() => trocarAbaPrincipal('personagens')}
           className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
             activeTab === 'personagens' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
           }`}
@@ -104,15 +163,33 @@ export const MasterPage = () => {
           <Users size={16} /> Personagens
         </button>
         <button
-          onClick={() => setActiveTab('cofre')}
+          onClick={() => trocarAbaPrincipal('cofre')}
           className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
             activeTab === 'cofre' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
           }`}
         >
           <Gem size={16} /> Cofre
         </button>
+        {podeEditarConteudo && (
+          <button
+            onClick={() => trocarAbaPrincipal('conteudo')}
+            className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
+              activeTab === 'conteudo' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
+            }`}
+          >
+            <BookOpenText size={16} /> Conteúdo
+          </button>
+        )}
         <button
-          onClick={() => setActiveTab('configs')}
+          onClick={() => trocarAbaPrincipal('logs')}
+          className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
+            activeTab === 'logs' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
+          }`}
+        >
+          <FileClock size={16} /> Logs
+        </button>
+        <button
+          onClick={() => trocarAbaPrincipal('configs')}
           className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
             activeTab === 'configs' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
           }`}
@@ -134,21 +211,34 @@ export const MasterPage = () => {
               <h2 className="text-xl font-bold text-white flex items-center gap-2" style={{ fontFamily: 'Cinzel, serif' }}>
                 <Users className="text-primary" size={20} /> Personagens da Campanha
               </h2>
-          
-          <div className="relative w-full md:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-            <input
-              type="text"
-              aria-label="Buscar personagem"
-              placeholder="Buscar personagem..."
-              value={busca}
-              onChange={(e) => setBusca(e.target.value)}
-              className="w-full bg-black/50 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-primary/50 transition-colors"
-            />
+
+          <div className="flex w-full md:w-auto items-center gap-3">
+            <div className="relative flex-1 md:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+              <input
+                type="text"
+                aria-label="Buscar personagem"
+                placeholder="Buscar personagem..."
+                value={busca}
+                onChange={(e) => setBusca(e.target.value)}
+                className="w-full bg-black/50 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-primary/50 transition-colors"
+              />
+            </div>
+            <button
+              onClick={() => setConcedendoParaId('')}
+              className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 text-sm font-bold transition-colors"
+            >
+              <PackagePlus size={16} /> Conceder da Loja
+            </button>
           </div>
         </div>
 
         <div className="p-6 md:p-8">
+          {erroTransferencia && (
+            <div className="mb-6 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+              {erroTransferencia}
+            </div>
+          )}
           {loading ? (
             <div className="py-12 flex justify-center text-primary">
               <Loader2 size={32} className="animate-spin" />
@@ -168,15 +258,45 @@ export const MasterPage = () => {
                   className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:border-primary/30 transition-colors"
                 >
                   <h3 className="text-lg font-bold text-white mb-2 truncate" style={{ fontFamily: 'Cinzel, serif' }}>{p.nome}</h3>
-                  <div className="flex justify-between items-center text-xs text-gray-400 mb-4">
+                  <div className="flex justify-between items-center text-xs text-gray-400 mb-3">
                     <span>Versão: {p.versao}</span>
                     <span>Moedas: {p.carteira?.reduce((acc, c) => acc + c.saldo, 0) || 0}</span>
                   </div>
-                  
+
+                  <div className="text-xs text-gray-500 mb-4 space-y-0.5">
+                    <p className="truncate">Criado por: <span className="text-gray-400">{p.criado_por_nome || '-'}</span></p>
+                    <p className="truncate">Jogador: <span className="text-gray-400">{p.dono_nome || 'Sem jogador atribuído'}</span></p>
+                  </div>
+
+                  <div className="mb-4">
+                    <label className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-gray-500 mb-1.5">
+                      <UserCog size={12} /> Transferir para
+                    </label>
+                    <select
+                      aria-label={`Transferir ${p.nome} para outro jogador`}
+                      value={p.dono_usuario_id || ''}
+                      disabled={transferindoId === p.id}
+                      onChange={(e) => handleTransferirDono(p.id, e.target.value)}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl py-2 px-3 text-xs text-white focus:outline-none focus:border-primary/50 transition-colors disabled:opacity-50"
+                    >
+                      <option value="" disabled>Selecione um jogador…</option>
+                      {membros.map(membro => (
+                        <option key={membro.id} value={membro.id}>{membro.nome_exibicao}</option>
+                      ))}
+                    </select>
+                  </div>
+
                   <div className="flex gap-2">
                     <a href={`/ficha/${p.id}`} className="flex-1 py-2 rounded-xl bg-primary/10 text-primary text-center text-sm font-bold border border-primary/20 hover:bg-primary/20 transition-colors">
                       Ver Ficha
                     </a>
+                    <button
+                      onClick={() => setConcedendoParaId(p.id)}
+                      title="Conceder item, criatura ou propriedade da loja"
+                      className="px-3 py-2 rounded-xl bg-white/5 text-gray-300 border border-white/10 hover:text-primary hover:border-primary/30 transition-colors"
+                    >
+                      <PackagePlus size={16} />
+                    </button>
                   </div>
                 </motion.div>
               ))}
@@ -200,6 +320,32 @@ export const MasterPage = () => {
           </motion.div>
         )}
 
+        {activeTab === 'conteudo' && podeEditarConteudo && campanhaAtiva && (
+          <motion.div
+            key="conteudo"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <ConteudoMestrePanel campanhaId={campanhaAtiva.id} initialAba={secaoConteudo} initialItem={itemSolicitado} onDirtyChange={setConteudoDirty} />
+          </motion.div>
+        )}
+
+        {activeTab === 'logs' && campanhaAtiva && (
+          <motion.div
+            key="logs"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <LogsMestrePanel
+              campanhaId={campanhaAtiva.id}
+              personagens={personagens.map((personagem) => ({ id: personagem.id, nome: personagem.nome }))}
+              membros={membros.map((membro) => ({ id: membro.id, nome: membro.nome_exibicao }))}
+            />
+          </motion.div>
+        )}
+
         {activeTab === 'configs' && (
           <motion.div
             key="configs"
@@ -215,6 +361,16 @@ export const MasterPage = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {campanhaAtiva && (
+        <ConcederItemModal
+          isOpen={concedendoParaId !== null}
+          onClose={() => setConcedendoParaId(null)}
+          campanhaId={campanhaAtiva.id}
+          personagens={personagens.map((p) => ({ id: p.id, nome: p.nome }))}
+          personagemInicialId={concedendoParaId || undefined}
+        />
+      )}
     </div>
   );
 };

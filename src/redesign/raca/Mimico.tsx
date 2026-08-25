@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
-import { Shuffle, Fingerprint, Eye } from 'lucide-react';
+import { Shuffle, Fingerprint, Eye, HeartCrack } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 interface MimicoProps {
@@ -85,7 +86,7 @@ export const Mimico = ({ raca }: MimicoProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-fuchsia-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Corpo sem forma verdadeira, só um jeito de ser que ele decide usar hoje. Copia rosto, roupa e trejeito de quem já observou de perto, mas por baixo da imitação continua sendo a mesma criatura de sempre.
+            Copia a cara, a roupa e o jeito de quem observou de perto, e copia também a forma de um móvel qualquer quando precisa que ninguém olhe. Por baixo continua o mesmo bicho magro e nervoso, com um núcleo só, e é esse núcleo que entrega tudo quando ele apaga.
           </motion.p>
         </motion.header>
 
@@ -103,7 +104,7 @@ export const Mimico = ({ raca }: MimicoProps) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Forma Emprestada</h3>
               <p className="text-fuchsia-200/60 leading-relaxed text-sm">
-                Uma vez por cena, gaste uma ação para copiar a aparência de uma criatura de tamanho próximo que você tenha tocado ou observado de perto. A cópia é só aparência: nenhum atributo, sentido, ataque ou imunidade vem junto.
+                Uma vez por cena, gaste uma ação e 2 Mana para assumir a forma de uma criatura de tamanho próximo ou de um objeto parado do tamanho do seu corpo. Você copia só a aparência: atributo, sentido, ataque e característica continuam sendo os seus, e equipamento não se transforma junto.
               </p>
             </div>
           </PremiumCard>
@@ -120,13 +121,36 @@ export const Mimico = ({ raca }: MimicoProps) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Instinto de Camuflagem</h3>
               <p className="text-fuchsia-200/60 leading-relaxed text-sm">
-                Enquanto permanece imóvel, sua textura e coloração se fundem ao ambiente ao redor. Receba vantagem em testes de Furtividade nesses momentos.
+                Parado, sua pele muda de cor e de textura sozinha até combinar com o que está em volta. Receba vantagem em Furtividade enquanto você não se mover.
+              </p>
+            </div>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className={`flex gap-6 p-8 rounded-xl ${tema.bg} ${tema.border} backdrop-blur-md md:col-span-2`}
+          >
+            <HeartCrack size={40} className={`${tema.icon} shrink-0`} strokeWidth={1.5} />
+            <div>
+              <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Núcleo Exposto</h3>
+              <p className="text-fuchsia-200/60 leading-relaxed text-sm">
+                Cair a 0 de Vida, ficar inconsciente ou sofrer um acerto crítico desmancha a forma copiada na hora, e você volta ao seu corpo de sempre na frente de quem estiver olhando.
               </p>
             </div>
           </PremiumCard>
         </div>
 
-        {/* Custom Choices */}
+        <EstagiosRaciais
+          raca={raca}
+          tema={tema}
+          titulo="Repertório"
+          descricao="Mímico novo segura um rosto de cada vez, e perde ele assim que apaga. O Repertório engorda por nível total, até ele guardar mais de uma forma pronta e não largar nenhuma nem desmaiando."
+        />
+
         <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>

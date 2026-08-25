@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Dices, Spade, Diamond } from 'lucide-react';
+import { Dices, Spade, Diamond, Layers, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -86,34 +86,64 @@ export const CartistaArcano = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.5 }}
             className={`flex flex-col p-8 rounded-xl ${tema.bg} border ${tema.border} backdrop-blur-md`}
           >
-            <Spade size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Cartas Afiadas</h3>
+            <Layers size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Baralho Arcano</h3>
             <p className="text-amber-200/60 leading-relaxed text-sm">
-              Use as cartas de um baralho comum infundidas com Fluxo como armas de arremesso letais. Além do dano base, magias conjuradas através delas podem carregar os efeitos até o alvo marcado.
+              O conceito central da classe: você conjura por cartas preparadas de antemão, não por magia solta. Cada estágio ensina mais uma magia do seu Fluxo nativo, e no auge você joga duas cartas por turno, a primeira sem custar Mana.
             </p>
           </PremiumCard>
 
           <PremiumCard
             glowColor={tema.glow}
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className={`flex flex-col p-8 rounded-xl ${tema.bg} border ${tema.border} backdrop-blur-md`}
+          >
+            <Spade size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Cartas Afiadas</h3>
+            <p className="text-amber-200/60 leading-relaxed text-sm">
+              Use as cartas de um baralho comum infundidas com Fluxo como armas de arremesso letais, e aprenda um Naipe Arcano por estágio: Espadas ignora Resistência, Copas cura de raspão, Ouros empurra e Paus queima. Todo naipe aprendido fica disponível pra escolher a cada arremesso.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
             className={`flex flex-col p-8 rounded-xl ${tema.bg} border ${tema.border} backdrop-blur-md`}
           >
             <Dices size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Dados Viciados</h3>
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Dados Viciados</h3>
             <p className="text-amber-200/60 leading-relaxed text-sm">
               O mestre do acaso. Uma vez por sessão, depois de ver uma rolagem de d20, substitua o dado por um 10 natural antes de aplicar os modificadores. Não escolhe crítico, desastre ou qualquer outro resultado arbitrário.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className={`flex flex-col p-8 rounded-xl ${tema.bg} border ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-amber-200/60 leading-relaxed text-sm">
+              Todo efeito seu que obriga um alvo a resistir rola Misticismo no momento em que aciona: o resultado vira a DT que ele precisa alcançar. É diferente da DT de conjuração normal (7 + 3 × o círculo da magia), que já vale sozinha pra toda magia que você lança.
             </p>
           </PremiumCard>
         </div>

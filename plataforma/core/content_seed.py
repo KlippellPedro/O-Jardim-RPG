@@ -111,20 +111,30 @@ def sync_shop_catalog(database: Database, data_root: Path) -> int:
 
 
 def seed_world_library(database: Database, data_root: Path) -> int:
-    """Carrega a biblioteca de Mundo empacotada, sem liberar nada a jogadores."""
+    """Carrega as bibliotecas editoriais empacotadas, sem publicar campanhas."""
     world_root = data_root / "mundo"
     if not world_root.exists():
         log.warning("Biblioteca de Mundo ausente em %s", world_root)
-        return 0
 
     entries: dict[tuple[str, str], dict] = {}
-    for path in world_root.rglob("*.json"):
+    world_paths = world_root.rglob("*.json") if world_root.exists() else ()
+    for path in world_paths:
         if path.name.startswith("_"):
             continue
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             log.exception("Falha ao ler conteudo de Mundo em %s", path)
+            continue
+        if path.name == "cronicas-arvores.json" and isinstance(payload, dict):
+            introduction = payload.get("introducao")
+            title = introduction.get("titulo") if isinstance(introduction, dict) else None
+            entries[("cronologia", "cronicas-arvores")] = {
+                "tipo": "cronologia",
+                "id": "cronicas-arvores",
+                "titulo": str(title or "Crônicas do Jardim"),
+                "conteudo": payload,
+            }
             continue
         candidates = payload.get("entradas") if isinstance(payload, dict) else None
         if not isinstance(candidates, list):
@@ -138,12 +148,15 @@ def seed_world_library(database: Database, data_root: Path) -> int:
             content = item.get("conteudo")
             if not entry_type or not entry_id or not title or not isinstance(content, dict):
                 continue
-            entries[(entry_type, entry_id)] = {
+            document = {
                 "tipo": entry_type,
                 "id": entry_id,
                 "titulo": title,
                 "conteudo": content,
             }
+            if isinstance(item.get("revelado"), bool):
+                document["revelado"] = item["revelado"]
+            entries[(entry_type, entry_id)] = document
 
     rules_path = data_root / "regras" / "mestre-v1.json"
     master_rules = None
@@ -155,21 +168,198 @@ def seed_world_library(database: Database, data_root: Path) -> int:
         except (OSError, json.JSONDecodeError):
             log.exception("Falha ao ler regras protegidas em %s", rules_path)
 
+    rules_entries: dict[tuple[str, str], dict] = {}
+    editorial_rules_path = data_root / "regras" / "regras-editorial.json"
+    if editorial_rules_path.exists():
+        try:
+            rules_payload = json.loads(editorial_rules_path.read_text(encoding="utf-8"))
+            candidates = rules_payload.get("entradas") if isinstance(rules_payload, dict) else None
+            if isinstance(candidates, list):
+                for item in candidates:
+                    if not isinstance(item, dict):
+                        continue
+                    resource_id = str(item.get("id") or "").strip()
+                    title = str(item.get("titulo") or "").strip()
+                    content = item.get("conteudo")
+                    if resource_id and title and isinstance(content, dict):
+                        rules_entries[("regra", resource_id)] = {
+                            "tipo": "regra", "id": resource_id,
+                            "titulo": title, "conteudo": content,
+                        }
+        except (OSError, json.JSONDecodeError):
+            log.exception("Falha ao ler capítulos editoriais em %s", editorial_rules_path)
+
+    for entry_type, filename in (("classe", "classes.json"), ("raca", "racas.json")):
+        catalog_path = data_root / "ficha" / filename
+        if not catalog_path.exists():
+            continue
+        try:
+            candidates = json.loads(catalog_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            log.exception("Falha ao ler catálogo editorial em %s", catalog_path)
+            continue
+        if not isinstance(candidates, list):
+            continue
+        for item in candidates:
+            if not isinstance(item, dict):
+                continue
+            resource_id = str(item.get("id") or "").strip()
+            title = str(item.get("titulo") or "").strip()
+            if not resource_id or not title:
+                continue
+            content = {
+                key: value
+                for key, value in item.items()
+                if key not in {"id", "tipo", "titulo"}
+            }
+            rules_entries[(entry_type, resource_id)] = {
+                "tipo": entry_type, "id": resource_id,
+                "titulo": title, "conteudo": content,
+            }
+
+    magic_path = data_root / "ficha" / "magias.json"
+    if magic_path.exists():
+        try:
+            magic_payload = json.loads(magic_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            log.exception("Falha ao ler catálogo mágico editorial em %s", magic_path)
+            magic_payload = {}
+        for entry_type, collection in (
+            ("fluxo", "fluxos"),
+            ("magia", "magias"),
+            ("ritual", "rituais"),
+            ("selo", "selos"),
+            ("encantamento", "encantamentos"),
+        ):
+            candidates = magic_payload.get(collection) if isinstance(magic_payload, dict) else None
+            if not isinstance(candidates, list):
+                continue
+            for item in candidates:
+                if not isinstance(item, dict):
+                    continue
+                resource_id = str(item.get("id") or "").strip()
+                title = str(item.get("titulo") or "").strip()
+                if not resource_id or not title:
+                    continue
+                rules_entries[(entry_type, resource_id)] = {
+                    "tipo": entry_type,
+                    "id": resource_id,
+                    "titulo": title,
+                    "conteudo": {
+                        key: value for key, value in item.items()
+                        if key not in {"id", "tipo", "titulo"}
+                    },
+                }
+
+    skills_path = data_root / "ficha" / "pericias.json"
+    if skills_path.exists():
+        try:
+            skills_payload = json.loads(skills_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            log.exception("Falha ao ler perícias editoriais em %s", skills_path)
+            skills_payload = {}
+        candidates = skills_payload.get("pericias") if isinstance(skills_payload, dict) else None
+        if isinstance(candidates, list):
+            for item in candidates:
+                if not isinstance(item, dict):
+                    continue
+                resource_id = str(item.get("id") or "").strip()
+                title = str(item.get("titulo") or "").strip()
+                if resource_id and title:
+                    rules_entries[("pericia", resource_id)] = {
+                        "tipo": "pericia", "id": resource_id, "titulo": title,
+                        "conteudo": {
+                            key: value for key, value in item.items()
+                            if key not in {"id", "tipo", "titulo"}
+                        },
+                    }
+
+    legacy_rules_path = data_root / "ficha" / "legados-regras-v1.json"
+    legacy_rules: dict[str, dict] = {}
+    if legacy_rules_path.exists():
+        try:
+            legacy_rules_payload = json.loads(legacy_rules_path.read_text(encoding="utf-8"))
+            candidate_rules = legacy_rules_payload.get("regras") if isinstance(legacy_rules_payload, dict) else None
+            if isinstance(candidate_rules, dict):
+                legacy_rules = {
+                    str(key): value for key, value in candidate_rules.items()
+                    if isinstance(value, dict)
+                }
+        except (OSError, json.JSONDecodeError):
+            log.exception("Falha ao ler regras editoriais de Legados em %s", legacy_rules_path)
+    for filename, collection in (("legados.json", "legados"), ("legados-novos.json", "novos")):
+        legacy_path = data_root / "ficha" / filename
+        if not legacy_path.exists():
+            continue
+        try:
+            legacy_payload = json.loads(legacy_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            log.exception("Falha ao ler Legados editoriais em %s", legacy_path)
+            continue
+        candidates = legacy_payload.get(collection) if isinstance(legacy_payload, dict) else None
+        if not isinstance(candidates, list):
+            continue
+        for item in candidates:
+            if not isinstance(item, dict):
+                continue
+            resource_id = str(item.get("id") or "").strip()
+            title = str(item.get("titulo") or "").strip()
+            if not resource_id or not title:
+                continue
+            merged = {**item, **legacy_rules.get(resource_id, {})}
+            rules_entries[("legado", resource_id)] = {
+                "tipo": "legado", "id": resource_id, "titulo": title,
+                "conteudo": {
+                    key: value for key, value in merged.items()
+                    if key not in {"id", "tipo", "titulo"}
+                },
+            }
+
+    conditions_path = data_root / "regras" / "condicoes-editorial.json"
+    if conditions_path.exists():
+        try:
+            conditions_payload = json.loads(conditions_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            log.exception("Falha ao ler condições editoriais em %s", conditions_path)
+            conditions_payload = {}
+        candidates = conditions_payload.get("entradas") if isinstance(conditions_payload, dict) else None
+        if isinstance(candidates, list):
+            for item in candidates:
+                if not isinstance(item, dict):
+                    continue
+                entry_type = str(item.get("tipo") or "").strip()
+                resource_id = str(item.get("id") or "").strip()
+                title = str(item.get("titulo") or "").strip()
+                if entry_type in {"condicao", "crise"} and resource_id and title:
+                    rules_entries[(entry_type, resource_id)] = {
+                        "tipo": entry_type, "id": resource_id, "titulo": title,
+                        "conteudo": {
+                            key: value for key, value in item.items()
+                            if key not in {"id", "tipo", "titulo"}
+                        },
+                    }
+
     with database.connection() as connection:
-        for (entry_type, entry_id), item in entries.items():
-            connection.execute(
-                """
-                INSERT INTO biblioteca_conteudo
-                    (modulo, tipo, chave_recurso, titulo, dados, ativo, atualizado_em)
-                VALUES ('mundo', %s, %s, %s, %s, TRUE, CURRENT_TIMESTAMP)
-                ON CONFLICT (modulo, tipo, chave_recurso) DO UPDATE SET
-                    titulo=EXCLUDED.titulo,
-                    dados=EXCLUDED.dados,
-                    ativo=TRUE,
-                    atualizado_em=CURRENT_TIMESTAMP
-                """,
-                (entry_type, entry_id, item["titulo"], Jsonb(item)),
-            )
+        if entries:
+            # executemany faz pipeline no psycopg3 - uma viagem de rede pro
+            # lote inteiro, em vez de uma por linha, no boot de todo restart.
+            with connection.cursor() as cursor:
+                cursor.executemany(
+                    """
+                    INSERT INTO biblioteca_conteudo
+                        (modulo, tipo, chave_recurso, titulo, dados, ativo, atualizado_em)
+                    VALUES ('mundo', %s, %s, %s, %s, TRUE, CURRENT_TIMESTAMP)
+                    ON CONFLICT (modulo, tipo, chave_recurso) DO UPDATE SET
+                        titulo=EXCLUDED.titulo,
+                        dados=EXCLUDED.dados,
+                        ativo=TRUE,
+                        atualizado_em=CURRENT_TIMESTAMP
+                    """,
+                    [
+                        (entry_type, entry_id, item["titulo"], Jsonb(item))
+                        for (entry_type, entry_id), item in entries.items()
+                    ],
+                )
         if master_rules:
             connection.execute(
                 """
@@ -184,6 +374,37 @@ def seed_world_library(database: Database, data_root: Path) -> int:
                 """,
                 (master_rules.get("titulo") or "Ferramentas do Mestre", Jsonb(master_rules)),
             )
-    total = len(entries) + (1 if master_rules else 0)
+        rule_ids_by_type: dict[str, list[str]] = {}
+        for entry_type, entry_id in rules_entries:
+            rule_ids_by_type.setdefault(entry_type, []).append(entry_id)
+        for entry_type, active_ids in rule_ids_by_type.items():
+            connection.execute(
+                """
+                UPDATE biblioteca_conteudo
+                SET ativo=FALSE, atualizado_em=CURRENT_TIMESTAMP
+                WHERE modulo='regras' AND tipo=%s
+                  AND NOT (chave_recurso = ANY(%s))
+                """,
+                (entry_type, active_ids),
+            )
+        if rules_entries:
+            with connection.cursor() as cursor:
+                cursor.executemany(
+                    """
+                    INSERT INTO biblioteca_conteudo
+                        (modulo, tipo, chave_recurso, titulo, dados, ativo, atualizado_em)
+                    VALUES ('regras', %s, %s, %s, %s, TRUE, CURRENT_TIMESTAMP)
+                    ON CONFLICT (modulo, tipo, chave_recurso) DO UPDATE SET
+                        titulo=EXCLUDED.titulo,
+                        dados=EXCLUDED.dados,
+                        ativo=TRUE,
+                        atualizado_em=CURRENT_TIMESTAMP
+                    """,
+                    [
+                        (entry_type, entry_id, item["titulo"], Jsonb(item))
+                        for (entry_type, entry_id), item in rules_entries.items()
+                    ],
+                )
+    total = len(entries) + len(rules_entries) + (1 if master_rules else 0)
     log.info("Biblioteca central protegida atualizada: %s entradas.", total)
     return total

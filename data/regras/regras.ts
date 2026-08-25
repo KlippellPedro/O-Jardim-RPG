@@ -12,6 +12,8 @@ import { REGRA_BASES } from './bases';
 import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from './condicoes';
 import { REGRA_CRAFTING } from './crafting';
 import { REGRA_MUNDO_FACCOES } from './faccoes';
+import { REGRA_MATERIAIS } from './materiais';
+import { REGRA_TRANSPORTE } from './transporte';
 import {
   CATEGORIAS_MODIFICACAO,
   DONS_RARIDADE_POR_CATEGORIA,
@@ -21,7 +23,11 @@ import {
   REGRAS_MODIFICACOES_EQUIPAMENTO,
   ROTULO_RARIDADE_MINIMA_MODIFICACAO,
 } from './raridadesEquipamentos';
-import { REGRA_VEICULOS } from './veiculosCombate';
+import {
+  REGRA_VEICULOS_CENAS,
+  REGRA_VEICULOS_CONDUCAO,
+  REGRA_VEICULOS_MANUTENCAO,
+} from './veiculosCombate';
 
 import type { RegrasCatalog } from './tipos';
 
@@ -463,20 +469,20 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p class="regras-lead">Esta é a página que você consulta para saber com quem está lidando. As fórmulas são as mesmas para todo mundo, então dá para prever a ficha de um personagem sabendo só o nível e o tipo de classe dele.</p>
 
       <h3 class="regras-subtitle">O personagem de referência</h3>
-      <p>Todas as 27 classes gastam o mesmo orçamento de 7 pontos por nível, distribuído entre Vida e Mana em três proporções. A tabela abaixo é o personagem médio de cada proporção, calculada com Constituição 14 e Sabedoria 10. Use como piso ao montar encontro.</p>
+      <p>Todas as 26 classes gastam o mesmo orçamento de 7 pontos por nível, distribuído entre Vida e Mana em cinco graus. A tabela abaixo é o personagem médio de cada grau, calculada com Constituição 14 e Sabedoria 10. Use como piso ao montar encontro.</p>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Nível</th><th>Marcial 5/2</th><th>Misto 4/3</th><th>Conjurador 3/4</th><th>Defesa</th><th>Poderes</th></tr></thead>
+        <thead><tr><th>Nível</th><th>Marcial Puro 6/1</th><th>Marcial 5/2</th><th>Misto 4/3</th><th>Conjurador 3/4</th><th>Conjurador Puro 2/5</th><th>Defesa</th><th>Poderes</th></tr></thead>
         <tbody>
-          <tr><td><strong>1</strong></td><td>16 / 8</td><td>16 / 8</td><td>16 / 8</td><td>11</td><td>0</td></tr>
-          <tr><td><strong>5</strong></td><td>44 / 16</td><td>40 / 20</td><td>36 / 24</td><td>13</td><td>1</td></tr>
-          <tr><td><strong>10</strong></td><td>79 / 26</td><td>70 / 35</td><td>61 / 44</td><td>16</td><td>3</td></tr>
-          <tr><td><strong>15</strong></td><td>114 / 36</td><td>100 / 50</td><td>86 / 64</td><td>18</td><td>5</td></tr>
-          <tr><td><strong>20</strong></td><td>149 / 46</td><td>130 / 65</td><td>111 / 84</td><td>21</td><td>8</td></tr>
-          <tr><td><strong>30</strong></td><td>204 / 81</td><td>185 / 100</td><td>166 / 119</td><td>26</td><td>8</td></tr>
-          <tr><td><strong>40</strong></td><td>259 / 116</td><td>240 / 135</td><td>221 / 154</td><td>31</td><td>8</td></tr>
+          <tr><td><strong>1</strong></td><td>14 / 1</td><td>13 / 2</td><td>12 / 3</td><td>11 / 4</td><td>10 / 5</td><td>11</td><td>0</td></tr>
+          <tr><td><strong>5</strong></td><td>38 / 5</td><td>33 / 10</td><td>28 / 15</td><td>23 / 20</td><td>18 / 25</td><td>13</td><td>1</td></tr>
+          <tr><td><strong>10</strong></td><td>68 / 10</td><td>58 / 20</td><td>48 / 30</td><td>38 / 40</td><td>28 / 50</td><td>16</td><td>3</td></tr>
+          <tr><td><strong>15</strong></td><td>98 / 15</td><td>83 / 30</td><td>68 / 45</td><td>53 / 60</td><td>38 / 75</td><td>18</td><td>5</td></tr>
+          <tr><td><strong>20</strong></td><td>128 / 20</td><td>108 / 40</td><td>88 / 60</td><td>68 / 80</td><td>48 / 100</td><td>21</td><td>8</td></tr>
+          <tr><td><strong>30</strong></td><td>188 / 30</td><td>158 / 60</td><td>128 / 90</td><td>98 / 120</td><td>68 / 150</td><td>26</td><td>8</td></tr>
+          <tr><td><strong>40</strong></td><td>248 / 40</td><td>208 / 80</td><td>168 / 120</td><td>128 / 160</td><td>88 / 200</td><td>31</td><td>8</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">Cinco classes são marciais, oito são mistas e catorze são conjuradoras. Num grupo comum de quatro, some as Vidas da coluna certa e multiplique o dano do grupo por rodada por 4,5: sai a Vida efetiva do encontro padrão.</p>
+      <p class="regras-note">Uma classe é Marcial Puro, quatro são Marciais, sete são Mistas, treze são Conjuradoras e três são Conjuradoras Puras. Num grupo comum de quatro, some as Vidas da coluna certa e multiplique o dano do grupo por rodada por 4,5: sai a Vida efetiva do encontro padrão.</p>
 
       <h3 class="regras-subtitle">Conferir maestria</h3>
       <ul class="regras-list">
@@ -685,6 +691,25 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Bônus fixo e dado extra vindos de habilidade, veneno ou efeito externo entram <strong>uma vez só</strong>. Eles só multiplicam se a própria habilidade disser que multiplica.</li>
         <li>Margem larga e multiplicador alto não andam juntos: 18-20 e 19-20 sempre com x2; x3 e x4 sempre com margem 20.</li>
         <li>Cobertura parcial dá +2 de Defesa; cobertura superior dá +5.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Manobras</h3>
+      <p>Nem todo ataque quer causar dano. Manobra gasta a mesma Ação Padrão de um ataque e usa a mesma rolagem, contra a defesa passiva do alvo: <strong>10 mais o bônus total</strong> da defesa indicada.</p>
+      <div class="regras-formula">d20 + Luta contra 10 + Reflexos ou Fortitude do alvo</div>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Manobra</th><th>Contra</th><th>Sucesso</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Agarrar</strong></td><td>10 + Reflexos</td><td>O alvo fica Agarrado. Você fica preso a ele enquanto segurar.</td></tr>
+          <tr><td><strong>Derrubar</strong></td><td>10 + Reflexos</td><td>O alvo fica Caído.</td></tr>
+          <tr><td><strong>Empurrar</strong></td><td>10 + Fortitude</td><td>O alvo recua 1,5 m, mais 1,5 m a cada 5 pontos acima da defesa.</td></tr>
+          <tr><td><strong>Desarmar</strong></td><td>10 + Reflexos</td><td>Um item que o alvo segura cai no espaço dele.</td></tr>
+          <tr><td><strong>Imobilizar</strong></td><td>10 + Fortitude</td><td>Só contra alvo já Agarrado. Ele fica Imobilizado.</td></tr>
+        </tbody>
+      </table></div>
+      <ul class="regras-list">
+        <li>Escapar de Agarrado ou Imobilizado custa uma Ação Padrão e um teste de Atletismo ou Acrobacia contra 10 mais a Luta de quem segura.</li>
+        <li>Criatura duas categorias de tamanho maior que você não é agarrada, derrubada nem empurrada sem uma regra que autorize.</li>
+        <li>Manobra não causa dano por si só. Habilidade que somar dano a uma manobra diz isso no texto.</li>
       </ul>
 
       <h3 class="regras-subtitle">Reações</h3>
@@ -1447,7 +1472,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Trocar um carregador usa a ação de movimento. Munição avulsa e arma pesada podem cobrar ação padrão quando a arma declarar isso.</li>
       </ul>
 
-      <p class="regras-note">Raridade, orçamento de poder e o catálogo de modificações ficam no capítulo <strong>Raridades e Modificações</strong>, logo em seguida.</p>
+      <p class="regras-note">Orçamento de poder fica em <strong>Raridades de Equipamento</strong>; as opções prontas e seus preços ficam em <strong>Modificações de Equipamento</strong>.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">Equipamento é o eixo que você controla sem tocar na ficha de ninguém. Vida e Defesa vêm do nível; dano e Resistência vêm do que o grupo carrega, e é aí que você mexe.</p>
@@ -1476,11 +1501,11 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   'raridades-modificacoes': {
     categoria: 'Combate e Mecânicas',
     status: 'Regra oficial',
-    resumo: 'Até onde cada raridade pode ir, como uma modificação entra na ficha e as 51 modificações prontas, com preço de encomenda.',
+    resumo: 'Até onde cada raridade pode ir, quantas modificações e efeitos um item comporta e quais dons visuais cada categoria pode manifestar.',
     destaques: [
       ['Raridade', 'é orçamento, não bônus fixo'],
-      ['Modificação', '1 efeito automático cada'],
-      ['Catálogo', '51 modificações com preço']
+      ['Faixas', 'Comum a Relíquia da Criação'],
+      ['Dons', 'definidos pela categoria do item'],
     ],
     corpo: `
       <h3 class="regras-subtitle">Raridades e orçamento de poder</h3>
@@ -1489,28 +1514,6 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <thead><tr><th>Raridade</th><th>Mods.</th><th>Efeitos próprios</th><th>Valor por efeito</th><th>Regra</th></tr></thead>
         <tbody>${tabelaRaridadesEquipamento}</tbody>
       </table></div>
-
-      <h3 class="regras-subtitle">Modificações e efeitos na ficha</h3>
-      <ul class="regras-list">${REGRAS_MODIFICACOES_EQUIPAMENTO.map((regra) => `<li>${regra}</li>`).join('')}</ul>
-      <p class="regras-note">Uma modificação pode conceder Vida máxima, Defesa, Ataque, atributo ou bônus em perícia. Ao guardar ou desequipar o item, a ficha remove os ajustes automaticamente.</p>
-
-      <h3 class="regras-subtitle">Como ler uma modificação</h3>
-      <ul class="regras-list">
-        <li><strong>Nível:</strong> <strong>Comum</strong> entra em qualquer item. <strong>Marcial</strong> bate mais forte e só entra em arma marcial ou exótica, armadura pesada e item Raro ou melhor.</li>
-        <li><strong>Valor:</strong> o peso do efeito automático. Compare com a coluna "Valor por efeito" da tabela ali em cima para saber de qual raridade o item precisa ser.</li>
-        <li><strong>Técnica:</strong> não tem efeito automático. Ocupa espaço de modificação, mas não gasta o orçamento de efeito da raridade.</li>
-        <li><strong>Pré-requisito:</strong> cobra de <em>quem usa</em>, não do item. Perdeu o requisito, a modificação desliga até você cumprir de novo.</li>
-      </ul>
-      <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Faixa</th><th>Preço de encomenda</th><th>Raridade mínima do item</th></tr></thead>
-        <tbody>${tabelaPrecoModificacoes}</tbody>
-      </table></div>
-      <p class="regras-note">A Loja vende cada uma delas na categoria <strong>Modificações</strong>, com o preço já aplicado. Marcial só aparece a partir da Metrópole.</p>
-
-      <h3 class="regras-subtitle">Catálogo de modificações</h3>
-      <p class="regras-lead">O catálogo contém ${MODIFICACOES_EQUIPAMENTO.length} modificações, agrupadas pela categoria do equipamento.</p>
-      ${tabelaModificacoesEquipamento}
-      <p class="regras-note">Isso aqui é ponto de partida, não lista fechada. Modificação nova passa, desde que respeite o valor máximo por efeito da raridade e o nível condizente com o equipamento.</p>
 
       <h3 class="regras-subtitle">Dons definidos por categoria</h3>
       <p>Cada raridade também possui uma manifestação por categoria. A descrição pode alterar aparência e comportamento, sem aumentar o efeito mecânico.</p>
@@ -1543,18 +1546,69 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     `,
   },
 
-  crafting: REGRA_CRAFTING,
+  'modificacoes-equipamentos': {
+    categoria: 'Combate e Mecânicas',
+    status: 'Catálogo oficial',
+    resumo: 'Como modificações entram na ficha, quanto custa uma encomenda e o catálogo completo agrupado pela categoria do equipamento.',
+    destaques: [
+      ['Modificação', '1 efeito automático cada'],
+      ['Catálogo', `${MODIFICACOES_EQUIPAMENTO.length} modificações`],
+      ['Consulta', 'agrupada por categoria'],
+    ],
+    corpo: `
+      <p class="regras-lead">Use esta página depois de conferir o orçamento no capítulo <strong>Raridades de Equipamento</strong>. Primeiro identifique o nível e o valor da modificação; depois abra somente a categoria do item que você está melhorando.</p>
 
-  veiculos: REGRA_VEICULOS,
+      <h3 class="regras-subtitle">Modificações e efeitos na ficha</h3>
+      <ul class="regras-list">${REGRAS_MODIFICACOES_EQUIPAMENTO.map((regra) => `<li>${regra}</li>`).join('')}</ul>
+      <p class="regras-note">Uma modificação pode conceder Vida máxima, Defesa, Ataque, atributo ou bônus em perícia. Ao guardar ou desequipar o item, a ficha remove os ajustes automaticamente.</p>
+
+      <h3 class="regras-subtitle">Como ler uma modificação</h3>
+      <ul class="regras-list">
+        <li><strong>Nível:</strong> <strong>Comum</strong> entra em qualquer item. <strong>Marcial</strong> bate mais forte e só entra em arma marcial ou exótica, armadura pesada e item Raro ou melhor.</li>
+        <li><strong>Valor:</strong> o peso do efeito automático. Compare com a coluna "Valor por efeito" da tabela de raridades para saber de qual faixa o item precisa ser.</li>
+        <li><strong>Técnica:</strong> não tem efeito automático. Ocupa espaço de modificação, mas não gasta o orçamento de efeito da raridade.</li>
+        <li><strong>Pré-requisito:</strong> cobra de <em>quem usa</em>, não do item. Perdeu o requisito, a modificação desliga até você cumprir de novo.</li>
+      </ul>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Faixa</th><th>Preço de encomenda</th><th>Raridade mínima do item</th></tr></thead>
+        <tbody>${tabelaPrecoModificacoes}</tbody>
+      </table></div>
+      <p class="regras-note">A Loja vende cada uma delas na categoria <strong>Modificações</strong>, com o preço já aplicado. Marcial só aparece a partir da Metrópole.</p>
+
+      <h3 class="regras-subtitle">Catálogo por categoria</h3>
+      <p>Existem ${MODIFICACOES_EQUIPAMENTO.length} modificações. Cada grupo abaixo começa fechado: abra apenas Armas, Armaduras, Escudos ou a categoria que corresponde ao item.</p>
+      ${tabelaModificacoesEquipamento}
+      <p class="regras-note">O catálogo é um ponto de partida, não uma lista fechada. Modificação nova precisa respeitar o valor máximo por efeito da raridade e o nível condizente com o equipamento.</p>
+    `,
+    corpoMestre: `
+      <p class="regras-lead">Aprovar uma modificação exige conferir três coisas separadas: se o item tem espaço, se a raridade comporta o valor automático e se quem usa cumpre o pré-requisito. A ficha automatiza o efeito, mas não substitui essa conferência.</p>
+
+      <h3 class="regras-subtitle">Avaliar uma encomenda</h3>
+      <ul class="regras-list">
+        <li>Técnica ocupa espaço, mas não consome orçamento de efeito. Modificação com valor consome os dois limites e precisa caber na raridade.</li>
+        <li>Marcial só entra nos equipamentos e nas raridades indicadas. Não transforme o preço maior em permissão para ignorar o requisito.</li>
+        <li>Para efeito novo, compare com entradas de mesmo valor e categoria. O número automático deve respeitar a faixa publicada antes de qualquer ajuste narrativo.</li>
+        <li>Deixe a escolha com o grupo quando a encomenda estiver disponível. Item escolhido tende a ser usado e torna o gasto de Lunaris uma decisão real.</li>
+      </ul>
+    `,
+  },
+
+  crafting: REGRA_CRAFTING,
+  materiais: REGRA_MATERIAIS,
+
+  veiculos: REGRA_VEICULOS_CONDUCAO,
+  'veiculos-cenas': REGRA_VEICULOS_CENAS,
+  'veiculos-manutencao': REGRA_VEICULOS_MANUTENCAO,
+  transporte: REGRA_TRANSPORTE,
 
   'magia-fluxo': {
     categoria: 'Livro do Jogador',
     status: 'Regra oficial',
-    resumo: 'Onze Fluxos aproveitáveis em magia, ritual, selo e encantamento, mais a fusão entre um Fluxo principal e um secundário.',
+    resumo: 'Os onze Fluxos, a fórmula de conjuração, a progressão dos círculos, os custos de Mana e as regras para manter concentração.',
     destaques: [
       ['Teste', 'd20 + Mod. Fluxo + Misticismo + classe'],
       ['Círculos', '1º ao 10º'],
-      ['Catálogo', '33 magias + 33 manifestações'],
+      ['Fluxos', '10 naturais + Tecnologia'],
     ],
     corpo: `
       <p class="regras-lead">A classe diz <strong>como</strong> você manipula a magia; o Fluxo nativo diz <strong>o que</strong> sai dali. São dez Fluxos naturais mais o artificial da Tecnologia: onze formas utilizáveis no total.</p>
@@ -1598,6 +1652,45 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </table></div>
       <p class="regras-note">Esses custos são a referência do círculo. Cada entrada do catálogo declara o custo final dela, que é o que vale na mesa.</p>
 
+      <h3 class="regras-subtitle">Concentração</h3>
+      <ul class="regras-list">
+        <li>Uma magia ou efeito de concentração por vez. Começar outro encerra o anterior na hora, sem aviso.</li>
+        <li>Ao sofrer dano, role Vontade contra DT 10 ou metade do dano recebido, o que for maior. Falhou, a concentração cai.</li>
+        <li>Ficar Atordoado, Inconsciente ou incapaz de agir também derruba. Largar de propósito não custa ação nenhuma.</li>
+        <li>A duração máxima está escrita na magia. Pagar Mana de novo não estica uma conjuração que já está de pé.</li>
+      </ul>
+
+    `,
+    corpoMestre: `
+      <p class="regras-lead">Magia aqui tem dois portões, e os dois são seus: quem tem acesso a um Fluxo e quem chega ao círculo alto. Fluxo alto sozinho não ensina magia nenhuma, então a torneira nunca abre por acidente.</p>
+
+      <h3 class="regras-subtitle">Conceder acesso</h3>
+      <ul class="regras-list">
+        <li>Cada alma nasce com um Fluxo natural e só um. Segundo Fluxo sempre vem de fora, por artefato, relíquia ou núcleo tecnológico, e nunca passa a morar na alma. Quando entregar um desses itens, você está entregando um Fluxo inteiro: pese como tal.</li>
+        <li>O Fluxo do Fim exige sua autorização antes da escolha. Autorizado, funciona como qualquer outro, então a decisão é de tom de campanha, não de balanceamento.</li>
+        <li>Concessão de magia fora da classe não gera Cicatriz. Se você quer o poder sem o preço, é esse o caminho, e ele é legítimo.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">A DT de conjuração trabalha por você</h3>
+      <ul class="regras-list">
+        <li>A DT é 7 mais três vezes o círculo, e a Mana sai na declaração, mesmo se o teste falhar. Um conjurador que tenta o círculo máximo dele está apostando recurso, não gastando de graça.</li>
+        <li>A mesma rolagem é lida duas vezes: contra a DT do círculo para estabilizar e contra a defesa do alvo. Estabilizar e ser resistido acontece, e vale explicar na primeira vez.</li>
+        <li>Metade do nível não entra nessa fórmula, de propósito. Isso mantém o conjurador dependente do atributo Fluxo e do grau de Misticismo, e não do nível puro.</li>
+      </ul>
+
+    `,
+  },
+
+  'marcas-cicatrizes': {
+    categoria: 'Livro do Jogador',
+    status: 'Regra oficial',
+    resumo: 'Os ganhos e os ônus que surgem do 5º ao 10º círculo, com as Marcas fixas de cada Fluxo e a tabela comum de Cicatrizes.',
+    destaques: [
+      ['Marcas', '5º ao 9º círculo'],
+      ['Cicatrizes', 'magias de 10º círculo'],
+      ['Registro', 'contam como Legado sem ocupar vaga'],
+    ],
+    corpo: `
       <h3 class="regras-subtitle">O preço dos círculos altos</h3>
       <p class="regras-lead">Magia grande não sai de graça. A partir do 5º círculo, o Fluxo começa a deixar marca em quem o carrega, e no 10º ele cobra por magia aprendida. Todo preço tem os dois lados: um ganho concreto e um ônus concreto.</p>
       <ul class="regras-list">
@@ -1616,14 +1709,31 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <thead><tr><th>Cicatriz</th><th>Ganho</th><th>Ônus</th></tr></thead>
         <tbody>${tabelaCicatrizes}</tbody>
       </table></div>
+    `,
+    corpoMestre: `
+      <p class="regras-lead">Marcas são consequências públicas e previsíveis da progressão; Cicatrizes são registradas quando a magia de 10º círculo é aprendida. Use os ônus na ficção sem acrescentar penalidades que a entrada não declara.</p>
 
-      <h3 class="regras-subtitle">Concentração</h3>
+      <h3 class="regras-subtitle">Conduzir os preços mágicos</h3>
       <ul class="regras-list">
-        <li>Uma magia ou efeito de concentração por vez. Começar outro encerra o anterior na hora, sem aviso.</li>
-        <li>Ao sofrer dano, role Vontade contra DT 10 ou metade do dano recebido, o que for maior. Falhou, a concentração cai.</li>
-        <li>Ficar Atordoado, Inconsciente ou incapaz de agir também derruba. Largar de propósito não custa ação nenhuma.</li>
-        <li>A duração máxima está escrita na magia. Pagar Mana de novo não estica uma conjuração que já está de pé.</li>
+        <li>Do 5º ao 9º, cada círculo entrega a Marca fixa daquele Fluxo. O jogador pode consultar a tabela antes de avançar, então não substitua a entrada depois da escolha.</li>
+        <li>No 10º, cada magia aprendida sorteia uma Cicatriz, e a mesma não sai duas vezes para a mesma pessoa. Faça o sorteio na mesa e registre o resultado na hora.</li>
+        <li>Marca e Cicatriz contam como Legado para efeitos que citam Legados, mas não ocupam vaga. Concessão do Mestre não gera Cicatriz.</li>
+        <li>Ônus social ou de rotina deve produzir consequência coerente, não uma punição numérica improvisada.</li>
       </ul>
+    `,
+  },
+
+  'rituais-selos': {
+    categoria: 'Livro do Jogador',
+    status: 'Regra oficial',
+    resumo: 'Como funcionam rituais fora de combate, fusões com um Fluxo secundário, selos consumíveis e encantamentos permanentes.',
+    destaques: [
+      ['Rituais', 'fora de combate e sem círculo'],
+      ['Fusão', '1 Fluxo secundário'],
+      ['Encantamentos', 'limitados pela raridade'],
+    ],
+    corpo: `
+      <p class="regras-lead">Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de círculo. Consulte cada bloco pelo tipo de preparação que o personagem está tentando realizar.</p>
 
       <h3 class="regras-subtitle">Rituais</h3>
       <ul class="regras-list">
@@ -1647,39 +1757,52 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Encantamento é padrão permanente, aplicado a um item, uma criatura ou um lugar.</li>
         <li>Quantos encantamentos cabem por raridade: Comum 1, Incomum 2, Raro 3, Épico 4 e Lendário 5.</li>
       </ul>
-
-      <h3 class="regras-subtitle">Catálogo</h3>
-      <p>Use os filtros abaixo para procurar magias, rituais, selos, encantamentos e assinaturas de fusão.</p>
     `,
     corpoMestre: `
-      <p class="regras-lead">Magia aqui tem dois portões, e os dois são seus: quem tem acesso a um Fluxo e quem chega ao círculo alto. Fluxo alto sozinho não ensina magia nenhuma, então a torneira nunca abre por acidente.</p>
+      <p class="regras-lead">Ritual, selo e encantamento dependem de tempo e oportunidade na ficção. Confirme a fonte de aprendizado, a preparação disponível e o momento em que a Mana ou o recurso é comprometido antes de resolver o efeito.</p>
 
-      <h3 class="regras-subtitle">Conceder acesso</h3>
+      <h3 class="regras-subtitle">Preparação e interrupção</h3>
       <ul class="regras-list">
-        <li>Cada alma nasce com um Fluxo natural e só um. Segundo Fluxo sempre vem de fora, por artefato, relíquia ou núcleo tecnológico, e nunca passa a morar na alma. Quando entregar um desses itens, você está entregando um Fluxo inteiro: pese como tal.</li>
-        <li>O Fluxo do Fim exige sua autorização antes da escolha. Autorizado, funciona como qualquer outro, então a decisão é de tom de campanha, não de balanceamento.</li>
-        <li>Concessão de magia fora da classe não gera Cicatriz. Se você quer o poder sem o preço, é esse o caminho, e ele é legítimo.</li>
+        <li>Ritual é a ferramenta para efeito prolongado fora de combate. Se a preparação for interrompida, a Mana já comprometida não retorna.</li>
+        <li>Selo e encantamento não são aplicados automaticamente pela ficha. Confirme que houve tempo e acesso para inscrever ou encantar.</li>
+        <li>Fusão exige uma fonte que autorize o Fluxo secundário e nunca abre uma terceira assinatura. A descrição do catalisador continua valendo.</li>
+        <li>Não transforme raridade em aprendizado: ela limita quantos encantamentos cabem, mas não ensina o padrão ao personagem.</li>
       </ul>
+    `,
+  },
 
-      <h3 class="regras-subtitle">A DT de conjuração trabalha por você</h3>
+  'catalogo-magico': {
+    categoria: 'Livro do Jogador',
+    status: 'Catálogo oficial',
+    resumo: 'Consulta interativa de magias, manifestações, rituais, selos, encantamentos e assinaturas de fusão, separada das regras de conjuração.',
+    destaques: [
+      ['Busca', 'por nome e descrição'],
+      ['Filtros', 'por forma e Fluxo'],
+      ['Consulta', 'regras e catálogo separados'],
+    ],
+    corpo: `
+      <p class="regras-lead">Esta página serve para procurar uma entrada específica. As fórmulas de teste, DT, Mana e concentração ficam em <strong>Magia e Fluxo</strong>; Marcas, Cicatrizes e preparações possuem capítulos próprios.</p>
+
+      <h3 class="regras-subtitle">O que está no catálogo</h3>
+      <p>Os filtros abaixo reúnem magias, manifestações de cada Fluxo, rituais, selos, encantamentos e assinaturas de fusão. Escolha primeiro a forma que procura e depois reduza pelos demais campos disponíveis.</p>
+
+      <h3 class="regras-subtitle">Antes de escolher uma entrada</h3>
       <ul class="regras-list">
-        <li>A DT é 7 mais três vezes o círculo, e a Mana sai na declaração, mesmo se o teste falhar. Um conjurador que tenta o círculo máximo dele está apostando recurso, não gastando de graça.</li>
-        <li>A mesma rolagem é lida duas vezes: contra a DT do círculo para estabilizar e contra a defesa do alvo. Estabilizar e ser resistido acontece, e vale explicar na primeira vez.</li>
-        <li>Metade do nível não entra nessa fórmula, de propósito. Isso mantém o conjurador dependente do atributo Fluxo e do grau de Misticismo, e não do nível puro.</li>
+        <li>Confirme se o personagem possui a classe, habilidade, item, Legado ou concessão que dá acesso àquela forma.</li>
+        <li>Para magia de círculo, confira Fluxo mínimo, Mana final e DT de conjuração no texto da própria entrada.</li>
+        <li>Ritual não pertence a círculo e não entra em combate. Selo e encantamento dependem da preparação descrita no capítulo correspondente.</li>
+        <li>Fluxo do Fim continua exigindo autorização do Mestre antes da escolha.</li>
       </ul>
+    `,
+    corpoMestre: `
+      <p class="regras-lead">O catálogo facilita encontrar efeitos, mas não concede acesso. Ao revisar uma escolha, compare a entrada com a progressão do personagem e com o capítulo da forma usada antes de autorizar o registro na ficha.</p>
 
-      <h3 class="regras-subtitle">Conduzir Marca e Cicatriz</h3>
+      <h3 class="regras-subtitle">Conferir uma escolha mágica</h3>
       <ul class="regras-list">
-        <li>Do 5º ao 9º, cada círculo alcançado entrega a Marca daquele círculo no Fluxo nativo. Elas são fixas e públicas, então o jogador escolhe subir sabendo o que vem. Não improvise Marca nova.</li>
-        <li>Toda Marca tem ganho e ônus, e o ônus costuma ser social ou de rotina, não numérico. Use na ficção: o rastro verde da Germinação Involuntária é uma pista que qualquer perseguidor segue.</li>
-        <li>No 10º, cada magia aprendida sorteia uma Cicatriz, e a mesma não sai duas vezes para a mesma pessoa. Sorteie na mesa, na hora de aprender.</li>
-        <li>Marca e Cicatriz contam como Legado para efeitos que citam Legados, mas não ocupam vaga. Confira isso quando um jogador tentar somar as duas coisas.</li>
-      </ul>
-
-      <h3 class="regras-subtitle">Ritual, Selo e Encantamento</h3>
-      <ul class="regras-list">
-        <li>Ritual não tem círculo e compromete a Mana desde o primeiro minuto: interromper já custou. É a ferramenta certa para efeito grande fora de combate, e a errada para resolver a cena atual.</li>
-        <li>Selo e Encantamento acontecem na mesa, com você. Nenhum dos dois se aplica sozinho pela ficha, então é sua a decisão de quando o personagem teve bancada e tempo.</li>
+        <li>Verifique primeiro a fonte de acesso; depois confira círculo, Fluxo mínimo, custo final e qualquer autorização indicada.</li>
+        <li>Uma manifestação muda como o Fluxo expressa a entrada, sem apagar os limites da magia ou da forma principal.</li>
+        <li>Magias concedidas fora da classe seguem a concessão registrada e não criam automaticamente novo Fluxo, círculo ou Cicatriz.</li>
+        <li>Se a entrada depender de ritual, selo, encantamento ou fusão, aplique também as regras da página correspondente.</li>
       </ul>
     `,
   },
@@ -1776,22 +1899,22 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     status: 'Catálogo oficial',
     resumo: 'Classe comum serve a qualquer Árvore. Classe especial é mais forte, só aparece nas Árvores indicadas e depende do Mestre liberar.',
     destaques: [
-      ['Classes', '27 catalogadas'],
-      ['Comuns / especiais', '16 / 11'],
-      ['Progressões completas', '27']
+      ['Classes', '26 catalogadas'],
+      ['Comuns / especiais', '17 / 9'],
+      ['Progressões completas', '26']
     ],
     corpo: `
       <p class="regras-lead">Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes e eventos por nível) fica no catálogo interativo da página de Regras, que lê o mesmo arquivo.</p>
       <ul class="regras-list">${listaClassesPublicas}</ul>
     `,
     corpoMestre: `
-      <p class="regras-lead">As 27 classes fecham no mesmo orçamento, então nenhuma é mais forte no papel. O que diferencia uma mesa da outra são os efeitos que mudam economia de ação, e esses estão marcados na referência de balanceamento.</p>
+      <p class="regras-lead">As 26 classes fecham no mesmo orçamento, então nenhuma é mais forte no papel. O que diferencia uma mesa da outra são os efeitos que mudam economia de ação, e esses estão marcados na referência de balanceamento.</p>
 
       <h3 class="regras-subtitle">Onde olhar antes da campanha</h3>
       <ul class="regras-list">
-        <li>Seis classes carregam alerta qualitativo na referência: Pop Star, Lutador, Atirador, Campeão Dimensional, Cartista Arcano e Ritualista. O alerta não quer dizer forte demais: quer dizer que aquele efeito muda escala ou economia de ação e precisa de cenário de mesa para ser medido.</li>
+        <li>Duas classes carregam alerta qualitativo na referência: Chef e Engenheiro. O alerta não quer dizer forte demais: quer dizer que aquele efeito muda escala ou economia de ação e precisa de cenário de mesa para ser medido.</li>
         <li>Leia a lista de poderes das classes que entraram na sua mesa antes do nível 2. São de dez a doze opções por classe, e as escolhas dos jogadores decidem o formato dos seus encontros mais que o nível deles.</li>
-        <li>Classe especial exige nível total 20, liberação sua e um acontecimento. As onze especiais também são presas a Árvores específicas, exceto Cartista Arcano e Invocador: confira isso antes de prometer.</li>
+        <li>Classe especial exige nível total 20, liberação sua e um acontecimento. As nove especiais também são presas a Árvores específicas, exceto Cartista Arcano e Invocador: confira isso antes de prometer.</li>
       </ul>
 
       <h3 class="regras-subtitle">Liberar uma especial</h3>
@@ -1815,7 +1938,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p class="regras-lead">Subir de nível numa classe sempre entrega alguma coisa, e essa coisa tem cinco formatos diferentes. A confusão mais comum da mesa é tratar Habilidade e Poder como sinônimos: uma vem sozinha e a outra você escolhe.</p>
 
       <h3 class="regras-subtitle">A grade de uma classe</h3>
-      <p>As 27 classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.</p>
+      <p>As 26 classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.</p>
       <div class="regras-table-wrap">
         <table class="regras-table">
           <thead><tr><th>Recompensa</th><th>Nos níveis</th><th>Quantas</th></tr></thead>

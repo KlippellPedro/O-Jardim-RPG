@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Search, Zap, Pencil, Trash2, Dices, GripVertical, Star, Sparkles, Shield, Crown } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
@@ -9,6 +9,7 @@ import { legadosSelecionados, poderesSelecionados } from '../../../services/prog
 import { obterStatusFicha } from '../../../services/statusService';
 import { EditorEfeitos } from '../components/ItemEffectsModals';
 import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
+import { periciasDisponiveisParaEfeitos } from '../../../services/periciasFichaService';
 import {
   EFEITOS_FICHA_MAXIMOS,
   normalizarEfeitosFicha,
@@ -21,6 +22,7 @@ import {
   type IPersonalizacaoAutomatica,
 } from '../../../services/personalizacaoAutomaticaService';
 import { PersonalizacaoAutomaticaModal } from '../components/PersonalizacaoAutomaticaModal';
+import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
 
 interface ICustoPoder {
   recurso: 'nenhum' | 'mana' | 'vida' | 'sanidade' | 'cansaco';
@@ -100,6 +102,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
   const [busca, setBusca] = useState('');
   const [modalItem, setModalItem] = useState<IPoder | null>(null);
   const [usandoId, setUsandoId] = useState<string | null>(null);
+  const usoEmAndamento = useRef(false);
   const [ultimoUsoMsg, setUltimoUsoMsg] = useState<{ id: string; texto: string; erro?: boolean } | null>(null);
   const [personalizando, setPersonalizando] = useState<{ id: string; titulo: string; descricao: string } | null>(null);
 
@@ -108,6 +111,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
   const f = character.ficha || {};
   const status = obterStatusFicha(f);
   const personalizacoes = obterPersonalizacoesAutomaticas(f);
+  const periciasDisponiveis = periciasDisponiveisParaEfeitos(f, PERICIAS_CATALOGO);
   const poderes: IPoder[] = f.poderes || [];
   const poderesClasse: IPoder[] = poderesSelecionados(f).map((item) => ({
     id: item.id,
@@ -188,7 +192,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
   };
 
   const handleReorder = (novosItens: IPoder[]) => {
-    const comOrdem = novosItens.map((item, index) => ({ ...item, ordem: index }));
+    const comOrdem = mesclarOrdemFiltrada(poderes, novosItens);
     salvarLista(comOrdem);
   };
 
@@ -259,6 +263,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
   };
 
   const usarPoder = async (item: IPoder) => {
+    if (usoEmAndamento.current) return;
     const recurso = item.custo?.recurso || 'nenhum';
     const valor = Number(item.custo?.valor) || 0;
 
@@ -299,7 +304,11 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
       }
     }
 
+    usoEmAndamento.current = true;
     setUsandoId(item.id);
+    if (campoStatus && novoValorStatus !== null) {
+      onUpdate(['ficha', 'status', campoStatus], novoValorStatus);
+    }
     try {
       if (campanhaAtiva?.id) {
         await registrosApi.registrarUso({
@@ -316,16 +325,19 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
         });
       }
 
-      if (campoStatus && novoValorStatus !== null) {
-        onUpdate(['ficha', 'status', campoStatus], novoValorStatus);
-      }
-
       setUltimoUsoMsg({ id: item.id, texto: `${item.nome} foi usado${valor ? ` por ${custoTexto(item.custo)}` : ''}.` });
       setTimeout(() => setUltimoUsoMsg((m) => (m?.id === item.id ? null : m)), 3000);
     } catch (e: any) {
-      setUltimoUsoMsg({ id: item.id, texto: e?.message || 'Falha ao registrar o uso.', erro: true });
+      setUltimoUsoMsg({
+        id: item.id,
+        texto: campoStatus
+          ? 'O custo foi aplicado, mas o servidor não registrou o uso.'
+          : (e?.message || 'Falha ao registrar o uso.'),
+        erro: true,
+      });
       setTimeout(() => setUltimoUsoMsg((m) => (m?.id === item.id ? null : m)), 3000);
     } finally {
+      usoEmAndamento.current = false;
       setUsandoId(null);
     }
   };
@@ -405,7 +417,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                               type="button"
                               onClick={() => abrirPersonalizacao(poder)}
                               title="Editar texto"
-                              className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all"
+                              className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-100 transition-all sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
                             >
                               <Pencil size={12} />
                             </button>
@@ -416,8 +428,8 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                           {poder.nivelAdquirido && <span className="text-[10px] text-gray-600">Nível {poder.nivelAdquirido}</span>}
                           {personalizacao && <span className="text-[9px] font-black uppercase tracking-wider text-[#c7a44c]/70">Editado por você</span>}
                         </div>
-                        <p className="mt-2 text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
-                        {poder.tipo !== 'Passiva' && <button type="button" onClick={() => usarPoder(poder)} disabled={usandoId === poder.id} className="mt-3 flex items-center gap-2 rounded-lg border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-3 py-2 text-xs font-bold text-[#c7a44c] disabled:opacity-50"><Dices size={14} />{usandoId === poder.id ? 'Usando...' : 'Usar poder'}</button>}
+                        <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
+                        {poder.tipo !== 'Passiva' && <button type="button" onClick={() => usarPoder(poder)} disabled={usandoId !== null} className="mt-3 flex items-center gap-2 rounded-lg border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-3 py-2 text-xs font-bold text-[#c7a44c] disabled:cursor-wait disabled:opacity-50"><Dices size={14} />{usandoId === poder.id ? 'Usando...' : 'Usar poder'}</button>}
                         {ultimoUsoMsg?.id === poder.id && <p className={`mt-2 text-xs ${ultimoUsoMsg.erro ? 'text-red-400' : 'text-green-400'}`}>{ultimoUsoMsg.texto}</p>}
                       </article>
                     );
@@ -479,15 +491,15 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                         type="button"
                         onClick={() => abrirPersonalizacao(poder)}
                         title="Editar texto"
-                        className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all flex-shrink-0"
+                        className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-100 transition-all flex-shrink-0 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
                       >
                         <Pencil size={12} />
                       </button>
                     </div>
                   </div>
-                  <p className="mt-2 text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
+                  <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
                   {poder.acao && <p className="mt-2 text-[11px] text-gray-500"><span className="font-bold uppercase text-gray-600">Ação:</span> {poder.acao}</p>}
-                  <button type="button" onClick={() => usarPoder(poder)} disabled={usandoId === poder.id} className={`mt-3 flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold disabled:opacity-50 ${poder.estagioFruto === 'despertado' ? 'border-fuchsia-400/30 bg-fuchsia-500/10 text-fuchsia-200' : 'border-[#c7a44c]/30 bg-[#c7a44c]/10 text-[#c7a44c]'}`}>
+                  <button type="button" onClick={() => usarPoder(poder)} disabled={usandoId !== null} className={`mt-3 flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold disabled:cursor-wait disabled:opacity-50 ${poder.estagioFruto === 'despertado' ? 'border-fuchsia-400/30 bg-fuchsia-500/10 text-fuchsia-200' : 'border-[#c7a44c]/30 bg-[#c7a44c]/10 text-[#c7a44c]'}`}>
                     <Dices size={14} />{usandoId === poder.id ? 'Usando...' : 'Usar poder'}
                   </button>
                   {ultimoUsoMsg?.id === poder.id && <p className={`mt-2 text-xs ${ultimoUsoMsg.erro ? 'text-red-400' : 'text-green-400'}`}>{ultimoUsoMsg.texto}</p>}
@@ -529,7 +541,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                 <div className="flex-1 min-w-0 pt-1">
                   <div className="flex justify-between items-start gap-3">
                     <h4 className="text-white font-bold text-lg mb-1">{p.nome || 'Poder Desconhecido'}</h4>
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                    <div className="flex items-center gap-1 opacity-100 transition-opacity flex-shrink-0 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                       <button
                         onClick={() => abrirEditar(p)}
                         className="w-7 h-7 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-colors"
@@ -580,7 +592,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                   <div className="flex items-center gap-3 pt-3 border-t border-white/5">
                     <button
                       onClick={() => usarPoder(p)}
-                      disabled={usandoId === p.id}
+                      disabled={usandoId !== null}
                       className="px-4 py-2 rounded-lg bg-[#c7a44c]/10 border border-[#c7a44c]/30 text-[#c7a44c] hover:bg-[#c7a44c]/20 hover:scale-105 flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50 disabled:hover:scale-100"
                     >
                       <Dices size={14} /> {usandoId === p.id ? 'Usando...' : 'Usar'}
@@ -669,7 +681,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                 <EditorEfeitos
                   efeitos={modalItem.efeitos || []}
                   onChange={(efeitos) => atualizarCampoModal('efeitos', efeitos)}
-                  pericias={PERICIAS_CATALOGO.map(p => ({ id: p.id, titulo: p.titulo }))}
+                  pericias={periciasDisponiveis}
                   maxEfeitos={EFEITOS_FICHA_MAXIMOS}
                   contexto="poder"
                 />

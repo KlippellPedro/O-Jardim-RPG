@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { BookOpen, UserPlus, BookX } from 'lucide-react';
+import { BookOpen, UserPlus, Feather, Sparkles, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -80,19 +80,19 @@ export const EscritorDeContos = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24 font-serif">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24 font-serif">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.5 }}
             className={`flex flex-col p-8 rounded-sm ${tema.bg} border ${tema.border} backdrop-blur-md`}
           >
-            <BookX size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2`} style={{ fontFamily: 'Cinzel, serif' }}>Página Rasgada</h3>
+            <Feather size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Tinta Carmesim</h3>
             <p className="text-fuchsia-100/60 leading-relaxed text-sm">
-              Reescreva o destino. Uma vez por cena, assim que um teste for rolado (por você, aliado ou inimigo) e o resultado anunciado, você rasga a página da realidade, gastando Mana pesada para anular o dado e forçar uma nova rolagem obrigatória que deve ser aceita.
+              O conceito central da classe: escreva um Motivo após descanso (coragem, perda ou esperança) e empreste força dele a um aliado uma vez por cena. Com o tempo, mantenha mais de um Motivo ao mesmo tempo, transforme um em presságio, e no auge escreva o desfecho de uma cena numa frase que o grupo ganha vantagem pra realizar.
             </p>
           </PremiumCard>
 
@@ -101,13 +101,43 @@ export const EscritorDeContos = ({ classe }: { classe: IClasse }) => {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             className={`flex flex-col p-8 rounded-sm ${tema.bg} border ${tema.border} backdrop-blur-md`}
           >
             <UserPlus size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2`} style={{ fontFamily: 'Cinzel, serif' }}>Personagens Recorrentes</h3>
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Personagens Recorrentes</h3>
             <p className="text-fuchsia-100/60 leading-relaxed text-sm">
-              A cada estágio, registre um contato real em sua história: um NPC de sua própria autoria que passa a existir no mundo. Uma vez por sessão, se puder ser contatado, um desses personagens pode oferecer informação ou ajuda plausível dentro da narrativa, não uma criatura que luta ao seu lado.
+              A cada estágio, registre um contato real em sua história — um NPC de sua própria autoria que passa a existir no mundo — e escolha um Arquétipo de Contato pra ele: Informante, Guarda-Costas, Curandeiro ou Contrabandista. Uma vez por sessão, se puder ser contatado, um deles ajuda dentro do que o arquétipo permite.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className={`flex flex-col p-8 rounded-sm ${tema.bg} border ${tema.border} backdrop-blur-md`}
+          >
+            <Sparkles size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Último Capítulo</h3>
+            <p className="text-fuchsia-100/60 leading-relaxed text-sm">
+              Uma vez por sessão, conduza uma cena de combate por três rodadas, dando vantagem ao grupo e reescrevendo uma falha crucial. Mas o capítulo maior é outro: fora de combate, quando fizer sentido pra história, escreva o conto de uma Entidade nova — combinando os detalhes com o Mestre, ela passa a existir no jogo de verdade, não só nesta mesa.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className={`flex flex-col p-8 rounded-sm ${tema.bg} border ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-fuchsia-100/60 leading-relaxed text-sm">
+              Todo efeito seu que obriga um alvo a resistir rola Enganação no momento em que aciona: o resultado vira a DT que ele precisa alcançar.
             </p>
           </PremiumCard>
         </div>

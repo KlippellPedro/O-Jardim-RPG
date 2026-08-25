@@ -6,6 +6,7 @@ import {
   obterEstagiosRaciais,
   obterGruposEscolhaRacial,
   obterTracosOpcaoRacial,
+  temDescricaoPropria,
 } from '../../../services/racaService';
 import type { ThemeEntry } from '../../themeMap';
 import { PremiumCard } from './PremiumCard';
@@ -96,9 +97,11 @@ export const EscolhaRacialCards = ({ raca, tema, paleta }: EscolhaRacialCardsPro
                     )}
                   </div>
 
-                  <p className="text-sm font-light leading-relaxed text-gray-400">
-                    {descreverOpcaoRacial(opcao)}
-                  </p>
+                  {temDescricaoPropria(opcao) && (
+                    <p className="text-sm font-light leading-relaxed text-gray-400">
+                      {descreverOpcaoRacial(opcao)}
+                    </p>
+                  )}
 
                   {tracos.length > 0 && (
                     <div className="mt-6 space-y-4 border-t border-white/10 pt-5">

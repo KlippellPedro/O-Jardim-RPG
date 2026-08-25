@@ -50,8 +50,15 @@ const classAudit = classes.map((clazz) => ({
   categoria: clazz.categoria === 'padrao' ? 'comum' : 'especial',
   recursosPorNivel: Number(clazz.vida) + Number(clazz.mana),
   referencias: levels.map((level) => reference(clazz, level)),
+  // Habilidade em estágios e habilidade com catálogo próprio (as Engenhocas)
+  // guardam o texto fora de `descricao`, então varrer só ela deixava passar a
+  // maior parte do que a classe realmente faz.
   alertasTexto: [...(clazz.habilidades || []), ...(clazz.poderes || [])]
-    .filter((item) => /ação extra|reação extra|dobra|triplica|automaticamente|sem limite|qualquer dano/i.test(item.descricao || ''))
+    .filter((item) => [
+      item.descricao,
+      ...(item.estagios || []).map((estagio) => estagio.descricao),
+      ...(item.opcoes || []).map((opcao) => opcao.descricao),
+    ].some((texto) => /ação extra|reação extra|\bdobra|\btriplica|automaticamente|sem limite|qualquer dano/i.test(texto || '')))
     .map((item) => item.titulo),
 }));
 

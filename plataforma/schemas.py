@@ -170,6 +170,10 @@ class CharacterUpdateInput(BaseModel):
         return self
 
 
+class CharacterOwnerUpdateInput(BaseModel):
+    novo_dono_usuario_id: UUID
+
+
 class EdenFruitConsumeInput(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
 
@@ -242,6 +246,7 @@ class InventoryTransactionInput(BaseModel):
 
 class CampaignVehicleInput(BaseModel):
     nome: str = Field(min_length=1, max_length=100)
+    raridade: Literal["comum", "incomum", "raro", "epico", "lendario"] = Field(default="comum")
     imagem_url: str | None = None
     descricao: str = ""
     vida_maxima: int = Field(default=0, ge=0)
@@ -396,6 +401,86 @@ class ShopBatchCommandInput(StrictCommandInput):
         if sum(item.quantidade for item in self.itens) > 500:
             raise ValueError("o lote excede 500 unidades")
         return self
+
+
+class ShopGrantItemInput(StrictCommandInput):
+    item_id: str = Field(min_length=1, max_length=160)
+    quantidade: StrictInt = Field(default=1, ge=1, le=500)
+
+    @field_validator("item_id")
+    @classmethod
+    def clean_item_id(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("item_id nao pode ser vazio")
+        return cleaned
+
+
+class ShopGrantCommandInput(StrictCommandInput):
+    """Mestre entrega item do catálogo (inclusive criatura/propriedade) direto
+    na ficha, sem cobrar moeda nem respeitar nível de loja ou requisito de
+    classe/nível — a autorização é o próprio Mestre estar chamando isto."""
+
+    campanha_id: UUID
+    personagem_id: UUID
+    idempotencia: str = Field(
+        min_length=8,
+        max_length=128,
+        pattern=_IDEMPOTENCY_PATTERN,
+    )
+    itens: list[ShopGrantItemInput] = Field(min_length=1, max_length=50)
+
+    @model_validator(mode="after")
+    def validate_batch(self):
+        keys = [item.item_id for item in self.itens]
+        if len(keys) != len(set(keys)):
+            raise ValueError("o lote contem item_id duplicado")
+        if sum(item.quantidade for item in self.itens) > 500:
+            raise ValueError("o lote excede 500 unidades")
+        return self
+
+
+ShopCatalogItemType = Literal[
+    "arma", "armadura", "artefato", "consumivel", "drop", "equipamento",
+    "fruto-eden", "implante", "modificacao", "monstro", "propriedade",
+    "veiculo", "veiculo-completo",
+]
+
+
+class ShopCatalogDraftInput(StrictCommandInput):
+    campanha_id: UUID
+    item_id: str = Field(
+        min_length=1,
+        max_length=160,
+        pattern=r"^[a-z0-9][a-z0-9-]*$",
+    )
+    tipo: ShopCatalogItemType
+    titulo: str = Field(min_length=1, max_length=160)
+    conteudo: dict[str, Any]
+    ativo: bool = True
+    versao_esperada: StrictInt | None = Field(default=None, ge=1)
+
+    @field_validator("item_id")
+    @classmethod
+    def clean_catalog_item_id(cls, value: str) -> str:
+        return value.strip()
+
+    @field_validator("titulo")
+    @classmethod
+    def clean_catalog_title(cls, value: str) -> str:
+        return " ".join(value.strip().split())
+
+    @model_validator(mode="after")
+    def validate_catalog_content_size(self):
+        encoded = json.dumps(self.conteudo, ensure_ascii=False, separators=(",", ":"))
+        if len(encoded.encode("utf-8")) > 100_000:
+            raise ValueError("o conteúdo do item excede o limite de 100 KB")
+        return self
+
+
+class ShopCatalogPublishInput(StrictCommandInput):
+    campanha_id: UUID
+    versao_esperada: StrictInt = Field(ge=1)
 
 
 class BountyClaimCommandInput(StrictCommandInput):
@@ -728,6 +813,34 @@ class ContentPublishInput(BaseModel):
         if not cleaned:
             raise ValueError("nenhuma chave valida")
         return cleaned
+
+
+class ContentEditorialDraftInput(BaseModel):
+    campanha_id: UUID
+    modulo: Literal["mundo", "regras"] = "mundo"
+    tipo: str = Field(min_length=1, max_length=60, pattern=r"^[a-z0-9_-]+$")
+    chave_recurso: str = Field(min_length=1, max_length=160, pattern=r"^[a-zA-Z0-9_-]+$")
+    titulo: str = Field(min_length=1, max_length=160)
+    conteudo: dict[str, Any]
+    revelado: bool | None = None
+    versao_esperada: int | None = Field(default=None, ge=1)
+
+    @field_validator("titulo")
+    @classmethod
+    def clean_editorial_title(cls, value: str) -> str:
+        return " ".join(value.strip().split())
+
+    @model_validator(mode="after")
+    def validate_editorial_content_size(self):
+        encoded = json.dumps(self.conteudo, ensure_ascii=False, separators=(",", ":"))
+        if len(encoded.encode("utf-8")) > 200_000:
+            raise ValueError("o conteudo editorial excede o limite de 200 KB")
+        return self
+
+
+class ContentEditorialPublishInput(BaseModel):
+    campanha_id: UUID
+    versao_esperada: int = Field(ge=1)
 
 class CampaignVehicleDeltaInput(BaseModel):
     versao: int

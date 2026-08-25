@@ -296,6 +296,42 @@ test('modificações viram categoria própria, com nível de loja pelo tipo da m
   assert.equal(itemCorrespondeSubfiltro(afiada, 'Modificações', 'Marciais'), false);
 });
 
+test('Mercenários separa serviço contratado de fera de combate pelo subfiltro', async () => {
+  const catalogo = (await import('../../data/loja/catalogo.json', { with: { type: 'json' } })).default as any;
+  const entradas = catalogo.entradas
+    .filter((entrada: any) => entrada.tipo === 'monstro' && entrada.conteudo.disponivelNaLoja !== false)
+    .map((entrada: any) => ({ ...entrada, preco: resolverPrecoComoBackend(entrada.conteudo.preco) }));
+  const mercenarios = mapearCatalogoLoja(entradas);
+  assert.ok(mercenarios.every((item) => item.categoria === 'Mercenários'));
+
+  const porId = (id: string) => {
+    const item = mercenarios.find((candidato) => candidato.id === id);
+    assert.ok(item, `${id} sumiu do balcão de Mercenários`);
+    return item;
+  };
+
+  const sentinela = porId('sentinela-de-portao');
+  assert.equal(itemCorrespondeSubfiltro(sentinela, 'Mercenários', 'Guardas de local'), true);
+  assert.equal(itemCorrespondeSubfiltro(sentinela, 'Mercenários', 'Escoltas'), false);
+  assert.equal(itemCorrespondeSubfiltro(sentinela, 'Mercenários', 'Feras e Invocações'), false);
+
+  const timoneiro = porId('timoneiro-contratado');
+  assert.equal(itemCorrespondeSubfiltro(timoneiro, 'Mercenários', 'Tripulação'), true);
+  assert.equal(itemCorrespondeSubfiltro(timoneiro, 'Mercenários', 'Ofícios'), false);
+
+  // Fera não declara função e cai no recorte que sobrou, sem sumir da vitrine.
+  const lobo = porId('lobo-cinzento');
+  assert.equal(itemCorrespondeSubfiltro(lobo, 'Mercenários', 'Feras e Invocações'), true);
+  assert.equal(itemCorrespondeSubfiltro(lobo, 'Mercenários', 'Guardas de local'), false);
+  assert.equal(itemCorrespondeSubfiltro(lobo, 'Mercenários', 'Todos'), true);
+
+  // A função também entra na busca por texto, senão "guarda" só acha pelo nome.
+  assert.equal(itemCorrespondeBusca(sentinela, 'guarda de local'), true);
+
+  // O perfil universal não chega a virar item de loja em nenhum subfiltro.
+  assert.equal(mercenarios.some((item) => item.id.startsWith('universal-vd-')), false);
+});
+
 test('todo item declara a loja mínima e a Vila fica restrita ao catálogo simples', async () => {
   const catalogo = (await import('../../data/loja/catalogo.json', { with: { type: 'json' } })).default as any;
   const entradas = catalogo.entradas as any[];
@@ -305,7 +341,7 @@ test('todo item declara a loja mínima e a Vila fica restrita ao catálogo simpl
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
 
-  assert.equal(entradas.length, 469);
+  assert.equal(entradas.length, 709);
   assert.ok(entradas.every((item) => Number.isInteger(nivel(item)) && nivel(item) >= 1 && nivel(item) <= 4));
   assert.ok([1, 2, 3, 4].every((loja) => entradas.some((item) => nivel(item) === loja)));
 

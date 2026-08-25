@@ -1,13 +1,18 @@
 # Dados oficiais
 
-Esta é a fonte única de conteúdo de O Jardim. Um texto de regra, lore, item,
-origem ou catálogo não deve ser criado em `src/`, `bots/` ou `docs/`.
+Esta é a fonte oficial compartilhada de conteúdo de O Jardim. Um texto de regra,
+lore, item, origem ou catálogo oficial não deve ser criado em `src/`, `bots/` ou
+`docs/`. Personalizações publicadas para uma campanha vivem no PostgreSQL e
+podem ser espelhadas em `editorial/campanhas/`; veja
+[o guia do editor por campanha](../docs/EDITOR_CONTEUDO_CAMPANHA.md).
 
 - `ficha/`: classes, raças, perícias, Legados, magias e origens.
 - `mundo/`: lore organizada por Árvore e a configuração canônica das Árvores.
 - `regras/`: regras públicas, regras internas, condições e balanceamento.
 - `loja/`: catálogo econômico, veículos, bestiário e instruções de edição.
 - `gerado/`: saídas mecânicas consumidas pelo código. Não edite à mão.
+- `editorial/`: snapshots das publicações por campanha para revisão no Git; não
+  são consumidos automaticamente pelo site.
 
 Em `ficha/`, prefira adicionar um JSON temático quando uma revisão complementa uma fonte existente. Por exemplo, `legados-regras-v1.json` contém as descrições balanceadas migradas do frontend antigo e é combinado com `legados.json` pelo serviço de catálogo.
 

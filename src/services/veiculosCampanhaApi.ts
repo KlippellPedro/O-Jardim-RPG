@@ -4,6 +4,7 @@ export interface ICampanhaVeiculoResumo {
   id: string;
   proprietario_personagem_id: string | null;
   nome: string;
+  raridade: 'comum' | 'incomum' | 'raro' | 'epico' | 'lendario';
   imagem_url: string | null;
   vida_atual: number;
   vida_maxima: number;
@@ -25,6 +26,7 @@ export interface ICampanhaVeiculo extends ICampanhaVeiculoResumo {
   sistemas_ativos_maximos: number;
   espacos_modulos_maximos: number;
   espacos_base: number;
+  modulos_utilidade_integrados: number;
   origem_item_id: string | null;
   modulos: ICampanhaModulo[];
   ocupantes: ICampanhaOcupante[];
@@ -76,6 +78,7 @@ export interface ICampanhaPermissao {
 
 export interface ICampanhaVeiculoInput {
   nome: string;
+  raridade?: 'comum' | 'incomum' | 'raro' | 'epico' | 'lendario';
   imagem_url?: string | null;
   descricao?: string;
   vida_maxima?: number;

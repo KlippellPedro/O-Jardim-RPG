@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
-import { GitMerge, Sprout } from 'lucide-react';
+import { GitMerge, Sprout, Brain } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 interface SimbionteProps {
@@ -88,16 +89,16 @@ export const Simbionte = ({ raca }: SimbionteProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-orange-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Não nasceu um: nasceu uma parceria. Um corpo só, com mais de um organismo trabalhando por baixo da mesma pele, e ninguém de fora consegue dizer com certeza onde um termina e o outro começa.
+            Um corpo com mais de um bicho morando dentro, dividindo comida, sono e decisão. Aguenta privação muito melhor do que qualquer um deles aguentaria sozinho, e ninguém de fora sabe dizer onde um termina e o outro começa.
           </motion.p>
         </motion.header>
 
-        {/* Base Trait */}
-        <div className="grid grid-cols-1 mb-24">
+        {/* Base Traits */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className={`flex gap-6 p-8 rounded-xl ${tema.bg} ${tema.border} backdrop-blur-md`}
@@ -106,13 +107,36 @@ export const Simbionte = ({ raca }: SimbionteProps) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Metabolismo Composto</h3>
               <p className="text-orange-200/60 leading-relaxed text-sm">
-                Seu corpo reparte recursos entre os organismos que o compõem. Você pode passar o dobro do tempo normal sem comer, beber ou descansar antes de sofrer as consequências disso, e recebe vantagem em Fortitude para resistir a fome, sede ou exaustão.
+                Os organismos que formam você repartem tudo o que entra. Você aguenta o dobro do tempo normal sem comer, beber ou descansar antes de sentir qualquer coisa, e recebe vantagem em Fortitude contra fome, sede e exaustão.
+              </p>
+            </div>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className={`flex gap-6 p-8 rounded-xl ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Brain size={40} className={`${tema.icon} shrink-0`} strokeWidth={1.5} />
+            <div>
+              <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Segunda Consciência</h3>
+              <p className="text-orange-200/60 leading-relaxed text-sm">
+                Tem mais de uma cabeça pensando aí dentro, e elas nem sempre concordam. Receba vantagem para resistir a efeitos que dominem, encantem ou leiam sua mente. Quem força a leitura recebe os pensamentos de todos os organismos ao mesmo tempo e não consegue separar de quem é o quê.
               </p>
             </div>
           </PremiumCard>
         </div>
 
-        {/* Tipos de Simbionte */}
+        <EstagiosRaciais
+          raca={raca}
+          tema={tema}
+          titulo="Convivência"
+          descricao="No começo é um acordo desajeitado, com cada organismo puxando para um lado. Cada nível total aproxima mais os inquilinos, até sobrar um corpo que ninguém consegue separar de novo."
+        />
+
         <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>

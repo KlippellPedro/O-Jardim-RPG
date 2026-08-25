@@ -17,12 +17,20 @@ import { useCampaignSSE } from '../../../hooks/useCampaignSSE';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput } from '../components/SharedFichaComponents';
 import { Select } from '../../../components/ui/Select';
+import { INSTALACOES_BASE } from '../../../../data/regras/bases';
+import {
+  PONTUACAO_NIVEL,
+  podeGerenciarRecursoResumo,
+  nivelEfetivoRecursoDetalhe,
+} from '../../../services/recursoCampanhaPermissoes';
 
 const NIVEL_PERMISSAO_OPCOES = [
   { value: 'visualizar', label: 'Visualizar' },
   { value: 'utilizar', label: 'Utilizar' },
   { value: 'gerenciar', label: 'Gerenciar' },
 ];
+
+const INSTALACAO_PERSONALIZADA = '__personalizada__';
 
 interface PropriedadesCampanhaProps {
   character: any;
@@ -82,7 +90,9 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
   const [compartilharAoMigrar, setCompartilharAoMigrar] = useState(false);
 
   const [expandidos, setExpandidos] = useState<Set<string>>(new Set());
-  const [novaInstalacao, setNovaInstalacao] = useState('');
+  const [novaInstalacaoTipo, setNovaInstalacaoTipo] = useState('');
+  const [novaInstalacaoNivel, setNovaInstalacaoNivel] = useState(1);
+  const [novaInstalacaoNomePersonalizado, setNovaInstalacaoNomePersonalizado] = useState('');
 
   const [personagensCampanha, setPersonagensCampanha] = useState<Array<{ id: string; nome: string }>>([]);
   const [novaPermPersonagemId, setNovaPermPersonagemId] = useState('');
@@ -92,6 +102,11 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
     (id: string) => personagensCampanha.find((p) => p.id === id)?.nome || 'Personagem removido',
     [personagensCampanha],
   );
+
+  const podeGerenciarResumo = (p: ICampanhaPropriedadeResumo) => podeGerenciarRecursoResumo(isMestre, character?.id, p);
+
+  const nivelDetalheAtual = nivelEfetivoRecursoDetalhe(isMestre, character?.id, detalhe);
+  const podeGerenciarDetalhe = PONTUACAO_NIVEL[nivelDetalheAtual] >= PONTUACAO_NIVEL.gerenciar;
 
   useEffect(() => {
     if (!campanhaAtiva?.id) return;
@@ -254,11 +269,28 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
     }
   };
 
+  const catalogoInstalacaoSelecionado = INSTALACOES_BASE.find((i) => i.id === novaInstalacaoTipo);
+  const nivelInstalacaoSelecionado = catalogoInstalacaoSelecionado?.niveis.find((n) => n.nivel === novaInstalacaoNivel);
+
   const adicionarInstalacao = async () => {
-    if (!campanhaAtiva?.id || !detalhe || !novaInstalacao.trim()) return;
+    if (!campanhaAtiva?.id || !detalhe || !novaInstalacaoTipo) return;
+    let nome: string;
+    let nivel: number | undefined;
+    let espacos: number | undefined;
+    if (novaInstalacaoTipo === INSTALACAO_PERSONALIZADA) {
+      nome = novaInstalacaoNomePersonalizado.trim();
+      if (!nome) return;
+    } else {
+      if (!catalogoInstalacaoSelecionado || !nivelInstalacaoSelecionado) return;
+      nome = catalogoInstalacaoSelecionado.titulo;
+      nivel = nivelInstalacaoSelecionado.nivel;
+      espacos = nivelInstalacaoSelecionado.espacos;
+    }
     try {
-      await propriedadesCampanhaApi.adicionarInstalacao(campanhaAtiva.id, detalhe.id, { nome: novaInstalacao.trim() });
-      setNovaInstalacao('');
+      await propriedadesCampanhaApi.adicionarInstalacao(campanhaAtiva.id, detalhe.id, { nome, nivel, espacos_ocupados: espacos });
+      setNovaInstalacaoTipo('');
+      setNovaInstalacaoNivel(1);
+      setNovaInstalacaoNomePersonalizado('');
       const d = await propriedadesCampanhaApi.obter(campanhaAtiva.id, detalhe.id);
       setDetalhe(d);
     } catch (e: any) {
@@ -380,7 +412,7 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
                   >
                     {isExpandido ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
                   </button>
-                  {isMestre && (
+                  {podeGerenciarResumo(p) && (
                     <>
                       <button
                         type="button"
@@ -435,7 +467,7 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
                               <span className="text-gray-200">{inst.nome} <span className="text-gray-500">(Nível {inst.nivel})</span></span>
                               <div className="flex items-center gap-2">
                                 <span className="text-[10px] text-gray-600">{inst.espacos_ocupados} esp.</span>
-                                {isMestre && (
+                                {podeGerenciarDetalhe && (
                                   <button type="button" onClick={() => removerInstalacao(inst.id)} className="text-red-500 hover:text-red-300">
                                     <Trash2 size={12} />
                                   </button>
@@ -447,18 +479,42 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
                             <p className="text-xs text-gray-600">Nenhuma instalação.</p>
                           )}
                         </div>
-                        {isMestre && (
-                          <div className="mt-2 flex gap-2">
-                            <input
-                              value={novaInstalacao}
-                              onChange={(e) => setNovaInstalacao(e.target.value)}
-                              placeholder="Nome da nova instalação"
-                              className="flex-1 rounded-md border border-white/5 bg-[#121118] px-3 py-1.5 text-xs text-gray-300 outline-none focus:border-emerald-500/50"
-                            />
+                        {podeGerenciarDetalhe && (
+                          <div className="mt-2 space-y-2 rounded-lg border border-white/5 bg-black/10 p-2">
+                            <div className="flex gap-2">
+                              <div className="flex-1">
+                                <Select
+                                  value={novaInstalacaoTipo}
+                                  onChange={(v) => { setNovaInstalacaoTipo(v); setNovaInstalacaoNivel(1); }}
+                                  placeholder="Tipo de instalação..."
+                                  options={[...INSTALACOES_BASE.map((i) => ({ value: i.id, label: i.titulo })), { value: INSTALACAO_PERSONALIZADA, label: 'Personalizada...' }]}
+                                />
+                              </div>
+                              {catalogoInstalacaoSelecionado && (
+                                <div className="w-44">
+                                  <Select
+                                    value={String(novaInstalacaoNivel)}
+                                    onChange={(v) => setNovaInstalacaoNivel(Number(v))}
+                                    options={catalogoInstalacaoSelecionado.niveis.map((n) => ({ value: String(n.nivel), label: `Nível ${n.nivel} · ${n.espacos} esp.` }))}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                            {novaInstalacaoTipo === INSTALACAO_PERSONALIZADA && (
+                              <input
+                                value={novaInstalacaoNomePersonalizado}
+                                onChange={(e) => setNovaInstalacaoNomePersonalizado(e.target.value)}
+                                placeholder="Nome da instalação personalizada"
+                                className="w-full rounded-md border border-white/5 bg-[#121118] px-3 py-1.5 text-xs text-gray-300 outline-none focus:border-emerald-500/50"
+                              />
+                            )}
+                            {nivelInstalacaoSelecionado && nivelInstalacaoSelecionado.efeitos.length > 0 && (
+                              <p className="text-[11px] leading-relaxed text-gray-500">{nivelInstalacaoSelecionado.efeitos.join(' ')}</p>
+                            )}
                             <button
                               type="button"
                               onClick={adicionarInstalacao}
-                              disabled={!novaInstalacao.trim()}
+                              disabled={novaInstalacaoTipo === INSTALACAO_PERSONALIZADA ? !novaInstalacaoNomePersonalizado.trim() : !novaInstalacaoTipo}
                               className="flex items-center gap-1 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-bold text-emerald-300 disabled:opacity-40"
                             >
                               <Plus size={12} /> Adicionar
@@ -467,12 +523,13 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
                         )}
                       </div>
 
-                      {isMestre && (
+                      {podeGerenciarDetalhe && (
                         <div>
                           <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-purple-400/60">
                             <KeyRound size={10} className="inline mr-1" />
                             Acesso individual
                           </p>
+                          <p className="mb-2 text-[11px] text-gray-600">Conceda acesso a outro personagem - por exemplo, quando dois jogadores dividem a mesma base ou comércio.</p>
                           <div className="space-y-1">
                             {detalhe.permissoes.map((perm) => (
                               <div key={perm.personagem_id} className="flex items-center justify-between rounded-lg bg-black/20 px-3 py-2 text-xs">
@@ -510,7 +567,7 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
                         <p className="text-xs leading-relaxed text-gray-500">{detalhe.descricao}</p>
                       )}
 
-                      {isMestre && (
+                      {podeGerenciarDetalhe && (
                         <button
                           type="button"
                           onClick={() => abrirFormEditar(detalhe)}

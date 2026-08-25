@@ -22,6 +22,7 @@ import type { ICreateCharacterPayload, IUpdateCharacterPayload } from '../types/
 import { ATRIBUTOS, calcularDerivadosComClasses } from '../services/calculoService';
 import { CLASSES_CATALOGO, RACAS_CATALOGO } from '../services/catalogoService';
 import { ajusteOrigem, chaveAjuste, totalAjustesManuais } from '../services/ajustesFichaService';
+import { limparSelecoesHabilidadeInvalidas } from '../services/progressaoFichaService';
 
 export type CharacterSaveDomain = 'sheet' | 'economy';
 export type CharacterSavePhase = 'idle' | 'pending' | 'saving' | 'saved' | 'error' | 'conflict';
@@ -50,6 +51,7 @@ interface CharacterStore {
   error: string | null;
   persistence: Record<string, CharacterPersistenceState>;
   fetchCharacters: () => Promise<void>;
+  loadCharacter: (id: string) => Promise<boolean>;
   refreshCharacter: (id: string) => Promise<boolean>;
   archiveCharacter: (id: string) => Promise<boolean>;
   createCharacter: (payload: ICreateCharacterPayload) => Promise<boolean>;
@@ -272,17 +274,21 @@ function sheetValues(record: PersonagemApiRecord): Pick<SheetSnapshot, 'nome' | 
 }
 
 function recalcularDerivadosSalvos(fichaOriginal: Record<string, any>): Record<string, any> {
-  const atributos = isRecord(fichaOriginal.atributosFinais)
-    ? fichaOriginal.atributosFinais
+  // Fichas afetadas pela antiga liberação precoce são saneadas ao carregar e
+  // antes de cada salvamento. Assim, o Estilo escolhido no nível 8 some do
+  // documento e não passa a bloquear todas as edições após a correção no servidor.
+  const fichaNormalizada = limparSelecoesHabilidadeInvalidas(fichaOriginal);
+  const atributos = isRecord(fichaNormalizada.atributosFinais)
+    ? fichaNormalizada.atributosFinais
     : null;
-  if (!atributos) return fichaOriginal;
+  if (!atributos) return fichaNormalizada;
 
-  const classes = Array.isArray(fichaOriginal.classes) && fichaOriginal.classes.length
-    ? fichaOriginal.classes
-    : fichaOriginal.classeId
-      ? [{ classeId: fichaOriginal.classeId, nivel: Number(fichaOriginal.nivel) || 1 }]
+  const classes = Array.isArray(fichaNormalizada.classes) && fichaNormalizada.classes.length
+    ? fichaNormalizada.classes
+    : fichaNormalizada.classeId
+      ? [{ classeId: fichaNormalizada.classeId, nivel: Number(fichaNormalizada.nivel) || 1 }]
       : [];
-  if (!classes.length) return fichaOriginal;
+  if (!classes.length) return fichaNormalizada;
 
   const nivelTotal = classes.reduce(
     (total, classe) => total + Math.max(0, Math.trunc(Number(classe?.nivel) || 0)),
@@ -291,24 +297,24 @@ function recalcularDerivadosSalvos(fichaOriginal: Record<string, any>): Record<s
   const atributosParaCalculo = Object.fromEntries(ATRIBUTOS.map((atributo) => [
     atributo,
     Number(atributos[atributo] ?? 10)
-      + ajusteOrigem(fichaOriginal, 'atributo', atributo)
-      + totalAjustesManuais(fichaOriginal, chaveAjuste('atributo', atributo)),
+      + ajusteOrigem(fichaNormalizada, 'atributo', atributo)
+      + totalAjustesManuais(fichaNormalizada, chaveAjuste('atributo', atributo)),
   ]));
-  const raca = RACAS_CATALOGO.find((item) => item.id === fichaOriginal.racaId) || null;
+  const raca = RACAS_CATALOGO.find((item) => item.id === fichaNormalizada.racaId) || null;
   const derivados = calcularDerivadosComClasses(
     atributosParaCalculo,
     raca,
     classes,
     CLASSES_CATALOGO,
     Math.max(1, nivelTotal),
-    fichaOriginal.escolhaRacial,
+    fichaNormalizada.escolhaRacial,
   );
 
-  if (!derivados.recursosDefinidos) return fichaOriginal;
+  if (!derivados.recursosDefinidos) return fichaNormalizada;
   return {
-    ...fichaOriginal,
+    ...fichaNormalizada,
     derivados: {
-      ...(isRecord(fichaOriginal.derivados) ? fichaOriginal.derivados : {}),
+      ...(isRecord(fichaNormalizada.derivados) ? fichaNormalizada.derivados : {}),
       ...derivados,
     },
   };
@@ -327,6 +333,7 @@ function normalizeCharacter(record: PersonagemApiRecord): ICharacter {
     id: record.id,
     nome: record.nome,
     donoUsuarioId: typeof record.dono_usuario_id === 'string' ? record.dono_usuario_id : null,
+    somenteLeitura: record.somente_leitura === true,
     versao: positiveInteger(record.versao),
     ficha,
     nivel: typeof ficha.nivel === 'number' ? ficha.nivel : 1,
@@ -856,6 +863,37 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
         || useAuthStore.getState().campanhaAtiva?.id !== campaignId
       ) return;
       set({ error: errorMessage(error) || 'Falha ao carregar personagens.', isLoading: false });
+    }
+  },
+
+  loadCharacter: async (id: string) => {
+    if (get().characters.some((character) => character.id === id)) {
+      set({ error: null });
+      return true;
+    }
+    set({ isLoading: true, error: null });
+    try {
+      const remote = (await personagensApi.obter(id)).personagem;
+      const normalized = normalizeCharacter(remote);
+      if (!normalized.somenteLeitura) {
+        economyBaseVersions.set(id, positiveInteger(normalized.economiaVersao));
+        economyServerStates.set(id, jsonClone({
+          carteira: normalized.carteira ?? [],
+          inventario: normalized.inventarioCentral ?? [],
+        }));
+      }
+      set((state) => ({
+        characters: [...state.characters.filter((character) => character.id !== id), normalized],
+        persistence: normalized.somenteLeitura
+          ? state.persistence
+          : { ...state.persistence, [id]: emptyPersistenceState() },
+        isLoading: false,
+        error: null,
+      }));
+      return true;
+    } catch (error) {
+      set({ error: errorMessage(error), isLoading: false });
+      return false;
     }
   },
 

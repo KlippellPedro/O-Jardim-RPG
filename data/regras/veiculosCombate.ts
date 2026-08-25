@@ -334,7 +334,7 @@ const tabelaTiers = PATAMARES_TIER_VEICULO.map(item => `
 export const REGRA_VEICULOS: IRegraVeiculos = {
   categoria: 'Combate e Mecânicas',
   status: 'Regra oficial',
-  resumo: 'Regras de condução, perseguição, combate, colisão, avarias, reparo e montarias.',
+  resumo: 'Regras de condução, perseguição, combate, colisão, avarias, manutenção e montarias.',
   destaques: [
     ['Escala', 'Vida e dano universais'],
     ['Condução', 'Pilotagem ou Cavalgar'],
@@ -419,9 +419,26 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
     <h3 class="regras-subtitle">Reparo</h3>
     <ul class="regras-list">
       <li><strong>Reparo emergencial:</strong> adjacente ao componente, ferramentas adequadas, Ação Padrão e Tecnologia ou Ofício apropriado contra DT 15. Sucesso suspende uma avaria até o fim da cena. Cada avaria aceita uma tentativa por cena.</li>
-      <li><strong>Manutenção:</strong> seis horas, ferramentas, local de trabalho e materiais no valor de 10% do preço do veículo. Faça Tecnologia ou Ofício apropriado contra DT 10 + número de avarias ativas. Sucesso remove uma avaria e restaura 10% da Vida máxima, arredondado para baixo, mínimo 1.</li>
+      <li><strong>Manutenção corretiva:</strong> seis horas, ferramentas, local de trabalho e 1 Componente Veicular da raridade do veículo. Faça Tecnologia ou Ofício apropriado contra DT 10 + número de avarias ativas. Sucesso remove uma avaria e restaura 10% da Vida máxima, arredondado para baixo, mínimo 1.</li>
       <li>Um veículo incapacitado volta a operar quando fica com pelo menos 1 de Vida e remove ao menos uma avaria adquirida ao chegar a 0.</li>
       <li>Habilidades, oficinas e sistemas de reparo que indiquem outro tempo ou valor substituem esta regra.</li>
+    </ul>
+
+    <h3 class="regras-subtitle">Componentes Veiculares por mês</h3>
+    <p>No fim de cada mês em que o veículo foi usado, gaste Componentes Veiculares para mantê-lo funcionando. Todos os lotes usam a raridade do próprio veículo.</p>
+    <div class="regras-table-wrap"><table class="regras-table">
+      <thead><tr><th>Parte do custo</th><th>Componentes exigidos</th></tr></thead>
+      <tbody>
+        <tr><td>Veículo</td><td>1 lote da raridade do veículo</td></tr>
+        <tr><td>Cada módulo de utilidade instalado</td><td>+1 lote da mesma raridade</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="regras-list">
+      <li>Conte todo módulo de utilidade instalado, mesmo que esteja desligado. Armas, Núcleo e Estrutura não aumentam o custo.</li>
+      <li>Uma nave Rara com duas utilidades instaladas gasta 3 Componentes Veiculares Raros no mês.</li>
+      <li>Um lote superior pode substituir um inferior. Lotes inferiores não podem ser somados para alcançar outra raridade.</li>
+      <li>Se o custo não for pago, o veículo fica sem manutenção e não pode se mover por conta própria nem ativar sistemas. Ele volta a funcionar quando o custo for pago.</li>
+      <li>O custo atrasado não acumula. Um veículo guardado e sem uso durante o mês não gasta Componentes Veiculares.</li>
     </ul>
 
     <h3 class="regras-subtitle">Montarias</h3>
@@ -458,6 +475,85 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
       <li>Prefira avariar a destruir. Um veículo quebrado é uma missão de reparo, uma peça a procurar e uma dívida; um veículo destruído é só uma compra apagada.</li>
       <li>Colisão é a ferramenta mais barata para mudar o rumo de uma perseguição sem precisar de mais inimigos.</li>
       <li>Componente tem tier, e tier alto pertence aos patamares altos da Loja. Segure isso junto com a liberação da Loja, ou o grupo monta um T3 antes da campanha comportar.</li>
+    </ul>
+  `,
+};
+
+const marcadorSecao = (titulo: string) => `<h3 class="regras-subtitle">${titulo}</h3>`;
+
+const extrairIntervalo = (corpo: string, inicio: string, fim?: string) => {
+  const indiceInicial = corpo.indexOf(marcadorSecao(inicio));
+  const indiceFinal = fim ? corpo.indexOf(marcadorSecao(fim), indiceInicial + 1) : corpo.length;
+  if (indiceInicial < 0 || indiceFinal < 0) {
+    throw new Error(`Não foi possível dividir a regra de veículos entre "${inicio}" e "${fim ?? 'fim'}".`);
+  }
+  return corpo.slice(indiceInicial, indiceFinal).trim();
+};
+
+export const REGRA_VEICULOS_CONDUCAO: IRegraVeiculos = {
+  categoria: 'Combate e Mecânicas',
+  status: 'Regra oficial',
+  resumo: 'Como ler uma ficha veicular, quem pode conduzir, quais perícias são usadas e como a tripulação gasta suas ações durante uma cena.',
+  destaques: [
+    ['Condução', 'Pilotagem ou Cavalgar'],
+    ['Escala', 'Vida e dano universais'],
+    ['Ações', 'pertencem à tripulação'],
+  ],
+  corpo: extrairIntervalo(REGRA_VEICULOS.corpo, 'Ficha veicular', 'Perseguições'),
+  corpoMestre: `
+    <p class="regras-lead">Antes de colocar um veículo em cena, confirme quem conduz, quantos postos precisam ser preenchidos e quais sistemas cada personagem pretende operar. Essa preparação evita descobrir no meio da rodada que uma arma ou manobra ficou sem tripulante.</p>
+
+    <h3 class="regras-subtitle">Preparar a tripulação</h3>
+    <ul class="regras-list">
+      <li>Veículo não concede turnos extras. Cada condutor, artilheiro ou operador usa as próprias ações, e uma mesma pessoa pode acumular postos sem ganhar ações por isso.</li>
+      <li>Quem não tem treinamento ainda pode conduzir fora de pressão. Quando a cena cobrar manobra, aplique as limitações publicadas em vez de proibir a tentativa sem aviso.</li>
+      <li>Informe cobertura, capacidade e tripulação mínima junto com a ficha. Esses três campos definem quem pode embarcar e quem pode ser alvo antes do primeiro ataque.</li>
+    </ul>
+  `,
+};
+
+export const REGRA_VEICULOS_CENAS: IRegraVeiculos = {
+  categoria: 'Combate e Mecânicas',
+  status: 'Regra oficial',
+  resumo: 'Perseguições, manobras, ataques, colisões e avarias para resolver cenas veiculares sem misturar as ações do veículo com as da tripulação.',
+  destaques: [
+    ['Perseguição', '5 faixas'],
+    ['Manobras', 'ação e falha explícitas'],
+    ['Avarias', 'até 6 tipos ativos'],
+  ],
+  corpo: extrairIntervalo(REGRA_VEICULOS.corpo, 'Perseguições', 'Reparo'),
+  corpoMestre: `
+    <p class="regras-lead">Perseguição funciona melhor como objetivo de cena, não como um combate comum que ganhou rodas. Defina antes quem foge, quem persegue e o que acontece quando a distância chega a Contato ou Escapou.</p>
+
+    <h3 class="regras-subtitle">Montar a perseguição</h3>
+    <ul class="regras-list">
+      <li>Registre uma faixa para cada perseguidor. Mais veículos não compartilham automaticamente a mesma posição, e isso mantém as decisões de cada piloto relevantes.</li>
+      <li>Use terreno, clima e obstáculos como fontes visíveis de vantagem ou desvantagem. Não altere secretamente o limite de duas faixas por rodada.</li>
+      <li>Prefira avariar a destruir. Avaria muda a estratégia e deixa uma consequência reparável; destruição deve depender de efeito que declare isso.</li>
+      <li>Em combate a pé, escolha com cuidado se o veículo faz parte do tabuleiro. Misturar as duas escalas sem objetivo claro pode deixar ocupantes intocáveis e personagens externos sem opção útil.</li>
+    </ul>
+  `,
+};
+
+export const REGRA_VEICULOS_MANUTENCAO: IRegraVeiculos = {
+  categoria: 'Combate e Mecânicas',
+  status: 'Regra oficial',
+  resumo: 'Reparo emergencial, manutenção mensal, montarias e tiers de componentes para conservar e melhorar veículos depois da cena.',
+  destaques: [
+    ['Reparo', 'emergencial ou corretivo'],
+    ['Manutenção', 'cobrada somente quando usado'],
+    ['Componentes', 'tiers T0 a T4'],
+  ],
+  corpo: extrairIntervalo(REGRA_VEICULOS.corpo, 'Reparo'),
+  corpoMestre: `
+    <p class="regras-lead">Manutenção transforma o veículo em recurso contínuo da campanha. Mostre o custo antes da compra e registre os módulos instalados, porque eles definem quantos lotes serão cobrados no fim de um mês de uso.</p>
+
+    <h3 class="regras-subtitle">Cobrar sem surpresa</h3>
+    <ul class="regras-list">
+      <li>O custo atrasado não acumula e veículo guardado não paga. A cobrança existe para acompanhar uso, não para criar dívida invisível durante períodos sem cena.</li>
+      <li>Um módulo de utilidade aumenta a manutenção mesmo desligado. Armas, Núcleo e Estrutura não aumentam esse custo, então confira a categoria da peça antes de contar.</li>
+      <li>Componente de tier alto acompanha a liberação da Loja e o patamar da campanha. A regra de tiers não cria preços novos nem autoriza acesso automático.</li>
+      <li>Montarias usam a mesma economia de ações, mas mantêm condições próprias e nunca recebem avarias veiculares.</li>
     </ul>
   `,
 };

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ScrollText, Search, X } from 'lucide-react';
 import { LEGADOS_CATALOGO } from '../../../services/catalogoService';
+import type { LegadoCatalogo } from '../../../hooks/useResolvedRules';
 
 interface RequisitoLegado {
   atributo?: string;
@@ -27,18 +28,22 @@ const formatarPreRequisitos = (preRequisitos: unknown[] | undefined) => {
   return formatados.length ? formatados.join(' · ') : 'Nenhum';
 };
 
-export const CatalogoLegados = () => {
+interface CatalogoLegadosProps {
+  catalogo?: LegadoCatalogo[];
+}
+
+export const CatalogoLegados = ({ catalogo = LEGADOS_CATALOGO as LegadoCatalogo[] }: CatalogoLegadosProps) => {
   const [busca, setBusca] = useState('');
   const termo = busca.trim().toLocaleLowerCase('pt-BR');
 
-  const legados = useMemo(() => LEGADOS_CATALOGO
+  const legados = useMemo(() => catalogo
     .map((legado: any) => ({
       id: legado.id as string,
       titulo: legado.titulo as string,
       descricao: legado.descricao as string,
       preRequisitos: formatarPreRequisitos(legado.pre_requisitos),
     }))
-    .sort((a, b) => a.titulo.localeCompare(b.titulo, 'pt-BR')), []);
+    .sort((a, b) => a.titulo.localeCompare(b.titulo, 'pt-BR')), [catalogo]);
 
   const legadosVisiveis = useMemo(() => {
     if (!termo) return legados;

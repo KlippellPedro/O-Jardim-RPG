@@ -534,6 +534,30 @@ d20 + Luta ou Pontaria contra a Defesa Natural
 
 - Cobertura parcial dá +2 de Defesa; cobertura superior dá +5.
 
+### Manobras
+
+Nem todo ataque quer causar dano. Manobra gasta a mesma Ação Padrão de um ataque e usa a mesma rolagem, contra a defesa passiva do alvo: **10 mais o bônus total** da defesa indicada.
+
+d20 + Luta contra 10 + Reflexos ou Fortitude do alvo
+
+- Manobra | Contra | Sucesso
+
+- Agarrar | 10 + Reflexos | O alvo fica Agarrado. Você fica preso a ele enquanto segurar.
+
+- Derrubar | 10 + Reflexos | O alvo fica Caído.
+
+- Empurrar | 10 + Fortitude | O alvo recua 1,5 m, mais 1,5 m a cada 5 pontos acima da defesa.
+
+- Desarmar | 10 + Reflexos | Um item que o alvo segura cai no espaço dele.
+
+- Imobilizar | 10 + Fortitude | Só contra alvo já Agarrado. Ele fica Imobilizado.
+
+- Escapar de Agarrado ou Imobilizado custa uma Ação Padrão e um teste de Atletismo ou Acrobacia contra 10 mais a Luta de quem segura.
+
+- Criatura duas categorias de tamanho maior que você não é agarrada, derrubada nem empurrada sem uma regra que autorize.
+
+- Manobra não causa dano por si só. Habilidade que somar dano a uma manobra diz isso no texto.
+
 ### Reações
 
 Você tem uma reação por rodada e recupera ela no começo do seu próprio turno. Defesa Natural funciona sozinha e não gasta reação nenhuma.
@@ -1230,7 +1254,7 @@ Resistência física geral cobre corte, perfuração e impacto. Balístico fica 
 
 - Trocar um carregador usa a ação de movimento. Munição avulsa e arma pesada podem cobrar ação padrão quando a arma declarar isso.
 
-Raridade, orçamento de poder e o catálogo de modificações ficam no capítulo **Raridades e Modificações**, logo em seguida.
+Orçamento de poder fica em **Raridades de Equipamento**; as opções prontas e seus preços ficam em **Modificações de Equipamento**.
 
 ## raridades-modificacoes
 
@@ -1238,7 +1262,7 @@ Raridade, orçamento de poder e o catálogo de modificações ficam no capítulo
 
 **Status:** Regra oficial
 
-Até onde cada raridade pode ir, como uma modificação entra na ficha e as 51 modificações prontas, com preço de encomenda.
+Até onde cada raridade pode ir, quantas modificações e efeitos um item comporta e quais dons visuais cada categoria pode manifestar.
 
 ### Raridades e orçamento de poder
 
@@ -1260,6 +1284,65 @@ Raridade não é um bônus fixo que todo item da mesma faixa recebe. Ela é um *
 
 - Relíquia da CriaçãoAprovação do Mestre | 7 | 3 | ±7 | Sempre única. Quebra regra comum só até onde o Mestre deixar.
 
+### Dons definidos por categoria
+
+Cada raridade também possui uma manifestação por categoria. A descrição pode alterar aparência e comportamento, sem aumentar o efeito mecânico.
+
+Arma
+
+- **Incomum:** Temperamento: esquenta, zumbe ou brilha de leve quando quem a empunha é o dono.
+- **Raro:** Voz desperta: fala ou passa impulsos simples, e com o tempo cria personalidade.
+- **Épico:** Instinto de confronto: sente hostilidade por perto e tenta avisar quem a carrega.
+- **Lendário:** Vontade de lenda: tem objetivos próprios e um poder único, do jeito que a descrição do item mandar.
+- **Mítico:** Golpe soberano: faz uma coisa impossível, ligada à história dela, com custo e limite que o Mestre aprova.
+- **Relíquia da Criação:** Corte de princípio: mexe com uma lei da realidade, escolhida quando a relíquia foi criada.
+
+Armadura
+
+- **Incomum:** Sempre impecável: não segura poeira, lama nem cheiro, e se ajusta sozinha a quem veste.
+- **Raro:** Memória de forma: some com arranhão de superfície durante um descanso. Durabilidade perdida não volta.
+- **Épico:** Guarda desperta: reage ao perigo antes de você. Se mexe, brilha ou avisa de algum jeito.
+- **Lendário:** Bastião consciente: conversa com quem a veste e tem uma defesa única, descrita no item.
+- **Mítico:** Corpo soberano: nada mundano a destrói enquanto a condição da história dela continuar de pé.
+- **Relíquia da Criação:** Lei de proteção: impõe uma condição absoluta de defesa, combinada com o Mestre.
+
+Consumivel
+
+- **Incomum:** Conservação perfeita: enquanto estiver lacrado, tempo e clima comum não estragam.
+- **Raro:** Dose responsiva: muda de sabor, cor ou temperatura para avisar se é seguro para aquela pessoa.
+- **Épico:** Efeito excepcional: carrega uma propriedade a mais, descrita no item, gasta junto com ele.
+- **Lendário:** Receita viva: se comunica por sinais e cobra uma condição especial para aceitar ser usada.
+- **Mítico:** Essência soberana: produz um efeito que só ela produz, e ninguém consegue copiar.
+- **Relíquia da Criação:** Semente de princípio: ao ser consumida, muda alguma coisa para sempre. O que muda, o Mestre define.
+
+Veiculo
+
+- **Incomum:** Partida fiel: reconhece o condutor e avisa das falhas simples antes de sair do lugar.
+- **Raro:** Navegador instintivo: guarda as rotas que já percorreu e sabe apontá-las de volta.
+- **Épico:** Resposta desperta: ajusta sistemas e postura sozinho quando o perigo aparece, do jeito descrito no veículo.
+- **Lendário:** Companheiro de jornada: tem personalidade e um jeito extraordinário de se deslocar.
+- **Mítico:** Travessia soberana: passa por um obstáculo que não deveria dar para passar, sob condição aprovada pelo Mestre.
+- **Relíquia da Criação:** Caminho impossível: chega a um tipo de destino que veículo nenhum alcança.
+
+Geral
+
+- **Incomum:** Marca do dono: esquenta, vibra ou muda de cara quando o dono chega perto.
+- **Raro:** Eco de uso: guarda impressões simples de quem já o usou, e revela por sinais.
+- **Épico:** Função desperta: faz sozinho uma tarefa simples e bem delimitada.
+- **Lendário:** Personalidade própria: fala, e tem um poder único que combina com a função dele.
+- **Mítico:** Autoridade soberana: manda em um assunto estreito, definido na história do objeto.
+- **Relíquia da Criação:** Objeto de princípio: representa um conceito e interfere nele. Qual conceito, você decide com o Mestre.
+
+## modificacoes-equipamentos
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Catálogo oficial
+
+Como modificações entram na ficha, quanto custa uma encomenda e o catálogo completo agrupado pela categoria do equipamento.
+
+Use esta página depois de conferir o orçamento no capítulo **Raridades de Equipamento**. Primeiro identifique o nível e o valor da modificação; depois abra somente a categoria do item que você está melhorando.
+
 ### Modificações e efeitos na ficha
 
 - Toda modificação ocupa um espaço da raridade, seja ela técnica, mágica ou especial.
@@ -1276,7 +1359,7 @@ Uma modificação pode conceder Vida máxima, Defesa, Ataque, atributo ou bônus
 
 - **Nível:** **Comum** entra em qualquer item. **Marcial** bate mais forte e só entra em arma marcial ou exótica, armadura pesada e item Raro ou melhor.
 
-- **Valor:** o peso do efeito automático. Compare com a coluna "Valor por efeito" da tabela ali em cima para saber de qual raridade o item precisa ser.
+- **Valor:** o peso do efeito automático. Compare com a coluna "Valor por efeito" da tabela de raridades para saber de qual faixa o item precisa ser.
 
 - **Técnica:** não tem efeito automático. Ocupa espaço de modificação, mas não gasta o orçamento de efeito da raridade.
 
@@ -1294,9 +1377,9 @@ Uma modificação pode conceder Vida máxima, Defesa, Ataque, atributo ou bônus
 
 A Loja vende cada uma delas na categoria **Modificações**, com o preço já aplicado. Marcial só aparece a partir da Metrópole.
 
-### Catálogo de modificações
+### Catálogo por categoria
 
-O catálogo contém 51 modificações, agrupadas pela categoria do equipamento.
+Existem 51 modificações. Cada grupo abaixo começa fechado: abra apenas Armas, Armaduras, Escudos ou a categoria que corresponde ao item.
 
 Armas
 18 modificações · 9 comuns · 9 marciais
@@ -1420,56 +1503,7 @@ Itens gerais e mágicos
 
 - Selado | Marcial | 3 | 1200 L | Nível total 10 e Misticismo treinado | O item carrega um Selo inscrito, escolhido na criação. Uma vez por dia ele dispara sem gastar Mana nem exigir teste de inscrição.
 
-Isso aqui é ponto de partida, não lista fechada. Modificação nova passa, desde que respeite o valor máximo por efeito da raridade e o nível condizente com o equipamento.
-
-### Dons definidos por categoria
-
-Cada raridade também possui uma manifestação por categoria. A descrição pode alterar aparência e comportamento, sem aumentar o efeito mecânico.
-
-Arma
-
-- **Incomum:** Temperamento: esquenta, zumbe ou brilha de leve quando quem a empunha é o dono.
-- **Raro:** Voz desperta: fala ou passa impulsos simples, e com o tempo cria personalidade.
-- **Épico:** Instinto de confronto: sente hostilidade por perto e tenta avisar quem a carrega.
-- **Lendário:** Vontade de lenda: tem objetivos próprios e um poder único, do jeito que a descrição do item mandar.
-- **Mítico:** Golpe soberano: faz uma coisa impossível, ligada à história dela, com custo e limite que o Mestre aprova.
-- **Relíquia da Criação:** Corte de princípio: mexe com uma lei da realidade, escolhida quando a relíquia foi criada.
-
-Armadura
-
-- **Incomum:** Sempre impecável: não segura poeira, lama nem cheiro, e se ajusta sozinha a quem veste.
-- **Raro:** Memória de forma: some com arranhão de superfície durante um descanso. Durabilidade perdida não volta.
-- **Épico:** Guarda desperta: reage ao perigo antes de você. Se mexe, brilha ou avisa de algum jeito.
-- **Lendário:** Bastião consciente: conversa com quem a veste e tem uma defesa única, descrita no item.
-- **Mítico:** Corpo soberano: nada mundano a destrói enquanto a condição da história dela continuar de pé.
-- **Relíquia da Criação:** Lei de proteção: impõe uma condição absoluta de defesa, combinada com o Mestre.
-
-Consumivel
-
-- **Incomum:** Conservação perfeita: enquanto estiver lacrado, tempo e clima comum não estragam.
-- **Raro:** Dose responsiva: muda de sabor, cor ou temperatura para avisar se é seguro para aquela pessoa.
-- **Épico:** Efeito excepcional: carrega uma propriedade a mais, descrita no item, gasta junto com ele.
-- **Lendário:** Receita viva: se comunica por sinais e cobra uma condição especial para aceitar ser usada.
-- **Mítico:** Essência soberana: produz um efeito que só ela produz, e ninguém consegue copiar.
-- **Relíquia da Criação:** Semente de princípio: ao ser consumida, muda alguma coisa para sempre. O que muda, o Mestre define.
-
-Veiculo
-
-- **Incomum:** Partida fiel: reconhece o condutor e avisa das falhas simples antes de sair do lugar.
-- **Raro:** Navegador instintivo: guarda as rotas que já percorreu e sabe apontá-las de volta.
-- **Épico:** Resposta desperta: ajusta sistemas e postura sozinho quando o perigo aparece, do jeito descrito no veículo.
-- **Lendário:** Companheiro de jornada: tem personalidade e um jeito extraordinário de se deslocar.
-- **Mítico:** Travessia soberana: passa por um obstáculo que não deveria dar para passar, sob condição aprovada pelo Mestre.
-- **Relíquia da Criação:** Caminho impossível: chega a um tipo de destino que veículo nenhum alcança.
-
-Geral
-
-- **Incomum:** Marca do dono: esquenta, vibra ou muda de cara quando o dono chega perto.
-- **Raro:** Eco de uso: guarda impressões simples de quem já o usou, e revela por sinais.
-- **Épico:** Função desperta: faz sozinho uma tarefa simples e bem delimitada.
-- **Lendário:** Personalidade própria: fala, e tem um poder único que combina com a função dele.
-- **Mítico:** Autoridade soberana: manda em um assunto estreito, definido na história do objeto.
-- **Relíquia da Criação:** Objeto de princípio: representa um conceito e interfere nele. Qual conceito, você decide com o Mestre.
+O catálogo é um ponto de partida, não uma lista fechada. Modificação nova precisa respeitar o valor máximo por efeito da raridade e o nível condizente com o equipamento.
 
 ## crafting
 
@@ -1577,6 +1611,9 @@ Materiais adicionais são calculados sobre o custo inicial do projeto. Cada nova
 
 ### Materiais, Drops e comércio
 
+Categoria, propriedade, afinidade, potência, estado e qualidade de um material vivem no capítulo
+    **Materiais e Ingredientes** - este capítulo só cobre o lado econômico do crafting.
+
 - O custo usa o preço normal, sem promoção. Item sem preço usa o valor de um item publicado de mesma raridade e função; sem comparável, o projeto não começa.
 - Materiais específicos e Drops só substituem parte do custo quando a receita permitir. Cada material é consumido uma vez e vale no máximo seu preço registrado.
 - Um Drop não pode ser usado, vendido e recuperado no mesmo projeto. Desmontagem nunca devolve mais valor do que foi consumido.
@@ -1586,13 +1623,139 @@ Materiais adicionais são calculados sobre o custo inicial do projeto. Cada nova
 
 **Classes:** Alquimista e Engenheiro usam as habilidades descritas nas próprias progressões. Nenhuma classe é obrigatória para fabricar itens comuns, desde que o personagem cumpra os requisitos da receita.
 
+## materiais
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+Todo material vira um de seis estoques: Componentes Químicos, Componentes Ritualísticos, Componentes Veiculares, Sucata, Mantimentos ou Matéria-prima.
+
+O nome exato de um material conta a história; o **lote genérico** é o que entra na ficha. Ervas, venenos e sais podem virar Componentes Químicos. Fios, placas e engrenagens podem virar Sucata. Assim o grupo ainda encontra coisas interessantes sem transformar cada preparo numa lista de compras.
+
+### A regra em trinta segundos
+
+- Ao receber um material, coloque-o no estoque indicado pelo catálogo e preserve a raridade: material Comum vira lote Comum, material Raro vira lote Raro.
+
+- Componentes Químicos, Componentes Ritualísticos, Sucata e Mantimentos têm listas próprias. Somente alguns materiais marcados no catálogo também podem virar Matéria-prima.
+
+- Alquimista, Engenheiro e Chef gastam 1 lote depois de um descanso para abastecer **todos** os preparos permitidos pela classe.
+
+- As fórmulas do Alquimista exigem Componentes Químicos da raridade do nível atual: Comum no nível 1, Incomum no 2, Raro no 3, Épico no 4 e Lendário no 5.
+
+- Os projetos do Engenheiro seguem a mesma escada com Sucata: Comum no nível 1, Incomum no 2, Rara no 3, Épica no 4 e Lendária no 5.
+
+- As receitas do Chef seguem a mesma escada com Mantimentos: Comum no nível 1, Incomum no 2, Raro no 3, Épico no 4 e Lendário no 5.
+
+- Rituais não têm círculo nem nível: a complexidade decide o custo. Simples gasta 1 Componente Ritualístico Incomum; Complexo, 1 Raro; Grandioso, 2 Épicos; Monumental, 2 Lendários.
+
+- Veículos usados no mês gastam Componentes Veiculares da própria raridade. O custo é 1 lote pelo veículo e mais 1 lote por módulo de utilidade instalado.
+
+- Ingredientes específicos são descrição narrativa e mercadoria. Uma receita só exige o estoque genérico indicado.
+
+### Os seis estoques
+
+- Estoque | Serve para | Custo normal
+
+- Componentes Químicos | Fórmulas e doses do Alquimista. | 1 por descanso, da raridade do nível atual das fórmulas.
+
+- Componentes Ritualísticos | Oferendas, símbolos e catalisadores de rituais. | De 1 Incomum a 2 Lendários, conforme a complexidade.
+
+- Componentes Veiculares | Manutenção de veículos e dos módulos de utilidade instalados. | 1 por mês de uso, mais 1 por módulo de utilidade instalado, sempre da raridade do veículo.
+
+- Sucata | Engenhocas temporárias do Engenheiro. | 1 por descanso, da raridade do nível atual dos projetos.
+
+- Mantimentos | Porções do Chef. | 1 por descanso, da raridade do nível atual das receitas.
+
+- Matéria-prima | Armas, armaduras e outras criações permanentes. | Conforme a raridade.
+
+### Componentes por complexidade do ritual
+
+- Complexidade | Componentes exigidos | Quando são gastos
+
+- Simples | 1 Incomum | Ao começar o rito
+
+- Complexo | 1 Raro | Ao começar o rito
+
+- Grandioso | 2 Épicos | Ao começar o rito
+
+- Monumental | 2 Lendários | Ao começar o rito
+
+O símbolo ou oferenda exata pode combinar com a cena, mas a quantidade e a raridade não mudam. Um lote superior substitui um inferior; lotes inferiores **não podem ser somados** para alcançar outra raridade. A Mana indicada no ritual também fica comprometida ao começar e não volta se o rito falhar ou for interrompido.
+
+### Quando os Componentes Químicos aumentam
+
+- Nível da fórmula | Nível de Alquimista | Componente exigido
+
+- 1 | 1–4 | Comum
+
+- 2 | 5–8 | Incomum
+
+- 3 | 9–12 | Raro
+
+- 4 | 13–16 | Épico
+
+- 5 | 17–20 | Lendário
+
+Um componente de raridade superior pode substituir um inferior. Componentes inferiores **não podem ser somados** para alcançar uma raridade maior. Assim, Água Pura Comum abastece fórmulas de nível 1, mas nunca uma fórmula de nível 2 ou superior.
+
+### Quando a Sucata aumenta
+
+- Nível do projeto | Nível de Engenheiro | Sucata exigida
+
+- 1 | 3–4 | Comum
+
+- 2 | 5–8 | Incomum
+
+- 3 | 9–12 | Rara
+
+- 4 | 13–16 | Épica
+
+- 5 | 17–20 | Lendária
+
+Sucata superior pode substituir uma inferior. Lotes inferiores não se somam para alcançar um patamar maior. Todos os projetos conhecidos melhoram automaticamente com o nível do Engenheiro; as vagas de Engenhoca continuam sendo liberadas separadamente.
+
+### Quando os Mantimentos aumentam
+
+- Nível da receita | Nível de Chef | Mantimento exigido
+
+- 1 | 1–4 | Comum
+
+- 2 | 5–8 | Incomum
+
+- 3 | 9–12 | Raro
+
+- 4 | 13–16 | Épico
+
+- 5 | 17–20 | Lendário
+
+Um Mantimento superior pode substituir um inferior. Mantimentos inferiores não se somam para criar uma raridade maior. Todas as receitas conhecidas sobem automaticamente com o nível do Chef.
+
+### Manutenção de veículos
+
+No fim de cada mês em que um veículo foi usado, gaste **1 Componente Veicular da raridade do veículo**, mais **1 lote da mesma raridade por módulo de utilidade instalado**. Conte os módulos instalados mesmo que estejam desligados. Armas, Núcleo e Estrutura não aumentam esse custo.
+
+Exemplo: uma nave Rara com Geladeira e Área Médica instaladas gasta 3 Componentes Veiculares Raros no mês. Um lote superior pode substituir um inferior; lotes inferiores não podem ser somados para alcançar outra raridade.
+
+Se o custo não for pago, o veículo fica **sem manutenção** e não pode se mover por conta própria nem ativar sistemas. Ele volta a funcionar assim que a manutenção for paga. O custo atrasado não acumula e o veículo não é destruído por falta de pagamento.
+
+### Fabricação permanente
+
+Além do teste, tempo e dinheiro do capítulo de Criação, gaste Matéria-prima conforme a raridade: **1** para Comum ou Incomum, **2** para Raro, **3** para Épico, **4** para Lendário, **5** para Relíquia e **6** para Relíquia da Criação.
+
+### Somente Matéria-prima pode aproveitar outro catálogo
+
+Os quatro estoques de classe e os Componentes Veiculares não se misturam. Um ingrediente de cozinha não vira reagente alquímico, e Sucata de engenhoca não substitui uma peça preparada para manter um veículo. Alguns materiais resistentes ou especiais também trazem a marca de Matéria-prima porque podem entrar numa criação permanente. Mesmo nesses casos, cada unidade entra em **um único estoque e na própria raridade**. Não duplique o mesmo achado.
+
+**Regra de ouro:** siga o catálogo, baixe um número e continue jogando. Potência, qualidade e estado não são contas exigidas dos jogadores.
+
 ## veiculos
 
 **Categoria:** Combate e Mecânicas
 
 **Status:** Regra oficial
 
-Regras de condução, perseguição, combate, colisão, avarias, reparo e montarias.
+Como ler uma ficha veicular, quem pode conduzir, quais perícias são usadas e como a tripulação gasta suas ações durante uma cena.
 
 ### Ficha veicular
 
@@ -1638,6 +1801,14 @@ Registre categoria, tamanho, Vida, Defesa, Resistência geral, resistências por
 - A tripulação mínima indica quantas pessoas são necessárias para preencher os postos obrigatórios. Sem condutor, o veículo não manobra; sem operador ou artilheiro, o respectivo sistema não é usado.
 
 - Uma arma instalada só ataca mais de uma vez no turno quando sua descrição permitir.
+
+## veiculos-cenas
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Perseguições, manobras, ataques, colisões e avarias para resolver cenas veiculares sem misturar as ações do veículo com as da tripulação.
 
 ### Perseguições
 
@@ -1725,15 +1896,43 @@ Terreno, clima, avarias e manobras podem conceder vantagem ou desvantagem. Se ma
 
 - 6 | Casco | A cobertura dos ocupantes cai um grau: total para parcial ou parcial para nenhuma. | O próximo dano recebido ignora a Resistência; depois, remova esta repetição.
 
+## veiculos-manutencao
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Reparo emergencial, manutenção mensal, montarias e tiers de componentes para conservar e melhorar veículos depois da cena.
+
 ### Reparo
 
 - **Reparo emergencial:** adjacente ao componente, ferramentas adequadas, Ação Padrão e Tecnologia ou Ofício apropriado contra DT 15. Sucesso suspende uma avaria até o fim da cena. Cada avaria aceita uma tentativa por cena.
 
-- **Manutenção:** seis horas, ferramentas, local de trabalho e materiais no valor de 10% do preço do veículo. Faça Tecnologia ou Ofício apropriado contra DT 10 + número de avarias ativas. Sucesso remove uma avaria e restaura 10% da Vida máxima, arredondado para baixo, mínimo 1.
+- **Manutenção corretiva:** seis horas, ferramentas, local de trabalho e 1 Componente Veicular da raridade do veículo. Faça Tecnologia ou Ofício apropriado contra DT 10 + número de avarias ativas. Sucesso remove uma avaria e restaura 10% da Vida máxima, arredondado para baixo, mínimo 1.
 
 - Um veículo incapacitado volta a operar quando fica com pelo menos 1 de Vida e remove ao menos uma avaria adquirida ao chegar a 0.
 
 - Habilidades, oficinas e sistemas de reparo que indiquem outro tempo ou valor substituem esta regra.
+
+### Componentes Veiculares por mês
+
+No fim de cada mês em que o veículo foi usado, gaste Componentes Veiculares para mantê-lo funcionando. Todos os lotes usam a raridade do próprio veículo.
+
+- Parte do custo | Componentes exigidos
+
+- Veículo | 1 lote da raridade do veículo
+
+- Cada módulo de utilidade instalado | +1 lote da mesma raridade
+
+- Conte todo módulo de utilidade instalado, mesmo que esteja desligado. Armas, Núcleo e Estrutura não aumentam o custo.
+
+- Uma nave Rara com duas utilidades instaladas gasta 3 Componentes Veiculares Raros no mês.
+
+- Um lote superior pode substituir um inferior. Lotes inferiores não podem ser somados para alcançar outra raridade.
+
+- Se o custo não for pago, o veículo fica sem manutenção e não pode se mover por conta própria nem ativar sistemas. Ele volta a funcionar quando o custo for pago.
+
+- O custo atrasado não acumula. Um veículo guardado e sem uso durante o mês não gasta Componentes Veiculares.
 
 ### Montarias
 
@@ -1767,13 +1966,63 @@ Terreno, clima, avarias e manobras podem conceder vantagem ou desvantagem. Se ma
 
 - Deslocamento escrito em metros no veículo completo prevalece sobre índices antigos de chassi ou componente.
 
+## transporte
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+Custos por personagem, duração das rotas e requisitos para viajar dentro de um reino, entre reinos, entre dimensões ou para fora da Árvore.
+
+Escolha o meio de transporte e a extensão da rota. Cada célula mostra primeiro o **preço por personagem** e, abaixo, o tempo normal de viagem. Os valores servem como referência de compra; clima, conflitos, bloqueios de rota e acontecimentos da campanha podem alterar a duração.
+
+### Transporte entre reinos e dimensões
+
+Custos e tempos dos meios de transporte de Lunaris
+
+- Transporte | Mesmo Reino | Entre Reinos | Entre Dimensões
+
+- Trem | 20 Lunaris 30 min | 50 Lunaris 1–2 dias | 200 Lunaris 7 dias
+
+- Aeronave Comum | 50 Lunaris 10 min | 100 Lunaris 1–2 horas | 500 Lunaris 2 dias
+
+- Aeronave de Alto Nível | 100 Lunaris 1 min | 250 Lunaris 20–30 min | 1.000 Lunaris 1 hora
+
+**Rota entre dimensões:** exige um Portal Dimensional disponível. Some a taxa de acesso ao preço do meio de transporte escolhido.
+
+### Portal Dimensional
+
+Taxa de acesso ao Portal Dimensional
+
+- Serviço | Custo | Requisito | Observação
+
+- Acesso ao Portal Dimensional | 500 Lunaris | Portal disponível | Custo adicional ao transporte
+
+### Viagens excepcionais
+
+Custos, tempos e requisitos de viagens excepcionais
+
+- Destino | Custo | Tempo | Requisito | Observação
+
+- Sair da Árvore | 10.000 Lunaris | 12 dias | Contato capaz de realizar a viagem | Dinheiro sozinho não garante acesso
+
+### Como aplicar os valores
+
+- Os preços são cobrados por personagem. Multiplique o valor da rota pelo número de viajantes que precisam de passagem.
+
+- Os tempos representam a duração normal da viagem, antes de qualquer imprevisto da campanha.
+
+- Viajar entre dimensões exige acesso a um Portal Dimensional e o pagamento adicional indicado na tabela.
+
+- Uma viagem excepcional pode exigir algo além de dinheiro. Para sair da Árvore, o grupo também precisa de um contato capaz de realizar a viagem.
+
 ## magia-fluxo
 
 **Categoria:** Livro do Jogador
 
 **Status:** Regra oficial
 
-Onze Fluxos aproveitáveis em magia, ritual, selo e encantamento, mais a fusão entre um Fluxo principal e um secundário.
+Os onze Fluxos, a fórmula de conjuração, a progressão dos círculos, os custos de Mana e as regras para manter concentração.
 
 A classe diz **como** você manipula a magia; o Fluxo nativo diz **o que** sai dali. São dez Fluxos naturais mais o artificial da Tecnologia: onze formas utilizáveis no total.
 
@@ -1846,6 +2095,24 @@ DT de conjuração = 7 + (3 × círculo)
 - 10º | 50 | 37 | 55
 
 Esses custos são a referência do círculo. Cada entrada do catálogo declara o custo final dela, que é o que vale na mesa.
+
+### Concentração
+
+- Uma magia ou efeito de concentração por vez. Começar outro encerra o anterior na hora, sem aviso.
+
+- Ao sofrer dano, role Vontade contra DT 10 ou metade do dano recebido, o que for maior. Falhou, a concentração cai.
+
+- Ficar Atordoado, Inconsciente ou incapaz de agir também derruba. Largar de propósito não custa ação nenhuma.
+
+- A duração máxima está escrita na magia. Pagar Mana de novo não estica uma conjuração que já está de pé.
+
+## marcas-cicatrizes
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+Os ganhos e os ônus que surgem do 5º ao 10º círculo, com as Marcas fixas de cada Fluxo e a tabela comum de Cicatrizes.
 
 ### O preço dos círculos altos
 
@@ -2045,15 +2312,15 @@ A.X.I.S
 
 - Reserva Rachada | Uma vez por cena, você conjura uma magia sem gastar Mana. | Ao fim dessa cena, 2 Cansaço.
 
-### Concentração
+## rituais-selos
 
-- Uma magia ou efeito de concentração por vez. Começar outro encerra o anterior na hora, sem aviso.
+**Categoria:** Livro do Jogador
 
-- Ao sofrer dano, role Vontade contra DT 10 ou metade do dano recebido, o que for maior. Falhou, a concentração cai.
+**Status:** Regra oficial
 
-- Ficar Atordoado, Inconsciente ou incapaz de agir também derruba. Largar de propósito não custa ação nenhuma.
+Como funcionam rituais fora de combate, fusões com um Fluxo secundário, selos consumíveis e encantamentos permanentes.
 
-- A duração máxima está escrita na magia. Pagar Mana de novo não estica uma conjuração que já está de pé.
+Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de círculo. Consulte cada bloco pelo tipo de preparação que o personagem está tentando realizar.
 
 ### Rituais
 
@@ -2083,9 +2350,29 @@ A.X.I.S
 
 - Quantos encantamentos cabem por raridade: Comum 1, Incomum 2, Raro 3, Épico 4 e Lendário 5.
 
-### Catálogo
+## catalogo-magico
 
-Use os filtros abaixo para procurar magias, rituais, selos, encantamentos e assinaturas de fusão.
+**Categoria:** Livro do Jogador
+
+**Status:** Catálogo oficial
+
+Consulta interativa de magias, manifestações, rituais, selos, encantamentos e assinaturas de fusão, separada das regras de conjuração.
+
+Esta página serve para procurar uma entrada específica. As fórmulas de teste, DT, Mana e concentração ficam em **Magia e Fluxo**; Marcas, Cicatrizes e preparações possuem capítulos próprios.
+
+### O que está no catálogo
+
+Os filtros abaixo reúnem magias, manifestações de cada Fluxo, rituais, selos, encantamentos e assinaturas de fusão. Escolha primeiro a forma que procura e depois reduza pelos demais campos disponíveis.
+
+### Antes de escolher uma entrada
+
+- Confirme se o personagem possui a classe, habilidade, item, Legado ou concessão que dá acesso àquela forma.
+
+- Para magia de círculo, confira Fluxo mínimo, Mana final e DT de conjuração no texto da própria entrada.
+
+- Ritual não pertence a círculo e não entra em combate. Selo e encantamento dependem da preparação descrita no capítulo correspondente.
+
+- Fluxo do Fim continua exigindo autorização do Mestre antes da escolha.
 
 ## condicoes
 
@@ -2311,22 +2598,21 @@ Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes
 - **Guardião** (comum) - Escolhe alguém pra proteger e leva a sério. Cria vínculo, obriga o inimigo a decidir em quem bater e absorve o que vier, até onde a reação e a cena aguentarem.
 - **Caçador** (comum) - Estuda a presa antes de encostar nela. Cada tipo de criatura pede um método, e o que ele aprende sobre uma vale pra todas daquela família.
 - **Engenheiro** (comum) - Chega com as coisas montadas. Prepara invenções que duram pouco, melhora o equipamento do grupo e força a máquina além do limite quando a hora pede, sabendo o que isso vai custar.
-- **Alquimista** (comum) - Transforma o que encontra pelo caminho em elixir. O estoque zera no descanso, então cada frasco é uma decisão: usa agora ou guarda pro que vem depois.
+- **Alquimista** (comum) - Transforma o que encontra pelo caminho em elixires, bombas e antídotos. Você escolhe as doses durante o descanso, e tudo o que não usar expira no descanso seguinte.
 - **Comerciante** (comum) - Ganha a briga antes dela começar. Contato certo, informação na hora e estoque bem escolhido resolvem mais que dado. E não, ele não fabrica dinheiro.
 - **Campeão Dimensional** (especial) - Classe especial de Baluarte. Corpo acima do que um corpo deveria aguentar. Os picos de poder são curtos e contados, e nenhum deles impede de morrer.
-- **Pirata Amaldiçoado** (especial) - Classe especial do Abismo. Comanda maré espectral e maldição de curta duração, à frente de uma tripulação que já morreu e ainda não aceitou.
+- **Pirata Amaldiçoado** (especial) - Classe especial do Abismo. Você luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que morreu, mas ainda segue o seu comando.
 - **Cartista Arcano** (especial) - Classe especial, aberta a qualquer Árvore. Conjura por cartas preparadas antes: o baralho decide o que você tem em mãos hoje, e o Fluxo nativo decide o que cada carta faz.
 - **Guia Dimensional** (especial) - Classe especial da Matriz. Conhece rota, portal e âncora: é por causa dele que o grupo chega em lugar onde não existe estrada.
-- **Caçador de Entidades** (especial) - Classe especial de Anima. Caça o que ataca por dentro: possessão, coisa que come memória, coisa que veste corpo alheio.
+- **Caçador das Almas** (especial) - Classe especial de Anima. Caça o que ataca por dentro: possessão, coisa que come memória, coisa que veste corpo alheio.
 - **Escritor de Contos** (especial) - Classe especial do Limiar. Transforma história, presságio e verdade pequena em apoio pro grupo. O que ele conta tem uma tendência incômoda a acontecer.
-- **Invocador** (especial) - Classe especial, aberta a qualquer Árvore. Não luta sozinho: chama. O que atende depende inteiramente do Fluxo nativo, e nem sempre é o que ele esperava.
+- **Invocador** (especial) - Classe especial, aberta a qualquer Árvore. Não luta sozinho: invoca. Escolhe do Catálogo de Invocações a criatura que vai lutar ao seu lado, e decide a cada pacto se chama mais uma ou fortalece a que já tem.
 - **Viajante** (especial) - Classe especial da Matriz, de Éon ou de Vórtice. Vive entre Árvores e dimensões, e converte estrada rodada em capacidade de se virar em qualquer lugar.
-- **Decodificador** (especial) - Classe especial de Alétheia. Lê padrão, código e mentira antes de qualquer um, e guarda o que descobriu até a hora em que aquilo vira vantagem.
-- **Codificador** (especial) - Classe especial da A.X.I.S. Escreve protocolo temporário direto na realidade pra proteger, melhorar e controlar o terreno da luta.
 - **Canalizador** (comum) - Fluxo puro, direto, sem intermediário nenhum. É a forma mais simples de conjurar e a mais difícil de fazer bem.
 - **Sintonizador** (comum) - Alinha o Fluxo nativo a catalisadores de fora pra fazer o que ele sozinho não faria. Nada disso passa a morar na alma: é sempre empréstimo.
 - **Ritualista** (comum) - Trabalha fora do combate. Ritual não tem círculo, cobra tempo e compromete a Mana desde o primeiro minuto: se interromperem, a Mana já foi.
 - **Interceptador** (especial) - Classe especial da A.X.I.S. Entra na Malha pra derrubar a magia dos outros. Não conjura Fluxo natural, atrapalha quem conjura.
+- **Chef** (comum) - Transforma Mantimentos em porções que sustentam o grupo dentro e fora de combate. Bebidas agem rápido, lanches acompanham a marcha e refeições oferecem benefícios mais duradouros.
 
 ## poderes-habilidades
 
@@ -2340,7 +2626,7 @@ Subir de nível numa classe sempre entrega alguma coisa, e essa coisa tem cinco 
 
 ### A grade de uma classe
 
-As 27 classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.
+As 26 classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.
 
 - Recompensa | Nos níveis | Quantas
 

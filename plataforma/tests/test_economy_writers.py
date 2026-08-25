@@ -13,6 +13,7 @@ from pydantic import ValidationError
 from core.economy_models import EconomyOperationsInput
 from routers import characters, internal, vault
 from schemas import (
+    CharacterOwnerUpdateInput,
     EconomyReplaceInput,
     InventoryTransactionInput,
     VaultTransferCurrencyInput,
@@ -641,6 +642,85 @@ class CharacterReplacementWriterTests(unittest.TestCase):
         )
 
 
+class CharacterOwnerTransferTests(unittest.TestCase):
+    NEW_OWNER_ID = UUID("44444444-4444-4444-4444-444444444444")
+
+    def _responder(self, *, actor_role="mestre", membro_ativo=True):
+        def responder(sql, params):
+            if sql.startswith("SELECT id, campanha_id, dono_usuario_id, nome FROM personagens"):
+                return {
+                    "id": CHARACTER_ID,
+                    "campanha_id": CAMPAIGN_ID,
+                    "dono_usuario_id": USER_ID,
+                    "nome": "Lys",
+                }
+            if "FROM campanhas c" in sql:
+                return {
+                    "campanha_id": CAMPAIGN_ID,
+                    "dono_id": USER_ID,
+                    "status": "ativa",
+                    "papel_plataforma": "jogador",
+                    "usuario_id": USER_ID,
+                    "papel": actor_role,
+                    "membro_status": "ativo",
+                }
+            if "JOIN usuarios u ON u.id=m.usuario_id" in sql:
+                if not membro_ativo:
+                    return None
+                return {"id": self.NEW_OWNER_ID, "nome_exibicao": "Novo Jogador"}
+            return None
+
+        return responder
+
+    def test_manager_transfers_owner_and_notifies_new_owner(self):
+        connection = _RecordingConnection(self._responder())
+        payload = CharacterOwnerUpdateInput(novo_dono_usuario_id=self.NEW_OWNER_ID)
+        with mock.patch.object(characters, "record_audit") as record_audit, \
+                mock.patch("core.notifications.notify") as notify:
+            result = characters.transfer_character_owner(
+                CHARACTER_ID,
+                payload,
+                user=SimpleNamespace(id=USER_ID),
+                database=_Database(connection),
+            )
+
+        self.assertEqual(result["dono_usuario_id"], self.NEW_OWNER_ID)
+        self.assertEqual(result["dono_nome"], "Novo Jogador")
+        self.assertTrue(
+            any("UPDATE personagens" in sql and "dono_usuario_id" in sql for sql, _ in connection.statements)
+        )
+        record_audit.assert_called_once()
+        notify.assert_called_once()
+        self.assertEqual(notify.call_args.kwargs["user_ids"], [self.NEW_OWNER_ID])
+
+    def test_player_cannot_transfer_owner(self):
+        connection = _RecordingConnection(self._responder(actor_role="jogador"))
+        payload = CharacterOwnerUpdateInput(novo_dono_usuario_id=self.NEW_OWNER_ID)
+        with self.assertRaises(HTTPException) as captured:
+            characters.transfer_character_owner(
+                CHARACTER_ID,
+                payload,
+                user=SimpleNamespace(id=USER_ID),
+                database=_Database(connection),
+            )
+        self.assertEqual(captured.exception.status_code, 403)
+        self.assertFalse(
+            any("UPDATE personagens" in sql for sql, _ in connection.statements)
+        )
+
+    def test_rejects_owner_who_is_not_active_campaign_member(self):
+        connection = _RecordingConnection(self._responder(membro_ativo=False))
+        payload = CharacterOwnerUpdateInput(novo_dono_usuario_id=self.NEW_OWNER_ID)
+        with self.assertRaises(HTTPException) as captured:
+            characters.transfer_character_owner(
+                CHARACTER_ID,
+                payload,
+                user=SimpleNamespace(id=USER_ID),
+                database=_Database(connection),
+            )
+        self.assertEqual(captured.exception.status_code, 422)
+
+
 class CharacterEconomyOperationTests(unittest.TestCase):
     def _connection(
         self,
@@ -780,6 +860,12 @@ class CharacterEconomyOperationTests(unittest.TestCase):
                         ],
                         "efeitosRaridade": [{"bonus": "dano", "valor": 99}],
                         "equipado": True,
+                        "favorito": True,
+                        "localArmazenamento": "Cinto",
+                        "municaoAtual": 3,
+                        "municaoMaxima": 999,
+                        "durabilidadeAtual": 7,
+                        "durabilidadeMaxima": 999,
                     },
                 }
             ],
@@ -797,6 +883,12 @@ class CharacterEconomyOperationTests(unittest.TestCase):
         self.assertEqual(saved_data["efeitosRaridade"], [])
         # campo com evidencia de edicao legitima (ver teste acima) continua liberado
         self.assertTrue(saved_data["equipado"])
+        self.assertTrue(saved_data["favorito"])
+        self.assertEqual(saved_data["localArmazenamento"], "Cinto")
+        self.assertEqual(saved_data["municaoAtual"], 3)
+        self.assertNotIn("municaoMaxima", saved_data)
+        self.assertEqual(saved_data["durabilidadeAtual"], 7)
+        self.assertNotIn("durabilidadeMaxima", saved_data)
 
     def test_manager_can_still_edit_mechanical_fields_on_loja_item(self):
         connection = self._connection(
@@ -967,8 +1059,8 @@ class CharacterEconomyOperationTests(unittest.TestCase):
             any("SET economia_versao" in sql for sql, _ in connection.statements)
         )
 
-    def test_owner_cannot_adjust_wallet(self):
-        connection = self._connection()
+    def test_owner_adjusts_own_wallet_with_player_ledger_origin(self):
+        connection = self._connection(balances=[{"moeda": "Lunaris", "saldo": 10}])
         payload = EconomyOperationsInput(
             versao_esperada=7,
             operacoes=[
@@ -980,9 +1072,39 @@ class CharacterEconomyOperationTests(unittest.TestCase):
                 }
             ],
         )
+        result = self._apply(connection, payload)
+
+        wallet_update = next(
+            params
+            for sql, params in connection.statements
+            if sql.startswith("UPDATE saldos_personagem")
+        )
+        self.assertEqual(wallet_update[0], 20)
+        ledger = next(
+            params
+            for sql, params in connection.statements
+            if "INSERT INTO lancamentos_economia" in sql
+        )
+        self.assertIn("site-ficha", ledger)
+        self.assertIn(USER_ID, ledger)
+        self.assertEqual(result["economia_versao"], 8)
+
+    def test_owner_cannot_spend_more_than_the_wallet_holds(self):
+        connection = self._connection(balances=[{"moeda": "Lunaris", "saldo": 3}])
+        payload = EconomyOperationsInput(
+            versao_esperada=7,
+            operacoes=[
+                {
+                    "tipo": "ajustar_saldo",
+                    "moeda": "Lunaris",
+                    "delta": -4,
+                    "motivo": "ajuste",
+                }
+            ],
+        )
         with self.assertRaises(HTTPException) as captured:
             self._apply(connection, payload)
-        self.assertEqual(captured.exception.status_code, 403)
+        self.assertEqual(captured.exception.status_code, 409)
         self.assertFalse(
             any("SET economia_versao" in sql for sql, _ in connection.statements)
         )

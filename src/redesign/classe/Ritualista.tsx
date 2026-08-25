@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { CircleDot, Hourglass, Star } from 'lucide-react';
+import { CircleDot, Hourglass, Star, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -67,7 +67,7 @@ export const Ritualista = ({ classe }: { classe: IClasse }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-purple-200/60 max-w-2xl mx-auto font-serif leading-relaxed"
           >
-            Eles não temem o tempo, eles o dedicam por inteiro. Um Ritualista negocia pactos e conduz preparações longas fora do combate. Seus rituais não pertencem aos círculos de conjuração nem se resolvem em rodadas de batalha: moldam o mundo antes que a ação comece.
+            O Ritualista prepara pactos, proteções e mudanças que levam tempo. Seus rituais ficam fora dos círculos de magia comum e costumam ser feitos antes do combate, quando o grupo ainda pode traçar o símbolo e pagar o preço com calma.
           </motion.p>
         </motion.header>
 
@@ -84,7 +84,7 @@ export const Ritualista = ({ classe }: { classe: IClasse }) => {
             <Hourglass size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Círculo Preparado</h3>
             <p className="text-purple-200/60 leading-relaxed text-sm">
-              Antes de um ritual começar, escolha por estágio um modificador para prepará-lo: proteção, precisão, duração ou ocultação. É uma decisão tomada na calma da preparação, fora de combate, nunca uma técnica de rodadas ou ação de batalha.
+              O traçado que você desenha antes da primeira palavra. São seis preparos, e você aprende quatro até o nível 20: Proteção, Precisão, Duração, Ocultação, Economia e Amplitude. Um deles entra em cada rito, declarado antes de qualquer rolagem.
             </p>
           </PremiumCard>
 
@@ -99,7 +99,35 @@ export const Ritualista = ({ classe }: { classe: IClasse }) => {
             <Star size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Grande Oficiante</h3>
             <p className="text-purple-200/60 leading-relaxed text-sm">
-              Enquanto você mantém concentração no Círculo Preparado, seus aliados podem doar sua própria Mana ou até Vida para alimentar o sacrifício do ritual, ignorando o limite normal de gasto de Mana que você possua.
+              No nível 20, uma vez por sessão, você conclui um ritual conhecido em três rodadas. Para cumprir requisitos de participantes, você conta como quatro ajudantes. Também recebe +5 contra interrupções e gasta 1 lote a menos de Componentes Ritualísticos. O custo de Mana não muda.
+            </p>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-purple-200/60 leading-relaxed text-sm">
+              Cada rito traz a própria DT, de 15 no simples a 30 no monumental, e você rola Misticismo contra ela. Quando alguma coisa ameaça o trabalho, é a mesma rolagem contra a mesma DT que decide se o traçado aguenta. Falhou, o rito quebra ali, e a Mana comprometida no primeiro minuto não volta.
+            </p>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.6 }}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Hourglass size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Rito Guardado</h3>
+            <p className="text-purple-200/60 leading-relaxed text-sm">
+              A partir do nível 15 você não precisa mais soltar o rito na hora em que ele fica pronto. Faça o trabalho na véspera, pague tudo, e prenda o efeito. Ele espera até o fim da sessão dentro de você, e sai com uma Ação Padrão no momento que importar, inclusive no meio de uma luta que o rito jamais poderia acompanhar.
             </p>
           </PremiumCard>
         </div>
@@ -111,4 +139,3 @@ export const Ritualista = ({ classe }: { classe: IClasse }) => {
 };
 
 export default Ritualista;
-

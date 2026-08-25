@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FlameKindling, Waves, Sparkles } from 'lucide-react';
+import { FlameKindling, Waves, Sparkles, Gauge, ShieldOff } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -68,17 +68,32 @@ export const Canalizador = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.5 }}
+            className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Waves size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Fluxo Nativo</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              O conceito central da classe: escolha, no nível 1, um dos dez Fluxos naturais do jogo (Origem, Essência, Comunicação, Vitalidade, Inconstância, Físico, Espaço, Tempo, Vazio ou o raríssimo Fim, que exige autorização do Mestre) — a Tecnologia fica de fora, porque ela nunca é nativa, só se instala de fora. Essa escolha é pra sempre e diz de onde vem sua magia.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
             <FlameKindling size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Forma do Fluxo</h3>
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Forma do Fluxo</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
               Escolha por estágio uma forma para dominar: alvo, área, defesa ou movimento. Uma vez por cena, uma magia lançada dentro dessa forma recebe +2, demonstrando o domínio bruto que você tem sobre aquele aspecto do Fluxo.
             </p>
@@ -89,13 +104,28 @@ export const Canalizador = ({ classe }: { classe: IClasse }) => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
             className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <Waves size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Voz da Deidade</h3>
+            <ShieldOff size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Fluxo Sem Filtro</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Uma vez por sessão, por três rodadas, sua voz canaliza a fonte diretamente: suas conjurações custam 2 Mana a menos (mínimo 1) e recebem +2, um pico breve de poder que não se sustenta além do momento.
+              Uma vez por combate, ao conjurar uma magia do seu Fluxo que exija Concentração, ela não pode ser quebrada por dano durante três rodadas. Só cai se você for nocauteado ou perder a consciência — a magia sai crua, sem filtro nenhum entre você e o efeito.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              Todo efeito seu que obriga um alvo a resistir rola Misticismo no momento da conjuração: o resultado vira a DT que ele precisa alcançar. É diferente da DT de conjuração normal (7 + 3 × o círculo da magia), que já vale sozinha pra toda magia que você lança.
             </p>
           </PremiumCard>
         </div>

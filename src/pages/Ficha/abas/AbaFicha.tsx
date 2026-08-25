@@ -8,7 +8,7 @@ import { aplicarAjustesAtributosRaciais, ATRIBUTOS, ATRIBUTO_VALOR_MINIMO, bonus
 import { limparEscolhasPrincipaisRaciais, obterGruposEscolhaRacial, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao } from '../../../../data/mundo/arvoresCatalog';
+import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, arvoresVisiveisComAtual, filtrarPorArvore, filtrarPorLiberacao } from '../../../../data/mundo/arvoresCatalog';
 import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
 import {
   atualizarStatusVital,
@@ -585,7 +585,8 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               value={f.arvoreId}
               options={[
                 { value: SEM_ARVORE_ID, label: 'Sem Árvore' },
-                ...(isMestre ? ARVORES : arvoresDisponiveis).map(arvore => ({ value: arvore.id, label: arvore.nome })),
+                ...(isMestre ? ARVORES : arvoresVisiveisComAtual(arvoresDisponiveis, f.arvoreId))
+                  .map(arvore => ({ value: arvore.id, label: arvore.nome })),
               ]}
               onChange={(v:any) => onUpdate(['ficha', 'arvoreId'], v)}
               disabled={!isMestre}

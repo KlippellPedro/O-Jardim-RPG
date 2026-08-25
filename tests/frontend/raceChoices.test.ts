@@ -27,6 +27,8 @@ const casosEsperados = [
   ['auleth', 'varianteId', 6],
   ['simbionte', 'varianteId', 4],
   ['divino', 'varianteId', 5],
+  ['mimico', 'varianteId', 4],
+  ['onirico', 'varianteId', 5],
 ] as const;
 
 test('mapeia todas as sub-raças e escolhas raciais principais do catálogo', () => {

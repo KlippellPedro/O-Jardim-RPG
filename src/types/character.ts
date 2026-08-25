@@ -2,6 +2,7 @@ export interface ICharacter {
   id: string;
   nome: string;
   donoUsuarioId?: string | null;
+  somenteLeitura?: boolean;
   nivel: number;
   versao?: number; // controle de concorrência otimista (versão do registro na API)
   ficha?: Record<string, any>; // conteúdo completo da ficha (schema flexível da API)

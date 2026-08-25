@@ -91,6 +91,20 @@ export function arvoreVisivel(arvoreId: string, config: CampanhaVisibilidadeConf
   return revelado.includes(arvoreId);
 }
 
+/**
+ * Mantém a Árvore já escolhida disponível para exibição na ficha, mesmo que
+ * ela ainda esteja oculta no Códice da campanha. Isso evita mostrar o id
+ * interno da Deidade, como "erebus", no lugar do nome "Abismo".
+ */
+export function arvoresVisiveisComAtual(
+  visiveis: ArvoreEntry[],
+  arvoreIdAtual?: string | null,
+): ArvoreEntry[] {
+  if (!arvoreIdAtual || visiveis.some((arvore) => arvore.id === arvoreIdAtual)) return visiveis;
+  const atual = ARVORES.find((arvore) => arvore.id === arvoreIdAtual);
+  return atual ? [...visiveis, atual] : visiveis;
+}
+
 interface FiltravelPorArvore {
   id: string;
   arvore?: string | null;

@@ -260,6 +260,24 @@ def xp_por_vd(vd: int | None) -> int:
     return XP_POR_VD.get(max(1, min(10, int(vd))), 0)
 
 
+def _pericias_concedidas(classes: list[tuple[dict, int]]) -> dict[str, int]:
+    """Pericias que a propria classe entrega, como o Oficio (Engenharia) do
+    Engenheiro. Devolve o id e o indice do grau concedido: ele nao ocupa uma das
+    pericias iniciais e nao consome Grau de Treinamento."""
+    concedidas: dict[str, int] = {}
+    for classe, _nivel in classes:
+        for item in classe.get("pericias_concedidas") or []:
+            if not isinstance(item, dict):
+                continue
+            pericia_id = str(item.get("id") or "").strip()
+            if not pericia_id:
+                continue
+            grau = str(item.get("grau_inicial") or "aprendiz").lower()
+            indice = _GRAUS.index(grau) if grau in _GRAUS else _GRAUS.index("aprendiz")
+            concedidas[pericia_id] = max(concedidas.get(pericia_id, 0), indice)
+    return concedidas
+
+
 def _graus_de_treinamento(classes: list[tuple[dict, int]]) -> int:
     total = 0
     for classe, nivel in classes:
@@ -282,6 +300,107 @@ def _vagas_poder(classe: dict, nivel: int) -> int:
         for recompensa in marco.get("recompensas") or []
         if isinstance(recompensa, dict) and recompensa.get("tipo") == "poder"
     )
+
+
+def _vagas_escolha_habilidade(habilidade: dict, nivel: int) -> int:
+    """Vagas de escolha de uma habilidade com catalogo proprio (as Engenhocas
+    do Engenheiro, por exemplo). Espelha `vagasEscolhaHabilidade` em
+    src/services/progressaoFichaService.ts."""
+    config = habilidade.get("escolha_opcoes")
+    if not isinstance(config, dict) or not (habilidade.get("opcoes") or []):
+        return 0
+    # `total` e quantidade liberada de uma vez, nao um atalho para ignorar o
+    # nivel de desbloqueio. O Estilo de Combate do Lutador so existe no 18.
+    liberada = any(
+        (_inteiro(marco) or 99) <= nivel
+        for marco in habilidade.get("niveis") or []
+    )
+    if not liberada:
+        return 0
+    total = _inteiro(config.get("total"))
+    if total:
+        return max(0, total)
+    # Vaga que nao sai em todo estagio: a Rede de Negocios do Comerciante abre
+    # praca nos niveis 1 e 5, e nada nos estagios seguintes.
+    niveis_vaga = config.get("niveis_vaga")
+    if isinstance(niveis_vaga, list) and niveis_vaga:
+        return sum(1 for marco in niveis_vaga if (_inteiro(marco) or 99) <= nivel)
+    estagios = sum(1 for marco in habilidade.get("niveis") or [] if (_inteiro(marco) or 99) <= nivel)
+    return max(0, estagios * max(1, _inteiro(config.get("por_estagio")) or 1))
+
+
+def efeitos_escolhas_habilidade(ficha: dict | None) -> list[dict]:
+    """Resolve efeitos permanentes das opções de classe selecionadas.
+
+    Espelha `opcoesHabilidadeSelecionadas` do front-end. Cada marco substitui
+    o anterior: Coração de Leviatã no degrau 4 vale +20, não +5+10+15+20.
+    """
+    if not isinstance(ficha, dict):
+        return []
+    escolhas = ficha.get("escolhasHabilidade")
+    if not isinstance(escolhas, dict):
+        return []
+
+    resultado: list[dict] = []
+    for referencia in _classes_da_ficha(ficha):
+        classe_id = str(referencia.get("classeId") or referencia.get("id") or "")
+        classe = _CATALOGO["classe"].get(classe_id)
+        nivel_classe = max(1, _inteiro(referencia.get("nivel")) or 1)
+        if not isinstance(classe, dict):
+            continue
+        for habilidade in classe.get("habilidades") or []:
+            if not isinstance(habilidade, dict):
+                continue
+            vagas = _vagas_escolha_habilidade(habilidade, nivel_classe)
+            chave = f"{classe_id}:{habilidade.get('id')}"
+            selecionadas = escolhas.get(chave)
+            if not vagas or not isinstance(selecionadas, list):
+                continue
+
+            opcoes = {
+                str(item.get("id")): item
+                for item in habilidade.get("opcoes") or []
+                if isinstance(item, dict) and item.get("id")
+            }
+            marcos_escada = (habilidade.get("escalonamento") or {}).get("marcos") or []
+            nivel_escada = max((
+                _inteiro(marco.get("nivel")) or 0
+                for marco in marcos_escada
+                if isinstance(marco, dict)
+                and (_inteiro(marco.get("nivel_classe")) or 99) <= nivel_classe
+            ), default=0)
+            nivel_aplicacao = max(1, nivel_escada)
+
+            for opcao_id in selecionadas[:vagas]:
+                opcao = opcoes.get(str(opcao_id))
+                if not opcao:
+                    continue
+                marco_atual = max((
+                    marco
+                    for marco in opcao.get("efeitos_por_nivel") or []
+                    if isinstance(marco, dict)
+                    and (_inteiro(marco.get("nivel")) or 99) <= nivel_aplicacao
+                ), key=lambda marco: _inteiro(marco.get("nivel")) or 0, default=None)
+                if not marco_atual:
+                    continue
+                resultado.extend(
+                    efeito for efeito in marco_atual.get("efeitos") or []
+                    if isinstance(efeito, dict)
+                )
+    return resultado
+
+
+def bonus_escolhas_habilidade(ficha: dict | None, categoria: str, alvo: str) -> int:
+    total = 0
+    for efeito in efeitos_escolhas_habilidade(ficha):
+        if efeito.get("categoria") != categoria or efeito.get("alvo") != alvo:
+            continue
+        if efeito.get("modo", "bonus") != "bonus":
+            continue
+        valor = efeito.get("valor")
+        if isinstance(valor, (int, float)) and not isinstance(valor, bool) and math.isfinite(valor):
+            total += int(valor)
+    return total
 
 
 def _indice_grau(grau) -> int:
@@ -406,6 +525,35 @@ def _validar_escolhas_progressao(ficha: dict, anterior: dict, classes: list[tupl
         classe, nivel = referencias[classe_id]
         if quantidade > _vagas_poder(classe, nivel):
             return "a ficha possui mais poderes de classe do que as vagas liberadas"
+
+    escolhas_habilidade = ficha.get("escolhasHabilidade") or {}
+    if not isinstance(escolhas_habilidade, dict):
+        return "escolhasHabilidade deve ser um objeto"
+    catalogo_escolhas: dict[str, tuple[dict, int]] = {}
+    for classe, nivel in classes:
+        for habilidade in classe.get("habilidades") or []:
+            if not isinstance(habilidade, dict):
+                continue
+            vagas_habilidade = _vagas_escolha_habilidade(habilidade, nivel)
+            if vagas_habilidade:
+                catalogo_escolhas[f"{classe.get('id')}:{habilidade.get('id')}"] = (habilidade, vagas_habilidade)
+    for chave, escolhidos in escolhas_habilidade.items():
+        if not isinstance(escolhidos, list) or any(not isinstance(item, str) for item in escolhidos):
+            return "cada escolha de habilidade deve ser uma lista de ids"
+        registro = catalogo_escolhas.get(str(chave))
+        if registro is None:
+            if escolhidos:
+                return "a ficha escolheu opcoes de uma habilidade que ainda nao foi liberada"
+            continue
+        habilidade, vagas_habilidade = registro
+        if len(escolhidos) > vagas_habilidade:
+            return "a ficha preparou mais opcoes de habilidade do que as vagas liberadas"
+        ids_opcoes = {str(item.get("id")) for item in habilidade.get("opcoes") or [] if isinstance(item, dict)}
+        if any(item not in ids_opcoes for item in escolhidos):
+            return "a ficha contem uma opcao inexistente no catalogo da habilidade"
+        repetivel = bool((habilidade.get("escolha_opcoes") or {}).get("repetivel"))
+        if not repetivel and len(set(escolhidos)) != len(escolhidos):
+            return "esta habilidade nao permite escolher a mesma opcao duas vezes"
 
     selecionados = ficha.get("legadosSelecionados") or []
     if not isinstance(selecionados, list) or any(not isinstance(item, str) for item in selecionados):
@@ -888,10 +1036,15 @@ def validar_regras_ficha(
         for item in ficha.get("periciasCustomizadas") or []
         if isinstance(item, dict) and str(item.get("id") or "").startswith("custom_")
     }
+    concedidas = _pericias_concedidas(classes)
     custo_graus = 0
     indices: dict[str, int] = {}
     for pericia_id, grau in pericias.items():
-        if str(pericia_id) not in _CATALOGO["pericia"] and str(pericia_id) not in customizadas:
+        if (
+            str(pericia_id) not in _CATALOGO["pericia"]
+            and str(pericia_id) not in customizadas
+            and str(pericia_id) not in concedidas
+        ):
             return "a ficha contem uma pericia inexistente"
         if grau not in _GRAUS:
             return "a ficha contem um grau de pericia invalido"
@@ -899,9 +1052,16 @@ def validar_regras_ficha(
         if nivel_total < _NIVEL_MINIMO_GRAU[indice]:
             return f"o nivel total ainda nao permite o grau {grau}"
         indices[str(pericia_id)] = indice
-        custo_graus += indice
+        # O grau que a classe deu de graca sai do custo; so o que passou dele
+        # pesa nos Graus de Treinamento.
+        custo_graus += max(0, indice - concedidas.get(str(pericia_id), 0))
     iniciais = 6 + max(0, _inteiro(raca.get("pericias_iniciais_adicionais")) or 0)
-    if criacao and (len(pericias) != iniciais or any(grau != "aprendiz" for grau in pericias.values())):
+    escolhidas = {
+        pericia_id: grau
+        for pericia_id, grau in pericias.items()
+        if str(pericia_id) not in concedidas or _GRAUS.index(grau) > concedidas[str(pericia_id)]
+    }
+    if criacao and (len(escolhidas) != iniciais or any(grau != "aprendiz" for grau in escolhidas.values())):
         return f"escolha exatamente {iniciais} pericias em Aprendiz na criacao"
     bonus_maestria = 2 if (_inteiro(finais.get("inteligencia")) or 0) >= 20 else 0
     orcamento_graus = iniciais + _graus_de_treinamento(classes) + bonus_maestria
@@ -1103,6 +1263,8 @@ def resumir_ficha(ficha: dict | None) -> dict:
     derivados = ficha.get("derivados") if isinstance(ficha.get("derivados"), dict) else {}
     status = _status_ficha(ficha)
     vida_maxima = derivados.get("vida")
+    if isinstance(vida_maxima, (int, float)):
+        vida_maxima += bonus_escolhas_habilidade(ficha, "recurso", "vidaMaxima")
     vida_atual = status.get("vidaAtual")
 
     raca_id = str(ficha.get("racaId") or "")

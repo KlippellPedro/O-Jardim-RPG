@@ -1,12 +1,23 @@
 import { motion } from 'framer-motion';
-import { Hexagon, PawPrint } from 'lucide-react';
+import { Hexagon, PawPrint, Link2, Gauge, BookMarked } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
 import { obterTemaPorId } from '../themeMap';
 
+const agruparCatalogoPorLinha = (itens: { tarefa: string; dt: string; nota?: string }[]) => {
+  const grupos = new Map<string, { tarefa: string; dt: string; nota?: string }[]>();
+  for (const item of itens) {
+    const linha = item.tarefa.replace(/ (I|II|III|IV|V)$/, '');
+    if (!grupos.has(linha)) grupos.set(linha, []);
+    grupos.get(linha)!.push(item);
+  }
+  return [...grupos.entries()];
+};
+
 export const Invocador = ({ classe }: { classe: IClasse }) => {
   const tema = obterTemaPorId(classe.id);
+  const linhasDoCatalogo = agruparCatalogoPorLinha(classe.tarefas_bancada?.itens || []);
 
   return (
     <div className="min-h-screen text-indigo-50 p-8 selection:bg-indigo-500/30 overflow-hidden relative">
@@ -61,24 +72,24 @@ export const Invocador = ({ classe }: { classe: IClasse }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-indigo-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            A força não está no que eles podem fazer, mas no que eles trazem. Ligados por pactos absolutos de mana, os Invocadores chamam feras, guardiões e construtos para batalhar em seu nome.
+            A força não está no que eles podem fazer, mas no que eles trazem. Ligados por pactos absolutos de mana, os Invocadores chamam feras, guardiões e espíritos reais do mundo para lutar ao seu lado, um pacto de cada vez.
           </motion.p>
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.5 }}
             className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <PawPrint size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Formas Vinculadas</h3>
+            <Link2 size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Pacto de Fluxo Nativo</h3>
             <p className="text-indigo-200/60 leading-relaxed text-sm">
-              Através do Pacto de Fluxo, você aprende uma forma vinculada por estágio: fera, guardião, espírito ou broto curador. Mantém apenas uma manifestação ativa por vez, agindo com sua ação de movimento. Em nível avançado, pode manter duas formas preparadas, mas ainda manifesta uma de cada vez; a exceção é uma vez por sessão, quando manifesta as duas ao mesmo tempo por três rodadas.
+              O conceito central da classe: invoque suas duas primeiras criaturas direto do Catálogo de Invocações, com ficha pronta, exclusiva da classe. A cada estágio seguinte, você escolhe: invocar mais duas criaturas ao seu lado, ou levar duas que já tem pro próximo nível do Catálogo. É a decisão que define seu Invocador, um exército pequeno ou poucos aliados imbatíveis.
             </p>
           </PremiumCard>
 
@@ -87,18 +98,98 @@ export const Invocador = ({ classe }: { classe: IClasse }) => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <PawPrint size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Formas Vinculadas</h3>
+            <p className="text-indigo-200/60 leading-relaxed text-sm">
+              Aprenda um treinamento por estágio, que vira buff permanente pra todas as suas invocações, presentes e futuras: são seis possíveis (Fera, Guardião, Espírito, Broto Curador, Sombra, Núcleo Firme) e você aprende quatro. Cada treinamento continua crescendo nos estágios seguintes.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
             className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
             <Hexagon size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Círculo de Convocação</h3>
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Círculo de Convocação</h3>
             <p className="text-indigo-200/60 leading-relaxed text-sm">
-              Use uma ação para projetar o brilho místico de um círculo no chão sob você. Aliados e Invocadores aliados dentro dessa área recebem pequenas curas mágicas residuais e bônus em defesas mágicas enquanto permanecerem nela.
+              Uma vez por cena, crie uma área de 9 m por três rodadas: você e todas as suas invocações dentro dela recebem +2 em testes e ataques, e 15 de Vida temporária ao entrar.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-indigo-200/60 leading-relaxed text-sm">
+              Todo efeito seu que obriga um alvo a resistir rola Misticismo no momento em que aciona: o resultado vira a DT que ele precisa alcançar.
             </p>
           </PremiumCard>
         </div>
 
         <DetalhesClasse classe={classe} />
+
+        {/* Catálogo de Invocações */}
+        {linhasDoCatalogo.length > 0 && (
+          <section className="mt-24">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-center mb-10"
+            >
+              <BookMarked size={32} className={`${tema.icon} mx-auto mb-3`} strokeWidth={1.5} />
+              <h2 className={`text-3xl font-bold ${tema.text} uppercase tracking-wide mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>
+                {classe.tarefas_bancada?.rotulo || 'Catálogo de Invocações'}
+              </h2>
+              <p className="text-indigo-200/60 max-w-2xl mx-auto text-sm leading-relaxed">
+                {classe.tarefas_bancada?.descricao}
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {linhasDoCatalogo.map(([linha, tiers], indice) => (
+                <PremiumCard
+                  key={linha}
+                  glowColor={tema.glow}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: indice * 0.1 }}
+                  className={`flex flex-col p-6 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
+                >
+                  <h3 className={`text-lg font-bold ${tema.text} mb-4 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>
+                    {linha}
+                  </h3>
+                  <ul className="space-y-3 text-sm text-indigo-200/70">
+                    {tiers.map(tier => (
+                      <li key={tier.tarefa} className="border-b border-white/5 pb-3 last:border-0 last:pb-0">
+                        <div className="flex items-baseline justify-between gap-2 mb-1">
+                          <span className="font-bold text-indigo-100">{tier.tarefa}</span>
+                          <span className="text-xs text-indigo-300/50 whitespace-nowrap">{tier.dt}</span>
+                        </div>
+                        <p className="text-xs text-indigo-300/60 leading-relaxed">{tier.nota}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </PremiumCard>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

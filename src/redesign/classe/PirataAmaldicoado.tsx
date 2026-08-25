@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Anchor, Skull, Ghost } from 'lucide-react';
+import { Anchor, Skull, Ghost, Waves, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -73,12 +73,12 @@ export const PirataAmaldicoado = ({ classe }: { classe: IClasse }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-teal-100/60 max-w-2xl mx-auto font-serif leading-relaxed"
           >
-            Ligados ao abismo por um preço alto. O oceano clama por eles, e em troca, eles comandam os espectros afogados e sofrem mutações abissais que os tornam monstros dos mares.
+            Você fez um acordo com o abismo e saiu marcado por ele. Agora controla água amaldiçoada, chama espíritos de antigos afogados e muda o próprio corpo para sobreviver onde quase ninguém conseguiria.
           </motion.p>
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, y: 30 }}
@@ -87,10 +87,10 @@ export const PirataAmaldicoado = ({ classe }: { classe: IClasse }) => {
             transition={{ duration: 0.5 }}
             className={`flex flex-col p-8 rounded-xl ${tema.bg} border-t ${tema.border} backdrop-blur-md`}
           >
-            <Anchor size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-serif ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Evolução Abissal</h3>
+            <Waves size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-serif ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Maldição dos Sete Mares</h3>
             <p className="text-teal-200/60 leading-relaxed text-sm font-serif">
-              A maldição respira por você debaixo d'água e ignora terreno aquático difícil, com +2 em Navegação e Percepção marítima. A cada estágio de Evolução Abissal, escolha ainda mais um benefício: visão no escuro, imunidade à pressão oceânica, Resistência 10 a frio ou vantagem em testes ligados ao mar.
+              Desde o nível 1, você respira debaixo d'água e atravessa terreno aquático difícil sem perder Movimento. Conforme avança, a maldição aumenta seu dano, protege o seu corpo e permite criar uma tempestade ao seu redor.
             </p>
           </PremiumCard>
 
@@ -99,13 +99,43 @@ export const PirataAmaldicoado = ({ classe }: { classe: IClasse }) => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className={`flex flex-col p-8 rounded-xl ${tema.bg} border-t ${tema.border} backdrop-blur-md`}
+          >
+            <Anchor size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-serif ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Evolução Abissal</h3>
+            <p className="text-teal-200/60 leading-relaxed text-sm font-serif">
+              Você escolhe quatro entre quatorze mutações nos níveis 3, 8, 14 e 20. Todas melhoram juntas. Se escolher uma mutação mais tarde, ela já começa no mesmo nível das outras.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
             className={`flex flex-col p-8 rounded-xl ${tema.bg} border-t ${tema.border} backdrop-blur-md`}
           >
             <Ghost size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-serif ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Tripulação dos Condenados</h3>
             <p className="text-teal-200/60 leading-relaxed text-sm font-serif">
-              Uma vez por combate, invoque três espectros por três rodadas. Cada um pode absorver um ataque em seu lugar; ao desaparecer, causa 1d6 de dano de Água a um inimigo adjacente.
+              No nível 18, você invoca três espectros afogados. Eles não atacam, mas podem receber um golpe no lugar de você ou de um aliado próximo. Quando desaparecem, causam 1d6 de dano de Água a uma criatura adjacente escolhida pelo Mestre.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.45 }}
+            className={`flex flex-col p-8 rounded-xl ${tema.bg} border-t ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-serif ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-teal-200/60 leading-relaxed text-sm font-serif">
+              Quando uma habilidade sua pedir um teste de Fortitude, Reflexos ou Vontade, role Intimidação usando Fluxo no lugar de Carisma. O resultado dessa rolagem vira a DT do efeito.
             </p>
           </PremiumCard>
         </div>
@@ -117,4 +147,3 @@ export const PirataAmaldicoado = ({ classe }: { classe: IClasse }) => {
 };
 
 export default PirataAmaldicoado;
-

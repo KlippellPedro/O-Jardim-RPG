@@ -182,11 +182,11 @@ const CACADOR: ThemeEntry = {
   text: 'text-lime-400', icon: 'text-lime-600/70', tag: 'text-lime-300',
   rationale: 'Rastreamento e predacao: floresta, paciencia predatoria e instinto.',
 };
-const CACADOR_ENTIDADES: ThemeEntry = {
+const CACADOR_DAS_ALMAS: ThemeEntry = {
   primary: '#6366f1', secondary: '#1e1b4b', glow: 'rgba(99,102,241,0.28)',
   bg: 'bg-indigo-950/30', border: 'border-indigo-600/25 hover:border-indigo-400/55',
   text: 'text-indigo-300', icon: 'text-indigo-600/70', tag: 'text-indigo-200',
-  rationale: 'Combate contra o incompreensivel: sobrenatural entre sagrado e profano.',
+  rationale: 'Combate contra o incompreensivel: possessao entre sagrado e profano.',
 };
 const CAMPEAO_DIMENSIONAL: ThemeEntry = {
   primary: '#c084fc', secondary: '#4c1d95', glow: 'rgba(192,132,252,0.28)',
@@ -206,23 +206,17 @@ const CARTISTA_ARCANO: ThemeEntry = {
   text: 'text-amber-300', icon: 'text-amber-500/70', tag: 'text-amber-200',
   rationale: 'Cartas, taro e sorte: ouro antigo de oraculo combinado a magia violeta do destino.',
 };
-const CODIFICADOR: ThemeEntry = {
-  primary: '#22c55e', secondary: '#052e16', glow: 'rgba(34,197,94,0.28)',
-  bg: 'bg-green-950/25', border: 'border-green-500/25 hover:border-green-400/55',
-  text: 'text-green-300', icon: 'text-green-500/70', tag: 'text-green-200',
-  rationale: 'Reescreve a realidade como codigo: verde fosforescente de terminal.',
-};
 const COMERCIANTE: ThemeEntry = {
   primary: '#fcd34d', secondary: '#92400e', glow: 'rgba(252,211,77,0.28)',
   bg: 'bg-yellow-950/25', border: 'border-yellow-500/25 hover:border-yellow-400/55',
   text: 'text-yellow-300', icon: 'text-yellow-500/70', tag: 'text-yellow-200',
   rationale: 'Riqueza, redes e influencia: poder financeiro e barganha.',
 };
-const DECODIFICADOR: ThemeEntry = {
-  primary: '#fb923c', secondary: '#0f172a', glow: 'rgba(251,146,60,0.28)',
-  bg: 'bg-orange-950/25', border: 'border-orange-500/25 hover:border-orange-400/55',
-  text: 'text-orange-300', icon: 'text-orange-500/70', tag: 'text-orange-200',
-  rationale: 'Desmonta e subverte sistemas: alerta digital, falha critica e invasao controlada.',
+const COZINHEIRO: ThemeEntry = {
+  primary: '#f59e0b', secondary: '#166534', glow: 'rgba(245,158,11,0.28)',
+  bg: 'bg-amber-950/25', border: 'border-amber-500/25 hover:border-amber-400/55',
+  text: 'text-amber-300', icon: 'text-amber-500/80', tag: 'text-lime-200',
+  rationale: 'Cozinha, calor e ingredientes frescos: cobre de fogao com verde de ervas e horta.',
 };
 const ENGENHEIRO: ThemeEntry = {
   primary: '#94a3b8', secondary: '#1e293b', glow: 'rgba(148,163,184,0.25)',
@@ -341,10 +335,10 @@ export const THEME_MAP: Record<string, ThemeEntry> = {
   onirico: ONIRICO, divino: DIVINO,
   // Classes
   alquimista: ALQUIMISTA, atirador: ATIRADOR, cacador: CACADOR,
-  cacadordeentidades: CACADOR_ENTIDADES, cacadordentidades: CACADOR_ENTIDADES,
+  cacadordasalmas: CACADOR_DAS_ALMAS,
   campeaodimensional: CAMPEAO_DIMENSIONAL, canalizador: CANALIZADOR,
-  cartistaarcano: CARTISTA_ARCANO, codificador: CODIFICADOR,
-  comerciante: COMERCIANTE, decodificador: DECODIFICADOR,
+  cartistaarcano: CARTISTA_ARCANO,
+  comerciante: COMERCIANTE, cozinheiro: COZINHEIRO,
   engenheiro: ENGENHEIRO, escritordecontos: ESCRITOR_CONTOS,
   espadachim: ESPADACHIM, guardiao: GUARDIAO, guerreiro: GUERREIRO,
   guiadimensional: GUIA_DIMENSIONAL, interceptador: INTERCEPTADOR,

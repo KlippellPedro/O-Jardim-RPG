@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Merge, Link } from 'lucide-react';
+import { Merge, Link, Zap, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -66,34 +66,64 @@ export const Sintonizador = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.5 }}
             className={`flex flex-col p-8 ${tema.bg} border-l-4 ${tema.border} backdrop-blur-md`}
           >
-            <Merge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Fusão Controlada</h3>
+            <Link size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sintonia Catalisada</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Escolha por estágio uma fusão através do seu catalisador ativo. Ela muda o tipo, a forma ou a utilidade de uma magia conjurada, mas nunca aumenta seu dano base. É uma mudança qualitativa, não uma soma de efeitos.
+              O conceito central da classe: vincule-se a um catalisador externo após dez minutos fora de combate, sem que ele altere seu Fluxo nativo. Com o tempo, mantenha mais catalisadores preparados ao mesmo tempo, troque qual está ativo como Ação Livre e, no topo da carreira, sustente dois ativos ao mesmo tempo.
             </p>
           </PremiumCard>
 
           <PremiumCard
             glowColor={tema.glow}
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             className={`flex flex-col p-8 ${tema.bg} border-l-4 ${tema.border} backdrop-blur-md`}
           >
-            <Link size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Convergência Segura</h3>
+            <Merge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Fusão Controlada</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Uma vez por sessão, por três rodadas, suas fusões não exigem troca de catalisador e recebem +2 em conjuração e Defesa. É uma janela breve de domínio total sobre a sintonia, não um estado permanente.
+              Aprenda uma fusão por estágio entre as onze publicadas no capítulo de Magia, uma para cada Fluxo do jogo (Tecnologia incluída). Cada fusão funde um Fluxo secundário à sua magia através do catalisador ativo, mudando o tipo, a forma ou a utilidade dela, sem aumentar o dano base.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className={`flex flex-col p-8 ${tema.bg} border-l-4 ${tema.border} backdrop-blur-md`}
+          >
+            <Zap size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Religação de Emergência</h3>
+            <p className="text-cyan-100/60 leading-relaxed text-sm">
+              Uma vez por combate, use uma Reação quando seu catalisador ativo for destruído, roubado ou desativado: vincule-se na hora a outro catalisador preparado, sem esperar os dez minutos normais de sintonia. O empréstimo de poder nunca fica sem reposição por muito tempo.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className={`flex flex-col p-8 ${tema.bg} border-l-4 ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-cyan-100/60 leading-relaxed text-sm">
+              Todo efeito seu que obriga um alvo a resistir rola Misticismo no momento da conjuração: o resultado vira a DT que ele precisa alcançar. É diferente da DT de conjuração normal (7 + 3 × o círculo da magia), que já vale sozinha pra toda magia que você lança.
             </p>
           </PremiumCard>
         </div>

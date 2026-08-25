@@ -10,8 +10,8 @@ Gerado por `npm run audit:balance`. Esta é uma verificação quantitativa, não
 
 ## Resultado automático
 
-- 27 classes analisadas.
-- 87 armas analisadas.
+- 26 classes analisadas.
+- 79 armas analisadas.
 - 0 classes fora do orçamento de 7 pontos de Vida + Mana.
 - 0 armas acima de 75 de dano médio sem bloqueio do Mestre.
 
@@ -22,30 +22,29 @@ Cada célula mostra `Vida/Mana/vagas de poder`.
 | Guerreiro | comum | 7 | 16/8/0 | 44/16/1 | 79/26/3 | 114/36/5 | 149/46/8 | 204/81/8 | 259/116/8 | nenhum |
 | Piloto | comum | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
 | Ninja | comum | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
-| Pop Star | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | Publi |
+| Pop Star | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 | Espadachim | comum | 7 | 16/8/0 | 44/16/1 | 79/26/3 | 114/36/5 | 149/46/8 | 204/81/8 | 259/116/8 | nenhum |
-| Lutador | comum | 7 | 16/8/0 | 44/16/1 | 79/26/3 | 114/36/5 | 149/46/8 | 204/81/8 | 259/116/8 | Não Levanta |
-| Atirador | comum | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | Um Só Disparo |
+| Lutador | comum | 7 | 16/8/0 | 48/12/1 | 88/17/3 | 128/22/5 | 168/27/8 | 223/62/8 | 278/97/8 | nenhum |
+| Atirador | comum | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
 | Médico | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 | Guardião | comum | 7 | 16/8/0 | 44/16/1 | 79/26/3 | 114/36/5 | 149/46/8 | 204/81/8 | 259/116/8 | nenhum |
 | Caçador | comum | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
-| Engenheiro | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
+| Engenheiro | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | Engenhocas |
 | Alquimista | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
-| Comerciante | comum | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
-| Campeão Dimensional | especial | 7 | 16/8/0 | 44/16/1 | 79/26/3 | 114/36/5 | 149/46/8 | 204/81/8 | 259/116/8 | Marcha |
+| Comerciante | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
+| Campeão Dimensional | especial | 7 | 16/8/0 | 44/16/1 | 79/26/3 | 114/36/5 | 149/46/8 | 204/81/8 | 259/116/8 | nenhum |
 | Pirata Amaldiçoado | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
-| Cartista Arcano | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | Morte |
+| Cartista Arcano | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 | Guia Dimensional | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
-| Caçador de Entidades | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
+| Caçador das Almas | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
 | Escritor de Contos | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 | Invocador | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 | Viajante | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
-| Decodificador | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
-| Codificador | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
-| Canalizador | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
-| Sintonizador | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
-| Ritualista | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | Âncora Ritual |
+| Canalizador | comum | 7 | 16/8/0 | 32/28/1 | 52/53/3 | 72/78/5 | 92/103/8 | 147/138/8 | 202/173/8 | nenhum |
+| Sintonizador | comum | 7 | 16/8/0 | 32/28/1 | 52/53/3 | 72/78/5 | 92/103/8 | 147/138/8 | 202/173/8 | nenhum |
+| Ritualista | comum | 7 | 16/8/0 | 32/28/1 | 52/53/3 | 72/78/5 | 92/103/8 | 147/138/8 | 202/173/8 | nenhum |
 | Interceptador | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
+| Chef | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | Cardápio |
 
 ## Maiores danos do arsenal
 
@@ -61,11 +60,11 @@ Cada célula mostra `Vida/Mana/vagas de poder`.
 | Triceratops | reliquia da criacao | 10d10+8 | 63.0 | 72.4 | 35 | sim |
 | Zangetsu | reliquia da criacao | 8d12+10 | 62.0 | 71.3 | 35 | sim |
 | Bazuca | lendario | 10d8+4d4 | 55.0 | 60.5 | 25 | sim |
-| Excalibur | lendario | 6d10+12 | 45.0 | 51.7 | 25 | sim |
-| Mjölnir | lendario | 6d10+12 | 45.0 | 51.7 | 25 | sim |
-| Martelo das Chamas | lendario | 6d10+10 | 43.0 | 49.4 | 25 | sim |
-| Masamune | lendario | 6d10+10 | 43.0 | 49.4 | 25 | sim |
-| Rhaast | lendario | 5d12+10 | 42.5 | 48.9 | 25 | sim |
+| Lâmina Monomolecular | lendario | 4d10+8 | 30.0 | 31.5 | 25 | sim |
+| Fuzil Sniper de Antimatéria | epico | 4d10+4 | 26.0 | 27.3 | não definido | não |
+| Rifle de Precisão | epico | 4d10 | 22.0 | 24.2 | não definido | não |
+| Minigun | epico | 3d12 | 19.5 | 21.5 | não definido | não |
+| AWP | epico | 3d12 | 19.5 | 21.5 | não definido | não |
 
 ## Magias publicadas para playtest
 

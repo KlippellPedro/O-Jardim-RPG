@@ -120,6 +120,31 @@ class Item:
         return str(self.conteudo.get("descricao", "")).strip()
 
     @property
+    def disponivel_na_loja(self) -> bool:
+        """Entrada publicada só como referência de mesa não vai a balcão.
+
+        É o caso dos perfis universais do bestiário: existem para o Mestre
+        montar inimigo e para consulta em /monstro, e nunca para contratação.
+
+        A marca explícita do catálogo vale para qualquer tipo. A categoria
+        "Universal" entra como rede de segurança porque o bot lê do PostgreSQL
+        depois da primeira carga: até rodar `/catalogo_republicar`, a linha
+        antiga ainda não tem a marca.
+        """
+        if self.conteudo.get("disponivelNaLoja") is False:
+            return False
+        return not (
+            self.tipo == "monstro"
+            and normalizar(self.conteudo.get("categoria")) == "universal"
+        )
+
+    @property
+    def funcao(self) -> Optional[str]:
+        """O que se contrata este ser para fazer, quando ele é contratável."""
+        texto = str(self.conteudo.get("funcao", "")).strip()
+        return texto or None
+
+    @property
     def imagem(self) -> Optional[str]:
         valor = self.conteudo.get("imagem")
         texto = str(valor).strip() if valor else ""

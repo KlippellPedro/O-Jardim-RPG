@@ -8,7 +8,13 @@ from psycopg.types.json import Jsonb
 
 from core import live_session
 from core.audit import record_audit
-from core.character_summary import _classes_da_ficha, _nome, validar_regras_ficha
+from core.character_summary import (
+    _classes_da_ficha,
+    _nome,
+    bonus_escolhas_habilidade,
+    iniciativa_fixa,
+    validar_regras_ficha,
+)
 from core.database import Database
 from core.economy_commands import MAX_ECONOMY_AMOUNT
 from core.economy_models import (
@@ -26,9 +32,16 @@ from core.dependencies import (
     campaign_access,
     get_current_user,
     get_database,
+    require_campaign_manager,
     require_csrf,
 )
-from schemas import CharacterCreateInput, CharacterUpdateInput, EdenFruitConsumeInput, EconomyReplaceInput
+from schemas import (
+    CharacterCreateInput,
+    CharacterOwnerUpdateInput,
+    CharacterUpdateInput,
+    EdenFruitConsumeInput,
+    EconomyReplaceInput,
+)
 
 
 router = APIRouter(prefix="/personagens", tags=["personagens"])
@@ -77,8 +90,16 @@ def _session_resources(sheet: dict) -> dict[str, int | None]:
     if mana_atual is None:
         mana_atual = inteiro(recursos.get("manaAtual"))
 
-    vida_maxima = None if vida_maxima is None else vida_maxima + _eden_fruit_resource_bonus(sheet, "vidaMaxima")
-    mana_maxima = None if mana_maxima is None else mana_maxima + _eden_fruit_resource_bonus(sheet, "manaMaxima")
+    vida_maxima = None if vida_maxima is None else (
+        vida_maxima
+        + _eden_fruit_resource_bonus(sheet, "vidaMaxima")
+        + bonus_escolhas_habilidade(sheet, "recurso", "vidaMaxima")
+    )
+    mana_maxima = None if mana_maxima is None else (
+        mana_maxima
+        + _eden_fruit_resource_bonus(sheet, "manaMaxima")
+        + bonus_escolhas_habilidade(sheet, "recurso", "manaMaxima")
+    )
 
     if vida_maxima is not None:
         vida_maxima = max(0, vida_maxima)
@@ -137,7 +158,19 @@ def _is_protected_inventory_data_key(key: str) -> bool:
 # test_owner_edits_and_consumes_but_cannot_forge_provenance). Deliberadamente
 # curta: nao inventar campos "cosmeticos" hipoteticos sem evidencia no
 # codigo atual — na duvida, o campo fica travado no valor atual.
-_LOJA_PLAYER_EDITABLE_KEYS = frozenset({"equipado"})
+# Estado operacional que o dono da ficha precisa controlar durante a sessão.
+# Nenhuma destas chaves altera proveniência, preço, raridade, bônus máximos ou
+# a mecânica-base comprada na Loja.
+_LOJA_PLAYER_EDITABLE_KEYS = frozenset(
+    {
+        "combustivelAtual",
+        "durabilidadeAtual",
+        "equipado",
+        "favorito",
+        "localArmazenamento",
+        "municaoAtual",
+    }
+)
 
 
 def _editable_inventory_data(
@@ -200,6 +233,122 @@ def _authorized_character(connection, character_id: UUID, user_id: UUID):
     if row["papel"] not in {"mestre", "assistente"} and row["dono_usuario_id"] != user_id:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="personagem nao encontrado")
     return row
+
+
+def _sheet_links_complex_ally(sheet: dict | None, character_id: UUID) -> bool:
+    allies = sheet.get("aliados") if isinstance(sheet, dict) else []
+    if not isinstance(allies, list):
+        return False
+    target = str(character_id)
+    return any(
+        isinstance(ally, dict)
+        and ally.get("categoria") == "complexo"
+        and str(ally.get("personagemId") or "") == target
+        for ally in allies
+    )
+
+
+def _readable_character(connection, character_id: UUID, user_id: UUID):
+    """Autoriza a ficha completa para dono/gestor ou como vínculo somente leitura."""
+    row = connection.execute(
+        """
+        SELECT p.*, m.papel
+        FROM personagens p
+        JOIN membros_campanha m
+          ON m.campanha_id=p.campanha_id AND m.usuario_id=%s
+        WHERE p.id=%s AND p.status='ativo' AND m.status='ativo'
+        """,
+        (user_id, character_id),
+    ).fetchone()
+    if not row:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="personagem nao encontrado")
+    if row["papel"] in {"mestre", "assistente"} or row["dono_usuario_id"] == user_id:
+        return row, False
+
+    owned_sheets = connection.execute(
+        """
+        SELECT ficha
+        FROM personagens
+        WHERE campanha_id=%s AND dono_usuario_id=%s AND status='ativo'
+        """,
+        (row["campanha_id"], user_id),
+    ).fetchall()
+    if any(_sheet_links_complex_ally(source["ficha"], character_id) for source in owned_sheets):
+        return row, True
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="personagem nao encontrado")
+
+
+_COMPLEX_ALLY_PLAYER_FIELDS = {"favorito", "emCena", "ordem"}
+
+
+def _complex_allies_for_permission(sheet: dict | None) -> dict[str, dict] | None:
+    """Normaliza vínculos complexos para comparar uma edição de jogador.
+
+    Favorito, ordem e presença em cena são preferências do dono da ficha. O
+    vínculo, a ficha escolhida e os demais dados continuam sob controle de
+    Mestre/assistente.
+    """
+    allies = sheet.get("aliados") if isinstance(sheet, dict) else []
+    if not isinstance(allies, list):
+        return {}
+    result: dict[str, dict] = {}
+    for ally in allies:
+        if not isinstance(ally, dict) or ally.get("categoria") != "complexo":
+            continue
+        ally_id = str(ally.get("id") or "").strip()
+        if not ally_id or ally_id in result:
+            return None
+        result[ally_id] = {
+            key: value
+            for key, value in ally.items()
+            if key not in _COMPLEX_ALLY_PLAYER_FIELDS
+        }
+    return result
+
+
+def _player_complex_allies_error(current_sheet: dict | None, next_sheet: dict | None) -> str | None:
+    current = _complex_allies_for_permission(current_sheet)
+    desired = _complex_allies_for_permission(next_sheet)
+    if current is None or desired is None:
+        return "vinculo complexo possui identificador ausente ou repetido"
+    if current != desired:
+        return "somente Mestre ou assistente pode criar, remover ou trocar um vinculo complexo"
+    return None
+
+
+def _complex_ally_summary(row: dict) -> dict:
+    """Publica somente os números necessários ao cartão de Aliados.
+
+    O jogador recebe o resumo porque o Mestre ligou esta ficha à dele, mas não
+    recebe inventário, notas, poderes ou o restante da ficha privada.
+    """
+    sheet = row.get("ficha") if isinstance(row.get("ficha"), dict) else {}
+    derived = sheet.get("derivados") if isinstance(sheet.get("derivados"), dict) else {}
+    resources = _session_resources(sheet)
+
+    def number(value, default=0):
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            return value
+        return default
+
+    maximum_life = max(1, int(number(resources.get("vida_maxima"), 1)))
+    current_life = int(number(resources.get("vida_atual"), maximum_life))
+    maximum_mana = max(0, int(number(resources.get("mana_maxima"), 0)))
+    current_mana = max(0, min(maximum_mana, int(number(resources.get("mana_atual"), maximum_mana))))
+    return {
+        "personagem_id": str(row["id"]),
+        "nome": row.get("nome") or "Aliado Desconhecido",
+        "foto": sheet.get("foto"),
+        "vida_atual": current_life,
+        "vida_maxima": maximum_life,
+        "mana_atual": current_mana,
+        "mana_maxima": maximum_mana,
+        "defesa": int(number(derived.get("defesaNatural"), 0))
+        + bonus_escolhas_habilidade(sheet, "combate", "defesa"),
+        "movimento": number(derived.get("movimento"), 9),
+        "iniciativa": iniciativa_fixa(sheet),
+        "nivel": max(1, int(number(sheet.get("nivel"), 1))),
+    }
 
 
 @router.post("", status_code=status.HTTP_201_CREATED)
@@ -377,11 +526,13 @@ def list_characters(
         if access.manages_content:
             rows = connection.execute(
                 """
-                SELECT p.id, p.campanha_id, p.dono_usuario_id, p.nome,
+                SELECT p.id, p.campanha_id, p.dono_usuario_id, p.criado_por, p.nome,
                        p.ficha, p.versao, p.economia_versao, p.status, p.atualizado_em,
-                       u.nome_exibicao AS dono_nome
+                       u.nome_exibicao AS dono_nome,
+                       c.nome_exibicao AS criado_por_nome
                 FROM personagens p
                 LEFT JOIN usuarios u ON u.id=p.dono_usuario_id
+                LEFT JOIN usuarios c ON c.id=p.criado_por
                 WHERE p.campanha_id=%s AND p.status='ativo'
                 ORDER BY p.nome
                 """,
@@ -390,11 +541,13 @@ def list_characters(
         else:
             rows = connection.execute(
                 """
-                SELECT p.id, p.campanha_id, p.dono_usuario_id, p.nome,
+                SELECT p.id, p.campanha_id, p.dono_usuario_id, p.criado_por, p.nome,
                        p.ficha, p.versao, p.economia_versao, p.status, p.atualizado_em,
-                       u.nome_exibicao AS dono_nome
+                       u.nome_exibicao AS dono_nome,
+                       c.nome_exibicao AS criado_por_nome
                 FROM personagens p
                 LEFT JOIN usuarios u ON u.id=p.dono_usuario_id
+                LEFT JOIN usuarios c ON c.id=p.criado_por
                 WHERE p.campanha_id=%s AND p.dono_usuario_id=%s
                   AND p.status='ativo'
                 ORDER BY p.nome
@@ -436,6 +589,54 @@ def list_characters(
     return {"personagens": personagens}
 
 
+@router.get("/{character_id}/aliados-complexos")
+def list_complex_allies(
+    character_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """Lê os status das fichas que o Mestre vinculou como aliados.
+
+    A autorização é feita pela ficha que guarda os vínculos. O retorno é um
+    resumo mecânico, nunca a ficha completa da outra pessoa.
+    """
+    with database.connection() as connection:
+        owner = _authorized_character(connection, character_id, user.id)
+        sheet = owner["ficha"] if isinstance(owner.get("ficha"), dict) else {}
+        raw_allies = sheet.get("aliados") if isinstance(sheet.get("aliados"), list) else []
+        linked_ids: list[UUID] = []
+        seen: set[UUID] = set()
+        for ally in raw_allies:
+            if not isinstance(ally, dict) or ally.get("categoria") != "complexo":
+                continue
+            try:
+                linked_id = UUID(str(ally.get("personagemId") or ""))
+            except (TypeError, ValueError, AttributeError):
+                continue
+            if linked_id not in seen:
+                linked_ids.append(linked_id)
+                seen.add(linked_id)
+
+        if not linked_ids:
+            return {"aliados": []}
+
+        rows = connection.execute(
+            """
+            SELECT id, nome, ficha
+            FROM personagens
+            WHERE campanha_id=%s AND status='ativo' AND id = ANY(%s)
+            """,
+            (owner["campanha_id"], linked_ids),
+        ).fetchall()
+        by_id = {row["id"]: dict(row) for row in rows}
+        summaries = [
+            _complex_ally_summary(by_id[linked_id])
+            for linked_id in linked_ids
+            if linked_id in by_id
+        ]
+    return {"aliados": summaries}
+
+
 @router.get("/{character_id}")
 def get_character(
     character_id: UUID,
@@ -443,7 +644,7 @@ def get_character(
     database: Database = Depends(get_database),
 ):
     with database.connection() as connection:
-        row = _authorized_character(connection, character_id, user.id)
+        row, read_only = _readable_character(connection, character_id, user.id)
         balances = connection.execute(
             """
             SELECT moeda, saldo FROM saldos_personagem
@@ -461,6 +662,7 @@ def get_character(
         ).fetchall()
     result = dict(row)
     result.pop("papel", None)
+    result["somente_leitura"] = read_only
     result["carteira"] = [dict(item) for item in balances]
     result["inventario_central"] = [dict(item) for item in inventory]
     return {"personagem": result}
@@ -473,11 +675,13 @@ def update_character(
     user: AuthenticatedUser = Depends(require_csrf),
     database: Database = Depends(get_database),
 ):
-    session_event: tuple[UUID, int] | None = None
     with database.connection() as connection:
         current = _authorized_character(connection, character_id, user.id)
         name = payload.nome or current["nome"]
         if current["papel"] not in {"mestre", "assistente"}:
+            complex_error = _player_complex_allies_error(current["ficha"], payload.ficha)
+            if complex_error:
+                raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=complex_error)
             campanha_row = connection.execute(
                 "SELECT configuracoes FROM campanhas WHERE id=%s", (current["campanha_id"],)
             ).fetchone()
@@ -616,19 +820,99 @@ def update_character(
                 ),
             ).fetchone()
             if participant:
-                session_version = connection.execute(
+                connection.execute(
                     """
                     UPDATE sessoes_mesa
                     SET versao=versao+1, atualizado_em=CURRENT_TIMESTAMP
                     WHERE id=%s
-                    RETURNING versao
                     """,
                     (active_session["id"],),
-                ).fetchone()
-                session_event = (current["campanha_id"], int(session_version["versao"]))
-    if session_event:
-        live_session.publicar(session_event[0], "personagem_atualizado", session_event[1])
+                )
+    # O evento também mantém os cartões de aliados complexos atualizados fora
+    # de uma sessão aberta. Ele carrega apenas o id; cada cliente refaz o GET e
+    # recebe somente o resumo que tem autorização para ver.
+    live_session.publicar(
+        current["campanha_id"],
+        "personagem_atualizado",
+        int(row["versao"]),
+        {"personagem_id": str(character_id)},
+    )
     return {"personagem": dict(row)}
+
+
+@router.put("/{character_id}/dono")
+def transfer_character_owner(
+    character_id: UUID,
+    payload: CharacterOwnerUpdateInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Reatribui o jogador dono de um personagem (mestre/assistente).
+
+    Cobre o fluxo de criar a ficha pelo painel do mestre e so depois associar
+    a um jogador real da mesa - hoje o dono so era definido na criacao.
+    """
+    with database.connection() as connection:
+        character = connection.execute(
+            "SELECT id, campanha_id, dono_usuario_id, nome FROM personagens WHERE id=%s AND status='ativo'",
+            (character_id,),
+        ).fetchone()
+        if not character:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="personagem nao encontrado")
+
+        require_campaign_manager(connection, character["campanha_id"], user.id)
+
+        novo_dono = connection.execute(
+            """
+            SELECT u.id, u.nome_exibicao
+            FROM membros_campanha m
+            JOIN usuarios u ON u.id=m.usuario_id
+            WHERE m.campanha_id=%s AND m.usuario_id=%s AND m.status='ativo'
+            """,
+            (character["campanha_id"], payload.novo_dono_usuario_id),
+        ).fetchone()
+        if not novo_dono:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="o novo dono deve ser membro ativo da campanha",
+            )
+
+        dono_anterior = character["dono_usuario_id"]
+        connection.execute(
+            "UPDATE personagens SET dono_usuario_id=%s, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s",
+            (novo_dono["id"], character_id),
+        )
+        record_audit(
+            connection,
+            action="personagem.dono_transferido",
+            actor_user_id=user.id,
+            campaign_id=character["campanha_id"],
+            target_type="personagem",
+            target_id=str(character_id),
+            details={
+                "dono_anterior": str(dono_anterior) if dono_anterior else None,
+                "dono_novo": str(novo_dono["id"]),
+                "nome": character["nome"],
+            },
+        )
+        if novo_dono["id"] != user.id and novo_dono["id"] != dono_anterior:
+            from core import notifications
+
+            notifications.notify(
+                connection,
+                user_ids=[novo_dono["id"]],
+                category="campanha",
+                title="Personagem atribuido a voce",
+                message=f"O personagem '{character['nome']}' agora e seu.",
+                campaign_id=character["campanha_id"],
+                actor_user_id=user.id,
+                details={"personagem_id": str(character_id)},
+            )
+    return {
+        "personagem_id": character_id,
+        "dono_usuario_id": novo_dono["id"],
+        "dono_nome": novo_dono["nome_exibicao"],
+    }
 
 
 @router.post("/{character_id}/economia/operacoes")
@@ -640,21 +924,14 @@ def apply_character_economy_operations(
 ):
     """Aplica um lote economico validado e incrementa a versao uma unica vez.
 
-    Jogadores podem administrar metadados, ordem e consumo do proprio
-    inventario. Somente gestores alteram saldo; itens recebidos da loja ou de
-    recompensas nunca podem ser aumentados por um jogador comum.
+    Jogadores administram metadados, ordem, consumo e o saldo da propria
+    carteira; cada ajuste vira lancamento com origem "site-ficha" para o mestre
+    auditar depois. Itens recebidos da loja ou de recompensas continuam sem
+    poder ser aumentados por um jogador comum.
     """
     with database.connection() as connection:
         current = _authorized_character(connection, character_id, user.id)
         is_manager = current["papel"] in {"mestre", "assistente"}
-        if not is_manager and any(
-            isinstance(operation, AdjustWalletBalanceOperation)
-            for operation in payload.operacoes
-        ):
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="somente mestre ou assistente pode ajustar saldos",
-            )
 
         locked = connection.execute(
             """

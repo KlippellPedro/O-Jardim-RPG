@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowUp, Crown, Zap } from 'lucide-react';
+import { ArrowUp, Crown, Zap, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -84,7 +84,7 @@ export const CampeaoDimensional = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, y: 40 }}
@@ -111,7 +111,7 @@ export const CampeaoDimensional = ({ classe }: { classe: IClasse }) => {
             <Crown size={40} className={`${tema.icon} mb-4`} strokeWidth={2} />
             <h3 className={`text-xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Número 1</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Você carrega o título. Receba +2 em testes físicos, vantagem contra Cansaço e quedas, e +2 de Status entre quem reconhece seu nome. Em estágios mais altos, você resiste a golpes repetidos do mesmo tipo, arranca um ataque extra ao derrubar um inimigo e, no auge, recusa a morte uma vez por sessão.
+              Você carrega o título. Receba +2 em testes físicos, vantagem contra Cansaço e quedas, e +2 em Diplomacia ou Intimidação diante de quem reconhece seu nome. Em estágios mais altos, você resiste a golpes repetidos do mesmo tipo, arranca um ataque extra ao derrubar um inimigo e, no auge, recusa a morte uma vez por sessão.
             </p>
           </PremiumCard>
 
@@ -127,6 +127,21 @@ export const CampeaoDimensional = ({ classe }: { classe: IClasse }) => {
             <h3 className={`text-xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Trono da Dimensão</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
               A pura força bruta rasga defesas, mas não é ilimitada. Uma vez por sessão, por duas rodadas, seus danos físicos ignoram 10 de Resistência e inimigos a 6 m sofrem −2 em testes físicos.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className={`flex flex-col items-center text-center p-8 rounded-xl ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={40} className={`${tema.icon} mb-4`} strokeWidth={2} />
+            <h3 className={`text-xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              Todo golpe seu que obriga o alvo a resistir rola Intimidação com Força no lugar de Carisma: o resultado vira a DT que ele precisa alcançar. É o tamanho do estrago que assusta, não a lábia.
             </p>
           </PremiumCard>
         </div>

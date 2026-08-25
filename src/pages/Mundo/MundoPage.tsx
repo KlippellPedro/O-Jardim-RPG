@@ -6,9 +6,11 @@ import { MUNDO_CATALOG, type LoreEntry } from '../../../data/gerado/mundoCatalog
 import { arvoreVisivel } from '../../../data/mundo/arvoresCatalog';
 import { useAuthStore } from '../../store/useAuthStore';
 import { usePerformanceProfile } from '../../hooks/usePerformance';
+import { conteudoEditorialApi } from '../../services/conteudoEditorialApi';
 import { BANCO_LUNAR_INFO } from './bancoLunarInfo';
 import { COSMIC_TREES } from './cosmicTrees';
 import { loreBloqueado } from './loreVisibility';
+import { WORLD_CHRONICLES, type WorldChronicleCatalog } from './worldChronicles';
 
 const CosmicTreeViewer = lazy(() => import('./components/CosmicTreeViewer').then((module) => ({ default: module.CosmicTreeViewer })));
 const TreeChroniclePage = lazy(() => import('./components/TreeChroniclePage').then((module) => ({ default: module.TreeChroniclePage })));
@@ -26,6 +28,8 @@ const WorldLoading = ({ label }: { label: string }) => (
 );
 
 export const MundoPage: React.FC = () => {
+  const [mundoCatalog, setMundoCatalog] = useState<LoreEntry[]>(MUNDO_CATALOG);
+  const [worldChronicles, setWorldChronicles] = useState<WorldChronicleCatalog>(WORLD_CHRONICLES);
   const [selectedDeidadeId, setSelectedDeidadeId] = useState<string | null>(null);
   const [infoDeidadeId, setInfoDeidadeId] = useState<string | null>(null);
   const [bancoLunarAberto, setBancoLunarAberto] = useState(false);
@@ -44,15 +48,49 @@ export const MundoPage: React.FC = () => {
   const loreRevelado = config.lore_revelado as string[] | undefined ?? [];
   const loreOculto = config.lore_oculto as string[] | undefined ?? [];
 
+  useEffect(() => {
+    if (!campanhaAtiva?.id) {
+      setMundoCatalog(MUNDO_CATALOG);
+      setWorldChronicles(WORLD_CHRONICLES);
+      return undefined;
+    }
+    const controller = new AbortController();
+    conteudoEditorialApi.carregarMundoResolvido(campanhaAtiva.id, controller.signal)
+      .then((response) => {
+        const chronology = response.entradas.find((entry) => entry.tipo === 'cronologia');
+        const chronologyContent = chronology?.conteudo;
+        if (
+          chronologyContent
+          && Array.isArray(chronologyContent.linha_tempo_geral)
+          && Array.isArray(chronologyContent.arvores)
+        ) {
+          setWorldChronicles(chronologyContent as unknown as WorldChronicleCatalog);
+        } else {
+          setWorldChronicles(WORLD_CHRONICLES);
+        }
+        setMundoCatalog(
+          response.entradas.filter((entry) => entry.tipo !== 'cronologia') as unknown as LoreEntry[],
+        );
+      })
+      .catch((error) => {
+        if (error?.name !== 'AbortError') {
+          console.error('Não foi possível carregar o conteúdo personalizado do Mundo.', error);
+          setMundoCatalog(MUNDO_CATALOG);
+          setWorldChronicles(WORLD_CHRONICLES);
+        }
+      });
+    return () => controller.abort();
+  }, [campanhaAtiva?.id]);
+
   const lockedDeidades = useMemo(() => COSMIC_TREES
     .map((tree) => tree.deidadeId)
     .filter((id) => {
       if (isMestre) return false;
       if (!arvoreVisivel(id, config, isMestre)) return true;
-      const entry = MUNDO_CATALOG.find((item) => item.id === id && item.tipo === 'deidade');
+      const entry = mundoCatalog.find((item) => item.id === id && item.tipo === 'deidade');
       if (!entry) return true;
       return loreBloqueado(entry, { isMestre, loreRevelado, loreOculto });
-    }), [config, isMestre, loreOculto, loreRevelado]);
+    }), [config, isMestre, loreOculto, loreRevelado, mundoCatalog]);
   const lockedSet = useMemo(() => new Set(lockedDeidades), [lockedDeidades]);
   const visibleTreeIds = useMemo(
     () => COSMIC_TREES.map((tree) => tree.deidadeId).filter((id) => !lockedSet.has(id)),
@@ -91,11 +129,11 @@ export const MundoPage: React.FC = () => {
 
   const details = useMemo(() => {
     if (!infoDeidadeId) return null;
-    const deidade = MUNDO_CATALOG.find((entry) => entry.id === infoDeidadeId && entry.tipo === 'deidade');
-    const fluxo = MUNDO_CATALOG.find((entry) => entry.id === deidade?.conteudo.fluxo && entry.tipo === 'fluxo');
-    const galhos = MUNDO_CATALOG.filter((entry) => entry.tipo === 'galho' && entry.conteudo.arvore === infoDeidadeId);
+    const deidade = mundoCatalog.find((entry) => entry.id === infoDeidadeId && entry.tipo === 'deidade');
+    const fluxo = mundoCatalog.find((entry) => entry.id === deidade?.conteudo.fluxo && entry.tipo === 'fluxo');
+    const galhos = mundoCatalog.filter((entry) => entry.tipo === 'galho' && entry.conteudo.arvore === infoDeidadeId);
     return { deidade, fluxo, galhos };
-  }, [infoDeidadeId]);
+  }, [infoDeidadeId, mundoCatalog]);
 
   const renderLoreBlock = useCallback((
     entry: LoreEntry | undefined,
@@ -143,6 +181,7 @@ export const MundoPage: React.FC = () => {
         <TreeChroniclePage
           treeId={arvoreId}
           color={activeTree.color}
+          chronicles={worldChronicles}
           onBack={() => navigate('/mundo')}
           onOpenGlobalTimeline={() => navigate('/mundo/cronologia')}
         />
@@ -155,6 +194,7 @@ export const MundoPage: React.FC = () => {
       <Suspense fallback={<WorldLoading label="Carregando linha do tempo..." />}>
         <GlobalChroniclePage
           visibleTreeIds={visibleTreeIds}
+          chronicles={worldChronicles}
           onBack={() => navigate('/mundo')}
           onOpenTree={openTreeChronicle}
         />

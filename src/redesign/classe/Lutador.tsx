@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { HandMetal, Trophy, Flame } from 'lucide-react';
+import { HandMetal, Trophy, Flame, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -79,22 +79,20 @@ export const Lutador = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className={`flex gap-6 p-8 rounded-none ${tema.bg} border-l-8 ${tema.border} backdrop-blur-md`}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <HandMetal size={40} className={`${tema.icon} shrink-0`} strokeWidth={2} />
-            <div>
-              <h3 className={`text-2xl font-black ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Punhos de Ferro</h3>
-              <p className="text-red-200/70 leading-relaxed text-sm font-medium">
-                Seus ataques desarmados deixam de ser Dano Brando e passam a ser Letais. Seu dano desarmado base aumenta em +1 categoria de dado permanente, escalando com seu estágio.
-              </p>
-            </div>
+            <HandMetal size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Punhos de Ferro</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              Sua mão fechada conta como arma marcial: rola Luta, soma o seu Mod. Força no dano e critica em 20 com x2. O dado sobe pela carreira, de 1d6 no nível 3 até 2d6 no 20, e no 14 a margem de crítico abre para 19 ou 20. Luva, encantamento e modificação somam no máximo uma categoria além disso.
+            </p>
           </PremiumCard>
 
           <PremiumCard
@@ -103,15 +101,13 @@ export const Lutador = ({ classe }: { classe: IClasse }) => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className={`flex gap-6 p-8 rounded-none ${tema.bg} border-l-8 ${tema.border} backdrop-blur-md`}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <Trophy size={40} className={`${tema.icon} shrink-0`} strokeWidth={2} />
-            <div>
-              <h3 className={`text-2xl font-black ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Estilo de Combate</h3>
-              <p className="text-red-200/70 leading-relaxed text-sm font-medium">
-                Crie com o mestre um estilo de luta próprio, com uma vantagem situacional e uma limitação de peso equivalente, como <span className="text-orange-400">golpes que ignoram esquiva ao custo de menor precisão</span> ou <span className="text-yellow-400">maior mobilidade desarmado em troca de dano reduzido</span>. O estilo não pode conceder ações extras permanentes nem copiar uma habilidade final.
-              </p>
-            </div>
+            <Trophy size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Estilo de Combate</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              No nível 18 o seu jeito de brigar vira escola. São oito estilos prontos, cada um com uma vantagem que só vale em certa situação e uma limitação do mesmo tamanho: <span className="text-orange-400">Boxe, Agarrão, Chute Baixo, Guarda Alta</span>, <span className="text-yellow-400">Contragolpe, Briga de Rua, Capoeira e Quebra-Ossos</span>. Dá para montar o seu com o Mestre, dentro dessa mesma medida.
+            </p>
           </PremiumCard>
 
           <PremiumCard
@@ -120,15 +116,27 @@ export const Lutador = ({ classe }: { classe: IClasse }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className={`col-span-1 md:col-span-2 flex gap-6 p-8 rounded-none ${tema.bg} border-l-8 ${tema.border} backdrop-blur-md`}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <Flame size={40} className={`${tema.icon} shrink-0`} strokeWidth={2} />
-            <div>
-              <h3 className={`text-2xl font-black ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Impacto Brutal</h3>
-              <p className="text-red-200/70 leading-relaxed text-sm font-medium">
-                Gaste 5 de Mana para causar +1d10 em um ataque desarmado, mas sofra −2 Defesa até o seu próximo turno.
-              </p>
-            </div>
+            <Flame size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Marcas de Guerra</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              Do nível 10 em diante, cada acerto seu deixa uma marca no corpo do sujeito, uma por turno, e elas ficam lá até o fim do combate. Com 2, acertar ele rende um golpe a mais por rodada. Com 3, a Defesa dele cai 2. Com 4, ele para de usar reação. Com 5, o seu próximo golpe entra com +5 de dano e limpa a conta. É a briga inteira virando desconto no mesmo alvo.
+            </p>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              Agarrar, derrubar, empurrar, desarmar e imobilizar são manobras, e agora estão no capítulo de Combate: você rola Luta contra 10 mais o Reflexos ou o Fortitude do alvo. Desde o nível 1 você rola com vantagem nas três primeiras. Marca de Guerra é outra história e não pede teste nenhum: ela gruda quando o golpe entra.
+            </p>
           </PremiumCard>
         </div>
 

@@ -1,5 +1,46 @@
 import { api } from './apiClient';
 
+export interface AuditoriaFiltros {
+  limite?: number;
+  pagina?: number;
+  ator_id?: string;
+  personagem_id?: string;
+  categoria?: string;
+  busca?: string;
+  desde?: string;
+  ate?: string;
+}
+
+export interface MudancaAuditoria {
+  caminho: string;
+  operacao: 'adicionado' | 'removido' | 'alterado' | string;
+  antes?: unknown;
+  depois?: unknown;
+}
+
+export interface EventoAuditoriaCampanha {
+  id: string;
+  ator_usuario_id: string | null;
+  ator_nome: string | null;
+  ator_servico: string | null;
+  acao: string;
+  alvo_tipo: string | null;
+  alvo_id: string | null;
+  alvo_nome: string | null;
+  alvo_dono_usuario_id: string | null;
+  alvo_dono_nome: string | null;
+  detalhes: Record<string, any>;
+  criado_em: string;
+}
+
+export interface AuditoriaCampanhaResponse {
+  eventos: EventoAuditoriaCampanha[];
+  pagina: number;
+  limite: number;
+  total: number;
+  paginas: number;
+}
+
 export const campanhasApi = {
   listar() {
     return api('/campanhas');
@@ -57,8 +98,19 @@ export const campanhasApi = {
       body: { novo_dono_id: novoDonoId },
     });
   },
-  auditoria(campanhaId: string, limite = 100) {
-    return api(`/campanhas/${encodeURIComponent(campanhaId)}/auditoria?limite=${encodeURIComponent(limite)}`);
+  auditoria(campanhaId: string, filtros: AuditoriaFiltros | number = {}, signal?: AbortSignal) {
+    const normalized = typeof filtros === 'number' ? { limite: filtros } : filtros;
+    const params = new URLSearchParams();
+    Object.entries(normalized).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && String(value).trim() !== '') {
+        params.set(key, String(value));
+      }
+    });
+    const query = params.toString();
+    return api<AuditoriaCampanhaResponse>(
+      `/campanhas/${encodeURIComponent(campanhaId)}/auditoria${query ? `?${query}` : ''}`,
+      { signal },
+    );
   },
   selecionarPersonagem(campanhaId: string, personagemId: string) {
     return api(`/campanhas/${encodeURIComponent(campanhaId)}/personagem-ativo`, {

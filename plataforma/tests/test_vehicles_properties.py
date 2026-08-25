@@ -179,11 +179,15 @@ class VehiclesPropertiesTests(unittest.TestCase):
     # -- criação / edição --------------------------------------------------
 
     def test_create_update_delta_roundtrip(self):
-        created = vehicles.create_vehicle(self.campanha_id, self._veiculo_input(), user=self.mestre, database=self.database)
+        created = vehicles.create_vehicle(
+            self.campanha_id, self._veiculo_input(raridade="incomum"),
+            user=self.mestre, database=self.database,
+        )
         vehicle_id = created["id"]
 
         updated = vehicles.update_vehicle(
-            self.campanha_id, vehicle_id, self._veiculo_input(nome="Moto Relâmpago II"),
+            self.campanha_id, vehicle_id,
+            self._veiculo_input(nome="Moto Relâmpago II", raridade="raro"),
             user=self.mestre, database=self.database,
         )
         self.assertEqual(updated["versao"], 2)
@@ -196,6 +200,11 @@ class VehiclesPropertiesTests(unittest.TestCase):
         self.assertEqual(delta["vida_atual"], 20)
         self.assertEqual(delta["combustivel_atual"], 7)
         self.assertEqual(delta["versao"], 3)
+        with self.database.connection() as connection:
+            raridade = connection.execute(
+                "SELECT raridade FROM campanha_veiculos WHERE id=%s", (vehicle_id,)
+            ).fetchone()["raridade"]
+        self.assertEqual(raridade, "raro")
 
         with self.assertRaises(HTTPException) as raised:
             vehicles.update_vehicle_delta(
@@ -362,7 +371,8 @@ class VehiclesPropertiesTests(unittest.TestCase):
                         SELECT vida_maxima, vida_atual, combustivel_maximo, combustivel_atual,
                                defesa, resistencia, deslocamento, manobrabilidade, cobertura,
                                capacidade, tripulacao_minima, sistemas_ativos_maximos,
-                               espacos_modulos_maximos, espacos_base
+                               espacos_modulos_maximos, espacos_base, raridade,
+                               modulos_utilidade_integrados
                         FROM campanha_veiculos WHERE id=%s
                         """,
                         (result["id"],),
@@ -390,6 +400,11 @@ class VehiclesPropertiesTests(unittest.TestCase):
                     vehicle["espacos_modulos_maximos"], conteudo["sistemasAtivosMaximos"]
                 )
                 self.assertEqual(vehicle["espacos_base"], conteudo["espacosBase"])
+                self.assertEqual(vehicle["raridade"], conteudo["raridade"])
+                self.assertEqual(
+                    vehicle["modulos_utilidade_integrados"],
+                    len(conteudo.get("sistemas", [])),
+                )
 
     def test_migrate_vehicle_preserves_explicit_zero_espacos_base(self):
         """`int(dados.get("espacosBase") or 1)` transformava um `espacosBase:

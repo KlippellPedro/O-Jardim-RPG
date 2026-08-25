@@ -14,6 +14,49 @@ export interface LojaCatalogEntry {
   nivel_loja?: number;
 }
 
+export interface LojaCatalogDocument {
+  id: string;
+  tipo: string;
+  titulo: string;
+  conteudo: Record<string, unknown>;
+  ativo: boolean;
+}
+
+export interface LojaCatalogEditorial {
+  id: string;
+  item_id: string;
+  rascunho: LojaCatalogDocument;
+  publicado: LojaCatalogDocument | null;
+  versao: number;
+  atualizado_em: string;
+  publicado_em: string | null;
+}
+
+export interface LojaCatalogEditorEntry {
+  item_id: string;
+  origem: 'oficial' | 'campanha';
+  base: LojaCatalogDocument | null;
+  editorial: LojaCatalogEditorial | null;
+}
+
+export interface LojaCatalogDraftInput {
+  campanha_id: string;
+  item_id: string;
+  tipo: string;
+  titulo: string;
+  conteudo: Record<string, unknown>;
+  ativo: boolean;
+  versao_esperada: number | null;
+}
+
+export interface LojaCatalogRevision {
+  id: string;
+  versao: number;
+  dados: LojaCatalogDocument;
+  criado_por: string | null;
+  criado_em: string;
+}
+
 export interface LojaCommandItem {
   item_id: string;
   quantidade: number;
@@ -145,6 +188,56 @@ export function prepareCheckoutAttempt(
   };
 }
 
+export interface LojaGrantCommandItem {
+  item_id: string;
+  quantidade: number;
+}
+
+export interface LojaGrantCommandInput {
+  campanha_id: string;
+  personagem_id: string;
+  idempotencia: string;
+  itens: LojaGrantCommandItem[];
+}
+
+export interface LojaGrantResult {
+  operacao_id: string;
+  repetida: boolean;
+  economia_versao: number;
+  itens: Array<{
+    item_id: string;
+    titulo: string;
+    quantidade: number;
+    valor_referencia: { moeda: string; valor: number } | null;
+  }>;
+}
+
+/**
+ * Monta o payload de uma concessão do Mestre. Ao contrário da compra, não
+ * carrega `economia_versao_esperada`: quem concede não está competindo com
+ * outra escrita concorrente do próprio jogador em cima da carteira, então
+ * não há corrida para detectar.
+ */
+export function prepareGrantAttempt(
+  campanhaId: string,
+  personagemId: string,
+  itens: readonly LojaGrantCommandItem[],
+  createId: IdFactory = createRandomId,
+): LojaGrantCommandInput {
+  const normalizedCampanha = campanhaId.trim();
+  const normalizedPersonagem = personagemId.trim();
+  if (!normalizedCampanha || !normalizedPersonagem) {
+    throw new TypeError('Campanha e personagem são obrigatórios.');
+  }
+  const normalizedItens = normalizeItems(itens).map(({ item_id, quantidade }) => ({ item_id, quantidade }));
+  return {
+    campanha_id: normalizedCampanha,
+    personagem_id: normalizedPersonagem,
+    idempotencia: `loja-concessao:${createId()}`,
+    itens: normalizedItens,
+  };
+}
+
 export const lojaApi = {
   listarCatalogo(campanhaId: string, signal?: AbortSignal) {
     return api<{ itens: LojaCatalogEntry[] }>(
@@ -159,5 +252,42 @@ export const lojaApi = {
 
   vender(payload: LojaCommandInput) {
     return api<LojaCommandResult>('/loja/vendas', { method: 'POST', body: payload });
+  },
+
+  conceder(payload: LojaGrantCommandInput) {
+    return api<LojaGrantResult>('/loja/concessoes', { method: 'POST', body: payload });
+  },
+
+  listarCatalogoEditor(campanhaId: string) {
+    return api<{ itens: LojaCatalogEditorEntry[] }>(
+      `/loja/editor/catalogo?campanha_id=${encodeURIComponent(campanhaId)}`,
+    );
+  },
+
+  salvarRascunhoCatalogo(payload: LojaCatalogDraftInput) {
+    return api<{ editorial: LojaCatalogEditorial }>('/loja/editor/rascunho', {
+      method: 'PUT',
+      body: payload,
+    });
+  },
+
+  publicarItemCatalogo(editorialId: string, campanhaId: string, versaoEsperada: number) {
+    return api<{ editorial: LojaCatalogEditorial }>(
+      `/loja/editor/${encodeURIComponent(editorialId)}/publicar`,
+      { method: 'POST', body: { campanha_id: campanhaId, versao_esperada: versaoEsperada } },
+    );
+  },
+
+  listarRevisoesCatalogo(editorialId: string, campanhaId: string) {
+    return api<{ revisoes: LojaCatalogRevision[] }>(
+      `/loja/editor/${encodeURIComponent(editorialId)}/revisoes?campanha_id=${encodeURIComponent(campanhaId)}`,
+    );
+  },
+
+  restaurarRevisaoCatalogo(editorialId: string, revisaoId: string, campanhaId: string, versaoEsperada: number) {
+    return api<{ editorial: LojaCatalogEditorial }>(
+      `/loja/editor/${encodeURIComponent(editorialId)}/revisoes/${encodeURIComponent(revisaoId)}/restaurar`,
+      { method: 'POST', body: { campanha_id: campanhaId, versao_esperada: versaoEsperada } },
+    );
   },
 };

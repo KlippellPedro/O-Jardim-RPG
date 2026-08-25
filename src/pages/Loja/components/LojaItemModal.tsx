@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Select } from '../../../components/ui/Select';
 import { LojaItem, getCurrencySymbol, itemEhVeiculoCompleto, obterBonusDefesaCatalogo, personagemAtendeRequisitosLoja } from '../../../services/lojaCatalogService';
@@ -39,6 +40,51 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
 
   // Renderização específica baseada na Categoria
   const renderDetails = () => {
+    if (item.tipoOrigem === 'drop') {
+      const propriedades = Array.isArray(dadosBrutos.propriedades) ? dadosBrutos.propriedades : [];
+      const usos = Array.isArray(dadosBrutos.usos) ? dadosBrutos.usos : [];
+      return (
+        <div className="mt-6 flex flex-col gap-5 border-t border-white/10 pt-6">
+          <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gray-500">
+            <Info size={16} /> Ficha do material
+          </h4>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              ['Categoria', dadosBrutos.categoria],
+              ['Afinidade', dadosBrutos.afinidade],
+            ].map(([rotulo, valor]) => (
+              <div key={String(rotulo)} className="rounded-xl border border-white/10 bg-white/5 p-3">
+                <div className="text-[10px] uppercase tracking-widest text-gray-500">{rotulo}</div>
+                <div className="mt-1 font-bold capitalize text-emerald-100">{String(valor ?? '-')}</div>
+              </div>
+            ))}
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+              <div className="mb-3 text-[10px] font-bold uppercase tracking-widest text-gray-500">Características</div>
+              <div className="flex flex-wrap gap-2">
+                {propriedades.map((propriedade: unknown) => <span key={String(propriedade)} className="rounded-md bg-emerald-400/10 px-2.5 py-1.5 text-xs text-emerald-100">{String(propriedade)}</span>)}
+              </div>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+              <div className="mb-3 text-[10px] font-bold uppercase tracking-widest text-gray-500">Usos</div>
+              <div className="flex flex-wrap gap-2">
+                {usos.map((uso: unknown) => <span key={String(uso)} className="rounded-md bg-violet-400/10 px-2.5 py-1.5 text-xs capitalize text-violet-100">{String(uso)}</span>)}
+              </div>
+            </div>
+          </div>
+          {dadosBrutos.origem && <div className="rounded-xl border border-white/10 bg-white/5 p-4"><div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-gray-500">Origem</div><p className="text-sm leading-6 text-gray-300">{dadosBrutos.origem}</p></div>}
+          <Link
+            to={`/materiais?busca=${encodeURIComponent(item.nome)}`}
+            onClick={onClose}
+            className="inline-flex w-fit items-center gap-2 rounded-xl border border-emerald-400/25 bg-emerald-400/10 px-4 py-2.5 text-sm font-bold text-emerald-100 hover:bg-emerald-400/20"
+          >
+            Ver receitas compatíveis
+          </Link>
+        </div>
+      );
+    }
+
     if (item.categoria === 'Consumíveis' && dadosBrutos.subtipo === 'selo') {
       return (
         <div className="mt-6 flex flex-col gap-4 border-t border-white/10 pt-6">
@@ -67,31 +113,87 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
     }
 
     switch (item.categoria) {
-      case 'Mercenários':
+      case 'Mercenários': {
+        const numeros = [
+          ['Nível', dadosBrutos.nivel],
+          ['VD', dadosBrutos.vd],
+          ['Vida', dadosBrutos.pv],
+          ['Defesa', dadosBrutos.defesa],
+          ['Iniciativa', dadosBrutos.iniciativa],
+          ['Deslocamento', dadosBrutos.deslocamento],
+        ].filter(([, valor]) => valor !== undefined && valor !== null && valor !== '');
+        const ataques = Array.isArray(dadosBrutos.ataques) ? dadosBrutos.ataques : [];
+        const habilidades = Array.isArray(dadosBrutos.habilidades) ? dadosBrutos.habilidades : [];
+        const pericias = Array.isArray(dadosBrutos.pericias) ? dadosBrutos.pericias : [];
         return (
-          <div className="flex flex-col gap-4 mt-6 border-t border-white/10 pt-6">
-            <h4 className="text-sm uppercase tracking-widest text-gray-500 font-bold mb-2 flex items-center gap-2">
+          <div className="mt-6 flex flex-col gap-4 border-t border-white/10 pt-6">
+            <h4 className="mb-2 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gray-500">
               <Activity size={16} /> Ficha de Combate
             </h4>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-                <div className="text-xs text-gray-400 uppercase">Nível</div>
-                <div className="text-2xl text-white font-bold">{dadosBrutos.nivel || '?'}</div>
-              </div>
-              <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-                <div className="text-xs text-gray-400 uppercase">Classe</div>
-                <div className="text-xl text-yellow-400 font-bold">{dadosBrutos.classe || 'Criatura'}</div>
-              </div>
+            <div className="flex flex-wrap gap-2">
+              {dadosBrutos.funcao && (
+                <span className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-bold text-emerald-300">
+                  {dadosBrutos.funcao}
+                </span>
+              )}
+              <span className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-3 py-1.5 text-xs font-bold text-yellow-400">
+                {dadosBrutos.classe || 'Criatura'}
+              </span>
+              {dadosBrutos.categoria && (
+                <span className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-300">
+                  {dadosBrutos.categoria}
+                </span>
+              )}
             </div>
-            {/* Se houver dados parseáveis de Vida/Dano no futuro, podem ser injetados aqui */}
-            {item.propriedades && (
-              <div className="bg-white/5 p-4 rounded-xl border border-white/10 mt-2">
-                <div className="text-xs text-gray-400 uppercase mb-2">Atributos e Habilidades</div>
-                <p className="text-gray-300 text-sm whitespace-pre-wrap">{item.propriedades}</p>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {numeros.map(([rotulo, valor]) => (
+                <div key={String(rotulo)} className="rounded-xl border border-white/10 bg-white/5 p-3 text-center">
+                  <div className="text-[10px] uppercase tracking-widest text-gray-400">{String(rotulo)}</div>
+                  <div className="mt-1 text-sm font-bold text-white">{String(valor)}</div>
+                </div>
+              ))}
+            </div>
+            {ataques.length > 0 && (
+              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                <div className="mb-2 text-xs uppercase text-gray-400">Ataques</div>
+                <ul className="flex flex-col gap-1 text-sm text-gray-300">
+                  {ataques.map((ataque: any, indice: number) => (
+                    <li key={indice}>
+                      <span className="font-semibold text-white">{ataque?.nome}</span>
+                      {ataque?.detalhe ? `: ${ataque.detalhe}` : ''}
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
+            {habilidades.length > 0 && (
+              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                <div className="mb-2 text-xs uppercase text-gray-400">Habilidades</div>
+                <ul className="flex flex-col gap-1 text-sm text-gray-300">
+                  {habilidades.map((habilidade: any, indice: number) => (
+                    <li key={indice}>{String(habilidade)}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {pericias.length > 0 && (
+              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+                <div className="mb-2 text-xs uppercase text-gray-400">Perícias</div>
+                <p className="text-sm text-gray-300">{pericias.join(' · ')}</p>
+              </div>
+            )}
+            {item.propriedades && (
+              <div className="mt-2 rounded-xl border border-white/10 bg-white/5 p-4">
+                <div className="mb-2 text-xs uppercase text-gray-400">Atributos e Habilidades</div>
+                <p className="whitespace-pre-wrap text-sm text-gray-300">{item.propriedades}</p>
+              </div>
+            )}
+            <p className="text-xs text-gray-500">
+              Ao contratar, o ser entra pronto e editável na aba Aliados da ficha.
+            </p>
           </div>
         );
+      }
 
       case 'Bens': {
         const propriedade = item.tipoOrigem === 'propriedade';

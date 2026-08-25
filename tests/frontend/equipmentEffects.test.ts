@@ -57,10 +57,48 @@ test('efeitos de modificações e raridade só funcionam com o item equipado', (
   assert.equal(inativo.efeitosAtivos.length, 0);
 });
 
-test('raridade limita mods, quantidade de efeitos e valor aplicado', () => {
+test('mutações abissais selecionadas somam Vida e Defesa sem acumular degraus antigos', () => {
+  const ficha = {
+    atributosFinais: { forca: 10 },
+    classes: [{ classeId: 'pirata-amaldicoado', nivel: 20 }],
+    escolhasHabilidade: {
+      'pirata-amaldicoado:evolucao-abissal': [
+        'pele-de-tubarao',
+        'coracao-de-leviata',
+        'faro-de-tempestade',
+        'chamado-da-alcateia',
+      ],
+    },
+  };
+
+  const resumo = resumirEquipamentos([], ficha);
+  assert.equal(resumo.bonusRecursos.vidaMaxima, 20);
+  assert.equal(resumo.bonusCombate.defesa, 2);
+  assert.equal(resumo.efeitosAtivos.length, 2, 'mutações condicionais não devem criar bônus permanentes');
+  assert.deepEqual(detalharEfeitosAutomaticos(resumo, 'recurso', 'vidaMaxima'), [
+    { nome: 'Habilidade: Coração de Leviatã', valor: 20 },
+  ]);
+  assert.deepEqual(detalharEfeitosAutomaticos(resumo, 'combate', 'defesa'), [
+    { nome: 'Habilidade: Pele de Tubarão', valor: 2 },
+  ]);
+});
+
+test('mutações não selecionadas não alteram a ficha', () => {
+  const resumo = resumirEquipamentos([], {
+    atributosFinais: { forca: 10 },
+    classes: [{ classeId: 'pirata-amaldicoado', nivel: 20 }],
+    escolhasHabilidade: {
+      'pirata-amaldicoado:evolucao-abissal': ['faro-de-tempestade'],
+    },
+  });
+  assert.equal(resumo.bonusRecursos.vidaMaxima, undefined);
+  assert.equal(resumo.bonusCombate.defesa, undefined);
+});
+
+test('a ficha aplica mods e efeitos acima do que o livro sugere para a raridade', () => {
   const resumo = resumirEquipamentos([{
-    item_id: 'item-limite',
-    titulo: 'Peça instável',
+    item_id: 'item-livre',
+    titulo: 'Peça fora do livro',
     dados: {
       categoria: 'geral',
       equipado: true,
@@ -82,17 +120,40 @@ test('raridade limita mods, quantidade de efeitos e valor aplicado', () => {
     },
   }], { atributosFinais: { forca: 10 }, nivel: 1 });
 
-  assert.equal(resumo.bonusRecursos.vidaMaxima, 1);
-  assert.equal(resumo.bonusRecursos.manaMaxima, undefined);
-  assert.equal(resumo.bonusCombate.defesa, 1);
-  assert.equal(resumo.bonusCombate.ataque, undefined);
-  assert.equal(resumo.bonusAtributos.forca, 1);
-  assert.equal(resumo.bonusAtributos.destreza, undefined);
-  assert.equal(resumo.efeitosAtivos.length, 3);
-  assert.match(resumo.conflitos[0], /excede os limites de Incomum/);
+  assert.equal(resumo.bonusRecursos.vidaMaxima, 20);
+  assert.equal(resumo.bonusRecursos.manaMaxima, 20);
+  assert.equal(resumo.bonusCombate.defesa, 8);
+  assert.equal(resumo.bonusCombate.ataque, 8);
+  assert.equal(resumo.bonusAtributos.forca, 9);
+  assert.equal(resumo.bonusAtributos.destreza, 9);
+  assert.equal(resumo.efeitosAtivos.length, 6);
+  assert.deepEqual(resumo.conflitos, []);
 });
 
-test('rótulo Mítico salvo na ficha usa os limites da antiga chave relíquia', () => {
+test('item comum aceita bônus próprios de raridade mesmo o livro sugerindo nenhum', () => {
+  const resumo = resumirEquipamentos([{
+    item_id: 'item-comum',
+    titulo: 'Faca de cozinha amaldiçoada',
+    dados: {
+      categoria: 'geral',
+      equipado: true,
+      raridade: 'comum',
+      efeitosRaridade: [efeito('e-comum', 'combate', 'dano', 3)],
+      modificacoes: [{
+        id: 'mod-comum', nome: 'Fio impossível', tipo: 'especial',
+        efeitos: [efeito('e-mod', 'atributo', 'forca', 4), efeito('e-mod-2', 'combate', 'iniciativa', 2)],
+      }],
+    },
+  }], { atributosFinais: { forca: 10 }, nivel: 1 });
+
+  assert.equal(resumo.bonusCombate.dano, 3);
+  assert.equal(resumo.bonusAtributos.forca, 4);
+  assert.equal(resumo.bonusCombate.iniciativa, 2);
+  assert.equal(resumo.efeitosAtivos.length, 3);
+  assert.deepEqual(resumo.conflitos, []);
+});
+
+test('rótulo Mítico salvo na ficha resolve para a mesma regra da chave relíquia', () => {
   const resumo = resumirEquipamentos([{
     item_id: 'item-mitico',
     titulo: 'Artefato Mítico',

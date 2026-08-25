@@ -1,9 +1,6 @@
 import { aplicarAjustesAtributosRaciais } from './calculoService';
 import { RACAS_CATALOGO } from './catalogoService';
-import {
-  EFEITOS_POR_MODIFICACAO_MAXIMOS,
-  obterRegraRaridade,
-} from '../../data/regras/raridadesEquipamentos';
+import { opcoesHabilidadeSelecionadas } from './progressaoFichaService';
 
 export interface IResumoEquipamento {
   defesaEquipamento: number;
@@ -151,30 +148,31 @@ export function resumirEquipamentos(inventarioCentral: any[], ficha: any): IResu
   const efeitosAtivos: IEfeitoEquipamentoAtivo[] = [];
   const conflitos: string[] = [];
 
-  equipados.forEach((item) => {
-    const regraRaridade = obterRegraRaridade(String(item?.dados?.raridade || 'comum'));
-    const modificacoesInformadas = normalizarModificacoesEquipamento(item?.dados?.modificacoes);
-    const efeitosRaridadeInformados = normalizarEfeitosEquipamento(item?.dados?.efeitosRaridade);
-    const nomeItem = String(item?.titulo || 'Item');
-    const valorLimitado = (efeito: IEfeitoEquipamento): IEfeitoEquipamento => ({
-      ...efeito,
-      valor: Math.sign(efeito.valor) * Math.min(Math.abs(efeito.valor), regraRaridade.valorMaximoPorEfeito),
+  const adicionarEfeitos = (
+    efeitos: unknown,
+    fonte: { itemId: string; itemNome: string; origem: string },
+    limitarQuantidade = false,
+  ) => {
+    const normalizados = limitarQuantidade
+      ? normalizarEfeitosFicha(efeitos)
+      : normalizarEfeitosEquipamento(efeitos);
+    normalizados.forEach((efeito) => {
+      efeitosAtivos.push({ ...efeito, ...fonte });
+      if (efeito.categoria === 'atributo') somarNoMapa(bonusAtributos, efeito.alvo, efeito.valor);
+      else if (efeito.categoria === 'recurso') somarNoMapa(bonusRecursos, efeito.alvo, efeito.valor);
+      else if (efeito.categoria === 'combate') somarNoMapa(bonusCombate, efeito.alvo, efeito.valor);
+      else if (efeito.modo === 'vantagem') somarNoMapa(vantagens, efeito.alvo, Math.abs(efeito.valor));
+      else if (efeito.modo === 'desvantagem') somarNoMapa(desvantagens, efeito.alvo, Math.abs(efeito.valor));
+      else somarNoMapa(bonusPericias, efeito.alvo, efeito.valor);
     });
-    const modificacoes = modificacoesInformadas
-      .slice(0, regraRaridade.modificacoesMaximas)
-      .map((modificacao) => ({
-        ...modificacao,
-        efeitos: modificacao.efeitos.slice(0, EFEITOS_POR_MODIFICACAO_MAXIMOS).map(valorLimitado),
-      }));
-    const efeitosRaridade = efeitosRaridadeInformados
-      .slice(0, regraRaridade.efeitosRaridadeMaximos)
-      .map(valorLimitado);
-    const excedeuLimites = modificacoesInformadas.length > regraRaridade.modificacoesMaximas
-      || efeitosRaridadeInformados.length > regraRaridade.efeitosRaridadeMaximos
-      || modificacoesInformadas.some((modificacao) => modificacao.efeitos.length > EFEITOS_POR_MODIFICACAO_MAXIMOS)
-      || [...modificacoesInformadas.flatMap((modificacao) => modificacao.efeitos), ...efeitosRaridadeInformados]
-        .some((efeito) => Math.abs(efeito.valor) > regraRaridade.valorMaximoPorEfeito);
-    if (excedeuLimites) conflitos.push(`${nomeItem} excede os limites de ${regraRaridade.titulo}; efeitos excedentes foram ignorados.`);
+  };
+
+  equipados.forEach((item) => {
+    // A ficha aplica o que estiver escrito no item. Os tetos de raridade do
+    // livro continuam valendo como orientação de mesa, e aparecem como aviso
+    // nos modais, mas não cortam nem limitam nenhum valor aqui.
+    const modificacoes = normalizarModificacoesEquipamento(item?.dados?.modificacoes);
+    const efeitosRaridade = normalizarEfeitosEquipamento(item?.dados?.efeitosRaridade);
 
     const fontes = [
       ...modificacoes.map((modificacao) => ({
@@ -186,20 +184,11 @@ export function resumirEquipamentos(inventarioCentral: any[], ficha: any): IResu
         efeitos: efeitosRaridade,
       },
     ];
-    fontes.forEach((fonte) => fonte.efeitos.forEach((efeito) => {
-      efeitosAtivos.push({
-        ...efeito,
+    fontes.forEach((fonte) => adicionarEfeitos(fonte.efeitos, {
         itemId: String(item?.item_id || ''),
         itemNome: String(item?.titulo || 'Item'),
         origem: fonte.origem,
-      });
-      if (efeito.categoria === 'atributo') somarNoMapa(bonusAtributos, efeito.alvo, efeito.valor);
-      else if (efeito.categoria === 'recurso') somarNoMapa(bonusRecursos, efeito.alvo, efeito.valor);
-      else if (efeito.categoria === 'combate') somarNoMapa(bonusCombate, efeito.alvo, efeito.valor);
-      else if (efeito.modo === 'vantagem') somarNoMapa(vantagens, efeito.alvo, Math.abs(efeito.valor));
-      else if (efeito.modo === 'desvantagem') somarNoMapa(desvantagens, efeito.alvo, Math.abs(efeito.valor));
-      else somarNoMapa(bonusPericias, efeito.alvo, efeito.valor);
-    }));
+      }));
   });
 
   const fontesDaFicha = [
@@ -219,23 +208,20 @@ export function resumirEquipamentos(inventarioCentral: any[], ficha: any): IResu
   fontesDaFicha.forEach(({ itens, rotulo }) => {
     (Array.isArray(itens) ? itens : []).forEach((item: any) => {
       if (Array.isArray(item?.efeitos) && item.efeitos.length > 0) {
-        const efeitosInformados = normalizarEfeitosFicha(item.efeitos);
-      efeitosInformados.forEach((efeito) => {
-        efeitosAtivos.push({
-          ...efeito,
+        adicionarEfeitos(item.efeitos, {
           itemId: String(item.id || ''),
           itemNome: String(item.nome || rotulo),
           origem: `${rotulo}: ${item.nome || 'Desconhecido'}`,
-        });
-        if (efeito.categoria === 'atributo') somarNoMapa(bonusAtributos, efeito.alvo, efeito.valor);
-        else if (efeito.categoria === 'recurso') somarNoMapa(bonusRecursos, efeito.alvo, efeito.valor);
-        else if (efeito.categoria === 'combate') somarNoMapa(bonusCombate, efeito.alvo, efeito.valor);
-        else if (efeito.modo === 'vantagem') somarNoMapa(vantagens, efeito.alvo, Math.abs(efeito.valor));
-        else if (efeito.modo === 'desvantagem') somarNoMapa(desvantagens, efeito.alvo, Math.abs(efeito.valor));
-        else somarNoMapa(bonusPericias, efeito.alvo, efeito.valor);
-      });
+        }, true);
       }
     });
+  });
+  opcoesHabilidadeSelecionadas(ficha).forEach((opcao) => {
+    adicionarEfeitos(opcao.efeitos, {
+      itemId: opcao.id,
+      itemNome: opcao.titulo,
+      origem: `Habilidade: ${opcao.titulo}`,
+    }, true);
   });
   const armaduras = equipados.filter((item) => item?.dados?.categoria === 'armadura');
   const escudos = armaduras.filter((item) => String(item?.dados?.subtipo || item?.titulo || '').toLowerCase().includes('escudo'));

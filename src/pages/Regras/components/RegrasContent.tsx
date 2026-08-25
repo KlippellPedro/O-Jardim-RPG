@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronDown, Dices, List, X } from 'lucide-react';
+import { sanitizeRuleHtml } from '../../../services/sanitizeRuleHtml';
 
 interface RegrasContentProps {
   htmlContent: string;
@@ -33,7 +34,7 @@ export const RegrasContent = ({ htmlContent }: RegrasContentProps) => {
     const container = contentRef.current;
     if (!container) return undefined;
 
-    container.innerHTML = htmlContent;
+    container.innerHTML = sanitizeRuleHtml(htmlContent);
     const headers = Array.from(container.querySelectorAll('h3'));
     const novoToc = headers.map((header, index) => {
       const id = slugTitulo(header.textContent || 'Tópico', index);
@@ -47,11 +48,36 @@ export const RegrasContent = ({ htmlContent }: RegrasContentProps) => {
     const walkDOM = (node: Node) => {
       if (node.nodeType === Node.TEXT_NODE) {
         const rawText = node.nodeValue || '';
-        if (rawText.match(diceRegex) && node.parentNode && (node.parentNode as HTMLElement).tagName !== 'BUTTON') {
-          const wrapper = document.createElement('span');
-          wrapper.innerHTML = rawText.replace(diceRegex, `<button type="button" aria-label="Rolar $&" class="dice-roll-btn mx-1 inline-flex items-center gap-1 rounded border border-fuchsia-500/40 bg-fuchsia-600/20 px-2 py-0.5 font-bold text-fuchsia-300 transition-colors hover:bg-fuchsia-500 hover:text-white" data-dice="$&"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="12" height="12" x="2" y="10" rx="2" ry="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/><path d="M6 18h.01"/><path d="M10 14h.01"/><path d="M15 6h.01"/><path d="M18 9h.01"/></svg>$&</button>`);
-          node.parentNode.replaceChild(wrapper, node);
-        }
+        if (!node.parentNode || (node.parentNode as HTMLElement).tagName === 'BUTTON') return;
+        diceRegex.lastIndex = 0;
+        const matches = Array.from(rawText.matchAll(diceRegex));
+        if (!matches.length) return;
+        const fragment = document.createDocumentFragment();
+        let cursor = 0;
+        matches.forEach((match) => {
+          const index = match.index ?? cursor;
+          fragment.appendChild(document.createTextNode(rawText.slice(cursor, index)));
+          const expression = match[0];
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.setAttribute('aria-label', `Rolar ${expression}`);
+          button.className = 'dice-roll-btn mx-1 inline-flex items-center gap-1 rounded border border-fuchsia-500/40 bg-fuchsia-600/20 px-2 py-0.5 font-bold text-fuchsia-300 transition-colors hover:bg-fuchsia-500 hover:text-white';
+          button.dataset.dice = expression;
+          const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          icon.setAttribute('aria-hidden', 'true');
+          icon.setAttribute('width', '12');
+          icon.setAttribute('height', '12');
+          icon.setAttribute('viewBox', '0 0 24 24');
+          icon.setAttribute('fill', 'none');
+          icon.setAttribute('stroke', 'currentColor');
+          icon.setAttribute('stroke-width', '2');
+          icon.innerHTML = '<rect width="12" height="12" x="2" y="10" rx="2" ry="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/><path d="M6 18h.01"/><path d="M10 14h.01"/><path d="M15 6h.01"/><path d="M18 9h.01"/>';
+          button.append(icon, document.createTextNode(expression));
+          fragment.appendChild(button);
+          cursor = index + expression.length;
+        });
+        fragment.appendChild(document.createTextNode(rawText.slice(cursor)));
+        node.parentNode.replaceChild(fragment, node);
         return;
       }
       Array.from(node.childNodes).forEach(walkDOM);

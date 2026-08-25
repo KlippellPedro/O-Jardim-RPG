@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { campanhasApi } from '../../services/campanhasApi';
 import { Select } from '../ui/Select';
-import { Users, Crown, UserX, Repeat, ScrollText, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Users, Crown, UserX, Repeat, Loader2 } from 'lucide-react';
 
 const PAPEIS = [
   { value: 'mestre', label: 'Mestre' },
@@ -19,9 +19,6 @@ export const MembrosCampanha: React.FC = () => {
   const [erro, setErro] = useState<string | null>(null);
   const [confirmandoRemover, setConfirmandoRemover] = useState<string | null>(null);
   const [transferindoPara, setTransferindoPara] = useState<string | null>(null);
-  const [auditoriaAberta, setAuditoriaAberta] = useState(false);
-  const [eventos, setEventos] = useState<any[]>([]);
-  const [carregandoAuditoria, setCarregandoAuditoria] = useState(false);
 
   if (!campanhaAtiva) return null;
 
@@ -63,23 +60,6 @@ export const MembrosCampanha: React.FC = () => {
     } finally {
       setProcessando(null);
       setTransferindoPara(null);
-    }
-  };
-
-  const carregarAuditoria = async () => {
-    if (auditoriaAberta) {
-      setAuditoriaAberta(false);
-      return;
-    }
-    setAuditoriaAberta(true);
-    setCarregandoAuditoria(true);
-    try {
-      const resp: any = await campanhasApi.auditoria(campanhaAtiva.id, 50);
-      setEventos(resp.eventos || []);
-    } catch (e) {
-      console.error('Falha ao carregar auditoria da campanha', e);
-    } finally {
-      setCarregandoAuditoria(false);
     }
   };
 
@@ -198,39 +178,6 @@ export const MembrosCampanha: React.FC = () => {
         </div>
       </section>
 
-      <section>
-        <button
-          onClick={carregarAuditoria}
-          className="flex items-center gap-2 mb-3 text-sm font-bold text-gray-300 hover:text-white transition-colors"
-        >
-          <ScrollText size={18} className="text-primary" />
-          Histórico de Auditoria
-          {auditoriaAberta ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-        </button>
-        {auditoriaAberta && (
-          <div className="bg-black/40 rounded-2xl border border-white/5 p-4 max-h-[320px] overflow-y-auto custom-scrollbar space-y-2">
-            {carregandoAuditoria ? (
-              <div className="flex items-center gap-2 text-gray-500 text-sm">
-                <Loader2 size={14} className="animate-spin" /> Carregando...
-              </div>
-            ) : eventos.length === 0 ? (
-              <p className="text-sm text-gray-600 italic">Nenhum evento registrado ainda.</p>
-            ) : (
-              eventos.map((ev) => (
-                <div key={ev.id} className="text-xs border-b border-white/5 pb-2 last:border-0">
-                  <div className="flex justify-between gap-3 text-gray-400">
-                    <span>
-                      <strong className="text-gray-300">{ev.ator_nome || ev.ator_servico || 'Sistema'}:</strong> {ev.acao}
-                    </span>
-                    <span className="shrink-0">{new Date(ev.criado_em).toLocaleString('pt-BR')}</span>
-                  </div>
-                  {ev.alvo_tipo && <span className="text-gray-600">{ev.alvo_tipo}: {ev.alvo_id}</span>}
-                </div>
-              ))
-            )}
-          </div>
-        )}
-      </section>
     </div>
   );
 };

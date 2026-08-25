@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Cog, Wrench, Pickaxe } from 'lucide-react';
+import { Cog, Wrench, Pickaxe, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -71,12 +71,12 @@ export const Engenheiro = ({ classe }: { classe: IClasse }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className={`text-lg ${tema.tag} opacity-80 max-w-2xl mx-auto font-medium leading-relaxed`}
           >
-            Construtores e inventores do campo de batalha. Com sucata, ferramentas e puro intelecto criativo, eles fabricam engenhocas temporárias e estruturas tecnológicas para moldar o ambiente ao seu favor.
+            O Engenheiro usa sucata e ferramentas para montar engenhocas, abrir caminhos, proteger aliados e controlar o campo de batalha.
           </motion.p>
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, scale: 0.95 }}
@@ -88,8 +88,11 @@ export const Engenheiro = ({ classe }: { classe: IClasse }) => {
             <Cog size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Engenhocas</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Use Mana para construir bugigangas mecânicas rápidas (como armadilhas, ganchos de escalada motorizados ou drones batedores básicos) durante descansos ou até no combate com ações completas.
+              No descanso, um único lote de Sucata monta todas as engenhocas preparadas. Seus projetos sobem do nível 1 ao 5 com a classe, exigindo Sucata de Comum a Lendária e melhorando automaticamente alcance, dano, resistência ou utilidade.
             </p>
+            <a href="#habilidade-engenhocas" className="mt-5 inline-flex w-fit rounded-xl border border-sky-300/25 bg-sky-400/10 px-4 py-2 text-xs font-black uppercase tracking-wider text-sky-100 transition hover:bg-sky-400/20">
+              Ver projetos e sucata
+            </a>
           </PremiumCard>
 
           <PremiumCard
@@ -101,9 +104,23 @@ export const Engenheiro = ({ classe }: { classe: IClasse }) => {
             className={`flex flex-col p-8 rounded-lg ${tema.bg} border ${tema.border} backdrop-blur-md shadow-inner`}
           >
             <Pickaxe size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Arquitetura Tech</h3>
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Arquitetura de Campo</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Modifique a arena ativamente. Você pode reforçar uma parede, criar uma ponte pênsil de até 6m, ou construir uma torre de vigia improvisada para oferecer cobertura pesada ao grupo.
+              No nível 18 a improvisação vira obra. Você ergue no meio da luta paredes com teto que dão cobertura superior, passarelas e cabos que levam o grupo aonde não havia caminho, ou uma bancada de campo onde todo mundo trabalha melhor. Cinco rodadas, 8 de Mana, uma vez por descanso longo.
+            </p>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+            className={`flex flex-col p-8 rounded-lg ${tema.bg} border ${tema.border} backdrop-blur-md shadow-inner`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              Nenhum aparelho seu usa número fixo. Ao acionar contra alguém, você rola Ofício (Engenharia), o ofício que vem junto da classe, e o resultado é o número que a vítima precisa alcançar para escapar. Bancada calibrada rende mais que sorte, e uma falha crítica queima o aparelho na sua mão.
             </p>
           </PremiumCard>
         </div>
@@ -115,4 +132,3 @@ export const Engenheiro = ({ classe }: { classe: IClasse }) => {
 };
 
 export default Engenheiro;
-

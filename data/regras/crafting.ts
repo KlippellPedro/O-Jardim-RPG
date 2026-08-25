@@ -377,6 +377,8 @@ export const REGRA_CRAFTING: RegraTopicoCrafting = {
     <ul class="regras-list">${itens(REGRAS_TECNOLOGIA_E_CIBERNETICOS)}</ul>
 
     <h3 class="regras-subtitle">Materiais, Drops e comércio</h3>
+    <p>Categoria, propriedade, afinidade, potência, estado e qualidade de um material vivem no capítulo
+    <strong>Materiais e Ingredientes</strong> - este capítulo só cobre o lado econômico do crafting.</p>
     <ul class="regras-list">${itens(SALVAGUARDAS_ECONOMIA_CRAFTING)}</ul>
 
     <p class="regras-note"><strong>Classes:</strong> Alquimista e Engenheiro usam as habilidades descritas nas próprias progressões. Nenhuma classe é obrigatória para fabricar itens comuns, desde que o personagem cumpra os requisitos da receita.</p>

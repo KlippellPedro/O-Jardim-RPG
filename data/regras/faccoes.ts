@@ -245,7 +245,6 @@ const linhasFaccoes = FACCOES_DOCUMENTADAS.map((faccao) => `
     <td>${faccao.tipo.replace(/-/g, ' ')}</td>
     <td>${faccao.alcance}</td>
     <td>${faccao.atuacao_publica}</td>
-    <td>${faccao.estado === 'canonica' ? 'Canônica' : 'Proposta'}</td>
   </tr>
 `).join('');
 
@@ -262,9 +261,9 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
     <p class="regras-lead">Estas regras podem ser usadas com qualquer organização da campanha, independentemente da Árvore. Cada facção registra seu próprio Prestígio; Fama continua sendo uma medida geral de visibilidade.</p>
 
     <h3 class="regras-subtitle">Facções documentadas</h3>
-    <p>Banco Lunar e AstraTech pertencem ao cenário atual. As outras três organizações são propostas e ainda não fazem parte do cânone.</p>
+    <p>Organizações que atuam além de uma Árvore só, e por isso podem aparecer em qualquer campanha. Cada uma guarda o próprio Prestígio.</p>
     <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Facção</th><th>Tipo</th><th>Alcance</th><th>Atuação pública</th><th>Estado</th></tr></thead>
+      <thead><tr><th>Facção</th><th>Tipo</th><th>Alcance</th><th>Atuação pública</th></tr></thead>
       <tbody>${linhasFaccoes}</tbody>
     </table></div>
 

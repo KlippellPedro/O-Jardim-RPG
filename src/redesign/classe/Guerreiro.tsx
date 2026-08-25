@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Sword, Users, Shield, ArrowRight } from 'lucide-react';
+import { Sword, Users, Shield, ArrowRight, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -79,7 +79,7 @@ export const Guerreiro = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, x: -30 }}
@@ -91,7 +91,7 @@ export const Guerreiro = ({ classe }: { classe: IClasse }) => {
             <Users size={36} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Batalhão</h3>
             <p className="text-red-200/60 leading-relaxed text-sm">
-              Escolha um aliado por estágio. Uma vez por rodada, gaste uma ação de movimento para comandar: um escolhido recebe +2 em seu próximo ataque ou teste físico, sem compartilhar poderes.
+              A cada estágio, mais um aliado entra no seu Batalhão e mais uma ordem entra na sua boca. São oito ordens possíveis e você aprende quatro: Mira, Avança, Segura, Levanta, Junto Comigo, Recua, Aguenta Firme e Pra Cima Dele. Uma ordem por rodada, gritada com uma Ação de Movimento para quem estiver a até 12 m e conseguir ouvir.
             </p>
           </PremiumCard>
 
@@ -106,7 +106,7 @@ export const Guerreiro = ({ classe }: { classe: IClasse }) => {
             <Sword size={36} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Arsenal Especial</h3>
             <p className="text-orange-200/60 leading-relaxed text-sm">
-              Selecione do seu arsenal armas, escudos e armaduras. Seus aliados do Batalhão podem comprá-los com desconto narrativo de 20% e ganham +1 para utilizá-los.
+              No nível 15 você põe o seu nome em oito peças da Loja, de raridade Rara ou inferior: quatro armas, duas armaduras e dois escudos. Aliado do Batalhão compra qualquer uma com 20% de desconto e recebe +1 nos testes para usá-la. Trocar uma peça leva um descanso longo. Quatro poderes da classe só funcionam em cima desse arsenal, e por isso todos pedem o nível 15.
             </p>
           </PremiumCard>
 
@@ -116,12 +116,26 @@ export const Guerreiro = ({ classe }: { classe: IClasse }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className={`col-span-1 md:col-span-2 flex flex-col p-8 ${tema.bg} ${tema.border} backdrop-blur-md`}
+            className={`flex flex-col p-8 ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
             <ArrowRight size={36} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Implacável</h3>
             <p className="text-red-200/60 leading-relaxed text-sm">
-              Antes de um ataque corpo a corpo, aceite −2 Defesa até o seu próximo turno para causar +4 de dano se acertar. Com a experiência, o risco compensa mais: contra-ataques contra quem erra ao seu lado, resistência a fogo e frio, vida vampírica ao golpear e, no auge, um ataque adicional que amedronta o alvo.
+              Antes de rolar um ataque corpo a corpo, aceite −2 de Defesa até o seu próximo turno para causar +4 de dano se acertar. O troco melhora com a carreira: reação contra quem erra do seu lado, Resistência 5 a fogo e frio, Vida de volta a cada golpe e, no nível 20, um ataque a mais em cima de quem acabou de perder a coragem.
+            </p>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className={`flex flex-col p-8 ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-red-200/60 leading-relaxed text-sm">
+              O Guerreiro rola Intimidação com Força no lugar de Carisma, e é esse número que o alvo precisa alcançar quando um efeito seu manda testar Vontade para não recuar. O que assusta não é o discurso: é o tamanho do estrago que você acabou de fazer na frente de todo mundo.
             </p>
           </PremiumCard>
         </div>

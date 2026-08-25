@@ -4,6 +4,7 @@ import type { IRaca } from '../../types/catalogo';
 
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 interface OniricoProps {
@@ -84,7 +85,7 @@ export const Onirico = ({ raca }: OniricoProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-indigo-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Não veio de nenhum ventre: veio de um sonho que se recusou a terminar quando o sonhador acordou. Anda entre o mundo real e a lógica solta de um pesadelo, e as duas coisas parecem sempre um pouco mais verdadeiras perto dele.
+            Veio de um sonho que continuou depois que o sonhador acordou. Precisa sonhar para descansar de verdade, escorrega para dentro da lógica dos sonhos quando quer sumir de um lugar, e traz o pesadelo dos outros para o meio da briga.
           </motion.p>
         </motion.header>
 
@@ -102,7 +103,7 @@ export const Onirico = ({ raca }: OniricoProps) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Passo Entre-Sonhos</h3>
               <p className="text-indigo-200/60 leading-relaxed text-sm">
-                Uma vez por cena, gaste uma ação e 3 Mana para se teleportar até 6 m para um espaço desocupado que consiga ver, escorregando por um instante para dentro da própria lógica dos sonhos.
+                Uma vez por cena, gaste seu Movimento e 3 Mana para sumir de onde está e aparecer num espaço desocupado que você enxergue a até 9 m. Isso não provoca reações.
               </p>
             </div>
           </PremiumCard>
@@ -119,7 +120,7 @@ export const Onirico = ({ raca }: OniricoProps) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Véu do Sonhador</h3>
               <p className="text-indigo-200/60 leading-relaxed text-sm">
-                Vantagem para resistir a Medo, perda de Sanidade e ilusões. Você também não pode ser localizado ou rastreado através dos sonhos de outra criatura.
+                Vantagem para resistir a medo, a perda de Sanidade e a ilusões. Ninguém consegue te achar ou te rastrear pelo sonho de outra criatura.
               </p>
             </div>
           </PremiumCard>
@@ -136,7 +137,7 @@ export const Onirico = ({ raca }: OniricoProps) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Leitura de Sonhos</h3>
               <p className="text-indigo-200/60 leading-relaxed text-sm">
-                Uma vez por descanso, enquanto uma criatura dorme e permite, você pode tocá-la e vislumbrar fragmentos soltos do sonho atual dela: uma imagem, uma emoção ou um medo recorrente.
+                Uma vez por descanso, enquanto uma criatura dorme e permite, toque nela e veja pedaços soltos do sonho que ela está tendo: uma imagem, uma emoção, um medo que volta sempre.
               </p>
             </div>
           </PremiumCard>
@@ -153,13 +154,19 @@ export const Onirico = ({ raca }: OniricoProps) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Pesadelo Manifesto</h3>
               <p className="text-indigo-200/60 leading-relaxed text-sm">
-                Uma vez por cena, gaste uma ação e 5 Mana para fazer uma criatura a até 15 m enxergar o pior pesadelo que carrega. Misticismo contra a Vontade dela; em falha, ela sofre desvantagem no próximo teste e perde reações até seu próximo turno.
+                Uma vez por cena, gaste uma ação e 5 Mana para fazer uma criatura a até 15 m ver o pior pesadelo que carrega. Misticismo contra a Vontade dela; falhando, ela fica Amedrontada por duas rodadas e sem reações nesse tempo. Passando, perde só a reação até o seu próximo turno.
               </p>
             </div>
           </PremiumCard>
         </div>
 
-        {/* Custom Choices */}
+        <EstagiosRaciais
+          raca={raca}
+          tema={tema}
+          titulo="Vigília"
+          descricao="Andar acordado é o que ensina o Onírico a mexer no próprio sonho. A Vigília abre por nível total, alcança bem mais longe no Sonho Lúcido e no topo afrouxa a matéria do corpo dele."
+        />
+
         <EscolhaRacialCards raca={raca} tema={tema} />
 
         {/* Limitation note */}
@@ -172,7 +179,7 @@ export const Onirico = ({ raca }: OniricoProps) => {
         >
           <h4 className="text-sm font-bold text-indigo-200 uppercase tracking-widest mb-2">Ancoragem Frágil</h4>
           <p className="text-indigo-200/50 text-sm leading-relaxed">
-            Se passar mais de 24 horas sem completar um descanso sonhando de verdade, seu corpo começa a perder coesão: até voltar a sonhar, sua Mana máxima fica reduzida à metade, arredondada para baixo.
+            Passadas 24 horas sem um descanso completo com sonho de verdade, seu corpo começa a perder coesão: até você voltar a sonhar, sua Mana máxima cai pela metade, arredondada para baixo.
           </p>
         </motion.div>
       </div>

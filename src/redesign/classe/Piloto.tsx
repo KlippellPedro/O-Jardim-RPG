@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Wrench, CarFront, Hammer } from 'lucide-react';
+import { Wrench, CarFront, Hammer, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -50,7 +50,7 @@ export const Piloto = ({ classe }: { classe: IClasse }) => {
             className={`w-28 h-28 mx-auto ${tema.bg} border-2 ${tema.border} rounded-lg flex items-center justify-center mb-8 skew-x-[-10deg] backdrop-blur-md`}
             style={{ boxShadow: `0 0 30px ${tema.glow}` }}
           >
-            <CarFront size={48} className={`${tema.icon} skew-x-[10deg]`} strokeWidth={1.5} />
+            <CarFront size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
           </motion.div>
 
           <motion.div className="overflow-hidden">
@@ -75,20 +75,20 @@ export const Piloto = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className={`flex gap-6 p-8 rounded-xl ${tema.bg} border-l-4 ${tema.border} backdrop-blur-md`}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <CarFront size={36} className={`${tema.icon} shrink-0`} strokeWidth={1.5} />
+            <CarFront size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Meu Xodó</h3>
               <p className="text-cyan-100/60 leading-relaxed text-sm">
-                Uma afinidade mecânica inigualável com seu veículo pessoal, permitindo extrair o máximo de desempenho em qualquer terreno ou combate.
+                O bônus que ele te dá vale em toda rolagem de Pilotagem: manobra, perseguição, fuga. Começa em +1 e chega a +5, e no caminho vêm o compartimento secreto, a travessia de terreno ruim sem perder deslocamento e o dispositivo que salva uma falha crítica por sessão.
               </p>
             </div>
           </PremiumCard>
@@ -99,13 +99,13 @@ export const Piloto = ({ classe }: { classe: IClasse }) => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className={`flex gap-6 p-8 rounded-xl ${tema.bg} border-l-4 ${tema.border} backdrop-blur-md`}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <Wrench size={36} className={`${tema.icon} shrink-0`} strokeWidth={1.5} />
+            <Wrench size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Tuning</h3>
               <p className="text-cyan-100/60 leading-relaxed text-sm">
-                Se tiver um mecânico de confiança, você recebe uma modificação gratuita no local dele. Caso não tenha, recebe o contato de um mecânico bom e de confiança onde estiver.
+                A cada estágio, uma peça entra no chassi sem custar Lunaris, escolhida entre dez: blindagem, motor envenenado, suspensão, armamento fixo, estabilizador, camuflagem, casco reforçado, cabine selada, torre de sensores e guincho. Você precisa de um mecânico de confiança, e se não tiver, a habilidade te apresenta um.
               </p>
             </div>
           </PremiumCard>
@@ -116,13 +116,29 @@ export const Piloto = ({ classe }: { classe: IClasse }) => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className={`col-span-1 md:col-span-2 flex gap-6 p-8 rounded-xl ${tema.bg} border-l-4 ${tema.border} backdrop-blur-md`}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <Hammer size={36} className={`${tema.icon} shrink-0`} strokeWidth={1.5} />
+            <Hammer size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>0 Km</h3>
               <p className="text-cyan-100/60 leading-relaxed text-sm">
-                Caso tenha um veículo quebrado ou com defeitos graves, você pode levá-lo ao seu mecânico de confiança e recebe um "martelinho de ouro" que restaura o veículo como se fosse totalmente novo.
+                No nível 15, uma vez por sessão, seis horas de oficina devolvem o veículo com a Vida cheia e sem nenhuma avaria, e o material sai de graça. O que foi destruído continua destruído: isto conserta, não ressuscita.
+              </p>
+            </div>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <div>
+              <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+              <p className="text-slate-300 leading-relaxed text-sm">
+                O seu turno acontece no capítulo de Veículos: manobra é Pilotagem contra DT 15, ou teste oposto quando dois condutores querem a mesma coisa. Perseguição roda em cinco faixas de distância, e o veículo que apanha rola avaria num d6 para saber o que parou de funcionar. O bônus do Meu Xodó entra em todas essas rolagens.
               </p>
             </div>
           </PremiumCard>

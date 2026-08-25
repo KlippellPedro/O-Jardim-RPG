@@ -9,6 +9,9 @@ interface MonstroEntry {
   id: string;
   titulo: string;
   categoria: string;
+  classe: string;
+  funcao: string;
+  deslocamento: string;
   descricao: string;
   pv: number | string;
   nivel: number | string;
@@ -26,6 +29,9 @@ const BESTIARIO_COMPLETO: MonstroEntry[] = (catalogo.entradas as any[])
     id: e.id,
     titulo: e.titulo,
     categoria: e.conteudo?.categoria || 'Desconhecida',
+    classe: e.conteudo?.classe || 'Criatura',
+    funcao: e.conteudo?.funcao || '',
+    deslocamento: e.conteudo?.deslocamento || '',
     descricao: e.conteudo?.descricao || '',
     pv: e.conteudo?.pv || '?',
     nivel: e.conteudo?.nivel || '?',
@@ -37,6 +43,17 @@ const BESTIARIO_COMPLETO: MonstroEntry[] = (catalogo.entradas as any[])
     habilidades: e.conteudo?.habilidades || [],
   }))
   .sort((a, b) => a.titulo.localeCompare(b.titulo));
+
+/** O bestiário passou de noventa fichas, então a busca por texto sozinha deixou
+ * de dar conta. Estes recortes existem para achar rápido o tipo de ser que a
+ * cena pede, com destaque para quem é contratado para tomar conta de um lugar. */
+const RECORTES = [
+  { id: 'todos', rotulo: 'Todos', aplica: () => true },
+  { id: 'guardas', rotulo: 'Guardas de local', aplica: (m: MonstroEntry) => m.funcao === 'Guarda de local' },
+  { id: 'contratados', rotulo: 'Contratáveis', aplica: (m: MonstroEntry) => Boolean(m.funcao) },
+  { id: 'feras', rotulo: 'Feras e monstros', aplica: (m: MonstroEntry) => !m.funcao && m.categoria !== 'Universal' },
+  { id: 'universais', rotulo: 'Perfis universais', aplica: (m: MonstroEntry) => m.categoria === 'Universal' },
+] as const;
 
 const BestiarioDetail = ({ item, compacto = false }: { item: MonstroEntry; compacto?: boolean }) => {
   return (
@@ -55,7 +72,19 @@ const BestiarioDetail = ({ item, compacto = false }: { item: MonstroEntry; compa
           </span>
         </div>
         <h3 className="text-2xl font-bold leading-tight text-[#f2ead7] sm:text-3xl" style={{ fontFamily: 'Cinzel, serif' }}>{item.titulo}</h3>
-        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-gray-500">VD {item.vd} · {item.pv} PV</p>
+        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
+          VD {item.vd} · {item.pv} PV{item.deslocamento ? ` · ${item.deslocamento}` : ''}
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-gray-400">
+            {item.classe}
+          </span>
+          {item.funcao ? (
+            <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-emerald-300">
+              Contrata-se: {item.funcao}
+            </span>
+          ) : null}
+        </div>
       </header>
 
       <div className="p-5 sm:p-6">
@@ -128,7 +157,7 @@ const BestiarioListItem = memo(({ active, item, onSelect }: { active: boolean; i
       <span className="min-w-0 flex-1">
         <strong className={`block truncate text-sm ${active ? 'text-red-400' : 'text-gray-300 group-hover:text-white'}`}>{item.titulo}</strong>
         <small className="mt-1 block truncate text-[10px] uppercase tracking-wider text-gray-600">
-          Nível {item.nivel} · {item.categoria}
+          Nível {item.nivel} · {item.categoria}{item.funcao ? ` · ${item.funcao}` : ''}
         </small>
       </span>
       <ChevronRight size={15} className={active ? 'text-red-400' : 'text-gray-700 group-hover:text-gray-400'} />
@@ -140,6 +169,7 @@ export const CatalogoBestiario = () => {
   const mobileDialogRef = useRef<HTMLDivElement>(null);
   const mobileCloseRef = useRef<HTMLButtonElement>(null);
   const [busca, setBusca] = useState('');
+  const [recorte, setRecorte] = useState<string>('todos');
   const [selecionadoId, setSelecionadoId] = useState('');
   const [detalheMovelAberto, setDetalheMovelAberto] = useState(false);
   const isMobile = useIsMobileViewport();
@@ -151,17 +181,23 @@ export const CatalogoBestiario = () => {
   });
   const buscaAdiada = useDeferredValue(busca.trim().toLocaleLowerCase('pt-BR'));
 
-  const itensVisiveis = useMemo(() => BESTIARIO_COMPLETO.filter((item) => {
-    if (!buscaAdiada) return true;
-    const texto = [
-      item.titulo,
-      item.categoria,
-      item.descricao,
-      ...(item.habilidades || []),
-      ...(item.ataques || [])
-    ].join(' ').toLocaleLowerCase('pt-BR');
-    return texto.includes(buscaAdiada);
-  }), [buscaAdiada]);
+  const itensVisiveis = useMemo(() => {
+    const recorteAtivo = RECORTES.find((r) => r.id === recorte) ?? RECORTES[0];
+    return BESTIARIO_COMPLETO.filter((item) => {
+      if (!recorteAtivo.aplica(item)) return false;
+      if (!buscaAdiada) return true;
+      const texto = [
+        item.titulo,
+        item.categoria,
+        item.classe,
+        item.funcao,
+        item.descricao,
+        ...(item.habilidades || []),
+        ...(item.ataques || [])
+      ].join(' ').toLocaleLowerCase('pt-BR');
+      return texto.includes(buscaAdiada);
+    });
+  }, [buscaAdiada, recorte]);
 
   const selecionado = itensVisiveis.find((item) => item.id === selecionadoId) || itensVisiveis[0] || null;
 
@@ -204,6 +240,23 @@ export const CatalogoBestiario = () => {
               className="w-full rounded-lg border border-white/10 bg-black/25 py-2.5 pl-9 pr-3 text-sm text-white outline-none placeholder:text-gray-700 focus:border-red-400/40"
             />
           </label>
+        </div>
+        <div className="custom-scrollbar mt-2 flex gap-2 overflow-x-auto px-1 pb-1">
+          {RECORTES.map((opcao) => (
+            <button
+              key={opcao.id}
+              type="button"
+              onClick={() => setRecorte(opcao.id)}
+              aria-pressed={recorte === opcao.id}
+              className={`shrink-0 rounded-full border px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.1em] transition-colors ${
+                recorte === opcao.id
+                  ? 'border-red-400/40 bg-red-500/15 text-red-300'
+                  : 'border-white/10 bg-white/5 text-gray-500 hover:text-gray-300'
+              }`}
+            >
+              {opcao.rotulo}
+            </button>
+          ))}
         </div>
         <p className="mt-2 px-1 text-[10px] font-bold uppercase tracking-[0.16em] text-gray-700">{itensVisiveis.length} resultado(s)</p>
       </div>

@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ShieldAlert, ArrowLeft, BookOpen, Sparkles } from 'lucide-react';
-import { CLASSES_CATALOGO, RACAS_CATALOGO } from '../../services/catalogoService';
+import { ShieldAlert, ArrowLeft, BookOpen, Pencil, Sparkles } from 'lucide-react';
 import {
   descreverOpcaoRacial,
   formatarAjustesRaciais,
@@ -16,6 +15,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { PremiumCard } from '../../redesign/components/premium/PremiumCard';
 import { RACA_PAGES } from '../../redesign/raca/registry';
 import { CLASSE_PAGES } from '../../redesign/classe/registry';
+import { useResolvedRules } from '../../hooks/useResolvedRules';
 
 export const RegraDetalhesPage = () => {
   const { categoria, itemId } = useParams<{ categoria: string; itemId: string }>();
@@ -25,6 +25,9 @@ export const RegraDetalhesPage = () => {
     || usuario?.papel_plataforma === 'criador'
     || campanhaAtiva?.papel === 'mestre'
     || campanhaAtiva?.papel === 'assistente';
+  const podeEditarConteudo = usuario?.papel_plataforma === 'criador'
+    || campanhaAtiva?.papel === 'mestre';
+  const { classes, racas } = useResolvedRules(campanhaAtiva?.id);
   const config = campanhaAtiva?.configuracoes ?? {};
   const racasLiberadas = new Set([
     ...(config.racas_liberadas ?? []),
@@ -35,18 +38,19 @@ export const RegraDetalhesPage = () => {
     ...((usuario?.id && config.classes_liberadas_membros?.[usuario.id]) ?? []),
   ]);
 
-  const racaEncontrada = categoria === 'racas' ? RACAS_CATALOGO.find(item => item.id === itemId) : undefined;
+  const racaEncontrada = categoria === 'racas' ? racas.find(item => item.id === itemId) : undefined;
   const raca = racaEncontrada && (isMestre || (!racaEncontrada.indisponivel
     && (racaEncontrada.categoria !== 'esquecida' || racasLiberadas.has(racaEncontrada.id))))
     ? racaEncontrada
     : undefined;
-  const classeEncontrada = categoria === 'classes' ? CLASSES_CATALOGO.find(item => item.id === itemId) : undefined;
+  const classeEncontrada = categoria === 'classes' ? classes.find(item => item.id === itemId) : undefined;
   const classe = classeEncontrada && (isMestre || (!classeEncontrada.indisponivel
     && (classeEncontrada.categoria !== 'esquecida' || classesLiberadas.has(classeEncontrada.id))))
     ? classeEncontrada
     : undefined;
   const item = raca ?? classe;
   const rotaRetorno = `/regras?topico=${categoria === 'classes' ? 'classes' : 'racas'}`;
+  const rotaEdicao = `/mestre?aba=conteudo&secao=regras&item=${categoria === 'classes' ? 'classe' : 'raca'}:${encodeURIComponent(itemId || '')}`;
   const gruposEscolhaRacial = obterGruposEscolhaRacial(raca);
   const estagiosRaciais = obterEstagiosRaciais(raca);
   const resumoRaca = raca?.descricao
@@ -114,6 +118,16 @@ export const RegraDetalhesPage = () => {
           <ArrowLeft size={16} />
           Voltar
         </motion.button>
+        {podeEditarConteudo ? (
+          <motion.button
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            onClick={() => navigate(rotaEdicao)}
+            className="fixed right-5 top-20 z-[60] flex items-center gap-2 rounded-full border border-[#c7a44c]/25 bg-black/60 px-4 py-2 text-sm font-bold uppercase tracking-wider text-[#e1c77e] backdrop-blur-md transition-colors hover:bg-black/80"
+          >
+            <Pencil size={15} /> Editar
+          </motion.button>
+        ) : null}
         {RacaPage && raca ? <RacaPage raca={raca} /> : ClassePage && classe ? <ClassePage classe={classe} /> : null}
       </div>
     );
@@ -129,15 +143,22 @@ export const RegraDetalhesPage = () => {
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-24 pt-20 sm:px-6 sm:pb-32 sm:pt-24 lg:px-12">
 
         {/* Botão Voltar */}
-        <motion.button
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          onClick={() => navigate(rotaRetorno)}
-          className="text-gray-400 hover:text-white mb-10 text-sm font-bold uppercase tracking-wider flex items-center gap-2 group transition-colors"
-        >
-          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          Voltar para Regras
-        </motion.button>
+        <div className="mb-10 flex flex-wrap items-center justify-between gap-3">
+          <motion.button
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            onClick={() => navigate(rotaRetorno)}
+            className="group flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gray-400 transition-colors hover:text-white"
+          >
+            <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
+            Voltar para Regras
+          </motion.button>
+          {podeEditarConteudo ? (
+            <button type="button" onClick={() => navigate(rotaEdicao)} className="inline-flex items-center gap-2 rounded-full border border-[#c7a44c]/25 bg-[#c7a44c]/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#e1c77e] transition hover:bg-[#c7a44c]/15">
+              <Pencil size={14} /> Editar narrativa
+            </button>
+          ) : null}
+        </div>
 
         {/* Header da página */}
         <motion.div

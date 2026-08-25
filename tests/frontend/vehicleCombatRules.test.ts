@@ -51,6 +51,9 @@ test('classifica estado e dimensiona manutenção pela Vida máxima', () => {
   assert.equal(calcularVidaRestauradaPorManutencao(5), 1);
   assert.equal(calcularVidaRestauradaPorManutencao(80), 8);
   assert.throws(() => obterEstadoVeiculo(0, 0), /Vida máxima/);
+  assert.match(REGRA_VEICULOS.corpo, /1 Componente Veicular da raridade do veículo/i);
+  assert.match(REGRA_VEICULOS.corpo, /nave Rara[^<]+3 Componentes Veiculares Raros/i);
+  assert.match(REGRA_VEICULOS.corpo, /custo atrasado não acumula/i);
 });
 
 test('perseguição possui quatro faixas ativas e um estado terminal', () => {

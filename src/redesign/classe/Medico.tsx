@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { HeartPulse, Syringe, Sparkles, Activity } from 'lucide-react';
+import { HeartPulse, Syringe, Users, Activity, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -63,7 +63,7 @@ export const Medico = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, x: -30 }}
@@ -75,7 +75,7 @@ export const Medico = ({ classe }: { classe: IClasse }) => {
             <Activity size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Medicina</h3>
             <p className="text-teal-200/60 leading-relaxed text-sm">
-              Ao curar uma criatura após avaliá-la com uma ação de movimento, some +1d6 à cura. Com a experiência, você passa a identificar Vida, Mana e condições visíveis, e sua cura remove condições leves do alvo por cena.
+              Ao curar uma criatura após avaliá-la com uma Ação de Movimento, some +1d6 à cura. Com a experiência, você passa a identificar Vida, Mana e condições visíveis, sua cura remove condições leves do alvo, e aprende Tratamentos Especializados que reagem ao problema real do paciente: trauma, veneno, medo, torpor, queda.
             </p>
           </PremiumCard>
 
@@ -90,7 +90,7 @@ export const Medico = ({ classe }: { classe: IClasse }) => {
             <Syringe size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Socorro de Emergência</h3>
             <p className="text-teal-200/60 leading-relaxed text-sm">
-              Até três vezes por combate, use uma reação e gaste 5 de Mana quando um aliado a 4m cair a 0 Vida: ele recupera 1d6 de Vida. Com a experiência, o alcance cresce para 8m e depois 12m, e a cura final se torna 1d12 + Mod.Inteligência.
+              Até três vezes por combate, use uma Reação e gaste 5 de Mana quando um aliado a 4 m cair a 0 de Vida: ele recupera 1d6 de Vida. Você pega o jeito rápido: a 2ª ativação no mesmo combate soma +1 dado, a 3ª soma +2 dados e ainda encerra uma condição leve. O alcance cresce, a cura final vira 1d12 + Mod.Sabedoria, e cada estágio soma um Protocolo de Emergência, entre oito possíveis.
             </p>
           </PremiumCard>
 
@@ -100,12 +100,26 @@ export const Medico = ({ classe }: { classe: IClasse }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className={`col-span-1 md:col-span-2 flex flex-col p-8 rounded-2xl ${tema.bg} border-t-4 ${tema.border} backdrop-blur-md`}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} border-t-4 ${tema.border} backdrop-blur-md`}
           >
-            <Sparkles size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Milagre</h3>
+            <Users size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Mestre da Vida</h3>
             <p className="text-teal-200/60 leading-relaxed text-sm">
-              Um ápice médico. Uma vez a cada cinco sessões, durante um descanso longo e com 12 de Mana, restaure um membro perdido de um aliado ou remova uma condição gravíssima. Não ressuscita mortos nem remove consequências narrativas sem aprovação do mestre.
+              Uma vez por sessão, você e até cinco aliados a 12 m recuperam metade da Vida máxima e metade da Mana máxima e encerram uma condição tratável. Quem estiver a 0 de Vida volta com 1 antes de receber a cura. Não ressuscita mortos.
+            </p>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} border-t-4 ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-teal-200/60 leading-relaxed text-sm">
+              Toda técnica sua que obriga o alvo a resistir rola Cura no momento do tratamento: o resultado vira a DT que ele precisa alcançar, valendo para todos os atingidos naquele uso.
             </p>
           </PremiumCard>
         </div>

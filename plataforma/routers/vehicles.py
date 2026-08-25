@@ -29,6 +29,13 @@ from schemas import (
 
 router = APIRouter(prefix="/campanhas/{campaign_id}/veiculos", tags=["veiculos-campanha"])
 
+_RARIDADES_VEICULO = {"comum", "incomum", "raro", "epico", "lendario"}
+
+
+def _vehicle_rarity(dados: dict) -> str:
+    value = str(dados.get("raridade", "comum")).strip().lower()
+    return value if value in _RARIDADES_VEICULO else "comum"
+
 
 def _vehicle_int_field(dados: dict, *keys: str, default: int) -> int:
     """Le o primeiro valor presente (nao-None) entre `keys` em `dados`,
@@ -136,7 +143,7 @@ def list_vehicles(
 
         vehicles = connection.execute(
             """
-            SELECT id, proprietario_personagem_id, nome, imagem_url, vida_atual, vida_maxima,
+            SELECT id, proprietario_personagem_id, nome, raridade, imagem_url, vida_atual, vida_maxima,
                    combustivel_atual, combustivel_maximo, capacidade, versao, nivel_acesso_campanha
             FROM campanha_veiculos
             WHERE campanha_id=%s
@@ -231,17 +238,17 @@ def create_vehicle(
         connection.execute(
             """
             INSERT INTO campanha_veiculos (
-                id, campanha_id, nome, imagem_url, descricao, 
+                id, campanha_id, nome, raridade, imagem_url, descricao,
                 vida_maxima, vida_atual, combustivel_maximo, combustivel_atual,
                 defesa, resistencia, deslocamento, manobrabilidade, cobertura,
                 capacidade, tripulacao_minima, sistemas_ativos_maximos, espacos_modulos_maximos, espacos_base,
                 nivel_acesso_campanha
             ) VALUES (
-                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
             )
             """,
             (
-                vehicle_id, campaign_id, payload.nome, payload.imagem_url, payload.descricao,
+                vehicle_id, campaign_id, payload.nome, payload.raridade, payload.imagem_url, payload.descricao,
                 payload.vida_maxima, payload.vida_maxima, payload.combustivel_maximo, payload.combustivel_maximo,
                 payload.defesa, payload.resistencia, payload.deslocamento, payload.manobrabilidade, payload.cobertura,
                 payload.capacidade, payload.tripulacao_minima, payload.sistemas_ativos_maximos, payload.espacos_modulos_maximos, payload.espacos_base,
@@ -282,7 +289,7 @@ def update_vehicle(
         row = connection.execute(
             """
             UPDATE campanha_veiculos SET
-                nome=%s, imagem_url=%s, descricao=%s,
+                nome=%s, raridade=%s, imagem_url=%s, descricao=%s,
                 vida_maxima=%s, vida_atual=LEAST(vida_atual, %s),
                 combustivel_maximo=%s, combustivel_atual=LEAST(combustivel_atual, %s),
                 defesa=%s, resistencia=%s, deslocamento=%s, manobrabilidade=%s, cobertura=%s,
@@ -294,7 +301,7 @@ def update_vehicle(
             RETURNING versao
             """,
             (
-                payload.nome, payload.imagem_url, payload.descricao,
+                payload.nome, payload.raridade, payload.imagem_url, payload.descricao,
                 payload.vida_maxima, payload.vida_maxima,
                 payload.combustivel_maximo, payload.combustivel_maximo,
                 payload.defesa, payload.resistencia, payload.deslocamento, payload.manobrabilidade, payload.cobertura,
@@ -462,6 +469,12 @@ def migrate_vehicle(
         tripulacao_minima = _vehicle_int_field(dados, "tripulacaoMinima", default=1)
         sistemas_ativos_maximos = _vehicle_int_field(dados, "sistemasAtivosMaximos", default=1)
         espacos_base = _vehicle_int_field(dados, "espacosBase", default=1)
+        raridade = _vehicle_rarity(dados)
+        sistemas_publicados = dados.get("sistemas")
+        modulos_utilidade_integrados = len([
+            sistema for sistema in sistemas_publicados
+            if isinstance(sistema, str) and sistema.strip()
+        ]) if isinstance(sistemas_publicados, list) else 0
 
         vehicle_id = uuid4()
 
@@ -470,25 +483,26 @@ def migrate_vehicle(
             """
             INSERT INTO campanha_veiculos (
                 id, campanha_id, proprietario_personagem_id, origem_item_id, origem_personagem_id,
-                nome, vida_maxima, vida_atual, combustivel_maximo, combustivel_atual,
+                nome, raridade, vida_maxima, vida_atual, combustivel_maximo, combustivel_atual,
                 defesa, resistencia, deslocamento, manobrabilidade, cobertura,
                 capacidade, tripulacao_minima, sistemas_ativos_maximos, espacos_modulos_maximos, espacos_base,
+                modulos_utilidade_integrados,
                 nivel_acesso_campanha
             ) VALUES (
+                %s, %s, %s, %s, %s, %s,
                 %s, %s, %s, %s, %s,
                 %s, %s, %s, %s, %s,
-                %s, %s, %s, %s, %s,
-                %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s,
                 %s
             )
             """,
             (
                 vehicle_id, campaign_id, payload.personagem_id, payload.item_id, payload.personagem_id,
-                nome,
+                nome, raridade,
                 vida_maxima, vida_atual, combustivel_maximo, combustivel_atual,
                 defesa, resistencia, deslocamento, manobrabilidade, cobertura,
                 capacidade, tripulacao_minima, sistemas_ativos_maximos, sistemas_ativos_maximos,
-                espacos_base,
+                espacos_base, modulos_utilidade_integrados,
                 "utilizar" if payload.compartilhar_campanha else "nenhum"
             )
         )

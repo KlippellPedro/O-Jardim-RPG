@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Shield, ShieldAlert, Mountain } from 'lucide-react';
+import { Shield, ShieldAlert, HeartHandshake, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -82,7 +82,7 @@ export const Guardiao = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, scale: 0.95 }}
@@ -91,10 +91,10 @@ export const Guardiao = ({ classe }: { classe: IClasse }) => {
             transition={{ duration: 0.4 }}
             className={`flex flex-col p-8 rounded-sm ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <ShieldAlert size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Provocar</h3>
+            <HeartHandshake size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Protegido</h3>
             <p className="text-stone-400 leading-relaxed text-sm">
-              Uma vez por combate, gaste Mana para bradar um desafio: todos os inimigos a até 6m testam Vontade. Quem falhar sofre −2 para atacar qualquer alvo que não seja você por uma rodada. Com a experiência, você também reduz o dano que sofre dos primeiros golpes recebidos.
+              Sele um juramento com um aliado e absorva o que vier no lugar dele. A cada estágio você também aprende um Juramento de Guarda, entre oito possíveis, que reforça o vínculo de um jeito diferente.
             </p>
           </PremiumCard>
 
@@ -106,10 +106,39 @@ export const Guardiao = ({ classe }: { classe: IClasse }) => {
             transition={{ duration: 0.4, delay: 0.1 }}
             className={`flex flex-col p-8 rounded-sm ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <Mountain size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Castelo</h3>
+            <ShieldAlert size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Provocar</h3>
             <p className="text-stone-400 leading-relaxed text-sm">
-              Uma vez por descanso longo, gaste 8 de Mana e permaneça imóvel por três rodadas. Aliados a até 6m recebem +2 na Defesa e, uma vez por rodada, você pode redirecionar para si mesmo um ataque que atingiria um deles.
+              Uma vez por combate, gaste Mana para bradar um desafio: todos os inimigos a até 6m testam Vontade contra a sua DT. Quem falhar sofre −2 para atacar qualquer alvo que não seja você por uma rodada. Com a experiência, você também reduz o dano que sofre dos primeiros golpes recebidos.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className={`flex flex-col p-8 rounded-sm ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Shield size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Coração Unificado</h3>
+            <p className="text-stone-400 leading-relaxed text-sm">
+              Uma vez por sessão, você e até cinco aliados a 12 m recebem Resistência 10 contra todo dano por três rodadas. Uma vez por rodada, use uma Reação para receber no lugar de um deles todo o dano de um ataque.
+            </p>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className={`flex flex-col p-8 rounded-sm ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-stone-400 leading-relaxed text-sm">
+              O Guardião rola Intimidação com Constituição no lugar de Carisma: o que impõe respeito é o tanto de pancada que você mostra aguentar, não o discurso. É esse número que o alvo precisa alcançar quando Provocar manda testar Vontade.
             </p>
           </PremiumCard>
         </div>

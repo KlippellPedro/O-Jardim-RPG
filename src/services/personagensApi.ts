@@ -18,6 +18,9 @@ export interface PersonagemApiRecord {
   id: string;
   nome: string;
   dono_usuario_id?: string | null;
+  dono_nome?: string | null;
+  criado_por?: string | null;
+  criado_por_nome?: string | null;
   ficha: Record<string, any>;
   versao: number;
   economia_versao?: number;
@@ -25,6 +28,7 @@ export interface PersonagemApiRecord {
   inventario_central?: InventarioPersonagemItem[];
   criado_em?: string;
   atualizado_em?: string;
+  somente_leitura?: boolean;
   [key: string]: unknown;
 }
 
@@ -45,6 +49,20 @@ export interface EconomiaPersonagemResponse {
   inventario: InventarioPersonagemItem[];
 }
 
+export interface AliadoComplexoResumo {
+  personagem_id: string;
+  nome: string;
+  foto?: string | null;
+  vida_atual: number;
+  vida_maxima: number;
+  mana_atual: number;
+  mana_maxima: number;
+  defesa: number;
+  movimento: number | string;
+  iniciativa: number;
+  nivel: number;
+}
+
 export interface ConsumirFrutoEdenPayload {
   versaoFichaEsperada: number;
   economiaVersaoEsperada: number;
@@ -59,6 +77,11 @@ export const personagensApi = {
   },
   obter(personagemId: string) {
     return api<{ personagem: PersonagemApiRecord }>(`/personagens/${encodeURIComponent(personagemId)}`);
+  },
+  listarAliadosComplexos(personagemId: string) {
+    return api<{ aliados: AliadoComplexoResumo[] }>(
+      `/personagens/${encodeURIComponent(personagemId)}/aliados-complexos`,
+    );
   },
   criar(campanhaId: string, personagem: any, donoUsuarioId: string | null = null) {
     return api('/personagens', {
@@ -79,6 +102,15 @@ export const personagensApi = {
   },
   arquivar(personagemId: string) {
     return api(`/personagens/${encodeURIComponent(personagemId)}`, { method: 'DELETE' });
+  },
+  transferirDono(personagemId: string, novoDonoUsuarioId: string) {
+    return api<{ personagem_id: string; dono_usuario_id: string; dono_nome: string }>(
+      `/personagens/${encodeURIComponent(personagemId)}/dono`,
+      {
+        method: 'PUT',
+        body: { novo_dono_usuario_id: novoDonoUsuarioId },
+      },
+    );
   },
   aplicarOperacoesEconomia(
     personagemId: string,

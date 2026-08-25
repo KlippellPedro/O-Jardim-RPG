@@ -1,20 +1,21 @@
 import React, { useCallback, useMemo } from 'react';
 import { ArrowLeft, BookOpen, GitBranch, History } from 'lucide-react';
 import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
-import { ChronicleEvent, WORLD_CHRONICLES } from '../worldChronicles';
+import { ChronicleEvent, type WorldChronicleCatalog } from '../worldChronicles';
 import { ChronicleTimeline } from './ChronicleTimeline';
 
 interface GlobalChroniclePageProps {
   visibleTreeIds: string[];
+  chronicles: WorldChronicleCatalog;
   onBack: () => void;
   onOpenTree: (treeId: string) => void;
 }
 
-export const GlobalChroniclePage: React.FC<GlobalChroniclePageProps> = ({ visibleTreeIds, onBack, onOpenTree }) => {
+export const GlobalChroniclePage: React.FC<GlobalChroniclePageProps> = ({ visibleTreeIds, chronicles, onBack, onOpenTree }) => {
   const visible = useMemo(() => new Set(visibleTreeIds), [visibleTreeIds]);
-  const events = useMemo(() => WORLD_CHRONICLES.linha_tempo_geral.filter((event) => (
+  const events = useMemo(() => chronicles.linha_tempo_geral.filter((event) => (
     !event.arvores?.length || event.arvores.every((treeId) => visible.has(treeId))
-  )), [visible]);
+  )), [chronicles, visible]);
 
   const labelForTrees = useCallback((event: ChronicleEvent) => (event.arvores || [])
     .filter((id) => visible.has(id))

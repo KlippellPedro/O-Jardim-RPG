@@ -1,0 +1,50 @@
+export const TITULOS_TOPICOS: Record<string, string> = {
+  'como-jogar': 'Como Jogar',
+  'criacao-personagem': 'Criação de Personagem',
+  'sistema-base': 'Sistema Base',
+  pericias: 'Perícias',
+  'acoes-coletivas': 'Ações Coletivas',
+  'ataques-combinados': 'Ataques Combinados',
+  combate: 'Combate',
+  distancias: 'Distâncias',
+  ferimentos: 'Ferimentos',
+  coreografia: 'Coreografia',
+  descanso: 'Descanso',
+  treinar: 'Treinamento',
+  xp: 'Experiência e Níveis',
+  legados: 'Legados',
+  'frutos-implantes': 'Frutos e Implantes',
+  'poderes-habilidades': 'Poderes e Habilidades',
+  'mesa-ao-vivo': 'Mesa ao Vivo',
+  equipamentos: 'Equipamentos',
+  'raridades-modificacoes': 'Raridades de Equipamento',
+  'modificacoes-equipamentos': 'Modificações de Equipamento',
+  'magia-fluxo': 'Magia e Fluxo',
+  'marcas-cicatrizes': 'Marcas e Cicatrizes',
+  'rituais-selos': 'Rituais, Selos e Fusão',
+  'catalogo-magico': 'Catálogo Mágico',
+  condicoes: 'Condições',
+  crafting: 'Criação, Forja e Alquimia',
+  materiais: 'Materiais e Ingredientes',
+  veiculos: 'Condução e Tripulação',
+  'veiculos-cenas': 'Perseguições e Combate Veicular',
+  'veiculos-manutencao': 'Manutenção e Componentes',
+  transporte: 'Transporte e Viagens',
+  aflicoes: 'Venenos, Doenças e Vícios',
+  classes: 'Classes',
+  racas: 'Raças',
+  bestiario: 'Bestiário',
+  bases: 'Propriedades e Bases',
+  'mundo-faccoes': 'Prestígio e Fama',
+  mestre: 'Guia do Mestre',
+  economia: 'Economia',
+  recompensas: 'Recompensas',
+  conduta: 'Conduta da Mesa',
+};
+
+export const tituloTopico = (key: string, overrides?: Record<string, string>) => (
+  overrides?.[key] || TITULOS_TOPICOS[key] || key
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+);

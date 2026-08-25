@@ -14,6 +14,7 @@ import {
 } from '../../../services/criticalService';
 import { carregarCatalogo } from '../../../services/catalogoService';
 import { aplicarAjustesAtributosRaciais, BONUS_GRAU, modificador, obterAjustesPericiasRaciais } from '../../../services/calculoService';
+import { obterAtributoPericia } from '../../../services/periciasFichaService';
 import type { ICatalogo } from '../../../types/catalogo';
 import { resumirEquipamentos } from '../../../services/equipamentoService';
 import { desvantagensAutomaticasTeste, obterStatusFicha, penalidadeAtaqueCondicoes, penalidadeCansacoTeste } from '../../../services/statusService';
@@ -135,7 +136,8 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
 
   const calcularBonusAtaque = (item: IAtaque) => {
     const periciaId = item.tipo === 'Corpo a Corpo' ? 'luta' : 'pontaria';
-    const atributoId = periciaId === 'luta' ? 'forca' : 'destreza';
+    // A ficha pode trocar o atributo base de Luta e Pontaria; o ataque segue a troca.
+    const atributoId = obterAtributoPericia(ficha, periciaId, periciaId === 'luta' ? 'forca' : 'destreza');
     const grau = ficha.pericias?.[periciaId] || 'iniciante';
     return modificador(atributos[atributoId] ?? 10)
       + metadeNivel

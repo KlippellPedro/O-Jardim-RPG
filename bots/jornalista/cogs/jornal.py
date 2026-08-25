@@ -41,7 +41,7 @@ TIPOS_MENSAGEM = [
 CATEGORIAS_CANAL = [
     app_commands.Choice(name="Entrada de membro", value="chegada"),
     app_commands.Choice(name="Saída de membro", value="partida"),
-    app_commands.Choice(name="Notícia (/jornal publicar)", value="noticia"),
+    app_commands.Choice(name="Notícia (/publicar_noticia)", value="noticia"),
     app_commands.Choice(name="Clima e estação", value="clima"),
     app_commands.Choice(name="Dinheiro e economia", value="dinheiro"),
 ]
@@ -265,8 +265,9 @@ class NoticiaModal(discord.ui.Modal, title="Criar notícia do Jardim"):
         max_length=500,
     )
 
-    def __init__(self, *, canal: discord.TextChannel, autor_id: int):
+    def __init__(self, *, bot, canal: discord.TextChannel, autor_id: int):
         super().__init__(timeout=300)
+        self.bot = bot
         self.canal = canal
         self.autor_id = autor_id
 
@@ -276,11 +277,6 @@ class NoticiaModal(discord.ui.Modal, title="Criar notícia do Jardim"):
                 "Esta notícia pertence a outra pessoa.", ephemeral=True
             )
             return False
-        if not _usuario_e_mestre(interaction):
-            await interaction.response.send_message(
-                "Você precisa da permissão **Gerenciar Servidor**.", ephemeral=True
-            )
-            return False
         return True
 
     async def on_submit(self, interaction: discord.Interaction) -> None:
@@ -288,6 +284,28 @@ class NoticiaModal(discord.ui.Modal, title="Criar notícia do Jardim"):
         if not _url_imagem_valida(imagem_url):
             await interaction.response.send_message(
                 "⚠️ A imagem precisa ser uma URL HTTPS válida. Nada foi publicado.",
+                ephemeral=True,
+            )
+            return
+
+        if not _usuario_e_mestre(interaction):
+            # Jogador comum: vira rascunho de pauta pro Mestre revisar. Não dá
+            # pra reaproveitar a prévia ephemeral+confirmar abaixo aqui, porque
+            # uma mensagem ephemeral só é visível a quem a recebeu — o Mestre
+            # nunca veria os botões de Publicar/Cancelar de um jogador.
+            pauta_id = self.bot.db.criar_pauta(
+                str(interaction.guild_id),
+                str(self.canal.id),
+                str(interaction.user.id),
+                self.titulo_noticia.value.strip(),
+                self.resumo.value.strip(),
+                self.corpo.value.strip(),
+                self.autoria.value.strip(),
+                imagem_url,
+            )
+            await interaction.response.send_message(
+                f"✅ Sua notícia foi enviada para revisão do Mestre como a pauta **#{pauta_id}**. "
+                "Ele pode aprovar com `/jornal pauta publicar` ou agendar com `/jornal pauta agendar`.",
                 ephemeral=True,
             )
             return
@@ -319,10 +337,13 @@ class NoticiaModal(discord.ui.Modal, title="Criar notícia do Jardim"):
     async def on_error(self, interaction: discord.Interaction, error: Exception) -> None:
         log.exception("erro no modal de noticia", exc_info=error)
         mensagem = "⚠️ Não consegui montar a prévia. Tente novamente."
-        if interaction.response.is_done():
-            await interaction.followup.send(mensagem, ephemeral=True)
-        else:
-            await interaction.response.send_message(mensagem, ephemeral=True)
+        try:
+            if interaction.response.is_done():
+                await interaction.followup.send(mensagem, ephemeral=True)
+            else:
+                await interaction.response.send_message(mensagem, ephemeral=True)
+        except discord.HTTPException:
+            log.warning("nao consegui avisar o usuario sobre a falha no modal de noticia")
 
 
 class PautaModal(discord.ui.Modal, title="Criar pauta do Jornal Lunar"):
@@ -681,8 +702,17 @@ class Jornal(commands.Cog):
             return None
         return canal
 
-    @jornal.command(name="publicar", description="Cria uma notícia com formulário, prévia e confirmação.")
-    @app_commands.checks.has_permissions(manage_guild=True)
+    # Fora do grupo `/jornal` de propósito: o Discord só permite um
+    # `default_member_permissions` por comando de nível raiz — como o grupo
+    # inteiro é registrado com `manage_guild` (linha ~474), qualquer
+    # subcomando dele fica invisível pra quem não é Mestre, mesmo sem
+    # nenhuma checagem de permissão em tempo de execução no código do
+    # subcomando (isso é limitação da API do Discord, não do discord.py).
+    # Por isso este vira comando de raiz próprio, sem essa restrição.
+    @app_commands.command(
+        name="publicar_noticia",
+        description="Cria uma notícia. O Mestre publica na hora; jogadores enviam para revisão do Mestre.",
+    )
     async def publicar(self, interaction: discord.Interaction):
         canal = await self._canal_do_jornal(interaction)
         if canal is None:
@@ -694,7 +724,7 @@ class Jornal(commands.Cog):
             )
             return
         await interaction.response.send_modal(
-            NoticiaModal(canal=canal, autor_id=interaction.user.id)
+            NoticiaModal(bot=self.bot, canal=canal, autor_id=interaction.user.id)
         )
 
     def _embed_pauta(self, pauta: dict) -> discord.Embed:
@@ -771,7 +801,7 @@ class Jornal(commands.Cog):
                 quando = f" · <t:{int(item['publicar_em'].timestamp())}:f>"
             linhas.append(
                 f"{icones.get(item['status'], '•')} **#{item['id']}** "
-                f"{item['titulo'][:80]} · `{item['status']}`{quando}"
+                f"{item['titulo'][:80]} · `{item['status']}`{quando} · <@{item['autor_id']}>"
             )
         emb = ui.embed(
             "🗂️ Pautas do Jornal Lunar", categoria="noticia",
@@ -787,7 +817,7 @@ class Jornal(commands.Cog):
             await interaction.response.send_message("Pauta não encontrada.", ephemeral=True)
             return
         await interaction.response.send_message(
-            content=f"**Pauta #{pauta_id}** · `{pauta['status']}`",
+            content=f"**Pauta #{pauta_id}** · `{pauta['status']}` · enviada por <@{pauta['autor_id']}>",
             embed=self._embed_pauta(pauta), ephemeral=True,
             allowed_mentions=discord.AllowedMentions.none(),
         )

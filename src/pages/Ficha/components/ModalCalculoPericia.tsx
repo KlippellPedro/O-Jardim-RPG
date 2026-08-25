@@ -59,7 +59,7 @@ export const ModalCalculoPericia: React.FC<ModalCalculoPericiaProps> = ({
 
           {desvantagensAutomaticas > 0 && (
             <div className="flex justify-between items-center bg-red-500/5 border border-red-500/15 rounded-lg p-3">
-              <span className="text-gray-400 text-sm">Cansaço e sobrecarga</span>
+              <span className="text-gray-400 text-sm">Desvantagens automáticas</span>
               <span className="text-red-300 font-mono">{desvantagensAutomaticas} desvantagem(ns)</span>
             </div>
           )}

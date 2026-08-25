@@ -192,6 +192,14 @@ class NotificationTests(unittest.TestCase):
             self.inseridos.append(params)
             return self
 
+        @contextlib.contextmanager
+        def cursor(self):
+            yield self
+
+        def executemany(self, _sql, params_seq):
+            for params in params_seq:
+                self.inseridos.append(params)
+
     def test_actor_does_not_notify_itself(self):
         conexao = self.ConexaoFalsa()
         ator = UUID("11111111-1111-1111-1111-111111111111")

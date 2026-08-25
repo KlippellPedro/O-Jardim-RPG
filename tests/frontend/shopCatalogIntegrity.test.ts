@@ -84,6 +84,32 @@ test('catálogo possui schema básico completo e identificadores únicos', () =>
   }
 });
 
+test('modificações só automatizam efeitos estruturados e verificáveis', () => {
+  const modificacoes = catalogo.entradas.filter((entrada) => entrada.tipo === 'modificacao');
+  const reforcada = modificacoes.find((entrada) => entrada.id === 'mod-reforcada');
+  assert.ok(reforcada, 'mod-reforcada ausente');
+  assert.deepEqual(reforcada.conteudo.efeitos, [{
+    id: 'mod-reforcada-defesa',
+    categoria: 'combate',
+    alvo: 'defesa',
+    modo: 'bonus',
+    valor: 1,
+  }]);
+
+  for (const modificacao of modificacoes) {
+    const efeitos = modificacao.conteudo.efeitos;
+    if (efeitos === undefined) continue;
+    assert.ok(Array.isArray(efeitos), `${modificacao.id}: efeitos deve ser uma lista`);
+    assert.ok(efeitos.length <= 1, `${modificacao.id}: uma modificação aceita no máximo um efeito automático`);
+    for (const efeito of efeitos) {
+      assert.ok(['atributo', 'recurso', 'combate', 'pericia'].includes(efeito.categoria), `${modificacao.id}: categoria de efeito inválida`);
+      assert.ok(String(efeito.alvo ?? '').trim(), `${modificacao.id}: alvo de efeito ausente`);
+      assert.ok(['bonus', 'vantagem', 'desvantagem'].includes(efeito.modo), `${modificacao.id}: modo de efeito inválido`);
+      assert.ok(Number.isFinite(efeito.valor) && efeito.valor !== 0, `${modificacao.id}: valor de efeito inválido`);
+    }
+  }
+});
+
 test('catálogo não hardcoda promoção: a vitrine gira sozinha pelo servidor', () => {
   // "Ofertas em destaque" é 100% calculada por plataforma/core/promotions.py
   // a cada requisição, numa janela de 12h. Se um item nascer com `promocao`
@@ -252,6 +278,54 @@ test('criaturas comercializadas possuem ficha e listas estruturadas', () => {
     }
     assert.ok(monstro.conteudo.ataques.length > 0, `${monstro.id}: criatura sem ataque publicado`);
   }
+});
+
+test('perfil universal fica só no bestiário e na sessão, fora do balcão', () => {
+  // Os perfis universais existem para o Mestre montar inimigo com números
+  // prontos. Eles continuam publicados (o Bestiário e o seletor da sessão leem
+  // o mesmo catálogo) e declaram `disponivelNaLoja: false`, que é o que a Loja
+  // usa para não vendê-los. Quem tirar essa marca coloca "Ameaça Genérica" à
+  // venda na categoria Mercenários, que foi exatamente o problema relatado.
+  const universais = catalogo.entradas.filter(item => item.conteudo.categoria === 'Universal');
+  assert.ok(universais.length > 0);
+  for (const item of universais) {
+    assert.equal(item.conteudo.disponivelNaLoja, false, `${item.id}: perfil universal não pode ir a balcão`);
+  }
+
+  const emBalcao = catalogo.entradas.filter(item => item.conteudo.disponivelNaLoja === false);
+  assert.equal(emBalcao.length, universais.length, 'só perfil universal sai do balcão hoje');
+});
+
+const FUNCOES = new Set(['Guarda de local', 'Escolta', 'Tripulação', 'Ofício']);
+
+test('todo ser contratável declara para que serve, e as quatro funções têm oferta', () => {
+  // `funcao` é o que separa quem se contrata para um serviço de quem se compra
+  // como fera de combate. Ela alimenta o subfiltro do balcão de Mercenários e
+  // vira o papel do Aliado criado na ficha, então classe "Ajudante" sem função
+  // deixa a contratação sem descrição de serviço nos dois lugares.
+  const monstros = catalogo.entradas.filter(item => item.tipo === 'monstro');
+  const ajudantes = monstros.filter(item => item.conteudo.classe === 'Ajudante');
+  assert.ok(ajudantes.length > 0);
+
+  for (const item of monstros) {
+    if (item.conteudo.funcao === undefined) {
+      assert.notEqual(item.conteudo.classe, 'Ajudante', `${item.id}: Ajudante sem funcao declarada`);
+      continue;
+    }
+    assert.ok(FUNCOES.has(item.conteudo.funcao), `${item.id}: funcao "${item.conteudo.funcao}" fora do enum`);
+    assert.notEqual(item.conteudo.disponivelNaLoja, false, `${item.id}: contratável precisa estar no balcão`);
+  }
+
+  for (const funcao of FUNCOES) {
+    const ofertas = monstros.filter(item => item.conteudo.funcao === funcao);
+    assert.ok(ofertas.length >= 3, `função ${funcao} tem só ${ofertas.length} contratável(is) no catálogo`);
+  }
+
+  // Guardar um lugar foi a lacuna que motivou esta leva: precisa de opção em
+  // mais de uma faixa de preço, senão só um patamar de mesa consegue contratar.
+  const guardas = monstros.filter(item => item.conteudo.funcao === 'Guarda de local');
+  const raridadesDeGuarda = new Set(guardas.map(item => normalizar(item.conteudo.raridade)));
+  assert.ok(raridadesDeGuarda.size >= 3, 'guarda de local precisa existir em pelo menos três raridades');
 });
 
 test('itens especiais publicam marcadores para busca e filtros', () => {

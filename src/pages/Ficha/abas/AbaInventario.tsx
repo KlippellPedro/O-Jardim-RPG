@@ -1,5 +1,5 @@
 import { useDeferredValue, useMemo, useState } from 'react';
-import { Search, Backpack, Coins, Shield, Sword, Box, Minus, Plus, Car, Trash2, Pencil, Wrench, Star, GripVertical, SlidersHorizontal, ListFilter, Cpu, Apple } from 'lucide-react';
+import { Search, Backpack, Coins, Shield, Sword, Box, Minus, Plus, Car, Trash2, Pencil, Wrench, Star, GripVertical, SlidersHorizontal, ListFilter, Cpu, Apple, Eye, EyeOff } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { useCharacterStore } from '../../../store/useCharacterStore';
 import { useAuthStore } from '../../../store/useAuthStore';
@@ -16,7 +16,9 @@ import {
   type IModificacaoEquipamento,
 } from '../../../services/equipamentoService';
 import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
-import { ModificacoesItemModal, RaridadeItemModal } from '../components/ItemEffectsModals';
+import { periciasDisponiveisParaEfeitos } from '../../../services/periciasFichaService';
+import { EfeitosItemModal, resumoEfeitoEquipamento } from '../components/ItemEffectsModals';
+import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
 import {
   getCurrencySymbol,
   getCurrencyTheme,
@@ -27,8 +29,14 @@ import {
   normalizarCategoriaInventarioLoja,
   rotuloRaridadeChave,
 } from '../../../services/lojaCatalogService';
-import { EFEITOS_POR_MODIFICACAO_MAXIMOS, obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
 import { personagensApi } from '../../../services/personagensApi';
+import {
+  RARIDADES_RECURSO_MATERIAL,
+  RECURSOS_MATERIAIS,
+  ROTULO_RARIDADE_RECURSO,
+  type RaridadeRecursoMaterial,
+  type RecursoMaterialId,
+} from '../../../../data/regras/recursos-materiais';
 
 interface IInventoryItem {
   id: string;
@@ -103,6 +111,17 @@ const CATEGORIAS_FILTRO: Array<{ value: 'todos' | IInventoryItem['categoria']; l
   { value: 'veiculo', label: 'Veículos' },
   { value: 'modulo-veicular', label: 'Peças e módulos' },
   { value: 'geral', label: 'Gerais' },
+];
+
+type TFiltroEstadoInventario = 'todos' | 'equipados' | 'favoritos' | 'com-efeitos';
+
+const PREFERENCIA_ESTOQUES_MATERIAIS = 'jardim:ficha:mostrar-estoques-materiais';
+
+const ESTADOS_FILTRO = [
+  { value: 'todos', label: 'Qualquer estado' },
+  { value: 'equipados', label: 'Equipados' },
+  { value: 'favoritos', label: 'Favoritos' },
+  { value: 'com-efeitos', label: 'Com bônus ou mods' },
 ];
 
 const RARIDADES_CONFIG = {
@@ -248,13 +267,17 @@ const itemEhManual = (item: IInventoryItem): boolean => (
   item.id.startsWith('manual:') || item._dadosOriginais.origem === 'manual'
 );
 
+const itemVeioDaLoja = (item: IInventoryItem): boolean => (
+  Boolean(item._dadosOriginais.catalogo_item_id) || item._dadosOriginais.origem === 'loja'
+);
+
 interface AbaInventarioProps {
   character: any;
   onUpdate?: any;
   modo?: 'inventario' | 'veiculos';
 }
 
-export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioProps) => {
+export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaInventarioProps) => {
   const modoVeiculos = modo === 'veiculos';
   const mutateEconomy = useCharacterStore((state) => state.mutateEconomy);
   const flushCharacterSaves = useCharacterStore((state) => state.flushCharacterSaves);
@@ -264,20 +287,27 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
     || papelCampanha === 'assistente';
   const [busca, setBusca] = useState('');
   const [filtroCategoria, setFiltroCategoria] = useState<'todos' | IInventoryItem['categoria']>('todos');
+  const [filtroEstado, setFiltroEstado] = useState<TFiltroEstadoInventario>('todos');
+  const [filtroRaridade, setFiltroRaridade] = useState<'todas' | ItemRaridadeChave>('todas');
+  const [mostrarEstoquesMateriais, setMostrarEstoquesMateriais] = useState(() => {
+    try {
+      return window.localStorage.getItem(PREFERENCIA_ESTOQUES_MATERIAIS) !== 'false';
+    } catch {
+      return true;
+    }
+  });
   const [moedasReveladas, setMoedasReveladas] = useState<string[]>([]);
   
   const [modalAberto, setModalAberto] = useState(false);
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [form, setForm] = useState<typeof ITEM_VAZIO>(ITEM_VAZIO);
   const [submodal, setSubmodal] = useState<'modificacoes' | 'raridade' | null>(null);
-  const [itemModificacoesVisivel, setItemModificacoesVisivel] = useState<IInventoryItem | null>(null);
+  // 'modificacoes' e 'raridade' abrem o mesmo painel, só mudando a aba inicial.
+  const [itemEfeitosVisivel, setItemEfeitosVisivel] = useState<IInventoryItem | null>(null);
   const [frutoPendenteId, setFrutoPendenteId] = useState<string | null>(null);
   const [feedbackFruto, setFeedbackFruto] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
 
-  const periciasDisponiveis = useMemo(() => [...new Map([
-    ...PERICIAS_CATALOGO,
-    ...((character.ficha?.periciasCustomizadas || []) as Array<{ id: string; titulo: string }>),
-  ].map((pericia) => [pericia.id, { id: pericia.id, titulo: pericia.titulo }])).values()], [character.ficha?.periciasCustomizadas]);
+  const periciasDisponiveis = periciasDisponiveisParaEfeitos(character.ficha || {}, PERICIAS_CATALOGO);
 
   const inventario: IInventoryItem[] = useMemo(() => (character.inventarioCentral || [])
     .map(paraUI)
@@ -344,6 +374,10 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
     && !podeGerenciarEconomia
     && inventario.some((item) => item.id === editandoId && !itemEhManual(item)),
   );
+  const itemEditado = editandoId ? inventario.find((item) => item.id === editandoId) : undefined;
+  const mecanicaSomenteLeitura = Boolean(
+    itemEditado && !podeGerenciarEconomia && itemVeioDaLoja(itemEditado),
+  );
 
   const itensDaAba = useMemo(
     () => inventario.filter((item) => modoVeiculos
@@ -403,28 +437,6 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
 
   const handleSalvar = () => {
     if (!form.nome?.trim()) return;
-
-    const regraRaridade = obterRegraRaridade(form.raridade);
-    const efeitosConfigurados = [
-      ...form.efeitosRaridade,
-      ...form.modificacoes.flatMap((modificacao) => modificacao.efeitos),
-    ];
-    if (form.modificacoes.length > regraRaridade.modificacoesMaximas) {
-      window.alert(`${regraRaridade.titulo} aceita no máximo ${regraRaridade.modificacoesMaximas} modificação(ões). Remova o excedente antes de salvar.`);
-      return;
-    }
-    if (form.efeitosRaridade.length > regraRaridade.efeitosRaridadeMaximos) {
-      window.alert(`${regraRaridade.titulo} aceita no máximo ${regraRaridade.efeitosRaridadeMaximos} efeito(s) próprios de raridade.`);
-      return;
-    }
-    if (form.modificacoes.some((modificacao) => modificacao.efeitos.length > EFEITOS_POR_MODIFICACAO_MAXIMOS)) {
-      window.alert('Cada modificação pode alterar no máximo um valor automático da ficha. Remova o efeito excedente antes de salvar.');
-      return;
-    }
-    if (efeitosConfigurados.some((efeito) => Math.abs(efeito.valor) > regraRaridade.valorMaximoPorEfeito)) {
-      window.alert(`Cada efeito de um item ${regraRaridade.titulo} deve ficar entre -${regraRaridade.valorMaximoPorEfeito} e +${regraRaridade.valorMaximoPorEfeito}.`);
-      return;
-    }
 
     const itemAtual = editandoId
       ? inventario.find((item) => item.id === editandoId)
@@ -523,25 +535,14 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
     });
   };
 
-  const handleReorder = (local: string, reorderedGroup: IInventoryItem[]) => {
-    const idsReordenados = reorderedGroup.map((item) => item.id);
-    mutarInventario((atual) => {
-      const porId = new Map(atual.map((item) => [item.id, item]));
-      const vistos = new Set(idsReordenados);
-      const grupoAtualizado = idsReordenados.flatMap((id) => {
-        const item = porId.get(id);
-        return item?.localArmazenamento === local ? [item] : [];
-      });
-      const restantesDoLocal = atual.filter((item) => (
-        item.localArmazenamento === local && !vistos.has(item.id)
-      ));
-      const outrosLocais = atual.filter((item) => item.localArmazenamento !== local);
-      return [...grupoAtualizado, ...restantesDoLocal, ...outrosLocais];
-    });
+  const handleReorder = (_local: string, reorderedGroup: IInventoryItem[]) => {
+    mutarInventario((atual) => mesclarOrdemFiltrada(atual, reorderedGroup));
   };
 
+  // A carteira é do jogador: ele ajusta o próprio saldo direto na ficha. O
+  // servidor registra cada ajuste em lancamentos_economia com o autor, então o
+  // mestre continua enxergando de onde veio cada moeda.
   const handleAjustarMoeda = (moeda: string, delta: number) => {
-    if (!podeGerenciarEconomia) return;
     void mutateEconomy(character.id, (current) => {
       const carteiraAtual = current.carteira.length
         ? current.carteira
@@ -556,7 +557,6 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
   };
 
   const handleSetMoeda = (moeda: string, valor: number) => {
-    if (!podeGerenciarEconomia) return;
     void mutateEconomy(character.id, (current) => {
       const carteiraAtual = current.carteira.length
         ? current.carteira
@@ -584,11 +584,30 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
   const buscaAdiada = useDeferredValue(busca.trim().toLocaleLowerCase('pt-BR'));
   const inventarioVisivel = useMemo(() => itensDaAba.filter((item) => {
     const correspondeCategoria = filtroCategoria === 'todos' || item.categoria === filtroCategoria;
+    const possuiEfeitos = item.efeitosRaridade.length > 0 || item.modificacoes.length > 0;
+    const correspondeEstado = filtroEstado === 'todos'
+      || (filtroEstado === 'equipados' && item.equipado)
+      || (filtroEstado === 'favoritos' && item.favorito)
+      || (filtroEstado === 'com-efeitos' && possuiEfeitos);
+    const correspondeRaridade = filtroRaridade === 'todas' || item.raridade === filtroRaridade;
+    const textoPesquisavel = [
+      item.nome,
+      item.localArmazenamento,
+      item.descricao,
+      item.categoria,
+      item.raridade,
+      rotuloRaridadeChave(item.raridade),
+      ...item.efeitosRaridade.map((efeito) => resumoEfeitoEquipamento(efeito, periciasDisponiveis)),
+      ...item.modificacoes.flatMap((modificacao) => [
+        modificacao.nome,
+        modificacao.efeito,
+        ...modificacao.efeitos.map((efeito) => resumoEfeitoEquipamento(efeito, periciasDisponiveis)),
+      ]),
+    ].filter(Boolean).join(' ').toLocaleLowerCase('pt-BR');
     const correspondeBusca = !buscaAdiada
-      || item.nome?.toLocaleLowerCase('pt-BR').includes(buscaAdiada)
-      || item.localArmazenamento?.toLocaleLowerCase('pt-BR').includes(buscaAdiada);
-    return correspondeCategoria && correspondeBusca;
-  }), [buscaAdiada, filtroCategoria, itensDaAba]);
+      || textoPesquisavel.includes(buscaAdiada);
+    return correspondeCategoria && correspondeEstado && correspondeRaridade && correspondeBusca;
+  }), [buscaAdiada, filtroCategoria, filtroEstado, filtroRaridade, itensDaAba, periciasDisponiveis]);
 
   const inventarioAgrupadoPorLocal = useMemo(() => locaisUnicos.reduce((acc, local) => {
     acc[local] = inventarioVisivel.filter(i => i.localArmazenamento === local);
@@ -600,6 +619,36 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
     0
   );
   const formEhModuloVeicular = modoVeiculos && form.categoria === 'modulo-veicular';
+  type EstoquePorRaridade = Partial<Record<RaridadeRecursoMaterial, number>>;
+  type EstoquesMateriaisSalvos = Partial<Record<RecursoMaterialId, number | EstoquePorRaridade>>;
+  const estoquesMateriais = (character.ficha?.recursosMateriais ?? {}) as EstoquesMateriaisSalvos;
+  const estoqueDoRecurso = (id: RecursoMaterialId): EstoquePorRaridade => {
+    const salvo = estoquesMateriais[id];
+    // Migração sem perda: o contador antigo não tinha raridade e passa a Comum.
+    if (typeof salvo === 'number') return { comum: Math.max(0, salvo) };
+    return salvo ?? {};
+  };
+  const ajustarRecursoMaterial = (id: RecursoMaterialId, raridade: RaridadeRecursoMaterial, valor: number) => {
+    if (!onUpdate) return;
+    onUpdate(['ficha', 'recursosMateriais'], {
+      ...estoquesMateriais,
+      [id]: {
+        ...estoqueDoRecurso(id),
+        [raridade]: Math.max(0, Math.min(999, Math.trunc(Number(valor) || 0))),
+      },
+    });
+  };
+  const alternarEstoquesMateriais = () => {
+    setMostrarEstoquesMateriais((visivel) => {
+      const proximo = !visivel;
+      try {
+        window.localStorage.setItem(PREFERENCIA_ESTOQUES_MATERIAIS, String(proximo));
+      } catch {
+        // A preferência continua funcionando nesta sessão mesmo sem armazenamento.
+      }
+      return proximo;
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -627,7 +676,7 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
               <Coins size={18} className="text-primary" />
               <h3 className="text-white font-bold tracking-widest uppercase text-xs">Carteira</h3>
             </div>
-            {podeGerenciarEconomia && moedasFaltantes.length > 0 && (
+            {moedasFaltantes.length > 0 && (
               <Select
                 value=""
                 onChange={(moeda) => setMoedasReveladas((prev) => [...prev, moeda])}
@@ -652,34 +701,27 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
                     <span className="text-xs text-gray-300 truncate">{m.moeda}</span>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
-                    {podeGerenciarEconomia && (
-                      <button
-                        onClick={() => handleAjustarMoeda(m.moeda, -1)}
-                        aria-label={`Reduzir saldo de ${m.moeda}`}
-                        className="w-6 h-6 rounded bg-black/40 border border-white/10 text-gray-400 hover:text-white flex items-center justify-center transition-colors"
-                      >
-                        <Minus size={11} />
-                      </button>
-                    )}
-                    {podeGerenciarEconomia ? (
-                      <input
-                        type="number"
-                        value={m.saldo}
-                        onChange={(e) => handleSetMoeda(m.moeda, parseInt(e.target.value) || 0)}
-                        className={`w-16 text-center text-base font-mono font-bold bg-transparent border-none outline-none focus:ring-1 focus:ring-white/20 rounded ${tema.texto} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
-                      />
-                    ) : (
-                      <span className={`w-14 text-center text-base font-mono font-bold ${tema.texto}`}>{m.saldo}</span>
-                    )}
-                    {podeGerenciarEconomia && (
-                      <button
-                        onClick={() => handleAjustarMoeda(m.moeda, 1)}
-                        aria-label={`Aumentar saldo de ${m.moeda}`}
-                        className="w-6 h-6 rounded bg-black/40 border border-white/10 text-gray-400 hover:text-white flex items-center justify-center transition-colors"
-                      >
-                        <Plus size={11} />
-                      </button>
-                    )}
+                    <button
+                      onClick={() => handleAjustarMoeda(m.moeda, -1)}
+                      aria-label={`Reduzir saldo de ${m.moeda}`}
+                      className="w-6 h-6 rounded bg-black/40 border border-white/10 text-gray-400 hover:text-white flex items-center justify-center transition-colors"
+                    >
+                      <Minus size={11} />
+                    </button>
+                    <input
+                      type="number"
+                      value={m.saldo}
+                      onChange={(e) => handleSetMoeda(m.moeda, parseInt(e.target.value) || 0)}
+                      aria-label={`Saldo de ${m.moeda}`}
+                      className={`w-16 text-center text-base font-mono font-bold bg-transparent border-none outline-none focus:ring-1 focus:ring-white/20 rounded ${tema.texto} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
+                    />
+                    <button
+                      onClick={() => handleAjustarMoeda(m.moeda, 1)}
+                      aria-label={`Aumentar saldo de ${m.moeda}`}
+                      className="w-6 h-6 rounded bg-black/40 border border-white/10 text-gray-400 hover:text-white flex items-center justify-center transition-colors"
+                    >
+                      <Plus size={11} />
+                    </button>
                   </div>
                 </div>
               );
@@ -687,6 +729,45 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
           </div>
         </div>}
       </div>
+
+      {!modoVeiculos && mostrarEstoquesMateriais && <section className="rounded-2xl border border-emerald-300/10 bg-[#0f0e15] p-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div><h3 className="font-serif text-lg font-bold text-white">Estoques de materiais</h3><p className="mt-1 text-xs leading-5 text-gray-500">Controle só estes seis lotes. Os materiais exatos são descrição da história.</p></div>
+          <div className="flex flex-wrap items-center gap-2">
+            <a href="/materiais" className="px-2 py-1.5 text-xs font-bold text-emerald-300/70 hover:text-emerald-200">Entender os lotes →</a>
+            <button
+              type="button"
+              onClick={alternarEstoquesMateriais}
+              aria-expanded="true"
+              className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs font-bold text-gray-400 transition-colors hover:border-white/20 hover:text-white"
+            >
+              <EyeOff size={13} /> Ocultar
+            </button>
+          </div>
+        </div>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          {RECURSOS_MATERIAIS.map((recurso) => <div key={recurso.id} className="rounded-xl border border-white/[0.07] bg-black/20 p-3"><span className="block min-h-8 text-[11px] font-bold leading-4 text-gray-300">{recurso.titulo}</span><div className="mt-2 space-y-1.5">{RARIDADES_RECURSO_MATERIAL.map((raridade) => {
+            const quantidade = Math.max(0, Number(estoqueDoRecurso(recurso.id)[raridade]) || 0);
+            return <div key={raridade} className="flex items-center justify-between gap-1"><span className="w-14 truncate text-[9px] uppercase tracking-wide text-gray-500">{ROTULO_RARIDADE_RECURSO[raridade]}</span><button type="button" onClick={() => ajustarRecursoMaterial(recurso.id, raridade, quantidade - 1)} aria-label={`Gastar ${recurso.singular} ${ROTULO_RARIDADE_RECURSO[raridade]}`} className="flex h-6 w-6 items-center justify-center rounded border border-white/10 text-gray-500 hover:text-white"><Minus size={10} /></button><input type="number" min="0" max="999" value={quantidade} onChange={(event) => ajustarRecursoMaterial(recurso.id, raridade, Number(event.target.value))} aria-label={`Quantidade de ${recurso.titulo} ${ROTULO_RARIDADE_RECURSO[raridade]}`} className="w-8 bg-transparent text-center font-mono text-sm font-bold text-white outline-none" /><button type="button" onClick={() => ajustarRecursoMaterial(recurso.id, raridade, quantidade + 1)} aria-label={`Adicionar ${recurso.singular} ${ROTULO_RARIDADE_RECURSO[raridade]}`} className="flex h-6 w-6 items-center justify-center rounded border border-white/10 text-gray-500 hover:text-white"><Plus size={10} /></button></div>;
+          })}</div></div>)}
+        </div>
+      </section>}
+
+      {!modoVeiculos && !mostrarEstoquesMateriais && (
+        <button
+          type="button"
+          onClick={alternarEstoquesMateriais}
+          aria-expanded="false"
+          className="flex w-full items-center justify-between gap-3 rounded-xl border border-dashed border-emerald-300/10 bg-[#0f0e15] px-4 py-3 text-left transition-colors hover:border-emerald-300/25 hover:bg-emerald-500/[0.03]"
+        >
+          <span className="flex items-center gap-2 text-xs font-bold text-gray-500">
+            <Box size={15} className="text-emerald-300/60" /> Estoques de materiais ocultos
+          </span>
+          <span className="flex shrink-0 items-center gap-1.5 text-xs font-bold text-emerald-300/80">
+            <Eye size={13} /> Mostrar
+          </span>
+        </button>
+      )}
 
       {/* FERRAMENTAS */}
       <div className="flex flex-col gap-3 xl:flex-row">
@@ -725,6 +806,22 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
           );
         })}
       </div>}
+      {!modoVeiculos && (
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <Select
+            value={filtroEstado}
+            onChange={(valor) => setFiltroEstado(valor as TFiltroEstadoInventario)}
+            options={ESTADOS_FILTRO}
+            className="w-full"
+          />
+          <Select
+            value={filtroRaridade}
+            onChange={(valor) => setFiltroRaridade(valor === 'todas' ? 'todas' : normalizarRaridadeChave(valor))}
+            options={[{ value: 'todas', label: 'Todas as raridades' }, ...RARIDADES_OPCOES]}
+            className="w-full"
+          />
+        </div>
+      )}
 
       {!modoVeiculos && feedbackFruto && (
         <div className={`rounded-xl border px-4 py-3 text-sm font-bold ${feedbackFruto.tipo === 'sucesso' ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300' : 'border-red-500/30 bg-red-500/10 text-red-300'}`} role="status">
@@ -818,6 +915,14 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
                 const catColor = CATEGORY_COLORS[item.categoria] || CATEGORY_COLORS.geral;
                 const moduloVeicular = item.categoria === 'modulo-veicular';
                 const frutoEden = item._dadosOriginais.tipo === 'fruto-eden';
+                const efeitosAutomaticos = [
+                  ...item.efeitosRaridade,
+                  ...item.modificacoes.flatMap((modificacao) => modificacao.efeitos),
+                ];
+                const regrasManuais = item.modificacoes.filter((modificacao) => (
+                  modificacao.efeitos.length === 0 && Boolean(modificacao.efeito.trim())
+                )).length;
+                const resumosVisiveis = efeitosAutomaticos.slice(0, 3);
                 
                 return (
                   <Reorder.Item
@@ -877,7 +982,7 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
                           
                           <div className="text-right flex flex-col items-end gap-1.5">
                             <div className="flex gap-2 items-center">
-                              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              <div className="flex gap-1 opacity-100 transition-opacity duration-300 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
                                 <button onClick={() => abrirEdicao(item)} className="w-6 h-6 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 flex items-center justify-center transition-colors">
                                   <Pencil size={11} />
                                 </button>
@@ -947,14 +1052,33 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
                           {modoVeiculos && !moduloVeicular && item.deslocamentoMetros != null && item.deslocamentoMetros > 0 && <div className="text-xs text-gray-300 bg-black/30 border border-white/5 px-2 py-1 rounded">Desloc.: <span className="font-mono text-green-400">{item.deslocamentoMetros}m</span></div>}
                         </div>
 
-                        {item.modificacoes.length > 0 ? (
+                        {(efeitosAutomaticos.length > 0 || item.modificacoes.length > 0) ? (
+                          <div className="mt-3 flex flex-col gap-2">
+                            <div className="flex flex-wrap gap-1.5" aria-label="Resumo dos bônus do item">
+                              {resumosVisiveis.map((efeito, indice) => (
+                                <span key={`${efeito.id}-${indice}`} className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold text-emerald-300">
+                                  {resumoEfeitoEquipamento(efeito, periciasDisponiveis)}
+                                </span>
+                              ))}
+                              {efeitosAutomaticos.length > resumosVisiveis.length ? (
+                                <span className="rounded-full border border-white/10 bg-black/20 px-2.5 py-1 text-[10px] font-bold text-gray-400">
+                                  +{efeitosAutomaticos.length - resumosVisiveis.length} automático(s)
+                                </span>
+                              ) : null}
+                              {regrasManuais > 0 ? (
+                                <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-1 text-[10px] font-bold text-amber-300">
+                                  {regrasManuais} regra(s) manual(is)
+                                </span>
+                              ) : null}
+                            </div>
                           <button
                             type="button"
-                            onClick={() => setItemModificacoesVisivel(item)}
+                            onClick={() => setItemEfeitosVisivel(item)}
                             className="mt-3 flex w-fit items-center gap-2 rounded-lg border border-[#c7a44c]/20 bg-[#c7a44c]/5 px-3 py-2 text-xs font-bold text-[#c7a44c] transition-colors hover:bg-[#c7a44c]/10"
                           >
-                            <SlidersHorizontal size={13} /> Ver modificações ({item.modificacoes.length})
+                            <SlidersHorizontal size={13} /> Ver bônus e modificações
                           </button>
+                          </div>
                         ) : null}
 
                         {item.descricao && <p className="text-xs text-gray-500 italic mt-3 line-clamp-2">{item.descricao}</p>}
@@ -999,12 +1123,19 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
         <div className="flex flex-col gap-4">
           <LabeledInput label={formEhModuloVeicular ? 'Nome da Peça ou Módulo' : modoVeiculos ? 'Nome do Veículo' : 'Nome do Item'} value={form.nome} placeholder={formEhModuloVeicular ? 'Ex.: Núcleo Estável T2' : modoVeiculos ? 'Ex.: Rover Tatu' : 'Ex.: Espada Longa, Corda 10m'} onChange={(v: string) => setCampo('nome', v)} />
 
+          {mecanicaSomenteLeitura && (
+            <div className="rounded-xl border border-sky-500/25 bg-sky-500/10 px-4 py-3 text-xs leading-relaxed text-sky-200">
+              Este item veio da Loja. Você pode renomear, mover, favoritar, equipar e controlar condição, munição ou combustível atuais. Raridade, bônus, modificações e valores-base são definidos pela Loja ou pela equipe da campanha.
+            </div>
+          )}
+
           <div className={`grid grid-cols-1 gap-3 ${modoVeiculos ? '' : 'sm:grid-cols-2'}`}>
             <div className="flex flex-col gap-1">
               <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Raridade</label>
               <Select
                 value={form.raridade}
                 onChange={(v) => setCampo('raridade', v)}
+                disabled={mecanicaSomenteLeitura}
                 className={`w-full uppercase tracking-widest font-bold ${RARIDADES_CONFIG[form.raridade as keyof typeof RARIDADES_CONFIG]?.cor || 'text-gray-400'}`}
                 options={RARIDADES_OPCOES}
               />
@@ -1014,6 +1145,7 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
               <Select
                 value={form.categoria}
                 onChange={(v) => setCampo('categoria', v)}
+                disabled={mecanicaSomenteLeitura}
                 className="w-full"
                 options={[
                   { value: 'arma', label: 'Arma' },
@@ -1036,31 +1168,32 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
               readOnly={quantidadeSomenteLeitura}
               onChange={(v: string) => setCampo('quantidade', v)}
             />
-            {!modoVeiculos && <LabeledInput label="Peso (kg)" type="number" value={String(form.espacos ?? '')} onChange={(v: string) => setCampo('espacos', v)} />}
+            {!modoVeiculos && <LabeledInput label="Peso (kg)" type="number" value={String(form.espacos ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('espacos', v)} />}
           </div>
 
           {!formEhModuloVeicular && <div className="mt-2 grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2">
-            <LabeledInput label={modoVeiculos ? 'Vida Máxima' : 'Durabilidade Máxima (0 = infinito)'} type="number" value={String(form.durabilidadeMaxima ?? '')} onChange={(v: string) => setCampo('durabilidadeMaxima', v)} />
+            <LabeledInput label={modoVeiculos ? 'Vida Máxima' : 'Durabilidade Máxima (0 = infinito)'} type="number" value={String(form.durabilidadeMaxima ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('durabilidadeMaxima', v)} />
             <LabeledInput label={modoVeiculos ? 'Vida Atual' : 'Durabilidade Atual'} type="number" value={String(form.durabilidadeAtual ?? '')} onChange={(v: string) => setCampo('durabilidadeAtual', v)} />
           </div>}
 
           {modoVeiculos && !formEhModuloVeicular && (
             <div className="grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2 lg:grid-cols-3">
-              <LabeledInput label="Combustível Máximo" type="number" value={String(form.combustivelMaximo ?? '')} onChange={(v: string) => setCampo('combustivelMaximo', v)} />
+              <LabeledInput label="Combustível Máximo" type="number" value={String(form.combustivelMaximo ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('combustivelMaximo', v)} />
               <LabeledInput label="Combustível Atual" type="number" value={String(form.combustivelAtual ?? '')} onChange={(v: string) => setCampo('combustivelAtual', v)} />
-              <LabeledInput label="Deslocamento (m)" type="number" value={String(form.deslocamentoMetros ?? '')} onChange={(v: string) => setCampo('deslocamentoMetros', v)} />
-              <LabeledInput label="Defesa" type="number" value={String(form.defesa ?? '')} onChange={(v: string) => setCampo('defesa', v)} />
-              <LabeledInput label="Resistência (RD)" type="number" value={String(form.resistencia ?? '')} onChange={(v: string) => setCampo('resistencia', v)} />
-              <LabeledInput label="Manobrabilidade" type="number" value={String(form.manobrabilidade ?? '')} onChange={(v: string) => setCampo('manobrabilidade', v)} />
-              <LabeledInput label="Capacidade" type="number" value={String(form.capacidade ?? '')} onChange={(v: string) => setCampo('capacidade', v)} />
-              <LabeledInput label="Tripulação Mínima" type="number" value={String(form.tripulacaoMinima ?? '')} onChange={(v: string) => setCampo('tripulacaoMinima', v)} />
-              <LabeledInput label="Sistemas Ativos" type="number" value={String(form.sistemasAtivosMaximos ?? '')} onChange={(v: string) => setCampo('sistemasAtivosMaximos', v)} />
-              <LabeledInput label="Espaços de Base" type="number" value={String(form.espacosBase ?? '')} onChange={(v: string) => setCampo('espacosBase', v)} />
+              <LabeledInput label="Deslocamento (m)" type="number" value={String(form.deslocamentoMetros ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('deslocamentoMetros', v)} />
+              <LabeledInput label="Defesa" type="number" value={String(form.defesa ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('defesa', v)} />
+              <LabeledInput label="Resistência (RD)" type="number" value={String(form.resistencia ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('resistencia', v)} />
+              <LabeledInput label="Manobrabilidade" type="number" value={String(form.manobrabilidade ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('manobrabilidade', v)} />
+              <LabeledInput label="Capacidade" type="number" value={String(form.capacidade ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('capacidade', v)} />
+              <LabeledInput label="Tripulação Mínima" type="number" value={String(form.tripulacaoMinima ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('tripulacaoMinima', v)} />
+              <LabeledInput label="Sistemas Ativos" type="number" value={String(form.sistemasAtivosMaximos ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('sistemasAtivosMaximos', v)} />
+              <LabeledInput label="Espaços de Base" type="number" value={String(form.espacosBase ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('espacosBase', v)} />
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Cobertura</label>
                 <Select
                   value={form.coberturaOcupantes || 'nenhuma'}
                   onChange={(v) => setCampo('coberturaOcupantes', v)}
+                  disabled={mecanicaSomenteLeitura}
                   className="w-full"
                   options={[
                     { value: 'nenhuma', label: 'Nenhuma' },
@@ -1075,42 +1208,44 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
           {/* CAMPOS ESPECÍFICOS */}
           {form.categoria === 'arma' && (
             <div className="grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2 lg:grid-cols-3">
-              <LabeledInput label="Dano" value={form.dano || ''} placeholder="Ex.: 1d8+2" onChange={(v: string) => setCampo('dano', v)} />
+              <LabeledInput label="Dano" value={form.dano || ''} placeholder="Ex.: 1d8+2" readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('dano', v)} />
               <LabeledInput label="Munição Atual" type="number" value={String(form.municaoAtual ?? '')} onChange={(v: string) => setCampo('municaoAtual', v)} />
-              <LabeledInput label="Munição Máx." type="number" value={String(form.municaoMaxima ?? '')} onChange={(v: string) => setCampo('municaoMaxima', v)} />
-              <LabeledInput label="Margem de ameaça" type="number" value={String(form.margemAmeaca ?? 20)} placeholder="Ex.: 18" onChange={(v: string) => setCampo('margemAmeaca', v)} />
-              <LabeledInput label="Multiplicador crítico" type="number" value={String(form.multiplicadorCritico ?? 2)} placeholder="Ex.: 5" onChange={(v: string) => setCampo('multiplicadorCritico', v)} />
+              <LabeledInput label="Munição Máx." type="number" value={String(form.municaoMaxima ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('municaoMaxima', v)} />
+              <LabeledInput label="Margem de ameaça" type="number" value={String(form.margemAmeaca ?? 20)} placeholder="Ex.: 18" readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('margemAmeaca', v)} />
+              <LabeledInput label="Multiplicador crítico" type="number" value={String(form.multiplicadorCritico ?? 2)} placeholder="Ex.: 5" readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('multiplicadorCritico', v)} />
               <p className="self-end pb-2 text-xs text-gray-600">Aceita valores especiais definidos pelo Mestre.</p>
             </div>
           )}
 
           {form.categoria === 'armadura' && (
             <div className="border-t border-white/5 pt-4 grid grid-cols-2 gap-3">
-              <LabeledInput label="Defesa" value={String(form.defesa ?? '')} onChange={(v: string) => setCampo('defesa', v)} />
-              <LabeledInput label="Penalidade" value={String(form.penalidade ?? '')} onChange={(v: string) => setCampo('penalidade', v)} />
+              <LabeledInput label="Defesa" value={String(form.defesa ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('defesa', v)} />
+              <LabeledInput label="Penalidade" value={String(form.penalidade ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('penalidade', v)} />
             </div>
           )}
 
           {form.categoria === 'consumivel' && (
             <div className="border-t border-white/5 pt-4">
-              <LabeledInput label="Efeito" value={form.efeito || ''} placeholder="Ex.: Cura 2d4+2 PV" onChange={(v: string) => setCampo('efeito', v)} />
+              <LabeledInput label="Efeito" value={form.efeito || ''} placeholder="Ex.: Cura 2d4+2 PV" readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('efeito', v)} />
             </div>
           )}
 
           <div className="grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2">
-            <button type="button" onClick={() => setSubmodal('modificacoes')} className="flex items-center justify-between rounded-xl border border-white/5 bg-black/20 p-4 text-left transition-colors hover:border-[#c7a44c]/30">
-              <span>
-                <strong className="block text-sm text-white">Ver modificações</strong>
-                <span className="mt-1 block text-xs text-gray-600">{form.modificacoes.length} configuradas</span>
-              </span>
-              <SlidersHorizontal size={18} className="text-[#c7a44c]" />
-            </button>
             <button type="button" onClick={() => setSubmodal('raridade')} className="flex items-center justify-between rounded-xl border border-white/5 bg-black/20 p-4 text-left transition-colors hover:border-[#c7a44c]/30">
               <span>
-                <strong className="block text-sm text-white">Raridade e vantagens</strong>
-                <span className="mt-1 block text-xs text-gray-600">{form.efeitosRaridade.length} efeitos automáticos</span>
+                <strong className="block text-sm text-white">Raridade e bônus</strong>
+                <span className="mt-1 block text-xs text-gray-600">{form.efeitosRaridade.length} bônus próprios</span>
               </span>
               <Star size={18} className="text-[#c7a44c]" />
+            </button>
+            <button type="button" onClick={() => setSubmodal('modificacoes')} className="flex items-center justify-between rounded-xl border border-white/5 bg-black/20 p-4 text-left transition-colors hover:border-[#c7a44c]/30">
+              <span>
+                <strong className="block text-sm text-white">Modificações</strong>
+                <span className="mt-1 block text-xs text-gray-600">
+                  {form.modificacoes.length} mod(s), {form.modificacoes.reduce((soma, modificacao) => soma + modificacao.efeitos.length, 0)} bônus
+                </span>
+              </span>
+              <SlidersHorizontal size={18} className="text-[#c7a44c]" />
             </button>
           </div>
 
@@ -1119,6 +1254,7 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
             <textarea
               value={form.descricao || ''}
               onChange={e => setCampo('descricao', e.target.value)}
+              readOnly={mecanicaSomenteLeitura}
               placeholder="História do item, regras específicas..."
               rows={3}
               className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors placeholder:text-gray-700 resize-none"
@@ -1143,34 +1279,36 @@ export const AbaInventario = ({ character, modo = 'inventario' }: AbaInventarioP
         </div>
       </FichaModal>
 
-      <ModificacoesItemModal
-        isOpen={submodal === 'modificacoes'}
-        onClose={() => setSubmodal(null)}
-        modificacoes={form.modificacoes}
-        onChange={(modificacoes) => setForm((atual) => ({ ...atual, modificacoes }))}
-        pericias={periciasDisponiveis}
-        itemNome={form.nome || undefined}
-        raridade={form.raridade}
-      />
+      {submodal !== null && (
+        <EfeitosItemModal
+          isOpen
+          onClose={() => setSubmodal(null)}
+          abaInicial={submodal}
+          raridade={form.raridade}
+          efeitosRaridade={form.efeitosRaridade}
+          modificacoes={form.modificacoes}
+          onRaridadeChange={(raridade) => setForm((atual) => ({ ...atual, raridade: normalizarRaridadeChave(raridade) }))}
+          onEfeitosRaridadeChange={(efeitosRaridade) => setForm((atual) => ({ ...atual, efeitosRaridade }))}
+          onModificacoesChange={(modificacoes) => setForm((atual) => ({ ...atual, modificacoes }))}
+          pericias={periciasDisponiveis}
+          itemNome={form.nome || undefined}
+          categoria={form.categoria === 'modulo-veicular' ? 'veiculo' : (form.categoria === 'implante' || form.categoria === 'propriedade') ? 'geral' : form.categoria}
+          readOnly={mecanicaSomenteLeitura}
+        />
+      )}
 
-      <RaridadeItemModal
-        isOpen={submodal === 'raridade'}
-        onClose={() => setSubmodal(null)}
-        raridade={form.raridade}
-        efeitos={form.efeitosRaridade}
-        onRaridadeChange={(raridade) => setForm((atual) => ({ ...atual, raridade: normalizarRaridadeChave(raridade) }))}
-        onEfeitosChange={(efeitosRaridade) => setForm((atual) => ({ ...atual, efeitosRaridade }))}
+      <EfeitosItemModal
+        isOpen={itemEfeitosVisivel !== null}
+        onClose={() => setItemEfeitosVisivel(null)}
+        raridade={itemEfeitosVisivel?.raridade || 'comum'}
+        efeitosRaridade={itemEfeitosVisivel?.efeitosRaridade || []}
+        modificacoes={itemEfeitosVisivel?.modificacoes || []}
+        onRaridadeChange={() => undefined}
+        onEfeitosRaridadeChange={() => undefined}
+        onModificacoesChange={() => undefined}
         pericias={periciasDisponiveis}
-        categoria={form.categoria === 'modulo-veicular' ? 'veiculo' : (form.categoria === 'implante' || form.categoria === 'propriedade') ? 'geral' : form.categoria}
-      />
-
-      <ModificacoesItemModal
-        isOpen={itemModificacoesVisivel !== null}
-        onClose={() => setItemModificacoesVisivel(null)}
-        modificacoes={itemModificacoesVisivel?.modificacoes || []}
-        pericias={periciasDisponiveis}
-        itemNome={itemModificacoesVisivel?.nome}
-        raridade={itemModificacoesVisivel?.raridade}
+        itemNome={itemEfeitosVisivel?.nome}
+        categoria={itemEfeitosVisivel?.categoria === 'modulo-veicular' ? 'veiculo' : (itemEfeitosVisivel?.categoria === 'implante' || itemEfeitosVisivel?.categoria === 'propriedade') ? 'geral' : itemEfeitosVisivel?.categoria}
         readOnly
       />
 

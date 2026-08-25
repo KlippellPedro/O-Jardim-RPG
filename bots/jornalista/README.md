@@ -137,9 +137,14 @@ Jornalista checa a fila a cada minuto.
 - `/jornal principal <canal>` — define o canal principal e fallback para
   conteúdos sem uma rota específica. Essa configuração agora pertence ao
   Jornalista.
-- `/jornal publicar` — abre um formulário com título, resumo, corpo, autoria
-  e URL HTTPS de imagem opcional. Mostra uma prévia privada com **Publicar**
-  e **Cancelar**; nada chega ao canal antes da confirmação.
+- `/publicar_noticia` — abre um formulário com título, resumo, corpo, autoria
+  e URL HTTPS de imagem opcional. Fora do grupo `/jornal` de propósito: o
+  Discord só permite um `default_member_permissions` por comando raiz, e o
+  grupo `/jornal` inteiro é restrito a Mestre/assistente. Quando o Mestre usa,
+  mostra uma prévia privada com **Publicar** e **Cancelar** (nada chega ao
+  canal antes da confirmação); quando um jogador usa, vira um rascunho de
+  pauta que o Mestre aprova com `/jornal pauta publicar` ou `/jornal pauta
+  agendar`.
 - `/jornal canal` / `/jornal canais` — define e consulta rotas específicas
   para notícia, clima, entrada, saída de membros, avisos de dinheiro e o
   resultado da Loteria Dominical.

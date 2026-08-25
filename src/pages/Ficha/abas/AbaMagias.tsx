@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AlertCircle,
   BookOpen,
@@ -52,6 +52,7 @@ import {
 } from '../../../services/magiaService';
 import { obterStatusFicha, penalidadeCansacoTeste } from '../../../services/statusService';
 import { resumirEquipamentos } from '../../../services/equipamentoService';
+import { RitualComponents } from '../../../components/materials/RitualComponents';
 import { useAuthStore } from '../../../store/useAuthStore';
 import {
   obterPersonalizacoesAutomaticas,
@@ -111,6 +112,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   const [defesasAlvo, setDefesasAlvo] = useState<Record<string, string>>({});
   const [mensagem, setMensagem] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
   const [conjurandoId, setConjurandoId] = useState<string | null>(null);
+  const acaoMagicaEmAndamento = useRef(false);
   const [circuloInterceptado, setCirculoInterceptado] = useState(1);
   const [personalizando, setPersonalizando] = useState<{ id: string; titulo: string; descricao: string } | null>(null);
 
@@ -196,6 +198,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   };
 
   const rolarInterceptacao = async () => {
+    if (acaoMagicaEmAndamento.current) return;
     const circulo = Math.max(1, Math.min(perfil.circuloDoFluxo, circuloInterceptado));
     if (!perfil.possuiInterceptacao || perfil.circuloDoFluxo < 1) {
       setMensagem({ tipo: 'erro', texto: 'O Fluxo atual ainda não sustenta um teste de interceptação de 1º círculo.' });
@@ -203,6 +206,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     }
     const dt = dtConjuracaoPorCirculo(circulo);
     const fluxoAlvo = perfil.catalisadorAtivoId ? FLUXOS_POR_ID.get(perfil.catalisadorAtivoId)?.titulo : null;
+    acaoMagicaEmAndamento.current = true;
     setConjurandoId('interceptacao-axis');
     try {
       if (campanha?.id) {
@@ -232,6 +236,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     } catch {
       setMensagem({ tipo: 'erro', texto: 'Não foi possível registrar o teste de interceptação no servidor.' });
     } finally {
+      acaoMagicaEmAndamento.current = false;
       setConjurandoId(null);
     }
   };
@@ -320,6 +325,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   };
 
   const realizarRitual = async (ritual: IRitualCatalogo) => {
+    if (acaoMagicaEmAndamento.current) return;
     const avaliacao = podeRealizarRitual(ficha, ritual, inventarioCentral);
     if (!avaliacao.permitido) {
       setMensagem({ tipo: 'erro', texto: avaliacao.motivo || 'Não é possível realizar este ritual.' });
@@ -330,6 +336,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       return;
     }
 
+    acaoMagicaEmAndamento.current = true;
     setConjurandoId(ritual.id);
     onUpdate(['ficha', 'status', 'manaAtual'], manaAtual - ritual.custo_mana);
 
@@ -364,6 +371,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     } catch {
       setMensagem({ tipo: 'erro', texto: 'O custo foi aplicado, mas o servidor não registrou o ritual.' });
     } finally {
+      acaoMagicaEmAndamento.current = false;
       setConjurandoId(null);
     }
   };
@@ -400,6 +408,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   };
 
   const conjurar = async (magia: IMagiaCatalogo) => {
+    if (acaoMagicaEmAndamento.current) return;
     const avaliacao = podeConjurarMagia(ficha, magia, inventarioCentral);
     if (!avaliacao.permitido) {
       setMensagem({ tipo: 'erro', texto: avaliacao.motivo || 'Não é possível conjurar esta magia.' });
@@ -420,6 +429,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       && !window.confirm(`Conjurar ${magia.titulo} encerrará ${concentracaoAtiva.titulo || 'a concentração atual'}. Continuar?`)
     ) return;
 
+    acaoMagicaEmAndamento.current = true;
     setConjurandoId(magia.id);
     onUpdate(['ficha', 'status', 'manaAtual'], manaAtual - magia.custo_mana);
     if (magia.concentracao) {
@@ -462,6 +472,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     } catch {
       setMensagem({ tipo: 'erro', texto: 'O custo foi aplicado, mas o servidor não registrou a conjuração.' });
     } finally {
+      acaoMagicaEmAndamento.current = false;
       setConjurandoId(null);
     }
   };
@@ -519,7 +530,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
                   type="button"
                   onClick={() => abrirPersonalizacao({ id: personalizacaoId, titulo: magia.titulo, descricao: efeitoNaFicha })}
                   title="Editar texto"
-                  className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all"
+                  className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-100 transition-all sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
                 >
                   <Pencil size={12} />
                 </button>
@@ -573,7 +584,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
               <button
                 type="button"
                 onClick={() => void conjurar(magia)}
-                disabled={conjurandoId === magia.id}
+                disabled={conjurandoId !== null}
                 className="flex w-full items-center justify-center gap-2 rounded-xl border border-sky-500/30 bg-sky-500/10 px-4 py-2.5 text-xs font-bold text-sky-300 transition-colors hover:bg-sky-500/20 disabled:opacity-50"
               >
                 <Dices size={14} /> {conjurandoId === magia.id ? 'Conjurando...' : 'Conjurar'}
@@ -627,7 +638,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
                   type="button"
                   onClick={() => abrirPersonalizacao({ id: personalizacaoId, titulo: ritual.titulo, descricao: ritual.efeito })}
                   title="Editar texto"
-                  className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all"
+                  className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-100 transition-all sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
                 >
                   <Pencil size={12} />
                 </button>
@@ -642,6 +653,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             <p className="mt-3 text-sm leading-relaxed text-gray-300">{efeitoExibido}</p>
             <p className="mt-2 text-xs leading-relaxed text-gray-500"><strong className="text-gray-400">Requisito:</strong> {ritual.requisito}</p>
             <p className="mt-1 text-xs leading-relaxed text-red-300/80"><strong className="text-red-300">Em falha:</strong> {ritual.falha}</p>
+            <RitualComponents complexidade={ritual.complexidade} compact />
           </div>
 
           {modoCatalogo ? (
@@ -662,7 +674,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
               <button
                 type="button"
                 onClick={() => void realizarRitual(ritual)}
-                disabled={conjurandoId === ritual.id}
+                disabled={conjurandoId !== null}
                 className="flex w-full items-center justify-center gap-2 rounded-xl border border-sky-500/30 bg-sky-500/10 px-4 py-2.5 text-xs font-bold text-sky-300 transition-colors hover:bg-sky-500/20 disabled:opacity-50"
               >
                 <Dices size={14} /> {conjurandoId === ritual.id ? 'Realizando...' : 'Realizar'}
@@ -725,7 +737,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
                   type="button"
                   onClick={() => abrirPersonalizacao({ id: personalizacaoId, titulo: item.titulo, descricao: item.efeito })}
                   title="Editar texto"
-                  className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all"
+                  className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-100 transition-all sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
                 >
                   <Pencil size={12} />
                 </button>
@@ -959,7 +971,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
               <button
                 type="button"
                 onClick={() => void rolarInterceptacao()}
-                disabled={perfil.circuloDoFluxo < 1 || conjurandoId === 'interceptacao-axis'}
+                disabled={perfil.circuloDoFluxo < 1 || conjurandoId !== null}
                 className="flex items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2.5 text-xs font-bold text-cyan-200 transition-colors hover:bg-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Dices size={14} /> {conjurandoId === 'interceptacao-axis' ? 'Interceptando...' : 'Rolar interceptação'}

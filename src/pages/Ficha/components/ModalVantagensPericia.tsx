@@ -7,6 +7,8 @@ interface ModalVantagensPericiaProps {
   periciaNome: string;
   initialVantagens: number;
   initialDesvantagens: number;
+  vantagensAutomaticas?: number;
+  desvantagensAutomaticas?: number;
   onApply: (vantagens: number, desvantagens: number) => void;
   onClear: () => void;
 }
@@ -17,6 +19,8 @@ export const ModalVantagensPericia: React.FC<ModalVantagensPericiaProps> = ({
   periciaNome,
   initialVantagens,
   initialDesvantagens,
+  vantagensAutomaticas = 0,
+  desvantagensAutomaticas = 0,
   onApply,
   onClear
 }) => {
@@ -30,7 +34,9 @@ export const ModalVantagensPericia: React.FC<ModalVantagensPericiaProps> = ({
     }
   }, [isOpen, initialVantagens, initialDesvantagens]);
 
-  const saldo = vantagens - desvantagens;
+  const vantagensTotais = vantagens + vantagensAutomaticas;
+  const desvantagensTotais = desvantagens + desvantagensAutomaticas;
+  const saldo = vantagensTotais - desvantagensTotais;
   
   let resumoTitulo = 'Rolagem normal';
   let resumoDescricao = 'Role 1d20 e some o seu bônus.';
@@ -39,17 +45,17 @@ export const ModalVantagensPericia: React.FC<ModalVantagensPericiaProps> = ({
 
   if (saldo > 0) {
     resumoTitulo = `Vantagem +${saldo}`;
-    resumoDescricao = `Fontes: ${vantagens}V − ${desvantagens}D = V +${saldo}. Role 2d20, use o MAIOR resultado.`;
+    resumoDescricao = `Fontes: ${vantagensTotais}V − ${desvantagensTotais}D = V +${saldo}. Role 2d20, use o MAIOR resultado.`;
     bgColor = 'bg-green-900/20 border-green-500/30';
     titleColor = 'text-green-400';
   } else if (saldo < 0) {
     resumoTitulo = `Desvantagem +${Math.abs(saldo)}`;
-    resumoDescricao = `Fontes: ${vantagens}V − ${desvantagens}D = D +${Math.abs(saldo)}. Role 2d20, use o MENOR resultado.`;
+    resumoDescricao = `Fontes: ${vantagensTotais}V − ${desvantagensTotais}D = D +${Math.abs(saldo)}. Role 2d20, use o MENOR resultado.`;
     bgColor = 'bg-red-900/20 border-red-500/30';
     titleColor = 'text-red-400';
-  } else if (vantagens > 0 || desvantagens > 0) {
+  } else if (vantagensTotais > 0 || desvantagensTotais > 0) {
     resumoTitulo = 'Fontes neutralizadas';
-    resumoDescricao = `Fontes: ${vantagens}V − ${desvantagens}D: as fontes se anulam. Role 1d20.`;
+    resumoDescricao = `Fontes: ${vantagensTotais}V − ${desvantagensTotais}D: as fontes se anulam. Role 1d20.`;
   }
 
   const handleApply = () => {
@@ -73,9 +79,23 @@ export const ModalVantagensPericia: React.FC<ModalVantagensPericiaProps> = ({
           As fontes se anulam uma a uma. O saldo define se a rolagem tem vantagem, desvantagem ou fica neutra.
         </p>
 
+        {(vantagensAutomaticas > 0 || desvantagensAutomaticas > 0) && (
+          <div className="rounded-xl border border-[#c7a44c]/20 bg-[#c7a44c]/5 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-sm font-bold text-[#c7a44c]">Fontes automáticas</span>
+              <span className="font-mono text-sm font-bold text-white">
+                {vantagensAutomaticas}V / {desvantagensAutomaticas}D
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-gray-500">
+              Vêm de itens, poderes, habilidades ou condições da ficha e já entram na rolagem. Para removê-las, altere a fonte que concede o efeito.
+            </p>
+          </div>
+        )}
+
         <div className="flex gap-4">
           <div className="flex-1 bg-[#121118] border border-green-500/20 rounded-xl p-4">
-            <h4 className="text-white font-bold mb-4">Vantagens</h4>
+            <h4 className="text-white font-bold mb-4">Vantagens manuais</h4>
             <div className="flex items-center justify-between">
               <button 
                 onClick={() => setVantagens(Math.max(0, vantagens - 1))}
@@ -94,7 +114,7 @@ export const ModalVantagensPericia: React.FC<ModalVantagensPericiaProps> = ({
           </div>
 
           <div className="flex-1 bg-[#121118] border border-red-500/20 rounded-xl p-4">
-            <h4 className="text-white font-bold mb-4">Desvantagens</h4>
+            <h4 className="text-white font-bold mb-4">Desvantagens manuais</h4>
             <div className="flex items-center justify-between">
               <button 
                 onClick={() => setDesvantagens(Math.max(0, desvantagens - 1))}
@@ -123,7 +143,7 @@ export const ModalVantagensPericia: React.FC<ModalVantagensPericiaProps> = ({
             onClick={handleClear}
             className="px-6 py-3 rounded-md bg-[#1a1924] border border-white/5 text-gray-400 hover:text-white text-sm font-bold uppercase tracking-wider transition-colors"
           >
-            Zerar
+            Zerar manuais
           </button>
           <button 
             onClick={onClose}

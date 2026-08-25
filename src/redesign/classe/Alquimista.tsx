@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FlaskConical, TestTube2, Combine } from 'lucide-react';
+import { FlaskConical, TestTube2, Combine, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -81,12 +81,12 @@ export const Alquimista = ({ classe }: { classe: IClasse }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className={`text-lg ${tema.tag} opacity-80 max-w-2xl mx-auto font-medium leading-relaxed`}
           >
-            A magia moldada através da matéria. Transformam elementos mundanos em frascos de puro caos ou cura, alterando não só o estado das coisas, mas a própria biologia através de fórmulas instáveis.
+            O Alquimista mistura reagentes para preparar curas, bombas, ácidos, antídotos e outras fórmulas. Cada dose é escolhida antes da aventura e resolve um problema bem definido quando chega a hora.
           </motion.p>
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, x: -30 }}
@@ -98,8 +98,11 @@ export const Alquimista = ({ classe }: { classe: IClasse }) => {
             <TestTube2 size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Fórmulas Essenciais</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Use testes de Alquimia para fabricar rapidamente poções de Cura (recupera Vida), poções de Mana, bombas elementais (Fogo/Ácido) e tônicos mutagênicos que fornecem bônus temporários físicos com um leve custo biológico.
+              Durante o descanso, você prepara as doses das fórmulas que conhece. Pode levar cura, Mana, fogo, ácido, névoa, veneno de lâmina ou mutagênico. Cada frasco é usado uma vez, e as doses que sobrarem expiram no descanso seguinte.
             </p>
+            <a href="#habilidade-formulas" className="mt-5 inline-flex w-fit rounded-xl border border-emerald-300/25 bg-emerald-400/10 px-4 py-2 text-xs font-black uppercase tracking-wider text-emerald-100 transition hover:bg-emerald-400/20">
+              Ver fórmulas e reagentes
+            </a>
           </PremiumCard>
 
           <PremiumCard
@@ -113,7 +116,21 @@ export const Alquimista = ({ classe }: { classe: IClasse }) => {
             <Combine size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Transmutação Mestra</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Uma vez por cena, gaste Mana e um turno focado para transmutar propriedades físicas de objetos médios não-mágicos. Transforme madeira em pedra, água em gelo, ou enferruje instantaneamente barras de ferro comuns.
+              No nível 18, uma vez por descanso longo, 8 de Mana trocam o material de um objeto mundano de até 2 m³ nas suas mãos por uma cena inteira. Pedra vira madeira, ferro vira vidro, corda vira corrente. Moeda, artefato e ser vivo ficam fora do alcance.
+            </p>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+            className={`flex flex-col p-8 rounded-2xl ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              Nenhuma dose sua usa número fixo. Ao usar o frasco, você rola Ofício (Alquimia), o ofício que vem junto da classe, e o resultado é o número que a vítima precisa alcançar para escapar. Dosagem boa rende mais que sorte, e uma falha crítica quebra o frasco errado.
             </p>
           </PremiumCard>
         </div>
@@ -125,4 +142,3 @@ export const Alquimista = ({ classe }: { classe: IClasse }) => {
 };
 
 export default Alquimista;
-

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Crosshair, Wind, Target } from 'lucide-react';
+import { Focus, Wind, Target, Zap, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -73,19 +73,19 @@ export const Atirador = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
+            className={`flex flex-col p-8 ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <Crosshair size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Posição de Tiro</h3>
+            <Focus size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Disparo Calculado</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Gaste uma ação de movimento para se fixar no lugar. Enquanto permanecer imóvel, por até três rodadas, ganha +2 nos ataques à distância. Mover-se encerra o efeito imediatamente.
+              Uma vez por combate, gaste uma Ação Completa pra estudar o alvo: vento, distância, movimento. Seu próximo ataque à distância contra ele recebe vantagem e ignora a cobertura que ele tiver.
             </p>
           </PremiumCard>
 
@@ -95,12 +95,41 @@ export const Atirador = ({ classe }: { classe: IClasse }) => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
+            className={`flex flex-col p-8 ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
             <Wind size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Tiro de Impulso</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Ao atacar, escolha um benefício conhecido: +1 categoria de alcance, ignorar uma penalidade ambiental, empurrar o alvo 3m ou causar metade do dano a um segundo alvo alinhado. Você aprende um benefício novo por estágio.
+              Ao atacar, escolha um benefício da lista: alcance estendido, recarga sem custo de ação, um segundo alvo alinhado, um ponto fraco na margem de ameaça e mais. Você aprende um benefício novo por estágio, entre oito possíveis.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className={`flex flex-col p-8 ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Zap size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Um Só Disparo</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              Uma vez por sessão, um disparo com vantagem que ignora cobertura e Resistência e conta como crítico, com o multiplicador da própria arma. Ainda gasta munição, e ainda pode errar.
+            </p>
+          </PremiumCard>
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className={`flex flex-col p-8 ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-slate-300 leading-relaxed text-sm">
+              Toda técnica sua que obriga o alvo a resistir rola Pontaria no momento do disparo: o resultado vira a DT que ele precisa alcançar, valendo para todos os atingidos naquele tiro.
             </p>
           </PremiumCard>
         </div>

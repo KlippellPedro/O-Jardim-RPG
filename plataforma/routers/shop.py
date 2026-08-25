@@ -7,14 +7,17 @@ from uuid import UUID, uuid4
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from psycopg.types.json import Jsonb
 
+from core import live_session
 from core.audit import record_audit
 from core.character_summary import _atende_requisito_legado
 from core.database import Database
+from core.notifications import campaign_member_ids, notify
 from core.dependencies import (
     AuthenticatedUser,
     campaign_access,
     get_current_user,
     get_database,
+    require_campaign_manager,
     require_csrf,
 )
 from core.economy_commands import (
@@ -29,10 +32,27 @@ from core.economy_commands import (
     resolve_catalog_price,
 )
 from core.promotions import resolve_promotion
-from schemas import ShopBatchCommandInput
+from schemas import (
+    ShopBatchCommandInput,
+    ShopCatalogDraftInput,
+    ShopCatalogPublishInput,
+    ShopGrantCommandInput,
+)
 
 
 router = APIRouter(prefix="/loja", tags=["loja"])
+
+_SHOP_RARITIES = {
+    "comum", "incomum", "raro", "epico", "lendario", "reliquia",
+    "reliquia da criacao", "mitico",
+}
+_SHOP_CURRENCIES = {
+    normalize_currency("Solares"),
+    normalize_currency("Lunaris"),
+    normalize_currency("Fragmentos de Estrela"),
+    normalize_currency("Créditos Sombrios"),
+}
+_MODIFICATION_APPLICATIONS = {"armas", "armaduras", "escudos", "itens gerais e magicos"}
 
 _PROTECTED_INVENTORY_METADATA = frozenset(
     {
@@ -161,6 +181,30 @@ def _catalog_shop_level(row: dict[str, Any]) -> int:
     return 1
 
 
+def _is_off_shop_catalog_item(row: dict[str, Any]) -> bool:
+    """Entrada publicada só como referência de mesa, nunca como mercadoria.
+
+    É o caso dos perfis universais do bestiário: eles existem para o Mestre
+    montar inimigo na sessão e para consulta no Bestiário, e nunca aparecem no
+    balcão. O filtro vale tanto para a vitrine quanto para a compra, porque as
+    duas leem as mesmas linhas.
+
+    São dois critérios de propósito. `conteudo.disponivelNaLoja: false` é a
+    marca explícita que o catálogo declara e serve para qualquer tipo. A
+    categoria "Universal" é a rede de segurança: a linha do banco só recebe a
+    marca quando o catálogo é ressincronizado, e enquanto isso não acontece
+    (ou se alguém editar a entrada pela biblioteca do mestre e derrubar a
+    marca) a "Ameaça Genérica" voltaria à venda em Mercenários.
+    """
+    content = row.get("conteudo") if isinstance(row.get("conteudo"), dict) else {}
+    if content.get("disponivelNaLoja") is False:
+        return True
+    return (
+        normalize_catalog_filter(row.get("tipo", "")) == "monstro"
+        and normalize_catalog_filter(content.get("categoria", "")) == "universal"
+    )
+
+
 def _is_hidden_catalog_item(
     row: dict[str, Any],
     hidden_rarities: set[str],
@@ -169,9 +213,80 @@ def _is_hidden_catalog_item(
     content = row.get("conteudo") if isinstance(row.get("conteudo"), dict) else {}
     rarity = normalize_catalog_filter(content.get("raridade", ""))
     return (
-        normalize_catalog_filter(row.get("id", "")) in hidden_items
+        _is_off_shop_catalog_item(row)
+        or normalize_catalog_filter(row.get("id", "")) in hidden_items
         or bool(rarity and rarity in hidden_rarities)
     )
+
+
+def _resolved_catalog_rows(
+    connection,
+    campaign_id: UUID,
+    item_ids: list[str] | None = None,
+    *,
+    lock: bool = False,
+) -> list[dict[str, Any]]:
+    """Sobrepõe publicações da campanha ao catálogo oficial.
+
+    Uma publicação com ``ativo=false`` é uma lápide: remove até um item oficial
+    daquela campanha sem alterar o catálogo compartilhado pelas outras mesas.
+    Rascunhos nunca entram nesta resolução e, portanto, não afetam compras.
+    """
+    lock_clause = " FOR SHARE" if lock else ""
+    if item_ids is None:
+        official_rows = connection.execute(
+            """
+            SELECT id, tipo, titulo, conteudo
+            FROM catalogo_itens
+            WHERE ativo=TRUE
+            """ + lock_clause
+        ).fetchall()
+        override_rows = connection.execute(
+            """
+            SELECT item_id, publicado
+            FROM catalogo_itens_campanha
+            WHERE campanha_id=%s AND publicado IS NOT NULL
+            """ + lock_clause,
+            (campaign_id,),
+        ).fetchall()
+    else:
+        official_rows = connection.execute(
+            """
+            SELECT id, tipo, titulo, conteudo
+            FROM catalogo_itens
+            WHERE ativo=TRUE AND id = ANY(%s)
+            """ + lock_clause,
+            (item_ids,),
+        ).fetchall()
+        override_rows = connection.execute(
+            """
+            SELECT item_id, publicado
+            FROM catalogo_itens_campanha
+            WHERE campanha_id=%s AND item_id = ANY(%s) AND publicado IS NOT NULL
+            """ + lock_clause,
+            (campaign_id, item_ids),
+        ).fetchall()
+
+    resolved = {row["id"]: dict(row) for row in official_rows}
+    for row in override_rows:
+        published = row["publicado"] if isinstance(row["publicado"], dict) else {}
+        item_id = str(row["item_id"])
+        if published.get("ativo") is False:
+            resolved.pop(item_id, None)
+            continue
+        content = published.get("conteudo")
+        if not all((published.get("tipo"), published.get("titulo"), isinstance(content, dict))):
+            # Defesa adicional para dados legados/corrompidos: nunca deixa uma
+            # publicação inválida alcançar a economia.
+            resolved.pop(item_id, None)
+            continue
+        resolved[item_id] = {
+            "id": item_id,
+            "tipo": published["tipo"],
+            "titulo": published["titulo"],
+            "conteudo": content,
+        }
+    return sorted(resolved.values(), key=lambda row: (row["tipo"], row["titulo"], row["id"]))
 
 
 def _visible_catalog_rows(
@@ -181,26 +296,7 @@ def _visible_catalog_rows(
     *,
     lock: bool = False,
 ) -> list[dict[str, Any]]:
-    lock_clause = " FOR SHARE OF c" if lock else ""
-    if item_ids is None:
-        rows = connection.execute(
-            """
-            SELECT c.id, c.tipo, c.titulo, c.conteudo
-            FROM catalogo_itens c
-            WHERE c.ativo=TRUE
-            ORDER BY c.tipo, c.titulo, c.id
-            """ + lock_clause
-        ).fetchall()
-    else:
-        rows = connection.execute(
-            """
-            SELECT c.id, c.tipo, c.titulo, c.conteudo
-            FROM catalogo_itens c
-            WHERE c.ativo=TRUE AND c.id = ANY(%s)
-            ORDER BY c.id
-            """ + lock_clause,
-            (item_ids,),
-        ).fetchall()
+    rows = _resolved_catalog_rows(connection, campaign_id, item_ids, lock=lock)
     hidden_rarities, hidden_items, _hidden_locations = _shop_config(connection, campaign_id, lock=lock)
     return [
         dict(row)
@@ -209,17 +305,14 @@ def _visible_catalog_rows(
     ]
 
 
-def _active_catalog_rows(connection, item_ids: list[str], *, lock: bool = False) -> list[dict[str, Any]]:
-    rows = connection.execute(
-        """
-        SELECT id, tipo, titulo, conteudo
-        FROM catalogo_itens
-        WHERE ativo=TRUE AND id = ANY(%s)
-        ORDER BY id
-        """ + (" FOR SHARE" if lock else ""),
-        (item_ids,),
-    ).fetchall()
-    return [dict(row) for row in rows]
+def _active_catalog_rows(
+    connection,
+    campaign_id: UUID,
+    item_ids: list[str],
+    *,
+    lock: bool = False,
+) -> list[dict[str, Any]]:
+    return _resolved_catalog_rows(connection, campaign_id, item_ids, lock=lock)
 
 
 def _owned_character(connection, campaign_id: UUID, character_id: UUID, user_id: UUID, *, lock: bool):
@@ -236,6 +329,27 @@ def _owned_character(connection, campaign_id: UUID, character_id: UUID, user_id:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail="escolha um personagem ativo seu desta campanha",
+        )
+    return row
+
+
+def _any_active_character(connection, campaign_id: UUID, character_id: UUID, *, lock: bool):
+    """Igual a `_owned_character`, mas sem exigir que o personagem seja do
+    chamador — usada quando quem chama já provou ser mestre/assistente da
+    campanha (`require_campaign_manager`), então pode mirar em qualquer ficha."""
+    suffix = " FOR UPDATE" if lock else ""
+    row = connection.execute(
+        """
+        SELECT id, nome, economia_versao, versao, ficha
+        FROM personagens
+        WHERE id=%s AND campanha_id=%s AND status='ativo'
+        """ + suffix,
+        (character_id, campaign_id),
+    ).fetchone()
+    if not row:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="escolha um personagem ativo desta campanha",
         )
     return row
 
@@ -409,12 +523,18 @@ def _mercenary_ally_from_catalog_item(item: dict[str, Any]) -> dict[str, Any]:
         return int(valor) if isinstance(valor, (int, float)) and not isinstance(valor, bool) else padrao
 
     vida_maxima = max(1, _inteiro(content.get("pv"), 10))
+    funcao = str(content.get("funcao") or "").strip()
+    # Quem foi contratado para tomar conta de um lugar ou tocar um oficio fica
+    # lotado na base: entra na ficha fora de cena, e o jogador coloca em cena na
+    # hora que levar junto. Escolta, tripulacao e criatura de combate ja nascem
+    # em cena porque andam com o grupo.
+    de_posto_fixo = funcao in {"Guarda de local", "Ofício"}
     return {
         "id": str(uuid4()),
         "nome": item["titulo"],
         "categoria": "comum",
         "especieTipo": content.get("categoria") or "Mercenário",
-        "papel": content.get("classe") or "Mercenário",
+        "papel": funcao or content.get("classe") or "Mercenário",
         "nivel": _inteiro(content.get("nivel"), 1),
         "vidaAtual": vida_maxima,
         "vidaMaxima": vida_maxima,
@@ -424,7 +544,7 @@ def _mercenary_ally_from_catalog_item(item: dict[str, Any]) -> dict[str, Any]:
         "ataquePrincipal": ataque_principal,
         "condicoes": "",
         "observacoes": content.get("descricao") or "",
-        "emCena": True,
+        "emCena": not de_posto_fixo,
         "favorito": False,
         "mercenarioCatalogoId": item["id"],
     }
@@ -468,6 +588,367 @@ def _property_from_catalog_item(item: dict[str, Any]) -> dict[str, Any]:
 
 def _build_properties(item: dict[str, Any], quantidade: int) -> list[dict[str, Any]]:
     return [_property_from_catalog_item(item) for _ in range(max(0, quantidade))]
+
+
+def _validate_catalog_editor_item(payload: ShopCatalogDraftInput) -> dict[str, Any]:
+    content = dict(payload.conteudo)
+    price = resolve_catalog_price(content)
+    if price is None or normalize_currency(price.moeda) not in _SHOP_CURRENCIES:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="informe um preço inteiro positivo em uma moeda aceita pela loja",
+        )
+    rarity = content.get("raridade")
+    if rarity is not None and normalize_catalog_filter(rarity) not in _SHOP_RARITIES:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=f"raridade desconhecida: {rarity}",
+        )
+    shop_level = content.get("nivelMinimoLoja")
+    if shop_level is not None and (
+        isinstance(shop_level, bool) or not isinstance(shop_level, int) or not 1 <= shop_level <= 4
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="nivelMinimoLoja precisa ser um inteiro entre 1 e 4",
+        )
+    if payload.tipo == "modificacao":
+        application = normalize_catalog_filter(content.get("aplicacao", ""))
+        if application not in _MODIFICATION_APPLICATIONS:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="a aplicação da modificação é inválida",
+            )
+    return {
+        "id": payload.item_id,
+        "tipo": payload.tipo,
+        "titulo": payload.titulo,
+        "conteudo": content,
+        "ativo": payload.ativo,
+    }
+
+
+def _require_shop_editor(connection, campaign_id: UUID, user_id: UUID):
+    access = campaign_access(connection, campaign_id, user_id)
+    if not access.is_master:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="somente o mestre pode editar o catálogo da campanha",
+        )
+    return access
+
+
+@router.get("/editor/catalogo")
+def list_campaign_catalog_editor(
+    campanha_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    with database.connection() as connection:
+        _require_shop_editor(connection, campanha_id, user.id)
+        official = connection.execute(
+            """
+            SELECT id, tipo, titulo, conteudo
+            FROM catalogo_itens
+            WHERE ativo=TRUE
+            ORDER BY tipo, titulo, id
+            """
+        ).fetchall()
+        overrides = connection.execute(
+            """
+            SELECT id, item_id, rascunho, publicado, versao,
+                   atualizado_em, publicado_em
+            FROM catalogo_itens_campanha
+            WHERE campanha_id=%s
+            ORDER BY atualizado_em DESC
+            """,
+            (campanha_id,),
+        ).fetchall()
+
+    official_by_id = {
+        row["id"]: {
+            "id": row["id"], "tipo": row["tipo"], "titulo": row["titulo"],
+            "conteudo": row["conteudo"], "ativo": True,
+        }
+        for row in official
+    }
+    override_by_id = {row["item_id"]: dict(row) for row in overrides}
+    entries = []
+    for item_id in sorted(
+        set(official_by_id) | set(override_by_id),
+        key=lambda key: (
+            str((override_by_id.get(key, {}).get("rascunho") or official_by_id.get(key, {})).get("tipo", "")),
+            str((override_by_id.get(key, {}).get("rascunho") or official_by_id.get(key, {})).get("titulo", "")),
+            key,
+        ),
+    ):
+        editorial = override_by_id.get(item_id)
+        entries.append({
+            "item_id": item_id,
+            "origem": "oficial" if item_id in official_by_id else "campanha",
+            "base": official_by_id.get(item_id),
+            "editorial": editorial,
+        })
+    return {"itens": entries}
+
+
+@router.put("/editor/rascunho")
+def save_campaign_catalog_draft(
+    payload: ShopCatalogDraftInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    document = _validate_catalog_editor_item(payload)
+    with database.connection() as connection:
+        _require_shop_editor(connection, payload.campanha_id, user.id)
+        current = connection.execute(
+            """
+            SELECT id, versao
+            FROM catalogo_itens_campanha
+            WHERE campanha_id=%s AND item_id=%s
+            FOR UPDATE
+            """,
+            (payload.campanha_id, payload.item_id),
+        ).fetchone()
+        if current:
+            if current["versao"] != payload.versao_esperada:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail={
+                        "mensagem": "o item foi alterado em outro lugar; recarregue antes de salvar",
+                        "versao_atual": current["versao"],
+                    },
+                )
+            row = connection.execute(
+                """
+                UPDATE catalogo_itens_campanha
+                SET rascunho=%s, atualizado_por=%s, versao=versao+1,
+                    atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s AND versao=%s
+                RETURNING id, item_id, rascunho, publicado, versao,
+                          atualizado_em, publicado_em
+                """,
+                (Jsonb(document), user.id, current["id"], payload.versao_esperada),
+            ).fetchone()
+        else:
+            if payload.versao_esperada is not None:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail={"mensagem": "o item ainda não possui versão editorial"},
+                )
+            total = connection.execute(
+                "SELECT count(*) AS total FROM catalogo_itens_campanha WHERE campanha_id=%s",
+                (payload.campanha_id,),
+            ).fetchone()["total"]
+            if total >= 500:
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    detail="a campanha atingiu o limite de 500 itens editados",
+                )
+            row = connection.execute(
+                """
+                INSERT INTO catalogo_itens_campanha
+                    (id, campanha_id, item_id, rascunho, versao,
+                     criado_por, atualizado_por)
+                VALUES (%s, %s, %s, %s, 1, %s, %s)
+                ON CONFLICT (campanha_id, item_id) DO NOTHING
+                RETURNING id, item_id, rascunho, publicado, versao,
+                          atualizado_em, publicado_em
+                """,
+                (uuid4(), payload.campanha_id, payload.item_id, Jsonb(document), user.id, user.id),
+            ).fetchone()
+            if not row:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail={"mensagem": "o item foi criado em outro lugar; recarregue antes de salvar"},
+                )
+        record_audit(
+            connection,
+            action="loja.catalogo_rascunho_salvo",
+            actor_user_id=user.id,
+            campaign_id=payload.campanha_id,
+            target_type="catalogo_item",
+            target_id=payload.item_id,
+            details={"versao": row["versao"], "ativo": payload.ativo},
+        )
+    return {"editorial": dict(row)}
+
+
+@router.post("/editor/{editorial_id}/publicar")
+def publish_campaign_catalog_item(
+    editorial_id: UUID,
+    payload: ShopCatalogPublishInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    with database.connection() as connection:
+        _require_shop_editor(connection, payload.campanha_id, user.id)
+        current = connection.execute(
+            """
+            SELECT id, item_id, rascunho, versao
+            FROM catalogo_itens_campanha
+            WHERE id=%s AND campanha_id=%s
+            FOR UPDATE
+            """,
+            (editorial_id, payload.campanha_id),
+        ).fetchone()
+        if not current:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="item editorial não encontrado")
+        if current["versao"] != payload.versao_esperada:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={
+                    "mensagem": "o rascunho mudou; recarregue antes de publicar",
+                    "versao_atual": current["versao"],
+                },
+            )
+        draft = current["rascunho"]
+        if not isinstance(draft, dict):
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="não existe rascunho válido para publicar",
+            )
+        new_version = int(current["versao"]) + 1
+        row = connection.execute(
+            """
+            UPDATE catalogo_itens_campanha
+            SET publicado=rascunho, versao=%s, atualizado_por=%s,
+                atualizado_em=CURRENT_TIMESTAMP, publicado_em=CURRENT_TIMESTAMP
+            WHERE id=%s AND versao=%s
+            RETURNING id, item_id, rascunho, publicado, versao,
+                      atualizado_em, publicado_em
+            """,
+            (new_version, user.id, editorial_id, payload.versao_esperada),
+        ).fetchone()
+        connection.execute(
+            """
+            INSERT INTO revisoes_catalogo_campanha
+                (id, catalogo_item_campanha_id, campanha_id, item_id,
+                 versao, dados, criado_por)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """,
+            (
+                uuid4(), editorial_id, payload.campanha_id, current["item_id"],
+                new_version, Jsonb(draft), user.id,
+            ),
+        )
+        record_audit(
+            connection,
+            action="loja.catalogo_item_publicado",
+            actor_user_id=user.id,
+            campaign_id=payload.campanha_id,
+            target_type="catalogo_item",
+            target_id=current["item_id"],
+            details={"versao": new_version, "ativo": draft.get("ativo", True)},
+        )
+    return {"editorial": dict(row)}
+
+
+@router.get("/editor/{editorial_id}/revisoes")
+def list_campaign_catalog_revisions(
+    editorial_id: UUID,
+    campanha_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    with database.connection() as connection:
+        _require_shop_editor(connection, campanha_id, user.id)
+        belongs = connection.execute(
+            "SELECT 1 FROM catalogo_itens_campanha WHERE id=%s AND campanha_id=%s",
+            (editorial_id, campanha_id),
+        ).fetchone()
+        if not belongs:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="item editorial não encontrado")
+        rows = connection.execute(
+            """
+            SELECT id, versao, dados, criado_por, criado_em
+            FROM revisoes_catalogo_campanha
+            WHERE catalogo_item_campanha_id=%s AND campanha_id=%s
+            ORDER BY versao DESC
+            LIMIT 50
+            """,
+            (editorial_id, campanha_id),
+        ).fetchall()
+    return {"revisoes": [dict(row) for row in rows]}
+
+
+@router.post("/editor/{editorial_id}/revisoes/{revision_id}/restaurar")
+def restore_campaign_catalog_revision(
+    editorial_id: UUID,
+    revision_id: UUID,
+    payload: ShopCatalogPublishInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Restaura uma publicação anterior como rascunho, sem publicá-la."""
+    with database.connection() as connection:
+        _require_shop_editor(connection, payload.campanha_id, user.id)
+        current = connection.execute(
+            """
+            SELECT id, item_id, versao
+            FROM catalogo_itens_campanha
+            WHERE id=%s AND campanha_id=%s
+            FOR UPDATE
+            """,
+            (editorial_id, payload.campanha_id),
+        ).fetchone()
+        if not current:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="item editorial não encontrado")
+        if current["versao"] != payload.versao_esperada:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={
+                    "mensagem": "o item mudou; recarregue antes de restaurar",
+                    "versao_atual": current["versao"],
+                },
+            )
+        revision = connection.execute(
+            """
+            SELECT id, dados
+            FROM revisoes_catalogo_campanha
+            WHERE id=%s AND catalogo_item_campanha_id=%s AND campanha_id=%s
+            """,
+            (revision_id, editorial_id, payload.campanha_id),
+        ).fetchone()
+        document = revision["dados"] if revision else None
+        if not isinstance(document, dict):
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="revisão não encontrada")
+        try:
+            validated = _validate_catalog_editor_item(ShopCatalogDraftInput(
+                campanha_id=payload.campanha_id,
+                item_id=current["item_id"],
+                tipo=document.get("tipo"),
+                titulo=document.get("titulo"),
+                conteudo=document.get("conteudo"),
+                ativo=document.get("ativo", True),
+                versao_esperada=current["versao"],
+            ))
+        except (TypeError, ValueError) as exc:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="a revisão armazenada não possui mais um formato válido",
+            ) from exc
+        row = connection.execute(
+            """
+            UPDATE catalogo_itens_campanha
+            SET rascunho=%s, atualizado_por=%s, versao=versao+1,
+                atualizado_em=CURRENT_TIMESTAMP
+            WHERE id=%s AND versao=%s
+            RETURNING id, item_id, rascunho, publicado, versao,
+                      atualizado_em, publicado_em
+            """,
+            (Jsonb(validated), user.id, editorial_id, payload.versao_esperada),
+        ).fetchone()
+        record_audit(
+            connection,
+            action="loja.catalogo_revisao_restaurada",
+            actor_user_id=user.id,
+            campaign_id=payload.campanha_id,
+            target_type="catalogo_item",
+            target_id=current["item_id"],
+            details={"revisao_id": str(revision_id), "versao": row["versao"]},
+        )
+    return {"editorial": dict(row)}
 
 
 @router.get("/catalogo")
@@ -933,15 +1414,18 @@ def purchase_batch(
                 "aliados": [*aliados_atuais, *new_allies],
                 "propriedades": [*propriedades_atuais, *new_properties],
             }
-            version = connection.execute(
+            versions = connection.execute(
                 """
                 UPDATE personagens
-                SET economia_versao=economia_versao+1, atualizado_em=CURRENT_TIMESTAMP, ficha=%s
+                SET economia_versao=economia_versao+1, versao=versao+1,
+                    atualizado_em=CURRENT_TIMESTAMP, ficha=%s
                 WHERE id=%s
-                RETURNING economia_versao
+                RETURNING economia_versao, versao
                 """,
                 (Jsonb(ficha_atualizada), payload.personagem_id),
-            ).fetchone()["economia_versao"]
+            ).fetchone()
+            version = versions["economia_versao"]
+            sheet_version = versions["versao"]
         else:
             version = connection.execute(
                 """
@@ -1027,6 +1511,210 @@ def purchase_batch(
                 )
 
         complete_economy_command(connection, command.id, result)
+    if new_allies or new_properties:
+        live_session.publicar(
+            payload.campanha_id,
+            "personagem_atualizado",
+            int(sheet_version),
+            {"personagem_id": str(payload.personagem_id)},
+        )
+    return result
+
+
+@router.post("/concessoes", status_code=status.HTTP_201_CREATED)
+def grant_batch(
+    payload: ShopGrantCommandInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Mestre entrega item do catálogo — item comum, criatura, propriedade —
+    direto na ficha de qualquer personagem da campanha. Não cobra moeda, não
+    olha nível de loja nem `requer_autorizacao_mestre`: quem está chamando
+    isto já É a autorização. Espelha o corpo de `purchase_batch`, mas sem a
+    metade da função dedicada a carteira, promoção e instalação de
+    modificação em item/veículo, que não fazem sentido numa concessão."""
+
+    with database.connection() as connection:
+        require_campaign_manager(connection, payload.campanha_id, user.id)
+        fingerprint = command_fingerprint(payload)
+        replay = get_economy_command_replay(
+            connection,
+            campaign_id=payload.campanha_id,
+            user_id=user.id,
+            command_type="loja.concessao",
+            idempotency_key=payload.idempotencia,
+            fingerprint=fingerprint,
+        )
+        if replay is not None:
+            return replay.replay_result
+        character = _any_active_character(
+            connection,
+            payload.campanha_id,
+            payload.personagem_id,
+            lock=True,
+        )
+        command = begin_economy_command(
+            connection,
+            campaign_id=payload.campanha_id,
+            user_id=user.id,
+            command_type="loja.concessao",
+            idempotency_key=payload.idempotencia,
+            fingerprint=fingerprint,
+        )
+        if command.replay_result is not None:
+            return command.replay_result
+
+        requested_ids = [line.item_id for line in payload.itens]
+        catalog = {
+            row["id"]: row
+            for row in _active_catalog_rows(
+                connection, payload.campanha_id, requested_ids, lock=True,
+            )
+        }
+        missing = next((item_id for item_id in requested_ids if item_id not in catalog), None)
+        if missing:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"o item {missing} nao existe no catalogo",
+            )
+
+        existing_inventory = _locked_inventory(connection, payload.campanha_id, payload.personagem_id, requested_ids)
+        for item_id, existing in existing_inventory.items():
+            data = existing["dados"] if isinstance(existing["dados"], dict) else {}
+            if data.get("origem") != "loja" or data.get("catalogo_item_id") != item_id:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail=f"o item_id {item_id} ja e usado por um item sem origem verificavel",
+                )
+
+        granted_items = []
+        new_allies: list[dict[str, Any]] = []
+        new_properties: list[dict[str, Any]] = []
+        for line in payload.itens:
+            item = catalog[line.item_id]
+            existing = existing_inventory.get(line.item_id, {})
+            existing_quantity = int(existing.get("quantidade", 0))
+            new_quantity = existing_quantity + line.quantidade
+            if new_quantity > 1_000_000:
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    detail=f"a quantidade de {item['titulo']} excede o limite do inventario",
+                )
+            existing_data = existing.get("dados") if isinstance(existing.get("dados"), dict) else {}
+            editable_state = _editable_instance_metadata(existing_data)
+            item_data = {
+                **editable_state,
+                **(item["conteudo"] or {}),
+                "tipo": item["tipo"],
+                "categoria": _inventory_category(item["tipo"]),
+                "origem": "loja",
+                "catalogo_item_id": item["id"],
+            }
+            connection.execute(
+                """
+                INSERT INTO inventario_personagem
+                    (campanha_id, personagem_id, item_id, titulo, quantidade, dados)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                ON CONFLICT (campanha_id, personagem_id, item_id) DO UPDATE SET
+                    titulo=EXCLUDED.titulo,
+                    quantidade=EXCLUDED.quantidade,
+                    dados=EXCLUDED.dados,
+                    atualizado_em=CURRENT_TIMESTAMP
+                """,
+                (
+                    payload.campanha_id,
+                    payload.personagem_id,
+                    item["id"],
+                    item["titulo"],
+                    new_quantity,
+                    Jsonb(item_data),
+                ),
+            )
+            if item["tipo"] == "monstro":
+                new_allies.extend(_build_mercenary_allies(item, line.quantidade))
+            elif item["tipo"] == "propriedade":
+                new_properties.extend(_build_properties(item, line.quantidade))
+
+            price = resolve_catalog_price(item["conteudo"])
+            granted_items.append({
+                "item_id": item["id"],
+                "titulo": item["titulo"],
+                "quantidade": line.quantidade,
+                "valor_referencia": {"moeda": price.moeda, "valor": price.valor} if price else None,
+            })
+
+        if new_allies or new_properties:
+            ficha_atual = character["ficha"] if isinstance(character["ficha"], dict) else {}
+            aliados_atuais = ficha_atual.get("aliados") if isinstance(ficha_atual.get("aliados"), list) else []
+            propriedades_atuais = ficha_atual.get("propriedades") if isinstance(ficha_atual.get("propriedades"), list) else []
+            ficha_atualizada = {
+                **ficha_atual,
+                "aliados": [*aliados_atuais, *new_allies],
+                "propriedades": [*propriedades_atuais, *new_properties],
+            }
+            versions = connection.execute(
+                """
+                UPDATE personagens
+                SET economia_versao=economia_versao+1, versao=versao+1,
+                    atualizado_em=CURRENT_TIMESTAMP, ficha=%s
+                WHERE id=%s
+                RETURNING economia_versao, versao
+                """,
+                (Jsonb(ficha_atualizada), payload.personagem_id),
+            ).fetchone()
+            version = versions["economia_versao"]
+            sheet_version = versions["versao"]
+        else:
+            version = connection.execute(
+                """
+                UPDATE personagens
+                SET economia_versao=economia_versao+1, atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s
+                RETURNING economia_versao
+                """,
+                (payload.personagem_id,),
+            ).fetchone()["economia_versao"]
+            sheet_version = None
+
+        result = {
+            "operacao_id": str(command.id),
+            "repetida": False,
+            "economia_versao": int(version),
+            "itens": granted_items,
+        }
+        record_audit(
+            connection,
+            action="loja.concessao",
+            actor_user_id=user.id,
+            campaign_id=payload.campanha_id,
+            target_type="personagem",
+            target_id=str(payload.personagem_id),
+            details={"operacao_id": str(command.id), "itens": granted_items},
+        )
+
+        titulo = f"O Mestre concedeu itens a {character['nome']}"
+        mensagem = f"**{character['nome']}** recebeu direto do Mestre:\n" + "\n".join(
+            f"- {item['quantidade']}x {item['titulo']}" for item in granted_items
+        )
+        notify(
+            connection,
+            user_ids=campaign_member_ids(connection, payload.campanha_id),
+            category="campanha",
+            title=titulo,
+            message=mensagem,
+            campaign_id=payload.campanha_id,
+            actor_user_id=user.id,
+            include_actor=True,
+        )
+
+        complete_economy_command(connection, command.id, result)
+    if sheet_version is not None:
+        live_session.publicar(
+            payload.campanha_id,
+            "personagem_atualizado",
+            int(sheet_version),
+            {"personagem_id": str(payload.personagem_id)},
+        )
     return result
 
 
@@ -1097,7 +1785,9 @@ def sell_batch(
 
         catalog = {
             row["id"]: row
-            for row in _active_catalog_rows(connection, requested_ids, lock=True)
+            for row in _active_catalog_rows(
+                connection, payload.campanha_id, requested_ids, lock=True,
+            )
         }
         missing_catalog = next((item_id for item_id in requested_ids if item_id not in catalog), None)
         if missing_catalog:

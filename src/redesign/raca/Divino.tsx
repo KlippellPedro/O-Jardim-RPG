@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
-import { Crown, Sparkles, Eye } from 'lucide-react';
+import { Crown, Sparkles, Eye, HandHeart, Landmark } from 'lucide-react';
 import type { IRaca } from '../../types/catalogo';
 
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
+import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
 interface DivinoProps {
@@ -67,7 +68,7 @@ export const Divino = ({ raca }: DivinoProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-yellow-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Sangue de deus correndo em corpo pequeno demais pra ele. Divindade plena está fora de alcance: o que sobra já é o suficiente pra ser temido, cultuado ou caçado, e nem sempre por quem dá valor às suas escolhas.
+            Carrega sangue de um deus, grande ou pequeno, cultuado ou esquecido faz séculos. Divindade inteira está fora de alcance, e o que sobrou já basta para ser adorado, temido ou caçado por gente que nunca perguntou a opinião dele.
           </motion.p>
         </motion.header>
 
@@ -85,7 +86,7 @@ export const Divino = ({ raca }: DivinoProps) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Sangue Divino</h3>
               <p className="text-yellow-200/60 leading-relaxed text-sm">
-                Receba +4 em Vontade e vantagem para resistir a efeitos que tentem controlar, subjugar ou apagar sua identidade.
+                Receba +4 em Vontade e vantagem para resistir a qualquer coisa que tente controlar, subjugar ou apagar quem você é.
               </p>
             </div>
           </PremiumCard>
@@ -102,13 +103,53 @@ export const Divino = ({ raca }: DivinoProps) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Presença que Pesa</h3>
               <p className="text-yellow-200/60 leading-relaxed text-sm">
-                Criaturas sensíveis ao sagrado ou ao profano sentem algo diferente em você mesmo disfarçado: desvantagem em Furtividade e Disfarce contra quem tiver devoção ou vínculo religioso ativo. Seguidores e inimigos da sua linhagem também tendem a te notar primeiro.
+                Criatura sensível ao sagrado ou ao profano sente que tem algo errado com você mesmo disfarçado: desvantagem em Furtividade e em Enganação para se disfarçar diante de quem tenha devoção ou vínculo religioso ativo. Seguidor e inimigo da sua linhagem costumam te notar antes do resto do grupo.
+              </p>
+            </div>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className={`flex gap-6 p-8 rounded-xl ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <HandHeart size={40} className={`${tema.icon} shrink-0`} strokeWidth={1.5} />
+            <div>
+              <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Bênção Concedida</h3>
+              <p className="text-yellow-200/60 leading-relaxed text-sm">
+                Uma vez por sessão, quando você ou um aliado a até 9 m falhar num teste, gaste uma reação e 4 Mana para transformar aquela falha comum em sucesso comum. Isso não transforma o impossível em possível e não funciona sobre falha crítica.
+              </p>
+            </div>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className={`flex gap-6 p-8 rounded-xl ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Landmark size={40} className={`${tema.icon} shrink-0`} strokeWidth={1.5} />
+            <div>
+              <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Nome que se Invoca</h3>
+              <p className="text-yellow-200/60 leading-relaxed text-sm">
+                Uma vez por sessão, num lugar onde exista culto, templo ou lembrança do seu deus, você consegue abrigo, uma informação ou um favor pequeno sem precisar de teste. Quem te reconhece costuma cobrar do jeito de sempre: devoção, pedido ou culpa.
               </p>
             </div>
           </PremiumCard>
         </div>
 
-        {/* Domínios Divinos */}
+        <EstagiosRaciais
+          raca={raca}
+          tema={tema}
+          titulo="Ascendência"
+          descricao="O sangue leva a campanha inteira para acordar por completo. Cada degrau da Ascendência entra por nível total, até o corpo aguentar vestir por três rodadas a forma que o deus teria."
+        />
+
         <EscolhaRacialCards raca={raca} tema={tema} />
       </div>
     </div>

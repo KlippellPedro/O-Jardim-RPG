@@ -1,7 +1,7 @@
 import { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { BookMarked, ChevronRight, Search, SlidersHorizontal, Sparkles, X } from 'lucide-react';
-import catalogoLoja from '../../../../data/loja/catalogo.json';
+import { RitualComponents } from '../../../components/materials/RitualComponents';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 import { useIsMobileViewport } from '../../../hooks/useMediaQuery';
 import {
@@ -16,47 +16,15 @@ import {
   circuloRotulo,
   simbolosDoRito,
   temaDoFluxo,
-  variantesDaMagia,
   type FluxoDeMagia,
-  type IIngredienteRitual,
+  type IEncantamentoCatalogo,
+  type IFluxoMagico,
+  type IMagiaCatalogo,
+  type IRitualCatalogo,
+  type ISeloCatalogo,
 } from '../../../services/magiaService';
-import { getCurrencySymbol, lerPrecoNativoLoja, rotuloRaridadeChave } from '../../../services/lojaCatalogService';
 
 type AbaCatalogo = 'magias' | 'rituais' | 'selos' | 'encantamentos' | 'fusoes';
-
-/** Só os itens tipo "drop" (categoria Componentes da loja) servem de ingrediente
- * de ritual - são o que existe hoje pra "partes de seres" e reagentes avulsos. */
-const COMPONENTES_POR_ID = new Map(
-  (catalogoLoja.entradas as Array<{ id: string; titulo: string; tipo: string; conteudo: Record<string, unknown> }>)
-    .filter((entrada) => entrada.tipo === 'drop')
-    .map((entrada) => [entrada.id, entrada]),
-);
-
-interface IngredienteResolvido {
-  id: string;
-  titulo: string;
-  quantidade: number;
-  precoTexto: string;
-  raridade: string;
-}
-
-/** Resolve os ids gravados no ritual contra o catálogo da loja, pra sempre
- * mostrar preço e raridade atuais em vez de duplicar esse dado no rito. */
-function resolverIngredientes(ingredientes?: IIngredienteRitual[]): IngredienteResolvido[] {
-  if (!ingredientes?.length) return [];
-  return ingredientes.flatMap((ingrediente) => {
-    const entrada = COMPONENTES_POR_ID.get(ingrediente.item_id);
-    if (!entrada) return [];
-    const preco = lerPrecoNativoLoja(entrada.conteudo.preco);
-    return [{
-      id: ingrediente.item_id,
-      titulo: entrada.titulo,
-      quantidade: ingrediente.quantidade,
-      precoTexto: preco ? `${preco.valorOriginal.toLocaleString('pt-BR')} ${getCurrencySymbol(preco.moedaPreco)}` : '?',
-      raridade: rotuloRaridadeChave(entrada.conteudo.raridade),
-    }];
-  });
-}
 
 interface CampoGrimorio {
   rotulo: string;
@@ -75,6 +43,7 @@ interface GrimorioItem {
   id: string;
   titulo: string;
   fluxoId: FluxoDeMagia;
+  fluxoTitulo?: string;
   categoria: string;
   chamada: string;
   /** O que a coisa é, antes dos números. As Fusões são a única aba sem ele. */
@@ -87,17 +56,34 @@ interface GrimorioItem {
   /** Só nos dois ritos dos Sete: o que cada Símbolo concedido por aquele rito
    * dá e cobra. Fica junto do ritual em vez de numa página de regras à parte. */
   simbolos?: LinhaSimbolo[];
-  /** Só nos rituais: materiais compráveis na Loja (Componentes) que o rito consome. */
-  ingredientes?: IngredienteResolvido[];
+  /** Só nos rituais: a complexidade define o estoque genérico exigido. */
+  complexidadeRitual?: string;
 }
 
 const CIRCULOS = Array.from({ length: 10 }, (_, indice) => indice + 1);
 
-const ITENS_POR_ABA: Record<AbaCatalogo, GrimorioItem[]> = {
-  magias: MAGIAS_CATALOGO.map((item) => ({
+interface CatalogoMagicoProps {
+  fluxos?: IFluxoMagico[];
+  magias?: IMagiaCatalogo[];
+  rituais?: IRitualCatalogo[];
+  selos?: ISeloCatalogo[];
+  encantamentos?: IEncantamentoCatalogo[];
+}
+
+const montarItensPorAba = ({
+  fluxos,
+  magias,
+  rituais,
+  selos,
+  encantamentos,
+}: Required<CatalogoMagicoProps>): Record<AbaCatalogo, GrimorioItem[]> => {
+  const fluxosPorId = new Map(fluxos.map((item) => [item.id, item]));
+  return {
+  magias: magias.map((item) => ({
     id: item.id,
     titulo: item.titulo,
     fluxoId: item.fluxo,
+    fluxoTitulo: item.fluxo === 'universal' ? 'Universal' : fluxosPorId.get(item.fluxo)?.titulo,
     categoria: circuloRotulo(item.circulo),
     chamada: `${item.papel} · ${item.custo_mana} Mana`,
     descricao: item.descricao,
@@ -114,18 +100,19 @@ const ITENS_POR_ABA: Record<AbaCatalogo, GrimorioItem[]> = {
       ...(item.dano ? [{ rotulo: 'Dano', valor: item.dano }] : []),
       // No livro de referência a universal mostra as onze manifestações; na
       // ficha aparece só a do Fluxo de quem conjura.
-      ...variantesDaMagia(item).map((variante) => ({
-        rotulo: `Canalizada por ${variante.fluxo.titulo}`,
-        valor: variante.efeito,
-      })),
+      ...fluxos.flatMap((fluxo) => {
+        const efeito = item.efeitos_por_fluxo?.[fluxo.id];
+        return efeito ? [{ rotulo: `Canalizada por ${fluxo.titulo}`, valor: efeito }] : [];
+      }),
     ],
     aviso: item.aviso_mestre,
     circulo: typeof item.circulo === 'number' ? item.circulo : undefined,
   })),
-  rituais: RITUAIS_CATALOGO.map((item) => ({
+  rituais: rituais.map((item) => ({
     id: item.id,
     titulo: item.titulo,
     fluxoId: item.fluxo,
+    fluxoTitulo: fluxosPorId.get(item.fluxo)?.titulo,
     categoria: 'Ritual',
     chamada: `${item.complexidade} · DT ${item.dt} · ${item.custo_mana} Mana`,
     descricao: item.descricao,
@@ -141,7 +128,7 @@ const ITENS_POR_ABA: Record<AbaCatalogo, GrimorioItem[]> = {
       { rotulo: 'Falha', valor: item.falha },
     ],
     aviso: item.aviso_mestre,
-    ingredientes: resolverIngredientes(item.ingredientes),
+    complexidadeRitual: item.complexidade,
     simbolos: simbolosDoRito(item.id).map((simbolo) => ({
       id: simbolo.id,
       titulo: simbolo.titulo,
@@ -152,10 +139,11 @@ const ITENS_POR_ABA: Record<AbaCatalogo, GrimorioItem[]> = {
       onus: simbolo.onus,
     })),
   })),
-  selos: SELOS_CATALOGO.map((item) => ({
+  selos: selos.map((item) => ({
     id: item.id,
     titulo: item.titulo,
     fluxoId: item.fluxo,
+    fluxoTitulo: fluxosPorId.get(item.fluxo)?.titulo,
     categoria: `Selo de Grau ${item.grau}`,
     chamada: `DT ${item.dt_inscricao} · ${item.custo_mana} Mana`,
     descricao: item.descricao,
@@ -169,10 +157,11 @@ const ITENS_POR_ABA: Record<AbaCatalogo, GrimorioItem[]> = {
     complemento: [{ rotulo: 'Ativação', valor: item.ativacao }],
     aviso: item.aviso_mestre,
   })),
-  encantamentos: ENCANTAMENTOS_CATALOGO.map((item) => ({
+  encantamentos: encantamentos.map((item) => ({
     id: item.id,
     titulo: item.titulo,
     fluxoId: item.fluxo,
+    fluxoTitulo: fluxosPorId.get(item.fluxo)?.titulo,
     categoria: `Encantamento de Grau ${item.grau}`,
     chamada: `DT ${item.dt} · ${item.custo_mana} Mana`,
     descricao: item.descricao,
@@ -189,14 +178,16 @@ const ITENS_POR_ABA: Record<AbaCatalogo, GrimorioItem[]> = {
     id: item.id,
     titulo: item.titulo,
     fluxoId: item.fluxo_secundario,
+    fluxoTitulo: fluxosPorId.get(item.fluxo_secundario)?.titulo,
     categoria: 'Assinatura de fusão',
-    chamada: `Fluxo secundário: ${FLUXOS_POR_ID.get(item.fluxo_secundario)?.titulo || item.fluxo_secundario}`,
+    chamada: `Fluxo secundário: ${fluxosPorId.get(item.fluxo_secundario)?.titulo || item.fluxo_secundario}`,
     efeito: item.efeito,
     campos: [
-      { rotulo: 'Fluxo secundário', valor: FLUXOS_POR_ID.get(item.fluxo_secundario)?.titulo || item.fluxo_secundario },
+      { rotulo: 'Fluxo secundário', valor: fluxosPorId.get(item.fluxo_secundario)?.titulo || item.fluxo_secundario },
       { rotulo: 'Limite', valor: 'Um Fluxo secundário por magia' },
     ],
   })),
+  };
 };
 
 const ABAS: Array<{ id: AbaCatalogo; titulo: string }> = [
@@ -211,9 +202,9 @@ const rotuloDoFluxo = (fluxoId: FluxoDeMagia): string => (fluxoId === 'universal
   ? 'Universal'
   : FLUXOS_POR_ID.get(fluxoId)?.titulo || fluxoId);
 
-const FluxoBadge = ({ fluxoId }: { fluxoId: FluxoDeMagia }) => {
+const FluxoBadge = ({ fluxoId, titulo }: { fluxoId: FluxoDeMagia; titulo?: string }) => {
   const tema = temaDoFluxo(fluxoId);
-  const rotulo = rotuloDoFluxo(fluxoId);
+  const rotulo = titulo || rotuloDoFluxo(fluxoId);
   return (
     <span
       className="inline-flex rounded-full border px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em]"
@@ -245,7 +236,7 @@ const GrimorioDetail = ({ item, compacto = false }: { item: GrimorioItem; compac
     >
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <span className="text-[9px] font-bold uppercase tracking-[0.2em]" style={{ color: tema.destaque }}>{item.categoria}</span>
-        <FluxoBadge fluxoId={item.fluxoId} />
+        <FluxoBadge fluxoId={item.fluxoId} titulo={item.fluxoTitulo} />
       </div>
       <h3 className="text-2xl font-bold leading-tight text-[#f2ead7] sm:text-3xl" style={{ fontFamily: 'Cinzel, serif' }}>{item.titulo}</h3>
       <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-gray-500">{item.chamada}</p>
@@ -279,28 +270,7 @@ const GrimorioDetail = ({ item, compacto = false }: { item: GrimorioItem; compac
         </section>
       ))}
 
-      {item.ingredientes?.length ? (
-        <section className="mt-6">
-          <h4 className="mb-3 text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: tema.destaque }}>
-            Ingredientes (Componentes da Loja)
-          </h4>
-          <ul className="space-y-1.5">
-            {item.ingredientes.map((ingrediente) => (
-              <li
-                key={ingrediente.id}
-                className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs"
-              >
-                <span className="text-gray-300">
-                  {ingrediente.titulo} <span className="text-gray-600">×{ingrediente.quantidade}</span>
-                </span>
-                <span className="whitespace-nowrap text-[10px] uppercase tracking-wide text-gray-500">
-                  {ingrediente.precoTexto} · {ingrediente.raridade}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
+      {item.complexidadeRitual ? <RitualComponents complexidade={item.complexidadeRitual} /> : null}
 
       {item.simbolos?.length ? (
         <section className="mt-6">
@@ -372,7 +342,7 @@ const GrimorioListItem = memo(({ active, item, onSelect }: GrimorioListItemProps
     <span className="min-w-0 flex-1">
       <strong className={`block truncate text-sm ${active ? '' : 'text-gray-300 group-hover:text-white'}`} style={{ color: active ? tema.texto : undefined }}>{item.titulo}</strong>
       <small className="mt-1 block truncate text-[10px] uppercase tracking-wider text-gray-600">
-        {rotuloDoFluxo(item.fluxoId)} · {item.categoria}
+        {item.fluxoTitulo || rotuloDoFluxo(item.fluxoId)} · {item.categoria}
       </small>
     </span>
     <ChevronRight size={15} className={active ? '' : 'text-gray-700 group-hover:text-gray-400'} style={{ color: active ? tema.destaque : undefined }} />
@@ -380,7 +350,13 @@ const GrimorioListItem = memo(({ active, item, onSelect }: GrimorioListItemProps
   );
 });
 
-export const CatalogoMagico = () => {
+export const CatalogoMagico = ({
+  fluxos = FLUXOS_CATALOGO,
+  magias = MAGIAS_CATALOGO,
+  rituais = RITUAIS_CATALOGO,
+  selos = SELOS_CATALOGO,
+  encantamentos = ENCANTAMENTOS_CATALOGO,
+}: CatalogoMagicoProps) => {
   const mobileDialogRef = useRef<HTMLDivElement>(null);
   const mobileCloseRef = useRef<HTMLButtonElement>(null);
   const [aba, setAba] = useState<AbaCatalogo>('magias');
@@ -397,7 +373,8 @@ export const CatalogoMagico = () => {
     onClose: () => setDetalheMovelAberto(false),
   });
   const buscaAdiada = useDeferredValue(busca.trim().toLocaleLowerCase('pt-BR'));
-  const itensAba = ITENS_POR_ABA[aba];
+  const itensPorAba = useMemo(() => montarItensPorAba({ fluxos, magias, rituais, selos, encantamentos }), [encantamentos, fluxos, magias, rituais, selos]);
+  const itensAba = itensPorAba[aba];
 
   const itensVisiveis = useMemo(() => itensAba.filter((item) => {
     if (fluxo !== 'todos' && item.fluxoId !== fluxo && item.fluxoId !== 'universal') return false;
@@ -449,6 +426,22 @@ export const CatalogoMagico = () => {
         </p>
       </header>
 
+      <details className="mb-8 overflow-hidden rounded-2xl border border-white/10 bg-black/20">
+        <summary className="cursor-pointer px-5 py-4 text-sm font-bold text-[#e1c77e]">Consultar os {fluxos.length} Fluxos e seus limites</summary>
+        <div className="grid gap-3 border-t border-white/10 p-4 md:grid-cols-2 xl:grid-cols-3">
+          {fluxos.map((item) => {
+            const tema = temaDoFluxo(item.id);
+            return <article key={item.id} className="rounded-xl border bg-black/25 p-4" style={{ borderColor: tema.borda }}>
+              <h3 className="font-bold" style={{ color: tema.texto }}>{item.titulo}</h3>
+              <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-gray-600">{item.arvore} · {item.deidade}</p>
+              <p className="mt-3 text-sm leading-6 text-gray-400">{item.essencia}</p>
+              {item.possibilidades.length ? <div className="mt-3"><strong className="text-[9px] uppercase tracking-wider text-gray-500">Possibilidades</strong><ul className="mt-1 list-disc space-y-1 pl-5 text-xs leading-5 text-gray-500">{item.possibilidades.map((texto) => <li key={texto}>{texto}</li>)}</ul></div> : null}
+              {item.limites.length ? <div className="mt-3"><strong className="text-[9px] uppercase tracking-wider text-gray-500">Limites</strong><ul className="mt-1 list-disc space-y-1 pl-5 text-xs leading-5 text-gray-500">{item.limites.map((texto) => <li key={texto}>{texto}</li>)}</ul></div> : null}
+            </article>;
+          })}
+        </div>
+      </details>
+
       <div className="sticky top-0 z-30 -mx-2 mb-5 border-y border-white/10 bg-[#111017]/95 px-2 py-3 shadow-xl backdrop-blur-xl">
         <div className="custom-scrollbar flex gap-1 overflow-x-auto pb-1" role="tablist" aria-label="Formas de manifestação mágica">
           {ABAS.map((item) => (
@@ -462,7 +455,7 @@ export const CatalogoMagico = () => {
                 ? 'bg-[#c7a44c]/20 text-[#e4ca83]'
                 : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'}`}
             >
-              {item.titulo} <span className="ml-1 opacity-50">{ITENS_POR_ABA[item.id].length}</span>
+              {item.titulo} <span className="ml-1 opacity-50">{itensPorAba[item.id].length}</span>
             </button>
           ))}
         </div>
@@ -487,7 +480,7 @@ export const CatalogoMagico = () => {
               className="w-full appearance-none rounded-lg border border-white/10 bg-[#0c0b10] py-2.5 pl-9 pr-8 text-sm text-gray-300 outline-none focus:border-[#c7a44c]/40"
             >
               <option value="todos">Todos os Fluxos</option>
-              {FLUXOS_CATALOGO.map((item) => <option key={item.id} value={item.id}>{item.titulo}</option>)}
+              {fluxos.map((item) => <option key={item.id} value={item.id}>{item.titulo}</option>)}
               <option value="universal">Universal</option>
             </select>
           </label>

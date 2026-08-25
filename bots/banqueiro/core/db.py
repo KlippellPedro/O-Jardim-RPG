@@ -459,6 +459,21 @@ _SCHEMA = (
         criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
     """,
+    # Sete itens do catálogo tinham id com underline (`plano_de_saude_vip`) em
+    # vez do slug com hífen que o resto do catálogo usa, e o teste de schema
+    # da loja pegava isso. O id é chave de `inventario`, e o Banqueiro procura
+    # três deles por nome fixo (planos de saúde no hospital, contrato de
+    # guarda-costas em /contratar_guarda): sem renomear aqui, quem comprou
+    # antes ficaria com um item que o bot não encontra mais. Roda uma vez e
+    # depois vira no-op, porque o id antigo deixa de existir.
+    """
+    UPDATE inventario SET item_id = replace(item_id, '_', '-')
+    WHERE item_id IN (
+        'mn_relogio_de_bolso_corrompido', 'mn_adaga_das_sombras',
+        'mn_pocao_do_esquecimento', 'mn_mascara_sem_rosto',
+        'plano_de_saude_basico', 'plano_de_saude_vip', 'contrato_guarda_costas'
+    )
+    """,
 )
 
 
@@ -597,11 +612,11 @@ class Database:
             self._garantir_jogador(con, guild_id, user_id)
             
             # Verifica se tem plano de saude
-            tem_vip = con.execute("SELECT 1 FROM inventario WHERE guild_id=%s AND user_id=%s AND item_id='plano_de_saude_vip'", (guild_id, user_id)).fetchone()
+            tem_vip = con.execute("SELECT 1 FROM inventario WHERE guild_id=%s AND user_id=%s AND item_id='plano-de-saude-vip'", (guild_id, user_id)).fetchone()
             if tem_vip:
                 custo_hospital = 50
             else:
-                tem_basico = con.execute("SELECT 1 FROM inventario WHERE guild_id=%s AND user_id=%s AND item_id='plano_de_saude_basico'", (guild_id, user_id)).fetchone()
+                tem_basico = con.execute("SELECT 1 FROM inventario WHERE guild_id=%s AND user_id=%s AND item_id='plano-de-saude-basico'", (guild_id, user_id)).fetchone()
                 if tem_basico:
                     custo_hospital = 100
                     

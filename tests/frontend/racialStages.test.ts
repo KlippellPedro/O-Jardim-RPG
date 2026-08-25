@@ -40,6 +40,10 @@ const ESCADAS: Array<[string, [number, number, number], string]> = [
   ['vampiro', [1, 11, 21], 'varianteId'],
   ['auleth', [1, 12, 22], 'varianteId'],
   ['elfo', [1, 13, 25], 'linhagemId'],
+  ['simbionte', [1, 7, 15], 'varianteId'],
+  ['mimico', [1, 8, 17], 'varianteId'],
+  ['onirico', [1, 10, 20], 'varianteId'],
+  ['divino', [1, 12, 24], 'varianteId'],
 ];
 
 test('cada raça com escada publica os degraus esperados, em ordem', () => {
@@ -153,6 +157,34 @@ test('Vida e Mana crescem nos limiares, e só neles', () => {
     recursos('elfo', 12, { linhagemId: 'gelo' }).mana + 2);
   assert.equal(recursos('elfo', 25, { linhagemId: 'gelo' }).mana,
     recursos('elfo', 24, { linhagemId: 'gelo' }).mana + 3);
+
+  // Simbionte: +2 Vida e +1 Mana no 7; +3 Vida e +2 Mana no 15.
+  assert.equal(recursos('simbionte', 7, { varianteId: 'colonia' }).vida,
+    recursos('simbionte', 6, { varianteId: 'colonia' }).vida + 2);
+  assert.equal(recursos('simbionte', 15, { varianteId: 'colonia' }).mana,
+    recursos('simbionte', 14, { varianteId: 'colonia' }).mana + 2);
+
+  // Mímico: +2 Mana no 8; no 17 somam +2 Vida e +3 Mana de uma vez.
+  assert.equal(recursos('mimico', 8, { varianteId: 'carne' }).mana,
+    recursos('mimico', 7, { varianteId: 'carne' }).mana + 2);
+  assert.equal(recursos('mimico', 17, { varianteId: 'carne' }).vida,
+    recursos('mimico', 16, { varianteId: 'carne' }).vida + 2);
+  assert.equal(recursos('mimico', 17, { varianteId: 'carne' }).mana,
+    recursos('mimico', 16, { varianteId: 'carne' }).mana + 3);
+
+  // Onírico: +1 Vida e +2 Mana no 10; +1 Vida e +3 Mana no 20.
+  assert.equal(recursos('onirico', 10, { varianteId: 'pesadelo' }).mana,
+    recursos('onirico', 9, { varianteId: 'pesadelo' }).mana + 2);
+  assert.equal(recursos('onirico', 20, { varianteId: 'pesadelo' }).mana,
+    recursos('onirico', 19, { varianteId: 'pesadelo' }).mana + 3);
+
+  // Divino: +1 Vida e +2 Mana no 12; +2 Vida e +3 Mana no 24.
+  assert.equal(recursos('divino', 12, { varianteId: 'guerra' }).vida,
+    recursos('divino', 11, { varianteId: 'guerra' }).vida + 1);
+  assert.equal(recursos('divino', 24, { varianteId: 'guerra' }).vida,
+    recursos('divino', 23, { varianteId: 'guerra' }).vida + 2);
+  assert.equal(recursos('divino', 24, { varianteId: 'guerra' }).mana,
+    recursos('divino', 23, { varianteId: 'guerra' }).mana + 3);
 });
 
 test('Movimento declarado em traço racial entra no Movimento derivado', () => {
@@ -252,4 +284,52 @@ test('os traços disponíveis respeitam o nível exigido, e só os da escolha fe
   assert.ok(cometa(22).includes('Impacto'));
   assert.ok(cometa(22).includes('Presença Alheia'));
   assert.ok(!cometa(22).includes('Corpo Radiante'), 'Origem escolhida não vaza para as outras');
+
+  // Mímico Molde do Objeto: o baú clássico só arma o bote no segundo degrau.
+  const objeto = (nivel: number) => titulos('mimico', { varianteId: 'objeto' }, nivel);
+  assert.ok(objeto(1).includes('Forma Emprestada'), 'o traço-base do Mímico continua valendo');
+  assert.ok(objeto(1).includes('Coisa Parada'));
+  assert.ok(!objeto(7).includes('Bote do Baú'));
+  assert.ok(objeto(8).includes('Bote do Baú'));
+  assert.ok(objeto(8).includes('Formas Guardadas'), 'o degrau Muitos Rostos entra junto');
+  assert.ok(!objeto(16).includes('Peso de Mentira'));
+  assert.ok(objeto(17).includes('Peso de Mentira'));
+  assert.ok(objeto(17).includes('Cara de Ninguém'));
+  assert.ok(!objeto(17).includes('Rosto Estudado'), 'Molde escolhido não vaza para os outros');
+
+  // Simbionte Enxame: a parceria só se ajusta com o tempo de convivência.
+  const enxame = (nivel: number) => titulos('simbionte', { varianteId: 'enxame' }, nivel);
+  assert.ok(enxame(1).includes('Metabolismo Composto'));
+  assert.ok(enxame(1).includes('Corpo em Enxame'));
+  assert.ok(!enxame(6).includes('Divisão Momentânea'));
+  assert.ok(enxame(7).includes('Divisão Momentânea'));
+  assert.ok(enxame(7).includes('Divisão de Trabalho'));
+  assert.ok(!enxame(14).includes('Nuvem Viva'));
+  assert.ok(enxame(15).includes('Nuvem Viva'));
+  assert.ok(enxame(15).includes('Corpo Redundante'));
+  assert.ok(!enxame(15).includes('Rede da Colônia'), 'Tipo escolhido não vaza para os outros');
+
+  // Onírico Pesadelo: o sonho de origem só se abre quando a Vigília sobe.
+  const pesadelo = (nivel: number) => titulos('onirico', { varianteId: 'pesadelo' }, nivel);
+  assert.ok(pesadelo(1).includes('Passo Entre-Sonhos'));
+  assert.ok(pesadelo(1).includes('Cara que Não Fecha'));
+  assert.ok(!pesadelo(9).includes('Pesadelo que Pega'));
+  assert.ok(pesadelo(10).includes('Pesadelo que Pega'));
+  assert.ok(pesadelo(10).includes('Mão no Sonho'));
+  assert.ok(!pesadelo(19).includes('Noite Sem Fim'));
+  assert.ok(pesadelo(20).includes('Noite Sem Fim'));
+  assert.ok(pesadelo(20).includes('Corpo de Sonho'));
+  assert.ok(!pesadelo(20).includes('Pés Fora do Chão'), 'Sonho de Origem não vaza para os outros');
+
+  // Divino da Guerra: o Domínio cresce junto com a Ascendência.
+  const guerra = (nivel: number) => titulos('divino', { varianteId: 'guerra' }, nivel);
+  assert.ok(guerra(1).includes('Sangue Divino'));
+  assert.ok(guerra(1).includes('Fúria Sagrada'));
+  assert.ok(!guerra(11).includes('Investida do Deus'));
+  assert.ok(guerra(12).includes('Investida do Deus'));
+  assert.ok(guerra(12).includes('Sangue Mais Acordado'));
+  assert.ok(!guerra(23).includes('Nome de Batalha'));
+  assert.ok(guerra(24).includes('Nome de Batalha'));
+  assert.ok(guerra(24).includes('Forma de Avatar'));
+  assert.ok(!guerra(24).includes('Toque que Cura'), 'Domínio escolhido não vaza para os outros');
 });

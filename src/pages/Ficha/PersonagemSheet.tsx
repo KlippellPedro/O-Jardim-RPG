@@ -54,7 +54,7 @@ export const PersonagemSheet: React.FC = () => {
   const {
     characters,
     isLoading,
-    fetchCharacters,
+    loadCharacter,
     patchCharacter,
     persistence,
     flushCharacterSaves,
@@ -80,19 +80,20 @@ export const PersonagemSheet: React.FC = () => {
     localStorage.setItem(`rpg_active_tab_${id}`, tab);
   };
 
-  useEffect(() => {
-    void fetchCharacters();
-  }, [fetchCharacters]);
-
   const character = characters.find((c) => c.id === id);
+  const somenteLeitura = character?.somenteLeitura === true;
   const characterPersistence = id ? persistence[id] : undefined;
 
+  useEffect(() => {
+    if (id && !character) void loadCharacter(id);
+  }, [character, id, loadCharacter]);
+
   const handleUpdate = useCallback((path: string[], value: unknown) => {
-    if (id) patchCharacter(id, path, value);
-  }, [id, patchCharacter]);
+    if (id && !somenteLeitura) patchCharacter(id, path, value);
+  }, [id, patchCharacter, somenteLeitura]);
 
   useEffect(() => {
-    if (!id) return undefined;
+    if (!id || somenteLeitura) return undefined;
 
     const flush = () => {
       void flushCharacterSaves(id);
@@ -121,7 +122,7 @@ export const PersonagemSheet: React.FC = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       flush();
     };
-  }, [flushCharacterSaves, hasPendingCharacterSaves, id]);
+  }, [flushCharacterSaves, hasPendingCharacterSaves, id, somenteLeitura]);
 
   if (isLoading && !character) {
     return (
@@ -145,7 +146,7 @@ export const PersonagemSheet: React.FC = () => {
               <p className="text-red-400 text-lg">Falha ao carregar a ficha.</p>
               <p className="text-gray-500 text-sm">{error}</p>
               <button
-                onClick={() => void fetchCharacters()}
+                onClick={() => { if (id) void loadCharacter(id); }}
                 className="mt-4 px-6 py-2 rounded-full bg-yellow-600/20 hover:bg-yellow-600/30 border border-yellow-600/30 text-yellow-300 transition-colors"
               >
                 Tentar novamente
@@ -224,32 +225,51 @@ export const PersonagemSheet: React.FC = () => {
     </div>
   );
 
+  const fotoPersonagem = character.foto ?? character.ficha?.foto ?? null;
+
   const renderHeader = () => (
     <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 mb-8 shadow-2xl relative">
       <div className="flex flex-col gap-5 md:flex-row md:justify-between md:items-start">
-        <div>
-          <h4 className="text-yellow-600 text-xs font-bold tracking-widest uppercase mb-2">
-            Personagem da Campanha Atual
-          </h4>
-          <h1 className="mb-2 text-[clamp(2rem,8vw,2.25rem)] leading-tight text-white" style={{ fontFamily: 'Cinzel, serif' }}>
-            {character.nome?.toUpperCase() || 'DESCONHECIDO'}
-          </h1>
-          <p className="text-gray-400 text-sm">
-            {(() => {
-              const racaId = character.ficha?.racaId;
-              const classeId = character.ficha?.classes?.[0]?.classeId || character.ficha?.classeId;
-              const racaCatalogo = catalogo?.racas.find((r) => r.id === racaId);
-              const classeCatalogo = catalogo?.classes.find((c) => c.id === classeId);
-              const nomeRaca = racaId
-                ? nomeExibicaoRaca(racaId, character.ficha?.racaNomePersonalizado, racaCatalogo?.titulo) || 'Sem Raça'
-                : 'Sem Raça';
-              const nomeClasse = classeCatalogo?.titulo || (classeId ? classeId : 'Sem Classe');
-              return `Nível ${character.nivel} • ${nomeRaca} • ${nomeClasse}`;
-            })()}
-          </p>
+        <div className="flex items-start gap-5 min-w-0">
+          <div className="w-20 h-20 rounded-2xl bg-black/50 border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-inner">
+            {fotoPersonagem ? (
+              <img
+                src={fotoPersonagem}
+                alt={`Foto de ${character.nome || 'personagem'}`}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-3xl font-bold text-gray-500" style={{ fontFamily: 'Cinzel, serif' }}>
+                {(character.nome?.charAt(0) || '?').toUpperCase()}
+              </span>
+            )}
+          </div>
+          <div className="min-w-0">
+            <h4 className="text-yellow-600 text-xs font-bold tracking-widest uppercase mb-2">
+              {somenteLeitura ? 'Aliado Complexo • Somente leitura' : 'Personagem da Campanha Atual'}
+            </h4>
+            <h1 className="mb-2 text-[clamp(2rem,8vw,2.25rem)] leading-tight text-white" style={{ fontFamily: 'Cinzel, serif' }}>
+              {character.nome?.toUpperCase() || 'DESCONHECIDO'}
+            </h1>
+            <p className="text-gray-400 text-sm">
+              {(() => {
+                const racaId = character.ficha?.racaId;
+                const classeId = character.ficha?.classes?.[0]?.classeId || character.ficha?.classeId;
+                const racaCatalogo = catalogo?.racas.find((r) => r.id === racaId);
+                const classeCatalogo = catalogo?.classes.find((c) => c.id === classeId);
+                const nomeRaca = racaId
+                  ? nomeExibicaoRaca(racaId, character.ficha?.racaNomePersonalizado, racaCatalogo?.titulo) || 'Sem Raça'
+                  : 'Sem Raça';
+                const nomeClasse = classeCatalogo?.titulo || (classeId ? classeId : 'Sem Classe');
+                return `Nível ${character.nivel} • ${nomeRaca} • ${nomeClasse}`;
+              })()}
+            </p>
+          </div>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <button
+          {!somenteLeitura && <button
             onClick={() => handleUpdate(['ficha', 'compartilhada'], !character.ficha?.compartilhada)}
             className={`px-4 py-2 rounded-full border text-sm font-bold flex items-center gap-2 transition-colors ${
               character.ficha?.compartilhada
@@ -260,7 +280,7 @@ export const PersonagemSheet: React.FC = () => {
           >
             {character.ficha?.compartilhada ? <Eye size={16} /> : <EyeOff size={16} />}
             {character.ficha?.compartilhada ? 'Visível na Sessão' : 'Ficha Privada'}
-          </button>
+          </button>}
           <button
             onClick={() => setShowAjuda(true)}
             className="w-10 h-10 rounded-full border border-yellow-600/30 flex items-center justify-center text-yellow-600 hover:bg-yellow-600/10 transition-colors"
@@ -270,10 +290,16 @@ export const PersonagemSheet: React.FC = () => {
           </button>
         </div>
       </div>
-      <div className="mt-4 pt-4 border-t border-white/5 flex flex-col gap-2" aria-live="polite" aria-atomic="false">
-        {renderSaveDomain('sheet', 'Ficha', characterPersistence?.sheet ?? EMPTY_SAVE_STATE)}
-        {renderSaveDomain('economy', 'Economia', characterPersistence?.economy ?? EMPTY_SAVE_STATE)}
-      </div>
+      {somenteLeitura ? (
+        <div className="mt-4 rounded-xl border border-sky-500/20 bg-sky-500/10 px-4 py-3 text-sm text-sky-200">
+          Esta ficha foi aberta por um vínculo complexo. Você pode consultar todas as abas, mas somente o dono e a equipe da campanha podem alterá-la.
+        </div>
+      ) : (
+        <div className="mt-4 pt-4 border-t border-white/5 flex flex-col gap-2" aria-live="polite" aria-atomic="false">
+          {renderSaveDomain('sheet', 'Ficha', characterPersistence?.sheet ?? EMPTY_SAVE_STATE)}
+          {renderSaveDomain('economy', 'Economia', characterPersistence?.economy ?? EMPTY_SAVE_STATE)}
+        </div>
+      )}
     </div>
   );
 
@@ -354,7 +380,9 @@ export const PersonagemSheet: React.FC = () => {
         {renderAjuda()}
         {renderTabs()}
 
-        <div>{renderActiveTab()}</div>
+        <fieldset disabled={somenteLeitura} className="m-0 min-w-0 border-0 p-0">
+          <div>{renderActiveTab()}</div>
+        </fieldset>
       </div>
     </motion.div>
   );

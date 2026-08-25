@@ -79,8 +79,34 @@ def test_semente_completa_aceita_tipos_e_raridades_da_loja():
     assert catalogo.get("artefato-grimorio-arcanis").tipo == "artefato"
     assert catalogo.get("selo-diagnostico").tipo == "consumivel"
     assert catalogo.get("implante-memoria-espelhada").tipo == "implante"
-    assert sum(bool(item["conteudo"].get("promocao", {}).get("ativa")) for item in entradas) == 3
+    # "Ofertas em destaque" passou a ser calculada pelo servidor a cada
+    # requisição. Promoção fixa no catálogo trava a rotação, então nenhuma
+    # entrada pode nascer com ela.
+    assert sum(bool(item["conteudo"].get("promocao", {}).get("ativa")) for item in entradas) == 0
     assert catalogo.get("reliquia-murasame").preco == {"Fragmentos de Estrela": 750}
+
+
+def test_perfil_universal_do_bestiario_fica_fora_do_balcao():
+    """Os perfis universais servem para o Mestre montar inimigo com números
+    prontos. Eles continuam no catálogo (o /monstro e o Bestiário do site leem
+    daqui) e são os únicos que declaram estar fora da loja."""
+    catalogo = Catalogo()
+    catalogo.carregar_arquivo(str(BASE.parent.parent / "data" / "loja" / "catalogo.json"))
+
+    universal = catalogo.get("universal-vd-3")
+    assert universal is not None and universal.tipo == "monstro"
+    assert universal.disponivel_na_loja is False
+
+    fora_do_balcao = [it for it in catalogo.listar() if not it.disponivel_na_loja]
+    assert fora_do_balcao and all(
+        it.conteudo.get("categoria") == "Universal" for it in fora_do_balcao
+    )
+
+    # Quem se contrata declara para que serve, e isso vira a etiqueta do item.
+    sentinela = catalogo.get("sentinela-de-portao")
+    assert sentinela.disponivel_na_loja is True
+    assert sentinela.funcao == "Guarda de local"
+    assert catalogo.get("lobo-cinzento").funcao is None
 
 
 def test_catalogo_rejeita_id_duplicado_e_raridade_desconhecida():

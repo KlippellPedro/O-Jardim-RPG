@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Map, Route, Compass } from 'lucide-react';
+import { Map, Route, Compass, DoorOpen, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -79,19 +79,19 @@ export const GuiaDimensional = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.5 }}
             className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
             <Map size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Mapa Vivo & Cartografia</h3>
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Cartografia da Matriz</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Você sempre sabe onde é o Norte e a hora do dia, e nunca se perde em ambientes naturais ou masmorras que já mapeou; ler uma planta baixa ou sentir os fluxos de mana do ambiente revela um detalhe oculto do local. No auge da carreira, pergunte ao Mestre por uma rota segura, rápida ou discreta até um objetivo conhecido uma vez por sessão.
+              Você sempre sabe onde é o Norte e a hora do dia, e nunca se perde em ambientes naturais ou masmorras que já mapeou; ler uma planta baixa ou sentir os fluxos de mana do ambiente revela um detalhe oculto do local. O teleporte em si cresce por aqui: passagens curtas de 6 m uma vez por cena, trazer aliados nos estágios avançados e, no auge, uma rota de até 1 km uma vez por sessão.
             </p>
           </PremiumCard>
 
@@ -100,13 +100,43 @@ export const GuiaDimensional = ({ classe }: { classe: IClasse }) => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
             <Route size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Âncoras Espaciais</h3>
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Âncoras</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Marque âncoras dimensionais fixas: uma a mais por estágio, até quatro. Fixar uma âncora exige um minuto no local, e ela desaparece após sete dias ou ao exceder seu limite. O teleporte em si vem da sua Cartografia da Matriz, em alcances limitados: passagens curtas de 6 m entre pontos visíveis uma vez por cena, trazer até dois aliados nos estágios avançados e, só no auge da carreira, uma rota de até 1 km uma vez por sessão.
+              Marque âncoras dimensionais fixas, uma a mais por estágio, até quatro, e aprenda um tipo novo de âncora em cada estágio: de Vigia (espia à distância), Compartilhada (aliados também usam), Oculta (só acha quem passar na sua DT) ou de Emergência (te resgata se você cair). Fixar uma âncora exige um minuto no local, e ela desaparece após sete dias.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <DoorOpen size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Caminho Impossível</h3>
+            <p className="text-cyan-100/60 leading-relaxed text-sm">
+              Uma vez por sessão, abra por três rodadas um portal até um local conhecido na mesma dimensão ou até uma âncora ativa em outra dimensão. Você, seus aliados e o que estiverem carregando atravessam juntos — selos e efeitos que bloqueiem viagem dimensional impedem a abertura.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className={`flex flex-col p-8 rounded-lg ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-cyan-100/60 leading-relaxed text-sm">
+              Todo efeito seu que obriga um alvo a resistir rola Misticismo no momento em que aciona: o resultado vira a DT que ele precisa alcançar.
             </p>
           </PremiumCard>
         </div>

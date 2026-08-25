@@ -72,7 +72,6 @@
       {
         "id": "voievod",
         "titulo": "Voievod",
-        "descricao": "Governaram Întuneric antes de a fome virar política, e até hoje se comportam como donos do lugar. Mandam com a voz e quase nunca precisam levantar da cadeira.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -112,7 +111,6 @@
       {
         "id": "strigoi",
         "titulo": "Strigoi",
-        "descricao": "Não sobrou paciência para fingir humanidade. Caçam de perto, com garra e faro, e não veem problema nenhum nisso.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -152,7 +150,6 @@
       {
         "id": "moroi",
         "titulo": "Moroi",
-        "descricao": "Passam por vivos melhor que qualquer outro Clã. Jantam na mesa da vítima e conversam a noite toda antes de pensar em morder.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -191,7 +188,6 @@
       {
         "id": "nosferat",
         "titulo": "Nosferat",
-        "descricao": "Neles a fome trabalhou por fora. Sem disfarce de gente, sobrou a cara daquilo que apaga a luz do corredor.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -208,7 +204,7 @@
             "titulo": "Terror de Porão",
             "tipo": "acao",
             "nivel_minimo": 11,
-            "descricao": "Mostre-se por inteiro: criaturas a até 9 m que enxerguem você testam Vontade e, falhando, ficam apavoradas por duas rodadas, sem poder se aproximar de você voluntariamente. Uma ação e 4 Mana, uma vez por cena.",
+            "descricao": "Mostre-se por inteiro: criaturas a até 9 m que enxerguem você testam Vontade e, falhando, ficam Amedrontadas por duas rodadas, sem poder se aproximar de você voluntariamente. Uma ação e 4 Mana, uma vez por cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -220,7 +216,7 @@
             "titulo": "Sombra que Engole",
             "tipo": "acao_completa",
             "nivel_minimo": 21,
-            "descricao": "Apague a luz numa área de 12 m por três rodadas. Dentro dela você enxerga normalmente e as criaturas hostis ficam cegas; cada uma que começar o turno na área testa Vontade e fica apavorada se falhar. Uma ação completa e 8 Mana, uma vez por sessão.",
+            "descricao": "Apague a luz numa área de 12 m por três rodadas. Dentro dela você enxerga normalmente e as criaturas hostis ficam cegas; cada uma que começar o turno na área testa Vontade e fica Amedrontada se falhar. Uma ação completa e 8 Mana, uma vez por sessão.",
             "usos": 1,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -232,7 +228,6 @@
       {
         "id": "pricolici",
         "titulo": "Pricolici",
-        "descricao": "A lua manda mais que o Clã aqui. Dividem o corpo com uma fera, e tem noite em que é a fera quem decide.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -272,7 +267,6 @@
       {
         "id": "sangvin",
         "titulo": "Sangvin",
-        "descricao": "Estudaram o que bebem até virar ofício. Sangue, para eles, é material de trabalho, e usam o próprio sem pensar duas vezes.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -319,7 +313,6 @@
         "nivel_minimo": 1,
         "vida": 0,
         "mana": 0,
-        "descricao": "Ainda conta os dias desde que virou. A Hemofagia funciona, a fome incomoda e o clã ainda está de olho pra ver no que vai dar.",
         "caracteristicas": []
       },
       {
@@ -328,7 +321,6 @@
         "nivel_minimo": 11,
         "vida": 3,
         "mana": 0,
-        "descricao": "Décadas de alimentação regular. O sangue rende mais e a fome cobra menos, pelo menos por enquanto.",
         "caracteristicas": [
           {
             "id": "hemofagia-profunda",
@@ -357,7 +349,6 @@
         "nivel_minimo": 21,
         "vida": 4,
         "mana": 2,
-        "descricao": "Séculos de noite. O clã inteiro responde a ele, e a fome cresceu junto com o poder: nesse ponto, é ela que dita o rumo da noite.",
         "caracteristicas": [
           {
             "id": "nevoa-e-morcego",
@@ -445,7 +436,6 @@
       {
         "id": "ferreiro",
         "titulo": "Ferreiro",
-        "descricao": "A bancada, o malho e a têmpera. Faz a arma que o grupo carrega e conserta o que quebrou no caminho.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -484,7 +474,6 @@
       {
         "id": "runista",
         "titulo": "Runista",
-        "descricao": "Grava o símbolo certo no lugar certo. A runa não dura, mas enquanto dura ela decide a briga.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -527,7 +516,6 @@
       {
         "id": "mineiro",
         "titulo": "Mineiro",
-        "descricao": "Lê a pedra como quem lê texto: sabe onde ela cede, onde ela guarda metal e onde ela vai desabar.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -568,7 +556,6 @@
       {
         "id": "engenheiro",
         "titulo": "Engenheiro",
-        "descricao": "Mecanismo, alçapão, gatilho e polia. Prefere que a armadilha lute no lugar dele.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -615,7 +602,6 @@
         "nivel_minimo": 1,
         "vida": 0,
         "mana": 0,
-        "descricao": "Já tem mão firme e ferramenta própria, e erra menos na segunda tentativa que qualquer outro povo na primeira.",
         "caracteristicas": []
       },
       {
@@ -624,7 +610,6 @@
         "nivel_minimo": 7,
         "vida": 0,
         "mana": 0,
-        "descricao": "Anos de bancada. A mão não treme mais e o material avisa antes de ceder.",
         "caracteristicas": [
           {
             "id": "mao-treinada",
@@ -644,7 +629,6 @@
         "nivel_minimo": 13,
         "vida": 0,
         "mana": 2,
-        "descricao": "O nome dele aparece gravado em coisas que ele não lembra de ter feito. É o degrau em que o Anão vira referência do próprio Reino.",
         "caracteristicas": [
           {
             "id": "mao-de-mestre",
@@ -698,7 +682,6 @@
       {
         "id": "pedra",
         "titulo": "Pedra",
-        "descricao": "Talhado em bloco inteiro, sem emenda. É o material mais antigo e o mais teimoso: em vez de rachar, ele só cede um pouco.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -734,7 +717,6 @@
       {
         "id": "ferro",
         "titulo": "Ferro",
-        "descricao": "Placas rebitadas sobre uma estrutura pesada. Bate como bigorna, e apanha como bigorna sem reclamar.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -776,7 +758,6 @@
       {
         "id": "madeira",
         "titulo": "Madeira",
-        "descricao": "Tronco vivo entalhado, ainda preso ao que era antes. Bebe água, procura sol e teme fogo como qualquer árvore.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -817,7 +798,6 @@
       {
         "id": "cristal",
         "titulo": "Cristal",
-        "descricao": "Crescido em câmara fechada, não talhado. Conduz Fluxo do mesmo jeito que conduz luz, por dentro e todo aceso.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -859,7 +839,6 @@
       {
         "id": "argila",
         "titulo": "Argila",
-        "descricao": "Nunca secou por completo. Continua mole o bastante pra ser refeito, e é por isso que dura mais que os outros.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -899,7 +878,6 @@
       {
         "id": "obsidiana",
         "titulo": "Obsidiana",
-        "descricao": "Vidro vulcânico lascado em quina. Corta ao ser tocado, e cada pedaço perdido vira mais uma lâmina no chão.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -946,7 +924,6 @@
         "nivel_minimo": 1,
         "vida": 0,
         "mana": 0,
-        "descricao": "Saiu da oficina faz pouco. As juntas ainda rangem no lugar errado e a pintura da marca do artesão continua legível.",
         "caracteristicas": []
       },
       {
@@ -955,7 +932,6 @@
         "nivel_minimo": 8,
         "vida": 4,
         "mana": 0,
-        "descricao": "Já foi quebrado e remontado vezes o bastante para que nenhuma peça seja a original. Cada conserto deixou o corpo um pouco mais duro que antes.",
         "caracteristicas": [
           {
             "id": "solda-sobre-solda",
@@ -986,7 +962,6 @@
         "nivel_minimo": 18,
         "vida": 8,
         "mana": 0,
-        "descricao": "Virou ponto de referência. Gente marca encontro no lugar onde ele costuma ficar parado, e ninguém mais lembra quem o ergueu.",
         "caracteristicas": [
           {
             "id": "estrutura-monumental",
@@ -1065,7 +1040,6 @@
         "nivel_minimo": 1,
         "vida": 0,
         "mana": 0,
-        "descricao": "O espírito recém-formado. Atravessa parede quando gasta Mana, mas ainda se desfaz fácil e desperta só a primeira característica da sua Cor.",
         "caracteristicas": []
       },
       {
@@ -1074,7 +1048,6 @@
         "nivel_minimo": 10,
         "vida": 0,
         "mana": 2,
-        "descricao": "Décadas paradas neste mundo deixam a forma mais densa. A travessia fica mais fácil, a névoa começa a aguentar golpe e a segunda característica da Cor desperta.",
         "caracteristicas": [
           {
             "id": "travessia-ampliada",
@@ -1103,7 +1076,6 @@
         "nivel_minimo": 20,
         "vida": 0,
         "mana": 3,
-        "descricao": "Velho o bastante para que o lugar onde ele está tenha virado parte dele. É o topo da escada espiritual, e chega pelo nível, sem precisar pedir nada a ninguém.",
         "caracteristicas": [
           {
             "id": "travessia-irrestrita",
@@ -1141,7 +1113,6 @@
         "id": "rosa",
         "titulo": "Rosa",
         "fluxo": "origem",
-        "descricao": "A cor do começo: o mesmo rosa que Gênese acende no que está prestes a nascer. É o espírito recém-morto, que ainda lembra do próprio nome e puxa força da vida que teve.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1185,7 +1156,6 @@
         "id": "amarelo",
         "titulo": "Amarelo",
         "fluxo": "essencia",
-        "descricao": "Perdeu o rosto e a história, e ficou só o que a pessoa era por baixo. O Amarelo enxerga essa mesma camada nos outros.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1228,7 +1198,6 @@
         "id": "prata",
         "titulo": "Prata",
         "fluxo": "comunicacao",
-        "descricao": "Morreu com alguma coisa por dizer. O Prata é a cor dos espíritos que continuam falando, e que são ouvidos mesmo sem som.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1270,7 +1239,6 @@
         "id": "verde",
         "titulo": "Verde",
         "fluxo": "vitalidade",
-        "descricao": "Alma que se recusou a soltar do mundo vivo e virou adubo em vez de fantasma. O Verde sustenta os outros melhor do que a si mesmo.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1315,7 +1283,6 @@
         "id": "laranja",
         "titulo": "Laranja",
         "fluxo": "inconstancia",
-        "descricao": "Morreu torto, e o Fluxo aproveitou a brecha. O Laranja nunca dá o mesmo resultado duas vezes.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1360,7 +1327,6 @@
         "id": "marrom",
         "titulo": "Marrom",
         "fluxo": "fisico",
-        "descricao": "Rondou o mesmo lugar tempo demais e endureceu, do jeito que a matéria de Baluarte endurece. É o espírito que quase voltou a ser corpo.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1399,7 +1365,6 @@
         "id": "roxo",
         "titulo": "Roxo",
         "fluxo": "espaco",
-        "descricao": "Morreu longe de casa, ou em dois lugares ao mesmo tempo. O Roxo trata distância como detalhe.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1441,7 +1406,6 @@
         "id": "dourado",
         "titulo": "Dourado Envelhecido",
         "fluxo": "tempo",
-        "descricao": "Continua no instante em que morreu e arrasta esse instante junto. O Dourado sempre chega antes ou depois da hora.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1485,7 +1449,6 @@
         "id": "preto",
         "titulo": "Preto",
         "fluxo": "vazio",
-        "descricao": "Sobrou menos do que uma alma inteira. O Preto é o buraco que restou, e ele puxa o que chega perto.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1529,7 +1492,6 @@
         "id": "vermelho-vinho",
         "titulo": "Vermelho Vinho",
         "fluxo": "fim",
-        "descricao": "Morreu com violência e não perdoou ninguém por isso. Os vivos reconhecem essa cor de longe, e ela é a que mais cobra de quem carrega.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1574,7 +1536,6 @@
         "id": "azul-neon",
         "titulo": "Azul Neon Artificial",
         "fluxo": "tecnologia",
-        "descricao": "Morreu dentro de um sistema, ou perto demais de um. O Azul Neon assombra circuito do mesmo jeito que os outros assombram casa.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1647,7 +1608,6 @@
       {
         "id": "pedra",
         "titulo": "Gigante de Pedra",
-        "descricao": "Tem montanha no sangue. Quando o resto do grupo já caiu, ele continua em pé.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1688,7 +1648,6 @@
       {
         "id": "gelo",
         "titulo": "Gigante de Gelo",
-        "descricao": "Veio do alto, onde o ar corta. Traz o inverno junto e não devolve.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1725,7 +1684,6 @@
       {
         "id": "tempestade",
         "titulo": "Gigante de Tempestade",
-        "descricao": "Cresceu ouvindo trovão de perto e passou a responder no mesmo tom.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1769,7 +1727,6 @@
       {
         "id": "fogo",
         "titulo": "Gigante do Fogo",
-        "descricao": "Por dentro ele é uma forja acesa. Onde trabalha, o metal cede e o chão racha.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -1811,7 +1768,6 @@
         "nivel_minimo": 1,
         "vida": 0,
         "mana": 0,
-        "descricao": "Seu tamanho é Grande, e você já não cabe direito em casa de gente normal. Carrega o dobro do peso e não sai do lugar quando empurram.",
         "caracteristicas": []
       },
       {
@@ -1820,7 +1776,6 @@
         "nivel_minimo": 9,
         "vida": 4,
         "mana": 0,
-        "descricao": "Gigante não para de crescer, só desacelera. Aqui o tamanho sobe para Enorme, e você alcança o que antes ficava alto demais.",
         "caracteristicas": [
           {
             "id": "envergadura",
@@ -1850,7 +1805,6 @@
         "nivel_minimo": 18,
         "vida": 8,
         "mana": 0,
-        "descricao": "No porte Colossal nada construído por gente serve mais. Porta nenhuma dá passagem, e o chão reclama a cada passo seu.",
         "caracteristicas": [
           {
             "id": "passada-que-abala",
@@ -1897,7 +1851,6 @@
       {
         "id": "agil",
         "titulo": "Morfologia Ágil",
-        "descricao": "O corpo puxou pro lado leve do bicho. Sobe, salta e se equilibra onde os outros precisam de corda.",
         "vida": -1,
         "mana": 1,
         "movimento": 1.5,
@@ -1914,7 +1867,6 @@
       {
         "id": "robusta",
         "titulo": "Morfologia Robusta",
-        "descricao": "Aqui pesou o osso e o músculo. Custa a sair do lugar quando alguém empurra, e custa mais ainda pra cair.",
         "vida": 2,
         "mana": 0,
         "movimento": 0,
@@ -1931,7 +1883,6 @@
       {
         "id": "mistica",
         "titulo": "Morfologia Mística",
-        "descricao": "Veio com os sentidos afiados no lugar do músculo. Enxerga no escuro e percebe pelo faro e pelo ouvido o que ninguém viu.",
         "vida": 0,
         "mana": 2,
         "movimento": 0,
@@ -1979,7 +1930,6 @@
       {
         "id": "fascinio",
         "titulo": "Canção do Fascínio",
-        "descricao": "A voz que prende quem escuta pelo tempo exato de virar a cena, ou de sair dela viva.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -2020,7 +1970,6 @@
       {
         "id": "lamento",
         "titulo": "Canção do Lamento",
-        "descricao": "Canta o que se perdeu no mar. Quem ouve lembra de tudo que já teve medo de perder.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -2041,7 +1990,7 @@
             "titulo": "Pranto que Corrói",
             "tipo": "acao",
             "nivel_minimo": 8,
-            "descricao": "Escolha uma criatura a até 9 m: ela faz um teste de Vontade e, se falhar, fica apavorada por duas rodadas. Enquanto estiver assim, não consegue se aproximar de você por vontade própria. Custa uma ação e 4 Mana, uma vez por cena.",
+            "descricao": "Escolha uma criatura a até 9 m: ela faz um teste de Vontade e, se falhar, fica Amedrontada por duas rodadas. Enquanto estiver assim, não consegue se aproximar de você por vontade própria. Custa uma ação e 4 Mana, uma vez por cena.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
@@ -2053,7 +2002,7 @@
             "titulo": "Reboque dos Afogados",
             "tipo": "acao_completa",
             "nivel_minimo": 16,
-            "descricao": "Cada criatura hostil a até 12 m faz um teste de Vontade. Quem falhar sofre 3d6 de dano psíquico e fica apavorada por duas rodadas. Custa uma ação completa e 8 Mana, uma vez por sessão.",
+            "descricao": "Cada criatura hostil a até 12 m faz um teste de Vontade. Quem falhar sofre 3d6 de dano psíquico e fica Amedrontada por duas rodadas. Custa uma ação completa e 8 Mana, uma vez por sessão.",
             "usos": 1,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -2065,7 +2014,6 @@
       {
         "id": "mare",
         "titulo": "Canção da Maré",
-        "descricao": "Essa voz embala, acalma e cura. Serve para segurar o grupo inteiro de pé mais um pouco.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -2107,7 +2055,6 @@
       {
         "id": "abismo",
         "titulo": "Canção do Abismo",
-        "descricao": "Aprendeu a cantar onde não chega luz. O som volta diferente lá embaixo.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -2154,7 +2101,6 @@
         "nivel_minimo": 1,
         "vida": 0,
         "mana": 0,
-        "descricao": "Nada tão rápido quanto anda, respira dos dois lados e conhece a beira como quintal de casa.",
         "caracteristicas": []
       },
       {
@@ -2163,7 +2109,6 @@
         "nivel_minimo": 8,
         "vida": 0,
         "mana": 2,
-        "descricao": "Desceu abaixo da linha em que a luz do sol ainda ajuda, e o corpo se ajustou.",
         "caracteristicas": [
           {
             "id": "olhos-de-profundeza",
@@ -2189,7 +2134,6 @@
         "nivel_minimo": 16,
         "vida": 0,
         "mana": 3,
-        "descricao": "Aqui embaixo não desce mais nada. A voz que sai daqui chega a lugares que ninguém mapeou.",
         "caracteristicas": [
           {
             "id": "canto-que-atravessa",
@@ -2225,26 +2169,234 @@
     "vida": -1,
     "mana": 2,
     "movimento": 0,
-    "descricao": "Corpo sem forma verdadeira, só um jeito de ser que ele decide usar hoje. Copia rosto, roupa e trejeito de quem já observou de perto, mas por baixo da imitação continua sendo a mesma criatura magra e insegura de sempre.",
+    "descricao": "Copia a cara, a roupa e o jeito de quem observou de perto, e copia também a forma de um móvel qualquer quando precisa que ninguém olhe. Por baixo continua o mesmo bicho magro e nervoso, com um núcleo só, e é esse núcleo que entrega tudo quando ele apaga. O Molde escolhido decide o que ele copia melhor, e com o tempo ele passa a guardar mais de uma forma pronta ao mesmo tempo.",
     "fisiologia": [
-      "Corpo instável, moldado por vontade consciente. Mantém um único núcleo de identidade, e perder a concentração ou ficar inconsciente faz a forma copiada se desfazer."
+      "Corpo mole, sem esqueleto fixo, que assume a forma que a vontade mandar. Tem um único núcleo de identidade, e perder a consciência desmancha qualquer forma copiada na hora."
     ],
     "caracteristicas": [
       {
         "id": "forma-emprestada",
         "titulo": "Forma Emprestada",
         "tipo": "acao",
-        "descricao": "Uma vez por cena, gaste uma ação para copiar a aparência de uma criatura de tamanho até uma categoria acima ou abaixo da sua que você tenha tocado ou observado de perto por pelo menos 1 minuto. A cópia é só aparência: não altera atributos, Vida, Mana, Movimento, alcance ou capacidade de carga, e não concede sentidos, ataques, imunidades ou características da forma copiada. Equipamentos não se transformam. Imitar uma criatura específica de forma convincente exige Enganação contra a Intuição de quem a conheça; a forma dura até você mudá-la de novo ou até o próximo descanso.",
+        "descricao": "Uma vez por cena, gaste uma ação e 2 Mana para assumir a forma de uma criatura de tamanho até uma categoria acima ou abaixo da sua, ou de um objeto parado de volume parecido com o seu corpo. Você copia só a aparência: atributos, Vida, Mana, Movimento, alcance, sentidos, ataques e características continuam sendo os seus. Equipamento não se transforma junto. Passar por uma pessoa específica pede Enganação contra a Intuição de quem conhece ela; passar por um objeto dispensa teste enquanto você não se mexer. A forma dura até você trocar de forma ou até o próximo descanso.",
         "usos": 1,
         "recuperacao": "cena",
+        "custo_mana": 2,
         "automatizada": false
       },
       {
         "id": "instinto-de-camuflagem",
         "titulo": "Instinto de Camuflagem",
         "tipo": "passiva",
-        "descricao": "Enquanto permanece imóvel, sua textura e coloração se fundem ao ambiente ao redor. Receba vantagem em testes de Furtividade nesses momentos.",
+        "descricao": "Parado, sua pele muda de cor e de textura sozinha até combinar com o que está em volta. Receba vantagem em Furtividade enquanto você não se mover.",
         "automatizada": false
+      },
+      {
+        "id": "nucleo-exposto",
+        "titulo": "Núcleo Exposto",
+        "tipo": "limitacao",
+        "descricao": "Cair a 0 de Vida, ficar inconsciente ou sofrer um acerto crítico desmancha a forma copiada na hora, e você volta ao seu corpo de sempre na frente de quem estiver olhando.",
+        "automatizada": false
+      }
+    ],
+    "rotulo_variante": "Molde",
+    "descricao_variantes": "Escolha o Molde que você aprendeu a copiar primeiro. Os quatro usam a mesma Forma Emprestada; o que muda é o que ela consegue fazer depois de pronta.",
+    "variantes": [
+      {
+        "id": "carne",
+        "titulo": "Molde da Carne",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "rosto-estudado",
+            "titulo": "Rosto Estudado",
+            "tipo": "passiva",
+            "nivel_minimo": 1,
+            "descricao": "Dez minutos observando uma pessoa guardam o rosto dela no seu repertório por uma semana, sem precisar tocar nela. Enquanto usa um rosto guardado, receba vantagem em Enganação para sustentar a farsa.",
+            "automatizada": false
+          },
+          {
+            "id": "trejeito-roubado",
+            "titulo": "Trejeito Roubado",
+            "tipo": "acao",
+            "nivel_minimo": 8,
+            "descricao": "Uma vez por cena, gaste uma ação e 3 Mana para copiar a voz e o jeito de alguém que você já guardou. Quem ouve sem desconfiar acredita sem teste; quem já suspeita faz Intuição contra a sua Enganação.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 3,
+            "automatizada": false
+          },
+          {
+            "id": "mais-de-um-voce",
+            "titulo": "Mais de Um Você",
+            "tipo": "acao_completa",
+            "nivel_minimo": 17,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 8 Mana para deixar no lugar uma casca sua com cara de gente, que anda devagar e repete frases curtas por três rodadas. Ela não ataca, não resiste a nada e desmancha ao primeiro dano, mas segura a atenção de quem não encostar nela.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "duracao_rodadas": 3,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "objeto",
+        "titulo": "Molde do Objeto",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "coisa-parada",
+            "titulo": "Coisa Parada",
+            "tipo": "passiva",
+            "nivel_minimo": 1,
+            "descricao": "Na forma de objeto e imóvel, criaturas que não estejam procurando por você passam direto sem teste nenhum. Quem procura faz Percepção contra a sua Furtividade.",
+            "automatizada": false
+          },
+          {
+            "id": "bote-do-bau",
+            "titulo": "Bote do Baú",
+            "tipo": "reacao",
+            "nivel_minimo": 8,
+            "descricao": "Uma vez por cena, quando uma criatura encostar em você ou terminar o turno adjacente enquanto você está na forma de objeto, gaste uma reação e 3 Mana para atacar com vantagem. Acertando, o ataque causa 2d6 de dano extra e deixa a criatura agarrada até o começo do seu próximo turno.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 3,
+            "automatizada": false
+          },
+          {
+            "id": "peso-de-mentira",
+            "titulo": "Peso de Mentira",
+            "tipo": "passiva",
+            "nivel_minimo": 17,
+            "descricao": "Sua forma de objeto passa a aguentar exame de perto: peso, som e textura batem com o que você imita, e só magia que revele forma verdadeira desfaz a farsa. Parado nessa forma, você recebe Resistência 5 contra dano físico.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "fera",
+        "titulo": "Molde da Fera",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "casco-e-garra",
+            "titulo": "Casco e Garra",
+            "tipo": "passiva",
+            "nivel_minimo": 1,
+            "descricao": "Na forma de um animal você ganha uma arma natural de dano-base 1d6 e o deslocamento simples do bicho copiado, seja escalar, nadar ou cavar, sempre igual ao seu Movimento.",
+            "automatizada": false
+          },
+          {
+            "id": "faro-emprestado",
+            "titulo": "Faro Emprestado",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Na forma de um animal, você enxerga normalmente em escuridão natural e recebe vantagem em Percepção sempre que o teste depender de olfato ou audição.",
+            "automatizada": false
+          },
+          {
+            "id": "bicho-grande",
+            "titulo": "Bicho Grande",
+            "tipo": "acao",
+            "nivel_minimo": 17,
+            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para virar por três rodadas uma fera uma categoria de tamanho acima da sua. Enquanto durar, sua arma natural sobe para 2d6, seu Movimento aumenta em 3 m e você recebe vantagem para agarrar e derrubar.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 6,
+            "duracao_rodadas": 3,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "voz",
+        "titulo": "Molde da Voz",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "boca-sem-dono",
+            "titulo": "Boca Sem Dono",
+            "tipo": "acao",
+            "nivel_minimo": 1,
+            "descricao": "Gaste 1 Mana para fazer sua voz sair de qualquer ponto que você enxergue a até 18 m, com o timbre que você quiser. Quem escuta e desconfia faz Intuição contra a sua Enganação.",
+            "custo_mana": 1,
+            "alcance_m": 18,
+            "automatizada": false
+          },
+          {
+            "id": "barulho-de-muitos",
+            "titulo": "Barulho de Muitos",
+            "tipo": "acao",
+            "nivel_minimo": 8,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para encher uma área de 9 m com o som de gente ou bicho que não está lá. Cada criatura hostil dentro dela faz Vontade contra a sua Enganação e, falhando, gasta o próximo turno virada para o lado errado, atacando com desvantagem.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "palavra-na-boca-do-outro",
+            "titulo": "Palavra na Boca do Outro",
+            "tipo": "acao",
+            "nivel_minimo": 17,
+            "descricao": "Uma vez por sessão, gaste uma ação e 8 Mana para fazer uma criatura a até 18 m ouvir, na própria voz, uma frase que ela nunca disse. Ela faz Vontade contra a sua Enganação e, falhando, passa duas rodadas convencida de que aquilo saiu dela, com desvantagem em Intuição e Vontade nesse tempo.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 18,
+            "automatizada": false
+          }
+        ]
+      }
+    ],
+    "estagios": [
+      {
+        "id": "um-rosto",
+        "titulo": "Um Rosto",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "muitos-rostos",
+        "titulo": "Muitos Rostos",
+        "nivel_minimo": 8,
+        "vida": 0,
+        "mana": 2,
+        "caracteristicas": [
+          {
+            "id": "formas-guardadas",
+            "titulo": "Formas Guardadas",
+            "tipo": "passiva",
+            "nivel_minimo": 8,
+            "descricao": "Você mantém duas formas prontas ao mesmo tempo e troca entre elas gastando só o seu Movimento, sem pagar Mana nem usar Forma Emprestada de novo.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "sem-rosto",
+        "titulo": "Sem Rosto",
+        "nivel_minimo": 17,
+        "vida": 2,
+        "mana": 3,
+        "caracteristicas": [
+          {
+            "id": "cara-de-ninguem",
+            "titulo": "Cara de Ninguém",
+            "tipo": "passiva",
+            "nivel_minimo": 17,
+            "descricao": "Ficar inconsciente ou levar um crítico já não desmancha a sua forma, e Núcleo Exposto passa a valer só quando você cai a 0 de Vida. Quem tenta lembrar do seu rosto verdadeiro depois que você sai de cena faz Vontade contra a sua Enganação para conseguir.",
+            "automatizada": false
+          }
+        ]
       }
     ],
     "recursos_provisorios": false
@@ -2259,21 +2411,28 @@
     "vida": 0,
     "mana": 0,
     "movimento": 0,
-    "descricao": "Não nasceu um: nasceu uma parceria. Um corpo só, com mais de um organismo trabalhando por baixo da mesma pele, e ninguém de fora consegue dizer com certeza onde um termina e o outro começa.",
+    "descricao": "Um corpo com mais de um bicho morando dentro, dividindo comida, sono e decisão. Aguenta privação muito melhor do que qualquer um deles aguentaria sozinho, e ninguém de fora sabe dizer onde um termina e o outro começa. O Tipo escolhido decide como a parceria aparece por fora, e quanto mais tempo ela dura, menos sobra de fronteira entre um e outro.",
     "fisiologia": [
-      "Corpo formado pela união ou cooperação entre organismos distintos. Aparência, textura e comportamento variam conforme o Tipo de Simbionte escolhido."
+      "Corpo formado pela união ou pela cooperação entre organismos distintos. Aparência, textura e comportamento mudam conforme o Tipo de Simbionte escolhido."
     ],
     "caracteristicas": [
       {
         "id": "metabolismo-composto",
         "titulo": "Metabolismo Composto",
         "tipo": "passiva",
-        "descricao": "Seu corpo reparte recursos entre os organismos que o compõem. Você pode passar o dobro do tempo normal sem comer, beber ou descansar antes de sofrer as consequências disso, e recebe vantagem em Fortitude para resistir a fome, sede ou exaustão.",
+        "descricao": "Os organismos que formam você repartem tudo o que entra. Você aguenta o dobro do tempo normal sem comer, beber ou descansar antes de sentir qualquer coisa, e recebe vantagem em Fortitude contra fome, sede e exaustão.",
+        "automatizada": false
+      },
+      {
+        "id": "segunda-consciencia",
+        "titulo": "Segunda Consciência",
+        "tipo": "passiva",
+        "descricao": "Tem mais de uma cabeça pensando aí dentro, e elas nem sempre concordam. Receba vantagem para resistir a efeitos que dominem, encantem ou leiam sua mente. Quem força a leitura recebe os pensamentos de todos os organismos ao mesmo tempo e não consegue separar de quem é o quê.",
         "automatizada": false
       }
     ],
     "rotulo_variante": "Tipo de Simbionte",
-    "descricao_variantes": "Escolha um dos quatro Tipos de Simbionte. Você recebe apenas as características do tipo escolhido.",
+    "descricao_variantes": "Escolha um dos quatro Tipos. Ele decide como a parceria aparece por fora e o que ela sabe fazer, e você recebe só o que estiver no Tipo escolhido.",
     "variantes": [
       {
         "id": "enxame",
@@ -2286,7 +2445,31 @@
             "id": "corpo-em-enxame",
             "titulo": "Corpo em Enxame",
             "tipo": "movimento",
-            "descricao": "Seu corpo é, na prática, um agregado coordenado de organismos menores. Sem carregar equipamento rígido maior que a passagem, você pode atravessar aberturas de pelo menos 8 cm; o trecho apertado conta como terreno difícil e você não pode terminar o movimento dentro dele. Você também recebe vantagem para escapar de agarrões, já que sua massa nunca fica totalmente presa.",
+            "nivel_minimo": 1,
+            "descricao": "Seu corpo é um monte de bicho pequeno andando junto. Sem equipamento rígido maior que a passagem, você atravessa qualquer abertura de pelo menos 8 cm; o trecho apertado conta como terreno difícil e você não pode terminar o movimento dentro dele. Receba vantagem para escapar de agarrões, já que sua massa nunca fica presa inteira.",
+            "automatizada": false
+          },
+          {
+            "id": "divisao-momentanea",
+            "titulo": "Divisão Momentânea",
+            "tipo": "reacao",
+            "nivel_minimo": 7,
+            "descricao": "Uma vez por cena, quando for alvo de um ataque, gaste uma reação e 3 Mana para se abrir no meio. O ataque erra, e você se remonta em qualquer espaço desocupado a até 3 m de onde estava.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 3,
+            "automatizada": false
+          },
+          {
+            "id": "nuvem-viva",
+            "titulo": "Nuvem Viva",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por sessão, gaste uma ação e 7 Mana para se espalhar por três rodadas numa nuvem de 3 m em volta de você. Enquanto durar, você não pode ser agarrado, atravessa criaturas e grades e sofre metade do dano de ataques corpo a corpo, mas não consegue atacar nem carregar equipamento pesado.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 7,
+            "duracao_rodadas": 3,
             "automatizada": false
           }
         ]
@@ -2301,10 +2484,30 @@
           {
             "id": "hospedeiro-mutuo",
             "titulo": "Hospedeiro Mútuo",
-            "tipo": "passiva",
-            "descricao": "Um organismo interno filtra o que entra em seu corpo antes que cause dano. Receba vantagem em Fortitude contra veneno e doenças. Uma vez por cena, gaste uma ação para se alimentar do vigor de uma criatura voluntária ou incapacitada que você toque e recuperar 1d4 de Vida.",
+            "tipo": "acao",
+            "nivel_minimo": 1,
+            "descricao": "Um organismo interno filtra o que chega antes de fazer estrago: receba vantagem em Fortitude contra veneno e doença. Uma vez por cena, gaste uma ação para se alimentar do vigor de uma criatura voluntária ou incapacitada que você toque e recuperar 1d6 de Vida.",
             "usos": 1,
             "recuperacao": "cena",
+            "automatizada": false
+          },
+          {
+            "id": "enxerto-vivo",
+            "titulo": "Enxerto Vivo",
+            "tipo": "acao",
+            "nivel_minimo": 7,
+            "descricao": "Uma vez por descanso, gaste uma ação e 4 Mana para enfiar um broto do seu organismo numa criatura voluntária. Ela recupera 2d6 de Vida na hora e fica com vantagem em Fortitude contra veneno e doença até o próximo descanso. Uma criatura carrega um enxerto por vez.",
+            "usos": 1,
+            "recuperacao": "descanso",
+            "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "digestao-profunda",
+            "titulo": "Digestão Profunda",
+            "tipo": "passiva",
+            "nivel_minimo": 15,
+            "descricao": "Alimentar-se com Hospedeiro Mútuo passa a recuperar 3d6 de Vida e a tirar de você uma condição de veneno, doença ou sangramento, escolhida na hora.",
             "automatizada": false
           }
         ]
@@ -2319,15 +2522,31 @@
           {
             "id": "rede-da-colonia",
             "titulo": "Rede da Colônia",
-            "tipo": "passiva",
-            "descricao": "Gaste uma ação para deixar esporos ou brotos em uma criatura voluntária que você toque. Até o próximo descanso, vocês podem trocar silenciosamente ideias simples enquanto estiverem a até 30 m um do outro. Uma criatura só pode carregar os esporos de um Simbionte por vez.",
+            "tipo": "acao",
+            "nivel_minimo": 1,
+            "descricao": "Gaste uma ação para deixar esporos ou brotos numa criatura voluntária que você toque. Até o próximo descanso, vocês trocam ideias simples em silêncio enquanto estiverem a até 30 m um do outro. Uma criatura carrega os esporos de um Simbionte por vez.",
+            "alcance_m": 30,
             "automatizada": false
           },
           {
             "id": "memoria-coletiva",
             "titulo": "Memória Coletiva",
             "tipo": "exploracao",
-            "descricao": "Depois de permanecer 1 minuto em contato com terra, madeira ou fungos de uma área, faça um teste de Sobrevivência para perceber, através da colônia, se criaturas passaram por ali recentemente. O efeito revela presença e direção aproximada, não identidades.",
+            "nivel_minimo": 7,
+            "descricao": "Depois de um minuto em contato com terra, madeira ou fungo de uma área, faça um teste de Sobrevivência para sentir, pela colônia, se passou criatura por ali nos últimos dias. Isso mostra presença e direção aproximada, nunca identidade.",
+            "automatizada": false
+          },
+          {
+            "id": "colonia-estendida",
+            "titulo": "Colônia Estendida",
+            "tipo": "acao",
+            "nivel_minimo": 15,
+            "descricao": "Uma vez por sessão, gaste uma ação e 6 Mana para brotar num raio de 9 m. Por três rodadas, o chão dessa área vira terreno difícil para criaturas hostis, seus aliados dentro dela recebem +2 de Defesa, e você sabe onde está todo mundo que pisar ali mesmo sem enxergar.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 6,
+            "alcance_m": 9,
+            "duracao_rodadas": 3,
             "automatizada": false
           }
         ]
@@ -2343,9 +2562,72 @@
             "id": "assimilacao-superficial",
             "titulo": "Assimilação Superficial",
             "tipo": "acao",
-            "descricao": "Uma vez por descanso, gaste uma ação para tocar uma criatura voluntária, incapacitada ou recém-derrotada e assimilar temporariamente um traço superficial dela: um sentido, uma resistência ou um modo de locomoção simples, a critério do mestre. O traço assimilado equivale no máximo a um sentido especial ou a um deslocamento igual ao seu Movimento, nunca a ataques, imunidades completas ou características raciais inteiras, e dura até o final da cena.",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por descanso, gaste uma ação para tocar uma criatura voluntária, incapacitada ou recém-derrotada e ficar com um traço superficial dela: um sentido, uma resistência ou um jeito simples de se locomover, a critério do mestre. O traço vale no máximo o equivalente a um sentido especial ou a um deslocamento igual ao seu Movimento, nunca ataques, imunidades completas ou características raciais inteiras, e dura até o fim da cena.",
             "usos": 1,
             "recuperacao": "descanso",
+            "automatizada": false
+          },
+          {
+            "id": "duas-coisas-de-uma-vez",
+            "titulo": "Duas Coisas de Uma Vez",
+            "tipo": "passiva",
+            "nivel_minimo": 7,
+            "descricao": "Assimilação Superficial passa a valer duas vezes por descanso, e você consegue manter os dois traços ao mesmo tempo.",
+            "automatizada": false
+          },
+          {
+            "id": "molde-fixo",
+            "titulo": "Molde Fixo",
+            "tipo": "passiva",
+            "nivel_minimo": 15,
+            "descricao": "Escolha um traço que você já assimilou alguma vez. Ele passa a valer sempre, sem gastar uso nem acabar no fim da cena. Trocar essa escolha exige um descanso completo e uma assimilação nova.",
+            "automatizada": false
+          }
+        ]
+      }
+    ],
+    "estagios": [
+      {
+        "id": "acordo-recente",
+        "titulo": "Acordo Recente",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "simbiose-firmada",
+        "titulo": "Simbiose Firmada",
+        "nivel_minimo": 7,
+        "vida": 2,
+        "mana": 1,
+        "caracteristicas": [
+          {
+            "id": "divisao-de-trabalho",
+            "titulo": "Divisão de Trabalho",
+            "tipo": "rerrolagem",
+            "nivel_minimo": 7,
+            "descricao": "Os organismos já se conhecem e sabem revezar. Uma vez por cena, depois de falhar em Fortitude ou Vontade, um deles assume: rerrole o teste e fique com o novo resultado.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "organismo-unico",
+        "titulo": "Organismo Único",
+        "nivel_minimo": 15,
+        "vida": 3,
+        "mana": 2,
+        "caracteristicas": [
+          {
+            "id": "corpo-redundante",
+            "titulo": "Corpo Redundante",
+            "tipo": "passiva",
+            "nivel_minimo": 15,
+            "descricao": "Nada em você é peça única. Acertos críticos contra você viram acertos comuns, e uma vez por sessão, quando um dano deixaria você a 0 de Vida, sua Vida vira 1.",
             "automatizada": false
           }
         ]
@@ -2393,7 +2675,6 @@
       {
         "id": "acido",
         "titulo": "Ácido",
-        "descricao": "Encostou, dissolveu. É o Slime que ninguém quer agarrar nem prender.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -2433,7 +2714,6 @@
       {
         "id": "cristal",
         "titulo": "Cristal",
-        "descricao": "A gosma endureceu em placas translúcidas. Serve de armadura e devolve parte do que recebe.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -2473,7 +2753,6 @@
       {
         "id": "toxico",
         "titulo": "Tóxico",
-        "descricao": "Fermentou num pântano e trouxe o pântano junto. O sangue é veneno, e o cheiro avisa antes.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -2513,7 +2792,6 @@
       {
         "id": "glacial",
         "titulo": "Glacial",
-        "descricao": "Nasceu em água parada de montanha e nunca descongelou por inteiro.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -2550,7 +2828,6 @@
       {
         "id": "magmatico",
         "titulo": "Magmático",
-        "descricao": "Guarda uma brasa acesa no meio da gosma desde que escorreu perto demais de uma fonte de calor.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -2591,7 +2868,6 @@
       {
         "id": "metalico",
         "titulo": "Metálico",
-        "descricao": "Anos de ferragem na dieta deixaram metal em suspensão no corpo inteiro. Ele endurece a gosma onde precisa e vira arma quando dá vontade.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -2633,7 +2909,6 @@
         "nivel_minimo": 1,
         "vida": 0,
         "mana": 0,
-        "descricao": "A massa que cabe numa pessoa. Passa por fresta, amassa queda e escorrega de agarrão. É o Slime que todo mundo conhece.",
         "caracteristicas": []
       },
       {
@@ -2642,7 +2917,6 @@
         "nivel_minimo": 6,
         "vida": 3,
         "mana": 0,
-        "descricao": "Comeu o bastante para encher um cômodo. O corpo vira Grande, e quem você agarra corre o risco de acabar dentro de você.",
         "caracteristicas": [
           {
             "id": "massa-crescente",
@@ -2671,7 +2945,6 @@
         "nivel_minimo": 14,
         "vida": 6,
         "mana": 0,
-        "descricao": "Massa demais para um corpo só. Nesse tamanho ele enche uma sala inteira, e quem entra passa a se preocupar com onde pisa.",
         "caracteristicas": [
           {
             "id": "massa-colossal",
@@ -2809,7 +3082,6 @@
       {
         "id": "natureza",
         "titulo": "Natureza",
-        "descricao": "A Linhagem que conversa com o que cresce. Planta responde, mato abre caminho, e o terreno passa a jogar do lado dele.",
         "efeito_pendente": false,
         "caracteristicas": [
           {
@@ -2871,7 +3143,6 @@
       {
         "id": "sombras",
         "titulo": "Sombras",
-        "descricao": "A Linhagem que trata sombra como porta. Enxerga dentro do escuro, some nele e reaparece onde escolher.",
         "efeito_pendente": false,
         "caracteristicas": [
           {
@@ -2918,7 +3189,6 @@
       {
         "id": "gelo",
         "titulo": "Gelo",
-        "descricao": "A Linhagem do frio que não incomoda quem carrega. Prende o inimigo no lugar e segue andando por cima do que congelou.",
         "efeito_pendente": false,
         "caracteristicas": [
           {
@@ -2967,7 +3237,6 @@
       {
         "id": "fogo",
         "titulo": "Fogo",
-        "descricao": "A Linhagem que acende junto. Queima quem chega perto e continua queimando enquanto a manifestação durar.",
         "efeito_pendente": false,
         "caracteristicas": [
           {
@@ -3013,7 +3282,6 @@
       {
         "id": "noite-eterna",
         "titulo": "Noite Eterna",
-        "descricao": "A Linhagem que apaga a luz. Dentro do escuro dela o Elfo enxerga tudo, e quem ficou de fora escolhe entre agir e andar.",
         "efeito_pendente": false,
         "caracteristicas": [
           {
@@ -3064,7 +3332,6 @@
       {
         "id": "tempestades",
         "titulo": "Tempestades",
-        "descricao": "A Linhagem que traz o tempo junto. Sobe no ar, sabe o que o céu vai fazer e descarrega em quem ficou embaixo.",
         "efeito_pendente": false,
         "caracteristicas": [
           {
@@ -3120,7 +3387,6 @@
         "nivel_minimo": 1,
         "vida": 0,
         "mana": 0,
-        "descricao": "Séculos ainda por vir. Já carrega o Intelecto Élfico e as duas primeiras dádivas da Linhagem.",
         "caracteristicas": []
       },
       {
@@ -3129,7 +3395,6 @@
         "nivel_minimo": 13,
         "vida": 0,
         "mana": 2,
-        "descricao": "Tempo suficiente para a Linhagem virar hábito. O que antes exigia esforço agora sai no reflexo.",
         "caracteristicas": [
           {
             "id": "memoria-acumulada",
@@ -3149,7 +3414,6 @@
         "nivel_minimo": 25,
         "vida": 0,
         "mana": 3,
-        "descricao": "Viu reino nascer e cair. Nesta idade a Linhagem responde por inteiro, e o alcance do que ele faz cresce junto.",
         "caracteristicas": [
           {
             "id": "memoria-inesgotavel",
@@ -3518,7 +3782,6 @@
       {
         "id": "estrela",
         "titulo": "Estrela",
-        "descricao": "Condensou dentro de uma fornalha que ainda queimava. Trouxe o calor junto, e ele nunca apagou de todo.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3558,7 +3821,6 @@
       {
         "id": "buraco-negro",
         "titulo": "Buraco Negro",
-        "descricao": "Formou-se na borda de algo que engole. Continua puxando de leve o tempo todo: poeira, moeda solta, atenção.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3600,7 +3862,6 @@
       {
         "id": "planeta",
         "titulo": "Planeta",
-        "descricao": "Veio de um mundo inteiro, e trouxe a escala junto. Anda por aqui como quem sabe exatamente quanto pesa.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3642,7 +3903,6 @@
       {
         "id": "nebulosa",
         "titulo": "Nebulosa",
-        "descricao": "Nasceu de uma nuvem que levou eras pra decidir virar alguma coisa. Até hoje hesita em ser sólido.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3683,7 +3943,6 @@
       {
         "id": "pulsar",
         "titulo": "Pulsar",
-        "descricao": "Girou emitindo sinal por tempo demais e nunca perdeu o compasso. Continua marcando ritmo mesmo parado.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3725,7 +3984,6 @@
       {
         "id": "cometa",
         "titulo": "Cometa",
-        "descricao": "Nunca ficou parado em lugar nenhum. Pra ele, chegar e atravessar sempre foram a mesma coisa.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3772,7 +4030,6 @@
         "nivel_minimo": 1,
         "vida": 0,
         "mana": 0,
-        "descricao": "Chegou incompleto. A forma que veste aqui é um resumo grosseiro do que ele era, e boa parte do que sabia ficou do outro lado.",
         "caracteristicas": []
       },
       {
@@ -3781,7 +4038,6 @@
         "nivel_minimo": 12,
         "vida": 0,
         "mana": 2,
-        "descricao": "Tempo suficiente neste mundo para remontar parte de si. A forma para de escorregar e a memória de casa volta em pedaços utilizáveis.",
         "caracteristicas": [
           {
             "id": "molde-estavel",
@@ -3807,7 +4063,6 @@
         "nivel_minimo": 22,
         "vida": 2,
         "mana": 3,
-        "descricao": "Reconstituído por inteiro. Ele continua andando entre os povos das Árvores com uma forma emprestada, só que agora por preferência dele.",
         "caracteristicas": [
           {
             "id": "forma-verdadeira",
@@ -3930,7 +4185,6 @@
       {
         "id": "bipede-pequeno",
         "titulo": "Chassi Bípede Pequeno",
-        "descricao": "O menor chassi com mãos. Cabe onde os outros não cabem e passa por porta feita pra gente.",
         "postura": "bipede",
         "tamanho": "Pequeno",
         "medida_m": 3.5,
@@ -3959,7 +4213,6 @@
       {
         "id": "bipede-normal",
         "titulo": "Chassi Bípede Normal",
-        "descricao": "O chassi padrão da A.X.I.S. Anda por aí sem chamar mais atenção do que um autômato já chama.",
         "postura": "bipede",
         "tamanho": "Normal",
         "medida_m": 5,
@@ -3988,7 +4241,6 @@
       {
         "id": "bipede-grande",
         "titulo": "Chassi Bípede Grande",
-        "descricao": "Chassi de trabalho pesado. Ainda tem mãos, mas nenhuma ferramenta de prateleira serve nelas.",
         "postura": "bipede",
         "tamanho": "Grande",
         "medida_m": 6,
@@ -4017,7 +4269,6 @@
       {
         "id": "bipede-enorme",
         "titulo": "Chassi Bípede Enorme",
-        "descricao": "O maior chassi com mãos que a A.X.I.S. assina. Não entra em construção feita pra gente, e bate como coisa desse tamanho bate.",
         "postura": "bipede",
         "tamanho": "Enorme",
         "medida_m": 9,
@@ -4046,7 +4297,6 @@
       {
         "id": "quadrupede-pequeno",
         "titulo": "Chassi Quadrúpede Pequeno",
-        "descricao": "Quatro patas, nenhuma mão. Pequeno, rápido e fácil de ignorar até a hora em que ele morde.",
         "postura": "quadrupede",
         "tamanho": "Pequeno",
         "medida_m": 0.7,
@@ -4075,7 +4325,6 @@
       {
         "id": "quadrupede-normal",
         "titulo": "Chassi Quadrúpede Normal",
-        "descricao": "Porte de cão grande. Cobre terreno mais rápido que qualquer bípede do mesmo tamanho.",
         "postura": "quadrupede",
         "tamanho": "Normal",
         "medida_m": 1.5,
@@ -4104,7 +4353,6 @@
       {
         "id": "quadrupede-grande",
         "titulo": "Chassi Quadrúpede Grande",
-        "descricao": "Quatro patas em escala de montaria. Corre bem, carrega bem, e não segura nada.",
         "postura": "quadrupede",
         "tamanho": "Grande",
         "medida_m": 3,
@@ -4133,7 +4381,6 @@
       {
         "id": "quadrupede-enorme",
         "titulo": "Chassi Quadrúpede Enorme",
-        "descricao": "O maior dos chassis de quatro patas. Chega antes de todo mundo, e chega pesado.",
         "postura": "quadrupede",
         "tamanho": "Enorme",
         "medida_m": 4.5,
@@ -4486,7 +4733,6 @@
       {
         "id": "replica-perfeita",
         "titulo": "Réplica Perfeita",
-        "descricao": "Feito pra ocupar o lugar do Original sem ninguém notar a troca. Tudo nele foi calibrado pra sustentar a mentira.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -4504,7 +4750,6 @@
       {
         "id": "arquivo-vivo",
         "titulo": "Arquivo Vivo",
-        "descricao": "Feito pra guardar o que o Original sabia. O conhecimento veio instalado, sem um dia de estudo pra trás.",
         "vida": 0,
         "mana": 0,
         "escolha_pericias": {
@@ -4527,7 +4772,6 @@
       {
         "id": "organismo-otimizado",
         "titulo": "Organismo Otimizado",
-        "descricao": "O laboratório aproveitou a cópia pra corrigir os defeitos do corpo original. Aguenta mais, adoece menos e fecha ferimento mais rápido.",
         "vida": 0,
         "mana": 0,
         "vida_por_nivel": 1,
@@ -4544,7 +4788,6 @@
       {
         "id": "serie-continua",
         "titulo": "Série Contínua",
-        "descricao": "Não é o primeiro nem vai ser o último com esse rosto. Tem corpo reserva esperando numa instalação, pronto pra acordar quando este acabar.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -5112,7 +5355,6 @@
       {
         "id": "familiar",
         "titulo": "Familiar",
-        "descricao": "Um bicho pequeno que anda junto e serve de segundo par de olhos. Some quando apanha e volta no descanso seguinte.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -5129,7 +5371,6 @@
       {
         "id": "grimorio",
         "titulo": "Grimório",
-        "descricao": "O caderno onde a bruxaria foi anotada. Guarda mais maldição do que cabe na cabeça e ajuda a acertar a mão no Misticismo.",
         "vida": 0,
         "mana": 0,
         "maldicoes_conhecidas": 5,
@@ -5148,7 +5389,6 @@
       {
         "id": "caldeirao",
         "titulo": "Caldeirão",
-        "descricao": "A panela onde a bruxaria vira dose. Rende duas por descanso, e o que sobrar estraga antes do próximo.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -5167,7 +5407,6 @@
       {
         "id": "vassoura",
         "titulo": "Vassoura",
-        "descricao": "O instrumento que resolve o problema de estar no chão. Uma vez por cena ela sobe, e fica no ar até a cena acabar.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -5214,41 +5453,49 @@
     "transformacao_em_qualquer_arvore": true,
     "origem_onirica": {
       "tipo": "ser-onirico",
-      "descricao": "Uma consciência nascida do véu dos sonhos que assume forma física para caminhar entre os povos das Árvores, sempre meio acordada, meio sonhando."
+      "descricao": "Uma consciência nascida do véu dos sonhos que tomou forma física para andar entre os povos das Árvores, sempre meio acordada."
     },
     "vida": 1,
     "mana": 4,
     "movimento": 0,
+    "ajustes_atributos": {
+      "sabedoria": 2,
+      "fluxo": 2
+    },
+    "limites_atributos": {
+      "sabedoria": 20,
+      "fluxo": 20
+    },
     "legados_adicionais": 1,
-    "descricao": "Não veio de nenhum ventre: veio de um sonho que se recusou a terminar quando o sonhador acordou. Anda entre o mundo real e a lógica solta de um pesadelo, e as duas coisas parecem sempre um pouco mais verdadeiras perto dele.",
+    "descricao": "Veio de um sonho que continuou depois que o sonhador acordou. Precisa sonhar para descansar de verdade, escorrega para dentro da lógica dos sonhos quando quer sumir de um lugar, e traz o pesadelo dos outros para o meio da briga. O Sonho de Origem decide de que matéria ele foi feito, e andar acordado é o que vai deixando ele lúcido dentro do próprio sonho.",
     "fisiologia": [
-      "Não dorme para descansar: para concluir um descanso completo, precisa efetivamente sonhar, e fica alheio aos arredores como qualquer criatura adormecida ficaria.",
-      "É imune a efeitos que dependam especificamente de forçar o sono, mas não a outras formas de nocaute ou inconsciência."
+      "Precisa sonhar de verdade para concluir um descanso completo, e enquanto sonha fica alheio aos arredores como qualquer criatura adormecida.",
+      "É imune a efeitos que forcem o sono, mas continua vulnerável a nocaute e a outras formas de inconsciência."
     ],
     "caracteristicas": [
       {
         "id": "passo-entre-sonhos",
         "titulo": "Passo Entre-Sonhos",
         "tipo": "movimento",
-        "descricao": "Uma vez por cena, gaste uma ação e 3 Mana para se teleportar até 6 m para um espaço desocupado que consiga ver, escorregando por um instante para dentro da própria lógica dos sonhos. Isso não provoca reações.",
+        "descricao": "Uma vez por cena, gaste seu Movimento e 3 Mana para sumir de onde está e aparecer num espaço desocupado que você enxergue a até 9 m. Isso não provoca reações.",
         "usos": 1,
         "recuperacao": "cena",
         "custo_mana": 3,
-        "alcance_m": 6,
+        "alcance_m": 9,
         "automatizada": false
       },
       {
         "id": "veu-do-sonhador",
         "titulo": "Véu do Sonhador",
         "tipo": "passiva",
-        "descricao": "Você recebe vantagem para resistir a Medo, perda de Sanidade e ilusões. Você também não pode ser localizado ou rastreado através dos sonhos de outra criatura.",
+        "descricao": "Receba vantagem para resistir a medo, a perda de Sanidade e a ilusões. Ninguém consegue te achar ou te rastrear pelo sonho de outra criatura.",
         "automatizada": false
       },
       {
         "id": "leitura-de-sonhos",
         "titulo": "Leitura de Sonhos",
         "tipo": "exploracao",
-        "descricao": "Uma vez por descanso, enquanto uma criatura dorme e permite, você pode tocá-la e vislumbrar fragmentos soltos do sonho atual dela: uma imagem, uma emoção ou um medo recorrente. Isso nunca revela senhas, planos completos ou segredos que a criatura não contaria mesmo dormindo.",
+        "descricao": "Uma vez por descanso, enquanto uma criatura dorme e permite, toque nela e veja pedaços soltos do sonho que ela está tendo: uma imagem, uma emoção, um medo que volta sempre. Isso nunca entrega senha, plano completo nem segredo que a criatura não contaria nem dormindo.",
         "usos": 1,
         "recuperacao": "descanso",
         "automatizada": false
@@ -5257,7 +5504,7 @@
         "id": "pesadelo-manifesto",
         "titulo": "Pesadelo Manifesto",
         "tipo": "acao",
-        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para fazer uma criatura a até 15 m enxergar, por um instante, o pior pesadelo que carrega. Faça Misticismo contra a Vontade dela; em falha, a criatura sofre desvantagem no próximo teste que fizer e não pode usar reações até o início do seu próximo turno.",
+        "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para fazer uma criatura a até 15 m ver por um instante o pior pesadelo que ela carrega. Faça Misticismo contra a Vontade dela. Falhando, ela fica Amedrontada por duas rodadas e não pode usar reações nesse tempo; passando, ela só perde a reação até o começo do seu próximo turno.",
         "usos": 1,
         "recuperacao": "cena",
         "custo_mana": 5,
@@ -5269,7 +5516,7 @@
         "id": "ancoragem-fragil",
         "titulo": "Ancoragem Frágil",
         "tipo": "limitacao",
-        "descricao": "Se passar mais de 24 horas sem completar um descanso sonhando de verdade, seu corpo começa a perder coesão: até voltar a sonhar, sua Mana máxima fica reduzida à metade, arredondada para baixo.",
+        "descricao": "Passadas 24 horas sem um descanso completo com sonho de verdade, seu corpo começa a perder coesão: até você voltar a sonhar, sua Mana máxima cai pela metade, arredondada para baixo.",
         "automatizada": false
       },
       {
@@ -5278,6 +5525,254 @@
         "tipo": "aquisicao",
         "descricao": "Ao adquirir esta raça, receba um Legado adicional, moldado pelo sonho que te deu forma.",
         "automatizada": false
+      }
+    ],
+    "rotulo_variante": "Sonho de Origem",
+    "descricao_variantes": "Escolha o sonho que não terminou e acabou virando você. Nenhum dos cinco é mais forte que os outros; cada um deixou para trás uma matéria diferente.",
+    "variantes": [
+      {
+        "id": "voo",
+        "titulo": "Sonho de Voo",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "pes-fora-do-chao",
+            "titulo": "Pés Fora do Chão",
+            "tipo": "passiva",
+            "nivel_minimo": 1,
+            "descricao": "Você pesa menos do que devia. Ignora terreno difícil, cai de qualquer altura sem sofrer dano e recebe vantagem em Acrobacia para se equilibrar.",
+            "automatizada": false
+          },
+          {
+            "id": "subida-do-sonho",
+            "titulo": "Subida do Sonho",
+            "tipo": "acao",
+            "nivel_minimo": 10,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para receber deslocamento de voo igual ao seu Movimento até o fim da cena.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "nunca-mais-pousar",
+            "titulo": "Nunca Mais Pousar",
+            "tipo": "passiva",
+            "nivel_minimo": 20,
+            "descricao": "Seu voo passa a valer sempre, sem gastar ação nem Mana, e Passo Entre-Sonhos ganha um segundo uso por cena.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "pesadelo",
+        "titulo": "Pesadelo",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "cara-que-nao-fecha",
+            "titulo": "Cara que Não Fecha",
+            "tipo": "passiva",
+            "nivel_minimo": 1,
+            "descricao": "Quem olha para você tempo demais vê o que menos queria ver. Receba vantagem em Intimidação, e criaturas que já falharam contra o seu Pesadelo Manifesto nesta cena não conseguem mais te pegar de surpresa.",
+            "automatizada": false
+          },
+          {
+            "id": "pesadelo-que-pega",
+            "titulo": "Pesadelo que Pega",
+            "tipo": "passiva",
+            "nivel_minimo": 10,
+            "descricao": "Pesadelo Manifesto passa a atingir também as criaturas hostis a até 6 m do alvo, e cada uma faz o próprio teste.",
+            "automatizada": false
+          },
+          {
+            "id": "noite-sem-fim",
+            "titulo": "Noite Sem Fim",
+            "tipo": "acao_completa",
+            "nivel_minimo": 20,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 9 Mana para virar 12 m em volta de você no pesadelo de quem estiver ali. Por três rodadas, cada criatura hostil dentro da área faz Vontade contra o seu Misticismo no começo do próprio turno e, falhando, sofre 3d6 de dano psíquico e perde a ação daquele turno.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 9,
+            "alcance_m": 12,
+            "duracao_rodadas": 3,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "recorrente",
+        "titulo": "Sonho Recorrente",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "de-novo-igual",
+            "titulo": "De Novo, Igual",
+            "tipo": "rerrolagem",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, depois de falhar num teste, rerrole e fique com o novo resultado. Você já viveu essa cena dormindo mais vezes do que consegue contar.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "automatizada": false
+          },
+          {
+            "id": "ja-vi-isso-antes",
+            "titulo": "Já Vi Isso Antes",
+            "tipo": "reacao",
+            "nivel_minimo": 10,
+            "descricao": "Uma vez por cena, quando uma criatura a até 9 m declarar um ataque ou um efeito contra você, gaste uma reação e 3 Mana para impor desvantagem nesse teste.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 3,
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "a-noite-que-se-repete",
+            "titulo": "A Noite que Se Repete",
+            "tipo": "reacao",
+            "nivel_minimo": 20,
+            "descricao": "Uma vez por sessão, gaste uma reação e 8 Mana para anular por completo um ataque ou efeito que acabou de acertar você ou um aliado a até 9 m, como se aquele pedaço da rodada não tivesse acontecido.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 9,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "alheio",
+        "titulo": "Sonho Alheio",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "dono-do-sonho",
+            "titulo": "Dono do Sonho",
+            "tipo": "passiva",
+            "nivel_minimo": 1,
+            "descricao": "Existe alguém em algum lugar que ainda sonha com você; defina com o mestre quem é. Enquanto essa pessoa estiver viva, você recebe vantagem em Vontade e sabe a direção aproximada dela. Se ela morrer, você perde os dois até outro sonhador te adotar.",
+            "automatizada": false
+          },
+          {
+            "id": "visita-noturna",
+            "titulo": "Visita Noturna",
+            "tipo": "exploracao",
+            "nivel_minimo": 10,
+            "descricao": "Uma vez por descanso, gaste 4 Mana e dez minutos dormindo para aparecer no sonho de uma criatura adormecida que você já viu de perto. Vocês conversam normalmente enquanto ela continuar dormindo, e ela acorda lembrando de tudo.",
+            "usos": 1,
+            "recuperacao": "descanso",
+            "custo_mana": 4,
+            "automatizada": false
+          },
+          {
+            "id": "sonho-emprestado",
+            "titulo": "Sonho Emprestado",
+            "tipo": "acao",
+            "nivel_minimo": 20,
+            "descricao": "Uma vez por sessão, gaste uma ação e 8 Mana para puxar um aliado a até 9 m para dentro do seu sonho por três rodadas. Enquanto estiverem lá, os dois somem do mundo: nada alcança vocês e nada que vocês fizerem alcança o mundo. Na volta, os dois aparecem onde saíram e recuperam 3d6 de Vida.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 8,
+            "alcance_m": 9,
+            "duracao_rodadas": 3,
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "febril",
+        "titulo": "Sonho Febril",
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": [
+          {
+            "id": "logica-torta",
+            "titulo": "Lógica Torta",
+            "tipo": "reacao",
+            "nivel_minimo": 1,
+            "descricao": "Perto de você as coisas não se comportam. Uma vez por cena, quando uma criatura a até 9 m fizer um teste, gaste uma reação e 2 Mana para mexer num detalhe pequeno da cena, como uma porta que troca de lado ou um chão que inclina, e imponha desvantagem nesse teste.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 2,
+            "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "delirio-contagioso",
+            "titulo": "Delírio Contagioso",
+            "tipo": "acao",
+            "nivel_minimo": 10,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para fazer uma criatura a até 12 m enxergar a cena errada. Faça Misticismo contra a Vontade dela; falhando, ela passa duas rodadas tratando um aliado como inimigo e um inimigo como aliado, os dois escolhidos por você.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 12,
+            "teste": "misticismo_vs_vontade",
+            "automatizada": false
+          },
+          {
+            "id": "o-mundo-nao-combina",
+            "titulo": "O Mundo Não Combina",
+            "tipo": "acao_completa",
+            "nivel_minimo": 20,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 9 Mana para deixar 12 m em volta de você sem regra fixa por três rodadas. No começo de cada uma das suas rodadas, escolha um efeito: o chão vira terreno difícil para quem você quiser, todo ataque à distância dentro da área sai com desvantagem, ou toda criatura hostil ali perde a reação. Seus aliados nunca são afetados.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 9,
+            "alcance_m": 12,
+            "duracao_rodadas": 3,
+            "automatizada": false
+          }
+        ]
+      }
+    ],
+    "estagios": [
+      {
+        "id": "meio-acordado",
+        "titulo": "Meio Acordado",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "sonho-lucido",
+        "titulo": "Sonho Lúcido",
+        "nivel_minimo": 10,
+        "vida": 1,
+        "mana": 2,
+        "caracteristicas": [
+          {
+            "id": "mao-no-sonho",
+            "titulo": "Mão no Sonho",
+            "tipo": "passiva",
+            "nivel_minimo": 10,
+            "descricao": "Você já sabe que está sonhando enquanto anda acordado. Passo Entre-Sonhos passa a alcançar 15 m, e uma vez por cena você leva junto uma criatura voluntária que esteja adjacente.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "sonho-que-nao-acaba",
+        "titulo": "Sonho que Não Acaba",
+        "nivel_minimo": 20,
+        "vida": 1,
+        "mana": 3,
+        "caracteristicas": [
+          {
+            "id": "corpo-de-sonho",
+            "titulo": "Corpo de Sonho",
+            "tipo": "passiva",
+            "nivel_minimo": 20,
+            "descricao": "Seu corpo já não obedece direito à matéria. Receba Resistência 5 contra dano físico e, uma vez por cena, quando sofrer dano, gaste uma reação para ficar incorpóreo até o começo do seu próximo turno, atravessando parede e criatura sem poder atacar nem carregar nada.",
+            "automatizada": false
+          }
+        ]
       }
     ],
     "recursos_provisorios": false
@@ -5310,7 +5805,7 @@
     "transformacao_em_qualquer_arvore": true,
     "origem_divina": {
       "tipo": "descendencia-divina",
-      "descricao": "Um semideus ou avatar reduzido de uma divindade, grande ou pequena, conhecida ou esquecida por quase todas as Árvores. A devoção plena de um deus inteiro está muito além do alcance de um personagem jogável."
+      "descricao": "Um semideus ou o avatar reduzido de uma divindade, grande ou pequena, conhecida ou esquecida por quase todas as Árvores. A devoção inteira de um deus está muito além do alcance de um personagem jogável."
     },
     "vida": 2,
     "mana": 4,
@@ -5323,36 +5818,59 @@
       "carisma": 20,
       "fluxo": 20
     },
+    "ajustes_pericias": {
+      "vontade": 4
+    },
     "legados_adicionais": 1,
-    "descricao": "Sangue de deus correndo em corpo pequeno demais pra ele. Divindade plena está fora de alcance: o que sobra já é o suficiente pra ser temido, cultuado ou caçado, e nem sempre por quem dá valor às suas escolhas.",
+    "descricao": "Carrega sangue de um deus, grande ou pequeno, cultuado ou esquecido faz séculos. Divindade inteira está fora de alcance, e o que sobrou já basta para ser adorado, temido ou caçado por quem nunca perguntou a opinião dele. O Domínio escolhido decide o que esse sangue faz na prática, e ele acorda devagar, até dar para vestir a forma inteira do deus por alguns instantes.",
     "fisiologia": [
-      "Não envelhece e é imune a doenças puramente mortais, mas continua vulnerável a maldições, venenos e ferimentos como qualquer outro ser vivo."
+      "Não envelhece e é imune a doenças puramente mortais, mas continua vulnerável a maldição, veneno e ferimento como qualquer outro ser vivo."
     ],
     "caracteristicas": [
       {
         "id": "sangue-divino",
         "titulo": "Sangue Divino",
         "tipo": "passiva",
-        "descricao": "Receba +4 em Vontade e vantagem para resistir a efeitos que tentem controlar, subjugar ou apagar sua identidade.",
+        "descricao": "Receba +4 em Vontade e vantagem para resistir a qualquer coisa que tente controlar, subjugar ou apagar quem você é.",
         "automatizada": true
+      },
+      {
+        "id": "bencao-concedida",
+        "titulo": "Bênção Concedida",
+        "tipo": "reacao",
+        "descricao": "Uma vez por sessão, quando você ou um aliado a até 9 m falhar num teste, gaste uma reação e 4 Mana para transformar aquela falha comum em sucesso comum. Isso não transforma o impossível em possível e não funciona sobre falha crítica.",
+        "usos": 1,
+        "recuperacao": "sessao",
+        "custo_mana": 4,
+        "alcance_m": 9,
+        "automatizada": false
+      },
+      {
+        "id": "nome-que-se-invoca",
+        "titulo": "Nome que se Invoca",
+        "tipo": "exploracao",
+        "descricao": "Sua linhagem ainda tem gente que reza para ela. Uma vez por sessão, num lugar onde exista culto, templo ou lembrança do seu deus, você consegue abrigo, uma informação ou um favor pequeno sem precisar de teste. Quem te reconhece costuma cobrar do jeito de sempre: devoção, pedido ou culpa.",
+        "usos": 1,
+        "recuperacao": "sessao",
+        "automatizada": false
       },
       {
         "id": "presenca-que-pesa",
         "titulo": "Presença que Pesa",
         "tipo": "limitacao",
-        "descricao": "Criaturas sensíveis ao sagrado ou ao profano sentem algo diferente em você mesmo disfarçado: receba desvantagem em Furtividade e Disfarce contra quem tiver devoção ou vínculo religioso ativo. Seguidores e inimigos da sua linhagem também tendem a te notar primeiro.",
+        "descricao": "Criatura sensível ao sagrado ou ao profano sente que tem algo errado com você mesmo quando está disfarçado: receba desvantagem em Furtividade e em Enganação para se disfarçar diante de quem tenha devoção ou vínculo religioso ativo. Seguidor e inimigo da sua linhagem costumam te notar antes de notar o resto do grupo.",
         "automatizada": false
       },
       {
         "id": "heranca-divina",
         "titulo": "Herança Divina",
         "tipo": "aquisicao",
-        "descricao": "Ao adquirir esta raça, receba um Legado adicional, herdado do sangue que carrega.",
+        "descricao": "Ao adquirir esta raça, receba um Legado adicional, herdado do sangue que você carrega.",
         "automatizada": false
       }
     ],
     "rotulo_variante": "Domínio Divino",
-    "descricao_variantes": "Escolha um único Domínio. Sua aparência pode variar, mas apenas a regra do Domínio escolhido funciona.",
+    "descricao_variantes": "Escolha um Domínio só. A aparência e o nome do seu deus ficam por sua conta, mas em mesa funciona apenas a regra do Domínio escolhido.",
     "variantes": [
       {
         "id": "criacao",
@@ -5363,10 +5881,34 @@
           {
             "id": "primeira-centelha",
             "titulo": "Primeira Centelha",
-            "tipo": "passiva",
-            "descricao": "Uma vez por cena, ao tentar pela primeira vez nesta campanha algo que seu personagem nunca fez antes, receba vantagem nesse teste.",
+            "tipo": "acao",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, gaste uma ação e 3 Mana para fazer surgir na sua mão um objeto simples e sem partes móveis, do tamanho de uma mochila: corda, tocha, chave bruta, escada curta, escudo. Ele é real, funciona como o equivalente comum e some no fim da cena.",
             "usos": 1,
             "recuperacao": "cena",
+            "custo_mana": 3,
+            "automatizada": false
+          },
+          {
+            "id": "mao-que-conserta",
+            "titulo": "Mão que Conserta",
+            "tipo": "acao",
+            "nivel_minimo": 12,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para refazer um objeto quebrado de até o tamanho de uma pessoa, ou devolver a uma arma ou armadura toda a durabilidade que ela perdeu. Não funciona em construto, em criatura nem no que já foi destruído por completo.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "automatizada": false
+          },
+          {
+            "id": "obra-do-nada",
+            "titulo": "Obra do Nada",
+            "tipo": "acao_completa",
+            "nivel_minimo": 24,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 9 Mana para erguer no lugar uma estrutura sólida de até 9 m de lado: ponte, muro, torre baixa, casa simples. Ela aguenta peso e fica de pé por um dia, ou para sempre se você passar um descanso completo firmando o que fez.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 9,
             "automatizada": false
           }
         ]
@@ -5381,11 +5923,36 @@
             "id": "toque-que-cura",
             "titulo": "Toque que Cura",
             "tipo": "acao",
-            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para tocar uma criatura e recuperar 2d6 + Mod.Carisma de Vida.",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para tocar uma criatura e devolver a ela 2d6 + Mod.Carisma de Vida.",
             "usos": 1,
             "recuperacao": "cena",
             "custo_mana": 4,
             "cura": "2d6 + Mod.Carisma",
+            "automatizada": false
+          },
+          {
+            "id": "folego-para-todos",
+            "titulo": "Fôlego para Todos",
+            "tipo": "acao",
+            "nivel_minimo": 12,
+            "descricao": "Uma vez por cena, gaste uma ação e 6 Mana para curar 2d6 + Mod.Carisma de Vida em cada aliado a até 9 m e tirar de cada um deles uma condição de veneno, doença ou sangramento.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 6,
+            "alcance_m": 9,
+            "cura": "2d6 + Mod.Carisma",
+            "automatizada": false
+          },
+          {
+            "id": "volta-aqui",
+            "titulo": "Volta Aqui",
+            "tipo": "acao_completa",
+            "nivel_minimo": 24,
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 10 Mana para tocar um aliado que morreu nesta cena e trazê-lo de volta com um quarto da Vida máxima e Ferido +2. A mesma criatura só volta assim uma vez.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 10,
             "automatizada": false
           }
         ]
@@ -5400,8 +5967,33 @@
             "id": "furia-sagrada",
             "titulo": "Fúria Sagrada",
             "tipo": "passiva",
-            "descricao": "Receba vantagem no primeiro teste de ataque que fizer em cada combate.",
+            "nivel_minimo": 1,
+            "descricao": "Receba vantagem no primeiro teste de ataque que fizer em cada combate, e o primeiro acerto de cada combate causa 1d6 de dano extra.",
             "automatizada": true
+          },
+          {
+            "id": "investida-do-deus",
+            "titulo": "Investida do Deus",
+            "tipo": "acao",
+            "nivel_minimo": 12,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para atacar duas vezes com a mesma arma. Se os dois ataques acertarem o mesmo alvo, ele fica Caído.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "automatizada": false
+          },
+          {
+            "id": "nome-de-batalha",
+            "titulo": "Nome de Batalha",
+            "tipo": "acao",
+            "nivel_minimo": 24,
+            "descricao": "Uma vez por sessão, gaste uma ação e 9 Mana para gritar o nome do seu deus. Por três rodadas, você e cada aliado a até 12 m recebem +2 de Defesa, vantagem em ataque e imunidade a medo. Cada criatura hostil que ouvir faz Vontade contra o seu Carisma e, falhando, ataca com desvantagem nesse tempo.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 9,
+            "alcance_m": 12,
+            "duracao_rodadas": 3,
+            "automatizada": false
           }
         ]
       },
@@ -5415,9 +6007,33 @@
             "id": "palavras-que-convencem",
             "titulo": "Palavras que Convencem",
             "tipo": "rerrolagem",
-            "descricao": "Uma vez por sessão, depois de falhar em um teste de Enganação ou Diplomacia, rerrole o teste e mantenha o novo resultado.",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por sessão, depois de falhar num teste de Enganação ou Diplomacia, rerrole e fique com o novo resultado.",
             "usos": 1,
             "recuperacao": "sessao",
+            "automatizada": false
+          },
+          {
+            "id": "nunca-estive-aqui",
+            "titulo": "Nunca Estive Aqui",
+            "tipo": "acao",
+            "nivel_minimo": 12,
+            "descricao": "Uma vez por cena, gaste uma ação e 4 Mana para se apagar da cena por três rodadas: quem não estiver olhando para você naquele instante esquece que você estava ali e não consegue te procurar. Atacar ou falar alto encerra o efeito na hora.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 4,
+            "duracao_rodadas": 3,
+            "automatizada": false
+          },
+          {
+            "id": "barganha-divina",
+            "titulo": "Barganha Divina",
+            "tipo": "acao",
+            "nivel_minimo": 24,
+            "descricao": "Uma vez por sessão, gaste uma ação e 9 Mana para propor um acordo a uma criatura que consiga te ouvir e entender. Ela faz Vontade contra o seu Carisma e, falhando, aceita o acordo como se a ideia tivesse sido dela e cumpre por uma cena, desde que ele não mande ela morrer nem trair o que ela mais ama.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 9,
             "automatizada": false
           }
         ]
@@ -5432,10 +6048,83 @@
             "id": "ultima-palavra",
             "titulo": "Última Palavra",
             "tipo": "reacao",
-            "descricao": "Uma vez por sessão, quando um aliado a até 9 m chegar a 0 de Vida, use sua reação para estabilizá-lo automaticamente, sem exigir teste.",
+            "nivel_minimo": 1,
+            "descricao": "Uma vez por sessão, quando um aliado a até 9 m chegar a 0 de Vida, gaste sua reação para estabilizá-lo na hora, sem teste nenhum.",
             "usos": 1,
             "recuperacao": "sessao",
             "alcance_m": 9,
+            "automatizada": false
+          },
+          {
+            "id": "portas-de-passagem",
+            "titulo": "Portas de Passagem",
+            "tipo": "acao",
+            "nivel_minimo": 12,
+            "descricao": "Uma vez por cena, gaste uma ação e 5 Mana para abrir uma passagem entre dois pontos que você enxergue, a até 18 m um do outro. Ela fica aberta até o começo do seu próximo turno e passa uma criatura de cada vez.",
+            "usos": 1,
+            "recuperacao": "cena",
+            "custo_mana": 5,
+            "alcance_m": 18,
+            "automatizada": false
+          },
+          {
+            "id": "segurar-o-fim",
+            "titulo": "Segurar o Fim",
+            "tipo": "reacao",
+            "nivel_minimo": 24,
+            "descricao": "Uma vez por sessão, quando uma criatura a até 12 m morreria, gaste uma reação e 9 Mana para negar essa morte: a Vida dela vira 1, Morrendo sai e ela recebe Ferido +1. Não funciona sobre quem já morreu em rodadas anteriores.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 9,
+            "alcance_m": 12,
+            "automatizada": false
+          }
+        ]
+      }
+    ],
+    "estagios": [
+      {
+        "id": "faisca",
+        "titulo": "Faísca",
+        "nivel_minimo": 1,
+        "vida": 0,
+        "mana": 0,
+        "caracteristicas": []
+      },
+      {
+        "id": "semideus",
+        "titulo": "Semideus",
+        "nivel_minimo": 12,
+        "vida": 1,
+        "mana": 2,
+        "caracteristicas": [
+          {
+            "id": "sangue-mais-acordado",
+            "titulo": "Sangue Mais Acordado",
+            "tipo": "passiva",
+            "nivel_minimo": 12,
+            "descricao": "O que corre em você começa a aparecer sem pedir licença. Uma vez por cena, reduza em 3 o custo de Mana de uma característica racial sua, até o mínimo de 1. Criatura comum, sem nome próprio na cena, precisa passar em Vontade contra o seu Carisma para conseguir te atacar.",
+            "automatizada": false
+          }
+        ]
+      },
+      {
+        "id": "avatar",
+        "titulo": "Avatar",
+        "nivel_minimo": 24,
+        "vida": 2,
+        "mana": 3,
+        "caracteristicas": [
+          {
+            "id": "forma-de-avatar",
+            "titulo": "Forma de Avatar",
+            "tipo": "acao",
+            "nivel_minimo": 24,
+            "descricao": "Uma vez por sessão, gaste uma ação e 10 Mana para vestir por três rodadas a forma que o seu deus teria. Enquanto durar, receba +4 de Defesa, vantagem em todo teste ligado ao seu Domínio e 2d6 de dano extra nos seus ataques, e você não pode ser derrubado, agarrado nem movido contra a sua vontade. Quando acabar, receba 1 ponto de Cansaço.",
+            "usos": 1,
+            "recuperacao": "sessao",
+            "custo_mana": 10,
+            "duracao_rodadas": 3,
             "automatizada": false
           }
         ]
