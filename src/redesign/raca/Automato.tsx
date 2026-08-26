@@ -72,7 +72,7 @@ export const Automato = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-cyan-200/60 max-w-2xl mx-auto font-mono leading-relaxed"
           >
-            Construto consciente saído da A.X.I.S, com núcleo próprio e vontade própria: não deve obediência a criador nenhum. Cura não funciona nele: quem conserta é engenheiro. O chassi, bípede ou quadrúpede, é decisão de criação. Fala Inglês.
+            Construto consciente saído da A.X.I.S, com núcleo e vontade próprios, que não deve obediência a nenhum criador. Cura comum ou mágica não repara seu corpo; esse trabalho exige Ofício (Engenharia). O chassi, bípede ou quadrúpede, é escolhido na criação. Fala Inglês.
           </motion.p>
         </motion.header>
 

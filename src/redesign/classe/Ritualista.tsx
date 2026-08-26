@@ -99,7 +99,7 @@ export const Ritualista = ({ classe }: { classe: IClasse }) => {
             <Star size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Grande Oficiante</h3>
             <p className="text-purple-200/60 leading-relaxed text-sm">
-              No nível 20, uma vez por sessão, você conclui um ritual conhecido em três rodadas. Para cumprir requisitos de participantes, você conta como quatro ajudantes. Também recebe +5 contra interrupções e gasta 1 lote a menos de Componentes Ritualísticos. O custo de Mana não muda.
+              No nível 20, uma vez por sessão, você pode realizar um ritual conhecido até em combate: use uma Ação Completa em cada um de três turnos e permaneça Concentrando. Você conta como quatro ajudantes, recebe +5 contra interrupções e gasta 1 lote a menos de Componentes Ritualísticos. O custo de Mana não muda.
             </p>
           </PremiumCard>
           <PremiumCard

@@ -16,14 +16,17 @@ export const Simbionte = ({ raca }: SimbionteProps) => {
   return (
     <div className="min-h-screen text-orange-50 p-8 selection:bg-orange-500/30 overflow-hidden relative">
       {/* Organic Gradient Background */}
-      <div className="fixed inset-0 z-0 bg-black">
+      <div
+        className="fixed inset-0 z-0 bg-black bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/assets/img/miceliano_bg.webp')" }}
+      >
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 25% 25%, rgba(224,122,95,0.18), transparent 55%), radial-gradient(circle at 75% 75%, rgba(124,45,18,0.22), transparent 55%), #0d0805',
+            background: 'radial-gradient(circle at 25% 25%, rgba(224,122,95,0.18), transparent 55%), radial-gradient(circle at 75% 75%, rgba(124,45,18,0.22), transparent 55%)',
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0d0805]/40 via-transparent to-[#0d0805]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0d0805]/55 via-[#0d0805]/25 to-[#0d0805]/90" />
       </div>
 
       {/* Spore / Symbiote Bioluminescence Effects */}

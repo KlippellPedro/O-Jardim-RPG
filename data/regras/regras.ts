@@ -6,6 +6,7 @@ import magiasData from '../ficha/magias.json';
 import marcasCirculoData from '../ficha/marcas-de-circulo.json';
 import periciasData from '../ficha/pericias.json';
 import racasData from '../ficha/racas.json';
+import catalogoLojaData from '../loja/catalogo.json';
 import { REGRA_AFLICOES } from './aflicoes';
 import { REGRA_ATAQUES_COMBINADOS } from './ataquesCombinados';
 import { REGRA_BASES } from './bases';
@@ -89,10 +90,46 @@ const listaClassesPublicas = classesData
   .map((classe) => `<li><strong>${classe.titulo}</strong> (${classe.categoria === 'esquecida' ? 'especial' : 'comum'}) - ${classe.descricao}</li>`)
   .join('');
 
-const listaRacasPublicas = racasData
-  .filter((raca) => !raca.indisponivel && raca.id !== 'raca-personalizada')
+const classesComuns = classesData.filter((classe) => classe.categoria === 'padrao').length;
+const classesEspeciais = classesData.filter((classe) => classe.categoria === 'esquecida').length;
+const classesComProgressao = classesData.filter((classe) => classe.progressao_publicada && classe.progressao?.length).length;
+
+/** Conta direto de classes.json para o resumo de perfis de Vida/Mana (Guia do
+ * Mestre) nunca divergir da distribuição real depois de um remapeamento. */
+const contarClassesPorPerfilVidaMana = (vida: number, mana: number) => (
+  classesData.filter((classe) => classe.vida === vida && classe.mana === mana).length
+);
+const totalClassesMarcialPuro = contarClassesPorPerfilVidaMana(6, 1);
+const totalClassesMarcial = contarClassesPorPerfilVidaMana(5, 2);
+const totalClassesMisto = contarClassesPorPerfilVidaMana(4, 3);
+const totalClassesConjurador = contarClassesPorPerfilVidaMana(3, 4);
+const totalClassesConjuradorPuro = contarClassesPorPerfilVidaMana(2, 5);
+
+const racasMecanicas = racasData
+  .filter((raca) => !raca.indisponivel && raca.id !== 'raca-personalizada');
+const racasComuns = racasMecanicas.filter((raca) => raca.categoria === 'padrao').length;
+const racasEspeciais = racasMecanicas.filter((raca) => raca.categoria === 'esquecida').length;
+const listaRacasPublicas = racasMecanicas
   .map((raca) => `<li><strong>${raca.titulo}</strong> (${raca.categoria === 'esquecida' ? 'especial' : 'comum'}) - Vida ${raca.vida >= 0 ? '+' : ''}${raca.vida}, Mana ${raca.mana >= 0 ? '+' : ''}${raca.mana}${raca.movimento ? `, Movimento +${raca.movimento} m` : ''}</li>`)
   .join('');
+
+const totalFrutosEden = catalogoLojaData.entradas.filter((item) => item.tipo === 'fruto-eden').length;
+const totalImplantes = catalogoLojaData.entradas.filter((item) => item.tipo === 'implante').length;
+
+/** nivelMinimoLoja é o mesmo campo que lojaCatalogService.ts lê para decidir o
+ * balcão de cada item (1 Vila, 2 Metrópole, 3 Mercado Negro, 4 Banco Lunar).
+ * Contado aqui para a tabela de locais nunca divergir do catálogo real. */
+const itensLojaPorPadrao = catalogoLojaData.entradas.filter(
+  (item) => (item.conteudo as { disponivelNaLoja?: boolean })?.disponivelNaLoja !== false,
+);
+const totalItensLoja = itensLojaPorPadrao.length;
+const contarPorNivelLoja = (nivel: number) => itensLojaPorPadrao.filter(
+  (item) => (item.conteudo as { nivelMinimoLoja?: number })?.nivelMinimoLoja === nivel,
+).length;
+const totalItensFeiraDeVila = contarPorNivelLoja(1);
+const totalItensMetropole = contarPorNivelLoja(2);
+const totalItensMercadoNegro = contarPorNivelLoja(3);
+const totalItensBancoLunar = contarPorNivelLoja(4);
 
 const NOME_ATRIBUTO_PERICIA: Record<string, string> = {
   forca: 'Força',
@@ -305,7 +342,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Jogador experiente na mesma mesa</h3>
       <ul class="regras-list">
-        <li>Quem já jogou vai querer otimizar e vai conhecer outros sistemas. Aponte para Ferimentos, Coreografia e Iniciativa estática: é onde O Jardim se afasta do que essa pessoa espera.</li>
+        <li>Quem já jogou vai querer otimizar e vai conhecer outros sistemas. Aponte para Ferimentos, Coreografia e a Iniciativa fixa do capítulo Combate: é onde O Jardim se afasta do que essa pessoa espera.</li>
         <li>Peça que ela não responda pelos outros. Um veterano ansioso ensina rápido e cala a mesa inteira sem perceber.</li>
         <li>Distribua os holofotes por cena, não por rodada. A cena social é de quem tem Carisma, e a de perseguição é de quem tem Pilotagem: assim ninguém precisa competir por espaço.</li>
       </ul>
@@ -469,7 +506,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p class="regras-lead">Esta é a página que você consulta para saber com quem está lidando. As fórmulas são as mesmas para todo mundo, então dá para prever a ficha de um personagem sabendo só o nível e o tipo de classe dele.</p>
 
       <h3 class="regras-subtitle">O personagem de referência</h3>
-      <p>Todas as 26 classes gastam o mesmo orçamento de 7 pontos por nível, distribuído entre Vida e Mana em cinco graus. A tabela abaixo é o personagem médio de cada grau, calculada com Constituição 14 e Sabedoria 10. Use como piso ao montar encontro.</p>
+      <p>Todas as ${classesData.length} classes gastam o mesmo orçamento de 7 pontos por nível, distribuído entre Vida e Mana em cinco graus. A tabela abaixo é o personagem médio de cada grau, calculada com Constituição 14 e Sabedoria 10. Use como piso ao montar encontro.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Nível</th><th>Marcial Puro 6/1</th><th>Marcial 5/2</th><th>Misto 4/3</th><th>Conjurador 3/4</th><th>Conjurador Puro 2/5</th><th>Defesa</th><th>Poderes</th></tr></thead>
         <tbody>
@@ -482,7 +519,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td><strong>40</strong></td><td>248 / 40</td><td>208 / 80</td><td>168 / 120</td><td>128 / 160</td><td>88 / 200</td><td>31</td><td>8</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">Uma classe é Marcial Puro, quatro são Marciais, sete são Mistas, treze são Conjuradoras e três são Conjuradoras Puras. Num grupo comum de quatro, some as Vidas da coluna certa e multiplique o dano do grupo por rodada por 4,5: sai a Vida efetiva do encontro padrão.</p>
+      <p class="regras-note">Perfil de Vida/Mana por classe: ${totalClassesMarcialPuro} Marcial Puro (6/1), ${totalClassesMarcial} Marciais (5/2), ${totalClassesMisto} Mistas (4/3), ${totalClassesConjurador} Conjuradoras (3/4) e ${totalClassesConjuradorPuro} Conjuradoras Puras (2/5). Num grupo comum de quatro, some as Vidas da coluna certa e multiplique o dano do grupo por rodada por 4,5: sai a Vida efetiva do encontro padrão.</p>
 
       <h3 class="regras-subtitle">Conferir maestria</h3>
       <ul class="regras-list">
@@ -672,6 +709,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Ataque', 'Luta/Pontaria vs. Defesa'],
     ],
     corpo: `
+      <h3 class="regras-subtitle">Iniciativa</h3>
+      <p class="regras-lead">Iniciativa aqui não se rola: é um número da ficha, igual à Defesa. Você calcula uma vez e usa em todo combate.</p>
+      <ul class="regras-list">
+        <li>Iniciativa = 10 + metade do nível + Mod.Destreza + bônus.</li>
+        <li>Empate se resolve pelo maior Mod.Sabedoria. Se persistir, personagens agem antes de NPCs.</li>
+        <li>Surpreendido leva −5 na primeira rodada. Atrasar baixa sua posição de vez, pelo resto do combate.</li>
+      </ul>
+
       <h3 class="regras-subtitle">Seu turno</h3>
       <ul class="regras-list">
         <li><strong>Ação Padrão:</strong> atacar, usar uma habilidade, ajudar alguém ou tentar uma manobra.</li>
@@ -712,6 +757,12 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Manobra não causa dano por si só. Habilidade que somar dano a uma manobra diz isso no texto.</li>
       </ul>
 
+      <h3 class="regras-subtitle">Defesas passivas</h3>
+      <ul class="regras-list">
+        <li>Quando alguém age contra sua Fortitude, Reflexos ou Vontade sem pedir rolagem, use <strong>10 + bônus total</strong>. É essa conta que sustenta a coluna "Contra" da tabela de Manobras acima.</li>
+        <li>Quando você resiste ativamente a um perigo, role o d20 com esse mesmo bônus.</li>
+      </ul>
+
       <h3 class="regras-subtitle">Reações</h3>
       <p class="regras-note">Você tem uma reação por rodada e recupera ela no começo do seu próprio turno. Defesa Natural funciona sozinha e não gasta reação nenhuma.</p>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -724,29 +775,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         </tbody>
       </table></div>
 
-      <h3 class="regras-subtitle">Tipos de dano</h3>
-      <ul class="regras-sublist regras-sublist--grid">
-        <li><strong>Físicos:</strong> corte, perfuração, impacto e balístico.</li>
-        <li><strong>Persistentes:</strong> sangramento, fogo e veneno; batem de novo no fim do turno até alguém remover.</li>
-        <li><strong>Energia:</strong> elemental, tecnologia e Fluxos.</li>
-        <li><strong>Mental:</strong> tira Sanidade ou Vida, dependendo de onde vem.</li>
-      </ul>
-
-      <h3 class="regras-subtitle">Dano elemental</h3>
-      <p class="regras-lead">São estes sete, e não existe um oitavo. Quem conjura pelo Fluxo do Físico escolhe um deles ao aprender a magia: é o <strong>elemento despertado</strong>, e ele vale para todas as magias de Físico daquela ficha. Modificação de arma, encantamento e Selo que pedem "um elemento" puxam da mesma lista.</p>
-      <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Elemento</th><th>Como costuma se manifestar</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Terra</strong></td><td>Pedra, areia e metal bruto. Bom para barreira, terreno difícil e derrubar.</td></tr>
-          <tr><td><strong>Água</strong></td><td>Líquido, gelo e vapor. Empurra, prende e apaga fogo.</td></tr>
-          <tr><td><strong>Fogo</strong></td><td>Chama e brasa. É o elemento que mais deixa dano persistente para trás.</td></tr>
-          <tr><td><strong>Ar</strong></td><td>Vento e pressão. Move criaturas e objetos, e limpa nuvem e gás.</td></tr>
-          <tr><td><strong>Raio</strong></td><td>Descarga elétrica. Salta entre alvos próximos e desliga o que é energizado.</td></tr>
-          <tr><td><strong>Luz</strong></td><td>Claridade que revela. Atinge o que se esconde e cega quem olha de perto.</td></tr>
-          <tr><td><strong>Escuridão</strong></td><td>Sombra que engole. Esconde, confunde e apaga a luz mundana da área.</td></tr>
-        </tbody>
-      </table></div>
-      <p class="regras-note">Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: quem resiste a Fogo não resiste a Raio. Trocar o elemento despertado depois exige aval do Mestre.</p>
+      <p class="regras-note">As famílias de dano, os sete elementos fixos e como a Resistência entra na conta ficam no capítulo <strong>Tipos de Dano</strong>.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">Um encontro se monta de trás para frente: você decide quantas rodadas ele deve durar, e daí sai a Vida dos inimigos. Começar escolhendo o monstro e torcer é o caminho mais curto para um combate de dez rodadas que ninguém queria.</p>
@@ -779,6 +808,63 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Resistência e vulnerabilidade valem por elemento, nunca em bloco. Um inimigo que resiste a Fogo continua aberto a Raio, e isso premia o grupo que investigou antes.</li>
         <li>Todo mundo tem uma reação por rodada. Se você quer que o grupo gaste a dele, ataque com mais de um inimigo por rodada em vez de um golpe único enorme.</li>
         <li>Não tire o turno inteiro de um jogador por mais de uma rodada seguida. Ficar olhando não é jogar.</li>
+      </ul>
+    `,
+  },
+
+  'tipos-de-dano': {
+    categoria: 'Combate e Mecânicas',
+    status: 'Regra oficial',
+    resumo: 'Físico, persistente, mágico, tecnológico e mental: as cinco famílias de dano do jogo, os sete elementos fixos e a ordem certa para aplicar Resistência.',
+    destaques: [
+      ['Famílias', 'Físico, Persistente, Mágico, Tecnológico, Mental'],
+      ['Elementos', '7 fixos, sem oitavo'],
+      ['Resistência', 'sempre por tipo específico'],
+    ],
+    corpo: `
+      <p class="regras-lead">Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade e qualquer efeito que "protege contra um tipo de dano" sempre apontam para uma entrada específica daqui, nunca para "dano" de forma genérica.</p>
+
+      <h3 class="regras-subtitle">As cinco famílias</h3>
+      <ul class="regras-sublist regras-sublist--grid">
+        <li><strong>Físicos:</strong> corte, perfuração, impacto e balístico.</li>
+        <li><strong>Persistentes:</strong> sangramento, fogo e veneno; batem de novo no fim do turno até alguém remover.</li>
+        <li><strong>Mágico:</strong> elemental e os outros dez Fluxos naturais.</li>
+        <li><strong>Tecnológico:</strong> vem do Fluxo artificial de Tecnologia (A.X.I.S). Usa a mesma Mana e a mesma regra de Resistência que qualquer Fluxo, mas não conta como dano mágico.</li>
+        <li><strong>Mental:</strong> tira Sanidade quando ataca a mente pelo lado emocional ou existencial, e Mana quando ataca diretamente o canal mágico de quem conjura.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Dano elemental</h3>
+      <p class="regras-lead">São estes sete, e não existe um oitavo. Quem conjura pelo Fluxo do Físico escolhe um deles ao aprender a magia: é o <strong>elemento despertado</strong>, e ele vale para todas as magias de Físico daquela ficha. Modificação de arma, encantamento e Selo que pedem "um elemento" puxam da mesma lista.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Elemento</th><th>Como costuma se manifestar</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Terra</strong></td><td>Pedra rachando, areia que enterra e metal que ainda carrega o formato do minério. É o elemento de quem quer erguer parede, prender um pé no chão ou simplesmente derrubar alguém no meio da briga.</td></tr>
+          <tr><td><strong>Água</strong></td><td>Da correnteza que arrasta ao gelo que trava no lugar, passando pelo vapor que embaça tudo. Empurra quem está de pé, prende quem tenta fugir e apaga o fogo que sobrou na cena.</td></tr>
+          <tr><td><strong>Fogo</strong></td><td>Chama viva e brasa que continua queimando depois do golpe. Nenhum outro elemento deixa tanto dano persistente para trás.</td></tr>
+          <tr><td><strong>Ar</strong></td><td>Vento cortante e pressão que empurra sem tocar. Joga corpo e objeto pra longe, e limpa qualquer nuvem de gás ou fumaça que esteja no caminho.</td></tr>
+          <tr><td><strong>Raio</strong></td><td>Descarga que salta de um alvo pro próximo sem pedir licença, e desliga na hora qualquer coisa energizada por perto.</td></tr>
+          <tr><td><strong>Luz</strong></td><td>Claridade que não deixa nada se esconder. Cega quem olha de perto e expõe quem contava com a escuridão pra passar despercebido.</td></tr>
+          <tr><td><strong>Escuridão</strong></td><td>Sombra espessa o bastante pra engolir contorno e som. Apaga a luz mundana da área, confunde quem tenta mirar e esconde o que não quer ser visto.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: quem resiste a Fogo não resiste a Raio. Trocar o elemento despertado depois exige aval do Mestre.</p>
+
+      <h3 class="regras-subtitle">Resistência e ordem de aplicação</h3>
+      <p class="regras-lead">A ordem importa: multiplicar depois de subtrair a Resistência daria um número completamente diferente. Faça sempre nesta sequência.</p>
+      <ol class="regras-steps">
+        <li>Role o dano e aplique o multiplicador crítico aos dados e modificadores que fazem parte do ataque.</li>
+        <li>Some os dados extras declarados pelo efeito. Dado extra só multiplica se a fonte disser que multiplica.</li>
+        <li>Aplique vulnerabilidade ou redução percentual.</li>
+        <li>Subtraia a Resistência do tipo de dano correspondente, até o mínimo 0.</li>
+      </ol>
+      <p class="regras-note">Resistência física geral cobre corte, perfuração e impacto. Balístico fica de fora, de propósito. E Resistência de um tipo específico não faz nada contra os outros tipos.</p>
+    `,
+    corpoMestre: `
+      <p class="regras-lead">Tipo de dano é a etiqueta que faz Resistência, vulnerabilidade e imunidade funcionarem sem ambiguidade. Ao criar monstro, item ou poder novo, escolha o tipo daqui em vez de inventar um rótulo solto.</p>
+      <ul class="regras-list">
+        <li>Não crie um oitavo elemento. Se a fantasia pede algo fora da lista, encaixe no elemento mais próximo e deixe a diferença na descrição, não na mecânica.</li>
+        <li>Dano Mental que vem de horror ou de uma revelação perturbadora tira Sanidade. Dano Mental que vem de um ataque voltado a atrapalhar quem conjura tira Mana. Decida qual dos dois antes de anunciar o efeito pra mesa.</li>
+        <li>Resistência genérica a dano mágico cobre elemental e os outros Fluxos naturais ao mesmo tempo, mas não cobre dano tecnológico: são famílias separadas, e um item precisa declarar as duas se quiser proteger contra ambas. É mais forte que Resistência a um elemento só, então reserve para itens de raridade alta.</li>
       </ul>
     `,
   },
@@ -1192,7 +1278,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   },
 
   xp: {
-    categoria: 'Combate e Mecânicas',
+    categoria: 'Livro do Jogador',
     status: 'Regra oficial',
     resumo: 'Uma tabela de XP só, do nível 1 ao 60, com recompensas que saem do nível total, nunca de cada classe separada.',
     destaques: [
@@ -1226,7 +1312,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p class="regras-note">Sair do nível N e chegar ao N+1 custa N × 1.000 XP.</p>
 
       <h3 class="regras-subtitle">Tabela completa</h3>
-      <div class="regras-xp-grid regras-xp-grid--revised">${tabelaXP}</div>
+      <details class="regras-details regras-details--xp">
+        <summary>Abrir níveis 1 a 60</summary>
+        <div class="regras-xp-grid regras-xp-grid--revised">${tabelaXP}</div>
+      </details>
 
       <h3 class="regras-subtitle">Recompensas por marco</h3>
       <ul class="regras-list">
@@ -1340,7 +1429,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
     `,
     corpoMestre: `
-      <p class="regras-lead">Aliado é o item de loja que mais afeta o seu trabalho, porque cada um é mais um turno por rodada. Um grupo de quatro com quatro bichos anda pela metade da velocidade.</p>
+      <p class="regras-lead">Aliado é o item de loja que mais afeta o ritmo da mesa, porque cada um acrescenta outro turno à rodada. Quanto mais aliados estiverem ativos, mais ações precisam ser resolvidas e maior tende a ser a duração do combate.</p>
 
       <h3 class="regras-subtitle">O teto que vale a pena combinar</h3>
       <ul class="regras-list">
@@ -1364,13 +1453,13 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     destaques: [
       ['Fruto', '1 por criatura, permanente'],
       ['Despertar', 'Escolha só de ida'],
-      ['Implante', 'Fica no corpo, não na mochila'],
+      ['Catálogo', `${totalFrutosEden} frutos · ${totalImplantes} implantes`],
     ],
     corpo: `
       <p class="regras-lead">Nível e Legado são o caminho normal de ficar mais forte. Estes dois são o caminho caro: você compra, aceita o que vem junto e não desfaz depois.</p>
 
       <h3 class="regras-subtitle">Frutos do Éden</h3>
-      <p>São quinze frutos, cada um com um poder próprio, vendidos por Fragmentos de Estrela e classificados como relíquia da criação. Comprar é a parte fácil: o preço em Fragmentos costuma significar uma campanha inteira atrás de um.</p>
+      <p>São ${totalFrutosEden} frutos, cada um com um poder próprio, vendidos por Fragmentos de Estrela e classificados como relíquia da criação. Comprar é a parte fácil: o preço em Fragmentos costuma significar uma campanha inteira atrás de um.</p>
       <ul class="regras-list">
         <li>O fruto entra no inventário como qualquer item. Comer é uma decisão à parte, feita na aba Inventário.</li>
         <li>Ao ser consumido, ele sai do inventário e se liga à ficha para sempre. Não dá para vender, emprestar nem cuspir de volta.</li>
@@ -1378,17 +1467,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Todo fruto traz uma fraqueza declarada, e água do mar aparece em quase todas. Enquanto a fraqueza estiver atuando, os poderes do fruto desligam.</li>
       </ul>
 
-      <h4 class="regras-subtitle">Os três degraus de um Fruto</h4>
+      <h3 class="regras-subtitle">Os três degraus de um Fruto</h3>
       <ul class="regras-list">
         <li><strong>Vínculo:</strong> a passiva que vale o tempo todo, sem custo nem ação. É o que muda o corpo do personagem, como a Resistência elemental do Fruto das Chamas.</li>
         <li><strong>Técnica:</strong> o poder ativo do dia a dia, na faixa de 3 a 4 de Mana. Custa uma ação e costuma valer uma vez por rodada.</li>
         <li><strong>Despertar:</strong> o poder grande, na faixa de 9 a 14 de Mana e quase sempre uma vez por cena. Ele fica trancado até o fruto ser despertado.</li>
       </ul>
       <p class="regras-note">Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. As técnicas normais continuam funcionando; o que muda é que o poder grande passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.</p>
-      <p>Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos quinze está no catálogo da Loja.</p>
+      <p>Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos ${totalFrutosEden} está no catálogo da Loja.</p>
 
       <h3 class="regras-subtitle">Implantes cibernéticos</h3>
-      <p>Enquanto o Fruto mexe na alma, o implante mexe na carne. São dez peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.</p>
+      <p>Enquanto o Fruto mexe na alma, o implante mexe na carne. São ${totalImplantes} peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.</p>
       <ul class="regras-list">
         <li>Implante não vai na mochila. Ele fica numa seção própria do inventário, porque está instalado no corpo e ocupa uma parte dele.</li>
         <li>Cada peça declara o que substitui: um olho, um braço, o coração, os pulmões. Duas peças que disputam a mesma parte do corpo não convivem.</li>
@@ -1454,15 +1543,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Sem proficiência no subtipo, a penalidade da peça dobra e você não usa habilidades que exijam proficiência.</li>
       </ul>
 
-      <h3 class="regras-subtitle">Resistência e tipos de dano</h3>
-      <p class="regras-lead">A ordem importa: multiplicar depois de subtrair a Resistência daria um número completamente diferente. Faça sempre nesta sequência.</p>
-      <ol class="regras-steps">
-        <li>Role o dano e aplique o multiplicador crítico aos dados e modificadores que fazem parte do ataque.</li>
-        <li>Some os dados extras declarados pelo efeito. Dado extra só multiplica se a fonte disser que multiplica.</li>
-        <li>Aplique vulnerabilidade ou redução percentual.</li>
-        <li>Subtraia a Resistência do tipo de dano correspondente, até o mínimo 0.</li>
-      </ol>
-      <p class="regras-note">Resistência física geral cobre corte, perfuração e impacto. Balístico fica de fora, de propósito. E Resistência de um tipo específico não faz nada contra os outros tipos.</p>
+      <p class="regras-note">Como a Resistência entra na conta do dano, em que ordem e o que cada tipo de dano cobre ficam no capítulo <strong>Tipos de Dano</strong>.</p>
 
       <h3 class="regras-subtitle">Armas, proficiência e munição</h3>
       <ul class="regras-list">
@@ -1509,7 +1590,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     ],
     corpo: `
       <h3 class="regras-subtitle">Raridades e orçamento de poder</h3>
-      <p class="regras-lead">Raridade não é um bônus fixo que todo item da mesma faixa recebe. Ela é um <strong>orçamento</strong>: diz quantas modificações, efeitos automáticos e dons aquele objeto aguenta carregar. É o que impede a ficha de virar uma pilha de +1 sem fim.</p>
+      <p class="regras-lead">Raridade funciona como um <strong>orçamento</strong>, não como um bônus fixo igual para todo item da mesma faixa: ela diz quantas modificações, efeitos automáticos e dons aquele objeto aguenta carregar. É o que impede a ficha de virar uma pilha de +1 sem fim.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Raridade</th><th>Mods.</th><th>Efeitos próprios</th><th>Valor por efeito</th><th>Regra</th></tr></thead>
         <tbody>${tabelaRaridadesEquipamento}</tbody>
@@ -1518,9 +1599,23 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Dons definidos por categoria</h3>
       <p>Cada raridade também possui uma manifestação por categoria. A descrição pode alterar aparência e comportamento, sem aumentar o efeito mecânico.</p>
       ${donsRaridadeEquipamento}
+
+      <h3 class="regras-subtitle">Quantos acessórios você pode usar</h3>
+      <p>Um Acessório (ou qualquer item genérico da categoria <strong>Outros</strong> que só existe para carregar um efeito automático de raridade) não ocupa o mesmo slot que arma, armadura ou escudo. Por isso o número deles equipados ao mesmo tempo é limitado ao seu <strong>nível dividido por 4, arredondado para baixo, com o mínimo de 1</strong>. Sem esse teto, dá pra empilhar efeito de raridade sem fim só comprando mais um objeto qualquer.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Nível</th><th>Acessórios equipados ao mesmo tempo</th></tr></thead>
+        <tbody>
+          <tr><td>1 a 7</td><td>1</td></tr>
+          <tr><td>8 a 11</td><td>2</td></tr>
+          <tr><td>12 a 15</td><td>3</td></tr>
+          <tr><td>16 a 19</td><td>4</td></tr>
+          <tr><td>20 a 23</td><td>5</td></tr>
+          <tr><td>24 ou mais</td><td>nível ÷ 4, arredondado para baixo</td></tr>
+        </tbody>
+      </table></div>
     `,
     corpoMestre: `
-      <p class="regras-lead">Raridade não é bônus, é orçamento. O que ela diz é quanto poder cabe naquele item, e as três faixas de cima passam por você antes de existir.</p>
+      <p class="regras-lead">O orçamento de uma raridade é o que você está aprovando de fato ao liberar um item. As três faixas de cima passam pela sua autorização antes de existir.</p>
 
       <h3 class="regras-subtitle">O que cada faixa comporta</h3>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -1542,6 +1637,12 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Efeito de raridade é o que muda a matemática; modificação costuma mudar o uso. Se quiser dar sabor sem inflar o poder, aprove modificação e segure o efeito.</li>
         <li>Cada modificação tem preço de encomenda publicado. Deixar o grupo encomendar é mais saudável que você sortear item: eles pagam, escolhem e ninguém fica com peça inútil.</li>
         <li>Item que o grupo montou peça por peça vale mais na mesa que item achado pronto, e custa menos do seu orçamento de poder.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Fiscalizar o limite de acessórios</h3>
+      <ul class="regras-list">
+        <li>O teto (nível ÷ 4, arredondado para baixo, mínimo 1) vale só para itens genéricos com efeito de raridade, como os Acessórios da Loja. Arma, armadura e escudo têm slot próprio e não entram nessa conta.</li>
+        <li>A ficha não impede sozinha equipar um Acessório a mais que o teto. É você quem confere na hora de aprovar a compra ou liberar o uso em mesa.</li>
       </ul>
     `,
   },
@@ -1741,6 +1842,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>A Mana fica comprometida no momento em que o ritual começa.</li>
         <li>Se interromperem o ritual, a Mana comprometida já era. Esse é o risco.</li>
         <li>Cada ritual vem de algum lugar: família, pacto, pergaminho, tradição. Ritual não se aprende sozinho.</li>
+        <li>DT, tempo de preparação e Mana ficam declarados na própria entrada do catálogo; não existe um valor único para todo ritual.</li>
       </ul>
 
       <h3 class="regras-subtitle">Fusão de Fluxos</h3>
@@ -1756,6 +1858,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Selo é efeito escrito antes, quase sempre consumível, que qualquer um pode disparar se cumprir a condição inscrita.</li>
         <li>Encantamento é padrão permanente, aplicado a um item, uma criatura ou um lugar.</li>
         <li>Quantos encantamentos cabem por raridade: Comum 1, Incomum 2, Raro 3, Épico 4 e Lendário 5.</li>
+        <li>DT de inscrição, tempo de preparo e Mana também ficam na própria entrada do catálogo, tanto para selo quanto para encantamento.</li>
       </ul>
     `,
     corpoMestre: `
@@ -1850,20 +1953,6 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <thead><tr><th>Condição</th><th>Efeito principal</th><th>Remoção</th></tr></thead>
         <tbody>${tabelaCondicoesGerais}</tbody>
       </table></div>
-
-      <h3 class="regras-subtitle">Iniciativa estática</h3>
-      <p class="regras-lead">Iniciativa aqui não se rola: é um número da ficha, igual à Defesa. Você calcula uma vez e usa em todo combate.</p>
-      <ul class="regras-list">
-        <li>Iniciativa = 10 + metade do nível + Mod.Destreza + bônus.</li>
-        <li>Empate se resolve pelo maior Mod.Sabedoria. Se persistir, personagens agem antes de NPCs.</li>
-        <li>Surpreendido leva −5 na primeira rodada. Atrasar baixa sua posição de vez, pelo resto do combate.</li>
-      </ul>
-
-      <h3 class="regras-subtitle">Defesas passivas</h3>
-      <ul class="regras-list">
-        <li>Quando alguém age contra sua Fortitude, Reflexos ou Vontade sem pedir rolagem, use <strong>10 + bônus total</strong>.</li>
-        <li>Quando você resiste ativamente a um perigo, role o d20 com esse mesmo bônus.</li>
-      </ul>
     `,
     corpoMestre: `
       <p class="regras-lead">Sanidade é a única barra do jogo que você controla sozinho: nada a consome sem você pedir um teste. Por isso ela vira ferramenta de tom, e não de dano.</p>
@@ -1897,24 +1986,24 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   classes: {
     categoria: 'Livro do Jogador',
     status: 'Catálogo oficial',
-    resumo: 'Classe comum serve a qualquer Árvore. Classe especial é mais forte, só aparece nas Árvores indicadas e depende do Mestre liberar.',
+    resumo: 'Classe comum serve a qualquer Árvore. Classe especial segue o mesmo orçamento de poder, mas só aparece nas Árvores indicadas e depende de liberação do Mestre.',
     destaques: [
-      ['Classes', '26 catalogadas'],
-      ['Comuns / especiais', '17 / 9'],
-      ['Progressões completas', '26']
+      ['Classes', `${classesData.length} catalogadas`],
+      ['Comuns / especiais', `${classesComuns} / ${classesEspeciais}`],
+      ['Progressões completas', String(classesComProgressao)]
     ],
     corpo: `
       <p class="regras-lead">Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes e eventos por nível) fica no catálogo interativo da página de Regras, que lê o mesmo arquivo.</p>
       <ul class="regras-list">${listaClassesPublicas}</ul>
     `,
     corpoMestre: `
-      <p class="regras-lead">As 26 classes fecham no mesmo orçamento, então nenhuma é mais forte no papel. O que diferencia uma mesa da outra são os efeitos que mudam economia de ação, e esses estão marcados na referência de balanceamento.</p>
+      <p class="regras-lead">As ${classesData.length} classes fecham no mesmo orçamento, então nenhuma é mais forte no papel. O que diferencia uma mesa da outra são os efeitos que mudam economia de ação, e esses estão marcados na referência de balanceamento.</p>
 
       <h3 class="regras-subtitle">Onde olhar antes da campanha</h3>
       <ul class="regras-list">
-        <li>Duas classes carregam alerta qualitativo na referência: Chef e Engenheiro. O alerta não quer dizer forte demais: quer dizer que aquele efeito muda escala ou economia de ação e precisa de cenário de mesa para ser medido.</li>
+        <li>Três classes carregam alerta qualitativo na referência: Caçador das Almas, Chef e Engenheiro. O alerta não quer dizer forte demais: quer dizer que aquele efeito muda escala, economia de ação ou retirada de cena e precisa de cenário de mesa para ser medido.</li>
         <li>Leia a lista de poderes das classes que entraram na sua mesa antes do nível 2. São de dez a doze opções por classe, e as escolhas dos jogadores decidem o formato dos seus encontros mais que o nível deles.</li>
-        <li>Classe especial exige nível total 20, liberação sua e um acontecimento. As nove especiais também são presas a Árvores específicas, exceto Cartista Arcano e Invocador: confira isso antes de prometer.</li>
+        <li>Classe especial exige nível total 20, liberação sua e um acontecimento. As ${classesEspeciais} especiais também são presas a Árvores específicas, exceto Cartista Arcano e Invocador: confira isso antes de prometer.</li>
       </ul>
 
       <h3 class="regras-subtitle">Liberar uma especial</h3>
@@ -1938,7 +2027,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p class="regras-lead">Subir de nível numa classe sempre entrega alguma coisa, e essa coisa tem cinco formatos diferentes. A confusão mais comum da mesa é tratar Habilidade e Poder como sinônimos: uma vem sozinha e a outra você escolhe.</p>
 
       <h3 class="regras-subtitle">A grade de uma classe</h3>
-      <p>As 26 classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.</p>
+      <p>As ${classesData.length} classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.</p>
       <div class="regras-table-wrap">
         <table class="regras-table">
           <thead><tr><th>Recompensa</th><th>Nos níveis</th><th>Quantas</th></tr></thead>
@@ -1961,7 +2050,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Poder</h3>
-      <p>Aqui você escolhe. Cada classe publica uma lista de dez a doze poderes, e a grade te dá oito vagas até o nível 20. Escolher todos é impossível de propósito: dois Guerreiros de mesmo nível não jogam igual.</p>
+      <p>Aqui você escolhe. Cada classe publica uma lista de dez a doze poderes, e a grade concede oito vagas até o nível 20. Como não há vagas para toda a lista, dois personagens da mesma classe e do mesmo nível podem ter conjuntos de poderes diferentes.</p>
       <ul class="regras-list">
         <li>A escolha é feita na hora que a vaga abre, e vale para sempre. Trocar depois exige uma regra que autorize ou a permissão do Mestre.</li>
         <li>Cada poder declara o próprio custo de Mana. Custo zero quer dizer passivo: ele funciona sem você fazer nada.</li>
@@ -2013,10 +2102,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   racas: {
     categoria: 'Livro do Jogador',
     status: 'Catálogo oficial',
-    resumo: 'Raça comum pode nascer em qualquer Árvore. Raça especial é mais forte e só existe nas Árvores compatíveis.',
+    resumo: 'Raça comum pode nascer em qualquer Árvore. Raça especial tem regras próprias, depende de liberação e só existe nas Árvores compatíveis.',
     destaques: [
-      ['Raças disponíveis', '23'],
-      ['Comuns / especiais', '13 / 11'],
+      ['Raças mecânicas', String(racasMecanicas.length)],
+      ['Comuns / especiais', `${racasComuns} / ${racasEspeciais}`],
       ['Ajustes', 'Vida, Mana e Mov.']
     ],
     corpo: `
@@ -2024,11 +2113,11 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">${listaRacasPublicas}</ul>
     `,
     corpoMestre: `
-      <p class="regras-lead">Raça mexe pouco em número e muito em ficção. Os ajustes vão de menos 2 a mais 5 de Vida e de menos 2 a mais 5 de Mana, o que no nível 1 é enorme e no nível 20 é ruído.</p>
+      <p class="regras-lead">Raça mexe em números e em ficção. Os ajustes iniciais pesam mais nos níveis baixos, enquanto as raças com estágios continuam recebendo características e recursos até o nível 50.</p>
 
       <h3 class="regras-subtitle">Comum e especial</h3>
       <ul class="regras-list">
-        <li>Doze raças comuns nascem em qualquer Árvore. As nove especiais são mais fortes e só existem nas Árvores compatíveis, então liberar uma é também uma decisão sobre de onde o personagem vem.</li>
+        <li>As ${racasComuns} raças comuns nascem em qualquer Árvore. As ${racasEspeciais} especiais têm regras e origens próprias e só existem nas Árvores compatíveis, então liberar uma é também uma decisão sobre de onde o personagem vem.</li>
         <li>Estar visível no catálogo não concede acesso. Diga na criação quais especiais estão abertas, em vez de negar depois.</li>
       </ul>
 
@@ -2044,21 +2133,23 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   bestiario: {
     categoria: 'Livro do Jogador',
     status: 'Regra oficial',
-    resumo: 'As quatro formas de ter uma criatura ao seu lado, o que muda entre elas e como uma criatura comprada vira um aliado na sua ficha.',
+    resumo: 'As seis formas de ter uma criatura ao seu lado, o que muda entre elas e como uma criatura comprada vira um aliado na sua ficha.',
     destaques: [
-      ['Tipos', 'Criatura, Familiar, Servo, Invocação'],
+      ['Tipos', '6 formas, mesma ficha de aliado'],
       ['Compra', 'Vira aliado na ficha'],
       ['Preço', 'Por fórmula, não por lista'],
     ],
     corpo: `
-      <p class="regras-lead">Criatura neste jogo não é item de mochila: é alguém que anda com você. O Bestiário reúne as quatro formas de ter uma criatura ao lado, e todas elas terminam do mesmo jeito, como um aliado com ficha própria.</p>
+      <p class="regras-lead">Criatura neste jogo não é item de mochila: é alguém que anda com você. O Bestiário reúne as seis formas de ter uma criatura ao lado, e todas elas terminam do mesmo jeito, como um aliado com ficha própria.</p>
 
-      <h3 class="regras-subtitle">As quatro formas</h3>
+      <h3 class="regras-subtitle">As seis formas</h3>
       <ul class="regras-list">
         <li><strong>Criaturas:</strong> animais, monstros e seres naturais capturados, domesticados ou criados em cativeiro. O que elas sabem fazer vem do corpo e do habitat, não de treino.</li>
         <li><strong>Familiares:</strong> entidades pequenas ou criaturas inteligentes ligadas ao dono por vínculo mágico. Rendem mais fora de combate que dentro dele: percepção, apoio, recado.</li>
         <li><strong>Servos:</strong> seres criados ou treinados para cumprir tarefa, ligados à alma do dono e incapazes de traí-lo diretamente. Chegam com a sanidade abalada, em metade da barra e com dois traumas, e isso é parte do que eles são.</li>
         <li><strong>Invocações:</strong> seres temporários trazidos por magia, ritual ou dispositivo. Cumprem a função e vão embora no prazo do efeito que os chamou.</li>
+        <li><strong>Ajudantes:</strong> gente e criaturas conscientes que topam o trabalho por conta própria, sem vínculo mágico nenhum. Cobram, decidem e podem recusar uma missão que não gostem.</li>
+        <li><strong>Seres Lendários:</strong> raros, únicos e fora da escala normal de preço. Exigem ritual complexo ou uma condição especial da história, e dependem de liberação do Mestre antes de aparecer à venda.</li>
       </ul>
 
       <h3 class="regras-subtitle">Como uma criatura chega até você</h3>
@@ -2187,7 +2278,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     
       <h3 class="regras-subtitle">Na mesa</h3>
       <ul class="regras-list">
-        <li>Cada aliado em cena é mais um turno por rodada. Um combate com quatro personagens e quatro bichos anda pela metade da velocidade: combine um teto antes de liberar a compra.</li>
+        <li>Cada aliado em cena acrescenta outro turno à rodada. Grupos com muitos aliados tendem a prolongar o combate, então combine um teto antes de liberar a compra.</li>
         <li>Criatura comprada não deve resolver o problema que o encontro propôs. Se um servo de nível alto apaga a cena, o preço estava barato demais para aquela campanha.</li>
         <li>Servo chega com sanidade abalada por regra. Use isso: é gancho pronto, e é o que impede o tipo de virar só um personagem extra mais barato.</li>
       </ul>
@@ -2328,8 +2419,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">O Vazio entre as Árvores</h3>
-      <p>O Vazio é o espaço entre as Árvores, e é habitado. Toda organização de alcance amplo tem sede lá, por uma razão simples de logística: quem atravessa as dez Árvores não pode morar dentro de uma delas. Morar no Vazio funciona como endereço, e por isso não aparece como degrau na tabela acima. Ele atravessa a tabela inteira, do tripulante de carga ao dono do banco.</p>
-      <p><strong>É o Vazio que faz a moeda funcionar.</strong> O Banco Lunar fica lá, e é por isso que um Solar vale a mesma coisa nas dez Árvores: existe uma casa fora de todas elas garantindo o câmbio. O quarto patamar da Loja se chama Banco Lunar exatamente por isso, e é daí que vem o Fragmento de Estrela como moeda daquele balcão. Quem está no Vazio está na câmara de compensação do Jardim inteiro.</p>
+      <p>O Vazio é o espaço entre as Árvores, e é habitado. Toda organização de alcance amplo tem sede lá, por uma razão simples de logística: quem atravessa as nove Árvores não pode morar dentro de uma delas. Morar no Vazio funciona como endereço, e por isso não aparece como degrau na tabela acima. Ele atravessa a tabela inteira, do tripulante de carga ao dono do banco.</p>
+      <p><strong>É o Vazio que faz a moeda funcionar.</strong> O Banco Lunar fica lá, e é por isso que um Solar vale a mesma coisa nas nove Árvores: existe uma casa fora de todas elas garantindo o câmbio. O quarto patamar da Loja se chama Banco Lunar exatamente por isso, e é daí que vem o Fragmento de Estrela como moeda daquele balcão. Quem está no Vazio está na câmara de compensação do Jardim inteiro.</p>
       <p><strong>Nada nasce no Vazio.</strong> Comida, água e ar sobem de dentro das Árvores, e a Caravana do Limiar cobra pelo transporte, então todo gasto cotidiano custa o triplo lá. Ao mesmo tempo o dinheiro que circula é o dobro do normal, porque o comércio de alto valor passa por ali. Ganha-se o dobro e gasta-se o triplo, e é essa conta que explica por que caçador nenhum se aposenta.</p>
 
       <h3 class="regras-subtitle">Quanto as facções do Vazio pagam</h3>
@@ -2387,17 +2478,17 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Compra', 'Pode virar aliado, base ou vínculo'],
     ],
     corpo: `
-      <p class="regras-lead">O catálogo inteiro tem quase quinhentos itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.</p>
+      <p class="regras-lead">O catálogo inteiro tem ${totalItensLoja} itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.</p>
 
       <h3 class="regras-subtitle">Os quatro locais</h3>
       <div class="regras-table-wrap">
         <table class="regras-table">
           <thead><tr><th>Local</th><th>O que vende</th><th>Itens</th></tr></thead>
           <tbody>
-            <tr><td><strong>Feira de Vila</strong></td><td>O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo.</td><td>107</td></tr>
-            <tr><td><strong>Metrópole</strong></td><td>Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias.</td><td>144</td></tr>
-            <tr><td><strong>Mercado Negro</strong></td><td>Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas.</td><td>122</td></tr>
-            <tr><td><strong>Banco Lunar</strong></td><td>Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários.</td><td>89</td></tr>
+            <tr><td><strong>Feira de Vila</strong></td><td>O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo.</td><td>${totalItensFeiraDeVila}</td></tr>
+            <tr><td><strong>Metrópole</strong></td><td>Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias.</td><td>${totalItensMetropole}</td></tr>
+            <tr><td><strong>Mercado Negro</strong></td><td>Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas.</td><td>${totalItensMercadoNegro}</td></tr>
+            <tr><td><strong>Banco Lunar</strong></td><td>Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários.</td><td>${totalItensBancoLunar}</td></tr>
           </tbody>
         </table>
       </div>

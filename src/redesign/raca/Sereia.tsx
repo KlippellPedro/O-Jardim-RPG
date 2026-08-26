@@ -147,7 +147,7 @@ export const Sereia = ({ raca }: SereiaProps) => {
           raca={raca}
           tema={tema}
           titulo="Profundidade"
-          descricao="Quanto mais fundo a voz aprende a descer, mais longe ela chega. A profundidade sobe por nível total: Águas Costeiras no começo, Águas Profundas no nível 8 e Águas Abissais no 16."
+          descricao="Quanto mais fundo a voz aprende a descer, mais longe ela chega. A profundidade sobe por nível total: Águas Costeiras no começo, Águas Profundas no nível 12 e Águas Abissais no 32."
         />
 
         <EscolhaRacialCards raca={raca} tema={tema} />

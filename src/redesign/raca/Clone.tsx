@@ -69,7 +69,7 @@ export const Clone = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-emerald-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Foi feito à imagem de outra pessoa, e sabe disso. Copia aparência, voz, digital e retina do Original, e de vez em quando lembra de alguma coisa que nunca viveu. O Projeto que motivou a clonagem decide o resto. Fala Ao Contrário.
+            Foi feito à imagem de outra pessoa e sabe muito bem disso. Copia aparência, voz, digital e retina do Original, e de vez em quando lembra de alguma coisa que nunca viveu. Fala Ao Contrário.
           </motion.p>
         </motion.header>
 

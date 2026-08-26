@@ -97,7 +97,7 @@ export const Gigante = ({ raca }: { raca: IRaca }) => {
               <ShieldAlert size={40} strokeWidth={1.5} />
               <Weight size={40} strokeWidth={1.5} />
             </div>
-            <h3 className={`text-3xl font-black ${tema.text} mb-4 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Porte Colossal</h3>
+            <h3 className={`text-3xl font-black ${tema.text} mb-4 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Porte de Gigante</h3>
             <p className="text-stone-400 leading-relaxed">
               Tirar você do lugar dá trabalho: você tem vantagem para resistir a empurrões e quedas causados por outra criatura. E sua capacidade de carga é o dobro da normal.
             </p>
@@ -108,7 +108,7 @@ export const Gigante = ({ raca }: { raca: IRaca }) => {
           raca={raca}
           tema={tema}
           titulo="Porte"
-          descricao="Gigante nunca para de crescer, só cresce mais devagar. O porte sobe por nível total: Grande no começo, Enorme no nível 9 e Colossal no 18. Cada degrau traz mais Vida e o que vem junto do tamanho novo."
+          descricao="Gigante nunca para de crescer, só cresce mais devagar. O porte sobe por nível total: Grande no começo, Enorme no nível 14 e Colossal no 36. Cada degrau traz mais Vida e o que vem junto do tamanho novo."
         />
 
         <EscolhaRacialCards raca={raca} tema={tema} />

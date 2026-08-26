@@ -115,8 +115,11 @@ const CORES_CATALOGO: Record<string, ICorCatalogo> = {
 const CATALOGOS_RECOLHIVEIS: Record<string, { cor: string; substantivo: string }> = {
   'alquimista:formulas': { cor: 'esmeralda', substantivo: 'fórmulas' },
   'atirador:tiro-de-impulso': { cor: 'ambar', substantivo: 'benefícios' },
+  'detetive:perfil-do-suspeito': { cor: 'ambar', substantivo: 'especialidades' },
+  'devorador:instintos-do-devorador': { cor: 'vermelho', substantivo: 'instintos' },
   'cacador:especializacao': { cor: 'lima', substantivo: 'raças' },
   'cacador:agencia-dos-cacadores': { cor: 'lima', substantivo: 'benefícios' },
+  'cacador-das-almas:zanpakuto': { cor: 'rosa', substantivo: 'aspectos' },
   'canalizador:canalizacao-nativa': { cor: 'ciano', substantivo: 'fluxos' },
   'comerciante:estoque': { cor: 'ambar', substantivo: 'linhas' },
   'comerciante:rede-de-negocios': { cor: 'ambar', substantivo: 'praças' },
@@ -126,6 +129,7 @@ const CATALOGOS_RECOLHIVEIS: Record<string, { cor: string; substantivo: string }
   'espadachim:talento-de-combate': { cor: 'azul', substantivo: 'posturas' },
   'guardiao:protegido': { cor: 'ceu', substantivo: 'juramentos' },
   'guerreiro:batalhao': { cor: 'vermelho', substantivo: 'ordens' },
+  'interceptador:hackear-fluxo': { cor: 'vermelho', substantivo: 'técnicas' },
   'invocador:formas-vinculadas': { cor: 'violeta', substantivo: 'formas' },
   'lutador:estilo-de-combate': { cor: 'laranja', substantivo: 'estilos' },
   'lutador:punhos-de-ferro': { cor: 'laranja', substantivo: 'técnicas' },
@@ -137,6 +141,7 @@ const CATALOGOS_RECOLHIVEIS: Record<string, { cor: string; substantivo: string }
   'pop-star:publi': { cor: 'violeta', substantivo: 'contratos' },
   'ritualista:circulo-preparado': { cor: 'violeta', substantivo: 'preparos' },
   'sintonizador:fusao-controlada': { cor: 'turquesa', substantivo: 'fusões' },
+  'viajante-classe:licoes-da-estrada': { cor: 'esmeralda', substantivo: 'lições' },
 };
 
 const CATALOGO_PADRAO = { cor: 'amarelo', substantivo: 'opções' };

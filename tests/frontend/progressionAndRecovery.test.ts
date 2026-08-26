@@ -89,7 +89,7 @@ test('equipamento aplica carga, combinações e Resistência sem dano negativo',
   assert.equal(capacidadeCarga(14, 10), 19);
   const inventario = [
     { quantidade: 1, titulo: 'Aço', dados: { categoria: 'armadura', equipado: true, bonus: '+7', penalidade: '-4', espacos: 4 } },
-    { quantidade: 1, titulo: 'Escudo Espelhado', dados: { categoria: 'armadura', subtipo: 'escudo', equipado: true, bonus: '+6', penalidade: '-4', espacos: 2 } },
+    { quantidade: 1, titulo: 'Escudo de Espelhos', dados: { categoria: 'armadura', subtipo: 'escudo', equipado: true, bonus: '+6', penalidade: '-4', espacos: 2 } },
   ];
   const resumo = resumirEquipamentos(inventario, { nivel: 10, atributosFinais: { forca: 14 } });
   assert.equal(resumo.defesaEquipamento, 13);

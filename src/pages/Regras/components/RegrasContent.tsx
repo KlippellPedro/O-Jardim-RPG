@@ -5,6 +5,8 @@ import { sanitizeRuleHtml } from '../../../services/sanitizeRuleHtml';
 
 interface RegrasContentProps {
   htmlContent: string;
+  ocultarCatalogoAflicoes?: boolean;
+  ocultarCatalogoPericias?: boolean;
 }
 
 interface TocItem {
@@ -22,7 +24,17 @@ const slugTitulo = (titulo: string, indice: number) => {
   return `secao-${slug || indice}`;
 };
 
-export const RegrasContent = ({ htmlContent }: RegrasContentProps) => {
+const normalizarTitulo = (titulo: string) => titulo
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .trim()
+  .toLocaleLowerCase('pt-BR');
+
+export const RegrasContent = ({
+  htmlContent,
+  ocultarCatalogoAflicoes = false,
+  ocultarCatalogoPericias = false,
+}: RegrasContentProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const toastTimerRef = useRef<number | null>(null);
   const [toc, setToc] = useState<TocItem[]>([]);
@@ -35,6 +47,22 @@ export const RegrasContent = ({ htmlContent }: RegrasContentProps) => {
     if (!container) return undefined;
 
     container.innerHTML = sanitizeRuleHtml(htmlContent);
+    const secoesOcultas = new Set([
+      ...(ocultarCatalogoAflicoes ? ['catalogo de aflicoes'] : []),
+      ...(ocultarCatalogoPericias ? ['catalogo de pericias'] : []),
+    ]);
+    Array.from(container.querySelectorAll('h3'))
+      .filter((header) => secoesOcultas.has(normalizarTitulo(header.textContent || '')))
+      .forEach((cabecalhoCatalogo) => {
+        let proximo = cabecalhoCatalogo.nextSibling;
+        while (proximo) {
+          const atual = proximo;
+          proximo = proximo.nextSibling;
+          if (atual instanceof HTMLHeadingElement && atual.tagName === 'H3') break;
+          atual.remove();
+        }
+        cabecalhoCatalogo.remove();
+      });
     const headers = Array.from(container.querySelectorAll('h3'));
     const novoToc = headers.map((header, index) => {
       const id = slugTitulo(header.textContent || 'Tópico', index);
@@ -117,7 +145,7 @@ export const RegrasContent = ({ htmlContent }: RegrasContentProps) => {
       observer?.disconnect();
       if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current);
     };
-  }, [htmlContent]);
+  }, [htmlContent, ocultarCatalogoAflicoes, ocultarCatalogoPericias]);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });

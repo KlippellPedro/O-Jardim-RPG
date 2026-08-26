@@ -16,14 +16,17 @@ export const Onirico = ({ raca }: OniricoProps) => {
   return (
     <div className="min-h-screen text-indigo-50 p-8 selection:bg-indigo-500/30 overflow-hidden relative">
       {/* Dream Veil Background */}
-      <div className="fixed inset-0 z-0 bg-black">
+      <div
+        className="fixed inset-0 z-0 bg-black bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/assets/img/onirico_bg.webp')" }}
+      >
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 20% 30%, rgba(129,140,248,0.20), transparent 55%), radial-gradient(circle at 80% 70%, rgba(49,46,129,0.30), transparent 55%), #05040d',
+            background: 'radial-gradient(circle at 20% 30%, rgba(129,140,248,0.20), transparent 55%), radial-gradient(circle at 80% 70%, rgba(49,46,129,0.30), transparent 55%)',
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#05040d]/40 via-transparent to-[#05040d]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#05040d]/55 via-[#05040d]/25 to-[#05040d]/90" />
       </div>
 
       {/* Floating Dream Motes */}
@@ -85,7 +88,7 @@ export const Onirico = ({ raca }: OniricoProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-indigo-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Veio de um sonho que continuou depois que o sonhador acordou. Precisa sonhar para descansar de verdade, escorrega para dentro da lógica dos sonhos quando quer sumir de um lugar, e traz o pesadelo dos outros para o meio da briga.
+            Nasceu em Sonhar, o mundo dos sonhos. Não é uma pessoa dormindo: tem corpo, nome e vontade próprios, e leva consigo as regras estranhas do lugar onde foi criado.
           </motion.p>
         </motion.header>
 
@@ -118,7 +121,7 @@ export const Onirico = ({ raca }: OniricoProps) => {
           >
             <CloudMoon size={40} className={`${tema.icon} shrink-0`} strokeWidth={1.5} />
             <div>
-              <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Véu do Sonhador</h3>
+              <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Véu do Sonhar</h3>
               <p className="text-indigo-200/60 leading-relaxed text-sm">
                 Vantagem para resistir a medo, a perda de Sanidade e a ilusões. Ninguém consegue te achar ou te rastrear pelo sonho de outra criatura.
               </p>
@@ -154,7 +157,7 @@ export const Onirico = ({ raca }: OniricoProps) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Pesadelo Manifesto</h3>
               <p className="text-indigo-200/60 leading-relaxed text-sm">
-                Uma vez por cena, gaste uma ação e 5 Mana para fazer uma criatura a até 15 m ver o pior pesadelo que carrega. Misticismo contra a Vontade dela; falhando, ela fica Amedrontada por duas rodadas e sem reações nesse tempo. Passando, perde só a reação até o seu próximo turno.
+                Uma vez por cena, gaste uma ação e 5 Mana para fazer uma criatura a até 15 m ver por um instante o pior pesadelo que ela carrega. Misticismo contra a Vontade dela; falhando, ela fica Amedrontada por duas rodadas e sem reações nesse tempo. Passando, perde só a reação até o começo do seu próximo turno.
               </p>
             </div>
           </PremiumCard>
@@ -164,7 +167,7 @@ export const Onirico = ({ raca }: OniricoProps) => {
           raca={raca}
           tema={tema}
           titulo="Vigília"
-          descricao="Andar acordado é o que ensina o Onírico a mexer no próprio sonho. A Vigília abre por nível total, alcança bem mais longe no Sonho Lúcido e no topo afrouxa a matéria do corpo dele."
+          descricao="O Onírico nasce em Sonhar e aprende a manter sua forma no mundo desperto. A cada degrau da Vigília, ele consegue trazer uma parte maior de sua terra natal para perto de si."
         />
 
         <EscolhaRacialCards raca={raca} tema={tema} />
@@ -179,7 +182,7 @@ export const Onirico = ({ raca }: OniricoProps) => {
         >
           <h4 className="text-sm font-bold text-indigo-200 uppercase tracking-widest mb-2">Ancoragem Frágil</h4>
           <p className="text-indigo-200/50 text-sm leading-relaxed">
-            Passadas 24 horas sem um descanso completo com sonho de verdade, seu corpo começa a perder coesão: até você voltar a sonhar, sua Mana máxima cai pela metade, arredondada para baixo.
+            Passadas 24 horas sem um descanso completo ligado a Sonhar, seu corpo começa a perder a forma. Até fazer esse descanso, sua Mana máxima cai pela metade, arredondada para baixo.
           </p>
         </motion.div>
       </div>

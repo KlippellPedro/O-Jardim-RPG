@@ -2,7 +2,7 @@
 // Execute python scripts/buildMundo.py para atualizar.
 // Fonte: data/mundo/**/*.json (campos com prefixo '_' sao anotacoes e nao entram aqui).
 
-export type LoreType = 'cosmologia' | 'conceito' | 'deidade' | 'fluxo' | 'realidade' | 'galho' | 'dimensao' | 'mundo' | 'reino' | 'personagem' | 'soberano' | 'npc' | 'evento' | 'idioma' | 'cultura';
+export type LoreType = 'cosmologia' | 'conceito' | 'deidade' | 'fluxo' | 'realidade' | 'galho' | 'dimensao' | 'mundo' | 'reino' | 'personagem' | 'soberano' | 'npc' | 'evento' | 'idioma' | 'cultura' | 'local';
 
 export interface LoreEntry {
   id: string;
@@ -25,7 +25,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
           "Dimensão",
           "Reino"
         ],
-        "descricao": "O Jardim é o todo. Dentro dele crescem dez Árvores, e cada Árvore é ao mesmo tempo três coisas: a Árvore em si, a Deidade que a habita e o Fluxo que ela rege - não são entidades distintas que se associam, são a mesma entidade vista de três ângulos.\n\nDe cada Árvore saem Galhos, também chamados de Realidades. Dentro de cada Galho abrem-se Dimensões, e dentro de cada Dimensão existem Reinos e outros Locais. É essa a cascata inteira, e é por ela que a exploração no Códice acontece: descobrir uma Árvore não revela seus Galhos, descobrir um Galho não revela suas Dimensões.\n\nDuas Árvores fogem do padrão. Limiar tem um único Galho (Arkarin), porque é chegada e não origem - todas as outras Árvores desembocam nela. E Parley é a única Árvore com duas identidades sobrepostas: a original, de Keryx, e a A.X.I.S que Jota Macedo instalou por cima.\n\nFora da cascata existem três camadas soltas: Personagens (soberanos, NPCs), Eventos e Idiomas. Elas se ligam ao mundo, mas não se penduram em nenhum Galho."
+        "descricao": "O Jardim é o todo. Dentro dele crescem nove Árvores, e cada Árvore é ao mesmo tempo três coisas: a Árvore em si, a Deidade que a habita e o Fluxo que ela rege - não são entidades distintas que se associam, são a mesma entidade vista de três ângulos.\n\nDe cada Árvore saem Galhos, também chamados de Realidades. Dentro de cada Galho abrem-se Dimensões, e dentro de cada Dimensão existem Reinos e outros Locais. É essa a cascata inteira, e é por ela que a exploração no Códice acontece: descobrir uma Árvore não revela seus Galhos, descobrir um Galho não revela suas Dimensões.\n\nDuas Árvores fogem do padrão. Limiar tem um único Galho (Arkarin), porque é chegada e não origem - todas as outras Árvores desembocam nela. E Parley é a única Árvore com duas identidades sobrepostas: a original, de Keryx, e a A.X.I.S que Jota Macedo instalou por cima.\n\nO Abismo não é uma décima Árvore. É o Vazio: o espaço que existe entre as nove Árvores, e entre tudo o mais que tem lugar no Jardim - inclusive o Banco Lunar, que só existe porque fica fora de todas elas ao mesmo tempo. Erebus governa esse espaço, não um pedaço de chão dentro dele, e por isso o pacote de Abismo não tem Galho nem Dimensão: tem só Deidade, Fluxo e dois Locais soltos (Bordo, A Saída).\n\nFora da cascata existem quatro camadas soltas: Personagens (soberanos, NPCs), Eventos, Idiomas e Locais que não pertencem a Árvore nenhuma (como Bordo e A Saída, no Vazio). Elas se ligam ao mundo, mas não se penduram em nenhum Galho."
       }
     },
     {
@@ -35,8 +35,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "conteudo": {
         "epiteto": "Aquele que Flui no Vazio",
         "genero": "Masculino",
-        "dominio": "O nada absoluto - guarda a \"saída\" definitiva da existência.",
-        "descricao": "Governa o nada absoluto. É a deidade silenciosa que guarda a saída definitiva da existência, sendo o mais temido, neutro e enigmático de todos. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo.",
+        "dominio": "O espaço entre as coisas - guarda a \"saída\" definitiva da existência.",
+        "descricao": "Governa o Vazio: não uma Árvore, mas o nada que existe entre as Árvores, entre o Banco Lunar e entre tudo o que tem lugar no Jardim. É a deidade silenciosa que guarda a saída definitiva da existência, sendo o mais temido, neutro e enigmático de todos. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo.",
         "fluxo": "fluxo-do-vazio",
         "status": "paralisada"
       }
@@ -276,16 +276,6 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     },
     {
       "tipo": "galho",
-      "id": "bordo",
-      "titulo": "Bordo",
-      "conteudo": {
-        "arvore": "erebus",
-        "descricao": "O último Galho, e o único de onde não se volta. Bordo é a borda do Jardim: a faixa onde a existência ainda alcança, e depois da qual não alcança mais. Não é escuro - escuridão é uma coisa, e ali não há coisa nenhuma. Quem olha pra frente em Bordo não vê preto: não vê.\n\nErebus fica sentado nessa borda, de costas pro Jardim, e é a única deidade que nunca precisou de um lugar habitável. Ele não guarda Bordo contra invasores - guarda contra saídas.\n\nA paralisia não o afetou como às outras. Erebus continua onde sempre esteve, fazendo o que sempre fez, e é impossível dizer se ele chegou a notar que as demais pararam de falar.",
-        "nota": "Bordo é o único Galho que não tem fronteira com nenhum outro. Ele faz fronteira com o fato de não haver mais nada."
-      }
-    },
-    {
-      "tipo": "galho",
       "id": "anamnesis",
       "titulo": "Anámnesis",
       "conteudo": {
@@ -384,16 +374,6 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     },
     {
       "tipo": "dimensao",
-      "id": "a-saida",
-      "titulo": "A Saída",
-      "conteudo": {
-        "galho": "bordo",
-        "descricao": "O ponto de Bordo onde a borda se abre. Não tem porta, moldura nem limiar marcado - é apenas o lugar onde alguém pode deixar de existir por escolha própria, e o único lugar do Jardim onde isso é possível.\n\nA Mulher Carmesim recebe todos os que acabam, e cada um deles vira um livro na Biblioteca de Arkarin. Quem atravessa a Saída não vira livro. Não vira nada, e não deixa nada - nem lembrança em quem ficou.\n\nErebus não impede ninguém. Ele apenas pergunta uma vez, e nunca duas.",
-        "caracteristicas": "Irreversível e sem registro. Não há como saber quem já passou por aqui, porque não sobra quem soubesse."
-      }
-    },
-    {
-      "tipo": "dimensao",
       "id": "sala-dos-nomes",
       "titulo": "Sala dos Nomes",
       "conteudo": {
@@ -458,7 +438,7 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "titulo": "Sonhar",
       "conteudo": {
         "galho": "realidade-0",
-        "descricao": "A dimensão que ninguém atravessa acordado. Sonhar não tem geografia fixa: é feita do que os viventes das outras dimensões deixam escapar quando dormem, e por isso muda de forma toda vez que alguém a visita. Divide-se em duas metades que se tocam sem fronteira clara - os Sonhos, onde o que se deseja ganha corpo, e os Pesadelos, onde ganha corpo o que se teme. Um viajante raramente escolhe em qual dos dois vai parar.\n\nSeu soberano é Grimm, um ser intrigante que admira todas as espécies de vida e gosta especialmente de seres com um objetivo muito forte e aparente - o que faz dele um anfitrião generoso e um colecionador perigoso, porque objetivo forte é justamente o que dá forma às duas metades da dimensão dele.",
+        "descricao": "A dimensão que ninguém atravessa acordado. Sonhar não tem geografia fixa: é feita do que os viventes das outras dimensões deixam escapar quando dormem, e por isso muda de forma toda vez que alguém a visita. Divide-se em duas metades que se tocam sem fronteira clara - os Sonhos, onde o que se deseja ganha corpo, e os Pesadelos, onde ganha corpo o que se teme. Um viajante raramente escolhe em qual dos dois vai parar.\n\nOs Oníricos nascem ali. São seres formados pela própria matéria de Sonhar, com corpo, nome e vontade próprios. Eles não são pessoas adormecidas e não dependem de um sonhador para continuar existindo.\n\nSeu soberano é Grimm, um ser intrigante que admira todas as espécies de vida e gosta especialmente de seres com um objetivo muito forte e aparente - o que faz dele um anfitrião generoso e um colecionador perigoso, porque objetivo forte é justamente o que dá forma às duas metades da dimensão dele.",
         "caracteristicas": "Sem geografia estável. Acesso pelo sono, não por portal. Contém Sonhos e Pesadelos."
       }
     },
@@ -877,6 +857,26 @@ export const MUNDO_CATALOG: LoreEntry[] = [
       "conteudo": {
         "descricao": "Treze povos, treze línguas. O Universal é falado por todos e foi criado por Auleth. O Romeno é dos Vampiros, criado por Davinor. O Finlandês é dos Elfos, criado pelos Finwë.\n\nOs demais não têm criador registrado: Grego entre os Gigantes, Alemão entre os Goblins, Nórdico Antigo entre os Anões, Libras entre os Golens, Enoquiano entre os Espíritos, Latim entre as Sereias, Sumeriano entre os Animálias, Ao Contrário entre os Clones, Inglês entre os Autômatos e Celta entre as Bruxas.",
         "nota": "Que um idioma tenha criador conhecido diz algo sobre o povo: Vampiros e Elfos sabem quem lhes deu a língua. Os outros dez não."
+      }
+    },
+    {
+      "tipo": "local",
+      "id": "bordo",
+      "titulo": "Bordo",
+      "conteudo": {
+        "no_vazio": "erebus",
+        "descricao": "Bordo é a borda do Jardim: a faixa onde a existência ainda alcança, e depois da qual não alcança mais. Não é escuro - escuridão é uma coisa, e ali não há coisa nenhuma. Quem olha pra frente em Bordo não vê preto: não vê. É o único ponto do Vazio que ganhou nome próprio, porque é onde Erebus se sentou desde sempre.\n\nErebus fica sentado nessa borda, de costas pro Jardim, e é a única deidade que nunca precisou de um lugar habitável dentro de uma Árvore - o próprio Vazio já é o lugar dele. Ele não guarda Bordo contra invasores - guarda contra saídas.\n\nA paralisia não o afetou como às outras. Erebus continua onde sempre esteve, fazendo o que sempre fez, e é impossível dizer se ele chegou a notar que as demais pararam de falar.",
+        "nota": "Bordo não faz fronteira com nenhuma Árvore específica - faz fronteira com o fato de não haver mais nada. Diferente de um Galho, ele não pertence a uma Árvore: é onde o Vazio se torna palpável o bastante para ter um nome."
+      }
+    },
+    {
+      "tipo": "local",
+      "id": "a-saida",
+      "titulo": "A Saída",
+      "conteudo": {
+        "no_vazio": "erebus",
+        "descricao": "O ponto de Bordo onde a borda se abre. Não tem porta, moldura nem limiar marcado - é apenas o lugar onde alguém pode deixar de existir por escolha própria, e o único lugar do Jardim onde isso é possível.\n\nA Mulher Carmesim recebe todos os que acabam, e cada um deles vira um livro na Biblioteca de Arkarin. Quem atravessa a Saída não vira livro. Não vira nada, e não deixa nada - nem lembrança em quem ficou.\n\nErebus não impede ninguém. Ele apenas pergunta uma vez, e nunca duas.",
+        "caracteristicas": "Irreversível e sem registro. Não há como saber quem já passou por aqui, porque não sobra quem soubesse."
       }
     }
   ];

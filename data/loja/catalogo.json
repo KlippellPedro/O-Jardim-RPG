@@ -1250,9 +1250,9 @@
     {
       "tipo": "equipamento",
       "id": "acessorio",
-      "titulo": "Acessório",
+      "titulo": "Acessório Simples",
       "conteudo": {
-        "descricao": "+1 em uma perícia escolhida na criação do item.",
+        "descricao": "+1 em uma perícia escolhida na aquisição, ou vantagem nessa mesma perícia (escolha um dos dois).",
         "preco": {
           "Lunaris": 190
         },
@@ -2312,7 +2312,7 @@
     {
       "tipo": "armadura",
       "id": "improvisado",
-      "titulo": "Improvisado",
+      "titulo": "Escudo de Sucata",
       "conteudo": {
         "descricao": "Concede +1 de bônus de defesa, mas -2 em ataques.",
         "preco": {
@@ -2330,7 +2330,7 @@
     {
       "tipo": "armadura",
       "id": "madeira",
-      "titulo": "Madeira",
+      "titulo": "Escudo de Madeira Bruta",
       "conteudo": {
         "descricao": "Escudo simples de madeira bruta; bloqueio básico.",
         "preco": {
@@ -2348,7 +2348,7 @@
     {
       "tipo": "armadura",
       "id": "redondo",
-      "titulo": "Redondo",
+      "titulo": "Escudo de Madeira Reforçada",
       "conteudo": {
         "descricao": "-1 em Furtividade.",
         "preco": {
@@ -2366,7 +2366,7 @@
     {
       "tipo": "armadura",
       "id": "cacador",
-      "titulo": "Caçador",
+      "titulo": "Escudo de Madeira e Folhas",
       "conteudo": {
         "descricao": "+2 em furtividade",
         "preco": {
@@ -2384,7 +2384,7 @@
     {
       "tipo": "armadura",
       "id": "osso",
-      "titulo": "Osso",
+      "titulo": "Escudo de Osso",
       "conteudo": {
         "descricao": "+2 em Intimidação.",
         "preco": {
@@ -2402,7 +2402,7 @@
     {
       "tipo": "armadura",
       "id": "ferro-2",
-      "titulo": "Ferro",
+      "titulo": "Escudo de Ferro",
       "conteudo": {
         "descricao": "Concede Resistência 2 contra dois tipos de dano comuns escolhidos na criação do item.",
         "preco": {
@@ -2420,7 +2420,7 @@
     {
       "tipo": "armadura",
       "id": "espinhoso",
-      "titulo": "Espinhoso",
+      "titulo": "Escudo de Espinhos",
       "conteudo": {
         "descricao": "Pode ser usado para causar 1d6 + Mod. Força de dano de Perfuração.",
         "preco": {
@@ -2438,7 +2438,7 @@
     {
       "tipo": "armadura",
       "id": "torre",
-      "titulo": "Torre",
+      "titulo": "Escudo de Torre",
       "conteudo": {
         "descricao": "Concede Resistência 5 contra três tipos de dano escolhidos na criação do item.",
         "preco": {
@@ -2456,7 +2456,7 @@
     {
       "tipo": "armadura",
       "id": "luxuoso",
-      "titulo": "Escudo Luxuoso",
+      "titulo": "Escudo de Ouro",
       "conteudo": {
         "descricao": "+1 no Mod de Carisma, Vantagem em testes de convencimento",
         "preco": {
@@ -2474,7 +2474,7 @@
     {
       "tipo": "armadura",
       "id": "canhao",
-      "titulo": "Canhão",
+      "titulo": "Escudo de Canhão",
       "conteudo": {
         "descricao": "O canhão causa 2d6 de dano Balístico e empurra o alvo 5 m.",
         "preco": {
@@ -2492,7 +2492,7 @@
     {
       "tipo": "armadura",
       "id": "barricada",
-      "titulo": "Barricada",
+      "titulo": "Escudo de Grafeno",
       "conteudo": {
         "descricao": "Faz com que anule completamente o dano no bloqueio. (duas mãos)",
         "preco": {
@@ -2510,7 +2510,7 @@
     {
       "tipo": "armadura",
       "id": "escudao",
-      "titulo": "Escudão",
+      "titulo": "Escudo de Titânio",
       "conteudo": {
         "descricao": "Concede Resistência 5 contra dois tipos de dano escolhidos na criação do item.",
         "preco": {
@@ -2528,7 +2528,7 @@
     {
       "tipo": "armadura",
       "id": "guardiao-2",
-      "titulo": "Guardião",
+      "titulo": "Escudo de Guardião",
       "conteudo": {
         "descricao": "Se o portador for um Guardião, este escudo concede +5 de Defesa adicional.",
         "preco": {
@@ -2546,7 +2546,7 @@
     {
       "tipo": "armadura",
       "id": "anti-magia-2",
-      "titulo": "Anti-mágia",
+      "titulo": "Escudo de Anti-magia",
       "conteudo": {
         "descricao": "Concede Resistência 5 contra dano mágico.",
         "preco": {
@@ -2564,7 +2564,7 @@
     {
       "tipo": "armadura",
       "id": "lunar",
-      "titulo": "Lunar",
+      "titulo": "Escudo de Auleth",
       "conteudo": {
         "descricao": "Concede duas vantagens e +5 em Fortitude durante a noite.",
         "preco": {
@@ -2582,7 +2582,7 @@
     {
       "tipo": "armadura",
       "id": "tecnologico",
-      "titulo": "Tecnologico",
+      "titulo": "Escudo de A.X.I.S",
       "conteudo": {
         "descricao": "Possui 3 cargas. Ao sofrer uma queda, gaste uma Reação e 1 carga para reduzir em 30 m a distância efetiva usada no cálculo do dano. Recupera todas as cargas após um descanso completo conectado por uma hora a uma fonte de energia A.X.I.S.",
         "preco": {
@@ -2642,7 +2642,7 @@
     {
       "tipo": "armadura",
       "id": "egide-primordial",
-      "titulo": "Égide Primordial",
+      "titulo": "Escudo de Éter Primordial",
       "conteudo": {
         "descricao": "Concede Resistência 4 contra todos os tipos de dano enquanto estiver equipada. A peça exige aprovação do Mestre.",
         "preco": {
@@ -4299,7 +4299,7 @@
     {
       "tipo": "armadura",
       "id": "broquel",
-      "titulo": "Broquel",
+      "titulo": "Escudo de Broquel",
       "conteudo": {
         "descricao": "Escudo pequeno; +1 de bônus sem penalidade.",
         "preco": {
@@ -4317,7 +4317,7 @@
     {
       "tipo": "armadura",
       "id": "paves",
-      "titulo": "Pavês",
+      "titulo": "Escudo de Pavês",
       "conteudo": {
         "descricao": "Escudo alto de infantaria; +2 de RD a distância enquanto agachado.",
         "preco": {
@@ -4335,7 +4335,7 @@
     {
       "tipo": "armadura",
       "id": "escudo-espelhado",
-      "titulo": "Escudo Espelhado",
+      "titulo": "Escudo de Espelhos",
       "conteudo": {
         "descricao": "Uma vez por combate, reflete uma magia à distância de volta ao lançador.",
         "preco": {
@@ -4539,6 +4539,12 @@
         "preco": {
           "Lunaris": 330
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Animal",
         "pv": 95,
@@ -4588,6 +4594,12 @@
         "descricao": "Fera territorial e resistente, ótima na exploração de covis.",
         "preco": {
           "Lunaris": 1350
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
         },
         "raridade": "incomum",
         "categoria": "Animal",
@@ -4639,6 +4651,12 @@
         "preco": {
           "Lunaris": 1600
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Animal",
         "pv": 380,
@@ -4689,6 +4707,12 @@
         "preco": {
           "Solares": 90
         },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
         "raridade": "raro",
         "categoria": "Monstro",
         "pv": 670,
@@ -4736,6 +4760,12 @@
         "descricao": "Híbrido de leão, cabra e dragão que cospe fogo.",
         "preco": {
           "Solares": 550
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
         },
         "raridade": "epico",
         "categoria": "Monstro",
@@ -4790,6 +4820,12 @@
         "preco": {
           "Lunaris": 1550
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Monstro",
         "pv": 170,
@@ -4838,6 +4874,12 @@
         "preco": {
           "Solares": 60
         },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
         "raridade": "raro",
         "categoria": "Espírito",
         "pv": 265,
@@ -4885,6 +4927,12 @@
         "descricao": "Pequeno dragão leal; cospe brasas e defende o dono.",
         "preco": {
           "Solares": 320
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
         },
         "raridade": "epico",
         "categoria": "Monstro",
@@ -4936,6 +4984,12 @@
         "preco": {
           "Solares": 890
         },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
         "raridade": "lendario",
         "categoria": "Monstro",
         "pv": 845,
@@ -4986,6 +5040,12 @@
         "preco": {
           "Lunaris": 450
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Morto-Vivo",
         "pv": 95,
@@ -5033,6 +5093,12 @@
         "descricao": "Lento, mas absurdamente resistente e incansável.",
         "preco": {
           "Lunaris": 450
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
         },
         "raridade": "comum",
         "categoria": "Morto-Vivo",
@@ -5083,6 +5149,12 @@
         "preco": {
           "Lunaris": 1800
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Morto-Vivo",
         "pv": 380,
@@ -5129,6 +5201,12 @@
         "descricao": "Campeão caído reerguido; comanda outros mortos-vivos.",
         "preco": {
           "Solares": 80
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
         },
         "raridade": "raro",
         "categoria": "Morto-Vivo",
@@ -5179,6 +5257,12 @@
         "preco": {
           "Lunaris": 640
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Elemental",
         "pv": 170,
@@ -5227,6 +5311,12 @@
         "preco": {
           "Solares": 49
         },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
         "raridade": "raro",
         "categoria": "Constructo",
         "pv": 380,
@@ -5273,6 +5363,12 @@
         "descricao": "Servo do abismo trazido por pacto; cobra um preço ao fim.",
         "preco": {
           "Solares": 570
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
         },
         "raridade": "epico",
         "categoria": "Aberração",
@@ -5323,6 +5419,12 @@
         "preco": {
           "Solares": 810
         },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
         "raridade": "lendario",
         "categoria": "Espírito",
         "pv": 1040,
@@ -5372,6 +5474,12 @@
         "preco": {
           "Lunaris": 540
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Humanoide",
         "pv": 95,
@@ -5418,6 +5526,12 @@
         "descricao": "Trata ferimentos e doenças em viagem.",
         "preco": {
           "Lunaris": 1200
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
@@ -5468,6 +5582,12 @@
         "preco": {
           "Lunaris": 1900
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Humanoide",
         "pv": 380,
@@ -5516,6 +5636,12 @@
         "preco": {
           "Solares": 70
         },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
         "raridade": "raro",
         "categoria": "Humanoide",
         "pv": 515,
@@ -5563,6 +5689,12 @@
         "descricao": "Wyrm milenar cuja sombra escurece vales inteiros.",
         "preco": {
           "Solares": 2150
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
         },
         "raridade": "lendario",
         "categoria": "Lendário",
@@ -5618,6 +5750,12 @@
         "preco": {
           "Solares": 3100
         },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
         "raridade": "lendario",
         "categoria": "Lendário",
         "pv": 1255,
@@ -5666,6 +5804,12 @@
         "descricao": "A chama eterna; sua presença reacende os caídos.",
         "preco": {
           "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
         },
         "raridade": "lendario",
         "categoria": "Lendário",
@@ -5716,6 +5860,12 @@
         "preco": {
           "Solares": 2900
         },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
         "raridade": "lendario",
         "categoria": "Lendário",
         "pv": 1255,
@@ -5757,106 +5907,118 @@
       }
     },
     {
-        "tipo": "monstro",
-        "id": "caribdis",
-        "titulo": "Caríbdis",
-        "conteudo": {
-          "descricao": "Um redemoinho vivo que engole o mar inteiro três vezes ao dia e devolve tudo que sobrou.",
-          "preco": {
-            "Solares": 2200
-          },
-          "raridade": "lendario",
-          "categoria": "Elemental",
-          "pv": 950,
-          "nivel": 33,
-          "vd": 7,
-          "defesa": 24,
-          "iniciativa": 27,
-          "deslocamento": "0m (presa ao estreito que habita)",
-          "atributos": {
-            "forca": 8,
-            "agilidade": 1,
-            "vigor": 8,
-            "presenca": 4,
-            "intelecto": 0
-          },
-          "pericias": [
-            "Luta +36",
-            "Fortitude +36",
-            "Reflexos +29",
-            "Vontade +32",
-            "Intimidação +24"
-          ],
-          "ataques": [
-            {
-              "nome": "Sugado ao Fundo",
-              "detalhe": "+36, 4d10+9 de Água"
-            }
-          ],
-          "habilidades": [
-            "O Sorvedouro (3/dia: todas as criaturas em 12 m fazem Reflexos DT 26; em falha, são puxadas para o centro do redemoinho, ficam Agarradas e começam a sufocar. Repete o teste no fim de cada turno para escapar; sucesso não impede a próxima ativação de puxar de novo)",
-            "Presa ao Estreito (não se move do trecho de mar que habita; fora d'água, Caríbdis não age)",
-            "Corpo de Maré (imune a agarrão, derrubar e empurrão; dano de impacto e cortante que não seja de Água causa metade)"
-          ],
-          "loot": [
-            "Núcleo do Sorvedouro (1800 Solares)",
-            "Água que Nunca Seca (700 Solares)"
-          ],
-          "classe": "Ser Lendário",
-          "nivelMinimoLoja": 4,
-          "requer_autorizacao_mestre": true
-        }
+      "tipo": "monstro",
+      "id": "caribdis",
+      "titulo": "Caríbdis",
+      "conteudo": {
+        "descricao": "Um redemoinho vivo que engole o mar inteiro três vezes ao dia e devolve tudo que sobrou.",
+        "preco": {
+          "Solares": 2200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Elemental",
+        "pv": 950,
+        "nivel": 33,
+        "vd": 7,
+        "defesa": 24,
+        "iniciativa": 27,
+        "deslocamento": "0m (presa ao estreito que habita)",
+        "atributos": {
+          "forca": 8,
+          "agilidade": 1,
+          "vigor": 8,
+          "presenca": 4,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +36",
+          "Fortitude +36",
+          "Reflexos +29",
+          "Vontade +32",
+          "Intimidação +24"
+        ],
+        "ataques": [
+          {
+            "nome": "Sugado ao Fundo",
+            "detalhe": "+36, 4d10+9 de Água"
+          }
+        ],
+        "habilidades": [
+          "O Sorvedouro (3/dia: todas as criaturas em 12 m fazem Reflexos DT 26; em falha, são puxadas para o centro do redemoinho, ficam Agarradas e começam a sufocar. Repete o teste no fim de cada turno para escapar; sucesso não impede a próxima ativação de puxar de novo)",
+          "Presa ao Estreito (não se move do trecho de mar que habita; fora d'água, Caríbdis não age)",
+          "Corpo de Maré (imune a agarrão, derrubar e empurrão; dano de impacto e cortante que não seja de Água causa metade)"
+        ],
+        "loot": [
+          "Núcleo do Sorvedouro (1800 Solares)",
+          "Água que Nunca Seca (700 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true
+      }
     },
     {
-        "tipo": "monstro",
-        "id": "fantasma-do-vendaval",
-        "titulo": "Fantasma do Vendaval",
-        "conteudo": {
-          "descricao": "O último fôlego de um marujo que a tempestade nunca deixou ir embora, agora puro vento com forma. Recrutas assim raramente aparecem à toa: a Tripulação de um Amaldiçoado costuma atrair o que sobrou de outros naufrágios.",
-          "preco": {
-            "Solares": 2100
-          },
-          "raridade": "lendario",
-          "categoria": "Espírito",
-          "pv": 820,
-          "nivel": 33,
-          "vd": 7,
-          "defesa": 27,
-          "iniciativa": 33,
-          "deslocamento": "18m (Voo)",
-          "atributos": {
-            "forca": 5,
-            "agilidade": 9,
-            "vigor": 5,
-            "presenca": 5,
-            "intelecto": 2
-          },
-          "pericias": [
-            "Luta +33",
-            "Fortitude +33",
-            "Reflexos +37",
-            "Vontade +33",
-            "Percepção +25"
-          ],
-          "ataques": [
-            {
-              "nome": "Lâmina de Vendaval",
-              "detalhe": "+33, 4d10+8 de Ar"
-            }
-          ],
-          "habilidades": [
-            "Corpo de Vento (passivo: atravessa vãos apertados e ignora terreno difícil; imune a ser Agarrado, Imobilizado ou derrubado por efeito não mágico)",
-            "Rajada Evasiva (1/combate, reação: ao ser atingido, mova-se até 6 m e reduza o dano recebido pela metade)",
-            "Olho da Tempestade (1/cena: criaturas em 6 m ao redor fazem Reflexos DT 27; em falha, sofrem 4d10 de Raio e ficam Atordoadas até o fim do próximo turno delas; em sucesso, sofrem metade do dano e não ficam Atordoadas)"
-          ],
-          "loot": [
-            "Pena de Tempestade (900 Solares)",
-            "Núcleo de Vendaval (500 Solares)"
-          ],
-          "classe": "Ser Lendário",
-          "nivelMinimoLoja": 4,
-          "requer_autorizacao_mestre": true
-        }
+      "tipo": "monstro",
+      "id": "fantasma-do-vendaval",
+      "titulo": "Fantasma do Vendaval",
+      "conteudo": {
+        "descricao": "O último fôlego de um marujo que a tempestade nunca deixou ir embora, agora puro vento com forma. Recrutas assim raramente aparecem à toa: a Tripulação de um Amaldiçoado costuma atrair o que sobrou de outros naufrágios.",
+        "preco": {
+          "Solares": 2100
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Espírito",
+        "pv": 820,
+        "nivel": 33,
+        "vd": 7,
+        "defesa": 27,
+        "iniciativa": 33,
+        "deslocamento": "18m (Voo)",
+        "atributos": {
+          "forca": 5,
+          "agilidade": 9,
+          "vigor": 5,
+          "presenca": 5,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +33",
+          "Fortitude +33",
+          "Reflexos +37",
+          "Vontade +33",
+          "Percepção +25"
+        ],
+        "ataques": [
+          {
+            "nome": "Lâmina de Vendaval",
+            "detalhe": "+33, 4d10+8 de Ar"
+          }
+        ],
+        "habilidades": [
+          "Corpo de Vento (passivo: atravessa vãos apertados e ignora terreno difícil; imune a ser Agarrado, Imobilizado ou derrubado por efeito não mágico)",
+          "Rajada Evasiva (1/combate, reação: ao ser atingido, mova-se até 6 m e reduza o dano recebido pela metade)",
+          "Olho da Tempestade (1/cena: criaturas em 6 m ao redor fazem Reflexos DT 27; em falha, sofrem 4d10 de Raio e ficam Atordoadas até o fim do próximo turno delas; em sucesso, sofrem metade do dano e não ficam Atordoadas)"
+        ],
+        "loot": [
+          "Pena de Tempestade (900 Solares)",
+          "Núcleo de Vendaval (500 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true
+      }
     },
     {
       "tipo": "drop",
@@ -12732,6 +12894,12 @@
         "preco": {
           "Lunaris": 980
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Constructo",
         "pv": 95,
@@ -12780,6 +12948,12 @@
         "descricao": "Manifestação luminosa de Aethel contratada para proteger e tratar um grupo por tempo limitado.",
         "preco": {
           "Solares": 48
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
         },
         "raridade": "incomum",
         "categoria": "Espírito",
@@ -12830,6 +13004,12 @@
         "descricao": "Besta das profundezas do Umbral contida por um contrato profano. O vínculo limita seus surtos e impede ataques fora de comando.",
         "preco": {
           "Solares": 31
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
         },
         "raridade": "incomum",
         "categoria": "Aberração",
@@ -16255,6 +16435,12 @@
         "preco": {
           "Lunaris": 760
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Monstro",
         "pv": 70,
@@ -16302,6 +16488,12 @@
         "descricao": "Investe sem aviso contra quem chega perto demais do seu território.",
         "preco": {
           "Lunaris": 300
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
         },
         "raridade": "comum",
         "categoria": "Animal",
@@ -16353,6 +16545,12 @@
         "preco": {
           "Lunaris": 1200
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Animal",
         "pv": 60,
@@ -16399,6 +16597,12 @@
         "descricao": "Serve um culto obscuro e luta até o fim por fé cega.",
         "preco": {
           "Lunaris": 670
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
         },
         "raridade": "comum",
         "categoria": "Humanoide",
@@ -16449,6 +16653,12 @@
         "preco": {
           "Lunaris": 940
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Animal",
         "pv": 170,
@@ -16495,6 +16705,12 @@
         "descricao": "Espírito menor que planta dúvidas na mente de quem se aproxima.",
         "preco": {
           "Lunaris": 1700
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
         },
         "raridade": "incomum",
         "categoria": "Espírito",
@@ -16544,6 +16760,12 @@
         "preco": {
           "Solares": 26
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Monstro",
         "pv": 250,
@@ -16592,6 +16814,12 @@
         "preco": {
           "Solares": 48
         },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
         "raridade": "raro",
         "categoria": "Monstro",
         "pv": 420,
@@ -16638,6 +16866,12 @@
         "descricao": "Mensageiro do Fim; sua presença corrói a realidade ao redor.",
         "preco": {
           "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
         },
         "raridade": "raro",
         "categoria": "Aberração",
@@ -16687,6 +16921,12 @@
         "preco": {
           "Solares": 27
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Monstro",
         "pv": 360,
@@ -16733,6 +16973,12 @@
         "descricao": "Construto de guerra pesado, feito pra derrubar portas e exércitos.",
         "preco": {
           "Solares": 105
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
         },
         "raridade": "raro",
         "categoria": "Constructo",
@@ -16781,6 +17027,12 @@
         "preco": {
           "Solares": 125
         },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
         "raridade": "raro",
         "categoria": "Humanoide",
         "pv": 460,
@@ -16828,6 +17080,12 @@
         "descricao": "Predador alado territorial com ferrão peçonhento na cauda.",
         "preco": {
           "Solares": 200
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
         },
         "raridade": "epico",
         "categoria": "Monstro",
@@ -16879,6 +17137,12 @@
         "preco": {
           "Solares": 300
         },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
         "raridade": "epico",
         "categoria": "Espírito",
         "pv": 480,
@@ -16926,6 +17190,12 @@
         "descricao": "Guarda labirintos e ruínas, forte demais pra ser ignorado.",
         "preco": {
           "Solares": 95
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
         },
         "raridade": "raro",
         "categoria": "Monstro",
@@ -16978,6 +17248,12 @@
         "preco": {
           "Solares": 260
         },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
         "raridade": "epico",
         "categoria": "Monstro",
         "pv": 720,
@@ -17024,6 +17300,12 @@
         "descricao": "Espírito do fogo preso a uma lâmpada ou anel, servo relutante.",
         "preco": {
           "Solares": 800
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
         },
         "raridade": "epico",
         "categoria": "Elemental",
@@ -17072,6 +17354,12 @@
         "descricao": "Colosso herbívoro que esmaga tudo em seu caminho por instinto, não malícia.",
         "preco": {
           "Solares": 480
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
         },
         "raridade": "epico",
         "categoria": "Monstro",
@@ -17125,6 +17413,12 @@
         "preco": {
           "Solares": 2000
         },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
         "raridade": "lendario",
         "categoria": "Lendário",
         "pv": 845,
@@ -17174,6 +17468,12 @@
         "preco": {
           "Solares": 2050
         },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
         "raridade": "lendario",
         "categoria": "Lendário",
         "pv": 1100,
@@ -17221,6 +17521,12 @@
         "descricao": "Fragmento consciente da escuridão entre os planos.",
         "preco": {
           "Solares": 3050
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
         },
         "raridade": "lendario",
         "categoria": "Lendário",
@@ -17271,6 +17577,12 @@
         "preco": {
           "Solares": 3200
         },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
         "raridade": "lendario",
         "categoria": "Lendário",
         "pv": 1600,
@@ -17319,6 +17631,12 @@
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
         "preco": {
           "Lunaris": 300
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
         },
         "raridade": "comum",
         "categoria": "Universal",
@@ -17369,6 +17687,12 @@
         "preco": {
           "Lunaris": 360
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Universal",
         "pv": 170,
@@ -17417,6 +17741,12 @@
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
         "preco": {
           "Lunaris": 690
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
         },
         "raridade": "comum",
         "categoria": "Universal",
@@ -17467,6 +17797,12 @@
         "preco": {
           "Lunaris": 1400
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Universal",
         "pv": 380,
@@ -17516,6 +17852,12 @@
         "preco": {
           "Solares": 25
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Universal",
         "pv": 515,
@@ -17564,6 +17906,12 @@
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
         "preco": {
           "Solares": 50
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
         },
         "raridade": "raro",
         "categoria": "Universal",
@@ -17616,6 +17964,12 @@
         "preco": {
           "Solares": 185
         },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
         "raridade": "raro",
         "categoria": "Universal",
         "pv": 845,
@@ -17666,6 +18020,12 @@
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
         "preco": {
           "Solares": 460
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
         },
         "raridade": "epico",
         "categoria": "Universal",
@@ -17718,6 +18078,12 @@
         "preco": {
           "Solares": 780
         },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
         "raridade": "epico",
         "categoria": "Universal",
         "pv": 1255,
@@ -17768,6 +18134,12 @@
         "descricao": "Perfil universal pronto para uso como criatura sem traços especiais. Nome e aparência podem mudar sem alterar os números publicados.",
         "preco": {
           "Solares": 800
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
         },
         "raridade": "lendario",
         "categoria": "Universal",
@@ -17821,6 +18193,12 @@
         "preco": {
           "Lunaris": 320
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Animal",
         "pv": 80,
@@ -17870,6 +18248,12 @@
         "descricao": "Guarda contratado para ficar num ponto fixo e conferir quem passa. Rende pouco em campo aberto e rende bem atrás de uma soleira.",
         "preco": {
           "Lunaris": 450
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
         },
         "raridade": "comum",
         "categoria": "Humanoide",
@@ -17926,6 +18310,12 @@
         "preco": {
           "Lunaris": 700
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Humanoide",
         "pv": 150,
@@ -17977,6 +18367,12 @@
         "descricao": "Cão grande criado para segurar invasor até a guarda chegar. Trava a mordida e só solta quando o dono manda.",
         "preco": {
           "Lunaris": 880
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
         },
         "raridade": "comum",
         "categoria": "Animal",
@@ -18030,6 +18426,12 @@
         "descricao": "Atirador de posto alto, contratado com a torre em mente. Cobre pátio, portão e muro sem descer para o corpo a corpo.",
         "preco": {
           "Lunaris": 1500
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
@@ -18086,6 +18488,12 @@
         "preco": {
           "Lunaris": 1950
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Constructo",
         "pv": 400,
@@ -18141,6 +18549,12 @@
         "preco": {
           "Solares": 34
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Espírito",
         "pv": 200,
@@ -18194,6 +18608,12 @@
         "preco": {
           "Solares": 68
         },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
         "raridade": "raro",
         "categoria": "Humanoide",
         "pv": 440,
@@ -18246,6 +18666,12 @@
         "descricao": "Oficial de carreira contratado para comandar o posto inteiro. Escala turno, distribui setor e briga junto quando o muro cede.",
         "preco": {
           "Solares": 120
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
         },
         "raridade": "raro",
         "categoria": "Humanoide",
@@ -18303,6 +18729,12 @@
         "preco": {
           "Solares": 320
         },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
         "raridade": "epico",
         "categoria": "Constructo",
         "pv": 1000,
@@ -18358,6 +18790,12 @@
         "preco": {
           "Lunaris": 820
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Humanoide",
         "pv": 175,
@@ -18412,6 +18850,12 @@
         "descricao": "Vai meia hora à frente do grupo e volta com o que viu. Serve para escolher acampamento e para evitar a primeira armadilha do caminho.",
         "preco": {
           "Lunaris": 950
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
         },
         "raridade": "comum",
         "categoria": "Humanoide",
@@ -18469,6 +18913,12 @@
         "preco": {
           "Lunaris": 380
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Animal",
         "pv": 55,
@@ -18517,6 +18967,12 @@
         "descricao": "Guarda-costas de juramento, contratado por temporada em vez de por dia. Fica entre o contratante e o ataque por reflexo treinado.",
         "preco": {
           "Solares": 78
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
         },
         "raridade": "raro",
         "categoria": "Humanoide",
@@ -18574,6 +19030,12 @@
         "preco": {
           "Lunaris": 1600
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Humanoide",
         "pv": 230,
@@ -18624,6 +19086,12 @@
         "descricao": "Serve a arma montada do veículo e cuida da munição. Sem ele, o canhão de bordo fica esperando alguém largar o leme.",
         "preco": {
           "Lunaris": 1750
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
         },
         "raridade": "incomum",
         "categoria": "Humanoide",
@@ -18679,6 +19147,12 @@
         "preco": {
           "Solares": 40
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Humanoide",
         "pv": 340,
@@ -18728,6 +19202,12 @@
         "descricao": "Lê carta, corrente e passagem dimensional com a mesma calma. Escolhe o caminho que chega antes e que ninguém está vigiando.",
         "preco": {
           "Solares": 55
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
         },
         "raridade": "raro",
         "categoria": "Humanoide",
@@ -18782,6 +19262,12 @@
         "preco": {
           "Lunaris": 420
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Humanoide",
         "pv": 85,
@@ -18831,6 +19317,12 @@
         "descricao": "Cuida de livro de contas, recibo e escritura da propriedade. Descobre o furto na coluna errada antes de qualquer guarda.",
         "preco": {
           "Lunaris": 520
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
         },
         "raridade": "comum",
         "categoria": "Humanoide",
@@ -18884,6 +19376,12 @@
         "preco": {
           "Lunaris": 1050
         },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
         "raridade": "comum",
         "categoria": "Humanoide",
         "pv": 130,
@@ -18935,6 +19433,12 @@
         "preco": {
           "Lunaris": 1350
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Humanoide",
         "pv": 180,
@@ -18985,6 +19489,12 @@
         "descricao": "Monta bancada na propriedade e produz frasco por encomenda. Precisa de laboratório instalado e de material comprado à parte.",
         "preco": {
           "Solares": 62
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
         },
         "raridade": "raro",
         "categoria": "Humanoide",
@@ -19043,6 +19553,12 @@
         "preco": {
           "Solares": 88
         },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
         "raridade": "raro",
         "categoria": "Humanoide",
         "pv": 420,
@@ -19096,6 +19612,12 @@
         "descricao": "Criada dentro do templo e solta nos corredores à noite. Enrola no primeiro corpo que se mexer fora do horário.",
         "preco": {
           "Lunaris": 1100
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
         },
         "raridade": "comum",
         "categoria": "Animal",
@@ -19151,6 +19673,12 @@
         "preco": {
           "Solares": 30
         },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
         "raridade": "incomum",
         "categoria": "Constructo",
         "pv": 250,
@@ -19202,6 +19730,12 @@
         "descricao": "Foi enterrado junto do que devia proteger e continua no posto. Não persegue ladrão para fora da câmara funerária.",
         "preco": {
           "Solares": 44
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
         },
         "raridade": "incomum",
         "categoria": "Morto-Vivo",
@@ -19255,6 +19789,12 @@
         "descricao": "Fera de fumaça e brasa acorrentada na entrada de um lugar proibido. Enxerga quem se aproxima invisível e late antes de queimar.",
         "preco": {
           "Solares": 100
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
         },
         "raridade": "raro",
         "categoria": "Aberração",
@@ -19310,6 +19850,12 @@
         "preco": {
           "Solares": 140
         },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
         "raridade": "raro",
         "categoria": "Constructo",
         "pv": 640,
@@ -19362,6 +19908,12 @@
         "descricao": "Massa de olhos que ocupa o teto de uma câmara e nunca pisca. Enxerga a sala inteira de uma vez e conta ao dono o que viu.",
         "preco": {
           "Solares": 420
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
         },
         "raridade": "epico",
         "categoria": "Aberração",
@@ -19668,6 +20220,1601 @@
           "Consumível"
         ],
         "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "vanguarda-selada",
+      "titulo": "Vanguarda Selada",
+      "conteudo": {
+        "descricao": "Guarda-costas selado por juramento de sangue: some entre o golpe e quem jurou proteger, sem hesitar.",
+        "preco": {
+          "Solares": 260
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "raridade": "epico",
+        "categoria": "Humanoide",
+        "pv": 900,
+        "nivel": 33,
+        "vd": 7,
+        "defesa": 25,
+        "iniciativa": 27,
+        "deslocamento": "9m",
+        "atributos": {
+          "forca": 6,
+          "agilidade": 5,
+          "vigor": 6,
+          "presenca": 3,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +33",
+          "Fortitude +30",
+          "Reflexos +31",
+          "Vontade +26",
+          "Percepção +21"
+        ],
+        "ataques": [
+          {
+            "nome": "Lâmina Selada",
+            "detalhe": "+33, 3d10+8 cortante"
+          }
+        ],
+        "habilidades": [
+          "Escudo de Sangue (1/cena, como Reação: torna-se o alvo de um ataque dirigido a um aliado a até 3 m e ganha Resistência 10 contra esse dano)",
+          "Juramento Inquebrável (imune a Medo e a efeitos que forcem abandonar quem protege)"
+        ],
+        "loot": [
+          "Selo de Sangue (60 Solares)",
+          "Cinto da Vanguarda (35 Solares)"
+        ],
+        "classe": "Ajudante",
+        "funcao": "Escolta",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "grumete-aprendiz",
+      "titulo": "Grumete Aprendiz",
+      "conteudo": {
+        "descricao": "Amarra nó, iça vela e aprende rápido. Ainda erra manobra sob pressão, mas sai barato.",
+        "preco": {
+          "Lunaris": 380
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "raridade": "comum",
+        "categoria": "Humanoide",
+        "pv": 80,
+        "nivel": 3,
+        "vd": 1,
+        "defesa": 12,
+        "iniciativa": 12,
+        "deslocamento": "9m",
+        "atributos": {
+          "forca": 1,
+          "agilidade": 3,
+          "vigor": 1,
+          "presenca": 1,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +6",
+          "Fortitude +6",
+          "Reflexos +8",
+          "Vontade +5",
+          "Ofício (Navegação) +5"
+        ],
+        "ataques": [
+          {
+            "nome": "Faca de Cabo",
+            "detalhe": "+6, 1d6+1 cortante"
+          }
+        ],
+        "habilidades": [
+          "Mão Extra (1/cena: ajuda em uma tarefa simples de bordo sem gastar ação)"
+        ],
+        "loot": [
+          "Corda Trançada (5 Solares)"
+        ],
+        "classe": "Ajudante",
+        "funcao": "Tripulação",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "almirante-de-fortuna",
+      "titulo": "Almirante de Fortuna",
+      "conteudo": {
+        "descricao": "Já afundou três navios e escapou dos três. Ninguém lê corrente e reputação melhor.",
+        "preco": {
+          "Solares": 340
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "raridade": "epico",
+        "categoria": "Humanoide",
+        "pv": 850,
+        "nivel": 33,
+        "vd": 7,
+        "defesa": 24,
+        "iniciativa": 26,
+        "deslocamento": "9m",
+        "mana": 90,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 5,
+          "presenca": 6,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +28",
+          "Fortitude +29",
+          "Reflexos +29",
+          "Vontade +30",
+          "Ofício (Navegação) +34",
+          "Diplomacia +27"
+        ],
+        "ataques": [
+          {
+            "nome": "Espadim de Duelo",
+            "detalhe": "+28, 3d8+7 perfurante"
+          }
+        ],
+        "habilidades": [
+          "Comandar a Tripulação (aliados com função de Tripulação a bordo do mesmo veículo recebem +2 em Pilotagem e Ofício (Navegação) enquanto o Almirante estiver consciente)",
+          "Manobra Impossível (1/cena: como Reação, o veículo ignora uma faixa de dano numa colisão ou avaria)"
+        ],
+        "loot": [
+          "Luneta de Latão (70 Solares)",
+          "Carta Náutica Completa (40 Solares)"
+        ],
+        "classe": "Ajudante",
+        "funcao": "Tripulação",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "arquiteto-de-maquinas",
+      "titulo": "Arquiteto de Máquinas",
+      "conteudo": {
+        "descricao": "Projeta gambiarra que vira solução permanente. Sabe fazer funcionar o que não devia.",
+        "preco": {
+          "Solares": 300
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "raridade": "epico",
+        "categoria": "Humanoide",
+        "pv": 820,
+        "nivel": 33,
+        "vd": 7,
+        "defesa": 22,
+        "iniciativa": 24,
+        "deslocamento": "6m",
+        "mana": 95,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 2,
+          "vigor": 4,
+          "presenca": 2,
+          "intelecto": 8
+        },
+        "pericias": [
+          "Luta +24",
+          "Fortitude +27",
+          "Reflexos +26",
+          "Vontade +26",
+          "Ofício (Engenharia) +36"
+        ],
+        "ataques": [
+          {
+            "nome": "Chave de Fenda Reforçada",
+            "detalhe": "+24, 2d8+6 impacto"
+          }
+        ],
+        "habilidades": [
+          "Retrofit de Campo (1/cena: como Ação Padrão, concede a um equipamento ou veículo aliado +2 de Defesa ou +2 de Resistência até o fim da cena)",
+          "Projeto Avançado (fora de combate, reduz em um quarto o tempo de qualquer reparo ou construção que supervisionar)"
+        ],
+        "loot": [
+          "Kit de Ferramentas de Precisão (90 Solares)",
+          "Manual de Engenharia Avançada (55 Solares)"
+        ],
+        "classe": "Ajudante",
+        "funcao": "Ofício",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "duelista-renegado",
+      "titulo": "Duelista Renegado",
+      "conteudo": {
+        "descricao": "Expulso de toda guilda de espadachins por trapacear em duelo. Nunca perdeu um.",
+        "preco": {
+          "Lunaris": 1500
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "raridade": "incomum",
+        "categoria": "Humanoide",
+        "pv": 245,
+        "nivel": 13,
+        "vd": 3,
+        "defesa": 17,
+        "iniciativa": 22,
+        "deslocamento": "9m",
+        "atributos": {
+          "forca": 4,
+          "agilidade": 5,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +19",
+          "Fortitude +16",
+          "Reflexos +21",
+          "Vontade +14",
+          "Intimidação +12"
+        ],
+        "ataques": [
+          {
+            "nome": "Rapieira Roubada",
+            "detalhe": "+19, 2d8+4 perfurante"
+          },
+          {
+            "nome": "Marca Dupla",
+            "detalhe": "+19, 1d8+4 perfurante extra se o alvo já estiver Ferido"
+          }
+        ],
+        "habilidades": [
+          "Fuga de Duelista (1/cena: como Reação, ao ser alvo de um ataque corpo a corpo, move-se até 6 m sem provocar ataque de oportunidade)"
+        ],
+        "loot": [
+          "Rapieira Roubada (28 Solares)",
+          "Máscara de Renegado (14 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "arquimago-banido",
+      "titulo": "Arquimago Banido",
+      "conteudo": {
+        "descricao": "Baniu a si mesmo antes que a torre o banisse. A magia que sobrou nele é mais perigosa do que era.",
+        "preco": {
+          "Solares": 500
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "raridade": "epico",
+        "categoria": "Humanoide",
+        "pv": 780,
+        "nivel": 33,
+        "vd": 7,
+        "defesa": 22,
+        "iniciativa": 27,
+        "deslocamento": "9m",
+        "mana": 140,
+        "atributos": {
+          "forca": 2,
+          "agilidade": 3,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 9
+        },
+        "pericias": [
+          "Luta +20",
+          "Fortitude +26",
+          "Reflexos +28",
+          "Vontade +30",
+          "Misticismo +36"
+        ],
+        "ataques": [
+          {
+            "nome": "Rajada Arcana Instável",
+            "detalhe": "+28, 4d10+8 de energia (fogo, frio ou elétrico, à escolha)"
+          }
+        ],
+        "habilidades": [
+          "Teleporte de Emergência (1/cena, como Reação: ao cair abaixo de metade da Vida, desloca-se até 18 m e fica Invisível até o fim do turno)",
+          "Magia Instável (ao tirar 1 natural num teste de ataque mágico, sofre 2d6 de dano de energia aleatório)"
+        ],
+        "loot": [
+          "Grimório Corrompido (200 Solares)",
+          "Anel de Contenção Rachado (90 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "trepadeira-devoradora",
+      "titulo": "Trepadeira Devoradora",
+      "conteudo": {
+        "descricao": "Parece moita inofensiva até a primeira vinha se fechar em volta de um tornozelo.",
+        "preco": {
+          "Lunaris": 420
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "raridade": "comum",
+        "categoria": "Planta",
+        "pv": 110,
+        "nivel": 5,
+        "vd": 1,
+        "defesa": 12,
+        "iniciativa": 8,
+        "deslocamento": "Nenhum (enraizada)",
+        "atributos": {
+          "forca": 4,
+          "agilidade": 0,
+          "vigor": 3,
+          "presenca": 0,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +9",
+          "Fortitude +11",
+          "Reflexos +6",
+          "Vontade +8",
+          "Furtividade +7"
+        ],
+        "ataques": [
+          {
+            "nome": "Vinha Constritora",
+            "detalhe": "+9, 1d8+3 impacto; em acerto, o alvo fica Agarrado"
+          },
+          {
+            "nome": "Suco Digestivo",
+            "detalhe": "1d6 de dano ácido por rodada contra alvo Agarrado"
+          }
+        ],
+        "habilidades": [
+          "Camuflagem Vegetal (impõe desvantagem em Percepção para notá-la antes do primeiro ataque)",
+          "Enraizada (não pode se mover do local)"
+        ],
+        "loot": [
+          "Seiva Ácida (15 Solares)",
+          "Fibra Constritora (8 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "fungo-colmeia-ambulante",
+      "titulo": "Fungo Colmeia Ambulante",
+      "conteudo": {
+        "descricao": "Uma colônia de fungos que aprendeu a andar. Cada golpe que a acerta solta esporo novo.",
+        "preco": {
+          "Solares": 60
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "raridade": "raro",
+        "categoria": "Planta",
+        "pv": 400,
+        "nivel": 20,
+        "vd": 4,
+        "defesa": 16,
+        "iniciativa": 18,
+        "deslocamento": "6m",
+        "atributos": {
+          "forca": 3,
+          "agilidade": 2,
+          "vigor": 5,
+          "presenca": 1,
+          "intelecto": 1
+        },
+        "pericias": [
+          "Luta +18",
+          "Fortitude +22",
+          "Reflexos +16",
+          "Vontade +14",
+          "Percepção +12"
+        ],
+        "ataques": [
+          {
+            "nome": "Baforada de Esporos",
+            "detalhe": "+18, área de 3 m: Fortitude DT 17 ou Enfraquecido até o fim da próxima cena"
+          },
+          {
+            "nome": "Golpe de Corpo Fúngico",
+            "detalhe": "+18, 2d8+5 impacto"
+          }
+        ],
+        "habilidades": [
+          "Regeneração Fúngica (recupera 15 PV no início do turno enquanto tiver ao menos 1 PV)",
+          "Vulnerável a Fogo (dano de fogo contra ele ignora Resistência)"
+        ],
+        "loot": [
+          "Esporo Concentrado (35 Solares)",
+          "Amostra de Micélio (20 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "zangao-do-veu",
+      "titulo": "Zangão do Véu",
+      "conteudo": {
+        "descricao": "Pequeno, rápido e cruel por diversão. Pica, ri da confusão e some antes da represália.",
+        "preco": {
+          "Lunaris": 1600
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "raridade": "incomum",
+        "categoria": "Feérico",
+        "pv": 160,
+        "nivel": 10,
+        "vd": 2,
+        "defesa": 17,
+        "iniciativa": 24,
+        "deslocamento": "9m (Voo)",
+        "atributos": {
+          "forca": 1,
+          "agilidade": 6,
+          "vigor": 1,
+          "presenca": 3,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +12",
+          "Fortitude +10",
+          "Reflexos +20",
+          "Vontade +13",
+          "Enganação +14"
+        ],
+        "ataques": [
+          {
+            "nome": "Ferrão Onírico",
+            "detalhe": "+16, 1d6+1 perfurante; em acerto, Vontade DT 14 ou Confuso até o fim do próximo turno"
+          }
+        ],
+        "habilidades": [
+          "Piscar entre Véus (1/rodada: como Ação de Movimento, fica Invisível até atacar ou até o fim do turno)",
+          "Enxame de Um (ataques de área contra ele têm 50% de chance de errar)"
+        ],
+        "loot": [
+          "Pólen Onírico (22 Solares)",
+          "Asa Iridescente (12 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "cervo-espinho-lua-cheia",
+      "titulo": "Cervo-Espinho da Lua Cheia",
+      "conteudo": {
+        "descricao": "Guardião de clareiras esquecidas. Sob a lua cheia, nenhum cavalo comum o alcança.",
+        "preco": {
+          "Solares": 55
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "raridade": "raro",
+        "categoria": "Feérico",
+        "pv": 420,
+        "nivel": 20,
+        "vd": 4,
+        "defesa": 18,
+        "iniciativa": 23,
+        "deslocamento": "15m",
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 1
+        },
+        "pericias": [
+          "Luta +19",
+          "Fortitude +19",
+          "Reflexos +21",
+          "Vontade +16",
+          "Percepção +15"
+        ],
+        "ataques": [
+          {
+            "nome": "Chifres Espinhosos",
+            "detalhe": "+19, 2d10+5 perfurante"
+          },
+          {
+            "nome": "Investida da Lua Cheia",
+            "detalhe": "+19, 3d8+5 impacto se moveu ao menos 9 m antes do ataque"
+          }
+        ],
+        "habilidades": [
+          "Fase Lunar (à noite ou sob luz da lua, ganha +2 de Defesa e +9 m de Movimento)",
+          "Trilha Feérica (deixa uma trilha de flores que se fecha em 1 rodada, servindo como terreno difícil para perseguidores)"
+        ],
+        "loot": [
+          "Chifre Lunar (55 Solares)",
+          "Semente Feérica (30 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "elemental-de-gelo-menor",
+      "titulo": "Elemental de Gelo Menor",
+      "conteudo": {
+        "descricao": "Nasce onde o frio nunca derrete de verdade. Cada soco deixa geada crescendo na pele.",
+        "preco": {
+          "Lunaris": 1900
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "raridade": "incomum",
+        "categoria": "Elemental",
+        "pv": 200,
+        "nivel": 10,
+        "vd": 2,
+        "defesa": 15,
+        "iniciativa": 15,
+        "deslocamento": "9m",
+        "atributos": {
+          "forca": 4,
+          "agilidade": 2,
+          "vigor": 4,
+          "presenca": 1,
+          "intelecto": 0
+        },
+        "pericias": [
+          "Luta +14",
+          "Fortitude +15",
+          "Reflexos +12",
+          "Vontade +10",
+          "Percepção +8"
+        ],
+        "ataques": [
+          {
+            "nome": "Punho de Gelo",
+            "detalhe": "+14, 2d8+4 frio"
+          }
+        ],
+        "habilidades": [
+          "Núcleo Congelante (ao ser atingido por dano físico corpo a corpo, o atacante faz Fortitude DT 13 ou tem o Movimento reduzido à metade até o fim do próximo turno)",
+          "Vulnerável a Fogo, Resistente a Frio"
+        ],
+        "loot": [
+          "Núcleo de Gelo Perpétuo (26 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "rei-carnical",
+      "titulo": "Rei Carniçal",
+      "conteudo": {
+        "descricao": "Um rei esquecido que se recusou a ficar enterrado. Comanda os mortos do próprio túmulo.",
+        "preco": {
+          "Solares": 450
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "raridade": "epico",
+        "categoria": "Morto-Vivo",
+        "pv": 780,
+        "nivel": 30,
+        "vd": 6,
+        "defesa": 23,
+        "iniciativa": 22,
+        "deslocamento": "9m",
+        "atributos": {
+          "forca": 7,
+          "agilidade": 2,
+          "vigor": 7,
+          "presenca": 4,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +30",
+          "Fortitude +30",
+          "Reflexos +22",
+          "Vontade +25",
+          "Intimidação +20"
+        ],
+        "ataques": [
+          {
+            "nome": "Golpe de Coroa Enferrujada",
+            "detalhe": "+30, 3d10+7 impacto"
+          },
+          {
+            "nome": "Toque Apodrecedor",
+            "detalhe": "+30, 2d8+7 necrótico; em acerto, o alvo não recupera PV até o fim da próxima cena"
+          }
+        ],
+        "habilidades": [
+          "Comandar os Mortos (1/cena: como Ação Padrão, até dois Carniçais ou Esqueletos aliados a até 12 m agem imediatamente)",
+          "Imune a veneno, sono e medo",
+          "Regeneração Sombria (recupera 20 PV no início do turno, a menos que tenha sofrido dano radiante ou de fogo na última rodada)"
+        ],
+        "loot": [
+          "Coroa Enferrujada (140 Solares)",
+          "Poeira de Ossos Reais (60 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-figado-depurador",
+      "titulo": "Fígado Depurador",
+      "conteudo": {
+        "descricao": "Filtra toxinas antes que cheguem à corrente sanguínea. Concede vantagem em Fortitude contra veneno ingerido e contra intoxicação por álcool ou drogas.",
+        "preco": {
+          "Créditos Sombrios": 15
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Implante Cibernético",
+          "Vantagem contra veneno ingerido",
+          "Imune a ressaca e embriaguez"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-regulador-circadiano",
+      "titulo": "Regulador Circadiano",
+      "conteudo": {
+        "descricao": "Reorganiza os ciclos de sono do usuário. Um descanso de duas horas recupera os mesmos benefícios de um descanso completo, mas não acelera a cura de Cansaço nem de Sanidade.",
+        "preco": {
+          "Créditos Sombrios": 12
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Implante Cibernético",
+          "Descanso completo em 2 horas",
+          "Não acelera cura de Cansaço/Sanidade"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-bolsa-subdermica",
+      "titulo": "Bolsa Subdérmica",
+      "conteudo": {
+        "descricao": "Uma bolsa cirúrgica sob a pele do abdômen, funda o bastante pra esconder um item pequeno de revistas comuns e detectores metálicos básicos. Retirar o conteúdo exige um lugar privado e uma Ação Padrão.",
+        "preco": {
+          "Créditos Sombrios": 18
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Implante Cibernético",
+          "Esconde 1 item pequeno",
+          "Passa por revista comum e detector básico"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-nariz-sabujo",
+      "titulo": "Nariz Sintético \"Faro de Sabujo\"",
+      "conteudo": {
+        "descricao": "Substitui o olfato por sensores químicos de precisão canina. Concede +2 em Sobrevivência para rastrear por cheiro e permite identificar venenos e drogas pelo odor antes de tocá-los.",
+        "preco": {
+          "Créditos Sombrios": 40
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Implante Cibernético",
+          "Sobrevivência (rastreio por cheiro) +2",
+          "Identifica venenos/drogas pelo odor"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-dedos-relojoeiro",
+      "titulo": "Dedos de Precisão \"Relojoeiro\"",
+      "conteudo": {
+        "descricao": "Substitui as pontas dos dedos por atuadores de precisão milimétrica. Concede +2 em Ofício para trabalho fino e em testes para destravar fechaduras ou desarmar armadilhas manuais.",
+        "preco": {
+          "Créditos Sombrios": 45
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Implante Cibernético",
+          "Ofício (trabalho fino) +2",
+          "Destravar/desarmar +2"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-glandulas-adrenais",
+      "titulo": "Glândulas Adrenais Reguladas",
+      "conteudo": {
+        "descricao": "Libera adrenalina sintética sob comando neural. Concede vantagem em Vontade contra Medo e Pânico. Uma vez por cena, pode ser ativado como Reação para agir normalmente mesmo Apavorado ou Abalado até o fim do turno.",
+        "preco": {
+          "Créditos Sombrios": 55
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Implante Cibernético",
+          "Vantagem contra Medo e Pânico",
+          "Ignora Apavorado/Abalado 1/cena"
+        ],
+        "subtipo": "cibernetico",
+        "ativacao": "Reação",
+        "frequencia": "1/cena",
+        "efeito": "Ignora os efeitos de Apavorado ou Abalado até o fim do turno",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-laringe-camaleao",
+      "titulo": "Laringe Sintética Camaleão",
+      "conteudo": {
+        "descricao": "Reproduz qualquer voz já gravada por pelo menos um minuto. Concede vantagem em Enganação quando o teste depender de imitar a voz de outra pessoa específica. Quem já ouviu a voz original de perto pode notar a imitação com um teste de Intuição contra a mesma DT.",
+        "preco": {
+          "Créditos Sombrios": 70
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Implante Cibernético",
+          "Imita vozes gravadas",
+          "Vantagem em Enganação por voz"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-olhos-vidro-sincero",
+      "titulo": "Olhos de Vidro Sincero",
+      "conteudo": {
+        "descricao": "Substitui os dois olhos por sensores que leem microexpressões e variação de pulso pela pele. Concede +3 em Intuição para perceber mentiras ditas na sua frente, mas não revela qual é a verdade, só que algo foi omitido ou distorcido.",
+        "preco": {
+          "Créditos Sombrios": 180
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Implante Cibernético",
+          "Intuição (detectar mentira) +3",
+          "Não revela qual é a verdade"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-tradutor-neural",
+      "titulo": "Tradutor Neural Universal",
+      "conteudo": {
+        "descricao": "Um núcleo linguístico que processa qualquer idioma falado ou escrito em tempo real, incluindo idiomas que o usuário nunca ouviu antes. Não traduz linguagem corporal, código cifrado nem magia.",
+        "preco": {
+          "Créditos Sombrios": 260
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Implante Cibernético",
+          "Entende e fala qualquer idioma",
+          "Não traduz cifra nem magia"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-sandevistan",
+      "titulo": "Sandevistan \"Trinity\"",
+      "conteudo": {
+        "descricao": "Um exoesqueleto neural que dilata o tempo subjetivo do usuário: por alguns segundos, o mundo parece congelar enquanto o corpo se move em velocidade real. Peça lendária entre ronin e mercenários das metrópoles subterrâneas.",
+        "preco": {
+          "Créditos Sombrios": 350
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Implante Cibernético",
+          "Age fora da ordem de iniciativa 1/cena",
+          "Ação Padrão extra",
+          "Custo: 2d6 interno + 2 Cansaço"
+        ],
+        "subtipo": "cibernetico",
+        "ativacao": "Reação, no início de qualquer rodada de combate",
+        "frequencia": "1/cena",
+        "efeito": "Nesta rodada, age imediatamente (ignora a ordem de iniciativa) e recebe uma Ação Padrão extra",
+        "custo": "2d6 de dano interno que ignora Resistência e 2 Cansaço ao terminar o efeito",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-cura-infima",
+      "titulo": "Poção de Cura Ínfima",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Restaura 1d6+1 pontos de Vida. Comum em qualquer feira, ainda serve pra sair de um aperto pequeno. (1 uso)",
+        "preco": {
+          "Lunaris": 20
+        },
+        "raridade": "comum",
+        "material": "Ervas Comuns",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-cura-suprema",
+      "titulo": "Poção de Cura Suprema",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Restaura 6d8+10 pontos de Vida. Selada em frasco reforçado que só alquimistas experientes conseguem produzir. (1 uso)",
+        "preco": {
+          "Solares": 18
+        },
+        "raridade": "epico",
+        "material": "Essência Vital Concentrada",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-cura-absoluta",
+      "titulo": "Poção de Cura Absoluta",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Restaura toda a Vida perdida instantaneamente. Rara o bastante pra decidir uma guerra sozinha. (1 uso)",
+        "preco": {
+          "Solares": 100
+        },
+        "raridade": "lendario",
+        "material": "Lágrima de Fênix",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-mana-infima",
+      "titulo": "Poção de Mana Ínfima",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Restaura 1d6+1 pontos de Mana. Gosto amargo, efeito imediato. (1 uso)",
+        "preco": {
+          "Lunaris": 22
+        },
+        "raridade": "comum",
+        "material": "Ervas Comuns",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-mana-menor",
+      "titulo": "Poção de Mana Menor",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Restaura 2d4+2 pontos de Mana. Item básico de qualquer conjurador que viaja. (1 uso)",
+        "preco": {
+          "Lunaris": 150
+        },
+        "raridade": "incomum",
+        "material": "Ervas Alquímicas",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-mana-maior",
+      "titulo": "Poção de Mana Maior",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Restaura 4d4+4 pontos de Mana. (1 uso)",
+        "preco": {
+          "Lunaris": 400
+        },
+        "raridade": "raro",
+        "material": "Ervas Raras",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-mana-suprema",
+      "titulo": "Poção de Mana Suprema",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Restaura 6d8+10 pontos de Mana. (1 uso)",
+        "preco": {
+          "Solares": 18
+        },
+        "raridade": "epico",
+        "material": "Essência Arcana Concentrada",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-mana-absoluta",
+      "titulo": "Poção de Mana Absoluta",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Restaura toda a Mana perdida instantaneamente. (1 uso)",
+        "preco": {
+          "Solares": 100
+        },
+        "raridade": "lendario",
+        "material": "Lágrima de Estrela",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "elixir-do-equilibrio",
+      "titulo": "Elixir do Equilíbrio",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Restaura 4d6 pontos de Vida e 4d6 pontos de Mana ao mesmo tempo. (1 uso)",
+        "preco": {
+          "Solares": 22
+        },
+        "raridade": "epico",
+        "material": "Essência Dupla",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "elixir-forca-absoluta",
+      "titulo": "Elixir da Força Absoluta",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Reescreve a estrutura muscular de quem bebe: aumenta permanentemente em +1 o modificador de Força. Cada personagem só se beneficia deste efeito uma vez na vida, não importa quantos elixires diferentes beba. (1 uso)",
+        "preco": {
+          "Solares": 90
+        },
+        "raridade": "lendario",
+        "material": "Sangue de Titã",
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "elixir-agilidade-absoluta",
+      "titulo": "Elixir da Agilidade Absoluta",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Reescreve os reflexos de quem bebe: aumenta permanentemente em +1 o modificador de Agilidade. Cada personagem só se beneficia deste efeito uma vez na vida, não importa quantos elixires diferentes beba. (1 uso)",
+        "preco": {
+          "Solares": 90
+        },
+        "raridade": "lendario",
+        "material": "Essência de Vento Cristalizado",
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "elixir-vigor-absoluto",
+      "titulo": "Elixir do Vigor Absoluto",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Reescreve a resistência do corpo de quem bebe: aumenta permanentemente em +1 o modificador de Vigor. Cada personagem só se beneficia deste efeito uma vez na vida, não importa quantos elixires diferentes beba. (1 uso)",
+        "preco": {
+          "Solares": 90
+        },
+        "raridade": "lendario",
+        "material": "Medula de Golem",
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "elixir-presenca-absoluta",
+      "titulo": "Elixir da Presença Absoluta",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Reescreve a força de vontade e o carisma de quem bebe: aumenta permanentemente em +1 o modificador de Presença. Cada personagem só se beneficia deste efeito uma vez na vida, não importa quantos elixires diferentes beba. (1 uso)",
+        "preco": {
+          "Solares": 90
+        },
+        "raridade": "lendario",
+        "material": "Lágrima de Sereia",
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "elixir-intelecto-absoluto",
+      "titulo": "Elixir do Intelecto Absoluto",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Reescreve as sinapses de quem bebe: aumenta permanentemente em +1 o modificador de Intelecto. Cada personagem só se beneficia deste efeito uma vez na vida, não importa quantos elixires diferentes beba. (1 uso)",
+        "preco": {
+          "Solares": 90
+        },
+        "raridade": "lendario",
+        "material": "Fragmento de Mente Ancestral",
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-instinto-furtivo",
+      "titulo": "Poção de Instinto Furtivo",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Concede +4 em testes de Furtividade até o fim da cena. (1 uso)",
+        "preco": {
+          "Lunaris": 70
+        },
+        "raridade": "incomum",
+        "material": "Ervas Alquímicas",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "elixir-sentidos-agucados",
+      "titulo": "Elixir dos Sentidos Aguçados",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Concede +4 em testes de Percepção até o fim da cena. (1 uso)",
+        "preco": {
+          "Lunaris": 75
+        },
+        "raridade": "incomum",
+        "material": "Ervas Alquímicas",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-do-convencimento",
+      "titulo": "Poção do Convencimento",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Concede +4 em testes de Diplomacia até o fim da cena. (1 uso)",
+        "preco": {
+          "Lunaris": 70
+        },
+        "raridade": "incomum",
+        "material": "Ervas Alquímicas",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-folego-de-aco",
+      "titulo": "Poção de Fôlego de Aço",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Concede +4 em testes de Atletismo até o fim da cena. (1 uso)",
+        "preco": {
+          "Lunaris": 75
+        },
+        "raridade": "incomum",
+        "material": "Ervas Alquímicas",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-mente-clara",
+      "titulo": "Poção da Mente Clara",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Concede +4 em testes de Investigação até o fim da cena. (1 uso)",
+        "preco": {
+          "Lunaris": 75
+        },
+        "raridade": "incomum",
+        "material": "Ervas Alquímicas",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-passos-ligeiros",
+      "titulo": "Poção de Passos Ligeiros",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Aumenta o Movimento em 3 m até o fim da cena. (1 uso)",
+        "preco": {
+          "Lunaris": 90
+        },
+        "raridade": "incomum",
+        "material": "Ervas Alquímicas",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "elixir-vento-veloz",
+      "titulo": "Elixir do Vento Veloz",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Aumenta o Movimento em 6 m e concede vantagem em testes para escapar de Agarrado até o fim da cena. (1 uso)",
+        "preco": {
+          "Lunaris": 350
+        },
+        "raridade": "raro",
+        "material": "Pena de Grifo",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-couraca-liquida",
+      "titulo": "Poção de Couraça Líquida",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Concede +2 de Defesa até o fim da cena. (1 uso)",
+        "preco": {
+          "Lunaris": 95
+        },
+        "raridade": "incomum",
+        "material": "Ervas Alquímicas",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "elixir-pele-de-pedra",
+      "titulo": "Elixir da Pele de Pedra",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Concede +4 de Defesa e Resistência 2 contra dano físico até o fim da cena. (1 uso)",
+        "preco": {
+          "Lunaris": 380
+        },
+        "raridade": "raro",
+        "material": "Pó de Basalto",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-dos-reflexos",
+      "titulo": "Poção dos Reflexos",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Concede +5 de Iniciativa até o fim da cena. (1 uso)",
+        "preco": {
+          "Lunaris": 100
+        },
+        "raridade": "incomum",
+        "material": "Ervas Alquímicas",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "elixir-vontade-inabalavel",
+      "titulo": "Elixir da Vontade Inabalável",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Concede vantagem em testes de Vontade até o fim da cena. (1 uso)",
+        "preco": {
+          "Lunaris": 320
+        },
+        "raridade": "raro",
+        "material": "Cinzas de Asceta",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "elixir-de-serenidade",
+      "titulo": "Elixir de Serenidade",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Restaura 2d6 pontos de Sanidade. (1 uso)",
+        "preco": {
+          "Lunaris": 110
+        },
+        "raridade": "incomum",
+        "material": "Flor da Calma",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "pocao-revigorante",
+      "titulo": "Poção Revigorante",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Remove 1 ponto de Cansaço acumulado. (1 uso)",
+        "preco": {
+          "Lunaris": 80
+        },
+        "raridade": "incomum",
+        "material": "Ervas Alquímicas",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "bomba-de-fumaca",
+      "titulo": "Bomba de Fumaça",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Ao ser arremessada, cria uma nuvem de fumaça densa num raio de 4,5 m por 1 minuto. Concede vantagem em Furtividade para quem se move dentro dela. (1 uso)",
+        "preco": {
+          "Lunaris": 15
+        },
+        "raridade": "comum",
+        "material": "Pólvora e Fósforo",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "frasco-incendiario",
+      "titulo": "Frasco Incendiário",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Arremessado contra um alvo ou ponto a até 9 m, causa 3d6 de dano de Fogo numa área de 3 m. (1 uso)",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "incomum",
+        "material": "Óleo Alquímico",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "capsula-estimulante-zero",
+      "titulo": "Cápsula Estimulante 'Zero'",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Injetada direto na veia, concede +3 em testes de ataque e dano até o fim da cena. Ao passar o efeito, o usuário ganha 2 pontos de Cansaço. Origem ilegal do Mercado Negro. (1 uso)",
+        "preco": {
+          "Lunaris": 300
+        },
+        "raridade": "raro",
+        "material": "Composto Sintético",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "incenso-de-meditacao",
+      "titulo": "Incenso de Meditação",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Queimado durante uma hora de descanso, concede vantagem no próximo teste de Misticismo ou Religião feito nas 3 horas seguintes. (1 uso)",
+        "preco": {
+          "Lunaris": 18
+        },
+        "raridade": "comum",
+        "material": "Resina Aromática",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "antitoxina-avancada",
+      "titulo": "Antitoxina Avançada",
+      "conteudo": {
+        "consumivel": true,
+        "espacos": 1,
+        "descricao": "Encerra qualquer efeito de veneno ativo e concede Resistência 5 contra veneno até o fim da cena. (1 uso)",
+        "preco": {
+          "Lunaris": 380
+        },
+        "raridade": "raro",
+        "material": "Ervas Raras",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "acessorio-refinado",
+      "titulo": "Acessório Refinado",
+      "conteudo": {
+        "espacos": 1,
+        "descricao": "+2 em uma perícia escolhida na aquisição, ou vantagem nessa mesma perícia (escolha um dos dois).",
+        "preco": {
+          "Lunaris": 400
+        },
+        "raridade": "raro",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "acessorio-superior",
+      "titulo": "Acessório Superior",
+      "conteudo": {
+        "espacos": 1,
+        "descricao": "Concede até dois efeitos automáticos, escolhidos na aquisição: cada um pode ser +3 em uma perícia ou vantagem nessa perícia. Pode escolher a mesma perícia duas vezes (vantagem repetida não empilha, mas os bônus somam).",
+        "preco": {
+          "Solares": 20
+        },
+        "raridade": "epico",
+        "categoria_loja": "Outros",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "acessorio-lendario",
+      "titulo": "Acessório Lendário",
+      "conteudo": {
+        "espacos": 1,
+        "descricao": "Concede até dois efeitos automáticos, escolhidos na aquisição: cada um pode ser +4 em uma perícia ou vantagem nessa perícia. Pode escolher a mesma perícia duas vezes (vantagem repetida não empilha, mas os bônus somam). A peça exige aprovação do Mestre.",
+        "preco": {
+          "Solares": 90
+        },
+        "raridade": "lendario",
+        "categoria_loja": "Outros",
+        "requer_autorizacao_mestre": true,
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "bussola-de-precisao",
+      "titulo": "Bússola de Precisão",
+      "conteudo": {
+        "espacos": 1,
+        "descricao": "Nunca falha em apontar o norte magnético. Concede vantagem em testes de Sobrevivência para não se perder.",
+        "preco": {
+          "Lunaris": 25
+        },
+        "raridade": "comum",
+        "material": "Latão e Agulha Imantada",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "binoculo-longo-alcance",
+      "titulo": "Binóculo de Longo Alcance",
+      "conteudo": {
+        "espacos": 1,
+        "descricao": "Amplia a visão com nitidez a até 500 m. Concede vantagem em Percepção à distância.",
+        "preco": {
+          "Lunaris": 90
+        },
+        "raridade": "incomum",
+        "material": "Lentes de Precisão",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "kit-de-arrombamento",
+      "titulo": "Kit de Arrombamento",
+      "conteudo": {
+        "espacos": 1,
+        "descricao": "Ganzuás e ferramentas finas para fechaduras mecânicas. Concede vantagem em testes para destravá-las.",
+        "preco": {
+          "Lunaris": 85
+        },
+        "raridade": "incomum",
+        "material": "Aço Temperado",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "kit-de-disfarce",
+      "titulo": "Kit de Disfarce",
+      "conteudo": {
+        "espacos": 1,
+        "descricao": "Maquiagem, perucas e roupas trocáveis. Concede vantagem em Enganação quando o teste depender de se passar por outra pessoa ou papel social.",
+        "preco": {
+          "Lunaris": 95
+        },
+        "raridade": "incomum",
+        "material": "Tecidos e Cosméticos",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "identidade-falsificada",
+      "titulo": "Identidade Falsificada",
+      "conteudo": {
+        "espacos": 1,
+        "descricao": "Um conjunto de documentos que resiste bem a uma verificação superficial. Falha automaticamente contra qualquer verificação com acesso a bancos de dados oficiais.",
+        "preco": {
+          "Lunaris": 250
+        },
+        "raridade": "raro",
+        "material": "Papel e Selo Forjados",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "barraca-de-campanha",
+      "titulo": "Barraca de Campanha",
+      "conteudo": {
+        "espacos": 2,
+        "descricao": "Abriga até quatro pessoas. Monta e desmonta em dez minutos. Um descanso completo feito dentro dela recupera 1 ponto extra de Cansaço.",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "comum",
+        "material": "Lona Encerada",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "kit-de-pesca-e-forrageamento",
+      "titulo": "Kit de Pesca e Forrageamento",
+      "conteudo": {
+        "espacos": 1,
+        "descricao": "Linha, anzóis e um guia de plantas comestíveis da região. Concede vantagem em Sobrevivência para conseguir comida em ambiente selvagem.",
+        "preco": {
+          "Lunaris": 20
+        },
+        "raridade": "comum",
+        "material": "Linha e Osso",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "sela-e-arreios-de-viagem",
+      "titulo": "Sela e Arreios de Viagem",
+      "conteudo": {
+        "espacos": 1,
+        "descricao": "Equipamento completo para montaria de longa distância. Reduz em 1 o Cansaço acumulado ao fim de um dia de viagem montada.",
+        "preco": {
+          "Lunaris": 60
+        },
+        "raridade": "incomum",
+        "material": "Couro Curtido",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "cofre-portatil",
+      "titulo": "Cofre Portátil",
+      "conteudo": {
+        "espacos": 2,
+        "descricao": "Tranca com um código pessoal de até seis dígitos. Abrir à força sem o código exige um teste de Atletismo ou Força contra DT 25.",
+        "preco": {
+          "Lunaris": 300
+        },
+        "raridade": "raro",
+        "material": "Liga de Aço",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "equipamento",
+      "id": "carregador-universal-axis",
+      "titulo": "Carregador Universal A.X.I.S",
+      "conteudo": {
+        "espacos": 1,
+        "descricao": "Recarrega qualquer implante ou dispositivo com cargas em uma hora, mesmo sem fonte de energia elétrica disponível.",
+        "preco": {
+          "Lunaris": 100
+        },
+        "raridade": "incomum",
+        "material": "Núcleo A.X.I.S",
+        "nivelMinimoLoja": 1
       }
     }
   ]

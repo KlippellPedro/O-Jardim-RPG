@@ -27,6 +27,7 @@ export interface ICreateCharacterPayload {
   inventarioInicial?: any[];
   escolhaRacial?: {
     varianteId?: string | null;
+    naturezaDivinaId?: string | null;
     divindade?: string;
     [key: string]: any;
   };

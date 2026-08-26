@@ -50,17 +50,21 @@ def _positive_integer(value: object) -> int | None:
     return integer
 
 
-def resolve_catalog_price(content: Mapping[str, Any] | None) -> CatalogPrice | None:
-    """Resolve o preço autoritativo do catálogo.
+def resolve_catalog_price(content: Mapping[str, Any] | None, field: str = "preco") -> CatalogPrice | None:
+    """Resolve um preço autoritativo do catálogo.
 
     Um número usa ``Solares``. Um objeto precisa declarar exatamente uma moeda
     não vazia com valor inteiro positivo; preços ambíguos ou truncáveis são
     rejeitados em vez de serem interpretados pelo cliente.
+
+    ``field`` deixa resolver preços alternativos declarados no mesmo formato,
+    como ``preco_contratacao``/``contrato_mensal`` dos Mercenários - ver
+    ``_mercenary_ally_from_catalog_item`` em routers/shop.py.
     """
 
     if not isinstance(content, Mapping):
         return None
-    raw_price = content.get("preco")
+    raw_price = content.get(field)
     numeric_price = _positive_integer(raw_price)
     if numeric_price is not None:
         return CatalogPrice(moeda="Solares", valor=numeric_price)

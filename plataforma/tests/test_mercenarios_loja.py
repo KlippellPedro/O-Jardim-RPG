@@ -109,5 +109,50 @@ class ContratacaoViraAliadoTests(unittest.TestCase):
         self.assertEqual(_mercenary_ally_from_catalog_item(fera)["papel"], "Criatura")
 
 
+class ContratarOuComprarTests(unittest.TestCase):
+    """Mercenario agora tem dois jeitos de virar aliado: comprado (preco cheio,
+    servo/escravo permanente, sem mensalidade) ou contratado (preco reduzido,
+    mensalidade recorrente que a mesa cobra fora do sistema - mesmo tratamento
+    que a manutencao de Bens ja recebe)."""
+
+    def test_todo_mercenario_declara_preco_de_contratacao_e_mensalidade(self):
+        for entrada in _MONSTROS:
+            with self.subTest(entrada["id"]):
+                self.assertIn("preco_contratacao", entrada["conteudo"])
+                self.assertIn("contrato_mensal", entrada["conteudo"])
+
+    def test_comprar_e_o_padrao_e_nao_gera_mensalidade(self):
+        lobo = next(e for e in _MONSTROS if e["id"] == "lobo-cinzento")
+        aliado = _mercenary_ally_from_catalog_item(lobo)
+        self.assertEqual(aliado["vinculo"], "comprado")
+        self.assertIsNone(aliado["mensalidade"])
+
+    def test_contratar_gera_mensalidade_a_partir_do_catalogo(self):
+        # A mensalidade e 20% da taxa de contratacao, nao o valor cheio dela -
+        # ver data/economia/escala-precos-v1.json (salarios_mensais e a base,
+        # a mensalidade e uma fracao disso pra nao equivaler a pagar o "salario"
+        # inteiro nao mes 1 e de novo todo mes seguinte).
+        lobo = next(e for e in _MONSTROS if e["id"] == "lobo-cinzento")
+        aliado = _mercenary_ally_from_catalog_item(lobo, modo="contratar")
+        self.assertEqual(aliado["vinculo"], "contratado")
+        self.assertEqual(lobo["conteudo"]["preco_contratacao"], {"Lunaris": 300})
+        self.assertEqual(aliado["mensalidade"], {"moeda": "Lunaris", "valor": 60})
+
+    def test_mensalidade_e_sempre_vinte_por_cento_da_taxa_de_contratacao(self):
+        for entrada in _MONSTROS:
+            with self.subTest(entrada["id"]):
+                contratacao = entrada["conteudo"]["preco_contratacao"]["Lunaris"]
+                mensal = entrada["conteudo"]["contrato_mensal"]["Lunaris"]
+                self.assertEqual(mensal, round(contratacao * 0.2))
+
+    def test_contratar_nao_muda_papel_nem_posto_fixo(self):
+        guarda = next(e for e in _MONSTROS if e["conteudo"].get("funcao") == "Guarda de local")
+        comprado = _mercenary_ally_from_catalog_item(guarda)
+        contratado = _mercenary_ally_from_catalog_item(guarda, modo="contratar")
+        self.assertEqual(comprado["papel"], contratado["papel"])
+        self.assertFalse(comprado["emCena"])
+        self.assertFalse(contratado["emCena"])
+
+
 if __name__ == "__main__":
     unittest.main()

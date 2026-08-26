@@ -210,13 +210,47 @@
   }
 
   .regras-content .regras-xp-grid {
-    @apply grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 my-6;
+    @apply my-8 grid gap-2.5 rounded-2xl border border-[#c7a44c]/15 bg-black/20 p-3 shadow-inner sm:p-4;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .regras-content .regras-xp-grid span {
-    @apply flex items-center justify-between bg-black/40 border border-white/5 rounded-lg px-3 py-2 text-sm text-gray-300 transition-all hover:border-yellow-600/30 hover:bg-[#15141b]/80;
+    @apply relative flex min-w-0 flex-col items-start gap-1.5 overflow-hidden rounded-xl border border-white/10 px-3 py-3 text-sm font-semibold text-gray-300 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#c7a44c]/40 hover:text-white hover:shadow-lg;
+    min-height: 4rem;
+    white-space: normal;
+    background: linear-gradient(135deg, rgba(19, 18, 25, 0.96), rgba(8, 7, 12, 0.96));
+  }
+  .regras-content .regras-xp-grid span::after {
+    content: '';
+    @apply pointer-events-none absolute inset-x-3 bottom-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent;
   }
   .regras-content .regras-xp-grid strong {
-    @apply text-yellow-500 font-bold mr-2 bg-yellow-600/20 px-1.5 py-0.5 rounded text-xs;
+    @apply flex h-9 min-w-10 shrink-0 items-center justify-center rounded-lg border border-[#c7a44c]/20 bg-[#c7a44c]/10 px-2 text-xs font-black tracking-wide text-[#e6c65f];
+    white-space: nowrap;
+  }
+  .regras-content .regras-xp-grid span:nth-child(5n) {
+    @apply border-[#c7a44c]/25;
+    background: linear-gradient(135deg, rgba(199, 164, 76, 0.09), rgba(10, 9, 14, 0.96) 70%);
+  }
+  .regras-content .regras-xp-grid span:nth-child(5n) strong {
+    @apply border-[#c7a44c]/35 bg-[#c7a44c]/20 text-[#f3d470];
+  }
+  .regras-content .regras-xp-grid span:nth-child(10n) {
+    @apply border-[#c7a44c]/40 shadow-[inset_0_0_24px_rgba(199,164,76,0.06)];
+  }
+  .regras-content .regras-xp-grid span:nth-child(10n) strong {
+    @apply bg-[#c7a44c] text-[#171108] shadow-[0_0_18px_rgba(199,164,76,0.18)];
+  }
+
+  @media (min-width: 40rem) {
+    .regras-content .regras-xp-grid {
+      grid-template-columns: repeat(auto-fit, minmax(9.75rem, 1fr));
+    }
+    .regras-content .regras-xp-grid span {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.625rem;
+      white-space: nowrap;
+    }
   }
 }
 

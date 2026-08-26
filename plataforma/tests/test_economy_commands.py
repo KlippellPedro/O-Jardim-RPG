@@ -86,6 +86,22 @@ class EconomyCommandUnitTests(unittest.TestCase):
             with self.subTest(content=content):
                 self.assertIsNone(resolve_catalog_price(content))
 
+    def test_resolve_catalog_price_reads_alternative_field(self):
+        content = {"preco": {"Lunaris": 1900}, "preco_contratacao": {"Lunaris": 750}, "contrato_mensal": {"Lunaris": 750}}
+        self.assertEqual(
+            resolve_catalog_price(content, field="preco_contratacao"),
+            CatalogPrice(moeda="Lunaris", valor=750),
+        )
+        self.assertEqual(
+            resolve_catalog_price(content, field="contrato_mensal"),
+            CatalogPrice(moeda="Lunaris", valor=750),
+        )
+        # O preco padrao continua acessivel sem passar field.
+        self.assertEqual(resolve_catalog_price(content), CatalogPrice(moeda="Lunaris", valor=1900))
+
+    def test_resolve_catalog_price_field_missing_is_none(self):
+        self.assertIsNone(resolve_catalog_price({"preco": {"Lunaris": 100}}, field="preco_contratacao"))
+
     def test_resale_is_half_rounded_down_with_minimum_one(self):
         self.assertEqual(resale_value(CatalogPrice("Solares", 5)).valor, 2)
         self.assertEqual(resale_value(CatalogPrice("Solares", 1)).valor, 1)

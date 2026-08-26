@@ -29,13 +29,14 @@ TIPOS_VALIDOS = [
     "personagem", "soberano", "npc",
     "evento",
     "idioma", "cultura",
+    "local",
 ]
 
 # Ordem de renderizacao: segue a cascata, pra o arquivo gerado ficar legivel.
 ORDEM_TIPOS = {tipo: i for i, tipo in enumerate([
     "cosmologia", "conceito", "deidade", "fluxo", "galho", "realidade",
     "dimensao", "reino", "mundo", "personagem", "soberano", "npc",
-    "evento", "idioma", "cultura",
+    "evento", "idioma", "cultura", "local",
 ])}
 
 

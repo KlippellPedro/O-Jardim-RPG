@@ -16,16 +16,19 @@ export const Mimico = ({ raca }: MimicoProps) => {
   return (
     <div className="min-h-screen text-fuchsia-50 p-8 selection:bg-fuchsia-500/30 overflow-hidden relative">
       {/* Shifting Gradient Background */}
-      <div className="fixed inset-0 z-0 bg-black">
+      <div
+        className="fixed inset-0 z-0 bg-black bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/assets/img/mimico_bg.webp')" }}
+      >
         <motion.div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 30% 20%, rgba(192,132,252,0.16), transparent 55%), radial-gradient(circle at 70% 80%, rgba(232,121,249,0.14), transparent 55%), #0b0713',
+            background: 'radial-gradient(circle at 30% 20%, rgba(192,132,252,0.16), transparent 55%), radial-gradient(circle at 70% 80%, rgba(232,121,249,0.14), transparent 55%)',
           }}
           animate={{ opacity: [0.7, 1, 0.7] }}
           transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0b0713]/40 via-transparent to-[#0b0713]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0b0713]/55 via-[#0b0713]/25 to-[#0b0713]/90" />
       </div>
 
       {/* Unstable Silhouette Effects */}
@@ -86,7 +89,7 @@ export const Mimico = ({ raca }: MimicoProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-fuchsia-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Copia a cara, a roupa e o jeito de quem observou de perto, e copia também a forma de um móvel qualquer quando precisa que ninguém olhe. Por baixo continua o mesmo bicho magro e nervoso, com um núcleo só, e é esse núcleo que entrega tudo quando ele apaga.
+            Copia o rosto, a roupa e o jeito de quem observou de perto, e também consegue virar um móvel qualquer quando precisa que ninguém repare nele. Por baixo continua o mesmo bicho magro e nervoso, com um núcleo só, e é esse núcleo que entrega tudo quando ele apaga.
           </motion.p>
         </motion.header>
 

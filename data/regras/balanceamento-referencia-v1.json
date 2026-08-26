@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-25T11:14:53.691Z",
+  "generatedAt": "2026-08-26T01:23:46.975Z",
   "levels": [
     1,
     5,
@@ -15,7 +15,7 @@
     "scope": "Mede recursos, vagas, dano médio e palavras de risco. Efeitos narrativos e controle ainda exigem playtest."
   },
   "summary": {
-    "classes": 26,
+    "classes": 28,
     "weapons": 79,
     "spells": 352,
     "invalidResourceBudgets": 0,
@@ -1319,7 +1319,9 @@
           "habilidades": 11
         }
       ],
-      "alertasTexto": []
+      "alertasTexto": [
+        "Konsō: Funeral da Alma"
+      ]
     },
     {
       "id": "escritor-de-contos",
@@ -1898,6 +1900,150 @@
       "alertasTexto": [
         "Cardápio"
       ]
+    },
+    {
+      "id": "detetive",
+      "titulo": "Detetive",
+      "categoria": "comum",
+      "recursosPorNivel": 7,
+      "referencias": [
+        {
+          "nivel": 1,
+          "vida": 16,
+          "mana": 8,
+          "defesaNatural": 11,
+          "poderes": 0,
+          "grausTreinamento": 1,
+          "habilidades": 1
+        },
+        {
+          "nivel": 5,
+          "vida": 40,
+          "mana": 20,
+          "defesaNatural": 13,
+          "poderes": 1,
+          "grausTreinamento": 1,
+          "habilidades": 3
+        },
+        {
+          "nivel": 10,
+          "vida": 70,
+          "mana": 35,
+          "defesaNatural": 16,
+          "poderes": 3,
+          "grausTreinamento": 2,
+          "habilidades": 5
+        },
+        {
+          "nivel": 15,
+          "vida": 100,
+          "mana": 50,
+          "defesaNatural": 18,
+          "poderes": 5,
+          "grausTreinamento": 3,
+          "habilidades": 7
+        },
+        {
+          "nivel": 20,
+          "vida": 130,
+          "mana": 65,
+          "defesaNatural": 21,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 30,
+          "vida": 185,
+          "mana": 100,
+          "defesaNatural": 26,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 40,
+          "vida": 240,
+          "mana": 135,
+          "defesaNatural": 31,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        }
+      ],
+      "alertasTexto": []
+    },
+    {
+      "id": "devorador",
+      "titulo": "Devorador",
+      "categoria": "especial",
+      "recursosPorNivel": 7,
+      "referencias": [
+        {
+          "nivel": 1,
+          "vida": 16,
+          "mana": 8,
+          "defesaNatural": 11,
+          "poderes": 0,
+          "grausTreinamento": 1,
+          "habilidades": 1
+        },
+        {
+          "nivel": 5,
+          "vida": 40,
+          "mana": 20,
+          "defesaNatural": 13,
+          "poderes": 1,
+          "grausTreinamento": 1,
+          "habilidades": 3
+        },
+        {
+          "nivel": 10,
+          "vida": 70,
+          "mana": 35,
+          "defesaNatural": 16,
+          "poderes": 3,
+          "grausTreinamento": 2,
+          "habilidades": 5
+        },
+        {
+          "nivel": 15,
+          "vida": 100,
+          "mana": 50,
+          "defesaNatural": 18,
+          "poderes": 5,
+          "grausTreinamento": 3,
+          "habilidades": 7
+        },
+        {
+          "nivel": 20,
+          "vida": 130,
+          "mana": 65,
+          "defesaNatural": 21,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 30,
+          "vida": 185,
+          "mana": 100,
+          "defesaNatural": 26,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        },
+        {
+          "nivel": 40,
+          "vida": 240,
+          "mana": 135,
+          "defesaNatural": 31,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 11
+        }
+      ],
+      "alertasTexto": []
     }
   ],
   "spells": [

@@ -371,6 +371,11 @@ class ShopCommandItemInput(StrictCommandInput):
     item_id: str = Field(min_length=1, max_length=160)
     quantidade: StrictInt = Field(default=1, ge=1, le=500)
     alvo_item_id: str | None = Field(default=None, max_length=160)
+    # Só faz sentido pra Mercenários: "comprar" torna o contratado um
+    # servo/escravo permanente (preço cheio, sem mensalidade); "contratar" é
+    # mais barato mas gera uma mensalidade recorrente na ficha. Validado
+    # contra o tipo do item no router, que é quem enxerga o catálogo.
+    modo: Literal["comprar", "contratar"] = Field(default="comprar")
 
     @field_validator("item_id")
     @classmethod
@@ -395,7 +400,7 @@ class ShopBatchCommandInput(StrictCommandInput):
 
     @model_validator(mode="after")
     def validate_batch(self):
-        keys = [(item.item_id, item.alvo_item_id) for item in self.itens]
+        keys = [(item.item_id, item.alvo_item_id, item.modo) for item in self.itens]
         if len(keys) != len(set(keys)):
             raise ValueError("o lote contem item_id duplicado para o mesmo alvo")
         if sum(item.quantidade for item in self.itens) > 500:

@@ -11,7 +11,17 @@ export interface CartItem {
   quantidade: number;
   alvoItemId?: string;
   alvoItemNome?: string;
+  /** Só em Mercenários: 'contratar' gera mensalidade, 'comprar'/ausente é o
+   * servo/escravo permanente. `item.valorOriginal` já reflete o preço certo
+   * pro modo escolhido - ver handleAddToCart em LojaPage. */
+  modo?: 'comprar' | 'contratar';
 }
+
+/** Chave estável de agrupamento/identificação de uma linha do carrinho.
+ * Contratar e comprar o mesmo item não se agrupam: são vínculos diferentes. */
+export const cartItemKey = ({ item, alvoItemId, modo }: Pick<CartItem, 'item' | 'alvoItemId' | 'modo'>): string => (
+  [item.id, alvoItemId, modo === 'contratar' ? 'contratar' : undefined].filter(Boolean).join('::')
+);
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -75,8 +85,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <p className="uppercase tracking-widest text-sm font-bold">Vazio</p>
                 </div>
               ) : (
-                cart.map(({ item, quantidade, alvoItemId, alvoItemNome }) => {
-                  const cartKey = alvoItemId ? `${item.id}::${alvoItemId}` : item.id;
+                cart.map((cartItem) => {
+                  const { item, quantidade, alvoItemId, alvoItemNome, modo } = cartItem;
+                  const cartKey = cartItemKey(cartItem);
                   return (
                   <div key={cartKey} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-4">
                     <div className="min-w-0 flex-1">
@@ -87,6 +98,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                           Para: {alvoItemNome}
                         </div>
                       )}
+                      {modo === 'contratar' ? (
+                        <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest mb-2 border border-emerald-500/20 bg-emerald-900/20 px-2 py-0.5 rounded-md inline-block">
+                          Contratação{item.mensalidade ? ` — ${item.mensalidade.valorOriginal.toLocaleString('pt-BR')} ${getCurrencySymbol(item.mensalidade.moedaPreco)}/mês` : ''}
+                        </div>
+                      ) : item.categoria === 'Mercenários' ? (
+                        <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2 border border-white/10 bg-white/5 px-2 py-0.5 rounded-md inline-block">
+                          Servo/escravo permanente
+                        </div>
+                      ) : null}
                       <div className="flex items-center gap-1 text-lg font-bold text-yellow-400">
                         {(item.valorOriginal * quantidade).toLocaleString('pt-BR')} <span className="text-xs">{getCurrencySymbol(item.moedaPreco)}</span>
                       </div>

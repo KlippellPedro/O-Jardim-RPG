@@ -131,7 +131,7 @@ const ENTIDADE: ThemeEntry = {
   text: 'text-neutral-300', icon: 'text-neutral-400/85', tag: 'text-neutral-400',
   rationale: 'Seres incompreensiveis sem forma: ausencia, vazio cosmico, alem da compreensao.',
 };
-const ERRANTE: ThemeEntry = {
+const ANOMALIA: ThemeEntry = {
   primary: '#fef08a', secondary: '#854d0e', glow: 'rgba(254,240,138,0.28)',
   bg: 'bg-yellow-950/25', border: 'border-yellow-400/25 hover:border-yellow-300/55',
   text: 'text-yellow-200', icon: 'text-yellow-400/70', tag: 'text-yellow-300',
@@ -153,13 +153,13 @@ const ONIRICO: ThemeEntry = {
   primary: '#818cf8', secondary: '#312e81', glow: 'rgba(129,140,248,0.30)',
   bg: 'bg-indigo-950/30', border: 'border-indigo-400/25 hover:border-indigo-300/55',
   text: 'text-indigo-200', icon: 'text-indigo-400/70', tag: 'text-indigo-300',
-  rationale: 'Seres nascidos do veu dos sonhos: indigo profundo de ceu noturno e logica onirica.',
+  rationale: 'Seres nascidos em Sonhar: indigo profundo de ceu noturno e logica onirica.',
 };
 const DIVINO: ThemeEntry = {
   primary: '#facc15', secondary: '#78350f', glow: 'rgba(250,204,21,0.32)',
   bg: 'bg-amber-950/30', border: 'border-yellow-400/25 hover:border-yellow-300/55',
   text: 'text-yellow-300', icon: 'text-yellow-400/70', tag: 'text-yellow-200',
-  rationale: 'Semideuses e avatares reduzidos: dourado solar, presenca que pesa e brilho divino.',
+  rationale: 'Deuses e semideuses: dourado solar, presenca forte e brilho divino.',
 };
 
 // ── CLASSES ───────────────────────────────────────────────────────────────────
@@ -320,6 +320,18 @@ const VIAJANTE: ThemeEntry = {
   text: 'text-violet-300', icon: 'text-violet-500/70', tag: 'text-violet-200',
   rationale: 'Cruza mundos e dimensoes: portais interdimensionais e sabedoria de eras.',
 };
+const DETETIVE: ThemeEntry = {
+  primary: '#d97706', secondary: '#451a03', glow: 'rgba(217,119,6,0.28)',
+  bg: 'bg-amber-950/30', border: 'border-amber-600/25 hover:border-amber-500/55',
+  text: 'text-amber-400', icon: 'text-amber-600/70', tag: 'text-amber-300',
+  rationale: 'Investigacao e deducao: sepia de arquivo antigo, lupa e luz de escritorio.',
+};
+const DEVORADOR: ThemeEntry = {
+  primary: '#dc2626', secondary: '#450a0a', glow: 'rgba(220,38,38,0.32)',
+  bg: 'bg-red-950/35', border: 'border-red-700/30 hover:border-red-600/60',
+  text: 'text-red-400', icon: 'text-red-600/80', tag: 'text-red-300',
+  rationale: 'Fome e apropriacao: sangue, presa e poder emprestado de quem ja morreu.',
+};
 
 // ── MAPA PRINCIPAL ────────────────────────────────────────────────────────────
 
@@ -331,7 +343,7 @@ export const THEME_MAP: Record<string, ThemeEntry> = {
   mimico: MIMICO, simbionte: SIMBIONTE, feerico: FEERICO, slime: SLIME, vampiro: VAMPIRO,
   // Racas Especiais
   elfo: ELFO, desperto: DESPERTO, auleth: AULETH, automato: AUTOMATO,
-  clone: CLONE, entidade: ENTIDADE, errante: ERRANTE, bruxa: BRUXA, amalgamo: AMALGAMO,
+  clone: CLONE, entidade: ENTIDADE, anomalia: ANOMALIA, bruxa: BRUXA, amalgamo: AMALGAMO,
   onirico: ONIRICO, divino: DIVINO,
   // Classes
   alquimista: ALQUIMISTA, atirador: ATIRADOR, cacador: CACADOR,
@@ -346,6 +358,7 @@ export const THEME_MAP: Record<string, ThemeEntry> = {
   ninja: NINJA, piloto: PILOTO, pirataamaldicoado: PIRATA_AMALDICOADO,
   popstar: POPSTAR, ritualista: RITUALISTA, sintonizador: SINTONIZADOR,
   viajanteclasse: VIAJANTE, viajante: VIAJANTE,
+  detetive: DETETIVE, devorador: DEVORADOR,
 };
 
 export const DEFAULT_THEME: ThemeEntry = HUMANO;

@@ -71,7 +71,7 @@ export const Amalgamo = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-pink-200/60 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Um corpo só, montado com mais de uma criatura. O que ele herda é a mistura, e não o pacote racial das partes: aguenta melhor o que ataca a carne, aguenta melhor o que ataca a cabeça, e conhece Fragmentos que consegue expressar por algumas rodadas antes de o corpo cobrar a conta.
+            Um corpo só, montado com mais de uma criatura, que herda a mistura das partes e não o pacote racial de nenhuma delas sozinha. Resiste melhor a ataques na carne e na cabeça, e ainda guarda Fragmentos que consegue usar por algumas rodadas antes de o corpo cobrar a conta.
           </motion.p>
         </motion.header>
 

@@ -84,7 +84,7 @@ export const Vampiro = ({ raca }: VampiroProps) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-red-200/60 max-w-2xl mx-auto font-medium leading-relaxed font-serif"
           >
-            Enxerga no escuro natural, fecha ferida bebendo sangue e paga caro quando fica sem. O povo é de Întuneric e fala Romeno. A dimensão inteira gira em torno de uma cadeia alimentar que termina neles, e da vítima ele tira tanto vida quanto magia.
+            Enxerga no escuro natural, fecha feridas bebendo sangue e paga caro quando fica sem. O Clã define como lida com a fome, e a idade desperta poderes novos. Fala Romeno.
           </motion.p>
         </motion.header>
 

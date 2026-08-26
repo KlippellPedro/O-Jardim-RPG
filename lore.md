@@ -114,7 +114,7 @@
 - **Regeneração Programada**: Uma vez por cena, quando sofrer dano e ficar com metade da Vida máxima ou menos, gaste uma reação e 4 Mana para recuperar 2d6 + Mod.Constituição de Vida, com mínimo de 2d6.
 - **Projeto de Clonagem**: Escolha Réplica Perfeita, Arquivo Vivo, Organismo Otimizado ou Série Contínua. Você recebe somente as características do Projeto escolhido.
 
-## Errante (errante)
+## Anomalia (anomalia)
 **Fisiologia:** N/A
 
 - **Identidade Preservada**: Conserve nome, aparência, personalidade, lembranças, relações, cicatrizes, objetivos e reputação do personagem original quando fizerem sentido. Nível, experiência, atributos, raça, classe, poderes, dinheiro e equipamentos são reconstruídos pelas regras e pelo patamar da campanha atual; nenhum número de outro sistema é importado diretamente.
@@ -142,22 +142,27 @@
 - **Grande Sabá**: Uma vez por sessão, gaste uma ação e 8 Mana para escolher uma Maldição conhecida e até Mod.Fluxo criaturas a até 15 m, com mínimo de uma. Faça um único teste de Misticismo e compare com a Vontade de cada alvo. A duração é determinada separadamente pelo resultado de cada criatura, seguindo Maldição Tecida.
 
 ## Onírico (onirico)
-**Fisiologia:** Não dorme para descansar: para concluir um descanso completo, precisa efetivamente sonhar, e fica alheio aos arredores como qualquer criatura adormecida ficaria. É imune a efeitos que dependam especificamente de forçar o sono, mas não a outras formas de nocaute ou inconsciência.
+**Origem:** O Onírico nasce em Sonhar, a dimensão dos sonhos. Não é uma pessoa adormecida nem uma criação presa ao sonho de alguém. Ele tem corpo, nome e vontade próprios, mesmo quando vive no mundo desperto.
+
+**Fisiologia:** Para concluir um descanso completo, precisa dormir e se ligar novamente a Sonhar. Enquanto faz isso, fica alheio aos arredores como qualquer criatura adormecida. É imune a efeitos que forcem o sono, mas não a nocaute nem a outras formas de inconsciência.
 
 - **Passo Entre-Sonhos**: Uma vez por cena, gaste uma ação e 3 Mana para se teleportar até 6 m para um espaço desocupado que consiga ver, escorregando por um instante para dentro da própria lógica dos sonhos. Isso não provoca reações.
-- **Véu do Sonhador**: Você recebe vantagem para resistir a Medo, perda de Sanidade e ilusões. Você também não pode ser localizado ou rastreado através dos sonhos de outra criatura.
+- **Véu do Sonhar**: Você recebe vantagem para resistir a Medo, perda de Sanidade e ilusões. Você também não pode ser localizado ou rastreado através dos sonhos de outra criatura.
 - **Leitura de Sonhos**: Uma vez por descanso, enquanto uma criatura dorme e permite, você pode tocá-la e vislumbrar fragmentos soltos do sonho atual dela: uma imagem, uma emoção ou um medo recorrente. Isso nunca revela senhas, planos completos ou segredos que a criatura não contaria mesmo dormindo.
 - **Pesadelo Manifesto**: Uma vez por cena, gaste uma ação e 5 Mana para fazer uma criatura a até 15 m enxergar, por um instante, o pior pesadelo que carrega. Faça Misticismo contra a Vontade dela; em falha, a criatura sofre desvantagem no próximo teste que fizer e não pode usar reações até o início do seu próximo turno.
-- **Ancoragem Frágil**: Se passar mais de 24 horas sem completar um descanso sonhando de verdade, seu corpo começa a perder coesão: até voltar a sonhar, sua Mana máxima fica reduzida à metade, arredondada para baixo.
-- **Sonhador Desperto**: Ao adquirir esta raça, receba um Legado adicional, moldado pelo sonho que te deu forma.
+- **Ancoragem Frágil**: Se passar mais de 24 horas sem completar um descanso ligado a Sonhar, seu corpo começa a perder a forma: até fazer esse descanso, sua Mana máxima fica reduzida à metade, arredondada para baixo.
+- **Filho do Sonhar**: Ao criar um personagem desta raça, receba um Legado adicional, marcado pela parte de Sonhar que deu forma a você.
 
 ## Divino (divino)
 **Fisiologia:** Não envelhece e é imune a doenças puramente mortais, mas continua vulnerável a maldições, venenos e ferimentos como qualquer outro ser vivo.
 
-- **Sangue Divino**: Receba +4 em Vontade e vantagem para resistir a efeitos que tentem controlar, subjugar ou apagar sua identidade.
+- **Sangue Divino**: Receba +4 em Vontade e vantagem para resistir a efeitos que tentem controlar você ou apagar quem você é.
 - **Presença que Pesa**: Criaturas sensíveis ao sagrado ou ao profano sentem algo diferente em você mesmo disfarçado: receba desvantagem em Furtividade e Disfarce contra quem tiver devoção ou vínculo religioso ativo. Seguidores e inimigos da sua linhagem também tendem a te notar primeiro.
 - **Herança Divina**: Ao adquirir esta raça, receba um Legado adicional, herdado do sangue que carrega.
-- **Domínio Divino**: Escolha um Domínio Divino (Criação, Vida, Guerra, Astúcia ou Limiar). Você recebe apenas a característica do Domínio escolhido.
+- **Semideus**: É filho de um deus com alguém de outra raça. O Domínio escolhido vem do pai ou da mãe divina e entrega os poderes da herança. A outra raça muda aparência, cultura e história, mas não dá um segundo pacote de bônus raciais.
+- **Deus**: É um Deus de verdade e recebe +6 de Vida, +8 de Mana e +2 de Defesa além dos bônus normais do Divino. Continua com essa força mesmo sem nenhum fiel. Pode ter virado Deus depois que ao menos 100 pessoas passaram a acreditar nele, pode ter nascido de dois deuses ou pode ter surgido porque ao menos 100 pessoas acreditaram no mesmo deus antes de ele existir.
+- **Fé que Alimenta**: Um Deus recebe bônus conforme o número de fiéis sinceros. Com 1 a 99, ganha +2 de Vida e +4 de Mana máximas. Com 100 a 999, ganha +4 de Vida, +8 de Mana e reduz em 2 o custo de um poder do Domínio uma vez por cena. Com 1.000 ou mais, ganha +6 de Vida, +12 de Mana, a redução vira 3 e Bênção Concedida pode ser usada três vezes por sessão. Use apenas a faixa atual. Medo, pagamento, mentira e controle mental não contam como fé; o mestre confirma mudanças no fim da sessão ou do arco.
+- **Domínio Divino**: Escolha Criação, Vida, Guerra, Astúcia, Natureza, Conhecimento, Tempestade, Luz ou Morte. Deus e Semideus recebem somente os poderes do Domínio escolhido.
 
 ## Entidade (entidade)
 **Fisiologia:** N/A
@@ -218,4 +223,3 @@
 ## Ritualista (ritualista)
 
 ## Interceptador (interceptador)
-

@@ -8,6 +8,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { usePerformanceProfile } from '../../hooks/usePerformance';
 import { conteudoEditorialApi } from '../../services/conteudoEditorialApi';
 import { BANCO_LUNAR_INFO } from './bancoLunarInfo';
+import { VAZIO_INFO } from './vazioInfo';
 import { COSMIC_TREES } from './cosmicTrees';
 import { loreBloqueado } from './loreVisibility';
 import { WORLD_CHRONICLES, type WorldChronicleCatalog } from './worldChronicles';
@@ -33,6 +34,7 @@ export const MundoPage: React.FC = () => {
   const [selectedDeidadeId, setSelectedDeidadeId] = useState<string | null>(null);
   const [infoDeidadeId, setInfoDeidadeId] = useState<string | null>(null);
   const [bancoLunarAberto, setBancoLunarAberto] = useState(false);
+  const [vazioAberto, setVazioAberto] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { arvoreId } = useParams<{ arvoreId?: string }>();
@@ -114,16 +116,25 @@ export const MundoPage: React.FC = () => {
     if (!id) {
       setInfoDeidadeId(null);
       setBancoLunarAberto(false);
+      setVazioAberto(false);
     }
   }, []);
 
   const handleOpenInfo = useCallback((id: string) => {
     setInfoDeidadeId(id);
     setBancoLunarAberto(false);
+    setVazioAberto(false);
   }, []);
 
   const handleOpenBancoLunar = useCallback(() => {
     setBancoLunarAberto(true);
+    setVazioAberto(false);
+    setInfoDeidadeId(null);
+  }, []);
+
+  const handleOpenVazio = useCallback(() => {
+    setVazioAberto(true);
+    setBancoLunarAberto(false);
     setInfoDeidadeId(null);
   }, []);
 
@@ -232,6 +243,7 @@ export const MundoPage: React.FC = () => {
               onSelectDeidade={handleSelectDeidade}
               onOpenInfo={handleOpenInfo}
               onOpenBancoLunar={handleOpenBancoLunar}
+              onOpenVazio={handleOpenVazio}
               lockedDeidades={lockedDeidades}
             />
           </Suspense>
@@ -299,6 +311,47 @@ export const MundoPage: React.FC = () => {
                 <button type="button" onClick={() => navigate('/loja?localizacao=4')} className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-2xl border px-5 py-4 text-sm font-bold uppercase tracking-widest transition hover:opacity-90" style={{ borderColor: `${BANCO_LUNAR_INFO.cor}66`, backgroundColor: `${BANCO_LUNAR_INFO.cor}1a`, color: BANCO_LUNAR_INFO.cor }}>
                   <ShoppingBag size={17} /> Ir para a Loja
                 </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {vazioAberto && (
+              <motion.div
+                initial={reduceMotion ? false : { x: '100%', opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={reduceMotion ? { opacity: 0 } : { x: '100%', opacity: 0 }}
+                transition={panelTransition}
+                className="performance-expensive-effects absolute right-0 top-0 z-20 flex h-full w-full flex-col gap-4 overflow-y-auto border-l border-white/10 bg-[#0a090e]/90 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[-20px_0_50px_rgba(0,0,0,0.5)] backdrop-blur-2xl custom-scrollbar pointer-events-auto sm:w-[min(400px,100%)] sm:gap-6 sm:p-6"
+              >
+                <div className="mb-2 flex shrink-0 items-start justify-between">
+                  <h3 className="text-3xl font-bold tracking-widest" style={{ fontFamily: 'Cinzel, serif', color: VAZIO_INFO.cor }}>{VAZIO_INFO.nome}</h3>
+                  <button type="button" onClick={() => setVazioAberto(false)} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-2xl text-gray-500 hover:bg-white/10 hover:text-white" aria-label="Fechar O Vazio">&times;</button>
+                </div>
+                <div className="flex w-full flex-col gap-2 rounded-2xl border border-white/5 bg-black/30 p-4">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Sobre</span>
+                  <p className="text-sm leading-relaxed text-gray-400">{VAZIO_INFO.descricao}</p>
+                </div>
+                <div className="flex w-full flex-col gap-2 rounded-2xl border border-white/5 bg-black/30 p-4">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Deidade</span>
+                  <h4 className="text-lg font-bold leading-tight text-white">{VAZIO_INFO.deidade.nome}</h4>
+                  <span className="text-xs italic" style={{ color: VAZIO_INFO.cor }}>“{VAZIO_INFO.deidade.epiteto}”</span>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-400">{VAZIO_INFO.deidade.descricao}</p>
+                </div>
+                <div className="flex w-full flex-col gap-2 rounded-2xl border border-white/5 bg-black/30 p-4">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Fluxo Cósmico</span>
+                  <h4 className="text-lg font-bold leading-tight text-white">{VAZIO_INFO.fluxo.nome}</h4>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-400">{VAZIO_INFO.fluxo.descricao}</p>
+                </div>
+                <div className="flex flex-col gap-4">
+                  {VAZIO_INFO.locais.map((local) => (
+                    <div key={local.nome} className="flex w-full flex-col gap-2 rounded-2xl border border-white/5 bg-black/30 p-4">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Local</span>
+                      <h4 className="text-lg font-bold leading-tight text-white">{local.nome}</h4>
+                      <p className="mt-2 text-sm leading-relaxed text-gray-400">{local.resumo}</p>
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

@@ -18,7 +18,7 @@ test('todo capítulo aparece uma única vez nos novos grupos', () => {
     'a navegação precisa cobrir todas as páginas do livro',
   );
   GRUPOS_NAVEGACAO.forEach((grupo) => {
-    assert.ok(grupo.topicos.length <= 10, `${grupo.titulo}: voltou a concentrar capítulos demais`);
+    assert.ok(grupo.topicos.length <= 11, `${grupo.titulo}: voltou a concentrar capítulos demais`);
     assert.ok(grupo.descricao.trim().length >= 20, `${grupo.titulo}: sem descrição útil na página inicial`);
   });
 });

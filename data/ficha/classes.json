@@ -326,7 +326,7 @@
       {
         "id": "batalhao",
         "titulo": "Batalhão",
-        "descricao": "Quem luta melhor perto de você. A cada estágio, escolha mais um aliado para o seu Batalhão e anote com o Mestre; podem ser outros jogadores ou gente da campanha. Trocar quem está na lista leva um descanso longo. Uma vez por rodada, gaste uma Ação de Movimento para gritar uma das ordens que você conhece a um aliado do Batalhão que possa ouvir você a até 12 m. Poder e habilidade não se emprestam: a ordem faz o que está escrita nela.",
+        "descricao": "Quem luta melhor perto de você. A cada estágio, escolha mais um aliado para o seu Batalhão e anote com o Mestre; podem ser outros jogadores ou gente da campanha. Trocar quem está na lista leva um descanso longo. Uma vez por rodada, gaste uma Ação de Movimento para gritar uma das ordens que você conhece a um aliado do Batalhão que possa ouvir você a até 12 m. Levanta! no nível 4 é a única exceção: pode alcançar um aliado inconsciente a 0 de Vida. Poder e habilidade não se emprestam: a ordem faz o que está escrita nela.",
         "niveis": [
           3,
           8,
@@ -435,7 +435,7 @@
             "alcance": "12 m",
             "duracao": "Até o próximo turno dele",
             "descricao": "Até o próximo turno dele, o aliado ataca de reação a primeira criatura que tentar sair de perto dele ou passar pelo espaço ao lado.",
-            "escalonamento": "Nível 2: o ataque de reação causa +2 de dano. Nível 3: acertar também para o movimento de quem tentou passar. Nível 4: a reação vale contra duas criaturas diferentes na mesma rodada."
+            "escalonamento": "Nível 2: o ataque de reação causa +2 de dano. Nível 3: acertar também para o movimento de quem tentou passar. Nível 4: a ordem pode disparar contra duas criaturas diferentes na mesma rodada; o segundo ataque não gasta outra Reação do aliado."
           },
           {
             "id": "firme-na-linha",
@@ -872,7 +872,7 @@
       {
         "id": "meu-xodo",
         "titulo": "Meu Xodó",
-        "descricao": "O veículo é seu de um jeito que ninguém mais entende. O bônus abaixo vale em toda rolagem de Pilotagem, inclusive nas manobras e na perseguição.",
+        "descricao": "Escolha um veículo que possua ou use regularmente como seu Xodó; você só pode manter um por vez. Para trocar, passe um descanso longo ajustando o novo veículo. As modificações do Tuning continuam instaladas no anterior, salvo efeito da Caixa Preta. Os bônus abaixo valem somente quando você conduz o Xodó, inclusive nas manobras e na perseguição.",
         "niveis": [
           1,
           5,
@@ -1466,7 +1466,7 @@
       {
         "id": "arma-ninja",
         "titulo": "Arma Ninja",
-        "descricao": "A cada estágio, marque mais uma arma como sua Arma Ninja e aplique mais uma melhoria da lista abaixo a qualquer arma já marcada, inclusive a mesma melhoria empilhada na mesma arma. Até o nível 20 você marca até quatro armas e aplica até quatro melhorias, do jeito que quiser distribuir.",
+        "descricao": "A cada estágio, marque mais uma arma como sua Arma Ninja e aplique mais uma melhoria da lista abaixo a qualquer arma já marcada. Até o nível 20 você marca até quatro armas e aplica até quatro melhorias, do jeito que quiser distribuir. Uma melhoria pode se repetir na mesma arma somente quando concede um bônus numérico; cada repetição soma esse mesmo valor. Melhorias sem bônus numérico e efeitos que declaram não acumular só funcionam uma vez por arma.",
         "niveis": [
           3,
           8,
@@ -1475,7 +1475,7 @@
         ],
         "escolha_opcoes": {
           "rotulo": "Melhorias da Arma Ninja",
-          "descricao": "Uma melhoria por estágio: uma no nível 3, duas no 8, três no 14 e quatro no 20. A mesma melhoria pode ser escolhida de novo na mesma arma para empilhar o efeito.",
+          "descricao": "Uma melhoria por estágio: uma no nível 3, duas no 8, três no 14 e quatro no 20. Na mesma arma, apenas melhorias com bônus numérico podem ser escolhidas novamente; efeitos sem número e os que não acumulam só valem uma vez.",
           "por_estagio": 1,
           "repetivel": true
         },
@@ -2152,7 +2152,7 @@
             "alcance": "Um dispositivo por vez",
             "duracao": "Enquanto o contrato durar",
             "descricao": "Um dispositivo comum da A.X.I.S. emprestado e um passe de visitante que abre porta de recepção e área pública.",
-            "escalonamento": "Nível 2: o dispositivo pode ser Incomum. Nível 3: o passe abre área restrita, e ninguém pergunta nada. Nível 4: dispositivo Raro, e um técnico da marca atende você por chamado.",
+            "escalonamento": "Nível 2: o dispositivo pode ser Incomum. Nível 3: o passe abre uma área restrita coberta pela autorização da marca, sem interrogatório; setores secretos ou de segurança continuam fora dele. Nível 4: dispositivo Raro, e um técnico da marca atende você por chamado.",
             "acao": "Retirado num balcão da marca"
           },
           {
@@ -2160,7 +2160,7 @@
             "titulo": "Casa de Moda",
             "alcance": "Você e um acompanhante",
             "duracao": "Uma cena",
-            "descricao": "Roupa de gala sob medida, entregue onde você estiver. Com ela, você entra sem ser barrado em qualquer lugar que exija etiqueta, e tem vantagem no primeiro teste social do evento.",
+            "descricao": "Roupa de gala sob medida, entregue onde você estiver. Com ela, você não é barrado por vestimenta inadequada num lugar que exija etiqueta e tem vantagem no primeiro teste social do evento; a roupa não substitui convite, credencial nem autorização de acesso.",
             "escalonamento": "Nível 2: veste o grupo inteiro. Nível 3: a peça é blindada por dentro e conta como armadura leve sem parecer uma. Nível 4: a roupa vira assunto, e quem chega perto quer falar com você.",
             "acao": "Entregue onde você estiver"
           },
@@ -3134,7 +3134,7 @@
           {
             "nivel": 1,
             "titulo": "Pegada",
-            "descricao": "Você rola com vantagem em manobras para agarrar, empurrar ou derrubar, e sofre desvantagem nenhuma por estar sem arma na mão.",
+            "descricao": "Você rola com vantagem em manobras para agarrar, empurrar ou derrubar e não sofre desvantagem por estar sem arma na mão.",
             "acao": "Passivo"
           },
           {
@@ -3146,7 +3146,7 @@
           {
             "nivel": 10,
             "titulo": "Marcas de Guerra",
-            "descricao": "Cada acerto seu deixa uma Marca de Guerra no alvo, no máximo uma por turno e uma por alvo. As marcas ficam no corpo dele até o fim do combate, e o que elas fazem se soma enquanto estiverem lá. Com 2 marcas, uma vez por rodada, acertar aquele alvo rende um ataque desarmado a mais contra ele. Com 3, ele fica com −2 de Defesa. Com 4, ele não usa reações. Com 5, o seu próximo golpe nele causa +5 de dano e apaga todas as marcas dele.",
+            "descricao": "Cada acerto seu deixa uma Marca de Guerra no alvo, no máximo uma por turno em cada alvo. As marcas ficam no corpo dele até o fim do combate, e o que elas fazem se soma enquanto estiverem lá. Com 2 marcas, uma vez por rodada, acertar aquele alvo rende um ataque desarmado a mais contra ele. Com 3, ele fica com −2 de Defesa. Com 4, ele não usa reações. Com 5, o seu próximo golpe nele causa +5 de dano e apaga todas as marcas dele.",
             "acao": "Passivo",
             "duracao": "Até o fim do combate",
             "usos": "Uma marca por turno, por alvo"
@@ -3752,10 +3752,11 @@
           },
           {
             "nivel": 5,
-            "descricao": "Marque uma criatura que possa ver; seu próximo ataque contra ela ignora cobertura leve e causa +1 dado de dano.",
+            "descricao": "Uma vez por turno, marque uma criatura que possa ver. Você só mantém uma marca deste estágio por vez. Até acertá-la ou a cena terminar, seu próximo ataque contra ela ignora cobertura parcial e causa +1 dado de dano.",
             "acao": "Ação Livre para marcar",
             "duracao": "Até acertar ou até o fim da cena",
-            "dano": "+1 dado"
+            "dano": "+1 dado",
+            "usos": "Uma vez por turno"
           },
           {
             "nivel": 10,
@@ -3866,7 +3867,7 @@
       {
         "id": "disparo-calculado",
         "titulo": "Disparo Calculado",
-        "descricao": "Uma vez por combate, gaste uma Ação Completa para estudar o alvo: vento, distância, movimento. Seu próximo ataque à distância contra ele, feito até o fim do seu próximo turno, recebe vantagem e ignora a cobertura que ele tiver.",
+        "descricao": "Uma vez por combate, gaste uma Ação Completa para estudar o alvo: vento, distância, movimento. Seu próximo ataque à distância contra ele, feito até o fim do seu próximo turno, recebe vantagem e ignora os bônus de cobertura parcial ou superior, mas não atravessa cobertura total.",
         "niveis": [
           18
         ],
@@ -4325,7 +4326,7 @@
             "acao": "Passivo",
             "alcance": "O mesmo da cura",
             "duracao": "Esta cura",
-            "descricao": "Se esta for a segunda vez que você cura o mesmo aliado nesta cena, a cura ignora Resistência."
+            "descricao": "Se esta for a segunda vez que você cura o mesmo aliado nesta cena, some +1d6 à cura. Ativa apenas nessa segunda cura, não nas seguintes."
           }
         ]
       },
@@ -4820,7 +4821,7 @@
           },
           {
             "nivel": 5,
-            "descricao": "Proteja até dois aliados; uma vez por rodada, use uma Reação para receber metade do dano de um deles. Aprenda mais um Juramento de Guarda.",
+            "descricao": "Proteja até dois aliados; uma vez por rodada, quando um deles sofrer dano, use uma Reação para dividir o dano antes das Resistências: o aliado sofre metade e você sofre a outra metade, arredondando a sua parcela para cima. Depois, cada um aplica as próprias Resistências à sua parcela. Aprenda mais um Juramento de Guarda.",
             "acao": "Reação",
             "usos": "Uma vez por rodada"
           },
@@ -5000,7 +5001,7 @@
       {
         "id": "castelo",
         "titulo": "Castelo",
-        "descricao": "Uma vez por descanso longo, gaste 8 Mana e permaneça imóvel por três rodadas. Aliados a 6 m recebem +2 Defesa e você pode redirecionar para si um ataque por rodada.",
+        "descricao": "Uma vez por descanso longo, gaste 8 Mana e permaneça imóvel por três rodadas. Aliados a 6 m recebem +2 Defesa. Uma vez por rodada, use sua Reação para se tornar o alvo de um ataque feito contra um desses aliados.",
         "niveis": [
           18
         ],
@@ -5511,8 +5512,8 @@
             "descricao": "Feito à imagem de outra pessoa; copia aparência e até digital, mas o Original é sempre outro alvo."
           },
           {
-            "id": "errante",
-            "titulo": "Errante",
+            "id": "anomalia",
+            "titulo": "Anomalia",
             "descricao": "Veio de outra campanha inteira; perdeu nível e ficha, mas a memória e a reputação continuam de pé."
           },
           {
@@ -5528,7 +5529,7 @@
           {
             "id": "onirico",
             "titulo": "Onírico",
-            "descricao": "Veio de um sonho que continuou; precisa sonhar pra descansar de verdade, e a lógica ao redor dele escorrega."
+            "descricao": "Nasceu em Sonhar, a dimensão dos sonhos; tem corpo e vontade próprios e consegue trazer parte das regras daquele mundo para perto de si."
           },
           {
             "id": "divino",
@@ -5817,7 +5818,7 @@
         "custo_mana": 2,
         "acao": "Ação Livre",
         "duracao": "Uma cena",
-        "descricao": "Por uma cena, compartilhe sentidos com seu companheiro; enquanto fizer isso, seu próprio corpo fica Surpreendido."
+        "descricao": "Por uma cena, perceba pelos sentidos do seu companheiro no lugar dos seus. Enquanto mantiver o vínculo, você não percebe os arredores do próprio corpo e não pode usar Reações disparadas por algo que aconteça ali. Encerre o vínculo como Ação Livre no seu turno."
       }
     ]
   },
@@ -6125,7 +6126,7 @@
           {
             "nivel": 5,
             "titulo": "Ajuste de Campo",
-            "descricao": "Uma vez por combate, force uma arma, uma armadura ou uma engenhoca que você alcance com a mão: ela recebe +2 de dano ou +2 de Defesa até o fim do combate. Funciona em item de aliado, e cada item aceita um ajuste por combate.",
+            "descricao": "Uma vez por combate, force uma arma, uma armadura ou uma engenhoca que você alcance com a mão até o fim do combate. Arma ou criação ofensiva recebe +2 de dano; armadura ou criação defensiva recebe +2 de Defesa. Funciona em item de aliado, e cada item aceita um ajuste por combate.",
             "acao": "Ação Livre",
             "alcance": "Toque",
             "duracao": "Até o fim do combate",
@@ -6148,7 +6149,7 @@
           {
             "nivel": 20,
             "titulo": "Invenção Suprema",
-            "descricao": "Projete com o Mestre uma Invenção Suprema, sua e permanente na ficha. Ela cumpre uma função só, e essa função respeita os tetos da moldura: até 6d10 de dano em um alvo ou 4d10 em área de 6 m, alcance de até 24 m, duração de até três rodadas, e nenhuma habilidade final de classe alguma sai duplicada nela. Três projetos prontos, para quem não quiser desenhar o próprio: um canhão de trilho cujo tiro atravessa cobertura, um andaime que se monta sozinho e carrega o grupo por 24 m, um pulso que desliga máquina e construto por uma rodada.",
+            "descricao": "Projete com o Mestre uma Invenção Suprema, sua e permanente na ficha. Ela cumpre uma função só, e essa função respeita os tetos da moldura: até 6d10 de dano em um alvo ou 4d10 em área de 6 m, alcance de até 24 m, duração de até três rodadas, e nenhuma habilidade final de classe alguma sai duplicada nela. Exemplos de conceito, ainda sujeitos a receber uma ficha dentro desses limites: um canhão de trilho cujo tiro atravessa cobertura, um andaime que se monta sozinho e carrega o grupo por 24 m ou um pulso que desliga máquina e construto por uma rodada.",
             "acao": "Ação Completa",
             "usos": "Uma vez por sessão"
           }
@@ -8236,7 +8237,7 @@
           },
           {
             "nivel": 10,
-            "descricao": "Uma vez por combate, ao derrubar um inimigo, faça um ataque adicional contra ele.",
+            "descricao": "Uma vez por combate, quando você deixar um inimigo Caído, faça imediatamente um ataque adicional contra ele. Esse ataque adicional não pode ativar este efeito de novo.",
             "acao": "Passivo",
             "usos": "Uma vez por combate"
           },
@@ -8955,7 +8956,7 @@
       {
         "id": "tripulacao-dos-condenados",
         "titulo": "Tripulação dos Condenados",
-        "descricao": "Uma vez por combate, invoque três espectros afogados em pontos a até 6 m de você. Cada um tem Defesa igual à sua, 1 de Vida e Movimento igual ao de um humano. Eles não atacam. Quando você ou um aliado a até 1,5 m de um espectro for atingido, o espectro pode receber o golpe e desaparecer no lugar do alvo. Sempre que um espectro desaparece, ele causa 1d6 de dano de Água a uma criatura adjacente escolhida pelo Mestre. Os espectros que sobrarem desaparecem depois de três rodadas.",
+        "descricao": "Uma vez por combate, invoque três espectros afogados em pontos a até 6 m de você. Cada um tem Defesa igual à sua, 1 de Vida e Movimento igual ao de um humano. Eles não atacam. Quando você ou um aliado a até 1,5 m de um espectro for atingido, o espectro pode receber o golpe e desaparecer no lugar do alvo. Sempre que um espectro desaparece, ele causa 1d6 de dano de Água a uma criatura adjacente escolhida por você. Os espectros que sobrarem desaparecem depois de três rodadas.",
         "niveis": [
           18
         ],
@@ -9041,7 +9042,7 @@
         "acao": "Ação Completa",
         "duracao": "Uma cena",
         "usos": "Uma vez por sessão",
-        "descricao": "Uma vez por sessão, invoque um navio espectral no lugar onde você estiver. Ele navega sem tripulação, atravessa névoa comum e barreiras mágicas fracas sem sofrer dano e desaparece no fim da cena."
+        "descricao": "Uma vez por sessão, invoque um navio espectral no lugar onde você estiver. Ele navega sem tripulação, atravessa névoa comum e barreiras mágicas que não declarem bloquear seres incorpóreos ou viagem espectral, sem sofrer dano, e desaparece no fim da cena. Barreiras que declarem esse bloqueio impedem a passagem."
       },
       {
         "id": "mare-profana",
@@ -9558,10 +9559,10 @@
       {
         "id": "imperatriz",
         "titulo": "Imperatriz",
-        "custo_mana": 7,
+        "custo_mana": 4,
         "acao": "Ação Livre",
         "duracao": "Três turnos",
-        "descricao": "Recupere 2 Mana no começo de seus próximos três turnos; não acumula."
+        "descricao": "Gaste 4 Mana para recuperar 2 Mana no começo de cada um dos seus próximos três turnos; este efeito não acumula consigo mesmo."
       },
       {
         "id": "mundo",
@@ -9586,9 +9587,9 @@
         "id": "a-lua",
         "titulo": "A Lua",
         "custo_mana": 2,
-        "acao": "Passivo",
+        "acao": "Ação Livre após acerto crítico com carta",
         "defesa": "Fortitude",
-        "descricao": "Após crítico com carta, derrube o alvo se ele falhar em Fortitude contra a DT do Cartista Arcano."
+        "descricao": "Após obter um acerto crítico com uma carta, gaste 2 Mana. O alvo testa Fortitude contra a DT do Cartista Arcano; em falha, fica Caído."
       },
       {
         "id": "imperador",
@@ -10101,12 +10102,12 @@
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
-    "versao_balanceamento": "2026-08-24",
-    "descricao": "Classe especial de Anima. Caça o que ataca por dentro: possessão, coisa que come memória, coisa que veste corpo alheio.",
+    "versao_balanceamento": "2026-08-25",
+    "descricao": "Classe especial de Anima. Cada Caçador vincula a própria alma a uma Zanpakutō, patrulha a fronteira entre vivos e mortos e purifica espíritos corrompidos. O nome da lâmina abre o Shikai; dominá-la por completo desperta a Bankai.",
     "dt_efeitos": {
       "rotulo": "DT do Caçador das Almas",
       "pericia": "misticismo",
-      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar."
+      "descricao": "Quando uma técnica sua obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que a aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar."
     },
     "progressao": [
       {
@@ -10114,7 +10115,7 @@
         "recompensas": [
           {
             "tipo": "habilidade",
-            "titulo": "Leitura da Alma",
+            "titulo": "Zanpakutō",
             "estagio": 1
           },
           {
@@ -10138,7 +10139,7 @@
         "recompensas": [
           {
             "tipo": "habilidade",
-            "titulo": "Selos de Contenção",
+            "titulo": "Treinamento de Ceifeiro",
             "estagio": 1
           }
         ]
@@ -10148,7 +10149,7 @@
         "recompensas": [
           {
             "tipo": "evento",
-            "titulo": "Caso Paranormal"
+            "titulo": "Patrulha do Véu"
           }
         ]
       },
@@ -10157,7 +10158,7 @@
         "recompensas": [
           {
             "tipo": "habilidade",
-            "titulo": "Leitura da Alma",
+            "titulo": "Zanpakutō",
             "estagio": 2
           }
         ]
@@ -10181,7 +10182,7 @@
         "recompensas": [
           {
             "tipo": "evento",
-            "titulo": "Caso Paranormal"
+            "titulo": "Patrulha do Véu"
           }
         ]
       },
@@ -10190,7 +10191,7 @@
         "recompensas": [
           {
             "tipo": "habilidade",
-            "titulo": "Selos de Contenção",
+            "titulo": "Treinamento de Ceifeiro",
             "estagio": 2
           }
         ]
@@ -10209,7 +10210,7 @@
         "recompensas": [
           {
             "tipo": "habilidade",
-            "titulo": "Leitura da Alma",
+            "titulo": "Zanpakutō",
             "estagio": 3
           }
         ]
@@ -10233,7 +10234,7 @@
         "recompensas": [
           {
             "tipo": "evento",
-            "titulo": "Caso Paranormal"
+            "titulo": "Patrulha do Véu"
           }
         ]
       },
@@ -10251,7 +10252,7 @@
         "recompensas": [
           {
             "tipo": "habilidade",
-            "titulo": "Selos de Contenção",
+            "titulo": "Treinamento de Ceifeiro",
             "estagio": 3
           }
         ]
@@ -10261,7 +10262,7 @@
         "recompensas": [
           {
             "tipo": "habilidade",
-            "titulo": "Leitura da Alma",
+            "titulo": "Zanpakutō",
             "estagio": 4
           }
         ]
@@ -10294,11 +10295,11 @@
         "recompensas": [
           {
             "tipo": "evento",
-            "titulo": "Caso Paranormal"
+            "titulo": "Patrulha do Véu"
           },
           {
             "tipo": "habilidade",
-            "titulo": "Exorcismo"
+            "titulo": "Konsō: Funeral da Alma"
           }
         ]
       },
@@ -10316,25 +10317,26 @@
         "recompensas": [
           {
             "tipo": "habilidade",
-            "titulo": "Leitura da Alma",
+            "titulo": "Zanpakutō",
             "estagio": 5
           },
           {
             "tipo": "habilidade",
-            "titulo": "Selos de Contenção",
+            "titulo": "Treinamento de Ceifeiro",
             "estagio": 4
           },
           {
             "tipo": "habilidade_final",
-            "titulo": "Veredito de Haemus"
+            "titulo": "Bankai"
           }
         ]
       }
     ],
     "habilidades": [
       {
-        "id": "leitura-da-alma",
-        "titulo": "Leitura da Alma",
+        "id": "zanpakuto",
+        "titulo": "Zanpakutō",
+        "descricao": "Sua arma espiritual possui nome, vontade e uma forma própria. Os estágios são cumulativos. A frase de liberação, a aparência e a personalidade da lâmina são escolhas narrativas e não alteram suas estatísticas.",
         "niveis": [
           1,
           5,
@@ -10345,41 +10347,98 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Perceba presença espiritual a 12 m e receba +2 para identificar possessão ou corrupção.",
-            "acao": "Passivo",
-            "alcance": "12 m"
+            "titulo": "Asauchi",
+            "descricao": "Após um descanso longo, vincule uma arma corpo a corpo à sua alma. Ela se torna sua Zanpakutō sem mudar o dano, o alcance ou as modificações originais. Você pode manifestá-la ou recolhê-la e escolhe, a cada acerto, se ela causa o tipo de dano original ou dano espiritual. Ela atinge criaturas incorpóreas e volta para você ao fim de um descanso longo se for perdida ou destruída.",
+            "acao": "Ação Livre para manifestar ou recolher",
+            "alcance": "Pessoal",
+            "duracao": "Permanente, até vincular outra arma"
           },
           {
             "nivel": 5,
-            "descricao": "Uma vez por turno, cause +1d6 contra possuidores ou criaturas possuídas.",
+            "titulo": "Nome da Lâmina",
+            "descricao": "Você escuta o nome da Zanpakutō. Receba +1 nos ataques feitos com ela e perceba almas, espíritos e possessões a até 12 m, mesmo sem vê-los; barreiras sólidas ainda bloqueiam a direção exata.",
             "acao": "Passivo",
-            "dano": "+1d6",
-            "usos": "Uma vez por turno"
+            "alcance": "12 m",
+            "duracao": "Permanente"
           },
           {
             "nivel": 10,
-            "descricao": "Ao estudar um possuidor por uma rodada, descubra uma Resistência ou vulnerabilidade que ele possua.",
-            "acao": "Ação Padrão",
-            "duracao": "Uma rodada"
+            "titulo": "Shikai",
+            "descricao": "Escolha um Aspecto da Zanpakutō. Uma vez por combate, gaste 5 de Mana e profira a frase de liberação seguida do nome da lâmina para ativar o Shikai. Durante três rodadas, aplique o efeito de Shikai do aspecto escolhido.",
+            "acao": "Ação Livre",
+            "alcance": "Pessoal",
+            "duracao": "Três rodadas",
+            "usos": "Uma vez por combate"
           },
           {
             "nivel": 15,
-            "descricao": "Receba Resistência 8 a dano espiritual e vantagem contra possessão.",
-            "acao": "Passivo"
+            "titulo": "Shikai Dominado",
+            "descricao": "Ativar o Shikai passa a custar 4 de Mana e sua duração passa a ser até o fim do combate. Se ficar Inconsciente ou soltar voluntariamente a Zanpakutō, o Shikai termina.",
+            "acao": "Passivo",
+            "alcance": "Pessoal",
+            "duracao": "Até o fim do combate"
           },
           {
             "nivel": 20,
-            "descricao": "Uma vez por sessão, marque um possuidor por três rodadas: ataques do grupo ignoram 10 de Resistência espiritual e ele não pode possuir novos alvos.",
-            "acao": "Ação Livre",
-            "duracao": "Três rodadas",
-            "usos": "Uma vez por sessão"
+            "titulo": "Forma Verdadeira",
+            "descricao": "A Zanpakutō revela sua forma completa. Enquanto a Bankai estiver ativa, aplique também a evolução de Bankai descrita no Aspecto da Zanpakutō escolhido.",
+            "acao": "Passivo",
+            "alcance": "Pessoal",
+            "duracao": "Enquanto a Bankai estiver ativa"
+          }
+        ],
+        "escolha_opcoes": {
+          "rotulo": "Aspecto da Zanpakutō",
+          "descricao": "No nível 10, escolha uma manifestação permanente para o Shikai e para a Bankai. O nome, a aparência e o comando de liberação continuam livres.",
+          "niveis_vaga": [
+            10
+          ],
+          "repetivel": false,
+          "permanente": true
+        },
+        "opcoes": [
+          {
+            "id": "tempestade",
+            "titulo": "Tempestade",
+            "descricao": "Shikai: uma vez por turno, o primeiro acerto com a Zanpakutō causa +1d8 de dano espiritual; uma segunda criatura a até 3 m do alvo sofre 1d6 do mesmo dano.",
+            "escalonamento": "Bankai: o dano adicional contra o alvo sobe para +2d8 e o dano contra a segunda criatura sobe para 2d6."
+          },
+          {
+            "id": "geada",
+            "titulo": "Geada",
+            "descricao": "Shikai: uma vez por turno, após ser acertado pela Zanpakutō, o alvo testa Fortitude contra a DT do Caçador das Almas. Em falha, o movimento dele cai para 0 até o início do seu próximo turno; em sucesso, diminui 3 m pelo mesmo período.",
+            "escalonamento": "Bankai: em falha, o alvo também não pode usar Reações e recebe -2 de Defesa pelo mesmo período."
+          },
+          {
+            "id": "correntes",
+            "titulo": "Correntes",
+            "descricao": "Shikai: a Zanpakutō alcança alvos a até 6 m. Uma vez por turno, após acertar, mova o alvo até 3 m na sua direção se ele falhar em Fortitude contra a DT do Caçador das Almas.",
+            "escalonamento": "Bankai: o alcance sobe para 12 m e você pode mover o alvo em qualquer direção, desde que ele termine em um espaço desocupado."
+          },
+          {
+            "id": "mil-laminas",
+            "titulo": "Mil Lâminas",
+            "descricao": "Shikai: você pode fazer ataques da Zanpakutō contra alvos a até 12 m. Uma vez por turno, após acertar, uma segunda criatura a até 3 m do alvo sofre metade do dano causado.",
+            "escalonamento": "Bankai: o alcance sobe para 24 m e a segunda criatura sofre o dano completo, mas não recebe os dados adicionais da Bankai."
+          },
+          {
+            "id": "guardiao",
+            "titulo": "Guardião",
+            "descricao": "Shikai: receba +2 de Defesa. Uma vez por rodada, use sua Reação para reduzir em 1d8 o dano sofrido por você ou por um aliado adjacente.",
+            "escalonamento": "Bankai: a Defesa sobe para +4, o alcance da proteção passa a 6 m e a redução sobe para 2d8."
+          },
+          {
+            "id": "miragem",
+            "titulo": "Miragem",
+            "descricao": "Shikai: uma vez por turno, quando você acerta com a Zanpakutō, o alvo testa Percepção contra a DT do Caçador das Almas. Em falha, recebe -2 nos ataques contra você até o início do seu próximo turno.",
+            "escalonamento": "Bankai: a penalidade sobe para -4 e também vale contra um aliado escolhido por você a até 6 m."
           }
         ]
       },
       {
-        "id": "selos-de-contencao",
-        "titulo": "Selos de Contenção",
-        "descricao": "Prepare um selo por estágio após descanso. Aplicado em área de 3 m, impede teleporte ou incorporeidade por uma rodada quando o alvo falha em Vontade contra a DT do Caçador das Almas.",
+        "id": "treinamento-de-ceifeiro",
+        "titulo": "Treinamento de Ceifeiro",
+        "descricao": "A formação dos Caçadores das Almas reúne quatro artes. Aprenda uma arte por estágio; uma arte aprendida permanece ativa e não pode ser escolhida duas vezes.",
         "niveis": [
           3,
           8,
@@ -10387,74 +10446,78 @@
           20
         ],
         "escolha_opcoes": {
-          "rotulo": "Tipos de Selo",
-          "descricao": "Aprenda um tipo de selo por estágio; todo selo que você prepara pode ser de qualquer tipo já aprendido, escolhido na hora de preparar.",
+          "rotulo": "Quatro Artes do Ceifeiro",
+          "descricao": "Aprenda uma arte no nível 3, outra no 8, outra no 14 e a última no 20.",
           "por_estagio": 1,
           "repetivel": false
         },
         "opcoes": [
           {
-            "id": "selo-de-silencio",
-            "titulo": "Selo de Silêncio",
+            "id": "zanjutsu",
+            "titulo": "Zanjutsu",
             "acao": "Passivo",
-            "alcance": "3 m",
-            "duracao": "Enquanto o selo existir",
-            "descricao": "Enquanto estiver preso por esse selo, o alvo não consegue falar nem conjurar magia."
+            "alcance": "Pessoal",
+            "duracao": "Permanente",
+            "dano": "+2 com a Zanpakutō",
+            "descricao": "Seu treinamento de espada concede +2 de dano nos ataques com a Zanpakutō. Durante o Shikai ou a Bankai, esse bônus sobe para +4."
           },
           {
-            "id": "selo-de-exaustao",
-            "titulo": "Selo de Exaustão",
+            "id": "hoho",
+            "titulo": "Hohō",
             "acao": "Passivo",
-            "alcance": "3 m",
-            "duracao": "Enquanto o selo existir",
-            "dano": "1d6 por turno",
-            "descricao": "Enquanto estiver preso por esse selo, o alvo sofre 1d6 de dano espiritual no início de cada turno dele."
+            "alcance": "Pessoal",
+            "duracao": "Permanente",
+            "descricao": "Seu movimento aumenta em 3 m. O primeiro movimento de até 3 m que fizer em cada turno não provoca Reações."
           },
           {
-            "id": "selo-de-vigilia",
-            "titulo": "Selo de Vigília",
+            "id": "kido",
+            "titulo": "Kidō",
             "acao": "Passivo",
-            "alcance": "3 m",
-            "duracao": "Enquanto o selo existir",
-            "descricao": "Você sente quando esse selo é acionado, não importa a distância."
+            "alcance": "Pessoal",
+            "duracao": "Permanente",
+            "descricao": "Receba +1 em Misticismo ao usar a DT do Caçador das Almas ou ao realizar um Konsō. Esse bônus não se aplica a outras fontes de Misticismo."
           },
           {
-            "id": "selo-amplificado",
-            "titulo": "Selo Amplificado",
+            "id": "hakuda",
+            "titulo": "Hakuda",
             "acao": "Passivo",
-            "alcance": "6 m",
-            "duracao": "Enquanto o selo existir",
-            "descricao": "A área desse selo cresce para 6 m de raio, em vez de 3 m."
+            "alcance": "Pessoal",
+            "duracao": "Permanente",
+            "descricao": "Seus ataques desarmados causam 1d8 de dano físico ou espiritual, à sua escolha. Enquanto mantiver ao menos uma mão livre, receba +1 de Defesa."
           }
         ]
       },
       {
-        "id": "exorcismo",
-        "titulo": "Exorcismo",
-        "descricao": "Uma vez por descanso longo, após três rodadas de ritual, faça Misticismo contra a Vontade do alvo para expulsar uma possessão. Em falha, suprima-a por uma rodada.",
+        "id": "konso-funeral-da-alma",
+        "titulo": "Konsō: Funeral da Alma",
+        "descricao": "Uma vez por descanso longo, toque uma alma voluntária ou um espírito hostil com até um quarto da Vida máxima. Um alvo hostil testa Vontade contra a DT do Caçador das Almas. Em falha, ele é purificado e removido da cena, sem ser automaticamente destruído; qualquer possessão que mantinha termina sem ferir o hospedeiro. Em sucesso, nada acontece. O uso é gasto em qualquer resultado.",
         "niveis": [
           18
         ],
-        "acao": "Três rodadas de ritual",
+        "acao": "Ação Completa",
+        "alcance": "Toque",
+        "defesa": "Vontade",
         "usos": "Uma vez por descanso longo"
       },
       {
-        "id": "veredito-de-haemus",
-        "titulo": "Veredito de Haemus",
-        "descricao": "Uma vez por sessão, use uma Ação Padrão para marcar um possuidor que possa perceber por três rodadas. Ele se torna corpóreo, não pode possuir, teleportar nem assumir forma incorpórea. Ataques de você e de seus aliados contra ele ignoram até 15 pontos de Resistência e recebem +2 no teste de ataque ou de conjuração.",
+        "id": "bankai",
+        "titulo": "Bankai",
+        "descricao": "Uma vez por sessão, use uma Ação Livre e pronuncie Bankai seguida do nome completo da sua Zanpakutō. O Shikai é ativado sem custo e, por três rodadas, seus ataques com a Zanpakutō recebem +2, ignoram metade da Resistência do alvo e o primeiro acerto de cada turno causa +2 dados de dano. Aplique também a evolução de Bankai do Aspecto da Zanpakutō escolhido. Quando o efeito termina, o Shikai também termina e não pode ser ativado novamente neste combate.",
         "niveis": [
           20
         ],
-        "acao": "Ação Padrão",
+        "acao": "Ação Livre",
+        "alcance": "Pessoal",
         "duracao": "Três rodadas",
+        "dano": "+2 dados no primeiro acerto de cada turno; ignora metade da Resistência",
         "usos": "Uma vez por sessão"
       }
     ],
     "eventos": [
       {
-        "id": "caso-paranormal",
-        "titulo": "Caso Paranormal",
-        "descricao": "Uma comunidade solicita investigação. A ameaça, inocentes envolvidos e recompensa são estabelecidos pelo mestre.",
+        "id": "patrulha-do-veu",
+        "titulo": "Patrulha do Véu",
+        "descricao": "Uma ruptura entre vivos e mortos exige sua presença. O mestre estabelece a alma envolvida, o desequilíbrio, quem seria ferido se nada fosse feito e a consequência narrativa da missão. Recusar não remove níveis nem habilidades.",
         "niveis": [
           4,
           7,
@@ -10465,88 +10528,131 @@
     ],
     "poderes": [
       {
-        "id": "municao-animica",
-        "titulo": "Munição Anímica",
+        "id": "passo-relampago",
+        "titulo": "Passo Relâmpago (Shunpō)",
         "custo_mana": 3,
-        "acao": "Ação Livre",
-        "duracao": "Até o fim da cena",
-        "descricao": "Por uma cena, uma arma sua afeta possuidores incorpóreos e causa +2 de dano espiritual."
+        "acao": "Ação de Movimento",
+        "alcance": "9 m",
+        "duracao": "Instantânea",
+        "descricao": "Desapareça e reapareça em um espaço desocupado que possa ver a até 9 m. Você não atravessa barreiras, não precisa percorrer o trajeto e esse deslocamento não provoca Reações."
       },
       {
-        "id": "olho-do-possuido",
-        "titulo": "Olho do Possuído",
-        "custo_mana": 3,
-        "acao": "Ação Padrão",
-        "alcance": "30 m",
-        "duracao": "Uma rodada",
-        "defesa": "Vontade",
-        "descricao": "Veja pelos sentidos de uma criatura marcada a até 30 m por uma rodada; ela testa Vontade contra a DT do Caçador das Almas para resistir."
-      },
-      {
-        "id": "sal-de-haemus",
-        "titulo": "Sal de Haemus",
+        "id": "pressao-espiritual",
+        "titulo": "Pressão Espiritual (Reiatsu)",
         "custo_mana": 4,
         "acao": "Ação Padrão",
-        "alcance": "6 m",
+        "alcance": "6 m de raio",
         "duracao": "Uma rodada",
         "defesa": "Vontade",
-        "descricao": "Crie uma linha de 6 m; possuidores que tentem atravessá-la testam Vontade contra a DT do Caçador das Almas ou ficam impedidos de atravessar por uma rodada."
+        "descricao": "Inimigos a até 6 m testam Vontade contra a DT do Caçador das Almas. Quem falhar recebe -2 nos ataques e não pode se aproximar voluntariamente de você até o início do seu próximo turno."
+      },
+      {
+        "id": "hado-raio-branco",
+        "titulo": "Hadō: Raio Branco",
+        "custo_mana": 4,
+        "acao": "Ação Padrão",
+        "alcance": "18 m",
+        "duracao": "Instantânea",
+        "defesa": "Reflexos",
+        "dano": "3d8 espiritual",
+        "descricao": "Dispare um raio de energia contra uma criatura a até 18 m. Ela testa Reflexos contra a DT do Caçador das Almas, sofre 3d8 de dano espiritual em falha ou metade em sucesso."
+      },
+      {
+        "id": "bakudo-seis-luzes",
+        "titulo": "Bakudō: Seis Luzes",
+        "custo_mana": 6,
+        "acao": "Ação Padrão",
+        "alcance": "12 m",
+        "duracao": "Uma rodada",
+        "defesa": "Vontade",
+        "descricao": "Uma criatura a até 12 m testa Vontade contra a DT do Caçador das Almas. Em falha, fica Imobilizada e não pode se teleportar nem assumir forma incorpórea até o início do seu próximo turno."
+      },
+      {
+        "id": "corte-da-lua",
+        "titulo": "Corte da Lua",
+        "custo_mana": 5,
+        "acao": "Ação Padrão",
+        "alcance": "12 m",
+        "duracao": "Instantânea",
+        "dano": "Dano da Zanpakutō +1 dado espiritual",
+        "descricao": "Projete a pressão da lâmina e faça um ataque com a Zanpakutō contra um alvo a até 12 m. Em acerto, cause o dano normal da arma mais 1 dado de dano espiritual."
+      },
+      {
+        "id": "pele-vazia",
+        "titulo": "Pele Vazia (Utsusemi)",
+        "custo_mana": 5,
+        "acao": "Reação",
+        "alcance": "Pessoal",
+        "duracao": "Instantânea",
+        "usos": "Uma vez por combate",
+        "descricao": "Quando for atingido, deixe uma pós-imagem no lugar, reduza o dano do ataque à metade e mova-se até 3 m sem provocar Reações.",
+        "pre_requisitos": [
+          "Nível 8 de Caçador das Almas"
+        ]
+      },
+      {
+        "id": "kido-de-cura",
+        "titulo": "Kidō de Cura (Kaidō)",
+        "custo_mana": 5,
+        "acao": "Ação Padrão",
+        "alcance": "Toque",
+        "duracao": "Instantânea",
+        "usos": "Uma vez por descanso por alvo",
+        "descricao": "Restaure 3d8 de Vida de uma criatura viva ou espiritual. Cada alvo só pode receber esta cura uma vez por descanso longo."
+      },
+      {
+        "id": "senka",
+        "titulo": "Flor do Passo (Senka)",
+        "custo_mana": 5,
+        "acao": "Ação Livre após Passo Relâmpago",
+        "alcance": "Pessoal",
+        "duracao": "Até o fim do turno",
+        "dano": "+1 dado no próximo ataque",
+        "descricao": "Depois de usar Passo Relâmpago, receba +3 no próximo ataque com a Zanpakutō feito neste turno. Se acertar, ele causa +1 dado de dano.",
+        "pre_requisitos": [
+          "Passo Relâmpago (Shunpō)"
+        ]
+      },
+      {
+        "id": "mascara-do-vazio",
+        "titulo": "Máscara do Vazio",
+        "custo_mana": 7,
+        "acao": "Ação Livre",
+        "alcance": "Pessoal",
+        "duracao": "Três rodadas",
+        "dano": "+1 dado com a Zanpakutō; 2d8 em você ao terminar",
+        "usos": "Uma vez por sessão",
+        "descricao": "Manifeste uma máscara espiritual corrompida. Por três rodadas, receba +1 nos ataques e +1 dado de dano com a Zanpakutō. Quando a máscara termina, você sofre 2d8 de dano que ignora Resistência e não pode ser reduzido ou transferido.",
+        "pre_requisitos": [
+          "Nível 12 de Caçador das Almas"
+        ]
+      },
+      {
+        "id": "corrente-do-destino",
+        "titulo": "Corrente do Destino",
+        "custo_mana": 2,
+        "acao": "Ação Padrão",
+        "alcance": "Toque",
+        "duracao": "Até seu próximo descanso longo",
+        "descricao": "Leia o vínculo de uma alma tocada. Até seu próximo descanso longo, saiba a direção aproximada dela enquanto estiver na mesma dimensão e receba vantagem para rastrear sua presença espiritual."
+      },
+      {
+        "id": "separacao-da-alma",
+        "titulo": "Separação da Alma",
+        "custo_mana": 5,
+        "acao": "Reação",
+        "alcance": "6 m",
+        "duracao": "Durante o efeito que disparou a Reação",
+        "descricao": "Quando você ou um aliado a até 6 m for alvo de possessão ou controle espiritual, conceda +4 no teste de resistência contra esse efeito."
       },
       {
         "id": "corte-do-vinculo",
         "titulo": "Corte do Vínculo",
-        "custo_mana": 5,
-        "acao": "Ação Padrão",
-        "descricao": "Encerre um efeito de controle espiritual de duração curta após teste de Misticismo."
-      },
-      {
-        "id": "rastro-de-essencia",
-        "titulo": "Rastro de Essência",
-        "custo_mana": 0,
-        "acao": "Passivo",
-        "descricao": "Receba vantagem para rastrear uma criatura cuja aura você já tenha examinado."
-      },
-      {
-        "id": "jaula-animica",
-        "titulo": "Jaula Anímica",
         "custo_mana": 6,
         "acao": "Ação Padrão",
-        "alcance": "12 m",
-        "defesa": "Vontade",
-        "descricao": "Um possuidor a 12 m testa Vontade contra a DT do Caçador das Almas; em falha, fica Imobilizado e não se torna incorpóreo por uma rodada."
-      },
-      {
-        "id": "reflexo-purificador",
-        "titulo": "Reflexo Purificador",
-        "custo_mana": 4,
-        "acao": "Reação",
-        "descricao": "Conceda +4 a um aliado contra possessão ou medo sobrenatural."
-      },
-      {
-        "id": "ferida-espiritual",
-        "titulo": "Ferida Espiritual",
-        "custo_mana": 5,
-        "acao": "Ação Livre no momento do ataque",
-        "duracao": "Até o início do próximo turno do alvo",
-        "descricao": "Seu próximo acerto impede a cura do alvo até o início do próximo turno dele."
-      },
-      {
-        "id": "nome-verdadeiro",
-        "titulo": "Nome Verdadeiro",
-        "custo_mana": 0,
-        "acao": "Passivo",
-        "descricao": "Se descobrir o nome verdadeiro de um possuidor em jogo, receba +2 nos testes contra ele; não pode inventá-lo."
-      },
-      {
-        "id": "banimento",
-        "titulo": "Banimento",
-        "custo_mana": 9,
-        "acao": "Ação Padrão",
-        "defesa": "Vontade",
-        "descricao": "Um possuidor abaixo de um quarto da Vida testa Vontade contra a DT do Caçador das Almas; em falha, é expulso desta cena, não destruído.",
-        "pre_requisitos": [
-          "Nível 12 de Caçador das Almas"
-        ]
+        "alcance": "Toque",
+        "duracao": "Instantânea",
+        "descricao": "Toque uma criatura sob possessão ou controle espiritual e faça Misticismo contra a DT original do efeito. Em sucesso, encerre o vínculo sem causar dano ao hospedeiro; em falha, o efeito permanece."
       }
     ]
   },
@@ -11704,7 +11810,7 @@
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
-    "versao_balanceamento": "2026-07-28",
+    "versao_balanceamento": "2026-08-25",
     "descricao": "Classe especial da Matriz, de Éon ou de Vórtice. Vive entre Árvores e dimensões, e converte estrada rodada em capacidade de se virar em qualquer lugar.",
     "progressao": [
       {
@@ -11943,35 +12049,125 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Receba +2 em Sobrevivência e conheça idioma ou costume básico de uma região visitada."
+            "descricao": "Receba +2 em Sobrevivência e conheça idioma ou costume básico de uma região visitada.",
+            "titulo": "Primeiro Passo",
+            "acao": "Passivo"
           },
           {
             "nivel": 5,
-            "descricao": "Ignore a primeira penalidade ambiental mundana de cada cena e mantenha um contato em duas regiões."
+            "descricao": "Ignore a primeira penalidade ambiental mundana de cada cena e mantenha um contato em duas regiões.",
+            "titulo": "Rota Conhecida",
+            "acao": "Passivo"
           },
           {
             "nivel": 10,
-            "descricao": "Uma vez por sessão, encontre abrigo seguro para um descanso curto, se existir algum na região."
+            "descricao": "Uma vez por sessão, encontre abrigo seguro para um descanso curto, se existir algum na região.",
+            "titulo": "Refúgio de Emergência",
+            "acao": "Ação Padrão",
+            "usos": "Uma vez por sessão"
           },
           {
             "nivel": 15,
-            "descricao": "Receba Resistência 5 contra dano ambiental e vantagem para identificar portais ou fronteiras dimensionais."
+            "descricao": "Receba Resistência 5 contra dano ambiental e vantagem para identificar portais ou fronteiras dimensionais.",
+            "titulo": "Pele de Estrada",
+            "acao": "Passivo"
           },
           {
             "nivel": 20,
-            "descricao": "Uma vez por sessão, o grupo atravessa uma fronteira ou obstáculo de viagem conhecido sem rolagem, mas não ignora selos divinos nem chega a local desconhecido."
+            "descricao": "Uma vez por sessão, o grupo atravessa uma fronteira ou obstáculo de viagem conhecido sem rolagem, mas não ignora selos divinos nem chega a local desconhecido.",
+            "titulo": "Travessia Livre",
+            "acao": "Ação Completa",
+            "usos": "Uma vez por sessão"
           }
         ]
       },
       {
         "id": "licoes-da-estrada",
         "titulo": "Lições da Estrada",
-        "descricao": "Escolha por estágio uma perícia fora de combate; uma vez por cena, receba +2 num teste dela ao aplicar experiência de viagem.",
+        "descricao": "Aprenda uma lição por estágio: um truque específico que você só aprende encarando estrada de verdade, cada um ligado a uma perícia fora de combate. Toda lição aprendida continua valendo junto com as outras.",
         "niveis": [
           3,
           8,
           14,
           20
+        ],
+        "escolha_opcoes": {
+          "rotulo": "Lições da Estrada",
+          "descricao": "Uma lição por estágio; cada lição aprendida fica valendo ao mesmo tempo que as outras.",
+          "por_estagio": 1,
+          "repetivel": false
+        },
+        "opcoes": [
+          {
+            "id": "farejar-perigo",
+            "titulo": "Farejar Perigo",
+            "acao": "Ação Livre",
+            "usos": "Uma vez por cena",
+            "descricao": "Antes de entrar num lugar desconhecido, um teste de Sobrevivência revela se há algum perigo natural óbvio por perto, sem precisar perguntar nada ao Mestre.",
+            "alcance": "Pessoal",
+            "duracao": "Instantâneo"
+          },
+          {
+            "id": "conversa-de-estrada",
+            "titulo": "Conversa de Estrada",
+            "acao": "Ação Livre",
+            "usos": "Uma vez por cena",
+            "descricao": "Converse por um minuto com um estranho e receba vantagem no próximo teste de Diplomacia com ele.",
+            "alcance": "Pessoal",
+            "duracao": "Até o próximo teste"
+          },
+          {
+            "id": "historia-inventada",
+            "titulo": "História Inventada",
+            "acao": "Ação Livre",
+            "usos": "Uma vez por cena",
+            "descricao": "Invente uma identidade ou motivo plausível para estar num lugar e receba vantagem no teste de Enganação para sustentar essa história.",
+            "alcance": "Pessoal",
+            "duracao": "Até o próximo teste"
+          },
+          {
+            "id": "sexto-sentido-de-viajante",
+            "titulo": "Sexto Sentido de Viajante",
+            "acao": "Reação",
+            "usos": "Uma vez por cena",
+            "descricao": "Quando alguém mentir na sua cara, receba vantagem no teste de Intuição para perceber.",
+            "alcance": "Pessoal",
+            "duracao": "Instantâneo"
+          },
+          {
+            "id": "memoria-de-mapas",
+            "titulo": "Memória de Mapas",
+            "acao": "Passivo",
+            "descricao": "Receba +2 em Conhecimento sobre geografia, rotas e lugares que já existem no mundo, mesmo que você nunca tenha visitado.",
+            "alcance": "Pessoal",
+            "duracao": "Permanente"
+          },
+          {
+            "id": "olho-treinado",
+            "titulo": "Olho Treinado",
+            "acao": "Ação Livre",
+            "usos": "Uma vez por cena",
+            "descricao": "Ao examinar um objeto, construção ou rastro estranho, receba vantagem no teste de Investigação pra reconhecer de onde ele vem.",
+            "alcance": "Pessoal",
+            "duracao": "Até o próximo teste"
+          },
+          {
+            "id": "sorte-de-taverna",
+            "titulo": "Sorte de Taverna",
+            "acao": "Ação Livre",
+            "usos": "Uma vez por cena",
+            "descricao": "Receba vantagem no primeiro teste de Jogatina de uma mesa ou disputa, contanto que você nunca tenha jogado ali antes.",
+            "alcance": "Pessoal",
+            "duracao": "Até o próximo teste"
+          },
+          {
+            "id": "amigo-dos-bichos-de-estrada",
+            "titulo": "Amigo dos Bichos de Estrada",
+            "acao": "Passivo",
+            "descricao": "Animais selvagens não domesticados começam neutros a você em vez de hostis, e você recebe +2 em Adestramento para acalmar um animal assustado.",
+            "alcance": "Pessoal",
+            "duracao": "Permanente"
+          }
         ]
       },
       {
@@ -11980,15 +12176,21 @@
         "descricao": "Uma vez por sessão, até três aliados ignoram Cansaço e penalidades de viagem por uma cena; os pontos de Cansaço continuam registrados.",
         "niveis": [
           18
-        ]
+        ],
+        "acao": "Ação Padrão",
+        "duracao": "Uma cena",
+        "usos": "Uma vez por sessão"
       },
       {
         "id": "sem-fronteiras",
         "titulo": "Sem Fronteiras",
-        "descricao": "Uma vez por sessão, use uma Ação Padrão para afetar você e até cinco aliados por uma cena. Os alvos ignoram terreno difícil, recebem +6 metros de Movimento e ficam imunes a dano e condições causados apenas pelo ambiente. Uma vez durante o efeito, cada alvo pode se teleportar até 12 metros para um espaço que possa perceber, sem gastar ação.",
+        "descricao": "Uma vez por sessão, afete você e até cinco aliados por uma cena: os alvos ignoram terreno difícil, recebem +6 metros de Movimento e ficam imunes a dano e condições causados apenas pelo ambiente. Uma vez durante o efeito, cada alvo pode gastar a própria Ação de Movimento para se teleportar até 12 metros para um espaço que possa perceber.",
         "niveis": [
           20
-        ]
+        ],
+        "acao": "Ação Padrão",
+        "duracao": "Uma cena",
+        "usos": "Uma vez por sessão"
       }
     ],
     "eventos": [
@@ -12009,66 +12211,88 @@
         "id": "mochila-impossivel",
         "titulo": "Mochila Impossível",
         "custo_mana": 0,
-        "descricao": "Passivo. Carregue dois espaços adicionais de itens comuns; a mochila não altera peso de objetos enormes."
+        "descricao": "Carregue dois espaços adicionais de itens comuns; a mochila não altera peso de objetos enormes.",
+        "acao": "Passivo"
       },
       {
         "id": "passo-longo",
         "titulo": "Passo Longo",
         "custo_mana": 3,
-        "descricao": "Receba +6 m Movimento neste turno e ignore terreno difícil."
+        "descricao": "Receba +6 m de Movimento neste turno e ignore terreno difícil.",
+        "acao": "Ação Livre",
+        "duracao": "Este turno"
       },
       {
         "id": "ja-vi-isso",
         "titulo": "Já Vi Isso",
         "custo_mana": 3,
-        "descricao": "Uma vez por cena, rerrole teste de Conhecimento, Sobrevivência ou Percepção e mantenha o novo resultado."
+        "descricao": "Rerrole um teste de Conhecimento, Sobrevivência ou Percepção que você acabou de fazer, e mantenha o novo resultado.",
+        "acao": "Reação",
+        "usos": "Uma vez por cena"
       },
       {
         "id": "mapa-rabiscado",
         "titulo": "Mapa Rabiscado",
         "custo_mana": 2,
-        "descricao": "Após dez minutos, produza mapa confiável da área já percorrida e marque uma rota de retorno."
+        "descricao": "Depois de dez minutos, produza um mapa confiável da área já percorrida e marque uma rota de retorno.",
+        "acao": "10 minutos, fora de combate"
       },
       {
         "id": "historia-de-taverna",
         "titulo": "História de Taverna",
         "custo_mana": 3,
-        "descricao": "Receba vantagem em um teste social ao trocar notícia verdadeira de outra região."
+        "descricao": "Receba vantagem em um teste social ao trocar notícia verdadeira de outra região.",
+        "acao": "Ação Livre"
       },
       {
         "id": "dormir-em-qualquer-lugar",
         "titulo": "Dormir em Qualquer Lugar",
         "custo_mana": 0,
-        "descricao": "Passivo. Um descanso em abrigo improvisado conta como adequado, salvo ambiente letal."
+        "descricao": "Um descanso em abrigo improvisado conta como adequado, salvo ambiente letal.",
+        "acao": "Passivo"
       },
       {
         "id": "carona",
         "titulo": "Carona",
         "custo_mana": 4,
-        "descricao": "Até três aliados acompanham seu deslocamento de viagem sem sofrer a primeira penalidade de ritmo acelerado."
+        "descricao": "Até três aliados acompanham seu deslocamento de viagem sem sofrer a primeira penalidade de ritmo acelerado.",
+        "acao": "Ação Padrão"
       },
       {
         "id": "plano-b",
         "titulo": "Plano B",
         "custo_mana": 5,
-        "descricao": "Uma vez por sessão, declare uma rota de fuga plausível; o grupo recebe +3 m Movimento ao segui-la por três rodadas."
+        "descricao": "Declare uma rota de fuga plausível; o grupo recebe +3 m de Movimento ao segui-la por três rodadas.",
+        "acao": "Ação Livre",
+        "duracao": "Três rodadas",
+        "usos": "Uma vez por sessão"
       },
       {
         "id": "sou-de-fora",
         "titulo": "Sou de Fora",
         "custo_mana": 2,
-        "descricao": "Receba +2 em Enganação para evitar uma obrigação cultural que desconhecia, uma vez por cena."
+        "descricao": "Receba +2 em Enganação para evitar uma obrigação cultural que desconhecia.",
+        "acao": "Ação Livre",
+        "usos": "Uma vez por cena"
       },
       {
         "id": "horizonte-aberto",
         "titulo": "Horizonte Aberto",
         "custo_mana": 7,
-        "descricao": "Por uma cena, você e aliados a 6 m não podem ficar Perdidos e recebem vantagem contra efeitos de confinamento.",
+        "descricao": "Por uma cena, você e aliados a até 6 m recebem vantagem em testes de Sobrevivência para não se perderem e contra efeitos de confinamento.",
         "pre_requisitos": [
           "Nível 10 de Viajante"
-        ]
+        ],
+        "acao": "Ação Padrão",
+        "alcance": "6 m",
+        "duracao": "Uma cena"
       }
-    ]
+    ],
+    "dt_efeitos": {
+      "rotulo": "DT do Viajante",
+      "pericia": "sobrevivencia",
+      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Sobrevivência no momento em que aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar."
+    }
   },
   {
     "id": "canalizador",
@@ -13040,6 +13264,7 @@
       {
         "id": "fusao-controlada",
         "titulo": "Fusão Controlada",
+        "descricao": "Ao conjurar, aplique no máximo uma fusão aprendida cujo Fluxo secundário corresponda ao catalisador ativo. A fusão não altera a ação nem o custo da magia, salvo quando o próprio efeito disser o contrário. Depois da conjuração, o catalisador usado fica desativado. Reativá-lo exige os dez minutos fora de combate de Sintonia Catalisada; trocar para outro catalisador preparado não o recarrega. Descarga do Catalisador é mais severa e continua desativando até o próximo descanso.",
         "niveis": [
           3,
           8,
@@ -13158,7 +13383,7 @@
       {
         "id": "convergencia-segura",
         "titulo": "Convergência Segura",
-        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você pode sustentar dois catalisadores ao mesmo tempo, suas fusões não exigem troca nem desativam outra fusão, custam 3 de Mana a menos, mínimo 1, e recebem +3 em conjuração e Defesa.",
+        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você pode sustentar dois catalisadores ativos ao mesmo tempo e usar a fusão de qualquer um deles sem desativá-lo. As magias fundidas custam 3 de Mana a menos, mínimo 1, e você recebe +3 nos testes de conjuração e na Defesa durante o efeito.",
         "niveis": [
           20
         ],
@@ -13193,7 +13418,7 @@
         "titulo": "Aterramento",
         "custo_mana": 3,
         "acao": "Reação",
-        "descricao": "Reduza em 8 o dano ligado ao catalisador."
+        "descricao": "Quando sofrer dano causado por uma magia do mesmo Fluxo do catalisador ativo, use uma Reação para reduzir esse dano em 8."
       },
       {
         "id": "dupla-frequencia",
@@ -13241,7 +13466,7 @@
         "custo_mana": 4,
         "acao": "Ação Livre",
         "duracao": "Até o fim da cena",
-        "descricao": "Receba Resistência 5 ao tipo do catalisador."
+        "descricao": "Até o fim da cena, receba Resistência 5 contra dano causado por magias do mesmo Fluxo do catalisador ativo."
       },
       {
         "id": "leitura-de-artefato",
@@ -13737,7 +13962,7 @@
       {
         "id": "grande-oficiante",
         "titulo": "Grande Oficiante",
-        "descricao": "Uma vez por sessão, escolha um ritual conhecido ao iniciá-lo. Se ele normalmente levaria mais tempo, você o conclui em três rodadas. Para cumprir requisitos de participantes, você conta como quatro ajudantes. Você também recebe +5 contra interrupção e gasta 1 lote a menos de Componentes Ritualísticos, até o mínimo de 0. O custo de Mana não muda.",
+        "descricao": "Uma vez por sessão, escolha um ritual conhecido ao iniciá-lo. Esta é uma exceção explícita à proibição de realizar ritos em combate: use uma Ação Completa em cada um dos seus três turnos e permaneça Concentrando até concluir. Uma interrupção ainda pode quebrar o rito pelas regras normais. Para cumprir requisitos de participantes, você conta como quatro ajudantes. Você também recebe +5 contra interrupção e gasta 1 lote a menos de Componentes Ritualísticos, até o mínimo de 0. O custo de Mana não muda.",
         "niveis": [
           20
         ],
@@ -13861,7 +14086,7 @@
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
-    "versao_balanceamento": "2026-08-01",
+    "versao_balanceamento": "2026-08-25",
     "descricao": "Classe especial da A.X.I.S. Entra na Malha pra derrubar a magia dos outros. Não conjura Fluxo natural, atrapalha quem conjura.",
     "progressao": [
       {
@@ -14100,44 +14325,117 @@
         "estagios": [
           {
             "nivel": 1,
-            "descricao": "Detecte conjurações naturais a até 12 m."
+            "descricao": "Detecte conjurações naturais a até 12 m.",
+            "titulo": "Primeiro Acesso",
+            "acao": "Passivo",
+            "alcance": "12 m"
           },
           {
             "nivel": 5,
-            "descricao": "Identifique círculo, Fluxo e alvo sem gastar ação."
+            "descricao": "Identifique círculo, Fluxo e alvo de qualquer conjuração que perceber.",
+            "titulo": "Leitura Completa",
+            "acao": "Passivo"
           },
           {
             "nivel": 10,
-            "descricao": "Receba +2 para interceptar magia, ritual, encantamento ou selo natural."
+            "descricao": "Receba +2 para interceptar magia, ritual, encantamento ou selo natural.",
+            "titulo": "Assinatura Reconhecida",
+            "acao": "Passivo"
           },
           {
             "nivel": 15,
-            "descricao": "Seu alcance aumenta para 24 m."
+            "descricao": "Seu alcance de detecção aumenta para 24 m.",
+            "titulo": "Alcance Ampliado",
+            "acao": "Passivo",
+            "alcance": "24 m"
           },
           {
             "nivel": 20,
-            "descricao": "Uma vez por sessão, por três rodadas, magias percebidas revelam seus dados."
+            "descricao": "Uma vez por sessão, por três rodadas, toda magia que você perceber revela a DT de conjuração e o efeito completo antes mesmo de terminar de ser lançada.",
+            "titulo": "Visão de Código",
+            "acao": "Passivo",
+            "duracao": "Três rodadas",
+            "usos": "Uma vez por sessão"
           }
         ]
       },
       {
         "id": "hackear-fluxo",
         "titulo": "Hackear Fluxo",
-        "descricao": "Escolha por estágio anular, atrasar, redirecionar ou isolar uma manifestação percebida.",
+        "descricao": "Interceptar com sucesso sempre cancela o efeito, no mínimo. Aprenda uma técnica por estágio pra fazer mais que isso quando quiser: são seis possíveis e você aprende quatro. Cada técnica aprendida continua disponível pra sempre, escolhida na hora de cada interceptação bem-sucedida.",
         "niveis": [
           3,
           8,
           14,
           20
+        ],
+        "escolha_opcoes": {
+          "rotulo": "Técnicas de Hackear Fluxo",
+          "descricao": "Uma técnica por estágio; cada técnica aprendida fica valendo ao mesmo tempo que as outras.",
+          "por_estagio": 1,
+          "repetivel": false
+        },
+        "opcoes": [
+          {
+            "id": "atrasar",
+            "titulo": "Atrasar",
+            "acao": "Escolhida ao interceptar com sucesso",
+            "alcance": "Igual ao efeito interceptado",
+            "duracao": "Instantâneo",
+            "descricao": "Em vez de cancelar, atrase o efeito interceptado até o fim do turno da fonte."
+          },
+          {
+            "id": "redirecionar",
+            "titulo": "Redirecionar",
+            "acao": "Escolhida ao interceptar com sucesso",
+            "alcance": "Igual ao efeito interceptado",
+            "duracao": "Instantâneo",
+            "descricao": "Em vez de cancelar, redirecione o efeito interceptado para outro alvo válido dentro do alcance original dele."
+          },
+          {
+            "id": "isolar",
+            "titulo": "Isolar",
+            "acao": "Escolhida ao interceptar com sucesso",
+            "alcance": "Igual ao efeito interceptado",
+            "duracao": "Instantâneo",
+            "descricao": "Em vez de cancelar, deixe o efeito interceptado acontecer, mas contido numa área de até 3 m ao redor da fonte, sem afetar ninguém fora dela."
+          },
+          {
+            "id": "assinatura-falsa",
+            "titulo": "Assinatura Falsa",
+            "acao": "Escolhida ao interceptar com sucesso",
+            "alcance": "Igual ao efeito interceptado",
+            "duracao": "Instantâneo",
+            "descricao": "Ao cancelar, faça o efeito parecer ter vindo de outra fonte plausível à sua escolha, pra quem estiver testemunhando."
+          },
+          {
+            "id": "eco-hostil",
+            "titulo": "Eco Hostil",
+            "acao": "Escolhida ao interceptar com sucesso",
+            "alcance": "Igual ao efeito interceptado",
+            "duracao": "Instantâneo",
+            "descricao": "Ao cancelar, a fonte sofre 2d6 de dano quando o efeito dela se desfaz."
+          },
+          {
+            "id": "nucleo-exposto",
+            "titulo": "Núcleo Exposto",
+            "acao": "Escolhida ao interceptar com sucesso",
+            "alcance": "Igual ao efeito interceptado",
+            "duracao": "Até o fim do próximo turno da fonte",
+            "descricao": "Ao cancelar, a fonte fica com a Defesa reduzida em 2 até o fim do próximo turno dela."
+          }
         ]
       },
       {
         "id": "acesso-administrador",
         "titulo": "Acesso Administrador",
-        "descricao": "Uma vez por sessão, ative esta habilidade sem gastar ação. Por três rodadas, você recebe +5 em interceptações, reduz o custo delas em 3 de Mana, mínimo 0, e pode realizar uma interceptação por turno sem consumir sua Reação. Em uma interceptação bem-sucedida, escolha cancelar, redirecionar para um alvo válido ou suspender o efeito até o início do próximo turno da fonte.",
+        "descricao": "Uma vez por sessão, por três rodadas, você recebe +5 em interceptações e reduz o custo delas em 3 de Mana (mínimo 0), e pode realizar uma interceptação por turno sem gastar sua Reação. Numa interceptação bem-sucedida nesse período, você pode aplicar duas técnicas de Hackear Fluxo ao mesmo tempo, em vez de uma só.",
         "niveis": [
           20
-        ]
+        ],
+        "acao": "Ação Livre",
+        "duracao": "Três rodadas",
+        "usos": "Uma vez por sessão"
       }
     ],
     "eventos": [
@@ -14158,66 +14456,91 @@
         "id": "pacote-descartado",
         "titulo": "Pacote Descartado",
         "custo_mana": 4,
-        "descricao": "Use reação e Misticismo contra a DT do círculo; em sucesso, a magia falha."
+        "descricao": "Role Misticismo contra a DT de conjuração da magia percebida; em sucesso, você a intercepta.",
+        "acao": "Reação"
       },
       {
         "id": "latencia",
         "titulo": "Latência",
         "custo_mana": 3,
-        "descricao": "Atrase uma magia até o fim do turno do conjurador."
+        "descricao": "Atrase uma magia percebida até o fim do turno do conjurador.",
+        "acao": "Reação"
       },
       {
         "id": "firewall-de-fluxo",
         "titulo": "Firewall de Fluxo",
         "custo_mana": 4,
-        "descricao": "Um alvo recebe +3 na Defesa contra magia natural."
+        "descricao": "Um alvo recebe +3 na Defesa contra magia natural.",
+        "acao": "Ação Padrão",
+        "alcance": "9 m",
+        "duracao": "Até o fim da cena"
       },
       {
         "id": "rastrear-assinatura",
         "titulo": "Rastrear Assinatura",
         "custo_mana": 2,
-        "descricao": "Identifique a direção do conjurador por uma cena."
+        "descricao": "Identifique a direção do conjurador por uma cena.",
+        "acao": "Ação Padrão",
+        "duracao": "Uma cena"
       },
       {
         "id": "quarentena-arcana",
         "titulo": "Quarentena Arcana",
         "custo_mana": 5,
-        "descricao": "Magias naturais numa área de 3 m sofrem −2."
+        "descricao": "Magias naturais conjuradas dentro de uma área de 3 m sofrem -2 na DT de conjuração, ficando mais fáceis de interceptar.",
+        "acao": "Ação Padrão",
+        "alcance": "3 m",
+        "duracao": "Uma cena"
       },
       {
         "id": "desmontar-selo",
         "titulo": "Desmontar Selo",
         "custo_mana": 4,
-        "descricao": "Suprima um selo por uma cena com Misticismo."
+        "descricao": "Role Misticismo contra a DT do selo; em sucesso, suprima-o por uma cena.",
+        "acao": "Ação Padrão",
+        "duracao": "Uma cena"
       },
       {
         "id": "cortar-concentracao",
         "titulo": "Cortar Concentração",
         "custo_mana": 5,
-        "descricao": "Force Vontade; em falha, a concentração termina."
+        "descricao": "Force um teste de Vontade contra a DT do Interceptador; em falha, a concentração do alvo termina.",
+        "acao": "Ação Padrão",
+        "alcance": "9 m"
       },
       {
         "id": "proxy",
         "titulo": "Proxy",
         "custo_mana": 6,
-        "descricao": "Ao ser alvo único, intercepte para escolher outro alvo válido."
+        "descricao": "Quando você for o único alvo de uma magia natural, role Misticismo contra a DT de conjuração dela; em sucesso, escolha outro alvo válido pra receber o efeito no seu lugar.",
+        "acao": "Reação"
       },
       {
         "id": "registro-forense",
         "titulo": "Registro Forense",
         "custo_mana": 0,
-        "descricao": "Passivo. A Malha preserva dados das magias percebidas."
+        "descricao": "A Malha preserva dados das magias percebidas. Consulte esse registro para identificar retroativamente o Fluxo, o círculo e o conjurador de qualquer magia natural que você tenha percebido nesta sessão, mesmo que não a tenha interceptado.",
+        "acao": "Passivo"
       },
       {
         "id": "apagao-local",
         "titulo": "Apagão Local",
         "custo_mana": 9,
-        "descricao": "Uma vez por sessão, crie zona que dificulta conjurações naturais.",
+        "descricao": "Uma vez por sessão, crie uma zona de 12 m por uma cena: conjurar magia natural dentro dela custa o dobro de Mana.",
         "pre_requisitos": [
           "Nível 12 de Interceptador"
-        ]
+        ],
+        "acao": "Ação Padrão",
+        "alcance": "12 m",
+        "duracao": "Uma cena",
+        "usos": "Uma vez por sessão"
       }
-    ]
+    ],
+    "dt_efeitos": {
+      "rotulo": "DT do Interceptador",
+      "pericia": "misticismo",
+      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar. Interceptar uma magia é diferente: você rola Misticismo contra a DT de conjuração que a própria magia já tem (7 + 3× o círculo dela), não contra essa DT do Interceptador."
+    }
   },
   {
     "id": "cozinheiro",
@@ -14898,6 +15221,958 @@
         "pre_requisitos": [
           "Nível 12 de Chef"
         ]
+      }
+    ]
+  },
+  {
+    "id": "detetive",
+    "tipo": "classe",
+    "titulo": "Detetive",
+    "categoria": "padrao",
+    "disponibilidade": "geral",
+    "arvore": null,
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": false,
+    "vida": 4,
+    "mana": 3,
+    "recursos_provisorios": false,
+    "progressao_publicada": true,
+    "origem_conteudo": "proposta_original_balanceada",
+    "versao_balanceamento": "2026-08-25",
+    "descricao": "Lê uma cena antes de qualquer um: pega o detalhe fora do lugar, a mentira mal contada, o padrão que ninguém mais viu. Não é sobre ter uma resposta pronta, é sobre nunca aceitar a primeira explicação.",
+    "dt_efeitos": {
+      "rotulo": "DT do Detetive",
+      "pericia": "investigacao",
+      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Investigação no momento em que aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar."
+    },
+    "progressao": [
+      {
+        "nivel": 1,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Dedução Metódica",
+            "estagio": 1
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia"
+          }
+        ]
+      },
+      {
+        "nivel": 2,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Detetive"
+          }
+        ]
+      },
+      {
+        "nivel": 3,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Perfil do Suspeito",
+            "estagio": 1
+          }
+        ]
+      },
+      {
+        "nivel": 4,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Caso Frio"
+          }
+        ]
+      },
+      {
+        "nivel": 5,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Dedução Metódica",
+            "estagio": 2
+          }
+        ]
+      },
+      {
+        "nivel": 6,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Detetive"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia"
+          }
+        ]
+      },
+      {
+        "nivel": 7,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Caso Frio"
+          }
+        ]
+      },
+      {
+        "nivel": 8,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Perfil do Suspeito",
+            "estagio": 2
+          }
+        ]
+      },
+      {
+        "nivel": 9,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Detetive"
+          }
+        ]
+      },
+      {
+        "nivel": 10,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Dedução Metódica",
+            "estagio": 3
+          }
+        ]
+      },
+      {
+        "nivel": 11,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Detetive"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia"
+          }
+        ]
+      },
+      {
+        "nivel": 12,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Caso Frio"
+          }
+        ]
+      },
+      {
+        "nivel": 13,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Detetive"
+          }
+        ]
+      },
+      {
+        "nivel": 14,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Perfil do Suspeito",
+            "estagio": 3
+          }
+        ]
+      },
+      {
+        "nivel": 15,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Dedução Metódica",
+            "estagio": 4
+          }
+        ]
+      },
+      {
+        "nivel": 16,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Detetive"
+          }
+        ]
+      },
+      {
+        "nivel": 17,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Detetive"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia"
+          }
+        ]
+      },
+      {
+        "nivel": 18,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Caso Frio"
+          },
+          {
+            "tipo": "habilidade",
+            "titulo": "Golpe de Vista"
+          }
+        ]
+      },
+      {
+        "nivel": 19,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Detetive"
+          }
+        ]
+      },
+      {
+        "nivel": 20,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Dedução Metódica",
+            "estagio": 5
+          },
+          {
+            "tipo": "habilidade",
+            "titulo": "Perfil do Suspeito",
+            "estagio": 4
+          },
+          {
+            "tipo": "habilidade_final",
+            "titulo": "Caso Encerrado"
+          }
+        ]
+      }
+    ],
+    "habilidades": [
+      {
+        "id": "deducao-metodica",
+        "titulo": "Dedução Metódica",
+        "niveis": [
+          1,
+          5,
+          10,
+          15,
+          20
+        ],
+        "estagios": [
+          {
+            "nivel": 1,
+            "titulo": "Primeira Leitura",
+            "descricao": "Ao examinar uma cena, pessoa ou objeto por um minuto, role Investigação contra a DT definida pela dificuldade da pista. Em sucesso, o Mestre revela um detalhe relevante sustentado pelo que foi examinado. Mesmo numa falha, revela um detalhe real secundário, nunca a pista central.",
+            "acao": "Um minuto, fora de combate"
+          },
+          {
+            "nivel": 5,
+            "titulo": "Detector de Mentiras",
+            "descricao": "Role Investigação, em vez de Percepção, para perceber se alguém está mentindo na sua frente. Receba +2 em Investigação.",
+            "acao": "Passivo"
+          },
+          {
+            "nivel": 10,
+            "titulo": "Leitura Rápida",
+            "descricao": "Examinar uma cena, pessoa ou objeto vira uma Ação Padrão em vez de levar um minuto, e o alcance da sua atenção cresce: perceba até três detalhes discrepantes numa sala inteira de uma vez.",
+            "acao": "Ação Padrão"
+          },
+          {
+            "nivel": 15,
+            "titulo": "Reconstituição",
+            "descricao": "Você também pode aplicar Dedução Metódica sobre um relato de segunda mão (um depoimento, uma carta, uma gravação), não só sobre o que examina pessoalmente.",
+            "acao": "Passivo"
+          },
+          {
+            "nivel": 20,
+            "titulo": "A Peça que Faltava",
+            "descricao": "Uma vez por sessão, faça ao Mestre uma pergunta direta sobre um fato que possa ser inferido das evidências que você já examinou nesta investigação e receba uma resposta verdadeira. A habilidade não revela planos futuros, identidade sem vestígio nem informação que não deixou evidência acessível na cena.",
+            "acao": "Ação Livre",
+            "usos": "Uma vez por sessão"
+          }
+        ]
+      },
+      {
+        "id": "perfil-do-suspeito",
+        "titulo": "Perfil do Suspeito",
+        "descricao": "Aprenda uma especialidade de investigação por estágio; são oito possíveis, você aprende quatro. Cada uma aprendida continua disponível pra sempre.",
+        "niveis": [
+          3,
+          8,
+          14,
+          20
+        ],
+        "escolha_opcoes": {
+          "rotulo": "Especialidades de Investigação",
+          "descricao": "Uma especialidade por estágio.",
+          "por_estagio": 1,
+          "repetivel": false
+        },
+        "opcoes": [
+          {
+            "id": "interrogatorio",
+            "titulo": "Interrogatório",
+            "acao": "Ação Padrão",
+            "alcance": "Pessoal",
+            "duracao": "Uma cena",
+            "descricao": "Contra um suspeito sob custódia ou disposto a conversar, receba vantagem em Investigação ou Intimidação para arrancar informação verdadeira."
+          },
+          {
+            "id": "perfil-psicologico",
+            "titulo": "Perfil Psicológico",
+            "acao": "Ação Padrão",
+            "alcance": "9 m",
+            "duracao": "Instantâneo",
+            "descricao": "Depois de observar alguém agir por uma cena inteira, role Investigação contra a Vontade do alvo. Em sucesso, o Mestre informa qual é a conduta imediata mais provável dele nas circunstâncias atuais, como atacar, fugir, negociar, proteger alguém ou usar um recurso que você tenha visto. A previsão deixa de valer se as circunstâncias mudarem."
+          },
+          {
+            "id": "pericia-forense",
+            "titulo": "Perícia Forense",
+            "acao": "Ação Padrão",
+            "alcance": "Toque",
+            "duracao": "Instantâneo",
+            "descricao": "Ao examinar sangue, fibra, marca ou resíduo, role Investigação para determinar o tipo e a origem imediata do vestígio. Identificar uma pessoa ou objeto específico exige uma amostra de comparação, um registro prévio ou outra evidência que faça essa ligação."
+          },
+          {
+            "id": "vigilancia",
+            "titulo": "Vigilância",
+            "acao": "Passivo",
+            "alcance": "Visual",
+            "duracao": "Até uma sessão",
+            "descricao": "Siga um alvo sem ser notado por horas seguidas; role Furtividade só uma vez para toda a perseguição, não a cada intervalo."
+          },
+          {
+            "id": "rede-de-informantes",
+            "titulo": "Rede de Informantes",
+            "acao": "Ação Livre",
+            "alcance": "A localidade atual",
+            "duracao": "Uma cena",
+            "descricao": "Uma vez por cena, pergunte ao Mestre um boato ou rumor de rua relevante ao caso, sem precisar declarar de quem veio."
+          },
+          {
+            "id": "reconstituicao-de-cena",
+            "titulo": "Reconstituição de Cena",
+            "acao": "Ação Completa",
+            "alcance": "A cena examinada",
+            "duracao": "Instantâneo",
+            "descricao": "Depois de obter sucesso em Dedução Metódica no local, recrie a ordem dos acontecimentos sustentados pelos vestígios encontrados. A reconstituição não revela atos que não deixaram marcas nem fatos ocultos sem evidência na cena."
+          },
+          {
+            "id": "disfarce-investigativo",
+            "titulo": "Disfarce Investigativo",
+            "acao": "Ação Padrão",
+            "alcance": "Pessoal",
+            "duracao": "Uma cena",
+            "descricao": "Assuma um papel ou identidade falsa; receba vantagem em Enganação para se infiltrar sem levantar suspeita."
+          },
+          {
+            "id": "leitura-de-documentos",
+            "titulo": "Leitura de Documentos",
+            "acao": "Ação Padrão",
+            "alcance": "Toque",
+            "duracao": "Instantâneo",
+            "descricao": "Identifique falsificação, letra forjada ou mensagem oculta em qualquer documento, mapa ou registro escrito."
+          }
+        ]
+      },
+      {
+        "id": "golpe-de-vista",
+        "titulo": "Golpe de Vista",
+        "descricao": "Uma vez por cena, observe uma cena ou pessoa e receba do Mestre uma dica direta sobre o que está fora do lugar ali.",
+        "niveis": [
+          18
+        ],
+        "acao": "Ação Livre",
+        "usos": "Uma vez por cena"
+      },
+      {
+        "id": "caso-encerrado",
+        "titulo": "Caso Encerrado",
+        "descricao": "Uma vez por sessão, ao apontar publicamente quem ou o que causou o mistério que está investigando, o Mestre confirma se sua dedução está certa. Se estiver, ganhe vantagem em todos os testes contra o alvo apontado pelo resto da cena. Se estiver errada, o Mestre apenas confirma o erro; a habilidade é gasta e não revela a resposta correta.",
+        "niveis": [
+          20
+        ],
+        "acao": "Ação Livre",
+        "usos": "Uma vez por sessão"
+      }
+    ],
+    "eventos": [
+      {
+        "id": "caso-frio",
+        "titulo": "Caso Frio",
+        "descricao": "Um mistério antigo e mal resolvido bate à sua porta de novo, trazendo uma pista nova ou uma testemunha que reapareceu.",
+        "niveis": [
+          4,
+          7,
+          12,
+          18
+        ]
+      }
+    ],
+    "poderes": [
+      {
+        "id": "golpe-certeiro-de-logica",
+        "titulo": "Golpe Certeiro de Lógica",
+        "custo_mana": 3,
+        "acao": "Ação Livre, após identificar o ponto fraco",
+        "duracao": "Até o próximo ataque ou o fim da cena",
+        "descricao": "Depois de obter sucesso em Investigação para identificar o ponto fraco de um alvo nesta cena, gaste 3 Mana. Seu próximo ataque contra ele, até o fim da cena, recebe +2 dados de dano."
+      },
+      {
+        "id": "blefe-perfeito",
+        "titulo": "Blefe Perfeito",
+        "custo_mana": 2,
+        "acao": "Ação Livre",
+        "descricao": "Receba vantagem no próximo teste de Enganação nesta cena."
+      },
+      {
+        "id": "memoria-fotografica",
+        "titulo": "Memória Fotográfica",
+        "custo_mana": 0,
+        "acao": "Passivo",
+        "descricao": "Você se lembra com exatidão de qualquer coisa que já viu ou leu, palavra por palavra ou traço por traço."
+      },
+      {
+        "id": "sexto-sentido",
+        "titulo": "Sexto Sentido",
+        "custo_mana": 3,
+        "acao": "Reação, ao fazer o teste",
+        "descricao": "Quando fizer um teste para perceber uma armadilha, emboscada ou ameaça escondida, gaste 3 Mana e use uma Reação para receber vantagem nesse teste."
+      },
+      {
+        "id": "pergunta-certa",
+        "titulo": "A Pergunta Certa",
+        "custo_mana": 5,
+        "acao": "Ação Padrão",
+        "alcance": "9 m",
+        "defesa": "Vontade",
+        "duracao": "Instantâneo",
+        "descricao": "Uma criatura a até 9 m que possa entender você e conheça a resposta testa Vontade contra a DT do Detetive. Em falha, responde com sinceridade a uma pergunta, usando apenas o que realmente sabe; ela pode responder que não sabe."
+      },
+      {
+        "id": "rastro-nao-some",
+        "titulo": "Rastro Não Some",
+        "custo_mana": 3,
+        "acao": "Ação Padrão",
+        "alcance": "Toque",
+        "duracao": "Um dia",
+        "descricao": "Marque um rastro ou uma pista física; ela não se apaga nem se degrada naturalmente por um dia inteiro."
+      },
+      {
+        "id": "alibi-furado",
+        "titulo": "Álibi Furado",
+        "custo_mana": 4,
+        "acao": "Ação Padrão",
+        "alcance": "9 m",
+        "descricao": "Ao ouvir o álibi de alguém, role Investigação contra a Enganação dele; em sucesso, você sabe exatamente qual parte é mentira."
+      },
+      {
+        "id": "disfarce-rapido",
+        "titulo": "Disfarce Rápido",
+        "custo_mana": 3,
+        "acao": "Ação Padrão",
+        "duracao": "Uma cena",
+        "descricao": "Mude traços visuais da própria aparência por uma cena, sem material de disfarce. Isso não altera tamanho, voz, roupa, equipamento nem concede a identidade de outra pessoa; quem tiver motivo para desconfiar ainda pode testar Percepção contra a sua Enganação."
+      },
+      {
+        "id": "conexoes-na-delegacia",
+        "titulo": "Conexões na Delegacia",
+        "custo_mana": 0,
+        "acao": "Passivo",
+        "usos": "Uma vez por sessão",
+        "descricao": "Uma vez por sessão, peça um favor razoável a um contato policial, jurídico ou autoridade equivalente no cenário, como consultar um arquivo permitido, obter uma liberação comum ou buscar uma informação de registro. O favor não supera sigilo, segurança nem a autoridade real do contato."
+      },
+      {
+        "id": "instinto-de-perigo",
+        "titulo": "Instinto de Perigo",
+        "custo_mana": 4,
+        "acao": "Reação",
+        "descricao": "Quando um ataque revelar uma ameaça que o deixou Surpreendido, gaste 4 Mana para receber +4 de Defesa contra esse ataque específico. Você pode usar esta Reação mesmo antes do seu primeiro turno; esta é uma exceção à restrição de Reações de Surpreendido."
+      }
+    ]
+  },
+  {
+    "id": "devorador",
+    "tipo": "classe",
+    "titulo": "Devorador",
+    "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "arvore": "mulher-carmesim",
+    "arvores": [
+      "mulher-carmesim"
+    ],
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "vida": 4,
+    "mana": 3,
+    "recursos_provisorios": false,
+    "progressao_publicada": true,
+    "origem_conteudo": "proposta_original_balanceada",
+    "versao_balanceamento": "2026-08-25",
+    "descricao": "Não nasce com poder nenhum. O que carrega vem de quem já morreu: mate ou chegue perto o bastante de um corpo ainda quente, devore o que sobrou dele, e uma parte real da força da vítima grava um espaço vazio dentro de você.",
+    "dt_efeitos": {
+      "rotulo": "DT do Devorador",
+      "pericia": "luta",
+      "descricao": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Luta no momento em que aciona. O resultado da sua rolagem é a DT que o alvo precisa alcançar."
+    },
+    "progressao": [
+      {
+        "nivel": 1,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Banquete de Poder",
+            "estagio": 1
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 2
+          }
+        ]
+      },
+      {
+        "nivel": 2,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Devorador"
+          }
+        ]
+      },
+      {
+        "nivel": 3,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Instintos do Devorador",
+            "estagio": 1
+          }
+        ]
+      },
+      {
+        "nivel": 4,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Fome que Não Passa"
+          }
+        ]
+      },
+      {
+        "nivel": 5,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Banquete de Poder",
+            "estagio": 2
+          }
+        ]
+      },
+      {
+        "nivel": 6,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Devorador"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 2
+          }
+        ]
+      },
+      {
+        "nivel": 7,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Fome que Não Passa"
+          }
+        ]
+      },
+      {
+        "nivel": 8,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Instintos do Devorador",
+            "estagio": 2
+          }
+        ]
+      },
+      {
+        "nivel": 9,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Devorador"
+          }
+        ]
+      },
+      {
+        "nivel": 10,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Banquete de Poder",
+            "estagio": 3
+          }
+        ]
+      },
+      {
+        "nivel": 11,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Devorador"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 2
+          }
+        ]
+      },
+      {
+        "nivel": 12,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Fome que Não Passa"
+          }
+        ]
+      },
+      {
+        "nivel": 13,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Devorador"
+          }
+        ]
+      },
+      {
+        "nivel": 14,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Instintos do Devorador",
+            "estagio": 3
+          }
+        ]
+      },
+      {
+        "nivel": 15,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Banquete de Poder",
+            "estagio": 4
+          }
+        ]
+      },
+      {
+        "nivel": 16,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Devorador"
+          }
+        ]
+      },
+      {
+        "nivel": 17,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Devorador"
+          },
+          {
+            "tipo": "grau_pericia",
+            "titulo": "Grau de perícia",
+            "quantidade": 2
+          }
+        ]
+      },
+      {
+        "nivel": 18,
+        "recompensas": [
+          {
+            "tipo": "evento",
+            "titulo": "Fome que Não Passa"
+          },
+          {
+            "tipo": "habilidade",
+            "titulo": "Ecos da Última Refeição"
+          }
+        ]
+      },
+      {
+        "nivel": 19,
+        "recompensas": [
+          {
+            "tipo": "poder",
+            "titulo": "Poder de Devorador"
+          }
+        ]
+      },
+      {
+        "nivel": 20,
+        "recompensas": [
+          {
+            "tipo": "habilidade",
+            "titulo": "Banquete de Poder",
+            "estagio": 5
+          },
+          {
+            "tipo": "habilidade",
+            "titulo": "Instintos do Devorador",
+            "estagio": 4
+          },
+          {
+            "tipo": "habilidade_final",
+            "titulo": "Banquete Final"
+          }
+        ]
+      }
+    ],
+    "habilidades": [
+      {
+        "id": "banquete-de-poder",
+        "titulo": "Banquete de Poder",
+        "niveis": [
+          1,
+          5,
+          10,
+          15,
+          20
+        ],
+        "estagios": [
+          {
+            "nivel": 1,
+            "titulo": "Primeira Presa",
+            "descricao": "Quando um humanoide morre perto de você - morto por você ou não - pode devorá-lo até o fim da cena atual, gastando um minuto junto ao corpo. Escolha uma habilidade ou um poder que a classe dele tinha, limitado ao que um personagem do seu próprio nível de Devorador já teria acesso naquela classe, e grave-a num slot vazio, dando a ela o nome e a aparência do que devorou. Você mantém um slot ativo por vez.",
+            "acao": "Um minuto, fora de combate",
+            "duracao": "Até o fim da cena da morte"
+          },
+          {
+            "nivel": 5,
+            "titulo": "Segundo Estômago",
+            "descricao": "Mantenha dois slots ativos ao mesmo tempo.",
+            "acao": "Passivo"
+          },
+          {
+            "nivel": 10,
+            "titulo": "Terceiro Estômago",
+            "descricao": "Mantenha três slots ativos ao mesmo tempo.",
+            "acao": "Passivo"
+          },
+          {
+            "nivel": 15,
+            "titulo": "Quarto Estômago",
+            "descricao": "Mantenha quatro slots ativos ao mesmo tempo.",
+            "acao": "Passivo"
+          },
+          {
+            "nivel": 20,
+            "titulo": "Fome sem Fundo",
+            "descricao": "Mantenha cinco slots ativos ao mesmo tempo, e o teto de nível pra devorar desaparece: grave o poder ou a habilidade no nível real que a vítima tinha.",
+            "acao": "Passivo"
+          }
+        ]
+      },
+      {
+        "id": "instintos-do-devorador",
+        "titulo": "Instintos do Devorador",
+        "descricao": "Aprenda um instinto predatório por estágio; são oito possíveis, você aprende quatro. Cada um aprendido continua ativo pra sempre.",
+        "niveis": [
+          3,
+          8,
+          14,
+          20
+        ],
+        "escolha_opcoes": {
+          "rotulo": "Instintos Predatórios",
+          "descricao": "Um instinto por estágio, sempre ativo depois de aprendido.",
+          "por_estagio": 1,
+          "repetivel": false,
+          "permanente": true
+        },
+        "opcoes": [
+          {
+            "id": "faro-de-sangue",
+            "titulo": "Faro de Sangue",
+            "descricao": "Perceba criaturas feridas ou sangrando a até 18 m, mesmo fora de linha de visão."
+          },
+          {
+            "id": "mandibula-reforcada",
+            "titulo": "Mandíbula Reforçada",
+            "descricao": "Seu ataque desarmado causa 1d8 em vez do dano desarmado padrão."
+          },
+          {
+            "id": "pele-curtida",
+            "titulo": "Pele Curtida",
+            "descricao": "Receba +2 de Defesa."
+          },
+          {
+            "id": "estomago-de-ferro",
+            "titulo": "Estômago de Ferro",
+            "descricao": "Você é imune a veneno e doença ingeridos."
+          },
+          {
+            "id": "fome-voraz",
+            "titulo": "Fome Voraz",
+            "descricao": "Ao devorar uma vítima com sucesso, recupere 2d6 de Vida."
+          },
+          {
+            "id": "reflexos-de-predador",
+            "titulo": "Reflexos de Predador",
+            "descricao": "Receba +2 de Iniciativa."
+          },
+          {
+            "id": "metabolismo-acelerado",
+            "titulo": "Metabolismo Acelerado",
+            "descricao": "Um descanso recupera duas vezes mais Cansaço que o normal."
+          },
+          {
+            "id": "instinto-de-matilha",
+            "titulo": "Instinto de Matilha",
+            "descricao": "Perceba a presença de outros predadores ou Devoradores a até 30 m."
+          }
+        ]
+      },
+      {
+        "id": "ecos-da-ultima-refeicao",
+        "titulo": "Ecos da Última Refeição",
+        "descricao": "Enquanto tiver ao menos um slot ativo, uma vez por combate, quando um dano cairia sua Vida a 0, um dos ecos absorvidos protege você: reduza esse dano até deixar sua Vida em 1, e esvazie o slot mais antigo em seguida.",
+        "niveis": [
+          18
+        ],
+        "acao": "Reação",
+        "usos": "Uma vez por combate"
+      },
+      {
+        "id": "banquete-final",
+        "titulo": "Banquete Final",
+        "descricao": "Uma vez por sessão, ao devorar um humanoide derrotado nesta cena, grave de uma vez todos os poderes e a habilidade que ele carregava, ignorando por essa devoração o teto de slots que você mantém. Eles ficam ativos até o fim da cena atual; depois disso, os excedentes se apagam, sobrando só o que já cabia no seu limite normal. Se sobrar mais gravações do que cabe nesse limite, você escolhe quais permanecem.",
+        "niveis": [
+          20
+        ],
+        "acao": "Um minuto, fora de combate",
+        "usos": "Uma vez por sessão"
+      }
+    ],
+    "eventos": [
+      {
+        "id": "fome-que-nao-passa",
+        "titulo": "Fome que Não Passa",
+        "descricao": "Passar tempo demais sem devorar cobra um preço: um instinto mais difícil de disfarçar, uma lembrança emprestada que ressurge, ou alguém que percebeu o que você é.",
+        "niveis": [
+          4,
+          7,
+          12,
+          18
+        ]
+      }
+    ],
+    "poderes": [
+      {
+        "id": "investida-predatoria",
+        "titulo": "Investida Predatória",
+        "custo_mana": 3,
+        "acao": "Ação Livre",
+        "descricao": "Seu próximo ataque corpo a corpo neste turno recebe +2 dados de dano."
+      },
+      {
+        "id": "presa-a-distancia",
+        "titulo": "Presa à Distância",
+        "custo_mana": 3,
+        "acao": "Ação Padrão",
+        "alcance": "9 m",
+        "descricao": "Cuspa ou arremesse algo de dentro de você contra um alvo a 9 m, causando 1d8 + Mod.Força de dano."
+      },
+      {
+        "id": "casca-endurecida",
+        "titulo": "Casca Endurecida",
+        "custo_mana": 4,
+        "acao": "Reação",
+        "duracao": "Uma rodada",
+        "descricao": "Receba +3 de Defesa contra um ataque."
+      },
+      {
+        "id": "regeneracao-de-banquete",
+        "titulo": "Regeneração de Banquete",
+        "custo_mana": 5,
+        "acao": "Ação Padrão",
+        "descricao": "Recupere 2d6 + Mod.Constituição de Vida."
+      },
+      {
+        "id": "paralisia-do-medo",
+        "titulo": "Paralisia do Medo",
+        "custo_mana": 5,
+        "acao": "Ação Padrão",
+        "alcance": "6 m",
+        "defesa": "Vontade",
+        "descricao": "Um alvo a 6 m testa Vontade contra a DT do Devorador; em falha, fica Imobilizado até o fim do próximo turno dele."
+      },
+      {
+        "id": "salto-bestial",
+        "titulo": "Salto Bestial",
+        "custo_mana": 3,
+        "acao": "Ação de Movimento",
+        "descricao": "Receba +9 m de Movimento neste turno."
+      },
+      {
+        "id": "sentidos-agucados",
+        "titulo": "Sentidos Aguçados",
+        "custo_mana": 2,
+        "acao": "Ação Livre",
+        "duracao": "Uma cena",
+        "descricao": "Por uma cena, perceba movimento e cheiro num raio de 18 m, mesmo no escuro."
+      },
+      {
+        "id": "grito-dominante",
+        "titulo": "Grito Dominante",
+        "custo_mana": 6,
+        "acao": "Ação Padrão",
+        "alcance": "6 m",
+        "duracao": "Uma rodada",
+        "descricao": "Inimigos numa área de 6 m recebem desvantagem no próximo ataque que fizerem."
+      },
+      {
+        "id": "metamorfose-parcial",
+        "titulo": "Metamorfose Parcial",
+        "custo_mana": 4,
+        "acao": "Ação Padrão",
+        "duracao": "Uma cena",
+        "descricao": "Parte do seu corpo muda - garras, guelras, membrana - concedendo vantagem numa perícia física relacionada por uma cena."
+      },
+      {
+        "id": "ultima-refeicao",
+        "titulo": "Última Refeição",
+        "custo_mana": 0,
+        "acao": "Passivo",
+        "usos": "Uma vez por sessão",
+        "descricao": "Uma vez por sessão, ao consumir a última porção de um slot vazio antes de dormir, recupere metade da sua Mana máxima ao acordar."
       }
     ]
   }

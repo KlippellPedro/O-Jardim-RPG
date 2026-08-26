@@ -16,7 +16,7 @@ export { Desperto } from './Desperto';
 export { Auleth } from './Auleth';
 export { Automato } from './Automato';
 export { Clone } from './Clone';
-export { Errante } from './Errante';
+export { Anomalia } from './Anomalia';
 export { Amalgamo } from './Amalgamo';
 export { Bruxa } from './Bruxa';
 export { Onirico } from './Onirico';

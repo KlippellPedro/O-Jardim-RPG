@@ -93,7 +93,7 @@ export const Sintonizador = ({ classe }: { classe: IClasse }) => {
             <Merge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Fusão Controlada</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Aprenda uma fusão por estágio entre as onze publicadas no capítulo de Magia, uma para cada Fluxo do jogo (Tecnologia incluída). Cada fusão funde um Fluxo secundário à sua magia através do catalisador ativo, mudando o tipo, a forma ou a utilidade dela, sem aumentar o dano base.
+              Aprenda uma fusão por estágio entre as onze publicadas no capítulo de Magia, uma para cada Fluxo do jogo (Tecnologia incluída). Cada conjuração aceita uma fusão compatível com o catalisador ativo; depois do uso, ele fica desativado até você refazer os dez minutos de sintonia fora do combate.
             </p>
           </PremiumCard>
 
@@ -135,4 +135,3 @@ export const Sintonizador = ({ classe }: { classe: IClasse }) => {
 };
 
 export default Sintonizador;
-

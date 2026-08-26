@@ -108,7 +108,7 @@ export const Ninja = ({ classe }: { classe: IClasse }) => {
             <Swords size={36} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Arma Ninja</h3>
             <p className="text-zinc-400 leading-relaxed text-sm">
-              Marque uma arma como sua a cada estágio e aplique uma melhoria da lista, como Fio Mortal, Golpe Certeiro ou Retorno da Sombra, a qualquer arma já marcada, inclusive empilhando a mesma melhoria duas vezes na mesma peça.
+              Marque uma arma como sua a cada estágio e aplique uma melhoria da lista, como Fio Mortal, Golpe Certeiro ou Retorno da Sombra, a qualquer arma já marcada. Na mesma arma, só melhorias com bônus numérico podem se repetir; efeitos sem número ou que não acumulam valem uma vez.
             </p>
           </PremiumCard>
 

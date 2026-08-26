@@ -26,6 +26,11 @@ export interface LojaItem {
     rotulo: string;
     descontoPercentual: number;
   };
+  /** Só em Mercenários: preço para contratar (menor, gera mensalidade) e o
+   * valor dessa mensalidade. `valorOriginal`/`moedaPreco` seguem sendo o
+   * preço de COMPRA (vira servo/escravo permanente, sem mensalidade). */
+  contratacao?: PrecoNativoLoja;
+  mensalidade?: PrecoNativoLoja;
 }
 
 const RARIDADES_CONHECIDAS = new Set<ItemRaridadeChave>([
@@ -412,7 +417,7 @@ export function itemCorrespondeSubfiltro(
     // Quem é contratável declara `funcao` no catálogo; quem não declara é fera,
     // servo ou invocação que se compra pelo que faz em combate.
     const funcao = normalizarMarcador(dados.funcao);
-    if (subfiltro === 'Feras e Invocações') return !FUNCOES_MERCENARIO.has(funcao);
+    if (subfiltro === 'Feras e Monstros') return !FUNCOES_MERCENARIO.has(funcao);
     return funcao === normalizarMarcador(SUBFILTRO_PARA_FUNCAO[subfiltro] ?? subfiltro);
   }
 
@@ -491,6 +496,8 @@ export const mapearItemLoja = (entrada: LojaCatalogEntry): LojaItem => {
         : undefined,
     dadosBrutos: c,
     precoAnterior: promocaoValida ? precoAnteriorLido.valorOriginal : undefined,
+    contratacao: categoria === 'Mercenários' ? lerPrecoNativoLoja(c.preco_contratacao) ?? undefined : undefined,
+    mensalidade: categoria === 'Mercenários' ? lerPrecoNativoLoja(c.contrato_mensal) ?? undefined : undefined,
     promocao: promocaoValida ? {
       rotulo: typeof promocaoBruta.rotulo === 'string' && promocaoBruta.rotulo.trim()
         ? promocaoBruta.rotulo.trim().slice(0, 40)

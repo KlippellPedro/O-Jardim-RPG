@@ -13,7 +13,16 @@ export const BANCO_LUNAR_RADIUS = 50;
 export const BANCO_LUNAR_SPEED = 0.025;
 export const BANCO_LUNAR_HEIGHT = 6;
 
-/** Metadados leves compartilhados pelas rotas textuais e pelo visualizador 3D. */
+/**
+ * Metadados leves compartilhados pelas rotas textuais e pelo visualizador 3D.
+ *
+ * Abismo/Erebus NÃO entra aqui: na lore ele deixou de ser uma Árvore que
+ * orbita como as outras e virou o Vazio, o espaço entre todas elas (ver
+ * data/mundo/Abismo/abismo.json e "O Vazio entre as Árvores" em
+ * data/regras/regras.ts). Por isso ele não tem corpo orbital na cena - é
+ * representado pelo próprio espaço escuro ao redor das Árvores, acessível
+ * pelo botão "O Vazio" (ver VAZIO_INFO em vazioInfo.ts).
+ */
 export const COSMIC_TREES: readonly TreeData[] = [
   { id: 'limiar', deidadeId: 'mulher-carmesim', name: 'Limiar', color: '#861c30', radius: 0, speed: 0, modelPath: '/models/trees/mulher-carmesim.glb' },
   { id: 'genese', deidadeId: 'aethel', name: 'Gênese', color: '#d6789c', radius: 8, speed: 0.1, modelPath: '/models/trees/aethel.glb' },
@@ -24,5 +33,4 @@ export const COSMIC_TREES: readonly TreeData[] = [
   { id: 'matriz', deidadeId: 'aperion', name: 'Matriz', color: '#8454bc', radius: 26, speed: 0.06, modelPath: '/models/trees/aperion.glb' },
   { id: 'axis', deidadeId: 'keryx', name: 'A.X.I.S', color: '#35d8ec', radius: 30, speed: 0.15, modelPath: '/models/trees/axis.glb' },
   { id: 'vortice', deidadeId: 'ignis', name: 'Vórtice', color: '#de722a', radius: 35, speed: 0.2, modelPath: '/models/trees/ignis.glb' },
-  { id: 'abismo', deidadeId: 'erebus', name: 'Abismo', color: '#221e28', radius: 40, speed: 0.08, modelPath: '/models/trees/erebus.glb' },
 ];

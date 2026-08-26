@@ -22,7 +22,7 @@ export const RACA_PAGES: Record<string, RacaPageComponent> = {
   auleth: Racas.Auleth,
   automato: Racas.Automato,
   clone: Racas.Clone,
-  errante: Racas.Errante,
+  anomalia: Racas.Anomalia,
   amalgamo: Racas.Amalgamo,
   bruxa: Racas.Bruxa,
   onirico: Racas.Onirico,

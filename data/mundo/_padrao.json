@@ -49,6 +49,11 @@
       "tipo": "personagem (ou soberano, npc)",
       "quantidade": "0 ou mais, avulso",
       "quando_revelar": "Não faz parte da cascata Árvore→Galho→Dimensão - é uma camada solta pra NPCs, soberanos etc. Usado pela primeira vez em data/mundo/Parley (subjulgado)/parley-axis.json, pra representar Keryx como remanescente fraco por baixo da A.X.I.S."
+    },
+    {
+      "tipo": "local",
+      "quantidade": "0 ou mais, avulso",
+      "quando_revelar": "Camada solta pra lugares que não pertencem a nenhuma Árvore - não têm Galho-mãe nem Dimensão-mãe. Usado pela primeira vez em data/mundo/Abismo/abismo.json, pra Bordo e A Saída: o Vazio não é uma Árvore, é o espaço entre elas, então esses dois lugares não se penduram em cascata nenhuma."
     }
   ],
 
@@ -57,12 +62,12 @@
   "arvore_de_referencia_completa": "data/mundo/Gênese/genese.json - primeira Árvore organizada nesse padrão, do início (Deidade) até uma Dimensão, com o guia mais detalhado de como importar tudo de uma vez ou separar entrada por entrada. Use como modelo.",
 
   "status_das_arvores": {
-    "resumo": "As 10 Árvores estão completas - Deidade, Fluxo, pelo menos 1 Galho e pelo menos 1 Dimensão, todos com conteúdo real. Nenhum '_pronto_para_importar': false restante.",
+    "resumo": "As 9 Árvores estão completas - Deidade, Fluxo, pelo menos 1 Galho e pelo menos 1 Dimensão, todos com conteúdo real. Nenhum '_pronto_para_importar': false restante. Abismo (Erebus) NÃO é uma Árvore - é o Vazio, o espaço entre as Árvores - por isso seu pacote só tem Deidade, Fluxo e dois 'local' soltos (Bordo, A Saída), sem Galho/Dimensão.",
     "com_a_cascata_ate_o_nivel_de_LOCAL": [
       "mulher-carmesim (Limiar): Arkarin → Castelo Carmesim → Tribunal, Biblioteca",
       "aethel (Gênese): Realidade 0 → 6 Dimensões → 12 Locais (reinos, vila ninja, orfanato, artefatos)"
     ],
-    "com_a_cascata_ate_DIMENSAO": "As outras 8 Árvores - cada uma com 1 Galho e 1 Dimensão. Elas não têm Locais porque estão paralisadas: são lugares parados, não habitados. Se algum dia forem reabertas, é aí que ganham Locais.",
+    "com_a_cascata_ate_DIMENSAO": "As outras 7 Árvores - cada uma com 1 Galho e 1 Dimensão. Elas não têm Locais porque estão paralisadas: são lugares parados, não habitados. Se algum dia forem reabertas, é aí que ganham Locais.",
     "quanto_do_conteudo_e_do_autor": "Fluxo do Físico, Fluxo da Tecnologia, Fluxo do Fim, Arkarin inteira, Întuneric inteira, Nadalon, Salém, Império, Astraluna, Emberhold, Iwagakure, o Orfanato, Chuva Roxa, Noite Rubra e o Baile das Estações são transcrição do Obsidian. Os 7 Fluxos restantes, os 8 Galhos/Dimensões das Árvores paralisadas, o Coliseu, Espelhos, Sonhar, o Reino dos Anões e 5 dos 10 Soberanos foram escritos do zero - todos marcados com '_origem': 'ESCRITO DO ZERO' na própria entrada, pra ficar claro o que é seu e o que é proposta."
   },
 

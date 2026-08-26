@@ -6,6 +6,7 @@ export const TITULOS_TOPICOS: Record<string, string> = {
   'acoes-coletivas': 'Ações Coletivas',
   'ataques-combinados': 'Ataques Combinados',
   combate: 'Combate',
+  'tipos-de-dano': 'Tipos de Dano',
   distancias: 'Distâncias',
   ferimentos: 'Ferimentos',
   coreografia: 'Coreografia',
@@ -38,8 +39,6 @@ export const TITULOS_TOPICOS: Record<string, string> = {
   'mundo-faccoes': 'Prestígio e Fama',
   mestre: 'Guia do Mestre',
   economia: 'Economia',
-  recompensas: 'Recompensas',
-  conduta: 'Conduta da Mesa',
 };
 
 export const tituloTopico = (key: string, overrides?: Record<string, string>) => (

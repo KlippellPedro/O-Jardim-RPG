@@ -88,7 +88,7 @@ export const Bruxa = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-rose-200/60 max-w-2xl mx-auto font-serif leading-relaxed"
           >
-            Bruxa não é profissão nem gênero: é uma natureza mágica que se adquire e não se devolve. Enxerga maldição, pacto e possessão a distância, tece maldição própria, e quando falta Mana paga com Vida. Fala Celta, e ninguém domina as artes do Fluxo como as de Salém.
+            Bruxa é uma natureza mágica que se adquire e não se perde depois. Enxerga maldição, pacto e possessão a distância, cria as próprias maldições e, quando falta Mana, paga o preço com a própria Vida. Fala Celta.
           </motion.p>
         </motion.header>
 

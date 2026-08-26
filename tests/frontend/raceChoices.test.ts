@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { obterVarianteRacial } from '../../src/services/calculoService';
+import { calcularDerivados, obterVarianteRacial } from '../../src/services/calculoService';
 import { FLUXO_TEMAS } from '../../src/services/magiaService';
 import { escolhaRacialEstaCompleta, obterGruposEscolhaRacial } from '../../src/services/racaService';
 import type { IRaca } from '../../src/types/catalogo';
@@ -26,7 +26,6 @@ const casosEsperados = [
   ['vampiro', 'varianteId', 6],
   ['auleth', 'varianteId', 6],
   ['simbionte', 'varianteId', 4],
-  ['divino', 'varianteId', 5],
   ['mimico', 'varianteId', 4],
   ['onirico', 'varianteId', 5],
 ] as const;
@@ -51,6 +50,56 @@ test('exige uma escolha válida somente quando a raça possui um grupo obrigató
   assert.equal(escolhaRacialEstaCompleta(elfo, { linhagemId: 'natureza' }), true);
   assert.equal(escolhaRacialEstaCompleta(elfo, { linhagemId: 'inexistente' }), false);
   assert.equal(escolhaRacialEstaCompleta(humano, {}), true);
+});
+
+test('Divino separa Natureza Divina e Domínio em duas escolhas obrigatórias', () => {
+  const divino = racas.find(item => item.id === 'divino');
+  assert.ok(divino, 'Divino ausente do catálogo');
+
+  const grupos = obterGruposEscolhaRacial(divino);
+  assert.deepEqual(grupos.map(grupo => [grupo.campo, grupo.opcoes.length]), [
+    ['naturezaDivinaId', 2],
+    ['varianteId', 9],
+  ]);
+  assert.deepEqual(grupos[1].opcoes.map(opcao => opcao.id), [
+    'criacao', 'vida', 'guerra', 'astucia', 'natureza',
+    'conhecimento', 'tempestade', 'luz', 'morte',
+  ]);
+  assert.ok(!grupos[1].opcoes.some(opcao => opcao.id === 'limiar'));
+  assert.equal(escolhaRacialEstaCompleta(divino, { naturezaDivinaId: 'deus' }), false);
+  assert.equal(escolhaRacialEstaCompleta(divino, { varianteId: 'guerra' }), false);
+  assert.equal(escolhaRacialEstaCompleta(divino, { naturezaDivinaId: 'semideus', varianteId: 'guerra' }), true);
+});
+
+test('Deus começa mais forte que Semideus, e ambos mantêm o mesmo Domínio', () => {
+  const divino = racas.find(item => item.id === 'divino') || null;
+  const atributos = {
+    forca: 10, destreza: 10, constituicao: 16,
+    inteligencia: 10, sabedoria: 16, carisma: 10, fluxo: 10,
+  };
+  const semideus = calcularDerivados(atributos, divino, 1, { naturezaDivinaId: 'semideus', varianteId: 'guerra' });
+  const deus = calcularDerivados(atributos, divino, 1, { naturezaDivinaId: 'deus', varianteId: 'guerra' });
+
+  assert.equal(deus.vida, semideus.vida + 6);
+  assert.equal(deus.mana, semideus.mana + 8);
+  assert.equal(deus.defesaNatural, semideus.defesaNatural + 2);
+  assert.equal(obterVarianteRacial(divino, { naturezaDivinaId: 'deus', varianteId: 'guerra' })?.titulo, 'Domínio da Guerra');
+});
+
+test('Onírico nasce em Sonhar e não depende do sonho de uma pessoa', () => {
+  const onirico = racas.find(item => item.id === 'onirico');
+  assert.ok(onirico, 'Onírico ausente do catálogo');
+
+  assert.deepEqual(onirico.formas_aquisicao, ['criacao_autorizada']);
+  assert.equal(onirico.transformacao_em_qualquer_arvore, false);
+  assert.match(String(onirico.origem_onirica?.descricao), /Nasceu em Sonhar/);
+  assert.match(String(onirico.origem_onirica?.descricao), /não pelo sonho de uma pessoa/);
+  assert.equal(onirico.rotulo_variante, 'Parte do Sonhar');
+
+  const textoPublicado = JSON.stringify(onirico);
+  assert.doesNotMatch(textoPublicado, /alguém sonhou com uma pessoa/i);
+  assert.doesNotMatch(textoPublicado, /sonhador acordou/i);
+  assert.doesNotMatch(textoPublicado, /outro sonhador te adotar/i);
 });
 
 test('o cálculo racial reconhece linhagem élfica e condição ancestral', () => {
@@ -128,4 +177,13 @@ test('a raça Simbionte substitui o antigo Miceliano pelo tipo Colônia', () => 
   assert.equal(miceliano, undefined);
   assert.ok(simbionte, 'Raça ausente: simbionte');
   assert.equal(obterVarianteRacial(simbionte, { varianteId: 'colonia' })?.titulo, 'Colônia');
+});
+
+test('a raça Errante virou Anomalia', () => {
+  const errante = racas.find(item => item.id === 'errante');
+  const anomalia = racas.find(item => item.id === 'anomalia');
+
+  assert.equal(errante, undefined);
+  assert.ok(anomalia, 'Raça ausente: anomalia');
+  assert.equal(anomalia.titulo, 'Anomalia');
 });

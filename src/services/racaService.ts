@@ -12,7 +12,7 @@ export function nomeExibicaoRaca(racaId: string | undefined, nomePersonalizado: 
   return tituloCatalogo || '';
 }
 
-export type CampoEscolhaRacial = 'varianteId' | 'linhagemId' | 'condicaoAncestralId';
+export type CampoEscolhaRacial = 'varianteId' | 'linhagemId' | 'condicaoAncestralId' | 'naturezaDivinaId';
 
 export interface GrupoEscolhaRacial {
   campo: CampoEscolhaRacial;
@@ -25,12 +25,21 @@ const CAMPOS_ESCOLHA_RACIAL: CampoEscolhaRacial[] = [
   'varianteId',
   'linhagemId',
   'condicaoAncestralId',
+  'naturezaDivinaId',
 ];
 
 export function obterGruposEscolhaRacial(raca: IRaca | null | undefined): GrupoEscolhaRacial[] {
   if (!raca) return [];
 
   const grupos: GrupoEscolhaRacial[] = [];
+  if (Array.isArray(raca.naturezas_divinas) && raca.naturezas_divinas.length > 0) {
+    grupos.push({
+      campo: 'naturezaDivinaId',
+      rotulo: raca.rotulo_natureza_divina || 'Natureza Divina',
+      descricao: raca.descricao_naturezas_divinas || 'Escolha se o personagem é Deus ou Semideus.',
+      opcoes: raca.naturezas_divinas,
+    });
+  }
   if (Array.isArray(raca.variantes) && raca.variantes.length > 0) {
     grupos.push({
       campo: 'varianteId',
@@ -87,6 +96,18 @@ export function obterOpcaoRacialSelecionada(
   return null;
 }
 
+/** Todas as escolhas raciais válidas do personagem. Algumas raças, como o
+ * Divino, pedem mais de uma escolha e precisam somar os efeitos de todas elas. */
+export function obterOpcoesRaciaisSelecionadas(
+  raca: IRaca | null | undefined,
+  escolhaRacial: Record<string, unknown> | null | undefined,
+): IOpcaoRacial[] {
+  return obterGruposEscolhaRacial(raca).flatMap(grupo => {
+    const selecionada = grupo.opcoes.find(opcao => opcao.id === escolhaRacial?.[grupo.campo]);
+    return selecionada ? [selecionada] : [];
+  });
+}
+
 /** Nível total a partir do qual o traço passa a valer. Sem o campo, vale desde
  * o começo - é o caso de quase todo o catálogo. */
 export function nivelMinimoTraco(traco: ICaracteristicaRacial | IOpcaoRacial): number {
@@ -126,10 +147,10 @@ export function obterTracosRaciaisDisponiveis(
   nivel: number,
 ): ICaracteristicaRacial[] {
   if (!raca) return [];
-  const opcao = obterOpcaoRacialSelecionada(raca, escolhaRacial);
+  const opcoes = obterOpcoesRaciaisSelecionadas(raca, escolhaRacial);
   const tracos = [
     ...(raca.caracteristicas || []),
-    ...(opcao ? obterTracosOpcaoRacial(opcao) : []),
+    ...opcoes.flatMap(obterTracosOpcaoRacial),
     ...obterEstagiosRaciaisAlcancados(raca, nivel).flatMap(estagio => estagio.caracteristicas || []),
   ];
   return tracos.filter(traco => tracoDisponivelNoNivel(traco, nivel));

@@ -30,4 +30,6 @@ export const CLASSE_PAGES: Record<string, ClassePageComponent> = {
   sintonizador: Classes.Sintonizador,
   ritualista: Classes.Ritualista,
   interceptador: Classes.Interceptador,
+  detetive: Classes.Detetive,
+  devorador: Classes.Devorador,
 };

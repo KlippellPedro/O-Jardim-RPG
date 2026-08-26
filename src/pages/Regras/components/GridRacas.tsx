@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Search, Sparkles, UserCircle, X } from 'lucide-react';
+import { ArrowRight, BookOpen, Search, Sparkles, UserCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { IRaca } from '../../../types/catalogo';
 import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
@@ -41,13 +41,23 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
         descricao: 'Não pertencem a nenhuma Árvore em particular. Podem nascer em qualquer uma delas, e não dependem de ninguém liberar.',
         racas: racas.filter(raca => raca.categoria === 'padrao'),
         especial: false,
+        entidade: false,
       },
       {
         id: 'especiais',
         titulo: 'Raças Especiais',
-        descricao: 'Nascem mais fortes, só existem nas Árvores indicadas e o Mestre precisa liberar antes. Não é conteúdo de criação: é conteúdo que se conquista.',
-        racas: racas.filter(raca => raca.categoria !== 'padrao'),
+        descricao: 'Têm regras e origens próprias, só existem nas Árvores indicadas e precisam ser liberadas pelo Mestre. O acesso acontece por criação autorizada ou conquista na história.',
+        racas: racas.filter(raca => raca.categoria !== 'padrao' && raca.id !== 'entidade'),
         especial: true,
+        entidade: false,
+      },
+      {
+        id: 'entidades',
+        titulo: 'Entidades',
+        descricao: 'Entidade não é uma raça mecânica e não concede atributos ou poderes. O cartão leva ao Livro das Entidades, onde cada existência é apresentada por meio de seu conto.',
+        racas: racas.filter(raca => raca.id === 'entidade'),
+        especial: false,
+        entidade: true,
       },
     ];
     if (!termo) return base;
@@ -96,7 +106,8 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
             className="mb-6 border-l-2 border-yellow-600/60 pl-4"
           >
             <h2 className="flex items-center gap-2 text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>
-              {grupo.especial && <Sparkles size={20} className="text-violet-400" />}
+              {grupo.entidade ? <BookOpen size={20} className="text-cyan-300" /> : null}
+              {grupo.especial ? <Sparkles size={20} className="text-violet-400" /> : null}
               {grupo.titulo}
             </h2>
             <p className="mt-1 max-w-3xl text-sm leading-relaxed text-gray-400">{grupo.descricao}</p>
@@ -106,6 +117,7 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
             {grupo.racas.map((raca, idx) => {
               const arvores = nomesArvores(raca);
               const tema = obterTemaPorId(raca.id);
+              const abreLivroEntidades = raca.id === 'entidade';
 
               return (
                 <PremiumCard
@@ -114,7 +126,7 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.28, delay: Math.min(idx * 0.03, 0.24) }}
-                  onClick={() => navigate(`/regras/racas/${raca.id}`)}
+                  onClick={() => navigate(abreLivroEntidades ? '/entidades' : `/regras/racas/${raca.id}`)}
                   className={`content-auto-list-item cursor-pointer min-h-[180px] p-6 text-left shadow-lg border ${tema.border} ${tema.bg}`}
                 >
                   {/* Background glow blob */}
@@ -131,8 +143,10 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
                       <UserCircle size={20} className={tema.icon} />
                       {raca.titulo}
                     </h3>
-                    <p className="mb-3 text-sm text-gray-400">{formatarAjustesRaciais(raca)}</p>
-                    {grupo.especial && (
+                    <p className="mb-3 text-sm text-gray-400">
+                      {abreLivroEntidades ? 'Sem atributos ou poderes · existência por meio de contos' : formatarAjustesRaciais(raca)}
+                    </p>
+                    {grupo.especial && !abreLivroEntidades && (
                       <p className={`text-xs font-bold uppercase tracking-wider ${tema.tag}`}>
                         {arvores ? `Árvores: ${arvores}` : 'Árvore definida pelo Mestre'}
                       </p>
@@ -140,7 +154,7 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
                   </div>
 
                   <div className={`mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest ${tema.icon}`}>
-                    Ver ficha fisiológica <ArrowRight size={14} />
+                    {abreLivroEntidades ? 'Abrir o Livro das Entidades' : 'Ver ficha fisiológica'} <ArrowRight size={14} />
                   </div>
                 </PremiumCard>
               );

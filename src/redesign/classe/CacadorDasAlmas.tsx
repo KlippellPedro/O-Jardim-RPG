@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Ghost, ShieldX, Eye, Gauge } from 'lucide-react';
+import { Gauge, Sparkles, Sword, Wind } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -13,11 +13,11 @@ export const CacadorDasAlmas = ({ classe }: { classe: IClasse }) => {
       {/* 3D WebGL Background */}
       <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/cacadordeentidades_bg.webp')" }} />
 
-      {/* Exorcism / Banishing Background Effects */}
+      {/* Spiritual pressure background effects */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-[20%] left-[20%] w-[50%] h-[50%] bg-red-900/20 blur-[150px] mix-blend-screen" />
         
-        {/* Banishing chains/seals */}
+        {/* Concentric spiritual pressure */}
         {[...Array(3)].map((_, i) => (
           <motion.div
             key={i}
@@ -48,7 +48,7 @@ export const CacadorDasAlmas = ({ classe }: { classe: IClasse }) => {
             className={`w-28 h-28 mx-auto ${tema.bg} border-2 ${tema.border} rounded-lg flex items-center justify-center mb-8 relative backdrop-blur-md`}
             style={{ boxShadow: `0 0 40px ${tema.glow}` }}
           >
-            <ShieldX size={48} className={`${tema.icon} z-10`} strokeWidth={1.5} />
+            <Sword size={48} className={`${tema.icon} z-10`} strokeWidth={1.5} />
           </motion.div>
 
           <motion.div className="overflow-hidden">
@@ -68,7 +68,7 @@ export const CacadorDasAlmas = ({ classe }: { classe: IClasse }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className={`text-lg ${tema.tag} opacity-80 max-w-2xl mx-auto font-medium leading-relaxed`}
           >
-            Inquisidores implacáveis do oculto. Eles se especializam em caçar e suprimir o que ataca por dentro, barrando fuga incorpórea e expurgando possessões da alma alheia.
+            Ceifeiros armados com lâminas que têm nome e vontade. Eles patrulham a fronteira entre vivos e mortos, purificam almas corrompidas e despertam formas cada vez mais completas da própria Zanpakutō.
           </motion.p>
         </motion.header>
 
@@ -82,10 +82,10 @@ export const CacadorDasAlmas = ({ classe }: { classe: IClasse }) => {
             transition={{ duration: 0.5 }}
             className={`flex flex-col p-8 rounded-none ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <Eye size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Leitura da Alma</h3>
+            <Sword size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Zanpakutō</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              O conceito central da classe: perceba presença espiritual à distância e identifique possessão ou corrupção de cara. Com o tempo, causa mais dano contra possuidores, descobre a fraqueza deles ao estudar, e no auge marca um alvo pra queda de toda Resistência espiritual do grupo.
+              Uma arma vinculada à sua alma, capaz de ferir o incorpóreo e voltar quando é perdida. Descubra seu nome, escolha um aspecto próprio e libere o Shikai antes de alcançar sua forma verdadeira.
             </p>
           </PremiumCard>
 
@@ -97,10 +97,10 @@ export const CacadorDasAlmas = ({ classe }: { classe: IClasse }) => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className={`flex flex-col p-8 rounded-none ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <ShieldX size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Selos de Contenção</h3>
+            <Wind size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Quatro Artes</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Prepare um selo após cada descanso (mais um por estágio), e aprenda um Tipo de Selo por estágio: Silêncio cala o preso, Exaustão desgasta ele, Vigília avisa você a distância e Amplificado dobra a área. Aplicado em 3 m, o selo impede teleporte ou incorporeidade por uma rodada contra a sua DT.
+              Aprenda Zanjutsu para dominar a lâmina, Hohō para cruzar o campo num passo, Kidō para impor sua pressão espiritual e Hakuda para lutar mesmo sem a arma em mãos.
             </p>
           </PremiumCard>
 
@@ -112,10 +112,10 @@ export const CacadorDasAlmas = ({ classe }: { classe: IClasse }) => {
             transition={{ duration: 0.5, delay: 0.4 }}
             className={`flex flex-col p-8 rounded-none ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <Ghost size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Exorcismo</h3>
+            <Sparkles size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Bankai</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Uma vez por descanso longo, conduza um ritual de três rodadas e faça Misticismo contra a Vontade do possuidor para expulsar a possessão. Em caso de falha, ao menos a suprima por uma rodada.
+              No nível 20, manifeste a forma completa da Zanpakutō por três rodadas. A Bankai ativa o Shikai sem custo, rompe Resistências e evolui o aspecto escolhido para uma manifestação única.
             </p>
           </PremiumCard>
 
@@ -142,4 +142,3 @@ export const CacadorDasAlmas = ({ classe }: { classe: IClasse }) => {
 };
 
 export default CacadorDasAlmas;
-

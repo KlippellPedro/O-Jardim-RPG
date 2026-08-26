@@ -88,7 +88,7 @@ export const Piloto = ({ classe }: { classe: IClasse }) => {
             <div>
               <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Meu Xodó</h3>
               <p className="text-cyan-100/60 leading-relaxed text-sm">
-                O bônus que ele te dá vale em toda rolagem de Pilotagem: manobra, perseguição, fuga. Começa em +1 e chega a +5, e no caminho vêm o compartimento secreto, a travessia de terreno ruim sem perder deslocamento e o dispositivo que salva uma falha crítica por sessão.
+                Escolha um único veículo como seu Xodó; trocar exige um descanso longo ajustando o novo. Ao conduzi-lo, o bônus vale em toda rolagem de Pilotagem: manobra, perseguição e fuga. Começa em +1 e chega a +5, e no caminho vêm o compartimento secreto, a travessia de terreno ruim sem perder deslocamento e o dispositivo que salva uma falha crítica por sessão.
               </p>
             </div>
           </PremiumCard>
@@ -151,4 +151,3 @@ export const Piloto = ({ classe }: { classe: IClasse }) => {
 };
 
 export default Piloto;
-

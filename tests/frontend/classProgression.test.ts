@@ -38,8 +38,8 @@ const obterClasse = (id: string) => {
   return classe;
 };
 
-test('publica as 26 classes com orçamento base consistente', () => {
-  assert.equal(classes.length, 26);
+test('publica as 28 classes com orçamento base consistente', () => {
+  assert.equal(classes.length, 28);
   for (const classe of classes) {
     assert.equal(classe.vida + classe.mana, 7, `Orçamento inválido em ${classe.titulo}`);
     assert.equal(classe.recursos_provisorios, false, `Classe provisória: ${classe.titulo}`);
@@ -137,12 +137,12 @@ test('Ação Completa usada pelas habilidades possui custo definido', () => {
   assert.match(combate.corpo, /Ação Completa:<\/strong> consome a Ação Padrão e a Ação de Movimento/i);
 });
 
-test('separa 17 classes comuns e 9 especiais por Árvore', () => {
+test('separa 18 classes comuns e 10 especiais por Árvore', () => {
   const common = classes.filter(classe => classe.categoria === 'padrao');
   const special = classes.filter(classe => classe.categoria !== 'padrao');
 
-  assert.equal(common.length, 17);
-  assert.equal(special.length, 9);
+  assert.equal(common.length, 18);
+  assert.equal(special.length, 10);
   assert.ok(common.every(classe => classe.disponibilidade === 'geral' && classe.arvore === null));
   assert.ok(common.every(classe => !classe.arvores?.length));
   assert.ok(special.every(classe => classe.disponibilidade === 'restrita'));
@@ -151,12 +151,102 @@ test('separa 17 classes comuns e 9 especiais por Árvore', () => {
 
   for (const tree of ARVORES) {
     const available = filtrarPorArvore(classes, tree.id);
-    assert.equal(available.filter(classe => classe.categoria === 'padrao').length, 17);
+    assert.equal(available.filter(classe => classe.categoria === 'padrao').length, 18);
     assert.ok(
       available.some(classe => classe.categoria !== 'padrao'),
       `Árvore sem classe especial: ${tree.nome}`,
     );
   }
+});
+
+test('classes comuns publicam limites para suas mecânicas mais abertas', () => {
+  const guerreiro = obterClasse('guerreiro');
+  const batalhao = guerreiro.habilidades?.find(item => item.id === 'batalhao');
+  assert.match(batalhao?.descricao || '', /Levanta! no nível 4 é a única exceção/i);
+  assert.match(
+    batalhao?.opcoes?.find(item => item.id === 'ninguem-passa')?.escalonamento || '',
+    /segundo ataque não gasta outra Reação/i,
+  );
+
+  const piloto = obterClasse('piloto');
+  assert.match(
+    piloto.habilidades?.find(item => item.id === 'meu-xodo')?.descricao || '',
+    /só pode manter um por vez/i,
+  );
+
+  const ninja = obterClasse('ninja');
+  const armaNinja = ninja.habilidades?.find(item => item.id === 'arma-ninja');
+  assert.match(armaNinja?.descricao || '', /somente quando concede um bônus numérico/i);
+  assert.match(armaNinja?.descricao || '', /só funcionam uma vez por arma/i);
+
+  const lutador = obterClasse('lutador');
+  const marcas = lutador.habilidades
+    ?.find(item => item.id === 'instinto-de-combate')
+    ?.estagios?.find(item => item.nivel === 10);
+  assert.match(marcas?.descricao || '', /uma por turno em cada alvo/i);
+  assert.doesNotMatch(marcas?.descricao || '', /uma por alvo\./i);
+
+  const atirador = obterClasse('atirador');
+  const marcaDaMira = atirador.habilidades
+    ?.find(item => item.id === 'na-mira')
+    ?.estagios?.find(item => item.nivel === 5);
+  assert.equal(marcaDaMira?.usos, 'Uma vez por turno');
+  assert.match(marcaDaMira?.descricao || '', /só mantém uma marca/i);
+  assert.match(
+    atirador.habilidades?.find(item => item.id === 'disparo-calculado')?.descricao || '',
+    /não atravessa cobertura total/i,
+  );
+
+  const medico = obterClasse('medico');
+  const segundaChance = medico.habilidades
+    ?.find(item => item.id === 'medicina')
+    ?.opcoes?.find(item => item.id === 'segunda-chance');
+  assert.match(segundaChance?.descricao || '', /some \+1d6 à cura/i);
+  assert.doesNotMatch(segundaChance?.descricao || '', /ignora Resistência/i);
+
+  const guardiao = obterClasse('guardiao');
+  const protegidoNivel5 = guardiao.habilidades
+    ?.find(item => item.id === 'protegido')
+    ?.estagios?.find(item => item.nivel === 5);
+  assert.match(protegidoNivel5?.descricao || '', /dividir o dano antes das Resistências/i);
+  assert.match(
+    guardiao.habilidades?.find(item => item.id === 'castelo')?.descricao || '',
+    /use sua Reação para se tornar o alvo/i,
+  );
+});
+
+test('Sintonizador, Ritualista e Detetive explicitam custos e exceções', () => {
+  const sintonizador = obterClasse('sintonizador');
+  assert.match(
+    sintonizador.habilidades?.find(item => item.id === 'fusao-controlada')?.descricao || '',
+    /Reativá-lo exige os dez minutos fora de combate de Sintonia Catalisada/i,
+  );
+  assert.match(
+    sintonizador.habilidades?.find(item => item.id === 'convergencia-segura')?.descricao || '',
+    /sem desativá-lo/i,
+  );
+
+  const ritualista = obterClasse('ritualista');
+  const grandeOficiante = ritualista.habilidades?.find(item => item.id === 'grande-oficiante');
+  assert.match(grandeOficiante?.descricao || '', /exceção explícita.*em combate/i);
+  assert.match(grandeOficiante?.descricao || '', /Ação Completa em cada um dos seus três turnos/i);
+  assert.match(grandeOficiante?.descricao || '', /permaneça Concentrando/i);
+
+  const detetive = obterClasse('detetive');
+  const casoEncerrado = detetive.habilidades?.find(item => item.id === 'caso-encerrado');
+  assert.match(casoEncerrado?.descricao || '', /apenas confirma o erro/i);
+  assert.match(casoEncerrado?.descricao || '', /não revela a resposta correta/i);
+
+  for (const id of ['golpe-certeiro-de-logica', 'sexto-sentido']) {
+    const poder = detetive.poderes?.find(item => item.id === id);
+    assert.notEqual(poder?.acao, 'Passivo', `${poder?.titulo} cobra Mana e precisa declarar o gatilho`);
+    assert.match(poder?.descricao || '', new RegExp(`${poder?.custo_mana} Mana`, 'i'));
+  }
+
+  assert.match(
+    detetive.poderes?.find(item => item.id === 'instinto-de-perigo')?.descricao || '',
+    /exceção à restrição de Reações de Surpreendido/i,
+  );
 });
 
 test('mantém o mapa temático das classes especiais', () => {
@@ -170,7 +260,7 @@ test('mantém o mapa temático das classes especiais', () => {
     aperion: ['cartista-arcano', 'guia-dimensional', 'invocador', 'viajante-classe'],
     chronus: ['cartista-arcano', 'invocador', 'viajante-classe'],
     erebus: ['cartista-arcano', 'invocador', 'pirata-amaldicoado'],
-    'mulher-carmesim': ['cartista-arcano', 'escritor-de-contos', 'invocador'],
+    'mulher-carmesim': ['cartista-arcano', 'devorador', 'escritor-de-contos', 'invocador'],
   };
 
   for (const [treeId, ids] of Object.entries(expected)) {
@@ -219,7 +309,7 @@ test('distingue material enviado de propostas originais', () => {
   const proposed = classes.filter(classe => classe.origem_conteudo === 'proposta_original_balanceada');
 
   assert.equal(revised.length, 14);
-  assert.equal(proposed.length, 12);
+  assert.equal(proposed.length, 14);
   assert.deepEqual(
     proposed.map(classe => classe.id).sort(),
     [
@@ -228,6 +318,8 @@ test('distingue material enviado de propostas originais', () => {
       'canalizador',
       'comerciante',
       'cozinheiro',
+      'detetive',
+      'devorador',
       'escritor-de-contos',
       'guia-dimensional',
       'interceptador',
@@ -405,7 +497,7 @@ test('Engenheiro sem escolha feita mostra as vagas livres na ficha', () => {
 
 // Classes já revisadas no molde do Engenheiro: catálogo de escolha publicado,
 // ficha técnica preenchida, DT declarada e perícia concedida pela classe.
-const CLASSES_POLIDAS = ['engenheiro', 'alquimista', 'cozinheiro', 'comerciante', 'ritualista', 'pop-star', 'lutador', 'guerreiro', 'piloto', 'pirata-amaldicoado', 'ninja', 'atirador', 'medico', 'espadachim', 'guardiao', 'cacador', 'canalizador', 'sintonizador', 'campeao-dimensional', 'cartista-arcano', 'guia-dimensional', 'cacador-das-almas', 'escritor-de-contos', 'invocador'];
+const CLASSES_POLIDAS = ['engenheiro', 'alquimista', 'cozinheiro', 'comerciante', 'ritualista', 'pop-star', 'lutador', 'guerreiro', 'piloto', 'pirata-amaldicoado', 'ninja', 'atirador', 'medico', 'espadachim', 'guardiao', 'cacador', 'canalizador', 'sintonizador', 'campeao-dimensional', 'cartista-arcano', 'guia-dimensional', 'cacador-das-almas', 'escritor-de-contos', 'invocador', 'viajante-classe', 'interceptador', 'detetive', 'devorador'];
 
 // Um efeito que manda o alvo testar resistência sem dizer contra qual número
 // para a mesa: ou o texto aponta a DT, ou a classe define de onde ela sai.
@@ -1782,6 +1874,7 @@ test('classes comuns usam cinco graus de Vida/Mana dentro do mesmo orçamento de
     ninja: [4, 3],
     atirador: [4, 3],
     cacador: [4, 3],
+    detetive: [4, 3],
     'pop-star': [3, 4],
     medico: [3, 4],
     engenheiro: [3, 4],
@@ -1897,29 +1990,54 @@ test('Guia Dimensional publica os quatro Tipos de Âncora como catálogo e a DT 
   assert.match(quedaLateral?.descricao || '', /DT do Guia Dimensional/);
 });
 
-test('Caçador de Entidades virou Caçador das Almas: sem menção à raça, foco em possessão, e catálogo de Tipos de Selo', () => {
+test('Caçador das Almas publica Zanpakutō, Shikai, as quatro artes e Bankai', () => {
   assert.equal(classes.some(classe => classe.id === 'cacador-de-entidades'), false);
   const cacador = obterClasse('cacador-das-almas');
   assert.equal(cacador.titulo, 'Caçador das Almas');
   assert.equal(cacador.dt_efeitos?.pericia, 'misticismo');
 
-  // Nenhum texto da classe cita "entidade" - o alvo dela é o possuidor, não uma raça.
+  // O nome antigo não volta: a classe caça e purifica almas, não uma raça jogável.
   const textoClasse = JSON.stringify(cacador);
   assert.doesNotMatch(textoClasse, /entidade/i);
 
-  const selos = cacador.habilidades?.find(item => item.id === 'selos-de-contencao');
-  assert.ok(selos);
-  assert.equal(selos.escolha_opcoes?.por_estagio, 1);
-  assert.equal(vagasEscolhaHabilidade(selos, 20), 4);
+  const zanpakuto = cacador.habilidades?.find(item => item.id === 'zanpakuto');
+  assert.ok(zanpakuto);
+  assert.deepEqual(zanpakuto.estagios?.map(item => item.titulo), [
+    'Asauchi',
+    'Nome da Lâmina',
+    'Shikai',
+    'Shikai Dominado',
+    'Forma Verdadeira',
+  ]);
+  assert.deepEqual(zanpakuto.escolha_opcoes?.niveis_vaga, [10]);
+  assert.equal(zanpakuto.escolha_opcoes?.permanente, true);
+  assert.equal(vagasEscolhaHabilidade(zanpakuto, 9), 0);
+  assert.equal(vagasEscolhaHabilidade(zanpakuto, 10), 1);
+  assert.equal(zanpakuto.opcoes?.length, 6);
+  for (const aspecto of zanpakuto.opcoes || []) {
+    assert.match(aspecto.descricao, /Shikai:/);
+    assert.match(aspecto.escalonamento || '', /Bankai:/);
+  }
+
+  const treinamento = cacador.habilidades?.find(item => item.id === 'treinamento-de-ceifeiro');
+  assert.ok(treinamento);
+  assert.equal(treinamento.escolha_opcoes?.por_estagio, 1);
+  assert.equal(vagasEscolhaHabilidade(treinamento, 20), 4);
   assert.deepEqual(
-    [...(selos.opcoes || [])].map(item => item.titulo).sort(),
-    ['Selo Amplificado', 'Selo de Exaustão', 'Selo de Silêncio', 'Selo de Vigília'],
+    [...(treinamento.opcoes || [])].map(item => item.titulo).sort(),
+    ['Hakuda', 'Hohō', 'Kidō', 'Zanjutsu'],
   );
 
-  const jaulaAnimica = cacador.poderes?.find(item => item.id === 'jaula-animica');
-  assert.match(jaulaAnimica?.descricao || '', /Imobilizado/);
-  assert.doesNotMatch(jaulaAnimica?.descricao || '', /\bImóvel\b/);
-  assert.match(jaulaAnimica?.descricao || '', /DT do Caçador das Almas/);
+  const final = cacador.progressao?.find(item => item.nivel === 20)
+    ?.recompensas.find(item => item.tipo === 'habilidade_final');
+  assert.equal(final?.titulo, 'Bankai');
+  const bankai = cacador.habilidades?.find(item => item.id === 'bankai');
+  assert.match(bankai?.descricao || '', /uma vez por sessão/i);
+  assert.match(bankai?.descricao || '', /Shikai/);
+
+  for (const id of ['passo-relampago', 'pressao-espiritual', 'hado-raio-branco', 'bakudo-seis-luzes']) {
+    assert.ok(cacador.poderes?.some(item => item.id === id), `Referência espiritual ausente: ${id}`);
+  }
 });
 
 test('Escritor de Contos publica os quatro Arquétipos de Contato como catálogo e a DT sai de Enganação', () => {
@@ -2082,5 +2200,103 @@ test('Formas Vinculadas do Invocador escala por nível como o Batalhão do Guerr
   for (const opcao of formas.opcoes || []) {
     const niveis = [...(opcao.escalonamento || '').matchAll(/Nível ([2-4]):/g)].map(item => Number(item[1]));
     assert.deepEqual(niveis, [2, 3, 4], `${opcao.titulo}: progressão incompleta pelos níveis 2 a 4`);
+  }
+});
+
+test('Viajante publica Lições da Estrada como catálogo e a DT sai de Sobrevivência', () => {
+  const viajante = obterClasse('viajante-classe');
+  assert.equal(viajante.dt_efeitos?.pericia, 'sobrevivencia');
+  assert.equal(viajante.progressao_magia, undefined, 'Viajante não conjura, só usa Mana em poderes');
+
+  const licoes = viajante.habilidades?.find(item => item.id === 'licoes-da-estrada');
+  assert.ok(licoes);
+  assert.equal((licoes.opcoes || []).length, 8, 'Catálogo de Lições da Estrada incompleto');
+  assert.equal(new Set(licoes.opcoes?.map(item => item.id)).size, licoes.opcoes?.length, 'Lição repetida');
+  assert.equal(licoes.escolha_opcoes?.por_estagio, 1);
+  assert.equal(licoes.escolha_opcoes?.repetivel, false);
+  assert.equal(vagasEscolhaHabilidade(licoes, 20), 4, 'quatro lições entre os níveis 3 e 20');
+
+  for (const opcao of licoes.opcoes || []) {
+    assert.ok(opcao.acao, `${opcao.titulo}: sem ação declarada`);
+    assert.ok(opcao.alcance, `${opcao.titulo}: sem alcance declarado`);
+    assert.ok(opcao.duracao, `${opcao.titulo}: sem duração declarada`);
+  }
+
+  // As perícias das lições precisam existir no catálogo fixo - nada de "Comércio"/"Persuasão"
+  // inventados, o mesmo erro que já apareceu em outras classes revisadas.
+  const textoCompleto = JSON.stringify(viajante);
+  for (const nome of ['Comércio', 'Persuasão']) {
+    assert.doesNotMatch(textoCompleto, new RegExp(nome), `Viajante cita "${nome}", que não existe no catálogo de perícias`);
+  }
+});
+
+test('Sem Fronteiras do Viajante cobra Ação de Movimento pra teleportar, e Horizonte Aberto não cita a condição inexistente "Perdido"', () => {
+  const viajante = obterClasse('viajante-classe');
+  const semFronteiras = viajante.habilidades?.find(item => item.id === 'sem-fronteiras');
+  assert.ok(semFronteiras);
+  assert.match(semFronteiras.descricao || '', /uma vez por sessão/i);
+  assert.match(semFronteiras.descricao || '', /gastar a própria Ação de Movimento/, 'teleporte precisa custar uma ação, não ser de graça');
+  assert.doesNotMatch(semFronteiras.descricao || '', /sem gastar ação/i);
+
+  const horizonteAberto = viajante.poderes?.find(item => item.id === 'horizonte-aberto');
+  assert.ok(horizonteAberto);
+  assert.doesNotMatch(horizonteAberto.descricao || '', /\bPerdidos?\b/, '"Perdido" não é condição oficial do livro');
+
+  // O poder "Mochila Impossível" e "Dormir em Qualquer Lugar" citavam "Passivo." dentro do texto,
+  // marcação redundante com o campo `acao` que já existe - mesmo bug que o Ninja teve. Os dois
+  // custam 0 de Mana, então "Passivo" é coerente com o campo `acao`.
+  for (const id of ['mochila-impossivel', 'dormir-em-qualquer-lugar']) {
+    const poder = viajante.poderes?.find(item => item.id === id);
+    assert.equal(poder?.custo_mana, 0);
+    assert.equal(poder?.acao, 'Passivo');
+    assert.doesNotMatch(poder?.descricao || '', /^Passivo\./i);
+  }
+
+  // "Carona" custa 4 de Mana pra ativar - não pode ser "Passivo" (isso é oq
+  // efeito de custo zero e sempre ligado tem). Marcá-lo como Passivo escondia
+  // que era preciso gastar Mana pra ligar o efeito em cada viagem.
+  const carona = viajante.poderes?.find(item => item.id === 'carona');
+  assert.ok(carona?.custo_mana && carona.custo_mana > 0, 'Carona precisa custar Mana pra valer a pena existir como poder');
+  assert.notEqual(carona?.acao, 'Passivo', 'poder com custo de Mana não pode ser Passivo');
+});
+
+test('Interceptador publica Hackear Fluxo como catálogo e distingue a DT do Interceptador da DT de conjuração', () => {
+  const interceptador = obterClasse('interceptador');
+  assert.equal(interceptador.dt_efeitos?.pericia, 'misticismo');
+  assert.equal(interceptador.progressao_magia, undefined, 'Interceptador não conjura, só atrapalha quem conjura');
+  assert.match(interceptador.dt_efeitos?.descricao || '', /DT de conjuração/, 'precisa distinguir a DT do Interceptador da DT de conjuração da magia interceptada');
+
+  const hackear = interceptador.habilidades?.find(item => item.id === 'hackear-fluxo');
+  assert.ok(hackear);
+  assert.equal((hackear.opcoes || []).length, 6, 'Catálogo de técnicas de Hackear Fluxo incompleto');
+  assert.equal(new Set(hackear.opcoes?.map(item => item.id)).size, hackear.opcoes?.length, 'Técnica repetida');
+  assert.equal(hackear.escolha_opcoes?.por_estagio, 1);
+  assert.equal(hackear.escolha_opcoes?.repetivel, false);
+  assert.equal(vagasEscolhaHabilidade(hackear, 20), 4, 'quatro técnicas entre os níveis 3 e 20');
+
+  for (const opcao of hackear.opcoes || []) {
+    assert.ok(opcao.acao, `${opcao.titulo}: sem ação declarada`);
+    assert.ok(opcao.alcance, `${opcao.titulo}: sem alcance declarado`);
+    assert.ok(opcao.duracao, `${opcao.titulo}: sem duração declarada`);
+  }
+
+  // Acesso Administrador precisa referenciar as técnicas de Hackear Fluxo já aprendidas, em vez de
+  // listar uma segunda vez com nomes diferentes (cancelar/redirecionar/suspender, como antes).
+  const capstone = interceptador.habilidades?.find(item => item.id === 'acesso-administrador');
+  assert.match(capstone?.descricao || '', /técnicas? de Hackear Fluxo/i);
+  assert.match(capstone?.descricao || '', /uma vez por sessão/i);
+});
+
+test('poderes do Interceptador não têm "Passivo." embutido no texto e Cortar Concentração aponta pra DT do Interceptador', () => {
+  const interceptador = obterClasse('interceptador');
+  const registroForense = interceptador.poderes?.find(item => item.id === 'registro-forense');
+  assert.equal(registroForense?.acao, 'Passivo');
+  assert.doesNotMatch(registroForense?.descricao || '', /^Passivo\./i);
+
+  const cortarConcentracao = interceptador.poderes?.find(item => item.id === 'cortar-concentracao');
+  assert.match(cortarConcentracao?.descricao || '', /DT do Interceptador/);
+
+  for (const poder of interceptador.poderes || []) {
+    assert.ok(poder.acao, `${poder.titulo}: sem ação declarada`);
   }
 });

@@ -1,10 +1,16 @@
 import { MUNDO_CATALOG } from '../gerado/mundoCatalog';
 
 /**
- * As 10 Árvores do jogo. O `id` é o mesmo id da Deidade padroeira em
- * `mundoCatalog.ts` (ex.: "aethel", "erebus") - é esse esquema que
- * `data/ficha/racas.json`/`classes.json` já usam nos campos `arvore`/
- * `arvores`, então reaproveitá-lo evita mais um mapeamento de ids.
+ * As 9 Árvores do jogo, mais Abismo/"erebus" - que na lore NÃO é uma Árvore
+ * (é o Vazio, o espaço entre as Árvores; ver data/mundo/Abismo/abismo.json e
+ * "O Vazio entre as Árvores" em data/regras/regras.ts), mas continua nesta
+ * lista porque mecanicamente um personagem ainda pode se originar dele -
+ * raças/classes com `arvore`/`arvores` incluindo "erebus" continuam válidas,
+ * e a ficha ainda precisa de uma entrada pra exibir "Abismo" como origem.
+ * O `id` é o mesmo id da Deidade padroeira em `mundoCatalog.ts`
+ * (ex.: "aethel", "erebus") - é esse esquema que `data/ficha/racas.json`/
+ * `classes.json` já usam nos campos `arvore`/`arvores`, então reaproveitá-lo
+ * evita mais um mapeamento de ids.
  * Este é o catálogo ativo e canônico da interface React.
  */
 export interface ArvoreEntry {
@@ -28,7 +34,7 @@ export interface ArvoreEntry {
  * Gênese rosa, Alétheia amarelo, A.X.I.S azul-neon, Anima verde, Vórtice
  * laranja, Baluarte marrom, Matriz roxo, Éon dourado envelhecido, Abismo
  * preto, Limiar vermelho vinho. Antes deste arquivo divergir, existiam
- * QUATRO paletas diferentes no projeto para as mesmas 10 Árvores.
+ * QUATRO paletas diferentes no projeto para as mesmas Árvores.
  */
 export const ARVORES: ArvoreEntry[] = [
   { id: 'aethel', nome: 'Gênese', deidadeTitulo: 'Aethel', rgb: '214,120,156', cor: 'from-pink-400/20 to-rose-300/5' },
@@ -55,7 +61,7 @@ export function corDaArvore(arvoreId: string): string {
   return ARVORES.find((a) => a.id === arvoreId)?.rgb || '160,160,170';
 }
 
-/** Sentinela pra "Sem Árvore": não é uma das 10 Árvores reais (não entra em
+/** Sentinela pra "Sem Árvore": não é uma das Árvores reais (não entra em
  * `ARVORES`), é usada quando a Árvore do jogador não quer ser revelada ainda.
  * Um personagem sem Árvore tem acesso a todas as raças e classes disponíveis. */
 export const SEM_ARVORE_ID = 'sem-arvore';

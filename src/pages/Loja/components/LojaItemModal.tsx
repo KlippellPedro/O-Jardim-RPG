@@ -11,7 +11,7 @@ import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 interface LojaItemModalProps {
   item: LojaItem;
   onClose: () => void;
-  onBuy: (item: LojaItem, alvoItemId?: string, alvoItemNome?: string) => void;
+  onBuy: (item: LojaItem, alvoItemId?: string, alvoItemNome?: string, modo?: 'comprar' | 'contratar') => void;
   podeComprar: boolean;
   modoLoja?: 'Comprar' | 'Vender';
   compradorAtivo?: ICharacter;
@@ -19,6 +19,10 @@ interface LojaItemModalProps {
 
 export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onBuy, podeComprar, modoLoja = 'Comprar', compradorAtivo }) => {
   const [alvoItemId, setAlvoItemId] = useState<string>('');
+  const ehMercenario = item.categoria === 'Mercenários';
+  const [modoContratacao, setModoContratacao] = useState<'comprar' | 'contratar'>(
+    ehMercenario && item.contratacao ? 'contratar' : 'comprar',
+  );
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   // Só existe montado enquanto aberto - equivale a isOpen sempre true.
@@ -189,7 +193,7 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
               </div>
             )}
             <p className="text-xs text-gray-500">
-              Ao contratar, o ser entra pronto e editável na aba Aliados da ficha.
+              Contratado ou comprado, o ser entra pronto e editável na aba Aliados da ficha.
             </p>
           </div>
         );
@@ -465,6 +469,40 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
           </div>
         )}
 
+        {/* CONTRATAR (SERVIÇO, MENSALIDADE) OU COMPRAR (SERVO/ESCRAVO PERMANENTE) */}
+        {modoLoja === 'Comprar' && ehMercenario && item.contratacao && (
+          <div className="px-6 pb-6">
+            <div className="flex flex-col gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Vínculo</span>
+              <div className="flex gap-2 rounded-lg border border-white/10 bg-black/40 p-1">
+                <button
+                  type="button"
+                  onClick={() => setModoContratacao('contratar')}
+                  className={`flex-1 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+                    modoContratacao === 'contratar' ? 'bg-[#c7a44c] text-black' : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Contratar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModoContratacao('comprar')}
+                  className={`flex-1 rounded-md px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+                    modoContratacao === 'comprar' ? 'bg-[#c7a44c] text-black' : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Comprar (servo/escravo)
+                </button>
+              </div>
+              <p className="text-xs text-gray-500">
+                {modoContratacao === 'contratar'
+                  ? `Preço reduzido. Depois de contratado, cobra-se ${item.mensalidade?.valorOriginal.toLocaleString('pt-BR')} ${item.mensalidade ? getCurrencySymbol(item.mensalidade.moedaPreco) : ''}/mês de contrato enquanto ele estiver com você.`
+                  : 'Preço cheio. O contratado se torna seu servo/escravo permanente: sem mensalidade, mas sem volta.'}
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* SELEÇÃO DE ALVO PARA MODIFICAÇÕES */}
         {modoLoja === 'Comprar' && item.categoria === 'Modificações' && compradorAtivo && (
           <div className="px-6 pb-6">
@@ -493,17 +531,32 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
         <div className="relative flex items-center justify-end overflow-hidden border-t border-white/10 bg-black/40 p-4 sm:p-6">
           <div className="responsive-action-row flex w-full items-center justify-end gap-4 sm:w-auto sm:gap-6">
             <div className="flex flex-col items-end">
-              <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Preço estimado</span>
-              {item.precoAnterior ? (
+              <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">
+                {ehMercenario && modoContratacao === 'contratar' ? 'Taxa de contratação' : 'Preço estimado'}
+              </span>
+              {item.precoAnterior && !(ehMercenario && modoContratacao === 'contratar') ? (
                 <span className="text-xs font-bold text-gray-500 line-through">
                   {item.precoAnterior.toLocaleString('pt-BR')} {getCurrencySymbol(item.moedaPreco)}
                 </span>
               ) : null}
               <div className="flex items-center gap-2">
-                <span className={`text-2xl font-bold flex items-center gap-1 ${item.moedaPreco === 'Solares' ? 'text-yellow-400' : item.moedaPreco === 'Lunaris' ? 'text-gray-200' : item.moedaPreco === 'Fragmentos de Estrela' ? 'text-fuchsia-400' : 'text-indigo-400'}`}>
-                  {item.valorOriginal.toLocaleString('pt-BR')} <span className="text-sm">{getCurrencySymbol(item.moedaPreco)}</span>
-                </span>
+                {(() => {
+                  const precoExibido = ehMercenario && modoContratacao === 'contratar' && item.contratacao
+                    ? item.contratacao
+                    : { valorOriginal: item.valorOriginal, moedaPreco: item.moedaPreco };
+                  return (
+                    <span className={`text-2xl font-bold flex items-center gap-1 ${precoExibido.moedaPreco === 'Solares' ? 'text-yellow-400' : precoExibido.moedaPreco === 'Lunaris' ? 'text-gray-200' : precoExibido.moedaPreco === 'Fragmentos de Estrela' ? 'text-fuchsia-400' : 'text-indigo-400'}`}>
+                      {precoExibido.valorOriginal.toLocaleString('pt-BR')}
+                      <span className="text-sm">{getCurrencySymbol(precoExibido.moedaPreco)}</span>
+                    </span>
+                  );
+                })()}
               </div>
+              {ehMercenario && modoContratacao === 'contratar' && item.mensalidade ? (
+                <span className="text-xs font-bold text-gray-500">
+                  + {item.mensalidade.valorOriginal.toLocaleString('pt-BR')} {getCurrencySymbol(item.mensalidade.moedaPreco)}/mês
+                </span>
+              ) : null}
             </div>
 
             <button
@@ -511,7 +564,7 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
                 const alvoItemNome = alvoItemId
                   ? compradorAtivo?.inventarioCentral?.find(i => i.item_id === alvoItemId)?.titulo
                   : undefined;
-                onBuy(item, alvoItemId || undefined, alvoItemNome);
+                onBuy(item, alvoItemId || undefined, alvoItemNome, ehMercenario ? modoContratacao : undefined);
               }}
               disabled={!podeComprar}
               className={`flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold tracking-widest uppercase transition-all shadow-xl sm:px-8 ${

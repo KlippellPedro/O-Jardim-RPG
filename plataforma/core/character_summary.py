@@ -596,6 +596,7 @@ def _opcao_racial_valida(raca: dict, campo: str, valor) -> bool:
         "varianteId": "variantes",
         "linhagemId": "linhagens",
         "condicaoAncestralId": "condicoes_ancestrais",
+        "naturezaDivinaId": "naturezas_divinas",
     }.get(campo)
     if colecao is None:
         return not _escolha_racial_vazia(valor)
@@ -610,18 +611,21 @@ def _fluxo_efetivo(ficha: dict, raca: dict) -> int:
     valor = _inteiro(finais.get("fluxo")) or 1
     ajuste = _inteiro((raca.get("ajustes_atributos") or {}).get("fluxo")) or 0
     escolha = ficha.get("escolhaRacial") if isinstance(ficha.get("escolhaRacial"), dict) else {}
-    variante_id = escolha.get("varianteId")
-    for colecao in ("variantes", "linhagens", "condicoes_ancestrais"):
+    for colecao, campo in (
+        ("variantes", "varianteId"),
+        ("linhagens", "linhagemId"),
+        ("condicoes_ancestrais", "condicaoAncestralId"),
+        ("naturezas_divinas", "naturezaDivinaId"),
+    ):
         opcao = next(
             (
                 item for item in raca.get(colecao) or []
-                if isinstance(item, dict) and str(item.get("id")) == str(variante_id)
+                if isinstance(item, dict) and str(item.get("id")) == str(escolha.get(campo))
             ),
             None,
         )
         if opcao:
             ajuste += _inteiro((opcao.get("ajustes_atributos") or {}).get("fluxo")) or 0
-            break
     configuracao = raca.get("escolha_atributos") if isinstance(raca.get("escolha_atributos"), dict) else {}
     campo = str(configuracao.get("campo") or "atributosRaciais")
     escolhas = escolha.get(campo) if isinstance(escolha.get(campo), list) else []
@@ -908,7 +912,7 @@ def validar_regras_ficha(
     if not criacao:
         escolha = ficha.get("escolhaRacial") if isinstance(ficha.get("escolhaRacial"), dict) else {}
         escolha_anterior = anterior.get("escolhaRacial") if isinstance(anterior.get("escolhaRacial"), dict) else {}
-        campos_fixos = {"varianteId", "linhagemId", "condicaoAncestralId"}
+        campos_fixos = {"varianteId", "linhagemId", "condicaoAncestralId", "naturezaDivinaId"}
         configuracao_atributos = raca.get("escolha_atributos")
         if isinstance(configuracao_atributos, dict) and configuracao_atributos.get("campo"):
             campos_fixos.add(str(configuracao_atributos["campo"]))
@@ -922,6 +926,11 @@ def validar_regras_ficha(
             # preenche o campo vazio uma unica vez. Trocar um valor ja escolhido
             # continua sendo prerrogativa do mestre.
             if _escolha_racial_vazia(anterior_campo) and _opcao_racial_valida(raca, campo, atual):
+                continue
+            # Se uma opção oficial deixou de existir, como o antigo Domínio do
+            # Limiar, o jogador pode escolher uma opção atual uma única vez. Sem
+            # isso, a ficha antiga ficaria presa para sempre num id removido.
+            if not _opcao_racial_valida(raca, campo, anterior_campo) and _opcao_racial_valida(raca, campo, atual):
                 continue
             return "escolhas raciais de criacao so podem ser alteradas pelo mestre"
 
@@ -1149,6 +1158,7 @@ def _atributo_efetivo(ficha: dict, atributo: str) -> int:
         ("variantes", "varianteId"),
         ("linhagens", "linhagemId"),
         ("condicoes_ancestrais", "condicaoAncestralId"),
+        ("naturezas_divinas", "naturezaDivinaId"),
     ):
         opcao = next((
             item for item in raca.get(colecao) or []
@@ -1158,7 +1168,6 @@ def _atributo_efetivo(ficha: dict, atributo: str) -> int:
             ajuste += _numero((opcao.get("ajustes_atributos") or {}).get(atributo))
             if atributo in (opcao.get("limites_atributos") or {}):
                 limite = opcao["limites_atributos"][atributo]
-            break
 
     configuracao = raca.get("escolha_atributos") if isinstance(raca.get("escolha_atributos"), dict) else {}
     campo = str(configuracao.get("campo") or "atributosRaciais")

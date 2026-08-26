@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Tent, Backpack, Compass } from 'lucide-react';
+import { Tent, Backpack, Compass, Map, Sparkles, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -84,7 +84,7 @@ export const ViajanteClasse = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, y: 20 }}
@@ -96,7 +96,7 @@ export const ViajanteClasse = ({ classe }: { classe: IClasse }) => {
             <Backpack size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Passaporte Entre Mundos</h3>
             <p className="text-emerald-100/60 leading-relaxed text-sm">
-              Você sabe como se portar. Uma vez por sessão, invente que você já esteve neste exato local ou dimensão antes, e o mestre lhe revelará um segredo útil sobre o ambiente ou seus costumes, sem necessidade de testes.
+              O que você carrega de toda estrada já andada: bônus permanentes em Sobrevivência e contra o ambiente, um jeito de achar abrigo quando precisa, e no fim da carreira, atravessar uma fronteira conhecida com o grupo inteiro sem nem precisar rolar dado.
             </p>
           </PremiumCard>
 
@@ -105,13 +105,58 @@ export const ViajanteClasse = ({ classe }: { classe: IClasse }) => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+            className={`flex flex-col p-8 rounded-xl ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Map size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Lições da Estrada</h3>
+            <p className="text-emerald-100/60 leading-relaxed text-sm">
+              Aprenda um truque por estágio, tirado de encarar estrada de verdade: são oito possíveis, ligados a perícias fora de combate como Sobrevivência, Diplomacia, Investigação e Adestramento, e você aprende quatro. Cada lição aprendida continua valendo pra sempre.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.3 }}
             className={`flex flex-col p-8 rounded-xl ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
             <Tent size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Companheiros de Jornada</h3>
             <p className="text-emerald-100/60 leading-relaxed text-sm">
               Uma vez por sessão, até três aliados ignoram os efeitos de Cansaço e as penalidades de viagem por uma cena, sustentados por suas histórias, preparos e rotinas de estrada. Os pontos de Cansaço continuam registrados, só deixam de pesar por um tempo.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.45 }}
+            className={`flex flex-col p-8 rounded-xl ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Sparkles size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sem Fronteiras</h3>
+            <p className="text-emerald-100/60 leading-relaxed text-sm">
+              Uma vez por sessão, você e até cinco aliados ignoram terreno difícil, ganham +6 m de Movimento e ficam imunes a dano e condições puramente ambientais por uma cena inteira - e cada um pode gastar a própria Ação de Movimento pra se teleportar até 12 m uma vez durante o efeito.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.6 }}
+            className={`flex flex-col p-8 rounded-xl ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-emerald-100/60 leading-relaxed text-sm">
+              Todo efeito seu que obriga um alvo a resistir rola Sobrevivência no momento em que aciona: o resultado vira a DT que ele precisa alcançar.
             </p>
           </PremiumCard>
         </div>

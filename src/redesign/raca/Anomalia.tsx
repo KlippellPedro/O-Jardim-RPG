@@ -6,7 +6,7 @@ import { EscolhaRacialCards } from '../components/premium/EscolhaRacialCards';
 import { EstagiosRaciais } from '../components/premium/EstagiosRaciais';
 import { obterTemaPorId } from '../themeMap';
 
-export const Errante = ({ raca }: { raca: IRaca }) => {
+export const Anomalia = ({ raca }: { raca: IRaca }) => {
   const tema = obterTemaPorId(raca.id);
 
   return (
@@ -72,7 +72,7 @@ export const Errante = ({ raca }: { raca: IRaca }) => {
                 className={`text-7xl font-bold tracking-tight ${tema.text} mb-6 uppercase`}
                 style={{ textShadow: "2px 0 red, -2px 0 cyan", fontFamily: 'Cinzel, serif' }}
              >
-               Errante
+               Anomalia
              </motion.h1>
           </motion.div>
           <motion.p 
@@ -81,7 +81,7 @@ export const Errante = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-gray-400 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            É um personagem de outra campanha que atravessou pra esta. Mantém nome, cara, memória e reputação; perde nível e ficha. O que sobrou de lá volta como uma Assinatura (uma técnica marcante, renomeada e convertida) e um Legado a mais.
+            É o personagem de uma campanha anterior que atravessou para esta mesa. Mantém nome, rosto, memória e reputação, mas perde nível e ficha. O que sobrou de lá volta como uma Assinatura, uma técnica marcante renomeada e convertida, e mais um Legado.
           </motion.p>
         </motion.header>
 
@@ -156,4 +156,4 @@ export const Errante = ({ raca }: { raca: IRaca }) => {
   );
 };
 
-export default Errante;
+export default Anomalia;

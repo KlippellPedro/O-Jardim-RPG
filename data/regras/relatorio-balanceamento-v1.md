@@ -10,7 +10,7 @@ Gerado por `npm run audit:balance`. Esta é uma verificação quantitativa, não
 
 ## Resultado automático
 
-- 26 classes analisadas.
+- 28 classes analisadas.
 - 79 armas analisadas.
 - 0 classes fora do orçamento de 7 pontos de Vida + Mana.
 - 0 armas acima de 75 de dano médio sem bloqueio do Mestre.
@@ -36,7 +36,7 @@ Cada célula mostra `Vida/Mana/vagas de poder`.
 | Pirata Amaldiçoado | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
 | Cartista Arcano | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 | Guia Dimensional | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
-| Caçador das Almas | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
+| Caçador das Almas | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | Konsō: Funeral da Alma |
 | Escritor de Contos | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 | Invocador | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 | Viajante | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
@@ -45,6 +45,8 @@ Cada célula mostra `Vida/Mana/vagas de poder`.
 | Ritualista | comum | 7 | 16/8/0 | 32/28/1 | 52/53/3 | 72/78/5 | 92/103/8 | 147/138/8 | 202/173/8 | nenhum |
 | Interceptador | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 | Chef | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | Cardápio |
+| Detetive | comum | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
+| Devorador | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
 
 ## Maiores danos do arsenal
 

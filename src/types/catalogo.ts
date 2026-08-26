@@ -222,6 +222,7 @@ export interface IRaca {
   estagios?: IOpcaoRacial[];
   linhagens?: IOpcaoRacial[];
   condicoes_ancestrais?: IOpcaoRacial[];
+  naturezas_divinas?: IOpcaoRacial[];
   rotulo_variante?: string;
   descricao_variantes?: string;
   escolha_atributos?: {

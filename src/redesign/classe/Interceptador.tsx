@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ShieldAlert, Fingerprint, RefreshCcw } from 'lucide-react';
+import { ShieldAlert, Fingerprint, RefreshCcw, Radar, Gauge } from 'lucide-react';
 import type { IClasse } from '../../types/catalogo';
 import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
@@ -82,7 +82,7 @@ export const Interceptador = ({ classe }: { classe: IClasse }) => {
         </motion.header>
 
         {/* Traits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24 font-mono">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24 font-mono">
           <PremiumCard
             glowColor={tema.glow}
             initial={{ opacity: 0, scale: 0.95 }}
@@ -91,10 +91,10 @@ export const Interceptador = ({ classe }: { classe: IClasse }) => {
             transition={{ duration: 0.4 }}
             className={`flex flex-col p-8 ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
-            <RefreshCcw size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
-            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Hackear Fluxo</h3>
+            <Radar size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Acesso à Malha</h3>
             <p className="text-red-200/60 leading-relaxed text-sm">
-              Use sua Reação e gaste 4 Mana quando um inimigo lançar um feitiço visível. Role um teste de contramágica; se passar, você cancela completamente o efeito do feitiço e o inimigo perde a Mana gasta.
+              O radar do Interceptador: detecta conjurações naturais a 12 m, depois lê círculo, Fluxo e alvo sem esforço, ganha bônus fixo pra interceptar, dobra o alcance de detecção e, no fim da carreira, arranca a DT e o efeito completo de qualquer magia que perceber antes dela nem terminar de ser lançada.
             </p>
           </PremiumCard>
 
@@ -103,13 +103,43 @@ export const Interceptador = ({ classe }: { classe: IClasse }) => {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+            className={`flex flex-col p-8 ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <RefreshCcw size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Hackear Fluxo</h3>
+            <p className="text-red-200/60 leading-relaxed text-sm">
+              Interceptar com sucesso já cancela o efeito, de graça. Aprenda uma técnica por estágio pra fazer mais que isso: são seis possíveis (Atrasar, Redirecionar, Isolar, Assinatura Falsa, Eco Hostil, Núcleo Exposto) e você aprende quatro, escolhendo qual aplicar a cada interceptação bem-sucedida.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.3 }}
             className={`flex flex-col p-8 ${tema.bg} ${tema.border} backdrop-blur-md`}
           >
             <Fingerprint size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Acesso Administrador</h3>
             <p className="text-red-200/60 leading-relaxed text-sm">
-              Uma vez por sessão, por três rodadas, você obtém privilégios totais sobre a Malha: recebe +4 em suas interceptações e reduz o custo delas em 2 Mana, até o mínimo de 1.
+              Uma vez por sessão, por três rodadas, você obtém privilégios totais sobre a Malha: +5 em interceptações, custo reduzido em 3 de Mana, uma interceptação por turno sem gastar Reação, e dá pra aplicar duas técnicas de Hackear Fluxo na mesma interceptação em vez de uma só.
+            </p>
+          </PremiumCard>
+
+          <PremiumCard
+            glowColor={tema.glow}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.45 }}
+            className={`flex flex-col p-8 ${tema.bg} ${tema.border} backdrop-blur-md`}
+          >
+            <Gauge size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
+            <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Sobre a DT</h3>
+            <p className="text-red-200/60 leading-relaxed text-sm">
+              Todo efeito seu que obriga um alvo a resistir rola Misticismo no momento em que aciona: o resultado vira a DT que ele precisa alcançar. Interceptar é diferente - você rola contra a DT de conjuração que a própria magia já tem.
             </p>
           </PremiumCard>
         </div>

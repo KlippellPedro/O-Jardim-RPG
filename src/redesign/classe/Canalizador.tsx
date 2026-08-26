@@ -80,7 +80,7 @@ export const Canalizador = ({ classe }: { classe: IClasse }) => {
             <Waves size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Fluxo Nativo</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              O conceito central da classe: escolha, no nível 1, um dos dez Fluxos naturais do jogo (Origem, Essência, Comunicação, Vitalidade, Inconstância, Físico, Espaço, Tempo, Vazio ou o raríssimo Fim, que exige autorização do Mestre) — a Tecnologia fica de fora, porque ela nunca é nativa, só se instala de fora. Essa escolha é pra sempre e diz de onde vem sua magia.
+              O conceito central da classe: escolha, no nível 1, um dos dez Fluxos naturais do jogo (Origem, Essência, Comunicação, Vitalidade, Inconstância, Físico, Espaço, Tempo, Vazio ou o raríssimo Fim, que exige autorização do Mestre). A Tecnologia fica de fora porque nunca é nativa; ela só se instala de fora. Essa escolha é permanente e diz de onde vem sua magia.
             </p>
           </PremiumCard>
 
@@ -110,7 +110,7 @@ export const Canalizador = ({ classe }: { classe: IClasse }) => {
             <ShieldOff size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Fluxo Sem Filtro</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Uma vez por combate, ao conjurar uma magia do seu Fluxo que exija Concentração, ela não pode ser quebrada por dano durante três rodadas. Só cai se você for nocauteado ou perder a consciência — a magia sai crua, sem filtro nenhum entre você e o efeito.
+              Uma vez por combate, ao conjurar uma magia do seu Fluxo que exija Concentração, ela não pode ser quebrada por dano durante três rodadas. Ainda termina se você for nocauteado ou perder a consciência: a magia sai crua, sem filtro entre você e o efeito.
             </p>
           </PremiumCard>
 
@@ -137,4 +137,3 @@ export const Canalizador = ({ classe }: { classe: IClasse }) => {
 };
 
 export default Canalizador;
-

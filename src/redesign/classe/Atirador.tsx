@@ -85,7 +85,7 @@ export const Atirador = ({ classe }: { classe: IClasse }) => {
             <Focus size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Disparo Calculado</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              Uma vez por combate, gaste uma Ação Completa pra estudar o alvo: vento, distância, movimento. Seu próximo ataque à distância contra ele recebe vantagem e ignora a cobertura que ele tiver.
+              Uma vez por combate, gaste uma Ação Completa pra estudar o alvo: vento, distância, movimento. Seu próximo ataque à distância contra ele recebe vantagem e ignora os bônus de cobertura parcial ou superior, mas não atravessa cobertura total.
             </p>
           </PremiumCard>
 
@@ -141,4 +141,3 @@ export const Atirador = ({ classe }: { classe: IClasse }) => {
 };
 
 export default Atirador;
-

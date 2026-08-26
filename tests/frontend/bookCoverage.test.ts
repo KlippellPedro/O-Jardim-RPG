@@ -5,6 +5,15 @@ import { REGRAS_OFICIAIS } from '../../data/regras/regras';
 
 const CHAVES = Object.keys(REGRAS_OFICIAIS);
 const semHtml = (corpo: string) => corpo.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+const classesCatalogo = JSON.parse(
+  readFileSync(new URL('../../data/ficha/classes.json', import.meta.url), 'utf8'),
+);
+const racasCatalogo = JSON.parse(
+  readFileSync(new URL('../../data/ficha/racas.json', import.meta.url), 'utf8'),
+);
+const lojaCatalogo = JSON.parse(
+  readFileSync(new URL('../../data/loja/catalogo.json', import.meta.url), 'utf8'),
+);
 
 test('toda página do livro está inteira', () => {
   CHAVES.forEach((chave) => {
@@ -15,6 +24,59 @@ test('toda página do livro está inteira', () => {
     assert.ok(pagina.destaques.length >= 1, `${chave}: sem destaques`);
     assert.ok(semHtml(pagina.corpo).length >= 400, `${chave}: corpo raso demais para ser uma página`);
   });
+});
+
+test('Personagem e Progressão usa as contagens atuais dos catálogos', () => {
+  const classesComuns = classesCatalogo.filter((classe: any) => classe.categoria === 'padrao').length;
+  const classesEspeciais = classesCatalogo.filter((classe: any) => classe.categoria === 'esquecida').length;
+  const progressõesCompletas = classesCatalogo.filter((classe: any) => classe.progressao_publicada && classe.progressao?.length).length;
+  const racasMecanicas = racasCatalogo.filter((raca: any) => !raca.indisponivel && raca.id !== 'raca-personalizada');
+  const racasComuns = racasMecanicas.filter((raca: any) => raca.categoria === 'padrao').length;
+  const racasEspeciais = racasMecanicas.filter((raca: any) => raca.categoria === 'esquecida').length;
+  const frutos = lojaCatalogo.entradas.filter((item: any) => item.tipo === 'fruto-eden').length;
+  const implantes = lojaCatalogo.entradas.filter((item: any) => item.tipo === 'implante').length;
+  const destaquesClasses = Object.fromEntries(REGRAS_OFICIAIS.classes.destaques);
+  const destaquesRacas = Object.fromEntries(REGRAS_OFICIAIS.racas.destaques);
+
+  assert.equal(destaquesClasses.Classes, `${classesCatalogo.length} catalogadas`);
+  assert.equal(destaquesClasses['Comuns / especiais'], `${classesComuns} / ${classesEspeciais}`);
+  assert.equal(destaquesClasses['Progressões completas'], String(progressõesCompletas));
+  assert.match(REGRAS_OFICIAIS['sistema-base'].corpoMestre || '', new RegExp(`Todas as ${classesCatalogo.length} classes`));
+  assert.match(REGRAS_OFICIAIS['poderes-habilidades'].corpo, new RegExp(`As ${classesCatalogo.length} classes`));
+  assert.equal(destaquesRacas['Raças mecânicas'], String(racasMecanicas.length));
+  assert.equal(destaquesRacas['Comuns / especiais'], `${racasComuns} / ${racasEspeciais}`);
+  assert.match(REGRAS_OFICIAIS['frutos-implantes'].corpo, new RegExp(`São ${frutos} frutos`));
+  assert.match(REGRAS_OFICIAIS['frutos-implantes'].corpo, new RegExp(`São ${implantes} peças`));
+});
+
+test('Personagem e Progressão mantém conteúdo no capítulo correto e sem duplicação visual', () => {
+  const regrasPageSource = readFileSync(new URL('../../src/pages/Regras/RegrasPage.tsx', import.meta.url), 'utf8');
+  const gridRacasSource = readFileSync(new URL('../../src/pages/Regras/components/GridRacas.tsx', import.meta.url), 'utf8');
+
+  assert.equal(REGRAS_OFICIAIS.xp.categoria, 'Livro do Jogador');
+  assert.match(REGRAS_OFICIAIS.xp.corpo, /<details class="regras-details regras-details--xp">/);
+  assert.match(REGRAS_OFICIAIS['frutos-implantes'].corpo, /<h3 class="regras-subtitle">Os três degraus de um Fruto<\/h3>/);
+  assert.doesNotMatch(REGRAS_OFICIAIS['frutos-implantes'].corpo, /<h4 class="regras-subtitle">/);
+  // Os três cartões de destaque no cabeçalho de cada página foram removidos a
+  // pedido do Pedro (2026-08-26): os dados continuam em `destaques` para as
+  // checagens de consistência abaixo, mas não aparecem mais na tela.
+  assert.doesNotMatch(regrasPageSource, /topicData\.destaques\.map/);
+  assert.match(regrasPageSource, /ocultarCatalogoPericias/);
+  assert.match(gridRacasSource, /id: 'entidades'/);
+  assert.match(gridRacasSource, /raca\.categoria !== 'padrao' && raca\.id !== 'entidade'/);
+});
+
+test('classes e raças especiais não são apresentadas como inerentemente mais fortes', () => {
+  const texto = [
+    REGRAS_OFICIAIS.classes.resumo,
+    REGRAS_OFICIAIS.classes.corpo,
+    REGRAS_OFICIAIS.classes.corpoMestre,
+    REGRAS_OFICIAIS.racas.resumo,
+    REGRAS_OFICIAIS.racas.corpo,
+    REGRAS_OFICIAIS.racas.corpoMestre,
+  ].join(' ');
+
+  assert.doesNotMatch(texto, /(?:classe|raça|raças) especial(?:is)? (?:é|são|nasce|nascem) mais forte/i);
 });
 
 // Uma página que promete conteúdo futuro é pior que uma página curta: o leitor
@@ -124,6 +186,7 @@ test('toda mecânica do sistema tem uma página', () => {
     ['sistema-base', 'fórmulas, nível e multiclasse'],
     ['pericias', 'testes, graus, vantagem e desvantagem'],
     ['combate', 'ações, ataques e reações'],
+    ['tipos-de-dano', 'famílias de dano, elementos e ordem de aplicar Resistência'],
     ['mesa-ao-vivo', 'a sessão compartilhada, sigilo e rolagem registrada'],
     ['distancias', 'faixas de alcance'],
     ['ferimentos', 'vida negativa, Morrendo e trauma'],

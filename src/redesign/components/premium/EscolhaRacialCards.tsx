@@ -24,12 +24,15 @@ interface EscolhaRacialCardsProps {
   /** Paleta opcional por id de opção (as Cores da Alma do Espírito, o sangue
    * de cada Linhagem Gigante...). Sem ela, todos os cartões usam o tema da raça. */
   paleta?: Record<string, EstiloOpcaoRacial>;
+  /** Fundo dos cartões quando uma página precisa manter uma direção visual
+   * própria. Sem este campo, continua usando o preto translúcido padrão. */
+  fundoCards?: string;
 }
 
 /** Grade de cartões das escolhas raciais - variantes, linhagens e condições
  * ancestrais. Substituiu a tabela de três colunas que espremia opção,
  * descrição e traços num scroll horizontal ilegível. */
-export const EscolhaRacialCards = ({ raca, tema, paleta }: EscolhaRacialCardsProps) => {
+export const EscolhaRacialCards = ({ raca, tema, paleta, fundoCards = 'bg-black/40' }: EscolhaRacialCardsProps) => {
   const grupos = obterGruposEscolhaRacial(raca);
   if (grupos.length === 0) return null;
 
@@ -80,7 +83,7 @@ export const EscolhaRacialCards = ({ raca, tema, paleta }: EscolhaRacialCardsPro
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.4, delay: (indice % 2) * 0.08 }}
-                  className={`flex h-full flex-col rounded-lg border-l-2 ${estilo.border} bg-black/40 p-7 backdrop-blur-md`}
+                  className={`flex h-full flex-col rounded-lg border-l-2 ${estilo.border} ${fundoCards} p-7 backdrop-blur-md`}
                 >
                   <div className="mb-3 flex flex-wrap items-center gap-3">
                     <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: estilo.tinta }} />

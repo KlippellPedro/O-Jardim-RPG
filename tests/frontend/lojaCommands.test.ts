@@ -313,7 +313,7 @@ test('Mercenários separa serviço contratado de fera de combate pelo subfiltro'
   const sentinela = porId('sentinela-de-portao');
   assert.equal(itemCorrespondeSubfiltro(sentinela, 'Mercenários', 'Guardas de local'), true);
   assert.equal(itemCorrespondeSubfiltro(sentinela, 'Mercenários', 'Escoltas'), false);
-  assert.equal(itemCorrespondeSubfiltro(sentinela, 'Mercenários', 'Feras e Invocações'), false);
+  assert.equal(itemCorrespondeSubfiltro(sentinela, 'Mercenários', 'Feras e Monstros'), false);
 
   const timoneiro = porId('timoneiro-contratado');
   assert.equal(itemCorrespondeSubfiltro(timoneiro, 'Mercenários', 'Tripulação'), true);
@@ -321,7 +321,7 @@ test('Mercenários separa serviço contratado de fera de combate pelo subfiltro'
 
   // Fera não declara função e cai no recorte que sobrou, sem sumir da vitrine.
   const lobo = porId('lobo-cinzento');
-  assert.equal(itemCorrespondeSubfiltro(lobo, 'Mercenários', 'Feras e Invocações'), true);
+  assert.equal(itemCorrespondeSubfiltro(lobo, 'Mercenários', 'Feras e Monstros'), true);
   assert.equal(itemCorrespondeSubfiltro(lobo, 'Mercenários', 'Guardas de local'), false);
   assert.equal(itemCorrespondeSubfiltro(lobo, 'Mercenários', 'Todos'), true);
 
@@ -341,7 +341,7 @@ test('todo item declara a loja mínima e a Vila fica restrita ao catálogo simpl
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
 
-  assert.equal(entradas.length, 709);
+  assert.equal(entradas.length, 776);
   assert.ok(entradas.every((item) => Number.isInteger(nivel(item)) && nivel(item) >= 1 && nivel(item) <= 4));
   assert.ok([1, 2, 3, 4].every((loja) => entradas.some((item) => nivel(item) === loja)));
 

@@ -3,6 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Billboard, OrbitControls, Stars, Text, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { BANCO_LUNAR_INFO } from '../bancoLunarInfo';
+import { VAZIO_INFO } from '../vazioInfo';
 import {
   BANCO_LUNAR_HEIGHT,
   BANCO_LUNAR_MODEL_PATH,
@@ -498,6 +499,7 @@ interface CosmicTreeViewerProps {
   onSelectDeidade: (id: string | null) => void;
   onOpenInfo: (id: string) => void;
   onOpenBancoLunar: () => void;
+  onOpenVazio: () => void;
   lockedDeidades?: string[];
 }
 
@@ -506,6 +508,7 @@ export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({
   onSelectDeidade,
   onOpenInfo,
   onOpenBancoLunar,
+  onOpenVazio,
   lockedDeidades = [],
 }) => {
   const controlsRef = useRef<OrbitControlsRef>(null);
@@ -518,6 +521,15 @@ export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({
       <div className="absolute left-4 top-4 z-10 rounded-full border border-white/10 bg-black/70 px-4 py-2 text-xs uppercase tracking-widest text-primary pointer-events-none">
         Projeção Astral das Árvores
       </div>
+
+      <button
+        type="button"
+        onClick={(event) => { event.stopPropagation(); onOpenVazio(); }}
+        className="absolute bottom-4 right-4 z-10 cursor-pointer rounded-full border px-4 py-2 text-xs uppercase tracking-widest transition-colors hover:bg-white/5"
+        style={{ borderColor: `${VAZIO_INFO.cor}55`, color: VAZIO_INFO.cor, backgroundColor: 'rgba(0,0,0,0.7)' }}
+      >
+        {VAZIO_INFO.nome}
+      </button>
       <div className="absolute bottom-4 left-4 z-10 hidden rounded-xl border border-white/5 bg-black/75 px-4 py-2 text-xs text-gray-400 pointer-events-none sm:block">
         <p className="mb-1 font-bold text-gray-300">Dicas de Controle:</p>
         <ul className="list-disc space-y-1 pl-4">

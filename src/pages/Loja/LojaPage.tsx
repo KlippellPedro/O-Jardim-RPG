@@ -5,7 +5,7 @@ import { Search, ShoppingBag, CheckCircle, XCircle, LayoutGrid, Sword, Shield, F
 import { calcularValorRevenda, LojaItem, ItemCategoria, ItemRaridade, getCurrencySymbol, itemCorrespondeBusca, itemCorrespondeSubfiltro, itemEhVeiculoCompleto, lerPrecoNativoLoja, mapearCatalogoLoja, rotuloRaridadeChave, somarPrecosNativos } from '../../services/lojaCatalogService';
 import { ItemCard } from './components/ItemCard';
 import { LojaItemModal } from './components/LojaItemModal';
-import { CartDrawer, CartItem } from './components/CartDrawer';
+import { CartDrawer, CartItem, cartItemKey } from './components/CartDrawer';
 import { useCharacterStore } from '../../store/useCharacterStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useWishlist } from '../../hooks/useWishlist';
@@ -76,7 +76,7 @@ const SUBFILTROS_POR_CATEGORIA: Partial<Record<ItemCategoria, readonly string[]>
   'Modificações': ['Todos', 'Comuns', 'Marciais', 'Armas', 'Armaduras', 'Escudos', 'Itens gerais e mágicos'],
   'Bens': ['Todos', 'Propriedades', 'Veículos Completos', 'Peças e Módulos'],
   'Consumíveis': ['Todos', 'Poções', 'Selos', 'Rituais', 'Ferramentas'],
-  'Mercenários': ['Todos', 'Guardas de local', 'Escoltas', 'Tripulação', 'Ofícios', 'Feras e Invocações'],
+  'Mercenários': ['Todos', 'Guardas de local', 'Escoltas', 'Tripulação', 'Ofícios', 'Feras e Monstros'],
   'Componentes': ['Todos', 'Componentes Químicos', 'Componentes Ritualísticos', 'Componentes Veiculares', 'Sucata', 'Mantimentos', 'Matéria-prima'],
   'Frutos do Éden': ['Todos', 'Sobrenatural', 'Mutação', 'Elemental'],
 };
@@ -290,15 +290,23 @@ export const LojaPage: React.FC = () => {
     }, 3000);
   };
 
-  const handleAddToCart = (item: LojaItem, alvoItemId?: string, alvoItemNome?: string) => {
+  const handleAddToCart = (item: LojaItem, alvoItemId?: string, alvoItemNome?: string, modo?: 'comprar' | 'contratar') => {
     if (!compradorAtivo) {
       showToast('Selecione um comprador primeiro.', 'error');
       return;
     }
+    // Contratar cobra o preço reduzido de item.contratacao em vez do preço de
+    // compra - a entrada do carrinho já nasce com o preço certo pra somar e
+    // exibir sem o resto da tela precisar saber de dois preços por item.
+    const itemParaCarrinho = modo === 'contratar' && item.contratacao
+      ? { ...item, valorOriginal: item.contratacao.valorOriginal, moedaPreco: item.contratacao.moedaPreco }
+      : item;
     setCart(prev => {
       // Itens com alvo não devem ser agrupados a menos que tenham o mesmo alvo.
-      // Como o alvo fixa quantidade em 1 por via das regras, tratamos sempre como entrada única ou agrupada pelo alvo.
-      const existingIdx = prev.findIndex(i => i.item.id === item.id && i.alvoItemId === alvoItemId);
+      // Contratar e comprar o mesmo mercenário também não se agrupam - são
+      // vínculos diferentes. Como o alvo fixa quantidade em 1 por via das
+      // regras, tratamos sempre como entrada única ou agrupada pelo alvo.
+      const existingIdx = prev.findIndex(i => i.item.id === item.id && i.alvoItemId === alvoItemId && i.modo === modo);
       if (existingIdx !== -1) {
         const maximo = Math.min(item.quantidadeDisponivel ?? MAX_SHOP_UNITS, MAX_SHOP_UNITS);
         const newCart = [...prev];
@@ -308,7 +316,7 @@ export const LojaPage: React.FC = () => {
         }
         return newCart;
       }
-      return [...prev, { item, quantidade: 1, alvoItemId, alvoItemNome }];
+      return [...prev, { item: itemParaCarrinho, quantidade: 1, alvoItemId, alvoItemNome, modo }];
     });
     showToast(`${item.nome} adicionado ao lote!`, 'success');
   };
@@ -317,7 +325,7 @@ export const LojaPage: React.FC = () => {
 
   const updateCartQuantity = (cartKey: string, delta: number) => {
     setCart(prev => prev.map(i => {
-      const key = i.alvoItemId ? `${i.item.id}::${i.alvoItemId}` : i.item.id;
+      const key = cartItemKey(i);
       if (key === cartKey) {
         const novaQtd = Math.min(i.item.quantidadeDisponivel ?? MAX_SHOP_UNITS, MAX_SHOP_UNITS, Math.max(1, i.quantidade + delta));
         return { ...i, quantidade: novaQtd };
@@ -328,7 +336,7 @@ export const LojaPage: React.FC = () => {
 
   const removeCartItem = (cartKey: string) => {
     setCart(prev => prev.filter(i => {
-      const key = i.alvoItemId ? `${i.item.id}::${i.alvoItemId}` : i.item.id;
+      const key = cartItemKey(i);
       return key !== cartKey;
     }));
   };
@@ -433,7 +441,12 @@ export const LojaPage: React.FC = () => {
         personagem_id: personagemAtual.id,
         economia_versao_esperada: personagemAtual.economiaVersao,
         ...(operation === 'compra' ? { localizacao_loja: localizacaoAtual } : {}),
-        itens: cart.map(({ item, quantidade, alvoItemId }) => ({ item_id: item.id, quantidade, alvo_item_id: alvoItemId })),
+        itens: cart.map(({ item, quantidade, alvoItemId, modo }) => ({
+          item_id: item.id,
+          quantidade,
+          alvo_item_id: alvoItemId,
+          ...(operation === 'compra' && modo === 'contratar' ? { modo } : {}),
+        })),
       });
       // Veículo completo e propriedade não viram entidade jogável (PV, combustível,
       // instalações...) só por serem comprados: ainda precisam da migração em
@@ -725,7 +738,7 @@ export const LojaPage: React.FC = () => {
               {itensEmPromocao.length} {itensEmPromocao.length === 1 ? 'item' : 'itens'}
             </span>
           </div>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,18rem),1fr))] gap-5 sm:gap-8">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,22rem),1fr))] gap-5 sm:gap-8">
             {itensEmPromocao.map((item) => (
               <ItemCard
                 key={`promocao:${item.id}`}
@@ -875,7 +888,7 @@ export const LojaPage: React.FC = () => {
       </div>
 
       {/* GRID DE ITENS */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,18rem),1fr))] gap-5 sm:gap-8">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,22rem),1fr))] gap-5 sm:gap-8">
         <AnimatePresence>
           {visibleItems.map((item) => (
             <ItemCard 

@@ -24,3 +24,5 @@ export { Canalizador } from './Canalizador';
 export { Sintonizador } from './Sintonizador';
 export { Ritualista } from './Ritualista';
 export { Interceptador } from './Interceptador';
+export { Detetive } from './Detetive';
+export { Devorador } from './Devorador';

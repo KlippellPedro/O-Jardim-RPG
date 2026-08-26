@@ -14,6 +14,11 @@ interface ItemCardProps {
 
 export const ItemCard: React.FC<ItemCardProps> = ({ item, onBuy, onView, podeComprar, isWishlisted, onToggleWishlist }) => {
   const isModificacao = item.categoria === 'Modificações';
+  // Mercenário tem dois preços (contratar/comprar); a escolha acontece no
+  // modal de detalhes, não direto no card - mesmo padrão que Modificações já
+  // usa pra escolher o alvo antes de ir pro carrinho.
+  const isMercenario = item.categoria === 'Mercenários';
+  const exigeEscolhaNoModal = isModificacao || isMercenario;
   // Configura a cor de acordo com a raridade para o glow e as bordas
   const getRarityColor = () => {
     switch (item.raridade) {
@@ -86,17 +91,17 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onBuy, onView, podeCom
             {item.nome}
           </h3>
         </div>
-        <div className="flex gap-2 items-center mb-4">
-          <span className={`text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md border ${rarityBadgeColor} ${classeTextoRaridade(item.raridade)}`}>
+        <div className="flex flex-wrap gap-2 items-center mb-4">
+          <span className={`shrink-0 whitespace-nowrap text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md border ${rarityBadgeColor} ${classeTextoRaridade(item.raridade)}`}>
             {item.raridade}
           </span>
-          <span className="text-[10px] uppercase tracking-widest font-bold px-2 py-1 bg-white/5 border border-white/10 rounded-md text-gray-400">
+          <span className="shrink-0 whitespace-nowrap text-[10px] uppercase tracking-widest font-bold px-2 py-1 bg-white/5 border border-white/10 rounded-md text-gray-400">
             {item.categoria}
           </span>
           {item.dadosBrutos?.subtipo && (
-            <span className={`text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md border ${
-              isSpecial 
-                ? 'bg-yellow-500/10 border-yellow-500/50 text-yellow-300' 
+            <span className={`shrink-0 whitespace-nowrap text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md border ${
+              isSpecial
+                ? 'bg-yellow-500/10 border-yellow-500/50 text-yellow-300'
                 : 'bg-white/5 border-white/10 text-gray-400'
             }`}>
               {item.dadosBrutos.subtipo}
@@ -111,15 +116,28 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onBuy, onView, podeCom
 
       <div className="p-6 pt-0 mt-auto flex justify-between items-end gap-4">
         <div>
-          <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1 block">Preço</span>
+          <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1 block">
+            {isMercenario ? 'Contratar a partir de' : 'Preço'}
+          </span>
           {item.precoAnterior ? (
             <span className="mb-0.5 block text-xs font-bold text-gray-500 line-through">
               {item.precoAnterior.toLocaleString('pt-BR')} {getCurrencySymbol(item.moedaPreco)}
             </span>
           ) : null}
-          <span className={`text-2xl font-bold flex items-center gap-1 ${item.moedaPreco === 'Solares' ? 'text-yellow-400' : item.moedaPreco === 'Lunaris' ? 'text-gray-200' : item.moedaPreco === 'Fragmentos de Estrela' ? 'text-fuchsia-400' : 'text-indigo-400'}`}>
-            {item.valorOriginal.toLocaleString('pt-BR')} <span className="text-xs">{getCurrencySymbol(item.moedaPreco)}</span>
-          </span>
+          {(() => {
+            const precoExibido = isMercenario && item.contratacao ? item.contratacao : { valorOriginal: item.valorOriginal, moedaPreco: item.moedaPreco };
+            return (
+              <span className={`text-2xl font-bold flex items-center gap-1 ${precoExibido.moedaPreco === 'Solares' ? 'text-yellow-400' : precoExibido.moedaPreco === 'Lunaris' ? 'text-gray-200' : precoExibido.moedaPreco === 'Fragmentos de Estrela' ? 'text-fuchsia-400' : 'text-indigo-400'}`}>
+                {precoExibido.valorOriginal.toLocaleString('pt-BR')}
+                <span className="text-xs">{getCurrencySymbol(precoExibido.moedaPreco)}</span>
+              </span>
+            );
+          })()}
+          {isMercenario && item.mensalidade ? (
+            <span className="mt-0.5 block text-[11px] font-bold text-gray-500">
+              + {item.mensalidade.valorOriginal.toLocaleString('pt-BR')} {getCurrencySymbol(item.mensalidade.moedaPreco)}/mês
+            </span>
+          ) : null}
         </div>
 
         <div className="flex gap-2">
@@ -134,10 +152,10 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onBuy, onView, podeCom
           </button>
           <button
             type="button"
-            onClick={() => (isModificacao ? onView(item) : onBuy(item))}
+            onClick={() => (exigeEscolhaNoModal ? onView(item) : onBuy(item))}
             disabled={!podeComprar}
-            title={isModificacao ? 'Escolher item para instalar a modificação' : 'Adicionar ao carrinho'}
-            aria-label={isModificacao ? `Escolher item para instalar ${item.nome}` : `Adicionar ${item.nome} ao carrinho`}
+            title={isModificacao ? 'Escolher item para instalar a modificação' : isMercenario ? 'Escolher contratar ou comprar' : 'Adicionar ao carrinho'}
+            aria-label={isModificacao ? `Escolher item para instalar ${item.nome}` : isMercenario ? `Escolher contratar ou comprar ${item.nome}` : `Adicionar ${item.nome} ao carrinho`}
             className={`relative flex items-center justify-center p-3 rounded-xl transition-all shadow-lg ${
               podeComprar
                 ? 'bg-[#c7a44c] hover:bg-yellow-400 text-black hover:scale-110'

@@ -24,6 +24,9 @@ const LojaPage = lazy(() => import('./pages/Loja/LojaPage').then((module) => ({ 
 const MateriaisPage = lazy(() => import('./pages/Materiais/MateriaisPage').then((module) => ({ default: module.MateriaisPage })));
 const MasterPage = lazy(() => import('./pages/Mestre/MasterPage'));
 const CofrePage = lazy(() => import('./pages/Cofre/CofrePage').then((module) => ({ default: module.CofrePage })));
+const EntidadesPage = lazy(() => import('./pages/Entidades/EntidadesPage').then((module) => ({ default: module.EntidadesPage })));
+const EntidadesSobrePage = lazy(() => import('./pages/Entidades/EntidadesSobrePage').then((module) => ({ default: module.EntidadesSobrePage })));
+const EntidadeContoPage = lazy(() => import('./pages/Entidades/EntidadeContoPage').then((module) => ({ default: module.EntidadeContoPage })));
 
 const PageLoading = () => (
   <div className="flex min-h-[50vh] items-center justify-center text-white">
@@ -280,6 +283,33 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <RegraDetalhesPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/entidades"
+                element={
+                  <ProtectedRoute>
+                    <EntidadesPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/entidades/:entidadeId"
+                element={
+                  <ProtectedRoute>
+                    <EntidadeContoPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/entidades/sobre"
+                element={
+                  <ProtectedRoute>
+                    <EntidadesSobrePage />
                   </ProtectedRoute>
                 }
               />

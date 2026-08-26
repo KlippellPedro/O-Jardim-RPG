@@ -504,6 +504,16 @@ Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo
 
 O que você faz no seu turno, como acertar, quando dá para reagir e de que jeito o dano entra.
 
+### Iniciativa
+
+Iniciativa aqui não se rola: é um número da ficha, igual à Defesa. Você calcula uma vez e usa em todo combate.
+
+- Iniciativa = 10 + metade do nível + Mod.Destreza + bônus.
+
+- Empate se resolve pelo maior Mod.Sabedoria. Se persistir, personagens agem antes de NPCs.
+
+- Surpreendido leva −5 na primeira rodada. Atrasar baixa sua posição de vez, pelo resto do combate.
+
 ### Seu turno
 
 - **Ação Padrão:** atacar, usar uma habilidade, ajudar alguém ou tentar uma manobra.
@@ -558,6 +568,12 @@ d20 + Luta contra 10 + Reflexos ou Fortitude do alvo
 
 - Manobra não causa dano por si só. Habilidade que somar dano a uma manobra diz isso no texto.
 
+### Defesas passivas
+
+- Quando alguém age contra sua Fortitude, Reflexos ou Vontade sem pedir rolagem, use **10 + bônus total**. É essa conta que sustenta a coluna "Contra" da tabela de Manobras acima.
+
+- Quando você resiste ativamente a um perigo, role o d20 com esse mesmo bônus.
+
 ### Reações
 
 Você tem uma reação por rodada e recupera ela no começo do seu próprio turno. Defesa Natural funciona sozinha e não gasta reação nenhuma.
@@ -572,15 +588,29 @@ Você tem uma reação por rodada e recupera ela no começo do seu próprio turn
 
 - Proteger | Aliado adjacente é atacado | Você vira o alvo e pode usar Bloqueio, se ainda tiver reação.
 
-### Tipos de dano
+As famílias de dano, os sete elementos fixos e como a Resistência entra na conta ficam no capítulo **Tipos de Dano**.
+
+## tipos-de-dano
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Físico, persistente, mágico, tecnológico e mental: as cinco famílias de dano do jogo, os sete elementos fixos e a ordem certa para aplicar Resistência.
+
+Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade e qualquer efeito que "protege contra um tipo de dano" sempre apontam para uma entrada específica daqui, nunca para "dano" de forma genérica.
+
+### As cinco famílias
 
 - **Físicos:** corte, perfuração, impacto e balístico.
 
 - **Persistentes:** sangramento, fogo e veneno; batem de novo no fim do turno até alguém remover.
 
-- **Energia:** elemental, tecnologia e Fluxos.
+- **Mágico:** elemental e os outros dez Fluxos naturais.
 
-- **Mental:** tira Sanidade ou Vida, dependendo de onde vem.
+- **Tecnológico:** vem do Fluxo artificial de Tecnologia (A.X.I.S). Usa a mesma Mana e a mesma regra de Resistência que qualquer Fluxo, mas não conta como dano mágico.
+
+- **Mental:** tira Sanidade quando ataca a mente pelo lado emocional ou existencial, e Mana quando ataca diretamente o canal mágico de quem conjura.
 
 ### Dano elemental
 
@@ -588,21 +618,35 @@ São estes sete, e não existe um oitavo. Quem conjura pelo Fluxo do Físico esc
 
 - Elemento | Como costuma se manifestar
 
-- Terra | Pedra, areia e metal bruto. Bom para barreira, terreno difícil e derrubar.
+- Terra | Pedra rachando, areia que enterra e metal que ainda carrega o formato do minério. É o elemento de quem quer erguer parede, prender um pé no chão ou simplesmente derrubar alguém no meio da briga.
 
-- Água | Líquido, gelo e vapor. Empurra, prende e apaga fogo.
+- Água | Da correnteza que arrasta ao gelo que trava no lugar, passando pelo vapor que embaça tudo. Empurra quem está de pé, prende quem tenta fugir e apaga o fogo que sobrou na cena.
 
-- Fogo | Chama e brasa. É o elemento que mais deixa dano persistente para trás.
+- Fogo | Chama viva e brasa que continua queimando depois do golpe. Nenhum outro elemento deixa tanto dano persistente para trás.
 
-- Ar | Vento e pressão. Move criaturas e objetos, e limpa nuvem e gás.
+- Ar | Vento cortante e pressão que empurra sem tocar. Joga corpo e objeto pra longe, e limpa qualquer nuvem de gás ou fumaça que esteja no caminho.
 
-- Raio | Descarga elétrica. Salta entre alvos próximos e desliga o que é energizado.
+- Raio | Descarga que salta de um alvo pro próximo sem pedir licença, e desliga na hora qualquer coisa energizada por perto.
 
-- Luz | Claridade que revela. Atinge o que se esconde e cega quem olha de perto.
+- Luz | Claridade que não deixa nada se esconder. Cega quem olha de perto e expõe quem contava com a escuridão pra passar despercebido.
 
-- Escuridão | Sombra que engole. Esconde, confunde e apaga a luz mundana da área.
+- Escuridão | Sombra espessa o bastante pra engolir contorno e som. Apaga a luz mundana da área, confunde quem tenta mirar e esconde o que não quer ser visto.
 
 Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: quem resiste a Fogo não resiste a Raio. Trocar o elemento despertado depois exige aval do Mestre.
+
+### Resistência e ordem de aplicação
+
+A ordem importa: multiplicar depois de subtrair a Resistência daria um número completamente diferente. Faça sempre nesta sequência.
+
+- Role o dano e aplique o multiplicador crítico aos dados e modificadores que fazem parte do ataque.
+
+- Some os dados extras declarados pelo efeito. Dado extra só multiplica se a fonte disser que multiplica.
+
+- Aplique vulnerabilidade ou redução percentual.
+
+- Subtraia a Resistência do tipo de dano correspondente, até o mínimo 0.
+
+Resistência física geral cobre corte, perfuração e impacto. Balístico fica de fora, de propósito. E Resistência de um tipo específico não faz nada contra os outros tipos.
 
 ## mesa-ao-vivo
 
@@ -908,7 +952,7 @@ São dois caminhos diferentes e vale não confundir. Quando uma **classe** te d�
 
 ## xp
 
-**Categoria:** Combate e Mecânicas
+**Categoria:** Livro do Jogador
 
 **Status:** Regra oficial
 
@@ -945,6 +989,8 @@ XP total do nível N = 500 × N × (N − 1)
 Sair do nível N e chegar ao N+1 custa N × 1.000 XP.
 
 ### Tabela completa
+
+Abrir níveis 1 a 60
 
 **N1**0 XP
 
@@ -1158,7 +1204,7 @@ Nível e Legado são o caminho normal de ficar mais forte. Estes dois são o cam
 
 ### Frutos do Éden
 
-São quinze frutos, cada um com um poder próprio, vendidos por Fragmentos de Estrela e classificados como relíquia da criação. Comprar é a parte fácil: o preço em Fragmentos costuma significar uma campanha inteira atrás de um.
+São 15 frutos, cada um com um poder próprio, vendidos por Fragmentos de Estrela e classificados como relíquia da criação. Comprar é a parte fácil: o preço em Fragmentos costuma significar uma campanha inteira atrás de um.
 
 - O fruto entra no inventário como qualquer item. Comer é uma decisão à parte, feita na aba Inventário.
 
@@ -1168,7 +1214,7 @@ São quinze frutos, cada um com um poder próprio, vendidos por Fragmentos de Es
 
 - Todo fruto traz uma fraqueza declarada, e água do mar aparece em quase todas. Enquanto a fraqueza estiver atuando, os poderes do fruto desligam.
 
-Os três degraus de um Fruto
+### Os três degraus de um Fruto
 
 - **Vínculo:** a passiva que vale o tempo todo, sem custo nem ação. É o que muda o corpo do personagem, como a Resistência elemental do Fruto das Chamas.
 
@@ -1178,11 +1224,11 @@ Os três degraus de um Fruto
 
 Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. As técnicas normais continuam funcionando; o que muda é que o poder grande passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.
 
-Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos quinze está no catálogo da Loja.
+Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos 15 está no catálogo da Loja.
 
 ### Implantes cibernéticos
 
-Enquanto o Fruto mexe na alma, o implante mexe na carne. São dez peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.
+Enquanto o Fruto mexe na alma, o implante mexe na carne. São 20 peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.
 
 - Implante não vai na mochila. Ele fica numa seção própria do inventário, porque está instalado no corpo e ocupa uma parte dele.
 
@@ -1230,19 +1276,7 @@ Capacidade = 10 + (2 × Mod.Força positivo) + ⌊Nível total ÷ 2⌋, mínimo 
 
 - Sem proficiência no subtipo, a penalidade da peça dobra e você não usa habilidades que exijam proficiência.
 
-### Resistência e tipos de dano
-
-A ordem importa: multiplicar depois de subtrair a Resistência daria um número completamente diferente. Faça sempre nesta sequência.
-
-- Role o dano e aplique o multiplicador crítico aos dados e modificadores que fazem parte do ataque.
-
-- Some os dados extras declarados pelo efeito. Dado extra só multiplica se a fonte disser que multiplica.
-
-- Aplique vulnerabilidade ou redução percentual.
-
-- Subtraia a Resistência do tipo de dano correspondente, até o mínimo 0.
-
-Resistência física geral cobre corte, perfuração e impacto. Balístico fica de fora, de propósito. E Resistência de um tipo específico não faz nada contra os outros tipos.
+Como a Resistência entra na conta do dano, em que ordem e o que cada tipo de dano cobre ficam no capítulo **Tipos de Dano**.
 
 ### Armas, proficiência e munição
 
@@ -1266,7 +1300,7 @@ Até onde cada raridade pode ir, quantas modificações e efeitos um item compor
 
 ### Raridades e orçamento de poder
 
-Raridade não é um bônus fixo que todo item da mesma faixa recebe. Ela é um **orçamento**: diz quantas modificações, efeitos automáticos e dons aquele objeto aguenta carregar. É o que impede a ficha de virar uma pilha de +1 sem fim.
+Raridade funciona como um **orçamento**, não como um bônus fixo igual para todo item da mesma faixa: ela diz quantas modificações, efeitos automáticos e dons aquele objeto aguenta carregar. É o que impede a ficha de virar uma pilha de +1 sem fim.
 
 - Raridade | Mods. | Efeitos próprios | Valor por efeito | Regra
 
@@ -1332,6 +1366,24 @@ Geral
 - **Lendário:** Personalidade própria: fala, e tem um poder único que combina com a função dele.
 - **Mítico:** Autoridade soberana: manda em um assunto estreito, definido na história do objeto.
 - **Relíquia da Criação:** Objeto de princípio: representa um conceito e interfere nele. Qual conceito, você decide com o Mestre.
+
+### Quantos acessórios você pode usar
+
+Um Acessório (ou qualquer item genérico da categoria **Outros** que só existe para carregar um efeito automático de raridade) não ocupa o mesmo slot que arma, armadura ou escudo. Por isso o número deles equipados ao mesmo tempo é limitado ao seu **nível dividido por 4, arredondado para baixo, com o mínimo de 1**. Sem esse teto, dá pra empilhar efeito de raridade sem fim só comprando mais um objeto qualquer.
+
+- Nível | Acessórios equipados ao mesmo tempo
+
+- 1 a 7 | 1
+
+- 8 a 11 | 2
+
+- 12 a 15 | 3
+
+- 16 a 19 | 4
+
+- 20 a 23 | 5
+
+- 24 ou mais | nível ÷ 4, arredondado para baixo
 
 ## modificacoes-equipamentos
 
@@ -1611,8 +1663,8 @@ Materiais adicionais são calculados sobre o custo inicial do projeto. Cada nova
 
 ### Materiais, Drops e comércio
 
-Categoria, propriedade, afinidade, potência, estado e qualidade de um material vivem no capítulo
-    **Materiais e Ingredientes** - este capítulo só cobre o lado econômico do crafting.
+O que cada um dos seis estoques genéricos de material serve, e quando a raridade exigida sobe, fica no capítulo
+    **Materiais e Ingredientes**. Este capítulo só cobre o lado econômico do crafting.
 
 - O custo usa o preço normal, sem promoção. Item sem preço usa o valor de um item publicado de mesma raridade e função; sem comparável, o projeto não começa.
 - Materiais específicos e Drops só substituem parte do custo quando a receita permitir. Cada material é consumido uma vez e vale no máximo seu preço registrado.
@@ -2332,6 +2384,8 @@ Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de c
 
 - Cada ritual vem de algum lugar: família, pacto, pergaminho, tradição. Ritual não se aprende sozinho.
 
+- DT, tempo de preparação e Mana ficam declarados na própria entrada do catálogo; não existe um valor único para todo ritual.
+
 ### Fusão de Fluxos
 
 - Toda magia tem um Fluxo principal, que define a identidade e o efeito central dela.
@@ -2349,6 +2403,8 @@ Estas formas usam Fluxo, mas não são a mesma coisa que conjurar uma magia de c
 - Encantamento é padrão permanente, aplicado a um item, uma criatura ou um lugar.
 
 - Quantos encantamentos cabem por raridade: Comum 1, Incomum 2, Raro 3, Épico 4 e Lendário 5.
+
+- DT de inscrição, tempo de preparo e Mana também ficam na própria entrada do catálogo, tanto para selo quanto para encantamento.
 
 ## catalogo-magico
 
@@ -2449,22 +2505,6 @@ d20 + bônus da perícia Sanidade ou Vontade contra DT 10 / 15 / 20 / 25
 - Surpreendido | Iniciativa reduzida em 5 na primeira rodada. Sem reação até realizar o primeiro turno. | Termina depois do primeiro turno.
 
 - Concentrando | Só pode manter um efeito de concentração por vez. Ao sofrer dano, teste Vontade DT 10 ou metade do dano, o que for maior. Falha encerra o efeito. | Encerre voluntariamente, fique incapacitado ou falhe no teste de concentração.
-
-### Iniciativa estática
-
-Iniciativa aqui não se rola: é um número da ficha, igual à Defesa. Você calcula uma vez e usa em todo combate.
-
-- Iniciativa = 10 + metade do nível + Mod.Destreza + bônus.
-
-- Empate se resolve pelo maior Mod.Sabedoria. Se persistir, personagens agem antes de NPCs.
-
-- Surpreendido leva −5 na primeira rodada. Atrasar baixa sua posição de vez, pelo resto do combate.
-
-### Defesas passivas
-
-- Quando alguém age contra sua Fortitude, Reflexos ou Vontade sem pedir rolagem, use **10 + bônus total**.
-
-- Quando você resiste ativamente a um perigo, role o d20 com esse mesmo bônus.
 
 ## aflicoes
 
@@ -2583,7 +2623,7 @@ Dependência de Estimulante
 
 **Status:** Catálogo oficial
 
-Classe comum serve a qualquer Árvore. Classe especial é mais forte, só aparece nas Árvores indicadas e depende do Mestre liberar.
+Classe comum serve a qualquer Árvore. Classe especial segue o mesmo orçamento de poder, mas só aparece nas Árvores indicadas e depende de liberação do Mestre.
 
 Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes e eventos por nível) fica no catálogo interativo da página de Regras, que lê o mesmo arquivo.
 
@@ -2604,7 +2644,7 @@ Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes
 - **Pirata Amaldiçoado** (especial) - Classe especial do Abismo. Você luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que morreu, mas ainda segue o seu comando.
 - **Cartista Arcano** (especial) - Classe especial, aberta a qualquer Árvore. Conjura por cartas preparadas antes: o baralho decide o que você tem em mãos hoje, e o Fluxo nativo decide o que cada carta faz.
 - **Guia Dimensional** (especial) - Classe especial da Matriz. Conhece rota, portal e âncora: é por causa dele que o grupo chega em lugar onde não existe estrada.
-- **Caçador das Almas** (especial) - Classe especial de Anima. Caça o que ataca por dentro: possessão, coisa que come memória, coisa que veste corpo alheio.
+- **Caçador das Almas** (especial) - Classe especial de Anima. Cada Caçador vincula a própria alma a uma Zanpakutō, patrulha a fronteira entre vivos e mortos e purifica espíritos corrompidos. O nome da lâmina abre o Shikai; dominá-la por completo desperta a Bankai.
 - **Escritor de Contos** (especial) - Classe especial do Limiar. Transforma história, presságio e verdade pequena em apoio pro grupo. O que ele conta tem uma tendência incômoda a acontecer.
 - **Invocador** (especial) - Classe especial, aberta a qualquer Árvore. Não luta sozinho: invoca. Escolhe do Catálogo de Invocações a criatura que vai lutar ao seu lado, e decide a cada pacto se chama mais uma ou fortalece a que já tem.
 - **Viajante** (especial) - Classe especial da Matriz, de Éon ou de Vórtice. Vive entre Árvores e dimensões, e converte estrada rodada em capacidade de se virar em qualquer lugar.
@@ -2613,6 +2653,8 @@ Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes
 - **Ritualista** (comum) - Trabalha fora do combate. Ritual não tem círculo, cobra tempo e compromete a Mana desde o primeiro minuto: se interromperem, a Mana já foi.
 - **Interceptador** (especial) - Classe especial da A.X.I.S. Entra na Malha pra derrubar a magia dos outros. Não conjura Fluxo natural, atrapalha quem conjura.
 - **Chef** (comum) - Transforma Mantimentos em porções que sustentam o grupo dentro e fora de combate. Bebidas agem rápido, lanches acompanham a marcha e refeições oferecem benefícios mais duradouros.
+- **Detetive** (comum) - Lê uma cena antes de qualquer um: pega o detalhe fora do lugar, a mentira mal contada, o padrão que ninguém mais viu. Não é sobre ter uma resposta pronta, é sobre nunca aceitar a primeira explicação.
+- **Devorador** (especial) - Não nasce com poder nenhum. O que carrega vem de quem já morreu: mate ou chegue perto o bastante de um corpo ainda quente, devore o que sobrou dele, e uma parte real da força da vítima grava um espaço vazio dentro de você.
 
 ## poderes-habilidades
 
@@ -2626,7 +2668,7 @@ Subir de nível numa classe sempre entrega alguma coisa, e essa coisa tem cinco 
 
 ### A grade de uma classe
 
-As 26 classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.
+As 28 classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.
 
 - Recompensa | Nos níveis | Quantas
 
@@ -2652,7 +2694,7 @@ As 26 classes seguem a mesma grade, contada pelo nível daquela classe. Se você
 
 ### Poder
 
-Aqui você escolhe. Cada classe publica uma lista de dez a doze poderes, e a grade te dá oito vagas até o nível 20. Escolher todos é impossível de propósito: dois Guerreiros de mesmo nível não jogam igual.
+Aqui você escolhe. Cada classe publica uma lista de dez a doze poderes, e a grade concede oito vagas até o nível 20. Como não há vagas para toda a lista, dois personagens da mesma classe e do mesmo nível podem ter conjuntos de poderes diferentes.
 
 - A escolha é feita na hora que a vaga abre, e vale para sempre. Trocar depois exige uma regra que autorize ou a permissão do Mestre.
 
@@ -2688,7 +2730,7 @@ Vale conferir a lista de poderes da classe antes de escolhê-la. Duas classes co
 
 **Status:** Catálogo oficial
 
-Raça comum pode nascer em qualquer Árvore. Raça especial é mais forte e só existe nas Árvores compatíveis.
+Raça comum pode nascer em qualquer Árvore. Raça especial tem regras próprias, depende de liberação e só existe nas Árvores compatíveis.
 
 Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologia, traços e variantes completos ficam no catálogo interativo da página de Regras, que lê o mesmo arquivo.
 
@@ -2710,7 +2752,7 @@ Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologi
 - **Auleth** (especial) - Vida +2, Mana +0
 - **Autômato** (especial) - Vida +0, Mana +0
 - **Clone** (especial) - Vida +3, Mana +3
-- **Errante** (especial) - Vida +3, Mana +3
+- **Anomalia** (especial) - Vida +3, Mana +3
 - **Amálgamo** (especial) - Vida +5, Mana +1
 - **Bruxa** (especial) - Vida +1, Mana +5
 - **Onírico** (especial) - Vida +1, Mana +4
@@ -2722,11 +2764,11 @@ Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologi
 
 **Status:** Regra oficial
 
-As quatro formas de ter uma criatura ao seu lado, o que muda entre elas e como uma criatura comprada vira um aliado na sua ficha.
+As seis formas de ter uma criatura ao seu lado, o que muda entre elas e como uma criatura comprada vira um aliado na sua ficha.
 
-Criatura neste jogo não é item de mochila: é alguém que anda com você. O Bestiário reúne as quatro formas de ter uma criatura ao lado, e todas elas terminam do mesmo jeito, como um aliado com ficha própria.
+Criatura neste jogo não é item de mochila: é alguém que anda com você. O Bestiário reúne as seis formas de ter uma criatura ao lado, e todas elas terminam do mesmo jeito, como um aliado com ficha própria.
 
-### As quatro formas
+### As seis formas
 
 - **Criaturas:** animais, monstros e seres naturais capturados, domesticados ou criados em cativeiro. O que elas sabem fazer vem do corpo e do habitat, não de treino.
 
@@ -2735,6 +2777,10 @@ Criatura neste jogo não é item de mochila: é alguém que anda com você. O Be
 - **Servos:** seres criados ou treinados para cumprir tarefa, ligados à alma do dono e incapazes de traí-lo diretamente. Chegam com a sanidade abalada, em metade da barra e com dois traumas, e isso é parte do que eles são.
 
 - **Invocações:** seres temporários trazidos por magia, ritual ou dispositivo. Cumprem a função e vão embora no prazo do efeito que os chamou.
+
+- **Ajudantes:** gente e criaturas conscientes que topam o trabalho por conta própria, sem vínculo mágico nenhum. Cobram, decidem e podem recusar uma missão que não gostem.
+
+- **Seres Lendários:** raros, únicos e fora da escala normal de preço. Exigem ritual complexo ou uma condição especial da história, e dependem de liberação do Mestre antes de aparecer à venda.
 
 ### Como uma criatura chega até você
 
@@ -2852,19 +2898,19 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra em O Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem quase quinhentos itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 766 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 ### Os quatro locais
 
 - Local | O que vende | Itens
 
-- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 107
+- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 245
 
-- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 144
+- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 209
 
-- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 122
+- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 180
 
-- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 89
+- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 132
 
 Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
 

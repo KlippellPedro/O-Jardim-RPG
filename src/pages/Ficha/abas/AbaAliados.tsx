@@ -10,6 +10,7 @@ import { personagensApi, type AliadoComplexoResumo } from '../../../services/per
 import { bonusIniciativaFicha, obterStatusFicha, penalidadeCansacoIniciativa, penalidadeIniciativaCondicoes } from '../../../services/statusService';
 import { useCampaignSSE } from '../../../hooks/useCampaignSSE';
 import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
+import { getCurrencySymbol, type MoedaTipo } from '../../../services/lojaCatalogService';
 
 interface IAliado {
   id: string;
@@ -30,6 +31,13 @@ interface IAliado {
   emCena: boolean;
   ordem?: number;
   favorito?: boolean;
+  /** Só existe em aliado nascido de compra na Loja (categoria Mercenários):
+   * 'comprado' é servo/escravo permanente (sem mensalidade); 'contratado'
+   * gera uma mensalidade que a mesa cobra fora do sistema, como a
+   * manutenção de Bens. Ver _mercenary_ally_from_catalog_item no backend. */
+  vinculo?: 'comprado' | 'contratado';
+  mensalidade?: { moeda: string; valor: number } | null;
+  mercenarioCatalogoId?: string;
 }
 
 type FormAliado = Omit<IAliado, 'id'>;
@@ -166,7 +174,13 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
     const vidaMaxima = Math.max(1, Math.trunc(Number(form.vidaMaxima) || 1));
     const vidaAtual = Math.max(0, Math.min(vidaMaxima, Math.trunc(Number(form.vidaAtual) || 0)));
 
+    // Preserva vínculo/mensalidade/origem de catálogo do aliado original -
+    // esses campos não têm campo no formulário e seriam apagados silenciosamente
+    // ao editar nome, vida etc. de um mercenário comprado ou contratado.
+    const original = editandoId ? itens.find((a) => a.id === editandoId) : undefined;
+
     const normalizado: IAliado = {
+      ...original,
       id: editandoId || gerarIdAliado(),
       nome: nomeFinal,
       categoria: form.categoria,
@@ -338,6 +352,16 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
                         {a.papel && (
                           <span className="text-[10px] px-2 py-0.5 bg-black/40 rounded border border-white/5 text-gray-400 uppercase font-bold tracking-wider">
                             {a.papel}
+                          </span>
+                        )}
+                        {a.vinculo === 'contratado' && (
+                          <span className="text-[10px] px-2 py-0.5 bg-emerald-500/10 rounded border border-emerald-500/30 text-emerald-400 uppercase font-bold tracking-wider">
+                            Contratado{a.mensalidade ? ` · ${a.mensalidade.valor.toLocaleString('pt-BR')} ${getCurrencySymbol(a.mensalidade.moeda as MoedaTipo)}/mês` : ''}
+                          </span>
+                        )}
+                        {a.vinculo === 'comprado' && (
+                          <span className="text-[10px] px-2 py-0.5 bg-red-500/10 rounded border border-red-500/30 text-red-400 uppercase font-bold tracking-wider">
+                            Servo/Escravo
                           </span>
                         )}
                       </div>

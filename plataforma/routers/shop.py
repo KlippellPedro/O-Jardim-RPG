@@ -509,8 +509,15 @@ def _record_wallet_ledger(
         )
 
 
-def _mercenary_ally_from_catalog_item(item: dict[str, Any]) -> dict[str, Any]:
-    """Converte um item de bestiário (categoria 'Mercenários' na loja) numa ficha de aliado pronta."""
+def _mercenary_ally_from_catalog_item(item: dict[str, Any], modo: str = "comprar") -> dict[str, Any]:
+    """Converte um item de bestiário (categoria 'Mercenários' na loja) numa ficha de aliado pronta.
+
+    ``modo="comprar"`` (padrão) é o preço cheio: o aliado vira servo/escravo
+    permanente, sem mensalidade. ``modo="contratar"`` é o preço reduzido: gera
+    uma mensalidade (``contrato_mensal`` do catálogo) que a mesa cobra fora do
+    sistema, o mesmo tratamento que ``manutencao`` já dá pra Bens (ver
+    _property_from_catalog_item) - nao ha cobranca automatica.
+    """
 
     content = item.get("conteudo") if isinstance(item.get("conteudo"), dict) else {}
     ataques = content.get("ataques") if isinstance(content.get("ataques"), list) else []
@@ -529,6 +536,8 @@ def _mercenary_ally_from_catalog_item(item: dict[str, Any]) -> dict[str, Any]:
     # hora que levar junto. Escolta, tripulacao e criatura de combate ja nascem
     # em cena porque andam com o grupo.
     de_posto_fixo = funcao in {"Guarda de local", "Ofício"}
+    contratado = modo == "contratar"
+    mensalidade = resolve_catalog_price(content, field="contrato_mensal") if contratado else None
     return {
         "id": str(uuid4()),
         "nome": item["titulo"],
@@ -547,11 +556,13 @@ def _mercenary_ally_from_catalog_item(item: dict[str, Any]) -> dict[str, Any]:
         "emCena": not de_posto_fixo,
         "favorito": False,
         "mercenarioCatalogoId": item["id"],
+        "vinculo": "contratado" if contratado else "comprado",
+        "mensalidade": {"moeda": mensalidade.moeda, "valor": mensalidade.valor} if mensalidade else None,
     }
 
 
-def _build_mercenary_allies(item: dict[str, Any], quantidade: int) -> list[dict[str, Any]]:
-    return [_mercenary_ally_from_catalog_item(item) for _ in range(max(0, quantidade))]
+def _build_mercenary_allies(item: dict[str, Any], quantidade: int, modo: str = "comprar") -> list[dict[str, Any]]:
+    return [_mercenary_ally_from_catalog_item(item, modo) for _ in range(max(0, quantidade))]
 
 
 def _property_from_catalog_item(item: dict[str, Any]) -> dict[str, Any]:
@@ -1080,7 +1091,13 @@ def purchase_batch(
         now = datetime.now(timezone.utc)
         for line in payload.itens:
             item = catalog[line.item_id]
-            price = resolve_catalog_price(item["conteudo"])
+            contratando = line.modo == "contratar"
+            if contratando and item["tipo"] != "monstro":
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    detail=f"{item['titulo']} nao pode ser contratado, apenas comprado",
+                )
+            price = resolve_catalog_price(item["conteudo"], field="preco_contratacao" if contratando else "preco")
             if price is None:
                 raise HTTPException(
                     status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
@@ -1088,12 +1105,15 @@ def purchase_batch(
                 )
             # Mesmo calculo da listagem (core/promotions.py): se o item esta
             # em oferta nesta janela de 12h, cobra o preco com desconto, o
-            # mesmo que o jogador viu na vitrine.
-            promotion = resolve_promotion(
-                item["id"], item["tipo"], item["conteudo"], price, _catalog_shop_level(item), now=now,
-            )
-            if promotion is not None:
-                price, _promo = promotion
+            # mesmo que o jogador viu na vitrine. Contratacao (mensalidade e
+            # taxa de contratacao) nao entra em promocao - a oferta vale so
+            # pra quem esta comprando o servo/escravo pelo preco cheio.
+            if not contratando:
+                promotion = resolve_promotion(
+                    item["id"], item["tipo"], item["conteudo"], price, _catalog_shop_level(item), now=now,
+                )
+                if promotion is not None:
+                    price, _promo = promotion
             _add_total(totals, price.moeda, price.valor * line.quantidade)
             purchased_items.append(
                 {
@@ -1360,7 +1380,7 @@ def purchase_batch(
                         status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                         detail="a instalacao direta em veiculos compartilhados requer a API de modulos",
                     )
-            
+
             existing = existing_inventory.get(line.item_id, {})
             existing_quantity = int(existing.get("quantidade", 0))
             new_quantity = existing_quantity + line.quantidade
@@ -1401,7 +1421,7 @@ def purchase_batch(
             )
 
             if item["tipo"] == "monstro":
-                new_allies.extend(_build_mercenary_allies(item, line.quantidade))
+                new_allies.extend(_build_mercenary_allies(item, line.quantidade, line.modo))
             elif item["tipo"] == "propriedade":
                 new_properties.extend(_build_properties(item, line.quantidade))
 

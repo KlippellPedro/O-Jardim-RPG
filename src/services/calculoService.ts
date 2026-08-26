@@ -2,6 +2,7 @@ import type { IClasse, IRaca } from '../types/catalogo';
 import {
   obterEstagiosRaciaisAlcancados,
   obterOpcaoRacialSelecionada,
+  obterOpcoesRaciaisSelecionadas,
   obterTracosRaciaisDisponiveis,
 } from './racaService';
 
@@ -103,6 +104,10 @@ export function normalizarAtributosIniciais(atribuicao: Record<string, number>):
 }
 
 export function obterVarianteRacial(raca: IRaca | null, escolhaRacial: any = {}) {
+  if (Array.isArray(raca?.variantes)) {
+    const variante = raca.variantes.find(item => item.id === escolhaRacial?.varianteId);
+    if (variante) return variante;
+  }
   return obterOpcaoRacialSelecionada(raca, escolhaRacial);
 }
 
@@ -115,7 +120,7 @@ function somarMapasNumericos(...mapas: any[]) {
 }
 
 export function obterAjustesAtributosRaciais(raca: IRaca, escolhaRacial: any = {}) {
-  const variante = obterVarianteRacial(raca, escolhaRacial);
+  const opcoes = obterOpcoesRaciaisSelecionadas(raca, escolhaRacial);
   const configuracao = raca?.escolha_atributos;
   const campo = String(configuracao?.campo || 'atributosRaciais');
   const total = Math.max(0, Math.trunc(Number(configuracao?.total) || 0));
@@ -127,13 +132,13 @@ export function obterAjustesAtributosRaciais(raca: IRaca, escolhaRacial: any = {
   const ajustesEscolhidos = Object.fromEntries(escolhas.map(atributo => [atributo, bonus]));
   return somarMapasNumericos(
     raca?.ajustes_atributos,
-    variante?.ajustes_atributos,
+    ...opcoes.map(opcao => opcao.ajustes_atributos),
     ajustesEscolhidos,
   );
 }
 
 export function obterLimitesAtributosRaciais(raca: IRaca, escolhaRacial: any = {}) {
-  const variante = obterVarianteRacial(raca, escolhaRacial);
+  const opcoes = obterOpcoesRaciaisSelecionadas(raca, escolhaRacial);
   const configuracao = raca?.escolha_atributos;
   const campo = String(configuracao?.campo || 'atributosRaciais');
   const total = Math.max(0, Math.trunc(Number(configuracao?.total) || 0));
@@ -147,7 +152,7 @@ export function obterLimitesAtributosRaciais(raca: IRaca, escolhaRacial: any = {
     : {};
   return {
     ...(raca?.limites_atributos || {}),
-    ...(variante?.limites_atributos || {}),
+    ...Object.assign({}, ...opcoes.map(opcao => opcao.limites_atributos || {})),
     ...limitesEscolhidos,
   } as Record<string, number>;
 }
@@ -201,13 +206,11 @@ export function obterModificacoesRaciaisInstaladas(raca: IRaca | null, escolhaRa
 }
 
 export function obterAjustesPericiasRaciais(raca: IRaca | null, escolhaRacial: any = {}) {
-  const condicao = Array.isArray(raca?.condicoes_ancestrais)
-    ? raca.condicoes_ancestrais.find((item: any) => item.id === escolhaRacial?.condicaoAncestralId)
-    : null;
+  const opcoes = obterOpcoesRaciaisSelecionadas(raca, escolhaRacial);
   const fragmentos = obterFragmentosRaciaisExpressos(raca, escolhaRacial);
   const mapas = [
     raca?.ajustes_pericias || {},
-    condicao?.ajustes_pericias || {},
+    ...opcoes.map(opcao => opcao.ajustes_pericias || {}),
     ...fragmentos.map((fragmento: any) => fragmento.ajustes_pericias || {}),
   ];
   const chaves = new Set(mapas.flatMap(mapa => Object.keys(mapa)));
@@ -274,6 +277,7 @@ function calcularDerivadosBase(
   const modSabedoria = modificador(atributosEfetivos.sabedoria);
   
   const varianteRacial = obterVarianteRacial(raca, escolhaRacial);
+  const opcoesRaciais = obterOpcoesRaciaisSelecionadas(raca, escolhaRacial);
   const fragmentosExpressos = obterFragmentosRaciaisExpressos(raca, escolhaRacial);
   
   // Estágios raciais (Espírito Menor/Maior/Primordial) se acumulam: quem chegou
@@ -283,12 +287,12 @@ function calcularDerivadosBase(
     .reduce((total: number, estagio: any) => total + (Number(estagio?.[campo]) || 0), 0);
 
   const baseVidaRaca = Number(raca?.vida) || 0;
-  const baseVidaVariante = Number(varianteRacial?.vida) || 0;
-  const bonusVidaRacial = baseVidaRaca + baseVidaVariante + somaEstagios('vida');
+  const baseVidaOpcoes = opcoesRaciais.reduce((total, opcao) => total + (Number(opcao.vida) || 0), 0);
+  const bonusVidaRacial = baseVidaRaca + baseVidaOpcoes + somaEstagios('vida');
 
   const baseManaRaca = Number(raca?.mana) || 0;
-  const baseManaVariante = Number(varianteRacial?.mana) || 0;
-  const bonusManaRacial = baseManaRaca + baseManaVariante + somaEstagios('mana')
+  const baseManaOpcoes = opcoesRaciais.reduce((total, opcao) => total + (Number(opcao.mana) || 0), 0);
+  const bonusManaRacial = baseManaRaca + baseManaOpcoes + somaEstagios('mana')
     + fragmentosExpressos.reduce((total, fragmento: any) => total + (Number(fragmento.mana) || 0), 0);
 
   // Traços raciais já destravados podem declarar Defesa e Movimento (Crosta e
@@ -299,11 +303,14 @@ function calcularDerivadosBase(
     .reduce((total: number, traco: any) => total + (Number(traco?.[campo]) || 0), 0);
 
   const baseMovimentoRaca = Number(raca?.movimento) || 0;
-  const baseMovimentoVariante = Number(varianteRacial?.movimento) || 0;
-  const bonusMovimentoRacial = baseMovimentoRaca + baseMovimentoVariante
+  const baseMovimentoOpcoes = opcoesRaciais.reduce((total, opcao) => total + (Number(opcao.movimento) || 0), 0);
+  const bonusMovimentoRacial = baseMovimentoRaca + baseMovimentoOpcoes
     + somaEstagios('movimento') + somaTracos('movimento');
 
-  const bonusVidaVariantePorNivel = (Number(varianteRacial?.vida_por_nivel) || 0) * Math.max(1, Number(nivel) || 1);
+  const bonusVidaVariantePorNivel = opcoesRaciais.reduce(
+    (total, opcao) => total + ((Number(opcao.vida_por_nivel) || 0) * Math.max(1, Number(nivel) || 1)),
+    0,
+  );
   const modificacoes = obterModificacoesRaciaisInstaladas(raca, escolhaRacial, nivel);
   const bonusVidaModificacoes = modificacoes.reduce(
     (total: number, item: any) => total + ((Number(item.vida_por_nivel) || 0) * Math.max(1, Number(nivel) || 1)),

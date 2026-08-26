@@ -25,7 +25,7 @@ export const GRUPOS_NAVEGACAO: readonly GrupoNavegacaoRegras[] = [
     id: 'combate',
     titulo: 'Combate e Cenas',
     descricao: 'Turnos, dano, condições e ações compartilhadas.',
-    topicos: ['combate', 'distancias', 'ferimentos', 'coreografia', 'descanso', 'acoes-coletivas', 'ataques-combinados', 'mesa-ao-vivo', 'condicoes', 'aflicoes'],
+    topicos: ['combate', 'tipos-de-dano', 'distancias', 'ferimentos', 'coreografia', 'descanso', 'acoes-coletivas', 'ataques-combinados', 'mesa-ao-vivo', 'condicoes', 'aflicoes'],
     cor: 'border-rose-300/20 from-rose-400/10',
   },
   {
