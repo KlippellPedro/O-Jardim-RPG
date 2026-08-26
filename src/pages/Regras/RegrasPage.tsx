@@ -24,6 +24,7 @@ import { CatalogoMagico } from './components/CatalogoMagico';
 import { CatalogoCondicoes } from './components/CatalogoCondicoes';
 import { CatalogoPericias } from './components/CatalogoPericias';
 import { CatalogoBestiario } from './components/CatalogoBestiario';
+import { CatalogoAflicoes } from './components/CatalogoAflicoes';
 import { GridClasses } from './components/GridClasses';
 import { GridRacas } from './components/GridRacas';
 import { RegrasContent } from './components/RegrasContent';
@@ -59,41 +60,59 @@ function RulesLanding({
       return termo.split(/\s+/).filter(Boolean).every((palavra) => alvo.includes(palavra));
     }),
   })).filter((grupo) => grupo.topicos.length > 0);
+  const totalTopicosVisiveis = gruposVisiveis.reduce((total, grupo) => total + grupo.topicos.length, 0);
 
   return (
     <motion.div key="inicio-regras" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mx-auto w-full max-w-[82.5rem] px-5 py-8 sm:px-8 lg:px-12 lg:py-12">
       <div className="border-b border-[#c7a44c]/20 pb-8">
         <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#c7a44c]">Livro de Regras</span>
         <h1 className="mt-4 font-serif text-3xl font-bold text-[#f2ead7] sm:text-5xl">O que você precisa descobrir?</h1>
-        <p className="mt-5 max-w-3xl text-base leading-8 text-gray-400">Encontre o assunto pelo grupo ou procure pelo nome e pela descrição. Todos os capítulos disponíveis para você aparecem nesta página.</p>
-        <label className="relative mt-6 block max-w-2xl">
+        <p className="mt-5 max-w-3xl text-base leading-8 text-gray-300/80">Encontre o assunto pelo grupo ou procure pelo nome e pela descrição. Todos os capítulos disponíveis para você aparecem nesta página.</p>
+        <label className="relative mt-6 block max-w-3xl">
           <span className="sr-only">Buscar em todos os capítulos</span>
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#d8bd75]/65" size={18} />
           <input
             type="search"
             value={buscaInicio}
             onChange={(event) => setBuscaInicio(event.target.value)}
             placeholder="Buscar classe, combate, viagem, magia..."
-            className="w-full rounded-xl border border-white/10 bg-black/25 py-3.5 pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-[#c7a44c]/50"
+            className="w-full rounded-2xl border border-white/15 bg-black/35 py-4 pl-11 pr-4 text-sm text-white shadow-inner outline-none transition placeholder:text-gray-500 hover:border-white/25 focus:border-[#c7a44c]/60 focus:bg-black/45 sm:pr-24"
           />
+          <span className="pointer-events-none absolute right-4 top-1/2 hidden -translate-y-1/2 text-[10px] font-bold uppercase tracking-[0.12em] text-gray-500 sm:block">
+            {totalTopicosVisiveis} {totalTopicosVisiveis === 1 ? 'capítulo' : 'capítulos'}
+          </span>
         </label>
       </div>
       {gruposVisiveis.length ? (
-        <div className="mt-8 grid items-start gap-5 lg:grid-cols-2">
-          {gruposVisiveis.map((grupo) => (
-            <section key={grupo.id} className={`rounded-2xl border bg-gradient-to-br ${grupo.cor} to-black/20 p-5 sm:p-6`}>
-              <h2 className="font-serif text-xl font-bold text-white/90">{grupo.titulo}</h2>
-              <p className="mt-1 text-sm leading-6 text-gray-500">{grupo.descricao}</p>
-              <div className="mt-5 grid gap-2 sm:grid-cols-2">
+        <div className="mt-8 space-y-5">
+          {gruposVisiveis.map((grupo, indiceGrupo) => (
+            <section key={grupo.id} className={`relative overflow-hidden rounded-[1.75rem] border bg-gradient-to-br ${grupo.cor} to-black/35 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.18)] sm:p-7`}>
+              <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full border border-white/[0.04] bg-white/[0.025]" />
+              <header className="relative flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/35">Seção {String(indiceGrupo + 1).padStart(2, '0')}</span>
+                  <h2 className="mt-1 font-serif text-2xl font-bold text-[#f2ead7]">{grupo.titulo}</h2>
+                  <p className="mt-1.5 text-sm leading-6 text-gray-300/70">{grupo.descricao}</p>
+                </div>
+                <span className="w-fit shrink-0 rounded-full border border-white/10 bg-black/25 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-gray-400">
+                  {grupo.topicos.length} {grupo.topicos.length === 1 ? 'capítulo' : 'capítulos'}
+                </span>
+              </header>
+              <div className="relative mt-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,18rem),1fr))] gap-3">
                 {grupo.topicos.map((topico) => (
                   <button
                     key={topico}
                     type="button"
                     onClick={() => onSelectTopic(topico)}
-                    className="group flex min-h-16 items-center justify-between gap-3 rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-left transition hover:border-[#c7a44c]/35 hover:bg-black/30"
+                    className="group flex min-h-[8.75rem] items-start justify-between gap-4 rounded-2xl border border-white/[0.12] bg-[#09080d]/70 p-5 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#c7a44c]/45 hover:bg-[#121017] hover:shadow-[0_12px_30px_rgba(0,0,0,0.28)] focus-visible:border-[#c7a44c]/60"
                   >
-                    <span><strong className="block text-sm text-gray-200">{tituloTopico(topico, titulos)}</strong><span className="mt-1 line-clamp-2 block text-xs leading-5 text-gray-500">{regras[topico].resumo}</span></span>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-[#c7a44c]/55 transition group-hover:translate-x-0.5" />
+                    <span className="min-w-0">
+                      <strong className="block text-base leading-6 text-gray-100 transition-colors group-hover:text-[#f2ead7]">{tituloTopico(topico, titulos)}</strong>
+                      <span className="mt-2 line-clamp-3 block text-sm leading-6 text-gray-400">{regras[topico].resumo}</span>
+                    </span>
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#c7a44c]/20 bg-[#c7a44c]/10 text-[#d8bd75] transition group-hover:border-[#c7a44c]/45 group-hover:bg-[#c7a44c]/15">
+                      <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    </span>
                   </button>
                 ))}
               </div>
@@ -101,9 +120,6 @@ function RulesLanding({
           ))}
         </div>
       ) : <p className="py-16 text-center text-sm text-gray-500">Nenhum capítulo corresponde à busca.</p>}
-      <Link to="/materiais" className="mt-5 flex items-center justify-between gap-4 rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-6 transition hover:bg-emerald-400/15">
-        <span><strong className="font-serif text-xl text-emerald-50">Materiais simplificados</strong><span className="mt-1 block text-sm text-emerald-100/50">Veja os seis estoques e o que pode virar cada recurso.</span></span><ArrowRight className="h-5 w-5 shrink-0 text-emerald-200" />
-      </Link>
     </motion.div>
   );
 }
@@ -276,7 +292,8 @@ export const RegrasPage = () => {
   const racasVisiveis = useMemo(
     () => isMestre
       ? racasCatalogo
-      : racasCatalogo.filter((raca) => !raca.indisponivel && (raca.categoria !== 'esquecida' || racasLiberadas.has(raca.id))),
+      : racasCatalogo.filter((raca) => raca.id === 'entidade'
+        || (!raca.indisponivel && (raca.categoria !== 'esquecida' || racasLiberadas.has(raca.id)))),
     [isMestre, racasCatalogo, racasLiberadas],
   );
   const classesVisiveis = useMemo(
@@ -334,6 +351,7 @@ export const RegrasPage = () => {
     'catalogo-magico',
     'modificacoes-equipamentos',
     'veiculos-cenas',
+    'aflicoes',
   ].includes(activeTopic);
 
   return (
@@ -427,13 +445,18 @@ export const RegrasPage = () => {
                   </>
                 ) : activeTopic === 'pericias' ? (
                   <>
-                    <RegrasContent htmlContent={topicData.corpo} />
+                    <RegrasContent htmlContent={topicData.corpo} ocultarCatalogoPericias />
                     <CatalogoPericias pericias={pericias} />
                   </>
                 ) : activeTopic === 'condicoes' ? (
                   <>
                     <RegrasContent htmlContent={topicData.corpo} />
                     <CatalogoCondicoes condicoes={condicoes} crises={crises} />
+                  </>
+                ) : activeTopic === 'aflicoes' ? (
+                  <>
+                    <RegrasContent htmlContent={topicData.corpo} ocultarCatalogoAflicoes />
+                    <CatalogoAflicoes />
                   </>
                 ) : activeTopic === 'bestiario' ? (
                   <>
