@@ -120,6 +120,12 @@ export interface EntidadeCatalogo {
   tema: TemaEntidade;
   musicaTema?: MusicaTemaEntidade;
   conto: SecaoContoEntidade[];
+  /** Visibilidade padrão pro jogador, antes de qualquer ajuste de campanha
+   * (mesma convenção de `revelado` em data/gerado/mundoCatalog.ts). Ausente
+   * ou `true`: visível por padrão, e o Mestre pode ocultar em Visibilidade >
+   * Contos das Entidades. `false`: trancado até o Mestre revelar. Publicar
+   * um conto aqui não obriga a mostrá-lo a todas as campanhas na hora. */
+  revelado?: boolean;
 }
 
 /**

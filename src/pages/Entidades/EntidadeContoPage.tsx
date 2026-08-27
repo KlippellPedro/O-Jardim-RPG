@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Crown, Feather } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { encontrarEntidade } from '../../../data/mundo/entidades';
+import { useAuthStore } from '../../store/useAuthStore';
+import { loreBloqueado } from '../Mundo/loreVisibility';
 import { EntityThemeMusic } from './EntityThemeMusic';
 import { EntityWanderingFigure } from './EntityWanderingFigure';
 import './entidades.css';
@@ -12,8 +14,19 @@ type EntityThemeStyle = CSSProperties & Record<`--entity-${string}`, string>;
 export function EntidadeContoPage() {
   const { entidadeId } = useParams<{ entidadeId: string }>();
   const entidade = encontrarEntidade(entidadeId);
+  const { usuario, campanhaAtiva } = useAuthStore();
+  const isMestre = usuario?.papel_plataforma === 'admin'
+    || usuario?.papel_plataforma === 'criador'
+    || campanhaAtiva?.papel === 'mestre'
+    || campanhaAtiva?.papel === 'assistente';
+  const config = campanhaAtiva?.configuracoes || {};
+  const bloqueada = Boolean(entidade) && loreBloqueado(entidade!, {
+    isMestre,
+    loreRevelado: config.entidades_revelado || [],
+    loreOculto: config.entidades_oculto || [],
+  });
 
-  if (!entidade) {
+  if (!entidade || bloqueada) {
     return (
       <main className="entity-story entity-story--missing">
         <BookOpen size={48} strokeWidth={1.2} />

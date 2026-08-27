@@ -35,6 +35,11 @@ export interface ICampanha {
     lore_oculto?: string[];
     arvores_revelado?: string[];
     arvores_oculto?: string[];
+    entidades_revelado?: string[];
+    entidades_oculto?: string[];
+    personagens_pastas?: Array<{ id: string; nome: string }>;
+    personagens_pasta_por_id?: Record<string, string>;
+    personagens_ordem?: string[];
     racas_liberadas?: string[];
     classes_liberadas?: string[];
     raridades_ocultas?: string[];

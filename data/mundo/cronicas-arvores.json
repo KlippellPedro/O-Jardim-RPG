@@ -11,16 +11,16 @@
       "id": "primeiro-brotar",
       "ordem": 10,
       "era": "Era do Primeiro Brotar",
-      "titulo": "O primeiro começo",
-      "resumo": "Aethel abre a possibilidade de alguma coisa existir, e é só disso que as outras nove precisam pra encontrar função. Peso, distância, mudança, vida, verdade, ordem, comunicação, fim e vazio aparecem quase juntos - o Jardim não foi montado por etapas, foi montado de uma vez e ajustado depois.",
+      "titulo": "As sementes são plantadas",
+      "resumo": "Aethel junto do jardineiro abrem a possibilidade de novas coisas existirem, e é só disso que as outras 8 arvores precisam pra encontrar suas funções. Peso, distância, mudança, vida, verdade, ordem, comunicação, fim e vazio, cada arvore se atribui um conceito existente e passam a serem deidades do mesmo.",
       "arvores": ["aethel"]
     },
     {
       "id": "jardim-toma-forma",
       "ordem": 20,
       "era": "Era da Formação",
-      "titulo": "Os Galhos se separam",
-      "resumo": "Moros dá peso ao que existia solto e Aperion abre distância entre o que não podia se encostar. É daí que saem as fronteiras: sem elas, duas realidades incompatíveis ocupariam o mesmo lugar, e nenhuma das duas sobreviveria à conta.",
+      "titulo": "O Jardim toma forma",
+      "resumo": "Moros dá peso ao que existia solto e Aperion abre distância entre o que não podia se encostar. É daí que saem as fronteiras, sem elas, duas realidades incompatíveis ocupariam o mesmo lugar, e nenhuma das duas sobreviveria a isso.",
       "arvores": ["moros", "aperion"]
     },
     {
@@ -28,7 +28,7 @@
       "ordem": 30,
       "era": "Era dos Pactos",
       "titulo": "As Árvores aprendem a se falar",
-      "resumo": "Keryx abre os caminhos por onde uma deidade fala com outra e escreve as leis que tornam um acordo entre Árvores possível. Os mais sérios eram fechados na Sala dos Nomes, em Alétheia, onde ninguém consegue prometer usando um nome que não é o seu.",
+      "resumo": "Keryx estabelece caminhos de comunicação e pactos entre realidades. Na Sala dos Nomes, em Alétheia, promessas passam a ser firmadas diante da essência verdadeira de quem as pronuncia.",
       "arvores": ["keryx", "ousias"]
     },
     {
@@ -36,7 +36,7 @@
       "ordem": 40,
       "era": "Era dos Registros",
       "titulo": "Limiar começa a guardar os finais",
-      "resumo": "Arkarin passa a receber tudo o que termina, e a Biblioteca ganha um livro por vida encerrada. É também nessa era que o título de Mulher Carmesim muda de dona pela primeira vez de que se tem notícia - a prova de que o cargo não é a pessoa.",
+      "resumo": "Arkarin passa a receber tudo o que termina, e a Biblioteca ganha um livro por vida encerrada. É também nessa era que o título de Mulher Carmesim muda de dona pela primeira vez de que se tem notícia a prova de que o cargo não é a pessoa.",
       "arvores": ["mulher-carmesim"]
     },
     {
@@ -44,48 +44,56 @@
       "ordem": 50,
       "era": "Ano 0 da Realidade 0",
       "titulo": "O Cataclismo do Ano Zero",
-      "resumo": "Uma magia deu errado e o mundo virou morte e caos. Quando parou, ninguém tinha como continuar a contagem antiga, então recomeçaram do zero. Salém já estava de pé antes e continuou de pé depois: é o único reino conhecido dos dois lados do marco.",
+      "resumo": "Uma magia de 10° circulo deu errado e muitos dos galhos viraram morte e caos. Quando tudo se acalmou, ninguém tinha como continuar a contagem antiga, então recomeçaram do zero.",
       "arvores": ["aethel"]
     },
     {
-      "id": "ascensao-astraluna",
+      "id": "chegada-das-anomalias",
       "ordem": 60,
+      "era": "Era do Vazio",
+      "titulo": "A chegada das anomalias",
+      "resumo": "Aqui é marcado a chegada de seres que no futuro seriam conhecidos como as aberrações mais destrutivas do jardim, eles são seres vindo de fora do universo, são criaturas capazes de mudar o rumo de como as coisas são conhecidas e por conta disso são temidos e ou reverenciados em alguns locais.",
+      "arvores": ["erebus"]
+    },
+    {
+      "id": "ascensao-astraluna",
+      "ordem": 70,
       "era": "Ano 1.188 da Realidade 0",
       "titulo": "Astraluna é fundada",
-      "resumo": "Uma cidade a mais na Dimensão Padrão, sem nada de notável na época. Séculos depois seria dali que sairia a AstraTech - e a fé de Astraluna em razão e máquina é metade da explicação de como a A.X.I.S foi construída sem que ninguém achasse aquilo estranho.",
+      "resumo": "Uma cidade da Dimensão Padrão da arvore Gêneses, sem nada de \"notável\" na época. Séculos depois dali que sairia a AstraTech e a fé de seus habitantes em um homem chamado Jota Macedo que junto da razão e máquina teria criado a A.X.I.S um fluxo artificial totalmente feito de tecnologia, para alguns isso era loucura, porem Jota não ligou pra isso e por conta disso marcou seu nome na historia como o maior engenheiro de todos.",
       "arvores": ["aethel", "keryx"]
     },
     {
+      "id": "ultimo-eclipse",
+      "ordem": 80,
+      "era": "Era dos Gênios",
+      "titulo": "O Último Eclipse",
+      "resumo": "Jota Macedo trabalha em uma máscara capaz de canalizar o poder de uma deidade e Circe tenta detê-lo juntando forças com as novas gerações prometidas.",
+      "arvores": []
+    },
+    {
       "id": "contrato-de-keryx",
-      "ordem": 70,
+      "ordem": 90,
       "era": "Era da Interceptação",
-      "titulo": "Keryx assina",
-      "resumo": "Jota Macedo não derrotou ninguém. Levou um contrato, e Keryx - que regia justamente os pactos e as leis entre realidades - leu, concordou e assinou. A Malha subiu sobre Parley no mesmo movimento.",
+      "titulo": "Keryx é subjugado",
+      "resumo": "Jota Macedo derrota Keryx fazendo ele aceitar um pacto forçado que se revela uma prisão. A Malha artificial da A.X.I.S sobe sobre Parley e assume o controle das mensagens entre as Árvores.",
       "arvores": ["keryx"]
     },
     {
       "id": "silencio-das-deidades",
-      "ordem": 80,
-      "era": "Era da Interceptação",
+      "ordem": 100,
+      "era": "Era do Silêncio",
       "titulo": "O Silêncio das Deidades",
-      "resumo": "Cortada a comunicação, oito deidades param. Não morreram nem foram vencidas: ficaram sem com quem confirmar nada, e nenhuma confia o bastante nas outras pra agir sozinha. Só Aethel e a Mulher Carmesim seguem trabalhando - o que nasce e o que acaba. Todo o caminho entre uma ponta e outra é que ficou sem dono.",
+      "resumo": "Sem comunicação, nenhuma das oito deidades pode se comunicar entre si. Apenas Aethel tenta continuar a se comunicar com suas \"irmãs\" e \"irmãos\" o nascimento seguem operando, enquanto quase tudo perde a direção.",
       "arvores": ["keryx", "aethel", "mulher-carmesim", "ousias", "haemus", "ignis", "moros", "aperion", "chronus", "erebus"]
     },
     {
-      "id": "sinais-da-fratura",
-      "ordem": 90,
-      "era": "Depois do Silêncio",
-      "titulo": "As primeiras rachaduras",
-      "resumo": "As fronteiras de Aperion cedem e abrem Vãos onde nunca houve passagem. O mundo de Ignis fica teimosamente igual a si mesmo. Acontecimentos começam a chegar levemente fora de ordem. E o Viveiro, que nunca precisou de ninguém pra crescer, cresce sem ninguém pra segurar.",
-      "arvores": ["aperion", "ignis", "chronus", "haemus"]
-    },
-    {
-      "id": "ultimo-eclipse",
-      "ordem": 100,
-      "era": "Presente da campanha",
-      "titulo": "O Último Eclipse",
-      "resumo": "Jota trabalha numa máscara capaz de canalizar o poder de uma deidade presa, e já tem uma presa. Circe, criada pela mesma mulher que criou ele, tenta chegar antes. O Jardim assiste com as duas pontas acesas e o meio inteiro no escuro.",
-      "arvores": ["keryx", "aethel", "mulher-carmesim"]
+      "id": "primeiros-erros",
+      "ordem": 110,
+      "era": "Era dos erros",
+      "titulo": "Os primeiros erros",
+      "resumo": "Erros começam a aparecer reinos que não eram pra existir surgem, seres de outras arvores passam entre as arvores como se fossem movidos de um lugar pro outro e dimensões começam a se juntar.",
+      "arvores": ["chronus", "ignis", "ousias", "aethel", "haemus", "aperion", "mulher-carmesim", "erebus", "keryx", "moros"]
     }
   ],
   "arvores": [

@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { BookOpen, History, Lock, ShoppingBag } from 'lucide-react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { MUNDO_CATALOG, type LoreEntry } from '../../../data/gerado/mundoCatalog';
-import { arvoreVisivel } from '../../../data/mundo/arvoresCatalog';
+import { ARVORES, arvoreVisivel } from '../../../data/mundo/arvoresCatalog';
 import { useAuthStore } from '../../store/useAuthStore';
 import { usePerformanceProfile } from '../../hooks/usePerformance';
 import { conteudoEditorialApi } from '../../services/conteudoEditorialApi';
@@ -16,8 +16,17 @@ import { WORLD_CHRONICLES, type WorldChronicleCatalog } from './worldChronicles'
 const CosmicTreeViewer = lazy(() => import('./components/CosmicTreeViewer').then((module) => ({ default: module.CosmicTreeViewer })));
 const TreeChroniclePage = lazy(() => import('./components/TreeChroniclePage').then((module) => ({ default: module.TreeChroniclePage })));
 const GlobalChroniclePage = lazy(() => import('./components/GlobalChroniclePage').then((module) => ({ default: module.GlobalChroniclePage })));
+const SimpleTreeList = lazy(() => import('./components/SimpleTreeList').then((module) => ({ default: module.SimpleTreeList })));
 
 const EMPTY_CONFIG: Record<string, unknown> = {};
+
+/** As 10 Árvores da lore, para checagem de bloqueio/visibilidade e para a
+ * linha do tempo. Diferente de COSMIC_TREES (9 corpos orbitais): Abismo/erebus
+ * não orbita na cena 3D, mas continua sendo uma Árvore válida com crônica
+ * própria - excluí-lo daqui escondia da Linha do Tempo do Jardim qualquer
+ * marco que cite Erebus, mesmo pro Mestre. "universal" fica de fora por não
+ * ser uma Árvore de verdade. */
+const CANONICAL_TREE_IDS = ARVORES.filter((arvore) => arvore.id !== 'universal').map((arvore) => arvore.id);
 
 const WorldLoading = ({ label }: { label: string }) => (
   <div className="flex min-h-[320px] w-full items-center justify-center rounded-3xl border border-white/10 bg-[#08070c]/85 text-sm text-gray-500">
@@ -35,6 +44,7 @@ export const MundoPage: React.FC = () => {
   const [infoDeidadeId, setInfoDeidadeId] = useState<string | null>(null);
   const [bancoLunarAberto, setBancoLunarAberto] = useState(false);
   const [vazioAberto, setVazioAberto] = useState(false);
+  const [visaoSimples, setVisaoSimples] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { arvoreId } = useParams<{ arvoreId?: string }>();
@@ -84,8 +94,7 @@ export const MundoPage: React.FC = () => {
     return () => controller.abort();
   }, [campanhaAtiva?.id]);
 
-  const lockedDeidades = useMemo(() => COSMIC_TREES
-    .map((tree) => tree.deidadeId)
+  const lockedDeidades = useMemo(() => CANONICAL_TREE_IDS
     .filter((id) => {
       if (isMestre) return false;
       if (!arvoreVisivel(id, config, isMestre)) return true;
@@ -95,7 +104,7 @@ export const MundoPage: React.FC = () => {
     }), [config, isMestre, loreOculto, loreRevelado, mundoCatalog]);
   const lockedSet = useMemo(() => new Set(lockedDeidades), [lockedDeidades]);
   const visibleTreeIds = useMemo(
-    () => COSMIC_TREES.map((tree) => tree.deidadeId).filter((id) => !lockedSet.has(id)),
+    () => CANONICAL_TREE_IDS.filter((id) => !lockedSet.has(id)),
     [lockedSet],
   );
   const activeTree = arvoreId
@@ -225,7 +234,7 @@ export const MundoPage: React.FC = () => {
       <div role="main" className="app-viewport mx-auto flex max-w-[112.5rem] flex-col overflow-hidden">
         <div className="mb-3 flex shrink-0 flex-col items-center sm:mb-5">
           <h1 className="text-center text-[clamp(2rem,7vw,3.75rem)] font-bold leading-tight tracking-wider text-yellow-500 drop-shadow-[0_0_20px_rgba(202,138,4,0.5)]" style={{ fontFamily: 'Cinzel, serif' }}>
-            Códice do Jardim
+            Geografia do Jardim
           </h1>
           <button
             type="button"
@@ -237,16 +246,27 @@ export const MundoPage: React.FC = () => {
         </div>
 
         <div className="performance-expensive-effects relative flex min-h-0 w-full flex-1 overflow-hidden rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] sm:rounded-3xl">
-          <Suspense fallback={<WorldLoading label="Preparando projeção astral..." />}>
-            <CosmicTreeViewer
-              selectedDeidadeId={selectedDeidadeId}
-              onSelectDeidade={handleSelectDeidade}
-              onOpenInfo={handleOpenInfo}
-              onOpenBancoLunar={handleOpenBancoLunar}
-              onOpenVazio={handleOpenVazio}
-              lockedDeidades={lockedDeidades}
-            />
-          </Suspense>
+          {visaoSimples ? (
+            <Suspense fallback={<WorldLoading label="Carregando lista das Árvores..." />}>
+              <SimpleTreeList
+                lockedDeidades={lockedSet}
+                onSelectTree={openTreeChronicle}
+                onBack={() => setVisaoSimples(false)}
+              />
+            </Suspense>
+          ) : (
+            <Suspense fallback={<WorldLoading label="Preparando projeção astral..." />}>
+              <CosmicTreeViewer
+                selectedDeidadeId={selectedDeidadeId}
+                onSelectDeidade={handleSelectDeidade}
+                onOpenInfo={handleOpenInfo}
+                onOpenBancoLunar={handleOpenBancoLunar}
+                onOpenVazio={handleOpenVazio}
+                onOpenListView={() => setVisaoSimples(true)}
+                lockedDeidades={lockedDeidades}
+              />
+            </Suspense>
+          )}
 
           <AnimatePresence>
             {details && (

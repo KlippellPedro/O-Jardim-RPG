@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, BookOpen, Library, Search, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { CLASSIFICACOES_ENTIDADE, ENTIDADES, RANKS_PERIGO } from '../../../data/mundo/entidades';
+import { useAuthStore } from '../../store/useAuthStore';
+import { loreBloqueado } from '../Mundo/loreVisibility';
 import './entidades.css';
 
 function normalizar(texto: string) {
@@ -12,16 +14,29 @@ function normalizar(texto: string) {
 export function EntidadesPage() {
   const [busca, setBusca] = useState('');
   const termo = normalizar(busca.trim());
+  const { usuario, campanhaAtiva } = useAuthStore();
+  const isMestre = usuario?.papel_plataforma === 'admin'
+    || usuario?.papel_plataforma === 'criador'
+    || campanhaAtiva?.papel === 'mestre'
+    || campanhaAtiva?.papel === 'assistente';
+  const config = campanhaAtiva?.configuracoes || {};
+  const entidadesRevelado = config.entidades_revelado || [];
+  const entidadesOculto = config.entidades_oculto || [];
+
+  const entidadesVisiveis = useMemo(() => ENTIDADES.filter((entidade) => (
+    !loreBloqueado(entidade, { isMestre, loreRevelado: entidadesRevelado, loreOculto: entidadesOculto })
+  )), [isMestre, entidadesRevelado, entidadesOculto]);
+
   const entidades = useMemo(() => {
-    if (!termo) return ENTIDADES;
-    return ENTIDADES.filter((entidade) => normalizar([
+    if (!termo) return entidadesVisiveis;
+    return entidadesVisiveis.filter((entidade) => normalizar([
       entidade.nome,
       entidade.epiteto,
       entidade.resumo,
       RANKS_PERIGO.find((rank) => rank.id === entidade.rankPerigo)?.titulo,
       ...entidade.classificacao.map((id) => CLASSIFICACOES_ENTIDADE.find((classificacao) => classificacao.id === id)?.titulo),
     ].filter(Boolean).join(' ')).includes(termo));
-  }, [termo]);
+  }, [termo, entidadesVisiveis]);
 
   return (
     <main className="entity-book">
@@ -60,10 +75,10 @@ export function EntidadesPage() {
               <span>Índice do livro</span>
               <h2 id="arquivo-entidades">Contos registrados</h2>
             </div>
-            <strong>{ENTIDADES.length.toString().padStart(2, '0')}</strong>
+            <strong>{entidadesVisiveis.length.toString().padStart(2, '0')}</strong>
           </div>
 
-          {ENTIDADES.length > 0 ? (
+          {entidadesVisiveis.length > 0 ? (
             <label className="entity-book__search">
               <Search size={17} aria-hidden="true" />
               <span className="sr-only">Buscar entidade</span>
@@ -81,7 +96,7 @@ export function EntidadesPage() {
             </label>
           ) : null}
 
-          {ENTIDADES.length === 0 ? (
+          {entidadesVisiveis.length === 0 ? (
             <div className="entity-book__empty">
               <div className="entity-book__empty-icon" aria-hidden="true"><Library size={34} strokeWidth={1.3} /></div>
               <span>Volume I · página em branco</span>

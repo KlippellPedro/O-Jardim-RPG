@@ -22,7 +22,7 @@ export const ChronicleTimeline: React.FC<ChronicleTimelineProps> = memo(({ event
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.24) }}
-            className={`${compact ? 'relative pb-7 pl-7' : 'relative pb-10 pl-8 md:pb-12 md:pl-12'} content-auto-list-item`}
+            className={compact ? 'relative pb-7 pl-7' : 'relative pb-10 pl-8 md:pb-12 md:pl-12'}
           >
             <span className="absolute -left-[7px] top-1 h-[13px] w-[13px] rounded-full border-[3px] border-[#09080d] shadow-[0_0_18px_currentColor]" style={{ backgroundColor: color, color }} aria-hidden="true" />
             <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-bold uppercase tracking-[0.2em]">
