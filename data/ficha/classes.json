@@ -10432,6 +10432,102 @@
             "titulo": "Miragem",
             "descricao": "Shikai: uma vez por turno, quando você acerta com a Zanpakutō, o alvo testa Percepção contra a DT do Caçador das Almas. Em falha, recebe -2 nos ataques contra você até o início do seu próximo turno.",
             "escalonamento": "Bankai: a penalidade sobe para -4 e também vale contra um aliado escolhido por você a até 6 m."
+          },
+          {
+            "id": "incendio",
+            "titulo": "Incêndio",
+            "descricao": "Shikai: uma vez por turno, o primeiro acerto com a Zanpakutō envolve o alvo em chamas espirituais: ele sofre 1d6 de dano de fogo no início de cada um dos dois turnos seguintes, a menos que gaste uma ação para apagar o fogo.",
+            "escalonamento": "Bankai: o dano das chamas sobe para 1d10 por turno e elas se espalham para uma segunda criatura adjacente ao alvo quando ele é atingido."
+          },
+          {
+            "id": "cinzas",
+            "titulo": "Cinzas",
+            "descricao": "Shikai: a lâmina se dissolve em uma nuvem de cinzas cortantes num raio de 3 m ao seu redor. Uma vez por turno, uma criatura hostil que entrar nesse raio ou terminar o turno nele sofre 1d6 de dano espiritual.",
+            "escalonamento": "Bankai: o raio aumenta para 6 m, o dano sobe para 2d6 e você pode se mover livremente dentro da nuvem sem provocar Reações."
+          },
+          {
+            "id": "veneno",
+            "titulo": "Veneno",
+            "descricao": "Shikai: uma vez por turno, ao acertar, o alvo é envenenado: testa Fortitude contra a DT do Caçador das Almas no início de cada um dos dois turnos seguintes ou sofre 1d6 de dano; um sucesso encerra o veneno.",
+            "escalonamento": "Bankai: o veneno dura até o fim do combate ou até ser curado, e cada falha também reduz a Defesa do alvo em 2 enquanto durar."
+          },
+          {
+            "id": "ressonancia",
+            "titulo": "Ressonância",
+            "descricao": "Shikai: uma vez por turno, ao acertar, o alvo testa Fortitude contra a DT do Caçador das Almas. Em falha, fica Surdo e recebe -2 na iniciativa e em testes de Percepção até o fim do combate.",
+            "escalonamento": "Bankai: em falha, o alvo também perde a próxima Reação disponível e a penalidade de Percepção sobe para -4."
+          },
+          {
+            "id": "fardo",
+            "titulo": "Fardo",
+            "descricao": "Shikai: uma vez por turno, ao acertar, o peso do alvo dobra até o início do seu próximo turno: o deslocamento dele cai pela metade e ele recebe -2 em testes de Reflexos.",
+            "escalonamento": "Bankai: o efeito passa a durar até o alvo ser acertado novamente pela Zanpakutō ou até o fim do combate, e a penalidade de Reflexos sobe para -4."
+          },
+          {
+            "id": "laminas-gemeas",
+            "titulo": "Lâminas Gêmeas",
+            "descricao": "Shikai: uma vez por turno, após acertar, faça um segundo ataque com a Zanpakutō contra a mesma criatura ou outra a até 3 m, causando metade do dano em caso de acerto.",
+            "escalonamento": "Bankai: o segundo ataque passa a causar dano completo e uma terceira criatura a até 3 m pode sofrer metade desse dano."
+          },
+          {
+            "id": "perfuracao",
+            "titulo": "Perfuração",
+            "descricao": "Shikai: uma vez por turno, o ataque com a Zanpakutō ignora bônus de Defesa vindos de armadura ou escudo do alvo.",
+            "escalonamento": "Bankai: o ataque ignora todos os bônus de Defesa do alvo, inclusive os concedidos por poderes ou magias."
+          },
+          {
+            "id": "mare-vital",
+            "titulo": "Maré Vital",
+            "descricao": "Shikai: uma vez por rodada, quando você acerta uma criatura hostil com a Zanpakutō, você ou um aliado a até 6 m recupera 1d8 de Vida.",
+            "escalonamento": "Bankai: a cura sobe para 2d8 e pode ser dividida entre até dois aliados a até 6 m."
+          },
+          {
+            "id": "sentidos-invertidos",
+            "titulo": "Sentidos Invertidos",
+            "descricao": "Shikai: uma vez por turno, ao acertar, o alvo testa Vontade contra a DT do Caçador das Almas. Em falha, seus sentidos se invertem até o início do seu próximo turno: perto parece longe e cima parece baixo, então ele recebe -2 em Percepção e, ao se mover, sempre percorre a metade da distância pretendida.",
+            "escalonamento": "Bankai: em falha, o alvo também mira mal o primeiro ataque que fizer antes do efeito terminar, acertando a criatura mais próxima dele em vez do alvo original, à escolha do mestre."
+          },
+          {
+            "id": "corte-espectral",
+            "titulo": "Corte Espectral",
+            "descricao": "Shikai: uma vez por turno, ao acertar com a Zanpakutō, você pode dispensar o contato e disparar uma lâmina de energia espiritual em linha reta de até 9 m, atingindo automaticamente a primeira criatura hostil no caminho e causando 1d10 de dano espiritual.",
+            "escalonamento": "Bankai: o alcance sobe para 18 m, o dano para 2d10 e a lâmina atravessa o primeiro alvo, atingindo uma segunda criatura na mesma linha com metade do dano."
+          },
+          {
+            "id": "barreira-escarlate",
+            "titulo": "Barreira Escarlate",
+            "descricao": "Shikai: uma vez por rodada, escolha um entre dois efeitos ao usar a Zanpakutō: dispare uma rajada carmesim a até 9 m que causa 1d8 de dano espiritual, ou use sua Reação para erguer uma barreira que concede +2 de Defesa a você e a aliados adjacentes até o início do seu próximo turno.",
+            "escalonamento": "Bankai: a rajada passa a causar 2d8 de dano e a barreira também reduz em 1d6 o dano da primeira vez que alguém protegido por ela for atingido."
+          },
+          {
+            "id": "palco-tragico",
+            "titulo": "Palco Trágico",
+            "descricao": "Shikai: uma vez por turno, ao acertar, o alvo testa Vontade contra a DT do Caçador das Almas. Em falha, ele subestima sua ameaça e passa a preferir atacar outros alvos, recebendo -2 para mirar em você especificamente até o início do seu próximo turno.",
+            "escalonamento": "Bankai: ao ativar a Bankai, cubra um raio de 9 m ao seu redor em uma escuridão teatral que dura enquanto ela estiver ativa. Toda criatura hostil que entrar ou começar o turno na área testa Vontade contra a DT do Caçador das Almas; em falha, fica Amedrontado por você enquanto permanecer na área."
+          },
+          {
+            "id": "cinzas-do-fim",
+            "titulo": "Cinzas do Fim",
+            "descricao": "Shikai: uma vez por combate, concentre todo o calor da lâmina em um único corte: faça um ataque com a Zanpakutō que, se acertar, causa 3d8 de dano de fogo em vez do dano normal e ignora Resistência a fogo do alvo.",
+            "escalonamento": "Bankai: quando uma criatura hostil é reduzida a 0 de Vida por essa lâmina em chamas, as cinzas dela se erguem como um espectro que luta ao seu lado até o fim do combate, atacando por você uma vez por rodada e causando 1d8 de dano físico."
+          },
+          {
+            "id": "ala-glacial",
+            "titulo": "Ala Glacial",
+            "descricao": "Shikai: uma vez por turno, após acertar, o alvo testa Fortitude contra a DT do Caçador das Almas. Em falha, uma camada de gelo o prende: ele fica Imobilizado até o início do seu próximo turno ou até gastar uma ação para quebrar o gelo.",
+            "escalonamento": "Bankai: você ganha asas de gelo e uma velocidade de voo igual ao seu deslocamento; em falha, o alvo também sofre 2d6 de dano de gelo ao ficar imobilizado."
+          },
+          {
+            "id": "eco-reverso",
+            "titulo": "Eco Reverso",
+            "descricao": "Shikai: uma vez por rodada, quando sofrer dano corpo a corpo, use sua Reação para acertar automaticamente o atacante com a Zanpakutō, causando metade do dano normal.",
+            "escalonamento": "Bankai: o contra-ataque passa a causar dano completo e ignora metade da Resistência do alvo."
+          },
+          {
+            "id": "colapso",
+            "titulo": "Colapso",
+            "descricao": "Shikai: uma vez por combate, como Ação Padrão, detone a pressão espiritual da lâmina num raio de 4 m: cada criatura na área testa Fortitude contra a DT do Caçador das Almas, sofrendo 3d6 de dano espiritual em falha ou metade em sucesso. Você não pode atacar com a Zanpakutō no turno em que usar este efeito.",
+            "escalonamento": "Bankai: o raio aumenta para 6 m, o dano sobe para 4d6 e some a restrição de não atacar no mesmo turno."
           }
         ]
       },
@@ -10490,14 +10586,14 @@
       {
         "id": "konso-funeral-da-alma",
         "titulo": "Konsō: Funeral da Alma",
-        "descricao": "Uma vez por descanso longo, toque uma alma voluntária ou um espírito hostil com até um quarto da Vida máxima. Um alvo hostil testa Vontade contra a DT do Caçador das Almas. Em falha, ele é purificado e removido da cena, sem ser automaticamente destruído; qualquer possessão que mantinha termina sem ferir o hospedeiro. Em sucesso, nada acontece. O uso é gasto em qualquer resultado.",
+        "descricao": "Konsō é o ritual que os Caçadores das Almas usam para guiar uma alma sofredora ao descanso, em vez de deixá-la apodrecer até virar algo pior. Uma vez por combate, gaste uma Ação Completa para tocar uma alma vulnerável: qualquer alma voluntária, viva ou não, ou um espírito hostil com metade da Vida máxima ou menos. Contra um alvo hostil, ele testa Vontade contra a DT do Caçador das Almas. Em sucesso, ele resiste ao ritual: recebe -2 na primeira rolagem de Defesa contra você até o fim do seu próximo turno, mas a tentativa é gasta mesmo assim. Em falha, ou se o alvo for voluntário, a alma é purificada e enviada além, removida da cena sem ser destruída pela força. Se ela estava possuindo um hospedeiro, a possessão termina na hora e o hospedeiro se estabiliza, mesmo que esteja com a Vida abaixo de 0. Ao concluir um Konsō com sucesso, você absorve parte da energia liberada e recupera 1d8 pontos de Vida ou Mana, à sua escolha.",
         "niveis": [
           18
         ],
         "acao": "Ação Completa",
         "alcance": "Toque",
         "defesa": "Vontade",
-        "usos": "Uma vez por descanso longo"
+        "usos": "Uma vez por combate"
       },
       {
         "id": "bankai",

@@ -61,6 +61,22 @@ export function corDaArvore(arvoreId: string): string {
   return ARVORES.find((a) => a.id === arvoreId)?.rgb || '160,160,170';
 }
 
+/** Descrição da Deidade padroeira de uma Árvore, puxada direto do Códice
+ * (MUNDO_CATALOG), pra usar em textos de ajuda sem duplicar a lore aqui. */
+export function descricaoArvore(arvoreId: string): string | null {
+  const deidade = MUNDO_CATALOG.find((e) => e.id === arvoreId && e.tipo === 'deidade');
+  const descricao = deidade?.conteudo?.descricao;
+  return typeof descricao === 'string' ? descricao : null;
+}
+
+/** Primeiro parágrafo de "A Hierarquia do Jardim", pra explicar rapidamente
+ * o que é uma Árvore no contexto da criação de personagem. */
+export function descricaoHierarquiaDoJardim(): string {
+  const entrada = MUNDO_CATALOG.find((e) => e.id === 'hierarquia-do-jardim');
+  const descricao = entrada?.conteudo?.descricao;
+  return typeof descricao === 'string' ? descricao.split('\n\n')[0] : '';
+}
+
 /** Sentinela pra "Sem Árvore": não é uma das Árvores reais (não entra em
  * `ARVORES`), é usada quando a Árvore do jogador não quer ser revelada ainda.
  * Um personagem sem Árvore tem acesso a todas as raças e classes disponíveis. */

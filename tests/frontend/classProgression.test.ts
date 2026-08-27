@@ -2013,7 +2013,7 @@ test('Caçador das Almas publica Zanpakutō, Shikai, as quatro artes e Bankai', 
   assert.equal(zanpakuto.escolha_opcoes?.permanente, true);
   assert.equal(vagasEscolhaHabilidade(zanpakuto, 9), 0);
   assert.equal(vagasEscolhaHabilidade(zanpakuto, 10), 1);
-  assert.equal(zanpakuto.opcoes?.length, 6);
+  assert.equal(zanpakuto.opcoes?.length, 22);
   for (const aspecto of zanpakuto.opcoes || []) {
     assert.match(aspecto.descricao, /Shikai:/);
     assert.match(aspecto.escalonamento || '', /Bankai:/);

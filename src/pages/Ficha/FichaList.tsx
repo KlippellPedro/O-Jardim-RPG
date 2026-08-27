@@ -217,7 +217,7 @@ const FichaList: React.FC = () => {
       {isLoading ? (
         <div className="flex flex-col items-center justify-center flex-1 py-20 gap-4">
           <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
-          <p className="text-gray-400">Carregando seus heróis...</p>
+          <p className="text-gray-400">Carregando seus personagens...</p>
         </div>
       ) : error ? (
         <div className="flex flex-col items-center justify-center flex-1 py-20 bg-red-500/5 rounded-3xl border border-red-500/10 text-center px-4">
@@ -249,7 +249,7 @@ const FichaList: React.FC = () => {
             className="px-8 py-4 rounded-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary/80 hover:to-purple-500 text-white font-bold tracking-wide shadow-[0_0_30px_rgba(var(--color-primary),0.4)] transition-all hover:scale-105 hover:shadow-[0_0_50px_rgba(var(--color-primary),0.6)] flex items-center gap-3 relative z-10"
           >
             <Plus size={24} />
-            Criar Meu Primeiro Herói
+            Criar Meu Primeiro Personagem
           </button>
         </motion.div>
       ) : (

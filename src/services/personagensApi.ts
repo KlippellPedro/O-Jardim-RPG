@@ -84,7 +84,7 @@ export const personagensApi = {
     );
   },
   criar(campanhaId: string, personagem: any, donoUsuarioId: string | null = null) {
-    return api('/personagens', {
+    return api<PersonagemApiRecord>('/personagens', {
       method: 'POST',
       body: {
         campanha_id: campanhaId,

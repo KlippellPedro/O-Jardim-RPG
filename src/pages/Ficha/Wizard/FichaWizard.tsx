@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { carregarCatalogo } from '../../../services/catalogoService';
 import { ICatalogo } from '../../../types/catalogo';
 import { ICreateCharacterPayload } from '../../../types/personagem';
 import { useCharacterStore } from '../../../store/useCharacterStore';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { X, ChevronRight, ChevronLeft, Dices, Shield, Sword, Sparkles, ListOrdered, SlidersHorizontal, Minus, Plus } from 'lucide-react';
+import { X, ChevronRight, ChevronLeft, Dices, Shield, Sword, Sparkles, ListOrdered, SlidersHorizontal, Minus, Plus, HelpCircle, SkipForward } from 'lucide-react';
 import {
   rolarAtributos,
   rolagemAtributosPermitida,
@@ -26,14 +27,28 @@ import {
   conjuntoAtributosValido,
 } from '../../../services/calculoService';
 import { descreverOpcaoRacial, escolhaRacialEstaCompleta, obterGruposEscolhaRacial, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
-import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao } from '../../../../data/mundo/arvoresCatalog';
+import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao, descricaoArvore, descricaoHierarquiaDoJardim } from '../../../../data/mundo/arvoresCatalog';
 import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
 
 interface WizardProps {
   onClose: () => void;
 }
 
+/** Botão redondo "?" que abre um modal de ajuda com `titulo`/`texto` -
+ * mesmo padrão visual usado nos cálculos da Ficha (AbaFicha.tsx). */
+const InfoButton: React.FC<{ label: string; onClick: () => void }> = ({ label, onClick }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    aria-label={label}
+    className="rounded-full p-1 text-gray-500 opacity-70 transition-opacity hover:text-primary hover:opacity-100"
+  >
+    <HelpCircle size={16} />
+  </button>
+);
+
 export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
+  const navigate = useNavigate();
   const { createCharacter } = useCharacterStore();
   const { usuario, campanhaAtiva } = useAuthStore();
   const isMestre = usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador'
@@ -72,6 +87,9 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
   // BUG-11: adicionar estado de erro para o carregamento do catálogo
   const [catalogoError, setCatalogoError] = useState<string | null>(null);
 
+  const [infoModal, setInfoModal] = useState<{ titulo: string; texto: string } | null>(null);
+  const [criandoRapido, setCriandoRapido] = useState(false);
+
   useEffect(() => {
     previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
     const previousOverflow = document.body.style.overflow;
@@ -79,7 +97,11 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onClose();
+        if (infoModal) {
+          setInfoModal(null);
+        } else {
+          onClose();
+        }
         return;
       }
       if (event.key !== 'Tab' || !dialogRef.current) return;
@@ -104,7 +126,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
       document.body.style.overflow = previousOverflow;
       previouslyFocusedRef.current?.focus();
     };
-  }, [onClose]);
+  }, [onClose, infoModal]);
 
   useEffect(() => {
     carregarCatalogo()
@@ -221,9 +243,81 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
       ...(racaId === RACA_PERSONALIZADA_ID ? { racaNomePersonalizado: racaNomePersonalizado.trim() } : {}),
     };
 
-    const success = await createCharacter(payload);
-    if (success) {
+    const novoId = await createCharacter(payload);
+    if (novoId) {
       onClose();
+    }
+  };
+
+  // Pula o passo a passo e cria a Ficha já com valores padrão (raça e classe
+  // liberadas na Árvore escolhida, atributos no conjunto equilibrado, item
+  // genérico) - tudo isso continua editável na Ficha depois de criado, então
+  // não há nada aqui que trave o personagem num estado ruim.
+  const handleCriarRapido = async () => {
+    if (!catalogo || criandoRapido) return;
+    const nomeFinal = nome.trim();
+    if (nomeFinal.length < 2) return;
+
+    setCriandoRapido(true);
+    try {
+      const arvoreFinal = arvoreId || SEM_ARVORE_ID;
+      const racasDisponiveisRapido = isMestre
+        ? catalogo.racas
+        : filtrarPorLiberacao(
+            filtrarPorArvore(catalogo.racas, arvoreFinal),
+            config.racas_liberadas || [],
+            (usuario?.id && config.racas_liberadas_membros?.[usuario.id]) || [],
+          );
+      const classesDisponiveisRapido = isMestre
+        ? catalogo.classes
+        : filtrarPorLiberacao(
+            filtrarPorArvore(catalogo.classes, arvoreFinal),
+            config.classes_liberadas || [],
+            (usuario?.id && config.classes_liberadas_membros?.[usuario.id]) || [],
+          );
+      const racaEscolhida = racasDisponiveisRapido.find((r) => r.id !== RACA_PERSONALIZADA_ID) || racasDisponiveisRapido[0];
+      const classeEscolhida = classesDisponiveisRapido[0];
+      if (!racaEscolhida || !classeEscolhida) return;
+
+      const atributosBaseRapido = distribuirValoresAtributos(VALORES_ATRIBUTOS_PADRAO);
+      const atributosFinaisRapido = normalizarAtributosIniciais(atributosBaseRapido);
+      const classesRapido = [{ classeId: classeEscolhida.id, nivel: 1 }];
+      const derivadosRapido = calcularDerivadosComClasses(
+        atributosFinaisRapido,
+        racaEscolhida,
+        classesRapido,
+        catalogo.classes,
+        1,
+        {},
+      );
+      const limiteRapido = 6 + Math.max(0, Number(racaEscolhida.pericias_iniciais_adicionais) || 0);
+      const periciasRapido = (catalogo.pericias || []).slice(0, limiteRapido).map((p) => p.id);
+
+      const payload: ICreateCharacterPayload = {
+        nome: nomeFinal,
+        arvoreId: arvoreFinal,
+        racaId: racaEscolhida.id,
+        classeId: classeEscolhida.id,
+        classes: classesRapido,
+        nivel: 1,
+        xp: 0,
+        metodoAtributos: 'padrao',
+        atributosBase: atributosBaseRapido,
+        atributosFinais: atributosFinaisRapido,
+        derivados: derivadosRapido,
+        lunarisInicial: 20,
+        pericias: Object.fromEntries(periciasRapido.map((id) => [id, 'aprendiz'])),
+        inventarioInicial: [{ titulo: 'Equipamento a definir', quantidade: 1 }],
+        escolhaRacial: {},
+      };
+
+      const novoId = await createCharacter(payload);
+      if (novoId) {
+        onClose();
+        navigate(`/ficha/${novoId}`);
+      }
+    } finally {
+      setCriandoRapido(false);
     }
   };
 
@@ -281,7 +375,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
         return (
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">Qual é o nome do seu Herói?</label>
+              <label className="block text-sm font-medium text-gray-400 mb-2">Qual é o nome do seu Personagem?</label>
               <input 
                 type="text" 
                 value={nome} 
@@ -294,7 +388,13 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-4">Escolha sua Árvore de Origem</label>
+              <div className="mb-4 flex items-center gap-2">
+                <label className="block text-sm font-medium text-gray-400">Escolha sua Árvore de Origem</label>
+                <InfoButton
+                  label="O que são as Árvores?"
+                  onClick={() => setInfoModal({ titulo: 'O que são as Árvores?', texto: descricaoHierarquiaDoJardim() })}
+                />
+              </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
                 <button
                   type="button"
@@ -302,18 +402,28 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                   className={`rounded-2xl border p-4 text-left transition-all sm:p-6 ${arvoreId === SEM_ARVORE_ID ? 'border-primary/50 bg-gradient-to-br from-gray-400/20 to-slate-300/5 shadow-[0_0_20px_rgba(var(--color-primary),0.2)]' : 'border-white/5 bg-black/30 hover:border-white/20'}`}
                 >
                   <h3 className="text-lg font-bold text-white sm:text-xl" style={{fontFamily: 'Cinzel, serif'}}>Sem Árvore</h3>
-                  <p className="text-xs text-gray-500 mt-1">Árvore oculta ou indefinida - libera o acesso a todas as opções do compêndio.</p>
+                  <p className="text-xs text-gray-500 mt-1">Árvore oculta ou indefinida: libera acesso a todas as opções do compêndio.</p>
                 </button>
                 {arvoresDisponiveis.map(arvore => (
-                  <button
-                    key={arvore.id}
-                    type="button"
-                    onClick={() => setArvoreId(arvore.id)}
-                    className={`rounded-2xl border p-4 text-left transition-all sm:p-6 ${arvoreId === arvore.id ? 'border-primary/50 bg-gradient-to-br shadow-[0_0_20px_rgba(var(--color-primary),0.2)] ' + arvore.cor : 'border-white/5 bg-black/30 hover:border-white/20'}`}
-                  >
-                    <h3 className="text-lg font-bold text-white sm:text-xl" style={{fontFamily: 'Cinzel, serif'}}>{arvore.nome}</h3>
-                    <p className="text-xs text-gray-500 mt-1">Deidade: {arvore.deidadeTitulo}</p>
-                  </button>
+                  <div key={arvore.id} className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setArvoreId(arvore.id)}
+                      className={`w-full rounded-2xl border p-4 text-left transition-all sm:p-6 ${arvoreId === arvore.id ? 'border-primary/50 bg-gradient-to-br shadow-[0_0_20px_rgba(var(--color-primary),0.2)] ' + arvore.cor : 'border-white/5 bg-black/30 hover:border-white/20'}`}
+                    >
+                      <h3 className="pr-6 text-lg font-bold text-white sm:text-xl" style={{fontFamily: 'Cinzel, serif'}}>{arvore.nome}</h3>
+                      <p className="text-xs text-gray-500 mt-1">Deidade: {arvore.deidadeTitulo}</p>
+                    </button>
+                    <div className="absolute right-3 top-3 sm:right-5 sm:top-5">
+                      <InfoButton
+                        label={`O que é a Árvore de ${arvore.nome}?`}
+                        onClick={() => setInfoModal({
+                          titulo: `${arvore.nome} · ${arvore.deidadeTitulo}`,
+                          texto: descricaoArvore(arvore.id) || 'Esta Árvore ainda não tem uma descrição detalhada no Códice.',
+                        })}
+                      />
+                    </div>
+                  </div>
                 ))}
               </div>
               {arvoreId === 'mulher-carmesim' && (
@@ -423,9 +533,9 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             <h2 className="text-3xl font-bold text-white mb-6" style={{fontFamily: 'Cinzel, serif'}}>A Divindade</h2>
             <p className="text-gray-400 mb-8 max-w-lg text-center">
               {semArvore
-                ? 'Sem uma Árvore de origem, seu Herói não tem uma Deidade padroeira: descreva livremente quem (ou o quê) ele cultua, se cultua algo.'
+                ? 'Sem uma Árvore de origem, seu Personagem não tem uma Deidade padroeira: descreva livremente quem (ou o quê) ele cultua, se cultua algo.'
                 : arvoreId === 'universal'
-                ? 'Transcendendo todas as Árvores, seu Herói não responde a uma única Deidade padroeira: descreva livremente quem (ou o quê) ele cultua, se cultua algo.'
+                ? 'Transcendendo todas as Árvores, seu Personagem não responde a uma única Deidade padroeira: descreva livremente quem (ou o quê) ele cultua, se cultua algo.'
                 : <>Como nascido da Árvore de <strong>{arvoreSelecionada?.nome}</strong>, você pode cultuar a Deidade principal ou jurar lealdade a um outro poder.</>}
             </p>
 
@@ -576,7 +686,16 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
             className="flex flex-1 min-h-0 flex-col gap-4"
           >
             <div className="shrink-0 bg-black/30 p-4 rounded-2xl border border-white/5">
-              <h3 className="text-xl text-white font-bold">Perícias e equipamento inicial</h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-xl text-white font-bold">Perícias e equipamento inicial</h3>
+                <InfoButton
+                  label="Como funcionam as perícias?"
+                  onClick={() => setInfoModal({
+                    titulo: 'Como funcionam as perícias?',
+                    texto: 'Toda perícia usa a mesma fórmula: d20 + atributo + metade do nível total + bônus do grau. As que você escolher aqui começam em Aprendiz (+2); as demais ficam em Iniciante (+0) até você treinar depois. Clique no "?" de cada perícia para ver o que ela cobre.',
+                  })}
+                />
+              </div>
               <p className="text-sm text-gray-400 mt-1">
                 Escolha exatamente {limitePericias} perícias para começar em Aprendiz e informe um item comum aprovado pelo Mestre.
               </p>
@@ -590,15 +709,25 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                 {(catalogo?.pericias || []).map(pericia => {
                   const selecionada = periciasIniciais.includes(pericia.id);
                   return (
-                    <button
-                      type="button"
-                      key={pericia.id}
-                      onClick={() => alternarPericia(pericia.id)}
-                      className={`p-3 rounded-xl border text-left transition-all ${selecionada ? 'border-green-500 bg-green-500/10' : 'border-white/10 bg-black/30 hover:border-white/30'}`}
-                    >
-                      <span className="text-sm text-white font-bold block">{pericia.titulo}</span>
-                      <span className="text-[10px] text-gray-500 uppercase tracking-wider">{pericia.atributo}</span>
-                    </button>
+                    <div key={pericia.id} className="relative">
+                      <button
+                        type="button"
+                        onClick={() => alternarPericia(pericia.id)}
+                        className={`w-full p-3 rounded-xl border text-left transition-all ${selecionada ? 'border-green-500 bg-green-500/10' : 'border-white/10 bg-black/30 hover:border-white/30'}`}
+                      >
+                        <span className="text-sm text-white font-bold block pr-5">{pericia.titulo}</span>
+                        <span className="text-[10px] text-gray-500 uppercase tracking-wider">{pericia.atributo}</span>
+                      </button>
+                      <div className="absolute right-1.5 top-1.5">
+                        <InfoButton
+                          label={`O que a perícia ${pericia.titulo} faz?`}
+                          onClick={() => setInfoModal({
+                            titulo: pericia.titulo,
+                            texto: pericia.descricao || 'Esta perícia ainda não tem uma descrição detalhada no Códice.',
+                          })}
+                        />
+                      </div>
+                    </div>
                   );
                 })}
               </div>
@@ -720,12 +849,26 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
               ))}
             </div>
             <h2 id="character-wizard-title" className="text-xl font-bold leading-tight tracking-wider text-white sm:text-2xl" style={{fontFamily: 'Cinzel, serif'}}>
-              O Despertar do Herói
+              Forjar Personagem
             </h2>
           </div>
-          <button type="button" onClick={onClose} aria-label="Fechar assistente" className="relative z-10 flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
-            <X size={24} />
-          </button>
+          <div className="relative z-10 flex shrink-0 items-center gap-2">
+            {step < 7 && (
+              <button
+                type="button"
+                onClick={handleCriarRapido}
+                disabled={nome.trim().length < 2 || criandoRapido}
+                title={nome.trim().length < 2 ? 'Escreva um nome pra pular direto pra Ficha' : 'Cria a Ficha com valores padrão; dá pra trocar raça, classe e tudo mais depois'}
+                className="flex items-center gap-1.5 whitespace-nowrap rounded-full border border-white/10 bg-white/5 px-3 py-2.5 text-xs font-medium text-gray-400 transition-colors hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <SkipForward size={14} />
+                <span className="hidden sm:inline">{criandoRapido ? 'Criando...' : 'Pular pra Ficha'}</span>
+              </button>
+            )}
+            <button type="button" onClick={onClose} aria-label="Fechar assistente" className="flex min-h-11 min-w-11 items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
+              <X size={24} />
+            </button>
+          </div>
         </div>
 
         {/* Body */}
@@ -768,6 +911,36 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
           )}
         </div>
       </motion.div>
+
+      <AnimatePresence>
+        {infoModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            role="dialog"
+            aria-modal="true"
+            className="fixed inset-0 z-[110] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+            onClick={() => setInfoModal(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              onClick={(event) => event.stopPropagation()}
+              className="max-h-[80vh] w-full max-w-md overflow-y-auto rounded-2xl border border-white/10 bg-[#13111c] p-6 shadow-2xl custom-scrollbar"
+            >
+              <div className="mb-3 flex items-start justify-between gap-4">
+                <h3 className="text-lg font-bold text-primary" style={{fontFamily: 'Cinzel, serif'}}>{infoModal.titulo}</h3>
+                <button type="button" onClick={() => setInfoModal(null)} aria-label="Fechar explicação" className="shrink-0 rounded-full p-1 text-gray-400 hover:text-white">
+                  <X size={20} />
+                </button>
+              </div>
+              <p className="whitespace-pre-line text-sm leading-relaxed text-gray-300">{infoModal.texto}</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

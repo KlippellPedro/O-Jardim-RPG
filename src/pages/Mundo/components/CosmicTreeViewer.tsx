@@ -1,6 +1,7 @@
 import React, { Suspense, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Billboard, OrbitControls, Stars, Text, useGLTF } from '@react-three/drei';
+import { List } from 'lucide-react';
 import * as THREE from 'three';
 import { BANCO_LUNAR_INFO } from '../bancoLunarInfo';
 import { VAZIO_INFO } from '../vazioInfo';
@@ -500,6 +501,7 @@ interface CosmicTreeViewerProps {
   onOpenInfo: (id: string) => void;
   onOpenBancoLunar: () => void;
   onOpenVazio: () => void;
+  onOpenListView: () => void;
   lockedDeidades?: string[];
 }
 
@@ -509,6 +511,7 @@ export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({
   onOpenInfo,
   onOpenBancoLunar,
   onOpenVazio,
+  onOpenListView,
   lockedDeidades = [],
 }) => {
   const controlsRef = useRef<OrbitControlsRef>(null);
@@ -518,8 +521,18 @@ export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({
 
   return (
     <div className="performance-expensive-effects relative h-full min-h-[500px] w-full overflow-hidden rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] lg:min-h-[700px]">
-      <div className="absolute left-4 top-4 z-10 rounded-full border border-white/10 bg-black/70 px-4 py-2 text-xs uppercase tracking-widest text-primary pointer-events-none">
-        Projeção Astral das Árvores
+      <div className="absolute left-4 top-4 z-10 flex items-center gap-2">
+        <div className="rounded-full border border-white/10 bg-black/70 px-4 py-2 text-xs uppercase tracking-widest text-primary pointer-events-none">
+          Projeção Astral das Árvores
+        </div>
+        <button
+          type="button"
+          onClick={(event) => { event.stopPropagation(); onOpenListView(); }}
+          title="Ver lista simples das Árvores"
+          className="pointer-events-auto flex items-center gap-2 rounded-full border border-white/10 bg-black/70 px-4 py-2 text-xs uppercase tracking-widest text-gray-300 transition-colors hover:border-white/30 hover:text-white"
+        >
+          <List size={13} /> Ver em lista
+        </button>
       </div>
 
       <button

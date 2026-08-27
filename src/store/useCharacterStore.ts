@@ -54,7 +54,7 @@ interface CharacterStore {
   loadCharacter: (id: string) => Promise<boolean>;
   refreshCharacter: (id: string) => Promise<boolean>;
   archiveCharacter: (id: string) => Promise<boolean>;
-  createCharacter: (payload: ICreateCharacterPayload) => Promise<boolean>;
+  createCharacter: (payload: ICreateCharacterPayload) => Promise<string | null>;
   patchCharacter: (id: string, path: readonly UpdatePathSegment[], value: unknown) => boolean;
   updateCharacter: (id: string, payload: IUpdateCharacterPayload) => Promise<boolean>;
   mutateEconomy: (id: string, updater: EconomyUpdater) => Promise<boolean>;
@@ -951,12 +951,12 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
     try {
       const campaignId = useAuthStore.getState().campanhaAtiva?.id ?? null;
       if (!campaignId) throw new Error('Nenhuma campanha ativa.');
-      await personagensApi.criar(campaignId, payload);
+      const response = await personagensApi.criar(campaignId, payload);
       await get().fetchCharacters();
-      return true;
+      return response.id;
     } catch (error) {
       set({ error: errorMessage(error) });
-      return false;
+      return null;
     }
   },
 
