@@ -5,6 +5,10 @@
 export interface IPersonalizacaoAutomatica {
   titulo?: string;
   texto?: string;
+  /** Esconde o item automático desta ficha (ex.: jogador juntou duas
+   * habilidades numa só e não quer ver a outra duplicada). Não apaga nada do
+   * catálogo nem da raça/classe - é reversível a qualquer momento. */
+  oculta?: boolean;
 }
 
 export function obterPersonalizacoesAutomaticas(ficha: any): Record<string, IPersonalizacaoAutomatica> {
@@ -25,8 +29,9 @@ export function salvarPersonalizacaoAutomatica(
   const limpo: IPersonalizacaoAutomatica = {};
   if (valores.titulo?.trim()) limpo.titulo = valores.titulo.trim();
   if (valores.texto?.trim()) limpo.texto = valores.texto.trim();
+  if (valores.oculta) limpo.oculta = true;
 
-  if (!limpo.titulo && !limpo.texto) {
+  if (!limpo.titulo && !limpo.texto && !limpo.oculta) {
     const { [id]: _removido, ...resto } = atuais;
     onUpdate(['ficha', 'personalizacoesAutomaticas'], resto);
     return;

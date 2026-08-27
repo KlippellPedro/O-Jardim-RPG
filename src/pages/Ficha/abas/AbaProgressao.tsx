@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import { BookOpen, Crown, LockKeyhole, Sparkles, Swords, Users, Wrench } from 'lucide-react';
 import { LEGADOS_CATALOGO, RACAS_CATALOGO, CLASSES_CATALOGO } from '../../../services/catalogoService';
-import { capacidadeModificacoesRaciais } from '../../../services/calculoService';
+import { ATRIBUTOS, capacidadeModificacoesRaciais } from '../../../services/calculoService';
+import { NOMES_ATRIBUTOS } from '../components/AtributosSection';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { ProgressaoClasses } from '../components/ProgressaoClasses';
 import { FormulaIngredients } from '../../../components/materials/FormulaIngredients';
@@ -124,6 +125,17 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
     if (atuais.includes(id)) atualizarEscolhaRacial('fragmentosExpressosIds', atuais.filter((item) => item !== id));
     else if (conhecidos.includes(id) && atuais.length < maximo) atualizarEscolhaRacial('fragmentosExpressosIds', [...atuais, id]);
   };
+  const configuracaoAtributos = raca?.escolha_atributos;
+  const campoAtributos = String(configuracaoAtributos?.campo || 'atributosRaciais');
+  const totalAtributos = Math.max(0, Math.trunc(Number(configuracaoAtributos?.total) || 0));
+  const atributosEscolhidos: string[] = Array.isArray(escolhaRacial[campoAtributos]) ? escolhaRacial[campoAtributos] : [];
+  const alternarAtributoRacial = (atributo: string) => {
+    if (atributosEscolhidos.includes(atributo)) {
+      atualizarEscolhaRacial(campoAtributos, atributosEscolhidos.filter((item) => item !== atributo));
+    } else if (atributosEscolhidos.length < totalAtributos) {
+      atualizarEscolhaRacial(campoAtributos, [...atributosEscolhidos, atributo]);
+    }
+  };
   const alternarModificacao = (id: string) => {
     const atuais: string[] = escolhaRacial.modificacoesIds || [];
     const maximo = capacidadeModificacoesRaciais(raca || null, Number(ficha.nivel) || 1);
@@ -145,6 +157,33 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
           {tracos.map((item) => <Card key={item.id} titulo={item.titulo} origem={item.origem} descricao={item.descricao} />)}
           {!tracos.length && <p className="text-sm text-gray-500">A raça atual não possui características estruturadas no catálogo.</p>}
         </div>
+        {configuracaoAtributos && totalAtributos > 0 && (
+          <div className="mt-5 rounded-xl border border-amber-500/15 bg-amber-500/5 p-4">
+            <h4 className="font-bold text-white">{(configuracaoAtributos as any).titulo || 'Atributos Raciais'}</h4>
+            <p className="mt-1 text-xs text-gray-500">
+              Escolha {totalAtributos} atributo{totalAtributos === 1 ? '' : 's'} distinto{totalAtributos === 1 ? '' : 's'} para receber +{configuracaoAtributos.bonus_por_escolha || 0}. Selecionados: {atributosEscolhidos.length}/{totalAtributos}.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {ATRIBUTOS.map((atributo) => {
+                const selecionado = atributosEscolhidos.includes(atributo);
+                const cheio = !selecionado && atributosEscolhidos.length >= totalAtributos;
+                return (
+                  <button
+                    key={atributo}
+                    type="button"
+                    disabled={cheio}
+                    onClick={() => alternarAtributoRacial(atributo)}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-30 ${
+                      selecionado ? 'border-amber-400/50 bg-amber-400/10 text-amber-200' : 'border-white/10 text-gray-400 hover:border-white/20'
+                    }`}
+                  >
+                    {NOMES_ATRIBUTOS[atributo]}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
         {Array.isArray(raca?.fragmentos) && raca.fragmentos.length > 0 && (
           <div className="mt-5 rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4">
             <h4 className="font-bold text-white">Fragmentos do Amálgamo</h4>

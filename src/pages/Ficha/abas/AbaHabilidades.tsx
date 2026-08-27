@@ -133,6 +133,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
   const habilidadesClasses = habilidadesAutomaticas(character.ficha || {});
   const habilidadesFruto = habilidadeDoFruto(character.ficha || {});
   const habilidadesOficiais = [...habilidadesRaciais, ...habilidadesClasses, ...habilidadesFruto];
+  const contarVisiveis = (itens: typeof habilidadesOficiais) => itens.filter((item) => !personalizacoes[item.id]?.oculta).length;
   const termoBusca = busca.trim().toLocaleLowerCase('pt-BR');
   const filtrarOficiais = (itens: typeof habilidadesOficiais) => itens.filter((item) => (
     !termoBusca
@@ -226,6 +227,15 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
     if (!personalizando) return;
     salvarPersonalizacaoAutomatica(onUpdate, character.ficha || {}, personalizando.id, {});
     setPersonalizando(null);
+  };
+
+  const ocultarAutomatica = (item: { id: string; titulo: string }) => {
+    if (!window.confirm(`Remover "${item.titulo}" desta ficha? Ela some da lista, mas dá pra trazer de volta depois.`)) return;
+    salvarPersonalizacaoAutomatica(onUpdate, character.ficha || {}, item.id, { oculta: true });
+  };
+
+  const restaurarAutomatica = (id: string) => {
+    salvarPersonalizacaoAutomatica(onUpdate, character.ficha || {}, id, {});
   };
 
   const salvar = () => {
@@ -342,7 +352,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
           <p className="text-gray-400 text-sm">Traços raciais, talentos e competências diversas.</p>
         </div>
         <div className="flex items-center gap-3 bg-[#15141b] border border-white/5 rounded-xl px-4 py-3">
-          <span className="text-3xl font-bold text-[#c7a44c]">{habilidades.length + habilidadesOficiais.length}</span>
+          <span className="text-3xl font-bold text-[#c7a44c]">{habilidades.length + contarVisiveis(habilidadesOficiais)}</span>
           <span className="text-sm text-gray-500 uppercase tracking-widest font-bold leading-tight">Habilidades<br/>Conhecidas</span>
         </div>
       </div>
@@ -367,12 +377,31 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                     </div>
                   </div>
                   <span className={`rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${grupo.paleta.selo}`}>
-                    {grupo.itens.length} {grupo.itens.length === 1 ? 'habilidade' : 'habilidades'}
+                    {contarVisiveis(grupo.itens)} {contarVisiveis(grupo.itens) === 1 ? 'habilidade' : 'habilidades'}
                   </span>
                 </div>
                 <div className="grid gap-3 lg:grid-cols-2">
                   {grupo.itens.map((item) => {
                     const personalizacao = personalizacoes[item.id];
+
+                    if (personalizacao?.oculta) {
+                      return (
+                        <div
+                          key={item.id}
+                          className="flex items-center justify-between gap-2 rounded-xl border border-dashed border-white/10 bg-black/20 px-4 py-2.5 text-xs text-gray-600"
+                        >
+                          <span className="italic truncate">{item.titulo} · oculta nesta ficha</span>
+                          <button
+                            type="button"
+                            onClick={() => restaurarAutomatica(item.id)}
+                            className="shrink-0 font-bold text-gray-500 hover:text-[#c7a44c] transition-colors"
+                          >
+                            Restaurar
+                          </button>
+                        </div>
+                      );
+                    }
+
                     const tituloExibido = personalizacao?.titulo || item.titulo;
                     const descricaoExibida = personalizacao?.texto || item.descricao;
                     return (
@@ -388,6 +417,14 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                               className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 opacity-100 transition-all sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
                             >
                               <Pencil size={12} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => ocultarAutomatica(item)}
+                              title="Excluir desta ficha"
+                              className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-500/10 opacity-100 transition-all sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
+                            >
+                              <Trash2 size={12} />
                             </button>
                           </div>
                         </div>

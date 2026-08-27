@@ -519,3 +519,75 @@ export function legadosSelecionados(ficha: any): ILegadoCatalogo[] {
     return legado ? [legado] : [];
   });
 }
+
+export interface IPendenciaProgressao {
+  id: string;
+  titulo: string;
+  descricao: string;
+  quantidade: number;
+}
+
+/** Levanta escolhas que a ficha já liberou (por nível/raça/classe) mas o
+ * jogador ainda não fez - usado pelo sino de notificação da ficha, pra quem
+ * some por umas sessões não perder Legado, poder ou habilidade de escolha. */
+export function pendenciasProgressao(ficha: any): IPendenciaProgressao[] {
+  const pendencias: IPendenciaProgressao[] = [];
+
+  const vagasLegados = vagasLegado(ficha);
+  const idsLegados: string[] = Array.isArray(ficha?.legadosSelecionados) ? ficha.legadosSelecionados : [];
+  const legadosLivres = vagasLegados - idsLegados.length;
+  if (legadosLivres > 0) {
+    pendencias.push({
+      id: 'legados',
+      titulo: legadosLivres === 1 ? '1 Legado disponível' : `${legadosLivres} Legados disponíveis`,
+      descricao: 'Você já tem vaga para escolher um Legado de Ascensão.',
+      quantidade: legadosLivres,
+    });
+  }
+
+  const selecoesPoder = selecoesPoderValidas(ficha);
+  for (const { classe, nivel } of classesDaFicha(ficha)) {
+    const vagas = vagasPoderDaClasse(classe, nivel);
+    const escolhidos = selecoesPoder.filter((item) => item.classeId === classe.id).length;
+    const livres = vagas - escolhidos;
+    if (livres > 0) {
+      pendencias.push({
+        id: `poder:${classe.id}`,
+        titulo: livres === 1 ? `1 poder de ${classe.titulo}` : `${livres} poderes de ${classe.titulo}`,
+        descricao: `${classe.titulo} liberou vaga de poder de classe para escolher.`,
+        quantidade: livres,
+      });
+    }
+  }
+
+  for (const escolha of escolhasHabilidadeDisponiveis(ficha)) {
+    const livres = escolha.vagas - escolha.selecionadas.length;
+    if (livres > 0) {
+      pendencias.push({
+        id: `escolha:${escolha.chave}`,
+        titulo: livres === 1 ? `1 escolha em ${escolha.rotulo}` : `${livres} escolhas em ${escolha.rotulo}`,
+        descricao: `${escolha.classeTitulo} · ${escolha.habilidadeTitulo} tem opção para escolher.`,
+        quantidade: livres,
+      });
+    }
+  }
+
+  const raca = RACAS_CATALOGO.find((item) => item.id === ficha?.racaId);
+  const configuracaoAtributos = raca?.escolha_atributos;
+  if (configuracaoAtributos) {
+    const campo = String(configuracaoAtributos.campo || 'atributosRaciais');
+    const total = Math.max(0, Math.trunc(Number(configuracaoAtributos.total) || 0));
+    const escolhidos = Array.isArray(ficha?.escolhaRacial?.[campo]) ? ficha.escolhaRacial[campo].length : 0;
+    const livres = total - escolhidos;
+    if (livres > 0) {
+      pendencias.push({
+        id: 'atributos-raciais',
+        titulo: livres === 1 ? '1 aumento de atributo' : `${livres} aumentos de atributo`,
+        descricao: `${(configuracaoAtributos as any).titulo || raca?.titulo || 'Sua raça'} ainda tem bônus de atributo para escolher.`,
+        quantidade: livres,
+      });
+    }
+  }
+
+  return pendencias;
+}

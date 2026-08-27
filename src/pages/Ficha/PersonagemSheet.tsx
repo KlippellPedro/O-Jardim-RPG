@@ -7,10 +7,11 @@ import {
   type CharacterDomainSaveState,
   type CharacterSaveDomain,
 } from '../../store/useCharacterStore';
-import { HelpCircle, Eye, EyeOff } from 'lucide-react';
+import { HelpCircle, Eye, EyeOff, Bell } from 'lucide-react';
 import { carregarCatalogo } from '../../services/catalogoService';
 import { ICatalogo } from '../../types/catalogo';
 import { nomeExibicaoRaca } from '../../services/racaService';
+import { pendenciasProgressao } from '../../services/progressaoFichaService';
 import { ModalInfoFicha } from './components/ModalInfoFicha';
 import { AbaFicha } from './abas/AbaFicha';
 import { AbaPericias } from './abas/AbaPericias';
@@ -69,6 +70,7 @@ export const PersonagemSheet: React.FC = () => {
     return savedTab && TABS.includes(savedTab) ? savedTab : 'Ficha';
   });
   const [showAjuda, setShowAjuda] = useState(false);
+  const [showPendencias, setShowPendencias] = useState(false);
   const [catalogo, setCatalogo] = useState<ICatalogo | null>(null);
 
   useEffect(() => {
@@ -226,6 +228,13 @@ export const PersonagemSheet: React.FC = () => {
   );
 
   const fotoPersonagem = character.foto ?? character.ficha?.foto ?? null;
+  const pendencias = somenteLeitura ? [] : pendenciasProgressao(character.ficha || {});
+  const totalPendencias = pendencias.reduce((total, item) => total + item.quantidade, 0);
+
+  const abrirPendencia = () => {
+    setShowPendencias(false);
+    handleTabChange('Progressão');
+  };
 
   const renderHeader = () => (
     <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 mb-8 shadow-2xl relative">
@@ -281,6 +290,48 @@ export const PersonagemSheet: React.FC = () => {
             {character.ficha?.compartilhada ? <Eye size={16} /> : <EyeOff size={16} />}
             {character.ficha?.compartilhada ? 'Visível na Sessão' : 'Ficha Privada'}
           </button>}
+          {!somenteLeitura && (
+            <div className="relative">
+              <button
+                onClick={() => setShowPendencias((atual) => !atual)}
+                className={`w-10 h-10 rounded-full border flex items-center justify-center transition-colors relative ${
+                  totalPendencias > 0
+                    ? 'border-amber-500/40 text-amber-400 hover:bg-amber-500/10'
+                    : 'border-white/10 text-gray-500 hover:bg-white/5'
+                }`}
+                aria-label="Ver pendências da ficha"
+                title="Pendências da ficha"
+              >
+                <Bell size={18} />
+                {totalPendencias > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-amber-500 text-black text-[10px] font-black flex items-center justify-center">
+                    {totalPendencias}
+                  </span>
+                )}
+              </button>
+              {showPendencias && (
+                <div className="absolute right-0 top-12 z-20 w-72 rounded-xl border border-white/10 bg-[#15141b] p-3 shadow-2xl">
+                  {pendencias.length ? (
+                    <div className="flex flex-col gap-2">
+                      {pendencias.map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={abrirPendencia}
+                          className="rounded-lg border border-white/5 bg-black/20 p-3 text-left transition-colors hover:border-amber-500/30 hover:bg-amber-500/5"
+                        >
+                          <p className="text-sm font-bold text-amber-300">{item.titulo}</p>
+                          <p className="mt-1 text-xs text-gray-400">{item.descricao}</p>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="p-2 text-sm text-gray-500">Sua ficha está em dia. Nenhuma escolha pendente.</p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
           <button
             onClick={() => setShowAjuda(true)}
             className="w-10 h-10 rounded-full border border-yellow-600/30 flex items-center justify-center text-yellow-600 hover:bg-yellow-600/10 transition-colors"
