@@ -2407,8 +2407,9 @@ class Economia(commands.Cog):
         
         # Converte para Solares
         # 1 Credito Sombrio = 2 Solares
+        rate, _taxa = db.get_cambio(sid)
         solares_brutos = economia.converter(
-            "Créditos Sombrios", "Solares", quantia_sombrios, db.get_config(sid).get("cambio_rate", economia.CAMBIO_RATE_PADRAO)
+            quantia_sombrios, "Créditos Sombrios", "Solares", rate
         )[0]
         
         # 15% taxa do doleiro

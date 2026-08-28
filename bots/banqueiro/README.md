@@ -80,6 +80,14 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
 - **Baús** — `/loja_baus` é a única loja mantida no Discord. Baús nunca
   sorteiam veículos, monstros, drops comerciais ou modificações, que possuem
   sistemas e preços próprios no site. IDs e estoques antigos permanecem válidos.
+- **Salão do Banco Lunar** — o grupo `/cassino` reúne Dados da Inconstância,
+  Vinte-e-Um de Amadheus, Roda das Dez Forças, Sucessão de Chronus, Queda pelo
+  Interstício, Corrida das Árvores, Pote das Dez Árvores, histórico, auditoria,
+  limites, pausa voluntária, mandatos e conquistas. Cada aposta mostra regras,
+  chances e pagamento antes da confirmação. Os quatro jogos puramente aleatórios
+  têm retorno teórico de 100%; a Corrida usa quatro estandartes equiprováveis e
+  distribui o bolo inteiro. Apostas usam somente Lunaris da carteira: cartão,
+  dívida, empréstimo e cofre não financiam jogo. Veja `docs/CASSINO_DISCORD.md`.
 - **Proteção do mestre** — `/mestre_proteger <membro>` define uma única conta
   imune aos dois tipos de roubo no servidor; chamar o comando sem membro remove
   a proteção. Tentar roubar essa conta consome o cooldown e queima no máximo
@@ -253,10 +261,12 @@ bots/banqueiro/
 │   ├── db.py
 │   ├── catalogo.py
 │   ├── economia.py       # constantes de segurança, roubo, dívida e recompensa
+│   ├── cassino.py         # jogos puros, contratos e elegibilidade do torneio
 │   ├── loot.py            # só o sorteio (sortear_bau); agendamento é do Jornalista
 │   └── ui.py               # marca, cores, barra de progresso — toda embed usa isso
 ├── cogs/
 │   ├── economia.py         # carteira, baús, cofre (itens + dinheiro), cartão, roubo
+│   ├── cassino.py          # hub, jogos, corrida, contratos e torneio
 │   ├── recompensas.py       # dívida crescente, procurados, recompensas entre jogadores
 │   ├── admin.py             # comandos de mestre, incluindo /juros_cofre e /setroubo
 │   ├── ajuda.py             # /ajuda (por categoria) e /comandos (lista tudo)

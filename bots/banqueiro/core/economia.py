@@ -608,10 +608,14 @@ _CATS_BAU = [
     ("sombrio", "Sombrio", ITENS_ELEGIVEIS_BAU),
 ]
 # raridade -> (preco, itens, lunaris_min, lunaris_max, rotulo)
+# Preço = ~60% do valor esperado dos itens sorteados, usando a referência
+# arma/armadura de cada raridade em data/economia/escala-precos-v1.json
+# (comum 30, incomum 120, raro 480, epico 2000, lendario 8000 Lunaris).
+# Mantém o mesmo desconto de "vale a pena arriscar" nos três degraus.
 _TIER_BAU = {
     "comum":    (50, 1, 5, 20, "Comum"),
-    "raro":     (150, 2, 15, 45, "Raro"),
-    "lendario": (400, 3, 40, 90, "Lendário"),
+    "raro":     (500, 2, 15, 45, "Raro"),
+    "lendario": (4000, 3, 40, 90, "Lendário"),
 }
 
 

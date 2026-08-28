@@ -82,6 +82,11 @@ def _cog(db=None):
     return cog
 
 
+class _DBFerimento:
+    def adicionar_ferimento(self, *_args):
+        return 1, False, 0
+
+
 def test_defesa_e_enviada_so_por_dm_e_resposta_do_ladrao_e_ephemeral(monkeypatch):
     async def impedir_imediatamente(self):
         self.impedido = True
@@ -91,7 +96,7 @@ def test_defesa_e_enviada_so_por_dm_e_resposta_do_ladrao_e_ephemeral(monkeypatch
     membro = _Membro()
 
     resultado = asyncio.run(
-        _cog()._abrir_defesa_roubo(interacao, membro, "a carteira")
+        _cog(_DBFerimento())._abrir_defesa_roubo(interacao, membro, "a carteira")
     )
 
     assert resultado == "impedido"

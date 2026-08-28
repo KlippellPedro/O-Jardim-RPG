@@ -65,11 +65,11 @@ CATEGORIA_DE = {
     "arma": "arsenal", "armadura": "arsenal", "equipamento": "arsenal",
     "artefato": "arsenal", "consumivel": "arsenal", "fruto-eden": "arsenal",
     "implante": "arsenal", "modificacao": "modificacoes",
-    "veiculo": "veiculos", "veiculo-completo": "veiculos", "propriedade": "veiculos",
+    "veiculo": "bens", "veiculo-completo": "bens", "propriedade": "bens",
     "monstro": "bestiario", "drop": "drops",
 }
 ACAO_DA_CATEGORIA = {
-    "arsenal": "Comprar", "veiculos": "Comprar", "modificacoes": "Encomendar",
+    "arsenal": "Comprar", "bens": "Comprar", "modificacoes": "Encomendar",
     "drops": "Comprar", "bestiario": "Contratar",
 }
 

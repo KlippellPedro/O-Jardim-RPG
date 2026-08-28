@@ -220,6 +220,299 @@ class AudioSynth {
     osc2.stop(ctx.currentTime + 2.5);
   }
 
+  // ──────────────────────────────────────────────────────────────────
+  // Sons do Cassino do Gambler - fichas, câmbio e resultado das apostas.
+  // ──────────────────────────────────────────────────────────────────
+
+  /** Ficha caindo na mesa: usado ao confirmar aposta, dobrar ou trocar personagem de mesa. */
+  playChipSound() {
+    const volume = this.currentVolume();
+    if (volume === null) return;
+    const ctx = this.getContext();
+    [0, 0.045].forEach((offset, indice) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const t0 = ctx.currentTime + offset;
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(indice === 0 ? 720 : 540, t0);
+      osc.frequency.exponentialRampToValueAtTime(indice === 0 ? 380 : 260, t0 + 0.06);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.16 * volume, t0 + 0.005);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.09);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + 0.1);
+    });
+  }
+
+  /** Moedas caindo no caixa: câmbio e resgate de fichas. */
+  playCoinsSound() {
+    const volume = this.currentVolume();
+    if (volume === null) return;
+    const ctx = this.getContext();
+    [1300, 1550, 1780, 2050].forEach((freq, indice) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const t0 = ctx.currentTime + indice * 0.045;
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.09 * volume, t0 + 0.006);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.14);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + 0.15);
+    });
+  }
+
+  /** Arpejo curto e alegre para uma vitória comum na mesa. */
+  playWinSound() {
+    const volume = this.currentVolume();
+    if (volume === null) return;
+    const ctx = this.getContext();
+    [523.25, 659.25, 783.99].forEach((freq, indice) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const t0 = ctx.currentTime + indice * 0.07;
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.14 * volume, t0 + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.32);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + 0.34);
+    });
+  }
+
+  /** Fanfarra maior para vitórias grandes (lucro alto numa única rodada). */
+  playBigWinSound() {
+    const volume = this.currentVolume();
+    if (volume === null) return;
+    const ctx = this.getContext();
+    [523.25, 659.25, 783.99, 1046.5].forEach((freq, indice) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const t0 = ctx.currentTime + indice * 0.09;
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.12 * volume, t0 + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.55);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + 0.6);
+    });
+    // Segunda voz uma oitava acima, mais baixa, pra dar corpo de fanfarra.
+    [1046.5, 1318.5, 1567.98, 2093].forEach((freq, indice) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const t0 = ctx.currentTime + indice * 0.09;
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.05 * volume, t0 + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.5);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + 0.55);
+    });
+  }
+
+  /** Queda curta e discreta para uma derrota comum - sem drama, é só a mesa seguindo. */
+  playLoseSound() {
+    const volume = this.currentVolume();
+    if (volume === null) return;
+    const ctx = this.getContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(310, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(170, ctx.currentTime + 0.22);
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.08 * volume, ctx.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.26);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.28);
+  }
+
+  // ──────────────────────────────────────────────────────────────────
+  // Som de cada jogo do Cassino do Gambler, tocado enquanto a mesa decide
+  // (durante o suspense) - cada mesa tem o seu próprio barulho.
+  // ──────────────────────────────────────────────────────────────────
+
+  /** Dados chacoalhando antes de parar - Dados da Inconstância. */
+  playDiceRollSound() {
+    const volume = this.currentVolume();
+    if (volume === null) return;
+    const ctx = this.getContext();
+    const batidas = 5;
+    for (let i = 0; i < batidas; i++) {
+      const t0 = ctx.currentTime + i * 0.07 + Math.random() * 0.02;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const freq = 380 + Math.random() * 260;
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t0);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.4, t0 + 0.045);
+      const pico = Math.max(0.02, (0.16 - i * 0.02) * volume);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(pico, t0 + 0.004);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.08);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + 0.09);
+    }
+  }
+
+  /** Roda girando e freando aos poucos - Roda das Dez Forças. */
+  playWheelSpinSound() {
+    const volume = this.currentVolume();
+    if (volume === null) return;
+    const ctx = this.getContext();
+    const cliques = 7;
+    let tempo = 0;
+    for (let i = 0; i < cliques; i++) {
+      tempo += 0.04 + i * 0.011;
+      const t0 = ctx.currentTime + tempo;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(1400, t0);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.05 * volume, t0 + 0.003);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.03);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + 0.035);
+    }
+  }
+
+  /** Duas batidas de relógio - Sucessão de Chronus. */
+  playClockTickSound() {
+    const volume = this.currentVolume();
+    if (volume === null) return;
+    const ctx = this.getContext();
+    [0, 0.32].forEach((offset, indice) => {
+      const t0 = ctx.currentTime + offset;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(indice === 0 ? 1200 : 900, t0);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.09 * volume, t0 + 0.003);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.05);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + 0.06);
+    });
+  }
+
+  /** Quatro plinks descendo, um por desvio - Queda pelo Interstício. */
+  playPlinkoSound() {
+    const volume = this.currentVolume();
+    if (volume === null) return;
+    const ctx = this.getContext();
+    [1500, 1250, 1050, 850].forEach((freq, indice) => {
+      const t0 = ctx.currentTime + indice * 0.13;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.1 * volume, t0 + 0.006);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.16);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + 0.18);
+    });
+  }
+
+  /** Três notas subindo, um brilho por pergaminho revelado - Pergaminhos do Acaso. */
+  playScrollRevealSound() {
+    const volume = this.currentVolume();
+    if (volume === null) return;
+    const ctx = this.getContext();
+    [660, 880, 1100].forEach((freq, indice) => {
+      const t0 = ctx.currentTime + indice * 0.11;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.09 * volume, t0 + 0.008);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.22);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + 0.24);
+    });
+  }
+
+  /** Duas cartas batendo na mesa e um tim metálico de decisão - Duelo do Vazio. */
+  playCardDuelSound() {
+    const volume = this.currentVolume();
+    if (volume === null) return;
+    const ctx = this.getContext();
+    [0, 0.09].forEach((offset) => {
+      const t0 = ctx.currentTime + offset;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(700, t0);
+      osc.frequency.exponentialRampToValueAtTime(120, t0 + 0.05);
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.13 * volume, t0 + 0.004);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.06);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + 0.07);
+    });
+    const t1 = ctx.currentTime + 0.16;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1800, t1);
+    gain.gain.setValueAtTime(0, t1);
+    gain.gain.linearRampToValueAtTime(0.08 * volume, t1 + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.001, t1 + 0.3);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t1);
+    osc.stop(t1 + 0.32);
+  }
+
+  /** Estalo seco de carta virando - Vinte-e-Um, uma vez por carta comprada. */
+  playCardFlipSound() {
+    const volume = this.currentVolume();
+    if (volume === null) return;
+    const ctx = this.getContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(900, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(140, ctx.currentTime + 0.06);
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.14 * volume, ctx.currentTime + 0.004);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.07);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.08);
+  }
+
   // Baixo abafado para o Desastre (1)
   playDisasterSound() {
     const volume = this.currentVolume();

@@ -9,6 +9,7 @@ interface EntityThemeMusicProps {
 
 export function EntityThemeMusic({ musica }: EntityThemeMusicProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const interagiuRef = useRef(false);
   const [tocando, setTocando] = useState(false);
   const [erro, setErro] = useState('');
   const audioHabilitado = useAudioStore((state) => state.enabled);
@@ -29,13 +30,16 @@ export function EntityThemeMusic({ musica }: EntityThemeMusicProps) {
 
   // Toca sozinha ao entrar no conto. Navegadores bloqueiam autoplay sem interação
   // do usuário, então, se a tentativa falhar, aguardamos o primeiro toque/clique
-  // na página para tentar de novo, sem exibir isso como um erro.
+  // na página para tentar de novo, sem exibir isso como um erro. Para assim que
+  // o usuário mexe no player pela primeira vez (play, pause ou volume) - depois
+  // disso a escolha é dele, e um clique em qualquer canto da página não pode
+  // reativar uma música que ele pausou de propósito.
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !audioHabilitado) return;
 
     const tentarTocar = () => {
-      if (!audio.paused) return;
+      if (interagiuRef.current || !audio.paused) return;
       audio.play().catch(() => {});
     };
 
@@ -51,6 +55,7 @@ export function EntityThemeMusic({ musica }: EntityThemeMusicProps) {
   const alternarReproducao = async () => {
     const audio = audioRef.current;
     if (!audio) return;
+    interagiuRef.current = true;
     setErro('');
 
     if (!audio.paused) {

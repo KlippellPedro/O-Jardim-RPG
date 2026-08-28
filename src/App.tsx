@@ -27,6 +27,7 @@ const CofrePage = lazy(() => import('./pages/Cofre/CofrePage').then((module) => 
 const EntidadesPage = lazy(() => import('./pages/Entidades/EntidadesPage').then((module) => ({ default: module.EntidadesPage })));
 const EntidadesSobrePage = lazy(() => import('./pages/Entidades/EntidadesSobrePage').then((module) => ({ default: module.EntidadesSobrePage })));
 const EntidadeContoPage = lazy(() => import('./pages/Entidades/EntidadeContoPage').then((module) => ({ default: module.EntidadeContoPage })));
+const GamblerCasinoPage = lazy(() => import('./pages/Entidades/GamblerCasinoPage').then((module) => ({ default: module.GamblerCasinoPage })));
 
 const PageLoading = () => (
   <div className="flex min-h-[50vh] items-center justify-center text-white">
@@ -292,6 +293,15 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <EntidadesPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/entidades/gambler/cassino"
+                element={
+                  <ProtectedRoute requireCampaign>
+                    <GamblerCasinoPage />
                   </ProtectedRoute>
                 }
               />

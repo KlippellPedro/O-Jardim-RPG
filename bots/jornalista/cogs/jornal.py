@@ -1698,7 +1698,10 @@ class Jornal(commands.Cog):
             
             # Adiciona fofoca sobre a vitima!
             alvo_id = str(jogador.id)
-            self.bot.db.adicionar_fofoca(guild_id, alvo_id, f"Vazaram segredos obscuros de <@{alvo_id}>!", suborno=recompensa*2)
+            prazo_fofoca = datetime.now(timezone.utc) + timedelta(minutes=30)
+            self.bot.db.adicionar_fofoca(
+                guild_id, alvo_id, f"Vazaram segredos obscuros de <@{alvo_id}>!", recompensa * 2, prazo_fofoca
+            )
             
             emb = ui.embed(
                 "📸 Furo Comprado!",

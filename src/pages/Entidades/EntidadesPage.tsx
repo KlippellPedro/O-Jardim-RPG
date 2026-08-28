@@ -121,13 +121,15 @@ export function EntidadesPage() {
                     <div>
                       {entidade.epiteto ? <small>{entidade.epiteto}</small> : null}
                       <h3>{entidade.nome}</h3>
-                      <p>{entidade.resumo}</p>
-                      <div className="entity-book__entry-tags">
-                        <span>{RANKS_PERIGO.find((rank) => rank.id === entidade.rankPerigo)?.titulo}</span>
-                        {entidade.classificacao.map((id) => (
-                          <span key={id}>{CLASSIFICACOES_ENTIDADE.find((classificacao) => classificacao.id === id)?.titulo}</span>
-                        ))}
-                      </div>
+                      {entidade.resumo ? <p>{entidade.resumo}</p> : null}
+                      {entidade.rankPerigo || entidade.classificacao.length > 0 ? (
+                        <div className="entity-book__entry-tags">
+                          {entidade.rankPerigo ? <span>{RANKS_PERIGO.find((rank) => rank.id === entidade.rankPerigo)?.titulo}</span> : null}
+                          {entidade.classificacao.map((id) => (
+                            <span key={id}>{CLASSIFICACOES_ENTIDADE.find((classificacao) => classificacao.id === id)?.titulo}</span>
+                          ))}
+                        </div>
+                      ) : null}
                     </div>
                     <span className="entity-book__entry-link">Ler o conto <ArrowRight size={15} /></span>
                   </Link>

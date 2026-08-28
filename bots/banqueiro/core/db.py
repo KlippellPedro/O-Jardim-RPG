@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+import secrets
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Mapping, Optional
@@ -11,6 +12,7 @@ from psycopg.types.json import Jsonb
 from psycopg_pool import ConnectionPool, PoolTimeout
 
 from . import economia
+from . import cassino as cassino_mod
 
 
 class SaldoInsuficiente(Exception):
@@ -27,6 +29,18 @@ class AlvoProtegido(Exception):
 
 class DatabaseUnavailable(RuntimeError):
     """Falha de infraestrutura/configuracao ao acessar o PostgreSQL."""
+
+
+class CassinoIndisponivel(RuntimeError):
+    pass
+
+
+class CassinoLimite(RuntimeError):
+    pass
+
+
+class RodadaCassinoConflito(RuntimeError):
+    pass
 
 
 _SCHEMA = (
@@ -354,6 +368,190 @@ _SCHEMA = (
         quantidade INTEGER NOT NULL DEFAULT 0,
         PRIMARY KEY (guild_id, user_id)
     )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS loteria_rodadas (
+        guild_id TEXT NOT NULL,
+        rodada_id TEXT NOT NULL,
+        vencedor_user_id TEXT NOT NULL,
+        total_bilhetes INTEGER NOT NULL CHECK (total_bilhetes > 0),
+        participantes INTEGER NOT NULL CHECK (participantes > 0),
+        premio INTEGER NOT NULL CHECK (premio >= 0),
+        encerrada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, rodada_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_config (
+        guild_id TEXT PRIMARY KEY,
+        ativo BOOLEAN NOT NULL DEFAULT TRUE,
+        aposta_minima INTEGER NOT NULL DEFAULT 5 CHECK (aposta_minima > 0),
+        aposta_maxima INTEGER NOT NULL DEFAULT 200 CHECK (aposta_maxima >= aposta_minima),
+        limite_apostado_dia INTEGER NOT NULL DEFAULT 500 CHECK (limite_apostado_dia > 0),
+        limite_perda_dia INTEGER NOT NULL DEFAULT 200 CHECK (limite_perda_dia > 0),
+        atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_jogadores (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        pausado_ate TIMESTAMPTZ,
+        atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, user_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_rodadas (
+        id TEXT PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        jogo TEXT NOT NULL CHECK (
+            jogo IN ('dados', 'vinte_um', 'corrida', 'roda_fluxos', 'sucessao', 'vaos')
+        ),
+        moeda TEXT NOT NULL DEFAULT 'Lunaris',
+        aposta INTEGER NOT NULL CHECK (aposta > 0),
+        pagamento_maximo INTEGER NOT NULL CHECK (pagamento_maximo >= 0),
+        pagamento INTEGER NOT NULL DEFAULT 0 CHECK (pagamento >= 0),
+        status TEXT NOT NULL DEFAULT 'ativa'
+            CHECK (status IN ('ativa', 'liquidada', 'reembolsada')),
+        estado JSONB NOT NULL DEFAULT '{}'::jsonb,
+        resultado JSONB,
+        versao INTEGER NOT NULL DEFAULT 1,
+        dia_local DATE NOT NULL,
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        encerrada_em TIMESTAMPTZ
+    )
+    """,
+    """
+    ALTER TABLE cassino_rodadas
+    DROP CONSTRAINT IF EXISTS cassino_rodadas_jogo_check
+    """,
+    """
+    DO $$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT 1 FROM pg_constraint
+            WHERE conrelid='cassino_rodadas'::regclass
+              AND conname='cassino_rodadas_jogo_valido_check'
+        ) THEN
+            ALTER TABLE cassino_rodadas
+            ADD CONSTRAINT cassino_rodadas_jogo_valido_check
+            CHECK (jogo IN ('dados', 'vinte_um', 'corrida', 'roda_fluxos', 'sucessao', 'vaos'));
+        END IF;
+    EXCEPTION WHEN duplicate_object THEN
+        NULL;
+    END $$
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS cassino_rodadas_jogador_idx
+    ON cassino_rodadas (guild_id, user_id, criado_em DESC)
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS cassino_rodadas_dia_idx
+    ON cassino_rodadas (guild_id, user_id, dia_local)
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_corridas (
+        id BIGSERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        slot_id TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'aberta'
+            CHECK (status IN ('aberta', 'liquidada', 'sem_apostas')),
+        fecha_em TIMESTAMPTZ NOT NULL,
+        vencedor TEXT,
+        total_apostado INTEGER NOT NULL DEFAULT 0 CHECK (total_apostado >= 0),
+        total_pago INTEGER NOT NULL DEFAULT 0 CHECK (total_pago >= 0),
+        criada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        liquidada_em TIMESTAMPTZ,
+        UNIQUE (guild_id, slot_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_corrida_apostas (
+        rodada_id TEXT PRIMARY KEY,
+        corrida_id BIGINT NOT NULL,
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        corredor TEXT NOT NULL,
+        valor INTEGER NOT NULL CHECK (valor > 0),
+        pagamento INTEGER NOT NULL DEFAULT 0 CHECK (pagamento >= 0),
+        criada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (corrida_id, user_id)
+    )
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS cassino_corridas_vencidas_idx
+    ON cassino_corridas (status, fecha_em)
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_contrato_atividades (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        semana DATE NOT NULL,
+        objetivo TEXT NOT NULL,
+        primeira_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, user_id, semana, objetivo)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_contrato_resgates (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        semana DATE NOT NULL,
+        lunaris INTEGER NOT NULL CHECK (lunaris >= 0),
+        reputacao INTEGER NOT NULL CHECK (reputacao >= 0),
+        resgatado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, user_id, semana)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_conquistas (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        chave TEXT NOT NULL,
+        desbloqueada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, user_id, chave)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_torneios (
+        id BIGSERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        semana DATE NOT NULL,
+        status TEXT NOT NULL DEFAULT 'aberto'
+            CHECK (status IN ('aberto', 'sorteado', 'concluido', 'sem_entradas')),
+        fecha_em TIMESTAMPTZ NOT NULL,
+        vencedor_user_id TEXT,
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        sorteado_em TIMESTAMPTZ,
+        concluido_em TIMESTAMPTZ,
+        UNIQUE (guild_id, semana)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_torneio_entradas (
+        id BIGSERIAL PRIMARY KEY,
+        torneio_id BIGINT NOT NULL,
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        item_id TEXT NOT NULL,
+        titulo TEXT NOT NULL,
+        tipo TEXT NOT NULL,
+        raridade TEXT NOT NULL,
+        modo_posse TEXT NOT NULL CHECK (modo_posse IN ('legado', 'cofre')),
+        referencia TEXT NOT NULL UNIQUE,
+        status TEXT NOT NULL DEFAULT 'pendente'
+            CHECK (status IN ('pendente', 'reservada', 'entregue')),
+        criada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        entregue_em TIMESTAMPTZ,
+        UNIQUE (torneio_id, user_id)
+    )
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS cassino_torneios_vencidos_idx
+    ON cassino_torneios (status, fecha_em)
     """,
     # Item leiloado pode ter sido reservado no cofre da plataforma (vendedor
     # com conta vinculada) ou removido localmente (modo legado, como sempre
@@ -3504,6 +3702,9 @@ class Database:
                 "roubo_cooldown", "roubo_cofre_cooldown",
                 "roubo_protecao_vitima", "roubo_alvo_reserva", "roubo_calor",
                 "preparos_roubo", "alertas_banco", "seguro_cofre",
+                "cassino_corrida_apostas", "cassino_rodadas", "cassino_jogadores",
+                "cassino_contrato_atividades", "cassino_contrato_resgates", "cassino_conquistas",
+                "cassino_torneio_entradas",
             ):
                 con.execute(
                     f"DELETE FROM {tabela} WHERE guild_id=%s AND user_id=%s",
@@ -3549,6 +3750,10 @@ class Database:
                 "roubo_protecao_vitima", "roubo_alvo_reserva", "roubo_calor",
                 "preparos_roubo", "alertas_banco", "seguro_cofre",
                 "custodia_moeda", "ciclos_guild", "avisos_pendentes",
+                "cassino_corrida_apostas", "cassino_corridas",
+                "cassino_rodadas", "cassino_jogadores",
+                "cassino_contrato_atividades", "cassino_contrato_resgates", "cassino_conquistas",
+                "cassino_torneio_entradas", "cassino_torneios",
             ):
                 cur = con.execute(f"DELETE FROM {tabela} WHERE guild_id=%s", (guild_id,))
                 resultado[tabela] = cur.rowcount
@@ -4786,6 +4991,1118 @@ class Database:
     def fechar_emprestimo(self, emprestimo_id: int, status: str) -> None:
         with self._conn() as con:
             con.execute("UPDATE emprestimos SET status=%s WHERE id=%s", (status, int(emprestimo_id)))
+
+    # ── Salão do Banco Lunar ─────────────────────────────────────────────────
+    def get_cassino_config(self, guild_id: str) -> dict:
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT * FROM cassino_config WHERE guild_id=%s", (guild_id,)
+            ).fetchone()
+        padrao = cassino_mod.CASSINO_CONFIG_PADRAO
+        if row is None:
+            return dict(padrao)
+        return {
+            "ativo": bool(row["ativo"]),
+            "aposta_minima": int(row["aposta_minima"]),
+            "aposta_maxima": int(row["aposta_maxima"]),
+            "limite_apostado_dia": int(row["limite_apostado_dia"]),
+            "limite_perda_dia": int(row["limite_perda_dia"]),
+        }
+
+    def configurar_cassino(
+        self,
+        guild_id: str,
+        *,
+        ativo: bool,
+        aposta_minima: int,
+        aposta_maxima: int,
+        limite_apostado_dia: int,
+        limite_perda_dia: int,
+    ) -> dict:
+        valores = (int(aposta_minima), int(aposta_maxima), int(limite_apostado_dia), int(limite_perda_dia))
+        if valores[0] <= 0 or valores[1] < valores[0] or valores[2] <= 0 or valores[3] <= 0:
+            raise ValueError("limites do cassino invalidos")
+        with self._conn() as con:
+            row = con.execute(
+                """
+                INSERT INTO cassino_config
+                    (guild_id, ativo, aposta_minima, aposta_maxima,
+                     limite_apostado_dia, limite_perda_dia)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                ON CONFLICT (guild_id) DO UPDATE SET
+                    ativo=EXCLUDED.ativo,
+                    aposta_minima=EXCLUDED.aposta_minima,
+                    aposta_maxima=EXCLUDED.aposta_maxima,
+                    limite_apostado_dia=EXCLUDED.limite_apostado_dia,
+                    limite_perda_dia=EXCLUDED.limite_perda_dia,
+                    atualizado_em=CURRENT_TIMESTAMP
+                RETURNING *
+                """,
+                (guild_id, bool(ativo), *valores),
+            ).fetchone()
+        return dict(row)
+
+    @staticmethod
+    def _metricas_cassino_dia_tx(con, guild_id: str, user_id: str, dia_local) -> dict:
+        row = con.execute(
+            """
+            SELECT
+                COALESCE(SUM(aposta), 0) AS apostado,
+                COALESCE(SUM(aposta - pagamento)
+                    FILTER (WHERE status='liquidada'), 0) AS resultado_casa
+            FROM cassino_rodadas
+            WHERE guild_id=%s AND user_id=%s AND dia_local=%s
+            """,
+            (guild_id, user_id, dia_local),
+        ).fetchone()
+        return {
+            "apostado": int(row["apostado"]),
+            "perda_liquida": max(0, int(row["resultado_casa"])),
+        }
+
+    def pausar_cassino(self, guild_id: str, user_id: str, pausado_ate) -> dict:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                INSERT INTO cassino_jogadores (guild_id, user_id, pausado_ate)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (guild_id, user_id) DO UPDATE SET
+                    pausado_ate=CASE
+                        WHEN cassino_jogadores.pausado_ate IS NULL
+                             OR cassino_jogadores.pausado_ate < EXCLUDED.pausado_ate
+                        THEN EXCLUDED.pausado_ate
+                        ELSE cassino_jogadores.pausado_ate
+                    END,
+                    atualizado_em=CURRENT_TIMESTAMP
+                RETURNING *
+                """,
+                (guild_id, user_id, pausado_ate),
+            ).fetchone()
+        return dict(row)
+
+    def perfil_cassino(self, guild_id: str, user_id: str, dia_local) -> dict:
+        with self._conn() as con:
+            metricas = self._metricas_cassino_dia_tx(con, guild_id, user_id, dia_local)
+            jogador = con.execute(
+                "SELECT pausado_ate FROM cassino_jogadores WHERE guild_id=%s AND user_id=%s",
+                (guild_id, user_id),
+            ).fetchone()
+            totais = con.execute(
+                """
+                SELECT COUNT(*) AS rodadas, COALESCE(SUM(aposta), 0) AS apostado,
+                       COALESCE(SUM(pagamento), 0) AS recebido
+                FROM cassino_rodadas
+                WHERE guild_id=%s AND user_id=%s AND status='liquidada'
+                """,
+                (guild_id, user_id),
+            ).fetchone()
+        return {
+            **metricas,
+            "pausado_ate": jogador["pausado_ate"] if jogador else None,
+            "rodadas": int(totais["rodadas"]),
+            "apostado_total": int(totais["apostado"]),
+            "recebido_total": int(totais["recebido"]),
+        }
+
+    def iniciar_rodada_cassino(
+        self,
+        rodada_id: str,
+        guild_id: str,
+        user_id: str,
+        jogo: str,
+        aposta: int,
+        pagamento_maximo: int,
+        estado: dict,
+        dia_local,
+    ) -> dict:
+        aposta = int(aposta)
+        pagamento_maximo = int(pagamento_maximo)
+        if not rodada_id or jogo not in cassino_mod.JOGOS_INSTANTANEOS | {"corrida"}:
+            raise ValueError("rodada de cassino invalida")
+        if aposta <= 0 or pagamento_maximo < 0 or not isinstance(estado, dict):
+            raise ValueError("valores da rodada invalidos")
+        with self._conn() as con:
+            existente = con.execute(
+                "SELECT * FROM cassino_rodadas WHERE id=%s FOR UPDATE", (rodada_id,)
+            ).fetchone()
+            if existente:
+                if existente["guild_id"] != guild_id or existente["user_id"] != user_id:
+                    raise RodadaCassinoConflito("identificador de rodada ja utilizado")
+                return {**dict(existente), "nova": False}
+
+            cfg = con.execute(
+                "SELECT * FROM cassino_config WHERE guild_id=%s", (guild_id,)
+            ).fetchone()
+            config = dict(cassino_mod.CASSINO_CONFIG_PADRAO) if cfg is None else {
+                "ativo": bool(cfg["ativo"]),
+                "aposta_minima": int(cfg["aposta_minima"]),
+                "aposta_maxima": int(cfg["aposta_maxima"]),
+                "limite_apostado_dia": int(cfg["limite_apostado_dia"]),
+                "limite_perda_dia": int(cfg["limite_perda_dia"]),
+            }
+            if not config["ativo"]:
+                raise CassinoIndisponivel("o cassino esta fechado neste servidor")
+            if not config["aposta_minima"] <= aposta <= config["aposta_maxima"]:
+                raise CassinoLimite(
+                    f"a aposta deve ficar entre {config['aposta_minima']} e {config['aposta_maxima']} Lunaris"
+                )
+
+            con.execute(
+                """
+                INSERT INTO cassino_jogadores (guild_id, user_id)
+                VALUES (%s, %s) ON CONFLICT DO NOTHING
+                """,
+                (guild_id, user_id),
+            )
+            jogador = con.execute(
+                """
+                SELECT * FROM cassino_jogadores
+                WHERE guild_id=%s AND user_id=%s FOR UPDATE
+                """,
+                (guild_id, user_id),
+            ).fetchone()
+            if jogador["pausado_ate"] and jogador["pausado_ate"] > datetime.now(timezone.utc):
+                raise CassinoIndisponivel(f"sua pausa do cassino vai ate {jogador['pausado_ate']}")
+
+            metricas = self._metricas_cassino_dia_tx(con, guild_id, user_id, dia_local)
+            if metricas["apostado"] + aposta > config["limite_apostado_dia"]:
+                raise CassinoLimite("esta aposta ultrapassa seu limite diario apostado")
+            if metricas["perda_liquida"] + aposta > config["limite_perda_dia"]:
+                raise CassinoLimite("esta aposta ultrapassa seu limite diario de perda")
+
+            self._garantir_jogador(con, guild_id, user_id)
+            moeda = self._nome_moeda_real(con, guild_id, user_id, "Lunaris")
+            saldo = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (aposta, guild_id, user_id, moeda, aposta),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"precisa de {aposta} Lunaris na carteira")
+            rodada = con.execute(
+                """
+                INSERT INTO cassino_rodadas
+                    (id, guild_id, user_id, jogo, moeda, aposta,
+                     pagamento_maximo, estado, dia_local)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                RETURNING *
+                """,
+                (rodada_id, guild_id, user_id, jogo, moeda, aposta,
+                 pagamento_maximo, Jsonb(estado), dia_local),
+            ).fetchone()
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, -aposta, moeda, f"Aposta no Cassino: {jogo}"
+            )
+        return {**dict(rodada), "nova": True}
+
+    def get_rodada_cassino(self, rodada_id: str, user_id: Optional[str] = None) -> Optional[dict]:
+        with self._conn() as con:
+            if user_id is None:
+                row = con.execute("SELECT * FROM cassino_rodadas WHERE id=%s", (rodada_id,)).fetchone()
+            else:
+                row = con.execute(
+                    "SELECT * FROM cassino_rodadas WHERE id=%s AND user_id=%s",
+                    (rodada_id, user_id),
+                ).fetchone()
+        return dict(row) if row else None
+
+    def atualizar_rodada_cassino(
+        self,
+        rodada_id: str,
+        user_id: str,
+        versao_esperada: int,
+        estado: dict,
+        *,
+        aposta_extra: int = 0,
+        pagamento_maximo: Optional[int] = None,
+    ) -> dict:
+        aposta_extra = int(aposta_extra)
+        if aposta_extra < 0 or not isinstance(estado, dict):
+            raise ValueError("atualizacao de rodada invalida")
+        with self._conn() as con:
+            rodada = con.execute(
+                "SELECT * FROM cassino_rodadas WHERE id=%s AND user_id=%s FOR UPDATE",
+                (rodada_id, user_id),
+            ).fetchone()
+            if rodada is None or rodada["status"] != "ativa":
+                raise RodadaCassinoConflito("rodada nao encontrada ou ja encerrada")
+            if int(rodada["versao"]) != int(versao_esperada):
+                raise RodadaCassinoConflito("a rodada mudou; recarregue o estado atual")
+
+            nova_aposta = int(rodada["aposta"])
+            if aposta_extra:
+                cfg_row = con.execute(
+                    "SELECT * FROM cassino_config WHERE guild_id=%s",
+                    (rodada["guild_id"],),
+                ).fetchone()
+                cfg = dict(cassino_mod.CASSINO_CONFIG_PADRAO) if cfg_row is None else {
+                    "ativo": bool(cfg_row["ativo"]),
+                    "aposta_minima": int(cfg_row["aposta_minima"]),
+                    "aposta_maxima": int(cfg_row["aposta_maxima"]),
+                    "limite_apostado_dia": int(cfg_row["limite_apostado_dia"]),
+                    "limite_perda_dia": int(cfg_row["limite_perda_dia"]),
+                }
+                metricas = self._metricas_cassino_dia_tx(
+                    con, rodada["guild_id"], user_id, rodada["dia_local"]
+                )
+                if nova_aposta + aposta_extra > cfg["aposta_maxima"]:
+                    raise CassinoLimite("a aposta dobrada ultrapassa o maximo da mesa")
+                if metricas["apostado"] + aposta_extra > cfg["limite_apostado_dia"]:
+                    raise CassinoLimite("a aposta dobrada ultrapassa seu limite diario")
+                if metricas["perda_liquida"] + aposta_extra > cfg["limite_perda_dia"]:
+                    raise CassinoLimite("a aposta dobrada ultrapassa seu limite diario de perda")
+                saldo = con.execute(
+                    """
+                    UPDATE carteira SET saldo=saldo-%s
+                    WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                    RETURNING saldo
+                    """,
+                    (aposta_extra, rodada["guild_id"], user_id, rodada["moeda"], aposta_extra),
+                ).fetchone()
+                if saldo is None:
+                    raise SaldoInsuficiente(f"precisa de mais {aposta_extra} Lunaris na carteira")
+                nova_aposta += aposta_extra
+                self._registrar_extrato_tx(
+                    con, rodada["guild_id"], user_id, -aposta_extra, rodada["moeda"],
+                    "Dobrou a aposta no Cassino: vinte_um",
+                )
+
+            novo_maximo = int(pagamento_maximo) if pagamento_maximo is not None else int(rodada["pagamento_maximo"])
+            if novo_maximo < 0:
+                raise ValueError("pagamento maximo invalido")
+            atualizada = con.execute(
+                """
+                UPDATE cassino_rodadas SET estado=%s, aposta=%s,
+                    pagamento_maximo=%s, versao=versao+1,
+                    atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s RETURNING *
+                """,
+                (Jsonb(estado), nova_aposta, novo_maximo, rodada_id),
+            ).fetchone()
+        return dict(atualizada)
+
+    def liquidar_rodada_cassino(
+        self, rodada_id: str, user_id: str, pagamento: int, resultado: dict, estado: dict
+    ) -> dict:
+        pagamento = int(pagamento)
+        if pagamento < 0 or not isinstance(resultado, dict) or not isinstance(estado, dict):
+            raise ValueError("liquidacao invalida")
+        with self._conn() as con:
+            rodada = con.execute(
+                "SELECT * FROM cassino_rodadas WHERE id=%s AND user_id=%s FOR UPDATE",
+                (rodada_id, user_id),
+            ).fetchone()
+            if rodada is None:
+                raise RodadaCassinoConflito("rodada nao encontrada")
+            if rodada["status"] != "ativa":
+                return {**dict(rodada), "nova": False}
+            if pagamento > int(rodada["pagamento_maximo"]):
+                raise ValueError("pagamento ultrapassa o maximo registrado da rodada")
+            if pagamento:
+                self._creditar_carteira_tx(
+                    con, rodada["guild_id"], user_id, rodada["moeda"], pagamento
+                )
+                self._registrar_extrato_tx(
+                    con, rodada["guild_id"], user_id, pagamento, rodada["moeda"],
+                    f"Premio do Cassino: {rodada['jogo']}",
+                )
+            final = con.execute(
+                """
+                UPDATE cassino_rodadas SET status='liquidada', pagamento=%s,
+                    resultado=%s, estado=%s, versao=versao+1,
+                    atualizado_em=CURRENT_TIMESTAMP, encerrada_em=CURRENT_TIMESTAMP
+                WHERE id=%s RETURNING *
+                """,
+                (pagamento, Jsonb(resultado), Jsonb(estado), rodada_id),
+            ).fetchone()
+        return {**dict(final), "nova": True}
+
+    def reembolsar_rodada_cassino(self, rodada_id: str, motivo: str) -> Optional[dict]:
+        with self._conn() as con:
+            rodada = con.execute(
+                "SELECT * FROM cassino_rodadas WHERE id=%s FOR UPDATE", (rodada_id,)
+            ).fetchone()
+            if rodada is None:
+                return None
+            if rodada["status"] != "ativa":
+                return {**dict(rodada), "nova": False}
+            valor = int(rodada["aposta"])
+            self._creditar_carteira_tx(
+                con, rodada["guild_id"], rodada["user_id"], rodada["moeda"], valor
+            )
+            self._registrar_extrato_tx(
+                con, rodada["guild_id"], rodada["user_id"], valor, rodada["moeda"],
+                f"Reembolso do Cassino: {motivo[:80]}",
+            )
+            final = con.execute(
+                """
+                UPDATE cassino_rodadas SET status='reembolsada', pagamento=%s,
+                    resultado=%s, versao=versao+1, atualizado_em=CURRENT_TIMESTAMP,
+                    encerrada_em=CURRENT_TIMESTAMP
+                WHERE id=%s RETURNING *
+                """,
+                (valor, Jsonb({"motivo": motivo[:200]}), rodada_id),
+            ).fetchone()
+        return {**dict(final), "nova": True}
+
+    def reembolsar_rodadas_cassino_expiradas(self, antes_de) -> List[dict]:
+        with self._conn() as con:
+            ids = [
+                row["id"]
+                for row in con.execute(
+                    """
+                    SELECT id FROM cassino_rodadas
+                    WHERE status='ativa' AND jogo != 'corrida' AND atualizado_em < %s
+                    ORDER BY atualizado_em LIMIT 100
+                    """,
+                    (antes_de,),
+                ).fetchall()
+            ]
+        devolvidas = []
+        for rodada_id in ids:
+            rodada = self.reembolsar_rodada_cassino(rodada_id, "rodada expirada")
+            if rodada and rodada.get("nova"):
+                devolvidas.append(rodada)
+        return devolvidas
+
+    def listar_rodadas_cassino_expiradas(self, antes_de, limite: int = 100) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT * FROM cassino_rodadas
+                WHERE status='ativa' AND jogo != 'corrida' AND atualizado_em < %s
+                ORDER BY atualizado_em LIMIT %s
+                """,
+                (antes_de, max(1, min(int(limite), 500))),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def listar_rodadas_cassino(self, guild_id: str, user_id: str, limite: int = 10) -> List[dict]:
+        limite = max(1, min(int(limite), 50))
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT * FROM cassino_rodadas
+                WHERE guild_id=%s AND user_id=%s
+                ORDER BY criado_em DESC LIMIT %s
+                """,
+                (guild_id, user_id, limite),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def diagnostico_cassino(self, guild_id: str) -> dict:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                SELECT COUNT(*) FILTER (WHERE status='liquidada') AS rodadas,
+                       COUNT(DISTINCT user_id) FILTER (WHERE status='liquidada') AS jogadores,
+                       COALESCE(SUM(aposta) FILTER (WHERE status='liquidada'), 0) AS apostado,
+                       COALESCE(SUM(pagamento) FILTER (WHERE status='liquidada'), 0) AS pago,
+                       COUNT(*) FILTER (WHERE status='ativa') AS ativas
+                FROM cassino_rodadas WHERE guild_id=%s
+                """,
+                (guild_id,),
+            ).fetchone()
+        apostado, pago = int(row["apostado"]), int(row["pago"])
+        return {
+            "rodadas": int(row["rodadas"]),
+            "jogadores": int(row["jogadores"]),
+            "apostado": apostado,
+            "pago": pago,
+            "resultado_casa": apostado - pago,
+            "rtp": (pago / apostado) if apostado else 0.0,
+            "ativas": int(row["ativas"]),
+        }
+
+    def auditoria_sorteios_cassino(self, guild_id: str) -> dict:
+        """Contagens publicas de resultados; nao inclui jogadores nem apostas."""
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT jogo,
+                       CASE jogo
+                           WHEN 'dados' THEN resultado->>'dado'
+                           WHEN 'roda_fluxos' THEN resultado->>'sorteada'
+                           WHEN 'sucessao' THEN resultado->>'marco'
+                           WHEN 'vaos' THEN resultado->>'indice'
+                       END AS resultado_sorteado,
+                       COUNT(*) AS quantidade
+                FROM cassino_rodadas
+                WHERE guild_id=%s AND status='liquidada'
+                  AND jogo IN ('dados', 'roda_fluxos', 'sucessao', 'vaos')
+                GROUP BY jogo, resultado_sorteado
+                ORDER BY jogo, resultado_sorteado
+                """,
+                (guild_id,),
+            ).fetchall()
+            corridas = con.execute(
+                """
+                SELECT vencedor AS resultado_sorteado, COUNT(*) AS quantidade
+                FROM cassino_corridas
+                WHERE guild_id=%s AND status='liquidada' AND vencedor IS NOT NULL
+                GROUP BY vencedor ORDER BY vencedor
+                """,
+                (guild_id,),
+            ).fetchall()
+        resultado = {jogo: {} for jogo in ("dados", "roda_fluxos", "sucessao", "vaos", "corrida")}
+        for row in rows:
+            if row["resultado_sorteado"] is not None:
+                resultado[row["jogo"]][str(row["resultado_sorteado"])] = int(row["quantidade"])
+        for row in corridas:
+            resultado["corrida"][str(row["resultado_sorteado"])] = int(row["quantidade"])
+        return resultado
+
+    def obter_ou_criar_corrida(self, guild_id: str, slot_id: str, fecha_em) -> dict:
+        if not slot_id or fecha_em <= datetime.now(timezone.utc):
+            raise ValueError("janela da corrida invalida")
+        with self._conn() as con:
+            row = con.execute(
+                """
+                INSERT INTO cassino_corridas (guild_id, slot_id, fecha_em)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (guild_id, slot_id) DO UPDATE SET slot_id=EXCLUDED.slot_id
+                RETURNING *
+                """,
+                (guild_id, slot_id, fecha_em),
+            ).fetchone()
+        return dict(row)
+
+    def apostar_corrida(
+        self, rodada_id: str, corrida_id: int, guild_id: str, user_id: str,
+        corredor: str, valor: int, dia_local,
+    ) -> dict:
+        valor = int(valor)
+        if corredor not in cassino_mod.CORREDORES_ASTRAIS or valor <= 0:
+            raise ValueError("aposta da corrida invalida")
+        with self._conn() as con:
+            corrida = con.execute(
+                "SELECT * FROM cassino_corridas WHERE id=%s AND guild_id=%s FOR UPDATE",
+                (int(corrida_id), guild_id),
+            ).fetchone()
+            if corrida is None or corrida["status"] != "aberta" or corrida["fecha_em"] <= datetime.now(timezone.utc):
+                raise CassinoIndisponivel("as apostas desta Corrida das Arvores ja fecharam")
+            existente = con.execute(
+                "SELECT * FROM cassino_corrida_apostas WHERE rodada_id=%s FOR UPDATE",
+                (rodada_id,),
+            ).fetchone()
+            if existente:
+                if existente["user_id"] != user_id or existente["guild_id"] != guild_id:
+                    raise RodadaCassinoConflito("identificador de aposta ja utilizado")
+                return {**dict(existente), "nova": False}
+            if con.execute(
+                "SELECT 1 FROM cassino_corrida_apostas WHERE corrida_id=%s AND user_id=%s",
+                (int(corrida_id), user_id),
+            ).fetchone():
+                raise CassinoLimite("voce ja apostou nesta corrida")
+
+            cfg_row = con.execute("SELECT * FROM cassino_config WHERE guild_id=%s", (guild_id,)).fetchone()
+            cfg = dict(cassino_mod.CASSINO_CONFIG_PADRAO) if cfg_row is None else {
+                "ativo": bool(cfg_row["ativo"]),
+                "aposta_minima": int(cfg_row["aposta_minima"]),
+                "aposta_maxima": int(cfg_row["aposta_maxima"]),
+                "limite_apostado_dia": int(cfg_row["limite_apostado_dia"]),
+                "limite_perda_dia": int(cfg_row["limite_perda_dia"]),
+            }
+            if not cfg["ativo"]:
+                raise CassinoIndisponivel("o cassino esta fechado neste servidor")
+            if not cfg["aposta_minima"] <= valor <= cfg["aposta_maxima"]:
+                raise CassinoLimite(
+                    f"a aposta deve ficar entre {cfg['aposta_minima']} e {cfg['aposta_maxima']} Lunaris"
+                )
+            con.execute(
+                "INSERT INTO cassino_jogadores (guild_id, user_id) VALUES (%s, %s) ON CONFLICT DO NOTHING",
+                (guild_id, user_id),
+            )
+            jogador = con.execute(
+                "SELECT * FROM cassino_jogadores WHERE guild_id=%s AND user_id=%s FOR UPDATE",
+                (guild_id, user_id),
+            ).fetchone()
+            if jogador["pausado_ate"] and jogador["pausado_ate"] > datetime.now(timezone.utc):
+                raise CassinoIndisponivel(f"sua pausa do cassino vai ate {jogador['pausado_ate']}")
+            metricas = self._metricas_cassino_dia_tx(con, guild_id, user_id, dia_local)
+            if metricas["apostado"] + valor > cfg["limite_apostado_dia"]:
+                raise CassinoLimite("esta aposta ultrapassa seu limite diario apostado")
+            if metricas["perda_liquida"] + valor > cfg["limite_perda_dia"]:
+                raise CassinoLimite("esta aposta ultrapassa seu limite diario de perda")
+
+            self._garantir_jogador(con, guild_id, user_id)
+            moeda = self._nome_moeda_real(con, guild_id, user_id, "Lunaris")
+            saldo = con.execute(
+                """
+                UPDATE carteira SET saldo=saldo-%s
+                WHERE guild_id=%s AND user_id=%s AND moeda=%s AND saldo >= %s
+                RETURNING saldo
+                """,
+                (valor, guild_id, user_id, moeda, valor),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"precisa de {valor} Lunaris na carteira")
+            con.execute(
+                """
+                INSERT INTO cassino_rodadas
+                    (id, guild_id, user_id, jogo, moeda, aposta,
+                     pagamento_maximo, estado, dia_local)
+                VALUES (%s, %s, %s, 'corrida', %s, %s, 2147483647, %s, %s)
+                """,
+                (rodada_id, guild_id, user_id, moeda, valor,
+                 Jsonb({"corrida_id": int(corrida_id), "corredor": corredor}), dia_local),
+            )
+            aposta = con.execute(
+                """
+                INSERT INTO cassino_corrida_apostas
+                    (rodada_id, corrida_id, guild_id, user_id, corredor, valor)
+                VALUES (%s, %s, %s, %s, %s, %s) RETURNING *
+                """,
+                (rodada_id, int(corrida_id), guild_id, user_id, corredor, valor),
+            ).fetchone()
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, -valor, moeda,
+                f"Aposta na Corrida das Arvores: {cassino_mod.CORREDORES_ASTRAIS[corredor]['nome']}",
+            )
+        return {**dict(aposta), "nova": True}
+
+    def resumo_corrida(self, corrida_id: int, guild_id: str, user_id: Optional[str] = None) -> dict:
+        with self._conn() as con:
+            corrida = con.execute(
+                "SELECT * FROM cassino_corridas WHERE id=%s AND guild_id=%s",
+                (int(corrida_id), guild_id),
+            ).fetchone()
+            if corrida is None:
+                raise ValueError("corrida nao encontrada")
+            linhas = con.execute(
+                """
+                SELECT corredor, COALESCE(SUM(valor), 0) AS total, COUNT(*) AS apostadores
+                FROM cassino_corrida_apostas WHERE corrida_id=%s GROUP BY corredor
+                """,
+                (int(corrida_id),),
+            ).fetchall()
+            minha = None if user_id is None else con.execute(
+                "SELECT * FROM cassino_corrida_apostas WHERE corrida_id=%s AND user_id=%s",
+                (int(corrida_id), user_id),
+            ).fetchone()
+        por_corredor = {chave: {"total": 0, "apostadores": 0} for chave in cassino_mod.CORREDORES_ASTRAIS}
+        for linha in linhas:
+            if linha["corredor"] in por_corredor:
+                por_corredor[linha["corredor"]] = {
+                    "total": int(linha["total"]), "apostadores": int(linha["apostadores"])
+                }
+        return {"corrida": dict(corrida), "por_corredor": por_corredor, "minha": dict(minha) if minha else None}
+
+    def registrar_atividade_contrato(
+        self, guild_id: str, user_id: str, semana, objetivo: str
+    ) -> bool:
+        if objetivo not in cassino_mod.OBJETIVOS_CONTRATO:
+            raise ValueError("objetivo semanal invalido")
+        with self._conn() as con:
+            row = con.execute(
+                """
+                INSERT INTO cassino_contrato_atividades
+                    (guild_id, user_id, semana, objetivo)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT DO NOTHING RETURNING objetivo
+                """,
+                (guild_id, user_id, semana, objetivo),
+            ).fetchone()
+        return row is not None
+
+    def resumo_contrato(self, guild_id: str, user_id: str, semana) -> dict:
+        with self._conn() as con:
+            atividades = con.execute(
+                """
+                SELECT objetivo FROM cassino_contrato_atividades
+                WHERE guild_id=%s AND user_id=%s AND semana=%s
+                ORDER BY objetivo
+                """,
+                (guild_id, user_id, semana),
+            ).fetchall()
+            resgate = con.execute(
+                """
+                SELECT * FROM cassino_contrato_resgates
+                WHERE guild_id=%s AND user_id=%s AND semana=%s
+                """,
+                (guild_id, user_id, semana),
+            ).fetchone()
+        concluidos = {row["objetivo"] for row in atividades}
+        return {
+            "semana": semana,
+            "concluidos": concluidos,
+            "quantidade": len(concluidos),
+            "necessarios": cassino_mod.CONTRATO_OBJETIVOS_NECESSARIOS,
+            "resgatado": resgate is not None,
+        }
+
+    def resgatar_contrato(self, guild_id: str, user_id: str, semana) -> dict:
+        with self._conn() as con:
+            total = con.execute(
+                """
+                SELECT COUNT(*) AS total FROM cassino_contrato_atividades
+                WHERE guild_id=%s AND user_id=%s AND semana=%s
+                """,
+                (guild_id, user_id, semana),
+            ).fetchone()["total"]
+            if int(total) < cassino_mod.CONTRATO_OBJETIVOS_NECESSARIOS:
+                raise CassinoLimite(
+                    f"complete {cassino_mod.CONTRATO_OBJETIVOS_NECESSARIOS} categorias diferentes primeiro"
+                )
+            resgate = con.execute(
+                """
+                INSERT INTO cassino_contrato_resgates
+                    (guild_id, user_id, semana, lunaris, reputacao)
+                VALUES (%s, %s, %s, %s, %s)
+                ON CONFLICT DO NOTHING RETURNING *
+                """,
+                (
+                    guild_id, user_id, semana,
+                    cassino_mod.CONTRATO_RECOMPENSA_LUNARIS,
+                    cassino_mod.CONTRATO_RECOMPENSA_REPUTACAO,
+                ),
+            ).fetchone()
+            if resgate is None:
+                existente = con.execute(
+                    """
+                    SELECT * FROM cassino_contrato_resgates
+                    WHERE guild_id=%s AND user_id=%s AND semana=%s
+                    """,
+                    (guild_id, user_id, semana),
+                ).fetchone()
+                return {**dict(existente), "novo": False}
+            self._garantir_jogador(con, guild_id, user_id)
+            self._creditar_carteira_tx(
+                con, guild_id, user_id, "Lunaris", cassino_mod.CONTRATO_RECOMPENSA_LUNARIS
+            )
+            con.execute(
+                """
+                UPDATE cartao SET credito=credito+%s
+                WHERE guild_id=%s AND user_id=%s
+                """,
+                (cassino_mod.CONTRATO_RECOMPENSA_REPUTACAO, guild_id, user_id),
+            )
+            self._registrar_extrato_tx(
+                con, guild_id, user_id, cassino_mod.CONTRATO_RECOMPENSA_LUNARIS,
+                "Lunaris", "Mandato Semanal do Banco Lunar",
+            )
+        return {**dict(resgate), "novo": True}
+
+    def avaliar_conquistas_cassino(self, guild_id: str, user_id: str) -> List[dict]:
+        with self._conn() as con:
+            rodadas = con.execute(
+                """
+                SELECT jogo, aposta, pagamento, estado, resultado
+                FROM cassino_rodadas
+                WHERE guild_id=%s AND user_id=%s AND status='liquidada'
+                ORDER BY encerrada_em, criado_em, id
+                """,
+                (guild_id, user_id),
+            ).fetchall()
+            extras = con.execute(
+                """
+                SELECT
+                    EXISTS (
+                        SELECT 1 FROM cassino_contrato_resgates
+                        WHERE guild_id=%s AND user_id=%s
+                    ) AS mandato,
+                    EXISTS (
+                        SELECT 1 FROM cassino_torneio_entradas
+                        WHERE guild_id=%s AND user_id=%s
+                          AND status IN ('reservada', 'entregue')
+                    ) AS oferenda,
+                    EXISTS (
+                        SELECT 1 FROM cassino_torneios
+                        WHERE guild_id=%s AND vencedor_user_id=%s
+                          AND status='concluido'
+                    ) AS campeao,
+                    EXISTS (
+                        SELECT 1 FROM cassino_jogadores
+                        WHERE guild_id=%s AND user_id=%s AND pausado_ate IS NOT NULL
+                    ) AS pausou
+                """,
+                (guild_id, user_id, guild_id, user_id, guild_id, user_id, guild_id, user_id),
+            ).fetchone()
+            chaves = []
+            quantidade = len(rodadas)
+            if quantidade >= 1:
+                chaves.append("primeira_rodada")
+            if quantidade >= 10:
+                chaves.append("frequentador")
+            if quantidade >= 50:
+                chaves.append("habitante_salao")
+
+            jogos = {str(row["jogo"]) for row in rodadas}
+            if cassino_mod.JOGOS_INSTANTANEOS <= jogos:
+                chaves.append("todos_jogos")
+
+            def resultado(row):
+                return row["resultado"] if isinstance(row["resultado"], dict) else {}
+
+            def estado(row):
+                return row["estado"] if isinstance(row["estado"], dict) else {}
+
+            if any(resultado(row).get("resultado") == "vinte_um_natural" for row in rodadas):
+                chaves.append("vinte_um_natural")
+            if any(
+                row["jogo"] == "dados" and resultado(row).get("escolha") == "exato"
+                and int(row["pagamento"]) > int(row["aposta"])
+                for row in rodadas
+            ):
+                chaves.append("dado_exato")
+            if any(
+                row["jogo"] == "roda_fluxos" and int(row["pagamento"]) > 0
+                for row in rodadas
+            ):
+                chaves.append("roda_exata")
+            if any(
+                row["jogo"] == "roda_fluxos"
+                and resultado(row).get("escolha") == "vazio"
+                and resultado(row).get("sorteada") == "vazio"
+                for row in rodadas
+            ):
+                chaves.append("roda_vazio")
+            if any(
+                row["jogo"] == "sucessao" and resultado(row).get("lado") == "passo"
+                for row in rodadas
+            ):
+                chaves.append("passo_chronus")
+            if any(
+                row["jogo"] == "vaos" and resultado(row).get("indice") in (0, 4)
+                for row in rodadas
+            ):
+                chaves.append("vaos_borda")
+            if any(
+                row["jogo"] == "vaos" and resultado(row).get("indice") == 2
+                for row in rodadas
+            ):
+                chaves.append("vaos_centro")
+            if any(int(row["pagamento"]) - int(row["aposta"]) >= 50 for row in rodadas):
+                chaves.append("grande_vitoria")
+            if any(int(row["pagamento"]) - int(row["aposta"]) >= 200 for row in rodadas):
+                chaves.append("fortuna_lunar")
+            if any(
+                row["jogo"] == "corrida"
+                and resultado(row).get("vencedor") == estado(row).get("corredor")
+                for row in rodadas
+            ):
+                chaves.append("apostador_astral")
+
+            sequencia = 0
+            maior_sequencia = 0
+            anteriores = []
+            retorno = False
+            for row in rodadas:
+                liquido = int(row["pagamento"]) - int(row["aposta"])
+                sinal = 1 if liquido > 0 else -1 if liquido < 0 else 0
+                if sinal == 1 and len(anteriores) >= 3 and anteriores[-3:] == [-1, -1, -1]:
+                    retorno = True
+                sequencia = sequencia + 1 if sinal == 1 else 0
+                maior_sequencia = max(maior_sequencia, sequencia)
+                anteriores.append(sinal)
+            if maior_sequencia >= 3:
+                chaves.append("sequencia_tres")
+            if maior_sequencia >= 5:
+                chaves.append("sequencia_cinco")
+            if retorno:
+                chaves.append("retorno_arkarin")
+            if bool(extras["mandato"]):
+                chaves.append("mandato_cumprido")
+            if bool(extras["oferenda"]):
+                chaves.append("oferenda_torneio")
+            if bool(extras["campeao"]):
+                chaves.append("campeao_torneio")
+            if bool(extras["pausou"]):
+                chaves.append("pausa_consciente")
+            novas = set()
+            for chave in chaves:
+                inserida = con.execute(
+                    """
+                    INSERT INTO cassino_conquistas (guild_id, user_id, chave)
+                    VALUES (%s, %s, %s) ON CONFLICT DO NOTHING
+                    RETURNING chave
+                    """,
+                    (guild_id, user_id, chave),
+                ).fetchone()
+                if inserida:
+                    novas.add(str(inserida["chave"]))
+            rows = con.execute(
+                """
+                SELECT * FROM cassino_conquistas
+                WHERE guild_id=%s AND user_id=%s ORDER BY desbloqueada_em, chave
+                """,
+                (guild_id, user_id),
+            ).fetchall()
+        return [{**dict(row), "nova": row["chave"] in novas} for row in rows]
+
+    def obter_ou_criar_torneio(self, guild_id: str, semana, fecha_em) -> dict:
+        if fecha_em <= datetime.now(timezone.utc):
+            raise ValueError("janela do torneio invalida")
+        with self._conn() as con:
+            row = con.execute(
+                """
+                INSERT INTO cassino_torneios (guild_id, semana, fecha_em)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (guild_id, semana) DO UPDATE SET semana=EXCLUDED.semana
+                RETURNING *
+                """,
+                (guild_id, semana, fecha_em),
+            ).fetchone()
+        return dict(row)
+
+    def criar_entrada_torneio_pendente(
+        self, torneio_id: int, guild_id: str, user_id: str,
+        item_id: str, titulo: str, tipo: str, raridade: str, modo_posse: str,
+    ) -> dict:
+        if modo_posse not in {"legado", "cofre"} or not item_id:
+            raise ValueError("entrada de torneio invalida")
+        referencia = f"cassino-torneio:{guild_id}:{int(torneio_id)}:{user_id}"
+        with self._conn() as con:
+            torneio = con.execute(
+                "SELECT * FROM cassino_torneios WHERE id=%s AND guild_id=%s FOR UPDATE",
+                (int(torneio_id), guild_id),
+            ).fetchone()
+            if torneio is None or torneio["status"] != "aberto" or torneio["fecha_em"] <= datetime.now(timezone.utc):
+                raise CassinoIndisponivel("as inscrições deste torneio já fecharam")
+            existente = con.execute(
+                "SELECT * FROM cassino_torneio_entradas WHERE torneio_id=%s AND user_id=%s",
+                (int(torneio_id), user_id),
+            ).fetchone()
+            if existente:
+                return {**dict(existente), "nova": False}
+            row = con.execute(
+                """
+                INSERT INTO cassino_torneio_entradas
+                    (torneio_id, guild_id, user_id, item_id, titulo, tipo,
+                     raridade, modo_posse, referencia)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                RETURNING *
+                """,
+                (int(torneio_id), guild_id, user_id, item_id, titulo, tipo,
+                 raridade, modo_posse, referencia),
+            ).fetchone()
+        return {**dict(row), "nova": True}
+
+    def confirmar_entrada_torneio_legado(self, entrada_id: int) -> dict:
+        with self._conn() as con:
+            entrada = con.execute(
+                "SELECT * FROM cassino_torneio_entradas WHERE id=%s FOR UPDATE",
+                (int(entrada_id),),
+            ).fetchone()
+            if entrada is None:
+                raise ValueError("entrada nao encontrada")
+            if entrada["status"] != "pendente":
+                return {**dict(entrada), "nova": False}
+            if entrada["modo_posse"] != "legado":
+                raise ValueError("entrada nao pertence ao inventario legado")
+            item = con.execute(
+                """
+                UPDATE inventario SET quantidade=quantidade-1
+                WHERE guild_id=%s AND user_id=%s AND item_id=%s AND quantidade >= 2
+                RETURNING quantidade
+                """,
+                (entrada["guild_id"], entrada["user_id"], entrada["item_id"]),
+            ).fetchone()
+            if item is None:
+                raise CassinoLimite("o torneio exige pelo menos duas unidades; uma fica com você")
+            atualizada = con.execute(
+                """
+                UPDATE cassino_torneio_entradas SET status='reservada'
+                WHERE id=%s RETURNING *
+                """,
+                (int(entrada_id),),
+            ).fetchone()
+        return {**dict(atualizada), "nova": True}
+
+    def confirmar_entrada_torneio_cofre(self, entrada_id: int) -> dict:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE cassino_torneio_entradas SET status='reservada'
+                WHERE id=%s AND modo_posse='cofre' AND status='pendente'
+                RETURNING *
+                """,
+                (int(entrada_id),),
+            ).fetchone()
+            if row is None:
+                existente = con.execute(
+                    "SELECT * FROM cassino_torneio_entradas WHERE id=%s", (int(entrada_id),)
+                ).fetchone()
+                if existente is None or existente["modo_posse"] != "cofre":
+                    raise ValueError("entrada de cofre nao encontrada")
+                return {**dict(existente), "nova": False}
+        return {**dict(row), "nova": True}
+
+    def listar_torneios_pendentes(self, agora) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT * FROM cassino_torneios
+                WHERE (status='aberto' AND fecha_em <= %s) OR status='sorteado'
+                ORDER BY fecha_em LIMIT 50
+                """,
+                (agora,),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def sortear_torneio(self, torneio_id: int, rng=None) -> dict:
+        gerador = rng or secrets.SystemRandom()
+        with self._conn() as con:
+            torneio = con.execute(
+                "SELECT * FROM cassino_torneios WHERE id=%s FOR UPDATE",
+                (int(torneio_id),),
+            ).fetchone()
+            if torneio is None:
+                raise ValueError("torneio nao encontrado")
+            entradas = con.execute(
+                """
+                SELECT * FROM cassino_torneio_entradas
+                WHERE torneio_id=%s AND status IN ('reservada', 'entregue')
+                ORDER BY id FOR UPDATE
+                """,
+                (int(torneio_id),),
+            ).fetchall()
+            if torneio["status"] == "aberto":
+                if torneio["fecha_em"] > datetime.now(timezone.utc):
+                    raise CassinoIndisponivel("o torneio ainda esta aceitando inscricoes")
+                if not entradas:
+                    final = con.execute(
+                        """
+                        UPDATE cassino_torneios SET status='sem_entradas',
+                            concluido_em=CURRENT_TIMESTAMP WHERE id=%s RETURNING *
+                        """,
+                        (int(torneio_id),),
+                    ).fetchone()
+                    return {**dict(final), "entradas": [], "novo": True}
+                vencedor = gerador.choice([e["user_id"] for e in entradas])
+                torneio = con.execute(
+                    """
+                    UPDATE cassino_torneios SET status='sorteado', vencedor_user_id=%s,
+                        sorteado_em=CURRENT_TIMESTAMP WHERE id=%s RETURNING *
+                    """,
+                    (vencedor, int(torneio_id)),
+                ).fetchone()
+                novo = True
+            else:
+                novo = False
+        return {**dict(torneio), "entradas": [dict(e) for e in entradas], "novo": novo}
+
+    def entregar_entrada_torneio_legado(self, entrada_id: int, vencedor_user_id: str) -> dict:
+        with self._conn() as con:
+            entrada = con.execute(
+                "SELECT * FROM cassino_torneio_entradas WHERE id=%s FOR UPDATE",
+                (int(entrada_id),),
+            ).fetchone()
+            if entrada is None:
+                raise ValueError("entrada nao encontrada")
+            if entrada["status"] == "entregue":
+                return {**dict(entrada), "nova": False}
+            if entrada["status"] != "reservada" or entrada["modo_posse"] != "legado":
+                raise ValueError("entrada legado nao esta reservada")
+            con.execute(
+                """
+                INSERT INTO inventario (guild_id, user_id, item_id, titulo, tipo, quantidade)
+                VALUES (%s, %s, %s, %s, %s, 1)
+                ON CONFLICT (guild_id, user_id, item_id)
+                DO UPDATE SET quantidade=inventario.quantidade+1,
+                              titulo=EXCLUDED.titulo, tipo=EXCLUDED.tipo
+                """,
+                (
+                    entrada["guild_id"], vencedor_user_id, entrada["item_id"],
+                    entrada["titulo"], entrada["tipo"],
+                ),
+            )
+            final = con.execute(
+                """
+                UPDATE cassino_torneio_entradas SET status='entregue',
+                    entregue_em=CURRENT_TIMESTAMP WHERE id=%s RETURNING *
+                """,
+                (int(entrada_id),),
+            ).fetchone()
+        return {**dict(final), "nova": True}
+
+    def marcar_entrada_torneio_cofre_entregue(self, entrada_id: int) -> dict:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE cassino_torneio_entradas SET status='entregue',
+                    entregue_em=CURRENT_TIMESTAMP
+                WHERE id=%s AND modo_posse='cofre' AND status='reservada'
+                RETURNING *
+                """,
+                (int(entrada_id),),
+            ).fetchone()
+            if row is None:
+                existente = con.execute(
+                    "SELECT * FROM cassino_torneio_entradas WHERE id=%s", (int(entrada_id),)
+                ).fetchone()
+                if existente is None:
+                    raise ValueError("entrada nao encontrada")
+                return {**dict(existente), "nova": False}
+        return {**dict(row), "nova": True}
+
+    def marcar_entrada_torneio_entregue_externamente(self, entrada_id: int) -> dict:
+        with self._conn() as con:
+            row = con.execute(
+                """
+                UPDATE cassino_torneio_entradas SET status='entregue',
+                    entregue_em=CURRENT_TIMESTAMP
+                WHERE id=%s AND status='reservada' RETURNING *
+                """,
+                (int(entrada_id),),
+            ).fetchone()
+            if row is None:
+                existente = con.execute(
+                    "SELECT * FROM cassino_torneio_entradas WHERE id=%s", (int(entrada_id),)
+                ).fetchone()
+                if existente is None:
+                    raise ValueError("entrada nao encontrada")
+                return {**dict(existente), "nova": False}
+        return {**dict(row), "nova": True}
+
+    def concluir_torneio(self, torneio_id: int) -> Optional[dict]:
+        with self._conn() as con:
+            pendente = con.execute(
+                """
+                SELECT 1 FROM cassino_torneio_entradas
+                WHERE torneio_id=%s AND status='reservada' LIMIT 1
+                """,
+                (int(torneio_id),),
+            ).fetchone()
+            if pendente:
+                return None
+            row = con.execute(
+                """
+                UPDATE cassino_torneios SET status='concluido',
+                    concluido_em=CURRENT_TIMESTAMP
+                WHERE id=%s AND status='sorteado' RETURNING *
+                """,
+                (int(torneio_id),),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def resumo_torneio(self, torneio_id: int, guild_id: str, user_id: Optional[str] = None) -> dict:
+        with self._conn() as con:
+            torneio = con.execute(
+                "SELECT * FROM cassino_torneios WHERE id=%s AND guild_id=%s",
+                (int(torneio_id), guild_id),
+            ).fetchone()
+            if torneio is None:
+                raise ValueError("torneio nao encontrado")
+            entradas = con.execute(
+                """
+                SELECT * FROM cassino_torneio_entradas
+                WHERE torneio_id=%s AND status IN ('reservada', 'entregue') ORDER BY id
+                """,
+                (int(torneio_id),),
+            ).fetchall()
+            minha = None if user_id is None else con.execute(
+                "SELECT * FROM cassino_torneio_entradas WHERE torneio_id=%s AND user_id=%s",
+                (int(torneio_id), user_id),
+            ).fetchone()
+        return {
+            "torneio": dict(torneio),
+            "entradas": [dict(e) for e in entradas],
+            "minha": dict(minha) if minha else None,
+        }
 
     # ── Loteria Dominical (bilhetes comprados no Banqueiro, sorteio no Jornalista) ──
     def comprar_bilhete_loteria(self, guild_id: str, user_id: str, quantidade: int) -> int:

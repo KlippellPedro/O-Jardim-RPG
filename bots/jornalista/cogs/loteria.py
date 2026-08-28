@@ -58,23 +58,20 @@ class Loteria(commands.Cog):
     async def _sortear_guild(self, guild: discord.Guild, agora: datetime) -> None:
         gid = str(guild.id)
         db = self.bot.db
-        bilhetes = db.listar_bilhetes_loteria(gid)
-        total_bilhetes = sum(b["quantidade"] for b in bilhetes)
-        if not bilhetes or total_bilhetes <= 0:
-            return
-
-        vencedor_id = sortear_vencedor(bilhetes)
         cfg_loteria = db.get_loteria_config(gid)
-        pote_bruto = total_bilhetes * cfg_loteria["preco_bilhete"]
-        premio = pote_bruto - int(pote_bruto * cfg_loteria["corte"])
-
-        # Ordem importa: pagar, encerrar a rodada e só então anunciar. Se o
-        # anúncio (ou qualquer coisa depois) falhar, o domingo seguinte não
-        # pode sortear o mesmo bolo de novo: foi exatamente o que acontecia
-        # quando `registrar_extrato` estourava antes de limpar os bilhetes.
-        db.creditar(gid, vencedor_id, "Lunaris", premio)
-        db.limpar_bilhetes_loteria(gid)
-        db.registrar_extrato(gid, vencedor_id, premio, "Lunaris", "Ganhou a Loteria Dominical")
+        rodada_id = agora.date().isoformat()
+        resultado = db.encerrar_loteria_atomica(
+            gid,
+            rodada_id,
+            cfg_loteria["preco_bilhete"],
+            cfg_loteria["corte"],
+        )
+        if not resultado or not resultado["nova"]:
+            return
+        vencedor_id = resultado["vencedor_user_id"]
+        total_bilhetes = int(resultado["total_bilhetes"])
+        participantes = int(resultado["participantes"])
+        premio = int(resultado["premio"])
 
         canal_id = db.get_canal_categoria(gid, "dinheiro")
         canal = guild.get_channel(int(canal_id)) if canal_id else None
@@ -83,7 +80,7 @@ class Loteria(commands.Cog):
         emb = ui.embed(
             "🎟️ Loteria Dominical: resultado!", categoria="noticia",
             descricao=(
-                f"{total_bilhetes} bilhete(s) vendido(s) entre {len(bilhetes)} participante(s) essa semana.\n\n"
+                f"{total_bilhetes} bilhete(s) vendido(s) entre {participantes} participante(s) essa semana.\n\n"
                 f"🏆 <@{vencedor_id}> levou ☾ **{premio} Lunaris**!"
             ),
         )
@@ -92,7 +89,7 @@ class Loteria(commands.Cog):
             guild_id=gid,
             embed=emb,
             origem="loteria_resultado",
-            dedupe_key=f"loteria:{gid}:{agora.date().isoformat()}",
+            dedupe_key=f"loteria:{gid}:{rodada_id}",
             categoria="dinheiro",
             canal_id=str(canal.id) if isinstance(canal, discord.TextChannel) else None,
             automacao="loteria_resultado",

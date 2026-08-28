@@ -25,6 +25,7 @@ EXTENSOES = (
     "cogs.horoscopo",
     "cogs.entrevista",
     "cogs.loteria",
+    "cogs.cassino",
     "cogs.ajuda",
 )
 

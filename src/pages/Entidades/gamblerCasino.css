@@ -1,0 +1,202 @@
+.gambler-casino {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  color: #f3e7d2;
+  background: #090505;
+}
+
+.gambler-casino__backdrop,
+.gambler-casino__veil { position: fixed; inset: 0; }
+.gambler-casino__backdrop { background: url('/assets/img/entidades/gambler-fundo.jpg') center / cover no-repeat; filter: saturate(.85) contrast(1.05) brightness(.72); transform: scale(1.02); }
+.gambler-casino__veil { background: radial-gradient(circle at 50% 14%, rgba(182, 117, 49, .08), transparent 35rem), linear-gradient(180deg, rgba(8, 4, 5, .5), rgba(8, 4, 5, .91) 82%); }
+.gambler-casino__shell { position: relative; z-index: 1; width: min(100% - 2rem, 78rem); margin: 0 auto; padding: 5.5rem 0 6rem; }
+.gambler-casino__nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.gambler-casino__nav a { display: inline-flex; align-items: center; gap: .45rem; color: #bda889; font-size: .62rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+
+.gambler-casino header { max-width: 54rem; margin: 5rem auto 3.2rem; text-align: center; }
+.gambler-casino header > span { color: #d0a052; font-size: .62rem; font-weight: 800; letter-spacing: .28em; text-transform: uppercase; }
+.gambler-casino header h1 { margin-top: .8rem; color: #f5e8d3; font: 500 clamp(2.7rem, 8vw, 6rem)/.95 Cinzel, Georgia, serif; letter-spacing: -.045em; text-shadow: 0 18px 60px #000; }
+.gambler-casino header p { max-width: 42rem; margin: 1.3rem auto 0; color: #bea998; font: 1rem/1.75 Georgia, serif; }
+
+.gambler-casino__account { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); overflow: hidden; border: 1px solid rgba(208, 160, 82, .22); border-radius: 1rem; background: rgba(18, 8, 9, .86); backdrop-filter: blur(16px); }
+.gambler-casino__account > div { display: flex; min-width: 0; padding: 1rem 1.2rem; flex-direction: column; gap: .25rem; }
+.gambler-casino__account > div + div { border-left: 1px solid rgba(208, 160, 82, .15); }
+.gambler-casino__account small { color: #937f6f; font-size: .55rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.gambler-casino__account strong { display: inline-flex; align-items: center; gap: .4rem; overflow: hidden; color: #ead7b9; font-size: .88rem; text-overflow: ellipsis; white-space: nowrap; }
+
+.gambler-streak { display: inline-flex; margin-left: .3rem; padding: .1rem .4rem; align-items: center; gap: .2rem; border-radius: 1rem; color: #ffb15a; background: rgba(255, 122, 26, .16); font-size: .68rem; font-weight: 800; animation: gambler-streak-pulse 1.6s ease-in-out infinite; }
+@keyframes gambler-streak-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.gambler-casino__toasts { position: fixed; top: 4.75rem; right: 1.2rem; z-index: 60; display: flex; width: min(92vw, 22rem); flex-direction: column; gap: .5rem; pointer-events: none; }
+.gambler-toast { display: flex; padding: .85rem 1rem; align-items: center; gap: .7rem; border: 1px solid rgba(233, 190, 92, .5); border-radius: .85rem; color: #f5e5bf; background: linear-gradient(120deg, rgba(58, 20, 8, .96), rgba(20, 10, 8, .97)); box-shadow: 0 1rem 3rem rgba(0, 0, 0, .5), 0 0 1.6rem rgba(233, 190, 92, .18); }
+.gambler-toast > svg { flex: none; color: #ecbb5d; }
+.gambler-toast div { display: flex; min-width: 0; flex-direction: column; gap: .1rem; }
+.gambler-toast small { color: #c9a878; font-size: .58rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.gambler-toast strong { overflow: hidden; font: 500 .82rem/1.3 Cinzel, Georgia, serif; text-overflow: ellipsis; white-space: nowrap; }
+.gambler-toast--aviso { border-color: rgba(90, 170, 130, .4); box-shadow: 0 1rem 3rem rgba(0, 0, 0, .5), 0 0 1.4rem rgba(90, 170, 130, .14); }
+.gambler-toast--aviso > svg { color: #7fc79a; }
+.gambler-toast--aviso strong { white-space: normal; }
+
+.gambler-achievements__bar { display: flex; margin-top: .7rem; flex-wrap: wrap; align-items: center; gap: .7rem; }
+.gambler-achievements__toggle { display: inline-flex; padding: .45rem .75rem; align-items: center; gap: .4rem; border: 1px solid rgba(208, 160, 82, .25); border-radius: .6rem; color: #d9b978; background: rgba(18, 8, 9, .7); font-size: .62rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; }
+.gambler-achievements__hint { max-width: 32rem; color: #8f7c6d; font: italic .72rem/1.4 Georgia, serif; }
+.gambler-achievements { overflow: hidden; margin-top: .55rem; border: 1px solid rgba(208, 160, 82, .2); border-radius: .85rem; background: rgba(14, 7, 8, .82); }
+.gambler-achievements ul { display: grid; max-height: 15rem; padding: .6rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: .5rem; overflow-y: auto; }
+.gambler-achievements li { display: flex; padding: .55rem .65rem; align-items: center; gap: .55rem; border: 1px solid rgba(233, 190, 92, .18); border-radius: .6rem; background: rgba(233, 190, 92, .05); }
+.gambler-achievements li > svg { flex: none; color: #dcaa4f; }
+.gambler-achievements li span { display: flex; min-width: 0; flex-direction: column; gap: .1rem; }
+.gambler-achievements li strong { overflow: hidden; color: #eddec7; font: 500 .74rem/1.25 Cinzel, Georgia, serif; text-overflow: ellipsis; white-space: nowrap; }
+.gambler-achievements li small { color: #a8927c; font-size: .64rem; line-height: 1.35; }
+.gambler-achievements li.is-bloqueada { border-color: rgba(255, 255, 255, .07); background: rgba(255, 255, 255, .02); opacity: .55; }
+.gambler-achievements li.is-bloqueada > svg { color: #766a5c; }
+.gambler-achievements li.is-bloqueada strong { color: #b7ab98; }
+.gambler-achievements > p { padding: 1rem; color: #a8927c; font-size: .74rem; text-align: center; }
+
+.gambler-cashier { position: relative; display: flex; margin-top: 1rem; padding: 1.2rem 1.35rem; flex-direction: column; gap: 1.1rem; border: 1px solid rgba(208, 160, 82, .22); border-radius: 1rem; background: linear-gradient(110deg, rgba(46, 14, 16, .94), rgba(14, 8, 9, .92)); backdrop-filter: blur(16px); }
+.gambler-cashier__row { display: grid; grid-template-columns: minmax(14rem, .8fr) minmax(25rem, 1.4fr); align-items: center; gap: 1.4rem; }
+.gambler-cashier__divider { height: 1px; background: rgba(208, 160, 82, .16); }
+.gambler-cashier__row > div:first-child > span { color: #dcaa4f; font-size: .55rem; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; }
+.gambler-cashier h2 { margin-top: .28rem; color: #eddec7; font: 500 1.1rem/1.28 Cinzel, Georgia, serif; }
+.gambler-cashier p { margin-top: .32rem; color: #af9c8a; font: .78rem/1.48 Georgia, serif; }
+.gambler-cashier__form { display: grid; grid-template-columns: minmax(10rem, 1.4fr) minmax(7rem, .65fr) minmax(8.5rem, .8fr) auto; align-items: end; gap: .7rem; }
+.gambler-cashier__form--resgate { grid-template-columns: minmax(7rem, .65fr) minmax(8.5rem, .8fr) auto; }
+.gambler-cashier__form label { display: flex; min-width: 0; flex-direction: column; gap: .35rem; color: #b7a291; font-size: .56rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.gambler-cashier__form select,
+.gambler-cashier__form input { width: 100%; min-height: 2.7rem; padding: 0 .75rem; border: 1px solid rgba(220, 176, 97, .26); border-radius: .6rem; color: #f1e2c4; background: rgba(5, 4, 5, .55); font-size: .88rem; font-weight: 600; outline: none; }
+.gambler-cashier__form select:focus,
+.gambler-cashier__form input:focus { border-color: rgba(233, 190, 92, .65); }
+.gambler-cashier__quote { display: flex; min-height: 2.7rem; padding: .35rem .8rem; flex-direction: column; justify-content: center; gap: .15rem; border: 1px solid rgba(233, 190, 92, .26); border-radius: .6rem; background: rgba(233, 190, 92, .07); }
+.gambler-cashier__quote small { color: #cbaf80; font-size: .5rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.gambler-cashier__quote strong { overflow: hidden; color: #edc370; font: 700 1.02rem/1.2 Cinzel, Georgia, serif; text-overflow: ellipsis; white-space: nowrap; }
+.gambler-cashier__form button { display: inline-flex; min-height: 2.7rem; padding: 0 .95rem; align-items: center; justify-content: center; gap: .4rem; border-radius: .6rem; color: #241504; background: #ddb15a; font-size: .63rem; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; transition: transform .15s ease, background .15s ease; }
+.gambler-cashier__form button:not(:disabled):hover { background: #eac272; transform: translateY(-1px); }
+.gambler-cashier__form button:disabled { cursor: not-allowed; opacity: .45; }
+.gambler-cashier__success { display: block; margin-top: .45rem; color: #e6c284; font-size: .72rem; font-weight: 700; text-align: right; }
+.gambler-casino__switch { display: inline-flex; margin: .65rem 0 0 auto; padding: .5rem .7rem; align-items: center; gap: .35rem; color: #bba58f; font-size: .57rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.gambler-casino__switch:disabled { opacity: .4; }
+
+.gambler-casino--selecting { display: grid; min-height: 100dvh; padding: 5rem 1rem 2rem; place-items: center; overflow: auto; }
+.gambler-character-modal { position: relative; z-index: 2; width: min(100%, 40rem); padding: clamp(1.5rem, 5vw, 2.5rem); border: 1px solid rgba(216, 169, 88, .32); border-radius: 1.25rem; color: #eadbc4; background: rgba(15, 8, 9, .95); box-shadow: 0 2rem 6rem rgba(0, 0, 0, .65); text-align: center; backdrop-filter: blur(18px); }
+.gambler-character-modal > span { display: block; color: #c99648; font-size: .55rem; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+.gambler-character-modal > svg { margin: 1.1rem auto .65rem; color: #d2a252; }
+.gambler-character-modal h1 { color: #f0dfc5; font: 500 clamp(1.65rem, 5vw, 2.5rem)/1.1 Cinzel, Georgia, serif; }
+.gambler-character-modal > p { max-width: 31rem; margin: .8rem auto 0; color: #a99380; font: .86rem/1.6 Georgia, serif; }
+.gambler-character-modal__list { display: flex; margin-top: 1.5rem; flex-direction: column; gap: .55rem; }
+.gambler-character-modal__list button { display: grid; grid-template-columns: 2.5rem 1fr auto; padding: .75rem .9rem; align-items: center; gap: .75rem; border: 1px solid rgba(213, 170, 93, .18); border-radius: .75rem; color: #d6c5ad; background: rgba(85, 28, 29, .18); text-align: left; transition: border-color .18s ease, background .18s ease, transform .18s ease; }
+.gambler-character-modal__list button:hover { transform: translateY(-1px); border-color: rgba(213, 170, 93, .52); background: rgba(85, 28, 29, .42); }
+.gambler-character-modal__list img { width: 2.5rem; height: 2.5rem; border-radius: 50%; object-fit: cover; }
+.gambler-character-modal__list > button > svg { margin: auto; color: #c99c55; }
+.gambler-character-modal__list span { display: flex; min-width: 0; flex-direction: column; gap: .15rem; }
+.gambler-character-modal__list strong { overflow: hidden; color: #eedfc8; font: 500 .9rem/1.2 Cinzel, Georgia, serif; text-overflow: ellipsis; white-space: nowrap; }
+.gambler-character-modal__list small { color: #8f7c6d; font-size: .62rem; }
+.gambler-character-modal__list em { color: #d4aa60; font-size: .68rem; font-style: normal; font-weight: 800; white-space: nowrap; }
+.gambler-character-modal > a { display: inline-flex; margin-top: 1.3rem; align-items: center; gap: .4rem; color: #ad9682; font-size: .62rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.gambler-character-modal__empty { padding: 1rem; border: 1px solid rgba(216, 169, 88, .15); border-radius: .7rem; }
+
+.gambler-casino__layout { display: grid; grid-template-columns: minmax(17rem, 23rem) minmax(0, 1fr); gap: 1rem; margin-top: 1rem; align-items: start; }
+.gambler-casino__games { display: flex; flex-direction: column; gap: .65rem; }
+.gambler-casino__games > button { display: grid; grid-template-columns: auto 1fr auto; min-width: 0; padding: 1rem; align-items: center; gap: .8rem; border: 1px solid rgba(208, 160, 82, .14); border-radius: .9rem; color: #a9917e; background: rgba(15, 8, 9, .84); text-align: left; backdrop-filter: blur(14px); transition: border-color .18s ease, background .18s ease, transform .18s ease; }
+.gambler-casino__games > button:not(:disabled):hover { transform: translateX(.2rem); border-color: rgba(208, 160, 82, .38); }
+.gambler-casino__games > button.is-active { border-color: rgba(208, 160, 82, .55); color: #d6a653; background: linear-gradient(110deg, rgba(89, 26, 28, .9), rgba(24, 10, 11, .9)); }
+.gambler-casino__games > button:disabled { cursor: not-allowed; opacity: .38; }
+.gambler-casino__games span { display: flex; min-width: 0; flex-direction: column; gap: .25rem; }
+.gambler-casino__games strong { color: #eadcc7; font: 500 .9rem/1.2 Cinzel, Georgia, serif; }
+.gambler-casino__games small { overflow: hidden; font-size: .7rem; text-overflow: ellipsis; white-space: nowrap; }
+.gambler-casino__games em { color: #d0a052; font-size: .64rem; font-style: normal; font-weight: 800; white-space: nowrap; }
+
+.gambler-table { position: relative; min-height: 34rem; overflow: hidden; border: 1px solid rgba(208, 160, 82, .24); border-radius: 1.25rem; background: #12392b; box-shadow: 0 30px 80px rgba(0, 0, 0, .38); }
+.gambler-table__felt { position: absolute; inset: 0; opacity: .64; background: radial-gradient(circle at 50% 20%, rgba(226, 188, 115, .1), transparent 28rem), repeating-linear-gradient(115deg, transparent 0 4px, rgba(255, 255, 255, .012) 4px 5px); }
+.gambler-table::after { content: ''; position: absolute; inset: .7rem; border: 1px solid rgba(230, 199, 129, .18); border-radius: .9rem; pointer-events: none; }
+.gambler-table__content { position: relative; z-index: 1; display: flex; min-height: 34rem; padding: clamp(1.5rem, 4vw, 3rem); flex-direction: column; align-items: center; justify-content: center; }
+.gambler-table__label { margin-bottom: .9rem; color: #e3c785; font: 500 .72rem/1.2 Cinzel, serif; letter-spacing: .18em; text-align: center; text-transform: uppercase; }
+.gambler-table__rule { max-width: 34rem; margin-bottom: 1.8rem; color: #d1c3aa; font: .95rem/1.7 Georgia, serif; text-align: center; }
+.gambler-table__choices { display: flex; max-width: 38rem; flex-wrap: wrap; align-items: center; justify-content: center; gap: .65rem; }
+.gambler-table__choices button { padding: .7rem .9rem; border: 1px solid rgba(237, 213, 158, .24); border-radius: .7rem; color: #d2c4ab; background: rgba(7, 28, 20, .48); font-size: .74rem; }
+.gambler-table__choices button.is-selected { border-color: #deb762; color: #251604; background: #deb762; }
+.gambler-table__choices label,
+.gambler-table__select { display: flex; color: #c8b99d; font-size: .66rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.gambler-table__choices label { align-items: center; gap: .5rem; }
+.gambler-table select { padding: .6rem .75rem; border: 1px solid rgba(237, 213, 158, .25); border-radius: .55rem; color: #f2e3c7; background: #10251d; }
+.gambler-table__select { width: min(100%, 27rem); flex-direction: column; gap: .55rem; }
+
+.gambler-table__bet { display: flex; width: min(100%, 31rem); margin-top: 2rem; align-items: end; justify-content: center; gap: .75rem; }
+.gambler-table__bet label { display: flex; flex: 1; flex-direction: column; gap: .45rem; color: #d6c6a9; font-size: .62rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.gambler-table__bet label > span { display: flex; min-height: 2.8rem; padding: 0 .8rem; align-items: center; gap: .4rem; border: 1px solid rgba(237, 213, 158, .24); border-radius: .7rem; background: rgba(5, 21, 15, .54); text-transform: none; }
+.gambler-table__bet input { min-width: 0; width: 100%; color: #f7e6c5; background: transparent; font-size: 1rem; font-weight: 800; outline: none; }
+.gambler-table__play { display: inline-flex; min-height: 2.8rem; padding: 0 1rem; align-items: center; justify-content: center; gap: .45rem; border-radius: .7rem; color: #211404; background: #dfb65f; font-size: .68rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.gambler-table__play:disabled { cursor: not-allowed; opacity: .45; }
+.gambler-table__error { max-width: 35rem; margin-top: 1.4rem; padding: .75rem 1rem; border: 1px solid rgba(239, 119, 119, .32); border-radius: .7rem; color: #ffd0d0; background: rgba(72, 11, 13, .55); font-size: .78rem; text-align: center; }
+
+.gambler-blackjack { display: grid; width: min(100%, 36rem); grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.gambler-blackjack > div { text-align: center; }
+.gambler-blackjack small { color: #d2c1a3; font-size: .65rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.gambler-blackjack > div > div { display: flex; min-height: 6rem; margin-top: .7rem; align-items: center; justify-content: center; }
+.gambler-blackjack span { display: grid; width: 3.7rem; height: 5.4rem; margin-left: -1rem; place-items: center; border: 1px solid #d8ccb9; border-radius: .38rem; color: #22150c; background: #f1eadc; box-shadow: .25rem .4rem .8rem rgba(0, 0, 0, .3); font: 700 1.2rem/1 Georgia, serif; }
+.gambler-blackjack span:first-child { margin-left: 0; }
+
+.gambler-scrolls { display: flex; gap: 1rem; }
+.gambler-scrolls span { display: grid; width: 4.6rem; height: 4.6rem; place-items: center; border: 1px solid rgba(237, 213, 158, .3); border-radius: .7rem; color: #e9d8b8; background: linear-gradient(160deg, #1a3a2c, #0c2018); box-shadow: inset 0 0 1.2rem rgba(0, 0, 0, .4); animation: gambler-scroll-unroll .4s ease-out; }
+.gambler-scrolls span.is-vazio { color: #ffb15a; border-color: rgba(255, 165, 50, .7); box-shadow: inset 0 0 1.2rem rgba(0, 0, 0, .4), 0 0 1.4rem rgba(255, 165, 50, .35); }
+@keyframes gambler-scroll-unroll { 0% { transform: translateY(-.6rem); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+
+.gambler-duelo { display: flex; align-items: center; gap: 1.4rem; }
+.gambler-duelo > div { text-align: center; }
+.gambler-duelo small { display: block; margin-bottom: .55rem; color: #d2c1a3; font-size: .65rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.gambler-duelo span { display: grid; width: 4.4rem; height: 6rem; place-items: center; border: 1px solid #d8ccb9; border-radius: .4rem; color: #22150c; background: #f1eadc; box-shadow: .25rem .4rem .8rem rgba(0, 0, 0, .3); font: 700 1.4rem/1 Georgia, serif; }
+.gambler-duelo > svg { color: #b99459; }
+
+.gambler-result { width: min(100%, 34rem); margin-top: 1.7rem; padding: 1rem; border: 1px solid rgba(230, 202, 142, .22); border-radius: .8rem; color: #d8c9ad; background: rgba(5, 24, 17, .56); text-align: center; }
+.gambler-result--win { border-color: rgba(233, 190, 92, .55); box-shadow: 0 0 2rem rgba(233, 190, 92, .12); animation: gambler-win-glow 1.8s ease-in-out .1s 2; }
+.gambler-result--grande { border-color: rgba(255, 165, 50, .75); box-shadow: 0 0 3rem rgba(255, 165, 50, .3); }
+.gambler-result--grande strong { color: #ffce7a; text-shadow: 0 0 1.4rem rgba(255, 165, 50, .45); }
+.gambler-result strong { display: block; color: #f1ddaf; font: 500 1rem/1.4 Cinzel, Georgia, serif; }
+.gambler-result span { display: block; margin-top: .35rem; font-size: .72rem; }
+.gambler-result--suspense { display: flex; align-items: center; justify-content: center; gap: .6rem; color: #cbb99a; }
+.gambler-result--suspense strong { color: #cbb99a; font: italic 500 .92rem/1.4 Cinzel, Georgia, serif; }
+@keyframes gambler-win-glow { 0%, 100% { box-shadow: 0 0 2rem rgba(233, 190, 92, .12); } 50% { box-shadow: 0 0 3.2rem rgba(233, 190, 92, .38); } }
+.gambler-table__actions { display: flex; margin-top: 1.7rem; flex-wrap: wrap; justify-content: center; gap: .6rem; }
+.gambler-table__actions button { min-height: 2.6rem; padding: 0 .9rem; border: 1px solid rgba(232, 201, 132, .38); border-radius: .65rem; color: #281805; background: #ddb35b; font-size: .66rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.gambler-table__actions button.is-quiet { color: #d9c8a9; background: rgba(4, 20, 14, .45); }
+.gambler-table__actions button:disabled { opacity: .4; }
+
+.gambler-casino--loading { display: flex; padding: 2rem; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; text-align: center; }
+.gambler-casino--loading h1 { font: 500 clamp(2rem, 6vw, 3.5rem)/1.1 Cinzel, Georgia, serif; }
+.gambler-casino--loading p { max-width: 34rem; color: #b7a28e; }
+.gambler-casino--loading a { display: inline-flex; align-items: center; gap: .4rem; color: #d0a052; }
+.gambler-casino__spinner { animation: gambler-spin .8s linear infinite; }
+@keyframes gambler-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 880px) {
+  .gambler-casino__account { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gambler-casino__account > div:nth-child(n+3) { border-top: 1px solid rgba(208, 160, 82, .15); }
+  .gambler-casino__account > div:nth-child(odd) { border-left: 0; }
+  .gambler-casino__layout { grid-template-columns: 1fr; }
+  .gambler-casino__games { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gambler-cashier__row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .gambler-casino__shell { padding-top: 5rem; }
+  .gambler-casino header { margin-top: 4rem; }
+  .gambler-casino__account { grid-template-columns: 1fr; }
+  .gambler-casino__account > div + div { border-top: 1px solid rgba(208, 160, 82, .15); border-left: 0; }
+  .gambler-casino__games { grid-template-columns: 1fr; }
+  .gambler-table__content { padding: 1.5rem 1rem; }
+  .gambler-table__bet { flex-direction: column; align-items: stretch; }
+  .gambler-blackjack { grid-template-columns: 1fr; gap: .8rem; }
+  .gambler-casino__nav a { font-size: .55rem; }
+  .gambler-cashier__form,
+  .gambler-cashier__form--resgate { grid-template-columns: 1fr 1fr; }
+  .gambler-cashier__form button { grid-column: 1 / -1; }
+  .gambler-character-modal__list button { grid-template-columns: 2.5rem minmax(0, 1fr); }
+  .gambler-character-modal__list em { grid-column: 2; }
+  .gambler-casino__toasts { top: 4.2rem; right: .6rem; left: .6rem; width: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gambler-casino__spinner { animation-duration: 1.8s; }
+  .gambler-casino__games > button { transition: none; }
+  .gambler-streak,
+  .gambler-result--win { animation: none; }
+}

@@ -11,6 +11,7 @@ import discord
 from discord.ext import commands
 
 from core import config
+from core import cassino as cassino_mod
 from core.db import Database, DatabaseUnavailable
 from core.catalogo import Catalogo
 from core.inventario import Inventario
@@ -30,6 +31,7 @@ EXTENSOES = (
     "cogs.investimentos",
     "cogs.emprestimos",
     "cogs.loteria",
+    "cogs.cassino",
     "cogs.servicos",
     "cogs.ajuda",
     "cogs.mercado_negro",
@@ -146,12 +148,24 @@ class Banqueiro(commands.Bot):
         log.info("Banqueiro online como %s.", self.user)
 
     async def on_interaction(self, interaction: discord.Interaction):
-        await super().on_interaction(interaction)
+        # commands.Bot/discord.Client não definem on_interaction por padrão
+        # (o dispatch dos comandos em si já acontece antes, em
+        # parse_interaction_create); não há super() a chamar aqui.
         if interaction.type == discord.InteractionType.application_command and interaction.guild_id:
             try:
                 self.db.adicionar_reputacao(str(interaction.guild_id), str(interaction.user.id), 1)
+                nome_comando = cassino_mod.nome_comando_interacao(interaction.data)
+                objetivo = cassino_mod.objetivo_para_comando(nome_comando)
+                if objetivo:
+                    self.db.registrar_atividade_contrato(
+                        str(interaction.guild_id), str(interaction.user.id),
+                        cassino_mod.semana_local(), objetivo,
+                    )
             except Exception:
-                pass
+                log.exception(
+                    "falha ao registrar reputacao/contrato por interacao (guild=%s user=%s)",
+                    interaction.guild_id, interaction.user.id,
+                )
 
     async def close(self):
         try:

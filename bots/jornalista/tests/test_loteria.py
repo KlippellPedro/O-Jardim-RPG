@@ -19,6 +19,7 @@ sys.path.insert(0, str(BASE))
 from cogs.loteria import Loteria, sortear_vencedor
 from core.db import Database, LOTERIA_CORTE_CASA_PADRAO, LOTERIA_PRECO_BILHETE_PADRAO
 from core.loot import TZ
+from tests.db_utils import novo_db
 
 LOTERIA_PRECO_BILHETE = LOTERIA_PRECO_BILHETE_PADRAO
 LOTERIA_CORTE_CASA = LOTERIA_CORTE_CASA_PADRAO
@@ -35,16 +36,22 @@ class _DBFake:
     def get_loteria_config(self, guild_id):
         return {"preco_bilhete": LOTERIA_PRECO_BILHETE_PADRAO, "corte": LOTERIA_CORTE_CASA_PADRAO}
 
-    def creditar(self, guild_id, user_id, moeda, quantia):
-        self.chamadas.append(("creditar", user_id, moeda, quantia))
-        return quantia
-
-    def limpar_bilhetes_loteria(self, guild_id):
-        self.chamadas.append(("limpar", guild_id))
+    def encerrar_loteria_atomica(self, guild_id, rodada_id, preco, corte):
+        self.chamadas.append(("encerrar", guild_id, rodada_id))
+        if not self._bilhetes:
+            return None
+        total = sum(b["quantidade"] for b in self._bilhetes)
+        vencedor = self._bilhetes[0]["user_id"]
+        participantes = len(self._bilhetes)
         self._bilhetes = []
-
-    def registrar_extrato(self, guild_id, user_id, delta, moeda, descricao):
-        self.chamadas.append(("extrato", user_id, delta, descricao))
+        premio = total * preco - int(total * preco * corte)
+        return {
+            "nova": True,
+            "vencedor_user_id": vencedor,
+            "total_bilhetes": total,
+            "participantes": participantes,
+            "premio": premio,
+        }
 
     def get_canal_categoria(self, guild_id, categoria):
         self.chamadas.append(("canal", guild_id, categoria))
@@ -81,21 +88,15 @@ def test_sorteio_paga_e_encerra_a_rodada():
 
     pote = 4 * LOTERIA_PRECO_BILHETE
     premio = pote - int(pote * LOTERIA_CORTE_CASA)
-    assert ("creditar", "42", "Lunaris", premio) in db.chamadas
-    assert any(c[0] == "limpar" for c in db.chamadas)
-    assert any(c[0] == "extrato" for c in db.chamadas)
+    assert any(c[0] == "encerrar" for c in db.chamadas)
     assert ("canal", "100", "dinheiro") in db.chamadas
 
 
-def test_bilhetes_sao_limpos_antes_do_extrato_para_nao_resortear():
-    """Regressão: qualquer falha depois do pagamento não pode deixar o bolo de
-    pé: senão o domingo seguinte sorteia e paga tudo de novo."""
+def test_pagamento_e_limpeza_usam_uma_unica_operacao_atomica():
     db = _DBFake([{"user_id": "42", "quantidade": 2}])
     _rodar_sorteio(db)
 
-    ordem = [c[0] for c in db.chamadas]
-    assert ordem.index("creditar") < ordem.index("limpar")
-    assert ordem.index("limpar") < ordem.index("extrato")
+    assert [c[0] for c in db.chamadas].count("encerrar") == 1
 
 
 def test_segundo_sorteio_sem_bilhetes_nao_paga_ninguem():
@@ -104,14 +105,15 @@ def test_segundo_sorteio_sem_bilhetes_nao_paga_ninguem():
     _rodar_sorteio(db)
     _rodar_sorteio(db)
 
-    pagamentos = [c for c in db.chamadas if c[0] == "creditar"]
-    assert len(pagamentos) == 1
+    encerramentos = [c for c in db.chamadas if c[0] == "encerrar"]
+    assert len(encerramentos) == 2
 
 
 def test_sorteio_sem_bilhetes_nao_faz_nada():
     db = _DBFake([])
     _rodar_sorteio(db)
-    assert db.chamadas == []
+    assert len(db.chamadas) == 1
+    assert db.chamadas[0][:2] == ("encerrar", "100")
 
 
 def test_dedupe_key_usa_o_mesmo_fuso_do_sorteio_nao_a_hora_local_ingenua():
@@ -161,3 +163,40 @@ def test_vencedor_e_ponderado_pela_quantidade_de_bilhetes():
 
     assert sortear_vencedor(bilhetes, rng=_RngFixo()) == "b"
     assert sortear_vencedor([]) is None
+
+
+def test_liquidacao_real_e_atomica_e_idempotente():
+    class _PrimeiroBilhete:
+        @staticmethod
+        def randrange(_total):
+            return 0
+
+    db = novo_db()
+    db.garantir_jogador("g", "u")
+    with db._conn() as con:
+        saldo_inicial = con.execute(
+            "SELECT saldo FROM carteira WHERE guild_id='g' AND user_id='u' AND moeda='Lunaris'"
+        ).fetchone()["saldo"]
+        con.execute(
+            "INSERT INTO loteria_bilhetes (guild_id, user_id, quantidade) VALUES ('g', 'u', 4)"
+        )
+
+    primeira = db.encerrar_loteria_atomica("g", "2026-08-30", 25, 0.10, rng=_PrimeiroBilhete())
+    segunda = db.encerrar_loteria_atomica("g", "2026-08-30", 25, 0.10, rng=_PrimeiroBilhete())
+
+    assert primeira["nova"] is True
+    assert primeira["premio"] == 90
+    assert segunda["nova"] is False
+    with db._conn() as con:
+        saldo = con.execute(
+            "SELECT saldo FROM carteira WHERE guild_id='g' AND user_id='u' AND moeda='Lunaris'"
+        ).fetchone()["saldo"]
+        bilhetes = con.execute(
+            "SELECT COUNT(*) AS total FROM loteria_bilhetes WHERE guild_id='g'"
+        ).fetchone()["total"]
+        extratos = con.execute(
+            "SELECT COUNT(*) AS total FROM extrato WHERE guild_id='g' AND descricao='Ganhou a Loteria Dominical'"
+        ).fetchone()["total"]
+    assert saldo == saldo_inicial + 90
+    assert bilhetes == 0
+    assert extratos == 1

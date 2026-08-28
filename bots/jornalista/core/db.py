@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
+import secrets
 from typing import Dict, List, Optional
 from uuid import uuid4
 
@@ -10,6 +11,7 @@ from psycopg.types.json import Jsonb
 from psycopg_pool import ConnectionPool, PoolTimeout
 
 from . import economia
+from . import cassino as cassino_mod
 from . import loot as loot_mod
 
 
@@ -352,6 +354,103 @@ _SCHEMA = (
         user_id TEXT NOT NULL,
         quantidade INTEGER NOT NULL DEFAULT 0,
         PRIMARY KEY (guild_id, user_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS loteria_rodadas (
+        guild_id TEXT NOT NULL,
+        rodada_id TEXT NOT NULL,
+        vencedor_user_id TEXT NOT NULL,
+        total_bilhetes INTEGER NOT NULL CHECK (total_bilhetes > 0),
+        participantes INTEGER NOT NULL CHECK (participantes > 0),
+        premio INTEGER NOT NULL CHECK (premio >= 0),
+        encerrada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, rodada_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_rodadas (
+        id TEXT PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        jogo TEXT NOT NULL CHECK (
+            jogo IN ('dados', 'vinte_um', 'corrida', 'roda_fluxos', 'sucessao', 'vaos')
+        ),
+        moeda TEXT NOT NULL DEFAULT 'Lunaris',
+        aposta INTEGER NOT NULL CHECK (aposta > 0),
+        pagamento_maximo INTEGER NOT NULL CHECK (pagamento_maximo >= 0),
+        pagamento INTEGER NOT NULL DEFAULT 0 CHECK (pagamento >= 0),
+        status TEXT NOT NULL DEFAULT 'ativa'
+            CHECK (status IN ('ativa', 'liquidada', 'reembolsada')),
+        estado JSONB NOT NULL DEFAULT '{}'::jsonb,
+        resultado JSONB,
+        versao INTEGER NOT NULL DEFAULT 1,
+        dia_local DATE NOT NULL,
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        encerrada_em TIMESTAMPTZ
+    )
+    """,
+    """
+    ALTER TABLE cassino_rodadas
+    DROP CONSTRAINT IF EXISTS cassino_rodadas_jogo_check
+    """,
+    """
+    DO $$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT 1 FROM pg_constraint
+            WHERE conrelid='cassino_rodadas'::regclass
+              AND conname='cassino_rodadas_jogo_valido_check'
+        ) THEN
+            ALTER TABLE cassino_rodadas
+            ADD CONSTRAINT cassino_rodadas_jogo_valido_check
+            CHECK (jogo IN ('dados', 'vinte_um', 'corrida', 'roda_fluxos', 'sucessao', 'vaos'));
+        END IF;
+    EXCEPTION WHEN duplicate_object THEN
+        NULL;
+    END $$
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_corridas (
+        id BIGSERIAL PRIMARY KEY,
+        guild_id TEXT NOT NULL,
+        slot_id TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'aberta'
+            CHECK (status IN ('aberta', 'liquidada', 'sem_apostas')),
+        fecha_em TIMESTAMPTZ NOT NULL,
+        vencedor TEXT,
+        total_apostado INTEGER NOT NULL DEFAULT 0 CHECK (total_apostado >= 0),
+        total_pago INTEGER NOT NULL DEFAULT 0 CHECK (total_pago >= 0),
+        criada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        liquidada_em TIMESTAMPTZ,
+        UNIQUE (guild_id, slot_id)
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_corrida_apostas (
+        rodada_id TEXT PRIMARY KEY,
+        corrida_id BIGINT NOT NULL,
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        corredor TEXT NOT NULL,
+        valor INTEGER NOT NULL CHECK (valor > 0),
+        pagamento INTEGER NOT NULL DEFAULT 0 CHECK (pagamento >= 0),
+        criada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (corrida_id, user_id)
+    )
+    """,
+    """
+    CREATE INDEX IF NOT EXISTS cassino_corridas_vencidas_idx
+    ON cassino_corridas (status, fecha_em)
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS cassino_conquistas (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        chave TEXT NOT NULL,
+        desbloqueada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (guild_id, user_id, chave)
     )
     """,
     # Marca a última vez que cada ciclo periódico (clima_auto, estacao_auto,
@@ -2469,6 +2568,239 @@ class Database:
     def limpar_bilhetes_loteria(self, guild_id: str) -> None:
         with self._conn() as con:
             con.execute("DELETE FROM loteria_bilhetes WHERE guild_id=%s", (guild_id,))
+
+    def encerrar_loteria_atomica(
+        self,
+        guild_id: str,
+        rodada_id: str,
+        preco_bilhete: int,
+        corte: float,
+        rng=None,
+    ) -> Optional[dict]:
+        """Sorteia, paga e encerra uma rodada numa unica transacao.
+
+        ``(guild_id, rodada_id)`` torna a operacao idempotente. Os bilhetes
+        ficam bloqueados durante o sorteio: uma compra concorrente espera e,
+        depois da limpeza, passa automaticamente a pertencer a proxima rodada.
+        """
+        if not rodada_id or preco_bilhete <= 0 or not 0 <= corte < 1:
+            raise ValueError("configuracao de loteria invalida")
+        gerador = rng or secrets.SystemRandom()
+        with self._conn() as con:
+            existente = con.execute(
+                """
+                SELECT * FROM loteria_rodadas
+                WHERE guild_id=%s AND rodada_id=%s
+                """,
+                (guild_id, rodada_id),
+            ).fetchone()
+            if existente:
+                return {**dict(existente), "nova": False}
+
+            bilhetes = con.execute(
+                """
+                SELECT user_id, quantidade FROM loteria_bilhetes
+                WHERE guild_id=%s AND quantidade > 0
+                ORDER BY user_id
+                FOR UPDATE
+                """,
+                (guild_id,),
+            ).fetchall()
+            total = sum(int(b["quantidade"]) for b in bilhetes)
+            if total <= 0:
+                return None
+
+            ponto = gerador.randrange(total)
+            vencedor_id = None
+            acumulado = 0
+            for bilhete in bilhetes:
+                acumulado += int(bilhete["quantidade"])
+                if ponto < acumulado:
+                    vencedor_id = bilhete["user_id"]
+                    break
+            if vencedor_id is None:  # defesa contra um RNG fora do contrato
+                raise RuntimeError("nao foi possivel selecionar o vencedor da loteria")
+
+            premio = total * int(preco_bilhete)
+            premio -= int(premio * float(corte))
+            rodada = con.execute(
+                """
+                INSERT INTO loteria_rodadas
+                    (guild_id, rodada_id, vencedor_user_id, total_bilhetes,
+                     participantes, premio)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                RETURNING *
+                """,
+                (guild_id, rodada_id, vencedor_id, total, len(bilhetes), premio),
+            ).fetchone()
+            self._garantir_jogador(con, guild_id, vencedor_id)
+            con.execute(
+                """
+                UPDATE carteira SET saldo=saldo+%s
+                WHERE guild_id=%s AND user_id=%s AND moeda='Lunaris'
+                """,
+                (premio, guild_id, vencedor_id),
+            )
+            con.execute("DELETE FROM loteria_bilhetes WHERE guild_id=%s", (guild_id,))
+            if premio:
+                con.execute(
+                    """
+                    INSERT INTO extrato (guild_id, user_id, delta, moeda, descricao)
+                    VALUES (%s, %s, %s, 'Lunaris', %s)
+                    """,
+                    (guild_id, vencedor_id, premio, "Ganhou a Loteria Dominical"),
+                )
+        return {**dict(rodada), "nova": True}
+
+    # ── Corrida das Árvores (apostas entram pelo Banqueiro) ───────────────
+    def listar_corridas_vencidas(self, agora) -> List[dict]:
+        with self._conn() as con:
+            rows = con.execute(
+                """
+                SELECT * FROM cassino_corridas
+                WHERE status='aberta' AND fecha_em <= %s
+                ORDER BY fecha_em LIMIT 100
+                """,
+                (agora,),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def liquidar_corrida_atomica(self, corrida_id: int, rng=None) -> Optional[dict]:
+        with self._conn() as con:
+            corrida = con.execute(
+                "SELECT * FROM cassino_corridas WHERE id=%s FOR UPDATE",
+                (int(corrida_id),),
+            ).fetchone()
+            if corrida is None:
+                return None
+            if corrida["status"] != "aberta":
+                return {**dict(corrida), "nova": False, "pagamentos": []}
+            apostas = con.execute(
+                """
+                SELECT * FROM cassino_corrida_apostas
+                WHERE corrida_id=%s ORDER BY rodada_id FOR UPDATE
+                """,
+                (int(corrida_id),),
+            ).fetchall()
+            if not apostas:
+                final = con.execute(
+                    """
+                    UPDATE cassino_corridas SET status='sem_apostas',
+                        liquidada_em=CURRENT_TIMESTAMP
+                    WHERE id=%s RETURNING *
+                    """,
+                    (int(corrida_id),),
+                ).fetchone()
+                return {**dict(final), "nova": True, "pagamentos": []}
+
+            vencedor = cassino_mod.sortear_corredor(rng=rng)
+            total = sum(int(a["valor"]) for a in apostas)
+            distribuivel = (total * (10_000 - cassino_mod.CORRIDA_CORTE_BP)) // 10_000
+            vencedoras = [a for a in apostas if a["corredor"] == vencedor]
+            base = sum(int(a["valor"]) for a in vencedoras)
+            elegiveis = vencedoras if base > 0 else apostas
+            base = base or total
+            # Maior-resto: distribui tambem os Lunaris que sobrariam do piso
+            # inteiro. Assim o total pago e exatamente o bolo distribuivel.
+            pagamentos_por_rodada = {
+                a["rodada_id"]: (distribuivel * int(a["valor"])) // base
+                for a in elegiveis
+            }
+            resto = distribuivel - sum(pagamentos_por_rodada.values())
+            ordem_resto = sorted(
+                elegiveis,
+                key=lambda a: (
+                    -((distribuivel * int(a["valor"])) % base),
+                    str(a["rodada_id"]),
+                ),
+            )
+            for aposta_resto in ordem_resto[:resto]:
+                pagamentos_por_rodada[aposta_resto["rodada_id"]] += 1
+            pagamentos = []
+            total_pago = 0
+            for aposta in apostas:
+                pagamento = pagamentos_por_rodada.get(aposta["rodada_id"], 0)
+                conquista_nova = False
+                if pagamento:
+                    self._garantir_jogador(con, aposta["guild_id"], aposta["user_id"])
+                    con.execute(
+                        """
+                        UPDATE carteira SET saldo=saldo+%s
+                        WHERE guild_id=%s AND user_id=%s AND moeda='Lunaris'
+                        """,
+                        (pagamento, aposta["guild_id"], aposta["user_id"]),
+                    )
+                    con.execute(
+                        """
+                        INSERT INTO extrato (guild_id, user_id, delta, moeda, descricao)
+                        VALUES (%s, %s, %s, 'Lunaris', 'Prêmio da Corrida das Árvores')
+                        """,
+                        (aposta["guild_id"], aposta["user_id"], pagamento),
+                    )
+                if aposta["corredor"] == vencedor:
+                    conquista = con.execute(
+                        """
+                        INSERT INTO cassino_conquistas (guild_id, user_id, chave)
+                        VALUES (%s, %s, 'apostador_astral')
+                        ON CONFLICT DO NOTHING RETURNING chave
+                        """,
+                        (aposta["guild_id"], aposta["user_id"]),
+                    ).fetchone()
+                    conquista_nova = conquista is not None
+                con.execute(
+                    "UPDATE cassino_corrida_apostas SET pagamento=%s WHERE rodada_id=%s",
+                    (pagamento, aposta["rodada_id"]),
+                )
+                con.execute(
+                    """
+                    UPDATE cassino_rodadas SET status='liquidada', pagamento=%s,
+                        resultado=%s, estado=estado || %s, versao=versao+1,
+                        atualizado_em=CURRENT_TIMESTAMP, encerrada_em=CURRENT_TIMESTAMP
+                    WHERE id=%s AND status='ativa'
+                    """,
+                    (
+                        pagamento,
+                        Jsonb({"vencedor": vencedor, "sem_aposta_vencedora": not bool(vencedoras)}),
+                        Jsonb({"vencedor": vencedor}),
+                        aposta["rodada_id"],
+                    ),
+                )
+                total_pago += pagamento
+                pagamentos.append(
+                    {
+                        "user_id": aposta["user_id"],
+                        "corredor": aposta["corredor"],
+                        "valor": int(aposta["valor"]),
+                        "pagamento": pagamento,
+                        "conquista_nova": conquista_nova,
+                    }
+                )
+            final = con.execute(
+                """
+                UPDATE cassino_corridas SET status='liquidada', vencedor=%s,
+                    total_apostado=%s, total_pago=%s, liquidada_em=CURRENT_TIMESTAMP
+                WHERE id=%s RETURNING *
+                """,
+                (vencedor, total, total_pago, int(corrida_id)),
+            ).fetchone()
+        return {
+            **dict(final),
+            "nova": True,
+            "pagamentos": pagamentos,
+            "sem_aposta_vencedora": not bool(vencedoras),
+        }
+
+    def adicionar_fofoca(
+        self, guild_id: str, user_id: str, texto_fofoca: str, suborno_valor: int, prazo: datetime
+    ) -> None:
+        with self._conn() as con:
+            con.execute(
+                """
+                INSERT INTO fofocas (guild_id, user_id, texto_fofoca, suborno_valor, prazo)
+                VALUES (%s, %s, %s, %s, %s)
+                """,
+                (guild_id, user_id, texto_fofoca, suborno_valor, prazo),
+            )
 
     def listar_fofocas_pendentes(self, agora: datetime) -> List[dict]:
         with self._conn() as con:

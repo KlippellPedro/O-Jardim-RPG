@@ -70,6 +70,14 @@ TABELAS: tuple[str, ...] = (
     "campanha_propriedade_instalacoes",
     "infracoes_loja",
 
+    # Cassino do Gambler (site) — ver plataforma/routers/casino.py.
+    "cassino_gambler_rodadas",
+    "cassino_gambler_fichas",
+    "cassino_gambler_fichas_lancamentos",
+    "cassino_gambler_cambios",
+    "cassino_gambler_resgates",
+    "cassino_gambler_conquistas",
+
     # Tabelas dos bots (Banqueiro/Jornalista/Barista) — mesmo Postgres central,
     # schema próprio deles (ver bots/*/core/db.py). Sem FK pra usuarios/campanhas
     # (chaveadas por guild_id/user_id do Discord), mas registro_opcoes depende de

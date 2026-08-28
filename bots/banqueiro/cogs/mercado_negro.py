@@ -15,6 +15,13 @@ def _aplicar_modificador_preco(preco_base: int, modificador: Optional[str]) -> i
         return int(preco_base * 0.85)
     return preco_base
 
+def _extrair_preco(preco) -> tuple[str, int]:
+    """Preço do catálogo vem como {moeda: valor}. Devolve (moeda, valor)."""
+    if isinstance(preco, dict) and preco:
+        moeda, valor = next(iter(preco.items()))
+        return moeda, int(valor)
+    return "Créditos Sombrios", 9999
+
 def _sid(interaction: discord.Interaction) -> str:
     return str(interaction.guild_id) if interaction.guild_id else "global"
 
@@ -44,26 +51,28 @@ class ComprarMercadoNegroModal(discord.ui.Modal, title="Comprar do Mercado Negro
             return
 
         sid, uid = _sid(interaction), str(interaction.user.id)
+        moeda = self.item_data["moeda"]
+        simbolo = ui.simbolo_moeda(moeda)
         custo_total = self.item_data["preco"] * qtd
 
         self.bot.db.garantir_jogador(sid, uid)
         carteira = self.bot.db.get_carteira(sid, uid)
 
-        sombrios = carteira.get("Créditos Sombrios", 0)
-        if sombrios < custo_total:
+        saldo = carteira.get(moeda, 0)
+        if saldo < custo_total:
             await interaction.response.send_message(
-                f"Você não tem Créditos Sombrios suficientes. "
-                f"Custa 🕳️ {custo_total}, você tem 🕳️ {sombrios}.",
+                f"Você não tem {moeda} suficientes. "
+                f"Custa {simbolo} {custo_total}, você tem {simbolo} {saldo}.",
                 ephemeral=True,
             )
             return
 
         # Debitar — levanta SaldoInsuficiente se a corrida mudar o saldo
         try:
-            self.bot.db.debitar(sid, uid, "Créditos Sombrios", custo_total)
+            self.bot.db.debitar(sid, uid, moeda, custo_total)
         except SaldoInsuficiente:
             await interaction.response.send_message(
-                "Saldo insuficiente de Créditos Sombrios.", ephemeral=True
+                f"Saldo insuficiente de {moeda}.", ephemeral=True
             )
             return
 
@@ -82,7 +91,7 @@ class ComprarMercadoNegroModal(discord.ui.Modal, title="Comprar do Mercado Negro
 
         await interaction.response.send_message(
             f"🤝 Você comprou {qtd}× **{self.item_data['titulo']}** "
-            f"por 🕳️ {custo_total} Créditos Sombrios. Foi parar no seu `/inventario`.",
+            f"por {simbolo} {custo_total} {moeda}. Foi parar no seu `/inventario`.",
             ephemeral=True,
         )
 
@@ -94,7 +103,8 @@ class MercadoNegroView(discord.ui.View):
         self.itens_do_dia = itens_do_dia
         
         for i, item in enumerate(itens_do_dia):
-            btn = discord.ui.Button(label=f"Comprar: {item['titulo']} (🕳️ {item['preco']})", style=discord.ButtonStyle.danger, custom_id=f"mn_comprar_{i}")
+            simbolo = ui.simbolo_moeda(item["moeda"])
+            btn = discord.ui.Button(label=f"Comprar: {item['titulo']} ({simbolo} {item['preco']})", style=discord.ButtonStyle.danger, custom_id=f"mn_comprar_{i}")
             btn.callback = self.make_callback(item)
             self.add_item(btn)
 
@@ -108,7 +118,7 @@ class MercadoNegro(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(name="mercado_negro", description="Acesso restrito. Vende itens exóticos por Créditos Sombrios.")
+    @app_commands.command(name="mercado_negro", description="Acesso restrito. Vende itens exóticos com preço variável no dia.")
     async def mercado_negro(self, interaction: discord.Interaction):
         todos_itens = self.bot.catalogo.listar()
         itens_sombrios = []
@@ -118,7 +128,7 @@ class MercadoNegro(commands.Cog):
         
         for it in todos_itens:
             if it.conteudo.get("mercado_negro"):
-                preco_base = it.conteudo.get("preco", 9999)
+                moeda, preco_base = _extrair_preco(it.conteudo.get("preco"))
                 preco_real = _aplicar_modificador_preco(preco_base, modificador)
                 itens_sombrios.append({
                     "id": it.id,
@@ -126,6 +136,7 @@ class MercadoNegro(commands.Cog):
                     "tipo": it.tipo,
                     "descricao": it.conteudo.get("descricao", "Sem descrição."),
                     "preco": preco_real,
+                    "moeda": moeda,
                     "raridade": it.raridade_rotulo
                 })
         
@@ -149,13 +160,14 @@ class MercadoNegro(commands.Cog):
         
         emb = ui.embed(
             "🕵️ Mercado Negro",
-            descricao="O contrabandista abre o sobretudo e revela as mercadorias de hoje. A seleção muda à meia-noite.\n\n*Pagamento aceito apenas em Créditos Sombrios (🕳️)*" + aviso_clima,
+            descricao="O contrabandista abre o sobretudo e revela as mercadorias de hoje. A seleção muda à meia-noite.\n\n*Pagamento na moeda indicada em cada item*" + aviso_clima,
             categoria="economia"
         )
-        
+
         for item in ofertas:
+            simbolo = ui.simbolo_moeda(item["moeda"])
             emb.add_field(
-                name=f"{item['titulo']} ({item['raridade']}) - 🕳️ {item['preco']}",
+                name=f"{item['titulo']} ({item['raridade']}) - {simbolo} {item['preco']}",
                 value=item['descricao'],
                 inline=False
             )

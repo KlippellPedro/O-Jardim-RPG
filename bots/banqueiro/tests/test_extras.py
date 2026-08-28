@@ -13,7 +13,7 @@ def _cat():
 
 
 def test_baus_config():
-    assert economia.bau_compravel_por_id("geral-raro")["preco"] == 150
+    assert economia.bau_compravel_por_id("geral-raro")["preco"] == 500
     assert economia.bau_compravel_por_id("nada") is None
 
 

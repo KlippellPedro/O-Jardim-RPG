@@ -1127,4 +1127,153 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        27,
+        "cassino_do_gambler",
+        (
+            """
+            CREATE TABLE IF NOT EXISTS cassino_gambler_rodadas (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                jogo TEXT NOT NULL
+                    CHECK (jogo IN ('dados', 'vinte_um', 'roda_fluxos', 'sucessao', 'vaos')),
+                moeda TEXT NOT NULL DEFAULT 'Lunaris',
+                aposta INTEGER NOT NULL CHECK (aposta > 0),
+                pagamento_maximo INTEGER NOT NULL CHECK (pagamento_maximo >= 0),
+                pagamento INTEGER NOT NULL DEFAULT 0 CHECK (pagamento >= 0),
+                requisicao JSONB NOT NULL DEFAULT '{}'::jsonb,
+                estado JSONB NOT NULL DEFAULT '{}'::jsonb,
+                resultado JSONB NOT NULL DEFAULT '{}'::jsonb,
+                status TEXT NOT NULL DEFAULT 'ativa'
+                    CHECK (status IN ('ativa', 'liquidada', 'reembolsada')),
+                versao INTEGER NOT NULL DEFAULT 1 CHECK (versao > 0),
+                dia_local DATE NOT NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                encerrada_em TIMESTAMPTZ
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS cassino_gambler_personagem_dia_idx
+            ON cassino_gambler_rodadas (campanha_id, personagem_id, dia_local)
+            """,
+            """
+            CREATE UNIQUE INDEX IF NOT EXISTS cassino_gambler_vinte_um_ativo_idx
+            ON cassino_gambler_rodadas (campanha_id, personagem_id)
+            WHERE jogo='vinte_um' AND status='ativa'
+            """,
+        ),
+    ),
+    (
+        28,
+        "fichas_e_caixa_do_gambler",
+        (
+            """
+            CREATE TABLE IF NOT EXISTS cassino_gambler_fichas (
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                saldo BIGINT NOT NULL DEFAULT 0 CHECK (saldo >= 0),
+                versao INTEGER NOT NULL DEFAULT 1 CHECK (versao > 0),
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (campanha_id, personagem_id)
+            )
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS cassino_gambler_fichas_lancamentos (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                usuario_id UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                delta BIGINT NOT NULL,
+                saldo_apos BIGINT NOT NULL CHECK (saldo_apos >= 0),
+                motivo TEXT NOT NULL,
+                origem TEXT NOT NULL,
+                idempotencia TEXT,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            CREATE UNIQUE INDEX IF NOT EXISTS cassino_gambler_fichas_idempotencia_idx
+            ON cassino_gambler_fichas_lancamentos (campanha_id, origem, idempotencia)
+            WHERE idempotencia IS NOT NULL
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS cassino_gambler_cambios (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                moeda TEXT NOT NULL,
+                quantidade BIGINT NOT NULL CHECK (quantidade > 0),
+                fichas_recebidas BIGINT NOT NULL CHECK (fichas_recebidas > 0),
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            WITH reembolsos AS (
+                SELECT campanha_id, personagem_id, SUM(aposta)::BIGINT AS total
+                FROM cassino_gambler_rodadas
+                WHERE lower(moeda)=lower('Lunaris') AND status='ativa'
+                GROUP BY campanha_id, personagem_id
+            )
+            UPDATE saldos_personagem saldo
+            SET saldo=saldo.saldo+reembolsos.total,
+                atualizado_em=CURRENT_TIMESTAMP
+            FROM reembolsos
+            WHERE saldo.campanha_id=reembolsos.campanha_id
+              AND saldo.personagem_id=reembolsos.personagem_id
+              AND lower(saldo.moeda)=lower('Lunaris')
+            """,
+            """
+            UPDATE cassino_gambler_rodadas
+            SET pagamento=aposta,
+                resultado='{"resultado":"migracao_para_fichas"}'::jsonb,
+                status='reembolsada',
+                versao=versao+1,
+                atualizado_em=CURRENT_TIMESTAMP,
+                encerrada_em=CURRENT_TIMESTAMP
+            WHERE lower(moeda)=lower('Lunaris') AND status='ativa'
+            """,
+        ),
+    ),
+    (
+        29,
+        "resgate_e_conquistas_do_gambler",
+        (
+            """
+            CREATE TABLE IF NOT EXISTS cassino_gambler_resgates (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                quantidade BIGINT NOT NULL CHECK (quantidade > 0),
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS cassino_gambler_conquistas (
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                chave TEXT NOT NULL,
+                desbloqueada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (campanha_id, personagem_id, chave)
+            )
+            """,
+        ),
+    ),
+    (
+        30,
+        "rolos_e_duelo_do_gambler",
+        (
+            """
+            ALTER TABLE cassino_gambler_rodadas DROP CONSTRAINT IF EXISTS cassino_gambler_rodadas_jogo_check
+            """,
+            """
+            ALTER TABLE cassino_gambler_rodadas ADD CONSTRAINT cassino_gambler_rodadas_jogo_check
+                CHECK (jogo IN ('dados', 'vinte_um', 'roda_fluxos', 'sucessao', 'vaos', 'rolos', 'duelo'))
+            """,
+        ),
+    ),
 )

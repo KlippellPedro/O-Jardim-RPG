@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import { useEffect, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Crown, Feather } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { loreBloqueado } from '../Mundo/loreVisibility';
 import { EntityThemeMusic } from './EntityThemeMusic';
 import { EntityWanderingFigure } from './EntityWanderingFigure';
+import { GamblerCoinGate } from './GamblerCoinGate';
 import './entidades.css';
 
 type EntityThemeStyle = CSSProperties & Record<`--entity-${string}`, string>;
@@ -14,6 +15,11 @@ type EntityThemeStyle = CSSProperties & Record<`--entity-${string}`, string>;
 export function EntidadeContoPage() {
   const { entidadeId } = useParams<{ entidadeId: string }>();
   const entidade = encontrarEntidade(entidadeId);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [entidadeId]);
+
   const { usuario, campanhaAtiva } = useAuthStore();
   const isMestre = usuario?.papel_plataforma === 'admin'
     || usuario?.papel_plataforma === 'criador'
@@ -87,10 +93,14 @@ export function EntidadeContoPage() {
           {entidade.musicaTema ? <EntityThemeMusic musica={entidade.musicaTema} /> : null}
         </motion.header>
 
-        <article className="entity-story__prose">
+        <article
+          className={`entity-story__prose${entidade.contoIlegivel ? ' entity-story__prose--ilegivel' : ''}${entidade.paginaEmBranco ? ' entity-story__prose--em-branco' : ''}`}
+          aria-label={entidade.contoIlegivel ? 'O conteúdo deste registro está ilegível.' : undefined}
+        >
           {entidade.conto.map((secao, index) => (
             <motion.section
               key={`${entidade.id}-${index}`}
+              aria-hidden={entidade.contoIlegivel || undefined}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.15 }}
@@ -103,6 +113,8 @@ export function EntidadeContoPage() {
             </motion.section>
           ))}
         </article>
+
+        {entidade.id === 'gambler' ? <GamblerCoinGate /> : null}
 
         <footer className="entity-story__footer">
           <Link to="/entidades">Retornar ao índice</Link>
