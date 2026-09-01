@@ -24,7 +24,7 @@ from core.security import (
     new_secret_token,
     verify_password,
 )
-from core.notifications import campaign_member_ids, notify
+from core.notifications import notify
 from schemas import LoginInput, PasswordChangeInput, PasswordHelpInput, RegisterInput
 
 
@@ -39,22 +39,23 @@ def _login_limit_key(email: str, request: Request) -> str:
     return limites.chave(limites.LOGIN, email.lower(), _client_fingerprint(request))
 
 
-def _validar_convite(connection, codigo: str | None):
-    """Confere o código e devolve o convite, ou recusa o cadastro.
+def _validar_convite_plataforma(connection, codigo: str | None):
+    """Confere o código de convite de plataforma, ou recusa o cadastro.
 
-    Reaproveita a mesma checagem de `campanhas/entrar`: código não revogado,
-    dentro da validade e com uso sobrando. A recusa é sempre igual — dizer
-    "expirado" em vez de "inexistente" contaria se o código já existiu.
+    É um convite só para criar conta — nunca associa a nenhuma campanha.
+    Entrar numa campanha é sempre um passo posterior, feito em /campanhas
+    depois do login. A recusa é sempre igual — dizer "expirado" em vez de
+    "inexistente" contaria se o código já existiu.
     """
     if not codigo or not codigo.strip():
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="o cadastro exige um convite de campanha",
+            detail="o cadastro exige um convite",
         )
     convite = connection.execute(
         """
-        SELECT id, campanha_id, papel, max_usos, usos, expira_em, revogado_em
-        FROM convites_campanha WHERE codigo_hash=%s FOR UPDATE
+        SELECT id, max_usos, usos, expira_em, revogado_em
+        FROM convites_plataforma WHERE codigo_hash=%s FOR UPDATE
         """,
         (hash_token(codigo.strip()),),
     ).fetchone()
@@ -179,9 +180,9 @@ def register(
     try:
         with database.connection() as connection:
             # O criador entra sem convite: exigir um travaria o primeiro acesso,
-            # já que ainda não existe campanha para convidar ninguém.
+            # já que ainda não existe ninguém para gerar um convite de plataforma.
             if settings.cadastro_exige_convite and not is_creator:
-                convite = _validar_convite(connection, payload.convite)
+                convite = _validar_convite_plataforma(connection, payload.convite)
             if is_creator:
                 connection.execute(
                     """
@@ -207,19 +208,9 @@ def register(
                     is_creator,
                 ),
             )
-            # Quem chegou por convite já entra na campanha: mandar a pessoa
-            # digitar o mesmo código de novo, logo depois de cadastrar, seria
-            # pedir duas vezes a mesma coisa.
             if convite is not None:
                 connection.execute(
-                    """
-                    INSERT INTO membros_campanha (campanha_id, usuario_id, papel, status)
-                    VALUES (%s, %s, %s, 'ativo')
-                    """,
-                    (convite["campanha_id"], user_id, convite["papel"]),
-                )
-                connection.execute(
-                    "UPDATE convites_campanha SET usos=usos+1 WHERE id=%s",
+                    "UPDATE convites_plataforma SET usos=usos+1 WHERE id=%s",
                     (convite["id"],),
                 )
 
@@ -237,18 +228,6 @@ def register(
                 target_id=str(user_id),
                 details={"papel_plataforma": role},
             )
-            if convite is not None:
-                notify(
-                    connection,
-                    user_ids=campaign_member_ids(
-                        connection, convite["campanha_id"], roles=("mestre", "assistente")
-                    ),
-                    category="campanha",
-                    title=f"{payload.nome_exibicao} entrou na campanha",
-                    message=f"Criou a conta com um convite e entrou como {convite['papel']}.",
-                    campaign_id=convite["campanha_id"],
-                    actor_user_id=user_id,
-                )
     except UniqueViolation:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,

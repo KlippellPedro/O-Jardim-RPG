@@ -6,6 +6,8 @@ from core.character_summary import carregar_catalogos
 from routers.characters import (
     _complex_ally_summary,
     _player_complex_allies_error,
+    _player_shared_allies_error,
+    _shared_allies_from_rows,
     _sheet_links_complex_ally,
 )
 
@@ -126,3 +128,70 @@ def test_only_complex_link_grants_linked_sheet_read_access():
         "aliados": [{"categoria": "comum", "personagemId": str(linked_id)}],
     }, linked_id)
     assert not _sheet_links_complex_ally({"aliados": [_complex_ally()]}, linked_id)
+
+
+def test_one_ally_can_be_shared_with_multiple_characters_without_duplication():
+    source_id = uuid4()
+    first_target = uuid4()
+    second_target = uuid4()
+    ally = {
+        "id": "simple-1",
+        "nome": "Corvo de vigilia",
+        "categoria": "comum",
+        "emCena": True,
+        "personagensVinculados": [str(first_target), str(second_target)],
+        "efeitos": [{
+            "id": "percepcao",
+            "categoria": "pericia",
+            "alvo": "percepcao",
+            "modo": "vantagem",
+            "valor": 1,
+        }],
+    }
+
+    shared = _shared_allies_from_rows([{
+        "id": source_id,
+        "nome": "Daphne",
+        "ficha": {"aliados": [ally]},
+    }], {first_target, second_target})
+
+    assert [item["id"] for item in shared[first_target]] == ["simple-1"]
+    assert [item["id"] for item in shared[second_target]] == ["simple-1"]
+    assert shared[first_target][0]["compartilhadoDe"] == str(source_id)
+    assert shared[first_target][0]["compartilhadoDeNome"] == "Daphne"
+    assert shared[first_target][0]["somenteLeitura"] is True
+    assert "personagensVinculados" not in shared[first_target][0]
+    assert shared[first_target][0]["efeitos"] == ally["efeitos"]
+
+
+def test_player_cannot_change_master_controlled_shared_ally():
+    target_id = uuid4()
+    current = {"aliados": [{
+        "id": "simple-1",
+        "nome": "Lobo",
+        "categoria": "comum",
+        "emCena": True,
+        "personagensVinculados": [str(target_id)],
+        "efeitos": [],
+        "favorito": False,
+        "ordem": 0,
+    }]}
+    harmless = {"aliados": [{
+        **current["aliados"][0],
+        "favorito": True,
+        "ordem": 2,
+    }]}
+    changed_effect = {"aliados": [{
+        **current["aliados"][0],
+        "efeitos": [{
+            "id": "bonus",
+            "categoria": "pericia",
+            "alvo": "atletismo",
+            "modo": "bonus",
+            "valor": 3,
+        }],
+    }]}
+
+    assert _player_shared_allies_error(current, harmless) is None
+    assert _player_shared_allies_error(current, changed_effect)
+    assert _player_shared_allies_error(current, {"aliados": []})

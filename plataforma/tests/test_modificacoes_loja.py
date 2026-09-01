@@ -386,6 +386,39 @@ class ModificacoesLojaTests(unittest.TestCase):
             )
         self.assertEqual(ctx.exception.status_code, 422)
 
+    def test_instalar_modificacao_bloqueia_capacidade_da_raridade_sem_slot_manual(self):
+        _, campanha_id, personagem_id, actor = self._personagem(email="raridade-cheia@example.com")
+        self._catalogo_item(
+            "nova-modificacao",
+            "modificacao",
+            {"preco": 20, "categorias_alvo": ["arma"], "slots_ocupados": 1},
+        )
+        self._inventario_direto(
+            campanha_id,
+            personagem_id,
+            "espada-incomum",
+            categoria="arma",
+            extra={
+                "raridade": "incomum",
+                "modificacoes": [
+                    {"id": str(uuid.uuid4()), "catalogo_item_id": "mod-a"},
+                    {"id": str(uuid.uuid4()), "catalogo_item_id": "mod-b"},
+                ],
+            },
+        )
+
+        with self.assertRaises(HTTPException) as ctx:
+            self._comprar_modificacao(
+                campanha_id=campanha_id,
+                personagem_id=personagem_id,
+                actor=actor,
+                mod_item_id="nova-modificacao",
+                alvo_item_id="espada-incomum",
+                idempotencia="teste-capacidade-raridade",
+            )
+        self.assertEqual(ctx.exception.status_code, 422)
+        self.assertIn("raridade incomum", str(ctx.exception.detail))
+
     def test_instalar_modificacao_bloqueia_pre_requisito_nao_atendido(self):
         # Achado 11 (auditoria 2026-08), fechado na etapa de implementação
         # final: pre_requisitos tipado existia no catálogo desde a correção

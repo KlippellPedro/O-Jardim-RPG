@@ -15,15 +15,18 @@ from core.dependencies import (
     campaign_access,
     get_current_user,
     get_database,
-    require_campaign_manager,
+    require_creator_campaign,
     require_csrf,
 )
 from core.notifications import campaign_member_ids, notify
 from schemas import (
     ContentAccessInput,
+    ContentEditorialDeleteInput,
     ContentEditorialDraftInput,
     ContentEditorialPublishInput,
     ContentPublishInput,
+    GlobalContentEditorialDraftInput,
+    GlobalContentEditorialVersionInput,
 )
 
 
@@ -56,14 +59,16 @@ def _library_rows(connection, module: str):
     ).fetchall()
 
 
-def _require_content_editor(connection, campaign_id: UUID, user_id: UUID):
-    access = campaign_access(connection, campaign_id, user_id)
-    if not access.is_master:
+def _require_content_editor(connection, campaign_id: UUID, user: AuthenticatedUser) -> None:
+    require_creator_campaign(connection, campaign_id, user)
+
+
+def _require_global_content_editor(user: AuthenticatedUser) -> None:
+    if not user.is_creator:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="somente o mestre pode editar o conteudo da campanha",
+            detail="permissao de criador necessaria",
         )
-    return access
 
 
 def _editorial_library_entry(connection, module: str, entry_type: str, resource_key: str):
@@ -78,12 +83,13 @@ def _editorial_library_entry(connection, module: str, entry_type: str, resource_
 
 
 def _validate_chronicle_content(data: dict) -> None:
+    introduction = data.get("introducao")
     global_events = data.get("linha_tempo_geral")
     trees = data.get("arvores")
-    if not isinstance(global_events, list) or not isinstance(trees, list):
+    if not isinstance(introduction, dict) or not isinstance(global_events, list) or not isinstance(trees, list):
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
-            detail="a cronologia precisa das listas linha_tempo_geral e arvores",
+            detail="as cronicas precisam da introducao e das listas linha_tempo_geral e arvores",
         )
     if len(global_events) > 500 or len(trees) > 50:
         raise HTTPException(
@@ -93,6 +99,16 @@ def _validate_chronicle_content(data: dict) -> None:
 
     tree_ids = []
     event_ids = set()
+
+    def validate_text(value, *, location: str, limit: int) -> None:
+        if not isinstance(value, str) or len(value) > limit:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail=f"texto invalido em {location}",
+            )
+
+    for field, limit in (("titulo", 160), ("subtitulo", 300), ("descricao", 12000)):
+        validate_text(introduction.get(field), location=f"introducao.{field}", limit=limit)
 
     def validate_event(event, *, location: str) -> None:
         if not isinstance(event, dict):
@@ -137,6 +153,49 @@ def _validate_chronicle_content(data: dict) -> None:
                 detail=f"arvore invalida ou duplicada na cronologia: {tree_id}",
             )
         tree_ids.append(tree_id)
+
+        for field, limit in (
+            ("nome", 160),
+            ("deidade", 160),
+            ("fluxo", 160),
+            ("epiteto", 1000),
+            ("estado", 300),
+            ("tese", 12000),
+            ("atmosfera", 12000),
+        ):
+            validate_text(tree.get(field), location=f"arvore {tree_id}.{field}", limit=limit)
+
+        themes = tree.get("temas")
+        history = tree.get("historia")
+        places = tree.get("lugares")
+        if (
+            not isinstance(themes, list)
+            or len(themes) > 100
+            or not isinstance(history, list)
+            or len(history) > 100
+            or not isinstance(places, list)
+            or len(places) > 100
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail=f"listas narrativas invalidas na arvore {tree_id}",
+            )
+        for index, theme in enumerate(themes):
+            validate_text(theme, location=f"arvore {tree_id}.temas[{index}]", limit=160)
+        for index, paragraph in enumerate(history):
+            validate_text(paragraph, location=f"arvore {tree_id}.historia[{index}]", limit=12000)
+        for index, place in enumerate(places):
+            if not isinstance(place, dict):
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    detail=f"lugar invalido na arvore {tree_id}",
+                )
+            for field, limit in (("nome", 160), ("tipo", 80), ("resumo", 6000)):
+                validate_text(
+                    place.get(field),
+                    location=f"arvore {tree_id}.lugares[{index}].{field}",
+                    limit=limit,
+                )
         for event in chronology:
             validate_event(event, location=f"arvore {tree_id}")
 
@@ -144,7 +203,10 @@ def _validate_chronicle_content(data: dict) -> None:
     for event in global_events:
         validate_event(event, location="linha geral")
         references = event.get("arvores", [])
-        if not isinstance(references, list) or any(reference not in known_trees for reference in references):
+        if not isinstance(references, list) or any(
+            not isinstance(reference, str) or reference not in known_trees
+            for reference in references
+        ):
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail=f"marco {event.get('id')} referencia uma arvore inexistente",
@@ -346,7 +408,7 @@ def _validate_editorial_content(module: str, entry_type: str, data: dict, base: 
 
 
 def _validate_custom_world_entry(entry_type: str, resource_key: str, data: dict) -> None:
-    """Valida entradas de Mundo que existem apenas dentro da campanha."""
+    """Valida entradas de Mundo que não existem na biblioteca-base."""
     if entry_type == "cronologia":
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
@@ -369,6 +431,11 @@ def _is_editorial_document(value: object) -> bool:
     )
 
 
+def _is_removed_document(value: object) -> bool:
+    """Identifica uma publicação editorial que remove a entrada resolvida."""
+    return _is_editorial_document(value) and value.get("excluido") is True
+
+
 @router.get("/biblioteca")
 def list_library(
     campanha_id: UUID,
@@ -377,7 +444,7 @@ def list_library(
     database: Database = Depends(get_database),
 ):
     with database.connection() as connection:
-        require_campaign_manager(connection, campanha_id, user.id)
+        require_creator_campaign(connection, campanha_id, user)
         entries = _library_rows(connection, modulo)
         published = connection.execute(
             """
@@ -407,7 +474,7 @@ def publish_content(
 ):
     published = []
     with database.connection() as connection:
-        require_campaign_manager(connection, payload.campanha_id, user.id)
+        require_creator_campaign(connection, payload.campanha_id, user)
         library = _library_rows(connection, payload.modulo)
         by_key = {
             f"{row['tipo']}:{row['chave_recurso']}": dict(row)
@@ -490,7 +557,7 @@ def list_editorial_content(
     módulo explícito para que Regras e Ficha possam entrar sem uma segunda UI.
     """
     with database.connection() as connection:
-        _require_content_editor(connection, campanha_id, user.id)
+        _require_content_editor(connection, campanha_id, user)
         library = _library_rows(connection, modulo)
         editorial_rows = connection.execute(
             """
@@ -510,14 +577,25 @@ def list_editorial_content(
         composite_key = f"{item['tipo']}:{item['chave_recurso']}"
         official_keys.add(composite_key)
         editorial = editorial_by_key.get(composite_key)
+        effective = None
+        if editorial:
+            if _is_editorial_document(editorial.get("rascunho")):
+                effective = editorial["rascunho"]
+            elif editorial.get("publicado_em") and _is_editorial_document(editorial.get("dados_completos")):
+                effective = editorial["dados_completos"]
         entries.append(
             {
                 "chave": composite_key,
-                "tipo": item["tipo"],
-                "chave_recurso": item["chave_recurso"],
-                "titulo": item["titulo"],
+                "tipo": effective["tipo"] if effective else item["tipo"],
+                "chave_recurso": effective["id"] if effective else item["chave_recurso"],
+                "titulo": effective["titulo"] if effective else item["titulo"],
                 "dados_base": item["dados"],
                 "editorial": editorial,
+                "excluido": bool(
+                    editorial
+                    and editorial.get("publicado_em")
+                    and _is_removed_document(editorial.get("dados_completos"))
+                ),
             }
         )
     if modulo == "mundo":
@@ -542,6 +620,10 @@ def list_editorial_content(
                     },
                     "editorial": editorial,
                     "origem": "campanha",
+                    "excluido": bool(
+                        editorial.get("publicado_em")
+                        and _is_removed_document(editorial.get("dados_completos"))
+                    ),
                 }
             )
         entries.sort(key=lambda item: (item["tipo"], item["titulo"].casefold(), item["chave"]))
@@ -555,6 +637,29 @@ def save_editorial_draft(
     database: Database = Depends(get_database),
 ):
     composite_key = f"{payload.tipo}:{payload.chave_recurso}"
+    source_composite_key = payload.chave_origem or composite_key
+    source_type, separator, source_resource_key = source_composite_key.partition(":")
+    if (
+        not separator
+        or not source_type
+        or not source_resource_key
+        or source_resource_key != payload.chave_recurso
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="a identidade original da entrada é inválida",
+        )
+    moving_category = source_composite_key != composite_key
+    if moving_category and payload.modulo != "mundo":
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="somente conteúdo de Mundo pode mudar de categoria",
+        )
+    if moving_category and (source_type == "cronologia" or payload.tipo == "cronologia"):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="a cronologia não pode ser movida para outra categoria",
+        )
     document = {
         "tipo": payload.tipo,
         "id": payload.chave_recurso,
@@ -562,16 +667,23 @@ def save_editorial_draft(
         "conteudo": payload.conteudo,
     }
     with database.connection() as connection:
-        _require_content_editor(connection, payload.campanha_id, user.id)
+        _require_content_editor(connection, payload.campanha_id, user)
         base = _editorial_library_entry(
-            connection, payload.modulo, payload.tipo, payload.chave_recurso
+            connection, payload.modulo, source_type, source_resource_key
         )
+        if moving_category and _editorial_library_entry(
+            connection, payload.modulo, payload.tipo, payload.chave_recurso
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="já existe conteúdo com este ID na categoria de destino",
+            )
         if not base and payload.modulo != "mundo":
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="entrada oficial de conteudo nao encontrada",
             )
-        if base:
+        if base and not moving_category:
             _validate_editorial_content(payload.modulo, payload.tipo, payload.conteudo, dict(base))
         else:
             _validate_custom_world_entry(payload.tipo, payload.chave_recurso, payload.conteudo)
@@ -587,8 +699,13 @@ def save_editorial_draft(
             WHERE campanha_id=%s AND tipo=%s AND chave_recurso=%s
             FOR UPDATE
             """,
-            (payload.campanha_id, payload.modulo, composite_key),
+            (payload.campanha_id, payload.modulo, source_composite_key),
         ).fetchone()
+        if moving_category and not base and not current:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="a entrada original não foi encontrada para mover",
+            )
         if current:
             if payload.versao_esperada != current["versao_editorial"]:
                 raise HTTPException(
@@ -639,7 +756,7 @@ def save_editorial_draft(
                     knowledge_id,
                     payload.campanha_id,
                     payload.modulo,
-                    composite_key,
+                    source_composite_key,
                     payload.titulo,
                     user.id,
                     Jsonb(document),
@@ -654,7 +771,11 @@ def save_editorial_draft(
             campaign_id=payload.campanha_id,
             target_type=payload.modulo,
             target_id=str(row["id"]),
-            details={"chave": composite_key, "versao": row["versao_editorial"]},
+            details={
+                "chave_origem": source_composite_key,
+                "chave_destino": composite_key,
+                "versao": row["versao_editorial"],
+            },
         )
     return {"editorial": dict(row)}
 
@@ -667,7 +788,7 @@ def publish_editorial_content(
     database: Database = Depends(get_database),
 ):
     with database.connection() as connection:
-        _require_content_editor(connection, payload.campanha_id, user.id)
+        _require_content_editor(connection, payload.campanha_id, user)
         current = connection.execute(
             """
             SELECT id, campanha_id, tipo, chave_recurso, titulo, rascunho,
@@ -762,6 +883,131 @@ def publish_editorial_content(
     return {"editorial": dict(row)}
 
 
+@router.delete("/editor/{knowledge_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_custom_editorial_content(
+    knowledge_id: UUID,
+    payload: ContentEditorialDeleteInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Compatibilidade com publicações antigas de Mundo por campanha.
+
+    O editor atual usa ``/editor-global``; esta rota permanece somente para que
+    dados anteriores à migração 33 possam ser auditados durante a transição.
+    """
+    with database.connection() as connection:
+        _require_content_editor(connection, payload.campanha_id, user)
+        current = connection.execute(
+            """
+            SELECT id, campanha_id, tipo, chave_recurso, titulo, rascunho,
+                   dados_completos, versao_editorial, publicado_em
+            FROM informacoes_campanha
+            WHERE id=%s AND campanha_id=%s
+            FOR UPDATE
+            """,
+            (knowledge_id, payload.campanha_id),
+        ).fetchone()
+        if not current:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="conteudo nao encontrado")
+        if current["versao_editorial"] != payload.versao_esperada:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={
+                    "mensagem": "o conteúdo mudou; recarregue antes de excluir",
+                    "versao_atual": current["versao_editorial"],
+                },
+            )
+        composite_key = str(current["chave_recurso"] or "")
+        entry_type, separator, resource_key = composite_key.partition(":")
+        if current["tipo"] != "mundo" or not separator or not entry_type or not resource_key:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="somente entradas de Mundo podem ser excluídas por este editor",
+            )
+        base = _editorial_library_entry(connection, "mundo", entry_type, resource_key)
+        if not base and current.get("publicado_em") is None:
+            deleted = connection.execute(
+                """
+                DELETE FROM informacoes_campanha
+                WHERE id=%s AND campanha_id=%s AND versao_editorial=%s
+                RETURNING id
+                """,
+                (knowledge_id, payload.campanha_id, payload.versao_esperada),
+            ).fetchone()
+            if not deleted:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="o conteúdo mudou; recarregue antes de excluir",
+                )
+            action = "conteudo.entrada_excluida"
+            new_version = current["versao_editorial"]
+        else:
+            document = current.get("rascunho")
+            if not _is_editorial_document(document):
+                document = current.get("dados_completos")
+            if not _is_editorial_document(document) and base:
+                document = base.get("dados")
+            if not _is_editorial_document(document):
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    detail="não foi possível preservar os dados antes da exclusão",
+                )
+            removed_document = {**document, "excluido": True}
+            new_version = int(current["versao_editorial"]) + 1
+            updated = connection.execute(
+                """
+                UPDATE informacoes_campanha
+                SET titulo=%s, dados_parciais=%s, dados_completos=%s,
+                    acesso_padrao='oculto', rascunho=NULL,
+                    rascunho_atualizado_por=NULL, publicado_em=CURRENT_TIMESTAMP,
+                    versao_editorial=%s, atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s AND campanha_id=%s AND versao_editorial=%s
+                RETURNING id
+                """,
+                (
+                    removed_document["titulo"],
+                    Jsonb(removed_document),
+                    Jsonb(removed_document),
+                    new_version,
+                    knowledge_id,
+                    payload.campanha_id,
+                    payload.versao_esperada,
+                ),
+            ).fetchone()
+            if not updated:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="o conteúdo mudou; recarregue antes de excluir",
+                )
+            connection.execute(
+                """
+                INSERT INTO revisoes_conteudo
+                    (id, informacao_id, campanha_id, versao, titulo, dados, criado_por)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                """,
+                (
+                    uuid4(), knowledge_id, payload.campanha_id, new_version,
+                    removed_document["titulo"], Jsonb(removed_document), user.id,
+                ),
+            )
+            action = "conteudo.entrada_removida_da_campanha"
+        record_audit(
+            connection,
+            action=action,
+            actor_user_id=user.id,
+            campaign_id=payload.campanha_id,
+            target_type="mundo",
+            target_id=str(knowledge_id),
+            details={
+                "chave": composite_key,
+                "titulo": current["titulo"],
+                "versao": new_version,
+                "base_oficial_preservada": bool(base),
+            },
+        )
+    return None
+
+
 @router.get("/editor/{knowledge_id}/revisoes")
 def list_editorial_revisions(
     knowledge_id: UUID,
@@ -770,7 +1016,7 @@ def list_editorial_revisions(
     database: Database = Depends(get_database),
 ):
     with database.connection() as connection:
-        _require_content_editor(connection, campanha_id, user.id)
+        _require_content_editor(connection, campanha_id, user)
         belongs = connection.execute(
             "SELECT 1 FROM informacoes_campanha WHERE id=%s AND campanha_id=%s",
             (knowledge_id, campanha_id),
@@ -802,7 +1048,7 @@ def restore_editorial_revision(
 ):
     """Copia uma publicação anterior para um novo rascunho revisável."""
     with database.connection() as connection:
-        _require_content_editor(connection, payload.campanha_id, user.id)
+        _require_content_editor(connection, payload.campanha_id, user)
         current = connection.execute(
             """
             SELECT id, tipo, versao_editorial
@@ -874,6 +1120,559 @@ def restore_editorial_revision(
     return {"editorial": dict(row)}
 
 
+def _global_editorial_rows(connection):
+    return connection.execute(
+        """
+        SELECT id, chave_origem AS chave_recurso, titulo, rascunho,
+               dados_publicados AS dados_completos, versao_editorial,
+               publicado_em, atualizado_em
+        FROM conteudo_global_editorial
+        WHERE modulo='mundo'
+        ORDER BY chave_origem
+        """
+    ).fetchall()
+
+
+def _global_editor_entries(connection) -> list[dict]:
+    library = _library_rows(connection, "mundo")
+    editorial_rows = _global_editorial_rows(connection)
+    editorial_by_key = {row["chave_recurso"]: dict(row) for row in editorial_rows}
+    entries: list[dict] = []
+    official_keys: set[str] = set()
+    for raw_item in library:
+        item = dict(raw_item)
+        composite_key = f"{item['tipo']}:{item['chave_recurso']}"
+        official_keys.add(composite_key)
+        editorial = editorial_by_key.get(composite_key)
+        effective = None
+        if editorial:
+            if _is_editorial_document(editorial.get("rascunho")):
+                effective = editorial["rascunho"]
+            elif editorial.get("publicado_em") and _is_editorial_document(editorial.get("dados_completos")):
+                effective = editorial["dados_completos"]
+        entries.append(
+            {
+                "chave": composite_key,
+                "tipo": effective["tipo"] if effective else item["tipo"],
+                "chave_recurso": effective["id"] if effective else item["chave_recurso"],
+                "titulo": effective["titulo"] if effective else item["titulo"],
+                "dados_base": item["dados"],
+                "editorial": editorial,
+                "excluido": bool(
+                    editorial
+                    and editorial.get("publicado_em")
+                    and _is_removed_document(editorial.get("dados_completos"))
+                ),
+            }
+        )
+    for composite_key, editorial in editorial_by_key.items():
+        if composite_key in official_keys:
+            continue
+        document = editorial.get("rascunho") or editorial.get("dados_completos")
+        if not _is_editorial_document(document):
+            continue
+        entries.append(
+            {
+                "chave": composite_key,
+                "tipo": document["tipo"],
+                "chave_recurso": document["id"],
+                "titulo": document["titulo"],
+                "dados_base": {
+                    "tipo": document["tipo"],
+                    "id": document["id"],
+                    "titulo": document["titulo"],
+                    "conteudo": {},
+                    **(
+                        {"revelado": document["revelado"]}
+                        if isinstance(document.get("revelado"), bool)
+                        else {}
+                    ),
+                },
+                "editorial": editorial,
+                "origem": "global",
+                "excluido": bool(
+                    editorial.get("publicado_em")
+                    and _is_removed_document(editorial.get("dados_completos"))
+                ),
+            }
+        )
+    entries.sort(key=lambda item: (item["tipo"], item["titulo"].casefold(), item["chave"]))
+    return entries
+
+
+@router.get("/editor-global")
+def list_global_editorial_content(
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """Biblioteca de Mundo compartilhada por todas as campanhas."""
+    _require_global_content_editor(user)
+    with database.connection() as connection:
+        entries = _global_editor_entries(connection)
+    return {"modulo": "mundo", "escopo": "global", "entradas": entries}
+
+
+@router.put("/editor-global/rascunho")
+def save_global_editorial_draft(
+    payload: GlobalContentEditorialDraftInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    _require_global_content_editor(user)
+    composite_key = f"{payload.tipo}:{payload.chave_recurso}"
+    source_composite_key = payload.chave_origem or composite_key
+    source_type, separator, source_resource_key = source_composite_key.partition(":")
+    if (
+        not separator
+        or not source_type
+        or not source_resource_key
+        or source_resource_key != payload.chave_recurso
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="a identidade original da entrada é inválida",
+        )
+    moving_category = source_composite_key != composite_key
+    if moving_category and (source_type == "cronologia" or payload.tipo == "cronologia"):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="a cronologia não pode ser movida para outra categoria",
+        )
+    document = {
+        "tipo": payload.tipo,
+        "id": payload.chave_recurso,
+        "titulo": payload.titulo,
+        "conteudo": payload.conteudo,
+    }
+    with database.connection() as connection:
+        base = _editorial_library_entry(
+            connection, "mundo", source_type, source_resource_key
+        )
+        if moving_category and _editorial_library_entry(
+            connection, "mundo", payload.tipo, payload.chave_recurso
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="já existe conteúdo com este ID na categoria de destino",
+            )
+        collision = connection.execute(
+            """
+            SELECT 1
+            FROM conteudo_global_editorial
+            WHERE modulo='mundo' AND chave_origem<>%s
+              AND COALESCE(rascunho, dados_publicados)->>'tipo'=%s
+              AND COALESCE(rascunho, dados_publicados)->>'id'=%s
+            """,
+            (source_composite_key, payload.tipo, payload.chave_recurso),
+        ).fetchone()
+        if collision:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="já existe conteúdo com este ID na categoria de destino",
+            )
+        if base and not moving_category:
+            _validate_editorial_content("mundo", payload.tipo, payload.conteudo, dict(base))
+        else:
+            _validate_custom_world_entry(payload.tipo, payload.chave_recurso, payload.conteudo)
+        base_document = base.get("dados") if base and isinstance(base.get("dados"), dict) else {}
+        revealed = payload.revelado if payload.revelado is not None else base_document.get("revelado")
+        if isinstance(revealed, bool):
+            document["revelado"] = revealed
+
+        current = connection.execute(
+            """
+            SELECT id, versao_editorial
+            FROM conteudo_global_editorial
+            WHERE modulo='mundo' AND chave_origem=%s
+            FOR UPDATE
+            """,
+            (source_composite_key,),
+        ).fetchone()
+        if moving_category and not base and not current:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="a entrada original não foi encontrada para mover",
+            )
+        if current:
+            if payload.versao_esperada != current["versao_editorial"]:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail={
+                        "mensagem": "o conteúdo global foi alterado em outro lugar; recarregue antes de salvar",
+                        "versao_atual": current["versao_editorial"],
+                    },
+                )
+            row = connection.execute(
+                """
+                UPDATE conteudo_global_editorial
+                SET titulo=%s, rascunho=%s, atualizado_por=%s,
+                    versao_editorial=versao_editorial+1,
+                    atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s AND versao_editorial=%s
+                RETURNING id, titulo, rascunho,
+                          dados_publicados AS dados_completos,
+                          versao_editorial, publicado_em, atualizado_em
+                """,
+                (
+                    payload.titulo,
+                    Jsonb(document),
+                    user.id,
+                    current["id"],
+                    payload.versao_esperada,
+                ),
+            ).fetchone()
+        else:
+            if payload.versao_esperada is not None:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail={"mensagem": "o conteúdo global ainda não possui versão editorial"},
+                )
+            row = connection.execute(
+                """
+                INSERT INTO conteudo_global_editorial
+                    (id, modulo, chave_origem, titulo, rascunho,
+                     versao_editorial, criado_por, atualizado_por)
+                VALUES (%s, 'mundo', %s, %s, %s, 1, %s, %s)
+                RETURNING id, titulo, rascunho,
+                          dados_publicados AS dados_completos,
+                          versao_editorial, publicado_em, atualizado_em
+                """,
+                (
+                    uuid4(), source_composite_key, payload.titulo,
+                    Jsonb(document), user.id, user.id,
+                ),
+            ).fetchone()
+        record_audit(
+            connection,
+            action="conteudo_global.rascunho_salvo",
+            actor_user_id=user.id,
+            target_type="mundo",
+            target_id=str(row["id"]),
+            details={
+                "chave_origem": source_composite_key,
+                "chave_destino": composite_key,
+                "versao": row["versao_editorial"],
+            },
+        )
+    return {"editorial": dict(row)}
+
+
+@router.post("/editor-global/{content_id}/publicar")
+def publish_global_editorial_content(
+    content_id: UUID,
+    payload: GlobalContentEditorialVersionInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    _require_global_content_editor(user)
+    with database.connection() as connection:
+        current = connection.execute(
+            """
+            SELECT id, chave_origem, titulo, rascunho, versao_editorial
+            FROM conteudo_global_editorial
+            WHERE id=%s AND modulo='mundo'
+            FOR UPDATE
+            """,
+            (content_id,),
+        ).fetchone()
+        if not current:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="conteúdo global não encontrado")
+        if current["versao_editorial"] != payload.versao_esperada:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={
+                    "mensagem": "o rascunho global mudou; recarregue antes de publicar",
+                    "versao_atual": current["versao_editorial"],
+                },
+            )
+        draft = current["rascunho"]
+        if not _is_editorial_document(draft):
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="não existe rascunho global para publicar",
+            )
+        source_type, _, source_key = current["chave_origem"].partition(":")
+        base = _editorial_library_entry(connection, "mundo", source_type, source_key)
+        if base:
+            _validate_editorial_content("mundo", draft["tipo"], draft["conteudo"], dict(base))
+        else:
+            _validate_custom_world_entry(draft["tipo"], draft["id"], draft["conteudo"])
+        new_version = int(current["versao_editorial"]) + 1
+        title = str(draft.get("titulo") or current["titulo"]).strip()
+        row = connection.execute(
+            """
+            UPDATE conteudo_global_editorial
+            SET titulo=%s, dados_publicados=%s, rascunho=NULL,
+                atualizado_por=%s, publicado_em=CURRENT_TIMESTAMP,
+                versao_editorial=%s, atualizado_em=CURRENT_TIMESTAMP
+            WHERE id=%s AND versao_editorial=%s
+            RETURNING id, titulo, rascunho,
+                      dados_publicados AS dados_completos,
+                      versao_editorial, publicado_em, atualizado_em
+            """,
+            (
+                title, Jsonb(draft), user.id, new_version,
+                content_id, payload.versao_esperada,
+            ),
+        ).fetchone()
+        connection.execute(
+            """
+            INSERT INTO revisoes_conteudo_global
+                (id, conteudo_id, versao, titulo, dados, criado_por)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            """,
+            (uuid4(), content_id, new_version, title, Jsonb(draft), user.id),
+        )
+        record_audit(
+            connection,
+            action="conteudo_global.publicado",
+            actor_user_id=user.id,
+            target_type="mundo",
+            target_id=str(content_id),
+            details={"chave": current["chave_origem"], "versao": new_version},
+        )
+    return {"editorial": dict(row)}
+
+
+@router.delete("/editor-global/{content_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_global_editorial_content(
+    content_id: UUID,
+    payload: GlobalContentEditorialVersionInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    _require_global_content_editor(user)
+    with database.connection() as connection:
+        current = connection.execute(
+            """
+            SELECT id, chave_origem, titulo, rascunho, dados_publicados,
+                   versao_editorial, publicado_em
+            FROM conteudo_global_editorial
+            WHERE id=%s AND modulo='mundo'
+            FOR UPDATE
+            """,
+            (content_id,),
+        ).fetchone()
+        if not current:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="conteúdo global não encontrado")
+        if current["versao_editorial"] != payload.versao_esperada:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={
+                    "mensagem": "o conteúdo global mudou; recarregue antes de excluir",
+                    "versao_atual": current["versao_editorial"],
+                },
+            )
+        entry_type, separator, resource_key = current["chave_origem"].partition(":")
+        if not separator or not entry_type or not resource_key:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="a identidade global da entrada é inválida",
+            )
+        base = _editorial_library_entry(connection, "mundo", entry_type, resource_key)
+        if not base and current.get("publicado_em") is None:
+            deleted = connection.execute(
+                """
+                DELETE FROM conteudo_global_editorial
+                WHERE id=%s AND versao_editorial=%s
+                RETURNING id
+                """,
+                (content_id, payload.versao_esperada),
+            ).fetchone()
+            if not deleted:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="o conteúdo global mudou; recarregue antes de excluir",
+                )
+            action = "conteudo_global.rascunho_excluido"
+            new_version = current["versao_editorial"]
+        else:
+            document = current.get("rascunho")
+            if not _is_editorial_document(document):
+                document = current.get("dados_publicados")
+            if not _is_editorial_document(document) and base:
+                document = base.get("dados")
+            if not _is_editorial_document(document):
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    detail="não foi possível preservar os dados antes da exclusão global",
+                )
+            removed_document = {**document, "excluido": True}
+            new_version = int(current["versao_editorial"]) + 1
+            updated = connection.execute(
+                """
+                UPDATE conteudo_global_editorial
+                SET titulo=%s, dados_publicados=%s, rascunho=NULL,
+                    atualizado_por=%s, publicado_em=CURRENT_TIMESTAMP,
+                    versao_editorial=%s, atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s AND versao_editorial=%s
+                RETURNING id
+                """,
+                (
+                    removed_document["titulo"], Jsonb(removed_document), user.id,
+                    new_version, content_id, payload.versao_esperada,
+                ),
+            ).fetchone()
+            if not updated:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="o conteúdo global mudou; recarregue antes de excluir",
+                )
+            connection.execute(
+                """
+                INSERT INTO revisoes_conteudo_global
+                    (id, conteudo_id, versao, titulo, dados, criado_por)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                """,
+                (
+                    uuid4(), content_id, new_version,
+                    removed_document["titulo"], Jsonb(removed_document), user.id,
+                ),
+            )
+            action = "conteudo_global.excluido"
+        record_audit(
+            connection,
+            action=action,
+            actor_user_id=user.id,
+            target_type="mundo",
+            target_id=str(content_id),
+            details={
+                "chave": current["chave_origem"],
+                "titulo": current["titulo"],
+                "versao": new_version,
+                "base_oficial_preservada": bool(base),
+            },
+        )
+    return None
+
+
+@router.get("/editor-global/{content_id}/revisoes")
+def list_global_editorial_revisions(
+    content_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    _require_global_content_editor(user)
+    with database.connection() as connection:
+        belongs = connection.execute(
+            "SELECT 1 FROM conteudo_global_editorial WHERE id=%s AND modulo='mundo'",
+            (content_id,),
+        ).fetchone()
+        if not belongs:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="conteúdo global não encontrado")
+        rows = connection.execute(
+            """
+            SELECT r.id, r.versao, r.titulo, r.dados, r.criado_em,
+                   u.nome_exibicao AS autor_nome
+            FROM revisoes_conteudo_global r
+            LEFT JOIN usuarios u ON u.id=r.criado_por
+            WHERE r.conteudo_id=%s
+            ORDER BY r.versao DESC
+            LIMIT 50
+            """,
+            (content_id,),
+        ).fetchall()
+    return {"revisoes": [dict(row) for row in rows]}
+
+
+@router.post("/editor-global/{content_id}/revisoes/{revision_id}/restaurar")
+def restore_global_editorial_revision(
+    content_id: UUID,
+    revision_id: UUID,
+    payload: GlobalContentEditorialVersionInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    _require_global_content_editor(user)
+    with database.connection() as connection:
+        current = connection.execute(
+            """
+            SELECT id, chave_origem, versao_editorial
+            FROM conteudo_global_editorial
+            WHERE id=%s AND modulo='mundo'
+            FOR UPDATE
+            """,
+            (content_id,),
+        ).fetchone()
+        if not current:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="conteúdo global não encontrado")
+        if current["versao_editorial"] != payload.versao_esperada:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={
+                    "mensagem": "o conteúdo global mudou; recarregue antes de restaurar",
+                    "versao_atual": current["versao_editorial"],
+                },
+            )
+        revision = connection.execute(
+            """
+            SELECT id, titulo, dados
+            FROM revisoes_conteudo_global
+            WHERE id=%s AND conteudo_id=%s
+            """,
+            (revision_id, content_id),
+        ).fetchone()
+        if not revision or not _is_editorial_document(revision["dados"]):
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="revisão global não encontrada")
+        document = {key: value for key, value in revision["dados"].items() if key != "excluido"}
+        source_type, _, source_key = current["chave_origem"].partition(":")
+        base = _editorial_library_entry(connection, "mundo", source_type, source_key)
+        if base:
+            _validate_editorial_content("mundo", document["tipo"], document["conteudo"], dict(base))
+        else:
+            _validate_custom_world_entry(document["tipo"], document["id"], document["conteudo"])
+        row = connection.execute(
+            """
+            UPDATE conteudo_global_editorial
+            SET titulo=%s, rascunho=%s, atualizado_por=%s,
+                versao_editorial=versao_editorial+1,
+                atualizado_em=CURRENT_TIMESTAMP
+            WHERE id=%s AND versao_editorial=%s
+            RETURNING id, titulo, rascunho,
+                      dados_publicados AS dados_completos,
+                      versao_editorial, publicado_em, atualizado_em
+            """,
+            (
+                document["titulo"], Jsonb(document), user.id,
+                content_id, payload.versao_esperada,
+            ),
+        ).fetchone()
+        record_audit(
+            connection,
+            action="conteudo_global.revisao_restaurada",
+            actor_user_id=user.id,
+            target_type="mundo",
+            target_id=str(content_id),
+            details={"revisao_id": str(revision_id), "versao": row["versao_editorial"]},
+        )
+    return {"editorial": dict(row)}
+
+
+@router.get("/editor-global/exportar")
+def export_global_editorial_content(
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    _require_global_content_editor(user)
+    with database.connection() as connection:
+        rows = connection.execute(
+            """
+            SELECT modulo, chave_origem, titulo, dados_publicados AS dados,
+                   versao_editorial AS versao, publicado_em
+            FROM conteudo_global_editorial
+            WHERE modulo='mundo' AND publicado_em IS NOT NULL
+              AND dados_publicados IS NOT NULL
+            ORDER BY chave_origem
+            """
+        ).fetchall()
+    return {
+        "formato": "o-jardim-conteudo-global",
+        "versao_formato": 1,
+        "gerado_em": datetime.now(timezone.utc).isoformat(),
+        "conteudo": [dict(row) for row in rows],
+    }
+
+
 @router.get("/resolvido")
 def resolved_content(
     campanha_id: UUID,
@@ -881,18 +1680,29 @@ def resolved_content(
     user: AuthenticatedUser = Depends(get_current_user),
     database: Database = Depends(get_database),
 ):
-    """Biblioteca oficial mesclada com as publicações da campanha."""
+    """Biblioteca base mesclada com a edição global ou com regras da campanha."""
     with database.connection() as connection:
         access = campaign_access(connection, campanha_id, user.id)
         library = _library_rows(connection, modulo)
-        overrides = connection.execute(
-            """
-            SELECT chave_recurso, dados_completos
-            FROM informacoes_campanha
-            WHERE campanha_id=%s AND tipo=%s AND publicado_em IS NOT NULL
-            """,
-            (campanha_id, modulo),
-        ).fetchall()
+        if modulo == "mundo":
+            overrides = connection.execute(
+                """
+                SELECT chave_origem AS chave_recurso,
+                       dados_publicados AS dados_completos
+                FROM conteudo_global_editorial
+                WHERE modulo='mundo' AND publicado_em IS NOT NULL
+                  AND dados_publicados IS NOT NULL
+                """
+            ).fetchall()
+        else:
+            overrides = connection.execute(
+                """
+                SELECT chave_recurso, dados_completos
+                FROM informacoes_campanha
+                WHERE campanha_id=%s AND tipo=%s AND publicado_em IS NOT NULL
+                """,
+                (campanha_id, modulo),
+            ).fetchall()
     override_by_key = {row["chave_recurso"]: row["dados_completos"] for row in overrides}
     entries = []
     official_keys = set()
@@ -901,7 +1711,15 @@ def resolved_content(
         composite_key = f"{item['tipo']}:{item['chave_recurso']}"
         official_keys.add(composite_key)
         override = override_by_key.get(composite_key)
-        resolved = override if isinstance(override, dict) else item["dados"]
+        if _is_removed_document(override):
+            continue
+        resolved = (
+            {**item["dados"], **override}
+            if isinstance(override, dict)
+            else dict(item["dados"])
+        )
+        if modulo == "mundo":
+            resolved["chave_origem"] = composite_key
         if (
             modulo == "regras"
             and not access.manages_content
@@ -920,9 +1738,13 @@ def resolved_content(
         entries.append(resolved)
     if modulo == "mundo":
         entries.extend(
-            document
+            {**document, "chave_origem": composite_key}
             for composite_key, document in override_by_key.items()
-            if composite_key not in official_keys and _is_editorial_document(document)
+            if (
+                composite_key not in official_keys
+                and _is_editorial_document(document)
+                and not _is_removed_document(document)
+            )
         )
     return {"modulo": modulo, "entradas": entries}
 
@@ -935,7 +1757,7 @@ def export_published_editorial_content(
 ):
     """Exporta apenas as versões publicadas, em um snapshot portátil e versionado."""
     with database.connection() as connection:
-        _require_content_editor(connection, campanha_id, user.id)
+        _require_content_editor(connection, campanha_id, user)
         campaign = connection.execute(
             "SELECT id, nome FROM campanhas WHERE id=%s",
             (campanha_id,),
@@ -948,7 +1770,7 @@ def export_published_editorial_content(
                    versao_editorial AS versao, publicado_em
             FROM informacoes_campanha
             WHERE campanha_id=%s
-              AND tipo IN ('mundo', 'regras')
+              AND tipo='regras'
               AND publicado_em IS NOT NULL
               AND dados_completos <> '{}'::jsonb
             ORDER BY tipo, chave_recurso
@@ -993,7 +1815,7 @@ def change_default_access(
         ).fetchone()
         if not current:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="conteudo nao encontrado")
-        require_campaign_manager(connection, current["campanha_id"], user.id)
+        require_creator_campaign(connection, current["campanha_id"], user)
         row = connection.execute(
             """
             UPDATE informacoes_campanha
@@ -1041,7 +1863,7 @@ def unpublish_content(
         ).fetchone()
         if not row:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="conteudo nao encontrado")
-        require_campaign_manager(connection, row["campanha_id"], user.id)
+        require_creator_campaign(connection, row["campanha_id"], user)
         connection.execute("DELETE FROM informacoes_campanha WHERE id=%s", (knowledge_id,))
         record_audit(
             connection,

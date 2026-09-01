@@ -14,6 +14,7 @@ import os
 import unittest
 import uuid
 from pathlib import Path
+from unittest.mock import patch
 
 import psycopg
 from psycopg import sql
@@ -24,7 +25,7 @@ from fastapi import HTTPException
 
 from core.database import Database
 from core.dependencies import AuthenticatedUser
-from routers.shop import grant_batch
+from routers.shop import _grant_notification_recipient_ids, grant_batch
 from schemas import ShopGrantCommandInput, ShopGrantItemInput
 
 
@@ -36,6 +37,24 @@ _CATALOGO_REAL = {
         (Path(__file__).resolve().parents[2] / "data" / "loja" / "catalogo.json").read_text(encoding="utf-8")
     )["entradas"]
 }
+
+
+def test_destinatarios_da_concessao_nao_incluem_outros_jogadores():
+    connection = object()
+    campaign_id = uuid.uuid4()
+    character_id = uuid.uuid4()
+    owner_id = uuid.uuid4()
+    master_id = uuid.uuid4()
+
+    with (
+        patch("routers.shop.character_owner_ids", return_value=[owner_id]) as owners,
+        patch("routers.shop.campaign_member_ids", return_value=[master_id]) as masters,
+    ):
+        recipients = _grant_notification_recipient_ids(connection, campaign_id, character_id)
+
+    assert recipients == [owner_id, master_id]
+    owners.assert_called_once_with(connection, campaign_id, [character_id])
+    masters.assert_called_once_with(connection, campaign_id, roles=("mestre",))
 
 
 @unittest.skipUnless(TEST_DSN, "TEST_DATABASE_URL nao configurada")
@@ -183,7 +202,7 @@ class ConcessaoMestreTests(unittest.TestCase):
 
         ficha = self._ficha(personagem_id)
         aliado = (ficha.get("aliados") or [])[0]
-        self.assertEqual(aliado["nome"], "Fantasma do Vendaval")
+        self.assertEqual(aliado["nome"], "Fantasma de Naufrágio")
         self.assertEqual(aliado["nivel"], 33)
         self.assertEqual(aliado["movimento"], "18m (Voo)")
         self.assertEqual(aliado["defesa"], 27)
@@ -225,6 +244,33 @@ class ConcessaoMestreTests(unittest.TestCase):
         self.assertTrue(repetida["repetida"])
         inventario = self._inventario(campanha_id, personagem_id)
         self.assertEqual(inventario[0]["quantidade"], 3, "a repeticao nao pode somar quantidade de novo")
+
+    def test_aviso_da_concessao_vai_so_para_dono_da_ficha_e_mestre(self):
+        campanha_id, personagem_id, mestre, jogador = self._campanha_com_personagem()
+        curioso_id, _curioso = self._usuario("curioso@example.com", "jogador")
+        with self.database.connection() as connection:
+            connection.execute(
+                "INSERT INTO membros_campanha (campanha_id, usuario_id, papel) VALUES (%s, %s, 'jogador')",
+                (campanha_id, curioso_id),
+            )
+        self._catalogo_item_real("lobo-cinzento")
+
+        self._conceder(
+            campanha_id=campanha_id,
+            personagem_id=personagem_id,
+            actor=mestre,
+            item_id="lobo-cinzento",
+        )
+
+        with self.database.connection() as connection:
+            recipients = connection.execute(
+                "SELECT usuario_id FROM notificacoes WHERE campanha_id=%s AND titulo LIKE 'O Mestre concedeu itens%'",
+                (campanha_id,),
+            ).fetchall()
+        self.assertEqual(
+            {row["usuario_id"] for row in recipients},
+            {mestre.id, jogador.id},
+        )
 
 
 if __name__ == "__main__":

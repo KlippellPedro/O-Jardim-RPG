@@ -13,7 +13,7 @@ from core.dependencies import (
     campaign_access,
     get_current_user,
     get_database,
-    require_campaign_manager,
+    require_creator_campaign,
     require_csrf,
 )
 from core.notifications import campaign_member_ids, character_owner_ids, notify
@@ -33,7 +33,7 @@ def create_knowledge(
     knowledge_id = uuid4()
     try:
         with database.connection() as connection:
-            require_campaign_manager(connection, payload.campanha_id, user.id)
+            require_creator_campaign(connection, payload.campanha_id, user)
             connection.execute(
                 """
                 INSERT INTO informacoes_campanha
@@ -84,7 +84,7 @@ def grant_knowledge(
         if not knowledge:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="informacao nao encontrada")
         campaign_id = knowledge["campanha_id"]
-        require_campaign_manager(connection, campaign_id, user.id)
+        require_creator_campaign(connection, campaign_id, user)
 
         if payload.destinatario_tipo == "papel":
             if payload.destinatario_id not in {"mestre", "assistente", "jogador", "observador"}:
@@ -189,7 +189,7 @@ def revoke_knowledge_grant(
         ).fetchone()
         if not knowledge:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="informacao nao encontrada")
-        require_campaign_manager(connection, knowledge["campanha_id"], user.id)
+        require_creator_campaign(connection, knowledge["campanha_id"], user)
         connection.execute(
             """
             DELETE FROM liberacoes_informacao
@@ -231,8 +231,8 @@ def list_knowledge(
             (campanha_id,),
         ).fetchall()
         if administrar:
-            if not access.manages_content:
-                raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="permissao de mestre necessaria")
+            if not user.is_creator:
+                raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="somente o criador da plataforma administra liberacoes")
             grants = connection.execute(
                 """
                 SELECT id, informacao_id, destinatario_tipo, destinatario_id,

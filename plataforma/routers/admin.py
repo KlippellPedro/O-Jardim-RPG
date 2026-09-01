@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from uuid import UUID
+from datetime import datetime, timedelta, timezone
+from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 
@@ -14,8 +15,8 @@ from core.dependencies import (
     require_platform_admin,
 )
 from core.notifications import notify
-from core.security import hash_password, new_temporary_password
-from schemas import AdminUserUpdateInput
+from core.security import hash_password, hash_token, new_secret_token, new_temporary_password
+from schemas import AdminUserUpdateInput, PlatformInviteCreateInput
 
 
 ROLE_LABELS = {
@@ -584,5 +585,84 @@ def deactivate_user(
             actor_user_id=actor.id,
             target_type="usuario",
             target_id=str(user_id),
+        )
+    return None
+
+
+@router.post("/convites", status_code=status.HTTP_201_CREATED)
+def create_platform_invite(
+    payload: PlatformInviteCreateInput,
+    actor: AuthenticatedUser = Depends(_require_admin_csrf),
+    database: Database = Depends(get_database),
+):
+    """Convite só para criar conta na plataforma — nunca associa a campanha."""
+    raw_code = new_secret_token(18)
+    invite_id = uuid4()
+    expires = datetime.now(timezone.utc) + timedelta(days=payload.expira_em_dias)
+    with database.connection() as connection:
+        connection.execute(
+            """
+            INSERT INTO convites_plataforma
+                (id, criado_por, codigo_hash, max_usos, expira_em)
+            VALUES (%s, %s, %s, %s, %s)
+            """,
+            (invite_id, actor.id, hash_token(raw_code), payload.max_usos, expires),
+        )
+        record_audit(
+            connection,
+            action="admin.convite_plataforma_criado",
+            actor_user_id=actor.id,
+            target_type="convite_plataforma",
+            target_id=str(invite_id),
+            details={"max_usos": payload.max_usos},
+        )
+    return {"id": invite_id, "codigo": raw_code, "expira_em": expires}
+
+
+@router.get("/convites")
+def list_platform_invites(
+    user: AuthenticatedUser = Depends(require_platform_admin),
+    database: Database = Depends(get_database),
+):
+    """Convites de plataforma ainda utilizáveis. O código nunca volta, só o hash existe."""
+    now = datetime.now(timezone.utc)
+    with database.connection() as connection:
+        rows = connection.execute(
+            """
+            SELECT i.id, i.max_usos, i.usos, i.expira_em, i.revogado_em,
+                   i.criado_em, u.nome_exibicao AS criado_por_nome
+            FROM convites_plataforma i
+            LEFT JOIN usuarios u ON u.id=i.criado_por
+            WHERE i.revogado_em IS NULL AND i.expira_em > %s AND i.usos < i.max_usos
+            ORDER BY i.criado_em DESC
+            """,
+            (now,),
+        ).fetchall()
+    return {"convites": [dict(row) for row in rows]}
+
+
+@router.delete("/convites/{invite_id}", status_code=status.HTTP_204_NO_CONTENT)
+def revoke_platform_invite(
+    invite_id: UUID,
+    actor: AuthenticatedUser = Depends(_require_admin_csrf),
+    database: Database = Depends(get_database),
+):
+    with database.connection() as connection:
+        row = connection.execute(
+            """
+            UPDATE convites_plataforma SET revogado_em=CURRENT_TIMESTAMP
+            WHERE id=%s AND revogado_em IS NULL
+            RETURNING id
+            """,
+            (invite_id,),
+        ).fetchone()
+        if not row:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="convite nao encontrado")
+        record_audit(
+            connection,
+            action="admin.convite_plataforma_revogado",
+            actor_user_id=actor.id,
+            target_type="convite_plataforma",
+            target_id=str(invite_id),
         )
     return None

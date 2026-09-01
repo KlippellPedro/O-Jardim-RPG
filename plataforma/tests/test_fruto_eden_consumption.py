@@ -9,7 +9,7 @@ from uuid import UUID
 from fastapi import HTTPException
 
 from routers import characters
-from schemas import EdenFruitConsumeInput
+from schemas import EdenFruitAwakenInput, EdenFruitConsumeInput
 
 
 CAMPAIGN_ID = UUID("11111111-1111-1111-1111-111111111111")
@@ -185,6 +185,99 @@ class EdenFruitConsumptionTests(unittest.TestCase):
             self._consume(connection)
         self.assertEqual(captured.exception.status_code, 409)
         self.assertFalse(any(sql.startswith("DELETE FROM inventario_personagem") for sql, _ in connection.statements))
+
+
+class EdenFruitAwakeningTests(unittest.TestCase):
+    def _awaken(self, connection, *, expected_version=3):
+        payload = EdenFruitAwakenInput(versao_ficha_esperada=expected_version)
+        with (
+            mock.patch.object(characters, "record_audit"),
+            mock.patch.object(characters.live_session, "publicar"),
+        ):
+            return characters.awaken_eden_fruit(
+                CHARACTER_ID,
+                payload,
+                user=SimpleNamespace(id=USER_ID),
+                database=_Database(connection),
+            )
+
+    def test_awakening_refreshes_official_snapshot_and_replaces_resource_bonus(self):
+        def responder(sql, _params):
+            if "JOIN membros_campanha" in sql:
+                return {
+                    "campanha_id": CAMPAIGN_ID,
+                    "dono_usuario_id": USER_ID,
+                    "papel": "jogador",
+                }
+            if sql.startswith("SELECT ficha, versao"):
+                return {
+                    "ficha": {
+                        "status": {"manaAtual": 10},
+                        "frutoEdenConsumido": {
+                            "itemId": "fruto-fenix",
+                            "titulo": "Fruto antigo",
+                            "consumidoEm": "2026-01-01T00:00:00+00:00",
+                            "conteudo": {
+                                "passivo": "Passiva antiga",
+                                "efeitosFicha": [
+                                    {"categoria": "recurso", "alvo": "manaMaxima", "valor": 2},
+                                ],
+                            },
+                        },
+                    },
+                    "versao": 3,
+                }
+            if sql.startswith("SELECT id, tipo, titulo, conteudo"):
+                return {
+                    "id": "fruto-fenix",
+                    "tipo": "fruto-eden",
+                    "titulo": "Fruto da Fênix",
+                    "conteudo": {
+                        "passivo": "Plumas da Aurora",
+                        "passivoDespertado": "Plumas do Retorno",
+                        "efeitosFicha": [
+                            {"categoria": "recurso", "alvo": "manaMaxima", "valor": 2},
+                        ],
+                        "efeitosFichaDespertado": [
+                            {"categoria": "recurso", "alvo": "manaMaxima", "valor": 4},
+                        ],
+                    },
+                }
+            if sql.startswith("UPDATE personagens SET ficha="):
+                return {"versao": 4}
+            return None
+
+        connection = _Connection(responder)
+        result = self._awaken(connection)
+
+        self.assertTrue(result["fruto"]["despertado"])
+        self.assertEqual(result["fruto"]["titulo"], "Fruto da Fênix")
+        self.assertEqual(result["fruto"]["conteudo"]["passivoDespertado"], "Plumas do Retorno")
+        update_params = next(
+            params for sql, params in connection.statements
+            if sql.startswith("UPDATE personagens SET ficha=")
+        )
+        stored_sheet = update_params[0].obj
+        self.assertEqual(stored_sheet["status"]["manaAtual"], 12)
+        self.assertEqual(stored_sheet["frutoEdenConsumido"]["consumidoEm"], "2026-01-01T00:00:00+00:00")
+
+    def test_awakening_rejects_stale_sheet_before_catalog_lookup(self):
+        def responder(sql, _params):
+            if "JOIN membros_campanha" in sql:
+                return {
+                    "campanha_id": CAMPAIGN_ID,
+                    "dono_usuario_id": USER_ID,
+                    "papel": "jogador",
+                }
+            if sql.startswith("SELECT ficha, versao"):
+                return {"ficha": {}, "versao": 4}
+            return None
+
+        connection = _Connection(responder)
+        with self.assertRaises(HTTPException) as captured:
+            self._awaken(connection, expected_version=3)
+        self.assertEqual(captured.exception.status_code, 409)
+        self.assertFalse(any(sql.startswith("SELECT id, tipo, titulo, conteudo") for sql, _ in connection.statements))
 
 
 if __name__ == "__main__":

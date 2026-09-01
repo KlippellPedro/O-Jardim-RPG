@@ -828,6 +828,50 @@ class CharacterEconomyOperationTests(unittest.TestCase):
             1,
         )
 
+    def test_owner_cannot_equip_special_item_above_shared_limit(self):
+        connection = self._connection(
+            inventory=[
+                {
+                    "item_id": "catalogo:acessorio",
+                    "titulo": "Acessorio",
+                    "quantidade": 1,
+                    "dados": {
+                        "origem": "loja",
+                        "catalogo_item_id": "acessorio",
+                        "grupo_limite_uso": "item-pericia",
+                        "equipado": True,
+                    },
+                },
+                {
+                    "item_id": "catalogo:artefato",
+                    "titulo": "Artefato",
+                    "quantidade": 1,
+                    "dados": {
+                        "origem": "loja",
+                        "catalogo_item_id": "artefato",
+                        "tipo": "artefato",
+                        "equipado": False,
+                    },
+                },
+            ],
+        )
+        payload = EconomyOperationsInput(
+            versao_esperada=7,
+            operacoes=[
+                {
+                    "tipo": "editar_item",
+                    "item_id": "catalogo:artefato",
+                    "dados": {"equipado": True},
+                }
+            ],
+        )
+
+        with self.assertRaises(HTTPException) as captured:
+            self._apply(connection, payload)
+        self.assertEqual(captured.exception.status_code, 422)
+        self.assertIn("pode usar 1", str(captured.exception.detail))
+        self.assertFalse(any("INSERT INTO inventario_personagem" in sql for sql, _ in connection.statements))
+
     def test_common_player_cannot_forge_mechanical_fields_on_loja_item(self):
         connection = self._connection(
             inventory=[

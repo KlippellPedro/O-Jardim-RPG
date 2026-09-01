@@ -33,6 +33,7 @@ VERSAO_FORMATO = 1
 TABELAS: tuple[str, ...] = (
     "schema_migrations",
     "usuarios",
+    "convites_plataforma",
     "campanhas",
     "personagens",
     "membros_campanha",
@@ -41,6 +42,8 @@ TABELAS: tuple[str, ...] = (
     "campanhas_discord",
     "informacoes_campanha",
     "revisoes_conteudo",
+    "conteudo_global_editorial",
+    "revisoes_conteudo_global",
     "catalogo_itens_campanha",
     "revisoes_catalogo_campanha",
     "liberacoes_informacao",

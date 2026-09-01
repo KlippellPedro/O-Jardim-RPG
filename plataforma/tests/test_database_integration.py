@@ -68,6 +68,8 @@ class DatabaseMigrationTests(unittest.TestCase):
             "campanhas_discord",
             "informacoes_campanha",
             "revisoes_conteudo",
+            "conteudo_global_editorial",
+            "revisoes_conteudo_global",
             "catalogo_itens_campanha",
             "revisoes_catalogo_campanha",
             "liberacoes_informacao",

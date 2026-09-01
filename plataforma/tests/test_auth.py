@@ -382,7 +382,7 @@ class RegisterTests(unittest.TestCase):
         )
         rules = [
             *_RATE_LIMIT_PASSTHROUGH,
-            ("SELECT id, campanha_id, papel, max_usos, usos, expira_em, revogado_em", None),
+            ("SELECT id, max_usos, usos, expira_em, revogado_em", None),
         ]
 
         with self.assertRaises(HTTPException) as ctx:
@@ -391,14 +391,10 @@ class RegisterTests(unittest.TestCase):
         self.assertEqual(ctx.exception.status_code, 403)
         self.assertEqual(ctx.exception.detail, "convite invalido ou expirado")
 
-    def test_valid_invite_adds_campaign_member_and_notifies_managers(self):
+    def test_valid_invite_creates_account_without_joining_any_campaign(self):
         settings = _settings(cadastro="convite")
-        campanha_id = uuid4()
-        manager_id = uuid4()
         convite_row = {
             "id": uuid4(),
-            "campanha_id": campanha_id,
-            "papel": "jogador",
             "max_usos": 5,
             "usos": 1,
             "expira_em": datetime.now(timezone.utc) + timedelta(days=1),
@@ -410,25 +406,22 @@ class RegisterTests(unittest.TestCase):
         )
         rules = [
             *_RATE_LIMIT_PASSTHROUGH,
-            ("SELECT id, campanha_id, papel, max_usos, usos, expira_em, revogado_em", convite_row),
+            ("SELECT id, max_usos, usos, expira_em, revogado_em", convite_row),
             ("INSERT INTO usuarios", None),
-            ("INSERT INTO membros_campanha", None),
-            ("UPDATE convites_campanha SET usos=usos+1", None),
+            ("UPDATE convites_plataforma SET usos=usos+1", None),
             ("INSERT INTO sessoes_auth", None),
             ("DELETE FROM sessoes_auth", None),
             ("INSERT INTO eventos_auditoria", None),
-            ("SELECT usuario_id FROM membros_campanha", _Result(rows=[{"usuario_id": manager_id}])),
-            ("INSERT INTO notificacoes", None),
         ]
 
         result, connection, _ = self._run(payload, settings, rules)
 
         self.assertEqual(result["usuario"]["papel_plataforma"], "player")
-        self.assertTrue(any(s.startswith("INSERT INTO membros_campanha") for s, _ in connection.statements))
+        self.assertFalse(any(s.startswith("INSERT INTO membros_campanha") for s, _ in connection.statements))
         self.assertTrue(any(
-            s.startswith("UPDATE convites_campanha SET usos=usos+1") for s, _ in connection.statements
+            s.startswith("UPDATE convites_plataforma SET usos=usos+1") for s, _ in connection.statements
         ))
-        self.assertTrue(any(s.startswith("INSERT INTO notificacoes") for s, _ in connection.statements))
+        self.assertFalse(any(s.startswith("INSERT INTO notificacoes") for s, _ in connection.statements))
 
     def test_duplicate_email_returns_409_with_vague_message(self):
         settings = _settings(cadastro="aberto")

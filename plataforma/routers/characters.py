@@ -17,6 +17,7 @@ from core.character_summary import (
 )
 from core.database import Database
 from core.economy_commands import MAX_ECONOMY_AMOUNT
+from core.equipment_rules import equipped_special_item_count, special_item_use_limit
 from core.economy_models import (
     AdjustInventoryQuantityOperation,
     AdjustWalletBalanceOperation,
@@ -39,6 +40,7 @@ from schemas import (
     CharacterCreateInput,
     CharacterOwnerUpdateInput,
     CharacterUpdateInput,
+    EdenFruitAwakenInput,
     EdenFruitConsumeInput,
     EconomyReplaceInput,
 )
@@ -121,7 +123,13 @@ def _session_resources(sheet: dict) -> dict[str, int | None]:
 def _eden_fruit_effects(sheet: dict) -> list[dict]:
     fruit = sheet.get("frutoEdenConsumido") if isinstance(sheet, dict) else None
     content = fruit.get("conteudo") if isinstance(fruit, dict) else None
-    raw = content.get("efeitosFicha") if isinstance(content, dict) else None
+    awakened = isinstance(fruit, dict) and fruit.get("despertado") is True
+    raw = None
+    if isinstance(content, dict):
+        if awakened and isinstance(content.get("efeitosFichaDespertado"), list):
+            raw = content.get("efeitosFichaDespertado")
+        else:
+            raw = content.get("efeitosFicha")
     if not isinstance(raw, list):
         return []
     return [effect for effect in raw if isinstance(effect, dict)]
@@ -248,6 +256,151 @@ def _sheet_links_complex_ally(sheet: dict | None, character_id: UUID) -> bool:
     )
 
 
+def _ally_shared_character_ids(ally: dict | None) -> list[UUID]:
+    raw_ids = ally.get("personagensVinculados") if isinstance(ally, dict) else []
+    if not isinstance(raw_ids, list):
+        return []
+    result: list[UUID] = []
+    seen: set[UUID] = set()
+    for raw_id in raw_ids:
+        try:
+            character_id = UUID(str(raw_id))
+        except (TypeError, ValueError, AttributeError):
+            continue
+        if character_id not in seen:
+            result.append(character_id)
+            seen.add(character_id)
+    return result
+
+
+def _sheet_shared_character_ids(sheet: dict | None) -> set[UUID]:
+    allies = sheet.get("aliados") if isinstance(sheet, dict) else []
+    if not isinstance(allies, list):
+        return set()
+    return {
+        character_id
+        for ally in allies
+        if isinstance(ally, dict)
+        for character_id in _ally_shared_character_ids(ally)
+    }
+
+
+def _shared_allies_from_rows(rows, target_ids: set[UUID]) -> dict[UUID, list[dict]]:
+    """Materializa a visão somente leitura sem duplicar o aliado nas fichas."""
+    result = {target_id: [] for target_id in target_ids}
+    for raw_source in rows:
+        source = dict(raw_source)
+        source_id = source["id"]
+        sheet = source.get("ficha") if isinstance(source.get("ficha"), dict) else {}
+        allies = sheet.get("aliados") if isinstance(sheet.get("aliados"), list) else []
+        for ally in allies:
+            if not isinstance(ally, dict):
+                continue
+            for target_id in _ally_shared_character_ids(ally):
+                if target_id not in result or target_id == source_id:
+                    continue
+                shared = dict(ally)
+                # A lista de outros destinatários não faz parte do cartão recebido.
+                shared.pop("personagensVinculados", None)
+                shared["compartilhadoDe"] = str(source_id)
+                shared["compartilhadoDeNome"] = source.get("nome") or "Ficha desconhecida"
+                shared["somenteLeitura"] = True
+                result[target_id].append(shared)
+    return result
+
+
+def _shared_allies_for_targets(connection, campaign_id: UUID, target_ids: set[UUID]) -> dict[UUID, list[dict]]:
+    if not target_ids:
+        return {}
+    sources = connection.execute(
+        """
+        SELECT id, nome, ficha
+        FROM personagens
+        WHERE campanha_id=%s AND status='ativo'
+        ORDER BY nome, id
+        """,
+        (campaign_id,),
+    ).fetchall()
+    return _shared_allies_from_rows(sources, target_ids)
+
+
+def _validate_ally_character_links(
+    connection,
+    campaign_id: UUID,
+    source_id: UUID,
+    sheet: dict | None,
+    previous_sheet: dict | None = None,
+) -> None:
+    """Recusa UUIDs inválidos e vínculos para fichas externas/arquivadas."""
+    allies = sheet.get("aliados") if isinstance(sheet, dict) else []
+    if not isinstance(allies, list):
+        return
+
+    referenced: set[UUID] = set()
+    for ally in allies:
+        if not isinstance(ally, dict):
+            continue
+        raw_shared = ally.get("personagensVinculados", [])
+        if not isinstance(raw_shared, list):
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="personagens vinculados do aliado devem formar uma lista",
+            )
+        parsed_shared = _ally_shared_character_ids(ally)
+        if len(parsed_shared) != len(raw_shared):
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="vinculo de aliado possui personagem invalido ou repetido",
+            )
+        if source_id in parsed_shared:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="a ficha de origem ja recebe o proprio aliado",
+            )
+        referenced.update(parsed_shared)
+
+        if ally.get("categoria") == "complexo":
+            try:
+                linked_id = UUID(str(ally.get("personagemId") or ""))
+            except (TypeError, ValueError, AttributeError):
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    detail="aliado complexo deve apontar para um personagem valido",
+                )
+            if linked_id == source_id:
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    detail="uma ficha nao pode ser aliada complexa dela mesma",
+                )
+            referenced.add(linked_id)
+
+    if not referenced:
+        return
+    valid_rows = connection.execute(
+        """
+        SELECT id FROM personagens
+        WHERE campanha_id=%s AND status='ativo' AND id = ANY(%s)
+        """,
+        (campaign_id, list(referenced)),
+    ).fetchall()
+    valid_ids = {row["id"] for row in valid_rows}
+    existing_references = _sheet_shared_character_ids(previous_sheet)
+    previous_allies = previous_sheet.get("aliados") if isinstance(previous_sheet, dict) else []
+    if isinstance(previous_allies, list):
+        for ally in previous_allies:
+            if not isinstance(ally, dict) or ally.get("categoria") != "complexo":
+                continue
+            try:
+                existing_references.add(UUID(str(ally.get("personagemId") or "")))
+            except (TypeError, ValueError, AttributeError):
+                continue
+    if referenced - valid_ids - existing_references:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="todo personagem vinculado deve estar ativo na mesma campanha",
+        )
+
+
 def _readable_character(connection, character_id: UUID, user_id: UUID):
     """Autoriza a ficha completa para dono/gestor ou como vínculo somente leitura."""
     row = connection.execute(
@@ -267,7 +420,7 @@ def _readable_character(connection, character_id: UUID, user_id: UUID):
 
     owned_sheets = connection.execute(
         """
-        SELECT ficha
+        SELECT id, ficha
         FROM personagens
         WHERE campanha_id=%s AND dono_usuario_id=%s AND status='ativo'
         """,
@@ -275,6 +428,26 @@ def _readable_character(connection, character_id: UUID, user_id: UUID):
     ).fetchall()
     if any(_sheet_links_complex_ally(source["ficha"], character_id) for source in owned_sheets):
         return row, True
+
+    owned_ids = {source["id"] for source in owned_sheets}
+    sources = connection.execute(
+        """
+        SELECT id, ficha FROM personagens
+        WHERE campanha_id=%s AND status='ativo'
+        """,
+        (row["campanha_id"],),
+    ).fetchall()
+    for source in sources:
+        sheet = source["ficha"] if isinstance(source["ficha"], dict) else {}
+        allies = sheet.get("aliados") if isinstance(sheet.get("aliados"), list) else []
+        for ally in allies:
+            if (
+                isinstance(ally, dict)
+                and ally.get("categoria") == "complexo"
+                and str(ally.get("personagemId") or "") == str(character_id)
+                and owned_ids.intersection(_ally_shared_character_ids(ally))
+            ):
+                return row, True
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="personagem nao encontrado")
 
 
@@ -313,6 +486,39 @@ def _player_complex_allies_error(current_sheet: dict | None, next_sheet: dict | 
         return "vinculo complexo possui identificador ausente ou repetido"
     if current != desired:
         return "somente Mestre ou assistente pode criar, remover ou trocar um vinculo complexo"
+    return None
+
+
+_SHARED_ALLY_PLAYER_FIELDS = {"favorito", "ordem"}
+
+
+def _shared_allies_for_permission(sheet: dict | None) -> dict[str, dict] | None:
+    """Congela a parte global de aliados que afetam mais de uma ficha."""
+    allies = sheet.get("aliados") if isinstance(sheet, dict) else []
+    if not isinstance(allies, list):
+        return {}
+    result: dict[str, dict] = {}
+    for ally in allies:
+        if not isinstance(ally, dict) or not _ally_shared_character_ids(ally):
+            continue
+        ally_id = str(ally.get("id") or "").strip()
+        if not ally_id or ally_id in result:
+            return None
+        result[ally_id] = {
+            key: value
+            for key, value in ally.items()
+            if key not in _SHARED_ALLY_PLAYER_FIELDS
+        }
+    return result
+
+
+def _player_shared_allies_error(current_sheet: dict | None, next_sheet: dict | None) -> str | None:
+    current = _shared_allies_for_permission(current_sheet)
+    desired = _shared_allies_for_permission(next_sheet)
+    if current is None or desired is None:
+        return "aliado compartilhado possui identificador ausente ou repetido"
+    if current != desired:
+        return "somente Mestre ou assistente pode criar, remover ou alterar um aliado compartilhado"
     return None
 
 
@@ -365,6 +571,20 @@ def create_character(
         owner_id = payload.dono_usuario_id or user.id
         if owner_id != user.id and not access.manages_content:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="jogador so pode criar o proprio personagem")
+        if not access.manages_content and _sheet_shared_character_ids(payload.ficha):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="somente Mestre ou assistente pode compartilhar aliados",
+            )
+        if not access.manages_content and any(
+            isinstance(ally, dict) and ally.get("categoria") == "complexo"
+            for ally in (payload.ficha.get("aliados") or [])
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="somente Mestre ou assistente pode criar um vinculo complexo",
+            )
+        _validate_ally_character_links(connection, payload.campanha_id, character_id, payload.ficha)
         if not access.manages_content:
             # A Árvore orienta as regras do RPG, mas não bloqueia a liberdade do
             # jogador na ficha. Configurações fora das regras seguem permitidas
@@ -556,6 +776,10 @@ def list_characters(
             ).fetchall()
 
         personagens = [dict(row) for row in rows]
+        target_ids = {item["id"] for item in personagens}
+        shared_by_target = _shared_allies_for_targets(connection, campanha_id, target_ids)
+        for personagem in personagens:
+            personagem["aliados_compartilhados"] = shared_by_target.get(personagem["id"], [])
         if completo and personagens:
             ids = [item["id"] for item in personagens]
             carteiras: dict[UUID, list] = {}
@@ -603,7 +827,10 @@ def list_complex_allies(
     with database.connection() as connection:
         owner = _authorized_character(connection, character_id, user.id)
         sheet = owner["ficha"] if isinstance(owner.get("ficha"), dict) else {}
-        raw_allies = sheet.get("aliados") if isinstance(sheet.get("aliados"), list) else []
+        raw_allies = list(sheet.get("aliados") if isinstance(sheet.get("aliados"), list) else [])
+        raw_allies.extend(
+            _shared_allies_for_targets(connection, owner["campanha_id"], {character_id}).get(character_id, [])
+        )
         linked_ids: list[UUID] = []
         seen: set[UUID] = set()
         for ally in raw_allies:
@@ -645,6 +872,9 @@ def get_character(
 ):
     with database.connection() as connection:
         row, read_only = _readable_character(connection, character_id, user.id)
+        shared_allies = [] if read_only else _shared_allies_for_targets(
+            connection, row["campanha_id"], {character_id}
+        ).get(character_id, [])
         balances = connection.execute(
             """
             SELECT moeda, saldo FROM saldos_personagem
@@ -665,6 +895,7 @@ def get_character(
     result["somente_leitura"] = read_only
     result["carteira"] = [dict(item) for item in balances]
     result["inventario_central"] = [dict(item) for item in inventory]
+    result["aliados_compartilhados"] = shared_allies
     return {"personagem": result}
 
 
@@ -682,6 +913,18 @@ def update_character(
             complex_error = _player_complex_allies_error(current["ficha"], payload.ficha)
             if complex_error:
                 raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=complex_error)
+            shared_error = _player_shared_allies_error(current["ficha"], payload.ficha)
+            if shared_error:
+                raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=shared_error)
+        _validate_ally_character_links(
+            connection,
+            current["campanha_id"],
+            character_id,
+            payload.ficha,
+            current["ficha"],
+        )
+        previous_share_targets = _sheet_shared_character_ids(current["ficha"])
+        if current["papel"] not in {"mestre", "assistente"}:
             campanha_row = connection.execute(
                 "SELECT configuracoes FROM campanhas WHERE id=%s", (current["campanha_id"],)
             ).fetchone()
@@ -779,6 +1022,7 @@ def update_character(
                     "versao_atual": actual["versao"] if actual else None,
                 },
             )
+        ally_share_targets = previous_share_targets | _sheet_shared_character_ids(row["ficha"])
         record_audit(
             connection,
             action="personagem.atualizado",
@@ -835,7 +1079,10 @@ def update_character(
         current["campanha_id"],
         "personagem_atualizado",
         int(row["versao"]),
-        {"personagem_id": str(character_id)},
+        {
+            "personagem_id": str(character_id),
+            "aliados_compartilhados_com": [str(item) for item in sorted(ally_share_targets, key=str)],
+        },
     )
     return {"personagem": dict(row)}
 
@@ -960,6 +1207,7 @@ def apply_character_economy_operations(
         ).fetchall()
         inventory = {row["item_id"]: dict(row) for row in inventory_rows}
         initial_item_ids = set(inventory)
+        initial_special_items = equipped_special_item_count(list(inventory.values()))
 
         balance_rows = connection.execute(
             """
@@ -1182,6 +1430,28 @@ def apply_character_economy_operations(
                     }
                 )
 
+        total_level = 0
+        current_sheet = dict(current).get("ficha") or {}
+        for class_slot in _classes_da_ficha(current_sheet):
+            try:
+                class_level = int(class_slot.get("nivel", 1))
+            except (TypeError, ValueError):
+                class_level = 1
+            total_level += max(1, min(20, class_level))
+        special_limit = special_item_use_limit(total_level)
+        final_special_items = equipped_special_item_count(list(inventory.values()))
+        # Fichas antigas acima do teto continuam editáveis. O servidor barra
+        # somente uma nova ativação que aumentaria o excesso; a interface marca
+        # os itens excedentes e não aplica seus bônus.
+        if final_special_items > special_limit and final_special_items > initial_special_items:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail=(
+                    f"o personagem pode usar {special_limit} item(ns) de pericia ou artefato "
+                    f"ao mesmo tempo no nivel total {max(1, total_level)}"
+                ),
+            )
+
         for item_id in deleted_item_ids:
             connection.execute(
                 """
@@ -1386,6 +1656,7 @@ def archive_character(
 ):
     with database.connection() as connection:
         current = _authorized_character(connection, character_id, user.id)
+        ally_share_targets = _sheet_shared_character_ids(current["ficha"])
         connection.execute(
             """
             UPDATE personagens SET status='arquivado', atualizado_em=CURRENT_TIMESTAMP
@@ -1401,6 +1672,15 @@ def archive_character(
             target_type="personagem",
             target_id=str(character_id),
         )
+    live_session.publicar(
+        current["campanha_id"],
+        "personagem_atualizado",
+        int(current["versao"]),
+        {
+            "personagem_id": str(character_id),
+            "aliados_compartilhados_com": [str(item) for item in sorted(ally_share_targets, key=str)],
+        },
+    )
     return None
 
 
@@ -1558,6 +1838,122 @@ def consume_eden_fruit(
         "versao": int(updated["versao"]),
         "economia_versao": int(updated["economia_versao"]),
     }
+
+
+@router.post(
+    "/{character_id}/despertar-fruto-eden",
+    status_code=status.HTTP_200_OK,
+)
+def awaken_eden_fruit(
+    character_id: UUID,
+    payload: EdenFruitAwakenInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Desperta o vínculo usando o conteúdo oficial atual do catálogo."""
+    with database.connection() as connection:
+        authorized = _authorized_character(connection, character_id, user.id)
+        character = connection.execute(
+            """
+            SELECT ficha, versao
+            FROM personagens
+            WHERE id=%s AND status='ativo'
+            FOR UPDATE
+            """,
+            (character_id,),
+        ).fetchone()
+        if not character:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="personagem nao encontrado")
+        if int(character["versao"]) != payload.versao_ficha_esperada:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={
+                    "mensagem": "a ficha mudou; recarregue antes de despertar o fruto",
+                    "versao_ficha_atual": int(character["versao"]),
+                },
+            )
+
+        current_sheet = character["ficha"] if isinstance(character["ficha"], dict) else {}
+        current_fruit = current_sheet.get("frutoEdenConsumido")
+        fruit_id = str(current_fruit.get("itemId") or "").strip() if isinstance(current_fruit, dict) else ""
+        if not fruit_id:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="a ficha nao possui um Fruto do Eden consumido",
+            )
+
+        catalog = connection.execute(
+            """
+            SELECT id, tipo, titulo, conteudo
+            FROM catalogo_itens
+            WHERE id=%s AND ativo=TRUE
+            """,
+            (fruit_id,),
+        ).fetchone()
+        if not catalog or catalog["tipo"] != "fruto-eden":
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="o Fruto do Eden vinculado nao esta ativo no catalogo oficial",
+            )
+        catalog_content = catalog["conteudo"] if isinstance(catalog["conteudo"], dict) else {}
+        if not str(catalog_content.get("passivoDespertado") or "").strip():
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="o catalogo do servidor ainda nao possui as melhorias de despertar; reinicie a plataforma para sincroniza-lo",
+            )
+
+        awakened_fruit = {
+            **current_fruit,
+            "itemId": str(catalog["id"]),
+            "titulo": str(catalog["titulo"]),
+            "conteudo": catalog_content,
+            "despertado": True,
+            "despertadoEm": current_fruit.get("despertadoEm") or datetime.now(timezone.utc).isoformat(),
+        }
+        next_sheet = {
+            **current_sheet,
+            "frutoEdenConsumido": awakened_fruit,
+        }
+
+        # Se um Fruto vier a conceder Vida/Mana máxima no Despertar, ajusta o
+        # recurso atual somente pela diferença entre os dois estágios.
+        current_status = current_sheet.get("status") if isinstance(current_sheet.get("status"), dict) else {}
+        next_status = dict(current_status)
+        for target, field in (("vidaMaxima", "vidaAtual"), ("manaMaxima", "manaAtual")):
+            current_value = current_status.get(field)
+            if not isinstance(current_value, (int, float)) or isinstance(current_value, bool):
+                continue
+            delta = _eden_fruit_resource_bonus(next_sheet, target) - _eden_fruit_resource_bonus(current_sheet, target)
+            next_status[field] = max(0, int(current_value) + delta)
+        if next_status:
+            next_sheet["status"] = next_status
+
+        updated = connection.execute(
+            """
+            UPDATE personagens
+            SET ficha=%s, versao=versao+1, atualizado_em=CURRENT_TIMESTAMP
+            WHERE id=%s
+            RETURNING versao
+            """,
+            (Jsonb(next_sheet), character_id),
+        ).fetchone()
+        record_audit(
+            connection,
+            action="personagem.fruto_eden_despertado",
+            actor_user_id=user.id,
+            campaign_id=authorized["campanha_id"],
+            target_type="personagem",
+            target_id=str(character_id),
+            details={"item_id": fruit_id, "titulo": str(catalog["titulo"])},
+        )
+
+    live_session.publicar(
+        authorized["campanha_id"],
+        "personagem_atualizado",
+        int(updated["versao"]),
+        {"personagem_id": str(character_id)},
+    )
+    return {"fruto": awakened_fruit, "versao": int(updated["versao"])}
 
 
 @router.post(

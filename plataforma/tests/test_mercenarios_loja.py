@@ -4,7 +4,7 @@ Não precisa de banco. Cobre duas regras que o catálogo declara e o servidor
 aplica:
 
 1. Perfil universal (`conteudo.disponivelNaLoja: false`) sai da vitrine e da
-   compra. Antes disso, "Ameaça Genérica (VD 3)" aparecia à venda na categoria
+   compra. Antes disso, "Modelo de Criatura (VD 3)" aparecia à venda na categoria
    Mercenários junto com os contratáveis de verdade.
 2. Quem é contratável declara `funcao`, e ela vira o papel do Aliado criado na
    ficha. Guarda de local e ofício entram lotados na base, fora de cena.
@@ -57,7 +57,7 @@ class BestiarioForaDoBalcaoTests(unittest.TestCase):
     def test_linha_antiga_do_banco_sem_a_marca_ainda_fica_fora_do_balcao(self):
         # A tabela `catalogo_itens` só recebe a marca quando o catálogo é
         # ressincronizado no boot da API. Até lá a linha antiga continua no
-        # banco sem `disponivelNaLoja`, e foi assim que a "Ameaça Genérica"
+        # banco sem `disponivelNaLoja`, e foi assim que o "Modelo de Criatura"
         # apareceu à venda em Mercenários. A categoria "Universal" segura isso.
         universal = next(e for e in _MONSTROS if e["conteudo"].get("categoria") == "Universal")
         linha_antiga = _linha(universal)

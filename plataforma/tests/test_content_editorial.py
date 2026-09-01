@@ -11,7 +11,7 @@ import pytest
 from fastapi import HTTPException
 
 from routers import content
-from schemas import ContentEditorialDraftInput, ContentEditorialPublishInput
+from schemas import ContentEditorialDeleteInput, ContentEditorialDraftInput, ContentEditorialPublishInput
 
 
 CAMPAIGN_ID = UUID("11111111-1111-1111-1111-111111111111")
@@ -19,6 +19,16 @@ MASTER_ID = UUID("22222222-2222-2222-2222-222222222222")
 ASSISTANT_ID = UUID("33333333-3333-3333-3333-333333333333")
 CONTENT_ID = UUID("44444444-4444-4444-4444-444444444444")
 REVISION_ID = UUID("55555555-5555-5555-5555-555555555555")
+CREATOR_ID = UUID("66666666-6666-6666-6666-666666666666")
+
+
+def _creator():
+    """Edicao de conteudo agora e exclusiva do criador da plataforma."""
+    return SimpleNamespace(id=CREATOR_ID, is_creator=True)
+
+
+def _non_creator(user_id: UUID):
+    return SimpleNamespace(id=user_id, is_creator=False)
 
 
 def _sql(statement: str) -> str:
@@ -83,15 +93,28 @@ def _draft(version=None):
 
 def test_assistant_cannot_open_editor():
     def responder(sql, _params):
-        if "FROM campanhas" in sql:
-            return _access(ASSISTANT_ID, "assistente")
         raise AssertionError(f"consulta inesperada: {sql}")
 
     with pytest.raises(HTTPException) as captured:
         content.list_editorial_content(
             CAMPAIGN_ID,
             modulo="mundo",
-            user=SimpleNamespace(id=ASSISTANT_ID),
+            user=_non_creator(ASSISTANT_ID),
+            database=_Database(_Connection(responder)),
+        )
+    assert captured.value.status_code == 403
+
+
+def test_master_cannot_open_editor_anymore():
+    """Edicao de conteudo deixou de ser um privilegio do mestre da campanha."""
+    def responder(sql, _params):
+        raise AssertionError(f"consulta inesperada: {sql}")
+
+    with pytest.raises(HTTPException) as captured:
+        content.list_editorial_content(
+            CAMPAIGN_ID,
+            modulo="mundo",
+            user=_non_creator(MASTER_ID),
             database=_Database(_Connection(responder)),
         )
     assert captured.value.status_code == 403
@@ -123,7 +146,7 @@ def test_new_draft_is_saved_without_publishing():
     connection = _Connection(responder)
     result = content.save_editorial_draft(
         _draft(),
-        user=SimpleNamespace(id=MASTER_ID),
+        user=_creator(),
         database=_Database(connection),
     )
     assert result["editorial"]["publicado_em"] is None
@@ -159,13 +182,13 @@ def test_new_campaign_only_world_entry_can_be_saved():
 
     result = content.save_editorial_draft(
         payload,
-        user=SimpleNamespace(id=MASTER_ID),
+        user=_creator(),
         database=_Database(_Connection(responder)),
     )
     assert result["editorial"]["versao_editorial"] == 1
 
 
-def test_campaign_only_world_publication_is_appended_to_resolved_catalog():
+def test_global_world_publication_is_appended_to_every_resolved_catalog():
     custom = {
         "tipo": "evento", "id": "queda-de-astraluna", "titulo": "A Queda de Astraluna",
         "conteudo": {"descricao": "Evento da campanha."},
@@ -176,7 +199,7 @@ def test_campaign_only_world_publication_is_appended_to_resolved_catalog():
             return _access(MASTER_ID, "mestre")
         if "FROM biblioteca_conteudo" in sql:
             return _Result(rows=[])
-        if sql.startswith("SELECT chave_recurso, dados_completos"):
+        if "FROM conteudo_global_editorial" in sql:
             return _Result(rows=[{"chave_recurso": "evento:queda-de-astraluna", "dados_completos": custom}])
         raise AssertionError(f"consulta inesperada: {sql}")
 
@@ -186,7 +209,159 @@ def test_campaign_only_world_publication_is_appended_to_resolved_catalog():
         user=SimpleNamespace(id=MASTER_ID),
         database=_Database(_Connection(responder)),
     )
-    assert result["entradas"] == [custom]
+    assert result["entradas"] == [{**custom, "chave_origem": "evento:queda-de-astraluna"}]
+
+
+def test_campaign_only_world_entry_can_be_deleted():
+    def responder(sql, _params):
+        if "FROM campanhas" in sql:
+            return _access(MASTER_ID, "mestre")
+        if sql.startswith("SELECT id, campanha_id, tipo, chave_recurso, titulo, rascunho"):
+            return {
+                "id": CONTENT_ID,
+                "campanha_id": CAMPAIGN_ID,
+                "tipo": "mundo",
+                "chave_recurso": "evento:queda-de-astraluna",
+                "titulo": "A Queda de Astraluna",
+                "versao_editorial": 3,
+            }
+        if "FROM biblioteca_conteudo" in sql:
+            return None
+        if sql.startswith("DELETE FROM informacoes_campanha"):
+            return {"id": CONTENT_ID}
+        if sql.startswith("INSERT INTO eventos_auditoria"):
+            return None
+        raise AssertionError(f"consulta inesperada: {sql}")
+
+    connection = _Connection(responder)
+    result = content.delete_custom_editorial_content(
+        CONTENT_ID,
+        ContentEditorialDeleteInput(campanha_id=CAMPAIGN_ID, versao_esperada=3),
+        user=_creator(),
+        database=_Database(connection),
+    )
+    assert result is None
+    assert any(sql.startswith("DELETE FROM informacoes_campanha") for sql, _ in connection.statements)
+    assert any(sql.startswith("INSERT INTO eventos_auditoria") for sql, _ in connection.statements)
+
+
+def test_official_world_entry_is_removed_only_from_campaign():
+    official = {
+        "tipo": "deidade", "id": "aethel", "titulo": "Aethel",
+        "conteudo": {"descricao": "Texto oficial."},
+    }
+
+    def responder(sql, _params):
+        if "FROM campanhas" in sql:
+            return _access(MASTER_ID, "mestre")
+        if sql.startswith("SELECT id, campanha_id, tipo, chave_recurso, titulo, rascunho"):
+            return {
+                "id": CONTENT_ID,
+                "campanha_id": CAMPAIGN_ID,
+                "tipo": "mundo",
+                "chave_recurso": "deidade:aethel",
+                "titulo": "Aethel",
+                "rascunho": None,
+                "dados_completos": {},
+                "versao_editorial": 2,
+                "publicado_em": None,
+            }
+        if "FROM biblioteca_conteudo" in sql:
+            return {"tipo": "deidade", "chave_recurso": "aethel", "titulo": "Aethel", "dados": official}
+        if sql.startswith("UPDATE informacoes_campanha"):
+            return {"id": CONTENT_ID}
+        if sql.startswith("INSERT INTO revisoes_conteudo") or sql.startswith("INSERT INTO eventos_auditoria"):
+            return None
+        raise AssertionError(f"consulta inesperada: {sql}")
+
+    connection = _Connection(responder)
+    result = content.delete_custom_editorial_content(
+        CONTENT_ID,
+        ContentEditorialDeleteInput(campanha_id=CAMPAIGN_ID, versao_esperada=2),
+        user=_creator(),
+        database=_Database(connection),
+    )
+    assert result is None
+    update = next(params for sql, params in connection.statements if sql.startswith("UPDATE informacoes_campanha"))
+    assert update[2].obj["excluido"] is True
+    assert update[2].obj["conteudo"] == official["conteudo"]
+    assert not any(sql.startswith("DELETE FROM informacoes_campanha") for sql, _ in connection.statements)
+    assert any(sql.startswith("INSERT INTO revisoes_conteudo") for sql, _ in connection.statements)
+
+
+def test_world_entry_can_move_category_without_changing_storage_identity():
+    payload = ContentEditorialDraftInput(
+        campanha_id=CAMPAIGN_ID,
+        tipo="local",
+        chave_recurso="biblioteca-de-arkarin",
+        chave_origem="reino:biblioteca-de-arkarin",
+        titulo="Biblioteca de Arkarin",
+        conteudo={"descricao": "Um lugar dentro do Castelo Carmesim."},
+    )
+
+    def responder(sql, params):
+        if "FROM campanhas" in sql:
+            return _access(MASTER_ID, "mestre")
+        if "FROM biblioteca_conteudo" in sql:
+            if params[1:] == ("reino", "biblioteca-de-arkarin"):
+                return {
+                    "tipo": "reino", "chave_recurso": "biblioteca-de-arkarin",
+                    "titulo": payload.titulo,
+                    "dados": {
+                        "tipo": "reino", "id": payload.chave_recurso,
+                        "titulo": payload.titulo, "conteudo": payload.conteudo,
+                    },
+                }
+            return None
+        if sql.startswith("SELECT id, versao_editorial FROM informacoes_campanha"):
+            return None
+        if sql.startswith("INSERT INTO informacoes_campanha"):
+            return {
+                "id": CONTENT_ID, "titulo": payload.titulo,
+                "rascunho": {
+                    "tipo": "local", "id": payload.chave_recurso,
+                    "titulo": payload.titulo, "conteudo": payload.conteudo,
+                },
+                "versao_editorial": 1, "publicado_em": None, "atualizado_em": None,
+            }
+        if sql.startswith("INSERT INTO eventos_auditoria"):
+            return None
+        raise AssertionError(f"consulta inesperada: {sql}")
+
+    connection = _Connection(responder)
+    result = content.save_editorial_draft(
+        payload,
+        user=_creator(),
+        database=_Database(connection),
+    )
+    insert_params = next(params for sql, params in connection.statements if sql.startswith("INSERT INTO informacoes_campanha"))
+    assert insert_params[3] == "reino:biblioteca-de-arkarin"
+    assert result["editorial"]["rascunho"]["tipo"] == "local"
+
+
+def test_custom_world_entry_delete_rejects_stale_version():
+    def responder(sql, _params):
+        if "FROM campanhas" in sql:
+            return _access(MASTER_ID, "mestre")
+        if sql.startswith("SELECT id, campanha_id, tipo, chave_recurso, titulo, rascunho"):
+            return {
+                "id": CONTENT_ID,
+                "campanha_id": CAMPAIGN_ID,
+                "tipo": "mundo",
+                "chave_recurso": "evento:queda-de-astraluna",
+                "titulo": "A Queda de Astraluna",
+                "versao_editorial": 4,
+            }
+        raise AssertionError(f"consulta inesperada: {sql}")
+
+    with pytest.raises(HTTPException) as captured:
+        content.delete_custom_editorial_content(
+            CONTENT_ID,
+            ContentEditorialDeleteInput(campanha_id=CAMPAIGN_ID, versao_esperada=3),
+            user=_creator(),
+            database=_Database(_Connection(responder)),
+        )
+    assert captured.value.status_code == 409
 
 
 def test_publish_creates_immutable_revision():
@@ -237,7 +412,7 @@ def test_publish_creates_immutable_revision():
     result = content.publish_editorial_content(
         CONTENT_ID,
         ContentEditorialPublishInput(campanha_id=CAMPAIGN_ID, versao_esperada=3),
-        user=SimpleNamespace(id=MASTER_ID),
+        user=_creator(),
         database=_Database(connection),
     )
     assert result["editorial"]["versao_editorial"] == 4
@@ -277,16 +452,16 @@ def test_revision_is_restored_as_draft_without_republishing():
         CONTENT_ID,
         REVISION_ID,
         ContentEditorialPublishInput(campanha_id=CAMPAIGN_ID, versao_esperada=4),
-        user=SimpleNamespace(id=MASTER_ID),
+        user=_creator(),
         database=_Database(connection),
     )
     assert result["editorial"]["rascunho"] == document
     assert not any(sql.startswith("INSERT INTO revisoes_conteudo") for sql, _ in connection.statements)
 
 
-def test_export_contains_only_portable_published_overrides():
+def test_campaign_export_contains_only_campaign_scoped_rules():
     document = {
-        "tipo": "evento", "id": "eclipse", "titulo": "O Eclipse",
+        "tipo": "regra", "id": "combate", "titulo": "Combate",
         "conteudo": {"descricao": "Publicado."},
     }
 
@@ -297,7 +472,7 @@ def test_export_contains_only_portable_published_overrides():
             return _access(MASTER_ID, "mestre")
         if sql.startswith("SELECT tipo AS modulo"):
             return _Result(rows=[{
-                "modulo": "mundo", "chave_recurso": "evento:eclipse",
+                "modulo": "regras", "chave_recurso": "regra:combate",
                 "titulo": document["titulo"], "dados": document,
                 "versao": 3, "publicado_em": None,
             }])
@@ -307,7 +482,7 @@ def test_export_contains_only_portable_published_overrides():
 
     result = content.export_published_editorial_content(
         CAMPAIGN_ID,
-        user=SimpleNamespace(id=MASTER_ID),
+        user=_creator(),
         database=_Database(_Connection(responder)),
     )
     assert result["formato"] == "o-jardim-conteudo-publicado"
@@ -328,14 +503,14 @@ def test_draft_rejects_stale_version():
     with pytest.raises(HTTPException) as captured:
         content.save_editorial_draft(
             _draft(version=4),
-            user=SimpleNamespace(id=MASTER_ID),
+            user=_creator(),
             database=_Database(_Connection(responder)),
         )
     assert captured.value.status_code == 409
     assert captured.value.detail["versao_atual"] == 5
 
 
-def test_resolved_content_overlays_only_published_campaign_version():
+def test_resolved_content_overlays_only_published_global_version():
     base_aethel = {
         "tipo": "deidade",
         "id": "aethel",
@@ -362,7 +537,7 @@ def test_resolved_content_overlays_only_published_campaign_version():
                 {"tipo": "deidade", "chave_recurso": "aethel", "titulo": "Aethel oficial", "dados": base_aethel},
                 {"tipo": "deidade", "chave_recurso": "keryx", "titulo": "A.X.I.S", "dados": base_axis},
             ])
-        if sql.startswith("SELECT chave_recurso, dados_completos"):
+        if "FROM conteudo_global_editorial" in sql:
             return _Result(rows=[{"chave_recurso": "deidade:aethel", "dados_completos": override}])
         raise AssertionError(f"consulta inesperada: {sql}")
 
@@ -372,7 +547,78 @@ def test_resolved_content_overlays_only_published_campaign_version():
         user=SimpleNamespace(id=MASTER_ID),
         database=_Database(_Connection(responder)),
     )
-    assert result["entradas"] == [override, base_axis]
+    assert result["entradas"] == [
+        {**override, "chave_origem": "deidade:aethel"},
+        {**base_axis, "chave_origem": "deidade:keryx"},
+    ]
+
+
+def test_resolved_content_omits_entry_removed_globally():
+    base = {
+        "tipo": "reino", "id": "biblioteca-de-arkarin",
+        "titulo": "Biblioteca de Arkarin",
+        "conteudo": {"descricao": "Texto oficial."},
+    }
+    removed = {**base, "tipo": "local", "excluido": True}
+
+    def responder(sql, _params):
+        if "FROM campanhas" in sql:
+            return _access(MASTER_ID, "mestre")
+        if "FROM biblioteca_conteudo" in sql:
+            return _Result(rows=[{
+                "tipo": "reino", "chave_recurso": base["id"],
+                "titulo": base["titulo"], "dados": base,
+            }])
+        if "FROM conteudo_global_editorial" in sql:
+            return _Result(rows=[{
+                "chave_recurso": "reino:biblioteca-de-arkarin",
+                "dados_completos": removed,
+            }])
+        raise AssertionError(f"consulta inesperada: {sql}")
+
+    result = content.resolved_content(
+        CAMPAIGN_ID,
+        modulo="mundo",
+        user=SimpleNamespace(id=MASTER_ID),
+        database=_Database(_Connection(responder)),
+    )
+    assert result["entradas"] == []
+
+
+def test_editor_lists_moved_entry_in_effective_category():
+    base = {
+        "tipo": "reino", "id": "biblioteca-de-arkarin",
+        "titulo": "Biblioteca de Arkarin",
+        "conteudo": {"descricao": "Texto oficial."},
+    }
+    moved_draft = {**base, "tipo": "local"}
+
+    def responder(sql, _params):
+        if "FROM campanhas" in sql:
+            return {"id": CAMPAIGN_ID}
+        if "FROM biblioteca_conteudo" in sql:
+            return _Result(rows=[{
+                "tipo": "reino", "chave_recurso": base["id"],
+                "titulo": base["titulo"], "dados": base,
+            }])
+        if sql.startswith("SELECT id, chave_recurso, titulo, rascunho"):
+            return _Result(rows=[{
+                "id": CONTENT_ID,
+                "chave_recurso": "reino:biblioteca-de-arkarin",
+                "titulo": base["titulo"], "rascunho": moved_draft,
+                "dados_completos": {}, "versao_editorial": 1,
+                "publicado_em": None, "atualizado_em": None,
+            }])
+        raise AssertionError(f"consulta inesperada: {sql}")
+
+    result = content.list_editorial_content(
+        CAMPAIGN_ID,
+        modulo="mundo",
+        user=_creator(),
+        database=_Database(_Connection(responder)),
+    )
+    assert result["entradas"][0]["chave"] == "reino:biblioteca-de-arkarin"
+    assert result["entradas"][0]["tipo"] == "local"
 
 
 def test_official_chronology_passes_editorial_validation():
@@ -401,6 +647,26 @@ def test_chronology_rejects_unknown_tree_reference():
         content._validate_chronicle_content(broken)
     assert captured.value.status_code == 422
     assert "inexistente" in captured.value.detail
+
+
+def test_chronology_rejects_invalid_tree_narrative_section():
+    root = Path(__file__).resolve().parents[2]
+    chronology = json.loads((root / "data" / "mundo" / "cronicas-arvores.json").read_text(encoding="utf-8"))
+    broken = copy.deepcopy(chronology)
+    broken["arvores"][0]["historia"] = "isto deveria ser uma lista de paragrafos"
+    with pytest.raises(HTTPException) as captured:
+        content._validate_chronicle_content(broken)
+    assert captured.value.status_code == 422
+    assert "narrativas" in captured.value.detail
+
+
+def test_chronology_accepts_empty_optional_tree_sections():
+    root = Path(__file__).resolve().parents[2]
+    chronology = json.loads((root / "data" / "mundo" / "cronicas-arvores.json").read_text(encoding="utf-8"))
+    chronology["arvores"][0]["atmosfera"] = ""
+    chronology["arvores"][0]["historia"] = []
+    chronology["arvores"][0]["lugares"] = []
+    content._validate_chronicle_content(chronology)
 
 
 def _rule_base(document: dict) -> dict:

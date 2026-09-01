@@ -179,3 +179,22 @@ def require_campaign_manager(connection, campaign_id: UUID, user_id: UUID) -> Ca
     if not access.manages_content:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="permissao de mestre necessaria")
     return access
+
+
+def require_creator_campaign(connection, campaign_id: UUID, user: AuthenticatedUser) -> None:
+    """Autoriza edicao de conteudo/lore/visibilidade: exclusivo do criador da plataforma.
+
+    Ao contrario de campaign_access, nao exige que o criador seja membro da
+    campanha - ele edita o conteudo de qualquer campanha ativa da plataforma.
+    """
+    if not user.is_creator:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="somente o criador da plataforma edita o conteudo da campanha",
+        )
+    campaign = connection.execute(
+        "SELECT id FROM campanhas WHERE id=%s AND status='ativa'",
+        (campaign_id,),
+    ).fetchone()
+    if not campaign:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="campanha nao encontrada")

@@ -389,9 +389,9 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
             connection.execute(
                 """
                 INSERT INTO saldos_personagem (campanha_id, personagem_id, moeda, saldo)
-                VALUES (%s, %s, 'Solares', 100)
+                VALUES (%s, %s, 'Solares', 100), (%s, %s, 'Lunaris', 10000)
                 """,
-                (self.campaign_id, self.hunter_id),
+                (self.campaign_id, self.hunter_id, self.campaign_id, self.hunter_id),
             )
             connection.execute(
                 "INSERT INTO contas_discord (usuario_id, discord_user_id) VALUES (%s, '222222222222')",
@@ -427,14 +427,18 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
             csrf_hash="hash",
         )
 
-    def _purchase_payload(self, *, key="checkout-12345678", version=1, quantity=1, location=1):
+    def _purchase_payload(self, *, key="checkout-12345678", version=1, quantity=1, location=1, rarity=None):
         return ShopBatchCommandInput(
             campanha_id=self.campaign_id,
             personagem_id=self.hunter_id,
             economia_versao_esperada=version,
             localizacao_loja=location,
             idempotencia=key,
-            itens=[{"item_id": "adaga", "quantidade": quantity}],
+            itens=[{
+                "item_id": "adaga",
+                "quantidade": quantity,
+                **({"raridade": rarity} if rarity else {}),
+            }],
         )
 
     def test_catalog_and_purchase_are_server_authoritative_and_replayable(self):
@@ -480,6 +484,49 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
                 (self.hunter_id,),
             ).fetchone()["saldo"]
         self.assertEqual(balance, 95)
+
+    def test_same_weapon_in_two_rarities_uses_separate_inventory_rows(self):
+        purchase_batch(
+            self._purchase_payload(key="checkout-common-rarity", rarity="comum"),
+            user=self.player,
+            database=self.database,
+        )
+        result = purchase_batch(
+            self._purchase_payload(key="checkout-rare-rarity", version=2, location=2, rarity="raro"),
+            user=self.player,
+            database=self.database,
+        )
+        self.assertEqual(result["debitos"], [{"moeda": "Lunaris", "valor": 8000, "saldo": 2000}])
+        with self.database.connection() as connection:
+            rows = connection.execute(
+                """
+                SELECT item_id, dados->>'raridade' AS raridade
+                FROM inventario_personagem
+                WHERE personagem_id=%s
+                ORDER BY item_id
+                """,
+                (self.hunter_id,),
+            ).fetchall()
+        self.assertEqual(
+            [(row["item_id"], row["raridade"]) for row in rows],
+            [("adaga", "comum"), ("adaga::raridade::raro", "raro")],
+        )
+
+    def test_variant_resale_uses_selected_rarity_price(self):
+        purchase_batch(
+            self._purchase_payload(key="checkout-rare-for-resale", location=2, rarity="raro"),
+            user=self.player,
+            database=self.database,
+        )
+        sale = ShopBatchCommandInput(
+            campanha_id=self.campaign_id,
+            personagem_id=self.hunter_id,
+            economia_versao_esperada=2,
+            idempotencia="sell-rare-variant",
+            itens=[{"item_id": "adaga::raridade::raro", "quantidade": 1}],
+        )
+        result = sell_batch(sale, user=self.player, database=self.database)
+        self.assertEqual(result["creditos"], [{"moeda": "Lunaris", "valor": 4000, "saldo": 6000}])
 
     def test_idempotency_key_cannot_be_reused_with_changed_payload(self):
         purchase_batch(self._purchase_payload(), user=self.player, database=self.database)
@@ -532,16 +579,15 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
             ).fetchone()["saldo"]
         self.assertEqual(balance, 95)
 
-    def test_hidden_rarity_is_not_listed_or_purchasable(self):
+    def test_hidden_rarity_blocks_variant_but_keeps_equipment_with_other_options_listed(self):
         with self.database.connection() as connection:
             connection.execute(
                 "UPDATE campanhas SET configuracoes=%s WHERE id=%s",
                 (Jsonb({"raridades_ocultas": ["Comum"]}), self.campaign_id),
             )
-        self.assertEqual(
-            get_shop_catalog(self.campaign_id, user=self.player, database=self.database)["itens"],
-            [],
-        )
+        catalog = get_shop_catalog(self.campaign_id, user=self.player, database=self.database)["itens"]
+        self.assertEqual([item["id"] for item in catalog], ["adaga"])
+        self.assertIn("incomum", catalog[0]["conteudo"]["precos_por_raridade"])
         with self.assertRaises(HTTPException) as raised:
             purchase_batch(self._purchase_payload(), user=self.player, database=self.database)
         self.assertEqual(raised.exception.status_code, 403)

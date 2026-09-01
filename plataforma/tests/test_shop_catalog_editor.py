@@ -17,6 +17,16 @@ MASTER_ID = UUID("22222222-2222-2222-2222-222222222222")
 ASSISTANT_ID = UUID("33333333-3333-3333-3333-333333333333")
 EDITORIAL_ID = UUID("44444444-4444-4444-4444-444444444444")
 REVISION_ID = UUID("55555555-5555-5555-5555-555555555555")
+CREATOR_ID = UUID("66666666-6666-6666-6666-666666666666")
+
+
+def _creator():
+    """Edicao do catalogo por campanha agora e exclusiva do criador da plataforma."""
+    return SimpleNamespace(id=CREATOR_ID, is_creator=True)
+
+
+def _non_creator(user_id: UUID):
+    return SimpleNamespace(id=user_id, is_creator=False)
 
 
 def _sql(statement: str) -> str:
@@ -147,14 +157,26 @@ def test_campaign_publication_overlays_and_can_hide_official_item():
 
 def test_assistant_cannot_edit_campaign_catalog():
     def responder(sql, _params):
-        if "FROM campanhas" in sql:
-            return _access(ASSISTANT_ID, "assistente")
         raise AssertionError(f"consulta inesperada: {sql}")
 
     with pytest.raises(HTTPException) as captured:
         shop.list_campaign_catalog_editor(
             CAMPAIGN_ID,
-            user=SimpleNamespace(id=ASSISTANT_ID),
+            user=_non_creator(ASSISTANT_ID),
+            database=_Database(_Connection(responder)),
+        )
+    assert captured.value.status_code == 403
+
+
+def test_master_cannot_edit_campaign_catalog_anymore():
+    """Editar o catalogo deixou de ser um privilegio do mestre da campanha."""
+    def responder(sql, _params):
+        raise AssertionError(f"consulta inesperada: {sql}")
+
+    with pytest.raises(HTTPException) as captured:
+        shop.list_campaign_catalog_editor(
+            CAMPAIGN_ID,
+            user=_non_creator(MASTER_ID),
             database=_Database(_Connection(responder)),
         )
     assert captured.value.status_code == 403
@@ -188,7 +210,7 @@ def test_publish_creates_revision_and_audit_event():
     result = shop.publish_campaign_catalog_item(
         EDITORIAL_ID,
         ShopCatalogPublishInput(campanha_id=CAMPAIGN_ID, versao_esperada=3),
-        user=SimpleNamespace(id=MASTER_ID),
+        user=_creator(),
         database=_Database(connection),
     )
     assert result["editorial"]["versao"] == 4
@@ -208,7 +230,7 @@ def test_publish_rejects_stale_version():
         shop.publish_campaign_catalog_item(
             EDITORIAL_ID,
             ShopCatalogPublishInput(campanha_id=CAMPAIGN_ID, versao_esperada=4),
-            user=SimpleNamespace(id=MASTER_ID),
+            user=_creator(),
             database=_Database(_Connection(responder)),
         )
     assert captured.value.status_code == 409
@@ -246,7 +268,7 @@ def test_revision_is_restored_as_unpublished_draft():
         EDITORIAL_ID,
         REVISION_ID,
         ShopCatalogPublishInput(campanha_id=CAMPAIGN_ID, versao_esperada=4),
-        user=SimpleNamespace(id=MASTER_ID),
+        user=_creator(),
         database=_Database(connection),
     )
     assert result["editorial"]["rascunho"] == document

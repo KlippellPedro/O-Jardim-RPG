@@ -6,7 +6,7 @@ import unicodedata
 from uuid import UUID, uuid4
 from zoneinfo import ZoneInfo
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from psycopg.types.json import Jsonb
 
@@ -630,6 +630,30 @@ def _round_response(connection, row, character) -> dict:
     }
 
 
+def _log_response(row) -> dict:
+    """Serializa somente o que o Mestre precisa para auditar uma aposta.
+
+    `estado` e `requisicao` ficam deliberadamente fora da resposta: numa mesa
+    de vinte-e-um ativa eles contêm o baralho e cartas ainda escondidas.
+    """
+    result_value = row.get("resultado") if isinstance(row.get("resultado"), dict) else {}
+    return {
+        "id": row["id"],
+        "personagem_id": row["personagem_id"],
+        "personagem_nome": row["personagem_nome"],
+        "usuario_id": row["usuario_id"],
+        "usuario_nome": row.get("usuario_nome") or "Usuário removido",
+        "jogo": row["jogo"],
+        "aposta": int(row["aposta"]),
+        "pagamento": int(row["pagamento"]),
+        "saldo": int(row["pagamento"]) - int(row["aposta"]),
+        "status": row["status"],
+        "resultado": result_value if row["status"] != "ativa" else {},
+        "criado_em": row["criado_em"],
+        "encerrada_em": row.get("encerrada_em"),
+    }
+
+
 def _instant_result(payload: JogadaInstantaneaInput) -> tuple[dict, int]:
     if payload.jogo == "dados":
         return casino_rules.jogar_dados(payload.escolha or "", payload.aposta, payload.numero), 60_000
@@ -681,6 +705,68 @@ def casino_characters(
                 "saldo_fichas": chips["saldo"],
             })
         return {"personagens": characters}
+
+
+@router.get("/logs")
+def casino_logs(
+    campanha_id: UUID,
+    limite: int = Query(default=50, ge=1, le=200),
+    deslocamento: int = Query(default=0, ge=0),
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """Histórico de apostas da campanha, visível somente para o Mestre."""
+    with database.connection() as connection:
+        access = campaign_access(connection, campanha_id, user.id)
+        if not access.is_master:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="somente o mestre pode consultar os logs do cassino",
+            )
+
+        summary = connection.execute(
+            """
+            SELECT
+                COUNT(*)::BIGINT AS total_rodadas,
+                COUNT(*) FILTER (WHERE status='ativa')::BIGINT AS rodadas_ativas,
+                COALESCE(SUM(aposta) FILTER (WHERE status<>'ativa'), 0)::BIGINT AS total_apostado,
+                COALESCE(SUM(pagamento) FILTER (WHERE status<>'ativa'), 0)::BIGINT AS total_pago
+            FROM cassino_gambler_rodadas
+            WHERE campanha_id=%s
+            """,
+            (campanha_id,),
+        ).fetchone()
+        rows = connection.execute(
+            """
+            SELECT
+                r.id, r.personagem_id, p.nome AS personagem_nome,
+                r.usuario_id, u.nome_exibicao AS usuario_nome,
+                r.jogo, r.aposta, r.pagamento, r.status, r.resultado,
+                r.criado_em, r.encerrada_em
+            FROM cassino_gambler_rodadas r
+            JOIN personagens p ON p.id=r.personagem_id
+            LEFT JOIN usuarios u ON u.id=r.usuario_id
+            WHERE r.campanha_id=%s
+            ORDER BY r.criado_em DESC, r.id DESC
+            LIMIT %s OFFSET %s
+            """,
+            (campanha_id, limite, deslocamento),
+        ).fetchall()
+        total_apostado = int(summary["total_apostado"])
+        total_pago = int(summary["total_pago"])
+        return {
+            "logs": [_log_response(row) for row in rows],
+            "total": int(summary["total_rodadas"]),
+            "limite": limite,
+            "deslocamento": deslocamento,
+            "resumo": {
+                "rodadas": int(summary["total_rodadas"]),
+                "ativas": int(summary["rodadas_ativas"]),
+                "apostado": total_apostado,
+                "pago": total_pago,
+                "saldo_casa": total_apostado - total_pago,
+            },
+        }
 
 
 @router.get("")

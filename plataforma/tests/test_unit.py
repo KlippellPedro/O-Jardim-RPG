@@ -40,7 +40,7 @@ from core.security import (
     normalize_human_code,
     verify_password,
 )
-from routers.characters import _sheet_without_central_fields
+from routers.characters import _eden_fruit_resource_bonus, _sheet_without_central_fields
 from routers.sessions import _estado_bloqueado, _estado_da_vida, _inteiro_do_catalogo
 from core.dependencies import AuthenticatedUser
 from schemas import (
@@ -81,6 +81,25 @@ class SecurityTests(unittest.TestCase):
     def test_human_code_normalization(self):
         code = new_human_code()
         self.assertEqual(normalize_human_code(code.lower()), code)
+
+
+class EdenFruitEffectsTests(unittest.TestCase):
+    def test_despertar_substitui_bonus_base_sem_acumular(self):
+        ficha = {
+            "frutoEdenConsumido": {
+                "itemId": "fruto-teste",
+                "despertado": True,
+                "conteudo": {
+                    "efeitosFicha": [
+                        {"categoria": "recurso", "alvo": "manaMaxima", "valor": 2},
+                    ],
+                    "efeitosFichaDespertado": [
+                        {"categoria": "recurso", "alvo": "manaMaxima", "valor": 4},
+                    ],
+                },
+            },
+        }
+        self.assertEqual(_eden_fruit_resource_bonus(ficha, "manaMaxima"), 4)
 
 
 class SchemaTests(unittest.TestCase):
@@ -545,6 +564,8 @@ class CampaignVisibilityTests(unittest.TestCase):
         visible = visible_campaign_config(
             {
                 "lore_oculto": ["segredo"],
+                "cronologia_geral_oculta": True,
+                "registros_universais_ocultos": True,
                 "racas_liberadas_membros": {
                     str(user_id): ["raca-propria"],
                     other_id: ["raca-alheia"],
@@ -555,6 +576,8 @@ class CampaignVisibilityTests(unittest.TestCase):
             user_id=user_id,
         )
         self.assertEqual(visible["lore_oculto"], ["segredo"])
+        self.assertTrue(visible["cronologia_geral_oculta"])
+        self.assertTrue(visible["registros_universais_ocultos"])
         self.assertEqual(visible["racas_liberadas_membros"], {str(user_id): ["raca-propria"]})
         self.assertNotIn("nota_privada", visible)
 

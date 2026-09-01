@@ -1276,4 +1276,111 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        31,
+        "indice_dos_logs_do_gambler",
+        (
+            """
+            CREATE INDEX IF NOT EXISTS cassino_gambler_campanha_criado_idx
+            ON cassino_gambler_rodadas (campanha_id, criado_em DESC, id DESC)
+            """,
+        ),
+    ),
+    (
+        32,
+        "convites_de_plataforma",
+        (
+            """
+            CREATE TABLE IF NOT EXISTS convites_plataforma (
+                id UUID PRIMARY KEY,
+                criado_por UUID NOT NULL REFERENCES usuarios(id),
+                codigo_hash TEXT NOT NULL UNIQUE,
+                max_usos INTEGER NOT NULL DEFAULT 1 CHECK (max_usos BETWEEN 1 AND 500),
+                usos INTEGER NOT NULL DEFAULT 0 CHECK (usos >= 0),
+                expira_em TIMESTAMPTZ NOT NULL,
+                revogado_em TIMESTAMPTZ,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+        ),
+    ),
+    (
+        33,
+        "conteudo_do_mundo_editorial_global",
+        (
+            """
+            CREATE TABLE IF NOT EXISTS conteudo_global_editorial (
+                id UUID PRIMARY KEY,
+                modulo TEXT NOT NULL DEFAULT 'mundo' CHECK (modulo='mundo'),
+                chave_origem TEXT NOT NULL,
+                titulo TEXT NOT NULL,
+                rascunho JSONB,
+                dados_publicados JSONB,
+                versao_editorial INTEGER NOT NULL DEFAULT 1
+                    CHECK (versao_editorial > 0),
+                criado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                atualizado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                publicado_em TIMESTAMPTZ,
+                UNIQUE (modulo, chave_origem)
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS conteudo_global_editorial_publicado_idx
+            ON conteudo_global_editorial (modulo, chave_origem)
+            WHERE publicado_em IS NOT NULL
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS revisoes_conteudo_global (
+                id UUID PRIMARY KEY,
+                conteudo_id UUID NOT NULL
+                    REFERENCES conteudo_global_editorial(id) ON DELETE CASCADE,
+                versao INTEGER NOT NULL CHECK (versao > 0),
+                titulo TEXT NOT NULL,
+                dados JSONB NOT NULL,
+                criado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE (conteudo_id, versao)
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS revisoes_conteudo_global_criado_idx
+            ON revisoes_conteudo_global (conteudo_id, criado_em DESC)
+            """,
+            """
+            INSERT INTO conteudo_global_editorial
+                (id, modulo, chave_origem, titulo, rascunho, dados_publicados,
+                 versao_editorial, criado_por, atualizado_por, criado_em,
+                 atualizado_em, publicado_em)
+            SELECT DISTINCT ON (i.chave_recurso)
+                i.id, 'mundo', i.chave_recurso, i.titulo, i.rascunho,
+                NULLIF(i.dados_completos, '{}'::jsonb), i.versao_editorial,
+                i.criado_por, COALESCE(i.rascunho_atualizado_por, i.criado_por),
+                i.criado_em, i.atualizado_em, i.publicado_em
+            FROM informacoes_campanha i
+            WHERE i.tipo='mundo'
+              AND i.chave_recurso ~ '^[a-z0-9_-]+:[a-zA-Z0-9_-]+$'
+              AND (
+                  i.rascunho IS NOT NULL
+                  OR i.versao_editorial > 1
+                  OR EXISTS (
+                      SELECT 1 FROM revisoes_conteudo r
+                      WHERE r.informacao_id=i.id
+                  )
+              )
+            ORDER BY i.chave_recurso, i.atualizado_em DESC, i.id
+            ON CONFLICT (modulo, chave_origem) DO NOTHING
+            """,
+            """
+            INSERT INTO revisoes_conteudo_global
+                (id, conteudo_id, versao, titulo, dados, criado_por, criado_em)
+            SELECT r.id, r.informacao_id, r.versao, r.titulo, r.dados,
+                   r.criado_por, r.criado_em
+            FROM revisoes_conteudo r
+            JOIN conteudo_global_editorial g ON g.id=r.informacao_id
+            ON CONFLICT (conteudo_id, versao) DO NOTHING
+            """,
+        ),
+    ),
 )

@@ -360,6 +360,27 @@ def seed_world_library(database: Database, data_root: Path) -> int:
                         for (entry_type, entry_id), item in entries.items()
                     ],
                 )
+            # Sem isto a biblioteca só crescia: uma entrada apagada do catálogo
+            # continuava ativa no banco e voltava a aparecer no Mundo, e trocar
+            # o `tipo` de uma entrada deixava a versão antiga viva ao lado da
+            # nova. O módulo `regras` logo abaixo já fazia essa limpeza.
+            connection.execute(
+                """
+                UPDATE biblioteca_conteudo
+                SET ativo=FALSE, atualizado_em=CURRENT_TIMESTAMP
+                WHERE modulo='mundo' AND ativo=TRUE
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM unnest(%s::text[], %s::text[]) AS vigentes(tipo, chave)
+                      WHERE vigentes.tipo = biblioteca_conteudo.tipo
+                        AND vigentes.chave = biblioteca_conteudo.chave_recurso
+                  )
+                """,
+                (
+                    [entry_type for entry_type, _ in entries],
+                    [entry_id for _, entry_id in entries],
+                ),
+            )
         if master_rules:
             connection.execute(
                 """

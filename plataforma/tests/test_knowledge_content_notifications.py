@@ -117,6 +117,18 @@ def _player_row(user_id=PLAYER_ID):
     return _access_row(user_id=user_id, papel="jogador")
 
 
+CREATOR_ID = UUID("55555555-5555-5555-5555-555555555555")
+
+
+def _creator():
+    """Edicao de conteudo/lore agora e exclusiva do criador da plataforma."""
+    return SimpleNamespace(id=CREATOR_ID, is_creator=True)
+
+
+def _non_creator(user_id):
+    return SimpleNamespace(id=user_id, is_creator=False)
+
+
 # ===========================================================================
 # knowledge.py — POST /conhecimento
 # ===========================================================================
@@ -146,11 +158,11 @@ class KnowledgeCreateTests(unittest.TestCase):
             acesso_padrao="rumor",
         )
 
-    def test_manager_creates_knowledge_entry(self):
+    def test_creator_creates_knowledge_entry(self):
         connection = self._connection(access_row=_manager_row())
         result = knowledge.create_knowledge(
             self._payload(),
-            user=SimpleNamespace(id=MANAGER_ID),
+            user=_creator(),
             database=_Database(connection),
         )
         self.assertIn("id", result)
@@ -158,12 +170,24 @@ class KnowledgeCreateTests(unittest.TestCase):
         self.assertTrue(_has(connection.statements, "INSERT INTO informacoes_campanha"))
         self.assertTrue(_has(connection.statements, "INSERT INTO eventos_auditoria"))
 
+    def test_manager_cannot_create_knowledge_entry_anymore(self):
+        """Criar conteudo deixou de ser um privilegio do mestre da campanha."""
+        connection = self._connection(access_row=_manager_row())
+        with self.assertRaises(HTTPException) as captured:
+            knowledge.create_knowledge(
+                self._payload(),
+                user=_non_creator(MANAGER_ID),
+                database=_Database(connection),
+            )
+        self.assertEqual(captured.exception.status_code, 403)
+        self.assertFalse(_has(connection.statements, "INSERT INTO informacoes_campanha"))
+
     def test_player_cannot_create_knowledge_entry(self):
         connection = self._connection(access_row=_player_row())
         with self.assertRaises(HTTPException) as captured:
             knowledge.create_knowledge(
                 self._payload(),
-                user=SimpleNamespace(id=PLAYER_ID),
+                user=_non_creator(PLAYER_ID),
                 database=_Database(connection),
             )
         self.assertEqual(captured.exception.status_code, 403)
@@ -174,7 +198,7 @@ class KnowledgeCreateTests(unittest.TestCase):
         with self.assertRaises(HTTPException) as captured:
             knowledge.create_knowledge(
                 self._payload(),
-                user=SimpleNamespace(id=MANAGER_ID),
+                user=_creator(),
                 database=_Database(connection),
             )
         self.assertEqual(captured.exception.status_code, 409)
@@ -212,7 +236,7 @@ class KnowledgeGrantTests(unittest.TestCase):
         payload = KnowledgeGrantInput(destinatario_tipo="papel", destinatario_id="jogador", acesso="rumor")
         with self.assertRaises(HTTPException) as captured:
             knowledge.grant_knowledge(
-                KNOWLEDGE_ID, payload, user=SimpleNamespace(id=PLAYER_ID), database=_Database(connection)
+                KNOWLEDGE_ID, payload, user=_non_creator(PLAYER_ID), database=_Database(connection)
             )
         self.assertEqual(captured.exception.status_code, 403)
 
@@ -237,7 +261,7 @@ class KnowledgeGrantTests(unittest.TestCase):
         payload = KnowledgeGrantInput(destinatario_tipo="papel", destinatario_id="vilao", acesso="rumor")
         with self.assertRaises(HTTPException) as captured:
             knowledge.grant_knowledge(
-                KNOWLEDGE_ID, payload, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection)
+                KNOWLEDGE_ID, payload, user=_creator(), database=_Database(connection)
             )
         self.assertEqual(captured.exception.status_code, 422)
 
@@ -246,7 +270,7 @@ class KnowledgeGrantTests(unittest.TestCase):
         payload = KnowledgeGrantInput(destinatario_tipo="usuario", destinatario_id="nao-e-uuid", acesso="rumor")
         with self.assertRaises(HTTPException) as captured:
             knowledge.grant_knowledge(
-                KNOWLEDGE_ID, payload, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection)
+                KNOWLEDGE_ID, payload, user=_creator(), database=_Database(connection)
             )
         self.assertEqual(captured.exception.status_code, 422)
 
@@ -262,7 +286,7 @@ class KnowledgeGrantTests(unittest.TestCase):
         )
         with self.assertRaises(HTTPException) as captured:
             knowledge.grant_knowledge(
-                KNOWLEDGE_ID, payload, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection)
+                KNOWLEDGE_ID, payload, user=_creator(), database=_Database(connection)
             )
         self.assertEqual(captured.exception.status_code, 422)
 
@@ -278,7 +302,7 @@ class KnowledgeGrantTests(unittest.TestCase):
         )
         with self.assertRaises(HTTPException) as captured:
             knowledge.grant_knowledge(
-                KNOWLEDGE_ID, payload, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection)
+                KNOWLEDGE_ID, payload, user=_creator(), database=_Database(connection)
             )
         self.assertEqual(captured.exception.status_code, 422)
 
@@ -308,7 +332,7 @@ class KnowledgeGrantTests(unittest.TestCase):
             destinatario_tipo="usuario", destinatario_id=str(TARGET_USER_ID), acesso="completo"
         )
         result = knowledge.grant_knowledge(
-            KNOWLEDGE_ID, payload, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection)
+            KNOWLEDGE_ID, payload, user=_creator(), database=_Database(connection)
         )
         self.assertEqual(result["acesso"], "completo")
         self.assertTrue(_has(connection.statements, "INSERT INTO notificacoes"))
@@ -337,13 +361,13 @@ class KnowledgeGrantTests(unittest.TestCase):
             knowledge, "campaign_member_ids", return_value=[TARGET_USER_ID, MANAGER_ID]
         ) as member_ids_mock:
             knowledge.grant_knowledge(
-                KNOWLEDGE_ID, payload, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection)
+                KNOWLEDGE_ID, payload, user=_creator(), database=_Database(connection)
             )
         member_ids_mock.assert_called_once()
         self.assertEqual(member_ids_mock.call_args.kwargs.get("roles"), ("jogador",))
         notify_mock.assert_called_once()
         self.assertEqual(notify_mock.call_args.kwargs["user_ids"], [TARGET_USER_ID, MANAGER_ID])
-        self.assertEqual(notify_mock.call_args.kwargs["actor_user_id"], MANAGER_ID)
+        self.assertEqual(notify_mock.call_args.kwargs["actor_user_id"], CREATOR_ID)
 
 
 class KnowledgeRevokeGrantTests(unittest.TestCase):
@@ -378,7 +402,7 @@ class KnowledgeRevokeGrantTests(unittest.TestCase):
                 KNOWLEDGE_ID,
                 destinatario_tipo="usuario",
                 destinatario_id=str(TARGET_USER_ID),
-                user=SimpleNamespace(id=PLAYER_ID),
+                user=_non_creator(PLAYER_ID),
                 database=_Database(connection),
             )
         self.assertEqual(captured.exception.status_code, 403)
@@ -400,7 +424,7 @@ class KnowledgeRevokeGrantTests(unittest.TestCase):
             KNOWLEDGE_ID,
             destinatario_tipo="usuario",
             destinatario_id=str(TARGET_USER_ID),
-            user=SimpleNamespace(id=MANAGER_ID),
+            user=_creator(),
             database=_Database(connection),
         )
         self.assertIsNone(result)
@@ -441,7 +465,7 @@ class KnowledgeListTests(unittest.TestCase):
         connection = _RecordingConnection(responder)
         with self.assertRaises(HTTPException) as captured:
             knowledge.list_knowledge(
-                CAMPAIGN_ID, administrar=True, user=SimpleNamespace(id=PLAYER_ID), database=_Database(connection)
+                CAMPAIGN_ID, administrar=True, user=_non_creator(PLAYER_ID), database=_Database(connection)
             )
         self.assertEqual(captured.exception.status_code, 403)
 
@@ -457,7 +481,7 @@ class KnowledgeListTests(unittest.TestCase):
 
         connection = _RecordingConnection(responder)
         result = knowledge.list_knowledge(
-            CAMPAIGN_ID, administrar=True, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection)
+            CAMPAIGN_ID, administrar=True, user=_creator(), database=_Database(connection)
         )
         self.assertIn("informacoes", result)
         self.assertIn("liberacoes", result)
@@ -533,7 +557,7 @@ class ContentLibraryTests(unittest.TestCase):
         connection = _RecordingConnection(responder)
         with self.assertRaises(HTTPException) as captured:
             content.list_library(
-                CAMPAIGN_ID, modulo="mundo", user=SimpleNamespace(id=PLAYER_ID), database=_Database(connection)
+                CAMPAIGN_ID, modulo="mundo", user=_non_creator(PLAYER_ID), database=_Database(connection)
             )
         self.assertEqual(captured.exception.status_code, 403)
 
@@ -553,7 +577,7 @@ class ContentLibraryTests(unittest.TestCase):
 
         connection = _RecordingConnection(responder)
         result = content.list_library(
-            CAMPAIGN_ID, modulo="mundo", user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection)
+            CAMPAIGN_ID, modulo="mundo", user=_creator(), database=_Database(connection)
         )
         entrada = result["entradas"][0]
         self.assertEqual(entrada["chave"], "mundo:reino-sul")
@@ -590,7 +614,7 @@ class ContentPublishTests(unittest.TestCase):
             acesso_padrao="completo",
         )
         with self.assertRaises(HTTPException) as captured:
-            content.publish_content(payload, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection))
+            content.publish_content(payload, user=_creator(), database=_Database(connection))
         self.assertEqual(captured.exception.status_code, 422)
         self.assertFalse(_has(connection.statements, "INSERT INTO informacoes_campanha"))
 
@@ -616,7 +640,7 @@ class ContentPublishTests(unittest.TestCase):
             campanha_id=CAMPAIGN_ID, modulo="mundo", chaves=["mundo:reino-sul"], acesso_padrao="completo"
         )
         result = content.publish_content(
-            payload, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection)
+            payload, user=_creator(), database=_Database(connection)
         )
         self.assertEqual(len(result["publicados"]), 1)
         self.assertTrue(_has(connection.statements, "INSERT INTO notificacoes"))
@@ -638,7 +662,7 @@ class ContentPublishTests(unittest.TestCase):
         payload = ContentPublishInput(
             campanha_id=CAMPAIGN_ID, modulo="mundo", chaves=["mundo:reino-sul"], acesso_padrao="oculto"
         )
-        content.publish_content(payload, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection))
+        content.publish_content(payload, user=_creator(), database=_Database(connection))
         self.assertFalse(_has(connection.statements, "INSERT INTO notificacoes"))
         self.assertFalse(_has(connection.statements, "SELECT usuario_id FROM membros_campanha"))
 
@@ -685,7 +709,7 @@ class ContentAccessChangeTests(unittest.TestCase):
         content.change_default_access(
             KNOWLEDGE_ID,
             ContentAccessInput(acesso_padrao=new),
-            user=SimpleNamespace(id=MANAGER_ID),
+            user=_creator(),
             database=_Database(connection),
         )
         return connection
@@ -727,7 +751,7 @@ class ContentUnpublishTests(unittest.TestCase):
 
         connection = _RecordingConnection(responder)
         result = content.unpublish_content(
-            KNOWLEDGE_ID, user=SimpleNamespace(id=MANAGER_ID), database=_Database(connection)
+            KNOWLEDGE_ID, user=_creator(), database=_Database(connection)
         )
         self.assertIsNone(result)
         self.assertTrue(_has(connection.statements, "DELETE FROM informacoes_campanha"))
@@ -743,7 +767,7 @@ class ContentUnpublishTests(unittest.TestCase):
         connection = _RecordingConnection(responder)
         with self.assertRaises(HTTPException) as captured:
             content.unpublish_content(
-                KNOWLEDGE_ID, user=SimpleNamespace(id=PLAYER_ID), database=_Database(connection)
+                KNOWLEDGE_ID, user=_non_creator(PLAYER_ID), database=_Database(connection)
             )
         self.assertEqual(captured.exception.status_code, 403)
         self.assertFalse(_has(connection.statements, "DELETE FROM informacoes_campanha"))

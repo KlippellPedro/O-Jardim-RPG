@@ -81,7 +81,6 @@ class CampaignCreateInput(BaseModel):
 class CampaignUpdateInput(BaseModel):
     nome: str | None = Field(default=None, min_length=2, max_length=100)
     descricao: str | None = Field(default=None, max_length=2000)
-    configuracoes: dict[str, Any] | None = Field(default=None)
 
     @field_validator("nome")
     @classmethod
@@ -95,6 +94,10 @@ class CampaignUpdateInput(BaseModel):
         if self.descricao is not None:
             self.descricao = self.descricao.strip()
         return self
+
+
+class CampaignVisibilityUpdateInput(BaseModel):
+    configuracoes: dict[str, Any] = Field(default_factory=dict)
 
 
 class AdminUserUpdateInput(BaseModel):
@@ -118,6 +121,11 @@ class CampaignInviteInput(BaseModel):
     papel: InviteRole = "jogador"
     expira_em_dias: int = Field(default=7, ge=1, le=30)
     max_usos: int = Field(default=1, ge=1, le=100)
+
+
+class PlatformInviteCreateInput(BaseModel):
+    expira_em_dias: int = Field(default=7, ge=1, le=90)
+    max_usos: int = Field(default=1, ge=1, le=500)
 
 
 class JoinCampaignInput(BaseModel):
@@ -180,6 +188,12 @@ class EdenFruitConsumeInput(BaseModel):
     versao_ficha_esperada: StrictInt = Field(ge=1)
     economia_versao_esperada: StrictInt = Field(ge=1)
     substituir: StrictBool = False
+
+
+class EdenFruitAwakenInput(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    versao_ficha_esperada: StrictInt = Field(ge=1)
 
 
 class KnowledgeCreateInput(BaseModel):
@@ -371,6 +385,10 @@ class ShopCommandItemInput(StrictCommandInput):
     item_id: str = Field(min_length=1, max_length=160)
     quantidade: StrictInt = Field(default=1, ge=1, le=500)
     alvo_item_id: str | None = Field(default=None, max_length=160)
+    # Armas e armaduras são anunciadas como Comuns e podem ser encomendadas
+    # em outro acabamento. O router rejeita este campo para qualquer outro
+    # tipo de item e recalcula o preço no servidor.
+    raridade: Literal["comum", "incomum", "raro", "epico", "lendario"] | None = None
     # Só faz sentido pra Mercenários: "comprar" torna o contratado um
     # servo/escravo permanente (preço cheio, sem mensalidade); "contratar" é
     # mais barato mas gera uma mensalidade recorrente na ficha. Validado
@@ -400,7 +418,7 @@ class ShopBatchCommandInput(StrictCommandInput):
 
     @model_validator(mode="after")
     def validate_batch(self):
-        keys = [(item.item_id, item.alvo_item_id, item.modo) for item in self.itens]
+        keys = [(item.item_id, item.alvo_item_id, item.modo, item.raridade) for item in self.itens]
         if len(keys) != len(set(keys)):
             raise ValueError("o lote contem item_id duplicado para o mesmo alvo")
         if sum(item.quantidade for item in self.itens) > 500:
@@ -825,6 +843,14 @@ class ContentEditorialDraftInput(BaseModel):
     modulo: Literal["mundo", "regras"] = "mundo"
     tipo: str = Field(min_length=1, max_length=60, pattern=r"^[a-z0-9_-]+$")
     chave_recurso: str = Field(min_length=1, max_length=160, pattern=r"^[a-zA-Z0-9_-]+$")
+    # Mantém a identidade estável da entrada quando somente sua categoria muda.
+    # Sem esta chave, mover `reino:biblioteca` para `local:biblioteca` criaria
+    # uma segunda entrada e deixaria a oficial antiga visível.
+    chave_origem: str | None = Field(
+        default=None,
+        max_length=221,
+        pattern=r"^[a-z0-9_-]+:[a-zA-Z0-9_-]+$",
+    )
     titulo: str = Field(min_length=1, max_length=160)
     conteudo: dict[str, Any]
     revelado: bool | None = None
@@ -846,6 +872,42 @@ class ContentEditorialDraftInput(BaseModel):
 class ContentEditorialPublishInput(BaseModel):
     campanha_id: UUID
     versao_esperada: int = Field(ge=1)
+
+
+class ContentEditorialDeleteInput(BaseModel):
+    campanha_id: UUID
+    versao_esperada: int = Field(ge=1)
+
+
+class GlobalContentEditorialDraftInput(BaseModel):
+    tipo: str = Field(min_length=1, max_length=60, pattern=r"^[a-z0-9_-]+$")
+    chave_recurso: str = Field(min_length=1, max_length=160, pattern=r"^[a-zA-Z0-9_-]+$")
+    chave_origem: str | None = Field(
+        default=None,
+        max_length=221,
+        pattern=r"^[a-z0-9_-]+:[a-zA-Z0-9_-]+$",
+    )
+    titulo: str = Field(min_length=1, max_length=160)
+    conteudo: dict[str, Any]
+    revelado: bool | None = None
+    versao_esperada: int | None = Field(default=None, ge=1)
+
+    @field_validator("titulo")
+    @classmethod
+    def clean_global_editorial_title(cls, value: str) -> str:
+        return " ".join(value.strip().split())
+
+    @model_validator(mode="after")
+    def validate_global_editorial_content_size(self):
+        encoded = json.dumps(self.conteudo, ensure_ascii=False, separators=(",", ":"))
+        if len(encoded.encode("utf-8")) > 200_000:
+            raise ValueError("o conteudo editorial excede o limite de 200 KB")
+        return self
+
+
+class GlobalContentEditorialVersionInput(BaseModel):
+    versao_esperada: int = Field(ge=1)
+
 
 class CampaignVehicleDeltaInput(BaseModel):
     versao: int

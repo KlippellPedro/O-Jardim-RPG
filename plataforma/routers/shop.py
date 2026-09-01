@@ -11,26 +11,34 @@ from core import live_session
 from core.audit import record_audit
 from core.character_summary import _atende_requisito_legado
 from core.database import Database
-from core.notifications import campaign_member_ids, notify
+from core.notifications import campaign_member_ids, character_owner_ids, notify
 from core.dependencies import (
     AuthenticatedUser,
     campaign_access,
     get_current_user,
     get_database,
     require_campaign_manager,
+    require_creator_campaign,
     require_csrf,
 )
 from core.economy_commands import (
+    CatalogPrice,
+    EQUIPMENT_PURCHASE_RARITIES,
     MAX_ECONOMY_AMOUNT,
     begin_economy_command,
     command_fingerprint,
     complete_economy_command,
+    equipment_variant_content,
+    equipment_variant_overrides,
+    equipment_variant_price,
     get_economy_command_replay,
     normalize_catalog_filter,
     normalize_currency,
+    normalize_equipment_rarity,
     resale_value,
     resolve_catalog_price,
 )
+from core.equipment_rules import modification_limit_for_rarity
 from core.promotions import resolve_promotion
 from schemas import (
     ShopBatchCommandInput,
@@ -53,6 +61,56 @@ _SHOP_CURRENCIES = {
     normalize_currency("Créditos Sombrios"),
 }
 _MODIFICATION_APPLICATIONS = {"armas", "armaduras", "escudos", "itens gerais e magicos"}
+
+
+def _is_configurable_equipment(row: dict[str, Any]) -> bool:
+    if normalize_catalog_filter(row.get("tipo", "")) not in {"arma", "armadura"}:
+        return False
+    content = row.get("conteudo") if isinstance(row.get("conteudo"), dict) else {}
+    original_rarity = normalize_catalog_filter(content.get("raridade", ""))
+    # Relíquia e Mítico já são exclusivos e ficam fora da encomenda normal
+    # (ver EQUIPMENT_PURCHASE_RARITIES): reimaginar um Excalibur como "Comum"
+    # por uma fração do preço em Fragmentos de Estrela quebraria o propósito
+    # do item.
+    if original_rarity in {"reliquia", "mitico", "mitica", "reliquia da criacao"}:
+        return False
+    return True
+
+
+def _discount_equipment_price(price: CatalogPrice, discount_percent: int) -> CatalogPrice:
+    discounted = max(1, round(price.valor * (1 - discount_percent / 100)))
+    return CatalogPrice(moeda=price.moeda, valor=discounted)
+
+
+def _selected_equipment_rarity(row: dict[str, Any], requested: str | None) -> str | None:
+    if not _is_configurable_equipment(row):
+        if requested is not None:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail=f"{row['titulo']} nao permite escolher raridade",
+            )
+        return None
+    selected = normalize_equipment_rarity(requested or "comum")
+    if selected not in EQUIPMENT_PURCHASE_RARITIES:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=f"raridade de compra invalida para {row['titulo']}",
+        )
+    return selected
+
+
+def _equipment_inventory_item_id(row: dict[str, Any], selected_rarity: str | None) -> str:
+    """Mantém o id legado para a raridade originalmente publicada.
+
+    Assim itens já existentes continuam reconhecíveis; as demais variantes
+    ganham um id estável e não misturam quantidades ou modificações entre si.
+    """
+
+    if not _is_configurable_equipment(row) or selected_rarity is None:
+        return row["id"]
+    content = row.get("conteudo") if isinstance(row.get("conteudo"), dict) else {}
+    catalog_rarity = normalize_equipment_rarity(content.get("raridade")) or "comum"
+    return row["id"] if selected_rarity == catalog_rarity else f"{row['id']}::raridade::{selected_rarity}"
 
 _PROTECTED_INVENTORY_METADATA = frozenset(
     {
@@ -143,42 +201,64 @@ def _shop_config(connection, campaign_id: UUID, *, lock: bool = False) -> tuple[
     return hidden_rarities, hidden_items, hidden_locations
 
 
-def _catalog_shop_level(row: dict[str, Any]) -> int:
+def _catalog_shop_level(row: dict[str, Any], equipment_rarity: str | None = None) -> int:
     content = row.get("conteudo") if isinstance(row.get("conteudo"), dict) else {}
     explicit = content.get("nivelMinimoLoja")
-    if isinstance(explicit, int) and not isinstance(explicit, bool) and 1 <= explicit <= 4:
+    if equipment_rarity is None and isinstance(explicit, int) and not isinstance(explicit, bool) and 1 <= explicit <= 4:
         return explicit
 
-    rarity = normalize_catalog_filter(content.get("raridade", ""))
+    rarity = equipment_rarity or normalize_catalog_filter(content.get("raridade", ""))
     catalog_type = normalize_catalog_filter(row.get("tipo", ""))
     if rarity not in {
         "comum", "incomum", "raro", "epico", "lendario", "reliquia",
         "mitico", "mitica", "reliquia da criacao",
     }:
         return 4
-    if rarity in {"lendario", "reliquia", "mitico", "mitica", "reliquia da criacao"}:
-        return 4
+    level = 4 if rarity in {"lendario", "reliquia", "mitico", "mitica", "reliquia da criacao"} else 1
+    if rarity == "epico":
+        level = max(level, 3)
+    elif rarity == "raro":
+        level = max(level, 2)
     if catalog_type == "fruto-eden":
-        return 4
-    price = resolve_catalog_price(content)
+        level = max(level, 4)
+    # A moeda publicada pertence à raridade original. Quando a raridade é uma
+    # escolha de compra, ela não pode empurrar a versão Comum para outro balcão.
+    price = None if equipment_rarity is not None else resolve_catalog_price(content)
     description = normalize_catalog_filter(content.get("descricao", ""))
     if price and normalize_currency(price.moeda) == normalize_currency("Fragmentos de Estrela"):
-        return 4
-    if rarity == "epico":
-        return 3
+        level = max(level, 4)
     if catalog_type in {"implante", "artefato"} or (price and normalize_currency(price.moeda) == normalize_currency("Créditos Sombrios")):
-        return 3
+        level = max(level, 3)
     if any(marker in description for marker in ("ilegal", "contrabando", "veneno", "mercado negro")):
-        return 3
+        level = max(level, 3)
     if catalog_type in {"veiculo", "veiculo-completo", "propriedade"}:
-        return 2
-    if rarity == "raro":
-        return 2
+        level = max(level, 2)
     if catalog_type == "arma" and normalize_catalog_filter(content.get("subtipo", "")) == "marcial":
-        return 2
+        level = max(level, 2)
     if catalog_type == "consumivel" and normalize_catalog_filter(content.get("subtipo", "")) == "selo":
-        return 2
-    return 1
+        level = max(level, 2)
+    # Um piso explícito num item originalmente Comum representa restrição de
+    # natureza (por exemplo, uma arma militar). Em itens publicados em faixa
+    # maior ele era o piso daquela raridade antiga e não deve prender a nova
+    # versão Comum no Banco Lunar - exceto quando o piso vem da natureza do
+    # item (mercado negro, autorização do Mestre), não da raridade antiga: aí
+    # a versão Comum reimaginada continua sendo a mesma bazuca ou a mesma
+    # lâmina perigosa, e o balcão exigido não pode sumir com o recálculo.
+    original_rarity = normalize_equipment_rarity(content.get("raridade"))
+    mantem_piso_original = (
+        original_rarity == "comum"
+        or content.get("requer_autorizacao_mestre") is True
+        or content.get("mercado_negro") is True
+    )
+    if (
+        equipment_rarity is not None
+        and mantem_piso_original
+        and isinstance(explicit, int)
+        and not isinstance(explicit, bool)
+        and 1 <= explicit <= 4
+    ):
+        level = max(level, explicit)
+    return level
 
 
 def _is_off_shop_catalog_item(row: dict[str, Any]) -> bool:
@@ -194,7 +274,7 @@ def _is_off_shop_catalog_item(row: dict[str, Any]) -> bool:
     categoria "Universal" é a rede de segurança: a linha do banco só recebe a
     marca quando o catálogo é ressincronizado, e enquanto isso não acontece
     (ou se alguém editar a entrada pela biblioteca do mestre e derrubar a
-    marca) a "Ameaça Genérica" voltaria à venda em Mercenários.
+    marca) o "Modelo de Criatura" voltaria à venda em Mercenários.
     """
     content = row.get("conteudo") if isinstance(row.get("conteudo"), dict) else {}
     if content.get("disponivelNaLoja") is False:
@@ -212,10 +292,15 @@ def _is_hidden_catalog_item(
 ) -> bool:
     content = row.get("conteudo") if isinstance(row.get("conteudo"), dict) else {}
     rarity = normalize_catalog_filter(content.get("raridade", ""))
+    rarity_hidden = bool(rarity and rarity in hidden_rarities)
+    if _is_configurable_equipment(row):
+        # A raridade publicada virou apenas a origem do cálculo do preço. O
+        # item continua visível se houver ao menos uma raridade encomendável.
+        rarity_hidden = all(value in hidden_rarities for value in EQUIPMENT_PURCHASE_RARITIES)
     return (
         _is_off_shop_catalog_item(row)
         or normalize_catalog_filter(row.get("id", "")) in hidden_items
-        or bool(rarity and rarity in hidden_rarities)
+        or rarity_hidden
     )
 
 
@@ -352,6 +437,14 @@ def _any_active_character(connection, campaign_id: UUID, character_id: UUID, *, 
             detail="escolha um personagem ativo desta campanha",
         )
     return row
+
+
+def _grant_notification_recipient_ids(connection, campaign_id: UUID, character_id: UUID) -> list[UUID]:
+    """Dono da ficha contemplada e Mestres ativos; nunca a mesa inteira."""
+    return [
+        *character_owner_ids(connection, campaign_id, [character_id]),
+        *campaign_member_ids(connection, campaign_id, roles=("mestre",)),
+    ]
 
 
 def _character_level_and_classes(character: dict[str, Any]) -> tuple[int, set[str]]:
@@ -639,14 +732,8 @@ def _validate_catalog_editor_item(payload: ShopCatalogDraftInput) -> dict[str, A
     }
 
 
-def _require_shop_editor(connection, campaign_id: UUID, user_id: UUID):
-    access = campaign_access(connection, campaign_id, user_id)
-    if not access.is_master:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="somente o mestre pode editar o catálogo da campanha",
-        )
-    return access
+def _require_shop_editor(connection, campaign_id: UUID, user: AuthenticatedUser) -> None:
+    require_creator_campaign(connection, campaign_id, user)
 
 
 @router.get("/editor/catalogo")
@@ -656,7 +743,7 @@ def list_campaign_catalog_editor(
     database: Database = Depends(get_database),
 ):
     with database.connection() as connection:
-        _require_shop_editor(connection, campanha_id, user.id)
+        _require_shop_editor(connection, campanha_id, user)
         official = connection.execute(
             """
             SELECT id, tipo, titulo, conteudo
@@ -711,7 +798,7 @@ def save_campaign_catalog_draft(
 ):
     document = _validate_catalog_editor_item(payload)
     with database.connection() as connection:
-        _require_shop_editor(connection, payload.campanha_id, user.id)
+        _require_shop_editor(connection, payload.campanha_id, user)
         current = connection.execute(
             """
             SELECT id, versao
@@ -793,7 +880,7 @@ def publish_campaign_catalog_item(
     database: Database = Depends(get_database),
 ):
     with database.connection() as connection:
-        _require_shop_editor(connection, payload.campanha_id, user.id)
+        _require_shop_editor(connection, payload.campanha_id, user)
         current = connection.execute(
             """
             SELECT id, item_id, rascunho, versao
@@ -863,7 +950,7 @@ def list_campaign_catalog_revisions(
     database: Database = Depends(get_database),
 ):
     with database.connection() as connection:
-        _require_shop_editor(connection, campanha_id, user.id)
+        _require_shop_editor(connection, campanha_id, user)
         belongs = connection.execute(
             "SELECT 1 FROM catalogo_itens_campanha WHERE id=%s AND campanha_id=%s",
             (editorial_id, campanha_id),
@@ -893,7 +980,7 @@ def restore_campaign_catalog_revision(
 ):
     """Restaura uma publicação anterior como rascunho, sem publicá-la."""
     with database.connection() as connection:
-        _require_shop_editor(connection, payload.campanha_id, user.id)
+        _require_shop_editor(connection, payload.campanha_id, user)
         current = connection.execute(
             """
             SELECT id, item_id, versao
@@ -971,6 +1058,7 @@ def get_shop_catalog(
     with database.connection() as connection:
         campaign_access(connection, campanha_id, user.id)
         rows = _visible_catalog_rows(connection, campanha_id)
+        hidden_rarities, _hidden_items, _hidden_locations = _shop_config(connection, campanha_id)
     now = datetime.now(timezone.utc)
     items = []
     for row in rows:
@@ -978,17 +1066,79 @@ def get_shop_catalog(
         if base_price is None:
             # Entrada publicada com preço inválido não pode aparecer como comprável.
             continue
-        shop_level = _catalog_shop_level(row)
+        configurable_equipment = _is_configurable_equipment(row)
+        shop_level = _catalog_shop_level(row, "comum" if configurable_equipment else None)
         content = row["conteudo"]
         price = base_price
-        promotion = resolve_promotion(row["id"], row["tipo"], content, base_price, shop_level, now=now)
-        if promotion is not None:
-            price, promo = promotion
+        promotion_level = _catalog_shop_level(row)
+        if configurable_equipment:
+            variant_base_prices = {
+                rarity: equipment_variant_price(content, row["tipo"], rarity)
+                for rarity in EQUIPMENT_PURCHASE_RARITIES
+                if rarity not in hidden_rarities
+            }
+            common_for_promotion = variant_base_prices.get("comum") or next(
+                (resolved for resolved in variant_base_prices.values() if resolved is not None),
+                None,
+            )
+            promotion = resolve_promotion(
+                row["id"], row["tipo"], content, common_for_promotion, promotion_level, now=now,
+            ) if common_for_promotion is not None else None
+            variant_prices = {
+                rarity: (
+                    _discount_equipment_price(resolved, promotion[1].discount_percent)
+                    if resolved is not None and promotion is not None
+                    else resolved
+                )
+                for rarity, resolved in variant_base_prices.items()
+            }
+            first_visible_rarity = next(iter(variant_prices), None)
+            if first_visible_rarity is None:
+                continue
+            shop_level = _catalog_shop_level(row, first_visible_rarity)
+            common_price = variant_prices.get("comum") or variant_prices[first_visible_rarity]
+            common_base_price = variant_base_prices.get("comum") or variant_base_prices[first_visible_rarity]
+            if common_price is None or common_base_price is None:
+                # Catálogo inválido ou moeda sem câmbio oficial: não anuncia
+                # um preço que o checkout não conseguiria reproduzir.
+                continue
+            price = common_price
             content = {
                 **content,
-                "preco_original": {base_price.moeda: base_price.valor},
-                "promocao": {"ativa": True, "rotulo": promo.label, "desconto_percentual": promo.discount_percent},
+                "raridade_catalogo_original": content.get("raridade"),
+                "raridade": "comum" if "comum" in variant_prices else first_visible_rarity,
+                "precos_por_raridade": {
+                    rarity: {resolved.moeda: resolved.valor}
+                    for rarity, resolved in variant_prices.items()
+                    if resolved is not None
+                },
+                "propriedades_por_raridade": {
+                    rarity: overrides
+                    for rarity in variant_prices
+                    if (overrides := equipment_variant_overrides(content, row["tipo"], rarity)) is not None
+                },
             }
+            if promotion is not None:
+                _promotional_price, promo = promotion
+                content = {
+                    **content,
+                    "preco_original": {common_base_price.moeda: common_base_price.valor},
+                    "precos_originais_por_raridade": {
+                        rarity: {resolved.moeda: resolved.valor}
+                        for rarity, resolved in variant_base_prices.items()
+                        if resolved is not None
+                    },
+                    "promocao": {"ativa": True, "rotulo": promo.label, "desconto_percentual": promo.discount_percent},
+                }
+        else:
+            promotion = resolve_promotion(row["id"], row["tipo"], content, base_price, promotion_level, now=now)
+            if promotion is not None:
+                price, promo = promotion
+                content = {
+                    **content,
+                    "preco_original": {base_price.moeda: base_price.valor},
+                    "promocao": {"ativa": True, "rotulo": promo.label, "desconto_percentual": promo.discount_percent},
+                }
         items.append(
             {
                 "id": row["id"],
@@ -1057,7 +1207,7 @@ def purchase_batch(
                 detail=f"o item {missing} nao esta disponivel nesta loja",
             )
         location = payload.localizacao_loja if payload.localizacao_loja is not None else 1
-        _hidden_rarities, _hidden_items, hidden_locations = _shop_config(
+        hidden_rarities, _hidden_items, hidden_locations = _shop_config(
             connection,
             payload.campanha_id,
             lock=True,
@@ -1067,15 +1217,21 @@ def purchase_batch(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="esta localizacao da loja nao esta liberada na campanha",
             )
-        unavailable = next(
-            (item for item in catalog.values() if _catalog_shop_level(item) > location),
-            None,
-        )
-        if unavailable:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"{unavailable['titulo']} exige uma localizacao de loja superior",
-            )
+        selected_rarities: dict[tuple[str, str | None, str, str], str | None] = {}
+        for line in payload.itens:
+            selected = _selected_equipment_rarity(catalog[line.item_id], line.raridade)
+            selected_rarities[(line.item_id, line.alvo_item_id, line.modo, line.raridade or "")] = selected
+            if selected is not None and selected in hidden_rarities:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail=f"a raridade {selected} nao esta disponivel nesta campanha",
+                )
+            required_level = _catalog_shop_level(catalog[line.item_id], selected)
+            if required_level > location:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail=f"{catalog[line.item_id]['titulo']} nessa raridade exige uma localizacao de loja superior",
+                )
         infracoes = []
         for item in catalog.values():
             content = item.get("conteudo") if isinstance(item.get("conteudo"), dict) else {}
@@ -1088,9 +1244,12 @@ def purchase_batch(
 
         totals: dict[str, dict[str, Any]] = {}
         purchased_items = []
+        selected_prices: dict[tuple[str, str | None, str, str], Any] = {}
         now = datetime.now(timezone.utc)
         for line in payload.itens:
+            line_key = (line.item_id, line.alvo_item_id, line.modo, line.raridade or "")
             item = catalog[line.item_id]
+            selected_rarity = selected_rarities[line_key]
             contratando = line.modo == "contratar"
             if contratando and item["tipo"] != "monstro":
                 raise HTTPException(
@@ -1103,30 +1262,55 @@ def purchase_batch(
                     status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                     detail=f"{item['titulo']} possui preco invalido no catalogo",
                 )
-            # Mesmo calculo da listagem (core/promotions.py): se o item esta
-            # em oferta nesta janela de 12h, cobra o preco com desconto, o
-            # mesmo que o jogador viu na vitrine. Contratacao (mensalidade e
-            # taxa de contratacao) nao entra em promocao - a oferta vale so
-            # pra quem esta comprando o servo/escravo pelo preco cheio.
-            if not contratando:
+            if selected_rarity is not None:
+                common_price = equipment_variant_price(item["conteudo"], item["tipo"], "comum")
+                price = equipment_variant_price(item["conteudo"], item["tipo"], selected_rarity)
+                if price is None or common_price is None:
+                    raise HTTPException(
+                        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                        detail=f"{item['titulo']} nao possui conversao de preco para essa raridade",
+                    )
+                promotion = resolve_promotion(
+                    item["id"], item["tipo"], item["conteudo"], common_price,
+                    _catalog_shop_level(item, "comum"), now=now,
+                )
+                if promotion is not None:
+                    price = _discount_equipment_price(price, promotion[1].discount_percent)
+            # Mesmo cálculo da listagem para itens sem raridade configurável.
+            # Contratação não entra em promoção.
+            elif not contratando:
                 promotion = resolve_promotion(
                     item["id"], item["tipo"], item["conteudo"], price, _catalog_shop_level(item), now=now,
                 )
                 if promotion is not None:
                     price, _promo = promotion
+            selected_prices[line_key] = price
             _add_total(totals, price.moeda, price.valor * line.quantidade)
             purchased_items.append(
                 {
-                    "item_id": item["id"],
+                    "item_id": _equipment_inventory_item_id(item, selected_rarity),
                     "titulo": item["titulo"],
                     "quantidade": line.quantidade,
+                    **({"raridade": selected_rarity} if selected_rarity is not None else {}),
                 }
             )
 
         wallet = _locked_wallet(connection, payload.campanha_id, payload.personagem_id)
         
         target_ids = [line.alvo_item_id for line in payload.itens if getattr(line, "alvo_item_id", None)]
-        all_inventory_ids = list(set(requested_ids + target_ids))
+        purchase_inventory_ids = [
+            _equipment_inventory_item_id(
+                catalog[line.item_id],
+                selected_rarities[(line.item_id, line.alvo_item_id, line.modo, line.raridade or "")],
+            )
+            for line in payload.itens
+        ]
+        if len(purchase_inventory_ids) != len(set(purchase_inventory_ids)):
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="o lote contem a mesma variante de equipamento mais de uma vez",
+            )
+        all_inventory_ids = list(set(purchase_inventory_ids + target_ids))
         
         existing_inventory = _locked_inventory(
             connection,
@@ -1134,14 +1318,24 @@ def purchase_batch(
             payload.personagem_id,
             all_inventory_ids,
         )
-        for item_id, existing in existing_inventory.items():
-            if item_id in target_ids:
+        expected_catalog_by_inventory_id = {
+            _equipment_inventory_item_id(
+                catalog[line.item_id],
+                selected_rarities[(line.item_id, line.alvo_item_id, line.modo, line.raridade or "")],
+            ): line.item_id
+            for line in payload.itens
+        }
+        for inventory_item_id, existing in existing_inventory.items():
+            if inventory_item_id in target_ids:
                 continue # Os alvos podem ter outras origens
             data = existing["dados"] if isinstance(existing["dados"], dict) else {}
-            if data.get("origem") != "loja" or data.get("catalogo_item_id") != item_id:
+            if (
+                data.get("origem") != "loja"
+                or data.get("catalogo_item_id") != expected_catalog_by_inventory_id.get(inventory_item_id)
+            ):
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
-                    detail=f"o item_id {item_id} ja e usado por um item sem origem verificavel",
+                    detail=f"o item_id {inventory_item_id} ja e usado por um item sem origem verificavel",
                 )
 
         debits = []
@@ -1184,6 +1378,10 @@ def purchase_batch(
         new_properties: list[dict[str, Any]] = []
         for line in payload.itens:
             item = catalog[line.item_id]
+            line_key = (line.item_id, line.alvo_item_id, line.modo, line.raridade or "")
+            selected_rarity = selected_rarities[line_key]
+            inventory_item_id = _equipment_inventory_item_id(item, selected_rarity)
+            selected_price = selected_prices[line_key]
             alvo_id = getattr(line, "alvo_item_id", None)
 
             if alvo_id:
@@ -1302,13 +1500,23 @@ def purchase_batch(
                 
                 if alvo:
                     modificacoes = alvo_dados.get("modificacoes", [])
-                    limite_modificacoes = alvo_dados.get("limite_modificacoes")
+                    if not isinstance(modificacoes, list):
+                        modificacoes = []
+                    limite_declarado = alvo_dados.get("limite_modificacoes")
+                    limite_raridade = modification_limit_for_rarity(alvo_dados.get("raridade"))
+                    try:
+                        limite_modificacoes = min(int(limite_declarado), limite_raridade) if limite_declarado is not None else limite_raridade
+                    except (TypeError, ValueError):
+                        limite_modificacoes = limite_raridade
                     slots_modificacao = alvo_dados.get("slots_modificacao")
                     
-                    if limite_modificacoes is not None and len(modificacoes) + line.quantidade > int(limite_modificacoes):
+                    if len(modificacoes) + line.quantidade > limite_modificacoes:
                         raise HTTPException(
                             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
-                            detail="o limite de modificacoes do item alvo foi excedido"
+                            detail=(
+                                f"o item alvo aceita {limite_modificacoes} modificacao(oes) "
+                                f"pela raridade {alvo_dados.get('raridade') or 'comum'}"
+                            ),
                         )
                     
                     if slots_modificacao is not None:
@@ -1381,7 +1589,7 @@ def purchase_batch(
                         detail="a instalacao direta em veiculos compartilhados requer a API de modulos",
                     )
 
-            existing = existing_inventory.get(line.item_id, {})
+            existing = existing_inventory.get(inventory_item_id, {})
             existing_quantity = int(existing.get("quantidade", 0))
             new_quantity = existing_quantity + line.quantidade
             if new_quantity > 1_000_000:
@@ -1391,13 +1599,29 @@ def purchase_batch(
                 )
             existing_data = existing.get("dados") if isinstance(existing.get("dados"), dict) else {}
             editable_state = _editable_instance_metadata(existing_data)
+            variant_content = (
+                equipment_variant_content(item["conteudo"], item["tipo"], selected_rarity)
+                if selected_rarity is not None
+                else dict(item["conteudo"] or {})
+            )
+            if variant_content is None:
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    detail=f"{item['titulo']} nao possui propriedades para essa raridade",
+                )
             item_data = {
                 **editable_state,
-                **(item["conteudo"] or {}),
+                **variant_content,
+                **({
+                    "raridade": selected_rarity,
+                    "preco": {selected_price.moeda: selected_price.valor},
+                    "raridade_catalogo_original": item["conteudo"].get("raridade"),
+                } if selected_rarity is not None else {}),
                 "tipo": item["tipo"],
                 "categoria": _inventory_category(item["tipo"]),
                 "origem": "loja",
                 "catalogo_item_id": item["id"],
+                "loja_item_id": inventory_item_id,
             }
             connection.execute(
                 """
@@ -1413,7 +1637,7 @@ def purchase_batch(
                 (
                     payload.campanha_id,
                     payload.personagem_id,
-                    item["id"],
+                    inventory_item_id,
                     item["titulo"],
                     new_quantity,
                     Jsonb(item_data),
@@ -1718,7 +1942,9 @@ def grant_batch(
         )
         notify(
             connection,
-            user_ids=campaign_member_ids(connection, payload.campanha_id),
+            user_ids=_grant_notification_recipient_ids(
+                connection, payload.campanha_id, payload.personagem_id,
+            ),
             category="campanha",
             title=titulo,
             message=mensagem,
@@ -1794,22 +2020,30 @@ def sell_batch(
 
         for item_id, item in inventory.items():
             data = item["dados"] if isinstance(item["dados"], dict) else {}
+            catalog_item_id = str(data.get("catalogo_item_id") or "").strip()
+            stored_inventory_id = str(data.get("loja_item_id") or "").strip()
             if (
                 data.get("origem") != "loja"
-                or data.get("catalogo_item_id") != item_id
+                or not catalog_item_id
+                or (stored_inventory_id and stored_inventory_id != item_id)
+                or (not stored_inventory_id and catalog_item_id != item_id)
             ):
                 raise HTTPException(
                     status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                     detail=f"o item {item_id} nao possui origem de loja verificavel",
                 )
 
+        requested_catalog_ids = list({
+            str(item["dados"].get("catalogo_item_id"))
+            for item in inventory.values()
+        })
         catalog = {
             row["id"]: row
             for row in _active_catalog_rows(
-                connection, payload.campanha_id, requested_ids, lock=True,
+                connection, payload.campanha_id, requested_catalog_ids, lock=True,
             )
         }
-        missing_catalog = next((item_id for item_id in requested_ids if item_id not in catalog), None)
+        missing_catalog = next((item_id for item_id in requested_catalog_ids if item_id not in catalog), None)
         if missing_catalog:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
@@ -1841,13 +2075,24 @@ def sell_batch(
                         "disponivel": int(stock["quantidade"]),
                     },
                 )
-            catalog_item = catalog[line.item_id]
+            catalog_item_id = str(stock_dados.get("catalogo_item_id"))
+            catalog_item = catalog[catalog_item_id]
             price = resolve_catalog_price(catalog_item["conteudo"])
             if price is None:
                 raise HTTPException(
                     status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                     detail=f"{catalog_item['titulo']} possui preco invalido no catalogo",
                 )
+            if _is_configurable_equipment(catalog_item):
+                selected_rarity = normalize_equipment_rarity(stock_dados.get("raridade"))
+                price = equipment_variant_price(
+                    catalog_item["conteudo"], catalog_item["tipo"], selected_rarity,
+                )
+                if price is None:
+                    raise HTTPException(
+                        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                        detail=f"{stock['titulo']} possui raridade ou preco de compra invalido",
+                    )
             reward = resale_value(price)
             _add_total(totals, reward.moeda, reward.valor * line.quantidade)
             sold_items.append(

@@ -16,6 +16,7 @@ from core.dependencies import (
     get_current_user,
     get_database,
     require_campaign_manager,
+    require_creator_campaign,
     require_csrf,
 )
 from core.notifications import campaign_member_ids, notify
@@ -26,6 +27,7 @@ from schemas import (
     CampaignInviteInput,
     CampaignOwnerInput,
     CampaignUpdateInput,
+    CampaignVisibilityUpdateInput,
     JoinCampaignInput,
     MemberRoleInput,
 )
@@ -179,20 +181,19 @@ def update_campaign(
                 detail="somente o mestre altera a campanha",
             )
         current = connection.execute(
-            "SELECT nome, descricao, configuracoes FROM campanhas WHERE id=%s FOR UPDATE",
+            "SELECT nome, descricao FROM campanhas WHERE id=%s FOR UPDATE",
             (campaign_id,),
         ).fetchone()
         row = connection.execute(
             """
             UPDATE campanhas
-            SET nome=%s, descricao=%s, configuracoes=%s, atualizado_em=CURRENT_TIMESTAMP
+            SET nome=%s, descricao=%s, atualizado_em=CURRENT_TIMESTAMP
             WHERE id=%s AND status='ativa'
             RETURNING id, dono_id, nome, descricao, configuracoes, status, atualizado_em
             """,
             (
                 payload.nome if payload.nome is not None else current["nome"],
                 payload.descricao if payload.descricao is not None else current["descricao"],
-                Jsonb(payload.configuracoes) if payload.configuracoes is not None else Jsonb(current["configuracoes"]),
                 campaign_id,
             ),
         ).fetchone()
@@ -207,6 +208,36 @@ def update_campaign(
                 "nome_anterior": current["nome"],
                 "nome_novo": row["nome"],
             },
+        )
+    return {"campanha": dict(row)}
+
+
+@router.put("/{campaign_id}/visibilidade")
+def update_campaign_visibility(
+    campaign_id: UUID,
+    payload: CampaignVisibilityUpdateInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """Atualiza a visibilidade/liberacoes da campanha: exclusivo do criador."""
+    with database.connection() as connection:
+        require_creator_campaign(connection, campaign_id, user)
+        row = connection.execute(
+            """
+            UPDATE campanhas
+            SET configuracoes=%s, atualizado_em=CURRENT_TIMESTAMP
+            WHERE id=%s AND status='ativa'
+            RETURNING id, dono_id, nome, descricao, configuracoes, status, atualizado_em
+            """,
+            (Jsonb(payload.configuracoes), campaign_id),
+        ).fetchone()
+        record_audit(
+            connection,
+            action="campanha.visibilidade_atualizada",
+            actor_user_id=user.id,
+            campaign_id=campaign_id,
+            target_type="campanha",
+            target_id=str(campaign_id),
         )
     return {"campanha": dict(row)}
 
