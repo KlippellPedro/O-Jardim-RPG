@@ -24,30 +24,35 @@ export default function Home() {
       description: 'Criar e gerenciar seus personagens e inventário.',
       iconUrl: '/assets/img/icons/menu/ficha.webp',
       path: '/ficha',
+      dieSides: 20 as const,
     },
     {
       title: 'Mundo',
       description: 'Deidades, fluxos, reinos e cronologias da lore.',
       iconUrl: '/assets/img/icons/menu/mundo.webp',
       path: '/mundo',
+      dieSides: 12 as const,
     },
     {
       title: 'Livro',
       description: 'Mecânicas, atributos, testes e rituais.',
       iconUrl: '/assets/img/icons/menu/regras.webp',
       path: '/regras',
+      dieSides: 10 as const,
     },
     {
       title: 'Loja',
       description: 'Armas, equipamentos, poções e mercadores.',
       iconUrl: '/assets/img/icons/menu/loja.webp',
       path: '/loja',
+      dieSides: 6 as const,
     },
     {
       title: 'Sessão ao Vivo',
       description: 'Iniciativa, combate e vida em tempo real.',
       iconUrl: '/assets/img/icons/menu/sessao-ao-vivo.png',
       path: '/sessao',
+      dieSides: 4 as const,
     },
   ];
 
@@ -94,6 +99,7 @@ export default function Home() {
               title={mod.title}
               description={mod.description}
               iconUrl={mod.iconUrl}
+              dieSides={mod.dieSides}
             />
           </motion.button>
         ))}

@@ -4,13 +4,13 @@ import {
   Settings, X, User, Crown, Bell, Swords, Gem, Shield, Volume2,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
+import { useSettingsPanelStore, SettingsPanelType } from '../../store/useSettingsPanelStore';
 import { useNavigate } from 'react-router-dom';
 import { useModalSfx } from '../../hooks/useSfx';
 import { usePerformanceProfile } from '../../hooks/usePerformance';
 import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
 
 const ContaPanel = lazy(() => import('./ContaPanel').then((module) => ({ default: module.ContaPanel })));
-const MestrePanel = lazy(() => import('./MestrePanel').then((module) => ({ default: module.MestrePanel })));
 const AvisosPanel = lazy(() => import('./AvisosPanel').then((module) => ({ default: module.AvisosPanel })));
 const CampanhasPanel = lazy(() => import('./CampanhasPanel').then((module) => ({ default: module.CampanhasPanel })));
 const PreferenciasPanel = lazy(() => import('./PreferenciasPanel').then((module) => ({ default: module.PreferenciasPanel })));
@@ -18,7 +18,7 @@ const PreferenciasPanel = lazy(() => import('./PreferenciasPanel').then((module)
 // ────────────────────────────────────────────────────────────
 // Tipos
 // ────────────────────────────────────────────────────────────
-type PanelType = 'conta' | 'avisos' | 'campanhas' | 'mestre' | 'preferencias' | null;
+type PanelType = SettingsPanelType;
 
 // ────────────────────────────────────────────────────────────
 // Role Badge
@@ -58,11 +58,6 @@ const PANELS: Record<
     title: 'Mesas e Campanhas',
     icon: <Swords className="text-blue-400" size={20} />,
     component: CampanhasPanel,
-  },
-  mestre: {
-    title: 'Painel do Mestre',
-    icon: <Crown className="text-red-400" size={20} />,
-    component: MestrePanel,
   },
   preferencias: {
     title: 'Preferências',
@@ -104,8 +99,11 @@ const DropdownItem = ({
 // ────────────────────────────────────────────────────────────
 export const SettingsMenu: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [activePanel, setActivePanel] = useState<PanelType>(null);
+  const activePanel = useSettingsPanelStore((state) => state.activePanel);
+  const openSettingsPanel = useSettingsPanelStore((state) => state.openPanel);
+  const closeSettingsPanel = useSettingsPanelStore((state) => state.closePanel);
   const panelRef = useRef<HTMLDivElement>(null);
+  const panelBackdropRef = useRef<HTMLDivElement>(null);
   const panelCloseRef = useRef<HTMLButtonElement>(null);
 
   const usuario = useAuthStore((state) => state.usuario);
@@ -129,8 +127,10 @@ export const SettingsMenu: React.FC = () => {
     usuario.papel_plataforma === 'admin' ||
     usuario.papel_plataforma === 'criador';
 
+  const canSeeCreator = usuario.papel_plataforma === 'criador';
+
   const openPanel = (panel: PanelType) => {
-    setActivePanel(panel);
+    openSettingsPanel(panel);
     setIsDropdownOpen(false);
   };
 
@@ -145,8 +145,9 @@ export const SettingsMenu: React.FC = () => {
   useDialogAccessibility({
     open: Boolean(activePanel),
     dialogRef: panelRef,
+    backdropRef: panelBackdropRef,
     initialFocusRef: panelCloseRef,
-    onClose: () => setActivePanel(null),
+    onClose: () => closeSettingsPanel(),
   });
 
   useEffect(() => {
@@ -255,6 +256,17 @@ export const SettingsMenu: React.FC = () => {
                 />
               )}
 
+              {canSeeCreator && (
+                <DropdownItem
+                  label="Painel do Criador"
+                  badge={<Crown size={14} className="text-primary/60" />}
+                  onClick={() => {
+                    setIsDropdownOpen(false);
+                    navigate('/criador');
+                  }}
+                />
+              )}
+
               {canSeeAdmin && (
                 <DropdownItem
                   label="Administração"
@@ -280,10 +292,11 @@ export const SettingsMenu: React.FC = () => {
           <>
             {/* Backdrop */}
             <motion.div
+              ref={panelBackdropRef}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setActivePanel(null)}
+              onClick={() => closeSettingsPanel()}
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60]"
             />
 
@@ -321,7 +334,7 @@ export const SettingsMenu: React.FC = () => {
                 </div>
                 <button
                   ref={panelCloseRef}
-                  onClick={() => setActivePanel(null)}
+                  onClick={() => closeSettingsPanel()}
                   data-sfx="off"
                   className="p-2 hover:bg-white/10 rounded-full text-gray-400 hover:text-white transition-colors"
                   aria-label="Fechar painel"

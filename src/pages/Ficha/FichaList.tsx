@@ -1,58 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useCharacterStore } from '../../store/useCharacterStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { Search, Plus, Trash2, Camera, HelpCircle, Shield, Sword } from 'lucide-react';
+import { useSettingsPanelStore } from '../../store/useSettingsPanelStore';
+import { Search, Plus, HelpCircle, ArrowLeftRight } from 'lucide-react';
 import { carregarCatalogo } from '../../services/catalogoService';
 import { ICatalogo } from '../../types/catalogo';
+import { ICharacter } from '../../types/character';
 import { nomeExibicaoRaca } from '../../services/racaService';
 
 import { FichaWizard } from './Wizard/FichaWizard';
 import { ModalPortal } from './components/ModalPortal';
-
-const TIPOS_FOTO_ACEITOS = new Set(['image/jpeg', 'image/png', 'image/webp']);
-const TAMANHO_MAXIMO_FOTO = 10 * 1024 * 1024;
-const RESOLUCAO_FOTO = 512;
-
-const carregarImagem = (file: File): Promise<HTMLImageElement> => new Promise((resolve, reject) => {
-  const objectUrl = URL.createObjectURL(file);
-  const image = new Image();
-  image.onload = () => {
-    URL.revokeObjectURL(objectUrl);
-    resolve(image);
-  };
-  image.onerror = () => {
-    URL.revokeObjectURL(objectUrl);
-    reject(new Error('Não foi possível abrir a imagem selecionada.'));
-  };
-  image.src = objectUrl;
-});
-
-const prepararFotoPersonagem = async (file: File): Promise<string> => {
-  if (!TIPOS_FOTO_ACEITOS.has(file.type)) {
-    throw new Error('Escolha uma imagem JPG, PNG ou WebP.');
-  }
-  if (file.size > TAMANHO_MAXIMO_FOTO) {
-    throw new Error('A imagem precisa ter no máximo 10 MB.');
-  }
-
-  const image = await carregarImagem(file);
-  const recorte = Math.min(image.naturalWidth, image.naturalHeight);
-  if (!recorte) throw new Error('A imagem selecionada não possui dimensões válidas.');
-
-  const tamanho = Math.min(RESOLUCAO_FOTO, recorte);
-  const canvas = document.createElement('canvas');
-  canvas.width = tamanho;
-  canvas.height = tamanho;
-  const context = canvas.getContext('2d');
-  if (!context) throw new Error('O navegador não conseguiu preparar a imagem.');
-
-  const origemX = (image.naturalWidth - recorte) / 2;
-  const origemY = (image.naturalHeight - recorte) / 2;
-  context.drawImage(image, origemX, origemY, recorte, recorte, 0, 0, tamanho, tamanho);
-  return canvas.toDataURL('image/webp', 0.82);
-};
+import { PersonagemWantedCard } from './components/PersonagemWantedCard';
+import { AjustarFotoModal } from './components/AjustarFotoModal';
 
 const FichaList: React.FC = () => {
   const navigate = useNavigate();
@@ -65,18 +26,21 @@ const FichaList: React.FC = () => {
     patchCharacter,
     flushCharacterSaves,
   } = useCharacterStore();
-  const { usuario } = useAuthStore();
+  const { usuario, campanhaAtiva } = useAuthStore();
+  const openSettingsPanel = useSettingsPanelStore((state) => state.openPanel);
   const [searchTerm, setSearchTerm] = useState('');
   const [showHelp, setShowHelp] = useState(false);
   const [showWizard, setShowWizard] = useState(false);
   const [catalogo, setCatalogo] = useState<ICatalogo | null>(null);
   const [salvandoFotoId, setSalvandoFotoId] = useState<string | null>(null);
   const [mensagemFoto, setMensagemFoto] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
-  const fotoInputsRef = useRef<Record<string, HTMLInputElement | null>>({});
+  const [personagemEditandoFoto, setPersonagemEditandoFoto] = useState<ICharacter | null>(null);
 
   useEffect(() => {
     fetchCharacters();
-  }, [fetchCharacters]);
+    // Refaz a busca quando a campanha ativa muda (ex.: botão "Trocar Campanha"
+    // trocando via CampanhasPanel sem sair desta tela).
+  }, [fetchCharacters, campanhaAtiva?.id]);
 
   useEffect(() => {
     carregarCatalogo().then(setCatalogo);
@@ -89,29 +53,22 @@ const FichaList: React.FC = () => {
     char.nome.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const escolherFoto = (event: React.MouseEvent<HTMLButtonElement>, personagemId: string) => {
-    event.stopPropagation();
-    fotoInputsRef.current[personagemId]?.click();
-  };
+  const confirmarFoto = async (dataUrl: string) => {
+    const personagem = personagemEditandoFoto;
+    if (!personagem) return;
 
-  const trocarFoto = async (event: React.ChangeEvent<HTMLInputElement>, personagemId: string) => {
-    const input = event.currentTarget;
-    const file = input.files?.[0];
-    input.value = '';
-    if (!file) return;
-
-    setSalvandoFotoId(personagemId);
+    setSalvandoFotoId(personagem.id);
     setMensagemFoto(null);
     try {
-      const foto = await prepararFotoPersonagem(file);
-      if (!patchCharacter(personagemId, ['ficha', 'foto'], foto)) {
+      if (!patchCharacter(personagem.id, ['ficha', 'foto'], dataUrl)) {
         throw new Error('O personagem não foi encontrado para receber a foto.');
       }
-      const sincronizada = await flushCharacterSaves(personagemId);
+      const sincronizada = await flushCharacterSaves(personagem.id);
       if (!sincronizada) {
         throw new Error('A foto foi aplicada localmente, mas não foi sincronizada. Tente novamente.');
       }
       setMensagemFoto({ tipo: 'sucesso', texto: 'Foto do personagem atualizada.' });
+      setPersonagemEditandoFoto(null);
     } catch (photoError) {
       setMensagemFoto({
         tipo: 'erro',
@@ -137,7 +94,21 @@ const FichaList: React.FC = () => {
           </ModalPortal>
         )}
       </AnimatePresence>
-      
+
+      <AnimatePresence>
+        {personagemEditandoFoto && (
+          <ModalPortal manageFocus={false} onClose={() => setPersonagemEditandoFoto(null)}>
+            <AjustarFotoModal
+              nome={personagemEditandoFoto.nome}
+              fotoAtual={personagemEditandoFoto.foto ?? null}
+              salvando={salvandoFotoId === personagemEditandoFoto.id}
+              onCancelar={() => setPersonagemEditandoFoto(null)}
+              onConfirmar={confirmarFoto}
+            />
+          </ModalPortal>
+        )}
+      </AnimatePresence>
+
       {/* Header */}
       <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
         <div>
@@ -147,10 +118,22 @@ const FichaList: React.FC = () => {
           <p className="text-gray-400 text-lg max-w-xl">
             Abra uma ficha existente ou crie um novo personagem para a campanha atual.
           </p>
+          {campanhaAtiva && (
+            <p className="mt-2 text-sm text-primary/70">⚔ {campanhaAtiva.nome}</p>
+          )}
         </div>
-        
+
         <div className="responsive-action-row flex items-center gap-3 sm:gap-4">
-          <button 
+          <button
+            type="button"
+            onClick={() => openSettingsPanel('campanhas')}
+            className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors text-gray-300 hover:text-white"
+          >
+            <ArrowLeftRight size={18} />
+            <span className="font-medium tracking-wide">Trocar Campanha</span>
+          </button>
+
+          <button
             onClick={() => setShowWizard(true)}
             className="relative group px-6 py-3 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/30 transition-all shadow-[0_0_20px_rgba(var(--color-primary),0.1)] hover:shadow-[0_0_30px_rgba(var(--color-primary),0.3)] overflow-hidden flex items-center gap-2"
           >
@@ -253,120 +236,45 @@ const FichaList: React.FC = () => {
           </button>
         </motion.div>
       ) : (
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,18rem),1fr))] gap-5 sm:gap-8">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-x-5 gap-y-10 sm:gap-x-8">
           <AnimatePresence>
-            {filteredCharacters.map((char, index) => (
-              <motion.div
-                key={char.id}
-                onClick={() => navigate(`/ficha/${char.id}`)}
-                role="link"
-                tabIndex={0}
-                aria-label={`Abrir ficha de ${char.nome}`}
-                onKeyDown={(event) => {
-                  if (event.target !== event.currentTarget) return;
-                  if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    navigate(`/ficha/${char.id}`);
-                  }
-                }}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4, delay: Math.min(index * 0.1, 0.5) }}
-                className="content-auto-list-item performance-expensive-effects group flex flex-col bg-[#0b0a12]/60 backdrop-blur-xl border border-white/10 hover:border-primary/40 rounded-3xl overflow-hidden shadow-xl hover:shadow-[0_0_30px_rgba(var(--color-primary),0.15)] transition-all cursor-pointer relative"
-              >
-                {/* Glow Effect */}
-                <div className="absolute -inset-0.5 bg-gradient-to-br from-primary/0 via-primary/10 to-purple-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
-                
-                <div className="p-6 relative z-10 flex gap-6 items-center border-b border-white/5">
-                  <div className="w-20 h-20 rounded-2xl bg-black/50 border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-inner">
-                    {char.foto ? (
-                      <img src={char.foto} alt={char.nome} loading="lazy" decoding="async" className="w-full h-full object-cover" />
-                    ) : (
-                      <span className="text-3xl font-bold text-gray-500" style={{fontFamily: 'Cinzel, serif'}}>
-                        {char.nome.charAt(0).toUpperCase()}
-                      </span>
-                    )}
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-1">
-                      <span className="px-2 py-0.5 rounded-md bg-white/10 text-gray-300 text-xs font-bold tracking-wider">
-                        NV. {char.nivel}
-                      </span>
-                    </div>
-                    <h2 className="text-2xl font-bold text-white truncate group-hover:text-primary transition-colors" style={{fontFamily: 'Cinzel, serif'}}>
-                      {char.nome}
-                    </h2>
-                    <p className="text-sm text-gray-400 truncate mt-1">
-                      {(() => {
-                        const racaCatalogo = catalogo?.racas.find((r) => r.id === char.racaId);
-                        const classeCatalogo = catalogo?.classes.find((c) => c.id === char.classeId);
-                        const nomeRaca = char.racaId
-                          ? nomeExibicaoRaca(char.racaId, char.ficha?.racaNomePersonalizado, racaCatalogo?.titulo) || 'Raça a definir'
-                          : 'Raça a definir';
-                        return `${nomeRaca} · ${classeCatalogo?.titulo || char.classeId || 'Classe'}`;
-                      })()}
-                    </p>
-                  </div>
-                </div>
+            {filteredCharacters.map((char, index) => {
+              const racaCatalogo = catalogo?.racas.find((r) => r.id === char.racaId);
+              const nomeRaca = char.racaId
+                ? nomeExibicaoRaca(char.racaId, char.ficha?.racaNomePersonalizado, racaCatalogo?.titulo) || 'Raça a definir'
+                : 'Raça a definir';
 
-                <div className="px-6 py-4 relative z-10 flex-1 flex flex-col justify-between gap-4">
-                  <div className="flex justify-between items-center bg-black/30 rounded-xl p-3 border border-white/5">
-                    <div className="flex items-center gap-2">
-                      <Shield size={16} className="text-green-400" />
-                      <span className="text-sm text-gray-300">HP {char.derivados?.vida || 0}</span>
-                    </div>
-                    <div className="w-px h-4 bg-white/10"></div>
-                    <div className="flex items-center gap-2">
-                      <Sword size={16} className="text-blue-400" />
-                      <span className="text-sm text-gray-300">MP {char.derivados?.mana || 0}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between mt-2">
-                    <span className="text-xs text-gray-500">
-                      Criado em {new Date(char.criadoEm).toLocaleDateString('pt-BR')}
-                    </span>
-                    
-                    <div className="flex items-center gap-2">
-                      <input
-                        ref={(node) => { fotoInputsRef.current[char.id] = node; }}
-                        type="file"
-                        accept="image/jpeg,image/png,image/webp"
-                        className="sr-only"
-                        aria-label={`Escolher foto de ${char.nome}`}
-                        onClick={(event) => event.stopPropagation()}
-                        onChange={(event) => void trocarFoto(event, char.id)}
-                      />
-                      <button
-                        type="button"
-                        onClick={(event) => escolherFoto(event, char.id)}
-                        disabled={salvandoFotoId === char.id}
-                        className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors disabled:cursor-wait disabled:opacity-50"
-                        title={salvandoFotoId === char.id ? 'Salvando foto...' : 'Trocar foto'}
-                        aria-label={salvandoFotoId === char.id ? `Salvando foto de ${char.nome}` : `Trocar foto de ${char.nome}`}
-                      >
-                        <Camera size={18} />
-                      </button>
-                      <button 
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (window.confirm(`Excluir ${char.nome}?`)) {
-                            archiveCharacter(char.id);
-                          }
-                        }}
-                        className="p-2 rounded-lg hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-colors" title="Excluir"
-                        aria-label={`Excluir ${char.nome}`}
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+              // Personagem multiclasse: mesma resolução de PersonagemSheet.tsx,
+              // ficha.classes é a fonte real (char.classeId é só o legado de classe única).
+              const classeIds: string[] = char.ficha?.classes?.length
+                ? char.ficha.classes
+                    .map((slot: { classeId?: string }) => slot.classeId)
+                    .filter((id: unknown): id is string => typeof id === 'string' && Boolean(id))
+                : (char.classeId ? [char.classeId] : []);
+              const nomesClasses = classeIds
+                .map((id) => catalogo?.classes.find((c) => c.id === id)?.titulo)
+                .filter((titulo): titulo is string => Boolean(titulo));
+              const nomeClasse = nomesClasses.length ? nomesClasses.join(' · ') : (char.classeId || 'Classe');
+
+              return (
+                <PersonagemWantedCard
+                  key={char.id}
+                  personagem={char}
+                  index={index}
+                  nomeRaca={nomeRaca}
+                  nomeClasse={nomeClasse}
+                  salvandoFoto={salvandoFotoId === char.id}
+                  onAbrir={() => navigate(`/ficha/${char.id}`)}
+                  onAbrirEditorFoto={() => setPersonagemEditandoFoto(char)}
+                  onExcluir={(event) => {
+                    event.stopPropagation();
+                    if (window.confirm(`Excluir ${char.nome}?`)) {
+                      archiveCharacter(char.id);
+                    }
+                  }}
+                />
+              );
+            })}
           </AnimatePresence>
         </div>
       )}

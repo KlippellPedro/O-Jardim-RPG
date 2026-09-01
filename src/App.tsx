@@ -23,6 +23,7 @@ const MundoPage = lazy(() => import('./pages/Mundo/MundoPage').then((module) => 
 const LojaPage = lazy(() => import('./pages/Loja/LojaPage').then((module) => ({ default: module.LojaPage })));
 const MateriaisPage = lazy(() => import('./pages/Materiais/MateriaisPage').then((module) => ({ default: module.MateriaisPage })));
 const MasterPage = lazy(() => import('./pages/Mestre/MasterPage'));
+const CreatorPage = lazy(() => import('./pages/Criador/CreatorPage'));
 const CofrePage = lazy(() => import('./pages/Cofre/CofrePage').then((module) => ({ default: module.CofrePage })));
 const EntidadesPage = lazy(() => import('./pages/Entidades/EntidadesPage').then((module) => ({ default: module.EntidadesPage })));
 const EntidadesSobrePage = lazy(() => import('./pages/Entidades/EntidadesSobrePage').then((module) => ({ default: module.EntidadesSobrePage })));
@@ -49,6 +50,7 @@ interface ProtectedRouteProps {
   requireCampaign?: boolean;
   requireAdmin?: boolean; // BUG-01: nova prop para proteger rotas administrativas
   requireCampaignManager?: boolean;
+  requireCreator?: boolean;
 }
 
 const ProtectedRoute = ({
@@ -56,6 +58,7 @@ const ProtectedRoute = ({
   requireCampaign = false,
   requireAdmin = false,
   requireCampaignManager = false,
+  requireCreator = false,
 }: ProtectedRouteProps) => {
   const usuario = useAuthStore((state) => state.usuario);
   const isInitialized = useAuthStore((state) => state.isInitialized);
@@ -91,6 +94,10 @@ const ProtectedRoute = ({
     const managesCampaign = campanhaAtiva?.papel === 'mestre' || campanhaAtiva?.papel === 'assistente';
     if (!managesCampaign) return <Navigate to="/" replace />;
   }
+
+  // Painel do Criador: cargo global, não depende de ter uma campanha ativa -
+  // o próprio painel deixa escolher qualquer campanha da plataforma.
+  if (requireCreator && usuario.papel_plataforma !== 'criador') return <Navigate to="/" replace />;
 
   return children;
 };
@@ -226,6 +233,15 @@ function App() {
                 }
               />
 
+              <Route
+                path="/criador"
+                element={
+                  <ProtectedRoute requireCreator>
+                    <CreatorPage />
+                  </ProtectedRoute>
+                }
+              />
+
               {/* Páginas em construção */}
               <Route
                 path="/mundo"
@@ -237,6 +253,40 @@ function App() {
               />
               <Route
                 path="/mundo/arvores/:arvoreId"
+                element={
+                  <ProtectedRoute>
+                    <MundoPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/mundo/arvores/:arvoreId/:entryType/:entryId"
+                element={
+                  <ProtectedRoute>
+                    <MundoPage />
+                  </ProtectedRoute>
+                }
+              />
+              {/* O Vazio não é uma Árvore, então tem rota própria em vez de
+                  viver debaixo de /mundo/arvores/. */}
+              <Route
+                path="/mundo/vazio"
+                element={
+                  <ProtectedRoute>
+                    <MundoPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/mundo/vazio/:entryType/:entryId"
+                element={
+                  <ProtectedRoute>
+                    <MundoPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/mundo/universal"
                 element={
                   <ProtectedRoute>
                     <MundoPage />

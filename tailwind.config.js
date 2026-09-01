@@ -9,7 +9,9 @@ export default {
       colors: {
         background: '#0b0a12',
         surface: 'rgba(255, 255, 255, 0.05)',
-        primary: '#c4a052' // golden touch
+        primary: '#c4a052', // golden touch
+        'primary-light': '#d8bd75',
+        'primary-dark': '#7f6835',
       }
     },
   },
