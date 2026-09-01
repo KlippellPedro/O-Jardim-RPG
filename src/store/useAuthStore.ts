@@ -37,6 +37,8 @@ export interface ICampanha {
     arvores_oculto?: string[];
     entidades_revelado?: string[];
     entidades_oculto?: string[];
+    cronologia_geral_oculta?: boolean;
+    registros_universais_ocultos?: boolean;
     personagens_pastas?: Array<{ id: string; nome: string }>;
     personagens_pasta_por_id?: Record<string, string>;
     personagens_ordem?: string[];
@@ -44,6 +46,10 @@ export interface ICampanha {
     classes_liberadas?: string[];
     raridades_ocultas?: string[];
     itens_ocultos?: string[];
+    /** Chaves "{arvoreId}:tese" | "{arvoreId}:atmosfera" | "{arvoreId}:historia" | "{arvoreId}:cronologia". */
+    cronica_secoes_ocultas?: string[];
+    /** Ids de eventos de `cronicas-arvores.json` escondidos da Linha do tempo da Árvore. */
+    cronica_eventos_ocultos?: string[];
     [key: string]: any;
   };
 }

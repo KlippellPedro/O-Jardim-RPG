@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
-import { HelpCircle, Search, X } from 'lucide-react';
+import { Check, ChevronDown, HelpCircle, Search, X } from 'lucide-react';
 import { AjusteButton } from './AjustesFichaModal';
 import { ModalPortal } from './ModalPortal';
+import { Select, type SelectOption } from '../../../components/ui/Select';
 
 export const SectionTitle = ({ title }: { title: string }) => (
   <div className="flex items-center gap-4 mb-5">
@@ -26,35 +27,101 @@ export const LabeledInput = ({ label, value, placeholder = '', onChange, readOnl
   </div>
 );
 
-export const LabeledSelect = ({ label, value, options, onChange }: any) => (
-  <div className="flex flex-col gap-1">
-    <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">{label}</label>
-    <select
-      aria-label={label}
+interface LabeledSelectProps {
+  label?: string;
+  value?: string | null;
+  options: Array<SelectOption | string>;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  className?: string;
+  name?: string;
+}
+
+export const LabeledSelect = ({
+  label,
+  value,
+  options,
+  onChange,
+  placeholder = 'Selecione...',
+  disabled = false,
+  className = '',
+  name,
+}: LabeledSelectProps) => (
+  <div className="flex min-w-0 flex-col gap-1">
+    {label ? <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">{label}</label> : null}
+    <Select
+      ariaLabel={label}
+      name={name}
       value={value || ''}
-      onChange={(event) => onChange(event.target.value)}
-      className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors appearance-none cursor-pointer"
-    >
-      <option value="">Selecione...</option>
-      {options.map((option: any) => (
-        <option key={option.value ?? option} value={option.value ?? option}>{option.label ?? option}</option>
-      ))}
-    </select>
+      onChange={onChange}
+      placeholder={placeholder}
+      disabled={disabled}
+      options={options.map((option) => typeof option === 'string' ? { value: option, label: option } : option)}
+      className={`w-full bg-[#121118] border-white/5 ${className}`}
+    />
   </div>
 );
 
-export const LabeledModalSelect = ({ label, value, options, onChange, placeholder = 'Selecione...', disabled = false }: any) => {
+export interface ModalSelectOption {
+  value: string;
+  label: string;
+  description?: string;
+  meta?: string;
+  eyebrow?: string;
+  color?: string;
+  secondaryColor?: string;
+  glow?: string;
+  searchText?: string;
+}
+
+type ModalSelectIdentity = 'arvore' | 'raca' | 'classe' | 'origem';
+
+interface LabeledModalSelectProps {
+  label?: string;
+  value?: string | null;
+  options: Array<ModalSelectOption | string>;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  identity?: ModalSelectIdentity;
+}
+
+const optionValue = (option: ModalSelectOption | string) => typeof option === 'object' ? option.value : option;
+const optionLabel = (option?: ModalSelectOption | string) => typeof option === 'object' ? option.label : option;
+const optionDetails = (option?: ModalSelectOption | string): ModalSelectOption | undefined => (
+  typeof option === 'object' ? option : undefined
+);
+
+export const LabeledModalSelect = ({
+  label,
+  value,
+  options,
+  onChange,
+  placeholder = 'Selecione...',
+  disabled = false,
+  identity,
+}: LabeledModalSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [busca, setBusca] = useState('');
-  const optionValue = (option: any) => typeof option === 'object' ? option.value : option;
-  const optionLabel = (option: any) => typeof option === 'object' ? option.label : option;
-  const selected = options.find((option: any) => optionValue(option) === value);
+  const selected = options.find((option) => optionValue(option) === value);
+  const selectedDetails = optionDetails(selected);
   const selectedLabel = optionLabel(selected) || value || placeholder;
   const buscaNormalizada = busca.trim().toLocaleLowerCase('pt-BR');
-  const opcoesFiltradas = options.filter((option: any) => (
-    !buscaNormalizada
-    || String(optionLabel(option) || '').toLocaleLowerCase('pt-BR').includes(buscaNormalizada)
-  ));
+  const opcoesFiltradas = options.filter((option) => {
+    if (!buscaNormalizada) return true;
+    const details = optionDetails(option);
+    return [optionLabel(option), details?.description, details?.meta, details?.eyebrow, details?.searchText]
+      .filter(Boolean)
+      .join(' ')
+      .toLocaleLowerCase('pt-BR')
+      .includes(buscaNormalizada);
+  });
+  const identityStyle = {
+    '--identity-color': selectedDetails?.color || '#c7a44c',
+    '--identity-secondary': selectedDetails?.secondaryColor || '#5f4a1f',
+    '--identity-glow': selectedDetails?.glow || 'rgba(199,164,76,0.24)',
+  } as CSSProperties;
 
   const fechar = () => {
     setIsOpen(false);
@@ -63,26 +130,54 @@ export const LabeledModalSelect = ({ label, value, options, onChange, placeholde
 
   return (
     <>
-      <div className="flex flex-col gap-1">
+      <div className={`flex min-w-0 flex-col gap-1 ${identity ? 'ficha-identity-select' : ''}`} style={identity ? identityStyle : undefined}>
         {label && <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">{label}</label>}
         <button
           type="button"
           onClick={() => { if (!disabled) setIsOpen(true); }}
+          aria-haspopup="dialog"
+          aria-expanded={isOpen}
           aria-disabled={disabled}
-          className={`flex min-w-0 items-center justify-between rounded-md border border-white/5 bg-[#121118] px-3 py-2.5 text-left text-sm text-gray-300 transition-colors ${disabled ? 'cursor-not-allowed opacity-60' : 'hover:border-[#c7a44c]/50 cursor-pointer'}`}
+          aria-label={`${label || 'Opção'}: ${selectedLabel}`}
+          className={identity
+            ? `ficha-identity-select__trigger ${!value ? 'is-empty' : ''} ${disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`
+            : `flex min-w-0 items-center justify-between rounded-md border border-white/5 bg-[#121118] px-3 py-2.5 text-left text-sm text-gray-300 transition-colors ${disabled ? 'cursor-not-allowed opacity-60' : 'hover:border-[#c7a44c]/50 cursor-pointer'}`}
         >
-          <span className={`min-w-0 truncate ${!value ? 'text-gray-600' : 'text-gray-300'}`}>{selectedLabel}</span>
-          <span className="text-gray-600 text-[10px] font-mono">▼</span>
+          {identity ? (
+            <>
+              <span className="min-w-0 flex-1">
+                {selectedDetails?.eyebrow ? <span className="ficha-identity-select__eyebrow">{selectedDetails.eyebrow}</span> : null}
+                <span className={`ficha-identity-select__name ${!value ? 'text-gray-600' : ''}`}>{selectedLabel}</span>
+              </span>
+              <ChevronDown className="ficha-identity-select__chevron" size={17} aria-hidden="true" />
+            </>
+          ) : (
+            <>
+              <span className={`min-w-0 truncate ${!value ? 'text-gray-600' : 'text-gray-300'}`}>{selectedLabel}</span>
+              <ChevronDown className="text-gray-600" size={14} aria-hidden="true" />
+            </>
+          )}
         </button>
       </div>
 
       {isOpen && (
         <ModalPortal onClose={fechar}>
-        <div className="modal-viewport fixed inset-0 z-[110] flex items-center justify-center bg-black/85 backdrop-blur-sm" onClick={fechar}>
-          <div role="dialog" aria-modal="true" aria-label={`Selecionar ${label || 'opção'}`} className="modal-surface flex w-full max-w-md flex-col rounded-2xl border border-[#c7a44c]/30 bg-[#0f0e15] p-4 shadow-[0_0_50px_rgba(199,164,76,0.1)] sm:p-6" onClick={(event) => event.stopPropagation()}>
+        <div
+          className="modal-viewport fixed inset-0 z-[110] flex items-center justify-center bg-black/85 backdrop-blur-sm"
+          onClick={fechar}
+          aria-label={`Selecionar ${label || 'opção'}`}
+        >
+          <div
+            className={`modal-surface flex w-full flex-col rounded-2xl p-4 sm:p-6 ${identity ? 'ficha-identity-picker max-w-xl' : 'max-w-md border border-[#c7a44c]/30 bg-[#0f0e15] shadow-[0_0_50px_rgba(199,164,76,0.1)]'}`}
+            style={identity ? identityStyle : undefined}
+            onClick={(event) => event.stopPropagation()}
+          >
             <div className="flex justify-between items-center mb-4 shrink-0">
-              <h3 className="text-[#c7a44c] font-bold tracking-widest uppercase">Selecione {label || 'uma opção'}</h3>
-              <button type="button" onClick={fechar} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-white/10 hover:text-white" aria-label="Fechar opções">
+              <div>
+                {identity ? <span className="ficha-identity-picker__eyebrow">Identidade do personagem</span> : null}
+                <h3 className={identity ? 'ficha-identity-picker__title' : 'text-[#c7a44c] font-bold tracking-widest uppercase'}>Selecione {label || 'uma opção'}</h3>
+              </div>
+              <button type="button" onClick={fechar} className={identity ? 'ficha-identity-picker__close' : 'flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-white/10 hover:text-white'} aria-label="Fechar opções">
                 <X size={20} />
               </button>
             </div>
@@ -94,23 +189,50 @@ export const LabeledModalSelect = ({ label, value, options, onChange, placeholde
                 value={busca}
                 onChange={(event) => setBusca(event.target.value)}
                 placeholder={`Pesquisar ${String(label || 'opção').toLocaleLowerCase('pt-BR')}...`}
-                className="w-full rounded-lg border border-white/10 bg-black/30 py-2.5 pl-9 pr-3 text-sm text-white outline-none focus:border-[#c7a44c]/50"
+                className={identity ? 'ficha-identity-picker__search' : 'w-full rounded-lg border border-white/10 bg-black/30 py-2.5 pl-9 pr-3 text-sm text-white outline-none focus:border-[#c7a44c]/50'}
               />
             </div>
-            <div className="overflow-y-auto custom-scrollbar pr-2 flex flex-col gap-2">
-              {opcoesFiltradas.map((option: any) => {
+            <div className={`overflow-y-auto custom-scrollbar pr-2 flex flex-col ${identity ? 'gap-2.5' : 'gap-2'}`}>
+              {opcoesFiltradas.map((option, index) => {
                 const valorOpcao = optionValue(option);
                 const rotuloOpcao = optionLabel(option);
+                const details = optionDetails(option);
                 const isSelected = valorOpcao === value;
+                const optionStyle = identity ? {
+                  '--option-color': details?.color || '#c7a44c',
+                  '--option-secondary': details?.secondaryColor || '#5f4a1f',
+                  '--option-glow': details?.glow || 'rgba(199,164,76,0.22)',
+                  '--option-index': index,
+                } as CSSProperties : undefined;
                 return (
                   <button
                     type="button"
                     key={String(valorOpcao)}
                     onClick={() => { onChange(valorOpcao); fechar(); }}
-                    className={`p-3 rounded-lg border text-left transition-colors flex justify-between items-center ${isSelected ? 'border-[#c7a44c] bg-[#c7a44c]/10 text-[#c7a44c]' : 'border-white/5 hover:border-[#c7a44c]/30 hover:bg-[#c7a44c]/5 text-gray-300'}`}
+                    aria-pressed={isSelected}
+                    style={optionStyle}
+                    className={identity
+                      ? `ficha-identity-option ${isSelected ? 'is-selected' : ''}`
+                      : `p-3 rounded-lg border text-left transition-colors flex justify-between items-center ${isSelected ? 'border-[#c7a44c] bg-[#c7a44c]/10 text-[#c7a44c]' : 'border-white/5 hover:border-[#c7a44c]/30 hover:bg-[#c7a44c]/5 text-gray-300'}`}
                   >
-                    <span className="font-bold">{rotuloOpcao}</span>
-                    {isSelected ? <span className="text-xs">✓</span> : null}
+                    {identity ? (
+                      <>
+                        <span className="min-w-0 flex-1">
+                          {details?.eyebrow ? <span className="ficha-identity-option__eyebrow">{details.eyebrow}</span> : null}
+                          <span className="ficha-identity-option__name">{rotuloOpcao}</span>
+                          {details?.description ? <span className="ficha-identity-option__description">{details.description}</span> : null}
+                          {details?.meta ? <span className="ficha-identity-option__meta">{details.meta}</span> : null}
+                        </span>
+                        <span className="ficha-identity-option__check" aria-hidden="true">
+                          {isSelected ? <Check size={15} strokeWidth={3} /> : null}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="font-bold">{rotuloOpcao}</span>
+                        {isSelected ? <Check size={14} aria-hidden="true" /> : null}
+                      </>
+                    )}
                   </button>
                 );
               })}

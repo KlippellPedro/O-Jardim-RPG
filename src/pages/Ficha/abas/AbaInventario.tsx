@@ -1,5 +1,6 @@
 import { useDeferredValue, useMemo, useState } from 'react';
-import { Search, Backpack, Coins, Shield, Sword, Box, Minus, Plus, Car, Trash2, Pencil, Wrench, Star, GripVertical, SlidersHorizontal, ListFilter, Cpu, Apple, Eye, EyeOff } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Search, Backpack, Coins, Shield, Sword, Box, Minus, Plus, Car, Trash2, Pencil, Wrench, Star, GripVertical, SlidersHorizontal, ListFilter, Cpu, Apple, Eye, EyeOff, CircleGauge, BookOpen, Sparkles, ChevronDown } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { useCharacterStore } from '../../../store/useCharacterStore';
 import { useAuthStore } from '../../../store/useAuthStore';
@@ -19,6 +20,7 @@ import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
 import { periciasDisponiveisParaEfeitos } from '../../../services/periciasFichaService';
 import { EfeitosItemModal, resumoEfeitoEquipamento } from '../components/ItemEffectsModals';
 import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
+import { grupoLimiteItemEspecial } from '../../../services/itensEspeciaisService';
 import {
   getCurrencySymbol,
   getCurrencyTheme,
@@ -37,6 +39,8 @@ import {
   type RaridadeRecursoMaterial,
   type RecursoMaterialId,
 } from '../../../../data/regras/recursos-materiais';
+import { obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
+import { ehReliquiaCriacao, lerRessonanciaReliquia } from '../../../services/reliquiasCriacaoService';
 
 interface IInventoryItem {
   id: string;
@@ -116,6 +120,7 @@ const CATEGORIAS_FILTRO: Array<{ value: 'todos' | IInventoryItem['categoria']; l
 type TFiltroEstadoInventario = 'todos' | 'equipados' | 'favoritos' | 'com-efeitos';
 
 const PREFERENCIA_ESTOQUES_MATERIAIS = 'jardim:ficha:mostrar-estoques-materiais';
+const PREFERENCIA_IMPLANTES = 'jardim:ficha:mostrar-implantes';
 
 const ESTADOS_FILTRO = [
   { value: 'todos', label: 'Qualquer estado' },
@@ -296,6 +301,13 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
       return true;
     }
   });
+  const [mostrarImplantes, setMostrarImplantes] = useState(() => {
+    try {
+      return window.localStorage.getItem(PREFERENCIA_IMPLANTES) !== 'false';
+    } catch {
+      return true;
+    }
+  });
   const [moedasReveladas, setMoedasReveladas] = useState<string[]>([]);
   
   const [modalAberto, setModalAberto] = useState(false);
@@ -306,6 +318,17 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
   const [itemEfeitosVisivel, setItemEfeitosVisivel] = useState<IInventoryItem | null>(null);
   const [frutoPendenteId, setFrutoPendenteId] = useState<string | null>(null);
   const [feedbackFruto, setFeedbackFruto] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
+  const [feedbackEquipamento, setFeedbackEquipamento] = useState<string | null>(null);
+  const [ressonanciasAbertas, setRessonanciasAbertas] = useState<Set<string>>(() => new Set());
+
+  const alternarRessonancia = (itemId: string) => {
+    setRessonanciasAbertas((atuais) => {
+      const proximas = new Set(atuais);
+      if (proximas.has(itemId)) proximas.delete(itemId);
+      else proximas.add(itemId);
+      return proximas;
+    });
+  };
 
   const periciasDisponiveis = periciasDisponiveisParaEfeitos(character.ficha || {}, PERICIAS_CATALOGO);
 
@@ -346,8 +369,8 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
     }
   };
   const resumoEquipamento = useMemo(
-    () => resumirEquipamentos(character.inventarioCentral || [], character.ficha || {}),
-    [character.inventarioCentral, character.ficha],
+    () => resumirEquipamentos(character.inventarioCentral || [], character.ficha || {}, character.aliadosCompartilhados || []),
+    [character.aliadosCompartilhados, character.inventarioCentral, character.ficha],
   );
 
   const carteiraSalva: { moeda: string; saldo: number; simbolo?: string }[] =
@@ -516,6 +539,13 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
   };
 
   const toggleEquipar = (id: string) => {
+    const alvo = inventario.find((item) => item.id === id);
+    if (!alvo) return;
+    if (!alvo.equipado && grupoLimiteItemEspecial(alvo) && resumoEquipamento.itensEspeciais.usados >= resumoEquipamento.itensEspeciais.limite) {
+      setFeedbackEquipamento(`Não há vaga especial livre. Guarde outro item de perícia ou artefato antes de equipar ${alvo.nome}.`);
+      return;
+    }
+    setFeedbackEquipamento(null);
     mutarInventario((atual) => atual.map((item) => (
       item.id === id ? { ...item, equipado: !item.equipado } : item
     )));
@@ -619,6 +649,7 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
     0
   );
   const formEhModuloVeicular = modoVeiculos && form.categoria === 'modulo-veicular';
+  const regraRaridadeForm = obterRegraRaridade(form.raridade);
   type EstoquePorRaridade = Partial<Record<RaridadeRecursoMaterial, number>>;
   type EstoquesMateriaisSalvos = Partial<Record<RecursoMaterialId, number | EstoquePorRaridade>>;
   const estoquesMateriais = (character.ficha?.recursosMateriais ?? {}) as EstoquesMateriaisSalvos;
@@ -649,13 +680,24 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
       return proximo;
     });
   };
+  const alternarImplantes = () => {
+    setMostrarImplantes((visivel) => {
+      const proximo = !visivel;
+      try {
+        window.localStorage.setItem(PREFERENCIA_IMPLANTES, String(proximo));
+      } catch {
+        // A preferência continua funcionando nesta sessão mesmo sem armazenamento.
+      }
+      return proximo;
+    });
+  };
 
   return (
     <div className="space-y-6">
 
       {/* HEADER E CARGA */}
-      <div className={`grid grid-cols-1 ${modoVeiculos ? '' : 'md:grid-cols-5'} gap-6`}>
-        <div className={`${modoVeiculos ? '' : 'md:col-span-3'} bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col justify-between`}>
+      <div className={`grid grid-cols-1 ${modoVeiculos ? '' : 'md:grid-cols-5'} gap-6`} data-tour="section-overview">
+        <div className={`${modoVeiculos ? '' : 'md:col-span-3'} bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col justify-between`} data-tour="inventario-resumo">
           <div>
             <h2 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Cinzel, serif' }}>{modoVeiculos ? 'Veículos' : 'Inventário'}</h2>
             <p className="text-gray-400 text-sm">{modoVeiculos ? 'Gerencie veículos, peças instaladas, condição e localização.' : 'Gerencie seus equipamentos, consumíveis e carga pessoal.'}</p>
@@ -666,11 +708,19 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
             <span className={`font-mono ${resumoEquipamento.sobrecarregado ? 'text-red-400' : 'text-white'}`}>{espacosUsados.toFixed(1)} / {resumoEquipamento.capacidade} <span className="text-gray-500 text-xs">ESPAÇOS</span></span>
           </div>}
           {!modoVeiculos && <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-gray-400"><span>Defesa equipada: <strong className="text-sky-300">+{resumoEquipamento.defesaEquipamento}</strong></span><span>Penalidade: <strong className="text-orange-300">-{resumoEquipamento.penalidadeArmadura}</strong></span></div>}
+          {!modoVeiculos && <div data-tour="inventario-itens-especiais" className="mt-4 flex flex-col gap-3 rounded-xl border border-cyan-400/15 bg-cyan-400/[0.04] p-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex min-w-0 items-start gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/[0.08] text-cyan-300"><CircleGauge size={17} /></span>
+              <div><strong className="block text-sm text-cyan-100">{resumoEquipamento.itensEspeciais.usados}/{resumoEquipamento.itensEspeciais.limite} vagas especiais em uso</strong><p className="mt-0.5 text-xs leading-5 text-gray-500">Itens de perícia e artefatos só ocupam vaga quando equipados.</p></div>
+            </div>
+            <Link to="/regras?topico=raridades-modificacoes" className="inline-flex shrink-0 items-center gap-1.5 text-xs font-bold text-cyan-300 hover:text-cyan-100"><BookOpen size={13} /> Ver regra</Link>
+          </div>}
+          {!modoVeiculos && feedbackEquipamento ? <p role="alert" className="mt-2 rounded-lg border border-amber-400/20 bg-amber-400/[0.06] px-3 py-2 text-xs text-amber-200">{feedbackEquipamento}</p> : null}
           {!modoVeiculos && resumoEquipamento.sobrecarregado && <p className="mt-2 text-xs font-bold text-red-300">Sobrecarregado: movimento reduzido em 3 m e desvantagem em testes físicos.</p>}
           {!modoVeiculos && resumoEquipamento.conflitos.map((conflito) => <p key={conflito} className="mt-1 text-xs text-amber-300">{conflito}</p>)}
         </div>
 
-        {!modoVeiculos && <div className="md:col-span-2 bg-[#0f0e15] border border-white/5 rounded-2xl p-4 flex flex-col gap-3">
+        {!modoVeiculos && <div className="md:col-span-2 bg-[#0f0e15] border border-white/5 rounded-2xl p-4 flex flex-col gap-3" data-tour="inventario-carteira">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <Coins size={18} className="text-primary" />
@@ -730,7 +780,7 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
         </div>}
       </div>
 
-      {!modoVeiculos && mostrarEstoquesMateriais && <section className="rounded-2xl border border-emerald-300/10 bg-[#0f0e15] p-5">
+      {!modoVeiculos && mostrarEstoquesMateriais && <section className="rounded-2xl border border-emerald-300/10 bg-[#0f0e15] p-5" data-tour="inventario-materiais">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div><h3 className="font-serif text-lg font-bold text-white">Estoques de materiais</h3><p className="mt-1 text-xs leading-5 text-gray-500">Controle só estes seis lotes. Os materiais exatos são descrição da história.</p></div>
           <div className="flex flex-wrap items-center gap-2">
@@ -756,6 +806,7 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
       {!modoVeiculos && !mostrarEstoquesMateriais && (
         <button
           type="button"
+          data-tour="inventario-materiais-toggle"
           onClick={alternarEstoquesMateriais}
           aria-expanded="false"
           className="flex w-full items-center justify-between gap-3 rounded-xl border border-dashed border-emerald-300/10 bg-[#0f0e15] px-4 py-3 text-left transition-colors hover:border-emerald-300/25 hover:bg-emerald-500/[0.03]"
@@ -770,7 +821,7 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
       )}
 
       {/* FERRAMENTAS */}
-      <div className="flex flex-col gap-3 xl:flex-row">
+      <div className="flex flex-col gap-3 xl:flex-row" data-tour="inventario-filtros">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
           <input
@@ -831,21 +882,33 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
 
       {/* IMPLANTES CIBERNÉTICOS */}
       {!modoVeiculos && implantes.length > 0 && (
-        <div className="relative overflow-hidden rounded-2xl border border-cyan-400/40 bg-gradient-to-br from-cyan-950/40 via-[#0a0912] to-fuchsia-950/20 p-6 shadow-[0_0_35px_rgba(34,211,238,0.12)]">
-          <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full border border-cyan-400/50 bg-cyan-500/10 text-cyan-300">
-              <Cpu size={20} />
+        <div className={`relative overflow-hidden rounded-2xl border border-cyan-400/40 bg-gradient-to-br from-cyan-950/40 via-[#0a0912] to-fuchsia-950/20 shadow-[0_0_35px_rgba(34,211,238,0.12)] ${mostrarImplantes ? 'p-6' : 'px-5 py-4'}`} data-tour="inventario-implantes">
+          <div className={`flex flex-wrap items-center justify-between gap-3 ${mostrarImplantes ? 'mb-4' : ''}`}>
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-cyan-400/50 bg-cyan-500/10 text-cyan-300">
+                <Cpu size={20} />
+              </div>
+              <div className="min-w-0">
+                <h3 className="truncate text-base font-bold uppercase tracking-widest text-cyan-300" style={{ fontFamily: 'Cinzel, serif' }}>
+                  Implantes Cibernéticos
+                </h3>
+                <p className="font-mono text-xs text-cyan-100/50">
+                  // {implantes.filter((item) => item.equipado).length} de {implantes.length} instalado(s)
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-base font-bold uppercase tracking-widest text-cyan-300" style={{ fontFamily: 'Cinzel, serif' }}>
-                Implantes Cibernéticos
-              </h3>
-              <p className="font-mono text-xs text-cyan-100/50">
-                // {implantes.filter((item) => item.equipado).length} de {implantes.length} instalado(s)
-              </p>
-            </div>
+            <button
+              type="button"
+              onClick={alternarImplantes}
+              aria-expanded={mostrarImplantes}
+              aria-controls="inventario-implantes-lista"
+              className="flex shrink-0 items-center gap-1.5 rounded-lg border border-cyan-300/20 bg-black/20 px-3 py-2 font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-200/70 transition-colors hover:border-cyan-300/40 hover:bg-cyan-400/[0.07] hover:text-cyan-100"
+            >
+              {mostrarImplantes ? <EyeOff size={13} /> : <Eye size={13} />}
+              {mostrarImplantes ? 'Recolher' : 'Mostrar'}
+            </button>
           </div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div id="inventario-implantes-lista" aria-hidden={!mostrarImplantes} className={`${mostrarImplantes ? 'grid' : 'hidden'} grid-cols-1 gap-4 md:grid-cols-2`}>
             {implantes.map((item) => {
               const atributos: string[] = Array.isArray(item._dadosOriginais?.atributos)
                 ? item._dadosOriginais.atributos as string[]
@@ -901,7 +964,7 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
         const cargaLocal = itensDesteLocal.reduce((soma, item) => soma + (item.espacos || 0) * (item.quantidade || 1), 0);
 
         return (
-          <div key={local} className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-6">
+          <div key={local} className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-6" data-tour="inventario-local">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-white font-bold uppercase tracking-widest text-sm flex items-center gap-2">
                 {modoVeiculos ? <Car size={16} className="text-amber-400" /> : <Backpack size={16} className="text-gray-500" />} {local}
@@ -915,6 +978,10 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                 const catColor = CATEGORY_COLORS[item.categoria] || CATEGORY_COLORS.geral;
                 const moduloVeicular = item.categoria === 'modulo-veicular';
                 const frutoEden = item._dadosOriginais.tipo === 'fruto-eden';
+                const reliquiaCriacao = ehReliquiaCriacao(item._dadosOriginais);
+                const ressonanciaReliquia = lerRessonanciaReliquia(item._dadosOriginais);
+                const ressonanciaAberta = ressonanciasAbertas.has(item.id);
+                const grupoEspecial = grupoLimiteItemEspecial(item);
                 const efeitosAutomaticos = [
                   ...item.efeitosRaridade,
                   ...item.modificacoes.flatMap((modificacao) => modificacao.efeitos),
@@ -928,6 +995,7 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                   <Reorder.Item
                     value={item}
                     key={item.id}
+                    data-tour="inventario-item"
                     className={`content-auto-list-item relative ${conf.bg} border ${conf.border} ${conf.glow} overflow-hidden rounded-xl p-4 pl-5 flex flex-col gap-3 transition-colors duration-300 group before:absolute before:inset-y-0 before:left-0 before:w-1 ${CATEGORY_ACCENTS[item.categoria]}`}
                   >
                     <div className="flex gap-4">
@@ -977,6 +1045,8 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                               <span className={`text-[9px] px-2 py-1 rounded border uppercase font-black tracking-wider ${catColor}`}>
                                 {item.categoria}
                               </span>
+                              {grupoEspecial ? <span className="inline-flex items-center gap-1 rounded border border-cyan-400/20 bg-cyan-400/[0.06] px-2 py-1 text-[9px] font-black uppercase tracking-wider text-cyan-300"><CircleGauge size={10} /> {item.equipado ? 'vaga especial em uso' : 'usa vaga ao equipar'}</span> : null}
+                              {reliquiaCriacao ? <span className="inline-flex items-center gap-1 rounded border border-fuchsia-200/25 bg-gradient-to-r from-cyan-300/[0.08] to-fuchsia-300/[0.08] px-2 py-1 text-[9px] font-black uppercase tracking-wider text-fuchsia-100"><Sparkles size={10} /> altera o campo</span> : null}
                             </div>
                           </div>
                           
@@ -1083,6 +1153,25 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
 
                         {item.descricao && <p className="text-xs text-gray-500 italic mt-3 line-clamp-2">{item.descricao}</p>}
 
+                        {ressonanciaReliquia ? (
+                          <div className="mt-3 overflow-hidden rounded-xl border border-amber-300/20 bg-amber-300/[0.04]">
+                            <button
+                              type="button"
+                              onClick={() => alternarRessonancia(item.id)}
+                              aria-expanded={ressonanciaAberta}
+                              className="flex w-full items-center justify-between gap-3 p-3 text-left transition-colors hover:bg-white/[0.03]"
+                            >
+                              <span className="min-w-0"><span className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.18em] text-amber-300"><Sparkles size={11} /> Ressonância empunhada</span><strong className="mt-1 block truncate text-sm text-white">{ressonanciaReliquia.nome}</strong></span>
+                              <ChevronDown size={16} className={`shrink-0 text-amber-300 transition-transform ${ressonanciaAberta ? 'rotate-180' : ''}`} />
+                            </button>
+                            {ressonanciaAberta ? (
+                              <div className="border-t border-white/10 p-4">
+                                <p className="text-xs leading-5 text-gray-300">{ressonanciaReliquia.efeito}</p>
+                              </div>
+                            ) : null}
+                          </div>
+                        ) : null}
+
                         {frutoEden && (
                           <button
                             type="button"
@@ -1105,7 +1194,7 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
       })}
       
       {inventarioVisivel.length === 0 && (
-        <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden py-12 text-center">
+        <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden py-12 text-center" data-tour="inventario-lista">
           {modoVeiculos ? <Car size={48} className="text-gray-700 mx-auto mb-4 opacity-50" /> : <Backpack size={48} className="text-gray-700 mx-auto mb-4 opacity-50" />}
           <p className="text-gray-500 font-bold uppercase tracking-widest">{modoVeiculos ? 'Nenhum veículo registrado' : 'Inventário Vazio'}</p>
         </div>
@@ -1249,6 +1338,11 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
             </button>
           </div>
 
+          <div className="flex flex-col gap-3 rounded-xl border border-[#c7a44c]/15 bg-[#c7a44c]/[0.04] p-4 text-xs leading-5 text-gray-400 sm:flex-row sm:items-center sm:justify-between">
+            <p><strong className="text-[#e0c982]">{regraRaridadeForm.titulo}</strong> permite {regraRaridadeForm.modificacoesMaximas} modificação(ões) e {regraRaridadeForm.efeitosRaridadeMaximos} bônus próprio(s) de raridade. O painel impede novas inclusões quando a capacidade termina.</p>
+            <div className="flex shrink-0 flex-wrap gap-3"><Link to="/regras?topico=raridades-modificacoes" className="inline-flex items-center gap-1.5 font-bold text-[#d8bd75] hover:text-white"><BookOpen size={13} /> Raridades</Link><Link to="/regras?topico=modificacoes-equipamentos" className="inline-flex items-center gap-1.5 font-bold text-[#d8bd75] hover:text-white"><Wrench size={13} /> Modificações</Link></div>
+          </div>
+
           <div className="flex flex-col gap-1 border-t border-white/5 pt-4">
             <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Descrição / Lore</label>
             <textarea
@@ -1292,7 +1386,6 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
           onModificacoesChange={(modificacoes) => setForm((atual) => ({ ...atual, modificacoes }))}
           pericias={periciasDisponiveis}
           itemNome={form.nome || undefined}
-          categoria={form.categoria === 'modulo-veicular' ? 'veiculo' : (form.categoria === 'implante' || form.categoria === 'propriedade') ? 'geral' : form.categoria}
           readOnly={mecanicaSomenteLeitura}
         />
       )}
@@ -1308,7 +1401,6 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
         onModificacoesChange={() => undefined}
         pericias={periciasDisponiveis}
         itemNome={itemEfeitosVisivel?.nome}
-        categoria={itemEfeitosVisivel?.categoria === 'modulo-veicular' ? 'veiculo' : (itemEfeitosVisivel?.categoria === 'implante' || itemEfeitosVisivel?.categoria === 'propriedade') ? 'geral' : itemEfeitosVisivel?.categoria}
         readOnly
       />
 

@@ -1,0 +1,78 @@
+/* Efeitos ambientes exclusivos de raças e classes especiais (ver AuraEspecial.tsx).
+   Some por inteiro no modo de desempenho reduzido via `.performance-decorative`,
+   igual às demais camadas decorativas do app (ver FichaAtmosphere). */
+
+.aura-especial__brilho {
+  position: absolute;
+  inset: -20% -10%;
+  background: radial-gradient(ellipse 60% 50% at 50% 30%, var(--aura-cor, rgba(168, 85, 247, 0.35)) 0%, transparent 70%);
+  filter: blur(50px);
+  opacity: 0.5;
+  animation: aura-halo-pulsar 7s ease-in-out infinite;
+}
+
+.aura-especial--faixa .aura-especial__brilho {
+  inset: -60% -5%;
+  filter: blur(32px);
+}
+
+.aura-especial__particula {
+  position: absolute;
+  bottom: -4%;
+  left: var(--aura-x, 50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--aura-cor, #a855f7);
+  box-shadow: 0 0 10px var(--aura-cor, #a855f7);
+  opacity: 0;
+}
+
+.aura-especial--pagina .aura-especial__particula {
+  animation: aura-particula-subir-pagina var(--aura-duracao, 6s) linear var(--aura-atraso, 0s) infinite;
+}
+
+.aura-especial--faixa .aura-especial__particula {
+  animation: aura-particula-subir-faixa var(--aura-duracao, 5s) ease-in var(--aura-atraso, 0s) infinite;
+}
+
+@keyframes aura-halo-pulsar {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.06); }
+}
+
+@keyframes aura-particula-subir-pagina {
+  0% { transform: translate3d(0, 0, 0) scale(0.5); opacity: 0; }
+  12% { opacity: 0.8; }
+  100% { transform: translate3d(10px, -100vh, 0) scale(1.15); opacity: 0; }
+}
+
+@keyframes aura-particula-subir-faixa {
+  0% { transform: translate3d(0, 0, 0) scale(0.4) rotate(0deg); opacity: 0; }
+  20% { opacity: 0.9; }
+  100% { transform: translate3d(6px, -170px, 0) scale(1.1) rotate(200deg); opacity: 0; }
+}
+
+/* Selo "Especial" com ícone pulsante e texto brilhante */
+.aura-selo__icone {
+  animation: aura-selo-pulsar 2.4s ease-in-out infinite;
+}
+
+@keyframes aura-selo-pulsar {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.85; }
+  50% { transform: scale(1.18) rotate(12deg); opacity: 1; }
+}
+
+.aura-texto-brilho {
+  background-image: linear-gradient(110deg, var(--aura-cor-texto, #facc15) 25%, #fff 50%, var(--aura-cor-texto, #facc15) 75%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: aura-texto-varrer 3.4s ease-in-out infinite;
+}
+
+@keyframes aura-texto-varrer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

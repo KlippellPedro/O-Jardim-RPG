@@ -1,12 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Select } from '../../../components/ui/Select';
-import { LojaItem, getCurrencySymbol, itemEhVeiculoCompleto, obterBonusDefesaCatalogo, personagemAtendeRequisitosLoja } from '../../../services/lojaCatalogService';
-import { X, ShoppingCart, Info, Swords, Activity, Skull, Sparkles, AlertTriangle } from 'lucide-react';
+import { aplicarRaridadeCompra, classeTextoRaridade, getCurrencySymbol, itemEhVeiculoCompleto, itemPermiteEscolherRaridade, LojaItem, nivelLojaParaRaridadeCompra, NOMES_LOCAIS_LOJA, obterBonusDefesaCatalogo, personagemAtendeRequisitosLoja, RARIDADES_COMPRA_EQUIPAMENTO, RaridadeCompraEquipamento } from '../../../services/lojaCatalogService';
+import { X, ShoppingCart, Info, Swords, Activity, Skull, Sparkles, AlertTriangle, Wrench, CircleGauge, BookOpen, ChevronRight } from 'lucide-react';
 import { ICharacter } from '../../../types/character';
 import { useModalSfx } from '../../../hooks/useSfx';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
+import { obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
+import { itemLojaContaComoEspecial, resumirLimiteItensEspeciais } from '../../../services/itensEspeciaisService';
+import { ehReliquiaCriacao, lerRessonanciaReliquia } from '../../../services/reliquiasCriacaoService';
 
 interface LojaItemModalProps {
   item: LojaItem;
@@ -15,11 +18,49 @@ interface LojaItemModalProps {
   podeComprar: boolean;
   modoLoja?: 'Comprar' | 'Vender';
   compradorAtivo?: ICharacter;
+  localizacaoAtual?: number;
+  raridadesOcultas?: string[];
 }
 
-export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onBuy, podeComprar, modoLoja = 'Comprar', compradorAtivo }) => {
+const normalizarRaridade = (valor: string): string => valor
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .trim()
+  .toLocaleLowerCase('pt-BR');
+
+export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onBuy, podeComprar, modoLoja = 'Comprar', compradorAtivo, localizacaoAtual = 1, raridadesOcultas = [] }) => {
   const [alvoItemId, setAlvoItemId] = useState<string>('');
   const ehMercenario = item.categoria === 'Mercenários';
+  const escolheRaridade = modoLoja === 'Comprar' && itemPermiteEscolherRaridade(item);
+  const raridadesOcultasNormalizadas = useMemo(
+    () => new Set(raridadesOcultas.map(normalizarRaridade)),
+    [raridadesOcultas],
+  );
+  const opcoesRaridade = useMemo(() => RARIDADES_COMPRA_EQUIPAMENTO.map((opcao) => {
+    const nivel = nivelLojaParaRaridadeCompra(item, opcao.value);
+    const indisponivel = !item.precosRaridade?.[opcao.value]
+      || raridadesOcultasNormalizadas.has(opcao.value)
+      || nivel > localizacaoAtual;
+    const local = NOMES_LOCAIS_LOJA[Math.max(0, Math.min(3, nivel - 1))];
+    return {
+      value: opcao.value,
+      label: `${opcao.label} · ${local}`,
+      triggerLabel: opcao.label,
+      disabled: indisponivel,
+      labelClassName: classeTextoRaridade(opcao.value),
+    };
+  }), [item, localizacaoAtual, raridadesOcultasNormalizadas]);
+  const primeiraRaridadeDisponivel = opcoesRaridade.find((opcao) => !opcao.disabled)?.value as RaridadeCompraEquipamento | undefined;
+  const [raridadeSelecionada, setRaridadeSelecionada] = useState<RaridadeCompraEquipamento>(() => (
+    item.raridadeCompra && !opcoesRaridade.find((opcao) => opcao.value === item.raridadeCompra)?.disabled
+      ? item.raridadeCompra
+      : primeiraRaridadeDisponivel ?? 'comum'
+  ));
+  const itemParaCompra = useMemo(
+    () => escolheRaridade ? aplicarRaridadeCompra(item, raridadeSelecionada) : item,
+    [escolheRaridade, item, raridadeSelecionada],
+  );
+  const raridadeDisponivel = !escolheRaridade || opcoesRaridade.some((opcao) => opcao.value === raridadeSelecionada && !opcao.disabled);
   const [modoContratacao, setModoContratacao] = useState<'comprar' | 'contratar'>(
     ehMercenario && item.contratacao ? 'contratar' : 'comprar',
   );
@@ -28,9 +69,36 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
   // Só existe montado enquanto aberto - equivale a isOpen sempre true.
   useModalSfx(true);
   useDialogAccessibility({ open: true, dialogRef, initialFocusRef: closeButtonRef, onClose });
-  const { dadosBrutos = {} } = item;
-  const veiculoCompleto = itemEhVeiculoCompleto(item);
+  const { dadosBrutos = {} } = itemParaCompra;
+  const melhoriasRaridade: string[] = Array.isArray(dadosBrutos.melhorias_raridade)
+    ? dadosBrutos.melhorias_raridade.map((melhoria: unknown) => String(melhoria))
+    : [];
+  const resistenciasPorTipo = dadosBrutos.resistencias_por_tipo
+    && typeof dadosBrutos.resistencias_por_tipo === 'object'
+    && !Array.isArray(dadosBrutos.resistencias_por_tipo)
+    ? Object.entries(dadosBrutos.resistencias_por_tipo as Record<string, unknown>)
+    : [];
+  const veiculoCompleto = itemEhVeiculoCompleto(itemParaCompra);
   const bonusDefesa = obterBonusDefesaCatalogo(dadosBrutos);
+  const reliquiaCriacao = ehReliquiaCriacao({ ...dadosBrutos, tipo: itemParaCompra.tipoOrigem });
+  const ressonanciaReliquia = lerRessonanciaReliquia(dadosBrutos);
+  // 'Desconhecida' fica no patamar mais alto da loja (mapNivelLoja), então usa
+  // o orçamento de Relíquia da Criação em vez do fallback padrão (Comum).
+  const regraRaridade = obterRegraRaridade(itemParaCompra.raridade === 'Desconhecida' ? 'reliquia da criacao' : itemParaCompra.raridade);
+  const grupoEspecial = itemLojaContaComoEspecial(item);
+  const resumoItensEspeciais = useMemo(
+    () => resumirLimiteItensEspeciais(compradorAtivo?.inventarioCentral || [], compradorAtivo?.ficha || {}),
+    [compradorAtivo?.inventarioCentral, compradorAtivo?.ficha],
+  );
+  const alvosModificacao = useMemo(() => (compradorAtivo?.inventarioCentral || [])
+    .filter((invItem) => ['arma', 'armadura', 'veiculo', 'geral'].includes(invItem.dados?.categoria))
+    .map((invItem) => {
+      const modificacoes = Array.isArray(invItem.dados?.modificacoes) ? invItem.dados.modificacoes.length : 0;
+      const limiteRaridade = obterRegraRaridade(String(invItem.dados?.raridade || 'comum')).modificacoesMaximas;
+      const limiteDeclarado = Number(invItem.dados?.limite_modificacoes);
+      const limite = Number.isFinite(limiteDeclarado) && limiteDeclarado >= 0 ? Math.min(limiteRaridade, limiteDeclarado) : limiteRaridade;
+      return { value: invItem.item_id, label: `${invItem.titulo} · ${modificacoes}/${limite} mods`, disabled: modificacoes >= limite };
+    }), [compradorAtivo?.inventarioCentral]);
   
   // Validação de Requisitos
   const meetsNivel = !item.requisitoNivel || Boolean(compradorAtivo && compradorAtivo.nivel >= item.requisitoNivel);
@@ -44,6 +112,35 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
 
   // Renderização específica baseada na Categoria
   const renderDetails = () => {
+    if (reliquiaCriacao && ressonanciaReliquia) {
+      const fichaArma = itemParaCompra.tipoOrigem === 'arma'
+        ? [
+            ['Dano', dadosBrutos.dano],
+            ['Crítico', dadosBrutos.critico],
+            ['Alcance', dadosBrutos.alcance],
+            ['Tipo de dano', dadosBrutos.tipo_de_dano],
+          ].filter(([, valor]) => valor !== undefined && valor !== null && valor !== '')
+        : [];
+      return (
+        <div className="mt-6 flex flex-col gap-5 border-t border-white/10 pt-6">
+          {fichaArma.length > 0 ? (
+            <div>
+              <h4 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gray-500"><Swords size={16} /> Ficha da relíquia</h4>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {fichaArma.map(([rotulo, valor]) => <div key={String(rotulo)} className="rounded-xl border border-white/10 bg-white/5 p-3 text-center"><div className="text-[10px] uppercase tracking-widest text-gray-500">{String(rotulo)}</div><div className="mt-1 font-bold text-white">{String(valor)}</div></div>)}
+              </div>
+            </div>
+          ) : null}
+
+          <div className="rounded-2xl border border-amber-300/20 bg-amber-300/[0.05] p-5">
+            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">Ressonância empunhada</div>
+            <h4 className="mt-2 font-serif text-lg font-bold text-amber-50">{ressonanciaReliquia.nome}</h4>
+            <p className="mt-2 text-sm leading-6 text-gray-300">{ressonanciaReliquia.efeito}</p>
+          </div>
+        </div>
+      );
+    }
+
     if (item.tipoOrigem === 'drop') {
       const propriedades = Array.isArray(dadosBrutos.propriedades) ? dadosBrutos.propriedades : [];
       const usos = Array.isArray(dadosBrutos.usos) ? dadosBrutos.usos : [];
@@ -298,7 +395,8 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
       }
 
       case 'Armas':
-      case 'Armaduras e Escudos':
+      case 'Armaduras':
+      case 'Escudos':
         return (
           <div className="flex flex-col gap-4 mt-6 border-t border-white/10 pt-6">
             <h4 className="text-sm uppercase tracking-widest text-gray-500 font-bold mb-2 flex items-center gap-2">
@@ -331,6 +429,18 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
                   <div className="text-xl text-blue-400 font-bold">{String(bonusDefesa).startsWith('-') ? '' : '+'}{String(bonusDefesa).replace(/^\+/, '')}</div>
                 </div>
               )}
+              {resistenciasPorTipo.length > 0 && (
+                <div className="col-span-2 rounded-xl border border-emerald-500/20 bg-emerald-500/[0.07] p-4">
+                  <div className="text-xs uppercase text-gray-400">Resistências da raridade</div>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {resistenciasPorTipo.map(([tipo, valor]) => (
+                      <span key={tipo} className="rounded-lg border border-emerald-400/20 bg-black/20 px-3 py-1.5 text-sm font-bold text-emerald-200">
+                        {tipo} {String(valor)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
               {dadosBrutos.alcance && (
                 <div className="bg-white/5 p-4 rounded-xl border border-white/10">
                   <div className="text-xs text-gray-400 uppercase">Alcance</div>
@@ -359,7 +469,7 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
 
   // Cores de Raridade para o Modal
   let accentColor = '';
-  switch (item.raridade) {
+  switch (itemParaCompra.raridade) {
     case 'Comum': accentColor = 'text-gray-300 border-gray-500 shadow-[0_0_20px_rgba(107,114,128,0.2)] bg-gray-500/10'; break;
     case 'Incomum': accentColor = 'text-emerald-400 border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)] bg-emerald-500/10'; break;
     case 'Raro': accentColor = 'text-blue-400 border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.2)] bg-blue-500/10'; break;
@@ -395,7 +505,7 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
           <div className="min-w-0">
             <div className="mb-2 flex flex-wrap items-center gap-2 sm:gap-3">
               <span className={`text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md border ${accentColor.split(' ')[0]} border-current`}>
-                {item.raridade}
+                {itemParaCompra.raridade}
               </span>
               <span className="text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md border border-white/20 text-gray-400 bg-white/5">
                 {item.categoria}
@@ -451,6 +561,50 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
               </div>
             </div>
           ) : null}
+          {escolheRaridade ? (
+            <div className="mb-6 rounded-2xl border border-[#c7a44c]/25 bg-[#c7a44c]/[0.06] p-4 sm:p-5">
+              <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+                <label className="min-w-0">
+                  <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.18em] text-[#dbc16f]">Raridade da encomenda</span>
+                  <Select
+                    value={raridadeSelecionada}
+                    onChange={(valor) => setRaridadeSelecionada(valor as RaridadeCompraEquipamento)}
+                    options={opcoesRaridade}
+                    disabled={!primeiraRaridadeDisponivel}
+                    ariaLabel={`Raridade de ${item.nome}`}
+                  />
+                </label>
+                <div className="sm:text-right">
+                  <span className="block text-[9px] font-bold uppercase tracking-widest text-gray-500">Preço nesta raridade</span>
+                  <strong className="mt-1 block text-xl text-[#ead48f]">
+                    {itemParaCompra.valorOriginal.toLocaleString('pt-BR')} {getCurrencySymbol(itemParaCompra.moedaPreco)}
+                  </strong>
+                </div>
+              </div>
+              <p className="mt-3 text-xs leading-5 text-gray-400">O preço Comum considera o modelo da peça: armas marciais e armaduras completas custam mais que armas simples e escudos básicos. Cada raridade também melhora a ficha mecânica, além de ampliar as modificações.</p>
+              {melhoriasRaridade.length > 0 ? (
+                <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+                  {melhoriasRaridade.map((melhoria) => (
+                    <li key={melhoria} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs leading-5 text-gray-300">
+                      {melhoria}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              {!primeiraRaridadeDisponivel ? <p className="mt-2 text-xs font-bold text-red-300">Nenhuma raridade deste equipamento está disponível neste balcão.</p> : null}
+            </div>
+          ) : null}
+          <div className="mb-6 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-white/[0.08] bg-black/25 p-4">
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#c7a44c]"><Wrench size={14} /> Orçamento de {itemParaCompra.raridade}</div>
+              <p className="mt-2 text-sm leading-6 text-gray-300">Até <strong className="text-white">{regraRaridade.modificacoesMaximas} modificações</strong>, {regraRaridade.efeitosRaridadeMaximos} efeito(s) próprio(s) e valor máximo ±{regraRaridade.valorMaximoPorEfeito} por efeito.</p>
+              <Link to="/regras?topico=raridades-modificacoes" onClick={onClose} className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#d8bd75] hover:text-white"><BookOpen size={13} /> Ver regra da raridade <ChevronRight size={12} /></Link>
+            </div>
+            <div className="rounded-xl border border-white/[0.08] bg-black/25 p-4">
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-cyan-300"><CircleGauge size={14} /> Uso na ficha</div>
+              {grupoEspecial ? <><p className="mt-2 text-sm leading-6 text-gray-300">Este {grupoEspecial === 'artefato' ? 'artefato' : 'item de perícia'} ocupa <strong className="text-white">1 vaga</strong> somente quando estiver equipado. {resumoItensEspeciais.usados}/{resumoItensEspeciais.limite} vagas estão em uso.</p><p className="mt-2 text-xs text-gray-500">Você pode comprar e guardar sem vaga livre.</p></> : <p className="mt-2 text-sm leading-6 text-gray-400">Este item não entra no limite compartilhado de itens de perícia e artefatos.</p>}
+            </div>
+          </div>
           <p className="text-gray-300 text-lg leading-relaxed italic border-l-2 border-[#c7a44c]/50 pl-4">
             "{item.descricao}"
           </p>
@@ -514,15 +668,11 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
                 placeholder="Nenhum (Comprar avulso)"
                 options={[
                   { value: '', label: 'Nenhum (Comprar avulso)' },
-                  ...(compradorAtivo.inventarioCentral
-                    ?.filter(invItem => invItem.dados?.categoria === 'arma' || invItem.dados?.categoria === 'armadura' || invItem.dados?.categoria === 'veiculo')
-                    .map(invItem => ({
-                      value: invItem.item_id,
-                      label: invItem.titulo,
-                    })) || [])
+                  ...alvosModificacao,
                 ]}
               />
-              <p className="text-xs text-gray-500 mt-2">Opcional. Se selecionado, a modificação será aplicada diretamente ao item e a quantidade comprada será fixada em 1.</p>
+              <p className="text-xs text-gray-500 mt-2">A contagem mostra modificações instaladas/capacidade da raridade. Alvos cheios ficam desativados. Sem alvo, a modificação entra avulsa no inventário.</p>
+              <Link to="/regras?topico=modificacoes-equipamentos" onClick={onClose} className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#d8bd75] hover:text-white"><BookOpen size={13} /> Ler instalação e requisitos <ChevronRight size={12} /></Link>
             </div>
           </div>
         )}
@@ -534,16 +684,16 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
               <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">
                 {ehMercenario && modoContratacao === 'contratar' ? 'Taxa de contratação' : 'Preço estimado'}
               </span>
-              {item.precoAnterior && !(ehMercenario && modoContratacao === 'contratar') ? (
+              {itemParaCompra.precoAnterior && !(ehMercenario && modoContratacao === 'contratar') ? (
                 <span className="text-xs font-bold text-gray-500 line-through">
-                  {item.precoAnterior.toLocaleString('pt-BR')} {getCurrencySymbol(item.moedaPreco)}
+                  {itemParaCompra.precoAnterior.toLocaleString('pt-BR')} {getCurrencySymbol(itemParaCompra.moedaPreco)}
                 </span>
               ) : null}
               <div className="flex items-center gap-2">
                 {(() => {
                   const precoExibido = ehMercenario && modoContratacao === 'contratar' && item.contratacao
                     ? item.contratacao
-                    : { valorOriginal: item.valorOriginal, moedaPreco: item.moedaPreco };
+                    : { valorOriginal: itemParaCompra.valorOriginal, moedaPreco: itemParaCompra.moedaPreco };
                   return (
                     <span className={`text-2xl font-bold flex items-center gap-1 ${precoExibido.moedaPreco === 'Solares' ? 'text-yellow-400' : precoExibido.moedaPreco === 'Lunaris' ? 'text-gray-200' : precoExibido.moedaPreco === 'Fragmentos de Estrela' ? 'text-fuchsia-400' : 'text-indigo-400'}`}>
                       {precoExibido.valorOriginal.toLocaleString('pt-BR')}
@@ -564,17 +714,17 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
                 const alvoItemNome = alvoItemId
                   ? compradorAtivo?.inventarioCentral?.find(i => i.item_id === alvoItemId)?.titulo
                   : undefined;
-                onBuy(item, alvoItemId || undefined, alvoItemNome, ehMercenario ? modoContratacao : undefined);
+                onBuy(itemParaCompra, alvoItemId || undefined, alvoItemNome, ehMercenario ? modoContratacao : undefined);
               }}
-              disabled={!podeComprar}
+              disabled={!podeComprar || !raridadeDisponivel}
               className={`flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold tracking-widest uppercase transition-all shadow-xl sm:px-8 ${
-                  podeComprar
+                  podeComprar && raridadeDisponivel
                   ? 'bg-[#c7a44c] hover:bg-yellow-400 text-black hover:scale-105'
                   : 'bg-gray-800 text-gray-500 cursor-not-allowed'
               }`}
             >
               <ShoppingCart size={20} />
-              {!podeComprar ? 'Selecione um personagem' : (modoLoja === 'Comprar' ? 'Adicionar ao carrinho' : 'Adicionar à venda')}
+              {!podeComprar ? 'Selecione um personagem' : !raridadeDisponivel ? 'Raridade indisponível' : (modoLoja === 'Comprar' ? 'Adicionar ao carrinho' : 'Adicionar à venda')}
             </button>
           </div>
         </div>

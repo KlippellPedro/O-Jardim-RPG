@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { HelpCircle } from 'lucide-react';
 import {
   ATRIBUTOS,
@@ -24,6 +25,23 @@ export const NOMES_ATRIBUTOS: Record<TAtributo, string> = {
   sabedoria: 'Sabedoria',
   carisma: 'Carisma',
   fluxo: 'Fluxo',
+};
+
+interface TemaAtributo {
+  color: string;
+  secondary: string;
+  glow: string;
+}
+
+/** Identidade visual própria de cada atributo, separada das regras numéricas. */
+export const TEMAS_ATRIBUTOS: Record<TAtributo, TemaAtributo> = {
+  forca: { color: '#ef4444', secondary: '#7f1d1d', glow: 'rgba(239,68,68,0.28)' },
+  destreza: { color: '#38bdf8', secondary: '#075985', glow: 'rgba(56,189,248,0.26)' },
+  constituicao: { color: '#34d399', secondary: '#065f46', glow: 'rgba(52,211,153,0.25)' },
+  inteligencia: { color: '#818cf8', secondary: '#312e81', glow: 'rgba(129,140,248,0.27)' },
+  sabedoria: { color: '#c084fc', secondary: '#581c87', glow: 'rgba(192,132,252,0.27)' },
+  carisma: { color: '#fb7185', secondary: '#9f1239', glow: 'rgba(251,113,133,0.27)' },
+  fluxo: { color: '#fbbf24', secondary: '#78350f', glow: 'rgba(251,191,36,0.28)' },
 };
 
 interface AtributosSectionProps {
@@ -62,7 +80,7 @@ export function AtributosSection({
   onOpenAdjust,
 }: AtributosSectionProps) {
   return (
-    <section className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6">
+    <section className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6" data-tour="ficha-atributos">
       <SectionTitle title="Atributos" />
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-7">
         {ATRIBUTOS.map((atributo) => {
@@ -80,9 +98,15 @@ export function AtributosSection({
           const ajusteRacial = efetivos[atributo] - antesDaRaca[atributo];
           const manuais = obterAjustesManuais(ficha, chaveAjuste('atributo', atributo));
           const valorComSinal = (valor: number) => `${valor > 0 ? '+' : ''}${valor}`;
+          const tema = TEMAS_ATRIBUTOS[atributo];
+          const style = {
+            '--attribute-color': tema.color,
+            '--attribute-secondary': tema.secondary,
+            '--attribute-glow': tema.glow,
+          } as CSSProperties;
 
           return (
-            <div key={atributo} className="min-w-0 bg-[#121118] border border-white/5 rounded-xl flex flex-col items-center px-2 pb-3 pt-10 relative group hover:border-[#c7a44c]/30 sm:px-3">
+            <div key={atributo} className="ficha-attribute-card group" style={style}>
               <div className="absolute right-2 top-2 flex items-center gap-1">
                 <button
                   type="button"
@@ -103,7 +127,7 @@ export function AtributosSection({
                     atributo,
                     onRolar: () => onRoll(atributo),
                   })}
-                  className="text-[#c7a44c] opacity-50 hover:opacity-100 transition-opacity"
+                  className="ficha-attribute-card__help"
                 >
                   <HelpCircle size={14} />
                 </button>
@@ -120,16 +144,16 @@ export function AtributosSection({
                   )}
                 />
               </div>
-              <span className="text-[10px] font-bold text-gray-500 uppercase">{atributo.substring(0, 3)}</span>
+              <span className="ficha-attribute-card__name">{NOMES_ATRIBUTOS[atributo]}</span>
               <input
                 aria-label={`Valor de ${NOMES_ATRIBUTOS[atributo]}`}
                 type="number"
                 min={ATRIBUTO_VALOR_MINIMO}
                 value={valorEfetivo}
                 onChange={(event) => onChange(atributo, Number.parseInt(event.target.value, 10) || 10)}
-                className="w-16 bg-transparent text-2xl font-serif text-white my-1 text-center focus:outline-none focus:bg-white/5 rounded"
+                className="ficha-attribute-card__value"
               />
-              <div className="w-full py-1 text-center bg-[#c7a44c]/10 border border-[#c7a44c]/20 rounded text-[#c7a44c] font-bold text-sm mb-2 mt-1">
+              <div className="ficha-attribute-card__modifier">
                 {modTexto}
               </div>
             </div>

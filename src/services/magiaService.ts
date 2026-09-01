@@ -39,7 +39,7 @@ const corArvore = (arvoreId: string, subjugada = false): string => {
 
 /** Paleta canônica das Árvores aplicada às manifestações mágicas.
  * Comunicação conserva o prata da Parley subjugada; Tecnologia usa o
- * azul-neon da A.X.I.S. O Vazio mantém o preto do Abismo, com contorno cinza
+ * azul-neon da A.X.I.S. O Vazio fica no preto de Erebus, com contorno cinza
  * apenas para continuar legível sobre o fundo escuro do site. */
 export const FLUXO_TEMAS: Record<FluxoMagicoId, FluxoTema> = {
   origem: {
@@ -75,7 +75,7 @@ export const FLUXO_TEMAS: Record<FluxoMagicoId, FluxoTema> = {
     fundo: 'rgba(168, 138, 72, 0.14)', borda: 'rgba(168, 138, 72, 0.48)', brilho: 'rgba(168, 138, 72, 0.22)',
   },
   vazio: {
-    arvore: 'Abismo', base: corArvore('erebus'), destaque: '#77707f', texto: '#d1ccd8',
+    arvore: 'O Vazio', base: corArvore('erebus'), destaque: '#77707f', texto: '#d1ccd8',
     fundo: 'rgba(10, 9, 13, 0.88)', borda: 'rgba(119, 112, 127, 0.55)', brilho: 'rgba(0, 0, 0, 0.72)',
   },
   fim: {
@@ -378,11 +378,15 @@ function contarVagasPorProgressao(classes: Array<{ id: string; nivel: number }>,
   return total;
 }
 
-export function obterPerfilMagico(ficha: any, inventarioCentral: any[] = []): IPerfilMagico {
+export function obterPerfilMagico(
+  ficha: any,
+  inventarioCentral: any[] = [],
+  aliadosCompartilhados: any[] = [],
+): IPerfilMagico {
   const classes = referenciasClasse(ficha);
   const nivelTotal = classes.reduce((total, item) => total + item.nivel, 0);
   const raca = RACAS_CATALOGO.find((item) => item.id === ficha?.racaId) || null;
-  const resumoEquipamento = resumirEquipamentos(inventarioCentral, ficha);
+  const resumoEquipamento = resumirEquipamentos(inventarioCentral, ficha, aliadosCompartilhados);
   const atributosBase = Object.fromEntries(
     ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'fluxo'].map((atributo) => [
       atributo,

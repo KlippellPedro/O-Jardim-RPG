@@ -1,6 +1,8 @@
 import { aplicarAjustesAtributosRaciais } from './calculoService';
 import { RACAS_CATALOGO } from './catalogoService';
 import { opcoesHabilidadeSelecionadas } from './progressaoFichaService';
+import { resumirLimiteItensEspeciais } from './itensEspeciaisService';
+import { efeitosBrutosDoFrutoEden } from './frutoEdenAwakening';
 
 export interface IResumoEquipamento {
   defesaEquipamento: number;
@@ -9,6 +11,12 @@ export interface IResumoEquipamento {
   espacosUsados: number;
   capacidade: number;
   sobrecarregado: boolean;
+  itensEspeciais: {
+    usados: number;
+    limite: number;
+    itensPericia: number;
+    artefatos: number;
+  };
   conflitos: string[];
   bonusAtributos: Record<string, number>;
   bonusRecursos: Record<string, number>;
@@ -111,7 +119,7 @@ export function detalharEfeitosAutomaticos(
   resumo.efeitosAtivos
     .filter((efeito) => efeito.categoria === categoria && efeito.alvo === alvo)
     .forEach((efeito) => {
-      const origemAutonoma = /^(Poder|Habilidade|Fruto do Éden):/i.test(efeito.origem);
+      const origemAutonoma = /^(Poder|Habilidade|Fruto do Éden|Aliado):/i.test(efeito.origem);
       const nome = origemAutonoma
         ? efeito.origem
         : `${efeito.itemNome}: ${efeito.origem}`;
@@ -133,12 +141,20 @@ export function capacidadeCarga(forca: number, nivel: number): number {
   return Math.max(5, 10 + Math.max(0, modificador) * 2 + Math.floor(Math.max(1, Number(nivel) || 1) / 2));
 }
 
-export function resumirEquipamentos(inventarioCentral: any[], ficha: any): IResumoEquipamento {
+export function resumirEquipamentos(
+  inventarioCentral: any[],
+  ficha: any,
+  aliadosCompartilhados: any[] = [],
+): IResumoEquipamento {
   const itens = Array.isArray(inventarioCentral) ? inventarioCentral : [];
   // Veículos são bens independentes: não ocupam a carga pessoal e seus
   // sistemas não aplicam bônus diretamente ao personagem.
   const itensPessoais = itens.filter((item) => item?.dados?.categoria !== 'veiculo');
-  const equipados = itensPessoais.filter((item) => item?.dados?.equipado);
+  const resumoItensEspeciais = resumirLimiteItensEspeciais(itensPessoais, ficha);
+  const idsEspeciaisExcedentes = new Set(resumoItensEspeciais.excedentes.map((item) => String(item.item_id || item.id || '')));
+  const equipados = itensPessoais.filter((item) => (
+    item?.dados?.equipado && !idsEspeciaisExcedentes.has(String(item?.item_id || item?.id || ''))
+  ));
   const bonusAtributos: Record<string, number> = {};
   const bonusRecursos: Record<string, number> = {};
   const bonusCombate: Record<string, number> = {};
@@ -147,6 +163,11 @@ export function resumirEquipamentos(inventarioCentral: any[], ficha: any): IResu
   const desvantagens: Record<string, number> = {};
   const efeitosAtivos: IEfeitoEquipamentoAtivo[] = [];
   const conflitos: string[] = [];
+  if (resumoItensEspeciais.excedentes.length > 0) {
+    conflitos.push(
+      `${resumoItensEspeciais.excedentes.length} item(ns) especial(is) excedem o limite de ${resumoItensEspeciais.limite}; os bônus excedentes estão inativos.`,
+    );
+  }
 
   const adicionarEfeitos = (
     efeitos: unknown,
@@ -168,9 +189,9 @@ export function resumirEquipamentos(inventarioCentral: any[], ficha: any): IResu
   };
 
   equipados.forEach((item) => {
-    // A ficha aplica o que estiver escrito no item. Os tetos de raridade do
-    // livro continuam valendo como orientação de mesa, e aparecem como aviso
-    // nos modais, mas não cortam nem limitam nenhum valor aqui.
+    // Só os itens especiais que cabem no orçamento de uso chegam a esta lista.
+    // Itens antigos acima do limite continuam no inventário, mas seus efeitos
+    // excedentes não alteram a ficha até uma vaga ser liberada.
     const modificacoes = normalizarModificacoesEquipamento(item?.dados?.modificacoes);
     const efeitosRaridade = normalizarEfeitosEquipamento(item?.dados?.efeitosRaridade);
 
@@ -191,15 +212,16 @@ export function resumirEquipamentos(inventarioCentral: any[], ficha: any): IResu
       }));
   });
 
+  const efeitosFruto = efeitosBrutosDoFrutoEden(ficha);
   const fontesDaFicha = [
     { itens: ficha?.poderes, rotulo: 'Poder' },
     { itens: ficha?.habilidades, rotulo: 'Habilidade' },
     {
-      itens: ficha?.frutoEdenConsumido?.conteudo?.efeitosFicha?.length
+      itens: ficha?.frutoEdenConsumido && Array.isArray(efeitosFruto) && efeitosFruto.length > 0
         ? [{
             id: `fruto:${ficha.frutoEdenConsumido.itemId || 'eden'}`,
             nome: ficha.frutoEdenConsumido.titulo || 'Fruto do Éden',
-            efeitos: ficha.frutoEdenConsumido.conteudo.efeitosFicha,
+            efeitos: efeitosFruto,
           }]
         : [],
       rotulo: 'Fruto do Éden',
@@ -216,6 +238,17 @@ export function resumirEquipamentos(inventarioCentral: any[], ficha: any): IResu
       }
     });
   });
+  const aliadosAtivos = [
+    ...(Array.isArray(ficha?.aliados) ? ficha.aliados : []),
+    ...(Array.isArray(aliadosCompartilhados) ? aliadosCompartilhados : []),
+  ].filter((aliado: any) => aliado?.emCena !== false);
+  aliadosAtivos.forEach((aliado: any) => {
+    adicionarEfeitos(aliado?.efeitos, {
+      itemId: String(aliado?.id || ''),
+      itemNome: String(aliado?.nome || 'Aliado'),
+      origem: `Aliado: ${aliado?.nome || 'Desconhecido'}`,
+    }, true);
+  });
   opcoesHabilidadeSelecionadas(ficha).forEach((opcao) => {
     adicionarEfeitos(opcao.efeitos, {
       itemId: opcao.id,
@@ -224,7 +257,13 @@ export function resumirEquipamentos(inventarioCentral: any[], ficha: any): IResu
     }, true);
   });
   const armaduras = equipados.filter((item) => item?.dados?.categoria === 'armadura');
-  const escudos = armaduras.filter((item) => String(item?.dados?.subtipo || item?.titulo || '').toLowerCase().includes('escudo'));
+  const escudos = armaduras.filter((item) => (
+    item?.dados?.categoria_protecao
+      ? item.dados.categoria_protecao === 'escudo'
+      // Peça comprada antes da separação escudo/armadura ainda não tem
+      // categoria_protecao: cai pro subtipo antigo ou pro título.
+      : String(item?.dados?.subtipo || item?.titulo || '').toLowerCase().includes('escudo')
+  ));
   const malhas = armaduras.filter((item) => String(item?.dados?.material || item?.titulo || '').toLowerCase().includes('malha'));
   const principais = armaduras.filter((item) => !escudos.includes(item) && !malhas.includes(item));
   if (principais.length > 1) conflitos.push('Equipe no máximo uma armadura principal.');
@@ -250,6 +289,12 @@ export function resumirEquipamentos(inventarioCentral: any[], ficha: any): IResu
     espacosUsados,
     capacidade,
     sobrecarregado: espacosUsados > capacidade,
+    itensEspeciais: {
+      usados: resumoItensEspeciais.usados,
+      limite: resumoItensEspeciais.limite,
+      itensPericia: resumoItensEspeciais.porGrupo['item-pericia'],
+      artefatos: resumoItensEspeciais.porGrupo.artefato,
+    },
     conflitos,
     bonusAtributos,
     bonusRecursos,

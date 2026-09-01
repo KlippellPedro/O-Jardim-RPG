@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { ORIGENS } from '../../data/ficha/origensData.ts';
 
 import {
   ATRIBUTOS,
@@ -21,13 +22,28 @@ test('os três métodos de atributos ficam disponíveis para jogadores e Mestres
   assert.equal(rolagemAtributosPermitida(true), true);
 });
 
+test('catálogo de origens tem vinte opções simples, ids únicos e um benefício por origem', () => {
+  assert.equal(ORIGENS.length, 20);
+  assert.equal(new Set(ORIGENS.map((origem) => origem.id)).size, ORIGENS.length);
+  ORIGENS.forEach((origem) => {
+    assert.ok(origem.titulo.trim());
+    assert.ok(origem.descricao.trim());
+    assert.equal(origem.ajustes.length, 1);
+    origem.ajustes.forEach((ajuste) => {
+      assert.ok(Number.isFinite(ajuste.valor));
+      assert.notEqual(ajuste.valor, 0);
+      assert.ok(ajuste.rotulo.trim());
+    });
+  });
+});
+
 test('teste de atributo com modificador zero não recebe metade do nível', () => {
   assert.equal(bonusTesteAtributo(10), 0);
   assert.equal(bonusTesteAtributo(30), 10);
   assert.equal(bonusTesteAtributo(10, -2), -2);
 });
 
-test('origens e ajustes nomeados permanecem pequenos e somam pela fonte', () => {
+test('origem de atributo aplica apenas o atributo escolhido e aumenta seu modificador em um', () => {
   const ficha = {
     origemId: 'academico',
     ajustesFicha: {
@@ -37,7 +53,14 @@ test('origens e ajustes nomeados permanecem pequenos e somam pela fonte', () => 
       ],
     },
   };
-  assert.equal(ajusteOrigem(ficha, 'pericia', 'conhecimento'), 1);
+  assert.equal(ajusteOrigem(ficha, 'pericia', 'conhecimento'), 0);
+  assert.equal(ajusteOrigem(ficha, 'pericia', 'investigacao'), 0);
+  assert.equal(ajusteOrigem(ficha, 'pericia', 'percepcao'), 0);
+  assert.equal(ajusteOrigem(ficha, 'atributo', 'inteligencia'), 2);
+  assert.equal(
+    bonusTesteAtributo(10 + ajusteOrigem(ficha, 'atributo', 'inteligencia')) - bonusTesteAtributo(10),
+    1,
+  );
   assert.equal(totalAjustesManuais(ficha, chaveAjuste('pericia', 'conhecimento')), 2);
 });
 
@@ -47,13 +70,20 @@ test('origem Artesão aplica o bônus de Ofício a uma perícia personalizada pe
   // perícia de Ofício nasce personalizada com id gerado por timestamp, nunca
   // literalmente "oficio" — então ajusteOrigem precisa casar pelo título.
   const idPersonalizado = 'custom_1735000000000';
-  assert.equal(ajusteOrigem(ficha, 'pericia', idPersonalizado, 'Ofício'), 1);
+  assert.equal(ajusteOrigem(ficha, 'pericia', idPersonalizado, 'Ofício'), 2);
   assert.equal(ajusteOrigem(ficha, 'pericia', idPersonalizado, 'Ofício (Ferreiro)'), 0);
   assert.equal(nomeAjusteOrigem(ficha, 'pericia', idPersonalizado, 'Ofício'), 'Origem: Artesão');
   // Uma perícia sem relação nenhuma com Ofício não deve ganhar o bônus.
   assert.equal(ajusteOrigem(ficha, 'pericia', idPersonalizado, 'Furtividade'), 0);
   // Compatibilidade: se algum dia "oficio" voltar a ser um id fixo, o match direto continua valendo.
-  assert.equal(ajusteOrigem(ficha, 'pericia', 'oficio'), 1);
+  assert.equal(ajusteOrigem(ficha, 'pericia', 'oficio'), 2);
+});
+
+test('origens alternativas podem trocar o atributo por recursos ou movimento', () => {
+  assert.equal(ajusteOrigem({ origemId: 'viajante' }, 'movimento'), 1.5);
+  assert.equal(ajusteOrigem({ origemId: 'viajante' }, 'atributo', 'destreza'), 0);
+  assert.equal(ajusteOrigem({ origemId: 'sobrevivente' }, 'vidaMaxima'), 2);
+  assert.equal(ajusteOrigem({ origemId: 'batedor' }, 'pericia', 'percepcao'), 2);
 });
 
 test('conjunto padrão equivale exatamente à compra de 24 pontos', () => {

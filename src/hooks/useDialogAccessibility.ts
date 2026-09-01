@@ -21,6 +21,10 @@ interface DialogAccessibilityOptions<T extends HTMLElement> {
   returnFocusRef?: RefObject<HTMLElement>;
   closeOnEscape?: boolean;
   restoreFocus?: boolean;
+  /** Elemento do backdrop quando ele é irmão do diálogo (não um ancestral) -
+   * sem isto, hideContentOutsideDialog o marcaria `inert` junto com o resto
+   * do conteúdo de fora, e o clique-fora-fecha nunca chegaria a disparar. */
+  backdropRef?: RefObject<HTMLElement>;
 }
 
 function focusableElements(container: HTMLElement): HTMLElement[] {
@@ -37,14 +41,14 @@ interface InertedSibling {
   ariaHidden: string | null;
 }
 
-function hideContentOutsideDialog(dialog: HTMLElement): InertedSibling[] {
+function hideContentOutsideDialog(dialog: HTMLElement, exempt: HTMLElement | null): InertedSibling[] {
   const changed: InertedSibling[] = [];
   let branch: HTMLElement = dialog;
   let parent = branch.parentElement;
 
   while (parent) {
     for (const sibling of Array.from(parent.children)) {
-      if (sibling === branch || !(sibling instanceof HTMLElement)) continue;
+      if (sibling === branch || sibling === exempt || !(sibling instanceof HTMLElement)) continue;
       changed.push({
         element: sibling,
         hadInert: sibling.hasAttribute('inert'),
@@ -73,6 +77,7 @@ export function useDialogAccessibility<T extends HTMLElement>({
   returnFocusRef,
   closeOnEscape = true,
   restoreFocus = true,
+  backdropRef,
 }: DialogAccessibilityOptions<T>) {
   const idRef = useRef(Symbol('dialog'));
   const onCloseRef = useRef(onClose);
@@ -91,7 +96,7 @@ export function useDialogAccessibility<T extends HTMLElement>({
     scrollLockDepth += 1;
 
     const dialog = dialogRef.current;
-    const inertedSiblings = dialog ? hideContentOutsideDialog(dialog) : [];
+    const inertedSiblings = dialog ? hideContentOutsideDialog(dialog, backdropRef?.current ?? null) : [];
     const addedTabIndex = Boolean(dialog && !dialog.hasAttribute('tabindex'));
     if (addedTabIndex) dialog?.setAttribute('tabindex', '-1');
 
@@ -154,5 +159,5 @@ export function useDialogAccessibility<T extends HTMLElement>({
         window.requestAnimationFrame(() => focusReturnTarget.focus({ preventScroll: true }));
       }
     };
-  }, [closeOnEscape, dialogRef, initialFocusRef, open, restoreFocus, returnFocusRef]);
+  }, [backdropRef, closeOnEscape, dialogRef, initialFocusRef, open, restoreFocus, returnFocusRef]);
 }

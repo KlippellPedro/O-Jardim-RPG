@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type CSSProperties } from 'react';
 import { HelpCircle, X, Pencil } from 'lucide-react';
-import { SectionTitle, LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
+import { SectionTitle, LabeledInput, LabeledModalSelect, LabeledSelect } from '../components/SharedFichaComponents';
 import { ModalInfoFicha } from '../components/ModalInfoFicha';
 import { carregarCatalogo } from '../../../services/catalogoService';
 import { ICatalogo } from '../../../types/catalogo';
@@ -8,9 +8,10 @@ import { aplicarAjustesAtributosRaciais, ATRIBUTOS, ATRIBUTO_VALOR_MINIMO, bonus
 import { limparEscolhasPrincipaisRaciais, obterGruposEscolhaRacial, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, arvoresVisiveisComAtual, filtrarPorArvore, filtrarPorLiberacao } from '../../../../data/mundo/arvoresCatalog';
+import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, arvoresVisiveisComAtual, filtrarPorArvore, filtrarPorLiberacao, type ArvoreEntry } from '../../../../data/mundo/arvoresCatalog';
 import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
 import {
+  adicionarCondicaoOficial,
   atualizarStatusVital,
   bonusIniciativaFicha,
   desvantagensAutomaticasTeste,
@@ -28,9 +29,9 @@ import {
   type IDetalheEfeitoAutomatico,
 } from '../../../services/equipamentoService';
 import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../../data/regras/condicoes';
-import { ORIGENS_EXEMPLO, obterOrigemExemplo } from '../../../../data/ficha/origensData';
+import { ORIGENS, obterOrigem, resumoAjustesOrigem } from '../../../../data/ficha/origensData';
 import { AjusteButton, AjustesFichaModal } from '../components/AjustesFichaModal';
-import { ModalPortal } from '../components/ModalPortal';
+import { FichaModal } from '../components/FichaModal';
 import {
   ajusteOrigem,
   chaveAjuste,
@@ -43,11 +44,42 @@ import { AtributosSection, NOMES_ATRIBUTOS } from '../components/AtributosSectio
 import { StatusVitaisSection } from '../components/StatusVitaisSection';
 import { FamaPrestigioSection } from '../components/FamaPrestigioSection';
 import { FrutoEdenSection } from '../components/FrutoEdenSection';
+import { obterTemaPorId } from '../../../redesign/themeMap';
+import { Select } from '../../../components/ui/Select';
 
 interface IClasseSlot {
   classeId: string;
   nivel: number;
 }
+
+const resumoIdentidade = (descricao: string | undefined, fallback: string) => {
+  const texto = descricao?.replace(/\s+/g, ' ').trim();
+  return texto || fallback;
+};
+
+const visualDaArvore = (arvore: ArvoreEntry) => {
+  const rgb = arvore.rgbInterface || arvore.rgb;
+  return {
+    color: `rgb(${rgb})`,
+    secondaryColor: `rgb(${arvore.rgb})`,
+    glow: `rgba(${rgb},0.28)`,
+  };
+};
+
+const PALETAS_ORIGEM = [
+  { color: '#d6a84b', secondaryColor: '#6b4615', glow: 'rgba(214,168,75,0.24)' },
+  { color: '#38bdf8', secondaryColor: '#075985', glow: 'rgba(56,189,248,0.22)' },
+  { color: '#34d399', secondaryColor: '#065f46', glow: 'rgba(52,211,153,0.22)' },
+  { color: '#c084fc', secondaryColor: '#581c87', glow: 'rgba(192,132,252,0.22)' },
+  { color: '#fb7185', secondaryColor: '#9f1239', glow: 'rgba(251,113,133,0.22)' },
+  { color: '#fb923c', secondaryColor: '#9a3412', glow: 'rgba(251,146,60,0.22)' },
+];
+
+const visualDaOrigem = (index: number) => PALETAS_ORIGEM[index % PALETAS_ORIGEM.length];
+
+const rotuloCategoria = (tipo: 'Raça' | 'Classe', categoria?: string) => (
+  categoria === 'esquecida' ? `${tipo} especial` : `${tipo} padrão`
+);
 
 const combinarDetalhesAutomaticos = (...listas: IDetalheEfeitoAutomatico[][]): IDetalheEfeitoAutomatico[] => {
   const totais = new Map<string, number>();
@@ -66,6 +98,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
     automaticos: Array<{ nome: string; valor: number }>;
   } | null>(null);
   const [catalogo, setCatalogo] = useState<ICatalogo | null>(null);
+  const [novaClasseNivelId, setNovaClasseNivelId] = useState('');
 
   useEffect(() => {
     carregarCatalogo().then(setCatalogo);
@@ -79,12 +112,19 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
 
   const status = obterStatusFicha(f);
   const racaAtual = catalogo?.racas.find(raca => raca.id === f.racaId) || null;
-  const origemAtual = obterOrigemExemplo(f.origemId);
+  const origemAtual = obterOrigem(f.origemId);
+  const temaOrigemAtual = origemAtual
+    ? visualDaOrigem(Math.max(0, ORIGENS.findIndex((origem) => origem.id === origemAtual.id)))
+    : null;
+  const estiloResumoOrigem = temaOrigemAtual ? {
+    '--origin-color': temaOrigemAtual.color,
+    '--origin-glow': temaOrigemAtual.glow,
+  } as CSSProperties : undefined;
   const classes: IClasseSlot[] = f.classes?.length
     ? f.classes
     : (f.classeId ? [{ classeId: f.classeId, nivel: character.nivel || 1 }] : []);
   const nivelTotalClasses = classes.reduce((sum, classe) => sum + (Number(classe.nivel) || 1), 0) || 1;
-  const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], f);
+  const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], f, character.aliadosCompartilhados || []);
   const attrsNaturais = (f.atributosFinais || character.atributosFinais || { forca:10, destreza:10, constituicao:10, inteligencia:10, sabedoria:10, carisma:10, fluxo:10 }) as Record<TAtributo, number>;
   const attrsAntesRacaSemEquipamento = Object.fromEntries(ATRIBUTOS.map((attr) => [
     attr,
@@ -498,11 +538,14 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
   };
 
   const handleOrigemChange = (origemId: string) => {
-    const origem = obterOrigemExemplo(origemId);
+    const origem = obterOrigem(origemId);
     const novaFicha = {
       ...f,
       origemId,
-      origem: origem?.titulo || (origemId === 'personalizada' ? '' : f.origem || ''),
+      // "personalizada" abre um campo de texto livre em branco para o
+      // jogador digitar; nos demais casos (catálogo ou "Sem origem"),
+      // preserva o texto legado digitado antes do catálogo de origens existir.
+      origem: origem?.titulo || (origemId === 'personalizada' ? '' : (f.origem || '')),
     };
     if (catalogo) {
       novaFicha.derivados = calcularDerivadosComClasses(
@@ -573,20 +616,43 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
     <div className="space-y-6">
       
       {/* LINHA 1: IDENTIDADE E CLASSE */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6" data-tour="section-overview">
         
         {/* IDENTIDADE */}
-        <div className="lg:col-span-2 bg-[#0f0e15] border border-white/5 rounded-2xl p-6">
+        <div className="lg:col-span-2 bg-[#0f0e15] border border-white/5 rounded-2xl p-6" data-tour="ficha-identidade">
           <SectionTitle title="Identidade do Personagem" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <LabeledInput label="Nome do Personagem" value={character.nome} onChange={(v:any) => onUpdate(['nome'], v)} />
             <LabeledModalSelect
               label="Árvore"
               value={f.arvoreId}
+              identity="arvore"
               options={[
-                { value: SEM_ARVORE_ID, label: 'Sem Árvore' },
+                {
+                  value: SEM_ARVORE_ID,
+                  label: 'Sem Árvore',
+                  eyebrow: 'Origem não revelada',
+                  description: 'Mantém a verdadeira ligação do personagem oculta e não restringe suas opções.',
+                  color: '#94a3b8',
+                  secondaryColor: '#334155',
+                  glow: 'rgba(148,163,184,0.22)',
+                },
                 ...(isMestre ? ARVORES : arvoresVisiveisComAtual(arvoresDisponiveis, f.arvoreId))
-                  .map(arvore => ({ value: arvore.id, label: arvore.nome })),
+                  .map(arvore => ({
+                    value: arvore.id,
+                    label: arvore.nome,
+                    eyebrow: arvore.naoEhArvore
+                      ? 'Origem entre as Árvores'
+                      : arvore.id === 'universal'
+                        ? 'Afinidade universal'
+                        : `Deidade · ${arvore.deidadeTitulo}`,
+                    description: arvore.naoEhArvore
+                      ? 'O espaço entre as Árvores e o restante do universo; não é uma Árvore do Jardim.'
+                      : arvore.id === 'universal'
+                        ? 'Uma origem sem afinidade exclusiva com apenas uma Árvore.'
+                        : `Origem vinculada à Árvore de ${arvore.deidadeTitulo}.`,
+                    ...visualDaArvore(arvore),
+                  })),
               ]}
               onChange={(v:any) => onUpdate(['ficha', 'arvoreId'], v)}
               disabled={!isMestre}
@@ -594,15 +660,24 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
             <LabeledModalSelect
               label="Raça"
               value={f.racaId}
+              identity="raca"
               options={catalogo
-                ? (isMestre ? racasFiltradas : racasEditaveisPeloJogador).map(raca => ({
-                    value: raca.id,
-                    // A raça personalizada mostra o nome que o jogador escreveu,
-                    // não o rótulo genérico do catálogo.
-                    label: raca.id === RACA_PERSONALIZADA_ID
-                      ? nomeExibicaoRaca(raca.id, f.racaNomePersonalizado, raca.titulo)
-                      : raca.titulo,
-                  }))
+                ? (isMestre ? racasFiltradas : racasEditaveisPeloJogador).map(raca => {
+                    const tema = obterTemaPorId(raca.id);
+                    return {
+                      value: raca.id,
+                      // A raça personalizada mostra o nome que o jogador escreveu,
+                      // não o rótulo genérico do catálogo.
+                      label: raca.id === RACA_PERSONALIZADA_ID
+                        ? nomeExibicaoRaca(raca.id, f.racaNomePersonalizado, raca.titulo)
+                        : raca.titulo,
+                      eyebrow: rotuloCategoria('Raça', raca.categoria),
+                      description: resumoIdentidade(raca.descricao, 'Origem racial disponível para este personagem.'),
+                      color: tema.primary,
+                      secondaryColor: tema.secondary,
+                      glow: tema.glow,
+                    };
+                  })
                 : [{ value: '', label: 'Carregando...' }]}
               onChange={handleRacaChange}
               disabled={!catalogo}
@@ -618,7 +693,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
             )}
 
             {gruposEscolhaRacial.map(grupo => (
-              <LabeledModalSelect
+              <LabeledSelect
                 key={grupo.campo}
                 label={grupo.rotulo}
                 value={f.escolhaRacial?.[grupo.campo]}
@@ -628,24 +703,59 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               />
             ))}
             
-            <LabeledModalSelect
-              label="Origem"
-              value={f.origemId || (f.origem ? 'personalizada' : '')}
-              options={[
-                { value: '', label: 'Sem origem' },
-                ...ORIGENS_EXEMPLO.map((origem) => ({ value: origem.id, label: `${origem.titulo}: ${origem.ajuste.rotulo}` })),
-                { value: 'personalizada', label: 'Outra / personalizada' },
-              ]}
-              onChange={handleOrigemChange}
-            />
-            {origemAtual ? (
-              <p className="self-end rounded-md border border-[#c7a44c]/10 bg-[#c7a44c]/5 px-3 py-2 text-xs leading-relaxed text-gray-400" title={origemAtual.ajuste.rotulo}>
-                {origemAtual.descricao}
-              </p>
-            ) : null}
-            {(f.origemId === 'personalizada' || (!f.origemId && f.origem)) && (
-              <LabeledInput label="Nome da origem" value={f.origem || ''} placeholder="Ex.: Jornalista" onChange={(v:any) => onUpdate(['ficha', 'origem'], v)} />
-            )}
+            <div className="md:col-span-2 grid min-w-0 grid-cols-1 gap-3 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+              <LabeledModalSelect
+                label="Origem"
+                value={f.origemId || (f.origem ? 'personalizada' : '')}
+                identity="origem"
+                options={[
+                  {
+                    value: '',
+                    label: 'Sem origem',
+                    eyebrow: 'Passado em aberto',
+                    description: 'Não aplica nenhum benefício automático à ficha.',
+                    color: '#94a3b8',
+                    secondaryColor: '#334155',
+                    glow: 'rgba(148,163,184,0.2)',
+                  },
+                  ...ORIGENS.map((origem, index) => ({
+                    value: origem.id,
+                    label: origem.titulo,
+                    eyebrow: origem.categoria,
+                    description: origem.descricao,
+                    meta: resumoAjustesOrigem(origem),
+                    searchText: resumoAjustesOrigem(origem),
+                    ...visualDaOrigem(index),
+                  })),
+                  {
+                    value: 'personalizada',
+                    label: 'Outra / personalizada',
+                    eyebrow: 'Criação livre',
+                    description: 'Registra um passado narrativo sem aplicar benefícios automáticos.',
+                    color: '#d6a84b',
+                    secondaryColor: '#6b4615',
+                    glow: 'rgba(214,168,75,0.24)',
+                  },
+                ]}
+                onChange={handleOrigemChange}
+              />
+              {origemAtual ? (
+                <div className="ficha-origin-summary" style={estiloResumoOrigem}>
+                  <p>{origemAtual.descricao}</p>
+                  <div className="ficha-origin-summary__benefits">
+                    {origemAtual.ajustes.map((ajuste) => (
+                      <span key={`${ajuste.alvo}-${ajuste.chave || ajuste.rotulo}`}>{ajuste.rotulo}</span>
+                    ))}
+                  </div>
+                </div>
+              ) : (f.origemId === 'personalizada' || (!f.origemId && f.origem)) ? (
+                <LabeledInput label="Nome da origem" value={f.origem || ''} placeholder="Ex.: Jornalista" onChange={(v:any) => onUpdate(['ficha', 'origem'], v)} />
+              ) : (
+                <div className="ficha-origin-summary is-empty">
+                  Escolha uma origem para ver sua história e seus benefícios.
+                </div>
+              )}
+            </div>
             <LabeledInput label="Título" value={f.titulo} placeholder="Ex: O Assassino" onChange={(v:any) => onUpdate(['ficha', 'titulo'], v)} />
             <LabeledInput label="Nível Total" value={nivelTotalClasses} readOnly={true} type="number" />
             <LabeledInput label="Tamanho" value={f.tamanho} placeholder="Ex: Normal" onChange={(v:any) => onUpdate(['ficha', 'tamanho'], v)} />
@@ -659,44 +769,68 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
         </div>
 
         {/* CLASSE */}
-        <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6">
+        <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6" data-tour="ficha-classes">
           <SectionTitle title="Classe" />
           <p className="text-xs text-gray-500 mb-4">{classes.length || 0} classe(s) · nível total {character.nivel}</p>
           <div className="flex flex-col gap-2 mb-4">
-            {classes.map((classeSlot, index) => (
-              <div key={index} className="flex gap-2">
-                <div className="flex-1">
+            {classes.map((classeSlot, index) => {
+              const classeAtualDoSlot = catalogo?.classes.find((classe) => classe.id === classeSlot.classeId);
+              const temaClasse = obterTemaPorId(classeSlot.classeId || 'humano');
+              const slotStyle = {
+                '--class-slot-color': temaClasse.primary,
+                '--class-slot-secondary': temaClasse.secondary,
+                '--class-slot-glow': temaClasse.glow,
+              } as CSSProperties;
+
+              return (
+              <div key={index} className="ficha-class-slot" style={slotStyle}>
+                <div className="min-w-0 flex-1">
                   <LabeledModalSelect
-                    label=""
+                    label={`Classe ${index + 1}`}
                     value={classeSlot.classeId}
+                    identity="classe"
                     options={catalogo
-                      ? (isMestre ? classesFiltradas : classesEditaveisPeloJogador(classeSlot.classeId)).map(classe => ({ value: classe.id, label: classe.titulo }))
+                      ? (isMestre ? classesFiltradas : classesEditaveisPeloJogador(classeSlot.classeId)).map(classe => {
+                          const tema = obterTemaPorId(classe.id);
+                          return {
+                            value: classe.id,
+                            label: classe.titulo,
+                            eyebrow: rotuloCategoria('Classe', classe.categoria),
+                            description: resumoIdentidade(classe.descricao, 'Caminho de progressão disponível para este personagem.'),
+                            color: tema.primary,
+                            secondaryColor: tema.secondary,
+                            glow: tema.glow,
+                          };
+                        })
                       : [{ value: '', label: 'Carregando...' }]}
                     onChange={(v: any) => handleClasseChange(index, v)}
                     disabled={!catalogo}
                   />
                 </div>
-                <div className="w-20">
+                <div className="ficha-class-slot__level">
+                  <label htmlFor={`nivel-classe-${index}`}>Nível</label>
                   <input
+                    id={`nivel-classe-${index}`}
                     type="number"
                     min={1}
                     max={20}
                     value={classeSlot.nivel}
                     onChange={(e) => handleClasseNivelChange(index, parseInt(e.target.value) || 1)}
-                    className="w-full bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors text-center"
+                    className="ficha-class-slot__level-input"
                   />
                 </div>
-                <div className="flex items-center">
-                  <button
-                    onClick={() => handleRemoverClasse(index)}
-                    className="text-gray-600 hover:text-red-500 transition-colors"
-                    title="Remover classe"
-                  >
-                    <X size={16} />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => handleRemoverClasse(index)}
+                  className="ficha-class-slot__remove"
+                  aria-label={`Remover classe ${classeAtualDoSlot?.titulo || index + 1}`}
+                  title="Remover classe"
+                >
+                  <X size={16} />
+                </button>
               </div>
-            ))}
+              );
+            })}
             {classes.length === 0 && (
               <p className="text-xs text-gray-600 italic">Nenhuma classe ainda.</p>
             )}
@@ -762,11 +896,11 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
       />
 
       {/* LINHA 5: COMBATE */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6">
+      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6" data-tour="ficha-combate">
         <SectionTitle title="Combate" />
         
         {/* Status Derivados */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" data-tour="ficha-combate-derivados">
           <div className="bg-[#121118] border border-white/5 rounded-xl p-4">
             <div className="flex justify-between mb-4">
               <span className="text-xs font-bold uppercase text-gray-500">Defesa</span>
@@ -843,7 +977,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
         <div className="w-full h-[1px] bg-white/5 mb-8 border-dashed"></div>
 
         {/* Textareas */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6" data-tour="ficha-condicoes">
           <div className="flex flex-col gap-2">
             <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Resistências</label>
             <textarea aria-label="Resistências" readOnly={!isMestre} value={f.resistenciasTexto || ''} onChange={(event) => onUpdate(['ficha', 'resistenciasTexto'], event.target.value)} placeholder="Ex.: Fogo 5, Corte 3..." className="bg-[#121118] border border-white/5 rounded-md p-3 text-sm text-gray-300 min-h-[100px] resize-none focus:border-[#c7a44c]/50 read-only:cursor-not-allowed read-only:opacity-70"></textarea>
@@ -866,25 +1000,31 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               className="bg-[#121118] border border-white/5 rounded-md p-3 text-sm text-gray-300 min-h-[100px] resize-none focus:border-[#c7a44c]/50 read-only:cursor-not-allowed read-only:opacity-70"
             ></textarea>
           </div>
-          <div className="flex flex-col gap-2 relative">
-            <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Condições Ativas</label>
-            <div className="bg-[#121118] border border-white/5 rounded-md p-3 min-h-[100px] flex flex-col gap-2">
+          <div id="ficha-condicoes-ativas" className="relative flex scroll-mt-28 flex-col gap-2 rounded-2xl border border-red-400/10 bg-red-400/[0.025] p-3 transition-shadow">
+            <div className="flex items-center justify-between gap-3">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-red-200/70">Condições Ativas</label>
+              <span className="rounded-full border border-red-400/15 bg-red-400/[0.06] px-2 py-1 text-[9px] font-bold text-red-200/70">{(f.condicoesAtivas || []).length}</span>
+            </div>
+            <div className="flex min-h-[100px] flex-col gap-2 rounded-xl border border-white/5 bg-[#121118] p-2.5">
               {(f.condicoesAtivas || []).map((c: any, i: number) => (
-                <div key={i} className="bg-black/50 border border-red-500/20 p-2 rounded flex justify-between items-start group">
-                  <div>
-                    <div className="text-red-400 font-bold text-xs uppercase">{c.nome}</div>
-                    <div className="text-gray-400 text-xs mt-1">{c.descricao}</div>
-                    <div className="text-gray-500 text-[10px] mt-1 italic">Afeta: {c.afeta}</div>
+                <div key={c.id || `${c.nome}-${i}`} className="group flex items-start justify-between gap-3 rounded-lg border border-red-400/15 bg-black/40 p-3 transition-colors hover:border-red-400/30">
+                  <div className="min-w-0">
+                    <div className="text-xs font-bold uppercase tracking-wide text-red-300">{c.nome}</div>
+                    <div className="mt-1 text-xs leading-relaxed text-gray-400">{c.descricao}</div>
+                    <div className="mt-2 flex flex-wrap gap-1.5 text-[9px] font-bold uppercase tracking-wider text-gray-500">
+                      {c.afeta && <span className="rounded-md bg-white/[0.04] px-2 py-1">{c.afeta}</span>}
+                      {c.duracao && <span className="rounded-md bg-white/[0.04] px-2 py-1 normal-case tracking-normal">{c.duracao}</span>}
+                    </div>
                   </div>
-                  <div className="flex gap-1">
-                    <button onClick={() => setActiveModal({ isCondicaoModal: true, condicao: c, editIndex: i })} className="text-gray-600 opacity-0 transition-opacity hover:text-white group-hover:opacity-100" aria-label={`Editar condiÃ§Ã£o ${c.nome}`}>
+                  <div className="flex shrink-0 gap-1 opacity-70 transition-opacity group-hover:opacity-100">
+                    <button type="button" onClick={() => setActiveModal({ isCondicaoModal: true, condicao: c, editIndex: i })} className="rounded-md p-1.5 text-gray-500 transition-colors hover:bg-white/5 hover:text-white" aria-label={`Editar condição ${c.nome}`}>
                       <Pencil size={14} />
                     </button>
-                    <button onClick={() => {
+                    <button type="button" onClick={() => {
                       const next = [...(f.condicoesAtivas || [])];
                       next.splice(i, 1);
                       onUpdate(['ficha', 'condicoesAtivas'], next);
-                    }} className="text-gray-600 opacity-0 transition-opacity hover:text-red-500 group-hover:opacity-100" aria-label={`Remover condiÃ§Ã£o ${c.nome}`}>
+                    }} className="rounded-md p-1.5 text-gray-500 transition-colors hover:bg-red-400/10 hover:text-red-300" aria-label={`Remover condição ${c.nome}`}>
                       <X size={14} />
                     </button>
                   </div>
@@ -892,7 +1032,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               ))}
               <button 
                 onClick={() => setActiveModal({ isCondicaoModal: true })}
-                className="w-full py-2 border border-dashed border-red-500/30 text-red-300 hover:bg-red-500/10 hover:text-red-200 rounded-md text-xs uppercase font-bold transition-colors mt-auto"
+                className="mt-auto w-full rounded-lg border border-dashed border-red-400/30 py-2.5 text-xs font-bold text-red-300 transition-colors hover:bg-red-400/10 hover:text-red-200"
               >
                 + Adicionar Condição
               </button>
@@ -906,7 +1046,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
       <FrutoEdenSection character={character} />
 
       {/* LINHA 6: EXPERIÊNCIA */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col gap-4 mb-20">
+      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col gap-4 mb-20" data-tour="ficha-experiencia">
         <SectionTitle title="Experiência" />
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
            <div className="grid grid-cols-2 gap-2 sm:flex">
@@ -943,7 +1083,10 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
         {!isMestre && <p className="text-xs text-gray-500">Você pode registrar seu próprio XP e nível de classe aqui - o Mestre é avisado quando isso muda.</p>}
         {podeSubirNivel && (
           <button
-            onClick={() => setActiveModal({ isLevelUpModal: true })}
+            onClick={() => {
+              setNovaClasseNivelId('');
+              setActiveModal({ isLevelUpModal: true });
+            }}
             className="w-full py-3 rounded-lg bg-gradient-to-r from-[#c7a44c] to-yellow-600 text-black text-sm font-bold uppercase tracking-widest hover:scale-[1.01] transition-transform shadow-[0_0_20px_rgba(199,164,76,0.4)]"
           >
             ✧ Subir para o Nível {nivelPorXp(xpAtual)}
@@ -966,37 +1109,20 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
       )}
 
       {activeModal && activeModal.isCondicaoModal && (
-        <ModalPortal onClose={() => setActiveModal(null)}>
-        <div 
-          className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm"
-          onClick={() => setActiveModal(null)}
+        <FichaModal
+          isOpen={true}
+          onClose={() => setActiveModal(null)}
+          title={activeModal.editIndex !== undefined ? 'Editar Condição' : 'Nova Condição'}
         >
-          <div 
-            className="modal-surface w-full max-w-md overflow-y-auto rounded-2xl border border-red-500/30 bg-[#0f0e15] p-4 shadow-[0_0_50px_rgba(239,68,68,0.1)] custom-scrollbar sm:p-6"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-red-500 font-bold tracking-widest uppercase">
-                {activeModal.editIndex !== undefined ? 'Editar Condição' : 'Nova Condição'}
-              </h3>
-              <button type="button" aria-label="Fechar" onClick={() => setActiveModal(null)} className="text-gray-500 hover:text-white transition-colors">
-                <X size={20} />
-              </button>
-            </div>
+          <div className="space-y-5">
             {activeModal.editIndex === undefined && (
-              <div className="mb-5">
+              <div className="rounded-xl border border-red-500/15 bg-red-500/5 p-4">
                 <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-gray-500">Aplicar condição oficial</p>
-                <div className="grid max-h-44 grid-cols-2 gap-2 overflow-y-auto pr-1">
+                <div className="custom-scrollbar grid max-h-44 grid-cols-1 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
                   {[...CONDICOES_OFICIAIS, ...CRISES_SANIDADE].map((regra) => (
                     <button key={regra.id} type="button" onClick={() => {
-                      const next = [...(f.condicoesAtivas || []), {
-                        id: regra.id,
-                        nome: regra.titulo,
-                        descricao: regra.efeitos.join(' '),
-                        afeta: regra.categoria,
-                        duracao: regra.duracao,
-                      }];
-                      onUpdate(['ficha', 'condicoesAtivas'], next);
+                      const resultado = adicionarCondicaoOficial(f.condicoesAtivas, regra);
+                      if (resultado.adicionada) onUpdate(['ficha', 'condicoesAtivas'], resultado.condicoes);
                       setActiveModal(null);
                     }} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-left text-xs font-bold text-gray-300 hover:border-red-500/30 hover:text-red-300">
                       {regra.titulo}
@@ -1027,7 +1153,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Nome da Condição</label>
-                <input name="nome" type="text" defaultValue={activeModal.condicao?.nome || ''} required placeholder="Ex: Perna Ferida" className="bg-[#121118] border border-white/5 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50" />
+                <input data-autofocus name="nome" type="text" defaultValue={activeModal.condicao?.nome || ''} required placeholder="Ex: Perna Ferida" className="bg-[#121118] border border-white/5 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50" />
               </div>
               
               <div className="flex flex-col gap-1">
@@ -1045,27 +1171,12 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               </button>
             </form>
           </div>
-        </div>
-        </ModalPortal>
+        </FichaModal>
       )}
 
       {activeModal && activeModal.isLevelUpModal && (
-        <ModalPortal onClose={() => setActiveModal(null)}>
-        <div 
-          className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm"
-          onClick={() => setActiveModal(null)}
-        >
-          <div 
-            className="modal-surface w-full max-w-md overflow-y-auto rounded-2xl border border-[#c7a44c]/50 bg-[#0f0e15] p-4 shadow-[0_0_50px_rgba(199,164,76,0.2)] custom-scrollbar sm:p-6"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-[#c7a44c] font-bold tracking-widest uppercase">Evolução de Nível</h3>
-              <button type="button" aria-label="Fechar" onClick={() => setActiveModal(null)} className="text-gray-500 hover:text-white transition-colors">
-                <X size={20} />
-              </button>
-            </div>
-            
+        <FichaModal isOpen={true} onClose={() => setActiveModal(null)} title="Evolução de Nível">
+          <div>
             <p className="text-gray-300 text-sm mb-6">
               Você atingiu experiência suficiente para o nível {nivelPorXp(xpAtual)}! Como deseja aplicar este novo nível?
             </p>
@@ -1097,23 +1208,19 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                 <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-3">Multiclasse (Adquirir Nova Classe)</h4>
                 <form onSubmit={(e) => {
                   e.preventDefault();
-                  const form = e.target as HTMLFormElement;
-                  const novaClasseId = (form.elements.namedItem('novaClasseId') as HTMLSelectElement).value;
-                  if (novaClasseId) {
-                    handleSubirNivel({ tipo: 'nova', novaClasseId });
+                  if (novaClasseNivelId) {
+                    handleSubirNivel({ tipo: 'nova', novaClasseId: novaClasseNivelId });
                   }
                 }} className="flex gap-2">
-                  <select
-                    name="novaClasseId"
-                    required
-                    className="flex-1 bg-[#121118] border border-white/10 rounded-lg px-3 py-3 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 appearance-none"
-                  >
-                    <option value="">Selecione uma classe...</option>
-                    {classesDisponiveisMulticlasse.map(cl => (
-                        <option key={cl.id} value={cl.id}>{cl.titulo}</option>
-                      ))}
-                  </select>
-                  <button type="submit" className="px-4 py-3 bg-[#15141b] text-[#c7a44c] border border-[#c7a44c]/30 font-bold uppercase tracking-widest rounded-lg hover:bg-[#c7a44c]/20 transition-colors">
+                  <Select
+                    ariaLabel="Nova classe da multiclasse"
+                    value={novaClasseNivelId}
+                    onChange={setNovaClasseNivelId}
+                    placeholder="Selecione uma classe..."
+                    options={classesDisponiveisMulticlasse.map((classe) => ({ value: classe.id, label: classe.titulo }))}
+                    className="min-w-0 flex-1 bg-[#121118] border-white/10 rounded-lg px-3 py-3"
+                  />
+                  <button type="submit" disabled={!novaClasseNivelId} className="px-4 py-3 bg-[#15141b] text-[#c7a44c] border border-[#c7a44c]/30 font-bold uppercase tracking-widest rounded-lg hover:bg-[#c7a44c]/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40">
                     Adicionar
                   </button>
                 </form>
@@ -1123,8 +1230,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               </div>
             </div>
           </div>
-        </div>
-        </ModalPortal>
+        </FichaModal>
       )}
 
       {ajusteModal ? (

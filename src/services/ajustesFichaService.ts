@@ -1,4 +1,4 @@
-import { obterOrigemExemplo } from '../../data/ficha/origensData';
+import { obterOrigem, type IAjusteOrigem } from '../../data/ficha/origensData';
 
 export interface IAjusteFicha {
   id: string;
@@ -44,22 +44,30 @@ function origemCasaComPericia(chave: string, periciaId?: string, tituloPericia?:
   return false;
 }
 
+function ajusteCorresponde(
+  ajuste: IAjusteOrigem,
+  alvo: string,
+  chave?: string,
+  tituloAlvo?: string,
+): boolean {
+  if (ajuste.alvo !== alvo) return false;
+  if (!chave) return true;
+  if (!ajuste.chave) return false;
+  return alvo === 'pericia'
+    ? origemCasaComPericia(ajuste.chave, chave, tituloAlvo)
+    : ajuste.chave === chave;
+}
+
 export function ajusteOrigem(ficha: any, alvo: string, chave?: string, tituloAlvo?: string): number {
-  const origem = obterOrigemExemplo(ficha?.origemId);
-  if (!origem || origem.ajuste.alvo !== alvo) return 0;
-  if (!chave) return origem.ajuste.valor;
-  const chaveOrigem = origem.ajuste.chave;
-  if (!chaveOrigem) return 0;
-  if (alvo === 'pericia' ? !origemCasaComPericia(chaveOrigem, chave, tituloAlvo) : chaveOrigem !== chave) return 0;
-  return origem.ajuste.valor;
+  const origem = obterOrigem(ficha?.origemId);
+  if (!origem) return 0;
+  return origem.ajustes
+    .filter((ajuste) => ajusteCorresponde(ajuste, alvo, chave, tituloAlvo))
+    .reduce((total, ajuste) => total + ajuste.valor, 0);
 }
 
 export function nomeAjusteOrigem(ficha: any, alvo: string, chave?: string, tituloAlvo?: string): string | null {
-  const origem = obterOrigemExemplo(ficha?.origemId);
-  if (!origem || origem.ajuste.alvo !== alvo) return null;
-  if (!chave) return `Origem: ${origem.titulo}`;
-  const chaveOrigem = origem.ajuste.chave;
-  if (!chaveOrigem) return null;
-  if (alvo === 'pericia' ? !origemCasaComPericia(chaveOrigem, chave, tituloAlvo) : chaveOrigem !== chave) return null;
+  const origem = obterOrigem(ficha?.origemId);
+  if (!origem?.ajustes.some((ajuste) => ajusteCorresponde(ajuste, alvo, chave, tituloAlvo))) return null;
   return `Origem: ${origem.titulo}`;
 }

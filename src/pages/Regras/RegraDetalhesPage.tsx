@@ -12,7 +12,9 @@ import {
 import { formatarResumoClasse } from '../../services/classeService';
 import { DetalhesClasse } from './components/DetalhesClasse';
 import { useAuthStore } from '../../store/useAuthStore';
+import { usePermissoes } from '../../hooks/usePermissoes';
 import { PremiumCard } from '../../redesign/components/premium/PremiumCard';
+import { AuraEspecial, SeloEspecial } from '../../redesign/components/premium/AuraEspecial';
 import { RACA_PAGES } from '../../redesign/raca/registry';
 import { CLASSE_PAGES } from '../../redesign/classe/registry';
 import { useResolvedRules } from '../../hooks/useResolvedRules';
@@ -21,12 +23,11 @@ export const RegraDetalhesPage = () => {
   const { categoria, itemId } = useParams<{ categoria: string; itemId: string }>();
   const navigate = useNavigate();
   const { usuario, campanhaAtiva } = useAuthStore();
+  const { podeEditarConteudo } = usePermissoes();
   const isMestre = usuario?.papel_plataforma === 'admin'
     || usuario?.papel_plataforma === 'criador'
     || campanhaAtiva?.papel === 'mestre'
     || campanhaAtiva?.papel === 'assistente';
-  const podeEditarConteudo = usuario?.papel_plataforma === 'criador'
-    || campanhaAtiva?.papel === 'mestre';
   const { classes, racas } = useResolvedRules(campanhaAtiva?.id);
   const config = campanhaAtiva?.configuracoes ?? {};
   const racasLiberadas = new Set([
@@ -50,7 +51,7 @@ export const RegraDetalhesPage = () => {
     : undefined;
   const item = raca ?? classe;
   const rotaRetorno = `/regras?topico=${categoria === 'classes' ? 'classes' : 'racas'}`;
-  const rotaEdicao = `/mestre?aba=conteudo&secao=regras&item=${categoria === 'classes' ? 'classe' : 'raca'}:${encodeURIComponent(itemId || '')}`;
+  const rotaEdicao = `/criador?aba=conteudo&secao=regras&item=${categoria === 'classes' ? 'classe' : 'raca'}:${encodeURIComponent(itemId || '')}${campanhaAtiva ? `&campanha_id=${encodeURIComponent(campanhaAtiva.id)}` : ''}`;
   const gruposEscolhaRacial = obterGruposEscolhaRacial(raca);
   const estagiosRaciais = obterEstagiosRaciais(raca);
   const resumoRaca = raca?.descricao
@@ -140,6 +141,8 @@ export const RegraDetalhesPage = () => {
       {/* Gradient overlay para legibilidade */}
       <div className="fixed inset-0 z-[1] pointer-events-none bg-gradient-to-b from-black/30 via-transparent to-black/50" />
 
+      {isEspecial && <AuraEspecial cor={particleColor} variante="pagina" className="z-[2]" />}
+
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-24 pt-20 sm:px-6 sm:pb-32 sm:pt-24 lg:px-12">
 
         {/* Botão Voltar */}
@@ -173,17 +176,24 @@ export const RegraDetalhesPage = () => {
             transition={{ delay: 0.2 }}
             className={`inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.28em] mb-4 ${accentText}`}
           >
-            {isEspecial && <Sparkles size={14} />}
+            {!isEspecial && <Sparkles size={14} />}
             Catálogo de {categoria === 'racas' ? 'Raças' : 'Classes'}
-            {isEspecial && ' · Especial'}
+            {isEspecial && (
+              <>
+                {' · '}
+                <SeloEspecial cor={particleColor} />
+              </>
+            )}
           </motion.span>
 
-          <h1
+          <motion.h1
             className="text-5xl font-black text-white drop-shadow-2xl sm:text-6xl lg:text-7xl xl:text-8xl"
             style={{ fontFamily: 'Cinzel, serif', textShadow: `0 0 60px ${particleColor}55` }}
+            animate={isEspecial ? { textShadow: [`0 0 40px ${particleColor}55`, `0 0 90px ${particleColor}cc`, `0 0 40px ${particleColor}55`] } : undefined}
+            transition={isEspecial ? { duration: 3.5, repeat: Infinity, ease: 'easeInOut' } : undefined}
           >
             {raca?.titulo || classe?.titulo}
-          </h1>
+          </motion.h1>
 
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -225,7 +235,7 @@ export const RegraDetalhesPage = () => {
               <div className="mt-5 flex flex-wrap gap-2">
                 <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1.5 text-xs text-gray-300">Perfil: {perfilClasse}</span>
                 <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1.5 text-xs text-gray-300">
-                  {classe.categoria === 'padrao' ? 'Classe comum' : 'Classe especial'}
+                  {classe.categoria === 'padrao' ? 'Classe comum' : <SeloEspecial texto="Classe especial" cor={particleColor} />}
                 </span>
                 <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1.5 text-xs text-gray-300">Progressão: 20 níveis</span>
               </div>
@@ -248,7 +258,7 @@ export const RegraDetalhesPage = () => {
               <p className="max-w-4xl text-base leading-relaxed text-gray-200 sm:text-lg">{resumoRaca}</p>
               <div className="mt-5 flex flex-wrap gap-2">
                 <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1.5 text-xs text-gray-300">
-                  {raca.categoria === 'padrao' ? 'Raça comum' : 'Raça especial'}
+                  {raca.categoria === 'padrao' ? 'Raça comum' : <SeloEspecial texto="Raça especial" cor={particleColor} />}
                 </span>
                 <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1.5 text-xs text-gray-300">
                   {raca.categoria === 'padrao' ? 'Qualquer Árvore' : 'Árvores específicas'}

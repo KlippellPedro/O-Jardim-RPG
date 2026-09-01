@@ -57,6 +57,13 @@ export const campanhasApi = {
       body: dados,
     });
   },
+  /** Exclusivo do criador da plataforma - ver core/dependencies.py:require_creator_campaign. */
+  atualizarVisibilidade(campanhaId: string, configuracoes: Record<string, any>) {
+    return api(`/campanhas/${encodeURIComponent(campanhaId)}/visibilidade`, {
+      method: 'PUT',
+      body: { configuracoes },
+    });
+  },
   arquivar(campanhaId: string) {
     return api(`/campanhas/${encodeURIComponent(campanhaId)}`, { method: 'DELETE' });
   },

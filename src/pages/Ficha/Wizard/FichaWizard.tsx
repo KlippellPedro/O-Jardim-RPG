@@ -29,6 +29,7 @@ import {
 import { descreverOpcaoRacial, escolhaRacialEstaCompleta, obterGruposEscolhaRacial, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
 import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao, descricaoArvore, descricaoHierarquiaDoJardim } from '../../../../data/mundo/arvoresCatalog';
 import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
+import { Select } from '../../../components/ui/Select';
 
 interface WizardProps {
   onClose: () => void;
@@ -646,16 +647,13 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                       </button>
                     </div>
                   ) : (
-                    <select
-                      value={atribuicao[attr]}
-                      onChange={(e) => handleOrganizarValor(attr, parseInt(e.target.value, 10))}
-                      className="bg-black/60 border border-white/20 text-white rounded-xl p-2 outline-none focus:border-primary w-full text-center text-xl font-bold appearance-none cursor-pointer"
-                      style={{fontFamily: 'Cinzel, serif'}}
-                    >
-                      {opcoesDoConjunto.map(val => (
-                        <option key={val} value={val}>{val}</option>
-                      ))}
-                    </select>
+                    <Select
+                      ariaLabel={`Valor de ${ROTULOS_ATRIBUTOS[attr]}`}
+                      value={String(atribuicao[attr])}
+                      onChange={(valor) => handleOrganizarValor(attr, Number.parseInt(valor, 10))}
+                      options={opcoesDoConjunto.map((valor) => ({ value: String(valor), label: String(valor) }))}
+                      className="w-full rounded-xl border-white/20 bg-black/60 p-2 text-center font-serif text-xl font-bold [&>span]:flex-1 [&>span]:text-center"
+                    />
                   )}
                 </div>
               ))}

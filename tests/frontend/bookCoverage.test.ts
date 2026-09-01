@@ -202,7 +202,7 @@ test('toda mecânica do sistema tem uma página', () => {
     ['aliados', 'criaturas e contratados que lutam com o grupo'],
     ['frutos-implantes', 'Frutos do Éden e implantes cibernéticos'],
     ['equipamentos', 'carga, armadura e resistência'],
-    ['raridades-modificacoes', 'orçamento de raridade e dons de equipamento'],
+    ['raridades-modificacoes', 'orçamento de raridade e ganho de modificação por categoria'],
     ['modificacoes-equipamentos', 'efeitos, preços e catálogo de modificações'],
     ['crafting', 'fabricar e reparar'],
     ['materiais', 'materiais especiais e preparos de classe sem burocracia'],

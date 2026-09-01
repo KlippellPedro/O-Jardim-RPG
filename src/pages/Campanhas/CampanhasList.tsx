@@ -21,18 +21,22 @@ export const CampanhasList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const joinModalRef = useRef<HTMLDivElement>(null);
   const createModalRef = useRef<HTMLDivElement>(null);
+  const joinModalBackdropRef = useRef<HTMLDivElement>(null);
+  const createModalBackdropRef = useRef<HTMLDivElement>(null);
   const joinTriggerRef = useRef<HTMLButtonElement>(null);
   const createTriggerRef = useRef<HTMLButtonElement>(null);
 
   useDialogAccessibility({
     open: isJoinModalOpen,
     dialogRef: joinModalRef,
+    backdropRef: joinModalBackdropRef,
     onClose: () => setIsJoinModalOpen(false),
     returnFocusRef: joinTriggerRef,
   });
   useDialogAccessibility({
     open: isCreateModalOpen,
     dialogRef: createModalRef,
+    backdropRef: createModalBackdropRef,
     onClose: () => setIsCreateModalOpen(false),
     returnFocusRef: createTriggerRef,
   });
@@ -187,7 +191,8 @@ export const CampanhasList: React.FC = () => {
       <AnimatePresence>
         {isJoinModalOpen && (
           <div className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center">
-            <motion.div 
+            <motion.div
+              ref={joinModalBackdropRef}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
               onClick={() => setIsJoinModalOpen(false)}
@@ -235,7 +240,8 @@ export const CampanhasList: React.FC = () => {
       <AnimatePresence>
         {isCreateModalOpen && (
           <div className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center">
-            <motion.div 
+            <motion.div
+              ref={createModalBackdropRef}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
               onClick={() => setIsCreateModalOpen(false)}

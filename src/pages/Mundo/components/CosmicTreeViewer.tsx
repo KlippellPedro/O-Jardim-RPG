@@ -527,6 +527,7 @@ export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({
         </div>
         <button
           type="button"
+          data-tour="mundo-lista"
           onClick={(event) => { event.stopPropagation(); onOpenListView(); }}
           title="Ver lista simples das Árvores"
           className="pointer-events-auto flex items-center gap-2 rounded-full border border-white/10 bg-black/70 px-4 py-2 text-xs uppercase tracking-widest text-gray-300 transition-colors hover:border-white/30 hover:text-white"
@@ -537,6 +538,7 @@ export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({
 
       <button
         type="button"
+        data-tour="mundo-vazio"
         onClick={(event) => { event.stopPropagation(); onOpenVazio(); }}
         className="absolute bottom-4 right-4 z-10 cursor-pointer rounded-full border px-4 py-2 text-xs uppercase tracking-widest transition-colors hover:bg-white/5"
         style={{ borderColor: `${VAZIO_INFO.cor}55`, color: VAZIO_INFO.cor, backgroundColor: 'rgba(0,0,0,0.7)' }}

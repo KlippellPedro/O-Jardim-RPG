@@ -105,7 +105,7 @@ export const FamaPrestigioSection = ({ ficha, onUpdate }: { ficha: any; onUpdate
 
   return (
     <>
-      <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-2" data-tour="ficha-reputacao">
         <div className="rounded-2xl border border-white/5 bg-[#0f0e15] p-4">
           <div className="mb-3 flex items-start justify-between gap-3">
             <div>

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BookOpenText, Check, Clock3, Code2, History, Loader2, Plus, RotateCcw, Save, Search, Send } from 'lucide-react';
+import { BookOpenText, Check, ChevronDown, Clock3, Code2, FileText, FolderOpen, History, Loader2, Lock, Plus, RotateCcw, Save, Search, Send, Trash2, X } from 'lucide-react';
 import {
   conteudoEditorialApi,
   type EditorialLibraryEntry,
@@ -10,15 +10,22 @@ import {
 import { useUnsavedChanges } from '../../hooks/useUnsavedChanges';
 
 interface ConteudoLorePanelProps {
-  campanhaId: string;
   onDirtyChange?: (dirty: boolean) => void;
 }
 
 const TIPOS_LORE = [
   'cosmologia', 'conceito', 'deidade', 'fluxo', 'realidade', 'galho',
   'dimensao', 'mundo', 'reino', 'personagem', 'soberano', 'npc', 'evento',
-  'idioma', 'cultura',
+  'idioma', 'cultura', 'local',
 ] as const;
+
+type FiltroBiblioteca = 'todos' | 'criados' | 'rascunhos' | 'excluidos';
+
+const ORDEM_TIPOS = [
+  'cosmologia', 'conceito', 'deidade', 'fluxo', 'galho', 'realidade',
+  'dimensao', 'mundo', 'reino', 'local', 'personagem', 'soberano', 'npc',
+  'evento', 'idioma', 'cultura',
+];
 
 function documentoEfetivo(entry: EditorialLibraryEntry): LoreDocument {
   if (entry.editorial?.rascunho) return entry.editorial.rascunho;
@@ -34,10 +41,12 @@ function rotuloCampo(key: string): string {
     .replace(/\b\w/g, (letter) => letter.toLocaleUpperCase('pt-BR'));
 }
 
-export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePanelProps) {
+export function ConteudoLorePanel({ onDirtyChange }: ConteudoLorePanelProps) {
   const [entradas, setEntradas] = useState<EditorialLibraryEntry[]>([]);
   const [selecionadaChave, setSelecionadaChave] = useState<string>('');
   const [busca, setBusca] = useState('');
+  const [filtro, setFiltro] = useState<FiltroBiblioteca>('todos');
+  const [tiposAbertos, setTiposAbertos] = useState<Set<string>>(new Set());
   const [titulo, setTitulo] = useState('');
   const [conteudo, setConteudo] = useState<Record<string, unknown>>({});
   const [revelado, setRevelado] = useState(true);
@@ -50,6 +59,8 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
   const [revisoes, setRevisoes] = useState<EditorialRevision[]>([]);
   const [historicoAberto, setHistoricoAberto] = useState(false);
   const [restoring, setRestoring] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [avisoLista, setAvisoLista] = useState<string | null>(null);
   const [novaEntrada, setNovaEntrada] = useState(false);
   const [novoTipo, setNovoTipo] = useState<string>('conceito');
   const [novoId, setNovoId] = useState('');
@@ -62,13 +73,16 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
     setLoading(true);
     setErro(null);
     try {
-      const resposta = await conteudoEditorialApi.listarMundo(campanhaId, signal);
+      const resposta = await conteudoEditorialApi.listarMundoGlobal(signal);
       const loreEntries = (resposta.entradas || []).filter((entry) => entry.tipo !== 'cronologia');
       setEntradas(loreEntries);
+      setTiposAbertos((atuais) => atuais.size > 0 || !loreEntries[0]
+        ? atuais
+        : new Set([loreEntries[0].tipo]));
       setSelecionadaChave((atual) => {
         if (preferredKey && loreEntries.some((entry) => entry.chave === preferredKey)) return preferredKey;
         if (atual && loreEntries.some((entry) => entry.chave === atual)) return atual;
-        return loreEntries[0]?.chave || '';
+        return loreEntries.find((entry) => !entry.excluido)?.chave || loreEntries[0]?.chave || '';
       });
     } catch (error: any) {
       if (error?.name !== 'AbortError') setErro(error?.message || 'Não foi possível carregar a biblioteca de Mundo.');
@@ -81,7 +95,7 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
     const controller = new AbortController();
     void carregar(controller.signal);
     return () => controller.abort();
-  }, [campanhaId]);
+  }, []);
 
   const selecionada = novaEntrada ? {
     chave: '__novo__',
@@ -93,8 +107,9 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
   } satisfies EditorialLibraryEntry : entradas.find((entry) => entry.chave === selecionadaChave) || null;
 
   useEffect(() => {
-    if (!selecionada) return;
+    if (!selecionada || novaEntrada) return;
     const documento = documentoEfetivo(selecionada);
+    setNovoTipo(documento.tipo || selecionada.tipo);
     setTitulo(documento.titulo || selecionada.titulo);
     setConteudo(documento.conteudo || {});
     setRevelado(documento.revelado !== false);
@@ -106,16 +121,50 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
     setSucesso(null);
     setRevisoes([]);
     setHistoricoAberto(false);
-  }, [selecionadaChave, selecionada?.editorial?.versao_editorial]);
+  }, [novaEntrada, selecionadaChave, selecionada?.editorial?.versao_editorial]);
 
   const filtradas = useMemo(() => {
     const termo = busca.trim().toLocaleLowerCase('pt-BR');
-    if (!termo) return entradas;
     return entradas.filter((entry) => {
+      if (filtro === 'excluidos') return Boolean(entry.excluido) && (!termo || `${documentoEfetivo(entry).titulo} ${entry.tipo} ${entry.chave_recurso}`.toLocaleLowerCase('pt-BR').includes(termo));
+      if (entry.excluido) return false;
+      if (filtro === 'criados' && entry.origem !== 'global') return false;
+      if (filtro === 'rascunhos' && !entry.editorial?.rascunho) return false;
+      if (!termo) return true;
       const document = documentoEfetivo(entry);
-      return `${document.titulo || entry.titulo} ${entry.tipo}`.toLocaleLowerCase('pt-BR').includes(termo);
+      return `${document.titulo || entry.titulo} ${entry.tipo} ${entry.chave_recurso}`.toLocaleLowerCase('pt-BR').includes(termo);
     });
-  }, [busca, entradas]);
+  }, [busca, entradas, filtro]);
+
+  const grupos = useMemo(() => {
+    const porTipo = new Map<string, EditorialLibraryEntry[]>();
+    for (const entry of filtradas) {
+      const atual = porTipo.get(entry.tipo) || [];
+      atual.push(entry);
+      porTipo.set(entry.tipo, atual);
+    }
+    return [...porTipo.entries()]
+      .sort(([tipoA], [tipoB]) => {
+        const a = ORDEM_TIPOS.indexOf(tipoA);
+        const b = ORDEM_TIPOS.indexOf(tipoB);
+        if (a === -1 && b === -1) return tipoA.localeCompare(tipoB, 'pt-BR');
+        if (a === -1) return 1;
+        if (b === -1) return -1;
+        return a - b;
+      })
+      .map(([tipo, items]) => ({
+        tipo,
+        items: [...items].sort((a, b) => documentoEfetivo(a).titulo.localeCompare(documentoEfetivo(b).titulo, 'pt-BR')),
+      }));
+  }, [filtradas]);
+
+  const totais = useMemo(() => ({
+    todos: entradas.filter((entry) => !entry.excluido).length,
+    criados: entradas.filter((entry) => entry.origem === 'global' && !entry.excluido).length,
+    rascunhos: entradas.filter((entry) => entry.editorial?.rascunho && !entry.excluido).length,
+    personalizados: entradas.filter((entry) => entry.editorial?.publicado_em && !entry.excluido).length,
+    excluidos: entradas.filter((entry) => entry.excluido).length,
+  }), [entradas]);
 
   const marcarAlteracao = () => {
     setDirty(true);
@@ -160,6 +209,90 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
     setHistoricoAberto(false);
   };
 
+  const cancelarNovaEntrada = () => {
+    if (!confirmarDescarte('Descartar esta nova entrada ainda não salva?')) return;
+    setNovaEntrada(false);
+    setDirty(false);
+    setSelecionadaChave(entradas[0]?.chave || '');
+  };
+
+  const alternarTipo = (tipo: string) => {
+    setTiposAbertos((atuais) => {
+      const proximos = new Set(atuais);
+      if (proximos.has(tipo)) proximos.delete(tipo);
+      else proximos.add(tipo);
+      return proximos;
+    });
+  };
+
+  const excluirEntrada = async (entry: EditorialLibraryEntry) => {
+    if (entry.excluido) return;
+    const ehSelecionada = !novaEntrada && entry.chave === selecionadaChave;
+    if (ehSelecionada && dirty && !confirmarDescarte('Existem alterações não salvas nesta entrada. Deseja descartá-las e excluir o conteúdo?')) return;
+    const nome = documentoEfetivo(entry).titulo || entry.titulo;
+    if (!window.confirm(`Excluir “${nome}” do Conteúdo do Mundo? A entrada deixará de aparecer em todas as campanhas. O histórico será preservado para restauração.`)) return;
+    setDeletingId(entry.editorial?.id || entry.chave);
+    setErro(null);
+    setAvisoLista(null);
+    try {
+      let editorial = entry.editorial;
+      if (!editorial?.id) {
+        const documento = documentoEfetivo(entry);
+        const preparada = await conteudoEditorialApi.salvarRascunhoGlobal({
+          tipo: documento.tipo,
+          chave_recurso: documento.id,
+          chave_origem: entry.chave,
+          titulo: documento.titulo,
+          conteudo: documento.conteudo,
+          revelado: documento.revelado,
+          versao_esperada: null,
+        });
+        editorial = preparada.editorial;
+      }
+      await conteudoEditorialApi.excluirConteudoGlobal(editorial.id, editorial.versao_editorial);
+      if (ehSelecionada) {
+        setDirty(false);
+        setNovaEntrada(false);
+        setSelecionadaChave('');
+      }
+      await carregar(undefined, ehSelecionada ? undefined : selecionadaChave);
+      setAvisoLista(`“${nome}” foi excluído globalmente. Ele pode ser recuperado no filtro Excluídos.`);
+    } catch (error: any) {
+      setErro(error?.message || 'Não foi possível excluir o conteúdo.');
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const restaurarEntradaExcluida = async (entry: EditorialLibraryEntry) => {
+    const editorial = entry.editorial;
+    if (!entry.excluido || !editorial?.id) return;
+    const documento = documentoEfetivo(entry);
+    if (!window.confirm(`Restaurar “${documento.titulo}” em todas as campanhas?`)) return;
+    setRestoring(true);
+    setErro(null);
+    setAvisoLista(null);
+    try {
+      const rascunho = await conteudoEditorialApi.salvarRascunhoGlobal({
+        tipo: documento.tipo,
+        chave_recurso: documento.id,
+        chave_origem: entry.chave,
+        titulo: documento.titulo,
+        conteudo: documento.conteudo,
+        revelado: documento.revelado,
+        versao_esperada: editorial.versao_editorial,
+      });
+      await conteudoEditorialApi.publicarGlobal(rascunho.editorial.id, rascunho.editorial.versao_editorial);
+      setFiltro('todos');
+      await carregar(undefined, entry.chave);
+      setAvisoLista(`“${documento.titulo}” foi restaurado globalmente.`);
+    } catch (error: any) {
+      setErro(error?.message || 'Não foi possível restaurar o conteúdo.');
+    } finally {
+      setRestoring(false);
+    }
+  };
+
   const conteudoDoJson = (): Record<string, unknown> | null => {
     try {
       const parsed: unknown = JSON.parse(jsonText);
@@ -202,7 +335,7 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
     if (!selecionada || !titulo.trim()) return null;
     const conteudoValidado = conteudoDoJson();
     if (!conteudoValidado) return null;
-    const tipoAlvo = novaEntrada ? novoTipo.trim() : selecionada.tipo;
+    const tipoAlvo = novoTipo.trim();
     const chaveAlvo = novaEntrada ? novoId.trim() : selecionada.chave_recurso;
     if (!tipoAlvo || !/^[a-zA-Z0-9_-]+$/.test(chaveAlvo)) {
       setErro('Informe um ID estável usando apenas letras, números, hífen ou sublinhado.');
@@ -211,10 +344,10 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
     setSaving(true);
     setErro(null);
     try {
-      const resposta = await conteudoEditorialApi.salvarRascunho({
-        campanha_id: campanhaId,
+      const resposta = await conteudoEditorialApi.salvarRascunhoGlobal({
         tipo: tipoAlvo,
         chave_recurso: chaveAlvo,
+        chave_origem: novaEntrada ? undefined : selecionada.chave,
         titulo: titulo.trim(),
         conteudo: conteudoValidado,
         revelado,
@@ -226,7 +359,12 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
       } else {
         setEntradas((atuais) => atuais.map((entry) => (
           entry.chave === selecionada.chave
-            ? { ...entry, editorial: { ...entry.editorial, ...resposta.editorial } as EditorialState }
+            ? {
+                ...entry,
+                tipo: tipoAlvo,
+                titulo: titulo.trim(),
+                editorial: { ...entry.editorial, ...resposta.editorial } as EditorialState,
+              }
             : entry
         )));
       }
@@ -249,9 +387,9 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
       let editorial = selecionada.editorial;
       if (dirty || !editorial?.rascunho) editorial = await salvar();
       if (!editorial) return;
-      await conteudoEditorialApi.publicar(editorial.id, campanhaId, editorial.versao_editorial);
+      await conteudoEditorialApi.publicarGlobal(editorial.id, editorial.versao_editorial);
       await carregar();
-      setSucesso('Conteúdo publicado para esta campanha.');
+      setSucesso('Conteúdo publicado globalmente para todas as campanhas.');
     } catch (error: any) {
       setErro(error?.message || 'Não foi possível publicar o conteúdo.');
     } finally {
@@ -264,7 +402,7 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
     setHistoricoAberto((aberto) => !aberto);
     if (revisoes.length) return;
     try {
-      const resposta = await conteudoEditorialApi.listarRevisoes(selecionada.editorial.id, campanhaId);
+      const resposta = await conteudoEditorialApi.listarRevisoesGlobais(selecionada.editorial.id);
       setRevisoes(resposta.revisoes || []);
     } catch (error: any) {
       setErro(error?.message || 'Não foi possível carregar o histórico.');
@@ -276,10 +414,9 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
     setRestoring(true);
     setErro(null);
     try {
-      await conteudoEditorialApi.restaurarRevisao(
+      await conteudoEditorialApi.restaurarRevisaoGlobal(
         selecionada.editorial.id,
         revision.id,
-        campanhaId,
         selecionada.editorial.versao_editorial,
       );
       await carregar(undefined, selecionada.chave);
@@ -297,43 +434,132 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
 
   return (
     <div className="overflow-hidden rounded-3xl border border-white/10 bg-[#0a090e] shadow-2xl">
-      <div className="border-b border-white/10 p-6 md:p-8">
-        <div className="flex items-start gap-3">
-          <BookOpenText className="mt-0.5 text-primary" size={24} />
-          <div>
-            <h2 className="text-xl font-bold text-white">Conteúdo do Mundo</h2>
-            <p className="mt-1 text-sm text-gray-400">Edite a versão desta campanha. Salvar cria um rascunho; publicar torna a alteração visível.</p>
+      <div className="border-b border-white/10 p-5 md:p-8">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+          <div className="flex items-start gap-3">
+            <BookOpenText className="mt-0.5 shrink-0 text-primary" size={24} />
+            <div>
+              <h2 className="text-xl font-bold text-white">Conteúdo do Mundo</h2>
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-400">Crie, edite, mova e exclua registros da biblioteca compartilhada por todas as campanhas.</p>
+            </div>
           </div>
+          <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {[
+              ['Registros', totais.todos],
+              ['Criados', totais.criados],
+              ['Rascunhos', totais.rascunhos],
+              ['Publicados', totais.personalizados],
+            ].map(([label, value]) => (
+              <div key={label} className="min-w-24 rounded-xl border border-white/10 bg-black/25 px-3 py-2 text-center">
+                <dt className="text-[9px] font-bold uppercase tracking-widest text-gray-500">{label}</dt>
+                <dd className="mt-0.5 text-lg font-bold text-white">{value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
 
-      <div className="grid min-h-[620px] lg:grid-cols-[300px_minmax(0,1fr)]">
-        <aside className="border-b border-white/10 p-4 lg:border-b-0 lg:border-r">
-          <button type="button" onClick={iniciarNovaEntrada} className="mb-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-2.5 text-sm font-bold text-primary hover:bg-primary/20"><Plus size={15} /> Nova entrada de lore</button>
-          <div className="relative mb-4">
+      {avisoLista && <div role="status" className="mx-4 mt-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300 md:mx-8">{avisoLista}</div>}
+
+      <div className="grid min-h-[620px] lg:grid-cols-[360px_minmax(0,1fr)]">
+        <aside className="border-b border-white/10 bg-black/10 p-4 lg:border-b-0 lg:border-r">
+          <button type="button" onClick={iniciarNovaEntrada} className="mb-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm font-bold text-primary transition hover:bg-primary/20"><Plus size={16} /> Criar conteúdo</button>
+          <div className="relative mb-3">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={15} />
-            <input value={busca} onChange={(event) => setBusca(event.target.value)} placeholder="Buscar lore..." className="w-full rounded-xl border border-white/10 bg-black/40 py-2.5 pl-9 pr-3 text-sm text-white outline-none focus:border-primary/50" />
+            <input value={busca} onChange={(event) => setBusca(event.target.value)} placeholder="Buscar por título, tipo ou ID..." className="w-full rounded-xl border border-white/10 bg-black/40 py-2.5 pl-9 pr-3 text-sm text-white outline-none focus:border-primary/50" />
           </div>
-          <div className="max-h-[540px] space-y-1 overflow-y-auto pr-1 custom-scrollbar">
-            {filtradas.map((entry) => {
-              const displayTitle = documentoEfetivo(entry).titulo || entry.titulo;
+          <div className="mb-4 grid grid-cols-2 gap-1 rounded-xl border border-white/5 bg-black/30 p-1">
+            {([
+              ['todos', 'Todos', totais.todos],
+              ['criados', 'Criados', totais.criados],
+              ['rascunhos', 'Rascunhos', totais.rascunhos],
+              ['excluidos', 'Excluídos', totais.excluidos],
+            ] as Array<[FiltroBiblioteca, string, number]>).map(([id, label, total]) => (
+              <button key={id} type="button" onClick={() => setFiltro(id)} className={`rounded-lg px-2 py-2 text-[10px] font-bold uppercase tracking-wide transition ${filtro === id ? 'bg-primary/15 text-primary' : 'text-gray-500 hover:text-gray-300'}`}>
+                {label} <span className="block text-[9px] opacity-70">{total}</span>
+              </button>
+            ))}
+          </div>
+          <div className="max-h-[560px] space-y-2 overflow-y-auto pr-1 custom-scrollbar">
+            {grupos.map(({ tipo, items }) => {
+              const aberto = busca.trim().length > 0 || tiposAbertos.has(tipo);
               return (
-                <button key={entry.chave} type="button" onClick={() => escolherEntrada(entry.chave)} className={`w-full rounded-xl border px-3 py-3 text-left transition ${!novaEntrada && entry.chave === selecionadaChave ? 'border-primary/40 bg-primary/10' : 'border-transparent hover:border-white/10 hover:bg-white/[0.03]'}`}>
-                  <span className="block text-[11px] font-bold uppercase tracking-widest text-gray-500">{entry.tipo}</span>
-                  <span className="mt-1 block text-sm font-medium text-gray-200">{displayTitle}</span>
-                  <span className={`mt-1.5 inline-flex items-center gap-1 text-[10px] ${entry.editorial?.rascunho ? 'text-amber-400' : entry.editorial?.publicado_em ? 'text-emerald-400' : 'text-gray-600'}`}>
-                    {entry.editorial?.rascunho ? <Clock3 size={11} /> : entry.editorial?.publicado_em ? <Check size={11} /> : null}
-                    {entry.editorial?.rascunho ? 'Rascunho' : entry.editorial?.publicado_em ? 'Personalizado' : 'Oficial'}
-                  </span>
-                </button>
+                <div key={tipo} className="overflow-hidden rounded-xl border border-white/5 bg-black/25">
+                  <button type="button" onClick={() => alternarTipo(tipo)} aria-expanded={aberto} className="flex w-full items-center gap-2 px-3 py-3 text-left transition hover:bg-white/[0.03]">
+                    <FolderOpen size={15} className="shrink-0 text-primary/70" />
+                    <span className="min-w-0 flex-1 text-xs font-bold uppercase tracking-widest text-gray-300">{rotuloCampo(tipo)}</span>
+                    <span className="text-[10px] text-gray-600">{items.length}</span>
+                    <ChevronDown size={15} className={`shrink-0 text-gray-600 transition-transform ${aberto ? 'rotate-180' : ''}`} />
+                  </button>
+                  {aberto && (
+                    <div className="space-y-1 border-t border-white/5 p-1.5">
+                      {items.map((entry) => {
+                        const displayTitle = documentoEfetivo(entry).titulo || entry.titulo;
+                        const selecionadaAgora = !novaEntrada && entry.chave === selecionadaChave;
+                        return (
+                          <div key={entry.chave} className={`group flex items-stretch rounded-lg border transition ${selecionadaAgora ? 'border-primary/40 bg-primary/10' : 'border-transparent hover:border-white/10 hover:bg-white/[0.03]'}`}>
+                            <button type="button" onClick={() => escolherEntrada(entry.chave)} className="min-w-0 flex-1 px-3 py-2.5 text-left">
+                              <span className="flex items-center gap-2">
+                                <FileText size={13} className="shrink-0 text-gray-600" />
+                                <span className="truncate text-sm font-medium text-gray-200">{displayTitle}</span>
+                              </span>
+                              <span className="mt-1.5 flex flex-wrap items-center gap-2 pl-5 text-[10px]">
+                                <span className="max-w-full truncate font-mono text-gray-600">{entry.chave_recurso}</span>
+                                <span className={`inline-flex items-center gap-1 ${entry.excluido ? 'text-red-300' : entry.editorial?.rascunho ? 'text-amber-400' : entry.editorial?.publicado_em ? 'text-emerald-400' : 'text-gray-600'}`}>
+                                  {entry.excluido ? <Trash2 size={10} /> : entry.editorial?.rascunho ? <Clock3 size={10} /> : entry.editorial?.publicado_em ? <Check size={10} /> : <Lock size={10} />}
+                                  {entry.excluido ? 'Excluído' : entry.editorial?.rascunho ? 'Rascunho' : entry.origem === 'global' ? 'Criado' : entry.editorial?.publicado_em ? 'Personalizado' : 'Oficial'}
+                                </span>
+                              </span>
+                            </button>
+                            {!entry.excluido && (
+                              <button type="button" onClick={() => void excluirEntrada(entry)} disabled={deletingId === (entry.editorial?.id || entry.chave)} aria-label={`Excluir ${displayTitle}`} title="Excluir de todas as campanhas" className="m-1 flex w-9 shrink-0 items-center justify-center rounded-lg text-gray-600 opacity-70 transition hover:bg-red-500/10 hover:text-red-300 group-hover:opacity-100 disabled:opacity-30">
+                                {deletingId === (entry.editorial?.id || entry.chave) ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                              </button>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               );
             })}
+            {grupos.length === 0 && (
+              <div className="rounded-xl border border-dashed border-white/10 px-4 py-8 text-center text-xs leading-5 text-gray-500">Nenhum conteúdo corresponde à busca ou ao filtro escolhido.</div>
+            )}
           </div>
         </aside>
 
         <section className="min-w-0 p-5 md:p-8">
           {!selecionada ? <p className="text-sm text-gray-500">Selecione uma entrada para editar.</p> : (
             <div className="mx-auto max-w-3xl space-y-6">
+              <div className="flex flex-col gap-3 border-b border-white/10 pb-5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">{novaEntrada ? 'Novo conteúdo' : rotuloCampo(novoTipo)}</span>
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                    <span className="font-mono">{novaEntrada ? 'ID ainda não definido' : selecionada.chave_recurso}</span>
+                    {!novaEntrada && (
+                      <span className={`rounded-full border px-2 py-0.5 ${selecionada.excluido ? 'border-red-500/20 bg-red-500/10 text-red-300' : selecionada.origem === 'global' ? 'border-cyan-500/20 bg-cyan-500/10 text-cyan-300' : 'border-white/10 bg-white/[0.03] text-gray-400'}`}>
+                        {selecionada.excluido ? 'Excluído globalmente' : selecionada.origem === 'global' ? 'Criado no editor global' : 'Base oficial preservada'}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                {novaEntrada ? (
+                  <button type="button" onClick={cancelarNovaEntrada} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs font-bold text-gray-400 transition hover:text-white"><X size={14} /> Cancelar criação</button>
+                ) : selecionada.excluido ? (
+                  <button type="button" onClick={() => void restaurarEntradaExcluida(selecionada)} disabled={restoring} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/[0.06] px-3 py-2 text-xs font-bold text-emerald-300 transition hover:bg-emerald-500/10 disabled:opacity-40">
+                    {restoring ? <Loader2 size={14} className="animate-spin" /> : <RotateCcw size={14} />} Restaurar conteúdo
+                  </button>
+                ) : (
+                  <button type="button" onClick={() => void excluirEntrada(selecionada)} disabled={deletingId === (selecionada.editorial?.id || selecionada.chave)} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-red-500/20 bg-red-500/[0.06] px-3 py-2 text-xs font-bold text-red-300 transition hover:bg-red-500/10 disabled:opacity-40">
+                    {deletingId === (selecionada.editorial?.id || selecionada.chave) ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />} Excluir globalmente
+                  </button>
+                )}
+              </div>
+              {selecionada.excluido && (
+                <div role="status" className="rounded-xl border border-red-500/20 bg-red-500/[0.06] px-4 py-3 text-sm leading-6 text-red-200">Este conteúdo não aparece em nenhuma campanha. Os dados abaixo foram preservados e podem ser restaurados.</div>
+              )}
               {novaEntrada && (
                 <div className="grid gap-4 rounded-2xl border border-primary/20 bg-primary/[0.04] p-4 sm:grid-cols-2">
                   <label className="text-[11px] font-bold uppercase tracking-widest text-gray-400">Tipo
@@ -345,6 +571,15 @@ export function ConteudoLorePanel({ campanhaId, onDirtyChange }: ConteudoLorePan
                     <input value={novoId} onChange={(event) => { setNovoId(event.target.value.toLocaleLowerCase('pt-BR').replace(/[^a-z0-9_-]/g, '-')); marcarAlteracao(); }} placeholder="ex.: queda-de-astraluna" className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none focus:border-primary/50" />
                   </label>
                   <p className="sm:col-span-2 text-xs leading-5 text-gray-400">O ID não poderá ser trocado depois do primeiro salvamento. Use um nome curto, estável e sem espaços.</p>
+                </div>
+              )}
+              {!novaEntrada && (
+                <div>
+                  <label className="mb-2 block text-[11px] font-bold uppercase tracking-widest text-gray-400">Categoria (pasta)</label>
+                  <select value={novoTipo} onChange={(event) => { setNovoTipo(event.target.value); marcarAlteracao(); }} className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-white outline-none focus:border-primary/50">
+                    {TIPOS_LORE.map((tipo) => <option key={tipo} value={tipo}>{rotuloCampo(tipo)}</option>)}
+                  </select>
+                  <p className="mt-2 text-xs leading-5 text-gray-500">Trocar a categoria move o registro sem mudar seu ID nem criar uma cópia.</p>
                 </div>
               )}
               <div>

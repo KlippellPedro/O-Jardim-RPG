@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import reinosData from '../../data/mundo/Gênese/realidade-0-reinos.json';
 import soberanosData from '../../data/mundo/Gênese/realidade-0-soberanos.json';
+import axisData from '../../data/mundo/Parley (subjulgado)/parley-axis.json';
 import escalaPrecosData from '../../data/economia/escala-precos-v1.json';
 import {
   AJUSTE_SOCIAL_MAXIMO,
@@ -88,6 +89,7 @@ test('fontes das facções canônicas existem e propostas não fingem possuir fo
   const entradasPorArquivo: Record<string, Set<string>> = {
     'data/mundo/Gênese/realidade-0-reinos.json': new Set(reinosData.entradas.map((entrada) => entrada.id)),
     'data/mundo/Gênese/realidade-0-soberanos.json': new Set(soberanosData.entradas.map((entrada) => entrada.id)),
+    'data/mundo/Parley (subjulgado)/parley-axis.json': new Set(axisData.entradas.map((entrada) => entrada.id)),
     'data/economia/escala-precos-v1.json': new Set(Object.keys(escalaPrecosData)),
   };
 

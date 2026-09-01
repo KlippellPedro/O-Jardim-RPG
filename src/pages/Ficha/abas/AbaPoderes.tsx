@@ -1,10 +1,12 @@
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Search, Zap, Pencil, Trash2, Dices, GripVertical, Star, Sparkles, Shield, Crown } from 'lucide-react';
-import { Reorder } from 'framer-motion';
+import { AnimatePresence, motion, Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
-import { LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
+import { LabeledInput, LabeledSelect } from '../components/SharedFichaComponents';
 import { registrosApi } from '../../../services/registrosApi';
+import { personagensApi } from '../../../services/personagensApi';
 import { useAuthStore } from '../../../store/useAuthStore';
+import { useCharacterStore } from '../../../store/useCharacterStore';
 import { legadosSelecionados, poderesSelecionados } from '../../../services/progressaoFichaService';
 import { obterStatusFicha } from '../../../services/statusService';
 import { EditorEfeitos } from '../components/ItemEffectsModals';
@@ -17,11 +19,15 @@ import {
 } from '../../../services/equipamentoService';
 import { bonusRecursoDoFruto, obterFrutoEdenConsumido, poderesDoFruto } from '../../../services/frutoEdenService';
 import {
+  marcarItemAutomaticoOculto,
   obterPersonalizacoesAutomaticas,
+  restaurarVisibilidadeItemAutomatico,
   salvarPersonalizacaoAutomatica,
   type IPersonalizacaoAutomatica,
 } from '../../../services/personalizacaoAutomaticaService';
 import { PersonalizacaoAutomaticaModal } from '../components/PersonalizacaoAutomaticaModal';
+import { ItensAutomaticosOcultos } from '../components/ItensAutomaticosOcultos';
+import { OcultarItemAutomaticoModal } from '../components/OcultarItemAutomaticoModal';
 import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
 
 interface ICustoPoder {
@@ -44,7 +50,7 @@ interface IPoder {
   favorito?: boolean;
   efeitos?: IEfeitoEquipamento[];
   usavel?: boolean;
-  estagioFruto?: 'normal' | 'despertado';
+  estagioFruto?: 'normal' | 'aprimorado' | 'despertado';
   categoriaOrigem?: 'Classe' | 'Legado' | 'Fruto do Éden';
   origemNome?: string;
 }
@@ -105,15 +111,20 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
   const usoEmAndamento = useRef(false);
   const [ultimoUsoMsg, setUltimoUsoMsg] = useState<{ id: string; texto: string; erro?: boolean } | null>(null);
   const [personalizando, setPersonalizando] = useState<{ id: string; titulo: string; descricao: string } | null>(null);
+  const [ocultando, setOcultando] = useState<IPoder | null>(null);
+  const [despertandoFruto, setDespertandoFruto] = useState(false);
+  const [erroDespertar, setErroDespertar] = useState('');
 
   const campanhaAtiva = useAuthStore((s) => s.campanhaAtiva);
+  const flushCharacterSaves = useCharacterStore((state) => state.flushCharacterSaves);
+  const refreshCharacter = useCharacterStore((state) => state.refreshCharacter);
 
   const f = character.ficha || {};
   const status = obterStatusFicha(f);
   const personalizacoes = obterPersonalizacoesAutomaticas(f);
   const periciasDisponiveis = periciasDisponiveisParaEfeitos(f, PERICIAS_CATALOGO);
   const poderes: IPoder[] = f.poderes || [];
-  const poderesClasse: IPoder[] = poderesSelecionados(f).map((item) => ({
+  const poderesClasse: IPoder[] = useMemo(() => poderesSelecionados(f).map((item) => ({
     id: item.id,
     nome: item.titulo,
     fonte: `Classe: ${item.origem}`,
@@ -126,8 +137,8 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     descricao: item.descricao,
     categoriaOrigem: 'Classe',
     origemNome: item.origem,
-  }));
-  const poderesLegado: IPoder[] = legadosSelecionados(f).map((item) => ({
+  })), [f]);
+  const poderesLegado: IPoder[] = useMemo(() => legadosSelecionados(f).map((item) => ({
     id: `legado:${item.id}`,
     nome: item.titulo,
     fonte: 'Legado de Ascensão',
@@ -140,15 +151,29 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     descricao: item.descricao,
     categoriaOrigem: 'Legado',
     origemNome: 'Legados de Ascensão',
-  }));
-  const poderesFruto: IPoder[] = poderesDoFruto(f);
+  })), [f]);
+  const poderesFruto: IPoder[] = useMemo(() => poderesDoFruto(f), [f]);
+  // Nenhum destes depende de `busca`: memoizados para não recalcular a cada tecla digitada.
+  const poderesAutomaticos = useMemo(
+    () => [...poderesClasse, ...poderesLegado, ...poderesFruto],
+    [poderesClasse, poderesLegado, poderesFruto],
+  );
+  const poderesOcultos = useMemo(() => poderesAutomaticos
+    .filter((poder) => personalizacoes[poder.id]?.oculta)
+    .map((poder) => ({
+      id: poder.id,
+      titulo: personalizacoes[poder.id]?.titulo || poder.nome,
+      origem: poder.origemNome || poder.fonte,
+    })), [poderesAutomaticos, personalizacoes]);
   const frutoConsumido = obterFrutoEdenConsumido(f);
   const termoBusca = busca.trim().toLocaleLowerCase('pt-BR');
   const poderesOficiais = [...poderesClasse, ...poderesLegado]
+    .filter((poder) => !personalizacoes[poder.id]?.oculta)
     .filter((poder) => !termoBusca
       || poder.nome.toLocaleLowerCase('pt-BR').includes(termoBusca)
       || (poder.origemNome || poder.fonte).toLocaleLowerCase('pt-BR').includes(termoBusca));
   const poderesFrutoVisiveis = poderesFruto
+    .filter((poder) => !personalizacoes[poder.id]?.oculta)
     .filter((poder) => !termoBusca
       || poder.nome.toLocaleLowerCase('pt-BR').includes(termoBusca)
       || poder.fonte.toLocaleLowerCase('pt-BR').includes(termoBusca));
@@ -181,15 +206,32 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     onUpdate(['ficha', 'poderes'], novaLista);
   };
 
-  const despertarFruto = () => {
-    if (!frutoConsumido || frutoConsumido.despertado) return;
-    if (!window.confirm(`Despertar ${frutoConsumido.titulo}? O estado despertado ficará salvo permanentemente nesta ficha.`)) return;
-    onUpdate(['ficha', 'frutoEdenConsumido'], {
-      ...f.frutoEdenConsumido,
-      despertado: true,
-      despertadoEm: new Date().toISOString(),
-    });
+  const salvarDespertar = async (ativar: boolean) => {
+    if (!frutoConsumido) return;
+    if (ativar && !window.confirm(`Despertar ${frutoConsumido.titulo}? O estado despertado ficará salvo permanentemente nesta ficha.`)) return;
+    setDespertandoFruto(true);
+    setErroDespertar('');
+    try {
+      if (!(await flushCharacterSaves(character.id))) {
+        throw new Error('Não foi possível salvar as alterações pendentes antes do despertar.');
+      }
+      const latest = useCharacterStore.getState().characters.find((entry) => entry.id === character.id);
+      if (!latest) throw new Error('O personagem não está mais carregado.');
+      await personagensApi.despertarFrutoEden(character.id, {
+        versaoFichaEsperada: Math.max(1, Number(latest.versao) || 1),
+      });
+      if (!(await refreshCharacter(character.id))) {
+        throw new Error('O Fruto foi despertado, mas a ficha precisa ser recarregada para mostrar o resultado.');
+      }
+    } catch (error: any) {
+      setErroDespertar(error?.message || 'Não foi possível despertar o Fruto agora.');
+    } finally {
+      setDespertandoFruto(false);
+    }
   };
+
+  const despertarFruto = () => salvarDespertar(true);
+  const sincronizarFrutoDespertado = () => salvarDespertar(false);
 
   const handleReorder = (novosItens: IPoder[]) => {
     const comOrdem = mesclarOrdemFiltrada(poderes, novosItens);
@@ -230,6 +272,30 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     if (!personalizando) return;
     salvarPersonalizacaoAutomatica(onUpdate, f, personalizando.id, {});
     setPersonalizando(null);
+  };
+
+  const ocultarAutomatico = (poder: IPoder) => {
+    setOcultando(poder);
+  };
+
+  const confirmarOcultacaoAutomatica = () => {
+    if (!ocultando) return;
+    salvarPersonalizacaoAutomatica(
+      onUpdate,
+      f,
+      ocultando.id,
+      marcarItemAutomaticoOculto(personalizacoes[ocultando.id]),
+    );
+    setOcultando(null);
+  };
+
+  const restaurarAutomatico = (id: string) => {
+    salvarPersonalizacaoAutomatica(
+      onUpdate,
+      f,
+      id,
+      restaurarVisibilidadeItemAutomatico(personalizacoes[id]),
+    );
   };
 
   const handleSalvar = () => {
@@ -348,19 +414,19 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     <div className="space-y-6">
 
       {/* HEADER */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4" data-tour="poderes-resumo">
         <div>
           <h2 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Cinzel, serif' }}>Poderes</h2>
           <p className="text-gray-400 text-sm">Habilidades ativas, passivas e características especiais.</p>
         </div>
         <div className="flex items-center gap-3 bg-[#15141b] border border-white/5 rounded-xl px-4 py-3">
-          <span className="text-3xl font-bold text-[#c7a44c]">{poderes.length + poderesClasse.length + poderesLegado.length + poderesFruto.length}</span>
+          <span className="text-3xl font-bold text-[#c7a44c]">{poderes.length + poderesAutomaticos.length - poderesOcultos.length}</span>
           <span className="text-sm text-gray-500 uppercase tracking-widest font-bold leading-tight">Poderes<br />Conhecidos</span>
         </div>
       </div>
 
       {/* FERRAMENTAS */}
-      <div className="flex gap-4">
+      <div className="flex gap-4" data-tour="poderes-ferramentas">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
           <input
@@ -380,7 +446,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
       </div>
 
       {poderesOficiais.length > 0 && (
-        <section className="bg-[#0f0e15] border border-[#c7a44c]/20 rounded-2xl p-4">
+        <section className="bg-[#0f0e15] border border-[#c7a44c]/20 rounded-2xl p-4" data-tour="poderes-oficiais">
           <div className="mb-4">
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#c7a44c]">Poderes oficiais por origem</h3>
             <p className="mt-1 text-xs text-gray-500">Classes e Legados ficam em blocos separados, mesmo em personagens multiclasse.</p>
@@ -403,12 +469,21 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                   </span>
                 </div>
                 <div className="grid gap-3 lg:grid-cols-2">
-                  {grupo.itens.map((poder) => {
+                  <AnimatePresence initial={false}>
+                    {grupo.itens.map((poder) => {
                     const personalizacao = personalizacoes[poder.id];
                     const nomeExibido = personalizacao?.titulo || poder.nome;
                     const descricaoExibida = personalizacao?.texto || poder.descricao;
                     return (
-                      <article key={poder.id} className="rounded-xl border border-white/5 bg-[#121118]/90 p-4 group relative">
+                      <motion.article
+                        layout
+                        key={poder.id}
+                        initial={{ opacity: 0, scale: 0.985 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.97, y: -4 }}
+                        transition={{ duration: 0.18 }}
+                        className="rounded-xl border border-white/5 bg-[#121118]/90 p-4 group relative"
+                      >
                         <div className="flex items-start justify-between gap-3">
                           <strong className="text-white">{nomeExibido}</strong>
                           <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -421,6 +496,14 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                             >
                               <Pencil size={12} />
                             </button>
+                            <button
+                              type="button"
+                              onClick={() => ocultarAutomatico(poder)}
+                              title="Ocultar nesta ficha"
+                              className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-500/10 opacity-100 transition-all sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
+                            >
+                              <Trash2 size={12} />
+                            </button>
                           </div>
                         </div>
                         <div className="mt-1 flex flex-wrap items-center gap-2">
@@ -431,9 +514,10 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                         <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
                         {poder.tipo !== 'Passiva' && <button type="button" onClick={() => usarPoder(poder)} disabled={usandoId !== null} className="mt-3 flex items-center gap-2 rounded-lg border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-3 py-2 text-xs font-bold text-[#c7a44c] disabled:cursor-wait disabled:opacity-50"><Dices size={14} />{usandoId === poder.id ? 'Usando...' : 'Usar poder'}</button>}
                         {ultimoUsoMsg?.id === poder.id && <p className={`mt-2 text-xs ${ultimoUsoMsg.erro ? 'text-red-400' : 'text-green-400'}`}>{ultimoUsoMsg.texto}</p>}
-                      </article>
+                      </motion.article>
                     );
-                  })}
+                    })}
+                  </AnimatePresence>
                 </div>
               </section>
             ))}
@@ -442,7 +526,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
       )}
 
       {frutoConsumido && (
-        <section className={`rounded-2xl border p-4 ${frutoConsumido.despertado ? 'border-fuchsia-400/40 bg-gradient-to-br from-fuchsia-950/30 via-[#0f0e15] to-amber-950/20 shadow-[0_0_30px_rgba(217,70,239,0.12)]' : 'border-amber-400/25 bg-[#0f0e15]'}`}>
+        <section className={`rounded-2xl border p-4 ${frutoConsumido.despertado ? 'border-fuchsia-400/40 bg-gradient-to-br from-fuchsia-950/30 via-[#0f0e15] to-amber-950/20 shadow-[0_0_30px_rgba(217,70,239,0.12)]' : 'border-amber-400/25 bg-[#0f0e15]'}`} data-tour="poderes-fruto">
           <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <div className="flex flex-wrap items-center gap-2">
@@ -453,27 +537,40 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
               </div>
               <p className="mt-1 text-xs text-gray-500">
                 {frutoConsumido.despertado
-                  ? 'As técnicas normais continuam disponíveis e o poder despertado foi liberado.'
-                  : 'Use as técnicas normalmente ou desperte o fruto para liberar seu poder máximo.'}
+                  ? frutoConsumido.conteudo.passivoDespertado
+                    ? 'A passiva e todas as técnicas foram aprimoradas; a manifestação final também está disponível.'
+                    : 'Este vínculo usa uma versão antiga. Atualize o despertar para receber as melhorias da passiva e das técnicas.'
+                  : 'O despertar aprimora a passiva e todas as técnicas, além de liberar a manifestação final.'}
               </p>
             </div>
-            {!frutoConsumido.despertado && (
+            {(!frutoConsumido.despertado || !frutoConsumido.conteudo.passivoDespertado) && (
               <button
                 type="button"
-                onClick={despertarFruto}
+                onClick={frutoConsumido.despertado ? sincronizarFrutoDespertado : despertarFruto}
+                disabled={despertandoFruto}
                 className="flex shrink-0 items-center justify-center gap-2 rounded-lg border border-fuchsia-400/40 bg-fuchsia-500/10 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-fuchsia-200 transition-all hover:bg-fuchsia-500/20 hover:shadow-[0_0_18px_rgba(217,70,239,0.18)]"
               >
-                <Sparkles size={15} /> Despertar fruto
+                <Sparkles size={15} /> {despertandoFruto ? 'Atualizando...' : frutoConsumido.despertado ? 'Atualizar despertar' : 'Despertar fruto'}
               </button>
             )}
           </div>
+          {erroDespertar && <p className="mb-3 rounded-lg border border-red-400/25 bg-red-500/[0.06] px-3 py-2 text-xs text-red-300">{erroDespertar}</p>}
           <div className="grid gap-3 lg:grid-cols-2">
-            {poderesFrutoVisiveis.map((poder) => {
+            <AnimatePresence initial={false}>
+              {poderesFrutoVisiveis.map((poder) => {
               const personalizacao = personalizacoes[poder.id];
               const nomeExibido = personalizacao?.titulo || poder.nome;
               const descricaoExibida = personalizacao?.texto || poder.descricao;
               return (
-                <article key={poder.id} className={`rounded-xl border p-4 group relative ${poder.estagioFruto === 'despertado' ? 'border-fuchsia-400/30 bg-fuchsia-500/[0.06]' : 'border-amber-400/15 bg-[#121118]'}`}>
+                <motion.article
+                  layout
+                  key={poder.id}
+                  initial={{ opacity: 0, scale: 0.985 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.97, y: -4 }}
+                  transition={{ duration: 0.18 }}
+                  className={`rounded-xl border p-4 group relative ${poder.estagioFruto === 'normal' ? 'border-amber-400/15 bg-[#121118]' : 'border-fuchsia-400/30 bg-fuchsia-500/[0.06]'}`}
+                >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <strong className="text-white">{nomeExibido}</strong>
@@ -483,8 +580,8 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                     <div className="flex items-start gap-1.5">
                       <div className="flex flex-col items-end gap-1">
                         <span className="text-[10px] font-bold text-[#c7a44c]">{custoTexto(poder.custo)}</span>
-                        <span className={`text-[9px] font-black uppercase tracking-wider ${poder.estagioFruto === 'despertado' ? 'text-fuchsia-300' : 'text-amber-300/70'}`}>
-                          {poder.estagioFruto === 'despertado' ? 'Despertado' : 'Técnica'}
+                        <span className={`text-[9px] font-black uppercase tracking-wider ${poder.estagioFruto === 'normal' ? 'text-amber-300/70' : 'text-fuchsia-300'}`}>
+                          {poder.estagioFruto === 'despertado' ? 'Manifestação' : poder.estagioFruto === 'aprimorado' ? 'Técnica aprimorada' : 'Técnica'}
                         </span>
                       </div>
                       <button
@@ -495,23 +592,38 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                       >
                         <Pencil size={12} />
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => ocultarAutomatico(poder)}
+                        title="Ocultar nesta ficha"
+                        className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-500/10 opacity-100 transition-all flex-shrink-0 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
+                      >
+                        <Trash2 size={12} />
+                      </button>
                     </div>
                   </div>
                   <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
                   {poder.acao && <p className="mt-2 text-[11px] text-gray-500"><span className="font-bold uppercase text-gray-600">Ação:</span> {poder.acao}</p>}
-                  <button type="button" onClick={() => usarPoder(poder)} disabled={usandoId !== null} className={`mt-3 flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold disabled:cursor-wait disabled:opacity-50 ${poder.estagioFruto === 'despertado' ? 'border-fuchsia-400/30 bg-fuchsia-500/10 text-fuchsia-200' : 'border-[#c7a44c]/30 bg-[#c7a44c]/10 text-[#c7a44c]'}`}>
+                  <button type="button" onClick={() => usarPoder(poder)} disabled={usandoId !== null} className={`mt-3 flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold disabled:cursor-wait disabled:opacity-50 ${poder.estagioFruto === 'normal' ? 'border-[#c7a44c]/30 bg-[#c7a44c]/10 text-[#c7a44c]' : 'border-fuchsia-400/30 bg-fuchsia-500/10 text-fuchsia-200'}`}>
                     <Dices size={14} />{usandoId === poder.id ? 'Usando...' : 'Usar poder'}
                   </button>
                   {ultimoUsoMsg?.id === poder.id && <p className={`mt-2 text-xs ${ultimoUsoMsg.erro ? 'text-red-400' : 'text-green-400'}`}>{ultimoUsoMsg.texto}</p>}
-                </article>
+                </motion.article>
               );
-            })}
+              })}
+            </AnimatePresence>
           </div>
         </section>
       )}
 
+      <ItensAutomaticosOcultos
+        itens={poderesOcultos}
+        tipo="poder"
+        onRestaurar={restaurarAutomatico}
+      />
+
       {/* LISTA DE PODERES */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4">
+      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4" data-tour="poderes-personalizados">
         <div className="mb-4 border-b border-white/5 pb-3">
           <h3 className="text-xs font-bold uppercase tracking-widest text-gray-300">Poderes personalizados</h3>
           <p className="mt-1 text-xs text-gray-600">Entradas criadas manualmente; a fonte informada aparece em cada cartão.</p>
@@ -521,6 +633,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
             <Reorder.Item
               value={p}
               key={p.id}
+              data-tour="poder-cartao"
               className={`bg-[#121118] border ${p.favorito ? 'border-yellow-600/50 shadow-[0_0_15px_rgba(202,138,4,0.15)]' : 'border-white/5 hover:border-yellow-600/30'} rounded-xl p-5 transition-colors group relative`}
             >
               <div className="flex gap-4 items-start">
@@ -625,7 +738,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
               <LabeledInput label="Nome" value={modalItem.nome} onChange={(v: string) => atualizarCampoModal('nome', v)} placeholder="Ex.: Lâmina Espectral" />
               
               <div className="grid grid-cols-2 gap-4">
-                <LabeledModalSelect
+                <LabeledSelect
                   label="Tipo"
                   value={modalItem.tipo}
                   options={TIPOS_PODER}
@@ -639,7 +752,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <LabeledModalSelect
+                <LabeledSelect
                   label="Recurso do Custo"
                   value={modalItem.custo.recurso}
                   options={RECURSOS_CUSTO}
@@ -716,6 +829,13 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
         personalizacao={personalizando ? personalizacoes[personalizando.id] : undefined}
         onSalvar={salvarPersonalizacao}
         onRestaurar={restaurarPersonalizacao}
+      />
+      <OcultarItemAutomaticoModal
+        isOpen={!!ocultando}
+        tipo="poder"
+        titulo={ocultando?.nome || ''}
+        onClose={() => setOcultando(null)}
+        onConfirmar={confirmarOcultacaoAutomatica}
       />
     </div>
   );

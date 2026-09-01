@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Search, Crosshair, Dices, Pencil, Trash2, Flame, GripVertical, Star } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
-import { LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
+import { LabeledInput, LabeledSelect } from '../components/SharedFichaComponents';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { useCharacterStore } from '../../../store/useCharacterStore';
@@ -111,7 +111,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
   const ataques: IAtaque[] = [...armasEquipadas, ...ataquesManuais];
   const ficha = character.ficha || {};
   const status = obterStatusFicha(ficha);
-  const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], ficha);
+  const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], ficha, character.aliadosCompartilhados || []);
   const racaAtual = catalogo?.racas.find(raca => raca.id === ficha.racaId) || null;
   const atributosBase = ficha.atributosFinais || character.atributosFinais || {};
   const atributosAntesRaca = Object.fromEntries(['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'fluxo'].map((atributo) => [
@@ -387,7 +387,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
     <div className="space-y-6">
 
       {/* HEADER */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4" data-tour="ataques-resumo">
         <div>
           <h2 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Cinzel, serif' }}>Ataques</h2>
           <p className="text-gray-400 text-sm">Armas equipadas e manobras de combate.</p>
@@ -399,7 +399,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
       </div>
 
       {/* FERRAMENTAS */}
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="flex flex-col md:flex-row gap-4" data-tour="ataques-ferramentas">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
           <input
@@ -429,7 +429,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
       </div>
 
       {/* LISTA */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4">
+      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4" data-tour="ataques-lista">
         <Reorder.Group axis="y" values={ataquesVisiveis} onReorder={handleReorder} className="flex flex-col gap-4">
           {ataquesVisiveis.map((a: IAtaque) => {
             const resultadoAtual = resultado?.ataqueId === a.id ? resultado : null;
@@ -452,6 +452,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
               <Reorder.Item
                 value={a}
                 key={a.id}
+                data-tour="ataque-cartao"
                 className={`bg-[#121118] border ${a.favorito ? 'border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.15)]' : 'border-white/5 hover:border-red-500/30'} rounded-xl p-5 transition-colors group relative`}
               >
                 <div className="flex gap-4 items-start">
@@ -547,7 +548,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
                       </div>
                     )}
 
-                    <div className="flex justify-between items-center mt-2 pt-3 border-t border-white/5">
+                    <div className="flex justify-between items-center mt-2 pt-3 border-t border-white/5" data-tour="ataque-rolagem">
                       <span className="text-xs text-gray-500 font-bold uppercase tracking-wider">{a.alcance || '1,5m'}</span>
                       <div className="flex items-center gap-2">
                         {a.dano && (
@@ -595,7 +596,7 @@ export const AbaAtaques = ({ character, onUpdate }: { character: any; onUpdate: 
             placeholder="Ex: Espada Longa"
             onChange={(v: string) => setForm(f => ({ ...f, nome: v }))}
           />
-          <LabeledModalSelect
+          <LabeledSelect
             label="Tipo"
             value={form.tipo}
             options={TIPOS_ATAQUE}

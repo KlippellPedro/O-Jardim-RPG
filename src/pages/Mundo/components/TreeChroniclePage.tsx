@@ -119,8 +119,8 @@ export const TreeChroniclePage: React.FC<TreeChroniclePageProps> = ({
             <p className="mt-2 leading-7 text-gray-400">{chronicle.atmosfera}</p>
           </div>
           <div className="mt-7 flex flex-wrap gap-2">
-            {chronicle.temas.map((theme) => (
-              <span key={theme} className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs uppercase tracking-wider text-gray-400">
+            {chronicle.temas.map((theme, index) => (
+              <span key={`tema-${index}`} className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs uppercase tracking-wider text-gray-400">
                 {theme}
               </span>
             ))}
@@ -133,7 +133,7 @@ export const TreeChroniclePage: React.FC<TreeChroniclePageProps> = ({
             <h2 className="text-2xl font-bold text-white md:text-3xl" style={{ fontFamily: 'Cinzel, serif' }}>História</h2>
           </div>
           <div className="max-w-4xl space-y-6 text-base leading-8 text-gray-300 md:text-lg md:leading-9">
-            {chronicle.historia.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            {chronicle.historia.map((paragraph, index) => <p key={`historia-${index}`}>{paragraph}</p>)}
           </div>
         </section>
 
@@ -143,8 +143,8 @@ export const TreeChroniclePage: React.FC<TreeChroniclePageProps> = ({
             <h2 className="text-2xl font-bold text-white md:text-3xl" style={{ fontFamily: 'Cinzel, serif' }}>Lugares do Galho</h2>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
-            {chronicle.lugares.map((place) => (
-              <article key={place.nome} className="group rounded-2xl border border-white/10 bg-black/30 p-5 transition hover:-translate-y-0.5 hover:border-white/20">
+            {chronicle.lugares.map((place, index) => (
+              <article key={`lugar-${index}`} className="group rounded-2xl border border-white/10 bg-black/30 p-5 transition hover:-translate-y-0.5 hover:border-white/20">
                 <div className="mb-3 flex items-center justify-between gap-4">
                   <h3 className="text-lg font-bold text-white">{place.nome}</h3>
                   <span className="rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest" style={{ backgroundColor: `${color}18`, color }}>

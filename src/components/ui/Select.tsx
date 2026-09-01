@@ -1,12 +1,15 @@
-import { useState, useRef, useEffect, useCallback, useId, useLayoutEffect } from 'react';
+import { useState, useRef, useEffect, useCallback, useId, useLayoutEffect, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronDown, Check } from 'lucide-react';
 
 export interface SelectOption {
   value: string;
   label: string;
+  /** Texto compacto usado apenas no botão fechado; a lista mantém `label`. */
+  triggerLabel?: string;
   disabled?: boolean;
   labelClassName?: string;
+  labelStyle?: CSSProperties;
 }
 
 interface SelectProps {
@@ -16,6 +19,10 @@ interface SelectProps {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
+  ariaLabel?: string;
+  id?: string;
+  name?: string;
+  title?: string;
 }
 
 /**
@@ -31,6 +38,10 @@ export const Select: React.FC<SelectProps> = ({
   placeholder = 'Selecione...',
   className = '',
   disabled = false,
+  ariaLabel,
+  id,
+  name,
+  title,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [coords, setCoords] = useState({ top: 0, left: 0, width: 0, maxHeight: 256 });
@@ -82,17 +93,22 @@ export const Select: React.FC<SelectProps> = ({
       setIsOpen(false);
     };
     const handleKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setIsOpen(false);
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        setIsOpen(false);
+        triggerRef.current?.focus();
+      }
     };
     const handleReposition = () => updateCoords();
 
     document.addEventListener('mousedown', handleOutside);
-    document.addEventListener('keydown', handleKey);
+    document.addEventListener('keydown', handleKey, true);
     window.addEventListener('scroll', handleReposition, true);
     window.addEventListener('resize', handleReposition);
     return () => {
       document.removeEventListener('mousedown', handleOutside);
-      document.removeEventListener('keydown', handleKey);
+      document.removeEventListener('keydown', handleKey, true);
       window.removeEventListener('scroll', handleReposition, true);
       window.removeEventListener('resize', handleReposition);
     };
@@ -144,12 +160,15 @@ export const Select: React.FC<SelectProps> = ({
     <>
       <button
         type="button"
+        id={id}
         ref={triggerRef}
         onClick={() => (isOpen ? setIsOpen(false) : handleOpen())}
         disabled={disabled}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-controls={isOpen ? listboxId : undefined}
+        aria-label={ariaLabel}
+        title={title}
         onKeyDown={(event) => {
           if (!isOpen && ['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) {
             event.preventDefault();
@@ -160,14 +179,19 @@ export const Select: React.FC<SelectProps> = ({
           isOpen ? 'border-primary/60' : ''
         } ${className}`}
       >
-        <span className={`truncate ${selected ? `text-white ${selected.labelClassName || ''}` : 'text-gray-500'}`}>
-          {selected ? selected.label : placeholder}
+        <span
+          className={`truncate ${selected ? (selected.labelClassName || 'text-white') : 'text-gray-500'}`}
+          style={selected?.labelStyle}
+        >
+          {selected ? (selected.triggerLabel || selected.label) : placeholder}
         </span>
         <ChevronDown
           size={14}
           className={`shrink-0 text-gray-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
+
+      {name ? <input type="hidden" name={name} value={value} disabled={disabled} /> : null}
 
       {isOpen &&
         createPortal(
@@ -197,7 +221,7 @@ export const Select: React.FC<SelectProps> = ({
                     : 'text-gray-300 hover:bg-white/5 hover:text-white'
                 }`}
               >
-                <span className={`truncate ${option.labelClassName || ''}`}>{option.label}</span>
+                <span className={`truncate ${option.labelClassName || ''}`} style={option.labelStyle}>{option.label}</span>
                 {option.value === value && <Check size={14} className="shrink-0" />}
               </button>
             ))}

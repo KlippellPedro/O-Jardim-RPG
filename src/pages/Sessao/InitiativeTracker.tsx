@@ -7,9 +7,10 @@ import {
   ArrowRight,
   CheckSquare,
   Eye,
-  Gauge,
   GripVertical,
   HeartPulse,
+  LayoutGrid,
+  ListOrdered,
   Pencil,
   Plus,
   RefreshCw,
@@ -72,10 +73,35 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
   const [batchAmount, setBatchAmount] = useState(1);
   const [showBestiario, setShowBestiario] = useState(false);
   const [xpMessage, setXpMessage] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'fila' | 'grupos'>('grupos');
 
   // Arrastar só faz sentido antes do combate começar - durante a luta a
   // ordem é a da iniciativa, não uma decisão manual do mestre.
-  const canReorder = comando && !emCombate && !batchMode;
+  const canReorder = comando && !emCombate && !batchMode && viewMode === 'fila';
+
+  const groupedSections = [
+    {
+      key: 'jogador',
+      title: 'Personagens',
+      subtitle: 'Fichas dos jogadores',
+      tone: 'border-cyan-300/15 bg-cyan-300/[0.035] text-cyan-100/70',
+      entities: iniciativa.filter((entity) => entity.tipo === 'jogador'),
+    },
+    {
+      key: 'aliado',
+      title: 'Aliados',
+      subtitle: 'Apoio do grupo',
+      tone: 'border-emerald-300/15 bg-emerald-300/[0.035] text-emerald-100/70',
+      entities: iniciativa.filter((entity) => entity.tipo === 'aliado'),
+    },
+    {
+      key: 'inimigo',
+      title: 'Inimigos',
+      subtitle: 'Oposição da cena',
+      tone: 'border-red-300/15 bg-red-300/[0.035] text-red-100/70',
+      entities: iniciativa.filter((entity) => entity.tipo === 'inimigo'),
+    },
+  ].filter((section) => section.entities.length > 0);
 
   const runAction = async (action: () => Promise<void>, errorMessage: string) => {
     if (busy) return;
@@ -225,30 +251,31 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
                 </span>
               ) : null}
             </div>
-            <div className="mt-0.5 flex items-center gap-1.5 text-[10px] capitalize text-white/40">
+            <div className="mt-0.5 flex items-center gap-1.5 text-[9px] capitalize text-white/35">
               <span>{entity.tipo}</span>
               <span>•</span>
-              <span>{entity.hpAtual !== undefined ? `${entity.hpAtual}/${entity.hpTotal ?? '?' } PV` : entity.estado_vida ?? 'PV ocultos'}</span>
+              <span>posição {index + 1}</span>
+              {comando && entity.vd != null ? (
+                <>
+                  <span>•</span>
+                  <span>VD {entity.vd}</span>
+                </>
+              ) : null}
             </div>
-            {entity.manaAtual != null || entity.manaTotal != null || entity.defesa != null || (comando && entity.vd != null) ? (
-              <div className="mt-1 flex items-center gap-2.5 text-[10px] text-white/40">
-                {entity.manaAtual != null || entity.manaTotal != null ? (
-                  <span className="flex items-center gap-0.5" title="Mana">
-                    <Zap size={10} className="text-sky-300/70" /> {entity.manaAtual ?? entity.manaTotal}/{entity.manaTotal ?? '?'}
-                  </span>
-                ) : null}
-                {entity.defesa != null ? (
-                  <span className="flex items-center gap-0.5" title="Defesa">
-                    <Shield size={10} /> {entity.defesa}
-                  </span>
-                ) : null}
-                {comando && entity.vd != null ? (
-                  <span className="flex items-center gap-0.5" title="Valor de Desafio">
-                    <Gauge size={10} /> {entity.vd}
-                  </span>
-                ) : null}
-              </div>
-            ) : null}
+            <div className="mt-2 grid grid-cols-3 gap-1 text-[9px]">
+              <span className="flex min-w-0 items-center gap-1 rounded-md bg-red-400/[0.07] px-1.5 py-1 text-red-100/60" title="Vida">
+                <HeartPulse size={10} className="shrink-0 text-red-300/70" />
+                <span className="truncate">{entity.hpAtual !== undefined ? `${entity.hpAtual}/${entity.hpTotal ?? '?'}` : entity.estado_vida ?? 'Oculta'}</span>
+              </span>
+              <span className="flex min-w-0 items-center gap-1 rounded-md bg-sky-400/[0.07] px-1.5 py-1 text-sky-100/60" title="Mana">
+                <Zap size={10} className="shrink-0 text-sky-300/70" />
+                <span className="truncate">{entity.manaAtual != null || entity.manaTotal != null ? `${entity.manaAtual ?? entity.manaTotal}/${entity.manaTotal ?? '?'}` : '—'}</span>
+              </span>
+              <span className="flex min-w-0 items-center gap-1 rounded-md bg-white/[0.035] px-1.5 py-1 text-white/45" title="Defesa">
+                <Shield size={10} className="shrink-0" />
+                <span className="truncate">{entity.defesa ?? '—'}</span>
+              </span>
+            </div>
             {hpRatio !== null ? (
               <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-white/[0.06]">
                 <div className="h-full rounded-full bg-red-400/65" style={{ width: `${hpRatio}%` }} />
@@ -322,9 +349,9 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
       <div className="shrink-0 border-b border-white/10 px-4 pb-4 pt-5">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <h2 className="font-semibold text-white">Iniciativa</h2>
+            <h2 className="font-semibold text-white">Controle da cena</h2>
             <p className="mt-0.5 text-[11px] text-white/40">
-              {emCombate ? 'Ordem de combate' : 'Preparação da cena'}
+              {emCombate ? 'Turnos e fichas em combate' : 'Participantes e iniciativa'}
             </p>
           </div>
           <div className="flex items-center gap-1">
@@ -375,6 +402,31 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
             ) : null}
           </div>
         </div>
+
+        {iniciativa.length ? (
+          <div className="mt-4 grid grid-cols-2 gap-1 rounded-lg border border-white/[0.07] bg-black/25 p-1" aria-label="Organização dos participantes">
+            <button
+              type="button"
+              onClick={() => setViewMode('grupos')}
+              className={`flex items-center justify-center gap-2 rounded-md px-3 py-2 text-[10px] font-semibold transition-colors ${
+                viewMode === 'grupos' ? 'bg-white/[0.07] text-white' : 'text-white/35 hover:text-white/65'
+              }`}
+              aria-pressed={viewMode === 'grupos'}
+            >
+              <LayoutGrid size={13} /> Por grupo
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('fila')}
+              className={`flex items-center justify-center gap-2 rounded-md px-3 py-2 text-[10px] font-semibold transition-colors ${
+                viewMode === 'fila' ? 'bg-white/[0.07] text-white' : 'text-white/35 hover:text-white/65'
+              }`}
+              aria-pressed={viewMode === 'fila'}
+            >
+              <ListOrdered size={13} /> Fila de turnos
+            </button>
+          </div>
+        ) : null}
 
         {isAdding && comando ? (
           <motion.form
@@ -553,6 +605,30 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
           <div className="flex h-full min-h-44 flex-col items-center justify-center px-6 text-center text-white/35">
             <UserRound size={32} strokeWidth={1.5} />
             <p className="mt-3 text-sm">{comando ? 'Adicione participantes para preparar o combate.' : 'O mestre ainda está preparando esta cena.'}</p>
+          </div>
+        ) : viewMode === 'grupos' ? (
+          <div className="space-y-5">
+            {groupedSections.map((section) => (
+              <section key={section.key} aria-labelledby={`session-group-${section.key}`}>
+                <div className={`mb-2 flex items-center justify-between rounded-lg border px-3 py-2 ${section.tone}`}>
+                  <div className="flex items-center gap-2.5">
+                    {section.key === 'jogador' ? <UserRound size={14} /> : section.key === 'aliado' ? <Shield size={14} /> : <Skull size={14} />}
+                    <div>
+                      <h3 id={`session-group-${section.key}`} className="text-[11px] font-semibold text-white/80">{section.title}</h3>
+                      <p className="text-[9px] text-white/35">{section.subtitle}</p>
+                    </div>
+                  </div>
+                  <span className="font-mono text-[10px] text-white/45">{section.entities.length}</span>
+                </div>
+                <div className="space-y-2">
+                  {section.entities.map((entity) => (
+                    <React.Fragment key={entity.id}>
+                      {renderCard(entity, iniciativa.findIndex((item) => item.id === entity.id))}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </section>
+            ))}
           </div>
         ) : canReorder ? (
           <Reorder.Group

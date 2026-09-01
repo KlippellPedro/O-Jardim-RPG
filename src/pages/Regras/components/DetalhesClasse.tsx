@@ -2,6 +2,8 @@ import { ChevronDown } from 'lucide-react';
 import type { IClasse, IFichaTecnicaClasse, IOpcaoHabilidadeClasse } from '../../../types/catalogo';
 import { classeTemProgressaoPublicada, formatarRecompensaClasse } from '../../../services/classeService';
 import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
+import { AuraEspecial, SeloEspecial } from '../../../redesign/components/premium/AuraEspecial';
+import { obterTemaPorId } from '../../../redesign/themeMap';
 import { FormulaIngredients } from '../../../components/materials/FormulaIngredients';
 import { ChemicalMaterialsCatalog } from '../../../components/materials/ChemicalMaterialsCatalog';
 import { CookingIngredients } from '../../../components/materials/CookingIngredients';
@@ -246,6 +248,7 @@ export const DetalhesClasse = ({ classe }: DetalhesClasseProps) => {
 
   const progressao = classe.progressao || [];
   const especial = classe.categoria !== 'padrao';
+  const tema = obterTemaPorId(classe.id);
   const idsArvores = classe.arvores?.length ? classe.arvores : (classe.arvore ? [classe.arvore] : []);
   const arvores = idsArvores
     .map(id => ARVORES.find(arvore => arvore.id === id)?.nome)
@@ -254,9 +257,12 @@ export const DetalhesClasse = ({ classe }: DetalhesClasseProps) => {
 
   return (
     <div className="space-y-12">
-      <div className={`rounded-2xl border p-5 text-sm leading-relaxed ${especial ? 'border-violet-500/20 bg-violet-500/5 text-violet-100' : 'border-white/10 bg-black/30 text-gray-300'}`}>
-        <p className="font-bold uppercase tracking-wider">{especial ? 'Classe especial' : 'Classe comum'}</p>
-        <p className="mt-1">
+      <div className={`relative overflow-hidden rounded-2xl border p-5 text-sm leading-relaxed ${especial ? 'border-violet-500/20 bg-violet-500/5 text-violet-100' : 'border-white/10 bg-black/30 text-gray-300'}`}>
+        {especial && <AuraEspecial cor={tema.glow} variante="faixa" />}
+        <p className="relative font-bold uppercase tracking-wider">
+          {especial ? <SeloEspecial texto="Classe especial" cor={tema.primary} /> : 'Classe comum'}
+        </p>
+        <p className="relative mt-1">
           {especial
             ? `Não se escolhe na criação: se conquista. Mais forte que o patamar-base, presa às Árvores ${arvores || 'que o Mestre definir'}, e o Mestre precisa liberar antes.`
             : 'É o patamar-base. Serve a personagem de qualquer Árvore, sem depender de ninguém liberar.'}

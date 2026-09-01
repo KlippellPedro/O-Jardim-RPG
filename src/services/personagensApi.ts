@@ -26,6 +26,7 @@ export interface PersonagemApiRecord {
   economia_versao?: number;
   carteira?: CarteiraPersonagemItem[];
   inventario_central?: InventarioPersonagemItem[];
+  aliados_compartilhados?: Record<string, any>[];
   criado_em?: string;
   atualizado_em?: string;
   somente_leitura?: boolean;
@@ -67,6 +68,10 @@ export interface ConsumirFrutoEdenPayload {
   versaoFichaEsperada: number;
   economiaVersaoEsperada: number;
   substituir?: boolean;
+}
+
+export interface DespertarFrutoEdenPayload {
+  versaoFichaEsperada: number;
 }
 
 export const personagensApi = {
@@ -147,6 +152,19 @@ export const personagensApi = {
           economia_versao_esperada: payload.economiaVersaoEsperada,
           substituir: Boolean(payload.substituir),
         },
+      },
+    );
+  },
+
+  despertarFrutoEden(personagemId: string, payload: DespertarFrutoEdenPayload) {
+    return api<{
+      fruto: Record<string, any>;
+      versao: number;
+    }>(
+      `/personagens/${encodeURIComponent(personagemId)}/despertar-fruto-eden`,
+      {
+        method: 'POST',
+        body: { versao_ficha_esperada: payload.versaoFichaEsperada },
       },
     );
   },

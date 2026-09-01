@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import { toR3fElapsedSeconds } from '../../src/pages/Mundo/animationTiming.ts';
 import { loreBloqueado } from '../../src/pages/Mundo/loreVisibility.ts';
+import { paginaGeralDoMundoVisivel } from '../../src/pages/Mundo/worldPageVisibility.ts';
 import { arvoresVisiveisComAtual } from '../../data/mundo/arvoresCatalog.ts';
 import {
   readLoadedWorldModels,
@@ -77,7 +78,14 @@ test('mestre enxerga os galhos mesmo em uma árvore oculta para jogadores', () =
   }), false);
 });
 
+test('página geral oculta some para jogador, mas permanece acessível para Mestre', () => {
+  assert.equal(paginaGeralDoMundoVisivel(true, false), false);
+  assert.equal(paginaGeralDoMundoVisivel(true, true), true);
+  assert.equal(paginaGeralDoMundoVisivel(false, false), true);
+  assert.equal(paginaGeralDoMundoVisivel(undefined, false), true);
+});
+
 test('ficha mostra o nome da Árvore escolhida mesmo quando ela está oculta no Códice', () => {
   const opcoes = arvoresVisiveisComAtual([], 'erebus');
-  assert.deepEqual(opcoes.map((arvore) => [arvore.id, arvore.nome]), [['erebus', 'Abismo']]);
+  assert.deepEqual(opcoes.map((arvore) => [arvore.id, arvore.nome]), [['erebus', 'O Vazio']]);
 });

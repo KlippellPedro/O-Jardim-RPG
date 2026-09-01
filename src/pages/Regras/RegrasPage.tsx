@@ -4,8 +4,11 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowLeft,
   ArrowRight,
+  BookOpen,
   ChevronDown,
   ChevronRight,
+  Compass,
+  LayoutGrid,
   Library,
   LockKeyhole,
   Menu,
@@ -19,6 +22,9 @@ import { GRUPOS_NAVEGACAO, grupoDoTopico, ordenarTopicosPorNavegacao } from '../
 import { tituloTopico } from '../../../data/regras/titulos';
 import { useResolvedRules } from '../../hooks/useResolvedRules';
 import { useAuthStore } from '../../store/useAuthStore';
+import { usePermissoes } from '../../hooks/usePermissoes';
+import { GuidedTour } from '../../components/ui/GuidedTour';
+import { REGRAS_TOUR_STEPS, regrasTourJaVisto, serializarRegrasTourVisto } from './regrasTourConfig';
 import { CatalogoLegados } from './components/CatalogoLegados';
 import { CatalogoMagico } from './components/CatalogoMagico';
 import { CatalogoCondicoes } from './components/CatalogoCondicoes';
@@ -41,11 +47,15 @@ function RulesLanding({
   regras,
   titulos,
   onSelectTopic,
+  isMestre,
+  podeEditarConteudo,
 }: {
   availableTopics: string[];
   regras: RegrasCatalog;
   titulos: Record<string, string>;
   onSelectTopic: (topic: string) => void;
+  isMestre: boolean;
+  podeEditarConteudo: boolean;
 }) {
   const [buscaInicio, setBuscaInicio] = useState('');
   const termo = normalizar(buscaInicio.trim());
@@ -68,7 +78,7 @@ function RulesLanding({
         <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#c7a44c]">Livro de Regras</span>
         <h1 className="mt-4 font-serif text-3xl font-bold text-[#f2ead7] sm:text-5xl">O que você precisa descobrir?</h1>
         <p className="mt-5 max-w-3xl text-base leading-8 text-gray-300/80">Encontre o assunto pelo grupo ou procure pelo nome e pela descrição. Todos os capítulos disponíveis para você aparecem nesta página.</p>
-        <label className="relative mt-6 block max-w-3xl">
+        <label data-tour="regras-busca" className="relative mt-6 block max-w-3xl">
           <span className="sr-only">Buscar em todos os capítulos</span>
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#d8bd75]/65" size={18} />
           <input
@@ -83,8 +93,65 @@ function RulesLanding({
           </span>
         </label>
       </div>
+
+      <section data-tour="regras-legenda" className="mt-8 rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
+        <h2 className="text-[10px] font-bold uppercase tracking-[0.22em] text-gray-500">Como ler este livro</h2>
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="flex items-start gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-emerald-300/25 bg-emerald-400/10 text-emerald-200">
+              <BookOpen size={15} />
+            </span>
+            <div>
+              <strong className="block text-sm text-gray-200">Comece por aqui</strong>
+              <p className="mt-0.5 text-xs leading-5 text-gray-500">O ponto de partida antes de qualquer outro capítulo.</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#c7a44c]/25 bg-[#c7a44c]/10 text-[#d8bd75]">
+              <Sparkles size={15} />
+            </span>
+            <div>
+              <strong className="block text-sm text-gray-200">Regra oficial</strong>
+              <p className="mt-0.5 text-xs leading-5 text-gray-500">Explica como um sistema do jogo funciona, valendo pra qualquer mesa.</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-sky-300/25 bg-sky-400/10 text-sky-200">
+              <LayoutGrid size={15} />
+            </span>
+            <div>
+              <strong className="block text-sm text-gray-200">Catálogo oficial</strong>
+              <p className="mt-0.5 text-xs leading-5 text-gray-500">Listas pra consultar (raças, classes, magias, itens), não pra ler de uma vez.</p>
+            </div>
+          </div>
+          {isMestre ? (
+            <div className="flex items-start gap-3">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#c7a44c]/25 bg-[#c7a44c]/10 text-[#cbb87e]">
+                <LockKeyhole size={15} />
+              </span>
+              <div>
+                <strong className="block text-sm text-gray-200">Somente Mestre</strong>
+                <p className="mt-0.5 text-xs leading-5 text-gray-500">Só aparece pra quem conduz a mesa — orientações de preparo e condução.</p>
+              </div>
+            </div>
+          ) : null}
+        </div>
+        {isMestre ? (
+          <p className="mt-5 flex items-start gap-2 border-t border-white/10 pt-4 text-xs leading-5 text-gray-500">
+            <LockKeyhole size={13} className="mt-0.5 shrink-0 text-[#cbb87e]" />
+            Capítulos públicos também podem trazer, no final, um bloco dourado <strong className="mx-1 text-gray-300">Para quem conduz a mesa</strong> visível só pra você.
+          </p>
+        ) : null}
+        {podeEditarConteudo ? (
+          <p className="mt-3 flex items-start gap-2 text-xs leading-5 text-gray-500">
+            <Pencil size={12} className="mt-0.5 shrink-0 text-gray-400" />
+            O botão <strong className="mx-1 text-gray-300">Editar</strong> no topo de um capítulo leva direto pra edição daquele conteúdo na campanha ativa.
+          </p>
+        ) : null}
+      </section>
+
       {gruposVisiveis.length ? (
-        <div className="mt-8 space-y-5">
+        <div data-tour="regras-secoes" className="mt-8 space-y-5">
           {gruposVisiveis.map((grupo, indiceGrupo) => (
             <section key={grupo.id} className={`relative overflow-hidden rounded-[1.75rem] border bg-gradient-to-br ${grupo.cor} to-black/35 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.18)] sm:p-7`}>
               <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full border border-white/[0.04] bg-white/[0.025]" />
@@ -131,6 +198,7 @@ interface ChapterNavigationProps {
   titulos: Record<string, string>;
   onBuscaChange: (value: string) => void;
   onSelectTopic: (topic: string) => void;
+  onOpenTour: () => void;
   onClose?: () => void;
 }
 
@@ -141,6 +209,7 @@ const ChapterNavigation = ({
   titulos,
   onBuscaChange,
   onSelectTopic,
+  onOpenTour,
   onClose,
 }: ChapterNavigationProps) => {
   const [categoriasAbertas, setCategoriasAbertas] = useState<Set<string>>(
@@ -179,11 +248,16 @@ const ChapterNavigation = ({
           <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>Livro de Regras</h2>
           <p className="mt-1 text-xs text-gray-500">Capítulos oficiais de O Jardim</p>
         </div>
-        {onClose ? (
-          <button type="button" onClick={onClose} aria-label="Fechar capítulos" className="rounded-lg border border-white/10 p-2 text-gray-400 hover:text-white">
-            <X size={18} />
+        <div className="flex shrink-0 items-center gap-2">
+          <button type="button" onClick={onOpenTour} aria-label="Abrir guia do livro" title="Guia do livro" className="rounded-lg border border-white/10 p-2 text-[#d8bd75] hover:border-[#c7a44c]/40 hover:text-[#e1c77e]">
+            <Compass size={17} />
           </button>
-        ) : null}
+          {onClose ? (
+            <button type="button" onClick={onClose} aria-label="Fechar capítulos" className="rounded-lg border border-white/10 p-2 text-gray-400 hover:text-white">
+              <X size={18} />
+            </button>
+          ) : null}
+        </div>
       </div>
 
       <label className="relative mx-5 my-4 block">
@@ -249,12 +323,11 @@ export const RegrasPage = () => {
   const [menuAberto, setMenuAberto] = useState(false);
   const mobileMenuRef = useRef<HTMLElement>(null);
   const { usuario, campanhaAtiva } = useAuthStore();
+  const { podeEditarConteudo } = usePermissoes();
   const isMestre = usuario?.papel_plataforma === 'admin'
     || usuario?.papel_plataforma === 'criador'
     || campanhaAtiva?.papel === 'mestre'
     || campanhaAtiva?.papel === 'assistente';
-  const podeEditarConteudo = usuario?.papel_plataforma === 'criador'
-    || campanhaAtiva?.papel === 'mestre';
   const {
     regras: regrasCatalog,
     titulos,
@@ -314,6 +387,42 @@ export const RegrasPage = () => {
     document.getElementById('regra-leitor')?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const [tourAberto, setTourAberto] = useState(false);
+  const tourTentadoRef = useRef(false);
+  const chaveTour = `jardim:regras-tour:v1:${usuario?.id || 'local'}`;
+
+  const abrirTourRegras = () => {
+    if (activeTopic) {
+      const proximosParametros = new URLSearchParams(searchParams);
+      proximosParametros.delete('topico');
+      setSearchParams(proximosParametros);
+    }
+    setTourAberto(true);
+  };
+
+  const encerrarTourRegras = () => {
+    try {
+      localStorage.setItem(chaveTour, serializarRegrasTourVisto());
+    } catch {
+      // O botão manual continua disponível mesmo se o navegador bloquear o armazenamento.
+    }
+    setTourAberto(false);
+  };
+
+  useEffect(() => {
+    if (activeTopic || tourAberto || tourTentadoRef.current) return;
+    try {
+      if (regrasTourJaVisto(localStorage.getItem(chaveTour))) return;
+    } catch {
+      // Sem armazenamento, o guia ainda abre uma vez nesta montagem.
+    }
+    const timer = window.setTimeout(() => {
+      tourTentadoRef.current = true;
+      setTourAberto(true);
+    }, 750);
+    return () => window.clearTimeout(timer);
+  }, [activeTopic, chaveTour, tourAberto]);
+
   const filteredKeys = useMemo(() => {
     const termo = normalizar(busca.trim());
     if (!termo) return catalogKeys;
@@ -355,8 +464,8 @@ export const RegrasPage = () => {
   ].includes(activeTopic);
 
   return (
-    <div className="app-viewport mx-auto flex max-w-[112.5rem] gap-3 overflow-hidden sm:gap-4 lg:gap-6">
-      <aside className="hidden h-full min-h-0 w-72 shrink-0 overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#0d0c12]/95 py-5 shadow-2xl backdrop-blur-xl md:block">
+    <div className="regras-shell app-viewport mx-auto flex max-w-[112.5rem] gap-3 overflow-hidden sm:gap-4 lg:gap-6">
+      <aside data-tour="regras-sidebar" className="hidden h-full min-h-0 w-72 shrink-0 overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#0d0c12]/95 py-5 shadow-2xl backdrop-blur-xl md:block">
         <ChapterNavigation
           activeTopic={activeTopic}
           busca={busca}
@@ -364,6 +473,7 @@ export const RegrasPage = () => {
           titulos={titulos}
           onBuscaChange={setBusca}
           onSelectTopic={setActiveTopic}
+          onOpenTour={abrirTourRegras}
         />
       </aside>
 
@@ -401,7 +511,7 @@ export const RegrasPage = () => {
                     <span className="text-gray-500">{grupoDoTopico(activeTopic)?.titulo || topicData.categoria || 'Regras gerais'}</span>
                     {podeEditarConteudo ? (
                       <Link
-                        to={`/mestre?aba=conteudo&secao=regras&item=regra:${encodeURIComponent(activeTopic)}`}
+                        to={`/criador?aba=conteudo&secao=regras&item=regra:${encodeURIComponent(activeTopic)}${campanhaAtiva ? `&campanha_id=${encodeURIComponent(campanhaAtiva.id)}` : ''}`}
                         className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-gray-300 transition hover:border-[#c7a44c]/35 hover:text-[#e1c77e]"
                       >
                         <Pencil size={11} /> Editar
@@ -505,7 +615,16 @@ export const RegrasPage = () => {
                   ) : null}
                 </footer>
               </motion.article>
-            ) : <RulesLanding availableTopics={catalogKeys} regras={regrasCatalog} titulos={titulos} onSelectTopic={setActiveTopic} />}
+            ) : (
+              <RulesLanding
+                availableTopics={catalogKeys}
+                regras={regrasCatalog}
+                titulos={titulos}
+                onSelectTopic={setActiveTopic}
+                isMestre={isMestre}
+                podeEditarConteudo={podeEditarConteudo}
+              />
+            )}
           </AnimatePresence>
         </main>
       </section>
@@ -532,12 +651,27 @@ export const RegrasPage = () => {
                 titulos={titulos}
                 onBuscaChange={setBusca}
                 onSelectTopic={setActiveTopic}
+                onOpenTour={() => {
+                  setMenuAberto(false);
+                  abrirTourRegras();
+                }}
                 onClose={() => setMenuAberto(false)}
               />
             </motion.aside>
           </motion.div>
         ) : null}
       </AnimatePresence>
+
+      {tourAberto ? (
+        <GuidedTour
+          passos={REGRAS_TOUR_STEPS}
+          accent="#c7a44c"
+          nomeGuia="Guia do Livro"
+          rootSelector=".regras-shell"
+          onClose={encerrarTourRegras}
+          onFinish={encerrarTourRegras}
+        />
+      ) : null}
     </div>
   );
 };

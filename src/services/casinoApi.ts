@@ -13,6 +13,36 @@ export interface RodadaCassinoGambler {
   resultado: Record<string, any>;
 }
 
+export interface LogApostaCassinoGambler {
+  id: string;
+  personagem_id: string;
+  personagem_nome: string;
+  usuario_id: string;
+  usuario_nome: string;
+  jogo: JogoCassinoGambler;
+  aposta: number;
+  pagamento: number;
+  saldo: number;
+  status: 'ativa' | 'liquidada' | 'reembolsada';
+  resultado: Record<string, any>;
+  criado_em: string;
+  encerrada_em?: string | null;
+}
+
+export interface LogsCassinoGambler {
+  logs: LogApostaCassinoGambler[];
+  total: number;
+  limite: number;
+  deslocamento: number;
+  resumo: {
+    rodadas: number;
+    ativas: number;
+    apostado: number;
+    pago: number;
+    saldo_casa: number;
+  };
+}
+
 export interface LimitesCassinoGambler {
   aposta_minima: number;
   aposta_maxima: number;
@@ -77,6 +107,14 @@ function novoId(): string {
 }
 
 export const casinoApi = {
+  logs(campanhaId: string, deslocamento = 0, limite = 50) {
+    const query = new URLSearchParams({
+      campanha_id: campanhaId,
+      deslocamento: String(deslocamento),
+      limite: String(limite),
+    });
+    return api<LogsCassinoGambler>(`/cassino-gambler/logs?${query.toString()}`);
+  },
   personagens(campanhaId: string) {
     return api<{ personagens: PersonagemCassinoGambler[] }>(`/cassino-gambler/personagens?campanha_id=${encodeURIComponent(campanhaId)}`);
   },

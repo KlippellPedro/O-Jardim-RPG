@@ -40,6 +40,33 @@ ORDEM_TIPOS = {tipo: i for i, tipo in enumerate([
 ])}
 
 
+# Pasta em data/mundo/ -> id da Arvore em data/mundo/arvoresCatalog.ts.
+# O painel de visibilidade agrupa as entradas por Arvore, e a cascata do codice
+# nao serve pra isso: personagens e eventos nao penduram em Galho nenhum, entao
+# sem esta marca eles ficariam todos num balaio "sem Arvore".
+# "Jardim" fica de fora de proposito - e o material que vale pro Jardim inteiro.
+ARVORE_POR_PASTA = {
+    "Gênese": "aethel",
+    "Alétheia": "ousias",
+    "Parley (subjulgado)": "keryx",
+    "Anima": "haemus",
+    "Vórtice": "ignis",
+    "Baluarte": "moros",
+    "Matriz": "aperion",
+    "Éon": "chronus",
+    "Abismo": "erebus",
+    "Limiar": "mulher-carmesim",
+}
+
+
+def arvore_de_origem(arquivo: Path) -> str | None:
+    """Descobre a Arvore dona do arquivo pela pasta em que ele esta."""
+    for parte in arquivo.relative_to(ORIGEM).parts[:-1]:
+        if parte in ARVORE_POR_PASTA:
+            return ARVORE_POR_PASTA[parte]
+    return None
+
+
 def limpar(entrada: dict) -> dict:
     """Remove os campos de anotacao (prefixo '_'), que o import ja ignora."""
     limpa = {k: v for k, v in entrada.items() if not k.startswith("_")}
@@ -69,6 +96,9 @@ def coletar() -> list[dict]:
                 raise SystemExit(
                     f"id duplicado '{entrada['id']}': {arquivo} e {vistos[entrada['id']]}"
                 )
+            arvore = arvore_de_origem(arquivo)
+            if arvore:
+                entrada["arvore_origem"] = arvore
             vistos[entrada["id"]] = arquivo
             ordem_leitura[entrada["id"]] = len(entradas)
             entradas.append(entrada)
@@ -131,6 +161,10 @@ def gerar(entradas: list[dict]) -> str:
         "  tipo: LoreType;\n"
         "  titulo: string;\n"
         "  revelado?: boolean;\n"
+        "  registro_universal?: 'ser' | 'local';\n"
+        "  /** Arvore dona da entrada, pela pasta de origem. Ausente no material\n"
+        "   *  do Jardim, que vale pro cosmos inteiro. */\n"
+        "  arvore_origem?: string;\n"
         "  conteudo: Record<string, string | string[]>;\n"
         "}\n"
         "\n"

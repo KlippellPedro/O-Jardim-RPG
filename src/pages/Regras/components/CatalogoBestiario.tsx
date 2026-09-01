@@ -9,6 +9,7 @@ interface MonstroEntry {
   id: string;
   titulo: string;
   categoria: string;
+  subtipo: string;
   classe: string;
   funcao: string;
   deslocamento: string;
@@ -29,6 +30,7 @@ const BESTIARIO_COMPLETO: MonstroEntry[] = (catalogo.entradas as any[])
     id: e.id,
     titulo: e.titulo,
     categoria: e.conteudo?.categoria || 'Desconhecida',
+    subtipo: e.conteudo?.subtipo || '',
     classe: e.conteudo?.classe || 'Criatura',
     funcao: e.conteudo?.funcao || '',
     deslocamento: e.conteudo?.deslocamento || '',
@@ -52,6 +54,10 @@ const RECORTES = [
   { id: 'guardas', rotulo: 'Guardas de local', aplica: (m: MonstroEntry) => m.funcao === 'Guarda de local' },
   { id: 'contratados', rotulo: 'Contratáveis', aplica: (m: MonstroEntry) => Boolean(m.funcao) },
   { id: 'feras', rotulo: 'Feras e monstros', aplica: (m: MonstroEntry) => !m.funcao && m.categoria !== 'Universal' },
+  { id: 'maritimas', rotulo: 'Marítimas', aplica: (m: MonstroEntry) => m.subtipo === 'Marítima' },
+  { id: 'espiritos', rotulo: 'Espíritos', aplica: (m: MonstroEntry) => m.subtipo === 'Espírito' },
+  { id: 'golens', rotulo: 'Golens', aplica: (m: MonstroEntry) => m.subtipo === 'Golem' },
+  { id: 'vazio', rotulo: 'Vazio', aplica: (m: MonstroEntry) => m.subtipo === 'Vazio' },
   { id: 'universais', rotulo: 'Perfis universais', aplica: (m: MonstroEntry) => m.categoria === 'Universal' },
 ] as const;
 
@@ -79,6 +85,11 @@ const BestiarioDetail = ({ item, compacto = false }: { item: MonstroEntry; compa
           <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-gray-400">
             {item.classe}
           </span>
+          {item.subtipo ? (
+            <span className="rounded-full border border-cyan-500/25 bg-cyan-500/10 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-cyan-300">
+              {item.subtipo}
+            </span>
+          ) : null}
           {item.funcao ? (
             <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-emerald-300">
               Contrata-se: {item.funcao}
@@ -189,6 +200,7 @@ export const CatalogoBestiario = () => {
       const texto = [
         item.titulo,
         item.categoria,
+        item.subtipo,
         item.classe,
         item.funcao,
         item.descricao,

@@ -5,6 +5,7 @@ import {
   Banknote,
   CircleDot,
   CircleOff,
+  ClipboardList,
   Coins,
   Crown,
   Dices,
@@ -36,6 +37,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { sfx } from '../../utils/audioSynth';
 import './entidades.css';
 import { EntityThemeMusic } from './EntityThemeMusic';
+import { GamblerBetLogsModal } from './GamblerBetLogsModal';
 import { possuiEntradaGambler } from './gamblerAccess';
 import './gamblerCasino.css';
 
@@ -100,9 +102,9 @@ const JOGOS: Array<{
   },
   {
     id: 'vaos',
-    nome: 'Queda pelo Interstício',
+    nome: 'Queda Livre',
     resumo: 'Quatro desvios decidem o destino da ficha.',
-    explicacao: 'A ficha desce por quatro desvios, um atrás do outro. Terminar numa borda paga quatro vezes o valor, cair num dos Vãos devolve exatamente o que foi apostado, e parar bem no meio, no Interstício, a casa fica com tudo.',
+    explicacao: 'A ficha desce por quatro desvios, um atrás do outro. Terminar numa borda paga quatro vezes o valor, cair num dos Vãos devolve exatamente o que foi apostado, e parar bem no meio a casa fica com tudo.',
     pagamento: 'até 4×',
     Icone: Triangle,
   },
@@ -166,13 +168,21 @@ function nomeCarta(valor: number): string {
   return NOMES_CARTA[valor] || String(valor);
 }
 
+// O servidor devolve "Interstício" pra manter o mesmo resultado do Banqueiro
+// no Discord, mas ninguém fala isso à mesa - aqui na tela vira só "Centro".
+const NOMES_DESTINO_VAOS: Record<string, string> = { 'Interstício': 'Centro' };
+
+function nomeDestino(destino: string): string {
+  return NOMES_DESTINO_VAOS[destino] || destino;
+}
+
 function textoResultado(rodada: RodadaCassinoGambler, simbolosRolos?: Record<string, { nome: string }>): string {
   const resultado = rodada.resultado || {};
   if (rodada.status === 'reembolsada') return 'A rodada foi cancelada. A aposta voltou para a carteira.';
   if (rodada.jogo === 'dados') return `O dado mostrou ${resultado.dado}.`;
   if (rodada.jogo === 'roda_fluxos') return `A roda parou em ${resultado.sorteada}.`;
   if (rodada.jogo === 'sucessao') return resultado.marco === 7 ? 'A ficha parou bem no Passo. A aposta voltou sem lucro nem perda.' : `A ficha parou no marco ${resultado.marco}.`;
-  if (rodada.jogo === 'vaos') return `Destino: ${resultado.destino}.`;
+  if (rodada.jogo === 'vaos') return `Destino: ${nomeDestino(resultado.destino)}.`;
   if (rodada.jogo === 'rolos') {
     const rolos: string[] = resultado.rolos || [];
     const nomes = rolos.map(id => simbolosRolos?.[id]?.nome || id).join(' · ');
@@ -191,7 +201,10 @@ function ganhou(rodada: RodadaCassinoGambler): boolean {
 
 export function GamblerCasinoPage() {
   const navigate = useNavigate();
-  const campanhaId = useAuthStore(state => state.campanhaAtiva?.id ?? null);
+  const campanhaAtiva = useAuthStore(state => state.campanhaAtiva);
+  const usuario = useAuthStore(state => state.usuario);
+  const campanhaId = campanhaAtiva?.id ?? null;
+  const mestreDoCasino = campanhaAtiva?.papel === 'mestre' || usuario?.papel_plataforma === 'criador';
   const [personagens, setPersonagens] = useState<PersonagemCassinoGambler[]>([]);
   const [personagemId, setPersonagemId] = useState<string | null>(null);
   const [estado, setEstado] = useState<EstadoCassinoGambler | null>(null);
@@ -212,13 +225,14 @@ export function GamblerCasinoPage() {
   const [resgatando, setResgatando] = useState(false);
   const [revelando, setRevelando] = useState(false);
   const [mostrarConquistas, setMostrarConquistas] = useState(false);
+  const [mostrarLogs, setMostrarLogs] = useState(false);
   const [toasts, setToasts] = useState<ToastCassino[]>([]);
   const toastIdRef = useRef(0);
   const [erro, setErro] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-    if (!possuiEntradaGambler()) {
+    if (!mestreDoCasino && !possuiEntradaGambler()) {
       navigate('/entidades/gambler', { replace: true });
       return;
     }
@@ -241,7 +255,7 @@ export function GamblerCasinoPage() {
         if (ativo) setCarregando(false);
       });
     return () => { ativo = false; };
-  }, [campanhaId, navigate]);
+  }, [campanhaId, mestreDoCasino, navigate]);
 
   const selecionarPersonagem = async (id: string) => {
     if (!campanhaId || carregando) return;
@@ -450,6 +464,9 @@ export function GamblerCasinoPage() {
       <main className="gambler-casino gambler-casino--selecting">
         <div className="gambler-casino__backdrop" aria-hidden="true" />
         <div className="gambler-casino__veil" aria-hidden="true" />
+        {mestreDoCasino && campanhaId ? (
+          <GamblerBetLogsModal aberto={mostrarLogs} campanhaId={campanhaId} onClose={() => setMostrarLogs(false)} />
+        ) : null}
         <section className="gambler-character-modal" role="dialog" aria-modal="true" aria-labelledby="gambler-character-title">
           <span>Antes de receber as fichas</span>
           <UserRound size={34} />
@@ -469,7 +486,14 @@ export function GamblerCasinoPage() {
           ) : (
             <p className="gambler-character-modal__empty">Você não possui um personagem ativo nesta campanha.</p>
           )}
-          <Link to="/entidades/gambler"><ArrowLeft size={16} /> Voltar ao conto</Link>
+          <div className="gambler-character-modal__actions">
+            {mestreDoCasino ? (
+              <button type="button" onClick={() => setMostrarLogs(true)}>
+                <ClipboardList size={16} /> Logs de apostas
+              </button>
+            ) : null}
+            <Link to="/entidades/gambler"><ArrowLeft size={16} /> Voltar ao conto</Link>
+          </div>
         </section>
       </main>
     );
@@ -495,6 +519,9 @@ export function GamblerCasinoPage() {
     <main className="gambler-casino">
       <div className="gambler-casino__backdrop" aria-hidden="true" />
       <div className="gambler-casino__veil" aria-hidden="true" />
+      {mestreDoCasino && campanhaId ? (
+        <GamblerBetLogsModal aberto={mostrarLogs} campanhaId={campanhaId} onClose={() => setMostrarLogs(false)} />
+      ) : null}
 
       <div className="gambler-casino__toasts" aria-live="polite">
         <AnimatePresence>
@@ -531,7 +558,14 @@ export function GamblerCasinoPage() {
       <div className="gambler-casino__shell">
         <nav className="gambler-casino__nav">
           <Link to="/entidades/gambler"><ArrowLeft size={16} /> Voltar ao conto</Link>
-          <Link to="/entidades"><DoorOpen size={16} /> Deixar o salão</Link>
+          <div className="gambler-casino__nav-actions">
+            {mestreDoCasino ? (
+              <button type="button" onClick={() => setMostrarLogs(true)}>
+                <ClipboardList size={16} /> Logs de apostas
+              </button>
+            ) : null}
+            <Link to="/entidades"><DoorOpen size={16} /> Deixar o salão</Link>
+          </div>
         </nav>
 
         <motion.header initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>

@@ -2,13 +2,16 @@
 .entity-story {
   position: relative;
   min-height: 100dvh;
-  overflow: hidden;
+  overflow-x: clip;
   color: #e9e4da;
 }
 
 .entity-book {
+  overflow-y: hidden;
   background: #07090d;
 }
+
+.entity-story { overflow-y: visible; }
 
 .entity-book__backdrop {
   position: fixed;
@@ -605,20 +608,43 @@
 .entity-story--missing p { margin: 1rem 0 2rem; color: #99958d; }
 
 @media (max-width: 640px) {
-  .entity-book__shell,
-  .entity-story__shell { padding-top: 5rem; }
+  .entity-book__shell { padding-top: 4rem; }
+  .entity-story__shell {
+    width: min(calc(100% - 1.25rem), 66rem);
+    padding-top: max(1rem, env(safe-area-inset-top, 0px));
+    padding-bottom: calc(var(--app-nav-block, 0px) + 2rem);
+  }
   .entity-book__hero { margin: 4rem auto; }
+  .entity-story__nav { min-height: 2.75rem; }
   .entity-story__nav > span { display: none; }
-  .entity-story__header { margin: 5rem auto 3.5rem; }
+  .entity-story__header { margin: 1.75rem auto 1.5rem; }
+  .entity-story__header h1 {
+    margin-top: .65rem;
+    overflow-wrap: anywhere;
+    font-size: clamp(2.5rem, 14vw, 4.25rem);
+    line-height: 1;
+  }
+  .entity-story__epithet { margin-top: .65rem; font-size: .95rem; }
+  .entity-story__header blockquote { margin-top: 1rem; font-size: .9rem; line-height: 1.55; }
+  .entity-story__image { opacity: .42; }
   .entity-music { flex-wrap: wrap; }
+  .entity-story__header .entity-music { margin-top: 1.25rem; }
   .entity-music__volume { width: 100%; margin-left: 3.25rem; }
-  .entity-story__prose { padding: 1.6rem 1.25rem; }
+  .entity-story__prose { padding: 1.45rem 1.15rem; border-radius: 1rem; }
   .entity-story__prose p { font-size: 1rem; line-height: 1.9; }
   .entity-guide__definition { grid-template-columns: 1fr; }
   .entity-guide__definition-icon { width: 3.8rem; height: 3.8rem; }
   .entity-guide__classifications { grid-template-columns: 1fr; }
   .entity-guide__classifications article:last-child { grid-column: auto; }
   .entity-guide__rank { grid-template-columns: 1.8rem .8rem 1fr; gap: .7rem; }
+}
+
+@media (max-width: 380px) {
+  .entity-story__nav a { font-size: .62rem; letter-spacing: .06em; }
+  .entity-story__kicker { font-size: .6rem; letter-spacing: .22em; }
+  .entity-music { padding: .65rem .7rem; gap: .6rem; }
+  .entity-music__volume { margin-left: 0; }
+  .entity-story__prose p { font-size: .96rem; line-height: 1.82; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -11,7 +11,7 @@ import { aplicarAjustesAtributosRaciais, BONUS_GRAU, obterAjustesPericiasRaciais
 import { resumirEquipamentos } from '../../../services/equipamentoService';
 import { desvantagensAutomaticasTeste, obterStatusFicha, penalidadeCansacoTeste } from '../../../services/statusService';
 import { AjusteButton, AjustesFichaModal } from '../components/AjustesFichaModal';
-import { ModalPortal } from '../components/ModalPortal';
+import { FichaModal } from '../components/FichaModal';
 import {
   ajusteOrigem,
   chaveAjuste,
@@ -30,9 +30,38 @@ import {
   removerPericiaCustomizada,
   renomearPericiaCustomizada,
 } from '../../../services/periciasFichaService';
+import { Select } from '../../../components/ui/Select';
+import { LabeledSelect } from '../components/SharedFichaComponents';
 
 const GRAUS_PERICIA = ['iniciante', 'aprendiz', 'treinado', 'especialista', 'mestre', 'veterano', 'renomado'];
 const NOMES_ATRIBUTOS = ATRIBUTOS_PERICIA;
+const ESTILOS_GRAU: Record<string, string> = {
+  iniciante: 'bg-slate-500/10 border-slate-400/20 text-slate-400 hover:border-slate-300/35',
+  aprendiz: 'bg-emerald-500/10 border-emerald-400/30 text-emerald-300 hover:border-emerald-300/50',
+  treinado: 'bg-sky-500/10 border-sky-400/30 text-sky-300 hover:border-sky-300/50',
+  especialista: 'bg-violet-500/10 border-violet-400/30 text-violet-300 hover:border-violet-300/50',
+  mestre: 'bg-amber-500/10 border-amber-400/30 text-amber-300 hover:border-amber-300/50',
+  veterano: 'bg-orange-500/10 border-orange-400/30 text-orange-300 hover:border-orange-300/50',
+  renomado: 'bg-rose-500/10 border-rose-400/30 text-rose-300 hover:border-rose-300/50',
+};
+const CORES_GRAU: Record<string, string> = {
+  iniciante: 'text-slate-400',
+  aprendiz: 'text-emerald-300',
+  treinado: 'text-sky-300',
+  especialista: 'text-violet-300',
+  mestre: 'text-amber-300',
+  veterano: 'text-orange-300',
+  renomado: 'text-rose-300',
+};
+const CORES_ATRIBUTO: Record<string, string> = {
+  forca: 'text-red-400',
+  destreza: 'text-sky-300',
+  constituicao: 'text-emerald-300',
+  inteligencia: 'text-indigo-300',
+  sabedoria: 'text-violet-300',
+  carisma: 'text-rose-300',
+  fluxo: 'text-amber-300',
+};
 
 export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate: any }) => {
   const campanhaAtiva = useAuthStore(s => s.campanhaAtiva);
@@ -40,7 +69,11 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
   const [racasCatalogo, setRacasCatalogo] = useState<IRaca[]>([]);
   const [busca, setBusca] = useState('');
   const [filtroAtributo, setFiltroAtributo] = useState('');
+  const [filtroGrau, setFiltroGrau] = useState('');
+  const [filtroFavoritos, setFiltroFavoritos] = useState('todos');
   const [rolando, setRolando] = useState<string | null>(null);
+  const [atributoForm, setAtributoForm] = useState('');
+  const [atributoObrigatorioErro, setAtributoObrigatorioErro] = useState(false);
 
   useEffect(() => {
     carregarCatalogo().then(data => {
@@ -58,7 +91,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
   const status = obterStatusFicha(f);
   const attrsBase = f.atributosFinais || character.atributosFinais || { forca: 10, destreza: 10, constituicao: 10, inteligencia: 10, sabedoria: 10, carisma: 10, fluxo: 10 };
   const racaAtual = racasCatalogo.find(raca => raca.id === f.racaId) || null;
-  const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], f);
+  const resumoEquipamento = resumirEquipamentos(character.inventarioCentral || [], f, character.aliadosCompartilhados || []);
   const attrsAntesRaca = Object.fromEntries(Object.keys(NOMES_ATRIBUTOS).map((atributo) => [
     atributo,
     Number(attrsBase[atributo] ?? 10)
@@ -198,6 +231,9 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
   const periciasVisiveis = todasPericias
     .filter(p => !busca || p.titulo.toLowerCase().includes(busca.toLowerCase()))
     .filter(p => !filtroAtributo || p.atributo === filtroAtributo)
+    .filter(p => !filtroGrau || (pericias[p.id] || 'iniciante') === filtroGrau)
+    .filter(p => filtroFavoritos === 'todos'
+      || (filtroFavoritos === 'favoritas' ? idsFavoritos.has(p.id) : !idsFavoritos.has(p.id)))
     .sort((a, b) => {
       const diferencaFavorito = Number(idsFavoritos.has(b.id)) - Number(idsFavoritos.has(a.id));
       return diferencaFavorito || a.titulo.localeCompare(b.titulo, 'pt-BR');
@@ -212,7 +248,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
     <div className="space-y-6">
       
       {/* HEADER */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6" data-tour="pericias-resumo">
         <div>
           <h2 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Cinzel, serif' }}>Perícias</h2>
           <p className="text-gray-400 text-sm">Consulte resultados, ajuste os graus e marque vantagens.</p>
@@ -233,7 +269,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
       </div>
 
       {/* FERRAMENTAS */}
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-[minmax(16rem,1fr)_repeat(3,minmax(10rem,auto))]" data-tour="pericias-filtros">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
           <input 
@@ -245,21 +281,45 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
             className="w-full bg-[#0f0e15] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:border-[#c7a44c]/50 outline-none text-sm"
           />
         </div>
-        <select 
-          aria-label="Filtrar perícias por atributo"
+        <Select
+          ariaLabel="Filtrar perícias por atributo"
           value={filtroAtributo}
-          onChange={e => setFiltroAtributo(e.target.value)}
-          className="bg-[#0f0e15] border border-white/5 rounded-xl py-3 px-4 text-white focus:border-[#c7a44c]/50 outline-none text-sm appearance-none md:min-w-[200px]"
-        >
-          <option value="">Todos os atributos</option>
-          {Object.entries(NOMES_ATRIBUTOS).map(([key, label]) => (
-            <option key={key} value={key}>{label}</option>
-          ))}
-        </select>
+          onChange={setFiltroAtributo}
+          options={[
+            { value: '', label: 'Todos os atributos' },
+            ...Object.entries(NOMES_ATRIBUTOS).map(([key, label]) => ({ value: key, label, labelClassName: CORES_ATRIBUTO[key] })),
+          ]}
+          className="w-full bg-[#0f0e15] border-white/5 rounded-xl py-3 px-4 xl:min-w-[11rem]"
+        />
+        <Select
+          ariaLabel="Filtrar perícias por grau de treinamento"
+          value={filtroGrau}
+          onChange={setFiltroGrau}
+          options={[
+            { value: '', label: 'Todos os graus' },
+            ...GRAUS_PERICIA.map((grau) => ({
+              value: grau,
+              label: `${grau.charAt(0).toLocaleUpperCase('pt-BR')}${grau.slice(1)} (+${BONUS_GRAU[grau] || 0})`,
+              labelClassName: CORES_GRAU[grau],
+            })),
+          ]}
+          className="w-full bg-[#0f0e15] border-white/5 rounded-xl py-3 px-4 xl:min-w-[11rem]"
+        />
+        <Select
+          ariaLabel="Filtrar perícias favoritas"
+          value={filtroFavoritos}
+          onChange={setFiltroFavoritos}
+          options={[
+            { value: 'todos', label: 'Todas as perícias' },
+            { value: 'favoritas', label: 'Somente favoritas', labelClassName: 'text-yellow-300' },
+            { value: 'nao-favoritas', label: 'Não favoritas' },
+          ]}
+          className="w-full bg-[#0f0e15] border-white/5 rounded-xl py-3 px-4 xl:min-w-[10rem]"
+        />
       </div>
 
       {/* LISTA EM GRID */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4">
+      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4" data-tour="pericias-lista">
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
           {periciasVisiveis.map(p => {
             const grauAtual = pericias[p.id] || 'iniciante';
@@ -287,6 +347,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 key={p.id} 
                 className="bg-[#121118] border border-white/5 rounded-xl p-4 flex flex-col gap-2 hover:border-[#c7a44c]/30 transition-colors group relative"
+                data-tour="pericia-cartao"
               >
                 <div className="flex justify-between items-start mb-1 gap-2">
                   <div className="flex flex-wrap items-center gap-2">
@@ -322,7 +383,11 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                       <>
                         <button
                           type="button"
-                          onClick={() => setActiveModal({ type: 'editar', periciaId: p.id })}
+                          onClick={() => {
+                            setAtributoForm(p.atributo);
+                            setAtributoObrigatorioErro(false);
+                            setActiveModal({ type: 'editar', periciaId: p.id });
+                          }}
                           aria-label={`Renomear ${p.titulo}`}
                           title="Renomear ofício"
                           className="text-gray-600 transition-colors hover:text-[#c7a44c]"
@@ -344,24 +409,28 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                   <span className="shrink-0 text-2xl font-bold text-[#c7a44c] leading-none drop-shadow-md">{totalStr}</span>
                 </div>
 
-                <div className="flex justify-between items-center">
-                  <select
-                    aria-label={`Atributo base de ${p.titulo}`}
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <Select
+                    ariaLabel={`Atributo base de ${p.titulo}`}
                     title={`Atributo base: ${NOMES_ATRIBUTOS[p.atributo] || p.atributo}`}
                     value={p.atributo}
-                    onChange={e => handleAtributoChange(p, e.target.value)}
-                    className={`text-[10px] px-2 py-1.5 rounded border appearance-none cursor-pointer font-bold outline-none transition-colors ${
+                    onChange={(valor) => handleAtributoChange(p, valor)}
+                    options={Object.entries(NOMES_ATRIBUTOS).map(([chave, nome]) => {
+                      const valor = Number(attrs[chave]) || 10;
+                      const modificadorAtributo = Math.floor((valor - 10) / 2);
+                      return {
+                        value: chave,
+                        label: `${nome} (${modificadorAtributo >= 0 ? '+' : ''}${modificadorAtributo})`,
+                        triggerLabel: `${nome.substring(0, 3).toLocaleUpperCase('pt-BR')} ${modificadorAtributo >= 0 ? '+' : ''}${modificadorAtributo}`,
+                        labelClassName: CORES_ATRIBUTO[chave],
+                      };
+                    })}
+                    className={`!min-h-0 w-[5.5rem] shrink-0 gap-1 px-2 py-1 text-[9px] font-semibold ${
                       p.atributo === p.atributoPadrao
                         ? 'bg-black/40 border-white/5 text-gray-400 hover:border-white/20'
                         : 'bg-[#c7a44c]/10 border-[#c7a44c]/30 text-[#c7a44c]'
                     }`}
-                  >
-                    {Object.entries(NOMES_ATRIBUTOS).map(([chave, nome]) => (
-                      <option key={chave} value={chave} className="bg-[#0f0e15] text-white">
-                        {chave === p.atributo ? `${nome.substring(0, 3)} ${mod >= 0 ? `+${mod}` : mod}` : nome}
-                      </option>
-                    ))}
-                  </select>
+                  />
                   {bonusRacial !== 0 && (
                     <span className="text-[10px] px-2 py-1.5 rounded border border-emerald-500/20 bg-emerald-500/10 text-emerald-300 font-bold">
                       Raça {bonusRacial >= 0 ? '+' : ''}{bonusRacial}
@@ -369,27 +438,25 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                   )}
                   {penalidadeEquipamento > 0 && <span className="text-[10px] font-bold text-orange-300">Armadura -{penalidadeEquipamento}</span>}
                   {penalidadeCansaco < 0 && <span className="text-[10px] font-bold text-red-300">Cansaço {penalidadeCansaco}</span>}
-                  <select
-                    aria-label={`Grau da perícia ${p.titulo}`}
-                    value={grauAtual}
-                    onChange={e => handleGrauChange(p.id, e.target.value)}
-                    className={`text-[10px] px-3 py-1.5 rounded-full border appearance-none text-center cursor-pointer font-bold uppercase tracking-wider outline-none transition-colors ${
-                      grauAtual === 'iniciante' ? 'bg-black/40 border-white/10 text-gray-500 hover:border-white/20' :
-                      grauAtual === 'aprendiz' ? 'bg-green-500/10 border-green-500/30 text-green-400' :
-                      grauAtual === 'treinado' ? 'bg-blue-500/10 border-blue-500/30 text-blue-400' :
-                      grauAtual === 'especialista' ? 'bg-purple-500/10 border-purple-500/30 text-purple-400' :
-                      grauAtual === 'mestre' ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400' :
-                      'bg-red-500/10 border-red-500/30 text-red-400'
-                    }`}
-                  >
-                    {GRAUS_PERICIA.map(g => (
-                      <option key={g} value={g} className="bg-[#0f0e15] text-white">{g} (+{BONUS_GRAU[g]})</option>
-                    ))}
-                  </select>
+                  <div className="ml-auto shrink-0" data-tour="pericia-grau">
+                    <Select
+                      ariaLabel={`Alterar grau da perícia ${p.titulo}. Atual: ${grauAtual}`}
+                      title={`Grau de treinamento: ${grauAtual} (+${BONUS_GRAU[grauAtual] || 0})`}
+                      value={grauAtual}
+                      onChange={(grau) => handleGrauChange(p.id, grau)}
+                      options={GRAUS_PERICIA.map((grau) => ({
+                        value: grau,
+                        label: `${grau.charAt(0).toLocaleUpperCase('pt-BR')}${grau.slice(1)} (+${BONUS_GRAU[grau]})`,
+                        triggerLabel: `${grau.charAt(0).toLocaleUpperCase('pt-BR')}${grau.slice(1)} +${BONUS_GRAU[grau]}`,
+                        labelClassName: CORES_GRAU[grau],
+                      }))}
+                      className={`!min-h-0 w-[8.75rem] shrink-0 gap-1 rounded-lg px-2 py-1 text-[9px] font-semibold tracking-normal ${ESTILOS_GRAU[grauAtual] || ESTILOS_GRAU.iniciante}`}
+                    />
+                  </div>
                 </div>
                 
                 {/* Vantagens / Rolar */}
-                <div className="flex justify-between items-center mt-2 pt-3 border-t border-white/5">
+                <div className="flex justify-between items-center mt-2 pt-3 border-t border-white/5" data-tour="pericia-rolagem">
                   <div className="flex items-center gap-1.5">
                     <button 
                       onClick={() => setActiveModal({ type: 'vantagens', periciaId: p.id })}
@@ -426,7 +493,11 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
             type="button"
             layout
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            onClick={() => setActiveModal({ type: 'nova', periciaId: '' })}
+            onClick={() => {
+              setAtributoForm('');
+              setAtributoObrigatorioErro(false);
+              setActiveModal({ type: 'nova', periciaId: '' });
+            }}
             className="bg-[#121118] border border-dashed border-white/20 rounded-xl p-4 flex flex-col items-center justify-center gap-2 hover:border-[#c7a44c]/50 hover:bg-[#c7a44c]/5 transition-colors cursor-pointer min-h-[140px] group"
           >
             <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#c7a44c]/20 transition-colors">
@@ -436,7 +507,21 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
           </motion.button>
         </div>
         {periciasVisiveis.length === 0 && (
-          <div className="p-8 text-center text-gray-500">Nenhuma perícia encontrada com esses filtros.</div>
+          <div className="p-8 text-center text-gray-500">
+            <p>Nenhuma perícia encontrada com esses filtros.</p>
+            <button
+              type="button"
+              onClick={() => {
+                setBusca('');
+                setFiltroAtributo('');
+                setFiltroGrau('');
+                setFiltroFavoritos('todos');
+              }}
+              className="mt-3 text-xs font-bold text-[#c7a44c] transition-colors hover:text-[#e3c46f]"
+            >
+              Limpar filtros
+            </button>
+          </div>
         )}
       </div>
 
@@ -492,30 +577,22 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
       )}
 
       {(activeModal?.type === 'nova' || activeModal?.type === 'editar') && (
-        <ModalPortal onClose={() => setActiveModal(null)}>
-        <div 
-          className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm"
-          onClick={() => setActiveModal(null)}
+        <FichaModal
+          isOpen={true}
+          onClose={() => setActiveModal(null)}
+          title={activeModal.type === 'editar' ? 'Editar Perícia / Ofício' : 'Nova Perícia / Ofício'}
         >
-          <div 
-            className="modal-surface bg-[#0f0e15] border border-[#c7a44c]/50 rounded-2xl p-4 sm:p-6 w-full max-w-md overflow-y-auto shadow-[0_0_50px_rgba(199,164,76,0.2)]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-[#c7a44c] font-bold tracking-widest uppercase">
-                {activeModal.type === 'editar' ? 'Editar Perícia / Ofício' : 'Nova Perícia / Ofício'}
-              </h3>
-              <button type="button" aria-label="Fechar" onClick={() => setActiveModal(null)} className="flex min-h-11 min-w-11 items-center justify-center text-gray-500 hover:text-white transition-colors">
-                ✕
-              </button>
-            </div>
-            
-            <form onSubmit={(e) => {
+          <form onSubmit={(e) => {
               e.preventDefault();
               const form = e.target as HTMLFormElement;
               const titulo = (form.elements.namedItem('titulo') as HTMLInputElement).value;
               const atributo = (form.elements.namedItem('atributo') as HTMLSelectElement).value;
-              if (!titulo.trim() || !atributo) return;
+              if (!atributo) {
+                setAtributoObrigatorioErro(true);
+                return;
+              }
+              if (!titulo.trim()) return;
+              setAtributoObrigatorioErro(false);
 
               if (activeModal.type === 'editar') {
                 handleSalvarCustomizada(activeModal.periciaId, titulo, atributo);
@@ -534,6 +611,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Nome da Perícia/Ofício</label>
                 <input
+                  data-autofocus
                   name="titulo"
                   type="text"
                   required
@@ -542,19 +620,22 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                   className="bg-[#121118] border border-white/5 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-[#c7a44c]/50"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Atributo Base</label>
-                <select
+              <div className={atributoObrigatorioErro ? 'rounded-md ring-1 ring-red-500/70' : ''}>
+                <LabeledSelect
+                  label="Atributo Base"
                   name="atributo"
-                  required
-                  defaultValue={activeModal.type === 'editar' ? (activePericiaObj?.atributo || '') : ''}
-                  className="bg-[#121118] border border-white/5 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-[#c7a44c]/50 appearance-none"
-                >
-                  <option value="">Selecione um atributo...</option>
-                  {Object.entries(NOMES_ATRIBUTOS).map(([key, label]) => (
-                    <option key={key} value={key}>{label}</option>
-                  ))}
-                </select>
+                  value={atributoForm}
+                  onChange={(valor) => { setAtributoForm(valor); setAtributoObrigatorioErro(false); }}
+                  placeholder="Selecione um atributo..."
+                  options={Object.entries(NOMES_ATRIBUTOS).map(([key, label]) => ({
+                    value: key,
+                    label,
+                    labelClassName: CORES_ATRIBUTO[key],
+                  }))}
+                />
+                {atributoObrigatorioErro && (
+                  <p className="mt-1 text-xs text-red-400">Escolha um atributo base para continuar.</p>
+                )}
               </div>
               <button type="submit" className="mt-4 w-full py-3 bg-[#c7a44c]/20 text-[#c7a44c] border border-[#c7a44c]/50 font-bold uppercase tracking-widest rounded-lg hover:bg-[#c7a44c]/30 transition-colors">
                 {activeModal.type === 'editar' ? 'Salvar Alterações' : 'Criar Perícia'}
@@ -569,23 +650,12 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                 </button>
               )}
             </form>
-          </div>
-        </div>
-        </ModalPortal>
+        </FichaModal>
       )}
 
       {activeModal?.type === 'resultado' && activeModal.registro && (
-        <ModalPortal onClose={() => setActiveModal(null)}>
-        <div 
-          className="modal-viewport fixed inset-0 z-[110] flex items-center justify-center bg-black/85 backdrop-blur-sm"
-          onClick={() => setActiveModal(null)}
-        >
-          <div 
-            className="modal-surface bg-[#0f0e15] border border-[#c7a44c]/50 rounded-2xl p-4 sm:p-6 w-full max-w-sm overflow-y-auto shadow-[0_0_50px_rgba(199,164,76,0.2)] flex flex-col items-center text-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="text-gray-400 font-bold tracking-widest uppercase mb-2">{activeModal.registro.titulo}</h3>
-            
+        <FichaModal isOpen={true} onClose={() => setActiveModal(null)} title={activeModal.registro.titulo}>
+          <div className="flex flex-col items-center text-center">
             <div className="text-5xl font-bold text-[#c7a44c] my-6 drop-shadow-[0_0_15px_rgba(199,164,76,0.5)]">
               {activeModal.registro.resultado}
             </div>
@@ -626,8 +696,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
               Fechar Resultado
             </button>
           </div>
-        </div>
-        </ModalPortal>
+        </FichaModal>
       )}
     </div>
   );

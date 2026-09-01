@@ -336,7 +336,7 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
   if (!campanhaAtiva?.id) return null;
 
   return (
-    <section className="rounded-2xl border border-emerald-500/15 bg-[#0f0e15] p-6">
+    <section className="rounded-2xl border border-emerald-500/15 bg-[#0f0e15] p-6" data-tour="bens-bases">
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
           <h2 className="flex items-center gap-2 text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>

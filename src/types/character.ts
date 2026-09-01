@@ -26,6 +26,8 @@ export interface ICharacter {
   economiaVersao?: number;
   carteira?: Array<{ moeda: string; saldo: number; simbolo?: string }>;
   inventarioCentral?: Array<{ item_id: string; titulo: string; quantidade: number; dados: Record<string, any> }>;
+  /** Aliados mantidos em outra ficha e compartilhados com este personagem. */
+  aliadosCompartilhados?: Record<string, any>[];
   // Índice de extensão mantido intencionalmente: ICharacter mapeia dados legados da API
   // que possuem campos não documentados. Será removido quando o schema estiver estabilizado.
   // TODO: Remove [key: string]: any when full API schema is typed

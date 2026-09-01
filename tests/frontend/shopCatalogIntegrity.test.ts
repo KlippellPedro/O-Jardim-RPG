@@ -234,7 +234,7 @@ test('armas publicam dano, modo e crítico mecanicamente coerentes', () => {
 
 test('armaduras usam nomes explícitos para não se confundirem com outros itens', () => {
   const armaduras = catalogo.entradas.filter(item => (
-    item.tipo === 'armadura' && normalizar(item.conteudo.subtipo) !== 'escudo'
+    item.tipo === 'armadura' && normalizar(item.conteudo.categoria_protecao) !== 'escudo'
   ));
   assert.ok(armaduras.length > 0);
   for (const armadura of armaduras) {
@@ -280,11 +280,32 @@ test('criaturas comercializadas possuem ficha e listas estruturadas', () => {
   }
 });
 
+test('expansão do bestiário publica ao menos seis fichas por família e mantém o Vazio distinto do Fim', () => {
+  const monstros = catalogo.entradas.filter(item => item.tipo === 'monstro');
+  const familias = ['Marítima', 'Espírito', 'Golem', 'Vazio'];
+
+  for (const familia of familias) {
+    const criaturas = monstros.filter(item => item.conteudo.subtipo === familia);
+    assert.ok(criaturas.length >= 6, `${familia}: expansão deveria ter ao menos seis criaturas`);
+    assert.ok(criaturas.every(item => item.conteudo.disponivelNaLoja !== false), `${familia}: criatura fora da Loja`);
+    assert.ok(new Set(criaturas.map(item => item.conteudo.vd)).size >= 5, `${familia}: pouca variedade de VD`);
+  }
+
+  const criaturasDoVazio = monstros.filter(item => item.conteudo.subtipo === 'Vazio');
+  assert.ok(criaturasDoVazio.every(item => item.conteudo.categoria === 'Aberração'));
+  assert.ok(criaturasDoVazio.every(item => item.conteudo.nivelMinimoLoja >= 3), 'Vazio não pode aparecer no comércio comum');
+  assert.ok(criaturasDoVazio.every(item => !/morto-vivo|fluxo do fim|limiar/i.test(item.conteudo.descricao)));
+  assert.match(
+    criaturasDoVazio.find(item => item.id === 'apagador-de-constelacoes')?.conteudo.descricao ?? '',
+    /fora do universo.*Era do Vazio/i,
+  );
+});
+
 test('perfil universal fica só no bestiário e na sessão, fora do balcão', () => {
   // Os perfis universais existem para o Mestre montar inimigo com números
   // prontos. Eles continuam publicados (o Bestiário e o seletor da sessão leem
   // o mesmo catálogo) e declaram `disponivelNaLoja: false`, que é o que a Loja
-  // usa para não vendê-los. Quem tirar essa marca coloca "Ameaça Genérica" à
+  // usa para não vendê-los. Quem tirar essa marca coloca "Modelo de Criatura" à
   // venda na categoria Mercenários, que foi exatamente o problema relatado.
   const universais = catalogo.entradas.filter(item => item.conteudo.categoria === 'Universal');
   assert.ok(universais.length > 0);
@@ -338,6 +359,15 @@ test('itens especiais publicam marcadores para busca e filtros', () => {
   }
 });
 
+test('acessórios que concedem perícia declaram o limite compartilhado de uso', () => {
+  const ids = ['acessorio', 'acessorio-refinado', 'acessorio-superior', 'acessorio-lendario'];
+  for (const id of ids) {
+    const item = catalogo.entradas.find((entrada) => entrada.id === id);
+    assert.ok(item, `${id}: entrada ausente`);
+    assert.equal(item.conteudo.grupo_limite_uso, 'item-pericia', `${id}: marcador de limite ausente`);
+  }
+});
+
 test('Frutos do Éden têm escala de Relíquia, contrajogo e três níveis de poder', () => {
   const frutos = catalogo.entradas.filter(item => item.tipo === 'fruto-eden');
   assert.equal(frutos.length, 15);
@@ -354,8 +384,20 @@ test('Frutos do Éden têm escala de Relíquia, contrajogo e três níveis de po
       fruto.conteudo.atributos.some((atributo: unknown) => familias.has(normalizar(atributo))),
       `${fruto.id}: família Sobrenatural, Mutação ou Elemental ausente`,
     );
-    for (const campo of ['passivo', 'tecnica', 'despertar', 'fraqueza', 'vinculo']) {
+    for (const campo of ['lore', 'passivo', 'passivoDespertado', 'tecnica', 'tecnicaDespertada', 'despertar', 'fraqueza', 'vinculo']) {
       assert.ok(String(fruto.conteudo[campo] ?? '').trim(), `${fruto.id}: ${campo} ausente`);
+    }
+    assert.ok(
+      fruto.conteudo.poderesDespertados && Object.keys(fruto.conteudo.poderesDespertados).length > 0,
+      `${fruto.id}: nenhuma técnica aprimorada declarada`,
+    );
+    if (Array.isArray(fruto.conteudo.efeitosFicha) && fruto.conteudo.efeitosFicha.length > 0) {
+      assert.ok(Array.isArray(fruto.conteudo.efeitosFichaDespertado), `${fruto.id}: bônus despertados ausentes`);
+      assert.equal(
+        fruto.conteudo.efeitosFichaDespertado.length,
+        fruto.conteudo.efeitosFicha.length,
+        `${fruto.id}: despertar deve substituir todos os bônus-base`,
+      );
     }
     assert.match(fruto.conteudo.descricao, /água do mar/i, `${fruto.id}: fraqueza comum ausente`);
     assert.match(fruto.conteudo.vinculo, /único/i, `${fruto.id}: Vínculo único ausente`);

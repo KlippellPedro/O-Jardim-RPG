@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   AlertTriangle,
   Car,
+  Compass,
   LockKeyhole,
   PanelLeft,
   PanelLeftClose,
@@ -25,6 +26,13 @@ import { useSessaoStore } from '../../store/useSessaoStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import { roleLabel } from './sessionUtils';
 import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
+import { GuidedTour } from '../../components/ui/GuidedTour';
+import {
+  obterPassosTourSessao,
+  serializarSessaoTourVisto,
+  sessaoTourJaVisto,
+} from './sessionTourConfig';
+import './sessao.css';
 
 export const SessaoPage: React.FC = () => {
   const [isChangingLive, setIsChangingLive] = useState(false);
@@ -34,12 +42,14 @@ export const SessaoPage: React.FC = () => {
   const [frotaDrawerOpen, setFrotaDrawerOpen] = useState(false);
   const [masterScreenOpen, setMasterScreenOpen] = useState(false);
   const [participantsDialogMode, setParticipantsDialogMode] = useState<'select' | 'start' | null>(null);
+  const [tourOpen, setTourOpen] = useState(false);
+  const tourAttemptedRef = useRef(false);
   const leftDrawerRef = useRef<HTMLElement>(null);
   const rightDrawerRef = useRef<HTMLElement>(null);
   const frotaDrawerRef = useRef<HTMLElement>(null);
   const masterScreenRef = useRef<HTMLElement>(null);
   // O histórico é útil, mas ocupa uma coluna inteira - dá pra recolher.
-  const [historyPanelOpen, setHistoryPanelOpen] = useState(true);
+  const [historyPanelOpen, setHistoryPanelOpen] = useState(false);
   const reduceMotion = useReducedMotion();
   const {
     conectarSSE,
@@ -63,8 +73,9 @@ export const SessaoPage: React.FC = () => {
     error,
     clearError,
   } = useSessaoStore();
-  const { campanhaAtiva } = useAuthStore();
+  const { campanhaAtiva, usuario } = useAuthStore();
   const activeCampaignId = campanhaAtiva?.id;
+  const tourStorageKey = `jardim:sessao-tour:${usuario?.id || 'local'}`;
 
   useDialogAccessibility({ open: leftDrawerOpen, dialogRef: leftDrawerRef, onClose: () => setLeftDrawerOpen(false) });
   useDialogAccessibility({ open: rightDrawerOpen, dialogRef: rightDrawerRef, onClose: () => setRightDrawerOpen(false) });
@@ -76,6 +87,53 @@ export const SessaoPage: React.FC = () => {
     conectarSSE(activeCampaignId);
     return () => desconectarSSE();
   }, [activeCampaignId, conectarSSE, desconectarSSE]);
+
+  const encerrarTour = useCallback(() => {
+    try {
+      localStorage.setItem(tourStorageKey, serializarSessaoTourVisto());
+    } catch {
+      // O botão manual mantém o guia disponível mesmo sem armazenamento local.
+    }
+    setTourOpen(false);
+  }, [tourStorageKey]);
+
+  const iniciarTour = useCallback(() => {
+    tourAttemptedRef.current = true;
+    setTourOpen(true);
+  }, []);
+
+  useEffect(() => {
+    tourAttemptedRef.current = false;
+    setTourOpen(false);
+  }, [activeCampaignId, usuario?.id]);
+
+  useEffect(() => {
+    const overlayOpen = leftDrawerOpen || rightDrawerOpen || frotaDrawerOpen || masterScreenOpen || !!participantsDialogMode;
+    if (!activeCampaignId || isLoading || bloqueada || !sessaoStatus || tourOpen || overlayOpen || tourAttemptedRef.current) return undefined;
+    try {
+      if (sessaoTourJaVisto(localStorage.getItem(tourStorageKey))) {
+        tourAttemptedRef.current = true;
+        return undefined;
+      }
+    } catch {
+      // Sem armazenamento, o guia ainda abre uma vez nesta montagem.
+    }
+    const timer = window.setTimeout(iniciarTour, 800);
+    return () => window.clearTimeout(timer);
+  }, [
+    activeCampaignId,
+    bloqueada,
+    frotaDrawerOpen,
+    iniciarTour,
+    isLoading,
+    leftDrawerOpen,
+    masterScreenOpen,
+    participantsDialogMode,
+    rightDrawerOpen,
+    sessaoStatus,
+    tourOpen,
+    tourStorageKey,
+  ]);
 
   if (!activeCampaignId) {
     return (
@@ -133,7 +191,7 @@ export const SessaoPage: React.FC = () => {
       <motion.div
         initial={reduceMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="app-screen overflow-hidden bg-[#07070b] text-white"
+        className="session-shell app-screen overflow-hidden bg-[#07070b] text-white"
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_36%,rgba(199,164,76,0.12),transparent_42%)]" />
         <main className="relative flex h-full items-center justify-center px-4 sm:px-6">
@@ -163,18 +221,18 @@ export const SessaoPage: React.FC = () => {
       initial={reduceMotion ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={reduceMotion ? undefined : { opacity: 0 }}
-      className="app-screen overflow-hidden bg-[#07070b] text-white"
+      className="session-shell app-screen overflow-hidden bg-[#07070b] text-white"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_52%_18%,rgba(199,164,76,0.10),transparent_46%)]" />
 
       <div className="relative z-10 h-full">
         <div
           className={`grid h-full min-h-0 grid-rows-[76px_minmax(0,1fr)] ${
-            historyPanelOpen ? 'xl:grid-cols-[320px_minmax(0,1fr)_340px]' : 'xl:grid-cols-[minmax(0,1fr)_340px]'
+            historyPanelOpen ? 'xl:grid-cols-[292px_minmax(0,1fr)_390px]' : 'xl:grid-cols-[minmax(0,1fr)_390px]'
           }`}
         >
-          <header className="col-span-full flex min-w-0 items-center justify-between border-b border-white/10 bg-[#0b0a10]/95 pl-4 pr-20 backdrop-blur-xl sm:pl-6 sm:pr-24">
-            <div className="flex min-w-0 items-center gap-3">
+          <header className="col-span-full flex min-w-0 items-center justify-between border-b border-white/10 bg-[#0b0a10]/95 pl-4 pr-20 backdrop-blur-xl sm:pl-6 sm:pr-24" data-tour="session-header">
+            <div className="flex min-w-0 items-center gap-3" data-tour="session-state">
               <div className="min-w-0">
                 <p className="truncate text-[11px] font-semibold uppercase tracking-[0.22em] text-[#c7a44c]">
                   {campanhaAtiva.nome}
@@ -195,7 +253,17 @@ export const SessaoPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+            <div className="flex shrink-0 items-center gap-1.5 sm:gap-2" data-tour="session-tools">
+              <button
+                type="button"
+                onClick={iniciarTour}
+                className="flex items-center gap-1.5 rounded-lg border border-[#c7a44c]/25 px-2 py-2 text-[#d9b95f] hover:border-[#c7a44c]/50 hover:bg-[#c7a44c]/10"
+                aria-label="Abrir guia da sessão ao vivo"
+                title="Guia da sessão"
+              >
+                <Compass size={18} />
+                <span className="hidden 2xl:inline text-[10px] font-semibold uppercase tracking-wider">Guia</span>
+              </button>
               <button
                 type="button"
                 onClick={() => setLeftDrawerOpen(true)}
@@ -280,6 +348,7 @@ export const SessaoPage: React.FC = () => {
                     : 'border-amber-400/20 bg-amber-400/10 text-amber-200'
                 }`}
                 role="status"
+                data-tour="session-connection"
               >
                 {connectionStatus === 'online' ? <Wifi size={13} /> : <WifiOff size={13} />}
                 <span className="hidden sm:inline">{connectionLabel}</span>
@@ -375,6 +444,18 @@ export const SessaoPage: React.FC = () => {
           startLive={participantsDialogMode === 'start'}
           onCancel={() => setParticipantsDialogMode(null)}
           onConfirm={handleParticipantsConfirm}
+        />
+      ) : null}
+
+      {tourOpen ? (
+        <GuidedTour
+          key={comando ? 'guia-sessao-comando' : 'guia-sessao-jogador'}
+          passos={obterPassosTourSessao(comando)}
+          accent="#d2b15a"
+          nomeGuia="Guia da Sessão"
+          rootSelector=".session-shell"
+          onClose={encerrarTour}
+          onFinish={encerrarTour}
         />
       ) : null}
 

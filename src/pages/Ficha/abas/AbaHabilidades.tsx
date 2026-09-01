@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 import { Search, Star, Pencil, Trash2, Dices, GripVertical, Dna, Shield, Apple } from 'lucide-react';
-import { motion, Reorder } from 'framer-motion';
+import { AnimatePresence, motion, Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
-import { LabeledInput, LabeledModalSelect } from '../components/SharedFichaComponents';
+import { LabeledInput, LabeledSelect } from '../components/SharedFichaComponents';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { caracteristicasRaciaisAutomaticas, habilidadesAutomaticas } from '../../../services/progressaoFichaService';
@@ -17,11 +17,15 @@ import {
 } from '../../../services/equipamentoService';
 import { bonusRecursoDoFruto, habilidadeDoFruto } from '../../../services/frutoEdenService';
 import {
+  marcarItemAutomaticoOculto,
   obterPersonalizacoesAutomaticas,
+  restaurarVisibilidadeItemAutomatico,
   salvarPersonalizacaoAutomatica,
   type IPersonalizacaoAutomatica,
 } from '../../../services/personalizacaoAutomaticaService';
 import { PersonalizacaoAutomaticaModal } from '../components/PersonalizacaoAutomaticaModal';
+import { ItensAutomaticosOcultos } from '../components/ItensAutomaticosOcultos';
+import { OcultarItemAutomaticoModal } from '../components/OcultarItemAutomaticoModal';
 import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
 
 // ---------------------------------------------------------------------------
@@ -125,6 +129,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
   const [ultimoUsoMsg, setUltimoUsoMsg] = useState<{ tipo: 'sucesso' | 'erro'; texto: string } | null>(null);
 
   const [personalizando, setPersonalizando] = useState<{ id: string; titulo: string; descricao: string } | null>(null);
+  const [ocultando, setOcultando] = useState<{ id: string; titulo: string } | null>(null);
   const personalizacoes = obterPersonalizacoesAutomaticas(character.ficha || {});
   const periciasDisponiveis = periciasDisponiveisParaEfeitos(character.ficha || {}, PERICIAS_CATALOGO);
 
@@ -134,12 +139,21 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
   const habilidadesFruto = habilidadeDoFruto(character.ficha || {});
   const habilidadesOficiais = [...habilidadesRaciais, ...habilidadesClasses, ...habilidadesFruto];
   const contarVisiveis = (itens: typeof habilidadesOficiais) => itens.filter((item) => !personalizacoes[item.id]?.oculta).length;
+  const habilidadesOcultas = habilidadesOficiais
+    .filter((item) => personalizacoes[item.id]?.oculta)
+    .map((item) => ({
+      id: item.id,
+      titulo: personalizacoes[item.id]?.titulo || item.titulo,
+      origem: item.origem,
+    }));
   const termoBusca = busca.trim().toLocaleLowerCase('pt-BR');
-  const filtrarOficiais = (itens: typeof habilidadesOficiais) => itens.filter((item) => (
-    !termoBusca
-    || item.titulo.toLocaleLowerCase('pt-BR').includes(termoBusca)
-    || item.origem.toLocaleLowerCase('pt-BR').includes(termoBusca)
-  ));
+  const filtrarOficiais = (itens: typeof habilidadesOficiais) => itens
+    .filter((item) => !personalizacoes[item.id]?.oculta)
+    .filter((item) => (
+      !termoBusca
+      || item.titulo.toLocaleLowerCase('pt-BR').includes(termoBusca)
+      || item.origem.toLocaleLowerCase('pt-BR').includes(termoBusca)
+    ));
   const classesPorOrigem = [...habilidadesClasses.reduce((mapa, item) => {
     const atuais = mapa.get(item.origem) || [];
     mapa.set(item.origem, [...atuais, item]);
@@ -230,12 +244,27 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
   };
 
   const ocultarAutomatica = (item: { id: string; titulo: string }) => {
-    if (!window.confirm(`Remover "${item.titulo}" desta ficha? Ela some da lista, mas dá pra trazer de volta depois.`)) return;
-    salvarPersonalizacaoAutomatica(onUpdate, character.ficha || {}, item.id, { oculta: true });
+    setOcultando(item);
+  };
+
+  const confirmarOcultacaoAutomatica = () => {
+    if (!ocultando) return;
+    salvarPersonalizacaoAutomatica(
+      onUpdate,
+      character.ficha || {},
+      ocultando.id,
+      marcarItemAutomaticoOculto(personalizacoes[ocultando.id]),
+    );
+    setOcultando(null);
   };
 
   const restaurarAutomatica = (id: string) => {
-    salvarPersonalizacaoAutomatica(onUpdate, character.ficha || {}, id, {});
+    salvarPersonalizacaoAutomatica(
+      onUpdate,
+      character.ficha || {},
+      id,
+      restaurarVisibilidadeItemAutomatico(personalizacoes[id]),
+    );
   };
 
   const salvar = () => {
@@ -346,7 +375,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
     <div className="space-y-6">
 
       {/* HEADER */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4" data-tour="habilidades-resumo">
         <div>
           <h2 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Cinzel, serif' }}>Habilidades</h2>
           <p className="text-gray-400 text-sm">Traços raciais, talentos e competências diversas.</p>
@@ -357,8 +386,8 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
         </div>
       </div>
 
-      {habilidadesOficiais.length > 0 && (
-        <section className="rounded-2xl border border-[#c7a44c]/20 bg-[#0f0e15] p-4">
+      {gruposOficiais.length > 0 && (
+        <section className="rounded-2xl border border-[#c7a44c]/20 bg-[#0f0e15] p-4" data-tour="habilidades-automaticas">
           <div className="mb-4">
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#c7a44c]">Habilidades automáticas por origem</h3>
             <p className="mt-1 text-xs text-gray-500">Cada bloco mostra de qual raça, classe ou fruto as habilidades vieram.</p>
@@ -381,31 +410,21 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                   </span>
                 </div>
                 <div className="grid gap-3 lg:grid-cols-2">
-                  {grupo.itens.map((item) => {
+                  <AnimatePresence initial={false}>
+                    {grupo.itens.map((item) => {
                     const personalizacao = personalizacoes[item.id];
-
-                    if (personalizacao?.oculta) {
-                      return (
-                        <div
-                          key={item.id}
-                          className="flex items-center justify-between gap-2 rounded-xl border border-dashed border-white/10 bg-black/20 px-4 py-2.5 text-xs text-gray-600"
-                        >
-                          <span className="italic truncate">{item.titulo} · oculta nesta ficha</span>
-                          <button
-                            type="button"
-                            onClick={() => restaurarAutomatica(item.id)}
-                            className="shrink-0 font-bold text-gray-500 hover:text-[#c7a44c] transition-colors"
-                          >
-                            Restaurar
-                          </button>
-                        </div>
-                      );
-                    }
-
                     const tituloExibido = personalizacao?.titulo || item.titulo;
                     const descricaoExibida = personalizacao?.texto || item.descricao;
                     return (
-                      <article key={item.id} className="rounded-xl border border-white/5 bg-[#121118]/90 p-4 group relative">
+                      <motion.article
+                        layout
+                        key={item.id}
+                        initial={{ opacity: 0, scale: 0.985 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.97, y: -4 }}
+                        transition={{ duration: 0.18 }}
+                        className="rounded-xl border border-white/5 bg-[#121118]/90 p-4 group relative"
+                      >
                         <div className="flex flex-wrap items-start justify-between gap-2">
                           <strong className="text-white">{tituloExibido}</strong>
                           <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -421,7 +440,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                             <button
                               type="button"
                               onClick={() => ocultarAutomatica(item)}
-                              title="Excluir desta ficha"
+                              title="Ocultar nesta ficha"
                               className="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-500/10 opacity-100 transition-all sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
                             >
                               <Trash2 size={12} />
@@ -432,15 +451,22 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                           <span className="mt-1 inline-block text-[9px] font-black uppercase tracking-wider text-[#c7a44c]/70">Editado por você</span>
                         )}
                         <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
-                      </article>
+                      </motion.article>
                     );
-                  })}
+                    })}
+                  </AnimatePresence>
                 </div>
               </section>
             ))}
           </div>
         </section>
       )}
+
+      <ItensAutomaticosOcultos
+        itens={habilidadesOcultas}
+        tipo="habilidade"
+        onRestaurar={restaurarAutomatica}
+      />
 
       {/* FEEDBACK DE USO */}
       {ultimoUsoMsg && (
@@ -457,7 +483,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
       )}
 
       {/* FERRAMENTAS */}
-      <div className="flex gap-4">
+      <div className="flex gap-4" data-tour="habilidades-ferramentas">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
           <input
@@ -477,7 +503,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
       </div>
 
       {/* LISTA */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4">
+      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden p-4" data-tour="habilidades-personalizadas">
         <div className="mb-4 border-b border-white/5 pb-3">
           <h3 className="text-xs font-bold uppercase tracking-widest text-gray-300">Habilidades personalizadas</h3>
           <p className="mt-1 text-xs text-gray-600">Entradas criadas manualmente; a origem informada aparece em cada cartão.</p>
@@ -487,6 +513,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
             <Reorder.Item
               value={h}
               key={h.id}
+              data-tour="habilidade-cartao"
               className={`bg-[#121118] border ${h.favorito ? 'border-yellow-600/50 shadow-[0_0_15px_rgba(202,138,4,0.15)]' : 'border-white/5 hover:border-yellow-600/30'} rounded-xl p-5 transition-colors group relative`}
             >
               <div className="flex gap-4 items-start">
@@ -600,7 +627,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                 placeholder="Ex.: Raça, Talento..."
                 onChange={(v: string) => setForm({ ...form, origem: v })}
               />
-              <LabeledModalSelect
+              <LabeledSelect
                 label="Tipo"
                 value={form.tipo}
                 options={TIPOS_HABILIDADE.map(t => ({ value: t, label: t }))}
@@ -618,7 +645,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <LabeledModalSelect
+              <LabeledSelect
                 label="Recurso do Custo"
                 value={form.custo.recurso}
                 options={RECURSOS}
@@ -710,6 +737,13 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
         personalizacao={personalizando ? personalizacoes[personalizando.id] : undefined}
         onSalvar={salvarPersonalizacao}
         onRestaurar={restaurarPersonalizacao}
+      />
+      <OcultarItemAutomaticoModal
+        isOpen={!!ocultando}
+        tipo="habilidade"
+        titulo={ocultando?.titulo || ''}
+        onClose={() => setOcultando(null)}
+        onConfirmar={confirmarOcultacaoAutomatica}
       />
     </div>
   );

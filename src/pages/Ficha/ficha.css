@@ -1,0 +1,1092 @@
+.ficha-shell {
+  --ficha-accent: #d4af37;
+  --ficha-secondary: #92764d;
+  --ficha-glow: rgb(212 175 55 / 0.28);
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 78% 9%, color-mix(in srgb, var(--ficha-accent) 10%, transparent), transparent 30rem),
+    radial-gradient(circle at 16% 28%, color-mix(in srgb, var(--ficha-secondary) 8%, transparent), transparent 34rem),
+    #07060a;
+}
+
+.ficha-atmosphere {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ficha-atmosphere__art {
+  position: absolute;
+  top: 0;
+  width: min(72rem, 78vw);
+  height: min(58rem, 92vh);
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: saturate(0.82) contrast(1.08);
+  opacity: 0.13;
+}
+
+.ficha-atmosphere__art--raca {
+  left: -18vw;
+  opacity: 0.08;
+  -webkit-mask-image: linear-gradient(90deg, black 24%, transparent 92%);
+  mask-image: linear-gradient(90deg, black 24%, transparent 92%);
+}
+
+.ficha-atmosphere__art--classe {
+  right: -14vw;
+  -webkit-mask-image: linear-gradient(270deg, black 24%, transparent 92%);
+  mask-image: linear-gradient(270deg, black 24%, transparent 92%);
+}
+
+.ficha-atmosphere__veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(7 6 10 / 0.14), rgb(7 6 10 / 0.82) 66%, #07060a),
+    repeating-linear-gradient(90deg, transparent 0 79px, rgb(255 255 255 / 0.012) 80px);
+}
+
+.ficha-atmosphere__sigil {
+  position: absolute;
+  top: 8rem;
+  left: 50%;
+  width: min(44rem, 82vw);
+  aspect-ratio: 1;
+  transform: translateX(-50%) rotate(12deg);
+  border: 1px solid color-mix(in srgb, var(--ficha-accent) 12%, transparent);
+  border-radius: 50%;
+  opacity: 0.32;
+}
+
+.ficha-atmosphere__sigil::before,
+.ficha-atmosphere__sigil::after {
+  content: '';
+  position: absolute;
+  inset: 13%;
+  border: 1px solid color-mix(in srgb, var(--ficha-secondary) 12%, transparent);
+  transform: rotate(45deg);
+}
+
+.ficha-atmosphere__sigil::after {
+  inset: 29%;
+  border-radius: 50%;
+  transform: none;
+}
+
+.ficha-effect {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0.52;
+}
+
+.ficha-effect i {
+  --ficha-particle-size: 3px;
+  position: absolute;
+  bottom: -2rem;
+  left: var(--ficha-particle-x);
+  width: var(--ficha-particle-size);
+  height: var(--ficha-particle-size);
+  border-radius: 999px;
+  background: var(--ficha-accent);
+  box-shadow: 0 0 12px var(--ficha-accent);
+  opacity: 0;
+  animation: ficha-particle-rise var(--ficha-particle-duration) linear var(--ficha-particle-delay) infinite;
+}
+
+.ficha-effect--raca {
+  right: 46%;
+  color: var(--ficha-secondary);
+  opacity: 0.28;
+}
+
+.ficha-effect--raca i {
+  background: var(--ficha-secondary);
+  box-shadow: 0 0 12px var(--ficha-secondary);
+}
+
+.ficha-effect--nevoa i {
+  --ficha-particle-size: 6rem;
+  filter: blur(2rem);
+  opacity: 0.06;
+}
+
+.ficha-effect--cosmico i,
+.ficha-effect--arcano i {
+  animation-name: ficha-particle-orbit;
+}
+
+.ficha-effect--tecnologico i {
+  width: 1px;
+  height: 3.5rem;
+  border-radius: 0;
+  opacity: 0.22;
+}
+
+.ficha-effect--ondas i {
+  width: 9rem;
+  height: 1px;
+  border-radius: 50%;
+  opacity: 0.16;
+  animation-name: ficha-wave-rise;
+}
+
+.ficha-effect--natureza i {
+  width: 6px;
+  height: 3px;
+  border-radius: 100% 0 100% 0;
+  animation-name: ficha-particle-drift;
+}
+
+.ficha-effect--holofote::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: 42%;
+  width: 18rem;
+  height: 115%;
+  transform: rotate(10deg);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ficha-accent) 12%, transparent), transparent 70%);
+  filter: blur(2rem);
+}
+
+.ficha-header {
+  position: relative;
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--ficha-accent) 24%, rgb(255 255 255 / 0.06));
+  background:
+    linear-gradient(112deg, rgb(15 14 21 / 0.98) 0%, rgb(15 14 21 / 0.93) 52%, color-mix(in srgb, var(--ficha-accent) 9%, rgb(15 14 21)) 100%);
+  box-shadow: 0 1.8rem 5rem rgb(0 0 0 / 0.42), 0 0 3rem var(--ficha-glow);
+}
+
+.ficha-header::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--ficha-accent) 72%, transparent), transparent 38%) top left / 58% 1px no-repeat,
+    radial-gradient(circle at 86% 18%, color-mix(in srgb, var(--ficha-secondary) 14%, transparent), transparent 28%);
+  pointer-events: none;
+}
+
+.ficha-header__content {
+  position: relative;
+  z-index: 2;
+}
+
+.ficha-header__art {
+  position: absolute;
+  z-index: 0;
+  top: -28%;
+  right: -4%;
+  width: 48%;
+  height: 170%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: saturate(0.8) contrast(1.12);
+  opacity: 0.13;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 62%);
+  mask-image: linear-gradient(90deg, transparent, black 62%);
+}
+
+.ficha-portrait {
+  border-color: color-mix(in srgb, var(--ficha-accent) 48%, rgb(255 255 255 / 0.08));
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.7), 0 0 1.8rem var(--ficha-glow);
+}
+
+.ficha-character-name {
+  color: white;
+  text-shadow: 0 0 2.2rem var(--ficha-glow);
+}
+
+.ficha-meta-chip {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--chip-color, var(--ficha-accent)) 28%, transparent);
+  border-radius: 999px;
+  padding: 0.36rem 0.72rem;
+  background: color-mix(in srgb, var(--chip-color, var(--ficha-accent)) 8%, rgb(0 0 0 / 0.26));
+  color: color-mix(in srgb, var(--chip-color, var(--ficha-accent)) 78%, white);
+  font-size: 0.69rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ficha-tabs {
+  position: relative;
+}
+
+.ficha-tabs::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ficha-accent) 30%, transparent), transparent);
+}
+
+.ficha-tab {
+  position: relative;
+  border-color: rgb(255 255 255 / 0.06);
+  background: rgb(21 20 27 / 0.82);
+  color: rgb(156 163 175);
+  backdrop-filter: blur(10px);
+}
+
+.ficha-tab:hover {
+  border-color: color-mix(in srgb, var(--ficha-accent) 34%, transparent);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.ficha-tab[aria-selected='true'] {
+  border-color: color-mix(in srgb, var(--ficha-accent) 74%, white 8%);
+  background: linear-gradient(135deg, var(--ficha-accent), color-mix(in srgb, var(--ficha-accent) 66%, var(--ficha-secondary)));
+  color: #07060a;
+  box-shadow: 0 0 1.25rem var(--ficha-glow), inset 0 1px rgb(255 255 255 / 0.24);
+}
+
+.ficha-tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  right: 20%;
+  bottom: -0.45rem;
+  left: 20%;
+  height: 0.14rem;
+  border-radius: 999px;
+  background: var(--ficha-accent);
+  box-shadow: 0 0 0.8rem var(--ficha-accent);
+}
+
+.ficha-guide-button {
+  border-color: color-mix(in srgb, var(--ficha-accent) 34%, transparent);
+  background: color-mix(in srgb, var(--ficha-accent) 8%, rgb(0 0 0 / 0.48));
+  color: color-mix(in srgb, var(--ficha-accent) 78%, white);
+}
+
+.ficha-guide-button:hover,
+.ficha-guide-button:focus-visible {
+  border-color: color-mix(in srgb, var(--ficha-accent) 68%, white 8%);
+  background: color-mix(in srgb, var(--ficha-accent) 15%, rgb(0 0 0 / 0.46));
+  box-shadow: 0 0 1.2rem var(--ficha-glow);
+  outline: none;
+}
+
+.ficha-tour {
+  position: fixed;
+  z-index: 160;
+  inset: 0;
+  overflow: hidden;
+  color: #f8f7fb;
+  pointer-events: auto;
+  isolation: isolate;
+}
+
+.ficha-tour--locating::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(2 2 8 / 0.86);
+  backdrop-filter: blur(1.5px);
+}
+
+.ficha-tour__spotlight {
+  position: fixed;
+  z-index: 0;
+  border: 2px solid color-mix(in srgb, var(--ficha-tour-accent) 82%, white 12%);
+  box-shadow:
+    0 0 0 200vmax rgb(2 2 8 / 0.84),
+    0 0 0.8rem color-mix(in srgb, var(--ficha-tour-accent) 75%, transparent),
+    0 0 2.4rem color-mix(in srgb, var(--ficha-tour-accent) 40%, transparent),
+    inset 0 0 1.5rem color-mix(in srgb, var(--ficha-tour-accent) 12%, transparent);
+  transition: inset 260ms ease, width 260ms ease, height 260ms ease, border-radius 260ms ease;
+  pointer-events: none;
+}
+
+.ficha-tour__card {
+  position: fixed;
+  z-index: 2;
+  right: 1rem;
+  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  width: min(calc(100vw - 2rem), 25rem);
+  max-height: min(29rem, calc(100dvh - 2rem));
+  padding: 1.2rem;
+  overflow-y: auto;
+  transform: translateX(-50%);
+  border: 1px solid color-mix(in srgb, var(--ficha-tour-accent) 28%, rgb(255 255 255 / 0.11));
+  border-radius: 1.45rem;
+  background:
+    linear-gradient(150deg, color-mix(in srgb, var(--ficha-tour-accent) 7%, #18151f), #0e0d14 68%),
+    #0e0d14;
+  box-shadow:
+    0 1.8rem 5rem rgb(0 0 0 / 0.68),
+    0 0 2.4rem color-mix(in srgb, var(--ficha-tour-accent) 12%, transparent);
+  animation: ficha-tour-card-in 260ms ease-out both;
+}
+
+.ficha-tour__card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 16%;
+  left: 16%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ficha-tour-accent), transparent);
+}
+
+.ficha-tour__eyebrow {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: color-mix(in srgb, var(--ficha-tour-accent) 76%, white);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ficha-tour__title {
+  font-family: Cinzel, serif;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+}
+
+.ficha-tour__close,
+.ficha-tour__back {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid rgb(255 255 255 / 0.09);
+  border-radius: 0.75rem;
+  background: rgb(255 255 255 / 0.035);
+  color: #a8a4b2;
+  transition: 160ms ease;
+}
+
+.ficha-tour__close:hover,
+.ficha-tour__close:focus-visible,
+.ficha-tour__back:hover:not(:disabled),
+.ficha-tour__back:focus-visible {
+  border-color: color-mix(in srgb, var(--ficha-tour-accent) 50%, transparent);
+  color: white;
+  outline: none;
+}
+
+.ficha-tour__back:disabled {
+  cursor: not-allowed;
+  opacity: 0.28;
+}
+
+.ficha-tour__description {
+  margin-top: 1rem;
+  color: #c4c0cd;
+  font-size: 0.875rem;
+  line-height: 1.65;
+}
+
+.ficha-tour__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgb(255 255 255 / 0.07);
+}
+
+.ficha-tour__dots {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ficha-tour__dots span {
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 99px;
+  background: rgb(255 255 255 / 0.2);
+  transition: width 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.ficha-tour__dots span.is-active {
+  width: 1.25rem;
+  background: var(--ficha-tour-accent);
+  box-shadow: 0 0 0.75rem color-mix(in srgb, var(--ficha-tour-accent) 68%, transparent);
+}
+
+.ficha-tour__next {
+  display: inline-flex;
+  min-height: 2.35rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid color-mix(in srgb, var(--ficha-tour-accent) 76%, white 10%);
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, var(--ficha-tour-accent), color-mix(in srgb, var(--ficha-tour-accent) 68%, #7a4d9b));
+  color: #08060b;
+  font-size: 0.78rem;
+  font-weight: 900;
+  box-shadow: 0 0 1.2rem color-mix(in srgb, var(--ficha-tour-accent) 22%, transparent);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.ficha-tour__next:hover,
+.ficha-tour__next:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 0 1.6rem color-mix(in srgb, var(--ficha-tour-accent) 38%, transparent);
+  outline: 2px solid color-mix(in srgb, var(--ficha-tour-accent) 42%, white);
+  outline-offset: 2px;
+}
+
+@keyframes ficha-tour-card-in {
+  from { opacity: 0; transform: translate(-50%, 0.75rem) scale(0.98); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+.ficha-modal-backdrop {
+  background:
+    radial-gradient(circle at 50% 18%, color-mix(in srgb, var(--ficha-accent, #c7a44c) 9%, transparent), transparent 28rem),
+    rgb(0 0 0 / 0.86);
+}
+
+.ficha-modal-surface {
+  border-color: color-mix(in srgb, var(--ficha-accent, #c7a44c) 34%, rgb(255 255 255 / 0.08));
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--ficha-accent, #c7a44c) 5%, #111017), #0d0c12 42%, #09080d);
+  box-shadow: 0 2rem 7rem rgb(0 0 0 / 0.72), 0 0 2.6rem color-mix(in srgb, var(--ficha-accent, #c7a44c) 13%, transparent);
+}
+
+.ficha-modal-surface::before {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 12%;
+  left: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ficha-accent, #c7a44c), transparent);
+  opacity: 0.8;
+}
+
+.ficha-modal-title {
+  color: color-mix(in srgb, var(--ficha-accent, #c7a44c) 78%, white);
+  text-shadow: 0 0 1.25rem color-mix(in srgb, var(--ficha-accent, #c7a44c) 30%, transparent);
+}
+
+.ficha-modal-close:hover,
+.ficha-modal-close:focus-visible {
+  border-color: color-mix(in srgb, var(--ficha-accent, #c7a44c) 58%, transparent);
+  background: color-mix(in srgb, var(--ficha-accent, #c7a44c) 8%, rgb(0 0 0 / 0.28));
+  box-shadow: 0 0 1.2rem color-mix(in srgb, var(--ficha-accent, #c7a44c) 18%, transparent);
+  outline-color: color-mix(in srgb, var(--ficha-accent, #c7a44c) 78%, white 8%);
+}
+
+.ficha-hidden-items {
+  border-color: color-mix(in srgb, var(--ficha-accent) 18%, rgb(255 255 255 / 0.06));
+  background: color-mix(in srgb, var(--ficha-accent) 2.5%, rgb(5 5 9 / 0.48));
+}
+
+.ficha-hidden-items__trigger {
+  color: #9ca3af;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.ficha-hidden-items__trigger:hover,
+.ficha-hidden-items__trigger:focus-visible {
+  background: color-mix(in srgb, var(--ficha-accent) 5%, transparent);
+  color: white;
+  outline: none;
+}
+
+.ficha-hidden-items__icon,
+.ficha-hidden-items__count,
+.ficha-hidden-items__restore {
+  border-color: color-mix(in srgb, var(--ficha-accent) 24%, transparent);
+  background: color-mix(in srgb, var(--ficha-accent) 7%, transparent);
+  color: color-mix(in srgb, var(--ficha-accent) 68%, #c5c2cc);
+}
+
+.ficha-hidden-items__restore:hover,
+.ficha-hidden-items__restore:focus-visible {
+  border-color: color-mix(in srgb, var(--ficha-accent) 54%, transparent);
+  background: color-mix(in srgb, var(--ficha-accent) 13%, transparent);
+  color: color-mix(in srgb, var(--ficha-accent) 86%, white);
+  box-shadow: 0 0 1rem color-mix(in srgb, var(--ficha-accent) 12%, transparent);
+  outline: none;
+}
+
+/* Seletores de identidade: cada Árvore, raça e classe carrega sua própria paleta. */
+.ficha-identity-select__trigger {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  min-height: 3.5rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--identity-color) 24%, rgb(255 255 255 / 0.06));
+  border-radius: 0.75rem;
+  background:
+    linear-gradient(112deg, color-mix(in srgb, var(--identity-color) 10%, transparent), transparent 56%),
+    linear-gradient(145deg, #15131b, color-mix(in srgb, var(--identity-secondary) 7%, #0c0b10));
+  color: #e8e5ed;
+  box-shadow: inset 0 1px rgb(255 255 255 / 0.025);
+  text-align: left;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.ficha-identity-select__trigger:not([aria-disabled='true']):hover,
+.ficha-identity-select__trigger:not([aria-disabled='true']):focus-visible,
+.ficha-identity-select__trigger[aria-expanded='true'] {
+  border-color: color-mix(in srgb, var(--identity-color) 62%, white 5%);
+  box-shadow: 0 0 1.2rem var(--identity-glow), inset 0 1px rgb(255 255 255 / 0.04);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.ficha-identity-select__eyebrow,
+.ficha-identity-select__name,
+.ficha-identity-option__eyebrow,
+.ficha-identity-option__name,
+.ficha-identity-option__description,
+.ficha-identity-option__meta {
+  display: block;
+}
+
+.ficha-identity-select__eyebrow {
+  overflow: hidden;
+  margin-bottom: 0.12rem;
+  color: color-mix(in srgb, var(--identity-color) 72%, #a7a3ae);
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ficha-identity-select__name {
+  overflow: hidden;
+  color: #eeebf2;
+  font-size: 0.86rem;
+  font-weight: 750;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ficha-identity-select__chevron {
+  color: color-mix(in srgb, var(--identity-color) 68%, #77727f);
+  transition: transform 180ms ease;
+}
+
+.ficha-identity-select__trigger[aria-expanded='true'] .ficha-identity-select__chevron {
+  transform: rotate(180deg);
+}
+
+.ficha-identity-picker {
+  position: relative;
+  max-height: min(48rem, calc(100dvh - 2rem));
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--identity-color) 42%, rgb(255 255 255 / 0.07));
+  background:
+    radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--identity-color) 13%, transparent), transparent 17rem),
+    linear-gradient(155deg, color-mix(in srgb, var(--identity-secondary) 8%, #121018), #09080d 52%);
+  box-shadow: 0 2rem 7rem rgb(0 0 0 / 0.76), 0 0 3rem var(--identity-glow);
+}
+
+.ficha-identity-picker::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 12%;
+  left: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--identity-color), transparent);
+  box-shadow: 0 0 1rem var(--identity-glow);
+}
+
+.ficha-identity-picker > .custom-scrollbar {
+  flex: 1 1 auto;
+  min-height: 0;
+  overscroll-behavior: contain;
+}
+
+.ficha-identity-picker__eyebrow {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #77727f;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.ficha-identity-picker__title {
+  color: color-mix(in srgb, var(--identity-color) 78%, white);
+  font-family: Cinzel, serif;
+  font-size: clamp(0.95rem, 3vw, 1.15rem);
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  text-shadow: 0 0 1.2rem var(--identity-glow);
+  text-transform: uppercase;
+}
+
+.ficha-identity-picker__close {
+  display: inline-flex;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--identity-color) 42%, rgb(255 255 255 / 0.08));
+  border-radius: 999px;
+  color: #aaa6b1;
+  transition: 180ms ease;
+}
+
+.ficha-identity-picker__close:hover,
+.ficha-identity-picker__close:focus-visible {
+  background: color-mix(in srgb, var(--identity-color) 10%, transparent);
+  color: white;
+  box-shadow: 0 0 1.1rem var(--identity-glow);
+  outline: none;
+  transform: rotate(8deg);
+}
+
+.ficha-identity-picker__search {
+  width: 100%;
+  padding: 0.72rem 0.75rem 0.72rem 2.25rem;
+  border: 1px solid rgb(255 255 255 / 0.09);
+  border-radius: 0.65rem;
+  background: rgb(0 0 0 / 0.28);
+  color: white;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.ficha-identity-picker__search:focus {
+  border-color: color-mix(in srgb, var(--identity-color) 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--identity-color) 9%, transparent);
+}
+
+.ficha-identity-option {
+  position: relative;
+  display: flex;
+  min-height: 4.15rem;
+  min-width: 0;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.78rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--option-color) 15%, rgb(255 255 255 / 0.055));
+  border-radius: 0.8rem;
+  background:
+    linear-gradient(105deg, color-mix(in srgb, var(--option-color) 6%, transparent), transparent 54%),
+    rgb(15 14 20 / 0.82);
+  color: #d8d4df;
+  text-align: left;
+  animation: ficha-identity-option-in 260ms both;
+  animation-delay: calc(var(--option-index) * 16ms);
+  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.ficha-identity-option::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  bottom: 20%;
+  left: 0;
+  width: 2px;
+  border-radius: 99px;
+  background: var(--option-color);
+  box-shadow: 0 0 0.7rem var(--option-glow);
+  opacity: 0.38;
+  transition: top 180ms ease, bottom 180ms ease, opacity 180ms ease;
+}
+
+.ficha-identity-option:hover,
+.ficha-identity-option:focus-visible,
+.ficha-identity-option.is-selected {
+  border-color: color-mix(in srgb, var(--option-color) 60%, white 4%);
+  background:
+    linear-gradient(105deg, color-mix(in srgb, var(--option-color) 15%, transparent), transparent 64%),
+    color-mix(in srgb, var(--option-secondary) 7%, #0f0e14);
+  box-shadow: 0 0.65rem 1.8rem rgb(0 0 0 / 0.25), 0 0 1.15rem var(--option-glow);
+  outline: none;
+  transform: translateX(2px);
+}
+
+.ficha-identity-option:hover::before,
+.ficha-identity-option:focus-visible::before,
+.ficha-identity-option.is-selected::before {
+  top: 8%;
+  bottom: 8%;
+  opacity: 1;
+}
+
+.ficha-identity-option__eyebrow {
+  margin-bottom: 0.12rem;
+  color: color-mix(in srgb, var(--option-color) 76%, #96919e);
+  font-size: 0.56rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ficha-identity-option__name {
+  color: #f0edf4;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.ficha-identity-option__description {
+  display: -webkit-box;
+  margin-top: 0.18rem;
+  overflow: hidden;
+  color: #8f8a98;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.ficha-identity-option__meta {
+  margin-top: 0.38rem;
+  color: color-mix(in srgb, var(--option-color) 72%, #a39eaa);
+  font-size: 0.64rem;
+  font-weight: 750;
+  letter-spacing: 0.015em;
+  line-height: 1.35;
+}
+
+.ficha-identity-option__check {
+  display: inline-flex;
+  width: 1.65rem;
+  height: 1.65rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--option-color) 24%, rgb(255 255 255 / 0.04));
+  border-radius: 999px;
+  color: var(--option-color);
+}
+
+.ficha-identity-option.is-selected .ficha-identity-option__check {
+  background: color-mix(in srgb, var(--option-color) 14%, transparent);
+  box-shadow: 0 0 0.85rem var(--option-glow);
+}
+
+.ficha-origin-summary {
+  display: flex;
+  min-width: 0;
+  min-height: 3.5rem;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--origin-color, #c7a44c) 22%, rgb(255 255 255 / 0.05));
+  border-radius: 0.75rem;
+  background: linear-gradient(120deg, color-mix(in srgb, var(--origin-color, #c7a44c) 7%, transparent), rgb(12 11 16 / 0.68));
+  box-shadow: inset 0 1px rgb(255 255 255 / 0.025);
+}
+
+.ficha-origin-summary > p {
+  color: #9a95a2;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.ficha-origin-summary__benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.ficha-origin-summary__benefits > span {
+  padding: 0.24rem 0.42rem;
+  border: 1px solid color-mix(in srgb, var(--origin-color) 24%, transparent);
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--origin-color) 8%, transparent);
+  color: color-mix(in srgb, var(--origin-color) 74%, white);
+  font-size: 0.61rem;
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.ficha-origin-summary.is-empty {
+  color: #68636f;
+  font-size: 0.7rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* Slots de multiclasse preservam a cor da classe também no campo de nível. */
+.ficha-class-slot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 4.5rem auto;
+  align-items: end;
+  gap: 0.55rem;
+  padding: 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--class-slot-color) 15%, rgb(255 255 255 / 0.04));
+  border-radius: 0.9rem;
+  background: linear-gradient(120deg, color-mix(in srgb, var(--class-slot-color) 5%, transparent), rgb(8 7 11 / 0.24));
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.ficha-class-slot:hover {
+  border-color: color-mix(in srgb, var(--class-slot-color) 30%, transparent);
+  box-shadow: 0 0 1.2rem color-mix(in srgb, var(--class-slot-glow) 55%, transparent);
+}
+
+.ficha-class-slot__level {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ficha-class-slot__level label {
+  color: #6b6772;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.ficha-class-slot__level-input {
+  width: 100%;
+  min-height: 3.5rem;
+  border: 1px solid color-mix(in srgb, var(--class-slot-color) 20%, rgb(255 255 255 / 0.05));
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--class-slot-secondary) 6%, #121118);
+  color: color-mix(in srgb, var(--class-slot-color) 70%, white);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 1rem;
+  font-weight: 800;
+  text-align: center;
+  outline: none;
+}
+
+.ficha-class-slot__level-input:focus {
+  border-color: color-mix(in srgb, var(--class-slot-color) 62%, white 4%);
+  box-shadow: 0 0 1rem var(--class-slot-glow);
+}
+
+.ficha-class-slot__remove {
+  display: inline-flex;
+  width: 2rem;
+  height: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.65rem;
+  color: #65616c;
+  transition: 160ms ease;
+}
+
+.ficha-class-slot__remove:hover,
+.ficha-class-slot__remove:focus-visible {
+  background: rgb(239 68 68 / 0.09);
+  color: #f87171;
+  outline: none;
+}
+
+/* Atributos: sete cores sem mudar nenhuma regra de cálculo. */
+.ficha-attribute-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.7rem 0.65rem 0.75rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--attribute-color) 17%, rgb(255 255 255 / 0.045));
+  border-radius: 0.85rem;
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--attribute-color) 11%, transparent), transparent 55%),
+    linear-gradient(160deg, #15131b, color-mix(in srgb, var(--attribute-secondary) 5%, #0f0e14));
+  box-shadow: inset 0 1px rgb(255 255 255 / 0.022);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.ficha-attribute-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 24%;
+  left: 24%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--attribute-color), transparent);
+  box-shadow: 0 0 0.8rem var(--attribute-glow);
+}
+
+.ficha-attribute-card:hover,
+.ficha-attribute-card:focus-within {
+  border-color: color-mix(in srgb, var(--attribute-color) 48%, white 3%);
+  box-shadow: 0 0.8rem 2rem rgb(0 0 0 / 0.2), 0 0 1.2rem var(--attribute-glow);
+  transform: translateY(-2px);
+}
+
+.ficha-attribute-card__help {
+  color: var(--attribute-color);
+  opacity: 0.54;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.ficha-attribute-card__help:hover,
+.ficha-attribute-card__help:focus-visible {
+  opacity: 1;
+  outline: none;
+  transform: scale(1.08);
+}
+
+.ficha-attribute-card [aria-label^='Organizar ajustes'] {
+  border-color: color-mix(in srgb, var(--attribute-color) 35%, transparent);
+  color: var(--attribute-color);
+}
+
+.ficha-attribute-card__name {
+  max-width: 100%;
+  overflow: hidden;
+  color: color-mix(in srgb, var(--attribute-color) 64%, #b8b3c0);
+  font-size: 0.58rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ficha-attribute-card__value {
+  width: 4rem;
+  margin: 0.28rem 0;
+  border-radius: 0.4rem;
+  background: transparent;
+  color: white;
+  font-family: Cinzel, serif;
+  font-size: 1.55rem;
+  line-height: 1.2;
+  text-align: center;
+  outline: none;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.ficha-attribute-card__value:focus {
+  background: color-mix(in srgb, var(--attribute-color) 8%, transparent);
+  color: color-mix(in srgb, var(--attribute-color) 48%, white);
+}
+
+.ficha-attribute-card__modifier {
+  width: 100%;
+  margin-top: 0.18rem;
+  padding: 0.3rem;
+  border: 1px solid color-mix(in srgb, var(--attribute-color) 24%, transparent);
+  border-radius: 0.45rem;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--attribute-secondary) 16%, transparent), color-mix(in srgb, var(--attribute-color) 9%, transparent));
+  color: color-mix(in srgb, var(--attribute-color) 82%, white);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.83rem;
+  font-weight: 850;
+  text-align: center;
+  text-shadow: 0 0 0.7rem var(--attribute-glow);
+}
+
+@keyframes ficha-identity-option-in {
+  from { opacity: 0; transform: translateY(0.35rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ficha-particle-rise {
+  0% { transform: translate3d(0, 2rem, 0) scale(0.6); opacity: 0; }
+  18% { opacity: 0.5; }
+  100% { transform: translate3d(2rem, -105vh, 0) scale(1.1); opacity: 0; }
+}
+
+@keyframes ficha-particle-drift {
+  0% { transform: translate3d(-2rem, 2rem, 0) rotate(0); opacity: 0; }
+  24% { opacity: 0.46; }
+  100% { transform: translate3d(8rem, -105vh, 0) rotate(420deg); opacity: 0; }
+}
+
+@keyframes ficha-particle-orbit {
+  0% { transform: translate3d(-2rem, 2rem, 0) scale(0.5); opacity: 0; }
+  20% { opacity: 0.56; }
+  55% { transform: translate3d(5rem, -52vh, 0) scale(1.25); }
+  100% { transform: translate3d(-3rem, -105vh, 0) scale(0.7); opacity: 0; }
+}
+
+@keyframes ficha-wave-rise {
+  0% { transform: translate3d(-4rem, 2rem, 0) scaleX(0.35); opacity: 0; }
+  25% { opacity: 0.22; }
+  100% { transform: translate3d(4rem, -105vh, 0) scaleX(1.4); opacity: 0; }
+}
+
+@media (max-width: 48rem) {
+  .ficha-atmosphere__art {
+    width: 130vw;
+    opacity: 0.09;
+  }
+
+  .ficha-atmosphere__art--raca {
+    display: none;
+  }
+
+  .ficha-header__art {
+    top: 0;
+    right: -34%;
+    width: 92%;
+    height: 100%;
+    opacity: 0.09;
+  }
+
+  .ficha-effect--raca {
+    display: none;
+  }
+
+  .ficha-tour__card {
+    bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+    width: min(calc(100vw - 1.25rem), 25rem);
+    padding: 1rem;
+    border-radius: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ficha-effect i {
+    animation: none;
+    opacity: 0.12;
+  }
+
+  .ficha-tour__spotlight,
+  .ficha-tour__card,
+  .ficha-tour__dots span,
+  .ficha-tour__next,
+  .ficha-identity-option,
+  .ficha-identity-select__trigger,
+  .ficha-attribute-card {
+    animation: none;
+    transition: none;
+  }
+}

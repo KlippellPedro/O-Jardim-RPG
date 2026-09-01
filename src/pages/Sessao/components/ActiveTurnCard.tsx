@@ -1,17 +1,180 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { GraduationCap, Heart, Shield, Sparkles, Swords, User, Zap } from 'lucide-react';
-import { useSessaoStore } from '../../../store/useSessaoStore';
+import { Eye, Shield, Sparkles, Swords, Target, User, Users } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useSessaoStore, type EntidadeIniciativa } from '../../../store/useSessaoStore';
 import { useCharacterStore } from '../../../store/useCharacterStore';
-import { PlayerGallery } from './PlayerGallery';
+
+interface EntityMetrics {
+  hpCurrent?: number;
+  hpMax?: number;
+  manaCurrent?: number;
+  manaMax?: number;
+  defense?: number | null;
+  photo?: string;
+}
+
+function percentage(current: number | undefined, maximum: number | undefined): number | null {
+  if (current === undefined || maximum === undefined || maximum <= 0) return null;
+  return Math.max(0, Math.min(100, (current / maximum) * 100));
+}
+
+function entityTypeLabel(type: EntidadeIniciativa['tipo']): string {
+  if (type === 'jogador') return 'Personagem';
+  if (type === 'aliado') return 'Aliado';
+  return 'Inimigo';
+}
+
+interface ResourceBarProps {
+  label: string;
+  current?: number;
+  maximum?: number;
+  fallback?: string;
+  tone: 'health' | 'mana';
+}
+
+const ResourceBar: React.FC<ResourceBarProps> = ({ label, current, maximum, fallback = 'N/D', tone }) => {
+  const ratio = percentage(current, maximum);
+  return (
+    <div className="session-resource">
+      <div className="session-resource__meta">
+        <span>{label}</span>
+        <strong>{current !== undefined ? `${current}/${maximum ?? '?'}` : fallback}</strong>
+      </div>
+      <div className="session-resource__track" aria-hidden="true">
+        <span className={`session-resource__fill session-resource__fill--${tone}`} style={{ width: `${ratio ?? 0}%` }} />
+      </div>
+    </div>
+  );
+};
+
+interface RosterCardProps {
+  entity: EntidadeIniciativa;
+  metrics: EntityMetrics;
+  active: boolean;
+  selected: boolean;
+  onSelect: () => void;
+}
+
+const RosterCard: React.FC<RosterCardProps> = ({ entity, metrics, active, selected, onSelect }) => {
+  const hpRatio = percentage(metrics.hpCurrent, metrics.hpMax);
+  const tone = entity.tipo === 'inimigo' ? 'enemy' : entity.tipo === 'aliado' ? 'ally' : 'player';
+  const visibleConditions = entity.condicoes.slice(0, 2);
+
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      className={`session-roster-card session-roster-card--${tone}${active ? ' is-active' : ''}${selected ? ' is-selected' : ''}`}
+      aria-pressed={selected}
+      aria-label={`Ver ficha de ${entity.nome}`}
+    >
+      <span className="session-roster-card__initiative" title={`Iniciativa ${entity.iniciativa}`}>
+        {entity.iniciativa}
+      </span>
+      <span className="session-roster-card__portrait">
+        {metrics.photo ? (
+          <img src={metrics.photo} alt="" loading="lazy" decoding="async" />
+        ) : (
+          <User size={20} aria-hidden="true" />
+        )}
+      </span>
+      <span className="session-roster-card__body">
+        <span className="session-roster-card__heading">
+          <strong>{entity.nome}</strong>
+          {active ? <em>Turno</em> : null}
+        </span>
+        <span className="session-roster-card__subline">
+          <span>{entityTypeLabel(entity.tipo)}</span>
+          <span aria-hidden="true">·</span>
+          <span>{metrics.defense != null ? `DEF ${metrics.defense}` : 'DEF —'}</span>
+          {metrics.manaCurrent != null || metrics.manaMax != null ? (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>{`MP ${metrics.manaCurrent ?? metrics.manaMax}/${metrics.manaMax ?? '?'}`}</span>
+            </>
+          ) : null}
+        </span>
+        <span className="session-roster-card__health">
+          <span className="session-roster-card__health-track">
+            <span style={{ width: `${hpRatio ?? 0}%` }} />
+          </span>
+          <span>{metrics.hpCurrent !== undefined ? `${metrics.hpCurrent}/${metrics.hpMax ?? '?'} PV` : entity.estado_vida ?? 'PV ocultos'}</span>
+        </span>
+        {visibleConditions.length ? (
+          <span className="session-roster-card__conditions">
+            {visibleConditions.map((condition) => (
+              <span key={`${condition.nome}-${condition.turnos ?? 'p'}`}>
+                {condition.nome}{condition.turnos ? ` · ${condition.turnos}` : ''}
+              </span>
+            ))}
+            {entity.condicoes.length > visibleConditions.length ? <span>+{entity.condicoes.length - visibleConditions.length}</span> : null}
+          </span>
+        ) : null}
+      </span>
+    </button>
+  );
+};
+
+interface TeamLaneProps {
+  id: string;
+  title: string;
+  subtitle: string;
+  tone: 'party' | 'enemy';
+  entities: EntidadeIniciativa[];
+  selectedId: string | null;
+  activeId: string | null;
+  metricsFor: (entity: EntidadeIniciativa) => EntityMetrics;
+  onSelect: (id: string) => void;
+}
+
+const TeamLane: React.FC<TeamLaneProps> = ({
+  id,
+  title,
+  subtitle,
+  tone,
+  entities,
+  selectedId,
+  activeId,
+  metricsFor,
+  onSelect,
+}) => (
+  <section className={`session-team-lane session-team-lane--${tone}`} aria-labelledby={id}>
+    <header className="session-team-lane__header">
+      <div>
+        <p>{subtitle}</p>
+        <h3 id={id}>{title}</h3>
+      </div>
+      <span>{entities.length}</span>
+    </header>
+    {entities.length ? (
+      <div className="session-team-lane__grid">
+        {entities.map((entity) => (
+          <RosterCard
+            key={entity.id}
+            entity={entity}
+            metrics={metricsFor(entity)}
+            active={entity.id === activeId}
+            selected={entity.id === selectedId}
+            onSelect={() => onSelect(entity.id)}
+          />
+        ))}
+      </div>
+    ) : (
+      <div className="session-team-lane__empty">
+        {tone === 'enemy' ? <Target size={22} /> : <Users size={22} />}
+        <span>{tone === 'enemy' ? 'Nenhuma ameaça revelada.' : 'Nenhum personagem ou aliado na cena.'}</span>
+      </div>
+    )}
+  </section>
+);
 
 export const ActiveTurnCard: React.FC = () => {
-  const { iniciativa, turnoAtualIndex, turnoAtualId, emCombate } = useSessaoStore();
+  const { iniciativa, turnoAtualIndex, turnoAtualId, emCombate, rodada, comando } = useSessaoStore();
   const { characters, fetchCharacters } = useCharacterStore();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const reduceMotion = useReducedMotion();
-  const activeEntity = emCombate
-    ? iniciativa.find((entity) => entity.id === turnoAtualId) ?? iniciativa[turnoAtualIndex]
-    : undefined;
+  const navigate = useNavigate();
 
   useEffect(() => {
     void fetchCharacters();
@@ -22,114 +185,186 @@ export const ActiveTurnCard: React.FC = () => {
     [characters],
   );
 
-  if (!activeEntity) {
+  const activeEntity = emCombate
+    ? iniciativa.find((entity) => entity.id === turnoAtualId) ?? iniciativa[turnoAtualIndex]
+    : undefined;
+
+  useEffect(() => {
+    if (activeEntity?.id) {
+      setSelectedId(activeEntity.id);
+    }
+  }, [activeEntity?.id]);
+
+  useEffect(() => {
+    if (!selectedId || !iniciativa.some((entity) => entity.id === selectedId)) {
+      setSelectedId(iniciativa[0]?.id ?? null);
+    }
+  }, [iniciativa, selectedId]);
+
+  const selectedEntity = iniciativa.find((entity) => entity.id === selectedId) ?? activeEntity ?? iniciativa[0];
+  const party = iniciativa.filter((entity) => entity.tipo !== 'inimigo');
+  const enemies = iniciativa.filter((entity) => entity.tipo === 'inimigo');
+
+  const metricsFor = (entity: EntidadeIniciativa): EntityMetrics => {
+    const character = entity.personagemId ? charactersById.get(entity.personagemId) : undefined;
+    const hpMax = entity.hpTotal ?? character?.derivados?.vida;
+    const manaMax = entity.manaTotal ?? character?.derivados?.mana;
+    return {
+      hpCurrent: entity.hpAtual ?? hpMax,
+      hpMax,
+      manaCurrent: entity.manaAtual ?? manaMax,
+      manaMax,
+      defense: entity.defesa ?? character?.derivados?.defesaNatural,
+      photo: character?.foto ?? undefined,
+    };
+  };
+
+  const selectedMetrics = selectedEntity ? metricsFor(selectedEntity) : null;
+  const isSelectedTurn = !!selectedEntity && selectedEntity.id === activeEntity?.id;
+
+  if (!iniciativa.length) {
     return (
-      <div className="custom-scrollbar h-full overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl">
-          <PlayerGallery />
+      <div className="session-stage custom-scrollbar h-full overflow-y-auto" data-tour="session-table">
+        <div className="session-empty-table">
+          <div className="session-empty-table__icon"><Users size={34} /></div>
+          <p>Preparação da mesa</p>
+          <h2>A cena ainda não tem participantes</h2>
+          <span>
+            {comando
+              ? 'Escolha os personagens no cabeçalho ou adicione aliados e inimigos no controle da cena.'
+              : 'O Mestre ainda está organizando os participantes desta sessão.'}
+          </span>
         </div>
       </div>
     );
   }
 
-  const character = activeEntity.personagemId ? charactersById.get(activeEntity.personagemId) : undefined;
-  const hpMax = activeEntity.hpTotal ?? character?.derivados?.vida;
-  const hpCurrent = activeEntity.hpAtual ?? hpMax;
-  const manaMax = activeEntity.manaTotal ?? character?.derivados?.mana;
-  const manaCurrent = activeEntity.manaAtual ?? manaMax;
-  const defense = activeEntity.defesa ?? character?.derivados?.defesaNatural;
-
   return (
-    <div className="custom-scrollbar h-full overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
+    <div className="session-stage custom-scrollbar h-full overflow-y-auto" data-tour="session-table">
       <motion.div
-        key={activeEntity.id}
-        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mx-auto max-w-4xl space-y-5"
+        className="session-stage__content"
       >
-        <section className="overflow-hidden rounded-2xl border border-[#c7a44c]/25 bg-[#0d0c12]/88 shadow-[0_20px_70px_rgba(0,0,0,0.35)]">
-          <div className="border-b border-white/[0.08] bg-[#c7a44c]/[0.06] px-5 py-3">
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#d7b85c]">
-              <Sparkles size={14} /> Turno atual
-            </div>
+        <header className="session-stage__toolbar">
+          <div>
+            <p><Sparkles size={13} /> Mesa tática</p>
+            <h2>{emCombate ? `Combate · Rodada ${Math.max(1, rodada)}` : 'Formação da cena'}</h2>
           </div>
+          <div className="session-stage__summary" aria-label="Resumo da cena">
+            <span><Users size={13} /> {party.length} no grupo</span>
+            <span><Target size={13} /> {enemies.length} ameaças</span>
+          </div>
+        </header>
 
-          <div className="p-5 sm:p-7">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-              <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[#c7a44c]/25 bg-black/35">
-                {character?.foto ? (
-                  <img src={character.foto} alt="" className="h-full w-full object-cover" />
-                ) : (
-                  <User size={34} className="text-[#c7a44c]/45" />
-                )}
+        {selectedEntity && selectedMetrics ? (
+          <motion.section
+            key={selectedEntity.id}
+            initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`session-focus-card session-focus-card--${selectedEntity.tipo}`}
+            aria-label={`Ficha em foco: ${selectedEntity.nome}`}
+            data-tour="session-focus"
+          >
+            <div className="session-focus-card__identity">
+              <div className="session-focus-card__portrait">
+                {selectedMetrics.photo ? <img src={selectedMetrics.photo} alt="" /> : <User size={30} />}
+                <span>{selectedEntity.iniciativa}</span>
               </div>
-              <div className="min-w-0 flex-1">
-                <h1 className="truncate text-2xl font-semibold text-white sm:text-3xl">{activeEntity.nome}</h1>
-                <p className="mt-1 text-sm capitalize text-white/45">
-                  {activeEntity.tipo} · Iniciativa {activeEntity.iniciativa}
-                </p>
-                {activeEntity.condicoes.length ? (
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {activeEntity.condicoes.map((condition) => (
-                      <span key={`${condition.nome}-${condition.turnos ?? 'p'}`} className="rounded-full border border-amber-300/20 bg-amber-300/[0.07] px-2 py-1 text-[11px] text-amber-100/80">
-                        {condition.nome}{condition.turnos ? ` · ${condition.turnos} turnos` : ''}
-                      </span>
-                    ))}
+              <div className="session-focus-card__name">
+                <p>{isSelectedTurn ? <><Swords size={13} /> Turno atual</> : 'Ficha em foco'}</p>
+                <h1>{selectedEntity.nome}</h1>
+                <span>{entityTypeLabel(selectedEntity.tipo)} · iniciativa {selectedEntity.iniciativa}</span>
+              </div>
+              {selectedEntity.personagemId ? (
+                <button
+                  type="button"
+                  onClick={() => navigate(`/ficha/${selectedEntity.personagemId}`)}
+                  className="session-focus-card__sheet-link"
+                  data-tour="session-sheet-link"
+                >
+                  <Eye size={15} /> Abrir ficha
+                </button>
+              ) : null}
+            </div>
+
+            <div className="session-focus-card__resources">
+              <ResourceBar
+                label="Vida"
+                current={selectedMetrics.hpCurrent}
+                maximum={selectedMetrics.hpMax}
+                fallback={selectedEntity.estado_vida ?? 'N/D'}
+                tone="health"
+              />
+              <ResourceBar label="Mana" current={selectedMetrics.manaCurrent} maximum={selectedMetrics.manaMax} tone="mana" />
+              <div className="session-focus-card__defense">
+                <Shield size={16} />
+                <span>Defesa</span>
+                <strong>{selectedMetrics.defense ?? '—'}</strong>
+              </div>
+            </div>
+
+            {selectedEntity.condicoes.length || selectedEntity.ataques?.length || selectedEntity.pericias?.length ? (
+              <div className="session-focus-card__details">
+                {selectedEntity.condicoes.length ? (
+                  <div className="session-focus-card__detail-group">
+                    <span>Condições</span>
+                    <div>
+                      {selectedEntity.condicoes.slice(0, 4).map((condition) => (
+                        <em key={`${condition.nome}-${condition.turnos ?? 'p'}`}>
+                          {condition.nome}{condition.turnos ? ` · ${condition.turnos}` : ''}
+                        </em>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+                {selectedEntity.ataques?.length ? (
+                  <div className="session-focus-card__detail-group">
+                    <span>Ataques</span>
+                    <div>
+                      {selectedEntity.ataques.slice(0, 3).map((attack, index) => (
+                        <em key={`${attack.nome}-${index}`}>{attack.nome}{attack.detalhe ? ` · ${attack.detalhe}` : ''}</em>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+                {selectedEntity.pericias?.length ? (
+                  <div className="session-focus-card__detail-group">
+                    <span>Perícias</span>
+                    <div>{selectedEntity.pericias.slice(0, 4).map((skill) => <em key={skill}>{skill}</em>)}</div>
                   </div>
                 ) : null}
               </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3">
-              <div className="rounded-xl border border-red-400/15 bg-red-400/[0.06] p-3 text-red-100/80 sm:p-4">
-                <Heart size={17} className="mb-2 text-red-300" />
-                <span className="block text-[10px] uppercase tracking-wider text-white/35">Vida</span>
-                <strong className="mt-1 block text-sm text-white sm:text-lg">{hpCurrent !== undefined ? `${hpCurrent}/${hpMax ?? '?'}` : activeEntity.estado_vida ?? 'N/D'}</strong>
-              </div>
-              <div className="rounded-xl border border-sky-400/15 bg-sky-400/[0.06] p-3 text-sky-100/80 sm:p-4">
-                <Zap size={17} className="mb-2 text-sky-300" />
-                <span className="block text-[10px] uppercase tracking-wider text-white/35">Mana</span>
-                <strong className="mt-1 block text-sm text-white sm:text-lg">{manaCurrent !== undefined ? `${manaCurrent}/${manaMax ?? '?'}` : 'N/D'}</strong>
-              </div>
-              <div className="rounded-xl border border-white/10 bg-white/[0.035] p-3 text-white/70 sm:p-4">
-                <Shield size={17} className="mb-2" />
-                <span className="block text-[10px] uppercase tracking-wider text-white/35">Defesa</span>
-                <strong className="mt-1 block text-sm text-white sm:text-lg">{defense ?? 'N/D'}</strong>
-              </div>
-            </div>
-
-            {activeEntity.pericias?.length ? (
-              <div className="mt-5 border-t border-white/[0.06] pt-5">
-                <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-white/40">
-                  <GraduationCap size={14} /> Perícias
-                </div>
-                <div className="mt-2.5 flex flex-wrap gap-1.5">
-                  {activeEntity.pericias.map((pericia) => (
-                    <span key={pericia} className="rounded-full border border-sky-300/15 bg-sky-300/[0.06] px-2.5 py-1 text-xs text-sky-100/80">
-                      {pericia}
-                    </span>
-                  ))}
-                </div>
-              </div>
             ) : null}
+          </motion.section>
+        ) : null}
 
-            {activeEntity.ataques?.length ? (
-              <div className="mt-5 border-t border-white/[0.06] pt-5">
-                <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-white/40">
-                  <Swords size={14} /> Ataques
-                </div>
-                <div className="mt-2.5 space-y-1.5">
-                  {activeEntity.ataques.map((ataque, index) => (
-                    <div key={`${ataque.nome}-${index}`} className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-sm">
-                      <span className="font-medium text-white/85">{ataque.nome}</span>
-                      {ataque.detalhe ? <span className="text-white/45"> · {ataque.detalhe}</span> : null}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-          </div>
-        </section>
+        <div className="session-battlefield" aria-label="Participantes organizados por lado da cena" data-tour="session-teams">
+          <TeamLane
+            id="session-party-lane"
+            title="Heróis & aliados"
+            subtitle="Lado do grupo"
+            tone="party"
+            entities={party}
+            selectedId={selectedEntity?.id ?? null}
+            activeId={activeEntity?.id ?? null}
+            metricsFor={metricsFor}
+            onSelect={setSelectedId}
+          />
+          <TeamLane
+            id="session-enemy-lane"
+            title="Ameaças"
+            subtitle="Oposição"
+            tone="enemy"
+            entities={enemies}
+            selectedId={selectedEntity?.id ?? null}
+            activeId={activeEntity?.id ?? null}
+            metricsFor={metricsFor}
+            onSelect={setSelectedId}
+          />
+        </div>
+
+        <p className="session-stage__hint">Selecione uma ficha na mesa para consultar seus recursos sem perder a visão do combate.</p>
       </motion.div>
     </div>
   );

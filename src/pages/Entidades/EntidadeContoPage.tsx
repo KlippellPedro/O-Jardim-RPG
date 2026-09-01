@@ -1,4 +1,4 @@
-import { useEffect, type CSSProperties } from 'react';
+import { useLayoutEffect, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Crown, Feather } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
@@ -16,8 +16,10 @@ export function EntidadeContoPage() {
   const { entidadeId } = useParams<{ entidadeId: string }>();
   const entidade = encontrarEntidade(entidadeId);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }, [entidadeId]);
 
   const { usuario, campanhaAtiva } = useAuthStore();
@@ -34,7 +36,7 @@ export function EntidadeContoPage() {
 
   if (!entidade || bloqueada) {
     return (
-      <main className="entity-story entity-story--missing">
+      <main className="entity-story entity-story--missing app-detail-page">
         <BookOpen size={48} strokeWidth={1.2} />
         <span>Registro inexistente</span>
         <h1>Este conto não está no livro.</h1>
@@ -59,7 +61,7 @@ export function EntidadeContoPage() {
   const ehRealeza = entidade.tema.moldura === 'realeza';
 
   return (
-    <main className={`entity-story${ehRealeza ? ' entity-story--realeza' : ''}`} style={estilo}>
+    <main className={`entity-story app-detail-page${ehRealeza ? ' entity-story--realeza' : ''}`} style={estilo}>
       {imagemErrante ? (
         <EntityWanderingFigure src={entidade.tema.imagemFundo!} />
       ) : (
@@ -102,8 +104,7 @@ export function EntidadeContoPage() {
               key={`${entidade.id}-${index}`}
               aria-hidden={entidade.contoIlegivel || undefined}
               initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45 }}
             >
               {secao.titulo ? <h2>{secao.titulo}</h2> : null}

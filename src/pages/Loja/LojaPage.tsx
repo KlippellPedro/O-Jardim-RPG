@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ShoppingBag, CheckCircle, XCircle, LayoutGrid, Sword, Shield, FlaskConical, Users, Gem, Archive, Heart, ArrowRightLeft, Sparkles, Cpu, Wand2, Wrench, Apple, MapPin, Building2, Skull, Globe2 } from 'lucide-react';
-import { calcularValorRevenda, LojaItem, ItemCategoria, ItemRaridade, getCurrencySymbol, itemCorrespondeBusca, itemCorrespondeSubfiltro, itemEhVeiculoCompleto, lerPrecoNativoLoja, mapearCatalogoLoja, rotuloRaridadeChave, somarPrecosNativos } from '../../services/lojaCatalogService';
+import { Search, ShoppingBag, CheckCircle, XCircle, LayoutGrid, Sword, Shield, ShieldHalf, FlaskConical, Users, Gem, Archive, Heart, Sparkles, Cpu, Wand2, Wrench, Apple, MapPin, Building2, Skull, Globe2, Compass, RotateCcw, CircleGauge, Store, ChevronRight, Backpack } from 'lucide-react';
+import { aplicarRaridadeCompra, calcularValorRevenda, LojaItem, ItemCategoria, ItemRaridade, itemPermiteEscolherRaridade, lerRaridadeChave, nivelLojaParaRaridadeCompra, NOMES_LOCAIS_LOJA, getCurrencySymbol, itemCorrespondeBusca, itemCorrespondeProficiencia, itemCorrespondeSubfiltro, itemEhVeiculoCompleto, lerPrecoNativoLoja, mapearCatalogoLoja, RARIDADES_COMPRA_EQUIPAMENTO, RaridadeCompraEquipamento, rotuloRaridadeChave, somarPrecosNativos } from '../../services/lojaCatalogService';
 import { ItemCard } from './components/ItemCard';
 import { LojaItemModal } from './components/LojaItemModal';
 import { CartDrawer, CartItem, cartItemKey } from './components/CartDrawer';
@@ -13,6 +13,12 @@ import { listarRecompensas, reivindicarRecompensa, resolverRecompensa, Recompens
 import { api } from '../../services/apiClient';
 import { CheckoutAttempt, createIdempotencyKey, hasVerifiableShopOrigin, lojaApi, MAX_SHOP_UNITS, prepareCheckoutAttempt } from '../../services/lojaApi';
 import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
+import { Select } from '../../components/ui/Select';
+import { GuidedTour } from '../../components/ui/GuidedTour';
+import { LOJA_TOUR_STEPS, lojaTourJaVisto, serializarLojaTourVisto } from './lojaTourConfig';
+import { grupoLimiteItemEspecial, resumirLimiteItensEspeciais } from '../../services/itensEspeciaisService';
+import { RARIDADES_EQUIPAMENTO } from '../../../data/regras/raridadesEquipamentos';
+import './loja.css';
 
 interface RecompensaAviso {
   id: string;
@@ -47,7 +53,8 @@ const CATEGORIAS_ICONES = {
   'Frutos do Éden': Apple,
   'Todos': LayoutGrid,
   'Armas': Sword,
-  'Armaduras e Escudos': Shield,
+  'Armaduras': Shield,
+  'Escudos': ShieldHalf,
   'Modificações': Wrench,
   'Consumíveis': FlaskConical,
   'Bens': Building2,
@@ -55,6 +62,7 @@ const CATEGORIAS_ICONES = {
   'Artefatos Mágicos': Wand2,
   'Mercenários': Users,
   'Componentes': Gem,
+  'Itens Comuns': Backpack,
   'Outros': Archive,
 } as const;
 
@@ -72,20 +80,59 @@ const RARIDADES_CORES = {
 
 const SUBFILTROS_POR_CATEGORIA: Partial<Record<ItemCategoria, readonly string[]>> = {
   'Armas': ['Todos', 'Corpo a Corpo', 'À Distância', 'Mágicas'],
-  'Armaduras e Escudos': ['Todos', 'Armaduras', 'Escudos'],
   'Modificações': ['Todos', 'Comuns', 'Marciais', 'Armas', 'Armaduras', 'Escudos', 'Itens gerais e mágicos'],
   'Bens': ['Todos', 'Propriedades', 'Veículos Completos', 'Peças e Módulos'],
   'Consumíveis': ['Todos', 'Poções', 'Selos', 'Rituais', 'Ferramentas'],
-  'Mercenários': ['Todos', 'Guardas de local', 'Escoltas', 'Tripulação', 'Ofícios', 'Feras e Monstros'],
+  'Mercenários': ['Todos', 'Guardas de local', 'Escoltas', 'Tripulação', 'Ofícios', 'Feras e Monstros', 'Marítimas', 'Espíritos', 'Golens', 'Vazio'],
   'Componentes': ['Todos', 'Componentes Químicos', 'Componentes Ritualísticos', 'Componentes Veiculares', 'Sucata', 'Mantimentos', 'Matéria-prima'],
   'Frutos do Éden': ['Todos', 'Sobrenatural', 'Mutação', 'Elemental'],
 };
+
+// Independente do subfiltro de Tipo acima (modo de combate) - dá pra
+// combinar os dois, tipo Corpo a Corpo + Marcial ao mesmo tempo, porque cada
+// um mexe num campo diferente do catálogo (modo x subtipo).
+const PROFICIENCIAS_POR_CATEGORIA: Partial<Record<ItemCategoria, readonly string[]>> = {
+  'Armas': ['Todos', 'Simples', 'Marcial'],
+  'Armaduras': ['Todos', 'Simples', 'Marcial'],
+  'Escudos': ['Todos', 'Simples', 'Marcial'],
+};
+
+const LOCAIS_LOJA = [
+  { id: 1, curto: NOMES_LOCAIS_LOJA[0], titulo: 'Feira Local', descricao: 'Suprimentos, ferramentas e equipamentos cotidianos.', icone: MapPin, cor: '#d6a254', nivelRotulo: 'cotidiano' },
+  { id: 2, curto: NOMES_LOCAIS_LOJA[1], titulo: 'Mercado da Metrópole', descricao: 'Arsenal marcial, tecnologia, propriedades e veículos.', icone: Building2, cor: '#60a5fa', nivelRotulo: 'especializado' },
+  { id: 3, curto: NOMES_LOCAIS_LOJA[2], titulo: 'Mercado Negro', descricao: 'Contrabando, implantes, venenos e artefatos proibidos.', icone: Skull, cor: '#f87171', nivelRotulo: 'restrito' },
+  { id: 4, curto: NOMES_LOCAIS_LOJA[3], titulo: 'Banco Lunar', descricao: 'Peças lendárias, relíquias e comércio multiversal.', icone: Globe2, cor: '#facc15', nivelRotulo: 'multiversal' },
+] as const;
+
+const CATEGORIA_DESCRICOES: Record<ItemCategoria | 'Todos', string> = {
+  Todos: 'Tudo o que este mercado consegue oferecer no momento.',
+  'Relíquias da Criação': 'Objetos únicos que interferem nas leis da realidade.',
+  Armas: 'Armas simples, marciais, tecnológicas e mágicas.',
+  Armaduras: 'Proteção pro corpo inteiro: Defesa, Resistência e penalidade de peso.',
+  Escudos: 'Equipamento de bloqueio, do broquel simples ao escudo de torre marcial.',
+  Modificações: 'Melhorias instaladas em um item que ainda tenha espaço pela raridade.',
+  Consumíveis: 'Poções, selos, rituais e ferramentas gastas durante o uso.',
+  Bens: 'Propriedades, veículos completos, peças e módulos.',
+  Mercenários: 'Contratos, servos e criaturas com ficha própria de Aliado.',
+  Componentes: 'Materiais usados em alquimia, rituais, forja, cozinha e manutenção.',
+  'Frutos do Éden': 'Poder permanente, raro e vinculado a uma única criatura.',
+  'Implantes Cibernéticos': 'Peças instaladas no corpo e negociadas no mercado clandestino.',
+  'Artefatos Mágicos': 'Objetos sobrenaturais que dividem o limite de uso com itens de perícia.',
+  'Itens Comuns': 'Acessórios, kits e ferramentas de uso cotidiano, sem magia envolvida.',
+  Outros: 'O que não se encaixa em nenhuma outra categoria da Loja.',
+};
+
+const CATEGORIAS_OPCOES = (Object.keys(CATEGORIAS_ICONES) as Array<ItemCategoria | 'Todos'>)
+  .map((value) => ({ value, label: value }));
+const RARIDADES_OPCOES = (Object.keys(RARIDADES_CORES) as Array<ItemRaridade | 'Todas'>)
+  .map((value) => ({ value, label: value }));
 
 export const LojaPage: React.FC = () => {
   const { characters, fetchCharacters, flushCharacterSaves } = useCharacterStore();
   const { campanhaAtiva, usuario } = useAuthStore();
   const config = campanhaAtiva?.configuracoes || {};
   const locaisOcultos = config.locais_ocultos || [3, 4];
+  const raridadesOcultas = Array.isArray(config.raridades_ocultas) ? config.raridades_ocultas.map(String) : [];
   const podeGerenciarRecompensas = campanhaAtiva?.papel === 'mestre' || campanhaAtiva?.papel === 'assistente';
   const localizacaoDisponivel = (id: number) => !locaisOcultos.includes(id) || podeGerenciarRecompensas;
   const localizacaoStorageKey = campanhaAtiva ? `loja_localizacao_${campanhaAtiva.id}` : null;
@@ -129,10 +176,12 @@ export const LojaPage: React.FC = () => {
   });
   const [selectedRaridade, setSelectedRaridade] = useState<ItemRaridade | 'Todas'>('Todas');
   const [subfiltro, setSubfiltro] = useState<string>('Todos');
+  const [proficiencia, setProficiencia] = useState<string>('Todos');
   const [itemsToShow, setItemsToShow] = useState(24);
   const [compradorId, setCompradorId] = useState<string>('');
   
   const [mostrarWishlist, setMostrarWishlist] = useState(false);
+  const [tourAberto, setTourAberto] = useState(false);
 
   const [itemSelecionado, setItemSelecionado] = useState<LojaItem | null>(null);
   const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
@@ -156,9 +205,11 @@ export const LojaPage: React.FC = () => {
   const [claimInProgress, setClaimInProgress] = useState(false);
   const [resolvingClaimId, setResolvingClaimId] = useState<string | null>(null);
   const quantidadeCarrinho = cart.reduce((total, item) => total + item.quantidade, 0);
+  const chaveTour = `jardim:loja-tour:v1:${usuario?.id || 'local'}`;
 
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const checkoutAttemptRef = useRef<CheckoutAttempt | null>(null);
+  const tourTentadoRef = useRef(false);
   const checkoutInFlightRef = useRef(false);
   const claimAttemptRef = useRef<{ signature: string; idempotencia: string } | null>(null);
   const claimInFlightRef = useRef(false);
@@ -248,6 +299,29 @@ export const LojaPage: React.FC = () => {
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
   }, []);
 
+  useEffect(() => {
+    if (!campanhaAtiva?.id || catalogoLoading || catalogoError || tourAberto || tourTentadoRef.current) return undefined;
+    try {
+      if (lojaTourJaVisto(localStorage.getItem(chaveTour))) return undefined;
+    } catch {
+      // Sem armazenamento, o guia ainda abre uma vez nesta montagem.
+    }
+    const timer = window.setTimeout(() => {
+      tourTentadoRef.current = true;
+      setTourAberto(true);
+    }, 750);
+    return () => window.clearTimeout(timer);
+  }, [campanhaAtiva?.id, catalogoError, catalogoLoading, chaveTour, tourAberto]);
+
+  const encerrarTour = () => {
+    try {
+      localStorage.setItem(chaveTour, serializarLojaTourVisto());
+    } catch {
+      // O botão manual continua disponível mesmo se o navegador bloquear o armazenamento.
+    }
+    setTourAberto(false);
+  };
+
   // Seleciona o primeiro personagem por padrão
   useEffect(() => {
     if (!personagensDoUsuario.some((character) => character.id === compradorId)) {
@@ -266,6 +340,11 @@ export const LojaPage: React.FC = () => {
   const compradorAtivo = useMemo(() => 
     personagensDoUsuario.find(c => c.id === compradorId),
   [personagensDoUsuario, compradorId]);
+  const limiteItensEspeciais = useMemo(
+    () => resumirLimiteItensEspeciais(compradorAtivo?.inventarioCentral || [], compradorAtivo?.ficha || {}),
+    [compradorAtivo?.ficha, compradorAtivo?.inventarioCentral],
+  );
+  const localAtual = LOCAIS_LOJA.find((local) => local.id === localizacaoAtual) || LOCAIS_LOJA[1];
 
   const saldos = useMemo(() => {
     let sol = 0, lun = 0, frag = 0, cred = 0;
@@ -306,7 +385,7 @@ export const LojaPage: React.FC = () => {
       // Contratar e comprar o mesmo mercenário também não se agrupam - são
       // vínculos diferentes. Como o alvo fixa quantidade em 1 por via das
       // regras, tratamos sempre como entrada única ou agrupada pelo alvo.
-      const existingIdx = prev.findIndex(i => i.item.id === item.id && i.alvoItemId === alvoItemId && i.modo === modo);
+      const existingIdx = prev.findIndex(i => i.item.id === item.id && i.alvoItemId === alvoItemId && i.modo === modo && i.item.raridadeCompra === item.raridadeCompra);
       if (existingIdx !== -1) {
         const maximo = Math.min(item.quantidadeDisponivel ?? MAX_SHOP_UNITS, MAX_SHOP_UNITS);
         const newCart = [...prev];
@@ -319,6 +398,18 @@ export const LojaPage: React.FC = () => {
       return [...prev, { item: itemParaCarrinho, quantidade: 1, alvoItemId, alvoItemNome, modo }];
     });
     showToast(`${item.nome} adicionado ao lote!`, 'success');
+  };
+
+  const abrirDetalhesItem = (item: LojaItem) => {
+    const raridadeFiltro = lerRaridadeChave(selectedRaridade);
+    const raridadeSelecionavel = raridadeFiltro && RARIDADES_COMPRA_EQUIPAMENTO.some((opcao) => opcao.value === raridadeFiltro)
+      ? raridadeFiltro as RaridadeCompraEquipamento
+      : null;
+    setItemSelecionado(
+      modoLoja === 'Comprar' && raridadeSelecionavel && itemPermiteEscolherRaridade(item)
+        ? aplicarRaridadeCompra(item, raridadeSelecionavel)
+        : item,
+    );
   };
 
   const podeAdicionarItem = (_item?: LojaItem) => Boolean(compradorAtivo);
@@ -446,6 +537,7 @@ export const LojaPage: React.FC = () => {
           quantidade,
           alvo_item_id: alvoItemId,
           ...(operation === 'compra' && modo === 'contratar' ? { modo } : {}),
+          ...(operation === 'compra' && item.raridadeCompra ? { raridade: item.raridadeCompra } : {}),
         })),
       });
       // Veículo completo e propriedade não viram entidade jogável (PV, combustível,
@@ -485,22 +577,30 @@ export const LojaPage: React.FC = () => {
     return compradorAtivo.inventarioCentral
       .filter(hasVerifiableShopOrigin)
       .flatMap(invItem => {
-      const original = catalogo.find(c => c.id === invItem.item_id);
-      const precoOriginal = original
-        ? { moedaPreco: original.moedaPreco, valorOriginal: original.valorOriginal }
+      const catalogoItemId = String(invItem.dados?.catalogo_item_id || invItem.item_id);
+      const original = catalogo.find(c => c.id === catalogoItemId);
+      const raridadeInventario = lerRaridadeChave(invItem.dados?.raridade);
+      const raridadeCompra = raridadeInventario && RARIDADES_COMPRA_EQUIPAMENTO.some((opcao) => opcao.value === raridadeInventario)
+        ? raridadeInventario as RaridadeCompraEquipamento
+        : null;
+      const originalNaRaridade = original && raridadeCompra && itemPermiteEscolherRaridade(original)
+        ? aplicarRaridadeCompra(original, raridadeCompra)
+        : original;
+      const precoOriginal = originalNaRaridade
+        ? { moedaPreco: originalNaRaridade.moedaPreco, valorOriginal: originalNaRaridade.valorOriginal }
         : lerPrecoNativoLoja(invItem.dados?.preco);
       if (!precoOriginal) return [];
       const valorRevenda = calcularValorRevenda(precoOriginal.valorOriginal);
       
       return [{
         id: invItem.item_id,
-        tipoOrigem: original?.tipoOrigem ?? 'inventario',
+        tipoOrigem: originalNaRaridade?.tipoOrigem ?? 'inventario',
         nome: invItem.titulo,
-        categoria: original?.categoria ?? 'Outros',
+        categoria: originalNaRaridade?.categoria ?? 'Outros',
         raridade: rotuloRaridadeChave(invItem.dados?.raridade),
         moedaPreco: precoOriginal.moedaPreco,
         valorOriginal: valorRevenda,
-        nivelLoja: original?.nivelLoja ?? 1,
+        nivelLoja: originalNaRaridade?.nivelLoja ?? 1,
         descricao: invItem.dados?.descricao || '',
         propriedades: invItem.dados?.efeito || '',
         quantidadeDisponivel: invItem.quantidade,
@@ -510,12 +610,20 @@ export const LojaPage: React.FC = () => {
   }, [compradorAtivo, catalogo]);
 
   const filteredItems = useMemo(() => {
-    const source = modoLoja === 'Comprar' ? catalogo : modoLoja === 'Vender' ? itensVenda : [];
+    const source: LojaItem[] = modoLoja === 'Comprar' ? catalogo : modoLoja === 'Vender' ? itensVenda : [];
 
     return source.filter(item => {
       const matchSearch = itemCorrespondeBusca(item, searchTerm);
       const matchCat = selectedCategoria === 'Todos' || item.categoria === selectedCategoria;
-      const matchRar = selectedRaridade === 'Todas' || item.raridade === selectedRaridade;
+      const raridadeFiltro = lerRaridadeChave(selectedRaridade);
+      const raridadeEquipamentoDisponivel = modoLoja === 'Comprar'
+        && itemPermiteEscolherRaridade(item)
+        && raridadeFiltro !== null
+        && RARIDADES_COMPRA_EQUIPAMENTO.some((opcao) => opcao.value === raridadeFiltro)
+        && Boolean(item.precosRaridade?.[raridadeFiltro as RaridadeCompraEquipamento])
+        && nivelLojaParaRaridadeCompra(item, raridadeFiltro as RaridadeCompraEquipamento) <= localizacaoAtual
+        && !raridadesOcultas.some((raridade) => lerRaridadeChave(raridade) === raridadeFiltro);
+      const matchRar = selectedRaridade === 'Todas' || item.raridade === selectedRaridade || raridadeEquipamentoDisponivel;
       // Cumulativo: cada localização mostra o que é dela mais tudo que já
       // apareceria nas anteriores - é o que o texto "Acesso irrestrito a
       // todos os artefatos da criação" do Banco Lunar promete. Com `===`
@@ -527,10 +635,11 @@ export const LojaPage: React.FC = () => {
       if (mostrarWishlist && modoLoja === 'Comprar' && !wishlist.includes(item.id)) return false;
       
       const matchSub = modoLoja !== 'Comprar' || itemCorrespondeSubfiltro(item, selectedCategoria, subfiltro);
+      const matchProficiencia = modoLoja !== 'Comprar' || itemCorrespondeProficiencia(item, selectedCategoria, proficiencia);
 
-      return matchSearch && matchCat && matchRar && matchSub && matchLocal;
+      return matchSearch && matchCat && matchRar && matchSub && matchProficiencia && matchLocal;
     });
-  }, [searchTerm, selectedCategoria, selectedRaridade, subfiltro, catalogo, itensVenda, modoLoja, mostrarWishlist, wishlist, localizacaoAtual]);
+  }, [searchTerm, selectedCategoria, selectedRaridade, subfiltro, proficiencia, catalogo, itensVenda, modoLoja, mostrarWishlist, wishlist, localizacaoAtual, raridadesOcultas]);
 
   const itensEmPromocao = useMemo(
     () => catalogo.filter((item) => item.promocao && item.nivelLoja <= localizacaoAtual).slice(0, 3),
@@ -542,15 +651,19 @@ export const LojaPage: React.FC = () => {
   const subfiltrosDisponiveis = selectedCategoria === 'Todos'
     ? []
     : SUBFILTROS_POR_CATEGORIA[selectedCategoria] ?? [];
+  const proficienciasDisponiveis = selectedCategoria === 'Todos'
+    ? []
+    : PROFICIENCIAS_POR_CATEGORIA[selectedCategoria] ?? [];
 
   useEffect(() => {
     setSubfiltro('Todos');
+    setProficiencia('Todos');
     setItemsToShow(24);
   }, [selectedCategoria]);
 
   useEffect(() => {
     setItemsToShow(24);
-  }, [searchTerm, selectedRaridade, subfiltro, modoLoja, mostrarWishlist, localizacaoAtual]);
+  }, [searchTerm, selectedRaridade, subfiltro, proficiencia, modoLoja, mostrarWishlist, localizacaoAtual]);
 
   useEffect(() => {
     if (!showCheckoutModal && !showGmPanel && !reivindicacaoAlvo && !itemSelecionado && !isCartOpen) return undefined;
@@ -567,150 +680,64 @@ export const LojaPage: React.FC = () => {
   }, [checkoutInProgress, isCartOpen, itemSelecionado, reivindicacaoAlvo, showCheckoutModal, showGmPanel]);
 
   return (
-    <div role="main" className="app-page mx-auto flex max-w-[100rem] flex-col">
-      
-      {/* HEADER DA LOJA & LOCALIZAÇÃO */}
-      <div className={`mb-12 flex flex-col items-start justify-between gap-6 rounded-3xl border-b p-4 pb-6 shadow-2xl backdrop-blur-md transition-colors duration-500 sm:p-6 sm:pb-8 xl:flex-row xl:items-end xl:p-8 ${
-        localizacaoAtual === 1 ? 'bg-amber-900/20 border-amber-800/30' :
-        localizacaoAtual === 2 ? 'bg-blue-900/20 border-blue-500/30 shadow-[0_0_30px_rgba(59,130,246,0.1)]' :
-        localizacaoAtual === 3 ? 'bg-purple-900/20 border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.1)]' :
-        'bg-yellow-500/10 border-yellow-400/40 shadow-[0_0_40px_rgba(250,204,21,0.2)]'
-      }`}>
-        <div className="flex-1 w-full">
-          {/* SELETOR DE LOCALIZAÇÃO */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            {(!locaisOcultos.includes(1) || podeGerenciarRecompensas) && <button onClick={() => trocarLocalizacao(1)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border transition-all ${localizacaoAtual === 1 ? 'bg-amber-800 text-amber-100 border-amber-600 shadow-lg' : 'bg-black/40 text-gray-500 border-white/5 hover:bg-white/10'}`}><MapPin size={14}/> Feira de Vila</button>}
-            {(!locaisOcultos.includes(2) || podeGerenciarRecompensas) && <button onClick={() => trocarLocalizacao(2)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border transition-all ${localizacaoAtual === 2 ? 'bg-blue-600 text-blue-100 border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.5)]' : 'bg-black/40 text-gray-500 border-white/5 hover:bg-white/10'}`}><Building2 size={14}/> Metrópole</button>}
-            {(!locaisOcultos.includes(3) || podeGerenciarRecompensas) && <button onClick={() => trocarLocalizacao(3)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border transition-all ${localizacaoAtual === 3 ? 'bg-purple-900 text-red-300 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]' : 'bg-black/40 text-gray-500 border-white/5 hover:bg-white/10'}`}><Skull size={14}/> Mercado Negro</button>}
-            {(!locaisOcultos.includes(4) || podeGerenciarRecompensas) && <button onClick={() => trocarLocalizacao(4)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border transition-all ${localizacaoAtual === 4 ? 'bg-yellow-600/30 text-yellow-300 border-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.6)]' : 'bg-black/40 text-gray-500 border-white/5 hover:bg-white/10'}`}><Globe2 size={14}/> Banco Lunar</button>}
-          </div>
-
-          <h1 className={`mb-4 flex items-center gap-3 text-[clamp(2rem,8vw,3rem)] font-bold leading-tight tracking-wider transition-colors sm:gap-4 ${
-            localizacaoAtual === 1 ? 'text-amber-500' :
-            localizacaoAtual === 2 ? 'text-blue-400' :
-            localizacaoAtual === 3 ? 'text-red-500' :
-            'text-yellow-400'
-          }`} style={{fontFamily: 'Cinzel, serif'}}>
-            {localizacaoAtual === 4 && <Shield size={40} className="text-gray-300 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"/>}
-            {localizacaoAtual !== 4 && (modoLoja === 'Comprar' ? <ShoppingBag size={40} /> : <ArrowRightLeft size={40} />)}
-            {localizacaoAtual === 1 ? 'Feira Local' :
-             localizacaoAtual === 2 ? 'Mercado da Metrópole' :
-             localizacaoAtual === 3 ? 'Mercado Negro do Umbral' :
-             'Banco Lunar Central'}
-          </h1>
-          
-          <p className="text-gray-300 text-lg max-w-2xl font-medium">
-            {localizacaoAtual === 1 ? 'Uma feira pacata vendendo suprimentos básicos, alimentos e ferramentas.' :
-             localizacaoAtual === 2 ? 'O centro de comércio tecnológico. Armas avançadas, blindagens e veículos disponíveis.' :
-             localizacaoAtual === 3 ? 'Onde a lei não alcança. Implantes ilegais, venenos e negociações sombrias.' :
-             'Conexão Multiversal Ativa • Cofre Sincronizado com o Discord. Acesso irrestrito a todos os artefatos da criação.'}
-          </p>
-        </div>
-
-        <div className="flex w-full flex-col items-stretch gap-4 sm:items-end xl:w-auto">
-          {/* BOTOES CARRINHO E MODO */}
-          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-end sm:gap-4">
-            <button
-              type="button"
-              onClick={() => setIsCartOpen(true)}
-              aria-label={`Abrir carrinho com ${quantidadeCarrinho} ${quantidadeCarrinho === 1 ? 'item' : 'itens'}`}
-              className="relative px-4 py-2 bg-black/40 border border-white/10 rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center text-gray-300"
-            >
-              <ShoppingBag size={20} />
-              {cart.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg">
-                  {quantidadeCarrinho}
-                </span>
-              )}
-            </button>
-
-            <div className="grid w-full grid-cols-3 rounded-2xl border border-white/10 bg-[#0b0a12]/80 p-1 shadow-lg backdrop-blur-md sm:w-auto">
-              <button 
-                onClick={() => trocarModoLoja('Comprar')}
-                className={`min-w-0 px-2 py-2 rounded-xl font-bold tracking-wide text-xs uppercase transition-all sm:px-4 sm:text-sm sm:tracking-widest ${
-                  modoLoja === 'Comprar' ? 'bg-[#c7a44c] text-black shadow-lg' : 'text-gray-500 hover:text-white'
-                }`}
-              >
-                Comprar
-              </button>
-              <button 
-                onClick={() => trocarModoLoja('Vender')}
-                className={`min-w-0 px-2 py-2 rounded-xl font-bold tracking-wide text-xs uppercase transition-all sm:px-4 sm:text-sm sm:tracking-widest ${
-                  modoLoja === 'Vender' ? 'bg-red-600 text-white shadow-lg' : 'text-gray-500 hover:text-white'
-                }`}
-              >
-                Vender
-              </button>
-              <button 
-                onClick={() => trocarModoLoja('Recompensas')}
-                className={`min-w-0 px-2 py-2 rounded-xl font-bold tracking-wide text-xs uppercase transition-all sm:px-4 sm:text-sm sm:tracking-widest ${
-                  modoLoja === 'Recompensas' ? 'bg-orange-700 text-white shadow-lg' : 'text-gray-500 hover:text-white'
-                }`}
-              >
-                Caçadores
+    <div role="main" className="loja-shell app-page mx-auto flex max-w-[100rem] flex-col" style={{ '--loja-accent': localAtual.cor } as React.CSSProperties}>
+      <header className="loja-hero mb-8 overflow-hidden rounded-[2rem] border border-white/10">
+        <div className="loja-hero__line" aria-hidden="true" />
+        <div className="relative p-4 sm:p-6 lg:p-8">
+          <div className="mb-7 flex flex-col gap-4 border-b border-white/[0.08] pb-6 xl:flex-row xl:items-start xl:justify-between">
+            <div className="max-w-3xl">
+              <span className="text-[10px] font-black uppercase tracking-[0.32em] text-[var(--loja-accent)]">Comércio entre as Árvores</span>
+              <h1 className="mt-3 font-serif text-[clamp(2rem,6vw,3.6rem)] font-bold leading-[1.05] text-[#f2ead7]">{localAtual.titulo}</h1>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-gray-300/80 sm:text-base">{localAtual.descricao} O que aparece depende do local aberto pela campanha e da publicação atual do catálogo.</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <button type="button" onClick={() => setTourAberto(true)} className="loja-action-button"><Compass size={16} /> Guia da Loja</button>
+              <button type="button" data-tour="loja-carrinho" onClick={() => setIsCartOpen(true)} aria-label={`Abrir carrinho com ${quantidadeCarrinho} ${quantidadeCarrinho === 1 ? 'item' : 'itens'}`} className="loja-action-button relative">
+                <ShoppingBag size={17} /> Lote
+                {quantidadeCarrinho > 0 ? <span className="rounded-full bg-[var(--loja-accent)] px-1.5 py-0.5 text-[10px] font-black text-black">{quantidadeCarrinho}</span> : null}
               </button>
             </div>
           </div>
 
-          {/* SELETOR DE COMPRADOR E CARTEIRA (GLASSMORPHISM) */}
-          {personagensDoUsuario.length > 0 && (
-            <div className="flex w-full flex-col items-stretch gap-2 rounded-3xl border border-white/10 bg-[#0b0a12]/80 p-4 shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-md sm:w-auto sm:items-end">
-              
-              <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-                <label htmlFor="shop-buyer" className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Comprador</label>
-                <select
-                  id="shop-buyer"
-                  value={compradorId}
-                  onChange={(e) => trocarComprador(e.target.value)}
-                  className="w-full cursor-pointer rounded-xl border border-white/10 bg-black/60 p-2 text-sm font-bold text-white outline-none transition-colors focus:border-[#c7a44c] sm:w-48"
-                >
-                  {personagensDoUsuario.map(c => (
-                    <option key={c.id} value={c.id}>{c.nome}</option>
-                  ))}
-                </select>
-              </div>
+          <nav className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4" aria-label="Mercados disponíveis" data-tour="loja-locais">
+            {LOCAIS_LOJA.filter((local) => !locaisOcultos.includes(local.id) || podeGerenciarRecompensas).map((local) => {
+              const Icon = local.icone;
+              const ativo = local.id === localizacaoAtual;
+              return (
+                <button key={local.id} type="button" onClick={() => trocarLocalizacao(local.id)} aria-current={ativo ? 'page' : undefined} className={`loja-location ${ativo ? 'is-active' : ''}`} style={{ '--location-color': local.cor } as React.CSSProperties}>
+                  <span className="loja-location__icon"><Icon size={17} /></span>
+                  <span className="min-w-0 text-left"><strong className="block text-sm text-gray-100">{local.curto}</strong><span className="mt-0.5 block truncate text-[11px] text-gray-500">Patamar {local.id} · {local.nivelRotulo}</span></span>
+                </button>
+              );
+            })}
+          </nav>
 
-              <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-1"></div>
-
-              <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
-                <div className="flex flex-col items-center p-2 rounded-xl border bg-black/40 border-white/5">
-                  <span className="text-[9px] uppercase tracking-wider text-gray-400">Solares</span>
-                  <span className="text-sm font-bold text-yellow-400">{saldos.sol} SOL</span>
-                </div>
-                <div className="flex flex-col items-center p-2 rounded-xl border bg-black/40 border-white/5">
-                  <span className="text-[9px] uppercase tracking-wider text-gray-400">Lunaris</span>
-                  <span className="text-sm font-bold text-gray-300">{saldos.lun} LUN</span>
-                </div>
-                <div className="flex flex-col items-center p-2 rounded-xl border bg-black/40 border-white/5">
-                  <span className="text-[9px] uppercase tracking-wider text-gray-400">Estrelas</span>
-                  <span className="text-sm font-bold text-fuchsia-400">{saldos.frag} FRG</span>
-                </div>
-                <div className="flex flex-col items-center p-2 rounded-xl border bg-black/40 border-white/5">
-                  <span className="text-[9px] uppercase tracking-wider text-gray-400">Sombrios</span>
-                  <span className="text-sm font-bold text-indigo-400">{saldos.cred} CRD</span>
-                </div>
-              </div>
-
+          <div className="mt-5 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(25rem,auto)]">
+            <div className="grid grid-cols-3 rounded-2xl border border-white/10 bg-black/25 p-1.5" data-tour="loja-modos">
+              {(['Comprar', 'Vender', 'Recompensas'] as const).map((modo) => (
+                <button key={modo} type="button" onClick={() => trocarModoLoja(modo)} className={`rounded-xl px-2 py-3 text-[10px] font-black uppercase tracking-[0.12em] transition sm:text-xs ${modoLoja === modo ? 'bg-[var(--loja-accent)] text-black shadow-lg' : 'text-gray-500 hover:bg-white/5 hover:text-gray-200'}`}>
+                  {modo === 'Recompensas' ? 'Caçadores' : modo}
+                </button>
+              ))}
             </div>
-          )}
 
-          {/* GM BUTTON */}
-          {podeGerenciarRecompensas && (
-            <button
-              onClick={() => setShowGmPanel(true)}
-              className="mt-2 w-full py-2 rounded-xl text-xs font-bold tracking-widest uppercase bg-purple-900/40 border border-purple-500/50 text-purple-300 hover:bg-purple-800/60 hover:text-white transition-all shadow-[0_0_15px_rgba(168,85,247,0.2)] relative"
-            >
-              Recompensas da Campanha
-              {notificacoesGM.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full animate-bounce">
-                  {notificacoesGM.length}
-                </span>
-              )}
-            </button>
-          )}
+            {personagensDoUsuario.length > 0 ? (
+              <div className="rounded-2xl border border-white/10 bg-black/25 p-3" data-tour="loja-comprador">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <label className="min-w-0 flex-1"><span className="mb-1.5 block text-[9px] font-black uppercase tracking-[0.18em] text-gray-500">Personagem da operação</span><Select value={compradorId} onChange={trocarComprador} options={personagensDoUsuario.map((personagem) => ({ value: personagem.id, label: personagem.nome }))} className="w-full sm:min-w-48" /></label>
+                  <div className="grid grid-cols-4 gap-1.5">
+                    {[['SOL', saldos.sol, 'text-yellow-400'], ['LUN', saldos.lun, 'text-gray-200'], ['FRG', saldos.frag, 'text-fuchsia-400'], ['CRD', saldos.cred, 'text-indigo-300']].map(([rotulo, saldo, cor]) => (
+                      <div key={String(rotulo)} className="min-w-14 rounded-xl border border-white/[0.07] bg-black/25 px-2 py-2 text-center"><span className="block text-[8px] font-bold text-gray-600">{rotulo}</span><strong className={`mt-0.5 block text-xs ${cor}`}>{Number(saldo).toLocaleString('pt-BR')}</strong></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
 
+          {podeGerenciarRecompensas ? <button type="button" onClick={() => setShowGmPanel(true)} className="relative mt-3 text-xs font-bold text-purple-300 hover:text-purple-200">Recompensas pendentes da campanha{notificacoesGM.length > 0 ? ` (${notificacoesGM.length})` : ''}</button> : null}
         </div>
-      </div>
+      </header>
 
       {modoLoja === 'Comprar' && catalogoLoading && (
         <div role="status" className="mb-8 rounded-2xl border border-white/10 bg-black/30 px-5 py-4 text-gray-300">
@@ -722,6 +749,39 @@ export const LojaPage: React.FC = () => {
           {catalogoError}
         </div>
       )}
+
+      <section className="mb-8 grid gap-3 lg:grid-cols-3" aria-labelledby="loja-regras-titulo" data-tour="loja-regras">
+        <h2 id="loja-regras-titulo" className="sr-only">Regras rápidas da Loja</h2>
+        <article className="loja-rule-card">
+          <div className="loja-rule-card__icon"><CircleGauge size={18} /></div>
+          <div className="min-w-0 flex-1">
+            <span className="loja-rule-card__eyebrow">Uso de itens especiais</span>
+            <strong className="loja-rule-card__title">{limiteItensEspeciais.usados} de {limiteItensEspeciais.limite} em uso</strong>
+            <p>Itens de perícia e artefatos dividem o mesmo limite: nível total ÷ 4, arredondado para baixo, mínimo 1. Comprar não ocupa vaga; equipar ocupa.</p>
+            <div className="mt-2 flex flex-wrap gap-2 text-[10px] font-bold text-gray-500"><span>{limiteItensEspeciais.equipados.filter((item) => grupoLimiteItemEspecial(item) === 'item-pericia').length} de perícia</span><span>·</span><span>{limiteItensEspeciais.equipados.filter((item) => grupoLimiteItemEspecial(item) === 'artefato').length} artefato(s)</span><span>·</span><span>Nível {limiteItensEspeciais.nivelTotal}</span></div>
+            <Link to="/regras?topico=raridades-modificacoes" className="loja-rule-link">Ler raridades e limites <ChevronRight size={13} /></Link>
+          </div>
+        </article>
+        <article className="loja-rule-card">
+          <div className="loja-rule-card__icon"><Wrench size={18} /></div>
+          <div className="min-w-0 flex-1">
+            <span className="loja-rule-card__eyebrow">Capacidade de modificação</span>
+            <strong className="loja-rule-card__title">Escolha a raridade do equipamento</strong>
+            <p>Armas, armaduras e escudos partem de Comum. No detalhe você pode encomendar de Incomum a Lendário: o preço e o balcão exigido sobem junto com os espaços.</p>
+            <div className="mt-2 flex flex-wrap gap-1.5">{RARIDADES_EQUIPAMENTO.slice(0, 5).map((raridade) => <span key={raridade.id} className="rounded-md border border-white/[0.07] bg-black/20 px-2 py-1 text-[9px] font-bold text-gray-500">{raridade.titulo} {raridade.modificacoesMaximas}</span>)}</div>
+            <Link to="/regras?topico=modificacoes-equipamentos" className="loja-rule-link">Abrir regra de modificações <ChevronRight size={13} /></Link>
+          </div>
+        </article>
+        <article className="loja-rule-card">
+          <div className="loja-rule-card__icon"><Store size={18} /></div>
+          <div className="min-w-0 flex-1">
+            <span className="loja-rule-card__eyebrow">Disponibilidade</span>
+            <strong className="loja-rule-card__title">Patamar {localizacaoAtual}: {localAtual.curto}</strong>
+            <p>Os mercados são cumulativos. Este balcão mostra itens de patamar {localizacaoAtual} e todos os anteriores, respeitando ocultações e publicações da campanha.</p>
+            <Link to="/regras?topico=loja" className="loja-rule-link">Entender os quatro mercados <ChevronRight size={13} /></Link>
+          </div>
+        </article>
+      </section>
 
       {modoLoja === 'Comprar' && itensEmPromocao.length > 0 ? (
         <section className="mb-12" aria-labelledby="ofertas-destaque-titulo">
@@ -743,7 +803,7 @@ export const LojaPage: React.FC = () => {
               <ItemCard
                 key={`promocao:${item.id}`}
                 item={item}
-                onView={setItemSelecionado}
+                onView={abrirDetalhesItem}
                 onBuy={handleAddToCart}
                 podeComprar={podeAdicionarItem(item)}
                 isWishlisted={wishlist.includes(item.id)}
@@ -754,147 +814,36 @@ export const LojaPage: React.FC = () => {
         </section>
       ) : null}
 
-      {/* FILTROS DE INTERFACE (PILLS) */}
-      <div className="mb-12 flex flex-col gap-6 rounded-3xl border border-white/5 bg-[#0b0a12]/50 p-4 shadow-xl backdrop-blur-md sm:p-6">
-        
-        {/* BUSCA, ORDENAÇÃO E TOGGLES RÁPIDOS */}
-        <div className="flex flex-col lg:flex-row gap-4 w-full">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
-            <input 
-              type="search" 
-              aria-label="Buscar itens da loja"
-              placeholder="Buscar por nome ou descrição..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-black/40 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#c7a44c]/50 transition-all text-sm"
-            />
-          </div>
-          
-          <div className="flex gap-4">
-            {modoLoja === 'Comprar' && (
-              <>
-                <button
-                  onClick={() => setMostrarWishlist(!mostrarWishlist)}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-2xl border text-sm font-bold tracking-widest uppercase transition-all ${
-                    mostrarWishlist ? 'bg-red-500/20 text-red-400 border-red-500/50' : 'bg-black/40 text-gray-400 border-white/10 hover:text-white'
-                  }`}
-                >
-                  <Heart size={16} fill={mostrarWishlist ? 'currentColor' : 'none'} /> Desejos
-                </button>
-              </>
-            )}
-
+      <section className="mb-8 rounded-3xl border border-white/[0.08] bg-[#0b0a12]/75 p-4 shadow-xl backdrop-blur-md sm:p-5" aria-label="Filtros do catálogo" data-tour="loja-filtros">
+        <div className="grid gap-3 xl:grid-cols-[minmax(18rem,1.6fr)_minmax(12rem,.8fr)_minmax(12rem,.8fr)_minmax(12rem,.8fr)_minmax(12rem,.8fr)_auto] xl:items-end">
+          <label className="relative block"><span className="mb-1.5 block text-[9px] font-black uppercase tracking-[0.18em] text-gray-500">Buscar no balcão</span><Search className="absolute bottom-3 left-3 text-gray-600" size={17} /><input type="search" aria-label="Buscar itens da loja" placeholder="Nome, efeito, material ou uso..." value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} className="h-11 w-full rounded-xl border border-white/10 bg-black/35 py-2 pl-10 pr-3 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-[var(--loja-accent)]" /></label>
+          <label className="min-w-0"><span className="mb-1.5 block text-[9px] font-black uppercase tracking-[0.18em] text-gray-500">Categoria</span><Select value={selectedCategoria} onChange={(valor) => setSelectedCategoria(valor as ItemCategoria | 'Todos')} options={CATEGORIAS_OPCOES} className="w-full" /></label>
+          <label className="min-w-0"><span className="mb-1.5 block text-[9px] font-black uppercase tracking-[0.18em] text-gray-500">Tipo</span><Select value={subfiltro} onChange={setSubfiltro} disabled={modoLoja !== 'Comprar' || subfiltrosDisponiveis.length === 0} options={(subfiltrosDisponiveis.length ? subfiltrosDisponiveis : ['Todos']).map((value) => ({ value, label: value }))} className="w-full" /></label>
+          <label className="min-w-0"><span className="mb-1.5 block text-[9px] font-black uppercase tracking-[0.18em] text-gray-500">Proficiência</span><Select value={proficiencia} onChange={setProficiencia} disabled={modoLoja !== 'Comprar' || proficienciasDisponiveis.length === 0} options={(proficienciasDisponiveis.length ? proficienciasDisponiveis : ['Todos']).map((value) => ({ value, label: value }))} className="w-full" /></label>
+          <label className="min-w-0"><span className="mb-1.5 block text-[9px] font-black uppercase tracking-[0.18em] text-gray-500">Raridade</span><Select value={selectedRaridade} onChange={(valor) => setSelectedRaridade(valor as ItemRaridade | 'Todas')} options={RARIDADES_OPCOES} className="w-full" /></label>
+          <div className="flex gap-2">
+            {modoLoja === 'Comprar' ? <button type="button" onClick={() => setMostrarWishlist((atual) => !atual)} aria-pressed={mostrarWishlist} aria-label="Desejos" className={`flex h-11 items-center gap-2 rounded-xl border px-3 text-xs font-bold ${mostrarWishlist ? 'border-rose-400/40 bg-rose-500/10 text-rose-300' : 'border-white/10 bg-black/25 text-gray-500 hover:text-gray-200'}`}><Heart size={15} fill={mostrarWishlist ? 'currentColor' : 'none'} /><span className="hidden 2xl:inline">Desejos</span></button> : null}
+            <button type="button" onClick={() => { setSearchTerm(''); setSelectedCategoria('Todos'); setSelectedRaridade('Todas'); setSubfiltro('Todos'); setProficiencia('Todos'); setMostrarWishlist(false); }} aria-label="Limpar filtros" className="flex h-11 items-center gap-2 rounded-xl border border-white/10 bg-black/25 px-3 text-xs font-bold text-gray-500 hover:text-gray-200"><RotateCcw size={15} /><span className="hidden 2xl:inline">Limpar</span></button>
           </div>
         </div>
-        
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-          
-          {/* CATEGORIAS PILLS */}
-          <div className="min-w-0">
-            <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-3 pl-1">Categorias</div>
-            <div className="flex flex-wrap gap-2">
-              {(Object.keys(CATEGORIAS_ICONES) as Array<ItemCategoria | 'Todos'>).map(cat => {
-                const Icon = CATEGORIAS_ICONES[cat];
-                const isSelected = selectedCategoria === cat;
-                return (
-                  <motion.button
-                    key={cat}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setSelectedCategoria(cat)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition-all ${
-                      isSelected 
-                        ? (cat === 'Relíquias da Criação' ? 'bg-gradient-to-r from-cyan-500/15 via-white/15 to-fuchsia-500/15 border-white/70 text-white shadow-[0_0_20px_rgba(255,255,255,0.3)]' : 'bg-[#c7a44c]/20 border-[#c7a44c]/50 text-[#c7a44c] shadow-[0_0_15px_rgba(199,164,76,0.2)]')
-                        : (cat === 'Relíquias da Criação' ? 'bg-black/40 border-white/30 text-white/70 hover:border-white/70 hover:text-white' : 'bg-black/40 border-white/5 text-gray-400 hover:border-white/20 hover:text-white')
-                    }`}
-                  >
-                    <Icon size={16} />
-                    {cat}
-                  </motion.button>
-                );
-              })}
-            </div>
-            
-            {/* SUBFILTROS DINÂMICOS */}
-            <AnimatePresence mode="wait">
-              {subfiltrosDisponiveis.length > 0 && modoLoja === 'Comprar' && (
-                <motion.div 
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="mt-4 flex flex-wrap gap-2 border-t border-white/5 pt-4"
-                >
-                  {subfiltrosDisponiveis.map(sub => (
-                    <button
-                      key={sub}
-                      onClick={() => setSubfiltro(sub)}
-                      className={`text-xs px-3 py-1.5 rounded-lg border transition-all font-bold tracking-wider ${
-                        subfiltro === sub
-                          ? 'bg-white/10 border-white/30 text-white'
-                          : 'bg-transparent border-transparent text-gray-500 hover:text-gray-300 hover:bg-white/5'
-                      }`}
-                    >
-                      {sub}
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* RARIDADES PILLS */}
-          <div className="min-w-0">
-            <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-3 pl-1">Raridade</div>
-            <div className="flex flex-wrap gap-2">
-              {(Object.keys(RARIDADES_CORES) as Array<ItemRaridade | 'Todas'>).map(rar => {
-                const colorClasses = RARIDADES_CORES[rar];
-                const isSelected = selectedRaridade === rar;
-                let activeClass = '';
-                if (isSelected) {
-                  switch (rar) {
-                    case 'Comum': activeClass = 'bg-gray-500/20 border-gray-500 text-white shadow-[0_0_15px_rgba(107,114,128,0.3)]'; break;
-                    case 'Incomum': activeClass = 'bg-emerald-500/20 border-emerald-500 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.3)]'; break;
-                    case 'Raro': activeClass = 'bg-blue-500/20 border-blue-500 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.3)]'; break;
-                    case 'Épico': activeClass = 'bg-purple-500/20 border-purple-500 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.3)]'; break;
-                    case 'Lendário': activeClass = 'bg-amber-500/20 border-amber-500 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.3)]'; break;
-                    case 'Mítico': activeClass = 'bg-red-500/20 border-red-500 text-red-300 shadow-[0_0_15px_rgba(239,68,68,0.3)]'; break;
-                    case 'Relíquia da Criação': activeClass = 'bg-gradient-to-r from-cyan-500/15 via-white/15 to-fuchsia-500/15 border-white/70 text-white shadow-[0_0_22px_rgba(255,255,255,0.35)]'; break;
-                    case 'Desconhecida': activeClass = 'bg-rose-500/20 border-rose-500 text-rose-200 shadow-[0_0_15px_rgba(244,63,94,0.25)]'; break;
-                    default: activeClass = 'bg-white/10 border-white/30 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]'; break;
-                  }
-                }
-
-                return (
-                  <motion.button
-                    key={rar}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setSelectedRaridade(rar)}
-                    className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all ${
-                      isSelected 
-                        ? activeClass
-                        : `bg-black/40 border-white/5 ${colorClasses}`
-                    }`}
-                  >
-                    {rar}
-                  </motion.button>
-                );
-              })}
-            </div>
-          </div>
-          
+        <div className="mt-4 flex flex-col gap-2 border-t border-white/[0.06] pt-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-gray-400"><strong className="text-gray-200">{selectedCategoria}</strong> · {CATEGORIA_DESCRICOES[selectedCategoria]}</p>
+          <span className="shrink-0 text-[10px] font-black uppercase tracking-[0.15em] text-[var(--loja-accent)]">{filteredItems.length} resultado(s)</span>
         </div>
-      </div>
+      </section>
 
-      {/* GRID DE ITENS */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,22rem),1fr))] gap-5 sm:gap-8">
+      <section data-tour="loja-catalogo" aria-labelledby="loja-catalogo-titulo">
+        <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div><span className="text-[9px] font-black uppercase tracking-[0.22em] text-[var(--loja-accent)]">Prateleira atual</span><h2 id="loja-catalogo-titulo" className="mt-1 font-serif text-2xl font-bold text-[#f2ead7]">{modoLoja === 'Vender' ? 'Itens disponíveis para venda' : modoLoja === 'Recompensas' ? 'Mural de contratos' : selectedCategoria}</h2></div>
+          {modoLoja !== 'Recompensas' ? <p className="max-w-xl text-sm leading-6 text-gray-500">Abra os detalhes para ler a regra completa do item antes de colocar no lote.</p> : null}
+        </div>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,19rem),1fr))] gap-4 sm:gap-5">
         <AnimatePresence>
           {visibleItems.map((item) => (
             <ItemCard 
               key={item.id} 
               item={item} 
-              onView={(it) => setItemSelecionado(it)}
+              onView={abrirDetalhesItem}
               onBuy={handleAddToCart} 
               podeComprar={podeAdicionarItem(item)}
               isWishlisted={modoLoja === 'Comprar' ? wishlist.includes(item.id) : undefined}
@@ -932,11 +881,12 @@ export const LojaPage: React.FC = () => {
             </button>
           </div>
         )}
-      </div>
+        </div>
+      </section>
 
       {/* VIEW DE RECOMPENSAS */}
       {modoLoja === 'Recompensas' && (
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] gap-5 sm:gap-8">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] gap-5 sm:gap-8" data-tour="loja-recompensas">
           <AnimatePresence>
             {recompensas.map(recompensa => (
               <motion.div
@@ -1203,9 +1153,22 @@ export const LojaPage: React.FC = () => {
             podeComprar={podeAdicionarItem(itemSelecionado)}
             modoLoja={modoLoja as 'Comprar' | 'Vender'}
             compradorAtivo={compradorAtivo}
+            localizacaoAtual={localizacaoAtual}
+            raridadesOcultas={raridadesOcultas}
           />
         )}
       </AnimatePresence>
+
+      {tourAberto ? (
+        <GuidedTour
+          passos={LOJA_TOUR_STEPS}
+          accent={localAtual.cor}
+          nomeGuia="Guia da Loja"
+          rootSelector=".loja-shell"
+          onClose={encerrarTour}
+          onFinish={encerrarTour}
+        />
+      ) : null}
 
     </div>
   );

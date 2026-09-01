@@ -61,6 +61,7 @@ export interface LojaCommandItem {
   item_id: string;
   quantidade: number;
   alvo_item_id?: string;
+  raridade?: 'comum' | 'incomum' | 'raro' | 'epico' | 'lendario';
   /** Só vale para Mercenários: 'contratar' cobra o preço reduzido e gera
    * mensalidade; ausente/'comprar' é o preço cheio (servo/escravo permanente). */
   modo?: 'comprar' | 'contratar';
@@ -113,7 +114,11 @@ export interface CheckoutAttempt {
 export function hasVerifiableShopOrigin(item: { item_id: string; dados?: unknown }): boolean {
   if (!item.dados || typeof item.dados !== 'object' || Array.isArray(item.dados)) return false;
   const data = item.dados as Record<string, unknown>;
-  return data.origem === 'loja' && data.catalogo_item_id === item.item_id;
+  const catalogItemId = typeof data.catalogo_item_id === 'string' ? data.catalogo_item_id.trim() : '';
+  const inventoryItemId = typeof data.loja_item_id === 'string' ? data.loja_item_id.trim() : '';
+  return data.origem === 'loja'
+    && Boolean(catalogItemId)
+    && (inventoryItemId ? inventoryItemId === item.item_id : catalogItemId === item.item_id);
 }
 
 type IdFactory = () => string;
@@ -132,7 +137,7 @@ export function createIdempotencyKey(scope: string): string {
 }
 
 function normalizeItems(items: readonly LojaCommandItem[]): LojaCommandItem[] {
-  const quantities = new Map<string, { quantidade: number; alvo_item_id?: string; modo?: 'comprar' | 'contratar' }>();
+  const quantities = new Map<string, { item_id: string; quantidade: number; alvo_item_id?: string; modo?: 'comprar' | 'contratar'; raridade?: LojaCommandItem['raridade'] }>();
   for (const item of items) {
     const itemId = item.item_id.trim();
     if (!itemId) throw new TypeError('O item da operação não possui identificador.');
@@ -141,20 +146,20 @@ function normalizeItems(items: readonly LojaCommandItem[]): LojaCommandItem[] {
     }
     // Contratar e comprar o mesmo item viram linhas distintas no lote, senão
     // uma agruparia silenciosamente na quantidade da outra.
-    const key = [itemId, item.alvo_item_id, item.modo === 'contratar' ? 'contratar' : undefined]
+    const key = [itemId, item.alvo_item_id, item.modo === 'contratar' ? 'contratar' : undefined, item.raridade]
       .filter(Boolean)
       .join('::');
-    const current = quantities.get(key) ?? { quantidade: 0, alvo_item_id: item.alvo_item_id, modo: item.modo };
+    const current = quantities.get(key) ?? { item_id: itemId, quantidade: 0, alvo_item_id: item.alvo_item_id, modo: item.modo, raridade: item.raridade };
     quantities.set(key, { ...current, quantidade: current.quantidade + item.quantidade });
   }
   if (!quantities.size) throw new TypeError('A operação precisa conter ao menos um item.');
-  const normalized = Array.from(quantities, ([key, data]) => {
-    const [item_id] = key.split('::');
+  const normalized = Array.from(quantities, ([_key, data]) => {
     return {
-      item_id,
+      item_id: data.item_id,
       quantidade: data.quantidade,
       alvo_item_id: data.alvo_item_id,
       ...(data.modo === 'contratar' ? { modo: data.modo } : {}),
+      ...(data.raridade ? { raridade: data.raridade } : {}),
     };
   }).sort((left, right) => left.item_id.localeCompare(right.item_id));
   if (normalized.length > 50 || normalized.reduce((total, item) => total + item.quantidade, 0) > MAX_SHOP_UNITS) {

@@ -60,6 +60,7 @@ import {
   type IPersonalizacaoAutomatica,
 } from '../../../services/personalizacaoAutomaticaService';
 import { PersonalizacaoAutomaticaModal } from '../components/PersonalizacaoAutomaticaModal';
+import { Select } from '../../../components/ui/Select';
 
 interface IMagiaAntiga {
   id?: string;
@@ -122,8 +123,14 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
   const inventarioCentral = character.inventarioCentral || [];
   const personalizacoes = obterPersonalizacoesAutomaticas(ficha);
   const status = obterStatusFicha(ficha);
-  const perfil = useMemo(() => obterPerfilMagico(ficha, inventarioCentral), [ficha, inventarioCentral]);
-  const resumoEquipamento = useMemo(() => resumirEquipamentos(inventarioCentral, ficha), [ficha, inventarioCentral]);
+  const perfil = useMemo(
+    () => obterPerfilMagico(ficha, inventarioCentral, character.aliadosCompartilhados || []),
+    [character.aliadosCompartilhados, ficha, inventarioCentral],
+  );
+  const resumoEquipamento = useMemo(
+    () => resumirEquipamentos(inventarioCentral, ficha, character.aliadosCompartilhados || []),
+    [character.aliadosCompartilhados, ficha, inventarioCentral],
+  );
   const magiasConhecidas = useMemo(() => magiasDaFicha(ficha, inventarioCentral), [ficha, inventarioCentral]);
   const rituaisConhecidos = useMemo(() => rituaisDaFicha(ficha, inventarioCentral), [ficha, inventarioCentral]);
   const selosConhecidos = useMemo(() => selosDaFicha(ficha, inventarioCentral), [ficha, inventarioCentral]);
@@ -777,7 +784,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
 
   return (
     <div className="space-y-6">
-      <header className="rounded-2xl border border-white/5 bg-[#0f0e15] p-6">
+      <header className="rounded-2xl border border-white/5 bg-[#0f0e15] p-6" data-tour="magias-resumo">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <h2 className="flex items-center gap-2 text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>
@@ -802,7 +809,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
           </button>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-2" data-tour="magias-tipos">
           {(['magia', 'ritual', 'selo', 'encantamento'] as TipoManifestacao[]).map((tipo) => (
             <button
               key={tipo}
@@ -819,7 +826,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
 
         {tipoAtivo === 'magia' && (
         <>
-        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6" data-tour="magias-limites">
           <div className="rounded-xl border border-white/5 bg-black/20 p-3">
             <span className="text-[10px] font-bold uppercase text-gray-500">{acessoSomenteInterceptacao ? 'Acesso' : 'Fonte'}</span>
             <strong className="mt-1 block text-sm text-white">{perfil.fontes.join(', ') || (perfil.possuiInterceptacao ? 'Interceptação A.X.I.S.' : 'Nenhuma')}</strong>
@@ -867,7 +874,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
         )}
 
         {tipoAtivo !== 'magia' && (
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-tour="magias-limites">
             <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Fluxo nativo</span><strong className="mt-1 block text-sm" style={{ color: temaFluxoNativo?.texto || '#d1d5db' }}>{perfil.fluxoNativoTitulo || 'Escolha uma Árvore'}</strong></div>
             <div className="rounded-xl border border-white/5 bg-black/20 p-3"><span className="text-[10px] font-bold uppercase text-gray-500">Mana</span><strong className="mt-1 block text-sm text-white">{manaAtual}/{manaMaxima}</strong></div>
             <div className="rounded-xl border border-white/5 bg-black/20 p-3">
@@ -883,7 +890,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       </header>
 
       {tipoAtivo === 'magia' && perfil.limiteCatalisadores > 0 && (
-        <section className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-5">
+        <section className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-5" data-tour="magias-catalisadores">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h3 className="font-bold text-white">
@@ -903,17 +910,21 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
           {perfil.limiteCatalisadores === 1 ? (
             <label className="mt-4 block sm:max-w-md">
               <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Catalisador ativo</span>
-              <select
+              <Select
+                ariaLabel="Catalisador ativo"
                 value={perfil.catalisadorAtivoId || ''}
-                onChange={(event) => {
-                  const id = event.target.value as FluxoMagicoId;
+                onChange={(valor) => {
+                  const id = valor as FluxoMagicoId;
                   atualizarCatalisadores(id ? [id] : [], id || null);
                 }}
+                placeholder="Escolha um Fluxo"
+                options={catalisadoresDisponiveis.map((fluxo) => ({
+                  value: fluxo.id,
+                  label: `${fluxo.titulo} · ${fluxo.arvore}`,
+                  labelStyle: { color: temaDoFluxo(fluxo.id).texto },
+                }))}
                 className="w-full rounded-xl border border-cyan-500/20 bg-[#0f0e15] px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-cyan-400/50"
-              >
-                <option value="">Escolha um Fluxo</option>
-                {catalisadoresDisponiveis.map((fluxo) => <option key={fluxo.id} value={fluxo.id}>{fluxo.titulo} · {fluxo.arvore}</option>)}
-              </select>
+              />
             </label>
           ) : (
             <>
@@ -956,16 +967,19 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             <div className="mt-4 grid gap-3 rounded-xl border border-white/5 bg-black/20 p-4 sm:grid-cols-[1fr_auto] sm:items-end">
               <label className="block">
                 <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Círculo do efeito interceptado</span>
-                <select
-                  value={Math.min(Math.max(1, circuloInterceptado), Math.max(1, perfil.circuloDoFluxo))}
-                  onChange={(event) => setCirculoInterceptado(Number(event.target.value))}
+                <Select
+                  ariaLabel="Círculo do efeito interceptado"
+                  value={String(Math.min(Math.max(1, circuloInterceptado), Math.max(1, perfil.circuloDoFluxo)))}
+                  onChange={(valor) => setCirculoInterceptado(Number(valor))}
                   disabled={perfil.circuloDoFluxo < 1}
+                  options={CIRCULOS_DISPONIVEIS
+                    .filter((circulo) => circulo <= perfil.circuloDoFluxo)
+                    .map((circulo) => ({
+                      value: String(circulo),
+                      label: `${circulo}º círculo · DT ${dtConjuracaoPorCirculo(circulo)}`,
+                    }))}
                   className="w-full rounded-xl border border-white/10 bg-[#0f0e15] px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-cyan-400/50 disabled:opacity-50"
-                >
-                  {CIRCULOS_DISPONIVEIS.filter((circulo) => circulo <= perfil.circuloDoFluxo).map((circulo) => (
-                    <option key={circulo} value={circulo}>{circulo}º círculo · DT {dtConjuracaoPorCirculo(circulo)}</option>
-                  ))}
-                </select>
+                />
                 <span className="mt-2 block text-[10px] leading-relaxed text-gray-600">Este é o teste-base de Misticismo contra a DT do círculo. O poder escolhido continua definindo Mana, reação, alcance e resultado.</span>
               </label>
               <button
@@ -983,6 +997,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
 
       {simbolo && (
         <section
+          data-tour="magias-simbolo"
           className={`rounded-2xl border p-5 ${simbolo.natureza === 'pecado'
             ? 'border-red-500/30 bg-red-500/5'
             : 'border-emerald-500/30 bg-emerald-500/5'}`}
@@ -1022,7 +1037,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       )}
 
       {(marcas.length > 0 || cicatrizes.length > 0 || cicatrizesPendentes > 0) && (
-        <section className="rounded-2xl border border-white/10 bg-black/20 p-5">
+        <section className="rounded-2xl border border-white/10 bg-black/20 p-5" data-tour="magias-cobrancas">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h3 className="flex items-center gap-2 font-bold text-white">
               <Sparkles size={16} className="text-[#c7a44c]" /> O que a magia cobrou
@@ -1080,14 +1095,14 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       )}
 
       {concentracaoAtiva?.magiaId && (
-        <section className="flex flex-col gap-3 rounded-2xl border border-violet-500/30 bg-violet-500/10 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <section className="flex flex-col gap-3 rounded-2xl border border-violet-500/30 bg-violet-500/10 p-4 sm:flex-row sm:items-center sm:justify-between" data-tour="magias-concentracao">
           <div><span className="text-[10px] font-bold uppercase tracking-widest text-violet-300">Concentração ativa</span><strong className="mt-1 block text-white">{concentracaoAtiva.titulo}</strong><p className="mt-1 text-xs text-gray-400">Ao sofrer dano, teste Vontade contra DT 10 ou metade do dano, o que for maior.</p></div>
           <button type="button" onClick={encerrarConcentracao} className="flex items-center justify-center gap-2 rounded-xl border border-violet-500/30 px-4 py-2 text-xs font-bold text-violet-200"><X size={14} /> Encerrar</button>
         </section>
       )}
 
       {tipoAtivo === 'magia' && (mostrarCatalogo ? (
-        <section className="space-y-4">
+        <section className="space-y-4" data-tour="magias-lista">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
             <input type="search" aria-label="Buscar no catálogo de magias" value={busca} onChange={(event) => setBusca(event.target.value)} placeholder="Buscar por nome, círculo, Fluxo ou efeito" className="w-full rounded-xl border border-white/5 bg-[#0f0e15] py-3 pl-10 pr-4 text-sm text-white outline-none focus:border-sky-500/40" />
@@ -1095,33 +1110,40 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
           <div className="grid gap-2 sm:grid-cols-2">
             <label className="block">
               <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Fluxo</span>
-              <select
+              <Select
+                ariaLabel="Filtrar catálogo por Fluxo"
                 value={filtroFluxo}
-                onChange={(event) => setFiltroFluxo(event.target.value as FluxoDeMagia | 'nativo' | 'todos')}
+                onChange={(valor) => setFiltroFluxo(valor as FluxoDeMagia | 'nativo' | 'todos')}
+                options={[
+                  { value: 'nativo', label: perfil.fluxoNativoTitulo ? `Fluxo nativo (${perfil.fluxoNativoTitulo})` : 'Fluxo nativo (não definido)' },
+                  { value: 'todos', label: 'Todos os Fluxos' },
+                  { value: 'universal', label: 'Só as universais', labelStyle: { color: temaDoFluxo('universal').texto } },
+                  ...FLUXOS_CATALOGO.map((fluxo) => ({ value: fluxo.id, label: fluxo.titulo, labelStyle: { color: temaDoFluxo(fluxo.id).texto } })),
+                ]}
                 className="w-full rounded-xl border border-white/5 bg-[#0f0e15] px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-sky-500/40"
-              >
-                <option value="nativo">{perfil.fluxoNativoTitulo ? `Fluxo nativo (${perfil.fluxoNativoTitulo})` : 'Fluxo nativo (não definido)'}</option>
-                <option value="todos">Todos os Fluxos</option>
-                <option value="universal">Só as universais</option>
-                {FLUXOS_CATALOGO.map((fluxo) => <option key={fluxo.id} value={fluxo.id}>{fluxo.titulo}</option>)}
-              </select>
+              />
             </label>
             <label className="block">
               <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Círculo</span>
-              <select
+              <Select
+                ariaLabel="Filtrar catálogo por círculo"
                 value={String(filtroCirculo)}
-                onChange={(event) => {
-                  const valor = event.target.value;
+                onChange={(valor) => {
                   setFiltroCirculo(valor === 'alcancaveis' || valor === 'todos' ? valor : Number(valor));
                 }}
+                options={[
+                  {
+                    value: 'alcancaveis',
+                    label: perfil.circuloMaximo > 0 ? `Até o ${perfil.circuloMaximo}º círculo (alcançáveis)` : 'Nenhum círculo alcançável',
+                  },
+                  { value: 'todos', label: 'Todos os círculos' },
+                  ...CIRCULOS_DISPONIVEIS.map((circulo) => ({
+                    value: String(circulo),
+                    label: circuloRotulo(circulo as IMagiaCatalogo['circulo']),
+                  })),
+                ]}
                 className="w-full rounded-xl border border-white/5 bg-[#0f0e15] px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-sky-500/40"
-              >
-                <option value="alcancaveis">
-                  {perfil.circuloMaximo > 0 ? `Até o ${perfil.circuloMaximo}º círculo (alcançáveis)` : 'Nenhum círculo alcançável'}
-                </option>
-                <option value="todos">Todos os círculos</option>
-                {CIRCULOS_DISPONIVEIS.map((circulo) => <option key={circulo} value={circulo}>{circuloRotulo(circulo as IMagiaCatalogo['circulo'])}</option>)}
-              </select>
+              />
             </label>
           </div>
           {!perfil.possuiFonte && filtroCirculo === 'alcancaveis' && (
@@ -1140,7 +1162,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             : <div className="rounded-2xl border border-dashed border-white/10 bg-[#0f0e15] py-10 text-center text-sm text-gray-500">Nenhuma magia corresponde aos filtros e limites atuais.</div>}
         </section>
       ) : (
-        <section className="space-y-4">
+        <section className="space-y-4" data-tour="magias-lista">
           <div className="flex items-center justify-between"><h3 className="font-bold text-white">Magias conhecidas</h3><span className="text-xs text-gray-500">{magiasConhecidas.length} oficiais</span></div>
           {magiasConhecidas.length > 0 ? <div className="space-y-3">{magiasConhecidas.map((magia) => renderMagia(magia))}</div> : (
             <div className="rounded-2xl border border-dashed border-white/10 bg-[#0f0e15] py-14 text-center"><Flame size={42} className="mx-auto mb-3 text-gray-700" /><p className="font-bold text-gray-500">Nenhuma magia oficial conhecida</p><p className="mt-2 text-xs text-gray-600">{perfil.possuiFonte ? 'Use Aprender magia para preencher as vagas liberadas.' : 'Uma classe, habilidade ou concessão do Mestre precisa fornecer acesso.'}</p></div>
@@ -1158,7 +1180,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             : renderSeloOuEncantamento(tipoAtivo, item as ISeloCatalogo | IEncantamentoCatalogo, modoCatalogo)
         );
         return mostrarCatalogo ? (
-          <section className="space-y-4">
+          <section className="space-y-4" data-tour="magias-lista">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
               <input
@@ -1172,21 +1194,23 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             </div>
             <label className="block sm:max-w-xs">
               <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Fluxo</span>
-              <select
+              <Select
+                ariaLabel={`Filtrar ${rotulo.toLowerCase()} por Fluxo`}
                 value={filtroFluxo}
-                onChange={(event) => setFiltroFluxo(event.target.value as FluxoDeMagia | 'nativo' | 'todos')}
+                onChange={(valor) => setFiltroFluxo(valor as FluxoDeMagia | 'nativo' | 'todos')}
+                options={[
+                  { value: 'nativo', label: perfil.fluxoNativoTitulo ? `Fluxo nativo (${perfil.fluxoNativoTitulo})` : 'Fluxo nativo (não definido)' },
+                  { value: 'todos', label: 'Todos os Fluxos' },
+                  ...FLUXOS_CATALOGO.map((fluxo) => ({ value: fluxo.id, label: fluxo.titulo, labelStyle: { color: temaDoFluxo(fluxo.id).texto } })),
+                ]}
                 className="w-full rounded-xl border border-white/5 bg-[#0f0e15] px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-sky-500/40"
-              >
-                <option value="nativo">{perfil.fluxoNativoTitulo ? `Fluxo nativo (${perfil.fluxoNativoTitulo})` : 'Fluxo nativo (não definido)'}</option>
-                <option value="todos">Todos os Fluxos</option>
-                {FLUXOS_CATALOGO.map((fluxo) => <option key={fluxo.id} value={fluxo.id}>{fluxo.titulo}</option>)}
-              </select>
+              />
             </label>
             <p className="text-[10px] font-bold uppercase tracking-widest text-gray-600">{catalogoManifestacaoVisivel.length} {rotulo.toLowerCase()}</p>
             <div className="space-y-3">{catalogoManifestacaoVisivel.map((item) => renderItem(item, true))}</div>
           </section>
         ) : (
-          <section className="space-y-4">
+          <section className="space-y-4" data-tour="magias-lista">
             <div className="flex items-center justify-between"><h3 className="font-bold text-white">{rotulo} conhecidos</h3><span className="text-xs text-gray-500">{conhecidosAtivos.length} conhecidos</span></div>
             {conhecidosAtivos.length > 0 ? <div className="space-y-3">{conhecidosAtivos.map((item) => renderItem(item))}</div> : (
               <div className="rounded-2xl border border-dashed border-white/10 bg-[#0f0e15] py-14 text-center">

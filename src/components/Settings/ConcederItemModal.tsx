@@ -22,13 +22,13 @@ interface ConcederItemModalProps {
 }
 
 const CATEGORIAS_FILTRO: Array<ItemCategoria | 'Todos'> = [
-  'Todos', 'Mercenários', 'Armas', 'Armaduras e Escudos', 'Consumíveis', 'Bens',
+  'Todos', 'Mercenários', 'Armas', 'Armaduras', 'Escudos', 'Consumíveis', 'Bens',
   'Implantes Cibernéticos', 'Artefatos Mágicos', 'Componentes', 'Modificações',
-  'Frutos do Éden', 'Relíquias da Criação', 'Outros',
+  'Frutos do Éden', 'Relíquias da Criação', 'Itens Comuns', 'Outros',
 ];
 
 /** As "coisas" que viram registro à parte na ficha, não item de inventário
- * comum — o jogador precisa saber disso antes de confirmar. */
+ * comum: o jogador precisa saber disso antes de confirmar. */
 const NOTA_POR_TIPO: Record<string, string> = {
   monstro: 'Vira um Aliado pronto na ficha, com Vida, Defesa e ataque já preenchidos.',
   propriedade: 'Vira uma Propriedade na ficha (base, veículo completo, imóvel).',

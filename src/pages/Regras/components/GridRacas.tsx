@@ -6,6 +6,7 @@ import type { IRaca } from '../../../types/catalogo';
 import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
 import { formatarAjustesRaciais } from '../../../services/racaService';
 import { PremiumCard } from '../../../redesign/components/premium/PremiumCard';
+import { AuraEspecial } from '../../../redesign/components/premium/AuraEspecial';
 import { obterTemaPorId } from '../../../redesign/themeMap';
 
 interface GridRacasProps {
@@ -103,14 +104,15 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.35, delay: grupoIdx * 0.08 }}
-            className="mb-6 border-l-2 border-yellow-600/60 pl-4"
+            className={`relative mb-6 overflow-hidden border-l-2 pl-4 ${grupo.especial ? 'border-violet-500/60 py-3' : 'border-yellow-600/60'}`}
           >
-            <h2 className="flex items-center gap-2 text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>
+            {grupo.especial && <AuraEspecial cor="rgba(168,85,247,0.5)" variante="faixa" />}
+            <h2 className="relative flex items-center gap-2 text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>
               {grupo.entidade ? <BookOpen size={20} className="text-cyan-300" /> : null}
-              {grupo.especial ? <Sparkles size={20} className="text-violet-400" /> : null}
+              {grupo.especial ? <Sparkles size={20} className="aura-selo__icone text-violet-400" /> : null}
               {grupo.titulo}
             </h2>
-            <p className="mt-1 max-w-3xl text-sm leading-relaxed text-gray-400">{grupo.descricao}</p>
+            <p className="relative mt-1 max-w-3xl text-sm leading-relaxed text-gray-400">{grupo.descricao}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

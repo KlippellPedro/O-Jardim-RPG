@@ -63,7 +63,7 @@ export function StatusVitaisSection({
   };
 
   return (
-    <section className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6">
+    <section className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6" data-tour="ficha-recursos">
       <SectionTitle title="Status Vitais" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
         <ResourceBar

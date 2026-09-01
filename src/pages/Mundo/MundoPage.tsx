@@ -1,31 +1,33 @@
-import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { BookOpen, History, Lock, ShoppingBag } from 'lucide-react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { BookMarked, BookOpen, Compass, History, Lock, ShoppingBag } from 'lucide-react';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { MUNDO_CATALOG, type LoreEntry } from '../../../data/gerado/mundoCatalog';
-import { ARVORES, arvoreVisivel } from '../../../data/mundo/arvoresCatalog';
+import { ARVORES, VAZIO_ID, arvoreVisivel, corDeInterface } from '../../../data/mundo/arvoresCatalog';
 import { useAuthStore } from '../../store/useAuthStore';
 import { usePerformanceProfile } from '../../hooks/usePerformance';
 import { conteudoEditorialApi } from '../../services/conteudoEditorialApi';
+import { GuidedTour } from '../../components/ui/GuidedTour';
+import { MUNDO_TOUR_STEPS, mundoTourJaVisto, serializarMundoTourVisto } from './mundoTourConfig';
 import { BANCO_LUNAR_INFO } from './bancoLunarInfo';
 import { VAZIO_INFO } from './vazioInfo';
-import { COSMIC_TREES } from './cosmicTrees';
 import { loreBloqueado } from './loreVisibility';
+import { paginaGeralDoMundoVisivel } from './worldPageVisibility';
 import { WORLD_CHRONICLES, type WorldChronicleCatalog } from './worldChronicles';
 
 const CosmicTreeViewer = lazy(() => import('./components/CosmicTreeViewer').then((module) => ({ default: module.CosmicTreeViewer })));
-const TreeChroniclePage = lazy(() => import('./components/TreeChroniclePage').then((module) => ({ default: module.TreeChroniclePage })));
+const TreeCodexPage = lazy(() => import('./components/TreeCodexPage').then((module) => ({ default: module.TreeCodexPage })));
 const GlobalChroniclePage = lazy(() => import('./components/GlobalChroniclePage').then((module) => ({ default: module.GlobalChroniclePage })));
 const SimpleTreeList = lazy(() => import('./components/SimpleTreeList').then((module) => ({ default: module.SimpleTreeList })));
+const UniversalCodexPage = lazy(() => import('./components/UniversalCodexPage').then((module) => ({ default: module.UniversalCodexPage })));
 
 const EMPTY_CONFIG: Record<string, unknown> = {};
 
-/** As 10 Árvores da lore, para checagem de bloqueio/visibilidade e para a
- * linha do tempo. Diferente de COSMIC_TREES (9 corpos orbitais): Abismo/erebus
- * não orbita na cena 3D, mas continua sendo uma Árvore válida com crônica
- * própria - excluí-lo daqui escondia da Linha do Tempo do Jardim qualquer
- * marco que cite Erebus, mesmo pro Mestre. "universal" fica de fora por não
- * ser uma Árvore de verdade. */
+/** Tudo que tem crônica e trava de visibilidade própria: as 9 Árvores mais O
+ * Vazio. Diferente de COSMIC_TREES (9 corpos orbitais): o Vazio não orbita na
+ * cena 3D e não é uma Árvore, mas tem crônica e locais próprios - excluí-lo
+ * daqui escondia da Linha do Tempo do Jardim qualquer marco que cite Erebus,
+ * mesmo pro Mestre. "universal" fica de fora por ser só uma sentinela. */
 const CANONICAL_TREE_IDS = ARVORES.filter((arvore) => arvore.id !== 'universal').map((arvore) => arvore.id);
 
 const WorldLoading = ({ label }: { label: string }) => (
@@ -45,9 +47,11 @@ export const MundoPage: React.FC = () => {
   const [bancoLunarAberto, setBancoLunarAberto] = useState(false);
   const [vazioAberto, setVazioAberto] = useState(false);
   const [visaoSimples, setVisaoSimples] = useState(false);
+  const [tourAberto, setTourAberto] = useState(false);
+  const tourTentadoRef = useRef(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { arvoreId } = useParams<{ arvoreId?: string }>();
+  const { arvoreId, entryType, entryId } = useParams<{ arvoreId?: string; entryType?: string; entryId?: string }>();
   const usuario = useAuthStore((state) => state.usuario);
   const campanhaAtiva = useAuthStore((state) => state.campanhaAtiva);
   const { reduceMotion } = usePerformanceProfile();
@@ -59,6 +63,12 @@ export const MundoPage: React.FC = () => {
   const config = campanhaAtiva?.configuracoes ?? EMPTY_CONFIG;
   const loreRevelado = config.lore_revelado as string[] | undefined ?? [];
   const loreOculto = config.lore_oculto as string[] | undefined ?? [];
+  const entidadesRevelado = config.entidades_revelado as string[] | undefined ?? [];
+  const entidadesOculto = config.entidades_oculto as string[] | undefined ?? [];
+  const cronicaSecoesOcultas = config.cronica_secoes_ocultas as string[] | undefined ?? [];
+  const cronicaEventosOcultos = config.cronica_eventos_ocultos as string[] | undefined ?? [];
+  const cronologiaGeralVisivel = paginaGeralDoMundoVisivel(config.cronologia_geral_oculta, isMestre);
+  const registrosUniversaisVisiveis = paginaGeralDoMundoVisivel(config.registros_universais_ocultos, isMestre);
 
   useEffect(() => {
     if (!campanhaAtiva?.id) {
@@ -80,9 +90,18 @@ export const MundoPage: React.FC = () => {
         } else {
           setWorldChronicles(WORLD_CHRONICLES);
         }
-        setMundoCatalog(
-          response.entradas.filter((entry) => entry.tipo !== 'cronologia') as unknown as LoreEntry[],
-        );
+        const resolvedEntries = response.entradas.filter((entry) => entry.tipo !== 'cronologia');
+        const resolvedByKey = new Map(resolvedEntries.map((entry) => [entry.chave_origem || `${entry.tipo}:${entry.id}`, entry]));
+        const officialKeys = new Set(MUNDO_CATALOG.map((entry) => `${entry.tipo}:${entry.id}`));
+        setMundoCatalog([
+          ...MUNDO_CATALOG.map((official) => ({
+            ...official,
+            ...resolvedByKey.get(`${official.tipo}:${official.id}`),
+            registro_universal: official.registro_universal,
+            arvore_origem: official.arvore_origem,
+          })),
+          ...resolvedEntries.filter((entry) => !officialKeys.has(entry.chave_origem || `${entry.tipo}:${entry.id}`)),
+        ] as unknown as LoreEntry[]);
       })
       .catch((error) => {
         if (error?.name !== 'AbortError') {
@@ -94,30 +113,70 @@ export const MundoPage: React.FC = () => {
     return () => controller.abort();
   }, [campanhaAtiva?.id]);
 
+  // Trava a Árvore em si (some do visualizador 3D, da lista e da navegação),
+  // que é um controle diferente de esconder o resumo da Deidade dentro da
+  // página da Árvore - aquele é por-entrada, via `loreBloqueado`, dentro de
+  // TreeCodexPage. Antes esta lista também travava a Árvore inteira quando só
+  // o resumo da Deidade estava oculto, impedindo o Mestre de deixar a Árvore
+  // visível/selecionável com o resumo escondido.
   const lockedDeidades = useMemo(() => CANONICAL_TREE_IDS
     .filter((id) => {
       if (isMestre) return false;
-      if (!arvoreVisivel(id, config, isMestre)) return true;
-      const entry = mundoCatalog.find((item) => item.id === id && item.tipo === 'deidade');
-      if (!entry) return true;
-      return loreBloqueado(entry, { isMestre, loreRevelado, loreOculto });
-    }), [config, isMestre, loreOculto, loreRevelado, mundoCatalog]);
+      return !arvoreVisivel(id, config, isMestre);
+    }), [config, isMestre]);
   const lockedSet = useMemo(() => new Set(lockedDeidades), [lockedDeidades]);
   const visibleTreeIds = useMemo(
     () => CANONICAL_TREE_IDS.filter((id) => !lockedSet.has(id)),
     [lockedSet],
   );
-  const activeTree = arvoreId
-    ? COSMIC_TREES.find((tree) => tree.deidadeId === arvoreId)
-    : undefined;
+  // `/mundo/vazio` é a rota própria do Vazio: ele não é uma Árvore, então não
+  // faz sentido só existir debaixo de `/mundo/arvores/`. A página renderizada
+  // é a mesma, com os rótulos trocados (ver `ehVazio` em TreeCodexPage).
+  const isVazioPage = location.pathname.startsWith('/mundo/vazio');
+  const codexId = isVazioPage ? VAZIO_ID : arvoreId;
+  const activeTree = codexId ? ARVORES.find((tree) => tree.id === codexId && tree.id !== 'universal') : undefined;
   const isGlobalTimeline = location.pathname === '/mundo/cronologia';
+  const isUniversalCodex = location.pathname === '/mundo/universal';
+  const emPaginaArvore = Boolean(codexId && activeTree && !lockedSet.has(codexId));
+  const naPaginaRaiz = !emPaginaArvore && !isGlobalTimeline && !isUniversalCodex;
+  const chaveTourMundo = `jardim:mundo-tour:v1:${usuario?.id || 'local'}`;
 
   useEffect(() => {
+    if (entryType && entryId && window.matchMedia('(max-width: 1023px)').matches) return;
     window.scrollTo({ top: 0, behavior: 'auto' });
-  }, [location.pathname]);
+  }, [entryId, entryType, location.pathname]);
+
+  const abrirTourMundo = useCallback(() => {
+    setVisaoSimples(false);
+    setTourAberto(true);
+  }, []);
+
+  const encerrarTourMundo = useCallback(() => {
+    try {
+      localStorage.setItem(chaveTourMundo, serializarMundoTourVisto());
+    } catch {
+      // O botão manual continua disponível mesmo se o navegador bloquear o armazenamento.
+    }
+    setTourAberto(false);
+  }, [chaveTourMundo]);
+
+  useEffect(() => {
+    if (!naPaginaRaiz || visaoSimples || tourAberto || tourTentadoRef.current) return;
+    try {
+      if (mundoTourJaVisto(localStorage.getItem(chaveTourMundo))) return;
+    } catch {
+      // Sem armazenamento, o guia ainda abre uma vez nesta montagem.
+    }
+    const timer = window.setTimeout(() => {
+      tourTentadoRef.current = true;
+      setTourAberto(true);
+    }, 750);
+    return () => window.clearTimeout(timer);
+  }, [chaveTourMundo, naPaginaRaiz, tourAberto, visaoSimples]);
 
   const openTreeChronicle = useCallback((treeId: string) => {
-    if (!lockedSet.has(treeId)) navigate(`/mundo/arvores/${treeId}`);
+    if (lockedSet.has(treeId)) return;
+    navigate(treeId === VAZIO_ID ? '/mundo/vazio' : `/mundo/arvores/${treeId}`);
   }, [lockedSet, navigate]);
 
   const handleSelectDeidade = useCallback((id: string | null) => {
@@ -195,15 +254,37 @@ export const MundoPage: React.FC = () => {
     );
   }, [infoDeidadeId, isMestre, loreOculto, loreRevelado, openTreeChronicle]);
 
-  if (arvoreId && activeTree && !lockedSet.has(arvoreId)) {
+  if ((isGlobalTimeline && !cronologiaGeralVisivel) || (isUniversalCodex && !registrosUniversaisVisiveis)) {
+    return <Navigate to="/mundo" replace />;
+  }
+
+  if (codexId && activeTree && !lockedSet.has(codexId)) {
+    // O preto do Vazio some quando vira cor de letra, então a página usa a
+    // cor de leitura em vez da canônica.
+    const treeColor = `rgb(${corDeInterface(activeTree.id)})`;
     return (
-      <Suspense fallback={<WorldLoading label="Carregando crônica..." />}>
-        <TreeChroniclePage
-          treeId={arvoreId}
-          color={activeTree.color}
+      <Suspense fallback={<WorldLoading label="Carregando códice da Árvore..." />}>
+        <TreeCodexPage
+          treeId={codexId}
+          treeName={activeTree.nome}
+          color={treeColor}
+          catalog={mundoCatalog}
           chronicles={worldChronicles}
+          entryType={entryType}
+          entryId={entryId}
+          isMestre={isMestre}
+          loreRevelado={loreRevelado}
+          loreOculto={loreOculto}
+          cronicaSecoesOcultas={cronicaSecoesOcultas}
+          cronicaEventosOcultos={cronicaEventosOcultos}
           onBack={() => navigate('/mundo')}
-          onOpenGlobalTimeline={() => navigate('/mundo/cronologia')}
+          onOpenOverview={() => navigate(isVazioPage ? '/mundo/vazio' : `/mundo/arvores/${codexId}`)}
+          onOpenGlobalTimeline={cronologiaGeralVisivel ? () => navigate('/mundo/cronologia') : undefined}
+          onOpenEntry={(entry) => navigate(
+            isVazioPage
+              ? `/mundo/vazio/${entry.tipo}/${entry.id}`
+              : `/mundo/arvores/${codexId}/${entry.tipo}/${entry.id}`,
+          )}
         />
       </Suspense>
     );
@@ -222,6 +303,23 @@ export const MundoPage: React.FC = () => {
     );
   }
 
+  if (isUniversalCodex) {
+    return (
+      <Suspense fallback={<WorldLoading label="Carregando registros universais..." />}>
+        <UniversalCodexPage
+          catalog={mundoCatalog}
+          isMestre={isMestre}
+          loreRevelado={loreRevelado}
+          loreOculto={loreOculto}
+          entidadesRevelado={entidadesRevelado}
+          entidadesOculto={entidadesOculto}
+          onBack={() => navigate('/mundo')}
+          onOpenGlobalTimeline={cronologiaGeralVisivel ? () => navigate('/mundo/cronologia') : undefined}
+        />
+      </Suspense>
+    );
+  }
+
   const panelTransition = reduceMotion ? { duration: 0 } : { type: 'spring' as const, stiffness: 200, damping: 25 };
   const arvoreDetalheTrancada = infoDeidadeId ? lockedSet.has(infoDeidadeId) : false;
 
@@ -231,21 +329,41 @@ export const MundoPage: React.FC = () => {
         <div className="world-stardust absolute inset-0 opacity-30 mix-blend-screen" />
       </div>
 
-      <div role="main" className="app-viewport mx-auto flex max-w-[112.5rem] flex-col overflow-hidden">
+      <div role="main" className="mundo-shell app-viewport mx-auto flex max-w-[112.5rem] flex-col overflow-hidden">
         <div className="mb-3 flex shrink-0 flex-col items-center sm:mb-5">
           <h1 className="text-center text-[clamp(2rem,7vw,3.75rem)] font-bold leading-tight tracking-wider text-yellow-500 drop-shadow-[0_0_20px_rgba(202,138,4,0.5)]" style={{ fontFamily: 'Cinzel, serif' }}>
             Geografia do Jardim
           </h1>
-          <button
-            type="button"
-            onClick={() => navigate('/mundo/cronologia')}
-            className="mt-2 inline-flex items-center gap-2 rounded-full border border-yellow-600/30 bg-black/25 px-4 py-2 text-xs font-bold uppercase tracking-widest text-yellow-500 transition hover:border-yellow-500/60 hover:bg-yellow-500/5 sm:mt-4"
-          >
-            <History size={15} /> Linha do tempo geral
-          </button>
+          <div data-tour="mundo-nav-geral" className="mt-2 flex flex-wrap items-center justify-center gap-2 sm:mt-4">
+            {cronologiaGeralVisivel && (
+              <button
+                type="button"
+                onClick={() => navigate('/mundo/cronologia')}
+                className="inline-flex items-center gap-2 rounded-full border border-yellow-600/30 bg-black/25 px-4 py-2 text-xs font-bold uppercase tracking-widest text-yellow-500 transition hover:border-yellow-500/60 hover:bg-yellow-500/5"
+              >
+                <History size={15} /> Linha do tempo geral
+              </button>
+            )}
+            {registrosUniversaisVisiveis && (
+              <button
+                type="button"
+                onClick={() => navigate('/mundo/universal')}
+                className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-black/25 px-4 py-2 text-xs font-bold uppercase tracking-widest text-cyan-300 transition hover:border-cyan-400/60 hover:bg-cyan-400/5"
+              >
+                <BookMarked size={15} /> Registros Universais
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={abrirTourMundo}
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/25 px-4 py-2 text-xs font-bold uppercase tracking-widest text-gray-300 transition hover:border-white/30 hover:text-white"
+            >
+              <Compass size={15} /> Guia do Mundo
+            </button>
+          </div>
         </div>
 
-        <div className="performance-expensive-effects relative flex min-h-0 w-full flex-1 overflow-hidden rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] sm:rounded-3xl">
+        <div data-tour="mundo-projecao" className="performance-expensive-effects relative flex min-h-0 w-full flex-1 overflow-hidden rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] sm:rounded-3xl">
           {visaoSimples ? (
             <Suspense fallback={<WorldLoading label="Carregando lista das Árvores..." />}>
               <SimpleTreeList
@@ -348,35 +466,90 @@ export const MundoPage: React.FC = () => {
                   <h3 className="text-3xl font-bold tracking-widest" style={{ fontFamily: 'Cinzel, serif', color: VAZIO_INFO.cor }}>{VAZIO_INFO.nome}</h3>
                   <button type="button" onClick={() => setVazioAberto(false)} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-2xl text-gray-500 hover:bg-white/10 hover:text-white" aria-label="Fechar O Vazio">&times;</button>
                 </div>
-                <div className="flex w-full flex-col gap-2 rounded-2xl border border-white/5 bg-black/30 p-4">
+                {/* Cada card abre o registro correspondente, igual acontece no
+                    painel das Árvores. Antes eram divs mortas e o único jeito
+                    de sair daqui era o botão lá do fim. */}
+                <button
+                  type="button"
+                  onClick={() => navigate('/mundo/vazio')}
+                  className="group flex w-full cursor-pointer flex-col gap-2 rounded-2xl border border-white/5 bg-black/30 p-4 text-left transition-colors hover:border-white/25"
+                >
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Sobre</span>
                   <p className="text-sm leading-relaxed text-gray-400">{VAZIO_INFO.descricao}</p>
-                </div>
-                <div className="flex w-full flex-col gap-2 rounded-2xl border border-white/5 bg-black/30 p-4">
+                  <span className="mt-2 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest opacity-70 transition group-hover:opacity-100" style={{ color: VAZIO_INFO.cor }}>
+                    <BookOpen size={13} /> Abrir página do Vazio
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate(`/mundo/vazio/${VAZIO_INFO.deidade.tipo}/${VAZIO_INFO.deidade.id}`)}
+                  className="group flex w-full cursor-pointer flex-col gap-2 rounded-2xl border border-white/5 bg-black/30 p-4 text-left transition-colors hover:border-white/25"
+                >
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Deidade</span>
                   <h4 className="text-lg font-bold leading-tight text-white">{VAZIO_INFO.deidade.nome}</h4>
                   <span className="text-xs italic" style={{ color: VAZIO_INFO.cor }}>“{VAZIO_INFO.deidade.epiteto}”</span>
                   <p className="mt-2 text-sm leading-relaxed text-gray-400">{VAZIO_INFO.deidade.descricao}</p>
-                </div>
-                <div className="flex w-full flex-col gap-2 rounded-2xl border border-white/5 bg-black/30 p-4">
+                  <span className="mt-2 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest opacity-70 transition group-hover:opacity-100" style={{ color: VAZIO_INFO.cor }}>
+                    <BookOpen size={13} /> Abrir registro
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate(`/mundo/vazio/${VAZIO_INFO.fluxo.tipo}/${VAZIO_INFO.fluxo.id}`)}
+                  className="group flex w-full cursor-pointer flex-col gap-2 rounded-2xl border border-white/5 bg-black/30 p-4 text-left transition-colors hover:border-white/25"
+                >
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Fluxo Cósmico</span>
                   <h4 className="text-lg font-bold leading-tight text-white">{VAZIO_INFO.fluxo.nome}</h4>
                   <p className="mt-2 text-sm leading-relaxed text-gray-400">{VAZIO_INFO.fluxo.descricao}</p>
-                </div>
+                  <span className="mt-2 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest opacity-70 transition group-hover:opacity-100" style={{ color: VAZIO_INFO.cor }}>
+                    <BookOpen size={13} /> Abrir registro
+                  </span>
+                </button>
                 <div className="flex flex-col gap-4">
                   {VAZIO_INFO.locais.map((local) => (
-                    <div key={local.nome} className="flex w-full flex-col gap-2 rounded-2xl border border-white/5 bg-black/30 p-4">
+                    <button
+                      key={local.id}
+                      type="button"
+                      onClick={() => navigate(`/mundo/vazio/${local.tipo}/${local.id}`)}
+                      className="group flex w-full cursor-pointer flex-col gap-2 rounded-2xl border border-white/5 bg-black/30 p-4 text-left transition-colors hover:border-white/25"
+                    >
                       <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Local</span>
                       <h4 className="text-lg font-bold leading-tight text-white">{local.nome}</h4>
                       <p className="mt-2 text-sm leading-relaxed text-gray-400">{local.resumo}</p>
-                    </div>
+                      <span className="mt-2 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest opacity-70 transition group-hover:opacity-100" style={{ color: VAZIO_INFO.cor }}>
+                        <BookOpen size={13} /> Abrir registro
+                      </span>
+                    </button>
                   ))}
                 </div>
+                {/* Sem isto o painel era um beco sem saída: mostrava o resumo
+                    do Vazio e não levava a lugar nenhum. */}
+                {!lockedSet.has(VAZIO_ID) && (
+                  <button
+                    type="button"
+                    onClick={() => navigate('/mundo/vazio')}
+                    className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-2xl border px-4 py-3 text-xs font-bold uppercase tracking-widest transition hover:bg-white/5"
+                    style={{ borderColor: `${VAZIO_INFO.cor}66`, color: VAZIO_INFO.cor }}
+                  >
+                    <BookOpen size={15} /> Abrir página do Vazio
+                  </button>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
         </div>
       </div>
+
+      {tourAberto ? (
+        <GuidedTour
+          passos={MUNDO_TOUR_STEPS}
+          accent="#eab308"
+          nomeGuia="Guia do Mundo"
+          rootSelector=".mundo-shell"
+          onClose={encerrarTourMundo}
+          onFinish={encerrarTourMundo}
+        />
+      ) : null}
     </>
   );
 };

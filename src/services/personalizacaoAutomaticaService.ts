@@ -19,6 +19,20 @@ export function personalizacaoDoItem(ficha: any, id: string): IPersonalizacaoAut
   return obterPersonalizacoesAutomaticas(ficha)[id];
 }
 
+export function marcarItemAutomaticoOculto(
+  personalizacao?: IPersonalizacaoAutomatica,
+): IPersonalizacaoAutomatica {
+  return { ...(personalizacao || {}), oculta: true };
+}
+
+export function restaurarVisibilidadeItemAutomatico(
+  personalizacao?: IPersonalizacaoAutomatica,
+): IPersonalizacaoAutomatica {
+  if (!personalizacao) return {};
+  const { oculta: _oculta, ...resto } = personalizacao;
+  return resto;
+}
+
 export function salvarPersonalizacaoAutomatica(
   onUpdate: (caminho: string[], valor: any) => void,
   ficha: any,

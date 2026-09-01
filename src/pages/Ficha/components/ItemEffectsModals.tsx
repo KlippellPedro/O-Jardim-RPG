@@ -11,11 +11,9 @@ import { FichaModal } from './FichaModal';
 import { LabeledInput } from './SharedFichaComponents';
 import { classeTextoRaridade } from '../../../services/lojaCatalogService';
 import {
-  DONS_RARIDADE_POR_CATEGORIA,
   EFEITOS_POR_MODIFICACAO_MAXIMOS,
   RARIDADES_EQUIPAMENTO,
   obterRegraRaridade,
-  type CategoriaEquipamentoId,
   type IRegraRaridadeEquipamento,
 } from '../../../../data/regras/raridadesEquipamentos';
 
@@ -102,9 +100,9 @@ export function resumoEfeitoEquipamento(efeito: IEfeitoEquipamento, pericias: IP
 }
 
 /**
- * Editor de efeitos automáticos. Os tetos de raridade do livro entram só como
- * sugestão visível: nada aqui bloqueia, corta ou trava um valor, porque a mesa
- * precisa poder burlar o livro quando a história pedir.
+ * Editor de efeitos automáticos. O número de efeitos pode ser limitado pela
+ * regra que abriu o editor. Valores fora da faixa continuam visíveis para
+ * preservar exceções antigas ou aprovadas pelo Mestre, mas ficam sinalizados.
  */
 export function EditorEfeitos({
   efeitos,
@@ -131,7 +129,7 @@ export function EditorEfeitos({
   sugestaoValor?: number;
   /** Nome da regra que gerou a sugestão, por exemplo "Comum". */
   sugestaoRotulo?: string;
-  contexto?: 'item' | 'poder' | 'habilidade';
+  contexto?: 'item' | 'poder' | 'habilidade' | 'aliado';
   /** Mostra a lista direto no lugar, sem esconder atrás de mais um modal. */
   inline?: boolean;
   titulo?: string;
@@ -358,6 +356,8 @@ export function EditorEfeitos({
               ? 'Ficam ativos enquanto o poder permanecer na ficha.'
               : contexto === 'habilidade'
                 ? 'Ficam ativos enquanto a habilidade permanecer na ficha.'
+                : contexto === 'aliado'
+                  ? 'Ficam ativos enquanto o aliado estiver Em cena, inclusive nas fichas compartilhadas.'
                 : 'Só ficam ativos enquanto o item estiver equipado.'}
           </p>
         </div>
@@ -407,18 +407,19 @@ function ListaModificacoes({
     onChange?.(modificacoes.map((modificacao) => modificacao.id === id ? { ...modificacao, ...atualizacao } : modificacao));
   };
 
-  const acimaDaSugestao = modificacoes.length > regraRaridade.modificacoesMaximas;
+  const acimaDoLimite = modificacoes.length > regraRaridade.modificacoesMaximas;
+  const atingiuLimite = modificacoes.length >= regraRaridade.modificacoesMaximas;
 
   return (
     <div className="flex flex-col gap-4">
       {!readOnly ? (
         <div className="flex items-center justify-between gap-3">
-          <p className={`text-xs ${acimaDaSugestao ? 'text-amber-300/80' : 'text-gray-500'}`}>
-            {acimaDaSugestao
-              ? `O livro sugere até ${regraRaridade.modificacoesMaximas} modificação(ões) em ${regraRaridade.titulo}, e este item tem ${modificacoes.length}. Segue valendo na ficha.`
-              : `O livro sugere até ${regraRaridade.modificacoesMaximas} modificação(ões) em ${regraRaridade.titulo}. Você pode passar disso.`}
+          <p className={`text-xs ${acimaDoLimite ? 'text-amber-300/80' : 'text-gray-500'}`}>
+            {acimaDoLimite
+              ? `Este item antigo tem ${modificacoes.length} modificações, acima do limite de ${regraRaridade.modificacoesMaximas} para ${regraRaridade.titulo}. Remover continua permitido, mas não é possível adicionar outra.`
+              : `${regraRaridade.titulo} comporta ${regraRaridade.modificacoesMaximas} modificação(ões). ${modificacoes.length}/${regraRaridade.modificacoesMaximas} espaços ocupados.`}
           </p>
-          <button type="button" onClick={adicionar} className="flex shrink-0 items-center gap-1 rounded-lg border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-3 py-2 text-xs font-bold text-[#c7a44c] hover:bg-[#c7a44c]/20">
+          <button type="button" onClick={adicionar} disabled={atingiuLimite} title={atingiuLimite ? 'A raridade deste item não comporta outra modificação.' : undefined} className="flex shrink-0 items-center gap-1 rounded-lg border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-3 py-2 text-xs font-bold text-[#c7a44c] hover:bg-[#c7a44c]/20 disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/5 disabled:text-gray-600">
             <Plus size={14} /> Adicionar mod
           </button>
         </div>
@@ -536,7 +537,6 @@ export function EfeitosItemModal({
   onEfeitosRaridadeChange,
   onModificacoesChange,
   pericias,
-  categoria = 'geral',
   itemNome,
   abaInicial = 'raridade',
   readOnly = false,
@@ -550,7 +550,6 @@ export function EfeitosItemModal({
   onEfeitosRaridadeChange: (efeitos: IEfeitoEquipamento[]) => void;
   onModificacoesChange: (modificacoes: IModificacaoEquipamento[]) => void;
   pericias: IPericiaOpcao[];
-  categoria?: CategoriaEquipamentoId;
   itemNome?: string;
   abaInicial?: 'raridade' | 'modificacoes';
   readOnly?: boolean;
@@ -560,7 +559,6 @@ export function EfeitosItemModal({
     if (isOpen) setAba(abaInicial);
   }, [abaInicial, isOpen]);
   const regraRaridade = obterRegraRaridade(raridade);
-  const dom = DONS_RARIDADE_POR_CATEGORIA[categoria]?.[regraRaridade.id];
   const totalEfeitos = efeitosRaridade.length + modificacoes.reduce((soma, mod) => soma + mod.efeitos.length, 0);
 
   const abas: Array<{ id: 'raridade' | 'modificacoes'; rotulo: string; contagem: number }> = [
@@ -605,9 +603,8 @@ export function EfeitosItemModal({
                 <Select value={raridade} options={RARIDADES} onChange={onRaridadeChange} disabled={readOnly} className="w-full uppercase" />
               </div>
               <div className="rounded-xl border border-[#c7a44c]/20 bg-[#c7a44c]/5 p-4">
-                <div className="flex items-center gap-2 text-[#c7a44c]"><Sparkles size={15} /><strong className="text-sm">Dom de {regraRaridade.titulo}</strong></div>
-                <p className="mt-2 text-sm text-gray-300">{dom}</p>
-                <p className="mt-2 text-xs text-gray-500">{regraRaridade.principio}</p>
+                <div className="flex items-center gap-2 text-[#c7a44c]"><Sparkles size={15} /><strong className="text-sm">{regraRaridade.titulo}</strong></div>
+                <p className="mt-2 text-sm text-gray-300">{regraRaridade.principio}</p>
                 {regraRaridade.requerMestre ? <p className="mt-2 text-xs font-bold text-amber-300">Requer aprovação do Mestre.</p> : null}
               </div>
               <EditorEfeitos
@@ -617,6 +614,7 @@ export function EfeitosItemModal({
                 inline={!readOnly}
                 readOnly={readOnly}
                 titulo="Bônus próprios do item"
+                maxEfeitos={readOnly ? undefined : regraRaridade.efeitosRaridadeMaximos}
                 sugestaoEfeitos={regraRaridade.efeitosRaridadeMaximos}
                 sugestaoValor={regraRaridade.valorMaximoPorEfeito}
                 sugestaoRotulo={regraRaridade.titulo}

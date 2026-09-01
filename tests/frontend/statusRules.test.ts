@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  adicionarCondicaoOficial,
   atualizarStatusVital,
   bonusIniciativaFicha,
   desvantagensAutomaticasTeste,
@@ -15,6 +16,31 @@ import {
   penalidadeDefesaCondicoes,
   penalidadeIniciativaCondicoes,
 } from '../../src/services/statusService';
+
+test('condição oficial entra no formato da ficha sem criar duplicatas', () => {
+  const regra = {
+    id: 'caido',
+    titulo: 'Caído',
+    categoria: 'física',
+    duracao: 'Até se levantar.',
+    efeitos: ['Seus ataques sofrem -2.'],
+    remocao: 'Gaste uma ação de movimento.',
+  };
+  const primeira = adicionarCondicaoOficial([], regra);
+  assert.equal(primeira.adicionada, true);
+  assert.deepEqual(primeira.condicoes, [{
+    id: 'caido',
+    nome: 'Caído',
+    descricao: 'Seus ataques sofrem -2.',
+    afeta: 'física',
+    duracao: 'Até se levantar.',
+    remocao: 'Gaste uma ação de movimento.',
+  }]);
+
+  const repetida = adicionarCondicaoOficial(primeira.condicoes, regra);
+  assert.equal(repetida.adicionada, false);
+  assert.equal(repetida.condicoes.length, 1);
+});
 
 test('Vida continua abaixo de zero e inicia Morrendo 1', () => {
   const status = atualizarStatusVital({ vidaAtual: 2 }, 'vidaAtual', -7, 20, 12);

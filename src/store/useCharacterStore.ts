@@ -26,6 +26,7 @@ import { limparSelecoesHabilidadeInvalidas } from '../services/progressaoFichaSe
 
 export type CharacterSaveDomain = 'sheet' | 'economy';
 export type CharacterSavePhase = 'idle' | 'pending' | 'saving' | 'saved' | 'error' | 'conflict';
+export type RemoteCharacterSyncResult = 'updated' | 'unchanged' | 'deferred' | 'retry' | 'error';
 
 export interface CharacterDomainSaveState {
   phase: CharacterSavePhase;
@@ -53,6 +54,7 @@ interface CharacterStore {
   fetchCharacters: () => Promise<void>;
   loadCharacter: (id: string) => Promise<boolean>;
   refreshCharacter: (id: string) => Promise<boolean>;
+  syncRemoteCharacter: (id: string, expectedVersion?: number) => Promise<RemoteCharacterSyncResult>;
   archiveCharacter: (id: string) => Promise<boolean>;
   createCharacter: (payload: ICreateCharacterPayload) => Promise<string | null>;
   patchCharacter: (id: string, path: readonly UpdatePathSegment[], value: unknown) => boolean;
@@ -357,6 +359,9 @@ function normalizeCharacter(record: PersonagemApiRecord): ICharacter {
     economiaVersao: positiveInteger(record.economia_versao),
     carteira: Array.isArray(record.carteira) ? record.carteira : [],
     inventarioCentral: Array.isArray(record.inventario_central) ? record.inventario_central : [],
+    aliadosCompartilhados: Array.isArray(record.aliados_compartilhados)
+      ? record.aliados_compartilhados
+      : [],
   };
 }
 
@@ -920,6 +925,87 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
     } catch (error) {
       set({ error: errorMessage(error) });
       return false;
+    }
+  },
+
+  syncRemoteCharacter: async (id: string, expectedVersion = 0) => {
+    const before = get().characters.find((character) => character.id === id);
+    if (!before) return 'error';
+    const expected = Math.max(0, Math.trunc(Number(expectedVersion) || 0));
+
+    // O eco do SSE costuma chegar logo antes ou depois da resposta do próprio
+    // PUT. A versão evita um GET desnecessário quando o store já incorporou a
+    // mesma gravação.
+    if (expected > 0 && positiveInteger(before.versao) >= expected) return 'unchanged';
+    if (get().hasPendingCharacterSaves(id)) return 'deferred';
+
+    try {
+      const remote = (await personagensApi.obter(id)).personagem;
+      const normalized = normalizeCharacter(remote);
+      const current = get().characters.find((character) => character.id === id);
+      if (!current) return 'error';
+
+      // Uma edição pode começar enquanto o GET está em voo. Nesse caso a
+      // resposta remota nunca substitui o rascunho que acabou de nascer.
+      if (get().hasPendingCharacterSaves(id)) return 'deferred';
+
+      const remoteSheetVersion = positiveInteger(normalized.versao);
+      const localSheetVersion = positiveInteger(current.versao);
+      const remoteEconomyVersion = positiveInteger(normalized.economiaVersao);
+      const localEconomyVersion = positiveInteger(current.economiaVersao);
+      if (expected > 0 && remoteSheetVersion < expected) return 'retry';
+
+      const applySheet = remoteSheetVersion > localSheetVersion;
+      const applyEconomy = remoteEconomyVersion > localEconomyVersion && !hasEconomyPending(id);
+      if (!applySheet && !applyEconomy) return 'unchanged';
+
+      if (applySheet) {
+        sheetBaseVersions.set(id, remoteSheetVersion);
+        sheetConflicts.delete(id);
+        removeStoredDraft(id);
+      }
+      if (applyEconomy) {
+        economyBaseVersions.set(id, remoteEconomyVersion);
+        economyServerStates.set(id, jsonClone({
+          carteira: normalized.carteira ?? [],
+          inventario: normalized.inventarioCentral ?? [],
+        }));
+      }
+
+      set((state) => ({
+        characters: state.characters.map((character) => {
+          if (character.id !== id) return character;
+          let next = character;
+          if (applySheet) {
+            next = withSheetDomain(
+              next,
+              normalized.nome,
+              normalized.ficha ?? {},
+              remoteSheetVersion,
+              normalized.atualizadoEm,
+            );
+          }
+          if (applyEconomy) {
+            next = {
+              ...next,
+              economiaVersao: remoteEconomyVersion,
+              carteira: normalized.carteira ?? [],
+              inventarioCentral: normalized.inventarioCentral ?? [],
+            };
+          }
+          return {
+            ...next,
+            somenteLeitura: normalized.somenteLeitura,
+            donoUsuarioId: normalized.donoUsuarioId,
+            aliadosCompartilhados: normalized.aliadosCompartilhados,
+          };
+        }),
+        error: null,
+      }));
+
+      return 'updated';
+    } catch {
+      return 'error';
     }
   },
 

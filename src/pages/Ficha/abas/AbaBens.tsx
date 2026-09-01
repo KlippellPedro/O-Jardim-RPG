@@ -110,7 +110,7 @@ export const AbaBens = ({ character, onUpdate }: { character: any; onUpdate: any
 
   return (
     <div className="space-y-8">
-      <section className="rounded-2xl border border-white/5 bg-[#0f0e15] p-6">
+      <section className="rounded-2xl border border-white/5 bg-[#0f0e15] p-6" data-tour="bens-propriedades">
         <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
           <div>
             <h2 className="flex items-center gap-2 text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>
@@ -161,7 +161,7 @@ export const AbaBens = ({ character, onUpdate }: { character: any; onUpdate: any
         </div>
       </section>
 
-      <section aria-label="Veículos e peças">
+      <section aria-label="Veículos e peças" data-tour="bens-veiculos">
         <AbaInventario character={character} modo="veiculos" />
       </section>
 

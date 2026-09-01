@@ -3,6 +3,11 @@ import test from 'node:test';
 
 import { detalharEfeitosAutomaticos, resumirEquipamentos } from '../../src/services/equipamentoService.ts';
 import { habilidadeDoFruto, obterFrutoEdenConsumido, poderesDoFruto } from '../../src/services/frutoEdenService.ts';
+import {
+  grupoLimiteItemEspecial,
+  limiteItensEspeciaisPorNivel,
+  resumirLimiteItensEspeciais,
+} from '../../src/services/itensEspeciaisService.ts';
 
 const efeito = (id: string, categoria: string, alvo: string, valor: number, modo = 'bonus') => ({
   id,
@@ -55,6 +60,40 @@ test('efeitos de modificações e raridade só funcionam com o item equipado', (
   assert.deepEqual(inativo.bonusRecursos, {});
   assert.deepEqual(inativo.bonusAtributos, {});
   assert.equal(inativo.efeitosAtivos.length, 0);
+});
+
+test('itens de perícia e artefatos compartilham uma vaga a cada quatro níveis', () => {
+  assert.equal(limiteItensEspeciaisPorNivel(1), 1);
+  assert.equal(limiteItensEspeciaisPorNivel(3), 1);
+  assert.equal(limiteItensEspeciaisPorNivel(4), 1);
+  assert.equal(limiteItensEspeciaisPorNivel(7), 1);
+  assert.equal(limiteItensEspeciaisPorNivel(8), 2);
+  assert.equal(limiteItensEspeciaisPorNivel(20), 5);
+
+  assert.equal(grupoLimiteItemEspecial({ item_id: 'acessorio-refinado', dados: {} }), 'item-pericia');
+  assert.equal(grupoLimiteItemEspecial({ item_id: 'qualquer', dados: { tipo: 'artefato' } }), 'artefato');
+  assert.equal(grupoLimiteItemEspecial({ item_id: 'espada', dados: { categoria: 'arma' } }), null);
+});
+
+test('bônus de itens especiais excedentes ficam inativos sem remover os itens antigos', () => {
+  const especiais = [
+    { item_id: 'acessorio', titulo: 'Estojo de ferramentas', quantidade: 1, dados: { categoria: 'geral', grupo_limite_uso: 'item-pericia', equipado: true, efeitosRaridade: [efeito('a', 'pericia', 'oficio', 1)] } },
+    { item_id: 'artefato-1', titulo: 'Pedra de eco', quantidade: 1, dados: { categoria: 'geral', tipo: 'artefato', equipado: true, efeitosRaridade: [efeito('b', 'pericia', 'oficio', 2)] } },
+    { item_id: 'artefato-2', titulo: 'Olho antigo', quantidade: 1, dados: { categoria: 'geral', tipo: 'artefato', equipado: true, efeitosRaridade: [efeito('c', 'pericia', 'oficio', 4)] } },
+  ];
+  const ficha = { atributosFinais: { forca: 10 }, classes: [{ classeId: 'piloto', nivel: 8 }] };
+  const limite = resumirLimiteItensEspeciais(especiais, ficha);
+  const resumo = resumirEquipamentos(especiais, ficha);
+
+  assert.equal(limite.limite, 2);
+  assert.equal(limite.usados, 3);
+  assert.equal(limite.excedentes.length, 1);
+  assert.equal(limite.porGrupo['item-pericia'], 1);
+  assert.equal(limite.porGrupo.artefato, 1);
+  assert.equal(resumo.bonusPericias.oficio, 3);
+  assert.equal(resumo.itensEspeciais.usados, 3);
+  assert.equal(resumo.itensEspeciais.limite, 2);
+  assert.match(resumo.conflitos[0] || '', /excedem o limite de 2/i);
 });
 
 test('mutações abissais selecionadas somam Vida e Defesa sem acumular degraus antigos', () => {
@@ -314,10 +353,19 @@ test('Fruto do Éden só aplica efeitos depois de existir um vínculo consumido 
       titulo: 'Fruto do Instante',
       conteudo: {
         passivo: 'Olhar entre Segundos: Iniciativa +2.',
+        passivoDespertado: 'Olhar Antes do Instante: Iniciativa +4 e você não pode ficar Surpreendido.',
         tecnica: 'Repetição Breve: refaz uma rolagem.',
+        tecnicaDespertada: 'Repetição Escolhida: refaz uma rolagem e escolhe o resultado.',
         despertar: 'Segundo Proibido: realiza um turno adicional.',
         custo: '4 Mana na Repetição; 14 Mana no Despertar',
         efeitosFicha: [efeito('iniciativa', 'combate', 'iniciativa', 2)],
+        efeitosFichaDespertado: [efeito('iniciativa', 'combate', 'iniciativa', 4)],
+        poderesDespertados: {
+          'repeticao-breve': {
+            nome: 'Repetição Escolhida',
+            descricao: 'Refaça uma rolagem própria e escolha qual resultado usar.',
+          },
+        },
       },
     },
   };
@@ -333,7 +381,11 @@ test('Fruto do Éden só aplica efeitos depois de existir um vínculo consumido 
     ...ficha,
     frutoEdenConsumido: { ...ficha.frutoEdenConsumido, despertado: true },
   };
-  assert.deepEqual(poderesDoFruto(despertada).map((item) => item.nome), ['Repetição Breve', 'Segundo Proibido']);
+  const resumoDespertado = resumirEquipamentos([], despertada);
+  assert.equal(resumoDespertado.bonusCombate.iniciativa, 4);
+  assert.equal(habilidadeDoFruto(despertada)[0]?.titulo, 'Olhar Antes do Instante');
+  assert.deepEqual(poderesDoFruto(despertada).map((item) => item.nome), ['Repetição Escolhida', 'Segundo Proibido']);
+  assert.equal(poderesDoFruto(despertada)[0]?.estagioFruto, 'aprimorado');
   assert.equal(poderesDoFruto(despertada)[1]?.custo.valor, 14);
   assert.equal(poderesDoFruto(despertada)[1]?.estagioFruto, 'despertado');
 });
@@ -354,4 +406,36 @@ test('Fruto do Trovão publica separadamente suas duas técnicas com custos corr
     ['Salto Voltaico', 3],
     ['Defesa Eletromagnética', 2],
   ]);
+});
+
+test('aliados em cena aplicam bônus e vantagens locais ou compartilhados', () => {
+  const efeitoPericia = efeito('e-pericia', 'pericia', 'percepcao', 2);
+  const efeitoVantagem = efeito('e-vantagem', 'pericia', 'percepcao', 1, 'vantagem');
+  const local = {
+    id: 'aliado-local',
+    nome: 'Corvo de vigília',
+    emCena: true,
+    efeitos: [efeitoPericia, efeitoVantagem],
+  };
+  const compartilhado = {
+    id: 'aliado-compartilhado',
+    nome: 'Guia espectral',
+    emCena: true,
+    efeitos: [efeito('e-defesa', 'combate', 'defesa', 1)],
+  };
+
+  const ativo = resumirEquipamentos([], { aliados: [local] }, [compartilhado]);
+  assert.equal(ativo.bonusPericias.percepcao, 2);
+  assert.equal(ativo.vantagens.percepcao, 1);
+  assert.equal(ativo.bonusCombate.defesa, 1);
+  assert.deepEqual(detalharEfeitosAutomaticos(ativo, 'pericia', 'percepcao'), [
+    { nome: 'Aliado: Corvo de vigília', valor: 3 },
+  ]);
+
+  const inativo = resumirEquipamentos([], {
+    aliados: [{ ...local, emCena: false }],
+  }, [{ ...compartilhado, emCena: false }]);
+  assert.equal(inativo.bonusPericias.percepcao, undefined);
+  assert.equal(inativo.vantagens.percepcao, undefined);
+  assert.equal(inativo.bonusCombate.defesa, undefined);
 });

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { ArrowLeft, BookOpen, GitBranch, History } from 'lucide-react';
-import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
+import { ARVORES, ARVORES_REAIS, VAZIO_ID } from '../../../../data/mundo/arvoresCatalog';
 import { ChronicleEvent, type WorldChronicleCatalog } from '../worldChronicles';
 import { ChronicleTimeline } from './ChronicleTimeline';
 
@@ -54,13 +54,30 @@ export const GlobalChroniclePage: React.FC<GlobalChroniclePageProps> = ({ visibl
             <h2 className="font-bold text-white">Crônicas individuais</h2>
           </div>
           <div className="space-y-2">
-            {ARVORES.filter((tree) => visible.has(tree.id)).map((tree) => (
+            {ARVORES_REAIS.filter((tree) => visible.has(tree.id)).map((tree) => (
               <button key={tree.id} type="button" onClick={() => onOpenTree(tree.id)} className="flex w-full items-center justify-between rounded-xl border border-transparent px-3 py-3 text-left text-sm text-gray-400 transition hover:border-white/10 hover:bg-white/[0.03] hover:text-white">
                 <span>{tree.nome}</span>
                 <BookOpen size={14} style={{ color: `rgb(${tree.rgb})` }} />
               </button>
             ))}
           </div>
+
+          {/* O Vazio fica separado porque não é uma Árvore: é o espaço entre
+              elas. Sai da lista de crônicas individuais e ganha o próprio
+              rótulo, pra não dar a entender que existe uma décima Árvore. */}
+          {visible.has(VAZIO_ID) && (
+            <div className="mt-5 border-t border-white/10 pt-5">
+              <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-gray-600">Entre as Árvores</p>
+              <button
+                type="button"
+                onClick={() => onOpenTree(VAZIO_ID)}
+                className="flex w-full items-center justify-between rounded-xl border border-transparent px-3 py-3 text-left text-sm text-gray-400 transition hover:border-white/10 hover:bg-white/[0.03] hover:text-white"
+              >
+                <span>{ARVORES.find((entry) => entry.id === VAZIO_ID)?.nome ?? 'O Vazio'}</span>
+                <BookOpen size={14} className="text-gray-500" />
+              </button>
+            </div>
+          )}
         </aside>
       </div>
     </main>

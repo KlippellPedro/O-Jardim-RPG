@@ -10,6 +10,24 @@ export interface IStatusVital {
   [key: string]: unknown;
 }
 
+export interface IRegraCondicaoAplicavel {
+  id: string;
+  titulo: string;
+  categoria: string;
+  duracao: string;
+  efeitos: string[];
+  remocao?: string;
+}
+
+export interface ICondicaoAtivaFicha {
+  id: string;
+  nome: string;
+  descricao: string;
+  afeta: string;
+  duracao: string;
+  remocao?: string;
+}
+
 function normalizarIdentificador(valor: unknown): string {
   return String(valor ?? '')
     .normalize('NFD')
@@ -38,6 +56,27 @@ export function obterStatusFicha(ficha: Record<string, any> | null | undefined):
 
 export function condicaoAtiva(condicoes: unknown, id: string): boolean {
   return idsCondicoes(condicoes).has(normalizarIdentificador(id));
+}
+
+export function adicionarCondicaoOficial(
+  condicoes: unknown,
+  regra: IRegraCondicaoAplicavel,
+): { condicoes: Array<unknown>; adicionada: boolean } {
+  const atuais = Array.isArray(condicoes) ? [...condicoes] : [];
+  if (condicaoAtiva(atuais, regra.id) || condicaoAtiva(atuais, regra.titulo)) {
+    return { condicoes: atuais, adicionada: false };
+  }
+
+  const novaCondicao: ICondicaoAtivaFicha = {
+    id: regra.id,
+    nome: regra.titulo,
+    descricao: regra.efeitos.join(' '),
+    afeta: regra.categoria,
+    duracao: regra.duracao,
+    ...(regra.remocao ? { remocao: regra.remocao } : {}),
+  };
+
+  return { condicoes: [...atuais, novaCondicao], adicionada: true };
 }
 
 /**

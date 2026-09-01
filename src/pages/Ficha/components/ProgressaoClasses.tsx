@@ -26,7 +26,7 @@ export const ProgressaoClasses = ({ classes, catalogoClasses }: ProgressaoClasse
   if (classesPublicadas.length === 0) return null;
 
   return (
-    <section className="rounded-2xl border border-white/5 bg-[#0f0e15] p-6">
+    <section className="rounded-2xl border border-white/5 bg-[#0f0e15] p-6" data-tour="progressao-classes">
       <div className="mb-5">
         <h2 className="text-lg font-bold uppercase tracking-widest text-[#c7a44c]">Progressão das Classes</h2>
         <p className="mt-1 text-xs leading-relaxed text-gray-500">

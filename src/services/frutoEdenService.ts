@@ -1,4 +1,5 @@
 import { normalizarEfeitosFicha, type IEfeitoEquipamento } from './equipamentoService';
+import { efeitosBrutosDoFrutoEden } from './frutoEdenAwakening';
 
 export interface IFrutoEdenConsumido {
   itemId: string;
@@ -21,7 +22,7 @@ export interface IPoderFrutoEden {
   alcance: string;
   descricao: string;
   usavel: boolean;
-  estagioFruto: 'normal' | 'despertado';
+  estagioFruto: 'normal' | 'aprimorado' | 'despertado';
 }
 
 const texto = (value: unknown) => typeof value === 'string' ? value.trim() : '';
@@ -45,8 +46,7 @@ export function obterFrutoEdenConsumido(ficha: any): IFrutoEdenConsumido | null 
 }
 
 export function efeitosFichaDoFruto(ficha: any): IEfeitoEquipamento[] {
-  const fruit = obterFrutoEdenConsumido(ficha);
-  return normalizarEfeitosFicha(fruit?.conteudo?.efeitosFicha);
+  return normalizarEfeitosFicha(efeitosBrutosDoFrutoEden(ficha));
 }
 
 export function bonusRecursoDoFruto(ficha: any, target: string): number {
@@ -57,7 +57,8 @@ export function bonusRecursoDoFruto(ficha: any, target: string): number {
 
 export function habilidadeDoFruto(ficha: any) {
   const fruit = obterFrutoEdenConsumido(ficha);
-  const passive = texto(fruit?.conteudo?.passivo);
+  const passive = texto(fruit?.despertado && fruit.conteudo.passivoDespertado)
+    || texto(fruit?.conteudo?.passivo);
   if (!fruit || !passive) return [];
   const separator = passive.indexOf(':');
   return [{
@@ -142,22 +143,29 @@ const REGRAS_PODERES_FRUTOS: Record<string, IRegraPoderFruto[]> = {
 };
 
 function powerFromRule(fruit: IFrutoEdenConsumido, rule: IRegraPoderFruto): IPoderFrutoEden | null {
-  const summary = rule.descricao || texto(fruit.conteudo[rule.fonte]);
+  const improvement = fruit.despertado && rule.fonte === 'tecnica'
+    ? fruit.conteudo?.poderesDespertados?.[rule.id]
+    : null;
+  const summary = texto(improvement?.descricao)
+    || rule.descricao
+    || (fruit.despertado && rule.fonte === 'tecnica' ? texto(fruit.conteudo.tecnicaDespertada) : '')
+    || texto(fruit.conteudo[rule.fonte]);
   if (!summary) return null;
   const separator = summary.indexOf(':');
+  const upgraded = rule.fonte === 'tecnica' && fruit.despertado && Boolean(improvement || texto(fruit.conteudo.tecnicaDespertada));
   return {
     id: `fruto:${fruit.itemId}:${rule.id}`,
-    nome: rule.nome || (separator > 0 ? summary.slice(0, separator).trim() : summary),
+    nome: texto(improvement?.nome) || rule.nome || (separator > 0 ? summary.slice(0, separator).trim() : summary),
     fonte: fruit.titulo,
     tipo: 'Ativa',
     nivelAdquirido: '',
-    custo: { recurso: 'mana', valor: rule.custoMana },
-    acao: rule.acao,
-    duracao: texto(fruit.conteudo.duracao),
-    alcance: texto(fruit.conteudo.alcance),
+    custo: { recurso: 'mana', valor: Number.isFinite(Number(improvement?.custoMana)) ? Math.max(0, Math.trunc(Number(improvement.custoMana))) : rule.custoMana },
+    acao: texto(improvement?.acao) || rule.acao,
+    duracao: texto(improvement?.duracao) || texto(fruit.conteudo.duracao),
+    alcance: texto(improvement?.alcance) || texto(fruit.conteudo.alcance),
     descricao: summary,
     usavel: true,
-    estagioFruto: rule.fonte === 'despertar' ? 'despertado' : 'normal',
+    estagioFruto: rule.fonte === 'despertar' ? 'despertado' : upgraded ? 'aprimorado' : 'normal',
   };
 }
 
@@ -173,24 +181,33 @@ export function poderesDoFruto(ficha: any): IPoderFrutoEden[] {
           ? raw.custo.recurso
           : 'nenhum';
         const value = Math.max(0, Math.trunc(Number(raw?.custo?.valor) || 0));
+        const improvement = fruit.despertado && raw?.estagio !== 'despertado' && raw?.melhoriaDespertada
+          ? raw.melhoriaDespertada
+          : null;
+        const improvedResource = ['mana', 'vida', 'sanidade', 'cansaco'].includes(improvement?.custo?.recurso)
+          ? improvement.custo.recurso
+          : resource;
+        const improvedValue = improvement?.custo && Number.isFinite(Number(improvement.custo.valor))
+          ? Math.max(0, Math.trunc(Number(improvement.custo.valor)))
+          : value;
         return [{
           id: `fruto:${fruit.itemId}:poder:${texto(raw?.id) || index}`,
-          nome: name,
+          nome: texto(improvement?.nome) || name,
           fonte: fruit.titulo,
           tipo: ['Ativa', 'Passiva', 'Reação', 'Sustentada', 'Outro'].includes(raw?.tipo) ? raw.tipo : 'Ativa',
           nivelAdquirido: '',
-          custo: { recurso: resource, valor: value },
-          acao: texto(raw?.acao),
-          duracao: texto(raw?.duracao),
-          alcance: texto(raw?.alcance),
-          descricao: texto(raw?.descricao),
+          custo: { recurso: improvedResource, valor: improvedValue },
+          acao: texto(improvement?.acao) || texto(raw?.acao),
+          duracao: texto(improvement?.duracao) || texto(raw?.duracao),
+          alcance: texto(improvement?.alcance) || texto(raw?.alcance),
+          descricao: texto(improvement?.descricao) || texto(raw?.descricao),
           usavel: raw?.usavel !== false,
-          estagioFruto: raw?.estagio === 'despertado' ? 'despertado' : 'normal',
+          estagioFruto: raw?.estagio === 'despertado' ? 'despertado' : improvement ? 'aprimorado' : 'normal',
         } as IPoderFrutoEden];
       })
     : [];
   if (structured.length > 0) {
-    return structured.filter((power) => power.estagioFruto === 'normal' || fruit.despertado);
+    return structured.filter((power) => power.estagioFruto !== 'despertado' || fruit.despertado);
   }
   const rules = REGRAS_PODERES_FRUTOS[fruit.itemId] || [
     { id: 'tecnica', fonte: 'tecnica', custoMana: 0, acao: texto(fruit.conteudo.ativacao) },

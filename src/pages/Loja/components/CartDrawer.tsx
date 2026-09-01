@@ -20,7 +20,7 @@ export interface CartItem {
 /** Chave estável de agrupamento/identificação de uma linha do carrinho.
  * Contratar e comprar o mesmo item não se agrupam: são vínculos diferentes. */
 export const cartItemKey = ({ item, alvoItemId, modo }: Pick<CartItem, 'item' | 'alvoItemId' | 'modo'>): string => (
-  [item.id, alvoItemId, modo === 'contratar' ? 'contratar' : undefined].filter(Boolean).join('::')
+  [item.id, alvoItemId, modo === 'contratar' ? 'contratar' : undefined, item.raridadeCompra].filter(Boolean).join('::')
 );
 
 interface CartDrawerProps {
@@ -39,16 +39,18 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 }) => {
   const totais = somarPrecosNativos(cart);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useModalSfx(isOpen);
-  useDialogAccessibility({ open: isOpen, dialogRef, initialFocusRef: closeButtonRef, onClose });
+  useDialogAccessibility({ open: isOpen, dialogRef, backdropRef, initialFocusRef: closeButtonRef, onClose });
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
           <motion.div
+            ref={backdropRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -93,6 +95,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <div className="min-w-0 flex-1">
                       <div className="text-xs uppercase tracking-widest text-gray-500 mb-1">{item.categoria}</div>
                       <h4 className="text-white font-bold mb-1">{item.nome}</h4>
+                      {item.raridadeCompra ? (
+                        <div className="mb-2 inline-block rounded-md border border-[#c7a44c]/25 bg-[#c7a44c]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#dfc87f]">
+                          {item.raridade}
+                        </div>
+                      ) : null}
                       {alvoItemNome && (
                         <div className="text-[10px] text-fuchsia-400 font-bold uppercase tracking-widest mb-2 border border-fuchsia-500/20 bg-fuchsia-900/20 px-2 py-0.5 rounded-md inline-block">
                           Para: {alvoItemNome}

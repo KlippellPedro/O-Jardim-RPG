@@ -2,17 +2,14 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { personagensApi, PersonagemApiRecord } from '../../services/personagensApi';
 import { campanhasApi } from '../../services/campanhasApi';
-import { Shield, Users, Settings, Gem, BookOpenText, FileClock, Eye, BarChart3 } from 'lucide-react';
+import { Shield, Users, Settings, Gem, FileClock, BarChart3 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MestrePanel } from '../../components/Settings/MestrePanel';
 import { CofrePanel } from '../../components/Settings/CofrePanel';
 import { ConcederItemModal } from '../../components/Settings/ConcederItemModal';
-import { ConteudoMestrePanel } from '../../components/Settings/ConteudoMestrePanel';
 import { LogsMestrePanel } from '../../components/Settings/LogsMestrePanel';
-import { VisibilidadeCampanha } from '../../components/Settings/VisibilidadeCampanha';
 import { EstatisticasCampanha } from '../../components/Settings/EstatisticasCampanha';
 import { PersonagensPainel } from '../../components/Settings/PersonagensPainel';
-import { useSearchParams } from 'react-router-dom';
 
 interface MembroCampanha {
   id: string;
@@ -20,42 +17,28 @@ interface MembroCampanha {
 }
 
 export const MasterPage = () => {
-  const [searchParams] = useSearchParams();
   const { campanhaAtiva, usuario } = useAuthStore();
   const [personagens, setPersonagens] = useState<PersonagemApiRecord[]>([]);
   const [membros, setMembros] = useState<MembroCampanha[]>([]);
   const [loading, setLoading] = useState(true);
   const [busca, setBusca] = useState('');
-  const [activeTab, setActiveTab] = useState<'personagens' | 'estatisticas' | 'cofre' | 'conteudo' | 'visibilidade' | 'logs' | 'configs'>('personagens');
-  const [conteudoDirty, setConteudoDirty] = useState(false);
+  const [activeTab, setActiveTab] = useState<'personagens' | 'estatisticas' | 'cofre' | 'logs' | 'configs'>('personagens');
   const [transferindoId, setTransferindoId] = useState<string | null>(null);
   const [erroTransferencia, setErroTransferencia] = useState<string | null>(null);
   const [concedendoParaId, setConcedendoParaId] = useState<string | null>(null);
 
   // Assistente também gerencia conteúdo da campanha (convites, auditoria) -
   // só ações mais sensíveis (arquivar, trocar papel, transferir dono) ficam
-  // reservadas ao mestre de verdade, gated dentro de cada painel.
+  // reservadas ao mestre de verdade, gated dentro de cada painel. Editar
+  // lore/regras/loja/visibilidade não é mais coisa deste painel - isso é
+  // exclusivo do criador da plataforma, em /criador.
   const isMestre = campanhaAtiva?.papel === 'mestre' || campanhaAtiva?.papel === 'assistente'
     || usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador';
-  const podeEditarConteudo = campanhaAtiva?.papel === 'mestre' || usuario?.papel_plataforma === 'criador';
-  const abaSolicitada = searchParams.get('aba');
-  const secaoSolicitada = searchParams.get('secao');
-  const itemSolicitado = searchParams.get('item') || undefined;
-  const secaoConteudo = secaoSolicitada === 'cronologia' || secaoSolicitada === 'loja' || secaoSolicitada === 'regras'
-    ? secaoSolicitada
-    : 'lore';
 
   const trocarAbaPrincipal = (next: typeof activeTab) => {
     if (next === activeTab) return;
-    if (activeTab === 'conteudo' && conteudoDirty
-      && !window.confirm('Existem alterações de conteúdo não salvas. Deseja descartá-las?')) return;
-    setConteudoDirty(false);
     setActiveTab(next);
   };
-
-  useEffect(() => {
-    if (abaSolicitada === 'conteudo' && podeEditarConteudo) setActiveTab('conteudo');
-  }, [abaSolicitada, podeEditarConteudo]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -144,24 +127,6 @@ export const MasterPage = () => {
         >
           <Gem size={16} /> Cofre
         </button>
-        {podeEditarConteudo && (
-          <button
-            onClick={() => trocarAbaPrincipal('conteudo')}
-            className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
-              activeTab === 'conteudo' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
-            }`}
-          >
-            <BookOpenText size={16} /> Conteúdo
-          </button>
-        )}
-        <button
-          onClick={() => trocarAbaPrincipal('visibilidade')}
-          className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
-            activeTab === 'visibilidade' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-300'
-          }`}
-        >
-          <Eye size={16} /> Visibilidade
-        </button>
         <button
           onClick={() => trocarAbaPrincipal('logs')}
           className={`flex items-center gap-2 pb-2 px-1 border-b-2 font-bold tracking-widest uppercase transition-colors whitespace-nowrap ${
@@ -226,29 +191,6 @@ export const MasterPage = () => {
             <div className="flex-1 w-full h-full p-2 md:p-6">
               <CofrePanel />
             </div>
-          </motion.div>
-        )}
-
-        {activeTab === 'conteudo' && podeEditarConteudo && campanhaAtiva && (
-          <motion.div
-            key="conteudo"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-          >
-            <ConteudoMestrePanel campanhaId={campanhaAtiva.id} initialAba={secaoConteudo} initialItem={itemSolicitado} onDirtyChange={setConteudoDirty} />
-          </motion.div>
-        )}
-
-        {activeTab === 'visibilidade' && (
-          <motion.div
-            key="visibilidade"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="relative flex min-h-[min(600px,70dvh)] flex-col rounded-3xl border border-white/10 bg-[#0a090e] p-6 shadow-2xl md:p-8"
-          >
-            <VisibilidadeCampanha />
           </motion.div>
         )}
 

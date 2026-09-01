@@ -398,7 +398,7 @@ test('Passo de Órbita anda uma casa e o Véu do Nada quebra ao agir', () => {
   assert.ok(passo);
   assert.equal(passo.fluxo, 'espaco');
   assert.equal(passo.circulo, 9);
-  assert.match(passo.efeito, /nunca o Abismo/i);
+  assert.match(passo.efeito, /nunca o Vazio/i);
 
   const veu = MAGIAS_CATALOGO.find((magia) => magia.id === 'veu-do-nada');
   assert.ok(veu);

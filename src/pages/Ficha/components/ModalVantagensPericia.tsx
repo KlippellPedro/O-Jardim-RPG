@@ -93,8 +93,8 @@ export const ModalVantagensPericia: React.FC<ModalVantagensPericiaProps> = ({
           </div>
         )}
 
-        <div className="flex gap-4">
-          <div className="flex-1 bg-[#121118] border border-green-500/20 rounded-xl p-4">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="min-w-0 bg-[#121118] border border-green-500/20 rounded-xl p-4">
             <h4 className="text-white font-bold mb-4">Vantagens manuais</h4>
             <div className="flex items-center justify-between">
               <button 
@@ -113,7 +113,7 @@ export const ModalVantagensPericia: React.FC<ModalVantagensPericiaProps> = ({
             </div>
           </div>
 
-          <div className="flex-1 bg-[#121118] border border-red-500/20 rounded-xl p-4">
+          <div className="min-w-0 bg-[#121118] border border-red-500/20 rounded-xl p-4">
             <h4 className="text-white font-bold mb-4">Desvantagens manuais</h4>
             <div className="flex items-center justify-between">
               <button 
@@ -138,22 +138,22 @@ export const ModalVantagensPericia: React.FC<ModalVantagensPericiaProps> = ({
           <p className="text-gray-400 text-sm">{resumoDescricao}</p>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
+        <div className="grid grid-cols-2 gap-3 border-t border-white/5 pt-4 sm:grid-cols-[1fr_auto_auto]">
           <button 
             onClick={handleClear}
-            className="px-6 py-3 rounded-md bg-[#1a1924] border border-white/5 text-gray-400 hover:text-white text-sm font-bold uppercase tracking-wider transition-colors"
+            className="min-h-12 whitespace-nowrap rounded-md border border-white/5 bg-[#1a1924] px-4 py-3 text-xs font-bold uppercase tracking-wider text-gray-400 transition-colors hover:border-white/15 hover:text-white sm:px-5 sm:text-sm"
           >
             Zerar manuais
           </button>
           <button 
             onClick={onClose}
-            className="px-6 py-3 rounded-md bg-[#1a1924] border border-white/5 text-gray-400 hover:text-white text-sm font-bold uppercase tracking-wider transition-colors"
+            className="min-h-12 whitespace-nowrap rounded-md border border-white/5 bg-[#1a1924] px-4 py-3 text-xs font-bold uppercase tracking-wider text-gray-400 transition-colors hover:border-white/15 hover:text-white sm:px-5 sm:text-sm"
           >
             Cancelar
           </button>
           <button 
             onClick={handleApply}
-            className="px-6 py-3 rounded-md bg-[#c7a44c]/10 border border-[#c7a44c]/30 text-[#c7a44c] hover:bg-[#c7a44c]/20 text-sm font-bold uppercase tracking-wider transition-colors"
+            className="col-span-2 min-h-12 whitespace-nowrap rounded-md border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-5 py-3 text-sm font-bold uppercase tracking-wider text-[#c7a44c] transition-all hover:bg-[#c7a44c]/20 hover:shadow-[0_0_18px_rgba(199,164,76,0.14)] sm:col-auto"
           >
             Aplicar Saldo
           </button>

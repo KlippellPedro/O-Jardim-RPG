@@ -36,9 +36,14 @@ const priceCurrency = (price) => {
 const levelForMonster = (entry, text) => {
   const content = entry.conteudo;
   const monsterClass = normalize(content.classe);
+  const monsterSubtype = normalize(content.subtipo);
   const monsterLevel = Number(content.nivel) || 0;
 
   if (monsterClass === 'ser lendario' || normalize(content.raridade) === 'lendario') return 4;
+  // Criaturas do Vazio não são fauna comum. Até os exemplares mais fracos só
+  // circulam contidos pela Guilda dos Caçadores e entram pelo Mercado Negro;
+  // acima do nível 40, o Banco Lunar continua sendo o único balcão possível.
+  if (monsterSubtype === 'vazio') return Math.max(monsterLevel > 40 ? 4 : 3, rarityLevel(content.raridade));
   if (monsterClass === 'servo') return 3;
 
   if (monsterClass === 'ajudante') {

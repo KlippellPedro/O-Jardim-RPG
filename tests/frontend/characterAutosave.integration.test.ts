@@ -305,3 +305,173 @@ test('409 preserva o rascunho local e só sobrescreve após decisão explícita'
   assert.equal(useCharacterStore.getState().persistence[character.id].sheet.phase, 'saved');
   assert.equal(storage.getItem(`oj_rpg_sheet_draft_v1_${character.id}`), null);
 });
+
+test('sincronização ao vivo aplica versão remota e atualiza a base do próximo autosave', async () => {
+  const character = makeCharacter('live-remote-update');
+  resetStore(character);
+  const bodies: any[] = [];
+
+  globalThis.fetch = (async (_input: RequestInfo | URL, init?: RequestInit) => {
+    const method = init?.method ?? 'GET';
+    if (method === 'GET') {
+      return jsonResponse(200, {
+        personagem: {
+          ...character,
+          ficha: { ...character.ficha, historia: 'alterada pelo mestre' },
+          versao: 2,
+          economia_versao: 1,
+          carteira: character.carteira,
+          inventario_central: character.inventarioCentral,
+          atualizado_em: '2026-01-01T00:00:02Z',
+        },
+      });
+    }
+
+    const body = JSON.parse(String(init?.body));
+    bodies.push(body);
+    return jsonResponse(200, {
+      personagem: {
+        ...character,
+        nome: body.nome,
+        ficha: body.ficha,
+        versao: 3,
+        economia_versao: 1,
+        atualizado_em: '2026-01-01T00:00:03Z',
+      },
+    });
+  }) as typeof fetch;
+
+  assert.equal(
+    await useCharacterStore.getState().syncRemoteCharacter(character.id, 2),
+    'updated',
+  );
+  let current = useCharacterStore.getState().characters[0];
+  assert.equal(current.versao, 2);
+  assert.equal(current.ficha?.historia, 'alterada pelo mestre');
+
+  useCharacterStore.getState().patchCharacter(character.id, ['ficha', 'historia'], 'resposta do jogador');
+  assert.equal(await useCharacterStore.getState().flushCharacterSaves(character.id), true);
+  assert.equal(bodies[0].versao_esperada, 2);
+  current = useCharacterStore.getState().characters[0];
+  assert.equal(current.versao, 3);
+  assert.equal(current.ficha?.historia, 'resposta do jogador');
+});
+
+test('eco SSE da versão já aplicada não faz nova requisição', async () => {
+  const character = makeCharacter('live-own-echo');
+  resetStore(character);
+  let requests = 0;
+  globalThis.fetch = (async () => {
+    requests += 1;
+    throw new Error('não deveria buscar o próprio eco');
+  }) as typeof fetch;
+
+  assert.equal(
+    await useCharacterStore.getState().syncRemoteCharacter(character.id, character.versao),
+    'unchanged',
+  );
+  assert.equal(requests, 0);
+});
+
+test('evento remoto aguarda o autosave local sem apagar o rascunho', async () => {
+  const character = makeCharacter('live-deferred-draft');
+  resetStore(character);
+  let getRequests = 0;
+
+  globalThis.fetch = (async (_input: RequestInfo | URL, init?: RequestInit) => {
+    const method = init?.method ?? 'GET';
+    if (method === 'GET') {
+      getRequests += 1;
+      return jsonResponse(500, { detail: 'não deveria buscar com rascunho pendente' });
+    }
+    const body = JSON.parse(String(init?.body));
+    return jsonResponse(200, {
+      personagem: {
+        ...character,
+        nome: body.nome,
+        ficha: body.ficha,
+        versao: 2,
+        economia_versao: 1,
+      },
+    });
+  }) as typeof fetch;
+
+  useCharacterStore.getState().patchCharacter(character.id, ['ficha', 'historia'], 'rascunho local');
+  assert.equal(
+    await useCharacterStore.getState().syncRemoteCharacter(character.id, 2),
+    'deferred',
+  );
+  assert.equal(getRequests, 0);
+  assert.equal(useCharacterStore.getState().characters[0].ficha?.historia, 'rascunho local');
+  assert.notEqual(storage.getItem(`oj_rpg_sheet_draft_v1_${character.id}`), null);
+
+  assert.equal(await useCharacterStore.getState().flushCharacterSaves(character.id), true);
+  assert.equal(storage.getItem(`oj_rpg_sheet_draft_v1_${character.id}`), null);
+});
+
+test('edição iniciada durante o GET impede aplicar a resposta remota', async () => {
+  const character = makeCharacter('live-edit-during-get');
+  resetStore(character);
+  const getResponse = deferred();
+
+  globalThis.fetch = (async (_input: RequestInfo | URL, init?: RequestInit) => {
+    const method = init?.method ?? 'GET';
+    if (method === 'GET') {
+      await getResponse.promise;
+      return jsonResponse(200, {
+        personagem: {
+          ...character,
+          ficha: { ...character.ficha, historia: 'versão remota' },
+          versao: 2,
+          economia_versao: 1,
+          carteira: character.carteira,
+          inventario_central: character.inventarioCentral,
+        },
+      });
+    }
+    const body = JSON.parse(String(init?.body));
+    return jsonResponse(200, {
+      personagem: {
+        ...character,
+        nome: body.nome,
+        ficha: body.ficha,
+        versao: 2,
+        economia_versao: 1,
+      },
+    });
+  }) as typeof fetch;
+
+  const synchronizing = useCharacterStore.getState().syncRemoteCharacter(character.id, 2);
+  await Promise.resolve();
+  useCharacterStore.getState().patchCharacter(character.id, ['ficha', 'historia'], 'edição durante a busca');
+  getResponse.resolve();
+
+  assert.equal(await synchronizing, 'deferred');
+  assert.equal(useCharacterStore.getState().characters[0].ficha?.historia, 'edição durante a busca');
+  assert.equal(useCharacterStore.getState().characters[0].versao, 1);
+  assert.equal(await useCharacterStore.getState().flushCharacterSaves(character.id), true);
+});
+
+test('sincronização pede nova tentativa quando o GET ainda não alcançou a versão do evento', async () => {
+  const character = makeCharacter('live-stale-read');
+  resetStore(character);
+
+  globalThis.fetch = (async () => jsonResponse(200, {
+    personagem: {
+      ...character,
+      ficha: { ...character.ficha, historia: 'versão intermediária' },
+      versao: 2,
+      economia_versao: 1,
+      carteira: character.carteira,
+      inventario_central: character.inventarioCentral,
+    },
+  })) as typeof fetch;
+
+  assert.equal(
+    await useCharacterStore.getState().syncRemoteCharacter(character.id, 3),
+    'retry',
+  );
+  const current = useCharacterStore.getState().characters[0];
+  assert.equal(current.versao, 1);
+  assert.equal(current.ficha?.historia, 'base');
+});

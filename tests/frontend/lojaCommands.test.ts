@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 
 const { hasVerifiableShopOrigin, lojaApi, prepareCheckoutAttempt } = await import('../../src/services/lojaApi.ts');
 const {
+  aplicarRaridadeCompra,
   calcularValorRevenda,
   itemCorrespondeBusca,
   itemCorrespondeSubfiltro,
@@ -20,6 +21,7 @@ const {
   somarPrecosNativos,
 } = await import('../../src/services/lojaCatalogService.ts');
 const { reivindicarRecompensa, resolverRecompensa } = await import('../../src/services/bountiesApi.ts');
+const { personagensApi } = await import('../../src/services/personagensApi.ts');
 
 function jsonResponse(payload: unknown): Response {
   return new Response(JSON.stringify(payload), {
@@ -76,6 +78,41 @@ test('localização integra a assinatura idempotente e aceita somente os quatro 
   assert.equal(first.payload.localizacao_loja, 2);
   assert.notEqual(first.payload.idempotencia, changed.payload.idempotencia);
   assert.throws(() => prepareCheckoutAttempt(null, 'compra', { ...base, localizacao_loja: 5 }), /localização/i);
+});
+
+test('raridades diferentes do mesmo equipamento ficam em linhas separadas e alteram a idempotência', () => {
+  const base = {
+    campanha_id: 'campaign-1', personagem_id: 'character-1', economia_versao_esperada: 7,
+    localizacao_loja: 4,
+    itens: [
+      { item_id: 'sword', quantidade: 1, raridade: 'comum' as const },
+      { item_id: 'sword', quantidade: 2, raridade: 'raro' as const },
+    ],
+  };
+  const attempt = prepareCheckoutAttempt(null, 'compra', base, () => 'rarity');
+  assert.deepEqual(attempt.payload.itens, [
+    { item_id: 'sword', quantidade: 1, alvo_item_id: undefined, raridade: 'comum' },
+    { item_id: 'sword', quantidade: 2, alvo_item_id: undefined, raridade: 'raro' },
+  ]);
+  const changed = prepareCheckoutAttempt(attempt, 'compra', {
+    ...base,
+    itens: [{ item_id: 'sword', quantidade: 3, raridade: 'incomum' as const }],
+  }, () => 'changed');
+  assert.notEqual(changed.signature, attempt.signature);
+});
+
+test('arma comum calcula preço e balcão de cada raridade sem alterar o item-base', () => {
+  const item = {
+    id: 'espada', tipoOrigem: 'arma', nome: 'Espada', categoria: 'Armas', raridade: 'Comum',
+    moedaPreco: 'Lunaris', valorOriginal: 30, nivelLoja: 1, descricao: '', dadosBrutos: { raridade: 'comum' }, raridadeConfiguravel: true,
+  } as const;
+  const rara = aplicarRaridadeCompra(item, 'raro');
+  const epica = aplicarRaridadeCompra(item, 'epico');
+  // Multiplicadores em Lunaris por raridade: comum 1x, incomum 3x, raro 8x, épico 20x, lendário 60x
+  // (mesma tabela usada pelo backend em equipment_variant_price). Base 30 Lunaris.
+  assert.deepEqual([rara.valorOriginal, rara.moedaPreco, rara.nivelLoja, rara.raridade], [240, 'Lunaris', 2, 'Raro']);
+  assert.deepEqual([epica.valorOriginal, epica.moedaPreco, epica.nivelLoja, epica.raridade], [6, 'Solares', 3, 'Épico']);
+  assert.deepEqual([item.valorOriginal, item.raridade], [30, 'Comum']);
 });
 
 test('compra e venda enviam apenas comandos; nunca carteira, inventário, preço ou total', async () => {
@@ -143,6 +180,27 @@ test('catálogo visual é mapeado somente das entradas devolvidas pelo servidor'
   assert.equal(catalog[0].nome, 'Espada publicada');
   assert.equal(catalog[0].moedaPreco, 'Solares');
   assert.equal(catalog[0].valorOriginal, 12);
+});
+
+test('despertar Fruto é um comando do personagem e envia somente a versão da ficha', async () => {
+  let request: { url: string; method: string; body: Record<string, unknown> } | null = null;
+  globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+    request = {
+      url: String(input),
+      method: init?.method ?? 'GET',
+      body: JSON.parse(String(init?.body)),
+    };
+    return jsonResponse({ fruto: { itemId: 'fruto-fenix', despertado: true }, versao: 8 });
+  }) as typeof fetch;
+
+  const response = await personagensApi.despertarFrutoEden('personagem-1', { versaoFichaEsperada: 7 });
+
+  assert.deepEqual(request, {
+    url: '/api/v1/personagens/personagem-1/despertar-fruto-eden',
+    method: 'POST',
+    body: { versao_ficha_esperada: 7 },
+  });
+  assert.equal(response.fruto.despertado, true);
 });
 
 test('raridade de relíquia da criação aceita grafia canônica e acentuada', () => {
@@ -325,6 +383,19 @@ test('Mercenários separa serviço contratado de fera de combate pelo subfiltro'
   assert.equal(itemCorrespondeSubfiltro(lobo, 'Mercenários', 'Guardas de local'), false);
   assert.equal(itemCorrespondeSubfiltro(lobo, 'Mercenários', 'Todos'), true);
 
+  const familias = [
+    ['caranguejo-lanterna', 'Marítimas'],
+    ['fogo-fatuo-do-caminho', 'Espíritos'],
+    ['golem-de-argila-selada', 'Golens'],
+    ['raspador-de-nomes', 'Vazio'],
+  ] as const;
+  for (const [id, subfiltro] of familias) {
+    const criatura = porId(id);
+    assert.equal(itemCorrespondeSubfiltro(criatura, 'Mercenários', subfiltro), true);
+    assert.equal(itemCorrespondeSubfiltro(criatura, 'Mercenários', 'Feras e Monstros'), true);
+  }
+  assert.equal(itemCorrespondeSubfiltro(porId('raspador-de-nomes'), 'Mercenários', 'Espíritos'), false);
+
   // A função também entra na busca por texto, senão "guarda" só acha pelo nome.
   assert.equal(itemCorrespondeBusca(sentinela, 'guarda de local'), true);
 
@@ -341,7 +412,7 @@ test('todo item declara a loja mínima e a Vila fica restrita ao catálogo simpl
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
 
-  assert.equal(entradas.length, 776);
+  assert.equal(entradas.length, 832);
   assert.ok(entradas.every((item) => Number.isInteger(nivel(item)) && nivel(item) >= 1 && nivel(item) <= 4));
   assert.ok([1, 2, 3, 4].every((loja) => entradas.some((item) => nivel(item) === loja)));
 
@@ -400,7 +471,7 @@ test('equipamentos mágicos não são classificados como consumíveis', () => {
 
   assert.equal(manto.categoria, 'Artefatos Mágicos');
   assert.equal(pocao.categoria, 'Consumíveis');
-  assert.equal(corda.categoria, 'Outros');
+  assert.equal(corda.categoria, 'Itens Comuns');
 });
 
 test('promoção só aparece quando preço anterior e moeda são válidos', () => {

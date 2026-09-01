@@ -418,7 +418,7 @@ class AudioSynth {
     });
   }
 
-  /** Quatro plinks descendo, um por desvio - Queda pelo Interstício. */
+  /** Quatro plinks descendo, um por desvio - Queda Livre. */
   playPlinkoSound() {
     const volume = this.currentVolume();
     if (volume === null) return;

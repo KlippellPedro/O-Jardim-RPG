@@ -1,10 +1,15 @@
 import type { LojaCatalogEntry } from './lojaApi';
+import { ehReliquiaCriacao } from './reliquiasCriacaoService';
 
-export type ItemCategoria = 'Relíquias da Criação' | 'Armas' | 'Armaduras e Escudos' | 'Modificações' | 'Consumíveis' | 'Bens' | 'Mercenários' | 'Componentes' | 'Frutos do Éden' | 'Implantes Cibernéticos' | 'Artefatos Mágicos' | 'Outros';
+export type ItemCategoria = 'Relíquias da Criação' | 'Armas' | 'Armaduras' | 'Escudos' | 'Modificações' | 'Consumíveis' | 'Bens' | 'Mercenários' | 'Componentes' | 'Frutos do Éden' | 'Implantes Cibernéticos' | 'Artefatos Mágicos' | 'Itens Comuns' | 'Outros';
 export type ItemRaridade = 'Comum' | 'Incomum' | 'Raro' | 'Épico' | 'Lendário' | 'Mítico' | 'Relíquia da Criação' | 'Desconhecida';
 export type ItemRaridadeChave = 'comum' | 'incomum' | 'raro' | 'epico' | 'lendario' | 'reliquia' | 'reliquia da criacao';
+export type RaridadeCompraEquipamento = 'comum' | 'incomum' | 'raro' | 'epico' | 'lendario';
 
 export type MoedaTipo = 'Solares' | 'Lunaris' | 'Fragmentos de Estrela' | 'Créditos Sombrios';
+
+/** Nomes curtos dos mercados da loja, indexados por nivelLoja - 1 (fonte única para LojaPage e ItemCard). */
+export const NOMES_LOCAIS_LOJA = ['Feira', 'Metrópole', 'Mercado Negro', 'Banco Lunar'] as const;
 
 export interface LojaItem {
   id: string;
@@ -15,6 +20,7 @@ export interface LojaItem {
   moedaPreco: MoedaTipo;
   valorOriginal: number; // Valor na moedaPreco
   nivelLoja: number; // 1=Vila, 2=Metrópole, 3=Mercado Negro, 4=Banco Lunar
+  nivelLojaBase?: number;
   descricao: string;
   propriedades?: string;
   requisitoNivel?: number;
@@ -31,6 +37,103 @@ export interface LojaItem {
    * preço de COMPRA (vira servo/escravo permanente, sem mensalidade). */
   contratacao?: PrecoNativoLoja;
   mensalidade?: PrecoNativoLoja;
+  precosRaridade?: Partial<Record<RaridadeCompraEquipamento, PrecoNativoLoja>>;
+  precosAnterioresRaridade?: Partial<Record<RaridadeCompraEquipamento, PrecoNativoLoja>>;
+  propriedadesRaridade?: Partial<Record<RaridadeCompraEquipamento, Record<string, unknown>>>;
+  /** Presente somente na cópia colocada no carrinho. O id continua sendo o
+   * id do catálogo; o servidor cria a variante estável no inventário. */
+  raridadeCompra?: RaridadeCompraEquipamento;
+  raridadeConfiguravel?: boolean;
+}
+
+export const RARIDADES_COMPRA_EQUIPAMENTO: ReadonlyArray<{
+  value: RaridadeCompraEquipamento;
+  label: ItemRaridade;
+  nivelLoja: number;
+}> = [
+  { value: 'comum', label: 'Comum', nivelLoja: 1 },
+  { value: 'incomum', label: 'Incomum', nivelLoja: 1 },
+  { value: 'raro', label: 'Raro', nivelLoja: 2 },
+  { value: 'epico', label: 'Épico', nivelLoja: 3 },
+  { value: 'lendario', label: 'Lendário', nivelLoja: 4 },
+];
+
+const MULTIPLICADOR_PRECO_RARIDADE: Record<RaridadeCompraEquipamento, number> = {
+  comum: 1,
+  incomum: 3,
+  raro: 8,
+  epico: 20,
+  lendario: 60,
+};
+
+const valorEmLunaris = (preco: PrecoNativoLoja): number | null => {
+  if (preco.moedaPreco === 'Lunaris') return preco.valorOriginal;
+  if (preco.moedaPreco === 'Solares') return preco.valorOriginal * 100;
+  if (preco.moedaPreco === 'Fragmentos de Estrela') return preco.valorOriginal * 5_000;
+  return null;
+};
+
+const precoComRaridade = (
+  precoComum: PrecoNativoLoja,
+  raridade: RaridadeCompraEquipamento,
+): PrecoNativoLoja => {
+  const baseLunaris = valorEmLunaris(precoComum);
+  if (baseLunaris === null) return precoComum;
+  const valorLunaris = Math.max(1, baseLunaris * MULTIPLICADOR_PRECO_RARIDADE[raridade]);
+  if (raridade === 'epico' || raridade === 'lendario') {
+    return { moedaPreco: 'Solares', valorOriginal: Math.max(1, Math.floor((valorLunaris / 100) + 0.5)) };
+  }
+  return { moedaPreco: 'Lunaris', valorOriginal: valorLunaris };
+};
+
+export const itemPermiteEscolherRaridade = (item: Pick<LojaItem, 'categoria' | 'tipoOrigem' | 'raridadeConfiguravel'>): boolean => (
+  item.raridadeConfiguravel === true
+  && (
+    item.tipoOrigem === 'arma'
+    || item.tipoOrigem === 'armadura'
+    || item.categoria === 'Armas'
+    || item.categoria === 'Armaduras'
+    || item.categoria === 'Escudos'
+  )
+);
+
+export const nivelLojaParaRaridadeCompra = (
+  item: Pick<LojaItem, 'nivelLoja' | 'nivelLojaBase'>,
+  raridade: RaridadeCompraEquipamento,
+): number => Math.max(
+  item.nivelLojaBase ?? item.nivelLoja,
+  RARIDADES_COMPRA_EQUIPAMENTO.find((opcao) => opcao.value === raridade)?.nivelLoja ?? 1,
+);
+
+export function aplicarRaridadeCompra(
+  item: LojaItem,
+  raridade: RaridadeCompraEquipamento,
+): LojaItem {
+  if (!itemPermiteEscolherRaridade(item)) return item;
+  const preco = item.precosRaridade?.[raridade] ?? precoComRaridade(item, raridade);
+  const precoAnterior = item.precosAnterioresRaridade?.[raridade] ?? (item.precoAnterior
+    ? precoComRaridade({ moedaPreco: item.moedaPreco, valorOriginal: item.precoAnterior }, raridade)
+    : null);
+  const rotulo = RARIDADES_COMPRA_EQUIPAMENTO.find((opcao) => opcao.value === raridade)?.label ?? 'Comum';
+  const dadosBrutos = {
+    ...(item.dadosBrutos || {}),
+    ...(item.propriedadesRaridade?.[raridade] || {}),
+    raridade,
+  };
+  return {
+    ...item,
+    raridade: rotulo,
+    raridadeCompra: raridade,
+    moedaPreco: preco.moedaPreco,
+    valorOriginal: preco.valorOriginal,
+    nivelLojaBase: item.nivelLojaBase ?? item.nivelLoja,
+    nivelLoja: nivelLojaParaRaridadeCompra(item, raridade),
+    dadosBrutos,
+    propriedades: Array.isArray(dadosBrutos.atributos)
+      ? dadosBrutos.atributos.map(String).join(' | ')
+      : item.propriedades,
+    precoAnterior: precoAnterior?.valorOriginal,
+  };
 }
 
 const RARIDADES_CONHECIDAS = new Set<ItemRaridadeChave>([
@@ -115,9 +218,9 @@ export const getCurrencyTheme = (moedaExibicao: MoedaTipo | string): CurrencyThe
 };
 
 const CATEGORIAS_LOJA = new Set<ItemCategoria>([
-  'Relíquias da Criação', 'Armas', 'Armaduras e Escudos', 'Modificações',
+  'Relíquias da Criação', 'Armas', 'Armaduras', 'Escudos', 'Modificações',
   'Consumíveis', 'Bens', 'Mercenários', 'Componentes', 'Frutos do Éden',
-  'Implantes Cibernéticos', 'Artefatos Mágicos', 'Outros',
+  'Implantes Cibernéticos', 'Artefatos Mágicos', 'Itens Comuns', 'Outros',
 ]);
 
 /** O que se contrata um ser para fazer. Vem de `conteudo.funcao` no catálogo,
@@ -135,6 +238,13 @@ const SUBFILTRO_PARA_FUNCAO: Record<string, FuncaoMercenario> = {
   'Escoltas': 'Escolta',
   'Tripulação': 'Tripulação',
   'Ofícios': 'Ofício',
+};
+
+const SUBFILTRO_PARA_FAMILIA_CRIATURA: Record<string, string> = {
+  'Marítimas': 'Marítima',
+  'Espíritos': 'Espírito',
+  'Golens': 'Golem',
+  'Vazio': 'Vazio',
 };
 
 const normalizarTexto = (valor: unknown): string => String(valor ?? '')
@@ -174,15 +284,18 @@ const mapCategoriaEquipamento = (item: any): ItemCategoria => {
     return 'Artefatos Mágicos';
   }
 
-  return 'Outros';
+  // Sem categoria declarada, sem marca de consumível e sem indício de magia:
+  // é equipamento de uso cotidiano (acessório, kit, mochila e afins). "Outros"
+  // fica reservado para o que de fato não se encaixa em nenhuma categoria.
+  return 'Itens Comuns';
 };
 
 const mapCategoria = (item: any): ItemCategoria => {
-  if (item.conteudo?.subtipo === 'reliquia-criacao') return 'Relíquias da Criação';
+  if (ehReliquiaCriacao({ ...item.conteudo, tipo: item.tipo })) return 'Relíquias da Criação';
   
   switch (item.tipo) {
     case 'arma': return 'Armas';
-    case 'armadura': return 'Armaduras e Escudos';
+    case 'armadura': return item.conteudo?.categoria_protecao === 'escudo' ? 'Escudos' : 'Armaduras';
     case 'modificacao': return 'Modificações';
     case 'equipamento': return mapCategoriaEquipamento(item);
     case 'consumivel': return 'Consumíveis';
@@ -363,6 +476,21 @@ const marcadoresDoItem = (item: LojaItem): Set<string> => {
   ].map(normalizarMarcador).filter(Boolean));
 };
 
+/** Filtro de Simples/Marcial - independente do subfiltro de Tipo (modo de
+ * combate), pra dar pra combinar os dois ao mesmo tempo (ex.: Corpo a Corpo
+ * + Marcial). Vale pra armas, armaduras e escudos, que usam o mesmo campo
+ * `subtipo` do catálogo pra essa distinção. */
+export function itemCorrespondeProficiencia(
+  item: LojaItem,
+  categoria: ItemCategoria | 'Todos',
+  proficiencia: string,
+): boolean {
+  if (proficiencia === 'Todos') return true;
+  if (categoria !== 'Armas' && categoria !== 'Armaduras' && categoria !== 'Escudos') return true;
+  const subtipo = normalizarMarcador(item.dadosBrutos?.subtipo);
+  return subtipo === normalizarMarcador(proficiencia);
+}
+
 export function itemCorrespondeSubfiltro(
   item: LojaItem,
   categoria: ItemCategoria | 'Todos',
@@ -381,13 +509,7 @@ export function itemCorrespondeSubfiltro(
     if (subfiltro === 'Mágicas') return ['magica', 'magia', 'runa'].some((termo) => descricao.includes(termo));
   }
 
-  if (categoria === 'Armaduras e Escudos') {
-    const escudo = marcadores.has('escudo') || descricao.includes('escudo');
-    if (subfiltro === 'Escudos') return escudo;
-    if (subfiltro === 'Armaduras') return !escudo;
-  }
-
-  if (categoria === 'Modificações') {
+if (categoria === 'Modificações') {
     // "Comum" e "Marcial" filtram pelo nível da modificação; o resto filtra pelo
     // tipo de equipamento que a recebe.
     if (subfiltro === 'Comuns') return normalizarMarcador(dados.nivel_modificacao) === 'comum';
@@ -418,6 +540,8 @@ export function itemCorrespondeSubfiltro(
     // servo ou invocação que se compra pelo que faz em combate.
     const funcao = normalizarMarcador(dados.funcao);
     if (subfiltro === 'Feras e Monstros') return !FUNCOES_MERCENARIO.has(funcao);
+    const familia = SUBFILTRO_PARA_FAMILIA_CRIATURA[subfiltro];
+    if (familia) return normalizarMarcador(dados.subtipo) === normalizarMarcador(familia);
     return funcao === normalizarMarcador(SUBFILTRO_PARA_FUNCAO[subfiltro] ?? subfiltro);
   }
 
@@ -468,6 +592,40 @@ export const mapearItemLoja = (entrada: LojaCatalogEntry): LojaItem => {
   const conversoesMaterial = entrada.tipo === 'drop' && Array.isArray(c.usos)
     ? [...new Set(c.usos.map((uso: unknown) => estoquePorUso[String(uso)]).filter(Boolean))]
     : [];
+  const mapearPrecosRaridade = (raw: unknown): Partial<Record<RaridadeCompraEquipamento, PrecoNativoLoja>> | undefined => {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return undefined;
+    const mapped: Partial<Record<RaridadeCompraEquipamento, PrecoNativoLoja>> = {};
+    for (const opcao of RARIDADES_COMPRA_EQUIPAMENTO) {
+      const preco = lerPrecoNativoLoja((raw as Record<string, unknown>)[opcao.value]);
+      if (preco) mapped[opcao.value] = preco;
+    }
+    return Object.keys(mapped).length ? mapped : undefined;
+  };
+  const mapearPropriedadesRaridade = (raw: unknown): Partial<Record<RaridadeCompraEquipamento, Record<string, unknown>>> | undefined => {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return undefined;
+    const mapped: Partial<Record<RaridadeCompraEquipamento, Record<string, unknown>>> = {};
+    for (const opcao of RARIDADES_COMPRA_EQUIPAMENTO) {
+      const value = (raw as Record<string, unknown>)[opcao.value];
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        mapped[opcao.value] = value as Record<string, unknown>;
+      }
+    }
+    return Object.keys(mapped).length ? mapped : undefined;
+  };
+  const descricaoCatalogo = entrada.tipo === 'fruto-eden'
+    ? [
+        typeof c.lore === 'string' ? c.lore.trim() : '',
+        c.passivo ? `Vínculo: ${String(c.passivo).trim()}` : '',
+        c.tecnica ? `Técnica: ${String(c.tecnica).trim()}` : '',
+        c.passivoDespertado ? `Vínculo despertado: ${String(c.passivoDespertado).trim()}` : '',
+        c.tecnicaDespertada ? `Técnica despertada: ${String(c.tecnicaDespertada).trim()}` : '',
+        c.despertar ? `Manifestação final: ${String(c.despertar).trim()}` : '',
+        c.fraqueza ? `Limite: ${String(c.fraqueza).trim()}` : '',
+      ].filter(Boolean).join('\n\n')
+    : [
+        typeof c.lore === 'string' ? c.lore.trim() : '',
+        typeof c.descricao === 'string' ? c.descricao.trim() : '',
+      ].filter(Boolean).join('\n\n');
   
   return {
     id: entrada.id,
@@ -478,7 +636,7 @@ export const mapearItemLoja = (entrada: LojaCatalogEntry): LojaItem => {
     moedaPreco,
     valorOriginal,
     nivelLoja,
-    descricao: typeof c.descricao === 'string' ? c.descricao : 'Um item peculiar de utilidade questionável.',
+    descricao: descricaoCatalogo || 'Um item peculiar de utilidade questionável.',
     propriedades: conversoesMaterial.length
       ? `Pode virar: ${conversoesMaterial.join(' | ')}`
       : Array.isArray(c.atributos)
@@ -498,6 +656,10 @@ export const mapearItemLoja = (entrada: LojaCatalogEntry): LojaItem => {
     precoAnterior: promocaoValida ? precoAnteriorLido.valorOriginal : undefined,
     contratacao: categoria === 'Mercenários' ? lerPrecoNativoLoja(c.preco_contratacao) ?? undefined : undefined,
     mensalidade: categoria === 'Mercenários' ? lerPrecoNativoLoja(c.contrato_mensal) ?? undefined : undefined,
+    precosRaridade: mapearPrecosRaridade(c.precos_por_raridade),
+    precosAnterioresRaridade: mapearPrecosRaridade(c.precos_originais_por_raridade),
+    propriedadesRaridade: mapearPropriedadesRaridade(c.propriedades_por_raridade),
+    raridadeConfiguravel: Boolean(mapearPrecosRaridade(c.precos_por_raridade)),
     promocao: promocaoValida ? {
       rotulo: typeof promocaoBruta.rotulo === 'string' && promocaoBruta.rotulo.trim()
         ? promocaoBruta.rotulo.trim().slice(0, 40)
