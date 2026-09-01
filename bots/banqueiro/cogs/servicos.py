@@ -182,7 +182,12 @@ class ServicosBanco(commands.Cog):
         )
         await interaction.response.send_message(embed=emb, ephemeral=True)
 
-    @tasks.loop(hours=24)
+    # Loop de hora em hora, não de 24 em 24h: o temporizador do tasks.loop é
+    # em memória e só reagenda depois de dormir o período inteiro, então um
+    # loop de 24h só dispara de novo se o bot ficar 24h ininterruptas no ar —
+    # raro com deploys frequentes. ciclo_guild_devido (Postgres, sobrevive a
+    # restart) é quem decide a cadência real.
+    @tasks.loop(hours=1)
     async def ciclo_seguros(self):
         if not self.bot.db.ciclo_guild_devido("_global", "seguros_cofre", 24):
             return

@@ -177,7 +177,9 @@ def _tag_item(it) -> str:
         sub = str(c.get("subtipo", "")).capitalize()
         return " · ".join(p for p in (sub, modo) if p)
     if it.tipo == "armadura":
-        return "Escudo" if c.get("subtipo") == "escudo" else "Armadura"
+        categoria = "Escudo" if c.get("categoria_protecao") == "escudo" else "Armadura"
+        sub = str(c.get("subtipo", "")).capitalize()
+        return " · ".join(p for p in (categoria, sub) if p)
     if it.tipo == "veiculo":
         sistema, tier = c.get("sistema"), c.get("tier")
         return f"{sistema} · {tier}" if sistema and tier and tier != "T0" else "Veículo"
@@ -195,7 +197,7 @@ def _tag_item(it) -> str:
     if it.tipo == "equipamento":
         return "Equipamento"
     if it.tipo == "consumivel":
-        return "Consumível"
+        return "Selo" if c.get("subtipo") == "selo" else "Consumível"
     if it.tipo == "fruto-eden":
         return "Fruto do Éden"
     if it.tipo == "implante":
@@ -374,13 +376,16 @@ class Economia(commands.Cog):
         self.ciclo_juros_cofre.cancel()
 
     # ── Juros automático do cofre (roda sozinho, recompensa quem guarda) ──────
-    @tasks.loop(hours=economia.JUROS_COFRE_TICK_HORAS)
+    # Loop de hora em hora, não de JUROS_COFRE_TICK_HORAS em
+    # JUROS_COFRE_TICK_HORAS: o temporizador do tasks.loop é em memória e só
+    # reagenda depois de dormir o período inteiro, então um loop de 24h só
+    # dispara de novo se o bot ficar 24h ininterruptas no ar — raro com
+    # deploys frequentes. ciclo_guild_devido (Postgres, sobrevive a restart)
+    # é quem decide a cadência real.
+    @tasks.loop(hours=1)
     async def ciclo_juros_cofre(self):
         for guild in self.bot.guilds:
             gid = str(guild.id)
-            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
-            # isto, todo restart (cada deploy na Discloud) pagava juros de
-            # novo mesmo horas depois do ultimo tick.
             if not self.bot.db.ciclo_guild_devido(gid, "juros_cofre", economia.JUROS_COFRE_TICK_HORAS):
                 continue
             try:

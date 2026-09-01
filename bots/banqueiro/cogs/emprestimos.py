@@ -276,13 +276,15 @@ class Emprestimos(commands.Cog):
         emb = ui.embed(titulo, categoria="economia", descricao="\n".join(linhas))
         await interaction.response.send_message(embed=emb, ephemeral=True)
 
-    @tasks.loop(hours=24)
+    # Loop de hora em hora, não de 24 em 24h: o temporizador do tasks.loop é
+    # em memória e só reagenda depois de dormir o período inteiro, então um
+    # loop de 24h só dispara de novo se o bot ficar 24h ininterruptas no ar —
+    # raro com deploys frequentes. ciclo_guild_devido (Postgres, sobrevive a
+    # restart) é quem decide a cadência real. Não é por guild (a listagem
+    # abaixo já cruza todas), então usa uma chave única.
+    @tasks.loop(hours=1)
     async def ciclo_juros(self):
         db = self.bot.db
-        # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
-        # isto, todo restart (cada deploy na Discloud) compunha juros de
-        # emprestimo de novo mesmo horas depois do ultimo tick. Nao e por
-        # guild (a listagem abaixo ja cruza todas), entao usa uma chave unica.
         if not db.ciclo_guild_devido("_global", "emprestimos_juros", 24):
             return
         for emp in db.listar_emprestimos_ativos():

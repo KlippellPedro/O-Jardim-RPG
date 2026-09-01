@@ -584,12 +584,15 @@ class Jornal(commands.Cog):
         await self.bot.wait_until_ready()
 
     # ── Clima sazonal automático (opt-in por guild via /jornal clima_auto) ────
-    @tasks.loop(hours=CLIMA_AUTO_INTERVALO_HORAS)
+    # Loop de hora em hora, não de CLIMA_AUTO_INTERVALO_HORAS em
+    # CLIMA_AUTO_INTERVALO_HORAS: o temporizador do tasks.loop é em memória e
+    # só reagenda depois de dormir o período inteiro, então um loop de 48h só
+    # dispara de novo se o bot ficar 48h ininterruptas no ar — raro num bot
+    # com deploys frequentes. ciclo_guild_devido (Postgres, sobrevive a
+    # restart) é quem decide a cadência real, igual ciclo_resumo.
+    @tasks.loop(hours=1)
     async def ciclo_clima(self):
         for gid in self.bot.db.listar_guilds_clima_auto():
-            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
-            # isto, todo restart (cada deploy na Discloud) publicava clima de
-            # novo mesmo horas depois do ultimo.
             if not self.bot.db.ciclo_guild_devido(gid, "clima_auto", CLIMA_AUTO_INTERVALO_HORAS):
                 continue
             try:
@@ -604,12 +607,12 @@ class Jornal(commands.Cog):
         await self.bot.wait_until_ready()
 
     # ── Rotação automática de estação (opt-in via /jornal estacao_auto) ──────
-    @tasks.loop(hours=ESTACAO_AUTO_INTERVALO_HORAS)
+    # Mesmo motivo do ciclo_clima acima: loop curto e frequente, cadência
+    # real controlada pelo ciclo_guild_devido no Postgres, não pelo
+    # temporizador em memória do tasks.loop (que zera a cada restart).
+    @tasks.loop(hours=1)
     async def ciclo_estacao_auto(self):
         for gid in self.bot.db.listar_guilds_estacao_auto():
-            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
-            # isto, todo restart avancava a estacao de novo mesmo dias antes
-            # do proximo avanco semanal de verdade.
             if not self.bot.db.ciclo_guild_devido(gid, "estacao_auto", ESTACAO_AUTO_INTERVALO_HORAS):
                 continue
             try:

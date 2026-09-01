@@ -75,7 +75,17 @@ class Entrevista(commands.Cog):
     def cog_unload(self):
         self.ciclo.cancel()
 
-    @tasks.loop(hours=ENTREVISTA_INTERVALO_HORAS)
+    # O intervalo do loop NAO pode ser ENTREVISTA_INTERVALO_HORAS (168): o
+    # tasks.loop só reagenda a próxima iteração depois que a atual dorme o
+    # período inteiro, e esse temporizador é em memória, então qualquer
+    # restart do bot (redeploy na Discloud, crash) zera a contagem. Com o
+    # loop de 168h, isso significa que a entrevista só dispara de verdade se
+    # o bot ficar 7 dias ininterruptos no ar — o que basicamente nunca
+    # acontece num bot em desenvolvimento ativo, e foi por isso que parou de
+    # mandar entrevista pros players. Igual ciclo_resumo (cogs/jornal.py):
+    # loop curto e frequente, com ciclo_guild_devido/marcar_ciclo_guild (no
+    # Postgres, sobrevive a restart) controlando a cadência semanal de verdade.
+    @tasks.loop(hours=1)
     async def ciclo(self):
         for guild in self.bot.guilds:
             gid = str(guild.id)
@@ -85,15 +95,14 @@ class Entrevista(commands.Cog):
                 await self._recuperar_pendentes(guild)
             except Exception:
                 log.exception("erro ao recuperar entrevistas pendentes (guild %s)", guild.id)
-            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
-            # isto, todo restart mandava uma entrevista nova por DM mesmo dias
-            # antes do proximo ciclo semanal de verdade. _recuperar_pendentes
-            # acima nao entra nesse controle: e so retry, sempre seguro rodar.
             if not self.bot.db.ciclo_guild_devido(gid, "entrevista", ENTREVISTA_INTERVALO_HORAS):
                 continue
             try:
-                await self._nova_entrevista(guild)
-                self.bot.db.marcar_ciclo_guild(gid, "entrevista")
+                # Só marca o ciclo como feito se uma entrevista foi realmente
+                # criada: se não havia ninguém disponível agora, tenta de
+                # novo na próxima hora em vez de esperar a semana inteira.
+                if await self._nova_entrevista(guild):
+                    self.bot.db.marcar_ciclo_guild(gid, "entrevista")
             except Exception:
                 log.exception("erro no ciclo de entrevista (guild %s)", guild.id)
 
@@ -113,7 +122,10 @@ class Entrevista(commands.Cog):
     async def _antes(self):
         await self.bot.wait_until_ready()
 
-    async def _nova_entrevista(self, guild: discord.Guild) -> None:
+    async def _nova_entrevista(self, guild: discord.Guild) -> bool:
+        """True = uma entrevista nova foi criada (ciclo pode ficar quieto até
+        a próxima semana). False = ninguém disponível agora — o chamador deve
+        tentar de novo em breve em vez de esperar o intervalo todo."""
         gid = str(guild.id)
         db = self.bot.db
         db.expirar_entrevistas_antigas(
@@ -122,7 +134,7 @@ class Entrevista(commands.Cog):
 
         candidatos = [m for m in guild.members if not m.bot]
         if not candidatos:
-            return
+            return False
         ja_entrevistados = set(db.usuarios_ja_entrevistados(gid))
         pendentes = set(db.usuarios_com_entrevista_pendente(gid))
         recusaram = set(db.usuarios_fora_das_entrevistas(gid))
@@ -131,7 +143,7 @@ class Entrevista(commands.Cog):
             if str(m.id) not in pendentes and str(m.id) not in recusaram
         ]
         if not disponiveis:
-            return
+            return False
         novos = [m for m in disponiveis if str(m.id) not in ja_entrevistados]
         alvo = random.choice(novos) if novos else random.choice(disponiveis)
 
@@ -149,6 +161,7 @@ class Entrevista(commands.Cog):
             await self._avisar_entrevista_sem_dm(
                 guild, alvo, pergunta, entrevista_id
             )
+        return True
 
     async def _avisar_entrevista_sem_dm(
         self, guild: discord.Guild, alvo: discord.Member, pergunta: str,

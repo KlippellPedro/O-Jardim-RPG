@@ -106,13 +106,16 @@ class Recompensas(commands.Cog):
         await self.bot.wait_until_ready()
 
     # ── Ciclo de dívida (roda sozinho, cresce dívida e cria recompensa) ────
-    @tasks.loop(hours=economia.DIVIDA_TICK_HORAS)
+    # Loop de hora em hora, não de DIVIDA_TICK_HORAS em DIVIDA_TICK_HORAS: o
+    # temporizador do tasks.loop é em memória e só reagenda depois de dormir
+    # o período inteiro, então um loop de 24h só dispara de novo se o bot
+    # ficar 24h ininterruptas no ar — raro com deploys frequentes.
+    # ciclo_guild_devido (Postgres, sobrevive a restart) é quem decide a
+    # cadência real.
+    @tasks.loop(hours=1)
     async def ciclo_divida(self):
         for guild in self.bot.guilds:
             gid = str(guild.id)
-            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
-            # isto, todo restart (cada deploy na Discloud) cobrava juros de
-            # divida de novo mesmo horas depois do ultimo tick.
             if not self.bot.db.ciclo_guild_devido(gid, "divida", economia.DIVIDA_TICK_HORAS):
                 continue
             try:

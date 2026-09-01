@@ -31,7 +31,13 @@ class Horoscopo(commands.Cog):
     def cog_unload(self):
         self.ciclo.cancel()
 
-    @tasks.loop(hours=HOROSCOPO_INTERVALO_HORAS)
+    # O loop roda de hora em hora, não a cada HOROSCOPO_INTERVALO_HORAS: o
+    # temporizador do tasks.loop é em memória e só reagenda depois de dormir
+    # o período inteiro, então um loop de 24h só dispara de novo se o bot
+    # ficar 24h ininterruptas no ar — raro num bot com deploys frequentes.
+    # ciclo_guild_devido (Postgres, sobrevive a restart) é quem decide a
+    # cadência diária de verdade.
+    @tasks.loop(hours=1)
     async def ciclo(self):
         for guild in self.bot.guilds:
             gid = str(guild.id)

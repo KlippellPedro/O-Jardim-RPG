@@ -448,12 +448,14 @@ class Mercado(commands.Cog):
                     log.info("nao consegui atualizar a mensagem final do leilao %s", leilao["id"])
 
     # ── Câmbio flutuante automático ──────────────────────────────────────
-    @tasks.loop(hours=24)
+    # Loop de hora em hora, não de 24 em 24h: o temporizador do tasks.loop é
+    # em memória e só reagenda depois de dormir o período inteiro, então um
+    # loop de 24h só dispara de novo se o bot ficar 24h ininterruptas no ar —
+    # raro com deploys frequentes. ciclo_guild_devido (Postgres, sobrevive a
+    # restart) é quem decide a cadência real.
+    @tasks.loop(hours=1)
     async def ciclo_cambio_flutuante(self):
         for gid in self.bot.db.listar_guilds_cambio_auto():
-            # tasks.loop dispara a primeira iteracao assim que o bot sobe: sem
-            # isto, todo restart ajustava o cambio de novo mesmo horas depois
-            # do ultimo ajuste diario.
             if not self.bot.db.ciclo_guild_devido(gid, "cambio_flutuante", 24):
                 continue
             try:
