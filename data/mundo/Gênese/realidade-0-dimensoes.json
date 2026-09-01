@@ -19,13 +19,13 @@
       "titulo": "Nadalon",
       "conteudo": {
         "galho": "realidade-0",
-        "descricao": "Uma dimensão cujo ecossistema reage ao estado de espírito de seus habitantes. Diferente da Dimensão Padrão, as leis da física aqui são ditadas pela Essência e pela harmonia.\n\nO céu é um gradiente constante de violeta e âmbar, sem noite total, e o clima é uma primavera infinita - a temperatura é regulada pela vontade de Noemi Finwë, pra garantir o conforto de todos. A geografia é feita de ilhas flutuantes conectadas por pontes de Luz, e de florestas com todos os tipos de árvore que se pode imaginar, cada uma com uma mensagem a transmitir sobre o passado, o presente ou o futuro.\n\nTodos os seres vivem em harmonia com a vida: por uma habilidade de Noemi, cresce ali um fruto chamado Miruvor, que provê todos os nutrientes de que os elfos precisam. As criaturas falantes da dimensão se comunicam por um idioma comum, o Finlandês.",
-        "caracteristicas": "Dimensão élfica. Sem noite, sem fome, sem inverno - e sem privacidade emocional, já que o ambiente responde ao que os habitantes sentem."
+        "descricao": "Uma dimensão cujo ecossistema reage ao estado de espírito de seus habitantes. Diferente da Dimensão Padrão, as leis da física aqui são ditadas pela Essência e pela harmonia.\n\nO céu é um gradiente constante de violeta e âmbar, sem noite total, e o clima é uma primavera infinita, e a temperatura é regulada pela vontade de Noemi Finwë, pra garantir o conforto de todos. A geografia é feita de ilhas flutuantes conectadas por pontes de Luz, e de florestas com todos os tipos de árvore que se pode imaginar, cada uma com uma mensagem a transmitir sobre o passado, o presente ou o futuro.\n\nTodos os seres vivem em harmonia com a vida por uma habilidade de Noemi, cresce ali um fruto chamado Miruvor, que provê todos os nutrientes de que os elfos precisam.",
+        "caracteristicas": "Dimensão élfica. Sem noite, sem fome, sem inverno e sem privacidade emocional, já que o ambiente responde ao que os habitantes sentem."
       },
-
       "_origem": "Conteúdo REAL - transcrito de 'Dimensões/Nadalon/Nadalon.md'.",
       "_nota_conexao": "A nota original diz que as leis da física ali são ditadas pela 'Essência' - que é exatamente o Fluxo da Árvore de Alétheia (Ousias). A nota nunca declara isso explicitamente, mas a ligação está no texto. Vale decidir se é coincidência de vocabulário ou se Nadalon é de fato um lugar onde o Fluxo da Essência vaza pra dentro da Realidade 0.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     },
 
     {
@@ -50,13 +50,13 @@
       "titulo": "Întuneric",
       "conteudo": {
         "galho": "realidade-0",
-        "descricao": "Esta não é uma dimensão comum: todos vivem num estado de agonia que não acaba. O céu é coberto por nuvens cor de fuligem que bloqueiam qualquer resquício de luz, e a única iluminação vem de uma lua pálida que nunca se põe.\n\nO ar é espesso, com cheiro de terra úmida e ferro. A vegetação são árvores retorcidas e secas, que parecem garras tentando perfurar o que quer que se aproxime. Pra um humano ou ser despreparado, a expectativa de vida é medida em minutos: se o frio sobrenatural não congelar seus pulmões, o som do próprio batimento cardíaco serve de sino de jantar pro que espreita na névoa.\n\nNão há agricultura - tudo o que cresce se alimenta da decomposição, e a cadeia alimentar começa nos monstros e termina nos Vampiros. As criaturas falantes se comunicam por um idioma comum, o Romeno.",
-        "caracteristicas": "Dimensão vampírica. Economia inteira baseada em sangue humano de colônias. Governada por Davinor Întuneric pelo silêncio e pelo medo."
+        "descricao": "Esta não é uma dimensão comum: todos vivem num estado de agonia que não acaba. O céu é coberto por nuvens cor de fuligem que bloqueiam qualquer resquício de luz, e a única iluminação vem de uma lua pálida que nunca se põe.\n\nO ar é espesso, com cheiro de terra úmida e ferro. A vegetação são árvores retorcidas e secas, que parecem garras tentando perfurar o que quer que se aproxime. Pra um humano ou ser despreparado, a expectativa de vida é medida em minutos, porque se o frio sobrenatural não congelar seus pulmões, o som do próprio batimento cardíaco serve de sino de jantar pro que espreita na névoa.\n\nNão há agricultura tudo o que cresce se alimenta da decomposição, e a cadeia alimentar começa nos monstros e termina nos Vampiros.",
+        "caracteristicas": "Dimensão vampírica. Economia inteira baseada em sangue humano de colônias."
       },
-
       "_origem": "Conteúdo REAL - transcrito de 'Dimensões/Întuneric/Întuneric.md'.",
       "_correcao_2026-07-29": "O Galho 'realidade-0' em genese.json listava 'Întuneric, Êtuneric' como se fossem duas dimensões diferentes. É a mesma palavra digitada duas vezes - corrigido lá pra uma só.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     },
 
     {
@@ -95,13 +95,13 @@
       "titulo": "Sonhar",
       "conteudo": {
         "galho": "realidade-0",
-        "descricao": "A dimensão que ninguém atravessa acordado. Sonhar não tem geografia fixa: é feita do que os viventes das outras dimensões deixam escapar quando dormem, e por isso muda de forma toda vez que alguém a visita. Divide-se em duas metades que se tocam sem fronteira clara - os Sonhos, onde o que se deseja ganha corpo, e os Pesadelos, onde ganha corpo o que se teme. Um viajante raramente escolhe em qual dos dois vai parar.\n\nOs Oníricos nascem ali. São seres formados pela própria matéria de Sonhar, com corpo, nome e vontade próprios. Eles não são pessoas adormecidas e não dependem de um sonhador para continuar existindo.\n\nSeu soberano é Grimm, um ser intrigante que admira todas as espécies de vida e gosta especialmente de seres com um objetivo muito forte e aparente - o que faz dele um anfitrião generoso e um colecionador perigoso, porque objetivo forte é justamente o que dá forma às duas metades da dimensão dele.",
-        "caracteristicas": "Sem geografia estável. Acesso pelo sono, não por portal. Contém Sonhos e Pesadelos."
+        "descricao": "A dimensão que ninguém atravessa acordado. Sonhar não tem geografia fixa: é feita do que os viventes das outras dimensões deixam escapar quando dormem, e por isso muda de forma toda vez que alguém a visita. Divide-se em duas metades que se tocam sem fronteira clara: os Sonhos, onde o que se deseja ganha corpo, e os Pesadelos, onde ganha corpo o que se teme. Um sonhador raramente escolhe em qual dos dois vai parar.\n\nOs Oníricos nascem ali. São seres formados pela própria matéria de Sonhar, com corpo, nome e vontade próprios. Eles não são pessoas adormecidas e não dependem de um sonhador para continuar existindo.\n\nSeu soberano é Grimm, um ser intrigante que admira todas as espécies de vida e gosta especialmente de seres com um objetivo muito forte e aparente o que faz dele um anfitrião generoso e um colecionador perigoso, porque um objetivo forte é justamente o que dá forma às duas metades da dimensão dele.",
+        "caracteristicas": "Sem geografia estável. Acesso pelo sonho. Contém Sonhos e Pesadelos."
       },
-
       "_origem": "PARCIAL - a única fonte era 'Dimensões/Sonhar/Grimm.md', com duas linhas sobre Grimm, mais as pastas vazias 'Sonhos' e 'Pesadelos'. O resto foi escrito do zero em 2026-07-29 a partir desses três indícios.",
       "_conflito_resolvido": "A nota do cofre chama Grimm de 'soberano dos sonhos'; a lista de Soberanos o chama de 'Soberano dos Pesadelos'. Resolvido assim: ele é soberano de Sonhar inteira, que contém as duas metades - e 'Soberano dos Pesadelos' é como os OUTROS soberanos o chamam. Usa as duas fontes sem contradizer nenhuma. Se preferir o contrário, é só inverter aqui.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     },
 
     {
@@ -111,13 +111,13 @@
       "titulo": "Espelhos",
       "conteudo": {
         "galho": "realidade-0",
-        "descricao": "Exatamente igual a tudo que existe nas outras dimensões - e é justamente isso que a torna insuportável. Espelhos reproduz cada dimensão da Realidade 0 nos mínimos detalhes: as mesmas cidades, as mesmas pessoas, as mesmas conversas acontecendo no mesmo instante. Nada ali é falso, e nada ali é original.\n\nO problema nunca foi encontrar a diferença. É que quase não há nenhuma, e as poucas que existem não se anunciam: uma decisão tomada ao contrário, uma pessoa que ali continua viva, uma porta que do outro lado nunca foi construída. Viajantes que passam tempo demais em Espelhos param de conseguir dizer de qual dos lados vieram.",
-        "caracteristicas": "Cópia integral das outras dimensões, com divergências raras e não sinalizadas."
+        "descricao": "Exatamente igual a tudo que existe nas outras dimensões, e é justamente isso que a torna insuportável. Espelhos reproduz cada dimensão da Realidade 0 nos mínimos detalhes: as mesmas cidades, as mesmas pessoas, as mesmas conversas acontecendo no mesmo instante. Nada ali é falso, e nada ali é original.\n\nO problema nunca foi encontrar a diferença. É que quase não há nenhuma, e as poucas que existem não são achadas com frequência. Pessoas que passam tempo demais em Espelhos param de conseguir dizer de qual dos lados vieram.",
+        "caracteristicas": "Cópia literal das outras dimensões, com mudanças raras e não sinalizadas."
       },
-
       "_origem": "PARCIAL - a única fonte era 'Dimensões/Espelhos/Conceito.md', com uma frase: 'É exatamente igual a tudo que tem nas outras dimensões'. O arquivo 'Espelhos.md' estava vazio. O resto foi escrito do zero em 2026-07-29, mantendo a frase original como primeira linha.",
       "_nota_loja": "Há um item no catálogo da Loja (data/loja/catalogo.json) que 'abre um portal para a dimensão espelhada' - era a única referência a esta dimensão em qualquer lugar do projeto. Agora tem lore por trás.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     },
 
     {
@@ -127,13 +127,13 @@
       "titulo": "Coliseu",
       "conteudo": {
         "galho": "realidade-0",
-        "descricao": "A menor das dimensões da Realidade 0, e a única construída de propósito. O Coliseu não tem povo, cidade nem clima: é uma arena suspensa no vazio, cercada por arquibancadas que se estendem além do alcance da vista e que nunca são vistas cheias nem vazias - só ocupadas o bastante pra que o barulho não pare nunca.\n\nQualquer um pode entrar; ninguém sabe explicar como se sai. O que se disputa ali raramente é dinheiro: são favores, passagens, dívidas, títulos e nomes. Diz-se que a arena aceita qualquer aposta desde que o apostador tenha o que apostou - e que já houve quem apostasse a própria morte e perdesse.",
-        "caracteristicas": "Arena dimensional neutra. Entrada livre, saída negociada. Combate como moeda."
+        "descricao": "A menor das dimensões da Realidade 0, e a única construída de propósito. O Coliseu não tem povo, cidade nem clima: é uma arena suspensa, cercada por arquibancadas que se estendem além do alcance da vista e que nunca são vistas vazias.\n\nQualquer um pode entrar; porém ninguém sabe explicar como se sai. O que se disputa ali raramente é dinheiro, normalmente são favores, passagens, dívidas, títulos e nomes. Dizem que a arena aceita qualquer aposta desde que o apostador tenha o que apostou e que já houve quem apostasse a própria existencia e perdesse.",
+        "caracteristicas": "Arena dimensional neutra. Entrada livre, saída nem tanto."
       },
-
       "_origem": "ESCRITO DO ZERO em 2026-07-29. O Coliseu era citado apenas por nome, uma vez, na descrição do Galho 'realidade-0' em genese.json - não existe nenhuma nota sobre ele no Obsidian. Tudo aqui é proposta minha; sinta-se livre pra descartar inteiro.",
       "_por_que_essa_direcao": "Escrito como espaço neutro de encontro entre dimensões, porque é a única das 6 que não tem povo nem soberano - servia melhor como lugar onde personagens de dimensões diferentes se cruzam sem precisar de uma guerra pra justificar.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     }
   ]
 }

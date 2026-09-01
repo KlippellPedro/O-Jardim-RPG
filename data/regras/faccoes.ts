@@ -42,6 +42,7 @@ export interface FaccaoDocumentada {
   alcance: string;
   atuacao_publica: string;
   estado: 'canonica' | 'proposta';
+  registro_universal: boolean;
   fontes: Array<{ arquivo: string; entrada_id: string }>;
 }
 

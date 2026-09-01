@@ -21,12 +21,12 @@
       "titulo": "A.X.I.S",
       "revelado": false,
       "conteudo": {
-        "epiteto": "Aquele que flui na Tecnologia",
-        "genero": "Masculino",
-        "dominio": "A nova malha artificial que intercepta, filtra e bloqueia a comunicação direta entre todas as deidades, isolando-as umas das outras.",
-        "descricao": "Jota Macedo convenceu Keryx - o antigo Fluxo da Comunicação, guardião das leis e pactos entre as Árvores - a assinar um contrato que se revelou uma prisão. Keryx não foi derrotado por força: foi enganado pela diplomacia, a própria arma que ele mais confiava. Desde então, Jota governa o que restou do Fluxo de Keryx através da A.X.I.S, uma malha tecnológica artificial que corta a comunicação direta entre as demais deidades - é por isso que quase todas elas estão paralisadas e isoladas, sem conseguir se falar.",
         "fluxo": "fluxo-da-tecnologia",
-        "status": "dominante"
+        "genero": "Masculino",
+        "status": "dominante",
+        "dominio": "A nova malha artificial que intercepta, filtra e bloqueia a comunicação direta entre todas as deidades, isolando-as umas das outras.",
+        "epiteto": "Aquele que flui na Tecnologia",
+        "descricao": "Jota Macedo subjugou Keryx o antigo Fluxo da Comunicação, guardião das leis e pactos entre as Árvores. Keryx não foi morto mas sim aprisionado e tendo seu poder absorvido dia após dia. Desde então, Jota governa o que restou do Fluxo de Keryx através da A.X.I.S, uma malha tecnológica artificial que corta a comunicação direta entre as demais deidades é por isso que quase todas elas estão paralisadas e isoladas, sem conseguir se falar."
       },
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json (entrada 'keryx', que na época ainda tratava Keryx e A.X.I.S como uma coisa só) antes de ele ser removido nesta sessão, reconciliado com a tabela mais recente 'Estrutura do Jardim' (que separa Parley/Keryx subjugado da A.X.I.S/Jota Macedo em duas linhas distintas - segui essa divisão mais recente aqui).",
       "_pronto_para_importar": true,
@@ -40,10 +40,10 @@
       "revelado": false,
       "conteudo": {
         "arvore": "Parley",
-        "descricao": "Fluxo natural de Keryx, responsável por comunicação, pactos, vínculos e transmissão entre as Árvores. Continua existindo, mas está enfraquecido e preso sob a Malha da A.X.I.S.",
         "status": "enfraquecido",
+        "descricao": "Fluxo natural de Keryx, responsável por comunicação, pactos, vínculos e transmissão entre as Árvores. Continua existindo, mas está enfraquecido e preso sob a Malha da A.X.I.S.",
         "subjugado_por": "Fluxo da Tecnologia / A.X.I.S",
-        "marca_corporal": "Linhas prateadas semelhantes a escrita percorrem garganta, mãos e ouvidos quando uma mensagem verdadeira atravessa o Fluxo."
+        "marca_corporal": "Linhas prateadas semelhantes a escrita percorrem a garganta dos seres desse fluxo."
       },
       "_origem": "Sincronizado das notas de Fluxos e Parley subjugada.",
       "_pronto_para_importar": true
@@ -56,9 +56,9 @@
       "revelado": false,
       "conteudo": {
         "arvore": "A.X.I.S",
-        "descricao": "Uma ramificação artificial desenvolvida a partir do Fluxo original, resultado direto das ambições de Jota Macedo - um homem determinado a desvendar e replicar os mistérios cósmicos usando apenas os princípios da ciência e da razão. Diferente do despertar tradicional das outras vertentes, que exige fé, emoção ou pactos divinos, a A.X.I.S é inteiramente construída sobre experimentação, lógica e precisão matemática.\n\nA cor predominante é o azul neon artificial, refletindo uma natureza fria, racional e calculadamente estável. Sua estética é marcada por estruturas geométricas perfeitas, cristais simétricos e artefatos forjados com uma exatidão espetacular.\n\nPra Astraluna e seus habitantes, a A.X.I.S representa a esperança de que a energia do mundo possa enfim ser compreendida, reproduzida e evoluída por mãos mortais. Virou o símbolo de uma nova era, provando que os Fluxos das velhas deidades não são mais os únicos capazes de sustentar a realidade. O que quase ninguém sabe é o preço: essa mesma malha é o que intercepta e bloqueia a comunicação entre as demais Árvores, e é por isso que quase todas as deidades estão paralisadas.",
         "citacao": "Se o fluir das árvores é visto como um milagre, então a A.X.I.S é a prova de que milagres podem ser replicados. - Jota Macedo",
-        "marca_corporal": "Veias de azul neon acendem sob a pele e pulsam como se respirassem - não é marca de nascença, é instalada."
+        "descricao": "Uma ramificação artificial desenvolvida a partir do Fluxo original, resultado direto das ambições de Jota Macedo um homem determinado a desvendar e replicar os mistérios cósmicos usando apenas os princípios da ciência e da razão. Diferente do despertar tradicional das outras vertentes, que exige fé, emoção ou pactos, a A.X.I.S é inteiramente construída sobre experimentação, lógica e precisão matemática.\n\nA cor predominante é o azul neon artificial, refletindo uma natureza fria, racional e calculadamente estável. Sua estética é marcada por estruturas geométricas perfeitas, cristais simétricos e artefatos forjados com uma exatidão espetacular.\n\nPra Astraluna e seus habitantes, a A.X.I.S representa a esperança de que a energia do mundo possa enfim ser compreendida, reproduzida e evoluída por mãos mortais. Virou o símbolo de uma nova era, provando que os Fluxos das velhas deidades não são mais os únicos capazes de sustentar a realidade. O que quase ninguém sabe é o preço: essa mesma malha é o que intercepta e bloqueia a comunicação entre as demais Árvores, e é por isso que quase todas as deidades estão paralisadas.",
+        "marca_corporal": "Veias de azul neon acendem sob a pele e pulsam como se respirassem."
       },
       "_origem": "Conteúdo REAL - transcrito da nota do Obsidian 'O Jardim/A.X.I.S/Fluxo.md', incluindo a citação de Jota Macedo. O último período do 3º parágrafo (o preço da malha) foi acrescentado pra amarrar com a descrição da Deidade, que já estabelece o bloqueio. A marca corporal vem de 'A.X.I.S/Astraluna/AstraTech/Máscaras.md' ('reluzem como veias azuis neon, pulsando como se respirassem').",
       "_nota_marca_instalada": "As outras 9 marcas corporais nascem com o portador; a da Tecnologia é instalada. Isso é deliberado - é o que separa a A.X.I.S de um Fluxo de verdade e sustenta a tese de Jota de que milagres podem ser replicados.",
@@ -105,13 +105,60 @@
       "revelado": false,
       "conteudo": {
         "galho": "a-malha",
-        "descricao": "O ponto de onde a Malha é operada, e o lugar mais bem guardado que existe - não por exércitos, mas por não constar em lugar nenhum. Nenhum mapa de Astraluna o mostra, nenhum funcionário da AstraTech admite tê-lo visitado, e o próprio nome só aparece em documentos que Jota Macedo assina sozinho.\n\nÉ ali que ficam os estoques: as prisões de poder onde uma deidade capturada pode ser mantida e drenada. Por enquanto há uma só ocupada, e o ocupante é Keryx.",
+        "descricao": "O ponto de onde a Malha é operada, e o lugar mais bem guardado que existe não por exércitos, mas por não constar em lugar nenhum. Nenhum mapa de Astraluna o mostra, nenhum funcionário da AstraTech admite tê-lo visitado, e o próprio nome só aparece em documentos que Jota Macedo sabe e assina.\n\nÉ ali que ficam os estoques, as prisões de poder onde uma deidade capturada pode ser mantida e drenada. Por enquanto há uma só ocupada, e o ocupante é Keryx.",
         "caracteristicas": "Geometria perfeita, azul neon, silêncio absoluto. É a única Dimensão do Jardim com controle de acesso."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29, mas os 'estoques/prisões de poder' são REAIS - vêm da nota do Obsidian 'A.X.I.S/Jota Macedo.md', que os cita uma vez e nunca explica. Esta entrada dá a eles um endereço; o funcionamento continua em aberto.",
       "_gancho": "Se os players quiserem libertar Keryx e reacender a comunicação entre as Árvores, é aqui que isso acontece. É o objetivo final natural de 'O Último Eclipse'.",
       "_pronto_para_importar": true,
       "_nota_revelado": "Diferente das outras entradas deste pacote, esta provavelmente deve continuar com revelado:false por muito tempo - é o segredo central do antagonista."
+    },
+    {
+      "_secao": "REINO - Astraluna",
+      "tipo": "reino",
+      "id": "astraluna",
+      "titulo": "Astraluna",
+      "conteudo": {
+        "galho": "a-malha",
+        "descricao": "O maior centro de tecnologia arcana do mundo, reconhecido como o berço da fusão perfeita entre magia e máquina. Suas oficinas e laboratórios produzem artefatos tão avançados que sustentam civilizações inteiras, o que torna o reino indispensável ao equilíbrio do continente. Cercado por barreiras poderosas e protocolos rigorosos de segurança, Astraluna guarda seus segredos com rigidez, impedindo que suas inovações caiam em mãos erradas. Misterioso e grandioso, é ao mesmo tempo um farol de progresso e um guardião ciumento das próprias maravilhas.\n\nÉ a sede da AstraTech e a base de operações de Jota Macedo, seu presidente - e é daqui que a A.X.I.S se espalhou pelo mundo. Pra Astraluna e seus habitantes, a A.X.I.S representa a esperança de que a energia do mundo enfim possa ser compreendida, reproduzida e evoluída por mãos mortais.",
+        "fundacao": "Ano 1.188 - o mais antigo dos reinos com data registrada.",
+        "governo": "Corporativo. Presidido por Jota Macedo, através da AstraTech."
+      },
+      "_origem": "Conteúdo REAL - transcrito de 'A.X.I.S/Astraluna/Astraluna.md' e 'Função.md'. O 2º parágrafo amarra com o que já estava em data/mundo/Parley (subjulgado)/parley-axis.json.",
+      "_nota_hierarquia": "No cofre, Astraluna está arquivada dentro da pasta da Árvore A.X.I.S, o que dava a entender que seria um Galho ou Dimensão dela. Mantive Astraluna como REINO da Dimensão Padrão, porque é onde a própria Dimensão Padrão já a listava e porque ela é um lugar físico do mundo mortal, não uma camada cósmica. A A.X.I.S continua sendo a Árvore; Astraluna é a cidade de onde ela é operada.",
+      "_frase_truncada_no_cofre": "'A.X.I.S/Astraluna/Idade.md' termina no meio: 'O reino de Astraluna foi construído em 1.188 e ' - a frase nunca foi terminada. Usei só a data.",
+      "_pronto_para_importar": true
+    },
+    {
+      "_secao": "ARTEFATO de Astraluna - as Máscaras",
+      "tipo": "reino",
+      "id": "mascaras-astratech",
+      "titulo": "Máscaras da AstraTech",
+      "conteudo": {
+        "reino": "astraluna",
+        "descricao": "Forjadas a partir do Arkan'vel, a tecnologia avançada desenvolvida em Astraluna, as máscaras são artefatos tão poderosos quanto temidos. Criadas nas profundezas dos laboratórios, onde ciência e feitiçaria se misturaram, reluzem como veias azuis neon, pulsando como se respirassem.\n\nAo serem colocadas, conectam-se diretamente à Força Vital e à mente do usuário, concedendo habilidades que ultrapassam os limites comuns - aumento de atributos físicos e da percepção como um todo.\n\nMas as máscaras não apenas canalizam poder: elas reescrevem o portador. Cada comando, cada pensamento é filtrado pelas camadas encantadas de código vivo e, com o tempo, a máscara passa a decidir por si. Muitos usuários perdem gradualmente a própria identidade, tornando-se extensões da vontade de Astraluna.\n\nJota Macedo trabalha em segredo numa máscara biomecânica maior que todas as outras, projetada pra conter e estabilizar o maior e mais puro fragmento de A.X.I.S existente - uma relíquia que lhe permitiria usar o poder de uma deidade, desde que ela estivesse num de seus estoques."
+      },
+      "_origem": "Conteúdo REAL - transcrito de 'A.X.I.S/Astraluna/AstraTech/Máscaras.md'; o último parágrafo, de 'A.X.I.S/Jota Macedo.md'.",
+      "_nota_tipo": "Entrou como 'reino' porque é o único tipo de Local que o schema tem - a cascata do Mundo não prevê um tipo 'artefato'. Se quiser, dá pra mover pra uma entrada tipo 'personagem' sem perder nada.",
+      "_termos_orfaos": "'Arkan'vel' e 'Força Vital' aparecem UMA única vez no cofre inteiro, aqui, sem definição em lugar nenhum. Mantive os dois: 'Arkan'vel' é claramente um material/tecnologia (e a raiz 'Ark' também está em Arkarin, então não cai junto com Arkania), e 'Força Vital' é genérico o bastante pra ficar. Ambos merecem uma definição própria em algum momento.",
+      "_gancho": "'Estoques/prisões de poder' é citado uma vez em Jota Macedo.md e nunca explicado. É o mecanismo pelo qual Jota pretende usar o poder de uma deidade - provavelmente a coisa mais importante ainda indefinida da campanha.",
+      "_pronto_para_importar": true
+    },
+    {
+      "_secao": "SOBERANO 4 - Cadeira da Tecnologia",
+      "tipo": "personagem",
+      "id": "jota-macedo",
+      "titulo": "Jota Macedo",
+      "conteudo": {
+        "epiteto": "Soberano da Tecnologia",
+        "genero": "Masculino",
+        "descricao": "Aclamado como o grande gênio da ciência moderna. É o criador da A.X.I.S e fundador da AstraTech, a maior corporação tecnológica já estabelecida na história. Mas o verdadeiro objetivo de Jota vai muito além do progresso industrial ou do sucesso empresarial: ele busca um feito inédito pra humanidade - quebrar as limitações mortais e ascender ao mesmo patamar de poder das deidades.\n\nPra alcançar esse ápice, trabalha secretamente numa máscara biomecânica, projetada pra conter e estabilizar o maior e mais puro fragmento de A.X.I.S existente: uma relíquia que lhe permite usar o poder de uma deidade, desde que ela esteja num de seus estoques.\n\nEle já conseguiu uma vez. Convenceu Keryx, o antigo Fluxo da Comunicação e guardião das leis e pactos entre as Árvores, a assinar um contrato que se revelou uma prisão - Keryx não foi derrotado pela força, foi enganado pela diplomacia, a arma em que mais confiava. É por causa disso que quase todas as deidades do Jardim estão paralisadas e incomunicáveis.\n\nAntes de tudo isso, Jota foi um menino do orfanato de Ofélia: inteligente, curioso, e capaz de usar o Fluxo numa forma pura e poderosa demais pra idade.",
+        "cor": "Azul",
+        "status": "ativo"
+      },
+      "_origem": "Conteúdo REAL - parágrafos 1 e 2 transcritos de 'A.X.I.S/Jota Macedo.md'; o 3º vem da entrada de Deidade em data/mundo/Parley (subjulgado)/parley-axis.json; o 4º, de 'Padrão/Locais Importantes/Orfanato.md'.",
+      "_por_que_isso_importa": "É o antagonista da campanha e o motivo de 8 das 10 Deidades estarem paralisadas - e até agora não existia nenhuma entrada dele no site.",
+      "_pronto_para_importar": true
     }
   ]
 }

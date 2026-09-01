@@ -18,18 +18,18 @@
       "id": "ignis",
       "titulo": "Ignis",
       "conteudo": {
-        "epiteto": "Aquele que flui na Inconstância",
-        "genero": "Masculino",
-        "dominio": "A mudança constante e a entropia - impede que o Jardim fique estagnado ou morra pela calmaria.",
-        "descricao": "Caótico e intenso. Governa a mudança constante e a entropia, impedindo que os Galhos fiquem estagnados. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo - ironicamente, o próprio Fluxo da mudança está estacionado.",
         "fluxo": "fluxo-da-inconstancia",
-        "status": "paralisada"
+        "genero": "Masculino",
+        "status": "paralisada",
+        "dominio": "A mudança constante e a entropia impede que o Jardim fique estagnado ou morra pela calmaria.",
+        "epiteto": "Aquele que flui na Inconstância",
+        "descricao": "Caótico e intenso. Governa a mudança constante e a entropia, impedindo que os Galhos fiquem estagnados. "
       },
-
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
       "_ajustado_para_bater_com_estrutura_do_jardim": "O panteon.json antigo tinha epíteto 'Aquela que flui na Mutação' e gênero 'Feminino'. A tabela mais recente 'Estrutura do Jardim' mostra epíteto 'Aquele que flui na Inconstância' e gênero 'Masculino' - usei a versão mais recente aqui. Se isso foi um erro de digitação na tabela em vez de uma mudança deliberada, é só ajustar este campo.",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Vórtice."
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Vórtice.",
+      "revelado": true
     },
 
     {
@@ -39,13 +39,13 @@
       "titulo": "Fluxo da Inconstância",
       "conteudo": {
         "arvore": "Vórtice",
-        "descricao": "O Fluxo que recusa que as coisas continuem como estão. Não destrói: troca. Uma armadura vira ferrugem, a ferrugem vira brasa, a brasa vira vento - e nada volta ao que era. É o único Fluxo que não pode ser repetido de propósito: o mesmo gesto, feito duas vezes, dá dois resultados diferentes, e quem canaliza a Inconstância aprende a apostar em vez de planejar. Com Ignis paralisado, o mundo vem ficando teimosamente igual a si mesmo - e há quem diga que essa estagnação, e não a A.X.I.S, é a verdadeira doença do Jardim.",
-        "marca_corporal": "Uma marca alaranjada que nunca amanhece no mesmo lugar do corpo."
+        "descricao": "O Fluxo que recusa que as coisas continuem como estão. Uma armadura enferruja, a ferrugem vira desgasta, e ao logo do tempo some no vento e nada volta ao que era. É o único Fluxo que não pode ser repetido de propósito: o mesmo gesto, feito duas vezes, dá dois resultados diferentes, e quem canaliza a Inconstância aprende a apostar em vez de planejar.",
+        "marca_corporal": "Uma marca alaranjada que nunca continua no mesmo lugar do corpo."
       },
-
       "_origem": "Domínio de Ignis (antigo data/world/panteon.json) + tabela 'Estrutura do Jardim' (cor Laranja, gênero Masculino). Reescrito em 2026-07-29; a ideia da estagnação vem da própria descrição da Deidade ('ironicamente, o próprio Fluxo da mudança está estacionado').",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Geralmente revelado depois da Deidade em si."
+      "_quando_revelar": "Geralmente revelado depois da Deidade em si.",
+      "revelado": true
     },
 
     {
@@ -69,12 +69,13 @@
       "titulo": "A Fornalha Parada",
       "conteudo": {
         "galho": "espiral",
-        "descricao": "O centro de Espiral, de onde a mudança se espalhava pro resto do Galho. Era fogo que não queimava nada: só transformava - o que entrasse saía sendo outra coisa, e ninguém, nem Ignis, decidia o quê.\n\nAgora está acesa e não consome. As chamas continuam de pé na mesma posição, na mesma altura, com a mesma cor, e não esquentam. Quem chega perto sente frio.",
+        "descricao": "O centro de Espiral, de onde a mudança se espalhava pro resto do Galho. Era um fogo que não queimava nada só transformava o que entrasse saía sendo outra coisa, e ninguém, nem Ignis, decidia o quê.",
         "caracteristicas": "Fogo laranja imóvel. Não queima, não ilumina direito, e não pode ser apagado."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29, junto com o Galho acima.",
       "_nota_mesa": "Reacender a Fornalha é o gancho mais direto pra libertar Ignis - e provavelmente o mais perigoso, já que a coisa que ela faz é transformar sem que ninguém escolha no quê.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     }
   ]
 }

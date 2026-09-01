@@ -112,6 +112,8 @@ export const CLASSIFICACOES_ENTIDADE: ClassificacaoEntidade[] = [
 export interface EntidadeCatalogo {
   id: string;
   nome: string;
+  /** Indica que o ser existe no universo geral e não pertence a uma Árvore. */
+  registroUniversal?: boolean;
   epiteto?: string;
   epigrafe?: string;
   resumo?: string;
@@ -142,6 +144,7 @@ export interface EntidadeCatalogo {
 export const ENTIDADES: EntidadeCatalogo[] = [
   {
     id: 'dama-solitaria',
+    registroUniversal: true,
     nome: 'Dama Solitária',
     epigrafe: 'A felicidade é efêmera, e a solidão é um destino inevitável.',
     resumo: 'Aparece a quem perdeu tudo e oferece um último desejo. O preço é a solidão eterna.',
@@ -184,6 +187,7 @@ export const ENTIDADES: EntidadeCatalogo[] = [
   },
   {
     id: 'dama-das-chamas',
+    registroUniversal: true,
     nome: 'Dama das Chamas',
     epigrafe: 'Ela não busca ouro, nem glória, mas sim o fogo da rivalidade.',
     resumo: 'Aparece onde a paz ameaça durar e semeia rivalidade só para ver o mundo pegar fogo.',
@@ -225,6 +229,7 @@ export const ENTIDADES: EntidadeCatalogo[] = [
   },
   {
     id: 'menino-guia',
+    registroUniversal: true,
     nome: 'Menino Guia',
     epigrafe: 'A luz do lampião nunca se apaga para aqueles que realmente precisam dela.',
     resumo: 'Aparece a quem perdeu algo precioso e guia até ele, sem pedir nada em troca.',
@@ -264,6 +269,7 @@ export const ENTIDADES: EntidadeCatalogo[] = [
   },
   {
     id: 'gato-dos-desejos',
+    registroUniversal: true,
     nome: 'Gato dos Desejos',
     epigrafe: 'O primeiro sinal era sempre o sino.',
     resumo: 'Aparece a quem deseja algo com toda a alma e concede o desejo, sem nunca ser lembrado depois.',
@@ -301,6 +307,7 @@ export const ENTIDADES: EntidadeCatalogo[] = [
   },
   {
     id: 'enciclopedia',
+    registroUniversal: true,
     nome: 'Enciclopédia',
     epigrafe: 'O conhecimento sempre tem um preço.',
     resumo: 'Concede uma resposta a quem busca conhecimento, mas nunca de forma direta.',
@@ -339,6 +346,7 @@ export const ENTIDADES: EntidadeCatalogo[] = [
   },
   {
     id: 'palhacinho',
+    registroUniversal: true,
     nome: 'Palhacinho',
     epigrafe: 'Não parem! A festa precisa continuar!',
     resumo: 'Surge em celebrações e transforma a alegria em um frenesi do qual ninguém consegue escapar.',
@@ -381,6 +389,7 @@ export const ENTIDADES: EntidadeCatalogo[] = [
   },
   {
     id: 'vendedor',
+    registroUniversal: true,
     nome: 'Vendedor',
     epigrafe: 'Tudo tem um preço… e eu estou aqui para cobrar.',
     resumo: 'Aparece diante de quem precisa comprar algo desesperadamente e sempre cobra o pagamento.',
@@ -425,6 +434,7 @@ export const ENTIDADES: EntidadeCatalogo[] = [
   },
   {
     id: 'borrao',
+    registroUniversal: true,
     nome: 'Borrão',
     epigrafe: 'Erros não são algo normal, por isso eu sempre os corrijo.',
     resumo: 'A entidade dos erros. Seus registros são corrigidos antes que alguém consiga compreendê-los.',
@@ -457,6 +467,7 @@ export const ENTIDADES: EntidadeCatalogo[] = [
   },
   {
     id: 'mamae',
+    registroUniversal: true,
     nome: 'Mamãe',
     epigrafe: 'Eu só quero o melhor para você.',
     resumo: 'Acolhe quem considera perdido e elimina qualquer vínculo que possa afastar seus filhos de sua proteção.',
@@ -516,6 +527,7 @@ export const ENTIDADES: EntidadeCatalogo[] = [
   },
   {
     id: 'gambler',
+    registroUniversal: true,
     nome: 'Gambler',
     epigrafe: 'A sorte não foi embora. Ela só está esperando a próxima aposta.',
     resumo: 'Mantém um cassino sem endereço, onde cada vitória alimenta a vontade de arriscar até não restar mais nada.',
@@ -586,6 +598,7 @@ export const ENTIDADES: EntidadeCatalogo[] = [
   },
   {
     id: 'dentista-cego',
+    registroUniversal: true,
     nome: 'Dentista Cego',
     classificacao: [],
     tema: {

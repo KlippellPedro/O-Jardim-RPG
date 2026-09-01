@@ -10,6 +10,7 @@
       "alcance": "Todas as Árvores",
       "atuacao_publica": "Guarda, administra e investe bens. Também fornece recursos a clientes capazes de pagar.",
       "estado": "canonica",
+      "registro_universal": true,
       "fontes": [
         {
           "arquivo": "data/mundo/Gênese/realidade-0-soberanos.json",
@@ -24,9 +25,10 @@
       "alcance": "Múltiplas Árvores",
       "atuacao_publica": "Desenvolve tecnologia arcana e mantém projetos capazes de operar além de Astraluna.",
       "estado": "canonica",
+      "registro_universal": true,
       "fontes": [
         {
-          "arquivo": "data/mundo/Gênese/realidade-0-reinos.json",
+          "arquivo": "data/mundo/Parley (subjulgado)/parley-axis.json",
           "entrada_id": "astraluna"
         }
       ]
@@ -38,6 +40,7 @@
       "alcance": "Rotas acessíveis entre Árvores",
       "atuacao_publica": "Transporta pessoas, cargas e mensagens por passagens dimensionais conhecidas. Não atravessa rotas seladas.",
       "estado": "canonica",
+      "registro_universal": true,
       "fontes": [
         {
           "arquivo": "data/economia/escala-precos-v1.json",
@@ -52,6 +55,7 @@
       "alcance": "Todas as Árvores alcançáveis",
       "atuacao_publica": "Investiga rupturas dimensionais, evacua áreas ameaçadas e contém criaturas que atravessam fronteiras entre Árvores.",
       "estado": "proposta",
+      "registro_universal": true,
       "fontes": []
     },
     {
@@ -61,6 +65,7 @@
       "alcance": "Núcleos em diferentes Árvores",
       "atuacao_publica": "Preserva registros, identifica artefatos e reúne informações verificadas sobre fenômenos de diferentes Árvores.",
       "estado": "proposta",
+      "registro_universal": true,
       "fontes": []
     },
     {
@@ -70,6 +75,7 @@
       "alcance": "Todas as Árvores",
       "atuacao_publica": "Aceita contrato para capturar criminoso procurado e para abater criatura vinda do Vazio. Paga por entrega confirmada, cobra caro por serviço urgente e mantém quadro de procurados aberto a quem quiser tentar.",
       "estado": "canonica",
+      "registro_universal": true,
       "fontes": [
         {
           "arquivo": "data/economia/escala-precos-v1.json",

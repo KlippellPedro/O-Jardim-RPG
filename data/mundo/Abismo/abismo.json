@@ -13,17 +13,17 @@
       "id": "erebus",
       "titulo": "Erebus",
       "conteudo": {
-        "epiteto": "Aquele que Flui no Vazio",
-        "genero": "Masculino",
-        "dominio": "O espaço entre as coisas - guarda a \"saída\" definitiva da existência.",
-        "descricao": "Governa o Vazio: não uma Árvore, mas o nada que existe entre as Árvores, entre o Banco Lunar e entre tudo o que tem lugar no Jardim. É a deidade silenciosa que guarda a saída definitiva da existência, sendo o mais temido, neutro e enigmático de todos. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo.",
         "fluxo": "fluxo-do-vazio",
-        "status": "paralisada"
+        "genero": "Masculino",
+        "status": "observando",
+        "dominio": "O vazio entre as coisas guarda a \"saída\" definitiva da existência.",
+        "epiteto": "Aquele que Flui no Vazio",
+        "descricao": "Governa o Vazio, não uma Árvore, mas o nada que existe entre as Árvores, entre o Banco Lunar e entre tudo o que não tem lugar no Jardim. É a deidade mais silenciosa que guarda a saída definitiva da existência, sendo o mais temido, neutro e enigmático de todos."
       },
-
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido. Descrição do domínio reescrita em 2026-08-26 pra deixar claro que Erebus não governa uma Árvore, e sim o espaço entre elas.",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás do Vazio."
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás do Vazio.",
+      "revelado": true
     },
 
     {
@@ -32,7 +32,7 @@
       "id": "fluxo-do-vazio",
       "titulo": "Fluxo do Vazio",
       "conteudo": {
-        "arvore": "Abismo",
+        "arvore": "O Vazio",
         "descricao": "O Fluxo do que não está. Apaga em vez de destruir: o som some antes de chegar ao ouvido, a dor não é sentida, o nome de alguém deixa de ocorrer a quem o conhecia. É o mais silencioso e o mais temido de todos, porque não deixa ruína nenhuma pra provar que houve algo ali. Erebus não guarda a morte - isso é do Limiar - e sim a saída definitiva: o que passa pelo Vazio não vai a lugar nenhum, simplesmente deixa de ter existido, e nem a Biblioteca de Arkarin fica com um livro pra contar.",
         "marca_corporal": "Estrelas no pulso - pontos brancos e frios sob a pele, que não refletem luz nenhuma."
       },
@@ -63,13 +63,15 @@
       "id": "a-saida",
       "titulo": "A Saída",
       "conteudo": {
+        "descricao": "O ponto onde a borda se abre. Não tem porta, moldura nem linha marcando é apenas o lugar onde alguém pode deixar de existir por escolha própria, e o único lugar do Jardim onde isso é possível.\n\nA Mulher Carmesim recebe todos os que acabam, e cada um deles vira um livro na Biblioteca de Arkarin. Quem atravessa a Saída não vira livro. Não vira nada, e não deixa nada nem lembrança em quem ficou.\n\nErebus não impede ninguém. Ele apenas pergunta se tem certeza dessa escolha.",
+        "caracteristicas": "Irreversível e sem registro. Não há como saber quem já passou por aqui, porque não sobra nada.",
         "no_vazio": "erebus",
-        "descricao": "O ponto de Bordo onde a borda se abre. Não tem porta, moldura nem limiar marcado - é apenas o lugar onde alguém pode deixar de existir por escolha própria, e o único lugar do Jardim onde isso é possível.\n\nA Mulher Carmesim recebe todos os que acabam, e cada um deles vira um livro na Biblioteca de Arkarin. Quem atravessa a Saída não vira livro. Não vira nada, e não deixa nada - nem lembrança em quem ficou.\n\nErebus não impede ninguém. Ele apenas pergunta uma vez, e nunca duas.",
-        "caracteristicas": "Irreversível e sem registro. Não há como saber quem já passou por aqui, porque não sobra quem soubesse."
+        "local_pai": "bordo"
       },
-      "_origem": "ESCRITO DO ZERO em 2026-07-29, junto com o local acima. Reclassificado de 'dimensao' para 'local' em 2026-08-26.",
+      "_origem": "ESCRITO DO ZERO em 2026-07-29, junto com o local acima. Mantido como local em 2026-08-28 porque Bordo pertence ao Vazio e não é um Galho.",
       "_nota_conexao": "É o que fecha a distinção entre as duas Árvores do fim, já registrada em '_nota_distincao' na entrada 2: o Limiar encerra e arquiva, o Vazio apaga. A Biblioteca de Arkarin tem um livro pra cada existência que acabou - e nenhum pros que passaram pela Saída.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     }
   ]
 }

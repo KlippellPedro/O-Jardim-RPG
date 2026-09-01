@@ -48,6 +48,10 @@ Cada item é um objeto assim (o mesmo schema do site, em `data/loja`):
   rejeitado pela auditoria e aparece como `Desconhecida` na interface.
 - **nivelMinimoLoja:** inteiro obrigatório de `1` a `4`. É a primeira loja em
   que o item aparece; lojas posteriores acumulam o catálogo das anteriores.
+- **grupo_limite_uso:** use `item-pericia` em acessórios ou itens genéricos
+  feitos para conceder bônus de perícia. Artefatos entram automaticamente no
+  grupo `artefato`. Os dois grupos dividem o limite de itens especiais
+  equipados: mínimo 1 e, depois, nível total dividido por 4.
 - **margem_ameaca:** menor resultado natural que gera crítico (`18`, `19` ou `20`).
 - **multiplicador_critico:** quantas vezes os dados da arma são rolados (`2`, `3` ou `4`).
 - Margens `18` e `19` usam `x2`; multiplicadores `x3` e `x4` exigem margem `20`.
@@ -109,13 +113,15 @@ ele não publica mudanças feitas no JSON.
   entrada aqui com o mesmo preço da faixa.
 - **Veículos:** 65, sendo 49 sistemas/peças e 16 veículos completos, todos com
   ficha estruturada e efeitos veiculares completos.
-- **Bestiário:** 60 seres (`tipo: "monstro"`, preço por fórmula).
+- **Bestiário:** 128 seres (`tipo: "monstro"`, preço por fórmula), incluindo
+  seis criaturas Marítimas, seis Espíritos, seis Golens e seis criaturas do
+  Vazio com fichas e filtros próprios.
 - **Componentes e drops:** 259 entradas (`tipo: "drop"`), incluindo os
   catálogos próprios de classe, Matéria-prima e Componentes Veiculares.
 - **Especiais:** 15 Frutos do Éden, 10 Implantes, 8 Artefatos Mágicos e 11 Selos
   consumíveis sincronizados com o catálogo mágico.
 
-Total: **708 entradas**.
+Total: **832 entradas**.
 
 ### Frutos do Éden
 
@@ -132,6 +138,23 @@ Os marcadores `Sobrenatural`, `Mutação` e `Elemental` alimentam os filtros da
 Loja. Os preços atuais ficam entre 520 e 800 Fragmentos de Estrela conforme
 impacto, versatilidade e frequência; preço maior não remove custos de Mana,
 defesas, concentração, Cansaço ou limites de uso.
+
+
+### Relíquias da Criação
+
+São 23 peças: 17 armas e 6 artefatos, sendo 9 delas à distância ou híbridas. O texto
+delas não é escrito à mão no JSON.
+A curadoria oficial mora em `tools/retrofit-creation-relics.mjs`. Relíquia nova entra
+no bloco `novas` (ficha de combate, preço e tipo) e no bloco `curadoria` (lore, vitrine
+e Ressonância); o script cria a entrada que ainda não existe. Edite lá e rode
+`npm run reliquias:retrofit`. Para conferir se o catálogo ainda bate com a
+curadoria, `npm run reliquias:check`.
+
+Cada Relíquia publica `natureza: "reliquia-criacao"`, que é o campo lido pelo site
+para reconhecer a peça, mais `lore` (texto de mesa) e `descricao`. As armas trazem
+um bloco `ressonancia` (`nome`, `efeito`) com a regra própria da peça empunhada; os
+artefatos trazem a habilidade na `descricao`, com `ativacao`, `frequencia` e, quando
+couber, `defesa`, `duracao` e `custo`.
 
 ## Política econômica
 
@@ -242,7 +265,7 @@ publicada, `lootIds` fica como campo irmão de `loot` e aponta apenas para ids `
 
 Convertidos de `data/loja/bestiario_precos.json`.
 
-**Bestiário (`tipo: "monstro"`, 90 seres):** preço calculado pela fórmula
+**Bestiário (`tipo: "monstro"`, 128 seres):** preço calculado pela fórmula
 
 ```text
 preço = (PreçoPorLevel[faixa] × nível) + Espécie[faixa] + Classe[faixa] + Σ(extras)

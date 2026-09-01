@@ -18,17 +18,17 @@
       "id": "aperion",
       "titulo": "Aperion",
       "conteudo": {
-        "epiteto": "Aquela que flui no Espaço",
-        "genero": "Feminino",
-        "dominio": "As distâncias, as dimensões e as fronteiras - os vazios necessários pra Árvores e Galhos não colidirem.",
-        "descricao": "Governa as distâncias, as dimensões e as fronteiras. É ela quem molda os vazios necessários para que existam Árvores e Galhos sem se colidirem. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisada desde que Keryx foi subjugado por Jota Macedo.",
         "fluxo": "fluxo-do-espaco",
-        "status": "paralisada"
+        "genero": "Feminino",
+        "status": "paralisada",
+        "dominio": "As distâncias, as dimensões e as fronteiras necessárias pra Árvores e Galhos não colidirem.",
+        "epiteto": "Aquela que flui no Espaço",
+        "descricao": "Governa as distâncias, as dimensões e as fronteiras. É ela quem molda esses espaços necessários para que existam Árvores e Galhos sem se colidirem."
       },
-
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Matriz."
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Matriz.",
+      "revelado": true
     },
 
     {
@@ -65,15 +65,16 @@
       "_secao": "4 de 4 - DIMENSÃO",
       "tipo": "dimensao",
       "id": "os-vaos",
-      "titulo": "Os Vãos",
+      "titulo": "Os Erros",
       "conteudo": {
         "galho": "intersticio",
-        "descricao": "Os pontos de Interstício onde a distância cedeu por completo, e dois lugares que nunca deveriam se tocar ficaram encostados. Cada Vão é uma junção: de um lado, um trecho de alguma Dimensão conhecida; do outro, um trecho de outra qualquer - e a fronteira entre eles é só uma linha no chão que ninguém desenhou.\n\nOs Vãos são a razão de haver criaturas de Întuneric aparecendo em lugares que nunca ouviram falar de vampiros, e de haver aldeias inteiras da Dimensão Padrão que amanheceram com um céu que não é o delas. Não são portais: portais se abrem e se fecham. Um Vão simplesmente está.",
-        "caracteristicas": "Junções instáveis entre Dimensões. Sem controle, sem aviso e sem porta - a travessia é dar um passo."
+        "descricao": "Os erros são pontos de colisão entre dois lugares que nunca deveriam se tocar. Cada erro é uma junção de um lado, um local de alguma Dimensão conhecida; com outro de outra dimensão qualquer e a fronteira entre eles é só uma \"linha\" no chão que ninguém viu aparecendo.\n\nOs erros são a razão de haver criaturas de Întuneric aparecendo em lugares que nunca ouviram falar, e de haver locais inteiros da Dimensão Padrão que amanheceram com um céu que não é o deles. Não são portais, afinal portais se abrem e se fecham. Um erro simplesmente aparece.",
+        "caracteristicas": "Junções instáveis entre Dimensões. Sem controle, sem aviso e sem porta o jeito é dar um passo."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29, junto com o Galho acima.",
       "_nota_mesa": "É a explicação estrutural pra encontros fora de contexto - um Strigl de Întuneric num campo de Lionês não precisa mais de justificativa caso a caso.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     }
   ]
 }

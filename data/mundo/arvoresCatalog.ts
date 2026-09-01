@@ -1,12 +1,14 @@
 import { MUNDO_CATALOG } from '../gerado/mundoCatalog';
 
 /**
- * As 9 Árvores do jogo, mais Abismo/"erebus" - que na lore NÃO é uma Árvore
- * (é o Vazio, o espaço entre as Árvores; ver data/mundo/Abismo/abismo.json e
- * "O Vazio entre as Árvores" em data/regras/regras.ts), mas continua nesta
- * lista porque mecanicamente um personagem ainda pode se originar dele -
- * raças/classes com `arvore`/`arvores` incluindo "erebus" continuam válidas,
- * e a ficha ainda precisa de uma entrada pra exibir "Abismo" como origem.
+ * As 9 Árvores do jogo, mais O Vazio/"erebus" - que NÃO é uma Árvore (é o
+ * espaço entre as Árvores e o resto do universo; ver data/mundo/Abismo/
+ * abismo.json e "O Vazio entre as Árvores" em data/regras/regras.ts), mas
+ * continua nesta lista porque mecanicamente um personagem ainda pode se
+ * originar dele - raças/classes com `arvore`/`arvores` incluindo "erebus"
+ * continuam válidas, e a ficha ainda precisa de uma entrada pra exibir
+ * "O Vazio" como origem. Use `ARVORES_REAIS` sempre que a lista for de
+ * Árvores de verdade; `ARVORES` inclui o Vazio.
  * O `id` é o mesmo id da Deidade padroeira em `mundoCatalog.ts`
  * (ex.: "aethel", "erebus") - é esse esquema que `data/ficha/racas.json`/
  * `classes.json` já usam nos campos `arvore`/`arvores`, então reaproveitá-lo
@@ -27,6 +29,14 @@ export interface ArvoreEntry {
    * Espelha `tituloSubjugada`/`rgbSubjugada` do arvores.js legacy, usados no
    * efeito de glitch do rótulo 3D. */
   subjugada?: { nome: string; deidade: string; rgb: string };
+  /** Marca a entrada que não é uma Árvore de verdade. Hoje só O Vazio: ele
+   * ocupa uma entrada aqui pra servir de origem na ficha, mas não orbita, não
+   * tem Galho e não entra em lista nenhuma de "Árvores do Jardim". */
+  naoEhArvore?: boolean;
+  /** Cor pra texto e bordas quando a canônica é escura demais pra ler sobre o
+   * fundo do site. O preto do Vazio é correto na paleta e na cena 3D, mas some
+   * quando vira cor de letra - aí a interface usa esta no lugar. */
+  rgbInterface?: string;
 }
 
 /**
@@ -51,14 +61,31 @@ export const ARVORES: ArvoreEntry[] = [
   { id: 'moros', nome: 'Baluarte', deidadeTitulo: 'Moros', rgb: '116,82,52', cor: 'from-amber-800/25 to-stone-600/5' },
   { id: 'aperion', nome: 'Matriz', deidadeTitulo: 'Aperion', rgb: '132,84,188', cor: 'from-purple-500/20 to-violet-400/5' },
   { id: 'chronus', nome: 'Éon', deidadeTitulo: 'Chronus', rgb: '168,138,72', cor: 'from-yellow-700/25 to-amber-600/5' },
-  { id: 'erebus', nome: 'Abismo', deidadeTitulo: 'Erebus', rgb: '34,30,40', cor: 'from-zinc-800/40 to-neutral-900/10' },
+  { id: 'erebus', nome: 'O Vazio', deidadeTitulo: 'Erebus', rgb: '34,30,40', cor: 'from-zinc-800/40 to-neutral-900/10', naoEhArvore: true, rgbInterface: '155,150,173' },
   { id: 'mulher-carmesim', nome: 'Limiar', deidadeTitulo: 'Mulher Carmesim', rgb: '134,28,48', cor: 'from-red-900/30 to-rose-800/5' },
   { id: 'universal', nome: 'Universal', deidadeTitulo: 'Universal', rgb: '201,196,214', cor: 'from-gray-400/20 to-slate-300/5' },
 ];
 
+/** Id da entrada que representa O Vazio - o espaço entre as Árvores. */
+export const VAZIO_ID = 'erebus';
+
+/** Só as Árvores de verdade: sem O Vazio e sem a sentinela "universal". Use
+ * esta lista em qualquer lugar que diga "Árvores do Jardim" pro jogador. */
+export const ARVORES_REAIS: ArvoreEntry[] = ARVORES.filter(
+  (arvore) => !arvore.naoEhArvore && arvore.id !== 'universal',
+);
+
 /** Retorna a cor canônica de uma Árvore como "r,g,b". */
 export function corDaArvore(arvoreId: string): string {
   return ARVORES.find((a) => a.id === arvoreId)?.rgb || '160,160,170';
+}
+
+/** Cor de leitura: a canônica, ou a substituta quando aquela não tem contraste
+ * suficiente pra virar texto. Use nas páginas; `corDaArvore` continua sendo a
+ * verdade pra cena 3D e pra paleta dos Fluxos. */
+export function corDeInterface(arvoreId: string): string {
+  const arvore = ARVORES.find((a) => a.id === arvoreId);
+  return arvore?.rgbInterface || arvore?.rgb || '160,160,170';
 }
 
 /** Descrição da Deidade padroeira de uma Árvore, puxada direto do Códice
@@ -93,6 +120,10 @@ export interface CampanhaVisibilidadeConfig {
    * `usuario.id`. */
   racas_liberadas_membros?: Record<string, string[]>;
   classes_liberadas_membros?: Record<string, string[]>;
+  /** Chaves "{arvoreId}:tese" | "{arvoreId}:atmosfera" | "{arvoreId}:historia" | "{arvoreId}:cronologia". */
+  cronica_secoes_ocultas?: string[];
+  /** Ids de eventos de `cronicas-arvores.json` escondidos da Linha do tempo da Árvore. */
+  cronica_eventos_ocultos?: string[];
   [key: string]: any;
 }
 
@@ -116,7 +147,7 @@ export function arvoreVisivel(arvoreId: string, config: CampanhaVisibilidadeConf
 /**
  * Mantém a Árvore já escolhida disponível para exibição na ficha, mesmo que
  * ela ainda esteja oculta no Códice da campanha. Isso evita mostrar o id
- * interno da Deidade, como "erebus", no lugar do nome "Abismo".
+ * interno da Deidade, como "erebus", no lugar do nome "O Vazio".
  */
 export function arvoresVisiveisComAtual(
   visiveis: ArvoreEntry[],

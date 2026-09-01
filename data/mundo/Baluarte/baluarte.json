@@ -16,16 +16,17 @@
       "id": "moros",
       "titulo": "Moros",
       "conteudo": {
-        "epiteto": "Aquele que flui no Físico",
-        "genero": "Masculino",
-        "dominio": "Peso, gravidade e substância física - sem sua proteção, nada seria sólido e tudo colapsaria em éter.",
-        "descricao": "Estóico e pesado. É ele quem dá peso, gravidade e substância física ao mundo. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo.",
         "fluxo": "fluxo-do-fisico",
-        "status": "paralisada"
+        "genero": "Masculino",
+        "status": "paralisada",
+        "dominio": "Peso, gravidade e substância física sem sua proteção, nada seria sólido e tudo colapsaria.",
+        "epiteto": "Aquele que flui no Físico",
+        "descricao": "Estóico e pesado. É ele quem dá peso, gravidade e substância física ao mundo."
       },
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão (lá o epíteto era 'Aquele que flui na Matéria'; ajustei pra 'Físico' pra bater com a tabela mais recente 'Estrutura do Jardim' - mesmo domínio, nome atualizado).",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Baluarte."
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Baluarte.",
+      "revelado": true
     },
     {
       "_secao": "2 de 4 - FLUXO",
@@ -62,12 +63,13 @@
       "titulo": "Os Sete Salões",
       "conteudo": {
         "galho": "alicerce",
-        "descricao": "Escavados na rocha de Alicerce, sete salões, um pra cada elemento primordial - Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Cada um contém o elemento em estado puro, antes de qualquer derivação, e é dali que o Fluxo do Físico chega ao resto do Jardim.\n\nOs salões não são cofres: são nascentes. Não guardam o elemento, produzem. E quem entra num deles sem o elemento correspondente já desperto não sai - não por armadilha, mas porque um lugar feito inteiramente de fogo puro não precisa de armadilha.",
-        "caracteristicas": "Sete câmaras elementais. O acesso a cada uma exige afinidade prévia com aquele elemento."
+        "descricao": "Escavados na rocha de Alicerce, sete salões, um pra cada elemento primordial Terra, Água, Fogo, Ar, Raio, Luz e Escuridão. Cada um contém o elemento em estado puro, antes de qualquer derivação, e é dali que o Fluxo do Físico chega ao resto do Jardim.\n\nOs salões não são cofres, eles não guardam o elemento, eles produzem. E quem entra num deles sem o elemento correspondente não tem um final agradável, não por uma armadilha, mas porque um lugar feito inteiramente de um elemento puro não é compatível com outra coisa a não ser ele mesmo.",
+        "caracteristicas": "Sete câmaras elementais. O acesso a cada uma exige afinidade com aquele elemento."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29, mas ancorado em conteúdo real: os sete elementos e suas derivações vêm da tabela em 'O Jardim/Baluarte/Fluxo.md', transcrita na entrada 2 deste mesmo arquivo.",
       "_nota_mesa": "Cada salão é uma sessão pronta, e a regra de acesso já vem do próprio sistema - o personagem precisa ter aquele elemento desperto. Serve bem como progressão de campanha pra um Canalizador do Fluxo Físico.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     }
   ]
 }

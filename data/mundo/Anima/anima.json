@@ -18,18 +18,18 @@
       "id": "haemus",
       "titulo": "Haemus",
       "conteudo": {
-        "epiteto": "Aquela que flui na Vitalidade",
-        "genero": "Ambos",
-        "dominio": "O ciclo selvagem da vida - nascer, viver, morrer, renascer - e tudo que a existência tem a oferecer.",
-        "descricao": "Entidade de energia bruta e instintiva. Governa o ciclo completo da vida, sempre aproveitando tudo que a existência lhe proporciona. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisada desde que Keryx foi subjugado por Jota Macedo.",
         "fluxo": "fluxo-da-vitalidade",
-        "status": "paralisada"
+        "genero": "Ambos",
+        "status": "paralisada",
+        "dominio": "O ciclo selvagem da vida nascer, viver, morrer, renascer e tudo que a existência tem a oferecer.",
+        "epiteto": "Aquela que flui na Vitalidade",
+        "descricao": "Entidade de energia bruta e instintiva. Governa o ciclo completo da vida, sempre aproveitando tudo que a existência lhe proporciona."
       },
-
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
       "_ajustado_para_bater_com_estrutura_do_jardim": "O panteon.json antigo tinha epíteto 'Aquela que flui na Vida' e gênero 'Feminino'. A tabela mais recente 'Estrutura do Jardim' (a fonte mais atual que você me passou) mostra epíteto 'Aquela que flui na Vitalidade' e gênero 'Ambos' - usei a versão mais recente aqui. Se isso foi um erro de digitação na tabela em vez de uma mudança deliberada, é só ajustar este campo.",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Anima."
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Anima.",
+      "revelado": true
     },
 
     {
@@ -39,13 +39,13 @@
       "titulo": "Fluxo da Vitalidade",
       "conteudo": {
         "arvore": "Anima",
-        "descricao": "O Fluxo do corpo vivo e faminto. Acelera o que já está acontecendo: fecha carne, força um coração parado a bater de novo, apodrece uma ferida em minutos, faz mato subir por cima de um campo de batalha numa noite. Não distingue cura de infestação - as duas são vida se espalhando -, e é por isso que Anima é o Fluxo mais fácil de despertar e o mais difícil de segurar. Haemus não escolhe lados: o que come e o que é comido fluem por ela do mesmo jeito.",
-        "marca_corporal": "Cabelo e unhas crescem depressa demais, e um pulso verde fica visível sob a pele do pescoço enquanto o Fluxo é usado."
+        "descricao": "O Fluxo do corpo vivo e faminto. Acelera o que já está acontecendo fecha a carne, força um coração parado a bater de novo, apodrece uma ferida em minutos, faz mato subir por cima de um campo de batalha numa noite. Não distingue cura de infestação as duas são vida se espalhando, e é por isso que Anima é o Fluxo mais fácil de despertar e o mais difícil de controlar. Haemus não escolhe lados o que come e o que é comido fluem por ela do mesmo jeito.",
+        "marca_corporal": "Sempre parecem ser jovens de mais, além de que seus cabelos e unhas crescem rápido de mais."
       },
-
       "_origem": "Domínio de Haemus (antigo data/world/panteon.json) + tabela 'Estrutura do Jardim' (cor Verde, gênero Ambos). Reescrito em 2026-07-29.",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Geralmente revelado depois da Deidade em si."
+      "_quando_revelar": "Geralmente revelado depois da Deidade em si.",
+      "revelado": true
     },
 
     {
@@ -69,11 +69,12 @@
       "titulo": "O Ventre",
       "conteudo": {
         "galho": "viveiro",
-        "descricao": "O fundo do Viveiro, abaixo de todas as camadas de mata que já morreram umas por cima das outras. Não é caverna nem subsolo: é matéria viva, quente, que respira num compasso lento o bastante pra confundir com o próprio pulso de quem está lá dentro.\n\nÉ do Ventre que sobe tudo o que cresce no Galho. E é pra ele que desce tudo o que morreu ali - inteiro, sem apodrecer no caminho.",
+        "descricao": "O fundo do Viveiro, abaixo de todas as camadas de mata que já morreram umas por cima das outras. Não é uma caverna é matéria viva, quente, que respira em uma batida lenta o bastante pra confundir com o próprio pulso de quem está lá dentro.\n\nÉ do Ventre que sobe tudo o que cresce no Galho. E é pra ele que desce tudo o que morreu ali inteiro, sem apodrecer no caminho.",
         "caracteristicas": "Sem luz, sem frio e sem silêncio. A temperatura é sempre a mesma de um corpo vivo."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29, junto com o Galho acima.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     }
   ]
 }

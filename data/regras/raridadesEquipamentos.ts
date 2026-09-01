@@ -7,8 +7,6 @@ export type RaridadeEquipamentoId =
   | 'reliquia'
   | 'reliquia da criacao';
 
-export type CategoriaEquipamentoId = 'arma' | 'armadura' | 'consumivel' | 'veiculo' | 'geral';
-
 export interface IRegraRaridadeEquipamento {
   id: RaridadeEquipamentoId;
   titulo: string;
@@ -24,27 +22,27 @@ export const RARIDADES_EQUIPAMENTO: IRegraRaridadeEquipamento[] = [
   {
     id: 'comum', titulo: 'Comum', resumo: 'Equipamento que funciona, e só. Nada de sobrenatural nele.',
     modificacoesMaximas: 1, efeitosRaridadeMaximos: 0, valorMaximoPorEfeito: 1, requerMestre: false,
-    principio: 'Aceita uma melhoria técnica. A raridade em si não dá vantagem nenhuma.',
+    principio: 'Mantém a ficha básica do modelo e aceita uma melhoria técnica.',
   },
   {
     id: 'incomum', titulo: 'Incomum', resumo: 'Feito bem demais para ser comum, ou começando a acordar.',
     modificacoesMaximas: 2, efeitosRaridadeMaximos: 1, valorMaximoPorEfeito: 1, requerMestre: false,
-    principio: 'Ganha uma esquisitice pequena e até um efeito automático de valor 1.',
+    principio: 'Melhora a ficha de armas e proteções, além de aceitar até um efeito automático de valor 1.',
   },
   {
     id: 'raro', titulo: 'Raro', resumo: 'Já tem nome, jeito próprio e gente que reconhece de longe.',
     modificacoesMaximas: 3, efeitosRaridadeMaximos: 1, valorMaximoPorEfeito: 2, requerMestre: false,
-    principio: 'Ganha um dom desperto e até um efeito automático de valor 2.',
+    principio: 'Amplia dano, crítico, Defesa e Resistências conforme a categoria, além de aceitar um efeito de valor 2.',
   },
   {
     id: 'epico', titulo: 'Épico', resumo: 'Peça que vira o rumo de uma cena sozinha.',
     modificacoesMaximas: 4, efeitosRaridadeMaximos: 2, valorMaximoPorEfeito: 3, requerMestre: false,
-    principio: 'Ganha um dom excepcional e até dois efeitos automáticos de valor 3.',
+    principio: 'Recebe a terceira melhoria mecânica da categoria e até dois efeitos automáticos de valor 3.',
   },
   {
     id: 'lendario', titulo: 'Lendário', resumo: 'Tem vontade própria, tem passado e tem feitos que as pessoas contam.',
     modificacoesMaximas: 5, efeitosRaridadeMaximos: 2, valorMaximoPorEfeito: 4, requerMestre: true,
-    principio: 'Pode ser senciente. Os poderes e os dois efeitos de valor 4 passam pelo Mestre.',
+    principio: 'Recebe a melhoria mecânica máxima de encomenda. Os poderes e os dois efeitos de valor 4 passam pelo Mestre.',
   },
   {
     id: 'reliquia', titulo: 'Mítico', resumo: 'Existe uma só, e ela está presa a um evento, a uma entidade ou a um povo.',
@@ -57,54 +55,6 @@ export const RARIDADES_EQUIPAMENTO: IRegraRaridadeEquipamento[] = [
     principio: 'Sempre única. Quebra regra comum só até onde o Mestre deixar.',
   },
 ];
-
-export const DONS_RARIDADE_POR_CATEGORIA: Record<CategoriaEquipamentoId, Record<RaridadeEquipamentoId, string>> = {
-  arma: {
-    comum: 'Sem dom: vive de técnica e manutenção, como qualquer ferro.',
-    incomum: 'Temperamento: esquenta, zumbe ou brilha de leve quando quem a empunha é o dono.',
-    raro: 'Voz desperta: fala ou passa impulsos simples, e com o tempo cria personalidade.',
-    epico: 'Instinto de confronto: sente hostilidade por perto e tenta avisar quem a carrega.',
-    lendario: 'Vontade de lenda: tem objetivos próprios e um poder único, do jeito que a descrição do item mandar.',
-    reliquia: 'Golpe soberano: faz uma coisa impossível, ligada à história dela, com custo e limite que o Mestre aprova.',
-    'reliquia da criacao': 'Corte de princípio: mexe com uma lei da realidade, escolhida quando a relíquia foi criada.',
-  },
-  armadura: {
-    comum: 'Sem dom: precisa de limpeza, ajuste e conserto como qualquer peça.',
-    incomum: 'Sempre impecável: não segura poeira, lama nem cheiro, e se ajusta sozinha a quem veste.',
-    raro: 'Memória de forma: some com arranhão de superfície durante um descanso. Durabilidade perdida não volta.',
-    epico: 'Guarda desperta: reage ao perigo antes de você. Se mexe, brilha ou avisa de algum jeito.',
-    lendario: 'Bastião consciente: conversa com quem a veste e tem uma defesa única, descrita no item.',
-    reliquia: 'Corpo soberano: nada mundano a destrói enquanto a condição da história dela continuar de pé.',
-    'reliquia da criacao': 'Lei de proteção: impõe uma condição absoluta de defesa, combinada com o Mestre.',
-  },
-  consumivel: {
-    comum: 'Sem dom: se conserva e funciona como foi fabricado.',
-    incomum: 'Conservação perfeita: enquanto estiver lacrado, tempo e clima comum não estragam.',
-    raro: 'Dose responsiva: muda de sabor, cor ou temperatura para avisar se é seguro para aquela pessoa.',
-    epico: 'Efeito excepcional: carrega uma propriedade a mais, descrita no item, gasta junto com ele.',
-    lendario: 'Receita viva: se comunica por sinais e cobra uma condição especial para aceitar ser usada.',
-    reliquia: 'Essência soberana: produz um efeito que só ela produz, e ninguém consegue copiar.',
-    'reliquia da criacao': 'Semente de princípio: ao ser consumida, muda alguma coisa para sempre. O que muda, o Mestre define.',
-  },
-  veiculo: {
-    comum: 'Sem dom: depende de combustível, de piloto e de manutenção.',
-    incomum: 'Partida fiel: reconhece o condutor e avisa das falhas simples antes de sair do lugar.',
-    raro: 'Navegador instintivo: guarda as rotas que já percorreu e sabe apontá-las de volta.',
-    epico: 'Resposta desperta: ajusta sistemas e postura sozinho quando o perigo aparece, do jeito descrito no veículo.',
-    lendario: 'Companheiro de jornada: tem personalidade e um jeito extraordinário de se deslocar.',
-    reliquia: 'Travessia soberana: passa por um obstáculo que não deveria dar para passar, sob condição aprovada pelo Mestre.',
-    'reliquia da criacao': 'Caminho impossível: chega a um tipo de destino que veículo nenhum alcança.',
-  },
-  geral: {
-    comum: 'Sem dom: funciona como foi fabricado.',
-    incomum: 'Marca do dono: esquenta, vibra ou muda de cara quando o dono chega perto.',
-    raro: 'Eco de uso: guarda impressões simples de quem já o usou, e revela por sinais.',
-    epico: 'Função desperta: faz sozinho uma tarefa simples e bem delimitada.',
-    lendario: 'Personalidade própria: fala, e tem um poder único que combina com a função dele.',
-    reliquia: 'Autoridade soberana: manda em um assunto estreito, definido na história do objeto.',
-    'reliquia da criacao': 'Objeto de princípio: representa um conceito e interfere nele. Qual conceito, você decide com o Mestre.',
-  },
-};
 
 export const REGRAS_MODIFICACOES_EQUIPAMENTO = [
   'Toda modificação ocupa um espaço da raridade, seja ela técnica, mágica ou especial.',

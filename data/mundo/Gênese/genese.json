@@ -29,14 +29,13 @@
       "id": "aethel",
       "titulo": "Aethel",
       "conteudo": {
-        "epiteto": "Aquela que flui na Origem",
-        "genero": "Feminino",
-        "dominio": "Criação pura, nascimento de novos Galhos, luz e ordem.",
-        "descricao": "Focada na criação pura, Aethel é uma entidade de luz e ordem que zela pelo nascimento de novos Galhos.",
         "fluxo": "fluxo-da-origem",
-        "status": "ativa"
+        "genero": "Feminino",
+        "status": "ativa",
+        "dominio": "Criação pura, nascimento de novos Galhos, luz e ordem.",
+        "epiteto": "Aquela que flui na Origem",
+        "descricao": "Focada na criação pura, Aethel é uma entidade de luz e ordem que zela pelo nascimento de novos Galhos."
       },
-
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
       "_pronto_para_importar": true,
       "_quando_revelar": "Aethel é a única Árvore que os players 'conhecem' desde o início (o círculo dela já aparece nomeado na tela de Árvores, sem precisar importar nada). Mas isso é só o NOME - esta entrada é a ficha completa dela (epíteto, domínio, status). Decisão sua: em que ponto da campanha os players descobrem esses detalhes de verdade? Só importe quando esse momento acontecer na mesa."
@@ -49,14 +48,14 @@
       "titulo": "Fluxo da Origem",
       "conteudo": {
         "arvore": "Gênese",
-        "descricao": "O Fluxo do que ainda não existe. Quem o canaliza não faz matéria surgir do nada - abre espaço pra que algo nasça: um vínculo, uma cura que o corpo ainda não sabia fazer, uma rota onde não havia caminho. É o mais generoso e o mais lento dos Fluxos, porque exige que o portador queira de verdade que aquilo exista, e recusa quem só quer o resultado. Por isso é o Fluxo dos invocadores e das parteiras, não o dos conquistadores. Aethel é a única deidade que nunca foi silenciada pela A.X.I.S - é por isso que coisas novas continuam nascendo mesmo com o Jardim inteiro isolado.",
-        "marca_corporal": "Um rosa pálido acende sob a pele das palmas e do peito diante de algo prestes a nascer, e some sem deixar cicatriz."
+        "descricao": "O Fluxo do que ainda não existe. Quem o canaliza não faz a matéria surgir do nada, mas abre espaço pra que algo nasça: um vínculo, uma cura que o corpo ainda não sabia fazer, uma rota onde não havia caminho. É o mais generoso e o mais lento dos Fluxos, porque exige que o portador queira de verdade que aquilo exista, e recusa quem só quer o resultado. Aethel é a única deidade que nunca foi silenciada pela A.X.I.S, e é por isso que coisas novas continuam nascendo mesmo com o Jardim inteiro isolado.",
+        "marca_corporal": "Um rosa pálido aparece sob as palmas das mãos."
       },
-
       "_origem": "Domínio de Aethel (antigo data/world/panteon.json) + tabela 'Estrutura do Jardim' (Fluxo 'Criação', cor Rosa). Reescrito em 2026-07-29 pra responder como um mortal canaliza o Fluxo, não só o que a deidade governa.",
       "_nota_nome": "A tabela do Obsidian chama este Fluxo de 'Criação'; mantido 'Origem' porque é o nome já usado no código e na característica 'Fluxo da Origem' da raça elfo (data/ficha/racas.json).",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Geralmente o Fluxo é um detalhe mais técnico/abstrato que os players descobrem depois da Deidade em si - não precisa ser revelado junto."
+      "_quando_revelar": "Geralmente o Fluxo é um detalhe mais técnico/abstrato que os players descobrem depois da Deidade em si - não precisa ser revelado junto.",
+      "revelado": true
     },
 
     {
@@ -66,7 +65,7 @@
       "titulo": "Realidade 0",
       "conteudo": {
         "arvore": "aethel",
-        "descricao": "O Galho principal da Árvore de Gênese, e o único Galho habitado que se conhece. É onde se passa a campanha 'O Último Eclipse'. Contém seis Dimensões: a Padrão (com todos os reinos mortais), Nadalon, Întuneric, Sonhar, Espelhos e o Coliseu.",
+        "descricao": "O Galho principal da Árvore de Gênese, e o único que se sabe habitado - os outros nascidos de Aethel ainda não foram encontrados, ou nunca chegaram a vingar. Aqui vivem espécies inteiras que não têm outro lugar pra chamar de casa: humanos, elfos, vampiros, anões, oníricos, cada povo preso à Dimensão que aprendeu a sustentar sua espécie.\n\nContém seis Dimensões - a Padrão, com todos os reinos mortais, Nadalon, Întuneric, Sonhar, Espelhos e o Coliseu - e é o palco de tudo que está acontecendo agora: com a Malha subida sobre o Galho de Keryx e as Deidades paralisadas, é em Realidade 0 que se decide se o Jardim volta a se falar.",
         "nota": "\"Realidade\" e \"Galho\" são sinônimos - \"Realidade 0\" é o rótulo imersivo preferido para este Galho específico."
       },
 
@@ -84,13 +83,13 @@
       "titulo": "Dimensão Padrão",
       "conteudo": {
         "galho": "realidade-0",
-        "descricao": "A dimensão central e habitável da Realidade 0. Abriga os grandes reinos do mundo mortal - Salém, o Império, Astraluna, Emberhold, Lionês, o Reino dos Anões e outros.",
-        "caracteristicas": "Dimensão física onde o tempo e o espaço seguem regras consistentes. É o palco principal da campanha."
+        "descricao": "Comparada às outras Dimensões da Realidade 0, a Dimensão Padrão não tem nada de extraordinário - e é exatamente essa normalidade que a torna a mais povoada de todas. Gravidade, clima e estações seguem leis fixas, sem depender de sonho, Fluxo ou vontade de ninguém, o oposto de tudo que cresce ao redor dela.\n\nÉ onde ficam os grandes reinos mortais - Salém, o Império, Emberhold, Lionês, Khazad e Solaria - cada um resolvendo o problema que os outros quatro não resolvem: o Império guarda, Emberhold arma, Lionês alimenta, Khazad forja, Salém domina o Fluxo. É também onde fica Iwagakure, a vila escondida que treina os shinobi mais temidos da Realidade 0.",
+        "caracteristicas": "Dimensão comum. Sem magia ambiental, sem clima estranho - é onde a maioria dos mortais vive e morre."
       },
-
       "_origem": "Conteúdo real - recuperado do antigo data/world/dimensions.json antes de ele ser removido nesta sessão.",
       "_pronto_para_importar": true,
-      "_proximo_passo": "Os Reinos citados na descrição (Salém, Império, Astraluna, Emberhold, Lionês, Reino dos Anões) seriam o próximo nível da cascata - 'Locais' dentro desta Dimensão (tipo: 'reino', campo conteudo.dimensao: 'padrao'). Nenhum deles tem entrada ainda; esse é o exemplo que falta pra fechar 'da Árvore até uma Dimensão E um Local'. As outras Dimensões da Realidade 0 (Nadalon, Espelhos, Sonhar, Întuneric, Êtuneric, Coliseu) também ainda não têm entrada - mesmo padrão desta aqui, um novo objeto no array."
+      "_proximo_passo": "Os Reinos citados na descrição (Salém, Império, Astraluna, Emberhold, Lionês, Reino dos Anões) seriam o próximo nível da cascata - 'Locais' dentro desta Dimensão (tipo: 'reino', campo conteudo.dimensao: 'padrao'). Nenhum deles tem entrada ainda; esse é o exemplo que falta pra fechar 'da Árvore até uma Dimensão E um Local'. As outras Dimensões da Realidade 0 (Nadalon, Espelhos, Sonhar, Întuneric, Êtuneric, Coliseu) também ainda não têm entrada - mesmo padrão desta aqui, um novo objeto no array.",
+      "revelado": true
     }
   ]
 }

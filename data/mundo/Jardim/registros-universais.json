@@ -1,0 +1,38 @@
+{
+  "pacote": "registros-universais",
+
+  "_LEIA_ISSO_PRIMEIRO": {
+    "o_que_e_esse_arquivo": "Seres e locais que existem no universo geral do Jardim e não pertencem a nenhuma Árvore. A presença aqui é explícita para impedir que registros regionais sem relação estrutural sejam classificados como universais por engano.",
+    "categorias_permitidas": "A página Registros Universais exibe apenas seres, facções e locais. Facções são mantidas separadamente em data/mundo/faccoes.json."
+  },
+
+  "entradas": [
+    {
+      "tipo": "personagem",
+      "id": "blanc",
+      "titulo": "Blanc",
+      "registro_universal": "ser",
+      "revelado": true,
+      "conteudo": {
+        "epiteto": "Espírito Primordial",
+        "descricao": "Blanc é um Espírito Primordial e o único Espírito Branco existente."
+      },
+      "_origem": "Decisão canônica do autor em 2026-08-28.",
+      "_pronto_para_importar": true
+    },
+    {
+      "tipo": "local",
+      "id": "banco-lunar",
+      "titulo": "Banco Lunar",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "localizacao": "Vazio",
+        "responsavel": "Amadheus Colona",
+        "descricao": "A única instituição que opera em todas as Árvores ao mesmo tempo, e a única que nenhum ser jamais ousou nacionalizar. Fica no Vazio, fora de todas as Árvores."
+      },
+      "_origem": "Consolidado em 2026-08-28 a partir da lore do Banco Lunar, de Amadheus Colona e da economia oficial.",
+      "_pronto_para_importar": true
+    }
+  ]
+}

@@ -18,17 +18,17 @@
       "id": "ousias",
       "titulo": "Ousias",
       "conteudo": {
-        "epiteto": "Aquela que flui na Essência",
-        "genero": "Feminino",
-        "dominio": "A alma e a verdade fundamental das coisas - o que define a natureza real de um ser.",
-        "descricao": "Governa o que define a alma e a verdade fundamental das coisas. É filosófica e raramente interfere, a menos que a natureza de um ser seja corrompida. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisada desde que Keryx foi subjugado por Jota Macedo - sente que algo está errado, mas não confia o bastante nas outras pra agir sozinha.",
         "fluxo": "fluxo-da-essencia",
-        "status": "paralisada"
+        "genero": "Feminino",
+        "status": "paralisada",
+        "dominio": "A alma e a verdade fundamental das coisas o que define a natureza real de um ser.",
+        "epiteto": "Aquela que flui na Essência",
+        "descricao": "Governa o que define a alma e a verdade fundamental das coisas. É filosófica e raramente interfere, a menos que a natureza de um ser seja corrompida. "
       },
-
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão (mesma fonte da entrada de Aethel em genese.json).",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Alétheia - nome, epíteto, domínio, status."
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Alétheia - nome, epíteto, domínio, status.",
+      "revelado": true
     },
 
     {
@@ -38,13 +38,13 @@
       "titulo": "Fluxo da Essência",
       "conteudo": {
         "arvore": "Alétheia",
-        "descricao": "O Fluxo que lê o que uma coisa é por baixo do que ela parece ser. Não adivinha o futuro nem lê pensamentos: revela natureza - a lâmina que foi forjada pra matar alguém específico, o juramento que uma pessoa quebrou, o nome que um ser tinha antes de trocar de forma. Quem canaliza a Essência aprende cedo que a verdade raramente ajuda e nunca consola, e os que insistem acabam calados como a própria Ousias. É a base da perícia Ressonância: reconhecer qual Fluxo alguém carrega é o uso mais elementar da Essência, e o primeiro que qualquer aprendiz consegue.",
-        "marca_corporal": "A íris perde a cor própria e vira âmbar enquanto o portador observa alguém com atenção de verdade."
+        "descricao": "O Fluxo que lê o que uma coisa é por baixo do que ela parece ser. Não adivinha o futuro nem lê pensamentos, mas revela a natureza de um ser. Quem canaliza a Essência aprende cedo que a verdade raramente ajuda e nunca consola, e os que insistem acabam calados como a própria Ousias. É a base da perícia Ressonância: reconhecer qual Fluxo alguém carrega é o uso mais certo da Essência, e o primeiro que qualquer aprendiz consegue.",
+        "marca_corporal": "A íris perde a cor própria e vira de uma cor âmbar."
       },
-
       "_origem": "Domínio de Ousias (antigo data/world/panteon.json) + tabela 'Estrutura do Jardim' (cor Amarelo). Reescrito em 2026-07-29; a ligação com a perícia Ressonância vem de data/ficha/pericias.json ('sentir qual Fluxo alguém carrega').",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Geralmente revelado depois da Deidade em si."
+      "_quando_revelar": "Geralmente revelado depois da Deidade em si.",
+      "revelado": true
     },
 
     {
@@ -68,12 +68,13 @@
       "titulo": "Sala dos Nomes",
       "conteudo": {
         "galho": "anamnesis",
-        "descricao": "A única estrutura fechada de Anámnesis, e a única parte do Galho que Ousias construiu com as próprias mãos. Dentro dela, todo ser presente é chamado pelo nome que realmente tem - não o de registro, não o adotado, não o que a mãe deu: o verdadeiro.\n\nNão há efeito mágico nem punição. A sala apenas diz, e quem estiver junto ouve. É por isso que pactos entre Árvores eram fechados ali, e é por isso que quase ninguém entra acompanhado.",
-        "caracteristicas": "Sem porta trancada e sem guarda. Quem entra revela o próprio nome verdadeiro a todos os presentes, sem escolha."
+        "descricao": "A única estrutura fechada de Anámnesis, e a única parte do Galho que Ousias construiu com as próprias mãos. Dentro dela, todo ser presente é chamado pelo nome que realmente tem não o de registro, não o adotado, não o que a mãe deu o verdadeiro nome.\n\nA sala apenas diz, e quem estiver junto ouve. É por isso que pactos entre Árvores eram fechados ali, e é por isso que quase ninguém entra acompanhado.",
+        "caracteristicas": "Quem entra revela o próprio nome verdadeiro a todos os presentes, sem escolha."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29, junto com o Galho acima.",
       "_nota_conexao": "Foi escrita pra conversar com Keryx: pactos entre realidades eram o domínio dele, e a Sala dos Nomes é onde esses pactos ficavam à prova de mentira. Que Jota tenha conseguido enganar Keryx com um contrato sugere que o contrato NÃO foi assinado aqui - possível gancho.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     }
   ]
 }

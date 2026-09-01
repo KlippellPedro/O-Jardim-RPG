@@ -8445,7 +8445,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Classe especial do Abismo. Você luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que morreu, mas ainda segue o seu comando.",
+    "descricao": "Classe especial do Vazio. Você luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que morreu, mas ainda segue o seu comando.",
     "dt_efeitos": {
       "rotulo": "DT da Maldição",
       "pericia": "intimidacao",
@@ -12805,7 +12805,7 @@
           {
             "id": "vazio",
             "titulo": "Vazio",
-            "descricao": "Ausência e saída definitiva da existência. Ligado à Árvore Abismo e à deidade Erebus. Tem vantagem natural sobre Inconstância e desvantagem contra Origem."
+            "descricao": "Ausência e saída definitiva da existência. Ligado ao Vazio e à deidade Erebus. Tem vantagem natural sobre Inconstância e desvantagem contra Origem."
           },
           {
             "id": "fim",

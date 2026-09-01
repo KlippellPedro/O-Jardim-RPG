@@ -1220,9 +1220,9 @@ São 15 frutos, cada um com um poder próprio, vendidos por Fragmentos de Estrel
 
 - **Técnica:** o poder ativo do dia a dia, na faixa de 3 a 4 de Mana. Custa uma ação e costuma valer uma vez por rodada.
 
-- **Despertar:** o poder grande, na faixa de 9 a 14 de Mana e quase sempre uma vez por cena. Ele fica trancado até o fruto ser despertado.
+- **Despertar:** transforma o vínculo inteiro: melhora a passiva, aprimora cada técnica já conhecida e libera a manifestação final, na faixa de 9 a 14 de Mana e quase sempre uma vez por cena.
 
-Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. As técnicas normais continuam funcionando; o que muda é que o poder grande passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.
+Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. A passiva e as técnicas são substituídas pelas versões aprimoradas, sem somar com as antigas, e a manifestação final passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.
 
 Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos 15 está no catálogo da Loja.
 
@@ -1296,82 +1296,63 @@ Orçamento de poder fica em **Raridades de Equipamento**; as opções prontas e 
 
 **Status:** Regra oficial
 
-Até onde cada raridade pode ir, quantas modificações e efeitos um item comporta e quais dons visuais cada categoria pode manifestar.
+Como cada raridade aumenta preço e propriedades de armas e proteções, além dos limites de modificações e efeitos.
 
 ### Raridades e orçamento de poder
 
-Raridade funciona como um **orçamento**, não como um bônus fixo igual para todo item da mesma faixa: ela diz quantas modificações, efeitos automáticos e dons aquele objeto aguenta carregar. É o que impede a ficha de virar uma pilha de +1 sem fim.
+Raridade possui duas funções: melhora a ficha própria de armas e proteções e define quantas modificações e efeitos o item comporta. A melhoria automática da raridade não ocupa uma vaga de modificação.
+
+**Na Loja, armas, armaduras e escudos são anunciados primeiro como Comuns.** O preço Comum vem do modelo e usa a mesma régua nos três: peça simples custa de 15 a 40 Lunaris, peça marcial custa de 50 a 80 Lunaris. Encomendar outra raridade aumenta preço e propriedades, e cada variante fica separada no inventário. Mítico e Relíquia da Criação continuam fora das encomendas normais.
+
+- Raridade | Preço | Armas | Armaduras e escudos
+
+- Comum | ×1 | Ficha básica do modelo | Ficha básica do modelo
+
+- Incomum | ×3 | +1d4 de dano | +1 Defesa; Resistência 1 a Corte
+
+- Raro | ×8 | +1d6 de dano; margem +1 | +2 Defesa; Resistência 2 a Corte e Perfuração; penalidade −1
+
+- Épico | ×20 | +1d8 de dano; margem +1; crítico +1 | +3 Defesa; Resistência 3 a Corte, Perfuração e Impacto; penalidade −1
+
+- Lendário | ×60 | +1d10 de dano; margem +2; crítico +1 | +4 Defesa; Resistência 5 a Corte, Perfuração, Impacto e Balístico; penalidade −2
+
+O dado extra passa a fazer parte do dano da arma e entra no crítico. “Margem +1” reduz em 1 o número inicial: 20 vira 19–20.
 
 - Raridade | Mods. | Efeitos próprios | Valor por efeito | Regra
 
-- Comum | 1 | 0 | ±1 | Aceita uma melhoria técnica. A raridade em si não dá vantagem nenhuma.
+- Comum | 1 | 0 | ±1 | Mantém a ficha básica do modelo e aceita uma melhoria técnica.
 
-- Incomum | 2 | 1 | ±1 | Ganha uma esquisitice pequena e até um efeito automático de valor 1.
+- Incomum | 2 | 1 | ±1 | Melhora a ficha de armas e proteções, além de aceitar até um efeito automático de valor 1.
 
-- Raro | 3 | 1 | ±2 | Ganha um dom desperto e até um efeito automático de valor 2.
+- Raro | 3 | 1 | ±2 | Amplia dano, crítico, Defesa e Resistências conforme a categoria, além de aceitar um efeito de valor 2.
 
-- Épico | 4 | 2 | ±3 | Ganha um dom excepcional e até dois efeitos automáticos de valor 3.
+- Épico | 4 | 2 | ±3 | Recebe a terceira melhoria mecânica da categoria e até dois efeitos automáticos de valor 3.
 
-- LendárioAprovação do Mestre | 5 | 2 | ±4 | Pode ser senciente. Os poderes e os dois efeitos de valor 4 passam pelo Mestre.
+- LendárioAprovação do Mestre | 5 | 2 | ±4 | Recebe a melhoria mecânica máxima de encomenda. Os poderes e os dois efeitos de valor 4 passam pelo Mestre.
 
 - MíticoAprovação do Mestre | 6 | 3 | ±5 | Ninguém reproduz e nada mundano destrói. Todo poder passa pelo Mestre.
 
 - Relíquia da CriaçãoAprovação do Mestre | 7 | 3 | ±7 | Sempre única. Quebra regra comum só até onde o Mestre deixar.
 
-### Dons definidos por categoria
+### O que a raridade dá para cada categoria
 
-Cada raridade também possui uma manifestação por categoria. A descrição pode alterar aparência e comportamento, sem aumentar o efeito mecânico.
+Fora do bônus automático de armas e proteções, o ganho de uma raridade mais alta é sempre da mesma espécie: mais espaço de modificação e mais efeitos automáticos para colocar no item (tabela acima). O que aquele espaço vira depende da categoria do equipamento.
 
-Arma
+- **Armas:** mais modificações e encantamentos cabem na mesma peça, e isso é o que empurra o dano além do bônus automático da raridade (ex.: Afiada, Elemental, Devastadora).
 
-- **Incomum:** Temperamento: esquenta, zumbe ou brilha de leve quando quem a empunha é o dono.
-- **Raro:** Voz desperta: fala ou passa impulsos simples, e com o tempo cria personalidade.
-- **Épico:** Instinto de confronto: sente hostilidade por perto e tenta avisar quem a carrega.
-- **Lendário:** Vontade de lenda: tem objetivos próprios e um poder único, do jeito que a descrição do item mandar.
-- **Mítico:** Golpe soberano: faz uma coisa impossível, ligada à história dela, com custo e limite que o Mestre aprova.
-- **Relíquia da Criação:** Corte de princípio: mexe com uma lei da realidade, escolhida quando a relíquia foi criada.
+- **Armaduras e escudos:** o espaço extra vira mais Defesa e Resistência por modificação (ex.: Reforçada, Isolante, Bastião), somando ao bônus automático da tabela acima.
 
-Armadura
+- **Consumíveis:** cabem mais efeitos por dose, uma versão Rara carrega um efeito automático a mais que uma Comum, sem virar um item totalmente novo.
 
-- **Incomum:** Sempre impecável: não segura poeira, lama nem cheiro, e se ajusta sozinha a quem veste.
-- **Raro:** Memória de forma: some com arranhão de superfície durante um descanso. Durabilidade perdida não volta.
-- **Épico:** Guarda desperta: reage ao perigo antes de você. Se mexe, brilha ou avisa de algum jeito.
-- **Lendário:** Bastião consciente: conversa com quem a veste e tem uma defesa única, descrita no item.
-- **Mítico:** Corpo soberano: nada mundano a destrói enquanto a condição da história dela continuar de pé.
-- **Relíquia da Criação:** Lei de proteção: impõe uma condição absoluta de defesa, combinada com o Mestre.
+- **Veículos:** o espaço vira mais componentes instalados de uma vez, sem estourar a Manutenção do casco (ver Manutenção e Componentes).
 
-Consumivel
+- **Itens gerais e mágicos:** o mesmo espaço aceita mais modificações técnicas ou mágicas, do jeito que o Catálogo de Modificações descreve.
 
-- **Incomum:** Conservação perfeita: enquanto estiver lacrado, tempo e clima comum não estragam.
-- **Raro:** Dose responsiva: muda de sabor, cor ou temperatura para avisar se é seguro para aquela pessoa.
-- **Épico:** Efeito excepcional: carrega uma propriedade a mais, descrita no item, gasta junto com ele.
-- **Lendário:** Receita viva: se comunica por sinais e cobra uma condição especial para aceitar ser usada.
-- **Mítico:** Essência soberana: produz um efeito que só ela produz, e ninguém consegue copiar.
-- **Relíquia da Criação:** Semente de princípio: ao ser consumida, muda alguma coisa para sempre. O que muda, o Mestre define.
+### Quantos itens especiais você pode usar
 
-Veiculo
+**Itens de perícia** e **artefatos** dividem o mesmo limite de uso: seu **nível total dividido por 4, arredondado para baixo, com o mínimo de 1**. Só uma peça equipada ou ativa ocupa vaga; comprar, carregar ou guardar não ocupa. Arma, armadura, escudo, consumível e item comum continuam seguindo seus próprios espaços.
 
-- **Incomum:** Partida fiel: reconhece o condutor e avisa das falhas simples antes de sair do lugar.
-- **Raro:** Navegador instintivo: guarda as rotas que já percorreu e sabe apontá-las de volta.
-- **Épico:** Resposta desperta: ajusta sistemas e postura sozinho quando o perigo aparece, do jeito descrito no veículo.
-- **Lendário:** Companheiro de jornada: tem personalidade e um jeito extraordinário de se deslocar.
-- **Mítico:** Travessia soberana: passa por um obstáculo que não deveria dar para passar, sob condição aprovada pelo Mestre.
-- **Relíquia da Criação:** Caminho impossível: chega a um tipo de destino que veículo nenhum alcança.
-
-Geral
-
-- **Incomum:** Marca do dono: esquenta, vibra ou muda de cara quando o dono chega perto.
-- **Raro:** Eco de uso: guarda impressões simples de quem já o usou, e revela por sinais.
-- **Épico:** Função desperta: faz sozinho uma tarefa simples e bem delimitada.
-- **Lendário:** Personalidade própria: fala, e tem um poder único que combina com a função dele.
-- **Mítico:** Autoridade soberana: manda em um assunto estreito, definido na história do objeto.
-- **Relíquia da Criação:** Objeto de princípio: representa um conceito e interfere nele. Qual conceito, você decide com o Mestre.
-
-### Quantos acessórios você pode usar
-
-Um Acessório (ou qualquer item genérico da categoria **Outros** que só existe para carregar um efeito automático de raridade) não ocupa o mesmo slot que arma, armadura ou escudo. Por isso o número deles equipados ao mesmo tempo é limitado ao seu **nível dividido por 4, arredondado para baixo, com o mínimo de 1**. Sem esse teto, dá pra empilhar efeito de raridade sem fim só comprando mais um objeto qualquer.
-
-- Nível | Acessórios equipados ao mesmo tempo
+- Nível total | Itens de perícia + artefatos em uso
 
 - 1 a 7 | 1
 
@@ -2294,7 +2275,7 @@ Matriz
 
 - 9º | Fora da Contagem | Você age primeiro em toda rodada, antes de qualquer criatura. | Cura e regeneração em você rendem metade: para elas, teu tempo não passa.
 
-Abismo
+O Vazio
 
 - Círculo | Marca | Ganho | Ônus
 
@@ -2641,7 +2622,7 @@ Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes
 - **Alquimista** (comum) - Transforma o que encontra pelo caminho em elixires, bombas e antídotos. Você escolhe as doses durante o descanso, e tudo o que não usar expira no descanso seguinte.
 - **Comerciante** (comum) - Ganha a briga antes dela começar. Contato certo, informação na hora e estoque bem escolhido resolvem mais que dado. E não, ele não fabrica dinheiro.
 - **Campeão Dimensional** (especial) - Classe especial de Baluarte. Corpo acima do que um corpo deveria aguentar. Os picos de poder são curtos e contados, e nenhum deles impede de morrer.
-- **Pirata Amaldiçoado** (especial) - Classe especial do Abismo. Você luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que morreu, mas ainda segue o seu comando.
+- **Pirata Amaldiçoado** (especial) - Classe especial do Vazio. Você luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que morreu, mas ainda segue o seu comando.
 - **Cartista Arcano** (especial) - Classe especial, aberta a qualquer Árvore. Conjura por cartas preparadas antes: o baralho decide o que você tem em mãos hoje, e o Fluxo nativo decide o que cada carta faz.
 - **Guia Dimensional** (especial) - Classe especial da Matriz. Conhece rota, portal e âncora: é por causa dele que o grupo chega em lugar onde não existe estrada.
 - **Caçador das Almas** (especial) - Classe especial de Anima. Cada Caçador vincula a própria alma a uma Zanpakutō, patrulha a fronteira entre vivos e mortos e purifica espíritos corrompidos. O nome da lâmina abre o Shikai; dominá-la por completo desperta a Bankai.
@@ -2898,21 +2879,23 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra em O Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 766 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 822 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 ### Os quatro locais
 
 - Local | O que vende | Itens
 
-- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 245
+- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 261
 
-- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 209
+- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 217
 
-- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 180
+- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 195
 
-- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 132
+- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 149
 
 Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
+
+**Armas, armaduras e escudos usam raridade por encomenda.** O cartão mostra a versão Comum com o preço do próprio modelo, não um preço genérico de raridade. Dentro dos detalhes você escolhe até Lendário e vê, antes de comprar, o novo dano e crítico ou a nova Defesa e Resistências. Uma arma marcial ainda respeita seu piso de Metrópole mesmo quando Comum.
 
 ### O que decide o local de um item
 

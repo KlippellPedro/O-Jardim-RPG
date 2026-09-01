@@ -21,17 +21,17 @@
       "id": "mulher-carmesim",
       "titulo": "Mulher Carmesim",
       "conteudo": {
-        "epiteto": "Aquela que Flui no Fim",
-        "genero": "Feminino",
-        "dominio": "O término de todas as eras e ciclos - recepciona tudo o que acaba, transformando o fim em solo pro recomeço.",
-        "descricao": "Também chamada de \"A Escritora do Fim\". Pacientemente recepciona tudo o que acaba, transformando o fim em solo para o recomeço. Preside o Tribunal de Arkarin, onde julga os mortos. Estruturalmente é igual às outras deidades - tem Árvore, tem Fluxo, tem Galho -, mas seu único Galho é Arkarin, o destino final de toda existência, o ponto de convergência de todas as outras Árvores: não uma origem, e sim uma chegada. Diferente das demais, não está paralisada pela queda de Keryx - opera em seu domínio ininterruptamente.",
         "fluxo": "fluxo-do-sangue",
-        "status": "ativa"
+        "genero": "Feminino",
+        "status": "ativa",
+        "dominio": "O término de todas as coisas recepciona tudo o que acaba, transformando o fim em um local pro \"recomeço\".",
+        "epiteto": "Aquela que Flui no Fim",
+        "descricao": "Também chamada de \"A Escritora do Fim\". Pacientemente recepciona tudo o que acaba, transformando o fim em local para o \"recomeço\". Preside o Tribunal de Arkarin, onde julga os mortos. Estruturalmente é igual às outras deidades tem Árvore, tem Fluxo, tem Galho, mas seu único Galho é Arkarin, o destino final de toda existência, o ponto de convergência de todas as outras Árvores: não uma origem, e sim uma chegada."
       },
-
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Limiar."
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Limiar.",
+      "revelado": true
     },
 
     {
@@ -84,13 +84,13 @@
       "titulo": "Castelo Carmesim",
       "conteudo": {
         "galho": "arkarin",
-        "descricao": "No centro de Arkarin ergue-se o Castelo Carmesim, uma colossal construção de pedra negra e cristal escarlate pulsante. Suas torres perfuram o vazio da dimensão como lanças cravadas na carne da própria existência. Correntes etéreas flutuam entre os pilares, segurando fragmentos de realidades esquecidas, memórias de mundos extintos e ecos de eras passadas. O castelo não é apenas um local: é o símbolo do limite intransponível, da linha que separa a existência do fim absoluto.",
-        "caracteristicas": "É a única parte de Arkarin que tem forma, endereço e portas. Todo o resto da dimensão é silêncio e vazio se desfazendo. Quem chega a Arkarin com permissão chega aqui."
+        "descricao": "No centro de Arkarin ergue-se o Castelo Carmesim, uma colossal construção de pedra negra e cristal escarlate pulsante. Suas torres perfuram o vazio da dimensão como lanças cravadas na carne da própria dimensão. Correntes flutuam entre os pilares, segurando fragmentos de realidades esquecidas, memórias de mundos extintos e resquícios de eras passadas. O castelo não é apenas um local: é o símbolo do limite intransponível, da linha que separa a existência do fim absoluto.",
+        "caracteristicas": "É a única parte de Arkarin que tem forma. Todo o resto da dimensão é silêncio e vazio se desfazendo. Quem chega a Arkarin com permissão chega aqui."
       },
-
       "_origem": "Conteúdo REAL - transcrito da nota do Obsidian 'Arkarin/Castelo Carmesim.md'. O campo 'caracteristicas' é meu, pra justificar por que o Castelo é a Dimensão e não um Local solto no vazio.",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Quando os players efetivamente entram em Arkarin - na prática, é impossível chegar lá e não ver o Castelo."
+      "_quando_revelar": "Quando os players efetivamente entram em Arkarin - na prática, é impossível chegar lá e não ver o Castelo.",
+      "revelado": true
     },
 
     {
@@ -112,7 +112,7 @@
 
     {
       "_secao": "6 de 6 - LOCAL (Reino/Mundo dentro da Dimensão)",
-      "tipo": "reino",
+      "tipo": "local",
       "id": "biblioteca-de-arkarin",
       "titulo": "Biblioteca de Arkarin",
       "conteudo": {

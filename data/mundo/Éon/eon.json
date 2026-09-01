@@ -18,17 +18,17 @@
       "id": "chronus",
       "titulo": "Chronus",
       "conteudo": {
-        "epiteto": "Aquele que flui no Tempo",
-        "genero": "Masculino",
-        "dominio": "A linha sucessiva e imutável de eventos - garante que passado, presente e futuro jamais se misturem.",
-        "descricao": "Paciente e inevitável. Ele zela pela linha sucessiva e imutável de eventos. Como quase todas as deidades (só Aethel e a Mulher Carmesim escapam disso), está paralisado desde que Keryx foi subjugado por Jota Macedo.",
         "fluxo": "fluxo-do-tempo",
-        "status": "paralisada"
+        "genero": "Masculino",
+        "status": "paralisada",
+        "dominio": "A linha sucessiva e imutável de eventos garante que passado, presente e futuro jamais se misturem.",
+        "epiteto": "Aquele que flui no Tempo",
+        "descricao": "Paciente e inevitável. Ele zela pela linha sucessiva e imutável de eventos."
       },
-
       "_origem": "Conteúdo real - recuperado do antigo data/world/panteon.json antes de ele ser removido nesta sessão.",
       "_pronto_para_importar": true,
-      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Éon."
+      "_quando_revelar": "Quando os players descobrem quem é a deidade por trás de Éon.",
+      "revelado": true
     },
 
     {
@@ -68,12 +68,13 @@
       "titulo": "O Passo",
       "conteudo": {
         "galho": "sucessao",
-        "descricao": "O único ponto de Sucessão que não está parado: o lugar exato onde Chronus está agora, avançando. Tudo atrás do Passo é imutável; tudo à frente ainda não existe o bastante pra ter forma.\n\nÉ a Dimensão mais estreita do Jardim - cabe um só ocupante - e a única que muda de endereço a cada instante. Chegar ao Passo é impossível por deslocamento: só se chega estando lá quando ele chega.\n\nDesde a paralisia, o Passo não avança. E é por isso que ninguém consegue dizer que horas são no Jardim.",
+        "descricao": "O único ponto que não está parado e ao mesmo tempo esta, esse é o lugar exato onde Chronus está agora. Tudo atrás do Passo é imutável; tudo à frente ainda não existe o bastante pra ter um formato.\n\nÉ a Dimensão mais estreita do Jardim cabe um só ocupante e a única que muda de local a cada instante. Chegar ao Passo é impossível por meio convencionais, só se chega lá quando você não esta mais lá.",
         "caracteristicas": "Um único ponto móvel. Ocupação máxima: um. Atualmente imóvel."
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29, junto com o Galho acima.",
       "_nota_mesa": "O Passo parado é a explicação de por que a paralisia não 'passa' - literalmente não há tempo correndo pra ela passar. Também é o gancho mais forte de Éon: alcançar o Passo exige estar no lugar certo no instante certo, o que é um enigma e não um combate.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     }
   ]
 }

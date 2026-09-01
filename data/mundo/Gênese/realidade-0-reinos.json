@@ -56,37 +56,6 @@
       "_pronto_para_importar": true
     },
     {
-      "_secao": "REINO - Astraluna",
-      "tipo": "reino",
-      "id": "astraluna",
-      "titulo": "Astraluna",
-      "conteudo": {
-        "dimensao": "padrao",
-        "descricao": "O maior centro de tecnologia arcana do mundo, reconhecido como o berço da fusão perfeita entre magia e máquina. Suas oficinas e laboratórios produzem artefatos tão avançados que sustentam civilizações inteiras, o que torna o reino indispensável ao equilíbrio do continente. Cercado por barreiras poderosas e protocolos rigorosos de segurança, Astraluna guarda seus segredos com rigidez, impedindo que suas inovações caiam em mãos erradas. Misterioso e grandioso, é ao mesmo tempo um farol de progresso e um guardião ciumento das próprias maravilhas.\n\nÉ a sede da AstraTech e a base de operações de Jota Macedo, seu presidente - e é daqui que a A.X.I.S se espalhou pelo mundo. Pra Astraluna e seus habitantes, a A.X.I.S representa a esperança de que a energia do mundo enfim possa ser compreendida, reproduzida e evoluída por mãos mortais.",
-        "fundacao": "Ano 1.188 - o mais antigo dos reinos com data registrada.",
-        "governo": "Corporativo. Presidido por Jota Macedo, através da AstraTech."
-      },
-      "_origem": "Conteúdo REAL - transcrito de 'A.X.I.S/Astraluna/Astraluna.md' e 'Função.md'. O 2º parágrafo amarra com o que já estava em data/mundo/Parley (subjulgado)/parley-axis.json.",
-      "_nota_hierarquia": "No cofre, Astraluna está arquivada dentro da pasta da Árvore A.X.I.S, o que dava a entender que seria um Galho ou Dimensão dela. Mantive Astraluna como REINO da Dimensão Padrão, porque é onde a própria Dimensão Padrão já a listava e porque ela é um lugar físico do mundo mortal, não uma camada cósmica. A A.X.I.S continua sendo a Árvore; Astraluna é a cidade de onde ela é operada.",
-      "_frase_truncada_no_cofre": "'A.X.I.S/Astraluna/Idade.md' termina no meio: 'O reino de Astraluna foi construído em 1.188 e ' - a frase nunca foi terminada. Usei só a data.",
-      "_pronto_para_importar": true
-    },
-    {
-      "_secao": "ARTEFATO de Astraluna - as Máscaras",
-      "tipo": "reino",
-      "id": "mascaras-astratech",
-      "titulo": "Máscaras da AstraTech",
-      "conteudo": {
-        "dimensao": "padrao",
-        "descricao": "Forjadas a partir do Arkan'vel, a tecnologia avançada desenvolvida em Astraluna, as máscaras são artefatos tão poderosos quanto temidos. Criadas nas profundezas dos laboratórios, onde ciência e feitiçaria se misturaram, reluzem como veias azuis neon, pulsando como se respirassem.\n\nAo serem colocadas, conectam-se diretamente à Força Vital e à mente do usuário, concedendo habilidades que ultrapassam os limites comuns - aumento de atributos físicos e da percepção como um todo.\n\nMas as máscaras não apenas canalizam poder: elas reescrevem o portador. Cada comando, cada pensamento é filtrado pelas camadas encantadas de código vivo e, com o tempo, a máscara passa a decidir por si. Muitos usuários perdem gradualmente a própria identidade, tornando-se extensões da vontade de Astraluna.\n\nJota Macedo trabalha em segredo numa máscara biomecânica maior que todas as outras, projetada pra conter e estabilizar o maior e mais puro fragmento de A.X.I.S existente - uma relíquia que lhe permitiria usar o poder de uma deidade, desde que ela estivesse num de seus estoques."
-      },
-      "_origem": "Conteúdo REAL - transcrito de 'A.X.I.S/Astraluna/AstraTech/Máscaras.md'; o último parágrafo, de 'A.X.I.S/Jota Macedo.md'.",
-      "_nota_tipo": "Entrou como 'reino' porque é o único tipo de Local que o schema tem - a cascata do Mundo não prevê um tipo 'artefato'. Se quiser, dá pra mover pra uma entrada tipo 'personagem' sem perder nada.",
-      "_termos_orfaos": "'Arkan'vel' e 'Força Vital' aparecem UMA única vez no cofre inteiro, aqui, sem definição em lugar nenhum. Mantive os dois: 'Arkan'vel' é claramente um material/tecnologia (e a raiz 'Ark' também está em Arkarin, então não cai junto com Arkania), e 'Força Vital' é genérico o bastante pra ficar. Ambos merecem uma definição própria em algum momento.",
-      "_gancho": "'Estoques/prisões de poder' é citado uma vez em Jota Macedo.md e nunca explicado. É o mecanismo pelo qual Jota pretende usar o poder de uma deidade - provavelmente a coisa mais importante ainda indefinida da campanha.",
-      "_pronto_para_importar": true
-    },
-    {
       "_secao": "REINO - Emberhold",
       "tipo": "reino",
       "id": "emberhold",
@@ -108,7 +77,7 @@
       "titulo": "Lionês",
       "conteudo": {
         "dimensao": "padrao",
-        "descricao": "O principal fabricante e fornecedor de alimentos, bebidas e plantações - o reino que alimenta os outros. Numa Realidade 0 onde o Império conquista, Emberhold arma e Astraluna maquina, Lionês é o único que ninguém pode se dar ao luxo de atacar.\n\nÉ governado pelo rei e seus conselheiros reais. O soberano de Lionês é Augustos Castilla, que ocupa a Cadeira do Comércio na assembleia dos dez Soberanos.",
+        "descricao": "O principal fabricante e fornecedor de alimentos, bebidas e plantações - o reino que alimenta os outros. Numa Realidade 0 onde o Império conquista e Emberhold arma, Lionês é o único que ninguém pode se dar ao luxo de atacar.\n\nAs terras de Lionês são um mosaico de plantações que nunca para: trigo numa estação, uva na outra, gado pastando onde a terra descansa. Não existe fome em Lionês porque não existe estação ruim - o solo é gentil demais e chove no momento certo com uma regularidade que ninguém sabe explicar.\n\nÉ essa fartura que garante a paz. Um embargo de Lionês esvazia despensas em semanas, não em meses, e os outros quatro reinos sabem disso melhor do que ninguém - por isso nenhum exército, por maior que seja, arrisca marchar contra quem alimenta a própria tropa.\n\nÉ governado pelo rei e seus conselheiros reais. O soberano de Lionês é Augustos Castilla, que ocupa a Cadeira do Comércio na assembleia dos dez Soberanos.",
         "fundacao": "Ano 1.595 - o mais novo dos reinos com data registrada.",
         "governo": "Monárquico, com conselho real."
       },
@@ -120,10 +89,10 @@
       "_secao": "REINO - Reino dos Anões",
       "tipo": "reino",
       "id": "reino-dos-anoes",
-      "titulo": "Reino dos Anões",
+      "titulo": "Khazad",
       "conteudo": {
         "dimensao": "padrao",
-        "descricao": "O reino subterrâneo, e o mais fechado da Dimensão Padrão depois de Salém. Governado por Durin II, que ocupa a Cadeira da Forja entre os dez Soberanos.\n\nSe Emberhold fabrica em escala, o Reino dos Anões forja em profundidade: o que sai dali não é produzido, é feito - peça por peça, e quase nunca pra vender. Os anões falam Nórdico Antigo entre si e raramente qualquer outra língua com estrangeiros, mesmo quando a entendem.",
+        "descricao": "O reino subterrâneo, e o mais fechado da Dimensão Padrão depois de Salém. Governado por Durin II, que ocupa a Cadeira da Forja entre os dez Soberanos.\n\nFica cavado nas raízes da própria Dimensão Padrão, camada sobre camada de salões e forjas que descem mais fundo do que qualquer mapa de superfície registra. Ninguém de fora sabe ao certo até onde Khazad vai - só que continua descendo.\n\nSe Emberhold fabrica em escala, Khazad forja em profundidade: cada peça sai da mão de um ferreiro, uma de cada vez, e quase nunca pra vender. Um anão vende uma peça sua uma vez na vida, no máximo duas, e o preço nunca é só em moedas - costuma vir com uma condição, um favor a ser cobrado depois, no momento que Khazad escolher. Os anões falam Nórdico Antigo entre si e raramente qualquer outra língua com estrangeiros, mesmo quando a entendem.",
         "fundacao": "Não registrada.",
         "governo": "Monárquico. Durin II, Soberano da Forja."
       },
@@ -132,7 +101,7 @@
     },
     {
       "_secao": "LOCAL - Iwagakure (vila ninja)",
-      "tipo": "reino",
+      "tipo": "local",
       "id": "iwagakure",
       "titulo": "Iwagakure",
       "conteudo": {
@@ -143,21 +112,6 @@
       "_origem": "Conteúdo REAL - transcrito de 'Padrão/Vilas Ninjas/Iwagakure/Cultura.md', 'Regras Ninja.md' e 'Gabimaru.md'.",
       "_nota_duplicata": "As regras 6 e 7 de 'Regras Ninja.md' são o MESMO texto, palavra por palavra ('Disputas internas e testes de força entre os próprios ninjas são comuns...'). Incluí uma vez só, e ela já estava coberta pelo 2º parágrafo (matar entre pares é permitido), então não repeti.",
       "_o_que_falta": "'Iwagakure/Sucessão.md' está vazio no cofre - quem sucede quem, e como, não existe.",
-      "_pronto_para_importar": true
-    },
-    {
-      "_secao": "LOCAL - Orfanato de Ofélia",
-      "tipo": "reino",
-      "id": "orfanato-de-ofelia",
-      "titulo": "Orfanato de Ofélia",
-      "conteudo": {
-        "dimensao": "padrao",
-        "descricao": "Um orfanato criado por Ofélia, ex-bruxa das Irmãs da Noite que foi expulsa e banida de Salém e de todas as suas instituições por causa do que chamavam de pensamento liberal. Banida, ela passou a perseguir seus objetivos por conta própria - o que resultou neste orfanato, para crianças escolhidas.\n\nOfélia teve muitos aprendizes, e cinco a quem chamava de filhos e filhas.\n\nJota sempre foi muito inteligente e curioso, e por isso criou aptidão pra usar o Fluxo com facilidade; o que impressionava Ofélia era que ele conseguia usá-lo numa forma pura e poderosa demais pra idade. Hoje é presidente de Astraluna e deseja criar seu próprio tipo de Fluxo.\n\nCirce sempre foi muito impaciente, e por isso vivia se metendo em confusão; ao contrário de Jota, não manipulava o Fluxo tão bem. Hoje tenta seguir o sonho de Ofélia e, ao mesmo tempo, parar os planos de Jota.\n\nMiranda aprendeu cedo a manipular o Fluxo do Físico, mas o que a tornava especial era conseguir manipular a água e o sangue das pessoas, o que lhe deu ótima aptidão pra curar. Hoje só queria ter sua família de volta - mas o tempo não pode voltar.\n\nYennefer teve desde cedo aptidão com o Fluxo da Origem e sempre se preocupou com os irmãos, ajudando e orientando quem tinha dúvidas. Tudo mudou quando a figura mais próxima de uma mãe morreu: ela ficou quebrada, destruída, mas algo dentro dela não aceitou - e o rosa primordial virou o sangue escarlate, que a transformou numa mulher poderosa e temida por todos que a encontram. Hoje vaga pelo Sangue, buscando uma forma de voltar ao mundo dos vivos e procurar o responsável por arruinar sua vida.\n\nErick mostrava, quando criança, aptidão enorme com o Fluxo do Físico na vertente da Terra, e por isso se tornou muito resistente e forte. Hoje está em Emberhold, trabalhando numa oficina de armas e armaduras."
-      },
-      "_origem": "Conteúdo REAL - transcrito de 'Padrão/Locais Importantes/Orfanato.md', incluindo a tabela dos cinco filhos (convertida em prosa).",
-      "_por_que_isso_importa": "É a peça que amarra o antagonista ao mundo. Jota Macedo não é um vilão externo: é um órfão de Salém que virou presidente de Astraluna e subjugou uma deidade. E Circe é a antagonista natural dele, criada pela mesma pessoa, com o objetivo declarado de detê-lo. Até agora nada disso aparecia no site.",
-      "_retraducao_2026-07-29": "Arkania → Fluxo em todo o texto. 'Arkania primordial' (Yennefer) → Fluxo da Origem; 'arkania elemental' (Miranda) e 'arkania de terra' (Erick) → Fluxo do Físico. A frase 'o rosa primordial virou o sangue escarlate' foi mantida LITERAL, porque é ela que prova que a retradução está certa: Gênese é Rosa e Limiar é Vermelho vinho na tabela 'Estrutura do Jardim', e o Fluxo do Sangue é descrito em data/mundo/Limiar/limiar.json como a Origem transformada pela dor. A lore já dizia isso sem nomear.",
-      "_personagens_sem_nota": "Ofélia e Circe são citadas aqui e em nenhum outro lugar do cofre - nenhuma das duas tem nota própria, apesar de Ofélia ser a origem de tudo e Circe ser a contraparte declarada do vilão.",
       "_pronto_para_importar": true
     }
   ]

@@ -18,13 +18,15 @@
       "id": "cataclismo-do-ano-zero",
       "titulo": "O Cataclismo do Ano Zero",
       "conteudo": {
+        "galho": "realidade-0",
         "era": "Ano 0 - o marco de onde toda a contagem parte",
-        "descricao": "Salém já existia havia muito tempo quando uma magia deu errado e o mundo foi devastado em morte e caos. Quando voltou ao normal, ele foi 'criado' de novo - e foi desse ponto que começaram a contar os anos.\n\nÉ por isso que todas as datas conhecidas da Realidade 0 são posteriores: Astraluna em 1.188, o Império em 1.261, Emberhold em 1.510, Lionês em 1.595. E é por isso que Salém é o único reino que existiu dos dois lados do marco.",
+        "descricao": "Salém já existia havia muito tempo quando uma magia deu errado e inúmeros galhos foram devastados em morte e caos. Quando voltou ao normal, ele foi 'criado' de novo, e foi desse ponto que começaram a contar os anos.\n\nÉ por isso que todas as datas conhecidas da Realidade 0 são posteriores: o Império em 1.261, Emberhold em 1.510, Lionês em 1.595. E é por isso que Salém é o único reino que existiu dos dois lados do marco.",
         "envolvidos": "Salém"
       },
       "_origem": "Conteúdo REAL - transcrito de 'Reinos/Salém/Idade.md', que é a única nota do cofre inteiro a explicar de onde vem a contagem dos anos.",
       "_o_que_falta": "A nota não diz QUEM lançou a magia, nem o que ela pretendia fazer. E o ano ATUAL da campanha não está declarado em lugar nenhum do cofre - sem ele, a linha do tempo tem começo e não tem 'agora'. É a decisão de cronologia mais urgente que sobrou.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     },
 
     {
@@ -33,13 +35,15 @@
       "id": "chuva-roxa",
       "titulo": "Chuva Roxa",
       "conteudo": {
+        "dimensao": "padrao",
         "era": "Recorrente, sem periodicidade conhecida",
-        "descricao": "Suas gotas, de tonalidade violeta e brilho quase metálico, caem majestosamente - mas não se engane: qualquer criatura viva que toque uma única gota sente imediatamente a vida se esvaindo, como se fosse drenada pra algum lugar misterioso.\n\nNinguém sabe ao certo de onde a Chuva Roxa surgiu. Alguns sábios afirmam que é consequência direta do colapso entre as realidades. Outros acreditam que é um evento criado por uma entidade, um método de limpeza pra preparar a terra pra algo maior. Há ainda os ocultistas que dizem que a chuva é a manifestação do arrependimento da própria dimensão.\n\nO efeito é devastador. O contato direto mata instantaneamente: o corpo enrijece, perde a cor e, com o tempo, se transforma em pó. Nem armaduras garantem proteção - a chuva parece atravessar como se procurasse pela vida. Apenas estruturas totalmente fechadas ou mágicas oferecem segurança.\n\nOs sobreviventes contam que, antes de ela cair, o céu respira: as nuvens se movem contra o vento, formando espirais lentas e hipnotizantes, o ar fica mais pesado, mais úmido, mais frio. E então começam as primeiras gotas. Cidades inteiras foram dizimadas em minutos.\n\nHá relatos de pessoas escolhidas pela chuva, que caminharam ilesas sob ela, como se as gotas escorressem ao redor de seus corpos. Essas pessoas não voltaram as mesmas: seus olhos brilhavam num tom violeta, e suas sombras se moviam de maneiras estranhas.",
-        "envolvidos": "Origem desconhecida - três teorias em disputa"
+        "descricao": "Suas gotas, de tonalidade violeta e brilho quase metálico, caem majestosamente, mas não se engane: qualquer criatura viva que toque uma única gota sente imediatamente a vida se esvaindo, como se fosse drenada pra algum lugar misterioso.\n\nNinguém sabe ao certo de onde a Chuva Roxa surgiu. Algumas pessoas acusam Salém e falam que é consequência direta das magias usadas pelas bruxas. Outros acreditam que é um evento criado por uma entidade, um método de limpeza pra preparar a terra pra algo maior. Há ainda os ocultistas que dizem que a chuva é a manifestação do arrependimento da própria dimensão.\n\nO efeito é devastador. O contato direto mata instantaneamente: o corpo enrijece, perde a cor e, com o tempo, se transforma em pó. Nem armaduras garantem proteção: a chuva parece atravessar como se procurasse pela vida. Apenas estruturas totalmente fechadas ou mágicas oferecem segurança.\n\nOs sobreviventes contam que, antes de ela cair, o céu meio que respira: as nuvens se movem contra o vento, formando espirais lentas e hipnotizantes, o ar fica mais pesado, mais úmido, mais frio. E então começam as primeiras gotas. Cidades inteiras foram dizimadas em minutos.\n\nHá relatos de pessoas escolhidas pela chuva, que caminharam ilesas sob ela, como se as gotas escorressem ao redor de seus corpos. Essas pessoas não voltaram as mesmas: seus olhos brilhavam num tom violeta, e suas sombras se moviam de maneiras estranhas.",
+        "envolvidos": "Origem desconhecida."
       },
       "_origem": "Conteúdo REAL - transcrito de 'Eventos/Climáticos/Chuva Roxa.md'.",
       "_nota_deliberada": "A origem é ambígua DE PROPÓSITO na nota original - as três teorias estão listadas lado a lado, sem nenhuma marcada como correta. Mantive assim; não escolhi uma.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     },
 
     {
@@ -48,29 +52,16 @@
       "id": "noite-rubra",
       "titulo": "Noite Rubra",
       "conteudo": {
-        "era": "Raro - anunciado pela Lua Carmesim",
-        "descricao": "Um dos eventos climáticos mais temidos. Ocorre raramente, anunciado por um fenômeno impossível de ignorar: A Lua Carmesim, que rasga o céu e tinge tudo com sua luz vermelha, vibrante e intensa. Dizem que sua aparição não é apenas astronômica - é como se o próprio Fluxo do Sangue ficasse inquieto e quisesse sair de Arkarin.\n\nQuando a Lua Carmesim surge, portais, fendas e rachaduras aparecem pelo mundo, permitindo que criaturas agressivas e corrompidas escapem de Arkarin e atravessem pra outras dimensões. Quando ela se põe, tudo volta ao normal - exceto as vidas que foram tiradas. Além disso, a Noite Rubra é vista como presságio de que algo pior está por vir.\n\n\"Somente os que sacrificam algo à altura podem continuar.\"\n\nOs grupos de seis que fizerem um sacrifício realmente grandioso, algo que marque a Noite Rubra, serão chamados a Arkarin - a terra onde as regras do mundo não se aplicam. Lá não há descanso, apenas desafios que testam a mente, a força, o medo e aquilo que cada um tenta esconder. Ao final das provas, apenas um grupo terá o direito de caminhar até ela, a Mulher Carmesim, que ouvirá um pedido dos vencedores.\n\nNesta Noite Rubra vocês não são apenas sobreviventes: são escolhidos ou sacrifícios, dependendo de como agirem.\n\nSacrifiquem. Entrem em Arkarin. Enfrentem as provas. E se vencerem, conversem com a Mulher Carmesim.",
+        "galho": "realidade-0",
+        "era": "Raro e anunciado pela Lua Carmesim",
+        "descricao": "Um dos eventos climáticos mais temidos. Ocorre raramente, anunciado por um fenômeno impossível de ignorar: A Lua Carmesim, que rasga o céu e tinge tudo com sua luz vermelha, vibrante e intensa. Dizem que a aparição dela vai além da astronomia: é como se o próprio Fluxo do Fim ficasse inquieto e quisesse sair de Arkarin.\n\nQuando a Lua Carmesim surge, portais, fendas e rachaduras aparecem pelo mundo, permitindo que amalgamas agressivas e corrompidas escapem de Arkarin e atravessem pra outras dimensões. Quando ela se põe, tudo volta ao normal, exceto as vidas que foram tiradas. Além disso, a Noite Rubra é vista como presságio de que algo pior está por vir.\n\n\"Somente os que sacrificam algo à altura podem continuar.\"\n\nOs grupos de seis que fizerem um sacrifício realmente grandioso, algo que marque a Noite Rubra, serão chamados a Arkarin, a terra onde as regras do mundo não se aplicam. Lá não há um momento de descanso, apenas desafios que testam a mente, a força, o medo e aquilo que cada um tenta esconder. Ao final das provas, apenas um grupo terá o direito de caminhar até ela, a Mulher Carmesim, que ouvirá um pedido dos vencedores.",
         "envolvidos": "Mulher Carmesim, Arkarin, o Fluxo do Sangue"
       },
       "_origem": "Conteúdo REAL - transcrito de 'Eventos/Climáticos/Noite Rubra.md'.",
       "_retraducao_2026-07-29": "'a própria Arkania de Sangue' → 'o próprio Fluxo do Sangue'.",
       "_nota_mesa": "É o único texto do cofre inteiro que já vem com estrutura de aventura pronta - grupo de 6, condição de entrada (sacrifício), provas, e uma recompensa concreta (um pedido atendido pela Mulher Carmesim). Dá pra rodar como está.",
-      "_pronto_para_importar": true
-    },
-
-    {
-      "_secao": "EVENTO - a campanha atual",
-      "tipo": "evento",
-      "id": "o-ultimo-eclipse",
-      "titulo": "O Último Eclipse",
-      "conteudo": {
-        "era": "Presente - é o agora da campanha",
-        "descricao": "A campanha que se passa na Realidade 0.\n\nO que está em curso: Jota Macedo convenceu Keryx, o Fluxo da Comunicação, a assinar um contrato que era uma prisão. Com Keryx preso, a malha da A.X.I.S passou a interceptar e bloquear a comunicação entre as Árvores, e oito das dez Deidades ficaram paralisadas e isoladas umas das outras. Só Aethel, que zela pelo que nasce, e a Mulher Carmesim, que zela pelo que acaba, continuam operando - as duas pontas do ciclo seguem funcionando, tudo entre elas travou.\n\nAs consequências já são visíveis no mundo: as fronteiras que Aperion sustentava vêm cedendo sozinhas, e fendas entre Dimensões aparecem onde nunca houve nada; com Ignis parado, o mundo fica teimosamente igual a si mesmo. Enquanto isso, Jota trabalha na máscara que lhe permitiria usar o poder de uma deidade capturada - e Circe, criada pela mesma mulher que o criou, tenta detê-lo.",
-        "envolvidos": "Jota Macedo, Keryx, Circe, as dez Deidades"
-      },
-      "_origem": "ESCRITO DO ZERO em 2026-07-29, mas SEM inventar enredo: cada frase é costura de coisas já estabelecidas em data/mundo/Parley (subjulgado)/parley-axis.json (o contrato, a paralisia), data/mundo/Matriz/matriz.json e data/mundo/Vórtice/vortice.json (as consequências), e 'Locais Importantes/Orfanato.md' (Circe). O nome 'O Último Eclipse' já era usado no Galho 'realidade-0' desde antes.",
-      "_o_que_falta": "'Eventos/Climáticos/Eclipse.md' está VAZIO no cofre. O nome da campanha é 'O Último Eclipse' e existe um arquivo chamado Eclipse.md sem uma linha dentro - provavelmente o evento que dá nome a tudo. Essa é a lacuna mais chamativa que sobrou.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     },
 
     {
@@ -79,13 +70,15 @@
       "id": "baile-das-estacoes",
       "titulo": "Baile das Estações",
       "conteudo": {
+        "dimensao": "padrao",
         "era": "Recorrente - quatro vezes por ano",
-        "descricao": "Quatro bailes, um por estação, e cada um com uma função social diferente.\n\nO da Primavera acontece em grandes jardins repletos de flores, com músicas leves e danças circulares que envolvem todos. É visto como o baile do amor e das novas alianças: casamentos podem ser anunciados, pactos firmados e até bênçãos de sacerdotes concedidas.\n\nO do Verão é ao ar livre, com jardins e fogueiras iluminando a noite. As danças são vivas, há música forte, banquetes fartos e competições amistosas entre os convidados. É baile de celebração, mas também de ostentação, onde as famílias mostram poder e riqueza.\n\nO do Outono é mais calmo e reflexivo: os convidados se vestem em tons quentes e se reúnem pra agradecer pela colheita. Muitas vezes há discursos em memória dos que se foram e rituais simbólicos, e é comum que o baile seja interrompido por apresentações teatrais ou encenações sobre lendas antigas.\n\nO do Inverno reúne nobres e convidados em salões iluminados por candelabros e cristais de gelo, no auge do frio. É uma noite de máscaras, discursos formais e danças lentas - e muitos a usam pra selar acordos secretos.",
+        "descricao": "Quatro bailes, um por estação, e cada um com uma função social diferente.\n\nO da Primavera acontece em grandes jardins repletos de flores, com músicas leves e danças circulares que envolvem todos. É visto como o baile do amor e das novas alianças: casamentos podem ser anunciados, pactos firmados e até bênçãos de sacerdotes concedidas.\n\nO do Verão é ao ar livre, com jardins e fogueiras iluminando a noite. As danças são vivas, há música forte, banquetes fartos e competições amistosas entre os convidados. É baile de celebração, mas também de ostentação, onde as famílias mostram poder e riqueza.\n\nO do Outono é mais calmo e reflexivo: os convidados se vestem em tons quentes e se reúnem pra agradecer pela colheita. Muitas vezes há discursos em memória dos que se foram e rituais simbólicos, e é comum que o baile seja interrompido por apresentações teatrais ou encenações sobre lendas antigas.\n\nO do Inverno reúne nobres e convidados em salões iluminados por candelabros e cristais de gelo, no auge do frio. É uma noite de máscaras, discursos formais e danças lentas, e muitos a usam pra selar acordos secretos.",
         "envolvidos": "A nobreza da Dimensão Padrão"
       },
       "_origem": "Conteúdo REAL - transcrito das quatro notas em 'Eventos/Festividades/Baile das Estações/'.",
       "_nota_mesa": "É o contraponto de tom de todo o resto do cofre - um lugar onde a intriga acontece sem combate. Os quatro têm ganchos distintos: Primavera fecha alianças, Verão expõe hierarquia, Outono lembra os mortos, Inverno esconde acordos.",
-      "_pronto_para_importar": true
+      "_pronto_para_importar": true,
+      "revelado": true
     }
   ]
 }

@@ -17,7 +17,6 @@ import { REGRA_MATERIAIS } from './materiais';
 import { REGRA_TRANSPORTE } from './transporte';
 import {
   CATEGORIAS_MODIFICACAO,
-  DONS_RARIDADE_POR_CATEGORIA,
   MODIFICACOES_EQUIPAMENTO,
   PRECO_MODIFICACAO_POR_VALOR,
   RARIDADES_EQUIPAMENTO,
@@ -53,15 +52,6 @@ const tabelaRaridadesEquipamento = RARIDADES_EQUIPAMENTO.map((raridade) => `
     <td>±${raridade.valorMaximoPorEfeito}</td>
     <td>${raridade.principio}</td>
   </tr>
-`).join('');
-
-const donsRaridadeEquipamento = Object.entries(DONS_RARIDADE_POR_CATEGORIA).map(([categoria, dons]) => `
-  <details class="regras-details">
-    <summary>${categoria.charAt(0).toUpperCase() + categoria.slice(1)}</summary>
-    <ul class="regras-list">
-      ${RARIDADES_EQUIPAMENTO.filter((raridade) => raridade.id !== 'comum').map((raridade) => `<li><strong>${raridade.titulo}:</strong> ${dons[raridade.id]}</li>`).join('')}
-    </ul>
-  </details>
 `).join('');
 
 /** Gerado de data/regras/condicoes.ts para o livro público nunca divergir do
@@ -166,7 +156,7 @@ const tabelaCirculos = magiasData.regras.circulos.map((circulo) => `
 const NOME_ARVORE_POR_FLUXO: Record<string, string> = {
   origem: 'Gênese', essencia: 'Alétheia', comunicacao: 'Parley', vitalidade: 'Anima',
   inconstancia: 'Vórtice', fisico: 'Baluarte', espaco: 'Matriz', tempo: 'Éon',
-  vazio: 'Abismo', fim: 'Limiar', tecnologia: 'A.X.I.S',
+  vazio: 'O Vazio', fim: 'Limiar', tecnologia: 'A.X.I.S',
 };
 
 const tabelaMarcasPorFluxo = Object.entries(marcasCirculoData.por_fluxo).map(([fluxoId, marcas]) => `
@@ -1471,9 +1461,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li><strong>Vínculo:</strong> a passiva que vale o tempo todo, sem custo nem ação. É o que muda o corpo do personagem, como a Resistência elemental do Fruto das Chamas.</li>
         <li><strong>Técnica:</strong> o poder ativo do dia a dia, na faixa de 3 a 4 de Mana. Custa uma ação e costuma valer uma vez por rodada.</li>
-        <li><strong>Despertar:</strong> o poder grande, na faixa de 9 a 14 de Mana e quase sempre uma vez por cena. Ele fica trancado até o fruto ser despertado.</li>
+        <li><strong>Despertar:</strong> transforma o vínculo inteiro: melhora a passiva, aprimora cada técnica já conhecida e libera a manifestação final, na faixa de 9 a 14 de Mana e quase sempre uma vez por cena.</li>
       </ul>
-      <p class="regras-note">Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. As técnicas normais continuam funcionando; o que muda é que o poder grande passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.</p>
+      <p class="regras-note">Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. A passiva e as técnicas são substituídas pelas versões aprimoradas, sem somar com as antigas, e a manifestação final passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.</p>
       <p>Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos ${totalFrutosEden} está no catálogo da Loja.</p>
 
       <h3 class="regras-subtitle">Implantes cibernéticos</h3>
@@ -1582,28 +1572,46 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   'raridades-modificacoes': {
     categoria: 'Combate e Mecânicas',
     status: 'Regra oficial',
-    resumo: 'Até onde cada raridade pode ir, quantas modificações e efeitos um item comporta e quais dons visuais cada categoria pode manifestar.',
+    resumo: 'Como cada raridade aumenta preço e propriedades de armas e proteções, além dos limites de modificações e efeitos.',
     destaques: [
-      ['Raridade', 'é orçamento, não bônus fixo'],
+      ['Raridade', 'melhora a ficha do equipamento'],
       ['Faixas', 'Comum a Relíquia da Criação'],
-      ['Dons', 'definidos pela categoria do item'],
+      ['Ganho por categoria', 'mais modificações e encantamentos'],
     ],
     corpo: `
       <h3 class="regras-subtitle">Raridades e orçamento de poder</h3>
-      <p class="regras-lead">Raridade funciona como um <strong>orçamento</strong>, não como um bônus fixo igual para todo item da mesma faixa: ela diz quantas modificações, efeitos automáticos e dons aquele objeto aguenta carregar. É o que impede a ficha de virar uma pilha de +1 sem fim.</p>
+      <p class="regras-lead">Raridade possui duas funções: melhora a ficha própria de armas e proteções e define quantas modificações e efeitos o item comporta. A melhoria automática da raridade não ocupa uma vaga de modificação.</p>
+      <p><strong>Na Loja, armas, armaduras e escudos são anunciados primeiro como Comuns.</strong> O preço Comum vem do modelo e usa a mesma régua nos três: peça simples custa de 15 a 40 Lunaris, peça marcial custa de 50 a 80 Lunaris. Encomendar outra raridade aumenta preço e propriedades, e cada variante fica separada no inventário. Mítico e Relíquia da Criação continuam fora das encomendas normais.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Raridade</th><th>Preço</th><th>Armas</th><th>Armaduras e escudos</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Comum</strong></td><td>×1</td><td>Ficha básica do modelo</td><td>Ficha básica do modelo</td></tr>
+          <tr><td><strong>Incomum</strong></td><td>×3</td><td>+1d4 de dano</td><td>+1 Defesa; Resistência 1 a Corte</td></tr>
+          <tr><td><strong>Raro</strong></td><td>×8</td><td>+1d6 de dano; margem +1</td><td>+2 Defesa; Resistência 2 a Corte e Perfuração; penalidade −1</td></tr>
+          <tr><td><strong>Épico</strong></td><td>×20</td><td>+1d8 de dano; margem +1; crítico +1</td><td>+3 Defesa; Resistência 3 a Corte, Perfuração e Impacto; penalidade −1</td></tr>
+          <tr><td><strong>Lendário</strong></td><td>×60</td><td>+1d10 de dano; margem +2; crítico +1</td><td>+4 Defesa; Resistência 5 a Corte, Perfuração, Impacto e Balístico; penalidade −2</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">O dado extra passa a fazer parte do dano da arma e entra no crítico. “Margem +1” reduz em 1 o número inicial: 20 vira 19–20.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Raridade</th><th>Mods.</th><th>Efeitos próprios</th><th>Valor por efeito</th><th>Regra</th></tr></thead>
         <tbody>${tabelaRaridadesEquipamento}</tbody>
       </table></div>
 
-      <h3 class="regras-subtitle">Dons definidos por categoria</h3>
-      <p>Cada raridade também possui uma manifestação por categoria. A descrição pode alterar aparência e comportamento, sem aumentar o efeito mecânico.</p>
-      ${donsRaridadeEquipamento}
+      <h3 class="regras-subtitle">O que a raridade dá para cada categoria</h3>
+      <p>Fora do bônus automático de armas e proteções, o ganho de uma raridade mais alta é sempre da mesma espécie: mais espaço de modificação e mais efeitos automáticos para colocar no item (tabela acima). O que aquele espaço vira depende da categoria do equipamento.</p>
+      <ul class="regras-list">
+        <li><strong>Armas:</strong> mais modificações e encantamentos cabem na mesma peça, e isso é o que empurra o dano além do bônus automático da raridade (ex.: Afiada, Elemental, Devastadora).</li>
+        <li><strong>Armaduras e escudos:</strong> o espaço extra vira mais Defesa e Resistência por modificação (ex.: Reforçada, Isolante, Bastião), somando ao bônus automático da tabela acima.</li>
+        <li><strong>Consumíveis:</strong> cabem mais efeitos por dose, uma versão Rara carrega um efeito automático a mais que uma Comum, sem virar um item totalmente novo.</li>
+        <li><strong>Veículos:</strong> o espaço vira mais componentes instalados de uma vez, sem estourar a Manutenção do casco (ver Manutenção e Componentes).</li>
+        <li><strong>Itens gerais e mágicos:</strong> o mesmo espaço aceita mais modificações técnicas ou mágicas, do jeito que o Catálogo de Modificações descreve.</li>
+      </ul>
 
-      <h3 class="regras-subtitle">Quantos acessórios você pode usar</h3>
-      <p>Um Acessório (ou qualquer item genérico da categoria <strong>Outros</strong> que só existe para carregar um efeito automático de raridade) não ocupa o mesmo slot que arma, armadura ou escudo. Por isso o número deles equipados ao mesmo tempo é limitado ao seu <strong>nível dividido por 4, arredondado para baixo, com o mínimo de 1</strong>. Sem esse teto, dá pra empilhar efeito de raridade sem fim só comprando mais um objeto qualquer.</p>
+      <h3 class="regras-subtitle">Quantos itens especiais você pode usar</h3>
+      <p><strong>Itens de perícia</strong> e <strong>artefatos</strong> dividem o mesmo limite de uso: seu <strong>nível total dividido por 4, arredondado para baixo, com o mínimo de 1</strong>. Só uma peça equipada ou ativa ocupa vaga; comprar, carregar ou guardar não ocupa. Arma, armadura, escudo, consumível e item comum continuam seguindo seus próprios espaços.</p>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Nível</th><th>Acessórios equipados ao mesmo tempo</th></tr></thead>
+        <thead><tr><th>Nível total</th><th>Itens de perícia + artefatos em uso</th></tr></thead>
         <tbody>
           <tr><td>1 a 7</td><td>1</td></tr>
           <tr><td>8 a 11</td><td>2</td></tr>
@@ -1639,10 +1647,11 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Item que o grupo montou peça por peça vale mais na mesa que item achado pronto, e custa menos do seu orçamento de poder.</li>
       </ul>
 
-      <h3 class="regras-subtitle">Fiscalizar o limite de acessórios</h3>
+      <h3 class="regras-subtitle">Fiscalizar o limite de itens especiais</h3>
       <ul class="regras-list">
-        <li>O teto (nível ÷ 4, arredondado para baixo, mínimo 1) vale só para itens genéricos com efeito de raridade, como os Acessórios da Loja. Arma, armadura e escudo têm slot próprio e não entram nessa conta.</li>
-        <li>A ficha não impede sozinha equipar um Acessório a mais que o teto. É você quem confere na hora de aprovar a compra ou liberar o uso em mesa.</li>
+        <li>O teto (nível total ÷ 4, arredondado para baixo, mínimo 1) é compartilhado por itens de perícia e artefatos. Arma, armadura, escudo e os demais equipamentos não entram nessa conta.</li>
+        <li>A ficha impede uma nova ativação acima do teto. Se uma ficha antiga já estiver acima dele, as peças permanecem no inventário, mas os efeitos excedentes ficam inativos até o jogador liberar vagas.</li>
+        <li>A compra continua permitida mesmo sem vaga: o limite controla o que está em uso, não o que o personagem possui.</li>
       </ul>
     `,
   },
@@ -2493,6 +2502,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         </table>
       </div>
       <p>Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.</p>
+      <p><strong>Armas, armaduras e escudos usam raridade por encomenda.</strong> O cartão mostra a versão Comum com o preço do próprio modelo, não um preço genérico de raridade. Dentro dos detalhes você escolhe até Lendário e vê, antes de comprar, o novo dano e crítico ou a nova Defesa e Resistências. Uma arma marcial ainda respeita seu piso de Metrópole mesmo quando Comum.</p>
 
       <h3 class="regras-subtitle">O que decide o local de um item</h3>
       <ul class="regras-list">

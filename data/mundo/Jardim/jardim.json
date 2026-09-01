@@ -16,11 +16,44 @@
       "id": "hierarquia-do-jardim",
       "titulo": "A Hierarquia do Jardim",
       "conteudo": {
-        "ordem": ["Jardim", "Árvore", "Galho", "Dimensão", "Reino"],
-        "descricao": "O Jardim é o todo. Dentro dele crescem nove Árvores, e cada Árvore é ao mesmo tempo três coisas: a Árvore em si, a Deidade que a habita e o Fluxo que ela rege - não são entidades distintas que se associam, são a mesma entidade vista de três ângulos.\n\nDe cada Árvore saem Galhos, também chamados de Realidades. Dentro de cada Galho abrem-se Dimensões, e dentro de cada Dimensão existem Reinos e outros Locais. É essa a cascata inteira, e é por ela que a exploração no Códice acontece: descobrir uma Árvore não revela seus Galhos, descobrir um Galho não revela suas Dimensões.\n\nDuas Árvores fogem do padrão. Limiar tem um único Galho (Arkarin), porque é chegada e não origem - todas as outras Árvores desembocam nela. E Parley é a única Árvore com duas identidades sobrepostas: a original, de Keryx, e a A.X.I.S que Jota Macedo instalou por cima.\n\nO Abismo não é uma décima Árvore. É o Vazio: o espaço que existe entre as nove Árvores, e entre tudo o mais que tem lugar no Jardim - inclusive o Banco Lunar, que só existe porque fica fora de todas elas ao mesmo tempo. Erebus governa esse espaço, não um pedaço de chão dentro dele, e por isso o pacote de Abismo não tem Galho nem Dimensão: tem só Deidade, Fluxo e dois Locais soltos (Bordo, A Saída).\n\nFora da cascata existem quatro camadas soltas: Personagens (soberanos, NPCs), Eventos, Idiomas e Locais que não pertencem a Árvore nenhuma (como Bordo e A Saída, no Vazio). Elas se ligam ao mundo, mas não se penduram em nenhum Galho."
+        "ordem": [
+          "Jardim",
+          "Árvore",
+          "Galho",
+          "Dimensão",
+          "Reino"
+        ],
+        "descricao": "O Jardim é o todo. Dentro dele crescem nove Árvores, e cada Árvore é ao mesmo tempo três coisas: a Árvore em si, a Deidade que a habita e o Fluxo que ela rege não são coisas distintas que se associam, são a mesma coisa vista de três ângulos.\n\nDe cada Árvore saem Galhos, também chamados de Realidades. Dentro de cada Galho abrem-se Dimensões, e dentro de cada Dimensão existem Reinos e outros Locais. É essa a linha inteira, e é por ela que a exploração acontece descobrir uma Árvore não revela seus Galhos, descobrir um Galho não revela suas Dimensões.\n\nDuas Árvores fogem do padrão. Limiar tem um único Galho (Arkarin), todas as coisas das outras Árvores acabam nela. E Parley é a única Árvore com duas identidades sobrepostas: a original, de Keryx, e a A.X.I.S que Jota Macedo instalou por cima.\n\nFora dessa contagem existe o Vazio, que não é uma décima Árvore: é o espaço entre as nove e o resto do universo, inclusive o Banco Lunar, que só existe porque fica fora de todas elas ao mesmo tempo. Erebus governa esse espaço, não um pedaço de terra dentro dele."
       },
       "_origem": "ESCRITO em 2026-07-29 a partir da estrutura documentada em data/mundo/_padrao.json e usada pelo catálogo React.",
       "_nota_id": "O id 'hierarquia-do-jardim' NÃO pode ser alterado - a view procura por ele literalmente (cosmologiaView.js, linha 67).",
+      "_pronto_para_importar": true,
+      "revelado": true
+    },
+
+    {
+      "_secao": "CONCEITO UNIVERSAL - Sonhar entre as Árvores",
+      "tipo": "conceito",
+      "id": "sonhar-entre-as-arvores",
+      "titulo": "Sonhar entre as Árvores",
+      "registro_universal": "local",
+      "revelado": true,
+      "conteudo": {
+        "arvores": [
+          "aethel",
+          "ousias",
+          "haemus",
+          "moros",
+          "mulher-carmesim",
+          "aperion",
+          "keryx",
+          "ignis",
+          "chronus"
+        ],
+        "descricao": "Sonhar existe em todas as Árvores ao mesmo tempo. Cada Árvore, porém, possui sua própria camada onírica, separada das demais: seres de Árvores diferentes não conseguem se ver nem se encontrar em Sonhar apenas por estarem sonhando. A travessia entre essas separações exige uma ruptura, passagem ou intervenção capaz de vencer as fronteiras entre Árvores.",
+        "nota": "A Sonhar documentada na Realidade 0 é a manifestação de Gênese. Ela não é a única Sonhar existente, apenas a camada conhecida por seus habitantes."
+      },
+      "_origem": "Decisão canônica do autor em 2026-08-28.",
       "_pronto_para_importar": true
     },
 
