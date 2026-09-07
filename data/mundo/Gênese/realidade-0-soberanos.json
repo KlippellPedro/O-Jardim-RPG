@@ -3,7 +3,7 @@
   "_LEIA_ISSO_PRIMEIRO": {
     "o_que_e_esse_arquivo": "Os dez Soberanos da Realidade 0, como entradas tipo 'personagem'.",
     "SOBERANOS_NAO_SAO_DEIDADES": "Decisão canônica (2026-07-29): os Soberanos são habitantes de UM Galho - a Realidade 0, da Árvore Gênese. Não se comparam às Deidades e não têm nada a ver com a cascata Árvore/Fluxo. São os maiores poderes MORTAIS de um único Galho, e só. Por isso entram como 'personagem', que é a camada solta do schema, e nunca como 'deidade'. Antes disso o cofre tinha dois sistemas de poder paralelos sem nenhuma explicação de como se relacionavam.",
-    "origem_do_conteudo": "A lista dos dez, com títulos e cores, vem de 'O Jardim/Gênese/Realidade 0/Soberanos.md'. Quatro tinham lore de verdade em notas próprias (Jota Macedo, Noemi Finwë, Davinor Întuneric, e Salém coletivamente); Grimm tinha duas linhas; os cinco restantes (Kaiser, Amadheus Colona, Netuno Laufey, Durin II, Augustos Castilla) eram arquivos de 0 byte. Os escritos do zero estão marcados.",
+    "origem_do_conteudo": "A lista dos dez, com títulos e cores, vem de 'O Jardim/Gênese/Realidade 0/Soberanos.md'. Quatro tinham lore de verdade em notas próprias (Jota Macedo, Noemi Finwë, Davinor Întuneric, e Salém coletivamente); Grimm tinha duas linhas; os cinco restantes (Kaiser, Amadheus Colona, Bergelmir Laufey [ex-Netuno Laufey, renomeado em 2026-09-01 pra não colidir com o jogo 2D], Durin II, Augustos Castilla) eram arquivos de 0 byte. Os escritos do zero estão marcados.",
     "assembleia": "Os 10 se juntam uma vez por ano para a assembleia da criação, onde discutem assuntos que envolvem o universo - novas ameaças surgindo, guerras frequentes e afins."
   },
   "entradas": [
@@ -93,8 +93,8 @@
     {
       "_secao": "SOBERANO 7 - Cadeira das Montanhas",
       "tipo": "personagem",
-      "id": "netuno-laufey",
-      "titulo": "Netuno Laufey",
+      "id": "bergelmir-laufey",
+      "titulo": "Bergelmir Laufey",
       "conteudo": {
         "epiteto": "Soberano das Montanhas",
         "genero": "Masculino",
@@ -104,6 +104,7 @@
       },
       "_origem": "ESCRITO DO ZERO em 2026-07-29. O cofre tem apenas 'Padrão/Montanhas/Netuno Laufey.md', VAZIO, e a linha em 'Soberanos.md'. A pasta 'Montanhas' foi a única pista real. Tudo aqui é proposta minha.",
       "_nota_nome": "'Laufey' é nome da mitologia nórdica (mãe de Loki) e combina com o Nórdico Antigo que os anões falam - pode valer uma ligação entre as Montanhas e o Reino dos Anões, mas não inventei uma.",
+      "_nota_renomeacao": "Renomeado de 'Netuno Laufey' para 'Bergelmir Laufey' em 2026-09-01, a pedido do autor, pra não colidir com o personagem jogável 'Netuno' do jogo 2D (ver game/docs/PLANEJAMENTO_INICIAL.md). Escolhi 'Bergelmir' por manter o tema nórdico do sobrenome Laufey: é um gigante de gelo nórdico cujo nome remete a montanha, o que combina com o epíteto 'Soberano das Montanhas'. O nome antigo veio do arquivo do cofre 'Padrão/Montanhas/Netuno Laufey.md' (vazio) - se esse arquivo ainda existir no Obsidian, vale renomear ele também, senão uma sincronização futura pode reimportar 'Netuno Laufey' ou criar uma entrada duplicada.",
       "_pronto_para_importar": true
     },
     {

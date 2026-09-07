@@ -811,8 +811,8 @@ export const MUNDO_CATALOG: LoreEntry[] = [
     },
     {
       "tipo": "personagem",
-      "id": "netuno-laufey",
-      "titulo": "Netuno Laufey",
+      "id": "bergelmir-laufey",
+      "titulo": "Bergelmir Laufey",
       "conteudo": {
         "epiteto": "Soberano das Montanhas",
         "genero": "Masculino",
