@@ -87,7 +87,8 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
   chances e pagamento antes da confirmação. Os quatro jogos puramente aleatórios
   têm retorno teórico de 100%; a Corrida usa quatro estandartes equiprováveis e
   distribui o bolo inteiro. Apostas usam somente Lunaris da carteira: cartão,
-  dívida, empréstimo e cofre não financiam jogo. Veja `docs/CASSINO_DISCORD.md`.
+  dívida, empréstimo e cofre não financiam jogo. Veja o
+  [guia do Salão](../../docs/sistema/BOTS_DISCORD.md#salao-do-banco-lunar).
 - **Proteção do mestre** — `/mestre_proteger <membro>` define uma única conta
   imune aos dois tipos de roubo no servidor; chamar o comando sem membro remove
   a proteção. Tentar roubar essa conta consome o cooldown e queima no máximo

@@ -14,11 +14,12 @@ Monorepositório da plataforma web, bots e dados oficiais de O Jardim RPG.
 | `tests/frontend/` | Testes das regras e da persistência do frontend. |
 | `scripts/` | Compiladores determinísticos de dados. |
 | `tools/` | Auditorias, normalizações e empacotamento manual. |
-| `docs/` | Regras publicadas e documentação de manutenção. |
+| `docs/` | Documentação consolidada, decisões do sistema e materiais de mesa. |
 
-Veja [docs/GUIA_MANUTENCAO.md](docs/GUIA_MANUTENCAO.md) antes de alterar regras
-ou estrutura. Para o editor do Painel do Mestre e as personalizações por
-campanha, leia
+Comece pelo [índice da documentação](docs/README.md). Veja
+[docs/GUIA_MANUTENCAO.md](docs/GUIA_MANUTENCAO.md) antes de alterar regras
+ou estrutura. Para o editor do Painel do Criador, publicações globais e
+personalizações por campanha, leia
 [docs/EDITOR_CONTEUDO_CAMPANHA.md](docs/EDITOR_CONTEUDO_CAMPANHA.md).
 
 ## Comandos principais

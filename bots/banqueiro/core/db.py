@@ -2007,7 +2007,7 @@ class Database:
         teto continua guardado com segurança, só para de render juros
         automáticos — sem isso, o juro composto diário não tinha limite e
         dominava estritamente o rendimento de Investimentos em qualquer prazo
-        (ver docs/decisao-design-balanceamento-2026-08.md). Retorna quantas
+        (ver docs/sistema/BALANCEAMENTO.md). Retorna quantas
         linhas (jogador+moeda) foram afetadas.
 
         `sem_teto=True` ignora o teto e calcula sobre o saldo integral — só o

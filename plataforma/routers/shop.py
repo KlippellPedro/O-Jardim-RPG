@@ -1459,7 +1459,7 @@ def purchase_batch(
                 # nestes testes) — os dados reais usam `aplicacao` (Armas/Armaduras/Escudos/
                 # Itens gerais e mágicos). Sem isto, uma modificação de arma sempre podia ser
                 # instalada numa armadura e vice-versa (achado descoberto na validação
-                # pós-correção 2026-08; ver docs/implementacao-final-pos-validacao-2026-08.md).
+                # pós-correção 2026-08; ver docs/sistema/INTEGRACAO.md).
                 #
                 # Mapeamento (baseado em dados reais, não em suposição de nome de campo):
                 #   - "Armas" só instala em item de categoria "arma".

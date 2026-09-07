@@ -1,5 +1,5 @@
 {
-  "descricao": "Fonte única dos tiers de Cofre bancário e de Segurança (resistência a roubo) do Banco Lunar. Consumida por bots/banqueiro/core/economia.py e plataforma/core/cofre_tiers.py — antes eram duas tabelas hardcoded mantidas manualmente em sincronia (ver docs/auditoria-integracao-sistema-2026-08.md, achado 10).",
+  "descricao": "Fonte única dos tiers de Cofre bancário e de Segurança (resistência a roubo) do Banco Lunar. Consumida por bots/banqueiro/core/economia.py e plataforma/core/cofre_tiers.py — antes eram duas tabelas hardcoded mantidas manualmente em sincronia (ver docs/sistema/INTEGRACAO.md, achado 10).",
   "cofre": {
     "tier_inicial": "comum",
     "tiers": [

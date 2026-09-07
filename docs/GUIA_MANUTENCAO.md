@@ -2,6 +2,11 @@
 
 Este documento indica o ponto de entrada de cada tipo de mudança. A regra geral é manter apresentação, regra e persistência em módulos diferentes.
 
+O [índice de docs](README.md) reúne as referências por assunto. Decisões e
+pendências de regras estão em [Balanceamento](sistema/BALANCEAMENTO.md);
+contratos entre sistemas, em [Integração](sistema/INTEGRACAO.md). Relatórios
+antigos ficam acessíveis pelo [histórico](HISTORICO.md), sem outra cópia ativa.
+
 ## Frontend
 
 - `src/pages/`: telas ligadas às rotas. A ficha fica em `src/pages/Ficha/`.
@@ -26,14 +31,23 @@ O conteúdo de `data/mundo/` é compilado para `data/gerado/mundoCatalog.ts`. De
 ```powershell
 npm run build:mundo
 npm run check:mundo
+npm run generate:server-content
+npm run check:server-content
 ```
 
 As regras públicas partem de `data/regras/regras.ts` e geram `data/regras/regras-publicas-v1.md`:
 
 ```powershell
 npm run generate:rules
+npm run generate:editorial-rules
 npm run check:rules-source
 ```
+
+O exportador editorial produz a base de Regras usada pelo backend. O seed
+`data/gerado/conteudo-servidor.json` guarda contos, facções e metadados para o
+servidor; não deve ser publicado como asset. O build já executa sua geração.
+Os detalhes de rascunho, publicação, snapshots e visibilidade ficam apenas no
+[guia do editor](EDITOR_CONTEUDO_CAMPANHA.md).
 
 ## Backend e bots
 
@@ -58,3 +72,23 @@ Não edite nem versione como fonte:
 ## Verificação mínima
 
 Após mudar frontend ou regras, rode `npm run test:frontend` e `npm run build`. Após mudar dados do Mundo ou regras públicas, rode também os respectivos comandos `check:*`.
+
+Para alterações na fronteira de conteúdo público/reservado, rode
+`npm run test:security`. Para backend, execute `python -m pytest -q` no
+ambiente de `plataforma/`; para bots, no ambiente do bot correspondente.
+Casos dependentes de PostgreSQL exigem `TEST_DATABASE_URL` de banco descartável.
+Teste pulado não equivale a teste aprovado.
+
+Mudanças apenas em documentação exigem revisão de referências, links e
+coerência de status; não precisam de rebuild da aplicação.
+
+## PDFs e organização documental
+
+Os comandos `docs:props`, `docs:guias`, `docs:livro` e `docs:livro:mestre` estão
+descritos em [tools/documentos-mundo/README.md](../tools/documentos-mundo/README.md).
+Os PDFs versionados são saídas para consulta/mesa, não fontes editáveis das
+regras. Preserve a distinção entre edição pública e conteúdo reservado do Mestre.
+
+Ao fechar uma auditoria ou decisão, atualize o documento temático existente em
+`docs/sistema/`. Guarde data, justificativa, evidência e pendências no próprio
+tema; evite outra sequência de arquivos de proposta, implementação e “final”.

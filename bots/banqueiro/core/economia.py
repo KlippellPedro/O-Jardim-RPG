@@ -644,7 +644,7 @@ def bau_compravel_por_id(bau_id):
 
 # Estações do Jardim (ESTACOES/estacao_info) moveram pro Jornalista:
 # bots/jornalista/core/economia.py: porque é ele quem sorteia o loot dos
-# baús automáticos que a estação influencia. Ver docs/Plano_Jornalista.md,
+# baús automáticos que a estação influencia. Ver docs/sistema/BOTS_DISCORD.md,
 # Decisão 2. /jornal estacao_definir substitui o antigo /estacao_definir.
 
 
@@ -722,7 +722,7 @@ INVESTIMENTO_TAXA_CRISE = -0.02   # rendimento se a guild estiver em Crise Econ�
 # Condições normais: risco/recompensa real em vez de um retorno fixo — com
 # taxa fixa, Investimento era estritamente pior que só guardar no Cofre em
 # qualquer prazo (juros do Cofre, mesmo com o novo teto, seguem previsíveis
-# e sem risco; ver docs/decisao-design-balanceamento-2026-08.md). O valor
+# e sem risco; ver docs/sistema/BALANCEAMENTO.md). O valor
 # esperado (0,7×8% + 0,3×(-3%) ≈ 4,7%) fica perto do antigo +5% fixo, mas
 # agora com dispersão de verdade: dá pra perder.
 INVESTIMENTO_CHANCE_GANHO = 0.70   # chance de o título vencer com o retorno bom

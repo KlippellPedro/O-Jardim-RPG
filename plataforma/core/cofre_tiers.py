@@ -5,7 +5,7 @@ Carregados de data/economia/cofre_seguranca_tiers.json — a mesma fonte que
 bots/banqueiro/core/economia.py lê. A plataforma e os bots viram ZIPs
 separados na Discloud (sem um pacote Python compartilhado), mas os dois lados
 agora leem o mesmo arquivo de dados em vez de manter duas tabelas Python
-hardcoded sincronizadas à mão (ver docs/auditoria-integracao-sistema-2026-08.md,
+hardcoded sincronizadas à mão (ver docs/sistema/INTEGRACAO.md,
 achado 10).
 
 Extraído de routers/vault.py pra não duplicar quando routers/internal.py

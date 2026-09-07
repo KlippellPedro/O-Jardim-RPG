@@ -1,6 +1,6 @@
 """_require_catalog_character_requirements não precisa de banco: cobre a regra
 de que requisito de nível/classe hoje gera infração (registrada e visível pra
-quem comprou) mas não bloqueia a compra. Ver docs/auditoria-integracao-sistema-2026-08.md,
+quem comprou) mas não bloqueia a compra. Ver docs/sistema/INTEGRACAO.md,
 achado 6."""
 
 import unittest
