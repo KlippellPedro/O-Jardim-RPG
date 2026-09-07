@@ -128,7 +128,7 @@ try {
 
     $platformData = Join-Path $platformStage 'data'
     New-Item -ItemType Directory -Path $platformData -Force | Out-Null
-    @('data\ficha', 'data\mundo', 'data\regras', 'data\loja', 'data\economia') |
+    @('data\ficha', 'data\mundo', 'data\regras', 'data\loja', 'data\economia', 'data\gerado') |
       ForEach-Object { Copy-ProjectItem $_ $platformData }
   }
 

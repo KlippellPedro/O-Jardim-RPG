@@ -47,6 +47,8 @@ OBRIGATORIOS = {
     "dist/index.html",
     "core/character_summary.py",
     "routers/characters.py",
+    "core/world_visibility.py",
+    "data/gerado/conteudo-servidor.json",
 }
 
 
