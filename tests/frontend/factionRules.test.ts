@@ -113,14 +113,12 @@ test('capítulo não publica cenário regional junto das facções', () => {
     /Irmãs da Noite|Asas de Prata|Aurora Escarlate|Titãs da Guerra|Reis da Favela|Trupe Fantasma/i,
   );
   assert.match(REGRA_MUNDO_FACCOES.corpo, /qualquer organização[^.]+independentemente da Árvore/i);
-  // O estado (cânone/proposta) é metadado de produção e saiu da página: o
-  // jogador não precisa saber quais facções ainda esperam aprovação.
+  // A listagem narrativa vem da API de Mundo com a visibilidade da campanha.
   assert.doesNotMatch(REGRA_MUNDO_FACCOES.corpo, /Canônica|Proposta|cânone/i);
-  assert.match(
-    REGRA_MUNDO_FACCOES.corpo,
-    /<th>Facção<\/th><th>Tipo<\/th><th>Alcance<\/th><th>Atuação pública<\/th><\/tr>/,
-  );
-  assert.match(REGRA_MUNDO_FACCOES.corpo, /Guilda dos Caçadores/);
+  assert.match(REGRA_MUNDO_FACCOES.corpo, /Registros Universais do Mundo/);
+  for (const faction of FACCOES_DOCUMENTADAS) {
+    assert.ok(!REGRA_MUNDO_FACCOES.corpo.includes(faction.titulo));
+  }
 });
 
 test('redação pública não usa citações ou falas', () => {

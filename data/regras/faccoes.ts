@@ -240,15 +240,6 @@ const linhasFama = TABELA_FAMA.map((faixa) => `
 
 const itens = (regras: string[]) => regras.map((regra) => `<li>${regra}</li>`).join('');
 
-const linhasFaccoes = FACCOES_DOCUMENTADAS.map((faccao) => `
-  <tr>
-    <td><strong>${faccao.titulo}</strong></td>
-    <td>${faccao.tipo.replace(/-/g, ' ')}</td>
-    <td>${faccao.alcance}</td>
-    <td>${faccao.atuacao_publica}</td>
-  </tr>
-`).join('');
-
 export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
   categoria: 'Livro do Jogador',
   status: 'Regra oficial',
@@ -262,11 +253,7 @@ export const REGRA_MUNDO_FACCOES: RegraTopicoFaccoes = {
     <p class="regras-lead">Estas regras podem ser usadas com qualquer organização da campanha, independentemente da Árvore. Cada facção registra seu próprio Prestígio; Fama continua sendo uma medida geral de visibilidade.</p>
 
     <h3 class="regras-subtitle">Facções documentadas</h3>
-    <p>Organizações que atuam além de uma Árvore só, e por isso podem aparecer em qualquer campanha. Cada uma guarda o próprio Prestígio.</p>
-    <div class="regras-table-wrap"><table class="regras-table">
-      <thead><tr><th>Facção</th><th>Tipo</th><th>Alcance</th><th>Atuação pública</th></tr></thead>
-      <tbody>${linhasFaccoes}</tbody>
-    </table></div>
+    <p>Consulte as facções disponíveis para esta campanha nos Registros Universais do Mundo.</p>
 
     <h3 class="regras-subtitle">Prestígio</h3>
     <p>Prestígio registra a relação de um personagem ou grupo com uma facção específica. O valor inicial é 0.</p>

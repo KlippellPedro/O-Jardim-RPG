@@ -1,3 +1,4 @@
+import { useAuthStore } from '../store/useAuthStore';
 import { useEffect, useMemo, useState } from 'react';
 import { REGRAS_OFICIAIS, type RegrasCatalog, type RegraTopic } from '../../data/regras/regras';
 import { CONDICOES_OFICIAIS, CRISES_SANIDADE, type ICondicaoRegra } from '../../data/regras/condicoes';
@@ -45,16 +46,21 @@ function aplicarDocumento<T extends { id: string; titulo: string }>(
 }
 
 export function useResolvedRules(campanhaId?: string): ResolvedRulesCatalog {
-  const [documents, setDocuments] = useState<Array<{
+  const user = useAuthStore(state => state.usuario);
+  const campaign = useAuthStore(state => state.campanhaAtiva);
+  const accessKey = JSON.stringify([user?.id, user?.papel_plataforma, campanhaId, campaign?.papel]);
+  const [documentKey, setDocumentKey] = useState<string | null>(null);
+  const [storedDocuments, setDocuments] = useState<Array<{
     tipo: string;
     id: string;
     titulo: string;
     conteudo: Record<string, unknown>;
   }> | null>(null);
+  const documents = documentKey === accessKey ? storedDocuments : null;
   const [loading, setLoading] = useState(Boolean(campanhaId));
 
   useEffect(() => {
-    if (!campanhaId) {
+    if (!campanhaId || !user) {
       setDocuments(null);
       setLoading(false);
       return;
@@ -62,7 +68,12 @@ export function useResolvedRules(campanhaId?: string): ResolvedRulesCatalog {
     const controller = new AbortController();
     setLoading(true);
     conteudoEditorialApi.carregarRegrasResolvidas(campanhaId, controller.signal)
-      .then((response) => setDocuments(response.entradas || []))
+      .then((response) => {
+        if (!controller.signal.aborted) {
+          setDocuments(response.entradas || []);
+          setDocumentKey(accessKey);
+        }
+      })
       .catch((error: any) => {
         if (error?.name !== 'AbortError') setDocuments(null);
       })
@@ -70,7 +81,7 @@ export function useResolvedRules(campanhaId?: string): ResolvedRulesCatalog {
         if (!controller.signal.aborted) setLoading(false);
       });
     return () => controller.abort();
-  }, [campanhaId]);
+  }, [campanhaId, accessKey, Boolean(user)]);
 
   return useMemo(() => {
     const regras: RegrasCatalog = { ...REGRAS_OFICIAIS };

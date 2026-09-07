@@ -201,3 +201,29 @@ Set-Location plataforma
 Além dos testes, confira com Criador e jogador que: salvar não publica; publicar
 muda todas as campanhas; mover não duplica; excluir remove globalmente;
 restaurar não publica; e visibilidade da campanha ainda pode ocultar entradas.
+
+## Fronteira de entrega ao navegador
+
+A resolução autenticada aplica a visibilidade da campanha antes de devolver
+Mundo, contos e crônicas. O navegador não recompõe entradas ausentes a partir
+da base local: exclusão, ocultação e indisponibilidade não são autorização.
+A troca de campanha ou usuário invalida os documentos carregados anteriormente.
+
+`tools/browser-content-boundary.ts` limita as fontes que Vite pode empacotar:
+`corpoMestre`, o capítulo reservado, contos completos e crônicas não integram
+os assets públicos. Isso vale também para o servidor de desenvolvimento.
+Metadados estruturais necessários às escolhas mecânicas continuam públicos.
+
+`npm run generate:server-content` gera `data/gerado/conteudo-servidor.json`
+a partir das fontes oficiais para o seed do backend. O build executa essa
+etapa automaticamente. Esse arquivo é privado ao servidor, não é snapshot
+editorial e nunca deve ir para `public/` ou ser servido como asset.
+
+Verificações adicionais: `npm run test:security` e `npm run check:server-content`.
+
+Contos e facções continuam mantidos nas fontes oficiais, sem novos campos
+editáveis no painel. A listagem de facções vem do Mundo autorizado; as regras
+conservam as mecânicas de Prestígio e Fama e remetem a essa listagem.
+Os endpoints legados de conhecimento, conteúdo visível e busca também consultam
+a resolução atual para referências editoriais. Conhecimento avulso conserva
+suas liberações, sempre sem campos reservados na resposta a jogadores.

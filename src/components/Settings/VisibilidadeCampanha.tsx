@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { MUNDO_CATALOG, type LoreEntry } from '../../../data/gerado/mundoCatalog';
+import { type LoreEntry } from '../../../data/gerado/mundoCatalog';
 import { ARVORES, ARVORES_REAIS, VAZIO_ID, arvoreInicialmenteRevelada, type ArvoreEntry } from '../../../data/mundo/arvoresCatalog';
-import { ENTIDADES } from '../../../data/mundo/entidades';
+import { useResolvedWorld } from '../../hooks/useResolvedWorld';
 import { carregarCatalogo } from '../../services/catalogoService';
 import { ICatalogo } from '../../types/catalogo';
 import { Select } from '../ui/Select';
-import { WORLD_CHRONICLES, getTreeChronicle, type WorldChronicleCatalog } from '../../pages/Mundo/worldChronicles';
+import { getTreeChronicle } from '../../pages/Mundo/worldChronicles';
 import { chaveSecaoCronica, type SecaoCronicaArvore } from '../../pages/Mundo/chronicleVisibility';
-import { conteudoEditorialApi } from '../../services/conteudoEditorialApi';
 import { Globe, ShoppingBag, Save, Eye, EyeOff, Loader2, TreePine, Sparkles, UserCog, BookOpen, History, ChevronDown, CircleOff } from 'lucide-react';
 
 const SECOES_CRONICA: Array<{ chave: SecaoCronicaArvore; label: string }> = [
@@ -143,8 +142,7 @@ export const VisibilidadeCampanha: React.FC<VisibilidadeCampanhaProps> = ({
   const [classesLiberadasMembros, setClassesLiberadasMembros] = useState<Record<string, string[]>>(config.classes_liberadas_membros || {});
   const [membroSelecionado, setMembroSelecionado] = useState<string>('');
   const [catalogo, setCatalogo] = useState<ICatalogo | null>(null);
-  const [mundoCatalog, setMundoCatalog] = useState<LoreEntry[]>(MUNDO_CATALOG);
-  const [worldChronicles, setWorldChronicles] = useState<WorldChronicleCatalog>(WORLD_CHRONICLES);
+  const { catalog: mundoCatalog, chronicles: worldChronicles, entities: ENTIDADES } = useResolvedWorld(campanhaId);
   const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -169,41 +167,6 @@ export const VisibilidadeCampanha: React.FC<VisibilidadeCampanhaProps> = ({
   useEffect(() => {
     carregarCatalogo().then(setCatalogo);
   }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    conteudoEditorialApi.carregarMundoResolvido(campanhaId, controller.signal)
-      .then((response) => {
-        const chronology = response.entradas.find((entry) => entry.tipo === 'cronologia');
-        if (
-          chronology?.conteudo
-          && Array.isArray(chronology.conteudo.linha_tempo_geral)
-          && Array.isArray(chronology.conteudo.arvores)
-        ) {
-          setWorldChronicles(chronology.conteudo as unknown as WorldChronicleCatalog);
-        }
-        const resolvedEntries = response.entradas.filter((entry) => entry.tipo !== 'cronologia');
-        const resolvedByOrigin = new Map(resolvedEntries.map((entry) => [entry.chave_origem || `${entry.tipo}:${entry.id}`, entry]));
-        const officialKeys = new Set(MUNDO_CATALOG.map((entry) => `${entry.tipo}:${entry.id}`));
-        setMundoCatalog([
-          ...MUNDO_CATALOG.map((official) => ({
-            ...official,
-            ...resolvedByOrigin.get(`${official.tipo}:${official.id}`),
-            registro_universal: official.registro_universal,
-            arvore_origem: official.arvore_origem,
-          })),
-          ...resolvedEntries.filter((entry) => !officialKeys.has(entry.chave_origem || `${entry.tipo}:${entry.id}`)),
-        ] as unknown as LoreEntry[]);
-      })
-      .catch((error) => {
-        if (error?.name !== 'AbortError') {
-          console.error('Não foi possível carregar o Mundo global na visibilidade.', error);
-          setMundoCatalog(MUNDO_CATALOG);
-          setWorldChronicles(WORLD_CHRONICLES);
-        }
-      });
-    return () => controller.abort();
-  }, [campanhaId]);
 
   const todosOsLocais = [
     { id: 1, nome: 'Feira de Vila' },

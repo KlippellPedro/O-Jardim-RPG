@@ -1,8 +1,9 @@
+import { useResolvedWorld } from '../../hooks/useResolvedWorld';
 import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, BookOpen, Library, Search, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { CLASSIFICACOES_ENTIDADE, ENTIDADES, RANKS_PERIGO } from '../../../data/mundo/entidades';
+import { CLASSIFICACOES_ENTIDADE, RANKS_PERIGO } from '../../../data/mundo/entidades';
 import { useAuthStore } from '../../store/useAuthStore';
 import { loreBloqueado } from '../Mundo/loreVisibility';
 import './entidades.css';
@@ -12,6 +13,7 @@ function normalizar(texto: string) {
 }
 
 export function EntidadesPage() {
+  const { entities: ENTIDADES, loading, error } = useResolvedWorld();
   const [busca, setBusca] = useState('');
   const termo = normalizar(busca.trim());
   const { usuario, campanhaAtiva } = useAuthStore();
@@ -25,7 +27,7 @@ export function EntidadesPage() {
 
   const entidadesVisiveis = useMemo(() => ENTIDADES.filter((entidade) => (
     !loreBloqueado(entidade, { isMestre, loreRevelado: entidadesRevelado, loreOculto: entidadesOculto })
-  )), [isMestre, entidadesRevelado, entidadesOculto]);
+  )), [ENTIDADES, isMestre, entidadesRevelado, entidadesOculto]);
 
   const entidades = useMemo(() => {
     if (!termo) return entidadesVisiveis;
@@ -37,6 +39,9 @@ export function EntidadesPage() {
       ...entidade.classificacao.map((id) => CLASSIFICACOES_ENTIDADE.find((classificacao) => classificacao.id === id)?.titulo),
     ].filter(Boolean).join(' ')).includes(termo));
   }, [termo, entidadesVisiveis]);
+
+  if (loading) return <p role="status">Carregando entidades…</p>;
+  if (error) return <p role="alert">{error}</p>;
 
   return (
     <main className="entity-book">

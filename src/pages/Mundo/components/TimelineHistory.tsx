@@ -1,6 +1,7 @@
+import { useResolvedWorld } from '../../../hooks/useResolvedWorld';
 import React from 'react';
 import { motion } from 'framer-motion';
-import { LoreEntry, MUNDO_CATALOG } from '../../../../data/gerado/mundoCatalog';
+import { type LoreEntry } from '../../../../data/gerado/mundoCatalog';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { ShieldAlert, History } from 'lucide-react';
 
@@ -12,7 +13,8 @@ export const TimelineHistory: React.FC<TimelineHistoryProps> = ({ onSelectEvent 
   const { usuario, campanhaAtiva } = useAuthStore();
   const isMestre = usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador' || campanhaAtiva?.papel === 'mestre' || campanhaAtiva?.papel === 'assistente';
 
-  const eventos = MUNDO_CATALOG.filter(e => e.tipo === 'evento');
+  const { catalog } = useResolvedWorld();
+  const eventos = catalog.filter(e => e.tipo === 'evento');
 
   return (
     <div className="w-full max-w-4xl mx-auto mt-12 py-8 relative">

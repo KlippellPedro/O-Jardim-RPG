@@ -8,6 +8,7 @@ from uuid import UUID, uuid4
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from psycopg.types.json import Jsonb
 
+from core.world_visibility import visible_world, without_private_fields
 from core.audit import record_audit
 from core.database import Database
 from core.dependencies import (
@@ -400,6 +401,11 @@ def _validate_rules_content(entry_type: str, data: dict, base: dict) -> None:
     _validate_narrative_fields(data, editable)
 
 
+def _require_editable_world_type(entry_type):
+    if entry_type in {"entidade", "faccao"}:
+        raise HTTPException(status_code=422, detail="este catálogo é mantido nos arquivos oficiais")
+
+
 def _validate_editorial_content(module: str, entry_type: str, data: dict, base: dict) -> None:
     if module == "mundo" and entry_type == "cronologia":
         _validate_chronicle_content(data)
@@ -626,6 +632,7 @@ def list_editorial_content(
                     ),
                 }
             )
+        entries = [entry for entry in entries if entry["tipo"] not in {"entidade", "faccao"}]
         entries.sort(key=lambda item: (item["tipo"], item["titulo"].casefold(), item["chave"]))
     return {"modulo": modulo, "entradas": entries}
 
@@ -639,6 +646,9 @@ def save_editorial_draft(
     composite_key = f"{payload.tipo}:{payload.chave_recurso}"
     source_composite_key = payload.chave_origem or composite_key
     source_type, separator, source_resource_key = source_composite_key.partition(":")
+    if getattr(payload, "modulo", "mundo") == "mundo":
+        _require_editable_world_type(source_type)
+        _require_editable_world_type(payload.tipo)
     if (
         not separator
         or not source_type
@@ -1196,6 +1206,7 @@ def _global_editor_entries(connection) -> list[dict]:
                 ),
             }
         )
+    entries = [entry for entry in entries if entry["tipo"] not in {"entidade", "faccao"}]
     entries.sort(key=lambda item: (item["tipo"], item["titulo"].casefold(), item["chave"]))
     return entries
 
@@ -1222,6 +1233,9 @@ def save_global_editorial_draft(
     composite_key = f"{payload.tipo}:{payload.chave_recurso}"
     source_composite_key = payload.chave_origem or composite_key
     source_type, separator, source_resource_key = source_composite_key.partition(":")
+    if getattr(payload, "modulo", "mundo") == "mundo":
+        _require_editable_world_type(source_type)
+        _require_editable_world_type(payload.tipo)
     if (
         not separator
         or not source_type
@@ -1683,6 +1697,10 @@ def resolved_content(
     """Biblioteca base mesclada com a edição global ou com regras da campanha."""
     with database.connection() as connection:
         access = campaign_access(connection, campanha_id, user.id)
+        config = {}
+        if modulo == "mundo" and not access.manages_content:
+            config_row = connection.execute("SELECT configuracoes FROM campanhas WHERE id=%s", (campanha_id,)).fetchone()
+            config = config_row.get("configuracoes", {}) if config_row else {}
         library = _library_rows(connection, modulo)
         if modulo == "mundo":
             overrides = connection.execute(
@@ -1708,6 +1726,8 @@ def resolved_content(
     official_keys = set()
     for raw_item in library:
         item = dict(raw_item)
+        if modulo == "regras" and not access.manages_content and (item["tipo"] == "regras-mestre" or item["chave_recurso"] == "mestre"):
+            continue
         composite_key = f"{item['tipo']}:{item['chave_recurso']}"
         official_keys.add(composite_key)
         override = override_by_key.get(composite_key)
@@ -1746,6 +1766,10 @@ def resolved_content(
                 and not _is_removed_document(document)
             )
         )
+    if modulo == "mundo":
+        entries = visible_world(entries, config, access.manages_content)
+    elif not access.manages_content:
+        entries = without_private_fields(entries)
     return {"modulo": modulo, "entradas": entries}
 
 
@@ -1876,6 +1900,40 @@ def unpublish_content(
     return None
 
 
+def public_legacy_rows(rows, campaign_id, user, database):
+    """Compatibilidade: referências editoriais obedecem à publicação atual.
+
+    Conhecimentos avulsos mantêm seus níveis de liberação. Uma cópia antiga de
+    um documento oficial nunca contorna a visibilidade nem amplia acesso parcial.
+    """
+    resolved = {}
+
+    def intersect(partial, full):
+        if isinstance(partial, dict) and isinstance(full, dict):
+            return {key: intersect(value, full[key]) for key, value in partial.items() if key in full}
+        if isinstance(partial, list) and isinstance(full, list):
+            return [value for value in partial if value in full]
+        return partial if partial == full else None
+
+    for raw in rows:
+        row = dict(raw)
+        module = row.get("tipo", row.get("modulo"))
+        key = str(row.get("chave_recurso", ""))
+        document = row.get("dados_completos")
+        if module in {"mundo", "regras"} and (":" in key or _is_editorial_document(document)):
+            if module not in resolved:
+                documents = resolved_content(campaign_id, module, user, database)["entradas"]
+                resolved[module] = {e.get("chave_origem", f"{e['tipo']}:{e['id']}"): e for e in documents}
+            full = resolved[module].get(key)
+            if full is None:
+                continue
+            row.update(titulo=full["titulo"], dados_completos=full,
+                       dados_parciais=intersect(row.get("dados_parciais", {}), full), resumo_rumor="")
+        if module == "regras" and key in {"mestre", "mestre-v1"}:
+            continue
+        yield without_private_fields(row)
+
+
 @router.get("/visivel")
 def visible_content(
     campanha_id: UUID,
@@ -1897,6 +1955,8 @@ def visible_content(
         ).fetchall()
         # Liberações mais específicas continuam sendo resolvidas pelo endpoint
         # /conhecimento. Esta rota cobre a publicação padrão para a campanha.
+    if not access.manages_content:
+        rows = public_legacy_rows(({**row, "tipo": modulo} for row in rows), campanha_id, user, database)
     entries = []
     for row in rows:
         if access.manages_content or row["acesso_padrao"] == "completo":
@@ -1928,7 +1988,7 @@ def buscar_conteudo(
     termo = f"%{q.strip()}%"
     resultados = []
     with database.connection() as connection:
-        campaign_access(connection, campanha_id, user.id)
+        access = campaign_access(connection, campanha_id, user.id)
         conteudo = connection.execute(
             """
             SELECT tipo AS modulo, chave_recurso, titulo
@@ -1941,7 +2001,11 @@ def buscar_conteudo(
             """,
             (campanha_id, termo),
         ).fetchall()
+        if not access.manages_content:
+            conteudo = public_legacy_rows(conteudo, campanha_id, user, database)
         for row in conteudo:
+            if q.strip().casefold() not in row["titulo"].casefold():
+                continue
             resultados.append(
                 {"modulo": row["modulo"], "titulo": row["titulo"], "ref": None}
             )

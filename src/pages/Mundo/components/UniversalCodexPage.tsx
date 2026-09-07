@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 import type { LoreEntry } from '../../../../data/gerado/mundoCatalog';
 import {
   CLASSIFICACOES_ENTIDADE,
-  ENTIDADES,
+  type EntidadeCatalogo,
   RANKS_PERIGO,
 } from '../../../../data/mundo/entidades';
 import { FACCOES_DOCUMENTADAS } from '../../../../data/regras/faccoes';
@@ -23,6 +23,7 @@ import { universalLoreEntries } from '../worldCodex';
 
 interface UniversalRecordsPageProps {
   catalog: LoreEntry[];
+  entities: EntidadeCatalogo[];
   isMestre: boolean;
   loreRevelado: string[];
   loreOculto: string[];
@@ -65,7 +66,7 @@ const loreRecord = (entry: LoreEntry): UniversalRecord => ({
   ].filter((item): item is [string, string] => Boolean(item[1])),
 });
 
-const entityRecords = (): UniversalRecord[] => ENTIDADES
+const entityRecords = (entities: EntidadeCatalogo[]): UniversalRecord[] => entities
   .filter((entity) => entity.registroUniversal)
   .map((entity) => {
     const rank = RANKS_PERIGO.find((item) => item.id === entity.rankPerigo)?.titulo;
@@ -160,6 +161,7 @@ const RecordsSection = ({
 
 export const UniversalCodexPage: React.FC<UniversalRecordsPageProps> = ({
   catalog,
+  entities,
   isMestre,
   loreRevelado,
   loreOculto,
@@ -177,16 +179,16 @@ export const UniversalCodexPage: React.FC<UniversalRecordsPageProps> = ({
   })), [catalog, isMestre, loreOculto, loreRevelado]);
   const beings = useMemo(() => [
     ...visibleUniversalLore.filter((entry) => entry.registro_universal === 'ser').map(loreRecord),
-    ...entityRecords().filter((record) => {
+    ...entityRecords(entities).filter((record) => {
       const entityId = record.key.replace('entidade:', '');
-      const entity = ENTIDADES.find((item) => item.id === entityId);
+      const entity = entities.find((item) => item.id === entityId);
       return entity && !loreBloqueado(entity, {
         isMestre,
         loreRevelado: entidadesRevelado,
         loreOculto: entidadesOculto,
       });
     }),
-  ], [entidadesOculto, entidadesRevelado, isMestre, visibleUniversalLore]);
+  ], [entities, entidadesOculto, entidadesRevelado, isMestre, visibleUniversalLore]);
   const locations = useMemo(() => visibleUniversalLore
     .filter((entry) => entry.registro_universal === 'local')
     .map(loreRecord), [visibleUniversalLore]);

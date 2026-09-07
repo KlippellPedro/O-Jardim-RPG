@@ -23,7 +23,7 @@ import {
   UserRound,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { encontrarEntidade } from '../../../data/mundo/entidades';
+import { useResolvedWorld } from '../../hooks/useResolvedWorld';
 import {
   casinoApi,
   type ConquistaCassinoGambler,
@@ -42,23 +42,6 @@ import { possuiEntradaGambler } from './gamblerAccess';
 import './gamblerCasino.css';
 
 type EntityThemeStyle = CSSProperties & Record<`--entity-${string}`, string>;
-
-const GAMBLER = encontrarEntidade('gambler');
-const MUSICA_GAMBLER = GAMBLER?.musicaTema;
-// EntityThemeMusic lê cores de custom properties --entity-* que normalmente
-// vêm da página do conto (EntidadeContoPage). Aqui, fora daquele contexto,
-// precisamos repassar as mesmas cores do tema do Gambler à mão.
-const ESTILO_MUSICA_GAMBLER = GAMBLER
-  ? ({
-      '--entity-accent': GAMBLER.tema.destaque,
-      '--entity-accent-soft': GAMBLER.tema.destaqueSuave,
-      '--entity-accent-2': GAMBLER.tema.destaqueSecundario ?? GAMBLER.tema.destaque,
-      '--entity-background': GAMBLER.tema.fundo,
-      '--entity-surface': GAMBLER.tema.superficie,
-      '--entity-text': GAMBLER.tema.texto,
-      '--entity-muted': GAMBLER.tema.textoSuave,
-    } as EntityThemeStyle)
-  : undefined;
 
 const JOGOS: Array<{
   id: JogoCassinoGambler;
@@ -200,6 +183,25 @@ function ganhou(rodada: RodadaCassinoGambler): boolean {
 }
 
 export function GamblerCasinoPage() {
+  const { entities } = useResolvedWorld();
+  const GAMBLER = entities.find(entity => entity.id === 'gambler');
+  const MUSICA_GAMBLER = GAMBLER?.musicaTema;
+  // EntityThemeMusic lê cores de custom properties --entity-* que normalmente
+  // vêm da página do conto (EntidadeContoPage). Aqui, fora daquele contexto,
+  // precisamos repassar as mesmas cores do tema do Gambler à mão.
+  const ESTILO_MUSICA_GAMBLER = GAMBLER
+    ? ({
+        '--entity-accent': GAMBLER.tema.destaque,
+        '--entity-accent-soft': GAMBLER.tema.destaqueSuave,
+        '--entity-accent-2': GAMBLER.tema.destaqueSecundario ?? GAMBLER.tema.destaque,
+        '--entity-background': GAMBLER.tema.fundo,
+        '--entity-surface': GAMBLER.tema.superficie,
+        '--entity-text': GAMBLER.tema.texto,
+        '--entity-muted': GAMBLER.tema.textoSuave,
+      } as EntityThemeStyle)
+    : undefined;
+
+
   const navigate = useNavigate();
   const campanhaAtiva = useAuthStore(state => state.campanhaAtiva);
   const usuario = useAuthStore(state => state.usuario);

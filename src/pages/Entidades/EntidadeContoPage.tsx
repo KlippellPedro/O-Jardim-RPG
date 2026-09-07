@@ -2,7 +2,7 @@ import { useLayoutEffect, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Crown, Feather } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
-import { encontrarEntidade } from '../../../data/mundo/entidades';
+import { useResolvedWorld } from '../../hooks/useResolvedWorld';
 import { useAuthStore } from '../../store/useAuthStore';
 import { loreBloqueado } from '../Mundo/loreVisibility';
 import { EntityThemeMusic } from './EntityThemeMusic';
@@ -14,7 +14,8 @@ type EntityThemeStyle = CSSProperties & Record<`--entity-${string}`, string>;
 
 export function EntidadeContoPage() {
   const { entidadeId } = useParams<{ entidadeId: string }>();
-  const entidade = encontrarEntidade(entidadeId);
+  const { entities, loading, error } = useResolvedWorld();
+  const entidade = entities.find(entry => entry.id === entidadeId);
 
   useLayoutEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
@@ -33,6 +34,8 @@ export function EntidadeContoPage() {
     loreRevelado: config.entidades_revelado || [],
     loreOculto: config.entidades_oculto || [],
   });
+
+  if (loading || error) return <main className="app-detail-page" role="status">{error || "Carregando conto..."}</main>;
 
   if (!entidade || bloqueada) {
     return (

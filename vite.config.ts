@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { browserContentBoundary } from './tools/browser-content-boundary'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [browserContentBoundary(), react()],
   build: {
     // O frontend 3D é carregado sob demanda. Separar suas bibliotecas evita
     // que Three.js e React Three Fiber voltem a engrossar o bundle inicial.

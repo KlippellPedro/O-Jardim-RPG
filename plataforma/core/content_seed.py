@@ -158,6 +158,28 @@ def seed_world_library(database: Database, data_root: Path) -> int:
                 document["revelado"] = item["revelado"]
             entries[(entry_type, entry_id)] = document
 
+    # Metadados e contos completos são seed exclusivo do servidor.
+    runtime_path = data_root / "gerado" / "conteudo-servidor.json"
+    if runtime_path.exists():
+        runtime = json.loads(runtime_path.read_text(encoding="utf-8"))
+        for metadata in runtime.get("mundo_metadados", []):
+            key = (metadata["tipo"], metadata["id"])
+            if key in entries:
+                entries[key].update({k: v for k, v in metadata.items() if k in {"arvore_origem", "registro_universal"}})
+        for entity in runtime.get("entidades", []):
+            entries[("entidade", entity["id"])] = {
+                "tipo": "entidade", "id": entity["id"], "titulo": entity["nome"],
+                "registro_universal": bool(entity.get("registroUniversal")),
+                "revelado": entity.get("revelado", True), "conteudo": entity,
+            }
+
+        for faction in runtime.get("faccoes", []):
+            entries[("faccao", faction["id"])] = {
+                "tipo": "faccao", "id": faction["id"], "titulo": faction["titulo"],
+                "registro_universal": faction.get("registro_universal", False),
+                "revelado": faction.get("estado") == "canonica", "conteudo": faction,
+            }
+
     rules_path = data_root / "regras" / "mestre-v1.json"
     master_rules = None
     if rules_path.exists():

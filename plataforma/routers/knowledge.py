@@ -268,6 +268,9 @@ def list_knowledge(
     by_entry: dict[UUID, list[dict]] = {}
     for grant in grants:
         by_entry.setdefault(grant["informacao_id"], []).append(dict(grant))
+    if not access.manages_content:
+        from .content import public_legacy_rows
+        entries = public_legacy_rows(entries, campanha_id, user, database)
     visible = []
     for entry in entries:
         level = "completo" if access.manages_content else entry["acesso_padrao"]

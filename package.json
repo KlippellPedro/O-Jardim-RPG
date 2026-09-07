@@ -32,7 +32,11 @@
     "fix:weapon-criticals": "node tools/normalize-weapon-criticals.mjs",
     "obsidian:import": "node tools/obsidian-content.mjs import",
     "obsidian:export": "node tools/obsidian-content.mjs export",
-    "obsidian:check": "node tools/obsidian-content.mjs check"
+    "obsidian:check": "node tools/obsidian-content.mjs check",
+    "generate:server-content": "node --import ./tests/frontend/registerTsLoader.mjs tools/export-server-content.mjs",
+    "check:server-content": "node --import ./tests/frontend/registerTsLoader.mjs tools/export-server-content.mjs --check",
+    "prebuild": "npm run generate:server-content",
+    "test:security": "npm run build && node --import ./tests/frontend/registerTsLoader.mjs --test tests/frontend/browserContentBoundary.test.ts"
   },
   "dependencies": {
     "@react-three/drei": "^9.108.0",

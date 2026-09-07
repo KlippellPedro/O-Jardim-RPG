@@ -3038,21 +3038,7 @@ Estas regras podem ser usadas com qualquer organização da campanha, independen
 
 ### Facções documentadas
 
-Organizações que atuam além de uma Árvore só, e por isso podem aparecer em qualquer campanha. Cada uma guarda o próprio Prestígio.
-
-- Facção | Tipo | Alcance | Atuação pública
-
-- Banco Lunar | instituicao financeira | Todas as Árvores | Guarda, administra e investe bens. Também fornece recursos a clientes capazes de pagar.
-
-- AstraTech | corporacao tecnologica | Múltiplas Árvores | Desenvolve tecnologia arcana e mantém projetos capazes de operar além de Astraluna.
-
-- Caravana do Limiar | rede de transporte | Rotas acessíveis entre Árvores | Transporta pessoas, cargas e mensagens por passagens dimensionais conhecidas. Não atravessa rotas seladas.
-
-- Vigília das Raízes | ordem de contencao | Todas as Árvores alcançáveis | Investiga rupturas dimensionais, evacua áreas ameaçadas e contém criaturas que atravessam fronteiras entre Árvores.
-
-- Arquivo Prismático | instituicao de pesquisa | Núcleos em diferentes Árvores | Preserva registros, identifica artefatos e reúne informações verificadas sobre fenômenos de diferentes Árvores.
-
-- Guilda dos Caçadores | guilda de cacadores | Todas as Árvores | Aceita contrato para capturar criminoso procurado e para abater criatura vinda do Vazio. Paga por entrega confirmada, cobra caro por serviço urgente e mantém quadro de procurados aberto a quem quiser tentar.
+Consulte as facções disponíveis para esta campanha nos Registros Universais do Mundo.
 
 ### Prestígio
 

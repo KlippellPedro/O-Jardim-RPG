@@ -1,3 +1,4 @@
+import { useResolvedWorld } from '../../../hooks/useResolvedWorld';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +28,7 @@ import {
   conjuntoAtributosValido,
 } from '../../../services/calculoService';
 import { descreverOpcaoRacial, escolhaRacialEstaCompleta, obterGruposEscolhaRacial, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
-import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao, descricaoArvore, descricaoHierarquiaDoJardim } from '../../../../data/mundo/arvoresCatalog';
+import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao } from '../../../../data/mundo/arvoresCatalog';
 import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
 import { Select } from '../../../components/ui/Select';
 
@@ -52,6 +53,15 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
   const navigate = useNavigate();
   const { createCharacter } = useCharacterStore();
   const { usuario, campanhaAtiva } = useAuthStore();
+  const { catalog: worldCatalog } = useResolvedWorld();
+  const descricaoArvore = (id: string) => {
+    const text = worldCatalog.find(entry => entry.tipo === 'deidade' && entry.id === id)?.conteudo.descricao;
+    return typeof text === 'string' ? text : null;
+  };
+  const descricaoHierarquiaDoJardim = () => {
+    const text = worldCatalog.find(entry => entry.id === 'hierarquia-do-jardim')?.conteudo.descricao;
+    return typeof text === 'string' ? text.split('\n\n')[0] : 'Este conteúdo ainda não está disponível nesta campanha.';
+  };
   const isMestre = usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador'
     || campanhaAtiva?.papel === 'mestre' || campanhaAtiva?.papel === 'assistente';
   const config = campanhaAtiva?.configuracoes || {};
