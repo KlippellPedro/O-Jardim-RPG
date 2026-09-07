@@ -1,6 +1,7 @@
 # OS
 .DS_Store
 Thumbs.db
+/nul
 
 # Editor
 .vscode/
@@ -43,3 +44,20 @@ __pycache__/
 # Rascunhos e anexos deixados por sessoes de agente. Nada aqui e fonte.
 .codex-remote-attachments/
 UsersPedroAppDataLocalTemp*.json
+
+# Moodboard de referencia visual do jogo 2D (Pinterest/web). Imagens de
+# terceiros sem licenca confirmada nao podem ir pro historico do git, ver
+# aviso em game/README.md. Fica so local, arquivo fontes.md guarda a origem
+# de cada imagem.
+game/referencias/
+
+# Cache/import do editor do Godot (projeto do jogo 2D em game/). Gerado
+# localmente a cada abertura do editor, nunca e fonte.
+game/.godot/
+game/*.translation
+export_presets.cfg
+
+# Documentos de mesa: HTML intermediario e perfil temporario do Chrome
+docs/props/_html/
+docs/players/_html/
+docs/livro/_html/

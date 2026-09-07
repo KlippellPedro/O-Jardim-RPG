@@ -1,0 +1,59 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/personagem/bob_idle.gd" id="1_bob"]
+
+[node name="VisualAyato" type="Node2D"]
+script = ExtResource("1_bob")
+
+[node name="Corpo" type="Polygon2D" parent="."]
+color = Color(0.15, 0.15, 0.17, 1)
+polygon = PackedVector2Array(-14, -16, 14, -16, 10, 24, -10, 24)
+
+[node name="AcentoFluxo" type="ColorRect" parent="."]
+offset_left = -11.0
+offset_top = 2.0
+offset_right = 11.0
+offset_bottom = 8.0
+color = Color(0.953, 0.584, 0.333, 1)
+
+[node name="Katana" type="ColorRect" parent="."]
+offset_left = -1.5
+offset_top = -14.0
+offset_right = 1.5
+offset_bottom = 16.0
+position = Vector2(9, 4)
+rotation = -0.35
+color = Color(0.35, 0.33, 0.3, 1)
+
+[node name="Cabeca" type="Node2D" parent="."]
+position = Vector2(0, -30)
+
+[node name="Base" type="Polygon2D" parent="Cabeca"]
+color = Color(0.92, 0.9, 0.85, 1)
+polygon = PackedVector2Array(13, 0, 9.19, 9.19, 0, 13, -9.19, 9.19, -13, 0, -9.19, -9.19, 0, -13, 9.19, -9.19)
+
+[node name="OlhoEsquerdo" type="ColorRect" parent="Cabeca"]
+offset_left = -7.0
+offset_top = -3.0
+offset_right = -3.0
+offset_bottom = 1.0
+color = Color(0.08, 0.08, 0.08, 1)
+
+[node name="OlhoDireito" type="ColorRect" parent="Cabeca"]
+offset_left = 3.0
+offset_top = -3.0
+offset_right = 7.0
+offset_bottom = 1.0
+color = Color(0.08, 0.08, 0.08, 1)
+
+[node name="Espinho1" type="Polygon2D" parent="Cabeca"]
+color = Color(0.15, 0.15, 0.17, 1)
+polygon = PackedVector2Array(-9, -8, -13, -20, -5, -10)
+
+[node name="Espinho2" type="Polygon2D" parent="Cabeca"]
+color = Color(0.15, 0.15, 0.17, 1)
+polygon = PackedVector2Array(-2, -10, 0, -24, 3, -10)
+
+[node name="Espinho3" type="Polygon2D" parent="Cabeca"]
+color = Color(0.15, 0.15, 0.17, 1)
+polygon = PackedVector2Array(5, -10, 11, -19, 9, -8)

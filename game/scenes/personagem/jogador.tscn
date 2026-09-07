@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/personagem/personagem_controller.gd" id="1_jogad"]
+[ext_resource type="Script" path="res://scripts/combate/vida.gd" id="2_vida"]
+[ext_resource type="Script" path="res://scripts/combate/hitbox.gd" id="3_hit"]
+[ext_resource type="Script" path="res://scripts/combate/hurtbox.gd" id="4_hurt"]
+[ext_resource type="PackedScene" path="res://scenes/personagem/visual_ayato.tscn" id="5_visual"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jogador"]
+size = Vector2(32, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hitbox_jogador"]
+size = Vector2(36, 32)
+
+[node name="Jogador" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_jogad")
+
+[node name="ColisaoJogador" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_jogador")
+
+[node name="VisualJogador" parent="." instance=ExtResource("5_visual")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+
+[node name="Vida" type="Node" parent="."]
+script = ExtResource("2_vida")
+vida_maxima = 50
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 64
+monitoring = false
+script = ExtResource("3_hit")
+dano = 10
+position = Vector2(32, 0)
+
+[node name="ColisaoHitbox" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("RectangleShape2D_hitbox_jogador")
+
+[node name="VisualGolpe" type="ColorRect" parent="Hitbox"]
+visible = false
+offset_left = -18.0
+offset_top = -16.0
+offset_right = 18.0
+offset_bottom = 16.0
+color = Color(1, 1, 0.6, 0.6)
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 0
+script = ExtResource("4_hurt")
+
+[node name="ColisaoHurtbox" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_jogador")

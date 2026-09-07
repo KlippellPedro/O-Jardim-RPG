@@ -1,0 +1,203 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/personagem/jogador.tscn" id="1_jogador"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_chao"]
+size = Vector2(1400, 40)
+
+[node name="SalaIntuneric" type="Node2D"]
+
+[node name="CorTonal" type="CanvasModulate" parent="."]
+color = Color(0.55, 0.6, 0.78, 1)
+
+[node name="Fundo" type="ParallaxBackground" parent="."]
+
+[node name="CamadaCeu" type="ParallaxLayer" parent="Fundo"]
+motion_scale = Vector2(0.1, 0.1)
+
+[node name="Ceu" type="ColorRect" parent="Fundo/CamadaCeu"]
+offset_left = -600.0
+offset_top = -900.0
+offset_right = 2000.0
+offset_bottom = 480.0
+color = Color(0.08, 0.08, 0.15, 1)
+
+[node name="Lua" type="Polygon2D" parent="Fundo/CamadaCeu"]
+position = Vector2(1100, -420)
+color = Color(0.85, 0.87, 0.9, 0.85)
+polygon = PackedVector2Array(45, 0, 31.8, 31.8, 0, 45, -31.8, 31.8, -45, 0, -31.8, -31.8, 0, -45, 31.8, -31.8)
+
+[node name="BrilhoLua" type="Polygon2D" parent="Fundo/CamadaCeu"]
+position = Vector2(1100, -420)
+color = Color(0.7, 0.75, 0.85, 0.18)
+polygon = PackedVector2Array(80, 0, 56.6, 56.6, 0, 80, -56.6, 56.6, -80, 0, -56.6, -56.6, 0, -80, 56.6, -56.6)
+
+[node name="Torre1" type="ColorRect" parent="Fundo/CamadaCeu"]
+offset_left = -100.0
+offset_top = 350.0
+offset_right = -20.0
+offset_bottom = 480.0
+color = Color(0.04, 0.04, 0.07, 1)
+
+[node name="Torre2" type="ColorRect" parent="Fundo/CamadaCeu"]
+offset_left = 100.0
+offset_top = 300.0
+offset_right = 200.0
+offset_bottom = 480.0
+color = Color(0.04, 0.04, 0.07, 1)
+
+[node name="TorreCentral" type="ColorRect" parent="Fundo/CamadaCeu"]
+offset_left = 350.0
+offset_top = 180.0
+offset_right = 520.0
+offset_bottom = 480.0
+color = Color(0.04, 0.04, 0.07, 1)
+
+[node name="PicoTorreCentral" type="Polygon2D" parent="Fundo/CamadaCeu"]
+color = Color(0.04, 0.04, 0.07, 1)
+polygon = PackedVector2Array(350, 180, 435, 120, 520, 180)
+
+[node name="JanelaAcesa" type="ColorRect" parent="Fundo/CamadaCeu"]
+offset_left = 420.0
+offset_top = 300.0
+offset_right = 450.0
+offset_bottom = 330.0
+color = Color(0.9, 0.6, 0.25, 0.9)
+
+[node name="BrilhoJanela" type="Polygon2D" parent="Fundo/CamadaCeu"]
+position = Vector2(435, 315)
+color = Color(0.85, 0.55, 0.25, 0.15)
+polygon = PackedVector2Array(60, 0, 42, 42, 0, 60, -42, 42, -60, 0, -42, -42, 0, -60, 42, -42)
+
+[node name="Torre3" type="ColorRect" parent="Fundo/CamadaCeu"]
+offset_left = 650.0
+offset_top = 370.0
+offset_right = 740.0
+offset_bottom = 480.0
+color = Color(0.04, 0.04, 0.07, 1)
+
+[node name="Torre4" type="ColorRect" parent="Fundo/CamadaCeu"]
+offset_left = 900.0
+offset_top = 320.0
+offset_right = 1010.0
+offset_bottom = 480.0
+color = Color(0.04, 0.04, 0.07, 1)
+
+[node name="PicoTorre4" type="Polygon2D" parent="Fundo/CamadaCeu"]
+color = Color(0.04, 0.04, 0.07, 1)
+polygon = PackedVector2Array(900, 320, 955, 270, 1010, 320)
+
+[node name="Torre5" type="ColorRect" parent="Fundo/CamadaCeu"]
+offset_left = 1250.0
+offset_top = 400.0
+offset_right = 1340.0
+offset_bottom = 480.0
+color = Color(0.04, 0.04, 0.07, 1)
+
+[node name="CamadaArvores" type="ParallaxLayer" parent="Fundo"]
+motion_scale = Vector2(0.45, 0.45)
+
+[node name="Tronco1" type="ColorRect" parent="Fundo/CamadaArvores"]
+offset_left = -20.0
+offset_top = 380.0
+offset_right = -12.0
+offset_bottom = 480.0
+color = Color(0.1, 0.09, 0.11, 1)
+
+[node name="Galho1a" type="ColorRect" parent="Fundo/CamadaArvores"]
+offset_left = -3.0
+offset_top = -18.0
+offset_right = 3.0
+offset_bottom = 22.0
+position = Vector2(-16, 400)
+rotation = 0.9
+color = Color(0.1, 0.09, 0.11, 1)
+
+[node name="Galho1b" type="ColorRect" parent="Fundo/CamadaArvores"]
+offset_left = -3.0
+offset_top = -18.0
+offset_right = 3.0
+offset_bottom = 22.0
+position = Vector2(-16, 415)
+rotation = -1.1
+color = Color(0.1, 0.09, 0.11, 1)
+
+[node name="Tronco2" type="ColorRect" parent="Fundo/CamadaArvores"]
+offset_left = -20.0
+offset_top = 380.0
+offset_right = -12.0
+offset_bottom = 480.0
+position = Vector2(480, -10)
+color = Color(0.1, 0.09, 0.11, 1)
+
+[node name="Galho2a" type="ColorRect" parent="Fundo/CamadaArvores"]
+offset_left = -3.0
+offset_top = -20.0
+offset_right = 3.0
+offset_bottom = 20.0
+position = Vector2(464, 385)
+rotation = 1.0
+color = Color(0.1, 0.09, 0.11, 1)
+
+[node name="Galho2b" type="ColorRect" parent="Fundo/CamadaArvores"]
+offset_left = -3.0
+offset_top = -20.0
+offset_right = 3.0
+offset_bottom = 20.0
+position = Vector2(464, 400)
+rotation = -0.85
+color = Color(0.1, 0.09, 0.11, 1)
+
+[node name="Tronco3" type="ColorRect" parent="Fundo/CamadaArvores"]
+offset_left = -20.0
+offset_top = 380.0
+offset_right = -12.0
+offset_bottom = 480.0
+position = Vector2(980, -25)
+color = Color(0.1, 0.09, 0.11, 1)
+
+[node name="Galho3a" type="ColorRect" parent="Fundo/CamadaArvores"]
+offset_left = -3.0
+offset_top = -20.0
+offset_right = 3.0
+offset_bottom = 20.0
+position = Vector2(964, 375)
+rotation = 0.95
+color = Color(0.1, 0.09, 0.11, 1)
+
+[node name="Galho3b" type="ColorRect" parent="Fundo/CamadaArvores"]
+offset_left = -3.0
+offset_top = -20.0
+offset_right = 3.0
+offset_bottom = 20.0
+position = Vector2(964, 390)
+rotation = -1.05
+color = Color(0.1, 0.09, 0.11, 1)
+
+[node name="CamadaNevoa" type="ParallaxLayer" parent="Fundo"]
+motion_scale = Vector2(0.75, 0.75)
+
+[node name="Nevoa" type="ColorRect" parent="Fundo/CamadaNevoa"]
+offset_left = -600.0
+offset_top = 420.0
+offset_right = 2000.0
+offset_bottom = 480.0
+color = Color(0.55, 0.6, 0.65, 0.16)
+
+[node name="Chao" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+position = Vector2(700, 500)
+
+[node name="ColisaoChao" type="CollisionShape2D" parent="Chao"]
+shape = SubResource("RectangleShape2D_chao")
+
+[node name="VisualChao" type="ColorRect" parent="Chao"]
+offset_left = -700.0
+offset_top = -20.0
+offset_right = 700.0
+offset_bottom = 20.0
+color = Color(0.16, 0.17, 0.2, 1)
+
+[node name="Jogador" parent="." instance=ExtResource("1_jogador")]
+position = Vector2(300, 456)

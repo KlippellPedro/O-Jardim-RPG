@@ -1,0 +1,34 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/personagem/jogador.tscn" id="1_jogador"]
+[ext_resource type="PackedScene" path="res://scenes/inimigo/inimigo.tscn" id="2_inimigo"]
+[ext_resource type="PackedScene" path="res://scenes/inimigo/boneco_treino.tscn" id="3_boneco"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_chao"]
+size = Vector2(1000, 40)
+
+[node name="ArenaTeste" type="Node2D"]
+
+[node name="Chao" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+position = Vector2(500, 500)
+
+[node name="ColisaoChao" type="CollisionShape2D" parent="Chao"]
+shape = SubResource("RectangleShape2D_chao")
+
+[node name="VisualChao" type="ColorRect" parent="Chao"]
+offset_left = -500.0
+offset_top = -20.0
+offset_right = 500.0
+offset_bottom = 20.0
+color = Color(0.3, 0.3, 0.32, 1)
+
+[node name="Jogador" parent="." instance=ExtResource("1_jogador")]
+position = Vector2(300, 456)
+
+[node name="Inimigo" parent="." instance=ExtResource("2_inimigo")]
+position = Vector2(650, 460)
+
+[node name="BonecoTreino" parent="." instance=ExtResource("3_boneco")]
+position = Vector2(150, 456)

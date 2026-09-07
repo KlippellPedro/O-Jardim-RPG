@@ -1,0 +1,167 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/personagem/jogador.tscn" id="1_jogador"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_chao"]
+size = Vector2(1300, 40)
+
+[node name="ColoniaIntuneric" type="Node2D"]
+
+[node name="CorTonal" type="CanvasModulate" parent="."]
+color = Color(0.42, 0.44, 0.46, 1)
+
+[node name="Fundo" type="ParallaxBackground" parent="."]
+
+[node name="CamadaPredios" type="ParallaxLayer" parent="Fundo"]
+motion_scale = Vector2(0.1, 0.1)
+
+[node name="Ceu" type="ColorRect" parent="Fundo/CamadaPredios"]
+offset_left = -400.0
+offset_top = -700.0
+offset_right = 1700.0
+offset_bottom = 480.0
+color = Color(0.24, 0.24, 0.27, 1)
+
+[node name="Predio1" type="ColorRect" parent="Fundo/CamadaPredios"]
+offset_left = -100.0
+offset_top = -50.0
+offset_right = 20.0
+offset_bottom = 480.0
+color = Color(0.06, 0.06, 0.08, 1)
+
+[node name="Predio2" type="ColorRect" parent="Fundo/CamadaPredios"]
+offset_left = 40.0
+offset_top = 100.0
+offset_right = 140.0
+offset_bottom = 480.0
+color = Color(0.08, 0.08, 0.1, 1)
+
+[node name="Predio3" type="ColorRect" parent="Fundo/CamadaPredios"]
+offset_left = 160.0
+offset_top = -80.0
+offset_right = 250.0
+offset_bottom = 480.0
+color = Color(0.06, 0.06, 0.08, 1)
+
+[node name="Predio4" type="ColorRect" parent="Fundo/CamadaPredios"]
+offset_left = 280.0
+offset_top = 150.0
+offset_right = 400.0
+offset_bottom = 480.0
+color = Color(0.08, 0.08, 0.1, 1)
+
+[node name="Predio5" type="ColorRect" parent="Fundo/CamadaPredios"]
+offset_left = 430.0
+offset_top = 20.0
+offset_right = 520.0
+offset_bottom = 480.0
+color = Color(0.06, 0.06, 0.08, 1)
+
+[node name="Predio6" type="ColorRect" parent="Fundo/CamadaPredios"]
+offset_left = 550.0
+offset_top = 180.0
+offset_right = 680.0
+offset_bottom = 480.0
+color = Color(0.08, 0.08, 0.1, 1)
+
+[node name="Predio7" type="ColorRect" parent="Fundo/CamadaPredios"]
+offset_left = 720.0
+offset_top = -30.0
+offset_right = 830.0
+offset_bottom = 480.0
+color = Color(0.06, 0.06, 0.08, 1)
+
+[node name="Predio8" type="ColorRect" parent="Fundo/CamadaPredios"]
+offset_left = 870.0
+offset_top = 140.0
+offset_right = 990.0
+offset_bottom = 480.0
+color = Color(0.08, 0.08, 0.1, 1)
+
+[node name="Predio9" type="ColorRect" parent="Fundo/CamadaPredios"]
+offset_left = 1030.0
+offset_top = 60.0
+offset_right = 1150.0
+offset_bottom = 480.0
+color = Color(0.06, 0.06, 0.08, 1)
+
+[node name="Predio10" type="ColorRect" parent="Fundo/CamadaPredios"]
+offset_left = 1190.0
+offset_top = 170.0
+offset_right = 1300.0
+offset_bottom = 480.0
+color = Color(0.08, 0.08, 0.1, 1)
+
+[node name="CamadaCanos" type="ParallaxLayer" parent="Fundo"]
+motion_scale = Vector2(0.45, 0.45)
+
+[node name="Cano1" type="ColorRect" parent="Fundo/CamadaCanos"]
+offset_left = -4.0
+offset_top = -80.0
+offset_right = 4.0
+offset_bottom = 80.0
+position = Vector2(130, 260)
+rotation = 1.4
+color = Color(0.12, 0.12, 0.13, 1)
+
+[node name="Cano2" type="ColorRect" parent="Fundo/CamadaCanos"]
+offset_left = -3.0
+offset_top = -60.0
+offset_right = 3.0
+offset_bottom = 60.0
+position = Vector2(460, 190)
+rotation = 1.55
+color = Color(0.12, 0.12, 0.13, 1)
+
+[node name="Cano3" type="ColorRect" parent="Fundo/CamadaCanos"]
+offset_left = -4.0
+offset_top = -90.0
+offset_right = 4.0
+offset_bottom = 90.0
+position = Vector2(760, 210)
+rotation = 1.35
+color = Color(0.12, 0.12, 0.13, 1)
+
+[node name="Cano4" type="ColorRect" parent="Fundo/CamadaCanos"]
+offset_left = -3.0
+offset_top = -70.0
+offset_right = 3.0
+offset_bottom = 70.0
+position = Vector2(1060, 240)
+rotation = 1.5
+color = Color(0.12, 0.12, 0.13, 1)
+
+[node name="CamadaNevoa" type="ParallaxLayer" parent="Fundo"]
+motion_scale = Vector2(0.75, 0.75)
+
+[node name="Nevoa" type="ColorRect" parent="Fundo/CamadaNevoa"]
+offset_left = -400.0
+offset_top = 420.0
+offset_right = 1700.0
+offset_bottom = 480.0
+color = Color(0.5, 0.5, 0.52, 0.2)
+
+[node name="Chao" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+position = Vector2(650, 500)
+
+[node name="ColisaoChao" type="CollisionShape2D" parent="Chao"]
+shape = SubResource("RectangleShape2D_chao")
+
+[node name="VisualChao" type="ColorRect" parent="Chao"]
+offset_left = -650.0
+offset_top = -20.0
+offset_right = 650.0
+offset_bottom = 20.0
+color = Color(0.2, 0.2, 0.21, 1)
+
+[node name="Calha" type="ColorRect" parent="Chao"]
+offset_left = -650.0
+offset_top = 6.0
+offset_right = 650.0
+offset_bottom = 12.0
+color = Color(0.14, 0.13, 0.13, 1)
+
+[node name="Jogador" parent="." instance=ExtResource("1_jogador")]
+position = Vector2(300, 456)

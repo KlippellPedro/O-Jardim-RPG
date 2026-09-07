@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 620" width="500" height="620">
+  <defs>
+    <style>
+      .canvas { fill: #ffffff; stroke: #000000; stroke-width: 2; }
+      .guia { stroke: #4aa8ff; stroke-width: 1.5; stroke-dasharray: 6 5; fill: none; }
+      .eixo { stroke: #4aa8ff; stroke-width: 1; stroke-dasharray: 2 4; }
+      .silhueta { fill: none; stroke: #c9c9c9; stroke-width: 2; }
+      .junta { fill: #e0403f; stroke: #7a1f1f; stroke-width: 1.5; }
+      .rotulo { font-family: Arial, sans-serif; font-size: 13px; fill: #333333; }
+      .titulo { font-family: Arial, sans-serif; font-size: 15px; fill: #111111; font-weight: bold; }
+    </style>
+  </defs>
+
+  <rect class="canvas" x="10" y="10" width="480" height="600" />
+  <text class="titulo" x="30" y="35">Guia de proporção — canvas 400x560 (área útil)</text>
+
+  <!-- Eixo central -->
+  <line class="eixo" x1="250" y1="50" x2="250" y2="590" />
+
+  <!-- Linhas guia horizontais -->
+  <line class="guia" x1="30" y1="50" x2="470" y2="50" />
+  <text class="rotulo" x="34" y="46">topo da cabeça</text>
+
+  <line class="guia" x1="30" y1="190" x2="470" y2="190" />
+  <text class="rotulo" x="34" y="186">ombro / base do pescoço</text>
+
+  <line class="guia" x1="30" y1="370" x2="470" y2="370" />
+  <text class="rotulo" x="34" y="366">quadril / cintura</text>
+
+  <line class="guia" x1="30" y1="480" x2="470" y2="480" />
+  <text class="rotulo" x="34" y="476">joelho</text>
+
+  <line class="guia" x1="30" y1="590" x2="470" y2="590" />
+  <text class="rotulo" x="34" y="605">chão (pé)</text>
+
+  <!-- Silhueta de referência (só pra orientar, não é arte final) -->
+  <ellipse class="silhueta" cx="250" cy="120" rx="70" ry="70" />
+  <path class="silhueta" d="M 180 190 Q 250 170 320 190 L 300 370 Q 250 385 200 370 Z" />
+  <line class="silhueta" x1="200" y1="370" x2="210" y2="480" />
+  <line class="silhueta" x1="210" y1="480" x2="215" y2="590" />
+  <line class="silhueta" x1="300" y1="370" x2="290" y2="480" />
+  <line class="silhueta" x1="290" y1="480" x2="285" y2="590" />
+  <line class="silhueta" x1="180" y1="200" x2="150" y2="320" />
+  <line class="silhueta" x1="320" y1="200" x2="350" y2="320" />
+
+  <!-- Juntas marcadas -->
+  <circle class="junta" cx="250" cy="190" r="6" />
+  <text class="rotulo" x="360" y="194">ombro (esq. e dir., espelhado do eixo)</text>
+
+  <circle class="junta" cx="180" cy="260" r="6" />
+  <circle class="junta" cx="320" cy="260" r="6" />
+  <text class="rotulo" x="360" y="264">cotovelo</text>
+
+  <circle class="junta" cx="150" cy="320" r="6" />
+  <circle class="junta" cx="350" cy="320" r="6" />
+  <text class="rotulo" x="360" y="324">pulso / mão</text>
+
+  <circle class="junta" cx="215" cy="370" r="6" />
+  <circle class="junta" cx="285" cy="370" r="6" />
+  <text class="rotulo" x="360" y="374">quadril</text>
+
+  <circle class="junta" cx="210" cy="480" r="6" />
+  <circle class="junta" cx="290" cy="480" r="6" />
+  <text class="rotulo" x="360" y="484">joelho</text>
+
+  <circle class="junta" cx="215" cy="590" r="6" />
+  <circle class="junta" cx="285" cy="590" r="6" />
+  <text class="rotulo" x="360" y="594">tornozelo / pé</text>
+
+  <text class="rotulo" x="30" y="30">altura total ≈ 4 cabeças (medida da cabeça = raio 70 × 2 = 140)</text>
+</svg>
