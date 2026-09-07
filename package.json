@@ -36,6 +36,10 @@
     "generate:server-content": "node --import ./tests/frontend/registerTsLoader.mjs tools/export-server-content.mjs",
     "check:server-content": "node --import ./tests/frontend/registerTsLoader.mjs tools/export-server-content.mjs --check",
     "prebuild": "npm run generate:server-content",
+    "docs:props": "node tools/documentos-mundo/gerar-props.mjs",
+    "docs:guias": "node tools/documentos-mundo/gerar.mjs",
+    "docs:livro": "node --import ./tests/frontend/registerTsLoader.mjs tools/documentos-mundo/gerar-livro.mjs",
+    "docs:livro:mestre": "node --import ./tests/frontend/registerTsLoader.mjs tools/documentos-mundo/gerar-livro.mjs --mestre",
     "test:security": "npm run build && node --import ./tests/frontend/registerTsLoader.mjs --test tests/frontend/browserContentBoundary.test.ts"
   },
   "dependencies": {
