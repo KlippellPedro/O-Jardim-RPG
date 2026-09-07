@@ -344,25 +344,27 @@ class RegisterTests(unittest.TestCase):
         self.assertEqual(ctx.exception.status_code, 403)
         self.assertEqual(connection.statements, [])
 
-    def test_creator_email_bypasses_cadastro_fechado_and_downgrades_previous_creator(self):
-        settings = _settings(cadastro="fechado", creator_email="dono@example.com")
-        payload = RegisterInput(email="DONO@example.com", nome_exibicao="Dono", senha="senha-longa-123")
-        rules = [
-            *_RATE_LIMIT_PASSTHROUGH,
-            ("UPDATE usuarios SET papel_plataforma='admin'", None),
-            ("INSERT INTO usuarios", None),
-            ("INSERT INTO sessoes_auth", None),
-            ("DELETE FROM sessoes_auth", None),
-            ("INSERT INTO eventos_auditoria", None),
-        ]
+    def test_creator_email_never_bypasses_closed_or_invite_registration(self):
+        payload = RegisterInput(email="dono@example.com", nome_exibicao="Dono", senha="senha-longa-123")
+        for mode in ("fechado", "convite"):
+            for creator_id in (None, uuid4()):
+                with self.subTest(mode=mode, creator_id=creator_id):
+                    with self.assertRaises(HTTPException) as error:
+                        self._run(payload, _settings(cadastro=mode, creator_email="dono@example.com", creator_user_id=creator_id), list(_RATE_LIMIT_PASSTHROUGH))
+                    self.assertEqual(error.exception.status_code, 403)
 
-        result, connection, _ = self._run(payload, settings, rules)
-
-        self.assertEqual(result["usuario"]["papel_plataforma"], "criador")
-        self.assertTrue(result["usuario"]["admin_plataforma"])
-        self.assertTrue(any(
-            s.startswith("UPDATE usuarios SET papel_plataforma='admin'") for s, _ in connection.statements
-        ))
+    def test_creator_email_open_registration_is_only_player(self):
+        payload = RegisterInput(email="dono@example.com", nome_exibicao="Dono", senha="senha-longa-123")
+        rules = [*_RATE_LIMIT_PASSTHROUGH, ("INSERT INTO usuarios", None),
+                 ("INSERT INTO sessoes_auth", None), ("DELETE FROM sessoes_auth", None),
+                 ("INSERT INTO eventos_auditoria", None)]
+        for creator_id in (None, uuid4()):
+            result, connection, _ = self._run(payload, _settings(creator_email="dono@example.com", creator_user_id=creator_id), rules)
+            self.assertEqual(result["usuario"]["papel_plataforma"], "player")
+            self.assertFalse(result["usuario"]["admin_plataforma"])
+            self.assertFalse(any(statement.startswith("UPDATE usuarios") for statement, _ in connection.statements))
+            inserted = next(params for statement, params in connection.statements if statement.startswith("INSERT INTO usuarios"))
+            self.assertEqual(inserted[-2:], ("player", False))
 
     def test_requires_invite_code_when_cadastro_exige_convite(self):
         settings = _settings(cadastro="convite")

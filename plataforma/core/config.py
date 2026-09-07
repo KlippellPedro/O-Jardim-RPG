@@ -79,7 +79,7 @@ class Settings:
 
     @property
     def has_creator_rule(self) -> bool:
-        return bool(self.creator_user_id or self.creator_email)
+        return self.creator_user_id is not None
 
     def validate(self) -> None:
         if not self.database_url:

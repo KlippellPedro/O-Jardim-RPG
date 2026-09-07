@@ -192,7 +192,7 @@ class CreatorSettingsTests(unittest.TestCase):
     def test_email_is_normalized_to_lowercase(self):
         settings = self.load(CREATOR_EMAIL="  Dono@Exemplo.com ")
         self.assertEqual(settings.creator_email, "dono@exemplo.com")
-        self.assertTrue(settings.has_creator_rule)
+        self.assertFalse(settings.has_creator_rule)
 
     def test_no_creator_configured(self):
         self.assertFalse(self.load().has_creator_rule)

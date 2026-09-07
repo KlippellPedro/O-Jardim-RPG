@@ -70,9 +70,6 @@ def _require_vehicle_permission(connection, campaign_id: UUID, vehicle_id: UUID,
     Mestre always has full control. Proprietario always has full control.
     """
     access = campaign_access(connection, campaign_id, user_id)
-    if access.manages_content: # Mestre/Assistente
-        return access
-        
     vehicle = connection.execute(
         """
         SELECT proprietario_personagem_id, nivel_acesso_campanha
@@ -83,6 +80,9 @@ def _require_vehicle_permission(connection, campaign_id: UUID, vehicle_id: UUID,
     
     if not vehicle:
         raise HTTPException(status_code=404, detail="Veículo não encontrado.")
+    # O papel vale somente para recursos pertencentes à campanha da URL.
+    if access.manages_content:
+        return access
         
     # Check if user owns the character that is the proprietor
     if vehicle["proprietario_personagem_id"]:

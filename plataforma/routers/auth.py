@@ -161,12 +161,10 @@ def register(
 ):
     email = str(payload.email).strip().lower()
     user_id = uuid4()
-    # A conta configurada em CREATOR_EMAIL pode se cadastrar depois do boot da
-    # API; sem isto ela ficaria como player até o próximo restart.
-    is_creator = bool(settings.creator_email) and email == settings.creator_email
-    role = "criador" if is_creator else "player"
+    # Endereço informado no cadastro não comprova identidade administrativa.
+    role = "player"
 
-    if settings.cadastro_fechado and not is_creator:
+    if settings.cadastro_fechado:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="o cadastro esta fechado; peca a um administrador",
@@ -179,19 +177,8 @@ def register(
     convite = None
     try:
         with database.connection() as connection:
-            # O criador entra sem convite: exigir um travaria o primeiro acesso,
-            # já que ainda não existe ninguém para gerar um convite de plataforma.
-            if settings.cadastro_exige_convite and not is_creator:
+            if settings.cadastro_exige_convite:
                 convite = _validar_convite_plataforma(connection, payload.convite)
-            if is_creator:
-                connection.execute(
-                    """
-                    UPDATE usuarios
-                    SET papel_plataforma='admin', admin_plataforma=TRUE,
-                        atualizado_em=CURRENT_TIMESTAMP
-                    WHERE papel_plataforma='criador'
-                    """
-                )
             connection.execute(
                 """
                 INSERT INTO usuarios
@@ -205,7 +192,7 @@ def register(
                     payload.nome_exibicao,
                     hash_password(payload.senha),
                     role,
-                    is_creator,
+                    False,
                 ),
             )
             if convite is not None:
@@ -240,7 +227,7 @@ def register(
             "id": user_id,
             "email": email,
             "nome_exibicao": payload.nome_exibicao,
-            "admin_plataforma": is_creator,
+            "admin_plataforma": False,
             "papel_plataforma": role,
             "senha_provisoria": False,
         }

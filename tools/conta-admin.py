@@ -268,6 +268,40 @@ def comando_promover(argumentos) -> int:
     return 0
 
 
+def comando_criar(argumentos) -> int:
+    """Provisiona jogador localmente; nunca promove pelo e-mail informado."""
+    from uuid import uuid4
+    sys.path.insert(0, str(RAIZ / "plataforma"))
+    from core.security import hash_password, new_temporary_password
+    from core.audit import record_audit
+    from schemas import RegisterInput
+    from pydantic import ValidationError
+    from psycopg.errors import UniqueViolation
+
+    temporaria = new_temporary_password()
+    try:
+        dados = RegisterInput(email=argumentos.email, nome_exibicao=argumentos.nome, senha=temporaria)
+    except ValidationError:
+        raise SystemExit("E-mail ou nome invalido; confira os dados da nova conta.") from None
+    usuario_id = uuid4()
+    try:
+        with _conectar() as connection, connection.transaction():
+            connection.execute(
+                """INSERT INTO usuarios
+                   (id, email, nome_exibicao, senha_hash, papel_plataforma, admin_plataforma, senha_provisoria)
+                   VALUES (%s, %s, %s, %s, 'player', FALSE, TRUE)""",
+                (usuario_id, str(dados.email).lower(), dados.nome_exibicao, hash_password(temporaria)),
+            )
+            record_audit(connection, action="usuario.provisionado", actor_service="conta-admin-local",
+                         target_type="usuario", target_id=str(usuario_id))
+    except UniqueViolation:
+        raise SystemExit("Ja existe uma conta com esses dados; nenhuma conta foi alterada.") from None
+    print(f"Jogador criado. UUID: {usuario_id}")
+    print(f"Senha provisoria (entregue apenas ao titular): {temporaria}")
+    print("Confira a identidade antes de configurar CREATOR_USER_ID ou promover a conta.")
+    return 0
+
+
 def main() -> int:
     _carregar_env()
     parser = argparse.ArgumentParser(
@@ -277,6 +311,9 @@ def main() -> int:
     sub = parser.add_subparsers(dest="comando", required=True)
 
     sub.add_parser("listar", help="mostra as contas e seus cargos")
+    criar = sub.add_parser("criar", help="provisiona jogador com senha provisoria, direto no banco")
+    criar.add_argument("email")
+    criar.add_argument("--nome", required=True)
 
     ajuda_api = (
         "usa a API em vez do banco (para quando o Postgres so aceita conexao "
@@ -294,6 +331,7 @@ def main() -> int:
     argumentos = parser.parse_args()
     return {
         "listar": comando_listar,
+        "criar": comando_criar,
         "senha": comando_senha,
         "promover": comando_promover,
     }[argumentos.comando](argumentos)

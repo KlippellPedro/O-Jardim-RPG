@@ -48,10 +48,9 @@ CADASTRO=convite   # exige código de convite de campanha (padrão em produção
 CADASTRO=fechado   # só o administrador cria contas
 ```
 
-No modo `convite` a conta já entra na campanha do código usado, com o papel do
-convite, e o mestre é avisado. A conta de `CREATOR_EMAIL` se cadastra em
-qualquer modo — sem isso o primeiro acesso ficaria travado, já que não existe
-campanha para convidar ninguém antes da primeira conta.
+No modo `convite`, o cadastro exige um convite válido de plataforma. Todos os
+cadastros públicos criam jogadores, sem exceção por e-mail. No modo `fechado`,
+use o procedimento administrativo para criar a primeira conta.
 
 Rotas públicas têm limite de tentativas por origem (`core/rate_limit_auth.py`): 3
 cadastros e 5 pedidos de senha por hora, 5 logins por 15 minutos. A contagem
@@ -118,7 +117,7 @@ Variáveis de produção da plataforma:
 APP_ENV=production
 DATABASE_URL=postgresql://...@<hostname-real-do-banco>:5432/...
 SERVICE_API_KEY=segredo-compartilhado-apenas-com-os-bots
-CREATOR_EMAIL=dono@exemplo.com
+CREATOR_USER_ID=<uuid-da-conta-confirmada>
 CADASTRO=convite
 COOKIE_SECURE=true
 ALLOWED_ORIGINS=https://jardim-rpg.discloud.app
@@ -129,20 +128,21 @@ Nunca inclua o `.env` real no ZIP ou no Git. Configure os valores pelo painel.
 
 ## Conta criador
 
-O cargo `criador` é único e reúne os acessos de administrador e de mestre. Ele é
-definido por configuração do servidor — o painel nunca concede nem remove esse
-cargo. Há duas formas:
+O cargo `criador` é único e reúne os acessos de administrador e de mestre.
+O cadastro público nunca concede esse cargo. `CREATOR_EMAIL` é legado e não
+promove contas, nem no cadastro nem no reinício da API.
 
-- `CREATOR_EMAIL`: a conta com esse e-mail é promovida no boot da API e, se
-  ainda não existir, no momento do cadastro. É a forma usada hoje
-  (`dono@exemplo.com`). Como o e-mail é público, cadastre-se com ele antes
-  de divulgar o site — quem se cadastrar primeiro com aquele endereço recebe o
-  cargo.
-- `CREATOR_USER_ID`: o UUID de uma conta já criada, disponível em
-  `GET /api/v1/auth/eu`. Não pode ser adivinhado e tem prioridade sobre o
-  e-mail; prefira migrar para ele depois que a conta existir.
+Para uma conta já estabelecida e cuja identidade foi conferida, configure seu
+`CREATOR_USER_ID` (UUID) no servidor. Alternativamente, o operador pode usar
+`tools/conta-admin.py promover EMAIL --api URL` com a credencial administrativa.
+Confirme a identidade da conta antes de qualquer promoção: o e-mail informado
+no cadastro não é prova de posse do endereço. Para provisionar uma conta quando o cadastro estiver fechado, o operador com
+acesso ao PostgreSQL usa `tools/conta-admin.py criar EMAIL --nome NOME`.
+O comando cria um jogador com senha provisória; depois de conferir o UUID,
+configure `CREATOR_USER_ID` ou execute a promoção administrativa separadamente.
 
-Promover uma segunda conta rebaixa a anterior para `admin` automaticamente.
+Contas que já são criadoras mantêm o papel, mesmo sem variável de bootstrap.
+Promover outra conta explicitamente rebaixa a anterior para `admin`.
 
 ## Backup e restauração
 

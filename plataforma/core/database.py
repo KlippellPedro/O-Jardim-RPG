@@ -84,33 +84,21 @@ class Database:
         creator_user_id: UUID | None,
         creator_email: str | None = None,
     ) -> bool:
-        """Promove somente a conta explicitamente configurada como criador.
+        """Promove apenas o UUID configurado de uma conta já estabelecida.
 
-        `CREATOR_USER_ID` continua sendo a forma mais forte: o UUID não pode ser
-        adivinhado. `CREATOR_EMAIL` existe para o caso comum de um dono único —
-        é resolvido para o UUID da conta com aquele e-mail, que é único no banco.
-        Se a conta ainda não existir, nada é alterado; o cadastro promove depois.
+        creator_email é aceito por compatibilidade, mas nunca autoriza promoção.
+        Uma conta já promovida administrativamente não é rebaixada por sua ausência.
         """
-        if creator_user_id is None and not creator_email:
+        if creator_user_id is None:
             return False
         with self.connection() as connection:
-            if creator_user_id is not None:
-                target = connection.execute(
-                    """
-                    SELECT id, papel_plataforma
-                    FROM usuarios WHERE id=%s AND ativo=TRUE FOR UPDATE
-                    """,
-                    (creator_user_id,),
-                ).fetchone()
-            else:
-                target = connection.execute(
-                    """
-                    SELECT id, papel_plataforma
-                    FROM usuarios
-                    WHERE LOWER(email)=LOWER(%s) AND ativo=TRUE FOR UPDATE
-                    """,
-                    (creator_email,),
-                ).fetchone()
+            target = connection.execute(
+                """
+                SELECT id, papel_plataforma
+                FROM usuarios WHERE id=%s AND ativo=TRUE FOR UPDATE
+                """,
+                (creator_user_id,),
+            ).fetchone()
             if not target:
                 return False
             creator_user_id = target["id"]

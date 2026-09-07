@@ -25,9 +25,6 @@ router = APIRouter(prefix="/campanhas/{campaign_id}/propriedades", tags=["propri
 
 def _require_property_permission(connection, campaign_id: UUID, property_id: UUID, user_id: UUID, required_level: str):
     access = campaign_access(connection, campaign_id, user_id)
-    if access.manages_content: 
-        return access
-        
     prop = connection.execute(
         """
         SELECT proprietario_personagem_id, nivel_acesso_campanha
@@ -38,6 +35,9 @@ def _require_property_permission(connection, campaign_id: UUID, property_id: UUI
     
     if not prop:
         raise HTTPException(status_code=404, detail="Propriedade não encontrada.")
+    # Gestores também precisam passar pela verificação de isolamento.
+    if access.manages_content:
+        return access
         
     if prop["proprietario_personagem_id"]:
         char_owner = connection.execute(

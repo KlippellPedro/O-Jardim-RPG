@@ -86,16 +86,10 @@ async def lifespan(app: FastAPI):
         )
     database = Database(settings.database_url, settings.startup_timeout)
     database.open()
-    if not settings.has_creator_rule:
-        log.warning(
-            "CREATOR_USER_ID/CREATOR_EMAIL nao configurados; nenhuma conta recebera o cargo criador."
-        )
-    elif not database.configure_creator(settings.creator_user_id, settings.creator_email):
-        # Conta ainda não cadastrada: o próprio registro promove quando o
-        # e-mail configurado se cadastrar.
-        log.warning(
-            "Conta criador ainda nao encontrada; o cargo sera aplicado quando ela existir."
-        )
+    if settings.creator_email:
+        log.warning("CREATOR_EMAIL nao concede privilegios; configure CREATOR_USER_ID ou use a ferramenta administrativa.")
+    if settings.creator_user_id and not database.configure_creator(settings.creator_user_id):
+        log.warning("CREATOR_USER_ID nao corresponde a uma conta ativa; nenhuma conta foi promovida.")
     sync_shop_catalog(database, _DATA_ROOT)
     seed_world_library(database, _DATA_ROOT)
     carregar_catalogos(_DATA_ROOT)
