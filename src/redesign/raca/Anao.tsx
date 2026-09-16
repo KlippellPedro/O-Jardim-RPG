@@ -14,7 +14,7 @@ export const Anao = ({ raca }: { raca: IRaca }) => {
       {/* Mountain Background */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
-        style={{ backgroundImage: "url('/assets/img/anao_bg.webp')" }}
+        style={{ backgroundImage: "url('/assets/img/anao_fantasy_bg.webp')" }}
       >
         <div className="absolute inset-0 bg-stone-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#120a06]/40 via-transparent to-[#120a06]/90" />

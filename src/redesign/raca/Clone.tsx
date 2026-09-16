@@ -13,7 +13,7 @@ export const Clone = ({ raca }: { raca: IRaca }) => {
       {/* Bio-Tech Background */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
-        style={{ backgroundImage: "url('/assets/img/clone_bg.webp')" }}
+        style={{ backgroundImage: "url('/assets/img/clone_fantasy_bg.webp')" }}
       >
         <div className="absolute inset-0 bg-emerald-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#010805]/40 via-transparent to-[#010805]/90" />

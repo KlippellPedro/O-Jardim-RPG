@@ -11,7 +11,7 @@ export const ViajanteClasse = ({ classe }: { classe: IClasse }) => {
   return (
     <div className="min-h-screen text-green-50 p-8 selection:bg-green-500/30 overflow-hidden relative">
       {/* 3D WebGL Background */}
-      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/viajanteclasse_bg.webp')" }} />
+      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/viajante-classe_class_fantasy_bg.webp')" }} />
 
       {/* Nature / Travel Background Effects */}
       <div className="fixed inset-0 pointer-events-none z-0">
@@ -168,4 +168,3 @@ export const ViajanteClasse = ({ classe }: { classe: IClasse }) => {
 };
 
 export default ViajanteClasse;
-

@@ -5,15 +5,13 @@ import { PremiumCard } from '../components/premium/PremiumCard';
 import { DetalhesClasse } from '../../pages/Regras/components/DetalhesClasse';
 import { obterTemaPorId } from '../themeMap';
 
-// Sem arte propria ainda: fundo em gradiente puro (sem imagem), pra nao
-// referenciar um asset _bg.webp que nao existe. Trocar por arte real quando
-// tiver.
 export const Devorador = ({ classe }: { classe: IClasse }) => {
   const tema = obterTemaPorId(classe.id);
 
   return (
     <div className="min-h-screen text-red-50 p-8 selection:bg-red-500/30 overflow-hidden relative">
       <div className="fixed inset-0 z-0 bg-[#0a0303]" />
+      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/devorador_class_fantasy_bg.webp')" }} />
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-[20%] right-[15%] w-[55%] h-[55%] bg-red-900/20 blur-[160px] mix-blend-screen" />
         <motion.div

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-26T01:23:46.975Z",
+  "generatedAt": "2026-09-12T01:15:40.023Z",
   "levels": [
     1,
     5,
@@ -15,8 +15,8 @@
     "scope": "Mede recursos, vagas, dano médio e palavras de risco. Efeitos narrativos e controle ainda exigem playtest."
   },
   "summary": {
-    "classes": 28,
-    "weapons": 79,
+    "classes": 29,
+    "weapons": 87,
     "spells": 352,
     "invalidResourceBudgets": 0,
     "unboundedWeapons": 0,
@@ -1320,7 +1320,7 @@
         }
       ],
       "alertasTexto": [
-        "Konsō: Funeral da Alma"
+        "Zanpakutō"
       ]
     },
     {
@@ -2041,6 +2041,78 @@
           "poderes": 8,
           "grausTreinamento": 4,
           "habilidades": 11
+        }
+      ],
+      "alertasTexto": []
+    },
+    {
+      "id": "elementarista",
+      "titulo": "Elementarista",
+      "categoria": "especial",
+      "recursosPorNivel": 7,
+      "referencias": [
+        {
+          "nivel": 1,
+          "vida": 16,
+          "mana": 8,
+          "defesaNatural": 11,
+          "poderes": 0,
+          "grausTreinamento": 1,
+          "habilidades": 1
+        },
+        {
+          "nivel": 5,
+          "vida": 36,
+          "mana": 24,
+          "defesaNatural": 13,
+          "poderes": 1,
+          "grausTreinamento": 1,
+          "habilidades": 4
+        },
+        {
+          "nivel": 10,
+          "vida": 61,
+          "mana": 44,
+          "defesaNatural": 16,
+          "poderes": 3,
+          "grausTreinamento": 2,
+          "habilidades": 6
+        },
+        {
+          "nivel": 15,
+          "vida": 86,
+          "mana": 64,
+          "defesaNatural": 18,
+          "poderes": 5,
+          "grausTreinamento": 3,
+          "habilidades": 11
+        },
+        {
+          "nivel": 20,
+          "vida": 111,
+          "mana": 84,
+          "defesaNatural": 21,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 15
+        },
+        {
+          "nivel": 30,
+          "vida": 166,
+          "mana": 119,
+          "defesaNatural": 26,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 15
+        },
+        {
+          "nivel": 40,
+          "vida": 221,
+          "mana": 154,
+          "defesaNatural": 31,
+          "poderes": 8,
+          "grausTreinamento": 4,
+          "habilidades": 15
         }
       ],
       "alertasTexto": []
@@ -5590,6 +5662,16 @@
       "autorizacaoMestre": true
     },
     {
+      "id": "reliquia-keraunos",
+      "titulo": "Keraunos",
+      "raridade": "reliquia da criacao",
+      "dano": "8d12+18",
+      "mediaNormal": 70,
+      "mediaComCritico": 80.5,
+      "nivelRecomendado": 35,
+      "autorizacaoMestre": true
+    },
+    {
       "id": "reliquia-martelo-chamas",
       "titulo": "Martelo das Chamas",
       "raridade": "reliquia da criacao",
@@ -5610,8 +5692,38 @@
       "autorizacaoMestre": true
     },
     {
+      "id": "reliquia-durandal",
+      "titulo": "Durandal",
+      "raridade": "reliquia da criacao",
+      "dano": "10d10+12",
+      "mediaNormal": 67,
+      "mediaComCritico": 77.05,
+      "nivelRecomendado": 35,
+      "autorizacaoMestre": true
+    },
+    {
       "id": "reliquia-gungnir",
       "titulo": "Gungnir",
+      "raridade": "reliquia da criacao",
+      "dano": "8d12+14",
+      "mediaNormal": 66,
+      "mediaComCritico": 75.89999999999999,
+      "nivelRecomendado": 35,
+      "autorizacaoMestre": true
+    },
+    {
+      "id": "reliquia-gae-bolg",
+      "titulo": "Gáe Bolg",
+      "raridade": "reliquia da criacao",
+      "dano": "8d12+14",
+      "mediaNormal": 66,
+      "mediaComCritico": 72.60000000000001,
+      "nivelRecomendado": 35,
+      "autorizacaoMestre": true
+    },
+    {
+      "id": "reliquia-kusanagi",
+      "titulo": "Kusanagi no Tsurugi",
       "raridade": "reliquia da criacao",
       "dano": "8d12+14",
       "mediaNormal": 66,
@@ -5640,6 +5752,26 @@
       "autorizacaoMestre": true
     },
     {
+      "id": "reliquia-arco-hou-yi",
+      "titulo": "Arco de Hou Yi",
+      "raridade": "reliquia da criacao",
+      "dano": "8d12+12",
+      "mediaNormal": 64,
+      "mediaComCritico": 73.6,
+      "nivelRecomendado": 35,
+      "autorizacaoMestre": true
+    },
+    {
+      "id": "reliquia-sharur",
+      "titulo": "Sharur",
+      "raridade": "reliquia da criacao",
+      "dano": "8d12+12",
+      "mediaNormal": 64,
+      "mediaComCritico": 73.6,
+      "nivelRecomendado": 35,
+      "autorizacaoMestre": true
+    },
+    {
       "id": "reliquia-triceratops",
       "titulo": "Triceratops",
       "raridade": "reliquia da criacao",
@@ -5658,66 +5790,6 @@
       "mediaComCritico": 71.3,
       "nivelRecomendado": 35,
       "autorizacaoMestre": true
-    },
-    {
-      "id": "bazuca",
-      "titulo": "Bazuca",
-      "raridade": "lendario",
-      "dano": "10d8+4d4",
-      "mediaNormal": 55,
-      "mediaComCritico": 60.50000000000001,
-      "nivelRecomendado": 25,
-      "autorizacaoMestre": true
-    },
-    {
-      "id": "arma-lamina-monomolecular",
-      "titulo": "Lâmina Monomolecular",
-      "raridade": "lendario",
-      "dano": "4d10+8",
-      "mediaNormal": 30,
-      "mediaComCritico": 31.5,
-      "nivelRecomendado": 25,
-      "autorizacaoMestre": true
-    },
-    {
-      "id": "arma-sniper-antimateria",
-      "titulo": "Fuzil Sniper de Antimatéria",
-      "raridade": "epico",
-      "dano": "4d10+4",
-      "mediaNormal": 26,
-      "mediaComCritico": 27.3,
-      "nivelRecomendado": null,
-      "autorizacaoMestre": false
-    },
-    {
-      "id": "rifle-de-precisao",
-      "titulo": "Rifle de Precisão",
-      "raridade": "epico",
-      "dano": "4d10",
-      "mediaNormal": 22,
-      "mediaComCritico": 24.200000000000003,
-      "nivelRecomendado": null,
-      "autorizacaoMestre": false
-    },
-    {
-      "id": "minigun",
-      "titulo": "Minigun",
-      "raridade": "epico",
-      "dano": "3d12",
-      "mediaNormal": 19.5,
-      "mediaComCritico": 21.450000000000003,
-      "nivelRecomendado": null,
-      "autorizacaoMestre": false
-    },
-    {
-      "id": "awp",
-      "titulo": "AWP",
-      "raridade": "epico",
-      "dano": "3d12",
-      "mediaNormal": 19.5,
-      "mediaComCritico": 21.450000000000003,
-      "nivelRecomendado": null,
-      "autorizacaoMestre": false
     }
   ]
 }

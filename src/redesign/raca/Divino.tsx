@@ -41,7 +41,7 @@ export const Divino = ({ raca }: DivinoProps) => {
   const racaSomenteComDominios = { ...raca, naturezas_divinas: [] };
   const imagemFundo = typeof raca.imagem_fundo === 'string' && raca.imagem_fundo
     ? raca.imagem_fundo
-    : '/assets/img/deus_bg.webp';
+    : '/assets/img/divino_fantasy_bg.webp';
   const fundoDaPagina = `linear-gradient(180deg, rgba(55,31,0,0.42), rgba(37,20,0,0.82)), url('${imagemFundo}'), radial-gradient(circle at 50% 8%, #9a6700 0%, #5b3500 40%, #2b1900 82%)`;
 
   return (

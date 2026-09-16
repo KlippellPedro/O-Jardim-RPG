@@ -32,4 +32,5 @@ export const CLASSE_PAGES: Record<string, ClassePageComponent> = {
   interceptador: Classes.Interceptador,
   detetive: Classes.Detetive,
   devorador: Classes.Devorador,
+  elementarista: Classes.Elementarista,
 };

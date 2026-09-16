@@ -19,7 +19,7 @@ export const Humano = ({ raca }: HumanoProps) => {
       {/* Background Image */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
-        style={{ backgroundImage: "url('/assets/img/humano_bg.webp')" }}
+        style={{ backgroundImage: "url('/assets/img/humano_fantasy_bg.webp')" }}
       >
         <div className="absolute inset-0 bg-slate-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#070b19]/40 via-transparent to-[#070b19]/90" />

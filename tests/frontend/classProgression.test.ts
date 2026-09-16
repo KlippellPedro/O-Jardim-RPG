@@ -38,8 +38,8 @@ const obterClasse = (id: string) => {
   return classe;
 };
 
-test('publica as 28 classes com orçamento base consistente', () => {
-  assert.equal(classes.length, 28);
+test('publica as 29 classes com orçamento base consistente', () => {
+  assert.equal(classes.length, 29);
   for (const classe of classes) {
     assert.equal(classe.vida + classe.mana, 7, `Orçamento inválido em ${classe.titulo}`);
     assert.equal(classe.recursos_provisorios, false, `Classe provisória: ${classe.titulo}`);
@@ -137,12 +137,12 @@ test('Ação Completa usada pelas habilidades possui custo definido', () => {
   assert.match(combate.corpo, /Ação Completa:<\/strong> consome a Ação Padrão e a Ação de Movimento/i);
 });
 
-test('separa 18 classes comuns e 10 especiais por Árvore', () => {
+test('separa 18 classes comuns e 11 especiais por Árvore', () => {
   const common = classes.filter(classe => classe.categoria === 'padrao');
   const special = classes.filter(classe => classe.categoria !== 'padrao');
 
   assert.equal(common.length, 18);
-  assert.equal(special.length, 10);
+  assert.equal(special.length, 11);
   assert.ok(common.every(classe => classe.disponibilidade === 'geral' && classe.arvore === null));
   assert.ok(common.every(classe => !classe.arvores?.length));
   assert.ok(special.every(classe => classe.disponibilidade === 'restrita'));
@@ -251,16 +251,16 @@ test('Sintonizador, Ritualista e Detetive explicitam custos e exceções', () =>
 
 test('mantém o mapa temático das classes especiais', () => {
   const expected: Record<string, string[]> = {
-    aethel: ['cartista-arcano', 'invocador'],
-    ousias: ['cartista-arcano', 'invocador'],
-    keryx: ['cartista-arcano', 'interceptador', 'invocador'],
-    haemus: ['cacador-das-almas', 'cartista-arcano', 'invocador'],
-    ignis: ['cartista-arcano', 'invocador', 'viajante-classe'],
-    moros: ['campeao-dimensional', 'cartista-arcano', 'invocador'],
-    aperion: ['cartista-arcano', 'guia-dimensional', 'invocador', 'viajante-classe'],
-    chronus: ['cartista-arcano', 'invocador', 'viajante-classe'],
-    erebus: ['cartista-arcano', 'invocador', 'pirata-amaldicoado'],
-    'mulher-carmesim': ['cartista-arcano', 'devorador', 'escritor-de-contos', 'invocador'],
+    aethel: ['campeao-dimensional', 'cartista-arcano', 'invocador'],
+    ousias: ['campeao-dimensional', 'cartista-arcano', 'invocador'],
+    keryx: ['campeao-dimensional', 'cartista-arcano', 'interceptador', 'invocador'],
+    haemus: ['cacador-das-almas', 'campeao-dimensional', 'cartista-arcano', 'invocador'],
+    ignis: ['campeao-dimensional', 'cartista-arcano', 'invocador', 'viajante-classe'],
+    moros: ['campeao-dimensional', 'cartista-arcano', 'elementarista', 'invocador'],
+    aperion: ['campeao-dimensional', 'cartista-arcano', 'guia-dimensional', 'invocador', 'viajante-classe'],
+    chronus: ['campeao-dimensional', 'cartista-arcano', 'invocador', 'viajante-classe'],
+    erebus: ['campeao-dimensional', 'cartista-arcano', 'invocador', 'pirata-amaldicoado'],
+    'mulher-carmesim': ['campeao-dimensional', 'cartista-arcano', 'devorador', 'escritor-de-contos', 'invocador'],
   };
 
   for (const [treeId, ids] of Object.entries(expected)) {
@@ -309,7 +309,7 @@ test('distingue material enviado de propostas originais', () => {
   const proposed = classes.filter(classe => classe.origem_conteudo === 'proposta_original_balanceada');
 
   assert.equal(revised.length, 14);
-  assert.equal(proposed.length, 14);
+  assert.equal(proposed.length, 15);
   assert.deepEqual(
     proposed.map(classe => classe.id).sort(),
     [
@@ -320,6 +320,7 @@ test('distingue material enviado de propostas originais', () => {
       'cozinheiro',
       'detetive',
       'devorador',
+      'elementarista',
       'escritor-de-contos',
       'guia-dimensional',
       'interceptador',
@@ -348,14 +349,95 @@ test('preserva os marcos das duas classes previamente publicadas', () => {
   assert.equal(obterProximaProgressao(obterClasse('ninja'), 20), null);
 });
 
-test('remove Elementarista e publica as novas classes mágicas', () => {
-  assert.equal(classes.some(classe => classe.id === 'elementarista'), false);
+test('publica Elementarista como especial de Baluarte e mantém as classes mágicas', () => {
+  const elementarista = obterClasse('elementarista');
+  assert.equal(elementarista.categoria, 'esquecida');
+  assert.deepEqual(elementarista.arvores, ['moros']);
+  assert.deepEqual(elementarista.progressao_magia?.tradicoes, ['Domínio Elemental', 'Canalização']);
+  assert.equal(elementarista.progressao_magia?.marcos?.[0]?.vagas, 1);
+  const polifonia = elementarista.habilidades?.find(item => item.id === 'afinidade-elemental');
+  assert.equal(polifonia?.titulo, 'Polifonia Elemental');
+  assert.equal(polifonia?.escolha_opcoes?.total, 1);
+  assert.match(polifonia?.descricao || '', /libera as magias Elementais/i);
+  assert.match(polifonia?.descricao || '', /uma vaga de magia/i);
+  assert.match(polifonia?.descricao || '', /Avatar pode declarar qualquer elemento já aprendido/i);
+  assert.deepEqual(elementarista.habilidades?.find(item => item.id === 'caminho-do-avatar')?.niveis, [5, 8, 11, 14, 17, 20]);
+  const derivacoes = elementarista.habilidades?.find(item => item.id === 'derivacao-desperta');
+  assert.equal(derivacoes?.titulo, 'Derivações Harmônicas');
+  assert.equal(derivacoes?.opcoes?.length, 14);
+  assert.ok(derivacoes?.opcoes?.every(item => /Efeito harmônico:/i.test(item.descricao)), 'Toda derivação precisa publicar o efeito que aplica');
+
+  const eventos = new Set((elementarista.eventos || []).map(item => item.titulo));
+  for (const marco of elementarista.progressao || []) {
+    for (const recompensa of marco.recompensas || []) {
+      if (recompensa.tipo === 'evento') assert.ok(eventos.has(recompensa.titulo), `Evento sem regra publicada: ${recompensa.titulo}`);
+    }
+  }
+
+  const textoPoderes = (elementarista.poderes || []).map(item => item.descricao).join(' ');
+  assert.doesNotMatch(textoPoderes, /Exige (Terra|Água|Fogo|Ar|Raio|Luz|Escuridão) dominad[ao]/i);
+  assert.ok((elementarista.poderes || []).every(item => /element|derivaç/i.test(`${item.titulo} ${item.descricao}`)), 'Todo poder deve funcionar pelo elemento dominado ou por sua derivação');
+  assert.ok((elementarista.poderes || []).every(item => item.acao && item.alcance && item.duracao), 'Todo poder precisa declarar ação, alcance e duração');
+
+  const dominio = elementarista.habilidades?.find(item => item.id === 'dominio-da-derivacao');
+  assert.match(dominio?.descricao || '', /uma vez por rodada/i);
+  assert.match(dominio?.descricao || '', /um único alvo, ponto ou espaço válido/i);
+  assert.match(dominio?.descricao || '', /arredondada para baixo/i);
+  const apogeu = elementarista.habilidades?.find(item => item.id === 'apogeu-elemental');
+  assert.match(apogeu?.descricao || '', /Afinidade única/i);
+  assert.match(apogeu?.descricao || '', /Avatar desperto/i);
+  assert.match(apogeu?.descricao || '', /Descontos de Mana não se acumulam/i);
+
+  const confrontos = elementarista.vantagens_elementais;
+  assert.equal(confrontos?.entradas?.length, 7);
+  assert.match(confrontos?.regra || '', /se enfrentam diretamente/i);
+  assert.match(confrontos?.regra || '', /não concede dano extra/i);
+  for (const entrada of confrontos?.entradas || []) {
+    const alvo = confrontos.entradas.find(item => item.elemento === entrada.vantagem_contra);
+    assert.equal(alvo?.desvantagem_contra, entrada.elemento, `${entrada.elemento}: vantagem sem desvantagem inversa`);
+    assert.notEqual(entrada.vantagem_contra, entrada.desvantagem_contra, `${entrada.elemento}: relação se anularia sozinha`);
+  }
   for (const id of ['canalizador', 'sintonizador', 'ritualista', 'interceptador']) obterClasse(id);
   assert.doesNotMatch(REGRAS_OFICIAIS.xp.corpo, /Modelo de progressão de classe/i);
   assert.doesNotMatch(REGRAS_OFICIAIS.xp.corpo, /classes que ainda não receberam progressão própria/i);
   // Prende a REGRA (classe comum não é restrita a Árvore), não a redação exata:
   // o texto do capítulo é reescrito de tempos em tempos e a frase muda de forma.
   assert.match(REGRAS_OFICIAIS.xp.corpo, /Classes? comu(m|ns)[^.]{0,60}qualquer Árvore/i);
+});
+
+test('Caminho do Avatar só abre depois da aptidão e nunca repete o elemento de origem', () => {
+  const base = {
+    arvoreId: 'moros',
+    classes: [{ classeId: 'elementarista', nivel: 20 }],
+    escolhasHabilidade: {
+      'elementarista:afinidade-elemental': ['agua'],
+      'elementarista:julgamento-da-aptidao': ['afinidade-unica'],
+    },
+  };
+  assert.equal(escolhasHabilidadeDisponiveis(base).some(item => item.habilidadeId === 'caminho-do-avatar'), false);
+
+  const avatar = {
+    ...base,
+    escolhasHabilidade: {
+      ...base.escolhasHabilidade,
+      'elementarista:julgamento-da-aptidao': ['avatar-desperto'],
+    },
+  };
+  const caminho = escolhasHabilidadeDisponiveis(avatar).find(item => item.habilidadeId === 'caminho-do-avatar');
+  assert.ok(caminho);
+  assert.equal(caminho.vagas, 6);
+  assert.equal(caminho.opcoes.some(item => item.id === 'agua'), false);
+  assert.equal(caminho.opcoes.length, 6);
+});
+
+test('Derivação Desperta mostra somente o par comum e raro do elemento de origem', () => {
+  const fichaAgua = {
+    arvoreId: 'moros',
+    classes: [{ classeId: 'elementarista', nivel: 12 }],
+    escolhasHabilidade: { 'elementarista:afinidade-elemental': ['agua'] },
+  };
+  const derivacao = escolhasHabilidadeDisponiveis(fichaAgua).find(item => item.habilidadeId === 'derivacao-desperta');
+  assert.deepEqual(derivacao?.opcoes.map(item => item.id), ['agua-gelo', 'agua-sangue']);
 });
 
 test('guia de criação acompanha o assistente e fixa classe especial no nível total 20', () => {
@@ -400,7 +482,7 @@ test('livro público não expõe notas editoriais preservadas na área protegida
     readFileSync(new URL('../../data/regras/mestre-v1.json', import.meta.url), 'utf8'),
   ) as { secoes?: Array<{ id?: string; itens?: string[] }> };
   const notas = regrasMestre.secoes?.find((secao) => secao.id === 'notas-editoriais')?.itens?.join(' ') || '';
-  assert.match(notas, /Elementarista foi removido/i);
+  assert.match(notas, /Elementarista retornou/i);
   assert.match(notas, /tabela antiga de XP/i);
   assert.match(notas, /Alquimista, Comerciante, Guia Dimensional/i);
   assert.match(notas, /raça Entidade permanece deliberadamente adiada/i);
@@ -497,7 +579,7 @@ test('Engenheiro sem escolha feita mostra as vagas livres na ficha', () => {
 
 // Classes já revisadas no molde do Engenheiro: catálogo de escolha publicado,
 // ficha técnica preenchida, DT declarada e perícia concedida pela classe.
-const CLASSES_POLIDAS = ['engenheiro', 'alquimista', 'cozinheiro', 'comerciante', 'ritualista', 'pop-star', 'lutador', 'guerreiro', 'piloto', 'pirata-amaldicoado', 'ninja', 'atirador', 'medico', 'espadachim', 'guardiao', 'cacador', 'canalizador', 'sintonizador', 'campeao-dimensional', 'cartista-arcano', 'guia-dimensional', 'cacador-das-almas', 'escritor-de-contos', 'invocador', 'viajante-classe', 'interceptador', 'detetive', 'devorador'];
+const CLASSES_POLIDAS = ['engenheiro', 'alquimista', 'cozinheiro', 'comerciante', 'ritualista', 'pop-star', 'lutador', 'guerreiro', 'piloto', 'pirata-amaldicoado', 'ninja', 'atirador', 'medico', 'espadachim', 'guardiao', 'cacador', 'canalizador', 'sintonizador', 'campeao-dimensional', 'cartista-arcano', 'guia-dimensional', 'cacador-das-almas', 'escritor-de-contos', 'invocador', 'viajante-classe', 'interceptador', 'detetive', 'devorador', 'elementarista'];
 
 // Um efeito que manda o alvo testar resistência sem dizer contra qual número
 // para a mesa: ou o texto aponta a DT, ou a classe define de onde ela sai.

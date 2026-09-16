@@ -11,7 +11,7 @@ export const Lutador = ({ classe }: { classe: IClasse }) => {
   return (
     <div className="min-h-screen text-red-50 p-8 selection:bg-red-500/30 overflow-hidden relative">
       {/* 3D WebGL Background */}
-      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/lutador_bg.webp')" }} />
+      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/lutador_class_fantasy_bg.webp')" }} />
 
       {/* Brutal Combat Background Effects */}
       <div className="fixed inset-0 pointer-events-none z-0">
@@ -147,4 +147,3 @@ export const Lutador = ({ classe }: { classe: IClasse }) => {
 };
 
 export default Lutador;
-

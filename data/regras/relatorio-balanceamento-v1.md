@@ -10,8 +10,8 @@ Gerado por `npm run audit:balance`. Esta é uma verificação quantitativa, não
 
 ## Resultado automático
 
-- 28 classes analisadas.
-- 79 armas analisadas.
+- 29 classes analisadas.
+- 87 armas analisadas.
 - 0 classes fora do orçamento de 7 pontos de Vida + Mana.
 - 0 armas acima de 75 de dano médio sem bloqueio do Mestre.
 
@@ -36,7 +36,7 @@ Cada célula mostra `Vida/Mana/vagas de poder`.
 | Pirata Amaldiçoado | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
 | Cartista Arcano | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 | Guia Dimensional | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
-| Caçador das Almas | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | Konsō: Funeral da Alma |
+| Caçador das Almas | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | Zanpakutō |
 | Escritor de Contos | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 | Invocador | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 | Viajante | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
@@ -47,6 +47,7 @@ Cada célula mostra `Vida/Mana/vagas de poder`.
 | Chef | comum | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | Cardápio |
 | Detetive | comum | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
 | Devorador | especial | 7 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
+| Elementarista | especial | 7 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
 
 ## Maiores danos do arsenal
 
@@ -54,19 +55,19 @@ Cada célula mostra `Vida/Mana/vagas de poder`.
 |---|---|---|---:|---:|---:|---|
 | Excalibur | reliquia da criacao | 8d12+20 | 72.0 | 82.8 | 35 | sim |
 | Mjolnir | reliquia da criacao | 8d12+18 | 70.0 | 80.5 | 35 | sim |
+| Keraunos | reliquia da criacao | 8d12+18 | 70.0 | 80.5 | 35 | sim |
 | Martelo das Chamas | reliquia da criacao | 8d12+16 | 68.0 | 78.2 | 35 | sim |
 | Murasame | reliquia da criacao | 8d12+16 | 68.0 | 71.4 | 35 | sim |
+| Durandal | reliquia da criacao | 10d10+12 | 67.0 | 77.0 | 35 | sim |
 | Gungnir | reliquia da criacao | 8d12+14 | 66.0 | 75.9 | 35 | sim |
+| Gáe Bolg | reliquia da criacao | 8d12+14 | 66.0 | 72.6 | 35 | sim |
+| Kusanagi no Tsurugi | reliquia da criacao | 8d12+14 | 66.0 | 75.9 | 35 | sim |
 | Masamune | reliquia da criacao | 10d10+10 | 65.0 | 74.8 | 35 | sim |
 | Rhaast | reliquia da criacao | 8d12+12 | 64.0 | 73.6 | 35 | sim |
+| Arco de Hou Yi | reliquia da criacao | 8d12+12 | 64.0 | 73.6 | 35 | sim |
+| Sharur | reliquia da criacao | 8d12+12 | 64.0 | 73.6 | 35 | sim |
 | Triceratops | reliquia da criacao | 10d10+8 | 63.0 | 72.4 | 35 | sim |
 | Zangetsu | reliquia da criacao | 8d12+10 | 62.0 | 71.3 | 35 | sim |
-| Bazuca | lendario | 10d8+4d4 | 55.0 | 60.5 | 25 | sim |
-| Lâmina Monomolecular | lendario | 4d10+8 | 30.0 | 31.5 | 25 | sim |
-| Fuzil Sniper de Antimatéria | epico | 4d10+4 | 26.0 | 27.3 | não definido | não |
-| Rifle de Precisão | epico | 4d10 | 22.0 | 24.2 | não definido | não |
-| Minigun | epico | 3d12 | 19.5 | 21.5 | não definido | não |
-| AWP | epico | 3d12 | 19.5 | 21.5 | não definido | não |
 
 ## Magias publicadas para playtest
 

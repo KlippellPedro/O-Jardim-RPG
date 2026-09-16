@@ -84,7 +84,7 @@ const FUNDOS_RACA: Record<string, string> = {
 const GRUPOS_EFEITO: Array<[EfeitoAtmosfericoFicha, Set<string>]> = [
   ['tecnologico', new Set(['piloto', 'engenheiro', 'interceptador', 'automato', 'clone', 'sintonizador'])],
   ['ondas', new Set(['pirata-amaldicoado', 'sereia', 'slime', 'canalizador'])],
-  ['brasas', new Set(['guerreiro', 'lutador', 'atirador', 'alquimista', 'cozinheiro', 'devorador'])],
+  ['brasas', new Set(['guerreiro', 'lutador', 'atirador', 'alquimista', 'cozinheiro', 'devorador', 'elementarista'])],
   ['cosmico', new Set(['campeao-dimensional', 'guia-dimensional', 'viajante-classe', 'auleth', 'anomalia', 'onirico'])],
   ['natureza', new Set(['cacador', 'animalia', 'goblim', 'elfo', 'feerico', 'simbionte'])],
   ['nevoa', new Set(['ninja', 'cacador-das-almas', 'vampiro', 'desperto', 'espirito', 'amalgamo', 'entidade'])],
@@ -123,4 +123,3 @@ export const criarTemaVisualFicha = (racaId?: string | null, classeId?: string |
     glow: principal.glow,
   };
 };
-

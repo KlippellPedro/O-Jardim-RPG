@@ -46,13 +46,13 @@
       "titulo": "Império",
       "conteudo": {
         "dimensao": "padrao",
-        "descricao": "O maior fornecedor de guardas e proteção do mundo conhecido, além de centro de mineração e da máquina de conquista de territórios que sustenta as duas coisas.\n\nÉ governado por um imperador, e o trono se chama Kaiser. Quem o ocupa hoje é Augusto I, portador do título de Deus da Guerra e senhor das batalhas - um Campeão Dimensional, a classe exclusiva da Árvore de Baluarte.\n\nO exército imperial conta com 6 mil guerreiros imperiais, 15 mil escravos de guerra e 6 mil comerciantes que mantêm mantimentos e suprimentos em campanha: 27 mil membros ao todo. A proporção diz quase tudo sobre o Império - pra cada soldado livre há mais de dois cativos em campo.",
+        "descricao": "O maior fornecedor de guardas e proteção do mundo conhecido, além de centro de mineração e da máquina de conquista de territórios que sustenta as duas coisas.\n\nÉ governado por um imperador, e o trono se chama Kaiser. Quem o ocupa hoje é Augusto I, portador do título de Deus da Guerra e senhor das batalhas - um Campeão Dimensional nascido na Árvore de Baluarte.\n\nO exército imperial conta com 6 mil guerreiros imperiais, 15 mil escravos de guerra e 6 mil comerciantes que mantêm mantimentos e suprimentos em campanha: 27 mil membros ao todo. A proporção diz quase tudo sobre o Império - pra cada soldado livre há mais de dois cativos em campo.",
         "fundacao": "Ano 1.261.",
         "governo": "Imperial. O trono é o Kaiser; o ocupante atual é Augusto I."
       },
       "_origem": "Conteúdo REAL - transcrito de 'Reinos/Império/Função.md', 'Governo.md', 'Exercito.md' e 'Idade.md'.",
       "_conflito_resolvido": "O cofre usa três nomes que pareciam ser a mesma figura: 'Augusto I' (em Governo.md), 'Kaiser' (arquivo vazio na pasta do Império, e na lista de Soberanos como 'Soberano da Guerra'). Resolvido assim: Kaiser é o TÍTULO/trono, Augusto I é quem senta nele. Isso deixa a lista de Soberanos correta (a Cadeira da Guerra é do Kaiser, não de um indivíduo) sem descartar o nome próprio.",
-      "_nota_ficha": "'Campeão Dimensional' é uma classe real do jogo - data/ficha/classes.json a lista como classe exclusiva da Árvore de Moros (Baluarte). O imperador é, portanto, um canalizador do Fluxo do Físico.",
+      "_nota_ficha": "'Campeão Dimensional' é uma classe real do jogo e aceita personagens de qualquer Árvore. Augusto I pertence a Moros (Baluarte) e, por isso, canaliza o Fluxo do Físico.",
       "_pronto_para_importar": true
     },
     {

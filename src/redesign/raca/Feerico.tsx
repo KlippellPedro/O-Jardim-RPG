@@ -17,7 +17,7 @@ export const Feerico = ({ raca }: FeericoProps) => {
       {/* Fey Background */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
-        style={{ backgroundImage: "url('/assets/img/feerico_bg.webp')" }}
+        style={{ backgroundImage: "url('/assets/img/feerico_fantasy_bg.webp')" }}
       >
         <div className="absolute inset-0 bg-pink-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#110514]/40 via-transparent to-[#110514]/90" />

@@ -26,3 +26,4 @@ export { Ritualista } from './Ritualista';
 export { Interceptador } from './Interceptador';
 export { Detetive } from './Detetive';
 export { Devorador } from './Devorador';
+export { Elementarista } from './Elementarista';

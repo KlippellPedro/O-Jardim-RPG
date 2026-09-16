@@ -14,7 +14,7 @@ export const Gigante = ({ raca }: { raca: IRaca }) => {
       {/* Giant Background */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
-        style={{ backgroundImage: "url('/assets/img/gigante_bg.webp')" }}
+        style={{ backgroundImage: "url('/assets/img/gigante_fantasy_bg.webp')" }}
       >
         <div className="absolute inset-0 bg-stone-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f0e0c]/40 via-transparent to-[#0f0e0c]/90" />

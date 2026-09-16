@@ -11,7 +11,7 @@ export const GuiaDimensional = ({ classe }: { classe: IClasse }) => {
   return (
     <div className="min-h-screen text-cyan-50 p-8 selection:bg-cyan-500/30 overflow-hidden relative">
       {/* 3D WebGL Background */}
-      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/guiadimensional_bg.webp')" }} />
+      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/guia-dimensional_class_fantasy_bg.webp')" }} />
 
       {/* Teleportation / Spatial Matrix Background Effects */}
       <div className="fixed inset-0 pointer-events-none z-0">
@@ -148,4 +148,3 @@ export const GuiaDimensional = ({ classe }: { classe: IClasse }) => {
 };
 
 export default GuiaDimensional;
-

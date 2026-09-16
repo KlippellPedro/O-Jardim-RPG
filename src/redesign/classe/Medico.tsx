@@ -11,7 +11,7 @@ export const Medico = ({ classe }: { classe: IClasse }) => {
   return (
     <div className="min-h-screen text-teal-50 p-8 selection:bg-teal-500/30 overflow-hidden relative">
       {/* 3D WebGL Background */}
-      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/medico_bg.webp')" }} />
+      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/medico_class_fantasy_bg.webp')" }} />
 
       {/* Medical / Biology Background Effects */}
       <div className="fixed inset-0 pointer-events-none z-0">
@@ -131,4 +131,3 @@ export const Medico = ({ classe }: { classe: IClasse }) => {
 };
 
 export default Medico;
-

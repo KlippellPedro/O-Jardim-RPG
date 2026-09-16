@@ -7970,9 +7970,18 @@
     "titulo": "Campeão Dimensional",
     "categoria": "esquecida",
     "disponibilidade": "restrita",
-    "arvore": "moros",
+    "arvore": null,
     "arvores": [
-      "moros"
+      "aethel",
+      "ousias",
+      "keryx",
+      "haemus",
+      "ignis",
+      "moros",
+      "aperion",
+      "chronus",
+      "erebus",
+      "mulher-carmesim"
     ],
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
@@ -7982,7 +7991,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Classe especial de Baluarte. Corpo acima do que um corpo deveria aguentar. Os picos de poder são curtos e contados, e nenhum deles impede de morrer.",
+    "descricao": "Classe especial aberta a qualquer Árvore e ao Vazio. O título pertence a quem supera os limites da própria dimensão; os picos de poder são curtos e contados, e nenhum deles impede de morrer.",
     "dt_efeitos": {
       "rotulo": "DT do Campeão Dimensional",
       "pericia": "intimidacao",
@@ -16269,6 +16278,425 @@
         "acao": "Passivo",
         "usos": "Uma vez por sessão",
         "descricao": "Uma vez por sessão, ao consumir a última porção de um slot vazio antes de dormir, recupere metade da sua Mana máxima ao acordar."
+      }
+    ]
+  },
+  {
+    "id": "elementarista",
+    "tipo": "classe",
+    "titulo": "Elementarista",
+    "categoria": "esquecida",
+    "disponibilidade": "restrita",
+    "arvore": "moros",
+    "arvores": [
+      "moros"
+    ],
+    "patamar": "conquista",
+    "requer_autorizacao_mestre": true,
+    "vida": 3,
+    "mana": 4,
+    "recursos_provisorios": false,
+    "progressao_publicada": true,
+    "origem_conteudo": "proposta_original_balanceada",
+    "versao_balanceamento": "2026-09-11",
+    "descricao": "Classe especial de Baluarte. Escolhe um único elemento primordial, aprofunda esse vínculo até alcançar uma derivação e transforma o campo de batalha por meio dele. Apenas a raríssima aptidão de Avatar permite aprender os outros elementos.",
+    "dt_efeitos": {
+      "rotulo": "DT da Elementarista",
+      "pericia": "misticismo",
+      "descricao": "Quando uma habilidade ou um poder da Elementarista manda alguém testar Fortitude, Reflexos ou Vontade, role Misticismo usando Fluxo. O resultado é a DT que o alvo precisa alcançar. Magias continuam usando a regra normal de conjuração e resistência do círculo."
+    },
+    "progressao_magia": {
+      "fonte": "Domínio Elemental",
+      "tradicoes": [
+        "Domínio Elemental",
+        "Canalização"
+      ],
+      "marcos": [
+        { "nivel": 1, "circulo": 2, "vagas": 1 },
+        { "nivel": 5, "circulo": 4, "vagas": 4 },
+        { "nivel": 10, "circulo": 6, "vagas": 6 },
+        { "nivel": 15, "circulo": 8, "vagas": 8 },
+        { "nivel": 20, "circulo": 10, "vagas": 10 }
+      ]
+    },
+    "progressao": [
+      { "nivel": 1, "recompensas": [
+        { "tipo": "habilidade", "titulo": "Polifonia Elemental" },
+        { "tipo": "grau_pericia", "titulo": "Grau de perícia", "quantidade": 2 }
+      ] },
+      { "nivel": 2, "recompensas": [
+        { "tipo": "poder", "titulo": "Poder de Elementarista" }
+      ] },
+      { "nivel": 3, "recompensas": [
+        { "tipo": "habilidade", "titulo": "Manifestação Natural" }
+      ] },
+      { "nivel": 4, "recompensas": [
+        { "tipo": "evento", "titulo": "Testemunho do Primeiro Salão" }
+      ] },
+      { "nivel": 5, "recompensas": [
+        { "tipo": "habilidade", "titulo": "Julgamento da Aptidão" },
+        { "tipo": "habilidade", "titulo": "Caminho do Avatar", "estagio": 1 }
+      ] },
+      { "nivel": 6, "recompensas": [
+        { "tipo": "poder", "titulo": "Poder de Elementarista" },
+        { "tipo": "grau_pericia", "titulo": "Grau de perícia", "quantidade": 2 }
+      ] },
+      { "nivel": 7, "recompensas": [
+        { "tipo": "evento", "titulo": "Prova da Derivação" }
+      ] },
+      { "nivel": 8, "recompensas": [
+        { "tipo": "habilidade", "titulo": "Caminho do Avatar", "estagio": 2 }
+      ] },
+      { "nivel": 9, "recompensas": [
+        { "tipo": "poder", "titulo": "Poder de Elementarista" }
+      ] },
+      { "nivel": 10, "recompensas": [
+        { "tipo": "habilidade", "titulo": "Maestria Elemental" }
+      ] },
+      { "nivel": 11, "recompensas": [
+        { "tipo": "poder", "titulo": "Poder de Elementarista" },
+        { "tipo": "habilidade", "titulo": "Caminho do Avatar", "estagio": 3 },
+        { "tipo": "grau_pericia", "titulo": "Grau de perícia", "quantidade": 2 }
+      ] },
+      { "nivel": 12, "recompensas": [
+        { "tipo": "habilidade", "titulo": "Derivações Harmônicas" }
+      ] },
+      { "nivel": 13, "recompensas": [
+        { "tipo": "poder", "titulo": "Poder de Elementarista" },
+        { "tipo": "habilidade", "titulo": "Domínio da Derivação" }
+      ] },
+      { "nivel": 14, "recompensas": [
+        { "tipo": "habilidade", "titulo": "Caminho do Avatar", "estagio": 4 }
+      ] },
+      { "nivel": 15, "recompensas": [
+        { "tipo": "habilidade", "titulo": "Soberania Elemental" }
+      ] },
+      { "nivel": 16, "recompensas": [
+        { "tipo": "poder", "titulo": "Poder de Elementarista" }
+      ] },
+      { "nivel": 17, "recompensas": [
+        { "tipo": "poder", "titulo": "Poder de Elementarista" },
+        { "tipo": "habilidade", "titulo": "Caminho do Avatar", "estagio": 5 },
+        { "tipo": "grau_pericia", "titulo": "Grau de perícia", "quantidade": 2 }
+      ] },
+      { "nivel": 18, "recompensas": [
+        { "tipo": "evento", "titulo": "Prova do Salão de Origem" },
+        { "tipo": "habilidade", "titulo": "Território Elemental" }
+      ] },
+      { "nivel": 19, "recompensas": [
+        { "tipo": "poder", "titulo": "Poder de Elementarista" }
+      ] },
+      { "nivel": 20, "recompensas": [
+        { "tipo": "habilidade", "titulo": "Caminho do Avatar", "estagio": 6 },
+        { "tipo": "habilidade_final", "titulo": "Apogeu Elemental" }
+      ] }
+    ],
+    "habilidades": [
+      {
+        "id": "afinidade-elemental",
+        "titulo": "Polifonia Elemental",
+        "niveis": [1],
+        "escolha_opcoes": {
+          "rotulo": "Elemento de origem",
+          "descricao": "Escolha um único elemento primordial. Ele é permanente e determina a forma de todas as suas magias Elementais, poderes e derivação. Somente o Caminho do Avatar pode acrescentar outros elementos.",
+          "total": 1,
+          "repetivel": false,
+          "permanente": true
+        },
+        "descricao": "Ao escolher seu elemento de origem, você libera as magias Elementais do Fluxo Físico e recebe uma vaga de magia. Preencha essa vaga com uma magia Elemental de até 2º círculo que seu Fluxo permita. Ao conjurar uma magia Elemental, declare um elemento que domina antes de rolar; ele determina o tipo de dano, a aparência e as relações de vantagem do efeito. Uma personagem de Afinidade única sempre declara o elemento de origem; um Avatar pode declarar qualquer elemento já aprendido. O elemento de origem não pode ser trocado por descanso, retreino ou mudança de magia; uma alteração exige decisão narrativa explícita do Mestre.",
+        "opcoes": [
+          { "id": "terra", "titulo": "Terra", "descricao": "Pedra, areia e minério em estado bruto. Favorece muralhas, terreno difícil, peso e imobilização." },
+          { "id": "agua", "titulo": "Água", "descricao": "Correnteza, vapor e massa líquida. Favorece deslocamento, contenção, dispersão e mudança de direção." },
+          { "id": "fogo", "titulo": "Fogo", "descricao": "Chama, brasa e calor. Favorece pressão ofensiva, dano persistente e negação de espaço." },
+          { "id": "ar", "titulo": "Ar", "descricao": "Vento, pressão e movimento. Favorece mobilidade, empurrões e limpeza de fumaça ou gás." },
+          { "id": "raio", "titulo": "Raio", "descricao": "Descarga, impulso e condução. Favorece ataques em cadeia, reação rápida e interrupção de energia." },
+          { "id": "luz", "titulo": "Luz", "descricao": "Claridade, brilho e exposição. Favorece revelar, orientar aliados e negar ocultação." },
+          { "id": "escuridao", "titulo": "Escuridão", "descricao": "Sombra espessa, silêncio e ausência de contorno. Favorece ocultação, bloqueio de visão e desorientação." }
+        ]
+      },
+      {
+        "id": "manifestacao-natural",
+        "titulo": "Manifestação Natural",
+        "niveis": [3],
+        "acao": "Ação de Movimento",
+        "alcance": "5 m",
+        "duracao": "Até o fim do próximo turno; matéria estável permanece",
+        "descricao": "Crie, mova ou modele até 0,25 m³ do seu elemento de origem para uma tarefa cotidiana. Terra e Água exigem matéria preexistente. Fogo pode criar uma chama do tamanho de uma tocha; Ar, uma rajada leve; Raio, apenas faíscas inofensivas; Luz ou Escuridão, iluminação ou penumbra numa área de 1,5 m. Uma manifestação criada se desfaz no fim do seu próximo turno; matéria preexistente modelada permanece somente se a nova forma for fisicamente estável. Isso não causa dano, não impõe condição, não reproduz uma magia e não cria material valioso."
+      },
+      {
+        "id": "julgamento-da-aptidao",
+        "titulo": "Julgamento da Aptidão",
+        "niveis": [5],
+        "descricao": "Depois do Testemunho do Primeiro Salão, o Mestre autoriza uma única rolagem pública de 1d20, sem modificadores. Um 20 natural revela a aptidão de Avatar; qualquer outro resultado confirma uma afinidade monoelemental. Antes da rolagem, o Mestre pode substituir o acaso por uma decisão narrativa, mas o método e o resultado são permanentes. Não despertar como Avatar não retira nenhuma habilidade da progressão normal.",
+        "escolha_opcoes": {
+          "rotulo": "Resultado da aptidão",
+          "descricao": "Registre o resultado somente depois do Julgamento conduzido pelo Mestre.",
+          "total": 1,
+          "repetivel": false,
+          "permanente": true
+        },
+        "opcoes": [
+          { "id": "afinidade-unica", "titulo": "Afinidade única", "descricao": "A personagem permanece ligada apenas ao elemento de origem e desenvolve esse domínio com mais profundidade." },
+          { "id": "avatar-desperto", "titulo": "Avatar desperto", "descricao": "A personagem pode percorrer os outros seis Salões e aprender um elemento adicional em cada marco do Caminho do Avatar." }
+        ]
+      },
+      {
+        "id": "caminho-do-avatar",
+        "titulo": "Caminho do Avatar",
+        "niveis": [5, 8, 11, 14, 17, 20],
+        "requer_escolha": { "chave": "elementarista:julgamento-da-aptidao", "opcao_id": "avatar-desperto" },
+        "excluir_escolhas": ["elementarista:afinidade-elemental"],
+        "descricao": "Disponível apenas para quem registrou Avatar desperto. Escolha um elemento adicional diferente do elemento de origem e de todos os já aprendidos em cada estágio. No 20º nível, o Avatar pode ter os sete elementos; as derivações continuam ligadas somente ao elemento de origem.",
+        "escolha_opcoes": {
+          "rotulo": "Elementos do Avatar",
+          "descricao": "Abra uma vaga nos níveis 5, 8, 11, 14, 17 e 20. Não repita o elemento de origem nem uma escolha anterior.",
+          "por_estagio": 1,
+          "repetivel": false,
+          "permanente": true
+        },
+        "opcoes": [
+          { "id": "terra", "titulo": "Terra", "descricao": "Pedra, areia e minério em estado bruto." },
+          { "id": "agua", "titulo": "Água", "descricao": "Correnteza, vapor e massa líquida." },
+          { "id": "fogo", "titulo": "Fogo", "descricao": "Chama, brasa e calor." },
+          { "id": "ar", "titulo": "Ar", "descricao": "Vento, pressão e movimento." },
+          { "id": "raio", "titulo": "Raio", "descricao": "Descarga, impulso e condução." },
+          { "id": "luz", "titulo": "Luz", "descricao": "Claridade, brilho e exposição." },
+          { "id": "escuridao", "titulo": "Escuridão", "descricao": "Sombra espessa, silêncio e ausência de contorno." }
+        ]
+      },
+      {
+        "id": "maestria-elemental",
+        "titulo": "Maestria Elemental",
+        "niveis": [10],
+        "descricao": "Uma vez por rodada, ao conjurar uma magia Elemental do seu elemento de origem, aplique um benefício compatível com o efeito: se causar dano, repita um dado e use o maior resultado; se mover uma criatura, aumente o deslocamento forçado em 3 m; se criar uma área, aumente uma dimensão dela em 3 m. O benefício não cria dano, movimento ou área numa magia que não possua esse componente e não se aplica aos elementos adicionais de um Avatar. Maestria Elemental pode acumular com Vetor Elemental."
+      },
+      {
+        "id": "derivacao-desperta",
+        "titulo": "Derivações Harmônicas",
+        "niveis": [12],
+        "descricao": "Escolha exatamente uma derivação do seu elemento de origem. A derivação comum é o desenvolvimento esperado; a rara exige uma Prova da Derivação e autorização do Mestre. A escolha é permanente. Ser Avatar não concede derivações para os elementos adicionais.",
+        "escolha_opcoes": {
+          "rotulo": "Derivação do elemento de origem",
+          "descricao": "Escolha somente uma das duas derivações ligadas ao seu elemento de origem. Uma derivação rara exige autorização do Mestre após a Prova da Derivação.",
+          "total": 1,
+          "repetivel": false,
+          "permanente": true
+        },
+        "opcoes": [
+          { "id": "terra-areia", "titulo": "Terra → Areia · comum", "descricao": "Efeito harmônico: uma criatura afetada pela magia perde 3 m de Movimento até o começo do seu próximo turno. A penalidade não acumula consigo mesma.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "terra" } },
+          { "id": "terra-cristal", "titulo": "Terra → Cristal · rara", "descricao": "Efeito harmônico: uma criatura que falhar na resistência contra a magia fica Exposta até o começo do seu próximo turno.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "terra" } },
+          { "id": "agua-gelo", "titulo": "Água → Gelo · comum", "descricao": "Efeito harmônico: escolha um espaço de 1,5 m afetado pela magia; ele vira terreno difícil até o começo do seu próximo turno.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "agua" } },
+          { "id": "agua-sangue", "titulo": "Água → Sangue · rara", "descricao": "Efeito harmônico: uma criatura viva que falhar na resistência contra a magia não pode recuperar Vida até o começo do seu próximo turno. Isso nunca controla ações ou movimentos do alvo.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "agua" } },
+          { "id": "fogo-magma", "titulo": "Fogo → Magma · comum", "descricao": "Efeito harmônico: um espaço de 1,5 m afetado pela magia permanece em brasa até o começo do seu próximo turno; cada criatura sofre 1d6 de Fogo na primeira vez que entrar ou começar o turno ali.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "fogo" } },
+          { "id": "fogo-astral", "titulo": "Fogo → Fogo Astral · rara", "descricao": "Efeito harmônico: uma criatura que sofrer dano da magia fica com desvantagem no próximo teste de concentração que fizer até o começo do seu próximo turno.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "fogo" } },
+          { "id": "ar-fumaca", "titulo": "Ar → Fumaça · comum", "descricao": "Efeito harmônico: crie uma área de fumaça de 3 m centrada num ponto afetado pela magia; ela concede cobertura parcial até o começo do seu próximo turno.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "ar" } },
+          { "id": "ar-vacuo", "titulo": "Ar → Vácuo · rara", "descricao": "Efeito harmônico: uma criatura que falhar na resistência contra a magia perde as reações até o começo do seu próximo turno. Vácuo não produz morte instantânea nem ignora defesas.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "ar" } },
+          { "id": "raio-plasma", "titulo": "Raio → Plasma · comum", "descricao": "Efeito harmônico: depois de causar dano, escolha outra criatura a até 3 m do alvo; ela sofre 1d6 de Raio, sem novo teste. Cada magia produz somente um salto.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "raio" } },
+          { "id": "raio-magnetismo", "titulo": "Raio → Magnetismo · rara", "descricao": "Efeito harmônico: mova até 3 m uma criatura afetada que esteja carregando ou vestindo metal. Se ela for hostil, o movimento só ocorre quando falhar na resistência da magia.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "raio" } },
+          { "id": "luz-pureza", "titulo": "Luz → Pureza · comum", "descricao": "Efeito harmônico: um aliado afetado pela magia encerra a condição Exposto ou, se Cego possuir duração medida em rodadas, reduz essa duração restante em 1 rodada, mínimo zero.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "luz" } },
+          { "id": "luz-aurora", "titulo": "Luz → Aurora · rara", "descricao": "Efeito harmônico: uma criatura hostil que falhar na resistência contra a magia fica Exposta até o começo do seu próximo turno e não recebe benefício de invisibilidade nesse período.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "luz" } },
+          { "id": "escuridao-trevas", "titulo": "Escuridão → Trevas · comum", "descricao": "Efeito harmônico: uma criatura que falhar na resistência contra a magia realiza o próximo ataque com desvantagem até o começo do seu próximo turno.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "escuridao" } },
+          { "id": "escuridao-eclipse", "titulo": "Escuridão → Eclipse · rara", "descricao": "Efeito harmônico: apague luz mundana e suprima luz mágica de círculo igual ou inferior ao da magia numa área de 3 m afetada até o começo do seu próximo turno. Eclipse não é o Fluxo do Vazio.", "requer_escolha": { "chave": "elementarista:afinidade-elemental", "opcao_id": "escuridao" } }
+        ]
+      },
+      {
+        "id": "dominio-da-derivacao",
+        "titulo": "Domínio da Derivação",
+        "niveis": [13],
+        "descricao": "Uma vez por rodada, ao conjurar uma magia Elemental do seu elemento de origem, você pode gastar +1 Mana para manifestar a derivação escolhida e aplicar o Efeito harmônico escrito nela a um único alvo, ponto ou espaço válido da magia. Se o efeito exigir que uma criatura falhe na resistência, uma magia sem resistência não o ativa contra criatura hostil. A Resistência ao elemento base vale pela metade contra o dano da magia, arredondada para baixo; imunidade continua valendo. A derivação conta como o elemento de origem para vantagens e desvantagens e não ganha propriedades além das escritas no Efeito harmônico."
+      },
+      {
+        "id": "soberania-elemental",
+        "titulo": "Soberania Elemental",
+        "niveis": [15],
+        "descricao": "A primeira magia Elemental do seu elemento de origem que você conjura em cada turno custa 2 Mana a menos, mínimo 1. Além disso, sua Manifestação Natural passa a controlar até 3 m³ do elemento presente na cena; os limites de criação, dano e duração da habilidade não mudam. O desconto não se aplica aos elementos adicionais de um Avatar e não se acumula com o desconto de Apogeu Elemental: use apenas o maior."
+      },
+      {
+        "id": "territorio-elemental",
+        "titulo": "Território Elemental",
+        "descricao": "Uma vez por sessão, faça uma área de 12 m a até 18 m assumir seu elemento de origem por quatro rodadas. A área vira terreno difícil para inimigos. No começo de cada um dos seus turnos, escolha até duas criaturas na área; cada uma testa Reflexos contra a DT da Elementarista. Em falha, você a move até 3 m para um espaço livre dentro da área ou a deixa Caída; em sucesso, ela não é movida nem derrubada. Mesmo um Avatar usa aqui apenas o elemento de origem.",
+        "niveis": [18],
+        "acao": "Ação Padrão",
+        "alcance": "18 m; área de 12 m",
+        "duracao": "Quatro rodadas",
+        "defesa": "Reflexos",
+        "usos": "Uma vez por sessão"
+      },
+      {
+        "id": "apogeu-elemental",
+        "titulo": "Apogeu Elemental",
+        "descricao": "Uma vez por sessão, por quatro rodadas, entre no auge da sua afinidade. Se tiver Afinidade única, suas magias do elemento de origem custam 4 Mana a menos, mínimo 1, você manifesta sua derivação sem o custo de +1 Mana e, uma vez por rodada, aprimora uma magia compatível com um dos seguintes efeitos: +2d8 de dano, +3 m de deslocamento forçado ou +3 m em uma dimensão da área. O aprimoramento não cria um componente que a magia não possua. Se for Avatar desperto, entre no Estado de Avatar: suas magias Elementais custam 3 Mana a menos, mínimo 1; ao conjurar, você pode declarar dois elementos aprendidos e usar a relação de vantagem mais favorável e a menor Resistência aplicável ao alvo, sem duplicar dano ou efeitos; além disso, uma vez por rodada, escolha uma criatura que sofreu dano ou falhou na resistência contra uma dessas magias para movê-la em 3 m ou transformar o espaço ocupado por ela em terreno difícil até o começo do seu próximo turno. Descontos de Mana não se acumulam e o Estado de Avatar não concede derivações adicionais.",
+        "alcance": "Pessoal",
+        "niveis": [20],
+        "acao": "Ação Livre",
+        "duracao": "Quatro rodadas",
+        "usos": "Uma vez por sessão"
+      }
+    ],
+    "eventos": [
+      {
+        "id": "testemunho-primeiro-salao",
+        "titulo": "Testemunho do Primeiro Salão",
+        "descricao": "No 4º nível, participe de uma cena em que o Salão do seu elemento reconhece a afinidade de origem. O evento não exige teste e não concede outro elemento; ele autoriza o Julgamento da Aptidão quando você alcançar o 5º nível.",
+        "niveis": [4]
+      },
+      {
+        "id": "prova-da-derivacao",
+        "titulo": "Prova da Derivação",
+        "descricao": "No 7º nível, o Mestre apresenta uma prova ligada ao seu elemento de origem e declara antes da cena se superá-la autorizará uma derivação rara. No 12º nível, quem não recebeu essa autorização ainda escolhe normalmente a derivação comum. A prova não altera o resultado do Avatar e nunca retira habilidades já obtidas.",
+        "niveis": [7]
+      },
+      {
+        "id": "prova-salao-origem",
+        "titulo": "Prova do Salão de Origem",
+        "descricao": "No 18º nível, conclua uma cena de domínio pleno do elemento de origem. Território Elemental é recebido nesse nível independentemente do resultado narrativo da cena; a prova define como o poder se manifesta na história, não se a ficha pode usá-lo.",
+        "niveis": [18]
+      }
+    ],
+    "vantagens_elementais": {
+      "regra": "Quando duas manifestações elementais se enfrentam diretamente, como ao atacar uma barreira, disputar o controle de uma área ou resistir a um efeito do elemento oposto, a manifestação em vantagem rola o teste envolvido com vantagem e a manifestação em desvantagem rola com desvantagem. Se as duas condições se aplicarem, elas se anulam. A relação não concede dano extra, não remove imunidade e não se aplica apenas porque o alvo conhece ou domina outro elemento.",
+      "entradas": [
+        { "elemento": "Terra", "vantagem_contra": "Raio", "desvantagem_contra": "Escuridão" },
+        { "elemento": "Água", "vantagem_contra": "Fogo", "desvantagem_contra": "Raio" },
+        { "elemento": "Fogo", "vantagem_contra": "Ar", "desvantagem_contra": "Água" },
+        { "elemento": "Ar", "vantagem_contra": "Luz", "desvantagem_contra": "Fogo" },
+        { "elemento": "Raio", "vantagem_contra": "Água", "desvantagem_contra": "Terra" },
+        { "elemento": "Luz", "vantagem_contra": "Escuridão", "desvantagem_contra": "Ar" },
+        { "elemento": "Escuridão", "vantagem_contra": "Terra", "desvantagem_contra": "Luz" }
+      ]
+    },
+    "poderes": [
+      {
+        "id": "muralha-elemental",
+        "titulo": "Muralha Elemental",
+        "custo_mana": 3,
+        "acao": "Ação Padrão",
+        "alcance": "12 m",
+        "duracao": "Três rodadas",
+        "descricao": "Escolha um elemento que domina e erga uma barreira mágica coerente com ele num espaço livre, com 4,5 m de largura, 3 m de altura e 15 cm de espessura. Mesmo Ar, Raio, Luz e Escuridão formam uma superfície sólida enquanto o poder durar. Ela oferece cobertura superior, bloqueia passagem e linha de efeito e desaba ao sofrer 30 de dano. Uma nova Muralha Elemental sua encerra a anterior."
+      },
+      {
+        "id": "corrente-elemental",
+        "titulo": "Corrente Elemental",
+        "custo_mana": 4,
+        "acao": "Ação Padrão",
+        "alcance": "12 m",
+        "duracao": "Instantânea",
+        "dano": "2d8",
+        "defesa": "Reflexos",
+        "descricao": "Escolha um elemento que domina. Uma criatura testa Reflexos contra a DT da Elementarista. Em falha, sofre 2d8 desse elemento e você a move até 4,5 m para um espaço livre; em sucesso, sofre metade do dano e não é movida."
+      },
+      {
+        "id": "revestimento-elemental",
+        "titulo": "Revestimento Elemental",
+        "custo_mana": 4,
+        "acao": "Reação ao ser atingido ou falhar numa resistência contra dano",
+        "alcance": "Pessoal",
+        "duracao": "Até o começo do seu próximo turno",
+        "descricao": "Escolha um elemento que domina e revista o corpo com ele. Receba Resistência 8 contra esse elemento e Resistência 4 contra dano físico até o começo do seu próximo turno. Declare o elemento antes de calcular o dano que ativou a reação."
+      },
+      {
+        "id": "prisao-elemental",
+        "titulo": "Prisão Elemental",
+        "custo_mana": 5,
+        "acao": "Ação Padrão",
+        "alcance": "12 m",
+        "duracao": "Até escapar",
+        "defesa": "Fortitude",
+        "descricao": "Escolha um elemento que domina e faça-o conter uma criatura. Ela testa Fortitude contra a DT da Elementarista. Em falha, fica Imobilizada. No fim de cada turno, pode repetir o teste; sucesso encerra o efeito. A forma da prisão muda, mas a regra é a mesma para todos os elementos."
+      },
+      {
+        "id": "contrafluxo-elemental",
+        "titulo": "Contrafluxo Elemental",
+        "custo_mana": 5,
+        "acao": "Reação quando uma criatura se move",
+        "alcance": "9 m",
+        "duracao": "Instantânea",
+        "defesa": "Reflexos",
+        "descricao": "Escolha um elemento que domina e interponha sua manifestação na rota. A criatura testa Reflexos contra a DT da Elementarista. Em falha, o movimento que ativou a reação termina e você a empurra até 3 m; em sucesso, ela conclui o movimento."
+      },
+      {
+        "id": "marca-elemental",
+        "titulo": "Marca Elemental",
+        "custo_mana": 5,
+        "acao": "Ação Livre depois de causar dano",
+        "alcance": "O alcance do efeito original",
+        "duracao": "Até o dano persistente ser removido",
+        "dano": "2d6 persistente",
+        "descricao": "Uma vez por turno, depois que uma magia ou poder seu causar dano com um elemento que domina, escolha uma criatura que sofreu esse dano e marque-a com o mesmo elemento. Ela sofre também 2d6 de dano persistente desse tipo. A condição segue a regra normal de dano persistente e não acumula consigo mesma."
+      },
+      {
+        "id": "passo-elemental",
+        "titulo": "Passo Elemental",
+        "custo_mana": 3,
+        "acao": "Ação de Movimento",
+        "alcance": "Pessoal",
+        "duracao": "Este movimento",
+        "descricao": "Escolha um elemento que domina e use-o como impulso, trilha ou passagem. Mova-se até 9 m por uma rota desimpedida, ignorando terreno difícil e sem provocar reações por movimento. Esse deslocamento não atravessa paredes nem criaturas."
+      },
+      {
+        "id": "cadeia-elemental",
+        "titulo": "Cadeia Elemental",
+        "custo_mana": 6,
+        "acao": "Ação Padrão",
+        "alcance": "15 m; saltos de 3 m",
+        "duracao": "Instantânea",
+        "dano": "2d8 por alvo",
+        "defesa": "Reflexos",
+        "descricao": "Escolha um elemento que domina e até três criaturas. A primeira deve estar no alcance e cada alvo seguinte deve estar a no máximo 3 m do anterior; todos precisam ter linha de efeito a partir do alvo anterior. Cada alvo testa Reflexos contra a DT da Elementarista; em falha, sofre 2d8 desse elemento, e em sucesso sofre metade. Uma criatura só pode ser alvo uma vez por uso."
+      },
+      {
+        "id": "campo-elemental",
+        "titulo": "Campo Elemental",
+        "custo_mana": 4,
+        "acao": "Ação Padrão",
+        "alcance": "12 m; área de 6 m",
+        "duracao": "Duas rodadas",
+        "defesa": "Reflexos",
+        "descricao": "Escolha um elemento que domina e preencha a área com uma manifestação intensa dele. A área vira terreno difícil para inimigos. Uma criatura hostil testa Reflexos contra a DT da Elementarista na primeira vez em cada rodada que entrar na área ou começar o turno ali; em falha, fica Exposta até o começo do seu próximo turno, e em sucesso não recebe a condição."
+      },
+      {
+        "id": "veu-elemental",
+        "titulo": "Véu Elemental",
+        "custo_mana": 4,
+        "acao": "Ação Padrão",
+        "alcance": "12 m; área de 6 m",
+        "duracao": "Duas rodadas",
+        "descricao": "Escolha um elemento que domina e forme névoa, poeira, clarão, sombra, faíscas ou outra interferência coerente. A área bloqueia a visão através dela; uma criatura inteiramente dentro não pode ser escolhida como alvo por quem não consegue enxergá-la, mas efeitos de área continuam funcionando. Um efeito que dissipe magia ou remova uma área mágica encerra o véu se for de círculo superior ao seu maior círculo; ataques comuns não o dissipam."
+      },
+      {
+        "id": "sentido-elemental",
+        "titulo": "Sentido Elemental",
+        "custo_mana": 3,
+        "acao": "Ação Livre",
+        "alcance": "15 m",
+        "duracao": "Uma cena",
+        "descricao": "Escolha um elemento que domina. Você percebe fontes, movimentos e alterações sobrenaturais desse elemento na área, mesmo sem linha de visão. Isso informa direção e intensidade aproximadas, mas não revela identidade, pensamentos nem detalhes escondidos."
+      },
+      {
+        "id": "vetor-elemental",
+        "titulo": "Vetor Elemental",
+        "custo_mana": 4,
+        "acao": "Ação Livre antes de uma magia",
+        "alcance": "O alcance da magia",
+        "duracao": "Esta magia",
+        "descricao": "Antes de conjurar uma magia Elemental de um elemento que domina, escolha um benefício compatível: se ela mover uma criatura, aumente o deslocamento forçado em 3 m; se possuir área, aumente uma dimensão dela em 3 m. O poder não cria movimento ou área numa magia que não possua esse componente e não recebe os dois benefícios no mesmo uso. Pode acumular com Maestria Elemental."
+      },
+      {
+        "id": "ruptura-derivada",
+        "titulo": "Ruptura Derivada",
+        "custo_mana": 8,
+        "acao": "Ação Padrão",
+        "alcance": "20 m; área de 9 m",
+        "duracao": "Instantânea",
+        "dano": "5d6",
+        "defesa": "Reflexos",
+        "usos": "Uma vez por combate",
+        "descricao": "Manifeste a derivação escolhida numa ruptura do seu elemento de origem. Criaturas hostis na área testam Reflexos contra a DT da Elementarista. Em falha, sofrem 5d6 do elemento derivado e ficam Caídas; em sucesso, sofrem metade e não caem. Resistência ao elemento base vale pela metade, mas imunidade continua valendo.",
+        "pre_requisitos": [
+          "Nível 13 de Elementarista",
+          "Derivações Harmônicas"
+        ]
       }
     ]
   }

@@ -18,7 +18,7 @@ export const Simbionte = ({ raca }: SimbionteProps) => {
       {/* Organic Gradient Background */}
       <div
         className="fixed inset-0 z-0 bg-black bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/assets/img/miceliano_bg.webp')" }}
+        style={{ backgroundImage: "url('/assets/img/simbionte_fantasy_bg.webp')" }}
       >
         <div
           className="absolute inset-0"

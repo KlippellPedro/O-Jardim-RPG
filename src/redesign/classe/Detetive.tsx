@@ -12,7 +12,7 @@ export const Detetive = ({ classe }: { classe: IClasse }) => {
     <div className="min-h-screen text-amber-50 p-8 selection:bg-amber-500/30 overflow-hidden relative">
       <div
         className="fixed inset-0 z-0 bg-[#0d0904] bg-cover bg-center bg-no-repeat opacity-[0.45]"
-        style={{ backgroundImage: "url('/assets/img/detetive_bg.webp')" }}
+        style={{ backgroundImage: "url('/assets/img/detetive_class_fantasy_bg.webp')" }}
       />
       <div className="fixed inset-0 z-0 bg-gradient-to-b from-[#0d0904]/35 via-[#0d0904]/55 to-[#0d0904]/95" />
       <div className="fixed inset-0 pointer-events-none z-0">

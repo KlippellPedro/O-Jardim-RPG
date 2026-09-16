@@ -11,7 +11,7 @@ export const CampeaoDimensional = ({ classe }: { classe: IClasse }) => {
   return (
     <div className={`min-h-screen ${tema.text} p-8 selection:bg-fuchsia-500/30 overflow-hidden relative`}>
       {/* 3D WebGL Background */}
-      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/campeaodimensional_bg.webp')" }} />
+      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/campeao-dimensional_class_fantasy_bg.webp')" }} />
 
       {/* OP Brute / Cosmic Energy Background Effects */}
       <div className="fixed inset-0 pointer-events-none z-0">
@@ -153,4 +153,3 @@ export const CampeaoDimensional = ({ classe }: { classe: IClasse }) => {
 };
 
 export default CampeaoDimensional;
-

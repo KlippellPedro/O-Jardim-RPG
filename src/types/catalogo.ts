@@ -55,6 +55,11 @@ export interface IOpcaoHabilidadeClasse extends IFichaTecnicaClasse {
   id: string;
   titulo: string;
   descricao: string;
+  /** Exibe a opção somente quando outra escolha da ficha contém este id. */
+  requer_escolha?: {
+    chave: string;
+    opcao_id: string;
+  };
   /** O que esta opcao ganha nos niveis mais altos da escada da habilidade. */
   escalonamento?: string;
   /** Substitui os efeitos do degrau anterior pelo marco mais recente. */
@@ -99,6 +104,14 @@ export interface IHabilidadeClasse extends IFichaTecnicaClasse {
   niveis: number[];
   estagios?: IEstagioHabilidadeClasse[];
   escolha_opcoes?: IEscolhaOpcoesClasse;
+  /** Libera este catálogo somente depois que outra escolha permanente da ficha
+   * registrar a opção indicada. Usado pelo Caminho do Avatar. */
+  requer_escolha?: {
+    chave: string;
+    opcao_id: string;
+  };
+  /** Remove deste catálogo ids já usados nas escolhas indicadas. */
+  excluir_escolhas?: string[];
   escalonamento?: IEscalonamentoHabilidade;
   opcoes?: IOpcaoHabilidadeClasse[];
 }

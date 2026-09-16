@@ -11,7 +11,7 @@ export const Guardiao = ({ classe }: { classe: IClasse }) => {
   return (
     <div className="min-h-screen text-stone-50 p-8 selection:bg-stone-500/30 overflow-hidden relative">
       {/* 3D WebGL Background */}
-      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/guardiao_bg.webp')" }} />
+      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/guardiao_class_fantasy_bg.webp')" }} />
 
       {/* Heavy Armor / Bulwark Background Effects */}
       <div className="fixed inset-0 pointer-events-none z-0">
@@ -150,4 +150,3 @@ export const Guardiao = ({ classe }: { classe: IClasse }) => {
 };
 
 export default Guardiao;
-

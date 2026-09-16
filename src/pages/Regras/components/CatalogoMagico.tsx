@@ -14,6 +14,8 @@ import {
   SELOS_CATALOGO,
   SIMBOLOS_POR_ID,
   circuloRotulo,
+  magiaEhElemental,
+  magiaExigeAvatar,
   simbolosDoRito,
   temaDoFluxo,
   type FluxoDeMagia,
@@ -98,6 +100,8 @@ const montarItensPorAba = ({
     ],
     complemento: [
       ...(item.dano ? [{ rotulo: 'Dano', valor: item.dano }] : []),
+      ...(magiaEhElemental(item) ? [{ rotulo: 'Acesso', valor: 'Exclusiva de Elementarista · usa um elemento dominado' }] : []),
+      ...(magiaExigeAvatar(item) ? [{ rotulo: 'Aptidão', valor: 'Exige Avatar desperto' }] : []),
       // No livro de referência a universal mostra as onze manifestações; na
       // ficha aparece só a do Fluxo de quem conjura.
       ...fluxos.flatMap((fluxo) => {

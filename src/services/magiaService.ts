@@ -252,6 +252,19 @@ export const ENCANTAMENTOS_CATALOGO = magiasData.encantamentos as unknown as IEn
 export const ENCANTAMENTOS_POR_ID = new Map(ENCANTAMENTOS_CATALOGO.map((encantamento) => [encantamento.id, encantamento]));
 export const AVISO_FLUXO_FIM = magiasData.regras.acesso_fim.aviso;
 export const MAGIAS_UNIVERSAIS = MAGIAS_CATALOGO.filter((magia) => magia.fluxo === 'universal');
+const ACESSO_ELEMENTAL = magiasData.regras.acesso_elemental;
+const MAGIAS_ELEMENTAIS_IDS = new Set<string>(ACESSO_ELEMENTAL.magias_elementais_ids);
+const MAGIAS_AVATAR_IDS = new Set<string>(ACESSO_ELEMENTAL.magias_exclusivas_avatar_ids);
+
+export const ELEMENTOS_FISICOS = ACESSO_ELEMENTAL.elementos as Array<'terra' | 'agua' | 'fogo' | 'ar' | 'raio' | 'luz' | 'escuridao'>;
+
+export function magiaEhElemental(magia: IMagiaCatalogo): boolean {
+  return magia.fluxo === 'fisico' && MAGIAS_ELEMENTAIS_IDS.has(magia.id);
+}
+
+export function magiaExigeAvatar(magia: IMagiaCatalogo): boolean {
+  return magiaEhElemental(magia) && MAGIAS_AVATAR_IDS.has(magia.id);
+}
 
 export function magiaEhUniversal(magia: IMagiaCatalogo): boolean {
   return magia.fluxo === 'universal';
@@ -313,6 +326,35 @@ const referenciasClasse = (ficha: any): Array<{ id: string; nivel: number }> => 
 const nivelDaClasse = (classes: Array<{ id: string; nivel: number }>, classeId: string): number => (
   classes.find((item) => item.id === classeId)?.nivel || 0
 );
+
+const idsEscolhidos = (ficha: any, chave: string): string[] => idsUnicos(ficha?.escolhasHabilidade?.[chave]);
+
+export function elementosElementaristaDaFicha(ficha: any): string[] {
+  return [...new Set([
+    ...idsEscolhidos(ficha, 'elementarista:afinidade-elemental'),
+    ...idsEscolhidos(ficha, 'elementarista:caminho-do-avatar'),
+    // Compatibilidade com fichas montadas durante a primeira versão da classe.
+    ...idsEscolhidos(ficha, 'elementarista:polifonia-elemental'),
+  ])].filter((id) => ELEMENTOS_FISICOS.includes(id as (typeof ELEMENTOS_FISICOS)[number]));
+}
+
+export function possuiAptidaoAvatar(ficha: any): boolean {
+  return idsEscolhidos(ficha, 'elementarista:julgamento-da-aptidao').includes('avatar-desperto');
+}
+
+function restricaoMagiaElemental(ficha: any, magia: IMagiaCatalogo): { permitido: boolean; motivo?: string } {
+  if (!magiaEhElemental(magia)) return { permitido: true };
+  if (nivelDaClasse(referenciasClasse(ficha), ACESSO_ELEMENTAL.classe_id) < 1) {
+    return { permitido: false, motivo: 'Magias Elementais do Fluxo Físico exigem a classe Elementarista.' };
+  }
+  if (!elementosElementaristaDaFicha(ficha).length) {
+    return { permitido: false, motivo: 'Escolha o elemento de origem da Elementarista antes de aprender esta magia.' };
+  }
+  if (magiaExigeAvatar(magia) && !possuiAptidaoAvatar(ficha)) {
+    return { permitido: false, motivo: 'Esta magia combina vários elementos e exige Avatar desperto.' };
+  }
+  return { permitido: true };
+}
 
 const FLUXOS_CATALISAVEIS = new Set<FluxoMagicoId>([
   'origem', 'essencia', 'comunicacao', 'vitalidade', 'inconstancia',
@@ -509,6 +551,8 @@ export function magiaElegivelParaAprender(ficha: any, magia: IMagiaCatalogo, inv
       return { permitido: false, motivo: `Esta magia pertence ao Fluxo ${magia.tradicao}; seu Fluxo nativo é ${perfil.fluxoNativoTitulo}.` };
     }
   }
+  const acessoElemental = restricaoMagiaElemental(ficha, magia);
+  if (!acessoElemental.permitido) return acessoElemental;
   const fontesDaFicha = referenciasClasse(ficha).flatMap(({ id, nivel }) => {
     const fonte = CLASSES_CATALOGO.find((item) => item.id === id)?.progressao_magia;
     return fonte && Array.isArray(fonte.marcos)
@@ -719,6 +763,10 @@ export function podeConjurarMagia(ficha: any, magia: IMagiaCatalogo, inventarioC
   const isUniversalTree = ficha?.arvoreId === 'universal';
   if (!concedida && !magiaEhUniversal(magia) && !isUniversalTree && perfil.fluxoNativoId && magia.fluxo !== perfil.fluxoNativoId) {
     return { permitido: false, motivo: `A magia não pertence ao Fluxo nativo ${perfil.fluxoNativoTitulo}.` };
+  }
+  if (!concedida) {
+    const acessoElemental = restricaoMagiaElemental(ficha, magia);
+    if (!acessoElemental.permitido) return acessoElemental;
   }
   if (typeof magia.circulo === 'number' && magia.circulo > perfil.circuloDoFluxo) {
     return { permitido: false, motivo: `Fluxo ${perfil.fluxo} não canaliza o ${magia.circulo}º círculo com segurança.` };

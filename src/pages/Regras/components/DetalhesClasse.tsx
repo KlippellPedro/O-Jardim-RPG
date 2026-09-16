@@ -15,6 +15,7 @@ import { RitualMaterialsCatalog } from '../../../components/materials/RitualMate
 
 interface DetalhesClasseProps {
   classe: IClasse;
+  ocultarCatalogos?: string[];
 }
 
 const formatarNiveis = (niveis: number[]) => niveis.join(', ');
@@ -119,6 +120,10 @@ const CATALOGOS_RECOLHIVEIS: Record<string, { cor: string; substantivo: string }
   'atirador:tiro-de-impulso': { cor: 'ambar', substantivo: 'benefícios' },
   'detetive:perfil-do-suspeito': { cor: 'ambar', substantivo: 'especialidades' },
   'devorador:instintos-do-devorador': { cor: 'vermelho', substantivo: 'instintos' },
+  'elementarista:afinidade-elemental': { cor: 'ambar', substantivo: 'elementos' },
+  'elementarista:julgamento-da-aptidao': { cor: 'ambar', substantivo: 'resultados' },
+  'elementarista:caminho-do-avatar': { cor: 'ciano', substantivo: 'elementos' },
+  'elementarista:derivacao-desperta': { cor: 'ambar', substantivo: 'derivações' },
   'cacador:especializacao': { cor: 'lima', substantivo: 'raças' },
   'cacador:agencia-dos-cacadores': { cor: 'lima', substantivo: 'benefícios' },
   'cacador-das-almas:zanpakuto': { cor: 'rosa', substantivo: 'aspectos' },
@@ -237,7 +242,7 @@ const CatalogoRecolhivel = ({
   );
 };
 
-export const DetalhesClasse = ({ classe }: DetalhesClasseProps) => {
+export const DetalhesClasse = ({ classe, ocultarCatalogos = [] }: DetalhesClasseProps) => {
   if (!classeTemProgressaoPublicada(classe)) {
     return (
       <div className="rounded-2xl border border-white/10 bg-black/30 p-6 text-gray-400">
@@ -409,7 +414,7 @@ export const DetalhesClasse = ({ classe }: DetalhesClasseProps) => {
                     ))}
                   </div>
                 )}
-                {(habilidade.opcoes || []).length > 0 && (
+                {(habilidade.opcoes || []).length > 0 && !ocultarCatalogos.includes(habilidade.id) && (
                   <div className="mt-5 border-t border-white/5 pt-5">
                     <h4 className="text-sm font-bold uppercase tracking-wider text-yellow-500/80">
                       {habilidade.escolha_opcoes?.rotulo || 'Opções'}

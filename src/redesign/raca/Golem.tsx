@@ -14,7 +14,7 @@ export const Golem = ({ raca }: { raca: IRaca }) => {
       {/* Golem Background */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-black"
-        style={{ backgroundImage: "url('/assets/img/golem_bg.webp')" }}
+        style={{ backgroundImage: "url('/assets/img/golem_fantasy_bg.webp')" }}
       >
         <div className="absolute inset-0 bg-stone-950/80 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0c0a08]/40 via-transparent to-[#0c0a08]/90" />

@@ -88,6 +88,51 @@ test('Canalizador combina limite da classe e do Fluxo sem somar metade do nível
   assert.equal(nivel20.bonusConjuracao, 22);
 });
 
+test('magia Elemental exige Elementarista, afinidade registrada e Avatar quando combina elementos', () => {
+  const impacto = MAGIAS_CATALOGO.find(item => item.id === 'impacto-elemental');
+  const escudo = MAGIAS_CATALOGO.find(item => item.id === 'escudo-material');
+  const julgamento = MAGIAS_CATALOGO.find(item => item.id === 'julgamento-dos-elementos');
+  assert.ok(impacto && escudo && julgamento);
+
+  const canalizadorFisico = ficha('canalizador', 20, 50, 'moros');
+  assert.equal(magiaElegivelParaAprender(canalizadorFisico, impacto).permitido, false);
+  assert.equal(magiaElegivelParaAprender(canalizadorFisico, escudo).permitido, true);
+
+  const elementarista = ficha('elementarista', 20, 50, 'moros');
+  assert.equal(magiaElegivelParaAprender(elementarista, impacto).permitido, false);
+  const comAfinidade = {
+    ...elementarista,
+    escolhasHabilidade: { 'elementarista:afinidade-elemental': ['agua'] },
+  };
+  assert.equal(magiaElegivelParaAprender(comAfinidade, impacto).permitido, true);
+  assert.equal(magiaElegivelParaAprender(comAfinidade, julgamento).permitido, false);
+  const avatar = {
+    ...comAfinidade,
+    escolhasHabilidade: {
+      ...comAfinidade.escolhasHabilidade,
+      'elementarista:julgamento-da-aptidao': ['avatar-desperto'],
+    },
+  };
+  assert.equal(magiaElegivelParaAprender(avatar, julgamento).permitido, true);
+
+  const inicial = {
+    ...ficha('elementarista', 1, 18, 'moros'),
+    escolhasHabilidade: { 'elementarista:afinidade-elemental': ['agua'] },
+  };
+  assert.equal(obterPerfilMagico(inicial).vagasConhecidas, 1, 'Polifonia Elemental concede exatamente uma magia no nível 1');
+  assert.equal(magiaElegivelParaAprender(inicial, impacto).permitido, true);
+
+  const idsElementais = magiasData.regras.acesso_elemental.magias_elementais_ids;
+  for (const id of idsElementais) {
+    const magia = MAGIAS_CATALOGO.find(item => item.id === id);
+    assert.ok(magia, `Magia Elemental não encontrada no catálogo: ${id}`);
+    if (magia.defesa && magia.dano) {
+      assert.match(magia.efeito, /sucesso/i, `${magia.titulo}: possui defesa e dano, mas não resolve um sucesso`);
+    }
+  }
+  assert.doesNotMatch(JSON.stringify(magiasData.magias), /elemento despertado/i, 'O termo antigo cria uma afinidade indefinida fora da Elementarista');
+});
+
 test('Ritualista não recebe círculos porque rituais ficam fora deles', () => {
   const perfil = obterPerfilMagico(ficha('ritualista', 20, 50));
   assert.equal(perfil.possuiFonte, false);

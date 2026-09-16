@@ -18,7 +18,7 @@ export const Mimico = ({ raca }: MimicoProps) => {
       {/* Shifting Gradient Background */}
       <div
         className="fixed inset-0 z-0 bg-black bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/assets/img/mimico_bg.webp')" }}
+        style={{ backgroundImage: "url('/assets/img/mimico_fantasy_bg.webp')" }}
       >
         <motion.div
           className="absolute inset-0"

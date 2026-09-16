@@ -139,10 +139,17 @@ export function selecoesHabilidadeValidas(ficha: any): Record<string, string[]> 
     for (const habilidade of classe.habilidades || []) {
       const vagas = vagasEscolhaHabilidade(habilidade, nivel);
       if (!vagas) continue;
+      const requisito = habilidade.requer_escolha;
+      if (requisito && !(resultado[requisito.chave] || []).includes(requisito.opcao_id)) continue;
       const chave = chaveEscolhaHabilidade(classe.id, habilidade.id);
       const escolhidos = Array.isArray(guardado[chave]) ? guardado[chave] : [];
+      const excluidos = new Set((habilidade.excluir_escolhas || []).flatMap((outraChave) => resultado[outraChave] || []));
+      const opcoesPermitidas = (habilidade.opcoes || []).filter((opcao) => {
+        const requisitoOpcao = opcao.requer_escolha;
+        return !requisitoOpcao || (resultado[requisitoOpcao.chave] || []).includes(requisitoOpcao.opcao_id);
+      });
       const validos = escolhidos
-        .filter((id: any) => typeof id === 'string' && (habilidade.opcoes || []).some((opcao) => opcao.id === id))
+        .filter((id: any) => typeof id === 'string' && !excluidos.has(id) && opcoesPermitidas.some((opcao) => opcao.id === id))
         .slice(0, vagas);
       const unicos = habilidade.escolha_opcoes?.repetivel ? validos : [...new Set(validos)];
       resultado[chave] = unicos;
@@ -174,10 +181,17 @@ export function limparSelecoesHabilidadeInvalidas<T extends Record<string, any>>
 export function escolhasHabilidadeDisponiveis(ficha: any): IEscolhaHabilidadeClasse[] {
   const selecoes = selecoesHabilidadeValidas(ficha);
   return classesDaFicha(ficha).flatMap(({ classe, nivel }) => (classe.habilidades || []).flatMap((habilidade) => {
+    const requisito = habilidade.requer_escolha;
+    if (requisito && !(selecoes[requisito.chave] || []).includes(requisito.opcao_id)) return [];
     const vagas = vagasEscolhaHabilidade(habilidade, nivel);
     if (!vagas) return [];
     const chave = chaveEscolhaHabilidade(classe.id, habilidade.id);
-    const opcoes = habilidade.opcoes || [];
+    const excluidos = new Set((habilidade.excluir_escolhas || []).flatMap((outraChave) => selecoes[outraChave] || []));
+    const opcoes = (habilidade.opcoes || []).filter((opcao) => {
+      const requisitoOpcao = opcao.requer_escolha;
+      return !excluidos.has(opcao.id)
+        && (!requisitoOpcao || (selecoes[requisitoOpcao.chave] || []).includes(requisitoOpcao.opcao_id));
+    });
     return [{
       chave,
       classeId: classe.id,

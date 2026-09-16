@@ -13,7 +13,7 @@ export const Elfo = ({ raca }: { raca: IRaca }) => {
       {/* Calm Forest Background */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat bg-[#070c06]"
-        style={{ backgroundImage: "url('/assets/img/elfo_bg.webp')" }}
+        style={{ backgroundImage: "url('/assets/img/elfo_fantasy_bg.webp')" }}
       >
         {/* Dark/Green overlay for readability and subtle fantasy vibe */}
         <div className="absolute inset-0 bg-[#070c06]/80 mix-blend-multiply" />

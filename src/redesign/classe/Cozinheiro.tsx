@@ -10,6 +10,7 @@ export const Cozinheiro = ({ classe }: { classe: IClasse }) => {
 
   return (
     <div className={`min-h-screen ${tema.text} p-8 overflow-hidden relative`}>
+      <div className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/img/cozinheiro_class_fantasy_bg.webp')" }} />
       <div className="fixed inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_25%_20%,rgba(245,158,11,0.16),transparent_40%),radial-gradient(circle_at_75%_70%,rgba(34,197,94,0.12),transparent_45%)]" />
       <div className="max-w-5xl mx-auto relative z-10 pt-16">
         <motion.header

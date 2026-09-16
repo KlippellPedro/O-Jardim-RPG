@@ -332,6 +332,12 @@ const DEVORADOR: ThemeEntry = {
   text: 'text-red-400', icon: 'text-red-600/80', tag: 'text-red-300',
   rationale: 'Fome e apropriacao: sangue, presa e poder emprestado de quem ja morreu.',
 };
+const ELEMENTARISTA: ThemeEntry = {
+  primary: '#d59a52', secondary: '#4b2f1c', glow: 'rgba(213,154,82,0.34)',
+  bg: 'bg-amber-950/30', border: 'border-amber-700/30 hover:border-amber-500/60',
+  text: 'text-amber-300', icon: 'text-amber-500/80', tag: 'text-amber-200',
+  rationale: 'Sete elementos do Fluxo Fisico: materia, energia e controle do terreno de Baluarte.',
+};
 
 // ── MAPA PRINCIPAL ────────────────────────────────────────────────────────────
 
@@ -358,7 +364,7 @@ export const THEME_MAP: Record<string, ThemeEntry> = {
   ninja: NINJA, piloto: PILOTO, pirataamaldicoado: PIRATA_AMALDICOADO,
   popstar: POPSTAR, ritualista: RITUALISTA, sintonizador: SINTONIZADOR,
   viajanteclasse: VIAJANTE, viajante: VIAJANTE,
-  detetive: DETETIVE, devorador: DEVORADOR,
+  detetive: DETETIVE, devorador: DEVORADOR, elementarista: ELEMENTARISTA,
 };
 
 export const DEFAULT_THEME: ThemeEntry = HUMANO;
