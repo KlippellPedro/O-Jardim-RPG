@@ -120,7 +120,7 @@ Jornalista checa a fila a cada minuto.
 - `/jornal automacao <tipo> <ligar>` / `/jornal automacoes` — controla e
   consulta tudo que o bot envia sozinho: entrevistas, horóscopo, avisos,
   loteria, boas-vindas, despedidas, resumo semanal, pautas, rumores, clima,
-  estação e baús. O resumo semanal começa desligado; os recursos antigos
+  estação e baús. O resumo semanal começa ligado; os recursos antigos
   preservam o estado que já possuíam.
 - `/jornal pauta criar|listar|ver|publicar|agendar|cancelar` — fluxo editorial
   persistente. Toda pauta nasce como rascunho, pode ser revisada em prévia
@@ -161,7 +161,67 @@ Jornalista checa a fila a cada minuto.
   painéis atuais de cargos por reação. `/registro preset_arvores` prepara o
   painel das 10 Árvores; `/registro paineis` e `/registro opcoes` consultam
   a configuração.
+- `/conquistas` — mostra, em resposta privada, somente os títulos secretos
+  já descobertos pelo jogador e tenta entregar seus cargos pendentes.
+- `/conquistas_config listar` — [Mestre] consulta os critérios secretos.
+- `/conquistas_config sincronizar [jogador]` — [Mestre] reavalia as conquistas
+  do jogador ou do servidor e tenta entregar os cargos.
 - `/estacao` — qualquer jogador pode ver a estação atual (só leitura).
+
+### Cargos secretos
+
+O Jornalista verifica conquistas a cada cinco minutos, usando os registros
+confirmados do PostgreSQL compartilhado. A automação começa ligada e pode
+ser pausada em `/jornal automacao` escolhendo **Cargos secretos por conquistas**.
+Pausar não remove títulos ou cargos já entregues.
+
+Os cargos são criados no primeiro desbloqueio, sem permissões, cor própria
+ou menção liberada. São permanentes e cumulativos. O bot precisa de
+**Gerenciar Cargos** e de estar acima deles na hierarquia. Uma entrega que
+falhar será tentada novamente; reiniciar o bot não apaga a conquista.
+Os critérios não aparecem na consulta do jogador, mas um cargo criado pode
+ser visto normalmente nas listas e perfis do Discord.
+
+Catálogo administrativo (critérios de design do bot, sem efeito na ficha):
+
+| Cargo | Critério |
+| --- | --- |
+| Dedos Leves | 1 roubo bem-sucedido de carteira ou cofre |
+| Sombra do Banco Lunar | 10 roubos bem-sucedidos |
+| Lenda do Submundo | 50 roubos bem-sucedidos |
+| Chave Mestra | 10 arrombamentos de cofre bem-sucedidos |
+| Fortuna Alheia | 5.000 Lunaris recebidos em roubos |
+| Farejador de Tesouros | 10 baús do Jornalista entregues |
+| Colecionador de Fechaduras | 50 baús do Jornalista entregues |
+| Lenda dos Tesouros | 100 baús do Jornalista entregues |
+| Toque do Impossível | 1 baú Mítico do Jornalista entregue |
+| Decifrador do Jardim | 5 desafios do jornal resolvidos |
+| Voz do Jardim | 3 entrevistas publicadas |
+| Pena da Lua | 3 pautas de sua autoria publicadas |
+| Queridinho do Destino | 1 vitória com prêmio na Loteria Dominical |
+| Olho da Rua | 5 furos comprados pelo Jornalista |
+| Caçador de Lendas | 5 recompensas por captura recebidas |
+
+Roubos e capturas usam os créditos positivos em Lunaris do extrato do
+Banqueiro. Débitos da vítima, multas e tentativas malsucedidas não contam.
+Os títulos de baús consideram `baus_entregas.status='entregue'`: incluem os
+baús automáticos, manuais e de rumores do Jornalista, mas não os baús
+comprados no Banqueiro. Reprocessar uma entrega não aumenta a contagem.
+O histórico existente conta quando há registros suficientes. Furos antigos
+sem lançamento no extrato não podem ser reconstruídos com segurança.
+
+### Fofocas e classificados
+
+`/vender_furo` aceita uma tentativa por hora por jogador e servidor, inclusive
+se a história for recusada. O intervalo sobrevive a reinícios. A chance de
+compra continua em 30%, pagando de 50 a 150 Solares; pagamento, extrato e
+criação da fofoca são gravados juntos. Não aceita o próprio jogador ou bots.
+
+`/subornar_jornalista` só cobra uma fofoca ainda dentro do prazo; cobrança e
+cancelamento são atômicos. Após o prazo, a fofoca entra na fila durável.
+`/anunciar_classificado` aceita texto de 1 a 3.000 caracteres e custa pelo
+menos 50 Solares. O débito e o anúncio são gravados juntos, sem nova cobrança
+ao repetir a mesma interação. Falhas de Discord são recuperadas pela fila.
 
 **Entrada/saída de membro** (`cogs/boasvindas.py` — sem comando, dispara
 sozinho):
@@ -254,12 +314,13 @@ bots/jornalista/
 
 ## Testes
 
-Os testes usam dublês locais de Discord e banco e não acessam o PostgreSQL de
-produção:
+Os testes usam dublês locais de Discord e um PostgreSQL descartável para
+integração. Defina `TEST_DATABASE_URL` com um banco local de testes, diferente
+de `DATABASE_URL`; cada teste cria e remove somente seu próprio schema.
+Os testes não devem apontar para o PostgreSQL de produção:
 
 ```bash
 cd bots/jornalista
 python -m pip install pytest
 python -m pytest tests/ -q
 ```
-

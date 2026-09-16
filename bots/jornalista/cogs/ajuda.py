@@ -83,6 +83,9 @@ CATEGORIAS = {
             ("/registro apagar <painel>", "[Mestre] Apaga um painel inteiro."),
             ("/registro canal <canal>", "[Mestre] Canal pra onde as boas-vindas mandam os novatos."),
             ("/registro preset_arvores", "[Mestre] Cria um painel pronto com as 10 Árvores do Jardim."),
+            ("/conquistas", "Mostra em privado os títulos secretos que você já descobriu."),
+            ("/conquistas_config listar", "[Mestre] Mostra os critérios e os cargos secretos criados."),
+            ("/conquistas_config sincronizar [jogador]", "[Mestre] Reavalia conquistas e tenta entregar cargos pendentes."),
         ],
     },
     "estrelas": {

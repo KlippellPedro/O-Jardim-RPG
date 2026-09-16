@@ -29,7 +29,7 @@ CATEGORIAS = {
             ("/cofre_seguranca_melhorar", "Sobe a segurança do cofre (reduz a chance de te roubarem)."),
             ("/cofre_depositar <quantia>", "Guarda dinheiro no cofre, onde a segurança reduz o risco de roubo."),
             ("/cofre_sacar <quantia>", "Tira dinheiro do cofre pra carteira (cobra taxa pequena)."),
-            ("/cartao", "Mostra nível, limite total/disponível e reputação bancária."),
+            ("/cartao", "Mostra nível, limite, reputação e como ganhar pontos com comandos, mensagens e recompensas."),
             ("/cartao_melhorar", "Sobe o nível do Cartão Lunar."),
             ("/fatura", "Mostra compras financiadas e seus vencimentos em sete dias."),
             ("/fatura_pagar <quantia>", "Paga faturas antigas; quitação pontual concede reputação."),

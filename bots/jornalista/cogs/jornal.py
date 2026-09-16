@@ -59,6 +59,7 @@ AUTOMACOES = {
     "clima_auto": ("Clima automático", False),
     "estacao_auto": ("Rotação automática de estação", False),
     "baus_auto": ("Baús automáticos", False),
+    "conquistas_secretas": ("Cargos secretos por conquistas", True),
 }
 
 AUTOMACAO_CHOICES = [
@@ -1618,20 +1619,18 @@ class Jornal(commands.Cog):
             return
             
         guild_id, user_id = str(interaction.guild_id), str(interaction.user.id)
-        fofoca = self.bot.db.get_fofoca_pendente_usuario(guild_id, user_id)
+        resultado = self.bot.db.subornar_fofoca(guild_id, user_id, datetime.now(timezone.utc))
         
-        if not fofoca:
-            await interaction.response.send_message("Não tenho nenhum furo de reportagem sobre você no momento. Está limpo!", ephemeral=True)
+        if resultado["status"] == "ausente":
+            await interaction.response.send_message("Você não tem fofocas dentro do prazo de suborno.", ephemeral=True)
             return
             
-        valor = fofoca["suborno_valor"]
+        valor = resultado["valor"]
         
-        if not self.bot.db.debitar(guild_id, user_id, "Lunaris", valor):
+        if resultado["status"] == "saldo_insuficiente":
             await interaction.response.send_message(f"Você não tem ☾ {valor} Lunaris para me pagar! Volte quando tiver dinheiro, ou sua reputação vai pra lama.", ephemeral=True)
             return
             
-        self.bot.db.atualizar_status_fofoca(fofoca["id"], "subornada")
-        
         emb = ui.embed(
             "🤐 Bico Calado",
             categoria="cofre",
@@ -1641,24 +1640,20 @@ class Jornal(commands.Cog):
 
     @app_commands.command(name="anunciar_classificado", description="Paga o Jornalista para publicar um anúncio no jornal (Ex: 'Compro Espada' ou 'Procuro guilda').")
     @app_commands.describe(texto="O texto do seu anúncio.", valor="Gorjeta extra em Solares para dar destaque (mínimo 50).")
-    async def anunciar_classificado(self, interaction: discord.Interaction, texto: str, valor: int = 50):
+    async def anunciar_classificado(
+        self, interaction: discord.Interaction, texto: app_commands.Range[str, 1, 3000],
+        valor: app_commands.Range[int, 50, 2_000_000_000] = 50,
+    ):
         if not interaction.guild_id:
             await interaction.response.send_message("Isso só funciona em um servidor.", ephemeral=True)
             return
             
-        if valor < 50:
-            await interaction.response.send_message("O espaço no jornal é caro! O anúncio custa no mínimo ☀️ 50 Solares.", ephemeral=True)
+        texto = texto.strip()
+        if not texto or len(texto) > 3000 or not 50 <= valor <= 2_000_000_000:
+            await interaction.response.send_message("Informe um anúncio de 1 a 3.000 caracteres e um valor válido a partir de 50 Solares.", ephemeral=True)
             return
             
         guild_id, user_id = str(interaction.guild_id), str(interaction.user.id)
-        
-        # Debita do jogador
-        if not self.bot.db.debitar(guild_id, user_id, "Solares", valor):
-            await interaction.response.send_message(f"Você não tem ☀️ {valor} Solares para pagar pelo anúncio.", ephemeral=True)
-            return
-            
-        # Pega o canal do jornal
-        canal_id = self.bot.db.get_canal_categoria(guild_id, "noticia")
         
         emb = ui.embed(
             "📰 CLASSIFICADOS",
@@ -1666,19 +1661,15 @@ class Jornal(commands.Cog):
             descricao=f"*{texto}*\n\n— *Anúncio pago por <@{user_id}> ({valor} Solares)*"
         )
         
-        from core import publicacoes
-        await publicacoes.publicar_ou_enfileirar(
-            self.bot,
-            guild_id=guild_id,
-            embed=emb,
-            origem="classificados",
-            dedupe_key=f"classificado:{interaction.id}",
-            categoria="noticia",
-            canal_id=canal_id,
-            automacao="classificados"
+        await interaction.response.defer(ephemeral=True)
+        publicacao = self.bot.db.comprar_classificado(
+            guild_id, user_id, valor, f"classificado:{interaction.id}", publicacoes.payload_embed(emb),
         )
-        
-        await interaction.response.send_message("Seu classificado foi entregue à redação e logo será publicado!", ephemeral=True)
+        if publicacao is None:
+            await interaction.followup.send(f"Você não tem ☀️ {valor} Solares para pagar pelo anúncio.", ephemeral=True)
+            return
+        await interaction.followup.send("Seu classificado foi entregue à redação e logo será publicado!", ephemeral=True)
+        await publicacoes.tentar_publicacao(self.bot, publicacao)
 
     @app_commands.command(name="vender_furo", description="Trabalho freelance! Venda fotos e segredos de outros pro Jornalista em troca de Solares.")
     @app_commands.describe(jogador="De quem é o segredo que você está vendendo?")
@@ -1688,28 +1679,29 @@ class Jornal(commands.Cog):
             return
             
         if jogador.id == interaction.user.id:
-            await interaction.response.send_message("Você não pode vender um furo sobre si mesmo! Isso é burrice.", ephemeral=True)
+            await interaction.response.send_message("Você não pode vender um furo sobre si mesmo.", ephemeral=True)
+            return
+        if jogador.bot:
+            await interaction.response.send_message("Escolha outro jogador, não um bot.", ephemeral=True)
             return
             
         guild_id, user_id = str(interaction.guild_id), str(interaction.user.id)
         
         import random
-        # 30% de chance do furo ser bom
-        if random.random() < 0.30:
-            recompensa = random.randint(50, 150)
-            self.bot.db.creditar(guild_id, user_id, "Solares", recompensa)
-            
-            # Adiciona fofoca sobre a vitima!
-            alvo_id = str(jogador.id)
-            prazo_fofoca = datetime.now(timezone.utc) + timedelta(minutes=30)
-            self.bot.db.adicionar_fofoca(
-                guild_id, alvo_id, f"Vazaram segredos obscuros de <@{alvo_id}>!", recompensa * 2, prazo_fofoca
-            )
-            
+        # Chance e recompensa preservadas; inclusive tentativas ruins têm intervalo.
+        recompensa = random.randint(50, 150) if random.random() < 0.30 else 0
+        resultado = self.bot.db.tentar_vender_furo(
+            guild_id, user_id, str(jogador.id), recompensa, datetime.now(timezone.utc),
+        )
+        if resultado["status"] == "cooldown":
+            quando = int(resultado["proxima_tentativa"].timestamp())
+            await interaction.response.send_message(f"Você poderá oferecer outro furo <t:{quando}:R>.", ephemeral=True)
+            return
+        if recompensa:
             emb = ui.embed(
                 "📸 Furo Comprado!",
                 categoria="cofre",
-                descricao=f"Ótimo material! Te paguei ☀️ **{recompensa} Solares** pelas fotos compromedoras do {jogador.mention}.\nO departamento vai entrar em contato com ele pra tentar um acordo..."
+                descricao=f"Ótimo material! Te paguei ☀️ **{recompensa} Solares** pelas fotos compromedoras do {jogador.mention}.\nA fofoca poderá ser publicada em 30 minutos; até lá, ele pode usar `/subornar_jornalista`."
             )
             await interaction.response.send_message(embed=emb, ephemeral=True)
         else:

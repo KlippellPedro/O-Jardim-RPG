@@ -21,6 +21,7 @@ EXTENSOES = (
     "cogs.publicacoes",
     "cogs.jornal",
     "cogs.registro",
+    "cogs.conquistas",
     "cogs.boasvindas",
     "cogs.horoscopo",
     "cogs.entrevista",
@@ -31,6 +32,9 @@ EXTENSOES = (
 
 COMANDOS_ESPERADOS = {
     "ajuda",
+    "conquistas",
+    "conquistas_config listar",
+    "conquistas_config sincronizar",
     "bau_agora",
     "bau_canais",
     "bau_canal_adicionar",

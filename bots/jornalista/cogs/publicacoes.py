@@ -40,15 +40,11 @@ class Publicacoes(commands.Cog):
                     categoria="noticia",
                     descricao=fofoca["texto_fofoca"]
                 )
-                await publicacoes.publicar_ou_enfileirar(
-                    self.bot,
-                    guild_id=fofoca["guild_id"],
-                    embed=emb,
-                    origem="fofoca",
-                    dedupe_key=f"fofoca_{fofoca['id']}",
-                    categoria="noticia"
+                publicacao = self.bot.db.enfileirar_fofoca(
+                    fofoca["id"], publicacoes.payload_embed(emb), agora,
                 )
-                self.bot.db.atualizar_status_fofoca(fofoca["id"], "publicada")
+                if publicacao:
+                    await publicacoes.tentar_publicacao(self.bot, publicacao)
             except Exception:
                 log.exception("erro ao publicar fofoca %s", fofoca["id"])
 

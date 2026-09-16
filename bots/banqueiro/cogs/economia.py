@@ -1906,6 +1906,17 @@ class Economia(commands.Cog):
             c["tier"], c["credito"], divida, faturas_pendentes
         )
         emb.add_field(name="🏦 Reputação bancária", value=f"**{c['credito']} pontos** · {benef['rotulo']}", inline=False)
+        emb.add_field(
+            name="Como ganhar reputação",
+            value=(
+                f"Comandos do Banqueiro: **+{economia.REPUTACAO_POR_COMANDO} ponto** por uso.\n"
+                f"Mensagens no servidor: **+{economia.REPUTACAO_POR_MENSAGEM} ponto**, "
+                f"no máximo uma vez a cada {economia.REPUTACAO_MENSAGEM_INTERVALO_SEGUNDOS} segundos.\n"
+                "Quitar faturas no prazo: **+3 a +50 pontos** por fatura.\n"
+                "Mandato semanal: **+5 pontos** ao resgatar; compra no Mercado Negro: **+1 ponto**."
+            ),
+            inline=False,
+        )
         emb.add_field(name="💳 Nível do cartão", value=tier["nome"], inline=False)
         emb.add_field(
             name="🌙 Limite do cartão",
@@ -2133,7 +2144,8 @@ class Economia(commands.Cog):
         if not estoque_ja_creditado:
             db.add_bau(sid, uid, b["id"], 1)
             db.registrar_extrato(sid, uid, -b["preco"], "Lunaris", f"Comprou {b['nome']}")
-        msg = f"Você comprou um **{b['nome']}** por ☾ {b['preco']}. Abra com `/abrir_bau`."
+        preco_pago = pagamento["carteira_usada"] + pagamento["financiado"]
+        msg = f"Você comprou um **{b['nome']}** por ☾ {preco_pago}. Abra com `/abrir_bau`."
         if pagamento["financiado"] > 0:
             vence_ts = int(pagamento["vence_em"].timestamp())
             msg += (
@@ -2160,7 +2172,7 @@ class Economia(commands.Cog):
         emb = ui.embed("🎁 Seus baús", categoria="bau", descricao="\n".join(linhas))
         await interaction.response.send_message(embed=emb)
 
-    def _entregar_legado(self, sid: str, uid: str, premio: dict) -> List[str]:
+    def _entregar_legado(self, sid: str, uid: str, premio: dict, moeda: str = "Lunaris") -> List[str]:
         """Entrega no cofre local. Levantar aqui significa "nada saiu", e é o
         que autoriza `_abrir_um_bau` a repor o baú.
 
@@ -2168,10 +2180,10 @@ class Economia(commands.Cog):
         jogador JÁ recebeu algo e repor o baú duplicaria o prêmio. Falha de
         item depois disso vira aviso na lista de ganhos, não exceção."""
         db = self.bot.db
-        db.creditar(sid, uid, "Lunaris", premio["lunaris"])
-        ganhos = [f"☾ {premio['lunaris']} Lunaris"]
+        db.creditar(sid, uid, moeda, premio["lunaris"])
+        ganhos = [f"{ui.simbolo_moeda(moeda)} {premio['lunaris']} {moeda}"]
         try:
-            db.registrar_extrato(sid, uid, premio["lunaris"], "Lunaris", "Baú aberto")
+            db.registrar_extrato(sid, uid, premio["lunaris"], moeda, "Baú aberto")
             tier = db.get_cofre_tier(sid, uid)
             for it in premio["itens"]:
                 if economia.pode_guardar(db.contar_itens(sid, uid), 1, tier):
@@ -2236,9 +2248,14 @@ class Economia(commands.Cog):
                 moedas=[],
             )
             if destino_entrega == entrega_mod.COFRE:
-                db.creditar(sid, uid, "Lunaris", premio["lunaris"])
-                return ganhos, "Lunaris na carteira · itens no cofre da conta no site", True, premio["lunaris"]
-            ganhos = self._entregar_legado(sid, uid, premio)
+                db.creditar(sid, uid, moeda_nome, premio["lunaris"])
+                try:
+                    db.registrar_extrato(sid, uid, premio["lunaris"], moeda_nome, "Baú aberto")
+                except Exception:
+                    # A moeda já saiu: falha de extrato não devolve outro baú.
+                    log.exception("falha ao registrar extrato do bau entregue (%s/%s)", sid, uid)
+                return ganhos, f"{moeda_nome} na carteira · itens no cofre da conta no site", True, premio["lunaris"]
+            ganhos = self._entregar_legado(sid, uid, premio, moeda_nome)
         except Exception:
             # Só chega aqui com o PostgreSQL fora: nem o cofre da conta nem o
             # local aceitaram escrita. Repõe o baú — ele foi pago.
@@ -2306,7 +2323,7 @@ class Economia(commands.Cog):
             return
         total_no_estoque = sum(e["quantidade"] for e in estoque)
         await interaction.response.defer()
-        total_lunaris = 0
+        totais_moedas: dict[str, int] = {}
         itens_ganhos: List[str] = []
         destinos: set[str] = set()
         interrompeu = False
@@ -2337,10 +2354,14 @@ class Economia(commands.Cog):
                     interrompeu = True
                     break
                 abertos += 1
-                total_lunaris += lunaris
+                moeda = "Créditos Sombrios" if b["id"].startswith("sombrio") else "Lunaris"
+                totais_moedas[moeda] = totais_moedas.get(moeda, 0) + lunaris
                 destinos.add(destino)
-                itens_ganhos.extend(g for g in ganhos if "Lunaris" not in g)
-        linhas = [f"Abriu **{abertos}** baú(s), ganhou ☾ **{total_lunaris} Lunaris** no total."]
+                itens_ganhos.extend(ganhos[1:])  # primeira linha é sempre a moeda
+        total_texto = " e ".join(
+            f"{ui.simbolo_moeda(moeda)} **{valor} {moeda}**" for moeda, valor in totais_moedas.items()
+        ) or "☾ **0 Lunaris**"
+        linhas = [f"Abriu **{abertos}** baú(s), ganhou {total_texto} no total."]
         if itens_ganhos:
             linhas.append("Itens: " + ", ".join(itens_ganhos)[:900])
         if destinos:
@@ -2360,7 +2381,7 @@ class Economia(commands.Cog):
     # ── Lavagem de Dinheiro ──
     @app_commands.command(name="lavar_dinheiro", description="Lava seus Créditos Sombrios em Solares limpos. Leva 24h.")
     @app_commands.describe(quantia="Quantidade de Créditos Sombrios para lavar.")
-    async def lavar_dinheiro(self, interaction: discord.Interaction, quantia: int):
+    async def lavar_dinheiro(self, interaction: discord.Interaction, quantia: app_commands.Range[int, 1, 2_000_000_000]):
         if quantia <= 0:
             await interaction.response.send_message("A quantia precisa ser positiva.", ephemeral=True)
             return
@@ -2368,23 +2389,13 @@ class Economia(commands.Cog):
         sid, uid = _sid(interaction), str(interaction.user.id)
         db = self.bot.db
         
-        db.garantir_jogador(sid, uid)
-        carteira = db.get_carteira(sid, uid)
-        
-        sombrios = carteira.get("Créditos Sombrios", 0)
-        if sombrios < quantia:
-            await interaction.response.send_message(f"Você só tem ♆ {sombrios} Créditos Sombrios na carteira.", ephemeral=True)
+        try:
+            lavagem = db.iniciar_lavagem(sid, uid, quantia, datetime.now(timezone.utc))
+        except SaldoInsuficiente as exc:
+            await interaction.response.send_message(f"💸 {exc}", ephemeral=True)
             return
-            
-        # Debita sombrios
-        if not db.debitar(sid, uid, "Créditos Sombrios", quantia):
-            await interaction.response.send_message("Erro ao processar a lavagem.", ephemeral=True)
-            return
-            
-        pronto_em = datetime.now(timezone.utc) + timedelta(hours=24)
-        db.adicionar_lavagem(sid, uid, quantia, pronto_em)
-        
-        pronto_ts = int(pronto_em.timestamp())
+
+        pronto_ts = int(lavagem["pronto_em"].timestamp())
         await interaction.response.send_message(
             f"🕴️ **O Doleiro pegou a grana.**\n"
             f"Você entregou ♆ {quantia} Créditos Sombrios.\n"
@@ -2398,31 +2409,17 @@ class Economia(commands.Cog):
         sid, uid = _sid(interaction), str(interaction.user.id)
         db = self.bot.db
         
-        lavagem = db.get_lavagem(sid, uid)
-        if not lavagem or lavagem["quantia"] <= 0:
+        resultado = db.resgatar_lavagem(sid, uid, datetime.now(timezone.utc))
+        if resultado["status"] == "ausente":
             await interaction.response.send_message("Você não tem nenhum dinheiro lavando.", ephemeral=True)
             return
             
-        if datetime.now(timezone.utc) < lavagem["pronto_em"]:
-            pronto_ts = int(lavagem["pronto_em"].timestamp())
+        if resultado["status"] == "aguardando":
+            pronto_ts = int(resultado["pronto_em"].timestamp())
             await interaction.response.send_message(f"Seu dinheiro ainda não está limpo. Volte <t:{pronto_ts}:R>.", ephemeral=True)
             return
             
-        quantia_sombrios = lavagem["quantia"]
-        
-        # Converte para Solares
-        # 1 Credito Sombrio = 2 Solares
-        rate, _taxa = db.get_cambio(sid)
-        solares_brutos = economia.converter(
-            quantia_sombrios, "Créditos Sombrios", "Solares", rate
-        )[0]
-        
-        # 15% taxa do doleiro
-        solares_limpos = max(1, int(solares_brutos * 0.85))
-        taxa = solares_brutos - solares_limpos
-        
-        db.creditar(sid, uid, "Solares", solares_limpos)
-        db.remover_lavagem(sid, uid)
+        solares_limpos, taxa = resultado["recebido"], resultado["taxa"]
         
         await interaction.response.send_message(
             f"💼 **Maleta na mão.**\n"
@@ -2436,30 +2433,11 @@ class Economia(commands.Cog):
         sid, uid = _sid(interaction), str(interaction.user.id)
         db = self.bot.db
         
-        # Verifica se o usuário tem o item no inventário
-        with db._conn() as con:
-            row = con.execute("SELECT quantidade FROM inventario WHERE guild_id=%s AND user_id=%s AND item_id='contrato-guarda-costas'", (sid, uid)).fetchone()
-            
-        if not row or row["quantidade"] <= 0:
+        if not db.contratar_guarda(sid, uid):
             await interaction.response.send_message("Você não tem nenhum Contrato Guarda-Costas no inventário! Compre na loja.", ephemeral=True)
             return
             
-        # Remove 1 do inventário
-        db.remover_item(sid, uid, "contrato-guarda-costas", 1)
-        
-        # Adiciona proteção
-        with db._conn() as con:
-            con.execute(
-                """
-                INSERT INTO protecoes_ativas (guild_id, user_id, tipo, quantidade)
-                VALUES (%s, %s, %s, 1)
-                ON CONFLICT (guild_id, user_id, tipo) DO UPDATE SET
-                    quantidade = protecoes_ativas.quantidade + 1
-                """,
-                (sid, uid, "guarda_costas")
-            )
-            
-        await interaction.response.send_message("🕴️ **Guarda-Costas contratado!** A sua próxima tentativa de roubo (carteira ou cofre) será barrada automaticamente.", ephemeral=True)
+        await interaction.response.send_message("🕴️ **Guarda-Costas contratado!** A próxima tentativa de roubo contra você (carteira ou cofre) será barrada automaticamente.", ephemeral=True)
 
 async def setup(bot):
     await bot.add_cog(Economia(bot))

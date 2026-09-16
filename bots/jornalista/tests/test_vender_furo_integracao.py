@@ -41,7 +41,7 @@ def _interacao(guild_id, user_id):
 
 
 def _jogador(jid):
-    return type("Membro", (), {"id": jid, "mention": f"<@{jid}>"})()
+    return type("Membro", (), {"id": jid, "mention": f"<@{jid}>", "bot": False})()
 
 
 def _cog(db):

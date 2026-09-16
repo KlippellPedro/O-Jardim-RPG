@@ -5,6 +5,7 @@ Ponto de entrada. Roda com: python main.py  (com o .env preenchido).
 
 from __future__ import annotations
 
+import asyncio
 import logging
 
 import discord
@@ -12,6 +13,7 @@ from discord.ext import commands
 
 from core import config
 from core import cassino as cassino_mod
+from core import economia as economia_mod
 from core.db import Database, DatabaseUnavailable
 from core.catalogo import Catalogo
 from core.inventario import Inventario
@@ -60,10 +62,41 @@ async def on_app_command_error(interaction: discord.Interaction, error: discord.
         log.info("nao consegui avisar o usuario sobre um erro de comando")
 
 
+class ArvoreComandosBanqueiro(discord.app_commands.CommandTree):
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        # O Gateway agenda on_interaction em paralelo ao comando. O ponto
+        # precisa estar confirmado antes de /cartao e /carteira lerem o saldo.
+        if (interaction.type != discord.InteractionType.application_command
+                or not interaction.guild_id or interaction.user.bot
+                or interaction.command is None):
+            return True
+        try:
+            await asyncio.to_thread(
+                self.client.db.adicionar_reputacao,
+                str(interaction.guild_id), str(interaction.user.id),
+                economia_mod.REPUTACAO_POR_COMANDO,
+            )
+        except Exception:
+            log.exception(
+                "falha ao registrar reputacao por comando (guild=%s user=%s)",
+                interaction.guild_id, interaction.user.id,
+            )
+            await interaction.response.send_message(
+                "⚠️ Não consegui registrar sua atividade no banco. "
+                "Tente o comando novamente em instantes.", ephemeral=True,
+            )
+            return False
+        return True
+
+
 class Banqueiro(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
-        super().__init__(command_prefix="!banqueiro ", intents=intents, help_command=None)
+        intents.guild_messages = True
+        super().__init__(
+            command_prefix="!banqueiro ", intents=intents, help_command=None,
+            tree_cls=ArvoreComandosBanqueiro,
+        )
         self.db = Database(
             config.DATABASE_URL,
             startup_timeout=config.DATABASE_STARTUP_TIMEOUT,
@@ -147,13 +180,29 @@ class Banqueiro(commands.Bot):
     async def on_ready(self):
         log.info("Banqueiro online como %s.", self.user)
 
+    async def on_message(self, message: discord.Message):
+        # Só metadados: não exige Message Content Intent nem lê o texto.
+        if (message.guild is not None and not message.author.bot
+                and message.webhook_id is None
+                and message.type in (discord.MessageType.default, discord.MessageType.reply)):
+            try:
+                await asyncio.to_thread(
+                    self.db.reputacao_por_mensagem,
+                    str(message.guild.id), str(message.author.id), message.created_at,
+                )
+            except Exception:
+                log.exception(
+                    "falha ao registrar reputacao por mensagem (guild=%s user=%s)",
+                    message.guild.id, message.author.id,
+                )
+        await self.process_commands(message)
+
     async def on_interaction(self, interaction: discord.Interaction):
         # commands.Bot/discord.Client não definem on_interaction por padrão
         # (o dispatch dos comandos em si já acontece antes, em
         # parse_interaction_create); não há super() a chamar aqui.
         if interaction.type == discord.InteractionType.application_command and interaction.guild_id:
             try:
-                self.db.adicionar_reputacao(str(interaction.guild_id), str(interaction.user.id), 1)
                 nome_comando = cassino_mod.nome_comando_interacao(interaction.data)
                 objetivo = cassino_mod.objetivo_para_comando(nome_comando)
                 if objetivo:
@@ -163,7 +212,7 @@ class Banqueiro(commands.Bot):
                     )
             except Exception:
                 log.exception(
-                    "falha ao registrar reputacao/contrato por interacao (guild=%s user=%s)",
+                    "falha ao registrar contrato por interacao (guild=%s user=%s)",
                     interaction.guild_id, interaction.user.id,
                 )
 

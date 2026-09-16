@@ -45,6 +45,14 @@ class RodadaCassinoConflito(RuntimeError):
 
 _SCHEMA = (
     """
+    CREATE TABLE IF NOT EXISTS reputacao_mensagens (
+        guild_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        ultima_em TIMESTAMPTZ NOT NULL,
+        PRIMARY KEY (guild_id, user_id)
+    )
+    """,
+    """
     CREATE TABLE IF NOT EXISTS carteira (
         guild_id TEXT NOT NULL,
         user_id TEXT NOT NULL,
@@ -665,12 +673,17 @@ _SCHEMA = (
     # antes ficaria com um item que o bot não encontra mais. Roda uma vez e
     # depois vira no-op, porque o id antigo deixa de existir.
     """
-    UPDATE inventario SET item_id = replace(item_id, '_', '-')
-    WHERE item_id IN (
-        'mn_relogio_de_bolso_corrompido', 'mn_adaga_das_sombras',
-        'mn_pocao_do_esquecimento', 'mn_mascara_sem_rosto',
-        'plano_de_saude_basico', 'plano_de_saude_vip', 'contrato_guarda_costas'
+    WITH antigos AS (
+        DELETE FROM inventario WHERE item_id IN (
+            'mn_relogio_de_bolso_corrompido', 'mn_adaga_das_sombras',
+            'mn_pocao_do_esquecimento', 'mn_mascara_sem_rosto',
+            'plano_de_saude_basico', 'plano_de_saude_vip', 'contrato_guarda_costas'
+        ) RETURNING *
     )
+    INSERT INTO inventario (guild_id, user_id, item_id, titulo, tipo, quantidade)
+    SELECT guild_id, user_id, replace(item_id, '_', '-'), titulo, tipo, quantidade FROM antigos
+    ON CONFLICT (guild_id, user_id, item_id) DO UPDATE SET
+        quantidade = inventario.quantidade + EXCLUDED.quantidade
     """,
 )
 
@@ -844,7 +857,7 @@ class Database:
             return pontos, False, 0
 
     def adicionar_reputacao(self, guild_id: str, user_id: str, valor: int = 1) -> None:
-        """Aumenta o limite de crédito (reputação) do jogador."""
+        """Soma pontos à reputação bancária, preservando o valor acumulado."""
         with self._conn() as con:
             self._garantir_jogador(con, guild_id, user_id)
             con.execute(
@@ -854,6 +867,29 @@ class Database:
                 """,
                 (valor, guild_id, user_id)
             )
+
+    def reputacao_por_mensagem(self, guild_id: str, user_id: str, criada_em: datetime) -> int:
+        """Concede o ponto e reserva o intervalo juntos, inclusive entre processos."""
+        intervalo = timedelta(seconds=economia.REPUTACAO_MENSAGEM_INTERVALO_SEGUNDOS)
+        with self._conn() as con:
+            reserva = con.execute(
+                """
+                INSERT INTO reputacao_mensagens (guild_id, user_id, ultima_em)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (guild_id, user_id) DO UPDATE SET ultima_em=EXCLUDED.ultima_em
+                WHERE reputacao_mensagens.ultima_em <= EXCLUDED.ultima_em - %s
+                RETURNING ultima_em
+                """,
+                (guild_id, user_id, criada_em, intervalo),
+            ).fetchone()
+            if reserva is None:
+                return 0
+            self._garantir_jogador(con, guild_id, user_id)
+            con.execute(
+                "UPDATE cartao SET credito=credito+%s WHERE guild_id=%s AND user_id=%s",
+                (economia.REPUTACAO_POR_MENSAGEM, guild_id, user_id),
+            )
+        return economia.REPUTACAO_POR_MENSAGEM
 
     # ── Controle de ciclos periódicos (evita reaplicar juros a cada restart) ─
     def ciclo_guild_devido(self, guild_id: str, ciclo: str, intervalo_horas: float) -> bool:
@@ -3705,6 +3741,7 @@ class Database:
                 "cassino_corrida_apostas", "cassino_rodadas", "cassino_jogadores",
                 "cassino_contrato_atividades", "cassino_contrato_resgates", "cassino_conquistas",
                 "cassino_torneio_entradas",
+                "reputacao_mensagens",
             ):
                 con.execute(
                     f"DELETE FROM {tabela} WHERE guild_id=%s AND user_id=%s",
@@ -3754,6 +3791,7 @@ class Database:
                 "cassino_rodadas", "cassino_jogadores",
                 "cassino_contrato_atividades", "cassino_contrato_resgates", "cassino_conquistas",
                 "cassino_torneio_entradas", "cassino_torneios",
+                "reputacao_mensagens",
             ):
                 cur = con.execute(f"DELETE FROM {tabela} WHERE guild_id=%s", (guild_id,))
                 resultado[tabela] = cur.rowcount
@@ -6168,6 +6206,116 @@ class Database:
                 (guild_id,),
             ).fetchall()
         return [dict(row) for row in rows]
+
+    def iniciar_lavagem(self, guild_id: str, user_id: str, quantia: int, agora: datetime) -> dict:
+        """Débito e reserva da lavanderia são confirmados juntos."""
+        if not isinstance(quantia, int) or isinstance(quantia, bool) or quantia <= 0:
+            raise ValueError("a quantia deve ser um inteiro positivo")
+        with self._conn() as con:
+            # A mesma ordem também é usada pelo resgate: a lavagem não pode
+            # receber um depósito enquanto outra transação a está encerrando.
+            con.execute("SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))", (f"lavagem:{guild_id}:{user_id}",))
+            self._garantir_jogador(con, guild_id, user_id)
+            moeda = self._nome_moeda_real(con, guild_id, user_id, "Créditos Sombrios")
+            saldo = con.execute(
+                """UPDATE carteira SET saldo=saldo-%s WHERE guild_id=%s AND user_id=%s
+                   AND moeda=%s AND saldo>=%s RETURNING saldo""",
+                (quantia, guild_id, user_id, moeda, quantia),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"precisa de {quantia} Créditos Sombrios")
+            row = con.execute(
+                """INSERT INTO lavagem_dinheiro (guild_id, user_id, quantia, pronto_em)
+                   VALUES (%s, %s, %s, %s) ON CONFLICT (guild_id, user_id) DO UPDATE SET
+                   quantia=lavagem_dinheiro.quantia+EXCLUDED.quantia,
+                   pronto_em=EXCLUDED.pronto_em RETURNING *""",
+                (guild_id, user_id, quantia, agora + timedelta(hours=24)),
+            ).fetchone()
+            self._registrar_extrato_tx(con, guild_id, user_id, -quantia, moeda, "Enviado para a lavanderia")
+        return dict(row)
+
+    def resgatar_lavagem(self, guild_id: str, user_id: str, agora: datetime) -> dict:
+        """Somente um resgate credita o saldo; falhas preservam a reserva."""
+        with self._conn() as con:
+            con.execute("SELECT pg_advisory_xact_lock(hashtextextended(%s, 0))", (f"lavagem:{guild_id}:{user_id}",))
+            lavagem = con.execute(
+                "SELECT * FROM lavagem_dinheiro WHERE guild_id=%s AND user_id=%s FOR UPDATE",
+                (guild_id, user_id),
+            ).fetchone()
+            if not lavagem or lavagem["quantia"] <= 0:
+                return {"status": "ausente"}
+            if lavagem["pronto_em"] > agora:
+                return {"status": "aguardando", "pronto_em": lavagem["pronto_em"]}
+            config = con.execute("SELECT cambio_rate, cambio_taxa FROM config WHERE guild_id=%s", (guild_id,)).fetchone()
+            bruto = economia.converter(
+                int(lavagem["quantia"]), "Créditos Sombrios", "Solares",
+                int(config["cambio_rate"]) if config else economia.CAMBIO_RATE_PADRAO,
+                float(config["cambio_taxa"]) if config else economia.CAMBIO_TAXA_PADRAO,
+            )[0]
+            # Mantém a taxa de 15% do doleiro, calculada com inteiros.
+            recebido = max(1, bruto * 85 // 100)
+            self._garantir_jogador(con, guild_id, user_id)
+            moeda = self._nome_moeda_real(con, guild_id, user_id, "Solares")
+            con.execute(
+                """INSERT INTO carteira (guild_id, user_id, moeda, saldo) VALUES (%s, %s, %s, %s)
+                   ON CONFLICT (guild_id, user_id, moeda) DO UPDATE SET saldo=carteira.saldo+EXCLUDED.saldo""",
+                (guild_id, user_id, moeda, recebido),
+            )
+            con.execute("DELETE FROM lavagem_dinheiro WHERE guild_id=%s AND user_id=%s", (guild_id, user_id))
+            self._registrar_extrato_tx(con, guild_id, user_id, recebido, moeda, "Resgate da lavanderia")
+        return {"status": "resgatada", "recebido": recebido, "taxa": bruto - recebido}
+
+    def contratar_guarda(self, guild_id: str, user_id: str) -> bool:
+        """Consome um contrato local e ativa a proteção na mesma transação."""
+        with self._conn() as con:
+            contrato = con.execute(
+                """UPDATE inventario SET quantidade=quantidade-1 WHERE guild_id=%s AND user_id=%s
+                   AND item_id='contrato-guarda-costas' AND quantidade>0 RETURNING quantidade""",
+                (guild_id, user_id),
+            ).fetchone()
+            if contrato is None:
+                return False
+            con.execute(
+                """INSERT INTO protecoes_ativas (guild_id, user_id, tipo, quantidade)
+                   VALUES (%s, %s, 'guarda_costas', 1) ON CONFLICT (guild_id, user_id, tipo)
+                   DO UPDATE SET quantidade=protecoes_ativas.quantidade+1""", (guild_id, user_id),
+            )
+            if contrato["quantidade"] == 0:
+                con.execute(
+                    "DELETE FROM inventario WHERE guild_id=%s AND user_id=%s AND item_id='contrato-guarda-costas'",
+                    (guild_id, user_id),
+                )
+        return True
+
+    def comprar_item_mercado_negro(
+        self, guild_id: str, user_id: str, item_id: str, titulo: str, tipo: str,
+        moeda: str, preco: int, quantidade: int,
+    ) -> None:
+        """Mantém a entrega local existente, com compra integral ou nenhum débito."""
+        if (not item_id or type(quantidade) is not int or not 1 <= quantidade <= 99
+                or type(preco) is not int or preco <= 0):
+            raise ValueError("item, preço ou quantidade inválidos")
+        if not any(economia.mesma_moeda(moeda, m) for m in economia.SALDO_INICIAL):
+            raise ValueError("moeda inválida")
+        custo = preco * quantidade
+        with self._conn() as con:
+            self._garantir_jogador(con, guild_id, user_id)
+            nome = self._nome_moeda_real(con, guild_id, user_id, moeda)
+            saldo = con.execute(
+                """UPDATE carteira SET saldo=saldo-%s WHERE guild_id=%s AND user_id=%s
+                   AND moeda=%s AND saldo>=%s RETURNING saldo""", (custo, guild_id, user_id, nome, custo),
+            ).fetchone()
+            if saldo is None:
+                raise SaldoInsuficiente(f"precisa de {custo} {nome}")
+            con.execute(
+                """INSERT INTO inventario (guild_id, user_id, item_id, titulo, tipo, quantidade)
+                   VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (guild_id, user_id, item_id)
+                   DO UPDATE SET quantidade=inventario.quantidade+EXCLUDED.quantidade,
+                                 titulo=EXCLUDED.titulo, tipo=EXCLUDED.tipo""",
+                (guild_id, user_id, item_id, titulo, tipo, quantidade),
+            )
+            con.execute("UPDATE cartao SET credito=credito+1 WHERE guild_id=%s AND user_id=%s", (guild_id, user_id))
+            self._registrar_extrato_tx(con, guild_id, user_id, -custo, nome, f"Mercado Negro: {titulo} x{quantidade}")
 
     def adicionar_lavagem(self, guild_id: str, user_id: str, quantia: int, pronto_em: datetime) -> None:
         with self._conn() as con:

@@ -21,6 +21,21 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
   `limite disponível = limite total - faturas pendentes - dívida`.
   O banco ainda armazena a reputação na coluna legada `cartao.credito`, mas
   comandos e mensagens usam os nomes corretos.
+- **Ganhos de reputação** — cada comando de aplicação conhecido do Banqueiro
+  enviado no servidor concede **1 ponto**, registrado antes da execução para
+  `/cartao` e `/carteira` já mostrarem o valor atualizado. O evento paralelo
+  `on_interaction` cuida apenas dos mandatos, sem conceder um segundo ponto.
+  Uma falha na gravação cancela o comando e avisa o jogador para tentar de novo.
+  Mensagens comuns e respostas concedem **1 ponto a cada 60 segundos** por
+  pessoa e servidor. Bots, webhooks, DMs, mensagens de sistema e edições não
+  pontuam. O intervalo é persistido em `reputacao_mensagens`, na mesma transação
+  do ponto: reiniciar o bot ou receber mensagens simultâneas não burla o limite.
+  O bot precisa conseguir ver o canal e receber eventos de mensagens; não é
+  necessário ativar o intent privilegiado de conteúdo das mensagens.
+  Faturas quitadas no prazo, compras no Mercado Negro (+1 por compra) e mandatos
+  semanais resgatados (+5) mantêm seus bônus próprios. `/cartao` explica essas
+  fontes. Pontos antigos são preservados; mensagens anteriores não são
+  recompensadas retroativamente e tempo em call não concede reputação.
 - **Fatura em sete dias** — o Banqueiro tenta cobrar somente a carteira. Se
   faltar Lunaris e o limite disponível cobrir todo o restante, mostra uma
   confirmação privada com preço, saldo, valor financiado, limite restante e
@@ -29,8 +44,8 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
   fatura inteira no prazo concede de 3 a 50 pontos de reputação, conforme o
   valor originalmente financiado. Depois de sete dias, somente o saldo ainda
   aberto vira dívida e passa a sofrer as regras de devedor. Reputação negativa
-  pode se recuperar até zero depois da quitação; reputação positiva só é ganha
-  mantendo faturas em dia.
+  pode se recuperar automaticamente até zero depois da quitação. Os ganhos por
+  atividade e recompensas são independentes dessa recuperação diária.
 - **Carteira** (`/carteira`) — dinheiro "vivo". Recebe o Lunaris dos baús,
   pagamentos, recompensas etc. `/roubar <membro>` responde apenas ao ladrão e
   manda a defesa por **DM** para a vítima, que tem **5 segundos** para clicar
@@ -80,6 +95,9 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
 - **Baús** — `/loja_baus` é a única loja mantida no Discord. Baús nunca
   sorteiam veículos, monstros, drops comerciais ou modificações, que possuem
   sistemas e preços próprios no site. IDs e estoques antigos permanecem válidos.
+  Baús Sombrios entregam Créditos Sombrios na carteira; os demais entregam
+  Lunaris. `/abrir_todos` mostra os totais separados por moeda. A confirmação
+  de compra informa o valor efetivamente cobrado, incluindo o ajuste do clima.
 - **Salão do Banco Lunar** — o grupo `/cassino` reúne Dados da Inconstância,
   Vinte-e-Um de Amadheus, Roda das Dez Forças, Sucessão de Chronus, Queda pelo
   Interstício, Corrida das Árvores, Pote das Dez Árvores, histórico, auditoria,
@@ -122,6 +140,29 @@ cuida só de dinheiro/posses — o loot que aparece sozinho pelo servidor
   dinheiro antes da conclusão e devolvem a reserva quando a operação falha,
   é recusada ou expira. `/economia_diagnostico` dá ao mestre uma visão
   privada de circulação, dívida, concentração, fluxo, roubos e reservas.
+- **Lavanderia** — `/lavar_dinheiro` debita Créditos Sombrios e registra a
+  reserva na mesma transação, inclusive quando o saldo restante é zero.
+  Novos depósitos se somam à reserva e reiniciam seu prazo de 24 horas.
+  `/lavanderia_resgatar` aplica o câmbio e a taxa bancária configurados, mais
+  a taxa de 15% do doleiro. O resgate é único e aparece no extrato; se a
+  gravação falhar, a reserva permanece disponível.
+- **Contratos e Mercado Negro** — a ativação de `/contratar_guarda` consome
+  o contrato do inventário local junto com a criação da proteção. Na compra
+  pelo Mercado Negro, débito, entrega local, reputação e extrato são gravados
+  juntos. Falhas de gravação desfazem toda a operação. Esses dois fluxos
+  continuam usando o inventário local do Banqueiro.
+
+### Revisão de comandos — setembro de 2026
+
+Além das operações acima, a migração de IDs antigos de itens agora combina
+as quantidades quando o inventário já contém o ID novo. Isso evita falha de
+inicialização por chave duplicada e não soma novamente ao reiniciar.
+
+As regressões estão em `tests/test_revisao_banqueiro.py`: saldo exato na
+lavanderia, resgates e contratos concorrentes, reversão de operações com falha,
+moedas dos baús, preço cobrado e migração repetida. Os testes de integração
+exigem `TEST_DATABASE_URL` apontando para um PostgreSQL descartável, diferente
+do banco de produção. Cada teste usa um schema isolado.
 
 Todas essas constantes (chances, percentuais, prazos) vivem em
 `core/economia.py`, fáceis de ajustar. O mestre também pode sobrescrever as

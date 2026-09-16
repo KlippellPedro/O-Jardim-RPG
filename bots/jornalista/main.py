@@ -28,6 +28,7 @@ EXTENSOES = (
     "cogs.publicacoes",
     "cogs.jornal",
     "cogs.registro",
+    "cogs.conquistas",
     "cogs.boasvindas",
     "cogs.horoscopo",
     "cogs.entrevista",

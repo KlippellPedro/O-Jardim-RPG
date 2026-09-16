@@ -44,7 +44,7 @@ class ComprarMercadoNegroModal(discord.ui.Modal, title="Comprar do Mercado Negro
 
         try:
             qtd = int(self.quantidade.value)
-            if qtd <= 0:
+            if not 1 <= qtd <= 99:
                 raise ValueError()
         except ValueError:
             await interaction.response.send_message("Quantidade inválida.", ephemeral=True)
@@ -55,39 +55,19 @@ class ComprarMercadoNegroModal(discord.ui.Modal, title="Comprar do Mercado Negro
         simbolo = ui.simbolo_moeda(moeda)
         custo_total = self.item_data["preco"] * qtd
 
-        self.bot.db.garantir_jogador(sid, uid)
-        carteira = self.bot.db.get_carteira(sid, uid)
-
-        saldo = carteira.get(moeda, 0)
-        if saldo < custo_total:
-            await interaction.response.send_message(
-                f"Você não tem {moeda} suficientes. "
-                f"Custa {simbolo} {custo_total}, você tem {simbolo} {saldo}.",
-                ephemeral=True,
-            )
-            return
-
-        # Debitar — levanta SaldoInsuficiente se a corrida mudar o saldo
         try:
-            self.bot.db.debitar(sid, uid, moeda, custo_total)
+            self.bot.db.comprar_item_mercado_negro(
+                sid, uid, self.item_data["id"], self.item_data["titulo"],
+                self.item_data.get("tipo", "item"), moeda, self.item_data["preco"], qtd,
+            )
         except SaldoInsuficiente:
             await interaction.response.send_message(
                 f"Saldo insuficiente de {moeda}.", ephemeral=True
             )
             return
-
-        # Entregar itens — add_item precisa de titulo e tipo
-        for _ in range(qtd):
-            self.bot.db.add_item(
-                sid, uid,
-                self.item_data["id"],
-                self.item_data["titulo"],
-                self.item_data.get("tipo", "item"),
-                qtd=1,
-            )
-
-        # Reputação passiva
-        self.bot.db.adicionar_reputacao(sid, uid, 1)
+        except ValueError:
+            await interaction.response.send_message("Esta oferta está com dados inválidos. Avise o mestre.", ephemeral=True)
+            return
 
         await interaction.response.send_message(
             f"🤝 Você comprou {qtd}× **{self.item_data['titulo']}** "

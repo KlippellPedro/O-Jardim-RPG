@@ -382,7 +382,10 @@ JUROS_COFRE_TETO = 1000
 DIVIDA_PENALIDADE_REPUTACAO = 15     # reputação cai isso a cada tick em dívida
 DIVIDA_REPUTACAO_MINIMA = -200       # reputação não desce de -200 só por dívida
 REPUTACAO_RECUPERACAO_TICK = 10      # recuperação de reputação negativa pra quem quitou as dívidas
-REPUTACAO_RECUPERACAO_TETO = 0       # reputação positiva é conquistada pagando faturas no prazo
+REPUTACAO_RECUPERACAO_TETO = 0       # a recuperação automática de quem quitou para em zero
+REPUTACAO_POR_COMANDO = 1
+REPUTACAO_POR_MENSAGEM = 1
+REPUTACAO_MENSAGEM_INTERVALO_SEGUNDOS = 60
 
 # Nomes antigos mantidos como aliases porque a coluna do banco e integrações
 # existentes ainda se chamam `credito`. Semanticamente, esses valores são a

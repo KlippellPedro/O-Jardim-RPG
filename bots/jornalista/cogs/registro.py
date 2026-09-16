@@ -11,7 +11,10 @@ recriar nada no boot. O mapeamento emoji→cargo vem do banco pelo id da mensage
 
 from __future__ import annotations
 
+import asyncio
 import logging
+from dataclasses import dataclass, field
+from weakref import WeakValueDictionary
 
 import discord
 from discord import app_commands
@@ -27,6 +30,12 @@ MAX_REACOES = 20
 
 # Emojis padrão do preset de Árvores (um por Árvore, na ordem de ARVORES).
 _EMOJIS_ARVORES = ("🌳", "🔥", "❄️", "⚡", "🌙", "☀️", "🌊", "💀", "🌀", "✨")
+
+
+@dataclass
+class _FilaRegistro:
+    lock: asyncio.Lock = field(default_factory=asyncio.Lock)
+    versao: int = 0
 
 
 def _normalizar_emoji(bruto: str) -> str | None:
@@ -50,6 +59,8 @@ class Registro(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        # Só mantém a fila enquanto há handlers usando/aguardando o painel.
+        self._filas: WeakValueDictionary = WeakValueDictionary()
 
     async def _achar_painel(self, interaction: discord.Interaction, painel: int):
         if not interaction.guild_id:
@@ -80,6 +91,16 @@ class Registro(commands.Cog):
         if dados is None:
             return  # reação em outra mensagem ou emoji não configurado
 
+        chave = (payload.guild_id, payload.message_id, payload.user_id)
+        fila = self._filas.get(chave)
+        if fila is None:
+            fila = self._filas[chave] = _FilaRegistro()
+        fila.versao += 1
+        versao = fila.versao
+        async with fila.lock:
+            await self._aplicar_reacao(payload, dados, adicionar, fila, versao)
+
+    async def _aplicar_reacao(self, payload, dados, adicionar, fila, versao):
         guild = self.bot.get_guild(payload.guild_id)
         if guild is None:
             return
@@ -87,18 +108,27 @@ class Registro(commands.Cog):
         if cargo is None:
             return
         membro = guild.get_member(payload.user_id)
-        if membro is None:
+        if membro is None or (adicionar and dados["unico"]):
+            # add_roles/remove_roles não atualizam Member.roles imediatamente.
+            # Consulte depois de entrar na fila para remover os irmãos atuais.
             try:
                 membro = await guild.fetch_member(payload.user_id)
-            except discord.HTTPException:
+            except discord.HTTPException as exc:
+                log.warning("Registro: falha ao consultar membro %s na guild %s: %s", payload.user_id, guild.id, exc)
                 return
         if membro.bot:
             return
 
         try:
             if not adicionar:
+                # Uma remoção gerada pela limpeza pode chegar depois de a
+                # pessoa selecionar esse mesmo emoji novamente.
+                if await self._ainda_reagiu(payload):
+                    return
                 await membro.remove_roles(cargo, reason="Registro: tirou a reação")
                 return
+            # Se a entrega falhar, preserve a escolha anterior e sua reação.
+            await membro.add_roles(cargo, reason="Registro: reagiu")
             if dados["unico"]:
                 irmaos = {
                     int(cid) for cid in dados["cargos_irmaos"] if str(cid) != str(dados["cargo_id"])
@@ -106,15 +136,39 @@ class Registro(commands.Cog):
                 remover = [r for r in membro.roles if r.id in irmaos]
                 if remover:
                     await membro.remove_roles(*remover, reason="Registro único: troca")
-                    await self._limpar_reacoes_irmas(payload, membro)
-            await membro.add_roles(cargo, reason="Registro: reagiu")
+                await self._limpar_reacoes_irmas(payload, membro, fila, versao)
         except discord.Forbidden:
             log.warning(
                 "Sem permissão pra gerenciar o cargo %s na guild %s: dê 'Gerenciar Cargos' "
                 "e suba o cargo do Jornalista acima dos de registro.", cargo.id, guild.id,
             )
+        except discord.HTTPException as exc:
+            log.warning(
+                "Registro: falha ao %s cargo %s do membro %s na guild %s: %s",
+                "adicionar/trocar" if adicionar else "remover", cargo.id, payload.user_id, guild.id, exc,
+            )
 
-    async def _limpar_reacoes_irmas(self, payload: discord.RawReactionActionEvent, membro: discord.Member):
+    async def _ainda_reagiu(self, payload):
+        canal = self.bot.get_channel(payload.channel_id)
+        if canal is None:
+            return False
+        try:
+            msg = await canal.fetch_message(payload.message_id)
+            for reacao in msg.reactions:
+                if str(reacao.emoji) != str(payload.emoji):
+                    continue
+                for tipo in (discord.ReactionType.normal, discord.ReactionType.burst):
+                    async for usuario in reacao.users(
+                        limit=1, after=discord.Object(id=payload.user_id - 1), type=tipo,
+                    ):
+                        if usuario.id == payload.user_id:
+                            return True
+        except discord.HTTPException as exc:
+            # Sem acesso ao histórico, ainda é possível processar o evento cru.
+            log.warning("Registro: não consegui conferir reação da mensagem %s: %s", payload.message_id, exc)
+        return False
+
+    async def _limpar_reacoes_irmas(self, payload, membro, fila, versao):
         """No modo único, tira as reações antigas do membro no painel pra elas
         refletirem a escolha única. Precisa de 'Gerenciar Mensagens'; sem ela,
         só o cargo troca (as reações podem ficar dessincronizadas)."""
@@ -127,7 +181,13 @@ class Registro(commands.Cog):
             return
         manter = str(payload.emoji)
         for reacao in msg.reactions:
+            # Outro clique já está na fila: a limpeza antiga não pode apagar
+            # a escolha nova enquanto as chamadas HTTP estão em andamento.
+            if fila.versao != versao:
+                return
             if str(reacao.emoji) == manter:
+                continue
+            if self.bot.db.get_opcao_por_reacao(str(payload.message_id), str(reacao.emoji)) is None:
                 continue
             try:
                 await reacao.remove(membro)
