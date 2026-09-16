@@ -37,6 +37,9 @@ export const TITULOS_TOPICOS: Record<string, string> = {
   bestiario: 'Bestiário',
   bases: 'Propriedades e Bases',
   'mundo-faccoes': 'Prestígio e Fama',
+  'entre-aventuras': 'Tempo Entre Aventuras',
+  'perseguicao-a-pe': 'Perseguições a Pé',
+  'conflito-social': 'Conflito Social',
   mestre: 'Guia do Mestre',
   economia: 'Economia',
 };

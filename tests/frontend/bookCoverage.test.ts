@@ -177,6 +177,154 @@ test('o lado do Mestre fica na mesma página e nunca sai no arquivo público', (
   });
 });
 
+// As tabelas de mesa do Guia do Mestre são consultadas com o dado já rolado:
+// uma linha faltando é um resultado que o Mestre não tem o que ler.
+test('tabelas de mesa do Guia do Mestre cobrem todo resultado do dado', () => {
+  const corpo = REGRAS_OFICIAIS.mestre.corpo;
+  const blocos = [...corpo.matchAll(/<summary>([^<]+)<span class="regras-details-contagem">(\dd\d+)<\/span><\/summary>([\s\S]*?)<\/details>/g)];
+  const tabelasDe = (html: string) => [...html.matchAll(/<tbody>([\s\S]*?)<\/tbody>/g)].map((achado) => achado[1]);
+  const faixaCoberta = (tbody: string) => {
+    const celulas = [...tbody.matchAll(/<tr><td>([^<]+)<\/td>/g)].map((achado) => achado[1].trim());
+    if (!celulas.length || !celulas.every((celula) => /^\d+(–\d+)?$/.test(celula))) return null;
+    const cobertos = new Set<number>();
+    celulas.forEach((celula) => {
+      const [inicio, fim = inicio] = celula.split('–').map(Number);
+      for (let valor = inicio; valor <= fim; valor += 1) cobertos.add(valor);
+    });
+    return [...cobertos].sort((a, b) => a - b);
+  };
+  const esperado = (dado: string) => {
+    const [quantidade, faces] = dado.split('d').map(Number);
+    const menor = quantidade === 2 ? 2 : 1;
+    const maior = quantidade * faces;
+    return Array.from({ length: maior - menor + 1 }, (_, indice) => menor + indice);
+  };
+
+  const porDado = (dado: string) => blocos.filter((bloco) => bloco[2] === dado);
+  assert.ok(porDado('1d6').length >= 8, 'o Guia do Mestre perdeu tabelas de descrição de momentos');
+  assert.ok(porDado('2d6').length >= 5, 'o Guia do Mestre perdeu tabelas de eventos aleatórios');
+  assert.ok(blocos.some((bloco) => bloco[2] === '1d12'), 'o Guia do Mestre perdeu as tabelas de NPC na hora');
+
+  blocos.forEach(([, titulo, dado, html]) => {
+    tabelasDe(html).forEach((tbody) => {
+      const cobertos = faixaCoberta(tbody);
+      // Tabela de apoio (ajustes, bolsa por classe) não começa por número.
+      if (!cobertos) return;
+      assert.deepEqual(cobertos, esperado(dado), `${titulo.trim()}: tabela de ${dado} com resultado sem linha`);
+    });
+  });
+});
+
+// Dinheiro é a única coisa do livro que existe em dois lugares: a escala da
+// economia e o texto do Mestre. Quando a escala mudar, o texto precisa mudar
+// junto, ou o Mestre paga a mesa pela tabela errada.
+test('o tesouro do Guia do Mestre segue a escala de preços oficial', () => {
+  const escala = JSON.parse(
+    readFileSync(new URL('../../data/economia/escala-precos-v1.json', import.meta.url), 'utf8'),
+  );
+  const corpo = REGRAS_OFICIAIS.mestre.corpo;
+
+  escala.verba_de_aventura.faixas.forEach((faixa: any) => {
+    const [inicio, fim] = faixa.niveis.split('-');
+    const valor = faixa.moeda === 'Solares'
+      ? `${faixa.por_sessao_solares} Solares`
+      : `${faixa.por_sessao_lunaris} Lunaris`;
+    assert.match(
+      corpo,
+      new RegExp(`<td>${inicio} a ${fim}</td><td>[^<]+</td><td>${valor}</td>`),
+      `verba de ${faixa.niveis} fora da escala: deveria ser ${valor} por sessão`,
+    );
+  });
+
+  escala.classes_sociais.degraus
+    .filter((degrau: any) => degrau.a_mao_dados && !['Dono de Dimensao', 'Soberano'].includes(degrau.classe))
+    .forEach((degrau: any) => {
+      assert.ok(
+        corpo.includes(`<td>${degrau.a_mao_dados}</td>`),
+        `bolsa de "${degrau.classe}" fora da escala: deveria ser ${degrau.a_mao_dados}`,
+      );
+    });
+
+  const lugares = escala.classes_sociais.modificador_por_lugar;
+  assert.match(corpo, new RegExp(`<td>Mercado Negro</td><td>${String(lugares['Mercado Negro']).replace('.', ',')}</td>`));
+  assert.match(corpo, new RegExp(`<td>Feira de vila</td><td>${String(lugares['Feira de Vila']).replace('.', ',')}</td>`));
+
+  // O custo de vida aparece na página que o jogador lê para decidir o intervalo.
+  const intervalo = REGRAS_OFICIAIS['entre-aventuras'].corpo;
+  const custo = escala.custo_de_vida;
+  const linhas: Array<[string, number]> = [
+    ['Refeição simples', custo.refeicao_simples],
+    ['Refeição farta', custo.refeicao_farta],
+    ['Noite em estalagem', custo.noite_em_estalagem],
+    ['Noite em quarto bom', custo.noite_em_quarto_bom],
+    ['Aluguel de um quarto, por mês', custo.aluguel_mensal_quarto],
+    ['Aluguel de uma casa, por mês', custo.aluguel_mensal_casa],
+    ['Viagem de carroça, por dia', custo.viagem_de_carroca_por_dia],
+    ['Serviço de cura leve', custo.servico_de_cura_leve],
+  ];
+  linhas.forEach(([rotulo, valor]) => {
+    assert.ok(
+      intervalo.includes(`<td>${rotulo}</td><td>${valor} Lunaris</td>`),
+      `custo de vida fora da escala: "${rotulo}" deveria custar ${valor} Lunaris`,
+    );
+  });
+  assert.ok(
+    intervalo.includes(`<td>Ofício comum, com uma perícia útil</td><td>${escala.ancora.salario_minimo_diario} Lunaris</td>`),
+    'o dia de trabalho comum saiu do salário mínimo diário da escala',
+  );
+});
+
+// O passo a passo de montar ameaça repete números que já existem na biblioteca
+// do mestre. Divergir deles seria pior que não ter o passo a passo: o Mestre
+// calibraria a mesa por uma tabela e o encontro por outra.
+test('montar uma ameaça segue a calibragem da biblioteca do mestre', () => {
+  const biblioteca = JSON.parse(
+    readFileSync(new URL('../../data/regras/mestre-v1.json', import.meta.url), 'utf8'),
+  );
+  const corpo = REGRAS_OFICIAIS.mestre.corpo;
+  const secao = corpo.slice(corpo.indexOf('Montar uma ameaça sob medida'));
+  const texto = semHtml(secao);
+
+  const orcamento = biblioteca.secoes.find((s: any) => s.titulo === 'Orçamento de um encontro');
+  const multiplicadores = orcamento.itens.join(' ').match(/×\s?([\d,]+)/g)?.map((t: string) => t.replace(/[×\s]/g, ''));
+  assert.deepEqual(multiplicadores, ['4,5', '3', '6'], 'a biblioteca mudou os multiplicadores de Vida do encontro');
+  ['4,5', ' 3 ', ' 6 '].forEach((valor) => {
+    assert.ok(texto.includes(valor.trim()), `o passo a passo não cita o multiplicador ${valor.trim()}`);
+  });
+  assert.match(texto, /80% e 110%/, 'a faixa de ações inimigas por rodada saiu do texto');
+
+  const papeis = biblioteca.secoes.find((s: any) => s.titulo === 'Ataque e dano de inimigos');
+  papeis.linhas.forEach(([papel, acerto, dano]: [string, string, string]) => {
+    const esperado = `<td>${papel}</td>`;
+    const alternativa = papel === 'Golpe de chefe anunciado' ? '<td>Chefe</td>' : esperado;
+    assert.ok(secao.includes(esperado) || secao.includes(alternativa), `papel sem linha na tabela: ${papel}`);
+    const secaoBaixa = secao.toLowerCase();
+    assert.ok(
+      secaoBaixa.includes(acerto.replace('–', ' a ').toLowerCase()) || secaoBaixa.includes(acerto.toLowerCase()),
+      `${papel}: chance de acerto diferente da biblioteca (${acerto})`,
+    );
+    const fatia = dano.replace('–', ' a ');
+    assert.ok(
+      secao.includes(fatia) || secao.includes(dano),
+      `${papel}: dano diferente da biblioteca (${dano})`,
+    );
+  });
+});
+
+// Boato é a porta de entrada da lore na mesa. Uma Árvore sem tabela é uma
+// Árvore que o Mestre nunca tem o que dizer sobre.
+test('toda Árvore das crônicas tem tabela de boatos no Guia do Mestre', () => {
+  const cronicas = JSON.parse(
+    readFileSync(new URL('../../data/mundo/cronicas-arvores.json', import.meta.url), 'utf8'),
+  );
+  const corpo = REGRAS_OFICIAIS.mestre.corpo;
+  const semTabela = cronicas.arvores
+    .map((arvore: any) => arvore.nome)
+    .filter((nome: string) => !corpo.includes(`<summary>${nome} <span class="regras-details-contagem">1d6</span></summary>`));
+
+  assert.deepEqual(semTabela, [], 'estas Árvores ficaram sem boatos');
+});
+
 // Mecânica que existe no sistema e não tem página vira conhecimento oral: só
 // quem estava na mesa no dia sabe que ela existe.
 test('toda mecânica do sistema tem uma página', () => {
@@ -196,8 +344,11 @@ test('toda mecânica do sistema tem uma página', () => {
     ['aflicoes', 'veneno, doença e vício'],
     ['acoes-coletivas', 'ajudar e teste de grupo'],
     ['ataques-combinados', 'ataque sincronizado'],
+    ['perseguicao-a-pe', 'alguém correu e alguém foi atrás'],
+    ['conflito-social', 'interrogatório, negociação e audiência em rodadas'],
     ['xp', 'progressão e recompensa'],
     ['treinar', 'subir grau de perícia'],
+    ['entre-aventuras', 'o que se faz com os dias entre um arco e outro'],
     ['legados', 'escolhas permanentes a cada cinco níveis'],
     ['aliados', 'criaturas e contratados que lutam com o grupo'],
     ['frutos-implantes', 'Frutos do Éden e implantes cibernéticos'],

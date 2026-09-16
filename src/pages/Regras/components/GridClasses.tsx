@@ -8,6 +8,7 @@ import { classeTemProgressaoPublicada, formatarResumoClasse } from '../../../ser
 import { PremiumCard } from '../../../redesign/components/premium/PremiumCard';
 import { AuraEspecial } from '../../../redesign/components/premium/AuraEspecial';
 import { obterTemaPorId } from '../../../redesign/themeMap';
+import { salvarPosicaoRetornoRegras } from '../regrasScrollRestoration';
 
 interface GridClassesProps {
   classes: IClasse[];
@@ -33,6 +34,12 @@ export const GridClasses: React.FC<GridClassesProps> = ({ classes }) => {
   const navigate = useNavigate();
   const [busca, setBusca] = useState('');
   const termo = busca.trim().toLocaleLowerCase('pt-BR');
+
+  const abrirClasse = (classeId: string) => {
+    const scrollTop = document.getElementById('regra-leitor')?.scrollTop ?? 0;
+    const retornoRegras = salvarPosicaoRetornoRegras('classes', scrollTop);
+    navigate(`/regras/classes/${classeId}`, { state: { retornoRegras } });
+  };
 
   const grupos = useMemo(() => {
     const base = [
@@ -116,7 +123,7 @@ export const GridClasses: React.FC<GridClassesProps> = ({ classes }) => {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.28, delay: Math.min(idx * 0.03, 0.24) }}
-                  onClick={() => navigate(`/regras/classes/${classe.id}`)}
+                  onClick={() => abrirClasse(classe.id)}
                   className={`content-auto-list-item cursor-pointer min-h-[180px] p-6 text-left shadow-lg border ${tema.border} ${tema.bg}`}
                 >
                   {/* Background glow blob */}

@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShieldAlert, ArrowLeft, BookOpen, Pencil, Sparkles } from 'lucide-react';
 import {
@@ -18,10 +18,12 @@ import { AuraEspecial, SeloEspecial } from '../../redesign/components/premium/Au
 import { RACA_PAGES } from '../../redesign/raca/registry';
 import { CLASSE_PAGES } from '../../redesign/classe/registry';
 import { useResolvedRules } from '../../hooks/useResolvedRules';
+import { obterPosicaoRetornoRegras } from './regrasScrollRestoration';
 
 export const RegraDetalhesPage = () => {
   const { categoria, itemId } = useParams<{ categoria: string; itemId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { usuario, campanhaAtiva } = useAuthStore();
   const { podeEditarConteudo } = usePermissoes();
   const isMestre = usuario?.papel_plataforma === 'admin'
@@ -51,6 +53,11 @@ export const RegraDetalhesPage = () => {
     : undefined;
   const item = raca ?? classe;
   const rotaRetorno = `/regras?topico=${categoria === 'classes' ? 'classes' : 'racas'}`;
+  const posicaoRetorno = obterPosicaoRetornoRegras(location.state, categoria || '');
+  const voltarParaCatalogo = () => navigate(
+    rotaRetorno,
+    posicaoRetorno ? { state: { retornoRegras: posicaoRetorno } } : undefined,
+  );
   const rotaEdicao = `/criador?aba=conteudo&secao=regras&item=${categoria === 'classes' ? 'classe' : 'raca'}:${encodeURIComponent(itemId || '')}${campanhaAtiva ? `&campanha_id=${encodeURIComponent(campanhaAtiva.id)}` : ''}`;
   const gruposEscolhaRacial = obterGruposEscolhaRacial(raca);
   const estagiosRaciais = obterEstagiosRaciais(raca);
@@ -93,7 +100,7 @@ export const RegraDetalhesPage = () => {
           <h1 className="text-3xl font-bold mb-4" style={{ fontFamily: 'Cinzel, serif' }}>Tópico Não Encontrado</h1>
           <p className="text-gray-400 mb-8">A página solicitada não existe ou foi removida dos compêndios.</p>
           <button
-            onClick={() => navigate(rotaRetorno)}
+            onClick={voltarParaCatalogo}
             className="px-6 py-3 rounded-full bg-yellow-600/20 text-yellow-500 font-bold hover:bg-yellow-600/30 border border-yellow-600/30 transition-all flex items-center gap-2"
           >
             <ArrowLeft size={18} />
@@ -113,7 +120,7 @@ export const RegraDetalhesPage = () => {
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          onClick={() => navigate(rotaRetorno)}
+          onClick={voltarParaCatalogo}
           className="detail-back-button fixed z-[60] flex items-center gap-2 rounded-full border border-white/10 bg-black/60 px-4 py-2 text-sm font-bold uppercase tracking-wider text-gray-300 backdrop-blur-md transition-colors hover:text-white"
         >
           <ArrowLeft size={16} />
@@ -150,7 +157,7 @@ export const RegraDetalhesPage = () => {
           <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            onClick={() => navigate(rotaRetorno)}
+            onClick={voltarParaCatalogo}
             className="group flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gray-400 transition-colors hover:text-white"
           >
             <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />

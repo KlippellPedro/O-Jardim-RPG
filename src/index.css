@@ -201,6 +201,22 @@
   .regras-content table.regras-table td:first-child {
     min-width: 9rem;
   }
+  /* Tabela de rolagem: a primeira coluna só guarda o número do dado, e os 9rem
+     acima roubavam espaço da descrição, que é a parte lida em voz alta. */
+  .regras-content table.regras-table--dado td:first-child,
+  .regras-content table.regras-table--dado th:first-child {
+    @apply w-14 text-center font-serif text-lg font-bold text-[#d8bd75];
+    min-width: 3.5rem;
+  }
+  .regras-content table.regras-table--dado th:first-child {
+    @apply text-[10px];
+  }
+  /* Segunda camada de uma linha de tabela do Mestre: a regra de um evento ou o
+     gancho de um boato. Separada da cena para o Mestre ler a primeira parte em
+     voz alta e aplicar a segunda sem reler tudo. */
+  .regras-content .regras-mecanica {
+    @apply mt-3 block border-t border-dashed border-[#c7a44c]/25 pt-2.5 text-[0.92em] leading-6 text-[#cbb87e];
+  }
   .regras-content table.regras-table tbody tr:hover {
     @apply bg-white/5 transition-colors;
   }

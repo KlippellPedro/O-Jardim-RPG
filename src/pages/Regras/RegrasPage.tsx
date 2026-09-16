@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowLeft,
@@ -34,9 +34,10 @@ import { CatalogoAflicoes } from './components/CatalogoAflicoes';
 import { GridClasses } from './components/GridClasses';
 import { GridRacas } from './components/GridRacas';
 import { RegrasContent } from './components/RegrasContent';
-import { FerramentasMestre } from './components/FerramentasMestre';
-import { NotasInternasMestre } from './components/NotasInternasMestre';
+import { GuiaDoMestre } from './components/GuiaDoMestre';
+import { estantesParaNavegacao, estruturarGuiaMestre } from './guiaMestre';
 import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
+import { limparPosicaoRetornoRegras, obterPosicaoRetornoRegras } from './regrasScrollRestoration';
 
 function normalizar(valor: string) {
   return valor.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR');
@@ -49,6 +50,7 @@ function RulesLanding({
   onSelectTopic,
   isMestre,
   podeEditarConteudo,
+  subtopicos,
 }: {
   availableTopics: string[];
   regras: RegrasCatalog;
@@ -56,6 +58,7 @@ function RulesLanding({
   onSelectTopic: (topic: string) => void;
   isMestre: boolean;
   podeEditarConteudo: boolean;
+  subtopicos: Record<string, SubtopicoNavegacao[]>;
 }) {
   const [buscaInicio, setBuscaInicio] = useState('');
   const termo = normalizar(buscaInicio.trim());
@@ -175,7 +178,20 @@ function RulesLanding({
                   >
                     <span className="min-w-0">
                       <strong className="block text-base leading-6 text-gray-100 transition-colors group-hover:text-[#f2ead7]">{tituloTopico(topico, titulos)}</strong>
-                      <span className="mt-2 line-clamp-3 block text-sm leading-6 text-gray-400">{regras[topico].resumo}</span>
+                      {subtopicos[topico]?.length ? (
+                        <>
+                          <span className="mt-2 line-clamp-2 block text-sm leading-6 text-gray-400">{regras[topico].resumo}</span>
+                          <span className="mt-3 flex flex-wrap gap-1.5">
+                            {subtopicos[topico].map((subtopico) => (
+                              <span key={subtopico.id} className="rounded-full border border-[#c7a44c]/25 bg-[#c7a44c]/[0.07] px-2.5 py-1 text-[11px] font-semibold text-[#dcc37f]">
+                                {subtopico.titulo}
+                              </span>
+                            ))}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="mt-2 line-clamp-3 block text-sm leading-6 text-gray-400">{regras[topico].resumo}</span>
+                      )}
                     </span>
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#c7a44c]/20 bg-[#c7a44c]/10 text-[#d8bd75] transition group-hover:border-[#c7a44c]/45 group-hover:bg-[#c7a44c]/15">
                       <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -191,8 +207,16 @@ function RulesLanding({
   );
 }
 
+interface SubtopicoNavegacao {
+  id: string;
+  titulo: string;
+}
+
 interface ChapterNavigationProps {
   activeTopic: string;
+  subtopicos: Record<string, SubtopicoNavegacao[]>;
+  subtopicoAtivo: string | null;
+  onSelectSubtopico: (topic: string, subtopico: string) => void;
   busca: string;
   groupedKeys: Record<string, string[]>;
   titulos: Record<string, string>;
@@ -204,6 +228,9 @@ interface ChapterNavigationProps {
 
 const ChapterNavigation = ({
   activeTopic,
+  subtopicos,
+  subtopicoAtivo,
+  onSelectSubtopico,
   busca,
   groupedKeys,
   titulos,
@@ -289,21 +316,47 @@ const ChapterNavigation = ({
               {aberta ? (
                 <div className="mt-1 space-y-1 border-l border-white/10 pl-2">
                   {keys.map((key) => (
-                    <button
-                      key={key}
-                      type="button"
-                      onClick={() => {
-                        onSelectTopic(key);
-                        onClose?.();
-                      }}
-                      aria-current={activeTopic === key ? 'page' : undefined}
-                      className={`group flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${activeTopic === key
-                        ? 'bg-[#c7a44c]/10 text-[#e1c77e]'
-                        : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
-                    >
-                      <span>{tituloTopico(key, titulos)}</span>
-                      {activeTopic === key ? <ChevronRight size={15} className="text-[#c7a44c]" /> : null}
-                    </button>
+                    <div key={key}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onSelectTopic(key);
+                          onClose?.();
+                        }}
+                        aria-current={activeTopic === key ? 'page' : undefined}
+                        className={`group flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${activeTopic === key
+                          ? 'bg-[#c7a44c]/10 text-[#e1c77e]'
+                          : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
+                      >
+                        <span>{tituloTopico(key, titulos)}</span>
+                        {activeTopic === key ? <ChevronRight size={15} className="text-[#c7a44c]" /> : null}
+                      </button>
+                      {subtopicos[key]?.length ? (
+                        <ul className="mb-1 ml-3 mt-1 space-y-0.5 border-l border-[#c7a44c]/20 pl-2" aria-label={`Partes de ${tituloTopico(key, titulos)}`}>
+                          {subtopicos[key].map((subtopico, indice) => {
+                            const ativo = activeTopic === key && (subtopicoAtivo ?? subtopicos[key][0].id) === subtopico.id;
+                            return (
+                              <li key={subtopico.id}>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    onSelectSubtopico(key, subtopico.id);
+                                    onClose?.();
+                                  }}
+                                  aria-current={ativo ? 'location' : undefined}
+                                  className={`flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-[13px] transition-colors ${ativo
+                                    ? 'bg-[#c7a44c]/10 text-[#e1c77e]'
+                                    : 'text-gray-500 hover:bg-white/5 hover:text-gray-200'}`}
+                                >
+                                  <span className="w-4 shrink-0 text-right font-mono text-[10px] text-gray-600">{indice + 1}</span>
+                                  <span className="truncate">{subtopico.titulo}</span>
+                                </button>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      ) : null}
+                    </div>
                   ))}
                 </div>
               ) : null}
@@ -319,6 +372,7 @@ const ChapterNavigation = ({
 
 export const RegrasPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
   const [busca, setBusca] = useState('');
   const [menuAberto, setMenuAberto] = useState(false);
   const mobileMenuRef = useRef<HTMLElement>(null);
@@ -379,12 +433,66 @@ export const RegrasPage = () => {
   const activeTopic = topicoSolicitado && catalogKeys.includes(topicoSolicitado)
     ? topicoSolicitado
     : '';
+  const retornoAplicadoRef = useRef(false);
+
+  useLayoutEffect(() => {
+    if (retornoAplicadoRef.current) return;
+    const posicao = obterPosicaoRetornoRegras(location.state, activeTopic);
+    if (!posicao) return;
+
+    let quadro = 0;
+    let tentativas = 0;
+    const restaurar = () => {
+      const leitor = document.getElementById('regra-leitor');
+      if (!leitor) {
+        if (tentativas++ < 30) quadro = window.requestAnimationFrame(restaurar);
+        return;
+      }
+
+      const limiteAtual = Math.max(0, leitor.scrollHeight - leitor.clientHeight);
+      if (limiteAtual + 1 < posicao.scrollTop && tentativas++ < 30) {
+        quadro = window.requestAnimationFrame(restaurar);
+        return;
+      }
+
+      retornoAplicadoRef.current = true;
+      leitor.scrollTo({ top: Math.min(posicao.scrollTop, limiteAtual), behavior: 'auto' });
+      limparPosicaoRetornoRegras();
+    };
+
+    quadro = window.requestAnimationFrame(restaurar);
+    return () => window.cancelAnimationFrame(quadro);
+  }, [activeTopic, location.state]);
+
+  const estantesMestre = useMemo(
+    () => (isMestre && regrasCatalog.mestre
+      ? estantesParaNavegacao(estruturarGuiaMestre(regrasCatalog.mestre.corpo))
+      : []),
+    [isMestre, regrasCatalog],
+  );
+  const subtopicos = useMemo<Record<string, SubtopicoNavegacao[]>>(
+    () => {
+      const mapa: Record<string, SubtopicoNavegacao[]> = {};
+      if (estantesMestre.length) mapa.mestre = estantesMestre;
+      return mapa;
+    },
+    [estantesMestre],
+  );
+  const subtopicoAtivo = searchParams.get('estante');
 
   const setActiveTopic = (topico: string) => {
     const proximosParametros = new URLSearchParams(searchParams);
     proximosParametros.set('topico', topico);
+    proximosParametros.delete('estante');
     setSearchParams(proximosParametros);
     document.getElementById('regra-leitor')?.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const abrirSubtopico = (topico: string, subtopico: string) => {
+    const proximosParametros = new URLSearchParams(searchParams);
+    proximosParametros.set('topico', topico);
+    proximosParametros.set('estante', subtopico);
+    setSearchParams(proximosParametros);
   };
 
   const [tourAberto, setTourAberto] = useState(false);
@@ -461,6 +569,7 @@ export const RegrasPage = () => {
     'modificacoes-equipamentos',
     'veiculos-cenas',
     'aflicoes',
+    'mestre',
   ].includes(activeTopic);
 
   return (
@@ -468,6 +577,9 @@ export const RegrasPage = () => {
       <aside data-tour="regras-sidebar" className="hidden h-full min-h-0 w-72 shrink-0 overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#0d0c12]/95 py-5 shadow-2xl backdrop-blur-xl md:block">
         <ChapterNavigation
           activeTopic={activeTopic}
+          subtopicos={subtopicos}
+          subtopicoAtivo={subtopicoAtivo}
+          onSelectSubtopico={abrirSubtopico}
           busca={busca}
           groupedKeys={groupedKeys}
           titulos={titulos}
@@ -574,11 +686,7 @@ export const RegrasPage = () => {
                     <CatalogoBestiario />
                   </>
                 ) : activeTopic === 'mestre' ? (
-                  <>
-                    <RegrasContent htmlContent={topicData.corpo} />
-                    <FerramentasMestre campanhaId={campanhaAtiva?.id} />
-                    <NotasInternasMestre campanhaId={campanhaAtiva?.id} />
-                  </>
+                  <GuiaDoMestre html={topicData.corpo} campanhaId={campanhaAtiva?.id} />
                 ) : (
                   <RegrasContent htmlContent={topicData.corpo} />
                 )}
@@ -623,6 +731,7 @@ export const RegrasPage = () => {
                 onSelectTopic={setActiveTopic}
                 isMestre={isMestre}
                 podeEditarConteudo={podeEditarConteudo}
+                subtopicos={subtopicos}
               />
             )}
           </AnimatePresence>
@@ -646,6 +755,9 @@ export const RegrasPage = () => {
             >
               <ChapterNavigation
                 activeTopic={activeTopic}
+                subtopicos={subtopicos}
+                subtopicoAtivo={subtopicoAtivo}
+                onSelectSubtopico={abrirSubtopico}
                 busca={busca}
                 groupedKeys={groupedKeys}
                 titulos={titulos}

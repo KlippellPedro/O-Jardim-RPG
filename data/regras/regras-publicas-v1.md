@@ -496,6 +496,178 @@ Um Ataque Combinado reúne ataques contra o mesmo alvo e resolve o dano ao mesmo
 
 - Ataque Combinado entre personagens não é Fusão de Fluxos. Ele não cria um novo efeito.
 
+## perseguicao-a-pe
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Alguém correu, e a cena vira uma disputa de faixas de distância, com a cidade inteira no caminho. Vale para fuga, captura e para a perseguição que atravessa metade de um bairro.
+
+Quando alguém corre e alguém vai atrás, a cena muda de ritmo. A respiração fica curta, a cidade vira obstáculo e cada esquina pode ser a última chance de alcançar, ou de sumir. A perseguição usa as mesmas faixas de distância da perseguição de veículos, e cada rodada move essas faixas conforme o que cada lado tentou.
+
+### As faixas
+
+- Faixa | Como parece, e a distância
+
+- Contato | Dá para ouvir a respiração do outro e agarrar a ponta do casaco.Até 1,5 m. Permite colisão e abordagem.
+
+- Curta | Dá para ver a nuca dele e ouvir as botas batendo na pedra logo à frente.Até 5 m. Use a faixa Curto das regras de distância.
+
+- Média | Ele vira as esquinas antes de você, e some por um segundo a cada curva.Até 15 m. Use a faixa Médio das regras de distância.
+
+- Longa | Só se vê um casaco mudando de rua ao longe, e a multidão fecha no meio.Até 25 m. Use a faixa Longo das regras de distância.
+
+- Escapou | A rua está cheia de gente comum, e nenhuma delas é quem vocês procuram.O alvo saiu da perseguição e não pode ser alcançado nesta cena.
+
+- **A perseguição começa onde os dois estavam** quando um deles saiu correndo. Fuga de uma conversa começa em Contato; fuga de uma emboscada avistada de longe começa em Longa.
+
+- **Os dois lados sabem o que querem.** Quem persegue quer chegar a Contato. Quem foge quer chegar a Escapou.
+
+- **O grupo corre no passo de quem está mais atrás.** Quem quiser disparar sozinho passa a ter faixa própria, e vê o resto do grupo ficar para trás.
+
+### A rodada
+
+- O Mestre descreve o terreno da rodada do jeito que quem corre enxerga: rápido e pela metade. Ele rola 1d6 na tabela de obstáculos ou escolhe um.
+
+- Cada lado declara uma manobra, dizendo o que faz com o corpo. Quem foge declara primeiro, porque está de costas.
+
+- Resolvam os testes. Quem vence move uma faixa a favor, e vitória por 10 ou mais move duas.
+
+- Aplique o obstáculo a quem não lidou com ele na manobra.
+
+- Marque uma parte do relógio da perseguição.
+
+A perseguição dura 6 rodadas. Se ninguém chegou a Contato nem a Escapou quando o relógio fechar, quem foge conseguiu se perder no meio da cidade, e quem perseguia continua com o rastro fresco, que já é outra cena.
+
+### Manobras
+
+Cada manobra traz o que o corpo faz e, embaixo, como se resolve. Diga a cena antes de rolar: é ela que diz ao Mestre onde a perseguição está acontecendo.
+
+- Manobra | Como é, e como se resolve
+
+- Correr solto | Cabeça baixa, braços trabalhando, o peito queimando. Nada de truque: só perna e vontade.Teste: Atletismo oposto. Sucesso: Quem vence move uma faixa a favor. Vitória por 10 ou mais move duas. Falha: A faixa não muda, e o outro lado escolhe a manobra da rodada seguinte antes de você.
+
+- Cortar caminho | Um beco que parece sem saída, uma cerca baixa, a porta dos fundos de uma padaria que você conhece. Se der certo, você sai na frente dele.Teste: Investigação na cidade, Sobrevivência no ermo. Sucesso: Move uma faixa a favor e ignora o obstáculo desta rodada. Com vantagem, se o personagem conhece o lugar. Falha: O atalho não existia, e a parede no fim do beco move uma faixa contra você.
+
+- Salto arriscado | De um telhado para outro, por cima de uma carroça, através do vão de uma ponte quebrada. Por um segundo, só existe o ar.Teste: Acrobacia contra a DT Difícil. Sucesso: Move duas faixas a favor de uma vez. Falha: Você cai: fica Caído e perde a rodada. Quem estava atrás move uma faixa.
+
+- Derrubar um obstáculo | Uma pilha de barris, a barraca de frutas, um varal cheio de roupa. Tudo que cai atrás de você vira problema de quem vem atrás.Teste: Atletismo ou Luta contra a DT Padrão. Sucesso: Quem vem atrás testa Reflexos na DT Padrão ou move uma faixa contra si. Falha: Você gasta a rodada puxando uma coisa que não cede, e nada sai do lugar.
+
+- Acertar de longeSó em Contato, Curta, Média | Parar meio segundo, respirar, mirar entre as cabeças da multidão e torcer para acertar a pessoa certa.Teste: Pontaria, magia ou o que alcançar. Sucesso: Resolve normalmente. Condição que tire o movimento move uma faixa a favor de quem atirou. Falha: A faixa não muda. Mirar correndo custa a rodada de qualquer jeito.
+
+- Sumir de vistaSó em Longa | Entrar numa procissão, tirar o casaco, sentar numa mesa de taverna como quem está ali há horas e pedir uma bebida com a voz calma.Teste: Furtividade oposta à Percepção. Sucesso: Sucesso encerra a cena: o fugitivo Escapou. Falha: Você foi visto entrando no esconderijo, e quem persegue move uma faixa.
+
+- Atravessar gente no caminho | Gritar "pega ladrão", mostrar um distintivo, pedir licença com a voz certa. A rua abre para você e fecha para o outro.Teste: Diplomacia ou Intimidação contra a DT Padrão. Sucesso: A rua atrapalha o outro lado, e ele sofre desvantagem na manobra seguinte. Falha: A multidão fecha bem na sua frente, e você move uma faixa contra si.
+
+- AgarrarSó em Contato | A mão fecha no colarinho, os dois perdem o equilíbrio, e o chão chega rápido.Teste: Atletismo oposto, apenas em Contato. Sucesso: Aplica Agarrado e encerra a perseguição. Falha: Os dedos escorregam no tecido, e você passa direto: move uma faixa contra si.
+
+- **Uma manobra por personagem, por rodada.** Ajudar alguém segue as regras de Ações Coletivas e conta como a sua manobra.
+
+- **Magia, item e habilidade de classe entram como manobra,** com o teste que já usam. Um efeito que tire o movimento do outro lado move uma faixa a seu favor.
+
+- **O fôlego acaba.** A partir da rodada 4, quem correu ganha 1 de Cansaço ao fim da cena, uma vez só.
+
+### Obstáculos
+
+- 1d6 | Na cidade | No ermo
+
+- 1 | Uma feira montada no meio da rua: barracas de pano, galinhas soltas e uma velha que não vai sair da frente de jeito nenhum. | Raízes grossas e um tronco caído, tudo coberto de musgo escorregadio.
+
+- 2 | Uma escada estreita de pedra, gasta no meio dos degraus, onde só passa uma pessoa de cada vez. | Um barranco de terra solta, alto demais para subir andando, que desmancha na mão.
+
+- 3 | Os telhados acabam, e o vão até o próximo beiral é grande demais para quem pensa antes de pular. | Um riacho gelado na altura da cintura, com pedras lisas no fundo.
+
+- 4 | Uma carroça atravessada na rua, a carga espalhada e o carroceiro gritando com todo mundo. | Mato alto até o peito, que esconde o chão e o que está no chão.
+
+- 5 | Um portão de ferro que alguém acabou de fechar, com o cadeado ainda balançando. | Uma neblina baixa, que engole quem fica mais de uma faixa para trás.
+
+- 6 | Um guarda no fim da rua, com a mão no cabo da espada, decidindo quem dos dois é o problema. | Um bicho grande, que estava ali antes dos dois e não gostou nada da visita.
+
+Quem não resolveu o obstáculo na própria manobra testa Acrobacia, Atletismo ou Reflexos contra a DT Padrão. A falha move uma faixa contra ele.
+
+### Como a cena termina
+
+- **Contato:** a perseguição acaba e o combate começa ali mesmo, no terreno da última rodada, com os dois ofegantes. Quem foi alcançado em plena corrida fica Exposto até o começo do próximo turno dele.
+
+- **Escapou:** quem fugia sumiu nesta cena. Reencontrar aquela pessoa vira investigação, informante ou uma pista nova.
+
+- **Relógio fechado:** ninguém conseguiu o que queria, e os dois lados ficam sabendo mais um do outro do que sabiam antes de correr: o rosto, o jeito de correr, o bairro para onde ele foi.
+
+## conflito-social
+
+**Categoria:** Combate e Mecânicas
+
+**Status:** Regra oficial
+
+Interrogatório, negociação e audiência resolvidos em rodadas, com a Resistência de quem está do outro lado descendo a cada bom argumento e a Paciência dele subindo a cada palavra errada.
+
+Tem conversa que é luta. A pessoa do outro lado pode dizer não, tem motivo para dizer, e cada palavra errada fecha uma porta. Um pedido simples continua sendo um teste só. Esta página é para as outras conversas: arrancar a verdade de um preso, fechar preço com quem não precisa vender, convencer um conselho que já decidiu antes de vocês entrarem.
+
+### As duas contagens
+
+- **Resistência** é o quanto falta para a pessoa ceder. Ela desce com argumento, prova, pressão e concessão, e a mesa vê isso acontecer: a pessoa senta, serve uma bebida, baixa a voz.
+
+- **Paciência** é o quanto falta para ela encerrar a conversa. São 4 partes, e elas enchem com erro, ameaça vazia, repetição e insistência no assunto errado. A mesa vê isso também: braços cruzados, um olhar para o guarda, respostas de uma palavra.
+
+- **Limite** é a única coisa que ela não faz de jeito nenhum. Entregar o próprio filho, trair o juramento, assinar a própria prisão. Resistência zerada nunca atravessa o Limite.
+
+- Resistência | Quando usar
+
+- 3 | A pessoa até quer ajudar, e só precisa de um motivo que a proteja depois.Por exemplo: Um escriba que odeia o patrão e está esperando a desculpa certa; uma guarda que acha a ordem injusta e tem filho para criar.
+
+- 5 | Ceder custa alguma coisa concreta a ela: dinheiro, tempo, posição ou risco.Por exemplo: Uma mercadora que perde o contrato do ano se vender para vocês; um capitão que vai responder pelo portão que abrir.
+
+- 8 | A posição dela é pública, jurada, ou foi imposta por alguém mais forte.Por exemplo: Um juiz numa audiência cheia de gente olhando; alguém com a família nas mãos de terceiros, que sorri para não chorar.
+
+### A rodada
+
+- Cada personagem faz uma abordagem por rodada, na ordem que a conversa pedir. Primeiro diz o que fala, com a voz do personagem, e só depois rola. Ajudar alguém segue as regras de Ações Coletivas.
+
+- A DT é a Padrão do nível do grupo. Use a Difícil quando a pessoa tem posição pública a defender ou já foi enganada antes.
+
+- Sucesso tira Resistência. Falha custa a rodada, e as abordagens agressivas ainda enchem a Paciência.
+
+- Repetir a mesma abordagem sem trazer nada novo enche 1 de Paciência, mesmo quando o teste passa.
+
+- A outra parte responde. Ela pergunta, pede garantia, chantageia de volta, e é nessa resposta que o grupo descobre o que ela quer.
+
+Prestígio e Fama ajustam a rolagem em no máximo 2, para cima ou para baixo, pela mesma regra de Prestígio e Fama. Reputação abre a porta, e o acordo ainda precisa ser conquistado lá dentro.
+
+### Abordagens
+
+Cada abordagem traz uma fala de exemplo e, embaixo, como se resolve. A fala serve de faísca: diga a sua, do jeito do seu personagem.
+
+- Abordagem | Uma fala, e como se resolve
+
+- Mostrar o interesse dela | “Pense no que acontece com o seu negócio se ele ganhar essa disputa.”Teste: Diplomacia. Sucesso: Tira 1 de Resistência. Tira 2 se o argumento usa algo que o grupo descobriu sobre ela. Risco: Falha só custa a rodada.
+
+- Pressionar | “Eu sei onde a sua irmã mora. E você sabe que eu sei.”Teste: Intimidação. Sucesso: Tira 1 de Resistência, e 2 quando a ameaça é verdadeira e a pessoa sabe disso. Risco: Falha enche 1 de Paciência. Ameaça vazia enche 1 mesmo em sucesso.
+
+- Mentir com utilidade | “O conselho já decidiu. A gente só veio avisar por educação.”Teste: Enganação contra Intuição. Sucesso: Tira 1 de Resistência agora. Risco: Mentira descoberta depois devolve toda a Resistência que ela tirou.
+
+- Apresentar prova | “Esta carta tem a sua letra e o seu selo. Quer ler em voz alta, ou eu leio?”Teste: Investigação, Conhecimento ou Tecnologia. Sucesso: Tira 2 de Resistência. Vale uma vez por prova. Risco: Prova fraca enche 1 de Paciência.
+
+- Ler a pessoa | “Você olhou para a porta duas vezes quando eu falei do porto.”Teste: Intuição. Sucesso: Não tira Resistência. Em troca, entrega o que ela quer de verdade ou revela o Limite dela. Risco: Falha entrega uma leitura errada, que o Mestre diz com a mesma convicção.
+
+- Puxar posição ou nome | “Minha família serve a esta casa há três gerações. Pergunte ao seu pai.”Teste: Nobreza ou Atuação. Sucesso: Tira 1 de Resistência, e mais 1 com Prestígio positivo na facção dela. Risco: Contra quem odeia o seu nome, enche 1 de Paciência.
+
+- Oferecer algo concreto | “A dívida com o Banco some amanhã, e ninguém precisa saber de onde veio o dinheiro.”Teste: Sem teste. Sucesso: Tira 1 de Resistência por oferta que custe de verdade ao grupo: dinheiro, favor, segredo, Prestígio. Risco: Oferta pequena demais enche 1 de Paciência e queima a ideia.
+
+- Ceder alguma coisa | “Fique com a carga. A gente só quer o nome de quem mandou.”Teste: Sem teste. Sucesso: Tira 2 de Resistência quando o grupo abre mão de algo que queria nesta negociação. Risco: A concessão vale, e a outra parte vai cobrar exatamente o que foi prometido.
+
+### Como termina
+
+- **Resistência a 0:** a pessoa cede do jeito dela, dentro do que ela pode e dentro do Limite. Ela diz o que quer em troca, e cumprir isso passa a ser problema do grupo.
+
+- **Paciência cheia:** a conversa acaba pior do que começou. A cadeira arrasta, a porta fecha, e reabrir exige uma pessoa nova, uma prova nova ou tempo.
+
+- **Ninguém chegou ao fim:** a conversa fica em aberto. Guardem as duas contagens: quando o assunto voltar, ele volta de onde parou.
+
+- **Num interrogatório,** cada ponto de Resistência que cai entrega uma informação na hora. A verdade sai em pedaços, e o grupo decide quando já ouviu o bastante.
+
+Nenhuma dessas rolagens controla a mente de ninguém. Elas mudam a posição de uma pessoa que continua decidindo por conta própria, e é por isso que o Limite existe.
+
 ## combate
 
 **Categoria:** Combate e Mecânicas
@@ -614,7 +786,7 @@ Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade
 
 ### Dano elemental
 
-São estes sete, e não existe um oitavo. Quem conjura pelo Fluxo do Físico escolhe um deles ao aprender a magia: é o **elemento despertado**, e ele vale para todas as magias de Físico daquela ficha. Modificação de arma, encantamento e Selo que pedem "um elemento" puxam da mesma lista.
+São estes sete, e não existe um oitavo. A **Polifonia Elemental** do Elementarista fixa um elemento de origem. Antes de conjurar uma magia catalogada como *Elemental*, ele declara qual elemento dominado está usando: quem possui afinidade única sempre declara o de origem; um Avatar pode declarar qualquer elemento que tenha aprendido. O elemento declarado define o tipo de dano, a aparência e a relação de vantagem ou desvantagem daquela conjuração.
 
 - Elemento | Como costuma se manifestar
 
@@ -632,7 +804,11 @@ São estes sete, e não existe um oitavo. Quem conjura pelo Fluxo do Físico esc
 
 - Escuridão | Sombra espessa o bastante pra engolir contorno e som. Apaga a luz mundana da área, confunde quem tenta mirar e esconde o que não quer ser visto.
 
-Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: quem resiste a Fogo não resiste a Raio. Trocar o elemento despertado depois exige aval do Mestre.
+Resistência e vulnerabilidade valem por elemento, nunca para o grupo inteiro: quem resiste a Fogo não resiste a Raio. O elemento de origem é permanente; aprender outro exige o Caminho do Avatar. Quando um item, modificação, encantamento ou Selo pedir "um elemento", esse elemento é escolhido ou fixado na criação conforme a própria fonte e não muda a afinidade de uma criatura.
+
+**Elementarista:** Polifonia Elemental fixa um único elemento de origem, libera as magias Elementais e concede uma vaga de magia no 1º nível. Somente quem desperta como Avatar no Julgamento da Aptidão pode aprender outros elementos; mesmo nesse caso, a derivação e os benefícios que citam o elemento de origem continuam ligados apenas a ele.
+
+**Acesso às magias:** o Fluxo Físico também produz força, peso e matéria bruta. Canalizador e Sintonizador continuam aprendendo essas magias materiais e cinéticas, mas as magias catalogadas como *Elementais* exigem níveis de Elementarista. Magias que combinam vários elementos exigem ainda Avatar desperto.
 
 ### Resistência e ordem de aplicação
 
@@ -949,6 +1125,116 @@ São dois caminhos diferentes e vale não confundir. Quando uma **classe** te d�
 - Parar no meio não apaga o que já foi feito. Mas mais de 30 dias largado cobra um dia de revisão antes de continuar.
 
 - Não se rola nada para treinar. Cumpriu o tempo, o Nível Total e o requisito da linha, subiu.
+
+## entre-aventuras
+
+**Categoria:** Livro do Jogador
+
+**Status:** Regra oficial
+
+Os dias que sobram entre um arco e outro, e o que cada personagem faz com eles: treinar, fabricar, trabalhar, se curar, cuidar da base, ganhar espaço com uma facção ou só viver um pouco, tudo no mesmo calendário.
+
+Terminado um arco, a vida volta a ter barulho de rua. As feridas fecham devagar, alguém finalmente dorme numa cama de verdade, e a espada vai para o ferreiro antes da próxima briga. O Mestre diz quantos dias vocês têm até o próximo chamado, e esses dias são seus.
+
+Cada personagem escolhe o que fazer com eles, em separado. É aqui que o tempo parado vira progresso concreto, e é aqui também que o personagem mostra quem é quando ninguém está atacando: para onde volta, com quem janta, o que faz com as mãos quando elas não seguram uma arma.
+
+### Como o calendário funciona
+
+- **Um dia de atividade são seis horas.** O resto do dia é vida normal: comer, dormir, conversar, olhar a chuva pela janela.
+
+- **Uma atividade por personagem, por dia.** Dá para dividir o intervalo entre várias, sempre em dias inteiros.
+
+- **Treino e fabricação cansam.** Cada dia deixa 1 de Cansaço, e uma noite de sono resolve. O problema só aparece para quem emenda o intervalo inteiro e sai direto da oficina para a estrada.
+
+- **Nada se perde quando você para.** Você retoma de onde parou, respeitando o que a regra daquela atividade diz sobre voltar depois de muito tempo.
+
+- **O mundo também usa esses dias.** Pergunte ao Mestre o que está correndo lá fora antes de decidir passar duas semanas debruçado numa bancada.
+
+### O que dá para fazer
+
+Cada atividade abaixo já tem a regra completa em outra página. Aqui elas aparecem lado a lado, com um pouco de como são vividas, para você comparar o que rende mais nos dias que tem.
+
+- Atividade | Como é vivida, e o que rende
+
+- Treinar uma perícia. | Repetir o mesmo movimento até a mão aprender antes da cabeça. Acordar dolorido, e perceber no terceiro dia que o corpo já não reclama tanto.Custa de 3 a 62 dias, conforme o grau. Rende um grau de treinamento. Regra completa em Treinar Perícias.
+
+- Fabricar ou reparar. | Cheiro de metal quente, farpa no dedo, uma peça que não encaixa e depois encaixa. No fim, a coisa existe porque você fez.Custa os dias do projeto. Rende o item pronto, com um teste no fim. Regra completa em Fabricação e Reparo.
+
+- Preparar ritual, selo ou encantamento. | Velas acesas sempre nas mesmas horas, símbolos redesenhados até saírem perfeitos, e uma paciência que ninguém de fora entende.Custa o tempo da própria obra. Rende o efeito preparado, pronto para usar. Regra completa em Rituais, Selos e Encantamentos.
+
+- Trabalhar no ofício. | Acordar cedo, voltar cansado com moeda no bolso e conhecer gente que nem imagina que você já enfrentou um monstro.Custa 1 dia por vez. Rende dinheiro, pela tabela Trabalhar pelo dia. Regra completa em Economia.
+
+- Tratar veneno, doença ou vício. | Chá amargo de hora em hora, febre de madrugada, e alguém sentado ao lado da cama contando os dias junto com você.Custa dias de cuidado contínuo. Rende a queda de estágio da aflição. Regra completa em Venenos, Doenças e Vícios.
+
+- Se recuperar em segurança. | Dormir até tarde sem sonhar com nada. Trocar o curativo e ver que a pele por baixo já está rosada.Custa 1 dia por vez. Rende Vida, Mana, Sanidade e a queda de Ferido. Regra completa em Descanso e Recuperação.
+
+- Cuidar da base. | Pregar a tábua solta, pagar quem conserta o telhado, pendurar na parede alguma coisa que veio da última aventura.Custa de 1 a vários dias. Rende instalação nova, reparo e conta mensal em dia. Regra completa em Propriedades e Bases.
+
+- Fazer um favor a uma facção. | Levar uma carta sem perguntar o que está escrito, ficar de guarda numa porta, aparecer no lugar certo com a roupa certa.Custa alguns dias, conforme o pedido. Rende Prestígio com ela. Regra completa em Prestígio e Fama.
+
+- Circular e ouvir a cidade. | Sentar no mesmo banco da praça três tardes seguidas, até o vendedor de castanha começar a contar as coisas sem você perguntar.Custa 1 dia por vez. Rende boatos, contatos e preço melhor no balcão. Regra completa em Loja e Locais de Compra.
+
+- Procurar uma pessoa específica. | Mostrar o mesmo retrato mal desenhado para cinquenta desconhecidos, até alguém parar, olhar de novo e mudar de expressão.Custa 1 dia por vez. Rende um teste de Investigação ou Diplomacia por dia. Regra completa em Perícias.
+
+- Cuidar de quem importa. | Escrever para casa. Levar flor a um túmulo. Ensinar uma criança a segurar uma espada de pau. Pagar a bebida de um velho amigo que ainda não sabe que você voltou.Custa 1 dia. Rende uma cena com alguém que importa para o seu personagem, e o que vier dela. Essa atividade não tem regra: ela é o próprio jogo.
+
+### Trabalhar pelo dia
+
+- Trabalho que você consegue arranjar | Por dia | Como costuma ser
+
+- Serviço braçal, sem ofício nenhum | 5 Lunaris | Carregar saco no porto, capinar, lavar louça de taverna.
+
+- Ofício comum, com uma perícia útil | 10 Lunaris | Cuidar de cavalo, escrever carta para quem não sabe, remendar rede de pesca.
+
+- Artesão ou soldado, com perícia Treinada | 25 Lunaris | Guardar uma caravana, forjar ferradura, costurar uniforme.
+
+- Especialista com nome na cidade | 65 Lunaris | Tratar o filho de um mercador rico, avaliar uma joia, ensinar esgrima a um herdeiro.
+
+Trabalhar paga o custo de vida, e sobra pouco. Um dia de ofício comum rende 10 Lunaris, uma noite de estalagem custa 3, e a bota nova vai ter que esperar. Nenhum personagem enriquece assim, e é por isso que a estrada continua chamando.
+
+### Quanto custa viver
+
+- Gasto | Preço | O que vem junto
+
+- Refeição simples | 1 Lunaris | Pão, caldo e um lugar no banco comprido, ao lado de estranhos.
+
+- Refeição farta | 3 Lunaris | Carne, vinho da casa e uma mesa só para vocês.
+
+- Noite em estalagem | 3 Lunaris | Colchão de palha num quarto dividido, e o ronco de alguém do lado.
+
+- Noite em quarto bom | 12 Lunaris | Porta com tranca, lençol limpo e água quente de manhã.
+
+- Aluguel de um quarto, por mês | 60 Lunaris | Uma janela sua, um prego para pendurar o casaco e uma senhoria que pergunta demais.
+
+- Aluguel de uma casa, por mês | 200 Lunaris | Uma porta que só abre para quem você quer.
+
+- Viagem de carroça, por dia | 5 Lunaris | Poeira, sacolejo e a conversa de quem vai no mesmo sentido.
+
+- Serviço de cura leve | 25 Lunaris | Pontos bem dados, um unguento que arde e o conselho de parar de apanhar.
+
+### Perguntas para o intervalo
+
+Nem todo dia livre precisa render número. Se você não souber o que o seu personagem faz com o tempo, responda uma destas perguntas e conte para a mesa.
+
+- Para quem você escreve uma carta, e o que deixa de contar nela?
+
+- Que lugar da cidade você visita sem ninguém junto, e por quê?
+
+- O que você compra primeiro quando sobra dinheiro, e o que isso diz sobre de onde você veio?
+
+- Com quem do grupo você passou uma tarde inteira sem falar da aventura?
+
+- Que coisa pequena da última aventura ainda não saiu da sua cabeça?
+
+- O que você faria da vida se a estrada parasse de chamar amanhã?
+
+### Antes de gastar o intervalo inteiro
+
+- **Confira os requisitos.** Subir de Especialista para Mestre pede instrutor, e achar um instrutor costuma render uma sessão inteira de procura.
+
+- **Combine com o grupo.** Quatro personagens em quatro cidades diferentes transformam a próxima sessão em quatro começos separados, e sempre tem alguém esperando a vez.
+
+- **Corpo primeiro.** Ferimento e Cansaço vêm antes de qualquer projeto. Chegar ao arco seguinte com Ferido 2 pesa mais que qualquer item fabricado no intervalo.
 
 ## xp
 
@@ -2087,6 +2373,8 @@ A classe diz **como** você manipula a magia; o Fluxo nativo diz **o que** sai d
 
 - Interceptador | Interferência tecnológica da A.X.I.S contra Fluxos naturais.
 
+- Elementarista | Domínio profundo de um elemento do Fluxo Físico; uma aptidão rara pode abrir o Caminho do Avatar.
+
 ### Teste e DT de magia
 
 Teste = d20 + Mod. Fluxo + Grau de Misticismo + bônus específico da classe
@@ -2621,7 +2909,7 @@ Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes
 - **Engenheiro** (comum) - Chega com as coisas montadas. Prepara invenções que duram pouco, melhora o equipamento do grupo e força a máquina além do limite quando a hora pede, sabendo o que isso vai custar.
 - **Alquimista** (comum) - Transforma o que encontra pelo caminho em elixires, bombas e antídotos. Você escolhe as doses durante o descanso, e tudo o que não usar expira no descanso seguinte.
 - **Comerciante** (comum) - Ganha a briga antes dela começar. Contato certo, informação na hora e estoque bem escolhido resolvem mais que dado. E não, ele não fabrica dinheiro.
-- **Campeão Dimensional** (especial) - Classe especial de Baluarte. Corpo acima do que um corpo deveria aguentar. Os picos de poder são curtos e contados, e nenhum deles impede de morrer.
+- **Campeão Dimensional** (especial) - Classe especial aberta a qualquer Árvore e ao Vazio. O título pertence a quem supera os limites da própria dimensão; os picos de poder são curtos e contados, e nenhum deles impede de morrer.
 - **Pirata Amaldiçoado** (especial) - Classe especial do Vazio. Você luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que morreu, mas ainda segue o seu comando.
 - **Cartista Arcano** (especial) - Classe especial, aberta a qualquer Árvore. Conjura por cartas preparadas antes: o baralho decide o que você tem em mãos hoje, e o Fluxo nativo decide o que cada carta faz.
 - **Guia Dimensional** (especial) - Classe especial da Matriz. Conhece rota, portal e âncora: é por causa dele que o grupo chega em lugar onde não existe estrada.
@@ -2636,6 +2924,7 @@ Nome, tipo e conceito de cada classe. Progressão completa (habilidades, poderes
 - **Chef** (comum) - Transforma Mantimentos em porções que sustentam o grupo dentro e fora de combate. Bebidas agem rápido, lanches acompanham a marcha e refeições oferecem benefícios mais duradouros.
 - **Detetive** (comum) - Lê uma cena antes de qualquer um: pega o detalhe fora do lugar, a mentira mal contada, o padrão que ninguém mais viu. Não é sobre ter uma resposta pronta, é sobre nunca aceitar a primeira explicação.
 - **Devorador** (especial) - Não nasce com poder nenhum. O que carrega vem de quem já morreu: mate ou chegue perto o bastante de um corpo ainda quente, devore o que sobrou dele, e uma parte real da força da vítima grava um espaço vazio dentro de você.
+- **Elementarista** (especial) - Classe especial de Baluarte. Escolhe um único elemento primordial, aprofunda esse vínculo até alcançar uma derivação e transforma o campo de batalha por meio dele. Apenas a raríssima aptidão de Avatar permite aprender os outros elementos.
 
 ## poderes-habilidades
 
@@ -2649,7 +2938,7 @@ Subir de nível numa classe sempre entrega alguma coisa, e essa coisa tem cinco 
 
 ### A grade de uma classe
 
-As 28 classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.
+As 29 classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.
 
 - Recompensa | Nos níveis | Quantas
 

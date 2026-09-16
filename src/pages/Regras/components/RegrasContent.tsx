@@ -7,6 +7,9 @@ interface RegrasContentProps {
   htmlContent: string;
   ocultarCatalogoAflicoes?: boolean;
   ocultarCatalogoPericias?: boolean;
+  /** Quem monta a própria navegação (o Guia do Mestre) desliga o sumário
+   *  "Neste capítulo", que ficaria duplicado ao lado do mapa. */
+  semSumario?: boolean;
 }
 
 interface TocItem {
@@ -34,6 +37,7 @@ export const RegrasContent = ({
   htmlContent,
   ocultarCatalogoAflicoes = false,
   ocultarCatalogoPericias = false,
+  semSumario = false,
 }: RegrasContentProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const toastTimerRef = useRef<number | null>(null);
@@ -184,7 +188,7 @@ export const RegrasContent = ({
       ) : null}
 
       <div className="min-w-0 flex-1">
-        {toc.length ? (
+        {toc.length && !semSumario ? (
           <div className="sticky top-0 z-20 mb-7 rounded-xl border border-white/10 bg-[#121018]/95 p-2 shadow-xl backdrop-blur-xl xl:hidden">
             <button
               type="button"
@@ -202,7 +206,7 @@ export const RegrasContent = ({
         <div ref={contentRef} className="regras-content max-w-[78ch] text-[15px] leading-7 text-gray-300 sm:text-base sm:leading-8" />
       </div>
 
-      {toc.length ? (
+      {toc.length && !semSumario ? (
         <aside className="sticky top-6 hidden w-56 shrink-0 xl:block" aria-label="Sumário deste capítulo">
           <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
             <h2 className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">

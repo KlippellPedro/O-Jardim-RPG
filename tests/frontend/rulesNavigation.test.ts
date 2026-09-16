@@ -6,6 +6,10 @@ import {
   ordenarTopicosPorNavegacao,
 } from '../../data/regras/navegacao';
 import { REGRAS_OFICIAIS } from '../../data/regras/regras';
+import {
+  obterPosicaoRetornoRegras,
+  salvarPosicaoRetornoRegras,
+} from '../../src/pages/Regras/regrasScrollRestoration';
 
 test('todo capítulo aparece uma única vez nos novos grupos', () => {
   const agrupados = GRUPOS_NAVEGACAO.flatMap((grupo) => grupo.topicos);
@@ -45,4 +49,26 @@ test('capítulos extensos foram divididos pela tarefa de consulta', () => {
 
   assert.doesNotMatch(REGRAS_OFICIAIS['raridades-modificacoes'].corpo, /Catálogo por categoria/);
   assert.match(REGRAS_OFICIAIS['modificacoes-equipamentos'].corpo, /Catálogo por categoria/);
+});
+
+test('posição da lista de classes ou raças acompanha a navegação para o detalhe', () => {
+  const posicao = salvarPosicaoRetornoRegras('classes', 1840.5);
+
+  assert.deepEqual(posicao, { topico: 'classes', scrollTop: 1840.5 });
+  assert.deepEqual(
+    obterPosicaoRetornoRegras({ retornoRegras: posicao }, 'classes'),
+    posicao,
+  );
+  assert.equal(obterPosicaoRetornoRegras({ retornoRegras: posicao }, 'racas'), null);
+});
+
+test('posição de retorno inválida nunca produz rolagem negativa', () => {
+  assert.deepEqual(
+    salvarPosicaoRetornoRegras('racas', -200),
+    { topico: 'racas', scrollTop: 0 },
+  );
+  assert.equal(
+    obterPosicaoRetornoRegras({ retornoRegras: { topico: 'classes', scrollTop: Number.NaN } }, 'classes'),
+    null,
+  );
 });

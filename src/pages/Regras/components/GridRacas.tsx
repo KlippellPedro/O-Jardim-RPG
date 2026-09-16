@@ -8,6 +8,7 @@ import { formatarAjustesRaciais } from '../../../services/racaService';
 import { PremiumCard } from '../../../redesign/components/premium/PremiumCard';
 import { AuraEspecial } from '../../../redesign/components/premium/AuraEspecial';
 import { obterTemaPorId } from '../../../redesign/themeMap';
+import { salvarPosicaoRetornoRegras } from '../regrasScrollRestoration';
 
 interface GridRacasProps {
   racas: IRaca[];
@@ -33,6 +34,16 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
   const navigate = useNavigate();
   const [busca, setBusca] = useState('');
   const termo = busca.trim().toLocaleLowerCase('pt-BR');
+
+  const abrirRaca = (racaId: string) => {
+    if (racaId === 'entidade') {
+      navigate('/entidades');
+      return;
+    }
+    const scrollTop = document.getElementById('regra-leitor')?.scrollTop ?? 0;
+    const retornoRegras = salvarPosicaoRetornoRegras('racas', scrollTop);
+    navigate(`/regras/racas/${racaId}`, { state: { retornoRegras } });
+  };
 
   const grupos = useMemo(() => {
     const base = [
@@ -128,7 +139,7 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.28, delay: Math.min(idx * 0.03, 0.24) }}
-                  onClick={() => navigate(abreLivroEntidades ? '/entidades' : `/regras/racas/${raca.id}`)}
+                  onClick={() => abrirRaca(raca.id)}
                   className={`content-auto-list-item cursor-pointer min-h-[180px] p-6 text-left shadow-lg border ${tema.border} ${tema.bg}`}
                 >
                   {/* Background glow blob */}
