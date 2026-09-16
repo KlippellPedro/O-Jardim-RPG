@@ -248,9 +248,21 @@ h3.regras-subtitle {
 h3.regras-subtitle:first-child { margin-top: 0; }
 h4, .dobra-titulo {
   font-size: 9.4pt; font-weight: 700; margin: 3.4mm 0 1.2mm;
-  break-after: avoid; color: var(--tinta);
+  break-after: avoid; break-inside: avoid; color: var(--tinta);
 }
 .dobra-titulo { color: rgb(var(--acd)); }
+
+/* Estante do Guia do Mestre: abre página e separa as partes do guia no papel. */
+h4.regras-estante-titulo {
+  font-size: 15pt; font-weight: 600; letter-spacing: .02em;
+  color: rgb(var(--acd)); margin: 0 0 1.2mm; padding-top: 2.4mm;
+  border-top: 0.8mm solid rgb(var(--ac));
+  break-after: avoid; break-inside: avoid;
+}
+p.regras-estante-quando {
+  font-style: italic; color: var(--tinta-suave); margin: 0 0 4mm;
+  text-align: left; hyphens: manual; break-before: avoid;
+}
 .dobra-titulo .regras-details-contagem {
   display: block; font-family: "Segoe UI", Corbel, sans-serif;
   font-size: 6.8pt; letter-spacing: .1em; text-transform: uppercase;
@@ -351,6 +363,11 @@ table.regras-table td {
 table.regras-table tbody tr:nth-child(even) td { background: rgba(var(--ac), 0.075); }
 table.regras-table tbody tr:last-child td { border-bottom: 0.3mm solid var(--regua); }
 table.regras-table small { display: block; }
+table.regras-table--dado td:first-child { width: 7mm; text-align: center; font-weight: 700; color: rgb(var(--acd)); }
+.regras-mecanica {
+  display: block; margin-top: 1.2mm; padding-top: 1mm;
+  border-top: 0.2mm dashed var(--regua); color: rgb(var(--acd)); font-size: .94em;
+}
 .acima table.regras-table { font-size: 8.8pt; }
 
 /* ================= espaço de arte ================= */

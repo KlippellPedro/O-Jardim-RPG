@@ -74,6 +74,17 @@ const PAGINADOR = `
   // O wrapper de rolagem horizontal das tabelas também é coisa de tela.
   lista('.regras-table-wrap').forEach(desembrulhar);
 
+  // Estantes do Guia do Mestre: na tela viram um mapa navegável; no papel,
+  // cada estante abre página nova com o próprio título, e o conteúdo volta a
+  // ser uma sequência de blocos irmãos que o paginador sabe medir.
+  // A primeira estante segue a abertura do assunto na mesma página.
+  lista('.regras-estante-cabeca').forEach(function (cabeca, indice) {
+    var titulo = cabeca.querySelector('.regras-estante-titulo');
+    if (titulo && indice > 0) titulo.setAttribute('data-quebra', '1');
+    desembrulhar(cabeca);
+  });
+  lista('section.regras-estante').forEach(desembrulhar);
+
   // Tabela com muitas colunas não cabe numa coluna de texto: vai para a
   // largura inteira da mancha, no topo de uma página.
   lista('.fluxo table').forEach(function (tabela) {

@@ -9,6 +9,7 @@ propósitos diferentes:
 | `npm run docs:guias` | `docs/players/` | Guias de referência neutros (enciclopédia). Úteis pro mestre consultar. |
 | `npm run docs:livro` | `docs/livro/` | **O livro de regras inteiro**, diagramado como livro de RPG impresso. |
 | `npm run docs:livro:mestre` | `docs/livro/` | O mesmo livro mais a edição que carrega os trechos do Mestre. |
+| `npm run docs:mestre` | `docs/mestre/` | **Kit do Mestre.** Folha de preparação de sessão e a aventura pronta de nível 1. |
 
 ## De onde vem o conteúdo
 
@@ -70,6 +71,25 @@ tabela larga, arte e abertura de assunto, e `.corpo` no meio, em duas colunas.
 Um bloco largo que aparece com as colunas já ocupadas tenta primeiro o pé da
 página, e as colunas são remedidas para a altura que sobrou. Sem isso, um
 catálogo de tabelas produziria uma sequência de páginas pela metade.
+
+## O kit do Mestre
+
+`docs/mestre/` tem duas peças de trabalho, não de ficção: a **Folha de
+Preparação de Sessão**, duas páginas para preencher a lápis antes da mesa, e
+**Dois Passageiros**, uma aventura de uma sessão para o nível 1 que usa o prop
+`Avulso-Aviso-Caravana` como material de apoio.
+
+Elas usam `estilo-mestre.mjs`, que é claro e seco de propósito: papel
+envelhecido gasta tinta e atrapalha quem escreve por cima. As páginas têm
+tamanho fixo e são desenhadas folha a folha, então aqui não existe paginador.
+O que existe é a medição inversa: `gerar-mestre.mjs` mede cada folha montada e
+diz quantos milímetros passaram de 297mm, e a saída termina em `Pronto, sem
+transbordo.` quando está tudo dentro. Para reescrever um texto sabendo de
+antemão quanto ele pode crescer, rode `node tools/documentos-mundo/gerar-mestre.mjs --folga`:
+o gerador passa a dizer também quantos milímetros livres sobram em cada folha.
+
+A verba por sessão impressa na folha sai de `data/economia/escala-precos-v1.json`,
+lida na geração. Mudou a escala, mudou a folha.
 
 ## Os props
 

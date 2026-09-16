@@ -41,6 +41,10 @@ export const ARTES_CAPITULO = {
     tamanho: 'pagina',
     brief: 'Um instante travado no meio de uma troca de golpes, em plano fechado. Duas figuras se cruzando, poeira e sangue no ar, e um terceiro personagem ao fundo já caído, sendo puxado por um quarto. O foco fica na decisão de quem puxa o ferido.',
   },
+  cenas: {
+    tamanho: 'pagina',
+    brief: 'Rua estreita de cidade, vista do alto de uma escada. Alguém corre na frente, virando a esquina, e só o ombro dele ainda aparece. Dois personagens vêm atrás em velocidades diferentes, e um terceiro parou no meio do caminho para falar com um guarda que bloqueia a passagem. A imagem mostra as duas cenas deste capítulo ao mesmo tempo: quem corre e quem negocia.',
+  },
   magia: {
     tamanho: 'pagina',
     brief: 'Conjurador de perfil, com uma Marca de Círculo acesa subindo pela pele do braço até o pescoço. A luz da Marca é a única fonte de luz da cena, e o rosto mostra o preço em vez do triunfo. Ao redor, o ar carrega desenho geométrico fino, quase invisível.',
