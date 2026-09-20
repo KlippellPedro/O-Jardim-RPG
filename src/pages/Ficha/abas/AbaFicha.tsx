@@ -10,6 +10,7 @@ import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, arvoresVisiveisComAtual, filtrarPorArvore, filtrarPorLiberacao, type ArvoreEntry } from '../../../../data/mundo/arvoresCatalog';
 import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
+import { dispararEscolhaImpacto } from '../components/escolhaImpacto';
 import {
   adicionarCondicaoOficial,
   atualizarStatusVital,
@@ -526,6 +527,10 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
   };
 
   const handleRacaChange = (novaRacaId: string) => {
+    const racaNova = catalogo?.racas.find(raca => raca.id === novaRacaId);
+    if (racaNova && novaRacaId !== f.racaId) {
+      dispararEscolhaImpacto({ tipo: 'raca', id: racaNova.id, nome: racaNova.titulo, especial: racaNova.categoria !== 'padrao' });
+    }
     const escolhaLimpa = limparEscolhasPrincipaisRaciais(f.escolhaRacial);
     salvarIdentidadeRacial(novaRacaId, escolhaLimpa);
   };
@@ -604,6 +609,10 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
   };
 
   const handleClasseChange = (index: number, classeId: string) => {
+    const classeNova = catalogo?.classes.find(classe => classe.id === classeId);
+    if (classeNova && classeNova.id !== classes[index]?.classeId) {
+      dispararEscolhaImpacto({ tipo: 'classe', id: classeNova.id, nome: classeNova.titulo, especial: classeNova.categoria !== 'padrao' });
+    }
     salvarClasses(classes.map((c, i) => (i === index ? { ...c, classeId } : c)));
   };
 

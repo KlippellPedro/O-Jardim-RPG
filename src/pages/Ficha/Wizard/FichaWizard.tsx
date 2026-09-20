@@ -31,6 +31,8 @@ import { descreverOpcaoRacial, escolhaRacialEstaCompleta, obterGruposEscolhaRaci
 import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, filtrarPorArvore, filtrarPorLiberacao } from '../../../../data/mundo/arvoresCatalog';
 import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
 import { Select } from '../../../components/ui/Select';
+import { dispararEscolhaImpacto } from '../components/escolhaImpacto';
+import { EscolhaImpactoHost } from '../components/EscolhaImpactoHost';
 
 interface WizardProps {
   onClose: () => void;
@@ -457,7 +459,10 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
               {racasFiltradas.map(raca => (
                 <button
                   key={raca.id}
-                  onClick={() => { setRacaId(raca.id); setEscolhaRacial({}); setPericiasIniciais([]); }}
+                  onClick={() => {
+                    if (raca.id !== racaId) dispararEscolhaImpacto({ tipo: 'raca', id: raca.id, nome: raca.titulo, especial: raca.categoria !== 'padrao' });
+                    setRacaId(raca.id); setEscolhaRacial({}); setPericiasIniciais([]);
+                  }}
                   className={`w-full p-4 rounded-2xl border text-left transition-all flex flex-col gap-1 ${racaId === raca.id ? 'border-primary bg-primary/10' : 'border-white/5 bg-black/40 hover:border-white/20'}`}
                 >
                   <h3 className="text-lg font-bold text-white" style={{fontFamily: 'Cinzel, serif'}}>{raca.titulo}</h3>
@@ -528,7 +533,10 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
               {classesFiltradas.map(classe => (
                 <button
                   key={classe.id}
-                  onClick={() => setClasseId(classe.id)}
+                  onClick={() => {
+                    if (classe.id !== classeId) dispararEscolhaImpacto({ tipo: 'classe', id: classe.id, nome: classe.titulo, especial: classe.categoria !== 'padrao' });
+                    setClasseId(classe.id);
+                  }}
                   className={`p-5 rounded-2xl border text-left transition-all flex flex-col gap-2 ${classeId === classe.id ? 'border-purple-500 bg-purple-500/10 shadow-[0_0_20px_rgba(168,85,247,0.2)]' : 'border-white/10 bg-black/40 hover:border-white/30'}`}
                 >
                   <h3 className="text-xl font-bold text-white" style={{fontFamily: 'Cinzel, serif'}}>{classe.titulo}</h3>
@@ -837,6 +845,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
 
   return (
     <div className="modal-viewport fixed inset-0 z-[100] flex items-center justify-center bg-[#050508]/90 backdrop-blur-xl">
+      <EscolhaImpactoHost />
       <motion.div
         ref={dialogRef}
         role="dialog"
