@@ -802,7 +802,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             {mostrarCatalogo
               ? 'Voltar às conhecidas'
               : isMestre
-                ? 'Abrir catálogo e concessões'
+                ? 'Abrir catálogo e ensinar'
                 : tipoAtivo === 'magia' && !perfil.possuiFonte
                   ? 'Consultar catálogo'
                   : `Aprender ${ROTULO_TIPO_SINGULAR[tipoAtivo]}`}
