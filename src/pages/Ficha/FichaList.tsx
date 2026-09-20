@@ -236,7 +236,7 @@ const FichaList: React.FC = () => {
           </button>
         </motion.div>
       ) : (
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-x-5 gap-y-10 sm:gap-x-8">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,17rem),19rem))] justify-center sm:justify-start gap-x-5 gap-y-10 sm:gap-x-8">
           <AnimatePresence>
             {filteredCharacters.map((char, index) => {
               const racaCatalogo = catalogo?.racas.find((r) => r.id === char.racaId);
