@@ -1,25 +1,24 @@
 /** Voz do painel de subida de nível.
  *
- * As falas são pecas gravadas antes (tools/gerar-voz-sabio.py, voz neural em
- * português) e montadas na hora: "Guerreiro" + "chegou ao nível" + "três".
- * As pecas são coladas com o silêncio das pontas cortado, para a frase soar
- * corrida. Se algum passo tiver uma peça que não existe no manifest, só esse
- * passo cai na voz do navegador; sem nenhum dos dois, o painel fica mudo. */
+ * Cada linha do painel é uma frase inteira gravada antes
+ * (tools/gerar-voz-sabio.py, voz neural em português), achada pelo próprio
+ * texto da linha. Frase inteira, e não palavras coladas, porque é isso que
+ * mantém a entonação e evita a voz escorregar para outro idioma. Por cima da
+ * fala vai um leve efeito metálico com eco, no clima do Grande Sábio. Se uma
+ * linha não tiver frase gravada, só ela cai na voz do navegador; sem nenhum
+ * dos dois, o painel fica mudo. */
 
 const CHAVE_PREFERENCIA = 'jardim:voz-grande-sabio';
 const PASTA = '/audio/sabio/';
 const LIMIAR_SILENCIO = 0.012;
 const MARGEM_CORTE_S = 0.012;
-const PAUSA_ENTRE_PECAS_S = 0.03;
 const PAUSA_ENTRE_PASSOS_S = 0.4;
 const ATRASO_INICIAL_S = 0.55;
 const MS_POR_CARACTERE_FALLBACK = 75;
 
 export interface PassoFala {
-  /** Texto mostrado na tela (e falado pela voz do navegador, se cair no fallback). */
+  /** Texto mostrado na tela; é a chave da frase gravada e o fallback da voz do navegador. */
   texto: string;
-  /** Chaves das pecas gravadas, na ordem em que são faladas. */
-  pecas: string[];
 }
 
 export interface OuvintesFala {
@@ -62,13 +61,20 @@ export const definirVozGrandeSabioLigada = (ligada: boolean) => {
 
 // ── Manifest e pecas ──────────────────────────────────────────────────────
 
-let manifestPromessa: Promise<Record<string, string>> | null = null;
+interface EntradaManifest {
+  /** Arquivo de áudio. */
+  a: string;
+  /** Segundo em que a fala de verdade começa (depois da âncora). */
+  i: number;
+}
+
+let manifestPromessa: Promise<Record<string, EntradaManifest>> | null = null;
 
 const carregarManifest = () => {
   if (!manifestPromessa) {
     manifestPromessa = fetch(`${PASTA}manifest.json`)
       .then((resposta) => (resposta.ok ? resposta.json() : { clips: {} }))
-      .then((dados) => (dados?.clips || {}) as Record<string, string>)
+      .then((dados) => (dados?.clips || {}) as Record<string, EntradaManifest>)
       .catch(() => ({}));
   }
   return manifestPromessa;
@@ -83,9 +89,9 @@ interface Peca {
 const cachePecas = new Map<string, Promise<Peca | null>>();
 
 /** Acha onde a fala de fato começa e termina, ignorando o silêncio das pontas. */
-const medirFala = (buffer: AudioBuffer): { inicio: number; duracao: number } => {
+const medirFala = (buffer: AudioBuffer, apartirDe: number): { inicio: number; duracao: number } => {
   const dados = buffer.getChannelData(0);
-  let primeiro = 0;
+  let primeiro = Math.min(Math.floor(apartirDe * buffer.sampleRate), dados.length - 1);
   let ultimo = dados.length - 1;
   while (primeiro < ultimo && Math.abs(dados[primeiro]) < LIMIAR_SILENCIO) primeiro += 1;
   while (ultimo > primeiro && Math.abs(dados[ultimo]) < LIMIAR_SILENCIO) ultimo -= 1;
@@ -94,13 +100,14 @@ const medirFala = (buffer: AudioBuffer): { inicio: number; duracao: number } => 
   return { inicio, duracao: Math.max(0.05, fim - inicio) };
 };
 
-const carregarPeca = (audio: AudioContext, arquivo: string): Promise<Peca | null> => {
+const carregarPeca = (audio: AudioContext, entrada: EntradaManifest): Promise<Peca | null> => {
+  const arquivo = entrada.a;
   let promessa = cachePecas.get(arquivo);
   if (!promessa) {
     promessa = fetch(`${PASTA}${arquivo}`)
       .then((resposta) => (resposta.ok ? resposta.arrayBuffer() : Promise.reject(new Error('sem áudio'))))
       .then((bytes) => audio.decodeAudioData(bytes))
-      .then((buffer) => ({ buffer, ...medirFala(buffer) }))
+      .then((buffer) => ({ buffer, ...medirFala(buffer, entrada.i) }))
       .catch(() => null);
     cachePecas.set(arquivo, promessa);
   }
@@ -124,6 +131,32 @@ const agendarDing = (audio: AudioContext, quando: number) => {
     oscilador.start(inicio);
     oscilador.stop(inicio + 0.6);
   });
+};
+
+/** Efeito do Grande Sábio: dois ecos curtos dão o brilho metálico e dois mais
+ * longos a sensação de voz holográfica. Devolve a entrada da cadeia. */
+const criarBusEfeito = (audio: AudioContext): AudioNode => {
+  const entrada = audio.createGain();
+  const soma = audio.createGain();
+  const saida = audio.createGain();
+  saida.gain.value = 0.5;
+  entrada.connect(soma);
+
+  const eco = (origem: AudioNode, destino: AudioNode, atrasoMs: number, ganho: number) => {
+    const atraso = audio.createDelay(1);
+    const nivel = audio.createGain();
+    atraso.delayTime.value = atrasoMs / 1000;
+    nivel.gain.value = ganho;
+    origem.connect(atraso).connect(nivel).connect(destino);
+  };
+
+  eco(entrada, soma, 9, 0.45);
+  eco(entrada, soma, 17, 0.3);
+  soma.connect(saida);
+  eco(soma, saida, 170, 0.22);
+  eco(soma, saida, 340, 0.12);
+  saida.connect(audio.destination);
+  return entrada;
 };
 
 // ── Voz do navegador (só para passos sem pecas gravadas) ─────────────────
@@ -179,8 +212,9 @@ export const falarSequencia = (passos: PassoFala[], ouvintes: OuvintesFala): (()
   void (async () => {
     const manifest = await carregarManifest();
     const carregados = await Promise.all(passos.map((passo) => Promise.all(
-      passo.pecas.map((chave) => (manifest[chave] ? carregarPeca(ctx, manifest[chave]) : Promise.resolve(null))),
+      [manifest[passo.texto] ? carregarPeca(ctx, manifest[passo.texto]) : Promise.resolve(null)],
     )));
+    const saida = criarBusEfeito(ctx);
     if (cancelado) return;
 
     const base = ctx.currentTime + ATRASO_INICIAL_S;
@@ -198,10 +232,10 @@ export const falarSequencia = (passos: PassoFala[], ouvintes: OuvintesFala): (()
         (pecas as Peca[]).forEach((peca) => {
           const fonte = ctx.createBufferSource();
           fonte.buffer = peca.buffer;
-          fonte.connect(ctx.destination);
+          fonte.connect(saida);
           fonte.start(base + ponta, peca.inicio, peca.duracao);
           fontes.push(fonte);
-          ponta += peca.duracao + PAUSA_ENTRE_PECAS_S;
+          ponta += peca.duracao;
         });
         duracaoPasso = ponta - cursor;
       } else {

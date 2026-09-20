@@ -1,329 +1,3788 @@
 {
- "voz": "pt-BR-FranciscaNeural",
+ "config": {
+  "voz": "pt-BR-ThalitaMultilingualNeural",
+  "taxa": "-8%",
+  "tom": "-6Hz",
+  "pronuncias": {
+   "Zanpakutō": "Zampacutô",
+   "Kokusen": "Cocussên",
+   "Konsō": "Cônsô",
+   "Bankai": "Bancai",
+   "Hackear": "Raquear",
+   "Mise en Place": "Mizanplás",
+   "Marketing": "Márquetin",
+   "Km": "quilômetros"
+  },
+  "modo": "frase"
+ },
  "clips": {
-  "n:0": "bed91d98a86b.mp3",
-  "n:1": "aa3f8b69f2cc.mp3",
-  "n:2": "32c6fd6365dc.mp3",
-  "n:3": "f630110750e4.mp3",
-  "n:4": "7c73961d9972.mp3",
-  "n:5": "416ce3853163.mp3",
-  "n:6": "c11a6de1c38b.mp3",
-  "n:7": "1b128d09ac93.mp3",
-  "n:8": "dcf5a54b42f3.mp3",
-  "n:9": "cfa5bdaaeddc.mp3",
-  "n:10": "669204215863.mp3",
-  "n:11": "71ac3105cf72.mp3",
-  "n:12": "322f15db9781.mp3",
-  "n:13": "0f0a94733f81.mp3",
-  "n:14": "aaca5cb83e26.mp3",
-  "n:15": "fc1bebd50b48.mp3",
-  "n:16": "76521062a9b8.mp3",
-  "n:17": "a44d8fbb60a8.mp3",
-  "n:18": "c798e69cca44.mp3",
-  "n:19": "cc381b640d98.mp3",
-  "n:20": "ba3909621ed2.mp3",
-  "n:21": "572f8ac00c69.mp3",
-  "n:22": "fd2970e43d7d.mp3",
-  "n:23": "3940eabf3651.mp3",
-  "n:24": "437bbf615a91.mp3",
-  "n:25": "9c100882a3e1.mp3",
-  "n:26": "01536fc66851.mp3",
-  "n:27": "4d69a8a1a706.mp3",
-  "n:28": "b0f886a979ee.mp3",
-  "n:29": "1f02837c3b44.mp3",
-  "n:30": "c0f148eafcb0.mp3",
-  "n:31": "7a9ac6a8a687.mp3",
-  "n:32": "305b9b466437.mp3",
-  "n:33": "689a5566b6af.mp3",
-  "n:34": "0a4953a59c97.mp3",
-  "n:35": "b7f5155595f3.mp3",
-  "n:36": "a51899f95987.mp3",
-  "n:37": "6f6f71a0b51d.mp3",
-  "n:38": "cd2994c060d8.mp3",
-  "n:39": "dcedba7a8c0e.mp3",
-  "n:40": "a0e2a0aec894.mp3",
-  "n:41": "c574c2ed0602.mp3",
-  "n:42": "c9c65affdc33.mp3",
-  "n:43": "408439f625f4.mp3",
-  "n:44": "4b2438b51d7a.mp3",
-  "n:45": "8502defd9e65.mp3",
-  "n:46": "4f7cf502a7f2.mp3",
-  "n:47": "205edf37758e.mp3",
-  "n:48": "bd0813f364de.mp3",
-  "n:49": "922d05709aac.mp3",
-  "n:50": "929f585797ff.mp3",
-  "n:51": "159b6f99cd2a.mp3",
-  "n:52": "024be639bda3.mp3",
-  "n:53": "276ce1b7155c.mp3",
-  "n:54": "c6e803a165b5.mp3",
-  "n:55": "c073e871f2d1.mp3",
-  "n:56": "98cc55344459.mp3",
-  "n:57": "3056100e5c39.mp3",
-  "n:58": "74e8bc0ad38d.mp3",
-  "n:59": "6894b62a5008.mp3",
-  "n:60": "59bb577a1770.mp3",
-  "n:61": "96126e61ec89.mp3",
-  "n:62": "3f5ae6f6a2e9.mp3",
-  "n:63": "6deb155b6dd6.mp3",
-  "n:64": "643b93d91fb5.mp3",
-  "n:65": "f86b40569f86.mp3",
-  "n:66": "370c4f72ef16.mp3",
-  "n:67": "04fc15d565d2.mp3",
-  "n:68": "a6ec8282e4ab.mp3",
-  "n:69": "e1fbd9fb27db.mp3",
-  "n:70": "655fb4dc7964.mp3",
-  "n:71": "586263b2cdca.mp3",
-  "n:72": "3e42e2a67111.mp3",
-  "n:73": "c7bc73846bc9.mp3",
-  "n:74": "6d2fd3565de9.mp3",
-  "n:75": "fbc9be14f952.mp3",
-  "n:76": "73d1887c22e4.mp3",
-  "n:77": "197c417b497a.mp3",
-  "n:78": "f5aad0c9e756.mp3",
-  "n:79": "05a3767f4827.mp3",
-  "n:80": "2104e173893a.mp3",
-  "n:81": "91307677273d.mp3",
-  "n:82": "38c78d238f05.mp3",
-  "n:83": "ca91f36e6d6b.mp3",
-  "n:84": "f70bd57bb664.mp3",
-  "n:85": "946cda5d3ac2.mp3",
-  "n:86": "4d2ac90526ec.mp3",
-  "n:87": "16b912740db2.mp3",
-  "n:88": "86f6ff46e07f.mp3",
-  "n:89": "106b94fe1ea4.mp3",
-  "n:90": "7217d073e5a2.mp3",
-  "n:91": "c6134df7c404.mp3",
-  "n:92": "eaa4abb9da15.mp3",
-  "n:93": "4ab847169ce8.mp3",
-  "n:94": "1936fa1fce99.mp3",
-  "n:95": "dd800c2fea73.mp3",
-  "n:96": "3af41cbce8d6.mp3",
-  "n:97": "74785fc41891.mp3",
-  "n:98": "b201261e4cfe.mp3",
-  "n:99": "cb269e511d7a.mp3",
-  "Nível": "87dc673f430b.mp3",
-  "alcançado": "fc6c0cdfd978.mp3",
-  "chegou ao nível": "474e8d64d4e0.mp3",
-  "Nova classe": "f858ad35bfa6.mp3",
-  "Vida": "518130c35cc2.mp3",
-  "Mana": "1eab2e778967.mp3",
-  "mais": "4f728e8f7ef2.mp3",
-  "menos": "4e16c8aa2c5c.mp3",
-  "Poder": "60d2d92759b7.mp3",
-  "Habilidade": "8425e4415f5d.mp3",
-  "Grau de perícia": "2bfb0e56a5da.mp3",
-  "Evento": "9383be4ba104.mp3",
-  "Habilidade final": "101cb5eb5827.mp3",
-  "Recompensa": "05ad1af0ce80.mp3",
-  "Guerreiro": "75bb1bca48ab.mp3",
-  "Implacável": "f9d0dbbfabe8.mp3",
-  "Poder de Guerreiro": "099443bc18ef.mp3",
-  "Batalhão": "bd09278c73f7.mp3",
-  "Até a Morte": "51976faa75e1.mp3",
-  "Arsenal Especial": "7662e4d15f4e.mp3",
-  "Senhor da Guerra": "93a7d4f4e521.mp3",
-  "Piloto": "7c114bf2fd2c.mp3",
-  "Meu Xodó": "d60217a09466.mp3",
-  "Poder de piloto": "677191a3b16d.mp3",
-  "Tuning": "221b75185057.mp3",
-  "Corrida Maluca": "21c3a3d23e3c.mp3",
-  "0 Km": "fade0c11accc.mp3",
-  "Ás Impossível": "e62b7e1774a4.mp3",
-  "Ninja": "7eb0443b6298.mp3",
-  "Hierarquia": "94efcd266012.mp3",
-  "Poder de Ninja": "cb825d549de0.mp3",
-  "Arma Ninja": "97824e5b511c.mp3",
-  "Treinamento Ninja": "cbd76728c424.mp3",
-  "Missão de Elite": "5cbf85a10e53.mp3",
-  "Substituição": "4361c5d73ecb.mp3",
-  "Sombra Suprema": "ce384dd5a778.mp3",
-  "Pop Star": "f8dc88585d33.mp3",
-  "Fama": "3b65d44d3abf.mp3",
-  "Poder de Pop Star": "1e630dd28c9a.mp3",
-  "Publi": "78dc6d0509c7.mp3",
-  "Entrevista": "7425e0217cc4.mp3",
-  "Agência de Marketing": "01a39fc0180e.mp3",
-  "Estrela Eterna": "11015791033e.mp3",
-  "Espadachim": "ad5ba8dd2b05.mp3",
-  "Arte da Espada": "b65495b585a9.mp3",
-  "Poder de Espadachim": "6945ae65afdf.mp3",
-  "Posturas de Combate": "bcd2ec565a97.mp3",
-  "Duelo": "c1332648c30b.mp3",
-  "Combo": "dcae5862b56f.mp3",
-  "Espírito da Espada": "4d74faa4cfa2.mp3",
-  "Lutador": "997170ce5e1a.mp3",
-  "Instinto de Combate": "dfa22db179ff.mp3",
-  "Poder de Lutador": "b719a3439f27.mp3",
-  "Punhos de Ferro": "1a9fb406d9fa.mp3",
-  "Ringue": "8bdbf8207604.mp3",
-  "Estilo de Combate": "a6760a946fb3.mp3",
-  "Kokusen": "ac4435dd89b9.mp3",
-  "Atirador": "3f8f005eeae4.mp3",
-  "Na Mira": "95c896817db3.mp3",
-  "Poder de Atirador": "fc57e326005a.mp3",
-  "Tiro de Impulso": "f00628e2094e.mp3",
-  "Tiro ao Alvo": "d5fea61125fb.mp3",
-  "Disparo Calculado": "251a8708832e.mp3",
-  "Um Só Disparo": "168e9281ca51.mp3",
-  "Médico": "07c441327693.mp3",
-  "Medicina": "8745df3f72ea.mp3",
-  "Poder de Médico": "b44ad42e9c71.mp3",
-  "Socorro de Emergência": "9cb60eb8c609.mp3",
-  "Especialização Médica": "ebcb73cfe4fd.mp3",
-  "Milagre": "1cf5d55ee5a8.mp3",
-  "Mestre da Vida": "8624d7621806.mp3",
-  "Guardião": "d61068fb2838.mp3",
-  "Protegido": "e5b125cc00d8.mp3",
-  "Poder de Guardião": "b8458f54937b.mp3",
-  "Provocar": "7a730494dbb7.mp3",
-  "Aliança": "3f396edebec0.mp3",
-  "Castelo": "e37990c5c086.mp3",
-  "Coração Unificado": "0bc230d4882e.mp3",
-  "Caçador": "59bd20551c43.mp3",
-  "Especialização": "fc4d228ca0e9.mp3",
-  "Poder de Caçador": "29218556b70b.mp3",
-  "Agência dos Caçadores": "72fc7215fd31.mp3",
-  "Requisição de Caçada": "6ec47d5bd4ad.mp3",
-  "Marca do Caçador": "f7aa2740b2c3.mp3",
-  "Predador Perfeito": "f30c0e80dfc8.mp3",
-  "Engenheiro": "0df5de74f6a0.mp3",
-  "Meus Filhos": "8690095cb6a1.mp3",
-  "Poder de Engenheiro": "0b454bfc468b.mp3",
-  "Engenhocas": "b82457fd053f.mp3",
-  "Concurso": "013301af78e4.mp3",
-  "Arquitetura de Campo": "2dc9dd75abc5.mp3",
-  "Engenho Divino": "812579f0d7aa.mp3",
-  "Alquimista": "49400b9ea091.mp3",
-  "Grande Obra": "331eaf1ceb02.mp3",
-  "Poder de Alquimista": "204e2b4c1ae5.mp3",
-  "Fórmulas": "df1ec10e3ed6.mp3",
-  "Feira Alquímica": "b570ca037c1a.mp3",
-  "Transmutação Mestra": "20b043d45d31.mp3",
-  "Pedra Filosofal": "59a50de6418c.mp3",
-  "Comerciante": "b36e8358f746.mp3",
-  "Rede de Negócios": "230b7ec1d3be.mp3",
-  "Poder de Comerciante": "51b882331715.mp3",
-  "Estoque": "741bb762b9f4.mp3",
-  "Grande Leilão": "9267c335086e.mp3",
-  "Contrato Irrecusável": "a33a62ad1cd3.mp3",
-  "Mercado Mundial": "6c8ca0d9e404.mp3",
-  "Campeão Dimensional": "8e4d52f714d0.mp3",
-  "Número 1": "c218ec6ccbf3.mp3",
-  "Poder de Campeão Dimensional": "44c954c3eb75.mp3",
-  "Além do Comum": "2208cdb7d24d.mp3",
-  "Batalha pelo Título": "d20894f91a2e.mp3",
-  "Trono da Dimensão": "ddb493e419cf.mp3",
-  "Pilar da Dimensão": "6604e16cbd8c.mp3",
-  "Pirata Amaldiçoado": "df965b63143b.mp3",
-  "Maldição dos Sete Mares": "0cc13c978a8c.mp3",
-  "Poder de Pirata Amaldiçoado": "4e3e534ae2f0.mp3",
-  "Evolução Abissal": "226ca050c3bb.mp3",
-  "Tripulação": "1ca66382ed30.mp3",
-  "Tripulação dos Condenados": "19c9ac66681c.mp3",
-  "Senhor das Profundezas": "60a0b798cbdb.mp3",
-  "Cartista Arcano": "6b3caa838dcb.mp3",
-  "Baralho Arcano": "44d79b388203.mp3",
-  "Poder de Cartista Arcano": "f8b9ea51ecd9.mp3",
-  "Cartas Afiadas": "4345850af993.mp3",
-  "Cassino Lunar": "8721cefea40e.mp3",
-  "Dados Viciados": "0251da6e09d1.mp3",
-  "Arcano Absoluto": "df1e7cbff6a6.mp3",
-  "Guia Dimensional": "b3450e737e15.mp3",
-  "Cartografia da Matriz": "6f72f2e6d8d1.mp3",
-  "Poder de Guia Dimensional": "58d9e7fa221f.mp3",
-  "Âncoras": "41aa9fc952d4.mp3",
-  "Rota Perdida": "8a5f5892758f.mp3",
-  "Mapa Vivo": "d4e0cb60b3cc.mp3",
-  "Caminho Impossível": "10a624e8509e.mp3",
-  "Caçador das Almas": "8dcefda1d899.mp3",
-  "Zanpakutō": "556ba93f5829.mp3",
-  "Poder de Caçador das Almas": "ec9e9c88a076.mp3",
-  "Treinamento de Ceifeiro": "166d4d64f5e6.mp3",
-  "Patrulha do Véu": "c35ecb756de0.mp3",
-  "Konsō: Funeral da Alma": "6a75561bf76d.mp3",
-  "Bankai": "364abdb836fd.mp3",
-  "Escritor de Contos": "791af87d28a6.mp3",
-  "Tinta Carmesim": "d5021209fc9d.mp3",
-  "Poder de Escritor de Contos": "7cefb6d72770.mp3",
-  "Personagens Recorrentes": "b2bc8d7539e4.mp3",
-  "História Inacabada": "fa5958abab32.mp3",
-  "Página Rasgada": "fc54956426ba.mp3",
-  "Último Capítulo": "12dae1517e07.mp3",
-  "Invocador": "5e738d1d64ec.mp3",
-  "Pacto de Fluxo nativo": "8b9dc4634ff8.mp3",
-  "Poder de Invocador": "1ebc6ee19cfc.mp3",
-  "Formas Vinculadas": "1eb98f915803.mp3",
-  "Chamado da Criação": "7bff66102085.mp3",
-  "Círculo de Convocação": "de5a0b40060c.mp3",
-  "Convergência Primordial": "0413be179815.mp3",
-  "Viajante": "62f99aad702f.mp3",
-  "Passaporte Entre Mundos": "7d8a86fa4e87.mp3",
-  "Poder de Viajante": "3ecb202342ac.mp3",
-  "Lições da Estrada": "3ee342254b77.mp3",
-  "Encruzilhada": "326be46d4ccf.mp3",
-  "Companheiros de Jornada": "6edd38e5a432.mp3",
-  "Sem Fronteiras": "3e35ca216867.mp3",
-  "Canalizador": "80a27426d734.mp3",
-  "Canalização Nativa": "3734718f34fb.mp3",
-  "Poder de Canalizador": "6f6a8df3cf25.mp3",
-  "Forma do Fluxo": "5770f6c111e0.mp3",
-  "Prova do Fluxo": "6e955d92bfe1.mp3",
-  "Fluxo Sem Filtro": "2c580b782ad0.mp3",
-  "Voz da Deidade": "a48b74534032.mp3",
-  "Sintonizador": "e63da4056dd2.mp3",
-  "Sintonia Catalisada": "0bdc1cf16178.mp3",
-  "Poder de Sintonizador": "1427c5240f7c.mp3",
-  "Fusão Controlada": "4ed184ada876.mp3",
-  "Ressonância Improvável": "f25cfb9d1140.mp3",
-  "Religação de Emergência": "23e9f0301597.mp3",
-  "Convergência Segura": "216d86384d52.mp3",
-  "Ritualista": "1dfc27d11fdf.mp3",
-  "Livro de Rituais": "3887a16e89ab.mp3",
-  "Poder de Ritualista": "33a5196d0335.mp3",
-  "Círculo Preparado": "a6153677897a.mp3",
-  "Pacto Antigo": "9dad2e3bef2c.mp3",
-  "Grande Oficiante": "9fc7b3a949af.mp3",
-  "Interceptador": "abc2b1e64e31.mp3",
-  "Acesso à Malha": "c751341e1ba1.mp3",
-  "Poder de Interceptador": "025fcb82ce9e.mp3",
-  "Hackear Fluxo": "3e3e63c3f8c3.mp3",
-  "Falha na Malha": "97fe105b4189.mp3",
-  "Acesso Administrador": "f1eb76abdc55.mp3",
-  "Chef": "46de8428aceb.mp3",
-  "Mise en Place": "3d20563ba8df.mp3",
-  "Poder de Chef": "1049a6f36b62.mp3",
-  "Cardápio": "505217b7f715.mp3",
-  "Festival Gastronômico": "3ecd2367d705.mp3",
-  "Prato Assinatura": "b757129a107e.mp3",
-  "Mesa da Celebração": "1e9e92a91134.mp3",
-  "Detetive": "56b82189ed4c.mp3",
-  "Dedução Metódica": "e51f0394dfc1.mp3",
-  "Poder de Detetive": "74fd228aa121.mp3",
-  "Perfil do Suspeito": "fcb586b02256.mp3",
-  "Caso Frio": "40084267e2d6.mp3",
-  "Golpe de Vista": "be680b86b881.mp3",
-  "Caso Encerrado": "cc4f7d7099d1.mp3",
-  "Devorador": "dadb2e3faef5.mp3",
-  "Banquete de Poder": "da33a2403436.mp3",
-  "Poder de Devorador": "ed8de0335467.mp3",
-  "Instintos do Devorador": "0caffee67ef5.mp3",
-  "Fome que Não Passa": "3c555d2c4e4d.mp3",
-  "Ecos da Última Refeição": "9a195b722fdb.mp3",
-  "Banquete Final": "f4ba5e42b9db.mp3",
-  "Elementarista": "40f51dc8038f.mp3",
-  "Polifonia Elemental": "a9b92af82d09.mp3",
-  "Poder de Elementarista": "7dbb883f55cd.mp3",
-  "Manifestação Natural": "b163a78ca46e.mp3",
-  "Testemunho do Primeiro Salão": "78035feab999.mp3",
-  "Julgamento da Aptidão": "4a9ba31c8ca0.mp3",
-  "Caminho do Avatar": "1098e8ab83e5.mp3",
-  "Prova da Derivação": "59531487ecb7.mp3",
-  "Maestria Elemental": "986957c8d543.mp3",
-  "Derivações Harmônicas": "d72b756bfd4d.mp3",
-  "Domínio da Derivação": "0011a4941660.mp3",
-  "Soberania Elemental": "9c0bef00a079.mp3",
-  "Prova do Salão de Origem": "42d0f61b6498.mp3",
-  "Território Elemental": "829476cc26e3.mp3",
-  "Apogeu Elemental": "28000fa0976f.mp3"
+  "Nível 2 alcançado": {
+   "a": "e3235669114d.mp3",
+   "i": 0
+  },
+  "Nível 3 alcançado": {
+   "a": "6f189290f503.mp3",
+   "i": 0
+  },
+  "Nível 4 alcançado": {
+   "a": "dcdaa792910a.mp3",
+   "i": 0
+  },
+  "Nível 5 alcançado": {
+   "a": "b72f34833978.mp3",
+   "i": 0
+  },
+  "Nível 6 alcançado": {
+   "a": "0f2bcad9b9e1.mp3",
+   "i": 0
+  },
+  "Nível 7 alcançado": {
+   "a": "2c68c2161add.mp3",
+   "i": 0
+  },
+  "Nível 8 alcançado": {
+   "a": "2c54e2aaad6c.mp3",
+   "i": 0
+  },
+  "Nível 9 alcançado": {
+   "a": "ad5df3c8792c.mp3",
+   "i": 0
+  },
+  "Nível 10 alcançado": {
+   "a": "044824b34c73.mp3",
+   "i": 0
+  },
+  "Nível 11 alcançado": {
+   "a": "db6735bf6f4f.mp3",
+   "i": 0
+  },
+  "Nível 12 alcançado": {
+   "a": "91314f1c20bb.mp3",
+   "i": 0
+  },
+  "Nível 13 alcançado": {
+   "a": "65b9182cf771.mp3",
+   "i": 0
+  },
+  "Nível 14 alcançado": {
+   "a": "b299e2a98475.mp3",
+   "i": 0
+  },
+  "Nível 15 alcançado": {
+   "a": "3517aec175ea.mp3",
+   "i": 0
+  },
+  "Nível 16 alcançado": {
+   "a": "7c39a27178c3.mp3",
+   "i": 0
+  },
+  "Nível 17 alcançado": {
+   "a": "4740f14cf91c.mp3",
+   "i": 0
+  },
+  "Nível 18 alcançado": {
+   "a": "fc5cfb2e6ebd.mp3",
+   "i": 0
+  },
+  "Nível 19 alcançado": {
+   "a": "60cc4d0a7337.mp3",
+   "i": 0
+  },
+  "Nível 20 alcançado": {
+   "a": "1bc155fd9050.mp3",
+   "i": 0
+  },
+  "Nível 21 alcançado": {
+   "a": "a15e872fd148.mp3",
+   "i": 0
+  },
+  "Nível 22 alcançado": {
+   "a": "137d3f259b30.mp3",
+   "i": 0
+  },
+  "Nível 23 alcançado": {
+   "a": "33461d9bbd18.mp3",
+   "i": 0
+  },
+  "Nível 24 alcançado": {
+   "a": "84e045ee1daa.mp3",
+   "i": 0
+  },
+  "Nível 25 alcançado": {
+   "a": "ff51b320f853.mp3",
+   "i": 0
+  },
+  "Nível 26 alcançado": {
+   "a": "eab4461a83b3.mp3",
+   "i": 0
+  },
+  "Nível 27 alcançado": {
+   "a": "09270af5efe5.mp3",
+   "i": 0
+  },
+  "Nível 28 alcançado": {
+   "a": "882816521663.mp3",
+   "i": 0
+  },
+  "Nível 29 alcançado": {
+   "a": "f376a899a4c2.mp3",
+   "i": 0
+  },
+  "Nível 30 alcançado": {
+   "a": "540e5835e252.mp3",
+   "i": 0
+  },
+  "Nível 31 alcançado": {
+   "a": "b6eb380b1913.mp3",
+   "i": 0
+  },
+  "Nível 32 alcançado": {
+   "a": "d211eff9cbe3.mp3",
+   "i": 0
+  },
+  "Nível 33 alcançado": {
+   "a": "258cf2f6dd0b.mp3",
+   "i": 0
+  },
+  "Nível 34 alcançado": {
+   "a": "3a336eda2613.mp3",
+   "i": 0
+  },
+  "Nível 35 alcançado": {
+   "a": "0a7f2f4d804c.mp3",
+   "i": 0
+  },
+  "Nível 36 alcançado": {
+   "a": "06ad0e02b565.mp3",
+   "i": 0
+  },
+  "Nível 37 alcançado": {
+   "a": "9e4e4adf1699.mp3",
+   "i": 0
+  },
+  "Nível 38 alcançado": {
+   "a": "dce9fa7a66d6.mp3",
+   "i": 0
+  },
+  "Nível 39 alcançado": {
+   "a": "03d2e79b82b5.mp3",
+   "i": 0
+  },
+  "Nível 40 alcançado": {
+   "a": "f36f05d37503.mp3",
+   "i": 0
+  },
+  "Nível 41 alcançado": {
+   "a": "4fa2b2adc17b.mp3",
+   "i": 0
+  },
+  "Nível 42 alcançado": {
+   "a": "df6da0f452b5.mp3",
+   "i": 0
+  },
+  "Nível 43 alcançado": {
+   "a": "dd45c6e74a4b.mp3",
+   "i": 0
+  },
+  "Nível 44 alcançado": {
+   "a": "7445297bb504.mp3",
+   "i": 0
+  },
+  "Nível 45 alcançado": {
+   "a": "a6697517e3c6.mp3",
+   "i": 0
+  },
+  "Nível 46 alcançado": {
+   "a": "30b0c3c532d6.mp3",
+   "i": 0
+  },
+  "Nível 47 alcançado": {
+   "a": "d364d7212608.mp3",
+   "i": 0
+  },
+  "Nível 48 alcançado": {
+   "a": "d4c10d88cedc.mp3",
+   "i": 0
+  },
+  "Nível 49 alcançado": {
+   "a": "b53c14d2a2b3.mp3",
+   "i": 0
+  },
+  "Nível 50 alcançado": {
+   "a": "51b253e80666.mp3",
+   "i": 0
+  },
+  "Nível 51 alcançado": {
+   "a": "99db6d2bd6f8.mp3",
+   "i": 0
+  },
+  "Nível 52 alcançado": {
+   "a": "3abf8c837d7c.mp3",
+   "i": 0
+  },
+  "Nível 53 alcançado": {
+   "a": "a3f5b866aaa4.mp3",
+   "i": 0
+  },
+  "Nível 54 alcançado": {
+   "a": "866897d84103.mp3",
+   "i": 0
+  },
+  "Nível 55 alcançado": {
+   "a": "28e597669488.mp3",
+   "i": 0
+  },
+  "Nível 56 alcançado": {
+   "a": "39b4ec900feb.mp3",
+   "i": 0
+  },
+  "Nível 57 alcançado": {
+   "a": "3671d585f2e7.mp3",
+   "i": 0
+  },
+  "Nível 58 alcançado": {
+   "a": "98aaf79256ba.mp3",
+   "i": 0
+  },
+  "Nível 59 alcançado": {
+   "a": "3ee9cf450d45.mp3",
+   "i": 0
+  },
+  "Nível 60 alcançado": {
+   "a": "1b6a7a35f1d1.mp3",
+   "i": 0
+  },
+  "Vida +1": {
+   "a": "3238ac2e6c4d.mp3",
+   "i": 0
+  },
+  "Vida +2": {
+   "a": "143a99b39ca9.mp3",
+   "i": 0
+  },
+  "Vida +3": {
+   "a": "9753c269772d.mp3",
+   "i": 0
+  },
+  "Vida +4": {
+   "a": "f7f2183dd540.mp3",
+   "i": 0
+  },
+  "Vida +5": {
+   "a": "8b7ccfa08aed.mp3",
+   "i": 0
+  },
+  "Vida +6": {
+   "a": "0050a82f43fd.mp3",
+   "i": 0
+  },
+  "Vida +7": {
+   "a": "368f143fed09.mp3",
+   "i": 0
+  },
+  "Vida +8": {
+   "a": "3c92ecff86f3.mp3",
+   "i": 0
+  },
+  "Vida +9": {
+   "a": "d9474d118529.mp3",
+   "i": 0
+  },
+  "Vida +10": {
+   "a": "9dc343fdb696.mp3",
+   "i": 0
+  },
+  "Vida +11": {
+   "a": "a055e210dec7.mp3",
+   "i": 0
+  },
+  "Vida +12": {
+   "a": "717a37d4d6c3.mp3",
+   "i": 0
+  },
+  "Vida +13": {
+   "a": "b235c50aa745.mp3",
+   "i": 0
+  },
+  "Vida +14": {
+   "a": "359ff9f94e93.mp3",
+   "i": 0
+  },
+  "Vida +15": {
+   "a": "e84de03006e6.mp3",
+   "i": 0
+  },
+  "Vida +16": {
+   "a": "ca57b9f85bb4.mp3",
+   "i": 0
+  },
+  "Vida +17": {
+   "a": "558cc207039f.mp3",
+   "i": 0
+  },
+  "Vida +18": {
+   "a": "d05b8b7027e1.mp3",
+   "i": 0
+  },
+  "Vida +19": {
+   "a": "df1c87224cd8.mp3",
+   "i": 0
+  },
+  "Vida +20": {
+   "a": "72c7b6fe0a87.mp3",
+   "i": 0
+  },
+  "Vida +21": {
+   "a": "223f85f2332a.mp3",
+   "i": 0
+  },
+  "Vida +22": {
+   "a": "bdf95f9d7d71.mp3",
+   "i": 0
+  },
+  "Vida +23": {
+   "a": "c3819b598dcc.mp3",
+   "i": 0
+  },
+  "Vida +24": {
+   "a": "8eec22fdfba6.mp3",
+   "i": 0
+  },
+  "Vida +25": {
+   "a": "3aa7e1145d1d.mp3",
+   "i": 0
+  },
+  "Vida +26": {
+   "a": "a978be444858.mp3",
+   "i": 0
+  },
+  "Vida +27": {
+   "a": "57ab95151afb.mp3",
+   "i": 0
+  },
+  "Vida +28": {
+   "a": "65f87855d332.mp3",
+   "i": 0
+  },
+  "Vida +29": {
+   "a": "1287147bfba4.mp3",
+   "i": 0
+  },
+  "Vida +30": {
+   "a": "f2a36b9d8361.mp3",
+   "i": 0
+  },
+  "Vida +31": {
+   "a": "7a2d977eeff6.mp3",
+   "i": 0
+  },
+  "Vida +32": {
+   "a": "c25f89b6f464.mp3",
+   "i": 0
+  },
+  "Vida +33": {
+   "a": "3cd881420b6b.mp3",
+   "i": 0
+  },
+  "Vida +34": {
+   "a": "44c01307191a.mp3",
+   "i": 0
+  },
+  "Vida +35": {
+   "a": "05d9dc98047d.mp3",
+   "i": 0
+  },
+  "Vida +36": {
+   "a": "4cb0f97f70e9.mp3",
+   "i": 0
+  },
+  "Vida +37": {
+   "a": "6bad0baa15ab.mp3",
+   "i": 0
+  },
+  "Vida +38": {
+   "a": "adf40c90e959.mp3",
+   "i": 0
+  },
+  "Vida +39": {
+   "a": "dd1fa812fab5.mp3",
+   "i": 0
+  },
+  "Vida +40": {
+   "a": "5cb450319f4b.mp3",
+   "i": 0
+  },
+  "Vida +41": {
+   "a": "0cd80e0a53a4.mp3",
+   "i": 0
+  },
+  "Vida +42": {
+   "a": "b62be44e5925.mp3",
+   "i": 0
+  },
+  "Vida +43": {
+   "a": "e42bb0cd7fc6.mp3",
+   "i": 0
+  },
+  "Vida +44": {
+   "a": "3050bcf1d270.mp3",
+   "i": 0
+  },
+  "Vida +45": {
+   "a": "cf3dc1cdd20e.mp3",
+   "i": 0
+  },
+  "Vida +46": {
+   "a": "1601a943800f.mp3",
+   "i": 0
+  },
+  "Vida +47": {
+   "a": "d50bab6d3257.mp3",
+   "i": 0
+  },
+  "Vida +48": {
+   "a": "f057f9c2851c.mp3",
+   "i": 0
+  },
+  "Vida +49": {
+   "a": "ab6af5fb47b7.mp3",
+   "i": 0
+  },
+  "Vida +50": {
+   "a": "7e92836b2338.mp3",
+   "i": 0
+  },
+  "Vida +51": {
+   "a": "8e6871c0568f.mp3",
+   "i": 0
+  },
+  "Vida +52": {
+   "a": "dcc813a56a9d.mp3",
+   "i": 0
+  },
+  "Vida +53": {
+   "a": "baa3277e0900.mp3",
+   "i": 0
+  },
+  "Vida +54": {
+   "a": "83abd3188766.mp3",
+   "i": 0
+  },
+  "Vida +55": {
+   "a": "1cc4dbc49672.mp3",
+   "i": 0
+  },
+  "Vida +56": {
+   "a": "2e5f94499ee9.mp3",
+   "i": 0
+  },
+  "Vida +57": {
+   "a": "6cdc76489c4b.mp3",
+   "i": 0
+  },
+  "Vida +58": {
+   "a": "6ed206751af9.mp3",
+   "i": 0
+  },
+  "Vida +59": {
+   "a": "672d1616d9f9.mp3",
+   "i": 0
+  },
+  "Vida +60": {
+   "a": "60013fc17b99.mp3",
+   "i": 0
+  },
+  "Mana +1": {
+   "a": "ced43ff760ae.mp3",
+   "i": 0
+  },
+  "Mana +2": {
+   "a": "4cfae862a630.mp3",
+   "i": 0
+  },
+  "Mana +3": {
+   "a": "d395cabbb5d7.mp3",
+   "i": 0
+  },
+  "Mana +4": {
+   "a": "ddf909cb2ef1.mp3",
+   "i": 0
+  },
+  "Mana +5": {
+   "a": "2bb39a83034d.mp3",
+   "i": 0
+  },
+  "Mana +6": {
+   "a": "a552aab5a8d6.mp3",
+   "i": 0
+  },
+  "Mana +7": {
+   "a": "8d5c21066c7e.mp3",
+   "i": 0
+  },
+  "Mana +8": {
+   "a": "e5000bb4d908.mp3",
+   "i": 0
+  },
+  "Mana +9": {
+   "a": "1c864e528f57.mp3",
+   "i": 0
+  },
+  "Mana +10": {
+   "a": "3e81a1220271.mp3",
+   "i": 0
+  },
+  "Mana +11": {
+   "a": "c09b8c897a8f.mp3",
+   "i": 0
+  },
+  "Mana +12": {
+   "a": "3a18766af3d4.mp3",
+   "i": 0
+  },
+  "Mana +13": {
+   "a": "68291308605e.mp3",
+   "i": 0
+  },
+  "Mana +14": {
+   "a": "86e164de392b.mp3",
+   "i": 0
+  },
+  "Mana +15": {
+   "a": "3e400b3e3b31.mp3",
+   "i": 0
+  },
+  "Mana +16": {
+   "a": "9c44b9dd3253.mp3",
+   "i": 0
+  },
+  "Mana +17": {
+   "a": "dc5571896bb9.mp3",
+   "i": 0
+  },
+  "Mana +18": {
+   "a": "343630281317.mp3",
+   "i": 0
+  },
+  "Mana +19": {
+   "a": "4bff866ca0be.mp3",
+   "i": 0
+  },
+  "Mana +20": {
+   "a": "3aa4a064d900.mp3",
+   "i": 0
+  },
+  "Mana +21": {
+   "a": "dbd6eae43223.mp3",
+   "i": 0
+  },
+  "Mana +22": {
+   "a": "191445ec35fa.mp3",
+   "i": 0
+  },
+  "Mana +23": {
+   "a": "be8ada40a542.mp3",
+   "i": 0
+  },
+  "Mana +24": {
+   "a": "a1c7bed7047e.mp3",
+   "i": 0
+  },
+  "Mana +25": {
+   "a": "23bdae706cb3.mp3",
+   "i": 0
+  },
+  "Mana +26": {
+   "a": "2cb33a5650d0.mp3",
+   "i": 0
+  },
+  "Mana +27": {
+   "a": "8d97d12a8fd3.mp3",
+   "i": 0
+  },
+  "Mana +28": {
+   "a": "96e11bbbdce1.mp3",
+   "i": 0
+  },
+  "Mana +29": {
+   "a": "2575b8c9b866.mp3",
+   "i": 0
+  },
+  "Mana +30": {
+   "a": "82b5268997a4.mp3",
+   "i": 0
+  },
+  "Mana +31": {
+   "a": "e9a2c222f064.mp3",
+   "i": 0
+  },
+  "Mana +32": {
+   "a": "ec70d739a2bb.mp3",
+   "i": 0
+  },
+  "Mana +33": {
+   "a": "71a61e309cd2.mp3",
+   "i": 0
+  },
+  "Mana +34": {
+   "a": "67197313adfa.mp3",
+   "i": 0
+  },
+  "Mana +35": {
+   "a": "d87b5d46e14d.mp3",
+   "i": 0
+  },
+  "Mana +36": {
+   "a": "4227de0ed213.mp3",
+   "i": 0
+  },
+  "Mana +37": {
+   "a": "df08d7ff44b6.mp3",
+   "i": 0
+  },
+  "Mana +38": {
+   "a": "6c74fc70a4c9.mp3",
+   "i": 0
+  },
+  "Mana +39": {
+   "a": "c456e86f2fd0.mp3",
+   "i": 0
+  },
+  "Mana +40": {
+   "a": "187a3fcde0d6.mp3",
+   "i": 0
+  },
+  "Mana +41": {
+   "a": "cc920a6cea3a.mp3",
+   "i": 0
+  },
+  "Mana +42": {
+   "a": "c4200d5b323d.mp3",
+   "i": 0
+  },
+  "Mana +43": {
+   "a": "b523eac3e767.mp3",
+   "i": 0
+  },
+  "Mana +44": {
+   "a": "f2780834ff11.mp3",
+   "i": 0
+  },
+  "Mana +45": {
+   "a": "1ec19b8b72fa.mp3",
+   "i": 0
+  },
+  "Mana +46": {
+   "a": "2d3e52d659b9.mp3",
+   "i": 0
+  },
+  "Mana +47": {
+   "a": "07aefd78b255.mp3",
+   "i": 0
+  },
+  "Mana +48": {
+   "a": "c0cce8945712.mp3",
+   "i": 0
+  },
+  "Mana +49": {
+   "a": "618ccf551742.mp3",
+   "i": 0
+  },
+  "Mana +50": {
+   "a": "6e176db39697.mp3",
+   "i": 0
+  },
+  "Mana +51": {
+   "a": "ae91cfc97626.mp3",
+   "i": 0
+  },
+  "Mana +52": {
+   "a": "7b0fe03d20c3.mp3",
+   "i": 0
+  },
+  "Mana +53": {
+   "a": "4f139a86b2e6.mp3",
+   "i": 0
+  },
+  "Mana +54": {
+   "a": "308dea237e02.mp3",
+   "i": 0
+  },
+  "Mana +55": {
+   "a": "040503ed146d.mp3",
+   "i": 0
+  },
+  "Mana +56": {
+   "a": "6e2d1e2d21a6.mp3",
+   "i": 0
+  },
+  "Mana +57": {
+   "a": "090d5aea6501.mp3",
+   "i": 0
+  },
+  "Mana +58": {
+   "a": "0f89ab9f159d.mp3",
+   "i": 0
+  },
+  "Mana +59": {
+   "a": "8a87353394f8.mp3",
+   "i": 0
+  },
+  "Mana +60": {
+   "a": "63283a0fc035.mp3",
+   "i": 0
+  },
+  "Nova classe: Guerreiro": {
+   "a": "6c95375b18a3.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 2": {
+   "a": "83a778105bc0.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 3": {
+   "a": "b48fa31749e9.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 4": {
+   "a": "fc87961ffd6e.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 5": {
+   "a": "4e5206a5597b.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 6": {
+   "a": "d6882a02b471.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 7": {
+   "a": "adfb5759b2cb.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 8": {
+   "a": "d74e11166b0b.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 9": {
+   "a": "bc498fde022d.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 10": {
+   "a": "38cb569cfaae.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 11": {
+   "a": "aa6ede9e82e2.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 12": {
+   "a": "8e97dfe0006f.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 13": {
+   "a": "d21b980cffed.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 14": {
+   "a": "e12ceb953e4b.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 15": {
+   "a": "32bcdbe8c465.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 16": {
+   "a": "95630d2b02f5.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 17": {
+   "a": "b929c88b4f55.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 18": {
+   "a": "f4e1c8935ae3.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 19": {
+   "a": "e28bfa35fce6.mp3",
+   "i": 0
+  },
+  "Guerreiro chegou ao nível 20": {
+   "a": "34d9d9408624.mp3",
+   "i": 0
+  },
+  "Habilidade: Implacável": {
+   "a": "29571c1438f2.mp3",
+   "i": 0
+  },
+  "Grau de perícia: Grau de perícia": {
+   "a": "582ad777f02b.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Guerreiro": {
+   "a": "fce5e551549e.mp3",
+   "i": 0
+  },
+  "Habilidade: Batalhão": {
+   "a": "80cd3f29d30c.mp3",
+   "i": 0
+  },
+  "Evento: Até a Morte": {
+   "a": "56a4032dd26e.mp3",
+   "i": 0
+  },
+  "Habilidade: Arsenal Especial": {
+   "a": "3af337595d20.mp3",
+   "i": 0
+  },
+  "Habilidade final: Senhor da Guerra": {
+   "a": "9b544f56f378.mp3",
+   "i": 0
+  },
+  "Nova classe: Piloto": {
+   "a": "024b0dc1cd89.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 2": {
+   "a": "a95a096fd4ef.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 3": {
+   "a": "731baf866003.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 4": {
+   "a": "bac97b52571d.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 5": {
+   "a": "758b015ddf14.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 6": {
+   "a": "516a871642eb.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 7": {
+   "a": "152888589942.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 8": {
+   "a": "2d553cd2cae7.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 9": {
+   "a": "108f82428f52.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 10": {
+   "a": "238ee086da24.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 11": {
+   "a": "556bb87b7b2b.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 12": {
+   "a": "a1d38e00c378.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 13": {
+   "a": "59db7b8f8cdf.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 14": {
+   "a": "b294069fc2e1.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 15": {
+   "a": "48919e380173.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 16": {
+   "a": "5f62b5c33401.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 17": {
+   "a": "22eae10b9606.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 18": {
+   "a": "ca1799e8de81.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 19": {
+   "a": "c451bf2e8e6e.mp3",
+   "i": 0
+  },
+  "Piloto chegou ao nível 20": {
+   "a": "4d36eb4212ce.mp3",
+   "i": 0
+  },
+  "Habilidade: Meu Xodó": {
+   "a": "94ef926c5610.mp3",
+   "i": 0
+  },
+  "Poder: Poder de piloto": {
+   "a": "60bc2c10280f.mp3",
+   "i": 0
+  },
+  "Habilidade: Tuning": {
+   "a": "730f03fd7c6e.mp3",
+   "i": 0
+  },
+  "Evento: Corrida Maluca": {
+   "a": "fd88611bf6b7.mp3",
+   "i": 0
+  },
+  "Habilidade: 0 Km": {
+   "a": "71cb1ece8db8.mp3",
+   "i": 0
+  },
+  "Habilidade final: Ás Impossível": {
+   "a": "de359cea576d.mp3",
+   "i": 0
+  },
+  "Nova classe: Ninja": {
+   "a": "8d7dfc844f46.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 2": {
+   "a": "190fa499a0f2.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 3": {
+   "a": "61ba4672b1ed.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 4": {
+   "a": "62416976fa69.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 5": {
+   "a": "fef7c581cb03.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 6": {
+   "a": "32bad3f17b58.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 7": {
+   "a": "287631337e8f.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 8": {
+   "a": "e1cce04100de.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 9": {
+   "a": "12eb878c26c7.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 10": {
+   "a": "74550d77846f.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 11": {
+   "a": "de8f06c4bc83.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 12": {
+   "a": "74225c38c8ff.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 13": {
+   "a": "e92eea9caf7d.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 14": {
+   "a": "d6228fc89e8d.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 15": {
+   "a": "d1a85f9b0766.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 16": {
+   "a": "2adfb58d397b.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 17": {
+   "a": "ace9d4b47eaa.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 18": {
+   "a": "71c693775442.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 19": {
+   "a": "29ca4cd72253.mp3",
+   "i": 0
+  },
+  "Ninja chegou ao nível 20": {
+   "a": "532dd6f742e3.mp3",
+   "i": 0
+  },
+  "Habilidade: Hierarquia": {
+   "a": "d398c12bcfcc.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Ninja": {
+   "a": "e44401a11a6a.mp3",
+   "i": 0
+  },
+  "Habilidade: Arma Ninja": {
+   "a": "9b21483dca19.mp3",
+   "i": 0
+  },
+  "Evento: Treinamento Ninja": {
+   "a": "eeddbac32392.mp3",
+   "i": 0
+  },
+  "Evento: Missão de Elite": {
+   "a": "a43712e88050.mp3",
+   "i": 0
+  },
+  "Habilidade: Substituição": {
+   "a": "db3b62d91082.mp3",
+   "i": 0
+  },
+  "Habilidade final: Sombra Suprema": {
+   "a": "449c0fb399f6.mp3",
+   "i": 0
+  },
+  "Nova classe: Pop Star": {
+   "a": "fa63442c9598.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 2": {
+   "a": "8722840537b1.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 3": {
+   "a": "a3ca4814ff42.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 4": {
+   "a": "3cf404c9e218.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 5": {
+   "a": "96892ead6c4b.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 6": {
+   "a": "6fe66865ad2a.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 7": {
+   "a": "cea15ce92519.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 8": {
+   "a": "b8156d960c0d.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 9": {
+   "a": "f6a041bcc941.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 10": {
+   "a": "64c0956d0996.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 11": {
+   "a": "1954bef96bae.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 12": {
+   "a": "dcbfd0d971f0.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 13": {
+   "a": "d0fadc33aa5e.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 14": {
+   "a": "a0127ad11651.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 15": {
+   "a": "d04239a66b15.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 16": {
+   "a": "4aa147ff9bbc.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 17": {
+   "a": "5f5c04f23196.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 18": {
+   "a": "f4dc0ef94ec9.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 19": {
+   "a": "f5ef4b0946eb.mp3",
+   "i": 0
+  },
+  "Pop Star chegou ao nível 20": {
+   "a": "f5075b8dc8fe.mp3",
+   "i": 0
+  },
+  "Habilidade: Fama": {
+   "a": "2a17454d11a9.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Pop Star": {
+   "a": "d206792bd6e9.mp3",
+   "i": 0
+  },
+  "Habilidade: Publi": {
+   "a": "1d440fe9585d.mp3",
+   "i": 0
+  },
+  "Evento: Entrevista": {
+   "a": "89648320a365.mp3",
+   "i": 0
+  },
+  "Habilidade: Agência de Marketing": {
+   "a": "85bb79476e17.mp3",
+   "i": 0
+  },
+  "Habilidade final: Estrela Eterna": {
+   "a": "621e958b21d1.mp3",
+   "i": 0
+  },
+  "Nova classe: Espadachim": {
+   "a": "d7349674158f.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 2": {
+   "a": "f5a2171058f3.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 3": {
+   "a": "1a0c66cb90be.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 4": {
+   "a": "83f4413e4d31.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 5": {
+   "a": "08382411f2b8.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 6": {
+   "a": "a6ef8c600d32.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 7": {
+   "a": "20a7eb46626e.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 8": {
+   "a": "74c40931ec0c.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 9": {
+   "a": "7093e595306e.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 10": {
+   "a": "28868c25fd33.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 11": {
+   "a": "5431caf6ff86.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 12": {
+   "a": "2c811e42f261.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 13": {
+   "a": "06cedaf945ff.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 14": {
+   "a": "1d27abee5c92.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 15": {
+   "a": "f13d97e832fa.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 16": {
+   "a": "dd795c674558.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 17": {
+   "a": "87c9dd5f1983.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 18": {
+   "a": "8e6acceb4446.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 19": {
+   "a": "97e4fe27a801.mp3",
+   "i": 0
+  },
+  "Espadachim chegou ao nível 20": {
+   "a": "7126658aaf62.mp3",
+   "i": 0
+  },
+  "Habilidade: Arte da Espada": {
+   "a": "344c4942f724.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Espadachim": {
+   "a": "5952909e7cb0.mp3",
+   "i": 0
+  },
+  "Habilidade: Posturas de Combate": {
+   "a": "776c8e6e3576.mp3",
+   "i": 0
+  },
+  "Evento: Duelo": {
+   "a": "1883f3969e0a.mp3",
+   "i": 0
+  },
+  "Habilidade: Combo": {
+   "a": "e714678a9eb7.mp3",
+   "i": 0
+  },
+  "Habilidade final: Espírito da Espada": {
+   "a": "4731db1213a6.mp3",
+   "i": 0
+  },
+  "Nova classe: Lutador": {
+   "a": "bb91ff6ea60c.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 2": {
+   "a": "dce5f4397d3e.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 3": {
+   "a": "1f4d4199705d.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 4": {
+   "a": "daa677ff2cc8.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 5": {
+   "a": "b3d2528930e6.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 6": {
+   "a": "bcc3c2390ea8.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 7": {
+   "a": "2890ba704ab3.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 8": {
+   "a": "9bc55b79f638.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 9": {
+   "a": "b74b3164fc12.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 10": {
+   "a": "15648c99630d.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 11": {
+   "a": "8cb473b6b671.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 12": {
+   "a": "0e47fd2299d9.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 13": {
+   "a": "4a5aee6aabe3.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 14": {
+   "a": "c154aaeef5a3.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 15": {
+   "a": "1ea11d29d4e2.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 16": {
+   "a": "31a01b43d328.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 17": {
+   "a": "58c8448bd795.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 18": {
+   "a": "22feace602bd.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 19": {
+   "a": "803c4252a7d6.mp3",
+   "i": 0
+  },
+  "Lutador chegou ao nível 20": {
+   "a": "362f57e2f301.mp3",
+   "i": 0
+  },
+  "Habilidade: Instinto de Combate": {
+   "a": "a68a68a92b5f.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Lutador": {
+   "a": "6381f29d6d31.mp3",
+   "i": 0
+  },
+  "Habilidade: Punhos de Ferro": {
+   "a": "0ff7b1773909.mp3",
+   "i": 0
+  },
+  "Evento: Ringue": {
+   "a": "7c852d1d2f06.mp3",
+   "i": 0
+  },
+  "Habilidade: Estilo de Combate": {
+   "a": "a08603f6b289.mp3",
+   "i": 0
+  },
+  "Habilidade final: Kokusen": {
+   "a": "f762e5679e9c.mp3",
+   "i": 0
+  },
+  "Nova classe: Atirador": {
+   "a": "1d39e64e4858.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 2": {
+   "a": "e81b1775d20b.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 3": {
+   "a": "61bbbdde1152.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 4": {
+   "a": "1c3646876ede.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 5": {
+   "a": "c1169d83d302.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 6": {
+   "a": "a86d8ca7074e.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 7": {
+   "a": "f459261d6c9a.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 8": {
+   "a": "8d1c9a9a5e1b.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 9": {
+   "a": "6903c188c421.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 10": {
+   "a": "5c498a3c8e4b.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 11": {
+   "a": "388ff2e3d2ba.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 12": {
+   "a": "125940880c89.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 13": {
+   "a": "d348427fd5b2.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 14": {
+   "a": "563c09c63bb3.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 15": {
+   "a": "d092e58c58d6.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 16": {
+   "a": "4fdee8474a16.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 17": {
+   "a": "7842a665824a.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 18": {
+   "a": "7b794d65b1f3.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 19": {
+   "a": "daff78feafd1.mp3",
+   "i": 0
+  },
+  "Atirador chegou ao nível 20": {
+   "a": "a36e3566be25.mp3",
+   "i": 0
+  },
+  "Habilidade: Na Mira": {
+   "a": "1b6568c44cf7.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Atirador": {
+   "a": "f7f56c00ca95.mp3",
+   "i": 0
+  },
+  "Habilidade: Tiro de Impulso": {
+   "a": "fabf4a1fc8c7.mp3",
+   "i": 0
+  },
+  "Evento: Tiro ao Alvo": {
+   "a": "5d1115214e30.mp3",
+   "i": 0
+  },
+  "Habilidade: Disparo Calculado": {
+   "a": "69bfea35b2ef.mp3",
+   "i": 0
+  },
+  "Habilidade final: Um Só Disparo": {
+   "a": "92a1f55311eb.mp3",
+   "i": 0
+  },
+  "Nova classe: Médico": {
+   "a": "1d9f582e6ca0.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 2": {
+   "a": "076526d8e059.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 3": {
+   "a": "2dafb1736def.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 4": {
+   "a": "e4a40a5c4fb7.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 5": {
+   "a": "de79be538f3a.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 6": {
+   "a": "3c1c69077fc1.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 7": {
+   "a": "414aadb03703.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 8": {
+   "a": "1071c93b3179.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 9": {
+   "a": "741ba9e964d7.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 10": {
+   "a": "676c08671357.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 11": {
+   "a": "bea24486a98d.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 12": {
+   "a": "1612189cbd73.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 13": {
+   "a": "30481e2b1901.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 14": {
+   "a": "73cf7a4efa8a.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 15": {
+   "a": "7d5e8d6f1be7.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 16": {
+   "a": "ce86919ae142.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 17": {
+   "a": "121978f24b49.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 18": {
+   "a": "707b16df93a0.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 19": {
+   "a": "00035f1424f9.mp3",
+   "i": 0
+  },
+  "Médico chegou ao nível 20": {
+   "a": "0009e840bb9f.mp3",
+   "i": 0
+  },
+  "Habilidade: Medicina": {
+   "a": "dcf828f83b22.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Médico": {
+   "a": "376a89ada164.mp3",
+   "i": 0
+  },
+  "Habilidade: Socorro de Emergência": {
+   "a": "36f0ff0a6777.mp3",
+   "i": 0
+  },
+  "Evento: Especialização Médica": {
+   "a": "fa7300ee510b.mp3",
+   "i": 0
+  },
+  "Habilidade: Milagre": {
+   "a": "2b4c9e34d991.mp3",
+   "i": 0
+  },
+  "Habilidade final: Mestre da Vida": {
+   "a": "10897aa0c354.mp3",
+   "i": 0
+  },
+  "Nova classe: Guardião": {
+   "a": "a15a9d68c5e7.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 2": {
+   "a": "2b384c9609bd.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 3": {
+   "a": "6ee6c10158eb.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 4": {
+   "a": "00d993300c41.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 5": {
+   "a": "ffb34984363d.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 6": {
+   "a": "9dc3423c8270.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 7": {
+   "a": "5e4f8abcaddd.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 8": {
+   "a": "874a1a69111d.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 9": {
+   "a": "9d44b9ff9341.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 10": {
+   "a": "f4d488f833b9.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 11": {
+   "a": "da0c976c3578.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 12": {
+   "a": "f0392bb55361.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 13": {
+   "a": "a8dcd912ca48.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 14": {
+   "a": "94a93b92a462.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 15": {
+   "a": "fb0b864c84a2.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 16": {
+   "a": "6bfdde35e2f5.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 17": {
+   "a": "697216d41d70.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 18": {
+   "a": "7536da6324e1.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 19": {
+   "a": "8d34a3ad8599.mp3",
+   "i": 0
+  },
+  "Guardião chegou ao nível 20": {
+   "a": "dc93990d9928.mp3",
+   "i": 0
+  },
+  "Habilidade: Protegido": {
+   "a": "8bd555cec504.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Guardião": {
+   "a": "0a2ddca21f97.mp3",
+   "i": 0
+  },
+  "Habilidade: Provocar": {
+   "a": "9e82926eff1b.mp3",
+   "i": 0
+  },
+  "Evento: Aliança": {
+   "a": "b8543e842375.mp3",
+   "i": 0
+  },
+  "Habilidade: Castelo": {
+   "a": "7ef7f3ce3e96.mp3",
+   "i": 0
+  },
+  "Habilidade final: Coração Unificado": {
+   "a": "6032200602a0.mp3",
+   "i": 0
+  },
+  "Nova classe: Caçador": {
+   "a": "34da9b20b83d.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 2": {
+   "a": "6ee3d6e3d9e7.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 3": {
+   "a": "753547fdac1b.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 4": {
+   "a": "ac944288483b.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 5": {
+   "a": "4fdd9f25928b.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 6": {
+   "a": "27a1ef13d43c.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 7": {
+   "a": "678768840796.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 8": {
+   "a": "13010f25e3ec.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 9": {
+   "a": "d153b34ec2a6.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 10": {
+   "a": "7926ab33c1e0.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 11": {
+   "a": "ca9e26147005.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 12": {
+   "a": "a242f39758a0.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 13": {
+   "a": "fdee0bf38426.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 14": {
+   "a": "486cecb3a5e2.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 15": {
+   "a": "00a516e184a5.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 16": {
+   "a": "fa17a9cdd25c.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 17": {
+   "a": "00b9407fda45.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 18": {
+   "a": "532beadb4457.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 19": {
+   "a": "9208166544e1.mp3",
+   "i": 0
+  },
+  "Caçador chegou ao nível 20": {
+   "a": "cdb1e9fd0946.mp3",
+   "i": 0
+  },
+  "Habilidade: Especialização": {
+   "a": "31d018876756.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Caçador": {
+   "a": "74d45d478a4f.mp3",
+   "i": 0
+  },
+  "Habilidade: Agência dos Caçadores": {
+   "a": "d9b6edf656cd.mp3",
+   "i": 0
+  },
+  "Evento: Requisição de Caçada": {
+   "a": "599babc6a052.mp3",
+   "i": 0
+  },
+  "Habilidade: Marca do Caçador": {
+   "a": "a2bf05bafcf7.mp3",
+   "i": 0
+  },
+  "Habilidade final: Predador Perfeito": {
+   "a": "d7eb624f4ce6.mp3",
+   "i": 0
+  },
+  "Nova classe: Engenheiro": {
+   "a": "aa897f6a6e6c.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 2": {
+   "a": "e8246f9e222f.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 3": {
+   "a": "7ed818e758e9.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 4": {
+   "a": "58b94b5f234c.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 5": {
+   "a": "099d94aa35dd.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 6": {
+   "a": "63f3198728b0.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 7": {
+   "a": "5e7aea7a4163.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 8": {
+   "a": "39e17e2e7923.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 9": {
+   "a": "ce60ffed1614.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 10": {
+   "a": "719460bfb125.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 11": {
+   "a": "987ed09c5fad.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 12": {
+   "a": "780a62ca8f04.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 13": {
+   "a": "387baa03da1b.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 14": {
+   "a": "270067cfa154.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 15": {
+   "a": "e76347225a9b.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 16": {
+   "a": "00f29408c9ea.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 17": {
+   "a": "01a21eac1517.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 18": {
+   "a": "49bb2dd3cf4e.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 19": {
+   "a": "8826d2403a75.mp3",
+   "i": 0
+  },
+  "Engenheiro chegou ao nível 20": {
+   "a": "9a6cde5905f0.mp3",
+   "i": 0
+  },
+  "Habilidade: Meus Filhos": {
+   "a": "6282e98e9c8e.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Engenheiro": {
+   "a": "c4e20e7856e1.mp3",
+   "i": 0
+  },
+  "Habilidade: Engenhocas": {
+   "a": "c2e28d5a2856.mp3",
+   "i": 0
+  },
+  "Evento: Concurso": {
+   "a": "853b48ee6f0c.mp3",
+   "i": 0
+  },
+  "Habilidade: Arquitetura de Campo": {
+   "a": "bc6c946b5f21.mp3",
+   "i": 0
+  },
+  "Habilidade final: Engenho Divino": {
+   "a": "23ecf35ea5ad.mp3",
+   "i": 0
+  },
+  "Nova classe: Alquimista": {
+   "a": "ccf6c95d6c85.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 2": {
+   "a": "28345ead299c.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 3": {
+   "a": "f10b870d3d3d.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 4": {
+   "a": "e9a18f7538cb.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 5": {
+   "a": "67e90221572c.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 6": {
+   "a": "b3f8c50a2ff4.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 7": {
+   "a": "7e7a604b0e07.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 8": {
+   "a": "09084faecbcb.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 9": {
+   "a": "20296aed29f0.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 10": {
+   "a": "cf48f3e937a8.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 11": {
+   "a": "3edbdd6c5b81.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 12": {
+   "a": "006e088292b7.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 13": {
+   "a": "adfa8880f952.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 14": {
+   "a": "d8491a186f8d.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 15": {
+   "a": "9a217761c488.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 16": {
+   "a": "70ab3b51db49.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 17": {
+   "a": "34e6c4de532e.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 18": {
+   "a": "9190bf7effce.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 19": {
+   "a": "3b28a77821e5.mp3",
+   "i": 0
+  },
+  "Alquimista chegou ao nível 20": {
+   "a": "a7f48a04551b.mp3",
+   "i": 0
+  },
+  "Habilidade: Grande Obra": {
+   "a": "b67e5ea18612.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Alquimista": {
+   "a": "0fe77596d706.mp3",
+   "i": 0
+  },
+  "Habilidade: Fórmulas": {
+   "a": "f4ce510100b0.mp3",
+   "i": 0
+  },
+  "Evento: Feira Alquímica": {
+   "a": "c2dee68b9482.mp3",
+   "i": 0
+  },
+  "Habilidade: Transmutação Mestra": {
+   "a": "2e7e27b020ce.mp3",
+   "i": 0
+  },
+  "Habilidade final: Pedra Filosofal": {
+   "a": "250c47616bf6.mp3",
+   "i": 0
+  },
+  "Nova classe: Comerciante": {
+   "a": "a1f757e67e66.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 2": {
+   "a": "81273d15a552.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 3": {
+   "a": "bcb72f8cf73a.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 4": {
+   "a": "7efbff298a50.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 5": {
+   "a": "590e62198246.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 6": {
+   "a": "152c5e33865b.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 7": {
+   "a": "ddc483ebf89b.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 8": {
+   "a": "8266dcd8037a.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 9": {
+   "a": "cf500005d3e3.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 10": {
+   "a": "ea560ecf1fbb.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 11": {
+   "a": "e23f94dc2e6a.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 12": {
+   "a": "fbbeb1423ab2.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 13": {
+   "a": "723a3cc99b5f.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 14": {
+   "a": "707536cc8fb4.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 15": {
+   "a": "f64fb75f3cdc.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 16": {
+   "a": "68d8eb7b47c7.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 17": {
+   "a": "54b97a41dbb6.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 18": {
+   "a": "2acdaf5f4202.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 19": {
+   "a": "69bd67b07aec.mp3",
+   "i": 0
+  },
+  "Comerciante chegou ao nível 20": {
+   "a": "210cc42b124e.mp3",
+   "i": 0
+  },
+  "Habilidade: Rede de Negócios": {
+   "a": "3ad37254b35b.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Comerciante": {
+   "a": "fce6c4147c50.mp3",
+   "i": 0
+  },
+  "Habilidade: Estoque": {
+   "a": "d9c960513837.mp3",
+   "i": 0
+  },
+  "Evento: Grande Leilão": {
+   "a": "8df50e7248e8.mp3",
+   "i": 0
+  },
+  "Habilidade: Contrato Irrecusável": {
+   "a": "c50fd67cf680.mp3",
+   "i": 0
+  },
+  "Habilidade final: Mercado Mundial": {
+   "a": "befcebf9890e.mp3",
+   "i": 0
+  },
+  "Nova classe: Campeão Dimensional": {
+   "a": "d6c3b382f501.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 2": {
+   "a": "e4f5ada899a2.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 3": {
+   "a": "8d9f38af1dcd.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 4": {
+   "a": "a328cf5ff841.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 5": {
+   "a": "3360503a5514.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 6": {
+   "a": "81523007ed3a.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 7": {
+   "a": "11bfb18cbc46.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 8": {
+   "a": "9ea49d9c7d8e.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 9": {
+   "a": "8bc164f93d7f.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 10": {
+   "a": "e549d32706b6.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 11": {
+   "a": "16768eefcfba.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 12": {
+   "a": "144d1bdb7800.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 13": {
+   "a": "62dfeb704de3.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 14": {
+   "a": "2b8c370e7eb2.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 15": {
+   "a": "0347d465b0b6.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 16": {
+   "a": "57fbe10d7cec.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 17": {
+   "a": "2cb5f945afbe.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 18": {
+   "a": "9ce8b90d2e1d.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 19": {
+   "a": "3f2125e2af14.mp3",
+   "i": 0
+  },
+  "Campeão Dimensional chegou ao nível 20": {
+   "a": "6854888589f2.mp3",
+   "i": 0
+  },
+  "Habilidade: Número 1": {
+   "a": "b0faf5c9deeb.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Campeão Dimensional": {
+   "a": "b1c1c1676cb8.mp3",
+   "i": 0
+  },
+  "Habilidade: Além do Comum": {
+   "a": "f0d303a47abe.mp3",
+   "i": 0
+  },
+  "Evento: Batalha pelo Título": {
+   "a": "8f92d8ee87ff.mp3",
+   "i": 0
+  },
+  "Habilidade: Trono da Dimensão": {
+   "a": "db0e6751ae80.mp3",
+   "i": 0
+  },
+  "Habilidade final: Pilar da Dimensão": {
+   "a": "6560fd2b3c5b.mp3",
+   "i": 0
+  },
+  "Nova classe: Pirata Amaldiçoado": {
+   "a": "ebc63c715461.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 2": {
+   "a": "5a79ded202e1.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 3": {
+   "a": "a5ca2366b086.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 4": {
+   "a": "6b1b50f4d0ac.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 5": {
+   "a": "fc3332be3161.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 6": {
+   "a": "c06c0880c6be.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 7": {
+   "a": "73328a50409b.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 8": {
+   "a": "1865d096a1cc.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 9": {
+   "a": "f10f5342bde0.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 10": {
+   "a": "76fbd3502064.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 11": {
+   "a": "a2cacfaafef1.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 12": {
+   "a": "a4ba3e0140ff.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 13": {
+   "a": "fd4a80cf1334.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 14": {
+   "a": "ee0cfca87b7a.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 15": {
+   "a": "458a40426a6f.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 16": {
+   "a": "971bc8e9eb0e.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 17": {
+   "a": "113d7ffe9bff.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 18": {
+   "a": "dfdd851f8cd4.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 19": {
+   "a": "fafba2c36435.mp3",
+   "i": 0
+  },
+  "Pirata Amaldiçoado chegou ao nível 20": {
+   "a": "103c95139357.mp3",
+   "i": 0
+  },
+  "Habilidade: Maldição dos Sete Mares": {
+   "a": "574cb8358f4e.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Pirata Amaldiçoado": {
+   "a": "23a3488cf202.mp3",
+   "i": 0
+  },
+  "Habilidade: Evolução Abissal": {
+   "a": "bb19f29ec686.mp3",
+   "i": 0
+  },
+  "Evento: Tripulação": {
+   "a": "5185a4c5da73.mp3",
+   "i": 0
+  },
+  "Habilidade: Tripulação dos Condenados": {
+   "a": "ae8458447228.mp3",
+   "i": 0
+  },
+  "Habilidade final: Senhor das Profundezas": {
+   "a": "bb6f97617240.mp3",
+   "i": 0
+  },
+  "Nova classe: Cartista Arcano": {
+   "a": "0d09e24fdef1.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 2": {
+   "a": "9195aab432d6.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 3": {
+   "a": "067b512635f0.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 4": {
+   "a": "7db3ac1800bb.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 5": {
+   "a": "b612fd88e262.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 6": {
+   "a": "e32b63ec11e8.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 7": {
+   "a": "93a669f65dbe.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 8": {
+   "a": "c39b9978ac70.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 9": {
+   "a": "dbb13f4eb0b6.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 10": {
+   "a": "e94ad3361819.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 11": {
+   "a": "9d432f44d40e.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 12": {
+   "a": "142fd564a25a.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 13": {
+   "a": "5fa3dadcfb79.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 14": {
+   "a": "c3b59a9db4ff.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 15": {
+   "a": "b57f8402e56f.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 16": {
+   "a": "27fd4e99705c.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 17": {
+   "a": "87c183d08cae.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 18": {
+   "a": "59b3bf8a056c.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 19": {
+   "a": "0e0668177944.mp3",
+   "i": 0
+  },
+  "Cartista Arcano chegou ao nível 20": {
+   "a": "4effad87bf9c.mp3",
+   "i": 0
+  },
+  "Habilidade: Baralho Arcano": {
+   "a": "7c766b57f618.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Cartista Arcano": {
+   "a": "6bc5c1fde7c2.mp3",
+   "i": 0
+  },
+  "Habilidade: Cartas Afiadas": {
+   "a": "7519712cd114.mp3",
+   "i": 0
+  },
+  "Evento: Cassino Lunar": {
+   "a": "405acfe54a32.mp3",
+   "i": 0
+  },
+  "Habilidade: Dados Viciados": {
+   "a": "7c873c7350e3.mp3",
+   "i": 0
+  },
+  "Habilidade final: Arcano Absoluto": {
+   "a": "c5085b1694d0.mp3",
+   "i": 0
+  },
+  "Nova classe: Guia Dimensional": {
+   "a": "1e2a88111319.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 2": {
+   "a": "91fcaa8821b4.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 3": {
+   "a": "e2ede71a89d5.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 4": {
+   "a": "655fe993e537.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 5": {
+   "a": "59b4ef1eab3d.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 6": {
+   "a": "9ca0c52f3c5b.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 7": {
+   "a": "9342165d7f21.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 8": {
+   "a": "44072680e5a1.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 9": {
+   "a": "cc6564bb4ffe.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 10": {
+   "a": "5d61b237c57c.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 11": {
+   "a": "1f7c3e40c320.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 12": {
+   "a": "2cba10d9e8cf.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 13": {
+   "a": "85102dc217db.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 14": {
+   "a": "ae1103658395.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 15": {
+   "a": "80c382e4935a.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 16": {
+   "a": "894aeb573bcd.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 17": {
+   "a": "4e87c97913b9.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 18": {
+   "a": "ba5e436e333b.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 19": {
+   "a": "d54ef10bf540.mp3",
+   "i": 0
+  },
+  "Guia Dimensional chegou ao nível 20": {
+   "a": "07806a82c812.mp3",
+   "i": 0
+  },
+  "Habilidade: Cartografia da Matriz": {
+   "a": "53fe88e6e659.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Guia Dimensional": {
+   "a": "add6f27e8403.mp3",
+   "i": 0
+  },
+  "Habilidade: Âncoras": {
+   "a": "2e2a9ecb121d.mp3",
+   "i": 0
+  },
+  "Evento: Rota Perdida": {
+   "a": "98e3bdd2599e.mp3",
+   "i": 0
+  },
+  "Habilidade: Mapa Vivo": {
+   "a": "7d05dc8c865e.mp3",
+   "i": 0
+  },
+  "Habilidade final: Caminho Impossível": {
+   "a": "651f6a52fe2e.mp3",
+   "i": 0
+  },
+  "Nova classe: Caçador das Almas": {
+   "a": "195c21194933.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 2": {
+   "a": "c290ceb459f1.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 3": {
+   "a": "219ce1d94795.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 4": {
+   "a": "9b8fa8033935.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 5": {
+   "a": "f4030ef33ae8.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 6": {
+   "a": "bcb25996fabc.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 7": {
+   "a": "cb166ffcd52c.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 8": {
+   "a": "964b72570afc.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 9": {
+   "a": "4f586cbdada7.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 10": {
+   "a": "6e22b3b0831e.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 11": {
+   "a": "a0ef1b4f5d48.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 12": {
+   "a": "95cb1413e6e6.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 13": {
+   "a": "35f6dfcdf416.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 14": {
+   "a": "575df8463867.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 15": {
+   "a": "9d1ebe11a9eb.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 16": {
+   "a": "63c75b06795c.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 17": {
+   "a": "0a418b84ed24.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 18": {
+   "a": "f7bed9fafb40.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 19": {
+   "a": "a1ac4df00bc0.mp3",
+   "i": 0
+  },
+  "Caçador das Almas chegou ao nível 20": {
+   "a": "d89ec75892e4.mp3",
+   "i": 0
+  },
+  "Habilidade: Zanpakutō": {
+   "a": "361c97cc45c6.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Caçador das Almas": {
+   "a": "c0996560d39e.mp3",
+   "i": 0
+  },
+  "Habilidade: Treinamento de Ceifeiro": {
+   "a": "e866798c57eb.mp3",
+   "i": 0
+  },
+  "Evento: Patrulha do Véu": {
+   "a": "544a2b0c0a47.mp3",
+   "i": 0
+  },
+  "Habilidade: Konsō: Funeral da Alma": {
+   "a": "8358332c0e5b.mp3",
+   "i": 0
+  },
+  "Habilidade final: Bankai": {
+   "a": "d5c952aebe96.mp3",
+   "i": 0
+  },
+  "Nova classe: Escritor de Contos": {
+   "a": "237e459b4177.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 2": {
+   "a": "dceaa4ed334c.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 3": {
+   "a": "d41f187cd17d.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 4": {
+   "a": "a3ce69185c09.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 5": {
+   "a": "74ed4f1bcdf5.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 6": {
+   "a": "0b5367b8f2b2.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 7": {
+   "a": "8858015a480c.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 8": {
+   "a": "c88d26979904.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 9": {
+   "a": "994254da385e.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 10": {
+   "a": "e0610d95bf16.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 11": {
+   "a": "9e5bf84ff758.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 12": {
+   "a": "29b1169d4262.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 13": {
+   "a": "139e26552755.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 14": {
+   "a": "ff0f72ac680f.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 15": {
+   "a": "cf19231577a9.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 16": {
+   "a": "2ce49ee6458f.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 17": {
+   "a": "405a4016f416.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 18": {
+   "a": "af9cc20afabc.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 19": {
+   "a": "f9d8134c329d.mp3",
+   "i": 0
+  },
+  "Escritor de Contos chegou ao nível 20": {
+   "a": "377b00ae6002.mp3",
+   "i": 0
+  },
+  "Habilidade: Tinta Carmesim": {
+   "a": "4418c14eed19.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Escritor de Contos": {
+   "a": "f39d44563a87.mp3",
+   "i": 0
+  },
+  "Habilidade: Personagens Recorrentes": {
+   "a": "57eb6f26c22c.mp3",
+   "i": 0
+  },
+  "Evento: História Inacabada": {
+   "a": "c798f3451fbe.mp3",
+   "i": 0
+  },
+  "Habilidade: Página Rasgada": {
+   "a": "eb73ccd1b14e.mp3",
+   "i": 0
+  },
+  "Habilidade final: Último Capítulo": {
+   "a": "bb52817f989b.mp3",
+   "i": 0
+  },
+  "Nova classe: Invocador": {
+   "a": "3f27c5734a7d.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 2": {
+   "a": "6771e24d1586.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 3": {
+   "a": "e1804ae8b544.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 4": {
+   "a": "35f814f29825.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 5": {
+   "a": "b825bd9f385c.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 6": {
+   "a": "66e16806fc07.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 7": {
+   "a": "5fbd7fca969f.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 8": {
+   "a": "98b894dce320.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 9": {
+   "a": "884dac86912a.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 10": {
+   "a": "eff365f7e71f.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 11": {
+   "a": "d1cfc05f3fa8.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 12": {
+   "a": "c5c519d3bcfb.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 13": {
+   "a": "084d72e1facb.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 14": {
+   "a": "b57434eca7c7.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 15": {
+   "a": "f54de3ff621a.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 16": {
+   "a": "e1dd1df082c1.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 17": {
+   "a": "8c897b871381.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 18": {
+   "a": "6f67a0859bc8.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 19": {
+   "a": "270db3f7b859.mp3",
+   "i": 0
+  },
+  "Invocador chegou ao nível 20": {
+   "a": "b2561d92e10e.mp3",
+   "i": 0
+  },
+  "Habilidade: Pacto de Fluxo nativo": {
+   "a": "5943f264c079.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Invocador": {
+   "a": "6f8837f1dae0.mp3",
+   "i": 0
+  },
+  "Habilidade: Formas Vinculadas": {
+   "a": "e4fd034b36bb.mp3",
+   "i": 0
+  },
+  "Evento: Chamado da Criação": {
+   "a": "14d6b092459f.mp3",
+   "i": 0
+  },
+  "Habilidade: Círculo de Convocação": {
+   "a": "4a79ed6295c6.mp3",
+   "i": 0
+  },
+  "Habilidade final: Convergência Primordial": {
+   "a": "438a96231541.mp3",
+   "i": 0
+  },
+  "Nova classe: Viajante": {
+   "a": "d1966e8e939e.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 2": {
+   "a": "50ee44207425.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 3": {
+   "a": "d4ff1b25d43d.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 4": {
+   "a": "821198034919.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 5": {
+   "a": "28c134c3910e.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 6": {
+   "a": "5a54f3c1970c.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 7": {
+   "a": "0dbdc1fd6630.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 8": {
+   "a": "9fc5f53b2539.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 9": {
+   "a": "9b8eecf6ad83.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 10": {
+   "a": "c549407547c8.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 11": {
+   "a": "bbc322d5ebf5.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 12": {
+   "a": "6917b700222e.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 13": {
+   "a": "e3d080661a1e.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 14": {
+   "a": "0faa77953fb5.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 15": {
+   "a": "cb5f5685a90c.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 16": {
+   "a": "bc57f12ae2e2.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 17": {
+   "a": "07da9cc83ef0.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 18": {
+   "a": "e5509a403522.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 19": {
+   "a": "65f3f4e5068e.mp3",
+   "i": 0
+  },
+  "Viajante chegou ao nível 20": {
+   "a": "dcef28135bfc.mp3",
+   "i": 0
+  },
+  "Habilidade: Passaporte Entre Mundos": {
+   "a": "c0915f413556.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Viajante": {
+   "a": "0b8334fd6bc8.mp3",
+   "i": 0
+  },
+  "Habilidade: Lições da Estrada": {
+   "a": "1de88bd9de92.mp3",
+   "i": 0
+  },
+  "Evento: Encruzilhada": {
+   "a": "580beb57fe8d.mp3",
+   "i": 0
+  },
+  "Habilidade: Companheiros de Jornada": {
+   "a": "5abd17a2cad0.mp3",
+   "i": 0
+  },
+  "Habilidade final: Sem Fronteiras": {
+   "a": "8efead6116e3.mp3",
+   "i": 0
+  },
+  "Nova classe: Canalizador": {
+   "a": "7ea99eba7dda.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 2": {
+   "a": "d57fce6423ca.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 3": {
+   "a": "3290ffce3be6.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 4": {
+   "a": "97694cb4437f.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 5": {
+   "a": "45f72f2a9a68.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 6": {
+   "a": "957d8c24ee51.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 7": {
+   "a": "b9ac47ff7b88.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 8": {
+   "a": "53d0ac664611.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 9": {
+   "a": "2cf90aee58ed.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 10": {
+   "a": "4f1482de592d.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 11": {
+   "a": "a72bc702a1af.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 12": {
+   "a": "c8f0a7de40f2.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 13": {
+   "a": "618f88ca4e41.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 14": {
+   "a": "7824728c8e5d.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 15": {
+   "a": "f8644e584b41.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 16": {
+   "a": "8fb74e2f198b.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 17": {
+   "a": "8df4d8d90aa3.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 18": {
+   "a": "c669db53cab4.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 19": {
+   "a": "e7aa80681306.mp3",
+   "i": 0
+  },
+  "Canalizador chegou ao nível 20": {
+   "a": "8e4cc72f730e.mp3",
+   "i": 0
+  },
+  "Habilidade: Canalização Nativa": {
+   "a": "045492a51766.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Canalizador": {
+   "a": "8729e750b914.mp3",
+   "i": 0
+  },
+  "Habilidade: Forma do Fluxo": {
+   "a": "afbecdffb702.mp3",
+   "i": 0
+  },
+  "Evento: Prova do Fluxo": {
+   "a": "9d30050b635b.mp3",
+   "i": 0
+  },
+  "Habilidade: Fluxo Sem Filtro": {
+   "a": "8a7dc645d7f9.mp3",
+   "i": 0
+  },
+  "Habilidade final: Voz da Deidade": {
+   "a": "a95e1cbeabd8.mp3",
+   "i": 0
+  },
+  "Nova classe: Sintonizador": {
+   "a": "14dfb1a6b3df.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 2": {
+   "a": "0cb78e9f3a57.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 3": {
+   "a": "aabc7cdad736.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 4": {
+   "a": "b9b3784d6019.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 5": {
+   "a": "21142b4c3486.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 6": {
+   "a": "a38319c05c9c.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 7": {
+   "a": "5583885a6e1d.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 8": {
+   "a": "0e16444e99d6.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 9": {
+   "a": "5dfaf734e785.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 10": {
+   "a": "af0ab3c4994f.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 11": {
+   "a": "a837a14786a9.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 12": {
+   "a": "eb2c74fc1d89.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 13": {
+   "a": "73e3c3c3b9fe.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 14": {
+   "a": "d21f1dcb01a1.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 15": {
+   "a": "ae9edac19ed9.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 16": {
+   "a": "50db8491a43f.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 17": {
+   "a": "413658228d79.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 18": {
+   "a": "104ed190e392.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 19": {
+   "a": "afdd4c89e5b6.mp3",
+   "i": 0
+  },
+  "Sintonizador chegou ao nível 20": {
+   "a": "e25c5fa740b4.mp3",
+   "i": 0
+  },
+  "Habilidade: Sintonia Catalisada": {
+   "a": "1094003513e0.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Sintonizador": {
+   "a": "1ad2d141f92d.mp3",
+   "i": 0
+  },
+  "Habilidade: Fusão Controlada": {
+   "a": "f112b1b8df34.mp3",
+   "i": 0
+  },
+  "Evento: Ressonância Improvável": {
+   "a": "260ce31f6b70.mp3",
+   "i": 0
+  },
+  "Habilidade: Religação de Emergência": {
+   "a": "a78517c7512b.mp3",
+   "i": 0
+  },
+  "Habilidade final: Convergência Segura": {
+   "a": "c8f78ab00d85.mp3",
+   "i": 0
+  },
+  "Nova classe: Ritualista": {
+   "a": "29fc6e291f49.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 2": {
+   "a": "f570856e2dca.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 3": {
+   "a": "2d65320f0f5d.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 4": {
+   "a": "7c2067b03b6e.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 5": {
+   "a": "5843ea366695.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 6": {
+   "a": "fbc8f9a5c3e1.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 7": {
+   "a": "81e827de0106.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 8": {
+   "a": "33c41b5a6671.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 9": {
+   "a": "808e7ec4c79e.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 10": {
+   "a": "3690449f6c5a.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 11": {
+   "a": "46a6998fbbec.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 12": {
+   "a": "a66f30c042b2.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 13": {
+   "a": "091d1a51d354.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 14": {
+   "a": "de2158b79370.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 15": {
+   "a": "d33605c652ed.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 16": {
+   "a": "ca77de691868.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 17": {
+   "a": "c754f5d1f243.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 18": {
+   "a": "a850029545c7.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 19": {
+   "a": "131c85ec591e.mp3",
+   "i": 0
+  },
+  "Ritualista chegou ao nível 20": {
+   "a": "555f7a295e98.mp3",
+   "i": 0
+  },
+  "Habilidade: Livro de Rituais": {
+   "a": "8c8c24ae0850.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Ritualista": {
+   "a": "19b7b152d168.mp3",
+   "i": 0
+  },
+  "Habilidade: Círculo Preparado": {
+   "a": "5d351ffe8dba.mp3",
+   "i": 0
+  },
+  "Evento: Pacto Antigo": {
+   "a": "a0de9cd68e77.mp3",
+   "i": 0
+  },
+  "Habilidade final: Grande Oficiante": {
+   "a": "3812accd0a09.mp3",
+   "i": 0
+  },
+  "Nova classe: Interceptador": {
+   "a": "fa1b56141603.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 2": {
+   "a": "4127b584de8c.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 3": {
+   "a": "cff696b42605.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 4": {
+   "a": "12c59152a066.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 5": {
+   "a": "f8c34b6ca03d.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 6": {
+   "a": "acc22a8127c1.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 7": {
+   "a": "bd87b1cbff68.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 8": {
+   "a": "ed9f8e1aebe6.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 9": {
+   "a": "873192e13be3.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 10": {
+   "a": "76b8a078fc13.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 11": {
+   "a": "ef8d1cd20c13.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 12": {
+   "a": "024313f97930.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 13": {
+   "a": "89298342b64b.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 14": {
+   "a": "b8a001dbff57.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 15": {
+   "a": "4339ab58287e.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 16": {
+   "a": "dc184228645a.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 17": {
+   "a": "f9f52c11678f.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 18": {
+   "a": "bbca8bb5cbdf.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 19": {
+   "a": "5ece59daefe8.mp3",
+   "i": 0
+  },
+  "Interceptador chegou ao nível 20": {
+   "a": "fdc8c0581e7e.mp3",
+   "i": 0
+  },
+  "Habilidade: Acesso à Malha": {
+   "a": "3419c62620da.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Interceptador": {
+   "a": "00568d6b1f02.mp3",
+   "i": 0
+  },
+  "Habilidade: Hackear Fluxo": {
+   "a": "0dc20d65f987.mp3",
+   "i": 0
+  },
+  "Evento: Falha na Malha": {
+   "a": "2a793d01533a.mp3",
+   "i": 0
+  },
+  "Habilidade: Acesso Administrador": {
+   "a": "d9982bc6c77f.mp3",
+   "i": 0
+  },
+  "Habilidade final: Acesso Administrador": {
+   "a": "827fb1b76d9f.mp3",
+   "i": 0
+  },
+  "Nova classe: Chef": {
+   "a": "38f587635ca4.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 2": {
+   "a": "1a080b64759a.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 3": {
+   "a": "ca6d6e51f02b.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 4": {
+   "a": "ae09dc8b18d5.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 5": {
+   "a": "2676bf04eabe.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 6": {
+   "a": "e20d3394dd03.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 7": {
+   "a": "c1f2e3202a97.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 8": {
+   "a": "dd9fc241ba23.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 9": {
+   "a": "d9e7a5b687e3.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 10": {
+   "a": "e058f824cc22.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 11": {
+   "a": "5ed5d1e5d009.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 12": {
+   "a": "1812c20fdfa9.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 13": {
+   "a": "057baf0a66c6.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 14": {
+   "a": "5394809a5281.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 15": {
+   "a": "a9f1d873c652.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 16": {
+   "a": "a1826061959f.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 17": {
+   "a": "3c369d386a1f.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 18": {
+   "a": "9ea47bd04c26.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 19": {
+   "a": "c32f3eaddb39.mp3",
+   "i": 0
+  },
+  "Chef chegou ao nível 20": {
+   "a": "5532ea978695.mp3",
+   "i": 0
+  },
+  "Habilidade: Mise en Place": {
+   "a": "0b76735ea514.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Chef": {
+   "a": "63801a02bd13.mp3",
+   "i": 0
+  },
+  "Habilidade: Cardápio": {
+   "a": "07e372c9c632.mp3",
+   "i": 0
+  },
+  "Evento: Festival Gastronômico": {
+   "a": "a7b6a725fa41.mp3",
+   "i": 0
+  },
+  "Habilidade: Prato Assinatura": {
+   "a": "d9d1a022b330.mp3",
+   "i": 0
+  },
+  "Habilidade final: Mesa da Celebração": {
+   "a": "513edb23a52b.mp3",
+   "i": 0
+  },
+  "Nova classe: Detetive": {
+   "a": "c6e82e4540e5.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 2": {
+   "a": "0b15483212a7.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 3": {
+   "a": "fc4a347cbfec.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 4": {
+   "a": "c5d86c6dc278.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 5": {
+   "a": "27281e2da2df.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 6": {
+   "a": "3a95cdb20589.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 7": {
+   "a": "599bb11d62a2.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 8": {
+   "a": "4fa18fa3e25f.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 9": {
+   "a": "50ef672b1cf3.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 10": {
+   "a": "81783c59a6a7.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 11": {
+   "a": "3e22a098676f.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 12": {
+   "a": "8d7e8d185510.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 13": {
+   "a": "565f16859d81.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 14": {
+   "a": "e55924820518.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 15": {
+   "a": "744346132e52.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 16": {
+   "a": "7e0f486baa95.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 17": {
+   "a": "9fee35665169.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 18": {
+   "a": "ffac79c28f34.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 19": {
+   "a": "8022ffa269a8.mp3",
+   "i": 0
+  },
+  "Detetive chegou ao nível 20": {
+   "a": "1cefed81296a.mp3",
+   "i": 0
+  },
+  "Habilidade: Dedução Metódica": {
+   "a": "f01bf9fd3556.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Detetive": {
+   "a": "e241244cb517.mp3",
+   "i": 0
+  },
+  "Habilidade: Perfil do Suspeito": {
+   "a": "9a6a6c94918e.mp3",
+   "i": 0
+  },
+  "Evento: Caso Frio": {
+   "a": "793579dc8fef.mp3",
+   "i": 0
+  },
+  "Habilidade: Golpe de Vista": {
+   "a": "3faec539c172.mp3",
+   "i": 0
+  },
+  "Habilidade final: Caso Encerrado": {
+   "a": "9d28309af020.mp3",
+   "i": 0
+  },
+  "Nova classe: Devorador": {
+   "a": "f59a13638782.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 2": {
+   "a": "1db1661d7629.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 3": {
+   "a": "dce031da6338.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 4": {
+   "a": "0024e5590c93.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 5": {
+   "a": "56b548b7c9da.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 6": {
+   "a": "f38fc47eb4f3.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 7": {
+   "a": "1aa2c1ab37fd.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 8": {
+   "a": "e4a9f43bcc31.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 9": {
+   "a": "ca1aaf2593a0.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 10": {
+   "a": "132d52606d20.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 11": {
+   "a": "6d889200d226.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 12": {
+   "a": "8e62be38cfb3.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 13": {
+   "a": "9a37b5f63f71.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 14": {
+   "a": "62189e9fae69.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 15": {
+   "a": "e932c1454d27.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 16": {
+   "a": "1b3593151e69.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 17": {
+   "a": "6edebc8f9763.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 18": {
+   "a": "4be31ea0f83b.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 19": {
+   "a": "07708c2c6aba.mp3",
+   "i": 0
+  },
+  "Devorador chegou ao nível 20": {
+   "a": "eb518f23f1bb.mp3",
+   "i": 0
+  },
+  "Habilidade: Banquete de Poder": {
+   "a": "c03d5376db0b.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Devorador": {
+   "a": "94eec2d8b994.mp3",
+   "i": 0
+  },
+  "Habilidade: Instintos do Devorador": {
+   "a": "c5a56ee46ef4.mp3",
+   "i": 0
+  },
+  "Evento: Fome que Não Passa": {
+   "a": "f9dc868a251b.mp3",
+   "i": 0
+  },
+  "Habilidade: Ecos da Última Refeição": {
+   "a": "3d75b3b54327.mp3",
+   "i": 0
+  },
+  "Habilidade final: Banquete Final": {
+   "a": "ea12c6fe9cf2.mp3",
+   "i": 0
+  },
+  "Nova classe: Elementarista": {
+   "a": "d89bfcb1146a.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 2": {
+   "a": "104c9e1dc933.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 3": {
+   "a": "dbf9a5460d77.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 4": {
+   "a": "ae0674aff9ee.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 5": {
+   "a": "3b6da86b404d.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 6": {
+   "a": "010bb68dcee2.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 7": {
+   "a": "87cd21921695.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 8": {
+   "a": "dd223e4fe144.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 9": {
+   "a": "ae0e975e9391.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 10": {
+   "a": "5aa29ebd50da.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 11": {
+   "a": "9362c402220c.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 12": {
+   "a": "696f36ca4c3b.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 13": {
+   "a": "45224f7e23bf.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 14": {
+   "a": "480d8378aa67.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 15": {
+   "a": "8043df8be493.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 16": {
+   "a": "54e8a7795610.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 17": {
+   "a": "2342ab0c896d.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 18": {
+   "a": "b4e036f2b41f.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 19": {
+   "a": "e3df6d49378c.mp3",
+   "i": 0
+  },
+  "Elementarista chegou ao nível 20": {
+   "a": "50a14ac4cf51.mp3",
+   "i": 0
+  },
+  "Habilidade: Polifonia Elemental": {
+   "a": "ef8be4a81580.mp3",
+   "i": 0
+  },
+  "Poder: Poder de Elementarista": {
+   "a": "6a67cbc67b6c.mp3",
+   "i": 0
+  },
+  "Habilidade: Manifestação Natural": {
+   "a": "8a5dc199bc7c.mp3",
+   "i": 0
+  },
+  "Evento: Testemunho do Primeiro Salão": {
+   "a": "7dd7d80a165e.mp3",
+   "i": 0
+  },
+  "Habilidade: Julgamento da Aptidão": {
+   "a": "18d372c3d929.mp3",
+   "i": 0
+  },
+  "Habilidade: Caminho do Avatar": {
+   "a": "5ab996c5b510.mp3",
+   "i": 0
+  },
+  "Evento: Prova da Derivação": {
+   "a": "f439a5adcd10.mp3",
+   "i": 0
+  },
+  "Habilidade: Maestria Elemental": {
+   "a": "44f354efa052.mp3",
+   "i": 0
+  },
+  "Habilidade: Derivações Harmônicas": {
+   "a": "b90123a00b03.mp3",
+   "i": 0
+  },
+  "Habilidade: Domínio da Derivação": {
+   "a": "287d82aba7ad.mp3",
+   "i": 0
+  },
+  "Habilidade: Soberania Elemental": {
+   "a": "adc95beae4fe.mp3",
+   "i": 0
+  },
+  "Evento: Prova do Salão de Origem": {
+   "a": "3f593f499024.mp3",
+   "i": 0
+  },
+  "Habilidade: Território Elemental": {
+   "a": "a44c5c6bd65a.mp3",
+   "i": 0
+  },
+  "Habilidade final: Apogeu Elemental": {
+   "a": "073bb38270b1.mp3",
+   "i": 0
+  }
  }
 }

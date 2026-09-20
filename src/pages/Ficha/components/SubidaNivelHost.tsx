@@ -32,29 +32,22 @@ interface LinhaPainel {
   passo: PassoFala;
 }
 
-const numero = (valor: number) => `n:${Math.abs(valor)}`;
-
-/** Monta as linhas mostradas e, junto, as pecas de fala de cada uma. */
+/** Monta as linhas mostradas. O texto de cada passo é também a chave da frase
+ * gravada (ver tools/gerar-voz-sabio.py), então precisa sair idêntico. */
 const montarPainel = (subida: SubidaNivel): { titulo: PassoFala; linhas: LinhaPainel[] } => {
-  const titulo: PassoFala = {
-    texto: `Nível ${subida.nivelTotal} alcançado`,
-    pecas: ['Nível', numero(subida.nivelTotal), 'alcançado'],
-  };
+  const titulo: PassoFala = { texto: `Nível ${subida.nivelTotal} alcançado` };
   const linhas: LinhaPainel[] = [];
 
   linhas.push(subida.classeNova
     ? {
       rotulo: 'Classe',
       texto: subida.nomeClasse,
-      passo: { texto: `Nova classe: ${subida.nomeClasse}`, pecas: ['Nova classe', subida.nomeClasse] },
+      passo: { texto: `Nova classe: ${subida.nomeClasse}` },
     }
     : {
       rotulo: 'Classe',
       texto: `${subida.nomeClasse} chegou ao nível ${subida.nivelClasse}`,
-      passo: {
-        texto: `${subida.nomeClasse} chegou ao nível ${subida.nivelClasse}`,
-        pecas: [subida.nomeClasse, 'chegou ao nível', numero(subida.nivelClasse)],
-      },
+      passo: { texto: `${subida.nomeClasse} chegou ao nível ${subida.nivelClasse}` },
     });
 
   const recurso = (rotulo: string, ganho: number) => {
@@ -62,7 +55,7 @@ const montarPainel = (subida: SubidaNivel): { titulo: PassoFala; linhas: LinhaPa
     linhas.push({
       rotulo,
       texto: sinal(ganho),
-      passo: { texto: `${rotulo} ${sinal(ganho)}`, pecas: [rotulo, ganho > 0 ? 'mais' : 'menos', numero(ganho)] },
+      passo: { texto: `${rotulo} ${sinal(ganho)}` },
     });
   };
   recurso('Vida', subida.ganhoVida);
@@ -74,7 +67,7 @@ const montarPainel = (subida: SubidaNivel): { titulo: PassoFala; linhas: LinhaPa
     linhas.push({
       rotulo: rotulo || 'Recompensa',
       texto: nome,
-      passo: { texto: recompensa, pecas: [rotulo || 'Recompensa', nome] },
+      passo: { texto: recompensa },
     });
   });
 
