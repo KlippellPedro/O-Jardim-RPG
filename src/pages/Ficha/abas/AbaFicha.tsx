@@ -11,6 +11,8 @@ import { useAuthStore } from '../../../store/useAuthStore';
 import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, arvoresVisiveisComAtual, filtrarPorArvore, filtrarPorLiberacao, type ArvoreEntry } from '../../../../data/mundo/arvoresCatalog';
 import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
 import { dispararEscolhaImpacto } from '../components/escolhaImpacto';
+import { dispararSubidaNivel } from '../components/subidaNivel';
+import '../components/subidaNivel.css';
 import {
   adicionarCondicaoOficial,
   atualizarStatusVital,
@@ -405,8 +407,11 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
     : 100;
   const podeSubirNivel = xpProximoNivel !== null && xpAtual >= xpProximoNivel;
 
+  const [xpFlutuante, setXpFlutuante] = useState<{ chave: number; delta: number } | null>(null);
+
   const handleXp = (delta: number) => {
     const novo = Math.max(0, xpAtual + delta);
+    if (novo !== xpAtual) setXpFlutuante({ chave: Date.now(), delta: novo - xpAtual });
     onUpdate(['ficha', 'xp'], novo);
   };
 
@@ -426,6 +431,33 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
       next[escolha.index] = { ...next[escolha.index], nivel: next[escolha.index].nivel + 1 };
     } else if (escolha.tipo === 'nova' && escolha.novaClasseId) {
       next.push({ classeId: escolha.novaClasseId, nivel: 1 });
+    }
+
+    const classeAlvo = escolha.tipo === 'existente' && escolha.index !== undefined
+      ? next[escolha.index]
+      : next[next.length - 1];
+    const classeCatalogo = catalogo?.classes.find(classe => classe.id === classeAlvo?.classeId);
+    if (catalogo && classeAlvo && classeCatalogo) {
+      const nivelTotalNovo = next.reduce((sum, c) => sum + (Number(c.nivel) || 1), 0) || 1;
+      const antes = calcularDerivadosComClasses(atributosParaDerivados(attrsNaturais, f), racaAtual, classes, catalogo.classes, nivelTotalAtual || 1, f.escolhaRacial);
+      const depois = calcularDerivadosComClasses(atributosParaDerivados(attrsNaturais, f), racaAtual, next, catalogo.classes, nivelTotalNovo, f.escolhaRacial);
+      const rotulos: Record<string, string> = {
+        poder: 'Poder', habilidade: 'Habilidade', grau_pericia: 'Grau de perícia', evento: 'Evento', habilidade_final: 'Habilidade final',
+      };
+      const recompensas = (classeCatalogo.progressao || [])
+        .find(marco => marco.nivel === classeAlvo.nivel)?.recompensas
+        .map(item => `${rotulos[item.tipo] || 'Recompensa'}: ${item.titulo}`) || [];
+      dispararSubidaNivel({
+        nivelTotal: nivelTotalNovo,
+        classeId: classeCatalogo.id,
+        nomeClasse: classeCatalogo.titulo,
+        nivelClasse: classeAlvo.nivel,
+        classeNova: escolha.tipo === 'nova',
+        especial: classeCatalogo.categoria !== 'padrao',
+        ganhoVida: Number(depois?.vida || 0) - Number(antes?.vida || 0),
+        ganhoMana: Number(depois?.mana || 0) - Number(antes?.mana || 0),
+        recompensas,
+      });
     }
 
     salvarClasses(next);
@@ -1062,7 +1094,13 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
               <button onClick={() => handleXp(-100)} disabled={xpAtual <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-100</button>
               <button onClick={() => handleXp(-10)} disabled={xpAtual <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-10</button>
            </div>
-           <div className="flex-1 h-6 bg-[#050508] border border-white/10 rounded-lg relative overflow-hidden flex items-center justify-center group shadow-inner ring-1 ring-inset ring-white/5">
+           <div className="relative flex-1">
+           {xpFlutuante && (
+             <span key={xpFlutuante.chave} aria-hidden="true" className={`xp-ganho${xpFlutuante.delta < 0 ? ' xp-ganho--perda' : ''}`}>
+               {xpFlutuante.delta > 0 ? '+' : ''}{xpFlutuante.delta} XP
+             </span>
+           )}
+           <div className={`h-6 bg-[#050508] border border-white/10 rounded-lg relative overflow-hidden flex items-center justify-center group shadow-inner ring-1 ring-inset ring-white/5${podeSubirNivel ? ' xp-barra--cheia' : ''}`}>
               {/* Verde estilo Minecraft com Gradiente e Glow */}
               <div
                 className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-[#059669] to-[#10b981] shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all duration-500 ease-out"
@@ -1083,6 +1121,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                 <span className="mx-1">/</span>
                 <span>{xpProximoNivel ?? xpAtual}</span>
               </div>
+           </div>
            </div>
            <div className="grid grid-cols-2 gap-2 sm:flex">
               <button onClick={() => handleXp(10)} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">+10</button>

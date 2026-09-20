@@ -1,0 +1,154 @@
+/* Painel de subida de nível (ver SubidaNivelHost.tsx) e feedback da barra de XP.
+   Só transform e opacity nas animações. */
+
+.subida-nivel {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: radial-gradient(circle at 50% 50%, rgba(5, 5, 8, 0.82), rgba(5, 5, 8, 0.94));
+  cursor: pointer;
+  animation: subida-nivel-fundo 0.4s ease-out both;
+}
+
+.subida-nivel__caixa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 26rem);
+  text-align: center;
+}
+
+.subida-nivel__hex {
+  position: relative;
+  width: 9rem;
+  height: 9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: subida-nivel-entrada 0.6s cubic-bezier(0.2, 1.3, 0.4, 1) both;
+}
+
+.subida-nivel__hex svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.subida-nivel__hex polygon {
+  fill: none;
+  stroke: var(--sub-cor);
+  stroke-linejoin: round;
+  transform-origin: 50% 50%;
+  filter: drop-shadow(0 0 6px var(--sub-cor));
+}
+
+.subida-nivel__hex-externo {
+  stroke-width: 2.5;
+  animation: subida-nivel-girar 9s linear infinite;
+}
+
+.subida-nivel__hex-interno {
+  stroke: var(--sub-cor2) !important;
+  stroke-width: 1.5;
+  transform: scale(0.72);
+  animation: subida-nivel-girar-inverso 6s linear infinite;
+}
+
+.subida-nivel__numero {
+  position: relative;
+  font-family: Cinzel, serif;
+  font-size: 3rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 18px var(--sub-cor);
+}
+
+.subida-nivel--especial .subida-nivel__hex-externo { stroke-width: 3.5; }
+
+.subida-nivel__titulo {
+  margin-top: 1.25rem;
+  font-family: Cinzel, serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: #fff;
+  text-shadow: 0 0 16px var(--sub-cor);
+  animation: subida-nivel-linha 0.5s ease-out 0.35s both;
+}
+
+.subida-nivel__lista {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.subida-nivel__linha {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--sub-cor) 40%, transparent);
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--sub-cor) 10%, transparent);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  animation: subida-nivel-linha 0.45s ease-out calc(0.8s + var(--i) * 0.35s) both;
+}
+
+.subida-nivel__dica {
+  margin-top: 1.25rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.subida-nivel--parado,
+.subida-nivel--parado * {
+  animation: none !important;
+}
+
+@keyframes subida-nivel-fundo { from { opacity: 0; } to { opacity: 1; } }
+@keyframes subida-nivel-entrada { from { opacity: 0; transform: scale(0.4) rotate(-40deg); } to { opacity: 1; transform: scale(1) rotate(0deg); } }
+@keyframes subida-nivel-girar { to { transform: rotate(360deg); } }
+@keyframes subida-nivel-girar-inverso { from { transform: scale(0.72) rotate(360deg); } to { transform: scale(0.72) rotate(0deg); } }
+@keyframes subida-nivel-linha { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Barra de XP: número que sobe ao ganhar experiência e brilho quando dá para subir de nível */
+.xp-ganho {
+  position: absolute;
+  right: 0.75rem;
+  top: -1.4rem;
+  font-family: monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6ee7b7;
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+  pointer-events: none;
+  animation: xp-ganho-subir 1.4s ease-out forwards;
+}
+
+.xp-ganho--perda { color: #fca5a5; text-shadow: 0 0 8px rgba(239, 68, 68, 0.7); }
+
+.xp-barra--cheia { animation: xp-barra-pulsar 1.6s ease-in-out infinite; }
+
+@keyframes xp-ganho-subir {
+  0% { opacity: 0; transform: translateY(6px); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-14px); }
+}
+
+@keyframes xp-barra-pulsar {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  50% { box-shadow: 0 0 16px 2px rgba(16, 185, 129, 0.55); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xp-ganho, .xp-barra--cheia { animation: none; }
+}

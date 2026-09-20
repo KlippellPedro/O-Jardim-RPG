@@ -60,6 +60,7 @@ import {
   serializarAbasVistasTourFicha,
 } from './fichaTourConfig';
 import { EscolhaImpactoHost } from './components/EscolhaImpactoHost';
+import { SubidaNivelHost } from './components/SubidaNivelHost';
 import './ficha.css';
 
 
@@ -759,6 +760,7 @@ export const PersonagemSheet: React.FC = () => {
     >
       <FichaAtmosphere tema={temaVisual} />
       <EscolhaImpactoHost />
+      <SubidaNivelHost />
       <div className="relative z-[1] mx-auto max-w-6xl">
         <button onClick={() => navigate('/ficha')} className="text-gray-500 hover:text-white mb-6 text-sm font-bold uppercase tracking-wider flex items-center gap-2">
           &larr; Voltar
