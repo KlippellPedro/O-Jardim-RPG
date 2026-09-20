@@ -101,6 +101,22 @@
   animation: subida-nivel-linha 0.45s ease-out calc(0.8s + var(--i) * 0.35s) both;
 }
 
+.subida-nivel__voz {
+  margin-top: 1rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--sub-cor) 45%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+}
+
+.subida-nivel__voz[aria-pressed='false'] { opacity: 0.55; }
+.subida-nivel__voz:hover { background: color-mix(in srgb, var(--sub-cor) 15%, transparent); }
+
 .subida-nivel__dica {
   margin-top: 1.25rem;
   font-size: 0.65rem;
