@@ -6,11 +6,16 @@ public/audio/sabio/ junto com um manifest.json. O painel monta as frases
 juntando pecas (ex.: "Guerreiro" + "chegou ao nivel" + "tres"); o que nao
 estiver no manifest cai na voz do navegador.
 
+Provedores:
+    openai (padrao)  gpt-4o-mini-tts, aceita instrucoes de tom. Precisa da
+                     variavel de ambiente OPENAI_API_KEY (nao vai para o repo).
+    edge             voz neural gratuita da Microsoft (pip install edge-tts).
+
 Uso:
-    pip install edge-tts
-    python tools/gerar-voz-sabio.py              # gera so o que falta
-    python tools/gerar-voz-sabio.py --refazer    # regrava tudo
-    python tools/gerar-voz-sabio.py --voz pt-BR-ThalitaNeural
+    python tools/gerar-voz-sabio.py                      # gera so o que falta
+    python tools/gerar-voz-sabio.py --refazer            # regrava tudo
+    python tools/gerar-voz-sabio.py --voz coral          # outra voz da OpenAI
+    python tools/gerar-voz-sabio.py --provedor edge      # voz gratuita
 
 Rode de novo sempre que classes ou recompensas mudarem. A chave de cada peca
 precisa bater com a de src/pages/Ficha/components/vozGrandeSabio.ts.
@@ -21,12 +26,22 @@ import hashlib
 import json
 from pathlib import Path
 
-import edge_tts
+import os
+import urllib.request
 
 RAIZ = Path(__file__).resolve().parent.parent
 CLASSES = RAIZ / "data" / "ficha" / "classes.json"
 SAIDA = RAIZ / "public" / "audio" / "sabio"
 MAX_NUMERO = 99
+
+MODELO_OPENAI = "gpt-4o-mini-tts"
+VOZ_PADRAO = {"openai": "sage", "edge": "pt-BR-FranciscaNeural"}
+INSTRUCOES = (
+    "Fale em português do Brasil com a voz de uma inteligência sábia e serena: "
+    "feminina, calma, levemente grave, dicção clara e ritmo pausado. Tom "
+    "constante e natural, sem exagero de emoção. Leia apenas o texto, sem "
+    "acrescentar nada."
+)
 
 UNIDADES = ["zero", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove",
             "dez", "onze", "doze", "treze", "catorze", "quinze", "dezesseis", "dezessete",
@@ -67,10 +82,44 @@ def nome_arquivo(chave: str) -> str:
     return hashlib.sha1(chave.encode("utf-8")).hexdigest()[:12] + ".mp3"
 
 
-async def gerar(voz: str, refazer: bool) -> None:
+def sintetizar_openai(texto: str, voz: str, destino: Path) -> None:
+    chave = os.environ.get("OPENAI_API_KEY", "").strip()
+    if not chave:
+        raise SystemExit("Defina a variavel de ambiente OPENAI_API_KEY antes de rodar.")
+    corpo = json.dumps({
+        "model": MODELO_OPENAI,
+        "voice": voz,
+        "input": texto,
+        "instructions": INSTRUCOES,
+        "response_format": "mp3",
+    }).encode("utf-8")
+    pedido = urllib.request.Request(
+        "https://api.openai.com/v1/audio/speech",
+        data=corpo,
+        headers={"Authorization": f"Bearer {chave}", "Content-Type": "application/json"},
+    )
+    with urllib.request.urlopen(pedido, timeout=60) as resposta:
+        destino.write_bytes(resposta.read())
+
+
+async def sintetizar_edge(texto: str, voz: str, destino: Path) -> None:
+    import edge_tts
+
+    await edge_tts.Communicate(texto, voz, rate="-4%", pitch="-2Hz").save(str(destino))
+
+
+async def gerar(provedor: str, voz: str, refazer: bool) -> None:
     SAIDA.mkdir(parents=True, exist_ok=True)
     itens = pecas()
-    limite = asyncio.Semaphore(6)
+
+    # Trocar de provedor ou de voz invalida as pecas ja gravadas: regrava tudo.
+    manifest_atual = SAIDA / "manifest.json"
+    if manifest_atual.exists() and not refazer:
+        anterior = json.loads(manifest_atual.read_text(encoding="utf-8"))
+        if (anterior.get("provedor", "edge"), anterior.get("voz")) != (provedor, voz):
+            print("Provedor ou voz mudou: regravando todas as pecas.")
+            refazer = True
+    limite = asyncio.Semaphore(4)
     novos = 0
 
     async def uma(chave: str, texto: str) -> None:
@@ -81,18 +130,23 @@ async def gerar(voz: str, refazer: bool) -> None:
         async with limite:
             for tentativa in range(3):
                 try:
-                    await edge_tts.Communicate(texto, voz, rate="-4%", pitch="-2Hz").save(str(destino))
+                    if provedor == "openai":
+                        await asyncio.to_thread(sintetizar_openai, texto, voz, destino)
+                    else:
+                        await sintetizar_edge(texto, voz, destino)
                     novos += 1
                     return
-                except Exception as erro:  # rede instavel: tenta de novo
+                except SystemExit:
+                    raise
+                except Exception as erro:  # rede instavel ou limite de taxa: tenta de novo
                     if tentativa == 2:
                         print(f"FALHOU: {chave!r}: {erro}")
-                    await asyncio.sleep(1.5)
+                    await asyncio.sleep(2 + tentativa * 3)
 
     await asyncio.gather(*(uma(chave, texto) for chave, texto in itens.items()))
 
     clips = {chave: nome_arquivo(chave) for chave in itens if (SAIDA / nome_arquivo(chave)).exists()}
-    manifest = {"voz": voz, "clips": clips}
+    manifest = {"provedor": provedor, "voz": voz, "clips": clips}
     (SAIDA / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding="utf-8")
 
     # remove sobras de pecas que nao existem mais
@@ -107,7 +161,8 @@ async def gerar(voz: str, refazer: bool) -> None:
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--voz", default="pt-BR-FranciscaNeural")
+    ap.add_argument("--provedor", choices=["openai", "edge"], default="openai")
+    ap.add_argument("--voz", help="voz do provedor (openai: sage, coral, nova, shimmer...)")
     ap.add_argument("--refazer", action="store_true")
     args = ap.parse_args()
-    asyncio.run(gerar(args.voz, args.refazer))
+    asyncio.run(gerar(args.provedor, args.voz or VOZ_PADRAO[args.provedor], args.refazer))
