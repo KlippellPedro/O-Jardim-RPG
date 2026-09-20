@@ -1,4 +1,5 @@
 import { obterTemaPorId, type ThemeEntry } from '../../redesign/themeMap';
+import { obterEstiloAuraFicha, type EstiloAuraFicha } from './auraEspecialFicha';
 
 export type EfeitoAtmosfericoFicha =
   | 'arcano'
@@ -15,6 +16,8 @@ interface TemaEntidadeFicha {
   tema: ThemeEntry;
   fundo: string | null;
   efeito: EfeitoAtmosfericoFicha;
+  /** Só raças e classes especiais têm aura própria. */
+  aura: EstiloAuraFicha | null;
 }
 
 export interface TemaVisualFicha {
@@ -108,6 +111,7 @@ const criarEntidadeTema = (tipo: 'classe' | 'raca', id?: string | null): TemaEnt
   tema: obterTemaPorId(id || 'humano'),
   fundo: obterFundoFicha(tipo, id),
   efeito: obterEfeitoAtmosfericoFicha(id),
+  aura: obterEstiloAuraFicha(id),
 });
 
 export const criarTemaVisualFicha = (racaId?: string | null, classeId?: string | null): TemaVisualFicha => {

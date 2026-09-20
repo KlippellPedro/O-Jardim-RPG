@@ -1,0 +1,226 @@
+/* Aura das raças e classes especiais na ficha (ver FichaAtmosphere.tsx).
+   Só transform e opacity nas animações; some no modo de desempenho reduzido
+   junto com o resto da atmosfera (.performance-decorative). */
+
+.ficha-aura {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.ficha-aura--raca { right: 46%; }
+
+.ficha-aura__brilho {
+  position: absolute;
+  inset: -20% -10% auto;
+  height: 60%;
+  background: radial-gradient(ellipse 60% 70% at 50% 0%, color-mix(in srgb, var(--aura-a) 20%, transparent), transparent 70%);
+  animation: ficha-aura-pulsar 8s ease-in-out infinite;
+}
+
+.ficha-aura i {
+  position: absolute;
+  bottom: -2rem;
+  left: var(--aura-x);
+  width: var(--aura-tam, 4px);
+  height: var(--aura-tam, 4px);
+  border-radius: 999px;
+  background: var(--aura-a);
+  box-shadow: 0 0 14px var(--aura-a);
+  opacity: 0;
+  animation: ficha-aura-subir var(--aura-dur) linear var(--aura-atraso) infinite;
+}
+
+.ficha-aura i:nth-child(even) {
+  background: var(--aura-b);
+  box-shadow: 0 0 14px var(--aura-b);
+}
+
+/* Estrelas: losangos de quatro pontas que cintilam enquanto sobem */
+.ficha-aura--estrelas i {
+  width: calc(var(--aura-tam) * 2);
+  height: calc(var(--aura-tam) * 2);
+  border-radius: 0;
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+  animation-name: ficha-aura-cintilar;
+}
+
+/* Halo: motas douradas grandes e lentas */
+.ficha-aura--halo i {
+  width: calc(var(--aura-tam) * 1.6);
+  height: calc(var(--aura-tam) * 1.6);
+  filter: blur(1px);
+  animation-duration: calc(var(--aura-dur) * 1.6);
+}
+
+/* Brasas: pontinhos vivos que sobem com balanço */
+.ficha-aura--brasas i {
+  animation-name: ficha-aura-brasa;
+  animation-duration: calc(var(--aura-dur) * 0.75);
+}
+
+/* Circuito: traços finos e retos, como dados subindo numa linha */
+.ficha-aura--circuito i {
+  width: 2px;
+  height: calc(var(--aura-tam) * 8);
+  border-radius: 0;
+  background: linear-gradient(180deg, var(--aura-a), transparent);
+  animation-name: ficha-aura-linha;
+}
+
+.ficha-aura--circuito i:nth-child(even) {
+  background: linear-gradient(180deg, var(--aura-b), transparent);
+}
+
+/* Glitch: quadrados que piscam em degraus */
+.ficha-aura--glitch i {
+  width: calc(var(--aura-tam) * 1.8);
+  height: calc(var(--aura-tam) * 1.8);
+  border-radius: 0;
+  animation-name: ficha-aura-glitch;
+  animation-timing-function: steps(9, end);
+}
+
+/* Folhas: pétalas que derivam */
+.ficha-aura--folhas i {
+  width: calc(var(--aura-tam) * 2);
+  height: var(--aura-tam);
+  border-radius: 100% 0 100% 0;
+  animation-name: ficha-particle-drift;
+}
+
+/* Almas: chamas alongadas que oscilam ao subir */
+.ficha-aura--almas i {
+  width: calc(var(--aura-tam) * 1.8);
+  height: calc(var(--aura-tam) * 5);
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  filter: blur(1px);
+  animation-name: ficha-aura-alma;
+}
+
+/* Cartas: retângulos que giram no ar */
+.ficha-aura--cartas i {
+  width: calc(var(--aura-tam) * 2.4);
+  height: calc(var(--aura-tam) * 3.4);
+  border-radius: 2px;
+  background: transparent;
+  border: 1px solid var(--aura-a);
+  animation-name: ficha-aura-carta;
+}
+
+.ficha-aura--cartas i:nth-child(even) {
+  background: transparent;
+  border-color: var(--aura-b);
+}
+
+/* Runas: losangos que orbitam */
+.ficha-aura--runas i {
+  width: calc(var(--aura-tam) * 1.6);
+  height: calc(var(--aura-tam) * 1.6);
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid var(--aura-a);
+  animation-name: ficha-aura-runa;
+}
+
+.ficha-aura--runas i:nth-child(even) {
+  background: transparent;
+  border-color: var(--aura-b);
+}
+
+/* Mistura: formas de tamanhos variados, cada uma de um jeito */
+.ficha-aura--mistura i:nth-child(3n) { border-radius: 0; animation-name: ficha-particle-drift; }
+.ficha-aura--mistura i:nth-child(3n + 1) { width: calc(var(--aura-tam) * 2); border-radius: 100% 0 100% 0; }
+
+/* Sombra: manchas grandes e turvas, com poucos pontos de brilho */
+.ficha-aura--sombra i {
+  width: 6rem;
+  height: 6rem;
+  filter: blur(2.2rem);
+  box-shadow: none;
+  animation-name: ficha-aura-mancha;
+}
+
+@keyframes ficha-aura-pulsar {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes ficha-aura-subir {
+  0% { transform: translate3d(0, 2rem, 0) scale(0.6); opacity: 0; }
+  15% { opacity: 0.7; }
+  100% { transform: translate3d(2rem, -105vh, 0) scale(1.1); opacity: 0; }
+}
+
+@keyframes ficha-aura-cintilar {
+  0% { transform: translate3d(0, 2rem, 0) scale(0.4); opacity: 0; }
+  20% { opacity: 0.9; }
+  40% { opacity: 0.25; }
+  60% { opacity: 0.9; }
+  100% { transform: translate3d(1.5rem, -105vh, 0) scale(1) rotate(90deg); opacity: 0; }
+}
+
+@keyframes ficha-aura-brasa {
+  0% { transform: translate3d(0, 2rem, 0) scale(0.7); opacity: 0; }
+  15% { opacity: 0.85; }
+  40% { transform: translate3d(1.2rem, -40vh, 0) scale(1); }
+  70% { transform: translate3d(-1rem, -75vh, 0) scale(0.8); }
+  100% { transform: translate3d(0.5rem, -105vh, 0) scale(0.3); opacity: 0; }
+}
+
+@keyframes ficha-aura-linha {
+  0% { transform: translate3d(0, 2rem, 0); opacity: 0; }
+  15% { opacity: 0.5; }
+  100% { transform: translate3d(0, -105vh, 0); opacity: 0; }
+}
+
+@keyframes ficha-aura-glitch {
+  0% { transform: translate3d(0, 2rem, 0); opacity: 0; }
+  10% { opacity: 0.8; }
+  30% { transform: translate3d(0.6rem, -28vh, 0); opacity: 0; }
+  40% { transform: translate3d(-0.4rem, -36vh, 0); opacity: 0.7; }
+  65% { transform: translate3d(0.8rem, -62vh, 0); opacity: 0.1; }
+  80% { opacity: 0.8; }
+  100% { transform: translate3d(0, -105vh, 0); opacity: 0; }
+}
+
+@keyframes ficha-aura-alma {
+  0% { transform: translate3d(0, 2rem, 0) scale(0.6); opacity: 0; }
+  20% { opacity: 0.65; }
+  35% { transform: translate3d(1.4rem, -35vh, 0); }
+  65% { transform: translate3d(-1.4rem, -68vh, 0); }
+  100% { transform: translate3d(0.6rem, -105vh, 0) scale(0.8); opacity: 0; }
+}
+
+@keyframes ficha-aura-carta {
+  0% { transform: translate3d(0, 2rem, 0) rotate(-20deg); opacity: 0; }
+  20% { opacity: 0.7; }
+  100% { transform: translate3d(3rem, -105vh, 0) rotate(340deg); opacity: 0; }
+}
+
+@keyframes ficha-aura-runa {
+  0% { transform: translate3d(-1rem, 2rem, 0) rotate(45deg) scale(0.5); opacity: 0; }
+  20% { opacity: 0.7; }
+  55% { transform: translate3d(4rem, -52vh, 0) rotate(225deg) scale(1.2); }
+  100% { transform: translate3d(-2rem, -105vh, 0) rotate(405deg) scale(0.6); opacity: 0; }
+}
+
+@keyframes ficha-aura-mancha {
+  0% { transform: translate3d(0, 2rem, 0) scale(0.8); opacity: 0; }
+  30% { opacity: 0.1; }
+  100% { transform: translate3d(2rem, -105vh, 0) scale(1.3); opacity: 0; }
+}
+
+@media (max-width: 48rem) {
+  .ficha-aura--raca { display: none; }
+  .ficha-aura i:nth-child(n + 8) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ficha-aura i,
+  .ficha-aura__brilho {
+    animation: none;
+  }
+
+  .ficha-aura i { opacity: 0.12; }
+}
