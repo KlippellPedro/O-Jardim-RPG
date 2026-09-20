@@ -1,7 +1,7 @@
-/* Painel de subida de nível (ver SubidaNivelHost.tsx) e feedback da barra de XP.
+/* Painel de subida de nível no estilo "Grande Sábio" (ver SubidaNivelHost.tsx).
    Só transform e opacity nas animações. */
 
-.subida-nivel {
+.sabio {
   position: fixed;
   inset: 0;
   z-index: 10000;
@@ -9,30 +9,91 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background: radial-gradient(circle at 50% 50%, rgba(5, 5, 8, 0.82), rgba(5, 5, 8, 0.94));
+  overflow: hidden;
   cursor: pointer;
-  animation: subida-nivel-fundo 0.4s ease-out both;
+  background: radial-gradient(circle at 50% 45%, rgba(6, 14, 28, 0.9), rgba(2, 4, 10, 0.97));
+  animation: sabio-fundo 0.45s ease-out both;
 }
 
-.subida-nivel__caixa {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: min(100%, 26rem);
-  text-align: center;
+.sabio__grade {
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34zM28 100L0 84V50M28 100l28-16V50' fill='none' stroke='%2367e8f9' stroke-opacity='.10'/%3E%3C/svg%3E");
+  mask-image: radial-gradient(circle at 50% 45%, #000 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 0%, transparent 70%);
+  animation: sabio-fundo 1s ease-out both;
 }
 
-.subida-nivel__hex {
+.sabio__varredura {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 30%;
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--sub-cor) 16%, transparent), transparent);
+  animation: sabio-varredura 1.6s ease-in-out 0.2s both;
+}
+
+.sabio__janela {
   position: relative;
-  width: 9rem;
-  height: 9rem;
+  width: min(100%, 27rem);
+  padding: 1.1rem 1.4rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--sub-cor) 35%, transparent);
+  background: linear-gradient(180deg, rgba(8, 20, 38, 0.82), rgba(4, 9, 20, 0.9));
+  box-shadow: 0 0 60px -10px var(--sub-cor), inset 0 0 40px -20px var(--sub-cor);
+  animation: sabio-janela 0.55s cubic-bezier(0.2, 1.1, 0.3, 1) both;
+}
+
+.sabio__canto {
+  position: absolute;
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px solid var(--sub-cor);
+  filter: drop-shadow(0 0 4px var(--sub-cor));
+}
+.sabio__canto--se { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
+.sabio__canto--sd { top: -2px; right: -2px; border-left: 0; border-bottom: 0; }
+.sabio__canto--ie { bottom: -2px; left: -2px; border-right: 0; border-top: 0; }
+.sabio__canto--id { bottom: -2px; right: -2px; border-left: 0; border-top: 0; }
+
+.sabio__topo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--sub-cor) 70%, #fff);
+}
+
+.sabio__topo-direita {
+  margin-left: auto;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.sabio__ponto {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--sub-cor);
+  box-shadow: 0 0 8px var(--sub-cor);
+  animation: sabio-piscar 1.4s ease-in-out infinite;
+}
+
+.sabio__heroi {
+  position: relative;
+  width: 8.5rem;
+  height: 8.5rem;
+  margin: 1rem auto 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: subida-nivel-entrada 0.6s cubic-bezier(0.2, 1.3, 0.4, 1) both;
 }
 
-.subida-nivel__hex svg {
+.sabio__heroi svg {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -40,101 +101,141 @@
   overflow: visible;
 }
 
-.subida-nivel__hex polygon {
+.sabio__hex {
   fill: none;
   stroke: var(--sub-cor);
   stroke-linejoin: round;
   transform-origin: 50% 50%;
-  filter: drop-shadow(0 0 6px var(--sub-cor));
+  filter: drop-shadow(0 0 5px var(--sub-cor));
 }
+.sabio__hex--1 { stroke-width: 2.4; animation: sabio-girar 14s linear infinite; }
+.sabio__hex--2 { stroke: var(--sub-cor2); stroke-width: 1.4; transform: scale(0.76); animation: sabio-girar-inverso 9s linear infinite; }
+.sabio__hex--3 { stroke: #fff; stroke-opacity: 0.55; stroke-width: 1; transform: scale(1.14); stroke-dasharray: 6 9; animation: sabio-girar 22s linear infinite; }
+.sabio--especial .sabio__hex--1 { stroke-width: 3.4; }
 
-.subida-nivel__hex-externo {
-  stroke-width: 2.5;
-  animation: subida-nivel-girar 9s linear infinite;
+.sabio__pulso {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--sub-cor);
+  border-radius: 999px;
+  opacity: 0;
+  animation: sabio-pulso 2.2s ease-out 0.3s infinite;
 }
+.sabio__pulso--2 { animation-delay: 1.4s; }
 
-.subida-nivel__hex-interno {
-  stroke: var(--sub-cor2) !important;
-  stroke-width: 1.5;
-  transform: scale(0.72);
-  animation: subida-nivel-girar-inverso 6s linear infinite;
-}
-
-.subida-nivel__numero {
+.sabio__numero {
   position: relative;
   font-family: Cinzel, serif;
-  font-size: 3rem;
+  font-size: 2.9rem;
   font-weight: 900;
   color: #fff;
-  text-shadow: 0 0 18px var(--sub-cor);
+  text-shadow: 0 0 20px var(--sub-cor);
+  animation: sabio-numero 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) 0.15s both;
 }
 
-.subida-nivel--especial .subida-nivel__hex-externo { stroke-width: 3.5; }
-
-.subida-nivel__titulo {
-  margin-top: 1.25rem;
+.sabio__titulo {
+  min-height: 2rem;
+  margin-top: 0.9rem;
+  text-align: center;
   font-family: Cinzel, serif;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 900;
   letter-spacing: 0.06em;
   color: #fff;
   text-shadow: 0 0 16px var(--sub-cor);
-  animation: subida-nivel-linha 0.5s ease-out 0.35s both;
 }
 
-.subida-nivel__lista {
-  margin: 1rem 0 0;
+.sabio__lista {
+  margin: 0.9rem 0 0;
   padding: 0;
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.4rem;
 }
 
-.subida-nivel__linha {
-  padding: 0.35rem 0.9rem;
-  border: 1px solid color-mix(in srgb, var(--sub-cor) 40%, transparent);
-  border-radius: 0.4rem;
-  background: color-mix(in srgb, var(--sub-cor) 10%, transparent);
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.9);
-  animation: subida-nivel-linha 0.45s ease-out calc(0.8s + var(--i) * 0.35s) both;
+.sabio__linha {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  min-height: 2.05rem;
+  padding: 0.4rem 0.7rem;
+  border-left: 2px solid var(--sub-cor);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--sub-cor) 14%, transparent), transparent);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+.sabio__linha--visivel { opacity: 1; transform: translateX(0); }
+
+.sabio__rotulo {
+  flex: none;
+  min-width: 4.6rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--sub-cor) 75%, #fff);
 }
 
-.subida-nivel__voz {
+.sabio__texto {
+  font-family: 'Cascadia Mono', Consolas, monospace;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.sabio__cursor {
+  display: inline-block;
+  width: 0.5ch;
+  height: 1em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: var(--sub-cor);
+  animation: sabio-piscar 0.6s steps(2) infinite;
+}
+
+.sabio__rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 1rem;
-  padding: 0.3rem 0.8rem;
+}
+
+.sabio__voz {
+  padding: 0.25rem 0.75rem;
   border: 1px solid color-mix(in srgb, var(--sub-cor) 45%, transparent);
   border-radius: 999px;
   background: transparent;
-  font-size: 0.7rem;
+  font-size: 0.62rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.75);
   cursor: pointer;
 }
+.sabio__voz[aria-pressed='false'] { opacity: 0.55; }
+.sabio__voz:hover { background: color-mix(in srgb, var(--sub-cor) 15%, transparent); }
 
-.subida-nivel__voz[aria-pressed='false'] { opacity: 0.55; }
-.subida-nivel__voz:hover { background: color-mix(in srgb, var(--sub-cor) 15%, transparent); }
-
-.subida-nivel__dica {
-  margin-top: 1.25rem;
-  font-size: 0.65rem;
-  letter-spacing: 0.3em;
+.sabio__dica {
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.35);
 }
 
-.subida-nivel--parado,
-.subida-nivel--parado * {
+.sabio--parado,
+.sabio--parado * {
   animation: none !important;
+  transition: none !important;
 }
 
-@keyframes subida-nivel-fundo { from { opacity: 0; } to { opacity: 1; } }
-@keyframes subida-nivel-entrada { from { opacity: 0; transform: scale(0.4) rotate(-40deg); } to { opacity: 1; transform: scale(1) rotate(0deg); } }
-@keyframes subida-nivel-girar { to { transform: rotate(360deg); } }
-@keyframes subida-nivel-girar-inverso { from { transform: scale(0.72) rotate(360deg); } to { transform: scale(0.72) rotate(0deg); } }
-@keyframes subida-nivel-linha { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes sabio-fundo { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sabio-janela { from { opacity: 0; transform: scale(0.94) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes sabio-varredura { from { transform: translateY(-100%); opacity: 1; } to { transform: translateY(330%); opacity: 0; } }
+@keyframes sabio-girar { to { transform: rotate(360deg); } }
+@keyframes sabio-girar-inverso { from { transform: scale(0.76) rotate(360deg); } to { transform: scale(0.76) rotate(0deg); } }
+@keyframes sabio-pulso { 0% { opacity: 0.7; transform: scale(0.55); } 100% { opacity: 0; transform: scale(1.7); } }
+@keyframes sabio-numero { from { opacity: 0; transform: scale(2.2); } to { opacity: 1; transform: scale(1); } }
+@keyframes sabio-piscar { 50% { opacity: 0.25; } }
 
 /* Barra de XP: número que sobe ao ganhar experiência e brilho quando dá para subir de nível */
 .xp-ganho {
