@@ -47,6 +47,7 @@ import {
 } from '../../../services/ajustesFichaService';
 import { AtributosSection, NOMES_ATRIBUTOS } from '../components/AtributosSection';
 import { StatusVitaisSection } from '../components/StatusVitaisSection';
+import { ModoMesa } from '../components/ModoMesa';
 import { FamaPrestigioSection } from '../components/FamaPrestigioSection';
 import { FrutoEdenSection } from '../components/FrutoEdenSection';
 import { obterTemaPorId } from '../../../redesign/themeMap';
@@ -94,8 +95,23 @@ const combinarDetalhesAutomaticos = (...listas: IDetalheEfeitoAutomatico[][]): I
     .map(([nome, valor]) => ({ nome, valor }));
 };
 
-export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: any }) => {
+interface IAbaFichaProps {
+  character: any;
+  onUpdate: any;
+  /** A ficha pediu para abrir o Modo mesa (botão do cabeçalho). */
+  abrirModoMesa?: boolean;
+  onModoMesaAberto?: () => void;
+  onAbrirAba?: (aba: string) => void;
+}
+
+export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMesaAberto, onAbrirAba }: IAbaFichaProps) => {
   const f = character.ficha || {};
+  const [modoMesaAberto, setModoMesaAberto] = useState(false);
+  useEffect(() => {
+    if (!abrirModoMesa) return;
+    setModoMesaAberto(true);
+    onModoMesaAberto?.();
+  }, [abrirModoMesa, onModoMesaAberto]);
   const [activeModal, setActiveModal] = useState<any>(null);
   const [ajusteModal, setAjusteModal] = useState<{
     chave: string;
@@ -910,6 +926,52 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
         onOpenInfo={setActiveModal}
         onOpenAdjust={abrirAjustes}
       />
+
+      {!character.somenteLeitura && (
+        <button
+          type="button"
+          onClick={() => setModoMesaAberto(true)}
+          className="flex min-h-14 w-full items-center justify-between gap-3 rounded-2xl border border-[#c7a44c]/30 bg-gradient-to-r from-[#c7a44c]/15 to-transparent px-5 text-left transition-colors hover:bg-[#c7a44c]/20"
+          data-tour="ficha-modo-mesa"
+        >
+          <span>
+            <span className="block text-sm font-bold text-[#f3dc8f]">Modo mesa</span>
+            <span className="block text-xs text-gray-400">Tela grande para jogar no celular: vida, mana, dado e condições a um toque.</span>
+          </span>
+          <span aria-hidden="true" className="text-lg text-[#c7a44c]">›</span>
+        </button>
+      )}
+      {!character.somenteLeitura && (
+        <ModoMesa
+          aberto={modoMesaAberto}
+          onFechar={() => setModoMesaAberto(false)}
+          nome={character.nome || 'Personagem'}
+          nivel={character.nivel || 1}
+          campanhaId={campanhaAtiva?.id ?? null}
+          personagemId={character.id}
+          vida={{ atual: vAtual, max: maxVida, extra: obterTemporario(status, 'vidaAtual') }}
+          mana={{ atual: mAtual, max: maxMana, extra: obterTemporario(status, 'manaAtual') }}
+          sanidade={{ atual: sAtual, max: maxSanidade, extra: obterTemporario(status, 'sanidadeAtual') }}
+          cansaco={{ atual: cAtual, max: maxCansaco }}
+          onStatus={handleStatus}
+          defesa={defesaTotal}
+          iniciativa={iniciativaFinal}
+          movimento={movimentoFinal}
+          atributos={ATRIBUTOS.map((attr) => ({
+            chave: attr,
+            rotulo: NOMES_ATRIBUTOS[attr],
+            mod: modificadorTeste(attr),
+            desvantagens: desvantagensAutomaticasTeste(status.cansacoAtual, ['forca', 'destreza', 'constituicao'].includes(attr), resumoEquipamento.sobrecarregado),
+          }))}
+          condicoes={(f.condicoesAtivas || []).map((c: any) => ({ id: c.id, nome: c.nome, descricao: c.descricao }))}
+          onRemoverCondicao={(indice) => {
+            const proximas = [...(f.condicoesAtivas || [])];
+            proximas.splice(indice, 1);
+            onUpdate(['ficha', 'condicoesAtivas'], proximas);
+          }}
+          onAbrirAba={(aba) => onAbrirAba?.(aba)}
+        />
+      )}
 
       <StatusVitaisSection
         atual={{ vida: vAtual, mana: mAtual, sanidade: sAtual, cansaco: cAtual }}

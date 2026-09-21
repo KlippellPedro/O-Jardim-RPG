@@ -1,0 +1,123 @@
+/* Retrato do personagem: moldura por nível, foto ou retrato composto. */
+.retrato {
+  --moldura-fio: #5b5566;
+  --moldura-brilho: rgba(91, 85, 102, 0.35);
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  padding: 3px;
+  border-radius: 1.1rem;
+  background: linear-gradient(145deg, var(--moldura-fio), rgba(0, 0, 0, 0.55) 55%, var(--moldura-fio));
+  box-shadow: 0 0 18px var(--moldura-brilho), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.retrato--prata,
+.retrato--ouro,
+.retrato--lenda {
+  padding: 4px;
+}
+
+.retrato--lenda {
+  overflow: visible;
+  background: conic-gradient(from var(--retrato-giro, 0deg), #f6d872, #fff3bd, #c99a25, #f6d872, #fff3bd, #c99a25, #f6d872);
+}
+
+@property --retrato-giro {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .retrato--lenda {
+    animation: retrato-giro 7s linear infinite;
+  }
+}
+
+@keyframes retrato-giro {
+  to { --retrato-giro: 360deg; }
+}
+
+.retrato__miolo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: calc(1.1rem - 3px);
+  background: #0b0a10;
+}
+
+.retrato__miolo > img,
+.retrato__miolo > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.retrato__miolo > img {
+  object-fit: cover;
+}
+
+.retrato__joia {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.55);
+  background: var(--moldura-fio);
+  box-shadow: 0 0 6px var(--moldura-brilho);
+  transform: rotate(45deg);
+}
+
+.retrato__joia--tl { top: -3px; left: -3px; }
+.retrato__joia--tr { top: -3px; right: -3px; }
+.retrato__joia--bl { bottom: -3px; left: -3px; }
+.retrato__joia--br { bottom: -3px; right: -3px; }
+
+.retrato__nivel {
+  position: absolute;
+  left: 50%;
+  bottom: -9px;
+  transform: translateX(-50%);
+  padding: 1px 8px;
+  border: 1px solid var(--moldura-fio);
+  border-radius: 999px;
+  background: #0b0a10;
+  color: var(--moldura-fio);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.retrato__editar {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: inherit;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.retrato:hover .retrato__editar,
+.retrato__editar:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .retrato__editar {
+    inset: auto 4px 4px auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.7);
+  }
+  .retrato__editar span { display: none; }
+}

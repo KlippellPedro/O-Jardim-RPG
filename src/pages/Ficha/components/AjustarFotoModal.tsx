@@ -10,7 +10,14 @@ interface AjustarFotoModalProps {
   nome: string;
   fotoAtual: string | null;
   salvando?: boolean;
+  /** Lado da imagem gerada, em px. Retratos pequenos (vínculos) usam menos que a foto da ficha. */
+  resolucao?: number;
+  /** Qualidade WebP de 0 a 1. */
+  qualidade?: number;
+  titulo?: string;
   onCancelar: () => void;
+  /** Quando informado e já existe foto, mostra o botão de remover. */
+  onRemover?: () => void;
   onConfirmar: (dataUrl: string) => void;
 }
 
@@ -21,7 +28,7 @@ interface Deslocamento {
 
 // Editor de enquadramento: arrastar para reposicionar e um controle de zoom,
 // pra substituir o corte automático no centro que não dava nenhuma escolha.
-export const AjustarFotoModal: React.FC<AjustarFotoModalProps> = ({ nome, fotoAtual, salvando, onCancelar, onConfirmar }) => {
+export const AjustarFotoModal: React.FC<AjustarFotoModalProps> = ({ nome, fotoAtual, salvando, resolucao = RESOLUCAO_FOTO, qualidade = 0.85, titulo = 'Ajustar foto', onCancelar, onRemover, onConfirmar }) => {
   const [src, setSrc] = useState<string | null>(fotoAtual);
   const [erro, setErro] = useState<string | null>(null);
   const [tamanhoNatural, setTamanhoNatural] = useState<{ w: number; h: number } | null>(null);
@@ -125,20 +132,20 @@ export const AjustarFotoModal: React.FC<AjustarFotoModalProps> = ({ nome, fotoAt
     const imagem = imgRef.current;
     if (!imagem || !tamanhoNatural) return;
     const canvas = document.createElement('canvas');
-    canvas.width = RESOLUCAO_FOTO;
-    canvas.height = RESOLUCAO_FOTO;
+    canvas.width = resolucao;
+    canvas.height = resolucao;
     const contexto = canvas.getContext('2d');
     if (!contexto) return;
 
-    const fator = RESOLUCAO_FOTO / VISOR;
+    const fator = resolucao / VISOR;
     const escala = escalaBase(tamanhoNatural) * zoom * fator;
     contexto.save();
-    contexto.translate(RESOLUCAO_FOTO / 2 + offset.x * fator, RESOLUCAO_FOTO / 2 + offset.y * fator);
+    contexto.translate(resolucao / 2 + offset.x * fator, resolucao / 2 + offset.y * fator);
     contexto.scale(escala, escala);
     contexto.drawImage(imagem, -tamanhoNatural.w / 2, -tamanhoNatural.h / 2);
     contexto.restore();
 
-    onConfirmar(canvas.toDataURL('image/webp', 0.85));
+    onConfirmar(canvas.toDataURL('image/webp', qualidade));
   };
 
   const escala = tamanhoNatural ? escalaBase(tamanhoNatural) * zoom : 1;
@@ -156,7 +163,7 @@ export const AjustarFotoModal: React.FC<AjustarFotoModalProps> = ({ nome, fotoAt
         className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#0b0a12] p-6 shadow-2xl"
       >
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>Ajustar foto</h3>
+          <h3 className="text-lg font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>{titulo}</h3>
           <button type="button" onClick={onCancelar} aria-label="Fechar" className="rounded-full p-1.5 text-gray-500 hover:bg-white/10 hover:text-white">
             <X size={18} />
           </button>
@@ -240,9 +247,16 @@ export const AjustarFotoModal: React.FC<AjustarFotoModalProps> = ({ nome, fotoAt
               <p className="flex items-center gap-1.5 text-xs text-gray-500">
                 <Move size={12} /> Arraste pra reposicionar
               </p>
-              <button type="button" onClick={escolherArquivo} className="text-xs font-medium text-primary hover:text-primary-light">
-                Trocar imagem
-              </button>
+              <span className="flex items-center gap-3">
+                {onRemover && fotoAtual ? (
+                  <button type="button" onClick={onRemover} className="text-xs font-medium text-gray-500 hover:text-red-400">
+                    Remover foto
+                  </button>
+                ) : null}
+                <button type="button" onClick={escolherArquivo} className="text-xs font-medium text-primary hover:text-primary-light">
+                  Trocar imagem
+                </button>
+              </span>
             </div>
           </>
         )}

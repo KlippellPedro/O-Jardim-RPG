@@ -15,6 +15,7 @@ import type { IPropriedadeFicha } from '../../../services/propriedadeService';
 import { personagensApi } from '../../../services/personagensApi';
 import { useCampaignSSE } from '../../../hooks/useCampaignSSE';
 import { FichaModal } from '../components/FichaModal';
+import { PlantaBase } from '../components/bens/PlantaBase';
 import { LabeledInput } from '../components/SharedFichaComponents';
 import { Select } from '../../../components/ui/Select';
 import { INSTALACOES_BASE } from '../../../../data/regras/bases';
@@ -377,7 +378,8 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
         <div className="rounded-xl border border-dashed border-white/10 py-12 text-center">
           <Building2 size={38} className="mx-auto mb-3 text-gray-700" />
           <p className="text-xs font-bold uppercase tracking-widest text-gray-600">Nenhuma base na campanha</p>
-          {isMestre && <p className="mt-1 text-xs text-gray-700">Clique em "+ Adicionar Base" para começar.</p>}
+          <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-gray-500">A base é o lugar do grupo: esconderijo, oficina, navio. Ela tem patamar, vagas para instalações e uma manutenção mensal.</p>
+          {isMestre ? <p className="mt-1 text-xs text-gray-600">Clique em "+ Adicionar Base" para começar.</p> : <p className="mt-1 text-xs text-gray-600">Peça ao Mestre para cadastrar a base do grupo.</p>}
         </div>
       )}
 
@@ -461,24 +463,11 @@ export const PropriedadesCampanha = ({ character, propriedadesLegadas = [], onMi
                           <Wrench size={10} className="inline mr-1" />
                           Instalações
                         </p>
-                        <div className="space-y-1">
-                          {detalhe.instalacoes.map((inst) => (
-                            <div key={inst.id} className="flex items-center justify-between rounded-lg bg-black/20 px-3 py-2 text-xs">
-                              <span className="text-gray-200">{inst.nome} <span className="text-gray-500">(Nível {inst.nivel})</span></span>
-                              <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-gray-600">{inst.espacos_ocupados} esp.</span>
-                                {podeGerenciarDetalhe && (
-                                  <button type="button" onClick={() => removerInstalacao(inst.id)} className="text-red-500 hover:text-red-300">
-                                    <Trash2 size={12} />
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                          ))}
-                          {detalhe.instalacoes.length === 0 && (
-                            <p className="text-xs text-gray-600">Nenhuma instalação.</p>
-                          )}
-                        </div>
+                        <PlantaBase
+                          patamar={detalhe.patamar}
+                          instalacoes={detalhe.instalacoes.map((inst) => ({ id: inst.id, nome: inst.nome, nivel: inst.nivel, espacos: inst.espacos_ocupados }))}
+                          onRemover={podeGerenciarDetalhe ? removerInstalacao : undefined}
+                        />
                         {podeGerenciarDetalhe && (
                           <div className="mt-2 space-y-2 rounded-lg border border-white/5 bg-black/10 p-2">
                             <div className="flex gap-2">

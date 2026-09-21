@@ -39,6 +39,7 @@ import {
   type ILegadoCatalogo,
 } from '../../../services/progressaoFichaService';
 import { ConquistasGaleria } from '../components/ConquistasGaleria';
+import { SimuladorNivel } from '../components/SimuladorNivel';
 
 type SecaoProgressaoId = 'raca' | 'habilidades' | 'escolhas' | 'poderes' | 'eventos' | 'legados';
 type FiltroDisponibilidade = 'todos' | 'disponiveis' | 'selecionados';
@@ -369,6 +370,8 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
       </nav>
 
       <ProgressaoClasses classes={classeSlots} catalogoClasses={CLASSES_CATALOGO} />
+
+      <SimuladorNivel character={character} />
 
       <Secao
         titulo="Características raciais"

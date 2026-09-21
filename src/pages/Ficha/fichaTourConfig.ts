@@ -19,6 +19,8 @@ export interface FichaTourStep {
   alvos: string[];
   /** Etapas opcionais só aparecem quando ao menos um alvo existe na ficha atual. */
   opcional?: boolean;
+  /** Seletor de um botão a clicar ao entrar na etapa, para abrir a aba interna onde o alvo mora. */
+  antes?: string;
 }
 
 export const FICHA_TOUR_TABS: FichaTourTabId[] = [
@@ -159,24 +161,39 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
   ],
   Bens: [
     {
+      id: 'bens-abas', titulo: 'Meus bens e Da equipe',
+      descricao: 'No topo, “Meus bens” reúne o que pertence só ao personagem e “Da equipe” reúne as bases e a frota da campanha. A linha de resumo mostra quantas propriedades e veículos você tem e quanto custa manter tudo por mês.',
+      alvos: ['[data-tour="bens-cabecalho"]'], antes: '#bens-tab-meus',
+    },
+    {
       id: 'bens-propriedades', titulo: 'Propriedades pessoais',
-      descricao: 'Casas, terrenos, comércios e bases do personagem ficam aqui. Cada registro pode guardar localização, aquisição, manutenção mensal, qualidade dos alojamentos e instalações com seus espaços; “Adicionar Propriedade” abre o cadastro completo.',
-      alvos: ['[data-tour="bens-propriedades"]', '[data-tour="section-overview"]'],
+      descricao: 'Casas, terrenos, comércios e bases do personagem ficam aqui. Cada cartão mostra tipo, patamar, localização, aquisição e manutenção mensal. “Adicionar Propriedade” abre o cadastro, e a Loja também vende propriedades.',
+      alvos: ['[data-tour="bens-propriedades"]', '[data-tour="section-overview"]'], antes: '#bens-tab-meus',
+    },
+    {
+      id: 'bens-planta', titulo: 'Planta da base',
+      descricao: 'Cada instalação ocupa os quadradinhos que custa e as vagas livres aparecem tracejadas. Toque numa instalação para ver o que ela faz e quanto custa. Abaixo ficam as melhorias possíveis (com o motivo quando algo está bloqueado), o que ainda cabe construir e o custo de subir de patamar.',
+      alvos: ['[data-tour="bens-planta"]'], opcional: true, antes: '#bens-tab-meus',
+    },
+    {
+      id: 'bens-garagem', titulo: 'Garagem e peças instaladas',
+      descricao: 'Cada veículo tem seu cartão, com atributos, Vida, Combustível e encaixes de peças. Clique numa vaga livre para instalar uma peça guardada, clique na peça para ligar ou desligar e no X para desinstalar. A peça continua no inventário.',
+      alvos: ['[data-tour="bens-garagem"]'], opcional: true, antes: '#bens-tab-meus',
     },
     {
       id: 'bens-veiculos', titulo: 'Veículos e peças pessoais',
-      descricao: 'Esta área usa a mesma organização do inventário, mas separa veículos, módulos e peças da mochila. Peso, condição, local e efeitos continuam sendo acompanhados nos cartões.',
-      alvos: ['[data-tour="bens-veiculos"]'],
+      descricao: 'Esta área usa a mesma organização do inventário, mas separa veículos, módulos e peças da mochila. É aqui que você cadastra, edita, ajusta combustível e define quantas vagas de peça cada veículo tem e quantas cada peça ocupa.',
+      alvos: ['[data-tour="bens-veiculos"]'], antes: '#bens-tab-meus',
     },
     {
       id: 'bens-frota', titulo: 'Frota da campanha',
-      descricao: 'Veículos compartilhados pertencem à campanha, não a uma única ficha. Permissões definem quem pode alterar tripulação, carga, condição e demais dados da frota.',
-      alvos: ['[data-tour="bens-frota"]'], opcional: true,
+      descricao: 'Veículos compartilhados pertencem à campanha, não a uma única ficha. Os módulos usam os mesmos encaixes da garagem e as permissões definem quem pode alterar tripulação, carga, condição e módulos.',
+      alvos: ['[data-tour="bens-frota"]'], opcional: true, antes: '#bens-tab-equipe',
     },
     {
       id: 'bens-bases', titulo: 'Bases da campanha',
-      descricao: 'Bases compartilhadas reúnem propriedades usadas pelo grupo. Registros pessoais antigos podem ser migrados quando a opção estiver disponível, preservando a separação entre patrimônio individual e coletivo.',
-      alvos: ['[data-tour="bens-bases"]'], opcional: true,
+      descricao: 'Bases compartilhadas reúnem propriedades usadas pelo grupo, com a mesma planta de instalações. Registros pessoais antigos podem ser migrados quando a opção estiver disponível, preservando a separação entre patrimônio individual e coletivo.',
+      alvos: ['[data-tour="bens-bases"]'], opcional: true, antes: '#bens-tab-equipe',
     },
   ],
   Habilidades: [

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Car, Fuel, Shield, Heart, Users, Package, Share2, ArrowUpRight,
-  Pencil, Trash2, CheckCircle2, Circle, ChevronDown, ChevronRight,
+  Pencil, Trash2, ChevronDown, ChevronRight,
   Zap, Globe, Lock, Upload, Plus, Minus, KeyRound
 } from 'lucide-react';
 import { useAuthStore } from '../../../store/useAuthStore';
@@ -14,6 +14,8 @@ import {
 import { personagensApi } from '../../../services/personagensApi';
 import { useCampaignSSE } from '../../../hooks/useCampaignSSE';
 import { FichaModal } from '../components/FichaModal';
+import { SlotsVeiculo } from '../components/bens/SlotsVeiculo';
+import type { SugestaoModulo } from '../utils/slotsVeiculo';
 import { LabeledInput } from '../components/SharedFichaComponents';
 import { Select } from '../../../components/ui/Select';
 import {
@@ -39,17 +41,6 @@ const RARIDADE_VEICULO_OPCOES = [
   { value: 'raro', label: 'Raro' },
   { value: 'epico', label: 'Épico' },
   { value: 'lendario', label: 'Lendário' },
-];
-
-// Sugestões rápidas para os módulos de utilidade publicados no catálogo. O
-// jogador ainda confirma ou edita o nome antes de adicionar à frota.
-const MODULOS_UTILIDADE_SUGERIDOS = [
-  { nome: 'Beliche (dormitório)', espacos: 1 },
-  { nome: 'Geladeira', espacos: 1 },
-  { nome: 'Filtro de água', espacos: 1 },
-  { nome: 'Enfermaria', espacos: 1 },
-  { nome: 'Armazém extra', espacos: 1 },
-  { nome: 'Blindagem extra', espacos: 2 },
 ];
 
 const TIPO_OCUPANTE_OPCOES = [
@@ -343,12 +334,13 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
 
   // -- Módulos ----------------------------------------------------------
 
-  const adicionarModulo = async () => {
-    if (!campanhaAtiva?.id || !detalhe || !novoModuloNome.trim()) return;
+  const adicionarModulo = async (sugestao?: SugestaoModulo) => {
+    const nome = (sugestao?.nome ?? novoModuloNome).trim();
+    if (!campanhaAtiva?.id || !detalhe || !nome) return;
     try {
       await veiculosCampanhaApi.adicionarModulo(campanhaAtiva.id, detalhe.id, {
-        nome: novoModuloNome.trim(),
-        espacos_ocupados: Math.max(1, Number(novoModuloEspacos) || 1),
+        nome,
+        espacos_ocupados: Math.max(1, sugestao?.espacos ?? (Number(novoModuloEspacos) || 1)),
       });
       setNovoModuloNome('');
       setNovoModuloEspacos('1');
@@ -499,7 +491,8 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
         <div className="rounded-xl border border-dashed border-white/10 py-12 text-center">
           <Car size={38} className="mx-auto mb-3 text-gray-700" />
           <p className="text-xs font-bold uppercase tracking-widest text-gray-600">Nenhum veículo na frota</p>
-          {isMestre && <p className="mt-1 text-xs text-gray-700">Clique em "+ Adicionar Veículo" para começar.</p>}
+          <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-gray-500">A frota é do grupo inteiro: qualquer veículo aqui pode ter tripulação, carga e módulos compartilhados, conforme as permissões.</p>
+          {isMestre ? <p className="mt-1 text-xs text-gray-600">Clique em "+ Adicionar Veículo" para começar, ou mova um veículo seu para a campanha.</p> : <p className="mt-1 text-xs text-gray-600">Peça ao Mestre para cadastrar ou liberar um veículo.</p>}
         </div>
       )}
 
@@ -665,52 +658,18 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                       </div>
 
                       {/* Módulos */}
-                      <div>
-                        <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-cyan-500/60">
-                          <Zap size={10} className="inline mr-1" />
-                          Módulos de utilidade ({detalhe.modulos.filter(m => m.ativo).length}/{detalhe.sistemas_ativos_maximos} ativos)
-                        </p>
-                        <div className="space-y-1">
-                          {detalhe.modulos.map((m) => (
-                            <div key={m.id} className="flex items-center justify-between rounded-lg bg-black/20 px-3 py-2 text-xs">
-                              <button
-                                type="button"
-                                onClick={() => podeUtilizarDetalhe && alternarModulo(m.id, !m.ativo)}
-                                disabled={!podeUtilizarDetalhe}
-                                className="flex min-w-0 flex-1 items-center gap-2 text-left disabled:cursor-default"
-                              >
-                                {m.ativo
-                                  ? <CheckCircle2 size={12} className="flex-shrink-0 text-cyan-400" />
-                                  : <Circle size={12} className="flex-shrink-0 text-gray-600" />
-                                }
-                                <span className={`truncate ${m.ativo ? 'text-gray-200' : 'text-gray-500'}`}>{m.nome}</span>
-                              </button>
-                              <div className="flex flex-shrink-0 items-center gap-2">
-                                <span className="text-[10px] text-gray-600">{m.espacos_ocupados} esp.</span>
-                                {podeGerenciarDetalhe && (
-                                  <button type="button" onClick={() => removerModulo(m.id)} className="text-red-500 hover:text-red-300">
-                                    <Trash2 size={11} />
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                          ))}
-                          {detalhe.modulos.length === 0 && <p className="text-xs text-gray-600">Nenhum módulo instalado.</p>}
-                        </div>
-                        {podeGerenciarDetalhe && (
-                          <div className="mt-2 space-y-2">
-                            <div className="flex flex-wrap gap-1.5">
-                              {MODULOS_UTILIDADE_SUGERIDOS.map((sugestao) => (
-                                <button
-                                  key={sugestao.nome}
-                                  type="button"
-                                  onClick={() => { setNovoModuloNome(sugestao.nome); setNovoModuloEspacos(String(sugestao.espacos)); }}
-                                  className="rounded-full border border-cyan-500/20 bg-cyan-500/5 px-2.5 py-1 text-[10px] font-bold text-cyan-300/80 hover:bg-cyan-500/15"
-                                >
-                                  + {sugestao.nome}
-                                </button>
-                              ))}
-                            </div>
+                      <SlotsVeiculo
+                        espacosMaximos={detalhe.espacos_modulos_maximos}
+                        sistemasAtivosMaximos={detalhe.sistemas_ativos_maximos}
+                        modulos={detalhe.modulos.map((m) => ({ id: m.id, nome: m.nome, espacos: m.espacos_ocupados, ativo: m.ativo }))}
+                        podeUtilizar={podeUtilizarDetalhe}
+                        podeGerenciar={podeGerenciarDetalhe}
+                        onAlternar={alternarModulo}
+                        onRemover={removerModulo}
+                        onInstalar={(sugestao) => adicionarModulo(sugestao)}
+                        formulario={(
+                          <div className="space-y-1.5">
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Módulo personalizado</p>
                             <div className="flex gap-2">
                               <input
                                 value={novoModuloNome}
@@ -727,7 +686,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                               />
                               <button
                                 type="button"
-                                onClick={adicionarModulo}
+                                onClick={() => adicionarModulo()}
                                 disabled={!novoModuloNome.trim()}
                                 className="flex items-center gap-1 rounded-md border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-bold text-cyan-300 disabled:opacity-40"
                               >
@@ -736,7 +695,7 @@ export const FrotaCampanha = ({ character, veiculosLegados = [], onMigrarVeiculo
                             </div>
                           </div>
                         )}
-                      </div>
+                      />
 
                       {/* Inventário / Carga */}
                       <div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowDown, ArrowUp, BookOpen, Search, Star, Pencil, Trash2, Copy, FileText, LayoutList, X } from 'lucide-react';
+import { ArrowDown, ArrowUp, BookOpen, Search, Star, Pencil, Trash2, Copy, FileText, LayoutList, X, ScrollText, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput } from '../components/SharedFichaComponents';
@@ -10,6 +10,8 @@ import {
   obterEtiquetasNota,
   separarEtiquetasDigitadas,
 } from '../../../services/notasFichaService';
+import { PainelDiario } from '../components/notas/PainelDiario';
+import { PainelVinculos } from '../components/notas/PainelVinculos';
 
 interface INotaTopico {
   id: string;
@@ -68,7 +70,7 @@ function getCategoryColor(category: string): string {
   return HASH_COLORS[Math.abs(hash) % HASH_COLORS.length];
 }
 
-export const AbaNotas = ({ character, onUpdate }: { character: any, onUpdate: any }) => {
+const PainelNotas = ({ character, onUpdate }: { character: any, onUpdate: any }) => {
   const [busca, setBusca] = useState('');
   const [filtroEtiqueta, setFiltroEtiqueta] = useState('');
   const [apenasFavoritas, setApenasFavoritas] = useState(false);
@@ -232,7 +234,7 @@ export const AbaNotas = ({ character, onUpdate }: { character: any, onUpdate: an
       {/* HEADER */}
       <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4" data-tour="notas-resumo">
         <div>
-          <h2 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Cinzel, serif' }}>Diário e Notas</h2>
+          <h2 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Cinzel, serif' }}>Notas</h2>
           <p className="text-gray-400 text-sm">Organize pistas, pessoas, lugares e acontecimentos.</p>
         </div>
         <div className="flex gap-4">
@@ -392,7 +394,7 @@ export const AbaNotas = ({ character, onUpdate }: { character: any, onUpdate: an
       </div>
 
       {/* MODAL DE LEITURA */}
-      <FichaModal isOpen={!!leituraAberta} onClose={() => setLeituraAberta(null)} title={leituraAberta?.titulo || ''} eyebrow="Diário do personagem" size="lg">
+      <FichaModal isOpen={!!leituraAberta} onClose={() => setLeituraAberta(null)} title={leituraAberta?.titulo || ''} eyebrow="Nota" size="lg">
         {leituraAberta && (
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-3 rounded-xl border border-white/5 bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -598,6 +600,42 @@ export const AbaNotas = ({ character, onUpdate }: { character: any, onUpdate: an
           </div>
         </div>
       </FichaModal>
+    </div>
+  );
+};
+
+type SecaoNotas = 'notas' | 'diario' | 'vinculos';
+
+const SECOES_NOTAS: { id: SecaoNotas; rotulo: string; icone: typeof BookOpen }[] = [
+  { id: 'notas', rotulo: 'Notas', icone: FileText },
+  { id: 'diario', rotulo: 'Diário', icone: ScrollText },
+  { id: 'vinculos', rotulo: 'Vínculos', icone: Heart },
+];
+
+export const AbaNotas = ({ character, onUpdate }: { character: any, onUpdate: any }) => {
+  const [secao, setSecao] = useState<SecaoNotas>('notas');
+
+  return (
+    <div className="space-y-6">
+      <div role="tablist" aria-label="Seções de notas" className="flex gap-2 overflow-x-auto" data-tour="notas-secoes">
+        {SECOES_NOTAS.map(({ id, rotulo, icone: Icone }) => (
+          <button
+            key={id}
+            type="button"
+            role="tab"
+            aria-selected={secao === id}
+            onClick={() => setSecao(id)}
+            className={`flex min-h-11 shrink-0 items-center gap-2 rounded-xl border px-5 text-sm font-bold transition-colors ${secao === id
+              ? 'border-[#c7a44c]/50 bg-[#c7a44c]/15 text-[#e3c46f]'
+              : 'border-white/5 bg-[#0f0e15] text-gray-400 hover:text-white'}`}
+          >
+            <Icone size={16} /> {rotulo}
+          </button>
+        ))}
+      </div>
+      {secao === 'notas' ? <PainelNotas character={character} onUpdate={onUpdate} /> : null}
+      {secao === 'diario' ? <PainelDiario character={character} onUpdate={onUpdate} /> : null}
+      {secao === 'vinculos' ? <PainelVinculos character={character} onUpdate={onUpdate} /> : null}
     </div>
   );
 };

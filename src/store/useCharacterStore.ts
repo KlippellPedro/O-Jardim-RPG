@@ -275,7 +275,7 @@ function sheetValues(record: PersonagemApiRecord): Pick<SheetSnapshot, 'nome' | 
   };
 }
 
-function recalcularDerivadosSalvos(fichaOriginal: Record<string, any>): Record<string, any> {
+export function recalcularDerivadosSalvos(fichaOriginal: Record<string, any>): Record<string, any> {
   // Fichas afetadas pela antiga liberação precoce são saneadas ao carregar e
   // antes de cada salvamento. Assim, o Estilo escolhido no nível 8 some do
   // documento e não passa a bloquear todas as edições após a correção no servidor.

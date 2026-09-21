@@ -1,11 +1,14 @@
 export type TierCartaz = 'comum' | 'prata' | 'ouro' | 'lenda';
 
-/** Valor da recompensa (flavor puro): cresce com o nível, na escala econômica
- * do Jardim (salário-base de 300 Lunaris), e ganha 25% a cada ponto de Fama. */
+/** Quanto a cabeça do personagem vale. Nível 1 vale um salário mínimo do Jardim
+ * (300 Lunaris) e cada nível soma 22% ao anterior, então o nível 20 fica em
+ * ~13 mil, abaixo do que uma casa nobre gasta num mês. Cada ponto de Fama soma
+ * 15%. Arredondado de 50 em 50 pra parecer valor de cartaz, não de calculadora. */
 export const calcularRecompensa = (nivel: number, fama = 0): number => {
   const nivelSeguro = Math.max(1, Math.trunc(Number(nivel) || 1));
   const famaSegura = Math.max(0, Math.min(5, Math.trunc(Number(fama) || 0)));
-  return Math.round((nivelSeguro + 1) * 3000 * (1 + famaSegura * 0.25));
+  const bruto = 300 * 1.22 ** (nivelSeguro - 1) * (1 + famaSegura * 0.15);
+  return Math.round(bruto / 50) * 50;
 };
 
 /** Moldura do cartaz: comum até o nível 9, prata de 10 a 14, ouro de 15 a 19 e

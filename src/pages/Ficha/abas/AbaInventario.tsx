@@ -1,6 +1,6 @@
 import { useDeferredValue, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Backpack, Coins, Shield, Sword, Box, Minus, Plus, Car, Trash2, Pencil, Wrench, Star, GripVertical, SlidersHorizontal, ListFilter, Cpu, Apple, Eye, EyeOff, CircleGauge, BookOpen, Sparkles, ChevronDown } from 'lucide-react';
+import { Search, Backpack, Coins, Shield, Sword, Box, Minus, Plus, Car, Trash2, Pencil, Wrench, Star, GripVertical, SlidersHorizontal, ListFilter, Cpu, Apple, Eye, EyeOff, CircleGauge, BookOpen, Sparkles, ChevronDown, ShoppingBag, Package } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { useCharacterStore } from '../../../store/useCharacterStore';
 import { useAuthStore } from '../../../store/useAuthStore';
@@ -39,10 +39,15 @@ import {
   type RaridadeRecursoMaterial,
   type RecursoMaterialId,
 } from '../../../../data/regras/recursos-materiais';
+import { materialPorId } from '../../../services/materialsCatalogService';
+import { converterMaterialEmLote, destinosDoMaterial, raridadeDoLote } from '../../../services/loteDeMaterialService';
+import { TransformarEmLoteModal } from '../components/TransformarEmLoteModal';
 import { obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
 import { ehReliquiaCriacao, lerRessonanciaReliquia } from '../../../services/reliquiasCriacaoService';
 import { SaldoAnimado } from '../components/SaldoAnimado';
 import { BonecoEquipamento } from '../components/BonecoEquipamento';
+import { GaragemPessoal } from '../components/bens/GaragemPessoal';
+import { VeiculoModal } from '../components/bens/VeiculoModal';
 import { sfx } from '../../../utils/audioSynth';
 import '../components/equiparItem.css';
 
@@ -85,6 +90,14 @@ interface IInventoryItem {
   tripulacaoMinima?: number;
   sistemasAtivosMaximos?: number;
   espacosBase?: number;
+  /** Veículo: quantas vagas de peça ele tem. */
+  espacosModulosMaximos?: number;
+  /** Peça: id do veículo do inventário em que está instalada ('' = guardada). */
+  instaladoEm?: string;
+  /** Peça: quantas vagas do veículo ela ocupa. */
+  vagasModulo?: number;
+  /** Peça instalada: ligada ou desligada (conta nos sistemas ativos do veículo). */
+  ligado?: boolean;
   
   ordem: number;
   /** Metadados recebidos do backend que esta UI ainda não conhece. */
@@ -194,6 +207,10 @@ const paraBackend = (item: IInventoryItem) => ({
     tripulacaoMinima: item.tripulacaoMinima,
     sistemasAtivosMaximos: item.sistemasAtivosMaximos,
     espacosBase: item.espacosBase,
+    espacosModulosMaximos: item.espacosModulosMaximos,
+    instaladoEm: item.instaladoEm || '',
+    vagasModulo: item.vagasModulo,
+    ligado: item.ligado,
     
     ordem: item.ordem
   },
@@ -235,6 +252,10 @@ const paraUI = (item: any, index: number): IInventoryItem => ({
   tripulacaoMinima: Number(item.dados?.tripulacaoMinima) || 1,
   sistemasAtivosMaximos: Number(item.dados?.sistemasAtivosMaximos) || 1,
   espacosBase: Number(item.dados?.espacosBase) || 1,
+  espacosModulosMaximos: Number(item.dados?.espacosModulosMaximos ?? 4),
+  instaladoEm: typeof item.dados?.instaladoEm === 'string' ? item.dados.instaladoEm : '',
+  vagasModulo: Math.max(1, Number(item.dados?.vagasModulo) || 1),
+  ligado: item.dados?.ligado !== false,
   
   ordem: item.dados?.ordem ?? index,
   _dadosOriginais: item.dados && typeof item.dados === 'object' && !Array.isArray(item.dados)
@@ -267,6 +288,10 @@ const ITEM_VAZIO: Omit<IInventoryItem, 'id'> = {
   tripulacaoMinima: 1,
   sistemasAtivosMaximos: 1,
   espacosBase: 1,
+  espacosModulosMaximos: 4,
+  instaladoEm: '',
+  vagasModulo: 1,
+  ligado: true,
   
   ordem: 0,
   _dadosOriginais: {},
@@ -503,6 +528,18 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
       combustivelAtual: Number(form.combustivelAtual) || 0,
       combustivelMaximo: Number(form.combustivelMaximo) || 0,
       efeito: form.efeito,
+      resistencia: Number(form.resistencia) || 0,
+      deslocamentoMetros: Number(form.deslocamentoMetros) || 0,
+      manobrabilidade: Number(form.manobrabilidade) || 0,
+      coberturaOcupantes: form.coberturaOcupantes || 'nenhuma',
+      capacidade: Number(form.capacidade) || 0,
+      tripulacaoMinima: Math.max(0, Number(form.tripulacaoMinima) || 0),
+      sistemasAtivosMaximos: Math.max(0, Number(form.sistemasAtivosMaximos) || 0),
+      espacosBase: Math.max(0, Number(form.espacosBase) || 0),
+      espacosModulosMaximos: Math.max(0, Number(form.espacosModulosMaximos) || 0),
+      instaladoEm: form.instaladoEm || '',
+      vagasModulo: Math.max(1, Math.trunc(Number(form.vagasModulo) || 1)),
+      ligado: form.ligado !== false,
       ordem: form.ordem ?? 0,
       _dadosOriginais: { ...form._dadosOriginais },
     };
@@ -561,8 +598,28 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
       window.setTimeout(() => setEquipadoAgora((atual) => (atual?.id === id ? null : atual)), 1000);
     }
     mutarInventario((atual) => atual.map((item) => (
-      item.id === id ? { ...item, equipado: !item.equipado } : item
+      item.id === id ? { ...item, equipado: !item.equipado, ...(item.equipado ? { instaladoEm: '' } : {}) } : item
     )));
+  };
+
+  // Peça instalada em veículo: o vínculo é só um marcador na própria peça. Ela
+  // continua no inventário e nada é apagado ao instalar ou desinstalar.
+  const instalarPeca = (pecaId: string, veiculoId: string) => {
+    sfx.play('equipar');
+    mutarInventario((atual) => atual.map((item) => (
+      item.id === pecaId ? { ...item, instaladoEm: veiculoId, equipado: true, ligado: true } : item
+    )));
+  };
+
+  const desinstalarPeca = (pecaId: string) => {
+    sfx.play('close');
+    mutarInventario((atual) => atual.map((item) => (
+      item.id === pecaId ? { ...item, instaladoEm: '', equipado: false } : item
+    )));
+  };
+
+  const ligarPeca = (pecaId: string, ligado: boolean) => {
+    mutarInventario((atual) => atual.map((item) => (item.id === pecaId ? { ...item, ligado } : item)));
   };
 
   const toggleFavorito = (id: string) => {
@@ -682,6 +739,24 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
         [raridade]: Math.max(0, Math.min(999, Math.trunc(Number(valor) || 0))),
       },
     });
+  };
+  // Material nomeado (as "drops" da Loja) que pode virar lote: só ele ganha o botão.
+  const [transformandoId, setTransformandoId] = useState<string | null>(null);
+  const [avisoLote, setAvisoLote] = useState('');
+  const materialDoItem = (item: IInventoryItem) => (!modoVeiculos ? materialPorId(item.id) : undefined);
+  const itemParaLote = transformandoId ? inventario.find((item) => item.id === transformandoId) : undefined;
+  const materialParaLote = itemParaLote ? materialDoItem(itemParaLote) : undefined;
+  const confirmarLote = (destino: RecursoMaterialId, quantidade: number) => {
+    if (!itemParaLote || !materialParaLote || !onUpdate) return;
+    const raridade = raridadeDoLote(materialParaLote.raridade);
+    const conversao = converterMaterialEmLote(estoquesMateriais, itemParaLote.quantidade, destino, raridade, quantidade);
+    if (!conversao) return;
+    onUpdate(['ficha', 'recursosMateriais'], conversao.estoques);
+    mutarInventario((atual) => (conversao.sobra > 0
+      ? atual.map((item) => (item.id === itemParaLote.id ? { ...item, quantidade: conversao.sobra } : item))
+      : atual.filter((item) => item.id !== itemParaLote.id)));
+    setAvisoLote(`${quantidade} ${itemParaLote.nome} virou ${quantidade === 1 ? '1 lote' : `${quantidade} lotes`} de ${RECURSOS_MATERIAIS.find((recurso) => recurso.id === destino)?.titulo} ${ROTULO_RARIDADE_RECURSO[raridade]}.`);
+    setTransformandoId(null);
   };
   const alternarEstoquesMateriais = () => {
     setMostrarEstoquesMateriais((visivel) => {
@@ -826,6 +901,19 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
         </div>
       </section>}
 
+      {avisoLote ? <p role="status" className="flex items-center justify-between gap-3 rounded-xl border border-emerald-300/25 bg-emerald-300/10 px-4 py-3 text-sm text-emerald-100">{avisoLote}<button type="button" onClick={() => setAvisoLote('')} className="text-xs font-bold text-emerald-200/70 hover:text-white">ok</button></p> : null}
+      {itemParaLote && materialParaLote ? (
+        <TransformarEmLoteModal
+          nome={itemParaLote.nome}
+          quantidade={itemParaLote.quantidade}
+          raridade={raridadeDoLote(materialParaLote.raridade)}
+          destinos={destinosDoMaterial(materialParaLote.usos)}
+          estoqueAtual={(destino) => Math.max(0, Number(estoqueDoRecurso(destino)[raridadeDoLote(materialParaLote.raridade)]) || 0)}
+          onConfirmar={confirmarLote}
+          onFechar={() => setTransformandoId(null)}
+        />
+      ) : null}
+
       {!modoVeiculos && !mostrarEstoquesMateriais && (
         <button
           type="button"
@@ -842,6 +930,10 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
           </span>
         </button>
       )}
+
+      {modoVeiculos ? (
+        <GaragemPessoal itens={inventario} onInstalar={instalarPeca} onDesinstalar={desinstalarPeca} onLigar={ligarPeca} />
+      ) : null}
 
       {/* FERRAMENTAS */}
       <div className="flex flex-col gap-3 xl:flex-row" data-tour="inventario-filtros">
@@ -1079,6 +1171,11 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                                 <button onClick={() => abrirEdicao(item)} className="w-6 h-6 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 flex items-center justify-center transition-colors">
                                   <Pencil size={11} />
                                 </button>
+                                {materialDoItem(item) ? (
+                                  <button type="button" onClick={() => setTransformandoId(item.id)} aria-label={`Transformar ${item.nome} em lote`} title="Transformar em lote de material" className="w-6 h-6 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 hover:bg-emerald-500/20 flex items-center justify-center transition-colors">
+                                    <Package size={11} />
+                                  </button>
+                                ) : null}
                                 <button onClick={() => handleRemoveItem(item.id, item.nome)} className="w-6 h-6 rounded bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 flex items-center justify-center transition-colors">
                                   <Trash2 size={11} />
                                 </button>
@@ -1220,181 +1317,211 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
         <div className="bg-[#0f0e15] border border-white/5 rounded-2xl overflow-hidden py-12 text-center" data-tour="inventario-lista">
           {modoVeiculos ? <Car size={48} className="text-gray-700 mx-auto mb-4 opacity-50" /> : <Backpack size={48} className="text-gray-700 mx-auto mb-4 opacity-50" />}
           <p className="text-gray-500 font-bold uppercase tracking-widest">{modoVeiculos ? 'Nenhum veículo registrado' : 'Inventário Vazio'}</p>
+          {modoVeiculos && itensDaAba.length === 0 ? (
+            <>
+              <p className="mx-auto mt-2 max-w-md px-6 text-sm leading-relaxed text-gray-500">
+                Veículos levam você e o grupo mais longe e aceitam peças instaladas nas vagas. Compre um na Loja ou cadastre o seu.
+              </p>
+              <Link to="/loja?categoria=Bens" className="mt-4 inline-flex items-center gap-2 rounded-xl border border-amber-300/25 bg-amber-300/10 px-4 py-2 text-xs font-bold text-amber-100 transition-colors hover:bg-amber-300/20">
+                <ShoppingBag size={14} aria-hidden="true" /> Ver na Loja
+              </Link>
+            </>
+          ) : null}
         </div>
       )}
 
       {/* MODAL DE EDIÇÃO */}
-      <FichaModal
-        isOpen={modalAberto}
-        onClose={fecharModal}
-        title={editandoId
-          ? (formEhModuloVeicular ? 'Editar Peça ou Módulo' : modoVeiculos ? 'Editar Veículo' : 'Editar Item')
-          : (modoVeiculos ? 'Novo Veículo' : 'Novo Item')}
-        size="lg"
-      >
-        <div className="flex flex-col gap-4">
-          <LabeledInput label={formEhModuloVeicular ? 'Nome da Peça ou Módulo' : modoVeiculos ? 'Nome do Veículo' : 'Nome do Item'} value={form.nome} placeholder={formEhModuloVeicular ? 'Ex.: Núcleo Estável T2' : modoVeiculos ? 'Ex.: Rover Tatu' : 'Ex.: Espada Longa, Corda 10m'} onChange={(v: string) => setCampo('nome', v)} />
+      {modoVeiculos ? (
+        <VeiculoModal
+          aberto={modalAberto}
+          editando={Boolean(editandoId)}
+          ehPeca={formEhModuloVeicular}
+          form={form}
+          setCampo={(campo, valor) => setCampo(campo as keyof typeof ITEM_VAZIO, valor)}
+          raridades={RARIDADES_OPCOES}
+          somenteLeituraMecanica={mecanicaSomenteLeitura}
+          quantidadeSomenteLeitura={quantidadeSomenteLeitura}
+          regraRaridade={regraRaridadeForm}
+          onAbrirRaridade={() => setSubmodal('raridade')}
+          onAbrirModificacoes={() => setSubmodal('modificacoes')}
+          onFechar={fecharModal}
+          onSalvar={handleSalvar}
+        />
+      ) : (
+        <FichaModal
+          isOpen={modalAberto}
+          onClose={fecharModal}
+          title={editandoId
+            ? (formEhModuloVeicular ? 'Editar Peça ou Módulo' : modoVeiculos ? 'Editar Veículo' : 'Editar Item')
+            : (modoVeiculos ? 'Novo Veículo' : 'Novo Item')}
+          size="lg"
+        >
+          <div className="flex flex-col gap-4">
+            <LabeledInput label={formEhModuloVeicular ? 'Nome da Peça ou Módulo' : modoVeiculos ? 'Nome do Veículo' : 'Nome do Item'} value={form.nome} placeholder={formEhModuloVeicular ? 'Ex.: Núcleo Estável T2' : modoVeiculos ? 'Ex.: Rover Tatu' : 'Ex.: Espada Longa, Corda 10m'} onChange={(v: string) => setCampo('nome', v)} />
 
-          {mecanicaSomenteLeitura && (
-            <div className="rounded-xl border border-sky-500/25 bg-sky-500/10 px-4 py-3 text-xs leading-relaxed text-sky-200">
-              Este item veio da Loja. Você pode renomear, mover, favoritar, equipar e controlar condição, munição ou combustível atuais. Raridade, bônus, modificações e valores-base são definidos pela Loja ou pela equipe da campanha.
-            </div>
-          )}
+            {mecanicaSomenteLeitura && (
+              <div className="rounded-xl border border-sky-500/25 bg-sky-500/10 px-4 py-3 text-xs leading-relaxed text-sky-200">
+                Este item veio da Loja. Você pode renomear, mover, favoritar, equipar e controlar condição, munição ou combustível atuais. Raridade, bônus, modificações e valores-base são definidos pela Loja ou pela equipe da campanha.
+              </div>
+            )}
 
-          <div className={`grid grid-cols-1 gap-3 ${modoVeiculos ? '' : 'sm:grid-cols-2'}`}>
-            <div className="flex flex-col gap-1">
-              <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Raridade</label>
-              <Select
-                value={form.raridade}
-                onChange={(v) => setCampo('raridade', v)}
-                disabled={mecanicaSomenteLeitura}
-                className={`w-full uppercase tracking-widest font-bold ${RARIDADES_CONFIG[form.raridade as keyof typeof RARIDADES_CONFIG]?.cor || 'text-gray-400'}`}
-                options={RARIDADES_OPCOES}
-              />
-            </div>
-            {!modoVeiculos && <div className="flex flex-col gap-1">
-              <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Categoria</label>
-              <Select
-                value={form.categoria}
-                onChange={(v) => setCampo('categoria', v)}
-                disabled={mecanicaSomenteLeitura}
-                className="w-full"
-                options={[
-                  { value: 'arma', label: 'Arma' },
-                  { value: 'armadura', label: 'Armadura' },
-                  { value: 'consumivel', label: 'Consumível' },
-                  { value: 'veiculo', label: 'Veículo' },
-                  { value: 'implante', label: 'Implante Cibernético' },
-                  { value: 'geral', label: 'Geral' },
-                ]}
-              />
-            </div>}
-          </div>
-
-          <div className={`grid grid-cols-1 gap-3 ${modoVeiculos ? 'sm:grid-cols-2' : 'sm:grid-cols-3'}`}>
-            <LabeledInput label={modoVeiculos ? 'Garagem / Localização' : 'Local de Armazenamento'} value={form.localArmazenamento} placeholder={modoVeiculos ? 'Ex.: Hangar da base' : 'Ex.: Mochila, Mão Direita'} onChange={(v: string) => setCampo('localArmazenamento', v)} />
-            <LabeledInput
-              label="Quantidade"
-              type="number"
-              value={String(form.quantidade ?? '')}
-              readOnly={quantidadeSomenteLeitura}
-              onChange={(v: string) => setCampo('quantidade', v)}
-            />
-            {!modoVeiculos && <LabeledInput label="Peso (kg)" type="number" value={String(form.espacos ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('espacos', v)} />}
-          </div>
-
-          {!formEhModuloVeicular && <div className="mt-2 grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2">
-            <LabeledInput label={modoVeiculos ? 'Vida Máxima' : 'Durabilidade Máxima (0 = infinito)'} type="number" value={String(form.durabilidadeMaxima ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('durabilidadeMaxima', v)} />
-            <LabeledInput label={modoVeiculos ? 'Vida Atual' : 'Durabilidade Atual'} type="number" value={String(form.durabilidadeAtual ?? '')} onChange={(v: string) => setCampo('durabilidadeAtual', v)} />
-          </div>}
-
-          {modoVeiculos && !formEhModuloVeicular && (
-            <div className="grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2 lg:grid-cols-3">
-              <LabeledInput label="Combustível Máximo" type="number" value={String(form.combustivelMaximo ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('combustivelMaximo', v)} />
-              <LabeledInput label="Combustível Atual" type="number" value={String(form.combustivelAtual ?? '')} onChange={(v: string) => setCampo('combustivelAtual', v)} />
-              <LabeledInput label="Deslocamento (m)" type="number" value={String(form.deslocamentoMetros ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('deslocamentoMetros', v)} />
-              <LabeledInput label="Defesa" type="number" value={String(form.defesa ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('defesa', v)} />
-              <LabeledInput label="Resistência (RD)" type="number" value={String(form.resistencia ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('resistencia', v)} />
-              <LabeledInput label="Manobrabilidade" type="number" value={String(form.manobrabilidade ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('manobrabilidade', v)} />
-              <LabeledInput label="Capacidade" type="number" value={String(form.capacidade ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('capacidade', v)} />
-              <LabeledInput label="Tripulação Mínima" type="number" value={String(form.tripulacaoMinima ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('tripulacaoMinima', v)} />
-              <LabeledInput label="Sistemas Ativos" type="number" value={String(form.sistemasAtivosMaximos ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('sistemasAtivosMaximos', v)} />
-              <LabeledInput label="Espaços de Base" type="number" value={String(form.espacosBase ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('espacosBase', v)} />
+            <div className={`grid grid-cols-1 gap-3 ${modoVeiculos ? '' : 'sm:grid-cols-2'}`}>
               <div className="flex flex-col gap-1">
-                <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Cobertura</label>
+                <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Raridade</label>
                 <Select
-                  value={form.coberturaOcupantes || 'nenhuma'}
-                  onChange={(v) => setCampo('coberturaOcupantes', v)}
+                  value={form.raridade}
+                  onChange={(v) => setCampo('raridade', v)}
+                  disabled={mecanicaSomenteLeitura}
+                  className={`w-full uppercase tracking-widest font-bold ${RARIDADES_CONFIG[form.raridade as keyof typeof RARIDADES_CONFIG]?.cor || 'text-gray-400'}`}
+                  options={RARIDADES_OPCOES}
+                />
+              </div>
+              {!modoVeiculos && <div className="flex flex-col gap-1">
+                <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Categoria</label>
+                <Select
+                  value={form.categoria}
+                  onChange={(v) => setCampo('categoria', v)}
                   disabled={mecanicaSomenteLeitura}
                   className="w-full"
                   options={[
-                    { value: 'nenhuma', label: 'Nenhuma' },
-                    { value: 'parcial', label: 'Parcial' },
-                    { value: 'total', label: 'Total' },
+                    { value: 'arma', label: 'Arma' },
+                    { value: 'armadura', label: 'Armadura' },
+                    { value: 'consumivel', label: 'Consumível' },
+                    { value: 'veiculo', label: 'Veículo' },
+                    { value: 'implante', label: 'Implante Cibernético' },
+                    { value: 'geral', label: 'Geral' },
                   ]}
                 />
+              </div>}
+            </div>
+
+            <div className={`grid grid-cols-1 gap-3 ${modoVeiculos ? 'sm:grid-cols-2' : 'sm:grid-cols-3'}`}>
+              <LabeledInput label={modoVeiculos ? 'Garagem / Localização' : 'Local de Armazenamento'} value={form.localArmazenamento} placeholder={modoVeiculos ? 'Ex.: Hangar da base' : 'Ex.: Mochila, Mão Direita'} onChange={(v: string) => setCampo('localArmazenamento', v)} />
+              <LabeledInput
+                label="Quantidade"
+                type="number"
+                value={String(form.quantidade ?? '')}
+                readOnly={quantidadeSomenteLeitura}
+                onChange={(v: string) => setCampo('quantidade', v)}
+              />
+              {!modoVeiculos && <LabeledInput label="Peso (kg)" type="number" value={String(form.espacos ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('espacos', v)} />}
+              {formEhModuloVeicular && <LabeledInput label="Vagas que ocupa no veículo" type="number" value={String(form.vagasModulo ?? 1)} onChange={(v: string) => setCampo('vagasModulo', v)} />}
+            </div>
+
+            {!formEhModuloVeicular && <div className="mt-2 grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2">
+              <LabeledInput label={modoVeiculos ? 'Vida Máxima' : 'Durabilidade Máxima (0 = infinito)'} type="number" value={String(form.durabilidadeMaxima ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('durabilidadeMaxima', v)} />
+              <LabeledInput label={modoVeiculos ? 'Vida Atual' : 'Durabilidade Atual'} type="number" value={String(form.durabilidadeAtual ?? '')} onChange={(v: string) => setCampo('durabilidadeAtual', v)} />
+            </div>}
+
+            {modoVeiculos && !formEhModuloVeicular && (
+              <div className="grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2 lg:grid-cols-3">
+                <LabeledInput label="Combustível Máximo" type="number" value={String(form.combustivelMaximo ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('combustivelMaximo', v)} />
+                <LabeledInput label="Combustível Atual" type="number" value={String(form.combustivelAtual ?? '')} onChange={(v: string) => setCampo('combustivelAtual', v)} />
+                <LabeledInput label="Deslocamento (m)" type="number" value={String(form.deslocamentoMetros ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('deslocamentoMetros', v)} />
+                <LabeledInput label="Defesa" type="number" value={String(form.defesa ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('defesa', v)} />
+                <LabeledInput label="Resistência (RD)" type="number" value={String(form.resistencia ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('resistencia', v)} />
+                <LabeledInput label="Manobrabilidade" type="number" value={String(form.manobrabilidade ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('manobrabilidade', v)} />
+                <LabeledInput label="Capacidade" type="number" value={String(form.capacidade ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('capacidade', v)} />
+                <LabeledInput label="Tripulação Mínima" type="number" value={String(form.tripulacaoMinima ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('tripulacaoMinima', v)} />
+                <LabeledInput label="Sistemas Ativos" type="number" value={String(form.sistemasAtivosMaximos ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('sistemasAtivosMaximos', v)} />
+                <LabeledInput label="Espaços de Base" type="number" value={String(form.espacosBase ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('espacosBase', v)} />
+                <LabeledInput label="Vagas de peça" type="number" value={String(form.espacosModulosMaximos ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('espacosModulosMaximos', v)} />
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Cobertura</label>
+                  <Select
+                    value={form.coberturaOcupantes || 'nenhuma'}
+                    onChange={(v) => setCampo('coberturaOcupantes', v)}
+                    disabled={mecanicaSomenteLeitura}
+                    className="w-full"
+                    options={[
+                      { value: 'nenhuma', label: 'Nenhuma' },
+                      { value: 'parcial', label: 'Parcial' },
+                      { value: 'total', label: 'Total' },
+                    ]}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* CAMPOS ESPECÍFICOS */}
-          {form.categoria === 'arma' && (
-            <div className="grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2 lg:grid-cols-3">
-              <LabeledInput label="Dano" value={form.dano || ''} placeholder="Ex.: 1d8+2" readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('dano', v)} />
-              <LabeledInput label="Munição Atual" type="number" value={String(form.municaoAtual ?? '')} onChange={(v: string) => setCampo('municaoAtual', v)} />
-              <LabeledInput label="Munição Máx." type="number" value={String(form.municaoMaxima ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('municaoMaxima', v)} />
-              <LabeledInput label="Margem de ameaça" type="number" value={String(form.margemAmeaca ?? 20)} placeholder="Ex.: 18" readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('margemAmeaca', v)} />
-              <LabeledInput label="Multiplicador crítico" type="number" value={String(form.multiplicadorCritico ?? 2)} placeholder="Ex.: 5" readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('multiplicadorCritico', v)} />
-              <p className="self-end pb-2 text-xs text-gray-600">Aceita valores especiais definidos pelo Mestre.</p>
-            </div>
-          )}
+            {/* CAMPOS ESPECÍFICOS */}
+            {form.categoria === 'arma' && (
+              <div className="grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2 lg:grid-cols-3">
+                <LabeledInput label="Dano" value={form.dano || ''} placeholder="Ex.: 1d8+2" readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('dano', v)} />
+                <LabeledInput label="Munição Atual" type="number" value={String(form.municaoAtual ?? '')} onChange={(v: string) => setCampo('municaoAtual', v)} />
+                <LabeledInput label="Munição Máx." type="number" value={String(form.municaoMaxima ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('municaoMaxima', v)} />
+                <LabeledInput label="Margem de ameaça" type="number" value={String(form.margemAmeaca ?? 20)} placeholder="Ex.: 18" readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('margemAmeaca', v)} />
+                <LabeledInput label="Multiplicador crítico" type="number" value={String(form.multiplicadorCritico ?? 2)} placeholder="Ex.: 5" readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('multiplicadorCritico', v)} />
+                <p className="self-end pb-2 text-xs text-gray-600">Aceita valores especiais definidos pelo Mestre.</p>
+              </div>
+            )}
 
-          {form.categoria === 'armadura' && (
-            <div className="border-t border-white/5 pt-4 grid grid-cols-2 gap-3">
-              <LabeledInput label="Defesa" value={String(form.defesa ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('defesa', v)} />
-              <LabeledInput label="Penalidade" value={String(form.penalidade ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('penalidade', v)} />
-            </div>
-          )}
+            {form.categoria === 'armadura' && (
+              <div className="border-t border-white/5 pt-4 grid grid-cols-2 gap-3">
+                <LabeledInput label="Defesa" value={String(form.defesa ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('defesa', v)} />
+                <LabeledInput label="Penalidade" value={String(form.penalidade ?? '')} readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('penalidade', v)} />
+              </div>
+            )}
 
-          {form.categoria === 'consumivel' && (
-            <div className="border-t border-white/5 pt-4">
-              <LabeledInput label="Efeito" value={form.efeito || ''} placeholder="Ex.: Cura 2d4+2 PV" readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('efeito', v)} />
-            </div>
-          )}
+            {form.categoria === 'consumivel' && (
+              <div className="border-t border-white/5 pt-4">
+                <LabeledInput label="Efeito" value={form.efeito || ''} placeholder="Ex.: Cura 2d4+2 PV" readOnly={mecanicaSomenteLeitura} onChange={(v: string) => setCampo('efeito', v)} />
+              </div>
+            )}
 
-          <div className="grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2">
-            <button type="button" onClick={() => setSubmodal('raridade')} className="flex items-center justify-between rounded-xl border border-white/5 bg-black/20 p-4 text-left transition-colors hover:border-[#c7a44c]/30">
-              <span>
-                <strong className="block text-sm text-white">Raridade e bônus</strong>
-                <span className="mt-1 block text-xs text-gray-600">{form.efeitosRaridade.length} bônus próprios</span>
-              </span>
-              <Star size={18} className="text-[#c7a44c]" />
-            </button>
-            <button type="button" onClick={() => setSubmodal('modificacoes')} className="flex items-center justify-between rounded-xl border border-white/5 bg-black/20 p-4 text-left transition-colors hover:border-[#c7a44c]/30">
-              <span>
-                <strong className="block text-sm text-white">Modificações</strong>
-                <span className="mt-1 block text-xs text-gray-600">
-                  {form.modificacoes.length} mod(s), {form.modificacoes.reduce((soma, modificacao) => soma + modificacao.efeitos.length, 0)} bônus
+            <div className="grid grid-cols-1 gap-3 border-t border-white/5 pt-4 sm:grid-cols-2">
+              <button type="button" onClick={() => setSubmodal('raridade')} className="flex items-center justify-between rounded-xl border border-white/5 bg-black/20 p-4 text-left transition-colors hover:border-[#c7a44c]/30">
+                <span>
+                  <strong className="block text-sm text-white">Raridade e bônus</strong>
+                  <span className="mt-1 block text-xs text-gray-600">{form.efeitosRaridade.length} bônus próprios</span>
                 </span>
-              </span>
-              <SlidersHorizontal size={18} className="text-[#c7a44c]" />
-            </button>
-          </div>
+                <Star size={18} className="text-[#c7a44c]" />
+              </button>
+              <button type="button" onClick={() => setSubmodal('modificacoes')} className="flex items-center justify-between rounded-xl border border-white/5 bg-black/20 p-4 text-left transition-colors hover:border-[#c7a44c]/30">
+                <span>
+                  <strong className="block text-sm text-white">Modificações</strong>
+                  <span className="mt-1 block text-xs text-gray-600">
+                    {form.modificacoes.length} mod(s), {form.modificacoes.reduce((soma, modificacao) => soma + modificacao.efeitos.length, 0)} bônus
+                  </span>
+                </span>
+                <SlidersHorizontal size={18} className="text-[#c7a44c]" />
+              </button>
+            </div>
 
-          <div className="flex flex-col gap-3 rounded-xl border border-[#c7a44c]/15 bg-[#c7a44c]/[0.04] p-4 text-xs leading-5 text-gray-400 sm:flex-row sm:items-center sm:justify-between">
-            <p><strong className="text-[#e0c982]">{regraRaridadeForm.titulo}</strong> permite {regraRaridadeForm.modificacoesMaximas} modificação(ões) e {regraRaridadeForm.efeitosRaridadeMaximos} bônus próprio(s) de raridade. O painel impede novas inclusões quando a capacidade termina.</p>
-            <div className="flex shrink-0 flex-wrap gap-3"><Link to="/regras?topico=raridades-modificacoes" className="inline-flex items-center gap-1.5 font-bold text-[#d8bd75] hover:text-white"><BookOpen size={13} /> Raridades</Link><Link to="/regras?topico=modificacoes-equipamentos" className="inline-flex items-center gap-1.5 font-bold text-[#d8bd75] hover:text-white"><Wrench size={13} /> Modificações</Link></div>
-          </div>
+            <div className="flex flex-col gap-3 rounded-xl border border-[#c7a44c]/15 bg-[#c7a44c]/[0.04] p-4 text-xs leading-5 text-gray-400 sm:flex-row sm:items-center sm:justify-between">
+              <p><strong className="text-[#e0c982]">{regraRaridadeForm.titulo}</strong> permite {regraRaridadeForm.modificacoesMaximas} modificação(ões) e {regraRaridadeForm.efeitosRaridadeMaximos} bônus próprio(s) de raridade. O painel impede novas inclusões quando a capacidade termina.</p>
+              <div className="flex shrink-0 flex-wrap gap-3"><Link to="/regras?topico=raridades-modificacoes" className="inline-flex items-center gap-1.5 font-bold text-[#d8bd75] hover:text-white"><BookOpen size={13} /> Raridades</Link><Link to="/regras?topico=modificacoes-equipamentos" className="inline-flex items-center gap-1.5 font-bold text-[#d8bd75] hover:text-white"><Wrench size={13} /> Modificações</Link></div>
+            </div>
 
-          <div className="flex flex-col gap-1 border-t border-white/5 pt-4">
-            <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Descrição / Lore</label>
-            <textarea
-              value={form.descricao || ''}
-              onChange={e => setCampo('descricao', e.target.value)}
-              readOnly={mecanicaSomenteLeitura}
-              placeholder="História do item, regras específicas..."
-              rows={3}
-              className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors placeholder:text-gray-700 resize-none"
-            />
-          </div>
+            <div className="flex flex-col gap-1 border-t border-white/5 pt-4">
+              <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Descrição / Lore</label>
+              <textarea
+                value={form.descricao || ''}
+                onChange={e => setCampo('descricao', e.target.value)}
+                readOnly={mecanicaSomenteLeitura}
+                placeholder="História do item, regras específicas..."
+                rows={3}
+                className="bg-[#121118] border border-white/5 rounded-md px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#c7a44c]/50 transition-colors placeholder:text-gray-700 resize-none"
+              />
+            </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-white/5 mt-2">
-            <button
-              onClick={fecharModal}
-              className="px-5 py-2.5 rounded-lg border border-white/10 text-gray-400 hover:text-white hover:border-white/30 text-sm font-bold transition-colors"
-            >
-              Cancelar
-            </button>
-            <button
-              onClick={handleSalvar}
-              disabled={!form.nome?.trim()}
-              className="px-5 py-2.5 rounded-lg bg-[#c7a44c]/10 border border-[#c7a44c]/30 text-[#c7a44c] hover:bg-[#c7a44c]/20 text-sm font-bold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              {editandoId ? 'Salvar Alterações' : (modoVeiculos ? 'Adicionar Veículo' : 'Adicionar Item')}
-            </button>
+            <div className="flex justify-end gap-3 pt-4 border-t border-white/5 mt-2">
+              <button
+                onClick={fecharModal}
+                className="px-5 py-2.5 rounded-lg border border-white/10 text-gray-400 hover:text-white hover:border-white/30 text-sm font-bold transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleSalvar}
+                disabled={!form.nome?.trim()}
+                className="px-5 py-2.5 rounded-lg bg-[#c7a44c]/10 border border-[#c7a44c]/30 text-[#c7a44c] hover:bg-[#c7a44c]/20 text-sm font-bold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {editandoId ? 'Salvar Alterações' : (modoVeiculos ? 'Adicionar Veículo' : 'Adicionar Item')}
+              </button>
+            </div>
           </div>
-        </div>
-      </FichaModal>
+        </FichaModal>
+      )}
 
       {submodal !== null && (
         <EfeitosItemModal

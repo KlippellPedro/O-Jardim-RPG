@@ -16,6 +16,7 @@ from core.character_summary import (
     validar_regras_ficha,
 )
 from core.conquistas import avaliar as avaliar_conquistas
+from core.diario import montar as montar_diario
 from core.database import Database
 from core.economy_commands import MAX_ECONOMY_AMOUNT
 from core.equipment_rules import equipped_special_item_count, special_item_use_limit
@@ -886,6 +887,23 @@ def listar_conquistas(
         row, somente_leitura = _readable_character(connection, character_id, user.id)
         eh_dono = not somente_leitura and row["dono_usuario_id"] == user.id
         return avaliar_conquistas(connection, character_id, gravar=eh_dono)
+
+
+@router.get("/{character_id}/diario")
+def obter_diario(
+    character_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """Linha do tempo automática do personagem (sessões, críticos, primeiros
+    usos, selos, grandes movimentos de Lunaris). Só leitura, calculada na hora.
+    Quem consulta como vínculo somente leitura (aliado complexo de outra ficha)
+    não vê o diário: ele é privado do dono, do Mestre e do assistente."""
+    with database.connection() as connection:
+        _, somente_leitura = _readable_character(connection, character_id, user.id)
+        if somente_leitura:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="personagem nao encontrado")
+        return montar_diario(connection, character_id)
 
 
 @router.get("/{character_id}")

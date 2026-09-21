@@ -73,15 +73,24 @@ export function FichaGuidedTour({ passos, onClose, onFinish, accent }: FichaGuid
   }, [passo]);
 
   useEffect(() => {
-    const alvo = localizarAlvo(passo);
     const reduzirMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    alvo?.scrollIntoView({ behavior: reduzirMovimento ? 'auto' : 'smooth', block: 'center', inline: 'nearest' });
-    setSpotlight(alvo ? medirAlvo(alvo) : null);
+    // Etapas cujo alvo mora numa aba interna clicam nela antes; o alvo só é medido
+    // no quadro seguinte, quando a aba já trocou.
+    const abrirAba = passo.antes ? document.querySelector<HTMLElement>(passo.antes) : null;
+    abrirAba?.click();
+    const posicionar = () => {
+      const alvo = localizarAlvo(passo);
+      alvo?.scrollIntoView({ behavior: reduzirMovimento ? 'auto' : 'smooth', block: 'center', inline: 'nearest' });
+      setSpotlight(alvo ? medirAlvo(alvo) : null);
+    };
+    const quadro = abrirAba ? window.requestAnimationFrame(posicionar) : null;
+    if (!abrirAba) posicionar();
 
-    const atualizarDepoisDaRolagem = window.setTimeout(atualizarSpotlight, 380);
+    const atualizarDepoisDaRolagem = window.setTimeout(atualizarSpotlight, abrirAba ? 480 : 380);
     window.addEventListener('resize', atualizarSpotlight);
     window.addEventListener('scroll', atualizarSpotlight, true);
     return () => {
+      if (quadro !== null) window.cancelAnimationFrame(quadro);
       window.clearTimeout(atualizarDepoisDaRolagem);
       window.removeEventListener('resize', atualizarSpotlight);
       window.removeEventListener('scroll', atualizarSpotlight, true);

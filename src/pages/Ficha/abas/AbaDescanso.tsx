@@ -31,6 +31,8 @@ import {
   obterTemporario,
 } from '../../../services/statusService';
 import { dispararDescanso } from '../components/descansoCena';
+import { LotesDoDescanso } from '../components/LotesDoDescanso';
+import { classesDaFicha } from '../../../services/progressaoFichaService';
 
 interface AbaDescansoProps {
   character: any;
@@ -106,6 +108,8 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
       ],
     });
     onUpdate(['ficha', 'status'], proximo);
+    // Cada descanso completo reabre o pagamento do lote de Alquimia, Engenharia e Cozinha.
+    onUpdate(['ficha', 'contadorDescansos'], Math.max(0, Math.trunc(Number(ficha.contadorDescansos) || 0)) + 1);
     const rotuloExtra: Record<string, string> = { vidaAtual: 'Vida', manaAtual: 'Mana', sanidadeAtual: 'Sanidade' };
     const partes = [`Descanso ${regraSelecionada.titulo.toLocaleLowerCase('pt-BR')} aplicado.`];
     if (resolucao.ajustes.length) {
@@ -235,6 +239,12 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
           </div>
         </div>
       </header>
+
+      <LotesDoDescanso
+        ficha={ficha}
+        classes={classesDaFicha(ficha).map((item) => ({ classeId: String(item.classe.id), nivel: item.nivel }))}
+        onUpdate={onUpdate}
+      />
 
       <section className="overflow-hidden rounded-3xl border border-white/[0.07] bg-[#0f0e15]" data-tour="descanso-completo">
         <div className="border-b border-white/[0.06] px-5 py-5 sm:px-6">

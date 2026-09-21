@@ -14,6 +14,8 @@ import {
   Compass,
   Crown,
   Dices,
+  Download,
+  Smartphone,
   Eye,
   EyeOff,
   HelpCircle,
@@ -70,6 +72,11 @@ import { DescansoHost } from './components/DescansoHost';
 import { CirculoMagicoHost } from './components/CirculoMagicoHost';
 import { AprendizadoHost } from './components/AprendizadoHost';
 import { AnaliseSabioModal } from './components/AnaliseSabioModal';
+import { RetratoPersonagem } from './components/RetratoPersonagem';
+import { ExportarFichaModal } from './components/ExportarFichaModal';
+import { AbaErrorBoundary } from './components/AbaErrorBoundary';
+import { AjustarFotoModal } from './components/AjustarFotoModal';
+import { ModalPortal } from './components/ModalPortal';
 import { perfilDaClasse } from '../../utils/somDeClasse';
 import { sfx } from '../../utils/audioSynth';
 import { resetarEstadoVital } from './estadoVital';
@@ -80,6 +87,7 @@ import { dispararLoot } from '../../components/loot/loot';
 import { dispararSuaVez } from '../../components/suaVez/suaVez';
 
 
+import { SimboloOculto } from '../../components/descobertas/SimboloOculto';
 const TABS = [
   { id: 'Ficha', icon: UserRound },
   { id: 'Perícias', icon: Dices },
@@ -146,6 +154,9 @@ export const PersonagemSheet: React.FC = () => {
   const [showAjuda, setShowAjuda] = useState(false);
   const [showPendencias, setShowPendencias] = useState(false);
   const [showAnalise, setShowAnalise] = useState(false);
+  const [editandoFoto, setEditandoFoto] = useState(false);
+  const [showExportar, setShowExportar] = useState(false);
+  const [pedidoModoMesa, setPedidoModoMesa] = useState(false);
   const [tourTab, setTourTab] = useState<FichaTourTabId | null>(null);
   const [catalogo, setCatalogo] = useState<ICatalogo | null>(null);
   const [liveSyncState, setLiveSyncState] = useState<LiveSyncState>('idle');
@@ -665,26 +676,21 @@ export const PersonagemSheet: React.FC = () => {
       )}
       <div className="ficha-header__content flex flex-col gap-5 md:flex-row md:justify-between md:items-start">
         <div className="flex items-start gap-5 min-w-0">
-          <div className="ficha-portrait flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl border bg-black/50 shadow-inner sm:h-24 sm:w-24">
-            {fotoPersonagem ? (
-              <img
-                src={fotoPersonagem}
-                alt={`Foto de ${character.nome || 'personagem'}`}
-                loading="lazy"
-                decoding="async"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-3xl font-bold text-gray-500" style={{ fontFamily: 'Cinzel, serif' }}>
-                {(character.nome?.charAt(0) || '?').toUpperCase()}
-              </span>
-            )}
-          </div>
+          <RetratoPersonagem
+            nome={character.nome || ''}
+            foto={fotoPersonagem}
+            nivel={character.nivel}
+            destaque={temaVisual.accent}
+            segunda={temaVisual.secondary}
+            efeito={classePrincipalId ? temaVisual.classe.efeito : temaVisual.raca.efeito}
+            tamanho={96}
+            onEditar={somenteLeitura ? undefined : () => setEditandoFoto(true)}
+          />
           <div className="min-w-0">
             <h4 className="mb-2 text-[10px] font-bold uppercase tracking-[0.24em] sm:text-xs" style={{ color: temaVisual.accent }}>
               {somenteLeitura ? 'Grimório vinculado • Somente leitura' : 'Grimório de personagem'}
             </h4>
-            <h1 className="ficha-character-name mb-3 break-words text-[clamp(1.8rem,7vw,2.5rem)] leading-tight" style={{ fontFamily: 'Cinzel, serif' }}>
+            <h1 data-descoberta="vaidoso" data-cliques="8" className="ficha-character-name mb-3 break-words text-[clamp(1.8rem,7vw,2.5rem)] leading-tight" style={{ fontFamily: 'Cinzel, serif' }}>
               {character.nome?.toUpperCase() || 'DESCONHECIDO'}
             </h1>
             <div className="flex flex-wrap gap-2">
@@ -752,6 +758,28 @@ export const PersonagemSheet: React.FC = () => {
               <Brain size={18} aria-hidden="true" />
             </button>
           )}
+          {!somenteLeitura && (
+            <button
+              type="button"
+              onClick={() => { handleTabChange('Ficha'); setPedidoModoMesa(true); }}
+              className="flex h-10 items-center gap-2 rounded-full border border-[#c7a44c]/35 bg-[#c7a44c]/10 px-3.5 text-xs font-bold uppercase tracking-[0.12em] text-[#e3c46f] transition-colors hover:bg-[#c7a44c]/20"
+              aria-label="Abrir o Modo mesa, tela para jogar no celular"
+              title="Modo mesa"
+            >
+              <Smartphone size={16} aria-hidden="true" />
+              <span className="hidden sm:inline">Mesa</span>
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => setShowExportar(true)}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-gray-400 transition-colors hover:bg-white/5 hover:text-white"
+            aria-label="Exportar ficha em PDF ou cartão"
+            aria-haspopup="dialog"
+            title="Exportar ficha"
+          >
+            <Download size={18} aria-hidden="true" />
+          </button>
           <button
             type="button"
             onClick={() => iniciarTour(activeTab)}
@@ -831,7 +859,14 @@ export const PersonagemSheet: React.FC = () => {
     const props = { character, onUpdate: handleUpdate };
     
     switch (activeTab) {
-      case 'Ficha': return <AbaFicha {...props} />;
+      case 'Ficha': return (
+        <AbaFicha
+          {...props}
+          abrirModoMesa={pedidoModoMesa}
+          onModoMesaAberto={() => setPedidoModoMesa(false)}
+          onAbrirAba={(aba) => handleTabChange(aba as FichaTourTabId)}
+        />
+      );
       case 'Progressão': return <AbaProgressao {...props} />;
       case 'Perícias': return <AbaPericias {...props} />;
       case 'Inventário': return <AbaInventario {...props} />;
@@ -875,7 +910,9 @@ export const PersonagemSheet: React.FC = () => {
         {renderTabs()}
 
         <fieldset disabled={somenteLeitura} className="m-0 min-w-0 border-0 p-0">
-          <AnimatePresence mode="wait" initial={false}>
+          {/* Sem AnimatePresence "wait": a aba nova nunca depende de a antiga terminar
+              de sair, então uma animação presa não deixa a página em branco. */}
+          <AbaErrorBoundary resetKey={`${id}:${activeTab}`}>
             <motion.div
               key={`${id}:${activeTab}`}
               id={`ficha-tabpanel-${activeTab}`}
@@ -884,15 +921,42 @@ export const PersonagemSheet: React.FC = () => {
               aria-labelledby={`ficha-tab-${activeTab}`}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -5 }}
               transition={{ duration: 0.18, ease: 'easeOut' }}
             >
               {renderActiveTab()}
             </motion.div>
-          </AnimatePresence>
+          </AbaErrorBoundary>
         </fieldset>
       </div>
+      <ExportarFichaModal
+        isOpen={showExportar}
+        onClose={() => setShowExportar(false)}
+        character={character}
+        destaque={temaVisual.accent}
+        segunda={temaVisual.secondary}
+        efeito={classePrincipalId ? temaVisual.classe.efeito : temaVisual.raca.efeito}
+      />
       {!somenteLeitura && (
+        <>
+        <AnimatePresence>
+          {editandoFoto ? (
+            <ModalPortal manageFocus={false} onClose={() => setEditandoFoto(false)}>
+              <AjustarFotoModal
+                nome={character.nome || 'personagem'}
+                fotoAtual={fotoPersonagem}
+                onCancelar={() => setEditandoFoto(false)}
+                onConfirmar={(dataUrl) => {
+                  handleUpdate(['ficha', 'foto'], dataUrl);
+                  setEditandoFoto(false);
+                }}
+                onRemover={() => {
+                  handleUpdate(['ficha', 'foto'], null);
+                  setEditandoFoto(false);
+                }}
+              />
+            </ModalPortal>
+          ) : null}
+        </AnimatePresence>
         <AnaliseSabioModal
           isOpen={showAnalise}
           onClose={() => setShowAnalise(false)}
@@ -914,6 +978,7 @@ export const PersonagemSheet: React.FC = () => {
           })()}
           onAbrirAba={(aba) => handleTabChange(aba as FichaTourTabId)}
         />
+        </>
       )}
       {!somenteLeitura && (
         <FichaModal
@@ -978,6 +1043,7 @@ export const PersonagemSheet: React.FC = () => {
           onFinish={encerrarTour}
         />
       )}
+      <div className="mt-12 flex justify-center pb-16"><SimboloOculto chave="olho_atento" glifo="◉" cliques={4} /></div>
     </motion.div>
   );
 };

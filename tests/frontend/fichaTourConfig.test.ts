@@ -81,3 +81,15 @@ test('o guia da Loja cobre operação, regras, filtros, item e lote', () => {
   assert.equal(lojaTourJaVisto('{"versao":0,"concluido":true}'), false);
   assert.equal(lojaTourJaVisto(serializarLojaTourVisto()), true);
 });
+
+test('o tour de Bens troca de aba interna antes de apontar para o alvo', () => {
+  const passos = obterPassosTourFicha('Bens');
+  const abas = new Set(passos.map((passo) => passo.antes).filter(Boolean));
+  assert.deepEqual([...abas].sort(), ['#bens-tab-equipe', '#bens-tab-meus']);
+  for (const id of ['bens-frota', 'bens-bases']) {
+    assert.equal(passos.find((passo) => passo.id === id)?.antes, '#bens-tab-equipe');
+  }
+  for (const id of ['bens-propriedades', 'bens-planta', 'bens-garagem', 'bens-veiculos']) {
+    assert.equal(passos.find((passo) => passo.id === id)?.antes, '#bens-tab-meus');
+  }
+});
