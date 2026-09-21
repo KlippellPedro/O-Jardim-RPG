@@ -70,6 +70,7 @@ import { resetarEstadoVital } from './estadoVital';
 import './ficha.css';
 import { conquistasApi } from '../../services/conquistasApi';
 import { dispararConquistas } from '../../components/conquistas/conquistas';
+import { dispararLoot } from '../../components/loot/loot';
 
 
 const TABS = [
@@ -190,6 +191,37 @@ export const PersonagemSheet: React.FC = () => {
   };
 
   const character = characters.find((c) => c.id === id);
+
+  // Item que chega na ficha (concedido pelo Mestre, por exemplo) vira uma carta
+  // que revela. Compras na Loja mostram a carta na própria Loja; itens
+  // criados à mão não contam. Só compara depois de a ficha ter carregado.
+  const inventarioParaLoot = character?.inventarioCentral;
+  const baseInventario = useRef<{ personagemId: string; ids: Set<string>; desde: number } | null>(null);
+  useEffect(() => {
+    if (!character?.id || !Array.isArray(inventarioParaLoot)) return;
+    const lista = inventarioParaLoot as Array<{ item_id: string; titulo: string; quantidade: number; dados?: Record<string, any> }>;
+    const anterior = baseInventario.current;
+    if (anterior && anterior.personagemId === character.id && Date.now() - anterior.desde > 2500) {
+      const novos = lista.filter((item) => (
+        !anterior.ids.has(String(item.item_id))
+        && !String(item.item_id).startsWith('manual:')
+        && item.dados?.origem !== 'manual'
+      ));
+      if (novos.length > 0 && novos.length <= 12) {
+        dispararLoot(novos.map((item) => ({
+          nome: item.titulo,
+          raridade: item.dados?.raridade,
+          categoria: typeof item.dados?.categoria === 'string' ? item.dados.categoria : '',
+          quantidade: item.quantidade,
+        })));
+      }
+    }
+    baseInventario.current = {
+      personagemId: character.id,
+      ids: new Set(lista.map((item) => String(item.item_id))),
+      desde: anterior && anterior.personagemId === character.id ? anterior.desde : Date.now(),
+    };
+  }, [character?.id, inventarioParaLoot]);
 
   // Conquistas de nível, Fama e saldo não passam por rolagem: avalia ao abrir a
   // ficha e quando o nível ou a Fama mudam. O servidor decide; aqui só comemora.

@@ -19,6 +19,7 @@ import { LOJA_TOUR_STEPS, lojaTourJaVisto, serializarLojaTourVisto } from './loj
 import { grupoLimiteItemEspecial, resumirLimiteItensEspeciais } from '../../services/itensEspeciaisService';
 import { RARIDADES_EQUIPAMENTO } from '../../../data/regras/raridadesEquipamentos';
 import './loja.css';
+import { dispararLoot } from '../../components/loot/loot';
 
 interface RecompensaAviso {
   id: string;
@@ -547,6 +548,15 @@ export const LojaPage: React.FC = () => {
       checkoutAttemptRef.current = attempt;
       const resultado = operation === 'compra' ? await lojaApi.comprar(attempt.payload) : await lojaApi.vender(attempt.payload);
       await fetchCharacters();
+      if (operation === 'compra') {
+        // O que acabou de ser comprado aparece numa carta que vira, com o brilho da raridade.
+        dispararLoot(cart.map(({ item, quantidade }) => ({
+          nome: item.nome,
+          raridade: item.raridadeCompra ?? item.raridade,
+          categoria: item.categoria,
+          quantidade,
+        })));
+      }
       if (operation === 'compra' && resultado.infracoes?.length) {
         // Requisito de nível/classe não bloqueia a compra (o mestre já é avisado
         // por notificação), mas quem comprou precisa saber que ficou registrado.

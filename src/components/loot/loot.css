@@ -1,0 +1,170 @@
+/* Carta de loot que vira (ver LootHost.tsx). Só transform e opacity. */
+
+.loot {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  cursor: pointer;
+  background: radial-gradient(circle at 50% 46%, rgba(8, 8, 16, 0.82), rgba(2, 2, 7, 0.95));
+  animation: loot-fundo 0.35s ease-out both;
+}
+
+/* Raios de luz atrás da carta: só do lendário para cima, e só depois de aberta */
+.loot__raios {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 150vmax;
+  height: 150vmax;
+  margin: -75vmax 0 0 -75vmax;
+  background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--loot-cor) 18%, transparent) 0 5deg, transparent 5deg 15deg);
+  mask-image: radial-gradient(circle, #000 0%, transparent 45%);
+  -webkit-mask-image: radial-gradient(circle, #000 0%, transparent 45%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  animation: loot-raios 30s linear infinite;
+}
+
+.loot--aberta.loot--n4 .loot__raios,
+.loot--aberta.loot--n5 .loot__raios,
+.loot--aberta.loot--n6 .loot__raios { opacity: 1; }
+
+.loot__palco {
+  position: relative;
+  perspective: 1100px;
+  animation: loot-entrar 0.5s cubic-bezier(0.2, 1.2, 0.4, 1) backwards;
+}
+
+.loot__carta {
+  position: relative;
+  width: min(62vw, 15rem);
+  aspect-ratio: 5 / 7;
+  transform-style: preserve-3d;
+  transition: transform 0.72s cubic-bezier(0.3, 1.2, 0.4, 1);
+  animation: loot-suspense 0.9s ease-in-out 0.5s infinite;
+}
+
+/* Quanto mais rara, mais a carta treme antes de virar */
+.loot--n2 .loot__carta, .loot--n3 .loot__carta { animation-duration: 0.7s; }
+.loot--n4 .loot__carta, .loot--n5 .loot__carta, .loot--n6 .loot__carta { animation-duration: 0.5s; }
+
+.loot__carta--virada { animation: none; transform: rotateY(180deg); }
+
+.loot__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1.2rem;
+  border: 2px solid var(--loot-cor);
+  border-radius: 1rem;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 0 26px -4px var(--loot-cor), inset 0 0 30px -14px var(--loot-cor);
+}
+
+.loot__face--costas {
+  color: var(--loot-cor);
+  background:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0 6px, transparent 6px 12px),
+    linear-gradient(160deg, #141a2e, #0a0d1a);
+}
+.loot__face--costas svg { width: 55%; filter: drop-shadow(0 0 10px var(--loot-cor)); }
+
+.loot__face--frente {
+  transform: rotateY(180deg);
+  background: linear-gradient(170deg, color-mix(in srgb, var(--loot-cor) 16%, #0b0e1c), #080a14 70%);
+  text-align: center;
+  color: #fff;
+}
+
+.loot__categoria { font-size: 0.62rem; font-weight: 800; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(255, 255, 255, 0.55); }
+
+.loot__nome {
+  font-family: Cinzel, serif;
+  font-size: 1.35rem;
+  line-height: 1.15;
+  text-shadow: 0 0 18px var(--loot-cor);
+}
+
+.loot__raridade {
+  padding: 0.2rem 0.8rem;
+  border: 1px solid var(--loot-cor);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--loot-cor);
+  box-shadow: 0 0 14px -2px var(--loot-cor);
+}
+
+.loot__quantidade { font-family: 'Cascadia Mono', Consolas, monospace; font-weight: 800; color: rgba(255, 255, 255, 0.75); }
+
+/* Relíquia da Criação: aro prismático girando */
+.loot--prismatica .loot__face { border-color: transparent; }
+.loot--prismatica .loot__carta::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 1.15rem;
+  background: conic-gradient(from 0deg, #67e8f9, #f0abfc, #fde68a, #86efac, #67e8f9);
+  filter: blur(6px);
+  opacity: 0.85;
+  animation: loot-raios 6s linear infinite;
+  transform: translateZ(-1px);
+}
+
+.loot__faiscas { position: absolute; inset: 0; pointer-events: none; }
+
+.loot__faiscas i {
+  position: absolute;
+  left: var(--l-x);
+  bottom: 12%;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--loot-cor);
+  box-shadow: 0 0 10px var(--loot-cor);
+  opacity: 0;
+  animation: loot-faisca 1.6s ease-out var(--l-atraso) both;
+}
+
+.loot__rodape {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+.loot__rodape em { font-style: normal; color: rgba(255, 255, 255, 0.32); font-size: 0.6rem; }
+
+@keyframes loot-fundo { from { opacity: 0; } to { opacity: 1; } }
+@keyframes loot-entrar { from { opacity: 0; transform: translateY(40px) scale(0.7); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes loot-suspense {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(-3px) rotate(-1.2deg); }
+  75% { transform: translateX(3px) rotate(1.2deg); }
+}
+@keyframes loot-raios { to { transform: rotate(360deg); } }
+@keyframes loot-faisca {
+  0% { opacity: 0; transform: translateY(0) scale(0.6); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-190px) scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loot { display: none; }
+}

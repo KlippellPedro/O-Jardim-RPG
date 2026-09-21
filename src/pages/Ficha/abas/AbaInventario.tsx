@@ -42,6 +42,8 @@ import {
 import { obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
 import { ehReliquiaCriacao, lerRessonanciaReliquia } from '../../../services/reliquiasCriacaoService';
 import { SaldoAnimado } from '../components/SaldoAnimado';
+import { sfx } from '../../../utils/audioSynth';
+import '../components/equiparItem.css';
 
 interface IInventoryItem {
   id: string;
@@ -539,6 +541,8 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
     }));
   };
 
+  const [equipadoAgora, setEquipadoAgora] = useState<{ id: string; chave: number } | null>(null);
+
   const toggleEquipar = (id: string) => {
     const alvo = inventario.find((item) => item.id === id);
     if (!alvo) return;
@@ -547,6 +551,14 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
       return;
     }
     setFeedbackEquipamento(null);
+    // Equipar encaixa com um clangor e um clarão no cartão; guardar é mais suave.
+    if (alvo.equipado) {
+      sfx.play('close');
+    } else {
+      sfx.play('equipar');
+      setEquipadoAgora({ id, chave: Date.now() });
+      window.setTimeout(() => setEquipadoAgora((atual) => (atual?.id === id ? null : atual)), 1000);
+    }
     mutarInventario((atual) => atual.map((item) => (
       item.id === id ? { ...item, equipado: !item.equipado } : item
     )));
@@ -997,7 +1009,7 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                     value={item}
                     key={item.id}
                     data-tour="inventario-item"
-                    className={`content-auto-list-item relative ${conf.bg} border ${conf.border} ${conf.glow} overflow-hidden rounded-xl p-4 pl-5 flex flex-col gap-3 transition-colors duration-300 group before:absolute before:inset-y-0 before:left-0 before:w-1 ${CATEGORY_ACCENTS[item.categoria]}`}
+                    className={`${equipadoAgora?.id === item.id ? 'item-equipando ' : ''}content-auto-list-item relative ${conf.bg} border ${conf.border} ${conf.glow} overflow-hidden rounded-xl p-4 pl-5 flex flex-col gap-3 transition-colors duration-300 group before:absolute before:inset-y-0 before:left-0 before:w-1 ${CATEGORY_ACCENTS[item.categoria]}`}
                   >
                     <div className="flex gap-4">
                       {/* Área de Ícone, Favorito e Arraste */}
