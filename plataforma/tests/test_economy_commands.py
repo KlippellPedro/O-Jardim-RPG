@@ -284,6 +284,12 @@ class EconomyCommandUnitTests(unittest.TestCase):
 TEST_DSN = (os.getenv("TEST_DATABASE_URL") or "").strip()
 
 
+# A adaga do catalogo de teste e simples (1d4): a formula de preco de
+# equipamento a vende por 15 Lunaris; a personagem comeca com 10.000 Lunaris.
+SALDO_INICIAL_LUNARIS = 10_000
+PRECO_ADAGA_LUNARIS = 15
+
+
 @unittest.skipUnless(TEST_DSN, "TEST_DATABASE_URL nao configurada")
 class EconomyCommandIntegrationTests(unittest.TestCase):
     def setUp(self):
@@ -370,7 +376,7 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
                 INSERT INTO catalogo_itens (id, tipo, titulo, conteudo)
                 VALUES ('adaga', 'arma', 'Adaga', %s)
                 """,
-                (Jsonb({"preco": 5, "raridade": "comum", "dano": "1d4"}),),
+                (Jsonb({"preco": 5, "raridade": "comum", "dano": "1d4", "subtipo": "simples"}),),
             )
             connection.execute(
                 """
@@ -443,7 +449,7 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
 
     def test_catalog_and_purchase_are_server_authoritative_and_replayable(self):
         catalog = get_shop_catalog(self.campaign_id, user=self.player, database=self.database)
-        self.assertEqual(catalog["itens"][0]["preco"], {"moeda": "Solares", "valor": 5})
+        self.assertEqual(catalog["itens"][0]["preco"], {"moeda": "Lunaris", "valor": PRECO_ADAGA_LUNARIS})
 
         payload = self._purchase_payload(quantity=2)
         result = purchase_batch(payload, user=self.player, database=self.database)
@@ -451,17 +457,17 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
         self.assertFalse(result["repetida"])
         self.assertTrue(replay["repetida"])
         self.assertEqual(result["operacao_id"], replay["operacao_id"])
-        self.assertEqual(result["debitos"], [{"moeda": "Solares", "valor": 10, "saldo": 90}])
+        self.assertEqual(result["debitos"], [{"moeda": "Lunaris", "valor": 2 * PRECO_ADAGA_LUNARIS, "saldo": SALDO_INICIAL_LUNARIS - 2 * PRECO_ADAGA_LUNARIS}])
         with self.database.connection() as connection:
             balance = connection.execute(
-                "SELECT saldo FROM saldos_personagem WHERE personagem_id=%s AND moeda='Solares'",
+                "SELECT saldo FROM saldos_personagem WHERE personagem_id=%s AND moeda='Lunaris'",
                 (self.hunter_id,),
             ).fetchone()["saldo"]
             item = connection.execute(
                 "SELECT quantidade, dados FROM inventario_personagem WHERE personagem_id=%s",
                 (self.hunter_id,),
             ).fetchone()
-        self.assertEqual(balance, 90)
+        self.assertEqual(balance, SALDO_INICIAL_LUNARIS - 2 * PRECO_ADAGA_LUNARIS)
         self.assertEqual(item["quantidade"], 2)
         self.assertEqual(item["dados"]["origem"], "loja")
         self.assertEqual(item["dados"]["catalogo_item_id"], "adaga")
@@ -480,10 +486,10 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
         self.assertEqual(replay["operacao_id"], original["operacao_id"])
         with self.database.connection() as connection:
             balance = connection.execute(
-                "SELECT saldo FROM saldos_personagem WHERE personagem_id=%s AND moeda='Solares'",
+                "SELECT saldo FROM saldos_personagem WHERE personagem_id=%s AND moeda='Lunaris'",
                 (self.hunter_id,),
             ).fetchone()["saldo"]
-        self.assertEqual(balance, 95)
+        self.assertEqual(balance, SALDO_INICIAL_LUNARIS - PRECO_ADAGA_LUNARIS)
 
     def test_same_weapon_in_two_rarities_uses_separate_inventory_rows(self):
         purchase_batch(
@@ -496,7 +502,8 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
             user=self.player,
             database=self.database,
         )
-        self.assertEqual(result["debitos"], [{"moeda": "Lunaris", "valor": 8000, "saldo": 2000}])
+        self.assertEqual(result["debitos"], [{"moeda": "Lunaris", "valor": 8 * PRECO_ADAGA_LUNARIS,
+           "saldo": SALDO_INICIAL_LUNARIS - 9 * PRECO_ADAGA_LUNARIS}])
         with self.database.connection() as connection:
             rows = connection.execute(
                 """
@@ -526,7 +533,8 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
             itens=[{"item_id": "adaga::raridade::raro", "quantidade": 1}],
         )
         result = sell_batch(sale, user=self.player, database=self.database)
-        self.assertEqual(result["creditos"], [{"moeda": "Lunaris", "valor": 4000, "saldo": 6000}])
+        self.assertEqual(result["creditos"], [{"moeda": "Lunaris", "valor": 4 * PRECO_ADAGA_LUNARIS,
+           "saldo": SALDO_INICIAL_LUNARIS - 4 * PRECO_ADAGA_LUNARIS}])
 
     def test_idempotency_key_cannot_be_reused_with_changed_payload(self):
         purchase_batch(self._purchase_payload(), user=self.player, database=self.database)
@@ -556,10 +564,10 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
         self.assertEqual(next(item for item in results if isinstance(item, HTTPException)).status_code, 409)
         with self.database.connection() as connection:
             balance = connection.execute(
-                "SELECT saldo FROM saldos_personagem WHERE personagem_id=%s AND moeda='Solares'",
+                "SELECT saldo FROM saldos_personagem WHERE personagem_id=%s AND moeda='Lunaris'",
                 (self.hunter_id,),
             ).fetchone()["saldo"]
-        self.assertEqual(balance, 95)
+        self.assertEqual(balance, SALDO_INICIAL_LUNARIS - PRECO_ADAGA_LUNARIS)
 
     def test_concurrent_replay_with_same_key_returns_one_persisted_result(self):
         payload = self._purchase_payload(key="checkout-same-key")
@@ -574,10 +582,10 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
         self.assertEqual(sorted(item["repetida"] for item in results), [False, True])
         with self.database.connection() as connection:
             balance = connection.execute(
-                "SELECT saldo FROM saldos_personagem WHERE personagem_id=%s AND moeda='Solares'",
+                "SELECT saldo FROM saldos_personagem WHERE personagem_id=%s AND moeda='Lunaris'",
                 (self.hunter_id,),
             ).fetchone()["saldo"]
-        self.assertEqual(balance, 95)
+        self.assertEqual(balance, SALDO_INICIAL_LUNARIS - PRECO_ADAGA_LUNARIS)
 
     def test_hidden_rarity_blocks_variant_but_keeps_equipment_with_other_options_listed(self):
         with self.database.connection() as connection:
@@ -654,16 +662,22 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
         self.assertIn("Mestre", str(raised.exception.detail))
 
     def test_insufficient_balance_rolls_back_every_economic_change(self):
+        with self.database.connection() as connection:
+            connection.execute(
+                "UPDATE saldos_personagem SET saldo=100 WHERE personagem_id=%s AND moeda='Lunaris'",
+                (self.hunter_id,),
+            )
+        # 7 adagas x 15 Lunaris = 105, mais que os 100 Lunaris que sobraram.
         with self.assertRaises(HTTPException) as raised:
             purchase_batch(
-                self._purchase_payload(quantity=21),
+                self._purchase_payload(quantity=7),
                 user=self.player,
                 database=self.database,
             )
         self.assertEqual(raised.exception.status_code, 409)
         with self.database.connection() as connection:
             balance = connection.execute(
-                "SELECT saldo FROM saldos_personagem WHERE personagem_id=%s AND moeda='Solares'",
+                "SELECT saldo FROM saldos_personagem WHERE personagem_id=%s AND moeda='Lunaris'",
                 (self.hunter_id,),
             ).fetchone()["saldo"]
             inventory = connection.execute(
@@ -700,7 +714,8 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
             itens=[{"item_id": "adaga", "quantidade": 1}],
         )
         result = sell_batch(sale, user=self.player, database=self.database)
-        self.assertEqual(result["creditos"], [{"moeda": "Solares", "valor": 2, "saldo": 97}])
+        self.assertEqual(result["creditos"], [{"moeda": "Lunaris", "valor": PRECO_ADAGA_LUNARIS // 2,
+           "saldo": SALDO_INICIAL_LUNARIS - PRECO_ADAGA_LUNARIS + PRECO_ADAGA_LUNARIS // 2}])
         self.assertEqual(result["economia_versao"], 3)
 
     def test_repurchase_preserves_instance_state_but_restores_catalog_fields(self):
@@ -727,7 +742,7 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
         self.assertEqual(item["quantidade"], 2)
         self.assertTrue(item["dados"]["equipado"])
         self.assertTrue(item["dados"]["favorito"])
-        self.assertEqual(item["dados"]["preco"], 5)
+        self.assertEqual(item["dados"]["preco"], {"Lunaris": PRECO_ADAGA_LUNARIS})
 
     def test_forged_inventory_item_cannot_be_sold(self):
         with self.database.connection() as connection:
@@ -867,7 +882,7 @@ class EconomyCommandIntegrationTests(unittest.TestCase):
             ledgers = connection.execute(
                 "SELECT COUNT(*) AS total FROM lancamentos_economia WHERE origem='recompensa.aprovada'"
             ).fetchone()["total"]
-        self.assertEqual(balance, 80)
+        self.assertEqual(balance, SALDO_INICIAL_LUNARIS + 80)
         self.assertIsNone(bounty)
         self.assertEqual(ledgers, 1)
 

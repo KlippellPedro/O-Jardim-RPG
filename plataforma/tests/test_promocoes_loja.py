@@ -38,6 +38,10 @@ TEST_DSN = (os.getenv("TEST_DATABASE_URL") or "").strip()
 # nesta janela específica, com 20% de desconto (100 -> 80 Lunaris). Serve
 # de fixture determinística sem precisar mockar o hash interno.
 _ITEM_PROMOVIDO_ID = "item-teste-promocao"
+# Nos testes com banco o item e um "equipamento" comum, com preco declarado de
+# 100 Lunaris. Arma e armadura sao precificadas pela formula do modelo (ver
+# core/economy_commands.py) e ignoram o campo `preco`, entao nao servem para
+# fixar o valor 100. A promocao so depende do id e da janela, nao do tipo.
 _JANELA_COM_PROMOCAO = datetime(2026, 1, 29, 0, 0, tzinfo=timezone.utc)
 _JANELA_SEM_PROMOCAO = datetime(2026, 1, 1, 0, 0, tzinfo=timezone.utc)
 
@@ -196,7 +200,7 @@ class PromocaoLojaIntegrationTests(unittest.TestCase):
 
     def test_catalogo_mostra_o_item_com_desconto_na_janela_promovida(self):
         campanha_id, _personagem_id, actor = self._personagem(email="vitrine-promo@example.com")
-        self._catalogo_item(_ITEM_PROMOVIDO_ID, "arma", {"preco": {"Lunaris": 100}})
+        self._catalogo_item(_ITEM_PROMOVIDO_ID, "equipamento", {"preco": {"Lunaris": 100}})
 
         with unittest.mock.patch("routers.shop.datetime") as mock_datetime:
             mock_datetime.now.return_value = _JANELA_COM_PROMOCAO
@@ -210,7 +214,7 @@ class PromocaoLojaIntegrationTests(unittest.TestCase):
 
     def test_catalogo_mostra_preco_cheio_fora_da_janela_promovida(self):
         campanha_id, _personagem_id, actor = self._personagem(email="vitrine-sem-promo@example.com")
-        self._catalogo_item(_ITEM_PROMOVIDO_ID, "arma", {"preco": {"Lunaris": 100}})
+        self._catalogo_item(_ITEM_PROMOVIDO_ID, "equipamento", {"preco": {"Lunaris": 100}})
 
         with unittest.mock.patch("routers.shop.datetime") as mock_datetime:
             mock_datetime.now.return_value = _JANELA_SEM_PROMOCAO
@@ -223,7 +227,7 @@ class PromocaoLojaIntegrationTests(unittest.TestCase):
 
     def test_compra_cobra_exatamente_o_preco_que_a_vitrine_mostrou(self):
         campanha_id, personagem_id, actor = self._personagem(email="compra-com-promo@example.com", saldo_lunaris=1000)
-        self._catalogo_item(_ITEM_PROMOVIDO_ID, "arma", {"preco": {"Lunaris": 100}})
+        self._catalogo_item(_ITEM_PROMOVIDO_ID, "equipamento", {"preco": {"Lunaris": 100}})
 
         payload = ShopBatchCommandInput(
             campanha_id=campanha_id,
@@ -241,7 +245,7 @@ class PromocaoLojaIntegrationTests(unittest.TestCase):
 
     def test_compra_fora_da_janela_cobra_preco_cheio(self):
         campanha_id, personagem_id, actor = self._personagem(email="compra-sem-promo@example.com", saldo_lunaris=1000)
-        self._catalogo_item(_ITEM_PROMOVIDO_ID, "arma", {"preco": {"Lunaris": 100}})
+        self._catalogo_item(_ITEM_PROMOVIDO_ID, "equipamento", {"preco": {"Lunaris": 100}})
 
         payload = ShopBatchCommandInput(
             campanha_id=campanha_id,
