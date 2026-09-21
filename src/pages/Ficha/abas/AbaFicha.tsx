@@ -16,6 +16,8 @@ import '../components/subidaNivel.css';
 import {
   adicionarCondicaoOficial,
   atualizarStatusVital,
+  campoTemporario,
+  obterTemporario,
   bonusIniciativaFicha,
   desvantagensAutomaticasTeste,
   movimentoBloqueadoPorCondicao,
@@ -278,9 +280,13 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
   );
   const valorComSinal = (valor: number) => `${valor > 0 ? '+' : ''}${valor}`;
 
-  const handleStatus = (field: string, change: number, max: number) => {
-    const proximoStatus = atualizarStatusVital(status, field, change, max, attrs.constituicao);
+  const handleStatus = (field: string, change: number, max: number, ignorarTemporario = false) => {
+    const proximoStatus = atualizarStatusVital(status, field, change, max, attrs.constituicao, { ignorarTemporario });
     onUpdate(['ficha', 'status'], proximoStatus);
+  };
+
+  const limparTemporario = (campo: string) => {
+    onUpdate(['ficha', 'status'], { ...status, [campoTemporario(campo)]: 0 });
   };
 
   const handleSanidadeMaxima = (novoMaximoTotal: number) => {
@@ -932,6 +938,12 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
           },
         }}
         onStatusChange={handleStatus}
+        temporario={{
+          vida: obterTemporario(status, 'vidaAtual'),
+          mana: obterTemporario(status, 'manaAtual'),
+          sanidade: obterTemporario(status, 'sanidadeAtual'),
+        }}
+        onLimparTemporario={limparTemporario}
         onSanidadeMaximaChange={handleSanidadeMaxima}
         onOpenInfo={setActiveModal}
         onOpenAdjust={abrirAjustes}

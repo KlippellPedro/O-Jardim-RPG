@@ -6,10 +6,12 @@ import {
   bonusIniciativaFicha,
   desvantagensAutomaticasTeste,
   estadoVida,
+  gastarComTemporario,
   limiteMorrendo,
   movimentoBloqueadoPorCondicao,
   multiplicadorMovimentoCansaco,
   obterStatusFicha,
+  obterTemporario,
   penalidadeAtaqueCondicoes,
   penalidadeCansacoIniciativa,
   penalidadeCansacoTeste,
@@ -99,4 +101,50 @@ test('maestria de Constituição amplia Morrendo e despertar aumenta Ferido', ()
   assert.equal(status.morrendo, 0);
   assert.equal(status.ferido, 2);
   assert.equal(estadoVida(status, 20), 'consciente');
+});
+
+test('cura acima do máximo vira extra temporário sem mexer no valor atual', () => {
+  const cheio = { vidaAtual: 40, manaAtual: 10 };
+  const curado = atualizarStatusVital(cheio, 'vidaAtual', 12, 40, 10);
+  assert.equal(curado.vidaAtual, 40);
+  assert.equal(curado.vidaTemporaria, 12);
+  assert.equal(obterTemporario(curado, 'vidaAtual'), 12);
+
+  // Cura que só completa a barra não gera extra; o que sobra gera.
+  const parcial = atualizarStatusVital({ vidaAtual: 35 }, 'vidaAtual', 10, 40, 10);
+  assert.equal(parcial.vidaAtual, 40);
+  assert.equal(parcial.vidaTemporaria, 5);
+});
+
+test('o dano gasta o extra temporário antes da vida normal', () => {
+  const comExtra = { vidaAtual: 40, vidaTemporaria: 12 };
+  const leve = atualizarStatusVital(comExtra, 'vidaAtual', -5, 40, 10);
+  assert.equal(leve.vidaAtual, 40);
+  assert.equal(leve.vidaTemporaria, 7);
+
+  const pesado = atualizarStatusVital(comExtra, 'vidaAtual', -20, 40, 10);
+  assert.equal(pesado.vidaTemporaria, 0);
+  assert.equal(pesado.vidaAtual, 32);
+});
+
+test('ajuste manual do valor atual não consome o extra temporário', () => {
+  const comExtra = { manaAtual: 20, manaTemporaria: 6 };
+  const ajustado = atualizarStatusVital(comExtra, 'manaAtual', -8, 20, 10, { ignorarTemporario: true });
+  assert.equal(ajustado.manaAtual, 12);
+  assert.equal(ajustado.manaTemporaria, 6);
+});
+
+test('Cansaço não tem extra temporário', () => {
+  const resultado = atualizarStatusVital({ cansacoAtual: 5 }, 'cansacoAtual', 4, 6, 10);
+  assert.equal(resultado.cansacoAtual, 6);
+  assert.equal(resultado.cansacoTemporaria, undefined);
+  assert.equal(obterTemporario({ cansacoTemporaria: 3 }, 'cansacoAtual'), 0);
+});
+
+test('custo de magia ou poder paga primeiro com o extra temporário', () => {
+  const status = { manaAtual: 10, manaTemporaria: 4 };
+  const meio = gastarComTemporario(status, 'manaAtual', 10, 3);
+  assert.deepEqual(meio, { atual: 10, temporario: 1 });
+  const alem = gastarComTemporario(status, 'manaAtual', 10, 7);
+  assert.deepEqual(alem, { atual: 7, temporario: 0 });
 });

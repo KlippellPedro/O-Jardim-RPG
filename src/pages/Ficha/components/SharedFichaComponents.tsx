@@ -264,8 +264,16 @@ interface EventoBarra {
   de: number;
 }
 
-/** `chaveVital` liga a barra à vinheta de tela cheia (Vida e Sanidade da ficha). */
-export const ResourceBar = ({ label, color, current, max, onAdd, onSub, onHelpClick, onAdjustClick, onMaxChange, chaveVital }: any) => {
+const COR_TEMPORARIO: Record<string, { de: string; ate: string }> = {
+  vermelho: { de: '#b45309', ate: '#fde68a' },
+  azul: { de: '#0e7490', ate: '#a5f3fc' },
+  roxo: { de: '#a21caf', ate: '#f5d0fe' },
+  cinza: { de: '#475569', ate: '#e2e8f0' },
+};
+
+/** `chaveVital` liga a barra à vinheta de tela cheia (Vida e Sanidade da ficha).
+ * `temporario` é o extra acima do máximo, mostrado numa barrinha à parte. */
+export const ResourceBar = ({ label, color, current, max, temporario = 0, onLimparTemporario, onAdd, onSub, onHelpClick, onAdjustClick, onMaxChange, chaveVital }: any) => {
   const maxSeguro = Math.max(1, Number(max) || 1);
   const percent = Math.min(100, Math.max(0, (Number(current) / maxSeguro) * 100));
   const bgColors: Record<string, { bg: string; glow: string }> = {
@@ -306,6 +314,24 @@ export const ResourceBar = ({ label, color, current, max, onAdd, onSub, onHelpCl
     return () => window.clearTimeout(timer);
   }, [evento]);
 
+  // O extra temporário tem as próprias reações: número dourado e brilho.
+  const extra = Math.max(0, Math.trunc(Number(temporario) || 0));
+  const extraAnterior = useRef(extra);
+  const [eventoExtra, setEventoExtra] = useState<{ chave: number; delta: number } | null>(null);
+  useEffect(() => {
+    if (extra !== extraAnterior.current) {
+      setEventoExtra({ chave: Date.now(), delta: extra - extraAnterior.current });
+      extraAnterior.current = extra;
+    }
+  }, [extra]);
+  useEffect(() => {
+    if (!eventoExtra) return undefined;
+    const timer = window.setTimeout(() => setEventoExtra(null), 1300);
+    return () => window.clearTimeout(timer);
+  }, [eventoExtra]);
+  const paletaExtra = COR_TEMPORARIO[color] || COR_TEMPORARIO.cinza;
+  const percentExtra = Math.min(100, (extra / maxSeguro) * 100);
+
   useEffect(() => {
     if (chaveVital) publicarEstadoVital({ [chaveVital]: valorAtual <= 0 ? 0 : percent });
   }, [chaveVital, percent, valorAtual]);
@@ -342,7 +368,7 @@ export const ResourceBar = ({ label, color, current, max, onAdd, onSub, onHelpCl
       const absVal = parseInt(val, 10);
       if (!Number.isNaN(absVal)) {
         if (absVal > current) onAdd(absVal - current);
-        else if (absVal < current) onSub(current - absVal);
+        else if (absVal < current) onSub(current - absVal, true);
       }
     }
     setInputValue(undefined);
@@ -359,7 +385,7 @@ export const ResourceBar = ({ label, color, current, max, onAdd, onSub, onHelpCl
           {onAdjustClick ? <AjusteButton onClick={onAdjustClick} label={label} /> : null}
         </div>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-start gap-2">
         <div className="flex gap-1">
           <button type="button" onClick={() => onSub(5)} className="w-8 h-8 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white">-5</button>
           <button type="button" onClick={() => onSub(1)} className="w-8 h-8 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white">-1</button>
@@ -453,8 +479,58 @@ export const ResourceBar = ({ label, color, current, max, onAdd, onSub, onHelpCl
                 aria-label={`Máximo de ${label}`}
               />
             ) : <span>{maxSeguro}</span>}
+            {extra > 0 && <span className="ml-1.5 text-amber-200" title="Extra temporário">+{extra}</span>}
           </div>
         </motion.div>
+        {(extra > 0 || eventoExtra) && (
+          <div className="mt-1.5 flex items-center gap-2" data-testid={`temporario-${label}`}>
+            <div className="barra-temporaria relative h-2 flex-1 overflow-hidden rounded-full border border-white/10 bg-[#050508]">
+              <motion.div
+                initial={false}
+                animate={{ width: `${percentExtra}%` }}
+                transition={{ type: 'spring', stiffness: 180, damping: 24 }}
+                className="absolute left-0 top-0 bottom-0 rounded-full"
+                style={{ background: `linear-gradient(90deg, ${paletaExtra.de}, ${paletaExtra.ate})`, boxShadow: `0 0 10px ${paletaExtra.ate}66` }}
+              />
+              <div className="barra-temporaria__listras pointer-events-none absolute inset-0" />
+              {eventoExtra && (
+                <motion.div
+                  key={`extra-${eventoExtra.chave}`}
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 bg-white/70"
+                  initial={{ opacity: 0.8 }}
+                  animate={{ opacity: 0 }}
+                  transition={{ duration: 0.45 }}
+                />
+              )}
+            </div>
+            <span className="min-w-[4.5rem] text-right font-mono text-[10px] font-bold uppercase tracking-wider" style={{ color: paletaExtra.ate }}>
+              +{extra} temp
+            </span>
+            {onLimparTemporario && extra > 0 ? (
+              <button
+                type="button"
+                onClick={onLimparTemporario}
+                className="flex h-4 w-4 items-center justify-center rounded text-gray-500 transition-colors hover:bg-white/10 hover:text-white"
+                title="Remover o extra temporário"
+                aria-label={`Remover o extra temporário de ${label}`}
+              >
+                <X size={11} />
+              </button>
+            ) : null}
+          </div>
+        )}
+        {eventoExtra && (
+          <motion.span
+            key={`flutua-extra-${eventoExtra.chave}`}
+            initial={false}
+            aria-hidden="true"
+            className="barra-flutuante barra-flutuante--temporario"
+            style={{ color: paletaExtra.ate }}
+          >
+            {eventoExtra.delta > 0 ? '+' : ''}{eventoExtra.delta} temp
+          </motion.span>
+        )}
         </div>
         <div className="flex gap-1">
           <button type="button" onClick={() => onAdd(1)} className="w-8 h-8 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white">+1</button>

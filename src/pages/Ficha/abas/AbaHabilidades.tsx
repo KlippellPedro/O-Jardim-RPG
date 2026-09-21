@@ -6,7 +6,7 @@ import { LabeledInput, LabeledSelect } from '../components/SharedFichaComponents
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { caracteristicasRaciaisAutomaticas, habilidadesAutomaticas } from '../../../services/progressaoFichaService';
-import { obterStatusFicha } from '../../../services/statusService';
+import { campoTemporario, gastarComTemporario, obterStatusFicha, obterTemporario } from '../../../services/statusService';
 import { EditorEfeitos } from '../components/ItemEffectsModals';
 import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
 import { periciasDisponiveisParaEfeitos } from '../../../services/periciasFichaService';
@@ -328,13 +328,16 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
         }
         statusAposUso = { ...status, [campoAtual]: novoValor };
       } else {
-        // Mana/Vida/Sanidade são gastos (diminuem)
-        if (atual < valor) {
+        // Mana/Vida/Sanidade são gastos (diminuem); o extra temporário paga primeiro
+        const extraDisponivel = obterTemporario(status, campoAtual);
+        if (atual + extraDisponivel < valor) {
           const rotulo = RECURSOS.find(r => r.value === recurso)?.label || recurso;
           mostrarUsoMsg('erro', `Não há ${rotulo} suficiente para usar ${item.nome}.`);
           return;
         }
-        statusAposUso = { ...status, [campoAtual]: atual - valor };
+        const gasto = gastarComTemporario(status, campoAtual, atual, valor);
+        statusAposUso = { ...status, [campoAtual]: gasto.atual };
+        if (extraDisponivel > 0) statusAposUso[campoTemporario(campoAtual)] = gasto.temporario;
       }
     }
 

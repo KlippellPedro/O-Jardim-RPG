@@ -8,7 +8,7 @@ import { personagensApi } from '../../../services/personagensApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { useCharacterStore } from '../../../store/useCharacterStore';
 import { legadosSelecionados, poderesSelecionados } from '../../../services/progressaoFichaService';
-import { obterStatusFicha } from '../../../services/statusService';
+import { campoTemporario, gastarComTemporario, obterStatusFicha, obterTemporario } from '../../../services/statusService';
 import { EditorEfeitos } from '../components/ItemEffectsModals';
 import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
 import { periciasDisponiveisParaEfeitos } from '../../../services/periciasFichaService';
@@ -336,6 +336,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     // Mapeia recurso -> campo em ficha.status e valida disponibilidade antes de gastar.
     let campoStatus: string | null = null;
     let novoValorStatus: number | null = null;
+    let novoTemporario: number | null = null;
 
     if (recurso !== 'nenhum' && valor > 0) {
       if (recurso === 'cansaco') {
@@ -358,7 +359,8 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
         const regra = mapaCampo[recurso];
         if (regra) {
           const atual = Number(status[regra.campo] ?? regra.max);
-          const novo = atual - valor;
+          const gasto = gastarComTemporario(status, regra.campo, atual, valor);
+          const novo = gasto.atual;
           if (novo < 0) {
             setUltimoUsoMsg({ id: item.id, texto: `Não há ${RECURSO_LABEL[recurso]} suficiente para usar ${item.nome}.`, erro: true });
             setTimeout(() => setUltimoUsoMsg((m) => (m?.id === item.id ? null : m)), 3000);
@@ -366,6 +368,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
           }
           campoStatus = regra.campo;
           novoValorStatus = novo;
+          if (obterTemporario(status, regra.campo) > 0) novoTemporario = gasto.temporario;
         }
       }
     }
@@ -374,6 +377,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     setUsandoId(item.id);
     if (campoStatus && novoValorStatus !== null) {
       onUpdate(['ficha', 'status', campoStatus], novoValorStatus);
+      if (novoTemporario !== null) onUpdate(['ficha', 'status', campoTemporario(campoStatus)], novoTemporario);
     }
     try {
       if (campanhaAtiva?.id) {

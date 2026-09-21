@@ -12,7 +12,10 @@ interface StatusVitaisSectionProps {
   maximo: { vida: number; mana: number; sanidade: number; cansaco: number };
   efeitosCansaco: string[];
   composicao: Record<'vida' | 'mana' | 'sanidade' | 'cansaco', IComposicaoStatusVital>;
-  onStatusChange: (campo: string, mudanca: number, maximo: number) => void;
+  onStatusChange: (campo: string, mudanca: number, maximo: number, ignorarTemporario?: boolean) => void;
+  /** Extra acima do máximo (vida, mana, sanidade). */
+  temporario?: { vida: number; mana: number; sanidade: number };
+  onLimparTemporario?: (campo: string) => void;
   onSanidadeMaximaChange: (maximo: number) => void;
   onOpenInfo: (modal: any) => void;
   onOpenAdjust: (
@@ -29,6 +32,8 @@ export function StatusVitaisSection({
   efeitosCansaco,
   composicao,
   onStatusChange,
+  temporario = { vida: 0, mana: 0, sanidade: 0 },
+  onLimparTemporario,
   onSanidadeMaximaChange,
   onOpenInfo,
   onOpenAdjust,
@@ -72,8 +77,10 @@ export function StatusVitaisSection({
           color="vermelho"
           current={atual.vida}
           max={maximo.vida}
+          temporario={temporario.vida}
+          onLimparTemporario={onLimparTemporario ? () => onLimparTemporario('vidaAtual') : undefined}
           onAdd={(valor: number) => onStatusChange('vidaAtual', valor, maximo.vida)}
-          onSub={(valor: number) => onStatusChange('vidaAtual', -valor, maximo.vida)}
+          onSub={(valor: number, ignorarTemporario?: boolean) => onStatusChange('vidaAtual', -valor, maximo.vida, ignorarTemporario)}
           onAdjustClick={() => onOpenAdjust(chaveAjuste('recurso', 'vidaMaxima'), 'Vida máxima', composicao.vida.automaticos)}
           onHelpClick={() => info('PONTOS DE VIDA', 'Representa a vitalidade e saúde física. Chegar a 0 significa cair morrendo.', 'Vida máxima', maximo.vida, composicao.vida)}
         />
@@ -82,8 +89,10 @@ export function StatusVitaisSection({
           color="azul"
           current={atual.mana}
           max={maximo.mana}
+          temporario={temporario.mana}
+          onLimparTemporario={onLimparTemporario ? () => onLimparTemporario('manaAtual') : undefined}
           onAdd={(valor: number) => onStatusChange('manaAtual', valor, maximo.mana)}
-          onSub={(valor: number) => onStatusChange('manaAtual', -valor, maximo.mana)}
+          onSub={(valor: number, ignorarTemporario?: boolean) => onStatusChange('manaAtual', -valor, maximo.mana, ignorarTemporario)}
           onAdjustClick={() => onOpenAdjust(chaveAjuste('recurso', 'manaMaxima'), 'Mana máxima', composicao.mana.automaticos)}
           onHelpClick={() => info('PONTOS DE MANA', 'A energia arcana e espiritual usada em magias e habilidades especiais.', 'Mana máxima', maximo.mana, composicao.mana)}
         />
@@ -93,8 +102,10 @@ export function StatusVitaisSection({
           color="roxo"
           current={atual.sanidade}
           max={maximo.sanidade}
+          temporario={temporario.sanidade}
+          onLimparTemporario={onLimparTemporario ? () => onLimparTemporario('sanidadeAtual') : undefined}
           onAdd={(valor: number) => onStatusChange('sanidadeAtual', valor, maximo.sanidade)}
-          onSub={(valor: number) => onStatusChange('sanidadeAtual', -valor, maximo.sanidade)}
+          onSub={(valor: number, ignorarTemporario?: boolean) => onStatusChange('sanidadeAtual', -valor, maximo.sanidade, ignorarTemporario)}
           onMaxChange={onSanidadeMaximaChange}
           onAdjustClick={() => onOpenAdjust(chaveAjuste('recurso', 'sanidadeMaxima'), 'Sanidade máxima', composicao.sanidade.automaticos)}
           onHelpClick={() => info('PONTOS DE SANIDADE', 'A integridade mental do personagem. Ver horrores pode drená-la.', 'Sanidade máxima', maximo.sanidade, composicao.sanidade)}

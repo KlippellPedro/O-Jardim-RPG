@@ -50,7 +50,7 @@ import {
   type ISeloCatalogo,
   type IEncantamentoCatalogo,
 } from '../../../services/magiaService';
-import { obterStatusFicha, penalidadeCansacoTeste } from '../../../services/statusService';
+import { gastarComTemporario, obterStatusFicha, obterTemporario, penalidadeCansacoTeste } from '../../../services/statusService';
 import { resumirEquipamentos } from '../../../services/equipamentoService';
 import { RitualComponents } from '../../../components/materials/RitualComponents';
 import { useAuthStore } from '../../../store/useAuthStore';
@@ -146,6 +146,8 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     || campanha?.papel === 'assistente';
   const manaMaxima = Math.max(0, (Number(ficha.derivados?.mana || character.derivados?.mana) || 0) + (resumoEquipamento.bonusRecursos.manaMaxima || 0));
   const manaAtual = Math.max(0, Number(status.manaAtual ?? manaMaxima));
+  const manaTemporaria = obterTemporario(status, 'manaAtual');
+  const manaDisponivel = manaAtual + manaTemporaria;
   const concentracaoAtiva = status.concentracaoAtiva as { magiaId?: string; titulo?: string } | null | undefined;
   const bonusConjuracaoFinal = perfil.bonusConjuracao + penalidadeCansacoTeste(status.cansacoAtual, false);
   const temaFluxoNativo = perfil.fluxoNativoId ? temaDoFluxo(perfil.fluxoNativoId) : null;
@@ -338,14 +340,16 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       setMensagem({ tipo: 'erro', texto: avaliacao.motivo || 'Não é possível realizar este ritual.' });
       return;
     }
-    if (manaAtual < ritual.custo_mana) {
+    if (manaDisponivel < ritual.custo_mana) {
       setMensagem({ tipo: 'erro', texto: `Mana insuficiente. ${ritual.titulo} custa ${ritual.custo_mana}.` });
       return;
     }
 
     acaoMagicaEmAndamento.current = true;
     setConjurandoId(ritual.id);
-    onUpdate(['ficha', 'status', 'manaAtual'], manaAtual - ritual.custo_mana);
+    const gastoRitual = gastarComTemporario(status, 'manaAtual', manaAtual, ritual.custo_mana);
+    onUpdate(['ficha', 'status', 'manaAtual'], gastoRitual.atual);
+    if (manaTemporaria > 0) onUpdate(['ficha', 'status', 'manaTemporaria'], gastoRitual.temporario);
 
     try {
       if (campanha?.id) {
@@ -421,7 +425,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       setMensagem({ tipo: 'erro', texto: avaliacao.motivo || 'Não é possível conjurar esta magia.' });
       return;
     }
-    if (manaAtual < magia.custo_mana) {
+    if (manaDisponivel < magia.custo_mana) {
       setMensagem({ tipo: 'erro', texto: `Mana insuficiente. ${magia.titulo} custa ${magia.custo_mana}.` });
       return;
     }
@@ -438,7 +442,9 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
 
     acaoMagicaEmAndamento.current = true;
     setConjurandoId(magia.id);
-    onUpdate(['ficha', 'status', 'manaAtual'], manaAtual - magia.custo_mana);
+    const gastoMagia = gastarComTemporario(status, 'manaAtual', manaAtual, magia.custo_mana);
+    onUpdate(['ficha', 'status', 'manaAtual'], gastoMagia.atual);
+    if (manaTemporaria > 0) onUpdate(['ficha', 'status', 'manaTemporaria'], gastoMagia.temporario);
     if (magia.concentracao) {
       onUpdate(['ficha', 'status', 'concentracaoAtiva'], { magiaId: magia.id, titulo: magia.titulo });
     }
@@ -856,7 +862,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
 
         <div className="mt-3 flex flex-wrap items-center gap-3 rounded-xl border border-white/5 bg-black/20 px-4 py-3 text-xs text-gray-400">
           <Shield size={15} className="text-emerald-300" />
-          <span>Mana {manaAtual}/{manaMaxima}</span>
+          <span>Mana {manaAtual}/{manaMaxima}{manaTemporaria > 0 ? ` (+${manaTemporaria} temp)` : ''}</span>
           <span>Fluxo sustenta até o {perfil.circuloDoFluxo || 0}º círculo.</span>
           {perfil.possuiFonte
             ? <span>Sua fonte libera até o {perfil.circuloDaFonte || 0}º; vale o menor dos dois limites.</span>

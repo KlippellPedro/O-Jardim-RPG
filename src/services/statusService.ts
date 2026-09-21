@@ -141,21 +141,66 @@ export function movimentoBloqueadoPorCondicao(condicoes: unknown): boolean {
   return ids.has('agarrado') || ids.has('imobilizado') || ids.has('inconsciente');
 }
 
+/** Vida, Mana e Sanidade aceitam um extra temporário acima do máximo. Ele fica
+ * num campo à parte (ex.: `vidaTemporaria`), então `vidaAtual` continua dentro
+ * do máximo e nada que depende disso (banco, sessão, descanso) muda. O
+ * Cansaço não tem extra: passar do limite é colapso, não bônus. */
+const CAMPOS_COM_TEMPORARIO = ['vidaAtual', 'manaAtual', 'sanidadeAtual'];
+
+export const aceitaTemporario = (campo: string) => CAMPOS_COM_TEMPORARIO.includes(campo);
+
+export const campoTemporario = (campo: string) => campo.replace('Atual', 'Temporaria');
+
+export function obterTemporario(status: IStatusVital | null | undefined, campo: string): number {
+  if (!status || !aceitaTemporario(campo)) return 0;
+  return Math.max(0, Math.trunc(Number(status[campoTemporario(campo)]) || 0));
+}
+
+/** Gasto de custo (magia, poder, habilidade): o temporário paga primeiro. */
+export function gastarComTemporario(
+  status: IStatusVital,
+  campo: string,
+  atual: number,
+  custo: number,
+): { atual: number; temporario: number } {
+  const temporario = obterTemporario(status, campo);
+  const absorvido = Math.min(temporario, Math.max(0, custo));
+  return { atual: atual - (custo - absorvido), temporario: temporario - absorvido };
+}
+
 export function limiteMorrendo(constituicao: unknown): 3 | 4 {
   return Number(constituicao) >= 20 ? 4 : 3;
 }
 
 export function atualizarStatusVital(
-  statusAtual: IStatusVital,
+  statusEntrada: IStatusVital,
   campo: string,
-  alteracao: number,
+  alteracaoBruta: number,
   maximo: number,
   constituicao: unknown,
+  opcoes: { ignorarTemporario?: boolean } = {},
 ): IStatusVital {
   const maximoSeguro = Math.max(1, Number(maximo) || 1);
-  const valorAtual = Number(statusAtual[campo] ?? (campo === 'cansacoAtual' ? 0 : maximoSeguro));
+  const valorAtual = Number(statusEntrada[campo] ?? (campo === 'cansacoAtual' ? 0 : maximoSeguro));
+
+  // Extra temporário: o dano gasta ele primeiro e o que passa do máximo vira ele.
+  let statusAtual = statusEntrada;
+  let alteracao = Number(alteracaoBruta || 0);
+  if (aceitaTemporario(campo)) {
+    let temporario = obterTemporario(statusEntrada, campo);
+    if (alteracao < 0 && !opcoes.ignorarTemporario && temporario > 0) {
+      const absorvido = Math.min(temporario, -alteracao);
+      temporario -= absorvido;
+      alteracao += absorvido;
+    } else if (alteracao > 0 && valorAtual + alteracao > maximoSeguro) {
+      const excesso = valorAtual + alteracao - maximoSeguro;
+      temporario += excesso;
+      alteracao -= excesso;
+    }
+    statusAtual = { ...statusEntrada, [campoTemporario(campo)]: temporario };
+  }
   const minimo = campo === 'vidaAtual' ? -maximoSeguro : 0;
-  const proximoValor = Math.max(minimo, Math.min(maximoSeguro, valorAtual + Number(alteracao || 0)));
+  const proximoValor = Math.max(minimo, Math.min(maximoSeguro, valorAtual + alteracao));
   const proximo: IStatusVital = { ...statusAtual, [campo]: proximoValor };
 
   if (campo !== 'vidaAtual') return proximo;
