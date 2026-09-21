@@ -268,6 +268,9 @@ _montar_diretorio_estatico(
     immutable=True,
 )
 _montar_diretorio_estatico("models", cache_seconds=86400)
+# Voz do Grande Sábio (frases gravadas + manifest.json). Sem este mount o site
+# publicado devolvia 404 e a voz caía na do navegador; o Vite servia por fora.
+_montar_diretorio_estatico("audio", cache_seconds=86400)
 
 
 # Catálogos de construção da ficha/regras são públicos. Mundo e Loja não são
@@ -296,7 +299,7 @@ def _frontend_index_response() -> FileResponse | JSONResponse:
     return resposta
 
 
-_PREFIXOS_RESERVADOS_DO_FRONTEND = frozenset({"api", "assets", "models", "data"})
+_PREFIXOS_RESERVADOS_DO_FRONTEND = frozenset({"api", "assets", "models", "audio", "data"})
 
 
 def _deve_usar_fallback_spa(request: Request) -> bool:

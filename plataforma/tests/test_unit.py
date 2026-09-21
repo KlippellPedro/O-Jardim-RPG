@@ -929,6 +929,23 @@ class FrontendRouteTests(unittest.TestCase):
         self.assertIn("javascript", resposta.headers["content-type"])
         self.assertNotEqual(resposta.content, self.frontend_index.read_bytes())
 
+    def test_voz_do_grande_sabio_e_servida_pelo_site_publicado(self):
+        # Sem o mount de /audio o site em producao devolvia 404 e a voz caia
+        # na do navegador (o Vite dev serve public/ por fora e escondia isso).
+        pasta = self.frontend_root / "audio" / "sabio"
+        if not (pasta / "manifest.json").is_file():
+            self.skipTest("dist sem a voz do Grande Sabio (rode npm run build)")
+
+        manifesto = self.client.get("/audio/sabio/manifest.json")
+        self.assertEqual(manifesto.status_code, 200)
+        self.assertNotIn("text/html", manifesto.headers["content-type"])
+        clips = manifesto.json()["clips"]
+        arquivo = next(iter(clips.values()))["a"]
+        clipe = self.client.get(f"/audio/sabio/{arquivo}")
+        self.assertEqual(clipe.status_code, 200)
+        self.assertIn("audio", clipe.headers["content-type"])
+        self.assertEqual(self.client.get("/audio/sabio/nao-existe.mp3", headers={"Accept": "text/html"}).status_code, 404)
+
     def test_arquivo_ausente_nao_devolve_index(self):
         for caminho in ("/assets/inexistente.js", "/models/inexistente.glb", "/sw.js"):
             resposta = self.client.get(caminho, headers={"Accept": "text/html"})
