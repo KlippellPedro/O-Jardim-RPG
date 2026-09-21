@@ -1,0 +1,238 @@
+/* Resumo da sessão (ver ResumoSessaoModal.tsx). Só transform e opacity. */
+
+.resumo-sessao {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #07070d;
+  color: #fff;
+  animation: resumo-entrada 0.4s ease-out both;
+}
+
+.resumo-sessao__fundo { position: absolute; inset: 0; transition: background 0.8s ease; }
+
+.resumo-sessao__fundo span {
+  position: absolute;
+  border-radius: 999px;
+  background: var(--resumo-tom);
+  filter: blur(90px);
+  opacity: 0.28;
+  transition: background 0.8s ease;
+}
+
+.resumo-sessao__fundo span:nth-child(1) { left: -12%; top: -18%; width: 55vmax; height: 55vmax; animation: resumo-flutuar 14s ease-in-out infinite; }
+.resumo-sessao__fundo span:nth-child(2) { right: -18%; bottom: -22%; width: 60vmax; height: 60vmax; animation: resumo-flutuar 18s ease-in-out infinite reverse; opacity: 0.2; }
+.resumo-sessao__fundo span:nth-child(3) { left: 32%; top: 30%; width: 28vmax; height: 28vmax; animation: resumo-flutuar 11s ease-in-out infinite; opacity: 0.12; }
+
+.resumo-sessao__progresso {
+  position: absolute;
+  left: 1rem;
+  right: 3.6rem;
+  top: max(0.9rem, env(safe-area-inset-top, 0px));
+  z-index: 3;
+  display: flex;
+  gap: 0.3rem;
+}
+
+.resumo-sessao__seg {
+  position: relative;
+  flex: 1;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.resumo-sessao__seg i { position: absolute; inset: 0; background: #fff; transform: scaleX(0); transform-origin: left; }
+.resumo-sessao__seg--feito i { transform: scaleX(1); }
+.resumo-sessao__seg--atual i { animation: resumo-barra linear forwards; }
+
+.resumo-sessao__fechar {
+  position: absolute;
+  right: 0.9rem;
+  top: max(0.55rem, env(safe-area-inset-top, 0px));
+  z-index: 4;
+  display: flex;
+  width: 2.2rem;
+  height: 2.2rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+}
+
+.resumo-sessao__zona {
+  position: absolute;
+  top: 3.4rem;
+  bottom: 3.4rem;
+  z-index: 2;
+  width: 34%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.resumo-sessao__zona--esq { left: 0; }
+.resumo-sessao__zona--dir { right: 0; }
+
+.resumo-sessao__palco {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(100%, 34rem);
+  padding: 0 1.5rem;
+  pointer-events: none;
+}
+
+.resumo-sessao__cartao {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: center;
+}
+
+.resumo-sessao__cartao small {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--resumo-tom);
+}
+
+.resumo-sessao__cartao h2 {
+  margin: 0;
+  font-family: Cinzel, serif;
+  font-size: clamp(2rem, 8vw, 3.3rem);
+  font-weight: 900;
+  line-height: 1.05;
+  text-shadow: 0 0 40px color-mix(in srgb, var(--resumo-tom) 55%, transparent);
+}
+
+.resumo-sessao__cartao p { margin: 0; font-size: 1rem; color: rgba(255, 255, 255, 0.7); }
+
+.resumo-sessao__icone { color: var(--resumo-tom); filter: drop-shadow(0 0 14px var(--resumo-tom)); }
+
+.resumo-sessao__valor {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-family: Cinzel, serif;
+  font-size: clamp(3.2rem, 14vw, 5.6rem);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--resumo-tom);
+  text-shadow: 0 0 34px color-mix(in srgb, var(--resumo-tom) 60%, transparent);
+}
+
+.resumo-sessao__valor span {
+  font-family: system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: none;
+}
+
+.resumo-sessao__numeros {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.1rem 1rem;
+  margin-top: 0.8rem;
+}
+
+.resumo-sessao__numeros div { display: flex; flex-direction: column; align-items: center; }
+
+.resumo-sessao__numeros strong {
+  font-family: Cinzel, serif;
+  font-size: clamp(2.4rem, 10vw, 3.6rem);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--resumo-tom);
+  text-shadow: 0 0 28px color-mix(in srgb, var(--resumo-tom) 55%, transparent);
+}
+
+.resumo-sessao__numeros span {
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.resumo-sessao__legenda {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1.5rem 1fr 4rem 4rem 4rem;
+  margin-top: 0.4rem;
+  padding: 0 0.9rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+.resumo-sessao__legenda span:first-child { grid-column: 3; }
+
+.resumo-sessao__ranking {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.resumo-sessao__ranking li {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr 4rem 4rem 4rem;
+  align-items: center;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--resumo-tom) 30%, transparent);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.05);
+  font-family: 'Cascadia Mono', Consolas, monospace;
+  font-size: 0.9rem;
+  animation: resumo-linha 0.5s ease-out both;
+}
+
+.resumo-sessao__ranking b { color: var(--resumo-tom); }
+.resumo-sessao__ranking .resumo-sessao__nome { overflow: hidden; text-align: left; text-overflow: ellipsis; white-space: nowrap; font-family: system-ui, sans-serif; font-weight: 700; }
+.resumo-sessao__ranking li > span:not(.resumo-sessao__nome) { text-align: right; }
+
+.resumo-sessao__dica { margin-top: 1.4rem; font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255, 255, 255, 0.35); }
+
+.resumo-sessao__mensagem { position: relative; z-index: 1; margin: 0; color: rgba(255, 255, 255, 0.7); }
+
+.resumo-sessao__concluir {
+  position: absolute;
+  bottom: max(1.4rem, env(safe-area-inset-bottom, 0px));
+  z-index: 4;
+  padding: 0.7rem 1.6rem;
+  border: 1px solid color-mix(in srgb, var(--resumo-tom) 55%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--resumo-tom) 18%, transparent);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #fff;
+  cursor: pointer;
+}
+
+@keyframes resumo-entrada { from { opacity: 0; } to { opacity: 1; } }
+@keyframes resumo-barra { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes resumo-flutuar { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(4vmax, -3vmax, 0); } }
+@keyframes resumo-linha { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .resumo-sessao, .resumo-sessao__fundo span, .resumo-sessao__ranking li { animation: none; }
+  .resumo-sessao__seg--atual i { animation: none; transform: scaleX(1); }
+}

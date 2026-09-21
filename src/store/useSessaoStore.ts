@@ -136,6 +136,9 @@ interface SessaoState {
   connectionStatus: SessionConnectionStatus;
   isLoading: boolean;
   error: string | null;
+  /** Sessão ao vivo que acabou de ser encerrada: a tela abre o resumo dela. */
+  resumoPendenteId: string | null;
+  limparResumoPendente: () => void;
 
   conectarSSE: (campanhaId: string) => void;
   desconectarSSE: () => void;
@@ -189,6 +192,8 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
   connectionStatus: 'offline',
   isLoading: false,
   error: null,
+  resumoPendenteId: null,
+  limparResumoPendente: () => set({ resumoPendenteId: null }),
 
   conectarSSE: (campanhaId) => {
     get().eventSource?.close();
@@ -279,7 +284,12 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
         return;
       }
 
+      // Uma sessão que estava ao vivo e sumiu foi encerrada: guarda o id para
+      // abrir o resumo (preparação cancelada não conta).
+      const antes = get();
+      const resumoPendenteId = antes.sessaoId && antes.sessaoStatus === 'aberta' ? antes.sessaoId : null;
       set({
+        ...(resumoPendenteId ? { resumoPendenteId } : {}),
         sessaoId: null,
         sessaoStatus: null,
         tituloSessao: null,
@@ -367,10 +377,11 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
   },
 
   encerrarSessao: async () => {
-    const { sessaoId } = get();
+    const { sessaoId, sessaoStatus } = get();
     if (!sessaoId) return;
     await sessaoApi.encerrarSessao(sessaoId);
     set({
+      ...(sessaoStatus === 'aberta' ? { resumoPendenteId: sessaoId } : {}),
       sessaoId: null,
       sessaoStatus: null,
       tituloSessao: null,

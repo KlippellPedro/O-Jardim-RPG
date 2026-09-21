@@ -10,6 +10,7 @@ import {
   PanelRight,
   Radio,
   RefreshCw,
+  Sparkles,
   Shield,
   Users,
   Wifi,
@@ -33,6 +34,8 @@ import {
   sessaoTourJaVisto,
 } from './sessionTourConfig';
 import './sessao.css';
+import { ResumoSessaoModal } from './components/ResumoSessaoModal';
+import { sessaoApi } from '../../services/sessaoApi';
 
 export const SessaoPage: React.FC = () => {
   const [isChangingLive, setIsChangingLive] = useState(false);
@@ -72,9 +75,33 @@ export const SessaoPage: React.FC = () => {
     isLoading,
     error,
     clearError,
+    resumoPendenteId,
+    limparResumoPendente,
   } = useSessaoStore();
   const { campanhaAtiva, usuario } = useAuthStore();
   const activeCampaignId = campanhaAtiva?.id;
+  // Resumo aberto à mão (botão) ou pelo fim da sessão ao vivo.
+  const [resumoManualId, setResumoManualId] = useState<string | null>(null);
+  const [resumoIndisponivel, setResumoIndisponivel] = useState(false);
+  const resumoAbertoId = resumoPendenteId ?? resumoManualId;
+  const fecharResumo = useCallback(() => {
+    limparResumoPendente();
+    setResumoManualId(null);
+  }, [limparResumoPendente]);
+  const abrirUltimoResumo = useCallback(async () => {
+    if (!activeCampaignId) return;
+    try {
+      const { sessao_id: ultima } = await sessaoApi.ultimaSessaoEncerrada(activeCampaignId);
+      if (ultima) setResumoManualId(ultima);
+      else {
+        setResumoIndisponivel(true);
+        window.setTimeout(() => setResumoIndisponivel(false), 3500);
+      }
+    } catch {
+      setResumoIndisponivel(true);
+      window.setTimeout(() => setResumoIndisponivel(false), 3500);
+    }
+  }, [activeCampaignId]);
   const tourStorageKey = `jardim:sessao-tour:${usuario?.id || 'local'}`;
 
   useDialogAccessibility({ open: leftDrawerOpen, dialogRef: leftDrawerRef, onClose: () => setLeftDrawerOpen(false) });
@@ -341,6 +368,16 @@ export const SessaoPage: React.FC = () => {
                   <span className="hidden sm:inline">{sessaoStatus === 'aberta' ? 'Encerrar ao vivo' : 'Iniciar ao vivo'}</span>
                 </button>
               ) : null}
+              <button
+                type="button"
+                onClick={() => void abrirUltimoResumo()}
+                className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-white/70 transition-colors hover:border-[#c7a44c]/40 hover:text-[#e3c363]"
+                aria-label="Ver o resumo da última sessão"
+                title={resumoIndisponivel ? 'Nenhuma sessão foi encerrada ainda.' : 'Resumo da última sessão'}
+              >
+                <Sparkles size={13} />
+                <span className="hidden sm:inline">{resumoIndisponivel ? 'Sem sessões ainda' : 'Resumo'}</span>
+              </button>
               <span
                 className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs ${
                   connectionStatus === 'online'
@@ -438,6 +475,8 @@ export const SessaoPage: React.FC = () => {
           </aside>
         </div>
       ) : null}
+
+      {resumoAbertoId ? <ResumoSessaoModal sessaoId={resumoAbertoId} onClose={fecharResumo} /> : null}
 
       {participantsDialogMode && comando && sessaoStatus === 'preparacao' ? (
         <SessionParticipantsDialog

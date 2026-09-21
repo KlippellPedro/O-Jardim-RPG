@@ -107,7 +107,59 @@ export interface SessaoResponse {
   bloqueada: boolean;
 }
 
+export interface ResumoDestaque {
+  id: string;
+  rotulo: string;
+  personagem: string;
+  valor: number;
+  unidade: string;
+  detalhe: string;
+}
+
+export interface ResumoJogador {
+  nome: string;
+  rolagens: number;
+  criticos: number;
+  falhas: number;
+  dano_total: number;
+  dano_maximo: number;
+  usos: number;
+  acoes: number;
+  media_natural: number | null;
+}
+
+/** Resumo da sessão: só números e o que foi registrado, sem o título de rolagens de perícia. */
+export interface ResumoSessaoResposta {
+  sessao: {
+    id: string;
+    titulo: string;
+    status: string;
+    rodadas: number;
+    duracao_min: number;
+    iniciada_em: string;
+    encerrada_em: string | null;
+  };
+  mesa: {
+    rolagens: number;
+    criticos: number;
+    falhas: number;
+    dano_total: number;
+    usos: number;
+    jogadores: number;
+  };
+  destaques: ResumoDestaque[];
+  jogadores: ResumoJogador[];
+}
+
 export const sessaoApi = {
+  resumoDaSessao(sessaoId: string) {
+    return api<ResumoSessaoResposta>(`/sessao/${sessaoId}/resumo`);
+  },
+
+  ultimaSessaoEncerrada(campanhaId: string) {
+    return api<{ sessao_id: string | null }>(`/sessao/campanha/${campanhaId}/ultima-encerrada`);
+  },
+
   obterSessao(campanhaId: string) {
     return api<SessaoResponse>(`/sessao?campanha_id=${campanhaId}`);
   },
