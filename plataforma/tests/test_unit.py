@@ -717,7 +717,7 @@ class SessaoAoVivoTests(unittest.TestCase):
 
     def test_xp_por_vd_cresce_com_a_dificuldade_e_ignora_vd_vazio(self):
         self.assertEqual(xp_por_vd(None), 0)
-        self.assertEqual(xp_por_vd(1), 200)
+        self.assertEqual(xp_por_vd(1), 500)
         self.assertEqual(xp_por_vd(10), 11000)
         # A tabela só cobre 1-10; fora da faixa, satura nas pontas em vez de
         # estourar (defensivo contra dado sujo vindo do catálogo).

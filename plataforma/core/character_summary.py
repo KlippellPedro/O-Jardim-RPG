@@ -248,9 +248,12 @@ def _classes_da_ficha(ficha: dict) -> list[dict]:
 # em 10 graus (mesma contagem dos círculos dos Fluxos). O XP de cada grau já
 # vem pronto aqui — o mestre só escolhe o VD da criatura, sem inventar XP na
 # mão pra cada uma.
+# Calibrado contra o custo de nível (N x 1.000) para um grupo de 4 enfrentando
+# um monstro de VD ~ nível/2: sobe de nível em ~9 a 11 lutas do 1 ao 16, e em
+# ~7 a 8 no 17-20. O VD 1 pagava só 200 e exigia 20-40 lutas nos primeiros níveis.
 XP_POR_VD: dict[int, int] = {
-    1: 200, 2: 600, 3: 1200, 4: 2000, 5: 3000,
-    6: 4200, 7: 5600, 8: 7200, 9: 9000, 10: 11000,
+    1: 500, 2: 1300, 3: 2200, 4: 3000, 5: 3800,
+    6: 4800, 7: 5800, 8: 7200, 9: 9000, 10: 11000,
 }
 
 
