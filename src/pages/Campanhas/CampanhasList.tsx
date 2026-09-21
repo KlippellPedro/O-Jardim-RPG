@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 import { campanhasApi } from '../../services/campanhasApi';
 import { Plus, Users, Crown, Eye, Loader2, KeyRound } from 'lucide-react';
+import { corDaCampanha, urlDaCapa } from '../Campanha/campanha';
 import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
 
+import { SimboloOculto } from '../../components/descobertas/SimboloOculto';
 export const CampanhasList: React.FC = () => {
   const { usuario, campanhas, setCampanhaAtiva, initContexto } = useAuthStore();
   const navigate = useNavigate();
@@ -48,7 +50,7 @@ export const CampanhasList: React.FC = () => {
     await setCampanhaAtiva(id);
     // isLoading será mantido true até a navegação completar -
     // o componente vai desmontar, portanto não precisamos de setIsLoading(false)
-    navigate('/ficha');
+    navigate('/campanha');
   };
 
   const handleJoin = async (e: React.FormEvent) => {
@@ -153,6 +155,17 @@ export const CampanhasList: React.FC = () => {
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all opacity-0 group-hover:opacity-100"></div>
               
+              <div
+                className="relative z-10 -mx-6 -mt-6 mb-4 h-24 overflow-hidden rounded-t-3xl"
+                style={{ background: `radial-gradient(circle at 80% 0%, ${corDaCampanha(campanha.identidade)}55, transparent 65%), linear-gradient(160deg, #14131c, #0a0a10)` }}
+                aria-hidden="true"
+              >
+                {urlDaCapa(campanha.id, campanha.identidade) ? (
+                  <img src={urlDaCapa(campanha.id, campanha.identidade) ?? undefined} alt="" loading="lazy" className="h-full w-full object-cover" />
+                ) : null}
+                <span className="absolute inset-x-0 bottom-0 h-1" style={{ backgroundColor: corDaCampanha(campanha.identidade) }} />
+              </div>
+
               <div className="flex justify-between items-start mb-4 relative z-10">
                 <h2 className="text-2xl font-bold text-white group-hover:text-primary transition-colors" style={{fontFamily: 'Cinzel, serif'}}>
                   {campanha.nome}
@@ -160,7 +173,7 @@ export const CampanhasList: React.FC = () => {
               </div>
               
               <p className="text-gray-400 text-sm mb-6 line-clamp-2 relative z-10">
-                {campanha.descricao || 'Sem descrição.'}
+                {campanha.identidade?.frase ? `“${campanha.identidade.frase}”` : campanha.descricao || 'Sem descrição.'}
               </p>
               
               <div className="flex items-center gap-2 mt-auto relative z-10">
@@ -295,6 +308,7 @@ export const CampanhasList: React.FC = () => {
         )}
       </AnimatePresence>
 
+      <div className="mt-10 flex justify-center"><SimboloOculto chave="selo_da_mesa" glifo="⚜" /></div>
     </div>
   );
 };

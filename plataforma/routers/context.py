@@ -30,7 +30,8 @@ def bootstrap_context(
             campanhas = connection.execute(
                 """
                 SELECT c.id, c.nome, c.descricao, c.status, c.atualizado_em,
-                       c.dono_id, c.configuracoes, 'mestre' AS papel, m.personagem_ativo_id
+                       c.dono_id, c.configuracoes, 'mestre' AS papel, m.personagem_ativo_id,
+                       jsonb_build_object('cor', c.identidade->'cor', 'frase', COALESCE(c.identidade->>'frase', ''), 'tem_capa', (c.identidade ? 'capa'), 'capa_em', c.identidade->'capa_em') AS identidade
                 FROM campanhas c
                 LEFT JOIN membros_campanha m
                   ON m.campanha_id=c.id AND m.usuario_id=%s AND m.status='ativo'
@@ -43,7 +44,8 @@ def bootstrap_context(
             campanhas = connection.execute(
                 """
                 SELECT c.id, c.nome, c.descricao, c.status, c.atualizado_em,
-                       c.dono_id, c.configuracoes, m.papel, m.personagem_ativo_id
+                       c.dono_id, c.configuracoes, m.papel, m.personagem_ativo_id,
+                       jsonb_build_object('cor', c.identidade->'cor', 'frase', COALESCE(c.identidade->>'frase', ''), 'tem_capa', (c.identidade ? 'capa'), 'capa_em', c.identidade->'capa_em') AS identidade
                 FROM campanhas c
                 JOIN membros_campanha m ON m.campanha_id=c.id
                 WHERE m.usuario_id=%s AND m.status='ativo' AND c.status='ativa'
