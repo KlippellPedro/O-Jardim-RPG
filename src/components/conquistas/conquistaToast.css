@@ -1,0 +1,108 @@
+/* Aviso de conquista (ver ConquistaHost.tsx). Só transform e opacity. */
+
+.conquista-toast-area {
+  position: fixed;
+  top: max(0.9rem, env(safe-area-inset-top, 0px));
+  left: 0;
+  right: 0;
+  z-index: 10002;
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem;
+  pointer-events: none;
+}
+
+.conquista-toast {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: min(100%, 26rem);
+  padding: 0.7rem 1.1rem 0.7rem 0.8rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--selo-aro, #cbd5e1) 45%, transparent);
+  border-radius: 1rem;
+  background: linear-gradient(120deg, rgba(10, 12, 22, 0.96), rgba(18, 16, 30, 0.96));
+  box-shadow: 0 14px 40px -12px rgba(0, 0, 0, 0.8), 0 0 28px -8px var(--selo-brilho, #94a3b8);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  pointer-events: auto;
+  animation: conquista-entrar 0.55s cubic-bezier(0.2, 1.2, 0.35, 1) both;
+}
+
+.conquista-toast--comum { --selo-aro: #cbd5e1; --selo-brilho: #94a3b8; }
+.conquista-toast--rara { --selo-aro: #c4b5fd; --selo-brilho: #8b5cf6; }
+.conquista-toast--lendaria { --selo-aro: #fde68a; --selo-brilho: #f59e0b; }
+
+.conquista-toast--saindo { animation: conquista-sair 0.45s ease-in both; }
+
+.conquista-toast__texto { display: flex; min-width: 0; flex-direction: column; gap: 0.1rem; }
+
+.conquista-toast__texto small {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--selo-aro);
+}
+
+.conquista-toast__texto strong {
+  font-family: Cinzel, serif;
+  font-size: 1.15rem;
+  line-height: 1.15;
+  text-shadow: 0 0 14px color-mix(in srgb, var(--selo-brilho) 60%, transparent);
+}
+
+.conquista-toast__texto em {
+  font-style: normal;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.conquista-toast__fila {
+  margin-left: auto;
+  align-self: flex-start;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.conquista-toast__brasas { position: absolute; inset: 0; pointer-events: none; }
+
+.conquista-toast__brasas i {
+  position: absolute;
+  left: var(--b-x);
+  bottom: -4px;
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: #fde68a;
+  box-shadow: 0 0 8px #f59e0b;
+  opacity: 0;
+  animation: conquista-brasa 2.2s ease-out var(--b-atraso) infinite;
+}
+
+@keyframes conquista-entrar {
+  from { opacity: 0; transform: translateY(-140%) scale(0.92); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes conquista-sair {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-40%); }
+}
+
+@keyframes conquista-brasa {
+  0% { opacity: 0; transform: translateY(0); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-64px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .conquista-toast { animation: none; }
+  .conquista-toast__brasas { display: none; }
+}

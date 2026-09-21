@@ -66,6 +66,8 @@ import { ChuvaMoedasHost } from './components/ChuvaMoedasHost';
 import { DescansoHost } from './components/DescansoHost';
 import { resetarEstadoVital } from './estadoVital';
 import './ficha.css';
+import { conquistasApi } from '../../services/conquistasApi';
+import { dispararConquistas } from '../../components/conquistas/conquistas';
 
 
 const TABS = [
@@ -186,6 +188,22 @@ export const PersonagemSheet: React.FC = () => {
   };
 
   const character = characters.find((c) => c.id === id);
+
+  // Conquistas de nível, Fama e saldo não passam por rolagem: avalia ao abrir a
+  // ficha e quando o nível ou a Fama mudam. O servidor decide; aqui só comemora.
+  const idParaConquistas = character?.id;
+  const nivelParaConquistas = character?.nivel;
+  const famaParaConquistas = character?.ficha?.fama;
+  useEffect(() => {
+    if (!idParaConquistas) return undefined;
+    let ativo = true;
+    conquistasApi.listar(idParaConquistas)
+      .then((resposta) => {
+        if (ativo) dispararConquistas(resposta.catalogo.filter((item) => resposta.novas.includes(item.chave)));
+      })
+      .catch(() => undefined);
+    return () => { ativo = false; };
+  }, [idParaConquistas, nivelParaConquistas, famaParaConquistas]);
   const somenteLeitura = character?.somenteLeitura === true;
   const characterPersistence = id ? persistence[id] : undefined;
   const campanhaId = useAuthStore((state) => state.campanhaAtiva?.id);

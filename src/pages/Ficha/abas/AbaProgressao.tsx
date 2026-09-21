@@ -38,6 +38,7 @@ import {
   vagasPoderDaClasse,
   type ILegadoCatalogo,
 } from '../../../services/progressaoFichaService';
+import { ConquistasGaleria } from '../components/ConquistasGaleria';
 
 type SecaoProgressaoId = 'raca' | 'habilidades' | 'escolhas' | 'poderes' | 'eventos' | 'legados';
 type FiltroDisponibilidade = 'todos' | 'disponiveis' | 'selecionados';
@@ -676,6 +677,8 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
           {!legadosVisiveis.length && <p className="rounded-xl border border-dashed border-white/10 p-5 text-center text-xs text-gray-500 lg:col-span-2">Nenhum Legado corresponde à busca e aos filtros atuais.</p>}
         </div>
       </Secao>
+
+      <ConquistasGaleria personagemId={character.id} />
     </div>
   );
 };

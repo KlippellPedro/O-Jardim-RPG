@@ -1,5 +1,7 @@
 import { api } from './apiClient';
 import { animarRolagem } from '../components/dados/rolagemDados';
+import { dispararConquistas } from '../components/conquistas/conquistas';
+import type { IConquistaNova } from './conquistasApi';
 
 export interface IRegistro {
   id: string;
@@ -26,7 +28,7 @@ export const registrosApi = {
     formula?: string | null;
     origem?: Record<string, any>;
   }) {
-    const resposta = await api<{ registro: IRegistro }>('/registros/rolagem', {
+    const resposta = await api<{ registro: IRegistro; conquistas_novas?: IConquistaNova[] }>('/registros/rolagem', {
       method: 'POST',
       body: {
         campanha_id: payload.campanhaId,
@@ -43,17 +45,19 @@ export const registrosApi = {
     // O dado já foi sorteado no servidor; a cena 3D só o mostra rolando e
     // segura a resposta até o pouso, para o modal de resultado vir depois.
     await animarRolagem(resposta.registro).catch(() => undefined);
+    // Conquista nova vem depois do dado pousar, para o aviso não roubar a cena dele.
+    dispararConquistas(resposta.conquistas_novas);
     return resposta;
   },
 
-  registrarUso(payload: {
+  async registrarUso(payload: {
     campanhaId: string;
     personagemId?: string | null;
     tipo: 'poder' | 'habilidade' | 'magia' | 'item' | 'anotacao';
     titulo: string;
     detalhes?: Record<string, any>;
   }) {
-    return api<{ registro: IRegistro }>('/registros/uso', {
+    const resposta = await api<{ registro: IRegistro; conquistas_novas?: IConquistaNova[] }>('/registros/uso', {
       method: 'POST',
       body: {
         campanha_id: payload.campanhaId,
@@ -63,6 +67,8 @@ export const registrosApi = {
         detalhes: payload.detalhes ?? {},
       },
     });
+    dispararConquistas(resposta.conquistas_novas);
+    return resposta;
   },
 
   listar(campanhaId: string, opts: { apenasSessao?: boolean; limite?: number } = {}) {

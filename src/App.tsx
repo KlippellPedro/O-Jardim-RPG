@@ -7,6 +7,7 @@ import { PerformancePreferencesBridge } from './hooks/usePerformance';
 import AtmosphericBackground from './AtmosphericBackground';
 
 const GlassMenu = lazy(() => import('./components/GlassMenu'));
+const ConquistaHost = lazy(() => import('./components/conquistas/ConquistaHost').then((modulo) => ({ default: modulo.ConquistaHost })));
 const RolagemHost = lazy(() => import('./components/dados/RolagemHost').then((modulo) => ({ default: modulo.RolagemHost })));
 const Home = lazy(() => import('./pages/Home'));
 const FichaList = lazy(() => import('./pages/Ficha/FichaList'));
@@ -175,6 +176,12 @@ function App() {
           {usuario && (
             <Suspense fallback={null}>
               <RolagemHost />
+            </Suspense>
+          )}
+
+          {usuario && (
+            <Suspense fallback={null}>
+              <ConquistaHost />
             </Suspense>
           )}
 

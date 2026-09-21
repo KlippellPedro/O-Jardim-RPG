@@ -33,6 +33,7 @@ import argparse
 import asyncio
 import hashlib
 import json
+import sys
 import unicodedata
 from pathlib import Path
 
@@ -41,6 +42,7 @@ from edge_tts import communicate
 
 RAIZ = Path(__file__).resolve().parent.parent
 CLASSES = RAIZ / "data" / "ficha" / "classes.json"
+CONQUISTAS = RAIZ / "plataforma" / "core" / "conquistas.py"
 SAIDA = RAIZ / "public" / "audio" / "sabio"
 
 VOZ_PADRAO = "pt-BR-FranciscaNeural"
@@ -115,6 +117,17 @@ def falado(texto: str) -> str:
     return texto
 
 
+def nomes_das_conquistas() -> list[str]:
+    """Nomes do catalogo de conquistas do servidor (plataforma/core/conquistas.py)."""
+    import importlib.util
+
+    especificacao = importlib.util.spec_from_file_location("conquistas_catalogo", CONQUISTAS)
+    modulo = importlib.util.module_from_spec(especificacao)
+    sys.modules["conquistas_catalogo"] = modulo  # dataclass precisa do modulo registrado
+    especificacao.loader.exec_module(modulo)
+    return [conquista.nome for conquista in modulo.CATALOGO]
+
+
 def frases() -> dict[str, str]:
     """texto mostrado na tela (chave do manifest) -> texto que a voz deve falar."""
     itens: dict[str, str] = {}
@@ -124,6 +137,11 @@ def frases() -> dict[str, str]:
     for rotulo in ("Vida", "Mana"):
         for n in range(1, MAX_GANHO + 1):
             itens[f"{rotulo} +{n}"] = f"{rotulo} mais {numero_por_extenso(n)}"
+
+    # O Grande Sabio anuncia cada conquista: "Conquista desbloqueada" e o nome.
+    itens["Conquista desbloqueada"] = "Conquista desbloqueada"
+    for nome in nomes_das_conquistas():
+        itens[nome] = nome
 
     dados = json.loads(CLASSES.read_text(encoding="utf-8"))
     lista = dados if isinstance(dados, list) else next(v for v in dados.values() if isinstance(v, list))
