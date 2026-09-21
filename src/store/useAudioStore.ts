@@ -6,6 +6,9 @@ interface AudioState {
   enabled: boolean;
   /** Volume dos efeitos, de 0 a 1. */
   volume: number;
+  /** Toque sonoro da classe por cima de momentos marcantes. Desligado por padrão. */
+  somDeClasse: boolean;
+  setSomDeClasse: (ativo: boolean) => void;
   setEnabled: (enabled: boolean) => void;
   toggleEnabled: () => void;
   setVolume: (volume: number) => void;
@@ -16,6 +19,8 @@ export const useAudioStore = create<AudioState>()(
     (set) => ({
       enabled: true,
       volume: 0.5,
+      somDeClasse: false,
+      setSomDeClasse: (somDeClasse) => set({ somDeClasse }),
 
       setEnabled: (enabled) => set({ enabled }),
       toggleEnabled: () => set((state) => ({ enabled: !state.enabled })),

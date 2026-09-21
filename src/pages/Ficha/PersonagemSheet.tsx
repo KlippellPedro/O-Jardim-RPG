@@ -69,6 +69,8 @@ import { DescansoHost } from './components/DescansoHost';
 import { CirculoMagicoHost } from './components/CirculoMagicoHost';
 import { AprendizadoHost } from './components/AprendizadoHost';
 import { AnaliseSabioModal } from './components/AnaliseSabioModal';
+import { perfilDaClasse } from '../../utils/somDeClasse';
+import { sfx } from '../../utils/audioSynth';
 import { resetarEstadoVital } from './estadoVital';
 import './ficha.css';
 import { conquistasApi } from '../../services/conquistasApi';
@@ -251,6 +253,11 @@ export const PersonagemSheet: React.FC = () => {
   const classePrincipalIdTema = (character?.ficha?.classes?.length
     ? character.ficha.classes.map((slot: { classeId?: string }) => slot.classeId).find((classeId: unknown): classeId is string => typeof classeId === 'string' && Boolean(classeId))
     : character?.ficha?.classeId) || '';
+  // O toque sonoro da classe vale enquanto esta ficha está aberta.
+  useEffect(() => {
+    sfx.definirPerfilClasse(perfilDaClasse(classePrincipalIdTema));
+    return () => sfx.definirPerfilClasse(null);
+  }, [classePrincipalIdTema]);
   const temaVisual = useMemo(
     () => criarTemaVisualFicha(racaIdTema, classePrincipalIdTema),
     [racaIdTema, classePrincipalIdTema],

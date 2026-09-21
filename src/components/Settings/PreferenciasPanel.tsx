@@ -4,11 +4,14 @@ import { useAudioStore } from '../../store/useAudioStore';
 import { sfx } from '../../utils/audioSynth';
 import { usePerformanceStore } from '../../store/usePerformanceStore';
 import { usePrefersReducedMotion } from '../../hooks/usePerformance';
+import { PERFIS_SONOROS, ROTULO_PERFIL } from '../../utils/somDeClasse';
 
 export const PreferenciasPanel: React.FC = () => {
   const enabled = useAudioStore((state) => state.enabled);
   const volume = useAudioStore((state) => state.volume);
   const toggleEnabled = useAudioStore((state) => state.toggleEnabled);
+  const somDeClasse = useAudioStore((state) => state.somDeClasse);
+  const setSomDeClasse = useAudioStore((state) => state.setSomDeClasse);
   const setVolume = useAudioStore((state) => state.setVolume);
   const performanceMode = usePerformanceStore((state) => state.performanceMode);
   const togglePerformanceMode = usePerformanceStore((state) => state.togglePerformanceMode);
@@ -130,6 +133,46 @@ export const PreferenciasPanel: React.FC = () => {
               <Volume2 size={16} className="text-gray-500 shrink-0" />
               <span className="text-xs font-mono text-gray-400 w-9 text-right">{Math.round(volume * 100)}%</span>
             </div>
+          </div>
+        </section>
+
+        <section className={`rounded-2xl border border-white/10 bg-white/5 p-6 transition-opacity ${enabled ? '' : 'opacity-50'}`}>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-bold text-white">Som da classe</h3>
+              <p className="mt-1 text-sm leading-6 text-gray-400">
+                Um toque extra da sua classe ao equipar, conjurar, acertar um crítico e quando chega a sua vez.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => { const proximo = !somDeClasse; setSomDeClasse(proximo); }}
+              data-sfx="off"
+              role="switch"
+              aria-checked={somDeClasse}
+              aria-label="Ativar ou desativar o som da classe"
+              disabled={!enabled}
+              className={`relative h-8 w-14 shrink-0 rounded-full transition-colors ${somDeClasse ? 'bg-primary' : 'bg-white/10'}`}
+            >
+              <span className={`absolute left-1 top-1 h-6 w-6 rounded-full bg-white shadow-md transition-transform ${somDeClasse ? 'translate-x-6' : 'translate-x-0'}`} />
+            </button>
+          </div>
+          <p className="mt-4 text-xs text-gray-500">Toque num perfil para ouvir. Cada classe usa um deles.</p>
+          <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {PERFIS_SONOROS.map((perfil) => (
+              <button
+                key={perfil}
+                type="button"
+                data-sfx="off"
+                disabled={!enabled}
+                onClick={() => sfx.prever(perfil)}
+                title={ROTULO_PERFIL[perfil].descricao}
+                className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-left transition-colors hover:border-primary/40 disabled:cursor-not-allowed"
+              >
+                <span className="block text-sm font-bold text-white">{ROTULO_PERFIL[perfil].titulo}</span>
+                <span className="block text-[11px] leading-4 text-gray-500">{ROTULO_PERFIL[perfil].descricao}</span>
+              </button>
+            ))}
           </div>
         </section>
       </div>

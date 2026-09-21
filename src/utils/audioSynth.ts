@@ -1,4 +1,5 @@
 import { useAudioStore } from '../store/useAudioStore';
+import type { PerfilSonoro } from './somDeClasse';
 
 // Efeitos sonoros de interface disponíveis. Nomes semânticos - quem chama
 // não precisa saber como o som é sintetizado nem em qual arquivo ele mora.
@@ -47,8 +48,46 @@ interface ToneStep {
   attack?: number;
 }
 
+// Momentos em que o toque da classe entra por cima do som normal.
+const COM_ASSINATURA: SfxName[] = ['equipar', 'conjurar', 'gongo', 'estrela'];
+
+const ASSINATURAS: Record<PerfilSonoro, ToneStep[]> = {
+  metal: [
+    { type: 'triangle', freqStart: 1480, freqEnd: 1420, duration: 0.5, gainPeak: 0.05, attack: 0.002 },
+    { type: 'sine', freqStart: 2790, duration: 0.4, startOffset: 0.01, gainPeak: 0.03, attack: 0.002 },
+    { type: 'sine', freqStart: 4100, duration: 0.25, startOffset: 0.02, gainPeak: 0.015, attack: 0.002 },
+  ],
+  cristal: [
+    { type: 'sine', freqStart: 1568, duration: 0.7, gainPeak: 0.04, attack: 0.005 },
+    { type: 'sine', freqStart: 2093, duration: 0.7, startOffset: 0.07, gainPeak: 0.035, attack: 0.005 },
+    { type: 'sine', freqStart: 2637, duration: 0.8, startOffset: 0.14, gainPeak: 0.03, attack: 0.005 },
+    { type: 'sine', freqStart: 3136, duration: 0.9, startOffset: 0.21, gainPeak: 0.022, attack: 0.005 },
+  ],
+  engrenagem: [
+    { type: 'square', freqStart: 660, freqEnd: 330, duration: 0.05, gainPeak: 0.04, attack: 0.001 },
+    { type: 'square', freqStart: 880, freqEnd: 440, duration: 0.05, startOffset: 0.09, gainPeak: 0.04, attack: 0.001 },
+    { type: 'square', freqStart: 1100, freqEnd: 550, duration: 0.07, startOffset: 0.18, gainPeak: 0.035, attack: 0.001 },
+  ],
+  sombra: [
+    { type: 'sawtooth', freqStart: 190, freqEnd: 70, duration: 0.45, gainPeak: 0.045, attack: 0.02 },
+    { type: 'sine', freqStart: 95, freqEnd: 55, duration: 0.6, gainPeak: 0.05, attack: 0.02 },
+  ],
+  natureza: [
+    { type: 'triangle', freqStart: 784, duration: 0.9, gainPeak: 0.04, attack: 0.01 },
+    { type: 'triangle', freqStart: 988, duration: 0.9, startOffset: 0.16, gainPeak: 0.035, attack: 0.01 },
+    { type: 'sine', freqStart: 1175, duration: 1.1, startOffset: 0.32, gainPeak: 0.025, attack: 0.01 },
+  ],
+  palco: [
+    { type: 'sawtooth', freqStart: 523, duration: 0.14, gainPeak: 0.03, attack: 0.005 },
+    { type: 'sawtooth', freqStart: 659, duration: 0.14, startOffset: 0.08, gainPeak: 0.03, attack: 0.005 },
+    { type: 'sawtooth', freqStart: 784, duration: 0.14, startOffset: 0.16, gainPeak: 0.03, attack: 0.005 },
+    { type: 'sawtooth', freqStart: 1047, duration: 0.4, startOffset: 0.24, gainPeak: 0.035, attack: 0.005 },
+  ],
+};
+
 class AudioSynth {
   private ctx: AudioContext | null = null;
+  private perfilClasse: PerfilSonoro | null = null;
   private lastPlayedAt: Partial<Record<SfxName, number>> = {};
 
   private getContext() {
@@ -108,6 +147,23 @@ class AudioSynth {
   }
 
   /** Ponto único de entrada para efeitos de interface. */
+  /** Perfil da classe da ficha aberta; `null` quando não há ficha aberta. */
+  definirPerfilClasse(perfil: PerfilSonoro | null) {
+    this.perfilClasse = perfil;
+  }
+
+  /** Toca o toque de um perfil, para o jogador ouvir antes de ligar. */
+  prever(perfil: PerfilSonoro) {
+    const volume = this.currentVolume();
+    if (volume === null) return;
+    this.playSteps(ASSINATURAS[perfil], volume);
+  }
+
+  private tocarAssinatura(volume: number) {
+    if (!this.perfilClasse || !useAudioStore.getState().somDeClasse) return;
+    this.playSteps(ASSINATURAS[this.perfilClasse], volume);
+  }
+
   play(name: SfxName) {
     if (this.isThrottled(name)) return;
     const volume = this.currentVolume();
@@ -233,6 +289,7 @@ class AudioSynth {
         ], volume);
         break;
     }
+    if (COM_ASSINATURA.includes(name)) this.tocarAssinatura(volume);
   }
 
   // ──────────────────────────────────────────────────────────────────
@@ -266,6 +323,7 @@ class AudioSynth {
   playCritSound() {
     const volume = this.currentVolume();
     if (volume === null) return;
+    this.tocarAssinatura(volume);
     const ctx = this.getContext();
     const osc1 = ctx.createOscillator();
     const osc2 = ctx.createOscillator();
