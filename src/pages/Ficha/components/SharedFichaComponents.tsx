@@ -1,9 +1,11 @@
-import { useState, type CSSProperties } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Check, ChevronDown, HelpCircle, Search, X } from 'lucide-react';
 import { AjusteButton } from './AjustesFichaModal';
 import { ModalPortal } from './ModalPortal';
 import { Select, type SelectOption } from '../../../components/ui/Select';
+import { dispararPancada, publicarEstadoVital } from '../estadoVital';
+import './barrasReativas.css';
 
 export const SectionTitle = ({ title }: { title: string }) => (
   <div className="flex items-center gap-4 mb-5">
@@ -246,7 +248,24 @@ export const LabeledModalSelect = ({
   );
 };
 
-export const ResourceBar = ({ label, color, current, max, onAdd, onSub, onHelpClick, onAdjustClick, onMaxChange }: any) => {
+const COR_RASTRO: Record<string, string> = {
+  vermelho: 'rgba(254, 202, 202, 0.85)',
+  azul: 'rgba(186, 230, 253, 0.85)',
+  roxo: 'rgba(221, 214, 254, 0.85)',
+  cinza: 'rgba(226, 232, 240, 0.7)',
+};
+
+const FAISCAS_CURA = [12, 28, 44, 60, 76, 90];
+
+interface EventoBarra {
+  chave: number;
+  delta: number;
+  /** Onde a barra estava antes, para o rastro do dano. */
+  de: number;
+}
+
+/** `chaveVital` liga a barra à vinheta de tela cheia (Vida e Sanidade da ficha). */
+export const ResourceBar = ({ label, color, current, max, onAdd, onSub, onHelpClick, onAdjustClick, onMaxChange, chaveVital }: any) => {
   const maxSeguro = Math.max(1, Number(max) || 1);
   const percent = Math.min(100, Math.max(0, (Number(current) / maxSeguro) * 100));
   const bgColors: Record<string, { bg: string; glow: string }> = {
@@ -259,6 +278,58 @@ export const ResourceBar = ({ label, color, current, max, onAdd, onSub, onHelpCl
   const isCritical = color === 'cinza' ? (percent >= 75 && current < maxSeguro) : (percent <= 25 && current > 0);
   const [inputValue, setInputValue] = useState<string | undefined>();
   const [maxInputValue, setMaxInputValue] = useState<string | undefined>();
+
+  // Reações: número flutuante, rastro do dano, tremor, faíscas de cura e a
+  // vinheta de tela cheia. Só apresentação; o valor continua vindo da ficha.
+  const cansaco = color === 'cinza';
+  const valorAtual = Number(current) || 0;
+  const anterior = useRef({ valor: valorAtual, percent });
+  const [evento, setEvento] = useState<EventoBarra | null>(null);
+
+  useEffect(() => {
+    const antes = anterior.current;
+    if (valorAtual !== antes.valor) {
+      const delta = valorAtual - antes.valor;
+      setEvento({ chave: Date.now(), delta, de: antes.percent });
+      const peso = Math.abs(delta) / maxSeguro;
+      if (chaveVital) {
+        if (delta < 0) dispararPancada(chaveVital === 'sanidade' ? 'sanidade' : 'dano', peso * 4);
+        else dispararPancada('cura', peso * 3);
+      }
+    }
+    anterior.current = { valor: valorAtual, percent };
+  }, [valorAtual, percent, maxSeguro, chaveVital]);
+
+  useEffect(() => {
+    if (!evento) return undefined;
+    const timer = window.setTimeout(() => setEvento(null), 1300);
+    return () => window.clearTimeout(timer);
+  }, [evento]);
+
+  useEffect(() => {
+    if (chaveVital) publicarEstadoVital({ [chaveVital]: valorAtual <= 0 ? 0 : percent });
+  }, [chaveVital, percent, valorAtual]);
+
+  // Para o Cansaço, subir é que é ruim: o "dano" dele é o aumento.
+  const perda = evento ? (cansaco ? evento.delta > 0 : evento.delta < 0) : false;
+  const ganho = evento ? !perda : false;
+  const tipoFlutuante = evento
+    ? cansaco ? 'cansaco' : perda ? (label === 'Mana' ? 'mana' : label === 'Sanidade' ? 'sanidade' : 'dano') : 'cura'
+    : 'cura';
+  const forcaTremor = evento ? Math.min(10, 3 + (Math.abs(evento.delta) / maxSeguro) * 40) : 0;
+  const esvaziada = !cansaco && valorAtual <= 0;
+  const classeEstado = esvaziada
+    ? ' barra--caida'
+    : label === 'Vida' && percent <= 25
+      ? ` barra--batimento${percent <= 10 ? ' barra--batimento-critico' : ''}`
+      : label === 'Sanidade' && percent <= 25
+        ? ' barra--instavel'
+        : '';
+  const animacaoTremor = evento && perda
+    ? (label === 'Sanidade'
+      ? { x: [0, 3, -4, 2, -1, 0], skewX: [0, -6, 5, -3, 0, 0] }
+      : { x: [0, -forcaTremor, forcaTremor, -forcaTremor * 0.6, forcaTremor * 0.3, 0] })
+    : { x: 0, skewX: 0 };
 
   const handleBlur = (val: string) => {
     if (!val.trim()) {
@@ -293,7 +364,60 @@ export const ResourceBar = ({ label, color, current, max, onAdd, onSub, onHelpCl
           <button type="button" onClick={() => onSub(5)} className="w-8 h-8 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white">-5</button>
           <button type="button" onClick={() => onSub(1)} className="w-8 h-8 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white">-1</button>
         </div>
-        <div className={`flex-1 h-8 bg-[#050508] border ${isCritical ? 'border-red-500/80 shadow-[0_0_20px_rgba(239,68,68,0.5)]' : 'border-white/10'} rounded-lg relative overflow-hidden flex items-center justify-center group shadow-inner ring-1 ring-inset ring-white/5`}>
+        <div className="relative flex-1">
+        <AnimatePresence>
+          {evento && (
+            <motion.span
+              key={evento.chave}
+              className={`barra-flutuante barra-flutuante--${tipoFlutuante}`}
+              initial={false}
+              exit={{ opacity: 0 }}
+              aria-hidden="true"
+            >
+              {evento.delta > 0 ? '+' : ''}{evento.delta}
+            </motion.span>
+          )}
+        </AnimatePresence>
+        <motion.div
+          animate={animacaoTremor}
+          transition={{ duration: 0.36, ease: 'easeOut' }}
+          className={`h-8 w-full bg-[#050508] border ${isCritical ? 'border-red-500/80 shadow-[0_0_20px_rgba(239,68,68,0.5)]' : 'border-white/10'} rounded-lg relative overflow-hidden flex items-center justify-center group shadow-inner ring-1 ring-inset ring-white/5${classeEstado}`}
+        >
+          {evento && perda && !cansaco && (
+            <motion.div
+              key={`rastro-${evento.chave}`}
+              aria-hidden="true"
+              className="absolute left-0 top-0 bottom-0"
+              style={{ background: COR_RASTRO[color] || COR_RASTRO.cinza }}
+              initial={{ width: `${evento.de}%`, opacity: 0.9 }}
+              animate={{ width: `${percent}%`, opacity: [0.9, 0.9, 0] }}
+              transition={{ delay: 0.4, duration: 0.85, ease: 'easeIn' }}
+            />
+          )}
+          {evento && (
+            <motion.div
+              key={`clarao-${evento.chave}`}
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-[5]"
+              style={{ background: perda ? (label === 'Sanidade' ? 'rgba(167,139,250,0.55)' : 'rgba(255,255,255,0.55)') : 'rgba(255,255,255,0.3)' }}
+              initial={{ opacity: 0.85 }}
+              animate={{ opacity: 0 }}
+              transition={{ duration: 0.35 }}
+            />
+          )}
+          {evento && ganho && !cansaco && FAISCAS_CURA.map((x, indice) => (
+            <span
+              key={`${evento.chave}-${x}`}
+              aria-hidden="true"
+              className="barra-faisca z-[6]"
+              style={{
+                '--fx': `${x}%`,
+                '--fc': color === 'azul' ? '#7dd3fc' : color === 'roxo' ? '#c4b5fd' : '#4ade80',
+                '--fa': `${indice * 0.05}s`,
+                '--fd': `${indice % 2 ? 8 : -8}px`,
+              } as CSSProperties}
+            />
+          ))}
           <motion.div
             initial={false}
             animate={{ width: `${percent}%` }}
@@ -330,6 +454,7 @@ export const ResourceBar = ({ label, color, current, max, onAdd, onSub, onHelpCl
               />
             ) : <span>{maxSeguro}</span>}
           </div>
+        </motion.div>
         </div>
         <div className="flex gap-1">
           <button type="button" onClick={() => onAdd(1)} className="w-8 h-8 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white">+1</button>

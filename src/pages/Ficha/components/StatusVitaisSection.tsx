@@ -68,6 +68,7 @@ export function StatusVitaisSection({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
         <ResourceBar
           label="Vida"
+          chaveVital="vida"
           color="vermelho"
           current={atual.vida}
           max={maximo.vida}
@@ -88,6 +89,7 @@ export function StatusVitaisSection({
         />
         <ResourceBar
           label="Sanidade"
+          chaveVital="sanidade"
           color="roxo"
           current={atual.sanidade}
           max={maximo.sanidade}

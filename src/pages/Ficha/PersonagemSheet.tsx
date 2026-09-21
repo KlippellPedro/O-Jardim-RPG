@@ -61,6 +61,8 @@ import {
 } from './fichaTourConfig';
 import { EscolhaImpactoHost } from './components/EscolhaImpactoHost';
 import { SubidaNivelHost } from './components/SubidaNivelHost';
+import { EstadoVitalOverlay } from './components/EstadoVitalOverlay';
+import { resetarEstadoVital } from './estadoVital';
 import './ficha.css';
 
 
@@ -137,6 +139,12 @@ export const PersonagemSheet: React.FC = () => {
   const liveSyncRunningRef = useRef(false);
   const liveSyncRunTokenRef = useRef(0);
   const liveSyncRetryRef = useRef<number | null>(null);
+
+  // A vinheta de Vida/Sanidade começa limpa e não vaza para outra ficha.
+  useEffect(() => {
+    resetarEstadoVital();
+    return resetarEstadoVital;
+  }, []);
 
   useEffect(() => {
     carregarCatalogo().then(setCatalogo);
@@ -761,6 +769,7 @@ export const PersonagemSheet: React.FC = () => {
       <FichaAtmosphere tema={temaVisual} />
       <EscolhaImpactoHost />
       <SubidaNivelHost />
+      <EstadoVitalOverlay />
       <div className="relative z-[1] mx-auto max-w-6xl">
         <button onClick={() => navigate('/ficha')} className="text-gray-500 hover:text-white mb-6 text-sm font-bold uppercase tracking-wider flex items-center gap-2">
           &larr; Voltar

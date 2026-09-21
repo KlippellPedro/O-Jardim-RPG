@@ -1,0 +1,97 @@
+/* Reações das barras de recurso (ver ResourceBar em SharedFichaComponents.tsx).
+   Só transform e opacity nas animações contínuas. */
+
+.barra-flutuante {
+  position: absolute;
+  right: 0.6rem;
+  top: -0.2rem;
+  z-index: 20;
+  font-family: 'Cascadia Mono', Consolas, monospace;
+  font-size: 0.95rem;
+  font-weight: 800;
+  pointer-events: none;
+  text-shadow: 0 0 10px currentColor, 0 1px 2px rgba(0, 0, 0, 0.9);
+  animation: barra-flutuar 1.15s ease-out forwards;
+}
+
+.barra-flutuante--dano { color: #ff6b6b; }
+.barra-flutuante--cura { color: #4ade80; }
+.barra-flutuante--mana { color: #7dd3fc; }
+.barra-flutuante--sanidade { color: #c4b5fd; }
+.barra-flutuante--cansaco { color: #fbbf24; }
+
+.barra-faisca {
+  position: absolute;
+  bottom: 0;
+  left: var(--fx);
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--fc);
+  box-shadow: 0 0 8px var(--fc);
+  opacity: 0;
+  pointer-events: none;
+  animation: barra-faisca-subir 0.95s ease-out var(--fa) both;
+}
+
+/* Vida baixa: a barra bate como um coração */
+.barra--batimento { animation: barra-batimento 1.5s ease-in-out infinite; }
+.barra--batimento-critico { animation-duration: 0.85s; }
+
+/* Sanidade baixa: a barra fica instável */
+.barra--instavel { animation: barra-instavel 2.6s steps(1, end) infinite; }
+.barra--instavel input { animation: barra-texto-tremer 0.18s steps(2, end) infinite; }
+
+/* Vida em 0 ou recurso esgotado: cor drenada */
+.barra--caida { filter: grayscale(0.85) brightness(0.75); animation: barra-caida 3s ease-in-out infinite; }
+
+@keyframes barra-flutuar {
+  0% { opacity: 0; transform: translateY(8px) scale(0.8); }
+  15% { opacity: 1; transform: translateY(-4px) scale(1.15); }
+  100% { opacity: 0; transform: translateY(-30px) scale(1); }
+}
+
+@keyframes barra-faisca-subir {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) scale(0.6); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(var(--fd), -26px, 0) scale(1.1); }
+}
+
+@keyframes barra-batimento {
+  0%, 100% { transform: scale(1); }
+  12% { transform: scale(1.014); }
+  24% { transform: scale(1); }
+  36% { transform: scale(1.01); }
+  50% { transform: scale(1); }
+}
+
+@keyframes barra-instavel {
+  0% { transform: translateX(0) skewX(0); }
+  70% { transform: translateX(2px) skewX(-3deg); }
+  73% { transform: translateX(-2px) skewX(2deg); }
+  76% { transform: translateX(0) skewX(0); }
+  100% { transform: translateX(0) skewX(0); }
+}
+
+@keyframes barra-texto-tremer {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(1px, -1px); }
+}
+
+@keyframes barra-caida {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barra-flutuante, .barra-faisca { animation-duration: 0.01s; }
+  .barra--batimento, .barra--instavel, .barra--instavel input, .barra--caida { animation: none; }
+}
+
+html[data-performance-mode='reduced'] .barra--batimento,
+html[data-performance-mode='reduced'] .barra--instavel,
+html[data-performance-mode='reduced'] .barra--instavel input,
+html[data-performance-mode='reduced'] .barra--caida,
+html[data-performance-mode='reduced'] .barra-faisca {
+  animation: none;
+}
