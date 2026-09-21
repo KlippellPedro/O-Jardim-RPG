@@ -95,6 +95,42 @@
       repeating-linear-gradient(25deg, rgba(70, 48, 20, 0.04) 0px, rgba(70, 48, 20, 0.04) 1px, transparent 1px, transparent 46px);
   }
 
+  /* Moldura por nivel: prata a partir do 10, ouro do 15, lenda no 20. O clip-path
+     corta sombras externas, entao a moldura e uma borda interna. */
+  .wanted-poster--prata::after,
+  .wanted-poster--ouro::after,
+  .wanted-poster--lenda::after {
+    content: '';
+    position: absolute;
+    inset: 10px 6px;
+    pointer-events: none;
+    border: 3px solid var(--cartaz-fio);
+    box-shadow: inset 0 0 14px var(--cartaz-brilho), 0 0 10px var(--cartaz-brilho);
+  }
+  .wanted-poster--prata { --cartaz-fio: #c9d1dc; --cartaz-brilho: rgba(201, 209, 220, 0.6); }
+  .wanted-poster--ouro { --cartaz-fio: #e3b840; --cartaz-brilho: rgba(227, 184, 64, 0.6); }
+  .wanted-poster--lenda { --cartaz-fio: #f6d872; --cartaz-brilho: rgba(255, 233, 150, 0.8); }
+  .wanted-poster--lenda::after { border-width: 4px; }
+
+  .wanted-poster-faixa {
+    position: absolute;
+    top: 26px;
+    right: -34px;
+    z-index: 1;
+    width: 130px;
+    padding: 2px 0;
+    transform: rotate(35deg);
+    text-align: center;
+    font-family: Cinzel, serif;
+    font-size: 0.6rem;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #3a2a06;
+    background: var(--cartaz-fio);
+    box-shadow: 0 0 10px var(--cartaz-brilho);
+  }
+
   .regra-reader-shell {
     background-image:
       radial-gradient(circle at 50% -20%, rgba(199, 164, 76, 0.08), transparent 42%),

@@ -1,7 +1,10 @@
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Brain, Camera, Loader2, Shield, Star, Sword, Trash2 } from 'lucide-react';
+import { Brain, Camera, Loader2, Share2, Shield, Star, Sword, Trash2 } from 'lucide-react';
 import type { ICharacter } from '../../../types/character';
 import { obterStatusFicha } from '../../../services/statusService';
+import { calcularRecompensa, ROTULO_TIER, tierDoCartaz } from '../utils/cartaz';
+import { compartilharCartaz, type ResultadoCompartilhamento } from '../utils/cartazExportar';
 
 const FAMA_MAXIMA = 5;
 
@@ -16,9 +19,11 @@ interface PersonagemWantedCardProps {
   onExcluir: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-// Flavor puro: um valor de recompensa condizente com a escala econômica do
-// Jardim (salário-base de 300 Lunaris), crescendo com o nível do personagem.
-const calcularRecompensa = (nivel: number) => (nivel + 1) * 3000;
+const MENSAGEM: Record<ResultadoCompartilhamento, string> = {
+  compartilhado: 'Cartaz enviado.',
+  copiado: 'Imagem copiada. É só colar no Discord.',
+  baixado: 'Imagem baixada.',
+};
 
 // Cartaz de procurado: a ficha de cada personagem vira um aviso pregado no
 // mural, em vez de mais um card retangular igual aos de qualquer outra tela.
@@ -35,7 +40,43 @@ export const PersonagemWantedCard: React.FC<PersonagemWantedCardProps> = ({
   const inclinacao = index % 2 === 0 ? -1.4 : 1.4;
   const moeda = personagem.carteira?.[0]?.moeda || 'Lunaris';
   const sanidadeAtual = obterStatusFicha(personagem.ficha).sanidadeAtual;
-  const recompensa = calcularRecompensa(personagem.nivel);
+  const fama = personagem.ficha?.fama ?? 0;
+  const recompensa = calcularRecompensa(personagem.nivel, fama);
+  const tier = tierDoCartaz(personagem.nivel);
+  const rotuloTier = ROTULO_TIER[tier];
+  const [aviso, setAviso] = useState<string | null>(null);
+  const [gerando, setGerando] = useState(false);
+  const timerAviso = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(timerAviso.current), []);
+
+  const compartilhar = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    if (gerando) return;
+    setGerando(true);
+    try {
+      const resultado = await compartilharCartaz({
+        nome: personagem.nome,
+        nivel: personagem.nivel,
+        racaClasse: `${nomeRaca} · ${nomeClasse}`,
+        recompensa: recompensa.toLocaleString('pt-BR'),
+        moeda,
+        vida: personagem.derivados?.vida ?? 0,
+        mana: personagem.derivados?.mana ?? 0,
+        sanidade: sanidadeAtual ?? null,
+        fama,
+        emitidoEm: new Date(personagem.criadoEm).toLocaleDateString('pt-BR'),
+        foto: personagem.foto,
+        tier,
+      });
+      setAviso(MENSAGEM[resultado]);
+    } catch {
+      setAviso('Não foi possível gerar a imagem.');
+    } finally {
+      setGerando(false);
+      window.clearTimeout(timerAviso.current);
+      timerAviso.current = window.setTimeout(() => setAviso(null), 3500);
+    }
+  };
 
   return (
     <motion.div
@@ -55,8 +96,9 @@ export const PersonagemWantedCard: React.FC<PersonagemWantedCardProps> = ({
       exit={{ opacity: 0, scale: 0.9 }}
       whileHover={{ rotate: 0, y: -8, scale: 1.02 }}
       transition={{ duration: 0.4, delay: Math.min(index * 0.1, 0.5) }}
-      className="wanted-poster performance-expensive-effects group relative flex cursor-pointer flex-col overflow-hidden rounded-sm p-5 pt-4 shadow-[0_18px_30px_-12px_rgba(0,0,0,0.6)]"
+      className={`wanted-poster wanted-poster--${tier} performance-expensive-effects group relative flex cursor-pointer flex-col overflow-hidden rounded-sm p-5 pt-4 shadow-[0_18px_30px_-12px_rgba(0,0,0,0.6)]`}
     >
+      {rotuloTier ? <span aria-hidden="true" className="wanted-poster-faixa">{rotuloTier}</span> : null}
       {/* Textura de arranhões envelhecidos */}
       <div aria-hidden="true" className="wanted-poster-scratches pointer-events-none absolute inset-0" />
 
@@ -126,16 +168,26 @@ export const PersonagemWantedCard: React.FC<PersonagemWantedCardProps> = ({
         </div>
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-1.5 uppercase tracking-wide text-[#5a4a2f]"><Star size={12} /> Fama</span>
-          <span className="font-bold">{personagem.ficha?.fama ?? 0}/{FAMA_MAXIMA}</span>
+          <span className="font-bold">{fama}/{FAMA_MAXIMA}</span>
         </div>
       </div>
 
       <div className="mt-4 flex items-center justify-between border-t border-[#5a4a2f]/25 pt-3">
-        <span className="text-[0.65rem] text-[#5a4a2f]/80">
-          Emitido em {new Date(personagem.criadoEm).toLocaleDateString('pt-BR')}
+        <span className="text-[0.65rem] text-[#5a4a2f]/80" role="status">
+          {aviso ?? `Emitido em ${new Date(personagem.criadoEm).toLocaleDateString('pt-BR')}`}
         </span>
 
         <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={compartilhar}
+            disabled={gerando}
+            className="rounded p-1.5 text-[#5a4a2f] transition-colors hover:bg-[#5a4a2f]/10 hover:text-[#2a2118] disabled:cursor-wait disabled:opacity-50"
+            title="Compartilhar cartaz"
+            aria-label={`Compartilhar cartaz de ${personagem.nome}`}
+          >
+            {gerando ? <Loader2 size={16} className="animate-spin" /> : <Share2 size={16} />}
+          </button>
           <button
             type="button"
             onClick={(event) => { event.stopPropagation(); onAbrirEditorFoto(); }}
