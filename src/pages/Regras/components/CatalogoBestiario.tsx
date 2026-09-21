@@ -57,7 +57,7 @@ const RECORTES = [
   { id: 'maritimas', rotulo: 'Marítimas', aplica: (m: MonstroEntry) => m.subtipo === 'Marítima' },
   { id: 'espiritos', rotulo: 'Espíritos', aplica: (m: MonstroEntry) => m.subtipo === 'Espírito' },
   { id: 'golens', rotulo: 'Golens', aplica: (m: MonstroEntry) => m.subtipo === 'Golem' },
-  { id: 'vazio', rotulo: 'Vazio', aplica: (m: MonstroEntry) => m.subtipo === 'Vazio' },
+  { id: 'vazio', rotulo: 'Criaturas do Vazio', aplica: (m: MonstroEntry) => m.subtipo === 'Vazio' },
   { id: 'universais', rotulo: 'Perfis universais', aplica: (m: MonstroEntry) => m.categoria === 'Universal' },
 ] as const;
 
@@ -109,6 +109,12 @@ const BestiarioDetail = ({ item, compacto = false }: { item: MonstroEntry; compa
             <dd className="mt-1 text-sm leading-relaxed text-gray-300">{item.iniciativa}</dd>
           </div>
         </dl>
+
+        {item.subtipo === 'Vazio' ? (
+          <p className="mt-5 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-xs font-semibold uppercase leading-5 tracking-[0.12em] text-red-300">
+            Último recurso. Esta criatura foi feita para ser evitada: leia Sinais e Como Evitar antes de levá-la para a cena.
+          </p>
+        ) : null}
 
         <section className="mt-6">
           <h4 className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-red-400">Descrição</h4>
