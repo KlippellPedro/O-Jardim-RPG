@@ -164,6 +164,19 @@ export const VisibilidadeCampanha: React.FC<VisibilidadeCampanhaProps> = ({
     [mundoCatalog],
   );
 
+  const nomeArvorePorId = useMemo(() => new Map(ARVORES.map((arvore) => [arvore.id, arvore.nome])), []);
+
+  /** Um Local "do Jardim inteiro" (ex.: Banco Lunar, no Vazio) pode ser
+   * respondido por um personagem que mora numa Árvore de verdade (os
+   * Soberanos moram todos em Aethel/Gênese). Sem isto, quem procura o
+   * responsável na seção do Universo - onde o Local dele está - nunca o acha,
+   * porque o toggle dele fica escondido dentro do Códice daquela Árvore. */
+  const responsavelForaDoUniverso = (entrada: LoreEntry): LoreEntry | undefined => {
+    const nomeResponsavel = entrada.conteudo?.responsavel;
+    if (entrada.tipo !== 'local' || typeof nomeResponsavel !== 'string' || !nomeResponsavel) return undefined;
+    return mundoCatalog.find((candidato) => candidato.arvore_origem && candidato.titulo === nomeResponsavel);
+  };
+
   useEffect(() => {
     carregarCatalogo().then(setCatalogo);
   }, []);
@@ -460,18 +473,35 @@ export const VisibilidadeCampanha: React.FC<VisibilidadeCampanhaProps> = ({
         </p>
 
         <div className="custom-scrollbar flex max-h-[340px] flex-col gap-1 overflow-y-auto rounded-2xl border border-white/5 bg-black/40 p-4">
-          {entradasDoUniverso.map(entrada => (
-            <LinhaEntrada
-              key={entrada.id}
-              rotulo={ROTULO_TIPO[entrada.tipo] || entrada.tipo}
-              titulo={entrada.titulo}
-              trancadoPorPadrao={entrada.revelado === false}
-              visivel={loreVisivel(entrada)}
-              onToggle={() => handleToggleLore(entrada.id, entrada.revelado !== false)}
-              disabled={!isMaster}
-              tom="azul"
-            />
-          ))}
+          {entradasDoUniverso.map(entrada => {
+            const responsavel = responsavelForaDoUniverso(entrada);
+            return (
+              <React.Fragment key={entrada.id}>
+                <LinhaEntrada
+                  rotulo={ROTULO_TIPO[entrada.tipo] || entrada.tipo}
+                  titulo={entrada.titulo}
+                  trancadoPorPadrao={entrada.revelado === false}
+                  visivel={loreVisivel(entrada)}
+                  onToggle={() => handleToggleLore(entrada.id, entrada.revelado !== false)}
+                  disabled={!isMaster}
+                  tom="azul"
+                />
+                {responsavel && (
+                  <div className="ml-4 border-l border-white/10 pl-3">
+                    <LinhaEntrada
+                      rotulo={`Responsável · ${nomeArvorePorId.get(responsavel.arvore_origem!) || responsavel.arvore_origem}`}
+                      titulo={responsavel.titulo}
+                      trancadoPorPadrao={responsavel.revelado === false}
+                      visivel={loreVisivel(responsavel)}
+                      onToggle={() => handleToggleLore(responsavel.id, responsavel.revelado !== false)}
+                      disabled={!isMaster}
+                      tom="ambar"
+                    />
+                  </div>
+                )}
+              </React.Fragment>
+            );
+          })}
 
           <h4 className="mb-1 mt-4 border-t border-white/5 pt-4 text-xs font-bold uppercase tracking-widest text-gray-500">
             Contos das Entidades
