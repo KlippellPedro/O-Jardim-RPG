@@ -1,0 +1,215 @@
+/* Cena do descanso (ver DescansoHost.tsx). Só transform e opacity. */
+
+.descanso-cena {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  overflow: hidden;
+  cursor: pointer;
+  animation: descanso-entrada 0.6s ease-out both;
+}
+
+.descanso-cena--saindo { animation: descanso-saida 0.35s ease-in both; }
+
+.descanso-cena__noite {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 100%, #131a3a 0%, #070a1c 55%, #03040c 100%);
+}
+
+/* O amanhecer entra por cima da noite */
+.descanso-cena__aurora {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, var(--alv-3) 0%, var(--alv-2) 38%, var(--alv-1) 100%);
+  opacity: 0;
+  transition: opacity 1.8s ease-in-out;
+}
+
+.descanso-cena--dia .descanso-cena__aurora { opacity: 0.95; }
+
+.descanso-cena__estrelas { position: absolute; inset: 0; transition: opacity 1.4s ease; }
+.descanso-cena--dia .descanso-cena__estrelas { opacity: 0; }
+
+.descanso-cena__estrelas i {
+  position: absolute;
+  left: var(--e-x);
+  top: var(--e-y);
+  width: var(--e-tam);
+  height: var(--e-tam);
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.85);
+  opacity: 0;
+  animation: descanso-estrela 2.4s ease-in-out var(--e-atraso) infinite;
+}
+
+.descanso-cena__lua {
+  position: absolute;
+  left: 50%;
+  top: 14%;
+  width: 4.2rem;
+  height: 4.2rem;
+  margin-left: -2.1rem;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: inset -1.05rem 0.3rem 0 0 #f3f0d8, 0 0 40px rgba(243, 240, 216, 0.22);
+  opacity: 0;
+  animation: descanso-lua 3.4s ease-out 0.2s both;
+  transition: opacity 1.2s ease;
+}
+
+.descanso-cena--dia .descanso-cena__lua { animation: none; opacity: 0; transform: translateY(-30px); }
+
+.descanso-cena__sol {
+  position: absolute;
+  left: 50%;
+  bottom: -14rem;
+  width: 26rem;
+  height: 26rem;
+  margin-left: -13rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, var(--alv-3) 0%, color-mix(in srgb, var(--alv-2) 55%, transparent) 42%, transparent 70%);
+  opacity: 0;
+  transform: translateY(6rem) scale(0.7);
+  transition: opacity 1.8s ease-out, transform 2.2s ease-out;
+}
+
+.descanso-cena--dia .descanso-cena__sol { opacity: 1; transform: translateY(0) scale(1); }
+
+/* Descanso excelente: raios de luz girando devagar */
+.descanso-cena__raios {
+  position: absolute;
+  left: 50%;
+  bottom: -60vmax;
+  width: 120vmax;
+  height: 120vmax;
+  margin-left: -60vmax;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 248, 214, 0.16) 0 6deg, transparent 6deg 18deg);
+  mask-image: radial-gradient(circle, #000 0%, transparent 62%);
+  -webkit-mask-image: radial-gradient(circle, #000 0%, transparent 62%);
+  opacity: 0;
+  transition: opacity 1.6s ease 0.5s;
+  animation: descanso-raios 40s linear infinite;
+}
+
+.descanso-cena--dia .descanso-cena__raios { opacity: 1; }
+
+.descanso-cena__conteudo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  padding: 1.5rem;
+}
+
+.descanso-cena__titulo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: Cinzel, serif;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 22px rgba(255, 255, 255, 0.35);
+}
+
+.descanso-cena__titulo small {
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.descanso-cena__painel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: min(100%, 24rem);
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1rem;
+  background: rgba(4, 6, 16, 0.55);
+  backdrop-filter: blur(6px);
+  animation: descanso-painel 0.7s ease-out 0.9s both;
+}
+
+.descanso-cena__linha {
+  display: grid;
+  grid-template-columns: 4.6rem 1fr 4.4rem;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.descanso-cena__rotulo {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.descanso-cena__trilha {
+  height: 0.55rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.descanso-cena__barra {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 1.6s cubic-bezier(0.3, 0.7, 0.3, 1);
+}
+
+.descanso-cena__valor {
+  font-family: 'Cascadia Mono', Consolas, monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: right;
+  color: #fff;
+}
+
+.descanso-cena__valor em { font-style: normal; font-weight: 400; color: rgba(255, 255, 255, 0.4); }
+
+.descanso-cena__ganhos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.descanso-cena__ganhos--visivel { opacity: 1; transform: translateY(0); }
+
+.descanso-cena__ganhos span {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #fff;
+}
+
+@keyframes descanso-entrada { from { opacity: 0; } to { opacity: 1; } }
+@keyframes descanso-saida { from { opacity: 1; } to { opacity: 0; } }
+@keyframes descanso-estrela { 0%, 100% { opacity: 0; } 50% { opacity: 0.9; } }
+@keyframes descanso-lua { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes descanso-raios { to { transform: rotate(360deg); } }
+@keyframes descanso-painel { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .descanso-cena { display: none; }
+}

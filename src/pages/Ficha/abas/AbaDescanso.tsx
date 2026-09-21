@@ -27,6 +27,7 @@ import {
   condicaoAtiva,
   obterStatusFicha,
 } from '../../../services/statusService';
+import { dispararDescanso } from '../components/descansoCena';
 
 interface AbaDescansoProps {
   character: any;
@@ -75,6 +76,16 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
       return;
     }
     const proximo = aplicarDescansoCompleto(status, maximos, qualidade, tratamento);
+    dispararDescanso({
+      qualidade,
+      titulo: regraSelecionada.titulo,
+      recursos: [
+        { rotulo: 'Vida', antes: Number(status.vidaAtual ?? maximos.vida), depois: Number(proximo.vidaAtual), maximo: maximos.vida, cor: 'linear-gradient(90deg,#b91c1c,#f87171)' },
+        { rotulo: 'Mana', antes: Number(status.manaAtual ?? maximos.mana), depois: Number(proximo.manaAtual), maximo: maximos.mana, cor: 'linear-gradient(90deg,#0369a1,#7dd3fc)' },
+        { rotulo: 'Sanidade', antes: Number(status.sanidadeAtual ?? maximos.sanidade), depois: Number(proximo.sanidadeAtual), maximo: maximos.sanidade, cor: 'linear-gradient(90deg,#6d28d9,#c4b5fd)' },
+        { rotulo: 'Cansaço', antes: Number(status.cansacoAtual ?? 0), depois: Number(proximo.cansacoAtual), maximo: 6, cor: 'linear-gradient(90deg,#475569,#cbd5e1)', inverso: true },
+      ],
+    });
     onUpdate(['ficha', 'status'], proximo);
     setMensagem(`Descanso ${regraSelecionada.titulo.toLocaleLowerCase('pt-BR')} aplicado.`);
   };
