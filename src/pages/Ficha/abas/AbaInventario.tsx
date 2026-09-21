@@ -42,6 +42,7 @@ import {
 import { obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
 import { ehReliquiaCriacao, lerRessonanciaReliquia } from '../../../services/reliquiasCriacaoService';
 import { SaldoAnimado } from '../components/SaldoAnimado';
+import { BonecoEquipamento } from '../components/BonecoEquipamento';
 import { sfx } from '../../../utils/audioSynth';
 import '../components/equiparItem.css';
 
@@ -792,6 +793,15 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
           </div>
         </div>}
       </div>
+
+      {!modoVeiculos && (
+        <BonecoEquipamento
+          itens={inventario.filter((item) => !['veiculo', 'modulo-veicular', 'propriedade'].includes(item.categoria))}
+          vagasEspeciais={resumoEquipamento.itensEspeciais.limite}
+          recenteId={equipadoAgora?.id}
+          onGuardar={toggleEquipar}
+        />
+      )}
 
       {!modoVeiculos && mostrarEstoquesMateriais && <section className="rounded-2xl border border-emerald-300/10 bg-[#0f0e15] p-5" data-tour="inventario-materiais">
         <div className="flex flex-wrap items-start justify-between gap-3">
