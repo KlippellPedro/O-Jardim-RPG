@@ -11,7 +11,7 @@ import { useAuthStore } from '../../../store/useAuthStore';
 import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, arvoresVisiveisComAtual, filtrarPorArvore, filtrarPorLiberacao, type ArvoreEntry } from '../../../../data/mundo/arvoresCatalog';
 import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
 import { dispararEscolhaImpacto } from '../components/escolhaImpacto';
-import { dispararSubidaNivel } from '../components/subidaNivel';
+import { descreverRecompensa, dispararSubidaNivel } from '../components/subidaNivel';
 import '../components/subidaNivel.css';
 import {
   adicionarCondicaoOficial,
@@ -398,19 +398,24 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
 
   // BUG-FIX: barra de XP era decorativa (0/1000 fixo, botões sem ação).
   // Usa a mesma tabela de XP do Wizard (TABELA_XP/nivelPorXp).
+  // ficha.xp guarda o total acumulado (o servidor soma o XP da sessão nele),
+  // mas a barra mostra só o progresso DENTRO do nível: ao subir, volta a 0 e
+  // o alvo passa a ser o custo do próximo (N x 1.000). O que passou do
+  // custo continua contando pro nível seguinte.
   const xpAtual = Number(f.xp) || 0;
   const nivelAtual = character.nivel || 1;
   const xpNivelAtual = TABELA_XP[nivelAtual - 1] ?? 0;
   const xpProximoNivel = TABELA_XP[nivelAtual] ?? null;
-  const percentXp = xpProximoNivel
-    ? Math.min(100, Math.max(0, ((xpAtual - xpNivelAtual) / (xpProximoNivel - xpNivelAtual)) * 100))
-    : 100;
+  const xpNoNivel = Math.max(0, xpAtual - xpNivelAtual);
+  const custoNivel = xpProximoNivel !== null ? xpProximoNivel - xpNivelAtual : null;
+  const percentXp = custoNivel ? Math.min(100, (xpNoNivel / custoNivel) * 100) : 100;
   const podeSubirNivel = xpProximoNivel !== null && xpAtual >= xpProximoNivel;
 
   const [xpFlutuante, setXpFlutuante] = useState<{ chave: number; delta: number } | null>(null);
 
+  // Nunca desce abaixo do começo do nível atual: o nível vem das classes, não do XP.
   const handleXp = (delta: number) => {
-    const novo = Math.max(0, xpAtual + delta);
+    const novo = xpNivelAtual + Math.max(0, xpNoNivel + delta);
     if (novo !== xpAtual) setXpFlutuante({ chave: Date.now(), delta: novo - xpAtual });
     onUpdate(['ficha', 'xp'], novo);
   };
@@ -441,12 +446,9 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
       const nivelTotalNovo = next.reduce((sum, c) => sum + (Number(c.nivel) || 1), 0) || 1;
       const antes = calcularDerivadosComClasses(atributosParaDerivados(attrsNaturais, f), racaAtual, classes, catalogo.classes, nivelTotalAtual || 1, f.escolhaRacial);
       const depois = calcularDerivadosComClasses(atributosParaDerivados(attrsNaturais, f), racaAtual, next, catalogo.classes, nivelTotalNovo, f.escolhaRacial);
-      const rotulos: Record<string, string> = {
-        poder: 'Poder', habilidade: 'Habilidade', grau_pericia: 'Grau de perícia', evento: 'Evento', habilidade_final: 'Habilidade final',
-      };
       const recompensas = (classeCatalogo.progressao || [])
         .find(marco => marco.nivel === classeAlvo.nivel)?.recompensas
-        .map(item => `${rotulos[item.tipo] || 'Recompensa'}: ${item.titulo}`) || [];
+        .map(item => descreverRecompensa(item.tipo, item.titulo, item.quantidade)) || [];
       dispararSubidaNivel({
         nivelTotal: nivelTotalNovo,
         classeId: classeCatalogo.id,
@@ -482,8 +484,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
     } else {
       const absVal = parseInt(val);
       if (!isNaN(absVal)) {
-        if (absVal > xpAtual) handleXp(absVal - xpAtual);
-        else if (absVal < xpAtual) handleXp(-(xpAtual - absVal));
+        if (absVal !== xpNoNivel) handleXp(absVal - xpNoNivel);
       }
     }
     setXpInput(undefined);
@@ -1091,8 +1092,8 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
         <SectionTitle title="Experiência" />
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
            <div className="grid grid-cols-2 gap-2 sm:flex">
-              <button onClick={() => handleXp(-100)} disabled={xpAtual <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-100</button>
-              <button onClick={() => handleXp(-10)} disabled={xpAtual <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-10</button>
+              <button onClick={() => handleXp(-100)} disabled={xpNoNivel <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-100</button>
+              <button onClick={() => handleXp(-10)} disabled={xpNoNivel <= 0} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">-10</button>
            </div>
            <div className="relative flex-1">
            {xpFlutuante && (
@@ -1113,15 +1114,21 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
                   type="text"
                   aria-label="Experiência atual"
                   className="bg-transparent border-none outline-none text-right w-16 text-white font-bold placeholder-white/70 group-hover:bg-white/10 rounded transition-colors"
-                  value={xpInput !== undefined ? xpInput : xpAtual}
+                  value={xpInput !== undefined ? xpInput : xpNoNivel}
                   onChange={(e) => setXpInput(e.target.value)}
                   onBlur={(e) => handleXpBlur(e.target.value)}
                   onKeyDown={(e) => { if (e.key === 'Enter') { (e.target as HTMLInputElement).blur(); } }}
                 />
                 <span className="mx-1">/</span>
-                <span>{xpProximoNivel ?? xpAtual}</span>
+                <span>{custoNivel ?? xpNoNivel}</span>
               </div>
            </div>
+           {custoNivel !== null && (
+             <p className="mt-1 text-[11px] text-gray-500 font-mono text-center">
+               Nível {nivelAtual} → {nivelAtual + 1}
+               {podeSubirNivel ? ' · pronto para subir' : ` · faltam ${custoNivel - xpNoNivel} XP`}
+             </p>
+           )}
            </div>
            <div className="grid grid-cols-2 gap-2 sm:flex">
               <button onClick={() => handleXp(10)} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">+10</button>
@@ -1137,7 +1144,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
             }}
             className="w-full py-3 rounded-lg bg-gradient-to-r from-[#c7a44c] to-yellow-600 text-black text-sm font-bold uppercase tracking-widest hover:scale-[1.01] transition-transform shadow-[0_0_20px_rgba(199,164,76,0.4)]"
           >
-            ✧ Subir para o Nível {nivelPorXp(xpAtual)}
+            ✧ Subir para o Nível {nivelAtual + 1}
           </button>
         )}
       </div>
@@ -1226,7 +1233,7 @@ export const AbaFicha = ({ character, onUpdate }: { character: any, onUpdate: an
         <FichaModal isOpen={true} onClose={() => setActiveModal(null)} title="Evolução de Nível">
           <div>
             <p className="text-gray-300 text-sm mb-6">
-              Você atingiu experiência suficiente para o nível {nivelPorXp(xpAtual)}! Como deseja aplicar este novo nível?
+              Você atingiu experiência suficiente para o nível {nivelAtual + 1}! Como deseja aplicar este novo nível?
             </p>
 
             <div className="flex flex-col gap-6">

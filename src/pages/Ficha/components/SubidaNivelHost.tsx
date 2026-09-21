@@ -17,7 +17,6 @@ const DURACAO_SEM_VOZ_MS = 650;
 const PAUSA_FINAL_MS = 2800;
 const LIMITE_COM_VOZ_MS = 45000;
 const MS_POR_LETRA = 32;
-const ROTULOS = ['Poder', 'Habilidade final', 'Habilidade', 'Grau de perícia', 'Evento', 'Recompensa'];
 
 const semMovimento = () => (
   Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
@@ -62,13 +61,7 @@ const montarPainel = (subida: SubidaNivel): { titulo: PassoFala; linhas: LinhaPa
   recurso('Mana', subida.ganhoMana);
 
   subida.recompensas.forEach((recompensa) => {
-    const rotulo = ROTULOS.find((item) => recompensa.startsWith(`${item}: `));
-    const nome = rotulo ? recompensa.slice(rotulo.length + 2) : recompensa;
-    linhas.push({
-      rotulo: rotulo || 'Recompensa',
-      texto: nome,
-      passo: { texto: recompensa },
-    });
+    linhas.push({ rotulo: recompensa.rotulo, texto: recompensa.texto, passo: { texto: recompensa.fala } });
   });
 
   return { titulo, linhas };
@@ -134,7 +127,7 @@ export const SubidaNivelHost = memo(function SubidaNivelHost() {
       // Se a voz não avisar o primeiro passo, mostra tudo em vez de deixar a tela vazia.
       timers.push(window.setTimeout(() => {
         if (!terminou) setPassoAtual((atual) => (atual < 0 ? passos.length : atual));
-      }, 4000));
+      }, 8000));
       timers.push(window.setTimeout(fechar, LIMITE_COM_VOZ_MS));
       pararVoz = falarSequencia(passos, {
         aoIniciarPasso: iniciar,

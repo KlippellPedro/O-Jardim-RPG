@@ -33,6 +33,7 @@ import argparse
 import asyncio
 import hashlib
 import json
+import unicodedata
 from pathlib import Path
 
 import edge_tts
@@ -64,6 +65,21 @@ ROTULO_TIPO = {
     "poder": "Poder", "habilidade": "Habilidade", "grau_pericia": "Grau de perícia",
     "evento": "Evento", "habilidade_final": "Habilidade final",
 }
+
+
+def sem_acento(texto: str) -> str:
+    return "".join(c for c in unicodedata.normalize("NFD", texto) if unicodedata.category(c) != "Mn").lower()
+
+
+def fala_da_recompensa(tipo: str, titulo: str, quantidade: int = 1) -> str:
+    """Mesma regra de descreverRecompensa em subidaNivel.ts (mantenha as duas iguais):
+    nao repete o que a etiqueta ja diz."""
+    if tipo == "grau_pericia":
+        return "Mais um grau de perícia" if quantidade == 1 else f"Mais {quantidade} graus de perícia"
+    rotulo = ROTULO_TIPO.get(tipo, "Recompensa")
+    if sem_acento(titulo).startswith(sem_acento(rotulo) + " "):
+        return titulo
+    return f"{rotulo}: {titulo}"
 
 UNIDADES = ["zero", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove",
             "dez", "onze", "doze", "treze", "catorze", "quinze", "dezesseis", "dezessete",
@@ -121,7 +137,9 @@ def frases() -> dict[str, str]:
         for marco in classe.get("progressao") or []:
             for recompensa in marco.get("recompensas") or []:
                 if recompensa.get("titulo"):
-                    linha = f"{ROTULO_TIPO.get(recompensa.get('tipo'), 'Recompensa')}: {recompensa['titulo']}"
+                    linha = fala_da_recompensa(
+                        recompensa.get("tipo", ""), recompensa["titulo"], recompensa.get("quantidade") or 1
+                    )
                     itens[linha] = linha
     return {chave: falado(texto) for chave, texto in itens.items()}
 
