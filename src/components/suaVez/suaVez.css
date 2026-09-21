@@ -1,0 +1,75 @@
+/* Aviso "É a sua vez!" (ver SuaVezHost.tsx). Só transform e opacity. */
+
+.sua-vez {
+  position: fixed;
+  inset: 0;
+  z-index: 10003;
+  pointer-events: none;
+  animation: sua-vez-vida 3.4s ease-out both;
+}
+
+.sua-vez__clarao {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 160px 40px rgba(250, 204, 21, 0.55);
+  animation: sua-vez-clarao 1.1s ease-out both;
+}
+
+.sua-vez__faixa {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 22%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 1.1rem 1rem 1.2rem;
+  overflow: hidden;
+  background: linear-gradient(90deg, transparent, rgba(30, 22, 6, 0.9) 18%, rgba(30, 22, 6, 0.9) 82%, transparent);
+  border-top: 1px solid rgba(250, 204, 21, 0.6);
+  border-bottom: 1px solid rgba(250, 204, 21, 0.6);
+  animation: sua-vez-entrar 0.55s cubic-bezier(0.2, 1.1, 0.3, 1) both;
+}
+
+.sua-vez__faixa small {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #fde68a;
+}
+
+.sua-vez__faixa strong {
+  font-family: Cinzel, serif;
+  font-size: clamp(2rem, 9vw, 3.6rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 26px rgba(250, 204, 21, 0.8), 0 0 60px rgba(250, 204, 21, 0.4);
+}
+
+.sua-vez__faixa em { font-style: normal; font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); }
+
+/* Onda de luz que varre a faixa */
+.sua-vez__onda {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 35%, rgba(255, 244, 190, 0.35) 50%, transparent 65%);
+  transform: translateX(-100%);
+  animation: sua-vez-onda 1.4s ease-in-out 0.3s both;
+}
+
+.sua-vez--calmo .sua-vez__clarao, .sua-vez--calmo .sua-vez__onda { display: none; }
+.sua-vez--calmo, .sua-vez--calmo .sua-vez__faixa { animation: none; }
+
+@keyframes sua-vez-vida { 0%, 84% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes sua-vez-clarao { 0% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes sua-vez-entrar { from { opacity: 0; transform: scaleY(0.2) scaleX(1.06); } to { opacity: 1; transform: scaleY(1) scaleX(1); } }
+@keyframes sua-vez-onda { to { transform: translateX(100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sua-vez__clarao, .sua-vez__onda { display: none; }
+  .sua-vez, .sua-vez__faixa { animation: none; }
+}

@@ -18,7 +18,8 @@ export type SfxName =
   | 'estrela'
   | 'amanhecer'
   | 'conjurar'
-  | 'equipar';
+  | 'equipar'
+  | 'gongo';
 
 // Intervalo mínimo entre dois disparos do MESMO som, pra hover rápido,
 // duplo-clique ou navegação em sequência nunca virarem uma matraca.
@@ -29,6 +30,7 @@ const MIN_INTERVAL_MS: Partial<Record<SfxName, number>> = {
   navigate: 150,
   moeda: 60,
   conjurar: 300,
+  gongo: 800,
   equipar: 120,
   'moeda-gasto': 90,
 };
@@ -201,6 +203,16 @@ class AudioSynth {
           { type: 'triangle', freqStart: 392, freqEnd: 1568, duration: 0.5, startOffset: 0.08, gainPeak: 0.035, attack: 0.15 },
           { type: 'sine', freqStart: 1568, duration: 0.5, startOffset: 0.5, gainPeak: 0.05 },
           { type: 'sine', freqStart: 2093, duration: 0.6, startOffset: 0.56, gainPeak: 0.035 },
+        ], volume);
+        break;
+      case 'gongo':
+        // Gongo: um tom grave que demora a morrer, com harmônicos desafinados
+        // de propósito para soar a metal.
+        this.playSteps([
+          { type: 'sine', freqStart: 110, freqEnd: 104, duration: 1.8, gainPeak: 0.16, attack: 0.01 },
+          { type: 'triangle', freqStart: 221, freqEnd: 210, duration: 1.4, gainPeak: 0.07, attack: 0.008 },
+          { type: 'sine', freqStart: 337, duration: 1.1, gainPeak: 0.05, attack: 0.006 },
+          { type: 'sine', freqStart: 523, duration: 0.8, gainPeak: 0.03, attack: 0.005 },
         ], volume);
         break;
       case 'equipar':

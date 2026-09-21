@@ -63,6 +63,7 @@ import { EscolhaImpactoHost } from './components/EscolhaImpactoHost';
 import { SubidaNivelHost } from './components/SubidaNivelHost';
 import { EstadoVitalOverlay } from './components/EstadoVitalOverlay';
 import { ChuvaMoedasHost } from './components/ChuvaMoedasHost';
+import { CondicaoOverlay } from './components/CondicaoOverlay';
 import { DescansoHost } from './components/DescansoHost';
 import { CirculoMagicoHost } from './components/CirculoMagicoHost';
 import { AprendizadoHost } from './components/AprendizadoHost';
@@ -71,6 +72,7 @@ import './ficha.css';
 import { conquistasApi } from '../../services/conquistasApi';
 import { dispararConquistas } from '../../components/conquistas/conquistas';
 import { dispararLoot } from '../../components/loot/loot';
+import { dispararSuaVez } from '../../components/suaVez/suaVez';
 
 
 const TABS = [
@@ -360,6 +362,17 @@ export const PersonagemSheet: React.FC = () => {
   }, [hasPendingCharacterSaves, id, syncRemoteCharacter]);
 
   const liveConnectionState = useCampaignSSE(campanhaId, (tipo, payload) => {
+    // A vez chegou neste personagem: gongo e faixa na tela.
+    if (
+      tipo === 'turno'
+      && character
+      && payload.em_combate
+      && payload.personagem_id === character.id
+      && ['iniciar', 'proximo', 'anterior'].includes(String(payload.acao))
+    ) {
+      dispararSuaVez({ nome: character.nome, rodada: Math.max(1, Math.trunc(Number(payload.rodada) || 1)) });
+      return;
+    }
     if (tipo !== 'personagem_atualizado' || !character) return;
     const personagemAtualizadoId = String(payload.personagem_id || '');
     if (personagemAtualizadoId === character.id) {
@@ -825,6 +838,7 @@ export const PersonagemSheet: React.FC = () => {
       <SubidaNivelHost />
       <EstadoVitalOverlay />
       <ChuvaMoedasHost />
+      <CondicaoOverlay condicoes={character?.ficha?.condicoesAtivas} />
       <DescansoHost />
       <CirculoMagicoHost />
       <AprendizadoHost />

@@ -1,0 +1,68 @@
+/* Borda das condições ativas (ver CondicaoOverlay.tsx). Só opacity e transform. */
+
+.condicao-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 29;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.condicao-overlay__borda {
+  position: absolute;
+  inset: 0;
+  opacity: var(--cond-nivel, 1);
+  box-shadow: inset 0 0 110px 14px color-mix(in srgb, var(--cond-cor) 38%, transparent);
+}
+
+.condicao-overlay__borda--pulso { animation: condicao-pulso 1.7s ease-in-out infinite; }
+.condicao-overlay__borda--lento { animation: condicao-lento 4.5s ease-in-out infinite; }
+.condicao-overlay__borda--tremor { animation: condicao-tremor 0.9s steps(1, end) infinite; }
+.condicao-overlay__borda--estatica { animation: condicao-estatica 0.5s steps(1, end) infinite; }
+
+/* Cego e Inconsciente escurecem a tela: forte nas bordas, sem cobrir o miolo */
+.condicao-overlay__borda--escuro {
+  box-shadow: inset 0 0 220px 90px color-mix(in srgb, var(--cond-cor) 78%, #000);
+  animation: condicao-lento 6s ease-in-out infinite;
+}
+
+.condicao-overlay__aviso {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 5.5rem;
+  display: flex;
+  justify-content: center;
+  animation: condicao-aviso 2.2s ease-out both;
+}
+
+.condicao-overlay__aviso span {
+  padding: 0.4rem 1.4rem;
+  border: 1px solid var(--cond-cor);
+  border-radius: 999px;
+  background: rgba(6, 6, 12, 0.85);
+  font-family: Cinzel, serif;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 14px var(--cond-cor);
+  box-shadow: 0 0 22px -4px var(--cond-cor);
+}
+
+@keyframes condicao-pulso { 0%, 100% { opacity: calc(var(--cond-nivel, 1) * 0.45); } 15% { opacity: var(--cond-nivel, 1); } 30% { opacity: calc(var(--cond-nivel, 1) * 0.6); } }
+@keyframes condicao-lento { 0%, 100% { opacity: calc(var(--cond-nivel, 1) * 0.6); } 50% { opacity: var(--cond-nivel, 1); } }
+@keyframes condicao-tremor { 0% { opacity: var(--cond-nivel, 1); } 45% { opacity: calc(var(--cond-nivel, 1) * 0.5); } 55% { opacity: var(--cond-nivel, 1); } 80% { opacity: calc(var(--cond-nivel, 1) * 0.65); } }
+@keyframes condicao-estatica { 0% { opacity: var(--cond-nivel, 1); } 50% { opacity: calc(var(--cond-nivel, 1) * 0.4); } }
+@keyframes condicao-aviso {
+  0% { opacity: 0; transform: translateY(-18px) scale(0.9); }
+  15% { opacity: 1; transform: translateY(0) scale(1); }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .condicao-overlay__borda { animation: none; opacity: calc(var(--cond-nivel, 1) * 0.7); }
+  .condicao-overlay__aviso { animation: none; }
+}

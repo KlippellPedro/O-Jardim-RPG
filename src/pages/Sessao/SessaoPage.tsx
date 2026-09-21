@@ -36,6 +36,7 @@ import {
 import './sessao.css';
 import { ResumoSessaoModal } from './components/ResumoSessaoModal';
 import { sessaoApi } from '../../services/sessaoApi';
+import { dispararSuaVez } from '../../components/suaVez/suaVez';
 
 export const SessaoPage: React.FC = () => {
   const [isChangingLive, setIsChangingLive] = useState(false);
@@ -103,6 +104,20 @@ export const SessaoPage: React.FC = () => {
     }
   }, [activeCampaignId]);
   const tourStorageKey = `jardim:sessao-tour:${usuario?.id || 'local'}`;
+
+  // Quando o turno passa a ser de um personagem meu, o mesmo "É a sua vez!" da ficha.
+  const turnoAnteriorRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!emCombate || !turnoAtualId) {
+      turnoAnteriorRef.current = null;
+      return;
+    }
+    const anterior = turnoAnteriorRef.current;
+    turnoAnteriorRef.current = turnoAtualId;
+    if (anterior === null || anterior === turnoAtualId) return;
+    const daVez = iniciativa.find((entidade) => entidade.id === turnoAtualId);
+    if (daVez?.eMeu && daVez.tipo === 'jogador') dispararSuaVez({ nome: daVez.nome, rodada });
+  }, [emCombate, turnoAtualId, iniciativa, rodada]);
 
   useDialogAccessibility({ open: leftDrawerOpen, dialogRef: leftDrawerRef, onClose: () => setLeftDrawerOpen(false) });
   useDialogAccessibility({ open: rightDrawerOpen, dialogRef: rightDrawerRef, onClose: () => setRightDrawerOpen(false) });
