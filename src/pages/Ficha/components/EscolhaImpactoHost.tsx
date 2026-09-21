@@ -7,16 +7,12 @@ import {
   type EscolhaImpacto,
 } from './escolhaImpacto';
 import './escolhaImpacto.css';
+import { semMovimento } from '../../../utils/movimento';
 
 const DURACAO_ESPECIAL_MS = 2400;
 const DURACAO_COMUM_MS = 1300;
 const FAISCAS_ESPECIAL = 26;
 
-const semMovimento = () => (
-  typeof window !== 'undefined'
-  && (Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
-    || document.documentElement.dataset.performanceMode === 'reduced')
-);
 
 const criarFaiscas = () => Array.from({ length: FAISCAS_ESPECIAL }, (_, i) => {
   const angulo = Math.random() * Math.PI * 2;

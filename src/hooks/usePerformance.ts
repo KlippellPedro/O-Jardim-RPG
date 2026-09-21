@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useSyncExternalStore } from 'react';
 import { usePerformanceStore } from '../store/usePerformanceStore';
+import { dispositivoFraco, sinaisDoAparelho } from '../utils/movimento';
 
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 const LARGE_VIEWPORT_QUERY = '(min-width: 2560px)';
@@ -82,13 +83,28 @@ export function usePerformanceProfile() {
  */
 export function PerformancePreferencesBridge() {
   const { pageVisible, performanceMode, prefersReducedMotion } = usePerformanceProfile();
+  const celebracoes = usePerformanceStore((state) => state.celebracoes);
+  const dado3d = usePerformanceStore((state) => state.dado3d);
+
+  // Primeira visita neste aparelho: se ele parece fraco, começa no modo leve (a pessoa pode desligar).
+  useEffect(() => {
+    try {
+      if (window.localStorage.getItem('jardim:desempenho-auto')) return;
+      window.localStorage.setItem('jardim:desempenho-auto', 'feito');
+      if (dispositivoFraco(sinaisDoAparelho())) usePerformanceStore.getState().aplicarModoLeveAutomatico();
+    } catch {
+      // Sem armazenamento, o modo leve continua manual.
+    }
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
     root.dataset.pageVisible = pageVisible ? 'true' : 'false';
     root.dataset.performanceMode = performanceMode ? 'reduced' : 'full';
     root.dataset.reducedMotion = prefersReducedMotion ? 'true' : 'false';
-  }, [pageVisible, performanceMode, prefersReducedMotion]);
+    root.dataset.celebracoes = celebracoes ? 'on' : 'off';
+    root.dataset.dado3d = dado3d ? 'on' : 'off';
+  }, [pageVisible, performanceMode, prefersReducedMotion, celebracoes, dado3d]);
 
   return null;
 }

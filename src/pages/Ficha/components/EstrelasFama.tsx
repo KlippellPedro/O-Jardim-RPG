@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Star } from 'lucide-react';
 import { sfx } from '../../../utils/audioSynth';
 import './estrelasFama.css';
+import { semMovimento } from '../../../utils/movimento';
 
 const NIVEIS = [1, 2, 3, 4, 5];
 const FAISCAS = [0, 1, 2, 3, 4, 5];
@@ -11,11 +12,6 @@ const PASSO_ACENDER_S = 0.11;
 // Cada nível esquenta a cor: cinza, âmbar, dourado, até o branco-dourado da lenda.
 const COR_NIVEL = ['#6b7280', '#d6a84a', '#e2b04a', '#f0be47', '#ffd15c', '#fff2b3'];
 
-const semMovimento = () => (
-  typeof window === 'undefined'
-  || Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
-  || document.documentElement.dataset.performanceMode === 'reduced'
-);
 
 interface EstrelasFamaProps {
   fama: number;

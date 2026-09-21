@@ -4,6 +4,7 @@ import { sfx } from '../../../utils/audioSynth';
 import { inscreverDescanso, type CenaDescanso, type RecursoDescanso } from './descansoCena';
 import { useNumeroAnimado } from './numeroAnimado';
 import './descansoCena.css';
+import { semMovimento } from '../../../utils/movimento';
 
 const FASE_BARRAS_MS = 1300;
 const FASE_AMANHECER_MS = 3500;
@@ -20,10 +21,6 @@ const ALVORADA: Record<string, [string, string, string]> = {
   excelente: ['#3a2c0c', '#f5c542', '#fff8d6'],
 };
 
-const semMovimento = () => (
-  Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
-  || document.documentElement.dataset.performanceMode === 'reduced'
-);
 
 const LinhaRecurso = ({ recurso, fase }: { recurso: RecursoDescanso; fase: number }) => {
   const alvo = fase >= 1 ? recurso.depois : recurso.antes;

@@ -3,13 +3,10 @@ import { createPortal } from 'react-dom';
 import { sfx } from '../../../utils/audioSynth';
 import { inscreverCirculoMagico, type CenaCirculo } from './circuloMagico';
 import './circuloMagico.css';
+import { semMovimento } from '../../../utils/movimento';
 
 const DURACAO_MS = 2100;
 
-const semMovimento = () => (
-  Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
-  || document.documentElement.dataset.performanceMode === 'reduced'
-);
 
 const pontos = (lados: number, raio: number, rotacao = -90) => Array.from({ length: lados }, (_, i) => {
   const angulo = ((rotacao + (360 / lados) * i) * Math.PI) / 180;

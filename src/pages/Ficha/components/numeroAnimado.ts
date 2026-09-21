@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { semMovimento } from '../../../utils/movimento';
 
-const semMovimento = () => (
-  typeof window === 'undefined'
-  || Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
-  || document.documentElement.dataset.performanceMode === 'reduced'
-);
 
 const desacelerar = (t: number) => 1 - (1 - t) ** 3;
 

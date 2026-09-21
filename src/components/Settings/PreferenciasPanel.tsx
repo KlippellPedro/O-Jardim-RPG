@@ -5,6 +5,38 @@ import { sfx } from '../../utils/audioSynth';
 import { usePerformanceStore } from '../../store/usePerformanceStore';
 import { usePrefersReducedMotion } from '../../hooks/usePerformance';
 import { PERFIS_SONOROS, ROTULO_PERFIL } from '../../utils/somDeClasse';
+import { CATEGORIAS_SOM, CATEGORIAS_PADRAO } from '../../utils/categoriasSom';
+import { definirVozGrandeSabioLigada, vozGrandeSabioDisponivel, vozGrandeSabioLigada } from '../../pages/Ficha/components/vozGrandeSabio';
+
+interface IInterruptorProps {
+  rotulo: string;
+  descricao: string;
+  ligado: boolean;
+  onMudar: (ligado: boolean) => void;
+  desabilitado?: boolean;
+}
+
+/** Linha com título, explicação e o botão liga/desliga (sem tocar som ao mexer nele). */
+const Interruptor: React.FC<IInterruptorProps> = ({ rotulo, descricao, ligado, onMudar, desabilitado }) => (
+  <div className={`flex items-center justify-between gap-4 py-3 ${desabilitado ? 'opacity-40' : ''}`}>
+    <div className="min-w-0">
+      <span className="block text-sm font-bold text-white">{rotulo}</span>
+      <span className="block text-xs leading-5 text-gray-500">{descricao}</span>
+    </div>
+    <button
+      type="button"
+      role="switch"
+      aria-checked={ligado}
+      aria-label={rotulo}
+      disabled={desabilitado}
+      data-sfx="off"
+      onClick={() => onMudar(!ligado)}
+      className={`relative h-8 w-14 shrink-0 rounded-full transition-colors disabled:cursor-not-allowed ${ligado ? 'bg-primary' : 'bg-white/10'}`}
+    >
+      <span className={`absolute left-1 top-1 h-6 w-6 rounded-full bg-white shadow-md transition-transform ${ligado ? 'translate-x-6' : 'translate-x-0'}`} />
+    </button>
+  </div>
+);
 
 export const PreferenciasPanel: React.FC = () => {
   const enabled = useAudioStore((state) => state.enabled);
@@ -16,6 +48,20 @@ export const PreferenciasPanel: React.FC = () => {
   const performanceMode = usePerformanceStore((state) => state.performanceMode);
   const togglePerformanceMode = usePerformanceStore((state) => state.togglePerformanceMode);
   const prefersReducedMotion = usePrefersReducedMotion();
+  const categorias = useAudioStore((state) => state.categorias);
+  const setCategoria = useAudioStore((state) => state.setCategoria);
+  const celebracoes = usePerformanceStore((state) => state.celebracoes);
+  const dado3d = usePerformanceStore((state) => state.dado3d);
+  const setEfeito = usePerformanceStore((state) => state.setEfeito);
+  const ligadoAutomaticamente = usePerformanceStore((state) => state.ligadoAutomaticamente);
+  const [voz, setVoz] = React.useState(vozGrandeSabioLigada);
+  const restaurar = () => {
+    CATEGORIAS_SOM.forEach((categoria) => setCategoria(categoria.id, CATEGORIAS_PADRAO[categoria.id]));
+    setEfeito('celebracoes', true);
+    setEfeito('dado3d', true);
+    definirVozGrandeSabioLigada(true);
+    setVoz(true);
+  };
 
   const handleToggle = () => {
     // Alterna primeiro e só confirma com som se ficou ativado - senão o
@@ -175,6 +221,37 @@ export const PreferenciasPanel: React.FC = () => {
             ))}
           </div>
         </section>
+
+        {ligadoAutomaticamente && performanceMode ? (
+          <p className="rounded-2xl border border-emerald-400/20 bg-emerald-400/5 px-4 py-3 text-xs leading-5 text-emerald-200/90" role="status">
+            Ligamos o modo de desempenho sozinhos porque este aparelho parece limitado (pouca memória ou poucos núcleos). Se ele aguentar bem, é só desligar acima.
+          </p>
+        ) : null}
+
+        <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
+          <h3 className="text-lg font-bold text-white">Sons por tipo</h3>
+          <p className="mb-2 mt-1 text-sm text-gray-400">Deixe só o que você gosta. O volume geral e o botão de efeitos sonoros continuam valendo por cima.</p>
+          <div className="divide-y divide-white/5">
+            {CATEGORIAS_SOM.map((categoria) => (
+              <Interruptor key={categoria.id} rotulo={categoria.rotulo} descricao={categoria.descricao} ligado={categorias[categoria.id]} desabilitado={!enabled} onMudar={(ligado) => { setCategoria(categoria.id, ligado); if (ligado && enabled) sfx.play(categoria.id === 'moedas' ? 'moeda' : categoria.id === 'eventos' ? 'notification' : 'select'); }} />
+            ))}
+            {vozGrandeSabioDisponivel() ? (
+              <Interruptor rotulo="Voz do Grande Sábio" descricao="Ele fala as análises e anuncia as conquistas." ligado={voz} onMudar={(ligado) => { definirVozGrandeSabioLigada(ligado); setVoz(ligado); }} />
+            ) : null}
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
+          <h3 className="text-lg font-bold text-white">Efeitos visuais</h3>
+          <p className="mb-2 mt-1 text-sm text-gray-400">Desligar tira só o espetáculo. As informações continuam aparecendo, sem a animação.</p>
+          <div className="divide-y divide-white/5">
+            <Interruptor rotulo="Celebrações" descricao="Conquistas, chuva de moedas, cartas de item, círculo mágico e o aviso de “é a sua vez”." ligado={celebracoes} desabilitado={performanceMode} onMudar={(ligado) => setEfeito('celebracoes', ligado)} />
+            <Interruptor rotulo="Dado 3D" descricao="O dado gira e pousa na tela. Desligado, o resultado aparece direto." ligado={dado3d} desabilitado={performanceMode} onMudar={(ligado) => setEfeito('dado3d', ligado)} />
+          </div>
+          {performanceMode ? <p className="mt-3 text-xs text-gray-500">O modo de desempenho já desliga estes efeitos.</p> : null}
+        </section>
+
+        <button type="button" onClick={restaurar} className="rounded-xl border border-white/10 px-4 py-2 text-xs font-bold text-gray-400 hover:text-white">Restaurar sons e efeitos ao padrão</button>
       </div>
     </div>
   );

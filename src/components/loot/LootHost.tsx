@@ -3,15 +3,12 @@ import { createPortal } from 'react-dom';
 import { sfx } from '../../utils/audioSynth';
 import { inscreverLoot, type CartaLoot } from './loot';
 import './loot.css';
+import { semMovimento } from '../../utils/movimento';
 
 const MAX_CARTAS = 6;
 const FLIP_MS = 720;
 const APOS_ABRIR_MS = 1700;
 
-const semMovimento = () => (
-  Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
-  || document.documentElement.dataset.performanceMode === 'reduced'
-);
 
 /** Carta que vira para revelar o item que chegou (compra na loja ou item novo
  * na ficha). Brilho, raios e faíscas crescem com a raridade. Clique vira ou

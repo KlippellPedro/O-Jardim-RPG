@@ -1,5 +1,6 @@
 import type { IRegistro } from '../../services/registrosApi';
 import { FACES_SUPORTADAS, MAX_DADOS_3D, type DadoCena } from './cenaDados';
+import { semDado3d as semMovimento } from '../../utils/movimento';
 
 export type GrauRolagem = 'sucesso critico' | 'sucesso' | 'falha' | 'falha critica';
 
@@ -27,11 +28,6 @@ export const registrarApresentadorRolagem = (funcao: Apresentador) => {
   return () => { if (apresentador === funcao) apresentador = null; };
 };
 
-const semMovimento = () => (
-  typeof window === 'undefined'
-  || Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
-  || document.documentElement.dataset.performanceMode === 'reduced'
-);
 
 /** Transforma o registro devolvido pelo servidor numa cena, ou null quando não
  * dá para mostrar em 3D (dado sem modelo, muitos dados, sem dados). */

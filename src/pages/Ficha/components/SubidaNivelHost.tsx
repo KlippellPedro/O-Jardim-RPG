@@ -10,6 +10,7 @@ import {
   type PassoFala,
 } from './vozGrandeSabio';
 import './subidaNivel.css';
+import { semMovimento } from '../../../utils/movimento';
 
 const HEXAGONO = '50,3 91,26.5 91,73.5 50,97 9,73.5 9,26.5';
 const INTERVALO_SEM_VOZ_MS = 900;
@@ -18,10 +19,6 @@ const PAUSA_FINAL_MS = 2800;
 const LIMITE_COM_VOZ_MS = 45000;
 const MS_POR_LETRA = 32;
 
-const semMovimento = () => (
-  Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
-  || document.documentElement.dataset.performanceMode === 'reduced'
-);
 
 const sinal = (valor: number) => (valor > 0 ? `+${valor}` : String(valor));
 

@@ -10,15 +10,12 @@ import {
 import { inscreverConquistas } from './conquistas';
 import { SeloConquista } from './SeloConquista';
 import './conquistaToast.css';
+import { semMovimento } from '../../utils/movimento';
 
 const DURACAO_MS = 5200;
 const DURACAO_LENDARIA_MS = 6400;
 const ROTULO_RARIDADE = { comum: 'Conquista', rara: 'Conquista rara', lendaria: 'Conquista lendária' } as const;
 
-const semMovimento = () => (
-  Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
-  || document.documentElement.dataset.performanceMode === 'reduced'
-);
 
 /** Aviso de conquista desbloqueada: um cartão desce do topo com o selo, o
  * Grande Sábio anuncia e o som toca. Várias conquistas de uma vez entram em

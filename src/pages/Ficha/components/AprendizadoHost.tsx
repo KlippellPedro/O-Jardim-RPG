@@ -4,14 +4,11 @@ import { sfx } from '../../../utils/audioSynth';
 import { inscreverAprendizado, type CenaAprendizado } from './aprendizado';
 import { falarSequencia, vozGrandeSabioDisponivel, vozGrandeSabioLigada } from './vozGrandeSabio';
 import './aprendizado.css';
+import { semMovimento } from '../../../utils/movimento';
 
 const DURACAO_MS = 6200;
 const PAUSA_APOS_FALA_MS = 2200;
 
-const semMovimento = () => (
-  Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
-  || document.documentElement.dataset.performanceMode === 'reduced'
-);
 
 const hexagono = (raio: number, rotacao = -90) => Array.from({ length: 6 }, (_, i) => {
   const angulo = ((rotacao + 60 * i) * Math.PI) / 180;

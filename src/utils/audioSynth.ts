@@ -1,3 +1,4 @@
+import { categoriaDoSom } from './categoriasSom';
 import { useAudioStore } from '../store/useAudioStore';
 import type { PerfilSonoro } from './somDeClasse';
 
@@ -168,6 +169,7 @@ class AudioSynth {
     if (this.isThrottled(name)) return;
     const volume = this.currentVolume();
     if (volume === null) return;
+    if (!useAudioStore.getState().categorias[categoriaDoSom(name)]) return;
 
     switch (name) {
       case 'click':

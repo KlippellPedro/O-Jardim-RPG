@@ -3,13 +3,10 @@ import { createPortal } from 'react-dom';
 import { sfx } from '../../utils/audioSynth';
 import { inscreverSuaVez, type AvisoSuaVez } from './suaVez';
 import './suaVez.css';
+import { semMovimento } from '../../utils/movimento';
 
 const DURACAO_MS = 3400;
 
-const semMovimento = () => (
-  Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
-  || document.documentElement.dataset.performanceMode === 'reduced'
-);
 
 /** Faixa dourada "É a sua vez!" com gongo (e vibração no celular). Não captura
  * clique e some sozinha. Com "reduzir movimento" ou desempenho reduzido, só o

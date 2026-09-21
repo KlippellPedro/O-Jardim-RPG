@@ -8,13 +8,10 @@ import {
   type EventoMoedas,
 } from './chuvaMoedas';
 import './chuvaMoedas.css';
+import { semMovimento } from '../../../utils/movimento';
 
 const DURACAO_MS = 3200;
 
-const semMovimento = () => (
-  Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
-  || document.documentElement.dataset.performanceMode === 'reduced'
-);
 
 interface Moeda {
   estilo: CSSProperties;
