@@ -264,7 +264,7 @@ class ConcessaoMestreTests(unittest.TestCase):
 
         with self.database.connection() as connection:
             recipients = connection.execute(
-                "SELECT usuario_id FROM notificacoes WHERE campanha_id=%s AND titulo LIKE 'O Mestre concedeu itens%'",
+                "SELECT usuario_id FROM notificacoes WHERE campanha_id=%s AND titulo LIKE 'O Mestre concedeu itens%%'",
                 (campanha_id,),
             ).fetchall()
         self.assertEqual(
