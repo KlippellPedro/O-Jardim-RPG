@@ -1,109 +1,96 @@
 {
-  "geradoEm": "2026-09-21T23:01:56.346Z",
+  "geradoEm": "2026-09-21T23:29:50.152Z",
   "itens": [
     {
-      "id": "manual-inicio",
+      "id": "3ae4a10",
       "data": "2026-09-21",
       "tipo": "novo",
-      "area": "Início",
-      "titulo": "Mural de novidades, calendário de sessões e descobertas escondidas",
-      "detalhes": [
-        "A Home mostra o que mudou no sistema e o calendário do grupo",
-        "O Mestre define a sessão fixa da semana uma vez só e cancela ou marca extras quando precisar",
-        "Coisas escondidas pelo site: quem achou cada uma aparece no Quadro, mas sem dizer onde estão"
-      ]
-    },
-    {
-      "id": "manual-mesa-tatica",
-      "data": "2026-09-21",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Mesa tática: mapa com névoa de guerra, trilha, votação, relógios e bilhetes secretos",
-      "detalhes": [
-        "Fichas arrastáveis, régua de distância e alcance",
-        "O Mestre escolhe o clima e a trilha toca para todos",
-        "Relógios de progresso e bilhetes que só um jogador vê"
-      ]
-    },
-    {
-      "id": "manual-replay",
-      "data": "2026-09-21",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Replay da sessão: reveja a noite em ordem, com pausa e velocidade",
+      "area": "Plataforma",
+      "titulo": "Novas paginas e rotas ligadas ao site, com migracoes e backup atualizados",
       "detalhes": []
     },
     {
-      "id": "manual-quadro",
+      "id": "15d47f1",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Mundo",
+      "titulo": "O Mundo tem calendario e estacoes, Registros Universais editaveis com Bestiario, e conteudo trancado aparece rasurado",
+      "detalhes": [
+        "Bestiario saiu do Livro de Regras e foi para os Registros Universais",
+        "Visibilidade por secao e pelo calendario",
+        "Exportar publicados inclui registros, calendario e identidade",
+        "Bot Jornalista respeita a estacao definida no site"
+      ]
+    },
+    {
+      "id": "241daca",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Geral",
+      "titulo": "Cada campanha tem pagina propria com cor, frase, capa, troca rapida, duplicacao e epilogo",
+      "detalhes": [
+        "Identidade da campanha",
+        "Duplicar e encerrar com epilogo"
+      ]
+    },
+    {
+      "id": "bc3c009",
       "data": "2026-09-21",
       "tipo": "novo",
       "area": "Quadro",
-      "titulo": "Quadro da campanha: mural do grupo, MVP da noite e rank da mesa",
+      "titulo": "A Home tem mural de novidades, calendario de sessao fixa e descobertas escondidas no lugar das missoes",
       "detalhes": [
-        "Frases e fotos do grupo, com curtidas e o selo de melhor frase da noite",
-        "Títulos de brincadeira como Rei do Vinte e Azarão Oficial"
+        "Novidades geradas a partir dos commits",
+        "Sessao semanal com cancelamento e sessoes especiais",
+        "Descobertas mostram quem achou, nao onde"
       ]
     },
     {
-      "id": "manual-modo-mesa",
+      "id": "9219761",
       "data": "2026-09-21",
       "tipo": "novo",
-      "area": "Ficha",
-      "titulo": "Modo mesa para o celular: vida, mana, dado e condições a um toque",
+      "area": "Sessão",
+      "titulo": "A sessao ao vivo foi redesenhada, sem mapa, com cronometros, relogios, votacao, bilhetes e replay",
       "detalhes": [
-        "Botão de rolar sempre à mão",
-        "Mantém a tela do celular ligada durante o jogo"
+        "Mapa removido",
+        "Cronometros e relogios",
+        "Frota virou pagina propria",
+        "XP no escudo do Mestre"
       ]
     },
     {
-      "id": "manual-exportar",
+      "id": "0105746",
       "data": "2026-09-21",
       "tipo": "novo",
       "area": "Ficha",
-      "titulo": "Exportar a ficha em PDF e em cartão de personagem",
-      "detalhes": []
-    },
-    {
-      "id": "manual-simulador",
-      "data": "2026-09-21",
-      "tipo": "novo",
-      "area": "Ficha",
-      "titulo": "Simulador de nível e build na aba Progressão",
+      "titulo": "A ficha ganhou diario, retrato ajustavel, exportacao, modo mesa e simulador de nivel",
       "detalhes": [
-        "Veja vida, mana e poderes de um nível futuro antes de decidir",
-        "Nada é salvo na ficha"
+        "Diario do personagem no servidor",
+        "Modo mesa e simulador de nivel",
+        "Bens e frota com permissoes compartilhadas"
       ]
     },
     {
-      "id": "manual-retrato",
+      "id": "b2fa2c9",
       "data": "2026-09-21",
       "tipo": "novo",
-      "area": "Ficha",
-      "titulo": "Retrato do personagem com moldura que muda de patamar por nível",
+      "area": "Geral",
+      "titulo": "Agora da para ligar e desligar sons e animacoes por categoria, e o movimento reduzido e respeitado",
       "detalhes": [
-        "Sem foto, o retrato é composto com as cores da classe e da raça"
+        "Categorias de som e de movimento",
+        "Preferencias aplicadas aos hosts de animacao da ficha"
       ]
     },
     {
-      "id": "manual-vinculos",
+      "id": "014e2be",
       "data": "2026-09-21",
       "tipo": "novo",
-      "area": "Ficha",
-      "titulo": "Vínculos do personagem, com teia visual e retrato de cada pessoa",
+      "area": "Geral",
+      "titulo": "Classes que fabricam gastam lotes de material a cada descanso, e a Loja vira lote com um toque",
       "detalhes": [
-        "Afinidade de -5 a +5 com histórico",
-        "Filtros e lista compacta para quem tem muitos vínculos"
-      ]
-    },
-    {
-      "id": "manual-diario",
-      "data": "2026-09-21",
-      "tipo": "novo",
-      "area": "Ficha",
-      "titulo": "Diário do personagem que se escreve sozinho",
-      "detalhes": [
-        "Sessões, críticos, primeiras vezes, selos e grandes gastos entram na hora",
-        "Dá para fixar momentos e comentar"
+        "Alquimista, Engenheiro e Cozinheiro gastam 1 lote por descanso",
+        "Lote superior paga um inferior",
+        "Botao Transformar em lote na ficha"
       ]
     },
     {
@@ -694,6 +681,28 @@
       "tipo": "correcao",
       "area": "Livro",
       "titulo": "Remove lista de Legados duplicada no capitulo",
+      "detalhes": []
+    },
+    {
+      "id": "aa850de",
+      "data": "2026-08-18",
+      "tipo": "correcao",
+      "area": "Livro",
+      "titulo": "Revisao de design e UX das paginas do livro",
+      "detalhes": [
+        "Corrige aria-label corrompido (mojibake) na navegacao principal",
+        "Aumenta o contraste dos links \"ver ficha\"/\"explorar progressao\" nos",
+        "Remove a coluna \"Descricao\" redundante nas tabelas de variante de",
+        "Adiciona as secoes que faltavam nas paginas de Automato (Modificacoes,",
+        "FerramentasMestre: reaproveita as classes regras-table* ja usadas no"
+      ]
+    },
+    {
+      "id": "9e0d308",
+      "data": "2026-08-18",
+      "tipo": "correcao",
+      "area": "Livro",
+      "titulo": "Remove travessao introduzido na descricao do Auleth",
       "detalhes": []
     }
   ]
