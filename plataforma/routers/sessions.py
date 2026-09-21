@@ -398,6 +398,197 @@ def publicar_sessao(
     return estado
 
 
+_MIN_ROLAGENS_PARA_SORTE = 4
+
+
+def _destaques_do_resumo(jogadores: list[dict], maior_dano, poder_favorito) -> list[dict]:
+    """Os cartões do resumo. Cada um só existe se alguém de fato o mereceu."""
+    destaques: list[dict] = []
+
+    def vencedor(chave, *, menor=False, minimo=1, filtro=None):
+        candidatos = [
+            jogador for jogador in jogadores
+            if jogador[chave] is not None and jogador[chave] >= minimo and (filtro is None or filtro(jogador))
+        ]
+        if not candidatos:
+            return None
+        return (min if menor else max)(candidatos, key=lambda jogador: (jogador[chave], jogador["nome"]))
+
+    rei = vencedor("criticos")
+    if rei:
+        destaques.append({
+            "id": "criticos", "rotulo": "Rei dos Críticos", "personagem": rei["nome"],
+            "valor": rei["criticos"], "unidade": "20 naturais",
+            "detalhe": "Ninguém tirou mais 20 naturais nesta sessão.",
+        })
+    azarao = vencedor("falhas")
+    if azarao:
+        destaques.append({
+            "id": "falhas", "rotulo": "Azarão da Noite", "personagem": azarao["nome"],
+            "valor": azarao["falhas"], "unidade": "1 naturais",
+            "detalhe": "Os dados não estavam do seu lado.",
+        })
+    if maior_dano:
+        destaques.append({
+            "id": "maior_dano", "rotulo": "Golpe da Noite", "personagem": maior_dano["autor_nome"],
+            "valor": int(maior_dano["resultado"]), "unidade": "de dano",
+            "detalhe": maior_dano["titulo"],
+        })
+    dano = vencedor("dano_total")
+    if dano:
+        destaques.append({
+            "id": "dano_total", "rotulo": "Mais Estrago", "personagem": dano["nome"],
+            "valor": dano["dano_total"], "unidade": "de dano no total",
+            "detalhe": "Somando todas as rolagens de dano.",
+        })
+    sorte = vencedor("media_natural", minimo=0, filtro=lambda j: j["rolagens"] >= _MIN_ROLAGENS_PARA_SORTE)
+    if sorte and len(jogadores) > 1:
+        destaques.append({
+            "id": "sorte", "rotulo": "Sorte da Mesa", "personagem": sorte["nome"],
+            "valor": sorte["media_natural"], "unidade": "de média no d20",
+            "detalhe": f"Em {sorte['rolagens']} rolagens.",
+        })
+        azar = vencedor("media_natural", menor=True, minimo=0, filtro=lambda j: j["rolagens"] >= _MIN_ROLAGENS_PARA_SORTE)
+        if azar and azar["nome"] != sorte["nome"]:
+            destaques.append({
+                "id": "azar", "rotulo": "Azar da Mesa", "personagem": azar["nome"],
+                "valor": azar["media_natural"], "unidade": "de média no d20",
+                "detalhe": f"Em {azar['rolagens']} rolagens.",
+            })
+    ativo = vencedor("acoes")
+    if ativo and len(jogadores) > 1:
+        destaques.append({
+            "id": "ativo", "rotulo": "Mais Ativo", "personagem": ativo["nome"],
+            "valor": ativo["acoes"], "unidade": "ações",
+            "detalhe": "Rolagens e usos de poder somados.",
+        })
+    if poder_favorito:
+        destaques.append({
+            "id": "poder", "rotulo": "Favorito da Mesa", "personagem": poder_favorito["titulo"],
+            "valor": int(poder_favorito["total"]), "unidade": "usos",
+            "detalhe": "O poder, habilidade ou magia mais usado.",
+        })
+    return destaques
+
+
+@router.get("/{sessao_id}/resumo")
+def resumo_da_sessao(
+    sessao_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """Resumo estilo "Wrapped" da sessão, para todos os membros da mesa.
+
+    Só entram personagens (o que o Mestre rola por monstros fica de fora) e só
+    números: o título de rolagens de perícia nunca aparece, para o resumo não
+    entregar cena. O maior dano mostra o nome do golpe porque dano é público."""
+    with database.connection() as connection:
+        sessao = connection.execute(
+            """
+            SELECT id, campanha_id, titulo, status, rodada, iniciada_em, encerrada_em,
+                   EXTRACT(EPOCH FROM (COALESCE(encerrada_em, CURRENT_TIMESTAMP) - iniciada_em)) AS segundos
+            FROM sessoes_mesa WHERE id=%s
+            """,
+            (sessao_id,),
+        ).fetchone()
+        if not sessao:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="sessao nao encontrada")
+        campaign_access(connection, sessao["campanha_id"], user.id)
+
+        linhas = connection.execute(
+            """
+            SELECT personagem_id::text AS chave,
+                   MAX(autor_nome) AS nome,
+                   COUNT(*) FILTER (WHERE tipo='rolagem') AS rolagens,
+                   COUNT(*) FILTER (WHERE tipo='rolagem' AND detalhes->>'critico_natural'='true') AS criticos,
+                   COUNT(*) FILTER (WHERE tipo='rolagem' AND detalhes->>'falha_natural'='true') AS falhas,
+                   COALESCE(SUM(resultado) FILTER (WHERE tipo='dano'), 0) AS dano_total,
+                   COALESCE(MAX(resultado) FILTER (WHERE tipo='dano'), 0) AS dano_maximo,
+                   COUNT(*) FILTER (WHERE tipo IN ('poder', 'habilidade', 'magia')) AS usos,
+                   ROUND(AVG((detalhes->>'natural')::numeric)
+                         FILTER (WHERE tipo='rolagem' AND detalhes ? 'natural'), 1) AS media_natural
+            FROM registros_mesa
+            WHERE sessao_id=%s AND personagem_id IS NOT NULL
+            GROUP BY personagem_id
+            """,
+            (sessao_id,),
+        ).fetchall()
+        maior_dano = connection.execute(
+            """
+            SELECT autor_nome, titulo, resultado FROM registros_mesa
+            WHERE sessao_id=%s AND tipo='dano' AND personagem_id IS NOT NULL AND resultado IS NOT NULL
+            ORDER BY resultado DESC, criado_em LIMIT 1
+            """,
+            (sessao_id,),
+        ).fetchone()
+        poder_favorito = connection.execute(
+            """
+            SELECT titulo, COUNT(*) AS total FROM registros_mesa
+            WHERE sessao_id=%s AND tipo IN ('poder', 'habilidade', 'magia') AND personagem_id IS NOT NULL
+            GROUP BY titulo ORDER BY total DESC, titulo LIMIT 1
+            """,
+            (sessao_id,),
+        ).fetchone()
+
+    jogadores = []
+    for linha in linhas:
+        media = linha["media_natural"]
+        jogadores.append({
+            "nome": linha["nome"],
+            "rolagens": int(linha["rolagens"]),
+            "criticos": int(linha["criticos"]),
+            "falhas": int(linha["falhas"]),
+            "dano_total": int(linha["dano_total"]),
+            "dano_maximo": int(linha["dano_maximo"]),
+            "usos": int(linha["usos"]),
+            "acoes": int(linha["rolagens"]) + int(linha["usos"]),
+            "media_natural": float(media) if media is not None else None,
+        })
+    jogadores.sort(key=lambda jogador: (-jogador["acoes"], jogador["nome"]))
+
+    return {
+        "sessao": {
+            "id": sessao["id"],
+            "titulo": sessao["titulo"],
+            "status": sessao["status"],
+            "rodadas": sessao["rodada"],
+            "duracao_min": max(0, int(round(float(sessao["segundos"] or 0) / 60))),
+            "iniciada_em": sessao["iniciada_em"],
+            "encerrada_em": sessao["encerrada_em"],
+        },
+        "mesa": {
+            "rolagens": sum(jogador["rolagens"] for jogador in jogadores),
+            "criticos": sum(jogador["criticos"] for jogador in jogadores),
+            "falhas": sum(jogador["falhas"] for jogador in jogadores),
+            "dano_total": sum(jogador["dano_total"] for jogador in jogadores),
+            "usos": sum(jogador["usos"] for jogador in jogadores),
+            "jogadores": len(jogadores),
+        },
+        "destaques": _destaques_do_resumo(jogadores, maior_dano, poder_favorito),
+        "jogadores": jogadores,
+    }
+
+
+@router.get("/campanha/{campanha_id}/ultima-encerrada")
+def ultima_sessao_encerrada(
+    campanha_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """Id da sessão encerrada mais recente da mesa, para reabrir o resumo."""
+    with database.connection() as connection:
+        campaign_access(connection, campanha_id, user.id)
+        linha = connection.execute(
+            """
+            SELECT id FROM sessoes_mesa
+            WHERE campanha_id=%s AND status='encerrada'
+            ORDER BY encerrada_em DESC NULLS LAST LIMIT 1
+            """,
+            (campanha_id,),
+        ).fetchone()
+    return {"sessao_id": linha["id"] if linha else None}
+
+
 @router.delete("/{sessao_id}", status_code=status.HTTP_204_NO_CONTENT)
 def encerrar_sessao(
     sessao_id: UUID,

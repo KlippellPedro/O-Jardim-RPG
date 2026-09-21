@@ -15,6 +15,7 @@ from core.character_summary import (
     iniciativa_fixa,
     validar_regras_ficha,
 )
+from core.conquistas import avaliar as avaliar_conquistas
 from core.database import Database
 from core.economy_commands import MAX_ECONOMY_AMOUNT
 from core.equipment_rules import equipped_special_item_count, special_item_use_limit
@@ -869,6 +870,19 @@ def list_complex_allies(
             if linked_id in by_id
         ]
     return {"aliados": summaries}
+
+
+@router.get("/{character_id}/conquistas")
+def listar_conquistas(
+    character_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """Selos do personagem. Avalia na hora e devolve o que acabou de ser
+    desbloqueado em `novas` (a tela comemora uma vez)."""
+    with database.connection() as connection:
+        _readable_character(connection, character_id, user.id)
+        return avaliar_conquistas(connection, character_id)
 
 
 @router.get("/{character_id}")

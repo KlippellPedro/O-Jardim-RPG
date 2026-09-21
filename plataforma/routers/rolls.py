@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from psycopg.types.json import Jsonb
 
 from core import live_session
+from core.conquistas import avaliar_sem_quebrar
 from core.dados import rolar_formula, rolar_teste
 from core.database import Database
 from core.dependencies import (
@@ -131,8 +132,9 @@ def rolar(
             resultado=dados["total"],
             detalhes={**dados, "origem": payload.origem},
         )
+        conquistas_novas = avaliar_sem_quebrar(connection, personagem_id)
     live_session.publicar(payload.campanha_id, "registro", 0)
-    return {"registro": registro}
+    return {"registro": registro, "conquistas_novas": conquistas_novas}
 
 
 def _tocar_sessao(connection, sessao_id) -> int:
@@ -216,6 +218,7 @@ def registrar_uso(
             resultado=None,
             detalhes=payload.detalhes,
         )
+        conquistas_novas = avaliar_sem_quebrar(connection, personagem_id)
         nova_versao_sessao = None
         if sessao and personagem_id and payload.detalhes.get("recurso") == "mana":
             custo = payload.detalhes.get("custo")
@@ -232,7 +235,7 @@ def registrar_uso(
         # mestre — "registro" só refresca o log de rolagens/usos, não os
         # participantes (achado descoberto na validação pós-correção, 2026-08).
         live_session.publicar(payload.campanha_id, "participante_atualizado", nova_versao_sessao)
-    return {"registro": registro}
+    return {"registro": registro, "conquistas_novas": conquistas_novas}
 
 
 @router.get("")

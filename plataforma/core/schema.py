@@ -1401,4 +1401,20 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        35,
+        "conquistas_dos_personagens",
+        (
+            # Selos da ficha. O que conta como conquista é decidido no servidor
+            # (core/conquistas.py); aqui só fica o que já foi desbloqueado.
+            """
+            CREATE TABLE IF NOT EXISTS personagem_conquistas (
+                personagem_id UUID NOT NULL REFERENCES personagens(id) ON DELETE CASCADE,
+                chave TEXT NOT NULL,
+                desbloqueada_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (personagem_id, chave)
+            )
+            """,
+        ),
+    ),
 )
