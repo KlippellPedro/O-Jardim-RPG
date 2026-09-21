@@ -1241,7 +1241,29 @@ def controlar_turno(
         atualizada = _sessao_ativa(connection, sessao["campanha_id"])
         estado = _montar_estado(connection, atualizada, sessao["_papel_comando"], user.id)
         campanha_id = sessao["campanha_id"]
-    live_session.publicar(campanha_id, "turno", estado["sessao"]["versao"])
+        # Quem está na vez, para a ficha do jogador avisar "É a sua vez!". Vai só
+        # o id do personagem (inimigo e NPC ficam sem id): o nome de criatura
+        # escondida nunca sai por aqui.
+        da_vez = connection.execute(
+            """
+            SELECT personagem_id FROM sessao_participantes
+            WHERE sessao_id=%s
+            ORDER BY ordem, iniciativa DESC, nome
+            OFFSET %s LIMIT 1
+            """,
+            (sessao_id, indice),
+        ).fetchone()
+    live_session.publicar(
+        campanha_id,
+        "turno",
+        estado["sessao"]["versao"],
+        {
+            "acao": payload.acao,
+            "em_combate": em_combate,
+            "rodada": rodada,
+            "personagem_id": str(da_vez["personagem_id"]) if da_vez and da_vez["personagem_id"] else None,
+        },
+    )
     return estado
 
 
