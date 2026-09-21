@@ -1066,6 +1066,32 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>12</td><td>2,8%</td><td><strong>Aqui não é o final:</strong> estabilize e volte imediatamente com 1 PV.</td></tr>
         </tbody>
       </table></div>
+
+      <h3 class="regras-subtitle">Mutilação</h3>
+      <p class="regras-lead">Algumas criaturas querem levar uma parte de quem enfrentam. Quando a ficha de uma criatura tem a habilidade <strong>Arrancar</strong>, ela diz o que dispara e qual teste você faz. Falhou, você perde um membro na hora, e ele não volta com descanso.</p>
+      <ul class="regras-list">
+        <li>A Mutilação sempre vem <strong>anunciada</strong> na rodada anterior, ou de um gatilho que a própria ficha descreve, como estar Agarrado, Imobilizado ou Marcado. Ninguém perde um membro por um golpe que a mesa não teve chance de ver.</li>
+        <li>Sucesso no teste evita a perda e deixa apenas <strong>Sangramento</strong>. Sucesso crítico não deixa nada.</li>
+        <li>Se a ficha não disser qual membro, role 1d6 na tabela abaixo. Ver o próprio membro sumir custa <strong>1d6 de Sanidade</strong>, e Vontade DT 15 corta a perda pela metade.</li>
+      </ul>
+      <div class="regras-table-wrap"><table class="regras-table regras-table--dado">
+        <thead><tr><th>1d6</th><th>Membro</th><th>O que muda</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>Mão dominante</strong></td><td>Não segura nada com ela. Sem armas de duas mãos e sem gestos de conjuração com ela, e ataques com a outra mão sofrem −2.</td></tr>
+          <tr><td>2</td><td><strong>Mão de apoio</strong></td><td>Sem escudo e sem armas de duas mãos. Desvantagem em Atletismo para escalar.</td></tr>
+          <tr><td>3</td><td><strong>Perna</strong></td><td>Deslocamento pela metade, sem correr, e desvantagem em Acrobacia e Furtividade.</td></tr>
+          <tr><td>4</td><td><strong>Olho</strong></td><td>−2 em ataques à distância e em Percepção que dependa de visão. Perder o segundo olho deixa o personagem Cego para sempre.</td></tr>
+          <tr><td>5</td><td><strong>Ouvido</strong></td><td>Desvantagem em Percepção que dependa de som. Perder o segundo ouvido falha automaticamente nesses testes.</td></tr>
+          <tr><td>6</td><td><strong>Voz</strong></td><td>Não fala. Sem componente verbal em magia e sem persuasão falada. Escrita e gestos continuam funcionando.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 class="regras-subtitle">Voltar a ter o membro</h3>
+      <ul class="regras-list">
+        <li><strong>Regeneração:</strong> só um efeito de Fluxo que diga, com todas as letras, que restaura um membro perdido.</li>
+        <li><strong>Implante:</strong> Braço Hidráulico Titânico, Pernas Pneumáticas e Olho Biônico Mk-II cobrem o que sumiu e anulam a penalidade daquele membro enquanto estiverem funcionando. O Mestre decide se a Laringe Sintética Camaleão devolve a fala.</li>
+        <li>Sem uma dessas portas, a perda é permanente. O personagem continua inteiro para tudo que a tabela não cita.</li>
+      </ul>
     `,
     corpoMestre: `
       <p class="regras-lead">Cair a 0 aqui não é o fim, é o começo de um relógio. Morrendo dá ao grupo algumas rodadas para decidir se resgatam ou se seguem em frente, e essa decisão é a parte boa da regra. Aproveite o relógio em vez de encurtá-lo.</p>
@@ -1089,6 +1115,14 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Quem acorda ganha Ferido 1, e Ferido entra na DT dos testes de Morrendo seguintes. É assim que uma sessão difícil pesa na próxima sem você precisar tirar Vida de ninguém.</li>
         <li>Sai 1 por descanso completo de qualidade Boa ou melhor, com tratamento. Se a campanha não dá espaço para descanso bom, o Ferido acumula e o grupo entra em espiral: esse é o aviso para afrouxar o ritmo.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Mutilação na mesa</h3>
+      <ul class="regras-list">
+        <li>Perder um membro é o preço de uma decisão que a mesa teve chance de evitar. Anuncie o golpe, diga a DT em voz alta e deixe alguém tentar proteger, empurrar ou tirar o alvo da frente antes do dado.</li>
+        <li>O livro avisa desde a primeira sessão que existe mutilação. Pergunte a quem joga se tem algum membro ou sentido que não quer ver perdido, e respeite sem negociar. Nesse caso, troque a perda por Sangramento e Sanidade.</li>
+        <li>Não mutile na primeira rodada de uma criatura desconhecida. Deixe os Sinais aparecerem antes, para que a mesa tenha visto o perigo e decidido ficar.</li>
+        <li>Quem perde um membro ainda é o mesmo personagem. Dê a ele uma cena para viver com isso: um implante que alguém oferece, uma forma nova de lutar, um pedido de desculpas que ninguém sabia como fazer. A perda rende história quando deixa de ser só punição.</li>
       </ul>
     `,
   },
@@ -1437,7 +1471,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Fórmula de progressão</h3>
       <div class="regras-formula">XP total do nível N = 500 × N × (N − 1)</div>
-      <p class="regras-note">Sair do nível N e chegar ao N+1 custa N × 1.000 XP.</p>
+      <p class="regras-note">Sair do nível N e chegar ao N+1 custa N × 1.000 XP. Na ficha, a barra recomeça do zero a cada nível: o que passar do custo continua contando para o próximo.</p>
 
       <h3 class="regras-subtitle">Tabela completa</h3>
       <details class="regras-details regras-details--xp">
@@ -3644,6 +3678,38 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Deixe uma fraqueza para o grupo descobrir em cena.</strong> Descobrir é o que transforma o combate em conversa entre jogadores, e é a melhor sensação que um combate pode dar.</li>
         <li><strong>Decida como ela sai da luta sem morrer.</strong> Fugir, se render, ser convencida, conseguir o que queria. Combate que só termina em morte tira da mesa a escolha mais interessante.</li>
         <li><strong>Se faltar tempo,</strong> use o Modelo de Criatura do VD certo direto: troque o nome, troque um ataque por algo que combine com a história, role uma decisão e um rosto nas tabelas acima. É uma ameaça pronta em três minutos, e com alma.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">Criatura que ninguém quer enfrentar</h3>
+      <p>As criaturas do Vazio são feitas com outra promessa: o combate é o último recurso. O grupo deve sair da cena sabendo que ganhar custa caro e que a boa jogada era não ter lutado. Guardas, mercenários e gente comum continuam nas tabelas normais acima. Terror é para o que não devia existir.</p>
+      <ol class="regras-steps">
+        <li><strong>Sinais antes da aparição.</strong> Dê dois sinais antes de a criatura entrar em cena. Toda ficha do Vazio traz os seus, e eles são o aviso justo que permite ao grupo escolher ficar ou ir embora.</li>
+        <li><strong>Pavor com número.</strong> A habilidade Presença Aterradora cobra um teste de Sanidade uma vez por cena, seguindo a regra de Condições: uma cena, um teste.</li>
+        <li><strong>Dano que assusta.</strong> O golpe comum tira cerca de 40% da Vida de quem está na linha de frente, e o golpe anunciado passa de 55%. O grupo entende o perigo antes do segundo turno.</li>
+        <li><strong>Um preço que a mesa reconhece.</strong> Arrancar leva um membro, e Mutilação está em Ferimentos. A criatura só cobra o preço quando o teste foi anunciado.</li>
+        <li><strong>Uma saída conhecida.</strong> Toda ficha traz um Como Evitar. Terror sem saída vira sentença, e o grupo só sente medo de verdade quando sabe que existe uma escolha melhor que a luta.</li>
+      </ol>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>VD</th><th>Presença Aterradora</th><th>Golpe comum</th><th>Golpe anunciado</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Vontade DT 15, 1d6</td><td>2d6+3 (10)</td><td>4d6 (14)</td></tr>
+          <tr><td>2</td><td>Vontade DT 15, 1d6</td><td>3d6+5 (15)</td><td>4d8+3 (21)</td></tr>
+          <tr><td>3</td><td>Vontade DT 15, 1d6</td><td>3d8+7 (20)</td><td>5d8+6 (28)</td></tr>
+          <tr><td>4</td><td>Vontade DT 20, 1d8</td><td>4d8+8 (26)</td><td>6d8+8 (35)</td></tr>
+          <tr><td>5</td><td>Vontade DT 20, 1d8</td><td>4d10+10 (32)</td><td>6d10+11 (44)</td></tr>
+          <tr><td>6</td><td>Vontade DT 20, 1d8</td><td>5d10+10 (37)</td><td>7d10+13 (51)</td></tr>
+          <tr><td>7</td><td>Vontade DT 25, 2d6</td><td>6d10+10 (43)</td><td>9d10+11 (60)</td></tr>
+          <tr><td>8</td><td>Vontade DT 25, 2d6</td><td>7d10+10 (48)</td><td>10d10+11 (66)</td></tr>
+          <tr><td>9</td><td>Vontade DT 25, 2d6</td><td>8d10+10 (54)</td><td>11d10+14 (74)</td></tr>
+          <tr><td>10</td><td>Vontade DT 25, 2d6</td><td>9d10+10 (59)</td><td>12d10+16 (82)</td></tr>
+        </tbody>
+      </table></div>
+      <p class="regras-note">A Vida da criatura do Vazio fica cerca de 20% acima do Modelo de Criatura do mesmo VD, e a Defesa dois pontos acima. Os números vêm da Vida de um personagem de nível igual ao dobro do VD, e servem para você montar uma criatura nova que se comporte como as do Bestiário.</p>
+      <ul class="regras-list">
+        <li>Se a mesa lutar mesmo assim, deixe a luta ser tão feia quanto a ficha promete. Não amoleça o golpe no meio da cena, porque o medo do grupo na próxima criatura depende de você ter cumprido a promessa nesta.</li>
+        <li>Fugir tem que funcionar quando o plano é bom. Uma boa fuga custa recurso, tempo ou alguém para trás, e nunca deve ser impossível.</li>
+        <li>Chefes como o Devorador de Mundos e o Devorador de Estrelas não são encontros para vencer no dano. A cena é de fuga, de evacuação ou de fechar o Vão de onde eles vieram.</li>
+        <li>O tom de horror precisa ser combinado na primeira sessão, junto com os limites de quem joga.</li>
       </ul>
 
       <h3 class="regras-subtitle">Tesouro e recompensa</h3>

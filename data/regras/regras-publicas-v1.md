@@ -1004,6 +1004,38 @@ Um teste de Cura usa a mesma DT. Sucesso estabiliza, o que interrompe os testes 
 
 - 12 | 2,8% | Aqui não é o final: estabilize e volte imediatamente com 1 PV.
 
+### Mutilação
+
+Algumas criaturas querem levar uma parte de quem enfrentam. Quando a ficha de uma criatura tem a habilidade **Arrancar**, ela diz o que dispara e qual teste você faz. Falhou, você perde um membro na hora, e ele não volta com descanso.
+
+- A Mutilação sempre vem **anunciada** na rodada anterior, ou de um gatilho que a própria ficha descreve, como estar Agarrado, Imobilizado ou Marcado. Ninguém perde um membro por um golpe que a mesa não teve chance de ver.
+
+- Sucesso no teste evita a perda e deixa apenas **Sangramento**. Sucesso crítico não deixa nada.
+
+- Se a ficha não disser qual membro, role 1d6 na tabela abaixo. Ver o próprio membro sumir custa **1d6 de Sanidade**, e Vontade DT 15 corta a perda pela metade.
+
+- 1d6 | Membro | O que muda
+
+- 1 | Mão dominante | Não segura nada com ela. Sem armas de duas mãos e sem gestos de conjuração com ela, e ataques com a outra mão sofrem −2.
+
+- 2 | Mão de apoio | Sem escudo e sem armas de duas mãos. Desvantagem em Atletismo para escalar.
+
+- 3 | Perna | Deslocamento pela metade, sem correr, e desvantagem em Acrobacia e Furtividade.
+
+- 4 | Olho | −2 em ataques à distância e em Percepção que dependa de visão. Perder o segundo olho deixa o personagem Cego para sempre.
+
+- 5 | Ouvido | Desvantagem em Percepção que dependa de som. Perder o segundo ouvido falha automaticamente nesses testes.
+
+- 6 | Voz | Não fala. Sem componente verbal em magia e sem persuasão falada. Escrita e gestos continuam funcionando.
+
+### Voltar a ter o membro
+
+- **Regeneração:** só um efeito de Fluxo que diga, com todas as letras, que restaura um membro perdido.
+
+- **Implante:** Braço Hidráulico Titânico, Pernas Pneumáticas e Olho Biônico Mk-II cobrem o que sumiu e anulam a penalidade daquele membro enquanto estiverem funcionando. O Mestre decide se a Laringe Sintética Camaleão devolve a fala.
+
+- Sem uma dessas portas, a perda é permanente. O personagem continua inteiro para tudo que a tabela não cita.
+
 ## coreografia
 
 **Categoria:** Combate e Mecânicas
@@ -1272,7 +1304,7 @@ Toda vez que você sobe de nível, escolhe uma das suas classes e aumenta o nív
 
 XP total do nível N = 500 × N × (N − 1)
 
-Sair do nível N e chegar ao N+1 custa N × 1.000 XP.
+Sair do nível N e chegar ao N+1 custa N × 1.000 XP. Na ficha, a barra recomeça do zero a cada nível: o que passar do custo continua contando para o próximo.
 
 ### Tabela completa
 
@@ -3168,7 +3200,7 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra em O Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 822 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 825 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 ### Os quatro locais
 
@@ -3178,7 +3210,7 @@ O catálogo inteiro tem 822 itens, e você nunca vê todos de uma vez. Cada item
 
 - Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 217
 
-- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 195
+- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 198
 
 - Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 149
 
