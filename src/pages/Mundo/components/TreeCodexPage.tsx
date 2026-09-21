@@ -17,6 +17,9 @@ import type { LoreEntry } from '../../../../data/gerado/mundoCatalog';
 import { VAZIO_ID } from '../../../../data/mundo/arvoresCatalog';
 import { secaoCronicaOculta, eventoCronicaOculto } from '../chronicleVisibility';
 import { loreBloqueado } from '../loreVisibility';
+import { useRecemRevelado } from '../revelacao';
+import { useAuthStore } from '../../../store/useAuthStore';
+import { CarimboRetido, RasuraTexto, RasuraTitulo } from '../../../components/ui/Rasura';
 import {
   buildTreeCodex,
   findCodexEntry,
@@ -159,6 +162,8 @@ interface NodeListProps {
 
 const CodexRow = ({ node, color, locked, onSelect, selected, ordem, depth }: NodeListProps & { node: WorldCodexNode; depth: number }) => {
   const isLocked = locked.get(entryKey(node.entry)) === true;
+  const campanhaId = useAuthStore((estado) => estado.campanhaAtiva?.id);
+  const { recemRevelado, lido } = useRecemRevelado(campanhaId, `${node.entry.tipo}:${node.entry.id}`, isLocked);
   const hasChildren = !isLocked && node.children.length > 0;
   // O caminho até o registro aberto no momento fica visível sozinho, pra que
   // clicar num Reino não deixe o mapa mostrando um galho que não é o dele.
@@ -193,16 +198,17 @@ const CodexRow = ({ node, color, locked, onSelect, selected, ordem, depth }: Nod
         <button
           type="button"
           disabled={isLocked}
-          onClick={() => onSelect(node.entry)}
+          onClick={() => { lido(); onSelect(node.entry); }}
           className={`group flex min-w-0 flex-1 items-center gap-2.5 rounded-xl px-2 py-2 text-left transition hover:bg-white/5 disabled:cursor-not-allowed ${isSelected ? 'bg-white/[0.07]' : ''}`}
         >
           <span className="h-6 w-1 shrink-0 rounded-full" style={{ backgroundColor: isLocked ? '#4b5563' : color, opacity: isSelected ? 1 : 0.6 }} />
           <span className="min-w-0 flex-1">
             <strong className={`block truncate text-sm ${isSelected ? 'text-white' : 'text-gray-200'}`}>
-              {isLocked ? 'Registro oculto' : node.entry.titulo}
+              {isLocked ? <RasuraTitulo semente={node.entry.id} /> : node.entry.titulo}
             </strong>
             <small className="block text-[9px] font-bold uppercase tracking-widest text-gray-600">
-              {isLocked ? 'Não revelado' : typeLabel(node.entry.tipo)}
+              {isLocked ? 'Retido' : typeLabel(node.entry.tipo)}
+              {recemRevelado ? <span className="recem-revelado__selo ml-2">Novo</span> : null}
               {hasChildren && !aberto ? ` · ${node.children.length}` : ''}
             </small>
           </span>
@@ -310,9 +316,11 @@ const IdentityCard = ({
   if (!entry || locked) {
     return (
       <div className="flex min-h-52 flex-col items-center justify-center rounded-3xl border border-white/10 bg-black/25 p-6 text-center">
-        <Lock size={24} className="mb-3 text-gray-700" />
-        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-600">{label}</p>
-        <p className="mt-2 text-sm italic text-gray-700">Conhecimento ainda não revelado.</p>
+        <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-gray-600">{label}</p>
+        <div className="w-full max-w-xs space-y-3">
+          <RasuraTexto semente={`${label}:${entry?.id ?? 'vazio'}`} linhas={3} className="text-sm" />
+          <CarimboRetido texto="Ainda não revelado" />
+        </div>
       </div>
     );
   }
@@ -494,8 +502,15 @@ export const TreeCodexPage: React.FC<TreeCodexPageProps> = ({
           {entryType && entryId ? (
             !selectedEntry || selectedLocked ? (
               <section className="flex min-h-[420px] flex-col items-center justify-center rounded-3xl border border-white/10 bg-[#0c0b11]/85 p-8 text-center">
-                <Lock size={42} className="mb-5 text-gray-700" />
-                <h2 className="text-2xl font-bold text-white">Registro indisponível</h2>
+                {selectedEntry ? (
+                  <div className="mb-6 w-full max-w-lg space-y-5 text-left">
+                    <RasuraTitulo semente={selectedEntry.id} className="text-3xl" />
+                    <RasuraTexto semente={selectedEntry.id} linhas={5} className="text-base" />
+                    <RasuraTexto semente={`${selectedEntry.id}:b`} linhas={3} className="text-base" />
+                    <div className="text-center"><CarimboRetido /></div>
+                  </div>
+                ) : <Lock size={42} className="mb-5 text-gray-700" />}
+                <h2 className="text-2xl font-bold text-white">{selectedEntry ? 'Este registro existe, mas está retido' : 'Registro indisponível'}</h2>
                 <p className="mt-2 max-w-md text-sm leading-6 text-gray-500">{ehVazio ? 'Este fragmento não pertence ao Vazio ou ainda não foi revelado pelo Mestre.' : 'Este fragmento não pertence à Árvore ou ainda não foi revelado pelo Mestre.'}</p>
                 <button type="button" onClick={onOpenOverview} className="mt-6 rounded-full border border-white/10 px-4 py-2 text-sm text-gray-300 hover:text-white">Voltar ao códice</button>
               </section>

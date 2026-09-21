@@ -1,3 +1,4 @@
+import { CarimboRetido, RasuraTexto, RasuraTitulo } from '../../../components/ui/Rasura';
 import React, { useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LoreEntry } from '../../../../data/gerado/mundoCatalog';
@@ -62,7 +63,7 @@ export const LoreItemModal: React.FC<LoreItemModalProps> = ({ entry, onClose, is
             </div>
 
             <h2 id="lore-item-modal-title" className="mb-2 pr-10 text-[clamp(2rem,8vw,2.25rem)] font-bold leading-tight text-white" style={{ fontFamily: 'Cinzel, serif' }}>
-              {isLocked ? 'Fragmento Desconhecido' : entry.titulo}
+              {isLocked ? <RasuraTitulo semente={entry.id} /> : entry.titulo}
             </h2>
             {!isLocked && entry.conteudo.epiteto && (
               <p className="text-yellow-600/80 italic text-lg font-serif">"{entry.conteudo.epiteto}"</p>
@@ -72,10 +73,13 @@ export const LoreItemModal: React.FC<LoreItemModalProps> = ({ entry, onClose, is
           {/* Body */}
           <div className="relative flex-1 overflow-y-auto p-4 custom-scrollbar sm:p-8">
             {isLocked ? (
-              <div className="h-full flex flex-col items-center justify-center text-center p-8 opacity-60">
-                <ShieldAlert size={64} className="mb-4 text-red-500/50" />
-                <p className="text-xl text-gray-300 font-serif mb-2">Conhecimento Proibido</p>
-                <p className="text-gray-500 text-sm">O Mestre ainda não revelou este fragmento. Seus olhos mortais não podem ver isto.</p>
+              <div className="mx-auto max-w-2xl space-y-6 py-4">
+                <RasuraTexto semente={entry.id} linhas={5} className="text-lg" />
+                <RasuraTexto semente={`${entry.id}:b`} linhas={4} className="text-lg" />
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <CarimboRetido />
+                  <p className="text-sm text-gray-500">Existe um registro aqui, mas o Mestre ainda não o liberou. Continue investigando.</p>
+                </div>
               </div>
             ) : (
               <div className="space-y-6">

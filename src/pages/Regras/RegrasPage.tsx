@@ -29,7 +29,6 @@ import { CatalogoLegados } from './components/CatalogoLegados';
 import { CatalogoMagico } from './components/CatalogoMagico';
 import { CatalogoCondicoes } from './components/CatalogoCondicoes';
 import { CatalogoPericias } from './components/CatalogoPericias';
-import { CatalogoBestiario } from './components/CatalogoBestiario';
 import { CatalogoAflicoes } from './components/CatalogoAflicoes';
 import { GridClasses } from './components/GridClasses';
 import { GridRacas } from './components/GridRacas';
@@ -39,6 +38,7 @@ import { estantesParaNavegacao, estruturarGuiaMestre } from './guiaMestre';
 import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
 import { limparPosicaoRetornoRegras, obterPosicaoRetornoRegras } from './regrasScrollRestoration';
 
+import { SimboloOculto } from '../../components/descobertas/SimboloOculto';
 function normalizar(valor: string) {
   return valor.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR');
 }
@@ -79,7 +79,7 @@ function RulesLanding({
     <motion.div key="inicio-regras" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mx-auto w-full max-w-[82.5rem] px-5 py-8 sm:px-8 lg:px-12 lg:py-12">
       <div className="border-b border-[#c7a44c]/20 pb-8">
         <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#c7a44c]">Livro de Regras</span>
-        <h1 className="mt-4 font-serif text-3xl font-bold text-[#f2ead7] sm:text-5xl">O que você precisa descobrir?</h1>
+        <h1 data-descoberta="erudito" data-cliques="5" className="mt-4 font-serif text-3xl font-bold text-[#f2ead7] sm:text-5xl">O que você precisa descobrir?</h1>
         <p className="mt-5 max-w-3xl text-base leading-8 text-gray-300/80">Encontre o assunto pelo grupo ou procure pelo nome e pela descrição. Todos os capítulos disponíveis para você aparecem nesta página.</p>
         <label data-tour="regras-busca" className="relative mt-6 block max-w-3xl">
           <span className="sr-only">Buscar em todos os capítulos</span>
@@ -683,7 +683,10 @@ export const RegrasPage = () => {
                 ) : activeTopic === 'bestiario' ? (
                   <>
                     <RegrasContent htmlContent={topicData.corpo} />
-                    <CatalogoBestiario />
+                    <Link to="/mundo/universal" className="mt-8 flex items-center gap-3 rounded-2xl border border-cyan-400/25 bg-cyan-400/[0.06] p-5 text-cyan-100 transition hover:bg-cyan-400/10">
+                      <span className="flex-1"><strong className="block text-sm">Procurando a lista de criaturas?</strong><span className="text-xs text-cyan-100/70">O Bestiário completo, com números e habilidades de cada uma, fica nos Registros Universais do Mundo.</span></span>
+                      <span aria-hidden="true">→</span>
+                    </Link>
                   </>
                 ) : activeTopic === 'mestre' ? (
                   <GuiaDoMestre html={topicData.corpo} campanhaId={campanhaAtiva?.id} />
@@ -784,6 +787,7 @@ export const RegrasPage = () => {
           onFinish={encerrarTourRegras}
         />
       ) : null}
+      <div className="mt-10 flex justify-end"><SimboloOculto chave="nota_de_rodape" glifo="†" /></div>
     </div>
   );
 };

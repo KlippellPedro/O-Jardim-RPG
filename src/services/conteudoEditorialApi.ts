@@ -59,6 +59,17 @@ export interface EditorialExportSnapshot {
     versao: number;
     publicado_em: string;
   }>;
+  /** Ajustes sobre os registros de fábrica e registros próprios do Mestre. Ausente em snapshots antigos. */
+  registros_universais?: Array<{
+    secao: string;
+    origem_id: string | null;
+    revelacao: 'oculto' | 'rasurado' | 'aberto';
+    dados: Record<string, unknown>;
+  }>;
+  /** Calendário do mundo (config, hoje, estação especial e acontecimentos). */
+  calendario?: Record<string, unknown> | null;
+  /** Cor, frase e capa da página da campanha. */
+  identidade?: Record<string, unknown>;
 }
 
 export interface GlobalEditorialExportSnapshot {

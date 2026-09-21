@@ -11,6 +11,7 @@ from psycopg.types.json import Jsonb
 from core.world_visibility import visible_world, without_private_fields
 from core.audit import record_audit
 from core.database import Database
+from core.discord_avisos import avisar_discord
 from core.dependencies import (
     AuthenticatedUser,
     campaign_access,
@@ -538,6 +539,10 @@ def publish_content(
                 campaign_id=payload.campanha_id,
                 actor_user_id=user.id,
                 details={"modulo": payload.modulo, "total": len(published)},
+            )
+            avisar_discord(
+                connection, payload.campanha_id, "liberacao",
+                f"🔓 **{len(published)} novidade(s) liberadas em {rotulo}**: {amostra}" + (f" e mais {resto}." if resto > 0 else "."),
             )
         record_audit(
             connection,
@@ -1783,11 +1788,24 @@ def export_published_editorial_content(
     with database.connection() as connection:
         _require_content_editor(connection, campanha_id, user)
         campaign = connection.execute(
-            "SELECT id, nome FROM campanhas WHERE id=%s",
+            "SELECT id, nome, identidade FROM campanhas WHERE id=%s",
             (campanha_id,),
         ).fetchone()
         if not campaign:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="campanha não encontrada")
+        universal_rows = connection.execute(
+            """
+            SELECT secao, origem_id, revelacao, dados
+            FROM campanha_registros_universais
+            WHERE campanha_id=%s
+            ORDER BY secao, origem_id NULLS LAST, criado_em, id
+            """,
+            (campanha_id,),
+        ).fetchall()
+        calendar_row = connection.execute(
+            "SELECT estado FROM campanha_calendario WHERE campanha_id=%s",
+            (campanha_id,),
+        ).fetchone()
         content_rows = connection.execute(
             """
             SELECT tipo AS modulo, chave_recurso, titulo, dados_completos AS dados,
@@ -1818,6 +1836,13 @@ def export_published_editorial_content(
         "campanha": {"id": str(campaign["id"]), "nome": campaign["nome"]},
         "conteudo": [dict(row) for row in content_rows],
         "loja": [dict(row) for row in shop_rows],
+        # Acrescentados depois: campos opcionais, o formato continua na versão 1.
+        # Registros Universais: ajustes sobre os de fábrica (origem_id) e registros próprios.
+        "registros_universais": [dict(row) for row in universal_rows],
+        # Calendário do mundo inteiro (nomes dos meses, data de hoje, estação especial e acontecimentos).
+        "calendario": calendar_row["estado"] if calendar_row else None,
+        # Cor, frase e capa (data URL) da página da campanha.
+        "identidade": campaign.get("identidade") or {},
     }
 
 
@@ -1859,6 +1884,7 @@ def change_default_access(
                 campaign_id=current["campanha_id"],
                 actor_user_id=user.id,
             )
+            avisar_discord(connection, current["campanha_id"], "liberacao", f"🔓 **Liberado para a mesa**: {current['titulo']}")
         record_audit(
             connection,
             action="conteudo.acesso_alterado",

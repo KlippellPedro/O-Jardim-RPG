@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
-import { BookOpenText, Clock3, Download, Library, Loader2, Store } from 'lucide-react';
+import { BookOpenText, Clock3, Download, Globe2, Library, Loader2, Store } from 'lucide-react';
 import { ConteudoLorePanel } from './ConteudoLorePanel';
 import { CronologiaPanel } from './CronologiaPanel';
 import { CatalogoLojaPanel } from './CatalogoLojaPanel';
 import { RegrasEditorPanel } from './RegrasEditorPanel';
+import { RegistrosUniversaisPanel } from './RegistrosUniversaisPanel';
 import { conteudoEditorialApi } from '../../services/conteudoEditorialApi';
 
-type AbaConteudo = 'lore' | 'cronologia' | 'loja' | 'regras';
+type AbaConteudo = 'lore' | 'cronologia' | 'loja' | 'regras' | 'registros';
 
 interface ConteudoMestrePanelProps {
   campanhaId: string;
@@ -60,7 +61,7 @@ export function ConteudoMestrePanel({ campanhaId, initialAba = 'lore', initialIt
       anchor.click();
       anchor.remove();
       URL.revokeObjectURL(url);
-      setExportMessage(`Snapshot ${isWorld ? 'global' : 'da campanha'} baixado. Antes do commit, sincronize esse arquivo com o repositório pelo comando editorial:sync.`);
+      setExportMessage(`Snapshot ${isWorld ? 'global' : 'da campanha (Regras, Loja, Registros Universais, calendário e identidade)'} baixado. Antes do commit, sincronize esse arquivo com o repositório pelo comando editorial:sync.`);
     } catch (error: any) {
       setExportMessage(error?.message || 'Não foi possível exportar o conteúdo publicado.');
     } finally {
@@ -76,6 +77,7 @@ export function ConteudoMestrePanel({ campanhaId, initialAba = 'lore', initialIt
           <button type="button" onClick={() => trocarAba('cronologia')} className={`flex items-center gap-2 whitespace-nowrap border-b-2 px-2 pb-3 text-xs font-bold uppercase tracking-widest ${aba === 'cronologia' ? 'border-primary text-primary' : 'border-transparent text-gray-500'}`}><Clock3 size={15} /> Árvores e Crônicas</button>
           <button type="button" onClick={() => trocarAba('loja')} className={`flex items-center gap-2 whitespace-nowrap border-b-2 px-2 pb-3 text-xs font-bold uppercase tracking-widest ${aba === 'loja' ? 'border-primary text-primary' : 'border-transparent text-gray-500'}`}><Store size={15} /> Loja</button>
           <button type="button" onClick={() => trocarAba('regras')} className={`flex items-center gap-2 whitespace-nowrap border-b-2 px-2 pb-3 text-xs font-bold uppercase tracking-widest ${aba === 'regras' ? 'border-primary text-primary' : 'border-transparent text-gray-500'}`}><Library size={15} /> Regras</button>
+          <button type="button" onClick={() => trocarAba('registros')} className={`flex items-center gap-2 whitespace-nowrap border-b-2 px-2 pb-3 text-xs font-bold uppercase tracking-widest ${aba === 'registros' ? 'border-primary text-primary' : 'border-transparent text-gray-500'}`}><Globe2 size={15} /> Registros</button>
         </div>
         <button type="button" onClick={() => void exportar()} disabled={exporting} className="mb-2 inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs font-bold text-gray-300 hover:border-primary/30 hover:text-primary disabled:opacity-50">
           {exporting ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />} Exportar publicados
@@ -86,6 +88,7 @@ export function ConteudoMestrePanel({ campanhaId, initialAba = 'lore', initialIt
       {aba === 'lore' && <ConteudoLorePanel initialItem={initialItem} onDirtyChange={registrarDirty} />}
       {aba === 'cronologia' && <CronologiaPanel initialItem={initialItem} onDirtyChange={registrarDirty} />}
       {aba === 'loja' && <CatalogoLojaPanel campanhaId={campanhaId} onDirtyChange={registrarDirty} />}
+      {aba === 'registros' && <RegistrosUniversaisPanel campanhaId={campanhaId} onAbrirLore={() => trocarAba('lore')} />}
       {aba === 'regras' && <RegrasEditorPanel campanhaId={campanhaId} initialItem={initialItem} onDirtyChange={registrarDirty} />}
     </div>
   );

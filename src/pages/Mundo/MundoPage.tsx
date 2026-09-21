@@ -1,7 +1,7 @@
 import type { LoreEntry } from '../../../data/gerado/mundoCatalog';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { BookMarked, BookOpen, Compass, History, Lock, ShoppingBag } from 'lucide-react';
+import { BookMarked, BookOpen, CalendarDays, Compass, History, Lock, ShoppingBag } from 'lucide-react';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useResolvedWorld } from '../../hooks/useResolvedWorld';
 import { ARVORES, VAZIO_ID, arvoreVisivel, corDeInterface } from '../../../data/mundo/arvoresCatalog';
@@ -13,8 +13,10 @@ import { MUNDO_TOUR_STEPS, mundoTourJaVisto, serializarMundoTourVisto } from './
 import { bancoLunarInfo } from './bancoLunarInfo';
 import { vazioInfo } from './vazioInfo';
 import { loreBloqueado } from './loreVisibility';
+import { CarimboRetido, RasuraTexto, RasuraTitulo } from '../../components/ui/Rasura';
 import { paginaGeralDoMundoVisivel } from './worldPageVisibility';
 
+import { SimboloOculto } from '../../components/descobertas/SimboloOculto';
 const CosmicTreeViewer = lazy(() => import('./components/CosmicTreeViewer').then((module) => ({ default: module.CosmicTreeViewer })));
 const TreeCodexPage = lazy(() => import('./components/TreeCodexPage').then((module) => ({ default: module.TreeCodexPage })));
 const GlobalChroniclePage = lazy(() => import('./components/GlobalChroniclePage').then((module) => ({ default: module.GlobalChroniclePage })));
@@ -40,7 +42,7 @@ const WorldLoading = ({ label }: { label: string }) => (
 );
 
 export const MundoPage: React.FC = () => {
-  const { catalog: mundoCatalog, chronicles: worldChronicles, entities, loading: worldLoading, error: worldError } = useResolvedWorld();
+  const { catalog: mundoCatalog, chronicles: worldChronicles, factions: mundoFaccoes, loading: worldLoading, error: worldError } = useResolvedWorld();
   const BANCO_LUNAR_INFO = bancoLunarInfo(mundoCatalog);
   const VAZIO_INFO = vazioInfo(mundoCatalog, worldChronicles);
   const [selectedDeidadeId, setSelectedDeidadeId] = useState<string | null>(null);
@@ -68,12 +70,12 @@ export const MundoPage: React.FC = () => {
   const config = campanhaAtiva?.configuracoes ?? EMPTY_CONFIG;
   const loreRevelado = config.lore_revelado as string[] | undefined ?? [];
   const loreOculto = config.lore_oculto as string[] | undefined ?? [];
-  const entidadesRevelado = config.entidades_revelado as string[] | undefined ?? [];
-  const entidadesOculto = config.entidades_oculto as string[] | undefined ?? [];
   const cronicaSecoesOcultas = config.cronica_secoes_ocultas as string[] | undefined ?? [];
   const cronicaEventosOcultos = config.cronica_eventos_ocultos as string[] | undefined ?? [];
   const cronologiaGeralVisivel = paginaGeralDoMundoVisivel(config.cronologia_geral_oculta, isMestre);
   const registrosUniversaisVisiveis = paginaGeralDoMundoVisivel(config.registros_universais_ocultos, isMestre);
+  const calendarioVisivel = paginaGeralDoMundoVisivel(config.calendario_oculto, isMestre);
+  const secoesUniversaisOcultas = (Array.isArray(config.registros_universais_secoes_ocultas) ? config.registros_universais_secoes_ocultas : []) as string[];
 
   // Trava a Árvore em si (some do visualizador 3D, da lista e da navegação),
   // que é um controle diferente de esconder o resumo da Deidade dentro da
@@ -185,10 +187,11 @@ export const MundoPage: React.FC = () => {
     const isLocked = loreBloqueado(entry, { isMestre, loreRevelado, loreOculto, paiBloqueado });
     if (isLocked) {
       return (
-        <div key={entry.id} className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/5 bg-black/60 p-4 text-center">
-          <Lock className="text-gray-600" size={24} />
-          <h4 className="text-xs font-bold uppercase tracking-widest text-gray-500">Conhecimento Oculto</h4>
-          <p className="text-xs italic text-gray-700">O Mestre ainda não revelou este fragmento da criação.</p>
+        <div key={entry.id} className="flex flex-col gap-3 rounded-2xl border border-white/5 bg-black/60 p-4">
+          <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500"><Lock size={12} /> {label}</span>
+          <RasuraTitulo semente={entry.id} className="text-lg" />
+          <RasuraTexto semente={entry.id} linhas={3} className="text-sm" />
+          <div><CarimboRetido /></div>
         </div>
       );
     }
@@ -276,13 +279,11 @@ export const MundoPage: React.FC = () => {
       <Suspense fallback={<WorldLoading label="Carregando registros universais..." />}>
         <UniversalCodexPage
           catalog={mundoCatalog}
-          entities={entities}
+          factions={mundoFaccoes}
+          secoesOcultas={secoesUniversaisOcultas}
           isMestre={isMestre}
           loreRevelado={loreRevelado}
           loreOculto={loreOculto}
-          entidadesRevelado={entidadesRevelado}
-          entidadesOculto={entidadesOculto}
-          podeEditarConteudo={podeEditarConteudo}
           onBack={() => navigate('/mundo')}
           onOpenGlobalTimeline={cronologiaGeralVisivel ? () => navigate('/mundo/cronologia') : undefined}
           onEditEntry={(tipo, id) => navigate(rotaEditorMundo('lore', `${tipo}:${id}`))}
@@ -302,7 +303,7 @@ export const MundoPage: React.FC = () => {
 
       <div role="main" className="mundo-shell app-viewport mx-auto flex max-w-[112.5rem] flex-col overflow-hidden">
         <div className="mb-3 flex shrink-0 flex-col items-center sm:mb-5">
-          <h1 className="text-center text-[clamp(2rem,7vw,3.75rem)] font-bold leading-tight tracking-wider text-yellow-500 drop-shadow-[0_0_20px_rgba(202,138,4,0.5)]" style={{ fontFamily: 'Cinzel, serif' }}>
+          <h1 data-descoberta="cartografo" data-cliques="5" className="text-center text-[clamp(2rem,7vw,3.75rem)] font-bold leading-tight tracking-wider text-yellow-500 drop-shadow-[0_0_20px_rgba(202,138,4,0.5)]" style={{ fontFamily: 'Cinzel, serif' }}>
             Geografia do Jardim
           </h1>
           <div data-tour="mundo-nav-geral" className="mt-2 flex flex-wrap items-center justify-center gap-2 sm:mt-4">
@@ -315,6 +316,13 @@ export const MundoPage: React.FC = () => {
                 <History size={15} /> Linha do tempo geral
               </button>
             )}
+            {calendarioVisivel && <button
+              type="button"
+              onClick={() => navigate('/mundo/calendario')}
+              className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-black/25 px-4 py-2 text-xs font-bold uppercase tracking-widest text-emerald-300 transition hover:border-emerald-400/60 hover:bg-emerald-400/5"
+            >
+              <CalendarDays size={15} /> Calendário e estações
+            </button>}
             {registrosUniversaisVisiveis && (
               <button
                 type="button"
@@ -521,6 +529,7 @@ export const MundoPage: React.FC = () => {
           onFinish={encerrarTourMundo}
         />
       ) : null}
+      <div className="flex justify-center pb-24"><SimboloOculto chave="vaga_lume" glifo="✧" cliques={5} /></div>
     </>
   );
 };

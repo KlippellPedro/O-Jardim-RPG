@@ -6,6 +6,7 @@ import { carregarCatalogo } from '../../services/catalogoService';
 import { ICatalogo } from '../../types/catalogo';
 import { Select } from '../ui/Select';
 import { getTreeChronicle } from '../../pages/Mundo/worldChronicles';
+import { SECOES_UNIVERSAIS } from '../../pages/Mundo/universais/registros';
 import { chaveSecaoCronica, type SecaoCronicaArvore } from '../../pages/Mundo/chronicleVisibility';
 import { Globe, ShoppingBag, Save, Eye, EyeOff, Loader2, TreePine, Sparkles, UserCog, BookOpen, History, ChevronDown, CircleOff } from 'lucide-react';
 
@@ -132,6 +133,8 @@ export const VisibilidadeCampanha: React.FC<VisibilidadeCampanhaProps> = ({
   const [entidadesOculto, setEntidadesOculto] = useState<string[]>(config.entidades_oculto || []);
   const [cronologiaGeralOculta, setCronologiaGeralOculta] = useState(config.cronologia_geral_oculta === true);
   const [registrosUniversaisOcultos, setRegistrosUniversaisOcultos] = useState(config.registros_universais_ocultos === true);
+  const [registrosSecoesOcultas, setRegistrosSecoesOcultas] = useState<string[]>(Array.isArray(config.registros_universais_secoes_ocultas) ? config.registros_universais_secoes_ocultas : []);
+  const [calendarioOculto, setCalendarioOculto] = useState(config.calendario_oculto === true);
   const [cronicaSecoesOcultas, setCronicaSecoesOcultas] = useState<string[]>(config.cronica_secoes_ocultas || []);
   const [cronicaEventosOcultos, setCronicaEventosOcultos] = useState<string[]>(config.cronica_eventos_ocultos || []);
   const [arvoreAberta, setArvoreAberta] = useState<string | null>(null);
@@ -286,6 +289,8 @@ export const VisibilidadeCampanha: React.FC<VisibilidadeCampanhaProps> = ({
       entidades_oculto: entidadesOculto,
       cronologia_geral_oculta: cronologiaGeralOculta,
       registros_universais_ocultos: registrosUniversaisOcultos,
+      registros_universais_secoes_ocultas: registrosSecoesOcultas,
+      calendario_oculto: calendarioOculto,
       cronica_secoes_ocultas: cronicaSecoesOcultas,
       cronica_eventos_ocultos: cronicaEventosOcultos,
       locais_ocultos: locaisOcultos,
@@ -458,6 +463,38 @@ export const VisibilidadeCampanha: React.FC<VisibilidadeCampanhaProps> = ({
             disabled={!isMaster}
             tom="ciano"
           />
+          <LinhaEntrada
+            rotulo="Página"
+            titulo="Calendário e estações"
+            visivel={!calendarioOculto}
+            onToggle={() => setCalendarioOculto((atual) => !atual)}
+            disabled={!isMaster}
+            tom="esmeralda"
+          />
+        </div>
+      </section>
+
+      <section>
+        <div className="mb-2 flex items-center gap-2">
+          <Sparkles className="text-cyan-400" size={20} />
+          <h3 className="text-lg font-bold text-white">Seções dos Registros Universais</h3>
+        </div>
+        <p className="mb-4 text-xs text-gray-400">
+          Esconda uma seção inteira dos jogadores (por exemplo, o Bestiário até a hora certa). Para liberar registro por registro, use “Editar” em cada um, dentro da própria página ou no editor de Conteúdo.
+          {registrosUniversaisOcultos ? ' A página inteira está oculta acima, então nenhuma seção aparece para os jogadores, qualquer que seja a escolha aqui.' : ''}
+        </p>
+        <div className="flex flex-col gap-1 rounded-2xl border border-white/5 bg-black/40 p-4">
+          {SECOES_UNIVERSAIS.map((secao) => (
+            <LinhaEntrada
+              key={secao.id}
+              rotulo="Seção"
+              titulo={secao.rotulo}
+              visivel={!registrosSecoesOcultas.includes(secao.id)}
+              onToggle={() => setRegistrosSecoesOcultas((atual) => (atual.includes(secao.id) ? atual.filter((item) => item !== secao.id) : [...atual, secao.id]))}
+              disabled={!isMaster}
+              tom="ciano"
+            />
+          ))}
         </div>
       </section>
 

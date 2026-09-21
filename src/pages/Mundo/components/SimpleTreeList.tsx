@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChevronRight, Lock, Orbit } from 'lucide-react';
+import { RasuraTitulo } from '../../../components/ui/Rasura';
 import { COSMIC_TREES } from '../cosmicTrees';
 
 interface SimpleTreeListProps {
@@ -42,8 +43,8 @@ export const SimpleTreeList: React.FC<SimpleTreeListProps> = ({ lockedDeidades, 
               style={{ backgroundColor: isLocked ? '#444444' : tree.color, boxShadow: isLocked ? 'none' : `0 0 10px ${tree.color}` }}
             />
             <span className="flex-1">
-              <span className="block text-base font-bold text-white">{isLocked ? 'Desconhecida' : tree.name}</span>
-              {isLocked && <span className="block text-xs italic text-gray-600">O Mestre ainda não revelou esta Árvore.</span>}
+              <span className="block text-base font-bold text-white">{isLocked ? <RasuraTitulo semente={tree.deidadeId} /> : tree.name}</span>
+              {isLocked && <span className="block text-xs italic text-gray-600">Existe uma Árvore aqui, ainda não revelada.</span>}
             </span>
             {isLocked
               ? <Lock size={16} className="shrink-0 text-gray-600" />

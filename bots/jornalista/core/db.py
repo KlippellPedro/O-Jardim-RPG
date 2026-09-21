@@ -255,6 +255,11 @@ _SCHEMA = (
     """
     ALTER TABLE config ADD COLUMN IF NOT EXISTS estacao_auto BOOLEAN NOT NULL DEFAULT FALSE
     """,
+    # A plataforma (calendário do Mundo) marca aqui quando é ELA quem define a estação.
+    # Enquanto estiver marcada, a rotação automática e o /jornal estacao_definir não mexem.
+    """
+    ALTER TABLE estacao ADD COLUMN IF NOT EXISTS gerida_pelo_site BOOLEAN NOT NULL DEFAULT FALSE
+    """,
     """
     CREATE TABLE IF NOT EXISTS baus_canais_tema (
         guild_id TEXT NOT NULL,
@@ -770,6 +775,14 @@ class Database:
                 "SELECT nome FROM estacao WHERE guild_id=%s", (guild_id,)
             ).fetchone()
         return row["nome"] if row else economia.ESTACAO_PADRAO
+
+    def estacao_gerida_pelo_site(self, guild_id: str) -> bool:
+        """Verdadeiro quando o calendário do site é quem decide a estação deste servidor."""
+        with self._conn() as con:
+            row = con.execute(
+                "SELECT gerida_pelo_site FROM estacao WHERE guild_id=%s", (guild_id,)
+            ).fetchone()
+        return bool(row["gerida_pelo_site"]) if row else False
 
     def set_estacao(self, guild_id: str, nome: str) -> None:
         """A estação pertence ao Jornalista porque determina o loot sazonal."""

@@ -1,3 +1,4 @@
+import { RasuraTexto, RasuraTitulo } from '../../../components/ui/Rasura';
 import { useResolvedWorld } from '../../../hooks/useResolvedWorld';
 import React from 'react';
 import { motion } from 'framer-motion';
@@ -63,12 +64,12 @@ export const TimelineHistory: React.FC<TimelineHistoryProps> = ({ onSelectEvent 
                   <div className={`flex items-center gap-2 mb-2 ${isLeft ? 'md:justify-end' : 'md:justify-start'}`}>
                     {isLocked && <ShieldAlert size={14} className="text-red-500" />}
                     <h4 className="text-xl font-bold text-white group-hover:text-yellow-400 transition-colors" style={{ fontFamily: 'Cinzel, serif' }}>
-                      {evento.titulo}
+                      {isLocked ? <RasuraTitulo semente={evento.id} className="min-w-[8rem]" /> : evento.titulo}
                     </h4>
                   </div>
                   
                   {isLocked ? (
-                    <p className="text-gray-600 text-xs italic">Evento censurado. Os registros foram apagados.</p>
+                    <RasuraTexto semente={evento.id} linhas={2} className="text-xs" />
                   ) : (
                     <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">
                       {evento.conteudo.descricao}

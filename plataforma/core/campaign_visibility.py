@@ -13,6 +13,8 @@ _PLAYER_CONFIG_KEYS = {
     "entidades_oculto",
     "cronologia_geral_oculta",
     "registros_universais_ocultos",
+    "registros_universais_secoes_ocultas",
+    "calendario_oculto",
     "cronica_secoes_ocultas",
     "cronica_eventos_ocultos",
     "locais_ocultos",
@@ -44,3 +46,53 @@ def visible_campaign_config(
         own_values = member_map.get(user_key, []) if isinstance(member_map, Mapping) else []
         visible[key] = {user_key: own_values}
     return visible
+
+
+_LISTAS_DE_LIBERACAO = (
+    # (chave que cresce quando algo é liberado, chave que encolhe quando algo deixa de ser oculto, rótulo)
+    ("lore_revelado", "lore_oculto", "lore"),
+    ("arvores_revelado", "arvores_oculto", "arvores"),
+    ("entidades_revelado", "entidades_oculto", "entidades"),
+    ("racas_liberadas", None, "racas"),
+    ("classes_liberadas", None, "classes"),
+    (None, "registros_universais_secoes_ocultas", "secoes"),
+)
+
+
+def _como_conjunto(valor) -> set[str]:
+    return {str(item) for item in valor} if isinstance(valor, (list, tuple, set)) else set()
+
+
+def novas_liberacoes(antes: Mapping | None, depois: Mapping | None) -> dict[str, int]:
+    """Quantos itens passaram a ser visíveis para os jogadores, por tipo.
+
+    Conta só o que ficou MAIS aberto (revelado agora, ou tirado da lista de
+    ocultos). Esconder de novo não avisa ninguém. Devolve apenas os tipos com
+    novidade; o aviso diz "quantos", nunca "quais", para não estragar o mistério.
+    """
+    antes = antes or {}
+    depois = depois or {}
+    novidades: dict[str, int] = {}
+    for chave_revelado, chave_oculto, rotulo in _LISTAS_DE_LIBERACAO:
+        total = len(_como_conjunto(depois.get(chave_revelado)) - _como_conjunto(antes.get(chave_revelado))) if chave_revelado else 0
+        if chave_oculto:
+            total += len(_como_conjunto(antes.get(chave_oculto)) - _como_conjunto(depois.get(chave_oculto)))
+        if total:
+            novidades[rotulo] = total
+    if antes.get("calendario_oculto") is True and depois.get("calendario_oculto") is not True:
+        novidades["calendario"] = 1
+    return novidades
+
+
+_ROTULOS = {"lore": "registro de lore", "arvores": "Árvore", "entidades": "entidade", "racas": "raça", "classes": "classe", "secoes": "seção dos Registros Universais", "calendario": "calendário do mundo"}
+_ROTULOS_PLURAL = {"lore": "registros de lore", "arvores": "Árvores", "entidades": "entidades", "racas": "raças", "classes": "classes", "secoes": "seções dos Registros Universais", "calendario": "calendário do mundo"}
+
+
+def texto_das_liberacoes(novidades: dict[str, int]) -> str:
+    partes = [
+        f"{quantidade} {(_ROTULOS if quantidade == 1 else _ROTULOS_PLURAL)[rotulo]}"
+        for rotulo, quantidade in novidades.items()
+    ]
+    if len(partes) > 1:
+        return ", ".join(partes[:-1]) + " e " + partes[-1]
+    return partes[0] if partes else ""

@@ -466,7 +466,7 @@ def test_campaign_export_contains_only_campaign_scoped_rules():
     }
 
     def responder(sql, _params):
-        if sql.startswith("SELECT id, nome FROM campanhas"):
+        if sql.startswith("SELECT id, nome, identidade FROM campanhas"):
             return {"id": CAMPAIGN_ID, "nome": "Campanha de teste"}
         if "FROM campanhas" in sql:
             return _access(MASTER_ID, "mestre")
@@ -478,6 +478,10 @@ def test_campaign_export_contains_only_campaign_scoped_rules():
             }])
         if sql.startswith("SELECT item_id, publicado AS dados"):
             return _Result(rows=[])
+        if "FROM campanha_registros_universais" in sql:
+            return _Result(rows=[{"secao": "rumores", "origem_id": None, "revelacao": "aberto", "dados": {"titulo": "A ponte"}}])
+        if "FROM campanha_calendario" in sql:
+            return {"estado": {"hoje": {"ano": 3, "mes": 4, "dia": 10}}}
         raise AssertionError(f"consulta inesperada: {sql}")
 
     result = content.export_published_editorial_content(
@@ -488,6 +492,9 @@ def test_campaign_export_contains_only_campaign_scoped_rules():
     assert result["formato"] == "o-jardim-conteudo-publicado"
     assert result["campanha"]["id"] == str(CAMPAIGN_ID)
     assert result["conteudo"][0]["dados"] == document
+    assert result["registros_universais"][0]["dados"] == {"titulo": "A ponte"}
+    assert result["calendario"]["hoje"]["ano"] == 3
+    assert result["identidade"] == {}
 
 
 def test_draft_rejects_stale_version():

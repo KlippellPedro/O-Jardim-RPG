@@ -34,7 +34,7 @@ export const TITULOS_TOPICOS: Record<string, string> = {
   aflicoes: 'Venenos, Doenças e Vícios',
   classes: 'Classes',
   racas: 'Raças',
-  bestiario: 'Bestiário',
+  bestiario: 'Criaturas e Companheiros',
   bases: 'Propriedades e Bases',
   'mundo-faccoes': 'Prestígio e Fama',
   'entre-aventuras': 'Tempo Entre Aventuras',

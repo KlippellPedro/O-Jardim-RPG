@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from psycopg.types.json import Jsonb
 
 from core.audit import record_audit
-from core.campaign_visibility import visible_campaign_config
+from core.campaign_visibility import novas_liberacoes, texto_das_liberacoes, visible_campaign_config
 from core.database import Database
 from core.dependencies import (
     AuthenticatedUser,
@@ -19,6 +19,7 @@ from core.dependencies import (
     require_creator_campaign,
     require_csrf,
 )
+from core.discord_avisos import avisar_discord
 from core.notifications import campaign_member_ids, notify
 from core.security import hash_token, new_secret_token
 from schemas import (
@@ -91,7 +92,8 @@ def list_campaigns(
                 """
                 SELECT c.id, c.nome, c.descricao, c.status, c.atualizado_em,
                        c.dono_id, 'mestre' AS papel,
-                       m.personagem_ativo_id
+                       m.personagem_ativo_id,
+                       jsonb_build_object('cor', c.identidade->'cor', 'frase', COALESCE(c.identidade->>'frase', ''), 'tem_capa', (c.identidade ? 'capa'), 'capa_em', c.identidade->'capa_em') AS identidade
                 FROM campanhas c
                 LEFT JOIN membros_campanha m
                   ON m.campanha_id=c.id AND m.usuario_id=%s AND m.status='ativo'
@@ -104,7 +106,8 @@ def list_campaigns(
             rows = connection.execute(
                 """
                 SELECT c.id, c.nome, c.descricao, c.status, c.atualizado_em,
-                       c.dono_id, m.papel, m.personagem_ativo_id
+                       c.dono_id, m.papel, m.personagem_ativo_id,
+                       jsonb_build_object('cor', c.identidade->'cor', 'frase', COALESCE(c.identidade->>'frase', ''), 'tem_capa', (c.identidade ? 'capa'), 'capa_em', c.identidade->'capa_em') AS identidade
                 FROM campanhas c
                 JOIN membros_campanha m ON m.campanha_id=c.id
                 WHERE m.usuario_id=%s AND m.status='ativo' AND c.status='ativa'
@@ -222,6 +225,10 @@ def update_campaign_visibility(
     """Atualiza a visibilidade/liberacoes da campanha: exclusivo do criador."""
     with database.connection() as connection:
         require_creator_campaign(connection, campaign_id, user)
+        anterior = connection.execute(
+            "SELECT configuracoes FROM campanhas WHERE id=%s AND status='ativa' FOR UPDATE",
+            (campaign_id,),
+        ).fetchone()
         row = connection.execute(
             """
             UPDATE campanhas
@@ -231,6 +238,20 @@ def update_campaign_visibility(
             """,
             (Jsonb(payload.configuracoes), campaign_id),
         ).fetchone()
+        # Avisa a mesa quando algo foi liberado. Diz quantos, nunca quais.
+        novidades = novas_liberacoes(anterior["configuracoes"] if anterior else None, payload.configuracoes)
+        if novidades:
+            texto = texto_das_liberacoes(novidades)
+            notify(
+                connection,
+                user_ids=campaign_member_ids(connection, campaign_id),
+                category="conteudo",
+                title="O Mestre liberou conhecimento novo",
+                message=f"Novo para você: {texto}. Vá ao Mundo e à ficha para descobrir.",
+                campaign_id=campaign_id,
+                actor_user_id=user.id,
+            )
+            avisar_discord(connection, campaign_id, "liberacao", f"🔓 **O Mestre liberou algo no Mundo**: {texto}.")
         record_audit(
             connection,
             action="campanha.visibilidade_atualizada",

@@ -614,6 +614,9 @@ class Jornal(commands.Cog):
     @tasks.loop(hours=1)
     async def ciclo_estacao_auto(self):
         for gid in self.bot.db.listar_guilds_estacao_auto():
+            # O calendário do site manda: a rotação semanal não pode desfazer o que o Mestre definiu lá.
+            if self.bot.db.estacao_gerida_pelo_site(gid):
+                continue
             if not self.bot.db.ciclo_guild_devido(gid, "estacao_auto", ESTACAO_AUTO_INTERVALO_HORAS):
                 continue
             try:
@@ -1200,6 +1203,13 @@ class Jornal(commands.Cog):
     async def estacao_definir(self, interaction: discord.Interaction, estacao: app_commands.Choice[str]):
         if not interaction.guild_id:
             await interaction.response.send_message("⚠️ Isso só funciona dentro de um servidor.", ephemeral=True)
+            return
+        if self.bot.db.estacao_gerida_pelo_site(str(interaction.guild_id)):
+            await interaction.response.send_message(
+                "📅 A estação deste servidor é definida pelo **calendário do site** (Mundo > Calendário e estações). "
+                "Mude por lá, ou desligue \"manter a estação do Discord igual à do calendário\" para voltar a controlar por aqui.",
+                ephemeral=True,
+            )
             return
         self.bot.db.set_estacao(str(interaction.guild_id), estacao.value)
         info = economia.estacao_info(estacao.value)

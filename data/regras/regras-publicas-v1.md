@@ -3068,7 +3068,7 @@ Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologi
 
 As seis formas de ter uma criatura ao seu lado, o que muda entre elas e como uma criatura comprada vira um aliado na sua ficha.
 
-Criatura neste jogo não é item de mochila: é alguém que anda com você. O Bestiário reúne as seis formas de ter uma criatura ao lado, e todas elas terminam do mesmo jeito, como um aliado com ficha própria.
+Criatura neste jogo não é item de mochila: é alguém que anda com você. Existem seis formas de ter uma criatura ao lado, e todas elas terminam do mesmo jeito, como um aliado com ficha própria. A lista das criaturas do mundo, com os números de cada uma, fica no Bestiário dos Registros Universais.
 
 ### As seis formas
 

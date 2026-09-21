@@ -21,6 +21,7 @@ import { RARIDADES_EQUIPAMENTO } from '../../../data/regras/raridadesEquipamento
 import './loja.css';
 import { dispararLoot } from '../../components/loot/loot';
 
+import { SimboloOculto } from '../../components/descobertas/SimboloOculto';
 interface RecompensaAviso {
   id: string;
   campanha_id: string | null;
@@ -697,7 +698,7 @@ export const LojaPage: React.FC = () => {
           <div className="mb-7 flex flex-col gap-4 border-b border-white/[0.08] pb-6 xl:flex-row xl:items-start xl:justify-between">
             <div className="max-w-3xl">
               <span className="text-[10px] font-black uppercase tracking-[0.32em] text-[var(--loja-accent)]">Comércio entre as Árvores</span>
-              <h1 className="mt-3 font-serif text-[clamp(2rem,6vw,3.6rem)] font-bold leading-[1.05] text-[#f2ead7]">{localAtual.titulo}</h1>
+              <h1 data-descoberta="mercador_fantasma" data-cliques="5" className="mt-3 font-serif text-[clamp(2rem,6vw,3.6rem)] font-bold leading-[1.05] text-[#f2ead7]">{localAtual.titulo}</h1>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-gray-300/80 sm:text-base">{localAtual.descricao} O que aparece depende do local aberto pela campanha e da publicação atual do catálogo.</p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -1180,6 +1181,7 @@ export const LojaPage: React.FC = () => {
         />
       ) : null}
 
+      <div className="flex justify-end px-6 pb-24"><SimboloOculto chave="moeda_perdida" glifo="◎" cliques={4} /></div>
     </div>
   );
 };

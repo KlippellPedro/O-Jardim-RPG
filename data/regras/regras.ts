@@ -2322,7 +2322,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       ['Preço', 'Por fórmula, não por lista'],
     ],
     corpo: `
-      <p class="regras-lead">Criatura neste jogo não é item de mochila: é alguém que anda com você. O Bestiário reúne as seis formas de ter uma criatura ao lado, e todas elas terminam do mesmo jeito, como um aliado com ficha própria.</p>
+      <p class="regras-lead">Criatura neste jogo não é item de mochila: é alguém que anda com você. Existem seis formas de ter uma criatura ao lado, e todas elas terminam do mesmo jeito, como um aliado com ficha própria. A lista das criaturas do mundo, com os números de cada uma, fica no Bestiário dos Registros Universais.</p>
 
       <h3 class="regras-subtitle">As seis formas</h3>
       <ul class="regras-list">
@@ -2344,7 +2344,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p class="regras-note">Servo é o único tipo que já nasce com um problema junto. Antes de comprar um, combine com a mesa o que a sanidade abalada dele significa na sua história, porque essa parte não se resolve com número.</p>
     `,
     corpoMestre: `
-      <p class="regras-lead">O Bestiário não publica uma lista fechada de preços: publica a fórmula. Você monta a criatura, aplica a faixa de nível e os traços, e o preço sai daí. Para vender ou contratar uma criatura específica, crie uma entrada do tipo monstro na Loja com o preço calculado por estas tabelas.</p>
+      <p class="regras-lead">Este capítulo não publica uma lista fechada de preços: publica a fórmula. Você monta a criatura, aplica a faixa de nível e os traços, e o preço sai daí. Para vender ou contratar uma criatura específica, crie uma entrada do tipo monstro na Loja com o preço calculado por estas tabelas.</p>
 
       <h3 class="regras-subtitle">Criaturas</h3>
       <p>Animais, monstros ou seres naturais capturados, domesticados ou criados em cativeiro. Variam desde feras pequenas até predadores perigosos. Suas habilidades geralmente vêm de sua natureza física ou de seu habitat.</p>
