@@ -86,6 +86,7 @@ export function StatusVitaisSection({
         />
         <ResourceBar
           label="Mana"
+          chaveVital="mana"
           color="azul"
           current={atual.mana}
           max={maximo.mana}

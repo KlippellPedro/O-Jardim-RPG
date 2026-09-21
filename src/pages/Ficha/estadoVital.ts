@@ -6,6 +6,8 @@ import { useSyncExternalStore } from 'react';
 export interface EstadoVital {
   vida: number;
   sanidade: number;
+  /** Não move a vinheta; só a Análise do Grande Sábio lê. */
+  mana: number;
 }
 
 export type TipoPancada = 'dano' | 'cura' | 'sanidade';
@@ -17,7 +19,7 @@ export interface Pancada {
   forca: number;
 }
 
-const PADRAO: EstadoVital = { vida: 100, sanidade: 100 };
+const PADRAO: EstadoVital = { vida: 100, sanidade: 100, mana: 100 };
 
 let estado: EstadoVital = PADRAO;
 const ouvintesEstado = new Set<() => void>();
@@ -26,7 +28,7 @@ let contador = 0;
 
 export const publicarEstadoVital = (parcial: Partial<EstadoVital>) => {
   const proximo = { ...estado, ...parcial };
-  if (proximo.vida === estado.vida && proximo.sanidade === estado.sanidade) return;
+  if (proximo.vida === estado.vida && proximo.sanidade === estado.sanidade && proximo.mana === estado.mana) return;
   estado = proximo;
   ouvintesEstado.forEach((ouvinte) => ouvinte());
 };

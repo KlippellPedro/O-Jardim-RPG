@@ -1,0 +1,13 @@
+{
+  "abertura": "Iniciando análise",
+  "poderes": "Existem poderes de classe esperando por uma escolha",
+  "legado": "Há um Legado de Ascensão disponível",
+  "escolhas": "Há escolhas de habilidade ainda em aberto",
+  "atributos": "Há aumentos de atributo esperando por uma escolha",
+  "vidaCritica": "Sua vida está em estado crítico",
+  "vidaBaixa": "Sua vida está abaixo da metade",
+  "manaBaixa": "Sua mana está quase esgotada",
+  "sanidadeBaixa": "Sua sanidade está abalada",
+  "condicoes": "Há condições ativas sobre você",
+  "nada": "Nada exige a sua atenção agora"
+}

@@ -300,7 +300,7 @@ export const ResourceBar = ({ label, color, current, max, temporario = 0, onLimp
       const delta = valorAtual - antes.valor;
       setEvento({ chave: Date.now(), delta, de: antes.percent });
       const peso = Math.abs(delta) / maxSeguro;
-      if (chaveVital) {
+      if (chaveVital && chaveVital !== 'mana') {
         if (delta < 0) dispararPancada(chaveVital === 'sanidade' ? 'sanidade' : 'dano', peso * 4);
         else dispararPancada('cura', peso * 3);
       }

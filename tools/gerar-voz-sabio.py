@@ -44,6 +44,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 CLASSES = RAIZ / "data" / "ficha" / "classes.json"
 CONQUISTAS = RAIZ / "plataforma" / "core" / "conquistas.py"
 MAGIAS = RAIZ / "data" / "ficha" / "magias.json"
+FALAS_ANALISE = RAIZ / "src" / "pages" / "Ficha" / "utils" / "falasAnalise.json"
 # Iguais a FRASES_APRENDIZADO em src/pages/Ficha/components/aprendizado.ts.
 FRASES_APRENDIZADO = ("Magia aprendida", "Ritual aprendido", "Selo aprendido", "Encantamento aprendido")
 SAIDA = RAIZ / "public" / "audio" / "sabio"
@@ -145,6 +146,10 @@ def frases() -> dict[str, str]:
     itens["Conquista desbloqueada"] = "Conquista desbloqueada"
     for nome in nomes_das_conquistas():
         itens[nome] = nome
+
+    # Analise do Grande Sabio: frases fixas, sem numeros (ver analiseSabio.ts).
+    for fala in json.loads(FALAS_ANALISE.read_text(encoding="utf-8")).values():
+        itens[fala] = fala
 
     # Painel de "aprendeu": a frase e o nome de cada magia, ritual, selo e encantamento.
     for frase in FRASES_APRENDIZADO:

@@ -10,6 +10,7 @@ import {
 import {
   Bell,
   ChevronRight,
+  Brain,
   Compass,
   Crown,
   Dices,
@@ -67,6 +68,7 @@ import { CondicaoOverlay } from './components/CondicaoOverlay';
 import { DescansoHost } from './components/DescansoHost';
 import { CirculoMagicoHost } from './components/CirculoMagicoHost';
 import { AprendizadoHost } from './components/AprendizadoHost';
+import { AnaliseSabioModal } from './components/AnaliseSabioModal';
 import { resetarEstadoVital } from './estadoVital';
 import './ficha.css';
 import { conquistasApi } from '../../services/conquistasApi';
@@ -140,6 +142,7 @@ export const PersonagemSheet: React.FC = () => {
   });
   const [showAjuda, setShowAjuda] = useState(false);
   const [showPendencias, setShowPendencias] = useState(false);
+  const [showAnalise, setShowAnalise] = useState(false);
   const [tourTab, setTourTab] = useState<FichaTourTabId | null>(null);
   const [catalogo, setCatalogo] = useState<ICatalogo | null>(null);
   const [liveSyncState, setLiveSyncState] = useState<LiveSyncState>('idle');
@@ -729,6 +732,18 @@ export const PersonagemSheet: React.FC = () => {
               )}
             </button>
           )}
+          {!somenteLeitura && (
+            <button
+              type="button"
+              onClick={() => setShowAnalise(true)}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-cyan-400/30 text-cyan-300 transition-colors hover:bg-cyan-400/10"
+              aria-label="Pedir a análise do Grande Sábio"
+              aria-haspopup="dialog"
+              title="Análise do Grande Sábio"
+            >
+              <Brain size={18} aria-hidden="true" />
+            </button>
+          )}
           <button
             type="button"
             onClick={() => iniciarTour(activeTab)}
@@ -869,6 +884,15 @@ export const PersonagemSheet: React.FC = () => {
           </AnimatePresence>
         </fieldset>
       </div>
+      {!somenteLeitura && (
+        <AnaliseSabioModal
+          isOpen={showAnalise}
+          onClose={() => setShowAnalise(false)}
+          pendencias={pendencias}
+          condicoesAtivas={Array.isArray(character.ficha?.condicoesAtivas) ? character.ficha.condicoesAtivas.length : 0}
+          onAbrirAba={(aba) => handleTabChange(aba as FichaTourTabId)}
+        />
+      )}
       {!somenteLeitura && (
         <FichaModal
           isOpen={showPendencias}
