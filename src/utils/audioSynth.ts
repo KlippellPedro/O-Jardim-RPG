@@ -12,7 +12,11 @@ export type SfxName =
   | 'confirm'
   | 'cancel'
   | 'error'
-  | 'notification';
+  | 'notification'
+  | 'moeda'
+  | 'moeda-gasto'
+  | 'estrela'
+  | 'amanhecer';
 
 // Intervalo mínimo entre dois disparos do MESMO som, pra hover rápido,
 // duplo-clique ou navegação em sequência nunca virarem uma matraca.
@@ -21,6 +25,8 @@ const MIN_INTERVAL_MS: Partial<Record<SfxName, number>> = {
   click: 45,
   select: 70,
   navigate: 150,
+  moeda: 60,
+  'moeda-gasto': 90,
 };
 const DEFAULT_MIN_INTERVAL_MS = 30;
 
@@ -158,6 +164,39 @@ class AudioSynth {
         this.playSteps([
           { type: 'sine', freqStart: 783.99, duration: 0.16, gainPeak: 0.10 }, // G5
           { type: 'sine', freqStart: 1046.5, duration: 0.22, startOffset: 0.06, gainPeak: 0.08 }, // C6
+        ], volume);
+        break;
+      case 'moeda': {
+        // Tilintar metálico: duas notas agudas e curtas, com a altura sorteada
+        // para uma chuva de moedas não soar como o mesmo som repetido.
+        const nota = 1760 + Math.random() * 500;
+        this.playSteps([
+          { type: 'triangle', freqStart: nota, freqEnd: nota * 1.05, duration: 0.09, gainPeak: 0.07 },
+          { type: 'sine', freqStart: nota * 1.5, duration: 0.16, startOffset: 0.045, gainPeak: 0.05 },
+        ], volume);
+        break;
+      }
+      case 'moeda-gasto':
+        this.playSteps([
+          { type: 'triangle', freqStart: 1320, freqEnd: 990, duration: 0.1, gainPeak: 0.06 },
+          { type: 'sine', freqStart: 880, freqEnd: 740, duration: 0.14, startOffset: 0.05, gainPeak: 0.04 },
+        ], volume);
+        break;
+      case 'estrela':
+        this.playSteps([
+          { type: 'sine', freqStart: 783.99, duration: 0.14, gainPeak: 0.07 },
+          { type: 'sine', freqStart: 987.77, duration: 0.14, startOffset: 0.07, gainPeak: 0.07 },
+          { type: 'sine', freqStart: 1174.66, duration: 0.2, startOffset: 0.14, gainPeak: 0.07 },
+          { type: 'sine', freqStart: 1567.98, duration: 0.3, startOffset: 0.22, gainPeak: 0.05 },
+        ], volume);
+        break;
+      case 'amanhecer':
+        // Acorde maior, suave e longo: a manhã depois da noite.
+        this.playSteps([
+          { type: 'sine', freqStart: 392, duration: 0.9, gainPeak: 0.06, attack: 0.2 },
+          { type: 'sine', freqStart: 493.88, duration: 0.9, startOffset: 0.12, gainPeak: 0.055, attack: 0.2 },
+          { type: 'sine', freqStart: 587.33, duration: 1, startOffset: 0.24, gainPeak: 0.05, attack: 0.2 },
+          { type: 'sine', freqStart: 783.99, duration: 1.1, startOffset: 0.36, gainPeak: 0.035, attack: 0.25 },
         ], volume);
         break;
     }

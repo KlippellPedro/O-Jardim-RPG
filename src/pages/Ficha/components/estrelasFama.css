@@ -1,0 +1,122 @@
+/* Estrelas de Fama (ver EstrelasFama.tsx). Só transform e opacity. */
+
+.estrelas-fama {
+  position: relative;
+  padding: 0.25rem 0 0.5rem;
+  text-align: center;
+}
+
+.estrelas-fama__linha {
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.estrelas-fama__estrela {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #4b5563;
+  cursor: pointer;
+  transition: color 0.25s ease, transform 0.15s ease;
+}
+
+.estrelas-fama__estrela:hover { color: var(--fama-cor); transform: scale(1.08); }
+.estrelas-fama__estrela--acesa { color: var(--fama-cor); }
+
+.estrelas-fama__estrela--acesa .estrelas-fama__icone {
+  filter: drop-shadow(0 0 7px var(--fama-cor));
+}
+
+.estrelas-fama__icone { display: flex; }
+
+.estrelas-fama__faiscas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.estrelas-fama__faiscas i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 999px;
+  background: var(--fama-cor);
+  box-shadow: 0 0 8px var(--fama-cor);
+  opacity: 0;
+  animation: fama-faisca 0.7s ease-out var(--fama-atraso) both;
+}
+
+.estrelas-fama__titulo {
+  margin-top: 0.4rem;
+  min-height: 1.6rem;
+}
+
+.estrelas-fama__titulo strong {
+  display: inline-block;
+  font-family: Cinzel, serif;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  color: var(--fama-cor);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--fama-cor) 55%, transparent);
+}
+
+.estrelas-fama__titulo-lenda {
+  background: linear-gradient(100deg, #f0be47 20%, #fff8d6 45%, #f0be47 70%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  animation: fama-brilho 2.8s linear infinite;
+}
+
+.estrelas-fama__confete {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.estrelas-fama__confete i {
+  position: absolute;
+  left: var(--c-x);
+  top: -4px;
+  width: 5px;
+  height: 9px;
+  border-radius: 1px;
+  background: var(--c-cor);
+  opacity: 0;
+  animation: fama-confete 2.4s ease-in var(--c-atraso) both;
+}
+
+@keyframes fama-faisca {
+  0% { opacity: 1; transform: rotate(var(--fama-angulo)) translateX(0) scale(1); }
+  100% { opacity: 0; transform: rotate(var(--fama-angulo)) translateX(24px) scale(0.3); }
+}
+
+@keyframes fama-brilho {
+  from { background-position: 200% 0; }
+  to { background-position: -20% 0; }
+}
+
+@keyframes fama-confete {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+  100% { opacity: 0; transform: translate3d(12px, 150px, 0) rotate(520deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .estrelas-fama__faiscas i, .estrelas-fama__confete i, .estrelas-fama__titulo-lenda { animation: none; }
+  .estrelas-fama__confete { display: none; }
+}
+
+html[data-performance-mode='reduced'] .estrelas-fama__confete { display: none; }
+html[data-performance-mode='reduced'] .estrelas-fama__titulo-lenda { animation: none; }

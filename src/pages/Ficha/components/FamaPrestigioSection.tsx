@@ -9,6 +9,7 @@ import {
 import { Select } from '../../../components/ui/Select';
 import { FichaModal } from './FichaModal';
 import { LabeledInput } from './SharedFichaComponents';
+import { EstrelasFama } from './EstrelasFama';
 
 interface IPrestigioFicha {
   id: string;
@@ -116,21 +117,13 @@ export const FamaPrestigioSection = ({ ficha, onUpdate }: { ficha: any; onUpdate
             </div>
             <span className="rounded-lg border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-3 py-1.5 font-mono text-lg font-black text-[#c7a44c]">{fama}</span>
           </div>
-          <div className="mb-3 grid grid-cols-6 gap-1.5" aria-label="Nível de Fama">
-            {[0, 1, 2, 3, 4, 5].map((nivel) => (
-              <button
-                key={nivel}
-                type="button"
-                aria-pressed={fama === nivel}
-                onClick={() => onUpdate(['ficha', 'fama'], nivel)}
-                className={`rounded-md border py-1.5 font-mono text-xs font-bold transition-colors ${fama === nivel ? 'border-[#c7a44c] bg-[#c7a44c]/20 text-[#c7a44c]' : 'border-white/10 bg-black/20 text-gray-500 hover:border-white/25 hover:text-white'}`}
-              >
-                {nivel}
-              </button>
-            ))}
-          </div>
+          <EstrelasFama
+            fama={fama}
+            titulo={faixaFama.titulo}
+            onChange={(nivel) => onUpdate(['ficha', 'fama'], limitarFama(nivel))}
+          />
           <div className="rounded-lg border border-white/5 bg-black/20 p-3">
-            <strong className="text-xs text-white">{faixaFama.titulo}</strong>
+            <strong className="text-xs text-white">Fama {fama}: {faixaFama.titulo}</strong>
             <p className="mt-1 text-[11px] leading-relaxed text-gray-400">{faixaFama.alcance}</p>
             <p className="mt-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-600">Anonimato: {textoComSinal(faixaFama.ajusteAnonimato)}</p>
           </div>

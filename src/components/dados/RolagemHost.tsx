@@ -66,7 +66,9 @@ export const RolagemHost = memo(function RolagemHost() {
       aoPousar: () => {
         if (cancelado) return;
         setPousou(true);
-        sfx.play(cena.destaque === 'critico' ? 'confirm' : cena.destaque === 'falha' ? 'error' : 'select');
+        if (cena.destaque === 'critico') sfx.playCritSound();
+        else if (cena.destaque === 'falha') sfx.play('error');
+        else sfx.playDiceClack();
         timers.push(window.setTimeout(fecharComSaida, PAUSA_APOS_POUSO_MS));
       },
     }).then((resultado) => {
