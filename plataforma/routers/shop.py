@@ -1305,7 +1305,16 @@ def purchase_batch(
             )
             for line in payload.itens
         ]
-        if len(purchase_inventory_ids) != len(set(purchase_inventory_ids)):
+        # A mesma variante pode chegar por dois caminhos (raridade em branco e
+        # raridade igual à do catálogo apontam pro mesmo id de inventário), e
+        # isso é duplicidade. Mas a mesma modificação instalada em alvos
+        # diferentes é um lote legítimo, então o alvo e o modo entram na chave -
+        # a mesma chave que ShopBatchCommandInput.validate_batch usa.
+        variantes_do_lote = [
+            (inventory_id, line.alvo_item_id, line.modo)
+            for inventory_id, line in zip(purchase_inventory_ids, payload.itens)
+        ]
+        if len(variantes_do_lote) != len(set(variantes_do_lote)):
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                 detail="o lote contem a mesma variante de equipamento mais de uma vez",
