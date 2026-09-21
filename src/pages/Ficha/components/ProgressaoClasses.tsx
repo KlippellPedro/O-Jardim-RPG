@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ConstelacaoClasse } from './ConstelacaoClasse';
 import type { IClasse } from '../../../types/catalogo';
 import {
   classeTemProgressaoPublicada,
@@ -85,29 +86,9 @@ export const ProgressaoClasses = ({ classes, catalogoClasses }: ProgressaoClasse
                 </div>
               </div>
 
-              <details className="mt-4 rounded-lg border border-white/5 bg-black/20 p-3">
-                <summary className="cursor-pointer text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white">
-                  Ver todos os níveis
-                </summary>
-                <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
-                  {classe.progressao?.map(item => {
-                    const conquistado = item.nivel <= nivel;
-                    return (
-                      <div
-                        key={item.nivel}
-                        className={`rounded-lg border p-3 text-xs ${
-                          conquistado
-                            ? 'border-emerald-500/20 bg-emerald-500/5 text-gray-300'
-                            : 'border-white/5 bg-black/20 text-gray-500'
-                        }`}
-                      >
-                        <span className={conquistado ? 'font-bold text-emerald-400' : 'font-bold text-gray-500'}>Nível {item.nivel}: </span>
-                        {item.recompensas.map(formatarRecompensaClasse).join(', ')}
-                      </div>
-                    );
-                  })}
-                </div>
-              </details>
+              <div className="mt-4">
+                <ConstelacaoClasse classe={classe} nivel={nivel} />
+              </div>
             </article>
           );
         })}
