@@ -41,6 +41,7 @@ import {
 } from '../../../../data/regras/recursos-materiais';
 import { obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
 import { ehReliquiaCriacao, lerRessonanciaReliquia } from '../../../services/reliquiasCriacaoService';
+import { SaldoAnimado } from '../components/SaldoAnimado';
 
 interface IInventoryItem {
   id: string;
@@ -758,10 +759,10 @@ export const AbaInventario = ({ character, onUpdate, modo = 'inventario' }: AbaI
                     >
                       <Minus size={11} />
                     </button>
-                    <input
-                      type="number"
-                      value={m.saldo}
-                      onChange={(e) => handleSetMoeda(m.moeda, parseInt(e.target.value) || 0)}
+                    <SaldoAnimado
+                      moeda={m.moeda}
+                      saldo={m.saldo}
+                      onChange={(valor) => handleSetMoeda(m.moeda, valor)}
                       aria-label={`Saldo de ${m.moeda}`}
                       className={`w-16 text-center text-base font-mono font-bold bg-transparent border-none outline-none focus:ring-1 focus:ring-white/20 rounded ${tema.texto} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
                     />

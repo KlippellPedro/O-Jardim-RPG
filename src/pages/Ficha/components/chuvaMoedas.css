@@ -1,0 +1,53 @@
+/* Chuva de moedas (ver ChuvaMoedasHost.tsx). Só transform e opacity. */
+
+.chuva-moedas {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  overflow: hidden;
+  pointer-events: none;
+  perspective: 700px;
+}
+
+.chuva-moedas__moeda {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--m-tam);
+  height: var(--m-tam);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.9), transparent 34%),
+    radial-gradient(circle, var(--m-clara) 0 52%, var(--m-escura) 100%);
+  box-shadow:
+    inset 0 0 0 2px color-mix(in srgb, var(--m-escura) 65%, #000),
+    inset 0 0 0 4px color-mix(in srgb, var(--m-clara) 70%, transparent),
+    0 0 10px color-mix(in srgb, var(--m-clara) 45%, transparent);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.chuva-moedas--chuva .chuva-moedas__moeda {
+  animation: moeda-cair var(--m-dur) cubic-bezier(0.4, 0, 0.9, 0.7) var(--m-atraso) both;
+}
+
+.chuva-moedas--gasto .chuva-moedas__moeda {
+  animation: moeda-jorrar 1s cubic-bezier(0.2, 0.7, 0.4, 1) var(--m-atraso) both;
+}
+
+@keyframes moeda-cair {
+  0% { opacity: 0; transform: translate3d(var(--m-x), -8vh, 0) rotateY(0deg); }
+  8% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(calc(var(--m-x) + var(--m-deriva)), 104vh, 0) rotateY(var(--m-giro)); }
+}
+
+@keyframes moeda-jorrar {
+  0% { opacity: 0; transform: translate3d(var(--m-x), var(--m-y), 0) rotateY(0deg) scale(0.6); }
+  15% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(calc(var(--m-x) + var(--m-deriva)), calc(var(--m-y) - var(--m-sobe)), 0) rotateY(var(--m-giro)) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chuva-moedas { display: none; }
+}
