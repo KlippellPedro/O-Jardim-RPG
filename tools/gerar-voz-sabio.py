@@ -7,6 +7,12 @@ manifest.json (chave = o texto exato mostrado na tela). O painel toca a frase
 gravada e aplica por cima um leve efeito metalico com eco; o que nao estiver no
 manifest cai na voz do navegador.
 
+Por que a Francisca e nao a Thalita "Multilingual": a Thalita decide sozinha o
+idioma de cada trecho e, nas linhas de Poder/Habilidade (nomes proprios em
+portugues), 60% saiam em espanhol ou ingles ("Habilidade" virava "Habilidate").
+Medido em 183 linhas: Francisca 100% em portugues e 95% de acerto, Thalita 40%
+em portugues e 74% de acerto. A Francisca so fala portugues, entao nao escapa.
+
 Por que frases inteiras: colar palavras soltas ("Guerreiro" + "chegou ao
 nivel" + "tres") deixava a entonacao quebrada e fazia a voz escorregar para o
 ingles ("Evento: Ringue" virava "Event Ring"). Medido com o Whisper, o erro
@@ -36,7 +42,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 CLASSES = RAIZ / "data" / "ficha" / "classes.json"
 SAIDA = RAIZ / "public" / "audio" / "sabio"
 
-VOZ_PADRAO = "pt-BR-ThalitaMultilingualNeural"
+VOZ_PADRAO = "pt-BR-FranciscaNeural"
 TAXA_PADRAO = "-8%"
 TOM_PADRAO = "-6Hz"
 MAX_NIVEL_TOTAL = 60
