@@ -1,4 +1,5 @@
 import { api } from './apiClient';
+import { animarRolagem } from '../components/dados/rolagemDados';
 
 export interface IRegistro {
   id: string;
@@ -14,7 +15,7 @@ export interface IRegistro {
 // Todo dado é sorteado no servidor - o cliente nunca escolhe o resultado,
 // só monta o pedido (bônus/vantagem/desvantagem/DT) e exibe a resposta.
 export const registrosApi = {
-  rolar(payload: {
+  async rolar(payload: {
     campanhaId: string;
     personagemId?: string | null;
     titulo: string;
@@ -25,7 +26,7 @@ export const registrosApi = {
     formula?: string | null;
     origem?: Record<string, any>;
   }) {
-    return api<{ registro: IRegistro }>('/registros/rolagem', {
+    const resposta = await api<{ registro: IRegistro }>('/registros/rolagem', {
       method: 'POST',
       body: {
         campanha_id: payload.campanhaId,
@@ -39,6 +40,10 @@ export const registrosApi = {
         origem: payload.origem ?? {},
       },
     });
+    // O dado já foi sorteado no servidor; a cena 3D só o mostra rolando e
+    // segura a resposta até o pouso, para o modal de resultado vir depois.
+    await animarRolagem(resposta.registro).catch(() => undefined);
+    return resposta;
   },
 
   registrarUso(payload: {

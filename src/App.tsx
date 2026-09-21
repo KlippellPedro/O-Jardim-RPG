@@ -7,6 +7,7 @@ import { PerformancePreferencesBridge } from './hooks/usePerformance';
 import AtmosphericBackground from './AtmosphericBackground';
 
 const GlassMenu = lazy(() => import('./components/GlassMenu'));
+const RolagemHost = lazy(() => import('./components/dados/RolagemHost').then((modulo) => ({ default: modulo.RolagemHost })));
 const Home = lazy(() => import('./pages/Home'));
 const FichaList = lazy(() => import('./pages/Ficha/FichaList'));
 const PreviewGallery = lazy(() => import('./redesign/PreviewGallery'));
@@ -170,6 +171,12 @@ function App() {
         <div className="relative min-h-[100dvh] w-full min-w-0 bg-background font-sans text-white selection:bg-primary/30">
 
           <AtmosphericBackground />
+
+          {usuario && (
+            <Suspense fallback={null}>
+              <RolagemHost />
+            </Suspense>
+          )}
 
           {usuario && (
             <Suspense fallback={null}>
