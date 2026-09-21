@@ -247,6 +247,30 @@
 .session-resource__fill--health { background: linear-gradient(90deg, #b8414d, #ed6671); }
 .session-resource__fill--mana { background: linear-gradient(90deg, #377bb6, #59b8df); }
 
+/* Extra temporário: faixa fina e listrada embaixo da barra normal */
+.session-resource__extra {
+  height: 3px;
+  margin-top: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.session-resource__extra-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background-image: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0 2px, transparent 2px 5px);
+  transition: width 300ms ease;
+}
+
+.session-resource__extra-fill--health { background-color: #f5c451; }
+.session-resource__extra-fill--mana { background-color: #a5f3fc; }
+
+.session-resource__extra-valor { font-style: normal; font-weight: 800; }
+.session-resource__extra-valor--health { color: #fde68a; }
+.session-resource__extra-valor--mana { color: #a5f3fc; }
+
 .session-focus-card__defense {
   display: grid;
   grid-template-columns: auto 1fr;

@@ -31,6 +31,8 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
   const [hpMax, setHpMax] = useState(entity.hpTotal ?? 0);
   const [manaCurrent, setManaCurrent] = useState(entity.manaAtual != null ? String(entity.manaAtual) : '');
   const [manaMax, setManaMax] = useState(entity.manaTotal != null ? String(entity.manaTotal) : '');
+  const [hpTemp, setHpTemp] = useState(String(entity.hpTemp ?? 0));
+  const [manaTemp, setManaTemp] = useState(String(entity.manaTemp ?? 0));
   const [defense, setDefense] = useState(entity.defesa != null ? String(entity.defesa) : '');
   const [vd, setVd] = useState(entity.vd != null ? String(entity.vd) : '');
   const [visibilidade, setVisibilidade] = useState<NivelVisibilidade>(entity.visibilidade ?? 'total');
@@ -170,6 +172,28 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
               placeholder="-"
               onChange={(event) => setManaMax(event.target.value)}
               className="mt-1 w-full rounded-md border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-[#c7a44c]/50"
+            />
+          </label>
+          <label className="text-[10px] uppercase tracking-wider text-white/40" title="Extra acima do máximo; o dano gasta ele primeiro">
+            PV temporário
+            <input
+              type="number"
+              min={0}
+              max={99999}
+              value={hpTemp}
+              onChange={(event) => setHpTemp(event.target.value)}
+              className="mt-1 w-full rounded-md border border-amber-300/20 bg-black/30 px-2 py-1.5 text-sm text-amber-100 outline-none focus:border-amber-300/50"
+            />
+          </label>
+          <label className="text-[10px] uppercase tracking-wider text-white/40" title="Extra acima do máximo; o custo gasta ele primeiro">
+            Mana temporária
+            <input
+              type="number"
+              min={0}
+              max={99999}
+              value={manaTemp}
+              onChange={(event) => setManaTemp(event.target.value)}
+              className="mt-1 w-full rounded-md border border-cyan-300/20 bg-black/30 px-2 py-1.5 text-sm text-cyan-100 outline-none focus:border-cyan-300/50"
             />
           </label>
           <label className="text-[10px] uppercase tracking-wider text-white/40">
@@ -368,6 +392,8 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
               vida_maxima: hpMax,
               mana_atual: parseOptionalInt(manaCurrent, 0, 99999),
               mana_maxima: parseOptionalInt(manaMax, 0, 99999),
+              vida_temporaria: parseOptionalInt(hpTemp, 0, 99999) ?? 0,
+              mana_temporaria: parseOptionalInt(manaTemp, 0, 99999) ?? 0,
               condicoes: conditions,
               ataques: attacks,
               pericias,

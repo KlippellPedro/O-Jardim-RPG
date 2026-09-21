@@ -27,6 +27,9 @@ export interface EntidadeIniciativa {
   hpTotal?: number;
   manaAtual?: number;
   manaTotal?: number;
+  /** Extra acima do máximo (efeito temporário), à parte da Vida e da Mana atuais. */
+  hpTemp?: number;
+  manaTemp?: number;
   defesa?: number | null;
   ataques?: SessionAttack[];
   pericias?: string[];
@@ -95,6 +98,8 @@ function mapParticipantes(participantes: SessaoParticipanteResponse[] | undefine
       hpTotal: typeof participante.vida_maxima === 'number' ? participante.vida_maxima : undefined,
       manaAtual: typeof participante.mana_atual === 'number' ? participante.mana_atual : undefined,
       manaTotal: typeof participante.mana_maxima === 'number' ? participante.mana_maxima : undefined,
+      hpTemp: typeof participante.vida_temporaria === 'number' && participante.vida_temporaria > 0 ? participante.vida_temporaria : undefined,
+      manaTemp: typeof participante.mana_temporaria === 'number' && participante.mana_temporaria > 0 ? participante.mana_temporaria : undefined,
       defesa: typeof participante.defesa === 'number' ? participante.defesa : null,
       ataques: normalizeAttacks(participante.ataques),
       pericias: normalizePericias(participante.pericias),

@@ -8,8 +8,10 @@ import { useCharacterStore } from '../../../store/useCharacterStore';
 interface EntityMetrics {
   hpCurrent?: number;
   hpMax?: number;
+  hpExtra?: number;
   manaCurrent?: number;
   manaMax?: number;
+  manaExtra?: number;
   defense?: number | null;
   photo?: string;
 }
@@ -31,19 +33,30 @@ interface ResourceBarProps {
   maximum?: number;
   fallback?: string;
   tone: 'health' | 'mana';
+  /** Extra temporário acima do máximo. */
+  extra?: number;
 }
 
-const ResourceBar: React.FC<ResourceBarProps> = ({ label, current, maximum, fallback = 'N/D', tone }) => {
+const ResourceBar: React.FC<ResourceBarProps> = ({ label, current, maximum, fallback = 'N/D', tone, extra = 0 }) => {
   const ratio = percentage(current, maximum);
+  const extraRatio = extra > 0 ? percentage(extra, maximum) ?? 100 : 0;
   return (
     <div className="session-resource">
       <div className="session-resource__meta">
         <span>{label}</span>
-        <strong>{current !== undefined ? `${current}/${maximum ?? '?'}` : fallback}</strong>
+        <strong>
+          {current !== undefined ? `${current}/${maximum ?? '?'}` : fallback}
+          {extra > 0 ? <em className={`session-resource__extra-valor session-resource__extra-valor--${tone}`} title="Extra temporário"> +{extra}</em> : null}
+        </strong>
       </div>
       <div className="session-resource__track" aria-hidden="true">
         <span className={`session-resource__fill session-resource__fill--${tone}`} style={{ width: `${ratio ?? 0}%` }} />
       </div>
+      {extra > 0 ? (
+        <div className="session-resource__extra" aria-hidden="true">
+          <span className={`session-resource__extra-fill session-resource__extra-fill--${tone}`} style={{ width: `${Math.min(100, extraRatio)}%` }} />
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -212,8 +225,10 @@ export const ActiveTurnCard: React.FC = () => {
     return {
       hpCurrent: entity.hpAtual ?? hpMax,
       hpMax,
+      hpExtra: entity.hpTemp,
       manaCurrent: entity.manaAtual ?? manaMax,
       manaMax,
+      manaExtra: entity.manaTemp,
       defense: entity.defesa ?? character?.derivados?.defesaNatural,
       photo: character?.foto ?? undefined,
     };
@@ -295,8 +310,9 @@ export const ActiveTurnCard: React.FC = () => {
                 maximum={selectedMetrics.hpMax}
                 fallback={selectedEntity.estado_vida ?? 'N/D'}
                 tone="health"
+                extra={selectedMetrics.hpExtra}
               />
-              <ResourceBar label="Mana" current={selectedMetrics.manaCurrent} maximum={selectedMetrics.manaMax} tone="mana" />
+              <ResourceBar label="Mana" current={selectedMetrics.manaCurrent} maximum={selectedMetrics.manaMax} tone="mana" extra={selectedMetrics.manaExtra} />
               <div className="session-focus-card__defense">
                 <Shield size={16} />
                 <span>Defesa</span>

@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { Heart, Shield, Sparkles, User, Users, Zap } from 'lucide-react';
 import { useCharacterStore } from '../../../store/useCharacterStore';
 import { useSessaoStore } from '../../../store/useSessaoStore';
+import { comExtraTemporario } from '../sessionUtils';
 
 export const PlayerGallery: React.FC = () => {
   const characters = useCharacterStore((state) => state.characters);
@@ -88,11 +89,11 @@ export const PlayerGallery: React.FC = () => {
               <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
                 <div className="rounded-lg bg-red-400/[0.07] p-2 text-red-200/80">
                   <Heart size={13} className="mb-1" />
-                  <span className="block truncate">{hpCurrent !== undefined ? `${hpCurrent}/${hpMax ?? '?'}` : entity.estado_vida ?? 'N/D'}</span>
+                  <span className="block truncate">{hpCurrent !== undefined ? comExtraTemporario(`${hpCurrent}/${hpMax ?? '?'}`, entity.hpTemp) : entity.estado_vida ?? 'N/D'}</span>
                 </div>
                 <div className="rounded-lg bg-sky-400/[0.07] p-2 text-sky-200/80">
                   <Zap size={13} className="mb-1" />
-                  <span>{manaCurrent !== undefined ? `${manaCurrent}/${manaMax ?? '?'}` : 'N/D'}</span>
+                  <span>{manaCurrent !== undefined ? comExtraTemporario(`${manaCurrent}/${manaMax ?? '?'}`, entity.manaTemp) : 'N/D'}</span>
                 </div>
                 <div className="rounded-lg bg-white/[0.04] p-2 text-white/60">
                   <Shield size={13} className="mb-1" />

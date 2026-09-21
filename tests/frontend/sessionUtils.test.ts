@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import type { IRegistro } from '../../src/services/registrosApi.ts';
 import {
+  comExtraTemporario,
   getRollBreakdown,
   getRollTone,
   matchesRollFilter,
@@ -49,4 +50,10 @@ test('filtros distinguem testes, fórmulas e usos', () => {
   assert.equal(matchesRollFilter(registro({ tipo: 'dano' }), 'dano'), true);
   assert.equal(matchesRollFilter(registro({ tipo: 'magia' }), 'uso'), true);
   assert.equal(matchesRollFilter(registro({ tipo: 'dano' }), 'uso'), false);
+});
+
+test('extra temporário aparece ao lado da Vida e da Mana só quando existe', () => {
+  assert.equal(comExtraTemporario('40/40', 6), '40/40 +6');
+  assert.equal(comExtraTemporario('40/40', 0), '40/40');
+  assert.equal(comExtraTemporario('40/40'), '40/40');
 });

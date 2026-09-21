@@ -2,6 +2,11 @@ import type { IRegistro } from '../../services/registrosApi';
 import type { NivelVisibilidade } from '../../services/sessaoApi';
 
 export type RollTone = 'critical' | 'failure' | 'neutral';
+/** "40/40" com o extra temporário ao lado, quando houver: "40/40 +6". */
+export function comExtraTemporario(texto: string, extra?: number): string {
+  return extra && extra > 0 ? `${texto} +${extra}` : texto;
+}
+
 export type RollFilter = 'todos' | 'rolagem' | 'dano' | 'uso';
 
 /** Do mais fechado ao mais aberto - é a ordem que aparece nos seletores. */

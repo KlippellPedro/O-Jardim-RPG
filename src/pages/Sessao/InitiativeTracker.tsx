@@ -26,7 +26,7 @@ import { useSessaoStore, type EntidadeIniciativa } from '../../store/useSessaoSt
 import { EntityEditor } from './components/EntityEditor';
 import { BestiarioPicker } from './components/BestiarioPicker';
 import type { BestiarioMonstro, NivelVisibilidade } from '../../services/sessaoApi';
-import { OPCOES_VISIBILIDADE, rotuloVisibilidade } from './sessionUtils';
+import { OPCOES_VISIBILIDADE, comExtraTemporario, rotuloVisibilidade } from './sessionUtils';
 
 interface InitiativeTrackerProps {
   onClose?: () => void;
@@ -265,11 +265,11 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
             <div className="mt-2 grid grid-cols-3 gap-1 text-[9px]">
               <span className="flex min-w-0 items-center gap-1 rounded-md bg-red-400/[0.07] px-1.5 py-1 text-red-100/60" title="Vida">
                 <HeartPulse size={10} className="shrink-0 text-red-300/70" />
-                <span className="truncate">{entity.hpAtual !== undefined ? `${entity.hpAtual}/${entity.hpTotal ?? '?'}` : entity.estado_vida ?? 'Oculta'}</span>
+                <span className="truncate">{entity.hpAtual !== undefined ? comExtraTemporario(`${entity.hpAtual}/${entity.hpTotal ?? '?'}`, entity.hpTemp) : entity.estado_vida ?? 'Oculta'}</span>
               </span>
               <span className="flex min-w-0 items-center gap-1 rounded-md bg-sky-400/[0.07] px-1.5 py-1 text-sky-100/60" title="Mana">
                 <Zap size={10} className="shrink-0 text-sky-300/70" />
-                <span className="truncate">{entity.manaAtual != null || entity.manaTotal != null ? `${entity.manaAtual ?? entity.manaTotal}/${entity.manaTotal ?? '?'}` : '—'}</span>
+                <span className="truncate">{entity.manaAtual != null || entity.manaTotal != null ? comExtraTemporario(`${entity.manaAtual ?? entity.manaTotal}/${entity.manaTotal ?? '?'}`, entity.manaTemp) : '—'}</span>
               </span>
               <span className="flex min-w-0 items-center gap-1 rounded-md bg-white/[0.035] px-1.5 py-1 text-white/45" title="Defesa">
                 <Shield size={10} className="shrink-0" />

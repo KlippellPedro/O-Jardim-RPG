@@ -18,6 +18,7 @@ import {
 import { useCharacterStore } from '../../../store/useCharacterStore';
 import { useSessaoStore, type EntidadeIniciativa } from '../../../store/useSessaoStore';
 import type { ICharacter } from '../../../types/character';
+import { comExtraTemporario } from '../sessionUtils';
 
 interface MasterScreenPanelProps {
   onClose: () => void;
@@ -103,11 +104,11 @@ const MasterEntityCard: React.FC<MasterEntityCardProps> = ({ entity, character, 
         <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
           <div className="rounded-lg border border-red-400/10 bg-red-400/[0.06] p-2 text-red-100/80">
             <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-white/35"><Heart size={11} /> Vida</div>
-            <strong className="mt-1 block text-white">{hpCurrent !== undefined ? `${hpCurrent}/${hpMax ?? '?'}` : 'N/D'}</strong>
+            <strong className="mt-1 block text-white">{hpCurrent !== undefined ? comExtraTemporario(`${hpCurrent}/${hpMax ?? '?'}`, entity.hpTemp) : 'N/D'}</strong>
           </div>
           <div className="rounded-lg border border-sky-400/10 bg-sky-400/[0.06] p-2 text-sky-100/80">
             <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-white/35"><Zap size={11} /> Mana</div>
-            <strong className="mt-1 block text-white">{manaCurrent !== undefined ? `${manaCurrent}/${manaMax ?? '?'}` : 'N/D'}</strong>
+            <strong className="mt-1 block text-white">{manaCurrent !== undefined ? comExtraTemporario(`${manaCurrent}/${manaMax ?? '?'}`, entity.manaTemp) : 'N/D'}</strong>
           </div>
           <div className="rounded-lg border border-white/[0.07] bg-white/[0.03] p-2 text-white/70">
             <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-white/35"><Shield size={11} /> Defesa</div>
