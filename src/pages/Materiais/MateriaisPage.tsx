@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { BookOpen, CarFront, ChevronRight, Cog, FlaskConical, Hammer, Package, Search, ShoppingBag, Sparkles, UtensilsCrossed, WandSparkles, X } from 'lucide-react';
 import {
@@ -20,6 +20,12 @@ import {
   type ReceitaCatalogItem,
 } from '../../services/materialsCatalogService';
 
+import { useAuthStore } from '../../store/useAuthStore';
+import { useCharacterStore } from '../../store/useCharacterStore';
+import { classesDaFicha } from '../../services/progressaoFichaService';
+import { estoqueDoRecurso, receitaCobertaPorLotes, type EstoquesMateriais } from '../../services/preparoDescansoService';
+
+import { SimboloOculto } from '../../components/descobertas/SimboloOculto';
 type Aba = 'recursos' | 'receitas' | 'guia';
 
 const TEMA_RECURSO: Record<RecursoMaterialId, string> = {
@@ -116,8 +122,19 @@ export function MateriaisPage() {
   const [busca, setBusca] = useState(() => searchParams.get('busca') ?? '');
   const [recursoAtivo, setRecursoAtivo] = useState<RecursoMaterialId | null>(() => recursoInicial && RECURSO_MATERIAL_POR_ID.has(recursoInicial) ? recursoInicial : null);
   const [classe, setClasse] = useState('');
+  const [soCobertas, setSoCobertas] = useState(false);
+  const personagemAtivoId = useAuthStore((estado) => estado.campanhaAtiva?.personagem_ativo_id ?? null);
+  const personagens = useCharacterStore((estado) => estado.characters);
+  const carregarPersonagens = useCharacterStore((estado) => estado.fetchCharacters);
+  useEffect(() => { if (personagemAtivoId && personagens.length === 0) void carregarPersonagens(); }, [personagemAtivoId, personagens.length, carregarPersonagens]);
+  const personagem = personagens.find((item) => item.id === personagemAtivoId) ?? null;
+  const estoques = ((personagem?.ficha as { recursosMateriais?: EstoquesMateriais } | undefined)?.recursosMateriais ?? undefined) as EstoquesMateriais | undefined;
+  const classesDoPersonagem = useMemo(
+    () => (personagem ? classesDaFicha(personagem.ficha).map((item) => ({ classeId: String(item.classe.id), nivel: item.nivel })) : []),
+    [personagem],
+  );
   const materiais = useMemo(() => MATERIAIS_CATALOGO.filter((material) => materialCorrespondeBusca(material, busca) && (!recursoAtivo || recursosDeUsos(material.usos).includes(recursoAtivo))), [busca, recursoAtivo]);
-  const receitas = useMemo(() => RECEITAS_CATALOGO.filter((receita) => receitaCorrespondeBusca(receita, busca) && (!classe || receita.classe === classe)), [busca, classe]);
+  const receitas = useMemo(() => RECEITAS_CATALOGO.filter((receita) => receitaCorrespondeBusca(receita, busca) && (!classe || receita.classe === classe) && (!soCobertas || receitaCobertaPorLotes(receita, estoques, classesDoPersonagem) === true)), [busca, classe, soCobertas, estoques, classesDoPersonagem]);
 
   return (
     <main className="relative z-10 min-h-[100dvh] px-4 pb-32 pt-8 sm:px-6 lg:px-10 lg:pt-10"><div className="mx-auto max-w-7xl">
@@ -125,9 +142,10 @@ export function MateriaisPage() {
       <section className="mt-6 rounded-3xl border border-white/10 bg-[#0b100f]/85 p-4 shadow-xl sm:p-6"><div className="flex flex-col gap-4 lg:flex-row lg:items-center"><div className="flex rounded-2xl border border-white/10 bg-black/25 p-1">{([['recursos', Package, 'Recursos'], ['receitas', FlaskConical, 'Receitas'], ['guia', BookOpen, 'Como funciona']] as const).map(([id, Icon, label]) => <button key={id} type="button" onClick={() => setAba(id)} className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold transition lg:flex-none ${aba === id ? 'bg-emerald-300 text-emerald-950' : 'text-white/55 hover:bg-white/5 hover:text-white'}`}><Icon className="h-4 w-4" /><span>{label}</span></button>)}</div>{aba !== 'guia' && <Busca valor={busca} onChange={setBusca} />}{aba === 'receitas' && <select value={classe} onChange={(event) => setClasse(event.target.value)} className="h-12 rounded-xl border border-white/10 bg-[#101614] px-3 text-sm text-white/80"><option value="">Todos os tipos</option><option value="alquimista">Alquimia</option><option value="ritualista">Rituais</option><option value="engenheiro">Engenharia</option><option value="cozinheiro">Cozinha</option></select>}</div></section>
       <section className="mt-7">
         {aba === 'recursos' && <div className="space-y-7"><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">{RECURSOS_MATERIAIS.map((recurso) => <RecursoCard key={recurso.id} id={recurso.id} ativo={recursoAtivo === recurso.id} onClick={() => setRecursoAtivo((atual) => atual === recurso.id ? null : recurso.id)} />)}</div><div className="flex items-center justify-between gap-4"><p className="text-sm text-white/45"><strong className="text-white/80">{materiais.length}</strong> exemplos {recursoAtivo ? `de ${RECURSO_MATERIAL_POR_ID.get(recursoAtivo)!.titulo}` : 'nos seis estoques'}</p><Link to="/loja?categoria=Componentes" className="inline-flex items-center gap-2 text-sm font-semibold text-amber-200/70 hover:text-amber-100"><ShoppingBag className="h-4 w-4" /> Ver na Loja</Link></div>{materiais.length ? <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{materiais.map((material) => <MaterialCard key={material.id} material={material} />)}</div> : <p className="rounded-2xl border border-white/10 p-8 text-center text-white/45">Nenhum exemplo encontrado.</p>}</div>}
-        {aba === 'receitas' && <div><p className="mb-4 text-sm text-white/45"><strong className="text-white/80">{receitas.length}</strong> preparos encontrados</p><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{receitas.map((receita) => <ReceitaCard key={receita.chave} receita={receita} />)}</div></div>}
+        {aba === 'receitas' && <div>{personagem ? <div className="mb-5 flex flex-wrap items-center gap-x-5 gap-y-3 rounded-2xl border border-emerald-300/15 bg-emerald-400/[0.05] p-4"><div className="min-w-0 flex-1"><p className="text-xs font-bold uppercase tracking-widest text-emerald-200/80">Lotes de {personagem.nome}</p><p className="mt-1 text-xs text-white/50">{RECURSOS_MATERIAIS.map((recurso) => { const total = Object.values(estoqueDoRecurso(estoques, recurso.id)).reduce<number>((soma, valor) => soma + (Number(valor) || 0), 0); return total > 0 ? `${recurso.titulo}: ${total}` : null; }).filter(Boolean).join(' · ') || 'Nenhum lote no Inventário ainda.'}</p></div><label className="flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border border-white/10 px-3 text-xs font-bold text-white/80"><input type="checkbox" checked={soCobertas} onChange={(evento) => setSoCobertas(evento.target.checked)} /> Só o que meus lotes cobrem</label></div> : null}<p className="mb-4 text-sm text-white/45"><strong className="text-white/80">{receitas.length}</strong> preparos encontrados</p><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{receitas.map((receita) => <ReceitaCard key={receita.chave} receita={receita} />)}</div></div>}
         {aba === 'guia' && <GuiaRapido />}
       </section>
+      <div className="mt-10 flex justify-center"><SimboloOculto chave="folha_dourada" glifo="❦" /></div>
     </div></main>
   );
 }
