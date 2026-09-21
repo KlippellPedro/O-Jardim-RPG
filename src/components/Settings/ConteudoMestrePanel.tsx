@@ -83,8 +83,8 @@ export function ConteudoMestrePanel({ campanhaId, initialAba = 'lore', initialIt
       </div>
       {exportMessage && <div role="status" className="mb-4 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-gray-300">{exportMessage}</div>}
       {(aba === 'lore' || aba === 'cronologia') && <div className="mb-4 rounded-xl border border-primary/20 bg-primary/[0.05] px-4 py-3 text-xs leading-5 text-gray-300">Esta seção é global. Tudo que for publicado ou excluído aqui vale para todas as campanhas.</div>}
-      {aba === 'lore' && <ConteudoLorePanel onDirtyChange={registrarDirty} />}
-      {aba === 'cronologia' && <CronologiaPanel onDirtyChange={registrarDirty} />}
+      {aba === 'lore' && <ConteudoLorePanel initialItem={initialItem} onDirtyChange={registrarDirty} />}
+      {aba === 'cronologia' && <CronologiaPanel initialItem={initialItem} onDirtyChange={registrarDirty} />}
       {aba === 'loja' && <CatalogoLojaPanel campanhaId={campanhaId} onDirtyChange={registrarDirty} />}
       {aba === 'regras' && <RegrasEditorPanel campanhaId={campanhaId} initialItem={initialItem} onDirtyChange={registrarDirty} />}
     </div>

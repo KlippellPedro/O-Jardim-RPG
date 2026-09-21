@@ -6,6 +6,7 @@ import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useResolvedWorld } from '../../hooks/useResolvedWorld';
 import { ARVORES, VAZIO_ID, arvoreVisivel, corDeInterface } from '../../../data/mundo/arvoresCatalog';
 import { useAuthStore } from '../../store/useAuthStore';
+import { usePermissoes } from '../../hooks/usePermissoes';
 import { usePerformanceProfile } from '../../hooks/usePerformance';
 import { GuidedTour } from '../../components/ui/GuidedTour';
 import { MUNDO_TOUR_STEPS, mundoTourJaVisto, serializarMundoTourVisto } from './mundoTourConfig';
@@ -55,6 +56,10 @@ export const MundoPage: React.FC = () => {
   const usuario = useAuthStore((state) => state.usuario);
   const campanhaAtiva = useAuthStore((state) => state.campanhaAtiva);
   const { reduceMotion } = usePerformanceProfile();
+  const { podeEditarConteudo } = usePermissoes();
+  const rotaEditorMundo = (secao: 'lore' | 'cronologia', item: string) => (
+    `/criador?aba=conteudo&secao=${secao}&item=${encodeURIComponent(item)}${campanhaAtiva ? `&campanha_id=${encodeURIComponent(campanhaAtiva.id)}` : ''}`
+  );
 
   const isMestre = usuario?.papel_plataforma === 'admin'
     || usuario?.papel_plataforma === 'criador'
@@ -237,6 +242,7 @@ export const MundoPage: React.FC = () => {
           loreOculto={loreOculto}
           cronicaSecoesOcultas={cronicaSecoesOcultas}
           cronicaEventosOcultos={cronicaEventosOcultos}
+          podeEditarConteudo={podeEditarConteudo}
           onBack={() => navigate('/mundo')}
           onOpenOverview={() => navigate(isVazioPage ? '/mundo/vazio' : `/mundo/arvores/${codexId}`)}
           onOpenGlobalTimeline={cronologiaGeralVisivel ? () => navigate('/mundo/cronologia') : undefined}
@@ -245,6 +251,8 @@ export const MundoPage: React.FC = () => {
               ? `/mundo/vazio/${entry.tipo}/${entry.id}`
               : `/mundo/arvores/${codexId}/${entry.tipo}/${entry.id}`,
           )}
+          onEditTree={() => navigate(rotaEditorMundo('cronologia', codexId))}
+          onEditEntry={(entry) => navigate(rotaEditorMundo('lore', `${entry.tipo}:${entry.id}`))}
         />
       </Suspense>
     );
@@ -274,8 +282,10 @@ export const MundoPage: React.FC = () => {
           loreOculto={loreOculto}
           entidadesRevelado={entidadesRevelado}
           entidadesOculto={entidadesOculto}
+          podeEditarConteudo={podeEditarConteudo}
           onBack={() => navigate('/mundo')}
           onOpenGlobalTimeline={cronologiaGeralVisivel ? () => navigate('/mundo/cronologia') : undefined}
+          onEditEntry={(tipo, id) => navigate(rotaEditorMundo('lore', `${tipo}:${id}`))}
         />
       </Suspense>
     );

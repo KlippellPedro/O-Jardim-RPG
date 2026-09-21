@@ -7,6 +7,7 @@ import {
   Globe2,
   History,
   Landmark,
+  Pencil,
   Shield,
   Sparkles,
 } from 'lucide-react';
@@ -29,8 +30,12 @@ interface UniversalRecordsPageProps {
   loreOculto: string[];
   entidadesRevelado: string[];
   entidadesOculto: string[];
+  podeEditarConteudo?: boolean;
   onBack: () => void;
   onOpenGlobalTimeline?: () => void;
+  /** Abre o registro de Mundo por trás do card no editor de Conteúdo. Só
+   * cobre registros de lore (entidades e facções têm fonte própria). */
+  onEditEntry?: (tipo: string, id: string) => void;
 }
 
 type SectionId = 'seres' | 'faccoes' | 'locais';
@@ -44,6 +49,8 @@ interface UniversalRecord {
   metadata: Array<[string, string]>;
   href?: string;
   hrefLabel?: string;
+  /** Só em registros de lore (não em entidades/facções): tipo/id pro editor. */
+  loreRef?: { tipo: string; id: string };
 }
 
 const paragraphs = (value: string): string[] => value.split(/\n\s*\n/).filter(Boolean);
@@ -64,6 +71,7 @@ const loreRecord = (entry: LoreEntry): UniversalRecord => ({
     ['Responsável', textValue(entry, 'responsavel')],
     ['Domínio', textValue(entry, 'dominio')],
   ].filter((item): item is [string, string] => Boolean(item[1])),
+  loreRef: { tipo: entry.tipo, id: entry.id },
 });
 
 const entityRecords = (entities: EntidadeCatalogo[]): UniversalRecord[] => entities
@@ -89,10 +97,25 @@ const entityRecords = (entities: EntidadeCatalogo[]): UniversalRecord[] => entit
     };
   });
 
-const RecordDetail = ({ record }: { record: UniversalRecord }) => (
+const RecordDetail = ({
+  record,
+  podeEditarConteudo,
+  onEditEntry,
+}: {
+  record: UniversalRecord;
+  podeEditarConteudo?: boolean;
+  onEditEntry?: (tipo: string, id: string) => void;
+}) => (
   <article className="rounded-3xl border border-cyan-400/20 bg-[#0d1116]/90 shadow-2xl lg:sticky lg:top-5">
     <header className="border-b border-white/10 bg-gradient-to-br from-cyan-400/10 to-transparent p-6 sm:p-9">
-      <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-cyan-300">{record.kind}</span>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-cyan-300">{record.kind}</span>
+        {podeEditarConteudo && record.loreRef && onEditEntry && (
+          <button type="button" onClick={() => onEditEntry(record.loreRef!.tipo, record.loreRef!.id)} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-300 transition hover:border-white/40 hover:text-white">
+            <Pencil size={12} /> Editar
+          </button>
+        )}
+      </div>
       <h2 className="mt-3 text-3xl font-bold text-white sm:text-5xl" style={{ fontFamily: 'Cinzel, serif' }}>{record.title}</h2>
       {record.subtitle ? <p className="mt-3 text-sm font-bold uppercase tracking-widest text-gray-500">{record.subtitle}</p> : null}
     </header>
@@ -122,11 +145,15 @@ const RecordsSection = ({
   selectedKey,
   onSelect,
   emptyLabel,
+  podeEditarConteudo,
+  onEditEntry,
 }: {
   records: UniversalRecord[];
   selectedKey: string;
   onSelect: (key: string) => void;
   emptyLabel: string;
+  podeEditarConteudo?: boolean;
+  onEditEntry?: (tipo: string, id: string) => void;
 }) => {
   const selected = records.find((record) => record.key === selectedKey) || records[0];
   if (!selected) {
@@ -154,7 +181,7 @@ const RecordsSection = ({
           </button>
         ))}
       </aside>
-      <div className="min-w-0 scroll-mt-4"><RecordDetail record={selected} /></div>
+      <div className="min-w-0 scroll-mt-4"><RecordDetail record={selected} podeEditarConteudo={podeEditarConteudo} onEditEntry={onEditEntry} /></div>
     </div>
   );
 };
@@ -167,8 +194,10 @@ export const UniversalCodexPage: React.FC<UniversalRecordsPageProps> = ({
   loreOculto,
   entidadesRevelado,
   entidadesOculto,
+  podeEditarConteudo,
   onBack,
   onOpenGlobalTimeline,
+  onEditEntry,
 }) => {
   const [section, setSection] = useState<SectionId>('seres');
   const [selectedKey, setSelectedKey] = useState('');
@@ -228,7 +257,7 @@ export const UniversalCodexPage: React.FC<UniversalRecordsPageProps> = ({
       </header>
 
       <div className="relative mx-auto max-w-[90rem] px-4 sm:px-5 md:px-10">
-        {section === 'seres' ? <RecordsSection records={beings} selectedKey={selectedKey} onSelect={setSelectedKey} emptyLabel="Nenhum ser universal foi revelado." /> : null}
+        {section === 'seres' ? <RecordsSection records={beings} selectedKey={selectedKey} onSelect={setSelectedKey} emptyLabel="Nenhum ser universal foi revelado." podeEditarConteudo={podeEditarConteudo} onEditEntry={onEditEntry} /> : null}
 
         {section === 'faccoes' ? (
           <section>
@@ -252,7 +281,7 @@ export const UniversalCodexPage: React.FC<UniversalRecordsPageProps> = ({
           </section>
         ) : null}
 
-        {section === 'locais' ? <RecordsSection records={locations} selectedKey={selectedKey} onSelect={setSelectedKey} emptyLabel="Nenhum local universal foi revelado." /> : null}
+        {section === 'locais' ? <RecordsSection records={locations} selectedKey={selectedKey} onSelect={setSelectedKey} emptyLabel="Nenhum local universal foi revelado." podeEditarConteudo={podeEditarConteudo} onEditEntry={onEditEntry} /> : null}
       </div>
     </main>
   );

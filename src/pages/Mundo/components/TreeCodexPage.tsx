@@ -10,6 +10,7 @@ import {
   MapPin,
   Network,
   Orbit,
+  Pencil,
   Sparkles,
 } from 'lucide-react';
 import type { LoreEntry } from '../../../../data/gerado/mundoCatalog';
@@ -38,10 +39,17 @@ interface TreeCodexPageProps {
   loreOculto: string[];
   cronicaSecoesOcultas: string[];
   cronicaEventosOcultos: string[];
+  /** Só o criador da plataforma edita conteúdo (ver usePermissoes) - um
+   * Mestre/assistente comum vê `isMestre` true, mas não tem acesso ao editor. */
+  podeEditarConteudo?: boolean;
   onBack: () => void;
   onOpenOverview: () => void;
   onOpenGlobalTimeline?: () => void;
   onOpenEntry: (entry: LoreEntry) => void;
+  /** Abre a ficha da Árvore/Vazio (tese, atmosfera, história) no editor. */
+  onEditTree?: () => void;
+  /** Abre o registro selecionado (Deidade, Fluxo, Dimensão, Local...) no editor. */
+  onEditEntry?: (entry: LoreEntry) => void;
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -340,10 +348,13 @@ export const TreeCodexPage: React.FC<TreeCodexPageProps> = ({
   loreOculto,
   cronicaSecoesOcultas,
   cronicaEventosOcultos,
+  podeEditarConteudo,
   onBack,
   onOpenOverview,
   onOpenGlobalTimeline,
   onOpenEntry,
+  onEditTree,
+  onEditEntry,
 }) => {
   const codex = useMemo(() => buildTreeCodex(catalog, treeId), [catalog, treeId]);
   const chronicle = getTreeChronicle(treeId, chronicles);
@@ -491,8 +502,15 @@ export const TreeCodexPage: React.FC<TreeCodexPageProps> = ({
             ) : (
               <article className="rounded-3xl border border-white/10 bg-[#0c0b11]/85 shadow-2xl">
                 <header className="border-b border-white/10 p-6 sm:p-9" style={{ background: `linear-gradient(135deg, ${color}18, transparent 65%)` }}>
-                  <div className="mb-4 flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color }}>
-                    <MapPin size={14} /> {typeLabel(selectedEntry.tipo)} · {displayTreeName}
+                  <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color }}>
+                      <MapPin size={14} /> {typeLabel(selectedEntry.tipo)} · {displayTreeName}
+                    </div>
+                    {podeEditarConteudo && onEditEntry && (
+                      <button type="button" onClick={() => onEditEntry(selectedEntry)} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-300 transition hover:border-white/40 hover:text-white">
+                        <Pencil size={12} /> Editar
+                      </button>
+                    )}
                   </div>
                   <h2 className="break-words text-3xl font-bold leading-tight text-white sm:text-5xl" style={{ fontFamily: 'Cinzel, serif' }}>{selectedEntry.titulo}</h2>
                   {typeof selectedEntry.conteudo.epiteto === 'string' ? <p className="mt-3 text-lg italic text-gray-400">“{selectedEntry.conteudo.epiteto}”</p> : null}
@@ -528,9 +546,16 @@ export const TreeCodexPage: React.FC<TreeCodexPageProps> = ({
           ) : (
             <div className="space-y-6">
               <section className="rounded-3xl border border-white/10 bg-[#0c0b11]/85 p-6 shadow-2xl sm:p-9">
-                <div className="mb-7 flex items-center gap-3" style={{ color }}>
-                  <BookOpen size={21} />
-                  <h2 className="text-2xl font-bold text-white sm:text-3xl" style={{ fontFamily: 'Cinzel, serif' }}>{ehVazio ? 'O Vazio, Deidade e Fluxo' : 'Árvore, Deidade e Fluxo'}</h2>
+                <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-3" style={{ color }}>
+                    <BookOpen size={21} />
+                    <h2 className="text-2xl font-bold text-white sm:text-3xl" style={{ fontFamily: 'Cinzel, serif' }}>{ehVazio ? 'O Vazio, Deidade e Fluxo' : 'Árvore, Deidade e Fluxo'}</h2>
+                  </div>
+                  {podeEditarConteudo && onEditTree && (
+                    <button type="button" onClick={onEditTree} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-300 transition hover:border-white/40 hover:text-white">
+                      <Pencil size={12} /> Editar resumo, atmosfera e história
+                    </button>
+                  )}
                 </div>
                 {chronicle?.tese && !secaoOculta('tese') ? <p className="mb-8 max-w-5xl text-xl leading-9 text-gray-200 sm:text-2xl">{chronicle.tese}</p> : null}
                 <div className={`grid gap-4 ${codex.flows.length > 1 ? 'xl:grid-cols-3' : 'md:grid-cols-2'}`}>

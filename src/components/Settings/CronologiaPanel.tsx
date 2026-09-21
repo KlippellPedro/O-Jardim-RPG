@@ -12,6 +12,9 @@ import type { ChronicleEvent, ChroniclePlace, TreeChronicle, WorldChronicleCatal
 import { useUnsavedChanges } from '../../hooks/useUnsavedChanges';
 
 interface CronologiaPanelProps {
+  /** Id da Árvore (ou "erebus" pro Vazio) pra abrir direto na ficha dela,
+   * vindo de um botão "Editar" numa página de Mundo. */
+  initialItem?: string;
   onDirtyChange?: (dirty: boolean) => void;
 }
 
@@ -48,10 +51,10 @@ const inputClass = 'w-full rounded-xl border border-white/10 bg-black/40 px-4 py
 const textareaClass = 'w-full resize-y rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm leading-7 text-gray-200 outline-none focus:border-primary/50';
 const labelClass = 'mb-2 block text-[10px] font-bold uppercase tracking-widest text-gray-500';
 
-export function CronologiaPanel({ onDirtyChange }: CronologiaPanelProps) {
+export function CronologiaPanel({ initialItem, onDirtyChange }: CronologiaPanelProps) {
   const [entry, setEntry] = useState<EditorialLibraryEntry | null>(null);
   const [catalog, setCatalog] = useState<WorldChronicleCatalog | null>(null);
-  const [scope, setScope] = useState('global');
+  const [scope, setScope] = useState(initialItem || 'global');
   const [section, setSection] = useState<EditorSection>('ficha');
   const [selectedId, setSelectedId] = useState('');
   const [loading, setLoading] = useState(true);

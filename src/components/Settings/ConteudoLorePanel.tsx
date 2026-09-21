@@ -10,6 +10,10 @@ import {
 import { useUnsavedChanges } from '../../hooks/useUnsavedChanges';
 
 interface ConteudoLorePanelProps {
+  /** Chave composta ("tipo:id") de um registro pra abrir direto nele, vinda
+   * de um botão "Editar" numa página de Mundo. Só serve pro carregamento
+   * inicial - depois disso a navegação interna do painel manda. */
+  initialItem?: string;
   onDirtyChange?: (dirty: boolean) => void;
 }
 
@@ -41,7 +45,7 @@ function rotuloCampo(key: string): string {
     .replace(/\b\w/g, (letter) => letter.toLocaleUpperCase('pt-BR'));
 }
 
-export function ConteudoLorePanel({ onDirtyChange }: ConteudoLorePanelProps) {
+export function ConteudoLorePanel({ initialItem, onDirtyChange }: ConteudoLorePanelProps) {
   const [entradas, setEntradas] = useState<EditorialLibraryEntry[]>([]);
   const [selecionadaChave, setSelecionadaChave] = useState<string>('');
   const [busca, setBusca] = useState('');
@@ -76,11 +80,13 @@ export function ConteudoLorePanel({ onDirtyChange }: ConteudoLorePanelProps) {
       const resposta = await conteudoEditorialApi.listarMundoGlobal(signal);
       const loreEntries = (resposta.entradas || []).filter((entry) => entry.tipo !== 'cronologia');
       setEntradas(loreEntries);
-      setTiposAbertos((atuais) => atuais.size > 0 || !loreEntries[0]
-        ? atuais
-        : new Set([loreEntries[0].tipo]));
+      const alvo = preferredKey && loreEntries.find((entry) => entry.chave === preferredKey);
+      setTiposAbertos((atuais) => {
+        if (alvo) return new Set([...atuais, alvo.tipo]);
+        return atuais.size > 0 || !loreEntries[0] ? atuais : new Set([loreEntries[0].tipo]);
+      });
       setSelecionadaChave((atual) => {
-        if (preferredKey && loreEntries.some((entry) => entry.chave === preferredKey)) return preferredKey;
+        if (alvo) return alvo.chave;
         if (atual && loreEntries.some((entry) => entry.chave === atual)) return atual;
         return loreEntries.find((entry) => !entry.excluido)?.chave || loreEntries[0]?.chave || '';
       });
@@ -93,8 +99,9 @@ export function ConteudoLorePanel({ onDirtyChange }: ConteudoLorePanelProps) {
 
   useEffect(() => {
     const controller = new AbortController();
-    void carregar(controller.signal);
+    void carregar(controller.signal, initialItem);
     return () => controller.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const selecionada = novaEntrada ? {
