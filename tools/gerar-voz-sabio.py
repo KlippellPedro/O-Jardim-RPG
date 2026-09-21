@@ -43,6 +43,9 @@ from edge_tts import communicate
 RAIZ = Path(__file__).resolve().parent.parent
 CLASSES = RAIZ / "data" / "ficha" / "classes.json"
 CONQUISTAS = RAIZ / "plataforma" / "core" / "conquistas.py"
+MAGIAS = RAIZ / "data" / "ficha" / "magias.json"
+# Iguais a FRASES_APRENDIZADO em src/pages/Ficha/components/aprendizado.ts.
+FRASES_APRENDIZADO = ("Magia aprendida", "Ritual aprendido", "Selo aprendido", "Encantamento aprendido")
 SAIDA = RAIZ / "public" / "audio" / "sabio"
 
 VOZ_PADRAO = "pt-BR-FranciscaNeural"
@@ -142,6 +145,15 @@ def frases() -> dict[str, str]:
     itens["Conquista desbloqueada"] = "Conquista desbloqueada"
     for nome in nomes_das_conquistas():
         itens[nome] = nome
+
+    # Painel de "aprendeu": a frase e o nome de cada magia, ritual, selo e encantamento.
+    for frase in FRASES_APRENDIZADO:
+        itens[frase] = frase
+    catalogo_magico = json.loads(MAGIAS.read_text(encoding="utf-8"))
+    for lista_magica in ("magias", "rituais", "selos", "encantamentos"):
+        for entrada in catalogo_magico.get(lista_magica, []):
+            if entrada.get("titulo"):
+                itens[entrada["titulo"]] = entrada["titulo"]
 
     dados = json.loads(CLASSES.read_text(encoding="utf-8"))
     lista = dados if isinstance(dados, list) else next(v for v in dados.values() if isinstance(v, list))

@@ -16,7 +16,9 @@ export type SfxName =
   | 'moeda'
   | 'moeda-gasto'
   | 'estrela'
-  | 'amanhecer';
+  | 'amanhecer'
+  | 'conjurar'
+  | 'equipar';
 
 // Intervalo mínimo entre dois disparos do MESMO som, pra hover rápido,
 // duplo-clique ou navegação em sequência nunca virarem uma matraca.
@@ -26,6 +28,8 @@ const MIN_INTERVAL_MS: Partial<Record<SfxName, number>> = {
   select: 70,
   navigate: 150,
   moeda: 60,
+  conjurar: 300,
+  equipar: 120,
   'moeda-gasto': 90,
 };
 const DEFAULT_MIN_INTERVAL_MS = 30;
@@ -188,6 +192,23 @@ class AudioSynth {
           { type: 'sine', freqStart: 987.77, duration: 0.14, startOffset: 0.07, gainPeak: 0.07 },
           { type: 'sine', freqStart: 1174.66, duration: 0.2, startOffset: 0.14, gainPeak: 0.07 },
           { type: 'sine', freqStart: 1567.98, duration: 0.3, startOffset: 0.22, gainPeak: 0.05 },
+        ], volume);
+        break;
+      case 'conjurar':
+        // Sopro que sobe e um brilho no fim: o círculo se acende.
+        this.playSteps([
+          { type: 'sine', freqStart: 196, freqEnd: 784, duration: 0.55, gainPeak: 0.07, attack: 0.12 },
+          { type: 'triangle', freqStart: 392, freqEnd: 1568, duration: 0.5, startOffset: 0.08, gainPeak: 0.035, attack: 0.15 },
+          { type: 'sine', freqStart: 1568, duration: 0.5, startOffset: 0.5, gainPeak: 0.05 },
+          { type: 'sine', freqStart: 2093, duration: 0.6, startOffset: 0.56, gainPeak: 0.035 },
+        ], volume);
+        break;
+      case 'equipar':
+        // Encaixe metálico: pancada curta e um tilintar.
+        this.playSteps([
+          { type: 'square', freqStart: 240, freqEnd: 110, duration: 0.07, gainPeak: 0.06, attack: 0.002 },
+          { type: 'triangle', freqStart: 1180, freqEnd: 900, duration: 0.14, startOffset: 0.03, gainPeak: 0.06 },
+          { type: 'sine', freqStart: 2360, duration: 0.22, startOffset: 0.05, gainPeak: 0.03 },
         ], volume);
         break;
       case 'amanhecer':

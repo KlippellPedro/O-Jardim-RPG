@@ -61,6 +61,8 @@ import {
 } from '../../../services/personalizacaoAutomaticaService';
 import { PersonalizacaoAutomaticaModal } from '../components/PersonalizacaoAutomaticaModal';
 import { Select } from '../../../components/ui/Select';
+import { dispararCirculoMagico } from '../components/circuloMagico';
+import { dispararAprendizado } from '../components/aprendizado';
 
 interface IMagiaAntiga {
   id?: string;
@@ -288,6 +290,12 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     if (!window.confirm(`Aprender ${magia.titulo}? A escolha só poderá ser removida pelo Mestre.`)) return;
     onUpdate(['ficha', 'magiasConhecidasIds'], [...perfil.conhecidasIds, magia.id]);
     setMensagem({ tipo: 'sucesso', texto: `${magia.titulo} foi aprendida.` });
+    dispararAprendizado({
+      tipo: 'Magia',
+      titulo: magia.titulo,
+      detalhe: `${FLUXOS_POR_ID.get(magia.fluxo as any)?.titulo || 'Universal'} · ${magia.circulo}º círculo`,
+      fluxo: magia.fluxo,
+    });
   };
 
   const CAMPOS_MANIFESTACAO = {
@@ -331,6 +339,12 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     if (!window.confirm(`Aprender ${item.titulo}? A escolha só poderá ser removida pelo Mestre.`)) return;
     onUpdate(['ficha', config.campoConhecidos], [...config.conhecidosIds, item.id]);
     setMensagem({ tipo: 'sucesso', texto: `${item.titulo} foi aprendido(a).` });
+    dispararAprendizado({
+      tipo: config.rotulo,
+      titulo: item.titulo,
+      detalhe: FLUXOS_POR_ID.get(item.fluxo as any)?.titulo || 'Universal',
+      fluxo: item.fluxo,
+    });
   };
 
   const realizarRitual = async (ritual: IRitualCatalogo) => {
@@ -347,6 +361,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
 
     acaoMagicaEmAndamento.current = true;
     setConjurandoId(ritual.id);
+    dispararCirculoMagico({ titulo: ritual.titulo, custo: ritual.custo_mana, circulo: 'ritual', fluxo: ritual.fluxo });
     const gastoRitual = gastarComTemporario(status, 'manaAtual', manaAtual, ritual.custo_mana);
     onUpdate(['ficha', 'status', 'manaAtual'], gastoRitual.atual);
     if (manaTemporaria > 0) onUpdate(['ficha', 'status', 'manaTemporaria'], gastoRitual.temporario);
@@ -442,6 +457,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
 
     acaoMagicaEmAndamento.current = true;
     setConjurandoId(magia.id);
+    dispararCirculoMagico({ titulo: magia.titulo, custo: magia.custo_mana, circulo: magia.circulo, fluxo: magia.fluxo });
     const gastoMagia = gastarComTemporario(status, 'manaAtual', manaAtual, magia.custo_mana);
     onUpdate(['ficha', 'status', 'manaAtual'], gastoMagia.atual);
     if (manaTemporaria > 0) onUpdate(['ficha', 'status', 'manaTemporaria'], gastoMagia.temporario);

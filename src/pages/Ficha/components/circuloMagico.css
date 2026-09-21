@@ -1,0 +1,101 @@
+/* Círculo mágico da conjuração (ver CirculoMagicoHost.tsx). Só transform e opacity. */
+
+.circulo-magico {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: circulo-vida 2.1s ease-out both;
+}
+
+.circulo-magico__aura {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 46%, var(--cm-brilho), transparent 55%);
+  animation: circulo-aura 2.1s ease-out both;
+}
+
+.circulo-magico__palco {
+  position: relative;
+  width: min(78vmin, 32rem);
+  height: min(78vmin, 32rem);
+  animation: circulo-escala 2.1s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.circulo-magico__svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 0 10px var(--cm-cor)); }
+
+.circulo-magico__giro { transform-origin: 0 0; animation: circulo-girar 6s linear infinite; }
+.circulo-magico__giro--lento { animation-duration: 14s; }
+.circulo-magico__giro--inverso { animation-direction: reverse; animation-duration: 8s; }
+
+.circulo-magico__traco {
+  fill: none;
+  stroke: var(--cm-cor);
+  stroke-width: 1.6;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: circulo-desenhar 0.9s ease-out 0.05s forwards;
+}
+
+.circulo-magico__traco--fino { stroke-width: 0.8; opacity: 0.8; animation-delay: 0.25s; }
+
+.circulo-magico__runa { stroke: var(--cm-cor); stroke-width: 1.1; opacity: 0; animation: circulo-runa 0.6s ease-out 0.6s forwards; }
+
+.circulo-magico__centro { fill: var(--cm-cor); opacity: 0; animation: circulo-centro 1.6s ease-out 0.4s both; }
+
+.circulo-magico__custo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 42%;
+  text-align: center;
+  font-family: 'Cascadia Mono', Consolas, monospace;
+  font-size: clamp(1.1rem, 4vmin, 1.7rem);
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 0 16px var(--cm-cor), 0 0 32px var(--cm-cor);
+  opacity: 0;
+  animation: circulo-custo 1.4s ease-out 0.7s both;
+}
+
+.circulo-magico__nome {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2.4rem;
+  text-align: center;
+  font-family: Cinzel, serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--cm-cor);
+  text-shadow: 0 0 14px var(--cm-cor);
+  opacity: 0;
+  animation: circulo-nome 1.5s ease-out 0.4s both;
+}
+
+@keyframes circulo-vida { 0%, 78% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes circulo-aura { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes circulo-escala {
+  0% { transform: scale(0.55) rotate(-25deg); }
+  35% { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(1.18) rotate(8deg); }
+}
+@keyframes circulo-girar { to { transform: rotate(360deg); } }
+@keyframes circulo-desenhar { to { stroke-dashoffset: 0; } }
+@keyframes circulo-runa { to { opacity: 0.85; } }
+@keyframes circulo-centro { 0% { opacity: 0; transform: scale(0.2); } 25% { opacity: 1; transform: scale(1.5); } 100% { opacity: 0.5; transform: scale(1); } }
+@keyframes circulo-custo {
+  0% { opacity: 0; transform: translateY(-16px) scale(0.9); }
+  25% { opacity: 1; transform: translateY(0) scale(1.1); }
+  100% { opacity: 0; transform: translateY(46px) scale(1); }
+}
+@keyframes circulo-nome { 0% { opacity: 0; transform: translateY(8px); } 30% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .circulo-magico { display: none; }
+}
