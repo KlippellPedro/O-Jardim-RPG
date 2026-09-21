@@ -1417,4 +1417,17 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        36,
+        "indice_de_registros_por_personagem",
+        (
+            # As conquistas e o resumo da sessão somam os registros de um
+            # personagem a cada rolagem e a cada abertura da ficha.
+            """
+            CREATE INDEX IF NOT EXISTS registros_mesa_personagem_idx
+            ON registros_mesa (personagem_id, tipo)
+            WHERE personagem_id IS NOT NULL
+            """,
+        ),
+    ),
 )

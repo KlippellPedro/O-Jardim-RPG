@@ -132,7 +132,7 @@ def rolar(
             resultado=dados["total"],
             detalhes={**dados, "origem": payload.origem},
         )
-        conquistas_novas = avaliar_sem_quebrar(connection, personagem_id)
+        conquistas_novas = avaliar_sem_quebrar(connection, personagem_id, user.id)
     live_session.publicar(payload.campanha_id, "registro", 0)
     return {"registro": registro, "conquistas_novas": conquistas_novas}
 
@@ -218,7 +218,7 @@ def registrar_uso(
             resultado=None,
             detalhes=payload.detalhes,
         )
-        conquistas_novas = avaliar_sem_quebrar(connection, personagem_id)
+        conquistas_novas = avaliar_sem_quebrar(connection, personagem_id, user.id)
         nova_versao_sessao = None
         if sessao and personagem_id and payload.detalhes.get("recurso") == "mana":
             custo = payload.detalhes.get("custo")

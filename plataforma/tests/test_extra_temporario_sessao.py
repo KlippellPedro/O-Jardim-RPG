@@ -177,6 +177,21 @@ class ExtraTemporarioSessaoTests(unittest.TestCase):
         linha = self._participante(participante["id"])
         self.assertEqual((linha["vida_temporaria"], linha["mana_temporaria"]), (8, 5))
         self.assertEqual(self._status_da_ficha(personagem_id)["vidaTemporaria"], 8)
+        # O extra de Mana também chega na ficha, senão a próxima gravação a apagaria.
+        self.assertEqual(self._status_da_ficha(personagem_id)["manaTemporaria"], 5)
+
+    def test_extra_de_mana_do_mestre_convive_com_a_mana_atual(self):
+        campanha_id, personagem_id, ator = self._mesa("extra-mana-junto@example.com")
+        sessao_id, participante = self._abrir(campanha_id, ator)
+
+        atualizar_participante(
+            sessao_id, participante["id"],
+            ParticipantUpdateInput(mana_atual=11, mana_temporaria=6),
+            user=ator, database=self.database,
+        )
+
+        status = self._status_da_ficha(personagem_id)
+        self.assertEqual((status["manaAtual"], status["manaTemporaria"]), (11, 6))
 
     def test_custo_de_mana_no_hud_paga_o_extra_primeiro(self):
         campanha_id, personagem_id, ator = self._mesa("extra-mana@example.com", mana_extra=4)

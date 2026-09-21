@@ -120,11 +120,16 @@ def metricas(connection, personagem_id) -> dict[str, int]:
     }
 
 
-def avaliar(connection, personagem_id) -> dict:
+def avaliar(connection, personagem_id, *, gravar: bool = True) -> dict:
     """Avalia, grava as conquistas novas e devolve o catálogo com o progresso.
 
     `novas` traz só o que acabou de ser desbloqueado nesta chamada, para a tela
     comemorar uma vez. Chamadas repetidas não repetem a comemoração.
+
+    Com `gravar=False` (quem consulta não é o dono da ficha: Mestre, assistente,
+    vínculo somente leitura) nada é gravado e `novas` vem vazio. O selo aparece
+    como conquistado, mas a comemoração fica guardada para o dono, que é quem
+    precisa vê-la.
     """
     valores = metricas(connection, personagem_id)
     ja = {
@@ -138,6 +143,8 @@ def avaliar(connection, personagem_id) -> dict:
     novas: list[str] = []
     for conquista in CATALOGO:
         if conquista.chave in ja or valores.get(conquista.metrica, 0) < conquista.minimo:
+            continue
+        if not gravar:
             continue
         inserida = connection.execute(
             """
@@ -156,7 +163,8 @@ def avaliar(connection, personagem_id) -> dict:
     for conquista in CATALOGO:
         item = asdict(conquista)
         atual = valores.get(conquista.metrica, 0)
-        item["desbloqueada"] = conquista.chave in ja
+        # Sem gravar, o que já bate a meta conta como conquistado na tela.
+        item["desbloqueada"] = conquista.chave in ja or (not gravar and atual >= conquista.minimo)
         item["desbloqueada_em"] = ja.get(conquista.chave)
         item["progresso"] = {"atual": min(atual, conquista.minimo), "minimo": conquista.minimo}
         catalogo.append(item)
@@ -164,16 +172,27 @@ def avaliar(connection, personagem_id) -> dict:
         "catalogo": catalogo,
         "novas": [POR_CHAVE[chave].chave for chave in novas],
         "total": len(CATALOGO),
-        "desbloqueadas": len(ja),
+        "desbloqueadas": sum(1 for item in catalogo if item["desbloqueada"]),
     }
 
 
-def avaliar_sem_quebrar(connection, personagem_id) -> list[dict]:
+def avaliar_sem_quebrar(connection, personagem_id, usuario_id=None) -> list[dict]:
     """Versão para dentro de outra operação (rolagem, uso): nunca derruba quem
     chamou. Usa um savepoint, senão um erro aqui deixaria a transação inteira
-    da rolagem inutilizável. Devolve só os dados das conquistas novas."""
+    da rolagem inutilizável. Devolve só os dados das conquistas novas.
+
+    Com `usuario_id`, só avalia quando ele é o dono da ficha. Um Mestre que rola
+    em nome de um jogador não gasta a comemoração dele: ela espera o dono abrir
+    a ficha ou rolar."""
     if not personagem_id:
         return []
+    if usuario_id is not None:
+        dono = connection.execute(
+            "SELECT 1 FROM personagens WHERE id=%s AND dono_usuario_id=%s",
+            (personagem_id, usuario_id),
+        ).fetchone()
+        if not dono:
+            return []
     try:
         with connection.transaction():
             resultado = avaliar(connection, personagem_id)

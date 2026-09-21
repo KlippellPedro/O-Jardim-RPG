@@ -222,6 +222,59 @@ class ConquistasEResumoTests(unittest.TestCase):
     def test_conquistas_referenciadas_existem_no_catalogo(self):
         self.assertIn("toque_de_sorte", POR_CHAVE)
 
+    def _mestre_de_fora(self, campanha_id, email):
+        """Outra conta, Mestre da mesma campanha, que não é dona da ficha."""
+        usuario_id = uuid.uuid4()
+        with self.database.connection() as connection:
+            connection.execute(
+                "INSERT INTO usuarios (id, email, nome_exibicao, senha_hash, papel_plataforma) VALUES (%s, %s, 'Outro Mestre', 'hash', 'player')",
+                (usuario_id, email),
+            )
+            connection.execute(
+                "INSERT INTO membros_campanha (campanha_id, usuario_id, papel) VALUES (%s, %s, 'mestre')",
+                (campanha_id, usuario_id),
+            )
+        return AuthenticatedUser(
+            id=usuario_id, email=email, nome_exibicao="Outro Mestre", admin_plataforma=False,
+            papel_plataforma="mestre", session_id=uuid.uuid4(), csrf_hash="hash",
+        )
+
+    def _gravadas(self, personagem_id):
+        with self.database.connection() as connection:
+            return connection.execute(
+                "SELECT COUNT(*) AS total FROM personagem_conquistas WHERE personagem_id=%s", (personagem_id,)
+            ).fetchone()["total"]
+
+    def test_quem_nao_e_dono_consulta_sem_gastar_a_comemoracao(self):
+        campanha_id, personagem_id, dono = self._mesa("conq-dono@example.com", nivel=5)
+        mestre = self._mestre_de_fora(campanha_id, "conq-mestre-fora@example.com")
+
+        vista_do_mestre = listar_conquistas(personagem_id, user=mestre, database=self.database)
+
+        self.assertEqual(vista_do_mestre["novas"], [])
+        self.assertEqual(self._gravadas(personagem_id), 0)
+        nivel = next(x for x in vista_do_mestre["catalogo"] if x["chave"] == "nivel_5")
+        self.assertTrue(nivel["desbloqueada"])
+        self.assertEqual(vista_do_mestre["desbloqueadas"], sum(1 for x in vista_do_mestre["catalogo"] if x["desbloqueada"]))
+        # A comemoração continua esperando o dono.
+        vista_do_dono = listar_conquistas(personagem_id, user=dono, database=self.database)
+        self.assertIn("nivel_5", vista_do_dono["novas"])
+        self.assertEqual(listar_conquistas(personagem_id, user=dono, database=self.database)["novas"], [])
+
+    def test_mestre_que_rola_pelo_jogador_nao_leva_a_conquista_dele(self):
+        campanha_id, personagem_id, dono = self._mesa("conq-rola-dono@example.com")
+        mestre = self._mestre_de_fora(campanha_id, "conq-rola-mestre@example.com")
+
+        resposta = rolar(
+            RollInput(campanha_id=campanha_id, personagem_id=personagem_id, titulo="Teste do Mestre", bonus=0),
+            user=mestre,
+            database=self.database,
+        )
+
+        self.assertEqual(resposta["conquistas_novas"], [])
+        self.assertEqual(self._gravadas(personagem_id), 0)
+        self.assertIn("primeira_rolagem", listar_conquistas(personagem_id, user=dono, database=self.database)["novas"])
+
 
 if __name__ == "__main__":
     unittest.main()

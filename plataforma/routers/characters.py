@@ -879,10 +879,13 @@ def listar_conquistas(
     database: Database = Depends(get_database),
 ):
     """Selos do personagem. Avalia na hora e devolve o que acabou de ser
-    desbloqueado em `novas` (a tela comemora uma vez)."""
+    desbloqueado em `novas` (a tela comemora uma vez). Só o dono da ficha grava
+    e comemora; Mestre, assistente e vínculos somente leitura apenas consultam,
+    para não gastarem a comemoração que é do jogador."""
     with database.connection() as connection:
-        _readable_character(connection, character_id, user.id)
-        return avaliar_conquistas(connection, character_id)
+        row, somente_leitura = _readable_character(connection, character_id, user.id)
+        eh_dono = not somente_leitura and row["dono_usuario_id"] == user.id
+        return avaliar_conquistas(connection, character_id, gravar=eh_dono)
 
 
 @router.get("/{character_id}")

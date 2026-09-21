@@ -931,22 +931,28 @@ def atualizar_participante(
         # Mesma ideia da Vida acima: sem isso, editar Mana no HUD da sessão
         # nunca chegava na ficha, e o jogador via um número diferente do que o
         # mestre acabou de ajustar (ver auditoria 2026-08, achados 8-9).
-        if atual["personagem_id"] and payload.mana_atual is not None:
+        # O extra temporário de Mana segue o mesmo caminho: sem isso o que o
+        # mestre define no HUD sumia na próxima gravação da ficha.
+        campos_mana = {}
+        if payload.mana_atual is not None:
+            campos_mana["manaAtual"] = payload.mana_atual
+        if payload.mana_temporaria is not None:
+            campos_mana["manaTemporaria"] = payload.mana_temporaria
+        if atual["personagem_id"] and campos_mana:
             connection.execute(
                 """
                 UPDATE personagens
                 SET ficha=jsonb_set(
                         ficha,
                         '{status}',
-                        COALESCE(ficha->'status', '{}'::jsonb)
-                            || jsonb_build_object('manaAtual', %s),
+                        COALESCE(ficha->'status', '{}'::jsonb) || %s,
                         true
                     ),
                     versao=versao+1,
                     atualizado_em=CURRENT_TIMESTAMP
                 WHERE id=%s AND status='ativo'
                 """,
-                (payload.mana_atual, atual["personagem_id"]),
+                (Jsonb(campos_mana), atual["personagem_id"]),
             )
         versao = _tocar(connection, sessao_id)
         campanha_id = sessao["campanha_id"]
