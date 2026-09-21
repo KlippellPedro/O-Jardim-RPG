@@ -18,7 +18,9 @@ import {
   aplicarDescansoCompleto,
   aplicarRelaxamento,
   descansoPermitido,
+  FATORES_DESCANSO,
   REGRAS_DESCANSO,
+  resolverQualidadeDescanso,
   type QualidadeDescanso,
 } from '../../../services/descansoService';
 import { useAuthStore } from '../../../store/useAuthStore';
@@ -26,6 +28,7 @@ import {
   adicionarCondicaoOficial,
   condicaoAtiva,
   obterStatusFicha,
+  obterTemporario,
 } from '../../../services/statusService';
 import { dispararDescanso } from '../components/descansoCena';
 
@@ -54,11 +57,24 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
   const derivados = character.derivados || ficha.derivados || {};
   const [qualidade, setQualidade] = useState<QualidadeDescanso>('boa');
   const [tratamento, setTratamento] = useState(false);
+  const [fatores, setFatores] = useState<string[]>([]);
   const [mensagem, setMensagem] = useState('');
+  const resolucao = useMemo(
+    () => resolverQualidadeDescanso(qualidade, fatores, isMestre),
+    [qualidade, fatores, isMestre],
+  );
+  // A regra que vale é a da qualidade final, depois das circunstâncias.
   const regraSelecionada = useMemo(
+    () => REGRAS_DESCANSO.find((item) => item.id === resolucao.qualidade) || REGRAS_DESCANSO[2],
+    [resolucao.qualidade],
+  );
+  const regraBase = useMemo(
     () => REGRAS_DESCANSO.find((item) => item.id === qualidade) || REGRAS_DESCANSO[2],
     [qualidade],
   );
+  const alternarFator = (id: string) => setFatores((atuais) => (
+    atuais.includes(id) ? atuais.filter((item) => item !== id) : [...atuais, id]
+  ));
   const condicoesAtivas = Array.isArray(ficha.condicoesAtivas) ? ficha.condicoesAtivas : [];
   const maximos = {
     vida: Math.max(1, Number(derivados.vida) || 10),
@@ -75,9 +91,12 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
       setMensagem('Personagens mortos não podem receber descanso completo. Somente uma regra explícita de retorno pode alterar esse estado.');
       return;
     }
-    const proximo = aplicarDescansoCompleto(status, maximos, qualidade, tratamento);
+    const extrasPerdidos = (['vidaAtual', 'manaAtual', 'sanidadeAtual'] as const)
+      .map((campo) => ({ campo, valor: obterTemporario(status, campo) }))
+      .filter((item) => item.valor > 0);
+    const proximo = aplicarDescansoCompleto(status, maximos, resolucao.qualidade, tratamento);
     dispararDescanso({
-      qualidade,
+      qualidade: resolucao.qualidade,
       titulo: regraSelecionada.titulo,
       recursos: [
         { rotulo: 'Vida', antes: Number(status.vidaAtual ?? maximos.vida), depois: Number(proximo.vidaAtual), maximo: maximos.vida, cor: 'linear-gradient(90deg,#b91c1c,#f87171)' },
@@ -87,7 +106,16 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
       ],
     });
     onUpdate(['ficha', 'status'], proximo);
-    setMensagem(`Descanso ${regraSelecionada.titulo.toLocaleLowerCase('pt-BR')} aplicado.`);
+    const rotuloExtra: Record<string, string> = { vidaAtual: 'Vida', manaAtual: 'Mana', sanidadeAtual: 'Sanidade' };
+    const partes = [`Descanso ${regraSelecionada.titulo.toLocaleLowerCase('pt-BR')} aplicado.`];
+    if (resolucao.ajustes.length) {
+      partes.push(`Base ${regraBase.titulo.toLocaleLowerCase('pt-BR')}, ${resolucao.passos > 0 ? '+' : ''}${resolucao.passos} pelas circunstâncias.`);
+    }
+    if (extrasPerdidos.length) {
+      partes.push(`Extra temporário acabou: ${extrasPerdidos.map((item) => `${rotuloExtra[item.campo]} +${item.valor}`).join(', ')}.`);
+    }
+    setMensagem(partes.join(' '));
+    setFatores([]);
   };
 
   const relaxar = () => {
@@ -248,10 +276,69 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
             })}
           </div>
 
+          <div className="mt-5 rounded-2xl border border-white/[0.07] bg-black/20 p-4" data-tour="descanso-circunstancias">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <div>
+                <h4 className="text-sm font-bold text-white">O que aconteceu durante o descanso</h4>
+                <p className="mt-1 text-xs text-gray-500">Cada circunstância marcada move a qualidade um degrau. O Mestre pode negar qualquer uma.</p>
+              </div>
+              {fatores.length > 0 && (
+                <button type="button" onClick={() => setFatores([])} className="text-[11px] font-bold uppercase tracking-wider text-gray-500 hover:text-white">
+                  Limpar
+                </button>
+              )}
+            </div>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              {([-1, 1] as const).map((lado) => (
+                <div key={lado}>
+                  <p className={`mb-2 text-[10px] font-bold uppercase tracking-[0.2em] ${lado < 0 ? 'text-red-300/80' : 'text-emerald-300/80'}`}>
+                    {lado < 0 ? 'Deixa pior' : 'Deixa melhor'}
+                  </p>
+                  <div className="flex flex-col gap-1.5">
+                    {FATORES_DESCANSO.filter((fator) => fator.efeito === lado).map((fator) => {
+                      const marcado = fatores.includes(fator.id);
+                      return (
+                        <button
+                          key={fator.id}
+                          type="button"
+                          aria-pressed={marcado}
+                          onClick={() => alternarFator(fator.id)}
+                          className={`flex items-start gap-2.5 rounded-xl border px-3 py-2 text-left transition-colors ${
+                            marcado
+                              ? (lado < 0 ? 'border-red-400/40 bg-red-400/10' : 'border-emerald-400/40 bg-emerald-400/10')
+                              : 'border-white/[0.06] bg-black/20 hover:border-white/15 hover:bg-white/[0.03]'
+                          }`}
+                        >
+                          <span className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border ${
+                            marcado
+                              ? (lado < 0 ? 'border-red-300 bg-red-300 text-black' : 'border-emerald-300 bg-emerald-300 text-black')
+                              : 'border-white/20 text-transparent'
+                          }`}>
+                            <Check size={11} />
+                          </span>
+                          <span>
+                            <strong className={`block text-xs ${marcado ? 'text-white' : 'text-gray-200'}`}>{fator.titulo}</strong>
+                            <span className="mt-0.5 block text-[11px] leading-snug text-gray-500">{fator.descricao}</span>
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="mt-5 grid gap-4 rounded-2xl border border-[#c7a44c]/15 bg-[#c7a44c]/[0.045] p-4 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
                 <strong className="text-sm text-white">Resultado de {regraSelecionada.titulo}</strong>
+                {resolucao.ajustes.length > 0 && (
+                  <span className={`rounded-md px-2 py-1 text-[10px] font-bold ${resolucao.passos < 0 ? 'bg-red-400/10 text-red-200' : resolucao.passos > 0 ? 'bg-emerald-400/10 text-emerald-200' : 'bg-white/5 text-gray-300'}`}>
+                    {regraBase.titulo} {resolucao.passos > 0 ? '+' : ''}{resolucao.passos} degrau(s)
+                    {resolucao.limitada ? ' · limite da qualidade' : ''}
+                  </span>
+                )}
                 <span className="text-xs text-gray-400">Sanidade +{Math.round(regraSelecionada.recuperacaoSanidade * 100)}%</span>
                 <span className="text-xs text-gray-400">Cansaço {formatarReducaoCansaco(regraSelecionada.reduzCansaco)}</span>
               </div>
@@ -264,6 +351,9 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
                 />
                 <span>Recebeu tratamento. Em descanso de qualidade Boa ou superior, reduz Ferido em 1 se o personagem voltar a ter Vida.</span>
               </label>
+              <p className="mt-3 text-[11px] leading-relaxed text-gray-500">
+                O extra temporário de Vida, Mana e Sanidade acaba com o descanso.
+              </p>
             </div>
             <button type="button" onClick={descansar} className="rounded-xl bg-[#c7a44c] px-5 py-3 text-sm font-bold text-black transition-colors hover:bg-[#ddbf67]">
               Aplicar descanso
