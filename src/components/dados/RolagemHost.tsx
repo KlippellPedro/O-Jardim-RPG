@@ -5,8 +5,8 @@ import { iniciarCenaDados, type ControleCena } from './cenaDados';
 import { registrarApresentadorRolagem, type CenaRolagem, type GrauRolagem } from './rolagemDados';
 import './rolagem.css';
 
-const PAUSA_APOS_POUSO_MS = 950;
 const SAIDA_MS = 320;
+const LIMITE_SEM_POUSAR_MS = 9000;
 
 const ROTULO_GRAU: Record<GrauRolagem, string> = {
   'sucesso critico': 'Sucesso crítico',
@@ -22,14 +22,18 @@ interface EmCena {
 }
 
 /** Overlay 3D das rolagens. O servidor já sorteou; aqui o dado só gira e pousa
- * na face certa. Clique ou tecla pula, e a promessa de `animarRolagem` só
- * resolve no fim, para o modal de resultado aparecer depois do pouso. */
+ * na face certa. Depois do pouso o resultado FICA na tela até a pessoa clicar
+ * (ou apertar Esc, Enter ou espaço), porque muitas vezes ela precisa dizer o
+ * número ao Mestre. A promessa de `animarRolagem` resolve no pouso, então o
+ * fluxo de quem rolou segue por baixo enquanto o resultado está à vista. Clicar
+ * durante a rolagem só pula a animação. */
 export const RolagemHost = memo(function RolagemHost() {
   const [emCena, setEmCena] = useState<EmCena | null>(null);
   const [pousou, setPousou] = useState(false);
   const [saindo, setSaindo] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contador = useRef(0);
+  const aoClicarRef = useRef<() => void>(() => undefined);
 
   useEffect(() => registrarApresentadorRolagem((cena, terminar) => {
     contador.current += 1;
@@ -43,7 +47,10 @@ export const RolagemHost = memo(function RolagemHost() {
     const { cena, terminar } = emCena;
     let controle: ControleCena | null = null;
     let cancelado = false;
+    let pousouLocal = false;
+    let saindoLocal = false;
     const timers: number[] = [];
+    let seguranca = 0;
 
     const encerrar = () => {
       if (cancelado) return;
@@ -54,9 +61,14 @@ export const RolagemHost = memo(function RolagemHost() {
       terminar();
     };
     const fecharComSaida = () => {
+      if (saindoLocal) return;
+      saindoLocal = true;
       setSaindo(true);
       timers.push(window.setTimeout(encerrar, SAIDA_MS));
     };
+    // Depois do pouso o clique fecha com fade; antes dele, só pula a cena.
+    const aoClicar = () => (pousouLocal ? fecharComSaida() : encerrar());
+    aoClicarRef.current = aoClicar;
 
     const canvas = canvasRef.current;
     if (!canvas) { encerrar(); return undefined; }
@@ -65,11 +77,15 @@ export const RolagemHost = memo(function RolagemHost() {
       destaque: cena.destaque,
       aoPousar: () => {
         if (cancelado) return;
+        pousouLocal = true;
+        window.clearTimeout(seguranca);
         setPousou(true);
         if (cena.destaque === 'critico') sfx.playCritSound();
         else if (cena.destaque === 'falha') sfx.play('error');
         else sfx.playDiceClack();
-        timers.push(window.setTimeout(fecharComSaida, PAUSA_APOS_POUSO_MS));
+        // O fluxo de quem rolou (modal de resultado, registros) segue por
+        // baixo; o resultado continua na tela até a pessoa fechar.
+        terminar();
       },
     }).then((resultado) => {
       if (cancelado) { resultado?.parar(); return; }
@@ -77,10 +93,14 @@ export const RolagemHost = memo(function RolagemHost() {
       controle = resultado;
     }).catch(encerrar);
 
-    const aoTecla = () => encerrar();
+    const aoTecla = (evento: KeyboardEvent) => {
+      if (evento.key === 'Escape' || evento.key === 'Enter' || evento.key === ' ') aoClicar();
+    };
     document.addEventListener('keydown', aoTecla, true);
-    // Segurança: nunca prende a tela se algo travar.
-    timers.push(window.setTimeout(encerrar, 9000));
+    // Segurança: se o dado nunca pousar, não prende a tela. Depois do pouso
+    // não há prazo: o resultado fica até a pessoa fechar.
+    seguranca = window.setTimeout(encerrar, LIMITE_SEM_POUSAR_MS);
+    timers.push(seguranca);
     return () => {
       document.removeEventListener('keydown', aoTecla, true);
       if (!cancelado) {
@@ -105,7 +125,7 @@ export const RolagemHost = memo(function RolagemHost() {
       aria-label={`${cena.titulo}: ${cena.total ?? ''}`}
       className={`rolagem${saindo ? ' rolagem--saindo' : ''}${cena.destaque === 'falha' && pousou ? ' rolagem--tremor' : ''}`}
       style={estilo}
-      onClick={() => { emCena.terminar(); }}
+      onClick={() => aoClicarRef.current()}
     >
       <div className="rolagem__brilho" aria-hidden="true" />
       <canvas ref={canvasRef} className="rolagem__canvas" aria-hidden="true" />
@@ -122,6 +142,7 @@ export const RolagemHost = memo(function RolagemHost() {
           )}
           {cena.natural === null && cena.formula && <div className="rolagem__conta">{cena.formula}</div>}
           {cena.grau && <div className={`rolagem__grau ${classeGrau}`}>{ROTULO_GRAU[cena.grau]}</div>}
+          <div className="rolagem__dica">Toque na tela para fechar</div>
         </div>
       )}
     </div>,
