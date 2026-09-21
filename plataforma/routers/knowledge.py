@@ -8,6 +8,7 @@ from psycopg.types.json import Jsonb
 
 from core.audit import record_audit
 from core.database import Database
+from core.discord_avisos import avisar_discord
 from core.dependencies import (
     AuthenticatedUser,
     campaign_access,
@@ -162,6 +163,9 @@ def grant_knowledge(
             actor_user_id=user.id,
             details={"informacao_id": str(knowledge_id), "acesso": payload.acesso},
         )
+        # Só quando a liberação é para a mesa toda: revelar algo a uma pessoa é segredo dela.
+        if payload.destinatario_tipo == "papel":
+            avisar_discord(connection, campaign_id, "liberacao", f"🔓 **O Mestre revelou**: {knowledge['titulo']}")
         record_audit(
             connection,
             action="conhecimento.liberado",

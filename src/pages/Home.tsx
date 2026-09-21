@@ -1,9 +1,15 @@
 import InteractiveModuleCard from '../InteractiveModuleCard';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useAuthStore } from '../store/useAuthStore';
+import NovidadesMural from './NovidadesMural';
+import { SeletorDeCampanha } from './Campanha/SeletorDeCampanha';
+import CalendarioSessoes from './Quadro/CalendarioSessoes';
 
+import { SimboloOculto } from '../components/descobertas/SimboloOculto';
 export default function Home() {
   const navigate = useNavigate();
+  const campanha = useAuthStore((estado) => estado.campanhaAtiva);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -58,6 +64,7 @@ export default function Home() {
 
   return (
     <main className="app-page mx-auto flex max-w-[100rem] flex-col items-center justify-center">
+      {campanha?.id ? <div className="mb-4 flex w-full justify-end"><SeletorDeCampanha /></div> : null}
 
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -69,6 +76,8 @@ export default function Home() {
           Plataforma de visualização de
         </span>
         <h1
+          data-descoberta="jardineiro"
+          data-cliques="7"
           className="mb-6 text-[clamp(2.5rem,10vw,6rem)] font-bold leading-[1.05] tracking-wide text-white drop-shadow-[0_0_30px_rgba(196,160,82,0.15)]"
           style={{ fontFamily: 'Cinzel, serif' }}
         >
@@ -104,6 +113,18 @@ export default function Home() {
           </motion.button>
         ))}
       </motion.div>
+
+      <div className="mt-10 grid w-full gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+        <NovidadesMural />
+        {campanha?.id ? (
+          <CalendarioSessoes campanhaId={campanha.id} />
+        ) : (
+          <section className="rounded-2xl border border-white/10 bg-[#0f0e15]/90 p-5 text-sm text-gray-500">
+            Escolha uma campanha para ver o calendário das sessões.
+          </section>
+        )}
+      </div>
+      <div className="mt-8 flex w-full justify-end"><SimboloOculto chave="runa_solitaria" glifo="ᛉ" /></div>
     </main>
   );
 }

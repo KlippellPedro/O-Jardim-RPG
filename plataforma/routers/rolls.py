@@ -9,6 +9,8 @@ from core import live_session
 from core.conquistas import avaliar_sem_quebrar
 from core.dados import rolar_formula, rolar_teste
 from core.database import Database
+from core.discord_avisos import avisar_discord
+from core.notifications import campaign_member_ids, notify
 from core.dependencies import (
     AuthenticatedUser,
     campaign_access,
@@ -133,6 +135,19 @@ def rolar(
             detalhes={**dados, "origem": payload.origem},
         )
         conquistas_novas = avaliar_sem_quebrar(connection, personagem_id, user.id)
+        # 20 natural durante a sessão ao vivo: a mesa toda fica sabendo (site e, se o Mestre quiser, Discord).
+        if tipo == "rolagem" and dados.get("critico_natural") and sessao and sessao["status"] == "aberta":
+            notify(
+                connection,
+                user_ids=campaign_member_ids(connection, payload.campanha_id),
+                category="sessao",
+                title=f"{autor_nome} tirou 20 natural!",
+                message=payload.titulo[:120],
+                campaign_id=payload.campanha_id,
+                actor_user_id=user.id,
+                details={"critico": True},
+            )
+            avisar_discord(connection, payload.campanha_id, "critico", f"🎯 **{autor_nome}** tirou **20 natural** em {payload.titulo[:80]}!")
     live_session.publicar(payload.campanha_id, "registro", 0)
     return {"registro": registro, "conquistas_novas": conquistas_novas}
 

@@ -1,0 +1,700 @@
+{
+  "geradoEm": "2026-09-21T23:01:56.346Z",
+  "itens": [
+    {
+      "id": "manual-inicio",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Início",
+      "titulo": "Mural de novidades, calendário de sessões e descobertas escondidas",
+      "detalhes": [
+        "A Home mostra o que mudou no sistema e o calendário do grupo",
+        "O Mestre define a sessão fixa da semana uma vez só e cancela ou marca extras quando precisar",
+        "Coisas escondidas pelo site: quem achou cada uma aparece no Quadro, mas sem dizer onde estão"
+      ]
+    },
+    {
+      "id": "manual-mesa-tatica",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mesa tática: mapa com névoa de guerra, trilha, votação, relógios e bilhetes secretos",
+      "detalhes": [
+        "Fichas arrastáveis, régua de distância e alcance",
+        "O Mestre escolhe o clima e a trilha toca para todos",
+        "Relógios de progresso e bilhetes que só um jogador vê"
+      ]
+    },
+    {
+      "id": "manual-replay",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Replay da sessão: reveja a noite em ordem, com pausa e velocidade",
+      "detalhes": []
+    },
+    {
+      "id": "manual-quadro",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Quadro",
+      "titulo": "Quadro da campanha: mural do grupo, MVP da noite e rank da mesa",
+      "detalhes": [
+        "Frases e fotos do grupo, com curtidas e o selo de melhor frase da noite",
+        "Títulos de brincadeira como Rei do Vinte e Azarão Oficial"
+      ]
+    },
+    {
+      "id": "manual-modo-mesa",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Modo mesa para o celular: vida, mana, dado e condições a um toque",
+      "detalhes": [
+        "Botão de rolar sempre à mão",
+        "Mantém a tela do celular ligada durante o jogo"
+      ]
+    },
+    {
+      "id": "manual-exportar",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Exportar a ficha em PDF e em cartão de personagem",
+      "detalhes": []
+    },
+    {
+      "id": "manual-simulador",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Simulador de nível e build na aba Progressão",
+      "detalhes": [
+        "Veja vida, mana e poderes de um nível futuro antes de decidir",
+        "Nada é salvo na ficha"
+      ]
+    },
+    {
+      "id": "manual-retrato",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Retrato do personagem com moldura que muda de patamar por nível",
+      "detalhes": [
+        "Sem foto, o retrato é composto com as cores da classe e da raça"
+      ]
+    },
+    {
+      "id": "manual-vinculos",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Vínculos do personagem, com teia visual e retrato de cada pessoa",
+      "detalhes": [
+        "Afinidade de -5 a +5 com histórico",
+        "Filtros e lista compacta para quem tem muitos vínculos"
+      ]
+    },
+    {
+      "id": "manual-diario",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Diário do personagem que se escreve sozinho",
+      "detalhes": [
+        "Sessões, críticos, primeiras vezes, selos e grandes gastos entram na hora",
+        "Dá para fixar momentos e comentar"
+      ]
+    },
+    {
+      "id": "cd25587",
+      "data": "2026-09-21",
+      "tipo": "correcao",
+      "area": "Plataforma",
+      "titulo": "Serve /audio para a voz do Grande Sabio funcionar no site publicado",
+      "detalhes": []
+    },
+    {
+      "id": "e0471fe",
+      "data": "2026-09-21",
+      "tipo": "melhoria",
+      "area": "Áudio",
+      "titulo": "Musicas das entidades a 128 kbps para o pacote da Discloud caber em 100 MB",
+      "detalhes": []
+    },
+    {
+      "id": "63c0a52",
+      "data": "2026-09-21",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Conquista por personagem, contexto WebGL liberado, Analise sem depender da aba Ficha",
+      "detalhes": []
+    },
+    {
+      "id": "f3508cf",
+      "data": "2026-09-21",
+      "tipo": "correcao",
+      "area": "Plataforma",
+      "titulo": "Conquista so e comemorada pelo dono, mana extra do Mestre chega na ficha e indice de registros",
+      "detalhes": []
+    },
+    {
+      "id": "8ace945",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Dados",
+      "titulo": "O resultado do dado fica na tela ate a pessoa clicar",
+      "detalhes": []
+    },
+    {
+      "id": "3903406",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Circunstancias do descanso e fim do extra temporario",
+      "detalhes": []
+    },
+    {
+      "id": "3ec9c46",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Áudio",
+      "titulo": "Som da classe, um toque por perfil em momentos marcantes",
+      "detalhes": []
+    },
+    {
+      "id": "6d78870",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Analise do Grande Sabio fala o que merece atencao na ficha",
+      "detalhes": []
+    },
+    {
+      "id": "9b61290",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Progressao da classe vira constelacao de 20 estrelas",
+      "detalhes": []
+    },
+    {
+      "id": "a788145",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Boneco de equipamento mostra o que esta vestido e onde",
+      "detalhes": []
+    },
+    {
+      "id": "6e0afb8",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Cartaz de procurado compartilhavel, com moldura por nivel",
+      "detalhes": []
+    },
+    {
+      "id": "bb2d9fb",
+      "data": "2026-09-21",
+      "tipo": "correcao",
+      "area": "Loja",
+      "titulo": "Mesma modificacao em dois alvos no mesmo lote volta a ser aceita",
+      "detalhes": []
+    },
+    {
+      "id": "15cfa1c",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Aviso de vez com gongo e borda das condicoes",
+      "detalhes": []
+    },
+    {
+      "id": "6b3235c",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Evento de turno avisa qual personagem esta na vez",
+      "detalhes": []
+    },
+    {
+      "id": "04e64cd",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Carta que vira revela o item comprado ou recebido",
+      "detalhes": []
+    },
+    {
+      "id": "b1dc455",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Círculo mágico ao conjurar e painel de magia aprendida",
+      "detalhes": []
+    },
+    {
+      "id": "a4ddbb8",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Resumo da noite em cartões, estilo Wrapped",
+      "detalhes": []
+    },
+    {
+      "id": "a790657",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Conquistas com selo, aviso do Grande Sábio e galeria",
+      "detalhes": []
+    },
+    {
+      "id": "c1efc42",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Plataforma",
+      "titulo": "Conquistas dos personagens e resumo da sessão",
+      "detalhes": []
+    },
+    {
+      "id": "d7bd37e",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Cena de descanso com noite, recuperação das barras e amanhecer",
+      "detalhes": []
+    },
+    {
+      "id": "a16d493",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Chuva de moedas e saldo que rola ao ganhar ou gastar",
+      "detalhes": []
+    },
+    {
+      "id": "2174288",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Estrelas de Fama acendem em sequência e revelam o título",
+      "detalhes": []
+    },
+    {
+      "id": "d165b21",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Mestre vê o extra temporário de Vida e Mana no HUD",
+      "detalhes": []
+    },
+    {
+      "id": "7a75ae4",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Participantes carregam o extra temporário de Vida e Mana",
+      "detalhes": []
+    },
+    {
+      "id": "53a7f33",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Extra temporário acima do máximo em Vida, Mana e Sanidade",
+      "detalhes": []
+    },
+    {
+      "id": "db0f3dd",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Barras de Vida, Mana e Sanidade reagem a dano e cura",
+      "detalhes": []
+    },
+    {
+      "id": "6781055",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Dados",
+      "titulo": "Dado 3D rola na tela e pousa na face sorteada pelo servidor",
+      "detalhes": []
+    },
+    {
+      "id": "a04c171",
+      "data": "2026-09-20",
+      "tipo": "correcao",
+      "area": "Criador",
+      "titulo": "Visibilidade acha o responsável de um Local do Jardim inteiro",
+      "detalhes": []
+    },
+    {
+      "id": "f3c3a91",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Mundo",
+      "titulo": "Botão Editar abre o registro direto no editor de Conteúdo",
+      "detalhes": []
+    },
+    {
+      "id": "f46cfd7",
+      "data": "2026-09-20",
+      "tipo": "correcao",
+      "area": "Plataforma",
+      "titulo": "Recalibra o XP por VD para subir de nível em 9 a 11 lutas",
+      "detalhes": []
+    },
+    {
+      "id": "1cb32fc",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Livro",
+      "titulo": "Aviso de último recurso nas Criaturas do Vazio",
+      "detalhes": []
+    },
+    {
+      "id": "57b29a7",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Catálogo passa de 832 para 835 entradas",
+      "detalhes": []
+    },
+    {
+      "id": "58f8fe0",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Livro",
+      "titulo": "Mutilação, XP por nível e bestiário em 825 criaturas",
+      "detalhes": []
+    },
+    {
+      "id": "63a7925",
+      "data": "2026-09-20",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Painel de nivel nao repete o que a etiqueta ja diz",
+      "detalhes": []
+    },
+    {
+      "id": "559c714",
+      "data": "2026-09-20",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Troca para a voz Francisca, que nao escapa para outro idioma",
+      "detalhes": []
+    },
+    {
+      "id": "e928416",
+      "data": "2026-09-20",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Voz do Grande Sabio fala frases inteiras em portugues",
+      "detalhes": []
+    },
+    {
+      "id": "8ffd990",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Voz humana gravada e painel de nivel no estilo Grande Sabio",
+      "detalhes": []
+    },
+    {
+      "id": "3433c4b",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Voz do Grande Sabio le a subida de nivel",
+      "detalhes": []
+    },
+    {
+      "id": "c255c65",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Aura propria para racas e classes especiais",
+      "detalhes": []
+    },
+    {
+      "id": "9f734ac",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Painel de subida de nivel e feedback na barra de XP",
+      "detalhes": []
+    },
+    {
+      "id": "4f417a5",
+      "data": "2026-09-20",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Cena animada ao escolher raca e classe",
+      "detalhes": []
+    },
+    {
+      "id": "cfd7d7d",
+      "data": "2026-09-20",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Troca 'concessoes' por 'ensinar' no botao do catalogo de magias",
+      "detalhes": []
+    },
+    {
+      "id": "09473c3",
+      "data": "2026-09-20",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Cartao de procurado nao estica quando ha poucos personagens",
+      "detalhes": []
+    },
+    {
+      "id": "a420173",
+      "data": "2026-09-16",
+      "tipo": "novo",
+      "area": "Livro",
+      "titulo": "Guia do Mestre em estantes e ferramentas de mesa",
+      "detalhes": []
+    },
+    {
+      "id": "47938ac",
+      "data": "2026-09-16",
+      "tipo": "novo",
+      "area": "Livro",
+      "titulo": "Retorna o Elementarista e troca os fundos de classes e racas",
+      "detalhes": []
+    },
+    {
+      "id": "d51a09b",
+      "data": "2026-09-16",
+      "tipo": "novo",
+      "area": "Discord",
+      "titulo": "Reputacao por atividade no Banqueiro e conquistas no Jornalista",
+      "detalhes": []
+    },
+    {
+      "id": "e4e899e",
+      "data": "2026-09-07",
+      "tipo": "novo",
+      "area": "Jogo 2D",
+      "titulo": "Adiciona prototipo Godot e documentacao visual do jogo",
+      "detalhes": []
+    },
+    {
+      "id": "18eecab",
+      "data": "2026-09-07",
+      "tipo": "correcao",
+      "area": "Livro",
+      "titulo": "Aplica visibilidade no servidor e remove lore reservada dos assets",
+      "detalhes": []
+    },
+    {
+      "id": "c412bcf",
+      "data": "2026-09-07",
+      "tipo": "correcao",
+      "area": "Mundo",
+      "titulo": "Renomeia soberano das Montanhas para Bergelmir Laufey",
+      "detalhes": []
+    },
+    {
+      "id": "75cffd2",
+      "data": "2026-09-07",
+      "tipo": "correcao",
+      "area": "Plataforma",
+      "titulo": "Isola recursos por campanha e elimina promocao por email",
+      "detalhes": []
+    },
+    {
+      "id": "bfe37b1",
+      "data": "2026-09-01",
+      "tipo": "novo",
+      "area": "Site",
+      "titulo": "Tour guiado, codex do Mundo, Painel do Criador e relíquias de criação",
+      "detalhes": []
+    },
+    {
+      "id": "beca78b",
+      "data": "2026-09-01",
+      "tipo": "novo",
+      "area": "Dados",
+      "titulo": "Editorial global do Mundo, raridade de equipamentos e ajustes de lore",
+      "detalhes": []
+    },
+    {
+      "id": "0990a69",
+      "data": "2026-09-01",
+      "tipo": "correcao",
+      "area": "Discord",
+      "titulo": "Ajustes no Banqueiro e no Jornalista",
+      "detalhes": []
+    },
+    {
+      "id": "b778e6b",
+      "data": "2026-09-01",
+      "tipo": "novo",
+      "area": "Plataforma",
+      "titulo": "Regras de equipamento, raridade de loja e editorial global do Mundo",
+      "detalhes": []
+    },
+    {
+      "id": "f77bc34",
+      "data": "2026-09-01",
+      "tipo": "novo",
+      "area": "Site",
+      "titulo": "Redesign de login/cadastro, home, ficha e editor de foto",
+      "detalhes": []
+    },
+    {
+      "id": "6b4c67e",
+      "data": "2026-08-27",
+      "tipo": "novo",
+      "area": "Geral",
+      "titulo": "Cassino do Gambler no site e Salao do Banco Lunar completo nos bots",
+      "detalhes": [
+        "Nova pagina de cassino ligada a entidade, com selecao de personagem,",
+        "Sete jogos: Dados, Vinte-e-Um, Roda das Dez Forcas, Sucessao de",
+        "25 conquistas, com limite de aposta que cresce conforme desbloqueia",
+        "Musica tema e efeitos sonoros proprios por jogo (dados rolando, roda",
+        "Corrige bug do Vinte-e-Um em que o Banqueiro nao comprava carta ate",
+        "Corrige validacao de UUID quebrada nas rotas do cassino (bloqueava"
+      ]
+    },
+    {
+      "id": "91199d0",
+      "data": "2026-08-27",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Botao de excluir habilidade automatica e sino de pendencias de progressao",
+      "detalhes": []
+    },
+    {
+      "id": "f45c81d",
+      "data": "2026-08-26",
+      "tipo": "novo",
+      "area": "Geral",
+      "titulo": "Mais formas de Zanpakuto no Cacador das Almas, criacao rapida de personagem e visao em lista do Mundo",
+      "detalhes": [
+        "Cacador das Almas ganha novas formas de Zanpakuto (Shikai/Bankai).",
+        "Assistente de criacao de personagem ganha um modo de criacao rapida e",
+        "Pagina de Mundo ganha uma visao em lista simples das Arvores"
+      ]
+    },
+    {
+      "id": "f49a67a",
+      "data": "2026-08-26",
+      "tipo": "novo",
+      "area": "Geral",
+      "titulo": "Reorganiza Painel do Mestre (Estatisticas, pastas de personagem) e corrige Linha do Tempo e Entidades",
+      "detalhes": [
+        "Os 3 cards do topo (personagens, jogadores, moedas) saem do cabecalho e",
+        "Aba Personagens ganha pastas pra organizar personagens, reordenacao",
+        "Marco \"Uma mulher desconhecida\" removido (era um rascunho que vazou pro",
+        "Era de \"O Silencio das Deidades\" corrigida de \"Interceptacao\" pra",
+        "Corrigido bug de content-visibility que cortava a metade dos pontinhos",
+        "CANONICAL_TREE_IDS: Abismo/Erebus nao tem corpo orbital na cena 3D mas"
+      ]
+    },
+    {
+      "id": "a899478",
+      "data": "2026-08-26",
+      "tipo": "novo",
+      "area": "Geral",
+      "titulo": "Detetive, Devorador, raca Anomalia, Entidades e revisao geral do Livro de Regras",
+      "detalhes": [
+        "Novas classes Detetive e Devorador (Devorador absorve poder de quem",
+        "Raca Errante renomeada para Anomalia, com registry e tema atualizados.",
+        "Paginas de Entidades (catalogo, sobre, conto individual), musica tema",
+        "Atualizacoes de catalogo, mercenarios/loja na plataforma (schemas,",
+        "Combate e Cenas: Iniciativa e Defesas passivas movidas de Condicoes",
+        "Equipamentos e Criacao: referencia cruzada corrigida entre Criacao e"
+      ]
+    },
+    {
+      "id": "1049dac",
+      "data": "2026-08-26",
+      "tipo": "correcao",
+      "area": "Geral",
+      "titulo": "Remove cartoes de destaque do topo das paginas de regras",
+      "detalhes": []
+    },
+    {
+      "id": "3806b6d",
+      "data": "2026-08-25",
+      "tipo": "novo",
+      "area": "Geral",
+      "titulo": "Editor de conteudo por campanha, materiais/crafting, permissoes de Bens e revisao de bugs",
+      "detalhes": [
+        "fix(regras): guard de efeitos_por_fluxo agora bloqueia magia sem Fluxo",
+        "fix(ficha): reordenar Aliados com busca filtrada nao apaga mais os aliados",
+        "perf(plataforma): seed da biblioteca central e notificacoes em lote via",
+        "refactor: concessao de item na loja reusa core.notifications.notify em vez"
+      ]
+    },
+    {
+      "id": "2b88cb0",
+      "data": "2026-08-18",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Reescreve escala de precos da Loja e roda ofertas em destaque no servidor",
+      "detalhes": []
+    },
+    {
+      "id": "e711336",
+      "data": "2026-08-18",
+      "tipo": "novo",
+      "area": "Site",
+      "titulo": "Sessao ao vivo, Mundo e Loja com itens do mercado negro",
+      "detalhes": []
+    },
+    {
+      "id": "22090d7",
+      "data": "2026-08-18",
+      "tipo": "novo",
+      "area": "Discord",
+      "titulo": "Mercado negro, painel do mestre e ajustes de economia",
+      "detalhes": []
+    },
+    {
+      "id": "debd08b",
+      "data": "2026-08-18",
+      "tipo": "novo",
+      "area": "Plataforma",
+      "titulo": "Consumo do Fruto do Eden, sessao e resumo de personagem",
+      "detalhes": []
+    },
+    {
+      "id": "892110d",
+      "data": "2026-08-18",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Fruto do Eden, personalizacao automatica e efeitos de item",
+      "detalhes": []
+    },
+    {
+      "id": "8e872a3",
+      "data": "2026-08-18",
+      "tipo": "novo",
+      "area": "Livro",
+      "titulo": "Amplia magias, aflicoes, bases e catalogos de regra",
+      "detalhes": []
+    },
+    {
+      "id": "a14e8d2",
+      "data": "2026-08-18",
+      "tipo": "novo",
+      "area": "Livro",
+      "titulo": "Escadas de estagio, escolhas raciais e Clas do Vampiro",
+      "detalhes": []
+    },
+    {
+      "id": "077fa43",
+      "data": "2026-08-18",
+      "tipo": "correcao",
+      "area": "Livro",
+      "titulo": "Remove lista de Legados duplicada no capitulo",
+      "detalhes": []
+    }
+  ]
+}
