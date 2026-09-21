@@ -46,7 +46,7 @@ export const registrosApi = {
     // segura a resposta até o pouso, para o modal de resultado vir depois.
     await animarRolagem(resposta.registro).catch(() => undefined);
     // Conquista nova vem depois do dado pousar, para o aviso não roubar a cena dele.
-    dispararConquistas(resposta.conquistas_novas);
+    dispararConquistas(resposta.conquistas_novas, payload.personagemId);
     return resposta;
   },
 
@@ -67,7 +67,7 @@ export const registrosApi = {
         detalhes: payload.detalhes ?? {},
       },
     });
-    dispararConquistas(resposta.conquistas_novas);
+    dispararConquistas(resposta.conquistas_novas, payload.personagemId);
     return resposta;
   },
 

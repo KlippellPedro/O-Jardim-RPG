@@ -426,6 +426,8 @@ export async function iniciarCenaDados(
       materialFaiscas?.map?.dispose();
       materialFaiscas?.dispose();
       renderizador.dispose();
+      // Sem isso os contextos WebGL se acumulam a cada rolagem até o navegador derrubar o mais antigo.
+      renderizador.forceContextLoss();
     },
   };
 }

@@ -15,6 +15,8 @@ interface AnaliseSabioModalProps {
   onClose: () => void;
   pendencias: Array<{ id: string; quantidade: number }>;
   condicoesAtivas: number;
+  /** Porcentagens aproximadas, usadas quando a aba Ficha ainda não publicou as reais. */
+  aproximado: { vida: number; mana: number; sanidade: number };
   onAbrirAba: (aba: string) => void;
 }
 
@@ -26,8 +28,10 @@ const COR: Record<GravidadeAnalise, string> = {
 
 /** O Grande Sábio olha a ficha e fala o que merece atenção, uma linha por vez.
  * A voz usa frases fixas gravadas antes; os números só aparecem escritos. */
-export function AnaliseSabioModal({ isOpen, onClose, pendencias, condicoesAtivas, onAbrirAba }: AnaliseSabioModalProps) {
-  const vital = useEstadoVital();
+export function AnaliseSabioModal({ isOpen, onClose, pendencias, condicoesAtivas, aproximado, onAbrirAba }: AnaliseSabioModalProps) {
+  const publicado = useEstadoVital();
+  // Só a aba Ficha calcula os máximos com todos os bônus; sem ela, vale a conta simples.
+  const vital = publicado.lidos ? publicado : aproximado;
   const [vozLigada, setVozLigada] = useState(vozGrandeSabioLigada);
   const [rodada, setRodada] = useState(0);
   // Quantas observações já foram anunciadas (-1 = ainda na abertura)

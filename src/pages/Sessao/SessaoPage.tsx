@@ -107,14 +107,19 @@ export const SessaoPage: React.FC = () => {
 
   // Quando o turno passa a ser de um personagem meu, o mesmo "É a sua vez!" da ficha.
   const turnoAnteriorRef = useRef<string | null>(null);
+  // null = ainda não sei (primeira leitura da página); só o combate que COMEÇA
+  // com a página aberta anuncia o primeiro turno. Entrar no meio dele não.
+  const combateAnteriorRef = useRef<boolean | null>(null);
   useEffect(() => {
+    const combateComecouAgora = combateAnteriorRef.current === false && Boolean(emCombate);
+    combateAnteriorRef.current = Boolean(emCombate);
     if (!emCombate || !turnoAtualId) {
       turnoAnteriorRef.current = null;
       return;
     }
     const anterior = turnoAnteriorRef.current;
     turnoAnteriorRef.current = turnoAtualId;
-    if (anterior === null || anterior === turnoAtualId) return;
+    if (anterior === turnoAtualId || (anterior === null && !combateComecouAgora)) return;
     const daVez = iniciativa.find((entidade) => entidade.id === turnoAtualId);
     if (daVez?.eMeu && daVez.tipo === 'jogador') dispararSuaVez({ nome: daVez.nome, rodada });
   }, [emCombate, turnoAtualId, iniciativa, rodada]);

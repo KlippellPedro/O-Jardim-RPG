@@ -19,7 +19,7 @@ export const ConquistasGaleria = ({ personagemId }: { personagemId: string }) =>
       .then((resposta) => {
         if (!ativo) return;
         setDados(resposta);
-        dispararConquistas(resposta.catalogo.filter((item) => resposta.novas.includes(item.chave)));
+        dispararConquistas(resposta.catalogo.filter((item) => resposta.novas.includes(item.chave)), personagemId);
       })
       .catch(() => { if (ativo) setErro('Não foi possível carregar as conquistas agora.'); });
     return () => { ativo = false; };

@@ -8,6 +8,8 @@ export interface EstadoVital {
   sanidade: number;
   /** Não move a vinheta; só a Análise do Grande Sábio lê. */
   mana: number;
+  /** As barras já publicaram algo nesta ficha (a aba Ficha foi aberta). */
+  lidos: boolean;
 }
 
 export type TipoPancada = 'dano' | 'cura' | 'sanidade';
@@ -19,7 +21,7 @@ export interface Pancada {
   forca: number;
 }
 
-const PADRAO: EstadoVital = { vida: 100, sanidade: 100, mana: 100 };
+const PADRAO: EstadoVital = { vida: 100, sanidade: 100, mana: 100, lidos: false };
 
 let estado: EstadoVital = PADRAO;
 const ouvintesEstado = new Set<() => void>();
@@ -27,7 +29,7 @@ const ouvintesPancada = new Set<(pancada: Pancada) => void>();
 let contador = 0;
 
 export const publicarEstadoVital = (parcial: Partial<EstadoVital>) => {
-  const proximo = { ...estado, ...parcial };
+  const proximo = { ...estado, ...parcial, lidos: true };
   if (proximo.vida === estado.vida && proximo.sanidade === estado.sanidade && proximo.mana === estado.mana) return;
   estado = proximo;
   ouvintesEstado.forEach((ouvinte) => ouvinte());

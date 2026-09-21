@@ -35,6 +35,7 @@ import { carregarCatalogo } from '../../services/catalogoService';
 import { ICatalogo } from '../../types/catalogo';
 import { nomeExibicaoRaca } from '../../services/racaService';
 import { pendenciasProgressao } from '../../services/progressaoFichaService';
+import { obterStatusFicha } from '../../services/statusService';
 import { ModalInfoFicha } from './components/ModalInfoFicha';
 import { FichaModal } from './components/FichaModal';
 import { AbaFicha } from './abas/AbaFicha';
@@ -158,7 +159,7 @@ export const PersonagemSheet: React.FC = () => {
   useEffect(() => {
     resetarEstadoVital();
     return resetarEstadoVital;
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     carregarCatalogo().then(setCatalogo);
@@ -240,7 +241,7 @@ export const PersonagemSheet: React.FC = () => {
     let ativo = true;
     conquistasApi.listar(idParaConquistas)
       .then((resposta) => {
-        if (ativo) dispararConquistas(resposta.catalogo.filter((item) => resposta.novas.includes(item.chave)));
+        if (ativo) dispararConquistas(resposta.catalogo.filter((item) => resposta.novas.includes(item.chave)), idParaConquistas);
       })
       .catch(() => undefined);
     return () => { ativo = false; };
@@ -876,7 +877,7 @@ export const PersonagemSheet: React.FC = () => {
         <fieldset disabled={somenteLeitura} className="m-0 min-w-0 border-0 p-0">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
-              key={activeTab}
+              key={`${id}:${activeTab}`}
               id={`ficha-tabpanel-${activeTab}`}
               role="tabpanel"
               data-tour="tab-content"
@@ -897,6 +898,20 @@ export const PersonagemSheet: React.FC = () => {
           onClose={() => setShowAnalise(false)}
           pendencias={pendencias}
           condicoesAtivas={Array.isArray(character.ficha?.condicoesAtivas) ? character.ficha.condicoesAtivas.length : 0}
+          aproximado={(() => {
+            const status = obterStatusFicha(character.ficha);
+            const derivados = character.ficha?.derivados ?? character.derivados ?? {};
+            const pct = (atual: unknown, maximo: unknown) => {
+              const max = Number(maximo);
+              const valor = Number(atual);
+              return max > 0 && Number.isFinite(valor) ? Math.max(0, Math.min(100, (valor / max) * 100)) : 100;
+            };
+            return {
+              vida: pct(status.vidaAtual ?? derivados.vida, derivados.vida),
+              mana: pct(status.manaAtual ?? derivados.mana, derivados.mana),
+              sanidade: pct(status.sanidadeAtual ?? (status as any).sanidadeMaxima ?? 100, (status as any).sanidadeMaxima ?? 100),
+            };
+          })()}
           onAbrirAba={(aba) => handleTabChange(aba as FichaTourTabId)}
         />
       )}

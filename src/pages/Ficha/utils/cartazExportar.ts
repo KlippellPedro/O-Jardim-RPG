@@ -55,8 +55,12 @@ const espacado = (ctx: CanvasRenderingContext2D, valor: string) => {
 const centro = (ctx: CanvasRenderingContext2D, texto: string, y: number) => ctx.fillText(texto, LARGURA / 2, y);
 
 export async function gerarImagemCartaz(dados: DadosCartaz): Promise<Blob> {
-  if (typeof document !== 'undefined' && document.fonts?.ready) {
-    try { await document.fonts.ready; } catch { /* segue com a fonte de reserva */ }
+  if (typeof document !== 'undefined' && document.fonts?.load) {
+    // Pede os pesos usados no desenho: sem isso o canvas pode sair com a fonte de reserva.
+    try {
+      await Promise.all(['900 84px Cinzel', '700 40px Cinzel'].map((fonte) => document.fonts.load(fonte)));
+      await document.fonts.ready;
+    } catch { /* segue com a fonte de reserva */ }
   }
   const canvas = document.createElement('canvas');
   canvas.width = LARGURA;
@@ -177,7 +181,9 @@ export async function gerarImagemCartaz(dados: DadosCartaz): Promise<Blob> {
   ctx.strokeStyle = 'rgba(90, 74, 47, 0.4)';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.roundRect(LARGURA / 2 - larguraAmeaca / 2, pilulaY - 32, larguraAmeaca, 48, 24);
+  // roundRect não existe em navegadores mais antigos: a pílula vira retângulo em vez de travar a imagem.
+  if (typeof ctx.roundRect === 'function') ctx.roundRect(LARGURA / 2 - larguraAmeaca / 2, pilulaY - 32, larguraAmeaca, 48, 24);
+  else ctx.rect(LARGURA / 2 - larguraAmeaca / 2, pilulaY - 32, larguraAmeaca, 48);
   ctx.fill();
   ctx.stroke();
   ctx.fillStyle = '#4a3b22';
@@ -221,7 +227,7 @@ export async function gerarImagemCartaz(dados: DadosCartaz): Promise<Blob> {
   const linhas: Array<[string, string]> = [
     ['VIDA', String(dados.vida)],
     ['MANA', String(dados.mana)],
-    ['SANIDADE', dados.sanidade === null ? '—' : String(dados.sanidade)],
+    ['SANIDADE', dados.sanidade === null ? '-' : String(dados.sanidade)],
     ['FAMA', `${dados.fama}/5`],
   ];
   linhas.forEach(([rotulo, valor], indice) => {

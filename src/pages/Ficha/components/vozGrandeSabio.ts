@@ -73,9 +73,10 @@ let manifestPromessa: Promise<Record<string, EntradaManifest>> | null = null;
 const carregarManifest = () => {
   if (!manifestPromessa) {
     manifestPromessa = fetch(`${PASTA}manifest.json`)
-      .then((resposta) => (resposta.ok ? resposta.json() : { clips: {} }))
+      .then((resposta) => (resposta.ok ? resposta.json() : Promise.reject(new Error('sem manifest'))))
       .then((dados) => (dados?.clips || {}) as Record<string, EntradaManifest>)
-      .catch(() => ({}));
+      // Falha de rede não pode valer a sessão inteira: a próxima fala tenta de novo.
+      .catch(() => { manifestPromessa = null; return {} as Record<string, EntradaManifest>; });
   }
   return manifestPromessa;
 };
@@ -108,7 +109,7 @@ const carregarPeca = (audio: AudioContext, entrada: EntradaManifest): Promise<Pe
       .then((resposta) => (resposta.ok ? resposta.arrayBuffer() : Promise.reject(new Error('sem áudio'))))
       .then((bytes) => audio.decodeAudioData(bytes))
       .then((buffer) => ({ buffer, ...medirFala(buffer, entrada.i) }))
-      .catch(() => null);
+      .catch(() => { cachePecas.delete(arquivo); return null; });
     cachePecas.set(arquivo, promessa);
   }
   return promessa;
