@@ -10,6 +10,7 @@ const GlassMenu = lazy(() => import('./components/GlassMenu'));
 const SuaVezHost = lazy(() => import('./components/suaVez/SuaVezHost').then((modulo) => ({ default: modulo.SuaVezHost })));
 const LootHost = lazy(() => import('./components/loot/LootHost').then((modulo) => ({ default: modulo.LootHost })));
 const ConquistaHost = lazy(() => import('./components/conquistas/ConquistaHost').then((modulo) => ({ default: modulo.ConquistaHost })));
+const DescobertasHost = lazy(() => import('./components/descobertas/DescobertasHost').then((modulo) => ({ default: modulo.DescobertasHost })));
 const RolagemHost = lazy(() => import('./components/dados/RolagemHost').then((modulo) => ({ default: modulo.RolagemHost })));
 const Home = lazy(() => import('./pages/Home'));
 const FichaList = lazy(() => import('./pages/Ficha/FichaList'));
@@ -22,6 +23,10 @@ const PersonagemSheet = lazy(() => import('./pages/Ficha/PersonagemSheet').then(
 const SettingsMenu = lazy(() => import('./components/Settings/SettingsMenu').then((module) => ({ default: module.SettingsMenu })));
 const RegrasPage = lazy(() => import('./pages/Regras/RegrasPage').then((module) => ({ default: module.RegrasPage })));
 const RegraDetalhesPage = lazy(() => import('./pages/Regras/RegraDetalhesPage').then((module) => ({ default: module.RegraDetalhesPage })));
+const QuadroPage = lazy(() => import('./pages/Quadro/QuadroPage').then((module) => ({ default: module.QuadroPage })));
+const CalendarioMundoPage = lazy(() => import('./pages/Mundo/CalendarioMundoPage'));
+const CampanhaPage = lazy(() => import('./pages/Campanha/CampanhaPage'));
+const FrotaPage = lazy(() => import('./pages/Frota/FrotaPage'));
 const SessaoPage = lazy(() => import('./pages/Sessao/SessaoPage').then((module) => ({ default: module.SessaoPage })));
 const MundoPage = lazy(() => import('./pages/Mundo/MundoPage').then((module) => ({ default: module.MundoPage })));
 const LojaPage = lazy(() => import('./pages/Loja/LojaPage').then((module) => ({ default: module.LojaPage })));
@@ -189,6 +194,12 @@ function App() {
 
           {usuario && (
             <Suspense fallback={null}>
+              <DescobertasHost />
+            </Suspense>
+          )}
+
+          {usuario && (
+            <Suspense fallback={null}>
               <LootHost />
             </Suspense>
           )}
@@ -331,6 +342,15 @@ function App() {
               />
 
               <Route
+                path="/mundo/calendario"
+                element={
+                  <ProtectedRoute requireCampaign>
+                    <CalendarioMundoPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
                 path="/loja"
                 element={
                   <ProtectedRoute requireCampaign>
@@ -407,6 +427,33 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <SessaoPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/campanha"
+                element={
+                  <ProtectedRoute requireCampaign>
+                    <CampanhaPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/frota"
+                element={
+                  <ProtectedRoute requireCampaign>
+                    <FrotaPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/quadro"
+                element={
+                  <ProtectedRoute requireCampaign>
+                    <QuadroPage />
                   </ProtectedRoute>
                 }
               />

@@ -30,6 +30,9 @@ export interface ICampanha {
   descricao?: string;
   papel: string;
   dono_id?: string;
+  personagem_ativo_id?: string | null;
+  /** Capa, cor e frase da campanha (a imagem em si tem rota própria). */
+  identidade?: Partial<import('../pages/Campanha/campanha').IIdentidade>;
   configuracoes?: {
     lore_revelado?: string[];
     lore_oculto?: string[];

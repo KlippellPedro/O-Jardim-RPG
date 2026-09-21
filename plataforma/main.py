@@ -17,18 +17,25 @@ from core.automatic_backup import AutomaticBackup
 from core.character_summary import carregar_catalogos
 from core.config import load_settings
 from core.content_seed import seed_world_library, sync_shop_catalog
+from core import lembretes
 from core.database import Database
 from routers import (
     admin,
     auth,
+    calendario,
+    campanha_painel,
     campaigns,
     casino,
     characters,
     content,
     context,
+    descobertas,
     discord_links,
+    engajamento,
     internal,
     knowledge,
+    registros_universais,
+    mesa,
     notifications,
     rolls,
     sessions,
@@ -115,10 +122,14 @@ async def lifespan(app: FastAPI):
             name="jardim-backup-automatico",
         )
     app.state.automatic_backup = backup_manager
+    parada_lembretes = asyncio.Event()
+    lembretes_task = asyncio.create_task(lembretes.rodar(database, parada_lembretes), name="jardim-lembretes-de-sessao")
     log.info("Plataforma iniciada; schema central atualizado.")
     try:
         yield
     finally:
+        parada_lembretes.set()
+        await lembretes_task
         if backup_manager and backup_task:
             backup_manager.stop()
             await backup_task
@@ -179,14 +190,20 @@ def health(request: Request):
 for api_router in (
     admin.router,
     auth.router,
+    calendario.router,
+    campanha_painel.router,
     campaigns.router,
     casino.router,
     characters.router,
     content.router,
     context.router,
+    descobertas.router,
     discord_links.router,
+    engajamento.router,
     internal.router,
     knowledge.router,
+    registros_universais.router,
+    mesa.router,
     notifications.router,
     rolls.router,
     sessions.router,

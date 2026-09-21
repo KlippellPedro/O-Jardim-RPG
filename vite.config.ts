@@ -8,7 +8,7 @@ export default defineConfig({
   build: {
     // O frontend 3D é carregado sob demanda. Separar suas bibliotecas evita
     // que Three.js e React Three Fiber voltem a engrossar o bundle inicial.
-    chunkSizeWarningLimit: 700,
+    chunkSizeWarningLimit: 800,
     rollupOptions: {
       output: {
         manualChunks(id) {

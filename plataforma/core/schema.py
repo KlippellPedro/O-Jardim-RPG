@@ -1430,4 +1430,228 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        37,
+        "mesa_ao_vivo_mapa_clima_votacao_relogios_bilhetes",
+        (
+            # Um documento por campanha: mapa tático, clima sonoro, votação,
+            # relógios e bilhetes. As regras e os segredos moram em
+            # core/mesa.py; o banco só guarda e versiona.
+            """
+            CREATE TABLE IF NOT EXISTS campanha_mesa (
+                campanha_id UUID PRIMARY KEY REFERENCES campanhas(id) ON DELETE CASCADE,
+                versao INTEGER NOT NULL DEFAULT 1 CHECK (versao > 0),
+                estado JSONB NOT NULL DEFAULT '{}'::jsonb,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            # Linha do tempo da sessão, para o replay. `publico` falso é segredo
+            # do Mestre (bilhetes, ficha escondida) e nunca sai para jogador.
+            """
+            CREATE TABLE IF NOT EXISTS eventos_mesa (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                sessao_id UUID REFERENCES sessoes_mesa(id) ON DELETE SET NULL,
+                tipo TEXT NOT NULL,
+                texto TEXT NOT NULL,
+                publico BOOLEAN NOT NULL DEFAULT TRUE,
+                detalhes JSONB NOT NULL DEFAULT '{}'::jsonb,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS eventos_mesa_sessao_idx
+            ON eventos_mesa (sessao_id, criado_em)
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS eventos_mesa_campanha_idx
+            ON eventos_mesa (campanha_id, criado_em DESC)
+            """,
+        ),
+    ),
+    (
+        38,
+        "engajamento_agenda_missoes_mural_mvp",
+        (
+            # Próxima sessão e o que o Mestre quer avisar (site e Discord). Os
+            # lembretes de 24h e 1h marcam quando já saíram, para nunca repetir.
+            """
+            CREATE TABLE IF NOT EXISTS campanha_agenda (
+                campanha_id UUID PRIMARY KEY REFERENCES campanhas(id) ON DELETE CASCADE,
+                proxima_em TIMESTAMPTZ,
+                titulo TEXT NOT NULL DEFAULT '',
+                nota TEXT NOT NULL DEFAULT '',
+                lembrete_24h_em TIMESTAMPTZ,
+                lembrete_1h_em TIMESTAMPTZ,
+                avisos JSONB NOT NULL DEFAULT '{}'::jsonb,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS campanha_missoes (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                titulo TEXT NOT NULL,
+                descricao TEXT NOT NULL DEFAULT '',
+                status TEXT NOT NULL DEFAULT 'ativa'
+                    CHECK (status IN ('ativa', 'concluida', 'falhou')),
+                secreta BOOLEAN NOT NULL DEFAULT FALSE,
+                objetivos JSONB NOT NULL DEFAULT '[]'::jsonb,
+                recompensa_lunaris INTEGER NOT NULL DEFAULT 0 CHECK (recompensa_lunaris >= 0),
+                recompensa_texto TEXT NOT NULL DEFAULT '',
+                recompensa_paga_em TIMESTAMPTZ,
+                criado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                concluida_em TIMESTAMPTZ
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS campanha_missoes_idx
+            ON campanha_missoes (campanha_id, status, atualizado_em DESC)
+            """,
+            # Mural do grupo: frases e fotos. A foto vai como miniatura em
+            # texto (data URL) para não depender de armazenamento de arquivos.
+            """
+            CREATE TABLE IF NOT EXISTS mural_itens (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                sessao_id UUID REFERENCES sessoes_mesa(id) ON DELETE SET NULL,
+                usuario_id UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                autor_nome TEXT NOT NULL DEFAULT '',
+                tipo TEXT NOT NULL CHECK (tipo IN ('citacao', 'foto')),
+                texto TEXT NOT NULL DEFAULT '',
+                imagem TEXT,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS mural_itens_idx
+            ON mural_itens (campanha_id, criado_em DESC)
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS mural_votos (
+                item_id UUID NOT NULL REFERENCES mural_itens(id) ON DELETE CASCADE,
+                usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (item_id, usuario_id)
+            )
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS mvp_votos (
+                sessao_id UUID NOT NULL REFERENCES sessoes_mesa(id) ON DELETE CASCADE,
+                votante_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                alvo_usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (sessao_id, votante_id)
+            )
+            """,
+            # Última vez que cada pessoa abriu a Home da campanha: é a régua do
+            # "o que mudou desde a sua última visita".
+            """
+            CREATE TABLE IF NOT EXISTS visitas_campanha (
+                usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                visto_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (usuario_id, campanha_id)
+            )
+            """,
+        ),
+    ),
+    (
+        39,
+        "sessao_fixa_semanal_e_descobertas_sem_missoes",
+        (
+            # Missões saíram do produto antes de ter uso real.
+            """
+            DROP TABLE IF EXISTS campanha_missoes
+            """,
+            # Sessão fixa (ex.: toda sexta, 18h), semanas canceladas e sessões
+            # especiais. `lembrete_para` diz de qual sessão os lembretes de
+            # 24h e 1h já saíram, para reiniciar a contagem quando a próxima muda.
+            """
+            ALTER TABLE campanha_agenda
+                ADD COLUMN IF NOT EXISTS recorrencia JSONB NOT NULL DEFAULT '{}'::jsonb,
+                ADD COLUMN IF NOT EXISTS cancelados JSONB NOT NULL DEFAULT '[]'::jsonb,
+                ADD COLUMN IF NOT EXISTS especiais JSONB NOT NULL DEFAULT '[]'::jsonb,
+                ADD COLUMN IF NOT EXISTS lembrete_para TIMESTAMPTZ
+            """,
+            # A data única que já existia vira uma sessão especial.
+            """
+            UPDATE campanha_agenda
+            SET especiais = jsonb_build_array(jsonb_build_object(
+                    'id', substr(md5(random()::text), 1, 10),
+                    'em', to_char(proxima_em AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"+00:00"'),
+                    'titulo', titulo,
+                    'nota', nota))
+            WHERE proxima_em IS NOT NULL AND especiais = '[]'::jsonb
+            """,
+            # Quem achou o quê. É da conta, não da campanha.
+            """
+            CREATE TABLE IF NOT EXISTS descobertas (
+                chave TEXT NOT NULL,
+                usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                descoberta_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (chave, usuario_id)
+            )
+            """,
+        ),
+    ),
+    (
+        40,
+        "calendario_do_mundo_e_estacoes",
+        (
+            # Um documento por campanha: que dia é "hoje" no mundo, a estação e os
+            # eventos do calendário. As regras (e o que o jogador pode ver) moram
+            # em core/calendario.py; o banco só guarda.
+            """
+            CREATE TABLE IF NOT EXISTS campanha_calendario (
+                campanha_id UUID PRIMARY KEY REFERENCES campanhas(id) ON DELETE CASCADE,
+                estado JSONB NOT NULL DEFAULT '{}'::jsonb,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+        ),
+    ),
+    (
+        41,
+        "identidade_da_campanha",
+        (
+            # Capa (imagem em data URL, servida por rota própria), cor de destaque e frase de abertura.
+            """
+            ALTER TABLE campanhas
+                ADD COLUMN IF NOT EXISTS identidade JSONB NOT NULL DEFAULT '{}'::jsonb
+            """,
+        ),
+    ),
+    (
+        42,
+        "registros_universais_editaveis",
+        (
+            # Ajustes do Mestre sobre os registros de fábrica (origem_id preenchido) e
+            # registros próprios (origem_id nulo). O texto de quem não está aberto
+            # nunca sai para jogador: ver core/registros_universais.py.
+            """
+            CREATE TABLE IF NOT EXISTS campanha_registros_universais (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                secao TEXT NOT NULL,
+                origem_id TEXT,
+                revelacao TEXT NOT NULL DEFAULT 'aberto' CHECK (revelacao IN ('oculto', 'rasurado', 'aberto')),
+                dados JSONB NOT NULL DEFAULT '{}'::jsonb,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            CREATE UNIQUE INDEX IF NOT EXISTS campanha_registros_universais_origem_idx
+            ON campanha_registros_universais (campanha_id, secao, origem_id)
+            WHERE origem_id IS NOT NULL
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS campanha_registros_universais_campanha_idx
+            ON campanha_registros_universais (campanha_id, secao)
+            """,
+        ),
+    ),
 )
