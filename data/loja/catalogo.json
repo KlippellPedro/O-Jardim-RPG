@@ -5844,7 +5844,7 @@
       "id": "leviata",
       "titulo": "Leviatã",
       "conteudo": {
-        "descricao": "Serpente marinha grande o bastante para enrolar um navio. Vive em águas muito fundas e sobe quando sente vibração de casco, explosão ou grande quantidade de sangue.",
+        "descricao": "Serpente marinha grande o bastante para enrolar um navio. Vive em águas muito fundas e sobe quando sente vibração de casco, explosão ou grande quantidade de sangue. As escamas refletem um céu de estrelas de outro universo, e quem encara demais vê o reflexo se mexer antes do corpo.",
         "preco": {
           "Solares": 3100
         },
@@ -5855,11 +5855,11 @@
           "Lunaris": 6000
         },
         "raridade": "lendario",
-        "categoria": "Lendário",
-        "pv": 1255,
+        "categoria": "Aberração",
+        "pv": 1505,
         "nivel": 45,
         "vd": 9,
-        "defesa": 29,
+        "defesa": 31,
         "iniciativa": 35,
         "deslocamento": "15m (Nado)",
         "atributos": {
@@ -5879,19 +5879,24 @@
         "ataques": [
           {
             "nome": "Engolir",
-            "detalhe": "+44, 5d12+11 (agarra e engole o alvo)"
+            "detalhe": "+44, 8d10+10 (agarra e engole o alvo)"
           }
         ],
         "habilidades": [
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 25; em falha, perde 2d6 de Sanidade e fica Amedrontado)",
           "Maremoto (1/cena: criaturas na área fazem Reflexos DT 30; em falha, são empurradas 6 m e ficam Caídas)",
-          "Arrastar às Profundezas (Fortitude DT 30; em falha, o alvo fica Agarrado e começa a sufocar. Repete o teste no fim de cada turno para escapar)"
+          "Arrastar às Profundezas (Fortitude DT 30; em falha, o alvo fica Agarrado e começa a sufocar. Repete o teste no fim de cada turno para escapar)",
+          "Arrancar (anunciado: Dentes de Espelho, no lugar do Engolir; Reflexos DT 32; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; sofre o dano de 11d10+14 de qualquer jeito)",
+          "Sinais (o mar reflete estrelas em pleno dia e ondas correm contra o vento)",
+          "Como Evitar (barulho, sangue e explosões atraem; um casco silencioso, sem fogo e sem feridos a bordo passa por cima dele)"
         ],
         "loot": [
           "Couro de Leviatã (3000 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "subtipo": "Vazio"
       }
     },
     {
@@ -5954,7 +5959,7 @@
       "id": "kraken",
       "titulo": "Kraken",
       "conteudo": {
-        "descricao": "Molusco gigantesco que vive em fossas oceânicas e caça perto de rotas marítimas. Usa os tentáculos para prender vários alvos, quebrar mastros e virar embarcações antes de se alimentar.",
+        "descricao": "Molusco gigantesco que vive numa fossa oceânica onde a água encontra um Vão do Vazio. Caça perto de rotas marítimas, usa os tentáculos para prender vários alvos, quebrar mastros e virar embarcações antes de se alimentar. Quem sobrevive jura que eram mais tentáculos do que cabiam no navio, e que alguns deles não terminavam em lugar nenhum.",
         "preco": {
           "Solares": 2900
         },
@@ -5965,11 +5970,11 @@
           "Lunaris": 6000
         },
         "raridade": "lendario",
-        "categoria": "Lendário",
-        "pv": 1255,
+        "categoria": "Aberração",
+        "pv": 1505,
         "nivel": 42,
         "vd": 9,
-        "defesa": 29,
+        "defesa": 31,
         "iniciativa": 35,
         "deslocamento": "12m (Nado)",
         "atributos": {
@@ -5989,11 +5994,16 @@
         "ataques": [
           {
             "nome": "Tentáculo Esmagador",
-            "detalhe": "+43, 5d10+11 impacto, vantagem no primeiro golpe"
+            "detalhe": "+43, 8d10+10 impacto, vantagem no primeiro golpe"
           }
         ],
         "habilidades": [
-          "Arrastar às Profundezas (Fortitude DT 30; em falha, o alvo fica Agarrado e começa a sufocar. Repete o teste no fim de cada turno para escapar)"
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 25; em falha, perde 2d6 de Sanidade e fica Amedrontado)",
+          "Arrastar às Profundezas (Fortitude DT 30; em falha, o alvo fica Agarrado e começa a sufocar. Repete o teste no fim de cada turno para escapar)",
+          "Arrancar (gatilho: uma criatura Agarrada por dois tentáculos no começo do turno do Kraken; Fortitude DT 32; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; os tentáculos puxam em sentidos opostos)",
+          "Nuvem de Tinta (1/cena: a área fica escura; ataques à distância têm desvantagem e criaturas dentro dela ficam Cegas até saírem)",
+          "Sinais (peixes fugindo em massa, água parada demais, bolhas subindo em linha reta)",
+          "Como Evitar (ele só ataca o que está sobre a fossa: um casco que mude de rota antes do primeiro tentáculo passa sem um arranhão)"
         ],
         "loot": [
           "Tentáculo Seco (2500 Solares)",
@@ -6001,7 +6011,8 @@
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "subtipo": "Vazio"
       }
     },
     {
@@ -6009,7 +6020,7 @@
       "id": "caribdis",
       "titulo": "Caríbdis",
       "conteudo": {
-        "descricao": "Caríbdis ocupa um estreito e parece um redemoinho comum até começar a puxar navios contra a corrente. Ela não sai daquele trecho de mar e alterna longos períodos de calma com ataques violentos.",
+        "descricao": "Ocupa um estreito e parece um redemoinho comum até puxar o primeiro navio contra a corrente. Vista de cima, a água do centro escurece além do que água consegue, e o que cai nela não chega ao fundo: ali existe uma boca do Vazio aberta no mar. Alterna longos períodos de calma com ataques violentos, e a calma é o que mais assusta quem já viu o outro lado.",
         "preco": {
           "Solares": 2200
         },
@@ -6020,11 +6031,11 @@
           "Lunaris": 6000
         },
         "raridade": "lendario",
-        "categoria": "Elemental",
-        "pv": 950,
+        "categoria": "Aberração",
+        "pv": 1140,
         "nivel": 33,
         "vd": 7,
-        "defesa": 24,
+        "defesa": 26,
         "iniciativa": 27,
         "deslocamento": "0m (presa ao estreito que habita)",
         "atributos": {
@@ -6044,13 +6055,17 @@
         "ataques": [
           {
             "nome": "Sugado ao Fundo",
-            "detalhe": "+36, 4d10+9 de Água"
+            "detalhe": "+36, 6d10+10 de Vazio"
           }
         ],
         "habilidades": [
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 25; em falha, perde 2d6 de Sanidade e fica Amedrontado)",
           "O Sorvedouro (3/dia: todas as criaturas em 12 m fazem Reflexos DT 26; em falha, são puxadas para o centro do redemoinho, ficam Agarradas e começam a sufocar. Repete o teste no fim de cada turno para escapar; sucesso não impede a próxima ativação de puxar de novo)",
-          "Presa ao Estreito (não se move do trecho de mar que habita; fora d'água, Caríbdis não age)",
-          "Corpo de Maré (imune a agarrão, derrubar e empurrão; dano de impacto e cortante que não seja de Água causa metade)"
+          "Presa ao Estreito (não se move do trecho de mar que habita; fora d'água, Caribdis não age)",
+          "Corpo de Maré (imune a agarrão, derrubar e empurrão; dano de impacto e cortante que não seja de água causa metade)",
+          "Arrancar (gatilho: uma criatura Agarrada pelo Sorvedouro falha no teste de escapar no fim do turno; Fortitude DT 27; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; a pressão do fundo esmaga o membro)",
+          "Sinais (o mar fica liso como vidro num trecho só, e destroços de navios giram devagar no mesmo lugar)",
+          "Como Evitar (ela não sai do estreito: qualquer rota que passe a mais de 12 m da corrente central é segura)"
         ],
         "loot": [
           "Núcleo do Sorvedouro (1800 Solares)",
@@ -6058,7 +6073,8 @@
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "subtipo": "Vazio"
       }
     },
     {
@@ -17968,7 +17984,7 @@
       "id": "devorador-de-mundos",
       "titulo": "Devorador de Mundos",
       "conteudo": {
-        "descricao": "Criatura do Vazio grande o bastante para atacar um reino inteiro. Ela se alimenta de matéria e magia, cresce durante o ataque e deixa áreas onde construções, corpos e registros simplesmente desapareceram.",
+        "descricao": "Criatura do Vazio grande o bastante para atacar um reino inteiro. Ela se alimenta de matéria e magia, cresce durante o ataque e deixa áreas onde construções, corpos e registros simplesmente desapareceram. Quem estava perto conta que a fome dela tem um som, e que o som continua depois que ela vai embora.",
         "preco": {
           "Solares": 3200
         },
@@ -17979,11 +17995,11 @@
           "Lunaris": 6000
         },
         "raridade": "lendario",
-        "categoria": "Lendário",
-        "pv": 1600,
+        "categoria": "Aberração",
+        "pv": 1920,
         "nivel": 48,
         "vd": 10,
-        "defesa": 32,
+        "defesa": 34,
         "iniciativa": 39,
         "deslocamento": "12m (Voo)",
         "mana": 150,
@@ -18004,18 +18020,23 @@
         "ataques": [
           {
             "nome": "Fome Sem Fim",
-            "detalhe": "+46, 6d12+13 (cura o Devorador pela metade do dano)"
+            "detalhe": "+46, 9d10+10 (cura o Devorador pela metade do dano)"
           }
         ],
         "habilidades": [
-          "Colapso da Realidade (1/cena: como Ação Padrão, criaturas na área fazem Reflexos DT 32. Sofrem 6d10 de vazio, metade em sucesso; esse dano não gera crítico)"
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 25; em falha, perde 2d6 de Sanidade e fica Amedrontado)",
+          "Colapso da Realidade (1/cena: como Ação Padrão, criaturas na área fazem Reflexos DT 34. Sofrem 10d10 de vazio, metade em sucesso; esse dano não gera crítico)",
+          "Arrancar (anunciado: Fome Sem Fim em mordida inteira, no lugar do ataque normal; Reflexos DT 34; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; sofre o dano de 12d10+16 de qualquer jeito)",
+          "Sinais (prédios e nomes em placas sumindo por trás do grupo, um som grave que sobe pelo chão)",
+          "Como Evitar (não é um encontro para vencer no dano: a cena é de fuga, de evacuação ou de fechar o Vão por onde ele veio)"
         ],
         "loot": [
           "Fragmento de Realidade Devorada (10000 Solares)"
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "subtipo": "Vazio"
       }
     },
     {
@@ -23264,7 +23285,7 @@
       "id": "raspador-de-nomes",
       "titulo": "Rastejante do Vazio",
       "conteudo": {
-        "descricao": "Criatura baixa, pálida e sem olhos que veio de fora do universo por um Vão. Vaga pelo Vazio atrás de vozes e inscrições, apagando marcas por onde passa. Os exemplares vendidos pela Guilda ficam presos em recipientes cobertos por selos escritos.",
+        "descricao": "Criatura baixa, pálida e sem olhos que veio de fora do universo por um Vão. Vaga pelo Vazio atrás de vozes e inscrições, apagando marcas por onde passa. Quem a ouve chegar percebe primeiro o que deixou de ouvir: a própria voz vai ficando fina, como se alguém a estivesse puxando para fora da garganta. Os exemplares vendidos pela Guilda ficam presos em recipientes cobertos por selos escritos.",
         "preco": {
           "Solares": 38
         },
@@ -23277,10 +23298,10 @@
         "raridade": "incomum",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 165,
+        "pv": 200,
         "nivel": 8,
         "vd": 2,
-        "defesa": 16,
+        "defesa": 18,
         "iniciativa": 20,
         "deslocamento": "12m (Escalar), 9m (Flutuar no Vazio)",
         "mana": 39,
@@ -23301,12 +23322,16 @@
         "ataques": [
           {
             "nome": "Garra",
-            "detalhe": "+15, 1d10+3 de Vazio"
+            "detalhe": "+15, 3d6+5 de Vazio"
           }
         ],
         "habilidades": [
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 15; em falha, perde 1d6 de Sanidade e fica Amedrontado)",
           "Roubar a Voz (1/cena: um alvo em alcance Curto faz Vontade DT 16; em falha, não pode conjurar nem usar habilidades que dependam de fala até o fim do próximo turno dele)",
-          "Sem Rastros (não deixa pegadas, cheiro ou som; rastreá-lo sem magia é impossível)"
+          "Arrancar (gatilho: a Garra acerta um alvo que está sob Roubar a Voz; Fortitude DT 17; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; a perda é sempre a Voz, sem sorteio)",
+          "Sem Rastros (não deixa pegadas, cheiro ou som; rastreá-lo sem magia é impossível)",
+          "Sinais (a área fica em silêncio e os objetos escritos ao redor perdem as letras aos poucos)",
+          "Como Evitar (foge de luz forte e de barulho constante; quem canta ou fala sem parar não é escolhido como alvo)"
         ],
         "loot": [
           "Fragmento de Selo Apagado (70 Solares)",
@@ -23321,7 +23346,7 @@
       "id": "mastim-sem-sombra",
       "titulo": "Cão do Vazio",
       "conteudo": {
-        "descricao": "Predador quadrúpede vindo de fora do universo, com pele escura e lisa que não projeta sombra. Caça em grupos pelo Vazio e persegue criaturas ligadas umas às outras. Na loja, é entregue com uma coleira de contenção que limita seus saltos.",
+        "descricao": "Predador quadrúpede vindo de fora do universo, com pele escura e lisa que não projeta sombra. Caça em grupos pelo Vazio e persegue criaturas ligadas umas às outras, sempre pelo lado que o grupo não vigia. O latido chega sem som, direto no fundo do ouvido. Na loja, é entregue com uma coleira de contenção que limita seus saltos.",
         "preco": {
           "Solares": 46
         },
@@ -23334,10 +23359,10 @@
         "raridade": "incomum",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 280,
+        "pv": 335,
         "nivel": 13,
         "vd": 3,
-        "defesa": 18,
+        "defesa": 20,
         "iniciativa": 23,
         "deslocamento": "15m",
         "atributos": {
@@ -23357,13 +23382,17 @@
         "ataques": [
           {
             "nome": "Mordida",
-            "detalhe": "+19, 2d6+4 de Vazio"
+            "detalhe": "+19, 3d8+7 de Vazio"
           }
         ],
         "habilidades": [
+          "Presença Aterradora (cada personagem que ouça o latido pela primeira vez na cena faz Vontade DT 15; em falha, perde 1d6 de Sanidade e fica Amedrontado)",
           "Faro (sempre sabe a direção de uma criatura cujo aliado ele tenha ferido nesta cena)",
           "Isolar (um alvo acertado pela Mordida não pode receber vantagem nem bônus concedido por aliados até o começo do próximo turno do Cão)",
-          "Salto Curto (1/cena: teleporta até 9 m para um espaço adjacente a uma criatura que possa perceber)"
+          "Salto Curto (1/cena: teleporta até 9 m para um espaço adjacente a uma criatura que possa perceber)",
+          "Arrancar (gatilho: dois ou mais Cães acertaram o mesmo alvo nesta rodada; Fortitude DT 18; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; a perda é sempre uma Perna, sem sorteio)",
+          "Sinais (cães do lugar ficam mudos e cabisbaixos; pegadas param no meio de um campo aberto)",
+          "Como Evitar (ficar de costas para uma parede ou dentro de uma construção com uma só entrada; em terreno aberto o grupo é cercado)"
         ],
         "loot": [
           "Coleira de Contenção Quebrada (95 Solares)",
@@ -23378,7 +23407,7 @@
       "id": "costureiro-de-fendas",
       "titulo": "Saltador de Fendas",
       "conteudo": {
-        "descricao": "Humanoide alto, de braços longos e corpo dobrado, encontrado perto dos Vãos. Abre cortes estreitos no espaço para atravessar pequenas distâncias, puxar uma presa ou bloquear uma passagem durante a caçada.",
+        "descricao": "Humanoide alto, de braços longos e corpo dobrado, encontrado perto dos Vãos. Abre cortes estreitos no espaço para atravessar pequenas distâncias, puxar uma presa ou bloquear uma passagem durante a caçada. As fendas que abre fecham como tesoura, e o que estiver atravessando na hora fica de um lado só.",
         "preco": {
           "Solares": 125
         },
@@ -23391,10 +23420,10 @@
         "raridade": "raro",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 390,
+        "pv": 470,
         "nivel": 18,
         "vd": 4,
-        "defesa": 21,
+        "defesa": 23,
         "iniciativa": 24,
         "deslocamento": "9m, 15m (entre fendas)",
         "mana": 70,
@@ -23415,13 +23444,17 @@
         "ataques": [
           {
             "nome": "Garra de Fenda",
-            "detalhe": "+22, 2d8+5 perfurante e Vazio, alcance 9 m"
+            "detalhe": "+22, 4d8+8 perfurante e Vazio, alcance 9 m"
           }
         ],
         "habilidades": [
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 20; em falha, perde 1d8 de Sanidade e fica Amedrontado)",
           "Puxar (ao acertar a Garra, puxa o alvo até 6 m; Fortitude DT 20 evita o movimento)",
           "Fechar Caminho (1/cena: escolhe uma linha de 9 m; atravessá-la exige uma Ação de Movimento adicional até o fim do próximo turno do Saltador)",
-          "Atravessar Fenda (como Ação de Movimento, teleporta entre as duas extremidades da linha criada por Fechar Caminho)"
+          "Atravessar Fenda (como Ação de Movimento, teleporta entre as duas extremidades da linha criada por Fechar Caminho)",
+          "Arrancar (anunciado: a fenda criada por Fechar Caminho se fecha sobre quem a estiver atravessando; Reflexos DT 21; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento)",
+          "Sinais (o ar dobra como papel, e sons chegam do lado errado do cômodo)",
+          "Como Evitar (não atravessar a linha da fenda; contornar custa tempo, mas não custa carne)"
         ],
         "loot": [
           "Garra de Fenda (260 Solares)",
@@ -23436,7 +23469,7 @@
       "id": "viuva-de-orbitas",
       "titulo": "Aranha do Vazio",
       "conteudo": {
-        "descricao": "Aranha colossal que veio de fora do universo e passou a vagar pelo Vazio. Pedras, destroços e restos de criaturas giram ao redor do corpo por causa de sua atração gravitacional. Ela prende grupos inteiros antes de se aproximar para comer.",
+        "descricao": "Aranha colossal que veio de fora do universo e passou a vagar pelo Vazio. Pedras, destroços e restos de criaturas giram ao redor do corpo por causa de sua atração gravitacional. Ela prende grupos inteiros antes de se aproximar para comer, e leva quem está preso para casulos pendurados no alto, onde a vítima fica viva por muito mais tempo do que gostaria.",
         "preco": {
           "Solares": 350
         },
@@ -23449,10 +23482,10 @@
         "raridade": "epico",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 720,
+        "pv": 865,
         "nivel": 28,
         "vd": 6,
-        "defesa": 25,
+        "defesa": 27,
         "iniciativa": 31,
         "deslocamento": "12m (Escalar), 9m (Flutuar no Vazio)",
         "mana": 87,
@@ -23473,13 +23506,18 @@
         "ataques": [
           {
             "nome": "Mordida",
-            "detalhe": "+31, 3d8+7 perfurante e Vazio"
+            "detalhe": "+31, 5d10+10 perfurante e Vazio"
           }
         ],
         "habilidades": [
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 20; em falha, perde 1d8 de Sanidade e fica Amedrontado)",
           "Teia Pesada (1/cena: criaturas em alcance Curto fazem Reflexos DT 24; em falha, ficam Imobilizadas até gastarem uma Ação Padrão para romper a teia)",
-          "Arremessar Destroço (1/turno: arremessa um fragmento contra um alvo a até 18 m, +30, 2d10+7 impacto; esta habilidade substitui a Mordida no turno)",
-          "Carapaça de Destroços (o primeiro ataque à distância contra a Aranha a cada rodada tem desvantagem)"
+          "Arremessar Destroço (1/turno: arremessa um fragmento contra um alvo a até 18 m, +30, 3d10+9 impacto; esta habilidade substitui a Mordida no turno)",
+          "Carapaça de Destroços (o primeiro ataque à distância contra a Aranha a cada rodada tem desvantagem)",
+          "Arrancar (gatilho: o alvo está Imobilizado pela Teia Pesada no começo do turno da Aranha; Fortitude DT 22; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; o pedaço arrancado vai para o casulo dela)",
+          "Casulo (uma criatura que passe duas rodadas Imobilizada perde 1d6 de Sanidade a cada rodada seguinte, enquanto assiste)",
+          "Sinais (destroços flutuando parados no meio do caminho e fios brilhando no alto)",
+          "Como Evitar (fogo corta a teia; a Aranha não persegue quem sai da área dos destroços)"
         ],
         "loot": [
           "Teia Gravitacional (620 Solares)",
@@ -23494,7 +23532,7 @@
       "id": "coro-sem-rosto",
       "titulo": "Multidão sem Rosto",
       "conteudo": {
-        "descricao": "Grupo de corpos humanoides sem olhos, boca ou qualquer outra feição. Eles se movem juntos pelo Vazio e produzem uma vibração que abafa vozes, passos e magia sonora antes do ataque.",
+        "descricao": "Grupo de corpos humanoides sem olhos, boca ou qualquer outra feição. Eles se movem juntos pelo Vazio e produzem uma vibração que abafa vozes, passos e magia sonora antes do ataque. Quando param diante de alguém, todos os rostos lisos se viram ao mesmo tempo para a mesma pessoa, e essa pessoa entende, sem ninguém dizer, que é ela quem vão levar.",
         "preco": {
           "Solares": 2800
         },
@@ -23507,10 +23545,10 @@
         "raridade": "lendario",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 1080,
+        "pv": 1300,
         "nivel": 38,
         "vd": 8,
-        "defesa": 28,
+        "defesa": 30,
         "iniciativa": 35,
         "deslocamento": "12m (Flutuar)",
         "mana": 125,
@@ -23531,13 +23569,17 @@
         "ataques": [
           {
             "nome": "Grito Mudo",
-            "detalhe": "+41, 4d8+9 de Vazio a até 24 m"
+            "detalhe": "+41, 7d10+10 de Vazio a até 24 m"
           }
         ],
         "habilidades": [
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 25; em falha, perde 2d6 de Sanidade e fica Amedrontado)",
           "Área de Silêncio (criaturas em alcance Curto precisam passar em Vontade DT 28 para conjurar ou usar habilidades que dependam de som; em falha, a ação falha e o recurso não é gasto)",
-          "Grito (1/cena: inimigos em alcance Médio fazem Vontade DT 28; sofrem 4d10 de Vazio e ficam Atordoados até o fim do próximo turno deles em falha, ou metade do dano sem condição em sucesso)",
-          "Sem Rosto (imune a Cego e a efeitos que dependam de reconhecer identidade ou expressão)"
+          "Grito (1/cena: inimigos em alcance Médio fazem Vontade DT 28; sofrem 6d10 de Vazio e ficam Atordoados até o fim do próximo turno deles em falha, ou metade do dano sem condição em sucesso)",
+          "Tomar o Rosto (anunciado: a Multidão escolhe um alvo e o cerca; Vontade DT 28; em falha, perde 2d6 de Sanidade, perde a Voz (Mutilação, sem sorteio) e passa a ser ignorado por criaturas que dependam de reconhecer o rosto dele; em sucesso, perde só 1d6 de Sanidade)",
+          "Sem Rosto (imune a Cego e a efeitos que dependam de reconhecer identidade ou expressão)",
+          "Sinais (vozes do grupo somem uma a uma, e a sombra de todos fica com um contorno a mais do que o número de pessoas)",
+          "Como Evitar (oferecer outro alvo por escolha própria, ou esconder o rosto de quem foi escolhido; a Multidão perde o interesse em quem ninguém vê)"
         ],
         "loot": [
           "Órgão Vibratório (3400 Solares)",
@@ -23553,7 +23595,7 @@
       "id": "apagador-de-constelacoes",
       "titulo": "Devorador de Estrelas",
       "conteudo": {
-        "descricao": "Aberração gigantesca que chegou de fora do universo durante a Era do Vazio. Vaga entre as Árvores e ataca qualquer fonte de vida ou luz que encontra. Sua aproximação é percebida quando estrelas começam a desaparecer do céu.",
+        "descricao": "Aberração gigantesca que chegou de fora do universo durante a Era do Vazio. Vaga entre as Árvores e ataca qualquer fonte de vida ou luz que encontra. Sua aproximação é percebida quando estrelas começam a desaparecer do céu, e quem olha para cima na hora errada percebe que o espaço vazio entre as estrelas tem a forma de uma boca.",
         "preco": {
           "Solares": 3150
         },
@@ -23566,10 +23608,10 @@
         "raridade": "lendario",
         "categoria": "Aberração",
         "subtipo": "Vazio",
-        "pv": 1580,
+        "pv": 1900,
         "nivel": 48,
         "vd": 10,
-        "defesa": 32,
+        "defesa": 34,
         "iniciativa": 42,
         "deslocamento": "18m (Voo no Vazio)",
         "mana": 160,
@@ -23590,14 +23632,18 @@
         "ataques": [
           {
             "nome": "Mordida",
-            "detalhe": "+46, 5d10+12 de Vazio; ignora metade da Resistência de Vazio"
+            "detalhe": "+46, 9d10+10 de Vazio; ignora metade da Resistência de Vazio"
           }
         ],
         "habilidades": [
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 25; em falha, perde 2d6 de Sanidade e fica Amedrontado)",
           "Presença do Vazio (inimigos em alcance Médio não recebem vantagem e não podem usar reações concedidas por aliados)",
-          "Rajada do Vazio (1/cena: escolha até cinco criaturas em alcance Longo; cada uma faz Vontade DT 32, sofre 6d10 de Vazio e fica Cega até o fim do próximo turno dela em falha, ou metade do dano sem condição em sucesso)",
+          "Rajada do Vazio (1/cena: escolha até cinco criaturas em alcance Longo; cada uma faz Vontade DT 34, sofre 8d10 de Vazio e fica Cega até o fim do próximo turno dela em falha, ou metade do dano sem condição em sucesso)",
           "Devorar (1/turno, quando reduz uma criatura a 0 PV, recupera 60 PV; esta habilidade não apaga a ficha, as memórias ou o personagem do jogador)",
-          "Corpo do Vazio (imune a medo, veneno, doença, sono e efeitos de envelhecimento)"
+          "Arrancar (anunciado: a Mordida Arrancadora, no lugar da Mordida; Reflexos DT 34; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; sofre o dano de 12d10+16 de qualquer jeito)",
+          "Corpo do Vazio (imune a medo, veneno, doença, sono e efeitos de envelhecimento)",
+          "Sinais (estrelas se apagando em fila, animais em silêncio total, luz das tochas ficando fraca)",
+          "Como Evitar (não é um encontro para vencer no dano: o grupo ganha ao fechar o Vão de onde ela veio, atrair o corpo para longe de algo vivo ou sobreviver até ela perder o interesse; o Mestre define qual porta a cena abre)"
         ],
         "loot": [
           "Núcleo Estelar (12000 Solares)",
@@ -24358,6 +24404,192 @@
         "frequencia": "1/cena",
         "duracao": "Até o fim do turno",
         "custo": "6 Mana"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "sussurrante-de-frestas",
+      "titulo": "Sussurrante de Frestas",
+      "conteudo": {
+        "descricao": "Coisa fina como um dedo de defunto que mora atrás de rodapés, sob assoalhos e no fundo de poços secos. Fala com a voz de alguém que o grupo perdeu, sempre de dentro de uma fresta que ninguém alcança, e só sai do buraco para levar o que a mão curiosa deixou para fora.",
+        "preco": {
+          "Lunaris": 1200
+        },
+        "preco_contratacao": {
+          "Lunaris": 400
+        },
+        "contrato_mensal": {
+          "Lunaris": 80
+        },
+        "raridade": "incomum",
+        "categoria": "Aberração",
+        "subtipo": "Vazio",
+        "pv": 115,
+        "nivel": 3,
+        "vd": 1,
+        "defesa": 14,
+        "iniciativa": 14,
+        "deslocamento": "6m (Escalar, só dentro de frestas)",
+        "mana": 30,
+        "atributos": {
+          "forca": 1,
+          "agilidade": 3,
+          "vigor": 1,
+          "presenca": 3,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +8",
+          "Fortitude +8",
+          "Reflexos +12",
+          "Vontade +10",
+          "Furtividade +14"
+        ],
+        "ataques": [
+          {
+            "nome": "Dedos Finos",
+            "detalhe": "+8, 2d6+3 perfurante"
+          }
+        ],
+        "habilidades": [
+          "Presença Aterradora (cada personagem que ouça a voz pela primeira vez na cena faz Vontade DT 15; em falha, perde 1d6 de Sanidade e fica Amedrontado)",
+          "Voz de Quem Falta (fala de dentro da fresta com a voz de alguém que o grupo perdeu; o Mestre escolhe quem, e a voz sabe coisas que só essa pessoa sabia)",
+          "Levar a Mão (gatilho: um alvo com a mão dentro de uma fresta, buraco ou vão; Fortitude DT 15; em falha, perde uma Mão, sorteada em 1d2 entre dominante e de apoio, e fica com Sangramento; em sucesso, só o Sangramento)",
+          "Preso à Fresta (não sai do buraco onde mora; luz forte dentro dele o obriga a recuar)",
+          "Sinais (sussurros que param quando alguém escuta, e arranhões do lado de dentro da parede)",
+          "Como Evitar (ninguém perde nada se ninguém enfia a mão na fresta; responder à voz também não ajuda, e ela fica pior quando percebe que foi ouvida)"
+        ],
+        "loot": [
+          "Dedo Fino do Vazio (30 Solares)",
+          "Cera de Fresta (12 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "megalodon-do-vazio",
+      "titulo": "Megalodon do Vazio",
+      "conteudo": {
+        "descricao": "Tubarão do tamanho de um navio de carga, branco como osso lavado, que nada em água, em névoa e em qualquer ar parado como se tudo fosse mar. Os olhos deram lugar a mais dentes. Chega por baixo, e o único aviso é a superfície ficando lisa como vidro e o silêncio das aves.",
+        "preco": {
+          "Solares": 260
+        },
+        "preco_contratacao": {
+          "Lunaris": 6000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1200
+        },
+        "raridade": "epico",
+        "categoria": "Aberração",
+        "subtipo": "Vazio",
+        "pv": 620,
+        "nivel": 23,
+        "vd": 5,
+        "defesa": 22,
+        "iniciativa": 26,
+        "deslocamento": "21m (Nado, inclusive em névoa densa)",
+        "mana": 90,
+        "atributos": {
+          "forca": 7,
+          "agilidade": 5,
+          "vigor": 7,
+          "presenca": 4,
+          "intelecto": 1
+        },
+        "pericias": [
+          "Luta +30",
+          "Fortitude +29",
+          "Reflexos +26",
+          "Vontade +22",
+          "Percepção +22"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordida Partidora",
+            "detalhe": "+30, 4d10+10 perfurante"
+          }
+        ],
+        "habilidades": [
+          "Presença Aterradora (cada personagem que veja a barbatana pela primeira vez na cena faz Vontade DT 20; em falha, perde 1d8 de Sanidade e fica Amedrontado)",
+          "Vem de Baixo (o primeiro ataque de uma cena contra alvo que não a tenha visto submergir tem vantagem, e o alvo fica Surpreendido)",
+          "Faro de Medo (sabe a direção de toda criatura Amedrontada ou sangrando em alcance Longo; ataques contra elas têm +2)",
+          "Arrancar (anunciado: Abocanhar, no lugar da Mordida, com 6d10+11 perfurante; Reflexos DT 24; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento; sofre o dano do Abocanhar de qualquer jeito)",
+          "Frenesi (enquanto houver criatura sangrando em alcance Longo, ganha +2 nos ataques e +6 m de Deslocamento)",
+          "Sufoca no Seco (fora da água ou da névoa densa não se move e perde 10% da Vida por rodada)",
+          "Sinais (a superfície fica lisa como vidro, aves em silêncio e uma sombra branca sem fim passando por baixo do casco)",
+          "Como Evitar (sair da água e da névoa, ou não deixar ninguém sangrar sobre a rota; sem sangue o Faro de Medo só encontra quem está com medo)"
+        ],
+        "loot": [
+          "Dente Sem Sombra (220 Solares)",
+          "Barbatana de Osso Branco (140 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "colecionador-de-membros",
+      "titulo": "Colecionador de Membros",
+      "conteudo": {
+        "descricao": "Humanoide alto e curvado, costurado por fora com pedaços que não combinam: um braço de criança, uma perna de soldado, uma mão delicada onde devia estar a boca. Mede cada visitante com os olhos como um alfaiate mede um cliente, e leva o que julga que falta em si.",
+        "preco": {
+          "Solares": 500
+        },
+        "preco_contratacao": {
+          "Lunaris": 15000
+        },
+        "contrato_mensal": {
+          "Lunaris": 3000
+        },
+        "raridade": "epico",
+        "categoria": "Aberração",
+        "subtipo": "Vazio",
+        "pv": 1015,
+        "nivel": 33,
+        "vd": 7,
+        "defesa": 26,
+        "iniciativa": 32,
+        "deslocamento": "9m",
+        "mana": 105,
+        "atributos": {
+          "forca": 6,
+          "agilidade": 4,
+          "vigor": 5,
+          "presenca": 6,
+          "intelecto": 5
+        },
+        "pericias": [
+          "Luta +34",
+          "Fortitude +33",
+          "Reflexos +30",
+          "Vontade +32",
+          "Percepção +26"
+        ],
+        "ataques": [
+          {
+            "nome": "Mão Emprestada",
+            "detalhe": "+34, 6d10+10 cortante"
+          }
+        ],
+        "habilidades": [
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 25; em falha, perde 2d6 de Sanidade e fica Amedrontado)",
+          "Medir (1/turno, como Ação de Movimento: escolhe um membro de um alvo em alcance Curto e o Marca; o próximo Arrancar sobre esse alvo leva o membro Marcado, sem sorteio)",
+          "Arrancar (anunciado: o estalar da tesoura na rodada anterior; Fortitude DT 27; em falha, perde um membro sorteado em Mutilação (regra de Ferimentos) e fica com Sangramento; em sucesso, só o Sangramento)",
+          "Costurar (quando arranca um membro, recupera 60 PV e ganha +2 de Defesa até o fim da cena)",
+          "Sinais (cheiro de linha encerada, o estalar de uma tesoura sem dono e sombras com um braço a mais)",
+          "Como Evitar (aceita uma troca: se alguém lhe entregar por vontade própria algo que o grupo valorize de verdade, ele leva o objeto e some por uma cena inteira)"
+        ],
+        "loot": [
+          "Linha de Costura Viva (700 Solares)",
+          "Agulha de Osso (420 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3,
+        "requer_autorizacao_mestre": true
       }
     }
   ]
