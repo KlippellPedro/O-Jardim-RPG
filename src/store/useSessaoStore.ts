@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { useMesaStore } from './useMesaStore';
 import {
   sessaoApi,
   type DistribuirXpResponse,
@@ -162,6 +163,7 @@ interface SessaoState {
   reordenarIniciativa: (ordem: string[]) => Promise<void>;
   aplicarEmMassa: (ids: string[], payload: ParticipantePayload) => Promise<void>;
   distribuirXp: (participanteIds: string[]) => Promise<DistribuirXpResponse>;
+  darXp: (participanteIds: string[], xp: number) => Promise<void>;
 
   clearError: () => void;
 }
@@ -202,7 +204,11 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
     void get().fetchEstadoSessao().then(() => get().fetchRolagens());
 
     const eventSource = new EventSource(`/api/v1/sessao/${campanhaId}/eventos`);
-    eventSource.onopen = () => set({ connectionStatus: 'online', error: null });
+    eventSource.onopen = () => {
+      set({ connectionStatus: 'online', error: null });
+      // Reconectou: pode ter perdido eventos, então a mesa se atualiza também.
+      void useMesaStore.getState().sincronizar();
+    };
     eventSource.onerror = () => set({
       connectionStatus: 'offline',
       error: 'A conexão ao vivo foi interrompida. O navegador tentará reconectar automaticamente.',
@@ -211,7 +217,10 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
       if (event.data === 'ping' || event.data === 'conectado') return;
       try {
         const payload = JSON.parse(event.data) as { tipo?: string };
-        if (payload.tipo === 'registro') {
+        if (payload.tipo === 'mesa') {
+          // Mapa, relógios, votação e bilhetes não mexem em iniciativa nem rolagens.
+          void useMesaStore.getState().sincronizar();
+        } else if (payload.tipo === 'registro') {
           void get().fetchRolagens();
         } else {
           void get().fetchEstadoSessao().then(() => get().fetchRolagens());
@@ -488,6 +497,12 @@ export const useSessaoStore = create<SessaoState>((set, get) => ({
     const { sessaoId } = get();
     if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
     return sessaoApi.distribuirXp(sessaoId, participanteIds);
+  },
+
+  darXp: async (participanteIds, xp) => {
+    const { sessaoId } = get();
+    if (!sessaoId) throw new Error('Nenhuma sessão ao vivo aberta.');
+    await sessaoApi.darXp(sessaoId, participanteIds, xp);
   },
 
   clearError: () => set({ error: null }),

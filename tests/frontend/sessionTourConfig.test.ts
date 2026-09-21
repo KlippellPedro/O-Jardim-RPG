@@ -11,7 +11,7 @@ test('guia da sessão mantém os passos essenciais para jogadores', () => {
   const passos = obterPassosTourSessao(false);
   assert.deepEqual(
     passos.map((passo) => passo.id),
-    ['estado-ao-vivo', 'mesa-tatica', 'ficha-em-foco', 'lados-da-cena', 'abrir-ficha', 'ferramentas-da-mesa'],
+    ['estado-ao-vivo', 'mesa-tatica', 'ficha-em-foco', 'lados-da-cena', 'abrir-ficha', 'mesa-do-grupo', 'frota-e-bases', 'ferramentas-da-mesa'],
   );
   assert.equal(passos.some((passo) => passo.id === 'comando-da-mesa'), false);
 });
@@ -19,6 +19,8 @@ test('guia da sessão mantém os passos essenciais para jogadores', () => {
 test('guia acrescenta controles administrativos somente para quem comanda', () => {
   const passos = obterPassosTourSessao(true);
   assert.equal(passos.at(-1)?.id, 'comando-da-mesa');
+  assert.ok(passos.some((passo) => passo.id === 'escudo-do-mestre'));
+  assert.ok(passos.some((passo) => passo.id === 'controle-da-cena'));
 });
 
 test('persistência do guia exige versão atual e conclusão', () => {

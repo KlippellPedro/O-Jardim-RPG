@@ -10,6 +10,7 @@ import {
   Search,
   Shield,
   Sparkles,
+  Star,
   Swords,
   UserRound,
   X,
@@ -36,6 +37,7 @@ interface MasterEntityCardProps {
 
 const MasterEntityCard: React.FC<MasterEntityCardProps> = ({ entity, character, active, upNext, onOpenSheet }) => {
   const atualizarEntidade = useSessaoStore((state) => state.atualizarEntidade);
+  const darXp = useSessaoStore((state) => state.darXp);
   const [expanded, setExpanded] = useState(false);
   const [amount, setAmount] = useState('1');
   const [note, setNote] = useState(entity.anotacao);
@@ -60,6 +62,7 @@ const MasterEntityCard: React.FC<MasterEntityCardProps> = ({ entity, character, 
     try {
       await atualizarEntidade(entity.id, payload);
       if ('anotacao' in payload) setMessage('Plano salvo.');
+      else setMessage(null);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Não foi possível atualizar esta criatura.');
     } finally {
@@ -74,6 +77,25 @@ const MasterEntityCard: React.FC<MasterEntityCardProps> = ({ entity, character, 
       return;
     }
     void perform(kind === 'dano' ? { dano: parsed } : { cura: parsed });
+  };
+
+  const giveXp = async () => {
+    const parsed = Number(amount);
+    if (!Number.isInteger(parsed) || parsed < 1 || parsed > 1_000_000) {
+      setMessage('Informe um XP inteiro entre 1 e 1.000.000.');
+      return;
+    }
+    if (busy) return;
+    setBusy(true);
+    setMessage(null);
+    try {
+      await darXp([entity.id], parsed);
+      setMessage(`${parsed} de XP dado a ${entity.nome}.`);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Não foi possível dar o XP.');
+    } finally {
+      setBusy(false);
+    }
   };
 
   const chooseAttack = (name: string, detail: string) => {
@@ -91,8 +113,8 @@ const MasterEntityCard: React.FC<MasterEntityCardProps> = ({ entity, character, 
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="truncate text-sm font-semibold text-white">{entity.nome}</h3>
-              {active ? <span className="rounded-full bg-[#c7a44c]/15 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[#e2c465]">Turno atual</span> : null}
-              {upNext ? <span className="rounded-full bg-violet-300/10 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-violet-200">A seguir</span> : null}
+              {active ? <span className="rounded-full bg-[#c7a44c]/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#e2c465]">Turno atual</span> : null}
+              {upNext ? <span className="rounded-full bg-violet-300/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-violet-200">A seguir</span> : null}
             </div>
             <p className="mt-0.5 text-[10px] capitalize text-white/40">{entity.tipo} · Iniciativa {entity.iniciativa}</p>
           </div>
@@ -122,6 +144,33 @@ const MasterEntityCard: React.FC<MasterEntityCardProps> = ({ entity, character, 
           </div>
         ) : null}
 
+        <div className="mt-3 rounded-lg border border-white/[0.07] bg-black/25 p-2.5">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <input
+              type="number"
+              min={1}
+              max={99999}
+              value={amount}
+              onChange={(event) => setAmount(event.target.value)}
+              className="h-9 w-[4.5rem] rounded-md border border-white/10 bg-black/40 px-2 text-center text-sm font-bold text-white outline-none focus:border-[#c7a44c]/50"
+              aria-label={`Quantidade para ${entity.nome}`}
+            />
+            <button type="button" onClick={() => applyHealth('dano')} disabled={busy} className="h-9 flex-1 rounded-md border border-red-400/25 bg-red-400/10 px-3 text-xs font-bold text-red-200 hover:bg-red-400/20 disabled:opacity-40">Dano</button>
+            <button type="button" onClick={() => applyHealth('cura')} disabled={busy} className="h-9 flex-1 rounded-md border border-emerald-400/25 bg-emerald-400/10 px-3 text-xs font-bold text-emerald-200 hover:bg-emerald-400/20 disabled:opacity-40">Cura</button>
+            {entity.tipo === 'jogador' && entity.personagemId ? (
+              <button type="button" onClick={() => void giveXp()} disabled={busy} className="flex h-9 flex-1 items-center justify-center gap-1 rounded-md border border-violet-300/25 bg-violet-300/10 px-3 text-xs font-bold text-violet-100 hover:bg-violet-300/20 disabled:opacity-40" title="Dar esta quantidade de XP à ficha">
+                <Star size={12} aria-hidden="true" /> XP
+              </button>
+            ) : null}
+          </div>
+          <div className="mt-1.5 flex gap-1">
+            {[1, 5, 10, 25].map((step) => (
+              <button key={step} type="button" onClick={() => setAmount(String(step))} className="flex-1 rounded border border-white/[0.06] py-0.5 text-[10px] text-white/40 hover:text-white/80">{step}</button>
+            ))}
+          </div>
+          {message ? <p className={`mt-1.5 text-[10px] ${message.startsWith('Plano') || message.includes('XP dado') ? 'text-emerald-300' : 'text-red-200'}`}>{message}</p> : null}
+        </div>
+
         {entity.anotacao ? (
           <div className="mt-3 flex items-start gap-2 rounded-lg border border-violet-300/15 bg-violet-300/[0.06] px-3 py-2 text-xs text-violet-100/80">
             <Sparkles size={13} className="mt-0.5 shrink-0 text-violet-300" />
@@ -132,23 +181,6 @@ const MasterEntityCard: React.FC<MasterEntityCardProps> = ({ entity, character, 
 
       {expanded ? (
         <div className="space-y-4 border-t border-white/[0.07] bg-black/15 p-4">
-          <section>
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-white/40">Ajuste rápido de Vida</p>
-            <div className="mt-2 flex gap-2">
-              <input
-                type="number"
-                min={1}
-                max={99999}
-                value={amount}
-                onChange={(event) => setAmount(event.target.value)}
-                className="w-20 rounded-md border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-[#c7a44c]/50"
-                aria-label={`Quantidade de dano ou cura para ${entity.nome}`}
-              />
-              <button type="button" onClick={() => applyHealth('dano')} disabled={busy} className="rounded-md border border-red-400/20 px-3 py-1.5 text-xs text-red-200 hover:bg-red-400/10 disabled:opacity-40">Dano</button>
-              <button type="button" onClick={() => applyHealth('cura')} disabled={busy} className="rounded-md border border-emerald-400/20 px-3 py-1.5 text-xs text-emerald-200 hover:bg-emerald-400/10 disabled:opacity-40">Cura</button>
-            </div>
-          </section>
-
           {entity.ataques?.length ? (
             <section>
               <p className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-white/40"><Swords size={12} /> Ataques disponíveis</p>
@@ -220,6 +252,10 @@ export const MasterScreenPanel: React.FC<MasterScreenPanelProps> = ({ onClose })
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<EntityFilter>('todos');
+  const darXp = useSessaoStore((state) => state.darXp);
+  const [xpGrupo, setXpGrupo] = useState('100');
+  const [xpOcupado, setXpOcupado] = useState(false);
+  const [xpMensagem, setXpMensagem] = useState<{ texto: string; erro: boolean } | null>(null);
 
   useEffect(() => {
     void fetchCharacters();
@@ -248,6 +284,25 @@ export const MasterScreenPanel: React.FC<MasterScreenPanelProps> = ({ onClose })
     inimigo: iniciativa.filter((entity) => entity.tipo === 'inimigo').length,
   }), [iniciativa]);
 
+  const jogadores = iniciativa.filter((entity) => entity.tipo === 'jogador' && entity.personagemId);
+  const darXpAoGrupo = async () => {
+    const valor = Number(xpGrupo);
+    if (!Number.isInteger(valor) || valor < 1 || valor > 1_000_000) {
+      setXpMensagem({ texto: 'Informe um XP inteiro entre 1 e 1.000.000.', erro: true });
+      return;
+    }
+    setXpOcupado(true);
+    setXpMensagem(null);
+    try {
+      await darXp(jogadores.map((entity) => entity.id), valor);
+      setXpMensagem({ texto: `${valor} de XP dado a ${jogadores.length} jogador(es).`, erro: false });
+    } catch (error) {
+      setXpMensagem({ texto: error instanceof Error ? error.message : 'Não foi possível dar o XP.', erro: true });
+    } finally {
+      setXpOcupado(false);
+    }
+  };
+
   return (
     <div className="flex h-full min-h-0 flex-col bg-[#0b0a10]">
       <header className="border-b border-white/[0.08] p-4 sm:p-5">
@@ -259,6 +314,16 @@ export const MasterScreenPanel: React.FC<MasterScreenPanelProps> = ({ onClose })
           </div>
           <button type="button" onClick={onClose} className="rounded-lg p-2 text-white/40 hover:bg-white/5 hover:text-white" aria-label="Fechar Escudo do Mestre"><X size={18} /></button>
         </div>
+
+        {jogadores.length ? (
+          <div className="mt-4 flex flex-wrap items-center gap-2 rounded-xl border border-violet-300/15 bg-violet-300/[0.05] p-2.5">
+            <Star size={15} className="ml-1 text-violet-300" aria-hidden="true" />
+            <span className="text-xs font-bold text-violet-100">XP para todos os jogadores</span>
+            <input type="number" min={1} max={1000000} value={xpGrupo} onChange={(event) => setXpGrupo(event.target.value)} className="ml-auto h-9 w-24 rounded-md border border-white/10 bg-black/40 px-2 text-center text-sm font-bold text-white outline-none focus:border-violet-300/50" aria-label="XP para cada jogador" />
+            <button type="button" onClick={() => void darXpAoGrupo()} disabled={xpOcupado} className="h-9 rounded-md border border-violet-300/30 bg-violet-300/15 px-4 text-xs font-bold text-violet-100 hover:bg-violet-300/25 disabled:opacity-40">Dar XP</button>
+            {xpMensagem ? <p className={`basis-full px-1 text-[11px] ${xpMensagem.erro ? 'text-red-200' : 'text-emerald-300'}`}>{xpMensagem.texto}</p> : null}
+          </div>
+        ) : null}
 
         <div className="relative mt-4">
           <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />

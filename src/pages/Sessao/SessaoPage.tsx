@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   AlertTriangle,
   Car,
   Compass,
+  Hourglass,
   LockKeyhole,
   PanelLeft,
   PanelLeftClose,
@@ -20,7 +22,6 @@ import {
 import { ActiveTurnCard } from './components/ActiveTurnCard';
 import { InitiativeTracker } from './InitiativeTracker';
 import { SessionLogPanel } from './components/SessionLogPanel';
-import { FrotaBasesPanel } from './components/FrotaBasesPanel';
 import { MasterScreenPanel } from './components/MasterScreenPanel';
 import { SessionParticipantsDialog } from './components/SessionParticipantsDialog';
 import { useSessaoStore } from '../../store/useSessaoStore';
@@ -37,21 +38,27 @@ import './sessao.css';
 import { ResumoSessaoModal } from './components/ResumoSessaoModal';
 import { sessaoApi } from '../../services/sessaoApi';
 import { dispararSuaVez } from '../../components/suaVez/suaVez';
+import { useMesaStore } from '../../store/useMesaStore';
+import { MesaPanel } from './mesa/MesaPanel';
+import { MesaAvisos } from './mesa/MesaAvisos';
+import { RelogiosFaixa } from './mesa/RelogiosFaixa';
+import { contarPendencias, type AbaMesa } from './mesa/avisos';
 
 export const SessaoPage: React.FC = () => {
+  const navigate = useNavigate();
   const [isChangingLive, setIsChangingLive] = useState(false);
   const [liveActionError, setLiveActionError] = useState<string | null>(null);
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
   const [rightDrawerOpen, setRightDrawerOpen] = useState(false);
-  const [frotaDrawerOpen, setFrotaDrawerOpen] = useState(false);
   const [masterScreenOpen, setMasterScreenOpen] = useState(false);
+  const [mesaAba, setMesaAba] = useState<AbaMesa | null>(null);
   const [participantsDialogMode, setParticipantsDialogMode] = useState<'select' | 'start' | null>(null);
   const [tourOpen, setTourOpen] = useState(false);
   const tourAttemptedRef = useRef(false);
   const leftDrawerRef = useRef<HTMLElement>(null);
   const rightDrawerRef = useRef<HTMLElement>(null);
-  const frotaDrawerRef = useRef<HTMLElement>(null);
   const masterScreenRef = useRef<HTMLElement>(null);
+  const mesaRef = useRef<HTMLElement>(null);
   // O histórico é útil, mas ocupa uma coluna inteira - dá pra recolher.
   const [historyPanelOpen, setHistoryPanelOpen] = useState(false);
   const reduceMotion = useReducedMotion();
@@ -126,8 +133,19 @@ export const SessaoPage: React.FC = () => {
 
   useDialogAccessibility({ open: leftDrawerOpen, dialogRef: leftDrawerRef, onClose: () => setLeftDrawerOpen(false) });
   useDialogAccessibility({ open: rightDrawerOpen, dialogRef: rightDrawerRef, onClose: () => setRightDrawerOpen(false) });
-  useDialogAccessibility({ open: frotaDrawerOpen, dialogRef: frotaDrawerRef, onClose: () => setFrotaDrawerOpen(false) });
   useDialogAccessibility({ open: masterScreenOpen, dialogRef: masterScreenRef, onClose: () => setMasterScreenOpen(false) });
+  useDialogAccessibility({ open: mesaAba !== null, dialogRef: mesaRef, onClose: () => setMesaAba(null) });
+
+  // Relógios, cronômetros, votação e bilhetes da campanha. Só vive enquanto a página está aberta.
+  const iniciarMesa = useMesaStore((estado) => estado.iniciar);
+  const encerrarMesa = useMesaStore((estado) => estado.encerrar);
+  const dadosMesa = useMesaStore((estado) => estado.dados);
+  useEffect(() => {
+    if (!activeCampaignId) return undefined;
+    iniciarMesa(activeCampaignId);
+    return () => encerrarMesa();
+  }, [activeCampaignId, iniciarMesa, encerrarMesa]);
+  const pendenciasMesa = contarPendencias(dadosMesa?.estado ?? null, Boolean(dadosMesa?.gestor));
 
   useEffect(() => {
     if (!activeCampaignId) return undefined;
@@ -155,7 +173,7 @@ export const SessaoPage: React.FC = () => {
   }, [activeCampaignId, usuario?.id]);
 
   useEffect(() => {
-    const overlayOpen = leftDrawerOpen || rightDrawerOpen || frotaDrawerOpen || masterScreenOpen || !!participantsDialogMode;
+    const overlayOpen = leftDrawerOpen || rightDrawerOpen || masterScreenOpen || mesaAba !== null || !!participantsDialogMode;
     if (!activeCampaignId || isLoading || bloqueada || !sessaoStatus || tourOpen || overlayOpen || tourAttemptedRef.current) return undefined;
     try {
       if (sessaoTourJaVisto(localStorage.getItem(tourStorageKey))) {
@@ -170,11 +188,11 @@ export const SessaoPage: React.FC = () => {
   }, [
     activeCampaignId,
     bloqueada,
-    frotaDrawerOpen,
     iniciarTour,
     isLoading,
     leftDrawerOpen,
     masterScreenOpen,
+    mesaAba,
     participantsDialogMode,
     rightDrawerOpen,
     sessaoStatus,
@@ -339,22 +357,38 @@ export const SessaoPage: React.FC = () => {
               </button>
               <button
                 type="button"
-                onClick={() => setFrotaDrawerOpen(true)}
-                className="rounded-lg border border-white/10 p-2 text-white/70 hover:border-amber-400/40 hover:text-white"
-                aria-label="Abrir frota e bases da campanha"
+                onClick={() => setMesaAba('relogios')}
+                className="relative flex items-center gap-1.5 rounded-lg border border-[#c7a44c]/25 p-2 text-[#d9b95f] hover:border-[#c7a44c]/50 hover:bg-[#c7a44c]/10 xl:px-3"
+                aria-label={pendenciasMesa ? `Abrir a mesa, ${pendenciasMesa} pendência(s)` : 'Abrir a mesa'}
+                title="Mesa: tempo, votação, bilhetes e replay"
+                data-tour="session-mesa"
+              >
+                <Hourglass size={18} />
+                <span className="hidden text-xs font-semibold xl:inline">Mesa</span>
+                {pendenciasMesa > 0 ? <span className="absolute -right-1 -top-1 flex min-w-4 items-center justify-center rounded-full bg-amber-400 px-1 text-[9px] font-black text-black">{pendenciasMesa}</span> : null}
+              </button>
+              <button
+                type="button"
+                data-tour="session-frota"
+                onClick={() => navigate('/frota')}
+                className="flex items-center gap-1.5 rounded-lg border border-white/10 p-2 text-white/70 hover:border-amber-400/40 hover:text-white xl:px-3"
+                aria-label="Abrir a página de frota e bases da campanha"
                 title="Frota & Bases"
               >
                 <Car size={18} />
+                <span className="hidden text-xs font-semibold xl:inline">Frota</span>
               </button>
               {comando ? (
                 <button
                   type="button"
                   onClick={() => setMasterScreenOpen(true)}
-                  className="rounded-lg border border-[#c7a44c]/20 p-2 text-[#d9b95f] hover:border-[#c7a44c]/45 hover:bg-[#c7a44c]/10"
+                  className="flex items-center gap-1.5 rounded-lg border border-[#c7a44c]/20 p-2 text-[#d9b95f] hover:border-[#c7a44c]/45 hover:bg-[#c7a44c]/10 xl:px-3"
                   aria-label="Abrir Escudo do Mestre"
+                  data-tour="session-escudo"
                   title="Escudo do Mestre"
                 >
                   <Shield size={18} />
+                  <span className="hidden text-xs font-semibold xl:inline">Escudo</span>
                 </button>
               ) : null}
               {comando && sessaoStatus === 'preparacao' ? (
@@ -420,6 +454,7 @@ export const SessaoPage: React.FC = () => {
           ) : null}
 
           <main className="relative min-h-0 min-w-0 overflow-hidden">
+            <RelogiosFaixa onAbrir={() => setMesaAba('relogios')} />
             {isLoading ? (
               <div className="flex h-full items-center justify-center text-sm text-white/50" role="status">
                 <RefreshCw className="mr-3 animate-spin text-[#c7a44c]" size={18} />
@@ -466,21 +501,6 @@ export const SessaoPage: React.FC = () => {
         </div>
       ) : null}
 
-      {frotaDrawerOpen ? (
-        <div className="modal-viewport fixed inset-0 z-[70] flex justify-end bg-black/70" role="presentation" onClick={() => setFrotaDrawerOpen(false)}>
-          <aside
-            ref={frotaDrawerRef}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Frota e bases"
-            className="h-full w-[min(380px,100%)] border-l border-white/10 bg-[#0b0a10]"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <FrotaBasesPanel onClose={() => setFrotaDrawerOpen(false)} />
-          </aside>
-        </div>
-      ) : null}
-
       {masterScreenOpen && comando ? (
         <div className="modal-viewport fixed inset-0 z-[70] flex justify-end bg-black/75" role="presentation" onClick={() => setMasterScreenOpen(false)}>
           <aside
@@ -495,6 +515,23 @@ export const SessaoPage: React.FC = () => {
           </aside>
         </div>
       ) : null}
+
+      {mesaAba !== null ? (
+        <div className="modal-viewport fixed inset-0 z-[70] flex justify-end bg-black/75" role="presentation" onClick={() => setMesaAba(null)}>
+          <aside
+            ref={mesaRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mesa"
+            className="h-full w-[min(1180px,100%)] border-l border-[#c7a44c]/15 bg-[#0b0a10] shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <MesaPanel aba={mesaAba} onAba={setMesaAba} onClose={() => setMesaAba(null)} />
+          </aside>
+        </div>
+      ) : null}
+
+      <MesaAvisos onAbrir={setMesaAba} />
 
       {resumoAbertoId ? <ResumoSessaoModal sessaoId={resumoAbertoId} onClose={fecharResumo} /> : null}
 

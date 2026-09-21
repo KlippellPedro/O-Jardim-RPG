@@ -1,6 +1,6 @@
 import type { GuidedTourStep } from '../../components/ui/GuidedTour';
 
-export const SESSAO_TOUR_STORAGE_VERSION = 1;
+export const SESSAO_TOUR_STORAGE_VERSION = 2;
 
 const PASSOS_JOGADOR: GuidedTourStep[] = [
   {
@@ -12,7 +12,7 @@ const PASSOS_JOGADOR: GuidedTourStep[] = [
   {
     id: 'mesa-tatica',
     titulo: 'Esta é a visão geral da cena',
-    descricao: 'A mesa tática mantém o combate inteiro em uma única área. Durante a luta, ela acompanha a rodada e destaca automaticamente quem possui o turno atual.',
+    descricao: 'A cena mantém o combate inteiro em uma única área. Durante a luta, ela acompanha a rodada e destaca automaticamente quem possui o turno atual.',
     alvos: ['[data-tour="session-table"]'],
   },
   {
@@ -37,22 +37,51 @@ const PASSOS_JOGADOR: GuidedTourStep[] = [
     opcional: true,
   },
   {
+    id: 'mesa-do-grupo',
+    titulo: 'A Mesa: tempo, votação, bilhetes e replay',
+    descricao: 'Este botão abre a Mesa. Em “Tempo” ficam os relógios e cronômetros que o Mestre põe para dar pressão; em “Votação”, as decisões do grupo; em “Bilhetes”, o que só você recebe; e em “Replay”, a noite inteira para rever. Um número no botão avisa que algo espera por você.',
+    alvos: ['[data-tour="session-mesa"]'],
+  },
+  {
+    id: 'frota-e-bases',
+    titulo: 'Frota e Bases da campanha',
+    descricao: 'O botão do carro leva a uma página com os veículos e as bases que a campanha inteira pode ver, com vida e combustível ao vivo.',
+    alvos: ['[data-tour="session-frota"]'],
+    opcional: true,
+  },
+  {
     id: 'ferramentas-da-mesa',
     titulo: 'Histórico, iniciativa e ferramentas',
-    descricao: 'Os atalhos do cabeçalho abrem o histórico de rolagens, a fila de iniciativa em telas menores e os recursos compartilhados da campanha. No desktop, histórico e controle da cena funcionam como painéis laterais.',
+    descricao: 'Os atalhos do cabeçalho abrem o histórico de rolagens e a fila de iniciativa em telas menores. No desktop, histórico e controle da cena funcionam como painéis laterais.',
     alvos: ['[data-tour="session-tools"]'],
   },
 ];
 
-const PASSO_COMANDO: GuidedTourStep = {
-  id: 'comando-da-mesa',
-  titulo: 'Controles de quem comanda a sessão',
-  descricao: 'Mestres e assistentes também encontram aqui participantes, Escudo do Mestre e publicação ao vivo. No painel “Controle da cena”, use “Por grupo” para administrar fichas ou “Fila de turnos” para ordenar e avançar o combate.',
-  alvos: ['[data-tour="session-tools"]'],
-};
+const PASSOS_COMANDO: GuidedTourStep[] = [
+  {
+    id: 'escudo-do-mestre',
+    titulo: 'Escudo do Mestre',
+    descricao: 'Dano, cura e XP de cada participante ficam sempre à vista, sem abrir nada. No topo há um campo para dar XP a todos os jogadores de uma vez. As anotações e os ataques abrem no cartão.',
+    alvos: ['[data-tour="session-escudo"]'],
+    opcional: true,
+  },
+  {
+    id: 'controle-da-cena',
+    titulo: 'Controle da cena e Bestiário',
+    descricao: 'No painel “Controle da cena”, o Bestiário monta o encontro com filtros por VD e categoria (dá para adicionar várias cópias de uma vez), “Novo” cria um NPC à mão e “Em massa” aplica dano ou cura em vários. Use “Por grupo” para administrar fichas ou “Fila de turnos” para avançar o combate.',
+    alvos: ['[data-tour="session-cena"]'],
+    opcional: true,
+  },
+  {
+    id: 'comando-da-mesa',
+    titulo: 'Controles de quem comanda a sessão',
+    descricao: 'Mestres e assistentes também encontram aqui a escolha dos participantes e a publicação ao vivo. Na Mesa, você cria relógios, cronômetros, votações e bilhetes secretos.',
+    alvos: ['[data-tour="session-tools"]'],
+  },
+];
 
 export function obterPassosTourSessao(comando: boolean): GuidedTourStep[] {
-  return comando ? [...PASSOS_JOGADOR, PASSO_COMANDO] : PASSOS_JOGADOR;
+  return comando ? [...PASSOS_JOGADOR, ...PASSOS_COMANDO] : PASSOS_JOGADOR;
 }
 
 export function sessaoTourJaVisto(valor: string | null): boolean {

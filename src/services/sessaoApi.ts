@@ -226,6 +226,13 @@ export const sessaoApi = {
     return api<{ monstros: BestiarioMonstro[] }>(`/sessao/bestiario?campanha_id=${campanhaId}`);
   },
 
+  darXp(sessaoId: string, participanteIds: string[], xp: number) {
+    return api<{ xp: number; personagens: Array<{ id: string; nome: string; xp: number }> }>(`/sessao/${sessaoId}/xp-direto`, {
+      method: 'POST',
+      body: { participante_ids: participanteIds, xp },
+    });
+  },
+
   distribuirXp(sessaoId: string, participanteIds: string[]) {
     return api<DistribuirXpResponse>(`/sessao/${sessaoId}/xp`, {
       method: 'POST',

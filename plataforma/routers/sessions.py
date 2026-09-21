@@ -20,9 +20,12 @@ from core.dependencies import (
     require_csrf,
 )
 from core import live_session
+from core.mesa_eventos import registrar as registrar_evento
+from core.discord_avisos import avisar_discord
 from core.notifications import campaign_member_ids, character_owner_ids, notify
 from schemas import (
     DistributeXpInput,
+    GrantXpInput,
     ParticipantCreateInput,
     ParticipantReorderInput,
     ParticipantUpdateInput,
@@ -383,6 +386,10 @@ def publicar_sessao(
                 message="O Mestre liberou a mesa ao vivo.",
                 campaign_id=sessao["campanha_id"],
                 actor_user_id=user.id,
+            )
+            avisar_discord(
+                connection, sessao["campanha_id"], "sessao",
+                "🎲 **A sessão começou!** A mesa ao vivo está aberta no site.",
             )
             record_audit(
                 connection,
@@ -1111,6 +1118,64 @@ def distribuir_xp(
     }
 
 
+@router.post("/{sessao_id}/xp-direto")
+def dar_xp_direto(
+    sessao_id: UUID,
+    payload: GrantXpInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    """O Mestre dá XP direto aos jogadores escolhidos (a mesma quantia para cada um),
+    sem passar por monstro derrotado: recompensa de cena, objetivo cumprido, boa ideia."""
+    with database.connection() as connection:
+        sessao = _sessao_sob_comando(connection, sessao_id, user.id)
+        jogadores = connection.execute(
+            """
+            SELECT DISTINCT personagem_id FROM sessao_participantes
+            WHERE sessao_id=%s AND id = ANY(%s) AND tipo='jogador' AND personagem_id IS NOT NULL
+            """,
+            (sessao_id, payload.participante_ids),
+        ).fetchall()
+        personagem_ids = [row["personagem_id"] for row in jogadores]
+        if not personagem_ids:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="nenhum jogador valido selecionado")
+        atualizados = connection.execute(
+            """
+            UPDATE personagens SET
+                ficha = jsonb_set(
+                    ficha, '{xp}',
+                    to_jsonb(COALESCE((ficha->>'xp')::int, 0) + %s),
+                    true
+                ),
+                versao = versao + 1,
+                atualizado_em = CURRENT_TIMESTAMP
+            WHERE id = ANY(%s) AND status='ativo'
+            RETURNING id, nome, (ficha->>'xp')::int AS xp
+            """,
+            (payload.xp, personagem_ids),
+        ).fetchall()
+        notify(
+            connection,
+            user_ids=character_owner_ids(connection, sessao["campanha_id"], personagem_ids),
+            category="sessao",
+            title="XP recebido",
+            message=f"O Mestre deu {payload.xp} de XP à sua ficha.",
+            campaign_id=sessao["campanha_id"],
+            actor_user_id=user.id,
+        )
+        record_audit(
+            connection,
+            action="sessao.xp_direto",
+            actor_user_id=user.id,
+            campaign_id=sessao["campanha_id"],
+            target_type="sessao",
+            target_id=str(sessao_id),
+            details={"xp": payload.xp, "personagens": len(personagem_ids)},
+        )
+        resultado = [dict(row) for row in atualizados]
+    return {"xp": payload.xp, "personagens": resultado}
+
+
 @router.get("/bestiario")
 def listar_bestiario(
     campanha_id: UUID,
@@ -1252,13 +1317,25 @@ def controlar_turno(
         # escondida nunca sai por aqui.
         da_vez = connection.execute(
             """
-            SELECT personagem_id FROM sessao_participantes
+            SELECT personagem_id, nome, tipo, visibilidade FROM sessao_participantes
             WHERE sessao_id=%s
             ORDER BY ordem, iniciativa DESC, nome
             OFFSET %s LIMIT 1
             """,
             (sessao_id, indice),
         ).fetchone()
+        # Linha do tempo do replay. Criatura escondida entra sem o nome.
+        if payload.acao == "iniciar":
+            registrar_evento(connection, campanha_id, sessao_id, "combate", "O combate começou.")
+        elif payload.acao == "encerrar":
+            registrar_evento(connection, campanha_id, sessao_id, "combate", "O combate terminou.")
+        elif payload.acao in ("proximo", "anterior") and em_combate and da_vez:
+            escondida = da_vez["tipo"] == "inimigo" and da_vez["visibilidade"] in ("oculto", "desconhecido")
+            quem = "uma criatura desconhecida" if escondida else da_vez["nome"]
+            registrar_evento(
+                connection, campanha_id, sessao_id, "turno",
+                f"Rodada {rodada}: vez de {quem}.",
+            )
     live_session.publicar(
         campanha_id,
         "turno",

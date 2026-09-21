@@ -169,7 +169,8 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
     }, field === 'dano' ? 'Não foi possível aplicar o dano.' : 'Não foi possível aplicar a cura.');
   };
 
-  const pickFromBestiario = async (monstro: BestiarioMonstro) => {
+  const pickFromBestiario = async (monstro: BestiarioMonstro, numero?: number) => {
+    const nomeBase = numero ? `${monstro.titulo} ${numero}` : monstro.titulo;
     const iniciativaBase = monstro.iniciativa ?? 10;
     const base = {
       tipo: 'inimigo' as const,
@@ -181,7 +182,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
       ataques: monstro.ataques,
       pericias: monstro.pericias,
     };
-    await adicionarEntidade({ ...base, nome: monstro.titulo, iniciativa: iniciativaBase });
+    await adicionarEntidade({ ...base, nome: nomeBase, iniciativa: iniciativaBase });
 
     // Multiataque age duas vezes por rodada: a segunda entrada some 10 da
     // iniciativa pra não ficar colada na primeira na fila.
@@ -189,11 +190,10 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
     if (temMultiataque) {
       await adicionarEntidade({
         ...base,
-        nome: `${monstro.titulo} (2º turno)`,
+        nome: `${nomeBase} (2º turno)`,
         iniciativa: Math.max(-99, iniciativaBase - 10),
       });
     }
-    setShowBestiario(false);
   };
 
   const distributeXp = () => {
@@ -236,22 +236,22 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
           ) : null}
           <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border bg-black/30 font-mono text-sm font-bold" style={{ borderColor: `${entity.cor}80`, color: entity.cor }}>
             {entity.iniciativa}
-            <span className="absolute -left-1 -top-1 rounded-full bg-[#17151c] px-1 text-[8px] font-normal text-white/35">{index + 1}</span>
+            <span className="absolute -left-1 -top-1 rounded-full bg-[#17151c] px-1 text-[10px] font-normal text-white/35">{index + 1}</span>
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <h3 className="truncate text-sm font-semibold text-white/90">{entity.nome}</h3>
-              {active ? <span className="rounded-full bg-[#c7a44c]/15 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[#e2c465]">Turno</span> : null}
+              {active ? <span className="rounded-full bg-[#c7a44c]/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#e2c465]">Turno</span> : null}
               {comando && entity.visibilidade && entity.visibilidade !== 'total' ? (
                 <span
-                  className="shrink-0 rounded-full border border-white/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white/40"
+                  className="shrink-0 rounded-full border border-white/10 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white/40"
                   title="Só quem comanda a mesa vê este selo - é o que os jogadores enxergam desta entidade."
                 >
                   {rotuloVisibilidade(entity.visibilidade)}
                 </span>
               ) : null}
             </div>
-            <div className="mt-0.5 flex items-center gap-1.5 text-[9px] capitalize text-white/35">
+            <div className="mt-0.5 flex items-center gap-1.5 text-[11px] capitalize text-white/35">
               <span>{entity.tipo}</span>
               <span>•</span>
               <span>posição {index + 1}</span>
@@ -262,7 +262,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
                 </>
               ) : null}
             </div>
-            <div className="mt-2 grid grid-cols-3 gap-1 text-[9px]">
+            <div className="mt-2 grid grid-cols-3 gap-1 text-[11px]">
               <span className="flex min-w-0 items-center gap-1 rounded-md bg-red-400/[0.07] px-1.5 py-1 text-red-100/60" title="Vida">
                 <HeartPulse size={10} className="shrink-0 text-red-300/70" />
                 <span className="truncate">{entity.hpAtual !== undefined ? comExtraTemporario(`${entity.hpAtual}/${entity.hpTotal ?? '?'}`, entity.hpTemp) : entity.estado_vida ?? 'Oculta'}</span>
@@ -277,8 +277,8 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
               </span>
             </div>
             {hpRatio !== null ? (
-              <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-white/[0.06]">
-                <div className="h-full rounded-full bg-red-400/65" style={{ width: `${hpRatio}%` }} />
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
+                <div className={`h-full rounded-full transition-[width] duration-500 ${hpRatio <= 25 ? 'bg-red-500' : hpRatio <= 50 ? 'bg-amber-400' : 'bg-emerald-400'}`} style={{ width: `${hpRatio}%` }} />
               </div>
             ) : null}
           </div>
@@ -297,7 +297,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
         {entity.condicoes.length && editingId !== entity.id ? (
           <div className="flex flex-wrap gap-1 border-t border-white/[0.06] px-3 py-2">
             {entity.condicoes.map((condition) => (
-              <span key={`${condition.nome}-${condition.turnos ?? 'p'}`} className="rounded-full bg-amber-300/[0.07] px-2 py-0.5 text-[9px] text-amber-100/65">
+              <span key={`${condition.nome}-${condition.turnos ?? 'p'}`} className="rounded-full bg-amber-300/[0.07] px-2 py-0.5 text-[11px] text-amber-100/65">
                 {condition.nome}{condition.turnos ? ` · ${condition.turnos}` : ''}
               </span>
             ))}
@@ -346,7 +346,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
 
   return (
     <div className="flex h-full min-h-0 flex-col bg-[#0d0c12]/92">
-      <div className="shrink-0 border-b border-white/10 px-4 pb-4 pt-5">
+      <div className="shrink-0 border-b border-white/10 px-4 pb-4 pt-5" data-tour="session-cena">
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="font-semibold text-white">Controle da cena</h2>
@@ -354,54 +354,53 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
               {emCombate ? 'Turnos e fichas em combate' : 'Participantes e iniciativa'}
             </p>
           </div>
-          <div className="flex items-center gap-1">
-            {comando && iniciativa.length > 0 ? (
+          {onClose ? (
+            <button type="button" onClick={onClose} className="rounded-md p-2 text-white/50 hover:bg-white/5 hover:text-white" aria-label="Fechar iniciativa">
+              <X size={18} />
+            </button>
+          ) : null}
+        </div>
+
+        {comando ? (
+          <div className="mt-4 grid grid-cols-3 gap-1.5" aria-label="Ferramentas da cena">
+            {campanhaId ? (
+              <button
+                type="button"
+                onClick={() => setShowBestiario(true)}
+                className="flex flex-col items-center gap-1 rounded-xl border border-[#c7a44c]/25 bg-[#c7a44c]/[0.06] px-2 py-2.5 text-[11px] font-bold text-[#e3c363] transition-colors hover:bg-[#c7a44c]/15"
+                aria-label="Abrir o Bestiário"
+                title="Adicionar criaturas do Bestiário"
+              >
+                <Skull size={18} /> Bestiário
+              </button>
+            ) : null}
+            <button
+              type="button"
+              onClick={() => setIsAdding((current) => !current)}
+              aria-pressed={isAdding}
+              className={`flex flex-col items-center gap-1 rounded-xl border px-2 py-2.5 text-[11px] font-bold transition-colors ${isAdding ? 'border-white/25 bg-white/10 text-white' : 'border-white/10 bg-white/[0.03] text-white/70 hover:bg-white/[0.07] hover:text-white'}`}
+              aria-label={isAdding ? 'Cancelar adição' : 'Adicionar entidade'}
+              title="Adicionar um NPC ou monstro à mão"
+            >
+              {isAdding ? <X size={18} /> : <Plus size={18} />} {isAdding ? 'Cancelar' : 'Novo'}
+            </button>
+            {iniciativa.length > 0 ? (
               <button
                 type="button"
                 onClick={() => {
                   setBatchMode((current) => !current);
                   setSelectedIds(new Set());
                 }}
-                className={`rounded-md border p-2 ${
-                  batchMode
-                    ? 'border-[#c7a44c]/50 bg-[#c7a44c]/10 text-[#d7b85c]'
-                    : 'border-white/10 text-white/50 hover:text-white'
-                }`}
+                className={`flex flex-col items-center gap-1 rounded-xl border px-2 py-2.5 text-[11px] font-bold transition-colors ${batchMode ? 'border-[#c7a44c]/50 bg-[#c7a44c]/12 text-[#e3c363]' : 'border-white/10 bg-white/[0.03] text-white/70 hover:bg-white/[0.07] hover:text-white'}`}
                 aria-pressed={batchMode}
                 aria-label={batchMode ? 'Sair da seleção em massa' : 'Selecionar vários para aplicar dano ou cura'}
                 title="Aplicar dano ou cura em vários participantes de uma vez"
               >
-                <CheckSquare size={17} />
-              </button>
-            ) : null}
-            {comando && campanhaId ? (
-              <button
-                type="button"
-                onClick={() => setShowBestiario(true)}
-                className="rounded-md border border-white/10 p-2 text-white/50 hover:border-[#c7a44c]/40 hover:text-white"
-                aria-label="Abrir o Bestiário"
-                title="Adicionar criatura do Bestiário"
-              >
-                <Skull size={17} />
-              </button>
-            ) : null}
-            {comando ? (
-              <button
-                type="button"
-                onClick={() => setIsAdding((current) => !current)}
-                className="rounded-md border border-[#c7a44c]/25 p-2 text-[#d7b85c] hover:bg-[#c7a44c]/10"
-                aria-label={isAdding ? 'Cancelar adição' : 'Adicionar entidade'}
-              >
-                {isAdding ? <X size={17} /> : <Plus size={17} />}
-              </button>
-            ) : null}
-            {onClose ? (
-              <button type="button" onClick={onClose} className="rounded-md p-2 text-white/50 hover:bg-white/5 hover:text-white" aria-label="Fechar iniciativa">
-                <X size={18} />
+                <CheckSquare size={18} /> Em massa
               </button>
             ) : null}
           </div>
-        </div>
+        ) : null}
 
         {iniciativa.length ? (
           <div className="mt-4 grid grid-cols-2 gap-1 rounded-lg border border-white/[0.07] bg-black/25 p-1" aria-label="Organização dos participantes">
@@ -615,7 +614,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
                     {section.key === 'jogador' ? <UserRound size={14} /> : section.key === 'aliado' ? <Shield size={14} /> : <Skull size={14} />}
                     <div>
                       <h3 id={`session-group-${section.key}`} className="text-[11px] font-semibold text-white/80">{section.title}</h3>
-                      <p className="text-[9px] text-white/35">{section.subtitle}</p>
+                      <p className="text-[11px] text-white/35">{section.subtitle}</p>
                     </div>
                   </div>
                   <span className="font-mono text-[10px] text-white/45">{section.entities.length}</span>

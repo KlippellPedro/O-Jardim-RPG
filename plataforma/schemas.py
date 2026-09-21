@@ -761,6 +761,13 @@ class DistributeXpInput(BaseModel):
     participante_ids: list[UUID] = Field(min_length=1, max_length=60)
 
 
+class GrantXpInput(BaseModel):
+    """XP dado à mão pelo Mestre: a mesma quantia para cada jogador escolhido."""
+
+    participante_ids: list[UUID] = Field(min_length=1, max_length=60)
+    xp: int = Field(ge=1, le=1_000_000)
+
+
 class SessionTurnInput(BaseModel):
     acao: Literal["iniciar", "proximo", "anterior", "ordenar", "encerrar"]
 

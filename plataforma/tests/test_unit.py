@@ -49,6 +49,7 @@ from schemas import (
     CharacterCreateInput,
     EconomyReplaceInput,
     DistributeXpInput,
+    GrantXpInput,
     NotificationReadInput,
     ParticipantCreateInput,
     ParticipantReorderInput,
@@ -732,6 +733,14 @@ class SessaoAoVivoTests(unittest.TestCase):
     def test_distribuir_xp_exige_ao_menos_um_participante(self):
         with self.assertRaises(ValidationError):
             DistributeXpInput(participante_ids=[])
+
+    def test_xp_direto_exige_jogador_e_quantia_positiva(self):
+        from uuid import uuid4
+        with self.assertRaises(ValidationError):
+            GrantXpInput(participante_ids=[], xp=100)
+        with self.assertRaises(ValidationError):
+            GrantXpInput(participante_ids=[uuid4()], xp=0)
+        self.assertEqual(GrantXpInput(participante_ids=[uuid4()], xp=250).xp, 250)
 
     def test_inteiro_do_catalogo_aceita_texto_ou_numero(self):
         # Entradas antigas do catálogo guardam pv/defesa como texto ("120");

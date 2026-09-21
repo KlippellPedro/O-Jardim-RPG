@@ -1,0 +1,304 @@
+/* Linguagem visual da mesa: relógios, cronômetros, votação, bilhetes, trilha e replay.
+   Tudo usa as mesmas peças (cartão, campo, botão, controle deslizante) para que as
+   seções pareçam da mesma casa. */
+
+.mesa {
+  --ouro: #c7a44c;
+  --ouro-claro: #f3dc8f;
+  --fundo: #0b0a10;
+  --cartao: #100f17;
+  --linha: rgba(255, 255, 255, 0.09);
+}
+
+/* ---------- cartão ---------- */
+.mesa-cartao {
+  position: relative;
+  border: 1px solid var(--linha);
+  border-radius: 1.1rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012)), var(--cartao);
+  padding: 1.1rem;
+}
+.mesa-cartao--ouro {
+  border-color: rgba(199, 164, 76, 0.35);
+  background: linear-gradient(160deg, rgba(199, 164, 76, 0.14), transparent 60%), var(--cartao);
+}
+.mesa-cartao--vazio {
+  border-style: dashed;
+  background: transparent;
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.mesa-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #8b8f9a;
+  margin-bottom: 0.75rem;
+}
+.mesa-titulo svg { color: var(--ouro); }
+
+/* ---------- campos ---------- */
+.mesa-campo {
+  width: 100%;
+  min-height: 2.75rem;
+  border: 1px solid var(--linha);
+  border-radius: 0.8rem;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 0.6rem 0.9rem;
+  color: #fff;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.mesa-campo::placeholder { color: #5d6270; }
+.mesa-campo:focus { border-color: rgba(199, 164, 76, 0.6); box-shadow: 0 0 0 3px rgba(199, 164, 76, 0.12); }
+textarea.mesa-campo { min-height: 7rem; resize: vertical; line-height: 1.6; }
+.mesa-rotulo { display: block; font-size: 0.72rem; font-weight: 700; color: #8b8f9a; }
+.mesa-rotulo > .mesa-campo { margin-top: 0.3rem; }
+
+/* ---------- botões ---------- */
+.mesa-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0 1.1rem;
+  border: 1px solid var(--linha);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.03);
+  color: #d1d5db;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+}
+.mesa-botao:hover:not(:disabled) { background: rgba(255, 255, 255, 0.08); color: #fff; }
+.mesa-botao:active:not(:disabled) { transform: translateY(1px); }
+.mesa-botao:disabled { opacity: 0.35; cursor: not-allowed; }
+.mesa-botao--ouro { border-color: rgba(199, 164, 76, 0.5); background: rgba(199, 164, 76, 0.16); color: var(--ouro-claro); }
+.mesa-botao--ouro:hover:not(:disabled) { background: rgba(199, 164, 76, 0.28); color: #fff3c4; }
+.mesa-botao--perigo { border-color: rgba(248, 113, 113, 0.35); background: rgba(248, 113, 113, 0.1); color: #fecaca; }
+.mesa-botao--perigo:hover:not(:disabled) { background: rgba(248, 113, 113, 0.2); }
+.mesa-botao--icone { width: 2.5rem; min-height: 2.5rem; padding: 0; }
+.mesa-botao--pequeno { min-height: 2.25rem; padding: 0 0.75rem; font-size: 0.78rem; border-radius: 0.65rem; }
+.mesa-botao[aria-pressed='true'] { border-color: rgba(199, 164, 76, 0.55); background: rgba(199, 164, 76, 0.16); color: var(--ouro-claro); }
+
+/* ---------- controle deslizante ---------- */
+.mesa-range {
+  --pct: 50%;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 1.75rem;
+  background: transparent;
+  cursor: pointer;
+}
+.mesa-range:disabled { opacity: 0.35; cursor: not-allowed; }
+.mesa-range::-webkit-slider-runnable-track {
+  height: 0.4rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--ouro) var(--pct), rgba(255, 255, 255, 0.12) var(--pct));
+}
+.mesa-range::-moz-range-track { height: 0.4rem; border-radius: 999px; background: rgba(255, 255, 255, 0.12); }
+.mesa-range::-moz-range-progress { height: 0.4rem; border-radius: 999px; background: var(--ouro); }
+.mesa-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: -0.375rem;
+  border-radius: 999px;
+  border: 2px solid #1a1508;
+  background: var(--ouro-claro);
+  box-shadow: 0 0 0 3px rgba(199, 164, 76, 0.25), 0 2px 6px rgba(0, 0, 0, 0.6);
+  transition: transform 0.12s;
+}
+.mesa-range::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.mesa-range::-moz-range-thumb {
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 999px;
+  border: 2px solid #1a1508;
+  background: var(--ouro-claro);
+  box-shadow: 0 0 0 3px rgba(199, 164, 76, 0.25);
+}
+.mesa-range:focus-visible { outline: none; }
+.mesa-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgba(243, 220, 143, 0.5); }
+
+/* ---------- navegação da mesa ---------- */
+.mesa-nav {
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--linha);
+  scrollbar-width: none;
+}
+.mesa-nav::-webkit-scrollbar { display: none; }
+.mesa-nav__item {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.85rem;
+  color: #8b8f9a;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: color 0.15s, background 0.15s;
+}
+.mesa-nav__item:hover { color: #fff; background: rgba(255, 255, 255, 0.04); }
+.mesa-nav__item[aria-selected='true'] { color: var(--ouro-claro); background: rgba(199, 164, 76, 0.13); border-color: rgba(199, 164, 76, 0.4); }
+.mesa-nav__selo {
+  min-width: 1.25rem;
+  border-radius: 999px;
+  background: #fbbf24;
+  padding: 0 0.3rem;
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #000;
+  line-height: 1.25rem;
+}
+
+/* ---------- cronômetro ---------- */
+.mesa-cronometro {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  overflow: hidden;
+  border: 1px solid var(--linha);
+  border-radius: 1.1rem;
+  background: var(--cartao);
+  padding: 1rem;
+}
+.mesa-cronometro::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--cor) 22%, transparent), transparent 65%);
+  pointer-events: none;
+}
+.mesa-cronometro > * { position: relative; }
+.mesa-cronometro--urgente { border-color: color-mix(in srgb, var(--cor) 70%, transparent); animation: mesa-pulso 1s ease-in-out infinite; }
+.mesa-cronometro--zerado { border-color: var(--cor); }
+.mesa-cronometro__tempo {
+  font-family: 'Cinzel', Georgia, serif;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(2.4rem, 7vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 0 22px color-mix(in srgb, var(--cor) 55%, transparent);
+}
+.mesa-cronometro__barra { height: 0.4rem; overflow: hidden; border-radius: 999px; background: rgba(255, 255, 255, 0.08); }
+.mesa-cronometro__barra > i { display: block; height: 100%; border-radius: inherit; background: var(--cor); transition: width 1s linear; }
+
+@keyframes mesa-pulso {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--cor) 0%, transparent); }
+  50% { box-shadow: 0 0 26px 2px color-mix(in srgb, var(--cor) 45%, transparent); }
+}
+
+/* ---------- votação ---------- */
+.mesa-opcao {
+  position: relative;
+  display: flex;
+  min-height: 3.5rem;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--linha);
+  border-radius: 0.9rem;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.5rem 1rem;
+  text-align: left;
+  font-weight: 700;
+  color: #fff;
+  transition: border-color 0.15s, transform 0.1s;
+}
+.mesa-opcao > .mesa-opcao__preenchimento {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, rgba(199, 164, 76, 0.28), rgba(199, 164, 76, 0.08));
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.mesa-opcao > *:not(.mesa-opcao__preenchimento) { position: relative; }
+button.mesa-opcao:hover:not(:disabled) { border-color: rgba(255, 255, 255, 0.3); }
+.mesa-opcao--minha { border-color: rgba(199, 164, 76, 0.75); box-shadow: 0 0 0 1px rgba(199, 164, 76, 0.4) inset; }
+.mesa-opcao--lider .mesa-opcao__preenchimento { background: linear-gradient(90deg, rgba(199, 164, 76, 0.5), rgba(199, 164, 76, 0.14)); }
+
+/* ---------- trilha ---------- */
+.mesa-clima {
+  position: relative;
+  display: flex;
+  min-height: 6.5rem;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.15rem;
+  overflow: hidden;
+  border: 1px solid var(--linha);
+  border-radius: 1rem;
+  background: linear-gradient(200deg, color-mix(in srgb, var(--cor) 26%, transparent), transparent 70%), var(--cartao);
+  padding: 0.85rem;
+  text-align: left;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.mesa-clima:hover:not(:disabled) { transform: translateY(-2px); border-color: color-mix(in srgb, var(--cor) 60%, transparent); }
+.mesa-clima[aria-pressed='true'] { border-color: var(--cor); box-shadow: 0 0 22px color-mix(in srgb, var(--cor) 30%, transparent); }
+.mesa-clima__onda {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.8rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 1rem;
+}
+.mesa-clima__onda i { width: 3px; border-radius: 2px; background: var(--cor); animation: mesa-onda 0.9s ease-in-out infinite; }
+.mesa-clima__onda i:nth-child(2) { animation-delay: 0.15s; }
+.mesa-clima__onda i:nth-child(3) { animation-delay: 0.3s; }
+.mesa-clima__onda i:nth-child(4) { animation-delay: 0.45s; }
+@keyframes mesa-onda { 0%, 100% { height: 25%; } 50% { height: 100%; } }
+
+/* ---------- bilhete ---------- */
+.mesa-bilhete {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.9rem;
+  border: 1px solid var(--linha);
+  border-radius: 0.95rem;
+  background: var(--cartao);
+  padding: 0.8rem 0.9rem;
+  text-align: left;
+}
+.mesa-bilhete__selo {
+  display: flex;
+  height: 2.6rem;
+  width: 2.6rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.05);
+}
+.mesa-bilhete--novo { border-color: rgba(199, 164, 76, 0.5); background: linear-gradient(90deg, rgba(199, 164, 76, 0.16), transparent), var(--cartao); }
+.mesa-bilhete--novo .mesa-bilhete__selo { background: rgba(199, 164, 76, 0.2); animation: mesa-balanco 2.4s ease-in-out infinite; }
+@keyframes mesa-balanco { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .mesa-cronometro--urgente, .mesa-clima__onda i, .mesa-bilhete--novo .mesa-bilhete__selo { animation: none; }
+}
