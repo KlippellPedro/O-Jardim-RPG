@@ -87,12 +87,26 @@ def _sessao_ativa(connection, campaign_id: UUID):
     ).fetchone()
 
 
+def _temporarios_da_ficha(ficha) -> tuple[int, int]:
+    """Extra acima do máximo (vida, mana) guardado na ficha; nunca negativo."""
+    status_ficha = ficha.get("status") if isinstance(ficha, dict) and isinstance(ficha.get("status"), dict) else {}
+
+    def extra(chave: str) -> int:
+        valor = status_ficha.get(chave)
+        if isinstance(valor, bool) or not isinstance(valor, (int, float)):
+            return 0
+        return max(0, int(valor))
+
+    return extra("vidaTemporaria"), extra("manaTemporaria")
+
+
 def _participantes(connection, sessao_id: UUID):
     return connection.execute(
         """
         SELECT id, personagem_id, nome, tipo, iniciativa, vida_atual,
                vida_maxima, condicoes, anotacao, visibilidade, ordem, defesa,
-               mana_atual, mana_maxima, ataques, vd, pericias
+               mana_atual, mana_maxima, ataques, vd, pericias,
+               vida_temporaria, mana_temporaria
         FROM sessao_participantes
         WHERE sessao_id=%s
         ORDER BY ordem, iniciativa DESC, nome
@@ -166,6 +180,8 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
             publico["defesa"] = item["defesa"]
             publico["mana_atual"] = item["mana_atual"]
             publico["mana_maxima"] = item["mana_maxima"]
+            publico["vida_temporaria"] = item["vida_temporaria"]
+            publico["mana_temporaria"] = item["mana_temporaria"]
             publico["ataques"] = item["ataques"]
             publico["pericias"] = item["pericias"]
         if manda:
@@ -304,14 +320,16 @@ def abrir_sessao(
                     INSERT INTO sessao_participantes
                         (id, sessao_id, personagem_id, nome, tipo,
                          iniciativa, vida_atual, vida_maxima, mana_atual,
-                         mana_maxima, condicoes, ordem)
-                    VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s, %s, %s, %s)
+                         mana_maxima, condicoes, ordem,
+                         vida_temporaria, mana_temporaria)
+                    VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """,
                     (uuid4(), sessao_id, personagem["id"], personagem["nome"],
                      iniciativa_fixa(personagem["ficha"]),
                      min(atual, maximo) if maximo else atual, maximo,
                      mana_atual, mana_maxima,
-                     Jsonb(normalizar_condicoes(personagem["ficha"].get("condicoesAtivas"))), ordem),
+                     Jsonb(normalizar_condicoes(personagem["ficha"].get("condicoesAtivas"))), ordem,
+                     *_temporarios_da_ficha(personagem["ficha"])),
                 )
 
         record_audit(
@@ -532,8 +550,9 @@ def selecionar_personagens(
                 INSERT INTO sessao_participantes
                     (id, sessao_id, personagem_id, nome, tipo,
                      iniciativa, vida_atual, vida_maxima, mana_atual,
-                     mana_maxima, condicoes, ordem)
-                VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s, %s, %s, %s)
+                     mana_maxima, condicoes, ordem,
+                     vida_temporaria, mana_temporaria)
+                VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
                     uuid4(), sessao_id, personagem["id"], personagem["nome"],
@@ -542,6 +561,7 @@ def selecionar_personagens(
                     mana_atual, mana_maxima,
                     Jsonb(normalizar_condicoes(personagem["ficha"].get("condicoesAtivas"))),
                     proxima_ordem,
+                    *_temporarios_da_ficha(personagem["ficha"]),
                 ),
             )
             proxima_ordem += 1
@@ -615,7 +635,8 @@ def atualizar_participante(
         sessao = _sessao_sob_comando(connection, sessao_id, user.id)
         atual = connection.execute(
             """
-            SELECT id, nome, vida_atual, vida_maxima, personagem_id
+            SELECT id, nome, vida_atual, vida_maxima, personagem_id,
+                   vida_temporaria, mana_temporaria
             FROM sessao_participantes
             WHERE id=%s AND sessao_id=%s FOR UPDATE
             """,
@@ -626,12 +647,21 @@ def atualizar_participante(
 
         vida_maxima = payload.vida_maxima if payload.vida_maxima is not None else int(atual["vida_maxima"])
         vida_atual = int(atual["vida_atual"])
+        vida_temporaria = int(atual["vida_temporaria"] or 0)
         if payload.vida_atual is not None:
             vida_atual = payload.vida_atual
         if payload.dano:
-            vida_atual -= payload.dano
+            # O extra temporário paga o dano primeiro.
+            absorvido = min(vida_temporaria, payload.dano)
+            vida_temporaria -= absorvido
+            vida_atual -= payload.dano - absorvido
         if payload.cura:
-            vida_atual = min(vida_maxima or vida_atual + payload.cura, vida_atual + payload.cura)
+            # Cura que passa do máximo vira extra temporário, como na ficha.
+            excesso = max(0, vida_atual + payload.cura - vida_maxima) if vida_maxima else 0
+            vida_atual += payload.cura - excesso
+            vida_temporaria += excesso
+        if payload.vida_temporaria is not None:
+            vida_temporaria = payload.vida_temporaria
         # Vida negativa é informação de jogo (o quanto passou de zero), mas não
         # deixamos ultrapassar o máximo por cura.
         vida_atual = max(-999, min(vida_atual, vida_maxima if vida_maxima else vida_atual))
@@ -643,8 +673,10 @@ def atualizar_participante(
                 iniciativa=COALESCE(%s, iniciativa),
                 vida_atual=%s,
                 vida_maxima=%s,
+                vida_temporaria=%s,
                 mana_atual=COALESCE(%s, mana_atual),
                 mana_maxima=COALESCE(%s, mana_maxima),
+                mana_temporaria=COALESCE(%s, mana_temporaria),
                 condicoes=COALESCE(%s, condicoes),
                 ataques=COALESCE(%s, ataques),
                 anotacao=COALESCE(%s, anotacao),
@@ -661,8 +693,10 @@ def atualizar_participante(
                 payload.iniciativa,
                 vida_atual,
                 vida_maxima,
+                vida_temporaria,
                 payload.mana_atual,
                 payload.mana_maxima,
+                payload.mana_temporaria,
                 Jsonb(payload.condicoes) if payload.condicoes is not None else None,
                 Jsonb(payload.ataques) if payload.ataques is not None else None,
                 payload.anotacao,
@@ -674,7 +708,12 @@ def atualizar_participante(
                 sessao_id,
             ),
         ).fetchone()
-        alterou_vida = payload.vida_atual is not None or bool(payload.dano) or bool(payload.cura)
+        alterou_vida = (
+            payload.vida_atual is not None
+            or payload.vida_temporaria is not None
+            or bool(payload.dano)
+            or bool(payload.cura)
+        )
         if atual["personagem_id"] and alterou_vida:
             connection.execute(
                 """
@@ -684,7 +723,7 @@ def atualizar_participante(
                             ficha,
                             '{status}',
                             COALESCE(ficha->'status', '{}'::jsonb)
-                                || jsonb_build_object('vidaAtual', %s),
+                                || jsonb_build_object('vidaAtual', %s, 'vidaTemporaria', %s),
                             true
                         ),
                         '{recursos}',
@@ -696,7 +735,7 @@ def atualizar_participante(
                     atualizado_em=CURRENT_TIMESTAMP
                 WHERE id=%s AND status='ativo'
                 """,
-                (vida_atual, vida_atual, atual["personagem_id"]),
+                (vida_atual, vida_temporaria, vida_atual, atual["personagem_id"]),
             )
         # Mesma ideia da Vida acima: sem isso, editar Mana no HUD da sessão
         # nunca chegava na ficha, e o jogador via um número diferente do que o

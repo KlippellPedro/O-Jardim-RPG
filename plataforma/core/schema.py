@@ -1383,4 +1383,22 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        34,
+        "extra_temporario_dos_participantes_da_sessao",
+        (
+            # Vida e Mana acima do máximo (efeitos temporários) ficam à parte da
+            # atual, que continua dentro do máximo. O Mestre vê o extra no HUD.
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS vida_temporaria INTEGER NOT NULL DEFAULT 0
+                CHECK (vida_temporaria >= 0)
+            """,
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS mana_temporaria INTEGER NOT NULL DEFAULT 0
+                CHECK (mana_temporaria >= 0)
+            """,
+        ),
+    ),
 )

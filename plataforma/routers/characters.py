@@ -112,11 +112,18 @@ def _session_resources(sheet: dict) -> dict[str, int | None]:
         if mana_atual is not None:
             mana_atual = max(0, min(mana_atual, mana_maxima))
 
+    def extra(chave: str) -> int:
+        valor = inteiro(status_ficha.get(chave))
+        return max(0, valor) if valor is not None else 0
+
     return {
         "vida_atual": vida_atual,
         "vida_maxima": vida_maxima,
         "mana_atual": mana_atual,
         "mana_maxima": mana_maxima,
+        # Extra acima do máximo: campo à parte, sempre >= 0.
+        "vida_temporaria": extra("vidaTemporaria"),
+        "mana_temporaria": extra("manaTemporaria"),
     }
 
 
@@ -1049,6 +1056,8 @@ def update_character(
                     vida_maxima=COALESCE(%s, vida_maxima),
                     mana_atual=COALESCE(%s, mana_atual),
                     mana_maxima=COALESCE(%s, mana_maxima),
+                    vida_temporaria=%s,
+                    mana_temporaria=%s,
                     atualizado_em=CURRENT_TIMESTAMP
                 WHERE sessao_id=%s AND personagem_id=%s
                 RETURNING id
@@ -1059,6 +1068,8 @@ def update_character(
                     resources["vida_maxima"],
                     resources["mana_atual"],
                     resources["mana_maxima"],
+                    resources["vida_temporaria"],
+                    resources["mana_temporaria"],
                     active_session["id"],
                     character_id,
                 ),

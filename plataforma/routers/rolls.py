@@ -161,7 +161,7 @@ def _descontar_mana_na_sessao(connection, *, sessao_id, personagem_id, custo: in
     validação pós-correção), ou None se não havia participante pra descontar."""
     linha = connection.execute(
         """
-        SELECT id, mana_atual FROM sessao_participantes
+        SELECT id, mana_atual, mana_temporaria FROM sessao_participantes
         WHERE sessao_id=%s AND personagem_id=%s
         FOR UPDATE
         """,
@@ -169,10 +169,17 @@ def _descontar_mana_na_sessao(connection, *, sessao_id, personagem_id, custo: in
     ).fetchone()
     if not linha or linha["mana_atual"] is None:
         return None
-    novo_valor = max(0, int(linha["mana_atual"]) - custo)
+    # O extra temporário paga o custo primeiro.
+    extra = int(linha.get("mana_temporaria") or 0)
+    absorvido = min(extra, custo)
+    novo_valor = max(0, int(linha["mana_atual"]) - (custo - absorvido))
     connection.execute(
-        "UPDATE sessao_participantes SET mana_atual=%s, atualizado_em=CURRENT_TIMESTAMP WHERE id=%s",
-        (novo_valor, linha["id"]),
+        """
+        UPDATE sessao_participantes
+        SET mana_atual=%s, mana_temporaria=%s, atualizado_em=CURRENT_TIMESTAMP
+        WHERE id=%s
+        """,
+        (novo_valor, extra - absorvido, linha["id"]),
     )
     return _tocar_sessao(connection, sessao_id)
 

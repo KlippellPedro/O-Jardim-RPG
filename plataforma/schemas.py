@@ -708,6 +708,9 @@ class ParticipantUpdateInput(BaseModel):
     cura: int | None = Field(default=None, ge=0, le=99_999)
     mana_atual: int | None = Field(default=None, ge=0, le=99_999)
     mana_maxima: int | None = Field(default=None, ge=0, le=99_999)
+    # Extra acima do máximo (efeito temporário); o dano gasta ele primeiro.
+    vida_temporaria: int | None = Field(default=None, ge=0, le=99_999)
+    mana_temporaria: int | None = Field(default=None, ge=0, le=99_999)
     condicoes: list[Any] | None = Field(default=None, max_length=20)
     ataques: list[Any] | None = Field(default=None, max_length=12)
     anotacao: str | None = Field(default=None, max_length=500)

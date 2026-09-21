@@ -58,7 +58,15 @@ class DescontarManaNaSessaoTests(unittest.TestCase):
         sql, params = conn.update_calls[0]
         self.assertIn("mana_atual=%s", sql)
         self.assertEqual(params[0], 6)  # 10 - 4
-        self.assertEqual(params[1], "participante-1")
+        self.assertEqual(params[1], 0)  # sem extra temporario
+        self.assertEqual(params[-1], "participante-1")
+
+    def test_extra_temporario_paga_o_custo_antes_da_mana_atual(self):
+        conn = FakeConnection({"id": "participante-1", "mana_atual": 10, "mana_temporaria": 3})
+        _descontar_mana_na_sessao(conn, sessao_id="sessao-1", personagem_id="pers-1", custo=5)
+        _, params = conn.update_calls[0]
+        self.assertEqual(params[0], 8)  # 10 - (5 - 3)
+        self.assertEqual(params[1], 0)  # o extra foi todo gasto
 
     def test_nunca_deixa_negativo_mesmo_com_custo_maior_que_a_mana_atual(self):
         conn = FakeConnection({"id": "participante-1", "mana_atual": 3})
