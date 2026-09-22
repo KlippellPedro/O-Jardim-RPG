@@ -1,6 +1,14 @@
 {
-  "geradoEm": "2026-09-22T02:39:00.400Z",
+  "geradoEm": "2026-09-22T04:02:49.544Z",
   "itens": [
+    {
+      "id": "3203456",
+      "data": "2026-09-22",
+      "tipo": "correcao",
+      "area": "Loja",
+      "titulo": "Corrige loop infinito na wishlist que derrubava a página inteira",
+      "detalhes": []
+    },
     {
       "id": "0a35e4c",
       "data": "2026-09-21",
@@ -706,14 +714,6 @@
       "tipo": "novo",
       "area": "Plataforma",
       "titulo": "Consumo do Fruto do Eden, sessao e resumo de personagem",
-      "detalhes": []
-    },
-    {
-      "id": "892110d",
-      "data": "2026-08-18",
-      "tipo": "novo",
-      "area": "Ficha",
-      "titulo": "Fruto do Eden, personalizacao automatica e efeitos de item",
       "detalhes": []
     }
   ]
