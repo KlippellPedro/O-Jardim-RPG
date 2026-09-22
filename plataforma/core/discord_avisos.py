@@ -35,6 +35,16 @@ ROTULOS_AVISO: dict[str, str] = {
 }
 
 
+#: Categoria de roteamento no Jornalista (`/jornal canal`): cada uma pode ter um canal próprio.
+CATEGORIA_DISCORD: dict[str, str] = {
+    "sessao": "sessao",
+    "lembrete": "sessao",
+    "critico": "sessao",
+    "liberacao": "liberacao",
+    "mural": "liberacao",
+}
+
+
 def avisos_da_campanha(avisos_salvos) -> dict[str, bool]:
     """Mescla o que o Mestre salvou com o padrão, ignorando chave desconhecida."""
     resultado = dict(AVISOS_PADRAO)
@@ -68,10 +78,24 @@ def avisar_discord(connection, campanha_id: UUID, tipo: str, mensagem: str) -> b
             fila = connection.execute("SELECT to_regclass('avisos_pendentes') AS tabela").fetchone()
             if not fila or not fila["tabela"]:
                 return False
-            connection.execute(
-                "INSERT INTO avisos_pendentes (guild_id, mensagem) VALUES (%s, %s)",
-                (linha["discord_guild_id"], mensagem[:1800]),
-            )
+            # A coluna `categoria` é criada pelo Jornalista; enquanto ele não
+            # subir a versão nova, o aviso segue sem categoria (canal de dinheiro/principal).
+            coluna = connection.execute(
+                """
+                SELECT 1 FROM information_schema.columns
+                WHERE table_schema = current_schema() AND table_name='avisos_pendentes' AND column_name='categoria'
+                """
+            ).fetchone()
+            if coluna:
+                connection.execute(
+                    "INSERT INTO avisos_pendentes (guild_id, mensagem, categoria) VALUES (%s, %s, %s)",
+                    (linha["discord_guild_id"], mensagem[:1800], CATEGORIA_DISCORD[tipo]),
+                )
+            else:
+                connection.execute(
+                    "INSERT INTO avisos_pendentes (guild_id, mensagem) VALUES (%s, %s)",
+                    (linha["discord_guild_id"], mensagem[:1800]),
+                )
         return True
     except Exception:  # noqa: BLE001 - aviso é cortesia, nunca derruba a ação principal
         log.exception("Falha ao enfileirar aviso do Discord (campanha %s)", campanha_id)

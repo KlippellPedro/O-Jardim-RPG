@@ -144,3 +144,36 @@ def test_falha_ao_enfileirar_nao_marca_aviso_como_publicado(monkeypatch):
     asyncio.run(cog._publicar_guild("123"))
 
     assert db.publicados == []
+
+
+def test_avisos_da_plataforma_vao_para_o_canal_da_propria_categoria(monkeypatch):
+    chamadas = []
+
+    async def _fake_publicar_ou_enfileirar(bot, **kwargs):
+        chamadas.append(kwargs)
+        return "entregue"
+
+    monkeypatch.setattr(avisos_mod.publicacoes, "publicar_ou_enfileirar", _fake_publicar_ou_enfileirar)
+
+    class _DB(_DBFake):
+        def listar_avisos_pendentes(self, guild_id):
+            return [
+                {"id": 1, "mensagem": "A sessão começou.", "categoria": "sessao"},
+                {"id": 2, "mensagem": "O Mestre liberou algo.", "categoria": "liberacao"},
+                {"id": 3, "mensagem": "Outro lembrete.", "categoria": "sessao"},
+                {"id": 4, "mensagem": "Juros.", "categoria": None},
+            ]
+
+    db = _DB()
+    cog = _criar_cog(db, _CanalFake())
+    asyncio.run(cog._publicar_guild("123"))
+
+    assert sorted(db.rotas_consultadas) == [("123", "dinheiro"), ("123", "liberacao"), ("123", "sessao")]
+    assert [c["categoria"] for c in chamadas] == ["sessao", "liberacao", "sessao", "dinheiro"]
+    assert [c["automacao"] for c in chamadas] == [None, None, None, "avisos_economicos"]
+    assert db.publicados == [1, 2, 3, 4]
+
+
+def test_categorias_de_sessao_e_liberacao_aparecem_no_jornal_canal():
+    valores = {escolha.value for escolha in CATEGORIAS_CANAL}
+    assert {"sessao", "liberacao"} <= valores

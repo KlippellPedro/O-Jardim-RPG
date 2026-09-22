@@ -1,5 +1,11 @@
-"""Cog Avisos: publica no canal de dinheiro os avisos que o Banqueiro
-enfileira (recompensas, procurados, quitações e eventos econômicos).
+"""Cog Avisos: publica os avisos enfileirados por outros serviços.
+
+O Banqueiro enfileira recompensas, procurados, quitações e eventos econômicos
+(sem categoria, vão para o canal de dinheiro). A plataforma enfileira avisos da
+mesa com categoria própria: `sessao` (sessão começou, lembretes, crítico) e
+`liberacao` (conteúdo liberado, novidades do mural). Cada categoria usa o canal
+definido em `/jornal canal`; sem rota, cai no canal principal.
+
 O Banqueiro só escreve na fila (`avisos_pendentes`); quem publica é sempre
 o Jornalista, pra manter a separação: Banqueiro cuida de dinheiro, Jornalista
 anuncia pro servidor. Sem rota específica, usa o canal principal do jornal.
@@ -50,15 +56,19 @@ class Avisos(commands.Cog):
 
     async def _publicar_guild(self, guild_id: str):
         db = self.bot.db
-        if not db.automacao_ativa(guild_id, "avisos_economicos", True):
-            return
-        canal_id = db.get_canal_categoria(guild_id, "dinheiro")
-        if not canal_id:
-            return
-        canal = self.bot.get_channel(int(canal_id))
-        if canal is None:
-            return
+        canais: dict = {}
         for aviso in db.listar_avisos_pendentes(guild_id):
+            categoria = aviso.get("categoria") or "dinheiro"
+            # O interruptor de avisos econômicos vale só para o dinheiro: o que a
+            # plataforma manda já foi ligado ou desligado pelo Mestre no site.
+            if categoria == "dinheiro" and not db.automacao_ativa(guild_id, "avisos_economicos", True):
+                continue
+            if categoria not in canais:
+                canal_id = db.get_canal_categoria(guild_id, categoria)
+                canais[categoria] = self.bot.get_channel(int(canal_id)) if canal_id else None
+            canal = canais[categoria]
+            if canal is None:
+                continue
             # A mensagem já vem pronta do Banqueiro (recompensa, procurado,
             # dívida quitada, leilão...) sem categoria estruturada — usa a
             # cor neutra do design system em vez de laranja fixo pra tudo.
@@ -71,9 +81,9 @@ class Avisos(commands.Cog):
                     embed=emb,
                     origem="aviso_economico",
                     dedupe_key=f"aviso:{aviso['id']}",
-                    categoria="dinheiro",
+                    categoria=categoria,
                     canal_id=str(canal.id) if isinstance(canal, discord.TextChannel) else None,
-                    automacao="avisos_economicos",
+                    automacao="avisos_economicos" if categoria == "dinheiro" else None,
                 )
             except Exception:
                 log.exception("falha ao enfileirar aviso %s (guild %s)", aviso["id"], guild_id)

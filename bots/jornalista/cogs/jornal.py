@@ -44,6 +44,8 @@ CATEGORIAS_CANAL = [
     app_commands.Choice(name="Notícia (/publicar_noticia)", value="noticia"),
     app_commands.Choice(name="Clima e estação", value="clima"),
     app_commands.Choice(name="Dinheiro e economia", value="dinheiro"),
+    app_commands.Choice(name="Sessão (começou, lembretes, crítico)", value="sessao"),
+    app_commands.Choice(name="Liberações do Mestre e mural", value="liberacao"),
 ]
 
 AUTOMACOES = {
@@ -923,6 +925,8 @@ class Jornal(commands.Cog):
         chegadas="Canal separado para boas-vindas.",
         saidas="Canal separado para despedidas.",
         baus="Canal que entra na rotação de baús automáticos.",
+        sessao="Canal para avisos de sessão (começou, lembretes, crítico).",
+        liberacoes="Canal para liberações do Mestre e novidades do mural.",
     )
     async def configurar(
         self,
@@ -934,6 +938,8 @@ class Jornal(commands.Cog):
         chegadas: discord.TextChannel = None,
         saidas: discord.TextChannel = None,
         baus: discord.TextChannel = None,
+        sessao: discord.TextChannel = None,
+        liberacoes: discord.TextChannel = None,
     ):
         if not interaction.guild_id:
             await interaction.response.send_message(
@@ -942,7 +948,7 @@ class Jornal(commands.Cog):
             return
         canais = [
             canal for canal in
-            (principal, noticias, clima, dinheiro, chegadas, saidas, baus)
+            (principal, noticias, clima, dinheiro, chegadas, saidas, baus, sessao, liberacoes)
             if canal is not None
         ]
         sem_permissao = [canal for canal in canais if not _bot_pode_publicar(canal)]
@@ -963,6 +969,8 @@ class Jornal(commands.Cog):
             "dinheiro": dinheiro,
             "chegada": chegadas,
             "partida": saidas,
+            "sessao": sessao,
+            "liberacao": liberacoes,
         }
         for categoria, canal in rotas.items():
             if canal is not None:

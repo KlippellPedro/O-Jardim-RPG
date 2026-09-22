@@ -146,8 +146,12 @@ Jornalista checa a fila a cada minuto.
   pauta que o Mestre aprova com `/jornal pauta publicar` ou `/jornal pauta
   agendar`.
 - `/jornal canal` / `/jornal canais` — define e consulta rotas específicas
-  para notícia, clima, entrada, saída de membros, avisos de dinheiro e o
-  resultado da Loteria Dominical.
+  para notícia, clima, entrada, saída de membros, avisos de dinheiro, o
+  resultado da Loteria Dominical, **Sessão** (sessão começou, lembretes,
+  crítico) e **Liberações do Mestre e mural**. Os dois últimos são os avisos
+  que o site enfileira; cada um pode ir para um canal próprio (também em
+  `/jornal configurar`, opções `sessao` e `liberacoes`). Sem rota, caem no
+  canal principal. Quais avisos são enviados continua sendo escolhido no site.
 - `/jornal estacao_definir <estacao>` — define a estação do Jardim (as 6:
   Primavera/Verão/Outono/Inverno/Noite Eterna/Eclipse — ver
   `core/economia.py`), muda o peso de raridade do

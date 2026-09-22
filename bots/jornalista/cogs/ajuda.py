@@ -42,7 +42,7 @@ CATEGORIAS = {
             ("/jornal desafio <pergunta> [recompensa]", "[Mestre] Publica uma pergunta; quem responder primeiro no canal ganha Lunaris."),
             ("/jornal mensagem <tipo> <texto>", "[Mestre] Edita o texto de entrada/saída de membros (use {mencao} e {nome})."),
             ("/jornal mensagem_ver <tipo>", "[Mestre] Mostra o texto atual (personalizado ou padrão) de entrada/saída."),
-            ("/jornal canal <categoria> <canal>", "[Mestre] Define o canal de cada conteúdo (entrada, saída, notícia, clima e dinheiro)."),
+            ("/jornal canal <categoria> <canal>", "[Mestre] Define o canal de cada conteúdo (entrada, saída, notícia, clima, dinheiro, sessão e liberações do Mestre)."),
             ("/jornal canais", "[Mestre] Mostra em que canal cada conteúdo é publicado."),
             ("/jornal imagem <tipo> <url>", "[Mestre] Imagem fixa das boas-vindas ou da despedida."),
             ("/jornal canais_boasvindas <canal1>", "[Mestre] Canais do bloco 'Confira estes canais' das boas-vindas."),

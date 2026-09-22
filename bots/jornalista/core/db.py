@@ -232,6 +232,11 @@ _SCHEMA = (
         publicado BOOLEAN NOT NULL DEFAULT FALSE
     )
     """,
+    # Categoria de roteamento do aviso (a plataforma marca "sessao"/"liberacao"; o Banqueiro
+    # não marca e, sem categoria, o aviso é tratado como "dinheiro").
+    """
+    ALTER TABLE avisos_pendentes ADD COLUMN IF NOT EXISTS categoria TEXT
+    """,
     # Textos editáveis do jornal (entrada/saída etc.) por servidor. Sem linha,
     # o código usa os padrões embutidos.
     """
@@ -1130,13 +1135,16 @@ class Database:
         with self._conn() as con:
             rows = con.execute(
                 """
-                SELECT id, mensagem FROM avisos_pendentes
+                SELECT id, mensagem, categoria FROM avisos_pendentes
                 WHERE guild_id=%s AND publicado=FALSE
                 ORDER BY criado_em
                 """,
                 (guild_id,),
             ).fetchall()
-        return [{"id": row["id"], "mensagem": row["mensagem"]} for row in rows]
+        return [
+            {"id": row["id"], "mensagem": row["mensagem"], "categoria": row["categoria"]}
+            for row in rows
+        ]
 
     def listar_guilds_com_aviso_pendente(self) -> List[str]:
         with self._conn() as con:
