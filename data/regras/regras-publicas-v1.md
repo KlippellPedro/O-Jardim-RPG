@@ -1546,7 +1546,7 @@ Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na
 
 ### Implantes cibernéticos
 
-Enquanto o Fruto mexe na alma, o implante mexe na carne. São 20 peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.
+Enquanto o Fruto mexe na alma, o implante mexe na carne. São 35 peças vendidas em Créditos Sombrios, todas exigindo nível 3 ou mais, porque instalar exige um corpo que aguente a cirurgia.
 
 - Implante não vai na mochila. Ele fica numa seção própria do inventário, porque está instalado no corpo e ocupa uma parte dele.
 
@@ -1730,10 +1730,10 @@ A Loja vende cada uma delas na categoria **Modificações**, com o preço já ap
 
 ### Catálogo por categoria
 
-Existem 51 modificações. Cada grupo abaixo começa fechado: abra apenas Armas, Armaduras, Escudos ou a categoria que corresponde ao item.
+Existem 63 modificações. Cada grupo abaixo começa fechado: abra apenas Armas, Armaduras, Escudos ou a categoria que corresponde ao item.
 
 Armas
-18 modificações · 9 comuns · 9 marciais
+21 modificações · 11 comuns · 10 marciais
 
 - Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
@@ -1755,6 +1755,10 @@ Armas
 
 - Silenciosa | Comum | Técnica | 18 L | Nenhum | Não produz som perceptível ao ser usada em um ataque.
 
+- Serrilhada | Comum | 1 | 70 L | Nenhum | Ao causar dano de Corte, o alvo sangra e sofre 1d4 de dano no início de cada turno seu por 2 rodadas. Uma vez por alvo por cena.
+
+- De Arremesso | Comum | Técnica | 18 L | Nenhum | A arma ganha a propriedade Arremesso com alcance Curto. Voltar à mão exige buscá-la normalmente.
+
 - Devastadora | Marcial | 2 | 290 L | Força 14, ou Destreza 14 em arma de disparo | +2 dados de dano da arma.
 
 - Elemental | Marcial | 2 | 290 L | Nenhum | +1d6 de dano de um tipo elemental escolhido na criação do item. Esse dado extra também multiplica no crítico.
@@ -1773,8 +1777,10 @@ Armas
 
 - Implacável | Marcial | 3 | 1200 L | Nível total 10 | Uma vez por cena, transforme um acerto em crítico, sem precisar cair na Margem de Ameaça. Não combina com a Coreografia Tudo ou Nada no mesmo ataque.
 
+- Atordoante | Marcial | 2 | 290 L | Força 14 | No crítico, o alvo faz um teste de Constituição ou perde a reação até o fim do próximo turno dele. Uma vez por cena por alvo.
+
 Armaduras
-12 modificações · 6 comuns · 6 marciais
+15 modificações · 7 comuns · 8 marciais
 
 - Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
@@ -1790,6 +1796,8 @@ Armaduras
 
 - Ajustável | Comum | Técnica | 18 L | Nenhum | Se adapta automaticamente ao corpo de quem veste, sem custo de reforma.
 
+- Térmica | Comum | 1 | 70 L | Nenhum | Você tem Resistência 2 contra Fogo e Gelo enquanto a vestir.
+
 - Bastião | Marcial | 2 | 290 L | Constituição 14 | Reduza 1d4 do dano físico recebido a cada ataque, aplicado depois da Resistência.
 
 - Regenerativa | Marcial | 2 | 290 L | Nível total 7 | Quem veste recupera 1d4 PV no início do próprio turno, uma vez por rodada.
@@ -1802,8 +1810,12 @@ Armaduras
 
 - Casca do Fim | Marcial | 3 | 1200 L | Nível total 10 | Enquanto estiver em Morrendo, a DT dos seus testes de Morrendo cai 3.
 
+- Dissipadora | Marcial | 3 | 1200 L | Nível total 10 | Uma vez por cena, ao sofrer dano de Impacto, reduza-o pela metade.
+
+- Reativa | Marcial | 2 | 290 L | Constituição 14 | Uma vez por rodada, quando um ataque corpo a corpo acertar você, o atacante sofre 1d6 de dano de Impacto.
+
 Escudos
-9 modificações · 4 comuns · 5 marciais
+11 modificações · 5 comuns · 6 marciais
 
 - Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
@@ -1815,6 +1827,8 @@ Escudos
 
 - Retrátil | Comum | Técnica | 18 L | Nenhum | Pode ser guardado ou sacado como uma ação livre.
 
+- Ancorado | Comum | Técnica | 18 L | Nenhum | A alça de ombro impede que o escudo caia por Desarmar, e você pode soltá-lo e recolocá-lo como parte de uma ação de movimento.
+
 - Amplo | Marcial | 2 | 290 L | Nenhum | A reação Proteger passa a cobrir dois aliados adjacentes em vez de um.
 
 - Repulsor | Marcial | 2 | 290 L | Nenhum | Ao usar Bloqueio com sucesso, empurre o atacante 1,5 m para longe de você.
@@ -1825,8 +1839,10 @@ Escudos
 
 - Contratempo | Marcial | 3 | 1200 L | Nível total 10 | Depois de um Contra-Ataque bem-sucedido, recupere sua reação. Uma vez por rodada.
 
+- Refletor | Marcial | 2 | 290 L | Fluxo 12 | Uma vez por cena, ao bloquear um ataque de Raio ou de Luz, redirecione o efeito para uma criatura a até 6 m.
+
 Itens gerais e mágicos
-12 modificações · 7 comuns · 5 marciais
+16 modificações · 9 comuns · 7 marciais
 
 - Modificação | Nível | Valor | Preço | Pré-requisito | Efeito
 
@@ -1844,6 +1860,10 @@ Itens gerais e mágicos
 
 - Instável | Comum | Técnica | 18 L | Nenhum | 5% de chance de gerar um efeito colateral menor a cada uso. O Mestre define qual.
 
+- Lacrado | Comum | Técnica | 18 L | Nenhum | O item é à prova d'água e de poeira, e não sofre corrosão nem ferrugem.
+
+- Chamado | Comum | 1 | 70 L | Nenhum | Uma vez por dia, gaste uma Ação de Movimento para trazer o item à sua mão, se ele estiver a até 30 m e em linha de visão.
+
 - Protetor | Marcial | 2 | 290 L | Nenhum | Resistência 4 contra um tipo de dano escolhido na criação do item, enquanto estiver equipado.
 
 - Vitalício | Marcial | 2 | 290 L | Nenhum | Uma vez por dia, ao chegar a 0 PV, recupere 1d6 PV automaticamente antes de cair inconsciente.
@@ -1853,6 +1873,10 @@ Itens gerais e mágicos
 - Reserva de Fluxo | Marcial | 2 | 290 L | Fluxo 12 | Guarda até 5 de Mana. Você pode gastar dessa reserva no lugar da sua, e ela enche de novo a cada descanso completo.
 
 - Selado | Marcial | 3 | 1200 L | Nível total 10 e Misticismo treinado | O item carrega um Selo inscrito, escolhido na criação. Uma vez por dia ele dispara sem gastar Mana nem exigir teste de inscrição.
+
+- Furtivo | Marcial | 2 | 290 L | Nenhum | O item passa despercebido em revistas comuns e detectores básicos. Achá-lo exige Investigação contra DT 20.
+
+- Catalisador | Marcial | 3 | 1200 L | Fluxo 14 e nível total 10 | Uma vez por cena, ao conjurar uma magia de 3º círculo ou maior com este item, recupere 1d6 de Mana.
 
 O catálogo é um ponto de partida, não uma lista fechada. Modificação nova precisa respeitar o valor máximo por efeito da raridade e o nível condizente com o equipamento.
 
@@ -3200,19 +3224,19 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra em O Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 825 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 959 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 ### Os quatro locais
 
 - Local | O que vende | Itens
 
-- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 261
+- Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 276
 
-- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 217
+- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 246
 
-- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 198
+- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 234
 
-- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 149
+- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 203
 
 Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
 

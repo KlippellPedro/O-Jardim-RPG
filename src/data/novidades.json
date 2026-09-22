@@ -1,6 +1,63 @@
 {
-  "geradoEm": "2026-09-21T23:38:23.970Z",
+  "geradoEm": "2026-09-22T02:39:00.400Z",
   "itens": [
+    {
+      "id": "0a35e4c",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Discord",
+      "titulo": "Avisos roteados por categoria (sessão/liberação/dinheiro)",
+      "detalhes": []
+    },
+    {
+      "id": "9af6ddd",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Geral",
+      "titulo": "Crônica coletiva, espectador na Sessão ao Vivo e atalhos na Home",
+      "detalhes": [
+        "Crônica da campanha: registro coletivo escrito à mão pelo grupo, diferente",
+        "Sessão ao Vivo: selo \"Espectador\" para quem acompanha sem personagem",
+        "Home: segunda fileira de atalhos (Campanha, Quadro, Materiais) com ícones"
+      ]
+    },
+    {
+      "id": "6adb7f8",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Geral",
+      "titulo": "Fila única entre loot/conquista/sua-vez e notificação do navegador",
+      "detalhes": [
+        "Novo hub em src/components/avisosRelampago/: loot, conquista e \"é sua vez\"",
+        "notificacoesNavegador.ts: preferência opcional (Preferências → Notificações)"
+      ]
+    },
+    {
+      "id": "c73cde6",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Carta de loot por raridade, moldura do retrato até nível 60, cartaz unificado e loot/wishlist entre aparelhos",
+      "detalhes": [
+        "loot.ts/LootHost.tsx: cartas ganham clarão, onda, tremor, chuva e anéis",
+        "useWishlist.ts: mesma correção para a lista de desejos da Loja, agora em",
+        "retrato.ts: a moldura do retrato passa a ter 13 graus (a cada 5 níveis, até",
+        "cartaz.ts/cartazExportar.ts/exportarFicha.ts: o cartaz de Procurado (tela,"
+      ]
+    },
+    {
+      "id": "72c2a53",
+      "data": "2026-09-21",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Reclassifica locais de venda, retrofit de relíquias de criação e 12 modificações novas",
+      "detalhes": [
+        "tools/classify-shop-locations.mjs reclassifica onde cada item do catálogo é",
+        "tools/retrofit-creation-relics.mjs marca relíquias de criação existentes com",
+        "lojaCatalogService.ts ganha rotuloCategoriaItem/rotuloSubtipoItem e",
+        "12 modificações de equipamento novas em raridadesEquipamentos.ts (Serrilhada,"
+      ]
+    },
     {
       "id": "3ae4a10",
       "data": "2026-09-21",
@@ -657,52 +714,6 @@
       "tipo": "novo",
       "area": "Ficha",
       "titulo": "Fruto do Eden, personalizacao automatica e efeitos de item",
-      "detalhes": []
-    },
-    {
-      "id": "8e872a3",
-      "data": "2026-08-18",
-      "tipo": "novo",
-      "area": "Livro",
-      "titulo": "Amplia magias, aflicoes, bases e catalogos de regra",
-      "detalhes": []
-    },
-    {
-      "id": "a14e8d2",
-      "data": "2026-08-18",
-      "tipo": "novo",
-      "area": "Livro",
-      "titulo": "Escadas de estagio, escolhas raciais e Clas do Vampiro",
-      "detalhes": []
-    },
-    {
-      "id": "077fa43",
-      "data": "2026-08-18",
-      "tipo": "correcao",
-      "area": "Livro",
-      "titulo": "Remove lista de Legados duplicada no capitulo",
-      "detalhes": []
-    },
-    {
-      "id": "aa850de",
-      "data": "2026-08-18",
-      "tipo": "correcao",
-      "area": "Livro",
-      "titulo": "Revisao de design e UX das paginas do livro",
-      "detalhes": [
-        "Corrige aria-label corrompido (mojibake) na navegacao principal",
-        "Aumenta o contraste dos links \"ver ficha\"/\"explorar progressao\" nos",
-        "Remove a coluna \"Descricao\" redundante nas tabelas de variante de",
-        "Adiciona as secoes que faltavam nas paginas de Automato (Modificacoes,",
-        "FerramentasMestre: reaproveita as classes regras-table* ja usadas no"
-      ]
-    },
-    {
-      "id": "9e0d308",
-      "data": "2026-08-18",
-      "tipo": "correcao",
-      "area": "Livro",
-      "titulo": "Remove travessao introduzido na descricao do Auleth",
       "detalhes": []
     }
   ]
