@@ -84,6 +84,19 @@ export interface IItemMural {
   melhor_da_noite: boolean;
 }
 
+export interface IEntradaCronica {
+  id: string;
+  titulo: string;
+  texto: string;
+  autor: string;
+  publicado_por: string;
+  sessao_id: string | null;
+  criado_em: string;
+  atualizado_em: string;
+  meu: boolean;
+  pode_editar: boolean;
+}
+
 export interface IResultadoMvp {
   ranking: Array<{ usuario_id: string; nome: string; votos: number }>;
   vencedores: Array<{ usuario_id: string; nome: string; votos: number }>;
@@ -163,6 +176,14 @@ export const engajamentoApi = {
     api<void>(`${base(campanhaId)}/mural/${encodeURIComponent(id)}`, { method: 'DELETE' }),
   alternarVoto: (campanhaId: string, id: string) =>
     api<{ votos: number; votei: boolean }>(`${base(campanhaId)}/mural/${encodeURIComponent(id)}/voto`, { method: 'POST' }),
+
+  cronica: (campanhaId: string) => api<{ entradas: IEntradaCronica[] }>(`${base(campanhaId)}/cronica`),
+  publicarCronica: (campanhaId: string, titulo: string, texto: string) =>
+    api<{ id: string }>(`${base(campanhaId)}/cronica`, { method: 'POST', body: { titulo, texto } }),
+  editarCronica: (campanhaId: string, id: string, titulo: string, texto: string) =>
+    api<{ id: string }>(`${base(campanhaId)}/cronica/${encodeURIComponent(id)}`, { method: 'PUT', body: { titulo, texto } }),
+  apagarCronica: (campanhaId: string, id: string) =>
+    api<void>(`${base(campanhaId)}/cronica/${encodeURIComponent(id)}`, { method: 'DELETE' }),
 
   mvp: (campanhaId: string, sessaoId: string) =>
     api<IMvp>(`${base(campanhaId)}/mvp/${encodeURIComponent(sessaoId)}`),

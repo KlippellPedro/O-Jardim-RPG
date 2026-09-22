@@ -177,6 +177,11 @@ export const MestrePanel: React.FC = () => {
                       <option value="assistente">Assistente</option>
                       <option value="observador">Observador</option>
                     </select>
+                    {papel === 'observador' && (
+                      <p className="mt-1.5 text-[11px] leading-4 text-gray-500">
+                        Link para quem só vai assistir: acompanha a Sessão ao Vivo e a campanha sem poder rolar dado, criar personagem ou agir.
+                      </p>
+                    )}
                   </div>
                   <div>
                     <label className="text-xs text-gray-400 font-medium pl-1 mb-1 block">Validade</label>

@@ -91,7 +91,7 @@ class EngajamentoBancoTests(unittest.TestCase):
                 """
                 CREATE TABLE avisos_pendentes (
                     id SERIAL PRIMARY KEY, guild_id TEXT NOT NULL, mensagem TEXT NOT NULL,
-                    criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP, publicado BOOLEAN NOT NULL DEFAULT FALSE
+                    criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP, publicado BOOLEAN NOT NULL DEFAULT FALSE, categoria TEXT
                 )
                 """
             )
@@ -281,6 +281,54 @@ class EngajamentoBancoTests(unittest.TestCase):
         with self.assertRaises(HTTPException) as erro:
             eng.publicar_foto(self.campanha, eng.FotoInput(imagem=ok), user=self.ana, database=self.database)
         self.assertEqual(erro.exception.status_code, 409)
+
+    # ------------------------------------------------------------ crônica
+    def _observador(self):
+        return self._usuario("eng-obs@example.com", "Observadora", "observador")
+
+    def test_cronica_lista_em_ordem_e_marca_quem_pode_editar(self):
+        sessao = self._sessao("aberta")
+        primeira = eng.publicar_cronica(self.campanha, eng.CronicaInput(titulo="A porta", texto="Abrimos a porta trancada."), user=self.ana, database=self.database)["id"]
+        segunda = eng.publicar_cronica(self.campanha, eng.CronicaInput(texto="O corredor continuava."), user=self.bruno, database=self.database)["id"]
+        entradas = eng.listar_cronica(self.campanha, user=self.mestre, database=self.database)["entradas"]
+        self.assertEqual([e["id"] for e in entradas], [primeira, segunda])
+        self.assertEqual(entradas[0]["sessao_id"], str(sessao))
+        self.assertEqual(entradas[0]["autor"], "Ana")
+        self.assertTrue(entradas[0]["pode_editar"])  # o Mestre edita tudo
+        do_bruno = eng.listar_cronica(self.campanha, user=self.bruno, database=self.database)["entradas"]
+        self.assertFalse(do_bruno[0]["pode_editar"])  # não é dele nem é Mestre
+        self.assertTrue(do_bruno[1]["pode_editar"])
+
+    def test_observador_nao_escreve_na_cronica(self):
+        observadora = self._observador()
+        with self.assertRaises(HTTPException) as erro:
+            eng.publicar_cronica(self.campanha, eng.CronicaInput(texto="Eu só assisto"), user=observadora, database=self.database)
+        self.assertEqual(erro.exception.status_code, 403)
+        eng.publicar_cronica(self.campanha, eng.CronicaInput(texto="oi"), user=self.ana, database=self.database)
+        entradas = eng.listar_cronica(self.campanha, user=observadora, database=self.database)["entradas"]
+        self.assertEqual(len(entradas), 1)  # mas continua lendo
+
+    def test_editar_e_apagar_cronica_respeita_autor_ou_mestre(self):
+        entrada = uuid.UUID(eng.publicar_cronica(self.campanha, eng.CronicaInput(titulo="Rascunho", texto="primeira versão"), user=self.ana, database=self.database)["id"])
+        with self.assertRaises(HTTPException) as erro:
+            eng.editar_cronica(self.campanha, entrada, eng.CronicaInput(texto="tentativa alheia"), user=self.bruno, database=self.database)
+        self.assertEqual(erro.exception.status_code, 403)
+        eng.editar_cronica(self.campanha, entrada, eng.CronicaInput(titulo="Final", texto="versão revisada"), user=self.ana, database=self.database)
+        revisada = eng.listar_cronica(self.campanha, user=self.mestre, database=self.database)["entradas"][0]
+        self.assertEqual((revisada["titulo"], revisada["texto"]), ("Final", "versão revisada"))
+        with self.assertRaises(HTTPException) as erro:
+            eng.apagar_cronica(self.campanha, entrada, user=self.bruno, database=self.database)
+        self.assertEqual(erro.exception.status_code, 403)
+        eng.apagar_cronica(self.campanha, entrada, user=self.mestre, database=self.database)
+        self.assertEqual(eng.listar_cronica(self.campanha, user=self.ana, database=self.database)["entradas"], [])
+
+    def test_cronica_avisa_discord_pela_categoria_do_mural(self):
+        self._ligar_discord()
+        eng.definir_avisos(self.campanha, eng.AvisosInput(avisos={"mural": True}), user=self.mestre, database=self.database)
+        eng.publicar_cronica(self.campanha, eng.CronicaInput(titulo="Chegada", texto="A vila recebeu o grupo com desconfiança."), user=self.ana, database=self.database)
+        avisos = self._avisos_discord()
+        self.assertEqual(len(avisos), 1)
+        self.assertIn("crônica", avisos[0].lower())
 
     # ------------------------------------------------------------ MVP
     def test_mvp_esconde_o_placar_ate_votar_e_nao_aceita_voto_em_si(self):

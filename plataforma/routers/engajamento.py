@@ -580,6 +580,138 @@ def alternar_voto(
     return {"votos": int(votos), "votei": not removido}
 
 
+# ---------------------------------------------------------------- crônica
+
+LIMITE_CRONICA = 200
+
+
+class CronicaInput(BaseModel):
+    titulo: str = Field(default="", max_length=120)
+    texto: str = Field(min_length=1, max_length=4000)
+
+
+def _entrada_cronica(linha: dict, usuario_id: UUID, gestor: bool) -> dict:
+    return {
+        "id": str(linha["id"]),
+        "titulo": linha["titulo"],
+        "texto": linha["texto"],
+        "autor": linha["autor_nome"],
+        "publicado_por": linha["publicador"],
+        "sessao_id": str(linha["sessao_id"]) if linha["sessao_id"] else None,
+        "criado_em": linha["criado_em"].isoformat(),
+        "atualizado_em": linha["atualizado_em"].isoformat(),
+        "meu": linha["usuario_id"] == usuario_id,
+        "pode_editar": gestor or linha["usuario_id"] == usuario_id,
+    }
+
+
+@router.get("/{campanha_id}/cronica")
+def listar_cronica(
+    campanha_id: UUID,
+    user: AuthenticatedUser = Depends(get_current_user),
+    database: Database = Depends(get_database),
+):
+    """A crônica coletiva: o que o grupo viveu, escrita à mão e visível a todos
+    (diferente do diário por personagem, que o servidor monta sozinho)."""
+    with database.connection() as connection:
+        acesso = campaign_access(connection, campanha_id, user.id)
+        linhas = connection.execute(
+            """
+            SELECT c.id, c.titulo, c.texto, c.autor_nome, c.sessao_id, c.criado_em, c.atualizado_em, c.usuario_id,
+                   COALESCE(u.nome_exibicao, c.autor_nome) AS publicador
+            FROM cronica_campanha c LEFT JOIN usuarios u ON u.id = c.usuario_id
+            WHERE c.campanha_id=%s
+            ORDER BY c.criado_em ASC LIMIT %s
+            """,
+            (campanha_id, LIMITE_CRONICA),
+        ).fetchall()
+    return {"entradas": [_entrada_cronica(dict(linha), user.id, acesso.manages_content) for linha in linhas]}
+
+
+@router.post("/{campanha_id}/cronica", status_code=status.HTTP_201_CREATED)
+def publicar_cronica(
+    campanha_id: UUID,
+    payload: CronicaInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    with database.connection() as connection:
+        acesso = campaign_access(connection, campanha_id, user.id)
+        if acesso.role == "observador":
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="observadores nao escrevem na cronica")
+        total = connection.execute(
+            "SELECT COUNT(*) AS total FROM cronica_campanha WHERE campanha_id=%s", (campanha_id,)
+        ).fetchone()["total"]
+        if total >= LIMITE_CRONICA:
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"a cronica guarda ate {LIMITE_CRONICA} entradas; apague alguma antes")
+        sessao = _sessao_recente(connection, campanha_id)
+        entrada_id = uuid4()
+        connection.execute(
+            """
+            INSERT INTO cronica_campanha (id, campanha_id, sessao_id, usuario_id, autor_nome, titulo, texto)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """,
+            (
+                entrada_id, campanha_id, sessao["id"] if sessao else None, user.id, user.nome_exibicao,
+                _texto(payload.titulo, 120, "titulo", obrigatorio=False),
+                _texto(payload.texto, 4000, "texto"),
+            ),
+        )
+        avisar_discord(connection, campanha_id, "mural", f"📜 **Nova entrada na crônica**: {_texto(payload.titulo, 100, 'titulo', obrigatorio=False) or _texto(payload.texto, 100, 'texto')}")
+    return {"id": str(entrada_id)}
+
+
+@router.put("/{campanha_id}/cronica/{entrada_id}")
+def editar_cronica(
+    campanha_id: UUID,
+    entrada_id: UUID,
+    payload: CronicaInput,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    with database.connection() as connection:
+        acesso = campaign_access(connection, campanha_id, user.id)
+        entrada = connection.execute(
+            "SELECT usuario_id FROM cronica_campanha WHERE id=%s AND campanha_id=%s", (entrada_id, campanha_id)
+        ).fetchone()
+        if not entrada:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="entrada nao encontrada")
+        if not acesso.manages_content and entrada["usuario_id"] != user.id:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="so quem escreveu ou o Mestre edita")
+        connection.execute(
+            """
+            UPDATE cronica_campanha SET titulo=%s, texto=%s, atualizado_em=CURRENT_TIMESTAMP
+            WHERE id=%s
+            """,
+            (
+                _texto(payload.titulo, 120, "titulo", obrigatorio=False),
+                _texto(payload.texto, 4000, "texto"),
+                entrada_id,
+            ),
+        )
+    return {"id": str(entrada_id)}
+
+
+@router.delete("/{campanha_id}/cronica/{entrada_id}", status_code=status.HTTP_204_NO_CONTENT)
+def apagar_cronica(
+    campanha_id: UUID,
+    entrada_id: UUID,
+    user: AuthenticatedUser = Depends(require_csrf),
+    database: Database = Depends(get_database),
+):
+    with database.connection() as connection:
+        acesso = campaign_access(connection, campanha_id, user.id)
+        entrada = connection.execute(
+            "SELECT usuario_id FROM cronica_campanha WHERE id=%s AND campanha_id=%s", (entrada_id, campanha_id)
+        ).fetchone()
+        if not entrada:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="entrada nao encontrada")
+        if not acesso.manages_content and entrada["usuario_id"] != user.id:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="so quem escreveu ou o Mestre apaga")
+        connection.execute("DELETE FROM cronica_campanha WHERE id=%s", (entrada_id,))
+    return None
+
+
 # --------------------------------------------------------------------- MVP
 
 class MvpInput(BaseModel):

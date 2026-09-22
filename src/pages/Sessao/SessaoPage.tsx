@@ -5,6 +5,7 @@ import {
   AlertTriangle,
   Car,
   Compass,
+  Eye,
   Hourglass,
   LockKeyhole,
   PanelLeft,
@@ -245,6 +246,9 @@ export const SessaoPage: React.FC = () => {
   };
 
   const activeEntity = iniciativa.find((entity) => entity.id === turnoAtualId) ?? iniciativa[turnoAtualIndex];
+  // Sem comando (Mestre/assistente) e sem nenhum personagem próprio na
+  // iniciativa: só está acompanhando, não jogando esta sessão.
+  const souEspectador = !comando && sessaoStatus === 'aberta' && !iniciativa.some((entidade) => entidade.eMeu);
   const connectionLabel = connectionStatus === 'online'
     ? 'Conectado'
     : connectionStatus === 'connecting'
@@ -314,6 +318,15 @@ export const SessaoPage: React.FC = () => {
                         : 'Ao vivo'
                       : 'Preparação privada'}
                   </span>
+                  {souEspectador ? (
+                    <span
+                      className="ml-1 inline-flex shrink-0 items-center gap-1 rounded-full border border-white/15 bg-white/[0.06] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white/60"
+                      title="Você acompanha esta sessão sem um personagem nela: vê tudo, mas não age."
+                    >
+                      <Eye size={11} aria-hidden="true" />
+                      Espectador
+                    </span>
+                  ) : null}
                 </div>
               </div>
             </div>

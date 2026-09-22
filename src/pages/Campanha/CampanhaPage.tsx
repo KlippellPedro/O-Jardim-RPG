@@ -15,6 +15,7 @@ import { formatarDataDaSessao } from '../Quadro/quadro';
 import { IdentidadeModal } from './IdentidadeModal';
 import { EpilogoModal } from './EpilogoModal';
 import { SeletorDeCampanha } from './SeletorDeCampanha';
+import { CronicaCampanha } from './CronicaCampanha';
 import { ROTULO_PAPEL, corDaCampanha, textoDeDuracao, textoDeVisita, urlDaCapa } from './campanha';
 
 const ATALHOS = [
@@ -194,6 +195,8 @@ export default function CampanhaPage() {
                 </ul>
               )}
             </section>
+
+            <CronicaCampanha campanhaId={campanhaId} cor={cor} />
           </div>
 
           <section className={`${cartao} h-fit`} aria-label="A mesa">

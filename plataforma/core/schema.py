@@ -1654,4 +1654,30 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        43,
+        "cronica_campanha",
+        (
+            # Crônica coletiva da campanha: entradas de próprio punho sobre o que o
+            # grupo viveu, visíveis a todos (diferente do diário, que é por
+            # personagem e montado sozinho pelo servidor - ver core/diario.py).
+            """
+            CREATE TABLE IF NOT EXISTS cronica_campanha (
+                id UUID PRIMARY KEY,
+                campanha_id UUID NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+                sessao_id UUID REFERENCES sessoes_mesa(id) ON DELETE SET NULL,
+                usuario_id UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+                autor_nome TEXT NOT NULL DEFAULT '',
+                titulo TEXT NOT NULL DEFAULT '',
+                texto TEXT NOT NULL,
+                criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS cronica_campanha_idx
+            ON cronica_campanha (campanha_id, criado_em ASC)
+            """,
+        ),
+    ),
 )

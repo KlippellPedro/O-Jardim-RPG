@@ -1,12 +1,20 @@
 import InteractiveModuleCard from '../InteractiveModuleCard';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Crown, FlaskConical, ScrollText } from 'lucide-react';
+import { sfx } from '../utils/audioSynth';
 import { useAuthStore } from '../store/useAuthStore';
 import NovidadesMural from './NovidadesMural';
 import { SeletorDeCampanha } from './Campanha/SeletorDeCampanha';
 import CalendarioSessoes from './Quadro/CalendarioSessoes';
 
 import { SimboloOculto } from '../components/descobertas/SimboloOculto';
+
+const ATALHOS_SECUNDARIOS = [
+  { titulo: 'Campanha', path: '/campanha', icone: Crown },
+  { titulo: 'Quadro', path: '/quadro', icone: ScrollText },
+  { titulo: 'Materiais', path: '/materiais', icone: FlaskConical },
+];
 export default function Home() {
   const navigate = useNavigate();
   const campanha = useAuthStore((estado) => estado.campanhaAtiva);
@@ -110,6 +118,29 @@ export default function Home() {
               iconUrl={mod.iconUrl}
               dieSides={mod.dieSides}
             />
+          </motion.button>
+        ))}
+      </motion.div>
+
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="mt-4 flex w-full flex-wrap justify-center gap-3"
+      >
+        {ATALHOS_SECUNDARIOS.map((atalho) => (
+          <motion.button
+            key={atalho.path}
+            type="button"
+            variants={itemVariants}
+            onClick={() => navigate(atalho.path)}
+            onMouseEnter={() => sfx.play('hover')}
+            data-sfx="navigate"
+            className="group flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 transition-colors hover:border-primary/30 hover:bg-white/[0.08]"
+            aria-label={`Abrir ${atalho.titulo}`}
+          >
+            <atalho.icone size={18} className="text-primary/70 transition-colors group-hover:text-primary" />
+            <span className="text-sm font-semibold text-gray-300 group-hover:text-white">{atalho.titulo}</span>
           </motion.button>
         ))}
       </motion.div>
