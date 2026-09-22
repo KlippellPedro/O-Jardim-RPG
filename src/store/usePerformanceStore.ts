@@ -8,7 +8,10 @@ interface PerformanceState {
   celebracoes: boolean;
   /** O dado 3D gira e pousa; desligado, o resultado aparece direto. */
   dado3d: boolean;
-  setEfeito: (efeito: 'celebracoes' | 'dado3d', ligado: boolean) => void;
+  /** Notificação do navegador quando chega a vez, mas a aba está em segundo plano.
+   * Só funciona depois da pessoa conceder a permissão do navegador. */
+  notificarSuaVez: boolean;
+  setEfeito: (efeito: 'celebracoes' | 'dado3d' | 'notificarSuaVez', ligado: boolean) => void;
   /** O modo de desempenho foi ligado sozinho por o aparelho parecer fraco (avisa uma vez). */
   ligadoAutomaticamente: boolean;
   aplicarModoLeveAutomatico: () => void;
@@ -22,6 +25,7 @@ export const usePerformanceStore = create<PerformanceState>()(
       performanceMode: false,
       celebracoes: true,
       dado3d: true,
+      notificarSuaVez: false,
       ligadoAutomaticamente: false,
       setEfeito: (efeito, ligado) => set({ [efeito]: ligado }),
       aplicarModoLeveAutomatico: () => set({ performanceMode: true, ligadoAutomaticamente: true }),
@@ -31,7 +35,9 @@ export const usePerformanceStore = create<PerformanceState>()(
     {
       name: 'jardim-performance-store',
       storage: createJSONStorage(() => localStorage),
-      partialize: ({ performanceMode, celebracoes, dado3d, ligadoAutomaticamente }) => ({ performanceMode, celebracoes, dado3d, ligadoAutomaticamente }),
+      partialize: ({ performanceMode, celebracoes, dado3d, notificarSuaVez, ligadoAutomaticamente }) => (
+        { performanceMode, celebracoes, dado3d, notificarSuaVez, ligadoAutomaticamente }
+      ),
     },
   ),
 );

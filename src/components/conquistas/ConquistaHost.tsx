@@ -9,6 +9,7 @@ import {
 } from '../../pages/Ficha/components/vozGrandeSabio';
 import { inscreverConquistas } from './conquistas';
 import { SeloConquista } from './SeloConquista';
+import { useVezAvisoRelampago } from '../avisosRelampago/useVezAvisoRelampago';
 import './conquistaToast.css';
 import { semMovimento } from '../../utils/movimento';
 
@@ -25,11 +26,14 @@ export const ConquistaHost = memo(function ConquistaHost() {
   const [saindo, setSaindo] = useState(false);
   const atual = fila[0] ?? null;
   const parar = useRef<() => void>(() => undefined);
+  // Loot, conquista e "é sua vez" disputam a mesma tela: só toca som e aparece
+  // quando é a vez da conquista, em vez de brigar com os outros avisos-relâmpago.
+  const temVez = useVezAvisoRelampago('conquista', atual !== null);
 
   useEffect(() => inscreverConquistas((novas) => setFila((anterior) => [...anterior, ...novas])), []);
 
   useEffect(() => {
-    if (!atual) return undefined;
+    if (!atual || !temVez) return undefined;
     setSaindo(false);
     sfx.play('estrela');
     if (vozGrandeSabioDisponivel() && vozGrandeSabioLigada()) {
@@ -47,9 +51,9 @@ export const ConquistaHost = memo(function ConquistaHost() {
       timers.forEach((timer) => window.clearTimeout(timer));
       parar.current();
     };
-  }, [atual]);
+  }, [atual, temVez]);
 
-  if (!atual) return null;
+  if (!atual || !temVez) return null;
   const lendaria = atual.raridade === 'lendaria';
   const animar = !semMovimento();
 

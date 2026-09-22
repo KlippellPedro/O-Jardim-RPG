@@ -1,5 +1,5 @@
 import React from 'react';
-import { Gauge, Volume2, VolumeX } from 'lucide-react';
+import { Bell, Gauge, Volume2, VolumeX } from 'lucide-react';
 import { useAudioStore } from '../../store/useAudioStore';
 import { sfx } from '../../utils/audioSynth';
 import { usePerformanceStore } from '../../store/usePerformanceStore';
@@ -7,6 +7,11 @@ import { usePrefersReducedMotion } from '../../hooks/usePerformance';
 import { PERFIS_SONOROS, ROTULO_PERFIL } from '../../utils/somDeClasse';
 import { CATEGORIAS_SOM, CATEGORIAS_PADRAO } from '../../utils/categoriasSom';
 import { definirVozGrandeSabioLigada, vozGrandeSabioDisponivel, vozGrandeSabioLigada } from '../../pages/Ficha/components/vozGrandeSabio';
+import {
+  notificacaoDisponivel,
+  pedirPermissaoNotificacao,
+  permissaoNotificacaoNegada,
+} from '../../utils/notificacoesNavegador';
 
 interface IInterruptorProps {
   rotulo: string;
@@ -52,15 +57,31 @@ export const PreferenciasPanel: React.FC = () => {
   const setCategoria = useAudioStore((state) => state.setCategoria);
   const celebracoes = usePerformanceStore((state) => state.celebracoes);
   const dado3d = usePerformanceStore((state) => state.dado3d);
+  const notificarSuaVez = usePerformanceStore((state) => state.notificarSuaVez);
   const setEfeito = usePerformanceStore((state) => state.setEfeito);
   const ligadoAutomaticamente = usePerformanceStore((state) => state.ligadoAutomaticamente);
   const [voz, setVoz] = React.useState(vozGrandeSabioLigada);
+  const [permissaoNegada, setPermissaoNegada] = React.useState(permissaoNotificacaoNegada);
+  const [pedindoPermissao, setPedindoPermissao] = React.useState(false);
   const restaurar = () => {
     CATEGORIAS_SOM.forEach((categoria) => setCategoria(categoria.id, CATEGORIAS_PADRAO[categoria.id]));
     setEfeito('celebracoes', true);
     setEfeito('dado3d', true);
+    setEfeito('notificarSuaVez', false);
     definirVozGrandeSabioLigada(true);
     setVoz(true);
+  };
+
+  // Pedir a permissão do navegador só faz sentido no clique de ligar; desligar
+  // é só uma preferência do app, a permissão concedida continua valendo.
+  const handleNotificarSuaVez = async (ligar: boolean) => {
+    if (!ligar) { setEfeito('notificarSuaVez', false); return; }
+    setPedindoPermissao(true);
+    const concedida = await pedirPermissaoNotificacao();
+    setPedindoPermissao(false);
+    setPermissaoNegada(!concedida && permissaoNotificacaoNegada());
+    setEfeito('notificarSuaVez', concedida);
+    if (concedida) sfx.play('confirm');
   };
 
   const handleToggle = () => {
@@ -249,6 +270,30 @@ export const PreferenciasPanel: React.FC = () => {
             <Interruptor rotulo="Dado 3D" descricao="O dado gira e pousa na tela. Desligado, o resultado aparece direto." ligado={dado3d} desabilitado={performanceMode} onMudar={(ligado) => setEfeito('dado3d', ligado)} />
           </div>
           {performanceMode ? <p className="mt-3 text-xs text-gray-500">O modo de desempenho já desliga estes efeitos.</p> : null}
+        </section>
+
+        <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
+          <div className="mb-1 flex items-center gap-2">
+            <Bell className="text-primary" size={20} />
+            <h3 className="text-lg font-bold text-white">Notificações</h3>
+          </div>
+          <p className="mb-2 mt-1 text-sm text-gray-400">Avisa fora da aba quando o assunto não pode esperar você voltar a olhar.</p>
+          <div className="divide-y divide-white/5">
+            <Interruptor
+              rotulo="É a sua vez"
+              descricao="Notificação do navegador na Sessão ao Vivo, se outra aba estiver aberta na hora."
+              ligado={notificarSuaVez}
+              desabilitado={!notificacaoDisponivel() || pedindoPermissao}
+              onMudar={handleNotificarSuaVez}
+            />
+          </div>
+          {!notificacaoDisponivel() ? (
+            <p className="mt-3 text-xs text-gray-500">Este navegador não tem suporte a notificações.</p>
+          ) : permissaoNegada ? (
+            <p className="mt-3 text-xs text-amber-300/80">
+              As notificações deste site estão bloqueadas nas configurações do navegador. Libere-as lá para ativar aqui.
+            </p>
+          ) : null}
         </section>
 
         <button type="button" onClick={restaurar} className="rounded-xl border border-white/10 px-4 py-2 text-xs font-bold text-gray-400 hover:text-white">Restaurar sons e efeitos ao padrão</button>
