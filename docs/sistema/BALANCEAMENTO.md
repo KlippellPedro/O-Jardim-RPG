@@ -5,6 +5,8 @@ implementação de agosto, com conferência das fontes locais citadas abaixo.
 Os relatórios originais e suas simulações estão no [histórico](../HISTORICO.md#balanceamento).
 Esta organização documental não altera números, regras ou aprovações.
 
+<a id="decisoes-de-legados"></a>
+
 ## Decisões de Legados
 
 | Assunto | Decisão implementada e conferida | Fonte |
@@ -15,6 +17,7 @@ Esta organização documental não altera números, regras ou aprovações.
 | Tô ficando bom, Bala Ágil e Mágico? | Pré-requisito de nível 5. A intervenção aprovada adiou o acesso, sem reescrever seus efeitos. | Mesmo catálogo. |
 | Código de Ética | Dano adicional de metade do nível, arredondado para baixo, limitado a +30 contra oponente armado. O restante da descrição permanece aplicável. | Mesmo catálogo. |
 | Legado racial adicional | A implementação de agosto documentou o bônus em Humano, Desperto, Auleth, Autômato, Clone, Amálgamo e Bruxa. O dado e a característica devem permanecer coerentes. | [racas.json](../../data/ficha/racas.json) |
+| Seis Legados novos (Eco do Fluxo, Passo Entre Galhos, Memória do Eclipse, Vínculo Lunar, Segundo Tempo e Âncora da Árvore) | Oficiais. Não fazem parte dos 36 Legados confirmados nos PDFs originais, mas entram no mesmo catálogo de escolha do personagem (frontend e backend carregam `legados.json` e `legados-novos.json` juntos, sem distinção de status). Cada um já tem pré-requisito e limitador de uso (uma vez por cena, turno, sessão ou descanso, conforme o Legado); não há pendência de revisão editorial aberta. | [legados-novos.json](../../data/ficha/legados-novos.json) |
 
 Não existe decisão aprovada nesses relatórios para refazer todo o catálogo com
 um orçamento universal de poder. A classificação comparativa das propostas
@@ -27,11 +30,6 @@ um orçamento universal de poder. A classificação comparativa das propostas
 - A raça Entidade continua `indisponivel: true`, sem características no
   catálogo atual. Não reaplicar automaticamente a proposta antiga de “Legado
   extra” antes de definir seu pacote racial.
-- Eco do Fluxo, Passo Entre Galhos, Memória do Eclipse, Vínculo Lunar, Segundo
-  Tempo e Âncora da Árvore não devem ser descritos genericamente como “sem
-  limitadores”: a revalidação de agosto corrigiu esse diagnóstico. A revisão
-  editorial de balanceamento dos seis é uma questão distinta da existência
-  de limites no texto de [legados-novos.json](../../data/ficha/legados-novos.json).
 
 ## Cofre e Investimentos
 
@@ -117,7 +115,6 @@ mudança dos dados não comprova, por si só, equilíbrio em mesa.
 | Câmbio ampliado versus textos e premissas antigas | Confirmar a intenção atual e alinhar as fontes contraditórias identificadas acima. |
 | Código de Ética contra ataques naturais | Definir o significado de armado/desarmado, sem alterar silenciosamente o teto já aprovado. |
 | Raça Entidade | Desenvolver seu pacote antes de liberar seleção ou documentar bônus que não está no dado atual. |
-| Revisão dos seis Legados novos | Avaliar os limites já existentes, em vez de partir do diagnóstico inicial corrigido. |
 | Exceção do Marco de Pedra | Manter até uma decisão específica de preço; comparar com os componentes atuais. |
 | Juros, risco e concentração de patrimônio | Calibrar com dados de uso; números de simulação antiga não substituem acompanhamento de campanha. |
 | Modificações aplicadas a veículos e distinção de escudos | Ver as decisões ainda abertas em Integração. |

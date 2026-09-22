@@ -60,6 +60,28 @@ registro não pode depender somente de esconder o componente na tela.
 | Compras avançadas | Detalhes e saldo insuficiente foram exercitados na interface; compra completa exige conta de teste com recursos adequados. |
 | Nós 3D móveis | A dificuldade da ferramenta de clicar no alvo não comprovou defeito do produto. Fazer a passagem humana por mouse, touch e teclado. |
 
+<a id="avisos-e-consistencia-21-09"></a>
+
+## Avisos-relâmpago, cartaz e atalhos (21 de setembro de 2026)
+
+Fechamento de uma rodada de pedidos pontuais sobre inconsistências entre
+telas, não uma nova auditoria completa da jornada.
+
+| Pedido | Fechamento |
+| --- | --- |
+| O cartaz de Procurado e a moldura do retrato mostravam patentes diferentes para o mesmo nível: o cartaz parava em "Lendário" a partir do nível 20, enquanto o retrato já tinha 13 graus (a cada 5 níveis) até o 60. | [cartaz.ts](../../src/pages/Ficha/utils/cartaz.ts) passou a reaproveitar `molduraDoRetrato` de [retrato.ts](../../src/pages/Ficha/utils/retrato.ts) como fonte única. O PNG exportado ([cartazExportar.ts](../../src/pages/Ficha/utils/cartazExportar.ts)) e o resumo impresso ([exportarFicha.ts](../../src/pages/Ficha/utils/exportarFicha.ts)) seguem a mesma escada. |
+| A carta de item comprado na Loja e a lista de desejos viviam só no `localStorage`: comprar num aparelho e abrir a ficha em outro perdia a revelação e a lista. | Os dois passaram a viver em `ficha.lootPendente` e `ficha.wishlist`, sincronizados pelo autosave normal da ficha ([useCharacterStore.ts](../../src/store/useCharacterStore.ts)), sem endpoint novo. Ver `proximosPendentes` em [loot.ts](../../src/components/loot/loot.ts) e [useWishlist.ts](../../src/hooks/useWishlist.ts). |
+| Loot, conquista e "é sua vez" eram três sistemas de aviso independentes, sem nenhuma coordenação entre si. | Hub compartilhado novo em [src/components/avisosRelampago/](../../src/components/avisosRelampago/hub.ts): só um tipo por vez toca som/vibra e aparece; os outros esperam a vez. Cada host manteve a própria animação (carta, selo, gongo). |
+| Ninguém era avisado de "é sua vez" fora da aba da Sessão ao Vivo. | Preferência opcional em Configurações → Preferências → Notificações; usa a Notification API do navegador, só com a aba escondida e a permissão concedida no clique de ligar. Ver [notificacoesNavegador.ts](../../src/utils/notificacoesNavegador.ts) e `usePerformanceStore.notificarSuaVez`. |
+| A grade inicial da Home só linkava 5 dos módulos, mesmo com Quadro, Campanha e Materiais tendo crescido bastante desde então. | [Home.tsx](../../src/pages/Home.tsx) ganhou uma segunda fileira de atalhos, com ícones Lucide (sem exigir arte nova) para esses três. |
+| Quem entra na Sessão ao Vivo sem personagem (papel `observador`, ou jogador sem ficha escolhida) já via tudo em modo leitura, mas sem nenhum indicativo disso na tela. | Selo "Espectador" no cabeçalho de [SessaoPage.tsx](../../src/pages/Sessao/SessaoPage.tsx) e explicação no formulário de convite ([MestrePanel.tsx](../../src/components/Settings/MestrePanel.tsx)) quando o Mestre escolhe o papel Observador. Nenhuma rota ou permissão nova: o backend já tratava `observador` como leitura completa (ver [Integração](INTEGRACAO.md#cronica-da-campanha)). |
+
+Cobertura: `npm run test:frontend` (611 testes em 21/09, incluindo os novos
+[cartaz.test.ts](../../tests/frontend/cartaz.test.ts),
+[lootPendente.test.ts](../../tests/frontend/lootPendente.test.ts) e
+[avisosRelampagoHub.test.ts](../../tests/frontend/avisosRelampagoHub.test.ts))
+e `npx tsc -b` limpos. Não repete navegação manual em navegador real.
+
 ## Responsividade e acessibilidade
 
 O fechamento de agosto corrigiu sete problemas reproduzidos:

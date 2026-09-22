@@ -23,7 +23,7 @@ seu encaminhamento, sem apresentar o relatório inicial como diagnóstico atual.
 | 10 — Cópias de tiers de Cofre | Plataforma, Banqueiro e Jornalista passaram a consumir o JSON compartilhado. A validação ampliou o escopo ao descobrir a terceira cópia. |
 | 11 — Modificações | Tipagem, pré-requisitos e compatibilidade por `aplicacao` conectados à compra. O relatório intermediário que dizia “compatibilidade desconectada” foi superado pelo E2E posterior. |
 | 12 — Compra e ativação de bens | Fluxo em duas etapas preservado e comunicado. Automatizar continua sendo mudança de produto. |
-| 13 — Seis Legados novos | A marcação de procedência foi corrigida. O exame posterior reconheceu limitadores já existentes; revisão de poder é tema de Balanceamento. |
+| 13 — Seis Legados novos | A marcação de procedência foi corrigida. O exame posterior reconheceu limitadores já existentes; os seis são oficiais e não têm pendência de revisão em aberto (ver [Balanceamento](BALANCEAMENTO.md#decisoes-de-legados)). |
 | 14 — Grafias de raridade | Normalização aplicada ao catálogo. Valores e enum atuais devem ser conferidos nas fontes. |
 | 15 — Preços destoantes | Os exemplos antigos mudaram depois da auditoria; ver Balanceamento, sem reaplicar os preços sugeridos naquela etapa. |
 | 16 — `limites.py` ambíguo | Módulo de autenticação renomeado para `rate_limit_auth.py`. Não confundir rate limit de login com limite de uso de poder. |
@@ -123,6 +123,42 @@ Fontes: [test_security_boundaries.py](../../plataforma/tests/test_security_bound
 [README da plataforma](../../plataforma/README.md).
 As regras completas de publicação e os arquivos de seed permanecem no
 [guia do editor](../EDITOR_CONTEUDO_CAMPANHA.md), sem outra cópia aqui.
+
+<a id="cronica-da-campanha"></a>
+
+## Crônica da campanha
+
+Nova em **21 de setembro de 2026**: um registro coletivo do que o grupo
+viveu, escrito à mão pelos jogadores e pelo Mestre — diferente do diário por
+personagem (montado sozinho pelo servidor, ver `core/diario.py`) e do
+"Anteriormente" da página da campanha (resumo automático das últimas 3
+sessões encerradas).
+
+Tabela `cronica_campanha` (migração 43 em
+[schema.py](../../plataforma/core/schema.py)). Rotas
+`GET/POST/PUT/DELETE /engajamento/{campanha_id}/cronica`
+([engajamento.py](../../plataforma/routers/engajamento.py)), no mesmo router
+do mural: reaproveita `campaign_access`, `_sessao_recente` (a entrada herda a
+sessão ao vivo/recém-encerrada, se houver) e a categoria de aviso do Discord
+já existente `"mural"` — não criou categoria nova em
+[discord_avisos.py](../../plataforma/core/discord_avisos.py).
+
+Permissões seguem exatamente o padrão do mural: qualquer papel lê, inclusive
+`observador`; `observador` não publica (`403`); cada entrada só é
+editável/apagável por quem escreveu ou por Mestre/Assistente. Frontend em
+[CronicaCampanha.tsx](../../src/pages/Campanha/CronicaCampanha.tsx), exibido
+na página da campanha logo abaixo de "Anteriormente".
+
+O papel `observador` em si não é novo — já existia no modelo de campanha
+(`membros_campanha.papel`) e já era tratado como leitura completa e sem
+comando em toda a Sessão ao Vivo (`campaign_access` em
+[dependencies.py](../../plataforma/core/dependencies.py)). O que mudou em
+setembro foi só deixar isso visível na interface; ver
+[Frontend](FRONTEND.md#avisos-e-consistencia-21-09).
+
+Cobertura:
+[test_engajamento_banco.py](../../plataforma/tests/test_engajamento_banco.py)
+(27 testes contra PostgreSQL descartável, 4 novos para a crônica).
 
 <a id="evidencia-de-validacao-e-limites"></a>
 
