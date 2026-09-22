@@ -324,6 +324,60 @@ export const MODIFICACOES_EQUIPAMENTO: IModificacaoEquipamento[] = [
     efeito: 'O item carrega um Selo inscrito, escolhido na criação. Uma vez por dia ele dispara sem gastar Mana nem exigir teste de inscrição.',
     preRequisito: 'Nível total 10 e Misticismo treinado',
   },
+  // Expansão 2026-09: 12 modificações novas
+  {
+    id: 'serrilhada', titulo: 'Serrilhada', categoria: 'arma', nivel: 'comum', valor: 1,
+    efeito: 'Ao causar dano de Corte, o alvo sangra e sofre 1d4 de dano no início de cada turno seu por 2 rodadas. Uma vez por alvo por cena.',
+  },
+  {
+    id: 'de-arremesso', titulo: 'De Arremesso', categoria: 'arma', nivel: 'comum', valor: 0,
+    efeito: 'A arma ganha a propriedade Arremesso com alcance Curto. Voltar à mão exige buscá-la normalmente.',
+  },
+  {
+    id: 'atordoante', titulo: 'Atordoante', categoria: 'arma', nivel: 'marcial', valor: 2,
+    efeito: 'No crítico, o alvo faz um teste de Constituição ou perde a reação até o fim do próximo turno dele. Uma vez por cena por alvo.',
+    preRequisito: 'Força 14',
+  },
+  {
+    id: 'termica', titulo: 'Térmica', categoria: 'armadura', nivel: 'comum', valor: 1,
+    efeito: 'Você tem Resistência 2 contra Fogo e Gelo enquanto a vestir.',
+  },
+  {
+    id: 'dissipadora', titulo: 'Dissipadora', categoria: 'armadura', nivel: 'marcial', valor: 3,
+    efeito: 'Uma vez por cena, ao sofrer dano de Impacto, reduza-o pela metade.',
+    preRequisito: 'Nível total 10',
+  },
+  {
+    id: 'reativa', titulo: 'Reativa', categoria: 'armadura', nivel: 'marcial', valor: 2,
+    efeito: 'Uma vez por rodada, quando um ataque corpo a corpo acertar você, o atacante sofre 1d6 de dano de Impacto.',
+    preRequisito: 'Constituição 14',
+  },
+  {
+    id: 'ancorado', titulo: 'Ancorado', categoria: 'escudo', nivel: 'comum', valor: 0,
+    efeito: 'A alça de ombro impede que o escudo caia por Desarmar, e você pode soltá-lo e recolocá-lo como parte de uma ação de movimento.',
+  },
+  {
+    id: 'refletor', titulo: 'Refletor', categoria: 'escudo', nivel: 'marcial', valor: 2,
+    efeito: 'Uma vez por cena, ao bloquear um ataque de Raio ou de Luz, redirecione o efeito para uma criatura a até 6 m.',
+    preRequisito: 'Fluxo 12',
+  },
+  {
+    id: 'lacrado', titulo: 'Lacrado', categoria: 'item', nivel: 'comum', valor: 0,
+    efeito: 'O item é à prova d\'água e de poeira, e não sofre corrosão nem ferrugem.',
+  },
+  {
+    id: 'chamado', titulo: 'Chamado', categoria: 'item', nivel: 'comum', valor: 1,
+    efeito: 'Uma vez por dia, gaste uma Ação de Movimento para trazer o item à sua mão, se ele estiver a até 30 m e em linha de visão.',
+  },
+  {
+    id: 'furtivo', titulo: 'Furtivo', categoria: 'item', nivel: 'marcial', valor: 2,
+    efeito: 'O item passa despercebido em revistas comuns e detectores básicos. Achá-lo exige Investigação contra DT 20.',
+  },
+  {
+    id: 'catalisador', titulo: 'Catalisador', categoria: 'item', nivel: 'marcial', valor: 3,
+    efeito: 'Uma vez por cena, ao conjurar uma magia de 3º círculo ou maior com este item, recupere 1d6 de Mana.',
+    preRequisito: 'Fluxo 14 e nível total 10',
+  },
 ];
 
 export const CATEGORIAS_MODIFICACAO: Array<{ id: CategoriaModificacaoId; titulo: string }> = [

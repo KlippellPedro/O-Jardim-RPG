@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Select } from '../../../components/ui/Select';
-import { aplicarRaridadeCompra, classeTextoRaridade, getCurrencySymbol, itemEhVeiculoCompleto, itemPermiteEscolherRaridade, LojaItem, nivelLojaParaRaridadeCompra, NOMES_LOCAIS_LOJA, obterBonusDefesaCatalogo, personagemAtendeRequisitosLoja, RARIDADES_COMPRA_EQUIPAMENTO, RaridadeCompraEquipamento } from '../../../services/lojaCatalogService';
+import { aplicarRaridadeCompra, classeTextoRaridade, getCurrencySymbol, itemEhVeiculoCompleto, itemPermiteEscolherRaridade, LojaItem, nivelLojaParaRaridadeCompra, NOMES_LOCAIS_LOJA, obterBonusDefesaCatalogo, personagemAtendeRequisitosLoja, rotuloCategoriaItem, rotuloSubtipoItem, RARIDADES_COMPRA_EQUIPAMENTO, RaridadeCompraEquipamento } from '../../../services/lojaCatalogService';
 import { X, ShoppingCart, Info, Swords, Activity, Skull, Sparkles, AlertTriangle, Wrench, CircleGauge, BookOpen, ChevronRight } from 'lucide-react';
 import { ICharacter } from '../../../types/character';
 import { useModalSfx } from '../../../hooks/useSfx';
@@ -508,11 +508,11 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
                 {itemParaCompra.raridade}
               </span>
               <span className="text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md border border-white/20 text-gray-400 bg-white/5">
-                {item.categoria}
+                {rotuloCategoriaItem(item)}
               </span>
-              {dadosBrutos.subtipo && (
+              {rotuloSubtipoItem(item) && (
                 <span className="text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md border border-white/20 text-blue-300 bg-blue-900/20">
-                  {dadosBrutos.subtipo}
+                  {rotuloSubtipoItem(item)}
                 </span>
               )}
               {item.promocao ? (

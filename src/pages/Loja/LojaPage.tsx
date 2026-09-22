@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ShoppingBag, CheckCircle, XCircle, LayoutGrid, Sword, Shield, ShieldHalf, FlaskConical, Users, Gem, Archive, Heart, Sparkles, Cpu, Wand2, Wrench, Apple, MapPin, Building2, Skull, Globe2, Compass, RotateCcw, CircleGauge, Store, ChevronRight, Backpack } from 'lucide-react';
-import { aplicarRaridadeCompra, calcularValorRevenda, LojaItem, ItemCategoria, ItemRaridade, itemPermiteEscolherRaridade, lerRaridadeChave, nivelLojaParaRaridadeCompra, NOMES_LOCAIS_LOJA, getCurrencySymbol, itemCorrespondeBusca, itemCorrespondeProficiencia, itemCorrespondeSubfiltro, itemEhVeiculoCompleto, lerPrecoNativoLoja, mapearCatalogoLoja, RARIDADES_COMPRA_EQUIPAMENTO, RaridadeCompraEquipamento, rotuloRaridadeChave, somarPrecosNativos } from '../../services/lojaCatalogService';
+import { aplicarRaridadeCompra, calcularValorRevenda, LojaItem, ItemCategoria, ItemRaridade, itemPermiteEscolherRaridade, lerRaridadeChave, nivelLojaParaRaridadeCompra, NOMES_LOCAIS_LOJA, getCurrencySymbol, itemCorrespondeBusca, itemCorrespondeCategoria, itemCorrespondeProficiencia, itemCorrespondeSubfiltro, itemEhVeiculoCompleto, lerPrecoNativoLoja, mapearCatalogoLoja, RARIDADES_COMPRA_EQUIPAMENTO, RaridadeCompraEquipamento, rotuloRaridadeChave, somarPrecosNativos } from '../../services/lojaCatalogService';
 import { ItemCard } from './components/ItemCard';
 import { LojaItemModal } from './components/LojaItemModal';
 import { CartDrawer, CartItem, cartItemKey } from './components/CartDrawer';
@@ -19,7 +19,7 @@ import { LOJA_TOUR_STEPS, lojaTourJaVisto, serializarLojaTourVisto } from './loj
 import { grupoLimiteItemEspecial, resumirLimiteItensEspeciais } from '../../services/itensEspeciaisService';
 import { RARIDADES_EQUIPAMENTO } from '../../../data/regras/raridadesEquipamentos';
 import './loja.css';
-import { dispararLoot } from '../../components/loot/loot';
+import { proximosPendentes } from '../../components/loot/loot';
 
 import { SimboloOculto } from '../../components/descobertas/SimboloOculto';
 interface RecompensaAviso {
@@ -130,7 +130,7 @@ const RARIDADES_OPCOES = (Object.keys(RARIDADES_CORES) as Array<ItemRaridade | '
   .map((value) => ({ value, label: value }));
 
 export const LojaPage: React.FC = () => {
-  const { characters, fetchCharacters, flushCharacterSaves } = useCharacterStore();
+  const { characters, fetchCharacters, flushCharacterSaves, patchCharacter } = useCharacterStore();
   const { campanhaAtiva, usuario } = useAuthStore();
   const config = campanhaAtiva?.configuracoes || {};
   const locaisOcultos = config.locais_ocultos || [3, 4];
@@ -550,13 +550,18 @@ export const LojaPage: React.FC = () => {
       const resultado = operation === 'compra' ? await lojaApi.comprar(attempt.payload) : await lojaApi.vender(attempt.payload);
       await fetchCharacters();
       if (operation === 'compra') {
-        // O que acabou de ser comprado aparece numa carta que vira, com o brilho da raridade.
-        dispararLoot(cart.map(({ item, quantidade }) => ({
+        // As cartas do que foi comprado esperam guardadas em ficha.lootPendente (autosave
+        // normal) e viram quando a ficha de quem comprou for aberta, em qualquer aparelho.
+        const personagemComFicha = useCharacterStore.getState().characters.find(
+          (character) => character.id === personagemAtual.id,
+        );
+        const novosPendentes = proximosPendentes(personagemComFicha?.ficha?.lootPendente, cart.map(({ item, quantidade }) => ({
           nome: item.nome,
           raridade: item.raridadeCompra ?? item.raridade,
           categoria: item.categoria,
           quantidade,
         })));
+        patchCharacter(personagemAtual.id, ['ficha', 'lootPendente'], novosPendentes);
       }
       if (operation === 'compra' && resultado.infracoes?.length) {
         // Requisito de nível/classe não bloqueia a compra (o mestre já é avisado
@@ -568,7 +573,7 @@ export const LojaPage: React.FC = () => {
       } else if (comprouAtivavel) {
         showToast('Compra concluída! Para usar o veículo/propriedade em jogo, ative-o em Frota & Bases da campanha.', 'success');
       } else {
-        showToast(operation === 'compra' ? 'Compra do lote finalizada com sucesso!' : 'Lote vendido com sucesso!', 'success');
+        showToast(operation === 'compra' ? 'Compra do lote finalizada! As cartas dos itens viram quando você abrir a ficha.' : 'Lote vendido com sucesso!', 'success');
       }
       setCart([]);
       checkoutAttemptRef.current = null;
@@ -625,7 +630,7 @@ export const LojaPage: React.FC = () => {
 
     return source.filter(item => {
       const matchSearch = itemCorrespondeBusca(item, searchTerm);
-      const matchCat = selectedCategoria === 'Todos' || item.categoria === selectedCategoria;
+      const matchCat = itemCorrespondeCategoria(item, selectedCategoria);
       const raridadeFiltro = lerRaridadeChave(selectedRaridade);
       const raridadeEquipamentoDisponivel = modoLoja === 'Comprar'
         && itemPermiteEscolherRaridade(item)

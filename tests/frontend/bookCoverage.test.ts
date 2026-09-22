@@ -34,7 +34,7 @@ test('Personagem e Progressão usa as contagens atuais dos catálogos', () => {
   const racasComuns = racasMecanicas.filter((raca: any) => raca.categoria === 'padrao').length;
   const racasEspeciais = racasMecanicas.filter((raca: any) => raca.categoria === 'esquecida').length;
   const frutos = lojaCatalogo.entradas.filter((item: any) => item.tipo === 'fruto-eden').length;
-  const implantes = lojaCatalogo.entradas.filter((item: any) => item.tipo === 'implante').length;
+  const implantes = lojaCatalogo.entradas.filter((item: any) => item.tipo === 'implante' && item.conteudo?.natureza !== 'reliquia-criacao').length;
   const destaquesClasses = Object.fromEntries(REGRAS_OFICIAIS.classes.destaques);
   const destaquesRacas = Object.fromEntries(REGRAS_OFICIAIS.racas.destaques);
 

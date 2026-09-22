@@ -135,7 +135,7 @@ test('texto mantém redação normativa sem diálogo ou bordão', () => {
 
 test('veículos completos publicam os campos necessários para combate', () => {
   const completos = catalogo.entradas.filter((entrada) => entrada.tipo === 'veiculo-completo');
-  assert.equal(completos.length, 16);
+  assert.equal(completos.length, 34);
   for (const veiculo of completos) {
     const texto = veiculo.conteudo.descricao ?? '';
     for (const campo of ['Vida', 'Defesa', 'Resistência', 'deslocamento', 'Manobrabilidade', 'capacidade', 'cobertura', 'tripulação mínima', 'sistemas ativos', 'espaços de base']) {

@@ -16,6 +16,8 @@ export interface LojaItem {
   tipoOrigem: string;
   nome: string;
   categoria: ItemCategoria;
+  /** Só nas Relíquias da Criação: a categoria comum a que o objeto pertence (Armas, Implantes...). */
+  categoriaBase?: ItemCategoria;
   raridade: ItemRaridade;
   moedaPreco: MoedaTipo;
   valorOriginal: number; // Valor na moedaPreco
@@ -290,9 +292,7 @@ const mapCategoriaEquipamento = (item: any): ItemCategoria => {
   return 'Itens Comuns';
 };
 
-const mapCategoria = (item: any): ItemCategoria => {
-  if (ehReliquiaCriacao({ ...item.conteudo, tipo: item.tipo })) return 'Relíquias da Criação';
-  
+const mapCategoriaPorTipo = (item: any): ItemCategoria => {
   switch (item.tipo) {
     case 'arma': return 'Armas';
     case 'armadura': return item.conteudo?.categoria_protecao === 'escudo' ? 'Escudos' : 'Armaduras';
@@ -310,6 +310,42 @@ const mapCategoria = (item: any): ItemCategoria => {
     default: return 'Outros';
   }
 };
+
+const mapCategoria = (item: any): ItemCategoria => (
+  ehReliquiaCriacao({ ...item.conteudo, tipo: item.tipo }) ? 'Relíquias da Criação' : mapCategoriaPorTipo(item)
+);
+
+/** Relíquia da Criação tem prateleira própria, mas continua sendo uma arma, um
+ * implante, uma armadura... Esta é a categoria "de verdade" dela, usada para a
+ * relíquia também aparecer quando se filtra por esse tipo. */
+const mapCategoriaBaseReliquia = (item: any): ItemCategoria | undefined => (
+  ehReliquiaCriacao({ ...item.conteudo, tipo: item.tipo }) ? mapCategoriaPorTipo(item) : undefined
+);
+
+/** Etiqueta de categoria da vitrine. Numa Relíquia da Criação a raridade já
+ * anuncia "Relíquia da Criação", então repetir isso na categoria gasta uma
+ * etiqueta sem dizer nada: aqui ela mostra o que a peça é (Armas, Implantes
+ * Cibernéticos, Bens...), que é a informação que falta. */
+export const rotuloCategoriaItem = (
+  item: Pick<LojaItem, 'categoria' | 'categoriaBase'>,
+): ItemCategoria => item.categoriaBase ?? item.categoria;
+
+/** Subtipo que vale a pena etiquetar. `reliquia-criacao` é marcação interna e
+ * seria a terceira etiqueta seguida dizendo a mesma coisa; subtipo de verdade
+ * (marcial, simples, completo) continua aparecendo. */
+export const rotuloSubtipoItem = (
+  item: Pick<LojaItem, 'dadosBrutos'>,
+): string | null => {
+  const subtipo = String(item.dadosBrutos?.subtipo ?? '').trim();
+  return subtipo && normalizarMarcador(subtipo) !== 'reliquia-criacao' ? subtipo : null;
+};
+
+/** Categoria escolhida no filtro bate com a do item ou, no caso de relíquia,
+ * com a categoria de origem dela. */
+export const itemCorrespondeCategoria = (
+  item: Pick<LojaItem, 'categoria' | 'categoriaBase'>,
+  categoria: ItemCategoria | 'Todos',
+): boolean => categoria === 'Todos' || item.categoria === categoria || item.categoriaBase === categoria;
 
 export const normalizarRaridadeChave = (raridade: unknown): ItemRaridadeChave => {
   const val = String(raridade ?? '')
@@ -632,6 +668,7 @@ export const mapearItemLoja = (entrada: LojaCatalogEntry): LojaItem => {
     tipoOrigem: entrada.tipo,
     nome: entrada.titulo || 'Item Desconhecido',
     categoria,
+    categoriaBase: mapCategoriaBaseReliquia(entrada),
     raridade,
     moedaPreco,
     valorOriginal,

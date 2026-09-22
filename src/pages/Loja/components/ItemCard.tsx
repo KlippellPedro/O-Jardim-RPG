@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingCart, Heart, Eye, Wrench, CircleGauge } from 'lucide-react';
-import { LojaItem, NOMES_LOCAIS_LOJA, classeTextoRaridade, getCurrencySymbol, itemPermiteEscolherRaridade } from '../../../services/lojaCatalogService';
+import { LojaItem, NOMES_LOCAIS_LOJA, classeTextoRaridade, getCurrencySymbol, itemPermiteEscolherRaridade, rotuloCategoriaItem, rotuloSubtipoItem } from '../../../services/lojaCatalogService';
 import { itemLojaContaComoEspecial } from '../../../services/itensEspeciaisService';
 import { obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
 
@@ -106,15 +106,15 @@ export const ItemCard: React.FC<ItemCardProps> = React.memo(function ItemCard({ 
             {escolheRaridade ? `${item.raridade} · escolha na compra` : item.raridade}
           </span>
           <span className="shrink-0 whitespace-nowrap text-[10px] uppercase tracking-widest font-bold px-2 py-1 bg-white/5 border border-white/10 rounded-md text-gray-400">
-            {item.categoria}
+            {rotuloCategoriaItem(item)}
           </span>
-          {item.dadosBrutos?.subtipo && (
+          {rotuloSubtipoItem(item) && (
             <span className={`shrink-0 whitespace-nowrap text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md border ${
               isSpecial
                 ? 'bg-yellow-500/10 border-yellow-500/50 text-yellow-300'
                 : 'bg-white/5 border-white/10 text-gray-400'
             }`}>
-              {item.dadosBrutos.subtipo}
+              {rotuloSubtipoItem(item)}
             </span>
           )}
         </div>

@@ -106,7 +106,7 @@ const listaRacasPublicas = racasMecanicas
   .join('');
 
 const totalFrutosEden = catalogoLojaData.entradas.filter((item) => item.tipo === 'fruto-eden').length;
-const totalImplantes = catalogoLojaData.entradas.filter((item) => item.tipo === 'implante').length;
+const totalImplantes = catalogoLojaData.entradas.filter((item) => item.tipo === 'implante' && item.conteudo?.natureza !== 'reliquia-criacao').length;
 
 /** nivelMinimoLoja é o mesmo campo que lojaCatalogService.ts lê para decidir o
  * balcão de cada item (1 Vila, 2 Metrópole, 3 Mercado Negro, 4 Banco Lunar).

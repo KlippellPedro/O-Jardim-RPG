@@ -208,7 +208,7 @@ test('a moeda acompanha o bolso: Lunaris no cotidiano, Solares no alto valor', (
   }
 
   // E o topo do catálogo continua cotado nas moedas do seu próprio balcão.
-  for (const item of catalogo.entradas.filter(entrada => entrada.tipo === 'implante')) {
+  for (const item of catalogo.entradas.filter(entrada => entrada.tipo === 'implante' && entrada.conteudo.natureza !== 'reliquia-criacao')) {
     assert.equal(lerPreco(item.conteudo.preco)?.moeda, 'Créditos Sombrios', `${item.id}: implante fora do Crédito Sombrio`);
   }
   for (const item of catalogo.entradas.filter(entrada => entrada.tipo === 'fruto-eden')) {
@@ -440,6 +440,6 @@ test('modificações declaram aplicacao dentro do enum e pre_requisitos tipados 
       comPreRequisitoTipado += 1;
     }
   }
-  // As 15 modificações "marciais" com pré-requisito identificadas na auditoria.
-  assert.equal(comPreRequisitoTipado, 15);
+  // As 15 modificações "marciais" com pré-requisito identificadas na auditoria, mais 5 da expansão 2026-09.
+  assert.equal(comPreRequisitoTipado, 20);
 });

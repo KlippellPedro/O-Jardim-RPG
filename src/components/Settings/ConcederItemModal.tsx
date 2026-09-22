@@ -7,6 +7,7 @@ import {
   mapearCatalogoLoja,
   itemCorrespondeBusca,
   getCurrencySymbol,
+  rotuloCategoriaItem,
   type ItemCategoria,
   type LojaItem,
 } from '../../services/lojaCatalogService';
@@ -209,7 +210,7 @@ export const ConcederItemModal: React.FC<ConcederItemModalProps> = ({
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-bold text-white truncate">{item.nome}</p>
                           <p className="text-xs text-gray-500 truncate">
-                            {item.categoria} · {item.raridade}
+                            {rotuloCategoriaItem(item)} · {item.raridade}
                             {item.dadosBrutos?.nivel ? ` · nível ${item.dadosBrutos.nivel}` : ''}
                             {' · '}{item.valorOriginal.toLocaleString('pt-BR')} {getCurrencySymbol(item.moedaPreco)}
                           </p>

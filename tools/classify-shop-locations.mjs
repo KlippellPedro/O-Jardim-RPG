@@ -131,7 +131,8 @@ export const classifyShopLocation = (entry) => {
       return Math.max(level, 2);
 
     case 'propriedade':
-      return normalize(content.patamar) === 'complexo' ? 3 : 2;
+      // Lendário vai sempre ao Banco Lunar, seja qual for o patamar.
+      return Math.max(normalize(content.patamar) === 'complexo' ? 3 : 2, rarity === 'lendario' ? 4 : 0);
 
     case 'monstro':
       return levelForMonster(entry, text);
@@ -149,7 +150,7 @@ export const classifyShopLocation = (entry) => {
       return level;
 
     case 'implante':
-      return 3;
+      return Math.max(3, rarity === 'lendario' ? 4 : 0);
 
     case 'artefato':
       return Math.max(level, 3);

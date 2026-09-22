@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, X, Plus, Minus, Trash2 } from 'lucide-react';
-import { LojaItem, getCurrencySymbol, somarPrecosNativos } from '../../../services/lojaCatalogService';
+import { LojaItem, getCurrencySymbol, rotuloCategoriaItem, somarPrecosNativos } from '../../../services/lojaCatalogService';
 import { MAX_SHOP_UNITS } from '../../../services/lojaApi';
 import { useModalSfx } from '../../../hooks/useSfx';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
@@ -93,7 +93,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   return (
                   <div key={cartKey} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-4">
                     <div className="min-w-0 flex-1">
-                      <div className="text-xs uppercase tracking-widest text-gray-500 mb-1">{item.categoria}</div>
+                      <div className="text-xs uppercase tracking-widest text-gray-500 mb-1">{rotuloCategoriaItem(item)}</div>
                       <h4 className="text-white font-bold mb-1">{item.nome}</h4>
                       {item.raridadeCompra ? (
                         <div className="mb-2 inline-block rounded-md border border-[#c7a44c]/25 bg-[#c7a44c]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#dfc87f]">

@@ -24591,6 +24591,3916 @@
         "nivelMinimoLoja": 3,
         "requer_autorizacao_mestre": true
       }
+    },
+    {
+      "tipo": "implante",
+      "id": "reliquia-olho-odin",
+      "titulo": "Olho de Odin",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 500
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Implante Cibernético",
+          "Vê o que é verdadeiro",
+          "Custo: 1d6 de Sanidade"
+        ],
+        "lore": "Odin deixou um olho no fundo de um poço em troca de uma pergunta, e o poço nunca devolveu a água limpa. A lente que sobrou dessa troca ainda olha para o lado de dentro das coisas. Quem a instala passa a semana seguinte sem conseguir olhar espelho nenhum.",
+        "descricao": "Uma vez por cena, gaste uma Ação Livre para enxergar o que é verdadeiro. Até o fim do seu turno, você vê através de ilusões, disfarces e invisibilidade a até 18 m e tem vantagem em Percepção e Intuição. Cada uso custa 1d6 de Sanidade.",
+        "ativacao": "Ação Livre",
+        "frequencia": "1/cena",
+        "custo": "1d6 de Sanidade",
+        "efeito": "Vê através de ilusões, disfarces e invisibilidade a até 18 m; vantagem em Percepção e Intuição até o fim do turno"
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "reliquia-braco-nuada",
+      "titulo": "Braço de Prata de Nuada",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 440
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Implante Cibernético",
+          "Não pode ser mutilado",
+          "Golpe de Prata"
+        ],
+        "lore": "Nuada perdeu o braço numa batalha e o trono junto com ele, porque um rei ferido não podia reinar. A prata que lhe deram no lugar trabalhou tão bem que o trono voltou. O braço guarda a memória de ser devolvido, e recusa a ideia de ser tirado outra vez.",
+        "descricao": "Este braço nunca pode ser mutilado, arrancado nem desarmado à força, e a mão que ele forma não solta o que segura contra a sua vontade. Uma vez por cena, gaste uma Ação Padrão para um golpe desarmado que causa 4d12 de dano adicional.",
+        "ativacao": "Ação Padrão",
+        "frequencia": "1/cena",
+        "efeito": "Imune a Mutilação e a desarme forçado; golpe desarmado com 4d12 de dano adicional 1/cena"
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "reliquia-coracao-ouroboros",
+      "titulo": "Coração de Ouroboros",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 560
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Implante Cibernético",
+          "Regeneração",
+          "Recusa a queda 1/descanso",
+          "Custo: 1 Cansaço"
+        ],
+        "lore": "A serpente que engole a própria cauda nunca chegou a decidir qual ponta veio primeiro. O coração bate no ritmo dessa dúvida: cada batida termina onde a seguinte começa, sem intervalo para o corpo aproveitar e morrer. Médicos que ouvem o peito de quem o carrega pedem para ouvir de novo.",
+        "descricao": "No início de cada turno seu, recupere 1d12 de Vida. Uma vez por descanso, ao chegar a 0 de Vida, você não cai: volta com metade da Vida máxima e ganha 1 Cansaço.",
+        "ativacao": "Reação, ao chegar a 0 de Vida",
+        "frequencia": "1/descanso",
+        "custo": "1 Cansaço",
+        "efeito": "Recupera 1d12 de Vida por turno; ao chegar a 0 de Vida, volta com metade da Vida máxima"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "reliquia-pele-nemeia",
+      "titulo": "Armadura de Nemeia",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 520
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "marcial",
+        "categoria_protecao": "armadura",
+        "bonus": "+30",
+        "penalidade": "-8",
+        "material": "Pele do Leão de Nemeia",
+        "espacos": 1,
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Armadura",
+          "Resistência 10: Corte, Perfuração, Impacto"
+        ],
+        "lore": "O leão de Nemeia teve a pele testada por todas as armas de uma cidade inteira, e nenhuma deixou marca. Só as garras dele serviram para cortá-la, e é por isso que a costura da armadura brilha como unha. Quem a veste aprende que ser difícil de ferir também pesa.",
+        "descricao": "Nenhum fio comum encontra caminho nesta pele. Enquanto estiver vestida, você tem Resistência 10 contra Corte, Perfuração e Impacto.",
+        "efeito": "Resistência 10 contra Corte, Perfuração e Impacto"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "reliquia-escudo-svalinn",
+      "titulo": "Escudo de Svalinn",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 400
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "marcial",
+        "categoria_protecao": "escudo",
+        "bonus": "+20",
+        "penalidade": "-6",
+        "material": "Placa do Escudo Solar",
+        "espacos": 1,
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Escudo",
+          "Bloqueia raios e chamas",
+          "Reação 1/cena"
+        ],
+        "lore": "Svalinn fica diante do sol para que a terra não queime. O escudo herdou a função inteira e a exerce com a educação de quem já foi testado por coisa maior que você. O metal esquenta quando o perigo se aproxima, sem que o portador sinta nada além de calor de lareira.",
+        "descricao": "Uma vez por cena, gaste uma Reação para bloquear um ataque à distância ou um efeito de área de Fogo, Luz ou Raio que atinja você ou um aliado adjacente. O alvo não sofre dano nem condição desse efeito.",
+        "ativacao": "Reação, alcance adjacente",
+        "frequencia": "1/cena",
+        "efeito": "Bloqueia um ataque à distância ou efeito de área de Fogo, Luz ou Raio contra você ou aliado adjacente"
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "reliquia-ilha-avalon",
+      "titulo": "Ilha de Avalon",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 600
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "tipoPropriedade": "base",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "enclave",
+        "qualidadeQuartos": "excelente",
+        "manutencao": 0,
+        "instalacoes": [
+          {
+            "nome": "Dormitório",
+            "nivel": 3,
+            "espacosOcupados": 3
+          },
+          {
+            "nome": "Área Médica",
+            "nivel": 3,
+            "espacosOcupados": 3
+          },
+          {
+            "nome": "Armazém",
+            "nivel": 2,
+            "espacosOcupados": 2
+          }
+        ],
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Bem Imóvel",
+          "Base",
+          "Descanso Excelente"
+        ],
+        "lore": "Avalon aparece na névoa para quem está ferido demais para procurar. Não há mapa da chegada, só a lembrança de ter sido carregado. As macieiras dão fruto o ano todo, e ninguém lembra de ter plantado nenhuma.",
+        "descricao": "Uma ilha inteira que se ergue da névoa e serve de base. Vem com Dormitório 3, Área Médica 3 e Armazém 2, e não cobra manutenção."
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "reliquia-nau-argo",
+      "titulo": "Nau Argo",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 480
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "completo",
+        "categoria": "aquático",
+        "tamanho": "grande",
+        "vidaMaxima": 200,
+        "defesa": 20,
+        "resistencia": 8,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 60,
+        "manobrabilidade": 4,
+        "capacidade": 20,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "total",
+        "tripulacaoMinima": 1,
+        "sistemasAtivosMaximos": 6,
+        "espacosBase": 4,
+        "armas": [],
+        "sistemas": [],
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Veículo Completo",
+          "Aquático",
+          "Proa que fala"
+        ],
+        "lore": "A proa foi talhada num carvalho de Dodona, uma madeira que profetiza, e a Argo nunca aprendeu a calar. Ela avisa de tempestade três dias antes e reclama de quem esquece de agradecer. Já atravessou mares que mudaram de nome enquanto ela passava.",
+        "descricao": "Veículo grande aquático. Vida 200; Defesa 20; Resistência 8; deslocamento 60 m na água; Manobrabilidade +4; capacidade total 20, incluindo tripulação; cobertura total; tripulação mínima 1; até 6 sistemas ativos; espaços de base: 4; sem armas integradas. A proa fala: uma vez por cena, quem pilota pergunta o rumo e a Argo responde com o caminho mais seguro, dando vantagem em testes de navegação até o fim da cena.",
+        "ativacao": "Ação Livre do piloto",
+        "frequencia": "1/cena"
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "reliquia-ambrosia",
+      "titulo": "Ambrosia",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 320
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "consumivel": true,
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Consumível",
+          "Cura total",
+          "Uso único"
+        ],
+        "lore": "Os deuses jamais explicaram de onde vinha. Explicavam só o gosto, e cada um descrevia um diferente. Quem bebe a Ambrosia sente um segundo de saudade de uma casa em que nunca morou, e logo depois a dor vai embora.",
+        "descricao": "Ao beber, você recupera toda a Vida e toda a Mana, remove todas as condições e fica imune a doenças e venenos por 1 hora. A Ambrosia se consome no uso.",
+        "ativacao": "Ação Padrão",
+        "frequencia": "Uso único",
+        "duracao": "1 hora",
+        "efeito": "Recupera toda Vida e Mana, remove todas as condições, imunidade a doenças e venenos por 1 hora"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-couro-javali",
+      "titulo": "Armadura de Couro de Javali",
+      "conteudo": {
+        "descricao": "Couro espesso, curtido com o pelo por fora. A gola alta protege o pescoço e o peito de estocadas.",
+        "categoria_protecao": "armadura",
+        "subtipo": "simples",
+        "preco": {
+          "Lunaris": 25
+        },
+        "raridade": "comum",
+        "bonus": "+2",
+        "penalidade": "-1",
+        "material": "Couro de javali",
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-lona-encerada",
+      "titulo": "Armadura de Lona Encerada",
+      "conteudo": {
+        "descricao": "Camadas de lona com cera de abelha, leves e à prova d'água. Quem a veste ignora a desvantagem de chuva leve e lama rasa.",
+        "categoria_protecao": "armadura",
+        "subtipo": "simples",
+        "preco": {
+          "Lunaris": 18
+        },
+        "raridade": "comum",
+        "bonus": "+1",
+        "penalidade": "-0",
+        "material": "Lona encerada",
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-carapaca-besouro",
+      "titulo": "Armadura de Carapaça de Besouro",
+      "conteudo": {
+        "descricao": "Placas de quitina sobrepostas, presas por tiras de couro. Dura como osso e leve como madeira seca.",
+        "categoria_protecao": "armadura",
+        "subtipo": "simples",
+        "preco": {
+          "Lunaris": 110
+        },
+        "raridade": "incomum",
+        "bonus": "+4",
+        "penalidade": "-1",
+        "material": "Quitina",
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-cota-runica",
+      "titulo": "Armadura de Cota Rúnica",
+      "conteudo": {
+        "descricao": "Malha de aço com runas gravadas em cada elo. Uma vez por descanso, gaste uma Reação para absorver 5 de dano de um ataque.",
+        "categoria_protecao": "armadura",
+        "subtipo": "marcial",
+        "preco": {
+          "Lunaris": 140
+        },
+        "raridade": "incomum",
+        "bonus": "+5",
+        "penalidade": "-3",
+        "material": "Aço rúnico",
+        "espacos": 1,
+        "ativacao": "Reação",
+        "frequencia": "1/descanso",
+        "efeito": "Absorve 5 de dano de um ataque",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-couro-sombrio",
+      "titulo": "Armadura de Couro de Sombra",
+      "conteudo": {
+        "descricao": "Couro tingido com pigmento que bebe a luz. Na penumbra ou no escuro, você tem vantagem em Furtividade.",
+        "categoria_protecao": "armadura",
+        "subtipo": "simples",
+        "preco": {
+          "Lunaris": 120
+        },
+        "raridade": "incomum",
+        "bonus": "+3",
+        "penalidade": "-0",
+        "material": "Couro sombrio",
+        "espacos": 1,
+        "efeito": "Vantagem em Furtividade na penumbra ou no escuro",
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-lamelar",
+      "titulo": "Armadura de Lamelar",
+      "conteudo": {
+        "descricao": "Centenas de lâminas de aço laqueado costuradas em fileiras. Cobre o corpo inteiro sem prender o giro dos ombros.",
+        "categoria_protecao": "armadura",
+        "subtipo": "marcial",
+        "preco": {
+          "Lunaris": 620
+        },
+        "raridade": "raro",
+        "bonus": "+9",
+        "penalidade": "-5",
+        "material": "Lâminas laqueadas",
+        "espacos": 1,
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-cacador-feras",
+      "titulo": "Armadura de Caçador de Feras",
+      "conteudo": {
+        "descricao": "Couro de fera enfeitado com presas e garras de troféu. Contra criaturas do tipo Fera, você ganha +1 de Defesa adicional.",
+        "categoria_protecao": "armadura",
+        "subtipo": "simples",
+        "preco": {
+          "Lunaris": 480
+        },
+        "raridade": "raro",
+        "bonus": "+7",
+        "penalidade": "-2",
+        "material": "Couro e presas",
+        "espacos": 1,
+        "efeito": "+1 de Defesa contra criaturas do tipo Fera",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-malha-prata",
+      "titulo": "Armadura de Malha de Prata",
+      "conteudo": {
+        "descricao": "Elos de prata trançados sobre um forro de seda. Você tem Resistência 3 contra dano causado por mortos-vivos.",
+        "categoria_protecao": "armadura",
+        "subtipo": "marcial",
+        "preco": {
+          "Lunaris": 500
+        },
+        "raridade": "raro",
+        "bonus": "+8",
+        "penalidade": "-3",
+        "material": "Prata",
+        "espacos": 1,
+        "efeito": "Resistência 3 contra dano de mortos-vivos",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-ceramica-balistica",
+      "titulo": "Armadura de Cerâmica Balística",
+      "conteudo": {
+        "descricao": "Placas de cerâmica dentro de fibra trançada. Estilhaça projéteis antes de o impacto chegar à pele, e trinca depressa sob golpe de martelo.",
+        "categoria_protecao": "armadura",
+        "subtipo": "marcial",
+        "preco": {
+          "Lunaris": 900
+        },
+        "raridade": "raro",
+        "bonus": "+11",
+        "penalidade": "-6",
+        "material": "Cerâmica compósita",
+        "espacos": 1,
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-coral-vivo",
+      "titulo": "Armadura de Coral Vivo",
+      "conteudo": {
+        "descricao": "Coral cultivado sobre uma base de couro, ainda vivo. Enquanto você estiver molhado ou submerso, recupera 2 de Vida no início de cada turno seu.",
+        "categoria_protecao": "armadura",
+        "subtipo": "simples",
+        "preco": {
+          "Solares": 12
+        },
+        "raridade": "epico",
+        "bonus": "+9",
+        "penalidade": "-2",
+        "material": "Coral vivo",
+        "espacos": 1,
+        "efeito": "Recupera 2 de Vida por turno enquanto molhado ou submerso",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-placas-obsidiana",
+      "titulo": "Armadura de Placas de Obsidiana",
+      "conteudo": {
+        "descricao": "Placas de vidro vulcânico com beiras afiadas. Quando um ataque corpo a corpo acertar você, o atacante sofre 1d6 de dano de Corte.",
+        "categoria_protecao": "armadura",
+        "subtipo": "marcial",
+        "preco": {
+          "Solares": 13
+        },
+        "raridade": "epico",
+        "bonus": "+14",
+        "penalidade": "-7",
+        "material": "Obsidiana",
+        "espacos": 1,
+        "efeito": "O atacante corpo a corpo que acertar você sofre 1d6 de Corte",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-campo-cinetico",
+      "titulo": "Armadura de Campo Cinético",
+      "conteudo": {
+        "descricao": "Uma malha fina que endurece com o impacto. Uma vez por cena, gaste uma Reação para reduzir em 20 o dano de queda ou de Impacto.",
+        "categoria_protecao": "armadura",
+        "subtipo": "simples",
+        "preco": {
+          "Solares": 12
+        },
+        "raridade": "epico",
+        "bonus": "+7",
+        "penalidade": "-1",
+        "material": "Malha cinética",
+        "espacos": 1,
+        "ativacao": "Reação",
+        "frequencia": "1/cena",
+        "efeito": "Reduz em 20 o dano de queda ou de Impacto",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-cavaleiro-eclipsado",
+      "titulo": "Armadura de Cavaleiro Eclipsado",
+      "conteudo": {
+        "descricao": "Aço escurecido por um eclipse que ninguém viu terminar. Uma vez por cena, ao cair a 0 de Vida, você fica com 1 de Vida.",
+        "categoria_protecao": "armadura",
+        "subtipo": "marcial",
+        "preco": {
+          "Solares": 70
+        },
+        "raridade": "lendario",
+        "bonus": "+21",
+        "penalidade": "-8",
+        "material": "Aço Eclipse",
+        "espacos": 1,
+        "ativacao": "Reação, ao chegar a 0 de Vida",
+        "frequencia": "1/cena",
+        "efeito": "Fica com 1 de Vida em vez de cair",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-pele-tita",
+      "titulo": "Armadura de Pele de Titã",
+      "conteudo": {
+        "descricao": "A pele de um titã, curtida em anos e ainda quente ao toque. Você não pode ser Derrubado nem Empurrado contra a sua vontade.",
+        "categoria_protecao": "armadura",
+        "subtipo": "marcial",
+        "preco": {
+          "Solares": 68
+        },
+        "raridade": "lendario",
+        "bonus": "+24",
+        "penalidade": "-9",
+        "material": "Couro de titã",
+        "espacos": 1,
+        "efeito": "Imune a Derrubar e Empurrar",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "armadura-nanocasulo",
+      "titulo": "Armadura de Nanocasulo",
+      "conteudo": {
+        "descricao": "Um casulo de nanofibra que reaprende o corpo a cada dia. No início de cada cena, escolha um tipo de dano: você ganha Resistência 5 contra ele até o fim da cena.",
+        "categoria_protecao": "armadura",
+        "subtipo": "simples",
+        "preco": {
+          "Solares": 58
+        },
+        "raridade": "lendario",
+        "bonus": "+14",
+        "penalidade": "-2",
+        "material": "Nanofibra",
+        "espacos": 1,
+        "efeito": "Resistência 5 contra um tipo de dano escolhido a cada cena",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-vime",
+      "titulo": "Escudo de Vime",
+      "conteudo": {
+        "descricao": "Vime trançado em três camadas, leve o bastante para esquecer no braço. Serve contra pedra e flecha de longe.",
+        "categoria_protecao": "escudo",
+        "subtipo": "simples",
+        "preco": {
+          "Lunaris": 20
+        },
+        "raridade": "comum",
+        "bonus": "+1",
+        "penalidade": "-0",
+        "material": "Vime trançado",
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-casco-tartaruga",
+      "titulo": "Escudo de Casco de Tartaruga",
+      "conteudo": {
+        "descricao": "Um casco inteiro, alças costuradas por dentro. Cobre bem, pesa mais do que parece.",
+        "categoria_protecao": "escudo",
+        "subtipo": "simples",
+        "preco": {
+          "Lunaris": 30
+        },
+        "raridade": "comum",
+        "bonus": "+1",
+        "penalidade": "-1",
+        "material": "Casco",
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-couro-esticado",
+      "titulo": "Escudo de Couro Esticado",
+      "conteudo": {
+        "descricao": "Couro cru esticado num aro de madeira, seco ao sol. Absorve pancada sem rachar.",
+        "categoria_protecao": "escudo",
+        "subtipo": "simples",
+        "preco": {
+          "Lunaris": 90
+        },
+        "raridade": "incomum",
+        "bonus": "+2",
+        "penalidade": "-0",
+        "material": "Couro cru",
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-targe-aco",
+      "titulo": "Escudo Targe de Aço",
+      "conteudo": {
+        "descricao": "Um targe redondo de aço batido, com espigão central. Nas mãos de quem sabe usar, vira arma de curta distância.",
+        "categoria_protecao": "escudo",
+        "subtipo": "marcial",
+        "preco": {
+          "Lunaris": 160
+        },
+        "raridade": "incomum",
+        "bonus": "+3",
+        "penalidade": "-1",
+        "material": "Aço",
+        "espacos": 1,
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-vidro-temperado",
+      "titulo": "Escudo de Vidro Temperado",
+      "conteudo": {
+        "descricao": "Vidro temperado transparente, moldado em curva. Você enxerga através dele e ganha vantagem em Reflexos contra projéteis.",
+        "categoria_protecao": "escudo",
+        "subtipo": "simples",
+        "preco": {
+          "Lunaris": 300
+        },
+        "raridade": "raro",
+        "bonus": "+3",
+        "penalidade": "-2",
+        "material": "Vidro temperado",
+        "espacos": 1,
+        "efeito": "Vantagem em Reflexos contra projéteis",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-rompe-lancas",
+      "titulo": "Escudo Rompe-Lanças",
+      "conteudo": {
+        "descricao": "Um escudo com entalhes fundos na borda, feitos para prender a haste inimiga. Ao bloquear um ataque feito depois de um deslocamento em linha reta, o atacante fica Desarmado até o fim do turno dele.",
+        "categoria_protecao": "escudo",
+        "subtipo": "marcial",
+        "preco": {
+          "Lunaris": 520
+        },
+        "raridade": "raro",
+        "bonus": "+4",
+        "penalidade": "-3",
+        "material": "Aço dentado",
+        "espacos": 1,
+        "efeito": "Bloquear ataque após deslocamento desarma o atacante até o fim do turno dele",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-carapaca",
+      "titulo": "Escudo de Carapaça",
+      "conteudo": {
+        "descricao": "Uma placa inteira de carapaça, polida por dentro. Leve para o que aguenta.",
+        "categoria_protecao": "escudo",
+        "subtipo": "simples",
+        "preco": {
+          "Lunaris": 450
+        },
+        "raridade": "raro",
+        "bonus": "+4",
+        "penalidade": "-2",
+        "material": "Quitina",
+        "espacos": 1,
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-campo-magnetico",
+      "titulo": "Escudo de Campo Magnético",
+      "conteudo": {
+        "descricao": "Uma bobina no miolo cria um campo que desvia metal. Você tem Resistência 5 contra dano de projéteis metálicos.",
+        "categoria_protecao": "escudo",
+        "subtipo": "marcial",
+        "preco": {
+          "Lunaris": 320
+        },
+        "raridade": "raro",
+        "bonus": "+3",
+        "penalidade": "-1",
+        "material": "Ferrita e bobina",
+        "espacos": 1,
+        "efeito": "Resistência 5 contra projéteis metálicos",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-sol-portatil",
+      "titulo": "Escudo de Sol Portátil",
+      "conteudo": {
+        "descricao": "Um disco de cristal que guarda a luz de um dia inteiro. Uma vez por cena, gaste uma Reação para um clarão: criaturas adjacentes ficam Cegas até o fim do próximo turno delas.",
+        "categoria_protecao": "escudo",
+        "subtipo": "simples",
+        "preco": {
+          "Solares": 12
+        },
+        "raridade": "epico",
+        "bonus": "+6",
+        "penalidade": "-3",
+        "material": "Cristal solar",
+        "espacos": 1,
+        "ativacao": "Reação",
+        "frequencia": "1/cena",
+        "efeito": "Clarão que Cega criaturas adjacentes até o fim do próximo turno delas",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-muralha",
+      "titulo": "Escudo de Muralha",
+      "conteudo": {
+        "descricao": "Uma laje de pedra encantada, quase uma porta. Como Ação de Movimento, finque-o no chão para ter cobertura total contra ataques de uma direção, até se mover.",
+        "categoria_protecao": "escudo",
+        "subtipo": "marcial",
+        "preco": {
+          "Solares": 13
+        },
+        "raridade": "epico",
+        "bonus": "+8",
+        "penalidade": "-7",
+        "material": "Pedra encantada",
+        "espacos": 1,
+        "ativacao": "Ação de Movimento",
+        "efeito": "Cobertura total contra uma direção até se mover",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-gelo-eterno",
+      "titulo": "Escudo de Gelo Eterno",
+      "conteudo": {
+        "descricao": "Gelo que nunca derrete, frio a ponto de queimar a mão sem luva. Quem acertar você em corpo a corpo tem o Movimento reduzido à metade até o fim do próximo turno.",
+        "categoria_protecao": "escudo",
+        "subtipo": "simples",
+        "preco": {
+          "Solares": 12
+        },
+        "raridade": "epico",
+        "bonus": "+6",
+        "penalidade": "-2",
+        "material": "Gelo eterno",
+        "espacos": 1,
+        "efeito": "Atacante corpo a corpo tem Movimento reduzido à metade",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-ressonancia",
+      "titulo": "Escudo de Ressonância",
+      "conteudo": {
+        "descricao": "Bronze de sino, afinado para um som só. Você tem Resistência 10 contra dano Sônico e, ao bloquear, o metal soa e atrai a atenção de quem estiver perto.",
+        "categoria_protecao": "escudo",
+        "subtipo": "marcial",
+        "preco": {
+          "Solares": 12
+        },
+        "raridade": "epico",
+        "bonus": "+7",
+        "penalidade": "-4",
+        "material": "Bronze sino",
+        "espacos": 1,
+        "efeito": "Resistência 10 contra Sônico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-ultimo-recuo",
+      "titulo": "Escudo do Último Recuo",
+      "conteudo": {
+        "descricao": "O escudo de uma retaguarda que nunca deixou o campo. Uma vez por cena, gaste uma Reação: um aliado adjacente sofre metade do dano de um ataque, e você sofre a outra metade.",
+        "categoria_protecao": "escudo",
+        "subtipo": "marcial",
+        "preco": {
+          "Solares": 58
+        },
+        "raridade": "lendario",
+        "bonus": "+14",
+        "penalidade": "-6",
+        "material": "Aço Juramentado antigo",
+        "espacos": 1,
+        "ativacao": "Reação",
+        "frequencia": "1/cena",
+        "efeito": "Divide o dano de um ataque com um aliado adjacente",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-barreira-fractal",
+      "titulo": "Escudo de Barreira Fractal",
+      "conteudo": {
+        "descricao": "Projeta uma barreira de facetas que se rearranjam a cada golpe. Uma vez por cena, gaste uma Ação de Movimento para dar cobertura a todos os aliados adjacentes até o início do seu próximo turno.",
+        "categoria_protecao": "escudo",
+        "subtipo": "marcial",
+        "preco": {
+          "Solares": 62
+        },
+        "raridade": "lendario",
+        "bonus": "+16",
+        "penalidade": "-8",
+        "material": "Liga A.X.I.S fractal",
+        "espacos": 1,
+        "ativacao": "Ação de Movimento",
+        "frequencia": "1/cena",
+        "efeito": "Cobertura para aliados adjacentes até o início do seu próximo turno",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "escudo-prismatico",
+      "titulo": "Escudo Prismático",
+      "conteudo": {
+        "descricao": "Um cristal lapidado em mil facetas. Uma vez por cena, ao bloquear um raio ou feixe de luz, redirecione-o contra qualquer criatura a até 12 m.",
+        "categoria_protecao": "escudo",
+        "subtipo": "simples",
+        "preco": {
+          "Solares": 55
+        },
+        "raridade": "lendario",
+        "bonus": "+12",
+        "penalidade": "-2",
+        "material": "Cristal prismático",
+        "espacos": 1,
+        "ativacao": "Reação",
+        "frequencia": "1/cena",
+        "efeito": "Redireciona raio ou feixe de luz bloqueado",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-ponte-optica-termica",
+      "titulo": "Ponte Óptica Térmica",
+      "conteudo": {
+        "descricao": "Lentes que leem calor. Você enxerga criaturas de sangue quente e máquinas em funcionamento a até 9 m, mesmo no escuro ou atrás de fumaça.",
+        "preco": {
+          "Créditos Sombrios": 20
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Implante Cibernético",
+          "Visão térmica: 9 m",
+          "Não enxerga cor"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-capsula-antidoto",
+      "titulo": "Cápsula Salivar de Antídoto",
+      "conteudo": {
+        "descricao": "Um reservatório atrás do molar que fabrica antídoto. Uma vez por descanso, gaste uma Ação Livre para remover a condição Envenenado.",
+        "preco": {
+          "Créditos Sombrios": 25
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Implante Cibernético",
+          "Remove Envenenado 1/descanso"
+        ],
+        "subtipo": "cibernetico",
+        "ativacao": "Ação Livre",
+        "frequencia": "1/descanso",
+        "efeito": "Remove Envenenado",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-articulacoes-aranha",
+      "titulo": "Articulações de Escalada \"Aranha\"",
+      "conteudo": {
+        "descricao": "Juntas com ventosas microscópicas nas pontas dos dedos. Você escala superfícies rugosas sem teste e tem +2 em Atletismo para escalar.",
+        "preco": {
+          "Créditos Sombrios": 28
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Implante Cibernético",
+          "Escalada sem teste em superfície rugosa",
+          "Atletismo (escalar) +2"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-sinapses-reflexo-duplo",
+      "titulo": "Sinapses de Reflexo Duplo",
+      "conteudo": {
+        "descricao": "Uma trama de fibras paralelas ao nervo original. Você tem +2 em Iniciativa e vantagem em testes para não ser surpreendido.",
+        "preco": {
+          "Créditos Sombrios": 60
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Implante Cibernético",
+          "Iniciativa +2",
+          "Vantagem contra surpresa"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-diafragma-submerso",
+      "titulo": "Diafragma Submerso",
+      "conteudo": {
+        "descricao": "Um diafragma sintético com reserva de ar. Você prende a respiração por dez vezes o tempo normal e sobrevive em água sem se afogar por até 1 hora.",
+        "preco": {
+          "Créditos Sombrios": 45
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Implante Cibernético",
+          "Respiração debaixo d'água: 1 hora",
+          "Fôlego x10"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-cordas-vocais-sonicas",
+      "titulo": "Cordas Vocais Sônicas",
+      "conteudo": {
+        "descricao": "Cordas vocais de cerâmica que emitem uma onda dirigida. Uma vez por cena, gaste uma Ação Padrão para um grito em cone curto: 3d6 de dano Sônico, Reflexos reduz à metade.",
+        "preco": {
+          "Créditos Sombrios": 70
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Implante Cibernético",
+          "Grito sônico 3d6 1/cena",
+          "Cone curto"
+        ],
+        "subtipo": "cibernetico",
+        "ativacao": "Ação Padrão, cone curto",
+        "frequencia": "1/cena",
+        "efeito": "3d6 de dano Sônico, Reflexos reduz à metade",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-retina-analitica",
+      "titulo": "Retina Analítica",
+      "conteudo": {
+        "descricao": "Uma retina que mede, compara e anota. Você tem +2 em Investigação e identifica o material de qualquer objeto que possa ver de perto.",
+        "preco": {
+          "Créditos Sombrios": 90
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Implante Cibernético",
+          "Investigação +2",
+          "Identifica materiais"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-escudo-dermico-ablativo",
+      "titulo": "Escudo Dérmico Ablativo",
+      "conteudo": {
+        "descricao": "Uma película sob a pele que se descama sob impacto. Uma vez por cena, gaste uma Reação para reduzir em 10 o dano de um ataque.",
+        "preco": {
+          "Créditos Sombrios": 100
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Implante Cibernético",
+          "Reduz 10 de dano 1/cena",
+          "Cicatriz visível"
+        ],
+        "subtipo": "cibernetico",
+        "ativacao": "Reação",
+        "frequencia": "1/cena",
+        "efeito": "Reduz em 10 o dano de um ataque",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-mao-multiferramenta",
+      "titulo": "Mão Multiferramenta",
+      "conteudo": {
+        "descricao": "A mão se abre em chaves, pinças e uma broca. Equivale a um Kit de Ofício e concede +1 em Ofício.",
+        "preco": {
+          "Créditos Sombrios": 50
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Implante Cibernético",
+          "Kit de Ofício embutido",
+          "Ofício +1"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-rede-neural-estrategista",
+      "titulo": "Rede Neural \"Estrategista\"",
+      "conteudo": {
+        "descricao": "Um processador que lê o campo de batalha e dita a ordem certa no seu ouvido. Uma vez por cena, gaste uma Ação Livre: você e os aliados a até 9 m ganham +2 em ataques por 3 rodadas.",
+        "preco": {
+          "Créditos Sombrios": 200
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Implante Cibernético",
+          "+2 em ataques para aliados 1/cena",
+          "Alcance 9 m"
+        ],
+        "subtipo": "cibernetico",
+        "ativacao": "Ação Livre, alcance 9 m",
+        "frequencia": "1/cena",
+        "duracao": "3 rodadas",
+        "efeito": "+2 em ataques para você e aliados a até 9 m",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-membrana-camuflagem",
+      "titulo": "Membrana de Camuflagem",
+      "conteudo": {
+        "descricao": "Uma membrana sob a pele que copia o que está atrás. Você tem vantagem em Furtividade e, uma vez por cena, fica Invisível até atacar ou até o fim da rodada seguinte.",
+        "preco": {
+          "Créditos Sombrios": 320
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Implante Cibernético",
+          "Vantagem em Furtividade",
+          "Invisível 1/cena"
+        ],
+        "subtipo": "cibernetico",
+        "ativacao": "Ação de Movimento",
+        "frequencia": "1/cena",
+        "efeito": "Invisível até atacar ou até o fim da rodada seguinte",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-rins-reator-filtrante",
+      "titulo": "Rins de Reator Filtrante",
+      "conteudo": {
+        "descricao": "Rins que filtram o sangue duas vezes. Você é imune a veneno comum e tem Resistência 5 contra dano de Ácido e Veneno.",
+        "preco": {
+          "Créditos Sombrios": 250
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Implante Cibernético",
+          "Imune a veneno comum",
+          "Resistência 5: Ácido, Veneno"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-esqueleto-reforco",
+      "titulo": "Servo-Esqueleto de Reforço",
+      "conteudo": {
+        "descricao": "Um esqueleto externo sob a carne, com músculos de cabo. Sua capacidade de carga dobra e você tem +2 em Atletismo.",
+        "preco": {
+          "Créditos Sombrios": 450
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Implante Cibernético",
+          "Carga x2",
+          "Atletismo +2"
+        ],
+        "subtipo": "cibernetico",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-nucleo-fusao-miniatura",
+      "titulo": "Núcleo de Fusão Miniaturizado",
+      "conteudo": {
+        "descricao": "Um reator do tamanho de um punho no peito. Guarda 10 de Mana extra que se recarrega a cada descanso; ao esvaziar, você ganha 1 Cansaço.",
+        "preco": {
+          "Créditos Sombrios": 900
+        },
+        "raridade": "lendario",
+        "atributos": [
+          "Implante Cibernético",
+          "+10 de Mana de reserva",
+          "Custo: 1 Cansaço ao esvaziar"
+        ],
+        "subtipo": "cibernetico",
+        "frequencia": "1/descanso",
+        "custo": "1 Cansaço ao esvaziar",
+        "efeito": "10 de Mana de reserva, recarrega no descanso",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "implante-sistema-espelhado-fantasma",
+      "titulo": "Sistema Nervoso Espelhado \"Fantasma\"",
+      "conteudo": {
+        "descricao": "Um sistema nervoso reserva que roda meio segundo à frente. Uma vez por cena, gaste uma Reação para evitar por completo um ataque; você ganha 2 Cansaço.",
+        "preco": {
+          "Créditos Sombrios": 1500
+        },
+        "raridade": "lendario",
+        "atributos": [
+          "Implante Cibernético",
+          "Evita um ataque 1/cena",
+          "Custo: 2 Cansaço"
+        ],
+        "subtipo": "cibernetico",
+        "ativacao": "Reação",
+        "frequencia": "1/cena",
+        "custo": "2 Cansaço",
+        "efeito": "Evita por completo um ataque",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "propriedade-cabana-guarda-florestal",
+      "titulo": "Cabana do Guarda-Florestal",
+      "conteudo": {
+        "descricao": "Uma cabana de troncos numa clareira, com lareira, despensa e um telhado que aguenta o inverno. Ninguém a vê da estrada.",
+        "preco": {
+          "Lunaris": 900
+        },
+        "raridade": "comum",
+        "tipoPropriedade": "residencia",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "posto",
+        "qualidadeQuartos": "boa",
+        "manutencao": 100,
+        "instalacoes": [
+          {
+            "nome": "Dormitório",
+            "nivel": 1,
+            "espacosOcupados": 1
+          },
+          {
+            "nome": "Armazém",
+            "nivel": 1,
+            "espacosOcupados": 1
+          }
+        ],
+        "atributos": [
+          "Bem Imóvel",
+          "Residência",
+          "Isolada"
+        ],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "propriedade-barracao-doca",
+      "titulo": "Barracão de Doca",
+      "conteudo": {
+        "descricao": "Um galpão de madeira sobre pilares, com rampa para barco. Fede a maré, mas guarda carga e um bote com folga.",
+        "preco": {
+          "Lunaris": 1500
+        },
+        "raridade": "comum",
+        "tipoPropriedade": "base",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "posto",
+        "qualidadeQuartos": "boa",
+        "manutencao": 100,
+        "instalacoes": [
+          {
+            "nome": "Armazém",
+            "nivel": 1,
+            "espacosOcupados": 1
+          },
+          {
+            "nome": "Hangar ou Estábulo",
+            "nivel": 1,
+            "espacosOcupados": 1
+          }
+        ],
+        "atributos": [
+          "Bem Imóvel",
+          "Base",
+          "Beira d'água"
+        ],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "propriedade-torre-vigia",
+      "titulo": "Torre de Vigia",
+      "conteudo": {
+        "descricao": "Uma torre de pedra de quatro andares, com ameias e sinal de fumaça. De cima se vê a estrada inteira.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "incomum",
+        "tipoPropriedade": "base",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "posto",
+        "qualidadeQuartos": "boa",
+        "manutencao": 100,
+        "instalacoes": [
+          {
+            "nome": "Dormitório",
+            "nivel": 1,
+            "espacosOcupados": 1
+          },
+          {
+            "nome": "Segurança",
+            "nivel": 1,
+            "espacosOcupados": 1
+          }
+        ],
+        "atributos": [
+          "Bem Imóvel",
+          "Base",
+          "Vigilância"
+        ],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "propriedade-estalagem-estrada",
+      "titulo": "Estalagem de Estrada",
+      "conteudo": {
+        "descricao": "Uma estalagem de dois andares no cruzamento de três caminhos. Vem com salão, cozinha, quartos e um estábulo ao lado.",
+        "preco": {
+          "Solares": 55
+        },
+        "raridade": "incomum",
+        "tipoPropriedade": "comercio",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "sede",
+        "qualidadeQuartos": "boa",
+        "manutencao": 200,
+        "instalacoes": [
+          {
+            "nome": "Dormitório",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Armazém",
+            "nivel": 1,
+            "espacosOcupados": 1
+          },
+          {
+            "nome": "Área Médica",
+            "nivel": 1,
+            "espacosOcupados": 1
+          }
+        ],
+        "atributos": [
+          "Bem Imóvel",
+          "Comércio",
+          "Rota de viajantes"
+        ],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "propriedade-oficina-fabrica",
+      "titulo": "Oficina-Fábrica Compacta",
+      "conteudo": {
+        "descricao": "Um galpão de tijolo com prensa, forja a gás e bancadas de precisão. Cabe uma equipe pequena e um projeto grande.",
+        "preco": {
+          "Solares": 120
+        },
+        "raridade": "raro",
+        "tipoPropriedade": "comercio",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "sede",
+        "qualidadeQuartos": "boa",
+        "manutencao": 200,
+        "instalacoes": [
+          {
+            "nome": "Oficina",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Armazém",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Segurança",
+            "nivel": 1,
+            "espacosOcupados": 1
+          }
+        ],
+        "atributos": [
+          "Bem Imóvel",
+          "Comércio",
+          "Produção"
+        ],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "propriedade-casa-cura-colina",
+      "titulo": "Casa de Cura da Colina",
+      "conteudo": {
+        "descricao": "Uma casa de pedra no alto de uma colina, com jardim de ervas, leitos amplos e uma sala de operações. O ar de lá cura devagar e sem pressa.",
+        "preco": {
+          "Solares": 160
+        },
+        "raridade": "raro",
+        "tipoPropriedade": "base",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "sede",
+        "qualidadeQuartos": "maravilhosa",
+        "manutencao": 200,
+        "instalacoes": [
+          {
+            "nome": "Área Médica",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Dormitório",
+            "nivel": 2,
+            "espacosOcupados": 2
+          }
+        ],
+        "atributos": [
+          "Bem Imóvel",
+          "Base",
+          "Repouso"
+        ],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "propriedade-hangar-doca-aereo",
+      "titulo": "Hangar-Doca Aéreo",
+      "conteudo": {
+        "descricao": "Uma plataforma de pouso coberta, com guindaste, tanque de combustível e oficina de casco. Recebe aeronave de porte médio.",
+        "preco": {
+          "Solares": 300
+        },
+        "raridade": "raro",
+        "tipoPropriedade": "base",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "complexo",
+        "qualidadeQuartos": "boa",
+        "manutencao": 400,
+        "instalacoes": [
+          {
+            "nome": "Hangar ou Estábulo",
+            "nivel": 3,
+            "espacosOcupados": 3
+          },
+          {
+            "nome": "Oficina",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Armazém",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Segurança",
+            "nivel": 1,
+            "espacosOcupados": 1
+          }
+        ],
+        "atributos": [
+          "Bem Imóvel",
+          "Base",
+          "Aeródromo"
+        ],
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "propriedade-fortaleza-fronteira",
+      "titulo": "Fortaleza de Fronteira",
+      "conteudo": {
+        "descricao": "Muralha dupla, cinco torres e um pátio de armas. Foi feita para segurar um cerco e ainda sobra cama para a guarnição.",
+        "preco": {
+          "Solares": 600
+        },
+        "raridade": "epico",
+        "tipoPropriedade": "base",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "complexo",
+        "qualidadeQuartos": "maravilhosa",
+        "manutencao": 400,
+        "instalacoes": [
+          {
+            "nome": "Dormitório",
+            "nivel": 3,
+            "espacosOcupados": 3
+          },
+          {
+            "nome": "Segurança",
+            "nivel": 3,
+            "espacosOcupados": 3
+          },
+          {
+            "nome": "Armazém",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Área Médica",
+            "nivel": 1,
+            "espacosOcupados": 1
+          }
+        ],
+        "atributos": [
+          "Bem Imóvel",
+          "Base",
+          "Fortificada"
+        ],
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "propriedade-colegio-laboratorio",
+      "titulo": "Colégio-Laboratório Arcano",
+      "conteudo": {
+        "descricao": "Um claustro de estudo com salas de experimento, biblioteca fechada e alojamento de pesquisadores. Cheira a tinta e a ozônio.",
+        "preco": {
+          "Solares": 900
+        },
+        "raridade": "epico",
+        "tipoPropriedade": "base",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "complexo",
+        "qualidadeQuartos": "maravilhosa",
+        "manutencao": 400,
+        "instalacoes": [
+          {
+            "nome": "Laboratório",
+            "nivel": 3,
+            "espacosOcupados": 3
+          },
+          {
+            "nome": "Oficina",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Dormitório",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Armazém",
+            "nivel": 2,
+            "espacosOcupados": 2
+          }
+        ],
+        "atributos": [
+          "Bem Imóvel",
+          "Base",
+          "Pesquisa"
+        ],
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "propriedade-cidadela-flutuante",
+      "titulo": "Cidadela Flutuante",
+      "conteudo": {
+        "descricao": "Uma cidadela sobre uma rocha que paira a cem metros do chão. Traz cais de aeronave, laboratórios, enfermaria e muralhas que giram com o vento.",
+        "preco": {
+          "Solares": 3000
+        },
+        "raridade": "lendario",
+        "tipoPropriedade": "base",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "enclave",
+        "qualidadeQuartos": "excelente",
+        "manutencao": 700,
+        "instalacoes": [
+          {
+            "nome": "Dormitório",
+            "nivel": 3,
+            "espacosOcupados": 3
+          },
+          {
+            "nome": "Área Médica",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Oficina",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Laboratório",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Armazém",
+            "nivel": 3,
+            "espacosOcupados": 3
+          },
+          {
+            "nome": "Hangar ou Estábulo",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Segurança",
+            "nivel": 2,
+            "espacosOcupados": 2
+          }
+        ],
+        "atributos": [
+          "Bem Imóvel",
+          "Base",
+          "Suspensa"
+        ],
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-pocao-cura-menor",
+      "titulo": "Poção de Cura Menor",
+      "conteudo": {
+        "descricao": "O líquido rubro tem gosto de cobre e desce quente. Ao beber, recupere 2d6 de Vida.",
+        "preco": {
+          "Lunaris": 12
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Poção",
+          "Recupera 2d6 de Vida"
+        ],
+        "subtipo": "pocao",
+        "consumivel": true,
+        "ativacao": "Ação Padrão",
+        "efeito": "Recupera 2d6 de Vida",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-pocao-cura",
+      "titulo": "Poção de Cura",
+      "conteudo": {
+        "descricao": "Espessa a ponto de escorrer devagar pela parede do vidro. Ao beber, recupere 3d6 de Vida.",
+        "preco": {
+          "Lunaris": 45
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Poção",
+          "Recupera 3d6 de Vida"
+        ],
+        "subtipo": "pocao",
+        "consumivel": true,
+        "ativacao": "Ação Padrão",
+        "efeito": "Recupera 3d6 de Vida",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-pocao-cura-maior",
+      "titulo": "Poção de Cura Maior",
+      "conteudo": {
+        "descricao": "Guarda um brilho próprio que aparece quando o frasco é sacudido. Ao beber, recupere 5d6 de Vida e remova uma condição à sua escolha.",
+        "preco": {
+          "Lunaris": 200
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Consumível",
+          "Poção",
+          "Recupera 5d6 de Vida",
+          "Remove 1 condição"
+        ],
+        "subtipo": "pocao",
+        "consumivel": true,
+        "ativacao": "Ação Padrão",
+        "efeito": "Recupera 5d6 de Vida e remove 1 condição",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-elixir-mana",
+      "titulo": "Elixir de Mana",
+      "conteudo": {
+        "descricao": "Um elixir azulado que arde na garganta. Ao beber, recupere 2d6 de Mana.",
+        "preco": {
+          "Lunaris": 60
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Elixir",
+          "Recupera 2d6 de Mana"
+        ],
+        "subtipo": "elixir",
+        "consumivel": true,
+        "ativacao": "Ação Padrão",
+        "efeito": "Recupera 2d6 de Mana",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-elixir-antichamas",
+      "titulo": "Elixir Antichamas",
+      "conteudo": {
+        "descricao": "Um elixir gelado que deixa a pele com um brilho úmido. Por 10 minutos, você tem Resistência 5 contra Fogo.",
+        "preco": {
+          "Lunaris": 50
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Elixir",
+          "Resistência 5: Fogo",
+          "Duração: 10 minutos"
+        ],
+        "subtipo": "elixir",
+        "consumivel": true,
+        "ativacao": "Ação Padrão",
+        "duracao": "10 minutos",
+        "efeito": "Resistência 5 contra Fogo",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-pocao-segunda-chance",
+      "titulo": "Poção da Segunda Chance",
+      "conteudo": {
+        "descricao": "Um frasco lacrado com cera dourada. Se você estiver em Morrendo, gaste uma Ação Livre para beber: volte com metade da Vida máxima.",
+        "preco": {
+          "Solares": 30
+        },
+        "raridade": "lendario",
+        "atributos": [
+          "Consumível",
+          "Poção",
+          "Reanima com metade da Vida"
+        ],
+        "subtipo": "pocao",
+        "consumivel": true,
+        "ativacao": "Ação Livre, quando Morrendo",
+        "efeito": "Volta com metade da Vida máxima",
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-tonico-vigilia",
+      "titulo": "Tônico de Vigília",
+      "conteudo": {
+        "descricao": "Um tônico amargo de ervas. Remove 1 Cansaço e, por 24 horas, você não precisa dormir.",
+        "preco": {
+          "Lunaris": 35
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Elixir",
+          "Remove 1 Cansaço",
+          "Duração: 24 horas"
+        ],
+        "subtipo": "elixir",
+        "consumivel": true,
+        "ativacao": "Ação Padrão",
+        "duracao": "24 horas",
+        "efeito": "Remove 1 Cansaço; dispensa o sono por 24 horas",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-antidoto-universal",
+      "titulo": "Antídoto Universal",
+      "conteudo": {
+        "descricao": "Um frasco leitoso preparado contra dezenas de peçonhas. Remove Envenenado e dá vantagem em testes contra veneno pela próxima hora.",
+        "preco": {
+          "Lunaris": 150
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Consumível",
+          "Elixir",
+          "Remove Envenenado",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "elixir",
+        "consumivel": true,
+        "ativacao": "Ação Padrão",
+        "duracao": "1 hora",
+        "efeito": "Remove Envenenado; vantagem contra veneno por 1 hora",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-bomba-fumaca",
+      "titulo": "Bomba de Fumaça",
+      "conteudo": {
+        "descricao": "Uma bola de argila que estoura em fumaça densa. Ao arremessar, cubra uma área de 6 m: quem estiver dentro tem cobertura total contra quem estiver fora, por 3 rodadas.",
+        "preco": {
+          "Lunaris": 14
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Consumível",
+          "Ferramenta",
+          "Área 6 m",
+          "Duração: 3 rodadas"
+        ],
+        "subtipo": "ferramenta",
+        "consumivel": true,
+        "ativacao": "Ação Padrão, alcance Curto",
+        "duracao": "3 rodadas",
+        "efeito": "Área de fumaça de 6 m com cobertura total",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-ampola-acido",
+      "titulo": "Ampola de Ácido",
+      "conteudo": {
+        "descricao": "Uma ampola de vidro grosso com ácido corrosivo. Ao arremessar, cause 3d6 de dano de Ácido a uma criatura e corroa a armadura dela em -1 de Defesa até ser reparada.",
+        "preco": {
+          "Lunaris": 40
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Consumível",
+          "Ferramenta",
+          "3d6 de Ácido",
+          "Corrói armadura"
+        ],
+        "subtipo": "ferramenta",
+        "consumivel": true,
+        "ativacao": "Ação Padrão, alcance Curto",
+        "efeito": "3d6 de Ácido e -1 de Defesa até reparo",
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-pergaminho-protecao",
+      "titulo": "Pergaminho de Ritual de Proteção",
+      "conteudo": {
+        "descricao": "Um pergaminho com um círculo de proteção desenhado em tinta prateada. Ao ler em voz alta, você e os aliados a até 6 m têm Resistência 5 a todos os tipos de dano até o fim da cena.",
+        "preco": {
+          "Lunaris": 220
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Consumível",
+          "Ritual",
+          "Resistência 5: todos os tipos",
+          "Duração: cena"
+        ],
+        "subtipo": "ritual",
+        "consumivel": true,
+        "ativacao": "Ação Padrão, alcance 6 m",
+        "duracao": "Até o fim da cena",
+        "efeito": "Resistência 5 a todos os tipos de dano até o fim da cena",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "consumivel",
+      "id": "consumivel-elixir-tita",
+      "titulo": "Elixir do Titã",
+      "conteudo": {
+        "descricao": "Um elixir escuro e grosso com cheiro de pedra molhada. Por 1 hora, você tem +3 em Força e em Atletismo. Ao acabar, ganha 1 Cansaço.",
+        "preco": {
+          "Solares": 8
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Consumível",
+          "Elixir",
+          "+3 em Força e Atletismo",
+          "Duração: 1 hora"
+        ],
+        "subtipo": "elixir",
+        "consumivel": true,
+        "ativacao": "Ação Padrão",
+        "duracao": "1 hora",
+        "custo": "1 Cansaço ao fim",
+        "efeito": "+3 em Força e Atletismo por 1 hora",
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-bicicleta-gazela",
+      "titulo": "Bicicleta Elétrica Gazela",
+      "conteudo": {
+        "descricao": "Veículo pequeno terrestre. Vida 8; Defesa 14; Resistência 0; deslocamento 18 m; Manobrabilidade +2; capacidade total 1, incluindo tripulação; cobertura nenhuma; tripulação mínima 1; sistemas ativos: 0; 0 espaços de base; sem armas integradas. O motor elétrico quase não faz barulho: você tem +1 em Furtividade enquanto pedala.",
+        "preco": {
+          "Lunaris": 350
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Veículo Completo",
+          "Transporte Pessoal",
+          "Silencioso"
+        ],
+        "subtipo": "completo",
+        "categoria": "terrestre",
+        "tamanho": "pequeno",
+        "vidaMaxima": 8,
+        "defesa": 14,
+        "resistencia": 0,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 18,
+        "manobrabilidade": 2,
+        "capacidade": 1,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "nenhuma",
+        "tripulacaoMinima": 1,
+        "sistemasAtivosMaximos": 0,
+        "espacosBase": 0,
+        "armas": [],
+        "sistemas": [],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-carroca-mula",
+      "titulo": "Carroça Blindada Mula",
+      "conteudo": {
+        "descricao": "Veículo médio terrestre. Vida 30; Defesa 9; Resistência 2; deslocamento 10 m; Manobrabilidade −1; capacidade total 6, incluindo tripulação; cobertura parcial; tripulação mínima 1; sistemas ativos: 0; espaços de base: 1; sem armas integradas. Precisa de duas montarias de tração para se mover.",
+        "preco": {
+          "Lunaris": 800
+        },
+        "raridade": "comum",
+        "atributos": [
+          "Veículo Completo",
+          "Tração Animal",
+          "Carga"
+        ],
+        "subtipo": "completo",
+        "categoria": "terrestre",
+        "tamanho": "médio",
+        "vidaMaxima": 30,
+        "defesa": 9,
+        "resistencia": 2,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 10,
+        "manobrabilidade": -1,
+        "capacidade": 6,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "parcial",
+        "tripulacaoMinima": 1,
+        "sistemasAtivosMaximos": 0,
+        "espacosBase": 1,
+        "armas": [],
+        "sistemas": [],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-balsa-sapo",
+      "titulo": "Balsa Anfíbia Sapo",
+      "conteudo": {
+        "descricao": "Veículo médio anfíbio. Vida 40; Defesa 11; Resistência 3; deslocamento 12 m em terra e 18 m na água; Manobrabilidade 0; capacidade total 8, incluindo tripulação; cobertura nenhuma; tripulação mínima 1; até 2 sistemas ativos; espaços de base: 1; sem armas integradas.",
+        "preco": {
+          "Solares": 28
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Veículo Completo",
+          "Anfíbio",
+          "Transporte"
+        ],
+        "subtipo": "completo",
+        "categoria": "anfíbio",
+        "tamanho": "médio",
+        "vidaMaxima": 40,
+        "defesa": 11,
+        "resistencia": 3,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 12,
+        "deslocamentosMetros": {
+          "terra": 12,
+          "agua": 18
+        },
+        "manobrabilidade": 0,
+        "capacidade": 8,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "nenhuma",
+        "tripulacaoMinima": 1,
+        "sistemasAtivosMaximos": 2,
+        "espacosBase": 1,
+        "armas": [],
+        "sistemas": [],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-planador-gaivota",
+      "titulo": "Planador Motorizado Gaivota",
+      "conteudo": {
+        "descricao": "Veículo pequeno atmosférico. Vida 14; Defesa 14; Resistência 0; deslocamento 40 m; Manobrabilidade +3; capacidade total 2, incluindo tripulação; cobertura nenhuma; tripulação mínima 1; até 1 sistemas ativos; 0 espaços de base; sem armas integradas. Sem motor ligado, plana e desce sem dano.",
+        "preco": {
+          "Solares": 22
+        },
+        "raridade": "incomum",
+        "atributos": [
+          "Veículo Completo",
+          "Aéreo",
+          "Leve"
+        ],
+        "subtipo": "completo",
+        "categoria": "atmosférico",
+        "tamanho": "pequeno",
+        "vidaMaxima": 14,
+        "defesa": 14,
+        "resistencia": 0,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 40,
+        "manobrabilidade": 3,
+        "capacidade": 2,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "nenhuma",
+        "tripulacaoMinima": 1,
+        "sistemasAtivosMaximos": 1,
+        "espacosBase": 0,
+        "armas": [],
+        "sistemas": [],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-lancha-tubarao-martelo",
+      "titulo": "Lancha de Patrulha Tubarão-Martelo",
+      "conteudo": {
+        "descricao": "Veículo médio aquático. Vida 50; Defesa 14; Resistência 3; deslocamento 42 m na água; Manobrabilidade +3; capacidade total 4, incluindo tripulação; cobertura parcial; tripulação mínima 1; até 3 sistemas ativos; 0 espaços de base. Arpão-canhão: 3d8 de Perfuração, bônus de ataque +0, alcance Médio, crítico 20/×2, 1 disparo por Ação Padrão.",
+        "preco": {
+          "Solares": 105
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Veículo Completo",
+          "Aquático",
+          "Patrulha",
+          "Combate Leve"
+        ],
+        "subtipo": "completo",
+        "categoria": "aquático",
+        "tamanho": "médio",
+        "vidaMaxima": 50,
+        "defesa": 14,
+        "resistencia": 3,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 42,
+        "deslocamentosMetros": {
+          "agua": 42
+        },
+        "manobrabilidade": 3,
+        "capacidade": 4,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "parcial",
+        "tripulacaoMinima": 1,
+        "sistemasAtivosMaximos": 3,
+        "espacosBase": 0,
+        "armas": [
+          "Arpão-canhão"
+        ],
+        "perfisArmas": [
+          {
+            "nome": "Arpão-canhão",
+            "dano": "3d8",
+            "tipoDano": "perfuração",
+            "bonusAtaque": 0,
+            "alcance": "Médio",
+            "margemAmeaca": 20,
+            "multiplicadorCritico": 2,
+            "disparosPorAcao": 1,
+            "acao": "padrão"
+          }
+        ],
+        "sistemas": [],
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-submarino-lula",
+      "titulo": "Submarino Explorador Lula",
+      "conteudo": {
+        "descricao": "Veículo médio submarino. Vida 60; Defesa 11; Resistência 5; deslocamento 20 m submerso; Manobrabilidade 0; capacidade total 5, incluindo tripulação; cobertura total; tripulação mínima 2; até 3 sistemas ativos; espaços de base: 1; sem armas integradas. A cabine é pressurizada e aguenta profundidades onde só o breu vive.",
+        "preco": {
+          "Solares": 150
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Veículo Completo",
+          "Submarino",
+          "Exploração"
+        ],
+        "subtipo": "completo",
+        "categoria": "submarino",
+        "tamanho": "médio",
+        "vidaMaxima": 60,
+        "defesa": 11,
+        "resistencia": 5,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 20,
+        "deslocamentosMetros": {
+          "agua": 20
+        },
+        "manobrabilidade": 0,
+        "capacidade": 5,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "total",
+        "tripulacaoMinima": 2,
+        "sistemasAtivosMaximos": 3,
+        "espacosBase": 1,
+        "armas": [],
+        "sistemas": [],
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-caminhao-mamute",
+      "titulo": "Caminhão de Esteiras Mamute",
+      "conteudo": {
+        "descricao": "Veículo grande terrestre. Vida 90; Defesa 9; Resistência 6; deslocamento 12 m; Manobrabilidade −2; capacidade total 10, incluindo tripulação; cobertura total; tripulação mínima 1; até 3 sistemas ativos; espaços de base: 3; sem armas integradas. As esteiras ignoram terreno difícil.",
+        "preco": {
+          "Solares": 100
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Veículo Completo",
+          "Esteiras",
+          "Carga Pesada"
+        ],
+        "subtipo": "completo",
+        "categoria": "terrestre",
+        "tamanho": "grande",
+        "vidaMaxima": 90,
+        "defesa": 9,
+        "resistencia": 6,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 12,
+        "manobrabilidade": -2,
+        "capacidade": 10,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "total",
+        "tripulacaoMinima": 1,
+        "sistemasAtivosMaximos": 3,
+        "espacosBase": 3,
+        "armas": [],
+        "sistemas": [],
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-andador-aranha",
+      "titulo": "Andador Mecha Aranha",
+      "conteudo": {
+        "descricao": "Veículo médio terrestre/mecha. Vida 55; Defesa 13; Resistência 3; deslocamento 15 m; Manobrabilidade +1; capacidade total 1, incluindo tripulação; cobertura parcial; tripulação mínima 1; até 3 sistemas ativos; 0 espaços de base; sem armas integradas. Seis pernas articuladas: sobe paredes e tetos sem teste, no mesmo deslocamento.",
+        "preco": {
+          "Solares": 130
+        },
+        "raridade": "raro",
+        "atributos": [
+          "Veículo Completo",
+          "Mecha",
+          "Escalador"
+        ],
+        "subtipo": "completo",
+        "categoria": "terrestre/mecha",
+        "tamanho": "médio",
+        "vidaMaxima": 55,
+        "defesa": 13,
+        "resistencia": 3,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 15,
+        "manobrabilidade": 1,
+        "capacidade": 1,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "parcial",
+        "tripulacaoMinima": 1,
+        "sistemasAtivosMaximos": 3,
+        "espacosBase": 0,
+        "armas": [],
+        "sistemas": [],
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-aeronave-harpia",
+      "titulo": "Aeronave de Assalto Harpia",
+      "conteudo": {
+        "descricao": "Veículo grande atmosférico. Vida 110; Defesa 14; Resistência 5; deslocamento 70 m; Manobrabilidade +1; capacidade total 8, incluindo tripulação; cobertura total; tripulação mínima 2; até 4 sistemas ativos; espaços de base: 2. Foguetes de saturação: 5d6 de Fogo, bônus de ataque +0, alcance Longo, crítico 20/×2, 1 disparo por Ação Padrão. Metralhadora pesada: 3d8 de Perfuração, bônus de ataque +0, alcance Médio, crítico 20/×2, até 2 disparos por Ação Padrão.",
+        "preco": {
+          "Solares": 520
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Veículo Completo",
+          "Aéreo",
+          "Assalto"
+        ],
+        "subtipo": "completo",
+        "categoria": "atmosférico",
+        "tamanho": "grande",
+        "vidaMaxima": 110,
+        "defesa": 14,
+        "resistencia": 5,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 70,
+        "manobrabilidade": 1,
+        "capacidade": 8,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "total",
+        "tripulacaoMinima": 2,
+        "sistemasAtivosMaximos": 4,
+        "espacosBase": 2,
+        "armas": [
+          "Foguetes de saturação",
+          "Metralhadora pesada"
+        ],
+        "perfisArmas": [
+          {
+            "nome": "Foguetes de saturação",
+            "dano": "5d6",
+            "tipoDano": "fogo",
+            "bonusAtaque": 0,
+            "alcance": "Longo",
+            "margemAmeaca": 20,
+            "multiplicadorCritico": 2,
+            "disparosPorAcao": 1,
+            "acao": "padrão"
+          },
+          {
+            "nome": "Metralhadora pesada",
+            "dano": "3d8",
+            "tipoDano": "perfuração",
+            "bonusAtaque": 0,
+            "alcance": "Médio",
+            "margemAmeaca": 20,
+            "multiplicadorCritico": 2,
+            "disparosPorAcao": 2,
+            "acao": "padrão"
+          }
+        ],
+        "sistemas": [],
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-trem-serpente-ferro",
+      "titulo": "Trem Blindado Serpente de Ferro",
+      "conteudo": {
+        "descricao": "Veículo colossal terrestre. Vida 250; Defesa 8; Resistência 10; deslocamento 30 m; Manobrabilidade −3; capacidade total 40, incluindo tripulação; cobertura total; tripulação mínima 3; até 5 sistemas ativos; espaços de base: 6; sem armas integradas. Só se move sobre trilhos, mas atravessa qualquer barricada.",
+        "preco": {
+          "Solares": 650
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Veículo Completo",
+          "Ferroviário",
+          "Transporte Pesado"
+        ],
+        "subtipo": "completo",
+        "categoria": "terrestre",
+        "tamanho": "colossal",
+        "vidaMaxima": 250,
+        "defesa": 8,
+        "resistencia": 10,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 30,
+        "manobrabilidade": -3,
+        "capacidade": 40,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "total",
+        "tripulacaoMinima": 3,
+        "sistemasAtivosMaximos": 5,
+        "espacosBase": 6,
+        "armas": [],
+        "sistemas": [],
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-nave-cometa",
+      "titulo": "Nave de Salto Cometa",
+      "conteudo": {
+        "descricao": "Veículo médio atmosférico/espacial. Vida 70; Defesa 16; Resistência 4; deslocamento 100 m na atmosfera e 180 m no espaço; Manobrabilidade +4; capacidade total 3, incluindo tripulação; cobertura total; tripulação mínima 1; até 4 sistemas ativos; espaços de base: 1. Canhão de íons: 4d6 de Impacto, bônus de ataque +0, alcance Longo, crítico 20/×2, 1 disparo por Ação Padrão. Uma vez por dia, o piloto pode fazer um salto curto e chegar a um ponto conhecido a até 10 km sem cruzar o espaço entre eles.",
+        "preco": {
+          "Solares": 430
+        },
+        "raridade": "epico",
+        "atributos": [
+          "Veículo Completo",
+          "Espacial",
+          "Interceptador"
+        ],
+        "subtipo": "completo",
+        "categoria": "atmosférico/espacial",
+        "tamanho": "médio",
+        "vidaMaxima": 70,
+        "defesa": 16,
+        "resistencia": 4,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 100,
+        "deslocamentosMetros": {
+          "atmosfera": 100,
+          "espaco": 180
+        },
+        "manobrabilidade": 4,
+        "capacidade": 3,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "total",
+        "tripulacaoMinima": 1,
+        "sistemasAtivosMaximos": 4,
+        "espacosBase": 1,
+        "armas": [
+          "Canhão de íons"
+        ],
+        "perfisArmas": [
+          {
+            "nome": "Canhão de íons",
+            "dano": "4d6",
+            "tipoDano": "impacto",
+            "bonusAtaque": 0,
+            "alcance": "Longo",
+            "margemAmeaca": 20,
+            "multiplicadorCritico": 2,
+            "disparosPorAcao": 1,
+            "acao": "padrão"
+          }
+        ],
+        "sistemas": [],
+        "nivelMinimoLoja": 3
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "veiculo-couracado-leviata-ceu",
+      "titulo": "Couraçado Voador Leviatã do Céu",
+      "conteudo": {
+        "descricao": "Veículo colossal atmosférico. Vida 350; Defesa 9; Resistência 14; deslocamento 30 m; Manobrabilidade −3; capacidade total 60, incluindo tripulação; cobertura total; tripulação mínima 8; até 8 sistemas ativos; espaços de base: 8. Baterias de plasma: 8d6 de Fogo, bônus de ataque +0, alcance Longo, crítico 20/×2, 1 disparo por Ação Padrão. Mísseis de saturação: 6d6 de Fogo, bônus de ataque +0, alcance Longo, crítico 20/×2, até 2 disparos por Ação Padrão.",
+        "preco": {
+          "Solares": 2400
+        },
+        "raridade": "lendario",
+        "atributos": [
+          "Veículo Completo",
+          "Aéreo",
+          "Guerra",
+          "Capital"
+        ],
+        "subtipo": "completo",
+        "categoria": "atmosférico",
+        "tamanho": "colossal",
+        "vidaMaxima": 350,
+        "defesa": 9,
+        "resistencia": 14,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 30,
+        "manobrabilidade": -3,
+        "capacidade": 60,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "total",
+        "tripulacaoMinima": 8,
+        "sistemasAtivosMaximos": 8,
+        "espacosBase": 8,
+        "armas": [
+          "Baterias de plasma",
+          "Mísseis de saturação"
+        ],
+        "perfisArmas": [
+          {
+            "nome": "Baterias de plasma",
+            "dano": "8d6",
+            "tipoDano": "fogo",
+            "bonusAtaque": 0,
+            "alcance": "Longo",
+            "margemAmeaca": 20,
+            "multiplicadorCritico": 2,
+            "disparosPorAcao": 1,
+            "acao": "padrão"
+          },
+          {
+            "nome": "Mísseis de saturação",
+            "dano": "6d6",
+            "tipoDano": "fogo",
+            "bonusAtaque": 0,
+            "alcance": "Longo",
+            "margemAmeaca": 20,
+            "multiplicadorCritico": 2,
+            "disparosPorAcao": 2,
+            "acao": "padrão"
+          }
+        ],
+        "sistemas": [],
+        "nivelMinimoLoja": 4
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-serrilhada",
+      "titulo": "Serrilhada",
+      "conteudo": {
+        "preco": {
+          "Lunaris": 70
+        },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "serrilhada",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "Ao causar dano de Corte, o alvo sangra e sofre 1d4 de dano no início de cada turno seu por 2 rodadas. Uma vez por alvo por cena.",
+        "atributos": [
+          "Aplica em: Armas",
+          "Nível Comum",
+          "Valor 1"
+        ],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-de-arremesso",
+      "titulo": "De Arremesso",
+      "conteudo": {
+        "preco": {
+          "Lunaris": 18
+        },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "de-arremesso",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "A arma ganha a propriedade Arremesso com alcance Curto. Voltar à mão exige buscá-la normalmente.",
+        "atributos": [
+          "Aplica em: Armas",
+          "Nível Comum",
+          "Valor 0"
+        ],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-atordoante",
+      "titulo": "Atordoante",
+      "conteudo": {
+        "preco": {
+          "Lunaris": 290
+        },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "atordoante",
+        "aplicacao": "Armas",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "No crítico, o alvo faz um teste de Constituição ou perde a reação até o fim do próximo turno dele. Uma vez por cena por alvo.",
+        "atributos": [
+          "Aplica em: Armas",
+          "Nível Marcial",
+          "Valor 2",
+          "Pré-requisito: Força 14"
+        ],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Força 14",
+        "pre_requisitos": [
+          {
+            "atributo": "forca",
+            "valor_minimo": 14
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-termica",
+      "titulo": "Térmica",
+      "conteudo": {
+        "preco": {
+          "Lunaris": 70
+        },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "termica",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "Você tem Resistência 2 contra Fogo e Gelo enquanto a vestir.",
+        "atributos": [
+          "Aplica em: Armaduras",
+          "Nível Comum",
+          "Valor 1"
+        ],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-dissipadora",
+      "titulo": "Dissipadora",
+      "conteudo": {
+        "preco": {
+          "Lunaris": 1200
+        },
+        "raridade": "epico",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "dissipadora",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 3,
+        "descricao": "Uma vez por cena, ao sofrer dano de Impacto, reduza-o pela metade.",
+        "atributos": [
+          "Aplica em: Armaduras",
+          "Nível Marcial",
+          "Valor 3",
+          "Pré-requisito: Nível total 10"
+        ],
+        "nivelMinimoLoja": 3,
+        "pre_requisito": "Nível total 10",
+        "pre_requisitos": [
+          {
+            "nivel_personagem": 10
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-reativa",
+      "titulo": "Reativa",
+      "conteudo": {
+        "preco": {
+          "Lunaris": 290
+        },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "reativa",
+        "aplicacao": "Armaduras",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Uma vez por rodada, quando um ataque corpo a corpo acertar você, o atacante sofre 1d6 de dano de Impacto.",
+        "atributos": [
+          "Aplica em: Armaduras",
+          "Nível Marcial",
+          "Valor 2",
+          "Pré-requisito: Constituição 14"
+        ],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Constituição 14",
+        "pre_requisitos": [
+          {
+            "atributo": "constituicao",
+            "valor_minimo": 14
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-ancorado",
+      "titulo": "Ancorado",
+      "conteudo": {
+        "preco": {
+          "Lunaris": 18
+        },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "ancorado",
+        "aplicacao": "Escudos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "A alça de ombro impede que o escudo caia por Desarmar, e você pode soltá-lo e recolocá-lo como parte de uma ação de movimento.",
+        "atributos": [
+          "Aplica em: Escudos",
+          "Nível Comum",
+          "Valor 0"
+        ],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-refletor",
+      "titulo": "Refletor",
+      "conteudo": {
+        "preco": {
+          "Lunaris": 290
+        },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "refletor",
+        "aplicacao": "Escudos",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "Uma vez por cena, ao bloquear um ataque de Raio ou de Luz, redirecione o efeito para uma criatura a até 6 m.",
+        "atributos": [
+          "Aplica em: Escudos",
+          "Nível Marcial",
+          "Valor 2",
+          "Pré-requisito: Fluxo 12"
+        ],
+        "nivelMinimoLoja": 2,
+        "pre_requisito": "Fluxo 12",
+        "pre_requisitos": [
+          {
+            "atributo": "fluxo",
+            "valor_minimo": 12
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-lacrado",
+      "titulo": "Lacrado",
+      "conteudo": {
+        "preco": {
+          "Lunaris": 18
+        },
+        "raridade": "comum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "lacrado",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 0,
+        "descricao": "O item é à prova d'água e de poeira, e não sofre corrosão nem ferrugem.",
+        "atributos": [
+          "Aplica em: Itens gerais e mágicos",
+          "Nível Comum",
+          "Valor 0"
+        ],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-chamado",
+      "titulo": "Chamado",
+      "conteudo": {
+        "preco": {
+          "Lunaris": 70
+        },
+        "raridade": "incomum",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "chamado",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "comum",
+        "valor_efeito": 1,
+        "descricao": "Uma vez por dia, gaste uma Ação de Movimento para trazer o item à sua mão, se ele estiver a até 30 m e em linha de visão.",
+        "atributos": [
+          "Aplica em: Itens gerais e mágicos",
+          "Nível Comum",
+          "Valor 1"
+        ],
+        "nivelMinimoLoja": 1
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-furtivo",
+      "titulo": "Furtivo",
+      "conteudo": {
+        "preco": {
+          "Lunaris": 290
+        },
+        "raridade": "raro",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "furtivo",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 2,
+        "descricao": "O item passa despercebido em revistas comuns e detectores básicos. Achá-lo exige Investigação contra DT 20.",
+        "atributos": [
+          "Aplica em: Itens gerais e mágicos",
+          "Nível Marcial",
+          "Valor 2"
+        ],
+        "nivelMinimoLoja": 2
+      }
+    },
+    {
+      "tipo": "modificacao",
+      "id": "mod-catalisador",
+      "titulo": "Catalisador",
+      "conteudo": {
+        "preco": {
+          "Lunaris": 1200
+        },
+        "raridade": "epico",
+        "categoria_loja": "Modificações",
+        "modificacao_id": "catalisador",
+        "aplicacao": "Itens gerais e mágicos",
+        "nivel_modificacao": "marcial",
+        "valor_efeito": 3,
+        "descricao": "Uma vez por cena, ao conjurar uma magia de 3º círculo ou maior com este item, recupere 1d6 de Mana.",
+        "atributos": [
+          "Aplica em: Itens gerais e mágicos",
+          "Nível Marcial",
+          "Valor 3",
+          "Pré-requisito: Fluxo 14 e nível total 10"
+        ],
+        "nivelMinimoLoja": 3,
+        "pre_requisito": "Fluxo 14 e nível total 10",
+        "pre_requisitos": [
+          {
+            "atributo": "fluxo",
+            "valor_minimo": 14
+          },
+          {
+            "nivel_personagem": 10
+          }
+        ]
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "reliquia-armadura-aquiles",
+      "titulo": "Armadura de Aquiles",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 620
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "marcial",
+        "categoria_protecao": "armadura",
+        "bonus": "+35",
+        "penalidade": "-6",
+        "material": "Bronze forjado por Hefesto",
+        "espacos": 1,
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Armadura",
+          "Quase invulnerável",
+          "Ponto fraco no calcanhar"
+        ],
+        "lore": "Hefesto forjou o bronze no fogo que sobra depois de uma guerra, batendo a peça até ela esquecer o que era ferir. Uma mãe pediu a armadura para o filho e recebeu de volta um herói que nenhuma lança alcançava. O calcanhar ficou de fora por descuido, e é o único lugar do mundo que ainda lembra como doer.",
+        "descricao": "Enquanto vestida, você tem Resistência 8 contra todos os tipos de dano. Um inimigo que descubra e mire especificamente no seu calcanhar (exige uma Ação Padrão de Investigação contra sua Vontade) ignora essa Resistência pelo resto da cena.",
+        "efeito": "Resistência 8 contra todos os tipos de dano, exceto se o inimigo expuser o ponto fraco"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "reliquia-couraca-sigurd",
+      "titulo": "Armadura de Sigurd",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 500
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "marcial",
+        "categoria_protecao": "armadura",
+        "bonus": "+26",
+        "penalidade": "-5",
+        "material": "Sangue de Fafnir",
+        "espacos": 1,
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Armadura",
+          "Resistência: Fogo e Veneno",
+          "Ponto cego nas costas"
+        ],
+        "lore": "Sigurd matou o dragão Fafnir e depois se banhou no sangue que escorria da ferida, e a pele parou de aceitar corte por causa disso. Uma folha de tília grudou bem entre as omoplatas antes do sangue secar, e nenhum banho seguinte alcançou aquele pedaço. Quem veste a couraça sente o calor do dragão morto até hoje, um instante antes de qualquer golpe acertar.",
+        "descricao": "Enquanto vestida, você tem Resistência 8 contra Fogo e Veneno. Um ataque desferido contra você por trás, sem que você o veja vir, ignora toda a Defesa da couraça.",
+        "efeito": "Resistência 8 contra Fogo e Veneno; ataque pelas costas sem ser visto ignora a Defesa da couraça"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "reliquia-armadura-fenix",
+      "titulo": "Armadura de Fênix",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 560
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "marcial",
+        "categoria_protecao": "armadura",
+        "bonus": "+20",
+        "penalidade": "-3",
+        "material": "Penas incandescentes",
+        "espacos": 1,
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Armadura",
+          "Renasce das cinzas",
+          "1/cena"
+        ],
+        "lore": "A pena que sobrou de uma fênix não apaga nunca, só espera a próxima vez. Fundida em placas finas, ela ainda pulsa um calor de ninho, e quem a veste dorme mal na primeira semana, sonhando com um incêndio que nunca chega. Depois disso, o calor vira companhia.",
+        "descricao": "Uma vez por cena, ao chegar a 0 de Vida enquanto veste a armadura, você se levanta imediatamente com metade da Vida máxima, envolto em chamas que não queimam você nem seus aliados.",
+        "ativacao": "Reação, ao chegar a 0 de Vida",
+        "frequencia": "1/cena",
+        "efeito": "Ao chegar a 0 de Vida, levanta com metade da Vida máxima"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "reliquia-placas-golem-praga",
+      "titulo": "Armadura de Barro do Golem",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 400
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "marcial",
+        "categoria_protecao": "armadura",
+        "bonus": "+32",
+        "penalidade": "-9",
+        "material": "Argila do Vltava",
+        "espacos": 1,
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Armadura",
+          "Defesa altíssima",
+          "Furtividade -4"
+        ],
+        "lore": "O rabino escreveu uma palavra na testa de barro e a argila aprendeu a andar. As placas guardam o mesmo peso, o mesmo passo pesado de quem foi feito para proteger uma cidade inteira sozinho. Apagar a palavra desliga o golem; ninguém que veste a armadura esquece disso.",
+        "descricao": "Enquanto vestida, você tem Resistência 6 contra todos os tipos de dano e sofre −4 em testes de Furtividade.",
+        "efeito": "Resistência 6 contra todos os tipos de dano; Furtividade -4"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "reliquia-exocarapaca-anansi",
+      "titulo": "Armadura de Teia de Anansi",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 380
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "simples",
+        "categoria_protecao": "armadura",
+        "bonus": "+16",
+        "penalidade": "-1",
+        "material": "Fio de teia antiga",
+        "espacos": 1,
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Armadura",
+          "Vantagem contra agarrão",
+          "Resistência: Veneno"
+        ],
+        "lore": "Anansi conta histórias e arma teias com a mesma paciência, e esta peça guarda um pouco das duas coisas. O fio nunca corta, só prende, e sempre prendeu mais armadilha do que presa. Quem a veste aprende a escapar de qualquer coisa que tente segurá-lo com força demais.",
+        "descricao": "Enquanto vestida, você tem vantagem em testes para escapar de agarrões e amarras, e Resistência 5 contra Veneno.",
+        "efeito": "Vantagem para escapar de agarrões e amarras; Resistência 5 contra Veneno"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "reliquia-escudo-ajax",
+      "titulo": "Escudo de Ajax",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 420
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "marcial",
+        "categoria_protecao": "escudo",
+        "bonus": "+18",
+        "penalidade": "-5",
+        "material": "Sete camadas de couro de boi",
+        "espacos": 1,
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Escudo",
+          "Cobre um aliado inteiro",
+          "1/cena"
+        ],
+        "lore": "Ájax mandou empilhar sete couros de boi e cobrir tudo com uma última camada de bronze. O escudo saiu maior que qualquer outro do acampamento, grande o bastante para esconder um amigo inteiro atrás dele. Nada que já bateu nesse escudo voltou a bater duas vezes no mesmo lugar.",
+        "descricao": "Uma vez por cena, gaste uma Reação para dar cobertura total a um aliado adjacente contra um único ataque, mesmo à distância.",
+        "ativacao": "Reação, alcance adjacente",
+        "frequencia": "1/cena",
+        "efeito": "Cobertura total a um aliado adjacente contra um ataque"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "reliquia-escudo-solar-ra",
+      "titulo": "Escudo Solar de Rá",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 480
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "marcial",
+        "categoria_protecao": "escudo",
+        "bonus": "+15",
+        "penalidade": "-4",
+        "material": "Disco de ouro polido",
+        "espacos": 1,
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Escudo",
+          "Reflete luz e fogo",
+          "1/cena"
+        ],
+        "lore": "O disco viaja com o sol pelo Nun todas as noites e volta pela manhã sem uma marca de escuridão. Polido a ponto de doer olhar, ele devolve tudo que recebe da mesma cor que veio. Serpentes do submundo nunca aprenderam a se acostumar com o brilho.",
+        "descricao": "Uma vez por cena, ao bloquear um ataque de Fogo ou de Luz com uma Reação, devolva metade do dano bloqueado ao atacante, se ele estiver a até 12 m.",
+        "ativacao": "Reação, alcance 12 m",
+        "frequencia": "1/cena",
+        "efeito": "Devolve metade do dano de Fogo ou Luz bloqueado ao atacante"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "reliquia-broquel-bagda",
+      "titulo": "Broquel do Ladrão de Bagdá",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 360
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "simples",
+        "categoria_protecao": "escudo",
+        "bonus": "+8",
+        "penalidade": "0",
+        "material": "Latão gravado",
+        "espacos": 1,
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Escudo",
+          "Vantagem em Furtividade",
+          "Invisível após bloquear"
+        ],
+        "lore": "Ninguém lembra o nome de quem o roubou primeiro, só que ele desapareceu de dentro do palácio sem que os guardas piscassem. O latão gravado guarda esse talento como se fosse dele mesmo: leve nas mãos, pesado na hora de ser encontrado.",
+        "descricao": "Enquanto equipado, você tem vantagem em testes de Furtividade. Uma vez por cena, ao bloquear um ataque com sucesso, fique Invisível até o fim do seu próximo turno.",
+        "ativacao": "Reação, ao bloquear um ataque",
+        "frequencia": "1/cena",
+        "efeito": "Vantagem em Furtividade; fica Invisível ao bloquear um ataque"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "reliquia-aspis-heracles",
+      "titulo": "Aspis de Héracles",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 440
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "marcial",
+        "categoria_protecao": "escudo",
+        "bonus": "+17",
+        "penalidade": "-4",
+        "material": "Bronze cravejado",
+        "espacos": 1,
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Escudo",
+          "Vantagem contra Amedrontado",
+          "Aliados adjacentes incluídos"
+        ],
+        "lore": "Um poeta contou o escudo verso por verso, cada figura de bronze cravejada narrando um feito que ninguém mais presenciou. O centro traz um rosto que assusta antes mesmo de a lâmina se erguer, e o medo alheio nunca conseguiu encostar em quem o carrega.",
+        "descricao": "Enquanto equipado, você e os aliados a até 3 m têm vantagem em testes de resistência contra a condição Amedrontado.",
+        "efeito": "Vantagem contra Amedrontado para você e aliados a até 3 m"
+      }
+    },
+    {
+      "tipo": "armadura",
+      "id": "reliquia-escudo-iris",
+      "titulo": "Escudo de Íris",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 460
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "marcial",
+        "categoria_protecao": "escudo",
+        "bonus": "+14",
+        "penalidade": "-2",
+        "material": "Vidro em sete cores",
+        "espacos": 1,
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Escudo",
+          "Resistência escolhida ao ativar",
+          "1/cena"
+        ],
+        "lore": "Íris corre entre o Olimpo e o mundo deixando um arco de cor para trás, uma ponte que qualquer um pode ver mas só ela atravessa. O escudo guarda um pedaço daquele caminho: sete faixas que mudam de ordem toda vez que alguém as encara com atenção.",
+        "descricao": "Uma vez por cena, gaste uma Ação Livre para escolher um tipo de dano. Até o fim da cena, você tem Resistência 6 contra esse tipo.",
+        "ativacao": "Ação Livre",
+        "frequencia": "1/cena",
+        "efeito": "Resistência 6 contra um tipo de dano escolhido, até o fim da cena"
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "reliquia-pernas-talos",
+      "titulo": "Pernas de Talos",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 500
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Implante Cibernético",
+          "Movimento dobrado",
+          "Ponto fraco no tornozelo"
+        ],
+        "lore": "Talos rodeava Creta três vezes por dia, sozinho, sem cansar. Um único prego de bronze no calcanhar segurava toda a vida dele lá dentro, e quando alguém o arrancou, o gigante esvaziou como um jarro virado. As pernas guardam o mesmo ritmo incansável, e o mesmo prego, bem escondido.",
+        "descricao": "Seu Movimento dobra. Se um inimigo descobrir e atacar especificamente o prego no seu tornozelo (exige uma Ação Padrão de Investigação contra sua Vontade), você perde esse bônus até o fim da cena.",
+        "efeito": "Movimento dobrado, perdido se o prego do tornozelo for exposto e atacado"
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "reliquia-pulmoes-enkidu",
+      "titulo": "Pulmões de Enkidu",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 380
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Implante Cibernético",
+          "Imune a doenças",
+          "Respira em qualquer ar"
+        ],
+        "lore": "Enkidu nasceu do barro da estepe e respirou o primeiro ar sem intermediário nenhum, sem cidade filtrando nada entre ele e o mundo. Estes pulmões carregam a mesma crueza: aceitam fumaça, gás e miasma como se fossem vento comum.",
+        "descricao": "Você é imune a doenças e respira normalmente em qualquer atmosfera tóxica, incluindo fumaça, gás e miasma sobrenatural.",
+        "efeito": "Imune a doenças; respira em qualquer atmosfera tóxica"
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "reliquia-espinha-adamastor",
+      "titulo": "Espinha do Adamastor",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 420
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Implante Cibernético",
+          "Resistência: Impacto",
+          "Não pode ser Derrubado"
+        ],
+        "lore": "O gigante da tempestade nasceu de uma promessa quebrada e virou rocha no fim de um continente, ainda de pé depois de todos esses séculos. Esta espinha guarda a mesma teimosia de ficar em pé: nenhuma onda, nenhum murro, nenhuma queda parece grande o bastante para derrubar quem a carrega.",
+        "descricao": "Você tem Resistência 6 contra dano de Impacto e não pode ser Derrubado contra a sua vontade.",
+        "efeito": "Resistência 6 contra Impacto; imune a Derrubar"
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "reliquia-cordas-sereia",
+      "titulo": "Cordas Vocais de Sereia",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 440
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Implante Cibernético",
+          "Canto de encantamento",
+          "1/cena"
+        ],
+        "lore": "Nenhum marujo que ouviu o canto original voltou pra contar como era, só que parou de remar. As cordas guardam o formato daquela nota impossível, presas na garganta como uma promessa que nunca se cumpre inteira.",
+        "descricao": "Uma vez por cena, gaste uma Ação Padrão para cantar: criaturas a até 9 m que puderem ouvir fazem Vontade contra a DT de efeito do portador ou ficam Enfeitiçadas até o fim da cena, tratando você como aliado confiável enquanto o efeito durar.",
+        "ativacao": "Ação Padrão, alcance 9 m",
+        "frequencia": "1/cena",
+        "defesa": "Vontade contra a DT de efeito do portador",
+        "efeito": "Enfeitiça criaturas que ouvirem o canto, até o fim da cena"
+      }
+    },
+    {
+      "tipo": "implante",
+      "id": "reliquia-olhos-argos",
+      "titulo": "Olhos de Argos",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 460
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Implante Cibernético",
+          "Percepção 360°",
+          "Imune a flanquear e surpresa"
+        ],
+        "lore": "Argos tinha cem olhos espalhados pelo corpo inteiro, e mesmo dormindo mantinha alguns abertos. Hera colocou os últimos dele na cauda de um pavão depois que a vigília acabou, mas um par sobrou, guardado, esperando outra cabeça para servir.",
+        "descricao": "Você enxerga em todas as direções ao mesmo tempo. É imune a ser flanqueado e a sofrer ataque furtivo, e nunca fica Surpreso no início de um combate.",
+        "efeito": "Imune a flanquear, ataque furtivo e surpresa"
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "reliquia-jardim-hesperides",
+      "titulo": "Jardim das Hespérides",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 560
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "tipoPropriedade": "base",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "sede",
+        "qualidadeQuartos": "maravilhosa",
+        "manutencao": 0,
+        "instalacoes": [
+          {
+            "nome": "Área Médica",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Armazém",
+            "nivel": 2,
+            "espacosOcupados": 2
+          }
+        ],
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Bem Imóvel",
+          "Base",
+          "Regeneração de quem descansa"
+        ],
+        "lore": "As macieiras do jardim dão fruto de ouro só uma vez por estação, mas a sombra delas já basta: quem dorme sob os galhos acorda mais inteiro do que deitou. Um dragão guardava a entrada, e ninguém sabe ao certo para onde ele foi quando o jardim trocou de dono.",
+        "descricao": "Uma base com pomar próprio. Vem com Área Médica 2 e Armazém 2, sem custo de manutenção. Quem descansa completamente dentro do jardim recupera Vida e Mana em dobro nesse descanso."
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "reliquia-vale-shambhala",
+      "titulo": "Vale de Shambhala",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 620
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "tipoPropriedade": "base",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "complexo",
+        "qualidadeQuartos": "excelente",
+        "manutencao": 0,
+        "instalacoes": [
+          {
+            "nome": "Dormitório",
+            "nivel": 3,
+            "espacosOcupados": 3
+          },
+          {
+            "nome": "Área Médica",
+            "nivel": 2,
+            "espacosOcupados": 2
+          }
+        ],
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Bem Imóvel",
+          "Base",
+          "Descanso completo em metade do tempo"
+        ],
+        "lore": "Ninguém chega a Shambhala seguindo um mapa, só uma disposição de ânimo que poucos sustentam até o fim da estrada. O tempo lá dentro anda mais devagar do que fora, o suficiente para uma tarde inteira caber numa hora de relógio comum.",
+        "descricao": "Uma base escondida num vale onde o tempo se estica. Vem com Dormitório 3 e Área Médica 2, sem custo de manutenção. Um descanso completo dentro do vale leva metade do tempo normal."
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "reliquia-fragmento-atlantida",
+      "titulo": "Fragmento de Atlântida",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 540
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "tipoPropriedade": "base",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "sede",
+        "qualidadeQuartos": "boa",
+        "manutencao": 0,
+        "instalacoes": [
+          {
+            "nome": "Laboratório",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Armazém",
+            "nivel": 2,
+            "espacosOcupados": 2
+          }
+        ],
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Bem Imóvel",
+          "Base",
+          "Respira debaixo d'água"
+        ],
+        "lore": "A cidade afundou numa noite só, e o que sobrou dela flutua agora entre uma Árvore e outra, meio submerso, meio lembrado. As cúpulas ainda seguram ar como seguravam há éons, e quem entra aprende a respirar de um jeito que a cidade nunca esqueceu.",
+        "descricao": "Uma cúpula submersa que ainda funciona como base. Vem com Laboratório 2 e Armazém 2, sem custo de manutenção. Todo ocupante respira normalmente dentro da cúpula, mesmo estando ela debaixo d'água."
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "reliquia-fragmento-babel",
+      "titulo": "Fragmento da Torre de Babel",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 500
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "tipoPropriedade": "base",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "sede",
+        "qualidadeQuartos": "boa",
+        "manutencao": 0,
+        "instalacoes": [
+          {
+            "nome": "Dormitório",
+            "nivel": 2,
+            "espacosOcupados": 2
+          },
+          {
+            "nome": "Segurança",
+            "nivel": 1,
+            "espacosOcupados": 1
+          }
+        ],
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Bem Imóvel",
+          "Base",
+          "Tradução universal"
+        ],
+        "lore": "A torre parou de crescer no dia em que ninguém mais entendeu o vizinho do andaime ao lado, e a obra desmoronou em línguas. Este pedaço sobrevivente carrega a confusão inteira e, de alguma forma, a resolve: quem mora aqui volta a se entender com qualquer um.",
+        "descricao": "Uma base erguida sobre o que sobrou da torre. Vem com Dormitório 2 e Segurança 1, sem custo de manutenção. Todo ocupante entende e é entendido em qualquer idioma enquanto estiver dentro da base."
+      }
+    },
+    {
+      "tipo": "propriedade",
+      "id": "reliquia-oasis-zerzura",
+      "titulo": "Oásis de Zerzura",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 400
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "tipoPropriedade": "base",
+        "localizacao": "A definir com o Mestre",
+        "patamar": "posto",
+        "qualidadeQuartos": "boa",
+        "manutencao": 0,
+        "instalacoes": [
+          {
+            "nome": "Dormitório",
+            "nivel": 1,
+            "espacosOcupados": 1
+          },
+          {
+            "nome": "Armazém",
+            "nivel": 1,
+            "espacosOcupados": 1
+          }
+        ],
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Bem Imóvel",
+          "Base",
+          "Nunca falta água ou comida"
+        ],
+        "lore": "A cidade branca do deserto só aparece para quem já desistiu de procurar por ela. As tamareiras nunca secam e os poços nunca baixam. Quem passou uma noite lá volta sem conseguir explicar em que momento a fome foi embora.",
+        "descricao": "Um oásis escondido que serve de base. Vem com Dormitório 1 e Armazém 1, sem custo de manutenção. A base sempre tem água potável e comida suficiente para os ocupantes, sem gastar suprimento algum."
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "reliquia-carruagem-helios",
+      "titulo": "Carruagem de Hélios",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 560
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "completo",
+        "categoria": "atmosférico",
+        "tamanho": "médio",
+        "vidaMaxima": 90,
+        "defesa": 20,
+        "resistencia": 6,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 120,
+        "manobrabilidade": 5,
+        "capacidade": 3,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "nenhuma",
+        "tripulacaoMinima": 1,
+        "sistemasAtivosMaximos": 2,
+        "espacosBase": 0,
+        "armas": [],
+        "sistemas": [],
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Veículo Completo",
+          "Atmosférico",
+          "Rastro de fogo"
+        ],
+        "lore": "Hélios cruza o céu todo dia na mesma carruagem, puxada por cavalos que respiram brasa em vez de ar. Faetonte pediu para guiá-la uma vez e o mundo quase queimou inteiro por causa disso. Quem assume as rédeas hoje aprende rápido que velocidade daquele tamanho não perdoa mão insegura.",
+        "descricao": "Veículo médio atmosférico. Vida 90; Defesa 20; Resistência 6; deslocamento 120 m; Manobrabilidade +5; capacidade total 3, incluindo tripulação; cobertura nenhuma; tripulação mínima 1; até 2 sistemas ativos; 0 espaços de base; sem armas integradas. O rastro da carruagem incendeia vegetação seca por onde passa, e criaturas que a tocarem sem proteção sofrem 2d6 de dano de Fogo.",
+        "efeito": "Quem tocar a carruagem sem proteção sofre 2d6 de Fogo"
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "reliquia-vimana",
+      "titulo": "Vimana",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 600
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "completo",
+        "categoria": "atmosférico/espacial",
+        "tamanho": "grande",
+        "vidaMaxima": 140,
+        "defesa": 18,
+        "resistencia": 7,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 80,
+        "manobrabilidade": 3,
+        "capacidade": 12,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "total",
+        "tripulacaoMinima": 1,
+        "sistemasAtivosMaximos": 4,
+        "espacosBase": 2,
+        "armas": [],
+        "sistemas": [],
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Veículo Completo",
+          "Espacial",
+          "Palácio voador"
+        ],
+        "lore": "Os textos descrevem cidades inteiras voando dentro de vimanas, com jardim, salão e guarda própria, movidas por um motor que ninguém soube reconstruir depois. Esta é pequena para os padrões do mito, mas ainda cabe uma tripulação e sobra espaço para andar dentro dela em pleno voo.",
+        "descricao": "Veículo grande atmosférico/espacial. Vida 140; Defesa 18; Resistência 7; deslocamento 80 m; Manobrabilidade +3; capacidade total 12, incluindo tripulação; cobertura total; tripulação mínima 1; até 4 sistemas ativos; espaços de base: 2; sem armas integradas."
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "reliquia-sleipnir",
+      "titulo": "Sleipnir",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 480
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "completo",
+        "categoria": "terrestre (montaria)",
+        "tamanho": "grande",
+        "vidaMaxima": 110,
+        "defesa": 19,
+        "resistencia": 4,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 90,
+        "manobrabilidade": 5,
+        "capacidade": 2,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "nenhuma",
+        "tripulacaoMinima": 1,
+        "sistemasAtivosMaximos": 1,
+        "espacosBase": 0,
+        "armas": [],
+        "sistemas": [],
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Veículo Completo",
+          "Montaria",
+          "Atravessa qualquer terreno"
+        ],
+        "lore": "Oito patas nasceram de uma aposta que Loki perdeu de um jeito complicado demais para contar em uma frase só. Odin cavalga Sleipnir entre os mundos sem que nenhuma fronteira pareça notar a passagem, e o cavalo nunca cansa de galopar onde nada mais consegue pisar.",
+        "descricao": "Veículo grande terrestre (montaria). Vida 110; Defesa 19; Resistência 4; deslocamento 90 m; Manobrabilidade +5; capacidade total 2, incluindo tripulação; cobertura nenhuma; tripulação mínima 1; sistemas ativos: 1; 0 espaços de base; sem armas integradas. Sleipnir ignora terreno difícil e pode galopar sobre água ou ar por até uma rodada por vez.",
+        "efeito": "Ignora terreno difícil; galopa sobre água ou ar por até 1 rodada"
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "reliquia-naglfar",
+      "titulo": "Naglfar",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 520
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "completo",
+        "categoria": "aquático",
+        "tamanho": "colossal",
+        "vidaMaxima": 260,
+        "defesa": 14,
+        "resistencia": 10,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 50,
+        "manobrabilidade": 0,
+        "capacidade": 40,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "total",
+        "tripulacaoMinima": 2,
+        "sistemasAtivosMaximos": 4,
+        "espacosBase": 3,
+        "armas": [],
+        "sistemas": [],
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Veículo Completo",
+          "Aquático",
+          "Aterroriza quem vê chegar"
+        ],
+        "lore": "Construído com as unhas de quem morreu sem tê-las cortadas, o navio só zarpa quando o mundo já está acabando, ou é o que dizem. Este fragmento chegou cedo demais, ou tarde demais, e agora navega para quem tiver estômago de comandá-lo.",
+        "descricao": "Veículo colossal aquático. Vida 260; Defesa 14; Resistência 10; deslocamento 50 m na água; Manobrabilidade 0; capacidade total 40, incluindo tripulação; cobertura total; tripulação mínima 2; até 4 sistemas ativos; espaços de base: 3; sem armas integradas. Criaturas que veem o Naglfar se aproximar pela primeira vez fazem Vontade contra a DT de efeito do comandante ou ficam Abaladas até o fim da cena.",
+        "efeito": "Quem vê o navio se aproximar pela primeira vez pode ficar Abalado"
+      }
+    },
+    {
+      "tipo": "veiculo-completo",
+      "id": "reliquia-asas-dedalo",
+      "titulo": "Asas de Dédalo",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 380
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "completo",
+        "categoria": "atmosférico",
+        "tamanho": "pequeno",
+        "vidaMaxima": 30,
+        "defesa": 17,
+        "resistencia": 1,
+        "resistenciasPorTipo": {},
+        "deslocamentoMetros": 70,
+        "manobrabilidade": 4,
+        "capacidade": 1,
+        "capacidadeIncluiTripulacao": true,
+        "coberturaOcupantes": "nenhuma",
+        "tripulacaoMinima": 1,
+        "sistemasAtivosMaximos": 0,
+        "espacosBase": 0,
+        "armas": [],
+        "sistemas": [],
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Veículo Completo",
+          "Voo pessoal",
+          "Não pode subir demais"
+        ],
+        "lore": "Dédalo construiu um par para o filho e um para si mesmo, avisando para não voar alto nem baixo demais. Ícaro não ouviu, e a cera derreteu antes de o mar aparecer embaixo dele. Estas asas ainda carregam o mesmo aviso, gravado numa pena que nunca se solta.",
+        "descricao": "Veículo pequeno atmosférico. Vida 30; Defesa 17; Resistência 1; deslocamento 70 m; Manobrabilidade +4; capacidade total 1, incluindo tripulação; cobertura nenhuma; tripulação mínima 1; sistemas ativos: 0; 0 espaços de base; sem armas integradas. Se voarem acima de 200 m de altitude por mais de uma rodada, a cera derrete e as asas param de funcionar até esfriarem, por 10 minutos.",
+        "efeito": "Param de funcionar por 10 minutos se voarem acima de 200 m por mais de 1 rodada"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "reliquia-bigorna-hefesto",
+      "titulo": "Bigorna de Hefesto",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 560
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Artefato",
+          "Repara qualquer equipamento",
+          "1/cena"
+        ],
+        "lore": "O ferreiro dos deuses nunca joga fora o que ainda pode ser martelado de volta à forma. Esta bigorna, do tamanho de um punho fechado, carrega o mesmo teimosia: nenhuma quebra parece definitiva enquanto ela ainda estiver no bolso de alguém.",
+        "descricao": "Uma vez por cena, gaste uma Ação Padrão para tocar um item quebrado, gasto ou sem carga com a bigorna. Ele volta ao estado original: uma arma partida se reconecta, um item sem carga enche de novo, uma armadura amassada se endireita.",
+        "ativacao": "Ação Padrão",
+        "frequencia": "1/cena",
+        "efeito": "Repara ou recarrega por completo um item tocado"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "reliquia-tear-parcas",
+      "titulo": "Tear das Parcas",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 600
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Artefato",
+          "Reescreve um teste já rolado",
+          "1/sessão"
+        ],
+        "lore": "Uma das Parcas fia o fio, a outra mede, a terceira corta, e nenhuma delas erra o comprimento. Este pedaço de tear ainda vibra com a última linha que passou por ele, e quem o segura sente, por um instante, o peso de decidir o que já estava decidido.",
+        "descricao": "Uma vez por sessão, gaste uma Ação Livre para refazer um teste que você ou uma criatura a até 9 m acabou de rolar, usando o novo resultado no lugar do antigo.",
+        "ativacao": "Ação Livre, alcance 9 m",
+        "frequencia": "1/sessão",
+        "efeito": "Refaz um teste recém-rolado, usando o novo resultado"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "reliquia-martelo-wayland",
+      "titulo": "Martelo de Wayland",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 480
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Artefato",
+          "Encanta um item comum temporariamente",
+          "1/cena"
+        ],
+        "lore": "Wayland forjou para reis e para si mesmo enquanto era mantido preso numa ilha só para servir a eles, e nunca entregou um trabalho malfeito por vingança sutil. Este martelo herdou o cuidado, não o rancor: toda peça que ele toca sai melhor do que entrou.",
+        "descricao": "Uma vez por cena, gaste uma Ação Padrão para tocar uma arma ou armadura comum ou incomum com o martelo. Até o fim da cena, ela ganha o efeito de uma modificação comum à sua escolha, sem ocupar espaço nem gastar preço.",
+        "ativacao": "Ação Padrão",
+        "frequencia": "1/cena",
+        "efeito": "Concede o efeito de uma modificação comum a um item tocado até o fim da cena"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "reliquia-cinta-hipolita",
+      "titulo": "Cinta de Hipólita",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 500
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Artefato",
+          "Lidera em combate",
+          "1/cena"
+        ],
+        "lore": "A rainha das Amazonas usava a cinta como sinal de comando, não de posse, e Héracles precisou de um exército inteiro de mal-entendidos para tirá-la dela. Quem a veste hoje descobre que ordens dadas com ela parecem mais fáceis de seguir, sem que ninguém saiba dizer por quê.",
+        "descricao": "Uma vez por cena, gaste uma Ação Padrão para dar uma ordem simples a até três aliados que possam ouvir você. Cada um pode usar a Reação para se mover até seu Movimento ou realizar um ataque básico, fora da própria vez.",
+        "ativacao": "Ação Padrão",
+        "frequencia": "1/cena",
+        "efeito": "Até três aliados usam a Reação para se mover ou atacar fora da vez deles"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "reliquia-fio-ariadne",
+      "titulo": "Fio de Ariadne",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 400
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Artefato",
+          "Nunca se perde",
+          "Imune a labirintos e ilusões de espaço"
+        ],
+        "lore": "Ariadne entregou o novelo sem pedir nada em troca além de um jeito de escapar do que ela mesma ajudou a esconder. O fio nunca acabou, mesmo depois de todas as voltas, e ainda encontra o caminho de volta para quem o segura, não importa quantas paredes se movam.",
+        "descricao": "Você sempre sabe o caminho de volta ao ponto onde começou a usar o fio. É imune a labirintos mágicos, ilusões de espaço e efeitos que reorganizem o ambiente à sua volta.",
+        "ativacao": "Passiva",
+        "frequencia": "Sempre ativa",
+        "efeito": "Sempre encontra o caminho de volta; imune a labirintos mágicos e ilusões de espaço"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "reliquia-calice-graal",
+      "titulo": "Cálice do Graal",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 650
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Artefato",
+          "Cura total e remove maldição",
+          "1/cena"
+        ],
+        "lore": "Ninguém concorda sobre a forma do cálice, só sobre o que ele faz para quem bebe dele com o coração no lugar certo. Cavaleiros passaram a vida inteira procurando, e a maioria voltou de mãos vazias, porque o Graal escolhe, não é escolhido.",
+        "descricao": "Uma vez por cena, gaste uma Ação Padrão para oferecer o cálice a uma criatura dentro do alcance. Ela recupera toda a Vida e toda a Mana, e remove uma maldição ou condição permanente.",
+        "ativacao": "Ação Padrão, alcance adjacente",
+        "frequencia": "1/cena",
+        "efeito": "Recupera toda Vida e Mana e remove uma maldição ou condição permanente"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "reliquia-frasco-pandora",
+      "titulo": "Frasco de Pandora",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 420
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Artefato",
+          "Libera um efeito imprevisível",
+          "1/sessão"
+        ],
+        "lore": "Abrir não era a instrução, mas curiosidade sempre foi mais forte do que aviso. O que saiu de dentro nunca voltou a caber, e o que sobrou no fundo do frasco, uma esperança pequena e teimosa, ainda mora ali, esperando outra mão sem paciência.",
+        "descricao": "Uma vez por sessão, gaste uma Ação Padrão para abrir o frasco numa área de 9 m. O Mestre sorteia um efeito de caos entre praga, medo em massa, sorte reversa ou tempestade repentina, afetando todos ali menos você. Se você mantiver o frasco fechado até o fim da cena sem abri-lo, todos os aliados dentro do alcance ganham vantagem no próximo teste que fizerem.",
+        "ativacao": "Ação Padrão, área 9 m",
+        "frequencia": "1/sessão",
+        "efeito": "Libera um efeito de caos escolhido pelo Mestre entre quatro opções"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "reliquia-taca-dioniso",
+      "titulo": "Taça de Dioniso",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 440
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Artefato",
+          "Fúria de combate",
+          "1/cena"
+        ],
+        "lore": "O vinho que enche a taça nunca é o mesmo duas vezes, e ninguém pergunta de onde ele vem enquanto está bebendo. Quem bebe começa a rir antes de entender a própria piada, e sai andando na direção do perigo com a certeza de quem já voltou de lá.",
+        "descricao": "Uma vez por cena, gaste uma Ação Livre para beber da taça. Até o fim da cena, você ganha +1d6 de dano em seus ataques e sofre −2 de Defesa.",
+        "ativacao": "Ação Livre",
+        "frequencia": "1/cena",
+        "efeito": "+1d6 de dano em ataques e -2 de Defesa até o fim da cena"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "reliquia-lamparina-maravilhosa",
+      "titulo": "Lamparina Maravilhosa",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 520
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Artefato",
+          "Invoca um auxiliar temporário",
+          "1/sessão"
+        ],
+        "lore": "Um mercador de rua vendeu a lamparina como bugiganga velha, sem imaginar o que dormia dentro dela. Quem esfrega o metal desperta uma vontade presa há séculos, ansiosa por trabalhar em troca de liberdade que nunca chega de verdade.",
+        "descricao": "Uma vez por sessão, esfregue a lamparina como Ação Padrão para invocar um auxiliar com VD igual a um quarto do seu nível, obediente por até 1 hora ou até ser derrotado. Ele desaparece ao fim do prazo, sem deixar despojos.",
+        "ativacao": "Ação Padrão",
+        "frequencia": "1/sessão",
+        "duracao": "1 hora",
+        "efeito": "Invoca um auxiliar com VD igual a um quarto do seu nível"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "reliquia-cornucopia",
+      "titulo": "Cornucópia",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 460
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Artefato",
+          "Provisões infinitas",
+          "1/dia"
+        ],
+        "lore": "A cabra que amamentou Zeus quebrou um chifre sem querer, e o chifre nunca parou de dar o que faltava naquele momento. Comida, água, um objeto pequeno e útil: a Cornucópia entrega sem julgar o pedido, só o tamanho dele.",
+        "descricao": "Uma vez por dia, gaste uma Ação Padrão para pedir à Cornucópia: ela produz comida e água suficientes para até 10 pessoas por um dia inteiro, ou um item comum não mágico à sua escolha, de até 1 espaço de carga.",
+        "ativacao": "Ação Padrão",
+        "frequencia": "1/dia",
+        "efeito": "Produz comida e água para 10 pessoas por um dia, ou um item comum de até 1 espaço"
+      }
     }
   ]
 }

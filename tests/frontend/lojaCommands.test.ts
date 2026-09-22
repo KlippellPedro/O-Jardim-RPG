@@ -331,7 +331,7 @@ test('modificações viram categoria própria, com nível de loja pelo tipo da m
     .map((entrada: any) => ({ ...entrada, preco: resolverPrecoComoBackend(entrada.conteudo.preco) }));
   const modificacoes = mapearCatalogoLoja(entradas);
 
-  assert.equal(modificacoes.length, 51);
+  assert.equal(modificacoes.length, 63);
   assert.ok(modificacoes.every((item) => item.categoria === 'Modificações'));
   assert.ok(modificacoes.every((item) => item.valorOriginal > 0 && item.moedaPreco === 'Lunaris'));
 
@@ -412,7 +412,7 @@ test('todo item declara a loja mínima e a Vila fica restrita ao catálogo simpl
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
 
-  assert.equal(entradas.length, 835);
+  assert.equal(entradas.length, 969);
   assert.ok(entradas.every((item) => Number.isInteger(nivel(item)) && nivel(item) >= 1 && nivel(item) <= 4));
   assert.ok([1, 2, 3, 4].every((loja) => entradas.some((item) => nivel(item) === loja)));
 
