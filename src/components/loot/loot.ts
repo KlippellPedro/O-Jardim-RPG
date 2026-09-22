@@ -49,6 +49,48 @@ export const montarCarta = (item: ItemLoot): CartaLoot => {
   };
 };
 
+/** Efeitos extras que a carta ganha conforme a raridade. */
+export interface EfeitosCarta {
+  /** Clarão branco no instante em que a carta vira. */
+  clarao: boolean;
+  /** Onda de choque que sai da carta ao virar. */
+  onda: boolean;
+  /** A tela treme ao virar. */
+  tremor: boolean;
+  /** Quantidade de faíscas que sobem. */
+  faiscas: number;
+  /** Quantidade de brasas que caem do alto (só do épico para cima). */
+  chuva: number;
+  /** Anéis de luz girando atrás da carta. */
+  aneis: number;
+}
+
+export const efeitosDaCarta = (nivel: number): EfeitosCarta => ({
+  clarao: nivel >= 1,
+  onda: nivel >= 2,
+  tremor: nivel >= 5,
+  faiscas: nivel >= 3 ? 14 + (nivel - 3) * 6 : nivel >= 1 ? 6 : 0,
+  chuva: nivel >= 3 ? 10 + (nivel - 3) * 6 : 0,
+  aneis: nivel >= 4 ? nivel - 3 : 0,
+});
+
+// Cartas que ainda não foram reveladas. Compra na Loja não abre a carta na hora:
+// ela espera guardada em ficha.lootPendente (sincronizada pelo autosave normal
+// da ficha) até a pessoa abrir a ficha de quem comprou — em qualquer aparelho,
+// não só no navegador onde a compra foi feita.
+const LIMITE_PENDENTES = 30;
+
+/** Novo valor de ficha.lootPendente somando o que já esperava com os itens da compra. */
+export const proximosPendentes = (
+  atuais: ItemLoot[] | null | undefined,
+  itens: ItemLoot[] | null | undefined,
+): ItemLoot[] => {
+  const validos = (itens ?? []).filter((item) => item?.nome);
+  if (validos.length === 0) return Array.isArray(atuais) ? atuais : [];
+  const base = Array.isArray(atuais) ? atuais : [];
+  return [...base, ...validos].slice(-LIMITE_PENDENTES);
+};
+
 type Ouvinte = (cartas: CartaLoot[]) => void;
 
 const ouvintes = new Set<Ouvinte>();

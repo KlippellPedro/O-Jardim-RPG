@@ -4,19 +4,33 @@ import { CLASSES_CATALOGO } from '../../src/services/catalogoService';
 import { GLIFOS, escurecerHex, iniciaisDoNome, molduraDoRetrato } from '../../src/pages/Ficha/utils/retrato';
 import { formatarModificador, montarResumoFicha, nomeDeArquivo } from '../../src/pages/Ficha/utils/exportarFicha';
 
-test('moldura do retrato sobe de patamar nos niveis 10, 15 e 20', () => {
-  assert.equal(molduraDoRetrato(1).tier, 'comum');
-  assert.equal(molduraDoRetrato(9).tier, 'comum');
-  assert.equal(molduraDoRetrato(10).tier, 'prata');
-  assert.equal(molduraDoRetrato(15).tier, 'ouro');
-  assert.equal(molduraDoRetrato(20).tier, 'lenda');
+test('moldura do retrato muda a cada 5 niveis ate o 60', () => {
+  assert.equal(molduraDoRetrato(1).chave, 'comum');
+  assert.equal(molduraDoRetrato(4).chave, 'comum');
+  assert.equal(molduraDoRetrato(5).chave, 'bronze');
+  assert.equal(molduraDoRetrato(9).chave, 'bronze');
+  assert.equal(molduraDoRetrato(10).chave, 'prata');
+  assert.equal(molduraDoRetrato(15).chave, 'ouro');
+  assert.equal(molduraDoRetrato(22).chave, 'esmeralda');
+  assert.equal(molduraDoRetrato(60).chave, 'lenda');
+  assert.equal(molduraDoRetrato(99).chave, 'lenda');
   assert.equal(molduraDoRetrato(1).rotulo, null);
-  assert.equal(molduraDoRetrato(20).rotulo, 'Lendário');
+  assert.equal(molduraDoRetrato(60).rotulo, 'Lendário');
+  assert.equal(molduraDoRetrato(Number.NaN).chave, 'comum');
 });
 
-test('joias da moldura crescem com o patamar e so a lenda anima', () => {
-  assert.deepEqual([1, 10, 15, 20].map((nivel) => molduraDoRetrato(nivel).joias), [0, 2, 4, 4]);
-  assert.deepEqual([1, 10, 15, 20].map((nivel) => molduraDoRetrato(nivel).animada), [false, false, false, true]);
+test('cada degrau de 5 em 5 niveis tem uma moldura diferente', () => {
+  const niveis = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
+  const molduras = niveis.map((nivel) => molduraDoRetrato(nivel));
+  assert.equal(new Set(molduras.map((moldura) => moldura.chave)).size, 13);
+  assert.equal(new Set(molduras.map((moldura) => moldura.fio + moldura.fio2)).size, 13);
+  assert.deepEqual(molduras.map((moldura) => moldura.degrau), niveis.map((_, indice) => indice));
+});
+
+test('joias, aro e brilho em movimento crescem com o degrau', () => {
+  assert.deepEqual([1, 5, 10, 15, 20].map((nivel) => molduraDoRetrato(nivel).joias), [0, 2, 2, 4, 4]);
+  assert.deepEqual([15, 20].map((nivel) => molduraDoRetrato(nivel).aro), [false, true]);
+  assert.deepEqual([40, 45, 60].map((nivel) => molduraDoRetrato(nivel).animada), [false, true, true]);
 });
 
 test('iniciais ignoram particulas e caracteres estranhos', () => {

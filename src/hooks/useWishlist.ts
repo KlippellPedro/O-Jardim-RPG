@@ -1,34 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useCharacterStore } from '../store/useCharacterStore';
 
+/** Lista de desejos por personagem: vive em ficha.wishlist, sincronizada pelo
+ * autosave normal da ficha para aparecer igual em qualquer aparelho. */
 export const useWishlist = (characterId: string) => {
-  const [wishlist, setWishlist] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (!characterId) {
-      setWishlist([]);
-      return;
-    }
-    const stored = localStorage.getItem(`wishlist_${characterId}`);
-    if (stored) {
-      try {
-        setWishlist(JSON.parse(stored));
-      } catch (e) {
-        setWishlist([]);
-      }
-    } else {
-      setWishlist([]);
-    }
-  }, [characterId]);
+  const wishlist = useCharacterStore((state) => {
+    const bruta = state.characters.find((character) => character.id === characterId)?.ficha?.wishlist;
+    return Array.isArray(bruta) ? bruta.filter((id): id is string => typeof id === 'string') : [];
+  });
+  const patchCharacter = useCharacterStore((state) => state.patchCharacter);
 
   const toggleWishlist = (itemId: string) => {
     if (!characterId) return;
-    setWishlist(prev => {
-      const newWishlist = prev.includes(itemId) 
-        ? prev.filter(id => id !== itemId) 
-        : [...prev, itemId];
-      localStorage.setItem(`wishlist_${characterId}`, JSON.stringify(newWishlist));
-      return newWishlist;
-    });
+    const proxima = wishlist.includes(itemId)
+      ? wishlist.filter((id) => id !== itemId)
+      : [...wishlist, itemId];
+    patchCharacter(characterId, ['ficha', 'wishlist'], proxima);
   };
 
   return { wishlist, toggleWishlist };

@@ -90,9 +90,9 @@ export async function gerarImagemCartao(dados: IDadosCartao): Promise<Blob> {
   // Moldura por nível
   ctx.save();
   ctx.shadowColor = moldura.brilho;
-  ctx.shadowBlur = moldura.tier === 'comum' ? 6 : 24;
+  ctx.shadowBlur = moldura.degrau === 0 ? 6 : 24;
   ctx.strokeStyle = moldura.fio;
-  ctx.lineWidth = moldura.tier === 'lenda' ? 10 : moldura.tier === 'comum' ? 4 : 7;
+  ctx.lineWidth = moldura.animada ? 10 : moldura.degrau === 0 ? 4 : 7;
   retanguloArredondado(ctx, 14, 14, LARGURA - 28, ALTURA - 28, 30);
   ctx.stroke();
   ctx.restore();

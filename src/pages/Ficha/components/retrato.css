@@ -1,25 +1,30 @@
 /* Retrato do personagem: moldura por nível, foto ou retrato composto. */
 .retrato {
   --moldura-fio: #5b5566;
+  --moldura-fio2: #5b5566;
   --moldura-brilho: rgba(91, 85, 102, 0.35);
   position: relative;
   display: inline-block;
   flex-shrink: 0;
   padding: 3px;
   border-radius: 1.1rem;
-  background: linear-gradient(145deg, var(--moldura-fio), rgba(0, 0, 0, 0.55) 55%, var(--moldura-fio));
+  background: linear-gradient(145deg, var(--moldura-fio), rgba(0, 0, 0, 0.55) 55%, var(--moldura-fio2));
   box-shadow: 0 0 18px var(--moldura-brilho), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
-.retrato--prata,
-.retrato--ouro,
-.retrato--lenda {
+.retrato:not(.retrato--comum) {
   padding: 4px;
 }
 
-.retrato--lenda {
+/* Do nível 20 em diante, um segundo aro de fora. */
+.retrato--aro {
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.6), 0 0 0 3px var(--moldura-fio2), 0 0 22px var(--moldura-brilho), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* Do nível 45 em diante, o brilho percorre a borda. */
+.retrato--animada {
   overflow: visible;
-  background: conic-gradient(from var(--retrato-giro, 0deg), #f6d872, #fff3bd, #c99a25, #f6d872, #fff3bd, #c99a25, #f6d872);
+  background: conic-gradient(from var(--retrato-giro, 0deg), var(--moldura-fio), var(--moldura-fio2), var(--moldura-fio), var(--moldura-fio2), var(--moldura-fio));
 }
 
 @property --retrato-giro {
@@ -29,7 +34,7 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .retrato--lenda {
+  .retrato--animada {
     animation: retrato-giro 7s linear infinite;
   }
 }
@@ -66,6 +71,19 @@
   background: var(--moldura-fio);
   box-shadow: 0 0 6px var(--moldura-brilho);
   transform: rotate(45deg);
+}
+
+.retrato__joia--circulo {
+  border-radius: 50%;
+  transform: none;
+}
+
+.retrato__joia--estrela {
+  width: 11px;
+  height: 11px;
+  border: 0;
+  transform: none;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
 }
 
 .retrato__joia--tl { top: -3px; left: -3px; }

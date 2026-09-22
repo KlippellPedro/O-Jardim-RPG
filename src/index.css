@@ -95,10 +95,21 @@
       repeating-linear-gradient(25deg, rgba(70, 48, 20, 0.04) 0px, rgba(70, 48, 20, 0.04) 1px, transparent 1px, transparent 46px);
   }
 
-  /* Moldura por nivel: prata a partir do 10, ouro do 15, lenda no 20. O clip-path
-     corta sombras externas, entao a moldura e uma borda interna. */
+  /* Moldura por grau: a mesma escada do retrato do personagem (um grau novo
+     a cada 5 niveis, do 5 ao 60), para as duas telas mostrarem a mesma
+     "patente". O clip-path corta sombras externas, entao a moldura e uma
+     borda interna. */
+  .wanted-poster--bronze::after,
   .wanted-poster--prata::after,
   .wanted-poster--ouro::after,
+  .wanted-poster--esmeralda::after,
+  .wanted-poster--safira::after,
+  .wanted-poster--rubi::after,
+  .wanted-poster--ametista::after,
+  .wanted-poster--obsidiana::after,
+  .wanted-poster--aurora::after,
+  .wanted-poster--celestial::after,
+  .wanted-poster--solar::after,
   .wanted-poster--lenda::after {
     content: '';
     position: absolute;
@@ -107,10 +118,46 @@
     border: 3px solid var(--cartaz-fio);
     box-shadow: inset 0 0 14px var(--cartaz-brilho), 0 0 10px var(--cartaz-brilho);
   }
+  .wanted-poster--bronze { --cartaz-fio: #d08a4a; --cartaz-brilho: rgba(208, 138, 74, 0.5); }
   .wanted-poster--prata { --cartaz-fio: #c9d1dc; --cartaz-brilho: rgba(201, 209, 220, 0.6); }
   .wanted-poster--ouro { --cartaz-fio: #e3b840; --cartaz-brilho: rgba(227, 184, 64, 0.6); }
-  .wanted-poster--lenda { --cartaz-fio: #f6d872; --cartaz-brilho: rgba(255, 233, 150, 0.8); }
-  .wanted-poster--lenda::after { border-width: 4px; }
+  .wanted-poster--esmeralda { --cartaz-fio: #3ddc97; --cartaz-brilho: rgba(61, 220, 151, 0.6); }
+  .wanted-poster--safira { --cartaz-fio: #4aa3ff; --cartaz-brilho: rgba(74, 163, 255, 0.6); }
+  .wanted-poster--rubi { --cartaz-fio: #ff4d5e; --cartaz-brilho: rgba(255, 77, 94, 0.65); }
+  .wanted-poster--ametista { --cartaz-fio: #b46bff; --cartaz-brilho: rgba(180, 107, 255, 0.65); }
+  .wanted-poster--obsidiana { --cartaz-fio: #a99bd6; --cartaz-brilho: rgba(140, 120, 210, 0.7); }
+  .wanted-poster--aurora { --cartaz-fio: #5ff2e0; --cartaz-brilho: rgba(120, 240, 230, 0.7); }
+  .wanted-poster--celestial { --cartaz-fio: #d6efff; --cartaz-brilho: rgba(190, 228, 255, 0.8); }
+  .wanted-poster--solar { --cartaz-fio: #ffc233; --cartaz-brilho: rgba(255, 150, 40, 0.8); }
+  .wanted-poster--lenda { --cartaz-fio: #f6d872; --cartaz-brilho: rgba(255, 233, 150, 0.85); }
+
+  /* Do nivel 20 em diante (mesmo corte do aro duplo do retrato) a moldura
+     engrossa. */
+  .wanted-poster--esmeralda::after,
+  .wanted-poster--safira::after,
+  .wanted-poster--rubi::after,
+  .wanted-poster--ametista::after,
+  .wanted-poster--obsidiana::after,
+  .wanted-poster--aurora::after,
+  .wanted-poster--celestial::after,
+  .wanted-poster--solar::after,
+  .wanted-poster--lenda::after {
+    border-width: 4px;
+  }
+
+  /* Nas molduras mais altas o brilho pulsa devagar, ecoando a borda animada
+     do retrato. */
+  .wanted-poster--aurora::after,
+  .wanted-poster--celestial::after,
+  .wanted-poster--solar::after,
+  .wanted-poster--lenda::after {
+    animation: wanted-poster-pulso 2.6s ease-in-out infinite;
+  }
+
+  @keyframes wanted-poster-pulso {
+    0%, 100% { box-shadow: inset 0 0 14px var(--cartaz-brilho), 0 0 10px var(--cartaz-brilho); }
+    50% { box-shadow: inset 0 0 22px var(--cartaz-brilho), 0 0 18px var(--cartaz-brilho); }
+  }
 
   .wanted-poster-faixa {
     position: absolute;

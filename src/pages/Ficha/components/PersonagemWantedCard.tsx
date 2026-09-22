@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Brain, Camera, Loader2, Share2, Shield, Star, Sword, Trash2 } from 'lucide-react';
 import type { ICharacter } from '../../../types/character';
 import { obterStatusFicha } from '../../../services/statusService';
-import { calcularRecompensa, ROTULO_TIER, tierDoCartaz } from '../utils/cartaz';
+import { calcularRecompensa, molduraDoCartaz } from '../utils/cartaz';
 import { compartilharCartaz, type ResultadoCompartilhamento } from '../utils/cartazExportar';
 
 const FAMA_MAXIMA = 5;
@@ -42,8 +42,8 @@ export const PersonagemWantedCard: React.FC<PersonagemWantedCardProps> = ({
   const sanidadeAtual = obterStatusFicha(personagem.ficha).sanidadeAtual;
   const fama = personagem.ficha?.fama ?? 0;
   const recompensa = calcularRecompensa(personagem.nivel, fama);
-  const tier = tierDoCartaz(personagem.nivel);
-  const rotuloTier = ROTULO_TIER[tier];
+  const moldura = molduraDoCartaz(personagem.nivel);
+  const rotuloTier = moldura.rotulo;
   const [aviso, setAviso] = useState<string | null>(null);
   const [gerando, setGerando] = useState(false);
   const timerAviso = useRef<number | undefined>(undefined);
@@ -66,7 +66,7 @@ export const PersonagemWantedCard: React.FC<PersonagemWantedCardProps> = ({
         fama,
         emitidoEm: new Date(personagem.criadoEm).toLocaleDateString('pt-BR'),
         foto: personagem.foto,
-        tier,
+        moldura,
       });
       setAviso(MENSAGEM[resultado]);
     } catch {
@@ -96,7 +96,7 @@ export const PersonagemWantedCard: React.FC<PersonagemWantedCardProps> = ({
       exit={{ opacity: 0, scale: 0.9 }}
       whileHover={{ rotate: 0, y: -8, scale: 1.02 }}
       transition={{ duration: 0.4, delay: Math.min(index * 0.1, 0.5) }}
-      className={`wanted-poster wanted-poster--${tier} performance-expensive-effects group relative flex cursor-pointer flex-col overflow-hidden rounded-sm p-5 pt-4 shadow-[0_18px_30px_-12px_rgba(0,0,0,0.6)]`}
+      className={`wanted-poster wanted-poster--${moldura.chave} performance-expensive-effects group relative flex cursor-pointer flex-col overflow-hidden rounded-sm p-5 pt-4 shadow-[0_18px_30px_-12px_rgba(0,0,0,0.6)]`}
     >
       {rotuloTier ? <span aria-hidden="true" className="wanted-poster-faixa">{rotuloTier}</span> : null}
       {/* Textura de arranhões envelhecidos */}

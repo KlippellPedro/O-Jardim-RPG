@@ -1,4 +1,4 @@
-export type TierCartaz = 'comum' | 'prata' | 'ouro' | 'lenda';
+import { molduraDoRetrato, type EstiloMoldura } from './retrato';
 
 /** Quanto a cabeça do personagem vale. Nível 1 vale um salário mínimo do Jardim
  * (300 Lunaris) e cada nível soma 22% ao anterior, então o nível 20 fica em
@@ -11,19 +11,8 @@ export const calcularRecompensa = (nivel: number, fama = 0): number => {
   return Math.round(bruto / 50) * 50;
 };
 
-/** Moldura do cartaz: comum até o nível 9, prata de 10 a 14, ouro de 15 a 19 e
- * lenda no 20. */
-export const tierDoCartaz = (nivel: number): TierCartaz => {
-  const valor = Math.trunc(Number(nivel) || 1);
-  if (valor >= 20) return 'lenda';
-  if (valor >= 15) return 'ouro';
-  if (valor >= 10) return 'prata';
-  return 'comum';
-};
-
-export const ROTULO_TIER: Record<TierCartaz, string | null> = {
-  comum: null,
-  prata: 'Veterano',
-  ouro: 'Renomado',
-  lenda: 'Lendário',
-};
+/** Moldura do cartaz: a mesma escada do retrato (um grau novo a cada 5
+ * níveis, até o 60), para o personagem ter a mesma "patente" nas duas telas
+ * em vez de um selo próprio que parava no nível 20. */
+export const molduraDoCartaz = molduraDoRetrato;
+export type { EstiloMoldura };

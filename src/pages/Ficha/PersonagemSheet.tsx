@@ -212,7 +212,7 @@ export const PersonagemSheet: React.FC = () => {
   const character = characters.find((c) => c.id === id);
 
   // Item que chega na ficha (concedido pelo Mestre, por exemplo) vira uma carta
-  // que revela. Compras na Loja mostram a carta na própria Loja; itens
+  // que revela. Compras na Loja guardam a carta e ela vira no efeito abaixo; itens
   // criados à mão não contam. Só compara depois de a ficha ter carregado.
   const inventarioParaLoot = character?.inventarioCentral;
   const baseInventario = useRef<{ personagemId: string; ids: Set<string>; desde: number } | null>(null);
@@ -241,6 +241,22 @@ export const PersonagemSheet: React.FC = () => {
       desde: anterior && anterior.personagemId === character.id ? anterior.desde : Date.now(),
     };
   }, [character?.id, inventarioParaLoot]);
+
+  // As cartas do que foi comprado na Loja (em qualquer aparelho) esperam em
+  // ficha.lootPendente e viram aqui, uma a uma, quando a ficha abre.
+  const idParaCartas = character?.id;
+  useEffect(() => {
+    if (!idParaCartas) return undefined;
+    const timer = window.setTimeout(() => {
+      const atual = useCharacterStore.getState().characters.find((item) => item.id === idParaCartas);
+      const pendentes = Array.isArray(atual?.ficha?.lootPendente) ? atual.ficha.lootPendente : [];
+      if (pendentes.length > 0) {
+        dispararLoot(pendentes);
+        useCharacterStore.getState().patchCharacter(idParaCartas, ['ficha', 'lootPendente'], []);
+      }
+    }, 900);
+    return () => window.clearTimeout(timer);
+  }, [idParaCartas]);
 
   // Conquistas de nível, Fama e saldo não passam por rolagem: avalia ao abrir a
   // ficha e quando o nível ou a Fama mudam. O servidor decide; aqui só comemora.

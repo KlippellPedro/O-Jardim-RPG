@@ -165,6 +165,136 @@
   100% { opacity: 0; transform: translateY(-190px) scale(1.1); }
 }
 
+/* ---- Efeitos extras ---- */
+
+.loot__titulo {
+  position: relative;
+  margin: 0;
+  font-family: Cinzel, serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--loot-cor);
+  text-shadow: 0 0 16px var(--loot-cor);
+  animation: loot-titulo 0.7s ease-out 0.15s backwards;
+}
+
+/* Poeira de luz subindo devagar atrás da carta, o tempo todo */
+.loot__poeira { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.loot__poeira i {
+  position: absolute;
+  left: var(--p-x);
+  bottom: -10px;
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--loot-cor);
+  box-shadow: 0 0 8px var(--loot-cor);
+  opacity: 0;
+  animation: loot-poeira var(--p-dur) linear var(--p-atraso) infinite;
+}
+
+/* Clarão ao virar */
+.loot__clarao {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 46%, #fff, color-mix(in srgb, var(--loot-cor) 60%, transparent) 40%, transparent 70%);
+  pointer-events: none;
+  animation: loot-clarao 0.55s ease-out both;
+}
+
+/* Onda de choque saindo da carta */
+.loot__onda {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14rem;
+  aspect-ratio: 1;
+  margin: -7rem 0 0 -7rem;
+  border: 3px solid var(--loot-cor);
+  border-radius: 50%;
+  box-shadow: 0 0 30px var(--loot-cor), inset 0 0 30px var(--loot-cor);
+  pointer-events: none;
+  animation: loot-onda 0.9s ease-out both;
+}
+
+/* Anéis de luz girando atrás da carta (lendário para cima) */
+.loot__aneis { position: absolute; left: 50%; top: 50%; width: 0; height: 0; pointer-events: none; }
+.loot__aneis b {
+  position: absolute;
+  width: calc(19rem + var(--a-i) * 3.2rem);
+  aspect-ratio: 1;
+  margin: calc((19rem + var(--a-i) * 3.2rem) / -2) 0 0 calc((19rem + var(--a-i) * 3.2rem) / -2);
+  border: 1px dashed color-mix(in srgb, var(--loot-cor) 70%, transparent);
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: loot-raios calc(14s + var(--a-i) * 6s) linear infinite, loot-anel 0.6s ease-out backwards;
+  animation-direction: normal, normal;
+}
+.loot__aneis b:nth-child(even) { animation-direction: reverse, normal; }
+
+/* Brilho holográfico que passa pela frente da carta */
+.loot__brilho {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.loot__brilho::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  width: 45%;
+  left: -60%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-18deg);
+}
+.loot--aberta .loot__brilho::before { animation: loot-varredura 2.4s ease-in-out 0.55s infinite; }
+
+/* Brasas caindo do alto (épico para cima) */
+.loot__chuva { position: fixed; inset: 0; overflow: hidden; pointer-events: none; }
+.loot__chuva i {
+  position: absolute;
+  left: var(--c-x);
+  top: -12px;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--loot-cor);
+  box-shadow: 0 0 12px var(--loot-cor);
+  opacity: 0;
+  animation: loot-chuva var(--c-dur) ease-in var(--c-atraso) both;
+}
+
+/* Tremor da tela ao virar uma carta de Relíquia */
+.loot--tremor .loot__palco { animation: loot-tremor 0.5s ease-out 0.35s both; }
+
+@keyframes loot-titulo { from { opacity: 0; transform: translateY(-14px); letter-spacing: 0.7em; } to { opacity: 1; transform: none; letter-spacing: 0.32em; } }
+@keyframes loot-poeira {
+  0% { opacity: 0; transform: translateY(0); }
+  15% { opacity: 0.9; }
+  100% { opacity: 0; transform: translateY(-105vh); }
+}
+@keyframes loot-clarao { 0% { opacity: 0.95; } 100% { opacity: 0; } }
+@keyframes loot-onda { from { opacity: 1; transform: scale(0.4); } to { opacity: 0; transform: scale(3.6); } }
+@keyframes loot-anel { from { opacity: 0; transform: scale(0.4); } to { opacity: 0.7; } }
+@keyframes loot-varredura { 0% { left: -60%; } 55%, 100% { left: 130%; } }
+@keyframes loot-chuva {
+  0% { opacity: 0; transform: translateY(0); }
+  15% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(105vh); }
+}
+@keyframes loot-tremor {
+  0%, 100% { transform: translate(0, 0); }
+  15% { transform: translate(-7px, 4px); }
+  30% { transform: translate(6px, -5px); }
+  45% { transform: translate(-5px, -3px); }
+  60% { transform: translate(4px, 4px); }
+  80% { transform: translate(-2px, 1px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .loot { display: none; }
 }

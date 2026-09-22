@@ -1,4 +1,4 @@
-import { ROTULO_TIER, type TierCartaz } from './cartaz';
+import type { EstiloMoldura } from './cartaz';
 
 /** Desenha o cartaz de Procurado numa imagem PNG para compartilhar (Discord,
  * WhatsApp...). É um desenho próprio no canvas, sem biblioteca: o cartaz da
@@ -15,18 +15,11 @@ export interface DadosCartaz {
   fama: number;
   emitidoEm: string;
   foto?: string | null;
-  tier: TierCartaz;
+  moldura: EstiloMoldura;
 }
 
 const LARGURA = 900;
 const ALTURA = 1260;
-
-const MOLDURAS: Record<TierCartaz, { fio: string; brilho: string } | null> = {
-  comum: null,
-  prata: { fio: '#c9d1dc', brilho: 'rgba(201, 209, 220, 0.55)' },
-  ouro: { fio: '#e3b840', brilho: 'rgba(227, 184, 64, 0.6)' },
-  lenda: { fio: '#f6d872', brilho: 'rgba(255, 233, 150, 0.75)' },
-};
 
 const carregarImagem = (fonte: string): Promise<HTMLImageElement | null> => new Promise((resolver) => {
   const imagem = new Image();
@@ -96,16 +89,16 @@ export async function gerarImagemCartaz(dados: DadosCartaz): Promise<Blob> {
   }
   ctx.restore();
 
-  // Moldura por tier
-  const moldura = MOLDURAS[dados.tier];
-  if (moldura) {
+  // Moldura por grau (a mesma escada do retrato)
+  const moldura = dados.moldura;
+  if (moldura.chave !== 'comum') {
     ctx.save();
     caminhoRasgado(ctx);
     ctx.clip();
     ctx.strokeStyle = moldura.fio;
     ctx.shadowColor = moldura.brilho;
     ctx.shadowBlur = 26;
-    ctx.lineWidth = dados.tier === 'lenda' ? 14 : 9;
+    ctx.lineWidth = moldura.aro ? 14 : 9;
     ctx.strokeRect(26, 40, LARGURA - 52, ALTURA - 80);
     ctx.shadowBlur = 0;
     ctx.lineWidth = 2;
@@ -249,9 +242,9 @@ export async function gerarImagemCartaz(dados: DadosCartaz): Promise<Blob> {
   ctx.font = '500 22px system-ui, sans-serif';
   centro(ctx, `Emitido em ${dados.emitidoEm}  ·  O Jardim RPG`, 1200);
 
-  // Faixa do tier
-  const rotuloTier = ROTULO_TIER[dados.tier];
-  if (rotuloTier && moldura) {
+  // Faixa do grau
+  const rotuloTier = moldura.rotulo;
+  if (rotuloTier) {
     ctx.save();
     ctx.translate(LARGURA - 108, 142);
     ctx.rotate(0.6);

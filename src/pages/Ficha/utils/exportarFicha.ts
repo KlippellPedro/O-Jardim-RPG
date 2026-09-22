@@ -5,7 +5,7 @@ import { GRAUS_PERICIA, grausComConcedidos } from '../../../services/periciasFic
 import { habilidadesAutomaticas, poderesSelecionados } from '../../../services/progressaoFichaService';
 import { nomeExibicaoRaca } from '../../../services/racaService';
 import { obterStatusFicha } from '../../../services/statusService';
-import { calcularRecompensa, tierDoCartaz, type TierCartaz } from './cartaz';
+import { calcularRecompensa, molduraDoCartaz } from './cartaz';
 
 /** Tudo que a ficha impressa e o cartão precisam, já pronto para desenhar. Os
  * dois formatos leem a mesma coisa, então nunca mostram números diferentes. */
@@ -20,7 +20,8 @@ export interface IResumoFicha {
   fama: number;
   xp: number;
   recompensa: number;
-  tier: TierCartaz;
+  /** Chave da moldura na escada do retrato/cartaz ('comum', 'bronze', ..., 'lenda'). */
+  tier: string;
   atributos: Array<{ chave: string; rotulo: string; valor: number; mod: number }>;
   recursos: {
     vida: { atual: number | null; maximo: number };
@@ -137,7 +138,7 @@ export function montarResumoFicha(character: any, agora: Date = new Date()): IRe
     fama,
     xp: Math.max(0, Number(ficha.xp) || 0),
     recompensa: calcularRecompensa(nivel, fama),
-    tier: tierDoCartaz(nivel),
+    tier: molduraDoCartaz(nivel).chave,
     atributos,
     recursos: {
       vida: { atual: numeroOuNulo(status.vidaAtual), maximo: vidaMaxima },
