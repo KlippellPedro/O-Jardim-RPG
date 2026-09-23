@@ -121,7 +121,7 @@ export const GuiaDimensional = ({ classe }: { classe: IClasse }) => {
             <DoorOpen size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Caminho Impossível</h3>
             <p className="text-cyan-100/60 leading-relaxed text-sm">
-              Uma vez por sessão, abra por três rodadas um portal até um local conhecido na mesma dimensão ou até uma âncora ativa em outra dimensão. Você, seus aliados e o que estiverem carregando atravessam juntos — selos e efeitos que bloqueiem viagem dimensional impedem a abertura.
+              Uma vez por sessão, abra por três rodadas um portal até um local conhecido na mesma dimensão ou até uma âncora ativa em outra dimensão. Você, seus aliados e o que estiverem carregando atravessam juntos - selos e efeitos que bloqueiem viagem dimensional impedem a abertura.
             </p>
           </PremiumCard>
 

@@ -107,7 +107,7 @@ export const EscritorDeContos = ({ classe }: { classe: IClasse }) => {
             <UserPlus size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Personagens Recorrentes</h3>
             <p className="text-fuchsia-100/60 leading-relaxed text-sm">
-              A cada estágio, registre um contato real em sua história — um NPC de sua própria autoria que passa a existir no mundo — e escolha um Arquétipo de Contato pra ele: Informante, Guarda-Costas, Curandeiro ou Contrabandista. Uma vez por sessão, se puder ser contatado, um deles ajuda dentro do que o arquétipo permite.
+              A cada estágio, registre um contato real em sua história - um NPC de sua própria autoria que passa a existir no mundo - e escolha um Arquétipo de Contato pra ele: Informante, Guarda-Costas, Curandeiro ou Contrabandista. Uma vez por sessão, se puder ser contatado, um deles ajuda dentro do que o arquétipo permite.
             </p>
           </PremiumCard>
 
@@ -122,7 +122,7 @@ export const EscritorDeContos = ({ classe }: { classe: IClasse }) => {
             <Sparkles size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Último Capítulo</h3>
             <p className="text-fuchsia-100/60 leading-relaxed text-sm">
-              Uma vez por sessão, conduza uma cena de combate por três rodadas, dando vantagem ao grupo e reescrevendo uma falha crucial. Mas o capítulo maior é outro: fora de combate, quando fizer sentido pra história, escreva o conto de uma Entidade nova — combinando os detalhes com o Mestre, ela passa a existir no jogo de verdade, não só nesta mesa.
+              Uma vez por sessão, conduza uma cena de combate por três rodadas, dando vantagem ao grupo e reescrevendo uma falha crucial. Mas o capítulo maior é outro: fora de combate, quando fizer sentido pra história, escreva o conto de uma Entidade nova - combinando os detalhes com o Mestre, ela passa a existir no jogo de verdade, não só nesta mesa.
             </p>
           </PremiumCard>
 

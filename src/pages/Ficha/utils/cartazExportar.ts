@@ -11,6 +11,8 @@ export interface DadosCartaz {
   moeda: string;
   vida: number;
   mana: number;
+  /** Ausente ou zero quando a ficha ainda não calculou a Estamina: a linha some. */
+  estamina?: number;
   sanidade: number | null;
   fama: number;
   emitidoEm: string;
@@ -212,7 +214,7 @@ export async function gerarImagemCartaz(dados: DadosCartaz): Promise<Blob> {
   ctx.setLineDash([10, 8]);
   ctx.strokeStyle = 'rgba(90, 74, 47, 0.45)';
   ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(120, 1050); ctx.lineTo(LARGURA - 120, 1050); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(120, 1046); ctx.lineTo(LARGURA - 120, 1046); ctx.stroke();
   ctx.setLineDash([]);
   ctx.font = '700 28px "Cascadia Mono", Consolas, monospace';
   ctx.fillStyle = '#3a2f1c';
@@ -220,6 +222,7 @@ export async function gerarImagemCartaz(dados: DadosCartaz): Promise<Blob> {
   const linhas: Array<[string, string]> = [
     ['VIDA', String(dados.vida)],
     ['MANA', String(dados.mana)],
+    ...((dados.estamina ?? 0) > 0 ? [['ESTAMINA', String(dados.estamina)] as [string, string]] : []),
     ['SANIDADE', dados.sanidade === null ? '-' : String(dados.sanidade)],
     ['FAMA', `${dados.fama}/5`],
   ];
@@ -227,7 +230,7 @@ export async function gerarImagemCartaz(dados: DadosCartaz): Promise<Blob> {
     const coluna = indice % 2;
     const linha = Math.floor(indice / 2);
     const x = coluna === 0 ? 130 : LARGURA / 2 + 30;
-    const y = 1096 + linha * 44;
+    const y = 1088 + linha * 40;
     ctx.fillStyle = '#5a4a2f';
     ctx.fillText(rotulo, x, y);
     ctx.fillStyle = '#2a2118';
@@ -240,7 +243,7 @@ export async function gerarImagemCartaz(dados: DadosCartaz): Promise<Blob> {
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(90, 74, 47, 0.8)';
   ctx.font = '500 22px system-ui, sans-serif';
-  centro(ctx, `Emitido em ${dados.emitidoEm}  ·  O Jardim RPG`, 1200);
+  centro(ctx, `Emitido em ${dados.emitidoEm}  ·  O Jardim RPG`, 1208);
 
   // Faixa do grau
   const rotuloTier = moldura.rotulo;

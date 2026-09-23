@@ -134,7 +134,7 @@ function RulesLanding({
               </span>
               <div>
                 <strong className="block text-sm text-gray-200">Somente Mestre</strong>
-                <p className="mt-0.5 text-xs leading-5 text-gray-500">Só aparece pra quem conduz a mesa — orientações de preparo e condução.</p>
+                <p className="mt-0.5 text-xs leading-5 text-gray-500">Só aparece pra quem conduz a mesa - orientações de preparo e condução.</p>
               </div>
             </div>
           ) : null}

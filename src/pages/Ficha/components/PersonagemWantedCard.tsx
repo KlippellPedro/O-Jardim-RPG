@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Brain, Camera, Loader2, Share2, Shield, Star, Sword, Trash2 } from 'lucide-react';
+import { Activity, Brain, Camera, Loader2, Share2, Shield, Star, Sword, Trash2 } from 'lucide-react';
 import type { ICharacter } from '../../../types/character';
 import { obterStatusFicha } from '../../../services/statusService';
 import { calcularRecompensa, molduraDoCartaz } from '../utils/cartaz';
@@ -62,6 +62,7 @@ export const PersonagemWantedCard: React.FC<PersonagemWantedCardProps> = ({
         moeda,
         vida: personagem.derivados?.vida ?? 0,
         mana: personagem.derivados?.mana ?? 0,
+        estamina: personagem.derivados?.estamina ?? 0,
         sanidade: sanidadeAtual ?? null,
         fama,
         emitidoEm: new Date(personagem.criadoEm).toLocaleDateString('pt-BR'),
@@ -162,9 +163,15 @@ export const PersonagemWantedCard: React.FC<PersonagemWantedCardProps> = ({
           <span className="flex items-center gap-1.5 uppercase tracking-wide text-[#5a4a2f]"><Sword size={12} /> Mana</span>
           <span className="font-bold">{personagem.derivados?.mana ?? 0}</span>
         </div>
+        {(personagem.derivados?.estamina ?? 0) > 0 && (
+          <div className="flex items-center justify-between">
+            <span className="flex items-center gap-1.5 uppercase tracking-wide text-[#5a4a2f]"><Activity size={12} /> Estamina</span>
+            <span className="font-bold">{personagem.derivados?.estamina}</span>
+          </div>
+        )}
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-1.5 uppercase tracking-wide text-[#5a4a2f]"><Brain size={12} /> Sanidade</span>
-          <span className="font-bold">{sanidadeAtual ?? '—'}</span>
+          <span className="font-bold">{sanidadeAtual ?? '-'}</span>
         </div>
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-1.5 uppercase tracking-wide text-[#5a4a2f]"><Star size={12} /> Fama</span>

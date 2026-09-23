@@ -42,7 +42,7 @@ export const Elementarista = ({ classe }: { classe: IClasse }) => {
           </div>
           <span className="mb-4 inline-flex rounded-full border border-amber-300/25 bg-amber-300/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-amber-100">Um vínculo. Um elemento. Uma vida inteira de domínio.</span>
           <h1 className={`mb-6 text-4xl font-black uppercase tracking-tight sm:text-6xl lg:text-7xl ${tema.text}`} style={{ fontFamily: 'Cinzel, serif' }}>Elementarista</h1>
-          <p className={`mx-auto max-w-3xl text-base font-medium leading-relaxed opacity-90 sm:text-lg ${tema.tag}`}>Escolha Terra, Água, Fogo, Ar, Raio, Luz ou Escuridão no primeiro nível. Esse elemento se torna sua assinatura e permanece com você até o fim — exceto se os Sete Salões revelarem algo muito mais raro.</p>
+          <p className={`mx-auto max-w-3xl text-base font-medium leading-relaxed opacity-90 sm:text-lg ${tema.tag}`}>Escolha Terra, Água, Fogo, Ar, Raio, Luz ou Escuridão no primeiro nível. Esse elemento se torna sua assinatura e permanece com você até o fim - exceto se os Sete Salões revelarem algo muito mais raro.</p>
         </motion.header>
 
         <section className="mb-16" aria-labelledby="caminhos-elementarista">
