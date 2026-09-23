@@ -1,6 +1,54 @@
 {
-  "geradoEm": "2026-09-22T04:02:49.544Z",
+  "geradoEm": "2026-09-23T23:17:50.228Z",
   "itens": [
+    {
+      "id": "b983508",
+      "data": "2026-09-23",
+      "tipo": "novo",
+      "area": "Geral",
+      "titulo": "Estamina no cartaz Procurado; chore: travessões e PDFs do livro",
+      "detalhes": []
+    },
+    {
+      "id": "8af2489",
+      "data": "2026-09-23",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Consumíveis de Estamina e itens de Vida e Mana que agora devolvem Estamina",
+      "detalhes": []
+    },
+    {
+      "id": "1716804",
+      "data": "2026-09-23",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Frutos dos Fluxos e Frutos do Éden físicos em Estamina",
+      "detalhes": []
+    },
+    {
+      "id": "36c5904",
+      "data": "2026-09-23",
+      "tipo": "correcao",
+      "area": "Geral",
+      "titulo": "Avisa a ficha aberta quando o servidor a altera, Estamina nos aliados, relíquia na Frota",
+      "detalhes": []
+    },
+    {
+      "id": "a6d6c7d",
+      "data": "2026-09-23",
+      "tipo": "correcao",
+      "area": "Geral",
+      "titulo": "Revisão pós-migração de recursos",
+      "detalhes": []
+    },
+    {
+      "id": "82a6c93",
+      "data": "2026-09-23",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Jardim das Habilidades e Estamina como terceiro recurso",
+      "detalhes": []
+    },
     {
       "id": "3203456",
       "data": "2026-09-22",
@@ -662,59 +710,6 @@
         "Combate e Cenas: Iniciativa e Defesas passivas movidas de Condicoes",
         "Equipamentos e Criacao: referencia cruzada corrigida entre Criacao e"
       ]
-    },
-    {
-      "id": "1049dac",
-      "data": "2026-08-26",
-      "tipo": "correcao",
-      "area": "Geral",
-      "titulo": "Remove cartoes de destaque do topo das paginas de regras",
-      "detalhes": []
-    },
-    {
-      "id": "3806b6d",
-      "data": "2026-08-25",
-      "tipo": "novo",
-      "area": "Geral",
-      "titulo": "Editor de conteudo por campanha, materiais/crafting, permissoes de Bens e revisao de bugs",
-      "detalhes": [
-        "fix(regras): guard de efeitos_por_fluxo agora bloqueia magia sem Fluxo",
-        "fix(ficha): reordenar Aliados com busca filtrada nao apaga mais os aliados",
-        "perf(plataforma): seed da biblioteca central e notificacoes em lote via",
-        "refactor: concessao de item na loja reusa core.notifications.notify em vez"
-      ]
-    },
-    {
-      "id": "2b88cb0",
-      "data": "2026-08-18",
-      "tipo": "novo",
-      "area": "Loja",
-      "titulo": "Reescreve escala de precos da Loja e roda ofertas em destaque no servidor",
-      "detalhes": []
-    },
-    {
-      "id": "e711336",
-      "data": "2026-08-18",
-      "tipo": "novo",
-      "area": "Site",
-      "titulo": "Sessao ao vivo, Mundo e Loja com itens do mercado negro",
-      "detalhes": []
-    },
-    {
-      "id": "22090d7",
-      "data": "2026-08-18",
-      "tipo": "novo",
-      "area": "Discord",
-      "titulo": "Mercado negro, painel do mestre e ajustes de economia",
-      "detalhes": []
-    },
-    {
-      "id": "debd08b",
-      "data": "2026-08-18",
-      "tipo": "novo",
-      "area": "Plataforma",
-      "titulo": "Consumo do Fruto do Eden, sessao e resumo de personagem",
-      "detalhes": []
     }
   ]
 }
