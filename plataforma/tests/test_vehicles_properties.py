@@ -342,8 +342,8 @@ class VehiclesPropertiesTests(unittest.TestCase):
         em `dados`, nao a estrutura aninhada que `migrate_vehicle` lia antes
         (dados["vida"]["maximo"] etc., que nunca existe nesse formato) — todo
         veiculo migrado nascia com vida/deslocamento zerados e sem cobertura.
-        Cobre as 16 entradas reais `veiculo-completo` do catalogo."""
-        self.assertEqual(len(_VEICULOS_COMPLETOS_REAIS), 16)
+        Cobre as 34 entradas reais `veiculo-completo` do catalogo."""
+        self.assertEqual(len(_VEICULOS_COMPLETOS_REAIS), 34)
         for entrada in _VEICULOS_COMPLETOS_REAIS:
             with self.subTest(veiculo=entrada["id"]):
                 _, personagem_id, jogador = self._jogador(
@@ -400,7 +400,11 @@ class VehiclesPropertiesTests(unittest.TestCase):
                     vehicle["espacos_modulos_maximos"], conteudo["sistemasAtivosMaximos"]
                 )
                 self.assertEqual(vehicle["espacos_base"], conteudo["espacosBase"])
-                self.assertEqual(vehicle["raridade"], conteudo["raridade"])
+                # A Relíquia da Criação não existe na Frota: migra como Lendário.
+                self.assertEqual(
+                    vehicle["raridade"],
+                    "lendario" if conteudo["raridade"] == "reliquia da criacao" else conteudo["raridade"],
+                )
                 self.assertEqual(
                     vehicle["modulos_utilidade_integrados"],
                     len(conteudo.get("sistemas", [])),

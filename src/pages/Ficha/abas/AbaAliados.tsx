@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Users, Heart, Shield, Footprints, Zap, Sword, Pencil, Trash2, AlertTriangle, Link, GripVertical, Star, ExternalLink, Droplet, Plus, X, Coins, Share2, Check } from 'lucide-react';
+import { Activity, Search, Users, Heart, Shield, Footprints, Zap, Sword, Pencil, Trash2, AlertTriangle, Link, GripVertical, Star, ExternalLink, Droplet, Plus, X, Coins, Share2, Check } from 'lucide-react';
 import { motion, Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput } from '../components/SharedFichaComponents';
@@ -403,6 +403,8 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
               : a.iniciativa;
             const manaAtual = Number(resumoVinculado?.mana_atual ?? statusVinculado.manaAtual ?? charVinculado?.derivados?.mana) || 0;
             const manaMaxima = Number(resumoVinculado?.mana_maxima ?? charVinculado?.derivados?.mana ?? fichaVinculada?.derivados?.mana) || 0;
+            const estaminaMaxima = Number(resumoVinculado?.estamina_maxima ?? charVinculado?.derivados?.estamina ?? fichaVinculada?.derivados?.estamina) || 0;
+            const estaminaAtual = Math.min(estaminaMaxima, Number(resumoVinculado?.estamina_atual ?? statusVinculado.estaminaAtual ?? estaminaMaxima) || 0);
             const defesaVinculada = Number(resumoVinculado?.defesa ?? charVinculado?.derivados?.defesaNatural ?? fichaVinculada?.derivados?.defesaNatural) || 0;
             const movimentoBruto = resumoVinculado?.movimento ?? charVinculado?.derivados?.movimento ?? fichaVinculada?.derivados?.movimento ?? 9;
             const movimentoVinculado = typeof movimentoBruto === 'number' ? `${movimentoBruto}m` : String(movimentoBruto);
@@ -561,11 +563,17 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
                   </div>
                 )}
                 {isComplexo && (
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className={`grid gap-2 ${estaminaMaxima > 0 ? 'grid-cols-5' : 'grid-cols-4'}`}>
                     <div className="bg-[#c7a44c]/10 rounded-lg py-2 px-1 flex flex-col items-center gap-0.5 border border-[#c7a44c]/20">
                       <span className="text-[9px] uppercase text-[#c7a44c] font-bold tracking-widest flex items-center gap-1"><Droplet size={10} /> Mana</span>
                       <span className="text-xs font-mono text-[#c7a44c]">{manaAtual} / {manaMaxima}</span>
                     </div>
+                    {estaminaMaxima > 0 && (
+                      <div className="bg-emerald-400/10 rounded-lg py-2 px-1 flex flex-col items-center gap-0.5 border border-emerald-400/20">
+                        <span className="text-[9px] uppercase text-emerald-300 font-bold tracking-widest flex items-center gap-1"><Activity size={10} /> Est</span>
+                        <span className="text-xs font-mono text-emerald-200">{estaminaAtual} / {estaminaMaxima}</span>
+                      </div>
+                    )}
                     <div className="bg-[#c7a44c]/10 rounded-lg py-2 px-1 flex flex-col items-center gap-0.5 border border-[#c7a44c]/20">
                       <span className="text-[9px] uppercase text-[#c7a44c] font-bold tracking-widest flex items-center gap-1"><Shield size={10} /> Def</span>
                       <span className="text-xs font-mono text-[#c7a44c]">{defesaVinculada}</span>
@@ -691,7 +699,7 @@ export const AbaAliados = ({ character, onUpdate }: { character: any; onUpdate: 
           {form.categoria === 'complexo' ? (
             <div className="flex flex-col gap-4 py-2 border-y border-white/5 my-2">
               <p className="text-xs text-[#c7a44c] bg-[#c7a44c]/10 p-3 rounded-lg border border-[#c7a44c]/20">
-                Escolha somente a ficha que fornece Vida, Mana, Defesa, Movimento e Iniciativa ao aliado complexo. Este campo não compartilha o aliado; o compartilhamento com uma ou várias fichas é feito apenas no bloco azul abaixo.
+                Escolha somente a ficha que fornece Vida, Mana, Estamina, Defesa, Movimento e Iniciativa ao aliado complexo. Este campo não compartilha o aliado; o compartilhamento com uma ou várias fichas é feito apenas no bloco azul abaixo.
               </p>
               <div className="flex flex-col gap-1">
                 <label htmlFor="aliado-ficha-base" className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Ficha-base sincronizada (não compartilha)</label>

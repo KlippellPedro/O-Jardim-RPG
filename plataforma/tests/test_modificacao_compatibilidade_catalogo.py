@@ -32,8 +32,8 @@ _APLICACOES_CONHECIDAS = set(_ALVOS_POR_APLICACAO) | _APLICACOES_SEM_RESTRICAO
 
 
 class CompatibilidadeCatalogoTests(unittest.TestCase):
-    def test_catalogo_tem_51_modificacoes(self):
-        self.assertEqual(len(_MODIFICACOES), 51)
+    def test_catalogo_tem_63_modificacoes(self):
+        self.assertEqual(len(_MODIFICACOES), 63)
 
     def test_toda_modificacao_tem_aplicacao_reconhecida(self):
         desconhecidas = []

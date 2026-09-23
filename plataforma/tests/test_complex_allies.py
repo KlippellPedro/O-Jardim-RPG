@@ -66,6 +66,7 @@ def test_complex_ally_summary_exposes_stats_but_not_private_sheet_fields():
             "derivados": {
                 "vida": 42,
                 "mana": 18,
+                "estamina": 25,
                 "defesaNatural": 17,
                 "movimento": 12,
                 "iniciativa": 7,
@@ -73,6 +74,7 @@ def test_complex_ally_summary_exposes_stats_but_not_private_sheet_fields():
             "status": {
                 "vidaAtual": 31,
                 "manaAtual": 11,
+                "estaminaAtual": 9,
                 "bonusIniciativa": 2,
                 "ajustesIniciativa": [{"valor": 1}],
                 "cansacoAtual": 2,
@@ -91,6 +93,8 @@ def test_complex_ally_summary_exposes_stats_but_not_private_sheet_fields():
         "vida_maxima": 42,
         "mana_atual": 11,
         "mana_maxima": 18,
+        "estamina_atual": 9,
+        "estamina_maxima": 25,
         "defesa": 17,
         "movimento": 12,
         "iniciativa": 4,
@@ -195,3 +199,13 @@ def test_player_cannot_change_master_controlled_shared_ally():
     assert _player_shared_allies_error(current, harmless) is None
     assert _player_shared_allies_error(current, changed_effect)
     assert _player_shared_allies_error(current, {"aliados": []})
+
+
+def test_complex_ally_summary_without_computed_stamina_has_no_stamina_bar():
+    summary = _complex_ally_summary({
+        "id": uuid4(),
+        "nome": "Antiga",
+        "ficha": {"nivel": 3, "derivados": {"vida": 20, "mana": 5}, "status": {"vidaAtual": 20}},
+    })
+    assert summary["estamina_maxima"] == 0
+    assert summary["estamina_atual"] == 0

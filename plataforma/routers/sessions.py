@@ -124,6 +124,19 @@ def _estamina_da_ficha(ficha) -> tuple[int | None, int | None, int]:
     return maxima, atual, max(0, extra or 0)
 
 
+def _avisar_fichas_alteradas(campanha_id: UUID, fichas: list[dict]) -> None:
+    """Publica `personagem_atualizado` para cada ficha que o servidor mexeu por
+    conta própria (HUD do Mestre, Cansaço do combate). É o evento que a ficha
+    aberta escuta para buscar a versão nova."""
+    for item in fichas:
+        live_session.publicar(
+            campanha_id,
+            "personagem_atualizado",
+            int(item["versao"]),
+            {"personagem_id": str(item["personagem_id"])},
+        )
+
+
 def _participantes(connection, sessao_id: UUID):
     return connection.execute(
         """
@@ -943,6 +956,7 @@ def atualizar_participante(
                 sessao_id,
             ),
         ).fetchone()
+        versao_ficha = None
         alterou_vida = (
             payload.vida_atual is not None
             or payload.vida_temporaria is not None
@@ -950,7 +964,7 @@ def atualizar_participante(
             or bool(payload.cura)
         )
         if atual["personagem_id"] and alterou_vida:
-            connection.execute(
+            linha_ficha = connection.execute(
                 """
                 UPDATE personagens
                 SET ficha=jsonb_set(
@@ -969,9 +983,11 @@ def atualizar_participante(
                     versao=versao+1,
                     atualizado_em=CURRENT_TIMESTAMP
                 WHERE id=%s AND status='ativo'
+                RETURNING versao
                 """,
                 (vida_atual, vida_temporaria, vida_atual, atual["personagem_id"]),
-            )
+            ).fetchone()
+            versao_ficha = int(linha_ficha["versao"]) if linha_ficha else versao_ficha
         # Mesma ideia da Vida acima: sem isso, editar Mana no HUD da sessão
         # nunca chegava na ficha, e o jogador via um número diferente do que o
         # mestre acabou de ajustar (ver auditoria 2026-08, achados 8-9).
@@ -983,7 +999,7 @@ def atualizar_participante(
         if payload.mana_temporaria is not None:
             campos_mana["manaTemporaria"] = payload.mana_temporaria
         if atual["personagem_id"] and campos_mana:
-            connection.execute(
+            linha_ficha = connection.execute(
                 """
                 UPDATE personagens
                 SET ficha=jsonb_set(
@@ -995,9 +1011,11 @@ def atualizar_participante(
                     versao=versao+1,
                     atualizado_em=CURRENT_TIMESTAMP
                 WHERE id=%s AND status='ativo'
+                RETURNING versao
                 """,
                 (Jsonb(campos_mana), atual["personagem_id"]),
-            )
+            ).fetchone()
+            versao_ficha = int(linha_ficha["versao"]) if linha_ficha else versao_ficha
         registrar_minimos(connection, sessao_id)
         # Estamina segue o mesmo caminho da Mana: o que o Mestre ajusta no HUD
         # tem que chegar na ficha, senão o jogador vê outro número.
@@ -1007,7 +1025,7 @@ def atualizar_participante(
         if payload.estamina_temporaria is not None:
             campos_estamina["estaminaTemporaria"] = payload.estamina_temporaria
         if atual["personagem_id"] and campos_estamina:
-            connection.execute(
+            linha_ficha = connection.execute(
                 """
                 UPDATE personagens
                 SET ficha=jsonb_set(
@@ -1019,12 +1037,20 @@ def atualizar_participante(
                     versao=versao+1,
                     atualizado_em=CURRENT_TIMESTAMP
                 WHERE id=%s AND status='ativo'
+                RETURNING versao
                 """,
                 (Jsonb(campos_estamina), atual["personagem_id"]),
-            )
+            ).fetchone()
+            versao_ficha = int(linha_ficha["versao"]) if linha_ficha else versao_ficha
         versao = _tocar(connection, sessao_id)
         campanha_id = sessao["campanha_id"]
     live_session.publicar(campanha_id, "participante_atualizado", versao)
+    if versao_ficha is not None:
+        # A ficha do jogador mudou por aqui: avisa a ficha aberta para buscar a
+        # versão nova, senão o próximo autosave dela vira conflito.
+        _avisar_fichas_alteradas(
+            campanha_id, [{"personagem_id": atual["personagem_id"], "versao": versao_ficha}],
+        )
     return {"participante": dict(row), "versao": versao}
 
 
@@ -1370,7 +1396,7 @@ def controlar_turno(
         )
         if nova_rodada:
             _passar_rodada_condicoes(connection, sessao_id)
-        cansados: list[str] = []
+        cansados: list[dict] = []
         if payload.acao == "iniciar":
             iniciar_marcas(connection, sessao_id)
         elif payload.acao == "encerrar":
@@ -1396,10 +1422,11 @@ def controlar_turno(
         elif payload.acao == "encerrar":
             registrar_evento(connection, campanha_id, sessao_id, "combate", "O combate terminou.")
             if cansados:
+                nomes = ", ".join(item["nome"] for item in cansados)
                 registrar_evento(
                     connection, campanha_id, sessao_id, "combate",
-                    f"Combate intenso: {', '.join(cansados)} ganha 1 de Cansaço." if len(cansados) == 1
-                    else f"Combate intenso: {', '.join(cansados)} ganham 1 de Cansaço.",
+                    f"Combate intenso: {nomes} ganha 1 de Cansaço." if len(cansados) == 1
+                    else f"Combate intenso: {nomes} ganham 1 de Cansaço.",
                 )
         elif payload.acao in ("proximo", "anterior") and em_combate and da_vez:
             escondida = da_vez["tipo"] == "inimigo" and da_vez["visibilidade"] in ("oculto", "desconhecido")
@@ -1408,6 +1435,9 @@ def controlar_turno(
                 connection, campanha_id, sessao_id, "turno",
                 f"Rodada {rodada}: vez de {quem}.",
             )
+    # A ficha de quem cansou mudou no servidor: sem este aviso a ficha aberta
+    # ficaria com a versão antiga e o próximo autosave viraria conflito.
+    _avisar_fichas_alteradas(campanha_id, cansados)
     live_session.publicar(
         campanha_id,
         "turno",

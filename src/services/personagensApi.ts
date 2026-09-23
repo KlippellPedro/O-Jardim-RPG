@@ -58,6 +58,8 @@ export interface AliadoComplexoResumo {
   vida_maxima: number;
   mana_atual: number;
   mana_maxima: number;
+  estamina_atual?: number;
+  estamina_maxima?: number;
   defesa: number;
   movimento: number | string;
   iniciativa: number;

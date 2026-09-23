@@ -4,6 +4,7 @@ dano -> encerrar -> +1 de Cansaço, uma vez por cena."""
 
 from __future__ import annotations
 
+import json
 import os
 import unittest
 import uuid
@@ -13,6 +14,7 @@ from psycopg import sql
 from psycopg.conninfo import make_conninfo
 from psycopg.types.json import Jsonb
 
+from core import live_session
 from core.combate_intenso import combate_foi_intenso
 from core.database import Database
 from core.dependencies import AuthenticatedUser
@@ -187,6 +189,52 @@ class CombateIntensoE2ETests(unittest.TestCase):
         self._turno(sessao_id, actor, "iniciar")
         self._turno(sessao_id, actor, "encerrar")
         self.assertEqual(self._cansaco(personagem_id), 1)
+
+    def _eventos(self, fila):
+        eventos = []
+        while not fila.empty():
+            eventos.append(json.loads(fila.get_nowait()))
+        return eventos
+
+    def test_quem_cansou_recebe_aviso_de_ficha_atualizada_para_a_ficha_aberta_sincronizar(self):
+        campanha_id, personagem_id, actor, sessao_id, participante_id = self._mesa("ci-aviso@example.com")
+        self._turno(sessao_id, actor, "iniciar")
+        self._dano(sessao_id, participante_id, actor, 60)
+        fila = live_session.assinar(campanha_id)
+        try:
+            self._turno(sessao_id, actor, "encerrar")
+            avisos = [e for e in self._eventos(fila) if e["tipo"] == "personagem_atualizado"]
+        finally:
+            live_session.cancelar(campanha_id, fila)
+        self.assertEqual([a["personagem_id"] for a in avisos], [str(personagem_id)])
+        with self.database.connection() as connection:
+            versao = connection.execute("SELECT versao FROM personagens WHERE id=%s", (personagem_id,)).fetchone()["versao"]
+        self.assertEqual(avisos[0]["versao"], versao)
+
+    def test_combate_sem_cansaco_nao_avisa_nenhuma_ficha(self):
+        campanha_id, _, actor, sessao_id, _ = self._mesa("ci-sem-aviso@example.com")
+        self._turno(sessao_id, actor, "iniciar")
+        fila = live_session.assinar(campanha_id)
+        try:
+            self._turno(sessao_id, actor, "encerrar")
+            avisos = [e for e in self._eventos(fila) if e["tipo"] == "personagem_atualizado"]
+        finally:
+            live_session.cancelar(campanha_id, fila)
+        self.assertEqual(avisos, [])
+
+    def test_hud_do_mestre_avisa_a_ficha_aberta_quando_espelha_o_recurso(self):
+        campanha_id, personagem_id, actor, sessao_id, participante_id = self._mesa("ci-hud@example.com")
+        fila = live_session.assinar(campanha_id)
+        try:
+            atualizar_participante(
+                sessao_id, participante_id, ParticipantUpdateInput(estamina_atual=20, mana_atual=10),
+                user=actor, database=self.database,
+            )
+            avisos = [e for e in self._eventos(fila) if e["tipo"] == "personagem_atualizado"]
+        finally:
+            live_session.cancelar(campanha_id, fila)
+        self.assertEqual(len(avisos), 1)
+        self.assertEqual(avisos[0]["personagem_id"], str(personagem_id))
 
     def test_cansaco_nao_passa_de_seis(self):
         _, personagem_id, actor, sessao_id, participante_id = self._mesa("ci-teto@example.com", cansaco=6)

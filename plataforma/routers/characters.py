@@ -565,6 +565,9 @@ def _complex_ally_summary(row: dict) -> dict:
     current_life = int(number(resources.get("vida_atual"), maximum_life))
     maximum_mana = max(0, int(number(resources.get("mana_maxima"), 0)))
     current_mana = max(0, min(maximum_mana, int(number(resources.get("mana_atual"), maximum_mana))))
+    # Ficha que ainda não calculou a Estamina fica com máxima 0 e sem cartão.
+    maximum_stamina = max(0, int(number(resources.get("estamina_maxima"), 0)))
+    current_stamina = max(0, min(maximum_stamina, int(number(resources.get("estamina_atual"), maximum_stamina))))
     return {
         "personagem_id": str(row["id"]),
         "nome": row.get("nome") or "Aliado Desconhecido",
@@ -573,6 +576,8 @@ def _complex_ally_summary(row: dict) -> dict:
         "vida_maxima": maximum_life,
         "mana_atual": current_mana,
         "mana_maxima": maximum_mana,
+        "estamina_atual": current_stamina,
+        "estamina_maxima": maximum_stamina,
         "defesa": int(number(derived.get("defesaNatural"), 0))
         + bonus_escolhas_habilidade(sheet, "combate", "defesa"),
         "movimento": number(derived.get("movimento"), 9),

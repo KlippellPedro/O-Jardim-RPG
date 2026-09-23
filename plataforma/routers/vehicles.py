@@ -32,8 +32,15 @@ router = APIRouter(prefix="/campanhas/{campaign_id}/veiculos", tags=["veiculos-c
 _RARIDADES_VEICULO = {"comum", "incomum", "raro", "epico", "lendario"}
 
 
+# A Frota só conhece cinco degraus. A Relíquia da Criação da Loja fica acima do
+# Lendário, e cair em "comum" deixaria a manutenção do veículo mais barata que a
+# de um carro de rua, então ela entra no degrau mais alto que a Frota tem.
+_EQUIVALENTE_NA_FROTA = {"reliquia da criacao": "lendario", "reliquia": "lendario"}
+
+
 def _vehicle_rarity(dados: dict) -> str:
     value = str(dados.get("raridade", "comum")).strip().lower()
+    value = _EQUIVALENTE_NA_FROTA.get(value, value)
     return value if value in _RARIDADES_VEICULO else "comum"
 
 

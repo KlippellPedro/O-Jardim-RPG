@@ -80,9 +80,10 @@ def combate_foi_intenso(marcas: dict | None, vida_maxima, mana_maxima, estamina_
     )
 
 
-def encerrar_combate_e_cansar(connection, sessao_id) -> list[str]:
+def encerrar_combate_e_cansar(connection, sessao_id) -> list[dict]:
     """Soma 1 de Cansaço nas fichas dos personagens cujo combate foi intenso e
-    limpa as marcas de todos. Devolve os nomes de quem cansou, para o replay."""
+    limpa as marcas de todos. Devolve nome, id e nova versão da ficha de quem
+    cansou: o nome vai para o replay e o resto avisa a ficha aberta."""
     linhas = connection.execute(
         """
         SELECT id, personagem_id, nome, combate_marcas,
@@ -92,7 +93,7 @@ def encerrar_combate_e_cansar(connection, sessao_id) -> list[str]:
         """,
         (sessao_id,),
     ).fetchall()
-    cansados: list[str] = []
+    cansados: list[dict] = []
     for linha in linhas:
         if not linha["personagem_id"]:
             continue
@@ -100,7 +101,7 @@ def encerrar_combate_e_cansar(connection, sessao_id) -> list[str]:
             linha["combate_marcas"], linha["vida_maxima"], linha["mana_maxima"], linha["estamina_maxima"]
         ):
             continue
-        connection.execute(
+        atualizado = connection.execute(
             """
             UPDATE personagens
             SET ficha=jsonb_set(
@@ -115,10 +116,16 @@ def encerrar_combate_e_cansar(connection, sessao_id) -> list[str]:
                 versao=versao+1,
                 atualizado_em=CURRENT_TIMESTAMP
             WHERE id=%s AND status='ativo'
+            RETURNING versao
             """,
             (CANSACO_MAXIMO, linha["personagem_id"]),
-        )
-        cansados.append(str(linha["nome"]))
+        ).fetchone()
+        if atualizado:
+            cansados.append({
+                "nome": str(linha["nome"]),
+                "personagem_id": linha["personagem_id"],
+                "versao": int(atualizado["versao"]),
+            })
     connection.execute(
         "UPDATE sessao_participantes SET combate_marcas=NULL WHERE sessao_id=%s",
         (sessao_id,),

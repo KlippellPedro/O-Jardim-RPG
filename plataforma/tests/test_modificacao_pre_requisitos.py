@@ -43,12 +43,12 @@ class ModificacaoPreRequisitosTests(unittest.TestCase):
         self.assertTrue(all(_atende_requisito_legado(r, _ficha(forca=8, destreza=14), 1) for r in pre_requisitos))
         self.assertFalse(all(_atende_requisito_legado(r, _ficha(forca=8, destreza=8), 1) for r in pre_requisitos))
 
-    def test_todas_as_15_modificacoes_com_pre_requisito_tem_a_forma_esperada(self):
+    def test_todas_as_20_modificacoes_com_pre_requisito_tem_a_forma_esperada(self):
         com_pre_requisito = [
             e["conteudo"] for e in _CATALOGO["entradas"]
             if e["tipo"] == "modificacao" and e["conteudo"].get("pre_requisito")
         ]
-        self.assertEqual(len(com_pre_requisito), 15)
+        self.assertEqual(len(com_pre_requisito), 20)
         for conteudo in com_pre_requisito:
             pre_requisitos = conteudo["pre_requisitos"]
             self.assertIsInstance(pre_requisitos, list)
