@@ -171,7 +171,7 @@ export const PersonagemWantedCard: React.FC<PersonagemWantedCardProps> = ({
         )}
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-1.5 uppercase tracking-wide text-[#5a4a2f]"><Brain size={12} /> Sanidade</span>
-          <span className="font-bold">{sanidadeAtual ?? '-'}</span>
+          <span className="font-bold">{sanidadeAtual ?? 'N/D'}</span>
         </div>
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-1.5 uppercase tracking-wide text-[#5a4a2f]"><Star size={12} /> Fama</span>

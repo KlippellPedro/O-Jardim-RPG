@@ -60,7 +60,7 @@ function actionLabel(action: string): string {
 }
 
 function formatValue(value: unknown): string {
-  if (value === undefined) return '-';
+  if (value === undefined) return 'N/D';
   if (value === null) return 'vazio';
   if (typeof value === 'boolean') return value ? 'sim' : 'não';
   if (typeof value === 'string' || typeof value === 'number') return String(value);

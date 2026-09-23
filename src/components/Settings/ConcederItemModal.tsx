@@ -122,7 +122,7 @@ export const ConcederItemModal: React.FC<ConcederItemModalProps> = ({
     <FichaModal isOpen={isOpen} onClose={onClose} title="Conceder da Loja" size="xl">
       <div className="flex flex-col gap-5">
         <p className="text-sm text-gray-400">
-          Entrega qualquer coisa do catálogo direto na ficha de um personagem - item, criatura, propriedade - sem
+          Entrega qualquer coisa do catálogo direto na ficha de um personagem (item, criatura, propriedade) sem
           cobrar moeda e sem olhar nível de loja ou requisito de classe. A escolha é sua.
         </p>
 

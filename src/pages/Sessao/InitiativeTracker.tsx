@@ -283,7 +283,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
               ) : null}
               <span className="flex min-w-0 items-center gap-1 rounded-md bg-white/[0.035] px-1.5 py-1 text-white/45" title="Defesa">
                 <Shield size={10} className="shrink-0" />
-                <span className="truncate">{entity.defesa ?? '-'}</span>
+                <span className="truncate">{entity.defesa ?? 'N/D'}</span>
               </span>
             </div>
             {hpRatio !== null ? (

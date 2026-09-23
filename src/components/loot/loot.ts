@@ -76,7 +76,7 @@ export const efeitosDaCarta = (nivel: number): EfeitosCarta => ({
 
 // Cartas que ainda não foram reveladas. Compra na Loja não abre a carta na hora:
 // ela espera guardada em ficha.lootPendente (sincronizada pelo autosave normal
-// da ficha) até a pessoa abrir a ficha de quem comprou - em qualquer aparelho,
+// da ficha) até a pessoa abrir a ficha de quem comprou, em qualquer aparelho,
 // não só no navegador onde a compra foi feita.
 const LIMITE_PENDENTES = 30;
 

@@ -107,7 +107,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       )}
                       {modo === 'contratar' ? (
                         <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest mb-2 border border-emerald-500/20 bg-emerald-900/20 px-2 py-0.5 rounded-md inline-block">
-                          Contratação{item.mensalidade ? ` - ${item.mensalidade.valorOriginal.toLocaleString('pt-BR')} ${getCurrencySymbol(item.mensalidade.moedaPreco)}/mês` : ''}
+                          Contratação{item.mensalidade ? `: ${item.mensalidade.valorOriginal.toLocaleString('pt-BR')} ${getCurrencySymbol(item.mensalidade.moedaPreco)}/mês` : ''}
                         </div>
                       ) : item.categoria === 'Mercenários' ? (
                         <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2 border border-white/10 bg-white/5 px-2 py-0.5 rounded-md inline-block">

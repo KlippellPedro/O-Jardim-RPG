@@ -103,7 +103,7 @@ const RosterCard: React.FC<RosterCardProps> = ({ entity, metrics, active, select
         <span className="session-roster-card__subline">
           <span>{entityTypeLabel(entity.tipo)}</span>
           <span aria-hidden="true">·</span>
-          <span>{metrics.defense != null ? `DEF ${metrics.defense}` : 'DEF -'}</span>
+          <span>{metrics.defense != null ? `DEF ${metrics.defense}` : 'DEF N/D'}</span>
           {metrics.manaCurrent != null || metrics.manaMax != null ? (
             <>
               <span aria-hidden="true">·</span>
@@ -332,7 +332,7 @@ export const ActiveTurnCard: React.FC = () => {
               <div className="session-focus-card__defense">
                 <Shield size={16} />
                 <span>Defesa</span>
-                <strong>{selectedMetrics.defense ?? '-'}</strong>
+                <strong>{selectedMetrics.defense ?? 'N/D'}</strong>
               </div>
             </div>
 
