@@ -1680,4 +1680,39 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        44,
+        "estamina_dos_participantes_da_sessao",
+        (
+            # Estamina é o terceiro recurso (Vida, Mana, Estamina): poder físico
+            # gasta dela. Mesmo desenho da Mana: atual e máxima anuláveis (NPC
+            # sem Estamina não mostra a barra) e o extra acima do máximo à parte.
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS estamina_atual INTEGER
+            """,
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS estamina_maxima INTEGER
+            """,
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS estamina_temporaria INTEGER NOT NULL DEFAULT 0
+                CHECK (estamina_temporaria >= 0)
+            """,
+        ),
+    ),
+    (
+        45,
+        "marcas_de_combate_intenso",
+        (
+            # Valores de partida e piores pontos de Vida/Mana/Estamina durante o
+            # combate; ao encerrar, quem cruzou um gatilho de combate intenso
+            # ganha 1 de Cansaço (core/combate_intenso.py). NULL fora de combate.
+            """
+            ALTER TABLE sessao_participantes
+            ADD COLUMN IF NOT EXISTS combate_marcas JSONB
+            """,
+        ),
+    ),
 )

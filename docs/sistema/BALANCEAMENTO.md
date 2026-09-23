@@ -108,6 +108,52 @@ mudança dos dados não comprova, por si só, equilíbrio em mesa.
   [integração](INTEGRACAO.md#veiculos-e-propriedades), não motivo para reprecificar
   categorias inteiras pela simples conversão de moeda.
 
+## Estamina: terceiro recurso (2026-09)
+
+Poderes físicos deixaram de gastar Mana. A Mana ficou para o que é místico e a
+Estamina paga golpe, postura, salto e esforço do corpo. Cansaço continua sendo
+outra conta, sem ligação mecânica com a Estamina.
+
+- **Orçamento:** cada classe gasta 9 pontos por nível em Vida + Mana + Estamina
+  (era 7 em Vida + Mana). A Vida de cada classe não mudou; o aumento foi
+  decisão deliberada. `npm run audit:balance` e `classProgression.test.ts`
+  exigem 9 nas 29 classes, com Mana e Estamina no mínimo 1.
+- **Fórmula:** Estamina base é 3 × o maior entre Mod.Força e Mod.Destreza, mais
+  o ganho de Estamina da classe por nível. Fluxo não entra: é o atributo de
+  controle mágico.
+- **Custo de poder:** cada poder declara `custo_mana` ou `custo_estamina`, nunca
+  os dois. Custo de habilidade vive só em texto (`descricao`, `usos`, `dano`).
+- **Recuperação:** descanso completo e Relaxar devolvem Estamina junto com Mana.
+  Efeitos de cura em massa citam Estamina; o Elixir de Mana e Isso é Bom
+  seguem só em Mana.
+- **Revisão de equilíbrio:** simulação de usos de poder por descanso, antes e
+  depois, nos níveis 1, 5, 10 e 20. A distância entre a classe comum mais forte
+  e a mais fraca caiu de 4,9x para menos de 3x, e o teste
+  `estaminaBalanceamento.test.ts` trava esse limite. Médico (3/3/3),
+  Cozinheiro (3/4/2), Piloto (4/4/1) e Caçador (4/3/2) foram reajustados depois
+  da primeira divisão, que os deixava fracos ou fortes demais.
+- **Conjuradoras:** ganharam menos (cerca de 1,2x), porque quase todo o ponto
+  novo foi para a Mana e a Estamina ficou em 1. Elas ainda gastam Mana em
+  magias, e a diferença é intencional.
+- **Habilidades de classe:** o custo de ativação passou a ter campo próprio
+  (`custo_mana` ou `custo_estamina`, no estágio ou na habilidade). O custo vale
+  o do último estágio alcançado que declara um (Provocar sobe de 4 a 7), e a
+  aba Habilidades mostra o selo de custo e o botão Usar, que debita o recurso.
+  Custos que reduzem outro custo (Cartista, Elementarista) seguem só em texto.
+- **Sessão ao Vivo:** participantes ganharam Estamina (atual, máxima e extra
+  temporário, migração 44), com barra no HUD, edição pelo Mestre e espelho de
+  volta na ficha. Uso de poder de Estamina debita o HUD como a Mana já fazia.
+  Ficha que ainda não calculou a Estamina entra sem barra até o dono abri-la.
+  Monstro do Bestiário entra sem Estamina; o Mestre preenche no editor.
+- **Combate intenso automático:** ao iniciar o combate o servidor fotografa
+  Vida, Mana e Estamina de cada participante e guarda o pior ponto (migração
+  45); ao encerrar, quem desceu à metade da Vida, entrou em Morrendo ou gastou
+  metade da Mana ou da Estamina ganha 1 de Cansaço (teto 6), uma vez por cena.
+  O botão manual do Descanso continua para fora da sessão.
+- **Únicos do Jardim:** seis passaram a gastar Estamina (Golpe Sem Nome, Respiro
+  Roubado, Corte que Lembra, Escudo Emprestado, Passo Fora do Tempo e Sombra
+  que Aprende). O preço em Sementes não mudou.
+
 ## Pendências para a próxima revisão de design
 
 | Questão | Próximo passo |

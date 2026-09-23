@@ -252,6 +252,7 @@ const COR_RASTRO: Record<string, string> = {
   vermelho: 'rgba(254, 202, 202, 0.85)',
   azul: 'rgba(186, 230, 253, 0.85)',
   roxo: 'rgba(221, 214, 254, 0.85)',
+  verde: 'rgba(167, 243, 208, 0.85)',
   cinza: 'rgba(226, 232, 240, 0.7)',
 };
 
@@ -268,6 +269,7 @@ const COR_TEMPORARIO: Record<string, { de: string; ate: string }> = {
   vermelho: { de: '#b45309', ate: '#fde68a' },
   azul: { de: '#0e7490', ate: '#a5f3fc' },
   roxo: { de: '#a21caf', ate: '#f5d0fe' },
+  verde: { de: '#0f766e', ate: '#99f6e4' },
   cinza: { de: '#475569', ate: '#e2e8f0' },
 };
 
@@ -280,6 +282,7 @@ export const ResourceBar = ({ label, color, current, max, temporario = 0, onLimp
     vermelho: { bg: 'bg-gradient-to-r from-[#8b1c2b] to-[#dc2626]', glow: 'shadow-[0_0_15px_rgba(220,38,38,0.4)]' },
     azul: { bg: 'bg-gradient-to-r from-[#0284c7] to-[#38bdf8]', glow: 'shadow-[0_0_15px_rgba(56,189,248,0.4)]' },
     roxo: { bg: 'bg-gradient-to-r from-[#5b21b6] to-[#a855f7]', glow: 'shadow-[0_0_15px_rgba(168,85,247,0.4)]' },
+    verde: { bg: 'bg-gradient-to-r from-[#047857] to-[#34d399]', glow: 'shadow-[0_0_15px_rgba(52,211,153,0.4)]' },
     cinza: { bg: 'bg-gradient-to-r from-[#334155] to-[#94a3b8]', glow: 'shadow-[0_0_15px_rgba(148,163,184,0.3)]' },
   };
   const theme = bgColors[color] || bgColors.cinza;
@@ -340,7 +343,7 @@ export const ResourceBar = ({ label, color, current, max, temporario = 0, onLimp
   const perda = evento ? (cansaco ? evento.delta > 0 : evento.delta < 0) : false;
   const ganho = evento ? !perda : false;
   const tipoFlutuante = evento
-    ? cansaco ? 'cansaco' : perda ? (label === 'Mana' ? 'mana' : label === 'Sanidade' ? 'sanidade' : 'dano') : 'cura'
+    ? cansaco ? 'cansaco' : perda ? (label === 'Mana' ? 'mana' : label === 'Estamina' ? 'estamina' : label === 'Sanidade' ? 'sanidade' : 'dano') : 'cura'
     : 'cura';
   const forcaTremor = evento ? Math.min(10, 3 + (Math.abs(evento.delta) / maxSeguro) * 40) : 0;
   const esvaziada = !cansaco && valorAtual <= 0;
@@ -377,7 +380,7 @@ export const ResourceBar = ({ label, color, current, max, temporario = 0, onLimp
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between items-center">
-        <span className="text-xs font-bold uppercase tracking-widest" style={{ color: color === 'vermelho' ? '#e53935' : color === 'azul' ? '#29b6f6' : color === 'roxo' ? '#b39ddb' : '#9e9e9e' }}>{label}</span>
+        <span className="text-xs font-bold uppercase tracking-widest" style={{ color: color === 'vermelho' ? '#e53935' : color === 'azul' ? '#29b6f6' : color === 'roxo' ? '#b39ddb' : color === 'verde' ? '#34d399' : '#9e9e9e' }}>{label}</span>
         <div className="flex items-center gap-1">
           <button type="button" className="opacity-50 transition-opacity hover:opacity-100" onClick={onHelpClick} aria-label={`Ajuda sobre ${label}`}>
             <HelpCircle size={14} className="text-[#c7a44c]" />
@@ -438,7 +441,7 @@ export const ResourceBar = ({ label, color, current, max, temporario = 0, onLimp
               className="barra-faisca z-[6]"
               style={{
                 '--fx': `${x}%`,
-                '--fc': color === 'azul' ? '#7dd3fc' : color === 'roxo' ? '#c4b5fd' : '#4ade80',
+                '--fc': color === 'azul' ? '#7dd3fc' : color === 'roxo' ? '#c4b5fd' : color === 'verde' ? '#6ee7b7' : '#4ade80',
                 '--fa': `${indice * 0.05}s`,
                 '--fd': `${indice % 2 ? 8 : -8}px`,
               } as CSSProperties}

@@ -26,13 +26,14 @@ export interface IResumoFicha {
   recursos: {
     vida: { atual: number | null; maximo: number };
     mana: { atual: number | null; maximo: number };
+    estamina: { atual: number | null; maximo: number };
     sanidade: number | null;
     defesa: number;
     iniciativa: number;
     movimento: number;
   };
   pericias: Array<{ titulo: string; grau: string }>;
-  poderes: Array<{ titulo: string; custoMana: number; descricao: string }>;
+  poderes: Array<{ titulo: string; custoMana: number; custoEstamina: number; descricao: string }>;
   habilidades: Array<{ titulo: string; origem: string }>;
   inventario: Array<{ titulo: string; quantidade: number; equipado: boolean }>;
   carteira: Array<{ moeda: string; saldo: number }>;
@@ -83,6 +84,7 @@ export function montarResumoFicha(character: any, agora: Date = new Date()): IRe
   const status = obterStatusFicha(ficha);
   const vidaMaxima = Number(derivados.vida) || 0;
   const manaMaxima = Number(derivados.mana) || 0;
+  const estaminaMaxima = Number(derivados.estamina) || 0;
 
   const graus = grausComConcedidos(ficha);
   const pericias = PERICIAS_CATALOGO
@@ -95,6 +97,7 @@ export function montarResumoFicha(character: any, agora: Date = new Date()): IRe
   const poderes = poderesSelecionados(ficha).map((poder) => ({
     titulo: poder.titulo,
     custoMana: poder.custoMana ?? 0,
+    custoEstamina: poder.custoEstamina ?? 0,
     descricao: poder.descricao,
   }));
   const habilidades = habilidadesAutomaticas(ficha)
@@ -143,6 +146,7 @@ export function montarResumoFicha(character: any, agora: Date = new Date()): IRe
     recursos: {
       vida: { atual: numeroOuNulo(status.vidaAtual), maximo: vidaMaxima },
       mana: { atual: numeroOuNulo(status.manaAtual), maximo: manaMaxima },
+      estamina: { atual: numeroOuNulo(status.estaminaAtual), maximo: estaminaMaxima },
       sanidade: numeroOuNulo(status.sanidadeAtual),
       defesa: Number(derivados.defesaNatural) || 0,
       iniciativa: Number(derivados.iniciativa) || 0,

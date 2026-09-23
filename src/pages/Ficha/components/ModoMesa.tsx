@@ -47,9 +47,10 @@ interface IModoMesaProps {
   personagemId: string;
   vida: IRecursoMesa;
   mana: IRecursoMesa;
+  estamina: IRecursoMesa;
   sanidade: IRecursoMesa;
   cansaco: IRecursoMesa;
-  onStatus: (campo: 'vidaAtual' | 'manaAtual' | 'sanidadeAtual' | 'cansacoAtual', delta: number, maximo: number) => void;
+  onStatus: (campo: 'vidaAtual' | 'manaAtual' | 'estaminaAtual' | 'sanidadeAtual' | 'cansacoAtual', delta: number, maximo: number) => void;
   defesa: number;
   iniciativa: number;
   movimento: number;
@@ -140,6 +141,7 @@ export const ModoMesa = ({
   personagemId,
   vida,
   mana,
+  estamina,
   sanidade,
   cansaco,
   onStatus,
@@ -242,6 +244,7 @@ export const ModoMesa = ({
       <div className="flex-1 space-y-4 overflow-y-auto overscroll-contain px-4 pb-6 pt-4">
         <CartaoRecurso rotulo="Vida" cor="#f87171" recurso={vida} onMudar={(delta) => onStatus('vidaAtual', delta, vida.max)} />
         <CartaoRecurso rotulo="Mana" cor="#60a5fa" recurso={mana} onMudar={(delta) => onStatus('manaAtual', delta, mana.max)} />
+        <CartaoRecurso rotulo="Estamina" cor="#34d399" recurso={estamina} onMudar={(delta) => onStatus('estaminaAtual', delta, estamina.max)} />
         <CartaoRecurso rotulo="Sanidade" cor="#c084fc" recurso={sanidade} onMudar={(delta) => onStatus('sanidadeAtual', delta, sanidade.max)} />
 
         <div className="grid grid-cols-3 gap-2">

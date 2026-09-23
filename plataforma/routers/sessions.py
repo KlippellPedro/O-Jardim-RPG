@@ -9,6 +9,7 @@ from psycopg.types.json import Jsonb
 
 from core.audit import record_audit
 from core.character_summary import iniciativa_fixa, sabedoria_desempate, xp_por_vd
+from core.combate_intenso import encerrar_combate_e_cansar, iniciar_marcas, registrar_minimos
 from core.condicoes import decrementar_condicoes, normalizar_condicoes
 from core.database import Database
 from core.dependencies import (
@@ -103,13 +104,34 @@ def _temporarios_da_ficha(ficha) -> tuple[int, int]:
     return extra("vidaTemporaria"), extra("manaTemporaria")
 
 
+def _estamina_da_ficha(ficha) -> tuple[int | None, int | None, int]:
+    """(máxima, atual, extra) de Estamina guardados na ficha. Ficha que ainda
+    não calculou a Estamina devolve máxima None: o participante fica sem barra
+    até o dono abrir a ficha, em vez de aparecer com 0 de 0."""
+    derivados = ficha.get("derivados") if isinstance(ficha, dict) and isinstance(ficha.get("derivados"), dict) else {}
+    status_ficha = ficha.get("status") if isinstance(ficha, dict) and isinstance(ficha.get("status"), dict) else {}
+
+    def inteiro(valor) -> int | None:
+        return int(valor) if isinstance(valor, (int, float)) and not isinstance(valor, bool) else None
+
+    maxima = inteiro(derivados.get("estamina"))
+    if maxima is None:
+        return None, None, 0
+    maxima = max(0, maxima)
+    atual = inteiro(status_ficha.get("estaminaAtual"))
+    atual = maxima if atual is None else max(0, min(atual, maxima))
+    extra = inteiro(status_ficha.get("estaminaTemporaria"))
+    return maxima, atual, max(0, extra or 0)
+
+
 def _participantes(connection, sessao_id: UUID):
     return connection.execute(
         """
         SELECT id, personagem_id, nome, tipo, iniciativa, vida_atual,
                vida_maxima, condicoes, anotacao, visibilidade, ordem, defesa,
                mana_atual, mana_maxima, ataques, vd, pericias,
-               vida_temporaria, mana_temporaria
+               vida_temporaria, mana_temporaria,
+               estamina_atual, estamina_maxima, estamina_temporaria
         FROM sessao_participantes
         WHERE sessao_id=%s
         ORDER BY ordem, iniciativa DESC, nome
@@ -185,6 +207,9 @@ def _montar_estado(connection, sessao, papel: str, usuario_id: UUID) -> dict:
             publico["mana_maxima"] = item["mana_maxima"]
             publico["vida_temporaria"] = item["vida_temporaria"]
             publico["mana_temporaria"] = item["mana_temporaria"]
+            publico["estamina_atual"] = item["estamina_atual"]
+            publico["estamina_maxima"] = item["estamina_maxima"]
+            publico["estamina_temporaria"] = item["estamina_temporaria"]
             publico["ataques"] = item["ataques"]
             publico["pericias"] = item["pericias"]
         if manda:
@@ -324,15 +349,17 @@ def abrir_sessao(
                         (id, sessao_id, personagem_id, nome, tipo,
                          iniciativa, vida_atual, vida_maxima, mana_atual,
                          mana_maxima, condicoes, ordem,
-                         vida_temporaria, mana_temporaria)
-                    VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                         vida_temporaria, mana_temporaria,
+                         estamina_maxima, estamina_atual, estamina_temporaria)
+                    VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """,
                     (uuid4(), sessao_id, personagem["id"], personagem["nome"],
                      iniciativa_fixa(personagem["ficha"]),
                      min(atual, maximo) if maximo else atual, maximo,
                      mana_atual, mana_maxima,
                      Jsonb(normalizar_condicoes(personagem["ficha"].get("condicoesAtivas"))), ordem,
-                     *_temporarios_da_ficha(personagem["ficha"])),
+                     *_temporarios_da_ficha(personagem["ficha"]),
+                     *_estamina_da_ficha(personagem["ficha"])),
                 )
 
         record_audit(
@@ -749,8 +776,9 @@ def selecionar_personagens(
                     (id, sessao_id, personagem_id, nome, tipo,
                      iniciativa, vida_atual, vida_maxima, mana_atual,
                      mana_maxima, condicoes, ordem,
-                     vida_temporaria, mana_temporaria)
-                VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                     vida_temporaria, mana_temporaria,
+                     estamina_maxima, estamina_atual, estamina_temporaria)
+                VALUES (%s, %s, %s, %s, 'jogador', %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
                     uuid4(), sessao_id, personagem["id"], personagem["nome"],
@@ -760,6 +788,7 @@ def selecionar_personagens(
                     Jsonb(normalizar_condicoes(personagem["ficha"].get("condicoesAtivas"))),
                     proxima_ordem,
                     *_temporarios_da_ficha(personagem["ficha"]),
+                    *_estamina_da_ficha(personagem["ficha"]),
                 ),
             )
             proxima_ordem += 1
@@ -793,8 +822,8 @@ def adicionar_participante(
             INSERT INTO sessao_participantes
                 (id, sessao_id, nome, tipo, iniciativa, vida_atual, vida_maxima,
                  visibilidade, ordem, defesa, mana_atual, mana_maxima, ataques, vd,
-                 pericias)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                 pericias, estamina_atual, estamina_maxima)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 participante_id,
@@ -812,6 +841,8 @@ def adicionar_participante(
                 Jsonb(payload.ataques),
                 payload.vd,
                 Jsonb(payload.pericias),
+                payload.estamina_maxima,
+                payload.estamina_maxima,
             ),
         )
         versao = _tocar(connection, sessao_id)
@@ -834,7 +865,7 @@ def atualizar_participante(
         atual = connection.execute(
             """
             SELECT id, nome, vida_atual, vida_maxima, personagem_id,
-                   vida_temporaria, mana_temporaria
+                   vida_temporaria, mana_temporaria, estamina_temporaria
             FROM sessao_participantes
             WHERE id=%s AND sessao_id=%s FOR UPDATE
             """,
@@ -875,6 +906,9 @@ def atualizar_participante(
                 mana_atual=COALESCE(%s, mana_atual),
                 mana_maxima=COALESCE(%s, mana_maxima),
                 mana_temporaria=COALESCE(%s, mana_temporaria),
+                estamina_atual=COALESCE(%s, estamina_atual),
+                estamina_maxima=COALESCE(%s, estamina_maxima),
+                estamina_temporaria=COALESCE(%s, estamina_temporaria),
                 condicoes=COALESCE(%s, condicoes),
                 ataques=COALESCE(%s, ataques),
                 anotacao=COALESCE(%s, anotacao),
@@ -895,6 +929,9 @@ def atualizar_participante(
                 payload.mana_atual,
                 payload.mana_maxima,
                 payload.mana_temporaria,
+                payload.estamina_atual,
+                payload.estamina_maxima,
+                payload.estamina_temporaria,
                 Jsonb(payload.condicoes) if payload.condicoes is not None else None,
                 Jsonb(payload.ataques) if payload.ataques is not None else None,
                 payload.anotacao,
@@ -960,6 +997,30 @@ def atualizar_participante(
                 WHERE id=%s AND status='ativo'
                 """,
                 (Jsonb(campos_mana), atual["personagem_id"]),
+            )
+        registrar_minimos(connection, sessao_id)
+        # Estamina segue o mesmo caminho da Mana: o que o Mestre ajusta no HUD
+        # tem que chegar na ficha, senão o jogador vê outro número.
+        campos_estamina = {}
+        if payload.estamina_atual is not None:
+            campos_estamina["estaminaAtual"] = payload.estamina_atual
+        if payload.estamina_temporaria is not None:
+            campos_estamina["estaminaTemporaria"] = payload.estamina_temporaria
+        if atual["personagem_id"] and campos_estamina:
+            connection.execute(
+                """
+                UPDATE personagens
+                SET ficha=jsonb_set(
+                        ficha,
+                        '{status}',
+                        COALESCE(ficha->'status', '{}'::jsonb) || %s,
+                        true
+                    ),
+                    versao=versao+1,
+                    atualizado_em=CURRENT_TIMESTAMP
+                WHERE id=%s AND status='ativo'
+                """,
+                (Jsonb(campos_estamina), atual["personagem_id"]),
             )
         versao = _tocar(connection, sessao_id)
         campanha_id = sessao["campanha_id"]
@@ -1309,6 +1370,11 @@ def controlar_turno(
         )
         if nova_rodada:
             _passar_rodada_condicoes(connection, sessao_id)
+        cansados: list[str] = []
+        if payload.acao == "iniciar":
+            iniciar_marcas(connection, sessao_id)
+        elif payload.acao == "encerrar":
+            cansados = encerrar_combate_e_cansar(connection, sessao_id)
         atualizada = _sessao_ativa(connection, sessao["campanha_id"])
         estado = _montar_estado(connection, atualizada, sessao["_papel_comando"], user.id)
         campanha_id = sessao["campanha_id"]
@@ -1329,6 +1395,12 @@ def controlar_turno(
             registrar_evento(connection, campanha_id, sessao_id, "combate", "O combate começou.")
         elif payload.acao == "encerrar":
             registrar_evento(connection, campanha_id, sessao_id, "combate", "O combate terminou.")
+            if cansados:
+                registrar_evento(
+                    connection, campanha_id, sessao_id, "combate",
+                    f"Combate intenso: {', '.join(cansados)} ganha 1 de Cansaço." if len(cansados) == 1
+                    else f"Combate intenso: {', '.join(cansados)} ganham 1 de Cansaço.",
+                )
         elif payload.acao in ("proximo", "anterior") and em_combate and da_vez:
             escondida = da_vez["tipo"] == "inimigo" and da_vez["visibilidade"] in ("oculto", "desconhecido")
             quem = "uma criatura desconhecida" if escondida else da_vez["nome"]

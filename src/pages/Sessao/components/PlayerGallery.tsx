@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Heart, Shield, Sparkles, User, Users, Zap } from 'lucide-react';
+import { Activity, Heart, Shield, Sparkles, User, Users, Zap } from 'lucide-react';
 import { useCharacterStore } from '../../../store/useCharacterStore';
 import { useSessaoStore } from '../../../store/useSessaoStore';
 import { comExtraTemporario } from '../sessionUtils';
@@ -53,6 +53,8 @@ export const PlayerGallery: React.FC = () => {
           const hpCurrent = entity.hpAtual ?? hpMax;
           const manaMax = entity.manaTotal ?? character?.derivados?.mana;
           const manaCurrent = entity.manaAtual ?? manaMax;
+          const estaminaMax = entity.estaminaTotal ?? character?.derivados?.estamina;
+          const estaminaCurrent = entity.estaminaAtual ?? estaminaMax;
           const defense = entity.defesa ?? character?.derivados?.defesaNatural;
 
           return (
@@ -86,7 +88,7 @@ export const PlayerGallery: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
+              <div className={`mt-4 grid gap-2 text-xs ${estaminaCurrent !== undefined ? 'grid-cols-4' : 'grid-cols-3'}`}>
                 <div className="rounded-lg bg-red-400/[0.07] p-2 text-red-200/80">
                   <Heart size={13} className="mb-1" />
                   <span className="block truncate">{hpCurrent !== undefined ? comExtraTemporario(`${hpCurrent}/${hpMax ?? '?'}`, entity.hpTemp) : entity.estado_vida ?? 'N/D'}</span>
@@ -95,6 +97,12 @@ export const PlayerGallery: React.FC = () => {
                   <Zap size={13} className="mb-1" />
                   <span>{manaCurrent !== undefined ? comExtraTemporario(`${manaCurrent}/${manaMax ?? '?'}`, entity.manaTemp) : 'N/D'}</span>
                 </div>
+                {estaminaCurrent !== undefined ? (
+                  <div className="rounded-lg bg-emerald-400/[0.07] p-2 text-emerald-200/80" title="Estamina">
+                    <Activity size={13} className="mb-1" />
+                    <span>{comExtraTemporario(`${estaminaCurrent}/${estaminaMax ?? '?'}`, entity.estaminaTemp)}</span>
+                  </div>
+                ) : null}
                 <div className="rounded-lg bg-white/[0.04] p-2 text-white/60">
                   <Shield size={13} className="mb-1" />
                   <span>{defense ?? 'N/D'}</span>

@@ -70,9 +70,9 @@ Estas palavras aparecem no livro inteiro sem serem explicadas de novo. Se travar
 
 - Atributo | Os sete números que descrevem o personagem: Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo.
 
-- Vida e Mana | Quanto dano você aguenta e quanto combustível mágico você tem.
+- Vida, Mana e Estamina | Quanto dano você aguenta, quanto combustível mágico você tem e quanto fôlego físico você tem para golpes, posturas e esforço.
 
-- Sanidade | Uma terceira barra, de 0 a 100, que cai diante de horror e trauma.
+- Sanidade | Uma barra de 0 a 100 que cai diante de horror e trauma.
 
 - Cansaço | Uma trilha de 0 a 6 que mede desgaste acumulado. Quanto mais alto, pior você joga.
 
@@ -132,7 +132,7 @@ Escolha o nome do personagem e a Árvore à qual ele pertence. A Árvore determi
 
 ### 3. Classe inicial
 
-- Escolha uma classe comum disponível. Ela concede as recompensas do nível 1 e define os ganhos de Vida e Mana por nível.
+- Escolha uma classe comum disponível. Ela concede as recompensas do nível 1 e define os ganhos de Vida, Mana e Estamina por nível.
 
 - A classe inicial começa no nível 1. Entrar em outra classe depois segue as regras de progressão e multiclasse.
 
@@ -168,6 +168,8 @@ Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabe
 
 - **Mana máxima:** máx. 1, (3 × Mod.Sabedoria) + Mana da classe, depois ajustes raciais
 
+- **Estamina máxima:** máx. 1, (3 × o maior entre Mod.Força e Mod.Destreza) + Estamina da classe
+
 - **Sanidade:** 100 de 100
 
 - **Cansaço:** 0 de 6
@@ -190,7 +192,7 @@ Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabe
 
 - Seis perícias estão em Aprendiz, ou sete se o personagem for Humano.
 
-- Vida, Mana, Sanidade, Cansaço, Defesa, Movimento e Iniciativa conferem com o resumo.
+- Vida, Mana, Estamina, Sanidade, Cansaço, Defesa, Movimento e Iniciativa conferem com o resumo.
 
 - O inventário contém um item comum de criação e a carteira contém 20 Lunaris.
 
@@ -220,6 +222,10 @@ Esta é a página de consulta: todas as contas que a ficha faz por você, reunid
 
 - **Mana por nível posterior:** ganho de Mana da classe do nível adquirido, mínimo 1
 
+- **Estamina no nível 1:** máx. 1, (3 × o maior entre Mod.Força e Mod.Destreza) + Estamina da classe
+
+- **Estamina por nível posterior:** ganho de Estamina da classe do nível adquirido
+
 - **Ajustes raciais:** bônus raciais de Vida e Mana são somados depois do cálculo correspondente
 
 - **Defesa Natural:** 10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + ajustes raciais ou naturais
@@ -227,6 +233,18 @@ Esta é a página de consulta: todas as contas que a ficha faz por você, reunid
 - **Movimento:** 9 m + (1,5 m × Mod.Destreza) + ajuste da raça ou morfologia, mínimo 4,5 m
 
 - **Iniciativa:** 10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + bônus
+
+### Mana e Estamina
+
+- **Estamina** paga o que o corpo faz: golpe, postura, salto, grito de comando, trabalho de mãos. A mesma barra serve a quem luta na Força e a quem luta na Destreza, porque a base usa o maior dos dois.
+
+- **Mana** paga o que é místico: magia, ritual, maldição, ilusão e tudo que dobra a realidade. Fluxo não entra na conta da Estamina.
+
+- Cada poder declara o próprio custo, em Mana ou em Estamina, nunca nos dois. Uma classe pode ter poderes dos dois tipos.
+
+- Toda classe ganha os dois recursos por nível, mesmo que um deles seja pequeno. A Mana que sobra numa classe marcial serve para itens e para o que ela plantar no Jardim.
+
+- Cansaço é outra conta. Ele mede desgaste geral e não sobe nem desce porque a Estamina acabou.
 
 ### Nível e multiclasse
 
@@ -1082,7 +1100,7 @@ Recuperação em porcentagem, que continua valendo no nível 30 igual valia no 3
 
 - **Excelente:** santuário protegido, com conforto e cuidado médico ou sobrenatural. Depende de autorização do Mestre.
 
-- Qualidade | PV e Mana | Sanidade | Reduz Cansaço
+- Qualidade | PV, Mana e Estamina | Sanidade | Reduz Cansaço
 
 - Péssima | 10% do máximo | 0% | 1
 
@@ -1096,7 +1114,9 @@ Recuperação em porcentagem, que continua valendo no nível 30 igual valia no 3
 
 ### Relaxar
 
-Recupere 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana
+Recupere 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana e de Estamina
+
+- Uma rolagem só: o mesmo valor volta para a Mana e para a Estamina, cada uma até o próprio máximo.
 
 - Exige uma hora em segurança relativa, e vale uma vez só entre dois descansos completos.
 
@@ -1120,7 +1140,7 @@ Recupere 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana
 
 - 6: Colapso | Inconsciente até reduzir Cansaço.
 
-Um combate conta como intenso quando o personagem desce à metade dos PV, gasta metade da Mana ou entra em Morrendo. A cena inteira gera **1** Cansaço, mesmo que os três gatilhos aconteçam. Seis horas de treino e uma noite em claro também valem 1 cada. Sempre em números inteiros, porque não existe meio Cansaço.
+Um combate conta como intenso quando o personagem desce à metade dos PV, gasta metade da Mana ou da Estamina ou entra em Morrendo. A cena inteira gera **1** Cansaço, mesmo que os três gatilhos aconteçam. Na Sessão ao Vivo o site registra isso sozinho quando o Mestre encerra o combate; fora dela, use o botão do Descanso. Seis horas de treino e uma noite em claro também valem 1 cada. Sempre em números inteiros, porque não existe meio Cansaço.
 
 ## treinar
 
@@ -3024,7 +3044,7 @@ Aqui você escolhe. Cada classe publica uma lista de dez a doze poderes, e a gra
 
 - A escolha é feita na hora que a vaga abre, e vale para sempre. Trocar depois exige uma regra que autorize ou a permissão do Mestre.
 
-- Cada poder declara o próprio custo de Mana. Custo zero quer dizer passivo: ele funciona sem você fazer nada.
+- Cada poder declara o próprio custo, em Mana ou em Estamina. Custo zero quer dizer passivo: ele funciona sem você fazer nada.
 
 - Poder com custo declara também a ação que consome. Sem isso escrito, ele é uma Ação Padrão.
 
@@ -3048,7 +3068,7 @@ Evento não é poder. É um gancho que a classe entrega ao Mestre: uma arena que
 
 - Se o grupo estiver no meio de outra coisa, o evento espera. Ele é oportunidade, não interrupção.
 
-Vale conferir a lista de poderes da classe antes de escolhê-la. Duas classes com a mesma Vida e a mesma Mana podem jogar de formas completamente diferentes por causa do que está nessa lista, e é ela que decide como o personagem vai se sentir no nível 10.
+Vale conferir a lista de poderes da classe antes de escolhê-la. Duas classes com a mesma Vida, a mesma Mana e a mesma Estamina podem jogar de formas completamente diferentes por causa do que está nessa lista, e é ela que decide como o personagem vai se sentir no nível 10.
 
 ## racas
 

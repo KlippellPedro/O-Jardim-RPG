@@ -1,5 +1,6 @@
 import type { EfeitoAtmosfericoFicha } from '../fichaTheme';
 import { formatarModificador, type IResumoFicha } from '../utils/exportarFicha';
+import { custoDePoder, ROTULO_RECURSO } from '../../../services/statusService';
 import { RetratoPersonagem } from './RetratoPersonagem';
 import './fichaImpressao.css';
 
@@ -11,6 +12,11 @@ interface IFichaImprimivelProps {
 }
 
 const valorRecurso = (atual: number | null, maximo: number) => (atual === null ? String(maximo) : `${atual}/${maximo}`);
+
+const custoImpresso = (poder: { custoMana: number; custoEstamina: number }) => {
+  const custo = custoDePoder(poder);
+  return custo.recurso === 'nenhum' ? '' : ` (${custo.valor} de ${ROTULO_RECURSO[custo.recurso].toLocaleLowerCase('pt-BR')})`;
+};
 
 /** A ficha em página A4. Fica escondida na tela e só aparece na impressão
  * (ver fichaImpressao.css). Mostra o essencial para jogar na mesa: recursos,
@@ -43,9 +49,10 @@ export const FichaImprimivel = ({ resumo, destaque, segunda, efeito }: IFichaImp
     </header>
 
     <h2>Recursos</h2>
-    <div className="fi-grade fi-grade--6">
+    <div className="fi-grade fi-grade--7">
       <div className="fi-caixa"><span>Vida</span><strong>{valorRecurso(resumo.recursos.vida.atual, resumo.recursos.vida.maximo)}</strong></div>
       <div className="fi-caixa"><span>Mana</span><strong>{valorRecurso(resumo.recursos.mana.atual, resumo.recursos.mana.maximo)}</strong></div>
+      <div className="fi-caixa"><span>Estamina</span><strong>{valorRecurso(resumo.recursos.estamina.atual, resumo.recursos.estamina.maximo)}</strong></div>
       <div className="fi-caixa"><span>Sanidade</span><strong>{resumo.recursos.sanidade ?? '—'}</strong></div>
       <div className="fi-caixa"><span>Defesa</span><strong>{resumo.recursos.defesa}</strong></div>
       <div className="fi-caixa"><span>Iniciativa</span><strong>{resumo.recursos.iniciativa}</strong></div>
@@ -81,7 +88,7 @@ export const FichaImprimivel = ({ resumo, destaque, segunda, efeito }: IFichaImp
     <h2>Poderes</h2>
     {resumo.poderes.length ? resumo.poderes.map((poder, indice) => (
       <div key={`${poder.titulo}-${indice}`} className="fi-item">
-        <strong>{poder.titulo}</strong>{poder.custoMana > 0 ? ` (${poder.custoMana} de mana)` : ''}
+        <strong>{poder.titulo}</strong>{custoImpresso(poder)}
         <p>{poder.descricao.split('\n')[0]}</p>
       </div>
     )) : <p className="fi-vazio">Nenhum poder de classe escolhido.</p>}

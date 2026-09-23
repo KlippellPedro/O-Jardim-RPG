@@ -12,6 +12,9 @@ interface EntityMetrics {
   manaCurrent?: number;
   manaMax?: number;
   manaExtra?: number;
+  estaminaCurrent?: number;
+  estaminaMax?: number;
+  estaminaExtra?: number;
   defense?: number | null;
   photo?: string;
 }
@@ -32,7 +35,7 @@ interface ResourceBarProps {
   current?: number;
   maximum?: number;
   fallback?: string;
-  tone: 'health' | 'mana';
+  tone: 'health' | 'mana' | 'stamina';
   /** Extra temporário acima do máximo. */
   extra?: number;
 }
@@ -105,6 +108,12 @@ const RosterCard: React.FC<RosterCardProps> = ({ entity, metrics, active, select
             <>
               <span aria-hidden="true">·</span>
               <span>{`MP ${metrics.manaCurrent ?? metrics.manaMax}/${metrics.manaMax ?? '?'}`}</span>
+            </>
+          ) : null}
+          {metrics.estaminaCurrent != null || metrics.estaminaMax != null ? (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>{`EP ${metrics.estaminaCurrent ?? metrics.estaminaMax}/${metrics.estaminaMax ?? '?'}`}</span>
             </>
           ) : null}
         </span>
@@ -222,6 +231,7 @@ export const ActiveTurnCard: React.FC = () => {
     const character = entity.personagemId ? charactersById.get(entity.personagemId) : undefined;
     const hpMax = entity.hpTotal ?? character?.derivados?.vida;
     const manaMax = entity.manaTotal ?? character?.derivados?.mana;
+    const estaminaMax = entity.estaminaTotal ?? character?.derivados?.estamina;
     return {
       hpCurrent: entity.hpAtual ?? hpMax,
       hpMax,
@@ -229,6 +239,9 @@ export const ActiveTurnCard: React.FC = () => {
       manaCurrent: entity.manaAtual ?? manaMax,
       manaMax,
       manaExtra: entity.manaTemp,
+      estaminaCurrent: entity.estaminaAtual ?? estaminaMax,
+      estaminaMax,
+      estaminaExtra: entity.estaminaTemp,
       defense: entity.defesa ?? character?.derivados?.defesaNatural,
       photo: character?.foto ?? undefined,
     };
@@ -313,6 +326,9 @@ export const ActiveTurnCard: React.FC = () => {
                 extra={selectedMetrics.hpExtra}
               />
               <ResourceBar label="Mana" current={selectedMetrics.manaCurrent} maximum={selectedMetrics.manaMax} tone="mana" extra={selectedMetrics.manaExtra} />
+              {selectedMetrics.estaminaCurrent != null || selectedMetrics.estaminaMax != null ? (
+                <ResourceBar label="Estamina" current={selectedMetrics.estaminaCurrent} maximum={selectedMetrics.estaminaMax} tone="stamina" extra={selectedMetrics.estaminaExtra} />
+              ) : null}
               <div className="session-focus-card__defense">
                 <Shield size={16} />
                 <span>Defesa</span>

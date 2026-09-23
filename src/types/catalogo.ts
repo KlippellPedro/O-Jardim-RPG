@@ -25,7 +25,14 @@ export interface IFichaTecnicaClasse {
   usos?: string;
 }
 
-export interface IEstagioHabilidadeClasse extends IFichaTecnicaClasse {
+/** Custo de ativação de uma habilidade. Estamina tem prioridade sobre Mana e
+ * nunca os dois juntos, igual ao custo de poder. */
+export interface ICustoAtivacaoClasse {
+  custo_mana?: number;
+  custo_estamina?: number;
+}
+
+export interface IEstagioHabilidadeClasse extends IFichaTecnicaClasse, ICustoAtivacaoClasse {
   nivel: number;
   titulo?: string;
   descricao: string;
@@ -97,7 +104,7 @@ export interface IEscolhaOpcoesClasse {
   permanente?: boolean;
 }
 
-export interface IHabilidadeClasse extends IFichaTecnicaClasse {
+export interface IHabilidadeClasse extends IFichaTecnicaClasse, ICustoAtivacaoClasse {
   id: string;
   titulo: string;
   descricao?: string;
@@ -127,6 +134,9 @@ export interface IPoderClasse extends IFichaTecnicaClasse {
   id: string;
   titulo: string;
   custo_mana: number;
+  /** Custo físico. Quando presente e maior que zero, o poder gasta Estamina
+   * em vez de Mana (nunca os dois). */
+  custo_estamina?: number;
   descricao: string;
   pre_requisitos?: string[];
   repetivel?: boolean;
@@ -178,6 +188,10 @@ export interface IClasse {
   descricao?: string;
   vida: number;
   mana: number;
+  /** Ganho de Estamina por nível de classe, no mesmo esquema de `vida` e
+   * `mana`. Ausente enquanto a classe ainda não passou pelo orçamento novo
+   * (Vida+Mana+Estamina). */
+  estamina?: number;
   categoria?: string;
   disponibilidade?: string;
   arvore?: string | null;
@@ -252,6 +266,23 @@ export interface IPericiaCatalogo {
   titulo: string;
   atributo: string;
   descricao?: string;
+}
+
+export type TTipoUnicoJardim = 'ataque' | 'suporte' | 'utilidade';
+export type TTierUnicoJardim = 'simples' | 'notavel' | 'extraordinaria' | 'lendaria';
+
+/** Poder ou habilidade única do Jardim: não vem de nenhuma classe, criada só
+ * pra esse catálogo. Preço já é o de compra (fixo, sem depender de nível ou
+ * classe de origem); a venda de volta sai mais barata (ver JARDIM_MARKUP). */
+export interface IUnicoJardim extends IFichaTecnicaClasse {
+  id: string;
+  titulo: string;
+  tipo: TTipoUnicoJardim;
+  tier: TTierUnicoJardim;
+  custoSementes: number;
+  custo_mana: number;
+  custo_estamina?: number;
+  descricao: string;
 }
 
 export interface ICatalogo {

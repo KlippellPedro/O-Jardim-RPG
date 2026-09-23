@@ -272,10 +272,11 @@ function calcularDerivadosBase(
   const atributosEfetivos = raca ? aplicarAjustesAtributosRaciais(atributosFinais, raca, escolhaRacial) : atributosFinais;
   const metadeNivel = Math.floor(Math.max(1, Number(nivel) || 1) / 2);
   
+  const modForca = modificador(atributosEfetivos.forca);
   const modDestreza = modificador(atributosEfetivos.destreza);
   const modConstituicao = modificador(atributosEfetivos.constituicao);
   const modSabedoria = modificador(atributosEfetivos.sabedoria);
-  
+
   const varianteRacial = obterVarianteRacial(raca, escolhaRacial);
   const opcoesRaciais = obterOpcoesRaciaisSelecionadas(raca, escolhaRacial);
   const fragmentosExpressos = obterFragmentosRaciaisExpressos(raca, escolhaRacial);
@@ -339,10 +340,15 @@ function calcularDerivadosBase(
 
   const vidaBase = (4 * modConstituicao) + bonusVidaRacial + bonusVidaVariantePorNivel + bonusVidaModificacoes;
   const manaBase = (3 * modSabedoria) + bonusManaRacial;
+  // Estamina é o recurso do corpo, então acompanha o melhor entre Força e
+  // Destreza (quem luta na força e quem luta na agilidade rendem igual). Fluxo
+  // não serve: nas regras ele é o atributo de controle mágico, o oposto disso.
+  const estaminaBase = 3 * Math.max(modForca, modDestreza);
 
   return {
     vida: limitarRecursos ? Math.max(1, vidaBase) : vidaBase,
     mana: limitarRecursos ? Math.max(1, manaBase) : manaBase,
+    estamina: limitarRecursos ? Math.max(1, estaminaBase) : estaminaBase,
     movimento: Math.max(4.5, movimentoBase + bonusMovimentoModificacoes),
     defesaNatural: 10 + metadeNivel + modDestreza + bonusDefesaModificacoes + bonusDefesaFragmentos + bonusDefesaRacial,
     iniciativa: 10 + metadeNivel + modDestreza,
@@ -375,6 +381,7 @@ export function calcularDerivadosComClasses(
   const derivados = calcularDerivadosBase(atributosFinais, raca, nivelParaEscala, escolhaRacial, false);
   let vida = derivados.vida;
   let mana = derivados.mana;
+  let estamina = derivados.estamina;
   let recursosDefinidos = true;
 
   classes.forEach((referencia) => {
@@ -386,12 +393,17 @@ export function calcularDerivadosComClasses(
     const niveisComGanho = Math.max(0, Math.trunc(Number(referencia.nivel) || 0));
     vida += niveisComGanho * Math.max(1, Number(classe.vida));
     mana += niveisComGanho * Math.max(1, Number(classe.mana));
+    // Sem o piso de 1 por nível que Vida e Mana têm: classe que ainda não
+    // declarou `estamina` no catálogo simplesmente não soma nada por nível, em
+    // vez de ganhar um ponto de graça antes do orçamento novo ser definido.
+    estamina += niveisComGanho * Math.max(0, Number(classe.estamina) || 0);
   });
 
   return {
     ...derivados,
     vida: Math.max(1, vida),
     mana: Math.max(1, mana),
+    estamina: Math.max(1, estamina),
     recursosDefinidos,
   };
 }

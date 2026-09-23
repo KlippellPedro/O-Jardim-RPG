@@ -8,13 +8,13 @@ export interface IComposicaoStatusVital {
 }
 
 interface StatusVitaisSectionProps {
-  atual: { vida: number; mana: number; sanidade: number; cansaco: number };
-  maximo: { vida: number; mana: number; sanidade: number; cansaco: number };
+  atual: { vida: number; mana: number; estamina: number; sanidade: number; cansaco: number };
+  maximo: { vida: number; mana: number; estamina: number; sanidade: number; cansaco: number };
   efeitosCansaco: string[];
-  composicao: Record<'vida' | 'mana' | 'sanidade' | 'cansaco', IComposicaoStatusVital>;
+  composicao: Record<'vida' | 'mana' | 'estamina' | 'sanidade' | 'cansaco', IComposicaoStatusVital>;
   onStatusChange: (campo: string, mudanca: number, maximo: number, ignorarTemporario?: boolean) => void;
-  /** Extra acima do máximo (vida, mana, sanidade). */
-  temporario?: { vida: number; mana: number; sanidade: number };
+  /** Extra acima do máximo (vida, mana, estamina, sanidade). */
+  temporario?: { vida: number; mana: number; estamina: number; sanidade: number };
   onLimparTemporario?: (campo: string) => void;
   onSanidadeMaximaChange: (maximo: number) => void;
   onOpenInfo: (modal: any) => void;
@@ -32,7 +32,7 @@ export function StatusVitaisSection({
   efeitosCansaco,
   composicao,
   onStatusChange,
-  temporario = { vida: 0, mana: 0, sanidade: 0 },
+  temporario = { vida: 0, mana: 0, estamina: 0, sanidade: 0 },
   onLimparTemporario,
   onSanidadeMaximaChange,
   onOpenInfo,
@@ -95,7 +95,19 @@ export function StatusVitaisSection({
           onAdd={(valor: number) => onStatusChange('manaAtual', valor, maximo.mana)}
           onSub={(valor: number, ignorarTemporario?: boolean) => onStatusChange('manaAtual', -valor, maximo.mana, ignorarTemporario)}
           onAdjustClick={() => onOpenAdjust(chaveAjuste('recurso', 'manaMaxima'), 'Mana máxima', composicao.mana.automaticos)}
-          onHelpClick={() => info('PONTOS DE MANA', 'A energia arcana e espiritual usada em magias e habilidades especiais.', 'Mana máxima', maximo.mana, composicao.mana)}
+          onHelpClick={() => info('PONTOS DE MANA', 'A energia arcana e espiritual usada em magias e em tudo que é místico.', 'Mana máxima', maximo.mana, composicao.mana)}
+        />
+        <ResourceBar
+          label="Estamina"
+          color="verde"
+          current={atual.estamina}
+          max={maximo.estamina}
+          temporario={temporario.estamina}
+          onLimparTemporario={onLimparTemporario ? () => onLimparTemporario('estaminaAtual') : undefined}
+          onAdd={(valor: number) => onStatusChange('estaminaAtual', valor, maximo.estamina)}
+          onSub={(valor: number, ignorarTemporario?: boolean) => onStatusChange('estaminaAtual', -valor, maximo.estamina, ignorarTemporario)}
+          onAdjustClick={() => onOpenAdjust(chaveAjuste('recurso', 'estaminaMaxima'), 'Estamina máxima', composicao.estamina.automaticos)}
+          onHelpClick={() => info('PONTOS DE ESTAMINA', 'O fôlego e a força do corpo, gastos em golpes, manobras e esforços físicos. Volta com o descanso, e é diferente do Cansaço, que mede o desgaste acumulado.', 'Estamina máxima', maximo.estamina, composicao.estamina)}
         />
         <ResourceBar
           label="Sanidade"

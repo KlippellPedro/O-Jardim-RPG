@@ -246,6 +246,7 @@
 
 .session-resource__fill--health { background: linear-gradient(90deg, #b8414d, #ed6671); }
 .session-resource__fill--mana { background: linear-gradient(90deg, #377bb6, #59b8df); }
+.session-resource__fill--stamina { background: linear-gradient(90deg, #2f9e75, #5fd9a6); }
 
 /* Extra temporário: faixa fina e listrada embaixo da barra normal */
 .session-resource__extra {
@@ -266,10 +267,12 @@
 
 .session-resource__extra-fill--health { background-color: #f5c451; }
 .session-resource__extra-fill--mana { background-color: #a5f3fc; }
+.session-resource__extra-fill--stamina { background-color: #bbf7d0; }
 
 .session-resource__extra-valor { font-style: normal; font-weight: 800; }
 .session-resource__extra-valor--health { color: #fde68a; }
 .session-resource__extra-valor--mana { color: #a5f3fc; }
+.session-resource__extra-valor--stamina { color: #bbf7d0; }
 
 .session-focus-card__defense {
   display: grid;

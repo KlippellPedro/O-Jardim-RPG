@@ -18,6 +18,7 @@ export interface ICreateCharacterPayload {
   derivados: {
     vida: number;
     mana: number;
+    estamina?: number;
     movimento: number;
     defesaNatural?: number;
     iniciativa?: number;

@@ -166,13 +166,18 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
   const derivadosComEquipamento = catalogo
     ? calcularDerivadosComClasses(attrsAntesRaca, racaAtual, classes, catalogo.classes, nivelTotalClasses, f.escolhaRacial)
     : null;
-  const deltaDerivado = (campo: 'vida' | 'mana' | 'defesaNatural' | 'iniciativa' | 'movimento') => (
+  const deltaDerivado = (campo: 'vida' | 'mana' | 'estamina' | 'defesaNatural' | 'iniciativa' | 'movimento') => (
     Number(derivadosComEquipamento?.[campo] || 0) - Number(derivadosSemEquipamento?.[campo] || 0)
   );
   const maxVidaBase = Number(f.derivados?.vida ?? character.derivados?.vida) || 10;
   const maxManaBase = Number(f.derivados?.mana ?? character.derivados?.mana) || 10;
+  // Fichas gravadas antes da Estamina existir não têm `derivados.estamina`
+  // guardado; nesse caso vale o cálculo fresco dos atributos e classes atuais,
+  // não um número solto como o 10 de Vida e Mana.
+  const maxEstaminaBase = Number(f.derivados?.estamina ?? character.derivados?.estamina ?? derivadosSemEquipamento?.estamina) || 1;
   const maxVida = Math.max(1, maxVidaBase + deltaDerivado('vida') + ajusteOrigem(f, 'vidaMaxima') + totalAjustesManuais(f, chaveAjuste('recurso', 'vidaMaxima')) + (resumoEquipamento.bonusRecursos.vidaMaxima || 0));
   const maxMana = Math.max(1, maxManaBase + deltaDerivado('mana') + ajusteOrigem(f, 'manaMaxima') + totalAjustesManuais(f, chaveAjuste('recurso', 'manaMaxima')) + (resumoEquipamento.bonusRecursos.manaMaxima || 0));
+  const maxEstamina = Math.max(1, maxEstaminaBase + deltaDerivado('estamina') + ajusteOrigem(f, 'estaminaMaxima') + totalAjustesManuais(f, chaveAjuste('recurso', 'estaminaMaxima')) + (resumoEquipamento.bonusRecursos.estaminaMaxima || 0));
   const maxSanidadeBase = Math.max(1, Number(status.sanidadeMaxima) || 100);
   const maxSanidade = Math.max(1, maxSanidadeBase + ajusteOrigem(f, 'sanidadeMaxima') + totalAjustesManuais(f, chaveAjuste('recurso', 'sanidadeMaxima')) + (resumoEquipamento.bonusRecursos.sanidadeMaxima || 0));
   const maxCansacoBase = Math.max(1, Number(status.cansacoMaximo) || 6);
@@ -196,6 +201,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
 
   const vAtual = Number(status.vidaAtual ?? maxVida);
   const mAtual = Number(status.manaAtual ?? maxMana);
+  const eAtual = Number(status.estaminaAtual ?? maxEstamina);
   const sAtual = Number(status.sanidadeAtual ?? maxSanidade);
   const cAtual = Number(status.cansacoAtual ?? 0);
   const efeitosCansaco = [
@@ -210,9 +216,10 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
   // Bônus em Constituição, Sabedoria ou Destreza também alteram recursos e
   // derivados. Calculamos a diferença fonte por fonte para que o modal mostre
   // o nome real do item, poder, habilidade ou fruto que gerou cada parcela.
-  const detalhesDerivadosPorFonte: Record<'vida' | 'mana' | 'defesaNatural' | 'iniciativa' | 'movimento', IDetalheEfeitoAutomatico[]> = {
+  const detalhesDerivadosPorFonte: Record<'vida' | 'mana' | 'estamina' | 'defesaNatural' | 'iniciativa' | 'movimento', IDetalheEfeitoAutomatico[]> = {
     vida: [],
     mana: [],
+    estamina: [],
     defesaNatural: [],
     iniciativa: [],
     movimento: [],
@@ -266,6 +273,11 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
     detalhesDerivadosPorFonte.mana,
     detalharEfeitosAutomaticos(resumoEquipamento, 'recurso', 'manaMaxima'),
     [{ nome: nomeAjusteOrigem(f, 'manaMaxima') || 'Origem', valor: ajusteOrigem(f, 'manaMaxima') }],
+  );
+  const automaticosEstamina = combinarDetalhesAutomaticos(
+    detalhesDerivadosPorFonte.estamina,
+    detalharEfeitosAutomaticos(resumoEquipamento, 'recurso', 'estaminaMaxima'),
+    [{ nome: nomeAjusteOrigem(f, 'estaminaMaxima') || 'Origem', valor: ajusteOrigem(f, 'estaminaMaxima') }],
   );
   const automaticosSanidade = combinarDetalhesAutomaticos(
     detalharEfeitosAutomaticos(resumoEquipamento, 'recurso', 'sanidadeMaxima'),
@@ -951,6 +963,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
           personagemId={character.id}
           vida={{ atual: vAtual, max: maxVida, extra: obterTemporario(status, 'vidaAtual') }}
           mana={{ atual: mAtual, max: maxMana, extra: obterTemporario(status, 'manaAtual') }}
+          estamina={{ atual: eAtual, max: maxEstamina, extra: obterTemporario(status, 'estaminaAtual') }}
           sanidade={{ atual: sAtual, max: maxSanidade, extra: obterTemporario(status, 'sanidadeAtual') }}
           cansaco={{ atual: cAtual, max: maxCansaco }}
           onStatus={handleStatus}
@@ -974,8 +987,8 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
       )}
 
       <StatusVitaisSection
-        atual={{ vida: vAtual, mana: mAtual, sanidade: sAtual, cansaco: cAtual }}
-        maximo={{ vida: maxVida, mana: maxMana, sanidade: maxSanidade, cansaco: maxCansaco }}
+        atual={{ vida: vAtual, mana: mAtual, estamina: eAtual, sanidade: sAtual, cansaco: cAtual }}
+        maximo={{ vida: maxVida, mana: maxMana, estamina: maxEstamina, sanidade: maxSanidade, cansaco: maxCansaco }}
         efeitosCansaco={efeitosCansaco}
         composicao={{
           vida: {
@@ -987,6 +1000,11 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
             base: maxManaBase,
             automaticos: automaticosMana,
             manuais: obterAjustesManuais(f, chaveAjuste('recurso', 'manaMaxima')),
+          },
+          estamina: {
+            base: maxEstaminaBase,
+            automaticos: automaticosEstamina,
+            manuais: obterAjustesManuais(f, chaveAjuste('recurso', 'estaminaMaxima')),
           },
           sanidade: {
             base: maxSanidadeBase,
@@ -1003,6 +1021,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
         temporario={{
           vida: obterTemporario(status, 'vidaAtual'),
           mana: obterTemporario(status, 'manaAtual'),
+          estamina: obterTemporario(status, 'estaminaAtual'),
           sanidade: obterTemporario(status, 'sanidadeAtual'),
         }}
         onLimparTemporario={limparTemporario}

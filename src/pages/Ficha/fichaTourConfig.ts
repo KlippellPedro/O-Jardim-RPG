@@ -5,6 +5,7 @@ export type FichaTourTabId =
   | 'Bens'
   | 'Habilidades'
   | 'Poderes'
+  | 'Jardim'
   | 'Magias'
   | 'Ataques'
   | 'Aliados'
@@ -25,7 +26,7 @@ export interface FichaTourStep {
 
 export const FICHA_TOUR_TABS: FichaTourTabId[] = [
   'Ficha', 'Perícias', 'Inventário', 'Bens', 'Habilidades', 'Poderes',
-  'Magias', 'Ataques', 'Aliados', 'Progressão', 'Descanso', 'Notas',
+  'Magias', 'Ataques', 'Aliados', 'Progressão', 'Jardim', 'Descanso', 'Notas',
 ];
 
 const FICHA_TOUR_VERSAO = 3;
@@ -255,6 +256,24 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
       alvos: ['[data-tour="poder-cartao"]', '[data-tour="poderes-personalizados"]'],
     },
   ],
+
+  Jardim: [
+    {
+      id: 'jardim-resumo', titulo: 'Podar e plantar poderes',
+      descricao: 'O Jardim troca poderes por Sementes. Podar um poder da própria classe libera a vaga de volta na Progressão; poderes plantados de outras classes ficam na aba Poderes com a origem "Jardim".',
+      alvos: ['[data-tour="jardim-resumo"]', '[data-tour="section-overview"]'],
+    },
+    {
+      id: 'jardim-podar', titulo: 'Podar poderes',
+      descricao: 'Lista tudo que pode ser vendido hoje: poderes da própria classe e poderes já plantados a partir de outras classes, cada um com as Sementes que rende.',
+      alvos: ['[data-tour="jardim-podar"]'],
+    },
+    {
+      id: 'jardim-catalogo', titulo: 'Catálogo do Jardim',
+      descricao: 'Busque e filtre por classe os poderes de outras classes disponíveis para plantar com Sementes.',
+      alvos: ['[data-tour="jardim-catalogo"]'],
+    },
+  ],
   Magias: [
     {
       id: 'magias-resumo', titulo: 'Fonte, Fluxo e manifestações',
@@ -391,7 +410,7 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
     },
     {
       id: 'descanso-completo', titulo: 'Qualidade do descanso',
-      descricao: 'Escolha a condição em que o personagem descansou para pré-visualizar Vida, Mana, Sanidade e Cansaço recuperados. Algumas qualidades exigem autorização; confirme apenas depois de conferir o resultado. Combate intenso registra Cansaço uma vez por cena.',
+      descricao: 'Escolha a condição em que o personagem descansou para pré-visualizar Vida, Mana, Sanidade e Cansaço recuperados. Algumas qualidades exigem autorização; confirme apenas depois de conferir o resultado. Combate intenso registra Cansaço uma vez por cena; na Sessão ao Vivo o servidor faz isso sozinho quando o Mestre encerra o combate.',
       alvos: ['[data-tour="descanso-completo"]'],
     },
     {

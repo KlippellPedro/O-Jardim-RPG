@@ -48,7 +48,8 @@ const classAudit = classes.map((clazz) => ({
   id: clazz.id,
   titulo: clazz.titulo,
   categoria: clazz.categoria === 'padrao' ? 'comum' : 'especial',
-  recursosPorNivel: Number(clazz.vida) + Number(clazz.mana),
+  recursosPorNivel: Number(clazz.vida) + Number(clazz.mana) + Number(clazz.estamina ?? 0),
+  orcamentoEsperado: 9,
   referencias: levels.map((level) => reference(clazz, level)),
   // Habilidade em estágios e habilidade com catálogo próprio (as Engenhocas)
   // guardam o texto fora de `descricao`, então varrer só ela deixava passar a
@@ -99,7 +100,7 @@ const spellAudit = spells.map((spell) => {
   };
 });
 
-const invalidClasses = classAudit.filter((item) => item.recursosPorNivel !== 7);
+const invalidClasses = classAudit.filter((item) => item.recursosPorNivel !== item.orcamentoEsperado);
 const unboundedWeapons = weapons.filter((item) => item.mediaNormal !== null && item.mediaNormal > 75 && !item.autorizacaoMestre);
 const highestWeapons = weapons.filter((item) => item.mediaNormal !== null).sort((a, b) => b.mediaNormal - a.mediaNormal).slice(0, 15);
 const invalidSpells = spellAudit.filter((item) => item.problemas.length > 0);
@@ -125,7 +126,7 @@ const levelSeparators = levels.map(() => '---:').join(' | ');
 const classLines = classAudit.map((item) => `| ${item.titulo} | ${item.categoria} | ${item.recursosPorNivel} | ${item.referencias.map((ref) => `${ref.vida}/${ref.mana}/${ref.poderes}`).join(' | ')} | ${item.alertasTexto.join(', ') || 'nenhum'} |`).join('\n');
 const weaponLines = highestWeapons.map((item) => `| ${item.titulo} | ${item.raridade} | ${item.dano} | ${item.mediaNormal?.toFixed(1)} | ${item.mediaComCritico?.toFixed(1)} | ${item.nivelRecomendado || 'não definido'} | ${item.autorizacaoMestre ? 'sim' : 'não'} |`).join('\n');
 const spellLines = spellAudit.map((item) => `| ${item.titulo} | ${item.circulo} | ${item.perfil} | ${item.custoMana} | ${item.dano || 'sem dano'} | ${item.mediaDano?.toFixed(1) || 'n/a'} | ${item.problemas.join(', ') || 'nenhum'} |`).join('\n');
-const markdown = `# Relatório de balanceamento v1\n\nGerado por \`npm run audit:balance\`. Esta é uma verificação quantitativa, não substitui playtest.\n\n## Premissas\n\n- ${report.assumptions.attributes}\n- ${report.assumptions.multiclass}\n- ${report.assumptions.scope}\n\n## Resultado automático\n\n- ${classAudit.length} classes analisadas.\n- ${weapons.length} armas analisadas.\n- ${invalidClasses.length} classes fora do orçamento de 7 pontos de Vida + Mana.\n- ${unboundedWeapons.length} armas acima de 75 de dano médio sem bloqueio do Mestre.\n\nCada célula mostra \`Vida/Mana/vagas de poder\`.\n\n| Classe | Tipo | Orçamento | ${levelHeaders} | Alertas qualitativos |\n|---|---|---:|${levelSeparators}|---|\n${classLines}\n\n## Maiores danos do arsenal\n\n| Arma | Raridade | Dano | Média normal | Média com crítico | Nível recomendado | Mestre |\n|---|---|---|---:|---:|---:|---|\n${weaponLines}\n\n## Interpretação\n\nO orçamento estrutural das classes está fechado. Alertas qualitativos indicam efeitos que alteram economia de ações ou escala e precisam de cenários de mesa. Armas lendárias normalizadas começam no nível 25; relíquias da criação no 35 e exigem autorização do Mestre.\n`;
+const markdown = `# Relatório de balanceamento v1\n\nGerado por \`npm run audit:balance\`. Esta é uma verificação quantitativa, não substitui playtest.\n\n## Premissas\n\n- ${report.assumptions.attributes}\n- ${report.assumptions.multiclass}\n- ${report.assumptions.scope}\n\n## Resultado automático\n\n- ${classAudit.length} classes analisadas.\n- ${weapons.length} armas analisadas.\n- ${invalidClasses.length} classes fora do orçamento de 9 pontos de Vida + Mana + Estamina.\n- ${unboundedWeapons.length} armas acima de 75 de dano médio sem bloqueio do Mestre.\n\nCada célula mostra \`Vida/Mana/vagas de poder\`.\n\n| Classe | Tipo | Orçamento | ${levelHeaders} | Alertas qualitativos |\n|---|---|---:|${levelSeparators}|---|\n${classLines}\n\n## Maiores danos do arsenal\n\n| Arma | Raridade | Dano | Média normal | Média com crítico | Nível recomendado | Mestre |\n|---|---|---|---:|---:|---:|---|\n${weaponLines}\n\n## Interpretação\n\nO orçamento estrutural das classes está fechado. Alertas qualitativos indicam efeitos que alteram economia de ações ou escala e precisam de cenários de mesa. Armas lendárias normalizadas começam no nível 25; relíquias da criação no 35 e exigem autorização do Mestre.\n`;
 const markdownWithSpells = markdown.replace('\n## Interpretação', `\n## Magias publicadas para playtest\n\n- ${spellAudit.length} magias analisadas.\n- ${invalidSpells.length} magias fora do custo, teto de dano, crítico ou acesso ritual.\n\n| Magia | Círculo | Perfil | Mana | Dano | Média | Alertas |\n|---|---:|---|---:|---|---:|---|\n${spellLines}\n\n## Interpretação`);
 const markdownPath = path.join(root, 'data', 'regras', 'relatorio-balanceamento-v1.md');
 fs.mkdirSync(path.dirname(markdownPath), { recursive: true });

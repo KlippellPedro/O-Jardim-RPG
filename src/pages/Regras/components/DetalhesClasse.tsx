@@ -1,6 +1,7 @@
 import { ChevronDown } from 'lucide-react';
 import type { IClasse, IFichaTecnicaClasse, IOpcaoHabilidadeClasse } from '../../../types/catalogo';
 import { classeTemProgressaoPublicada, formatarRecompensaClasse } from '../../../services/classeService';
+import { rotuloCustoDePoder } from '../../../services/statusService';
 import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
 import { AuraEspecial, SeloEspecial } from '../../../redesign/components/premium/AuraEspecial';
 import { obterTemaPorId } from '../../../redesign/themeMap';
@@ -460,7 +461,7 @@ export const DetalhesClasse = ({ classe, ocultarCatalogos = [] }: DetalhesClasse
                 <div className="mb-3 flex items-start justify-between gap-4">
                   <h3 className="text-xl font-bold text-violet-300">{poder.titulo}</h3>
                   <span className="shrink-0 rounded-full border border-violet-400/30 bg-violet-400/10 px-3 py-1 text-xs font-bold text-violet-200">
-                    {poder.custo_mana} Mana
+                    {rotuloCustoDePoder({ custoMana: poder.custo_mana, custoEstamina: poder.custo_estamina }) || '0 Custo'}
                   </span>
                 </div>
                 <p className="text-sm leading-relaxed text-gray-300">{poder.descricao}</p>

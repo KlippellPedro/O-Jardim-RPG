@@ -8,6 +8,7 @@ from psycopg.types.json import Jsonb
 
 from core import live_session
 from core.audit import record_audit
+from core.combate_intenso import registrar_minimos
 from core.character_summary import (
     _classes_da_ficha,
     _nome,
@@ -114,6 +115,17 @@ def _session_resources(sheet: dict) -> dict[str, int | None]:
         if mana_atual is not None:
             mana_atual = max(0, min(mana_atual, mana_maxima))
 
+    estamina_maxima = inteiro(derivados.get("estamina"))
+    estamina_atual = inteiro(status_ficha.get("estaminaAtual"))
+    if estamina_maxima is not None:
+        estamina_maxima = max(0, (
+            estamina_maxima
+            + _eden_fruit_resource_bonus(sheet, "estaminaMaxima")
+            + bonus_escolhas_habilidade(sheet, "recurso", "estaminaMaxima")
+        ))
+        if estamina_atual is not None:
+            estamina_atual = max(0, min(estamina_atual, estamina_maxima))
+
     def extra(chave: str) -> int:
         valor = inteiro(status_ficha.get(chave))
         return max(0, valor) if valor is not None else 0
@@ -126,6 +138,9 @@ def _session_resources(sheet: dict) -> dict[str, int | None]:
         # Extra acima do máximo: campo à parte, sempre >= 0.
         "vida_temporaria": extra("vidaTemporaria"),
         "mana_temporaria": extra("manaTemporaria"),
+        "estamina_atual": estamina_atual,
+        "estamina_maxima": estamina_maxima,
+        "estamina_temporaria": extra("estaminaTemporaria"),
     }
 
 
@@ -1093,6 +1108,9 @@ def update_character(
                     mana_maxima=COALESCE(%s, mana_maxima),
                     vida_temporaria=%s,
                     mana_temporaria=%s,
+                    estamina_atual=COALESCE(%s, estamina_atual),
+                    estamina_maxima=COALESCE(%s, estamina_maxima),
+                    estamina_temporaria=%s,
                     atualizado_em=CURRENT_TIMESTAMP
                 WHERE sessao_id=%s AND personagem_id=%s
                 RETURNING id
@@ -1105,11 +1123,15 @@ def update_character(
                     resources["mana_maxima"],
                     resources["vida_temporaria"],
                     resources["mana_temporaria"],
+                    resources["estamina_atual"],
+                    resources["estamina_maxima"],
+                    resources["estamina_temporaria"],
                     active_session["id"],
                     character_id,
                 ),
             ).fetchone()
             if participant:
+                registrar_minimos(connection, active_session["id"])
                 connection.execute(
                     """
                     UPDATE sessoes_mesa
@@ -1827,7 +1849,7 @@ def consume_eden_fruit(
         # numa substituicao. Os maximos continuam derivados no frontend.
         status_sheet = current_sheet.get("status") if isinstance(current_sheet.get("status"), dict) else {}
         next_status = dict(status_sheet)
-        for target, field in (("vidaMaxima", "vidaAtual"), ("manaMaxima", "manaAtual")):
+        for target, field in (("vidaMaxima", "vidaAtual"), ("manaMaxima", "manaAtual"), ("estaminaMaxima", "estaminaAtual")):
             current_value = status_sheet.get(field)
             if not isinstance(current_value, (int, float)) or isinstance(current_value, bool):
                 continue
@@ -1965,7 +1987,7 @@ def awaken_eden_fruit(
         # recurso atual somente pela diferença entre os dois estágios.
         current_status = current_sheet.get("status") if isinstance(current_sheet.get("status"), dict) else {}
         next_status = dict(current_status)
-        for target, field in (("vidaMaxima", "vidaAtual"), ("manaMaxima", "manaAtual")):
+        for target, field in (("vidaMaxima", "vidaAtual"), ("manaMaxima", "manaAtual"), ("estaminaMaxima", "estaminaAtual")):
             current_value = current_status.get(field)
             if not isinstance(current_value, (int, float)) or isinstance(current_value, bool):
                 continue

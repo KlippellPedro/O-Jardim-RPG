@@ -19,9 +19,12 @@ export interface ParticipantePayload {
   cura?: number;
   mana_atual?: number | null;
   mana_maxima?: number | null;
+  estamina_atual?: number | null;
+  estamina_maxima?: number | null;
   /** Extra acima do máximo (efeito temporário); o dano gasta ele primeiro. */
   vida_temporaria?: number;
   mana_temporaria?: number;
+  estamina_temporaria?: number;
   condicoes?: Array<string | { nome: string; turnos: number | null }>;
   ataques?: AtaquePayload[];
   anotacao?: string;
@@ -53,9 +56,12 @@ export interface SessaoParticipanteResponse {
   defesa?: number | null;
   mana_atual?: number | null;
   mana_maxima?: number | null;
+  estamina_atual?: number | null;
+  estamina_maxima?: number | null;
   /** Extra acima do máximo; mesma regra de visibilidade da Vida. */
   vida_temporaria?: number;
   mana_temporaria?: number;
+  estamina_temporaria?: number;
   ataques?: AtaquePayload[];
   /** Só vem preenchido para quem comanda a mesa - é uso interno de XP. */
   vd?: number | null;

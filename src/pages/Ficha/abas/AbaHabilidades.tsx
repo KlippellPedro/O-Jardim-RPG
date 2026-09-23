@@ -1,12 +1,22 @@
 import { useRef, useState } from 'react';
-import { Search, Star, Pencil, Trash2, Dices, GripVertical, Dna, Shield, Apple } from 'lucide-react';
+import { Search, Star, Pencil, Trash2, Dices, GripVertical, Dna, Shield, Apple, Sprout } from 'lucide-react';
 import { AnimatePresence, motion, Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput, LabeledSelect } from '../components/SharedFichaComponents';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { caracteristicasRaciaisAutomaticas, habilidadesAutomaticas } from '../../../services/progressaoFichaService';
-import { campoTemporario, gastarComTemporario, obterStatusFicha, obterTemporario } from '../../../services/statusService';
+import { caracteristicasRaciaisAutomaticas, habilidadesAutomaticas, habilidadesJardimSelecionadas } from '../../../services/progressaoFichaService';
+import {
+  CAMPO_STATUS_RECURSO,
+  campoTemporario,
+  custoDePoder,
+  gastarComTemporario,
+  obterStatusFicha,
+  obterTemporario,
+  RECURSOS_CUSTO_OPCOES,
+  rotuloCustoDePoder,
+  type TRecursoCusto,
+} from '../../../services/statusService';
 import { EditorEfeitos } from '../components/ItemEffectsModals';
 import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
 import { periciasDisponiveisParaEfeitos } from '../../../services/periciasFichaService';
@@ -32,7 +42,7 @@ import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
 // Tipos locais da entidade "habilidade" (traços raciais, talentos, competências)
 // ---------------------------------------------------------------------------
 type TipoHabilidade = 'Ativa' | 'Passiva' | 'Reação' | 'Sustentada' | 'Outro';
-type RecursoCusto = 'nenhum' | 'mana' | 'vida' | 'sanidade' | 'cansaco';
+type RecursoCusto = TRecursoCusto;
 
 interface ICustoHabilidade {
   recurso: RecursoCusto;
@@ -57,13 +67,7 @@ interface IHabilidade {
 
 const TIPOS_HABILIDADE: TipoHabilidade[] = ['Ativa', 'Passiva', 'Reação', 'Sustentada', 'Outro'];
 
-const RECURSOS: { value: RecursoCusto; label: string }[] = [
-  { value: 'nenhum', label: 'Nenhum' },
-  { value: 'mana', label: 'Mana' },
-  { value: 'vida', label: 'Vida' },
-  { value: 'sanidade', label: 'Sanidade' },
-  { value: 'cansaco', label: 'Cansaço' },
-];
+const RECURSOS: { value: RecursoCusto; label: string }[] = [...RECURSOS_CUSTO_OPCOES];
 
 const TIPO_COLORS: Record<TipoHabilidade, string> = {
   Ativa: 'bg-red-500/10 border-red-500/30 text-red-400',
@@ -73,17 +77,12 @@ const TIPO_COLORS: Record<TipoHabilidade, string> = {
   Outro: 'bg-gray-500/10 border-gray-500/30 text-gray-400'
 };
 
-// Mapeia o recurso da habilidade para os campos de status usados na Ficha
-// (veja AbaFicha.tsx: vidaAtual/manaAtual/sanidadeAtual/cansacoAtual)
-const CAMPO_STATUS: Record<Exclude<RecursoCusto, 'nenhum'>, string> = {
-  mana: 'manaAtual',
-  vida: 'vidaAtual',
-  sanidade: 'sanidadeAtual',
-  cansaco: 'cansacoAtual',
-};
+// O mapa recurso -> campo de ficha.status vive em statusService.ts, junto do
+// tipo do recurso, pra AbaPoderes e frutoEdenService usarem a mesma tabela.
+const CAMPO_STATUS = CAMPO_STATUS_RECURSO;
 
-// Vida e Mana máximas vêm de character.derivados (calculadas), Sanidade e Cansaço
-// já são configuráveis dentro de ficha.status (veja AbaFicha.tsx)
+// Vida, Mana e Estamina máximas vêm de character.derivados (calculadas),
+// Sanidade e Cansaço já são configuráveis dentro de ficha.status (veja AbaFicha.tsx)
 const CAMPO_MAXIMO_STATUS: Partial<Record<Exclude<RecursoCusto, 'nenhum'>, string>> = {
   sanidade: 'sanidadeMaxima',
   cansaco: 'cansacoMaximo',
@@ -137,7 +136,8 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
   const habilidadesRaciais = caracteristicasRaciaisAutomaticas(character.ficha || {});
   const habilidadesClasses = habilidadesAutomaticas(character.ficha || {});
   const habilidadesFruto = habilidadeDoFruto(character.ficha || {});
-  const habilidadesOficiais = [...habilidadesRaciais, ...habilidadesClasses, ...habilidadesFruto];
+  const habilidadesJardim = habilidadesJardimSelecionadas(character.ficha || {});
+  const habilidadesOficiais = [...habilidadesRaciais, ...habilidadesClasses, ...habilidadesFruto, ...habilidadesJardim];
   const contarVisiveis = (itens: typeof habilidadesOficiais) => itens.filter((item) => !personalizacoes[item.id]?.oculta).length;
   const habilidadesOcultas = habilidadesOficiais
     .filter((item) => personalizacoes[item.id]?.oculta)
@@ -175,6 +175,10 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
     ...(habilidadesFruto.length ? [{
       id: 'fruto', categoria: 'Fruto do Éden', titulo: habilidadesFruto[0].origem, itens: filtrarOficiais(habilidadesFruto), icone: 'fruto',
       paleta: { borda: 'border-amber-400/30', fundo: 'bg-amber-500/[0.05]', texto: 'text-amber-300', selo: 'border-amber-400/30 bg-amber-500/10 text-amber-200' },
+    }] : []),
+    ...(habilidadesJardim.length ? [{
+      id: 'jardim', categoria: 'Jardim', titulo: 'Plantadas no Jardim', itens: filtrarOficiais(habilidadesJardim), icone: 'jardim',
+      paleta: { borda: 'border-lime-400/30', fundo: 'bg-lime-500/[0.05]', texto: 'text-lime-300', selo: 'border-lime-400/30 bg-lime-500/10 text-lime-200' },
     }] : []),
   ].filter((grupo) => grupo.itens.length > 0);
   const status = obterStatusFicha(character.ficha);
@@ -311,10 +315,14 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
         + bonusRecursoDoFruto(character.ficha, 'vidaMaxima');
       const maxMana = (character.ficha?.derivados?.mana || character.derivados?.mana || 10)
         + bonusRecursoDoFruto(character.ficha, 'manaMaxima');
+      const maxEstamina = (character.ficha?.derivados?.estamina || character.derivados?.estamina || 1)
+        + bonusRecursoDoFruto(character.ficha, 'estaminaMaxima');
       const atual = recurso === 'vida'
         ? Number(status.vidaAtual ?? maxVida)
         : recurso === 'mana'
         ? Number(status.manaAtual ?? maxMana)
+        : recurso === 'estamina'
+        ? Number(status.estaminaAtual ?? maxEstamina)
         : Number(status[campoAtual]) || 0;
 
       if (recurso === 'cansaco') {
@@ -401,7 +409,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-3 border-b border-white/5 pb-3">
                   <div className="flex items-center gap-3">
                     <div className={`flex h-9 w-9 items-center justify-center rounded-lg border ${grupo.paleta.selo}`}>
-                      {grupo.icone === 'raca' ? <Dna size={17} /> : grupo.icone === 'fruto' ? <Apple size={17} /> : <Shield size={17} />}
+                      {grupo.icone === 'raca' ? <Dna size={17} /> : grupo.icone === 'fruto' ? <Apple size={17} /> : grupo.icone === 'jardim' ? <Sprout size={17} /> : <Shield size={17} />}
                     </div>
                     <div>
                       <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${grupo.paleta.texto}`}>{grupo.categoria}</p>
@@ -418,6 +426,7 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                     const personalizacao = personalizacoes[item.id];
                     const tituloExibido = personalizacao?.titulo || item.titulo;
                     const descricaoExibida = personalizacao?.texto || item.descricao;
+                    const custoOficial = custoDePoder(item as { custoMana?: number; custoEstamina?: number });
                     return (
                       <motion.article
                         layout
@@ -454,6 +463,30 @@ export const AbaHabilidades = ({ character, onUpdate }: { character: any; onUpda
                           <span className="mt-1 inline-block text-[9px] font-black uppercase tracking-wider text-[#c7a44c]/70">Editado por você</span>
                         )}
                         <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{descricaoExibida}</p>
+                        {custoOficial.recurso !== 'nenhum' && (
+                          <div className="mt-3 flex items-center justify-between gap-3 border-t border-white/5 pt-3">
+                            <span className={`rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${grupo.paleta.selo}`}>{rotuloCustoDePoder(item as { custoMana?: number; custoEstamina?: number })}</span>
+                            <button
+                              type="button"
+                              onClick={() => usar({
+                                id: item.id,
+                                nome: tituloExibido,
+                                origem: item.origem,
+                                tipo: 'Ativa',
+                                nivelAdquirido: Number((item as { nivel?: number }).nivel) || 0,
+                                custo: custoOficial,
+                                acao: '',
+                                duracao: '',
+                                alcance: '',
+                                descricao: descricaoExibida,
+                              } as IHabilidade)}
+                              disabled={usoPendenteId !== null}
+                              className="px-4 py-2 rounded-lg bg-[#c7a44c]/10 border border-[#c7a44c]/30 text-[#c7a44c] hover:bg-[#c7a44c]/20 flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50"
+                            >
+                              <Dices size={14} /> {usoPendenteId === item.id ? 'Usando...' : 'Usar'}
+                            </button>
+                          </div>
+                        )}
                       </motion.article>
                     );
                     })}

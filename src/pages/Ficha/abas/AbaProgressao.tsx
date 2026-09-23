@@ -40,6 +40,8 @@ import {
 } from '../../../services/progressaoFichaService';
 import { ConquistasGaleria } from '../components/ConquistasGaleria';
 import { SimuladorNivel } from '../components/SimuladorNivel';
+import { ModalConfirmacao } from '../components/ModalConfirmacao';
+import { rotuloCustoDePoder } from '../../../services/statusService';
 
 type SecaoProgressaoId = 'raca' | 'habilidades' | 'escolhas' | 'poderes' | 'eventos' | 'legados';
 type FiltroDisponibilidade = 'todos' | 'disponiveis' | 'selecionados';
@@ -53,7 +55,7 @@ const correspondeBusca = (termo: string, ...campos: unknown[]) => (
   !termo || campos.some((campo) => normalizarBusca(campo).includes(termo))
 );
 
-const Card = ({ titulo, origem, descricao, detalhe }: { titulo: string; origem: string; descricao: string; detalhe?: string }) => (
+const Card = ({ titulo, origem, descricao, detalhe, acao }: { titulo: string; origem: string; descricao: string; detalhe?: string; acao?: React.ReactNode }) => (
   <details className="group rounded-xl border border-white/[0.07] bg-[#111017] transition-colors open:border-[#c7a44c]/20 open:bg-[#141219]">
     <summary className="flex cursor-pointer list-none items-start justify-between gap-3 p-4 marker:content-none">
       <span className="min-w-0">
@@ -61,6 +63,7 @@ const Card = ({ titulo, origem, descricao, detalhe }: { titulo: string; origem: 
         {detalhe && <span className="mt-1 block text-xs font-bold text-emerald-300">{detalhe}</span>}
       </span>
       <span className="flex shrink-0 items-center gap-2">
+        {acao}
         <span className="rounded-full border border-[#c7a44c]/25 bg-[#c7a44c]/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#c7a44c]">{origem}</span>
         <ChevronDown size={15} className="text-gray-600 transition-transform group-open:rotate-180" />
       </span>
@@ -101,6 +104,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
   const [filtroPoder, setFiltroPoder] = useState<FiltroDisponibilidade>('todos');
   const [filtroLegado, setFiltroLegado] = useState<FiltroDisponibilidade>('todos');
   const [secoesAbertas, setSecoesAbertas] = useState<Set<SecaoProgressaoId>>(() => new Set(['poderes']));
+  const [confirmacao, setConfirmacao] = useState<{ mensagem: string; aoConfirmar: () => void } | null>(null);
   const ficha = character.ficha || {};
   const usuario = useAuthStore((state) => state.usuario);
   const campanha = useAuthStore((state) => state.campanhaAtiva);
@@ -137,8 +141,10 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
   }, [buscaGeral, buscaLegado]);
 
   const adicionarPoder = (classeId: string, poderId: string) => {
-    if (!window.confirm('A escolha de um poder de classe é permanente para jogadores. Confirmar?')) return;
-    onUpdate(['ficha', 'poderesClasseSelecionados'], [...selecoesPoder, { classeId, poderId }]);
+    setConfirmacao({
+      mensagem: 'A escolha de um poder de classe é permanente para jogadores.',
+      aoConfirmar: () => onUpdate(['ficha', 'poderesClasseSelecionados'], [...selecoesPoder, { classeId, poderId }]),
+    });
   };
   const removerPoder = (classeId: string, poderId: string) => {
     const indice = selecoesPoder.findIndex((item) => item.classeId === classeId && item.poderId === poderId);
@@ -156,8 +162,10 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
     onUpdate(['ficha', 'escolhasHabilidade'], { ...atuais, [chave]: lista });
   };
   const adicionarLegado = (id: string) => {
-    if (!window.confirm('A escolha de um Legado é permanente para jogadores. Confirmar?')) return;
-    onUpdate(['ficha', 'legadosSelecionados'], [...idsLegados, id]);
+    setConfirmacao({
+      mensagem: 'A escolha de um Legado é permanente para jogadores.',
+      aoConfirmar: () => onUpdate(['ficha', 'legadosSelecionados'], [...idsLegados, id]),
+    });
   };
   const removerLegado = (id: string) => {
     const indice = idsLegados.indexOf(id);
@@ -532,7 +540,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
         onToggle={() => alternarSecao('poderes')}
       >
         <div className="mb-5 grid gap-3 lg:grid-cols-2">
-          {poderesVisiveis.map((item) => <Card key={item.id} titulo={item.titulo} origem={item.origem} detalhe={item.custoMana ? `${item.custoMana} Mana` : 'Sem custo de Mana'} descricao={item.descricao} />)}
+          {poderesVisiveis.map((item) => <Card key={item.id} titulo={item.titulo} origem={item.origem} detalhe={rotuloCustoDePoder(item) || 'Sem custo'} descricao={item.descricao} />)}
           {!poderesVisiveis.length && <p className="text-sm text-gray-500">{termoBusca ? 'Nenhum poder escolhido corresponde à busca. Veja o catálogo abaixo.' : 'Use as vagas abaixo para escolher seus poderes.'}</p>}
         </div>
         <div className="mb-4 flex flex-col justify-between gap-3 rounded-xl border border-white/[0.06] bg-black/20 p-3 sm:flex-row sm:items-center">
@@ -575,7 +583,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
                     return (
                       <div key={poder.id} className={`rounded-xl border p-3 ${quantidade ? 'border-orange-400/25 bg-orange-400/[0.05]' : 'border-white/5 bg-[#121118]'}`}>
                         <div className="flex items-start justify-between gap-3">
-                          <div><strong className="text-sm text-white">{poder.titulo}</strong><p className="mt-1 text-xs text-gray-500">{poder.custo_mana || 0} Mana</p></div>
+                          <div><strong className="text-sm text-white">{poder.titulo}</strong><p className="mt-1 text-xs text-gray-500">{rotuloCustoDePoder({ custoMana: poder.custo_mana, custoEstamina: poder.custo_estamina }) || 'Sem custo'}</p></div>
                           <div className="flex gap-1">
                             {quantidade > 0 && isMestre && <button type="button" onClick={() => removerPoder(classe.id, poder.id)} className="rounded-lg border border-red-500/30 px-2 py-1 text-xs font-bold text-red-300">Remover</button>}
                             <button type="button" disabled={!avaliacao.permitido} title={avaliacao.motivo} onClick={() => adicionarPoder(classe.id, poder.id)} className="rounded-lg border border-[#c7a44c]/30 px-2 py-1 text-xs font-bold text-[#c7a44c] disabled:cursor-not-allowed disabled:opacity-30">Escolher{quantidade ? ` (${quantidade})` : ''}</button>
@@ -627,10 +635,21 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
       >
         <div className="mb-5 grid gap-3 lg:grid-cols-2">
           {legados.map((item, indice) => (
-            <div key={`${item.id}-${indice}`} className="relative">
-              <Card titulo={item.titulo} origem="Legado" descricao={item.descricao} />
-              {isMestre && <button type="button" onClick={() => removerLegado(item.id)} className="absolute bottom-3 right-3 text-xs font-bold text-red-300">Remover</button>}
-            </div>
+            <Card
+              key={`${item.id}-${indice}`}
+              titulo={item.titulo}
+              origem="Legado"
+              descricao={item.descricao}
+              acao={isMestre ? (
+                <button
+                  type="button"
+                  onClick={(event) => { event.preventDefault(); event.stopPropagation(); removerLegado(item.id); }}
+                  className="rounded-lg border border-red-500/30 bg-red-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-red-300 transition-colors hover:bg-red-500/20"
+                >
+                  Remover
+                </button>
+              ) : undefined}
+            />
           ))}
           {!legados.length && <p className="text-sm text-gray-500">O primeiro Legado é liberado no nível total 5.</p>}
         </div>
@@ -682,6 +701,17 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
       </Secao>
 
       <ConquistasGaleria personagemId={character.id} />
+
+      <ModalConfirmacao
+        isOpen={!!confirmacao}
+        titulo="Confirmar escolha"
+        mensagem={confirmacao?.mensagem || ''}
+        onClose={() => setConfirmacao(null)}
+        onConfirmar={() => {
+          confirmacao?.aoConfirmar();
+          setConfirmacao(null);
+        }}
+      />
     </div>
   );
 };

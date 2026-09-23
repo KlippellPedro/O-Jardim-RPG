@@ -1,6 +1,7 @@
 export interface IStatusVital {
   vidaAtual?: number;
   manaAtual?: number;
+  estaminaAtual?: number;
   sanidadeAtual?: number;
   cansacoAtual?: number;
   morrendo?: number;
@@ -8,6 +9,58 @@ export interface IStatusVital {
   estabilizado?: boolean;
   morto?: boolean;
   [key: string]: unknown;
+}
+
+/** Qualquer recurso que um poder, habilidade ou magia pode cobrar. Era
+ * declarado três vezes (AbaPoderes, AbaHabilidades, frutoEdenService); agora
+ * é uma fonte só, e adicionar um recurso novo é mexer aqui. */
+export type TRecursoCusto = 'nenhum' | 'mana' | 'estamina' | 'vida' | 'sanidade' | 'cansaco';
+
+export const RECURSOS_CUSTO_OPCOES: ReadonlyArray<{ value: TRecursoCusto; label: string }> = [
+  { value: 'nenhum', label: 'Nenhum' },
+  { value: 'mana', label: 'Mana' },
+  { value: 'estamina', label: 'Estamina' },
+  { value: 'vida', label: 'Vida' },
+  { value: 'sanidade', label: 'Sanidade' },
+  { value: 'cansaco', label: 'Cansaço' },
+];
+
+export const ROTULO_RECURSO: Record<TRecursoCusto, string> = Object.fromEntries(
+  RECURSOS_CUSTO_OPCOES.map((opcao) => [opcao.value, opcao.label]),
+) as Record<TRecursoCusto, string>;
+
+export const RECURSOS_CUSTO_VALIDOS: ReadonlyArray<Exclude<TRecursoCusto, 'nenhum'>> = [
+  'mana', 'estamina', 'vida', 'sanidade', 'cansaco',
+];
+
+/** Campo de `ficha.status` onde cada recurso guarda o valor atual. */
+export const CAMPO_STATUS_RECURSO: Record<Exclude<TRecursoCusto, 'nenhum'>, string> = {
+  mana: 'manaAtual',
+  estamina: 'estaminaAtual',
+  vida: 'vidaAtual',
+  sanidade: 'sanidadeAtual',
+  cansaco: 'cansacoAtual',
+};
+
+/** Um poder gasta Estamina ou Mana, nunca os dois: `custo_estamina` (físico)
+ * tem prioridade, e `custo_mana` (místico) vale quando ele não existe. */
+export interface ICustoDePoder {
+  recurso: Extract<TRecursoCusto, 'nenhum' | 'mana' | 'estamina'>;
+  valor: number;
+}
+
+export function custoDePoder(fonte: { custoMana?: number; custoEstamina?: number } | null | undefined): ICustoDePoder {
+  const estamina = Math.max(0, Number(fonte?.custoEstamina) || 0);
+  if (estamina > 0) return { recurso: 'estamina', valor: estamina };
+  const mana = Math.max(0, Number(fonte?.custoMana) || 0);
+  if (mana > 0) return { recurso: 'mana', valor: mana };
+  return { recurso: 'nenhum', valor: 0 };
+}
+
+/** "3 Estamina", "2 Mana" ou vazio quando o poder não custa nada. */
+export function rotuloCustoDePoder(fonte: { custoMana?: number; custoEstamina?: number } | null | undefined): string {
+  const custo = custoDePoder(fonte);
+  return custo.recurso === 'nenhum' ? '' : `${custo.valor} ${ROTULO_RECURSO[custo.recurso]}`;
 }
 
 export interface IRegraCondicaoAplicavel {
@@ -141,11 +194,12 @@ export function movimentoBloqueadoPorCondicao(condicoes: unknown): boolean {
   return ids.has('agarrado') || ids.has('imobilizado') || ids.has('inconsciente');
 }
 
-/** Vida, Mana e Sanidade aceitam um extra temporário acima do máximo. Ele fica
- * num campo à parte (ex.: `vidaTemporaria`), então `vidaAtual` continua dentro
- * do máximo e nada que depende disso (banco, sessão, descanso) muda. O
- * Cansaço não tem extra: passar do limite é colapso, não bônus. */
-const CAMPOS_COM_TEMPORARIO = ['vidaAtual', 'manaAtual', 'sanidadeAtual'];
+/** Vida, Mana, Estamina e Sanidade aceitam um extra temporário acima do
+ * máximo. Ele fica num campo à parte (ex.: `vidaTemporaria`), então
+ * `vidaAtual` continua dentro do máximo e nada que depende disso (banco,
+ * sessão, descanso) muda. O Cansaço não tem extra: passar do limite é
+ * colapso, não bônus. */
+const CAMPOS_COM_TEMPORARIO = ['vidaAtual', 'manaAtual', 'estaminaAtual', 'sanidadeAtual'];
 
 export const aceitaTemporario = (campo: string) => CAMPOS_COM_TEMPORARIO.includes(campo);
 

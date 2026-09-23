@@ -35,6 +35,7 @@ const ALVOS_FIXOS: Record<Exclude<TCategoriaEfeitoEquipamento, 'pericia'>, Array
   recurso: [
     { value: 'vidaMaxima', label: 'Vida máxima' },
     { value: 'manaMaxima', label: 'Mana máxima' },
+    { value: 'estaminaMaxima', label: 'Estamina máxima' },
     { value: 'sanidadeMaxima', label: 'Sanidade máxima' },
     { value: 'cansacoMaximo', label: 'Cansaço máximo' },
   ],
@@ -67,6 +68,7 @@ const ATALHOS_EFEITO: Array<{ rotulo: string; categoria: TCategoriaEfeitoEquipam
   { rotulo: 'Defesa +1', categoria: 'combate', alvo: 'defesa', valor: 1 },
   { rotulo: 'Vida +5', categoria: 'recurso', alvo: 'vidaMaxima', valor: 5 },
   { rotulo: 'Mana +5', categoria: 'recurso', alvo: 'manaMaxima', valor: 5 },
+  { rotulo: 'Estamina +5', categoria: 'recurso', alvo: 'estaminaMaxima', valor: 5 },
   { rotulo: 'Ataque +1', categoria: 'combate', alvo: 'ataque', valor: 1 },
   { rotulo: 'Dano +1', categoria: 'combate', alvo: 'dano', valor: 1 },
   { rotulo: 'Força +1', categoria: 'atributo', alvo: 'forca', valor: 1 },

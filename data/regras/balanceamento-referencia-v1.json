@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-12T01:15:40.023Z",
+  "generatedAt": "2026-09-23T22:02:10.740Z",
   "levels": [
     1,
     5,
@@ -27,7 +27,8 @@
       "id": "guerreiro",
       "titulo": "Guerreiro",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -41,7 +42,7 @@
         {
           "nivel": 5,
           "vida": 44,
-          "mana": 16,
+          "mana": 12,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -50,7 +51,7 @@
         {
           "nivel": 10,
           "vida": 79,
-          "mana": 26,
+          "mana": 17,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -59,7 +60,7 @@
         {
           "nivel": 15,
           "vida": 114,
-          "mana": 36,
+          "mana": 22,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -68,7 +69,7 @@
         {
           "nivel": 20,
           "vida": 149,
-          "mana": 46,
+          "mana": 27,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -77,7 +78,7 @@
         {
           "nivel": 30,
           "vida": 204,
-          "mana": 81,
+          "mana": 62,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -86,7 +87,7 @@
         {
           "nivel": 40,
           "vida": 259,
-          "mana": 116,
+          "mana": 97,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -99,7 +100,8 @@
       "id": "piloto",
       "titulo": "Piloto",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -113,7 +115,7 @@
         {
           "nivel": 5,
           "vida": 40,
-          "mana": 20,
+          "mana": 24,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -122,7 +124,7 @@
         {
           "nivel": 10,
           "vida": 70,
-          "mana": 35,
+          "mana": 44,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -131,7 +133,7 @@
         {
           "nivel": 15,
           "vida": 100,
-          "mana": 50,
+          "mana": 64,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -140,7 +142,7 @@
         {
           "nivel": 20,
           "vida": 130,
-          "mana": 65,
+          "mana": 84,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -149,7 +151,7 @@
         {
           "nivel": 30,
           "vida": 185,
-          "mana": 100,
+          "mana": 119,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -158,7 +160,7 @@
         {
           "nivel": 40,
           "vida": 240,
-          "mana": 135,
+          "mana": 154,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -171,7 +173,8 @@
       "id": "ninja",
       "titulo": "Ninja",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -185,7 +188,7 @@
         {
           "nivel": 5,
           "vida": 40,
-          "mana": 20,
+          "mana": 16,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -194,7 +197,7 @@
         {
           "nivel": 10,
           "vida": 70,
-          "mana": 35,
+          "mana": 26,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -203,7 +206,7 @@
         {
           "nivel": 15,
           "vida": 100,
-          "mana": 50,
+          "mana": 36,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -212,7 +215,7 @@
         {
           "nivel": 20,
           "vida": 130,
-          "mana": 65,
+          "mana": 46,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -221,7 +224,7 @@
         {
           "nivel": 30,
           "vida": 185,
-          "mana": 100,
+          "mana": 81,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -230,7 +233,7 @@
         {
           "nivel": 40,
           "vida": 240,
-          "mana": 135,
+          "mana": 116,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -243,7 +246,8 @@
       "id": "pop-star",
       "titulo": "Pop Star",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -315,7 +319,8 @@
       "id": "espadachim",
       "titulo": "Espadachim",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -329,7 +334,7 @@
         {
           "nivel": 5,
           "vida": 44,
-          "mana": 16,
+          "mana": 12,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -338,7 +343,7 @@
         {
           "nivel": 10,
           "vida": 79,
-          "mana": 26,
+          "mana": 17,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -347,7 +352,7 @@
         {
           "nivel": 15,
           "vida": 114,
-          "mana": 36,
+          "mana": 22,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -356,7 +361,7 @@
         {
           "nivel": 20,
           "vida": 149,
-          "mana": 46,
+          "mana": 27,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -365,7 +370,7 @@
         {
           "nivel": 30,
           "vida": 204,
-          "mana": 81,
+          "mana": 62,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -374,7 +379,7 @@
         {
           "nivel": 40,
           "vida": 259,
-          "mana": 116,
+          "mana": 97,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -387,7 +392,8 @@
       "id": "lutador",
       "titulo": "Lutador",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -459,7 +465,8 @@
       "id": "atirador",
       "titulo": "Atirador",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -473,7 +480,7 @@
         {
           "nivel": 5,
           "vida": 40,
-          "mana": 20,
+          "mana": 12,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -482,7 +489,7 @@
         {
           "nivel": 10,
           "vida": 70,
-          "mana": 35,
+          "mana": 17,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -491,7 +498,7 @@
         {
           "nivel": 15,
           "vida": 100,
-          "mana": 50,
+          "mana": 22,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -500,7 +507,7 @@
         {
           "nivel": 20,
           "vida": 130,
-          "mana": 65,
+          "mana": 27,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -509,7 +516,7 @@
         {
           "nivel": 30,
           "vida": 185,
-          "mana": 100,
+          "mana": 62,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -518,7 +525,7 @@
         {
           "nivel": 40,
           "vida": 240,
-          "mana": 135,
+          "mana": 97,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -531,7 +538,8 @@
       "id": "medico",
       "titulo": "Médico",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -545,7 +553,7 @@
         {
           "nivel": 5,
           "vida": 36,
-          "mana": 24,
+          "mana": 20,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -554,7 +562,7 @@
         {
           "nivel": 10,
           "vida": 61,
-          "mana": 44,
+          "mana": 35,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -563,7 +571,7 @@
         {
           "nivel": 15,
           "vida": 86,
-          "mana": 64,
+          "mana": 50,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -572,7 +580,7 @@
         {
           "nivel": 20,
           "vida": 111,
-          "mana": 84,
+          "mana": 65,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -581,7 +589,7 @@
         {
           "nivel": 30,
           "vida": 166,
-          "mana": 119,
+          "mana": 100,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -590,7 +598,7 @@
         {
           "nivel": 40,
           "vida": 221,
-          "mana": 154,
+          "mana": 135,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -603,7 +611,8 @@
       "id": "guardiao",
       "titulo": "Guardião",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -617,7 +626,7 @@
         {
           "nivel": 5,
           "vida": 44,
-          "mana": 16,
+          "mana": 12,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -626,7 +635,7 @@
         {
           "nivel": 10,
           "vida": 79,
-          "mana": 26,
+          "mana": 17,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -635,7 +644,7 @@
         {
           "nivel": 15,
           "vida": 114,
-          "mana": 36,
+          "mana": 22,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -644,7 +653,7 @@
         {
           "nivel": 20,
           "vida": 149,
-          "mana": 46,
+          "mana": 27,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -653,7 +662,7 @@
         {
           "nivel": 30,
           "vida": 204,
-          "mana": 81,
+          "mana": 62,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -662,7 +671,7 @@
         {
           "nivel": 40,
           "vida": 259,
-          "mana": 116,
+          "mana": 97,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -675,7 +684,8 @@
       "id": "cacador",
       "titulo": "Caçador",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -747,7 +757,8 @@
       "id": "engenheiro",
       "titulo": "Engenheiro",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -821,7 +832,8 @@
       "id": "alquimista",
       "titulo": "Alquimista",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -893,7 +905,8 @@
       "id": "comerciante",
       "titulo": "Comerciante",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -965,7 +978,8 @@
       "id": "campeao-dimensional",
       "titulo": "Campeão Dimensional",
       "categoria": "especial",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -979,7 +993,7 @@
         {
           "nivel": 5,
           "vida": 44,
-          "mana": 16,
+          "mana": 12,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -988,7 +1002,7 @@
         {
           "nivel": 10,
           "vida": 79,
-          "mana": 26,
+          "mana": 17,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -997,7 +1011,7 @@
         {
           "nivel": 15,
           "vida": 114,
-          "mana": 36,
+          "mana": 22,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -1006,7 +1020,7 @@
         {
           "nivel": 20,
           "vida": 149,
-          "mana": 46,
+          "mana": 27,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1015,7 +1029,7 @@
         {
           "nivel": 30,
           "vida": 204,
-          "mana": 81,
+          "mana": 62,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1024,7 +1038,7 @@
         {
           "nivel": 40,
           "vida": 259,
-          "mana": 116,
+          "mana": 97,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1037,7 +1051,8 @@
       "id": "pirata-amaldicoado",
       "titulo": "Pirata Amaldiçoado",
       "categoria": "especial",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1109,7 +1124,8 @@
       "id": "cartista-arcano",
       "titulo": "Cartista Arcano",
       "categoria": "especial",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1123,7 +1139,7 @@
         {
           "nivel": 5,
           "vida": 36,
-          "mana": 24,
+          "mana": 28,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -1132,7 +1148,7 @@
         {
           "nivel": 10,
           "vida": 61,
-          "mana": 44,
+          "mana": 53,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -1141,7 +1157,7 @@
         {
           "nivel": 15,
           "vida": 86,
-          "mana": 64,
+          "mana": 78,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -1150,7 +1166,7 @@
         {
           "nivel": 20,
           "vida": 111,
-          "mana": 84,
+          "mana": 103,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1159,7 +1175,7 @@
         {
           "nivel": 30,
           "vida": 166,
-          "mana": 119,
+          "mana": 138,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1168,7 +1184,7 @@
         {
           "nivel": 40,
           "vida": 221,
-          "mana": 154,
+          "mana": 173,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1181,7 +1197,8 @@
       "id": "guia-dimensional",
       "titulo": "Guia Dimensional",
       "categoria": "especial",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1195,7 +1212,7 @@
         {
           "nivel": 5,
           "vida": 36,
-          "mana": 24,
+          "mana": 28,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -1204,7 +1221,7 @@
         {
           "nivel": 10,
           "vida": 61,
-          "mana": 44,
+          "mana": 53,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -1213,7 +1230,7 @@
         {
           "nivel": 15,
           "vida": 86,
-          "mana": 64,
+          "mana": 78,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -1222,7 +1239,7 @@
         {
           "nivel": 20,
           "vida": 111,
-          "mana": 84,
+          "mana": 103,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1231,7 +1248,7 @@
         {
           "nivel": 30,
           "vida": 166,
-          "mana": 119,
+          "mana": 138,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1240,7 +1257,7 @@
         {
           "nivel": 40,
           "vida": 221,
-          "mana": 154,
+          "mana": 173,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1253,7 +1270,8 @@
       "id": "cacador-das-almas",
       "titulo": "Caçador das Almas",
       "categoria": "especial",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1327,7 +1345,8 @@
       "id": "escritor-de-contos",
       "titulo": "Escritor de Contos",
       "categoria": "especial",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1341,7 +1360,7 @@
         {
           "nivel": 5,
           "vida": 36,
-          "mana": 24,
+          "mana": 28,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -1350,7 +1369,7 @@
         {
           "nivel": 10,
           "vida": 61,
-          "mana": 44,
+          "mana": 53,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -1359,7 +1378,7 @@
         {
           "nivel": 15,
           "vida": 86,
-          "mana": 64,
+          "mana": 78,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -1368,7 +1387,7 @@
         {
           "nivel": 20,
           "vida": 111,
-          "mana": 84,
+          "mana": 103,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1377,7 +1396,7 @@
         {
           "nivel": 30,
           "vida": 166,
-          "mana": 119,
+          "mana": 138,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1386,7 +1405,7 @@
         {
           "nivel": 40,
           "vida": 221,
-          "mana": 154,
+          "mana": 173,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1399,7 +1418,8 @@
       "id": "invocador",
       "titulo": "Invocador",
       "categoria": "especial",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1413,7 +1433,7 @@
         {
           "nivel": 5,
           "vida": 36,
-          "mana": 24,
+          "mana": 28,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -1422,7 +1442,7 @@
         {
           "nivel": 10,
           "vida": 61,
-          "mana": 44,
+          "mana": 53,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -1431,7 +1451,7 @@
         {
           "nivel": 15,
           "vida": 86,
-          "mana": 64,
+          "mana": 78,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -1440,7 +1460,7 @@
         {
           "nivel": 20,
           "vida": 111,
-          "mana": 84,
+          "mana": 103,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1449,7 +1469,7 @@
         {
           "nivel": 30,
           "vida": 166,
-          "mana": 119,
+          "mana": 138,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1458,7 +1478,7 @@
         {
           "nivel": 40,
           "vida": 221,
-          "mana": 154,
+          "mana": 173,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1471,7 +1491,8 @@
       "id": "viajante-classe",
       "titulo": "Viajante",
       "categoria": "especial",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1543,7 +1564,8 @@
       "id": "canalizador",
       "titulo": "Canalizador",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1557,7 +1579,7 @@
         {
           "nivel": 5,
           "vida": 32,
-          "mana": 28,
+          "mana": 32,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -1566,7 +1588,7 @@
         {
           "nivel": 10,
           "vida": 52,
-          "mana": 53,
+          "mana": 62,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -1575,7 +1597,7 @@
         {
           "nivel": 15,
           "vida": 72,
-          "mana": 78,
+          "mana": 92,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -1584,7 +1606,7 @@
         {
           "nivel": 20,
           "vida": 92,
-          "mana": 103,
+          "mana": 122,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1593,7 +1615,7 @@
         {
           "nivel": 30,
           "vida": 147,
-          "mana": 138,
+          "mana": 157,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1602,7 +1624,7 @@
         {
           "nivel": 40,
           "vida": 202,
-          "mana": 173,
+          "mana": 192,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1615,7 +1637,8 @@
       "id": "sintonizador",
       "titulo": "Sintonizador",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1629,7 +1652,7 @@
         {
           "nivel": 5,
           "vida": 32,
-          "mana": 28,
+          "mana": 32,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -1638,7 +1661,7 @@
         {
           "nivel": 10,
           "vida": 52,
-          "mana": 53,
+          "mana": 62,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -1647,7 +1670,7 @@
         {
           "nivel": 15,
           "vida": 72,
-          "mana": 78,
+          "mana": 92,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -1656,7 +1679,7 @@
         {
           "nivel": 20,
           "vida": 92,
-          "mana": 103,
+          "mana": 122,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1665,7 +1688,7 @@
         {
           "nivel": 30,
           "vida": 147,
-          "mana": 138,
+          "mana": 157,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1674,7 +1697,7 @@
         {
           "nivel": 40,
           "vida": 202,
-          "mana": 173,
+          "mana": 192,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1687,7 +1710,8 @@
       "id": "ritualista",
       "titulo": "Ritualista",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1701,7 +1725,7 @@
         {
           "nivel": 5,
           "vida": 32,
-          "mana": 28,
+          "mana": 32,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -1710,7 +1734,7 @@
         {
           "nivel": 10,
           "vida": 52,
-          "mana": 53,
+          "mana": 62,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -1719,7 +1743,7 @@
         {
           "nivel": 15,
           "vida": 72,
-          "mana": 78,
+          "mana": 92,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -1728,7 +1752,7 @@
         {
           "nivel": 20,
           "vida": 92,
-          "mana": 103,
+          "mana": 122,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1737,7 +1761,7 @@
         {
           "nivel": 30,
           "vida": 147,
-          "mana": 138,
+          "mana": 157,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1746,7 +1770,7 @@
         {
           "nivel": 40,
           "vida": 202,
-          "mana": 173,
+          "mana": 192,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1759,7 +1783,8 @@
       "id": "interceptador",
       "titulo": "Interceptador",
       "categoria": "especial",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1773,7 +1798,7 @@
         {
           "nivel": 5,
           "vida": 36,
-          "mana": 24,
+          "mana": 28,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -1782,7 +1807,7 @@
         {
           "nivel": 10,
           "vida": 61,
-          "mana": 44,
+          "mana": 53,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -1791,7 +1816,7 @@
         {
           "nivel": 15,
           "vida": 86,
-          "mana": 64,
+          "mana": 78,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -1800,7 +1825,7 @@
         {
           "nivel": 20,
           "vida": 111,
-          "mana": 84,
+          "mana": 103,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1809,7 +1834,7 @@
         {
           "nivel": 30,
           "vida": 166,
-          "mana": 119,
+          "mana": 138,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1818,7 +1843,7 @@
         {
           "nivel": 40,
           "vida": 221,
-          "mana": 154,
+          "mana": 173,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -1831,7 +1856,8 @@
       "id": "cozinheiro",
       "titulo": "Chef",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1905,7 +1931,8 @@
       "id": "detetive",
       "titulo": "Detetive",
       "categoria": "comum",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1977,7 +2004,8 @@
       "id": "devorador",
       "titulo": "Devorador",
       "categoria": "especial",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -1991,7 +2019,7 @@
         {
           "nivel": 5,
           "vida": 40,
-          "mana": 20,
+          "mana": 16,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -2000,7 +2028,7 @@
         {
           "nivel": 10,
           "vida": 70,
-          "mana": 35,
+          "mana": 26,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -2009,7 +2037,7 @@
         {
           "nivel": 15,
           "vida": 100,
-          "mana": 50,
+          "mana": 36,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -2018,7 +2046,7 @@
         {
           "nivel": 20,
           "vida": 130,
-          "mana": 65,
+          "mana": 46,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -2027,7 +2055,7 @@
         {
           "nivel": 30,
           "vida": 185,
-          "mana": 100,
+          "mana": 81,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -2036,7 +2064,7 @@
         {
           "nivel": 40,
           "vida": 240,
-          "mana": 135,
+          "mana": 116,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -2049,7 +2077,8 @@
       "id": "elementarista",
       "titulo": "Elementarista",
       "categoria": "especial",
-      "recursosPorNivel": 7,
+      "recursosPorNivel": 9,
+      "orcamentoEsperado": 9,
       "referencias": [
         {
           "nivel": 1,
@@ -2063,7 +2092,7 @@
         {
           "nivel": 5,
           "vida": 36,
-          "mana": 24,
+          "mana": 28,
           "defesaNatural": 13,
           "poderes": 1,
           "grausTreinamento": 1,
@@ -2072,7 +2101,7 @@
         {
           "nivel": 10,
           "vida": 61,
-          "mana": 44,
+          "mana": 53,
           "defesaNatural": 16,
           "poderes": 3,
           "grausTreinamento": 2,
@@ -2081,7 +2110,7 @@
         {
           "nivel": 15,
           "vida": 86,
-          "mana": 64,
+          "mana": 78,
           "defesaNatural": 18,
           "poderes": 5,
           "grausTreinamento": 3,
@@ -2090,7 +2119,7 @@
         {
           "nivel": 20,
           "vida": 111,
-          "mana": 84,
+          "mana": 103,
           "defesaNatural": 21,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -2099,7 +2128,7 @@
         {
           "nivel": 30,
           "vida": 166,
-          "mana": 119,
+          "mana": 138,
           "defesaNatural": 26,
           "poderes": 8,
           "grausTreinamento": 4,
@@ -2108,7 +2137,7 @@
         {
           "nivel": 40,
           "vida": 221,
-          "mana": 154,
+          "mana": 173,
           "defesaNatural": 31,
           "poderes": 8,
           "grausTreinamento": 4,

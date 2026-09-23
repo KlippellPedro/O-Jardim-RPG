@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AnimatePresence, motion, Reorder, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
+  Activity,
   Award,
   ArrowLeft,
   ArrowRight,
@@ -60,6 +61,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
   const [hpMax, setHpMax] = useState('');
   const [defenseValue, setDefenseValue] = useState('');
   const [manaValue, setManaValue] = useState('');
+  const [estaminaValue, setEstaminaValue] = useState('');
   const [type, setType] = useState<'aliado' | 'inimigo'>('inimigo');
   // O padrão protege o mestre: o número do monstro só aparece se ele escolher.
   const [visibilidade, setVisibilidade] = useState<NivelVisibilidade>('parcial');
@@ -140,12 +142,14 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
         visibilidade,
         defesa: defenseValue.trim() === '' ? undefined : Math.max(0, Math.min(999, Number(defenseValue) || 0)),
         mana_maxima: manaValue.trim() === '' ? undefined : Math.max(0, Math.min(99999, Number(manaValue) || 0)),
+        estamina_maxima: estaminaValue.trim() === '' ? undefined : Math.max(0, Math.min(99999, Number(estaminaValue) || 0)),
       });
       setName('');
       setInitiativeValue(10);
       setHpMax('');
       setDefenseValue('');
       setManaValue('');
+      setEstaminaValue('');
       setType('inimigo');
       setVisibilidade('parcial');
       setIsAdding(false);
@@ -271,6 +275,12 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
                 <Zap size={10} className="shrink-0 text-sky-300/70" />
                 <span className="truncate">{entity.manaAtual != null || entity.manaTotal != null ? comExtraTemporario(`${entity.manaAtual ?? entity.manaTotal}/${entity.manaTotal ?? '?'}`, entity.manaTemp) : '-'}</span>
               </span>
+              {entity.estaminaAtual != null || entity.estaminaTotal != null ? (
+                <span className="flex min-w-0 items-center gap-1 rounded-md bg-emerald-400/[0.07] px-1.5 py-1 text-emerald-100/60" title="Estamina">
+                  <Activity size={10} className="shrink-0 text-emerald-300/70" />
+                  <span className="truncate">{comExtraTemporario(`${entity.estaminaAtual ?? entity.estaminaTotal}/${entity.estaminaTotal ?? '?'}`, entity.estaminaTemp)}</span>
+                </span>
+              ) : null}
               <span className="flex min-w-0 items-center gap-1 rounded-md bg-white/[0.035] px-1.5 py-1 text-white/45" title="Defesa">
                 <Shield size={10} className="shrink-0" />
                 <span className="truncate">{entity.defesa ?? '—'}</span>
@@ -486,6 +496,18 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
                   max={99999}
                   value={manaValue}
                   onChange={(event) => setManaValue(event.target.value)}
+                  placeholder="-"
+                  className="mt-1 w-full rounded-md border border-white/10 bg-black/30 px-2 py-2 text-sm text-white outline-none"
+                />
+              </label>
+              <label className="text-[10px] uppercase tracking-wider text-white/40">
+                Estamina
+                <input
+                  type="number"
+                  min={0}
+                  max={99999}
+                  value={estaminaValue}
+                  onChange={(event) => setEstaminaValue(event.target.value)}
                   placeholder="-"
                   className="mt-1 w-full rounded-md border border-white/10 bg-black/30 px-2 py-2 text-sm text-white outline-none"
                 />

@@ -81,6 +81,7 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
   const maximos = {
     vida: Math.max(1, Number(derivados.vida) || 10),
     mana: Math.max(0, Number(derivados.mana) || 10),
+    estamina: Math.max(1, Number(derivados.estamina) || 1),
     sanidade: Math.max(1, Number(status.sanidadeMaxima) || 100),
   };
 
@@ -93,7 +94,7 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
       setMensagem('Personagens mortos não podem receber descanso completo. Somente uma regra explícita de retorno pode alterar esse estado.');
       return;
     }
-    const extrasPerdidos = (['vidaAtual', 'manaAtual', 'sanidadeAtual'] as const)
+    const extrasPerdidos = (['vidaAtual', 'manaAtual', 'estaminaAtual', 'sanidadeAtual'] as const)
       .map((campo) => ({ campo, valor: obterTemporario(status, campo) }))
       .filter((item) => item.valor > 0);
     const proximo = aplicarDescansoCompleto(status, maximos, resolucao.qualidade, tratamento);
@@ -103,6 +104,7 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
       recursos: [
         { rotulo: 'Vida', antes: Number(status.vidaAtual ?? maximos.vida), depois: Number(proximo.vidaAtual), maximo: maximos.vida, cor: 'linear-gradient(90deg,#b91c1c,#f87171)' },
         { rotulo: 'Mana', antes: Number(status.manaAtual ?? maximos.mana), depois: Number(proximo.manaAtual), maximo: maximos.mana, cor: 'linear-gradient(90deg,#0369a1,#7dd3fc)' },
+        { rotulo: 'Estamina', antes: Number(status.estaminaAtual ?? maximos.estamina), depois: Number(proximo.estaminaAtual), maximo: maximos.estamina, cor: 'linear-gradient(90deg,#047857,#6ee7b7)' },
         { rotulo: 'Sanidade', antes: Number(status.sanidadeAtual ?? maximos.sanidade), depois: Number(proximo.sanidadeAtual), maximo: maximos.sanidade, cor: 'linear-gradient(90deg,#6d28d9,#c4b5fd)' },
         { rotulo: 'Cansaço', antes: Number(status.cansacoAtual ?? 0), depois: Number(proximo.cansacoAtual), maximo: 6, cor: 'linear-gradient(90deg,#475569,#cbd5e1)', inverso: true },
       ],
@@ -110,7 +112,7 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
     onUpdate(['ficha', 'status'], proximo);
     // Cada descanso completo reabre o pagamento do lote de Alquimia, Engenharia e Cozinha.
     onUpdate(['ficha', 'contadorDescansos'], Math.max(0, Math.trunc(Number(ficha.contadorDescansos) || 0)) + 1);
-    const rotuloExtra: Record<string, string> = { vidaAtual: 'Vida', manaAtual: 'Mana', sanidadeAtual: 'Sanidade' };
+    const rotuloExtra: Record<string, string> = { vidaAtual: 'Vida', manaAtual: 'Mana', estaminaAtual: 'Estamina', sanidadeAtual: 'Sanidade' };
     const partes = [`Descanso ${regraSelecionada.titulo.toLocaleLowerCase('pt-BR')} aplicado.`];
     if (resolucao.ajustes.length) {
       partes.push(`Base ${regraBase.titulo.toLocaleLowerCase('pt-BR')}, ${resolucao.passos > 0 ? '+' : ''}${resolucao.passos} pelas circunstâncias.`);
@@ -130,11 +132,12 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
       Number(atributos.sabedoria) || 10,
       Number(ficha.nivel) || Number(character.nivel) || 1,
       dado,
+      maximos.estamina,
     );
     if (resultado.erro) setMensagem(resultado.erro);
     else {
       onUpdate(['ficha', 'status'], resultado.status);
-      setMensagem(`Relaxamento: d6 = ${dado}; ${resultado.recuperado} Mana recuperada.`);
+      setMensagem(`Relaxamento: d6 = ${dado}; ${resultado.recuperado} Mana e ${resultado.recuperadoEstamina} Estamina recuperadas.`);
     }
   };
 
@@ -224,10 +227,11 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
               Recupere recursos, registre o desgaste da sessão e aplique condições oficiais diretamente na ficha.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:min-w-[440px]">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-5 lg:min-w-[520px]">
             {[
               ['Vida', status.vidaAtual ?? maximos.vida, maximos.vida],
               ['Mana', status.manaAtual ?? maximos.mana, maximos.mana],
+              ['Estamina', status.estaminaAtual ?? maximos.estamina, maximos.estamina],
               ['Sanidade', status.sanidadeAtual ?? maximos.sanidade, maximos.sanidade],
               ['Cansaço', status.cansacoAtual ?? 0, 6],
             ].map(([label, atual, maximo]) => (
@@ -279,6 +283,7 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
                   <div className="mt-3 flex flex-wrap gap-1.5 text-[10px] font-bold">
                     <span className="rounded-md bg-red-400/10 px-2 py-1 text-red-200">PV {Math.round(regra.recuperacao * 100)}%</span>
                     <span className="rounded-md bg-sky-400/10 px-2 py-1 text-sky-200">Mana {Math.round(regra.recuperacao * 100)}%</span>
+                    <span className="rounded-md bg-emerald-400/10 px-2 py-1 text-emerald-200">Estamina {Math.round(regra.recuperacao * 100)}%</span>
                   </div>
                   <p className="mt-3 text-[11px] leading-relaxed text-gray-500">{regra.criterio}</p>
                 </button>
@@ -377,7 +382,7 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
             </button>
             <button type="button" onClick={adicionarCansaco} className="flex items-center gap-3 rounded-2xl border border-orange-400/20 bg-orange-400/[0.06] p-4 text-left transition-colors hover:bg-orange-400/10">
               <Swords className="shrink-0 text-orange-300" size={20} />
-              <span><strong className="block text-sm text-orange-100">Registrar combate intenso</strong><span className="mt-1 block text-xs text-gray-500">Adiciona 1 Cansaço, no máximo uma vez por cena.</span></span>
+              <span><strong className="block text-sm text-orange-100">Registrar combate intenso</strong><span className="mt-1 block text-xs text-gray-500">Adiciona 1 Cansaço, no máximo uma vez por cena. Na Sessão ao Vivo isso acontece sozinho quando o combate termina; use o botão só fora dela.</span></span>
             </button>
           </div>
 

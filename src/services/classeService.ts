@@ -13,7 +13,7 @@ export const classeTemProgressaoPublicada = (classe: IClasse | undefined): boole
 );
 
 export const formatarResumoClasse = (classe: IClasse): string => (
-  `Vida por nível: ${classe.vida} | Mana por nível: ${classe.mana}`
+  `Vida: ${classe.vida} | Mana: ${classe.mana}${classe.estamina !== undefined ? ` | Estamina: ${classe.estamina}` : ''}`
 );
 
 export const formatarRecompensaClasse = (recompensa: IRecompensaClasse): string => {

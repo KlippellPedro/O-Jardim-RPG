@@ -417,7 +417,7 @@ export const RECEITAS_MATERIAIS_COZINHEIRO: ReceitaMaterial[] = simplificarPrepa
     classe: 'cozinheiro',
     raridade: 'comum',
     linhas: [{ id: 'essencia-vital', quantidade: 1, propriedade: { nome: 'Vital', valorMinimo: 1 } }],
-    efeito: 'Refeição. Restaura 1d4 de Mana. A mesma criatura aproveita esta receita apenas uma vez por descanso.',
+    efeito: 'Refeição. Restaura 1d4 de Estamina. A mesma criatura aproveita esta receita apenas uma vez por descanso.',
   },
   {
     id: 'molho-picante',

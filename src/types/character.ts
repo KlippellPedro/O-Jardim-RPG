@@ -16,6 +16,8 @@ export interface ICharacter {
   derivados?: {
     vida: number;
     mana: number;
+    /** Ausente em fichas gravadas antes da Estamina existir. */
+    estamina?: number;
     movimento: number;
     defesaNatural?: number;
     iniciativa?: number;

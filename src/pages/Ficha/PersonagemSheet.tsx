@@ -26,6 +26,7 @@ import {
   RefreshCw,
   ScrollText,
   Sparkles,
+  Sprout,
   Swords,
   TrendingUp,
   UserRound,
@@ -44,6 +45,7 @@ import { AbaFicha } from './abas/AbaFicha';
 import { AbaPericias } from './abas/AbaPericias';
 import { AbaInventario } from './abas/AbaInventario';
 import { AbaPoderes } from './abas/AbaPoderes';
+import { AbaJardim } from './abas/AbaJardim';
 import { AbaHabilidades } from './abas/AbaHabilidades';
 import { AbaAtaques } from './abas/AbaAtaques';
 import { AbaMagias } from './abas/AbaMagias';
@@ -99,6 +101,7 @@ const TABS = [
   { id: 'Ataques', icon: Swords },
   { id: 'Aliados', icon: Users },
   { id: 'Progressão', icon: TrendingUp },
+  { id: 'Jardim', icon: Sprout },
   { id: 'Descanso', icon: Moon },
   { id: 'Notas', icon: ScrollText },
 ] as const;
@@ -843,6 +846,7 @@ export const PersonagemSheet: React.FC = () => {
         { label: 'Inventário', value: 'Itens e moedas (sincronizados com o servidor)' },
         { label: 'Bens', value: 'Propriedades e veículos' },
         { label: 'Poderes / Habilidades / Magias', value: 'Escolher progressão, consultar efeitos, conjurar pelo catálogo oficial e registrar na mesa' },
+        { label: 'Jardim', value: 'Podar poderes por Sementes e plantar poderes de outras classes na ficha' },
         { label: 'Ataques', value: 'Criar, editar e rolar acerto/dano no servidor' },
         { label: 'Aliados', value: 'Companheiros e seguidores' },
         { label: 'Notas', value: 'História e anotações de sessão' },
@@ -888,6 +892,7 @@ export const PersonagemSheet: React.FC = () => {
       case 'Inventário': return <AbaInventario {...props} />;
       case 'Bens': return <AbaBens {...props} />;
       case 'Poderes': return <AbaPoderes {...props} />;
+      case 'Jardim': return <AbaJardim {...props} />;
       case 'Habilidades': return <AbaHabilidades {...props} />;
       case 'Ataques': return <AbaAtaques {...props} />;
       case 'Descanso': return <AbaDescanso {...props} onOpenConditions={openActiveConditions} />;

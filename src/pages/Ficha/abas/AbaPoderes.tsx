@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import { Search, Zap, Pencil, Trash2, Dices, GripVertical, Star, Sparkles, Shield, Crown } from 'lucide-react';
+import { Search, Zap, Pencil, Trash2, Dices, GripVertical, Star, Sparkles, Shield, Crown, Sprout, Gem } from 'lucide-react';
 import { AnimatePresence, motion, Reorder } from 'framer-motion';
 import { FichaModal } from '../components/FichaModal';
 import { LabeledInput, LabeledSelect } from '../components/SharedFichaComponents';
@@ -7,8 +7,17 @@ import { registrosApi } from '../../../services/registrosApi';
 import { personagensApi } from '../../../services/personagensApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { useCharacterStore } from '../../../store/useCharacterStore';
-import { legadosSelecionados, poderesSelecionados } from '../../../services/progressaoFichaService';
-import { campoTemporario, gastarComTemporario, obterStatusFicha, obterTemporario } from '../../../services/statusService';
+import { legadosSelecionados, poderesJardimSelecionados, poderesSelecionados, unicosJardimSelecionados } from '../../../services/progressaoFichaService';
+import {
+  campoTemporario,
+  custoDePoder,
+  gastarComTemporario,
+  obterStatusFicha,
+  obterTemporario,
+  RECURSOS_CUSTO_OPCOES,
+  ROTULO_RECURSO,
+  type TRecursoCusto,
+} from '../../../services/statusService';
 import { EditorEfeitos } from '../components/ItemEffectsModals';
 import { PERICIAS_CATALOGO } from '../../../services/catalogoService';
 import { periciasDisponiveisParaEfeitos } from '../../../services/periciasFichaService';
@@ -31,7 +40,7 @@ import { OcultarItemAutomaticoModal } from '../components/OcultarItemAutomaticoM
 import { mesclarOrdemFiltrada } from '../../../services/listOrderingService';
 
 interface ICustoPoder {
-  recurso: 'nenhum' | 'mana' | 'vida' | 'sanidade' | 'cansaco';
+  recurso: TRecursoCusto;
   valor: number;
 }
 
@@ -51,27 +60,13 @@ interface IPoder {
   efeitos?: IEfeitoEquipamento[];
   usavel?: boolean;
   estagioFruto?: 'normal' | 'aprimorado' | 'despertado';
-  categoriaOrigem?: 'Classe' | 'Legado' | 'Fruto do Éden';
+  categoriaOrigem?: 'Classe' | 'Legado' | 'Fruto do Éden' | 'Jardim' | 'Único';
   origemNome?: string;
 }
 
 const TIPOS_PODER = ['Ativa', 'Passiva', 'Reação', 'Sustentada', 'Outro'];
 
-const RECURSOS_CUSTO = [
-  { value: 'nenhum', label: 'Nenhum' },
-  { value: 'mana', label: 'Mana' },
-  { value: 'vida', label: 'Vida' },
-  { value: 'sanidade', label: 'Sanidade' },
-  { value: 'cansaco', label: 'Cansaço' },
-];
-
-const RECURSO_LABEL: Record<string, string> = {
-  nenhum: 'Nenhum',
-  mana: 'Mana',
-  vida: 'Vida',
-  sanidade: 'Sanidade',
-  cansaco: 'Cansaço',
-};
+const RECURSOS_CUSTO = [...RECURSOS_CUSTO_OPCOES];
 
 const TIPO_COLORS: Record<string, string> = {
   Ativa: 'bg-red-500/10 border-red-500/30 text-red-400',
@@ -101,7 +96,7 @@ const criarPoderVazio = (): IPoder => ({
 
 function custoTexto(custo?: ICustoPoder) {
   if (!custo || custo.recurso === 'nenhum' || !custo.valor) return 'Sem custo';
-  return `${custo.valor} ${RECURSO_LABEL[custo.recurso] || custo.recurso}`;
+  return `${custo.valor} ${ROTULO_RECURSO[custo.recurso] || custo.recurso}`;
 }
 
 export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: any }) => {
@@ -130,7 +125,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     fonte: `Classe: ${item.origem}`,
     tipo: item.descricao.toLocaleLowerCase('pt-BR').startsWith('passivo') ? 'Passiva' : 'Ativa',
     nivelAdquirido: String(item.nivel),
-    custo: { recurso: item.custoMana ? 'mana' : 'nenhum', valor: item.custoMana || 0 },
+    custo: custoDePoder(item),
     acao: '',
     duracao: '',
     alcance: '',
@@ -153,10 +148,38 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     origemNome: 'Legados de Ascensão',
   })), [f]);
   const poderesFruto: IPoder[] = useMemo(() => poderesDoFruto(f), [f]);
+  const poderesJardim: IPoder[] = useMemo(() => poderesJardimSelecionados(f).map((item) => ({
+    id: item.id,
+    nome: item.titulo,
+    fonte: `Jardim: ${item.origem}`,
+    tipo: item.descricao.toLocaleLowerCase('pt-BR').startsWith('passivo') ? 'Passiva' : 'Ativa',
+    nivelAdquirido: String(item.nivel),
+    custo: custoDePoder(item),
+    acao: '',
+    duracao: '',
+    alcance: '',
+    descricao: item.descricao,
+    categoriaOrigem: 'Jardim',
+    origemNome: item.origem,
+  })), [f]);
+  const poderesUnicos: IPoder[] = useMemo(() => unicosJardimSelecionados(f).map((item) => ({
+    id: item.id,
+    nome: item.titulo,
+    fonte: 'Único do Jardim',
+    tipo: item.descricao.toLocaleLowerCase('pt-BR').startsWith('passivo') ? 'Passiva' : 'Ativa',
+    nivelAdquirido: '',
+    custo: custoDePoder(item),
+    acao: '',
+    duracao: '',
+    alcance: '',
+    descricao: item.descricao,
+    categoriaOrigem: 'Único',
+    origemNome: 'Único do Jardim',
+  })), [f]);
   // Nenhum destes depende de `busca`: memoizados para não recalcular a cada tecla digitada.
   const poderesAutomaticos = useMemo(
-    () => [...poderesClasse, ...poderesLegado, ...poderesFruto],
-    [poderesClasse, poderesLegado, poderesFruto],
+    () => [...poderesClasse, ...poderesLegado, ...poderesFruto, ...poderesJardim, ...poderesUnicos],
+    [poderesClasse, poderesLegado, poderesFruto, poderesJardim, poderesUnicos],
   );
   const poderesOcultos = useMemo(() => poderesAutomaticos
     .filter((poder) => personalizacoes[poder.id]?.oculta)
@@ -167,7 +190,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
     })), [poderesAutomaticos, personalizacoes]);
   const frutoConsumido = obterFrutoEdenConsumido(f);
   const termoBusca = busca.trim().toLocaleLowerCase('pt-BR');
-  const poderesOficiais = [...poderesClasse, ...poderesLegado]
+  const poderesOficiais = [...poderesClasse, ...poderesLegado, ...poderesJardim, ...poderesUnicos]
     .filter((poder) => !personalizacoes[poder.id]?.oculta)
     .filter((poder) => !termoBusca
       || poder.nome.toLocaleLowerCase('pt-BR').includes(termoBusca)
@@ -195,6 +218,16 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
       id: 'legados', categoria: 'Legado de Ascensão', titulo: 'Legados de Ascensão',
       itens: poderesOficiais.filter((poder) => poder.categoriaOrigem === 'Legado'), icone: 'legado',
       paleta: { borda: 'border-amber-400/30', fundo: 'bg-amber-500/[0.05]', texto: 'text-amber-300', selo: 'border-amber-400/30 bg-amber-500/10 text-amber-200' },
+    }] : []),
+    ...(poderesOficiais.some((poder) => poder.categoriaOrigem === 'Jardim') ? [{
+      id: 'jardim', categoria: 'Jardim', titulo: 'Plantados no Jardim',
+      itens: poderesOficiais.filter((poder) => poder.categoriaOrigem === 'Jardim'), icone: 'jardim',
+      paleta: { borda: 'border-lime-400/30', fundo: 'bg-lime-500/[0.05]', texto: 'text-lime-300', selo: 'border-lime-400/30 bg-lime-500/10 text-lime-200' },
+    }] : []),
+    ...(poderesOficiais.some((poder) => poder.categoriaOrigem === 'Único') ? [{
+      id: 'unicos', categoria: 'Único', titulo: 'Únicos do Jardim',
+      itens: poderesOficiais.filter((poder) => poder.categoriaOrigem === 'Único'), icone: 'unico',
+      paleta: { borda: 'border-violet-400/30', fundo: 'bg-violet-500/[0.05]', texto: 'text-violet-300', selo: 'border-violet-400/30 bg-violet-500/10 text-violet-200' },
     }] : []),
   ];
 
@@ -353,6 +386,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
       } else {
         const mapaCampo: Record<string, { campo: string; max: number }> = {
           mana: { campo: 'manaAtual', max: (f.derivados?.mana || character.derivados?.mana || 10) + bonusRecursoDoFruto(f, 'manaMaxima') },
+          estamina: { campo: 'estaminaAtual', max: (f.derivados?.estamina || character.derivados?.estamina || 1) + bonusRecursoDoFruto(f, 'estaminaMaxima') },
           vida: { campo: 'vidaAtual', max: (f.derivados?.vida || character.derivados?.vida || 10) + bonusRecursoDoFruto(f, 'vidaMaxima') },
           sanidade: { campo: 'sanidadeAtual', max: Number(status.sanidadeMaxima) || 100 },
         };
@@ -362,7 +396,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
           const gasto = gastarComTemporario(status, regra.campo, atual, valor);
           const novo = gasto.atual;
           if (novo < 0) {
-            setUltimoUsoMsg({ id: item.id, texto: `Não há ${RECURSO_LABEL[recurso]} suficiente para usar ${item.nome}.`, erro: true });
+            setUltimoUsoMsg({ id: item.id, texto: `Não há ${ROTULO_RECURSO[recurso]} suficiente para usar ${item.nome}.`, erro: true });
             setTimeout(() => setUltimoUsoMsg((m) => (m?.id === item.id ? null : m)), 3000);
             return;
           }
@@ -461,7 +495,7 @@ export const AbaPoderes = ({ character, onUpdate }: { character: any; onUpdate: 
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-3 border-b border-white/5 pb-3">
                   <div className="flex items-center gap-3">
                     <div className={`flex h-9 w-9 items-center justify-center rounded-lg border ${grupo.paleta.selo}`}>
-                      {grupo.icone === 'legado' ? <Crown size={17} /> : <Shield size={17} />}
+                      {grupo.icone === 'legado' ? <Crown size={17} /> : grupo.icone === 'jardim' ? <Sprout size={17} /> : grupo.icone === 'unico' ? <Gem size={17} /> : <Shield size={17} />}
                     </div>
                     <div>
                       <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${grupo.paleta.texto}`}>{grupo.categoria}</p>

@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from psycopg.types.json import Jsonb
 
 from core import live_session
+from core.combate_intenso import registrar_minimos
 from core.conquistas import avaliar_sem_quebrar
 from core.dados import rolar_formula, rolar_teste
 from core.database import Database
@@ -163,7 +164,13 @@ def _tocar_sessao(connection, sessao_id) -> int:
     return int(linha["versao"])
 
 
-def _descontar_mana_na_sessao(connection, *, sessao_id, personagem_id, custo: int) -> int | None:
+_COLUNAS_RECURSO_SESSAO = {
+    "mana": ("mana_atual", "mana_temporaria"),
+    "estamina": ("estamina_atual", "estamina_temporaria"),
+}
+
+
+def _descontar_mana_na_sessao(connection, *, sessao_id, personagem_id, custo: int, recurso: str = "mana") -> int | None:
     """Quando um poder/habilidade/magia com custo em Mana é registrado
     (ver AbaPoderes.tsx / AbaHabilidades.tsx, que já descontam da ficha), e o
     personagem está em cena numa sessão ao vivo, desconta o mesmo valor do HUD
@@ -176,24 +183,25 @@ def _descontar_mana_na_sessao(connection, *, sessao_id, personagem_id, custo: in
     que precisa publicar "participante_atualizado" e não só "registro" — sem
     isso o HUD ao vivo do mestre não atualizava sozinho; achado descoberto na
     validação pós-correção), ou None se não havia participante pra descontar."""
+    coluna_atual, coluna_extra = _COLUNAS_RECURSO_SESSAO[recurso]
     linha = connection.execute(
-        """
-        SELECT id, mana_atual, mana_temporaria FROM sessao_participantes
+        f"""
+        SELECT id, {coluna_atual}, {coluna_extra} FROM sessao_participantes
         WHERE sessao_id=%s AND personagem_id=%s
         FOR UPDATE
         """,
         (sessao_id, personagem_id),
     ).fetchone()
-    if not linha or linha["mana_atual"] is None:
+    if not linha or linha[coluna_atual] is None:
         return None
     # O extra temporário paga o custo primeiro.
-    extra = int(linha.get("mana_temporaria") or 0)
+    extra = int(linha.get(coluna_extra) or 0)
     absorvido = min(extra, custo)
-    novo_valor = max(0, int(linha["mana_atual"]) - (custo - absorvido))
+    novo_valor = max(0, int(linha[coluna_atual]) - (custo - absorvido))
     connection.execute(
-        """
+        f"""
         UPDATE sessao_participantes
-        SET mana_atual=%s, mana_temporaria=%s, atualizado_em=CURRENT_TIMESTAMP
+        SET {coluna_atual}=%s, {coluna_extra}=%s, atualizado_em=CURRENT_TIMESTAMP
         WHERE id=%s
         """,
         (novo_valor, extra - absorvido, linha["id"]),
@@ -235,7 +243,7 @@ def registrar_uso(
         )
         conquistas_novas = avaliar_sem_quebrar(connection, personagem_id, user.id)
         nova_versao_sessao = None
-        if sessao and personagem_id and payload.detalhes.get("recurso") == "mana":
+        if sessao and personagem_id and payload.detalhes.get("recurso") in _COLUNAS_RECURSO_SESSAO:
             custo = payload.detalhes.get("custo")
             if isinstance(custo, (int, float)) and not isinstance(custo, bool) and custo > 0:
                 nova_versao_sessao = _descontar_mana_na_sessao(
@@ -243,7 +251,10 @@ def registrar_uso(
                     sessao_id=sessao["id"],
                     personagem_id=personagem_id,
                     custo=int(custo),
+                    recurso=payload.detalhes["recurso"],
                 )
+                if nova_versao_sessao is not None:
+                    registrar_minimos(connection, sessao["id"])
     live_session.publicar(payload.campanha_id, "registro", 0)
     if nova_versao_sessao is not None:
         # Sem isso, o HUD da sessão só atualizava com uma ação manual do

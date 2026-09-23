@@ -7,7 +7,8 @@
     "disponibilidade": "geral",
     "arvore": null,
     "vida": 5,
-    "mana": 2,
+    "mana": 1,
+    "estamina": 3,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -316,10 +317,11 @@
           {
             "nivel": 20,
             "titulo": "Sai da Frente",
-            "descricao": "Uma vez por combate, depois de acertar, gaste 8 de Mana: o alvo testa Vontade contra a sua DT de Guerreiro; em falha ele fica Amedrontado por uma rodada, e você ataca de novo na hora.",
+            "descricao": "Uma vez por combate, depois de acertar, gaste 8 de Estamina: o alvo testa Vontade contra a sua DT de Guerreiro; em falha ele fica Amedrontado por uma rodada, e você ataca de novo na hora.",
+            "custo_estamina": 8,
             "acao": "Ação Livre depois do acerto",
             "defesa": "Vontade contra a DT de Guerreiro",
-            "usos": "Uma vez por combate, 8 Mana"
+            "usos": "Uma vez por combate, 8 Estamina"
           }
         ]
       },
@@ -528,7 +530,8 @@
       {
         "id": "correndo",
         "titulo": "Correndo",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação de Movimento",
         "alcance": "12 m",
         "duracao": "Três rodadas",
@@ -537,7 +540,8 @@
       {
         "id": "serio-isso",
         "titulo": "Sério Isso?",
-        "custo_mana": 2,
+        "custo_mana": 0,
+        "custo_estamina": 2,
         "acao": "Reação",
         "duracao": "Até o fim da cena",
         "descricao": "Use a reação quando alguém tentar intimidar você: receba vantagem para resistir, e +2 na sua próxima Intimidação contra essa pessoa até o fim da cena."
@@ -545,7 +549,8 @@
       {
         "id": "alvo-do-batalhao",
         "titulo": "Alvo do Batalhão",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação de Movimento",
         "alcance": "12 m",
         "duracao": "Duas rodadas",
@@ -554,7 +559,8 @@
       {
         "id": "grito-de-batalha",
         "titulo": "Grito de Batalha",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação Padrão",
         "alcance": "12 m",
         "duracao": "Até o começo do seu próximo turno",
@@ -563,7 +569,8 @@
       {
         "id": "comando-de-guerra",
         "titulo": "Comando de Guerra",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Reação",
         "alcance": "12 m",
         "descricao": "Use a reação quando um aliado seguir uma ordem sua: o ataque dele soma o seu Grau em Luta ao dano."
@@ -582,7 +589,8 @@
       {
         "id": "reacao-de-veterano",
         "titulo": "Reação de Veterano",
-        "custo_mana": 6,
+        "custo_mana": 0,
+        "custo_estamina": 6,
         "acao": "Ação Livre",
         "usos": "Uma vez por rodada",
         "descricao": "Uma vez por rodada, recupere a reação assim que ela for gasta. Isso não dá duas reações no mesmo gatilho: a segunda espera o próximo."
@@ -597,7 +605,8 @@
     "disponibilidade": "geral",
     "arvore": null,
     "vida": 4,
-    "mana": 3,
+    "mana": 4,
+    "estamina": 1,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -1155,7 +1164,8 @@
       {
         "id": "reparo-rapido",
         "titulo": "Reparo Rápido",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação Padrão",
         "alcance": "Adjacente ao veículo",
         "usos": "Uma vez por cena",
@@ -1179,7 +1189,8 @@
     "disponibilidade": "geral",
     "arvore": null,
     "vida": 4,
-    "mana": 3,
+    "mana": 2,
+    "estamina": 3,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -1649,7 +1660,8 @@
       {
         "id": "ataque-em-movimento",
         "titulo": "Ataque em Movimento",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação Livre",
         "usos": "Uma vez por combate",
         "descricao": "Uma vez por combate, enquanto se move em combate, realize um ataque adicional com uma shuriken ou kunai que possua."
@@ -1657,7 +1669,8 @@
       {
         "id": "aplicacao-inteligente",
         "titulo": "Aplicação Inteligente",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
         "dano": "+1 dado do Mod. Inteligência (+2 com Arma Ninja)",
@@ -1666,7 +1679,8 @@
       {
         "id": "ataque-oculto",
         "titulo": "Ataque Oculto",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação Livre antes do ataque",
         "dano": "+1d8 (até +3d8 com o poder escolhido de novo)",
         "descricao": "Ao atacar em alcance corpo a corpo ou curto um alvo que não percebeu você, cause +1d8 de dano. Este poder pode ser escolhido novamente para adicionar +1d8, até o máximo de 3 escolhas.",
@@ -1676,7 +1690,8 @@
       {
         "id": "dano-desarmado",
         "titulo": "Dano Desarmado",
-        "custo_mana": 1,
+        "custo_mana": 0,
+        "custo_estamina": 1,
         "acao": "Ação Livre",
         "duracao": "Uma cena",
         "dano": "1d6",
@@ -1685,7 +1700,8 @@
       {
         "id": "pulo-duplo",
         "titulo": "Pulo Duplo",
-        "custo_mana": 2,
+        "custo_mana": 0,
+        "custo_estamina": 2,
         "acao": "Ação Livre",
         "descricao": "Ao saltar, faça um teste de Atletismo contra DT 18 para realizar um segundo salto no ar. Você perde este benefício enquanto usar uma armadura marcial."
       },
@@ -1729,7 +1745,8 @@
       {
         "id": "onshinjutsu",
         "titulo": "Onshinjutsu",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação de Movimento",
         "duracao": "Enquanto permanecer parado",
         "descricao": "Use um tecido de camuflagem e receba +5 em Furtividade enquanto permanecer parado. A técnica não funciona contra quem já estiver observando você."
@@ -1745,6 +1762,7 @@
     "arvore": null,
     "vida": 3,
     "mana": 4,
+    "estamina": 2,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -2107,7 +2125,7 @@
             "duracao": "Instantânea",
             "usos": "Uma lata por sessão",
             "descricao": "A marca manda caixa fechada. Uma vez por sessão, uma lata remove 1 de Cansaço de quem beber.",
-            "escalonamento": "Nível 2: duas latas por sessão. Nível 3: a lata também devolve 1d6 de Mana. Nível 4: três latas por sessão, e cada uma remove 2 de Cansaço."
+            "escalonamento": "Nível 2: duas latas por sessão. Nível 3: a lata também devolve 1d6 de Estamina. Nível 4: três latas por sessão, e cada uma remove 2 de Cansaço."
           },
           {
             "id": "cosmeticos",
@@ -2210,7 +2228,7 @@
       {
         "id": "estrela-eterna",
         "titulo": "Estrela Eterna",
-        "descricao": "Uma vez por sessão, use uma Ação Completa para iniciar uma apresentação que dura três rodadas. Todos os aliados que possam ver ou ouvir você recebem 8 de Mana temporária, vantagem no primeiro teste de cada turno e imunidade a medo enquanto durar a apresentação. Uma vez durante o efeito, quando um desses aliados cair a 0 de Vida, ele permanece com 1 de Vida. A Mana temporária desaparece ao fim da cena e não se acumula.",
+        "descricao": "Uma vez por sessão, use uma Ação Completa para iniciar uma apresentação que dura três rodadas. Todos os aliados que possam ver ou ouvir você recebem 8 de Mana temporária e 8 de Estamina temporária, vantagem no primeiro teste de cada turno e imunidade a medo enquanto durar a apresentação. Uma vez durante o efeito, quando um desses aliados cair a 0 de Vida, ele permanece com 1 de Vida. A Mana temporária desaparece ao fim da cena e não se acumula.",
         "niveis": [
           20
         ],
@@ -2237,7 +2255,8 @@
       {
         "id": "pose-de-diva",
         "titulo": "Pose de Diva",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação de Movimento",
         "duracao": "Uma rodada",
         "defesa": "Vontade contra a DT de Palco",
@@ -2273,7 +2292,8 @@
       {
         "id": "lancamento-surpresa",
         "titulo": "Lançamento Surpresa",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação Padrão",
         "alcance": "12 m",
         "duracao": "Uma cena",
@@ -2282,7 +2302,8 @@
       {
         "id": "meu-cabelo-tem-vida-propria",
         "titulo": "Meu Cabelo Tem Vida Própria",
-        "custo_mana": 2,
+        "custo_mana": 0,
+        "custo_estamina": 2,
         "acao": "Reação",
         "alcance": "6 m",
         "descricao": "Use a reação quando uma criatura a até 6 m mirar em você: ela sofre −2 nesse ataque."
@@ -2309,7 +2330,8 @@
       {
         "id": "faz-o-l-de-luz",
         "titulo": "Faz o L de Luz",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Padrão",
         "alcance": "3 m ao redor",
         "duracao": "Até o próximo turno",
@@ -2337,7 +2359,8 @@
     "disponibilidade": "geral",
     "arvore": null,
     "vida": 5,
-    "mana": 2,
+    "mana": 1,
+    "estamina": 3,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -2601,9 +2624,9 @@
           },
           {
             "nivel": 15,
-            "descricao": "O dano adicional da espada vinculada sobe para +4. Ao derrubar uma criatura relevante, recupere 2 de Mana.",
+            "descricao": "O dano adicional da espada vinculada sobe para +4. Ao derrubar uma criatura relevante, recupere 2 de Estamina.",
             "dano": "+4 de dano com a espada vinculada",
-            "usos": "A recuperação de Mana vale uma vez por rodada"
+            "usos": "A recuperação de Estamina vale uma vez por rodada"
           },
           {
             "nivel": 20,
@@ -2740,7 +2763,8 @@
       {
         "id": "golpe-em-z",
         "titulo": "Golpe em Z",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
         "dano": "+1 dado",
@@ -2749,7 +2773,8 @@
       {
         "id": "golpe-em-w",
         "titulo": "Golpe em W",
-        "custo_mana": 6,
+        "custo_mana": 0,
+        "custo_estamina": 6,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
         "dano": "+2 dados",
@@ -2761,7 +2786,8 @@
       {
         "id": "corte-cirurgico",
         "titulo": "Corte Cirúrgico",
-        "custo_mana": 2,
+        "custo_mana": 0,
+        "custo_estamina": 2,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
         "descricao": "Receba +2 no próximo ataque com espada."
@@ -2769,7 +2795,8 @@
       {
         "id": "corte-a-distancia",
         "titulo": "Corte à Distância",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Padrão",
         "alcance": "9 m",
         "descricao": "Faça um ataque com espada contra um alvo a até 9 m; ele causa o dano normal da arma."
@@ -2777,7 +2804,8 @@
       {
         "id": "penetrar-armadura",
         "titulo": "Penetrar Armadura",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
         "dano": "Ignora 5 de Resistência",
@@ -2786,7 +2814,8 @@
       {
         "id": "penetrar-armadura-ii",
         "titulo": "Penetrar Armadura II",
-        "custo_mana": 6,
+        "custo_mana": 0,
+        "custo_estamina": 6,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
         "dano": "Ignora 10 de Resistência",
@@ -2798,7 +2827,8 @@
       {
         "id": "protecao-da-espada",
         "titulo": "Proteção da Espada",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação de Movimento",
         "duracao": "Até o começo do próximo turno",
         "defesa": "+3",
@@ -2807,7 +2837,8 @@
       {
         "id": "corte-a-distancia-ii",
         "titulo": "Corte à Distância II",
-        "custo_mana": 7,
+        "custo_mana": 0,
+        "custo_estamina": 7,
         "acao": "Ação Livre, junto com Corte à Distância",
         "alcance": "18 m",
         "descricao": "Aumente para 18 m o alcance de Corte à Distância.",
@@ -2818,7 +2849,8 @@
       {
         "id": "corte-cirurgico-ii",
         "titulo": "Corte Cirúrgico II",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
         "descricao": "Receba +5 no próximo ataque com espada.",
@@ -2829,7 +2861,8 @@
       {
         "id": "protecao-da-espada-ii",
         "titulo": "Proteção da Espada II",
-        "custo_mana": 8,
+        "custo_mana": 0,
+        "custo_estamina": 8,
         "acao": "Reação",
         "defesa": "+5",
         "descricao": "Use uma reação para receber +5 Defesa contra um ataque.",
@@ -2848,6 +2881,7 @@
     "arvore": null,
     "vida": 6,
     "mana": 1,
+    "estamina": 2,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -3161,9 +3195,10 @@
           {
             "nivel": 20,
             "titulo": "Aquele Golpe",
-            "descricao": "Uma vez por sessão, ao tirar crítico num ataque desarmado, gaste 8 de Mana para rolar os dados de dano duas vezes e ignorar metade da Resistência do alvo. Pelas duas rodadas seguintes você recebe +2 em ataques e em Defesa.",
+            "descricao": "Uma vez por sessão, ao tirar crítico num ataque desarmado, gaste 8 de Estamina para rolar os dados de dano duas vezes e ignorar metade da Resistência do alvo. Pelas duas rodadas seguintes você recebe +2 em ataques e em Defesa.",
+            "custo_estamina": 8,
             "acao": "Ação Livre no crítico",
-            "usos": "Uma vez por sessão, 8 Mana"
+            "usos": "Uma vez por sessão, 8 Estamina"
           }
         ]
       },
@@ -3343,7 +3378,7 @@
       {
         "id": "kokusen",
         "titulo": "Kokusen",
-        "descricao": "Uma vez por sessão, ative esta habilidade após acertar um ataque desarmado, sem gastar ação. Por três rodadas, seus ataques desarmados recebem +2 dados de dano, ignoram metade da Resistência do alvo e obtêm acerto crítico com resultado natural 19 ou 20. O primeiro acerto crítico de cada rodada recupera 2 de Mana.",
+        "descricao": "Uma vez por sessão, ative esta habilidade após acertar um ataque desarmado, sem gastar ação. Por três rodadas, seus ataques desarmados recebem +2 dados de dano, ignoram metade da Resistência do alvo e obtêm acerto crítico com resultado natural 19 ou 20. O primeiro acerto crítico de cada rodada recupera 2 de Estamina.",
         "niveis": [
           20
         ],
@@ -3369,7 +3404,8 @@
       {
         "id": "apertao-de-aco",
         "titulo": "Apertão de Aço",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação Livre no seu turno",
         "duracao": "Enquanto o agarrão durar",
         "dano": "1d6 de impacto por turno",
@@ -3378,7 +3414,8 @@
       {
         "id": "impacto-brutal",
         "titulo": "Impacto Brutal",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação Livre antes de rolar o ataque",
         "duracao": "Até o seu próximo turno",
         "dano": "+1d10",
@@ -3394,14 +3431,16 @@
       {
         "id": "nao-levanta",
         "titulo": "Não Levanta",
-        "custo_mana": 6,
+        "custo_mana": 0,
+        "custo_estamina": 6,
         "acao": "Ação Livre ao derrubar o alvo",
         "descricao": "Quando um golpe seu leva uma criatura a 0 de Vida, ela sofre −4 no primeiro teste de Morrendo. Isso não mata ninguém sozinho: só empurra a conta na direção que você quer."
       },
       {
         "id": "eu-te-conheco",
         "titulo": "Eu Te Conheço?",
-        "custo_mana": 2,
+        "custo_mana": 0,
+        "custo_estamina": 2,
         "acao": "Ação Livre",
         "descricao": "Contra uma criatura que você já enfrentou antes, receba +2 no primeiro ataque da cena."
       },
@@ -3426,7 +3465,8 @@
       {
         "id": "quebra-gigante",
         "titulo": "Quebra-Gigante",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação de Movimento",
         "duracao": "Uma cena",
         "descricao": "Por uma cena, cause o dobro de dano contra objeto e +1 dado de dano contra criatura de tamanho maior que o seu.",
@@ -3448,7 +3488,8 @@
       {
         "id": "braco-de-ferro",
         "titulo": "Braço de Ferro",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Reação",
         "descricao": "Use a reação ao sofrer dano físico e reduza esse dano no seu Mod. Força mais o seu Grau em Luta.",
         "pre_requisitos": [
@@ -3465,7 +3506,8 @@
     "disponibilidade": "geral",
     "arvore": null,
     "vida": 4,
-    "mana": 3,
+    "mana": 1,
+    "estamina": 4,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -3772,7 +3814,8 @@
           },
           {
             "nivel": 20,
-            "descricao": "Uma vez por sessão, gaste uma ação completa e 8 Mana: um disparo ignora cobertura e Resistência, causa dano máximo dos dados e, se o alvo sobreviver, impõe −2 Defesa por uma rodada.",
+            "descricao": "Uma vez por sessão, gaste uma ação completa e 8 Estamina: um disparo ignora cobertura e Resistência, causa dano máximo dos dados e, se o alvo sobreviver, impõe −2 Defesa por uma rodada.",
+            "custo_estamina": 8,
             "acao": "Ação Completa",
             "usos": "Uma vez por sessão",
             "dano": "Dano máximo dos dados"
@@ -3911,7 +3954,8 @@
       {
         "id": "high-ground",
         "titulo": "High Ground",
-        "custo_mana": 2,
+        "custo_mana": 0,
+        "custo_estamina": 2,
         "acao": "Ação Livre",
         "duracao": "Até o fim do turno",
         "descricao": "Até o fim do turno, se estiver em terreno elevado, receba +2 no ataque e +5 m de alcance."
@@ -3927,7 +3971,8 @@
       {
         "id": "tiro-de-panico",
         "titulo": "Tiro de Pânico",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Reação",
         "alcance": "Alcance da arma",
         "dano": "Metade do dano normal do disparo",
@@ -3936,7 +3981,8 @@
       {
         "id": "zigue-zague",
         "titulo": "Zigue-Zague",
-        "custo_mana": 2,
+        "custo_mana": 0,
+        "custo_estamina": 2,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
         "descricao": "O alvo sofre −2 Defesa contra seu próximo disparo neste turno."
@@ -3944,7 +3990,8 @@
       {
         "id": "ultimo-cartucho",
         "titulo": "Último Cartucho",
-        "custo_mana": 2,
+        "custo_mana": 0,
+        "custo_estamina": 2,
         "acao": "Ação Livre",
         "usos": "Uma vez por cena",
         "descricao": "Uma vez por cena, você revela uma munição comum compatível que havia reservado."
@@ -3952,7 +3999,8 @@
       {
         "id": "ricochete",
         "titulo": "Ricochete",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação Padrão",
         "dano": "Metade do dano normal do disparo",
         "descricao": "Ataque um alvo sem linha direta, desde que conheça sua posição e exista uma superfície de ricochete; cause metade do dano."
@@ -3968,7 +4016,8 @@
       {
         "id": "dois-olhares",
         "titulo": "Dois Olhares",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação Livre",
         "duracao": "Até o fim da cena",
         "descricao": "Marque dois alvos visíveis; até o fim da cena, alternar entre eles não encerra efeitos de Mira."
@@ -3976,7 +4025,8 @@
       {
         "id": "mira-fantasma",
         "titulo": "Mira Fantasma",
-        "custo_mana": 8,
+        "custo_mana": 0,
+        "custo_estamina": 8,
         "acao": "Ação Padrão para concentrar-se",
         "duracao": "O próximo disparo",
         "descricao": "Concentre-se por uma rodada; o próximo disparo ignora cobertura total oferecida por uma única barreira mundana fina.",
@@ -3994,7 +4044,8 @@
     "disponibilidade": "geral",
     "arvore": null,
     "vida": 3,
-    "mana": 4,
+    "mana": 3,
+    "estamina": 3,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -4264,6 +4315,7 @@
           {
             "nivel": 20,
             "descricao": "Uma vez por sessão, gaste 10 Mana e uma Ação Completa para fazer um aliado a 6 m recuperar metade da Vida máxima e encerrar uma condição grave que possa ser tratada.",
+            "custo_mana": 10,
             "acao": "Ação Completa",
             "alcance": "6 m",
             "usos": "Uma vez por sessão"
@@ -4343,6 +4395,7 @@
           {
             "nivel": 3,
             "descricao": "Até três vezes por combate, use uma Reação e gaste 5 Mana quando um aliado a até 4 m cair a 0 de Vida: ele recupera 1d6 de Vida. Você pega o jeito rápido: a 2ª ativação neste combate soma +1 dado a essa cura, e a 3ª soma +2 dados e também encerra uma condição leve do aliado.",
+            "custo_mana": 5,
             "acao": "Reação",
             "alcance": "4 m",
             "dano": "1d6 (+1 dado na 2ª ativação do combate, +2 dados na 3ª)",
@@ -4449,6 +4502,7 @@
         "id": "milagre",
         "titulo": "Milagre",
         "descricao": "Uma vez a cada cinco sessões, durante um descanso longo e com 12 Mana, restaure um membro perdido ou remova uma condição gravíssima. Não ressuscita mortos nem remove consequências narrativas sem aprovação do mestre.",
+        "custo_mana": 12,
         "niveis": [
           18
         ],
@@ -4458,14 +4512,15 @@
       {
         "id": "mestre-da-vida",
         "titulo": "Mestre da Vida",
-        "descricao": "Uma vez por sessão, use uma Ação Completa e gaste 10 de Mana. Você e até cinco aliados em alcance de 12 metros recuperam metade da Vida máxima e metade da Mana máxima e encerram uma condição que Cura possa tratar. Um alvo a 0 de Vida primeiro retorna com 1 de Vida e então recebe a recuperação. Esta habilidade não ressuscita mortos.",
+        "descricao": "Uma vez por sessão, use uma Ação Completa e gaste 10 de Mana. Você e até cinco aliados em alcance de 12 metros recuperam metade da Vida, da Mana e da Estamina máximas e encerram uma condição que Cura possa tratar. Um alvo a 0 de Vida primeiro retorna com 1 de Vida e então recebe a recuperação. Esta habilidade não ressuscita mortos.",
+        "custo_mana": 10,
         "niveis": [
           20
         ],
         "acao": "Ação Completa",
         "alcance": "12 m",
         "usos": "Uma vez por sessão",
-        "dano": "Metade da Vida e da Mana máximas"
+        "dano": "Metade da Vida, da Mana e da Estamina máximas"
       }
     ],
     "eventos": [
@@ -4485,7 +4540,8 @@
       {
         "id": "maleta-medica",
         "titulo": "Maleta Médica",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Livre",
         "duracao": "Uma cena",
         "descricao": "Por uma cena, tenha instrumentos adequados e possa tratar condições médias que exijam equipamento."
@@ -4493,7 +4549,8 @@
       {
         "id": "medico-de-campo",
         "titulo": "Médico de Campo",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação Livre",
         "duracao": "Até o fim do turno",
         "descricao": "Até o fim do turno, dobre seu Movimento ao se deslocar diretamente até um aliado caído."
@@ -4546,7 +4603,8 @@
       {
         "id": "cirurgia",
         "titulo": "Cirurgia",
-        "custo_mana": 8,
+        "custo_mana": 0,
+        "custo_estamina": 8,
         "acao": "Ação Completa durante um descanso longo",
         "descricao": "Durante um descanso longo, trate um aliado que entrou em Morrendo desde o último descanso; ele recupera toda a Vida, mas mantém condições não tratadas.",
         "pre_requisitos": [
@@ -4570,7 +4628,8 @@
     "disponibilidade": "geral",
     "arvore": null,
     "vida": 5,
-    "mana": 2,
+    "mana": 1,
+    "estamina": 3,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -4840,7 +4899,7 @@
           },
           {
             "nivel": 20,
-            "descricao": "Escolha um aliado voluntário após descanso longo. Uma vez por sessão, quando um dos dois cair a 0 Vida, o outro pode gastar 8 Mana para deixá-lo com 1 Vida; o vínculo então termina. Aprenda o último Juramento de Guarda.",
+            "descricao": "Escolha um aliado voluntário após descanso longo. Uma vez por sessão, quando um dos dois cair a 0 Vida, o outro pode gastar 8 Estamina para deixá-lo com 1 Vida; o vínculo então termina. Aprenda o último Juramento de Guarda.",
             "acao": "Reação",
             "duracao": "Até ser usado ou até o próximo descanso longo",
             "usos": "Uma vez por sessão"
@@ -4970,28 +5029,32 @@
         "estagios": [
           {
             "nivel": 3,
-            "descricao": "Uma vez por combate, gaste 4 Mana: inimigos a até 6 m testam Vontade contra a DT do Guardião. Quem falhar sofre −2 para atacar outros alvos por uma rodada.",
+            "descricao": "Uma vez por combate, gaste 4 Estamina: inimigos a até 6 m testam Vontade contra a DT do Guardião. Quem falhar sofre −2 para atacar outros alvos por uma rodada.",
+            "custo_estamina": 4,
             "acao": "Ação Livre",
             "alcance": "6 m",
             "usos": "Uma vez por combate"
           },
           {
             "nivel": 8,
-            "descricao": "O custo sobe para 5 Mana. Você também reduz em 5 o primeiro dano físico que sofrer nesta rodada.",
+            "descricao": "O custo sobe para 5 Estamina. Você também reduz em 5 o primeiro dano físico que sofrer nesta rodada.",
+            "custo_estamina": 5,
             "acao": "Ação Livre",
             "alcance": "6 m",
             "usos": "Uma vez por combate"
           },
           {
             "nivel": 14,
-            "descricao": "O custo sobe para 6 Mana. A redução de dano vale para os dois primeiros danos físicos que sofrer nesta rodada.",
+            "descricao": "O custo sobe para 6 Estamina. A redução de dano vale para os dois primeiros danos físicos que sofrer nesta rodada.",
+            "custo_estamina": 6,
             "acao": "Ação Livre",
             "alcance": "6 m",
             "usos": "Uma vez por combate"
           },
           {
             "nivel": 20,
-            "descricao": "O custo sobe para 7 Mana.",
+            "descricao": "O custo sobe para 7 Estamina.",
+            "custo_estamina": 7,
             "acao": "Ação Livre",
             "alcance": "6 m",
             "usos": "Uma vez por combate"
@@ -5001,7 +5064,8 @@
       {
         "id": "castelo",
         "titulo": "Castelo",
-        "descricao": "Uma vez por descanso longo, gaste 8 Mana e permaneça imóvel por três rodadas. Aliados a 6 m recebem +2 Defesa. Uma vez por rodada, use sua Reação para se tornar o alvo de um ataque feito contra um desses aliados.",
+        "descricao": "Uma vez por descanso longo, gaste 8 Estamina e permaneça imóvel por três rodadas. Aliados a 6 m recebem +2 Defesa. Uma vez por rodada, use sua Reação para se tornar o alvo de um ataque feito contra um desses aliados.",
+        "custo_estamina": 8,
         "niveis": [
           18
         ],
@@ -5040,7 +5104,8 @@
       {
         "id": "escudo-humano",
         "titulo": "Escudo Humano",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Reação",
         "alcance": "8 m",
         "descricao": "Use reação para se tornar o alvo de um ataque contra criatura a até 8 m."
@@ -5048,7 +5113,8 @@
       {
         "id": "corridao",
         "titulo": "Corridão",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Reação",
         "descricao": "Use reação para mover até o dobro do Movimento até um aliado recém-caído; ele ganha uma rodada a mais antes do próximo teste de Morrendo."
       },
@@ -5117,7 +5183,8 @@
       {
         "id": "bandeirao",
         "titulo": "Bandeirão",
-        "custo_mana": 6,
+        "custo_mana": 0,
+        "custo_estamina": 6,
         "acao": "Ação Padrão",
         "alcance": "12 m",
         "duracao": "Uma cena",
@@ -5138,6 +5205,7 @@
     "arvore": null,
     "vida": 4,
     "mana": 3,
+    "estamina": 2,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -5742,7 +5810,8 @@
       {
         "id": "instinto-predador",
         "titulo": "Instinto Predador",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
         "dano": "+1d6",
@@ -5752,7 +5821,8 @@
       {
         "id": "armadilha",
         "titulo": "Armadilha",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Padrão para instalar",
         "alcance": "Adjacente",
         "duracao": "Até ser acionada",
@@ -5769,7 +5839,8 @@
       {
         "id": "abate",
         "titulo": "Abate",
-        "custo_mana": 8,
+        "custo_mana": 0,
+        "custo_estamina": 8,
         "acao": "Ação Livre no ataque",
         "usos": "Uma vez por combate",
         "descricao": "Uma vez por combate, contra alvo abaixo de 10% da Vida, um acerto causa dano máximo dos dados; não é execução automática.",
@@ -5831,6 +5902,7 @@
     "arvore": null,
     "vida": 3,
     "mana": 4,
+    "estamina": 2,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -6503,7 +6575,8 @@
       {
         "id": "arquitetura-tech",
         "titulo": "Arquitetura de Campo",
-        "descricao": "Uma vez por descanso longo, gaste uma Ação Completa e 8 de Mana para erguer uma estrutura em uma área de 6 m que você enxergue a até 12 m. Ela dura cinco rodadas. Escolha o tipo quando montar. Cobertura: placas e teto dão cobertura superior e +5 de Defesa a quem estiver dentro. A estrutura aguenta 30 de dano antes de ceder. Mobilidade: rampas, cabos e passarelas ligam a área a um ponto a até 12 m. Quem passar por elas não precisa fazer teste, e o terreno difícil dentro da área deixa de contar. Suporte: uma bancada de campo dá +2 em testes de perícia com ferramentas aos aliados na área. Você também monta imediatamente uma engenhoca extra da sua lista, que expira junto com a estrutura.",
+        "descricao": "Uma vez por descanso longo, gaste uma Ação Completa e 8 de Estamina para erguer uma estrutura em uma área de 6 m que você enxergue a até 12 m. Ela dura cinco rodadas. Escolha o tipo quando montar. Cobertura: placas e teto dão cobertura superior e +5 de Defesa a quem estiver dentro. A estrutura aguenta 30 de dano antes de ceder. Mobilidade: rampas, cabos e passarelas ligam a área a um ponto a até 12 m. Quem passar por elas não precisa fazer teste, e o terreno difícil dentro da área deixa de contar. Suporte: uma bancada de campo dá +2 em testes de perícia com ferramentas aos aliados na área. Você também monta imediatamente uma engenhoca extra da sua lista, que expira junto com a estrutura.",
+        "custo_estamina": 8,
         "niveis": [
           18
         ],
@@ -6550,7 +6623,8 @@
       {
         "id": "drone-de-utilidade",
         "titulo": "Drone de Utilidade",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação Padrão",
         "alcance": "18 m",
         "duracao": "Três rodadas",
@@ -6590,7 +6664,8 @@
       {
         "id": "torreta-compacta",
         "titulo": "Torreta Compacta",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação Padrão",
         "alcance": "Adjacente para montar, 18 m de tiro",
         "duracao": "Três rodadas",
@@ -6610,7 +6685,8 @@
       {
         "id": "barreira",
         "titulo": "Muro de Contenção",
-        "custo_mana": 6,
+        "custo_mana": 0,
+        "custo_estamina": 6,
         "acao": "Ação Padrão",
         "alcance": "6 m",
         "duracao": "Até ser destruído ou a cena acabar",
@@ -6641,6 +6717,7 @@
     "arvore": null,
     "vida": 3,
     "mana": 4,
+    "estamina": 2,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -6956,7 +7033,7 @@
           {
             "nivel": 20,
             "titulo": "Dose da Pedra",
-            "descricao": "Uma vez por sessão, prepare uma dose da Pedra Filosofal. Ela restaura metade da Vida e metade da Mana de um alvo ao toque, ou transmuta um objeto mundano de até 1 m³ por uma cena. Esta dose não ocupa as vagas das outras.",
+            "descricao": "Uma vez por sessão, prepare uma dose da Pedra Filosofal. Ela restaura metade da Vida, da Mana e da Estamina de um alvo ao toque, ou transmuta um objeto mundano de até 1 m³ por uma cena. Esta dose não ocupa as vagas das outras.",
             "acao": "Ação Padrão",
             "alcance": "Toque",
             "usos": "Uma vez por sessão"
@@ -7206,6 +7283,7 @@
         "id": "transmutacao-mestra",
         "titulo": "Transmutação Mestra",
         "descricao": "Uma vez por descanso longo, gaste 8 Mana para alterar por uma cena o material de um objeto mundano de até 2 m³ que você esteja tocando. Pedra vira madeira, ferro vira vidro, corda vira corrente. A regra fecha três portas: nada de moeda, nada de artefato, nada de ser vivo, e nenhum componente raro nasce permanente.",
+        "custo_mana": 8,
         "niveis": [
           18
         ],
@@ -7217,7 +7295,7 @@
       {
         "id": "pedra-filosofal",
         "titulo": "Pedra Filosofal",
-        "descricao": "Uma vez por sessão, use uma Ação Completa para produzir um dos efeitos: Panaceia faz até cinco criaturas em alcance de 12 metros recuperarem metade da Vida máxima e metade da Mana máxima e encerra uma condição de cada uma; Reconstrução devolve à vida uma criatura que morreu desde o fim de seu turno anterior, com metade da Vida máxima, 0 de Mana e 2 de Cansaço; Transmutação transforma até 3 metros cúbicos de matéria mundana em outra matéria mundana até o fim da sessão, sem criar dinheiro, seres vivos, relíquias ou materiais únicos.",
+        "descricao": "Uma vez por sessão, use uma Ação Completa para produzir um dos efeitos: Panaceia faz até cinco criaturas em alcance de 12 metros recuperarem metade da Vida, da Mana e da Estamina máximas e encerra uma condição de cada uma; Reconstrução devolve à vida uma criatura que morreu desde o fim de seu turno anterior, com metade da Vida máxima, 0 de Mana, 0 de Estamina e 2 de Cansaço; Transmutação transforma até 3 metros cúbicos de matéria mundana em outra matéria mundana até o fim da sessão, sem criar dinheiro, seres vivos, relíquias ou materiais únicos.",
         "niveis": [
           20
         ],
@@ -7251,7 +7329,8 @@
       {
         "id": "bomba-adesiva",
         "titulo": "Bomba Adesiva",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Padrão",
         "alcance": "12 m de arremesso",
         "duracao": "Uma rodada",
@@ -7288,7 +7367,8 @@
       {
         "id": "essencia-volatil",
         "titulo": "Essência Volátil",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação Padrão",
         "alcance": "12 m",
         "duracao": "Instantânea",
@@ -7315,7 +7395,8 @@
       {
         "id": "mutacao-controlada",
         "titulo": "Mutação Controlada",
-        "custo_mana": 6,
+        "custo_mana": 0,
+        "custo_estamina": 6,
         "acao": "Ação Padrão",
         "duracao": "Três rodadas",
         "dano": "Arma natural 1d10",
@@ -7344,6 +7425,7 @@
     "arvore": null,
     "vida": 3,
     "mana": 4,
+    "estamina": 2,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -7913,7 +7995,8 @@
       {
         "id": "amostra-gratis",
         "titulo": "Amostra Grátis",
-        "custo_mana": 2,
+        "custo_mana": 0,
+        "custo_estamina": 2,
         "acao": "Ação de Movimento",
         "duracao": "Até o fim da sessão",
         "usos": "Uma vez por sessão",
@@ -7930,7 +8013,8 @@
       {
         "id": "logistica",
         "titulo": "Logística",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Completa",
         "duracao": "Uma entrega",
         "descricao": "Reduza pela metade o tempo mundano de transportar carga ou organizar uma entrega dentro da mesma região. Não acelera viagem de aventura nem persegue quem já saiu na frente."
@@ -7945,7 +8029,8 @@
       {
         "id": "oferta-relampago",
         "titulo": "Oferta Relâmpago",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação de Movimento",
         "alcance": "12 m",
         "duracao": "Uma cena",
@@ -7986,7 +8071,8 @@
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
     "vida": 5,
-    "mana": 2,
+    "mana": 1,
+    "estamina": 3,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -8342,7 +8428,8 @@
       {
         "id": "pisada",
         "titulo": "Pisada",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação Padrão",
         "alcance": "3 m",
         "dano": "2d10 de impacto",
@@ -8352,7 +8439,8 @@
       {
         "id": "soco",
         "titulo": "Soco",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Este ataque",
         "dano": "+2d12",
@@ -8361,7 +8449,8 @@
       {
         "id": "avanco",
         "titulo": "Avanço",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação Padrão",
         "alcance": "12 m em linha",
         "dano": "1d10",
@@ -8371,7 +8460,8 @@
       {
         "id": "rasgar",
         "titulo": "Rasgar",
-        "custo_mana": 6,
+        "custo_mana": 0,
+        "custo_estamina": 6,
         "acao": "Ação Padrão",
         "alcance": "15 m",
         "dano": "2d10 verdadeiro",
@@ -8380,14 +8470,16 @@
       {
         "id": "carne-de-diamante",
         "titulo": "Carne de Diamante",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Reação",
         "descricao": "Reduza à metade um dano recebido, antes de aplicar Resistência."
       },
       {
         "id": "impacto",
         "titulo": "Impacto",
-        "custo_mana": 6,
+        "custo_mana": 0,
+        "custo_estamina": 6,
         "acao": "Ação Livre no momento do ataque",
         "duracao": "Este ataque",
         "dano": "+3d10",
@@ -8396,7 +8488,8 @@
       {
         "id": "marcha",
         "titulo": "Marcha",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação Livre",
         "alcance": "6 m",
         "duracao": "Três rodadas",
@@ -8405,7 +8498,8 @@
       {
         "id": "pulso",
         "titulo": "Pulso",
-        "custo_mana": 6,
+        "custo_mana": 0,
+        "custo_estamina": 6,
         "acao": "Ação Padrão",
         "alcance": "6 m",
         "duracao": "Uma rodada",
@@ -8415,7 +8509,8 @@
       {
         "id": "aura",
         "titulo": "Aura",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Padrão",
         "alcance": "Adjacente",
         "duracao": "Duas rodadas",
@@ -8424,7 +8519,8 @@
       {
         "id": "punho",
         "titulo": "Punho",
-        "custo_mana": 9,
+        "custo_mana": 0,
+        "custo_estamina": 9,
         "acao": "Ação Livre no momento do ataque",
         "dano": "+4d12",
         "defesa": "Fortitude",
@@ -8450,6 +8546,7 @@
     "requer_autorizacao_mestre": true,
     "vida": 4,
     "mana": 3,
+    "estamina": 2,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -9026,7 +9123,8 @@
       {
         "id": "garras-do-abismo",
         "titulo": "Garras do Abismo",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Livre antes do ataque",
         "duracao": "Uma rodada",
         "defesa": "Fortitude contra a DT da Maldição",
@@ -9067,7 +9165,8 @@
       {
         "id": "sussurros-do-fundo",
         "titulo": "Sussurros do Fundo",
-        "custo_mana": 2,
+        "custo_mana": 0,
+        "custo_estamina": 2,
         "acao": "Ação Livre",
         "duracao": "Até o fim da cena",
         "descricao": "Você tem vantagem no próximo teste de Intimidação ou Enganação que fizer nesta cena."
@@ -9075,7 +9174,8 @@
       {
         "id": "corpo-encharcado",
         "titulo": "Corpo Encharcado",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação Livre",
         "duracao": "Até o seu próximo turno",
         "descricao": "Até o seu próximo turno, reduza em 5 cada dano que sofrer e ignore qualquer efeito que tente empurrar você."
@@ -9093,7 +9193,8 @@
       {
         "id": "capitao-dos-condenados",
         "titulo": "Capitão dos Condenados",
-        "custo_mana": 6,
+        "custo_mana": 0,
+        "custo_estamina": 6,
         "acao": "Ação Padrão",
         "alcance": "6 m",
         "duracao": "Duas rodadas",
@@ -9123,7 +9224,8 @@
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
     "vida": 3,
-    "mana": 4,
+    "mana": 5,
+    "estamina": 1,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
@@ -9641,7 +9743,8 @@
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
     "vida": 3,
-    "mana": 4,
+    "mana": 5,
+    "estamina": 1,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -10108,6 +10211,7 @@
     "requer_autorizacao_mestre": true,
     "vida": 4,
     "mana": 3,
+    "estamina": 2,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -10374,6 +10478,7 @@
             "nivel": 10,
             "titulo": "Shikai",
             "descricao": "Escolha um Aspecto da Zanpakutō. Uma vez por combate, gaste 5 de Mana e profira a frase de liberação seguida do nome da lâmina para ativar o Shikai. Durante três rodadas, aplique o efeito de Shikai do aspecto escolhido.",
+            "custo_mana": 5,
             "acao": "Ação Livre",
             "alcance": "Pessoal",
             "duracao": "Três rodadas",
@@ -10383,6 +10488,7 @@
             "nivel": 15,
             "titulo": "Shikai Dominado",
             "descricao": "Ativar o Shikai passa a custar 4 de Mana e sua duração passa a ser até o fim do combate. Se ficar Inconsciente ou soltar voluntariamente a Zanpakutō, o Shikai termina.",
+            "custo_mana": 4,
             "acao": "Passivo",
             "alcance": "Pessoal",
             "duracao": "Até o fim do combate"
@@ -10635,7 +10741,8 @@
       {
         "id": "passo-relampago",
         "titulo": "Passo Relâmpago (Shunpō)",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação de Movimento",
         "alcance": "9 m",
         "duracao": "Instantânea",
@@ -10675,7 +10782,8 @@
       {
         "id": "corte-da-lua",
         "titulo": "Corte da Lua",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação Padrão",
         "alcance": "12 m",
         "duracao": "Instantânea",
@@ -10685,7 +10793,8 @@
       {
         "id": "pele-vazia",
         "titulo": "Pele Vazia (Utsusemi)",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Reação",
         "alcance": "Pessoal",
         "duracao": "Instantânea",
@@ -10708,7 +10817,8 @@
       {
         "id": "senka",
         "titulo": "Flor do Passo (Senka)",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação Livre após Passo Relâmpago",
         "alcance": "Pessoal",
         "duracao": "Até o fim do turno",
@@ -10721,7 +10831,8 @@
       {
         "id": "mascara-do-vazio",
         "titulo": "Máscara do Vazio",
-        "custo_mana": 7,
+        "custo_mana": 0,
+        "custo_estamina": 7,
         "acao": "Ação Livre",
         "alcance": "Pessoal",
         "duracao": "Três rodadas",
@@ -10774,7 +10885,8 @@
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
     "vida": 3,
-    "mana": 4,
+    "mana": 5,
+    "estamina": 1,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -11200,7 +11312,7 @@
         "custo_mana": 4,
         "acao": "Ação Livre",
         "alcance": "9 m",
-        "descricao": "Ao fim de combate, até três aliados a 9 m recuperam 1d6 de Vida e 1d4 de Mana."
+        "descricao": "Ao fim de combate, até três aliados a 9 m recuperam 1d6 de Vida e 1d4 de Mana ou de Estamina, à escolha de cada um."
       },
       {
         "id": "quebra-da-quarta-parede",
@@ -11237,7 +11349,8 @@
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
     "vida": 3,
-    "mana": 4,
+    "mana": 5,
+    "estamina": 1,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -11912,6 +12025,7 @@
     "requer_autorizacao_mestre": true,
     "vida": 4,
     "mana": 3,
+    "estamina": 2,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -12322,7 +12436,8 @@
       {
         "id": "passo-longo",
         "titulo": "Passo Longo",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "descricao": "Receba +6 m de Movimento neste turno e ignore terreno difícil.",
         "acao": "Ação Livre",
         "duracao": "Este turno"
@@ -12359,14 +12474,16 @@
       {
         "id": "carona",
         "titulo": "Carona",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "descricao": "Até três aliados acompanham seu deslocamento de viagem sem sofrer a primeira penalidade de ritmo acelerado.",
         "acao": "Ação Padrão"
       },
       {
         "id": "plano-b",
         "titulo": "Plano B",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "descricao": "Declare uma rota de fuga plausível; o grupo recebe +3 m de Movimento ao segui-la por três rodadas.",
         "acao": "Ação Livre",
         "duracao": "Três rodadas",
@@ -12383,7 +12500,8 @@
       {
         "id": "horizonte-aberto",
         "titulo": "Horizonte Aberto",
-        "custo_mana": 7,
+        "custo_mana": 0,
+        "custo_estamina": 7,
         "descricao": "Por uma cena, você e aliados a até 6 m recebem vantagem em testes de Sobrevivência para não se perderem e contra efeitos de confinamento.",
         "pre_requisitos": [
           "Nível 10 de Viajante"
@@ -12407,7 +12525,8 @@
     "disponibilidade": "geral",
     "arvore": null,
     "vida": 2,
-    "mana": 5,
+    "mana": 6,
+    "estamina": 1,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -13006,7 +13125,8 @@
     "disponibilidade": "geral",
     "arvore": null,
     "vida": 2,
-    "mana": 5,
+    "mana": 6,
+    "estamina": 1,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -13602,7 +13722,8 @@
     "disponibilidade": "geral",
     "arvore": null,
     "vida": 2,
-    "mana": 5,
+    "mana": 6,
+    "estamina": 1,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -14100,7 +14221,8 @@
       {
         "id": "vigilia",
         "titulo": "Vigília",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Declarado ao iniciar o rito",
         "duracao": "O rito inteiro",
         "descricao": "Ignore 1 de Cansaço cobrado pela complexidade do rito ao terminá-lo. Um uso por rito."
@@ -14187,7 +14309,8 @@
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
     "vida": 3,
-    "mana": 4,
+    "mana": 5,
+    "estamina": 1,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -14656,6 +14779,7 @@
     "arvore": null,
     "vida": 3,
     "mana": 4,
+    "estamina": 2,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -14954,7 +15078,7 @@
           {
             "nivel": 10,
             "titulo": "Ponto Perfeito",
-            "descricao": "Quando uma porção rolar cura, Vida temporária ou Mana, cada dado que resultar 1 pode ser rerrolado uma vez. Se o efeito durar em rodadas, aumente a duração em uma rodada.",
+            "descricao": "Quando uma porção rolar cura, Vida temporária, Mana ou Estamina, cada dado que resultar 1 pode ser rerrolado uma vez. Se o efeito durar em rodadas, aumente a duração em uma rodada.",
             "acao": "Passivo"
           },
           {
@@ -15094,9 +15218,9 @@
             "acao": "Dez minutos ou durante um descanso",
             "alcance": "Toque",
             "duracao": "Instantânea",
-            "dano": "Restaura 1d4 de Mana",
-            "descricao": "Refeição. Restaura 1d4 de Mana. A mesma criatura aproveita esta receita apenas uma vez por descanso.",
-            "escalonamento": "Nível 2: a restauração sobe para 2d4 de Mana. Nível 5: sobe para 3d4, e o alvo também recupera a reação, se estiver sem ela."
+            "dano": "Restaura 1d4 de Estamina",
+            "descricao": "Refeição. Restaura 1d4 de Estamina. A mesma criatura aproveita esta receita apenas uma vez por descanso.",
+            "escalonamento": "Nível 2: a restauração sobe para 2d4 de Estamina. Nível 5: sobe para 3d4, e o alvo também recupera a reação, se estiver sem ela."
           },
           {
             "id": "molho-picante",
@@ -15216,7 +15340,7 @@
       {
         "id": "mesa-da-celebracao",
         "titulo": "Mesa da Celebração",
-        "descricao": "Uma vez por sessão, prepare uma celebração de dez minutos para você e até cinco aliados a até 6 m. Cada participante recupera metade da Vida máxima, metade da Mana máxima, reduz 2 de Cansaço e encerra uma condição leve que Cura possa tratar. A celebração não consome porções e não ressuscita mortos.",
+        "descricao": "Uma vez por sessão, prepare uma celebração de dez minutos para você e até cinco aliados a até 6 m. Cada participante recupera metade da Vida máxima, metade da Mana máxima, metade da Estamina máxima, reduz 2 de Cansaço e encerra uma condição leve que Cura possa tratar. A celebração não consome porções e não ressuscita mortos.",
         "niveis": [
           20
         ],
@@ -15258,7 +15382,8 @@
       {
         "id": "prova-antes-de-servir",
         "titulo": "Prova Antes de Servir",
-        "custo_mana": 2,
+        "custo_mana": 0,
+        "custo_estamina": 2,
         "acao": "Reação",
         "usos": "Uma vez por teste",
         "descricao": "Quando falhar em Ofício (Cozinha), rerrole o teste e mantenha o novo resultado, mesmo que seja pior."
@@ -15273,10 +15398,11 @@
       {
         "id": "picante-na-medida",
         "titulo": "Fogo Alto",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação Livre",
         "usos": "Uma vez por porção",
-        "descricao": "Depois de rolar os dados de cura, dano, Vida temporária ou Mana de uma porção, rerrole até dois deles e mantenha os novos resultados."
+        "descricao": "Depois de rolar os dados de cura, dano, Vida temporária, Mana ou Estamina de uma porção, rerrole até dois deles e mantenha os novos resultados."
       },
       {
         "id": "doce-recompensa",
@@ -15297,7 +15423,8 @@
       {
         "id": "marmita-de-combate",
         "titulo": "Marmita de Combate",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Padrão",
         "alcance": "Toque",
         "descricao": "Sirva uma refeição preparada durante o combate. Você ou uma criatura adjacente consome a porção e recebe o efeito sem esperar dez minutos.",
@@ -15308,7 +15435,8 @@
       {
         "id": "servico-sincronizado",
         "titulo": "Serviço Sincronizado",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Reação",
         "alcance": "6 m",
         "descricao": "Quando um aliado no alcance consumir uma porção, use sua Reação para servir a mesma receita a outra criatura adjacente a ele. Gaste uma porção para cada alvo.",
@@ -15340,6 +15468,7 @@
     "requer_autorizacao_mestre": false,
     "vida": 4,
     "mana": 3,
+    "estamina": 2,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -15735,10 +15864,11 @@
       {
         "id": "golpe-certeiro-de-logica",
         "titulo": "Golpe Certeiro de Lógica",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação Livre, após identificar o ponto fraco",
         "duracao": "Até o próximo ataque ou o fim da cena",
-        "descricao": "Depois de obter sucesso em Investigação para identificar o ponto fraco de um alvo nesta cena, gaste 3 Mana. Seu próximo ataque contra ele, até o fim da cena, recebe +2 dados de dano."
+        "descricao": "Depois de obter sucesso em Investigação para identificar o ponto fraco de um alvo nesta cena, gaste 3 Estamina. Seu próximo ataque contra ele, até o fim da cena, recebe +2 dados de dano."
       },
       {
         "id": "blefe-perfeito",
@@ -15757,9 +15887,10 @@
       {
         "id": "sexto-sentido",
         "titulo": "Sexto Sentido",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Reação, ao fazer o teste",
-        "descricao": "Quando fizer um teste para perceber uma armadilha, emboscada ou ameaça escondida, gaste 3 Mana e use uma Reação para receber vantagem nesse teste."
+        "descricao": "Quando fizer um teste para perceber uma armadilha, emboscada ou ameaça escondida, gaste 3 Estamina e use uma Reação para receber vantagem nesse teste."
       },
       {
         "id": "pergunta-certa",
@@ -15807,9 +15938,10 @@
       {
         "id": "instinto-de-perigo",
         "titulo": "Instinto de Perigo",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Reação",
-        "descricao": "Quando um ataque revelar uma ameaça que o deixou Surpreendido, gaste 4 Mana para receber +4 de Defesa contra esse ataque específico. Você pode usar esta Reação mesmo antes do seu primeiro turno; esta é uma exceção à restrição de Reações de Surpreendido."
+        "descricao": "Quando um ataque revelar uma ameaça que o deixou Surpreendido, gaste 4 Estamina para receber +4 de Defesa contra esse ataque específico. Você pode usar esta Reação mesmo antes do seu primeiro turno; esta é uma exceção à restrição de Reações de Surpreendido."
       }
     ]
   },
@@ -15826,7 +15958,8 @@
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
     "vida": 4,
-    "mana": 3,
+    "mana": 2,
+    "estamina": 3,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
@@ -16203,14 +16336,16 @@
       {
         "id": "investida-predatoria",
         "titulo": "Investida Predatória",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação Livre",
         "descricao": "Seu próximo ataque corpo a corpo neste turno recebe +2 dados de dano."
       },
       {
         "id": "presa-a-distancia",
         "titulo": "Presa à Distância",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação Padrão",
         "alcance": "9 m",
         "descricao": "Cuspa ou arremesse algo de dentro de você contra um alvo a 9 m, causando 1d8 + Mod.Força de dano."
@@ -16218,7 +16353,8 @@
       {
         "id": "casca-endurecida",
         "titulo": "Casca Endurecida",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Reação",
         "duracao": "Uma rodada",
         "descricao": "Receba +3 de Defesa contra um ataque."
@@ -16226,7 +16362,8 @@
       {
         "id": "regeneracao-de-banquete",
         "titulo": "Regeneração de Banquete",
-        "custo_mana": 5,
+        "custo_mana": 0,
+        "custo_estamina": 5,
         "acao": "Ação Padrão",
         "descricao": "Recupere 2d6 + Mod.Constituição de Vida."
       },
@@ -16242,14 +16379,16 @@
       {
         "id": "salto-bestial",
         "titulo": "Salto Bestial",
-        "custo_mana": 3,
+        "custo_mana": 0,
+        "custo_estamina": 3,
         "acao": "Ação de Movimento",
         "descricao": "Receba +9 m de Movimento neste turno."
       },
       {
         "id": "sentidos-agucados",
         "titulo": "Sentidos Aguçados",
-        "custo_mana": 2,
+        "custo_mana": 0,
+        "custo_estamina": 2,
         "acao": "Ação Livre",
         "duracao": "Uma cena",
         "descricao": "Por uma cena, perceba movimento e cheiro num raio de 18 m, mesmo no escuro."
@@ -16257,7 +16396,8 @@
       {
         "id": "grito-dominante",
         "titulo": "Grito Dominante",
-        "custo_mana": 6,
+        "custo_mana": 0,
+        "custo_estamina": 6,
         "acao": "Ação Padrão",
         "alcance": "6 m",
         "duracao": "Uma rodada",
@@ -16266,7 +16406,8 @@
       {
         "id": "metamorfose-parcial",
         "titulo": "Metamorfose Parcial",
-        "custo_mana": 4,
+        "custo_mana": 0,
+        "custo_estamina": 4,
         "acao": "Ação Padrão",
         "duracao": "Uma cena",
         "descricao": "Parte do seu corpo muda - garras, guelras, membrana - concedendo vantagem numa perícia física relacionada por uma cena."
@@ -16277,7 +16418,7 @@
         "custo_mana": 0,
         "acao": "Passivo",
         "usos": "Uma vez por sessão",
-        "descricao": "Uma vez por sessão, ao consumir a última porção de um slot vazio antes de dormir, recupere metade da sua Mana máxima ao acordar."
+        "descricao": "Uma vez por sessão, ao consumir a última porção de um slot vazio antes de dormir, recupere metade da sua Mana e da sua Estamina máximas ao acordar."
       }
     ]
   },
@@ -16294,7 +16435,8 @@
     "patamar": "conquista",
     "requer_autorizacao_mestre": true,
     "vida": 3,
-    "mana": 4,
+    "mana": 5,
+    "estamina": 1,
     "recursos_provisorios": false,
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",

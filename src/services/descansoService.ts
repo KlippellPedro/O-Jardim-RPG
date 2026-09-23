@@ -76,7 +76,7 @@ const limitar = (valor: number, minimo: number, maximo: number) => Math.max(mini
 
 export function aplicarDescansoCompleto(
   status: Record<string, any>,
-  maximos: { vida: number; mana: number; sanidade?: number },
+  maximos: { vida: number; mana: number; estamina?: number; sanidade?: number },
   qualidade: QualidadeDescanso,
   recebeuTratamento = false,
 ) {
@@ -89,10 +89,20 @@ export function aplicarDescansoCompleto(
   const sanidadeAtual = Number(status.sanidadeAtual ?? sanidadeMaxima);
   const vidaFinal = limitar(vidaAtual + Math.ceil(vidaMaxima * regra.recuperacao), -vidaMaxima, vidaMaxima);
   const podeTratarFerido = recebeuTratamento && ['boa', 'maravilhosa', 'excelente'].includes(regra.id) && vidaFinal > 0;
+  // Estamina volta na mesma proporção de Vida e Mana. Só entra na conta quando
+  // quem chama informa o máximo: quem ainda não conhece a Estamina não ganha
+  // um campo novo escrito na ficha por tabela.
+  const estaminaMaxima = Number(maximos.estamina);
+  const recuperaEstamina = Number.isFinite(estaminaMaxima) && estaminaMaxima > 0;
+  const estaminaAtual = Number(status.estaminaAtual ?? estaminaMaxima);
   return {
     ...status,
     vidaAtual: vidaFinal,
     manaAtual: limitar(manaAtual + Math.ceil(manaMaxima * regra.recuperacao), 0, manaMaxima),
+    ...(recuperaEstamina ? {
+      estaminaAtual: limitar(estaminaAtual + Math.ceil(estaminaMaxima * regra.recuperacao), 0, estaminaMaxima),
+      estaminaTemporaria: 0,
+    } : {}),
     sanidadeAtual: limitar(sanidadeAtual + Math.ceil(sanidadeMaxima * regra.recuperacaoSanidade), 0, sanidadeMaxima),
     cansacoAtual: Math.max(0, Number(status.cansacoAtual || 0) - regra.reduzCansaco),
     ferido: Math.max(0, Number(status.ferido || 0) - (podeTratarFerido ? 1 : 0)),
@@ -108,15 +118,36 @@ export function aplicarDescansoCompleto(
   };
 }
 
-export function aplicarRelaxamento(status: Record<string, any>, manaMaxima: number, sabedoria: number, nivel: number, dado: number) {
-  if (status.relaxouDesdeDescanso) return { status, recuperado: 0, erro: 'Relaxar só funciona uma vez entre descansos completos.' };
+/** Relaxar rola uma vez e o mesmo valor volta para Mana e para Estamina, cada
+ * um limitado ao próprio máximo. Sem `estaminaMaxima`, só a Mana é tocada. */
+export function aplicarRelaxamento(
+  status: Record<string, any>,
+  manaMaxima: number,
+  sabedoria: number,
+  nivel: number,
+  dado: number,
+  estaminaMaxima?: number,
+) {
+  if (status.relaxouDesdeDescanso) return { status, recuperado: 0, recuperadoEstamina: 0, erro: 'Relaxar só funciona uma vez entre descansos completos.' };
   const modificador = Math.floor((Number(sabedoria || 10) - 10) / 2);
   const recuperado = Math.max(0, limitar(Math.trunc(dado), 1, 6) + modificador + Math.floor(Math.max(1, nivel) / 4));
   const atual = Number(status.manaAtual ?? manaMaxima);
   const final = limitar(atual + recuperado, 0, Math.max(0, manaMaxima));
-  return { status: { ...status, manaAtual: final, relaxouDesdeDescanso: true }, recuperado: final - atual };
+  const recuperaEstamina = typeof estaminaMaxima === 'number' && estaminaMaxima > 0;
+  const estaminaAtual = recuperaEstamina ? Number(status.estaminaAtual ?? estaminaMaxima) : 0;
+  const estaminaFinal = recuperaEstamina ? limitar(estaminaAtual + recuperado, 0, estaminaMaxima) : 0;
+  return {
+    status: {
+      ...status,
+      manaAtual: final,
+      ...(recuperaEstamina ? { estaminaAtual: estaminaFinal } : {}),
+      relaxouDesdeDescanso: true,
+    },
+    recuperado: final - atual,
+    recuperadoEstamina: recuperaEstamina ? estaminaFinal - estaminaAtual : 0,
+  };
 }
 
-export function combateFoiIntenso(evento: { caiuMetadeVida?: boolean; gastouMetadeMana?: boolean; entrouMorrendo?: boolean }): boolean {
-  return Boolean(evento.caiuMetadeVida || evento.gastouMetadeMana || evento.entrouMorrendo);
+export function combateFoiIntenso(evento: { caiuMetadeVida?: boolean; gastouMetadeMana?: boolean; gastouMetadeEstamina?: boolean; entrouMorrendo?: boolean }): boolean {
+  return Boolean(evento.caiuMetadeVida || evento.gastouMetadeMana || evento.gastouMetadeEstamina || evento.entrouMorrendo);
 }

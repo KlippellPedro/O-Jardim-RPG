@@ -50,6 +50,7 @@ export interface IOpcaoPoder {
   id: string;
   titulo: string;
   custoMana: number;
+  custoEstamina: number;
   descricao: string;
   situacao: SituacaoPoder;
   /** Por que não dá para escolher, quando `situacao` é 'bloqueado'. */
@@ -158,6 +159,7 @@ function classificarPoder(
     id: poder.id,
     titulo: poder.titulo,
     custoMana: Math.max(0, Number(poder.custo_mana) || 0),
+    custoEstamina: Math.max(0, Number(poder.custo_estamina) || 0),
     descricao: poder.descricao,
     situacao,
     motivo: situacao === 'bloqueado' ? simulado.motivo : undefined,

@@ -673,6 +673,7 @@ class ParticipantCreateInput(BaseModel):
     # Defesa e a Mana da própria ficha.
     defesa: int | None = Field(default=None, ge=0, le=999)
     mana_maxima: int | None = Field(default=None, ge=0, le=99_999)
+    estamina_maxima: int | None = Field(default=None, ge=0, le=99_999)
     ataques: list[Any] = Field(default_factory=list, max_length=12)
     # VD (Valor de Desafio, 1 a 10): vem do Bestiário quando a criatura entra
     # pela lista; usado depois pra somar o XP da luta sem contar na mão.
@@ -708,9 +709,12 @@ class ParticipantUpdateInput(BaseModel):
     cura: int | None = Field(default=None, ge=0, le=99_999)
     mana_atual: int | None = Field(default=None, ge=0, le=99_999)
     mana_maxima: int | None = Field(default=None, ge=0, le=99_999)
+    estamina_atual: int | None = Field(default=None, ge=0, le=99_999)
+    estamina_maxima: int | None = Field(default=None, ge=0, le=99_999)
     # Extra acima do máximo (efeito temporário); o dano gasta ele primeiro.
     vida_temporaria: int | None = Field(default=None, ge=0, le=99_999)
     mana_temporaria: int | None = Field(default=None, ge=0, le=99_999)
+    estamina_temporaria: int | None = Field(default=None, ge=0, le=99_999)
     condicoes: list[Any] | None = Field(default=None, max_length=20)
     ataques: list[Any] | None = Field(default=None, max_length=12)
     anotacao: str | None = Field(default=None, max_length=500)

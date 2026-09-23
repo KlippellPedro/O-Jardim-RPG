@@ -86,16 +86,16 @@ const classesComuns = classesData.filter((classe) => classe.categoria === 'padra
 const classesEspeciais = classesData.filter((classe) => classe.categoria === 'esquecida').length;
 const classesComProgressao = classesData.filter((classe) => classe.progressao_publicada && classe.progressao?.length).length;
 
-/** Conta direto de classes.json para o resumo de perfis de Vida/Mana (Guia do
+/** Conta direto de classes.json para o resumo de perfis de Vida (Guia do
  * Mestre) nunca divergir da distribuição real depois de um remapeamento. */
-const contarClassesPorPerfilVidaMana = (vida: number, mana: number) => (
-  classesData.filter((classe) => classe.vida === vida && classe.mana === mana).length
+const contarClassesPorVida = (vida: number) => (
+  classesData.filter((classe) => classe.vida === vida).length
 );
-const totalClassesMarcialPuro = contarClassesPorPerfilVidaMana(6, 1);
-const totalClassesMarcial = contarClassesPorPerfilVidaMana(5, 2);
-const totalClassesMisto = contarClassesPorPerfilVidaMana(4, 3);
-const totalClassesConjurador = contarClassesPorPerfilVidaMana(3, 4);
-const totalClassesConjuradorPuro = contarClassesPorPerfilVidaMana(2, 5);
+const totalClassesVida6 = contarClassesPorVida(6);
+const totalClassesVida5 = contarClassesPorVida(5);
+const totalClassesVida4 = contarClassesPorVida(4);
+const totalClassesVida3 = contarClassesPorVida(3);
+const totalClassesVida2 = contarClassesPorVida(2);
 
 const racasMecanicas = racasData
   .filter((raca) => !raca.indisponivel && raca.id !== 'raca-personalizada');
@@ -282,8 +282,8 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
             <tr><td><strong>Teste</strong></td><td>Qualquer rolagem de d20 contra uma DT.</td></tr>
             <tr><td><strong>Grau</strong></td><td>O quanto você treinou uma perícia, de Iniciante a Renomado. Cada degrau vale um bônus fixo.</td></tr>
             <tr><td><strong>Atributo</strong></td><td>Os sete números que descrevem o personagem: Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma e Fluxo.</td></tr>
-            <tr><td><strong>Vida e Mana</strong></td><td>Quanto dano você aguenta e quanto combustível mágico você tem.</td></tr>
-            <tr><td><strong>Sanidade</strong></td><td>Uma terceira barra, de 0 a 100, que cai diante de horror e trauma.</td></tr>
+            <tr><td><strong>Vida, Mana e Estamina</strong></td><td>Quanto dano você aguenta, quanto combustível mágico você tem e quanto fôlego físico você tem para golpes, posturas e esforço.</td></tr>
+            <tr><td><strong>Sanidade</strong></td><td>Uma barra de 0 a 100 que cai diante de horror e trauma.</td></tr>
             <tr><td><strong>Cansaço</strong></td><td>Uma trilha de 0 a 6 que mede desgaste acumulado. Quanto mais alto, pior você joga.</td></tr>
             <tr><td><strong>Condição</strong></td><td>Um estado que gruda no personagem por um tempo, como Caído, Cego ou Sangramento.</td></tr>
             <tr><td><strong>Defesa</strong></td><td>O número que um inimigo precisa alcançar para acertar você.</td></tr>
@@ -371,7 +371,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">3. Classe inicial</h3>
       <ul class="regras-list">
-        <li>Escolha uma classe comum disponível. Ela concede as recompensas do nível 1 e define os ganhos de Vida e Mana por nível.</li>
+        <li>Escolha uma classe comum disponível. Ela concede as recompensas do nível 1 e define os ganhos de Vida, Mana e Estamina por nível.</li>
         <li>A classe inicial começa no nível 1. Entrar em outra classe depois segue as regras de progressão e multiclasse.</li>
         <li>Classe especial exige <strong>nível total 20</strong>, liberação do Mestre e um acontecimento na história, salvo uma exceção explícita que permita começar com ela.</li>
       </ul>
@@ -399,6 +399,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <dt>Nível e XP</dt><dd>nível total 1 e 0 XP</dd>
         <dt>Vida máxima</dt><dd>máx. 1, (4 × Mod.Constituição) + Vida da classe, depois ajustes raciais</dd>
         <dt>Mana máxima</dt><dd>máx. 1, (3 × Mod.Sabedoria) + Mana da classe, depois ajustes raciais</dd>
+        <dt>Estamina máxima</dt><dd>máx. 1, (3 × o maior entre Mod.Força e Mod.Destreza) + Estamina da classe</dd>
         <dt>Sanidade</dt><dd>100 de 100</dd>
         <dt>Cansaço</dt><dd>0 de 6</dd>
         <dt>Defesa Natural</dt><dd>10 + ⌊Nível total ÷ 2⌋ + Mod.Destreza + ajustes raciais ou naturais</dd>
@@ -413,7 +414,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Nome, raça, variante e classe estão preenchidos. Árvore e divindade podem ficar vazias quando a campanha permitir personagem sem Árvore.</li>
         <li>Os sete atributos usam um método válido e os ajustes raciais aparecem uma única vez.</li>
         <li>Seis perícias estão em Aprendiz, ou sete se o personagem for Humano.</li>
-        <li>Vida, Mana, Sanidade, Cansaço, Defesa, Movimento e Iniciativa conferem com o resumo.</li>
+        <li>Vida, Mana, Estamina, Sanidade, Cansaço, Defesa, Movimento e Iniciativa conferem com o resumo.</li>
         <li>O inventário contém um item comum de criação e a carteira contém 20 Lunaris.</li>
         <li>O personagem possui um motivo para participar da campanha e trabalhar com o grupo.</li>
       </ul>
@@ -464,11 +465,22 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <dt>Vida por nível posterior</dt><dd>ganho de Vida da classe do nível adquirido, mínimo 1</dd>
         <dt>Mana no nível 1</dt><dd>máx. 1, (3 × Mod.Sabedoria) + Mana da classe</dd>
         <dt>Mana por nível posterior</dt><dd>ganho de Mana da classe do nível adquirido, mínimo 1</dd>
+        <dt>Estamina no nível 1</dt><dd>máx. 1, (3 × o maior entre Mod.Força e Mod.Destreza) + Estamina da classe</dd>
+        <dt>Estamina por nível posterior</dt><dd>ganho de Estamina da classe do nível adquirido</dd>
         <dt>Ajustes raciais</dt><dd>bônus raciais de Vida e Mana são somados depois do cálculo correspondente</dd>
         <dt>Defesa Natural</dt><dd>10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + ajustes raciais ou naturais</dd>
         <dt>Movimento</dt><dd>9 m + (1,5 m × Mod.Destreza) + ajuste da raça ou morfologia, mínimo 4,5 m</dd>
         <dt>Iniciativa</dt><dd>10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + bônus</dd>
       </dl>
+
+      <h3 class="regras-subtitle">Mana e Estamina</h3>
+      <ul class="regras-list">
+        <li><strong>Estamina</strong> paga o que o corpo faz: golpe, postura, salto, grito de comando, trabalho de mãos. A mesma barra serve a quem luta na Força e a quem luta na Destreza, porque a base usa o maior dos dois.</li>
+        <li><strong>Mana</strong> paga o que é místico: magia, ritual, maldição, ilusão e tudo que dobra a realidade. Fluxo não entra na conta da Estamina.</li>
+        <li>Cada poder declara o próprio custo, em Mana ou em Estamina, nunca nos dois. Uma classe pode ter poderes dos dois tipos.</li>
+        <li>Toda classe ganha os dois recursos por nível, mesmo que um deles seja pequeno. A Mana que sobra numa classe marcial serve para itens e para o que ela plantar no Jardim.</li>
+        <li>Cansaço é outra conta. Ele mede desgaste geral e não sobe nem desce porque a Estamina acabou.</li>
+      </ul>
 
       <h3 class="regras-subtitle">Nível e multiclasse</h3>
       <ul class="regras-list">
@@ -498,20 +510,20 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p class="regras-lead">Esta é a página que você consulta para saber com quem está lidando. As fórmulas são as mesmas para todo mundo, então dá para prever a ficha de um personagem sabendo só o nível e o tipo de classe dele.</p>
 
       <h3 class="regras-subtitle">O personagem de referência</h3>
-      <p>Todas as ${classesData.length} classes gastam o mesmo orçamento de 7 pontos por nível, distribuído entre Vida e Mana em cinco graus. A tabela abaixo é o personagem médio de cada grau, calculada com Constituição 14 e Sabedoria 10. Use como piso ao montar encontro.</p>
+      <p>Todas as ${classesData.length} classes gastam o mesmo orçamento de 9 pontos por nível, distribuído entre Vida, Mana e Estamina. A Vida define a coluna, e o que sobra vira Mana e Estamina somadas. A tabela abaixo é o personagem médio de cada coluna, calculada com Constituição 14, Sabedoria 10 e Destreza 14. Use como piso ao montar encontro.</p>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Nível</th><th>Marcial Puro 6/1</th><th>Marcial 5/2</th><th>Misto 4/3</th><th>Conjurador 3/4</th><th>Conjurador Puro 2/5</th><th>Defesa</th><th>Poderes</th></tr></thead>
+        <thead><tr><th>Nível</th><th>Vida 6 (3 de recurso)</th><th>Vida 5 (4)</th><th>Vida 4 (5)</th><th>Vida 3 (6)</th><th>Vida 2 (7)</th><th>Defesa</th><th>Poderes</th></tr></thead>
         <tbody>
-          <tr><td><strong>1</strong></td><td>14 / 1</td><td>13 / 2</td><td>12 / 3</td><td>11 / 4</td><td>10 / 5</td><td>11</td><td>0</td></tr>
-          <tr><td><strong>5</strong></td><td>38 / 5</td><td>33 / 10</td><td>28 / 15</td><td>23 / 20</td><td>18 / 25</td><td>13</td><td>1</td></tr>
-          <tr><td><strong>10</strong></td><td>68 / 10</td><td>58 / 20</td><td>48 / 30</td><td>38 / 40</td><td>28 / 50</td><td>16</td><td>3</td></tr>
-          <tr><td><strong>15</strong></td><td>98 / 15</td><td>83 / 30</td><td>68 / 45</td><td>53 / 60</td><td>38 / 75</td><td>18</td><td>5</td></tr>
-          <tr><td><strong>20</strong></td><td>128 / 20</td><td>108 / 40</td><td>88 / 60</td><td>68 / 80</td><td>48 / 100</td><td>21</td><td>8</td></tr>
-          <tr><td><strong>30</strong></td><td>188 / 30</td><td>158 / 60</td><td>128 / 90</td><td>98 / 120</td><td>68 / 150</td><td>26</td><td>8</td></tr>
-          <tr><td><strong>40</strong></td><td>248 / 40</td><td>208 / 80</td><td>168 / 120</td><td>128 / 160</td><td>88 / 200</td><td>31</td><td>8</td></tr>
+          <tr><td><strong>1</strong></td><td>14 / 9</td><td>13 / 10</td><td>12 / 11</td><td>11 / 12</td><td>10 / 13</td><td>11</td><td>0</td></tr>
+          <tr><td><strong>5</strong></td><td>38 / 21</td><td>33 / 26</td><td>28 / 31</td><td>23 / 36</td><td>18 / 41</td><td>13</td><td>1</td></tr>
+          <tr><td><strong>10</strong></td><td>68 / 36</td><td>58 / 46</td><td>48 / 56</td><td>38 / 66</td><td>28 / 76</td><td>16</td><td>3</td></tr>
+          <tr><td><strong>15</strong></td><td>98 / 51</td><td>83 / 66</td><td>68 / 81</td><td>53 / 96</td><td>38 / 111</td><td>18</td><td>5</td></tr>
+          <tr><td><strong>20</strong></td><td>128 / 66</td><td>108 / 86</td><td>88 / 106</td><td>68 / 126</td><td>48 / 146</td><td>21</td><td>8</td></tr>
+          <tr><td><strong>30</strong></td><td>188 / 96</td><td>158 / 126</td><td>128 / 156</td><td>98 / 186</td><td>68 / 216</td><td>26</td><td>8</td></tr>
+          <tr><td><strong>40</strong></td><td>248 / 126</td><td>208 / 166</td><td>168 / 206</td><td>128 / 246</td><td>88 / 286</td><td>31</td><td>8</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">Perfil de Vida/Mana por classe: ${totalClassesMarcialPuro} Marcial Puro (6/1), ${totalClassesMarcial} Marciais (5/2), ${totalClassesMisto} Mistas (4/3), ${totalClassesConjurador} Conjuradoras (3/4) e ${totalClassesConjuradorPuro} Conjuradoras Puras (2/5). Num grupo comum de quatro, some as Vidas da coluna certa e multiplique o dano do grupo por rodada por 4,5: sai a Vida efetiva do encontro padrão.</p>
+      <p class="regras-note">Classes por Vida: ${totalClassesVida6} com 6, ${totalClassesVida5} com 5, ${totalClassesVida4} com 4, ${totalClassesVida3} com 3 e ${totalClassesVida2} com 2. Nas colunas de Vida alta o recurso vai quase todo para Estamina; nas de Vida baixa, para Mana. Num grupo comum de quatro, some as Vidas da coluna certa e multiplique o dano do grupo por rodada por 4,5: sai a Vida efetiva do encontro padrão.</p>
 
       <h3 class="regras-subtitle">Conferir maestria</h3>
       <ul class="regras-list">
@@ -1192,7 +1204,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li><strong>Excelente:</strong> santuário protegido, com conforto e cuidado médico ou sobrenatural. Depende de autorização do Mestre.</li>
       </ul>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Qualidade</th><th>PV e Mana</th><th>Sanidade</th><th>Reduz Cansaço</th></tr></thead>
+        <thead><tr><th>Qualidade</th><th>PV, Mana e Estamina</th><th>Sanidade</th><th>Reduz Cansaço</th></tr></thead>
         <tbody>
           <tr><td>Péssima</td><td>10% do máximo</td><td>0%</td><td>1</td></tr>
           <tr><td>Ruim</td><td>25% do máximo</td><td>5%</td><td>2</td></tr>
@@ -1203,8 +1215,9 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </table></div>
 
       <h3 class="regras-subtitle">Relaxar</h3>
-      <div class="regras-formula">Recupere 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana</div>
+      <div class="regras-formula">Recupere 1d6 + Mod.Sabedoria + ⌊Nível ÷ 4⌋ de Mana e de Estamina</div>
       <ul class="regras-list">
+        <li>Uma rolagem só: o mesmo valor volta para a Mana e para a Estamina, cada uma até o próprio máximo.</li>
         <li>Exige uma hora em segurança relativa, e vale uma vez só entre dois descansos completos.</li>
         <li>Se a hora foi gasta em algo que significa alguma coisa para o personagem, o Mestre pode devolver 1 ponto de Cansaço junto.</li>
       </ul>
@@ -1222,7 +1235,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
           <tr><td>6: Colapso</td><td>Inconsciente até reduzir Cansaço.</td></tr>
         </tbody>
       </table></div>
-      <p class="regras-note">Um combate conta como intenso quando o personagem desce à metade dos PV, gasta metade da Mana ou entra em Morrendo. A cena inteira gera <strong>1</strong> Cansaço, mesmo que os três gatilhos aconteçam. Seis horas de treino e uma noite em claro também valem 1 cada. Sempre em números inteiros, porque não existe meio Cansaço.</p>
+      <p class="regras-note">Um combate conta como intenso quando o personagem desce à metade dos PV, gasta metade da Mana ou da Estamina ou entra em Morrendo. A cena inteira gera <strong>1</strong> Cansaço, mesmo que os três gatilhos aconteçam. Na Sessão ao Vivo o site registra isso sozinho quando o Mestre encerra o combate; fora dela, use o botão do Descanso. Seis horas de treino e uma noite em claro também valem 1 cada. Sempre em números inteiros, porque não existe meio Cansaço.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">A escala de qualidade do descanso é o seu botão de ritmo mais preciso. Você não precisa tirar Vida de ninguém para apertar uma campanha: basta o grupo dormir mal duas noites seguidas.</p>
@@ -1232,7 +1245,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Péssima devolve 10% e tira 1 de Cansaço; Excelente devolve tudo e zera a trilha inteira. É uma diferença enorme, e ela é decidida pelo mundo que você descreve, não por rolagem.</li>
         <li>Excelente depende da sua autorização por escrito na regra. Trate como recompensa de lugar: um santuário, uma base com Área Médica, um aliado poderoso hospedando o grupo.</li>
         <li>Descanso de qualidade Boa ou melhor também tira 1 de Ferido. Negar descanso bom por muitas sessões não atrasa só a recuperação: acumula Ferido, que sobe a DT de Morrendo e empurra o grupo para uma espiral. Quando notar isso, afrouxe.</li>
-        <li>Relaxar existe e a mesa esquece. Uma hora em segurança relativa, uma vez entre descansos completos, devolve Mana. Ofereça em voz alta quando houver uma pausa.</li>
+        <li>Relaxar existe e a mesa esquece. Uma hora em segurança relativa, uma vez entre descansos completos, devolve Mana e Estamina. Ofereça em voz alta quando houver uma pausa.</li>
       </ul>
 
       <h3 class="regras-subtitle">Pressão sem trapaça</h3>
@@ -2235,7 +2248,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p>Aqui você escolhe. Cada classe publica uma lista de dez a doze poderes, e a grade concede oito vagas até o nível 20. Como não há vagas para toda a lista, dois personagens da mesma classe e do mesmo nível podem ter conjuntos de poderes diferentes.</p>
       <ul class="regras-list">
         <li>A escolha é feita na hora que a vaga abre, e vale para sempre. Trocar depois exige uma regra que autorize ou a permissão do Mestre.</li>
-        <li>Cada poder declara o próprio custo de Mana. Custo zero quer dizer passivo: ele funciona sem você fazer nada.</li>
+        <li>Cada poder declara o próprio custo, em Mana ou em Estamina. Custo zero quer dizer passivo: ele funciona sem você fazer nada.</li>
         <li>Poder com custo declara também a ação que consome. Sem isso escrito, ele é uma Ação Padrão.</li>
         <li>Só dá para escolher um poder da lista da sua própria classe, e cada um uma vez só.</li>
       </ul>
@@ -2253,7 +2266,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>O que sai dali é recompensa combinada na mesa. Evento não concede nível, dinheiro infinito nem item garantido.</li>
         <li>Se o grupo estiver no meio de outra coisa, o evento espera. Ele é oportunidade, não interrupção.</li>
       </ul>
-      <p class="regras-note">Vale conferir a lista de poderes da classe antes de escolhê-la. Duas classes com a mesma Vida e a mesma Mana podem jogar de formas completamente diferentes por causa do que está nessa lista, e é ela que decide como o personagem vai se sentir no nível 10.</p>
+      <p class="regras-note">Vale conferir a lista de poderes da classe antes de escolhê-la. Duas classes com a mesma Vida, a mesma Mana e a mesma Estamina podem jogar de formas completamente diferentes por causa do que está nessa lista, e é ela que decide como o personagem vai se sentir no nível 10.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">Os Eventos são a única parte da progressão que cai no seu colo. Os outros quatro tipos a ficha resolve sozinha; o Evento só existe se você o colocar em cena.</p>

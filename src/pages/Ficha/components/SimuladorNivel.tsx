@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { ArrowRight, ChevronDown, FlaskConical, Lock, Minus, Plus, RotateCcw, Sparkles } from 'lucide-react';
 import { ATRIBUTOS, ROTULOS_ATRIBUTOS } from '../../../services/calculoService';
 import { CLASSES_CATALOGO } from '../../../services/catalogoService';
+import { rotuloCustoDePoder } from '../../../services/statusService';
 import {
   AJUSTE_ATRIBUTO_MAXIMO,
   NIVEL_MAXIMO_SIMULADO,
@@ -277,7 +278,7 @@ export const SimuladorNivel = ({ character }: ISimuladorNivelProps) => {
                               <span className="shrink-0 rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider" style={{ color: rotulo.cor, borderColor: `${rotulo.cor}55` }}>{rotulo.texto}</span>
                             </summary>
                             <p className="whitespace-pre-line border-t border-white/5 px-3 pb-3 pt-2 text-xs leading-relaxed text-gray-400">
-                              {opcao.custoMana > 0 ? <span className="mb-1 block font-bold text-sky-300">Custo: {opcao.custoMana} de mana</span> : null}
+                              {rotuloCustoDePoder(opcao) ? <span className="mb-1 block font-bold text-sky-300">Custo: {rotuloCustoDePoder(opcao)}</span> : null}
                               {opcao.descricao}
                             </p>
                           </details>

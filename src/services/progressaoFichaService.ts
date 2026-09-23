@@ -1,5 +1,5 @@
-import type { ICaracteristicaRacial, IClasse, IEfeitoFichaClasse, IFichaTecnicaClasse, IHabilidadeClasse, IOpcaoHabilidadeClasse, IPoderClasse, IRaca } from '../types/catalogo';
-import { CLASSES_CATALOGO, LEGADOS_CATALOGO, RACAS_CATALOGO } from './catalogoService';
+import type { ICaracteristicaRacial, IClasse, IEfeitoFichaClasse, IFichaTecnicaClasse, IHabilidadeClasse, IOpcaoHabilidadeClasse, IPoderClasse, IRaca, IUnicoJardim } from '../types/catalogo';
+import { CLASSES_CATALOGO, LEGADOS_CATALOGO, RACAS_CATALOGO, UNICOS_JARDIM_CATALOGO } from './catalogoService';
 import {
   nivelMinimoTraco,
   obterEstagiosRaciaisAlcancados,
@@ -27,6 +27,7 @@ export interface IConteudoAutomatico {
   origem: string;
   nivel: number;
   custoMana?: number;
+  custoEstamina?: number;
   subtipo?: 'habilidade' | 'escolha';
 }
 
@@ -251,6 +252,24 @@ function descricaoHabilidadeNoNivel(habilidade: IHabilidadeClasse, nivel: number
     .join('\n\n');
 }
 
+/** Custo de ativação vigente no nível: o do último estágio alcançado que declara
+ * um (o custo de Provocar sobe de 4 a 7 conforme os estágios), ou o da própria
+ * habilidade quando ela não tem estágios. Sem custo declarado, devolve zeros. */
+export function custoAtivacaoHabilidadeNoNivel(
+  habilidade: IHabilidadeClasse,
+  nivel: number,
+): { custoMana: number; custoEstamina: number } {
+  const estagios = [...(habilidade.estagios || [])]
+    .filter((estagio) => estagio.nivel <= nivel)
+    .sort((a, b) => a.nivel - b.nivel);
+  const comCusto = [...estagios].reverse().find((estagio) => (estagio.custo_mana || 0) > 0 || (estagio.custo_estamina || 0) > 0);
+  const fonte = comCusto || (estagios.length ? null : habilidade);
+  return {
+    custoMana: Math.max(0, Number(fonte?.custo_mana) || 0),
+    custoEstamina: Math.max(0, Number(fonte?.custo_estamina) || 0),
+  };
+}
+
 /** Devolve somente o marco numérico vigente. Os marcos substituem os
  * anteriores, evitando somar +5, +10, +15 e +20 como se fossem cumulativos. */
 export function efeitosOpcaoHabilidadeNoNivel(
@@ -330,8 +349,10 @@ ${rotulo} (${escolhidos.length}/${vagas}): ${titulos.join(', ')}.`;
 
 export function habilidadesAutomaticas(ficha: any): IConteudoAutomatico[] {
   const escolhas = selecoesHabilidadeValidas(ficha);
+  const vendidasNoJardim = new Set(habilidadesVendidasJardim(ficha).map((item) => `${item.classeId}:${item.habilidadeId}`));
   const habilidades = classesDaFicha(ficha).flatMap(({ classe, nivel }) => (classe.habilidades || [])
     .filter((habilidade) => (habilidade.niveis || []).some((marco) => marco <= nivel))
+    .filter((habilidade) => !vendidasNoJardim.has(`${classe.id}:${habilidade.id}`))
     .map((habilidade) => ({
       id: `classe:${classe.id}:${habilidade.id}`,
       titulo: habilidade.titulo,
@@ -340,6 +361,7 @@ export function habilidadesAutomaticas(ficha: any): IConteudoAutomatico[] {
       origem: classe.titulo,
       nivel: Math.max(...habilidade.niveis.filter((marco) => marco <= nivel)),
       subtipo: 'habilidade' as const,
+      ...custoAtivacaoHabilidadeNoNivel(habilidade, nivel),
     })));
   return [...habilidades, ...opcoesHabilidadeSelecionadas(ficha)];
 }
@@ -407,8 +429,455 @@ export function poderesSelecionados(ficha: any): IConteudoAutomatico[] {
       origem: referencia.classe.titulo,
       nivel: referencia.nivel,
       custoMana: Math.max(0, Number(poder.custo_mana) || 0),
+      custoEstamina: Math.max(0, Number(poder.custo_estamina) || 0),
     }];
   });
+}
+
+/** Nível usado como referência de preço no Jardim. O catálogo não guarda um
+ * nível fixo por poder (a vaga é livre, ver `vagasPoderDaClasse`), então lemos
+ * o primeiro "Nível N" citado nos pré-requisitos; sem isso, assume o nível da
+ * primeira vaga de poder mais comum entre as classes (2). */
+export function nivelEstimadoPoder(poder: IPoderClasse): number {
+  for (const requisito of poder.pre_requisitos || []) {
+    const encontrado = String(requisito).match(/n[ií]vel\s+(\d+)/i);
+    if (encontrado) return Math.max(1, Math.min(20, Number(encontrado[1])));
+  }
+  return 2;
+}
+
+const JARDIM_SEMENTES_BASE = 10;
+const JARDIM_SEMENTES_POR_NIVEL = 4;
+const JARDIM_MARKUP_COMPRA = 1.5;
+
+/** Classes "esquecida" (Campeão Dimensional, Devorador, Invocador...) custam
+ * bem mais no Jardim que classes "padrao". x10 foi calibrado simulando o
+ * catálogo inteiro (ver tests/frontend/jardimEconomia.test.ts): é o menor
+ * multiplicador redondo em que nem o cenário "vende a habilidade principal
+ * inteira + os dois poderes mais caros" de nenhuma classe padrao (o pior caso
+ * é o Guerreiro) cobre o item esquecida mais barato do jogo inteiro - só
+ * liquidar o kit padrao completo consegue, e mesmo assim só os mais baratos. */
+const JARDIM_MULTIPLICADOR_CATEGORIA: Record<string, number> = {
+  padrao: 1,
+  esquecida: 10,
+};
+
+function multiplicadorDeClasse(classe: IClasse): number {
+  return JARDIM_MULTIPLICADOR_CATEGORIA[classe.categoria || 'padrao'] ?? 1;
+}
+
+/** Sementes recebidas ao podar (vender) um poder do Jardim. */
+export function sementesPorVenderPoder(poder: IPoderClasse, classe: IClasse): number {
+  const base = JARDIM_SEMENTES_BASE + nivelEstimadoPoder(poder) * JARDIM_SEMENTES_POR_NIVEL;
+  return Math.round(base * multiplicadorDeClasse(classe));
+}
+
+/** Sementes cobradas para plantar (comprar) um poder de outra classe. Um
+ * pouco mais caro que a venda para não virar uma troca sem custo. */
+export function sementesPorComprarPoder(poder: IPoderClasse, classe: IClasse): number {
+  return Math.ceil((sementesPorVenderPoder(poder, classe) * JARDIM_MARKUP_COMPRA) / 5) * 5;
+}
+
+/** Poderes de outras classes que o personagem já plantou no Jardim. */
+export function poderesComprasJardim(ficha: any): ISelecaoPoderClasse[] {
+  const bruto = Array.isArray(ficha?.jardim?.comprados) ? ficha.jardim.comprados : [];
+  return bruto.filter((item: any) => item && typeof item.classeId === 'string' && typeof item.poderId === 'string');
+}
+
+/** Resolve os poderes comprados no Jardim contra o catálogo completo (não só
+ * as classes que o personagem tem), com a origem para exibir na ficha. */
+export function poderesJardimSelecionados(ficha: any): IConteudoAutomatico[] {
+  const classesProprias = new Set(classesDaFicha(ficha).map((item) => item.classe.id));
+  return poderesComprasJardim(ficha).flatMap((selecao) => {
+    if (classesProprias.has(selecao.classeId)) return [];
+    const classe = CLASSES_CATALOGO.find((item) => item.id === selecao.classeId);
+    const poder = classe?.poderes?.find((item) => item.id === selecao.poderId);
+    if (!classe || !poder) return [];
+    return [{
+      id: `jardim:${classe.id}:${poder.id}`,
+      titulo: poder.titulo,
+      descricao: comFichaTecnica(poder.descricao, poder),
+      origem: classe.titulo,
+      nivel: nivelEstimadoPoder(poder),
+      custoMana: Math.max(0, Number(poder.custo_mana) || 0),
+      custoEstamina: Math.max(0, Number(poder.custo_estamina) || 0),
+    }];
+  });
+}
+
+export interface IPoderCatalogoJardim {
+  classeId: string;
+  classeTitulo: string;
+  categoriaClasse?: string;
+  poder: IPoderClasse;
+  custoSementes: number;
+  jaAdquirido: boolean;
+}
+
+/** Catálogo de poderes disponíveis para comprar no Jardim: todo poder de
+ * classe que o personagem não tem hoje (classes que não são as dele). */
+export function catalogoJardimDisponivel(ficha: any): IPoderCatalogoJardim[] {
+  const classesProprias = new Set(classesDaFicha(ficha).map((item) => item.classe.id));
+  const jaComprados = new Set(poderesComprasJardim(ficha).map((item) => `${item.classeId}:${item.poderId}`));
+  return CLASSES_CATALOGO
+    .filter((classe) => !classesProprias.has(classe.id))
+    .flatMap((classe) => (classe.poderes || []).map((poder) => ({
+      classeId: classe.id,
+      classeTitulo: classe.titulo,
+      categoriaClasse: classe.categoria,
+      poder,
+      custoSementes: sementesPorComprarPoder(poder, classe),
+      jaAdquirido: jaComprados.has(`${classe.id}:${poder.id}`),
+    })));
+}
+
+export interface IPoderVendavelJardim {
+  indice: number;
+  classeId: string;
+  poderId: string;
+  titulo: string;
+  origem: string;
+  origemTipo: 'classe' | 'jardim';
+  custoMana: number;
+  custoEstamina: number;
+  sementesRecebidas: number;
+}
+
+/** Tudo que o personagem pode podar hoje: poderes escolhidos da própria
+ * classe e poderes plantados no Jardim vindos de outras classes. O índice
+ * identifica a ocorrência exata (poderes repetíveis podem aparecer mais de
+ * uma vez) para a venda remover só aquela entrada. */
+export function poderesVendaveisJardim(ficha: any): IPoderVendavelJardim[] {
+  const classes = new Map(classesDaFicha(ficha).map((item) => [item.classe.id, item]));
+  const proprios = selecoesPoderValidas(ficha).map((selecao, indice): IPoderVendavelJardim | null => {
+    const referencia = classes.get(selecao.classeId);
+    const poder = referencia?.classe.poderes?.find((item) => item.id === selecao.poderId);
+    if (!referencia || !poder) return null;
+    return {
+      indice,
+      classeId: selecao.classeId,
+      poderId: selecao.poderId,
+      titulo: poder.titulo,
+      origem: referencia.classe.titulo,
+      origemTipo: 'classe',
+      custoMana: Math.max(0, Number(poder.custo_mana) || 0),
+      custoEstamina: Math.max(0, Number(poder.custo_estamina) || 0),
+      sementesRecebidas: sementesPorVenderPoder(poder, referencia.classe),
+    };
+  }).filter((item): item is IPoderVendavelJardim => item !== null);
+  const doJardim = poderesComprasJardim(ficha).map((selecao, indice): IPoderVendavelJardim | null => {
+    const classe = CLASSES_CATALOGO.find((item) => item.id === selecao.classeId);
+    const poder = classe?.poderes?.find((item) => item.id === selecao.poderId);
+    if (!classe || !poder) return null;
+    return {
+      indice,
+      classeId: selecao.classeId,
+      poderId: selecao.poderId,
+      titulo: poder.titulo,
+      origem: classe.titulo,
+      origemTipo: 'jardim',
+      custoMana: Math.max(0, Number(poder.custo_mana) || 0),
+      custoEstamina: Math.max(0, Number(poder.custo_estamina) || 0),
+      sementesRecebidas: sementesPorVenderPoder(poder, classe),
+    };
+  }).filter((item): item is IPoderVendavelJardim => item !== null);
+  return [...proprios, ...doJardim];
+}
+
+/** Remove a ocorrência `indice` de `poderesClasseSelecionados` (venda de um
+ * poder da própria classe: a vaga volta a ficar livre para escolher outro). */
+export function venderPoderDeClasseNoJardim(ficha: any, indice: number): ISelecaoPoderClasse[] | null {
+  const atuais = selecoesPoderValidas(ficha);
+  if (indice < 0 || indice >= atuais.length) return null;
+  return [...atuais.slice(0, indice), ...atuais.slice(indice + 1)];
+}
+
+/** Remove a ocorrência `indice` de `jardim.comprados` (venda de um poder que
+ * tinha sido plantado a partir de outra classe). */
+export function venderPoderDoJardim(ficha: any, indice: number): ISelecaoPoderClasse[] | null {
+  const atuais = poderesComprasJardim(ficha);
+  if (indice < 0 || indice >= atuais.length) return null;
+  return [...atuais.slice(0, indice), ...atuais.slice(indice + 1)];
+}
+
+/** Planta um poder de outra classe no Jardim. Devolve null se o personagem já
+ * tem aquele poder plantado (compra não é cumulativa). */
+export function comprarPoderNoJardim(ficha: any, alvo: { classeId: string; poderId: string }): ISelecaoPoderClasse[] | null {
+  const atuais = poderesComprasJardim(ficha);
+  if (atuais.some((item) => item.classeId === alvo.classeId && item.poderId === alvo.poderId)) return null;
+  return [...atuais, { classeId: alvo.classeId, poderId: alvo.poderId }];
+}
+
+export interface ISelecaoHabilidadeJardim {
+  classeId: string;
+  habilidadeId: string;
+}
+
+/** Quantos estágios da escada (ex.: Implacável 1/5/10/15/20) já foram
+ * alcançados num dado nível de referência. */
+function estagiosAlcancadosHabilidade(habilidade: IHabilidadeClasse, nivelReferencia: number): number {
+  return (habilidade.niveis || []).filter((marco) => marco <= nivelReferencia).length;
+}
+
+const JARDIM_SEMENTES_HABILIDADE_BASE = 20;
+const JARDIM_SEMENTES_HABILIDADE_POR_ESTAGIO = 15;
+
+/** Sementes por podar uma habilidade em escada: o preço soma todos os
+ * estágios que o personagem já alcançou, porque vender tira a escada
+ * inteira, não um estágio isolado - não dá pra manter o estágio 3 e vender
+ * só o 1. Vender no nível 15 rende mais que vender no nível 1 porque há mais
+ * estágio embutido na mesma venda. Habilidade de classe esquecida também leva
+ * o multiplicador de tier, pelo mesmo motivo dos poderes. */
+export function sementesPorVenderHabilidade(habilidade: IHabilidadeClasse, nivelReferencia: number, classe: IClasse): number {
+  const estagios = Math.max(1, estagiosAlcancadosHabilidade(habilidade, nivelReferencia));
+  const base = JARDIM_SEMENTES_HABILIDADE_BASE + (estagios - 1) * JARDIM_SEMENTES_HABILIDADE_POR_ESTAGIO;
+  return Math.round(base * multiplicadorDeClasse(classe));
+}
+
+/** Sementes por plantar uma habilidade em escada. Comprar também é tudo ou
+ * nada: o personagem recebe de uma vez todos os estágios que o próprio nível
+ * total já alcançaria, nunca um estágio maior que o seu nível permite. */
+export function sementesPorComprarHabilidade(habilidade: IHabilidadeClasse, nivelReferencia: number, classe: IClasse): number {
+  return Math.ceil((sementesPorVenderHabilidade(habilidade, nivelReferencia, classe) * JARDIM_MARKUP_COMPRA) / 5) * 5;
+}
+
+/** Só habilidades "simples" entram no Jardim: as que têm catálogo de escolha
+ * próprio (Engenhocas do Engenheiro) ou dependem de outra escolha guardam
+ * estado em `ficha.escolhasHabilidade` que não faz sentido transplantar entre
+ * classes, então ficam de fora por enquanto. */
+function habilidadeElegivelParaJardim(habilidade: IHabilidadeClasse): boolean {
+  return !habilidade.escolha_opcoes && !habilidade.requer_escolha;
+}
+
+export function habilidadesVendidasJardim(ficha: any): ISelecaoHabilidadeJardim[] {
+  const bruto = Array.isArray(ficha?.jardim?.habilidadesVendidas) ? ficha.jardim.habilidadesVendidas : [];
+  return bruto.filter((item: any) => item && typeof item.classeId === 'string' && typeof item.habilidadeId === 'string');
+}
+
+export function habilidadesCompradasJardim(ficha: any): ISelecaoHabilidadeJardim[] {
+  const bruto = Array.isArray(ficha?.jardim?.habilidadesCompradas) ? ficha.jardim.habilidadesCompradas : [];
+  return bruto.filter((item: any) => item && typeof item.classeId === 'string' && typeof item.habilidadeId === 'string');
+}
+
+/** Habilidades plantadas no Jardim (da própria classe recomprada ou de outra
+ * classe), resolvidas contra o catálogo completo e escaladas pelo nível total
+ * atual do personagem - por isso continuam ganhando estágio novo sozinhas se
+ * o personagem subir de nível depois de plantada. */
+export function habilidadesJardimSelecionadas(ficha: any): IConteudoAutomatico[] {
+  const nivel = nivelTotalFicha(ficha);
+  return habilidadesCompradasJardim(ficha).flatMap((selecao) => {
+    const classe = CLASSES_CATALOGO.find((item) => item.id === selecao.classeId);
+    const habilidade = classe?.habilidades?.find((item) => item.id === selecao.habilidadeId);
+    if (!classe || !habilidade || !habilidadeElegivelParaJardim(habilidade)) return [];
+    const estagios = estagiosAlcancadosHabilidade(habilidade, nivel);
+    if (!estagios) return [];
+    return [{
+      id: `jardim-habilidade:${classe.id}:${habilidade.id}`,
+      titulo: habilidade.titulo,
+      descricao: descricaoHabilidadeNoNivel(habilidade, nivel),
+      origem: classe.titulo,
+      nivel: Math.max(...habilidade.niveis.filter((marco) => marco <= nivel)),
+      subtipo: 'habilidade' as const,
+      ...custoAtivacaoHabilidadeNoNivel(habilidade, nivel),
+    }];
+  });
+}
+
+export interface IHabilidadeCatalogoJardim {
+  classeId: string;
+  classeTitulo: string;
+  categoriaClasse?: string;
+  habilidade: IHabilidadeClasse;
+  custoSementes: number;
+  estagiosNoNivelAtual: number;
+  /** Texto completo, estágio a estágio, do que o personagem recebe ao
+   * plantar agora - não é só a descrição genérica do catálogo (que costuma
+   * ser uma linha tipo "cada estágio soma ao anterior"). */
+  descricaoNoNivelAtual: string;
+  jaAdquirida: boolean;
+}
+
+/** Catálogo de habilidades plantáveis: da própria classe, só entra se já foi
+ * vendida (senão o personagem já tem ela de graça); de outra classe, sempre
+ * pode - mas em ambos os casos só aparece se o nível total do personagem já
+ * alcançou o primeiro estágio da escada. Não dá pra plantar uma habilidade
+ * "de nível 5" estando no nível 1: o próprio catálogo já filtra isso fora. */
+export function catalogoJardimHabilidadesDisponivel(ficha: any): IHabilidadeCatalogoJardim[] {
+  const nivel = nivelTotalFicha(ficha);
+  const classesProprias = new Set(classesDaFicha(ficha).map((item) => item.classe.id));
+  const vendidas = new Set(habilidadesVendidasJardim(ficha).map((item) => `${item.classeId}:${item.habilidadeId}`));
+  const jaCompradas = new Set(habilidadesCompradasJardim(ficha).map((item) => `${item.classeId}:${item.habilidadeId}`));
+  return CLASSES_CATALOGO.flatMap((classe) => (classe.habilidades || [])
+    .filter((habilidade) => habilidadeElegivelParaJardim(habilidade))
+    .filter((habilidade) => {
+      const propria = classesProprias.has(classe.id);
+      return !propria || vendidas.has(`${classe.id}:${habilidade.id}`);
+    })
+    .map((habilidade) => ({
+      classeId: classe.id,
+      classeTitulo: classe.titulo,
+      categoriaClasse: classe.categoria,
+      habilidade,
+      custoSementes: sementesPorComprarHabilidade(habilidade, nivel, classe),
+      estagiosNoNivelAtual: estagiosAlcancadosHabilidade(habilidade, nivel),
+      descricaoNoNivelAtual: descricaoHabilidadeNoNivel(habilidade, nivel),
+      jaAdquirida: jaCompradas.has(`${classe.id}:${habilidade.id}`),
+    }))
+    .filter((item) => item.estagiosNoNivelAtual > 0));
+}
+
+export interface IHabilidadeVendavelJardim {
+  classeId: string;
+  habilidadeId: string;
+  titulo: string;
+  origem: string;
+  origemTipo: 'classe' | 'jardim';
+  estagiosAlcancados: number;
+  sementesRecebidas: number;
+  /** Texto completo, estágio a estágio, do que o personagem perde ao podar. */
+  descricaoAtual: string;
+}
+
+/** Tudo que o personagem pode podar hoje: a habilidade principal da própria
+ * classe (inteira, todos os estágios já alcançados) e habilidades plantadas
+ * no Jardim vindas de outra classe. */
+export function habilidadesVendaveisJardim(ficha: any): IHabilidadeVendavelJardim[] {
+  const nivel = nivelTotalFicha(ficha);
+  const vendidas = new Set(habilidadesVendidasJardim(ficha).map((item) => `${item.classeId}:${item.habilidadeId}`));
+  const proprias = classesDaFicha(ficha).flatMap(({ classe, nivel: nivelClasse }) => (classe.habilidades || [])
+    .filter((habilidade) => habilidadeElegivelParaJardim(habilidade))
+    .filter((habilidade) => (habilidade.niveis || []).some((marco) => marco <= nivelClasse))
+    .filter((habilidade) => !vendidas.has(`${classe.id}:${habilidade.id}`))
+    .map((habilidade): IHabilidadeVendavelJardim => ({
+      classeId: classe.id,
+      habilidadeId: habilidade.id,
+      titulo: habilidade.titulo,
+      origem: classe.titulo,
+      origemTipo: 'classe',
+      estagiosAlcancados: estagiosAlcancadosHabilidade(habilidade, nivel),
+      sementesRecebidas: sementesPorVenderHabilidade(habilidade, nivel, classe),
+      descricaoAtual: descricaoHabilidadeNoNivel(habilidade, nivel),
+    })));
+  const doJardim = habilidadesCompradasJardim(ficha).flatMap((selecao): IHabilidadeVendavelJardim[] => {
+    const classe = CLASSES_CATALOGO.find((item) => item.id === selecao.classeId);
+    const habilidade = classe?.habilidades?.find((item) => item.id === selecao.habilidadeId);
+    if (!classe || !habilidade) return [];
+    return [{
+      classeId: classe.id,
+      habilidadeId: habilidade.id,
+      titulo: habilidade.titulo,
+      origem: classe.titulo,
+      origemTipo: 'jardim',
+      estagiosAlcancados: estagiosAlcancadosHabilidade(habilidade, nivel),
+      sementesRecebidas: sementesPorVenderHabilidade(habilidade, nivel, classe),
+      descricaoAtual: descricaoHabilidadeNoNivel(habilidade, nivel),
+    }];
+  });
+  return [...proprias, ...doJardim];
+}
+
+/** Poda a habilidade principal da própria classe: sai inteira (todos os
+ * estágios), e a classe não volta a concedê-la sozinha subindo de nível. */
+export function venderHabilidadeDeClasseNoJardim(ficha: any, alvo: { classeId: string; habilidadeId: string }): ISelecaoHabilidadeJardim[] | null {
+  const atuais = habilidadesVendidasJardim(ficha);
+  if (atuais.some((item) => item.classeId === alvo.classeId && item.habilidadeId === alvo.habilidadeId)) return null;
+  return [...atuais, { classeId: alvo.classeId, habilidadeId: alvo.habilidadeId }];
+}
+
+/** Poda uma habilidade que tinha sido plantada a partir de outra classe. */
+export function venderHabilidadeDoJardim(ficha: any, alvo: { classeId: string; habilidadeId: string }): ISelecaoHabilidadeJardim[] | null {
+  const atuais = habilidadesCompradasJardim(ficha);
+  const indice = atuais.findIndex((item) => item.classeId === alvo.classeId && item.habilidadeId === alvo.habilidadeId);
+  if (indice === -1) return null;
+  return [...atuais.slice(0, indice), ...atuais.slice(indice + 1)];
+}
+
+/** Planta uma habilidade (da própria classe vendida antes, ou de outra
+ * classe) inteira, no estágio que o nível total atual já alcança. */
+export function comprarHabilidadeNoJardim(ficha: any, alvo: { classeId: string; habilidadeId: string }): ISelecaoHabilidadeJardim[] | null {
+  const atuais = habilidadesCompradasJardim(ficha);
+  if (atuais.some((item) => item.classeId === alvo.classeId && item.habilidadeId === alvo.habilidadeId)) return null;
+  return [...atuais, { classeId: alvo.classeId, habilidadeId: alvo.habilidadeId }];
+}
+
+/** Sementes recebidas ao podar um Único de volta. O preço de compra do
+ * catálogo já é o valor final (não depende de classe nem nível); a venda
+ * volta um pouco menor, na mesma proporção do markup dos poderes e
+ * habilidades, pra manter a regra de que comprar e vender de volta sempre dá
+ * prejuízo em qualquer canto do Jardim. */
+export function sementesPorVenderUnico(unico: IUnicoJardim): number {
+  return Math.floor(unico.custoSementes / JARDIM_MARKUP_COMPRA / 5) * 5;
+}
+
+export function unicosComprasJardim(ficha: any): string[] {
+  const bruto = Array.isArray(ficha?.jardim?.unicosComprados) ? ficha.jardim.unicosComprados : [];
+  return bruto.filter((id: any) => typeof id === 'string');
+}
+
+/** Únicos que o personagem já plantou, resolvidos contra o catálogo. Não têm
+ * classe de origem nem nível: uma vez plantados, são seus, ponto final. */
+export function unicosJardimSelecionados(ficha: any): IConteudoAutomatico[] {
+  return unicosComprasJardim(ficha).flatMap((id) => {
+    const unico = UNICOS_JARDIM_CATALOGO.find((item) => item.id === id);
+    if (!unico) return [];
+    return [{
+      id: `jardim-unico:${unico.id}`,
+      titulo: unico.titulo,
+      descricao: comFichaTecnica(unico.descricao, unico),
+      origem: 'Jardim',
+      nivel: 0,
+      custoMana: Math.max(0, Number(unico.custo_mana) || 0),
+      custoEstamina: Math.max(0, Number(unico.custo_estamina) || 0),
+    }];
+  });
+}
+
+/** Catálogo de Únicos disponíveis pra plantar: tudo que ainda não foi
+ * comprado. Sem filtro de classe ou de nível - são acessíveis a qualquer
+ * personagem, o que trava o acesso é só o preço em Sementes. */
+export function catalogoJardimUnicosDisponivel(ficha: any): Array<{ unico: IUnicoJardim; jaAdquirido: boolean }> {
+  const jaComprados = new Set(unicosComprasJardim(ficha));
+  return UNICOS_JARDIM_CATALOGO.map((unico) => ({
+    unico,
+    jaAdquirido: jaComprados.has(unico.id),
+  }));
+}
+
+export interface IUnicoVendavelJardim {
+  id: string;
+  titulo: string;
+  tipo: string;
+  tier: string;
+  sementesRecebidas: number;
+}
+
+export function unicosVendaveisJardim(ficha: any): IUnicoVendavelJardim[] {
+  return unicosComprasJardim(ficha).flatMap((id) => {
+    const unico = UNICOS_JARDIM_CATALOGO.find((item) => item.id === id);
+    if (!unico) return [];
+    return [{
+      id: unico.id,
+      titulo: unico.titulo,
+      tipo: unico.tipo,
+      tier: unico.tier,
+      sementesRecebidas: sementesPorVenderUnico(unico),
+    }];
+  });
+}
+
+/** Poda um Único plantado. */
+export function venderUnicoNoJardim(ficha: any, id: string): string[] | null {
+  const atuais = unicosComprasJardim(ficha);
+  const indice = atuais.indexOf(id);
+  if (indice === -1) return null;
+  return [...atuais.slice(0, indice), ...atuais.slice(indice + 1)];
+}
+
+/** Planta um Único novo. Não é cumulativo: só pode ter um de cada. */
+export function comprarUnicoNoJardim(ficha: any, id: string): string[] | null {
+  const atuais = unicosComprasJardim(ficha);
+  if (atuais.includes(id)) return null;
+  return [...atuais, id];
 }
 
 export function podeSelecionarPoder(

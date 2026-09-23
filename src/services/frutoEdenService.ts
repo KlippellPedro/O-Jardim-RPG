@@ -1,5 +1,6 @@
 import { normalizarEfeitosFicha, type IEfeitoEquipamento } from './equipamentoService';
 import { efeitosBrutosDoFrutoEden } from './frutoEdenAwakening';
+import { RECURSOS_CUSTO_VALIDOS, type TRecursoCusto } from './statusService';
 
 export interface IFrutoEdenConsumido {
   itemId: string;
@@ -16,7 +17,7 @@ export interface IPoderFrutoEden {
   fonte: string;
   tipo: 'Ativa' | 'Passiva' | 'Reação' | 'Sustentada' | 'Outro';
   nivelAdquirido: string;
-  custo: { recurso: 'nenhum' | 'mana' | 'vida' | 'sanidade' | 'cansaco'; valor: number };
+  custo: { recurso: TRecursoCusto; valor: number };
   acao: string;
   duracao: string;
   alcance: string;
@@ -177,14 +178,14 @@ export function poderesDoFruto(ficha: any): IPoderFrutoEden[] {
     ? fruit.conteudo.poderesFicha.flatMap((raw: any, index: number) => {
         const name = texto(raw?.nome);
         if (!name) return [];
-        const resource = ['mana', 'vida', 'sanidade', 'cansaco'].includes(raw?.custo?.recurso)
+        const resource: TRecursoCusto = (RECURSOS_CUSTO_VALIDOS as readonly string[]).includes(raw?.custo?.recurso)
           ? raw.custo.recurso
           : 'nenhum';
         const value = Math.max(0, Math.trunc(Number(raw?.custo?.valor) || 0));
         const improvement = fruit.despertado && raw?.estagio !== 'despertado' && raw?.melhoriaDespertada
           ? raw.melhoriaDespertada
           : null;
-        const improvedResource = ['mana', 'vida', 'sanidade', 'cansaco'].includes(improvement?.custo?.recurso)
+        const improvedResource: TRecursoCusto = (RECURSOS_CUSTO_VALIDOS as readonly string[]).includes(improvement?.custo?.recurso)
           ? improvement.custo.recurso
           : resource;
         const improvedValue = improvement?.custo && Number.isFinite(Number(improvement.custo.valor))
