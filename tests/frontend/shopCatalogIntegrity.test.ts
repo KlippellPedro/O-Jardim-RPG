@@ -370,7 +370,7 @@ test('acessórios que concedem perícia declaram o limite compartilhado de uso',
 
 test('Frutos do Éden têm escala de Relíquia, contrajogo e três níveis de poder', () => {
   const frutos = catalogo.entradas.filter(item => item.tipo === 'fruto-eden');
-  assert.equal(frutos.length, 15);
+  assert.equal(frutos.length, 26);
 
   const familias = new Set(['sobrenatural', 'mutacao', 'elemental']);
   for (const fruto of frutos) {

@@ -73,7 +73,11 @@ export function habilidadeDoFruto(ficha: any) {
 interface IRegraPoderFruto {
   id: string;
   fonte: 'tecnica' | 'despertar';
+  /** Valor do custo. O nome ficou de quando todo poder gastava Mana. */
   custoMana: number;
+  /** Recurso que paga o custo. Poder de corpo (forma, golpe) gasta Estamina;
+   * o que mexe em elemento, espaço ou tempo continua em Mana. */
+  recurso?: 'mana' | 'estamina';
   acao: string;
   nome?: string;
   descricao?: string;
@@ -85,12 +89,12 @@ const REGRAS_PODERES_FRUTOS: Record<string, IRegraPoderFruto[]> = {
     { id: 'sol-infernal', fonte: 'despertar', custoMana: 9, acao: 'Ação Padrão' },
   ],
   'fruto-dragao': [
-    { id: 'forma-hibrida', fonte: 'tecnica', custoMana: 3, acao: 'Ação de Movimento' },
-    { id: 'dragao-anciao', fonte: 'despertar', custoMana: 12, acao: 'Ação Padrão' },
+    { id: 'forma-hibrida', fonte: 'tecnica', custoMana: 3, recurso: 'estamina', acao: 'Ação de Movimento' },
+    { id: 'dragao-anciao', fonte: 'despertar', custoMana: 12, recurso: 'estamina', acao: 'Ação Padrão' },
   ],
   'fruto-tremor': [
-    { id: 'golpe-sismico', fonte: 'tecnica', custoMana: 3, acao: 'Ao acertar um ataque corpo a corpo' },
-    { id: 'ruptura-continental', fonte: 'despertar', custoMana: 10, acao: 'Ação Padrão' },
+    { id: 'golpe-sismico', fonte: 'tecnica', custoMana: 3, recurso: 'estamina', acao: 'Ao acertar um ataque corpo a corpo' },
+    { id: 'ruptura-continental', fonte: 'despertar', custoMana: 10, recurso: 'estamina', acao: 'Ação Padrão' },
   ],
   'fruto-gravidade': [
     { id: 'orbita-forcada', fonte: 'tecnica', custoMana: 3, acao: 'Ação de Movimento' },
@@ -118,12 +122,12 @@ const REGRAS_PODERES_FRUTOS: Record<string, IRegraPoderFruto[]> = {
     { id: 'renascimento-solar', fonte: 'despertar', custoMana: 12, acao: 'Sem ação, ao chegar a 0 de Vida' },
   ],
   'fruto-colosso': [
-    { id: 'forma-titanica', fonte: 'tecnica', custoMana: 4, acao: 'Ação de Movimento' },
-    { id: 'colosso-primordial', fonte: 'despertar', custoMana: 10, acao: 'Ação Padrão' },
+    { id: 'forma-titanica', fonte: 'tecnica', custoMana: 4, recurso: 'estamina', acao: 'Ação de Movimento' },
+    { id: 'colosso-primordial', fonte: 'despertar', custoMana: 10, recurso: 'estamina', acao: 'Ação Padrão' },
   ],
   'fruto-quimera': [
-    { id: 'metamorfose', fonte: 'tecnica', custoMana: 3, acao: 'Ação de Movimento' },
-    { id: 'quimera-perfeita', fonte: 'despertar', custoMana: 10, acao: 'Ação Padrão' },
+    { id: 'metamorfose', fonte: 'tecnica', custoMana: 3, recurso: 'estamina', acao: 'Ação de Movimento' },
+    { id: 'quimera-perfeita', fonte: 'despertar', custoMana: 10, recurso: 'estamina', acao: 'Ação Padrão' },
   ],
   'fruto-portais': [
     { id: 'travessia', fonte: 'tecnica', custoMana: 3, acao: 'Ação de Movimento' },
@@ -160,7 +164,7 @@ function powerFromRule(fruit: IFrutoEdenConsumido, rule: IRegraPoderFruto): IPod
     fonte: fruit.titulo,
     tipo: 'Ativa',
     nivelAdquirido: '',
-    custo: { recurso: 'mana', valor: Number.isFinite(Number(improvement?.custoMana)) ? Math.max(0, Math.trunc(Number(improvement.custoMana))) : rule.custoMana },
+    custo: { recurso: rule.recurso ?? 'mana', valor: Number.isFinite(Number(improvement?.custoMana)) ? Math.max(0, Math.trunc(Number(improvement.custoMana))) : rule.custoMana },
     acao: texto(improvement?.acao) || rule.acao,
     duracao: texto(improvement?.duracao) || texto(fruit.conteudo.duracao),
     alcance: texto(improvement?.alcance) || texto(fruit.conteudo.alcance),

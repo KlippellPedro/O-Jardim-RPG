@@ -118,7 +118,7 @@ ele não publica mudanças feitas no JSON.
   Vazio com fichas e filtros próprios.
 - **Componentes e drops:** 259 entradas (`tipo: "drop"`), incluindo os
   catálogos próprios de classe, Matéria-prima e Componentes Veiculares.
-- **Especiais:** 15 Frutos do Éden, 10 Implantes, 8 Artefatos Mágicos e 11 Selos
+- **Especiais:** 26 Frutos do Éden (15 Místicos e 11 Frutos dos Fluxos), 10 Implantes, 8 Artefatos Mágicos e 11 Selos
   consumíveis sincronizados com o catálogo mágico.
 
 Total: **832 entradas**.
@@ -135,7 +135,8 @@ mágico comum. Cada um publica cinco blocos mecânicos obrigatórios:
 - `vinculo`: uma criatura mantém apenas um Vínculo do Éden por vez.
 
 Os marcadores `Sobrenatural`, `Mutação` e `Elemental` alimentam os filtros da
-Loja. Os preços atuais ficam entre 520 e 800 Fragmentos de Estrela conforme
+Loja. Os Frutos dos Fluxos (um por Fluxo, com Dom da deidade e Comunhão no Despertar)
+usam o marcador `Fluxo: <nome>` e ficam entre 720 e 950. Os preços atuais ficam entre 520 e 950 Fragmentos de Estrela conforme
 impacto, versatilidade e frequência; preço maior não remove custos de Mana,
 defesas, concentração, Cansaço ou limites de uso.
 

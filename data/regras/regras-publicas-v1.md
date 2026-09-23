@@ -1542,7 +1542,7 @@ Nível e Legado são o caminho normal de ficar mais forte. Estes dois são o cam
 
 ### Frutos do Éden
 
-São 15 frutos, cada um com um poder próprio, vendidos por Fragmentos de Estrela e classificados como relíquia da criação. Comprar é a parte fácil: o preço em Fragmentos costuma significar uma campanha inteira atrás de um.
+São 26 frutos, cada um com um poder próprio, vendidos por Fragmentos de Estrela e classificados como relíquia da criação. Comprar é a parte fácil: o preço em Fragmentos costuma significar uma campanha inteira atrás de um.
 
 - O fruto entra no inventário como qualquer item. Comer é uma decisão à parte, feita na aba Inventário.
 
@@ -1556,13 +1556,27 @@ São 15 frutos, cada um com um poder próprio, vendidos por Fragmentos de Estrel
 
 - **Vínculo:** a passiva que vale o tempo todo, sem custo nem ação. É o que muda o corpo do personagem, como a Resistência elemental do Fruto das Chamas.
 
-- **Técnica:** o poder ativo do dia a dia, na faixa de 3 a 4 de Mana. Custa uma ação e costuma valer uma vez por rodada.
+- **Técnica:** o poder ativo do dia a dia, na faixa de 3 a 4 de Mana ou de Estamina. Custa uma ação e costuma valer uma vez por rodada.
 
-- **Despertar:** transforma o vínculo inteiro: melhora a passiva, aprimora cada técnica já conhecida e libera a manifestação final, na faixa de 9 a 14 de Mana e quase sempre uma vez por cena.
+- **Despertar:** transforma o vínculo inteiro: melhora a passiva, aprimora cada técnica já conhecida e libera a manifestação final, na faixa de 9 a 14 de Mana ou de Estamina e quase sempre uma vez por cena.
+
+O recurso segue o corpo do poder. Forma, golpe e transformação gastam Estamina, como no Fruto do Dragão, do Tremor, do Colosso e da Quimera. O que mexe em elemento, espaço, tempo ou alma gasta Mana.
+
+### Frutos dos Fluxos
+
+Existe um Fruto para cada um dos onze Fluxos. Ele aproxima quem come do Fluxo e da deidade que o sustenta, sem ensinar magia nenhuma. A marca do Fluxo aparece no corpo, o portador ganha um bônus numa perícia ligada a ele e soma +1 nos testes de conjuração das magias daquele Fluxo (+2 depois do Despertar).
+
+- Cada Fruto de Fluxo traz três poderes: uma Técnica de uso frequente, um Dom da deidade, que vale uma vez por sessão, e a Comunhão, que só existe depois do Despertar.
+
+- A deidade do Fluxo fala pelo fruto na medida em que consegue: o Dom é o pedaço do poder dela que atravessa até quem comeu.
+
+- Cada Fruto declara a fraqueza no Fluxo que tem vantagem sobre o dele, além da água do mar. O Fruto do Fim exige a autorização do Mestre, como todo acesso ao Fim.
+
+- Vale a regra de sempre: uma criatura sustenta um Fruto por vez, e escolher o de um Fluxo troca o vínculo anterior.
 
 Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. A passiva e as técnicas são substituídas pelas versões aprimoradas, sem somar com as antigas, e a manifestação final passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.
 
-Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos 15 está no catálogo da Loja.
+Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos 26 está no catálogo da Loja.
 
 ### Implantes cibernéticos
 
@@ -3244,7 +3258,7 @@ O banco do Banqueiro guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra em O Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 959 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 970 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 ### Os quatro locais
 
@@ -3256,7 +3270,7 @@ O catálogo inteiro tem 959 itens, e você nunca vê todos de uma vez. Cada item
 
 - Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 234
 
-- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 203
+- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 214
 
 Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
 

@@ -1645,8 +1645,18 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Os três degraus de um Fruto</h3>
       <ul class="regras-list">
         <li><strong>Vínculo:</strong> a passiva que vale o tempo todo, sem custo nem ação. É o que muda o corpo do personagem, como a Resistência elemental do Fruto das Chamas.</li>
-        <li><strong>Técnica:</strong> o poder ativo do dia a dia, na faixa de 3 a 4 de Mana. Custa uma ação e costuma valer uma vez por rodada.</li>
-        <li><strong>Despertar:</strong> transforma o vínculo inteiro: melhora a passiva, aprimora cada técnica já conhecida e libera a manifestação final, na faixa de 9 a 14 de Mana e quase sempre uma vez por cena.</li>
+        <li><strong>Técnica:</strong> o poder ativo do dia a dia, na faixa de 3 a 4 de Mana ou de Estamina. Custa uma ação e costuma valer uma vez por rodada.</li>
+        <li><strong>Despertar:</strong> transforma o vínculo inteiro: melhora a passiva, aprimora cada técnica já conhecida e libera a manifestação final, na faixa de 9 a 14 de Mana ou de Estamina e quase sempre uma vez por cena.</li>
+      </ul>
+      <p>O recurso segue o corpo do poder. Forma, golpe e transformação gastam Estamina, como no Fruto do Dragão, do Tremor, do Colosso e da Quimera. O que mexe em elemento, espaço, tempo ou alma gasta Mana.</p>
+
+      <h3 class="regras-subtitle">Frutos dos Fluxos</h3>
+      <p>Existe um Fruto para cada um dos onze Fluxos. Ele aproxima quem come do Fluxo e da deidade que o sustenta, sem ensinar magia nenhuma. A marca do Fluxo aparece no corpo, o portador ganha um bônus numa perícia ligada a ele e soma +1 nos testes de conjuração das magias daquele Fluxo (+2 depois do Despertar).</p>
+      <ul class="regras-list">
+        <li>Cada Fruto de Fluxo traz três poderes: uma Técnica de uso frequente, um Dom da deidade, que vale uma vez por sessão, e a Comunhão, que só existe depois do Despertar.</li>
+        <li>A deidade do Fluxo fala pelo fruto na medida em que consegue: o Dom é o pedaço do poder dela que atravessa até quem comeu.</li>
+        <li>Cada Fruto declara a fraqueza no Fluxo que tem vantagem sobre o dele, além da água do mar. O Fruto do Fim exige a autorização do Mestre, como todo acesso ao Fim.</li>
+        <li>Vale a regra de sempre: uma criatura sustenta um Fruto por vez, e escolher o de um Fluxo troca o vínculo anterior.</li>
       </ul>
       <p class="regras-note">Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. A passiva e as técnicas são substituídas pelas versões aprimoradas, sem somar com as antigas, e a manifestação final passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.</p>
       <p>Os efeitos numéricos do fruto entram na ficha sozinhos e os poderes aparecem na aba Poderes, junto dos poderes de classe. O texto completo de cada um dos ${totalFrutosEden} está no catálogo da Loja.</p>
