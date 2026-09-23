@@ -284,7 +284,7 @@ function calcularDerivadosBase(
   // Estágios raciais (Espírito Menor/Maior/Primordial) se acumulam: quem chegou
   // no Primordial continua somando o que o Maior deu.
   const estagiosRaciais = obterEstagiosRaciaisAlcancados(raca, nivel);
-  const somaEstagios = (campo: 'vida' | 'mana' | 'movimento' | 'defesa') => estagiosRaciais
+  const somaEstagios = (campo: 'vida' | 'mana' | 'estamina' | 'movimento' | 'defesa') => estagiosRaciais
     .reduce((total: number, estagio: any) => total + (Number(estagio?.[campo]) || 0), 0);
 
   const baseVidaRaca = Number(raca?.vida) || 0;
@@ -295,6 +295,10 @@ function calcularDerivadosBase(
   const baseManaOpcoes = opcoesRaciais.reduce((total, opcao) => total + (Number(opcao.mana) || 0), 0);
   const bonusManaRacial = baseManaRaca + baseManaOpcoes + somaEstagios('mana')
     + fragmentosExpressos.reduce((total, fragmento: any) => total + (Number(fragmento.mana) || 0), 0);
+
+  const baseEstaminaRaca = Number(raca?.estamina) || 0;
+  const baseEstaminaOpcoes = opcoesRaciais.reduce((total, opcao) => total + (Number(opcao.estamina) || 0), 0);
+  const bonusEstaminaRacial = baseEstaminaRaca + baseEstaminaOpcoes + somaEstagios('estamina');
 
   // Traços raciais já destravados podem declarar Defesa e Movimento (Crosta e
   // Núcleo do Auleth Planeta, Trajetória do Cometa). Somar aqui, e não só no
@@ -343,7 +347,7 @@ function calcularDerivadosBase(
   // Estamina é o recurso do corpo, então acompanha o melhor entre Força e
   // Destreza (quem luta na força e quem luta na agilidade rendem igual). Fluxo
   // não serve: nas regras ele é o atributo de controle mágico, o oposto disso.
-  const estaminaBase = 3 * Math.max(modForca, modDestreza);
+  const estaminaBase = (3 * Math.max(modForca, modDestreza)) + bonusEstaminaRacial;
 
   return {
     vida: limitarRecursos ? Math.max(1, vidaBase) : vidaBase,

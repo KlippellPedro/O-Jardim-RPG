@@ -102,7 +102,7 @@ const racasMecanicas = racasData
 const racasComuns = racasMecanicas.filter((raca) => raca.categoria === 'padrao').length;
 const racasEspeciais = racasMecanicas.filter((raca) => raca.categoria === 'esquecida').length;
 const listaRacasPublicas = racasMecanicas
-  .map((raca) => `<li><strong>${raca.titulo}</strong> (${raca.categoria === 'esquecida' ? 'especial' : 'comum'}) - Vida ${raca.vida >= 0 ? '+' : ''}${raca.vida}, Mana ${raca.mana >= 0 ? '+' : ''}${raca.mana}${raca.movimento ? `, Movimento +${raca.movimento} m` : ''}</li>`)
+  .map((raca) => `<li><strong>${raca.titulo}</strong> (${raca.categoria === 'esquecida' ? 'especial' : 'comum'}) - Vida ${raca.vida >= 0 ? '+' : ''}${raca.vida}, Mana ${raca.mana >= 0 ? '+' : ''}${raca.mana}${raca.estamina ? `, Estamina +${raca.estamina}` : ''}${raca.movimento ? `, Movimento +${raca.movimento} m` : ''}</li>`)
   .join('');
 
 const totalFrutosEden = catalogoLojaData.entradas.filter((item) => item.tipo === 'fruto-eden').length;
@@ -399,7 +399,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <dt>Nível e XP</dt><dd>nível total 1 e 0 XP</dd>
         <dt>Vida máxima</dt><dd>máx. 1, (4 × Mod.Constituição) + Vida da classe, depois ajustes raciais</dd>
         <dt>Mana máxima</dt><dd>máx. 1, (3 × Mod.Sabedoria) + Mana da classe, depois ajustes raciais</dd>
-        <dt>Estamina máxima</dt><dd>máx. 1, (3 × o maior entre Mod.Força e Mod.Destreza) + Estamina da classe</dd>
+        <dt>Estamina máxima</dt><dd>máx. 1, (3 × o maior entre Mod.Força e Mod.Destreza) + Estamina da classe, depois ajustes raciais</dd>
         <dt>Sanidade</dt><dd>100 de 100</dd>
         <dt>Cansaço</dt><dd>0 de 6</dd>
         <dt>Defesa Natural</dt><dd>10 + ⌊Nível total ÷ 2⌋ + Mod.Destreza + ajustes raciais ou naturais</dd>
@@ -467,7 +467,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <dt>Mana por nível posterior</dt><dd>ganho de Mana da classe do nível adquirido, mínimo 1</dd>
         <dt>Estamina no nível 1</dt><dd>máx. 1, (3 × o maior entre Mod.Força e Mod.Destreza) + Estamina da classe</dd>
         <dt>Estamina por nível posterior</dt><dd>ganho de Estamina da classe do nível adquirido</dd>
-        <dt>Ajustes raciais</dt><dd>bônus raciais de Vida e Mana são somados depois do cálculo correspondente</dd>
+        <dt>Ajustes raciais</dt><dd>bônus raciais de Vida, Mana e Estamina são somados depois do cálculo correspondente</dd>
         <dt>Defesa Natural</dt><dd>10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + ajustes raciais ou naturais</dd>
         <dt>Movimento</dt><dd>9 m + (1,5 m × Mod.Destreza) + ajuste da raça ou morfologia, mínimo 4,5 m</dd>
         <dt>Iniciativa</dt><dd>10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + bônus</dd>
@@ -2311,10 +2311,10 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
     destaques: [
       ['Raças mecânicas', String(racasMecanicas.length)],
       ['Comuns / especiais', `${racasComuns} / ${racasEspeciais}`],
-      ['Ajustes', 'Vida, Mana e Mov.']
+      ['Ajustes', 'Vida, Mana, Estamina e Mov.']
     ],
     corpo: `
-      <p class="regras-lead">Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologia, traços e variantes completos ficam no catálogo interativo da página de Regras, que lê o mesmo arquivo.</p>
+      <p class="regras-lead">Nome, tipo e ajustes iniciais de Vida, Mana, Estamina e Movimento de cada raça. Fisiologia, traços e variantes completos ficam no catálogo interativo da página de Regras, que lê o mesmo arquivo.</p>
       <ul class="regras-list">${listaRacasPublicas}</ul>
     `,
     corpoMestre: `

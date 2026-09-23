@@ -150,6 +150,16 @@ outra conta, sem ligação mecânica com a Estamina.
   45); ao encerrar, quem desceu à metade da Vida, entrou em Morrendo ou gastou
   metade da Mana ou da Estamina ganha 1 de Cansaço (teto 6), uma vez por cena.
   O botão manual do Descanso continua para fora da sessão.
+- **Raças:** o pacote racial ganhou o campo `estamina`, somado depois da
+  fórmula de atributo, na raça, na variante escolhida, nos estágios e na
+  natureza divina. Ganham Estamina as raças de corpo: Anão (+3), Gigante (+3,
+  +3 e +8 nos estágios), Golem (+3, +3 e +8), Amálgamo (+3), Goblim (+2),
+  Desperto (+2), Clone (+2), Anomalia (+2), Vampiro (+1, +3 e +4), Slime (+1,
+  +2 e +6), Simbionte (variantes +1 e estágios +2 e +3), Animália (Ágil +2,
+  Robusta +3), o chassi do Autômato (+2 a +5 por tamanho), o Divino (+1, Deus
+  +4, estágios +1 e +2) e o estágio Sem Rosto do Mímico (+2). Raças de Mana,
+  de sonho ou sem corpo (Elfo, Feérico, Espírito, Sereia, Bruxa, Onírico,
+  Auleth) não ganham. O teste `estaminaRacial.test.ts` trava a lista.
 - **Únicos do Jardim:** seis passaram a gastar Estamina (Golpe Sem Nome, Respiro
   Roubado, Corte que Lembra, Escudo Emprestado, Passo Fora do Tempo e Sombra
   que Aprende). O preço em Sementes não mudou.

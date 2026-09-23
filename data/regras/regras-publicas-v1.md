@@ -168,7 +168,7 @@ Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabe
 
 - **Mana máxima:** máx. 1, (3 × Mod.Sabedoria) + Mana da classe, depois ajustes raciais
 
-- **Estamina máxima:** máx. 1, (3 × o maior entre Mod.Força e Mod.Destreza) + Estamina da classe
+- **Estamina máxima:** máx. 1, (3 × o maior entre Mod.Força e Mod.Destreza) + Estamina da classe, depois ajustes raciais
 
 - **Sanidade:** 100 de 100
 
@@ -226,7 +226,7 @@ Esta é a página de consulta: todas as contas que a ficha faz por você, reunid
 
 - **Estamina por nível posterior:** ganho de Estamina da classe do nível adquirido
 
-- **Ajustes raciais:** bônus raciais de Vida e Mana são somados depois do cálculo correspondente
+- **Ajustes raciais:** bônus raciais de Vida, Mana e Estamina são somados depois do cálculo correspondente
 
 - **Defesa Natural:** 10 + ⌊Nível ÷ 2⌋ + Mod.Destreza + ajustes raciais ou naturais
 
@@ -3092,31 +3092,31 @@ Vale conferir a lista de poderes da classe antes de escolhê-la. Duas classes co
 
 Raça comum pode nascer em qualquer Árvore. Raça especial tem regras próprias, depende de liberação e só existe nas Árvores compatíveis.
 
-Nome, tipo e ajustes iniciais de Vida, Mana e Movimento de cada raça. Fisiologia, traços e variantes completos ficam no catálogo interativo da página de Regras, que lê o mesmo arquivo.
+Nome, tipo e ajustes iniciais de Vida, Mana, Estamina e Movimento de cada raça. Fisiologia, traços e variantes completos ficam no catálogo interativo da página de Regras, que lê o mesmo arquivo.
 
 - **Humano** (comum) - Vida +0, Mana +0
-- **Vampiro** (comum) - Vida +1, Mana +0
-- **Goblim** (comum) - Vida -1, Mana +1, Movimento +1.5 m
-- **Anão** (comum) - Vida +2, Mana +0
-- **Golem** (comum) - Vida +5, Mana -2
+- **Vampiro** (comum) - Vida +1, Mana +0, Estamina +1
+- **Goblim** (comum) - Vida -1, Mana +1, Estamina +2, Movimento +1.5 m
+- **Anão** (comum) - Vida +2, Mana +0, Estamina +3
+- **Golem** (comum) - Vida +5, Mana -2, Estamina +3
 - **Espírito** (comum) - Vida -2, Mana +3
-- **Gigante** (comum) - Vida +4, Mana -1
+- **Gigante** (comum) - Vida +4, Mana -1, Estamina +3
 - **Animália** (comum) - Vida +0, Mana +0
 - **Sereia / Tritão** (comum) - Vida -1, Mana +2
 - **Mímico** (comum) - Vida -1, Mana +2
 - **Simbionte** (comum) - Vida +0, Mana +0
-- **Slime** (comum) - Vida +3, Mana -2
+- **Slime** (comum) - Vida +3, Mana -2, Estamina +1
 - **Feérico** (comum) - Vida -2, Mana +4
 - **Elfo** (especial) - Vida +2, Mana +4
-- **Desperto** (especial) - Vida +4, Mana +2
+- **Desperto** (especial) - Vida +4, Mana +2, Estamina +2
 - **Auleth** (especial) - Vida +2, Mana +0
 - **Autômato** (especial) - Vida +0, Mana +0
-- **Clone** (especial) - Vida +3, Mana +3
-- **Anomalia** (especial) - Vida +3, Mana +3
-- **Amálgamo** (especial) - Vida +5, Mana +1
+- **Clone** (especial) - Vida +3, Mana +3, Estamina +2
+- **Anomalia** (especial) - Vida +3, Mana +3, Estamina +2
+- **Amálgamo** (especial) - Vida +5, Mana +1, Estamina +3
 - **Bruxa** (especial) - Vida +1, Mana +5
 - **Onírico** (especial) - Vida +1, Mana +4
-- **Divino** (especial) - Vida +2, Mana +4
+- **Divino** (especial) - Vida +2, Mana +4, Estamina +1
 
 ## bestiario
 

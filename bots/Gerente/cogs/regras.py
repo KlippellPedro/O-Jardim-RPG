@@ -44,7 +44,7 @@ def _meta(item) -> str | None:
 def _embed_raca(r) -> discord.Embed:
     e = ui.embed(f"🧬 {r.get('titulo', 'Raça')}", _meta(r))
     ajustes = []
-    for campo, rot in (("vida", "Vida"), ("mana", "Mana"), ("movimento", "Movimento")):
+    for campo, rot in (("vida", "Vida"), ("mana", "Mana"), ("estamina", "Estamina"), ("movimento", "Movimento")):
         if int(r.get(campo) or 0) != 0:
             ajustes.append(f"{rot} {_sinal(r.get(campo))}")
     if r.get("pericias_iniciais_adicionais"):

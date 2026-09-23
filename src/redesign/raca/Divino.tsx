@@ -82,7 +82,7 @@ export const Divino = ({ raca }: DivinoProps) => {
                   </div>
                   <h3 className={`text-2xl font-bold ${tema.text}`} style={{ fontFamily: 'Cinzel, serif' }}>{natureza.titulo}</h3>
                   <div className="ml-auto flex gap-2">
-                    {[bonusComSinal(natureza.vida, 'Vida'), bonusComSinal(natureza.mana, 'Mana'), bonusComSinal(defesaDaNatureza(natureza), 'Defesa')].filter(Boolean).map(bonus => (
+                    {[bonusComSinal(natureza.vida, 'Vida'), bonusComSinal(natureza.mana, 'Mana'), bonusComSinal(natureza.estamina, 'Estamina'), bonusComSinal(defesaDaNatureza(natureza), 'Defesa')].filter(Boolean).map(bonus => (
                       <span key={bonus} className="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-[11px] font-bold text-amber-200">{bonus}</span>
                     ))}
                   </div>

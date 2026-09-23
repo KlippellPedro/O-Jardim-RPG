@@ -343,6 +343,7 @@ export const RegraDetalhesPage = () => {
                       <span className="text-[11px] font-bold uppercase tracking-widest text-gray-500">
                         A partir do nível total {nivelMinimoTraco(estagio)}
                         {Number(estagio.mana) ? ` · Mana +${estagio.mana}` : ''}
+                        {Number(estagio.estamina) ? ` · Estamina +${estagio.estamina}` : ''}
                         {Number(estagio.vida) ? ` · Vida ${Number(estagio.vida) > 0 ? '+' : ''}${estagio.vida}` : ''}
                       </span>
                     </div>

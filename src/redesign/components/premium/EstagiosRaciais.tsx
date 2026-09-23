@@ -63,11 +63,12 @@ export const EstagiosRaciais = ({ raca, tema, titulo = 'Estágios', descricao }:
             {estagio.descricao && (
               <p className="text-sm font-light leading-relaxed text-gray-400">{estagio.descricao}</p>
             )}
-            {(Number(estagio.vida) !== 0 || Number(estagio.mana) !== 0) && (
+            {(Number(estagio.vida) !== 0 || Number(estagio.mana) !== 0 || Number(estagio.estamina) !== 0) && (
               <p className="mt-4 text-xs font-bold uppercase tracking-widest text-gray-500">
                 {[
                   Number(estagio.vida) ? `Vida ${Number(estagio.vida) > 0 ? '+' : ''}${estagio.vida}` : '',
                   Number(estagio.mana) ? `Mana ${Number(estagio.mana) > 0 ? '+' : ''}${estagio.mana}` : '',
+                  Number(estagio.estamina) ? `Estamina ${Number(estagio.estamina) > 0 ? '+' : ''}${estagio.estamina}` : '',
                 ].filter(Boolean).join(' · ')}
               </p>
             )}

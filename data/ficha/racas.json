@@ -42,6 +42,7 @@
     "arvore": null,
     "vida": 1,
     "mana": 0,
+    "estamina": 1,
     "movimento": 0,
     "descricao": "Enxerga no escuro natural, fecha ferida bebendo sangue e paga caro quando fica sem. O Clã decide o que ele faz com a fome, e o tempo faz o resto: quanto mais velho, mais o sangue rende, e quem atravessa séculos vira Senhor da Noite com uma fome do mesmo tamanho. O povo é de Întuneric e fala Romeno.",
     "fisiologia": [
@@ -321,6 +322,7 @@
         "nivel_minimo": 17,
         "vida": 5,
         "mana": 0,
+        "estamina": 3,
         "caracteristicas": [
           {
             "id": "hemofagia-profunda",
@@ -349,6 +351,7 @@
         "nivel_minimo": 42,
         "vida": 8,
         "mana": 4,
+        "estamina": 4,
         "caracteristicas": [
           {
             "id": "nevoa-e-morcego",
@@ -382,6 +385,7 @@
     "arvore": null,
     "vida": -1,
     "mana": 1,
+    "estamina": 2,
     "movimento": 1.5,
     "descricao": "Pequeno, rápido e com um talento incômodo pra vender qualquer coisa por mais do que ela vale, de preferência coisa que já era dele. Fala Alemão entre os seus.",
     "fisiologia": [
@@ -414,6 +418,7 @@
     "arvore": null,
     "vida": 2,
     "mana": 0,
+    "estamina": 3,
     "movimento": 0,
     "descricao": "Baixo, duro de derrubar e melhor que qualquer um com uma ferramenta na mão. Constrói, conserta e erra menos na segunda tentativa. Escolhe um Ofício de Forja na criação e sobe de Aprendiz a Mestre com o tempo de bancada. Fala Nórdico Antigo, e o Reino dos Anões forja o que os outros reinos apenas fabricam.",
     "fisiologia": [
@@ -662,6 +667,7 @@
     "arvore": null,
     "vida": 5,
     "mana": -2,
+    "estamina": 3,
     "movimento": 0,
     "descricao": "Corpo construído, grande ou enorme, que não respira, não come e não adoece. Quem cuida dele não é médico, é artesão, e nenhuma armadura de prateleira serve sem ajuste antes. O Material do Corpo diz do que ele é feito, e cada conserto o deixa mais duro: de Recém-Erguido a Monumento. Fala Libras.",
     "fisiologia": [
@@ -943,6 +949,7 @@
         "nivel_minimo": 12,
         "vida": 6,
         "mana": 0,
+        "estamina": 3,
         "caracteristicas": [
           {
             "id": "solda-sobre-solda",
@@ -973,6 +980,7 @@
         "nivel_minimo": 36,
         "vida": 16,
         "mana": 0,
+        "estamina": 8,
         "caracteristicas": [
           {
             "id": "estrutura-monumental",
@@ -1607,6 +1615,7 @@
     "arvore": null,
     "vida": 4,
     "mana": -1,
+    "estamina": 3,
     "movimento": 0,
     "descricao": "Grande a ponto de nada feito pros outros servir nele. Carrega o dobro, não sai do lugar quando tentam empurrar, e vive esbarrando em porta de tamanho normal. A Linhagem decide o que corre no sangue, e o porte não para de crescer: Grande, Enorme e, no fim, Colossal. Fala Grego.",
     "fisiologia": [
@@ -1797,6 +1806,7 @@
         "nivel_minimo": 14,
         "vida": 6,
         "mana": 0,
+        "estamina": 3,
         "caracteristicas": [
           {
             "id": "envergadura",
@@ -1826,6 +1836,7 @@
         "nivel_minimo": 36,
         "vida": 16,
         "mana": 0,
+        "estamina": 8,
         "caracteristicas": [
           {
             "id": "passada-que-abala",
@@ -1882,6 +1893,7 @@
         "titulo": "Morfologia Ágil",
         "vida": -1,
         "mana": 1,
+        "estamina": 2,
         "movimento": 1.5,
         "caracteristicas": [
           {
@@ -1898,6 +1910,7 @@
         "titulo": "Morfologia Robusta",
         "vida": 2,
         "mana": 0,
+        "estamina": 3,
         "movimento": 0,
         "caracteristicas": [
           {
@@ -2416,6 +2429,7 @@
         "nivel_minimo": 34,
         "vida": 4,
         "mana": 6,
+        "estamina": 2,
         "caracteristicas": [
           {
             "id": "cara-de-ninguem",
@@ -2479,6 +2493,7 @@
         "titulo": "Enxame",
         "vida": -1,
         "mana": 1,
+        "estamina": 1,
         "movimento": 1.5,
         "caracteristicas": [
           {
@@ -2519,6 +2534,7 @@
         "titulo": "Parasita-Simbiose",
         "vida": 1,
         "mana": 1,
+        "estamina": 1,
         "movimento": 0,
         "caracteristicas": [
           {
@@ -2557,6 +2573,7 @@
         "titulo": "Colônia",
         "vida": 1,
         "mana": 1,
+        "estamina": 1,
         "movimento": 0,
         "caracteristicas": [
           {
@@ -2642,6 +2659,7 @@
         "nivel_minimo": 11,
         "vida": 3,
         "mana": 2,
+        "estamina": 2,
         "caracteristicas": [
           {
             "id": "divisao-de-trabalho",
@@ -2661,6 +2679,7 @@
         "nivel_minimo": 30,
         "vida": 6,
         "mana": 4,
+        "estamina": 3,
         "caracteristicas": [
           {
             "id": "corpo-redundante",
@@ -2694,6 +2713,7 @@
     "arvore": null,
     "vida": 3,
     "mana": -2,
+    "estamina": 1,
     "movimento": 0,
     "descricao": "Corpo semissólido, sem osso e sem órgão em lugar fixo. Passa por qualquer fresta de 15 cm, amassa queda que quebraria outro e escorrega de agarrão, mas nada rígido veste ele sem adaptação. A Composição do Núcleo diz do que ele é feito, e comer o bastante faz a massa crescer de Coeso a Colossal.",
     "fisiologia": [
@@ -2967,6 +2987,7 @@
         "nivel_minimo": 9,
         "vida": 5,
         "mana": 0,
+        "estamina": 2,
         "caracteristicas": [
           {
             "id": "massa-crescente",
@@ -2995,6 +3016,7 @@
         "nivel_minimo": 28,
         "vida": 12,
         "mana": 0,
+        "estamina": 6,
         "caracteristicas": [
           {
             "id": "massa-colossal",
@@ -3512,6 +3534,7 @@
     "transformacao_em_qualquer_arvore": true,
     "vida": 4,
     "mana": 2,
+    "estamina": 2,
     "movimento": 0,
     "ajustes_pericias": {
       "vontade": 4
@@ -4240,6 +4263,7 @@
         "medida_m": 3.5,
         "vida": 3,
         "mana": 0,
+        "estamina": 2,
         "movimento_fixo": 6,
         "ajustes_atributos": {
           "forca": -2,
@@ -4268,6 +4292,7 @@
         "medida_m": 5,
         "vida": 5,
         "mana": 0,
+        "estamina": 3,
         "movimento_fixo": 9,
         "ajustes_atributos": {
           "forca": 2,
@@ -4296,6 +4321,7 @@
         "medida_m": 6,
         "vida": 8,
         "mana": 0,
+        "estamina": 4,
         "movimento_fixo": 12,
         "ajustes_atributos": {
           "forca": 4,
@@ -4324,6 +4350,7 @@
         "medida_m": 9,
         "vida": 10,
         "mana": 0,
+        "estamina": 5,
         "movimento_fixo": 12,
         "ajustes_atributos": {
           "forca": 5,
@@ -4352,6 +4379,7 @@
         "medida_m": 0.7,
         "vida": 3,
         "mana": 0,
+        "estamina": 2,
         "movimento_fixo": 9,
         "ajustes_atributos": {
           "forca": -3,
@@ -4380,6 +4408,7 @@
         "medida_m": 1.5,
         "vida": 5,
         "mana": 0,
+        "estamina": 3,
         "movimento_fixo": 12,
         "ajustes_atributos": {
           "forca": 0,
@@ -4408,6 +4437,7 @@
         "medida_m": 3,
         "vida": 8,
         "mana": 0,
+        "estamina": 4,
         "movimento_fixo": 15,
         "ajustes_atributos": {
           "forca": 3,
@@ -4436,6 +4466,7 @@
         "medida_m": 4.5,
         "vida": 10,
         "mana": 0,
+        "estamina": 5,
         "movimento_fixo": 15,
         "ajustes_atributos": {
           "forca": 5,
@@ -4712,6 +4743,7 @@
     "transformacao_em_qualquer_arvore": true,
     "vida": 3,
     "mana": 3,
+    "estamina": 2,
     "movimento": 0,
     "escolha_atributos": {
       "total": 2,
@@ -4882,6 +4914,7 @@
     "acesso_duplo_classes_exclusivas": true,
     "vida": 3,
     "mana": 3,
+    "estamina": 2,
     "movimento": 0,
     "escolha_atributos": {
       "total": 1,
@@ -5098,6 +5131,7 @@
     ],
     "vida": 5,
     "mana": 1,
+    "estamina": 3,
     "movimento": 0,
     "ajustes_atributos": {
       "constituicao": 2,
@@ -5871,6 +5905,7 @@
     },
     "vida": 2,
     "mana": 4,
+    "estamina": 1,
     "movimento": 0,
     "ajustes_atributos": {
       "carisma": 2,
@@ -5955,7 +5990,8 @@
         "titulo": "Deus",
         "vida": 6,
         "mana": 8,
-        "descricao": "Você é um Deus de verdade. Receba +6 de Vida, +8 de Mana e +2 de Defesa além dos bônus normais do Divino. Essa força já é sua e não desaparece quando você fica sem fiéis.",
+        "estamina": 4,
+        "descricao": "Você é um Deus de verdade. Receba +6 de Vida, +8 de Mana, +4 de Estamina e +2 de Defesa além dos bônus normais do Divino. Essa força já é sua e não desaparece quando você fica sem fiéis.",
         "caracteristicas": [
           {
             "id": "poder-proprio",
@@ -6435,6 +6471,7 @@
         "nivel_minimo": 18,
         "vida": 2,
         "mana": 3,
+        "estamina": 1,
         "caracteristicas": [
           {
             "id": "dominio-desperto",
@@ -6452,6 +6489,7 @@
         "nivel_minimo": 48,
         "vida": 4,
         "mana": 6,
+        "estamina": 2,
         "caracteristicas": [
           {
             "id": "forma-divina",

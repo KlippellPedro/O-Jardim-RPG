@@ -226,6 +226,7 @@ export interface IOpcaoRacial {
   ajustes_atributos?: Record<string, number>;
   vida?: number;
   mana?: number;
+  estamina?: number;
   movimento?: number;
   [key: string]: any;
 }
@@ -237,6 +238,8 @@ export interface IRaca {
   ajustes_atributos?: Record<string, number>;
   vida?: number;
   mana?: number;
+  /** Bônus racial de Estamina máxima, somado depois da fórmula de atributo. */
+  estamina?: number;
   movimento?: number;
   categoria?: string;
   disponibilidade?: string;
