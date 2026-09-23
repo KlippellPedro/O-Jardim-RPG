@@ -1,6 +1,14 @@
 {
-  "geradoEm": "2026-09-23T23:17:50.228Z",
+  "geradoEm": "2026-09-23T23:22:36.640Z",
   "itens": [
+    {
+      "id": "b90e221",
+      "data": "2026-09-23",
+      "tipo": "correcao",
+      "area": "Geral",
+      "titulo": "Tira o travessão sem deixar hífen no lugar",
+      "detalhes": []
+    },
     {
       "id": "b983508",
       "data": "2026-09-23",
@@ -694,21 +702,6 @@
         "Era de \"O Silencio das Deidades\" corrigida de \"Interceptacao\" pra",
         "Corrigido bug de content-visibility que cortava a metade dos pontinhos",
         "CANONICAL_TREE_IDS: Abismo/Erebus nao tem corpo orbital na cena 3D mas"
-      ]
-    },
-    {
-      "id": "a899478",
-      "data": "2026-08-26",
-      "tipo": "novo",
-      "area": "Geral",
-      "titulo": "Detetive, Devorador, raca Anomalia, Entidades e revisao geral do Livro de Regras",
-      "detalhes": [
-        "Novas classes Detetive e Devorador (Devorador absorve poder de quem",
-        "Raca Errante renomeada para Anomalia, com registry e tema atualizados.",
-        "Paginas de Entidades (catalogo, sobre, conto individual), musica tema",
-        "Atualizacoes de catalogo, mercenarios/loja na plataforma (schemas,",
-        "Combate e Cenas: Iniciativa e Defesas passivas movidas de Condicoes",
-        "Equipamentos e Criacao: referencia cruzada corrigida entre Criacao e"
       ]
     }
   ]
