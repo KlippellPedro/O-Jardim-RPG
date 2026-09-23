@@ -243,7 +243,8 @@ def registrar_uso(
         )
         conquistas_novas = avaliar_sem_quebrar(connection, personagem_id, user.id)
         nova_versao_sessao = None
-        if sessao and personagem_id and payload.detalhes.get("recurso") in _COLUNAS_RECURSO_SESSAO:
+        recurso_usado = payload.detalhes.get("recurso")
+        if sessao and personagem_id and isinstance(recurso_usado, str) and recurso_usado in _COLUNAS_RECURSO_SESSAO:
             custo = payload.detalhes.get("custo")
             if isinstance(custo, (int, float)) and not isinstance(custo, bool) and custo > 0:
                 nova_versao_sessao = _descontar_mana_na_sessao(
@@ -251,7 +252,7 @@ def registrar_uso(
                     sessao_id=sessao["id"],
                     personagem_id=personagem_id,
                     custo=int(custo),
-                    recurso=payload.detalhes["recurso"],
+                    recurso=recurso_usado,
                 )
                 if nova_versao_sessao is not None:
                     registrar_minimos(connection, sessao["id"])

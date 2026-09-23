@@ -866,7 +866,7 @@ Dá para jogar O Jardim inteiro no papel. Mas a mesa ao vivo existe para resolve
 
 - Ao virar a rodada, as condições com prazo contam um passo sozinhas. Ninguém precisa lembrar que o Exposto do inimigo já venceu.
 
-- Vida e Mana editadas na sessão chegam a todo mundo na hora, sem recarregar a página.
+- Vida, Mana e Estamina editadas na sessão chegam a todo mundo na hora, sem recarregar a página.
 
 ### O que cada um enxerga
 

@@ -56,6 +56,7 @@ const montarPainel = (subida: SubidaNivel): { titulo: PassoFala; linhas: LinhaPa
   };
   recurso('Vida', subida.ganhoVida);
   recurso('Mana', subida.ganhoMana);
+  recurso('Estamina', subida.ganhoEstamina ?? 0);
 
   subida.recompensas.forEach((recompensa) => {
     linhas.push({ rotulo: recompensa.rotulo, texto: recompensa.texto, passo: { texto: recompensa.fala } });

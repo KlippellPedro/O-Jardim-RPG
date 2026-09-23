@@ -6,7 +6,7 @@ const PASSOS_JOGADOR: GuidedTourStep[] = [
   {
     id: 'estado-ao-vivo',
     titulo: 'A mesa se atualiza ao vivo',
-    descricao: 'Aqui você confere a campanha, o nome da sessão, a rodada e quem está agindo. “Conectado” significa que turnos, Vida, Mana, condições e rolagens recebidas do servidor aparecerão sem recarregar a página.',
+    descricao: 'Aqui você confere a campanha, o nome da sessão, a rodada e quem está agindo. “Conectado” significa que turnos, Vida, Mana, Estamina, condições e rolagens recebidas do servidor aparecerão sem recarregar a página.',
     alvos: ['[data-tour="session-state"]', '[data-tour="session-header"]'],
   },
   {
@@ -18,7 +18,7 @@ const PASSOS_JOGADOR: GuidedTourStep[] = [
   {
     id: 'ficha-em-foco',
     titulo: 'Consulte uma ficha sem perder a cena',
-    descricao: 'A ficha em foco reúne Vida, Mana, Defesa, condições, ataques e perícias disponíveis para você. Quando o turno muda ela acompanha o novo participante; você também pode escolher outra ficha nos cartões abaixo.',
+    descricao: 'A ficha em foco reúne Vida, Mana, Estamina, Defesa, condições, ataques e perícias disponíveis para você. Quando o turno muda ela acompanha o novo participante; você também pode escolher outra ficha nos cartões abaixo.',
     alvos: ['[data-tour="session-focus"]'],
     opcional: true,
   },

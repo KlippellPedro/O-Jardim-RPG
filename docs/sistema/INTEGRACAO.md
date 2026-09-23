@@ -76,6 +76,23 @@ Fontes: [rolls.py](../../plataforma/routers/rolls.py),
 [characters.py](../../plataforma/routers/characters.py),
 [test_mana_sessao_e2e.py](../../plataforma/tests/test_mana_sessao_e2e.py) e
 [statusService.ts](../../src/services/statusService.ts).
+### Estamina e combate intenso
+
+A Estamina segue o mesmo caminho da Mana: `rolls.py` debita o recurso indicado
+em `detalhes.recurso` (`mana` ou `estamina`) no participante da sessão, o HUD
+do Mestre edita e o valor volta para `ficha.status` (`estaminaAtual`,
+`estaminaTemporaria`). O participante ganhou `estamina_atual`,
+`estamina_maxima` e `estamina_temporaria` (migração 44); a máxima só entra
+quando a ficha já calculou `derivados.estamina`, então ficha antiga fica sem
+barra até o dono abri-la.
+
+O Cansaço automático vive em [combate_intenso.py](../../plataforma/core/combate_intenso.py):
+`iniciar` fotografa Vida, Mana e Estamina (`combate_marcas`, migração 45), toda
+escrita de recurso atualiza o pior ponto, e `encerrar` soma 1 de Cansaço (teto 6)
+a quem desceu à metade da Vida, entrou em Morrendo ou gastou metade da Mana ou
+da Estamina. Testes: [test_estamina_sessao_e2e.py](../../plataforma/tests/test_estamina_sessao_e2e.py)
+e [test_combate_intenso.py](../../plataforma/tests/test_combate_intenso.py).
+
 O catálogo de condições não implica que todos os efeitos tenham execução
 automática; a cobertura efetiva continua sendo a implementada nos serviços.
 

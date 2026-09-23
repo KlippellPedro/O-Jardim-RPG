@@ -492,6 +492,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
         especial: classeCatalogo.categoria !== 'padrao',
         ganhoVida: Number(depois?.vida || 0) - Number(antes?.vida || 0),
         ganhoMana: Number(depois?.mana || 0) - Number(antes?.mana || 0),
+        ganhoEstamina: Number(depois?.estamina || 0) - Number(antes?.estamina || 0),
         recompensas,
       });
     }

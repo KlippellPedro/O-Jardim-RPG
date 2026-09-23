@@ -902,7 +902,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Passar o turno anda na lista e devolve a reação de quem está começando o próprio turno.</li>
         <li>Ao virar a rodada, as condições com prazo contam um passo sozinhas. Ninguém precisa lembrar que o Exposto do inimigo já venceu.</li>
-        <li>Vida e Mana editadas na sessão chegam a todo mundo na hora, sem recarregar a página.</li>
+        <li>Vida, Mana e Estamina editadas na sessão chegam a todo mundo na hora, sem recarregar a página.</li>
       </ul>
 
       <h3 class="regras-subtitle">O que cada um enxerga</h3>
@@ -2290,7 +2290,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <h3 class="regras-subtitle">Onde a grade pesa no encontro</h3>
       <ul class="regras-list">
         <li>Os saltos que mais mudam o jogo são o 2 (primeiro poder), o 10 (metade das habilidades já entregues) e o 20 (Habilidade Final). Se o grupo acabou de cruzar um deles, recalibre a Vida do encontro antes de reutilizar uma ficha de inimigo antiga.</li>
-        <li>As vagas de poder saem de 0 no nível 1 para 8 no nível 20. A referência de balanceamento traz esse número por classe e por nível, junto de Vida e Mana, nas Notas Internas.</li>
+        <li>As vagas de poder saem de 0 no nível 1 para 8 no nível 20. A referência de balanceamento traz esse número por classe e por nível, junto de Vida, Mana e Estamina, nas Notas Internas.</li>
       </ul>
     `,
   },

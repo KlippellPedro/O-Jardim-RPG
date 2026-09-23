@@ -62,7 +62,7 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
     },
     {
       id: 'ficha-recursos', titulo: 'Barras de recursos',
-      descricao: 'Vida, Mana, Sanidade e Cansaço mostram atual e máximo. Use os botões ou digite o valor atual conforme sofre dano ou gasta recursos; os máximos combinam base, efeitos e ajustes identificados. Cansaço funciona ao contrário: cresce a partir de zero e aplica penalidades nos patamares indicados.',
+      descricao: 'Vida, Mana, Estamina, Sanidade e Cansaço mostram atual e máximo. Estamina paga o que o corpo faz (golpes e posturas) e Mana paga o que é místico. Use os botões ou digite o valor atual conforme sofre dano ou gasta recursos; os máximos combinam base, efeitos e ajustes identificados. Cansaço funciona ao contrário: cresce a partir de zero e aplica penalidades nos patamares indicados.',
       alvos: ['[data-tour="ficha-recursos"]'],
     },
     {
@@ -410,7 +410,7 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
     },
     {
       id: 'descanso-completo', titulo: 'Qualidade do descanso',
-      descricao: 'Escolha a condição em que o personagem descansou para pré-visualizar Vida, Mana, Sanidade e Cansaço recuperados. Algumas qualidades exigem autorização; confirme apenas depois de conferir o resultado. Combate intenso registra Cansaço uma vez por cena; na Sessão ao Vivo o servidor faz isso sozinho quando o Mestre encerra o combate.',
+      descricao: 'Escolha a condição em que o personagem descansou para pré-visualizar Vida, Mana, Estamina, Sanidade e Cansaço recuperados. Algumas qualidades exigem autorização; confirme apenas depois de conferir o resultado. Combate intenso registra Cansaço uma vez por cena; na Sessão ao Vivo o servidor faz isso sozinho quando o Mestre encerra o combate.',
       alvos: ['[data-tour="descanso-completo"]'],
     },
     {

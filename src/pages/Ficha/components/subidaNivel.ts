@@ -48,9 +48,10 @@ export interface SubidaNivel {
   nivelClasse: number;
   classeNova: boolean;
   especial: boolean;
-  /** Ganhos reais de Vida e Mana calculados pela própria ficha. */
+  /** Ganhos reais de Vida, Mana e Estamina calculados pela própria ficha. */
   ganhoVida: number;
   ganhoMana: number;
+  ganhoEstamina?: number;
   /** Recompensas publicadas para aquele nível da classe. */
   recompensas: RecompensaSubida[];
 }

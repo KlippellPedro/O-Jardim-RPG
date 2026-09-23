@@ -283,12 +283,12 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
 
       {filtroTipo !== 'poder' && filtroTipo !== 'unico' && (
         <p className="rounded-xl border border-amber-400/20 bg-amber-500/[0.05] px-4 py-3 text-xs text-amber-200/80">
-          Uma habilidade em escada (como Implacável) sai ou entra inteira: podar tira todos os estágios já alcançados, e plantar entrega de uma vez os estágios que o seu nível total já permite. Você só encontra no catálogo o que já cabe no seu nível — nada de "nível 5" estando no nível 1.
+          Uma habilidade em escada (como Implacável) sai ou entra inteira: podar tira todos os estágios já alcançados, e plantar entrega de uma vez os estágios que o seu nível total já permite. Você só encontra no catálogo o que já cabe no seu nível, sem "nível 5" aparecendo para quem está no nível 1.
         </p>
       )}
       {(filtroTipo === 'unico' || filtroTipo === 'todos') && (
         <p className="rounded-xl border border-violet-400/20 bg-violet-500/[0.05] px-4 py-3 text-xs text-violet-200/80">
-          Únicos não vêm de nenhuma classe: são coisas que só existem no Jardim. O preço é fixo, sem depender do seu nível, e vai de truques simples a poderes lendários no tamanho de uma expansão de domínio — quanto mais raro, mais Sementes custa.
+          Únicos não vêm de nenhuma classe: são coisas que só existem no Jardim. O preço é fixo, sem depender do seu nível, e vai de truques simples a poderes lendários no tamanho de uma expansão de domínio. Quanto mais raro, mais Sementes custa.
         </p>
       )}
 

@@ -105,7 +105,7 @@ export const Medico = ({ classe }: { classe: IClasse }) => {
             <Users size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Mestre da Vida</h3>
             <p className="text-teal-200/60 leading-relaxed text-sm">
-              Uma vez por sessão, você e até cinco aliados a 12 m recuperam metade da Vida máxima e metade da Mana máxima e encerram uma condição tratável. Quem estiver a 0 de Vida volta com 1 antes de receber a cura. Não ressuscita mortos.
+              Uma vez por sessão, você e até cinco aliados a 12 m recuperam metade da Vida, da Mana e da Estamina máximas e encerram uma condição tratável. Quem estiver a 0 de Vida volta com 1 antes de receber a cura. Não ressuscita mortos.
             </p>
           </PremiumCard>
           <PremiumCard

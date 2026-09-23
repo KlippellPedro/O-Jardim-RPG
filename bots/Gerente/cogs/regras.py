@@ -64,6 +64,8 @@ def _embed_classe(c) -> discord.Embed:
     e = ui.embed(f"⚔️ {c.get('titulo', 'Classe')}", _meta(c))
     e.add_field(name="Vida / nível", value=str(c.get("vida", "Não informado")), inline=True)
     e.add_field(name="Mana / nível", value=str(c.get("mana", "Não informado")), inline=True)
+    if c.get("estamina") is not None:
+        e.add_field(name="Estamina / nível", value=str(c["estamina"]), inline=True)
     return e
 
 

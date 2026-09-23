@@ -367,7 +367,7 @@ export const AbaDescanso = ({ character, onUpdate, onOpenConditions }: AbaDescan
                 <span>Recebeu tratamento. Em descanso de qualidade Boa ou superior, reduz Ferido em 1 se o personagem voltar a ter Vida.</span>
               </label>
               <p className="mt-3 text-[11px] leading-relaxed text-gray-500">
-                O extra temporário de Vida, Mana e Sanidade acaba com o descanso.
+                O extra temporário de Vida, Mana, Estamina e Sanidade acaba com o descanso.
               </p>
             </div>
             <button type="button" onClick={descansar} className="rounded-xl bg-[#c7a44c] px-5 py-3 text-sm font-bold text-black transition-colors hover:bg-[#ddbf67]">

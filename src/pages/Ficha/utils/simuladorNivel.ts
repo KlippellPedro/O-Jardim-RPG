@@ -136,6 +136,7 @@ export function aplicarCenario(ficha: any, cenario: ICenarioSimulacao): Record<s
 const RECURSOS: Array<{ chave: string; rotulo: string; formato: FormatoLinha }> = [
   { chave: 'vida', rotulo: 'Vida', formato: 'inteiro' },
   { chave: 'mana', rotulo: 'Mana', formato: 'inteiro' },
+  { chave: 'estamina', rotulo: 'Estamina', formato: 'inteiro' },
   { chave: 'defesaNatural', rotulo: 'Defesa natural', formato: 'inteiro' },
   { chave: 'iniciativa', rotulo: 'Iniciativa', formato: 'inteiro' },
   { chave: 'movimento', rotulo: 'Movimento (m)', formato: 'decimal' },

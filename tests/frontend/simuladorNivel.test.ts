@@ -43,6 +43,7 @@ test('subir de nivel soma vida e mana por nivel da classe', () => {
   assert.equal(resultado.nivelSimulado, 8);
   assert.equal(linha(resultado, 'vida').delta, 5 * Math.max(1, Number(classe.vida)));
   assert.equal(linha(resultado, 'mana').delta, 5 * Math.max(1, Number(classe.mana)));
+  assert.equal(linha(resultado, 'estamina').delta, 5 * Math.max(0, Number(classe.estamina) || 0));
 });
 
 test('recompensas listadas ficam entre o nivel atual e o simulado, em ordem', () => {

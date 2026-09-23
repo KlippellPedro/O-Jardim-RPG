@@ -106,7 +106,7 @@ export const Engenheiro = ({ classe }: { classe: IClasse }) => {
             <Pickaxe size={36} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-2 uppercase tracking-wide`} style={{ fontFamily: 'Cinzel, serif' }}>Arquitetura de Campo</h3>
             <p className="text-slate-300 leading-relaxed text-sm">
-              No nível 18 a improvisação vira obra. Você ergue no meio da luta paredes com teto que dão cobertura superior, passarelas e cabos que levam o grupo aonde não havia caminho, ou uma bancada de campo onde todo mundo trabalha melhor. Cinco rodadas, 8 de Mana, uma vez por descanso longo.
+              No nível 18 a improvisação vira obra. Você ergue no meio da luta paredes com teto que dão cobertura superior, passarelas e cabos que levam o grupo aonde não havia caminho, ou uma bancada de campo onde todo mundo trabalha melhor. Cinco rodadas, 8 de Estamina, uma vez por descanso longo.
             </p>
           </PremiumCard>
           <PremiumCard

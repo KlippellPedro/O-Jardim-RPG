@@ -109,7 +109,7 @@ export const Guardiao = ({ classe }: { classe: IClasse }) => {
             <ShieldAlert size={40} className={`${tema.icon} mb-6`} strokeWidth={1.5} />
             <h3 className={`text-2xl font-bold ${tema.text} mb-3 uppercase`} style={{ fontFamily: 'Cinzel, serif' }}>Provocar</h3>
             <p className="text-stone-400 leading-relaxed text-sm">
-              Uma vez por combate, gaste Mana para bradar um desafio: todos os inimigos a até 6m testam Vontade contra a sua DT. Quem falhar sofre −2 para atacar qualquer alvo que não seja você por uma rodada. Com a experiência, você também reduz o dano que sofre dos primeiros golpes recebidos.
+              Uma vez por combate, gaste Estamina para bradar um desafio: todos os inimigos a até 6m testam Vontade contra a sua DT. Quem falhar sofre −2 para atacar qualquer alvo que não seja você por uma rodada. Com a experiência, você também reduz o dano que sofre dos primeiros golpes recebidos.
             </p>
           </PremiumCard>
 
