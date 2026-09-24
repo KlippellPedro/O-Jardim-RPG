@@ -138,7 +138,7 @@ def frases() -> dict[str, str]:
 
     for n in range(2, MAX_NIVEL_TOTAL + 1):
         itens[f"Nível {n} alcançado"] = f"Nível {numero_por_extenso(n)} alcançado"
-    for rotulo in ("Vida", "Mana"):
+    for rotulo in ("Vida", "Mana", "Estamina"):
         for n in range(1, MAX_GANHO + 1):
             itens[f"{rotulo} +{n}"] = f"{rotulo} mais {numero_por_extenso(n)}"
 
