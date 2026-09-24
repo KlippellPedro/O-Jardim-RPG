@@ -1,5 +1,9 @@
+import { Suspense, lazy } from 'react';
 import { Apple, Sparkles } from 'lucide-react';
 import { efeitosFichaDoFruto, obterFrutoEdenConsumido } from '../../../services/frutoEdenService';
+import { temModeloFruto } from '../../../services/frutoEdenModelo';
+
+const FrutoEdenViewer = lazy(() => import('../../../components/FrutoEdenViewer'));
 
 /** Exibe somente o Fruto do Éden efetivamente consumido e vinculado à ficha. */
 export const FrutoEdenSection = ({ character }: { character: any }) => {
@@ -26,6 +30,11 @@ export const FrutoEdenSection = ({ character }: { character: any }) => {
         </div>
       </div>
       <div className="rounded-xl border border-amber-400/20 bg-black/30 p-4">
+        {temModeloFruto(fruto.itemId) && (
+          <Suspense fallback={<div className="mb-3 h-56 w-full" />}>
+            <FrutoEdenViewer id={fruto.itemId} className="mb-3 h-56 w-full" />
+          </Suspense>
+        )}
         <div className="mb-1 flex flex-wrap items-center gap-2">
           <h3 className="font-bold text-amber-100">{fruto.titulo}</h3>
           {fruto.despertado && (

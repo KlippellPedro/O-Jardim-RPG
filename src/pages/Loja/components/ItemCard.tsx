@@ -4,6 +4,7 @@ import { ShoppingCart, Heart, Eye, Wrench, CircleGauge } from 'lucide-react';
 import { LojaItem, NOMES_LOCAIS_LOJA, classeTextoRaridade, getCurrencySymbol, itemPermiteEscolherRaridade, rotuloCategoriaItem, rotuloSubtipoItem } from '../../../services/lojaCatalogService';
 import { itemLojaContaComoEspecial } from '../../../services/itensEspeciaisService';
 import { obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
+import { temModeloFruto } from '../../../services/frutoEdenModelo';
 
 interface ItemCardProps {
   item: LojaItem;
@@ -95,6 +96,19 @@ export const ItemCard: React.FC<ItemCardProps> = React.memo(function ItemCard({ 
           </button>
         )}
 
+        {temModeloFruto(item.id) && (
+          <div className="mb-3 flex h-32 items-center justify-center rounded-xl bg-[radial-gradient(circle_at_50%_55%,rgba(251,191,36,0.16),rgba(0,0,0,0)_70%)]">
+            <img
+              src={`/assets/img/frutos/${item.id}.webp`}
+              alt=""
+              width={128}
+              height={128}
+              loading="lazy"
+              decoding="async"
+              className="h-32 w-32 object-contain drop-shadow-[0_6px_10px_rgba(0,0,0,0.55)] transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
+        )}
         <div className="mb-3 flex flex-col pr-10">
           <span className="mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-gray-600">Disponível em {localMinimo}</span>
           <h3 className="text-lg font-bold tracking-wide text-white" style={{ fontFamily: 'Cinzel, serif' }}>

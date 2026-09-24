@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { Suspense, lazy, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Select } from '../../../components/ui/Select';
@@ -10,6 +10,10 @@ import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 import { obterRegraRaridade } from '../../../../data/regras/raridadesEquipamentos';
 import { itemLojaContaComoEspecial, resumirLimiteItensEspeciais } from '../../../services/itensEspeciaisService';
 import { ehReliquiaCriacao, lerRessonanciaReliquia } from '../../../services/reliquiasCriacaoService';
+import { temModeloFruto } from '../../../services/frutoEdenModelo';
+import { FrutoEdenDetalhes } from './FrutoEdenDetalhes';
+
+const FrutoEdenViewer = lazy(() => import('../../../components/FrutoEdenViewer'));
 
 interface LojaItemModalProps {
   item: LojaItem;
@@ -78,6 +82,7 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
     && !Array.isArray(dadosBrutos.resistencias_por_tipo)
     ? Object.entries(dadosBrutos.resistencias_por_tipo as Record<string, unknown>)
     : [];
+  const ehFrutoEden = item.tipoOrigem === 'fruto-eden';
   const veiculoCompleto = itemEhVeiculoCompleto(itemParaCompra);
   const bonusDefesa = obterBonusDefesaCatalogo(dadosBrutos);
   const reliquiaCriacao = ehReliquiaCriacao({ ...dadosBrutos, tipo: itemParaCompra.tipoOrigem });
@@ -538,6 +543,11 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
 
         {/* CORPO DO MODAL */}
         <div className="flex-1 overflow-y-auto p-4 custom-scrollbar sm:p-8">
+          {temModeloFruto(item.id) && (
+            <Suspense fallback={<div className="mb-6 h-56 w-full" />}>
+              <FrutoEdenViewer id={item.id} className="mb-6 h-56 w-full" />
+            </Suspense>
+          )}
           {hasWarning && (
             <div className="mb-6 p-4 rounded-xl bg-red-900/30 border border-red-500/50 flex items-start gap-3">
               <AlertTriangle className="text-red-400 shrink-0 mt-0.5" size={20} />
@@ -594,6 +604,7 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
               {!primeiraRaridadeDisponivel ? <p className="mt-2 text-xs font-bold text-red-300">Nenhuma raridade deste equipamento está disponível neste balcão.</p> : null}
             </div>
           ) : null}
+          {!ehFrutoEden && (
           <div className="mb-6 grid gap-3 sm:grid-cols-2">
             <div className="rounded-xl border border-white/[0.08] bg-black/25 p-4">
               <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#c7a44c]"><Wrench size={14} /> Orçamento de {itemParaCompra.raridade}</div>
@@ -605,14 +616,19 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
               {grupoEspecial ? <><p className="mt-2 text-sm leading-6 text-gray-300">Este {grupoEspecial === 'artefato' ? 'artefato' : 'item de perícia'} ocupa <strong className="text-white">1 vaga</strong> somente quando estiver equipado. {resumoItensEspeciais.usados}/{resumoItensEspeciais.limite} vagas estão em uso.</p><p className="mt-2 text-xs text-gray-500">Você pode comprar e guardar sem vaga livre.</p></> : <p className="mt-2 text-sm leading-6 text-gray-400">Este item não entra no limite compartilhado de itens de perícia e artefatos.</p>}
             </div>
           </div>
-          <p className="text-gray-300 text-lg leading-relaxed italic border-l-2 border-[#c7a44c]/50 pl-4">
-            "{item.descricao}"
-          </p>
+          )}
+          {ehFrutoEden ? (
+            <FrutoEdenDetalhes dados={dadosBrutos} />
+          ) : (
+            <p className="text-gray-300 text-lg leading-relaxed italic border-l-2 border-[#c7a44c]/50 pl-4">
+              "{item.descricao}"
+            </p>
+          )}
 
           {renderDetails()}
         </div>
 
-        {dadosBrutos.efeito && (
+        {dadosBrutos.efeito && !ehFrutoEden && (
           <div className="px-6 pb-6">
             <div className="bg-fuchsia-900/20 border border-fuchsia-500/30 p-4 rounded-xl flex flex-col shadow-[0_0_15px_rgba(232,121,249,0.1)]">
               <span className="text-[10px] text-fuchsia-400 uppercase tracking-widest font-bold mb-2 flex items-center gap-2">
