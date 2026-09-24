@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Sprout, Search, ArrowRightLeft, Sparkles, Filter, Gem, X, ChevronDown, ArrowUpDown } from 'lucide-react';
+import { Sprout, Search, ArrowRightLeft, Sparkles, Filter, Gem, X, Check, ChevronDown, ArrowUpDown } from 'lucide-react';
 import {
   catalogoJardimDisponivel,
   catalogoJardimHabilidadesDisponivel,
@@ -395,6 +395,16 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
     );
   };
 
+  const interruptor = (rotulo: string, ligado: boolean, alterar: (valor: boolean) => void) => (
+    <label className={`group flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold transition-colors focus-within:ring-2 focus-within:ring-lime-400/40 ${ligado ? 'border-lime-400/30 bg-lime-500/10 text-lime-200' : 'border-white/5 bg-[#121118] text-gray-400 hover:border-white/15 hover:text-gray-200'}`}>
+      <input type="checkbox" checked={ligado} onChange={(e) => alterar(e.target.checked)} className="sr-only" />
+      <span aria-hidden="true" className={`flex h-4 w-4 items-center justify-center rounded border transition-colors ${ligado ? 'border-lime-400 bg-lime-400 text-[#0f0e15]' : 'border-white/20 bg-[#0b0a10] group-hover:border-white/40'}`}>
+        {ligado && <Check size={12} strokeWidth={3.5} />}
+      </span>
+      {rotulo}
+    </label>
+  );
+
   const chipTipo = (opcao: { value: TTipoFiltro; label: string }) => (
     <button
       key={opcao.value}
@@ -501,14 +511,8 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
               <option value="nome">Nome (A a Z)</option>
             </select>
           </div>
-          <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-white/5 bg-[#121118] px-3 py-2 text-xs text-gray-300">
-            <input type="checkbox" checked={soPagaveis} onChange={(e) => setSoPagaveis(e.target.checked)} className="accent-lime-400" />
-            Só o que posso pagar
-          </label>
-          <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-white/5 bg-[#121118] px-3 py-2 text-xs text-gray-300">
-            <input type="checkbox" checked={ocultarAdquiridos} onChange={(e) => setOcultarAdquiridos(e.target.checked)} className="accent-lime-400" />
-            Esconder o que já plantei
-          </label>
+          {interruptor('Só o que posso pagar', soPagaveis, setSoPagaveis)}
+          {interruptor('Esconder o que já plantei', ocultarAdquiridos, setOcultarAdquiridos)}
           {filtrosAtivos && (
             <button type="button" onClick={limparFiltros} className="ml-auto flex items-center gap-1 text-xs font-bold text-gray-400 hover:text-white">
               <X size={12} /> Limpar filtros
