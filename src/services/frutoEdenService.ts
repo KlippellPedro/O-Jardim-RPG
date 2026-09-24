@@ -86,7 +86,7 @@ interface IRegraPoderFruto {
 const REGRAS_PODERES_FRUTOS: Record<string, IRegraPoderFruto[]> = {
   'fruto-chamas': [
     { id: 'passo-incandescente', fonte: 'tecnica', custoMana: 3, acao: 'Ação de Movimento' },
-    { id: 'sol-infernal', fonte: 'despertar', custoMana: 9, acao: 'Ação Padrão' },
+    { id: 'sol-infernal', fonte: 'despertar', custoMana: 14, acao: 'Ação Padrão' },
   ],
   'fruto-dragao': [
     { id: 'forma-hibrida', fonte: 'tecnica', custoMana: 3, recurso: 'estamina', acao: 'Ação de Movimento' },
@@ -94,7 +94,7 @@ const REGRAS_PODERES_FRUTOS: Record<string, IRegraPoderFruto[]> = {
   ],
   'fruto-tremor': [
     { id: 'golpe-sismico', fonte: 'tecnica', custoMana: 3, recurso: 'estamina', acao: 'Ao acertar um ataque corpo a corpo' },
-    { id: 'ruptura-continental', fonte: 'despertar', custoMana: 10, recurso: 'estamina', acao: 'Ação Padrão' },
+    { id: 'ruptura-continental', fonte: 'despertar', custoMana: 12, recurso: 'estamina', acao: 'Ação Padrão' },
   ],
   'fruto-gravidade': [
     { id: 'orbita-forcada', fonte: 'tecnica', custoMana: 3, acao: 'Ação de Movimento' },
@@ -103,22 +103,22 @@ const REGRAS_PODERES_FRUTOS: Record<string, IRegraPoderFruto[]> = {
   'fruto-trovao': [
     { id: 'salto-voltaico', fonte: 'tecnica', custoMana: 3, acao: 'Ação de Movimento', nome: 'Salto Voltaico', descricao: 'Teleporte-se até 12 m para um espaço que possa perceber.' },
     { id: 'defesa-eletromagnetica', fonte: 'tecnica', custoMana: 2, acao: 'Reação', nome: 'Defesa Eletromagnética', descricao: 'Receba +5 de Defesa contra um ataque físico; se ele errar, desloque-se 3 m sem provocar reação.' },
-    { id: 'julgamento-tempestade', fonte: 'despertar', custoMana: 10, acao: 'Ação Padrão' },
+    { id: 'julgamento-tempestade', fonte: 'despertar', custoMana: 14, acao: 'Ação Padrão' },
   ],
   'fruto-gelo': [
     { id: 'muralha-perene', fonte: 'tecnica', custoMana: 3, acao: 'Ação de Movimento' },
-    { id: 'inverno-absoluto', fonte: 'despertar', custoMana: 10, acao: 'Ação Padrão' },
+    { id: 'inverno-absoluto', fonte: 'despertar', custoMana: 14, acao: 'Ação Padrão' },
   ],
   'fruto-luz': [
     { id: 'passo-fotonico', fonte: 'tecnica', custoMana: 3, acao: 'Ação de Movimento' },
-    { id: 'horizonte-branco', fonte: 'despertar', custoMana: 11, acao: 'Ação Padrão' },
+    { id: 'horizonte-branco', fonte: 'despertar', custoMana: 14, acao: 'Ação Padrão' },
   ],
   'fruto-sombra': [
     { id: 'evasao-umbral', fonte: 'tecnica', custoMana: 3, acao: 'Reação' },
     { id: 'noite-sem-horizonte', fonte: 'despertar', custoMana: 10, acao: 'Ação Padrão' },
   ],
   'fruto-fenix': [
-    { id: 'chama-restauradora', fonte: 'tecnica', custoMana: 4, acao: 'Ação de Movimento' },
+    { id: 'chama-restauradora', fonte: 'tecnica', custoMana: 5, acao: 'Ação de Movimento' },
     { id: 'renascimento-solar', fonte: 'despertar', custoMana: 12, acao: 'Sem ação, ao chegar a 0 de Vida' },
   ],
   'fruto-colosso': [

@@ -1550,7 +1550,7 @@ São 26 frutos, cada um com um poder próprio, vendidos por Fragmentos de Estrel
 
 - Uma criatura sustenta um Fruto por vez. Comer um segundo substitui o primeiro em definitivo, e o poder antigo se perde.
 
-- Todo fruto traz uma fraqueza declarada, e água do mar aparece em quase todas. Enquanto a fraqueza estiver atuando, os poderes do fruto desligam.
+- Todo fruto traz uma fraqueza declarada. Enquanto a fraqueza estiver atuando, os poderes do fruto desligam.
 
 ### Os três degraus de um Fruto
 
@@ -1570,7 +1570,7 @@ Existe um Fruto para cada um dos onze Fluxos. Ele aproxima quem come do Fluxo e 
 
 - A deidade do Fluxo fala pelo fruto na medida em que consegue: o Dom é o pedaço do poder dela que atravessa até quem comeu.
 
-- Cada Fruto declara a fraqueza no Fluxo que tem vantagem sobre o dele, além da água do mar. O Fruto do Fim exige a autorização do Mestre, como todo acesso ao Fim.
+- Cada Fruto declara a fraqueza no Fluxo que tem vantagem sobre o dele. O Fruto do Fim exige a autorização do Mestre, como todo acesso ao Fim.
 
 - Vale a regra de sempre: uma criatura sustenta um Fruto por vez, e escolher o de um Fluxo troca o vínculo anterior.
 

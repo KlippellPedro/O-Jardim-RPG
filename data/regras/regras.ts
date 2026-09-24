@@ -1653,7 +1653,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>O fruto entra no inventário como qualquer item. Comer é uma decisão à parte, feita na aba Inventário.</li>
         <li>Ao ser consumido, ele sai do inventário e se liga à ficha para sempre. Não dá para vender, emprestar nem cuspir de volta.</li>
         <li>Uma criatura sustenta um Fruto por vez. Comer um segundo substitui o primeiro em definitivo, e o poder antigo se perde.</li>
-        <li>Todo fruto traz uma fraqueza declarada, e água do mar aparece em quase todas. Enquanto a fraqueza estiver atuando, os poderes do fruto desligam.</li>
+        <li>Todo fruto traz uma fraqueza declarada. Enquanto a fraqueza estiver atuando, os poderes do fruto desligam.</li>
       </ul>
 
       <h3 class="regras-subtitle">Os três degraus de um Fruto</h3>
@@ -1669,7 +1669,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Cada Fruto de Fluxo traz três poderes: uma Técnica de uso frequente, um Dom da deidade, que vale uma vez por sessão, e a Comunhão, que só existe depois do Despertar.</li>
         <li>A deidade do Fluxo fala pelo fruto na medida em que consegue: o Dom é o pedaço do poder dela que atravessa até quem comeu.</li>
-        <li>Cada Fruto declara a fraqueza no Fluxo que tem vantagem sobre o dele, além da água do mar. O Fruto do Fim exige a autorização do Mestre, como todo acesso ao Fim.</li>
+        <li>Cada Fruto declara a fraqueza no Fluxo que tem vantagem sobre o dele. O Fruto do Fim exige a autorização do Mestre, como todo acesso ao Fim.</li>
         <li>Vale a regra de sempre: uma criatura sustenta um Fruto por vez, e escolher o de um Fluxo troca o vínculo anterior.</li>
       </ul>
       <p class="regras-note">Despertar é um botão na aba Poderes e só anda para frente: uma vez despertado, o fruto fica assim para sempre naquela ficha. A passiva e as técnicas são substituídas pelas versões aprimoradas, sem somar com as antigas, e a manifestação final passa a existir. Combine com o Mestre o acontecimento da história que justifica o despertar, porque a ficha não pergunta duas vezes.</p>
@@ -1704,7 +1704,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Usar a fraqueza</h3>
       <ul class="regras-list">
-        <li>Todo fruto declara uma fraqueza, e água do mar aparece em quase todas. Isso é desenho, não descuido: é o que permite montar uma cena em que o portador não é a resposta.</li>
+        <li>Todo fruto declara uma fraqueza, e é ela que permite montar uma cena em que o portador não é a resposta.</li>
         <li>Use com parcimônia. Anular o fruto em toda sessão apaga a compra mais cara que o jogador fez.</li>
       </ul>
 

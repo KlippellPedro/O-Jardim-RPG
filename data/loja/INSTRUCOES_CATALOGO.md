@@ -131,7 +131,7 @@ mágico comum. Cada um publica cinco blocos mecânicos obrigatórios:
 - `passivo`: identidade permanente e benefício de exploração ou defesa;
 - `tecnica`: poder recorrente, normalmente limitado a uma vez por rodada;
 - `despertar`: efeito decisivo limitado por cena ou sessão;
-- `fraqueza`: contrajogo específico mais a fraqueza comum à água do mar;
+- `fraqueza`: contrajogo específico do fruto;
 - `vinculo`: uma criatura mantém apenas um Vínculo do Éden por vez.
 
 Os marcadores `Sobrenatural`, `Mutação` e `Elemental` alimentam os filtros da

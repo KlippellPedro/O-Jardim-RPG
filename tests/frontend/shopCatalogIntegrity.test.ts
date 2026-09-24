@@ -399,7 +399,8 @@ test('Frutos do Éden têm escala de Relíquia, contrajogo e três níveis de po
         `${fruto.id}: despertar deve substituir todos os bônus-base`,
       );
     }
-    assert.match(fruto.conteudo.descricao, /água do mar/i, `${fruto.id}: fraqueza comum ausente`);
+    assert.doesNotMatch(JSON.stringify(fruto.conteudo), /água do mar|impede nadar/i, `${fruto.id}: a água do mar deixou de ser fraqueza de Fruto`);
+    assert.ok(String(fruto.conteudo.fraqueza).length > 12, `${fruto.id}: sem contrajogo declarado`);
     assert.match(fruto.conteudo.vinculo, /único/i, `${fruto.id}: Vínculo único ausente`);
   }
 });
