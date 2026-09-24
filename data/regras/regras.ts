@@ -7,6 +7,7 @@ import marcasCirculoData from '../ficha/marcas-de-circulo.json';
 import periciasData from '../ficha/pericias.json';
 import racasData from '../ficha/racas.json';
 import catalogoLojaData from '../loja/catalogo.json';
+import { ARVORES } from '../mundo/arvoresCatalog';
 import { REGRA_AFLICOES } from './aflicoes';
 import { REGRA_ATAQUES_COMBINADOS } from './ataquesCombinados';
 import { REGRA_BASES } from './bases';
@@ -78,8 +79,21 @@ const tabelaCrisesSanidade = CRISES_SANIDADE.map((crise) => `
 /** Geradas de data/ficha/classes.json e racas.json: o livro público lista nome,
  * tipo e conceito de cada entrada em vez de repetir a progressão inteira, que
  * já vive no catálogo interativo da página de Regras. */
+const IDS_TODAS_AS_ARVORES = ARVORES.filter((arvore) => arvore.id !== 'universal').map((arvore) => arvore.id);
+
+/** O texto da classe não repete a Árvore; a lista pública diz onde a especial
+ * existe ("especial, Matriz" ou "especial, qualquer Árvore"). */
+const rotuloTipoClasse = (classe: (typeof classesData)[number]) => {
+  if (classe.categoria !== 'esquecida') return 'comum';
+  const ids: string[] = classe.arvores?.length ? classe.arvores : (classe.arvore ? [classe.arvore] : []);
+  if (!ids.length) return 'especial';
+  if (IDS_TODAS_AS_ARVORES.every((id) => ids.includes(id))) return 'especial, qualquer Árvore';
+  const nomes = ids.map((id) => ARVORES.find((arvore) => arvore.id === id)?.nome).filter(Boolean);
+  return `especial, ${nomes.join(', ')}`;
+};
+
 const listaClassesPublicas = classesData
-  .map((classe) => `<li><strong>${classe.titulo}</strong> (${classe.categoria === 'esquecida' ? 'especial' : 'comum'}) - ${classe.descricao}</li>`)
+  .map((classe) => `<li><strong>${classe.titulo}</strong> (${rotuloTipoClasse(classe)}) - ${classe.descricao}</li>`)
   .join('');
 
 const classesComuns = classesData.filter((classe) => classe.categoria === 'padrao').length;

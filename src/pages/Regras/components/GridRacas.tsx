@@ -1,14 +1,15 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, BookOpen, Search, Sparkles, UserCircle, X } from 'lucide-react';
+import { BookOpen, Search, Sparkles, UserCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { IRaca } from '../../../types/catalogo';
 import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
-import { formatarAjustesRaciais } from '../../../services/racaService';
-import { PremiumCard } from '../../../redesign/components/premium/PremiumCard';
+import { obterEstagiosRaciais } from '../../../services/racaService';
 import { AuraEspecial } from '../../../redesign/components/premium/AuraEspecial';
 import { obterTemaPorId } from '../../../redesign/themeMap';
 import { salvarPosicaoRetornoRegras } from '../regrasScrollRestoration';
+import { CartaoCatalogo, ChipCatalogo } from './CartaoCatalogo';
+import { obterIconeCatalogo } from './iconesCatalogo';
 
 interface GridRacasProps {
   racas: IRaca[];
@@ -21,6 +22,14 @@ const nomesArvores = (raca: IRaca) => {
     .filter(Boolean)
     .join(' · ');
 };
+
+const ROTULOS_ATRIBUTO: Record<string, string> = {
+  forca: 'FOR', destreza: 'DES', constituicao: 'CON', inteligencia: 'INT',
+  sabedoria: 'SAB', carisma: 'CAR', fluxo: 'FLX',
+};
+
+const sinal = (valor: number) => `${valor > 0 ? '+' : valor < 0 ? '−' : ''}${Math.abs(valor)}`;
+const tomDoValor = (valor: number) => (valor > 0 ? 'positivo' : valor < 0 ? 'negativo' : 'neutro');
 
 const correspondeABusca = (raca: IRaca, termo: string) => {
   const alvo = [raca.titulo, raca.descricao, nomesArvores(raca)]
@@ -50,7 +59,7 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
       {
         id: 'comuns',
         titulo: 'Raças Comuns',
-        descricao: 'Não pertencem a nenhuma Árvore em particular. Podem nascer em qualquer uma delas, e não dependem de ninguém liberar.',
+        descricao: 'Podem nascer em qualquer Árvore e ficam liberadas desde o começo, sem precisar pedir pro Mestre.',
         racas: racas.filter(raca => raca.categoria === 'padrao'),
         especial: false,
         entidade: false,
@@ -58,7 +67,7 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
       {
         id: 'especiais',
         titulo: 'Raças Especiais',
-        descricao: 'Têm regras e origens próprias, só existem nas Árvores indicadas e precisam ser liberadas pelo Mestre. O acesso acontece por criação autorizada ou conquista na história.',
+        descricao: 'Cada uma tem regras e origem próprias e só existe em certas Árvores. Pra jogar com elas, o Mestre precisa liberar, seja já na criação da ficha ou como conquista durante a história.',
         racas: racas.filter(raca => raca.categoria !== 'padrao' && raca.id !== 'entidade'),
         especial: true,
         entidade: false,
@@ -66,7 +75,7 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
       {
         id: 'entidades',
         titulo: 'Entidades',
-        descricao: 'Entidade não é uma raça mecânica e não concede atributos ou poderes. O cartão leva ao Livro das Entidades, onde cada existência é apresentada por meio de seu conto.',
+        descricao: 'Entidade não dá atributo nem poder nenhum pra ficha. O cartão abre o Livro das Entidades, onde cada uma aparece contada pelo próprio conto.',
         racas: racas.filter(raca => raca.id === 'entidade'),
         especial: false,
         entidade: true,
@@ -126,50 +135,60 @@ export const GridRacas: React.FC<GridRacasProps> = ({ racas }) => {
             <p className="relative mt-1 max-w-3xl text-sm leading-relaxed text-gray-400">{grupo.descricao}</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(max(15rem,calc((100%_-_3rem)/3)),1fr))] gap-6">
             {grupo.racas.map((raca, idx) => {
               const arvores = nomesArvores(raca);
               const tema = obterTemaPorId(raca.id);
               const abreLivroEntidades = raca.id === 'entidade';
 
+              const estagios = obterEstagiosRaciais(raca);
+              const ajustes = Object.entries(raca.ajustes_atributos || {}).filter(([, valor]) => Number(valor) !== 0);
+
               return (
-                <PremiumCard
+                <CartaoCatalogo
                   key={raca.id}
-                  glowColor={tema.glow}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.28, delay: Math.min(idx * 0.03, 0.24) }}
-                  onClick={() => abrirRaca(raca.id)}
-                  className={`content-auto-list-item cursor-pointer min-h-[180px] p-6 text-left shadow-lg border ${tema.border} ${tema.bg}`}
+                  titulo={raca.titulo}
+                  descricao={raca.descricao}
+                  icone={obterIconeCatalogo(raca.id, abreLivroEntidades ? BookOpen : UserCircle)}
+                  tema={tema}
+                  etiqueta={grupo.especial && !abreLivroEntidades ? (arvores || 'Árvore definida pelo Mestre') : undefined}
+                  rotuloAcao={abreLivroEntidades ? 'Abrir o Livro das Entidades' : 'Ver ficha fisiológica'}
+                  indice={idx}
+                  onAbrir={() => abrirRaca(raca.id)}
                 >
-                  {/* Background glow blob */}
-                  <div
-                    className="absolute right-0 top-0 -mr-10 -mt-10 h-32 w-32 rounded-full blur-2xl pointer-events-none"
-                    style={{ backgroundColor: tema.glow.replace(/,[\d.]+\)/, ',0.2)') }}
-                  />
-
-                  <div className="relative flex-1">
-                    <h3
-                      className={`mb-2 flex items-center gap-2 text-xl font-bold ${tema.text}`}
-                      style={{ fontFamily: 'Cinzel, serif' }}
-                    >
-                      <UserCircle size={20} className={tema.icon} />
-                      {raca.titulo}
-                    </h3>
-                    <p className="mb-3 text-sm text-gray-400">
-                      {abreLivroEntidades ? 'Sem atributos ou poderes · existência por meio de contos' : formatarAjustesRaciais(raca)}
-                    </p>
-                    {grupo.especial && !abreLivroEntidades && (
-                      <p className={`text-xs font-bold uppercase tracking-wider ${tema.tag}`}>
-                        {arvores ? `Árvores: ${arvores}` : 'Árvore definida pelo Mestre'}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className={`mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest ${tema.icon}`}>
-                    {abreLivroEntidades ? 'Abrir o Livro das Entidades' : 'Ver ficha fisiológica'} <ArrowRight size={14} />
-                  </div>
-                </PremiumCard>
+                  {abreLivroEntidades ? (
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Sem atributos ou poderes</p>
+                  ) : (
+                    <>
+                      <div className="flex flex-wrap gap-1.5">
+                        <ChipCatalogo tom={tomDoValor(Number(raca.vida) || 0)} titulo="Vida">Vida {sinal(Number(raca.vida) || 0)}</ChipCatalogo>
+                        <ChipCatalogo tom={tomDoValor(Number(raca.mana) || 0)} titulo="Mana">Mana {sinal(Number(raca.mana) || 0)}</ChipCatalogo>
+                        {Number(raca.estamina) ? (
+                          <ChipCatalogo tom={tomDoValor(Number(raca.estamina))} titulo="Estamina">Estamina {sinal(Number(raca.estamina))}</ChipCatalogo>
+                        ) : null}
+                        <ChipCatalogo tom={tomDoValor(Number(raca.movimento) || 0)} titulo="Movimento">Mov. {sinal(Number(raca.movimento) || 0)} m</ChipCatalogo>
+                        {ajustes.map(([campo, valor]) => (
+                          <ChipCatalogo key={campo} tom={tomDoValor(Number(valor))} titulo={campo}>
+                            {ROTULOS_ATRIBUTO[campo] ?? campo} {sinal(Number(valor))}
+                          </ChipCatalogo>
+                        ))}
+                      </div>
+                      {estagios.length > 0 ? (
+                        <p
+                          className={`flex items-center gap-1.5 text-[11px] font-semibold ${tema.tag}`}
+                          title={estagios.map(estagio => estagio.titulo).join(' · ')}
+                        >
+                          <span className="flex gap-1" aria-hidden="true">
+                            {estagios.map(estagio => (
+                              <span key={estagio.id} className="h-1.5 w-1.5 rounded-full bg-current" />
+                            ))}
+                          </span>
+                          Evolui em {estagios.length} estágios
+                        </p>
+                      ) : null}
+                    </>
+                  )}
+                </CartaoCatalogo>
               );
             })}
           </div>

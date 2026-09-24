@@ -10,7 +10,7 @@
     "mana": 0,
     "movimento": 0,
     "pericias_iniciais_adicionais": 1,
-    "descricao": "Não nasce com dom nenhum, e é exatamente esse o ponto. Aprende uma coisa a mais que todo mundo na largada e cabe em qualquer Árvore, qualquer classe, qualquer mesa.",
+    "descricao": "Nasce sem dom nenhum, e é justamente aí que está a graça. Começa sabendo uma coisa a mais que todo mundo e se encaixa em qualquer Árvore, em qualquer classe e em qualquer mesa.",
     "fisiologia": [
       "Tamanho Normal."
     ],
@@ -44,7 +44,7 @@
     "mana": 0,
     "estamina": 1,
     "movimento": 0,
-    "descricao": "Enxerga no escuro natural, fecha ferida bebendo sangue e paga caro quando fica sem. O Clã decide o que ele faz com a fome, e o tempo faz o resto: quanto mais velho, mais o sangue rende, e quem atravessa séculos vira Senhor da Noite com uma fome do mesmo tamanho. O povo é de Întuneric e fala Romeno.",
+    "descricao": "Enxerga no escuro, fecha ferida bebendo sangue e sofre bastante quando fica sem. O Clã define o que ele faz com a fome, e o tempo cuida do resto: quanto mais velho, mais o sangue rende, e quem passa de séculos vira Senhor da Noite, com uma fome do mesmo tamanho. É um povo de Întuneric e fala Romeno.",
     "fisiologia": [
       "Enxerga normalmente em escuridão natural, mas não através de escuridão criada por magia ou Fluxo."
     ],
@@ -387,7 +387,7 @@
     "mana": 1,
     "estamina": 2,
     "movimento": 1.5,
-    "descricao": "Pequeno, rápido e com um talento incômodo pra vender qualquer coisa por mais do que ela vale, de preferência coisa que já era dele. Fala Alemão entre os seus.",
+    "descricao": "Pequeno, rápido e com um talento chato pra vender qualquer coisa por mais do que ela vale, de preferência algo que já era dele. Entre os seus, fala Alemão.",
     "fisiologia": [
       "Tamanho Pequeno."
     ],
@@ -420,7 +420,7 @@
     "mana": 0,
     "estamina": 3,
     "movimento": 0,
-    "descricao": "Baixo, duro de derrubar e melhor que qualquer um com uma ferramenta na mão. Constrói, conserta e erra menos na segunda tentativa. Escolhe um Ofício de Forja na criação e sobe de Aprendiz a Mestre com o tempo de bancada. Fala Nórdico Antigo, e o Reino dos Anões forja o que os outros reinos apenas fabricam.",
+    "descricao": "Baixinho, difícil de derrubar e melhor que qualquer um com uma ferramenta na mão. Constrói, conserta e na segunda tentativa quase não erra. Na criação escolhe um Ofício de Forja e vai de Aprendiz a Mestre conforme passa tempo na bancada. Fala Nórdico Antigo, e o que sai das forjas do Reino dos Anões nenhum outro reino consegue igualar.",
     "fisiologia": [
       "Tamanho Pequeno."
     ],
@@ -669,7 +669,7 @@
     "mana": -2,
     "estamina": 3,
     "movimento": 0,
-    "descricao": "Corpo construído, grande ou enorme, que não respira, não come e não adoece. Quem cuida dele não é médico, é artesão, e nenhuma armadura de prateleira serve sem ajuste antes. O Material do Corpo diz do que ele é feito, e cada conserto o deixa mais duro: de Recém-Erguido a Monumento. Fala Libras.",
+    "descricao": "Tem um corpo construído, grande ou enorme, que não respira, não come e não fica doente. Quando quebra, quem resolve é um artesão, e armadura de loja só serve depois de ajustada. O Material do Corpo diz do que ele é feito, e cada conserto deixa ele mais duro, de Recém-Erguido até Monumento. Fala Libras.",
     "fisiologia": [
       "Tamanho Grande ou Enorme, definido na criação.",
       "Não precisa respirar, comer ou beber e não contrai doenças comuns."
@@ -1013,7 +1013,7 @@
     "vida": -2,
     "mana": 3,
     "movimento": 0,
-    "descricao": "Não tem corpo pra alimentar nem pulmão pra encher. Enxerga no escuro, atravessa parede quando tem Mana pra gastar, e não veste armadura comum porque não há o que vestir. Cada espírito carrega uma Cor, que é o Fluxo que o prendeu ao mundo, e amadurece sozinho de Menor a Maior e a Primordial conforme sobe de nível. Fala Enoquiano.",
+    "descricao": "Não tem corpo pra alimentar nem pulmão pra encher. Enxerga no escuro, atravessa parede quando tem Mana sobrando e não usa armadura comum, porque não tem onde vestir. Cada espírito tem uma Cor, que é o Fluxo que prendeu ele ao mundo, e vai amadurecendo sozinho de Menor pra Maior e depois Primordial conforme sobe de nível. Fala Enoquiano.",
     "fisiologia": [
       "Não precisa respirar, comer ou beber.",
       "Enxerga normalmente em escuridão natural.",
@@ -1617,7 +1617,7 @@
     "mana": -1,
     "estamina": 3,
     "movimento": 0,
-    "descricao": "Grande a ponto de nada feito pros outros servir nele. Carrega o dobro, não sai do lugar quando tentam empurrar, e vive esbarrando em porta de tamanho normal. A Linhagem decide o que corre no sangue, e o porte não para de crescer: Grande, Enorme e, no fim, Colossal. Fala Grego.",
+    "descricao": "É tão grande que nada feito pros outros serve nele. Carrega o dobro, não sai do lugar quando tentam empurrar e vive batendo a cabeça em porta normal. A Linhagem define o que corre no sangue, e o porte só aumenta: Grande, Enorme e, no fim, Colossal. Fala Grego.",
     "fisiologia": [
       "Tamanho Grande; equipamentos precisam ter tamanho compatível."
     ],
@@ -1872,7 +1872,7 @@
     "vida": 0,
     "mana": 0,
     "movimento": 0,
-    "descricao": "Gente com corpo de bicho. Qual bicho é escolha sua, e a morfologia decide se ele sai ágil, robusto ou místico. Troca ideia simples com animais, o que está longe de significar que eles obedeçam. Fala Sumeriano.",
+    "descricao": "Gente com corpo de bicho. Você escolhe o bicho, e a morfologia define se ele sai ágil, robusto ou místico. Consegue conversar coisas simples com animais, o que não quer dizer que eles vão obedecer. Fala Sumeriano.",
     "rotulo_variante": "Morfologia",
     "descricao_variantes": "Escolha o quanto do bicho aparece no corpo. As três morfologias valem igual; a diferença está em qual instinto veio mais forte.",
     "fisiologia": [
@@ -1951,7 +1951,7 @@
     "vida": -1,
     "mana": 2,
     "movimento": 0,
-    "descricao": "Respira dentro e fora d'água, e nada tão rápido quanto anda em terra. A Canção escolhida decide o que a voz faz com quem escuta, e quanto mais fundo ela desce, da costa até o abismo, mais longe essa voz chega. Fala Latim.",
+    "descricao": "Respira dentro e fora d'água e nada tão rápido quanto anda em terra. A Canção escolhida define o que a voz faz com quem ouve, e quanto mais fundo ela vai, da costa até o abismo, mais longe a voz alcança. Fala Latim.",
     "fisiologia": [
       "Anfíbio: respira no ar e na água; seu deslocamento de natação é igual ao Movimento terrestre."
     ],
@@ -2211,7 +2211,7 @@
     "vida": -1,
     "mana": 2,
     "movimento": 0,
-    "descricao": "Copia a cara, a roupa e o jeito de quem observou de perto, e copia também a forma de um móvel qualquer quando precisa que ninguém olhe. Por baixo continua o mesmo bicho magro e nervoso, com um núcleo só, e é esse núcleo que entrega tudo quando ele apaga. O Molde escolhido decide o que ele copia melhor, e com o tempo ele passa a guardar mais de uma forma pronta ao mesmo tempo.",
+    "descricao": "Copia o rosto, a roupa e o jeito de quem observou de perto, e vira até um móvel quando precisa que ninguém olhe. Por baixo continua o mesmo bicho magro e nervoso, com um núcleo só, e é esse núcleo que entrega tudo quando ele apaga. O Molde escolhido define o que ele copia melhor, e com o tempo ele consegue guardar mais de uma forma pronta.",
     "fisiologia": [
       "Corpo mole, sem esqueleto fixo, que assume a forma que a vontade mandar. Tem um único núcleo de identidade, e perder a consciência desmancha qualquer forma copiada na hora."
     ],
@@ -2465,7 +2465,7 @@
     "vida": 0,
     "mana": 0,
     "movimento": 0,
-    "descricao": "Um corpo com mais de um bicho morando dentro, dividindo comida, sono e decisão. Aguenta privação muito melhor do que qualquer um deles aguentaria sozinho, e ninguém de fora sabe dizer onde um termina e o outro começa. O Tipo escolhido decide como a parceria aparece por fora, e quanto mais tempo ela dura, menos sobra de fronteira entre um e outro.",
+    "descricao": "Um corpo só com mais de um bicho morando dentro, dividindo comida, sono e decisões. Aguenta passar necessidade muito melhor do que qualquer um deles aguentaria sozinho, e ninguém de fora sabe dizer onde um acaba e o outro começa. O Tipo escolhido define como essa parceria aparece por fora, e quanto mais tempo passa, mais eles se misturam.",
     "fisiologia": [
       "Corpo formado pela união ou pela cooperação entre organismos distintos. Aparência, textura e comportamento mudam conforme o Tipo de Simbionte escolhido."
     ],
@@ -2715,7 +2715,7 @@
     "mana": -2,
     "estamina": 1,
     "movimento": 0,
-    "descricao": "Corpo semissólido, sem osso e sem órgão em lugar fixo. Passa por qualquer fresta de 15 cm, amassa queda que quebraria outro e escorrega de agarrão, mas nada rígido veste ele sem adaptação. A Composição do Núcleo diz do que ele é feito, e comer o bastante faz a massa crescer de Coeso a Colossal.",
+    "descricao": "Corpo meio sólido, sem osso e sem órgão em lugar fixo. Passa por qualquer fresta de 15 cm, amortece queda que quebraria outra pessoa e escorrega de quem tenta agarrar, mas nada rígido serve nele sem adaptar antes. A Composição do Núcleo diz do que ele é feito, e comendo bastante a massa cresce de Coeso até Colossal.",
     "fisiologia": [
       "Corpo semissólido: não possui ossos nem órgãos em posições fixas.",
       "Armaduras e vestimentas rígidas precisam ser adaptadas ao corpo do Slime."
@@ -3051,7 +3051,7 @@
     "vida": -2,
     "mana": 4,
     "movimento": 0,
-    "descricao": "Pequeno ou normal, e com Mana muito acima do que o tamanho sugere. Faz truque sensorial o tempo todo, de graça, e ilusão grande quando resolve levar a sério. Nada disso machuca: o estrago é sempre o que a vítima faz com a informação errada.",
+    "descricao": "Pode ser pequeno ou de tamanho normal, e tem muito mais Mana do que o tamanho faz parecer. Faz truquezinho sensorial toda hora, de graça, e ilusão grande quando resolve levar a sério. Nenhuma delas machuca ninguém; o estrago vem do que a vítima faz acreditando na coisa errada.",
     "fisiologia": [
       "Tamanho Pequeno ou Normal, definido na criação."
     ],
@@ -3109,7 +3109,7 @@
       "itens_comuns_total": 2,
       "retroativos_em_transformacao": false
     },
-    "descricao": "Não envelhece e não esquece: são séculos de leitura empilhados num Intelecto que passa do teto que vale pra todo mundo. Vem de Nadalon, fala Finlandês, e escolhe uma das seis Linhagens: é isso que separa um Elfo de Sombras de um Elfo de Tempestades. E o tempo não passa em vão: a Linhagem se aprofunda quando ele vira Ancião e se abre por inteiro quando vira Milenar.",
+    "descricao": "Não envelhece e não esquece nada. São séculos de leitura acumulados num Intelecto que passa do limite que vale pra todo mundo. Vem de Nadalon, fala Finlandês e escolhe uma das seis Linhagens, que é o que diferencia um Elfo de Sombras de um Elfo de Tempestades. A Linhagem fica mais forte quando ele vira Ancião e se abre por completo quando chega a Milenar.",
     "fisiologia": [
       "Não envelhece e é imune a envelhecimento sobrenatural."
     ],
@@ -3545,7 +3545,7 @@
       "itens_comuns_total": 0,
       "retroativos_em_transformacao": false
     },
-    "descricao": "Morreu, foi parar em Arkarin e voltou. Carrega um Fragmento de Arkarin preso à alma, que vibra perto de espírito preso e de qualquer coisa mexida pela morte. Quanto mais tempo passou do outro lado, mais ele trouxe de volta, e a Condição Ancestral escolhida explica por que a Mulher Carmesim deixou ele sair.",
+    "descricao": "Morreu, foi parar em Arkarin e voltou. Trouxe um Fragmento de Arkarin preso na alma, que vibra perto de espírito preso e de tudo que a morte tocou. Quanto mais tempo ficou do outro lado, mais coisa trouxe de volta, e a Condição Ancestral escolhida explica por que a Mulher Carmesim deixou ele ir embora.",
     "fisiologia": [
       "Continua sendo um ser vivo, salvo alteração declarada pela Condição Ancestral escolhida.",
       "Carrega um Fragmento de Arkarin ligado à própria alma."
@@ -3796,7 +3796,7 @@
       "Grande",
       "Enorme"
     ],
-    "descricao": "Uma consciência que se formou lá fora e escolheu um corpo para caber aqui. Muda de forma e de tamanho quando quer, sabe demais sobre duas coisas muito específicas e quase nada sobre sentir o que os outros sentem. A Origem Cósmica diz de que tipo de coisa ele nasceu (estrela, planeta, buraco negro) e o tempo neste mundo vai devolvendo o que ficou do outro lado, de Fragmento a Íntegro.",
+    "descricao": "Uma consciência que nasceu lá fora e escolheu um corpo pra caber aqui. Muda de forma e de tamanho quando quer, sabe demais sobre duas coisas bem específicas e quase nada sobre o que os outros sentem. A Origem Cósmica diz de onde ele veio (estrela, planeta, buraco negro), e o tempo neste mundo vai devolvendo o que ficou pra trás, de Fragmento até Íntegro.",
     "fisiologia": [
       "Não precisa comer, beber ou dormir. Para concluir um descanso, medita pelo tempo normal e pode perceber os arredores, mas qualquer atividade além de observação simples interrompe a recuperação.",
       "É imune a doenças comuns ou sobrenaturais, mas não a venenos ou outras condições que apenas produzam sintomas semelhantes.",
@@ -4187,7 +4187,7 @@
       "nivel_por_slot": 2,
       "formula": "1 + piso(Nível Total / 2)"
     },
-    "descricao": "Construto consciente saído da A.X.I.S, com núcleo próprio e vontade própria: não deve obediência a criador nenhum. Cura não funciona nele: quem conserta é engenheiro. O chassi, bípede ou quadrúpede, é decisão de criação. Fala Inglês.",
+    "descricao": "Um construto consciente que saiu da A.X.I.S, com núcleo e vontade próprios, e que não deve obediência a criador nenhum. Cura não funciona nele; quando quebra, quem conserta é um engenheiro. Na criação você escolhe o chassi, bípede ou quadrúpede. Fala Inglês.",
     "rotulo_variante": "Chassi",
     "descricao_variantes": "Escolha o corpo em que o núcleo foi montado. Bípede tem mãos e usa equipamento comum; quadrúpede troca as mãos por velocidade.",
     "fisiologia": [
@@ -4756,7 +4756,7 @@
     "legados_adicionais": 1,
     "rotulo_variante": "Projeto de Clonagem",
     "descricao_variantes": "Escolha um único Projeto. Ele representa a finalidade para a qual o Clone foi criado.",
-    "descricao": "Foi feito à imagem de outra pessoa, e sabe disso. Copia aparência, voz, digital e retina do Original, e de vez em quando lembra de alguma coisa que nunca viveu. O Projeto que motivou a clonagem decide o resto. Fala Ao Contrário.",
+    "descricao": "Foi feito à imagem de outra pessoa, e sabe disso. Tem a mesma aparência, voz, digital e retina do Original, e de vez em quando lembra de coisas que nunca viveu. O Projeto por trás da clonagem define o resto. Fala Ao Contrário.",
     "fisiologia": [
       "É biologicamente vivo e precisa respirar, alimentar-se, dormir e descansar normalmente.",
       "A aparência pode reproduzir outra raça, mas o Clone possui somente as características raciais deste pacote."
@@ -4944,7 +4944,7 @@
       "campo": "periciasMemoria",
       "titulo": "Perícia das Memórias"
     },
-    "descricao": "É um personagem de outra campanha que atravessou pra esta. Mantém nome, cara, memória e reputação; perde nível e ficha. O que sobrou de lá volta como uma Assinatura (uma técnica marcante, renomeada e convertida) e um Legado a mais.",
+    "descricao": "Um personagem de outra campanha que atravessou pra esta. Chega com o mesmo nome, rosto, memória e fama, mas perde o nível e a ficha. O que sobrou de lá volta como uma Assinatura (uma técnica marcante, com nome novo e adaptada) e um Legado extra.",
     "caracteristicas": [
       {
         "id": "identidade-preservada",
@@ -5147,7 +5147,7 @@
       "expressos": 2,
       "surto_adicional": 1
     },
-    "descricao": "Um corpo só, montado com mais de uma criatura. Não herda o pacote racial de nenhuma das partes, e sim a mistura: aguenta melhor tanto o que ataca a carne quanto o que ataca a cabeça, e conhece Fragmentos que consegue expressar por algumas rodadas antes de o corpo cobrar a conta.",
+    "descricao": "Um corpo só, montado com pedaços de mais de uma criatura. Fica com uma mistura das partes, sem herdar o pacote de raça de nenhuma delas: aguenta melhor o que ataca o corpo e o que ataca a cabeça, e conhece Fragmentos que consegue usar por algumas rodadas antes do corpo cobrar a conta.",
     "fisiologia": [
       "É um ser vivo e pode ser tratado normalmente com Medicina.",
       "Seu corpo reúne diferentes criaturas, corpos, almas ou essências, mas não acumula os pacotes raciais das partes que o formaram."
@@ -5346,7 +5346,7 @@
       "conhecidas_base": 3,
       "campo": "maldicoesConhecidasIds"
     },
-    "descricao": "Não é profissão nem gênero: é uma natureza mágica que se adquire e não se devolve. Enxerga maldição, pacto e possessão a distância, tece maldição própria, e quando falta Mana paga com Vida. Fala Celta, e ninguém domina as artes do Fluxo como as de Salém.",
+    "descricao": "Bruxa é uma natureza mágica, e qualquer pessoa pode acabar virando uma. Depois que vem, não tem volta. Enxerga maldição, pacto e possessão de longe, cria as próprias maldições e, quando a Mana acaba, paga com Vida. Fala Celta, e ninguém entende tanto de Fluxo quanto as bruxas de Salém.",
     "fisiologia": [
       "Bruxa é uma natureza mágica adquirida, não uma profissão nem uma identidade de gênero.",
       "Permanece um ser vivo, salvo transformação narrativa posterior declarada pelo mestre."
@@ -5550,7 +5550,7 @@
       "fluxo": 20
     },
     "legados_adicionais": 1,
-    "descricao": "O Onírico é um ser nascido em Sonhar, o mundo dos sonhos. Ele não é uma pessoa adormecida nem desaparece quando alguém acorda. Seu corpo é feito da matéria de Sonhar, por isso consegue dobrar pequenas partes da realidade, entrar nos sonhos de outras criaturas e trazer sonhos ou pesadelos para uma luta. A Parte do Sonhar escolhida mostra que lado desse mundo mais marcou sua criação.",
+    "descricao": "Nasceu em Sonhar, o mundo dos sonhos, e continua existindo mesmo quando todo mundo acorda. O corpo é feito da matéria de lá, então consegue dobrar pedacinhos da realidade, entrar no sonho dos outros e trazer sonho ou pesadelo pra dentro de uma luta. A Parte do Sonhar escolhida mostra qual lado desse mundo mais marcou ele.",
     "fisiologia": [
       "Para concluir um descanso completo, precisa dormir e se ligar novamente a Sonhar. Enquanto faz isso, fica alheio aos arredores como qualquer criatura adormecida.",
       "É imune a efeitos que forcem o sono, mas continua vulnerável a nocaute e a outras formas de inconsciência."
@@ -5919,7 +5919,7 @@
       "vontade": 4
     },
     "legados_adicionais": 1,
-    "descricao": "Um Divino pode ser um Deus ou um Semideus. O Semideus herdou poder de um pai ou de uma mãe divina. O Deus já nasceu divino ou virou um porque muita gente passou a acreditar nele. Os dois escolhem um Domínio, mas o Deus começa bem mais forte e ainda cresce quando ganha fiéis.",
+    "descricao": "Pode ser um Deus ou um Semideus. O Semideus herdou o poder do pai ou da mãe divina. O Deus já nasceu assim ou virou um porque muita gente começou a acreditar nele. Os dois escolhem um Domínio, mas o Deus começa bem mais forte e cresce ainda mais conforme ganha fiéis.",
     "fisiologia": [
       "Não envelhece e não pega doenças comuns. Ainda pode ser ferido, envenenado ou amaldiçoado."
     ],
@@ -6526,7 +6526,7 @@
     "mana": 0,
     "indisponivel": true,
     "motivo_indisponivel": "Entidade não é uma opção de raça mecânica. Ela existe no Livro das Entidades por meio de seu conto.",
-    "descricao": "Entidade não é uma raça comum e não concede atributos, poderes ou características. Cada Entidade nasce de um conceito e só existe depois que esse conceito recebe um conto.",
+    "descricao": "Fica fora das raças comuns e não dá atributo, poder ou característica nenhuma. Cada Entidade nasce de uma ideia e só passa a existir quando essa ideia ganha um conto.",
     "fisiologia": [],
     "caracteristicas": [],
     "recursos_provisorios": false
@@ -6544,6 +6544,6 @@
     "fisiologia": [],
     "caracteristicas": [],
     "recursos_provisorios": false,
-    "descricao": "Nenhuma raça do catálogo serve? Escolha esta e escreva o nome livremente na ficha. Sem bônus ou característica própria: mecanicamente é uma raça em branco; o que ela representa fica a critério do mestre."
+    "descricao": "Não achou nenhuma raça que sirva? Escolha esta e escreva o nome que quiser na ficha. Ela não dá bônus nem característica nenhuma, então o que ela representa fica por conta do mestre."
   }
 ]

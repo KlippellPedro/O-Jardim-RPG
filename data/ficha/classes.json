@@ -13,7 +13,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Fica na frente porque alguém tem que ficar. Aguenta pancada, puxa o inimigo pra si e comanda um batalhão que luta melhor perto dele.",
+    "descricao": "Alguém tem que ficar na frente, e ele fica. Segura a pancada, chama a atenção do inimigo pra si e comanda um batalhão que luta melhor quando ele está por perto.",
     "dt_efeitos": {
       "rotulo": "DT de Guerreiro",
       "pericia": "intimidacao",
@@ -611,7 +611,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Não vai a pé. Luta de dentro de um veículo que ele mesmo melhora peça por peça, e o veículo cresce junto com o personagem.",
+    "descricao": "Luta de dentro de um veículo que ele mesmo vai melhorando peça por peça. Quanto mais o personagem sobe, mais o veículo cresce junto.",
     "dt_efeitos": {
       "rotulo": "Manobra e Perseguição",
       "pericia": "pilotagem",
@@ -1195,7 +1195,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-21",
-    "descricao": "Foi treinado por um clã e ainda deve satisfação a ele. Sobe na hierarquia, ganha armas e técnicas conforme o clã vai confiando, e rende muito mais quando ninguém sabe que ele está ali.",
+    "descricao": "Aprendeu tudo com um clã e ainda responde a ele. Conforme ganha a confiança dos superiores, sobe na hierarquia e recebe armas e técnicas novas. Rende muito mais quando ninguém percebeu que ele chegou.",
     "dt_efeitos": {
       "rotulo": "DT do Ninja",
       "pericia": "furtividade",
@@ -1767,7 +1767,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Resolve com plateia o que os outros resolvem no braço. Fama abre porta, presença segura atenção, e uma boa apresentação costuma valer mais que uma ameaça.",
+    "descricao": "Onde os outros partem pra briga, ele sobe no palco. A fama abre portas, a presença prende a atenção de todo mundo, e uma boa apresentação muitas vezes resolve mais que uma ameaça.",
     "dt_efeitos": {
       "rotulo": "DT de Palco",
       "pericia": "atuacao",
@@ -2365,7 +2365,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Uma espada, a vida inteira. Troca de postura no meio da luta e encadeia golpes que só fazem sentido em sequência: errar um estraga os outros.",
+    "descricao": "Passou a vida inteira com uma espada na mão. Muda de postura no meio da luta e encadeia golpes em sequência, e quando erra um, o resto da sequência vai junto.",
     "dt_efeitos": {
       "rotulo": "DT do Espadachim",
       "pericia": "luta",
@@ -2886,7 +2886,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Sem arma, sem armadura, sem desculpa. Marca o inimigo golpe a golpe e ganha a briga no fôlego, não no primeiro impacto.",
+    "descricao": "Briga de mão limpa, sem arma e sem armadura. Vai marcando o inimigo golpe a golpe e costuma ganhar no cansaço, quando o outro já não aguenta mais.",
     "dt_efeitos": {
       "rotulo": "Manobra e Marca",
       "pericia": "luta",
@@ -3512,7 +3512,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Trabalha longe e chega preparado. Posição, munição e paciência valem mais que reflexo, e ele sempre sabe quantos tiros ainda tem.",
+    "descricao": "Prefere lutar de longe e nunca chega sem plano. Escolhe a posição com calma, cuida da munição e sabe sempre quantos tiros ainda tem.",
     "dt_efeitos": {
       "rotulo": "DT do Atirador",
       "pericia": "pontaria",
@@ -4050,7 +4050,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Mantém o grupo de pé. Diagnostica, estabiliza quem caiu e devolve gente pra luta. O que ele não faz é desfazer o que já aconteceu.",
+    "descricao": "Segura o grupo de pé. Descobre o que o aliado tem, estabiliza quem caiu e manda de volta pra luta. Só não consegue desfazer o que já aconteceu.",
     "dt_efeitos": {
       "rotulo": "DT do Médico",
       "pericia": "cura",
@@ -4634,7 +4634,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Escolhe alguém pra proteger e leva a sério. Cria vínculo, obriga o inimigo a decidir em quem bater e absorve o que vier, até onde a reação e a cena aguentarem.",
+    "descricao": "Escolhe uma pessoa pra proteger e leva isso muito a sério. Cria um vínculo com ela, obriga o inimigo a escolher em quem bater e aguenta o que vier, até onde a reação e a cena deixarem.",
     "dt_efeitos": {
       "rotulo": "DT do Guardião",
       "pericia": "intimidacao",
@@ -5210,7 +5210,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Estuda a presa antes de encostar nela. Cada tipo de criatura pede um método, e o que ele aprende sobre uma vale pra todas daquela família.",
+    "descricao": "Estuda a presa antes de chegar perto. Cada tipo de criatura pede um jeito diferente de caçar, e o que ele aprende sobre uma serve pra toda a família dela.",
     "dt_efeitos": {
       "rotulo": "DT do Caçador",
       "pericia": "sobrevivencia",
@@ -5907,7 +5907,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Chega com as coisas montadas. Prepara invenções que duram pouco, melhora o equipamento do grupo e força a máquina além do limite quando a hora pede, sabendo o que isso vai custar.",
+    "descricao": "Chega com tudo montado. Prepara invenções de uso rápido, melhora o equipamento do grupo e, quando precisa, força a máquina além do limite sabendo muito bem o preço.",
     "pericias_concedidas": [
       {
         "id": "oficio-engenharia",
@@ -6722,7 +6722,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Transforma o que encontra pelo caminho em elixires, bombas e antídotos. Você escolhe as doses durante o descanso, e tudo o que não usar expira no descanso seguinte.",
+    "descricao": "Pega o que encontra pelo caminho e transforma em elixir, bomba ou antídoto. Você prepara as doses no descanso, e o que sobrar estraga até o descanso seguinte.",
     "pericias_concedidas": [
       {
         "id": "oficio-alquimia",
@@ -7430,7 +7430,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Ganha a briga antes dela começar. Contato certo, informação na hora e estoque bem escolhido resolvem mais que dado. E não, ele não fabrica dinheiro.",
+    "descricao": "Resolve a briga antes dela começar. Conhece a pessoa certa, fica sabendo das coisas na hora e tem sempre o item certo no estoque. Dinheiro do nada ele não faz, por mais que o grupo peça.",
     "pericias_concedidas": [
       {
         "id": "oficio-comercio",
@@ -8077,7 +8077,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Classe especial aberta a qualquer Árvore e ao Vazio. O título pertence a quem supera os limites da própria dimensão; os picos de poder são curtos e contados, e nenhum deles impede de morrer.",
+    "descricao": "O título fica com quem passa dos limites da própria dimensão. Os picos de poder duram pouco, são contados, e nenhum deles salva ninguém da morte.",
     "dt_efeitos": {
       "rotulo": "DT do Campeão Dimensional",
       "pericia": "intimidacao",
@@ -8551,7 +8551,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Classe especial do Vazio. Você luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que morreu, mas ainda segue o seu comando.",
+    "descricao": "Luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que já morreu e continua obedecendo às suas ordens.",
     "dt_efeitos": {
       "rotulo": "DT da Maldição",
       "pericia": "intimidacao",
@@ -9282,7 +9282,7 @@
         }
       ]
     },
-    "descricao": "Classe especial, aberta a qualquer Árvore. Conjura por cartas preparadas antes: o baralho decide o que você tem em mãos hoje, e o Fluxo nativo decide o que cada carta faz.",
+    "descricao": "Conjura com cartas que prepara antes. O baralho define o que você tem na mão naquele dia, e o seu Fluxo nativo define o que cada carta faz.",
     "dt_efeitos": {
       "rotulo": "DT do Cartista Arcano",
       "pericia": "misticismo",
@@ -9749,7 +9749,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Classe especial da Matriz. Conhece rota, portal e âncora: é por causa dele que o grupo chega em lugar onde não existe estrada.",
+    "descricao": "Conhece as rotas, os portais e as âncoras. Quando o grupo chega num lugar sem estrada nenhuma, foi ele quem levou.",
     "dt_efeitos": {
       "rotulo": "DT do Guia Dimensional",
       "pericia": "misticismo",
@@ -10216,7 +10216,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-25",
-    "descricao": "Classe especial de Anima. Cada Caçador vincula a própria alma a uma Zanpakutō, patrulha a fronteira entre vivos e mortos e purifica espíritos corrompidos. O nome da lâmina abre o Shikai; dominá-la por completo desperta a Bankai.",
+    "descricao": "Liga a própria alma a uma Zanpakutō e passa a vida patrulhando a fronteira entre vivos e mortos, purificando espíritos corrompidos. Quem descobre o nome da lâmina abre o Shikai, e quem domina ela por completo desperta a Bankai.",
     "dt_efeitos": {
       "rotulo": "DT do Caçador das Almas",
       "pericia": "misticismo",
@@ -10891,7 +10891,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Classe especial do Limiar. Transforma história, presságio e verdade pequena em apoio pro grupo. O que ele conta tem uma tendência incômoda a acontecer.",
+    "descricao": "Conta histórias, presságios e pequenas verdades que ajudam o grupo. O incômodo é que o que ele conta costuma acontecer.",
     "dt_efeitos": {
       "rotulo": "DT do Escritor de Contos",
       "pericia": "enganacao",
@@ -11355,7 +11355,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Classe especial, aberta a qualquer Árvore. Não luta sozinho: invoca. Escolhe do Catálogo de Invocações a criatura que vai lutar ao seu lado, e decide a cada pacto se chama mais uma ou fortalece a que já tem.",
+    "descricao": "Luta com uma criatura invocada do lado. Escolhe ela no Catálogo de Invocações e, a cada pacto, decide se chama mais uma ou se fortalece a que já tem.",
     "dt_efeitos": {
       "rotulo": "DT do Invocador",
       "pericia": "misticismo",
@@ -12030,7 +12030,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-25",
-    "descricao": "Classe especial da Matriz, de Éon ou de Vórtice. Vive entre Árvores e dimensões, e converte estrada rodada em capacidade de se virar em qualquer lugar.",
+    "descricao": "Vive pulando entre Árvores e dimensões. Cada estrada que percorre vira mais um jeito de se virar em qualquer lugar.",
     "progressao": [
       {
         "nivel": 1,
@@ -12612,7 +12612,7 @@
         }
       ]
     },
-    "descricao": "Fluxo puro, direto, sem intermediário nenhum. É a forma mais simples de conjurar e a mais difícil de fazer bem.",
+    "descricao": "Usa o Fluxo puro, direto da fonte. É o jeito mais simples de conjurar e também o mais difícil de dominar.",
     "dt_efeitos": {
       "rotulo": "DT do Canalizador",
       "pericia": "misticismo",
@@ -13212,7 +13212,7 @@
         }
       ]
     },
-    "descricao": "Alinha o Fluxo nativo a catalisadores de fora pra fazer o que ele sozinho não faria. Nada disso passa a morar na alma: é sempre empréstimo.",
+    "descricao": "Junta o próprio Fluxo com catalisadores de fora pra conseguir o que sozinho não conseguiria. Tudo isso é emprestado e nunca fica guardado na alma.",
     "dt_efeitos": {
       "rotulo": "DT do Sintonizador",
       "pericia": "misticismo",
@@ -13776,7 +13776,7 @@
         }
       ]
     },
-    "descricao": "Trabalha fora do combate. Ritual não tem círculo, cobra tempo e compromete a Mana desde o primeiro minuto: se interromperem, a Mana já foi.",
+    "descricao": "Trabalha longe do combate. Ritual não tem círculo, leva tempo e prende a Mana desde o primeiro minuto. Se alguém interromper, a Mana já era.",
     "dt_efeitos": {
       "rotulo": "Teste do Rito e Interrupção",
       "pericia": "misticismo",
@@ -14315,7 +14315,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-25",
-    "descricao": "Classe especial da A.X.I.S. Entra na Malha pra derrubar a magia dos outros. Não conjura Fluxo natural, atrapalha quem conjura.",
+    "descricao": "Entra na Malha pra desmontar a magia dos outros e atrapalhar quem está conjurando. Fluxo natural mesmo, ele não usa.",
     "progressao": [
       {
         "nivel": 1,
@@ -14784,7 +14784,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-20",
-    "descricao": "Transforma Mantimentos em porções que sustentam o grupo dentro e fora de combate. Bebidas agem rápido, lanches acompanham a marcha e refeições oferecem benefícios mais duradouros.",
+    "descricao": "Pega os Mantimentos e faz comida que segura o grupo, em combate ou fora dele. Bebida faz efeito na hora, lanche vai junto na caminhada e refeição dá um benefício que dura mais.",
     "pericias_concedidas": [
       {
         "id": "oficio-cozinha",
@@ -15473,7 +15473,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-25",
-    "descricao": "Lê uma cena antes de qualquer um: pega o detalhe fora do lugar, a mentira mal contada, o padrão que ninguém mais viu. Não é sobre ter uma resposta pronta, é sobre nunca aceitar a primeira explicação.",
+    "descricao": "Olha uma cena e vê antes de todo mundo: o detalhe fora do lugar, a mentira mal contada, o padrão que passou batido. E nunca fica satisfeito com a primeira explicação.",
     "dt_efeitos": {
       "rotulo": "DT do Detetive",
       "pericia": "investigacao",
@@ -15964,7 +15964,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-25",
-    "descricao": "Não nasce com poder nenhum. O que carrega vem de quem já morreu: mate ou chegue perto o bastante de um corpo ainda quente, devore o que sobrou dele, e uma parte real da força da vítima grava um espaço vazio dentro de você.",
+    "descricao": "Nasce sem poder nenhum e pega emprestado de quem morreu. Mate, ou chegue perto de um corpo ainda quente, devore o que sobrou, e uma parte de verdade da força da vítima passa a ocupar um espaço vazio dentro de você.",
     "dt_efeitos": {
       "rotulo": "DT do Devorador",
       "pericia": "luta",
@@ -16441,7 +16441,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-09-11",
-    "descricao": "Classe especial de Baluarte. Escolhe um único elemento primordial, aprofunda esse vínculo até alcançar uma derivação e transforma o campo de batalha por meio dele. Apenas a raríssima aptidão de Avatar permite aprender os outros elementos.",
+    "descricao": "Escolhe um único elemento primordial e vai aprofundando esse laço até chegar numa derivação, usando ele pra mudar o campo de batalha. Aprender os outros elementos só dá pra quem tem a aptidão de Avatar, que é raríssima.",
     "dt_efeitos": {
       "rotulo": "DT da Elementarista",
       "pericia": "misticismo",

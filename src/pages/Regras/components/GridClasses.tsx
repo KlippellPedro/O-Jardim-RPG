@@ -1,14 +1,15 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Search, Sparkles, Sword, X } from 'lucide-react';
+import { Search, Sparkles, Sword, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { IClasse } from '../../../types/catalogo';
 import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
-import { classeTemProgressaoPublicada, formatarResumoClasse } from '../../../services/classeService';
-import { PremiumCard } from '../../../redesign/components/premium/PremiumCard';
+import { classeTemProgressaoPublicada } from '../../../services/classeService';
 import { AuraEspecial } from '../../../redesign/components/premium/AuraEspecial';
 import { obterTemaPorId } from '../../../redesign/themeMap';
 import { salvarPosicaoRetornoRegras } from '../regrasScrollRestoration';
+import { CartaoCatalogo, LinhaRecurso } from './CartaoCatalogo';
+import { obterIconeCatalogo } from './iconesCatalogo';
 
 interface GridClassesProps {
   classes: IClasse[];
@@ -46,14 +47,14 @@ export const GridClasses: React.FC<GridClassesProps> = ({ classes }) => {
       {
         id: 'comuns',
         titulo: 'Classes Comuns',
-        descricao: 'Abertas a personagem de qualquer Árvore. É o patamar-base de progressão: tudo o mais no jogo é medido a partir daqui.',
+        descricao: 'Qualquer personagem, de qualquer Árvore, pode pegar uma delas. São a base do jogo, e todo o resto é medido a partir delas.',
         classes: classes.filter(classe => classe.categoria === 'padrao'),
         especial: false,
       },
       {
         id: 'especiais',
         titulo: 'Classes Especiais',
-        descricao: 'Seguem o mesmo orçamento de poder das comuns, mas são ligadas às Árvores indicadas e liberadas pelo Mestre. Exigem nível total 20 e um acontecimento na história, salvo exceção explícita.',
+        descricao: 'São tão fortes quanto as comuns, só que cada uma pertence a certas Árvores e precisa ser liberada pelo Mestre. Em geral pedem nível total 20 e algum acontecimento na história, a menos que a classe diga o contrário.',
         classes: classes.filter(classe => classe.categoria !== 'padrao'),
         especial: true,
       },
@@ -111,52 +112,30 @@ export const GridClasses: React.FC<GridClassesProps> = ({ classes }) => {
             <p className="relative mt-1 max-w-3xl text-sm leading-relaxed text-gray-400">{grupo.descricao}</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(max(15rem,calc((100%_-_3rem)/3)),1fr))] gap-6">
             {grupo.classes.map((classe, idx) => {
               const arvores = nomesArvores(classe);
               const tema = obterTemaPorId(classe.id);
 
               return (
-                <PremiumCard
+                <CartaoCatalogo
                   key={classe.id}
-                  glowColor={tema.glow}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.28, delay: Math.min(idx * 0.03, 0.24) }}
-                  onClick={() => abrirClasse(classe.id)}
-                  className={`content-auto-list-item cursor-pointer min-h-[180px] p-6 text-left shadow-lg border ${tema.border} ${tema.bg}`}
+                  titulo={classe.titulo}
+                  descricao={classe.descricao}
+                  icone={obterIconeCatalogo(classe.id, Sword)}
+                  tema={tema}
+                  etiqueta={grupo.especial && arvores ? arvores : undefined}
+                  rotuloAcao="Explorar progressão"
+                  concluido={classeTemProgressaoPublicada(classe)}
+                  indice={idx}
+                  onAbrir={() => abrirClasse(classe.id)}
                 >
-                  {/* Background glow blob */}
-                  <div
-                    className="absolute right-0 top-0 -mr-10 -mt-10 h-32 w-32 rounded-full blur-2xl pointer-events-none"
-                    style={{ backgroundColor: tema.glow.replace(/,[\d.]+\)/, ',0.2)') }}
-                  />
-
-                  <div className="relative flex-1">
-                    <h3
-                      className={`mb-2 flex items-center gap-2 text-xl font-bold ${tema.text}`}
-                      style={{ fontFamily: 'Cinzel, serif' }}
-                    >
-                      <Sword size={20} className={tema.icon} />
-                      {classe.titulo}
-                    </h3>
-                    <p className="mb-3 text-sm text-gray-400">{formatarResumoClasse(classe)}</p>
-                    {grupo.especial && arvores && (
-                      <p className={`mb-3 text-xs font-bold uppercase tracking-wider ${tema.tag}`}>
-                        Árvores: {arvores}
-                      </p>
-                    )}
-                    {classeTemProgressaoPublicada(classe) && (
-                      <span className="inline-flex rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                        Progressão completa
-                      </span>
-                    )}
-                  </div>
-
-                  <div className={`mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest ${tema.icon}`}>
-                    Explorar progressão <ArrowRight size={14} />
-                  </div>
-                </PremiumCard>
+                  <LinhaRecurso recurso="vida" rotulo="Vida" valor={classe.vida} />
+                  <LinhaRecurso recurso="mana" rotulo="Mana" valor={classe.mana} />
+                  {classe.estamina !== undefined ? (
+                    <LinhaRecurso recurso="estamina" rotulo="Estamina" valor={classe.estamina} />
+                  ) : null}
+                </CartaoCatalogo>
               );
             })}
           </div>
