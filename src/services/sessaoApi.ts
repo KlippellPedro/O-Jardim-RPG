@@ -83,6 +83,7 @@ export interface BestiarioMonstro {
   pv: number | null;
   defesa: number | null;
   mana: number | null;
+  estamina: number | null;
   iniciativa: number | null;
   ataques: AtaquePayload[];
   pericias: string[];

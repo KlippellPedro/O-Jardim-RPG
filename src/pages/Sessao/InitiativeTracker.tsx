@@ -183,6 +183,7 @@ export const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({ onClose })
       vd: monstro.vd ?? undefined,
       defesa: monstro.defesa ?? undefined,
       mana_maxima: monstro.mana ?? undefined,
+      estamina_maxima: monstro.estamina ?? undefined,
       ataques: monstro.ataques,
       pericias: monstro.pericias,
     };

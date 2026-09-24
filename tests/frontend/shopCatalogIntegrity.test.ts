@@ -268,7 +268,7 @@ test('criaturas comercializadas possuem ficha e listas estruturadas', () => {
   const monstros = catalogo.entradas.filter(item => item.tipo === 'monstro');
   assert.ok(monstros.length > 0);
   for (const monstro of monstros) {
-    for (const campo of ['pv', 'nivel', 'vd', 'defesa', 'iniciativa']) {
+    for (const campo of ['pv', 'estamina', 'nivel', 'vd', 'defesa', 'iniciativa']) {
       assert.ok(Number.isFinite(monstro.conteudo[campo]) && monstro.conteudo[campo] >= 0, `${monstro.id}: ${campo} inválido`);
     }
     assert.ok(String(monstro.conteudo.deslocamento ?? '').trim(), `${monstro.id}: deslocamento ausente`);

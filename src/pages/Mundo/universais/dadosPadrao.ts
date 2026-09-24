@@ -54,7 +54,7 @@ const bestiarioPadrao = (): IRegistro[] => ordenarPorTitulo(ENTRADAS.filter((ent
     subtitulo: [c.classe, c.subtipo].filter(Boolean).join(' · '),
     descricao: texto(c.descricao),
     campos: camposCom([
-      ['Nível', c.nivel], ['VD', c.vd], ['Vida', c.pv], ['Defesa', c.defesa], ['Iniciativa', c.iniciativa],
+      ['Nível', c.nivel], ['VD', c.vd], ['Vida', c.pv], ['Mana', c.mana], ['Estamina', c.estamina], ['Defesa', c.defesa], ['Iniciativa', c.iniciativa],
       ['Deslocamento', c.deslocamento], ['Contrata-se como', c.funcao],
     ]),
     blocos,

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { Check, Heart, Minus, Plus, RefreshCw, Search, Shield, Skull, Sparkles, X, Zap } from 'lucide-react';
+import { Activity, Check, Heart, Minus, Plus, RefreshCw, Search, Shield, Skull, Sparkles, X, Zap } from 'lucide-react';
 import { sessaoApi, type BestiarioMonstro } from '../../../services/sessaoApi';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
 
@@ -60,6 +60,7 @@ const Cartao = ({ monstro, adicionados, ocupado, onAdicionar }: ICartaoProps) =>
             {monstro.pv != null ? <span className="flex items-center gap-1 rounded-md bg-red-400/10 px-1.5 py-0.5 text-red-200"><Heart size={10} aria-hidden="true" /> {monstro.pv}</span> : null}
             {monstro.defesa != null ? <span className="flex items-center gap-1 rounded-md bg-white/[0.06] px-1.5 py-0.5 text-white/75"><Shield size={10} aria-hidden="true" /> {monstro.defesa}</span> : null}
             {monstro.mana != null ? <span className="flex items-center gap-1 rounded-md bg-sky-400/10 px-1.5 py-0.5 text-sky-200"><Zap size={10} aria-hidden="true" /> {monstro.mana}</span> : null}
+            {monstro.estamina != null ? <span className="flex items-center gap-1 rounded-md bg-emerald-400/10 px-1.5 py-0.5 text-emerald-200" title="Estamina"><Activity size={10} aria-hidden="true" /> {monstro.estamina}</span> : null}
             {monstro.iniciativa != null ? <span className="rounded-md bg-white/[0.06] px-1.5 py-0.5 text-white/60">Ini {monstro.iniciativa}</span> : null}
           </div>
         </div>

@@ -1297,6 +1297,7 @@ def listar_bestiario(
                 "pv": _inteiro_do_catalogo(conteudo.get("pv")),
                 "defesa": _inteiro_do_catalogo(conteudo.get("defesa")),
                 "mana": _inteiro_do_catalogo(conteudo.get("mana")),
+                "estamina": _inteiro_do_catalogo(conteudo.get("estamina")),
                 "iniciativa": _inteiro_do_catalogo(conteudo.get("iniciativa")),
                 "ataques": conteudo.get("ataques") or [],
                 "pericias": conteudo.get("pericias") or [],

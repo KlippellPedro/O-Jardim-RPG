@@ -1,6 +1,18 @@
 {
   "itens": [
     {
+      "id": "2026-09-24-bestiario-estamina",
+      "data": "2026-09-24",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "Estamina no Bestiário",
+      "detalhes": [
+        "Todas as criaturas do Bestiário agora têm Estamina, ao lado de Vida e Mana.",
+        "Ao chamar uma criatura para a Sessão ao Vivo, ela já entra com a barra de Estamina.",
+        "A ficha do Bestiário no Mundo mostra Mana e Estamina."
+      ]
+    },
+    {
       "id": "2026-09-24-unicos",
       "data": "2026-09-24",
       "tipo": "novo",
