@@ -31,6 +31,10 @@ const VALID_MODEL_IDS = new Set([
 const rememberedModelIds = new Set<string>();
 let modelCacheHydrated = false;
 const globalTargetPosition = new THREE.Vector3();
+/** Distância da câmera ao focar: o Banco Lunar é bem maior que uma Árvore. */
+const FOCUS_DISTANCE_TREE = 15;
+const FOCUS_DISTANCE_BANK = 30;
+const focusDistanceFor = (id: string | null) => (id === BANK_MODEL_KEY ? FOCUS_DISTANCE_BANK : FOCUS_DISTANCE_TREE);
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 
 function getBrowserModelStorage(): ModelCacheStorage | null {
@@ -270,12 +274,14 @@ const EasterEggUniverses = memo(({ animate }: { animate: boolean }) => {
 });
 
 const MoonBankNode = memo(({
+  isSelected,
   onClick,
   onModelLoaded,
   detailed,
   animate,
   showGlow,
 }: {
+  isSelected: boolean;
   onClick: () => void;
   onModelLoaded: (modelId: string) => void;
   detailed: boolean;
@@ -287,10 +293,12 @@ const MoonBankNode = memo(({
   const offset = COSMIC_TREES.length * GOLDEN_ANGLE;
 
   useFrame((state) => {
+    if (isSelected && groupRef.current) globalTargetPosition.copy(groupRef.current.position);
     if (!animate) return;
     const time = state.clock.elapsedTime;
     const angle = time * BANCO_LUNAR_SPEED + offset;
-    if (groupRef.current) {
+    // Selecionado, o Banco para de orbitar, como as Árvores, pra câmera não perseguir.
+    if (groupRef.current && !isSelected) {
       groupRef.current.position.x = Math.cos(angle) * BANCO_LUNAR_RADIUS;
       groupRef.current.position.z = Math.sin(angle) * BANCO_LUNAR_RADIUS;
       groupRef.current.position.y = BANCO_LUNAR_HEIGHT;
@@ -308,17 +316,17 @@ const MoonBankNode = memo(({
       onClick={(event) => { event.stopPropagation(); onClick(); }}
     >
       <group ref={visualRef}>
-        {showGlow && <GlowSprite color={BANCO_LUNAR_INFO.cor} isSelected={false} />}
-        <mesh>
-          <sphereGeometry args={[2, 10, 10]} />
+        {showGlow && <GlowSprite color={BANCO_LUNAR_INFO.cor} isSelected={isSelected} />}
+        <mesh position={[0, 2.5, 0]}>
+          <sphereGeometry args={[5, 10, 10]} />
           <meshBasicMaterial visible={false} />
         </mesh>
         <Suspense fallback={<TreePlaceholder color={BANCO_LUNAR_INFO.cor} />}>
           {detailed ? <MoonBankModel onLoaded={onModelLoaded} /> : <TreePlaceholder color={BANCO_LUNAR_INFO.cor} />}
         </Suspense>
       </group>
-      <Billboard position={[0, 2.6, 0]}>
-        <Text fontSize={0.5} color={BANCO_LUNAR_INFO.cor} anchorX="center" anchorY="middle">{BANCO_LUNAR_INFO.nome}</Text>
+      <Billboard position={[0, isSelected ? 9 : 7.6, 0]}>
+        <Text fontSize={isSelected ? 1.2 : 0.7} color={BANCO_LUNAR_INFO.cor} anchorX="center" anchorY="middle">{BANCO_LUNAR_INFO.nome}</Text>
       </Billboard>
     </group>
   );
@@ -424,7 +432,17 @@ const CameraRig = memo(({
     const selectedIndex = COSMIC_TREES.findIndex((tree) => tree.deidadeId === selectedDeidadeId);
     const selectedTree = selectedIndex >= 0 ? COSMIC_TREES[selectedIndex] : null;
 
-    if (!selectedTree) {
+    if (selectedDeidadeId === BANK_MODEL_KEY) {
+      const bankOffset = COSMIC_TREES.length * GOLDEN_ANGLE;
+      globalTargetPosition.set(
+        Math.cos(bankOffset) * BANCO_LUNAR_RADIUS,
+        BANCO_LUNAR_HEIGHT,
+        Math.sin(bankOffset) * BANCO_LUNAR_RADIUS,
+      );
+      scratch.copy(camera.position).sub(globalTargetPosition);
+      if (scratch.lengthSq() < 0.0001) scratch.set(0, 0.55, 1);
+      camera.position.copy(scratch.normalize().multiplyScalar(FOCUS_DISTANCE_BANK).add(globalTargetPosition));
+    } else if (!selectedTree) {
       globalTargetPosition.set(0, 0, 0);
       camera.position.set(0, 20, 40);
     } else {
@@ -436,7 +454,7 @@ const CameraRig = memo(({
       );
       scratch.copy(camera.position).sub(globalTargetPosition);
       if (scratch.lengthSq() < 0.0001) scratch.set(0, 0.55, 1);
-      camera.position.copy(scratch.normalize().multiplyScalar(15).add(globalTargetPosition));
+      camera.position.copy(scratch.normalize().multiplyScalar(FOCUS_DISTANCE_TREE).add(globalTargetPosition));
     }
 
     controls.target.copy(globalTargetPosition);
@@ -457,8 +475,8 @@ const CameraRig = memo(({
         scratch.set(0, 20, 40);
         cameraPosition.lerp(scratch, step * 1.5);
       }
-    } else if (cameraPosition.distanceToSquared(globalTargetPosition) > 225) {
-      scratch.copy(cameraPosition).sub(globalTargetPosition).normalize().multiplyScalar(15).add(globalTargetPosition);
+    } else if (cameraPosition.distanceToSquared(globalTargetPosition) > focusDistanceFor(selectedDeidadeId) ** 2) {
+      scratch.copy(cameraPosition).sub(globalTargetPosition).normalize().multiplyScalar(focusDistanceFor(selectedDeidadeId)).add(globalTargetPosition);
       cameraPosition.lerp(scratch, step * 2);
     }
 
@@ -608,7 +626,11 @@ export const CosmicTreeViewer: React.FC<CosmicTreeViewerProps> = ({
         </mesh>
 
         <MoonBankNode
-          onClick={onOpenBancoLunar}
+          isSelected={selectedDeidadeId === BANK_MODEL_KEY}
+          onClick={() => {
+            if (selectedDeidadeId === BANK_MODEL_KEY) onOpenBancoLunar();
+            else onSelectDeidade(BANK_MODEL_KEY);
+          }}
           onModelLoaded={onModelLoaded}
           detailed={detailedModels.has(BANK_MODEL_KEY)}
           animate={world.animate}

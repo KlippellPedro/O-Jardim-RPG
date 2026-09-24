@@ -52,7 +52,8 @@ import sys
 import math
 import argparse
 import numpy as np
-from mathutils import Vector
+from mathutils import Vector, Quaternion, Matrix
+import bmesh
 
 
 def parse_args():
@@ -67,6 +68,7 @@ def parse_args():
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--out", required=True)
     parser.add_argument("--mode", default="organica", choices=["organica", "axis"])
+    parser.add_argument("--estilo", default="padrao", help="silhueta da arvore (ver ESTILOS); padrao = gerador original")
     return parser.parse_args(argv)
 
 
@@ -564,6 +566,378 @@ def build_axis_glass(dome_radius, mats):
     return glass
 
 
+# ── Silhuetas próprias por Árvore (--estilo) ──
+# Galhos ramificados de verdade (recursivos, com torção e gravidade) em vez de
+# um tronco reto com blobs. Tudo é gerado com bmesh em UMA malha de tronco e
+# UMA de folhagem, então a hierarquia exportada é a mesma de sempre
+# (Tree_Trunk, Tree_Foliage, Dome_Base, Dome_Glass).
+# Cada estilo é só dados; `extras` adiciona a assinatura visual da Árvore.
+# Materiais da folhagem: índice 0 = folha, índice 1 = brilho (emissivo).
+
+ESTILOS = {
+    # Gênese: copa larga de cerejeira, pétalas flutuando.
+    "genese": dict(h=1.25, r=0.15, torcao=0.18, prof=3, filhos=3, abertura=44, encolhe=0.72,
+                   grav=0.35, comp=0.55, folhas=2, folha_r=0.30, folha_esc=(1, 1, 0.8), jitter=0.20,
+                   brilho=0.0, tronco=(0.30, 0.19, 0.14), extras=[("petalas", 16)]),
+    # Éon: tronco antigo, retorcido e grosso; anéis de tempo dourados.
+    "eon": dict(h=1.0, r=0.24, torcao=0.55, prof=3, filhos=2, abertura=58, encolhe=0.74,
+                grav=0.15, comp=0.55, folhas=2, folha_r=0.26, folha_esc=(1, 1, 0.7), jitter=0.25,
+                brilho=0.0, tronco=(0.20, 0.15, 0.10), extras=[("aneis", 2)], raizes=5),
+    # Alétheia: esguia, folhas em cristais dourados que brilham.
+    "aletheia": dict(h=1.4, r=0.11, torcao=0.10, prof=3, filhos=3, abertura=34, encolhe=0.74,
+                     grav=0.45, comp=0.5, folhas=4, folha_r=0.26, folha_esc=(0.34, 0.34, 1.4), jitter=0.06,
+                     brilho=1.3, tronco=(0.34, 0.27, 0.14), orienta=True, extras=[]),
+    # Anima: exuberante, viva, com raízes e flores.
+    "anima": dict(h=1.15, r=0.17, torcao=0.20, prof=3, filhos=3, abertura=46, encolhe=0.72,
+                  grav=0.30, comp=0.5, folhas=3, folha_r=0.24, folha_esc=(1, 1, 0.85), jitter=0.22,
+                  brilho=0.0, tronco=(0.26, 0.18, 0.10), extras=[("petalas", 12)], raizes=5),
+    # Baluarte: baixa, larga e maciça; copa achatada como muralha.
+    "baluarte": dict(h=0.75, r=0.32, torcao=0.05, prof=2, filhos=3, abertura=70, encolhe=0.7,
+                     grav=-0.05, comp=0.5, folhas=3, folha_r=0.36, folha_esc=(1.25, 1.25, 0.5), jitter=0.10,
+                     brilho=0.0, tronco=(0.22, 0.17, 0.12), extras=[], raizes=7),
+    # Matriz: copa partida em fragmentos que orbitam um núcleo aceso.
+    "matriz": dict(h=1.2, r=0.13, torcao=0.30, prof=3, filhos=2, abertura=50, encolhe=0.7,
+                   grav=0.3, comp=0.5, folhas=1, folha_r=0.26, folha_esc=(1, 1, 1), jitter=0.28,
+                   brilho=0.25, tronco=(0.16, 0.11, 0.22), espalha=0.32,
+                   extras=[("nucleo", 1), ("fragmentos", 9), ("aneis", 1)]),
+    # Vórtice: tronco em espiral e a copa é fogo, não folha.
+    "vortice": dict(h=1.1, r=0.14, torcao=0.75, prof=2, filhos=3, abertura=38, encolhe=0.7,
+                    grav=0.7, comp=0.55, folhas=0, folha_r=0.2, folha_esc=(1, 1, 1), jitter=0.1,
+                    brilho=1.6, tronco=(0.12, 0.07, 0.05), extras=[("chamas", 1)]),
+    # O Vazio: galhos secos e negros, cacos flutuando.
+    "vazio": dict(h=1.3, r=0.13, torcao=0.35, prof=4, filhos=2, abertura=52, encolhe=0.74,
+                  grav=0.1, comp=0.6, folhas=0, folha_r=0.2, folha_esc=(1, 1, 1), jitter=0.1,
+                  brilho=0.0, tronco=(0.20, 0.17, 0.26), extras=[("cacos", 14)]),
+    # Limiar: chorona, fios carmesim pendendo dos galhos.
+    "limiar": dict(h=1.2, r=0.15, torcao=0.25, prof=3, filhos=3, abertura=52, encolhe=0.72,
+                   grav=-0.45, comp=0.55, folhas=1, folha_r=0.18, folha_esc=(1, 1, 1.3), jitter=0.2,
+                   brilho=0.25, tronco=(0.12, 0.05, 0.06), extras=[("fios", 3)]),
+    # Parley: pálida e rala, o que sobrou.
+    "parley": dict(h=1.15, r=0.11, torcao=0.30, prof=3, filhos=2, abertura=48, encolhe=0.72,
+                   grav=-0.1, comp=0.5, folhas=1, folha_r=0.16, folha_esc=(1, 1, 0.9), jitter=0.2,
+                   brilho=0.0, tronco=(0.34, 0.35, 0.38), extras=[("petalas", 6)]),
+}
+
+
+def _cone_entre(bm, p1, p2, r1, r2, seg=6, mat=0):
+    d = p2 - p1
+    comp = d.length
+    if comp < 1e-5:
+        return
+    rot = Vector((0, 0, 1)).rotation_difference(d.normalized()).to_matrix().to_4x4()
+    n0 = len(bm.faces)
+    bmesh.ops.create_cone(
+        bm, cap_ends=True, cap_tris=False, segments=seg, radius1=r1, radius2=r2,
+        depth=comp, matrix=Matrix.Translation((p1 + p2) / 2) @ rot, calc_uvs=True,
+    )
+    bm.faces.ensure_lookup_table()
+    for f in bm.faces[n0:]:
+        f.material_index = mat
+
+
+def _ico(bm, pos, raio, escala, direcao, rng, jitter, mat=0):
+    """Icosfera achatada/esticada e amassada. `direcao`: eixo Z da peça."""
+    rot = Vector((0, 0, 1)).rotation_difference(Vector(direcao).normalized()).to_matrix().to_4x4()
+    rot = rot @ Matrix.Rotation(rng.uniform(0, math.tau), 4, "Z")
+    esc = Matrix.Diagonal((escala[0], escala[1], escala[2], 1.0))
+    n0 = len(bm.faces)
+    v0 = len(bm.verts)
+    bmesh.ops.create_icosphere(
+        bm, subdivisions=1, radius=raio, matrix=Matrix.Translation(pos) @ rot @ esc, calc_uvs=True,
+    )
+    bm.verts.ensure_lookup_table()
+    bm.faces.ensure_lookup_table()
+    for v in bm.verts[v0:]:
+        v.co += Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-1, 1))) * raio * jitter
+    for f in bm.faces[n0:]:
+        f.material_index = mat
+
+
+def _toro(bm, raio, espessura, matriz, mat=0, seg=36, lado=6):
+    anel = []
+    for i in range(seg):
+        a = math.tau * i / seg
+        centro = Vector((math.cos(a) * raio, math.sin(a) * raio, 0))
+        radial = centro.normalized()
+        linha = []
+        for j in range(lado):
+            b = math.tau * j / lado
+            p = centro + radial * math.cos(b) * espessura + Vector((0, 0, math.sin(b) * espessura))
+            linha.append(bm.verts.new(matriz @ p))
+        anel.append(linha)
+    for i in range(seg):
+        for j in range(lado):
+            f = bm.faces.new((anel[i][j], anel[i][(j + 1) % lado],
+                              anel[(i + 1) % seg][(j + 1) % lado], anel[(i + 1) % seg][j]))
+            f.material_index = mat
+
+
+def _rodar(d, eixo, ang):
+    return Quaternion(eixo, ang) @ d
+
+
+def _crescer(tronco_bm, p, d, comp, r, prof, est, rng, pontas):
+    p2 = p + d * comp
+    _cone_entre(tronco_bm, p, p2, r, r * 0.62, seg=6)
+    if prof == 0:
+        pontas.append((p2, d))
+        return
+    n = est["filhos"]
+    base_az = rng.uniform(0, math.tau)
+    perp = d.orthogonal().normalized()
+    for i in range(n):
+        az = base_az + math.tau * i / n + rng.uniform(-0.35, 0.35)
+        eixo = _rodar(perp, d, az)
+        ab = math.radians(est["abertura"] * rng.uniform(0.75, 1.15))
+        nd = _rodar(d, eixo, ab)
+        nd = (nd + Vector((0, 0, est["grav"] * 0.6))).normalized()
+        _crescer(tronco_bm, p2, nd, comp * est["encolhe"] * rng.uniform(0.9, 1.1),
+                 r * 0.62, prof - 1, est, rng, pontas)
+
+
+def build_tree_styled(estilo, rng, rgb01, seed, sobrescreve=None, alfa=1.0):
+    """Retorna (tronco, folhagem, alcance) com a silhueta do estilo."""
+    est = dict(ESTILOS[estilo])
+    est.update(sobrescreve or {})
+    est["comp"] *= 1.4
+    est["h"] *= 0.85
+    est["folha_r"] *= 1.3
+    est["r"] *= 1.15
+    tb = bmesh.new()   # tronco + galhos
+    fb = bmesh.new()   # folhas + extras
+
+    # Tronco: cadeia de segmentos com torção.
+    p = Vector((0, 0, 0))
+    nseg = 4
+    fase = rng.uniform(0, math.tau)
+    dir_atual = Vector((0, 0, 1))
+    for i in range(nseg):
+        a = fase + i * 1.9
+        d = Vector((math.cos(a) * est["torcao"], math.sin(a) * est["torcao"], 1.0)).normalized()
+        d = (d + dir_atual * 0.4).normalized()
+        comp = est["h"] / nseg
+        rr = est["r"] * (1 - 0.13 * i)
+        _cone_entre(tb, p, p + d * comp, rr, rr * 0.87, seg=7)
+        p = p + d * comp
+        dir_atual = d
+    topo = p
+
+    for k in range(est.get("raizes", 0)):
+        a = math.tau * k / est["raizes"] + rng.uniform(-0.2, 0.2)
+        fora = Vector((math.cos(a), math.sin(a), 0))
+        _cone_entre(tb, Vector((0, 0, est["h"] * 0.22)) + fora * est["r"] * 0.3,
+                    fora * est["r"] * 3.0 + Vector((0, 0, -0.02)), est["r"] * 0.55, est["r"] * 0.12, seg=5)
+
+    pontas = []
+    _crescer(tb, topo, dir_atual, est["comp"], est["r"] * 0.7, est["prof"], est, rng, pontas)
+
+    # Folhas nas pontas.
+    for pos, d in pontas:
+        for _ in range(est["folhas"]):
+            off = Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-0.3, 1))) * est.get("espalha", 0.18)
+            direcao = d if est.get("orienta") else Vector((rng.uniform(-.3, .3), rng.uniform(-.3, .3), 1))
+            _ico(fb, pos + off, est["folha_r"] * rng.uniform(0.75, 1.1), est["folha_esc"], direcao,
+                 rng, est["jitter"], mat=0)
+
+    ex = dict(est["extras"])
+    topo_copa = max([pt[0].z for pt in pontas] + [topo.z])
+    centro_copa = Vector((0, 0, (topo.z + topo_copa) / 2 + 0.1))
+    raio_copa = max([(pt[0] - centro_copa).length for pt in pontas] + [0.5])
+
+    if "petalas" in ex:
+        for _ in range(ex["petalas"]):
+            dirv = Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-0.6, 0.8))).normalized()
+            _ico(fb, centro_copa + dirv * raio_copa * rng.uniform(0.7, 1.15), 0.05,
+                 (1, 1, 0.3), dirv, rng, 0.1, mat=1)
+    if "nucleo" in ex:
+        _ico(fb, centro_copa, 0.17, (1, 1, 1), Vector((0, 0, 1)), rng, 0.05, mat=1)
+    if "fragmentos" in ex:
+        for i in range(ex["fragmentos"]):
+            a = math.tau * i / ex["fragmentos"] + rng.uniform(-0.2, 0.2)
+            rr = raio_copa * rng.uniform(1.0, 1.3)
+            pos = centro_copa + Vector((math.cos(a) * rr, math.sin(a) * rr, rng.uniform(-0.45, 0.5)))
+            _ico(fb, pos, rng.uniform(0.07, 0.14), (1, 1, 1.6), (pos - centro_copa), rng, 0.15,
+                 mat=1 if i % 2 else 0)
+    if "aneis" in ex:
+        for i in range(ex["aneis"]):
+            tilt = Matrix.Rotation(math.radians(rng.uniform(15, 40)) * (1 if i % 2 else -1), 4, "X") @ \
+                Matrix.Rotation(math.radians(70 * i), 4, "Z")
+            _toro(fb, raio_copa * (1.05 + 0.22 * i), 0.018, Matrix.Translation(centro_copa) @ tilt, mat=1)
+    if "chamas" in ex:
+        for pos, d in pontas:
+            for _ in range(2):
+                dv = (d + Vector((rng.uniform(-.4, .4), rng.uniform(-.4, .4), 1.1))).normalized()
+                _cone_entre(fb, pos, pos + dv * rng.uniform(0.6, 1.0), 0.16, 0.0, seg=5, mat=1)
+    if "cacos" in ex:
+        for i in range(ex["cacos"]):
+            a = math.tau * i / ex["cacos"] + rng.uniform(-0.3, 0.3)
+            rr = raio_copa * rng.uniform(0.8, 1.3)
+            pos = centro_copa + Vector((math.cos(a) * rr, math.sin(a) * rr, rng.uniform(-0.6, 0.6)))
+            _ico(fb, pos, rng.uniform(0.05, 0.11), (0.6, 0.6, 1.8),
+                 (rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-1, 1)), rng, 0.1,
+                 mat=1)
+    if "fios" in ex:
+        for pos, d in pontas:
+            for _ in range(ex["fios"]):
+                off = Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * 0.12
+                _cone_entre(fb, pos + off, pos + off + Vector((0, 0, -rng.uniform(0.55, 0.95))),
+                            0.03, 0.005, seg=4, mat=1)
+
+    def fazer_objeto(bm, nome):
+        malha = bpy.data.meshes.new(nome)
+        bm.to_mesh(malha)
+        bm.free()
+        obj = bpy.data.objects.new(nome, malha)
+        bpy.context.collection.objects.link(obj)
+        return obj
+
+    tronco = fazer_objeto(tb, "Tree_Trunk")
+    folhagem = fazer_objeto(fb, "Tree_Foliage")
+
+    tronco.data.materials.append(make_material(
+        "Tree_Bark", est["tronco"], alpha=alfa, roughness=0.95,
+        bump={"seed": seed, "escala": 22.0, "forca": 0.55},
+    ))
+    folhagem.data.materials.append(make_material(
+        "Tree_Foliage_Mat", rgb01, alpha=alfa, roughness=0.5,
+        bump={"seed": seed + 100, "escala": 34.0, "forca": 0.3},
+        emissao={"forca": est["brilho"]} if est["brilho"] > 0 else None,
+    ))
+    folhagem.data.materials.append(make_material(
+        "Tree_Glow_Mat", rgb01, roughness=0.3, emissao={"forca": max(0.9, est["brilho"] * 1.4)},
+    ))
+
+    alcance = 0.0
+    for obj in (tronco, folhagem):
+        for v in obj.data.vertices:
+            alcance = max(alcance, v.co.length)
+    return tronco, folhagem, alcance, pontas
+
+
+# ── A.X.I.S v2: a Parley presa numa gaiola-servidor ──
+# A Parley (pálida, semitransparente) fica bem visível de pé numa plataforma
+# hexagonal em camadas; uma gaiola de nervuras + anéis a envolve e cabos de
+# neon saem da gaiola e se cravam nos galhos e no tronco — a tecnologia
+# parasitando a árvore. Nomes de nós mantidos (Dome_Base/Dome_Glass etc.).
+
+def _bm_objeto(bm, nome):
+    malha = bpy.data.meshes.new(nome)
+    bm.to_mesh(malha)
+    bm.free()
+    obj = bpy.data.objects.new(nome, malha)
+    bpy.context.collection.objects.link(obj)
+    return obj
+
+
+def _ponto_esfera(R, theta, phi):
+    return Vector((R * math.sin(phi) * math.cos(theta), R * math.sin(phi) * math.sin(theta), R * math.cos(phi)))
+
+
+def _cabo(bm, a, b, esp, sag, mat=0):
+    meio = (a + b) / 2 + Vector((0, 0, -sag))
+    _cone_entre(bm, a, meio, esp, esp * 0.8, seg=4, mat=mat)
+    _cone_entre(bm, meio, b, esp * 0.8, esp * 0.6, seg=4, mat=mat)
+
+
+def build_axis_v2(rng, seed, rgb01):
+    mats = criar_materiais_axis(rgb01)
+    trunk, foliage, alcance, pontas = build_tree_styled(
+        "parley", rng, RGB_PARLEY_DESBOTADA, seed,
+        sobrescreve=dict(h=1.35, comp=0.55, folha_r=0.2, torcao=0.35, prof=3, r=0.13),
+        alfa=0.72,
+    )
+    R = max(alcance * 1.12, 1.6)
+
+    # Plataforma em camadas + circuitos + ponta de servidor por baixo.
+    pb = bmesh.new()
+    alt = R * 0.16
+    raio = R * 0.66
+    bmesh.ops.create_cone(pb, cap_ends=True, segments=6, radius1=raio, radius2=raio, depth=alt,
+                          matrix=Matrix.Translation((0, 0, -alt / 2)), calc_uvs=True)
+    bmesh.ops.create_cone(pb, cap_ends=True, segments=6, radius1=raio * 0.84, radius2=raio * 0.84, depth=alt * 0.7,
+                          matrix=Matrix.Translation((0, 0, -alt - alt * 0.35)), calc_uvs=True)
+    bmesh.ops.create_cone(pb, cap_ends=True, segments=6, radius1=R * 0.05, radius2=raio * 0.7, depth=R * 0.95,
+                          matrix=Matrix.Translation((0, 0, -alt * 1.7 - R * 0.475)), calc_uvs=True)
+    cantos = hex_pontos(6, raio * 0.99, 0.012)
+    for i in range(6):
+        _cone_entre(pb, cantos[i], cantos[(i + 1) % 6], 0.016, 0.016, seg=4, mat=1)
+    for i in range(6):
+        ang = math.tau * (i + 0.5) / 6
+        f = Vector((math.cos(ang), math.sin(ang), 0.012))
+        ini, meio, fim = f * raio * 0.16, f * raio * 0.55, f * raio * 0.95
+        _cone_entre(pb, ini, meio, 0.012, 0.012, seg=4, mat=1)
+        lado = Vector((-math.sin(ang), math.cos(ang), 0)) * raio * 0.13
+        _cone_entre(pb, meio, meio + lado + f * raio * 0.15, 0.010, 0.010, seg=4, mat=1)
+        _cone_entre(pb, meio + lado + f * raio * 0.15, fim + lado, 0.010, 0.010, seg=4, mat=1)
+    plataforma = _bm_objeto(pb, "Dome_Base")
+    plataforma.data.materials.append(mats["metal_escuro"])
+    plataforma.data.materials.append(mats["neon_puro"])
+
+    # Gaiola: 6 nervuras em arco + 3 anéis hexagonais, aberta no topo.
+    sb = bmesh.new()
+    off = rng.uniform(0, math.tau)
+    fis = [math.radians(90), math.radians(66), math.radians(42), math.radians(20)]
+    for i in range(6):
+        th = off + math.tau * i / 6
+        pts = [_ponto_esfera(R * 0.98, th, f) for f in fis]
+        for a, b in zip(pts, pts[1:]):
+            _cone_entre(sb, a, b, 0.032 * R, 0.028 * R, seg=4, mat=0)
+    for f in fis[:3]:
+        pts = [_ponto_esfera(R * 0.98, off + math.tau * i / 6, f) for i in range(6)]
+        for i in range(6):
+            _cone_entre(sb, pts[i], pts[(i + 1) % 6], 0.02 * R, 0.02 * R, seg=4, mat=1)
+    struts = _bm_objeto(sb, "Axis_Struts")
+    struts.data.materials.append(mats["metal_escuro"])
+    struts.data.materials.append(mats["metal_neon"])
+
+    # Cabos de neon cravados nos galhos e no tronco (parasitismo).
+    cb = bmesh.new()
+    alvos = [pt[0] for pt in pontas]
+    rng.shuffle(alvos)
+    alvos = alvos[:9]
+    verts_tronco = sorted((v.co.copy() for v in trunk.data.vertices), key=lambda v: v.z)
+    alvos += [verts_tronco[int(len(verts_tronco) * k)] for k in (0.15, 0.35, 0.55)]
+    for alvo in alvos:
+        az = math.atan2(alvo.y, alvo.x) + rng.uniform(-0.15, 0.15)
+        phi = math.radians(66 if alvo.z > R * 0.35 else 90)
+        a = _ponto_esfera(R * 0.97, az, phi)
+        a.z = max(a.z, 0.05)
+        _cabo(cb, a, alvo, 0.007 * R + 0.004, rng.uniform(0.05, 0.15), mat=0)
+    cabos = _bm_objeto(cb, "Axis_Cables")
+    cabos.data.materials.append(mats["neon_puro"])
+
+    # Agulha/antena no ápice, saindo da gaiola.
+    ab = bmesh.new()
+    z_ap = R * math.cos(math.radians(20))
+    r_ap = R * 0.98 * math.sin(math.radians(20))
+    colar = [Vector((math.cos(off + math.tau * i / 6) * r_ap, math.sin(off + math.tau * i / 6) * r_ap, z_ap)) for i in range(6)]
+    for i in range(6):
+        _cone_entre(ab, colar[i], colar[(i + 1) % 6], 0.024 * R, 0.024 * R, seg=4, mat=1)
+        _cone_entre(ab, colar[i], Vector((0, 0, z_ap + R * 0.14)), 0.02 * R, 0.014 * R, seg=4, mat=0)
+    _cone_entre(ab, Vector((0, 0, z_ap + R * 0.1)), Vector((0, 0, z_ap + R * 0.62)), 0.05 * R, 0.0, seg=6, mat=0)
+    core = _bm_objeto(ab, "Axis_Core")
+    core.data.materials.append(mats["metal_escuro"])
+    core.data.materials.append(mats["metal_neon"])
+
+    # Anéis orbitais de varredura.
+    rb = bmesh.new()
+    _toro(rb, R * 1.02, 0.018 * R, Matrix.Translation((0, 0, 0.03)), mat=0, seg=48)
+    _toro(rb, R * 0.86, 0.016 * R, Matrix.Translation((0, 0, R * 0.42)) @ Matrix.Rotation(math.radians(16), 4, "X"), mat=0, seg=48)
+    _toro(rb, R * 0.6, 0.014 * R, Matrix.Translation((0, 0, R * 0.9)) @ Matrix.Rotation(math.radians(-22), 4, "Y"), mat=0, seg=48)
+    aneis = _bm_objeto(rb, "Axis_Rings")
+    aneis.data.materials.append(mats["neon_puro"])
+
+    # Nós de dados: ponta de cada galho capturado + topo da antena.
+    mb = bmesh.new()
+    for pt in [pt[0] for pt in pontas][:10] + [Vector((0, 0, z_ap + R * 0.62))]:
+        _ico(mb, pt, 0.045, (1, 1, 1), Vector((0, 0, 1)), rng, 0.0, mat=0)
+    motes = _bm_objeto(mb, "Axis_Motes")
+    motes.data.materials.append(mats["neon_puro"])
+
+    glass = build_axis_glass(R, mats)
+    return [trunk, foliage, plataforma, struts, cabos, core, aneis, motes, glass]
+
+
 def build_studio_lights():
     """Key (forte, frontal) + Fill (mais fraca, lateral) + Rim (traseira,
     contraluz) — só pra preview/render dentro do próprio Blender. Não
@@ -606,26 +980,11 @@ def main():
     clear_scene()
 
     if args.mode == "axis":
-        dome_radius = 1.55 + rng.uniform(-0.05, 0.15)
-        mats = criar_materiais_axis(rgb01)
-
-        trunk_height = rng.uniform(0.32, 0.42)
-        trunk = build_trunk(
-            rng, trunk_height, args.seed,
-            rgb01=RGB_PARLEY_DESBOTADA, alpha=0.55, radius_mult=0.55,
-            tilt_deg=rng.uniform(9, 16),
-        )
-        foliage, _ = build_foliage(
-            rng, RGB_PARLEY_DESBOTADA, trunk_height, args.seed,
-            n_range=(1, 2), radius_range=(0.13, 0.19), center_radius=0.10, alpha=0.55,
-        )
-        platform = build_axis_platform(dome_radius, mats)
-        core, ponta_core = build_axis_core(dome_radius, mats)
-        rings = build_axis_rings(dome_radius, args.seed, mats)
-        struts, topo_pts = build_axis_struts(dome_radius, args.seed, mats)
-        motes = build_axis_motes(topo_pts + [ponta_core], mats)
-        glass = build_axis_glass(dome_radius, mats)
-        partes = [trunk, foliage, platform, core, rings, struts, motes, glass]
+        partes = build_axis_v2(rng, args.seed, rgb01)
+    elif args.estilo != "padrao":
+        trunk, foliage, alcance_arvore, _ = build_tree_styled(args.estilo, rng, rgb01, args.seed)
+        base, glass = build_dome(alcance_arvore, args.seed)
+        partes = [trunk, foliage, base, glass]
     else:
         trunk_height = rng.uniform(0.9, 1.3)
         trunk = build_trunk(rng, trunk_height, args.seed)
