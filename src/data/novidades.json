@@ -1,6 +1,31 @@
 {
   "itens": [
     {
+      "id": "2026-09-24-calendario-luas",
+      "data": "2026-09-24",
+      "tipo": "novo",
+      "area": "Mundo",
+      "titulo": "Calendário com dez meses e as fases da Lua",
+      "detalhes": [
+        "O ano agora tem um mês para cada Árvore, com 28 dias, e cada mês é uma lunação: Lua Nova no dia 1 e Lua Cheia no dia 15.",
+        "Alguns meses ganham um dia a mais, como o Dia da Lua Carmesim no Limiar. O Mestre pode criar outros.",
+        "Bailes de uma semana, Chuva Roxa, Grande Tormenta e outros acontecimentos do ano aparecem nas datas certas. Os de dia sorteado só se revelam quando o dia chega.",
+        "O Mestre pode desfazer a última mudança de data, pular até a próxima Lua Cheia ou estação e revelar de uma vez o que já passou."
+      ]
+    },
+    {
+      "id": "2026-09-24-cartoes-catalogo",
+      "data": "2026-09-24",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Cartões de Classes e Raças mais completos",
+      "detalhes": [
+        "Cada cartão ganhou um emblema próprio e mostra Vida, Mana e Estamina de relance.",
+        "Nas raças, os ajustes de atributo, o movimento e os estágios de evolução aparecem direto no cartão.",
+        "Alguns textos de classes e raças foram reescritos para ficar mais claros."
+      ]
+    },
+    {
       "id": "2026-09-24-bestiario-estamina",
       "data": "2026-09-24",
       "tipo": "melhoria",
