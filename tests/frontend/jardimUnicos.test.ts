@@ -14,10 +14,10 @@ import {
 const TIPOS_VALIDOS = new Set(['ataque', 'suporte', 'utilidade']);
 const TIERS_VALIDOS = new Set(['simples', 'notavel', 'extraordinaria', 'lendaria']);
 
-test('o catálogo de Únicos tem 20 exemplares, sem id nem título repetido', () => {
-  assert.equal(UNICOS_JARDIM_CATALOGO.length, 20);
-  assert.equal(new Set(UNICOS_JARDIM_CATALOGO.map((u) => u.id)).size, 20);
-  assert.equal(new Set(UNICOS_JARDIM_CATALOGO.map((u) => u.titulo)).size, 20);
+test('o catálogo de Únicos tem 40 exemplares, sem id nem título repetido', () => {
+  assert.equal(UNICOS_JARDIM_CATALOGO.length, 40);
+  assert.equal(new Set(UNICOS_JARDIM_CATALOGO.map((u) => u.id)).size, 40);
+  assert.equal(new Set(UNICOS_JARDIM_CATALOGO.map((u) => u.titulo)).size, 40);
 });
 
 test('todo Único tem tipo e tier válidos, preço positivo e descrição não vazia', () => {
@@ -86,13 +86,13 @@ test('comprar um Único novo funciona, e comprar o mesmo de novo é recusado', (
 test('catalogoJardimUnicosDisponivel não depende de classe nem nível: aparece tudo, só marca o que já foi plantado', () => {
   const fichaVazia: any = {};
   const catalogo = catalogoJardimUnicosDisponivel(fichaVazia);
-  assert.equal(catalogo.length, 20);
+  assert.equal(catalogo.length, 40);
   assert.ok(catalogo.every((item) => !item.jaAdquirido));
 
   const idAlvo = UNICOS_JARDIM_CATALOGO[3].id;
   const fichaComUnico: any = { jardim: { unicosComprados: [idAlvo] } };
   const catalogo2 = catalogoJardimUnicosDisponivel(fichaComUnico);
-  assert.equal(catalogo2.length, 20, 'já plantado continua listado, só marcado');
+  assert.equal(catalogo2.length, 40, 'já plantado continua listado, só marcado');
   assert.equal(catalogo2.find((item) => item.unico.id === idAlvo)?.jaAdquirido, true);
 });
 
@@ -145,4 +145,11 @@ test('Único de Estamina chega à ficha como custo de Estamina', () => {
   assert.equal(corte?.custoMana, 0);
   assert.equal(cicatriz?.custoMana, 7);
   assert.equal(cicatriz?.custoEstamina, 0);
+});
+
+test('os Únicos gastam Mana ou Estamina, nunca os dois, e não repetem título de poder de classe', () => {
+  for (const unico of UNICOS_JARDIM_CATALOGO) {
+    assert.ok(!(Number(unico.custo_mana) > 0 && Number(unico.custo_estamina) > 0), `${unico.id}: mana e estamina juntas`);
+    assert.ok(!/\u2014/.test(JSON.stringify(unico)), `${unico.id}: travessão`);
+  }
 });

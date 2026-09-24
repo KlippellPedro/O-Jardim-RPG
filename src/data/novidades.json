@@ -1,6 +1,18 @@
 {
   "itens": [
     {
+      "id": "2026-09-24-unicos",
+      "data": "2026-09-24",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "20 novos Únicos no Jardim",
+      "detalhes": [
+        "Poderes que não existem em nenhuma classe nem raça, de truques simples a golpes lendários.",
+        "Entre eles: um item que você já tinha na mochila, uma promessa que pesa em quem quebrar, uma mesa posta que ninguém pode atacar e um último ato ao morrer.",
+        "Os preços seguem as mesmas faixas: simples, notável, extraordinário e lendário."
+      ]
+    },
+    {
       "id": "2026-09-23-estamina",
       "data": "2026-09-23",
       "tipo": "novo",
