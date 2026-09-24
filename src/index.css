@@ -849,3 +849,37 @@ textarea::placeholder {
   color: rgb(138 148 164);
   opacity: 1;
 }
+
+/* Caixinhas de marcar no visual do Jardim (o navegador desenharia a padrão, branca). */
+input[type="checkbox"]:not(.sr-only) {
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0.3rem;
+  background-color: #0b0a10;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 80%;
+  transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+input[type="checkbox"]:not(.sr-only):hover {
+  border-color: rgba(199, 164, 76, 0.6);
+}
+input[type="checkbox"]:not(.sr-only):checked {
+  border-color: #c7a44c;
+  background-color: #c7a44c;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230b0a10' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
+}
+input[type="checkbox"]:not(.sr-only):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(199, 164, 76, 0.4);
+}
+input[type="checkbox"]:not(.sr-only):disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
