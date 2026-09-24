@@ -1,4 +1,63 @@
 {
-  "_comentario": "Novidades escritas à mão para o que ainda não foi commitado. Quando o trabalho for commitado com uma linha 'Novidade:' no corpo, apague a entrada daqui para não aparecer duas vezes.",
-  "itens": []
+  "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
+  "itens": [
+    {
+      "id": "2026-09-23-estamina",
+      "data": "2026-09-23",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Estamina, o terceiro recurso",
+      "detalhes": [
+        "Além de Vida e Mana, todo personagem agora tem Estamina, o fôlego para poderes e habilidades físicas.",
+        "As 29 classes foram reajustadas: cada uma divide 9 pontos por nível entre Vida, Mana e Estamina.",
+        "Algumas raças ganham bônus de Estamina, e o card de cada classe e raça mostra o valor.",
+        "Habilidades de classe podem ter custo, com botão Usar na aba Habilidades.",
+        "Descansar e Relaxar recuperam Estamina junto com a Mana."
+      ]
+    },
+    {
+      "id": "2026-09-23-sessao-estamina",
+      "data": "2026-09-23",
+      "tipo": "novo",
+      "area": "Sessão",
+      "titulo": "Estamina na Sessão ao Vivo e Cansaço automático",
+      "detalhes": [
+        "A barra de Estamina aparece na sessão e é descontada quando você usa um poder físico.",
+        "Ao terminar um combate intenso (Vida na metade, metade da Mana ou da Estamina gasta, ou Morrendo), o personagem ganha 1 de Cansaço sozinho."
+      ]
+    },
+    {
+      "id": "2026-09-23-frutos",
+      "data": "2026-09-23",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Frutos dos Fluxos e consumíveis de Estamina",
+      "detalhes": [
+        "Onze Frutos novos, um para cada Fluxo, que aproximam o personagem da deidade daquele Fluxo.",
+        "Os Frutos do Éden físicos agora gastam Estamina em vez de Mana.",
+        "Poção de Vigor e Elixir de Vigor restauram Estamina, e vários itens de Vida e Mana passaram a devolver Estamina também."
+      ]
+    },
+    {
+      "id": "2026-09-23-jardim",
+      "data": "2026-09-23",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Jardim mais fácil de navegar",
+      "detalhes": [
+        "Filtros fixos no topo, com a quantidade de itens em cada tipo.",
+        "A busca também olha o texto do efeito.",
+        "Ordenação por preço ou nome, e opções para ver só o que você pode pagar ou esconder o que já plantou.",
+        "Cartões compactos com Ler tudo, e a confirmação de podar virou uma janela do site."
+      ]
+    },
+    {
+      "id": "2026-09-23-cartaz",
+      "data": "2026-09-23",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Estamina no cartaz Procurado",
+      "detalhes": []
+    }
+  ]
 }
