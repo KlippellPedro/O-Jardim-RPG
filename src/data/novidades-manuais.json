@@ -2,6 +2,44 @@
   "_comentario": "Mural de novidades da Home. Escreva aqui, à mão, o que mudou a cada versão que vai para o ar (quando regerar os ZIPs da Discloud). Uma entrada por assunto, em linguagem de quem joga, sem travessão. tipo: novo | melhoria | correcao. Campos: id (único), data (AAAA-MM-DD), tipo, area, titulo, detalhes (lista opcional).",
   "itens": [
     {
+      "id": "2026-09-24-modelos-3d-mundo",
+      "data": "2026-09-24",
+      "tipo": "melhoria",
+      "area": "Mundo",
+      "titulo": "Árvores, A.X.I.S e Banco Lunar em novos modelos 3D",
+      "detalhes": [
+        "Cada Árvore ganhou uma silhueta própria: a Gênese é uma cerejeira em flor, o Éon tem os anéis do tempo, o Vórtice queima e o Limiar chora fios carmesim.",
+        "A A.X.I.S agora mostra a Parley presa numa gaiola tecnológica, com cabos de neon cravados nos galhos.",
+        "O Banco Lunar virou um templo-cofre imponente, com colunata, cúpula, uma lua crescente gigante ao fundo e moedas em órbita.",
+        "Ao clicar no Banco Lunar, a câmera agora se aproxima como nas Árvores. O segundo clique abre o painel."
+      ]
+    },
+    {
+      "id": "2026-09-24-frutos-em-3d",
+      "data": "2026-09-24",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Os 26 Frutos do Éden em 3D",
+      "detalhes": [
+        "Cada fruto tem um modelo próprio, que gira na Ficha (no card do fruto consumido) e no detalhe do item na Loja. Arraste para virar.",
+        "Os cards da Loja mostram uma miniatura de cada fruto.",
+        "No detalhe, a lore vem em destaque e as regras aparecem em blocos: Vínculo, Técnica, Despertar e Limite."
+      ]
+    },
+    {
+      "id": "2026-09-24-frutos-equilibrio",
+      "data": "2026-09-24",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Frutos do Éden: equilíbrio e fraquezas revistos",
+      "detalhes": [
+        "A água do mar deixou de ser fraqueza dos frutos. Cada um mantém só o contrajogo próprio.",
+        "Tremor e Gravidade ganharam uma fraqueza nova: o Tremor pede apoio firme e a Gravidade sofre com o Fluxo do Espaço.",
+        "Os Despertares que causam dano em área (Chamas, Luz, Trovão, Gelo e Tremor) ficaram mais caros, e a Fênix gasta um pouco mais de Mana para curar.",
+        "Reescrevemos as lores dos Frutos dos Fluxos para não repetirem a mesma frase de fecho."
+      ]
+    },
+    {
       "id": "2026-09-24-calendario-luas",
       "data": "2026-09-24",
       "tipo": "novo",
