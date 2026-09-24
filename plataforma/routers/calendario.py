@@ -1,6 +1,6 @@
 """Calendário do mundo e estações (regras em core/calendario.py).
 
-Qualquer membro da campanha lê; o Mestre (e o assistente) escreve. O que o
+Qualquer membro da campanha lê; só o Mestre (e o criador da plataforma) escreve. O que o
 jogador recebe já vem recortado: evento oculto não aparece, evento rasurado
 chega sem título nem texto.
 """
@@ -24,7 +24,7 @@ from core.dependencies import (
     campaign_access,
     get_current_user,
     get_database,
-    require_campaign_manager,
+    require_campaign_master,
     require_csrf,
 )
 
@@ -47,8 +47,15 @@ class EstacaoEspecialInput(BaseModel):
 
 
 class ConfigInput(BaseModel):
-    meses: list[str] | None = Field(default=None, max_length=12)
+    meses: list[str] | None = Field(default=None, max_length=regras.MESES_POR_ANO)
     sincronizar_discord: bool | None = None
+    eventos_desligados: list[str] | None = Field(default=None, max_length=50)
+
+
+class DiaExtraInput(BaseModel):
+    mes: int
+    nome: str = Field(min_length=1, max_length=40)
+    descricao: str = Field(default="", max_length=300)
 
 
 class EventoInput(BaseModel):
@@ -58,6 +65,8 @@ class EventoInput(BaseModel):
     dia: int
     ano: int | None = None
     anual: bool = False
+    repeticao: str | None = None
+    duracao: int = Field(default=1, ge=1, le=28)
     revelacao: str = "rasurado"
 
 
@@ -68,6 +77,8 @@ class EventoEdicaoInput(BaseModel):
     dia: int | None = None
     ano: int | None = None
     anual: bool | None = None
+    repeticao: str | None = None
+    duracao: int | None = Field(default=None, ge=1, le=28)
     revelacao: str | None = None
 
 
@@ -164,7 +175,7 @@ def _avisar_a_mesa(connection, campanha_id: UUID, user: AuthenticatedUser, estac
 def _alterar(campanha_id: UUID, user: AuthenticatedUser, database: Database, mudar) -> dict:
     """Trava o calendário, aplica `mudar(estado)`, grava, sincroniza e devolve a visão do Mestre."""
     with database.connection() as connection:
-        require_campaign_manager(connection, campanha_id, user.id)
+        require_campaign_master(connection, campanha_id, user.id)
         estado = _ler(connection, campanha_id, travar=True)
         estacao_antes = regras.estacao_atual(estado)
         abertos_antes = _ids_abertos(estado)
@@ -182,7 +193,7 @@ def _alterar(campanha_id: UUID, user: AuthenticatedUser, database: Database, mud
 def obter(
     campanha_id: UUID,
     ano: int | None = Query(default=None, ge=-99999, le=99999),
-    mes: int | None = Query(default=None, ge=0, le=11),
+    mes: int | None = Query(default=None, ge=0, le=regras.MESES_POR_ANO - 1),
     user: AuthenticatedUser = Depends(get_current_user),
     database: Database = Depends(get_database),
 ):
@@ -193,7 +204,7 @@ def obter(
             if campanha and isinstance(campanha["configuracoes"], dict) and campanha["configuracoes"].get("calendario_oculto") is True:
                 raise HTTPException(status_code=403, detail="o calendario do mundo ainda nao foi liberado")
         estado = _ler(connection, campanha_id)
-    return regras.visao(estado, gestor=acesso.manages_content, ano=ano, mes=mes)
+    return regras.visao(estado, gestor=acesso.is_master, ano=ano, mes=mes)
 
 
 @router.put("/{campanha_id}/hoje")
@@ -204,6 +215,26 @@ def definir_hoje(campanha_id: UUID, payload: HojeInput, user: AuthenticatedUser 
 @router.post("/{campanha_id}/avancar")
 def avancar(campanha_id: UUID, payload: AvancarInput, user: AuthenticatedUser = Depends(require_csrf), database: Database = Depends(get_database)):
     return _alterar(campanha_id, user, database, lambda estado: regras.avancar(estado, payload.dias))
+
+
+@router.post("/{campanha_id}/dias-extras")
+def criar_dia_extra(campanha_id: UUID, payload: DiaExtraInput, user: AuthenticatedUser = Depends(require_csrf), database: Database = Depends(get_database)):
+    return _alterar(campanha_id, user, database, lambda estado: regras.criar_dia_extra(estado, payload.model_dump()))
+
+
+@router.delete("/{campanha_id}/dias-extras/{mes}")
+def apagar_dia_extra(campanha_id: UUID, mes: int, user: AuthenticatedUser = Depends(require_csrf), database: Database = Depends(get_database)):
+    return _alterar(campanha_id, user, database, lambda estado: regras.apagar_dia_extra(estado, mes))
+
+
+@router.post("/{campanha_id}/desfazer")
+def desfazer(campanha_id: UUID, user: AuthenticatedUser = Depends(require_csrf), database: Database = Depends(get_database)):
+    return _alterar(campanha_id, user, database, regras.desfazer)
+
+
+@router.post("/{campanha_id}/revelar-passados")
+def revelar_passados(campanha_id: UUID, user: AuthenticatedUser = Depends(require_csrf), database: Database = Depends(get_database)):
+    return _alterar(campanha_id, user, database, regras.revelar_passados)
 
 
 @router.put("/{campanha_id}/estacao-especial")

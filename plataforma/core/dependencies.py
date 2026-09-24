@@ -181,6 +181,14 @@ def require_campaign_manager(connection, campaign_id: UUID, user_id: UUID) -> Ca
     return access
 
 
+def require_campaign_master(connection, campaign_id: UUID, user_id: UUID) -> CampaignAccess:
+    """Só o Mestre da campanha (o criador da plataforma conta como Mestre). Assistente não."""
+    access = campaign_access(connection, campaign_id, user_id)
+    if not access.is_master:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="somente o mestre faz isso")
+    return access
+
+
 def require_creator_campaign(connection, campaign_id: UUID, user: AuthenticatedUser) -> None:
     """Autoriza edicao de conteudo/lore/visibilidade: exclusivo do criador da plataforma.
 

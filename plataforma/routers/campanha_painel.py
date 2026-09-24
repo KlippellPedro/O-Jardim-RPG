@@ -342,6 +342,7 @@ def duplicar(
             """
             INSERT INTO campanha_calendario (campanha_id, estado)
             SELECT %s, jsonb_build_object(
+                'versao', estado->'versao',
                 'config', COALESCE(estado->'config', '{}'::jsonb) || '{"sincronizar_discord": false}'::jsonb,
                 'eventos', COALESCE(estado->'eventos', '[]'::jsonb)
             ) FROM campanha_calendario WHERE campanha_id=%s

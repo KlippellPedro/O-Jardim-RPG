@@ -1,25 +1,23 @@
-import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, CalendarDays, ChevronLeft, ChevronRight, EyeOff, Moon, Plus, Repeat, Sparkles, Trash2 } from 'lucide-react';
+import { ArrowLeft, CalendarDays, CalendarPlus, ChevronLeft, ChevronRight, Moon, Sparkles, Sunrise } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import {
   calendarioMundoApi,
   type ChaveEstacao,
   type ICalendarioMundo,
   type IEventoCalendario,
-  type Revelacao,
 } from '../../services/calendarioMundoApi';
 import { CarimboRetido, RasuraTitulo } from '../../components/ui/Rasura';
-import { COR_DA_ESTACAO, ESTACOES_DO_ANO, rotuloDoEvento, somarMes, textoEmDias } from './calendarioMundo';
+import { COR_DA_ESTACAO, ESTACOES_DO_ANO, faseDaLua, rotuloDoEvento, somarMes, textoEmDias } from './calendarioMundo';
+import { PainelCalendarioMestre, type IPreenchimento } from './PainelCalendarioMestre';
+import { LuaFase } from './LuaFase';
 
-const campo = 'w-full min-h-11 rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-yellow-500/50';
 const botao = 'inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 text-xs font-bold text-gray-200 transition hover:bg-white/10 hover:text-white disabled:opacity-40';
 
-const REVELACOES: Array<{ id: Revelacao; rotulo: string; ajuda: string }> = [
-  { id: 'oculto', rotulo: 'Oculto', ajuda: 'Os jogadores nem sabem que existe.' },
-  { id: 'rasurado', rotulo: 'Rasurado', ajuda: 'Veem que algo acontece nesse dia, sem saber o quê.' },
-  { id: 'aberto', rotulo: 'Aberto', ajuda: 'Título e texto à vista.' },
-];
+const NOME_DA_ESTACAO: Record<ChaveEstacao, string> = {
+  primavera: 'Primavera', verao: 'Verão', outono: 'Outono', inverno: 'Inverno', noite_eterna: 'Noite Eterna', eclipse: 'Eclipse',
+};
 
 /** Um evento no calendário: aberto mostra o título, rasurado mostra a faixa de tinta. */
 const EventoNome = ({ evento }: { evento: IEventoCalendario }) =>
@@ -34,6 +32,7 @@ export default function CalendarioMundoPage() {
   const [erro, setErro] = useState('');
   const [ocupado, setOcupado] = useState(false);
   const [diaAberto, setDiaAberto] = useState<number | null>(null);
+  const [preencher, setPreencher] = useState<IPreenchimento | null>(null);
 
   const carregar = useCallback(async (alvo?: { ano: number; mes: number }) => {
     if (!campanhaId) return;
@@ -81,7 +80,9 @@ export default function CalendarioMundoPage() {
 
   const estacao = dados?.estacao;
   const cor = estacao ? COR_DA_ESTACAO[estacao.chave] : '#c7a44c';
-  const eventosDoDia = dados && diaAberto ? dados.mes.dias.find((dia) => dia.dia === diaAberto)?.eventos ?? [] : [];
+  const diaSelecionado = dados && diaAberto ? dados.mes.dias.find((dia) => dia.dia === diaAberto) : undefined;
+  const eventosDoDia = diaSelecionado?.eventos ?? [];
+  const eventosDoAnoNoDia = diaSelecionado?.do_ano ?? [];
 
   return (
     <main className="app-page mx-auto flex max-w-6xl flex-col gap-6" style={{ '--cor-estacao': cor } as CSSProperties}>
@@ -110,14 +111,17 @@ export default function CalendarioMundoPage() {
               <div className="rounded-2xl border border-white/10 bg-black/35 px-5 py-4 text-right">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Hoje no mundo</p>
                 <p className="mt-1 text-xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>{dados.hoje_extenso}</p>
+                <p className="mt-2 flex items-center justify-end gap-2 text-xs text-gray-400">
+                  <LuaFase dia={dados.hoje.dia} carmesim={dados.hoje_lua_carmesim} tamanho={18} decorativa /> {faseDaLua(dados.hoje.dia, dados.hoje_lua_carmesim).nome}
+                </p>
               </div>
             </div>
             <ol className="mt-6 grid grid-cols-4 gap-2" aria-label="Estações do ano">
-              {ESTACOES_DO_ANO.map((chave, indice) => {
-                const atual = dados.mes.estacao === chave || (dados.estacao_especial === null && Math.floor(dados.hoje.mes / 3) === indice);
+              {ESTACOES_DO_ANO.map((chave) => {
+                const atual = dados.estacao_normal === chave;
                 return (
                   <li key={chave} className="rounded-xl border px-2 py-2 text-center text-[11px] font-bold uppercase tracking-wider" style={{ borderColor: atual ? COR_DA_ESTACAO[chave] : 'rgba(255,255,255,0.08)', color: atual ? COR_DA_ESTACAO[chave] : '#6b7280', backgroundColor: atual ? `${COR_DA_ESTACAO[chave]}18` : 'transparent' }}>
-                    {['Primavera', 'Verão', 'Outono', 'Inverno'][indice]}
+                    {NOME_DA_ESTACAO[chave]}
                   </li>
                 );
               })}
@@ -130,11 +134,11 @@ export default function CalendarioMundoPage() {
                 <button type="button" className={`${botao} w-10 px-0`} aria-label="Mês anterior" onClick={() => ir(-1)}><ChevronLeft size={16} /></button>
                 <div className="text-center">
                   <h3 className="text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>{dados.mes.nome}</h3>
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-gray-500">Ano {dados.mes.ano} · {['Primavera', 'Verão', 'Outono', 'Inverno'][Math.floor(dados.mes.mes / 3)]}</p>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-gray-500">Ano {dados.mes.ano} · {NOME_DA_ESTACAO[dados.mes.estacao_normal]}</p>
                 </div>
                 <button type="button" className={`${botao} w-10 px-0`} aria-label="Próximo mês" onClick={() => ir(1)}><ChevronRight size={16} /></button>
               </header>
-              <div className="grid grid-cols-6 gap-1.5 sm:gap-2" role="grid" aria-label={`Dias de ${dados.mes.nome}`}>
+              <div className="grid grid-cols-7 gap-1.5 sm:gap-2" role="grid" aria-label={`Dias de ${dados.mes.nome}`}>
                 {dados.mes.dias.map((dia) => {
                   const ativo = diaAberto === dia.dia;
                   return (
@@ -142,17 +146,23 @@ export default function CalendarioMundoPage() {
                       key={dia.dia}
                       type="button"
                       role="gridcell"
-                      aria-label={`Dia ${dia.dia}${dia.hoje ? ', hoje' : ''}${dia.eventos.length ? `, ${dia.eventos.length} acontecimento(s)` : ''}`}
+                      aria-label={`Dia ${dia.dia}${dia.do_ano.length ? `, ${dia.do_ano.map((item) => item.nome).join(', ')}` : ''}, ${faseDaLua(dia.dia, dia.lua_carmesim).nome}${dia.hoje ? ', hoje' : ''}${dia.eventos.length ? `, ${dia.eventos.length} acontecimento(s)` : ''}`}
                       aria-selected={ativo}
                       onClick={() => setDiaAberto(ativo ? null : dia.dia)}
                       className="flex min-h-[4.2rem] flex-col rounded-xl border p-1.5 text-left transition hover:border-white/30 sm:min-h-[5rem] sm:p-2"
-                      style={{ borderColor: dia.hoje ? cor : ativo ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.07)', backgroundColor: dia.hoje ? `${cor}1f` : 'rgba(0,0,0,0.25)' }}
+                      style={{ borderColor: dia.hoje ? cor : ativo ? 'rgba(255,255,255,0.35)' : dia.lua_carmesim ? 'rgba(225,29,72,0.55)' : dia.extra ? 'rgba(199,164,76,0.5)' : 'rgba(255,255,255,0.07)', backgroundColor: dia.hoje ? `${cor}1f` : dia.lua_carmesim ? 'rgba(225,29,72,0.08)' : dia.extra ? 'rgba(199,164,76,0.07)' : 'rgba(0,0,0,0.25)' }}
                     >
-                      <span className={`text-xs font-bold ${dia.hoje ? 'text-white' : 'text-gray-500'}`}>{dia.dia}</span>
+                      <span className="flex items-start justify-between gap-1">
+                        <span className={`text-xs font-bold ${dia.hoje ? 'text-white' : 'text-gray-500'}`}>{dia.dia}</span>
+                        <LuaFase dia={dia.dia} carmesim={dia.lua_carmesim} tamanho={20} decorativa className={dia.dia === 1 || dia.dia === 15 || dia.dia > 28 ? 'opacity-100' : 'opacity-60'} />
+                      </span>
+                      {dia.do_ano.map((item) => (
+                        <span key={item.id} title={item.descricao} className="mt-1 block truncate rounded px-1 text-[10px] font-bold leading-4" style={item.id === 'lua-carmesim' ? { backgroundColor: 'rgba(225,29,72,0.18)', color: '#fb7185' } : { backgroundColor: 'rgba(199,164,76,0.16)', color: '#e7c76a' }}>{item.nome}{item.duracao > 1 ? ` ${item.parte}/${item.duracao}` : ''}</span>
+                      ))}
                       {dia.eventos.slice(0, 2).map((evento) => (
                         evento.rasurado
                           ? <span key={evento.id} className="mt-1 block h-2 rounded-sm bg-black ring-1 ring-white/10" aria-hidden="true" />
-                          : <span key={evento.id} className="mt-1 block truncate rounded px-1 text-[10px] font-bold leading-4" style={{ backgroundColor: `${cor}33`, color: cor }}>{evento.titulo}</span>
+                          : <span key={evento.id} className="mt-1 block truncate rounded px-1 text-[10px] font-bold leading-4" style={{ backgroundColor: `${cor}33`, color: cor }}>{evento.titulo}{evento.duracao > 1 ? ` ${evento.parte}/${evento.duracao}` : ''}</span>
                       ))}
                     </button>
                   );
@@ -161,12 +171,31 @@ export default function CalendarioMundoPage() {
 
               {diaAberto ? (
                 <div className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-4">
-                  <h4 className="text-sm font-bold text-white">{diaAberto} de {dados.mes.nome}</h4>
-                  {eventosDoDia.length === 0 ? <p className="mt-2 text-sm text-gray-500">Nada de especial neste dia.</p> : (
+                  <h4 className="flex items-center gap-2 text-sm font-bold text-white">
+                    Dia {diaAberto} · {dados.mes.nome}
+                    <span className="flex items-center gap-1.5 text-xs font-normal text-gray-400"><LuaFase dia={diaAberto} carmesim={Boolean(diaSelecionado?.lua_carmesim)} tamanho={16} decorativa /> {faseDaLua(diaAberto, Boolean(diaSelecionado?.lua_carmesim)).nome}</span>
+                  </h4>
+                  {dados.gestor ? (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <button type="button" className={botao} onClick={() => setPreencher((atual) => ({ mes: dados.mes.mes, dia: diaAberto, ano: dados.mes.ano, n: (atual?.n ?? 0) + 1 }))}>
+                        <CalendarPlus size={13} /> Marcar acontecimento neste dia
+                      </button>
+                      <button type="button" className={botao} disabled={ocupado} onClick={() => void agir(() => calendarioMundoApi.definirHoje(campanhaId, { ano: dados.mes.ano, mes: dados.mes.mes, dia: diaAberto }))}>
+                        <Sunrise size={13} /> Hoje é este dia
+                      </button>
+                    </div>
+                  ) : null}
+                  {eventosDoAnoNoDia.map((item) => (
+                    <p key={item.id} className={`mt-2 text-sm leading-6 ${item.id === 'lua-carmesim' ? 'text-rose-200/90' : 'text-amber-100/85'}`}>
+                      <strong className={item.id === 'lua-carmesim' ? 'text-rose-300' : 'text-amber-300'}>{item.nome}{item.duracao > 1 ? ` (dia ${item.parte} de ${item.duracao})` : ''}.</strong> {item.descricao}
+                      {dados.gestor && item.sorteado ? <span className="ml-1 text-[10px] uppercase tracking-widest text-gray-500">(dia sorteado, os jogadores só veem quando chegar)</span> : null}
+                    </p>
+                  ))}
+                  {eventosDoDia.length === 0 && eventosDoAnoNoDia.length === 0 ? <p className="mt-2 text-sm text-gray-500">Nada de especial neste dia.</p> : (
                     <ul className="mt-3 space-y-3">
                       {eventosDoDia.map((evento) => (
                         <li key={evento.id}>
-                          <p className="font-bold text-white"><EventoNome evento={evento} /></p>
+                          <p className="font-bold text-white"><EventoNome evento={evento} />{evento.duracao > 1 ? <span className="ml-2 text-xs font-normal text-gray-500">dia {evento.parte} de {evento.duracao}</span> : null}</p>
                           {evento.rasurado ? <div className="mt-2"><CarimboRetido texto="Algo acontece aqui" /></div> : evento.nota ? <p className="mt-1 text-sm leading-6 text-gray-400">{evento.nota}</p> : null}
                           {dados.gestor ? <p className="mt-1 text-[10px] uppercase tracking-widest text-gray-600">{rotuloDoEvento(evento)}</p> : null}
                         </li>
@@ -183,7 +212,7 @@ export default function CalendarioMundoPage() {
                 <ul className="space-y-3">
                   {dados.proximos.map((evento) => (
                     <li key={`${evento.id}-${evento.ano}`} className="rounded-2xl border border-white/[0.07] bg-black/25 p-3">
-                      <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: cor }}>{textoEmDias(evento.em_dias)} · {evento.dia} de {dados.config.meses[evento.mes]}</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: cor }}>{textoEmDias(evento.em_dias)} · dia {evento.dia} · {dados.config.meses[evento.mes]}</p>
                       <p className="mt-1 font-bold text-white"><EventoNome evento={evento} /></p>
                       {evento.rasurado ? <div className="mt-2"><CarimboRetido texto="Informação retida" /></div> : evento.nota ? <p className="mt-1 line-clamp-2 text-xs leading-5 text-gray-400">{evento.nota}</p> : null}
                     </li>
@@ -193,144 +222,9 @@ export default function CalendarioMundoPage() {
             </section>
           </div>
 
-          {dados.gestor ? <PainelDoMestre campanhaId={campanhaId} dados={dados} ocupado={ocupado} agir={agir} /> : null}
+          {dados.gestor ? <PainelCalendarioMestre campanhaId={campanhaId} dados={dados} ocupado={ocupado} agir={agir} preencher={preencher} /> : null}
         </>
       )}
     </main>
   );
 }
-
-interface IPainelProps {
-  campanhaId: string;
-  dados: ICalendarioMundo;
-  ocupado: boolean;
-  agir: (acao: () => Promise<ICalendarioMundo>) => Promise<void>;
-}
-
-/** Só o Mestre: mexer no tempo do mundo e marcar acontecimentos com o grau de revelação. */
-const PainelDoMestre = ({ campanhaId, dados, ocupado, agir }: IPainelProps) => {
-  const meses = dados.config.meses;
-  const [ano, setAno] = useState(String(dados.hoje.ano));
-  const [mes, setMes] = useState(dados.hoje.mes);
-  const [dia, setDia] = useState(String(dados.hoje.dia));
-  const [dias, setDias] = useState('7');
-  const [titulo, setTitulo] = useState('');
-  const [nota, setNota] = useState('');
-  const [eMes, setEMes] = useState(dados.hoje.mes);
-  const [eDia, setEDia] = useState('1');
-  const [eAno, setEAno] = useState(String(dados.hoje.ano));
-  const [anual, setAnual] = useState(false);
-  const [revelacao, setRevelacao] = useState<Revelacao>('rasurado');
-  const [nomesMeses, setNomesMeses] = useState<string[] | null>(null);
-
-  useEffect(() => {
-    setAno(String(dados.hoje.ano));
-    setMes(dados.hoje.mes);
-    setDia(String(dados.hoje.dia));
-  }, [dados.hoje.ano, dados.hoje.mes, dados.hoje.dia]);
-
-  const todosEventos = useMemo(() => {
-    const lista: IEventoCalendario[] = [];
-    const vistos = new Set<string>();
-    dados.mes.dias.forEach((d) => d.eventos.forEach((e) => { if (!vistos.has(e.id)) { vistos.add(e.id); lista.push(e); } }));
-    dados.proximos.forEach((e) => { if (!vistos.has(e.id)) { vistos.add(e.id); lista.push(e); } });
-    return lista;
-  }, [dados]);
-
-  return (
-    <section className="grid gap-6 lg:grid-cols-2" aria-label="Ferramentas do Mestre">
-      <div className="space-y-5 rounded-3xl border border-yellow-600/20 bg-[#0c0b11]/85 p-5">
-        <h3 className="text-[11px] font-bold uppercase tracking-[0.22em] text-yellow-500">Mexer no tempo</h3>
-        <div>
-          <p className="mb-2 text-xs text-gray-400">Avançar o dia do mundo</p>
-          <div className="flex flex-wrap gap-2">
-            {[1, 3, 7, 30].map((quantidade) => <button key={quantidade} type="button" className={botao} disabled={ocupado} onClick={() => void agir(() => calendarioMundoApi.avancar(campanhaId, quantidade))}>+{quantidade} {quantidade === 1 ? 'dia' : 'dias'}</button>)}
-            <input className={`${campo} !w-20`} type="number" value={dias} onChange={(evento) => setDias(evento.target.value)} aria-label="Quantidade de dias" />
-            <button type="button" className={botao} disabled={ocupado || !Number(dias)} onClick={() => void agir(() => calendarioMundoApi.avancar(campanhaId, Number(dias)))}>Avançar</button>
-          </div>
-        </div>
-        <div>
-          <p className="mb-2 text-xs text-gray-400">Definir a data de hoje</p>
-          <div className="grid grid-cols-[4.5rem_1fr_4.5rem_auto] gap-2">
-            <input className={campo} type="number" value={dia} min={1} max={30} onChange={(evento) => setDia(evento.target.value)} aria-label="Dia" />
-            <select className={campo} value={mes} onChange={(evento) => setMes(Number(evento.target.value))} aria-label="Mês">{meses.map((nome, indice) => <option key={nome + indice} value={indice}>{nome}</option>)}</select>
-            <input className={campo} type="number" value={ano} onChange={(evento) => setAno(evento.target.value)} aria-label="Ano" />
-            <button type="button" className={botao} disabled={ocupado} onClick={() => void agir(() => calendarioMundoApi.definirHoje(campanhaId, { ano: Number(ano), mes, dia: Number(dia) }))}>Definir</button>
-          </div>
-        </div>
-        <div>
-          <p className="mb-2 text-xs text-gray-400">Estação especial (vale até a estação do mês mudar)</p>
-          <div className="flex flex-wrap gap-2">
-            {([[null, 'Nenhuma'], ['noite_eterna', 'Noite Eterna'], ['eclipse', 'Eclipse']] as Array<[ChaveEstacao | null, string]>).map(([chave, rotulo]) => (
-              <button key={rotulo} type="button" className={botao} aria-pressed={dados.estacao_especial === chave} style={dados.estacao_especial === chave ? { borderColor: '#c7a44c', color: '#f3dc8f' } : undefined} disabled={ocupado} onClick={() => void agir(() => calendarioMundoApi.estacaoEspecial(campanhaId, chave))}>{rotulo}</button>
-            ))}
-          </div>
-        </div>
-        <label className="flex items-start gap-2 text-xs leading-5 text-gray-400">
-          <input type="checkbox" className="mt-0.5" checked={Boolean(dados.config.sincronizar_discord)} onChange={(evento) => void agir(() => calendarioMundoApi.config(campanhaId, { sincronizar_discord: evento.target.checked }))} />
-          Manter a estação do Discord igual à do calendário (o Jornalista usa a estação para sortear o loot).
-        </label>
-        <details>
-          <summary className="cursor-pointer text-xs font-bold text-gray-400 hover:text-white">Renomear os meses</summary>
-          <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {(nomesMeses ?? meses).map((nome, indice) => (
-              <input key={indice} className={campo} value={nome} maxLength={24} aria-label={`Nome do mês ${indice + 1}`} onChange={(evento) => setNomesMeses((atual) => (atual ?? meses).map((item, i) => (i === indice ? evento.target.value : item)))} />
-            ))}
-          </div>
-          <button type="button" className={`${botao} mt-3`} disabled={ocupado || !nomesMeses || nomesMeses.some((nome) => !nome.trim())} onClick={() => { if (nomesMeses) void agir(() => calendarioMundoApi.config(campanhaId, { meses: nomesMeses })).then(() => setNomesMeses(null)); }}>Salvar nomes</button>
-        </details>
-      </div>
-
-      <div className="space-y-5 rounded-3xl border border-yellow-600/20 bg-[#0c0b11]/85 p-5">
-        <h3 className="text-[11px] font-bold uppercase tracking-[0.22em] text-yellow-500">Marcar um acontecimento</h3>
-        <form
-          className="space-y-3"
-          onSubmit={(evento) => {
-            evento.preventDefault();
-            if (!titulo.trim()) return;
-            void agir(() => calendarioMundoApi.criarEvento(campanhaId, { titulo, nota, mes: eMes, dia: Number(eDia), ano: anual ? null : Number(eAno), anual, revelacao })).then(() => { setTitulo(''); setNota(''); });
-          }}
-        >
-          <input className={campo} value={titulo} maxLength={80} onChange={(evento) => setTitulo(evento.target.value)} placeholder="Ex.: Festa da Colheita, o selo se rompe" aria-label="Título do acontecimento" />
-          <textarea className={`${campo} min-h-20`} value={nota} maxLength={600} onChange={(evento) => setNota(evento.target.value)} placeholder="O que acontece (só aparece quando estiver aberto)" aria-label="Texto do acontecimento" />
-          <div className="grid grid-cols-[4.5rem_1fr_5rem] gap-2">
-            <input className={campo} type="number" min={1} max={30} value={eDia} onChange={(evento) => setEDia(evento.target.value)} aria-label="Dia do acontecimento" />
-            <select className={campo} value={eMes} onChange={(evento) => setEMes(Number(evento.target.value))} aria-label="Mês do acontecimento">{meses.map((nome, indice) => <option key={nome + indice} value={indice}>{nome}</option>)}</select>
-            <input className={campo} type="number" value={eAno} disabled={anual} onChange={(evento) => setEAno(evento.target.value)} aria-label="Ano do acontecimento" />
-          </div>
-          <label className="flex items-center gap-2 text-xs text-gray-400"><input type="checkbox" checked={anual} onChange={(evento) => setAnual(evento.target.checked)} /> <Repeat size={12} /> Todo ano (festival, data fixa)</label>
-          <div role="group" aria-label="Quanto os jogadores enxergam" className="grid gap-2 sm:grid-cols-3">
-            {REVELACOES.map((opcao) => (
-              <button key={opcao.id} type="button" aria-pressed={revelacao === opcao.id} onClick={() => setRevelacao(opcao.id)} className="rounded-xl border p-2.5 text-left transition" style={{ borderColor: revelacao === opcao.id ? '#c7a44c' : 'rgba(255,255,255,0.1)', backgroundColor: revelacao === opcao.id ? 'rgba(199,164,76,0.12)' : 'transparent' }}>
-                <span className="block text-xs font-bold text-white">{opcao.rotulo}</span>
-                <span className="block text-[11px] leading-4 text-gray-500">{opcao.ajuda}</span>
-              </button>
-            ))}
-          </div>
-          <button type="submit" className={botao} disabled={ocupado || !titulo.trim()}><Plus size={14} /> Marcar no calendário</button>
-        </form>
-
-        {todosEventos.length ? (
-          <div>
-            <p className="mb-2 text-xs text-gray-400">Deste mês e dos próximos dias</p>
-            <ul className="space-y-2">
-              {todosEventos.map((evento) => (
-                <li key={evento.id} className="flex items-center gap-2 rounded-xl border border-white/[0.07] bg-black/25 p-2.5">
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-bold text-white">{evento.titulo}</p>
-                    <p className="text-[10px] uppercase tracking-widest text-gray-500">{evento.dia} de {meses[evento.mes]} · {rotuloDoEvento(evento)}</p>
-                  </div>
-                  <select className="min-h-9 rounded-lg border border-white/10 bg-black/40 px-2 text-xs text-gray-200" value={evento.revelacao} aria-label={`Revelação de ${evento.titulo}`} disabled={ocupado} onChange={(e) => void agir(() => calendarioMundoApi.editarEvento(campanhaId, evento.id, { revelacao: e.target.value as Revelacao }))}>
-                    {REVELACOES.map((opcao) => <option key={opcao.id} value={opcao.id}>{opcao.rotulo}</option>)}
-                  </select>
-                  {evento.revelacao === 'oculto' ? <EyeOff size={14} className="text-amber-300" aria-label="Oculto dos jogadores" /> : null}
-                  <button type="button" className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-gray-500 hover:text-red-400" aria-label={`Apagar ${evento.titulo}`} onClick={() => { if (window.confirm(`Apagar "${evento.titulo}" do calendário?`)) void agir(() => calendarioMundoApi.apagarEvento(campanhaId, evento.id)); }}><Trash2 size={14} /></button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-      </div>
-    </section>
-  );
-};

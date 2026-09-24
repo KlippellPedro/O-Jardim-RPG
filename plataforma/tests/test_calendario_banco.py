@@ -13,7 +13,10 @@ from psycopg.conninfo import make_conninfo
 
 from core.database import Database
 from core.dependencies import AuthenticatedUser
-from routers.calendario import ConfigInput, EventoInput, HojeInput, criar_evento, definir_config, definir_hoje, obter
+from routers.calendario import (
+    AvancarInput, ConfigInput, DiaExtraInput, EventoInput, HojeInput, apagar_dia_extra, avancar, criar_dia_extra, criar_evento,
+    definir_config, definir_hoje, desfazer, obter, revelar_passados,
+)
 
 TEST_DSN = (os.getenv("TEST_DATABASE_URL") or "").strip()
 
@@ -31,6 +34,7 @@ class CalendarioBancoTests(unittest.TestCase):
         self.campanha_id = uuid.uuid4()
         self.mestre = self._usuario("cal-mestre@example.com", "Mestre", "mestre")
         self.ana = self._usuario("cal-ana@example.com", "Ana", "jogador")
+        self.bia = self._usuario("cal-bia@example.com", "Bia", "assistente")
         with self.database.connection() as connection:
             connection.execute(
                 "INSERT INTO campanhas_discord (campanha_id, discord_guild_id, vinculado_por) VALUES (%s, 'guild-1', %s)",
@@ -100,6 +104,47 @@ class CalendarioBancoTests(unittest.TestCase):
         self.assertTrue(dia["eventos"][0]["rasurado"])
         self.assertNotIn("Segredo", str(visao))
         self.assertNotIn("A traicao", str(visao))
+
+    def test_assistente_nao_ve_a_area_do_mestre_nem_mexe_no_tempo(self):
+        visao = obter(self.campanha_id, ano=None, mes=None, user=self.bia, database=self.database)
+        self.assertFalse(visao["gestor"])
+        self.assertNotIn("todos_eventos", visao)
+        for acao in (
+            lambda: avancar(self.campanha_id, AvancarInput(dias=1), user=self.bia, database=self.database),
+            lambda: desfazer(self.campanha_id, user=self.bia, database=self.database),
+            lambda: revelar_passados(self.campanha_id, user=self.bia, database=self.database),
+        ):
+            with self.assertRaises(HTTPException) as erro:
+                acao()
+            self.assertEqual(erro.exception.status_code, 403)
+
+    def test_mestre_volta_o_tempo_e_o_historico_persiste_no_banco(self):
+        avancar(self.campanha_id, AvancarInput(dias=7), user=self.mestre, database=self.database)
+        visao = desfazer(self.campanha_id, user=self.mestre, database=self.database)
+        self.assertEqual(visao["hoje"], {"ano": 1, "mes": 0, "dia": 1})
+        self.assertEqual(visao["historico"], [])
+        with self.assertRaises(HTTPException) as erro:
+            desfazer(self.campanha_id, user=self.mestre, database=self.database)
+        self.assertEqual(erro.exception.status_code, 409)
+
+    def test_dia_extra_e_acontecimento_de_varios_dias_persistem_no_banco_e_so_o_mestre_cria(self):
+        with self.assertRaises(HTTPException) as erro:
+            criar_dia_extra(self.campanha_id, DiaExtraInput(mes=0, nome="Dia do Recomeco"), user=self.bia, database=self.database)
+        self.assertEqual(erro.exception.status_code, 403)
+        visao = criar_dia_extra(self.campanha_id, DiaExtraInput(mes=0, nome="Dia do Recomeco", descricao="Tudo recomeca."), user=self.mestre, database=self.database)
+        self.assertEqual(visao["config"]["dias_por_mes"][0], 29)
+        criar_evento(
+            self.campanha_id,
+            EventoInput(titulo="Festival", nota="x", mes=0, dia=28, repeticao="mensal", duracao=3, revelacao="aberto"),
+            user=self.mestre, database=self.database,
+        )
+        jogadora = obter(self.campanha_id, ano=None, mes=2, user=self.ana, database=self.database)
+        self.assertEqual([(d["dia"], d["eventos"][0]["parte"]) for d in jogadora["mes"]["dias"] if d["eventos"]], [(1, 3), (28, 1)])
+        primeiro = obter(self.campanha_id, ano=None, mes=0, user=self.ana, database=self.database)
+        self.assertEqual(len(primeiro["mes"]["dias"]), 29)
+        visao = apagar_dia_extra(self.campanha_id, 0, user=self.mestre, database=self.database)
+        self.assertEqual(visao["config"]["dias_por_mes"][0], 28)
+        self.assertEqual(visao["config"]["meses_para_dia_extra"], [0, 2, 3, 4, 5, 6])
 
 
 if __name__ == "__main__":
