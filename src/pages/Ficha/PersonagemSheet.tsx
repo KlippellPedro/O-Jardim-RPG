@@ -907,7 +907,7 @@ export const PersonagemSheet: React.FC = () => {
     <motion.div 
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       role="main"
-      className="ficha-shell app-page w-full overflow-x-hidden"
+      className="ficha-shell app-page w-full overflow-x-clip"
       style={estiloTema}
       data-ficha-raca={racaId || undefined}
       data-ficha-classe={classePrincipalId || undefined}

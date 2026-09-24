@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { Sprout, Search, ArrowRightLeft, Sparkles, Filter, Gem } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Sprout, Search, ArrowRightLeft, Sparkles, Filter, Gem, X, ChevronDown, ArrowUpDown } from 'lucide-react';
 import {
   catalogoJardimDisponivel,
   catalogoJardimHabilidadesDisponivel,
@@ -23,8 +23,12 @@ import {
   type IUnicoVendavelJardim,
 } from '../../../services/progressaoFichaService';
 import type { IUnicoJardim } from '../../../types/catalogo';
+import { ModalConfirmacao } from '../components/ModalConfirmacao';
 
 type TTipoFiltro = 'todos' | 'poder' | 'habilidade' | 'unico';
+type TOrdem = 'barato' | 'caro' | 'nome';
+
+const PASSO_LISTA = 24;
 
 type TUnicoCatalogo = { unico: IUnicoJardim; jaAdquirido: boolean };
 
@@ -69,6 +73,12 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
   const [busca, setBusca] = useState('');
   const [filtroClasse, setFiltroClasse] = useState('todas');
   const [filtroTipo, setFiltroTipo] = useState<TTipoFiltro>('todos');
+  const [ordem, setOrdem] = useState<TOrdem>('barato');
+  const [soPagaveis, setSoPagaveis] = useState(false);
+  const [ocultarAdquiridos, setOcultarAdquiridos] = useState(false);
+  const [limite, setLimite] = useState(PASSO_LISTA);
+  const [expandidos, setExpandidos] = useState<Set<string>>(new Set());
+  const [confirmacao, setConfirmacao] = useState<{ titulo: string; mensagem: string; acao: () => void } | null>(null);
   const [mensagem, setMensagem] = useState<{ texto: string; erro?: boolean } | null>(null);
 
   const f = character.ficha || {};
@@ -115,24 +125,69 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
   const classeIdDe = (item: TVendavel | TCatalogo): string | null => (item.tipo === 'unico' ? null : item.dado.classeId);
   const custoSementesDe = (item: TCatalogo): number => (item.tipo === 'unico' ? item.dado.unico.custoSementes : item.dado.custoSementes);
 
-  const combinarFiltros = <T extends TVendavel | TCatalogo>(itens: T[], comFiltroClasse: boolean) => itens
-    .filter((item) => filtroTipo === 'todos' || item.tipo === filtroTipo)
-    .filter((item) => !comFiltroClasse || filtroClasse === 'todas' || classeIdDe(item) === filtroClasse)
-    .filter((item) => !termoBusca
-      || tituloDe(item).toLocaleLowerCase('pt-BR').includes(termoBusca)
-      || classeTituloDe(item).toLocaleLowerCase('pt-BR').includes(termoBusca));
+  const descricaoDe = (item: TCatalogo): string => {
+    if (item.tipo === 'poder') return item.dado.poder.descricao || '';
+    if (item.tipo === 'habilidade') return item.dado.descricaoNoNivelAtual || '';
+    return item.dado.unico.descricao || '';
+  };
+  const jaAdquiridoDe = (item: TCatalogo): boolean => {
+    if (item.tipo === 'poder') return item.dado.jaAdquirido;
+    if (item.tipo === 'habilidade') return item.dado.jaAdquirida;
+    return item.dado.jaAdquirido;
+  };
 
-  const vendaveisVisiveis = combinarFiltros(vendaveis, true);
-  const catalogoVisivel = combinarFiltros(catalogo, true)
-    .sort((a, b) => custoSementesDe(a) - custoSementesDe(b));
+  const passaBusca = (item: TVendavel | TCatalogo) => !termoBusca
+    || tituloDe(item).toLocaleLowerCase('pt-BR').includes(termoBusca)
+    || classeTituloDe(item).toLocaleLowerCase('pt-BR').includes(termoBusca);
+  const passaBuscaCatalogo = (item: TCatalogo) => passaBusca(item)
+    || descricaoDe(item).toLocaleLowerCase('pt-BR').includes(termoBusca);
+  const passaClasse = (item: TVendavel | TCatalogo) => filtroClasse === 'todas' || classeIdDe(item) === filtroClasse;
+
+  // Contagem de cada aba de tipo respeita a busca e a classe, para o número prometer o que vai aparecer.
+  const contagemPorTipo = useMemo(() => {
+    const base = catalogo.filter((item) => passaClasse(item) && passaBuscaCatalogo(item));
+    return {
+      todos: base.length,
+      poder: base.filter((item) => item.tipo === 'poder').length,
+      habilidade: base.filter((item) => item.tipo === 'habilidade').length,
+      unico: base.filter((item) => item.tipo === 'unico').length,
+    } as Record<TTipoFiltro, number>;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [catalogo, filtroClasse, termoBusca]);
+
+  const vendaveisVisiveis = vendaveis
+    .filter((item) => filtroTipo === 'todos' || item.tipo === filtroTipo)
+    .filter((item) => passaClasse(item) && passaBusca(item));
+
+  const catalogoVisivel = catalogo
+    .filter((item) => filtroTipo === 'todos' || item.tipo === filtroTipo)
+    .filter((item) => passaClasse(item) && passaBuscaCatalogo(item))
+    .filter((item) => !soPagaveis || (!jaAdquiridoDe(item) && custoSementesDe(item) <= sementes))
+    .filter((item) => !ocultarAdquiridos || !jaAdquiridoDe(item))
+    .sort((a, b) => {
+      // O que já está plantado vai para o fim, para não atrapalhar quem procura algo novo.
+      const adq = Number(jaAdquiridoDe(a)) - Number(jaAdquiridoDe(b));
+      if (adq !== 0) return adq;
+      if (ordem === 'nome') return tituloDe(a).localeCompare(tituloDe(b), 'pt-BR');
+      const dif = custoSementesDe(a) - custoSementesDe(b);
+      return (ordem === 'caro' ? -dif : dif) || tituloDe(a).localeCompare(tituloDe(b), 'pt-BR');
+    });
+
+  useEffect(() => { setLimite(PASSO_LISTA); }, [termoBusca, filtroClasse, filtroTipo, ordem, soPagaveis, ocultarAdquiridos]);
+
+  const alternarExpandido = (chave: string) => setExpandidos((atual) => {
+    const proximo = new Set(atual);
+    if (proximo.has(chave)) proximo.delete(chave); else proximo.add(chave);
+    return proximo;
+  });
+  const pedirConfirmacao = (dados: { titulo: string; mensagem: string; acao: () => void }) => setConfirmacao(dados);
 
   const avisar = (texto: string, erro = false) => {
     setMensagem({ texto, erro });
     setTimeout(() => setMensagem((atual) => (atual?.texto === texto ? null : atual)), 3500);
   };
 
-  const venderPoder = (alvo: IPoderVendavelJardim) => {
-    if (!window.confirm(`Podar "${alvo.titulo}" em troca de ${alvo.sementesRecebidas} Sementes? O poder some da ficha.`)) return;
+  const executarVenderPoder = (alvo: IPoderVendavelJardim) => {
     const novaLista = alvo.origemTipo === 'classe'
       ? venderPoderDeClasseNoJardim(f, alvo.indice)
       : venderPoderDoJardim(f, alvo.indice);
@@ -161,8 +216,7 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
     avisar(`${item.poder.titulo} (${item.classeTitulo}) foi plantado no Jardim.`);
   };
 
-  const venderHabilidade = (alvo: IHabilidadeVendavelJardim) => {
-    if (!window.confirm(`Podar "${alvo.titulo}" (todos os ${alvo.estagiosAlcancados} estágios já alcançados) em troca de ${alvo.sementesRecebidas} Sementes? A escada inteira some da ficha.`)) return;
+  const executarVenderHabilidade = (alvo: IHabilidadeVendavelJardim) => {
     const novaLista = alvo.origemTipo === 'classe'
       ? venderHabilidadeDeClasseNoJardim(f, { classeId: alvo.classeId, habilidadeId: alvo.habilidadeId })
       : venderHabilidadeDoJardim(f, { classeId: alvo.classeId, habilidadeId: alvo.habilidadeId });
@@ -191,8 +245,7 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
     avisar(`${item.habilidade.titulo} (${item.classeTitulo}) foi plantada no Jardim, já no estágio do seu nível atual.`);
   };
 
-  const venderUnico = (alvo: IUnicoVendavelJardim) => {
-    if (!window.confirm(`Podar "${alvo.titulo}" em troca de ${alvo.sementesRecebidas} Sementes? Ele some da ficha.`)) return;
+  const executarVenderUnico = (alvo: IUnicoVendavelJardim) => {
     const novaLista = venderUnicoNoJardim(f, alvo.id);
     if (!novaLista) {
       avisar('Não foi possível podar esse Único agora.', true);
@@ -219,251 +272,351 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
     avisar(`${item.unico.titulo} foi plantado no Jardim.`);
   };
 
+  const podarItem = (item: TVendavel) => {
+    if (item.tipo === 'poder') {
+      const alvo = item.dado;
+      pedirConfirmacao({
+        titulo: 'Podar poder',
+        mensagem: `Podar "${alvo.titulo}" em troca de ${alvo.sementesRecebidas} Sementes? O poder some da ficha.`,
+        acao: () => executarVenderPoder(alvo),
+      });
+    } else if (item.tipo === 'habilidade') {
+      const alvo = item.dado;
+      pedirConfirmacao({
+        titulo: 'Podar habilidade',
+        mensagem: `Podar "${alvo.titulo}" (todos os ${alvo.estagiosAlcancados} estágios já alcançados) em troca de ${alvo.sementesRecebidas} Sementes? A escada inteira some da ficha.`,
+        acao: () => executarVenderHabilidade(alvo),
+      });
+    } else {
+      const alvo = item.dado;
+      pedirConfirmacao({
+        titulo: 'Podar Único',
+        mensagem: `Podar "${alvo.titulo}" em troca de ${alvo.sementesRecebidas} Sementes? Ele some da ficha.`,
+        acao: () => executarVenderUnico(alvo),
+      });
+    }
+  };
+
+  const plantarItem = (item: TCatalogo) => {
+    if (item.tipo === 'poder') comprarPoder(item.dado);
+    else if (item.tipo === 'habilidade') comprarHabilidade(item.dado);
+    else comprarUnico(item.dado);
+  };
+
+  const chaveVendavel = (item: TVendavel) => (item.tipo === 'poder'
+    ? `poder:${item.dado.origemTipo}:${item.dado.classeId}:${item.dado.poderId}:${item.dado.indice}`
+    : item.tipo === 'habilidade'
+    ? `habilidade:${item.dado.origemTipo}:${item.dado.classeId}:${item.dado.habilidadeId}`
+    : `unico:${item.dado.id}`);
+
+  const chaveCatalogo = (item: TCatalogo) => (item.tipo === 'poder'
+    ? `poder:${item.dado.classeId}:${item.dado.poder.id}`
+    : item.tipo === 'habilidade'
+    ? `habilidade:${item.dado.classeId}:${item.dado.habilidade.id}`
+    : `unico:${item.dado.unico.id}`);
+
+  const selosTipo = (tipo: TTipoFiltro) => (tipo === 'poder'
+    ? 'border-sky-400/30 bg-sky-500/10 text-sky-200'
+    : tipo === 'habilidade'
+    ? 'border-fuchsia-400/30 bg-fuchsia-500/10 text-fuchsia-200'
+    : 'border-violet-400/30 bg-violet-500/10 text-violet-200');
+
+  const rotuloTipo = (tipo: TTipoFiltro) => (tipo === 'poder' ? 'Poder' : tipo === 'habilidade' ? 'Habilidade' : 'Único');
+
+  const irPara = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  const cartaoCatalogo = (item: TCatalogo) => {
+    const chave = chaveCatalogo(item);
+    const custo = custoSementesDe(item);
+    const adquirido = jaAdquiridoDe(item);
+    const faltam = custo - sementes;
+    const podePagar = faltam <= 0;
+    const aberto = expandidos.has(chave);
+    const descricao = descricaoDe(item);
+    const longa = descricao.length > 180;
+    const dado = item.dado;
+    const titulo = tituloDe(item);
+    const especial = item.tipo !== 'unico' && (dado as IPoderCatalogoJardim | IHabilidadeCatalogoJardim).categoriaClasse === 'esquecida';
+    const unico = item.tipo === 'unico' ? (dado as TUnicoCatalogo).unico : null;
+    const detalhe = item.tipo === 'unico'
+      ? `${TIPO_UNICO_LABEL[unico!.tipo] || unico!.tipo}${resumoFichaTecnica(unico!) ? ` · ${resumoFichaTecnica(unico!)}` : ''}`
+      : item.tipo === 'habilidade'
+      ? `${classeTituloDe(item)} · ${(dado as IHabilidadeCatalogoJardim).estagiosNoNivelAtual} estágio${(dado as IHabilidadeCatalogoJardim).estagiosNoNivelAtual > 1 ? 's' : ''} no seu nível`
+      : classeTituloDe(item);
+    return (
+      <article
+        key={chave}
+        className={`flex flex-col rounded-xl border p-4 transition-colors ${adquirido ? 'border-lime-400/30 bg-lime-500/[0.04]' : item.tipo === 'unico' ? 'border-violet-400/20 bg-violet-500/[0.03] hover:border-violet-400/40' : 'border-white/5 bg-[#121118]/90 hover:border-white/15'}`}
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              {item.tipo === 'unico' && <Gem size={13} className="text-violet-300" />}
+              <strong className="text-white leading-tight">{titulo}</strong>
+            </div>
+            <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+              <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${selosTipo(item.tipo)}`}>{rotuloTipo(item.tipo)}</span>
+              {unico && (
+                <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${TIER_COR[unico.tier] || TIER_COR.simples}`}>{TIER_LABEL[unico.tier] || unico.tier}</span>
+              )}
+              {especial && (
+                <span className="rounded-full border border-rose-400/30 bg-rose-500/10 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-rose-300">Especial</span>
+              )}
+            </div>
+            <p className="mt-1.5 text-[11px] text-gray-500">{item.tipo === 'unico' ? detalhe : `Classe: ${detalhe}`}</p>
+          </div>
+          <span className="flex-shrink-0 rounded-lg border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-2.5 py-1.5 text-center leading-none">
+            <span className="block text-base font-black text-[#c7a44c]">{custo}</span>
+            <span className="mt-0.5 block text-[8px] font-bold uppercase tracking-widest text-[#c7a44c]/70">sementes</span>
+          </span>
+        </div>
+        <p className={`mt-3 whitespace-pre-line text-sm leading-relaxed text-gray-400 ${longa && !aberto ? 'line-clamp-3' : ''}`}>{descricao}</p>
+        {longa && (
+          <button
+            type="button"
+            onClick={() => alternarExpandido(chave)}
+            className="mt-1 flex items-center gap-1 self-start text-[11px] font-bold text-gray-500 hover:text-gray-300"
+          >
+            <ChevronDown size={12} className={`transition-transform ${aberto ? 'rotate-180' : ''}`} /> {aberto ? 'Mostrar menos' : 'Ler tudo'}
+          </button>
+        )}
+        <div className="mt-auto flex flex-wrap items-center gap-3 pt-3">
+          <button
+            type="button"
+            onClick={() => plantarItem(item)}
+            disabled={adquirido || !podePagar}
+            className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${item.tipo === 'unico' ? 'border-violet-400/30 bg-violet-500/10 text-violet-200 hover:bg-violet-500/20' : 'border-lime-400/30 bg-lime-500/10 text-lime-200 hover:bg-lime-500/20'}`}
+          >
+            <Sparkles size={14} /> {adquirido ? (item.tipo === 'habilidade' ? 'Já plantada' : 'Já plantado') : 'Plantar no Jardim'}
+          </button>
+          {!adquirido && !podePagar && <span className="text-[11px] font-bold text-red-300/80">Faltam {faltam} sementes</span>}
+        </div>
+      </article>
+    );
+  };
+
+  const chipTipo = (opcao: { value: TTipoFiltro; label: string }) => (
+    <button
+      key={opcao.value}
+      type="button"
+      onClick={() => setFiltroTipo(opcao.value)}
+      aria-pressed={filtroTipo === opcao.value}
+      className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-bold transition-colors ${filtroTipo === opcao.value ? 'border-lime-400/30 bg-lime-500/15 text-lime-200' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
+    >
+      {opcao.label}
+      <span className={`rounded-full px-1.5 py-px text-[10px] ${filtroTipo === opcao.value ? 'bg-lime-400/20 text-lime-100' : 'bg-white/5 text-gray-500'}`}>{contagemPorTipo[opcao.value]}</span>
+    </button>
+  );
+
+  const filtrosAtivos = termoBusca !== '' || filtroClasse !== 'todas' || filtroTipo !== 'todos' || soPagaveis || ocultarAdquiridos;
+  const limparFiltros = () => {
+    setBusca('');
+    setFiltroClasse('todas');
+    setFiltroTipo('todos');
+    setSoPagaveis(false);
+    setOcultarAdquiridos(false);
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* HEADER */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4" data-tour="jardim-resumo">
+      <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-white/5 bg-[#0f0e15] p-5 md:flex-row md:items-center" data-tour="jardim-resumo">
         <div>
-          <h2 className="text-2xl font-bold text-white mb-1 flex items-center gap-2" style={{ fontFamily: 'Cinzel, serif' }}>
+          <h2 className="mb-1 flex items-center gap-2 text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>
             <Sprout className="text-lime-400" size={22} /> Jardim
           </h2>
-          <p className="text-gray-400 text-sm max-w-xl">Pode poderes e habilidades que você não usa em troca de Sementes, e plante poderes, habilidades e Únicos na sua ficha.</p>
+          <p className="max-w-xl text-sm text-gray-400">Pode poderes e habilidades que você não usa em troca de Sementes, e plante poderes, habilidades e Únicos na sua ficha.</p>
         </div>
-        <div className="flex items-center gap-3 bg-[#15141b] border border-lime-400/20 rounded-xl px-4 py-3">
-          <span className="text-3xl font-bold text-lime-400">{sementes}</span>
-          <span className="text-sm text-gray-500 uppercase tracking-widest font-bold leading-tight">Sementes</span>
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-3 rounded-xl border border-lime-400/20 bg-[#15141b] px-4 py-3">
+            <span className="text-3xl font-bold text-lime-400">{sementes}</span>
+            <span className="text-sm font-bold uppercase leading-tight tracking-widest text-gray-500">Sementes</span>
+          </div>
+          <div className="flex gap-2 text-xs font-bold">
+            <button type="button" onClick={() => irPara('jardim-catalogo')} className="rounded-lg border border-lime-400/25 bg-lime-500/10 px-3 py-2 text-lime-200 hover:bg-lime-500/20">
+              Plantar ({catalogo.length})
+            </button>
+            <button type="button" onClick={() => irPara('jardim-podar')} className="rounded-lg border border-red-400/25 bg-red-500/10 px-3 py-2 text-red-300 hover:bg-red-500/20">
+              Podar ({vendaveis.length})
+            </button>
+          </div>
         </div>
       </div>
 
       {mensagem && (
-        <div className={`rounded-xl border px-4 py-3 text-sm ${mensagem.erro ? 'border-red-400/30 bg-red-500/10 text-red-300' : 'border-lime-400/30 bg-lime-500/10 text-lime-200'}`}>
+        <div role="status" className={`sticky top-2 z-30 rounded-xl border px-4 py-3 text-sm shadow-lg backdrop-blur ${mensagem.erro ? 'border-red-400/30 bg-red-950/80 text-red-200' : 'border-lime-400/30 bg-lime-950/80 text-lime-100'}`}>
           {mensagem.texto}
         </div>
       )}
 
-      {/* FILTROS */}
-      <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-4 flex flex-col sm:flex-row gap-3" data-tour="jardim-filtros">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
-          <input
-            type="text"
-            placeholder="Buscar por nome ou classe..."
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            className="w-full bg-[#121118] border border-white/5 rounded-xl py-2.5 pl-9 pr-4 text-white focus:border-lime-400/40 outline-none text-sm"
-          />
+      {/* FILTROS (grudam no topo ao rolar) */}
+      <div className="sticky top-0 z-20 space-y-3 rounded-2xl border border-white/5 bg-[#0f0e15]/95 p-3 shadow-[0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur" data-tour="jardim-filtros">
+        <div className="flex flex-col gap-3 lg:flex-row">
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+            <input
+              type="text"
+              placeholder="Buscar por nome, classe ou texto do efeito..."
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              aria-label="Buscar no Jardim"
+              className="w-full rounded-xl border border-white/5 bg-[#121118] py-2.5 pl-9 pr-9 text-sm text-white outline-none focus:border-lime-400/40"
+            />
+            {busca && (
+              <button type="button" onClick={() => setBusca('')} aria-label="Limpar busca" className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-gray-500 hover:text-white">
+                <X size={14} />
+              </button>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-1 rounded-xl border border-white/5 bg-[#121118] p-1">
+            {TIPOS_FILTRO.map(chipTipo)}
+          </div>
         </div>
-        <div className="flex flex-wrap gap-1.5 rounded-xl border border-white/5 bg-[#121118] p-1">
-          {TIPOS_FILTRO.map((opcao) => (
-            <button
-              key={opcao.value}
-              type="button"
-              onClick={() => setFiltroTipo(opcao.value)}
-              className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-colors ${filtroTipo === opcao.value ? 'bg-lime-500/15 text-lime-200 border border-lime-400/30' : 'text-gray-500 hover:text-gray-300 border border-transparent'}`}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative">
+            <Filter className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={14} />
+            <select
+              value={filtroClasse}
+              onChange={(e) => setFiltroClasse(e.target.value)}
+              disabled={filtroTipo === 'unico'}
+              aria-label="Filtrar por classe"
+              className="appearance-none rounded-lg border border-white/5 bg-[#121118] py-2 pl-8 pr-7 text-xs text-white outline-none focus:border-lime-400/40 disabled:opacity-40"
             >
-              {opcao.label}
+              <option value="todas">Todas as classes</option>
+              {classesCatalogo.map(([id, titulo]) => (
+                <option key={id} value={id}>{titulo}</option>
+              ))}
+            </select>
+          </div>
+          <div className="relative">
+            <ArrowUpDown className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={14} />
+            <select
+              value={ordem}
+              onChange={(e) => setOrdem(e.target.value as TOrdem)}
+              aria-label="Ordenar catálogo"
+              className="appearance-none rounded-lg border border-white/5 bg-[#121118] py-2 pl-8 pr-7 text-xs text-white outline-none focus:border-lime-400/40"
+            >
+              <option value="barato">Mais barato primeiro</option>
+              <option value="caro">Mais caro primeiro</option>
+              <option value="nome">Nome (A a Z)</option>
+            </select>
+          </div>
+          <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-white/5 bg-[#121118] px-3 py-2 text-xs text-gray-300">
+            <input type="checkbox" checked={soPagaveis} onChange={(e) => setSoPagaveis(e.target.checked)} className="accent-lime-400" />
+            Só o que posso pagar
+          </label>
+          <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-white/5 bg-[#121118] px-3 py-2 text-xs text-gray-300">
+            <input type="checkbox" checked={ocultarAdquiridos} onChange={(e) => setOcultarAdquiridos(e.target.checked)} className="accent-lime-400" />
+            Esconder o que já plantei
+          </label>
+          {filtrosAtivos && (
+            <button type="button" onClick={limparFiltros} className="ml-auto flex items-center gap-1 text-xs font-bold text-gray-400 hover:text-white">
+              <X size={12} /> Limpar filtros
             </button>
-          ))}
-        </div>
-        <div className="relative">
-          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" size={16} />
-          <select
-            value={filtroClasse}
-            onChange={(e) => setFiltroClasse(e.target.value)}
-            disabled={filtroTipo === 'unico'}
-            className="bg-[#121118] border border-white/5 rounded-xl py-2.5 pl-9 pr-8 text-white focus:border-lime-400/40 outline-none text-sm appearance-none disabled:opacity-40"
-          >
-            <option value="todas">Todas as classes</option>
-            {classesCatalogo.map(([id, titulo]) => (
-              <option key={id} value={id}>{titulo}</option>
-            ))}
-          </select>
+          )}
         </div>
       </div>
 
-      {filtroTipo !== 'poder' && filtroTipo !== 'unico' && (
-        <p className="rounded-xl border border-amber-400/20 bg-amber-500/[0.05] px-4 py-3 text-xs text-amber-200/80">
-          Uma habilidade em escada (como Implacável) sai ou entra inteira: podar tira todos os estágios já alcançados, e plantar entrega de uma vez os estágios que o seu nível total já permite. Você só encontra no catálogo o que já cabe no seu nível, sem "nível 5" aparecendo para quem está no nível 1.
-        </p>
-      )}
-      {(filtroTipo === 'unico' || filtroTipo === 'todos') && (
-        <p className="rounded-xl border border-violet-400/20 bg-violet-500/[0.05] px-4 py-3 text-xs text-violet-200/80">
-          Únicos não vêm de nenhuma classe: são coisas que só existem no Jardim. O preço é fixo, sem depender do seu nível, e vai de truques simples a poderes lendários no tamanho de uma expansão de domínio. Quanto mais raro, mais Sementes custa.
-        </p>
-      )}
-
-      {/* PODAR */}
-      <section className="bg-[#0f0e15] border border-white/5 rounded-2xl p-4" data-tour="jardim-podar">
-        <div className="mb-4">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#c7a44c]">Podar</h3>
-          <p className="mt-1 text-xs text-gray-500">Vender um poder da própria classe libera a vaga de volta na Progressão; vender a habilidade principal tira a escada inteira; vender um Único tira ele da ficha.</p>
+      <details className="rounded-xl border border-white/5 bg-[#0f0e15] px-4 py-3 text-xs text-gray-400">
+        <summary className="cursor-pointer select-none font-bold text-gray-300">Como funciona o Jardim</summary>
+        <div className="mt-3 space-y-2 leading-relaxed">
+          <p>Uma habilidade em escada (como Implacável) sai ou entra inteira: podar tira todos os estágios já alcançados, e plantar entrega de uma vez os estágios que o seu nível total já permite. Você só encontra no catálogo o que já cabe no seu nível.</p>
+          <p>Únicos não vêm de nenhuma classe: são coisas que só existem no Jardim. O preço é fixo, sem depender do seu nível, e vai de truques simples a poderes lendários no tamanho de uma expansão de domínio. Quanto mais raro, mais Sementes custa.</p>
         </div>
-        {vendaveisVisiveis.length === 0 ? (
-          <p className="py-6 text-center text-sm text-gray-600">Nada disponível para podar com esse filtro.</p>
-        ) : (
-          <div className="grid gap-3 lg:grid-cols-2">
-            {vendaveisVisiveis.map((item) => {
-              const chave = item.tipo === 'poder'
-                ? `poder:${item.dado.origemTipo}:${item.dado.classeId}:${item.dado.poderId}:${item.dado.indice}`
-                : item.tipo === 'habilidade'
-                ? `habilidade:${item.dado.origemTipo}:${item.dado.classeId}:${item.dado.habilidadeId}`
-                : `unico:${item.dado.id}`;
-              const titulo = tituloDe(item);
-              const sementesRecebidas = item.dado.sementesRecebidas;
-              return (
-                <article key={chave} className="rounded-xl border border-white/5 bg-[#121118]/90 p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <strong className="text-white">{titulo}</strong>
-                        {item.tipo === 'unico' ? (
-                          <>
-                            <span className="rounded-full border border-violet-400/30 bg-violet-500/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-violet-200">Único</span>
-                            <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${TIER_COR[item.dado.tier] || TIER_COR.simples}`}>{TIER_LABEL[item.dado.tier] || item.dado.tier}</span>
-                          </>
-                        ) : (
-                          <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${item.tipo === 'poder' ? 'border-sky-400/30 bg-sky-500/10 text-sky-200' : 'border-fuchsia-400/30 bg-fuchsia-500/10 text-fuchsia-200'}`}>
-                            {item.tipo === 'poder' ? 'Poder' : 'Habilidade'}
-                          </span>
-                        )}
-                      </div>
-                      <p className="mt-0.5 text-[11px] text-gray-500">
-                        {item.tipo === 'unico'
-                          ? TIPO_UNICO_LABEL[item.dado.tipo] || item.dado.tipo
-                          : item.dado.origemTipo === 'jardim' ? `Jardim: ${item.dado.origem}` : `Classe: ${item.dado.origem}`}
-                        {item.tipo === 'habilidade' && ` · ${item.dado.estagiosAlcancados} estágio${item.dado.estagiosAlcancados > 1 ? 's' : ''} alcançado${item.dado.estagiosAlcancados > 1 ? 's' : ''}`}
-                      </p>
-                    </div>
-                    <span className="rounded-full border border-lime-400/30 bg-lime-500/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-lime-200 flex-shrink-0">
-                      +{sementesRecebidas} sementes
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => (item.tipo === 'poder' ? venderPoder(item.dado) : item.tipo === 'habilidade' ? venderHabilidade(item.dado) : venderUnico(item.dado))}
-                    className="mt-3 flex items-center gap-2 rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-xs font-bold text-red-300 hover:bg-red-500/20 transition-colors"
-                  >
-                    <ArrowRightLeft size={14} /> Podar por Sementes
-                  </button>
-                </article>
-              );
-            })}
-          </div>
-        )}
-      </section>
+      </details>
 
       {/* CATÁLOGO */}
-      <section className="bg-[#0f0e15] border border-white/5 rounded-2xl p-4" data-tour="jardim-catalogo">
-        <div className="mb-4">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-lime-300">Catálogo do Jardim</h3>
-          <p className="mt-1 text-xs text-gray-500">Poderes, habilidades de outras classes e Únicos, prontos para plantar na sua ficha com Sementes.</p>
+      <section id="jardim-catalogo" className="scroll-mt-40 rounded-2xl border border-white/5 bg-[#0f0e15] p-4" data-tour="jardim-catalogo">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-lime-300">Catálogo do Jardim</h3>
+            <p className="mt-1 text-xs text-gray-500">Poderes, habilidades de outras classes e Únicos, prontos para plantar na sua ficha com Sementes.</p>
+          </div>
+          <span className="text-xs text-gray-500">{catalogoVisivel.length} de {catalogo.length} itens</span>
         </div>
         {catalogoVisivel.length === 0 ? (
-          <p className="py-6 text-center text-sm text-gray-600">Nada encontrado com esse filtro.</p>
-        ) : (
-          <div className="grid gap-3 lg:grid-cols-2 max-h-[32rem] overflow-y-auto pr-1 custom-scrollbar">
-            {catalogoVisivel.map((item) => {
-              if (item.tipo === 'poder') {
-                const dado = item.dado;
-                const podeComprar = !dado.jaAdquirido && sementes >= dado.custoSementes;
-                return (
-                  <article key={`poder:${dado.classeId}:${dado.poder.id}`} className={`rounded-xl border p-4 ${dado.jaAdquirido ? 'border-lime-400/30 bg-lime-500/[0.04]' : 'border-white/5 bg-[#121118]/90'}`}>
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <strong className="text-white">{dado.poder.titulo}</strong>
-                          <span className="rounded-full border border-sky-400/30 bg-sky-500/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-sky-200">Poder</span>
-                        </div>
-                        <p className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[11px] text-gray-500">
-                          Classe: {dado.classeTitulo}
-                          {dado.categoriaClasse === 'esquecida' && (
-                            <span className="rounded-full border border-rose-400/30 bg-rose-500/10 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-rose-300">Especial</span>
-                          )}
-                        </p>
-                      </div>
-                      <span className="rounded-full border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#c7a44c] flex-shrink-0">
-                        {dado.custoSementes} sementes
-                      </span>
-                    </div>
-                    <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{dado.poder.descricao}</p>
-                    <button
-                      type="button"
-                      onClick={() => comprarPoder(dado)}
-                      disabled={dado.jaAdquirido || !podeComprar}
-                      className="mt-3 flex items-center gap-2 rounded-lg border border-lime-400/30 bg-lime-500/10 px-3 py-2 text-xs font-bold text-lime-200 hover:bg-lime-500/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                    >
-                      <Sparkles size={14} /> {dado.jaAdquirido ? 'Já plantado' : 'Plantar no Jardim'}
-                    </button>
-                  </article>
-                );
-              }
-              if (item.tipo === 'habilidade') {
-                const dado = item.dado;
-                const podeComprar = !dado.jaAdquirida && sementes >= dado.custoSementes;
-                return (
-                  <article key={`habilidade:${dado.classeId}:${dado.habilidade.id}`} className={`rounded-xl border p-4 ${dado.jaAdquirida ? 'border-lime-400/30 bg-lime-500/[0.04]' : 'border-white/5 bg-[#121118]/90'}`}>
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <strong className="text-white">{dado.habilidade.titulo}</strong>
-                          <span className="rounded-full border border-fuchsia-400/30 bg-fuchsia-500/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-fuchsia-200">Habilidade</span>
-                        </div>
-                        <p className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[11px] text-gray-500">
-                          Classe: {dado.classeTitulo} · {dado.estagiosNoNivelAtual} estágio{dado.estagiosNoNivelAtual > 1 ? 's' : ''} no seu nível
-                          {dado.categoriaClasse === 'esquecida' && (
-                            <span className="rounded-full border border-rose-400/30 bg-rose-500/10 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-rose-300">Especial</span>
-                          )}
-                        </p>
-                      </div>
-                      <span className="rounded-full border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#c7a44c] flex-shrink-0">
-                        {dado.custoSementes} sementes
-                      </span>
-                    </div>
-                    <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{dado.descricaoNoNivelAtual}</p>
-                    <button
-                      type="button"
-                      onClick={() => comprarHabilidade(dado)}
-                      disabled={dado.jaAdquirida || !podeComprar}
-                      className="mt-3 flex items-center gap-2 rounded-lg border border-lime-400/30 bg-lime-500/10 px-3 py-2 text-xs font-bold text-lime-200 hover:bg-lime-500/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                    >
-                      <Sparkles size={14} /> {dado.jaAdquirida ? 'Já plantada' : 'Plantar no Jardim'}
-                    </button>
-                  </article>
-                );
-              }
-              const dado = item.dado;
-              const podeComprar = !dado.jaAdquirido && sementes >= dado.unico.custoSementes;
-              const ficha = resumoFichaTecnica(dado.unico);
-              return (
-                <article key={`unico:${dado.unico.id}`} className={`rounded-xl border p-4 ${dado.jaAdquirido ? 'border-lime-400/30 bg-lime-500/[0.04]' : 'border-violet-400/20 bg-violet-500/[0.03]'}`}>
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <Gem size={13} className="text-violet-300" />
-                        <strong className="text-white">{dado.unico.titulo}</strong>
-                        <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${TIER_COR[dado.unico.tier] || TIER_COR.simples}`}>{TIER_LABEL[dado.unico.tier] || dado.unico.tier}</span>
-                      </div>
-                      <p className="mt-0.5 text-[11px] text-gray-500">{TIPO_UNICO_LABEL[dado.unico.tipo] || dado.unico.tipo}{ficha ? ` · ${ficha}` : ''}</p>
-                    </div>
-                    <span className="rounded-full border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#c7a44c] flex-shrink-0">
-                      {dado.unico.custoSementes} sementes
-                    </span>
-                  </div>
-                  <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-400">{dado.unico.descricao}</p>
-                  <button
-                    type="button"
-                    onClick={() => comprarUnico(dado)}
-                    disabled={dado.jaAdquirido || !podeComprar}
-                    className="mt-3 flex items-center gap-2 rounded-lg border border-violet-400/30 bg-violet-500/10 px-3 py-2 text-xs font-bold text-violet-200 hover:bg-violet-500/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                  >
-                    <Sparkles size={14} /> {dado.jaAdquirido ? 'Já plantado' : 'Plantar no Jardim'}
-                  </button>
-                </article>
-              );
-            })}
+          <div className="py-8 text-center text-sm text-gray-600">
+            <p>Nada encontrado com esses filtros.</p>
+            {filtrosAtivos && (
+              <button type="button" onClick={limparFiltros} className="mt-3 rounded-lg border border-white/10 px-3 py-2 text-xs font-bold text-gray-300 hover:text-white">Limpar filtros</button>
+            )}
           </div>
+        ) : (
+          <>
+            <div className="grid gap-3 lg:grid-cols-2 2xl:grid-cols-3">
+              {catalogoVisivel.slice(0, limite).map(cartaoCatalogo)}
+            </div>
+            {catalogoVisivel.length > limite && (
+              <div className="mt-4 text-center">
+                <button
+                  type="button"
+                  onClick={() => setLimite((atual) => atual + PASSO_LISTA)}
+                  className="rounded-lg border border-lime-400/25 bg-lime-500/10 px-4 py-2 text-xs font-bold text-lime-200 hover:bg-lime-500/20"
+                >
+                  Mostrar mais ({catalogoVisivel.length - limite} restantes)
+                </button>
+              </div>
+            )}
+          </>
         )}
       </section>
+
+      {/* PODAR */}
+      <section id="jardim-podar" className="scroll-mt-40 rounded-2xl border border-white/5 bg-[#0f0e15] p-4" data-tour="jardim-podar">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#c7a44c]">Podar</h3>
+            <p className="mt-1 text-xs text-gray-500">Vender um poder da própria classe libera a vaga de volta na Progressão; vender a habilidade principal tira a escada inteira; vender um Único tira ele da ficha.</p>
+          </div>
+          <span className="text-xs text-gray-500">{vendaveisVisiveis.length} de {vendaveis.length} itens</span>
+        </div>
+        {vendaveisVisiveis.length === 0 ? (
+          <p className="py-6 text-center text-sm text-gray-600">Nada disponível para podar com esses filtros.</p>
+        ) : (
+          <ul className="divide-y divide-white/5 overflow-hidden rounded-xl border border-white/5">
+            {vendaveisVisiveis.map((item) => {
+              const dado = item.dado;
+              const origem = item.tipo === 'unico'
+                ? `${TIPO_UNICO_LABEL[item.dado.tipo] || item.dado.tipo} · ${TIER_LABEL[item.dado.tier] || item.dado.tier}`
+                : `${item.dado.origemTipo === 'jardim' ? 'Jardim' : 'Classe'}: ${item.dado.origem}${item.tipo === 'habilidade' ? ` · ${item.dado.estagiosAlcancados} estágio${item.dado.estagiosAlcancados > 1 ? 's' : ''}` : ''}`;
+              return (
+                <li key={chaveVendavel(item)} className="flex flex-wrap items-center gap-3 bg-[#121118]/90 px-4 py-3 hover:bg-[#161520]">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <strong className="text-sm text-white">{tituloDe(item)}</strong>
+                      <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${selosTipo(item.tipo)}`}>{rotuloTipo(item.tipo)}</span>
+                    </div>
+                    <p className="mt-0.5 text-[11px] text-gray-500">{origem}</p>
+                  </div>
+                  <span className="flex-shrink-0 rounded-full border border-lime-400/30 bg-lime-500/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-lime-200">
+                    +{dado.sementesRecebidas} sementes
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => podarItem(item)}
+                    className="flex flex-shrink-0 items-center gap-2 rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-xs font-bold text-red-300 transition-colors hover:bg-red-500/20"
+                  >
+                    <ArrowRightLeft size={14} /> Podar
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
+
+      <ModalConfirmacao
+        isOpen={confirmacao !== null}
+        titulo={confirmacao?.titulo || ''}
+        mensagem={confirmacao?.mensagem || ''}
+        rotuloConfirmar="Podar por Sementes"
+        onClose={() => setConfirmacao(null)}
+        onConfirmar={() => {
+          const acao = confirmacao?.acao;
+          setConfirmacao(null);
+          acao?.();
+        }}
+      />
     </div>
   );
 };
