@@ -45,6 +45,11 @@ CLASSES = RAIZ / "data" / "ficha" / "classes.json"
 CONQUISTAS = RAIZ / "plataforma" / "core" / "conquistas.py"
 MAGIAS = RAIZ / "data" / "ficha" / "magias.json"
 FALAS_ANALISE = RAIZ / "src" / "pages" / "Ficha" / "utils" / "falasAnalise.json"
+# Falas fixas do painel de subida (Maestria, Legado, atributo, item especial) e o
+# modelo da linha "Classe no nível N": src/pages/Ficha/components/subidaNivel.ts.
+FALAS_SUBIDA = RAIZ / "src" / "pages" / "Ficha" / "components" / "falasSubida.json"
+# Ritmos de nível compartilhados com o site e a plataforma (patamares, teto da classe).
+PROGRESSAO_NIVEIS = RAIZ / "data" / "ficha" / "progressao-niveis.json"
 # Iguais a FRASES_APRENDIZADO em src/pages/Ficha/components/aprendizado.ts.
 FRASES_APRENDIZADO = ("Magia aprendida", "Ritual aprendido", "Selo aprendido", "Encantamento aprendido")
 SAIDA = RAIZ / "public" / "audio" / "sabio"
@@ -52,7 +57,11 @@ SAIDA = RAIZ / "public" / "audio" / "sabio"
 VOZ_PADRAO = "pt-BR-FranciscaNeural"
 TAXA_PADRAO = "-8%"
 TOM_PADRAO = "-6Hz"
-MAX_NIVEL_TOTAL = 60
+# "Nível N alcançado" é gravado de 2 até aqui, mais um por patamar acima disso
+# (progressao-niveis.json). Fora dessas frases a linha cai na voz do navegador.
+MAX_NIVEL_TOTAL = 200
+# Até aqui a linha da classe cita o nome ("Guerreiro chegou ao nível 7"); depois
+# dele a fala é genérica ("Classe no nível 35"), para não gravar 29 classes x 30 níveis.
 MAX_NIVEL_CLASSE = 20
 MAX_GANHO = 60
 
@@ -108,11 +117,22 @@ def _mkssml(tc, texto):
 communicate.mkssml = _mkssml
 
 
+CENTENAS = ["", "cento", "duzentos", "trezentos", "quatrocentos", "quinhentos",
+            "seiscentos", "setecentos", "oitocentos", "novecentos"]
+
+
 def numero_por_extenso(n: int) -> str:
     if n < 20:
         return UNIDADES[n]
-    dezena, unidade = divmod(n, 10)
-    return DEZENAS[dezena] if unidade == 0 else f"{DEZENAS[dezena]} e {UNIDADES[unidade]}"
+    if n < 100:
+        dezena, unidade = divmod(n, 10)
+        return DEZENAS[dezena] if unidade == 0 else f"{DEZENAS[dezena]} e {UNIDADES[unidade]}"
+    if n == 100:
+        return "cem"
+    if n < 1000:
+        centena, resto = divmod(n, 100)
+        return CENTENAS[centena] if resto == 0 else f"{CENTENAS[centena]} e {numero_por_extenso(resto)}"
+    raise ValueError(f"numero fora do alcance da leitura por extenso: {n}")
 
 
 def falado(texto: str) -> str:
@@ -136,7 +156,9 @@ def frases() -> dict[str, str]:
     """texto mostrado na tela (chave do manifest) -> texto que a voz deve falar."""
     itens: dict[str, str] = {}
 
-    for n in range(2, MAX_NIVEL_TOTAL + 1):
+    progressao = json.loads(PROGRESSAO_NIVEIS.read_text(encoding="utf-8"))
+    niveis_totais = set(range(2, MAX_NIVEL_TOTAL + 1)) | set(progressao["patamares"]["niveis"])
+    for n in sorted(niveis_totais):
         itens[f"Nível {n} alcançado"] = f"Nível {numero_por_extenso(n)} alcançado"
     for rotulo in ("Vida", "Mana", "Estamina"):
         for n in range(1, MAX_GANHO + 1):
@@ -146,6 +168,15 @@ def frases() -> dict[str, str]:
     itens["Conquista desbloqueada"] = "Conquista desbloqueada"
     for nome in nomes_das_conquistas():
         itens[nome] = nome
+
+    # Falas fixas do painel de subida e a linha generica da classe acima do 20.
+    falas_subida = json.loads(FALAS_SUBIDA.read_text(encoding="utf-8"))
+    for chave, fala in falas_subida.items():
+        if not chave.startswith("_") and "{n}" not in fala:
+            itens[fala] = fala
+    modelo_classe = falas_subida["classeAcimaDoConteudo"]
+    for n in range(progressao["classe"]["nivel_conteudo"] + 1, progressao["classe"]["nivel_maximo"] + 1):
+        itens[modelo_classe.replace("{n}", str(n))] = modelo_classe.replace("{n}", numero_por_extenso(n))
 
     # Analise do Grande Sabio: frases fixas, sem numeros (ver analiseSabio.ts).
     for fala in json.loads(FALAS_ANALISE.read_text(encoding="utf-8")).values():
