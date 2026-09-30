@@ -2,6 +2,7 @@ import { ATRIBUTOS, ROTULOS_ATRIBUTOS, modificador } from '../../../services/cal
 import { CLASSES_CATALOGO, PERICIAS_CATALOGO, RACAS_CATALOGO } from '../../../services/catalogoService';
 import { ajusteOrigem, chaveAjuste, totalAjustesManuais } from '../../../services/ajustesFichaService';
 import { GRAUS_PERICIA, grausComConcedidos } from '../../../services/periciasFichaService';
+import { nomeDoGrauPericia } from '../../../services/progressaoNiveis';
 import { habilidadesAutomaticas, poderesSelecionados } from '../../../services/progressaoFichaService';
 import { nomeExibicaoRaca } from '../../../services/racaService';
 import { obterStatusFicha } from '../../../services/statusService';
@@ -44,8 +45,6 @@ export interface IResumoFicha {
 const LIMITE_INVENTARIO = 40;
 const LIMITE_PERICIAS = 24;
 const GRAU_MINIMO_IMPRESSO = GRAUS_PERICIA.indexOf('treinado');
-
-const capitalizar = (texto: string) => (texto ? texto.charAt(0).toLocaleUpperCase('pt-BR') + texto.slice(1) : texto);
 
 const numeroOuNulo = (valor: unknown): number | null => (
   typeof valor === 'number' && Number.isFinite(valor) ? valor : null
@@ -92,7 +91,7 @@ export function montarResumoFicha(character: any, agora: Date = new Date()): IRe
     .filter((pericia) => GRAUS_PERICIA.indexOf(pericia.grau) >= GRAU_MINIMO_IMPRESSO)
     .sort((a, b) => GRAUS_PERICIA.indexOf(b.grau) - GRAUS_PERICIA.indexOf(a.grau) || a.titulo.localeCompare(b.titulo, 'pt-BR'))
     .slice(0, LIMITE_PERICIAS)
-    .map((pericia) => ({ titulo: pericia.titulo, grau: capitalizar(pericia.grau) }));
+    .map((pericia) => ({ titulo: pericia.titulo, grau: nomeDoGrauPericia(pericia.grau) }));
 
   const poderes = poderesSelecionados(ficha).map((poder) => ({
     titulo: poder.titulo,

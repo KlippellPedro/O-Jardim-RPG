@@ -29,16 +29,8 @@ export const COMPRA_PONTOS_BASE = 8;
 export const COMPRA_PONTOS_MAXIMO = 15;
 export const ATRIBUTO_VALOR_MINIMO = 1;
 export const ATRIBUTO_VALOR_MAXIMO = 20;
-export const GRAUS_PERICIA = ['iniciante', 'aprendiz', 'treinado', 'especialista', 'mestre', 'veterano', 'renomado'] as const;
-export const BONUS_GRAU: Record<string, number> = {
-  iniciante: 0,
-  aprendiz: 2,
-  treinado: 4,
-  especialista: 6,
-  mestre: 8,
-  veterano: 10,
-  renomado: 12,
-};
+// Os graus de perícia e o bônus de cada um moram em data/ficha/progressao-niveis.json.
+export { GRAUS_PERICIA, BONUS_GRAU } from './progressaoNiveis';
 
 export function distribuirValoresAtributos(valores: readonly number[]): Record<TAtributo, number> {
   return Object.fromEntries(ATRIBUTOS.map((atributo, indice) => [

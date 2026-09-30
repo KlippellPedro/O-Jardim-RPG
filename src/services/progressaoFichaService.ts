@@ -8,7 +8,7 @@ import {
   tracoDisponivelNoNivel,
 } from './racaService';
 import { ATRIBUTOS, obterFragmentosRaciaisExpressos, obterModificacoesRaciaisInstaladas } from './calculoService';
-import { aumentosAtributoPorNivel, legadosPorNivel } from './progressaoNiveis';
+import { GRAUS_PERICIA, aumentosAtributoPorNivel, legadosPorNivel, nomeDoGrauPericia } from './progressaoNiveis';
 
 export interface IReferenciaClasseFicha {
   classeId?: string;
@@ -954,8 +954,7 @@ export function aumentosDeAtributo(ficha: any): IAumentosAtributo | null {
 }
 
 function grauPericia(ficha: any, id: string): number {
-  const ordem = ['iniciante', 'aprendiz', 'treinado', 'especialista', 'mestre', 'veterano', 'renomado'];
-  return ordem.indexOf(normalizar(ficha?.pericias?.[id]));
+  return GRAUS_PERICIA.indexOf(normalizar(ficha?.pericias?.[id]));
 }
 
 const NOMES_ATRIBUTOS: Record<string, string> = {
@@ -968,16 +967,6 @@ const NOMES_ATRIBUTOS: Record<string, string> = {
   fluxo: 'Fluxo',
 };
 
-const NOMES_GRAUS_PERICIA: Record<string, string> = {
-  iniciante: 'Iniciante',
-  aprendiz: 'Aprendiz',
-  treinado: 'Treinado',
-  especialista: 'Especialista',
-  mestre: 'Mestre',
-  veterano: 'Veterano',
-  renomado: 'Renomado',
-};
-
 export function descreverRequisito(requisito: any): string {
   if (!requisito || typeof requisito !== 'object') return '';
   if (Array.isArray(requisito.ou)) return requisito.ou.map(descreverRequisito).filter(Boolean).join(' ou ');
@@ -987,7 +976,7 @@ export function descreverRequisito(requisito: any): string {
     return `${nome} ${requisito.valor_minimo || 0}+`;
   }
   if (requisito.pericia) {
-    const nomeGrau = NOMES_GRAUS_PERICIA[normalizar(requisito.nivel)] || requisito.nivel;
+    const nomeGrau = nomeDoGrauPericia(normalizar(requisito.nivel)) || requisito.nivel;
     const nomePericia = String(requisito.pericia).charAt(0).toUpperCase() + String(requisito.pericia).slice(1);
     return `${nomePericia} (${nomeGrau})`;
   }

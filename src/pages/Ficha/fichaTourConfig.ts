@@ -109,7 +109,7 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
     },
     {
       id: 'pericias-grau', titulo: 'Grau de treinamento',
-      descricao: 'O grau vai de Iniciante a Renomado e define o bônus de treinamento. Clique no grau para ver todos os patamares e escolher o treinamento atual da perícia.',
+      descricao: 'O grau vai de Iniciante a Absoluto e define o bônus de treinamento; os cinco últimos só abrem a partir do nível 60. Clique no grau para ver todos os degraus e escolher o treinamento atual da perícia.',
       alvos: ['[data-tour="pericia-grau"]'], opcional: true,
     },
     {

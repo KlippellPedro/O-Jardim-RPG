@@ -26,10 +26,39 @@ export const NIVEL_CONTEUDO_CLASSE: number = progressaoData.classe.nivel_conteud
 export const NIVEL_MAXIMO_CLASSE: number = progressaoData.classe.nivel_maximo;
 /** Níveis totais em que o personagem muda de patamar, em ordem crescente. */
 export const PATAMARES_NIVEL: readonly number[] = [...progressaoData.patamares.niveis].sort((a, b) => a - b);
-/** Nível total mínimo de cada grau de perícia (iniciante ... renomado). */
-export const NIVEL_MINIMO_GRAU: readonly number[] = [...progressaoData.graus_pericia.nivel_minimo];
+export interface IGrauPericia {
+  id: string;
+  rotulo: string;
+  bonus: number;
+  nivel_minimo: number;
+  /** Dias de treino para subir até este grau (0 = o grau de partida). */
+  treino_dias: number;
+  /** Condição extra do treino além do tempo e do nível; vazio quando não há. */
+  requisito: string;
+}
 
-/** Índice (0 = iniciante ... 6 = renomado) do maior grau que o nível total permite. */
+/** Os graus de perícia do menor para o maior: fonte única do site e da plataforma. */
+export const GRAUS_PERICIA_DADOS: readonly IGrauPericia[] = progressaoData.graus_pericia.graus;
+/** Ids dos graus na ordem (iniciante ... absoluto), para comparar treinamento por índice. */
+export const GRAUS_PERICIA: readonly string[] = GRAUS_PERICIA_DADOS.map((grau) => grau.id);
+/** Bônus de cada grau no teste, por id. */
+export const BONUS_GRAU: Record<string, number> = Object.fromEntries(
+  GRAUS_PERICIA_DADOS.map((grau) => [grau.id, grau.bonus]),
+);
+/** Nome de cada grau para mostrar (com acento), por id. */
+export const ROTULO_GRAU: Record<string, string> = Object.fromEntries(
+  GRAUS_PERICIA_DADOS.map((grau) => [grau.id, grau.rotulo]),
+);
+/** Nível total mínimo de cada grau de perícia, na ordem dos graus. */
+export const NIVEL_MINIMO_GRAU: readonly number[] = GRAUS_PERICIA_DADOS.map((grau) => grau.nivel_minimo);
+
+/** Nome do grau para mostrar; devolve o próprio texto quando o id é desconhecido. */
+export function nomeDoGrauPericia(grau: unknown): string {
+  const id = String(grau ?? '').trim().toLowerCase();
+  return ROTULO_GRAU[id] ?? (id ? `${id.charAt(0).toLocaleUpperCase('pt-BR')}${id.slice(1)}` : '');
+}
+
+/** Índice (0 = iniciante ... 11 = absoluto) do maior grau que o nível total permite. */
 export function indiceDoMaiorGrauPorNivel(nivelTotal: unknown): number {
   const alvo = nivelInteiro(nivelTotal, 0);
   let indice = 0;
@@ -64,6 +93,24 @@ export function xpParaNivel(nivel: unknown): number {
 export function custoDoNivel(nivel: unknown): number {
   const atual = nivelInteiro(nivel, 1);
   return xpParaNivel(atual + 1) - xpParaNivel(atual);
+}
+
+/** Maior Valor de Desafio aceito (criaturas únicas podem passar do 100). */
+export const VD_MAXIMO: number = progressaoData.combate.vd_maximo;
+const XP_DIVISOR_POR_VD: number = progressaoData.combate.xp_divisor_por_vd;
+
+/** XP de uma criatura solo de um VD (o VD é o nível do grupo que ela desafia):
+ * um quinto do custo do nível de mesmo número. Vazio ou zero paga 0. */
+export function xpPorVd(vd: unknown): number {
+  if (vd === null || vd === undefined || vd === '') return 0;
+  const alvo = Math.min(VD_MAXIMO, nivelInteiro(vd, 1));
+  return Math.floor(custoDoNivel(alvo) / XP_DIVISOR_POR_VD);
+}
+
+/** O VD antigo ia de 1 a 10 (cada um uma faixa de 5 níveis de criatura). Devolve o
+ * VD de hoje no meio da faixa: 1 vira 3, 2 vira 8, ..., 10 vira 48. */
+export function vdAntigoParaNivel(vdAntigo: number): number {
+  return 5 * Math.trunc(vdAntigo) - 2;
 }
 
 /** Maior nível cujo XP acumulado cabe no valor informado. */

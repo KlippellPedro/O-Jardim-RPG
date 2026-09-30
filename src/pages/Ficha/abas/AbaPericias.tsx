@@ -7,7 +7,8 @@ import { useAuthStore } from '../../../store/useAuthStore';
 import { IPericiaCatalogo, IRaca } from '../../../types/catalogo';
 import { ModalVantagensPericia } from '../components/ModalVantagensPericia';
 import { ModalCalculoPericia } from '../components/ModalCalculoPericia';
-import { aplicarAjustesAtributosRaciais, BONUS_GRAU, obterAjustesPericiasRaciais } from '../../../services/calculoService';
+import { aplicarAjustesAtributosRaciais, obterAjustesPericiasRaciais } from '../../../services/calculoService';
+import { BONUS_GRAU, GRAUS_PERICIA, nomeDoGrauPericia } from '../../../services/progressaoNiveis';
 import { resumirEquipamentos } from '../../../services/equipamentoService';
 import { desvantagensAutomaticasTeste, obterStatusFicha, penalidadeCansacoTeste } from '../../../services/statusService';
 import { AjusteButton, AjustesFichaModal } from '../components/AjustesFichaModal';
@@ -33,8 +34,8 @@ import {
 import { Select } from '../../../components/ui/Select';
 import { LabeledSelect } from '../components/SharedFichaComponents';
 
-const GRAUS_PERICIA = ['iniciante', 'aprendiz', 'treinado', 'especialista', 'mestre', 'veterano', 'renomado'];
 const NOMES_ATRIBUTOS = ATRIBUTOS_PERICIA;
+// Classes escritas por extenso: o Tailwind descarta nome montado em runtime.
 const ESTILOS_GRAU: Record<string, string> = {
   iniciante: 'bg-slate-500/10 border-slate-400/20 text-slate-400 hover:border-slate-300/35',
   aprendiz: 'bg-emerald-500/10 border-emerald-400/30 text-emerald-300 hover:border-emerald-300/50',
@@ -43,6 +44,11 @@ const ESTILOS_GRAU: Record<string, string> = {
   mestre: 'bg-amber-500/10 border-amber-400/30 text-amber-300 hover:border-amber-300/50',
   veterano: 'bg-orange-500/10 border-orange-400/30 text-orange-300 hover:border-orange-300/50',
   renomado: 'bg-rose-500/10 border-rose-400/30 text-rose-300 hover:border-rose-300/50',
+  lendario: 'bg-yellow-500/10 border-yellow-300/40 text-yellow-200 hover:border-yellow-200/60',
+  mitico: 'bg-fuchsia-500/10 border-fuchsia-400/40 text-fuchsia-300 hover:border-fuchsia-300/60',
+  cosmico: 'bg-indigo-500/10 border-indigo-400/40 text-indigo-300 hover:border-indigo-300/60',
+  eterno: 'bg-cyan-500/10 border-cyan-300/40 text-cyan-200 hover:border-cyan-200/60',
+  absoluto: 'bg-white/10 border-white/40 text-white hover:border-white/70',
 };
 const CORES_GRAU: Record<string, string> = {
   iniciante: 'text-slate-400',
@@ -52,6 +58,11 @@ const CORES_GRAU: Record<string, string> = {
   mestre: 'text-amber-300',
   veterano: 'text-orange-300',
   renomado: 'text-rose-300',
+  lendario: 'text-yellow-200',
+  mitico: 'text-fuchsia-300',
+  cosmico: 'text-indigo-300',
+  eterno: 'text-cyan-200',
+  absoluto: 'text-white',
 };
 const CORES_ATRIBUTO: Record<string, string> = {
   forca: 'text-red-400',
@@ -257,7 +268,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
           {contagemGraus.length > 0 ? contagemGraus.map(c => (
             <div key={c.grau} className="flex items-center gap-3 bg-[#15141b] border border-white/5 rounded-xl px-4 py-2">
               <span className="text-2xl font-bold text-[#c7a44c]">{c.count}</span>
-              <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold leading-tight">{c.grau}</span>
+              <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold leading-tight">{nomeDoGrauPericia(c.grau)}</span>
             </div>
           )) : (
             <div className="flex items-center gap-3 bg-[#15141b] border border-white/5 rounded-xl px-4 py-2">
@@ -299,7 +310,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
             { value: '', label: 'Todos os graus' },
             ...GRAUS_PERICIA.map((grau) => ({
               value: grau,
-              label: `${grau.charAt(0).toLocaleUpperCase('pt-BR')}${grau.slice(1)} (+${BONUS_GRAU[grau] || 0})`,
+              label: `${nomeDoGrauPericia(grau)} (+${BONUS_GRAU[grau] || 0})`,
               labelClassName: CORES_GRAU[grau],
             })),
           ]}
@@ -440,14 +451,14 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                   {penalidadeCansaco < 0 && <span className="text-[10px] font-bold text-red-300">Cansaço {penalidadeCansaco}</span>}
                   <div className="ml-auto shrink-0" data-tour="pericia-grau">
                     <Select
-                      ariaLabel={`Alterar grau da perícia ${p.titulo}. Atual: ${grauAtual}`}
-                      title={`Grau de treinamento: ${grauAtual} (+${BONUS_GRAU[grauAtual] || 0})`}
+                      ariaLabel={`Alterar grau da perícia ${p.titulo}. Atual: ${nomeDoGrauPericia(grauAtual)}`}
+                      title={`Grau de treinamento: ${nomeDoGrauPericia(grauAtual)} (+${BONUS_GRAU[grauAtual] || 0})`}
                       value={grauAtual}
                       onChange={(grau) => handleGrauChange(p.id, grau)}
                       options={GRAUS_PERICIA.map((grau) => ({
                         value: grau,
-                        label: `${grau.charAt(0).toLocaleUpperCase('pt-BR')}${grau.slice(1)} (+${BONUS_GRAU[grau]})`,
-                        triggerLabel: `${grau.charAt(0).toLocaleUpperCase('pt-BR')}${grau.slice(1)} +${BONUS_GRAU[grau]}`,
+                        label: `${nomeDoGrauPericia(grau)} (+${BONUS_GRAU[grau]})`,
+                        triggerLabel: `${nomeDoGrauPericia(grau)} +${BONUS_GRAU[grau]}`,
                         labelClassName: CORES_GRAU[grau],
                       }))}
                       className={`!min-h-0 w-[8.75rem] shrink-0 gap-1 rounded-lg px-2 py-1 text-[9px] font-semibold tracking-normal ${ESTILOS_GRAU[grauAtual] || ESTILOS_GRAU.iniciante}`}
@@ -549,7 +560,7 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
           modificador={activeMod}
           nivel={nivel}
           metadeNivel={metadeNivelCalculado}
-          grauNome={activeGrau}
+          grauNome={nomeDoGrauPericia(activeGrau)}
           bonusGrau={activeBonusGrau}
           bonusRacial={activeBonusRacial}
           bonusOutros={activeBonusExtra}

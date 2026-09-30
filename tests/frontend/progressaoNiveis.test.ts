@@ -1,21 +1,29 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
 import progressaoData from '../../data/ficha/progressao-niveis.json';
 import {
+  BONUS_GRAU,
+  GRAUS_PERICIA,
+  GRAUS_PERICIA_DADOS,
   NIVEL_CONTEUDO_CLASSE,
   NIVEL_MAXIMO_CLASSE,
   NIVEL_MINIMO_GRAU,
   PATAMARES_NIVEL,
+  VD_MAXIMO,
   aumentosAtributoPorNivel,
   custoDoNivel,
   indiceDoMaiorGrauPorNivel,
   legadosPorNivel,
   nivelPorXp,
+  nomeDoGrauPericia,
   patamarAtual,
   patamaresAlcancados,
   rotuloDoPatamar,
   vagasItemEspecialPorNivel,
+  vdAntigoParaNivel,
   xpParaNivel,
+  xpPorVd,
 } from '../../src/services/progressaoNiveis';
 
 // Os mesmos valores estão em plataforma/tests/test_progressao_niveis.py: se um
@@ -115,10 +123,56 @@ test('patamares 60, 100, 150, 250 e 500', () => {
   assert.equal(patamarAtual(250), 250);
 });
 
-test('grau de perícia máximo por nível total: renomado só a partir do 29', () => {
-  assert.deepEqual([...NIVEL_MINIMO_GRAU], [1, 1, 3, 7, 13, 19, 29]);
-  const casos: Array<[number, number]> = [[1, 1], [2, 1], [3, 2], [6, 2], [7, 3], [12, 3], [13, 4], [18, 4], [19, 5], [28, 5], [29, 6], [200, 6]];
+test('doze graus de perícia: os sete de sempre e cinco novos, um por patamar', () => {
+  assert.deepEqual([...GRAUS_PERICIA], [
+    'iniciante', 'aprendiz', 'treinado', 'especialista', 'mestre', 'veterano', 'renomado',
+    'lendario', 'mitico', 'cosmico', 'eterno', 'absoluto',
+  ]);
+  // Os mesmos valores estão em plataforma/tests/test_progressao_niveis.py.
+  assert.deepEqual(GRAUS_PERICIA.map((grau) => BONUS_GRAU[grau]), [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]);
+  assert.deepEqual([...NIVEL_MINIMO_GRAU], [1, 1, 3, 7, 13, 19, 29, 60, 100, 150, 250, 500]);
+  assert.deepEqual(GRAUS_PERICIA_DADOS.map((grau) => grau.treino_dias), [0, 3, 7, 14, 21, 32, 62, 90, 120, 180, 270, 365]);
+  assert.deepEqual(
+    GRAUS_PERICIA_DADOS.slice(-5).map((grau) => nomeDoGrauPericia(grau.id)),
+    ['Lendário', 'Mítico', 'Cósmico', 'Eterno', 'Absoluto'],
+  );
+});
+
+test('os cinco graus novos abrem exatamente nos patamares de nível', () => {
+  assert.deepEqual([...NIVEL_MINIMO_GRAU].slice(-PATAMARES_NIVEL.length), [...PATAMARES_NIVEL]);
+});
+
+test('graus só sobem: bônus, nível e tempo de treino nunca diminuem', () => {
+  GRAUS_PERICIA_DADOS.forEach((grau, indice) => {
+    if (indice === 0) return;
+    const anterior = GRAUS_PERICIA_DADOS[indice - 1];
+    assert.equal(grau.bonus - anterior.bonus, 2, `${grau.id}: cada degrau vale +2`);
+    assert.ok(grau.nivel_minimo >= anterior.nivel_minimo, `${grau.id}: nível mínimo`);
+    assert.ok(grau.treino_dias > anterior.treino_dias, `${grau.id}: dias de treino`);
+  });
+});
+
+test('nome do grau de perícia aparece com acento e cai em maiúscula para id desconhecido', () => {
+  assert.equal(nomeDoGrauPericia('lendario'), 'Lendário');
+  assert.equal(nomeDoGrauPericia('COSMICO'), 'Cósmico');
+  assert.equal(nomeDoGrauPericia('xis'), 'Xis');
+  assert.equal(nomeDoGrauPericia(undefined), '');
+});
+
+test('grau de perícia máximo por nível total, um degrau novo em cada patamar', () => {
+  const casos: Array<[number, number]> = [
+    [1, 1], [2, 1], [3, 2], [6, 2], [7, 3], [12, 3], [13, 4], [18, 4], [19, 5], [28, 5], [29, 6], [59, 6],
+    [60, 7], [99, 7], [100, 8], [149, 8], [150, 9], [249, 9], [250, 10], [499, 10], [500, 11], [5000, 11],
+  ];
   for (const [nivel, indice] of casos) assert.equal(indiceDoMaiorGrauPorNivel(nivel), indice, `nível ${nivel}`);
+});
+
+test('a ficha tem cor para cada grau de perícia (o Tailwind descarta nome montado em runtime)', () => {
+  const fonte = readFileSync(new URL('../../src/pages/Ficha/abas/AbaPericias.tsx', import.meta.url), 'utf8');
+  for (const nome of ['ESTILOS_GRAU', 'CORES_GRAU']) {
+    const bloco = fonte.slice(fonte.indexOf(`const ${nome}`), fonte.indexOf('};', fonte.indexOf(`const ${nome}`)));
+    for (const grau of GRAUS_PERICIA) assert.match(bloco, new RegExp(`\\b${grau}:`), `${nome} sem ${grau}`);
+  }
 });
 
 test('rótulo do patamar em algarismos romanos, ou nada dentro do padrão', () => {
@@ -131,4 +185,30 @@ test('rótulo do patamar em algarismos romanos, ou nada dentro do padrão', () =
 test('classe: conteúdo escrito até o 20, botão de subir até o 50', () => {
   assert.equal(NIVEL_CONTEUDO_CLASSE, 20);
   assert.equal(NIVEL_MAXIMO_CLASSE, 50);
+});
+
+test('XP por VD: um quinto do custo do nível de mesmo número', () => {
+  // Os mesmos valores estão em plataforma/tests/test_unit.py.
+  const esperado: Array<[number, number]> = [
+    [1, 200], [3, 600], [10, 2_000], [48, 9_600], [60, 12_000], [100, 20_000], [150, 30_000], [250, 50_000], [500, 100_000],
+  ];
+  for (const [vd, xp] of esperado) assert.equal(xpPorVd(vd), xp, `VD ${vd}`);
+  assert.equal(xpPorVd(null), 0);
+  assert.equal(xpPorVd(0), xpPorVd(1));
+  assert.equal(xpPorVd(VD_MAXIMO + 500), xpPorVd(VD_MAXIMO));
+  assert.equal(VD_MAXIMO, 1000);
+});
+
+test('VD antigo (1 a 10) vira o meio da faixa de 5 níveis', () => {
+  assert.deepEqual(Array.from({ length: 10 }, (_, i) => vdAntigoParaNivel(i + 1)), [3, 8, 13, 18, 23, 28, 33, 38, 43, 48]);
+});
+
+test('todo monstro do catálogo tem VD igual ao nível', async () => {
+  const { default: catalogo } = await import('../../data/loja/catalogo.json');
+  const monstros = catalogo.entradas.filter((item: any) => item.tipo === 'monstro');
+  assert.ok(monstros.length >= 121);
+  for (const monstro of monstros as any[]) {
+    assert.equal(monstro.conteudo.vd, monstro.conteudo.nivel, `${monstro.id}: VD diferente do nível`);
+    assert.ok(monstro.conteudo.vd >= 1 && monstro.conteudo.vd <= VD_MAXIMO, `${monstro.id}: VD fora da faixa`);
+  }
 });

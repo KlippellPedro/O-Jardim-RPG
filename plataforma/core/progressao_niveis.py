@@ -39,8 +39,17 @@ _ITEM_ESPECIAL_MINIMO = max(0, int(_DADOS["item_especial"].get("minimo") or 0))
 # Onde a classe deixa de ter recompensa escrita e teto do botão de subir nível.
 NIVEL_CONTEUDO_CLASSE: int = _DADOS["classe"]["nivel_conteudo"]
 NIVEL_MAXIMO_CLASSE: int = _DADOS["classe"]["nivel_maximo"]
-# Nível total mínimo de cada grau de perícia (iniciante ... renomado).
-NIVEL_MINIMO_GRAU: tuple[int, ...] = tuple(int(nivel) for nivel in _DADOS["graus_pericia"]["nivel_minimo"])
+# Graus de perícia do menor para o maior (iniciante ... absoluto): fonte única do site e da plataforma.
+GRAUS_PERICIA_DADOS: tuple[dict, ...] = tuple(_DADOS["graus_pericia"]["graus"])
+GRAUS_PERICIA: tuple[str, ...] = tuple(grau["id"] for grau in GRAUS_PERICIA_DADOS)
+BONUS_GRAU: dict[str, int] = {grau["id"]: int(grau["bonus"]) for grau in GRAUS_PERICIA_DADOS}
+ROTULO_GRAU: dict[str, str] = {grau["id"]: grau["rotulo"] for grau in GRAUS_PERICIA_DADOS}
+# Nível total mínimo de cada grau de perícia, na ordem dos graus.
+NIVEL_MINIMO_GRAU: tuple[int, ...] = tuple(int(grau["nivel_minimo"]) for grau in GRAUS_PERICIA_DADOS)
+# Valor de Desafio: nível do grupo que a criatura desafia sozinha. O máximo só
+# barra digitação absurda (únicas podem passar do 100); o XP é um quinto do custo.
+VD_MAXIMO: int = int(_DADOS["combate"]["vd_maximo"])
+_XP_DIVISOR_POR_VD: int = int(_DADOS["combate"]["xp_divisor_por_vd"])
 # Níveis totais em que o personagem muda de patamar, em ordem crescente.
 PATAMARES_NIVEL: tuple[int, ...] = tuple(sorted(_DADOS["patamares"]["niveis"]))
 # Onde terminam as regras padrão (duas classes comuns + uma especial): o primeiro patamar.
@@ -68,6 +77,28 @@ def xp_para_nivel(nivel: object) -> int:
         if niveis > 0:
             total += niveis * faixa["custo_por_nivel"]
     return total
+
+
+def custo_do_nivel(nivel: object) -> int:
+    """XP para sair do nível informado e chegar ao seguinte."""
+    atual = _nivel_inteiro(nivel, 1)
+    return xp_para_nivel(atual + 1) - xp_para_nivel(atual)
+
+
+def xp_por_vd(vd: object) -> int:
+    """XP de uma criatura solo de um VD: um quinto do custo do nível de mesmo
+    número. Vazio paga 0; abaixo de 1 vale como 1, acima do máximo como o máximo."""
+    if vd is None or vd == "":
+        return 0
+    alvo = min(VD_MAXIMO, _nivel_inteiro(vd, 1))
+    return custo_do_nivel(alvo) // _XP_DIVISOR_POR_VD
+
+
+def vd_antigo_para_nivel(vd_antigo: int) -> int:
+    """O VD antigo ia de 1 a 10 (cada um uma faixa de 5 níveis de criatura).
+    Devolve o VD de hoje no meio da faixa: 1 vira 3, 2 vira 8, ..., 10 vira 48.
+    A migração 46 faz a mesma conta em SQL (5 * vd - 2)."""
+    return 5 * int(vd_antigo) - 2
 
 
 def nivel_por_xp(xp: object) -> int:

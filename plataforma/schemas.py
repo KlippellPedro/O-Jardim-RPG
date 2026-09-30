@@ -17,6 +17,7 @@ from pydantic import (
 )
 
 from core.condicoes import normalizar_condicoes
+from core.progressao_niveis import VD_MAXIMO
 
 
 CampaignRole = Literal["mestre", "assistente", "jogador", "observador"]
@@ -675,9 +676,10 @@ class ParticipantCreateInput(BaseModel):
     mana_maxima: int | None = Field(default=None, ge=0, le=99_999)
     estamina_maxima: int | None = Field(default=None, ge=0, le=99_999)
     ataques: list[Any] = Field(default_factory=list, max_length=12)
-    # VD (Valor de Desafio, 1 a 10): vem do Bestiário quando a criatura entra
-    # pela lista; usado depois pra somar o XP da luta sem contar na mão.
-    vd: int | None = Field(default=None, ge=1, le=10)
+    # VD (Valor de Desafio): o nível do grupo que a criatura desafia sozinha.
+    # Vem do Bestiário quando a criatura entra pela lista; usado depois pra
+    # somar o XP da luta sem contar na mão.
+    vd: int | None = Field(default=None, ge=1, le=VD_MAXIMO)
     # Referência rápida ("Luta +12"); não valida nada, só evita reabrir o
     # Bestiário no meio da cena.
     pericias: list[Any] = Field(default_factory=list, max_length=8)
@@ -720,7 +722,7 @@ class ParticipantUpdateInput(BaseModel):
     anotacao: str | None = Field(default=None, max_length=500)
     visibilidade: NivelVisibilidade | None = None
     defesa: int | None = Field(default=None, ge=0, le=999)
-    vd: int | None = Field(default=None, ge=1, le=10)
+    vd: int | None = Field(default=None, ge=1, le=VD_MAXIMO)
     pericias: list[Any] | None = Field(default=None, max_length=8)
 
     @field_validator("condicoes")

@@ -26,7 +26,8 @@ from core.backup import (
 )
 from core.automatic_backup import salvar_backup_automatico
 from core import rate_limit_auth as limites
-from core.character_summary import carregar_catalogos, iniciativa_fixa, resumir_ficha, sabedoria_desempate, xp_por_vd
+from core.character_summary import carregar_catalogos, iniciativa_fixa, resumir_ficha, sabedoria_desempate
+from core.progressao_niveis import VD_MAXIMO, vd_antigo_para_nivel, xp_por_vd
 from core.campaign_visibility import visible_campaign_config
 from core.dados import _classificar, rolar_formula, rolar_teste
 from core.config import load_settings
@@ -708,27 +709,41 @@ class SessaoAoVivoTests(unittest.TestCase):
         with self.assertRaises(ValidationError):
             ParticipantCreateInput(nome="Ogro", mana_maxima=-1)
 
-    def test_vd_aceita_um_a_dez_e_recusa_fora_da_faixa(self):
+    def test_vd_aceita_do_um_ao_maximo_e_recusa_fora_da_faixa(self):
         self.assertIsNone(ParticipantCreateInput(nome="Ogro").vd)
         self.assertEqual(ParticipantCreateInput(nome="Ogro", vd=7).vd, 7)
+        # O VD e o nivel do grupo: passa de 10 e de 100 (unicas passam do 100).
+        self.assertEqual(ParticipantCreateInput(nome="Ogro", vd=48).vd, 48)
+        self.assertEqual(ParticipantCreateInput(nome="Titan", vd=250).vd, 250)
+        self.assertEqual(ParticipantCreateInput(nome="Titan", vd=VD_MAXIMO).vd, VD_MAXIMO)
         with self.assertRaises(ValidationError):
             ParticipantCreateInput(nome="Ogro", vd=0)
         with self.assertRaises(ValidationError):
-            ParticipantCreateInput(nome="Ogro", vd=11)
+            ParticipantCreateInput(nome="Ogro", vd=VD_MAXIMO + 1)
 
-    def test_xp_por_vd_cresce_com_a_dificuldade_e_ignora_vd_vazio(self):
+    def test_xp_por_vd_e_um_quinto_do_custo_do_nivel_de_mesmo_numero(self):
+        # Mesmos valores de tests/frontend/progressaoNiveis.test.ts.
         self.assertEqual(xp_por_vd(None), 0)
-        self.assertEqual(xp_por_vd(1), 500)
-        self.assertEqual(xp_por_vd(10), 11000)
-        # A tabela só cobre 1-10; fora da faixa, satura nas pontas em vez de
-        # estourar (defensivo contra dado sujo vindo do catálogo).
+        for vd, xp in ((1, 200), (3, 600), (10, 2_000), (48, 9_600), (60, 12_000), (100, 20_000),
+                       (150, 30_000), (250, 50_000), (500, 100_000)):
+            self.assertEqual(xp_por_vd(vd), xp, f"VD {vd}")
+        # Fora da faixa, satura nas pontas em vez de estourar (dado sujo do catalogo).
         self.assertEqual(xp_por_vd(0), xp_por_vd(1))
-        self.assertEqual(xp_por_vd(99), xp_por_vd(10))
+        self.assertEqual(xp_por_vd(VD_MAXIMO + 500), xp_por_vd(VD_MAXIMO))
         anterior = 0
-        for vd in range(1, 11):
+        for vd in range(1, 301):
             atual = xp_por_vd(vd)
-            self.assertGreater(atual, anterior)
+            self.assertGreaterEqual(atual, anterior)
             anterior = atual
+
+    def test_vd_antigo_vira_o_meio_da_faixa_e_a_migracao_faz_a_mesma_conta(self):
+        from core.schema import MIGRATIONS
+        self.assertEqual([vd_antigo_para_nivel(vd) for vd in range(1, 11)], [3, 8, 13, 18, 23, 28, 33, 38, 43, 48])
+        versao, nome, comandos = MIGRATIONS[-1]
+        self.assertEqual(nome, "vd_igual_ao_nivel_do_grupo")
+        sql = " ".join(comandos[0].split())
+        self.assertIn("SET vd = 5 * vd - 2", sql)
+        self.assertIn("WHERE vd BETWEEN 1 AND 10", sql)
 
     def test_distribuir_xp_exige_ao_menos_um_participante(self):
         with self.assertRaises(ValidationError):

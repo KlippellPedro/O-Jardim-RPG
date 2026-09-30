@@ -41,8 +41,26 @@
     ]
   },
   "graus_pericia": {
-    "_nota": "Nível total mínimo para cada grau de perícia, na ordem iniciante, aprendiz, treinado, especialista, mestre, veterano e renomado. O servidor confere na ficha e a referência de balanceamento usa para saber o maior grau que o nível permite.",
-    "nivel_minimo": [1, 1, 3, 7, 13, 19, 29]
+    "_nota": "Os graus de perícia do menor para o maior. 'bonus' entra no teste (d20 + atributo + metade do nível + grau), 'nivel_minimo' é o Nível Total em que o grau abre, 'treino_dias' e 'requisito' são o que o Livro cobra para subir até ele por treino (a classe entrega grau na hora, sem isso). Os cinco últimos abrem nos patamares (60, 100, 150, 250, 500). O servidor só avisa o Mestre; a referência de balanceamento usa o nível para saber o maior grau possível.",
+    "graus": [
+      { "id": "iniciante", "rotulo": "Iniciante", "bonus": 0, "nivel_minimo": 1, "treino_dias": 0, "requisito": "" },
+      { "id": "aprendiz", "rotulo": "Aprendiz", "bonus": 2, "nivel_minimo": 1, "treino_dias": 3, "requisito": "" },
+      { "id": "treinado", "rotulo": "Treinado", "bonus": 4, "nivel_minimo": 3, "treino_dias": 7, "requisito": "" },
+      { "id": "especialista", "rotulo": "Especialista", "bonus": 6, "nivel_minimo": 7, "treino_dias": 14, "requisito": "" },
+      { "id": "mestre", "rotulo": "Mestre", "bonus": 8, "nivel_minimo": 13, "treino_dias": 21, "requisito": "instrutor" },
+      { "id": "veterano", "rotulo": "Veterano", "bonus": 10, "nivel_minimo": 19, "treino_dias": 32, "requisito": "feito notável" },
+      { "id": "renomado", "rotulo": "Renomado", "bonus": 12, "nivel_minimo": 29, "treino_dias": 62, "requisito": "feito e item especial" },
+      { "id": "lendario", "rotulo": "Lendário", "bonus": 14, "nivel_minimo": 60, "treino_dias": 90, "requisito": "feito lendário e instrutor" },
+      { "id": "mitico", "rotulo": "Mítico", "bonus": 16, "nivel_minimo": 100, "treino_dias": 120, "requisito": "feito mítico e item especial" },
+      { "id": "cosmico", "rotulo": "Cósmico", "bonus": 18, "nivel_minimo": 150, "treino_dias": 180, "requisito": "feito de alcance cósmico e instrutor" },
+      { "id": "eterno", "rotulo": "Eterno", "bonus": 20, "nivel_minimo": 250, "treino_dias": 270, "requisito": "feito que o tempo não apaga e item especial" },
+      { "id": "absoluto", "rotulo": "Absoluto", "bonus": 22, "nivel_minimo": 500, "treino_dias": 365, "requisito": "feito absoluto, instrutor e item especial" }
+    ]
+  },
+  "combate": {
+    "_nota": "Valor de Desafio (VD) das criaturas: é o nível do grupo que a criatura desafia sozinha (VD 30 = criatura solo para um grupo de nível 30). 'vd_maximo' só barra digitação absurda, e criaturas únicas podem passar do 100. O XP de uma criatura solo é o custo do nível de mesmo número dividido por 'xp_divisor_por_vd', somado e repartido entre os jogadores da cena.",
+    "vd_maximo": 1000,
+    "xp_divisor_por_vd": 5
   },
   "patamares": {
     "_nota": "Níveis totais em que o personagem 'muda de patamar': aviso na tela, moldura e Conquista. Coincidem com as faixas de XP. O 60 é onde terminam as regras padrão.",

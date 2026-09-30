@@ -12,6 +12,7 @@ import type { NivelVisibilidade, ParticipantePayload } from '../../../services/s
 import { OPCOES_VISIBILIDADE } from '../sessionUtils';
 import { CONDICOES_OFICIAIS, CRISES_SANIDADE } from '../../../../data/regras/condicoes';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
+import { VD_MAXIMO } from '../../../services/progressaoNiveis';
 
 const CONDICOES_RAPIDAS = [...CONDICOES_OFICIAIS, ...CRISES_SANIDADE];
 
@@ -251,11 +252,11 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
             <input
               type="number"
               min={1}
-              max={10}
+              max={VD_MAXIMO}
               value={vd}
               placeholder="-"
               onChange={(event) => setVd(event.target.value)}
-              title="Valor de Desafio (1-10) - de onde vem o XP ao distribuir"
+              title="Valor de Desafio: o nível do grupo que a criatura desafia sozinha. É de onde vem o XP ao distribuir"
               className="mt-1 w-full rounded-md border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-[#c7a44c]/50"
             />
           </label>
@@ -440,7 +441,7 @@ export const EntityEditor: React.FC<EntityEditorProps> = ({ entity, busy, onCanc
               pericias,
               visibilidade,
               defesa: parseOptionalInt(defense, 0, 999),
-              vd: parseOptionalInt(vd, 1, 10),
+              vd: parseOptionalInt(vd, 1, VD_MAXIMO),
             })}
             disabled={busy}
             className="flex items-center gap-1.5 rounded-md bg-[#c7a44c] px-3 py-1.5 text-xs font-bold text-black disabled:opacity-50"

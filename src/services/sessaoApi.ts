@@ -31,7 +31,7 @@ export interface ParticipantePayload {
   visibilidade?: NivelVisibilidade;
   /** Só usado por quem não tem ficha (NPCs, monstros). */
   defesa?: number | null;
-  /** Valor de Desafio (1-10) - de onde vem o XP ao distribuir. */
+  /** Valor de Desafio (o nível do grupo que a criatura desafia sozinha) - de onde vem o XP ao distribuir. */
   vd?: number | null;
   /** Referência rápida ("Luta +12"); não valida nada. */
   pericias?: string[];
@@ -80,6 +80,12 @@ export interface BestiarioMonstro {
   descricao: string | null;
   vd: number | null;
   xp: number;
+  /** Família do Bestiário (id de data/bestiario/familias-v1.json), quando tem. */
+  familia?: string | null;
+  estagio?: string | null;
+  papel?: string | null;
+  /** Criatura de uma versão só, sem estágios. */
+  unico?: boolean;
   pv: number | null;
   defesa: number | null;
   mana: number | null;

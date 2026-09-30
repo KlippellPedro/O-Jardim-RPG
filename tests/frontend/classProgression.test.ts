@@ -26,6 +26,7 @@ import {
   grausComConcedidos,
   periciasConcedidasPelaClasse,
 } from '../../src/services/periciasFichaService';
+import { GRAUS_PERICIA } from '../../src/services/progressaoNiveis';
 import type { IClasse } from '../../src/types/catalogo';
 
 const classes = JSON.parse(
@@ -634,7 +635,7 @@ test('todo item de catálogo das classes revisadas declara como usa, alcance e d
 
 test('perícia concedida por classe traz id, atributo e grau utilizáveis pela ficha', () => {
   const atributos = ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'fluxo'];
-  const graus = ['iniciante', 'aprendiz', 'treinado', 'especialista', 'mestre', 'veterano', 'renomado'];
+  const graus: readonly string[] = GRAUS_PERICIA;
   for (const classe of classes) {
     for (const pericia of classe.pericias_concedidas || []) {
       assert.ok(pericia.id?.trim(), `${classe.titulo}: perícia concedida sem id`);

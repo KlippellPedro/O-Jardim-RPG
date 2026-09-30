@@ -8,7 +8,8 @@ from fastapi.responses import StreamingResponse
 from psycopg.types.json import Jsonb
 
 from core.audit import record_audit
-from core.character_summary import iniciativa_fixa, sabedoria_desempate, xp_por_vd
+from core.character_summary import iniciativa_fixa, sabedoria_desempate
+from core.progressao_niveis import xp_por_vd
 from core.combate_intenso import encerrar_combate_e_cansar, iniciar_marcas, registrar_minimos
 from core.condicoes import decrementar_condicoes, normalizar_condicoes
 from core.database import Database
@@ -1294,6 +1295,10 @@ def listar_bestiario(
                 "descricao": conteudo.get("descricao"),
                 "vd": vd,
                 "xp": xp_por_vd(vd),
+                "familia": conteudo.get("familia"),
+                "estagio": conteudo.get("estagio"),
+                "papel": conteudo.get("papel"),
+                "unico": bool(conteudo.get("unico")),
                 "pv": _inteiro_do_catalogo(conteudo.get("pv")),
                 "defesa": _inteiro_do_catalogo(conteudo.get("defesa")),
                 "mana": _inteiro_do_catalogo(conteudo.get("mana")),

@@ -1,5 +1,6 @@
 import type { IPericiaCatalogo } from '../types/catalogo';
 import { classesDaFicha } from './progressaoFichaService';
+import { GRAUS_PERICIA } from './progressaoNiveis';
 
 /**
  * Perícias e ofícios da ficha. O catálogo traz o atributo padrão de cada
@@ -139,9 +140,9 @@ export function removerPericiaCustomizada(ficha: any, periciaId: string): IRemoc
   };
 }
 
-/** Ordem dos graus, do menor para o maior. Espelha o que a ficha e a plataforma
- * usam para comparar treinamento. */
-export const GRAUS_PERICIA = ['iniciante', 'aprendiz', 'treinado', 'especialista', 'mestre', 'veterano', 'renomado'];
+/** Ordem dos graus, do menor para o maior: a mesma que a plataforma usa para
+ * comparar treinamento (data/ficha/progressao-niveis.json). */
+export { GRAUS_PERICIA };
 
 export interface IPericiaConcedida extends IPericiaCatalogo {
   /** Grau que a classe já entrega, sem gastar Grau de Treinamento. */

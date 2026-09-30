@@ -1715,4 +1715,20 @@ MIGRATIONS: tuple[tuple[int, str, tuple[str, ...]], ...] = (
             """,
         ),
     ),
+    (
+        46,
+        "vd_igual_ao_nivel_do_grupo",
+        (
+            # O VD deixou de ser uma escala de 1 a 10 (cada grau = 5 níveis de
+            # criatura) e passou a ser o nível do grupo que a criatura desafia
+            # sozinha. Participantes de cenas antigas, com o VD na escala velha,
+            # vão para o meio da faixa: 1 vira 3, 2 vira 8, ..., 10 vira 48
+            # (core.progressao_niveis.vd_antigo_para_nivel). Roda uma vez só.
+            """
+            UPDATE sessao_participantes
+            SET vd = 5 * vd - 2
+            WHERE vd BETWEEN 1 AND 10
+            """,
+        ),
+    ),
 )

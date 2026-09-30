@@ -3,10 +3,14 @@ from __future__ import annotations
 import unittest
 
 from core.progressao_niveis import (
+    BONUS_GRAU,
+    GRAUS_PERICIA,
+    GRAUS_PERICIA_DADOS,
     NIVEL_CONTEUDO_CLASSE,
     NIVEL_MAXIMO_CLASSE,
     NIVEL_MINIMO_GRAU,
     PATAMARES_NIVEL,
+    ROTULO_GRAU,
     aumentos_atributo_por_nivel,
     legados_por_nivel,
     nivel_por_xp,
@@ -78,9 +82,32 @@ class ProgressaoNiveisTests(unittest.TestCase):
             with self.subTest(nivel=nivel):
                 self.assertEqual(vagas_item_especial_por_nivel(nivel), vagas)
 
-    def test_nivel_minimo_de_cada_grau_de_pericia(self) -> None:
-        # Mesmo valor de tests/frontend/progressaoNiveis.test.ts.
-        self.assertEqual(NIVEL_MINIMO_GRAU, (1, 1, 3, 7, 13, 19, 29))
+    def test_doze_graus_de_pericia_os_sete_de_sempre_e_cinco_novos(self) -> None:
+        # Mesmos valores de tests/frontend/progressaoNiveis.test.ts.
+        self.assertEqual(GRAUS_PERICIA, (
+            "iniciante", "aprendiz", "treinado", "especialista", "mestre", "veterano", "renomado",
+            "lendario", "mitico", "cosmico", "eterno", "absoluto",
+        ))
+        self.assertEqual([BONUS_GRAU[grau] for grau in GRAUS_PERICIA], [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22])
+        self.assertEqual(NIVEL_MINIMO_GRAU, (1, 1, 3, 7, 13, 19, 29, 60, 100, 150, 250, 500))
+        self.assertEqual(
+            [grau["treino_dias"] for grau in GRAUS_PERICIA_DADOS],
+            [0, 3, 7, 14, 21, 32, 62, 90, 120, 180, 270, 365],
+        )
+        self.assertEqual(
+            [ROTULO_GRAU[grau] for grau in GRAUS_PERICIA[-5:]],
+            ["Lendário", "Mítico", "Cósmico", "Eterno", "Absoluto"],
+        )
+
+    def test_os_cinco_graus_novos_abrem_nos_patamares(self) -> None:
+        self.assertEqual(NIVEL_MINIMO_GRAU[-len(PATAMARES_NIVEL):], PATAMARES_NIVEL)
+
+    def test_graus_so_sobem(self) -> None:
+        for anterior, grau in zip(GRAUS_PERICIA_DADOS, GRAUS_PERICIA_DADOS[1:]):
+            with self.subTest(grau=grau["id"]):
+                self.assertEqual(grau["bonus"] - anterior["bonus"], 2)
+                self.assertGreaterEqual(grau["nivel_minimo"], anterior["nivel_minimo"])
+                self.assertGreater(grau["treino_dias"], anterior["treino_dias"])
 
     def test_patamares(self) -> None:
         self.assertEqual(PATAMARES_NIVEL, (60, 100, 150, 250, 500))

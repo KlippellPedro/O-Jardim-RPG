@@ -84,7 +84,7 @@ export const ARTES_TOPICO = {
   },
   pericias: {
     tamanho: 'coluna',
-    brief: 'Sete mãos em fila, do aprendiz ao renomado, cada uma fazendo o mesmo gesto com resultado diferente. A primeira treme, a última está firme e marcada de trabalho.',
+    brief: 'Doze mãos em fila, do aprendiz ao absoluto, cada uma fazendo o mesmo gesto com resultado diferente. A primeira treme, a última está firme e marcada de trabalho.',
   },
   combate: {
     tamanho: 'meia',
