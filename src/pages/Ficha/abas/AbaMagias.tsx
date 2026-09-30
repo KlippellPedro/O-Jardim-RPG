@@ -24,6 +24,8 @@ import {
   FLUXOS_POR_ID,
   circuloRotulo,
   dtConjuracaoPorCirculo,
+  avisoDeFluxoDaMagia,
+  magiasPorCirculo,
   magiaElegivelParaAprender,
   ritualElegivelParaAprender,
   seloElegivelParaAprender,
@@ -129,6 +131,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
     () => obterPerfilMagico(ficha, inventarioCentral, character.aliadosCompartilhados || []),
     [character.aliadosCompartilhados, ficha, inventarioCentral],
   );
+  const porCirculo = useMemo(() => magiasPorCirculo(ficha, inventarioCentral), [ficha, inventarioCentral]);
   const resumoEquipamento = useMemo(
     () => resumirEquipamentos(inventarioCentral, ficha, character.aliadosCompartilhados || []),
     [character.aliadosCompartilhados, ficha, inventarioCentral],
@@ -170,7 +173,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
 
   const catalogoVisivel = useMemo(() => {
     const fluxoEscolhido = filtroFluxo === 'nativo' ? perfil.fluxoNativoId : filtroFluxo;
-    const tetoAlcancavel = perfil.circuloMaximo;
+    const tetoAlcancavel = perfil.circuloDaFonte;
     return MAGIAS_CATALOGO.filter((magia) => {
       // Universal atravessa o filtro de Fluxo: ela é aprendível por todos.
       const passaNoFluxo = !fluxoEscolhido || fluxoEscolhido === 'todos'
@@ -185,7 +188,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       return [magia.titulo, magia.tradicao, magia.papel, magia.descricao, magia.efeito, circuloRotulo(magia.circulo)]
         .some((valor) => valor.toLocaleLowerCase('pt-BR').includes(termo));
     });
-  }, [busca, filtroCirculo, filtroFluxo, perfil.circuloMaximo, perfil.fluxoNativoId]);
+  }, [busca, filtroCirculo, filtroFluxo, perfil.circuloDaFonte, perfil.fluxoNativoId]);
 
   const atualizarCatalisadores = (preparadosIds: FluxoMagicoId[], ativoId: FluxoMagicoId | null) => {
     const preparadosValidos = [...new Set(preparadosIds)]
@@ -287,9 +290,12 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
       setMensagem({ tipo: 'erro', texto: avaliacao.motivo || 'Esta magia ainda não pode ser aprendida.' });
       return;
     }
-    if (!window.confirm(`Aprender ${magia.titulo}? A escolha só poderá ser removida pelo Mestre.`)) return;
+    const avisoDeFluxo = avisoDeFluxoDaMagia(ficha, magia, inventarioCentral);
+    if (!window.confirm(`Aprender ${magia.titulo}? A escolha só poderá ser removida pelo Mestre.${avisoDeFluxo ? `
+
+${avisoDeFluxo}` : ''}`)) return;
     onUpdate(['ficha', 'magiasConhecidasIds'], [...perfil.conhecidasIds, magia.id]);
-    setMensagem({ tipo: 'sucesso', texto: `${magia.titulo} foi aprendida.` });
+    setMensagem({ tipo: 'sucesso', texto: `${magia.titulo} foi aprendida.${avisoDeFluxo ? ` ${avisoDeFluxo}` : ''}` });
     dispararAprendizado({
       tipo: 'Magia',
       titulo: magia.titulo,
@@ -496,7 +502,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
             : `${magia.titulo}: resultado ${resultado}. DT do círculo ${dtCirculo}${magia.defesa ? `; compare também com ${magia.defesa}${dtAlvo > 0 ? ` ${dtAlvo}` : ''}` : ''}.`,
         });
       } else {
-        setMensagem({ tipo: 'sucesso', texto: `${magia.titulo}: custo aplicado. Faça o teste de conjuração contra DT ${dtConjuracaoPorCirculo(magia.circulo)}.` });
+        setMensagem({ tipo: 'sucesso', texto: `${magia.titulo}: custo aplicado. Faça o teste de conjuração contra DT ${dtConjuracaoPorCirculo(magia.circulo)}.${avisoDeFluxoDaMagia(ficha, magia, inventarioCentral) ? ` ${avisoDeFluxoDaMagia(ficha, magia, inventarioCentral)}` : ''}` });
       }
     } catch {
       setMensagem({ tipo: 'erro', texto: 'O custo foi aplicado, mas o servidor não registrou a conjuração.' });
@@ -871,7 +877,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
           </div>
           <div className="rounded-xl border border-white/5 bg-black/20 p-3">
             <span className="text-[10px] font-bold uppercase text-gray-500">Círculo e vagas</span>
-            <strong className="mt-1 block text-sm text-white">{perfil.possuiFonte ? `${perfil.circuloMaximo}º, ${perfil.conhecidasIds.length}/${perfil.vagasConhecidas}` : 'Não se aplica'}</strong>
+            <strong className="mt-1 block text-sm text-white">{perfil.possuiFonte ? `${perfil.circuloDaFonte}º, ${perfil.conhecidasIds.length}/${perfil.vagasConhecidas}` : 'Não se aplica'}</strong>
             {!perfil.possuiFonte && <small className="mt-1 block text-[10px] text-gray-600">sem fonte de conjuração</small>}
           </div>
         </div>
@@ -879,13 +885,43 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
         <div className="mt-3 flex flex-wrap items-center gap-3 rounded-xl border border-white/5 bg-black/20 px-4 py-3 text-xs text-gray-400">
           <Shield size={15} className="text-emerald-300" />
           <span>Mana {manaAtual}/{manaMaxima}{manaTemporaria > 0 ? ` (+${manaTemporaria} temp)` : ''}</span>
-          <span>Fluxo sustenta até o {perfil.circuloDoFluxo || 0}º círculo.</span>
+          <span>Fluxo recomendado até o {perfil.circuloDoFluxo || 0}º círculo.</span>
           {perfil.possuiFonte
-            ? <span>Sua fonte libera até o {perfil.circuloDaFonte || 0}º; vale o menor dos dois limites.</span>
+            ? <span>Sua fonte libera até o {perfil.circuloDaFonte || 0}º e é ela que vale para aprender; acima do Fluxo, a rolagem precisa alcançar a DT.</span>
             : perfil.possuiInterceptacao
               ? <span>Interceptação usa essa DT como referência, mas não concede círculos nem vagas para aprender magias.</span>
               : <span>Sem uma fonte, não há círculos nem vagas para aprender magias.</span>}
         </div>
+        {perfil.possuiFonte && perfil.circuloDaFonte > 0 && (
+          <div className="mt-3 rounded-xl border border-white/5 bg-black/20 px-4 py-3" data-tour="magias-por-circulo">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <span className="text-[10px] font-bold uppercase text-gray-500">Magias por círculo</span>
+              <span className="text-[11px] text-gray-400">
+                {porCirculo.vagasLivres > 0 ? `${porCirculo.vagasLivres} vaga(s) livre(s) no total` : 'Todas as vagas preenchidas'}
+                {porCirculo.teto !== null ? ` · no máximo ${porCirculo.teto} do mesmo círculo` : ' · sem limite por círculo agora'}
+              </span>
+            </div>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {porCirculo.circulos.map((item) => {
+                const cheio = item.restantes === 0;
+                return (
+                  <span
+                    key={item.circulo}
+                    title={item.teto === null ? `${item.conhecidas} magia(s) do ${item.circulo}º círculo` : `${item.conhecidas} de ${item.teto} magias do ${item.circulo}º círculo`}
+                    className={`rounded-lg border px-2 py-1 text-[11px] font-semibold tabular-nums ${cheio ? 'border-amber-400/40 bg-amber-400/10 text-amber-200' : 'border-white/10 text-gray-300'}`}
+                  >
+                    {item.circulo}º · {item.teto === null ? item.conhecidas : `${item.conhecidas}/${item.teto}`}
+                  </span>
+                );
+              })}
+            </div>
+            {porCirculo.tetoAPartirDoNivel && (
+              <small className="mt-2 block text-[10px] text-gray-500">
+                Do nível {porCirculo.tetoAPartirDoNivel.nivel} da fonte em diante, no máximo {porCirculo.tetoAPartirDoNivel.teto} magias do mesmo círculo.
+              </small>
+            )}
+          </div>
+        )}
         {perfil.avisoFluxo && (
           <div className="mt-3 flex items-start gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-xs leading-relaxed text-amber-200">
             <AlertCircle size={16} className="mt-0.5 shrink-0" />
@@ -1156,7 +1192,7 @@ export const AbaMagias = ({ character, onUpdate }: { character: any; onUpdate: a
                 options={[
                   {
                     value: 'alcancaveis',
-                    label: perfil.circuloMaximo > 0 ? `Até o ${perfil.circuloMaximo}º círculo (alcançáveis)` : 'Nenhum círculo alcançável',
+                    label: perfil.circuloDaFonte > 0 ? `Até o ${perfil.circuloDaFonte}º círculo (da sua fonte)` : 'Nenhum círculo alcançável',
                   },
                   { value: 'todos', label: 'Todos os círculos' },
                   ...CIRCULOS_DISPONIVEIS.map((circulo) => ({

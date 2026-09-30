@@ -9255,6 +9255,48 @@
           "nivel": 15,
           "circulo": 2,
           "vagas": 5
+        },
+        {
+          "nivel": 20,
+          "circulo": 2,
+          "vagas": 6,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 25,
+          "circulo": 2,
+          "vagas": 7,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 30,
+          "circulo": 2,
+          "vagas": 8,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 35,
+          "circulo": 2,
+          "vagas": 9,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 40,
+          "circulo": 2,
+          "vagas": 10,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 45,
+          "circulo": 2,
+          "vagas": 11,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 50,
+          "circulo": 2,
+          "vagas": 12,
+          "teto_por_circulo": 4
         }
       ]
     },
@@ -9267,6 +9309,22 @@
         {
           "nivel": 10,
           "vagas": 2
+        },
+        {
+          "nivel": 20,
+          "vagas": 3
+        },
+        {
+          "nivel": 30,
+          "vagas": 4
+        },
+        {
+          "nivel": 40,
+          "vagas": 5
+        },
+        {
+          "nivel": 50,
+          "vagas": 6
         }
       ]
     },
@@ -9279,6 +9337,22 @@
         {
           "nivel": 10,
           "vagas": 2
+        },
+        {
+          "nivel": 20,
+          "vagas": 3
+        },
+        {
+          "nivel": 30,
+          "vagas": 4
+        },
+        {
+          "nivel": 40,
+          "vagas": 5
+        },
+        {
+          "nivel": 50,
+          "vagas": 6
         }
       ]
     },
@@ -12561,6 +12635,42 @@
           "nivel": 20,
           "circulo": 10,
           "vagas": 10
+        },
+        {
+          "nivel": 25,
+          "circulo": 10,
+          "vagas": 12,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 30,
+          "circulo": 10,
+          "vagas": 14,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 35,
+          "circulo": 10,
+          "vagas": 16,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 40,
+          "circulo": 10,
+          "vagas": 18,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 45,
+          "circulo": 10,
+          "vagas": 20,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 50,
+          "circulo": 10,
+          "vagas": 22,
+          "teto_por_circulo": 4
         }
       ]
     },
@@ -12585,6 +12695,30 @@
         {
           "nivel": 20,
           "vagas": 5
+        },
+        {
+          "nivel": 25,
+          "vagas": 6
+        },
+        {
+          "nivel": 30,
+          "vagas": 7
+        },
+        {
+          "nivel": 35,
+          "vagas": 8
+        },
+        {
+          "nivel": 40,
+          "vagas": 9
+        },
+        {
+          "nivel": 45,
+          "vagas": 10
+        },
+        {
+          "nivel": 50,
+          "vagas": 11
         }
       ]
     },
@@ -12609,6 +12743,30 @@
         {
           "nivel": 20,
           "vagas": 5
+        },
+        {
+          "nivel": 25,
+          "vagas": 6
+        },
+        {
+          "nivel": 30,
+          "vagas": 7
+        },
+        {
+          "nivel": 35,
+          "vagas": 8
+        },
+        {
+          "nivel": 40,
+          "vagas": 9
+        },
+        {
+          "nivel": 45,
+          "vagas": 10
+        },
+        {
+          "nivel": 50,
+          "vagas": 11
         }
       ]
     },
@@ -13161,6 +13319,42 @@
           "nivel": 20,
           "circulo": 10,
           "vagas": 10
+        },
+        {
+          "nivel": 25,
+          "circulo": 10,
+          "vagas": 12,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 30,
+          "circulo": 10,
+          "vagas": 14,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 35,
+          "circulo": 10,
+          "vagas": 16,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 40,
+          "circulo": 10,
+          "vagas": 18,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 45,
+          "circulo": 10,
+          "vagas": 20,
+          "teto_por_circulo": 4
+        },
+        {
+          "nivel": 50,
+          "circulo": 10,
+          "vagas": 22,
+          "teto_por_circulo": 4
         }
       ]
     },
@@ -13185,6 +13379,30 @@
         {
           "nivel": 20,
           "vagas": 5
+        },
+        {
+          "nivel": 25,
+          "vagas": 6
+        },
+        {
+          "nivel": 30,
+          "vagas": 7
+        },
+        {
+          "nivel": 35,
+          "vagas": 8
+        },
+        {
+          "nivel": 40,
+          "vagas": 9
+        },
+        {
+          "nivel": 45,
+          "vagas": 10
+        },
+        {
+          "nivel": 50,
+          "vagas": 11
         }
       ]
     },
@@ -13209,6 +13427,30 @@
         {
           "nivel": 20,
           "vagas": 5
+        },
+        {
+          "nivel": 25,
+          "vagas": 6
+        },
+        {
+          "nivel": 30,
+          "vagas": 7
+        },
+        {
+          "nivel": 35,
+          "vagas": 8
+        },
+        {
+          "nivel": 40,
+          "vagas": 9
+        },
+        {
+          "nivel": 45,
+          "vagas": 10
+        },
+        {
+          "nivel": 50,
+          "vagas": 11
         }
       ]
     },
@@ -13741,6 +13983,18 @@
         {
           "nivel": 15,
           "vagas": 4
+        },
+        {
+          "nivel": 30,
+          "vagas": 5
+        },
+        {
+          "nivel": 40,
+          "vagas": 6
+        },
+        {
+          "nivel": 50,
+          "vagas": 7
         }
       ]
     },
@@ -13757,6 +14011,18 @@
         {
           "nivel": 15,
           "vagas": 3
+        },
+        {
+          "nivel": 30,
+          "vagas": 4
+        },
+        {
+          "nivel": 40,
+          "vagas": 5
+        },
+        {
+          "nivel": 50,
+          "vagas": 6
         }
       ]
     },
@@ -13773,6 +14039,18 @@
         {
           "nivel": 15,
           "vagas": 3
+        },
+        {
+          "nivel": 30,
+          "vagas": 4
+        },
+        {
+          "nivel": 40,
+          "vagas": 5
+        },
+        {
+          "nivel": 50,
+          "vagas": 6
         }
       ]
     },
@@ -16458,7 +16736,13 @@
         { "nivel": 5, "circulo": 4, "vagas": 4 },
         { "nivel": 10, "circulo": 6, "vagas": 6 },
         { "nivel": 15, "circulo": 8, "vagas": 8 },
-        { "nivel": 20, "circulo": 10, "vagas": 10 }
+        { "nivel": 20, "circulo": 10, "vagas": 10 },
+        { "nivel": 25, "circulo": 10, "vagas": 12, "teto_por_circulo": 4 },
+        { "nivel": 30, "circulo": 10, "vagas": 14, "teto_por_circulo": 4 },
+        { "nivel": 35, "circulo": 10, "vagas": 16, "teto_por_circulo": 4 },
+        { "nivel": 40, "circulo": 10, "vagas": 18, "teto_por_circulo": 4 },
+        { "nivel": 45, "circulo": 10, "vagas": 20, "teto_por_circulo": 4 },
+        { "nivel": 50, "circulo": 10, "vagas": 22, "teto_por_circulo": 4 }
       ]
     },
     "progressao": [

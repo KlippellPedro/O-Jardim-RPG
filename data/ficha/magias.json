@@ -6,7 +6,7 @@
     "fluxos_naturais": 10,
     "fluxos_artificiais": 1,
     "fluxos_utilizaveis": 11,
-    "formula_teste": "d20 + Mod. Fluxo + Grau de Misticismo + bônus específico da classe",
+    "formula_teste": "d20 + Mod. Fluxo + metade do nível total + Grau de Misticismo + bônus específico da classe",
     "formula_dt": "7 + (3 × círculo)",
     "mana_gasta_ao_declarar": true,
     "mana_devolvida_em_falha": false,

@@ -17,6 +17,7 @@ import {
   RITO_DAS_SETE_VIRTUDES_ID,
   RITUAIS_CATALOGO,
   SELOS_CATALOGO,
+  avisoDeFluxoDaMagia,
   circuloPermitidoPorFluxo,
   cicatrizesDevidas,
   dtConjuracaoPorCirculo,
@@ -25,7 +26,9 @@ import {
   simbolosDoRito,
   sortearCicatriz,
   efeitoDaMagia,
+  magiaEhUniversal,
   magiaElegivelParaAprender,
+  magiasPorCirculo,
   obterPerfilMagico,
   temaDoFluxo,
   variantesDaMagia,
@@ -73,19 +76,66 @@ test('os onze Fluxos usam a paleta canônica de suas Árvores', () => {
   assert.notEqual(temaDoFluxo('comunicacao').base, temaDoFluxo('tecnologia').base);
 });
 
-test('Canalizador combina limite da classe e do Fluxo sem somar metade do nível', () => {
+test('Canalizador combina limite da classe e do Fluxo, e a rolagem soma metade do nível', () => {
   const nivel5 = obterPerfilMagico(ficha('canalizador', 5, 18));
   assert.equal(nivel5.circuloDaFonte, 4);
   assert.equal(nivel5.circuloDoFluxo, 2);
+  // O círculo que o Fluxo sustenta continua valendo para as Marcas; o que a classe libera vale para aprender.
   assert.equal(nivel5.circuloMaximo, 2);
   assert.equal(nivel5.vagasConhecidas, 4);
-  assert.equal(nivel5.bonusConjuracao, 6);
-  assert.equal(nivel5.dtMagia, 13);
+  assert.equal(nivel5.componentesConjuracao.metadeDoNivel, 2);
+  assert.equal(nivel5.bonusConjuracao, 8);
+  assert.equal(nivel5.dtMagia, 19, 'DT do círculo mais alto que a fonte libera');
 
   const nivel20 = obterPerfilMagico(ficha('canalizador', 20, 50));
   assert.equal(nivel20.circuloMaximo, 10);
   assert.equal(nivel20.dtMagia, 37);
-  assert.equal(nivel20.bonusConjuracao, 22);
+  assert.equal(nivel20.bonusConjuracao, 32);
+});
+
+test('Fluxo abaixo do recomendado vira aviso: aprende-se o círculo da fonte e a DT decide se conjura', () => {
+  const magia5 = MAGIAS_CATALOGO.find((item) => item.circulo === 4 && item.fontes_permitidas.includes('Canalização') && item.fluxo === 'espaco');
+  assert.ok(magia5, 'precisa de uma magia de 4º círculo do Fluxo Espaço');
+  const fichaBaixa = ficha('canalizador', 5, 14, 'aethel');
+  const perfil = obterPerfilMagico(fichaBaixa);
+  assert.equal(perfil.circuloDoFluxo, 1);
+  const aviso = avisoDeFluxoDaMagia(fichaBaixa, magia5);
+  assert.match(aviso ?? '', /Fluxo 14 abaixo do recomendado \(26\) para o 4º círculo/);
+  assert.match(aviso ?? '', /DT 19/);
+  assert.equal(avisoDeFluxoDaMagia(ficha('canalizador', 5, 26), magia5), null);
+  const elegivel = magiaElegivelParaAprender(fichaBaixa, magia5);
+  assert.doesNotMatch(elegivel.motivo ?? '', /Fluxo insuficiente/);
+});
+
+test('marcos de magia vão até o nível 50 e o teto por círculo só aparece do 25 em diante', () => {
+  const por = (classe: string, nivel: number) => obterPerfilMagico(ficha(classe, nivel, 20));
+  assert.equal(por('canalizador', 20).vagasConhecidas, 10);
+  assert.equal(por('canalizador', 20).tetoPorCirculo, null);
+  assert.deepEqual([25, 30, 35, 40, 45, 50].map((n) => por('canalizador', n).vagasConhecidas), [12, 14, 16, 18, 20, 22]);
+  assert.deepEqual([25, 30, 50].map((n) => por('sintonizador', n).tetoPorCirculo), [4, 4, 4]);
+  assert.equal(por('elementarista', 50).vagasConhecidas, 22);
+  assert.equal(por('cartista-arcano', 50).vagasConhecidas, 12);
+  assert.equal(por('cartista-arcano', 50).circuloDaFonte, 2);
+  // Rituais, Selos e Encantamentos seguem o mesmo ritmo depois do 20.
+  assert.equal(por('canalizador', 50).vagasSelos, 11);
+  assert.equal(por('canalizador', 50).vagasEncantamentos, 11);
+  assert.equal(por('ritualista', 50).vagasRituais, 7);
+});
+
+test('teto por círculo: a 5ª magia do mesmo círculo é recusada, a de outro círculo não', () => {
+  // Um Fluxo publica 3 magias por círculo e a Universal soma 2: o pool de um conjurador é 5.
+  const doCirculo = MAGIAS_CATALOGO.filter((item) => item.circulo === 1 && (item.fluxo === 'origem' || magiaEhUniversal(item)));
+  const outroCirculo = MAGIAS_CATALOGO.find((item) => item.circulo === 2 && item.fluxo === 'origem');
+  assert.equal(doCirculo.length, 5);
+  assert.ok(outroCirculo);
+  const base = { ...ficha('canalizador', 50, 30), magiasConhecidasIds: doCirculo.slice(0, 4).map((item) => item.id) };
+  const recusada = magiaElegivelParaAprender(base, doCirculo[4]);
+  assert.equal(recusada.permitido, false);
+  assert.match(recusada.motivo ?? '', /máximo da sua fonte/);
+  assert.equal(magiaElegivelParaAprender(base, outroCirculo as any).permitido, true);
+  // Abaixo do nível 25 não há teto: o 20 fecha a grade antiga sem mudar nada.
+  const nivel20 = { ...ficha('canalizador', 20, 30), magiasConhecidasIds: doCirculo.slice(0, 4).map((item) => item.id) };
+  assert.doesNotMatch(magiaElegivelParaAprender(nivel20, doCirculo[4]).motivo ?? '', /máximo da sua fonte/);
 });
 
 test('magia Elemental exige Elementarista, afinidade registrada e Avatar quando combina elementos', () => {
@@ -202,7 +252,7 @@ test('item equipado altera Fluxo, Misticismo e vantagens de conjuração', () =>
   const perfil = obterPerfilMagico(ficha('canalizador', 5, 14), [item]);
   assert.equal(perfil.fluxo, 18);
   assert.equal(perfil.circuloDoFluxo, 2);
-  assert.equal(perfil.bonusConjuracao, 9);
+  assert.equal(perfil.bonusConjuracao, 11);
   assert.equal(perfil.vantagensConjuracao, 1);
 });
 
@@ -667,4 +717,26 @@ test('Fluxo do Fim avisa sobre autorização do Mestre sem bloquear o catálogo'
   assert.equal(perfil.fluxoNativoId, 'fim');
   assert.match(perfil.avisoFluxo || '', /autoriza[cç][aã]o do Mestre/i);
   assert.equal(magiaElegivelParaAprender(fichaFim, magiaFim).permitido, true);
+});
+
+test('resumo por círculo mostra o que a ficha conhece, o teto e quantas ainda pode escolher', () => {
+  const primeiro = MAGIAS_CATALOGO.filter((item) => item.circulo === 1 && (item.fluxo === 'origem' || magiaEhUniversal(item)));
+  const nivel50 = { ...ficha('canalizador', 50, 30), magiasConhecidasIds: primeiro.slice(0, 3).map((item) => item.id) };
+  const resumo = magiasPorCirculo(nivel50);
+  assert.equal(resumo.teto, 4);
+  assert.equal(resumo.tetoAPartirDoNivel, null);
+  assert.equal(resumo.circulos.length, 10);
+  assert.deepEqual(resumo.circulos[0], { circulo: 1, conhecidas: 3, teto: 4, restantes: 1 });
+  assert.deepEqual(resumo.circulos[1], { circulo: 2, conhecidas: 0, teto: 4, restantes: 4 });
+  assert.equal(resumo.vagasLivres, 22 - 3);
+
+  // Antes do 25 não há teto, mas a ficha já avisa a partir de que nível ele começa.
+  const nivel10 = magiasPorCirculo(ficha('canalizador', 10, 20));
+  assert.equal(nivel10.teto, null);
+  assert.deepEqual(nivel10.tetoAPartirDoNivel, { nivel: 25, teto: 4 });
+  assert.equal(nivel10.circulos.length, 6);
+  assert.ok(nivel10.circulos.every((item) => item.teto === null && item.restantes === null));
+
+  // Sem fonte de magia não há círculo nenhum para listar.
+  assert.equal(magiasPorCirculo(ficha('guerreiro', 10, 20)).circulos.length, 0);
 });

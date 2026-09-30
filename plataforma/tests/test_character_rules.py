@@ -177,6 +177,24 @@ class TestCharacterRules:
         erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
         assert "nivel total" in erro
 
+    def test_graus_novos_abrem_so_nos_patamares(self):
+        # Lendario abre no nivel total 60, Absoluto no 500: antes disso a ficha
+        # avisa que o nivel ainda nao permite o grau.
+        for grau, nivel_minimo in (("lendario", 60), ("mitico", 100), ("cosmico", 150), ("eterno", 250), ("absoluto", 500)):
+            anterior, atual = self._ficha_com_classes([("guerreiro", nivel_minimo - 1)])
+            atual["pericias"]["atletismo"] = grau
+            assert f"nivel total ainda nao permite o grau {grau}" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+            anterior, atual = self._ficha_com_classes([("guerreiro", nivel_minimo)])
+            atual["pericias"]["atletismo"] = grau
+            erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+            assert erro is None or "nivel total ainda nao permite" not in erro
+
+    def test_grau_de_pericia_desconhecido_continua_invalido(self):
+        anterior = _ficha_criacao()
+        atual = deepcopy(anterior)
+        atual["pericias"]["atletismo"] = "supremo"
+        assert "grau de pericia invalido" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
     def test_players_can_award_themselves_xp(self):
         # Decisão de design 2026-08: idem ao nível de classe - o jogador
         # agora define o próprio XP, e o mestre é avisado pelo router.
@@ -299,9 +317,33 @@ class TestCharacterRules:
         erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
         assert "pre-requisitos" in erro
 
+    def test_teto_por_circulo_so_vale_do_nivel_25_em_diante(self):
+        primeiro_circulo = sorted(
+            magia_id for magia_id, magia in _CATALOGO["magia"].items()
+            if magia.get("circulo") == 1 and magia.get("fluxo") in ("origem", "universal")
+        )
+        assert len(primeiro_circulo) == 5
+        anterior = _ficha_criacao()
+        anterior["arvoreId"] = "aethel"
+        anterior["classeId"] = "canalizador"
+        anterior["classes"] = [{"classeId": "canalizador", "nivel": 50}]
+        anterior["nivel"] = 50
+        # Fluxo baixo de proposito: o Fluxo minimo do circulo e so recomendacao.
+        atual = deepcopy(anterior)
+        atual["magiasConhecidasIds"] = primeiro_circulo[:4]
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+        atual["magiasConhecidasIds"] = primeiro_circulo
+        assert "mesmo circulo" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        # No nivel 20 (ultimo marco antigo) nao ha teto por circulo.
+        anterior["classes"] = [{"classeId": "canalizador", "nivel": 20}]
+        anterior["nivel"] = 20
+        atual = deepcopy(anterior)
+        atual["magiasConhecidasIds"] = primeiro_circulo
+        assert "mesmo circulo" not in (validar_regras_ficha(atual, {}, ficha_anterior=anterior) or "")
+
     def test_validates_magic_source_slots_circle_and_flux(self):
         """Catálogo de dez círculos: Canalizador nível 8 libera até o 4º círculo
-        com 4 vagas, mas o atributo Fluxo 15 só sustenta o 1º."""
+        com 4 vagas; o atributo Fluxo 15 só sustenta o 1º, mas isso é recomendação."""
         anterior = _ficha_criacao()
         anterior["arvoreId"] = "ignis"
         anterior["classes"] = [
@@ -324,11 +366,13 @@ class TestCharacterRules:
         circulo_alto["magiasConhecidasIds"][-1] = "vortice-menor"  # 5º círculo
         assert "fonte de magia" in validar_regras_ficha(circulo_alto, {}, ficha_anterior=anterior)
 
+        # O Fluxo minimo do circulo e so recomendacao: Fluxo baixo nao gera alerta,
+        # porque a DT do circulo e o portao real na hora de conjurar.
         sem_fluxo = deepcopy(atual)
-        sem_fluxo["atributosFinais"]["fluxo"] = 13  # abaixo do mínimo do 1º círculo
+        sem_fluxo["atributosFinais"]["fluxo"] = 13
         anterior_sem_fluxo = deepcopy(anterior)
         anterior_sem_fluxo["atributosFinais"]["fluxo"] = 13
-        assert "Fluxo insuficiente" in validar_regras_ficha(sem_fluxo, {}, ficha_anterior=anterior_sem_fluxo)
+        assert "Fluxo insuficiente" not in (validar_regras_ficha(sem_fluxo, {}, ficha_anterior=anterior_sem_fluxo) or "")
 
         # O servidor conta vagas; o Fluxo nativo de cada magia é checado na ficha.
         excedente = deepcopy(atual)

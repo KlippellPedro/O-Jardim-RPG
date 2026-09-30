@@ -206,6 +206,7 @@ export interface IPerfilMagico {
   bonusConjuracao: number;
   componentesConjuracao: {
     modificadorFluxo: number;
+    metadeDoNivel: number;
     grauMisticismo: number;
     racial: number;
     origem: number;
@@ -220,6 +221,8 @@ export interface IPerfilMagico {
   circuloDoFluxo: number;
   circuloMaximo: number;
   vagasConhecidas: number;
+  /** Quantas magias do mesmo círculo a ficha pode conhecer; null quando nenhuma fonte declara teto. */
+  tetoPorCirculo: number | null;
   possuiInterceptacao: boolean;
   nivelInterceptador: number;
   nivelSintonizador: number;
@@ -448,7 +451,10 @@ export function obterPerfilMagico(
   const bonusOrigem = ajusteOrigem(ficha, 'pericia', 'misticismo');
   const bonusManual = totalAjustesManuais(ficha, chaveAjuste('pericia', 'misticismo'));
   const bonusEquipamento = resumoEquipamento.bonusPericias.misticismo || 0;
+  // A rolagem de magia soma metade do nível total, como todo teste da ficha.
+  const metadeDoNivel = Math.floor(nivelTotal / 2);
   const bonusConjuracao = modificador(fluxo)
+    + metadeDoNivel
     + bonusGrau
     + bonusRacial
     + bonusOrigem
@@ -457,6 +463,7 @@ export function obterPerfilMagico(
 
   let circuloDaFonte = 0;
   let vagasConhecidas = 0;
+  let tetoPorCirculo: number | null = null;
   const fontes: string[] = [];
   classes.forEach(({ id, nivel }) => {
     const classe = CLASSES_CATALOGO.find((item) => item.id === id);
@@ -467,6 +474,7 @@ export function obterPerfilMagico(
     fontes.push(String(fonte.fonte || classe?.titulo || id));
     circuloDaFonte = Math.max(circuloDaFonte, Number(marco.circulo) || 0);
     vagasConhecidas += Math.max(0, Number(marco.vagas) || 0);
+    if (Number(marco.teto_por_circulo) > 0) tetoPorCirculo = Math.max(tetoPorCirculo ?? 0, Number(marco.teto_por_circulo));
   });
   const circuloDoFluxo = circuloPermitidoPorFluxo(fluxo);
   const fluxoNativo = obterFluxoNativo(ficha);
@@ -497,6 +505,7 @@ export function obterPerfilMagico(
     bonusConjuracao,
     componentesConjuracao: {
       modificadorFluxo: modificador(fluxo),
+      metadeDoNivel,
       grauMisticismo: bonusGrau,
       racial: bonusRacial,
       origem: bonusOrigem,
@@ -505,12 +514,13 @@ export function obterPerfilMagico(
     },
     vantagensConjuracao: resumoEquipamento.vantagens.misticismo || 0,
     desvantagensConjuracao: resumoEquipamento.desvantagens.misticismo || 0,
-    dtMagia: dtConjuracaoPorCirculo(Math.min(circuloDaFonte, circuloDoFluxo)),
+    dtMagia: dtConjuracaoPorCirculo(circuloDaFonte),
     dtLimiteFluxo: dtConjuracaoPorCirculo(circuloDoFluxo),
     circuloDaFonte,
     circuloDoFluxo,
     circuloMaximo: Math.min(circuloDaFonte, circuloDoFluxo),
     vagasConhecidas,
+    tetoPorCirculo,
     possuiInterceptacao,
     nivelInterceptador,
     nivelSintonizador,
@@ -542,7 +552,15 @@ export function magiaElegivelParaAprender(ficha: any, magia: IMagiaCatalogo, inv
   if (perfil.conhecidasIds.length >= perfil.vagasConhecidas) return { permitido: false, motivo: 'Todas as vagas de magia já foram preenchidas.' };
   if (magia.circulo === 'ritual' || magia.somente_mestre) return { permitido: false, motivo: 'Rituais e concessões especiais dependem do Mestre.' };
   if (magia.circulo > perfil.circuloDaFonte) return { permitido: false, motivo: 'A fonte de magia ainda não libera este círculo.' };
-  if (magia.circulo > perfil.circuloDoFluxo) return { permitido: false, motivo: `Fluxo insuficiente para o ${magia.circulo}º círculo.` };
+  // O Fluxo mínimo do círculo é só recomendação (ver avisoDeFluxoDaMagia): quem
+  // tenta conjurar um círculo acima do próprio bônus falha sozinho, porque a
+  // rolagem não alcança a DT do círculo.
+  if (perfil.tetoPorCirculo !== null) {
+    const doMesmoCirculo = perfil.conhecidasIds.filter((id) => MAGIAS_POR_ID.get(id)?.circulo === magia.circulo).length;
+    if (doMesmoCirculo >= perfil.tetoPorCirculo) {
+      return { permitido: false, motivo: `Você já conhece ${doMesmoCirculo} magias do ${magia.circulo}º círculo, o máximo da sua fonte.` };
+    }
+  }
   const isUniversalTree = ficha?.arvoreId === 'universal';
   if (!isUniversalTree) {
     if (!perfil.fluxoNativoId) return { permitido: false, motivo: 'Escolha uma Árvore para definir o Fluxo nativo da ficha.' };
@@ -564,6 +582,57 @@ export function magiaElegivelParaAprender(ficha: any, magia: IMagiaCatalogo, inv
     return { permitido: false, motivo: 'Sua classe ainda não oferece uma fonte compatível com esta magia.' };
   }
   return { permitido: true };
+}
+
+export interface IMagiasPorCirculo {
+  /** Um item por círculo que a fonte libera (do 1º ao maior). */
+  circulos: Array<{ circulo: number; conhecidas: number; teto: number | null; restantes: number | null }>;
+  /** Teto atual por círculo; null quando a fonte ainda não declara um. */
+  teto: number | null;
+  /** Primeiro marco de classe que passa a ter teto, para avisar antes de chegar lá. */
+  tetoAPartirDoNivel: { nivel: number; teto: number } | null;
+  vagasLivres: number;
+}
+
+/** Quantas magias de cada círculo a ficha conhece e quantas ainda pode escolher,
+ * para a aba de magias mostrar o limite sem mandar ninguém ao livro. */
+export function magiasPorCirculo(ficha: any, inventarioCentral: any[] = []): IMagiasPorCirculo {
+  const perfil = obterPerfilMagico(ficha, inventarioCentral);
+  const teto = perfil.tetoPorCirculo;
+  const contagem = new Map<number, number>();
+  perfil.conhecidasIds.forEach((id) => {
+    const circulo = MAGIAS_POR_ID.get(id)?.circulo;
+    if (typeof circulo === 'number') contagem.set(circulo, (contagem.get(circulo) ?? 0) + 1);
+  });
+  const circulos = Array.from({ length: perfil.circuloDaFonte }, (_, indice) => {
+    const circulo = indice + 1;
+    const conhecidas = contagem.get(circulo) ?? 0;
+    return { circulo, conhecidas, teto, restantes: teto === null ? null : Math.max(0, teto - conhecidas) };
+  });
+  let tetoAPartirDoNivel: IMagiasPorCirculo['tetoAPartirDoNivel'] = null;
+  if (teto === null) {
+    referenciasClasse(ficha).forEach(({ id }) => {
+      const marcos = CLASSES_CATALOGO.find((item) => item.id === id)?.progressao_magia?.marcos;
+      (Array.isArray(marcos) ? marcos : []).forEach((marco: any) => {
+        const valor = Number(marco.teto_por_circulo);
+        if (valor > 0 && (!tetoAPartirDoNivel || Number(marco.nivel) < tetoAPartirDoNivel.nivel)) {
+          tetoAPartirDoNivel = { nivel: Number(marco.nivel), teto: valor };
+        }
+      });
+    });
+  }
+  return { circulos, teto, tetoAPartirDoNivel, vagasLivres: Math.max(0, perfil.vagasConhecidas - perfil.conhecidasIds.length) };
+}
+
+/** Aviso (nunca trava) de que o Fluxo da ficha está abaixo do recomendado para o
+ * círculo da magia. Devolve null quando o Fluxo basta ou a magia não tem círculo. */
+export function avisoDeFluxoDaMagia(ficha: any, magia: IMagiaCatalogo, inventarioCentral: any[] = []): string | null {
+  if (typeof magia.circulo !== 'number') return null;
+  const perfil = obterPerfilMagico(ficha, inventarioCentral);
+  if (magia.circulo <= perfil.circuloDoFluxo) return null;
+  const minimo = CIRCULOS_CONFIG.find((item) => item.circulo === magia.circulo)?.fluxo_minimo ?? 0;
+  const dt = dtConjuracaoPorCirculo(magia.circulo);
+  return `Fluxo ${perfil.fluxo} abaixo do recomendado (${minimo}) para o ${magia.circulo}º círculo. Você aprende, mas para conjurar a rolagem precisa alcançar DT ${dt}; hoje ela soma ${perfil.bonusConjuracao >= 0 ? '+' : ''}${perfil.bonusConjuracao}.`;
 }
 
 /** Rituais, Selos e Encantamentos não têm "fontes_permitidas" nem círculo -
@@ -767,9 +836,6 @@ export function podeConjurarMagia(ficha: any, magia: IMagiaCatalogo, inventarioC
   if (!concedida) {
     const acessoElemental = restricaoMagiaElemental(ficha, magia);
     if (!acessoElemental.permitido) return acessoElemental;
-  }
-  if (typeof magia.circulo === 'number' && magia.circulo > perfil.circuloDoFluxo) {
-    return { permitido: false, motivo: `Fluxo ${perfil.fluxo} não canaliza o ${magia.circulo}º círculo com segurança.` };
   }
   return { permitido: true };
 }

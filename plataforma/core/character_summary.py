@@ -9,6 +9,7 @@ from pathlib import Path
 
 from core.maestria_classe import graus_de_maestria
 from core.progressao_niveis import (
+    GRAUS_PERICIA,
     NIVEL_CONTEUDO_CLASSE,
     NIVEL_MINIMO_GRAU,
     NIVEL_TOTAL_PADRAO,
@@ -35,7 +36,7 @@ _CATALOGO: dict[str, dict[str, dict]] = {
 }
 _ATRIBUTOS = ("forca", "destreza", "constituicao", "inteligencia", "sabedoria", "carisma", "fluxo")
 _VALORES_PADRAO = sorted((15, 14, 13, 12, 10, 8, 8))
-_GRAUS = ("iniciante", "aprendiz", "treinado", "especialista", "mestre", "veterano", "renomado")
+_GRAUS = GRAUS_PERICIA
 _NIVEL_MINIMO_GRAU = NIVEL_MINIMO_GRAU
 _FLUXOS_CATALISAVEIS = {
     "origem", "essencia", "comunicacao", "vitalidade", "inconstancia",
@@ -253,23 +254,9 @@ def _classes_da_ficha(ficha: dict) -> list[dict]:
     return [item for item in bruto if isinstance(item, dict)]
 
 
-# VD (Valor de Desafio): classifica a dificuldade das criaturas do Bestiário
-# em 10 graus (mesma contagem dos círculos dos Fluxos). O XP de cada grau já
-# vem pronto aqui — o mestre só escolhe o VD da criatura, sem inventar XP na
-# mão pra cada uma.
-# Calibrado contra o custo de nível (N x 1.000) para um grupo de 4 enfrentando
-# um monstro de VD ~ nível/2: sobe de nível em ~9 a 11 lutas do 1 ao 16, e em
-# ~7 a 8 no 17-20. O VD 1 pagava só 200 e exigia 20-40 lutas nos primeiros níveis.
-XP_POR_VD: dict[int, int] = {
-    1: 500, 2: 1300, 3: 2200, 4: 3000, 5: 3800,
-    6: 4800, 7: 5800, 8: 7200, 9: 9000, 10: 11000,
-}
-
-
-def xp_por_vd(vd: int | None) -> int:
-    if vd is None:
-        return 0
-    return XP_POR_VD.get(max(1, min(10, int(vd))), 0)
+# VD (Valor de Desafio) é o nível do grupo que a criatura desafia sozinha, e o
+# XP dele mora em core/progressao_niveis.py (xp_por_vd): um quinto do custo do
+# nível de mesmo número, para uma criatura solo. O mestre só escolhe o VD.
 
 
 def _pericias_concedidas(classes: list[tuple[dict, int]]) -> dict[str, int]:
@@ -804,6 +791,7 @@ def _validar_magias(
 
     circulo_fonte = 0
     vagas = 0
+    teto_por_circulo: int | None = None
     tradicoes: set[str] = set()
     for classe, nivel in classes:
         fonte = classe.get("progressao_magia") if isinstance(classe.get("progressao_magia"), dict) else {}
@@ -816,11 +804,16 @@ def _validar_magias(
         marco = max(marcos, key=lambda item: _inteiro(item.get("nivel")) or 0)
         circulo_fonte = max(circulo_fonte, _inteiro(marco.get("circulo")) or 0)
         vagas += max(0, _inteiro(marco.get("vagas")) or 0)
+        teto = _inteiro(marco.get("teto_por_circulo")) or 0
+        if teto > 0:
+            teto_por_circulo = max(teto_por_circulo or 0, teto)
         tradicoes.update(str(item) for item in fonte.get("tradicoes") or [])
 
     if len(conhecidas) > vagas:
         return "a ficha possui mais magias conhecidas do que as vagas liberadas"
-    circulo_fluxo = _circulo_por_fluxo(_fluxo_efetivo(ficha, raca))
+    # O Fluxo minimo do circulo e so recomendacao (a DT do circulo e o portao real),
+    # entao nao gera alerta aqui. O que continua conferido e o teto por circulo.
+    por_circulo: dict[int, int] = {}
     for magia_id in conhecidas:
         magia = _CATALOGO["magia"][magia_id]
         circulo = _inteiro(magia.get("circulo"))
@@ -828,8 +821,9 @@ def _validar_magias(
             return "rituais e magias especiais precisam ser concedidos pelo mestre"
         if circulo > circulo_fonte:
             return "a fonte de magia ainda nao libera o circulo escolhido"
-        if circulo > circulo_fluxo:
-            return "Fluxo insuficiente para o circulo de uma magia conhecida"
+        por_circulo[circulo] = por_circulo.get(circulo, 0) + 1
+        if teto_por_circulo is not None and por_circulo[circulo] > teto_por_circulo:
+            return "a ficha possui mais magias do mesmo circulo do que o teto da fonte"
         # "tradicao" nomeia o Fluxo da magia; quem casa com a classe e
         # "fontes_permitidas" (Canalizacao, Sintonia, Cartomancia de Fluxo).
         permitidas = {str(item) for item in magia.get("fontes_permitidas") or []}
