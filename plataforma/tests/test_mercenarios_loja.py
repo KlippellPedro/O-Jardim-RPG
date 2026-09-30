@@ -33,20 +33,43 @@ def _linha(entrada):
     return {"id": entrada["id"], "tipo": entrada["tipo"], "titulo": entrada["titulo"], "conteudo": entrada["conteudo"]}
 
 
+# Os "Modelo de Criatura (VD n)" saíram do catálogo (o gerador do site monta uma
+# criatura de qualquer VD), mas a rede de segurança da categoria "Universal"
+# continua valendo para quem voltar a publicar um perfil assim.
+_UNIVERSAL = {
+    "id": "universal-teste",
+    "tipo": "monstro",
+    "titulo": "Modelo de Criatura (teste)",
+    "conteudo": {"categoria": "Universal", "vd": 10, "nivel": 10, "raridade": "comum"},
+}
+
+
 class BestiarioForaDoBalcaoTests(unittest.TestCase):
+    def test_catalogo_nao_traz_mais_perfil_universal_gravado(self):
+        self.assertEqual([e["id"] for e in _MONSTROS if e["conteudo"].get("categoria") == "Universal"], [])
+
     def test_perfil_universal_some_do_balcao_mesmo_sem_config_de_campanha(self):
-        universais = [e for e in _MONSTROS if e["conteudo"].get("categoria") == "Universal"]
-        self.assertTrue(universais, "o bestiário precisa manter os perfis universais publicados")
-        for entrada in universais:
-            with self.subTest(entrada["id"]):
-                self.assertTrue(_is_hidden_catalog_item(_linha(entrada), set(), set()))
+        self.assertTrue(_is_hidden_catalog_item(_linha(_UNIVERSAL), set(), set()))
 
     def test_criatura_e_contratavel_continuam_no_balcao(self):
-        vendaveis = [e for e in _MONSTROS if e["conteudo"].get("categoria") != "Universal"]
+        # Estágios gerados de VD alto e únicos ficam só no Bestiário (disponivelNaLoja false).
+        vendaveis = [
+            e for e in _MONSTROS
+            if e["conteudo"].get("categoria") != "Universal" and e["conteudo"].get("disponivelNaLoja") is not False
+        ]
         self.assertTrue(vendaveis)
         for entrada in vendaveis:
             with self.subTest(entrada["id"]):
                 self.assertFalse(_is_hidden_catalog_item(_linha(entrada), set(), set()))
+
+    def test_criatura_so_de_bestiario_some_do_balcao_e_a_de_familia_comum_continua(self):
+        so_bestiario = [e for e in _MONSTROS if e["conteudo"].get("disponivelNaLoja") is False]
+        self.assertGreaterEqual(len(so_bestiario), 30)
+        for entrada in so_bestiario:
+            with self.subTest(entrada["id"]):
+                self.assertTrue(_is_hidden_catalog_item(_linha(entrada), set(), set()))
+        # As nove primeiras (Dragão Jovem, Lobo Alfa...) seguem à venda.
+        self.assertFalse(_is_hidden_catalog_item(_linha(next(e for e in _MONSTROS if e["id"] == "dragao-jovem")), set(), set()))
 
     def test_marca_de_fora_do_balcao_convive_com_os_filtros_da_campanha(self):
         # Ocultar por raridade ou por id continua funcionando por cima da marca.
@@ -59,8 +82,7 @@ class BestiarioForaDoBalcaoTests(unittest.TestCase):
         # ressincronizado no boot da API. Até lá a linha antiga continua no
         # banco sem `disponivelNaLoja`, e foi assim que o "Modelo de Criatura"
         # apareceu à venda em Mercenários. A categoria "Universal" segura isso.
-        universal = next(e for e in _MONSTROS if e["conteudo"].get("categoria") == "Universal")
-        linha_antiga = _linha(universal)
+        linha_antiga = _linha(_UNIVERSAL)
         linha_antiga["conteudo"] = {
             chave: valor
             for chave, valor in linha_antiga["conteudo"].items()
@@ -156,3 +178,23 @@ class ContratarOuComprarTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class VidaDeAliadoTests(unittest.TestCase):
+    def test_vida_do_aliado_e_no_maximo_o_dobro_da_vida_de_um_personagem(self):
+        from core.curva_criatura import vida_de_aliado
+        # Mesmos valores de tests/frontend/curvaCriatura.test.ts.
+        for vd, pv, esperado in ((3, 105, 38), (8, 170, 74), (20, 410, 160), (33, 850, 276), (50, 1320, 428), (100, 2700, 772)):
+            self.assertEqual(vida_de_aliado(vd, pv), esperado, f"VD {vd}")
+        self.assertEqual(vida_de_aliado(20, 100), 100)
+        self.assertEqual(vida_de_aliado(None, 500), 500)
+
+    def test_criatura_comprada_nasce_com_a_vida_de_aliado_e_nao_a_de_inimigo(self):
+        for entrada in _MONSTROS:
+            conteudo = entrada["conteudo"]
+            if conteudo.get("disponivelNaLoja") is False or conteudo.get("vd", 0) < 8:
+                continue
+            with self.subTest(entrada["id"]):
+                aliado = _mercenary_ally_from_catalog_item(entrada)
+                self.assertLessEqual(aliado["vidaMaxima"], 0.6 * conteudo["pv"])
+                self.assertEqual(aliado["vidaAtual"], aliado["vidaMaxima"])

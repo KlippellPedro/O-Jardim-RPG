@@ -1,0 +1,349 @@
+{
+  "_nota": "Famílias do Bestiário: criaturas que compartilham corpo e tema, em escada de VD. `membros` são fichas escritas à mão que já existem no catálogo (nunca são sobrescritas). `unicos` são criaturas com uma versão só, sem estágios. Este arquivo vai para o site (filtro do Bestiário); os estágios propostos ficam em familias-propostas-v1.json, que o site não importa.",
+  "papelPadrao": "solo",
+  "unicos": [
+    "arconte-da-ordem",
+    "caribdis",
+    "fantasma-do-vendaval",
+    "coro-sem-rosto",
+    "titan-de-gelo",
+    "kraken",
+    "baleia-catedral",
+    "cortejo-das-mil-velas",
+    "avatar-das-sombras",
+    "leviata",
+    "apagador-de-constelacoes",
+    "devorador-de-mundos",
+    "fenix-imortal"
+  ],
+  "familias": [
+    {
+      "id": "golem",
+      "titulo": "Golem",
+      "descricao": "Corpos de material inerte animados por um propósito. A escada vai do barro ao vidro e à obsidiana, e cada material muda o que o golem aguenta e o que teme.",
+      "membros": [
+        {
+          "id": "golem-de-argila-selada"
+        },
+        {
+          "id": "golem-de-sal"
+        },
+        {
+          "id": "golem-de-bronze-cantante"
+        },
+        {
+          "id": "golem-de-pedra"
+        },
+        {
+          "id": "golem-de-ferro"
+        },
+        {
+          "id": "golem-de-raizes-encouracadas"
+        },
+        {
+          "id": "sentinela-de-cristal"
+        },
+        {
+          "id": "golem-de-espelhos"
+        },
+        {
+          "id": "golem-guardiao-de-portal"
+        },
+        {
+          "id": "colosso-de-obsidiana"
+        }
+      ]
+    },
+    {
+      "id": "automato",
+      "titulo": "Autômato",
+      "descricao": "Máquinas de guarda e de ronda que seguem uma rota e uma ordem, sem pressa e sem cansaço.",
+      "membros": [
+        {
+          "id": "merc-automato"
+        },
+        {
+          "id": "automato-de-ronda"
+        }
+      ]
+    },
+    {
+      "id": "morto-vivo",
+      "titulo": "Morto-vivo",
+      "descricao": "Quem não conseguiu ir embora por inteiro. Os mais fracos ainda repetem gestos da vida, os mais fortes lembram por que ficaram.",
+      "membros": [
+        {
+          "id": "esqueleto-guerreiro"
+        },
+        {
+          "id": "zumbi-bruto"
+        },
+        {
+          "id": "carnical"
+        },
+        {
+          "id": "guardiao-de-tumba"
+        },
+        {
+          "id": "necromante-decadente"
+        },
+        {
+          "id": "cavaleiro-da-morte"
+        },
+        {
+          "id": "rei-carnical"
+        },
+        {
+          "id": "cortejo-das-mil-velas"
+        }
+      ]
+    },
+    {
+      "id": "vazio",
+      "titulo": "Criaturas do Vazio",
+      "descricao": "Aberrações que nascem onde o mundo esqueceu de existir. Todas trazem sinais antes de aparecer e uma saída conhecida (ver Criatura que ninguém quer enfrentar, no Guia do Mestre).",
+      "membros": [
+        {
+          "id": "sussurrante-de-frestas"
+        },
+        {
+          "id": "raspador-de-nomes"
+        },
+        {
+          "id": "merc-umbral"
+        },
+        {
+          "id": "mastim-sem-sombra"
+        },
+        {
+          "id": "costureiro-de-fendas"
+        },
+        {
+          "id": "arauto-do-vazio"
+        },
+        {
+          "id": "megalodon-do-vazio"
+        },
+        {
+          "id": "viuva-de-orbitas"
+        },
+        {
+          "id": "vigia-de-mil-olhos"
+        },
+        {
+          "id": "colecionador-de-membros"
+        },
+        {
+          "id": "caribdis"
+        },
+        {
+          "id": "coro-sem-rosto"
+        },
+        {
+          "id": "kraken"
+        },
+        {
+          "id": "leviata"
+        },
+        {
+          "id": "apagador-de-constelacoes"
+        },
+        {
+          "id": "devorador-de-mundos"
+        }
+      ]
+    },
+    {
+      "id": "elemental",
+      "titulo": "Elemental",
+      "descricao": "Um elemento mantido de pé por magia ou por costume. O menor obedece por pouco tempo; o maior já escolhe; o primordial é o próprio elemento com opinião.",
+      "membros": [
+        {
+          "id": "elemental-de-fogo-menor",
+          "estagio": "Menor"
+        },
+        {
+          "id": "elemental-de-gelo-menor",
+          "estagio": "Menor"
+        },
+        {
+          "id": "efreeti-do-deserto"
+        },
+        {
+          "id": "rainha-dos-corais"
+        }
+      ]
+    },
+    {
+      "id": "dragao",
+      "titulo": "Dragão",
+      "descricao": "A família que cresce a vida inteira. O filhote cabe no colo, o ancião ocupa uma fortaleza, e cada idade muda o quanto ele conversa antes de queimar.",
+      "membros": [
+        {
+          "id": "dragonete",
+          "estagio": "Filhote"
+        },
+        {
+          "id": "wyvern-das-montanhas"
+        },
+        {
+          "id": "dragao-anciao",
+          "estagio": "Ancião"
+        }
+      ]
+    },
+    {
+      "id": "espirito",
+      "titulo": "Espírito",
+      "descricao": "Presenças ligadas a um lugar, uma promessa ou uma perda. Quase nunca querem machucar, e por isso o combate costuma ser a pior resposta.",
+      "membros": [
+        {
+          "id": "fogo-fatuo-do-caminho"
+        },
+        {
+          "id": "eco-do-afogado"
+        },
+        {
+          "id": "sombra-sussurrante"
+        },
+        {
+          "id": "merc-aethel"
+        },
+        {
+          "id": "espirito-do-lar"
+        },
+        {
+          "id": "guardiao-das-promessas"
+        },
+        {
+          "id": "gato-espectral"
+        },
+        {
+          "id": "espectro-vingativo"
+        },
+        {
+          "id": "noiva-do-espelho-partido"
+        },
+        {
+          "id": "arquivista-dos-nomes"
+        },
+        {
+          "id": "fantasma-do-vendaval"
+        },
+        {
+          "id": "anjo-guardiao"
+        }
+      ]
+    },
+    {
+      "id": "cao-e-lobo",
+      "titulo": "Cão e lobo",
+      "descricao": "Matilhas e guardas de quatro patas, do cão de portão ao lobo que lidera. O que muda de um estágio a outro é o quanto o bando obedece a ele.",
+      "membros": [
+        {
+          "id": "cao-de-guarda"
+        },
+        {
+          "id": "lobo-cinzento",
+          "estagio": "Lobo"
+        },
+        {
+          "id": "mastim-de-guerra"
+        },
+        {
+          "id": "hiena-risonha"
+        },
+        {
+          "id": "cao-infernal-de-portao"
+        }
+      ]
+    },
+    {
+      "id": "aranha",
+      "titulo": "Aranha",
+      "descricao": "Tecelãs pacientes. A aranha gigante espera na teia, e a do Vazio tece onde não há nada para prender.",
+      "membros": [
+        {
+          "id": "aranha-gigante"
+        }
+      ]
+    },
+    {
+      "id": "mar",
+      "titulo": "Criaturas do mar",
+      "descricao": "Bichos de recife, casco e maré, de quem vive de sobras a quem os marinheiros dão nome próprio.",
+      "membros": [
+        {
+          "id": "moreia-de-coral"
+        },
+        {
+          "id": "caranguejo-lanterna"
+        },
+        {
+          "id": "manta-trovao"
+        },
+        {
+          "id": "tubarao-de-ferro"
+        },
+        {
+          "id": "baleia-catedral"
+        }
+      ]
+    },
+    {
+      "id": "fenix",
+      "titulo": "Fênix",
+      "descricao": "A ave que volta do próprio fim. A menor acompanha alguém, e a imortal é única e não acompanha ninguém.",
+      "membros": [
+        {
+          "id": "fenix-menor",
+          "estagio": "Menor"
+        },
+        {
+          "id": "fenix-imortal",
+          "estagio": "Imortal"
+        }
+      ]
+    },
+    {
+      "id": "roedor",
+      "titulo": "Roedor",
+      "descricao": "Ratos de esgoto e de porão, que crescem onde a comida sobra. O rei aparece quando o bando aprende a obedecer a um só.",
+      "membros": []
+    },
+    {
+      "id": "salteador",
+      "titulo": "Salteador",
+      "descricao": "Gente de estrada, do ladrão que assalta por fome ao senhor que cobra pedágio de um trecho inteiro. Cada degrau tem mais gente atrás.",
+      "membros": []
+    },
+    {
+      "id": "gigante",
+      "titulo": "Gigante",
+      "descricao": "Do brutamontes de beira de estrada ao que dorme sob uma montanha. Quanto mais velho o gigante, mais o chão lembra dele.",
+      "membros": []
+    },
+    {
+      "id": "hidra",
+      "titulo": "Hidra",
+      "descricao": "Cabeças que voltam. A luta contra uma hidra se decide por fogo, ácido e tempo, e cada estágio soma pescoços.",
+      "membros": [
+        {
+          "id": "hidra-de-duas-cabecas",
+          "estagio": "Duas Cabeças"
+        }
+      ]
+    },
+    {
+      "id": "behemoth",
+      "titulo": "Behemoth",
+      "descricao": "Animais grandes demais para terem inimigos naturais, e velhos o bastante para terem opinião sobre isso.",
+      "membros": [
+        {
+          "id": "behemoth-das-planicies",
+          "estagio": "Planícies"
+        }
+      ]
+    }
+  ]
+}

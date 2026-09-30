@@ -301,20 +301,23 @@ test('expansão do bestiário publica ao menos seis fichas por família e manté
   );
 });
 
-test('perfil universal fica só no bestiário e na sessão, fora do balcão', () => {
-  // Os perfis universais existem para o Mestre montar inimigo com números
-  // prontos. Eles continuam publicados (o Bestiário e o seletor da sessão leem
-  // o mesmo catálogo) e declaram `disponivelNaLoja: false`, que é o que a Loja
-  // usa para não vendê-los. Quem tirar essa marca coloca "Modelo de Criatura" à
-  // venda na categoria Mercenários, que foi exatamente o problema relatado.
+test('perfil universal, se existir, fica só no bestiário e na sessão, fora do balcão', () => {
+  // Os modelos genéricos "Modelo de Criatura (VD n)" saíram do catálogo: o
+  // gerador (src/services/curvaCriatura.ts) monta uma criatura de qualquer VD.
+  // A regra continua valendo para quem voltar a publicar um perfil universal:
+  // ele declara `disponivelNaLoja: false`, que é o que a Loja usa para não
+  // vendê-lo. Quem tirar essa marca coloca o modelo à venda em Mercenários, que
+  // foi exatamente o problema relatado.
   const universais = catalogo.entradas.filter(item => item.conteudo.categoria === 'Universal');
-  assert.ok(universais.length > 0);
   for (const item of universais) {
     assert.equal(item.conteudo.disponivelNaLoja, false, `${item.id}: perfil universal não pode ir a balcão`);
   }
 
+  // Também saem do balcão as criaturas geradas só para o Bestiário (VD alto e únicas): elas não são para comprar.
   const emBalcao = catalogo.entradas.filter(item => item.conteudo.disponivelNaLoja === false);
-  assert.equal(emBalcao.length, universais.length, 'só perfil universal sai do balcão hoje');
+  const soBestiario = emBalcao.filter(item => item.conteudo.geradoPorFamilia === true);
+  assert.equal(emBalcao.length, universais.length + soBestiario.length, 'só perfil universal e criatura só de Bestiário saem do balcão');
+  assert.ok(soBestiario.every(item => item.tipo === 'monstro'));
 });
 
 const FUNCOES = new Set(['Guarda de local', 'Escolta', 'Tripulação', 'Ofício']);

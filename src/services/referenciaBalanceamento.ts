@@ -125,11 +125,21 @@ const nivelDaArma = (arma: IArmaDeReferencia): number => arma.nivelRecomendado
   ?? NIVEL_DA_RARIDADE_DE_ARMA[String(arma.raridade ?? '')]
   ?? 1;
 
+/** As Relíquias da Criação são "quebradas" de propósito e ficam muito acima da
+ * curva (20d12+50 em vez dos 8d12+20 de antes). A referência de balanceamento
+ * não segue elas: conta a relíquia no degrau que o balanceamento aprovou, para
+ * a Vida de inimigo padrão e o bestiário não dobrarem quando alguém empunha uma. */
+export const DANO_DE_RELIQUIA_NA_REFERENCIA = 72;
+
 /** Dano médio da melhor arma que o nível já alcança (0 se nenhuma serve). */
 export function melhorDanoDeArmaAteONivel(armas: readonly IArmaDeReferencia[], nivel: number): number {
   return armas
     .filter((arma) => arma.mediaNormal !== null && nivelDaArma(arma) <= nivel)
-    .reduce((melhor, arma) => Math.max(melhor, arma.mediaNormal as number), 0);
+    .reduce((melhor, arma) => {
+      const eReliquia = String(arma.raridade ?? '').startsWith('reliquia');
+      const media = eReliquia ? Math.min(arma.mediaNormal as number, DANO_DE_RELIQUIA_NA_REFERENCIA) : (arma.mediaNormal as number);
+      return Math.max(melhor, media);
+    }, 0);
 }
 
 export interface IReferenciaDoNivel {

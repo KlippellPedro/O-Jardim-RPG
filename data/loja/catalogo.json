@@ -4648,7 +4648,7 @@
         "pv": 95,
         "estamina": 15,
         "nivel": 5,
-        "vd": 1,
+        "vd": 5,
         "defesa": 12,
         "iniciativa": 17,
         "deslocamento": "12m",
@@ -4682,7 +4682,10 @@
           "Presas Afiadas (6 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "familia": "cao-e-lobo",
+        "estagio": "Lobo",
+        "papel": "solo"
       }
     },
     {
@@ -4705,7 +4708,7 @@
         "pv": 265,
         "estamina": 36,
         "nivel": 12,
-        "vd": 3,
+        "vd": 12,
         "defesa": 16,
         "iniciativa": 17,
         "deslocamento": "9m",
@@ -4739,7 +4742,8 @@
           "Garras de Urso (12 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -4762,7 +4766,7 @@
         "pv": 380,
         "estamina": 54,
         "nivel": 18,
-        "vd": 4,
+        "vd": 18,
         "defesa": 18,
         "iniciativa": 26,
         "deslocamento": "9m (Escalar)",
@@ -4796,7 +4800,9 @@
           "Seda de Teia (18 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "aranha",
+        "papel": "solo"
       }
     },
     {
@@ -4819,7 +4825,7 @@
         "pv": 670,
         "estamina": 84,
         "nivel": 28,
-        "vd": 6,
+        "vd": 28,
         "defesa": 22,
         "iniciativa": 26,
         "deslocamento": "6m",
@@ -4851,7 +4857,8 @@
           "Escamas de Basilisco (60 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "papel": "solo"
       }
     },
     {
@@ -4873,7 +4880,7 @@
         "categoria": "Monstro",
         "pv": 1040,
         "nivel": 38,
-        "vd": 8,
+        "vd": 38,
         "defesa": 26,
         "iniciativa": 33,
         "deslocamento": "9m (Voo 12m)",
@@ -4911,7 +4918,8 @@
           "Presas Tríplices (90 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "papel": "solo"
       }
     },
     {
@@ -4933,7 +4941,7 @@
         "categoria": "Monstro",
         "pv": 170,
         "nivel": 6,
-        "vd": 2,
+        "vd": 6,
         "defesa": 14,
         "iniciativa": 19,
         "deslocamento": "12m (Voo)",
@@ -4966,7 +4974,8 @@
           "Pena Arcana (20 Solares)"
         ],
         "classe": "Familiar",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -4988,7 +4997,7 @@
         "categoria": "Espírito",
         "pv": 265,
         "nivel": 14,
-        "vd": 3,
+        "vd": 14,
         "defesa": 16,
         "iniciativa": 25,
         "deslocamento": "9m (Atravessar paredes)",
@@ -5021,7 +5030,9 @@
           "Fragmento Etéreo (45 Solares)"
         ],
         "classe": "Familiar",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "espirito",
+        "papel": "solo"
       }
     },
     {
@@ -5043,7 +5054,7 @@
         "categoria": "Monstro",
         "pv": 515,
         "nivel": 22,
-        "vd": 5,
+        "vd": 22,
         "defesa": 20,
         "iniciativa": 27,
         "deslocamento": "15m (Voo)",
@@ -5078,7 +5089,10 @@
           "Escama de Dragonete (100 Solares)"
         ],
         "classe": "Familiar",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "dragao",
+        "estagio": "Filhote",
+        "papel": "solo"
       }
     },
     {
@@ -5100,7 +5114,7 @@
         "categoria": "Monstro",
         "pv": 845,
         "nivel": 35,
-        "vd": 7,
+        "vd": 35,
         "defesa": 24,
         "iniciativa": 33,
         "deslocamento": "15m (Voo)",
@@ -5135,7 +5149,10 @@
         ],
         "classe": "Familiar",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "familia": "fenix",
+        "estagio": "Menor",
+        "papel": "solo"
       }
     },
     {
@@ -5158,7 +5175,7 @@
         "pv": 95,
         "estamina": 12,
         "nivel": 4,
-        "vd": 1,
+        "vd": 4,
         "defesa": 13,
         "iniciativa": 14,
         "deslocamento": "9m",
@@ -5190,7 +5207,9 @@
           "Arma Enferrujada (8 Solares)"
         ],
         "classe": "Servo",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "morto-vivo",
+        "papel": "solo"
       }
     },
     {
@@ -5213,7 +5232,7 @@
         "pv": 170,
         "estamina": 30,
         "nivel": 10,
-        "vd": 2,
+        "vd": 10,
         "defesa": 13,
         "iniciativa": 15,
         "deslocamento": "6m",
@@ -5246,7 +5265,9 @@
           "Carne Podre (3 Solares)"
         ],
         "classe": "Servo",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "morto-vivo",
+        "papel": "solo"
       }
     },
     {
@@ -5269,7 +5290,7 @@
         "pv": 380,
         "estamina": 48,
         "nivel": 16,
-        "vd": 4,
+        "vd": 16,
         "defesa": 17,
         "iniciativa": 23,
         "deslocamento": "12m",
@@ -5300,7 +5321,9 @@
           "Garras Necróticas (20 Solares)"
         ],
         "classe": "Servo",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "morto-vivo",
+        "papel": "solo"
       }
     },
     {
@@ -5322,7 +5345,7 @@
         "categoria": "Morto-Vivo",
         "pv": 670,
         "nivel": 30,
-        "vd": 6,
+        "vd": 30,
         "defesa": 23,
         "iniciativa": 28,
         "deslocamento": "9m",
@@ -5356,7 +5379,9 @@
           "Espada Amaldiçoada (200 Solares)"
         ],
         "classe": "Servo",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "morto-vivo",
+        "papel": "solo"
       }
     },
     {
@@ -5378,7 +5403,7 @@
         "categoria": "Elemental",
         "pv": 170,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 14,
         "iniciativa": 18,
         "deslocamento": "9m",
@@ -5411,7 +5436,10 @@
           "Núcleo Flamejante (15 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "elemental",
+        "estagio": "Menor",
+        "papel": "solo"
       }
     },
     {
@@ -5434,7 +5462,7 @@
         "pv": 380,
         "estamina": 54,
         "nivel": 18,
-        "vd": 4,
+        "vd": 18,
         "defesa": 20,
         "iniciativa": 19,
         "deslocamento": "6m",
@@ -5465,7 +5493,9 @@
           "Fragmento de Núcleo (60 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "golem",
+        "papel": "solo"
       }
     },
     {
@@ -5487,7 +5517,7 @@
         "categoria": "Aberração",
         "pv": 670,
         "nivel": 26,
-        "vd": 6,
+        "vd": 26,
         "defesa": 22,
         "iniciativa": 28,
         "deslocamento": "9m (Voo curto)",
@@ -5521,7 +5551,8 @@
           "Contrato Rasgado (150 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "papel": "solo"
       }
     },
     {
@@ -5543,7 +5574,7 @@
         "categoria": "Espírito",
         "pv": 1040,
         "nivel": 40,
-        "vd": 8,
+        "vd": 40,
         "defesa": 27,
         "iniciativa": 35,
         "deslocamento": "15m (Voo)",
@@ -5577,7 +5608,9 @@
         ],
         "classe": "Invocação",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "familia": "espirito",
+        "papel": "solo"
       }
     },
     {
@@ -5600,7 +5633,7 @@
         "pv": 95,
         "estamina": 9,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 13,
         "iniciativa": 14,
         "deslocamento": "9m",
@@ -5631,7 +5664,8 @@
         ],
         "classe": "Ajudante",
         "nivelMinimoLoja": 1,
-        "funcao": "Escolta"
+        "funcao": "Escolta",
+        "papel": "solo"
       }
     },
     {
@@ -5653,7 +5687,7 @@
         "categoria": "Humanoide",
         "pv": 170,
         "nivel": 10,
-        "vd": 2,
+        "vd": 10,
         "defesa": 13,
         "iniciativa": 17,
         "deslocamento": "9m",
@@ -5687,7 +5721,8 @@
         ],
         "classe": "Ajudante",
         "nivelMinimoLoja": 1,
-        "funcao": "Ofício"
+        "funcao": "Ofício",
+        "papel": "solo"
       }
     },
     {
@@ -5710,7 +5745,7 @@
         "pv": 380,
         "estamina": 48,
         "nivel": 16,
-        "vd": 4,
+        "vd": 16,
         "defesa": 19,
         "iniciativa": 22,
         "deslocamento": "9m",
@@ -5742,7 +5777,8 @@
         ],
         "classe": "Ajudante",
         "nivelMinimoLoja": 2,
-        "funcao": "Escolta"
+        "funcao": "Escolta",
+        "papel": "solo"
       }
     },
     {
@@ -5765,7 +5801,7 @@
         "pv": 515,
         "estamina": 66,
         "nivel": 22,
-        "vd": 5,
+        "vd": 22,
         "defesa": 18,
         "iniciativa": 23,
         "deslocamento": "6m",
@@ -5797,7 +5833,8 @@
         ],
         "classe": "Ajudante",
         "nivelMinimoLoja": 2,
-        "funcao": "Ofício"
+        "funcao": "Ofício",
+        "papel": "solo"
       }
     },
     {
@@ -5819,7 +5856,7 @@
         "categoria": "Lendário",
         "pv": 1040,
         "nivel": 40,
-        "vd": 8,
+        "vd": 40,
         "defesa": 28,
         "iniciativa": 34,
         "deslocamento": "18m (Voo)",
@@ -5858,7 +5895,10 @@
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "familia": "dragao",
+        "estagio": "Ancião",
+        "papel": "solo"
       }
     },
     {
@@ -5881,7 +5921,7 @@
         "pv": 1505,
         "estamina": 135,
         "nivel": 45,
-        "vd": 9,
+        "vd": 45,
         "defesa": 31,
         "iniciativa": 35,
         "deslocamento": "15m (Nado)",
@@ -5919,7 +5959,10 @@
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
-        "subtipo": "Vazio"
+        "subtipo": "Vazio",
+        "familia": "vazio",
+        "papel": "solo",
+        "unico": true
       }
     },
     {
@@ -5941,7 +5984,7 @@
         "categoria": "Lendário",
         "pv": 1490,
         "nivel": 50,
-        "vd": 10,
+        "vd": 50,
         "defesa": 30,
         "iniciativa": 42,
         "deslocamento": "18m (Voo)",
@@ -5975,7 +6018,11 @@
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "familia": "fenix",
+        "estagio": "Imortal",
+        "papel": "solo",
+        "unico": true
       }
     },
     {
@@ -5998,7 +6045,7 @@
         "pv": 1505,
         "estamina": 126,
         "nivel": 42,
-        "vd": 9,
+        "vd": 42,
         "defesa": 31,
         "iniciativa": 35,
         "deslocamento": "12m (Nado)",
@@ -6037,7 +6084,10 @@
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
-        "subtipo": "Vazio"
+        "subtipo": "Vazio",
+        "familia": "vazio",
+        "papel": "solo",
+        "unico": true
       }
     },
     {
@@ -6060,7 +6110,7 @@
         "pv": 1140,
         "estamina": 99,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 26,
         "iniciativa": 27,
         "deslocamento": "0m (presa ao estreito que habita)",
@@ -6100,7 +6150,10 @@
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
-        "subtipo": "Vazio"
+        "subtipo": "Vazio",
+        "familia": "vazio",
+        "papel": "solo",
+        "unico": true
       }
     },
     {
@@ -6123,7 +6176,7 @@
         "pv": 820,
         "estamina": 99,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 27,
         "iniciativa": 33,
         "deslocamento": "18m (Voo)",
@@ -6158,7 +6211,10 @@
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "familia": "espirito",
+        "papel": "solo",
+        "unico": true
       }
     },
     {
@@ -12758,13 +12814,13 @@
         },
         "raridade": "reliquia da criacao",
         "atributos": [
-          "8d12+20 de dano",
+          "20d12+50 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
           "Pureza"
         ],
-        "dano": "8d12+20",
+        "dano": "20d12+50",
         "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Pureza",
@@ -12796,13 +12852,13 @@
         },
         "raridade": "reliquia da criacao",
         "atributos": [
-          "8d12+16 de dano",
+          "20d12+40 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
           "Fogo Astral"
         ],
-        "dano": "8d12+16",
+        "dano": "20d12+40",
         "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Fogo Astral",
@@ -12834,13 +12890,13 @@
         },
         "raridade": "reliquia da criacao",
         "atributos": [
-          "10d10+8 de dano",
+          "25d10+20 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
           "Sangue Ventrue"
         ],
-        "dano": "10d10+8",
+        "dano": "25d10+20",
         "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Escuridão",
@@ -12872,13 +12928,13 @@
         },
         "raridade": "reliquia da criacao",
         "atributos": [
-          "8d12+18 de dano",
+          "20d12+45 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
           "Raio"
         ],
-        "dano": "8d12+18",
+        "dano": "20d12+45",
         "critico": "20/x4",
         "alcance": "Longo",
         "tipo_de_dano": "Raio",
@@ -12896,7 +12952,7 @@
         "lore": "Mjolnir sempre volta, e ninguém concorda de onde. Entre o arremesso e o retorno ele some por um instante dentro de um céu de tempestades velhas, e às vezes chega de volta com neve, cinza ou água salgada grudada na cabeça. O trovão que vem junto traz o nome de quem teve coragem de chamar o martelo.",
         "ressonancia": {
           "nome": "O Caminho de Volta",
-          "efeito": "Depois de arremessado, Mjolnir retorna à mão do portador ao fim do ataque sem gastar ação, desde que ambos estejam na mesma Dimensão. Num crítico, uma segunda criatura escolhida a até 6 m do alvo sofre 4d8 de Raio; Reflexos contra a DT de efeito do portador reduz esse dano à metade."
+          "efeito": "Depois de arremessado, Mjolnir retorna à mão do portador ao fim do ataque sem gastar ação, desde que ambos estejam na mesma Dimensão. Num crítico, uma segunda criatura escolhida a até 6 m do alvo sofre 10d8 de Raio; Reflexos contra a DT de efeito do portador reduz esse dano à metade."
         }
       }
     },
@@ -12910,13 +12966,13 @@
         },
         "raridade": "reliquia da criacao",
         "atributos": [
-          "8d12+12 de dano",
+          "20d12+30 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
           "Sangue"
         ],
-        "dano": "8d12+12",
+        "dano": "20d12+30",
         "critico": "20/x4",
         "alcance": "Curto/Longo",
         "tipo_de_dano": "Sangue",
@@ -12934,7 +12990,7 @@
         "lore": "Rhaast só fala com fome, e nunca com a própria voz. O sussurro sai das feridas abertas em volta, cada uma pedindo que a próxima seja maior. O cabo é morno igual pele com febre. A lâmina é fria igual o espaço que sobra quando alguma coisa acabou de morrer ali.",
         "ressonancia": {
           "nome": "Dízimo Rubro",
-          "efeito": "Uma vez por turno, quando Rhaast causar dano a uma criatura viva, o portador recupera 1d12 de Vida. Vida recuperada além do máximo é perdida. Construtos, objetos e criaturas sem sangue ou força vital não alimentam a relíquia."
+          "efeito": "Uma vez por turno, quando Rhaast causar dano a uma criatura viva, o portador recupera 3d12 de Vida. Vida recuperada além do máximo é perdida. Construtos, objetos e criaturas sem sangue ou força vital não alimentam a relíquia."
         }
       }
     },
@@ -12948,13 +13004,13 @@
         },
         "raridade": "reliquia da criacao",
         "atributos": [
-          "8d12+10 de dano",
+          "20d12+25 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
           "Vazio"
         ],
-        "dano": "8d12+10",
+        "dano": "20d12+25",
         "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Vazio",
@@ -12972,7 +13028,7 @@
         "lore": "Zangetsu não devolve o rosto de quem segura ela. No metal aparece uma lua rachada, mesmo debaixo de sol aberto, e uma figura parada muito longe que nunca chega mais perto. Alimentar a lâmina com Mana encurta o caminho entre o corte e aquilo que ele resolveu alcançar.",
         "ressonancia": {
           "nome": "Fome da Lua Partida",
-          "efeito": "Uma vez por turno, antes de atacar com Zangetsu, o portador pode gastar 2, 4 ou 6 de Mana. O ataque causa respectivamente +1d12, +2d12 ou +3d12 de Vazio. A Mana é gasta mesmo se o ataque errar, e os dados adicionais multiplicam no crítico."
+          "efeito": "Uma vez por turno, antes de atacar com Zangetsu, o portador pode gastar 2, 4 ou 6 de Mana. O ataque causa respectivamente +3d12, +5d12 ou +8d12 de Vazio. A Mana é gasta mesmo se o ataque errar, e os dados adicionais multiplicam no crítico."
         }
       }
     },
@@ -12986,14 +13042,14 @@
         },
         "raridade": "reliquia da criacao",
         "atributos": [
-          "8d12+14 de dano",
+          "20d12+35 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
           "Juramento",
           "Luz Solar"
         ],
-        "dano": "8d12+14",
+        "dano": "20d12+35",
         "critico": "20/x4",
         "alcance": "Médio",
         "tipo_de_dano": "Luz Solar",
@@ -13025,13 +13081,13 @@
         },
         "raridade": "reliquia da criacao",
         "atributos": [
-          "10d10+10 de dano",
+          "25d10+25 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
           "Metal"
         ],
-        "dano": "10d10+10",
+        "dano": "25d10+25",
         "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Metal",
@@ -13063,14 +13119,14 @@
         },
         "raridade": "reliquia da criacao",
         "atributos": [
-          "8d12+16 de dano",
+          "20d12+40 de dano",
           "Crítico 20/x2",
           "Relíquia da Criação",
           "Arma",
           "Vazio",
           "Execução"
         ],
-        "dano": "8d12+16",
+        "dano": "20d12+40",
         "critico": "20/x2",
         "alcance": "Curto",
         "tipo_de_dano": "Vazio",
@@ -13088,7 +13144,7 @@
         "lore": "A chuva começa antes de Murasame sair da bainha. Ela não molha roupa nem apaga fogo, cai só em cima de quem já está ferido e corre para cima, das poças de volta para a lâmina. A espada tem paciência com todo mundo, menos com quem já passou de certo ponto.",
         "ressonancia": {
           "nome": "Sentença na Ferida",
-          "efeito": "Uma vez por cena, ao atingir uma criatura com no máximo 25% da Vida máxima, obrigue-a a testar Fortitude contra a DT de efeito do portador. Em falha, ela sofre +6d12 de Vazio; esse dano não multiplica no crítico. Criaturas sem Vida, objetos e alvos imunes a efeitos de execução ignoram o dano adicional."
+          "efeito": "Uma vez por cena, ao atingir uma criatura com no máximo 25% da Vida máxima, obrigue-a a testar Fortitude contra a DT de efeito do portador. Em falha, ela sofre +15d12 de Vazio; esse dano não multiplica no crítico. Criaturas sem Vida, objetos e alvos imunes a efeitos de execução ignoram o dano adicional."
         }
       }
     },
@@ -13112,7 +13168,7 @@
         "pv": 95,
         "estamina": 9,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 14,
         "iniciativa": 12,
         "deslocamento": "6m",
@@ -13145,7 +13201,9 @@
           }
         ],
         "nivelMinimoLoja": 2,
-        "funcao": "Guarda de local"
+        "funcao": "Guarda de local",
+        "familia": "automato",
+        "papel": "solo"
       }
     },
     {
@@ -13168,7 +13226,7 @@
         "pv": 170,
         "estamina": 24,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 16,
         "iniciativa": 18,
         "deslocamento": "12m (Voo)",
@@ -13202,7 +13260,9 @@
           }
         ],
         "nivelMinimoLoja": 2,
-        "funcao": "Escolta"
+        "funcao": "Escolta",
+        "familia": "espirito",
+        "papel": "solo"
       }
     },
     {
@@ -13225,7 +13285,7 @@
         "pv": 265,
         "estamina": 36,
         "nivel": 12,
-        "vd": 3,
+        "vd": 12,
         "defesa": 18,
         "iniciativa": 18,
         "deslocamento": "15m",
@@ -13258,7 +13318,9 @@
             "detalhe": "+18, 2d8+4 escuridão"
           }
         ],
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "vazio",
+        "papel": "solo"
       }
     },
     {
@@ -18074,7 +18136,7 @@
         "categoria": "Monstro",
         "pv": 70,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 13,
         "iniciativa": 17,
         "deslocamento": "15m (Voo)",
@@ -18107,7 +18169,8 @@
           "Pena de Corvo (8 Solares)"
         ],
         "classe": "Familiar",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -18130,7 +18193,7 @@
         "pv": 100,
         "estamina": 9,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 12,
         "iniciativa": 13,
         "deslocamento": "12m",
@@ -18164,7 +18227,8 @@
           "Couro Grosso (15 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -18187,7 +18251,7 @@
         "pv": 60,
         "estamina": 9,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 10,
         "iniciativa": 16,
         "deslocamento": "9m",
@@ -18218,7 +18282,8 @@
           "Caudas de Rato (2 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -18240,7 +18305,7 @@
         "categoria": "Humanoide",
         "pv": 150,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 13,
         "iniciativa": 16,
         "deslocamento": "9m",
@@ -18274,7 +18339,8 @@
           "Tomo Corrompido (40 Solares)"
         ],
         "classe": "Servo",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "papel": "solo"
       }
     },
     {
@@ -18297,7 +18363,7 @@
         "pv": 170,
         "estamina": 24,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 14,
         "iniciativa": 19,
         "deslocamento": "12m",
@@ -18328,7 +18394,9 @@
           "Pele Manchada (12 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "familia": "cao-e-lobo",
+        "papel": "solo"
       }
     },
     {
@@ -18350,7 +18418,7 @@
         "categoria": "Espírito",
         "pv": 140,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 16,
         "iniciativa": 18,
         "deslocamento": "9m (Atravessar paredes)",
@@ -18383,7 +18451,9 @@
           "Resíduo Sombrio (35 Solares)"
         ],
         "classe": "Servo",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "espirito",
+        "papel": "solo"
       }
     },
     {
@@ -18405,7 +18475,7 @@
         "categoria": "Monstro",
         "pv": 250,
         "nivel": 13,
-        "vd": 3,
+        "vd": 13,
         "defesa": 17,
         "iniciativa": 20,
         "deslocamento": "9m",
@@ -18438,7 +18508,8 @@
           "Escamas de Lamia (70 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -18461,7 +18532,7 @@
         "pv": 420,
         "estamina": 54,
         "nivel": 18,
-        "vd": 4,
+        "vd": 18,
         "defesa": 18,
         "iniciativa": 21,
         "deslocamento": "12m",
@@ -18492,7 +18563,8 @@
           "Sangue Regenerativo (100 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -18514,7 +18586,7 @@
         "categoria": "Aberração",
         "pv": 380,
         "nivel": 18,
-        "vd": 4,
+        "vd": 18,
         "defesa": 19,
         "iniciativa": 22,
         "deslocamento": "9m (Flutuar)",
@@ -18547,7 +18619,9 @@
           "Fragmento do Vazio (200 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "vazio",
+        "papel": "solo"
       }
     },
     {
@@ -18570,7 +18644,7 @@
         "pv": 360,
         "estamina": 54,
         "nivel": 18,
-        "vd": 4,
+        "vd": 18,
         "defesa": 19,
         "iniciativa": 26,
         "deslocamento": "15m (Voo)",
@@ -18601,7 +18675,8 @@
           "Penas de Tempestade (60 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -18624,7 +18699,7 @@
         "pv": 600,
         "estamina": 69,
         "nivel": 23,
-        "vd": 5,
+        "vd": 23,
         "defesa": 23,
         "iniciativa": 21,
         "deslocamento": "6m",
@@ -18655,7 +18730,9 @@
           "Placas de Ferro Encantado (250 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "golem",
+        "papel": "solo"
       }
     },
     {
@@ -18677,7 +18754,7 @@
         "categoria": "Humanoide",
         "pv": 460,
         "nivel": 23,
-        "vd": 5,
+        "vd": 23,
         "defesa": 19,
         "iniciativa": 23,
         "deslocamento": "9m",
@@ -18710,7 +18787,9 @@
           "Grimório Decadente (180 Solares)"
         ],
         "classe": "Servo",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "morto-vivo",
+        "papel": "solo"
       }
     },
     {
@@ -18733,7 +18812,7 @@
         "pv": 560,
         "estamina": 69,
         "nivel": 23,
-        "vd": 5,
+        "vd": 23,
         "defesa": 21,
         "iniciativa": 27,
         "deslocamento": "18m (Voo)",
@@ -18767,7 +18846,9 @@
           "Asas de Wyvern (150 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "dragao",
+        "papel": "solo"
       }
     },
     {
@@ -18789,7 +18870,7 @@
         "categoria": "Espírito",
         "pv": 480,
         "nivel": 23,
-        "vd": 5,
+        "vd": 23,
         "defesa": 22,
         "iniciativa": 26,
         "deslocamento": "9m (Atravessar paredes)",
@@ -18822,7 +18903,9 @@
           "Corrente Espectral (180 Solares)"
         ],
         "classe": "Servo",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "espirito",
+        "papel": "solo"
       }
     },
     {
@@ -18845,7 +18928,7 @@
         "pv": 700,
         "estamina": 84,
         "nivel": 28,
-        "vd": 6,
+        "vd": 28,
         "defesa": 23,
         "iniciativa": 27,
         "deslocamento": "9m",
@@ -18880,7 +18963,8 @@
           "Chifres de Minotauro (150 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "papel": "solo"
       }
     },
     {
@@ -18903,7 +18987,7 @@
         "pv": 720,
         "estamina": 84,
         "nivel": 28,
-        "vd": 6,
+        "vd": 28,
         "defesa": 21,
         "iniciativa": 27,
         "deslocamento": "9m (Nado)",
@@ -18934,7 +19018,10 @@
           "Cabeça Regenerativa (400 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "papel": "solo",
+        "familia": "hidra",
+        "estagio": "Duas Cabeças"
       }
     },
     {
@@ -18956,7 +19043,7 @@
         "categoria": "Elemental",
         "pv": 800,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 24,
         "iniciativa": 29,
         "deslocamento": "12m (Voo)",
@@ -18989,7 +19076,9 @@
           "Cinza de Efreeti (600 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "elemental",
+        "papel": "solo"
       }
     },
     {
@@ -19012,7 +19101,7 @@
         "pv": 900,
         "estamina": 99,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 23,
         "iniciativa": 27,
         "deslocamento": "12m",
@@ -19048,7 +19137,10 @@
           "Couro Colossal (700 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "papel": "solo",
+        "familia": "behemoth",
+        "estagio": "Planícies"
       }
     },
     {
@@ -19070,7 +19162,7 @@
         "categoria": "Lendário",
         "pv": 845,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 26,
         "iniciativa": 31,
         "deslocamento": "15m (Voo)",
@@ -19104,7 +19196,9 @@
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "papel": "solo",
+        "unico": true
       }
     },
     {
@@ -19127,7 +19221,7 @@
         "pv": 1100,
         "estamina": 114,
         "nivel": 38,
-        "vd": 8,
+        "vd": 38,
         "defesa": 27,
         "iniciativa": 30,
         "deslocamento": "9m",
@@ -19159,7 +19253,9 @@
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "papel": "solo",
+        "unico": true
       }
     },
     {
@@ -19181,7 +19277,7 @@
         "categoria": "Lendário",
         "pv": 1255,
         "nivel": 43,
-        "vd": 9,
+        "vd": 43,
         "defesa": 28,
         "iniciativa": 37,
         "deslocamento": "12m (Atravessar paredes)",
@@ -19215,7 +19311,9 @@
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "papel": "solo",
+        "unico": true
       }
     },
     {
@@ -19237,7 +19335,7 @@
         "categoria": "Aberração",
         "pv": 1920,
         "nivel": 48,
-        "vd": 10,
+        "vd": 48,
         "defesa": 34,
         "iniciativa": 39,
         "deslocamento": "12m (Voo)",
@@ -19276,578 +19374,10 @@
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
-        "subtipo": "Vazio"
-      }
-    },
-    {
-      "tipo": "monstro",
-      "id": "universal-vd-1",
-      "titulo": "Modelo de Criatura (VD 1)",
-      "conteudo": {
-        "descricao": "Ficha-base para uma criatura fraca ou um capanga sem treinamento. Troque nome, aparência e tipo de dano para encaixar no encontro.",
-        "preco": {
-          "Lunaris": 300
-        },
-        "preco_contratacao": {
-          "Lunaris": 300
-        },
-        "contrato_mensal": {
-          "Lunaris": 60
-        },
-        "raridade": "comum",
-        "categoria": "Universal",
-        "pv": 95,
-        "nivel": 3,
-        "vd": 1,
-        "defesa": 12,
-        "iniciativa": 12,
-        "deslocamento": "9m",
-        "mana": 27,
-        "estamina": 3,
-        "atributos": {
-          "forca": 1,
-          "agilidade": 1,
-          "vigor": 1,
-          "presenca": 0,
-          "intelecto": 0
-        },
-        "pericias": [
-          "Luta +6",
-          "Fortitude +6",
-          "Reflexos +6",
-          "Vontade +5",
-          "Percepção +1"
-        ],
-        "ataques": [
-          {
-            "nome": "Ataque Corpo a Corpo",
-            "detalhe": "+6, 1d8+2 impacto"
-          },
-          {
-            "nome": "Ataque à Distância",
-            "detalhe": "+6, 1d8+2 perfurante"
-          }
-        ],
-        "habilidades": [],
-        "loot": [],
-        "classe": "Criatura",
-        "nivelMinimoLoja": 1,
-        "disponivelNaLoja": false
-      }
-    },
-    {
-      "tipo": "monstro",
-      "id": "universal-vd-2",
-      "titulo": "Modelo de Criatura (VD 2)",
-      "conteudo": {
-        "descricao": "Ficha-base para uma criatura comum que já oferece perigo a aventureiros iniciantes. Pode representar uma fera grande, um guarda ou um morto-vivo simples.",
-        "preco": {
-          "Lunaris": 360
-        },
-        "preco_contratacao": {
-          "Lunaris": 300
-        },
-        "contrato_mensal": {
-          "Lunaris": 60
-        },
-        "raridade": "comum",
-        "categoria": "Universal",
-        "pv": 170,
-        "nivel": 8,
-        "vd": 2,
-        "defesa": 14,
-        "iniciativa": 16,
-        "deslocamento": "9m",
-        "mana": 39,
-        "estamina": 8,
-        "atributos": {
-          "forca": 2,
-          "agilidade": 2,
-          "vigor": 2,
-          "presenca": 1,
-          "intelecto": 1
-        },
-        "pericias": [
-          "Luta +12",
-          "Fortitude +12",
-          "Reflexos +12",
-          "Vontade +11",
-          "Percepção +4"
-        ],
-        "ataques": [
-          {
-            "nome": "Ataque Corpo a Corpo",
-            "detalhe": "+12, 1d10+3 impacto"
-          },
-          {
-            "nome": "Ataque à Distância",
-            "detalhe": "+12, 1d10+3 perfurante"
-          }
-        ],
-        "habilidades": [],
-        "loot": [],
-        "classe": "Criatura",
-        "nivelMinimoLoja": 1,
-        "disponivelNaLoja": false
-      }
-    },
-    {
-      "tipo": "monstro",
-      "id": "universal-vd-3",
-      "titulo": "Modelo de Criatura (VD 3)",
-      "conteudo": {
-        "descricao": "Ficha-base para um inimigo experiente ou monstro de porte médio. Acrescente uma característica simples do cenário sem mexer nos valores principais.",
-        "preco": {
-          "Lunaris": 690
-        },
-        "preco_contratacao": {
-          "Lunaris": 300
-        },
-        "contrato_mensal": {
-          "Lunaris": 60
-        },
-        "raridade": "comum",
-        "categoria": "Universal",
-        "pv": 265,
-        "nivel": 13,
-        "vd": 3,
-        "defesa": 16,
-        "iniciativa": 18,
-        "deslocamento": "9m",
-        "mana": 51,
-        "estamina": 13,
-        "atributos": {
-          "forca": 2,
-          "agilidade": 2,
-          "vigor": 2,
-          "presenca": 1,
-          "intelecto": 1
-        },
-        "pericias": [
-          "Luta +16",
-          "Fortitude +16",
-          "Reflexos +16",
-          "Vontade +15",
-          "Percepção +8"
-        ],
-        "ataques": [
-          {
-            "nome": "Ataque Corpo a Corpo",
-            "detalhe": "+16, 2d6+4 impacto"
-          },
-          {
-            "nome": "Ataque à Distância",
-            "detalhe": "+16, 2d6+4 perfurante"
-          }
-        ],
-        "habilidades": [],
-        "loot": [],
-        "classe": "Criatura",
-        "nivelMinimoLoja": 2,
-        "disponivelNaLoja": false
-      }
-    },
-    {
-      "tipo": "monstro",
-      "id": "universal-vd-4",
-      "titulo": "Modelo de Criatura (VD 4)",
-      "conteudo": {
-        "descricao": "Ficha-base para uma ameaça forte, capaz de enfrentar um grupo preparado. Funciona bem para soldados de elite, predadores mágicos e invocações menores.",
-        "preco": {
-          "Lunaris": 1400
-        },
-        "preco_contratacao": {
-          "Lunaris": 750
-        },
-        "contrato_mensal": {
-          "Lunaris": 150
-        },
-        "raridade": "incomum",
-        "categoria": "Universal",
-        "pv": 380,
-        "nivel": 18,
-        "vd": 4,
-        "defesa": 18,
-        "iniciativa": 22,
-        "deslocamento": "9m",
-        "mana": 63,
-        "estamina": 18,
-        "atributos": {
-          "forca": 3,
-          "agilidade": 3,
-          "vigor": 3,
-          "presenca": 2,
-          "intelecto": 2
-        },
-        "pericias": [
-          "Luta +20",
-          "Fortitude +20",
-          "Reflexos +20",
-          "Vontade +19",
-          "Percepção +12"
-        ],
-        "ataques": [
-          {
-            "nome": "Ataque Corpo a Corpo",
-            "detalhe": "+20, 2d8+5 impacto"
-          },
-          {
-            "nome": "Ataque à Distância",
-            "detalhe": "+20, 2d8+5 perfurante"
-          }
-        ],
-        "habilidades": [],
-        "loot": [],
-        "classe": "Criatura",
-        "nivelMinimoLoja": 2,
-        "disponivelNaLoja": false
-      }
-    },
-    {
-      "tipo": "monstro",
-      "id": "universal-vd-5",
-      "titulo": "Modelo de Criatura (VD 5)",
-      "conteudo": {
-        "descricao": "Ficha-base para um chefe de patrulha ou criatura perigosa. Dê a ela um modo claro de se mover, atacar ou defender para marcar sua função na cena.",
-        "preco": {
-          "Solares": 25
-        },
-        "preco_contratacao": {
-          "Lunaris": 750
-        },
-        "contrato_mensal": {
-          "Lunaris": 150
-        },
-        "raridade": "incomum",
-        "categoria": "Universal",
-        "pv": 515,
-        "nivel": 23,
-        "vd": 5,
-        "defesa": 20,
-        "iniciativa": 24,
-        "deslocamento": "9m",
-        "mana": 75,
-        "estamina": 23,
-        "atributos": {
-          "forca": 3,
-          "agilidade": 3,
-          "vigor": 3,
-          "presenca": 2,
-          "intelecto": 2
-        },
-        "pericias": [
-          "Luta +24",
-          "Fortitude +24",
-          "Reflexos +24",
-          "Vontade +23",
-          "Percepção +16"
-        ],
-        "ataques": [
-          {
-            "nome": "Ataque Corpo a Corpo",
-            "detalhe": "+24, 2d10+6 impacto"
-          },
-          {
-            "nome": "Ataque à Distância",
-            "detalhe": "+24, 2d10+6 perfurante"
-          }
-        ],
-        "habilidades": [],
-        "loot": [],
-        "classe": "Criatura",
-        "nivelMinimoLoja": 3,
-        "disponivelNaLoja": false
-      }
-    },
-    {
-      "tipo": "monstro",
-      "id": "universal-vd-6",
-      "titulo": "Modelo de Criatura (VD 6)",
-      "conteudo": {
-        "descricao": "Ficha-base para um monstro grande ou combatente veterano. Já suporta uma habilidade de área ou uma defesa especial sem precisar aumentar os números.",
-        "preco": {
-          "Solares": 50
-        },
-        "preco_contratacao": {
-          "Lunaris": 2000
-        },
-        "contrato_mensal": {
-          "Lunaris": 400
-        },
-        "raridade": "raro",
-        "categoria": "Universal",
-        "pv": 670,
-        "nivel": 28,
-        "vd": 6,
-        "defesa": 22,
-        "iniciativa": 28,
-        "deslocamento": "9m",
-        "mana": 87,
-        "estamina": 42,
-        "atributos": {
-          "forca": 4,
-          "agilidade": 4,
-          "vigor": 4,
-          "presenca": 3,
-          "intelecto": 3
-        },
-        "pericias": [
-          "Luta +28",
-          "Fortitude +28",
-          "Reflexos +28",
-          "Vontade +27",
-          "Percepção +19"
-        ],
-        "ataques": [
-          {
-            "nome": "Ataque Corpo a Corpo",
-            "detalhe": "+28, 3d8+7 impacto"
-          },
-          {
-            "nome": "Ataque à Distância",
-            "detalhe": "+28, 3d8+7 perfurante"
-          }
-        ],
-        "habilidades": [
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
-        ],
-        "loot": [],
-        "classe": "Criatura",
-        "nivelMinimoLoja": 3,
-        "disponivelNaLoja": false
-      }
-    },
-    {
-      "tipo": "monstro",
-      "id": "universal-vd-7",
-      "titulo": "Modelo de Criatura (VD 7)",
-      "conteudo": {
-        "descricao": "Ficha-base para uma ameaça que domina um encontro inteiro. Use como comandante, monstro raro ou guardião de um local importante.",
-        "preco": {
-          "Solares": 185
-        },
-        "preco_contratacao": {
-          "Lunaris": 2000
-        },
-        "contrato_mensal": {
-          "Lunaris": 400
-        },
-        "raridade": "raro",
-        "categoria": "Universal",
-        "pv": 845,
-        "nivel": 33,
-        "vd": 7,
-        "defesa": 24,
-        "iniciativa": 30,
-        "deslocamento": "9m",
-        "mana": 99,
-        "estamina": 50,
-        "atributos": {
-          "forca": 4,
-          "agilidade": 4,
-          "vigor": 4,
-          "presenca": 3,
-          "intelecto": 3
-        },
-        "pericias": [
-          "Luta +32",
-          "Fortitude +32",
-          "Reflexos +32",
-          "Vontade +31",
-          "Percepção +23"
-        ],
-        "ataques": [
-          {
-            "nome": "Ataque Corpo a Corpo",
-            "detalhe": "+32, 3d10+8 impacto"
-          },
-          {
-            "nome": "Ataque à Distância",
-            "detalhe": "+32, 3d10+8 perfurante"
-          }
-        ],
-        "habilidades": [
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
-        ],
-        "loot": [],
-        "classe": "Criatura",
-        "nivelMinimoLoja": 3,
-        "disponivelNaLoja": false
-      }
-    },
-    {
-      "tipo": "monstro",
-      "id": "universal-vd-8",
-      "titulo": "Modelo de Criatura (VD 8)",
-      "conteudo": {
-        "descricao": "Ficha-base para um inimigo épico, com força suficiente para romper defesas e resistir a um grupo veterano. A aparência pode mudar sem alterar a ficha.",
-        "preco": {
-          "Solares": 460
-        },
-        "preco_contratacao": {
-          "Lunaris": 8000
-        },
-        "contrato_mensal": {
-          "Lunaris": 1600
-        },
-        "raridade": "epico",
-        "categoria": "Universal",
-        "pv": 1040,
-        "nivel": 38,
-        "vd": 8,
-        "defesa": 26,
-        "iniciativa": 34,
-        "deslocamento": "9m",
-        "mana": 111,
-        "estamina": 57,
-        "atributos": {
-          "forca": 5,
-          "agilidade": 5,
-          "vigor": 5,
-          "presenca": 4,
-          "intelecto": 4
-        },
-        "pericias": [
-          "Luta +36",
-          "Fortitude +36",
-          "Reflexos +36",
-          "Vontade +35",
-          "Percepção +27"
-        ],
-        "ataques": [
-          {
-            "nome": "Ataque Corpo a Corpo",
-            "detalhe": "+36, 4d8+9 impacto"
-          },
-          {
-            "nome": "Ataque à Distância",
-            "detalhe": "+36, 4d8+9 perfurante"
-          }
-        ],
-        "habilidades": [
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
-        ],
-        "loot": [],
-        "classe": "Criatura",
-        "nivelMinimoLoja": 3,
-        "disponivelNaLoja": false
-      }
-    },
-    {
-      "tipo": "monstro",
-      "id": "universal-vd-9",
-      "titulo": "Modelo de Criatura (VD 9)",
-      "conteudo": {
-        "descricao": "Ficha-base para uma criatura lendária ou chefe de campanha. Use poucas habilidades, mas faça cada uma mudar a posição ou o objetivo do grupo.",
-        "preco": {
-          "Solares": 780
-        },
-        "preco_contratacao": {
-          "Lunaris": 8000
-        },
-        "contrato_mensal": {
-          "Lunaris": 1600
-        },
-        "raridade": "epico",
-        "categoria": "Universal",
-        "pv": 1255,
-        "nivel": 43,
-        "vd": 9,
-        "defesa": 28,
-        "iniciativa": 36,
-        "deslocamento": "9m",
-        "mana": 123,
-        "estamina": 64,
-        "atributos": {
-          "forca": 5,
-          "agilidade": 5,
-          "vigor": 5,
-          "presenca": 4,
-          "intelecto": 4
-        },
-        "pericias": [
-          "Luta +38",
-          "Fortitude +38",
-          "Reflexos +38",
-          "Vontade +37",
-          "Percepção +29"
-        ],
-        "ataques": [
-          {
-            "nome": "Ataque Corpo a Corpo",
-            "detalhe": "+38, 4d10+10 impacto"
-          },
-          {
-            "nome": "Ataque à Distância",
-            "detalhe": "+38, 4d10+10 perfurante"
-          }
-        ],
-        "habilidades": [
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
-        ],
-        "loot": [],
-        "classe": "Criatura",
-        "nivelMinimoLoja": 4,
-        "disponivelNaLoja": false
-      }
-    },
-    {
-      "tipo": "monstro",
-      "id": "universal-vd-10",
-      "titulo": "Modelo de Criatura (VD 10)",
-      "conteudo": {
-        "descricao": "Ficha-base para uma ameaça de fim de arco, feita para enfrentar personagens no auge. Nome, origem e poderes precisam ser definidos pelo Mestre antes da sessão.",
-        "preco": {
-          "Solares": 800
-        },
-        "preco_contratacao": {
-          "Lunaris": 30000
-        },
-        "contrato_mensal": {
-          "Lunaris": 6000
-        },
-        "raridade": "lendario",
-        "categoria": "Universal",
-        "pv": 1490,
-        "nivel": 48,
-        "vd": 10,
-        "defesa": 30,
-        "iniciativa": 40,
-        "deslocamento": "9m",
-        "mana": 135,
-        "estamina": 96,
-        "atributos": {
-          "forca": 6,
-          "agilidade": 6,
-          "vigor": 6,
-          "presenca": 5,
-          "intelecto": 5
-        },
-        "pericias": [
-          "Luta +42",
-          "Fortitude +42",
-          "Reflexos +42",
-          "Vontade +41",
-          "Percepção +32"
-        ],
-        "ataques": [
-          {
-            "nome": "Ataque Corpo a Corpo",
-            "detalhe": "+42, 5d10+12 impacto"
-          },
-          {
-            "nome": "Ataque à Distância",
-            "detalhe": "+42, 5d10+12 perfurante"
-          }
-        ],
-        "habilidades": [
-          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
-        ],
-        "loot": [],
-        "classe": "Criatura",
-        "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true,
-        "disponivelNaLoja": false
+        "subtipo": "Vazio",
+        "familia": "vazio",
+        "papel": "solo",
+        "unico": true
       }
     },
     {
@@ -19870,7 +19400,7 @@
         "pv": 80,
         "estamina": 9,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 13,
         "iniciativa": 14,
         "deslocamento": "12m",
@@ -19904,7 +19434,9 @@
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "familia": "cao-e-lobo",
+        "papel": "solo"
       }
     },
     {
@@ -19927,7 +19459,7 @@
         "pv": 105,
         "estamina": 9,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 14,
         "iniciativa": 11,
         "deslocamento": "9m",
@@ -19966,7 +19498,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -19989,7 +19522,7 @@
         "pv": 150,
         "estamina": 24,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 15,
         "iniciativa": 19,
         "deslocamento": "9m",
@@ -20025,7 +19558,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -20048,7 +19582,7 @@
         "pv": 180,
         "estamina": 24,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 15,
         "iniciativa": 17,
         "deslocamento": "12m",
@@ -20085,7 +19619,9 @@
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "familia": "cao-e-lobo",
+        "papel": "solo"
       }
     },
     {
@@ -20108,7 +19644,7 @@
         "pv": 240,
         "estamina": 39,
         "nivel": 13,
-        "vd": 3,
+        "vd": 13,
         "defesa": 16,
         "iniciativa": 20,
         "deslocamento": "9m",
@@ -20147,7 +19683,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -20170,7 +19707,7 @@
         "pv": 400,
         "estamina": 54,
         "nivel": 18,
-        "vd": 4,
+        "vd": 18,
         "defesa": 19,
         "iniciativa": 18,
         "deslocamento": "9m",
@@ -20209,7 +19746,9 @@
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "automato",
+        "papel": "solo"
       }
     },
     {
@@ -20231,7 +19770,7 @@
         "categoria": "Espírito",
         "pv": 200,
         "nivel": 13,
-        "vd": 3,
+        "vd": 13,
         "defesa": 17,
         "iniciativa": 20,
         "deslocamento": "9m (atravessa parede)",
@@ -20269,7 +19808,9 @@
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "espirito",
+        "papel": "solo"
       }
     },
     {
@@ -20291,7 +19832,7 @@
         "categoria": "Humanoide",
         "pv": 440,
         "nivel": 23,
-        "vd": 5,
+        "vd": 23,
         "defesa": 19,
         "iniciativa": 22,
         "deslocamento": "9m",
@@ -20329,7 +19870,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -20352,7 +19894,7 @@
         "pv": 700,
         "estamina": 84,
         "nivel": 28,
-        "vd": 6,
+        "vd": 28,
         "defesa": 23,
         "iniciativa": 27,
         "deslocamento": "9m",
@@ -20392,7 +19934,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -20415,7 +19958,7 @@
         "pv": 1000,
         "estamina": 99,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 26,
         "iniciativa": 24,
         "deslocamento": "6m",
@@ -20454,7 +19997,9 @@
         ],
         "classe": "Ajudante",
         "funcao": "Guarda de local",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "golem",
+        "papel": "solo"
       }
     },
     {
@@ -20477,7 +20022,7 @@
         "pv": 175,
         "estamina": 24,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 15,
         "iniciativa": 16,
         "deslocamento": "9m",
@@ -20516,7 +20061,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Escolta",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -20539,7 +20085,7 @@
         "pv": 145,
         "estamina": 24,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 15,
         "iniciativa": 20,
         "deslocamento": "12m",
@@ -20579,7 +20125,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Escolta",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -20602,7 +20149,7 @@
         "pv": 55,
         "estamina": 9,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 15,
         "iniciativa": 16,
         "deslocamento": "3m (Voo 24m)",
@@ -20635,7 +20182,8 @@
         ],
         "classe": "Familiar",
         "funcao": "Escolta",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -20658,7 +20206,7 @@
         "pv": 540,
         "estamina": 69,
         "nivel": 23,
-        "vd": 5,
+        "vd": 23,
         "defesa": 21,
         "iniciativa": 25,
         "deslocamento": "9m",
@@ -20698,7 +20246,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Escolta",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -20721,7 +20270,7 @@
         "pv": 230,
         "estamina": 39,
         "nivel": 13,
-        "vd": 3,
+        "vd": 13,
         "defesa": 16,
         "iniciativa": 20,
         "deslocamento": "9m",
@@ -20756,7 +20305,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Tripulação",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -20779,7 +20329,7 @@
         "pv": 250,
         "estamina": 39,
         "nivel": 13,
-        "vd": 3,
+        "vd": 13,
         "defesa": 16,
         "iniciativa": 18,
         "deslocamento": "9m",
@@ -20817,7 +20367,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Tripulação",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -20840,7 +20391,7 @@
         "pv": 340,
         "estamina": 54,
         "nivel": 18,
-        "vd": 4,
+        "vd": 18,
         "defesa": 17,
         "iniciativa": 19,
         "deslocamento": "9m",
@@ -20874,7 +20425,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Tripulação",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -20896,7 +20448,7 @@
         "categoria": "Humanoide",
         "pv": 330,
         "nivel": 18,
-        "vd": 4,
+        "vd": 18,
         "defesa": 17,
         "iniciativa": 21,
         "deslocamento": "9m",
@@ -20934,7 +20486,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Tripulação",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -20957,7 +20510,7 @@
         "pv": 85,
         "estamina": 9,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 12,
         "iniciativa": 10,
         "deslocamento": "9m",
@@ -20991,7 +20544,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Ofício",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -21014,7 +20568,7 @@
         "pv": 75,
         "estamina": 9,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 12,
         "iniciativa": 11,
         "deslocamento": "9m",
@@ -21050,7 +20604,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Ofício",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -21073,7 +20628,7 @@
         "pv": 130,
         "estamina": 24,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 14,
         "iniciativa": 18,
         "deslocamento": "9m",
@@ -21108,7 +20663,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Ofício",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -21131,7 +20687,7 @@
         "pv": 180,
         "estamina": 24,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 15,
         "iniciativa": 15,
         "deslocamento": "9m",
@@ -21166,7 +20722,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Ofício",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -21188,7 +20745,7 @@
         "categoria": "Humanoide",
         "pv": 300,
         "nivel": 18,
-        "vd": 4,
+        "vd": 18,
         "defesa": 16,
         "iniciativa": 20,
         "deslocamento": "9m",
@@ -21230,7 +20787,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Ofício",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -21252,7 +20810,7 @@
         "categoria": "Humanoide",
         "pv": 420,
         "nivel": 23,
-        "vd": 5,
+        "vd": 23,
         "defesa": 18,
         "iniciativa": 21,
         "deslocamento": "9m",
@@ -21291,7 +20849,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Ofício",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -21314,7 +20873,7 @@
         "pv": 165,
         "estamina": 24,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 15,
         "iniciativa": 18,
         "deslocamento": "9m (Escalada 9m)",
@@ -21352,7 +20911,8 @@
           "Glândula de Veneno (4 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -21375,7 +20935,7 @@
         "pv": 250,
         "estamina": 39,
         "nivel": 13,
-        "vd": 3,
+        "vd": 13,
         "defesa": 18,
         "iniciativa": 17,
         "deslocamento": "9m (Voo 15m)",
@@ -21411,7 +20971,8 @@
           "Fragmento de Cantaria Viva (11 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -21434,7 +20995,7 @@
         "pv": 400,
         "estamina": 54,
         "nivel": 18,
-        "vd": 4,
+        "vd": 18,
         "defesa": 19,
         "iniciativa": 17,
         "deslocamento": "9m",
@@ -21471,7 +21032,9 @@
           "Amuleto Funerário (16 Solares)"
         ],
         "classe": "Servo",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "morto-vivo",
+        "papel": "solo"
       }
     },
     {
@@ -21494,7 +21057,7 @@
         "pv": 500,
         "estamina": 69,
         "nivel": 23,
-        "vd": 5,
+        "vd": 23,
         "defesa": 20,
         "iniciativa": 26,
         "deslocamento": "15m",
@@ -21532,7 +21095,9 @@
           "Elo de Corrente Negra (18 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "cao-e-lobo",
+        "papel": "solo"
       }
     },
     {
@@ -21554,7 +21119,7 @@
         "categoria": "Constructo",
         "pv": 640,
         "nivel": 28,
-        "vd": 6,
+        "vd": 28,
         "defesa": 24,
         "iniciativa": 26,
         "deslocamento": "9m (Flutua)",
@@ -21592,7 +21157,9 @@
           "Estilhaço de Quartzo Desperto (46 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "golem",
+        "papel": "solo"
       }
     },
     {
@@ -21614,7 +21181,7 @@
         "categoria": "Aberração",
         "pv": 780,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 25,
         "iniciativa": 32,
         "deslocamento": "3m (Voo 9m)",
@@ -21655,7 +21222,9 @@
           "Icor de Vigia (58 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "vazio",
+        "papel": "solo"
       }
     },
     {
@@ -21938,7 +21507,7 @@
         "pv": 900,
         "estamina": 99,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 25,
         "iniciativa": 27,
         "deslocamento": "9m",
@@ -21972,7 +21541,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Escolta",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "papel": "solo"
       }
     },
     {
@@ -21995,7 +21565,7 @@
         "pv": 80,
         "estamina": 9,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 12,
         "iniciativa": 12,
         "deslocamento": "9m",
@@ -22027,7 +21597,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Tripulação",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -22049,7 +21620,7 @@
         "categoria": "Humanoide",
         "pv": 850,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 24,
         "iniciativa": 26,
         "deslocamento": "9m",
@@ -22086,7 +21657,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Tripulação",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "papel": "solo"
       }
     },
     {
@@ -22108,7 +21680,7 @@
         "categoria": "Humanoide",
         "pv": 820,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 22,
         "iniciativa": 24,
         "deslocamento": "6m",
@@ -22144,7 +21716,8 @@
         ],
         "classe": "Ajudante",
         "funcao": "Ofício",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "papel": "solo"
       }
     },
     {
@@ -22167,7 +21740,7 @@
         "pv": 245,
         "estamina": 39,
         "nivel": 13,
-        "vd": 3,
+        "vd": 13,
         "defesa": 17,
         "iniciativa": 22,
         "deslocamento": "9m",
@@ -22203,7 +21776,8 @@
           "Máscara de Renegado (14 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -22225,7 +21799,7 @@
         "categoria": "Humanoide",
         "pv": 780,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 22,
         "iniciativa": 27,
         "deslocamento": "9m",
@@ -22260,7 +21834,8 @@
           "Anel de Contenção Rachado (90 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "papel": "solo"
       }
     },
     {
@@ -22283,7 +21858,7 @@
         "pv": 110,
         "estamina": 15,
         "nivel": 5,
-        "vd": 1,
+        "vd": 5,
         "defesa": 12,
         "iniciativa": 8,
         "deslocamento": "Nenhum (enraizada)",
@@ -22320,7 +21895,8 @@
           "Fibra Constritora (8 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -22343,7 +21919,7 @@
         "pv": 400,
         "estamina": 60,
         "nivel": 20,
-        "vd": 4,
+        "vd": 20,
         "defesa": 16,
         "iniciativa": 18,
         "deslocamento": "6m",
@@ -22380,7 +21956,8 @@
           "Amostra de Micélio (20 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -22403,7 +21980,7 @@
         "pv": 160,
         "estamina": 30,
         "nivel": 10,
-        "vd": 2,
+        "vd": 10,
         "defesa": 17,
         "iniciativa": 24,
         "deslocamento": "9m (Voo)",
@@ -22436,7 +22013,8 @@
           "Asa Iridescente (12 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "papel": "solo"
       }
     },
     {
@@ -22459,7 +22037,7 @@
         "pv": 420,
         "estamina": 60,
         "nivel": 20,
-        "vd": 4,
+        "vd": 20,
         "defesa": 18,
         "iniciativa": 23,
         "deslocamento": "15m",
@@ -22496,7 +22074,8 @@
           "Semente Feérica (30 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "papel": "solo"
       }
     },
     {
@@ -22519,7 +22098,7 @@
         "pv": 200,
         "estamina": 30,
         "nivel": 10,
-        "vd": 2,
+        "vd": 10,
         "defesa": 15,
         "iniciativa": 15,
         "deslocamento": "9m",
@@ -22551,7 +22130,10 @@
           "Núcleo de Gelo Perpétuo (26 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "familia": "elemental",
+        "estagio": "Menor",
+        "papel": "solo"
       }
     },
     {
@@ -22574,7 +22156,7 @@
         "pv": 780,
         "estamina": 90,
         "nivel": 30,
-        "vd": 6,
+        "vd": 30,
         "defesa": 23,
         "iniciativa": 22,
         "deslocamento": "9m",
@@ -22612,7 +22194,9 @@
           "Poeira de Ossos Reais (60 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "morto-vivo",
+        "papel": "solo"
       }
     },
     {
@@ -23641,7 +23225,7 @@
         "pv": 110,
         "estamina": 9,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 14,
         "iniciativa": 10,
         "deslocamento": "6m, 9m (Nado)",
@@ -23674,7 +23258,9 @@
           "Glândula Luminosa (5 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "familia": "mar",
+        "papel": "solo"
       }
     },
     {
@@ -23698,7 +23284,7 @@
         "pv": 170,
         "estamina": 24,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 15,
         "iniciativa": 19,
         "deslocamento": "3m, 12m (Nado)",
@@ -23731,7 +23317,9 @@
           "Presa de Moreia (9 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 1
+        "nivelMinimoLoja": 1,
+        "familia": "mar",
+        "papel": "solo"
       }
     },
     {
@@ -23754,7 +23342,7 @@
         "subtipo": "Marítima",
         "pv": 250,
         "nivel": 13,
-        "vd": 3,
+        "vd": 13,
         "defesa": 17,
         "iniciativa": 22,
         "deslocamento": "15m (Nado), 9m (Voo por 1 turno após saltar)",
@@ -23789,7 +23377,9 @@
           "Couro de Manta (24 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "mar",
+        "papel": "solo"
       }
     },
     {
@@ -23813,7 +23403,7 @@
         "pv": 560,
         "estamina": 69,
         "nivel": 23,
-        "vd": 5,
+        "vd": 23,
         "defesa": 22,
         "iniciativa": 25,
         "deslocamento": "18m (Nado)",
@@ -23847,7 +23437,9 @@
           "Placa de Metal Incrustada (75 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "mar",
+        "papel": "solo"
       }
     },
     {
@@ -23870,7 +23462,7 @@
         "subtipo": "Marítima",
         "pv": 900,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 27,
         "iniciativa": 27,
         "deslocamento": "6m, 9m (Nado)",
@@ -23906,7 +23498,9 @@
           "Pérola de Colônia (280 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "elemental",
+        "papel": "solo"
       }
     },
     {
@@ -23929,7 +23523,7 @@
         "subtipo": "Marítima",
         "pv": 1340,
         "nivel": 43,
-        "vd": 9,
+        "vd": 43,
         "defesa": 29,
         "iniciativa": 33,
         "deslocamento": "15m (Nado)",
@@ -23966,7 +23560,10 @@
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "familia": "mar",
+        "papel": "solo",
+        "unico": true
       }
     },
     {
@@ -23989,7 +23586,7 @@
         "subtipo": "Espírito",
         "pv": 80,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 15,
         "iniciativa": 16,
         "deslocamento": "12m (Voo)",
@@ -24023,7 +23620,9 @@
           "Cinza Luminosa (12 Solares)"
         ],
         "classe": "Familiar",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "espirito",
+        "papel": "solo"
       }
     },
     {
@@ -24046,7 +23645,7 @@
         "subtipo": "Espírito",
         "pv": 150,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 16,
         "iniciativa": 18,
         "deslocamento": "9m (Flutuar), 15m (Nado)",
@@ -24081,7 +23680,9 @@
           "Frasco de Água Espectral (16 Solares)"
         ],
         "classe": "Servo",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "espirito",
+        "papel": "solo"
       }
     },
     {
@@ -24104,7 +23705,7 @@
         "subtipo": "Espírito",
         "pv": 290,
         "nivel": 13,
-        "vd": 3,
+        "vd": 13,
         "defesa": 19,
         "iniciativa": 16,
         "deslocamento": "9m",
@@ -24139,7 +23740,9 @@
           "Elmo Antigo (32 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "espirito",
+        "papel": "solo"
       }
     },
     {
@@ -24162,7 +23765,7 @@
         "subtipo": "Espírito",
         "pv": 480,
         "nivel": 23,
-        "vd": 5,
+        "vd": 23,
         "defesa": 24,
         "iniciativa": 28,
         "deslocamento": "9m (Flutuar)",
@@ -24198,7 +23801,9 @@
           "Estilhaço Assombrado (95 Solares)"
         ],
         "classe": "Servo",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "espirito",
+        "papel": "solo"
       }
     },
     {
@@ -24221,7 +23826,7 @@
         "subtipo": "Espírito",
         "pv": 820,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 26,
         "iniciativa": 31,
         "deslocamento": "12m (Flutuar)",
@@ -24257,7 +23862,9 @@
           "Tinteiro Assombrado (420 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "espirito",
+        "papel": "solo"
       }
     },
     {
@@ -24280,7 +23887,7 @@
         "subtipo": "Espírito",
         "pv": 1200,
         "nivel": 43,
-        "vd": 9,
+        "vd": 43,
         "defesa": 30,
         "iniciativa": 38,
         "deslocamento": "12m (Flutuar)",
@@ -24317,7 +23924,10 @@
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "familia": "morto-vivo",
+        "papel": "solo",
+        "unico": true
       }
     },
     {
@@ -24341,7 +23951,7 @@
         "pv": 125,
         "estamina": 9,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 13,
         "iniciativa": 8,
         "deslocamento": "6m",
@@ -24374,7 +23984,9 @@
           "Argila Animada (6 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "golem",
+        "papel": "solo"
       }
     },
     {
@@ -24398,7 +24010,7 @@
         "pv": 190,
         "estamina": 24,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 16,
         "iniciativa": 12,
         "deslocamento": "6m",
@@ -24431,7 +24043,9 @@
           "Sal de Proteção (14 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "golem",
+        "papel": "solo"
       }
     },
     {
@@ -24454,7 +24068,7 @@
         "subtipo": "Golem",
         "pv": 310,
         "nivel": 13,
-        "vd": 3,
+        "vd": 13,
         "defesa": 20,
         "iniciativa": 15,
         "deslocamento": "9m",
@@ -24489,7 +24103,9 @@
           "Placa Ressonante (38 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 2
+        "nivelMinimoLoja": 2,
+        "familia": "golem",
+        "papel": "solo"
       }
     },
     {
@@ -24512,7 +24128,7 @@
         "subtipo": "Golem",
         "pv": 570,
         "nivel": 23,
-        "vd": 5,
+        "vd": 23,
         "defesa": 23,
         "iniciativa": 20,
         "deslocamento": "9m",
@@ -24548,7 +24164,9 @@
           "Seiva Regeneradora (85 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "golem",
+        "papel": "solo"
       }
     },
     {
@@ -24571,7 +24189,7 @@
         "subtipo": "Golem",
         "pv": 880,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 29,
         "iniciativa": 32,
         "deslocamento": "9m",
@@ -24607,7 +24225,9 @@
           "Prisma de Vigilância (360 Solares)"
         ],
         "classe": "Invocação",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "golem",
+        "papel": "solo"
       }
     },
     {
@@ -24630,7 +24250,7 @@
         "subtipo": "Golem",
         "pv": 1450,
         "nivel": 43,
-        "vd": 9,
+        "vd": 43,
         "defesa": 32,
         "iniciativa": 30,
         "deslocamento": "9m",
@@ -24667,7 +24287,9 @@
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "familia": "golem",
+        "papel": "solo"
       }
     },
     {
@@ -24690,7 +24312,7 @@
         "subtipo": "Vazio",
         "pv": 200,
         "nivel": 8,
-        "vd": 2,
+        "vd": 8,
         "defesa": 18,
         "iniciativa": 20,
         "deslocamento": "12m (Escalar), 9m (Flutuar no Vazio)",
@@ -24729,7 +24351,9 @@
           "Garra Pálida (35 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "vazio",
+        "papel": "solo"
       }
     },
     {
@@ -24753,7 +24377,7 @@
         "pv": 335,
         "estamina": 39,
         "nivel": 13,
-        "vd": 3,
+        "vd": 13,
         "defesa": 20,
         "iniciativa": 23,
         "deslocamento": "15m",
@@ -24791,7 +24415,9 @@
           "Presa do Vazio (60 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "vazio",
+        "papel": "solo"
       }
     },
     {
@@ -24814,7 +24440,7 @@
         "subtipo": "Vazio",
         "pv": 470,
         "nivel": 18,
-        "vd": 4,
+        "vd": 18,
         "defesa": 23,
         "iniciativa": 24,
         "deslocamento": "9m, 15m (entre fendas)",
@@ -24854,7 +24480,9 @@
           "Fibra Espacial (140 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "vazio",
+        "papel": "solo"
       }
     },
     {
@@ -24877,7 +24505,7 @@
         "subtipo": "Vazio",
         "pv": 865,
         "nivel": 28,
-        "vd": 6,
+        "vd": 28,
         "defesa": 27,
         "iniciativa": 31,
         "deslocamento": "12m (Escalar), 9m (Flutuar no Vazio)",
@@ -24918,7 +24546,9 @@
           "Fragmento Orbital (310 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "vazio",
+        "papel": "solo"
       }
     },
     {
@@ -24941,7 +24571,7 @@
         "subtipo": "Vazio",
         "pv": 1300,
         "nivel": 38,
-        "vd": 8,
+        "vd": 38,
         "defesa": 30,
         "iniciativa": 35,
         "deslocamento": "12m (Flutuar)",
@@ -24982,7 +24612,10 @@
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "familia": "vazio",
+        "papel": "solo",
+        "unico": true
       }
     },
     {
@@ -25005,7 +24638,7 @@
         "subtipo": "Vazio",
         "pv": 1900,
         "nivel": 48,
-        "vd": 10,
+        "vd": 48,
         "defesa": 34,
         "iniciativa": 42,
         "deslocamento": "18m (Voo no Vazio)",
@@ -25047,7 +24680,10 @@
         ],
         "classe": "Ser Lendário",
         "nivelMinimoLoja": 4,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "familia": "vazio",
+        "papel": "solo",
+        "unico": true
       }
     },
     {
@@ -25432,7 +25068,7 @@
           "Fragmentos de Estrela": 620
         },
         "raridade": "reliquia da criacao",
-        "dano": "8d12+12",
+        "dano": "20d12+30",
         "critico": "20/x4",
         "alcance": "Longo",
         "tipo_de_dano": "Luz",
@@ -25449,7 +25085,7 @@
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
         "atributos": [
-          "8d12+12 de dano",
+          "20d12+30 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
@@ -25460,7 +25096,7 @@
         "descricao": "O arco que derrubou nove sóis. A flecha dele sai reta demais para caber atrás de qualquer proteção.",
         "ressonancia": {
           "nome": "Sol Abatido",
-          "efeito": "Uma vez por cena, gaste uma Ação Padrão para um disparo com alcance dobrado que ignora cobertura parcial e camuflagem. Em acerto, o alvo sofre +4d12 de Luz; se estiver voando, faz Reflexos contra a DT de efeito do portador e, em falha, desce até o solo sem sofrer dano de queda e fica Caído."
+          "efeito": "Uma vez por cena, gaste uma Ação Padrão para um disparo com alcance dobrado que ignora cobertura parcial e camuflagem. Em acerto, o alvo sofre +10d12 de Luz; se estiver voando, faz Reflexos contra a DT de efeito do portador e, em falha, desce até o solo sem sofrer dano de queda e fica Caído."
         }
       }
     },
@@ -25473,7 +25109,7 @@
           "Fragmentos de Estrela": 700
         },
         "raridade": "reliquia da criacao",
-        "dano": "8d12+18",
+        "dano": "20d12+45",
         "critico": "20/x4",
         "alcance": "Longo",
         "tipo_de_dano": "Raio",
@@ -25490,7 +25126,7 @@
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
         "atributos": [
-          "8d12+18 de dano",
+          "20d12+45 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
@@ -25514,7 +25150,7 @@
           "Fragmentos de Estrela": 580
         },
         "raridade": "reliquia da criacao",
-        "dano": "8d12+10",
+        "dano": "20d12+25",
         "critico": "20/x4",
         "alcance": "Médio",
         "tipo_de_dano": "Corte",
@@ -25531,7 +25167,7 @@
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
         "atributos": [
-          "8d12+10 de dano",
+          "20d12+25 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
@@ -25555,7 +25191,7 @@
           "Fragmentos de Estrela": 420
         },
         "raridade": "reliquia da criacao",
-        "dano": "8d12+8",
+        "dano": "20d12+20",
         "critico": "20/x4",
         "alcance": "Médio",
         "tipo_de_dano": "Balístico",
@@ -25572,7 +25208,7 @@
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
         "atributos": [
-          "8d12+8 de dano",
+          "20d12+20 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
@@ -25596,7 +25232,7 @@
           "Fragmentos de Estrela": 540
         },
         "raridade": "reliquia da criacao",
-        "dano": "8d12+14",
+        "dano": "20d12+35",
         "critico": "19-20/x2",
         "alcance": "Curto/Longo",
         "tipo_de_dano": "Perfuração",
@@ -25611,7 +25247,7 @@
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
         "atributos": [
-          "8d12+14 de dano",
+          "20d12+35 de dano",
           "Crítico 19-20/x2",
           "Relíquia da Criação",
           "Arma",
@@ -25635,7 +25271,7 @@
           "Fragmentos de Estrela": 460
         },
         "raridade": "reliquia da criacao",
-        "dano": "8d12+12",
+        "dano": "20d12+30",
         "critico": "20/x4",
         "alcance": "Curto/Longo",
         "tipo_de_dano": "Impacto",
@@ -25650,7 +25286,7 @@
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
         "atributos": [
-          "8d12+12 de dano",
+          "20d12+30 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
@@ -25674,7 +25310,7 @@
           "Fragmentos de Estrela": 600
         },
         "raridade": "reliquia da criacao",
-        "dano": "8d12+14",
+        "dano": "20d12+35",
         "critico": "20/x4",
         "alcance": "Curto/Médio",
         "tipo_de_dano": "Ar",
@@ -25689,7 +25325,7 @@
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
         "atributos": [
-          "8d12+14 de dano",
+          "20d12+35 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
@@ -25713,7 +25349,7 @@
           "Fragmentos de Estrela": 520
         },
         "raridade": "reliquia da criacao",
-        "dano": "10d10+12",
+        "dano": "25d10+30",
         "critico": "20/x4",
         "alcance": "Curto",
         "tipo_de_dano": "Corte",
@@ -25728,7 +25364,7 @@
         "nivelMinimoLoja": 4,
         "requer_autorizacao_mestre": true,
         "atributos": [
-          "10d10+12 de dano",
+          "25d10+30 de dano",
           "Crítico 20/x4",
           "Relíquia da Criação",
           "Arma",
@@ -25739,7 +25375,7 @@
         "descricao": "A espada que se recusou a quebrar. Nada mundano a danifica, e o que ela apara chega mais fraco.",
         "ressonancia": {
           "nome": "A Lâmina que Não Cede",
-          "efeito": "Durandal não pode ser destruída, danificada, desarmada nem desviada por nada que não seja outra Relíquia da Criação. Uma vez por rodada, o portador pode gastar uma Reação para aparar um ataque corpo a corpo que o tenha acertado, reduzindo o dano em 4d12."
+          "efeito": "Durandal não pode ser destruída, danificada, desarmada nem desviada por nada que não seja outra Relíquia da Criação. Uma vez por rodada, o portador pode gastar uma Reação para aparar um ataque corpo a corpo que o tenha acertado, reduzindo o dano em 10d12."
         }
       }
     },
@@ -25822,7 +25458,7 @@
         "subtipo": "Vazio",
         "pv": 115,
         "nivel": 3,
-        "vd": 1,
+        "vd": 3,
         "defesa": 14,
         "iniciativa": 14,
         "deslocamento": "6m (Escalar, só dentro de frestas)",
@@ -25861,7 +25497,9 @@
           "Cera de Fresta (12 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "vazio",
+        "papel": "solo"
       }
     },
     {
@@ -25884,7 +25522,7 @@
         "subtipo": "Vazio",
         "pv": 620,
         "nivel": 23,
-        "vd": 5,
+        "vd": 23,
         "defesa": 22,
         "iniciativa": 26,
         "deslocamento": "21m (Nado, inclusive em névoa densa)",
@@ -25925,7 +25563,9 @@
           "Barbatana de Osso Branco (140 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3
+        "nivelMinimoLoja": 3,
+        "familia": "vazio",
+        "papel": "solo"
       }
     },
     {
@@ -25948,7 +25588,7 @@
         "subtipo": "Vazio",
         "pv": 1015,
         "nivel": 33,
-        "vd": 7,
+        "vd": 33,
         "defesa": 26,
         "iniciativa": 32,
         "deslocamento": "9m",
@@ -25988,7 +25628,9 @@
         ],
         "classe": "Criatura",
         "nivelMinimoLoja": 3,
-        "requer_autorizacao_mestre": true
+        "requer_autorizacao_mestre": true,
+        "familia": "vazio",
+        "papel": "solo"
       }
     },
     {
@@ -26014,7 +25656,7 @@
           "Custo: 1d6 de Sanidade"
         ],
         "lore": "Odin deixou um olho no fundo de um poço em troca de uma pergunta, e o poço nunca devolveu a água limpa. A lente que sobrou dessa troca ainda olha para o lado de dentro das coisas. Quem a instala passa a semana seguinte sem conseguir olhar espelho nenhum.",
-        "descricao": "Uma vez por cena, gaste uma Ação Livre para enxergar o que é verdadeiro. Até o fim do seu turno, você vê através de ilusões, disfarces e invisibilidade a até 18 m e tem vantagem em Percepção e Intuição. Cada uso custa 1d6 de Sanidade.",
+        "descricao": "Uma vez por cena, gaste uma Ação Livre para enxergar o que é verdadeiro. Até o fim do seu turno, você vê através de ilusões, disfarces e invisibilidade a até 18 m e tem vantagem em Percepção e Intuição. Cada uso custa 3d6 de Sanidade.",
         "ativacao": "Ação Livre",
         "frequencia": "1/cena",
         "custo": "1d6 de Sanidade",
@@ -26044,10 +25686,10 @@
           "Golpe de Prata"
         ],
         "lore": "Nuada perdeu o braço numa batalha e o trono junto com ele, porque um rei ferido não podia reinar. A prata que lhe deram no lugar trabalhou tão bem que o trono voltou. O braço guarda a memória de ser devolvido, e recusa a ideia de ser tirado outra vez.",
-        "descricao": "Este braço nunca pode ser mutilado, arrancado nem desarmado à força, e a mão que ele forma não solta o que segura contra a sua vontade. Uma vez por cena, gaste uma Ação Padrão para um golpe desarmado que causa 4d12 de dano adicional.",
+        "descricao": "Este braço nunca pode ser mutilado, arrancado nem desarmado à força, e a mão que ele forma não solta o que segura contra a sua vontade. Uma vez por cena, gaste uma Ação Padrão para um golpe desarmado que causa 10d12 de dano adicional.",
         "ativacao": "Ação Padrão",
         "frequencia": "1/cena",
-        "efeito": "Imune a Mutilação e a desarme forçado; golpe desarmado com 4d12 de dano adicional 1/cena"
+        "efeito": "Imune a Mutilação e a desarme forçado; golpe desarmado com 10d12 de dano adicional 1/cena"
       }
     },
     {
@@ -26074,11 +25716,11 @@
           "Custo: 1 Cansaço"
         ],
         "lore": "A serpente que engole a própria cauda nunca chegou a decidir qual ponta veio primeiro. O coração bate no ritmo dessa dúvida: cada batida termina onde a seguinte começa, sem intervalo para o corpo aproveitar e morrer. Médicos que ouvem o peito de quem o carrega pedem para ouvir de novo.",
-        "descricao": "No início de cada turno seu, recupere 1d12 de Vida. Uma vez por descanso, ao chegar a 0 de Vida, você não cai: volta com metade da Vida máxima e ganha 1 Cansaço.",
+        "descricao": "No início de cada turno seu, recupere 4d12 de Vida. Uma vez por descanso, ao chegar a 0 de Vida, você não cai: volta com metade da Vida máxima e ganha 1 Cansaço.",
         "ativacao": "Reação, ao chegar a 0 de Vida",
         "frequencia": "1/descanso",
         "custo": "1 Cansaço",
-        "efeito": "Recupera 1d12 de Vida por turno; ao chegar a 0 de Vida, volta com metade da Vida máxima"
+        "efeito": "Recupera 4d12 de Vida por turno; ao chegar a 0 de Vida, volta com metade da Vida máxima"
       }
     },
     {
@@ -29457,8 +29099,8 @@
           "Rastro de fogo"
         ],
         "lore": "Hélios cruza o céu todo dia na mesma carruagem, puxada por cavalos que respiram brasa em vez de ar. Faetonte pediu para guiá-la uma vez e o mundo quase queimou inteiro por causa disso. Quem assume as rédeas hoje aprende rápido que velocidade daquele tamanho não perdoa mão insegura.",
-        "descricao": "Veículo médio atmosférico. Vida 90; Defesa 20; Resistência 6; deslocamento 120 m; Manobrabilidade +5; capacidade total 3, incluindo tripulação; cobertura nenhuma; tripulação mínima 1; até 2 sistemas ativos; 0 espaços de base; sem armas integradas. O rastro da carruagem incendeia vegetação seca por onde passa, e criaturas que a tocarem sem proteção sofrem 2d6 de dano de Fogo.",
-        "efeito": "Quem tocar a carruagem sem proteção sofre 2d6 de Fogo"
+        "descricao": "Veículo médio atmosférico. Vida 90; Defesa 20; Resistência 6; deslocamento 120 m; Manobrabilidade +5; capacidade total 3, incluindo tripulação; cobertura nenhuma; tripulação mínima 1; até 2 sistemas ativos; 0 espaços de base; sem armas integradas. O rastro da carruagem incendeia vegetação seca por onde passa, e criaturas que a tocarem sem proteção sofrem 5d6 de dano de Fogo.",
+        "efeito": "Quem tocar a carruagem sem proteção sofre 5d6 de Fogo"
       }
     },
     {
@@ -29858,10 +29500,10 @@
           "1/cena"
         ],
         "lore": "O vinho que enche a taça nunca é o mesmo duas vezes, e ninguém pergunta de onde ele vem enquanto está bebendo. Quem bebe começa a rir antes de entender a própria piada, e sai andando na direção do perigo com a certeza de quem já voltou de lá.",
-        "descricao": "Uma vez por cena, gaste uma Ação Livre para beber da taça. Até o fim da cena, você ganha +1d6 de dano em seus ataques e sofre −2 de Defesa.",
+        "descricao": "Uma vez por cena, gaste uma Ação Livre para beber da taça. Até o fim da cena, você ganha +3d6 de dano em seus ataques e sofre −2 de Defesa.",
         "ativacao": "Ação Livre",
         "frequencia": "1/cena",
-        "efeito": "+1d6 de dano em ataques e -2 de Defesa até o fim da cena"
+        "efeito": "+3d6 de dano em ataques e -2 de Defesa até o fim da cena"
       }
     },
     {
@@ -29887,11 +29529,11 @@
           "1/sessão"
         ],
         "lore": "Um mercador de rua vendeu a lamparina como bugiganga velha, sem imaginar o que dormia dentro dela. Quem esfrega o metal desperta uma vontade presa há séculos, ansiosa por trabalhar em troca de liberdade que nunca chega de verdade.",
-        "descricao": "Uma vez por sessão, esfregue a lamparina como Ação Padrão para invocar um auxiliar com VD igual a um quarto do seu nível, obediente por até 1 hora ou até ser derrotado. Ele desaparece ao fim do prazo, sem deixar despojos.",
+        "descricao": "Uma vez por sessão, esfregue a lamparina como Ação Padrão para invocar um auxiliar com VD igual ao seu nível, obediente por até 1 hora ou até ser derrotado. Ele desaparece ao fim do prazo, sem deixar despojos.",
         "ativacao": "Ação Padrão",
         "frequencia": "1/sessão",
         "duracao": "1 hora",
-        "efeito": "Invoca um auxiliar com VD igual a um quarto do seu nível"
+        "efeito": "Invoca um auxiliar com VD igual ao seu nível"
       }
     },
     {
@@ -29921,6 +29563,2884 @@
         "ativacao": "Ação Padrão",
         "frequencia": "1/dia",
         "efeito": "Produz comida e água para 10 pessoas por um dia, ou um item comum de até 1 espaço"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "golem-titanico",
+      "titulo": "Golem Titânico",
+      "conteudo": {
+        "descricao": "Construído para guardar uma cidade e depois esquecido no meio dela. Tem a altura de uma torre, obedece a uma ordem que ninguém lembra e a cumpre com paciência de pedra.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Constructo",
+        "pv": 1730,
+        "nivel": 65,
+        "vd": 65,
+        "defesa": 42,
+        "iniciativa": 48,
+        "deslocamento": "12m",
+        "mana": 200,
+        "estamina": 130,
+        "atributos": {
+          "forca": 6,
+          "agilidade": 6,
+          "vigor": 6,
+          "presenca": 5,
+          "intelecto": 5
+        },
+        "pericias": [
+          "Luta +52",
+          "Fortitude +52",
+          "Reflexos +52",
+          "Vontade +51",
+          "Percepção +44"
+        ],
+        "ataques": [
+          {
+            "nome": "Punho Titânico",
+            "detalhe": "+52, 6d10+21 impacto"
+          },
+          {
+            "nome": "Lajedo Arremessado",
+            "detalhe": "+52, 6d10+21 impacto, em área"
+          }
+        ],
+        "habilidades": [
+          "Corpo de Cidade (imune a Amedrontado, Atordoado e a efeitos de mente; reduz em 6 o dano físico de cada golpe)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Núcleo Titânico (260 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "golem",
+        "estagio": "Titânico",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "cavaleiro-sem-rosto",
+      "titulo": "Cavaleiro Sem Rosto",
+      "conteudo": {
+        "descricao": "Uma armadura cheia de vento montada num cavalo feito da mesma coisa. Ninguém lembra a quem serviu, e por isso serve a quem o chama primeiro.",
+        "preco": {
+          "Solares": 550
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "raridade": "epico",
+        "categoria": "Morto-Vivo",
+        "pv": 1055,
+        "nivel": 37,
+        "vd": 37,
+        "defesa": 28,
+        "iniciativa": 33,
+        "deslocamento": "15m",
+        "mana": 116,
+        "estamina": 74,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 4,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +35",
+          "Fortitude +35",
+          "Reflexos +35",
+          "Vontade +34",
+          "Percepção +27"
+        ],
+        "ataques": [
+          {
+            "nome": "Lança do Vazio Antigo",
+            "detalhe": "+35, 4d10+12 perfurante"
+          },
+          {
+            "nome": "Galope Cortante",
+            "detalhe": "+35, 4d10+12 cortante"
+          }
+        ],
+        "habilidades": [
+          "Sem Rosto (não pode ser Enfeitiçado nem lido por efeitos de mente)",
+          "Carga Fantasma (1/cena, Ação de Movimento: atravessa criaturas e obstáculos até 18 m em linha reta)"
+        ],
+        "loot": [
+          "Elmo Vazio (150 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "morto-vivo",
+        "estagio": "Cavaleiro",
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "vampiro-anciao",
+      "titulo": "Vampiro Ancião",
+      "conteudo": {
+        "descricao": "Viu séculos passarem em salões que hoje são ruínas, e ainda se veste como quem vai a um baile. Educado até o último segundo, e o último segundo costuma chegar rápido.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Morto-Vivo",
+        "pv": 1615,
+        "nivel": 49,
+        "vd": 49,
+        "defesa": 34,
+        "iniciativa": 39,
+        "deslocamento": "12m",
+        "mana": 152,
+        "estamina": 98,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 4,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +43",
+          "Fortitude +43",
+          "Reflexos +43",
+          "Vontade +42",
+          "Percepção +35"
+        ],
+        "ataques": [
+          {
+            "nome": "Garras de Seda",
+            "detalhe": "+43, 7d10+25 cortante"
+          },
+          {
+            "nome": "Olhar Dominante",
+            "detalhe": "+43, 7d10+25 psíquico"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 10d10+40, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Sede Antiga (uma vez por turno, ao causar dano a uma criatura viva, recupera Vida igual a um quinto do dano)",
+          "Olhar Dominante (Ação Padrão, alcance Médio: Vontade DT 39 ou o alvo obedece a um comando de uma palavra)"
+        ],
+        "loot": [
+          "Anel de Sangue Antigo (200 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "familia": "morto-vivo",
+        "estagio": "Ancião",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "devorador-de-eras",
+      "titulo": "Devorador de Eras",
+      "conteudo": {
+        "descricao": "Devora o momento em que as coisas aconteceram. Onde ele passa, as pessoas esquecem que o lugar existiu, e as estações perdem a ordem e se repetem.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Aberração",
+        "pv": 4050,
+        "nivel": 120,
+        "vd": 120,
+        "defesa": 71,
+        "iniciativa": 77,
+        "deslocamento": "18m",
+        "mana": 365,
+        "estamina": 240,
+        "atributos": {
+          "forca": 7,
+          "agilidade": 7,
+          "vigor": 7,
+          "presenca": 6,
+          "intelecto": 6
+        },
+        "pericias": [
+          "Luta +85",
+          "Fortitude +85",
+          "Reflexos +85",
+          "Vontade +84",
+          "Percepção +77"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordida do Depois",
+            "detalhe": "+85, 15d10+52 Vazio"
+          },
+          {
+            "nome": "Bocado de Eras",
+            "detalhe": "+85, 15d10+52 Vazio, em área"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 22d10+80, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 75; em falha, perde 3d6 de Sanidade e fica Amedrontado)",
+          "Bocado de Eras (1/cena: como Ação Padrão, criaturas na área fazem Reflexos DT 75. Sofrem 15d10 de Vazio, metade em sucesso; esse dano não gera crítico)",
+          "Sinais (relógios que erram por dentro do grupo e lembranças que faltam, uma a uma)",
+          "Como Evitar (a cena é de fuga, ou de fazer o grupo lembrar em voz alta o que ele já levou)"
+        ],
+        "loot": [
+          "Ampulheta Roída (480 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "familia": "vazio",
+        "unico": true,
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "ausencia-faminta",
+      "titulo": "A Ausência Faminta",
+      "conteudo": {
+        "descricao": "Um lugar onde deveria haver alguma coisa e não há. Cresce sobre o que consome, e o que resta parece sempre um pouco menor do que era.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Aberração",
+        "pv": 10500,
+        "nivel": 300,
+        "vd": 300,
+        "defesa": 162,
+        "iniciativa": 170,
+        "deslocamento": "24m",
+        "mana": 905,
+        "estamina": 600,
+        "atributos": {
+          "forca": 10,
+          "agilidade": 10,
+          "vigor": 10,
+          "presenca": 9,
+          "intelecto": 9
+        },
+        "pericias": [
+          "Luta +182",
+          "Fortitude +182",
+          "Reflexos +182",
+          "Vontade +181",
+          "Percepção +174"
+        ],
+        "ataques": [
+          {
+            "nome": "Toque de Falta",
+            "detalhe": "+182, 33d10+117 Vazio"
+          },
+          {
+            "nome": "Ausência Total",
+            "detalhe": "+182, 33d10+117 Vazio, em área grande"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 49d10+178, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT 165; em falha, perde 4d6 de Sanidade e fica Amedrontado)",
+          "Ausência Total (1/cena: como Ação Padrão, criaturas na área fazem Reflexos DT 165. Sofrem 20d10 de Vazio, metade em sucesso; esse dano não gera crítico)",
+          "Sinais (coisas que somem sem barulho e vozes que perdem o eco, uma a uma)",
+          "Como Evitar (ela só consome o que está sendo chamado: a cena é de fuga, ou de calar quem chama e sair do alcance)"
+        ],
+        "loot": [
+          "Fragmento de Ausência (1200 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "familia": "vazio",
+        "unico": true,
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "ultimo-silencio",
+      "titulo": "O Último Silêncio",
+      "conteudo": {
+        "descricao": "Vem depois de todo o resto, quando não sobra ninguém para chamá-lo de nada. Os que o viram descrevem só uma coisa: o momento antes de a voz falhar.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Aberração",
+        "pv": 18125,
+        "nivel": 500,
+        "vd": 500,
+        "defesa": 264,
+        "iniciativa": 273,
+        "deslocamento": "30m",
+        "mana": 1505,
+        "estamina": 1000,
+        "atributos": {
+          "forca": 13,
+          "agilidade": 13,
+          "vigor": 13,
+          "presenca": 12,
+          "intelecto": 12
+        },
+        "pericias": [
+          "Luta +287",
+          "Fortitude +287",
+          "Reflexos +287",
+          "Vontade +286",
+          "Percepção +279"
+        ],
+        "ataques": [
+          {
+            "nome": "Silêncio que Corta",
+            "detalhe": "+287, 52d10+193 Vazio"
+          },
+          {
+            "nome": "Fim do Som",
+            "detalhe": "+287, 52d10+193 Vazio, em área grande"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 78d10+290, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT 265; em falha, perde 5d6 de Sanidade e fica Amedrontado)",
+          "Fim do Som (1/cena: como Ação Padrão, criaturas na área fazem Vontade DT 265. Sofrem 25d10 de Vazio e ficam Surdas até o fim da cena, metade e sem condição em sucesso; esse dano não gera crítico)",
+          "Sinais (o som some de um lugar de cada vez, até a respiração do grupo)",
+          "Como Evitar (ele reage a quem tenta fazer barulho: a cena é de fuga em silêncio, ou de fechar o Vão por onde ele veio)"
+        ],
+        "loot": [
+          "Poeira de Silêncio (2000 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "familia": "vazio",
+        "unico": true,
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "elemental-de-fogo-maior",
+      "titulo": "Elemental de Fogo Maior",
+      "conteudo": {
+        "descricao": "Uma fornalha que aprendeu a andar. Já decide o que queimar, obedece a quem o invocou enquanto o pacto for bom e responde com fogo a quem tenta apagá-lo.",
+        "preco": {
+          "Solares": 150
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "raridade": "raro",
+        "categoria": "Elemental",
+        "pv": 810,
+        "nivel": 25,
+        "vd": 25,
+        "defesa": 21,
+        "iniciativa": 26,
+        "deslocamento": "12m",
+        "mana": 80,
+        "estamina": 50,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +26",
+          "Fortitude +26",
+          "Reflexos +26",
+          "Vontade +25",
+          "Percepção +18"
+        ],
+        "ataques": [
+          {
+            "nome": "Golpe Flamejante",
+            "detalhe": "+26, 3d10+7 fogo"
+          },
+          {
+            "nome": "Rajada de Brasas",
+            "detalhe": "+26, 3d10+7 fogo, à distância"
+          }
+        ],
+        "habilidades": [
+          "Explosão ao Cair (ao chegar a 0 PV, criaturas em alcance Curto fazem Reflexos DT 27; sofrem metade do dano de um ataque dele, metade em sucesso)"
+        ],
+        "loot": [
+          "Núcleo Flamejante (100 Solares)"
+        ],
+        "classe": "Invocação",
+        "nivelMinimoLoja": 3,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "elemental",
+        "estagio": "Maior"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "elemental-de-fogo-primordial",
+      "titulo": "Elemental de Fogo Primordial",
+      "conteudo": {
+        "descricao": "O fogo que o mundo usou para começar. Ele negocia, e o preço quase sempre é lembrar o que queimou da última vez.",
+        "preco": {
+          "Solares": 2500
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Elemental",
+        "pv": 1190,
+        "nivel": 45,
+        "vd": 45,
+        "defesa": 32,
+        "iniciativa": 37,
+        "deslocamento": "15m",
+        "mana": 140,
+        "estamina": 90,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 4,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +39",
+          "Fortitude +39",
+          "Reflexos +39",
+          "Vontade +38",
+          "Percepção +31"
+        ],
+        "ataques": [
+          {
+            "nome": "Toque Primordial",
+            "detalhe": "+39, 4d10+19 fogo"
+          },
+          {
+            "nome": "Tempestade de Brasas",
+            "detalhe": "+39, 4d10+19 fogo, em área"
+          }
+        ],
+        "habilidades": [
+          "Calor Insuportável (quem termina o turno em alcance Curto sofre dano de fogo igual a um décimo do golpe dele)"
+        ],
+        "loot": [
+          "Coração de Fogo Primordial (180 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "elemental",
+        "estagio": "Primordial",
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "elemental-de-gelo-maior",
+      "titulo": "Elemental de Gelo Maior",
+      "conteudo": {
+        "descricao": "Um inverno que ganhou ombros. Anda devagar, e o chão à frente dele já está gelado quando ele chega.",
+        "preco": {
+          "Solares": 170
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "raridade": "raro",
+        "categoria": "Elemental",
+        "pv": 810,
+        "nivel": 28,
+        "vd": 28,
+        "defesa": 23,
+        "iniciativa": 28,
+        "deslocamento": "12m",
+        "mana": 89,
+        "estamina": 56,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +28",
+          "Fortitude +28",
+          "Reflexos +28",
+          "Vontade +27",
+          "Percepção +20"
+        ],
+        "ataques": [
+          {
+            "nome": "Golpe Gélido",
+            "detalhe": "+28, 3d10+9 gelo"
+          },
+          {
+            "nome": "Lança de Gelo",
+            "detalhe": "+28, 3d10+9 gelo, à distância"
+          }
+        ],
+        "habilidades": [
+          "Chão Gelado (o chão em alcance Curto é terreno difícil; Reflexos DT 29 ou cai ao correr)"
+        ],
+        "loot": [
+          "Núcleo de Gelo (110 Solares)"
+        ],
+        "classe": "Invocação",
+        "nivelMinimoLoja": 3,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "elemental",
+        "estagio": "Maior"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "elemental-de-gelo-primordial",
+      "titulo": "Elemental de Gelo Primordial",
+      "conteudo": {
+        "descricao": "O frio de antes de haver calor para comparar. Espera sem pressa, e o mundo em volta vai ficando do tamanho da paciência dele.",
+        "preco": {
+          "Solares": 2920
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Elemental",
+        "pv": 1265,
+        "nivel": 48,
+        "vd": 48,
+        "defesa": 34,
+        "iniciativa": 39,
+        "deslocamento": "15m",
+        "mana": 149,
+        "estamina": 96,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 4,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +41",
+          "Fortitude +41",
+          "Reflexos +41",
+          "Vontade +40",
+          "Percepção +33"
+        ],
+        "ataques": [
+          {
+            "nome": "Toque Primordial",
+            "detalhe": "+41, 5d10+16 gelo"
+          },
+          {
+            "nome": "Nevasca Primordial",
+            "detalhe": "+41, 5d10+16 gelo, em área"
+          }
+        ],
+        "habilidades": [
+          "Inverno Longo (no fim de cada rodada, criaturas em alcance Médio fazem Fortitude DT 39 ou perdem 1 ponto de Estamina)"
+        ],
+        "loot": [
+          "Coração de Gelo Primordial (190 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "elemental",
+        "estagio": "Primordial",
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "elemental-de-fogo-ancestral",
+      "titulo": "Elemental de Fogo Ancestral",
+      "conteudo": {
+        "descricao": "O fogo que continuou depois que o mundo esfriou. Cada passo dele deixa vidro no chão e um cheiro de pedra derretida no ar, e ele nunca perdoou o mundo por ter esfriado.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Elemental",
+        "pv": 3780,
+        "nivel": 140,
+        "vd": 140,
+        "defesa": 81,
+        "iniciativa": 87,
+        "deslocamento": "30m",
+        "mana": 425,
+        "estamina": 280,
+        "atributos": {
+          "forca": 7,
+          "agilidade": 7,
+          "vigor": 7,
+          "presenca": 6,
+          "intelecto": 6
+        },
+        "pericias": [
+          "Luta +93",
+          "Fortitude +93",
+          "Reflexos +93",
+          "Vontade +92",
+          "Percepção +85"
+        ],
+        "ataques": [
+          {
+            "nome": "Toque Ancestral",
+            "detalhe": "+93, 12d10+40 fogo"
+          },
+          {
+            "nome": "Coluna de Fogo",
+            "detalhe": "+93, 12d10+40 fogo, em área grande"
+          }
+        ],
+        "habilidades": [
+          "Calor Insuportável (quem termina o turno em alcance Médio sofre dano de fogo igual a um décimo do golpe dele)",
+          "Explosão ao Cair (ao chegar a 0 PV, criaturas em alcance Longo fazem Reflexos DT 85; sofrem o dano de um ataque dele, metade em sucesso)"
+        ],
+        "loot": [
+          "Cinza Ancestral (560 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "elemental",
+        "estagio": "Ancestral",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "elemental-de-gelo-ancestral",
+      "titulo": "Elemental de Gelo Ancestral",
+      "conteudo": {
+        "descricao": "O inverno que decidiu ficar. Onde ele para, o tempo passa mais devagar, e as pegadas dele continuam congeladas por séculos depois que ele se foi.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Elemental",
+        "pv": 4520,
+        "nivel": 165,
+        "vd": 165,
+        "defesa": 93,
+        "iniciativa": 100,
+        "deslocamento": "30m",
+        "mana": 500,
+        "estamina": 330,
+        "atributos": {
+          "forca": 8,
+          "agilidade": 8,
+          "vigor": 8,
+          "presenca": 7,
+          "intelecto": 7
+        },
+        "pericias": [
+          "Luta +108",
+          "Fortitude +108",
+          "Reflexos +108",
+          "Vontade +107",
+          "Percepção +100"
+        ],
+        "ataques": [
+          {
+            "nome": "Toque Ancestral",
+            "detalhe": "+108, 13d10+52 gelo"
+          },
+          {
+            "nome": "Nevasca Ancestral",
+            "detalhe": "+108, 13d10+52 gelo, em área grande"
+          }
+        ],
+        "habilidades": [
+          "Inverno Longo (no fim de cada rodada, criaturas em alcance Longo fazem Fortitude DT 97 ou perdem 2 pontos de Estamina)"
+        ],
+        "loot": [
+          "Cristal de Inverno Ancestral (660 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "elemental",
+        "estagio": "Ancestral",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "dragao-jovem",
+      "titulo": "Dragão Jovem",
+      "conteudo": {
+        "descricao": "Um dragão que já não cabe na caverna onde nasceu e ainda não aprendeu a ter paciência. Ataca primeiro e pergunta depois, e o fogo dele sai mais largo do que ele sabe controlar.",
+        "preco": {
+          "Solares": 500
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "raridade": "epico",
+        "categoria": "Monstro",
+        "pv": 810,
+        "nivel": 30,
+        "vd": 30,
+        "defesa": 24,
+        "iniciativa": 29,
+        "deslocamento": "18m (Voo)",
+        "mana": 95,
+        "estamina": 60,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +31",
+          "Fortitude +31",
+          "Reflexos +31",
+          "Vontade +30",
+          "Percepção +23"
+        ],
+        "ataques": [
+          {
+            "nome": "Sopro Largo",
+            "detalhe": "+31, 3d10+11 fogo, em cone"
+          },
+          {
+            "nome": "Garras e Mordida",
+            "detalhe": "+31, 3d10+11 cortante"
+          }
+        ],
+        "habilidades": [
+          "Sopro Largo (1/cena: cone de 9m; Reflexos DT 30, metade do dano em sucesso)"
+        ],
+        "loot": [
+          "Escama de Dragão Jovem (120 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 3,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Jovem"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "dragao-adulto",
+      "titulo": "Dragão Adulto",
+      "conteudo": {
+        "descricao": "Um dragão no auge, com território, tesouro e memória. Já perdeu a pressa: escolhe quando lutar, e quem entra no território dele costuma ser convidado a sair antes.",
+        "preco": {
+          "Solares": 690
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "epico",
+        "categoria": "Monstro",
+        "pv": 1040,
+        "nivel": 35,
+        "vd": 35,
+        "defesa": 27,
+        "iniciativa": 31,
+        "deslocamento": "18m (Voo)",
+        "mana": 110,
+        "estamina": 70,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +33",
+          "Fortitude +33",
+          "Reflexos +33",
+          "Vontade +32",
+          "Percepção +25"
+        ],
+        "ataques": [
+          {
+            "nome": "Sopro do Território",
+            "detalhe": "+33, 3d10+16 fogo, em cone"
+          },
+          {
+            "nome": "Garras e Mordida",
+            "detalhe": "+33, 3d10+16 cortante"
+          }
+        ],
+        "habilidades": [
+          "Presença de Dragão (ao entrar em cena, cada inimigo faz Vontade DT 32 ou fica Amedrontado até o fim da rodada; uma vez por criatura por cena)"
+        ],
+        "loot": [
+          "Escama de Dragão Adulto (140 Solares)",
+          "Dente de Dragão (140 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Adulto"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "dragao-primordial",
+      "titulo": "Dragão Primordial",
+      "conteudo": {
+        "descricao": "O que os anciões chamam de avô. Nasceu antes de o fogo ter nome, e o sopro dele leva o nome que ele quiser. Poucos o viram, e os que viram não discutem geografia com ele.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 1595,
+        "nivel": 60,
+        "vd": 60,
+        "defesa": 40,
+        "iniciativa": 46,
+        "deslocamento": "24m (Voo)",
+        "mana": 185,
+        "estamina": 120,
+        "atributos": {
+          "forca": 6,
+          "agilidade": 6,
+          "vigor": 6,
+          "presenca": 5,
+          "intelecto": 5
+        },
+        "pericias": [
+          "Luta +50",
+          "Fortitude +50",
+          "Reflexos +50",
+          "Vontade +49",
+          "Percepção +42"
+        ],
+        "ataques": [
+          {
+            "nome": "Sopro Primordial",
+            "detalhe": "+50, 6d10+18 fogo, em área grande"
+          },
+          {
+            "nome": "Garras e Mordida",
+            "detalhe": "+50, 6d10+18 cortante"
+          }
+        ],
+        "habilidades": [
+          "Pele Antiga (reduz em 5 o dano físico e mágico de cada golpe)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Escama Primordial (240 Solares)",
+          "Dente de Dragão (240 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Primordial",
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "dragao-ancestral",
+      "titulo": "Dragão Ancestral",
+      "conteudo": {
+        "descricao": "Um dragão que já foi ancião, primordial e lenda, e continua crescendo. O território dele é um continente, e a paciência dele tem o tamanho do território.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 3715,
+        "nivel": 110,
+        "vd": 110,
+        "defesa": 66,
+        "iniciativa": 72,
+        "deslocamento": "30m (Voo)",
+        "mana": 335,
+        "estamina": 220,
+        "atributos": {
+          "forca": 7,
+          "agilidade": 7,
+          "vigor": 7,
+          "presenca": 6,
+          "intelecto": 6
+        },
+        "pericias": [
+          "Luta +80",
+          "Fortitude +80",
+          "Reflexos +80",
+          "Vontade +79",
+          "Percepção +72"
+        ],
+        "ataques": [
+          {
+            "nome": "Sopro Ancestral",
+            "detalhe": "+80, 14d10+48 fogo, em área grande"
+          },
+          {
+            "nome": "Garras e Mordida",
+            "detalhe": "+80, 14d10+48 cortante"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 20d10+77, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Pele Ancestral (reduz em 8 o dano físico e mágico de cada golpe)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Escama Ancestral (440 Solares)",
+          "Dente de Dragão (440 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "familia": "dragao",
+        "estagio": "Ancestral",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "tempestade-viva",
+      "titulo": "Tempestade Viva",
+      "conteudo": {
+        "descricao": "Uma tempestade com vontade, memória e ressentimento. Segue quem a incomodou por muitas léguas, e a chuva chega antes dela como aviso.",
+        "preco": {
+          "Solares": 90
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "raridade": "raro",
+        "categoria": "Espírito",
+        "pv": 810,
+        "nivel": 29,
+        "vd": 29,
+        "defesa": 23,
+        "iniciativa": 28,
+        "deslocamento": "18m (Voo)",
+        "mana": 92,
+        "estamina": 58,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +30",
+          "Fortitude +30",
+          "Reflexos +30",
+          "Vontade +29",
+          "Percepção +22"
+        ],
+        "ataques": [
+          {
+            "nome": "Descarga",
+            "detalhe": "+30, 3d10+10 raio"
+          },
+          {
+            "nome": "Rajada Cortante",
+            "detalhe": "+30, 3d10+10 ar, à distância"
+          }
+        ],
+        "habilidades": [
+          "Ventania (criaturas em alcance Curto fazem Fortitude DT 29 no começo de cada rodada ou são empurradas 3 m)"
+        ],
+        "loot": [
+          "Faísca Engarrafada (120 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "espirito",
+        "estagio": "Tormenta",
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "arcanjo",
+      "titulo": "Arcanjo",
+      "conteudo": {
+        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que ele traz não pede licença, e o que ele decide proteger fica protegido.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Espírito",
+        "pv": 2825,
+        "nivel": 85,
+        "vd": 85,
+        "defesa": 53,
+        "iniciativa": 58,
+        "deslocamento": "24m (Voo)",
+        "mana": 260,
+        "estamina": 170,
+        "atributos": {
+          "forca": 6,
+          "agilidade": 6,
+          "vigor": 6,
+          "presenca": 5,
+          "intelecto": 5
+        },
+        "pericias": [
+          "Luta +64",
+          "Fortitude +64",
+          "Reflexos +64",
+          "Vontade +63",
+          "Percepção +56"
+        ],
+        "ataques": [
+          {
+            "nome": "Espada de Luz",
+            "detalhe": "+64, 11d10+41 luz"
+          },
+          {
+            "nome": "Sentença Radiante",
+            "detalhe": "+64, 11d10+41 luz, em área"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 16d10+63, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Aura Sagrada (aliados a até 9 m têm vantagem em testes de Vontade; inimigos Mortos-Vivos e Demoníacos têm desvantagem em ataques contra ele)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Pena de Arcanjo (340 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "familia": "espirito",
+        "estagio": "Arcanjo",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "serafim",
+      "titulo": "Serafim",
+      "conteudo": {
+        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Espírito",
+        "pv": 5140,
+        "nivel": 150,
+        "vd": 150,
+        "defesa": 86,
+        "iniciativa": 93,
+        "deslocamento": "30m (Voo)",
+        "mana": 455,
+        "estamina": 300,
+        "atributos": {
+          "forca": 8,
+          "agilidade": 8,
+          "vigor": 8,
+          "presenca": 7,
+          "intelecto": 7
+        },
+        "pericias": [
+          "Luta +103",
+          "Fortitude +103",
+          "Reflexos +103",
+          "Vontade +102",
+          "Percepção +95"
+        ],
+        "ataques": [
+          {
+            "nome": "Lâmina do Cântico",
+            "detalhe": "+103, 18d10+62 luz"
+          },
+          {
+            "nome": "Cântico Devastador",
+            "detalhe": "+103, 18d10+62 luz, em área grande"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 26d10+98, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Cântico Constante (no começo de cada rodada, aliados a até 18 m recuperam Vida igual a um vigésimo do golpe dele; inimigos sofrem esse valor em luz)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Pena de Serafim (600 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "familia": "espirito",
+        "estagio": "Serafim",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "lobo-atroz",
+      "titulo": "Lobo Atroz",
+      "conteudo": {
+        "descricao": "Um lobo que cresceu o dobro do que devia, comendo o que a matilha comum não ousa. Caça sozinho ou com dois ou três iguais a ele, e reconhece quem está ferido antes de o ferido saber.",
+        "preco": {
+          "Solares": 41
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "raridade": "incomum",
+        "categoria": "Animal",
+        "pv": 400,
+        "nivel": 15,
+        "vd": 15,
+        "defesa": 16,
+        "iniciativa": 20,
+        "deslocamento": "12m",
+        "mana": 50,
+        "estamina": 30,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +18",
+          "Fortitude +18",
+          "Reflexos +18",
+          "Vontade +17",
+          "Percepção +10"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordida",
+            "detalhe": "+18, 2d8+4 perfurante"
+          },
+          {
+            "nome": "Investida",
+            "detalhe": "+18, 2d8+4 impacto"
+          }
+        ],
+        "habilidades": [
+          "Faro de Ferida (tem vantagem em ataques contra quem está abaixo da metade da Vida)"
+        ],
+        "loot": [
+          "Presa de Lobo Atroz (60 Solares)",
+          "Pele de Lobo Atroz (60 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "cao-e-lobo",
+        "estagio": "Atroz"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "lobo-alfa",
+      "titulo": "Lobo Alfa",
+      "conteudo": {
+        "descricao": "O lobo que a matilha inteira acompanha sem que ele precise levantar a voz. Onde ele ataca, os outros já estão chegando pelo lado.",
+        "preco": {
+          "Solares": 150
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "raridade": "raro",
+        "categoria": "Animal",
+        "pv": 810,
+        "nivel": 25,
+        "vd": 25,
+        "defesa": 21,
+        "iniciativa": 26,
+        "deslocamento": "15m",
+        "mana": 80,
+        "estamina": 50,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +26",
+          "Fortitude +26",
+          "Reflexos +26",
+          "Vontade +25",
+          "Percepção +18"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordida",
+            "detalhe": "+26, 3d10+7 perfurante"
+          },
+          {
+            "nome": "Investida do Alfa",
+            "detalhe": "+26, 3d10+7 impacto"
+          }
+        ],
+        "habilidades": [
+          "Uivo do Bando (1/cena, Ação Padrão: chama 1d4 Lobos Cinzentos, que entram no começo da rodada seguinte)"
+        ],
+        "loot": [
+          "Presa de Lobo Alfa (100 Solares)",
+          "Pele de Lobo Alfa (100 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "cao-e-lobo",
+        "estagio": "Alfa"
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "serpente-marinha-ancestral",
+      "titulo": "Serpente Marinha Ancestral",
+      "conteudo": {
+        "descricao": "Um corpo comprido demais para caber num único horizonte. Os marinheiros dão nomes diferentes a ela em cada porto, e ela atende por todos.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Monstro",
+        "pv": 1860,
+        "nivel": 70,
+        "vd": 70,
+        "defesa": 45,
+        "iniciativa": 51,
+        "deslocamento": "24m (Nado)",
+        "mana": 215,
+        "estamina": 140,
+        "atributos": {
+          "forca": 6,
+          "agilidade": 6,
+          "vigor": 6,
+          "presenca": 5,
+          "intelecto": 5
+        },
+        "pericias": [
+          "Luta +55",
+          "Fortitude +55",
+          "Reflexos +55",
+          "Vontade +54",
+          "Percepção +47"
+        ],
+        "ataques": [
+          {
+            "nome": "Constrição Oceânica",
+            "detalhe": "+55, 6d10+25 impacto"
+          },
+          {
+            "nome": "Jato de Maré",
+            "detalhe": "+55, 6d10+25 água, em área"
+          }
+        ],
+        "habilidades": [
+          "Maré Viva (criaturas a bordo de embarcações a até 30 m fazem Reflexos DT 50 ou caem na água)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Escama Oceânica (280 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "mar",
+        "estagio": "Ancestral",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "maremoto-que-anda",
+      "titulo": "O Maremoto que Anda",
+      "conteudo": {
+        "descricao": "Uma onda que aprendeu a ir para onde quer. Passa por cima de cais, faróis e cidades pequenas, e volta para o mar como quem termina uma tarefa.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Elemental",
+        "pv": 3510,
+        "nivel": 130,
+        "vd": 130,
+        "defesa": 76,
+        "iniciativa": 82,
+        "deslocamento": "30m (Nado)",
+        "mana": 395,
+        "estamina": 260,
+        "atributos": {
+          "forca": 7,
+          "agilidade": 7,
+          "vigor": 7,
+          "presenca": 6,
+          "intelecto": 6
+        },
+        "pericias": [
+          "Luta +88",
+          "Fortitude +88",
+          "Reflexos +88",
+          "Vontade +87",
+          "Percepção +80"
+        ],
+        "ataques": [
+          {
+            "nome": "Muralha de Água",
+            "detalhe": "+88, 11d10+40 água"
+          },
+          {
+            "nome": "Onda Devastadora",
+            "detalhe": "+88, 11d10+40 água, em área imensa"
+          }
+        ],
+        "habilidades": [
+          "Maré Viva (criaturas a até 30 m fazem Reflexos DT 80 ou são arrastadas 9 m)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Sal do Maremoto (520 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "mar",
+        "estagio": "Maremoto",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "rato-de-esgoto",
+      "titulo": "Rato de Esgoto",
+      "conteudo": {
+        "descricao": "Do tamanho de um gato, com dentes amarelos e nenhuma pressa de fugir. Vive onde a cidade esquece o que joga fora, e ataca quem chega perto do ninho como se o ninho fosse dele.",
+        "preco": {
+          "Lunaris": 540
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "raridade": "comum",
+        "categoria": "Animal",
+        "pv": 70,
+        "nivel": 1,
+        "vd": 1,
+        "defesa": 9,
+        "iniciativa": 12,
+        "deslocamento": "9m",
+        "mana": 8,
+        "estamina": 2,
+        "atributos": {
+          "forca": 2,
+          "agilidade": 2,
+          "vigor": 2,
+          "presenca": 1,
+          "intelecto": 1
+        },
+        "pericias": [
+          "Luta +4",
+          "Fortitude +4",
+          "Reflexos +4",
+          "Vontade +3",
+          "Percepção -4"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordida Suja",
+            "detalhe": "+4, 1d4+1 perfurante"
+          },
+          {
+            "nome": "Arranhão",
+            "detalhe": "+4, 1d4+1 cortante"
+          }
+        ],
+        "habilidades": [
+          "Doença do Esgoto (quem sofre a mordida faz Fortitude DT 15 ou fica Enjoado por 1 hora)"
+        ],
+        "loot": [
+          "Dente de Rato (10 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 1,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "roedor",
+        "estagio": "Comum",
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "rato-gigante",
+      "titulo": "Rato Gigante",
+      "conteudo": {
+        "descricao": "Um rato que passou tempo demais perto de esgoto encantado e cresceu até a altura de um cão de guarda. Caça em grupo, e a fome dele já passou dos restos.",
+        "preco": {
+          "Lunaris": 1200
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "raridade": "comum",
+        "categoria": "Animal",
+        "pv": 150,
+        "nivel": 7,
+        "vd": 7,
+        "defesa": 12,
+        "iniciativa": 16,
+        "deslocamento": "9m",
+        "mana": 26,
+        "estamina": 14,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +12",
+          "Fortitude +12",
+          "Reflexos +12",
+          "Vontade +11",
+          "Percepção +4"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordida Feroz",
+            "detalhe": "+12, 1d6+4 perfurante"
+          },
+          {
+            "nome": "Investida",
+            "detalhe": "+12, 1d6+4 impacto"
+          }
+        ],
+        "habilidades": [
+          "Bando (tem vantagem em ataques contra alvo que já esteja adjacente a outro Roedor)"
+        ],
+        "loot": [
+          "Pelagem Suja (30 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 1,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "roedor",
+        "estagio": "Gigante",
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "rei-dos-ratos",
+      "titulo": "Rei dos Ratos",
+      "conteudo": {
+        "descricao": "Um nó de corpos presos pelas caudas, que anda como uma coisa só e comanda o esgoto inteiro. Cada boca dele sabe o nome do que come.",
+        "preco": {
+          "Lunaris": 1600
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "raridade": "incomum",
+        "categoria": "Animal",
+        "pv": 500,
+        "nivel": 17,
+        "vd": 17,
+        "defesa": 17,
+        "iniciativa": 21,
+        "deslocamento": "9m",
+        "mana": 56,
+        "estamina": 34,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +21",
+          "Fortitude +21",
+          "Reflexos +21",
+          "Vontade +20",
+          "Percepção +13"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordidas Coletivas",
+            "detalhe": "+21, 2d10+10 perfurante"
+          },
+          {
+            "nome": "Maré de Corpos",
+            "detalhe": "+21, 2d10+10 impacto"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 3d10+15, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Chamado do Esgoto (1/cena, Ação Padrão: 2d4 Ratos Gigantes entram no começo da rodada seguinte)"
+        ],
+        "loot": [
+          "Cauda Entrelaçada (70 Solares)",
+          "Dente de Rei (70 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "familia": "roedor",
+        "estagio": "Rei",
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "salteador-de-estrada",
+      "titulo": "Salteador de Estrada",
+      "conteudo": {
+        "descricao": "Gente que trocou o arado por uma faca e um pedaço de caminho. Emboscam carroças, cobram o que acham justo e desistem fácil de quem mostra que não vai pagar.",
+        "preco": {
+          "Lunaris": 540
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "raridade": "comum",
+        "categoria": "Humanoide",
+        "pv": 70,
+        "nivel": 2,
+        "vd": 2,
+        "defesa": 10,
+        "iniciativa": 13,
+        "deslocamento": "9m",
+        "mana": 11,
+        "estamina": 4,
+        "atributos": {
+          "forca": 2,
+          "agilidade": 2,
+          "vigor": 2,
+          "presenca": 1,
+          "intelecto": 1
+        },
+        "pericias": [
+          "Luta +5",
+          "Fortitude +5",
+          "Reflexos +5",
+          "Vontade +4",
+          "Percepção -3"
+        ],
+        "ataques": [
+          {
+            "nome": "Golpe de Faca",
+            "detalhe": "+5, 1d4+1 cortante"
+          },
+          {
+            "nome": "Arremesso de Pedra",
+            "detalhe": "+5, 1d4+1 impacto"
+          }
+        ],
+        "habilidades": [
+          "Bolsa Cortada (ao acertar, pode trocar o dano por roubar um item pequeno do alvo; Furtividade contra a Percepção do alvo)"
+        ],
+        "loot": [
+          "Bolsa Surrada (10 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 1,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "salteador",
+        "estagio": "Salteador",
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "capitao-de-bando",
+      "titulo": "Capitão de Bando",
+      "conteudo": {
+        "descricao": "Quem manda no bando porque foi o último a sobrar depois das brigas. Conhece cada curva do caminho e já sabe que lado da carroça guarda o dinheiro.",
+        "preco": {
+          "Lunaris": 1350
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "raridade": "incomum",
+        "categoria": "Humanoide",
+        "pv": 165,
+        "nivel": 12,
+        "vd": 12,
+        "defesa": 15,
+        "iniciativa": 19,
+        "deslocamento": "9m",
+        "mana": 41,
+        "estamina": 24,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +15",
+          "Fortitude +15",
+          "Reflexos +15",
+          "Vontade +14",
+          "Percepção +7"
+        ],
+        "ataques": [
+          {
+            "nome": "Espada Curta",
+            "detalhe": "+15, 2d10+5 cortante"
+          },
+          {
+            "nome": "Pistola Enferrujada",
+            "detalhe": "+15, 2d10+5 perfurante"
+          }
+        ],
+        "habilidades": [
+          "Ordem de Ataque (Reação: um aliado a até 9 m faz um ataque imediato)"
+        ],
+        "loot": [
+          "Insígnia do Bando (50 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2,
+        "papel": "elite",
+        "geradoPorFamilia": true,
+        "familia": "salteador",
+        "estagio": "Capitão",
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "senhor-da-estrada",
+      "titulo": "Senhor da Estrada",
+      "conteudo": {
+        "descricao": "Dono de um trecho inteiro de estrada, com pedágio, vigias e uma história que os viajantes contam baixinho. Perdeu a paciência com o mundo há muito tempo e cobra por isso.",
+        "preco": {
+          "Solares": 105
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "raridade": "raro",
+        "categoria": "Humanoide",
+        "pv": 510,
+        "nivel": 24,
+        "vd": 24,
+        "defesa": 21,
+        "iniciativa": 26,
+        "deslocamento": "12m",
+        "mana": 77,
+        "estamina": 48,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +28",
+          "Fortitude +28",
+          "Reflexos +28",
+          "Vontade +27",
+          "Percepção +20"
+        ],
+        "ataques": [
+          {
+            "nome": "Lâmina do Pedágio",
+            "detalhe": "+28, 3d10+14 cortante"
+          },
+          {
+            "nome": "Tiro de Aviso",
+            "detalhe": "+28, 3d10+14 perfurante"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 5d10+18, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Pedágio (ao entrar em cena, quem não pagar faz Vontade DT 27 ou fica Intimidado até o fim da rodada)",
+          "Guarda Pessoal (1/cena, Ação Padrão: 1d4 Capitães de Bando chegam na rodada seguinte)"
+        ],
+        "loot": [
+          "Selo do Pedágio (100 Solares)",
+          "Mapa da Estrada (100 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "familia": "salteador",
+        "estagio": "Senhor",
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "ogro-de-estrada",
+      "titulo": "Ogro de Estrada",
+      "conteudo": {
+        "descricao": "Um brutamontes que aprendeu que carroça pequena vale pouco e viajante grande vale muito. Fala pouco, come muito, e chora de verdade quando perde o cajado.",
+        "preco": {
+          "Lunaris": 450
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        },
+        "raridade": "comum",
+        "categoria": "Monstro",
+        "pv": 150,
+        "nivel": 9,
+        "vd": 9,
+        "defesa": 13,
+        "iniciativa": 17,
+        "deslocamento": "9m",
+        "mana": 32,
+        "estamina": 18,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +13",
+          "Fortitude +13",
+          "Reflexos +13",
+          "Vontade +12",
+          "Percepção +5"
+        ],
+        "ataques": [
+          {
+            "nome": "Cajado Pesado",
+            "detalhe": "+13, 1d8+5 impacto"
+          },
+          {
+            "nome": "Pedra Arremessada",
+            "detalhe": "+13, 1d8+5 impacto"
+          }
+        ],
+        "habilidades": [
+          "Pancada Descuidada (quando erra um ataque, o alvo mais próximo faz Reflexos DT 19 ou é atingido por metade do dano)"
+        ],
+        "loot": [
+          "Presa de Ogro (40 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "gigante",
+        "estagio": "Ogro",
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "gigante-de-pedra",
+      "titulo": "Gigante de Pedra",
+      "conteudo": {
+        "descricao": "Vive na encosta, e de longe parece só mais uma parte da montanha. Quando se levanta, as pedras que ele escolheu como casa se levantam junto.",
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        },
+        "raridade": "raro",
+        "categoria": "Monstro",
+        "pv": 410,
+        "nivel": 21,
+        "vd": 21,
+        "defesa": 19,
+        "iniciativa": 24,
+        "deslocamento": "12m",
+        "mana": 68,
+        "estamina": 42,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +24",
+          "Fortitude +24",
+          "Reflexos +24",
+          "Vontade +23",
+          "Percepção +16"
+        ],
+        "ataques": [
+          {
+            "nome": "Punho de Pedra",
+            "detalhe": "+24, 2d10+7 impacto"
+          },
+          {
+            "nome": "Rochedo Arremessado",
+            "detalhe": "+24, 2d10+7 impacto"
+          }
+        ],
+        "habilidades": [
+          "Pele de Rocha (reduz em 3 o dano físico de cada golpe)"
+        ],
+        "loot": [
+          "Lasca de Rocha Viva (80 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "gigante",
+        "estagio": "Pedra",
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "gigante-da-tormenta",
+      "titulo": "Gigante da Tormenta",
+      "conteudo": {
+        "descricao": "Anda por cima das nuvens e desce quando a tempestade pede. O trovão vem das passadas dele, e o raio vem de onde ele aponta.",
+        "preco": {
+          "Solares": 430
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "epico",
+        "categoria": "Monstro",
+        "pv": 810,
+        "nivel": 34,
+        "vd": 34,
+        "defesa": 27,
+        "iniciativa": 31,
+        "deslocamento": "15m",
+        "mana": 107,
+        "estamina": 68,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +33",
+          "Fortitude +33",
+          "Reflexos +33",
+          "Vontade +32",
+          "Percepção +25"
+        ],
+        "ataques": [
+          {
+            "nome": "Martelo de Trovão",
+            "detalhe": "+33, 3d10+14 raio"
+          },
+          {
+            "nome": "Raio Chamado",
+            "detalhe": "+33, 3d10+14 raio, à distância"
+          }
+        ],
+        "habilidades": [
+          "Ar de Tormenta (no começo de cada rodada, criaturas a até 9 m fazem Reflexos DT 32 ou perdem 1 ponto de Estamina)"
+        ],
+        "loot": [
+          "Faísca de Tormenta (140 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "gigante",
+        "estagio": "Tormenta",
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "gigante-ancestral",
+      "titulo": "Gigante Ancestral",
+      "conteudo": {
+        "descricao": "Nasceu quando a montanha ainda estava aprendendo a ter forma. Cada passo dele muda um pedaço de mapa, e ele pergunta sempre o mesmo: por que tanta gente pequena em cima do meu chão?",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Monstro",
+        "pv": 1450,
+        "nivel": 55,
+        "vd": 55,
+        "defesa": 37,
+        "iniciativa": 42,
+        "deslocamento": "18m",
+        "mana": 170,
+        "estamina": 110,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 4,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +44",
+          "Fortitude +44",
+          "Reflexos +44",
+          "Vontade +43",
+          "Percepção +36"
+        ],
+        "ataques": [
+          {
+            "nome": "Punho do Mundo",
+            "detalhe": "+44, 5d10+21 impacto"
+          },
+          {
+            "nome": "Pedra de Montanha",
+            "detalhe": "+44, 5d10+21 impacto, em área"
+          }
+        ],
+        "habilidades": [
+          "Passo que Muda o Chão (1/rodada, Ação de Movimento: terreno em alcance Médio vira difícil; Reflexos DT 42 ou cai)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Pedra Ancestral (220 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "gigante",
+        "estagio": "Ancestral",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "hidra-de-sete-cabecas",
+      "titulo": "Hidra de Sete Cabeças",
+      "conteudo": {
+        "descricao": "Sete pescoços, sete opiniões, uma única fome. Corte um e o pescoço volta com um irmão, então a luta não se ganha por força: ganha-se por fogo, por tempo ou por sorte.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Monstro",
+        "pv": 1240,
+        "nivel": 47,
+        "vd": 47,
+        "defesa": 33,
+        "iniciativa": 38,
+        "deslocamento": "12m",
+        "mana": 146,
+        "estamina": 94,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 4,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +40",
+          "Fortitude +40",
+          "Reflexos +40",
+          "Vontade +39",
+          "Percepção +32"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordidas Múltiplas",
+            "detalhe": "+40, 5d10+16 perfurante"
+          },
+          {
+            "nome": "Cuspe Ácido",
+            "detalhe": "+40, 5d10+16 ácido"
+          }
+        ],
+        "habilidades": [
+          "Cabeças que Voltam (no fim de cada rodada recupera Vida igual a um décimo do golpe dela, a menos que tenha sofrido fogo ou ácido na rodada)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Presa de Hidra (190 Solares)",
+          "Sangue de Hidra (190 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "hidra",
+        "estagio": "Sete Cabeças",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "hidra-primordial",
+      "titulo": "Hidra Primordial",
+      "conteudo": {
+        "descricao": "Uma hidra tão antiga que cada cabeça dela já foi uma hidra inteira. Ocupa um lago sem esforço, e o lago não ousa esvaziar.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Monstro",
+        "pv": 2660,
+        "nivel": 80,
+        "vd": 80,
+        "defesa": 50,
+        "iniciativa": 56,
+        "deslocamento": "15m",
+        "mana": 245,
+        "estamina": 160,
+        "atributos": {
+          "forca": 6,
+          "agilidade": 6,
+          "vigor": 6,
+          "presenca": 5,
+          "intelecto": 5
+        },
+        "pericias": [
+          "Luta +62",
+          "Fortitude +62",
+          "Reflexos +62",
+          "Vontade +61",
+          "Percepção +54"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordidas de Muitas Cabeças",
+            "detalhe": "+62, 10d10+39 perfurante"
+          },
+          {
+            "nome": "Torrente Ácida",
+            "detalhe": "+62, 10d10+39 ácido, em área"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 15d10+59, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Cabeças que Voltam (no fim de cada rodada recupera Vida igual a um décimo do golpe dela, a menos que tenha sofrido fogo ou ácido na rodada)",
+          "Pescoços em Todo Lugar (1/rodada, Reação: ataca quem entrar em alcance Curto)"
+        ],
+        "loot": [
+          "Cabeça Primordial (320 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "familia": "hidra",
+        "estagio": "Primordial",
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "behemoth-anciao",
+      "titulo": "Behemoth Ancião",
+      "conteudo": {
+        "descricao": "O maior animal que já pisou nas planícies, e ele sabe. Quando corre, o chão faz eco por três dias, e as manadas dividem o caminho antes que ele peça.",
+        "preco": {
+          "Solares": 800
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "epico",
+        "categoria": "Monstro",
+        "pv": 1160,
+        "nivel": 44,
+        "vd": 44,
+        "defesa": 32,
+        "iniciativa": 37,
+        "deslocamento": "15m",
+        "mana": 137,
+        "estamina": 88,
+        "atributos": {
+          "forca": 5,
+          "agilidade": 5,
+          "vigor": 5,
+          "presenca": 4,
+          "intelecto": 4
+        },
+        "pericias": [
+          "Luta +39",
+          "Fortitude +39",
+          "Reflexos +39",
+          "Vontade +38",
+          "Percepção +31"
+        ],
+        "ataques": [
+          {
+            "nome": "Chifrada Devastadora",
+            "detalhe": "+39, 4d10+17 perfurante"
+          },
+          {
+            "nome": "Pisoteio",
+            "detalhe": "+39, 4d10+17 impacto"
+          }
+        ],
+        "habilidades": [
+          "Estouro da Manada (1/cena, Ação Padrão: investida em linha de 18 m; criaturas no caminho fazem Reflexos DT 37 ou sofrem o dano de um ataque e caem)"
+        ],
+        "loot": [
+          "Chifre de Behemoth (180 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "familia": "behemoth",
+        "estagio": "Ancião",
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "dragao-do-fim-dos-tempos",
+      "titulo": "O Dragão do Fim dos Tempos",
+      "conteudo": {
+        "descricao": "Diz a lenda que espera o último dia de tudo, e que o sopro dele é a última coisa que o mundo conhece. Quem duvida da lenda nunca chegou perto das asas dele.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 8690,
+        "nivel": 250,
+        "vd": 250,
+        "defesa": 137,
+        "iniciativa": 144,
+        "deslocamento": "36m (Voo)",
+        "mana": 755,
+        "estamina": 500,
+        "atributos": {
+          "forca": 9,
+          "agilidade": 9,
+          "vigor": 9,
+          "presenca": 8,
+          "intelecto": 8
+        },
+        "pericias": [
+          "Luta +156",
+          "Fortitude +156",
+          "Reflexos +156",
+          "Vontade +155",
+          "Percepção +148"
+        ],
+        "ataques": [
+          {
+            "nome": "Sopro do Último Dia",
+            "detalhe": "+156, 27d10+104 fogo, em área imensa"
+          },
+          {
+            "nome": "Garras do Fim",
+            "detalhe": "+156, 27d10+104 cortante"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 41d10+153, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Pele do Último Dia (reduz em 12 o dano físico e mágico de cada golpe)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Escama do Último Dia (1000 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "espantalho-vivo",
+      "titulo": "Espantalho Vivo",
+      "conteudo": {
+        "descricao": "Palha, pano e uma ideia fixa: proteger uma plantação que já não existe. Ninguém sabe quem o animou, e ele não pergunta.",
+        "preco": {
+          "Lunaris": 1050
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        },
+        "raridade": "comum",
+        "categoria": "Constructo",
+        "pv": 265,
+        "nivel": 11,
+        "vd": 11,
+        "defesa": 14,
+        "iniciativa": 18,
+        "deslocamento": "9m",
+        "mana": 38,
+        "estamina": 22,
+        "atributos": {
+          "forca": 3,
+          "agilidade": 3,
+          "vigor": 3,
+          "presenca": 2,
+          "intelecto": 2
+        },
+        "pericias": [
+          "Luta +14",
+          "Fortitude +14",
+          "Reflexos +14",
+          "Vontade +13",
+          "Percepção +6"
+        ],
+        "ataques": [
+          {
+            "nome": "Golpe de Foice",
+            "detalhe": "+14, 1d8+6 cortante"
+          },
+          {
+            "nome": "Chuva de Corvos",
+            "detalhe": "+14, 1d8+6 perfurante"
+          }
+        ],
+        "habilidades": [
+          "Corvos do Campo (1/cena, Ação Padrão: criaturas a até 6 m fazem Reflexos DT 20 ou ficam Cegas até o fim da rodada)"
+        ],
+        "loot": [
+          "Palha Encantada (40 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 2,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "gorgona",
+      "titulo": "Górgona",
+      "conteudo": {
+        "descricao": "Uma mulher de cabelos de serpente que nunca pediu o olhar que carrega. Vive longe das estradas, e a maior parte das estátuas do caminho conta a mesma história.",
+        "preco": {
+          "Solares": 105
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        },
+        "raridade": "raro",
+        "categoria": "Monstro",
+        "pv": 410,
+        "nivel": 24,
+        "vd": 24,
+        "defesa": 21,
+        "iniciativa": 26,
+        "deslocamento": "12m",
+        "mana": 77,
+        "estamina": 48,
+        "atributos": {
+          "forca": 4,
+          "agilidade": 4,
+          "vigor": 4,
+          "presenca": 3,
+          "intelecto": 3
+        },
+        "pericias": [
+          "Luta +26",
+          "Fortitude +26",
+          "Reflexos +26",
+          "Vontade +25",
+          "Percepção +18"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordida de Serpente",
+            "detalhe": "+26, 2d10+10 perfurante"
+          },
+          {
+            "nome": "Flecha Curta",
+            "detalhe": "+26, 2d10+10 perfurante"
+          }
+        ],
+        "habilidades": [
+          "Olhar de Pedra (Ação Padrão, alcance Médio: Fortitude DT 27 ou o alvo fica Lento; se falhar de novo na rodada seguinte, fica Petrificado até o fim da cena)"
+        ],
+        "loot": [
+          "Serpente Petrificada (100 Solares)"
+        ],
+        "classe": "Criatura",
+        "nivelMinimoLoja": 3,
+        "papel": "solo",
+        "geradoPorFamilia": true,
+        "disponivelNaLoja": false
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "cavaleiro-da-ultima-hora",
+      "titulo": "O Cavaleiro da Última Hora",
+      "conteudo": {
+        "descricao": "Chega sempre um instante depois de tudo acabar, e é isso que o torna terrível: ele decide o que a última hora significou. Os que sobreviveram a ele evitam relógios.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Morto-Vivo",
+        "pv": 3040,
+        "nivel": 90,
+        "vd": 90,
+        "defesa": 56,
+        "iniciativa": 62,
+        "deslocamento": "18m",
+        "mana": 275,
+        "estamina": 180,
+        "atributos": {
+          "forca": 7,
+          "agilidade": 7,
+          "vigor": 7,
+          "presenca": 6,
+          "intelecto": 6
+        },
+        "pericias": [
+          "Luta +68",
+          "Fortitude +68",
+          "Reflexos +68",
+          "Vontade +67",
+          "Percepção +60"
+        ],
+        "ataques": [
+          {
+            "nome": "Lâmina de Ponteiro",
+            "detalhe": "+68, 11d10+45 cortante"
+          },
+          {
+            "nome": "Badalada",
+            "detalhe": "+68, 11d10+45 Vazio, em área"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 17d10+65, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT 60; em falha, perde 3d6 de Sanidade e fica Amedrontado)",
+          "Hora Marcada (ao entrar em cena, escolhe uma criatura: ela sofre desvantagem em todos os testes até o fim da cena, ou até ele cair)",
+          "Sinais (relógios que batem uma hora que ninguém ouviu, e um cavalo que não deixa pegadas)"
+        ],
+        "loot": [
+          "Ponteiro Quebrado (360 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "serpente-do-mundo",
+      "titulo": "A Serpente que Abraça o Mundo",
+      "conteudo": {
+        "descricao": "Um corpo tão longo que a própria cauda passa despercebida, e a boca que a segura nunca a soltou. Quando afrouxa o abraço, as marés respondem.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 3375,
+        "nivel": 100,
+        "vd": 100,
+        "defesa": 61,
+        "iniciativa": 67,
+        "deslocamento": "30m (Nado)",
+        "mana": 305,
+        "estamina": 200,
+        "atributos": {
+          "forca": 7,
+          "agilidade": 7,
+          "vigor": 7,
+          "presenca": 6,
+          "intelecto": 6
+        },
+        "pericias": [
+          "Luta +75",
+          "Fortitude +75",
+          "Reflexos +75",
+          "Vontade +74",
+          "Percepção +67"
+        ],
+        "ataques": [
+          {
+            "nome": "Constrição do Mundo",
+            "detalhe": "+75, 13d10+45 impacto"
+          },
+          {
+            "nome": "Maré Ancestral",
+            "detalhe": "+75, 13d10+45 água, em área imensa"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 19d10+70, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Abraço do Mundo (Ação Padrão: ataque de agarrar; alvo agarrado não pode se afastar e sofre o dano do ataque no começo de cada turno dele)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Escama do Mundo (400 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "come-tempo",
+      "titulo": "O Que Come o Tempo",
+      "conteudo": {
+        "descricao": "Nunca é visto duas vezes do mesmo jeito. O que ele deixou para trás são relógios parados em horas diferentes e pessoas com idade demais ou de menos.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Aberração",
+        "pv": 5140,
+        "nivel": 150,
+        "vd": 150,
+        "defesa": 86,
+        "iniciativa": 93,
+        "deslocamento": "24m",
+        "mana": 455,
+        "estamina": 300,
+        "atributos": {
+          "forca": 8,
+          "agilidade": 8,
+          "vigor": 8,
+          "presenca": 7,
+          "intelecto": 7
+        },
+        "pericias": [
+          "Luta +103",
+          "Fortitude +103",
+          "Reflexos +103",
+          "Vontade +102",
+          "Percepção +95"
+        ],
+        "ataques": [
+          {
+            "nome": "Mordida de Segundos",
+            "detalhe": "+103, 18d10+62 Vazio"
+          },
+          {
+            "nome": "Rasgo de Instantes",
+            "detalhe": "+103, 18d10+62 Vazio, em área"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 26d10+98, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT 90; em falha, perde 4d6 de Sanidade e fica Amedrontado)",
+          "Tempo Roubado (uma vez por rodada, Reação: rouba a ação de um alvo em alcance Médio; Vontade DT 90 nega)",
+          "Sinais (ecos que chegam antes do som e sombras que andam mais devagar que o dono)",
+          "Como Evitar (ele perde o interesse em quem age fora de ordem: a cena é de fuga, ou de quebrar o ritmo que ele espera)"
+        ],
+        "loot": [
+          "Relógio Sem Ponteiros (600 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "fim-que-anda",
+      "titulo": "O Fim Que Anda",
+      "conteudo": {
+        "descricao": "Uma figura sem pressa, com o passo de quem já sabe como cada caminho termina. Aparece onde tudo já estava terminando, e o que sobra é silêncio educado.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 6850,
+        "nivel": 200,
+        "vd": 200,
+        "defesa": 112,
+        "iniciativa": 118,
+        "deslocamento": "24m",
+        "mana": 605,
+        "estamina": 400,
+        "atributos": {
+          "forca": 8,
+          "agilidade": 8,
+          "vigor": 8,
+          "presenca": 7,
+          "intelecto": 7
+        },
+        "pericias": [
+          "Luta +128",
+          "Fortitude +128",
+          "Reflexos +128",
+          "Vontade +127",
+          "Percepção +120"
+        ],
+        "ataques": [
+          {
+            "nome": "Toque do Encerramento",
+            "detalhe": "+128, 23d10+81 Vazio"
+          },
+          {
+            "nome": "Sentença Final",
+            "detalhe": "+128, 23d10+81 Vazio, em área grande"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 34d10+124, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT 115; em falha, perde 5d6 de Sanidade e fica Amedrontado)",
+          "Sinais (velas que se apagam sozinhas e um silêncio educado que se espalha primeiro pelos cantos)",
+          "Como Evitar (ele só encerra o que já começou a acabar: quem recusa o fim com um ato deliberado, como salvar alguém ou acender a luz, fica fora do alcance por uma rodada)"
+        ],
+        "loot": [
+          "Poeira do Fim (800 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
+      }
+    },
+    {
+      "tipo": "monstro",
+      "id": "titan-que-sustenta-o-ceu",
+      "titulo": "O Titã que Sustenta o Céu",
+      "conteudo": {
+        "descricao": "Carrega o céu nos ombros desde antes de haver quem olhasse para cima. Quando muda de posição, as estações mudam de lugar, e o que ele diz em voz baixa vira lei nos vales.",
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        },
+        "raridade": "lendario",
+        "categoria": "Lendário",
+        "pv": 14200,
+        "nivel": 400,
+        "vd": 400,
+        "defesa": 213,
+        "iniciativa": 221,
+        "deslocamento": "30m",
+        "mana": 1205,
+        "estamina": 800,
+        "atributos": {
+          "forca": 11,
+          "agilidade": 11,
+          "vigor": 11,
+          "presenca": 10,
+          "intelecto": 10
+        },
+        "pericias": [
+          "Luta +233",
+          "Fortitude +233",
+          "Reflexos +233",
+          "Vontade +232",
+          "Percepção +225"
+        ],
+        "ataques": [
+          {
+            "nome": "Punho de Céu e Terra",
+            "detalhe": "+233, 42d10+157 impacto"
+          },
+          {
+            "nome": "Peso do Céu",
+            "detalhe": "+233, 42d10+157 impacto, em área imensa"
+          }
+        ],
+        "habilidades": [
+          "Golpe Anunciado (anuncie na rodada anterior; acerta 63d10+236, cerca de 45% da Vida de um personagem do nível; quem sai da frente a tempo não sofre nada)",
+          "Peso Sustentado (reduz em 15 o dano físico e mágico de cada golpe)",
+          "Passo que Muda o Chão (1/rodada, Ação de Movimento: terreno em alcance Longo vira difícil; Reflexos DT 215 ou cai)"
+        ],
+        "loot": [
+          "Pedra do Céu (1600 Solares)"
+        ],
+        "classe": "Ser Lendário",
+        "nivelMinimoLoja": 4,
+        "papel": "chefe",
+        "geradoPorFamilia": true,
+        "unico": true,
+        "disponivelNaLoja": false,
+        "requer_autorizacao_mestre": true
       }
     }
   ]

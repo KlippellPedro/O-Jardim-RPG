@@ -6,14 +6,14 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const catalogPath = path.join(root, 'data', 'loja', 'catalogo.json');
 const document = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
 const profiles = {
-  'reliquia-excalibur': ['8d12+20', 35, 'reliquia'],
-  'reliquia-mjolnir': ['8d12+18', 35, 'reliquia'],
-  'reliquia-martelo-chamas': ['8d12+16', 35, 'reliquia'],
-  'reliquia-gungnir': ['8d12+14', 35, 'reliquia'],
-  'reliquia-masamune': ['10d10+10', 35, 'reliquia'],
-  'reliquia-rhaast': ['8d12+12', 35, 'reliquia'],
-  'reliquia-triceratops': ['10d10+8', 35, 'reliquia'],
-  'reliquia-zangetsu': ['8d12+10', 35, 'reliquia'],
+  'reliquia-excalibur': ['20d12+50', 35, 'reliquia'],
+  'reliquia-mjolnir': ['20d12+45', 35, 'reliquia'],
+  'reliquia-martelo-chamas': ['20d12+40', 35, 'reliquia'],
+  'reliquia-gungnir': ['20d12+35', 35, 'reliquia'],
+  'reliquia-masamune': ['25d10+25', 35, 'reliquia'],
+  'reliquia-rhaast': ['20d12+30', 35, 'reliquia'],
+  'reliquia-triceratops': ['25d10+20', 35, 'reliquia'],
+  'reliquia-zangetsu': ['20d12+25', 35, 'reliquia'],
 };
 const ammunition = {
   'arco-curto': 1, besta: 1, dardo: 1, pistola: 12, revolver: 6, submetralhadora: 30,

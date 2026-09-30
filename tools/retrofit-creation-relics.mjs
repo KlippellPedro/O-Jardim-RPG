@@ -46,7 +46,7 @@ const novas = {
     base: {
       preco: { 'Fragmentos de Estrela': 620 },
       raridade: 'reliquia da criacao',
-      dano: '8d12+12', critico: '20/x4', alcance: 'Longo', tipo_de_dano: 'Luz',
+      dano: '20d12+30', critico: '20/x4', alcance: 'Longo', tipo_de_dano: 'Luz',
       subtipo: 'reliquia-criacao', modo: 'À distância',
       margem_ameaca: 20, multiplicador_critico: 4,
       municao_maxima: 1, municao_atual: 1,
@@ -58,7 +58,7 @@ const novas = {
     base: {
       preco: { 'Fragmentos de Estrela': 700 },
       raridade: 'reliquia da criacao',
-      dano: '8d12+18', critico: '20/x4', alcance: 'Longo', tipo_de_dano: 'Raio',
+      dano: '20d12+45', critico: '20/x4', alcance: 'Longo', tipo_de_dano: 'Raio',
       subtipo: 'reliquia-criacao', modo: 'À distância',
       margem_ameaca: 20, multiplicador_critico: 4,
       municao_maxima: 1, municao_atual: 1,
@@ -70,7 +70,7 @@ const novas = {
     base: {
       preco: { 'Fragmentos de Estrela': 580 },
       raridade: 'reliquia da criacao',
-      dano: '8d12+10', critico: '20/x4', alcance: 'Médio', tipo_de_dano: 'Corte',
+      dano: '20d12+25', critico: '20/x4', alcance: 'Médio', tipo_de_dano: 'Corte',
       subtipo: 'reliquia-criacao', modo: 'À distância',
       margem_ameaca: 20, multiplicador_critico: 4,
       municao_maxima: 1, municao_atual: 1,
@@ -82,7 +82,7 @@ const novas = {
     base: {
       preco: { 'Fragmentos de Estrela': 420 },
       raridade: 'reliquia da criacao',
-      dano: '8d12+8', critico: '20/x4', alcance: 'Médio', tipo_de_dano: 'Balístico',
+      dano: '20d12+20', critico: '20/x4', alcance: 'Médio', tipo_de_dano: 'Balístico',
       subtipo: 'reliquia-criacao', modo: 'À distância',
       margem_ameaca: 20, multiplicador_critico: 4,
       municao_maxima: 6, municao_atual: 6,
@@ -94,7 +94,7 @@ const novas = {
     base: {
       preco: { 'Fragmentos de Estrela': 540 },
       raridade: 'reliquia da criacao',
-      dano: '8d12+14', critico: '19-20/x2', alcance: 'Curto/Longo', tipo_de_dano: 'Perfuração',
+      dano: '20d12+35', critico: '19-20/x2', alcance: 'Curto/Longo', tipo_de_dano: 'Perfuração',
       subtipo: 'reliquia-criacao', modo: 'Híbrida',
       margem_ameaca: 19, multiplicador_critico: 2,
     },
@@ -105,7 +105,7 @@ const novas = {
     base: {
       preco: { 'Fragmentos de Estrela': 460 },
       raridade: 'reliquia da criacao',
-      dano: '8d12+12', critico: '20/x4', alcance: 'Curto/Longo', tipo_de_dano: 'Impacto',
+      dano: '20d12+30', critico: '20/x4', alcance: 'Curto/Longo', tipo_de_dano: 'Impacto',
       subtipo: 'reliquia-criacao', modo: 'Híbrida',
       margem_ameaca: 20, multiplicador_critico: 4,
     },
@@ -116,7 +116,7 @@ const novas = {
     base: {
       preco: { 'Fragmentos de Estrela': 600 },
       raridade: 'reliquia da criacao',
-      dano: '8d12+14', critico: '20/x4', alcance: 'Curto/Médio', tipo_de_dano: 'Ar',
+      dano: '20d12+35', critico: '20/x4', alcance: 'Curto/Médio', tipo_de_dano: 'Ar',
       subtipo: 'reliquia-criacao', modo: 'Híbrida',
       margem_ameaca: 20, multiplicador_critico: 4,
     },
@@ -127,7 +127,7 @@ const novas = {
     base: {
       preco: { 'Fragmentos de Estrela': 520 },
       raridade: 'reliquia da criacao',
-      dano: '10d10+12', critico: '20/x4', alcance: 'Curto', tipo_de_dano: 'Corte',
+      dano: '25d10+30', critico: '20/x4', alcance: 'Curto', tipo_de_dano: 'Corte',
       subtipo: 'reliquia-criacao', modo: 'Corpo a corpo',
       margem_ameaca: 20, multiplicador_critico: 4,
     },
@@ -488,7 +488,7 @@ const novas = {
 const curadoria = {
   'reliquia-excalibur': {
     ...comum,
-    atributos: arma('8d12+20', '20/x4', 'Pureza'),
+    atributos: arma('20d12+50', '20/x4', 'Pureza'),
     lore: 'Excalibur saiu de uma guerra que ninguém venceu e voltou sem uma gota de sangue no fio. Passado o golpe, o metal volta a refletir um amanhecer que não bate com nenhum céu do Jardim. Quem empunha a espada querendo poupar alguém acha ela leve; quem empunha para terminar o serviço sente o peso subir pelo braço.',
     descricao: 'A espada que derruba sem matar. Todo golpe dela para em 1 de Vida, por mais forte que venha.',
     ressonancia: {
@@ -498,7 +498,7 @@ const curadoria = {
   },
   'reliquia-martelo-chamas': {
     ...comum,
-    atributos: arma('8d12+16', '20/x4', 'Fogo Astral'),
+    atributos: arma('20d12+40', '20/x4', 'Fogo Astral'),
     lore: 'Acharam o martelo ainda quente dentro de uma estrela morta. No cabo ficou a marca funda de cinco dedos, e ela não está no mesmo lugar toda vez que alguém confere. O que ele faz com a matéria leva um instante a mais que fogo comum: primeiro o metal aceita que sempre esteve queimando, depois queima.',
     descricao: 'O malho da Dama Rubra. O fogo dele passa por quem se acha imune e amolece o que for parede.',
     ressonancia: {
@@ -508,7 +508,7 @@ const curadoria = {
   },
   'reliquia-triceratops': {
     ...comum,
-    atributos: arma('10d10+8', '20/x4', 'Sangue Ventrue'),
+    atributos: arma('25d10+20', '20/x4', 'Sangue Ventrue'),
     lore: 'As três marcas talhadas na guarda contam a história inteira: sangue tomado, sangue negado, sangue herdado. A katana pertenceu a um Ventrue cujo nome foi raspado de todo registro que existia, e mesmo assim ela ainda se inclina sozinha diante de trono vazio. Com alguém ferido por perto, as três marcas passam a respirar fora de ritmo.',
     descricao: 'Katana vampírica que marca o primeiro sangue da cena e sabe onde essa presa está a 30 m de distância.',
     ressonancia: {
@@ -518,38 +518,38 @@ const curadoria = {
   },
   'reliquia-mjolnir': {
     ...comum,
-    atributos: arma('8d12+18', '20/x4', 'Raio'),
+    atributos: arma('20d12+45', '20/x4', 'Raio'),
     modo: 'À distância',
     lore: 'Mjolnir sempre volta, e ninguém concorda de onde. Entre o arremesso e o retorno ele some por um instante dentro de um céu de tempestades velhas, e às vezes chega de volta com neve, cinza ou água salgada grudada na cabeça. O trovão que vem junto traz o nome de quem teve coragem de chamar o martelo.',
     descricao: 'O martelo que volta sozinho para a mão e, no crítico, ainda cobra um segundo alvo com um raio.',
     ressonancia: {
       nome: 'O Caminho de Volta',
-      efeito: 'Depois de arremessado, Mjolnir retorna à mão do portador ao fim do ataque sem gastar ação, desde que ambos estejam na mesma Dimensão. Num crítico, uma segunda criatura escolhida a até 6 m do alvo sofre 4d8 de Raio; Reflexos contra a DT de efeito do portador reduz esse dano à metade.',
+      efeito: 'Depois de arremessado, Mjolnir retorna à mão do portador ao fim do ataque sem gastar ação, desde que ambos estejam na mesma Dimensão. Num crítico, uma segunda criatura escolhida a até 6 m do alvo sofre 10d8 de Raio; Reflexos contra a DT de efeito do portador reduz esse dano à metade.',
     },
   },
   'reliquia-rhaast': {
     ...comum,
-    atributos: arma('8d12+12', '20/x4', 'Sangue'),
+    atributos: arma('20d12+30', '20/x4', 'Sangue'),
     lore: 'Rhaast só fala com fome, e nunca com a própria voz. O sussurro sai das feridas abertas em volta, cada uma pedindo que a próxima seja maior. O cabo é morno igual pele com febre. A lâmina é fria igual o espaço que sobra quando alguma coisa acabou de morrer ali.',
     descricao: 'Foice que cobra dízimo: cada golpe em coisa viva devolve Vida para quem empunha.',
     ressonancia: {
       nome: 'Dízimo Rubro',
-      efeito: 'Uma vez por turno, quando Rhaast causar dano a uma criatura viva, o portador recupera 1d12 de Vida. Vida recuperada além do máximo é perdida. Construtos, objetos e criaturas sem sangue ou força vital não alimentam a relíquia.',
+      efeito: 'Uma vez por turno, quando Rhaast causar dano a uma criatura viva, o portador recupera 3d12 de Vida. Vida recuperada além do máximo é perdida. Construtos, objetos e criaturas sem sangue ou força vital não alimentam a relíquia.',
     },
   },
   'reliquia-zangetsu': {
     ...comum,
-    atributos: arma('8d12+10', '20/x4', 'Vazio'),
+    atributos: arma('20d12+25', '20/x4', 'Vazio'),
     lore: 'Zangetsu não devolve o rosto de quem segura ela. No metal aparece uma lua rachada, mesmo debaixo de sol aberto, e uma figura parada muito longe que nunca chega mais perto. Alimentar a lâmina com Mana encurta o caminho entre o corte e aquilo que ele resolveu alcançar.',
     descricao: 'Lâmina lunar que troca Mana por corte: quanto mais você alimenta antes do golpe, mais fundo ela chega.',
     ressonancia: {
       nome: 'Fome da Lua Partida',
-      efeito: 'Uma vez por turno, antes de atacar com Zangetsu, o portador pode gastar 2, 4 ou 6 de Mana. O ataque causa respectivamente +1d12, +2d12 ou +3d12 de Vazio. A Mana é gasta mesmo se o ataque errar, e os dados adicionais multiplicam no crítico.',
+      efeito: 'Uma vez por turno, antes de atacar com Zangetsu, o portador pode gastar 2, 4 ou 6 de Mana. O ataque causa respectivamente +3d12, +5d12 ou +8d12 de Vazio. A Mana é gasta mesmo se o ataque errar, e os dados adicionais multiplicam no crítico.',
     },
   },
   'reliquia-gungnir': {
     ...comum,
-    atributos: arma('8d12+14', '20/x4', 'Juramento', 'Luz Solar'),
+    atributos: arma('20d12+35', '20/x4', 'Juramento', 'Luz Solar'),
     lore: 'Gungnir cobra qualquer juramento dito de olhos abertos e nunca pergunta se ele era justo. Cada promessa feita diante dela vira uma runa nova na haste. Ninguém achou até hoje espaço suficiente para todas as promessas que essa lança já cobrou.',
     descricao: 'A lança do juramento. Cumpra o que você prometeu e ela abre qualquer defesa; volte atrás e ela cobra de você.',
     ressonancia: {
@@ -559,7 +559,7 @@ const curadoria = {
   },
   'reliquia-masamune': {
     ...comum,
-    atributos: arma('10d10+10', '20/x4', 'Metal'),
+    atributos: arma('25d10+25', '20/x4', 'Metal'),
     lore: 'Masamune corta primeiro e chega depois. Quem olha com atenção vê talos de flor de metal brotando no lugar onde a lâmina ainda vai passar. O ferreiro que deu nome a ela deixou um bilhete dentro da bainha com um recado só: escolha com cuidado o que ela vai alcançar antes de você.',
     descricao: 'Lâmina que chega antes do braço: o primeiro corte de cada combate sai com vantagem.',
     ressonancia: {
@@ -569,12 +569,12 @@ const curadoria = {
   },
   'reliquia-murasame': {
     ...comum,
-    atributos: arma('8d12+16', '20/x2', 'Vazio', 'Execução'),
+    atributos: arma('20d12+40', '20/x2', 'Vazio', 'Execução'),
     lore: 'A chuva começa antes de Murasame sair da bainha. Ela não molha roupa nem apaga fogo, cai só em cima de quem já está ferido e corre para cima, das poças de volta para a lâmina. A espada tem paciência com todo mundo, menos com quem já passou de certo ponto.',
     descricao: 'Espada de execução. Contra quem já está quase caindo, um golpe dela encerra a conversa.',
     ressonancia: {
       nome: 'Sentença na Ferida',
-      efeito: 'Uma vez por cena, ao atingir uma criatura com no máximo 25% da Vida máxima, obrigue-a a testar Fortitude contra a DT de efeito do portador. Em falha, ela sofre +6d12 de Vazio; esse dano não multiplica no crítico. Criaturas sem Vida, objetos e alvos imunes a efeitos de execução ignoram o dano adicional.',
+      efeito: 'Uma vez por cena, ao atingir uma criatura com no máximo 25% da Vida máxima, obrigue-a a testar Fortitude contra a DT de efeito do portador. Em falha, ela sofre +15d12 de Vazio; esse dano não multiplica no crítico. Criaturas sem Vida, objetos e alvos imunes a efeitos de execução ignoram o dano adicional.',
     },
   },
   'reliquia-coroa-primeiro-nome': {
@@ -614,17 +614,17 @@ const curadoria = {
   },
   'reliquia-arco-hou-yi': {
     ...comum,
-    atributos: arma('8d12+12', '20/x4', 'Luz', 'Munição 1'),
+    atributos: arma('20d12+30', '20/x4', 'Luz', 'Munição 1'),
     lore: 'Havia dez sóis no céu e a terra estava cozinhando embaixo deles. Hou Yi derrubou nove e escolheu deixar o décimo de pé. O arco guarda essa conta: quem levanta ele sente na corda o peso do tiro que ficou sem ser dado.',
     descricao: 'O arco que derrubou nove sóis. A flecha dele sai reta demais para caber atrás de qualquer proteção.',
     ressonancia: {
       nome: 'Sol Abatido',
-      efeito: 'Uma vez por cena, gaste uma Ação Padrão para um disparo com alcance dobrado que ignora cobertura parcial e camuflagem. Em acerto, o alvo sofre +4d12 de Luz; se estiver voando, faz Reflexos contra a DT de efeito do portador e, em falha, desce até o solo sem sofrer dano de queda e fica Caído.',
+      efeito: 'Uma vez por cena, gaste uma Ação Padrão para um disparo com alcance dobrado que ignora cobertura parcial e camuflagem. Em acerto, o alvo sofre +10d12 de Luz; se estiver voando, faz Reflexos contra a DT de efeito do portador e, em falha, desce até o solo sem sofrer dano de queda e fica Caído.',
     },
   },
   'reliquia-keraunos': {
     ...comum,
-    atributos: arma('8d12+18', '20/x4', 'Raio', 'Munição 1'),
+    atributos: arma('20d12+45', '20/x4', 'Raio', 'Munição 1'),
     lore: 'Os ciclopes dobraram um raio inteiro até ele caber numa mão e entregaram a peça a Zeus. Ela some da palma no instante do arremesso e se refaz no lugar de onde saiu, ainda quente. Perto dela, cabelo se levanta sozinho e todo metal por perto canta baixinho.',
     descricao: 'O raio de Zeus dobrado em forma de arma. Some da mão ao ser lançado e volta a existir no mesmo lugar.',
     ressonancia: {
@@ -634,7 +634,7 @@ const curadoria = {
   },
   'reliquia-sudarshana-chakra': {
     ...comum,
-    atributos: arma('8d12+10', '20/x4', 'Corte', 'Munição 1'),
+    atributos: arma('20d12+25', '20/x4', 'Corte', 'Munição 1'),
     lore: 'O disco gira sozinho e nunca esquenta. Quem chega perto conta mil raios no lugar de seis, e nenhum deles parado. Ele volta sempre para a mão que o lançou, inclusive quando essa mão já mudou de ideia no meio do arremesso.',
     descricao: 'O disco de Vishnu. Sai da mão, cobra de até três alvos na mesma volta e retorna sozinho.',
     ressonancia: {
@@ -644,7 +644,7 @@ const curadoria = {
   },
   'reliquia-jackal': {
     ...comum,
-    atributos: arma('8d12+8', '20/x4', 'Balístico', 'Munição 6'),
+    atributos: arma('20d12+20', '20/x4', 'Balístico', 'Munição 6'),
     lore: 'Uma pistola preta de cano longo, pesada demais para a maioria das mãos vivas segurar sem apoio. As balas são de prata derretida de uma cruz de igreja, e o cano leva gravado em latim um pedido que ninguém traduz em voz alta. Quem dispara sente o coice na coluna, não no braço.',
     descricao: 'Pistola antimonstro. Contra morto-vivo, demônio e coisa sustentada por Escuridão, ela passa por qualquer couro.',
     ressonancia: {
@@ -654,7 +654,7 @@ const curadoria = {
   },
   'reliquia-gae-bolg': {
     ...comum,
-    atributos: arma('8d12+14', '19-20/x2', 'Perfuração', 'Arremesso que retorna'),
+    atributos: arma('20d12+35', '19-20/x2', 'Perfuração', 'Arremesso que retorna'),
     lore: 'A lança foi lascada do osso de um monstro do mar e nunca perdoou o que atravessa. Quem sobreviveu a ela conta que a dor chegou antes do golpe. Cú Chulainn a usou uma vez contra o próprio irmão de criação, e desde esse dia a haste pesa na mão de quem hesita.',
     descricao: 'A lança que abre ferida que não fecha. Vai arremessada, cobra o preço e volta para a mão.',
     ressonancia: {
@@ -664,7 +664,7 @@ const curadoria = {
   },
   'reliquia-sharur': {
     ...comum,
-    atributos: arma('8d12+12', '20/x4', 'Impacto', 'Arremesso que retorna'),
+    atributos: arma('20d12+30', '20/x4', 'Impacto', 'Arremesso que retorna'),
     lore: 'Sharur fala, e fala demais. A maça contava a Ninurta o que tinha visto do outro lado do campo, discutia a estratégia e reclamava quando a ordem era burra. Depois de voltar para a mão, ela ainda leva alguns segundos terminando a frase.',
     descricao: 'A maça que voa, volta e conta o que viu. Depois de acertar, ela entrega em voz alta uma fraqueza do alvo.',
     ressonancia: {
@@ -674,7 +674,7 @@ const curadoria = {
   },
   'reliquia-kusanagi': {
     ...comum,
-    atributos: arma('8d12+14', '20/x4', 'Ar', 'Alcance de 9 m'),
+    atributos: arma('20d12+35', '20/x4', 'Ar', 'Alcance de 9 m'),
     lore: 'Saiu da cauda de uma serpente de oito cabeças, e o ferreiro que a limpou jurou que o metal estava seco depois de anos dentro do bicho. Ela corta o vento antes de cortar o alvo. Em dia parado, quem está por perto ouve um assobio que não vem de lugar nenhum.',
     descricao: 'A espada dos ventos. O corte dela sai da lâmina e continua pelo ar até nove metros.',
     ressonancia: {
@@ -684,12 +684,12 @@ const curadoria = {
   },
   'reliquia-durandal': {
     ...comum,
-    atributos: arma('10d10+12', '20/x4', 'Corte', 'Indestrutível'),
+    atributos: arma('25d10+30', '20/x4', 'Corte', 'Indestrutível'),
     lore: 'Roland tentou quebrar Durandal contra a pedra dos Pirenéus para que ela não caísse na mão errada. A pedra rachou e a espada não. Contam que ela segue encravada numa parede de rocha em Rocamadour, o que não explica as vezes em que foi vista bem longe dali.',
     descricao: 'A espada que se recusou a quebrar. Nada mundano a danifica, e o que ela apara chega mais fraco.',
     ressonancia: {
       nome: 'A Lâmina que Não Cede',
-      efeito: 'Durandal não pode ser destruída, danificada, desarmada nem desviada por nada que não seja outra Relíquia da Criação. Uma vez por rodada, o portador pode gastar uma Reação para aparar um ataque corpo a corpo que o tenha acertado, reduzindo o dano em 4d12.',
+      efeito: 'Durandal não pode ser destruída, danificada, desarmada nem desviada por nada que não seja outra Relíquia da Criação. Uma vez por rodada, o portador pode gastar uma Reação para aparar um ataque corpo a corpo que o tenha acertado, reduzindo o dano em 10d12.',
     },
   },
   'reliquia-egide': {
@@ -716,7 +716,7 @@ const curadoria = {
     ...comum,
     atributos: peca('Implante Cibernético', 'Vê o que é verdadeiro', 'Custo: 1d6 de Sanidade'),
     lore: 'Odin deixou um olho no fundo de um poço em troca de uma pergunta, e o poço nunca devolveu a água limpa. A lente que sobrou dessa troca ainda olha para o lado de dentro das coisas. Quem a instala passa a semana seguinte sem conseguir olhar espelho nenhum.',
-    descricao: 'Uma vez por cena, gaste uma Ação Livre para enxergar o que é verdadeiro. Até o fim do seu turno, você vê através de ilusões, disfarces e invisibilidade a até 18 m e tem vantagem em Percepção e Intuição. Cada uso custa 1d6 de Sanidade.',
+    descricao: 'Uma vez por cena, gaste uma Ação Livre para enxergar o que é verdadeiro. Até o fim do seu turno, você vê através de ilusões, disfarces e invisibilidade a até 18 m e tem vantagem em Percepção e Intuição. Cada uso custa 3d6 de Sanidade.',
     ativacao: 'Ação Livre',
     frequencia: '1/cena',
     custo: '1d6 de Sanidade',
@@ -726,20 +726,20 @@ const curadoria = {
     ...comum,
     atributos: peca('Implante Cibernético', 'Não pode ser mutilado', 'Golpe de Prata'),
     lore: 'Nuada perdeu o braço numa batalha e o trono junto com ele, porque um rei ferido não podia reinar. A prata que lhe deram no lugar trabalhou tão bem que o trono voltou. O braço guarda a memória de ser devolvido, e recusa a ideia de ser tirado outra vez.',
-    descricao: 'Este braço nunca pode ser mutilado, arrancado nem desarmado à força, e a mão que ele forma não solta o que segura contra a sua vontade. Uma vez por cena, gaste uma Ação Padrão para um golpe desarmado que causa 4d12 de dano adicional.',
+    descricao: 'Este braço nunca pode ser mutilado, arrancado nem desarmado à força, e a mão que ele forma não solta o que segura contra a sua vontade. Uma vez por cena, gaste uma Ação Padrão para um golpe desarmado que causa 10d12 de dano adicional.',
     ativacao: 'Ação Padrão',
     frequencia: '1/cena',
-    efeito: 'Imune a Mutilação e a desarme forçado; golpe desarmado com 4d12 de dano adicional 1/cena',
+    efeito: 'Imune a Mutilação e a desarme forçado; golpe desarmado com 10d12 de dano adicional 1/cena',
   },
   'reliquia-coracao-ouroboros': {
     ...comum,
     atributos: peca('Implante Cibernético', 'Regeneração', 'Recusa a queda 1/descanso', 'Custo: 1 Cansaço'),
     lore: 'A serpente que engole a própria cauda nunca chegou a decidir qual ponta veio primeiro. O coração bate no ritmo dessa dúvida: cada batida termina onde a seguinte começa, sem intervalo para o corpo aproveitar e morrer. Médicos que ouvem o peito de quem o carrega pedem para ouvir de novo.',
-    descricao: 'No início de cada turno seu, recupere 1d12 de Vida. Uma vez por descanso, ao chegar a 0 de Vida, você não cai: volta com metade da Vida máxima e ganha 1 Cansaço.',
+    descricao: 'No início de cada turno seu, recupere 4d12 de Vida. Uma vez por descanso, ao chegar a 0 de Vida, você não cai: volta com metade da Vida máxima e ganha 1 Cansaço.',
     ativacao: 'Reação, ao chegar a 0 de Vida',
     frequencia: '1/descanso',
     custo: '1 Cansaço',
-    efeito: 'Recupera 1d12 de Vida por turno; ao chegar a 0 de Vida, volta com metade da Vida máxima',
+    efeito: 'Recupera 4d12 de Vida por turno; ao chegar a 0 de Vida, volta com metade da Vida máxima',
   },
   'reliquia-pele-nemeia': {
     ...comum,
@@ -936,8 +936,8 @@ const curadoria = {
     ...comum,
     atributos: peca('Veículo Completo', 'Atmosférico', 'Rastro de fogo'),
     lore: 'Hélios cruza o céu todo dia na mesma carruagem, puxada por cavalos que respiram brasa em vez de ar. Faetonte pediu para guiá-la uma vez e o mundo quase queimou inteiro por causa disso. Quem assume as rédeas hoje aprende rápido que velocidade daquele tamanho não perdoa mão insegura.',
-    descricao: 'Veículo médio atmosférico. Vida 90; Defesa 20; Resistência 6; deslocamento 120 m; Manobrabilidade +5; capacidade total 3, incluindo tripulação; cobertura nenhuma; tripulação mínima 1; até 2 sistemas ativos; 0 espaços de base; sem armas integradas. O rastro da carruagem incendeia vegetação seca por onde passa, e criaturas que a tocarem sem proteção sofrem 2d6 de dano de Fogo.',
-    efeito: 'Quem tocar a carruagem sem proteção sofre 2d6 de Fogo',
+    descricao: 'Veículo médio atmosférico. Vida 90; Defesa 20; Resistência 6; deslocamento 120 m; Manobrabilidade +5; capacidade total 3, incluindo tripulação; cobertura nenhuma; tripulação mínima 1; até 2 sistemas ativos; 0 espaços de base; sem armas integradas. O rastro da carruagem incendeia vegetação seca por onde passa, e criaturas que a tocarem sem proteção sofrem 5d6 de dano de Fogo.',
+    efeito: 'Quem tocar a carruagem sem proteção sofre 5d6 de Fogo',
   },
   'reliquia-vimana': {
     ...comum,
@@ -1037,20 +1037,20 @@ const curadoria = {
     ...comum,
     atributos: artefato('Fúria de combate', '1/cena'),
     lore: 'O vinho que enche a taça nunca é o mesmo duas vezes, e ninguém pergunta de onde ele vem enquanto está bebendo. Quem bebe começa a rir antes de entender a própria piada, e sai andando na direção do perigo com a certeza de quem já voltou de lá.',
-    descricao: 'Uma vez por cena, gaste uma Ação Livre para beber da taça. Até o fim da cena, você ganha +1d6 de dano em seus ataques e sofre −2 de Defesa.',
+    descricao: 'Uma vez por cena, gaste uma Ação Livre para beber da taça. Até o fim da cena, você ganha +3d6 de dano em seus ataques e sofre −2 de Defesa.',
     ativacao: 'Ação Livre',
     frequencia: '1/cena',
-    efeito: '+1d6 de dano em ataques e -2 de Defesa até o fim da cena',
+    efeito: '+3d6 de dano em ataques e -2 de Defesa até o fim da cena',
   },
   'reliquia-lamparina-maravilhosa': {
     ...comum,
     atributos: artefato('Invoca um auxiliar temporário', '1/sessão'),
     lore: 'Um mercador de rua vendeu a lamparina como bugiganga velha, sem imaginar o que dormia dentro dela. Quem esfrega o metal desperta uma vontade presa há séculos, ansiosa por trabalhar em troca de liberdade que nunca chega de verdade.',
-    descricao: 'Uma vez por sessão, esfregue a lamparina como Ação Padrão para invocar um auxiliar com VD igual a um quarto do seu nível, obediente por até 1 hora ou até ser derrotado. Ele desaparece ao fim do prazo, sem deixar despojos.',
+    descricao: 'Uma vez por sessão, esfregue a lamparina como Ação Padrão para invocar um auxiliar com VD igual ao seu nível, obediente por até 1 hora ou até ser derrotado. Ele desaparece ao fim do prazo, sem deixar despojos.',
     ativacao: 'Ação Padrão',
     frequencia: '1/sessão',
     duracao: '1 hora',
-    efeito: 'Invoca um auxiliar com VD igual a um quarto do seu nível',
+    efeito: 'Invoca um auxiliar com VD igual ao seu nível',
   },
   'reliquia-cornucopia': {
     ...comum,

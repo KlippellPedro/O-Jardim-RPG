@@ -87,19 +87,19 @@ def test_semente_completa_aceita_tipos_e_raridades_da_loja():
 
 
 def test_perfil_universal_do_bestiario_fica_fora_do_balcao():
-    """Os perfis universais servem para o Mestre montar inimigo com números
-    prontos. Eles continuam no catálogo (o /monstro e o Bestiário do site leem
-    daqui) e são os únicos que declaram estar fora da loja."""
+    """Os "Modelo de Criatura (VD n)" saíram do catálogo (o gerador do site monta
+    uma criatura de qualquer VD). Se algum perfil universal voltar, ele precisa
+    declarar que está fora da loja: é o que impede o modelo de ir a balcão."""
     catalogo = Catalogo()
     catalogo.carregar_arquivo(str(BASE.parent.parent / "data" / "loja" / "catalogo.json"))
 
-    universal = catalogo.get("universal-vd-3")
-    assert universal is not None and universal.tipo == "monstro"
-    assert universal.disponivel_na_loja is False
+    assert catalogo.get("universal-vd-3") is None
 
     fora_do_balcao = [it for it in catalogo.listar() if not it.disponivel_na_loja]
-    assert fora_do_balcao and all(
-        it.conteudo.get("categoria") == "Universal" for it in fora_do_balcao
+    # Fora do balcão: perfil universal ou criatura gerada só para o Bestiário (VD alto, únicas).
+    assert all(
+        it.conteudo.get("categoria") == "Universal" or it.conteudo.get("geradoPorFamilia")
+        for it in fora_do_balcao
     )
 
     # Quem se contrata declara para que serve, e isso vira a etiqueta do item.

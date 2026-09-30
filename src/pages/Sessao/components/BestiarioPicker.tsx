@@ -4,6 +4,9 @@ import { motion } from 'framer-motion';
 import { Activity, Check, Heart, Minus, Plus, RefreshCw, Search, Shield, Skull, Sparkles, X, Zap } from 'lucide-react';
 import { sessaoApi, type BestiarioMonstro } from '../../../services/sessaoApi';
 import { useDialogAccessibility } from '../../../hooks/useDialogAccessibility';
+import { ARQUETIPOS_CRIATURA, ORDEM_DOS_ARQUETIPOS, ORDEM_DOS_PAPEIS, PAPEIS_CRIATURA, modeloDeCriatura, vdValido, type ArquetipoCriatura, type PapelCriatura } from '../../../services/curvaCriatura';
+import { VD_MAXIMO } from '../../../services/progressaoNiveis';
+import familiasData from '../../../../data/bestiario/familias-v1.json';
 
 interface BestiarioPickerProps {
   campanhaId: string;
@@ -17,20 +20,25 @@ const ORDEM_CATEGORIAS = [
   'Constructo', 'Espírito', 'Aberração', 'Lendário',
 ];
 
-type FaixaVd = 'todos' | 'baixo' | 'medio' | 'alto';
+// O VD é o nível do grupo que a criatura desafia sozinha, então as faixas
+// seguem os patamares de jogo: começo, meio, fim do padrão e além dele.
+const TITULO_DA_FAMILIA: Record<string, string> = Object.fromEntries(familiasData.familias.map((familia) => [familia.id, familia.titulo]));
+
+type FaixaVd = 'todos' | 'baixo' | 'medio' | 'alto' | 'extremo';
 const FAIXAS: Array<{ id: FaixaVd; rotulo: string; testar: (vd: number | null) => boolean }> = [
   { id: 'todos', rotulo: 'Qualquer VD', testar: () => true },
-  { id: 'baixo', rotulo: 'VD 1-3', testar: (vd) => vd != null && vd <= 3 },
-  { id: 'medio', rotulo: 'VD 4-6', testar: (vd) => vd != null && vd >= 4 && vd <= 6 },
-  { id: 'alto', rotulo: 'VD 7+', testar: (vd) => vd != null && vd >= 7 },
+  { id: 'baixo', rotulo: 'VD 1-10', testar: (vd) => vd != null && vd <= 10 },
+  { id: 'medio', rotulo: 'VD 11-25', testar: (vd) => vd != null && vd >= 11 && vd <= 25 },
+  { id: 'alto', rotulo: 'VD 26-50', testar: (vd) => vd != null && vd >= 26 && vd <= 50 },
+  { id: 'extremo', rotulo: 'VD 51+', testar: (vd) => vd != null && vd >= 51 },
 ];
 
 /** A cor do selo sobe com a ameaça: verde tranquilo até vermelho mortal. */
 const corDoVd = (vd: number | null): string => {
   if (vd == null) return '#9ca3af';
-  if (vd <= 3) return '#4ade80';
-  if (vd <= 6) return '#fbbf24';
-  if (vd <= 8) return '#fb923c';
+  if (vd <= 10) return '#4ade80';
+  if (vd <= 25) return '#fbbf24';
+  if (vd <= 40) return '#fb923c';
   return '#ef4444';
 };
 
@@ -40,6 +48,29 @@ interface ICartaoProps {
   ocupado: boolean;
   onAdicionar: (monstro: BestiarioMonstro, quantidade: number) => void;
 }
+
+/** A ficha que o gerador monta para um VD e um papel, no formato do Bestiário. */
+const monstroSobMedida = (vd: number, papel: PapelCriatura, arquetipo: ArquetipoCriatura): BestiarioMonstro => {
+  const modelo = modeloDeCriatura(vd, papel, arquetipo);
+  return {
+    id: `sob-medida-${modelo.vd}-${papel}-${arquetipo}`,
+    titulo: `Criatura de VD ${modelo.vd} (${modelo.papelRotulo}${arquetipo === 'comum' ? '' : `, ${modelo.arquetipoRotulo}`})`,
+    nivel: modelo.vd,
+    classe: 'Sob medida',
+    categoria: 'Universal',
+    descricao: null,
+    vd: modelo.vd,
+    xp: modelo.xp,
+    pv: modelo.pv,
+    defesa: modelo.defesa,
+    mana: modelo.mana,
+    estamina: modelo.estamina,
+    iniciativa: modelo.iniciativa,
+    ataques: modelo.ataques,
+    pericias: modelo.pericias,
+    habilidades: modelo.habilidades,
+  };
+};
 
 const Cartao = ({ monstro, adicionados, ocupado, onAdicionar }: ICartaoProps) => {
   const [quantidade, setQuantidade] = useState(1);
@@ -54,7 +85,7 @@ const Cartao = ({ monstro, adicionados, ocupado, onAdicionar }: ICartaoProps) =>
         <div className="min-w-0 flex-1">
           <h4 className="truncate text-sm font-bold text-white">{monstro.titulo}</h4>
           <p className="mt-0.5 truncate text-[10px] uppercase tracking-wider text-white/40">
-            {monstro.classe ?? monstro.categoria ?? 'Criatura'}{monstro.nivel != null ? ` · Nível ${monstro.nivel}` : ''}{monstro.vd != null ? ` · ${monstro.xp} XP` : ''}
+            {monstro.unico ? 'Única · ' : ''}{monstro.familia ? `${TITULO_DA_FAMILIA[monstro.familia] ?? monstro.familia}${monstro.estagio ? ` (${monstro.estagio})` : ''} · ` : ''}{monstro.classe ?? monstro.categoria ?? 'Criatura'}{monstro.nivel != null ? ` · Nível ${monstro.nivel}` : ''}{monstro.vd != null ? ` · ${monstro.xp} XP` : ''}
           </p>
           <div className="mt-2 flex flex-wrap gap-1.5 text-[11px] font-semibold">
             {monstro.pv != null ? <span className="flex items-center gap-1 rounded-md bg-red-400/10 px-1.5 py-0.5 text-red-200"><Heart size={10} aria-hidden="true" /> {monstro.pv}</span> : null}
@@ -97,9 +128,13 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [search, setSearch] = useState('');
-  const [aba, setAba] = useState<'criaturas' | 'universais'>('criaturas');
+  const [aba, setAba] = useState<'criaturas' | 'sobmedida'>('criaturas');
+  const [vdSobMedida, setVdSobMedida] = useState('20');
+  const [papelSobMedida, setPapelSobMedida] = useState<PapelCriatura>('solo');
+  const [arquetipoSobMedida, setArquetipoSobMedida] = useState<ArquetipoCriatura>('comum');
   const [categoriaFiltro, setCategoriaFiltro] = useState<string | null>(null);
   const [faixa, setFaixa] = useState<FaixaVd>('todos');
+  const [familiaFiltro, setFamiliaFiltro] = useState('');
   const [ordem, setOrdem] = useState<'nome' | 'vd'>('nome');
   const [adicionados, setAdicionados] = useState<Record<string, number>>({});
   useDialogAccessibility({ open: true, dialogRef, initialFocusRef: searchRef, onClose: onCancel });
@@ -115,7 +150,13 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
   }, [campanhaId]);
 
   const criaturas = useMemo(() => monstros.filter((m) => m.categoria !== 'Universal'), [monstros]);
-  const universais = useMemo(() => monstros.filter((m) => m.categoria === 'Universal'), [monstros]);
+  const vdEscolhido = vdValido(vdSobMedida);
+  const sobMedida = useMemo(() => monstroSobMedida(vdEscolhido, papelSobMedida, arquetipoSobMedida), [vdEscolhido, papelSobMedida, arquetipoSobMedida]);
+
+  const familiasDisponiveis = useMemo(() => {
+    const presentes = new Set(criaturas.map((m) => m.familia).filter((f): f is string => !!f));
+    return familiasData.familias.filter((familia) => presentes.has(familia.id));
+  }, [criaturas]);
 
   const categoriasDisponiveis = useMemo(() => {
     const presentes = new Set(criaturas.map((m) => m.categoria).filter((c): c is string => !!c));
@@ -123,12 +164,13 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
   }, [criaturas]);
 
   const filtrados = useMemo(() => {
-    const base = aba === 'universais' ? universais : criaturas;
+    const base = criaturas;
     const termo = search.trim().toLocaleLowerCase('pt-BR');
     const testarFaixa = FAIXAS.find((item) => item.id === faixa)?.testar ?? (() => true);
     const lista = base.filter((monstro) => (
-      (aba === 'universais' || !categoriaFiltro || monstro.categoria === categoriaFiltro)
+      (!categoriaFiltro || monstro.categoria === categoriaFiltro)
       && testarFaixa(monstro.vd)
+      && (!familiaFiltro || (familiaFiltro === 'unicas' ? monstro.unico : monstro.familia === familiaFiltro))
       && (!termo || monstro.titulo.toLocaleLowerCase('pt-BR').includes(termo))
     ));
     return [...lista].sort((a, b) => (
@@ -136,7 +178,7 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
         ? (a.vd ?? 0) - (b.vd ?? 0) || a.titulo.localeCompare(b.titulo, 'pt-BR')
         : a.titulo.localeCompare(b.titulo, 'pt-BR')
     ));
-  }, [aba, criaturas, universais, categoriaFiltro, faixa, ordem, search]);
+  }, [criaturas, categoriaFiltro, faixa, familiaFiltro, ordem, search]);
 
   const totalAdicionados = Object.values(adicionados).reduce((soma, valor) => soma + valor, 0);
 
@@ -202,12 +244,14 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
         <div className="space-y-3 border-b border-white/[0.08] px-5 py-3">
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex rounded-lg border border-white/10 p-0.5" role="tablist" aria-label="Tipo de criatura">
-              {(['criaturas', 'universais'] as const).map((valor) => (
+              {(['criaturas', 'sobmedida'] as const).map((valor) => (
                 <button key={valor} type="button" role="tab" aria-selected={aba === valor} onClick={() => setAba(valor)} className={`rounded-md px-3 py-1.5 text-xs font-bold ${aba === valor ? 'bg-[#c7a44c]/18 text-[#f0d685]' : 'text-white/45 hover:text-white/80'}`}>
-                  {valor === 'criaturas' ? `Criaturas · ${criaturas.length}` : `Universais · ${universais.length}`}
+                  {valor === 'criaturas' ? `Criaturas · ${criaturas.length}` : 'Sob medida'}
                 </button>
               ))}
             </div>
+            {aba === 'criaturas' ? (
+            <>
             <div className="relative min-w-[12rem] flex-1">
               <Search size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
               <input ref={searchRef} value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar criatura pelo nome..." className="h-10 w-full rounded-lg border border-white/10 bg-black/30 pl-9 pr-3 text-sm text-white outline-none focus:border-[#c7a44c]/50" />
@@ -216,8 +260,16 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
               <option value="nome">Ordem: nome</option>
               <option value="vd">Ordem: mais fracas primeiro</option>
             </select>
+            <select value={familiaFiltro} onChange={(evento) => setFamiliaFiltro(evento.target.value)} aria-label="Família" className="h-10 rounded-lg border border-white/10 bg-black/30 px-3 text-xs font-semibold text-white/80 outline-none">
+              <option value="">Todas as famílias</option>
+              <option value="unicas">Criaturas únicas</option>
+              {familiasDisponiveis.map((familia) => <option key={familia.id} value={familia.id}>{familia.titulo}</option>)}
+            </select>
+            </>
+            ) : null}
           </div>
 
+          {aba === 'criaturas' ? (
           <div className="custom-scrollbar flex gap-1.5 overflow-x-auto pb-1">
             {FAIXAS.map((item) => <button key={item.id} type="button" aria-pressed={faixa === item.id} onClick={() => setFaixa(item.id)} className={botaoFiltro(faixa === item.id)}>{item.rotulo}</button>)}
             {aba === 'criaturas' && categoriasDisponiveis.length ? <span className="mx-1 w-px shrink-0 self-stretch bg-white/10" aria-hidden="true" /> : null}
@@ -228,17 +280,54 @@ export const BestiarioPicker: React.FC<BestiarioPickerProps> = ({ campanhaId, on
               </>
             ) : null}
           </div>
+          ) : null}
         </div>
 
         <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto p-4 sm:p-5">
-          {aba === 'universais' ? (
-            <p className="mb-4 flex items-start gap-1.5 text-xs leading-5 text-white/45">
-              <Sparkles size={14} className="mt-0.5 shrink-0 text-[#c7a44c]/70" />
-              Modelos prontos para reskinar na hora: adicione e troque o nome, uma perícia ou um traço no editor (ícone de lápis).
-            </p>
-          ) : null}
           {error ? <p role="alert" className="mb-3 rounded-md bg-red-400/10 px-3 py-2 text-xs text-red-200">{error}</p> : null}
-          {loading ? (
+          {aba === 'sobmedida' ? (
+            <div className="mx-auto max-w-xl space-y-4">
+              <p className="flex items-start gap-1.5 text-xs leading-5 text-white/45">
+                <Sparkles size={14} className="mt-0.5 shrink-0 text-[#c7a44c]/70" />
+                Uma criatura para qualquer VD (o nível do grupo que ela desafia sozinha), com Vida, Defesa, ataques e testes já na conta. Depois de adicionar, troque o nome e um traço no editor (ícone de lápis).
+              </p>
+              <div className="flex flex-wrap items-end gap-3">
+                <label className="text-[10px] uppercase tracking-wider text-white/40">
+                  VD
+                  <input
+                    type="number"
+                    min={1}
+                    max={VD_MAXIMO}
+                    value={vdSobMedida}
+                    onChange={(evento) => setVdSobMedida(evento.target.value)}
+                    aria-label="Valor de Desafio da criatura"
+                    className="mt-1 block h-10 w-28 rounded-lg border border-white/10 bg-black/30 px-3 text-sm text-white outline-none focus:border-[#c7a44c]/50"
+                  />
+                </label>
+                <div className="flex flex-wrap gap-1.5" role="group" aria-label="Papel da criatura">
+                  {ORDEM_DOS_PAPEIS.map((papel) => (
+                    <button key={papel} type="button" aria-pressed={papelSobMedida === papel} onClick={() => setPapelSobMedida(papel)} className={botaoFiltro(papelSobMedida === papel)}>
+                      {PAPEIS_CRIATURA[papel].rotulo}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-1.5" role="group" aria-label="Jeito de lutar">
+                {ORDEM_DOS_ARQUETIPOS.map((arquetipo) => (
+                  <button key={arquetipo} type="button" aria-pressed={arquetipoSobMedida === arquetipo} onClick={() => setArquetipoSobMedida(arquetipo)} title={ARQUETIPOS_CRIATURA[arquetipo].descricao} className={botaoFiltro(arquetipoSobMedida === arquetipo)}>
+                    {ARQUETIPOS_CRIATURA[arquetipo].rotulo}
+                  </button>
+                ))}
+              </div>
+              <p className="text-[11px] leading-5 text-white/40">{ARQUETIPOS_CRIATURA[arquetipoSobMedida].descricao}</p>
+              <ul>
+                <Cartao monstro={sobMedida} adicionados={adicionados[sobMedida.id] ?? 0} ocupado={busy === sobMedida.id} onAdicionar={(m, quantidade) => void adicionar(m, quantidade)} />
+              </ul>
+              <p className="text-[11px] leading-5 text-white/35">
+                Lacaio, inimigo padrão e elite ocupam uma fatia do encontro (10%, 25% e 50% da Vida de um encontro padrão); chefe é o encontro inteiro e anuncia um golpe forte; solo é a criatura que basta sozinha, como as do Bestiário.
+              </p>
+            </div>
+          ) : loading ? (
             <div className="flex items-center justify-center py-16 text-sm text-white/40"><RefreshCw className="mr-2 animate-spin" size={15} /> Carregando o Bestiário…</div>
           ) : filtrados.length === 0 ? (
             <p className="py-14 text-center text-sm text-white/35">Nenhuma criatura com esses filtros.</p>

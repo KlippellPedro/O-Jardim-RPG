@@ -1,0 +1,1779 @@
+{
+  "_nota": "Rascunhos de estágios novos por família, a revisar antes de entrar no catálogo. NÃO importar no site. Textos aprovados em 2026-09-30 e já aplicados ao catálogo; o arquivo continua fora do site. `preco`, `preco_contratacao` e `contrato_mensal` foram fixados depois de `npm run precos:normalizar` (dentro da banda da raridade), para `--novos` reproduzir o catálogo. Criaturas com `disponivelNaLoja: false` ficam só no Bestiário. tools/aplicar-familias-bestiario.mjs --novos monta cada um pela curva de criatura (src/services/curvaCriatura.ts) e nunca sobrescreve ficha que já existe.",
+  "porFamilia": {
+    "elemental": [
+      {
+        "id": "elemental-de-fogo-maior",
+        "titulo": "Elemental de Fogo Maior",
+        "vd": 25,
+        "estagio": "Maior",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "12m",
+        "descricao": "Uma fornalha que aprendeu a andar. Já decide o que queimar, obedece a quem o invocou enquanto o pacto for bom e responde com fogo a quem tenta apagá-lo.",
+        "ataques": [
+          {
+            "nome": "Golpe Flamejante",
+            "tipo": "fogo",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Rajada de Brasas",
+            "tipo": "fogo, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Explosão ao Cair (ao chegar a 0 PV, criaturas em alcance Curto fazem Reflexos DT {dt}; sofrem metade do dano de um ataque dele, metade em sucesso)"
+        ],
+        "loot": [
+          "Núcleo Flamejante"
+        ],
+        "preco": {
+          "Solares": 150
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        }
+      },
+      {
+        "id": "elemental-de-fogo-primordial",
+        "titulo": "Elemental de Fogo Primordial",
+        "vd": 45,
+        "estagio": "Primordial",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Elemental",
+        "deslocamento": "15m",
+        "descricao": "O fogo que o mundo usou para começar. Ele negocia, e o preço quase sempre é lembrar o que queimou da última vez.",
+        "ataques": [
+          {
+            "nome": "Toque Primordial",
+            "tipo": "fogo",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Tempestade de Brasas",
+            "tipo": "fogo, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Calor Insuportável (quem termina o turno em alcance Curto sofre dano de fogo igual a um décimo do golpe dele)"
+        ],
+        "loot": [
+          "Coração de Fogo Primordial"
+        ],
+        "preco": {
+          "Solares": 2500
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "elemental-de-gelo-maior",
+        "titulo": "Elemental de Gelo Maior",
+        "vd": 28,
+        "estagio": "Maior",
+        "papel": "solo",
+        "classe": "Invocação",
+        "categoria": "Elemental",
+        "deslocamento": "12m",
+        "descricao": "Um inverno que ganhou ombros. Anda devagar, e o chão à frente dele já está gelado quando ele chega.",
+        "ataques": [
+          {
+            "nome": "Golpe Gélido",
+            "tipo": "gelo",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Lança de Gelo",
+            "tipo": "gelo, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Chão Gelado (o chão em alcance Curto é terreno difícil; Reflexos DT {dt} ou cai ao correr)"
+        ],
+        "loot": [
+          "Núcleo de Gelo"
+        ],
+        "preco": {
+          "Solares": 170
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        }
+      },
+      {
+        "id": "elemental-de-gelo-primordial",
+        "titulo": "Elemental de Gelo Primordial",
+        "vd": 48,
+        "estagio": "Primordial",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Elemental",
+        "deslocamento": "15m",
+        "descricao": "O frio de antes de haver calor para comparar. Espera sem pressa, e o mundo em volta vai ficando do tamanho da paciência dele.",
+        "ataques": [
+          {
+            "nome": "Toque Primordial",
+            "tipo": "gelo",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Nevasca Primordial",
+            "tipo": "gelo, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Inverno Longo (no fim de cada rodada, criaturas em alcance Médio fazem Fortitude DT {dt} ou perdem 1 ponto de Estamina)"
+        ],
+        "loot": [
+          "Coração de Gelo Primordial"
+        ],
+        "preco": {
+          "Solares": 2920
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "elemental-de-fogo-ancestral",
+        "titulo": "Elemental de Fogo Ancestral",
+        "vd": 140,
+        "estagio": "Ancestral",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Elemental",
+        "deslocamento": "30m",
+        "descricao": "O fogo que continuou depois que o mundo esfriou. Cada passo dele deixa vidro no chão e um cheiro de pedra derretida no ar, e ele nunca perdoou o mundo por ter esfriado.",
+        "ataques": [
+          {
+            "nome": "Toque Ancestral",
+            "tipo": "fogo",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Coluna de Fogo",
+            "tipo": "fogo, em área grande",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Calor Insuportável (quem termina o turno em alcance Médio sofre dano de fogo igual a um décimo do golpe dele)",
+          "Explosão ao Cair (ao chegar a 0 PV, criaturas em alcance Longo fazem Reflexos DT {dt}; sofrem o dano de um ataque dele, metade em sucesso)"
+        ],
+        "loot": [
+          "Cinza Ancestral"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "elemental-de-gelo-ancestral",
+        "titulo": "Elemental de Gelo Ancestral",
+        "vd": 165,
+        "estagio": "Ancestral",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Elemental",
+        "deslocamento": "30m",
+        "descricao": "O inverno que decidiu ficar. Onde ele para, o tempo passa mais devagar, e as pegadas dele continuam congeladas por séculos depois que ele se foi.",
+        "ataques": [
+          {
+            "nome": "Toque Ancestral",
+            "tipo": "gelo",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Nevasca Ancestral",
+            "tipo": "gelo, em área grande",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Inverno Longo (no fim de cada rodada, criaturas em alcance Longo fazem Fortitude DT {dt} ou perdem 2 pontos de Estamina)"
+        ],
+        "loot": [
+          "Cristal de Inverno Ancestral"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      }
+    ],
+    "dragao": [
+      {
+        "id": "dragao-jovem",
+        "titulo": "Dragão Jovem",
+        "vd": 30,
+        "estagio": "Jovem",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Monstro",
+        "deslocamento": "18m (Voo)",
+        "descricao": "Um dragão que já não cabe na caverna onde nasceu e ainda não aprendeu a ter paciência. Ataca primeiro e pergunta depois, e o fogo dele sai mais largo do que ele sabe controlar.",
+        "ataques": [
+          {
+            "nome": "Sopro Largo",
+            "tipo": "fogo, em cone",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Garras e Mordida",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Sopro Largo (1/cena: cone de 9m; Reflexos DT {dt}, metade do dano em sucesso)"
+        ],
+        "loot": [
+          "Escama de Dragão Jovem"
+        ],
+        "preco": {
+          "Solares": 500
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        }
+      },
+      {
+        "id": "dragao-adulto",
+        "titulo": "Dragão Adulto",
+        "vd": 35,
+        "estagio": "Adulto",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Monstro",
+        "deslocamento": "18m (Voo)",
+        "descricao": "Um dragão no auge, com território, tesouro e memória. Já perdeu a pressa: escolhe quando lutar, e quem entra no território dele costuma ser convidado a sair antes.",
+        "ataques": [
+          {
+            "nome": "Sopro do Território",
+            "tipo": "fogo, em cone",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Garras e Mordida",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Presença de Dragão (ao entrar em cena, cada inimigo faz Vontade DT {dt} ou fica Amedrontado até o fim da rodada; uma vez por criatura por cena)"
+        ],
+        "loot": [
+          "Escama de Dragão Adulto",
+          "Dente de Dragão"
+        ],
+        "preco": {
+          "Solares": 690
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "dragao-primordial",
+        "titulo": "Dragão Primordial",
+        "vd": 60,
+        "estagio": "Primordial",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Lendário",
+        "deslocamento": "24m (Voo)",
+        "descricao": "O que os anciões chamam de avô. Nasceu antes de o fogo ter nome, e o sopro dele leva o nome que ele quiser. Poucos o viram, e os que viram não discutem geografia com ele.",
+        "ataques": [
+          {
+            "nome": "Sopro Primordial",
+            "tipo": "fogo, em área grande",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Garras e Mordida",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Pele Antiga (reduz em 5 o dano físico e mágico de cada golpe)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Escama Primordial",
+          "Dente de Dragão"
+        ],
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "dragao-ancestral",
+        "titulo": "Dragão Ancestral",
+        "vd": 110,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Lendário",
+        "deslocamento": "30m (Voo)",
+        "descricao": "Um dragão que já foi ancião, primordial e lenda, e continua crescendo. O território dele é um continente, e a paciência dele tem o tamanho do território.",
+        "ataques": [
+          {
+            "nome": "Sopro Ancestral",
+            "tipo": "fogo, em área grande",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Garras e Mordida",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Pele Ancestral (reduz em 8 o dano físico e mágico de cada golpe)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Escama Ancestral",
+          "Dente de Dragão"
+        ],
+        "estagio": "Ancestral",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      }
+    ],
+    "cao-e-lobo": [
+      {
+        "id": "lobo-atroz",
+        "titulo": "Lobo Atroz",
+        "vd": 15,
+        "estagio": "Atroz",
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Animal",
+        "deslocamento": "12m",
+        "descricao": "Um lobo que cresceu o dobro do que devia, comendo o que a matilha comum não ousa. Caça sozinho ou com dois ou três iguais a ele, e reconhece quem está ferido antes de o ferido saber.",
+        "ataques": [
+          {
+            "nome": "Mordida",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Investida",
+            "tipo": "impacto",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Faro de Ferida (tem vantagem em ataques contra quem está abaixo da metade da Vida)"
+        ],
+        "loot": [
+          "Presa de Lobo Atroz",
+          "Pele de Lobo Atroz"
+        ],
+        "preco": {
+          "Solares": 41
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        }
+      },
+      {
+        "id": "lobo-alfa",
+        "titulo": "Lobo Alfa",
+        "vd": 25,
+        "estagio": "Alfa",
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Animal",
+        "deslocamento": "15m",
+        "descricao": "O lobo que a matilha inteira acompanha sem que ele precise levantar a voz. Onde ele ataca, os outros já estão chegando pelo lado.",
+        "ataques": [
+          {
+            "nome": "Mordida",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Investida do Alfa",
+            "tipo": "impacto",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Uivo do Bando (1/cena, Ação Padrão: chama 1d4 Lobos Cinzentos, que entram no começo da rodada seguinte)"
+        ],
+        "loot": [
+          "Presa de Lobo Alfa",
+          "Pele de Lobo Alfa"
+        ],
+        "preco": {
+          "Solares": 150
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        }
+      }
+    ],
+    "avulsas": [
+      {
+        "id": "dragao-do-fim-dos-tempos",
+        "titulo": "O Dragão do Fim dos Tempos",
+        "vd": 250,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Lendário",
+        "deslocamento": "36m (Voo)",
+        "descricao": "Diz a lenda que espera o último dia de tudo, e que o sopro dele é a última coisa que o mundo conhece. Quem duvida da lenda nunca chegou perto das asas dele.",
+        "ataques": [
+          {
+            "nome": "Sopro do Último Dia",
+            "tipo": "fogo, em área imensa",
+            "modo": "sopro"
+          },
+          {
+            "nome": "Garras do Fim",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Pele do Último Dia (reduz em 12 o dano físico e mágico de cada golpe)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Escama do Último Dia"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "espantalho-vivo",
+        "titulo": "Espantalho Vivo",
+        "vd": 11,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Constructo",
+        "deslocamento": "9m",
+        "descricao": "Palha, pano e uma ideia fixa: proteger uma plantação que já não existe. Ninguém sabe quem o animou, e ele não pergunta.",
+        "ataques": [
+          {
+            "nome": "Golpe de Foice",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Chuva de Corvos",
+            "tipo": "perfurante",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Corvos do Campo (1/cena, Ação Padrão: criaturas a até 6 m fazem Reflexos DT {dt} ou ficam Cegas até o fim da rodada)"
+        ],
+        "loot": [
+          "Palha Encantada"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Lunaris": 1050
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        }
+      },
+      {
+        "id": "gorgona",
+        "titulo": "Górgona",
+        "vd": 24,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "12m",
+        "descricao": "Uma mulher de cabelos de serpente que nunca pediu o olhar que carrega. Vive longe das estradas, e a maior parte das estátuas do caminho conta a mesma história.",
+        "ataques": [
+          {
+            "nome": "Mordida de Serpente",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Flecha Curta",
+            "tipo": "perfurante",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Olhar de Pedra (Ação Padrão, alcance Médio: Fortitude DT {dt} ou o alvo fica Lento; se falhar de novo na rodada seguinte, fica Petrificado até o fim da cena)"
+        ],
+        "loot": [
+          "Serpente Petrificada"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 105
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        }
+      },
+      {
+        "id": "cavaleiro-da-ultima-hora",
+        "titulo": "O Cavaleiro da Última Hora",
+        "vd": 90,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Morto-Vivo",
+        "deslocamento": "18m",
+        "descricao": "Chega sempre um instante depois de tudo acabar, e é isso que o torna terrível: ele decide o que a última hora significou. Os que sobreviveram a ele evitam relógios.",
+        "ataques": [
+          {
+            "nome": "Lâmina de Ponteiro",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Badalada",
+            "tipo": "Vazio, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT {dt}; em falha, perde 3d6 de Sanidade e fica Amedrontado)",
+          "Hora Marcada (ao entrar em cena, escolhe uma criatura: ela sofre desvantagem em todos os testes até o fim da cena, ou até ele cair)",
+          "Sinais (relógios que batem uma hora que ninguém ouviu, e um cavalo que não deixa pegadas)"
+        ],
+        "loot": [
+          "Ponteiro Quebrado"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "serpente-do-mundo",
+        "titulo": "A Serpente que Abraça o Mundo",
+        "vd": 100,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Lendário",
+        "deslocamento": "30m (Nado)",
+        "descricao": "Um corpo tão longo que a própria cauda passa despercebida, e a boca que a segura nunca a soltou. Quando afrouxa o abraço, as marés respondem.",
+        "ataques": [
+          {
+            "nome": "Constrição do Mundo",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Maré Ancestral",
+            "tipo": "água, em área imensa",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Abraço do Mundo (Ação Padrão: ataque de agarrar; alvo agarrado não pode se afastar e sofre o dano do ataque no começo de cada turno dele)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Escama do Mundo"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "come-tempo",
+        "titulo": "O Que Come o Tempo",
+        "vd": 150,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Aberração",
+        "deslocamento": "24m",
+        "descricao": "Nunca é visto duas vezes do mesmo jeito. O que ele deixou para trás são relógios parados em horas diferentes e pessoas com idade demais ou de menos.",
+        "ataques": [
+          {
+            "nome": "Mordida de Segundos",
+            "tipo": "Vazio",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Rasgo de Instantes",
+            "tipo": "Vazio, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT {dt}; em falha, perde 4d6 de Sanidade e fica Amedrontado)",
+          "Tempo Roubado (uma vez por rodada, Reação: rouba a ação de um alvo em alcance Médio; Vontade DT {dt} nega)",
+          "Sinais (ecos que chegam antes do som e sombras que andam mais devagar que o dono)",
+          "Como Evitar (ele perde o interesse em quem age fora de ordem: a cena é de fuga, ou de quebrar o ritmo que ele espera)"
+        ],
+        "loot": [
+          "Relógio Sem Ponteiros"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "fim-que-anda",
+        "titulo": "O Fim Que Anda",
+        "vd": 200,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Lendário",
+        "deslocamento": "24m",
+        "descricao": "Uma figura sem pressa, com o passo de quem já sabe como cada caminho termina. Aparece onde tudo já estava terminando, e o que sobra é silêncio educado.",
+        "ataques": [
+          {
+            "nome": "Toque do Encerramento",
+            "tipo": "Vazio",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Sentença Final",
+            "tipo": "Vazio, em área grande",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT {dt}; em falha, perde 5d6 de Sanidade e fica Amedrontado)",
+          "Sinais (velas que se apagam sozinhas e um silêncio educado que se espalha primeiro pelos cantos)",
+          "Como Evitar (ele só encerra o que já começou a acabar: quem recusa o fim com um ato deliberado, como salvar alguém ou acender a luz, fica fora do alcance por uma rodada)"
+        ],
+        "loot": [
+          "Poeira do Fim"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "titan-que-sustenta-o-ceu",
+        "titulo": "O Titã que Sustenta o Céu",
+        "vd": 400,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Lendário",
+        "deslocamento": "30m",
+        "descricao": "Carrega o céu nos ombros desde antes de haver quem olhasse para cima. Quando muda de posição, as estações mudam de lugar, e o que ele diz em voz baixa vira lei nos vales.",
+        "ataques": [
+          {
+            "nome": "Punho de Céu e Terra",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Peso do Céu",
+            "tipo": "impacto, em área imensa",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Peso Sustentado (reduz em 15 o dano físico e mágico de cada golpe)",
+          "Passo que Muda o Chão (1/rodada, Ação de Movimento: terreno em alcance Longo vira difícil; Reflexos DT {dt} ou cai)"
+        ],
+        "loot": [
+          "Pedra do Céu"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      }
+    ],
+    "roedor": [
+      {
+        "id": "rato-de-esgoto",
+        "titulo": "Rato de Esgoto",
+        "vd": 1,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Animal",
+        "deslocamento": "9m",
+        "descricao": "Do tamanho de um gato, com dentes amarelos e nenhuma pressa de fugir. Vive onde a cidade esquece o que joga fora, e ataca quem chega perto do ninho como se o ninho fosse dele.",
+        "ataques": [
+          {
+            "nome": "Mordida Suja",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Arranhão",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Doença do Esgoto (quem sofre a mordida faz Fortitude DT {dt} ou fica Enjoado por 1 hora)"
+        ],
+        "loot": [
+          "Dente de Rato"
+        ],
+        "estagio": "Comum",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Lunaris": 540
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        }
+      },
+      {
+        "id": "rato-gigante",
+        "titulo": "Rato Gigante",
+        "vd": 7,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Animal",
+        "deslocamento": "9m",
+        "descricao": "Um rato que passou tempo demais perto de esgoto encantado e cresceu até a altura de um cão de guarda. Caça em grupo, e a fome dele já passou dos restos.",
+        "ataques": [
+          {
+            "nome": "Mordida Feroz",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Investida",
+            "tipo": "impacto",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Bando (tem vantagem em ataques contra alvo que já esteja adjacente a outro Roedor)"
+        ],
+        "loot": [
+          "Pelagem Suja"
+        ],
+        "estagio": "Gigante",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Lunaris": 1200
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        }
+      },
+      {
+        "id": "rei-dos-ratos",
+        "titulo": "Rei dos Ratos",
+        "vd": 17,
+        "papel": "chefe",
+        "classe": "Criatura",
+        "categoria": "Animal",
+        "deslocamento": "9m",
+        "descricao": "Um nó de corpos presos pelas caudas, que anda como uma coisa só e comanda o esgoto inteiro. Cada boca dele sabe o nome do que come.",
+        "ataques": [
+          {
+            "nome": "Mordidas Coletivas",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Maré de Corpos",
+            "tipo": "impacto",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Chamado do Esgoto (1/cena, Ação Padrão: 2d4 Ratos Gigantes entram no começo da rodada seguinte)"
+        ],
+        "loot": [
+          "Cauda Entrelaçada",
+          "Dente de Rei"
+        ],
+        "estagio": "Rei",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Lunaris": 1600
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        }
+      }
+    ],
+    "salteador": [
+      {
+        "id": "salteador-de-estrada",
+        "titulo": "Salteador de Estrada",
+        "vd": 2,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "9m",
+        "descricao": "Gente que trocou o arado por uma faca e um pedaço de caminho. Emboscam carroças, cobram o que acham justo e desistem fácil de quem mostra que não vai pagar.",
+        "ataques": [
+          {
+            "nome": "Golpe de Faca",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Arremesso de Pedra",
+            "tipo": "impacto",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Bolsa Cortada (ao acertar, pode trocar o dano por roubar um item pequeno do alvo; Furtividade contra a Percepção do alvo)"
+        ],
+        "loot": [
+          "Bolsa Surrada"
+        ],
+        "estagio": "Salteador",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Lunaris": 540
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        }
+      },
+      {
+        "id": "capitao-de-bando",
+        "titulo": "Capitão de Bando",
+        "vd": 12,
+        "papel": "elite",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "9m",
+        "descricao": "Quem manda no bando porque foi o último a sobrar depois das brigas. Conhece cada curva do caminho e já sabe que lado da carroça guarda o dinheiro.",
+        "ataques": [
+          {
+            "nome": "Espada Curta",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pistola Enferrujada",
+            "tipo": "perfurante",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Ordem de Ataque (Reação: um aliado a até 9 m faz um ataque imediato)"
+        ],
+        "loot": [
+          "Insígnia do Bando"
+        ],
+        "estagio": "Capitão",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Lunaris": 1350
+        },
+        "preco_contratacao": {
+          "Lunaris": 750
+        },
+        "contrato_mensal": {
+          "Lunaris": 150
+        }
+      },
+      {
+        "id": "senhor-da-estrada",
+        "titulo": "Senhor da Estrada",
+        "vd": 24,
+        "papel": "chefe",
+        "classe": "Criatura",
+        "categoria": "Humanoide",
+        "deslocamento": "12m",
+        "descricao": "Dono de um trecho inteiro de estrada, com pedágio, vigias e uma história que os viajantes contam baixinho. Perdeu a paciência com o mundo há muito tempo e cobra por isso.",
+        "ataques": [
+          {
+            "nome": "Lâmina do Pedágio",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Tiro de Aviso",
+            "tipo": "perfurante",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Pedágio (ao entrar em cena, quem não pagar faz Vontade DT {dt} ou fica Intimidado até o fim da rodada)",
+          "Guarda Pessoal (1/cena, Ação Padrão: 1d4 Capitães de Bando chegam na rodada seguinte)"
+        ],
+        "loot": [
+          "Selo do Pedágio",
+          "Mapa da Estrada"
+        ],
+        "estagio": "Senhor",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 105
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        }
+      }
+    ],
+    "gigante": [
+      {
+        "id": "ogro-de-estrada",
+        "titulo": "Ogro de Estrada",
+        "vd": 9,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "9m",
+        "descricao": "Um brutamontes que aprendeu que carroça pequena vale pouco e viajante grande vale muito. Fala pouco, come muito, e chora de verdade quando perde o cajado.",
+        "ataques": [
+          {
+            "nome": "Cajado Pesado",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pedra Arremessada",
+            "tipo": "impacto",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Pancada Descuidada (quando erra um ataque, o alvo mais próximo faz Reflexos DT {dt} ou é atingido por metade do dano)"
+        ],
+        "loot": [
+          "Presa de Ogro"
+        ],
+        "estagio": "Ogro",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Lunaris": 450
+        },
+        "preco_contratacao": {
+          "Lunaris": 300
+        },
+        "contrato_mensal": {
+          "Lunaris": 60
+        }
+      },
+      {
+        "id": "gigante-de-pedra",
+        "titulo": "Gigante de Pedra",
+        "vd": 21,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "12m",
+        "descricao": "Vive na encosta, e de longe parece só mais uma parte da montanha. Quando se levanta, as pedras que ele escolheu como casa se levantam junto.",
+        "ataques": [
+          {
+            "nome": "Punho de Pedra",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Rochedo Arremessado",
+            "tipo": "impacto",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Pele de Rocha (reduz em 3 o dano físico de cada golpe)"
+        ],
+        "loot": [
+          "Lasca de Rocha Viva"
+        ],
+        "estagio": "Pedra",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 190
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        }
+      },
+      {
+        "id": "gigante-da-tormenta",
+        "titulo": "Gigante da Tormenta",
+        "vd": 34,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Monstro",
+        "deslocamento": "15m",
+        "descricao": "Anda por cima das nuvens e desce quando a tempestade pede. O trovão vem das passadas dele, e o raio vem de onde ele aponta.",
+        "ataques": [
+          {
+            "nome": "Martelo de Trovão",
+            "tipo": "raio",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Raio Chamado",
+            "tipo": "raio, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Ar de Tormenta (no começo de cada rodada, criaturas a até 9 m fazem Reflexos DT {dt} ou perdem 1 ponto de Estamina)"
+        ],
+        "loot": [
+          "Faísca de Tormenta"
+        ],
+        "estagio": "Tormenta",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 430
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "gigante-ancestral",
+        "titulo": "Gigante Ancestral",
+        "vd": 55,
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Monstro",
+        "deslocamento": "18m",
+        "descricao": "Nasceu quando a montanha ainda estava aprendendo a ter forma. Cada passo dele muda um pedaço de mapa, e ele pergunta sempre o mesmo: por que tanta gente pequena em cima do meu chão?",
+        "ataques": [
+          {
+            "nome": "Punho do Mundo",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pedra de Montanha",
+            "tipo": "impacto, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Passo que Muda o Chão (1/rodada, Ação de Movimento: terreno em alcance Médio vira difícil; Reflexos DT {dt} ou cai)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Pedra Ancestral"
+        ],
+        "estagio": "Ancestral",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      }
+    ],
+    "hidra": [
+      {
+        "id": "hidra-de-sete-cabecas",
+        "titulo": "Hidra de Sete Cabeças",
+        "vd": 47,
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Monstro",
+        "deslocamento": "12m",
+        "descricao": "Sete pescoços, sete opiniões, uma única fome. Corte um e o pescoço volta com um irmão, então a luta não se ganha por força: ganha-se por fogo, por tempo ou por sorte.",
+        "ataques": [
+          {
+            "nome": "Mordidas Múltiplas",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Cuspe Ácido",
+            "tipo": "ácido",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Cabeças que Voltam (no fim de cada rodada recupera Vida igual a um décimo do golpe dela, a menos que tenha sofrido fogo ou ácido na rodada)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Presa de Hidra",
+          "Sangue de Hidra"
+        ],
+        "estagio": "Sete Cabeças",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "hidra-primordial",
+        "titulo": "Hidra Primordial",
+        "vd": 80,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Monstro",
+        "deslocamento": "15m",
+        "descricao": "Uma hidra tão antiga que cada cabeça dela já foi uma hidra inteira. Ocupa um lago sem esforço, e o lago não ousa esvaziar.",
+        "ataques": [
+          {
+            "nome": "Mordidas de Muitas Cabeças",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Torrente Ácida",
+            "tipo": "ácido, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Cabeças que Voltam (no fim de cada rodada recupera Vida igual a um décimo do golpe dela, a menos que tenha sofrido fogo ou ácido na rodada)",
+          "Pescoços em Todo Lugar (1/rodada, Reação: ataca quem entrar em alcance Curto)"
+        ],
+        "loot": [
+          "Cabeça Primordial"
+        ],
+        "estagio": "Primordial",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      }
+    ],
+    "behemoth": [
+      {
+        "id": "behemoth-anciao",
+        "titulo": "Behemoth Ancião",
+        "vd": 44,
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Monstro",
+        "deslocamento": "15m",
+        "descricao": "O maior animal que já pisou nas planícies, e ele sabe. Quando corre, o chão faz eco por três dias, e as manadas dividem o caminho antes que ele peça.",
+        "ataques": [
+          {
+            "nome": "Chifrada Devastadora",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Pisoteio",
+            "tipo": "impacto",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Estouro da Manada (1/cena, Ação Padrão: investida em linha de 18 m; criaturas no caminho fazem Reflexos DT {dt} ou sofrem o dano de um ataque e caem)"
+        ],
+        "loot": [
+          "Chifre de Behemoth"
+        ],
+        "estagio": "Ancião",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 800
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      }
+    ],
+    "golem": [
+      {
+        "id": "golem-titanico",
+        "titulo": "Golem Titânico",
+        "vd": 65,
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Constructo",
+        "deslocamento": "12m",
+        "descricao": "Construído para guardar uma cidade e depois esquecido no meio dela. Tem a altura de uma torre, obedece a uma ordem que ninguém lembra e a cumpre com paciência de pedra.",
+        "ataques": [
+          {
+            "nome": "Punho Titânico",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Lajedo Arremessado",
+            "tipo": "impacto, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Corpo de Cidade (imune a Amedrontado, Atordoado e a efeitos de mente; reduz em 6 o dano físico de cada golpe)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Núcleo Titânico"
+        ],
+        "estagio": "Titânico",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      }
+    ],
+    "morto-vivo": [
+      {
+        "id": "cavaleiro-sem-rosto",
+        "titulo": "Cavaleiro Sem Rosto",
+        "vd": 37,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Morto-Vivo",
+        "deslocamento": "15m",
+        "descricao": "Uma armadura cheia de vento montada num cavalo feito da mesma coisa. Ninguém lembra a quem serviu, e por isso serve a quem o chama primeiro.",
+        "ataques": [
+          {
+            "nome": "Lança do Vazio Antigo",
+            "tipo": "perfurante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Galope Cortante",
+            "tipo": "cortante",
+            "modo": "corpo"
+          }
+        ],
+        "habilidades": [
+          "Sem Rosto (não pode ser Enfeitiçado nem lido por efeitos de mente)",
+          "Carga Fantasma (1/cena, Ação de Movimento: atravessa criaturas e obstáculos até 18 m em linha reta)"
+        ],
+        "loot": [
+          "Elmo Vazio"
+        ],
+        "estagio": "Cavaleiro",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 550
+        },
+        "preco_contratacao": {
+          "Lunaris": 8000
+        },
+        "contrato_mensal": {
+          "Lunaris": 1600
+        }
+      },
+      {
+        "id": "vampiro-anciao",
+        "titulo": "Vampiro Ancião",
+        "vd": 49,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Morto-Vivo",
+        "deslocamento": "12m",
+        "descricao": "Viu séculos passarem em salões que hoje são ruínas, e ainda se veste como quem vai a um baile. Educado até o último segundo, e o último segundo costuma chegar rápido.",
+        "ataques": [
+          {
+            "nome": "Garras de Seda",
+            "tipo": "cortante",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Olhar Dominante",
+            "tipo": "psíquico",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Sede Antiga (uma vez por turno, ao causar dano a uma criatura viva, recupera Vida igual a um quinto do dano)",
+          "Olhar Dominante (Ação Padrão, alcance Médio: Vontade DT {dt} ou o alvo obedece a um comando de uma palavra)"
+        ],
+        "loot": [
+          "Anel de Sangue Antigo"
+        ],
+        "estagio": "Ancião",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      }
+    ],
+    "vazio": [
+      {
+        "id": "devorador-de-eras",
+        "titulo": "Devorador de Eras",
+        "vd": 120,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Aberração",
+        "deslocamento": "18m",
+        "descricao": "Devora o momento em que as coisas aconteceram. Onde ele passa, as pessoas esquecem que o lugar existiu, e as estações perdem a ordem e se repetem.",
+        "ataques": [
+          {
+            "nome": "Mordida do Depois",
+            "tipo": "Vazio",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Bocado de Eras",
+            "tipo": "Vazio, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT {dt}; em falha, perde 3d6 de Sanidade e fica Amedrontado)",
+          "Bocado de Eras (1/cena: como Ação Padrão, criaturas na área fazem Reflexos DT {dt}. Sofrem 15d10 de Vazio, metade em sucesso; esse dano não gera crítico)",
+          "Sinais (relógios que erram por dentro do grupo e lembranças que faltam, uma a uma)",
+          "Como Evitar (a cena é de fuga, ou de fazer o grupo lembrar em voz alta o que ele já levou)"
+        ],
+        "loot": [
+          "Ampulheta Roída"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "ausencia-faminta",
+        "titulo": "A Ausência Faminta",
+        "vd": 300,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Aberração",
+        "deslocamento": "24m",
+        "descricao": "Um lugar onde deveria haver alguma coisa e não há. Cresce sobre o que consome, e o que resta parece sempre um pouco menor do que era.",
+        "ataques": [
+          {
+            "nome": "Toque de Falta",
+            "tipo": "Vazio",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Ausência Total",
+            "tipo": "Vazio, em área grande",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Presença Aterradora (cada personagem que a veja pela primeira vez na cena faz Vontade DT {dt}; em falha, perde 4d6 de Sanidade e fica Amedrontado)",
+          "Ausência Total (1/cena: como Ação Padrão, criaturas na área fazem Reflexos DT {dt}. Sofrem 20d10 de Vazio, metade em sucesso; esse dano não gera crítico)",
+          "Sinais (coisas que somem sem barulho e vozes que perdem o eco, uma a uma)",
+          "Como Evitar (ela só consome o que está sendo chamado: a cena é de fuga, ou de calar quem chama e sair do alcance)"
+        ],
+        "loot": [
+          "Fragmento de Ausência"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "ultimo-silencio",
+        "titulo": "O Último Silêncio",
+        "vd": 500,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Aberração",
+        "deslocamento": "30m",
+        "descricao": "Vem depois de todo o resto, quando não sobra ninguém para chamá-lo de nada. Os que o viram descrevem só uma coisa: o momento antes de a voz falhar.",
+        "ataques": [
+          {
+            "nome": "Silêncio que Corta",
+            "tipo": "Vazio",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Fim do Som",
+            "tipo": "Vazio, em área grande",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Presença Aterradora (cada personagem que o veja pela primeira vez na cena faz Vontade DT {dt}; em falha, perde 5d6 de Sanidade e fica Amedrontado)",
+          "Fim do Som (1/cena: como Ação Padrão, criaturas na área fazem Vontade DT {dt}. Sofrem 25d10 de Vazio e ficam Surdas até o fim da cena, metade e sem condição em sucesso; esse dano não gera crítico)",
+          "Sinais (o som some de um lugar de cada vez, até a respiração do grupo)",
+          "Como Evitar (ele reage a quem tenta fazer barulho: a cena é de fuga em silêncio, ou de fechar o Vão por onde ele veio)"
+        ],
+        "loot": [
+          "Poeira de Silêncio"
+        ],
+        "unico": true,
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      }
+    ],
+    "espirito": [
+      {
+        "id": "tempestade-viva",
+        "titulo": "Tempestade Viva",
+        "vd": 29,
+        "papel": "solo",
+        "classe": "Criatura",
+        "categoria": "Espírito",
+        "deslocamento": "18m (Voo)",
+        "descricao": "Uma tempestade com vontade, memória e ressentimento. Segue quem a incomodou por muitas léguas, e a chuva chega antes dela como aviso.",
+        "ataques": [
+          {
+            "nome": "Descarga",
+            "tipo": "raio",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Rajada Cortante",
+            "tipo": "ar, à distância",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Ventania (criaturas em alcance Curto fazem Fortitude DT {dt} no começo de cada rodada ou são empurradas 3 m)"
+        ],
+        "loot": [
+          "Faísca Engarrafada"
+        ],
+        "estagio": "Tormenta",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 90
+        },
+        "preco_contratacao": {
+          "Lunaris": 2000
+        },
+        "contrato_mensal": {
+          "Lunaris": 400
+        }
+      },
+      {
+        "id": "arcanjo",
+        "titulo": "Arcanjo",
+        "vd": 85,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Espírito",
+        "deslocamento": "24m (Voo)",
+        "descricao": "Um mensageiro que carrega a ordem de quem está acima dele e a cumpre até o último detalhe. A luz que ele traz não pede licença, e o que ele decide proteger fica protegido.",
+        "ataques": [
+          {
+            "nome": "Espada de Luz",
+            "tipo": "luz",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Sentença Radiante",
+            "tipo": "luz, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Aura Sagrada (aliados a até 9 m têm vantagem em testes de Vontade; inimigos Mortos-Vivos e Demoníacos têm desvantagem em ataques contra ele)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Pena de Arcanjo"
+        ],
+        "estagio": "Arcanjo",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "serafim",
+        "titulo": "Serafim",
+        "vd": 150,
+        "papel": "chefe",
+        "classe": "Ser Lendário",
+        "categoria": "Espírito",
+        "deslocamento": "30m (Voo)",
+        "descricao": "Seis asas, mil olhos e um canto que só é ouvido de dentro. Guarda o que os outros anjos apenas mensageiam, e a presença dele redefine o que a sala considera possível.",
+        "ataques": [
+          {
+            "nome": "Lâmina do Cântico",
+            "tipo": "luz",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Cântico Devastador",
+            "tipo": "luz, em área grande",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Cântico Constante (no começo de cada rodada, aliados a até 18 m recuperam Vida igual a um vigésimo do golpe dele; inimigos sofrem esse valor em luz)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Pena de Serafim"
+        ],
+        "estagio": "Serafim",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      }
+    ],
+    "mar": [
+      {
+        "id": "serpente-marinha-ancestral",
+        "titulo": "Serpente Marinha Ancestral",
+        "vd": 70,
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Monstro",
+        "deslocamento": "24m (Nado)",
+        "descricao": "Um corpo comprido demais para caber num único horizonte. Os marinheiros dão nomes diferentes a ela em cada porto, e ela atende por todos.",
+        "ataques": [
+          {
+            "nome": "Constrição Oceânica",
+            "tipo": "impacto",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Jato de Maré",
+            "tipo": "água, em área",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Maré Viva (criaturas a bordo de embarcações a até 30 m fazem Reflexos DT {dt} ou caem na água)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Escama Oceânica"
+        ],
+        "estagio": "Ancestral",
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      },
+      {
+        "id": "maremoto-que-anda",
+        "titulo": "O Maremoto que Anda",
+        "vd": 130,
+        "estagio": "Maremoto",
+        "papel": "solo",
+        "classe": "Ser Lendário",
+        "categoria": "Elemental",
+        "deslocamento": "30m (Nado)",
+        "descricao": "Uma onda que aprendeu a ir para onde quer. Passa por cima de cais, faróis e cidades pequenas, e volta para o mar como quem termina uma tarefa.",
+        "ataques": [
+          {
+            "nome": "Muralha de Água",
+            "tipo": "água",
+            "modo": "corpo"
+          },
+          {
+            "nome": "Onda Devastadora",
+            "tipo": "água, em área imensa",
+            "modo": "distancia"
+          }
+        ],
+        "habilidades": [
+          "Maré Viva (criaturas a até 30 m fazem Reflexos DT {dt} ou são arrastadas 9 m)",
+          "Sequência de Ataques (1/turno: como Ação Padrão, realiza os dois ataques listados; isso não concede ações extras)"
+        ],
+        "loot": [
+          "Sal do Maremoto"
+        ],
+        "disponivelNaLoja": false,
+        "preco": {
+          "Solares": 3200
+        },
+        "preco_contratacao": {
+          "Lunaris": 30000
+        },
+        "contrato_mensal": {
+          "Lunaris": 6000
+        }
+      }
+    ]
+  }
+}

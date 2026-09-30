@@ -27,6 +27,8 @@
     "precos:check": "node tools/normalize-shop-prices.mjs --check",
     "materiais:retrofit": "node tools/retrofit-materials.mjs",
     "materiais:check": "node tools/retrofit-materials.mjs --check",
+    "bestiario:familias": "node --import ./tests/frontend/registerTsLoader.mjs tools/aplicar-familias-bestiario.mjs",
+    "check:familias": "node --import ./tests/frontend/registerTsLoader.mjs tools/aplicar-familias-bestiario.mjs --check",
     "audit:balance": "node --import ./tests/frontend/registerTsLoader.mjs tools/audit-balance.mjs",
     "check:balance": "node --import ./tests/frontend/registerTsLoader.mjs tools/audit-balance.mjs --check",
     "check:typography": "node tools/check-site-typography.mjs",

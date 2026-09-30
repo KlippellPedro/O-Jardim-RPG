@@ -54,11 +54,11 @@ const bestiarioPadrao = (): IRegistro[] => ordenarPorTitulo(ENTRADAS.filter((ent
     subtitulo: [c.classe, c.subtipo].filter(Boolean).join(' · '),
     descricao: texto(c.descricao),
     campos: camposCom([
-      ['Nível', c.nivel], ['VD', c.vd], ['Vida', c.pv], ['Mana', c.mana], ['Estamina', c.estamina], ['Defesa', c.defesa], ['Iniciativa', c.iniciativa],
+      ['Nível', c.nivel], ['VD', c.vd], ['Família', c.familia], ['Estágio', c.estagio], ['Papel', c.papel], ['Vida', c.pv], ['Mana', c.mana], ['Estamina', c.estamina], ['Defesa', c.defesa], ['Iniciativa', c.iniciativa],
       ['Deslocamento', c.deslocamento], ['Contrata-se como', c.funcao],
     ]),
     blocos,
-    etiquetas: [c.categoria, c.subtipo, c.funcao ? 'Contratável' : ''].filter(Boolean),
+    etiquetas: [c.categoria, c.subtipo, c.unico ? 'Única' : '', c.funcao ? 'Contratável' : ''].filter(Boolean),
   };
 }));
 

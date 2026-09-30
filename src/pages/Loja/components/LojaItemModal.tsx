@@ -12,6 +12,7 @@ import { itemLojaContaComoEspecial, resumirLimiteItensEspeciais } from '../../..
 import { ehReliquiaCriacao, lerRessonanciaReliquia } from '../../../services/reliquiasCriacaoService';
 import { temModeloFruto } from '../../../services/frutoEdenModelo';
 import { FrutoEdenDetalhes } from './FrutoEdenDetalhes';
+import { vidaDeAliado } from '../../../services/curvaCriatura';
 
 const FrutoEdenViewer = lazy(() => import('../../../components/FrutoEdenViewer'));
 
@@ -223,7 +224,8 @@ export const LojaItemModal: React.FC<LojaItemModalProps> = ({ item, onClose, onB
         const numeros = [
           ['Nível', dadosBrutos.nivel],
           ['VD', dadosBrutos.vd],
-          ['Vida', dadosBrutos.pv],
+          ['Vida como aliado', typeof dadosBrutos.pv === 'number' ? vidaDeAliado(dadosBrutos.vd, dadosBrutos.pv) : dadosBrutos.pv],
+          ...(typeof dadosBrutos.pv === 'number' && vidaDeAliado(dadosBrutos.vd, dadosBrutos.pv) !== dadosBrutos.pv ? [['Vida como inimigo', dadosBrutos.pv]] : []),
           ['Defesa', dadosBrutos.defesa],
           ['Iniciativa', dadosBrutos.iniciativa],
           ['Deslocamento', dadosBrutos.deslocamento],

@@ -10,6 +10,7 @@ from psycopg.types.json import Jsonb
 from core import live_session
 from core.audit import record_audit
 from core.character_summary import _atende_requisito_legado
+from core.curva_criatura import vida_de_aliado
 from core.database import Database
 from core.notifications import campaign_member_ids, character_owner_ids, notify
 from core.dependencies import (
@@ -622,7 +623,9 @@ def _mercenary_ally_from_catalog_item(item: dict[str, Any], modo: str = "comprar
     def _inteiro(valor: Any, padrao: int) -> int:
         return int(valor) if isinstance(valor, (int, float)) and not isinstance(valor, bool) else padrao
 
-    vida_maxima = max(1, _inteiro(content.get("pv"), 10))
+    # No catálogo a Vida é a de um inimigo solo; como aliado ela cai para 2x a Vida
+    # média de um personagem do VD (ver core/curva_criatura.py).
+    vida_maxima = vida_de_aliado(content.get("vd"), max(1, _inteiro(content.get("pv"), 10)))
     funcao = str(content.get("funcao") or "").strip()
     # Quem foi contratado para tomar conta de um lugar ou tocar um oficio fica
     # lotado na base: entra na ficha fora de cena, e o jogador coloca em cena na
