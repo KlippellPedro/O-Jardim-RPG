@@ -19,6 +19,16 @@ class EquipmentRulesTests(unittest.TestCase):
         self.assertEqual(special_item_use_limit(8), 2)
         self.assertEqual(special_item_use_limit(20), 5)
 
+    def test_special_limit_slows_down_after_level_50_and_100(self):
+        # Mesmos valores de tests/frontend/equipmentEffects.test.ts.
+        self.assertEqual(special_item_use_limit(50), 12)
+        self.assertEqual(special_item_use_limit(57), 12)
+        self.assertEqual(special_item_use_limit(58), 13)
+        self.assertEqual(special_item_use_limit(60), 13)
+        self.assertEqual(special_item_use_limit(100), 18)
+        self.assertEqual(special_item_use_limit(116), 19)
+        self.assertEqual(special_item_use_limit("abc"), 1)
+
     def test_skill_items_and_artifacts_share_the_equipped_count(self):
         inventory = [
             {

@@ -1510,7 +1510,7 @@ def apply_character_economy_operations(
                 class_level = int(class_slot.get("nivel", 1))
             except (TypeError, ValueError):
                 class_level = 1
-            total_level += max(1, min(20, class_level))
+            total_level += max(1, class_level)
         special_limit = special_item_use_limit(total_level)
         final_special_items = equipped_special_item_count(list(inventory.values()))
         # Fichas antigas acima do teto continuam editáveis. O servidor barra

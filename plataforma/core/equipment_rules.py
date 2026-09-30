@@ -3,6 +3,8 @@ from __future__ import annotations
 import unicodedata
 from typing import Any
 
+from core.progressao_niveis import vagas_item_especial_por_nivel
+
 
 def _normalize(value: Any) -> str:
     text = unicodedata.normalize("NFD", str(value or ""))
@@ -10,13 +12,15 @@ def _normalize(value: Any) -> str:
 
 
 def special_item_use_limit(total_level: Any) -> int:
-    """One initial slot, then one slot for every four total levels."""
+    """One initial slot, then one slot every four total levels up to level 50,
+    every eight up to 100 and every sixteen after that
+    (data/ficha/progressao-niveis.json)."""
 
     try:
         level = int(total_level)
     except (TypeError, ValueError):
         level = 1
-    return max(1, max(1, level) // 4)
+    return vagas_item_especial_por_nivel(max(1, level))
 
 
 def special_item_group(item: dict[str, Any] | None) -> str | None:

@@ -7,6 +7,15 @@ import re
 import unicodedata
 from pathlib import Path
 
+from core.maestria_classe import graus_de_maestria
+from core.progressao_niveis import (
+    NIVEL_CONTEUDO_CLASSE,
+    NIVEL_MINIMO_GRAU,
+    NIVEL_TOTAL_PADRAO,
+    aumentos_atributo_por_nivel,
+    legados_por_nivel,
+)
+
 
 log = logging.getLogger("jardim-plataforma")
 
@@ -27,7 +36,7 @@ _CATALOGO: dict[str, dict[str, dict]] = {
 _ATRIBUTOS = ("forca", "destreza", "constituicao", "inteligencia", "sabedoria", "carisma", "fluxo")
 _VALORES_PADRAO = sorted((15, 14, 13, 12, 10, 8, 8))
 _GRAUS = ("iniciante", "aprendiz", "treinado", "especialista", "mestre", "veterano", "renomado")
-_NIVEL_MINIMO_GRAU = (1, 1, 3, 7, 13, 19, 29)
+_NIVEL_MINIMO_GRAU = NIVEL_MINIMO_GRAU
 _FLUXOS_CATALISAVEIS = {
     "origem", "essencia", "comunicacao", "vitalidade", "inconstancia",
     "fisico", "espaco", "tempo", "vazio", "fim",
@@ -284,6 +293,9 @@ def _pericias_concedidas(classes: list[tuple[dict, int]]) -> dict[str, int]:
 def _graus_de_treinamento(classes: list[tuple[dict, int]]) -> int:
     total = 0
     for classe, nivel in classes:
+        # A Maestria (nível 21 em diante da classe) tem graus de perícia próprios,
+        # iguais para todas as classes (data/ficha/maestria-classe.json).
+        total += graus_de_maestria(nivel)
         for marco in classe.get("progressao") or []:
             if not isinstance(marco, dict) or _inteiro(marco.get("nivel")) is None:
                 continue
@@ -561,7 +573,7 @@ def _validar_escolhas_progressao(ficha: dict, anterior: dict, classes: list[tupl
     selecionados = ficha.get("legadosSelecionados") or []
     if not isinstance(selecionados, list) or any(not isinstance(item, str) for item in selecionados):
         return "legadosSelecionados deve ser uma lista de ids"
-    vagas = nivel_total // 5 + max(0, _inteiro(raca.get("legados_adicionais")) or 0)
+    vagas = legados_por_nivel(nivel_total) + max(0, _inteiro(raca.get("legados_adicionais")) or 0)
     if len(selecionados) > vagas:
         return "a ficha possui mais Legados do que os marcos liberados"
     contagem_legados: dict[str, int] = {}
@@ -949,8 +961,8 @@ def validar_regras_ficha(
         classe = _CATALOGO["classe"].get(classe_id)
         if not classe:
             return "classe inexistente no catalogo oficial"
-        if nivel is None or not 1 <= nivel <= 20:
-            return "cada classe deve ter entre 1 e 20 niveis"
+        if nivel is None or nivel < 1:
+            return "cada classe deve ter pelo menos 1 nivel"
         if classe_id in ids:
             return "a mesma classe nao pode ocupar dois espacos"
         ids.append(classe_id)
@@ -962,9 +974,12 @@ def validar_regras_ficha(
     comuns = [(classe, nivel) for classe, nivel in classes if classe.get("categoria") == "padrao"]
     especiais = [(classe, nivel) for classe, nivel in classes if classe.get("categoria") != "padrao"]
     nivel_total = sum(nivel for _, nivel in classes)
-    if nivel_total > 60:
-        return "o nivel total nao pode passar de 60"
-    if len(comuns) > 2 or len(especiais) > 1:
+    # O padrão do jogo (duas classes comuns e uma especial, até o nível 60) só é
+    # conferido enquanto a ficha está dentro dele. Passar do 60 é outro patamar:
+    # não há teto de nível total nem de número de classes, e nada disso vira
+    # alerta pro mestre. Quem cuida do aviso é a própria tela da ficha.
+    dentro_do_padrao = nivel_total <= NIVEL_TOTAL_PADRAO
+    if dentro_do_padrao and (len(comuns) > 2 or len(especiais) > 1):
         return "o limite e duas classes comuns e uma classe especial"
     if criacao:
         if len(classes) != 1 or classes[0][1] != 1:
@@ -974,9 +989,9 @@ def validar_regras_ficha(
         # jogador (ou pra campanha) pode começar a ficha, não só uma comum.
         if classe_inicial.get("categoria") != "padrao" and str(classe_inicial.get("id")) not in liberados_classe:
             return "a criacao deve comecar com uma classe comum, ou uma classe especial liberada pelo mestre"
-    if len(comuns) == 2 and not any(nivel == 20 for _, nivel in comuns):
+    if dentro_do_padrao and len(comuns) == 2 and not any(nivel >= NIVEL_CONTEUDO_CLASSE for _, nivel in comuns):
         return "a segunda classe comum so pode ser escolhida depois de uma classe chegar ao nivel 20"
-    if especiais and comuns:
+    if dentro_do_padrao and especiais and comuns:
         # O nível 20 só é pré-requisito quando a especial vem MULTICLASSANDO
         # sobre uma base comum já em progresso. Uma ficha que É a especial
         # liberada desde a criação (sem base comum) não tem "antes" nenhum
@@ -995,9 +1010,10 @@ def validar_regras_ficha(
     # o nível e o XP livremente pela própria ficha - o router
     # (characters.py::update_character) avisa o mestre/assistente sempre que
     # um jogador mexe nisso, então a revisão acontece depois, não como
-    # bloqueio aqui. Só as regras de catálogo acima (nível 1-20, sem classe
-    # repetida, compatibilidade de árvore, limite de 60 níveis, duas comuns +
-    # uma especial e a ordem de multiclasse) continuam valendo pra todo mundo.
+    # bloqueio aqui. Só as regras de catálogo acima (nível mínimo 1, sem classe
+    # repetida, compatibilidade de árvore e, dentro dos 60 níveis do padrão,
+    # duas comuns + uma especial e a ordem de multiclasse) continuam valendo pra
+    # todo mundo.
 
     xp = _inteiro(ficha.get("xp", 0))
     if xp is None or xp < 0:
@@ -1029,7 +1045,7 @@ def validar_regras_ficha(
     aumentos = [final - inicial for inicial, final in zip(valores_base, valores_finais)]
     if any(aumento < 0 for aumento in aumentos):
         return "atributos adquiridos nao podem ficar abaixo dos valores de criacao"
-    if sum(aumentos) > nivel_total // 4:
+    if sum(aumentos) > aumentos_atributo_por_nivel(nivel_total):
         return "a ficha possui mais aumentos de atributo do que os niveis permitem"
     if criacao and any(aumentos):
         return "atributos de criacao ainda nao recebem aumentos de nivel"

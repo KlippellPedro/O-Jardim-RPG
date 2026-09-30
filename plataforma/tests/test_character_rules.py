@@ -5,6 +5,9 @@ from pathlib import Path
 
 from core.character_summary import (
     RACA_PERSONALIZADA_ID,
+    _CATALOGO,
+    _atributo_efetivo,
+    _fluxo_efetivo,
     _circulo_por_fluxo,
     bonus_escolhas_habilidade,
     carregar_catalogos,
@@ -115,6 +118,45 @@ class TestCharacterRules:
         atual["nivel"] = 3
         erro = validar_regras_ficha(atual, {}, ficha_anterior=anterior)
         assert "segunda classe comum" in erro
+
+    def _ficha_com_classes(self, classes):
+        anterior = _ficha_criacao()
+        atual = deepcopy(anterior)
+        atual["classes"] = [{"classeId": classe, "nivel": nivel} for classe, nivel in classes]
+        atual["nivel"] = sum(nivel for _, nivel in classes)
+        return anterior, atual
+
+    def test_class_level_above_20_is_not_an_error(self):
+        # O 20 é onde a classe termina de entregar recompensas escritas, não um
+        # teto: acima dele ela só soma recursos, e a ficha não gera alerta.
+        anterior, atual = self._ficha_com_classes([("guerreiro", 35)])
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+    def test_class_needs_at_least_one_level(self):
+        anterior, atual = self._ficha_com_classes([("guerreiro", 0)])
+        assert "pelo menos 1 nivel" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+    def test_total_level_and_class_count_have_no_ceiling_above_60(self):
+        # Além do 60 é outro patamar: sem teto de nível total, sem limite de
+        # classes, e nenhuma regra do padrão vira alerta ao mestre.
+        anterior, atual = self._ficha_com_classes([
+            ("guerreiro", 25), ("ninja", 25), ("piloto", 25), ("pop-star", 25),
+        ])
+        assert atual["nivel"] == 100
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+    def test_standard_build_limit_still_alerts_up_to_60(self):
+        anterior, atual = self._ficha_com_classes([("guerreiro", 20), ("ninja", 10), ("piloto", 5)])
+        assert "duas classes comuns" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+        # Passando do 60 o mesmo trio deixa de ser conferido.
+        anterior, atual = self._ficha_com_classes([("guerreiro", 30), ("ninja", 20), ("piloto", 11)])
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+    def test_second_common_class_accepts_a_class_already_past_20(self):
+        anterior, atual = self._ficha_com_classes([("guerreiro", 25), ("ninja", 5)])
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+        anterior, atual = self._ficha_com_classes([("guerreiro", 19), ("ninja", 5)])
+        assert "segunda classe comum" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
 
     def test_player_can_raise_class_level_without_matching_xp(self):
         # Decisão de design 2026-08: o jogador ganhou o controle de
@@ -338,6 +380,83 @@ class TestCharacterRules:
         atual = deepcopy(anterior)
         atual["atributosFinais"]["forca"] = 22  # base 15, aumento 7 (orcamento: 28 // 4 = 7)
         assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+    def _ficha_de_nivel_alto(self, classes):
+        anterior, atual = self._ficha_com_classes(classes)
+        anterior["classes"], anterior["nivel"] = deepcopy(atual["classes"]), atual["nivel"]
+        atual = deepcopy(anterior)
+        return anterior, atual
+
+    def test_aumentos_de_atributo_seguem_as_faixas_do_nivel(self):
+        # 1 a cada 4 níveis até o 50, a cada 8 até o 100, a cada 16 depois:
+        # 13 aumentos no nível 60 (o ritmo antigo daria 15), 18 no 100.
+        casos = [
+            ([("guerreiro", 30), ("ninja", 30)], 13),
+            ([("guerreiro", 25), ("ninja", 25), ("piloto", 25), ("pop-star", 25)], 18),
+            ([("guerreiro", 30), ("ninja", 20)], 12),
+        ]
+        for classes, direito in casos:
+            anterior, atual = self._ficha_de_nivel_alto(classes)
+            atual["atributosFinais"]["forca"] = 15 + direito
+            assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None, classes
+            atual["atributosFinais"]["forca"] = 15 + direito + 1
+            assert "aumentos de atributo" in validar_regras_ficha(atual, {}, ficha_anterior=anterior), classes
+
+    def test_legados_seguem_as_faixas_do_nivel(self):
+        # 1 a cada 5 níveis até o 50, a cada 10 até o 100, a cada 20 depois:
+        # 10 vagas no nível 55 (o ritmo antigo daria 11), 11 no 60 e 15 no 100.
+        livres = [
+            legado_id for legado_id, legado in _CATALOGO["legado"].items()
+            if not legado.get("repetivel") and all(
+                isinstance(item, dict) and set(item) <= {"nivel_personagem"}
+                for item in legado.get("pre_requisitos") or []
+            )
+        ]
+        assert len(livres) >= 16
+        casos = [
+            ([("guerreiro", 30), ("ninja", 25)], 10),
+            ([("guerreiro", 30), ("ninja", 30)], 11),
+            ([("guerreiro", 25), ("ninja", 25), ("piloto", 25), ("pop-star", 25)], 15),
+        ]
+        for classes, vagas in casos:
+            anterior, atual = self._ficha_de_nivel_alto(classes)
+            atual["legadosSelecionados"] = livres[:vagas]
+            assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None, classes
+            atual["legadosSelecionados"] = livres[:vagas + 1]
+            assert "mais Legados" in validar_regras_ficha(atual, {}, ficha_anterior=anterior), classes
+
+    def test_bonus_racial_de_atributo_nao_tem_mais_teto(self):
+        # Elfo (+4 Int), Auleth (+2 Sab), Clone e Anomalia (bônus escolhido) e as
+        # raças com Fluxo tinham um teto de 20 (ou 24) nos bônus raciais.
+        def ficha(raca, **atributos):
+            base = dict.fromkeys(("forca", "destreza", "constituicao", "inteligencia", "sabedoria", "carisma", "fluxo"), 10)
+            base.update(atributos)
+            return {"racaId": raca, "atributosFinais": base}
+
+        assert _atributo_efetivo(ficha("elfo", inteligencia=22), "inteligencia") == 26
+        assert _atributo_efetivo(ficha("auleth", sabedoria=20), "sabedoria") == 22
+        assert _atributo_efetivo(ficha("divino", carisma=20), "carisma") == 22
+        clone = ficha("clone", forca=20)
+        clone["escolhaRacial"] = {"atributosRaciais": ["forca", "destreza"]}
+        assert _atributo_efetivo(clone, "forca") == 22
+        anomalia = ficha("anomalia", forca=21)
+        anomalia["escolhaRacial"] = {"atributosRaciais": ["forca"]}
+        assert _atributo_efetivo(anomalia, "forca") == 25
+        onirico = ficha("onirico", fluxo=21)
+        assert _fluxo_efetivo(onirico, _CATALOGO["raca"]["onirico"]) == 23
+
+    def test_nenhuma_raca_declara_teto_de_atributo(self):
+        def tem_teto(valor):
+            if isinstance(valor, list):
+                return any(tem_teto(item) for item in valor)
+            if not isinstance(valor, dict):
+                return False
+            return any(
+                chave == "limites_atributos" or (chave == "limite" and isinstance(filho, (int, float))) or tem_teto(filho)
+                for chave, filho in valor.items()
+            )
+
+        assert [raca_id for raca_id, raca in _CATALOGO["raca"].items() if tem_teto(raca)] == []
 
     def test_atributo_final_nao_pode_ficar_abaixo_de_1(self):
         anterior = _ficha_criacao()
