@@ -1,5 +1,5 @@
 import { memo, type CSSProperties } from 'react';
-import { Coins, Crown, Dices, Skull, Sparkles, Star, Swords, Trophy, Users, type LucideIcon } from 'lucide-react';
+import { Coins, Crown, Dices, Medal, Mountain, Skull, Sparkles, Star, Swords, Trophy, Users, type LucideIcon } from 'lucide-react';
 import type { RaridadeConquista } from '../../services/conquistasApi';
 import './selo.css';
 
@@ -13,6 +13,9 @@ const ICONES: Record<string, LucideIcon> = {
   trofeu: Trophy,
   fama: Crown,
   moedas: Coins,
+  // Patamares do nível total (60 em diante) e níveis de uma classe só.
+  montanha: Mountain,
+  medalha: Medal,
 };
 
 // Cor do aro e do brilho por raridade.

@@ -79,7 +79,7 @@ class ConquistasEResumoTests(unittest.TestCase):
     def test_catalogo_tem_chaves_unicas_e_metricas_conhecidas(self):
         chaves = [conquista.chave for conquista in CATALOGO]
         self.assertEqual(len(chaves), len(set(chaves)))
-        conhecidas = {"rolagens", "criticos", "falhas", "dano_maximo", "usos", "sessoes", "nivel", "fama", "lunaris"}
+        conhecidas = {"rolagens", "criticos", "falhas", "dano_maximo", "usos", "sessoes", "nivel", "classe_max", "fama", "lunaris"}
         self.assertTrue(all(conquista.metrica in conhecidas for conquista in CATALOGO))
         self.assertTrue(all(conquista.raridade in {"comum", "rara", "lendaria"} for conquista in CATALOGO))
 

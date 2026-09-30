@@ -48,11 +48,31 @@ CATALOGO: tuple[Conquista, ...] = (
     # Poderes
     Conquista("primeiro_poder", "Primeiro Poder", "Use um poder, habilidade ou magia.", "usos", 1, "comum", "brilho"),
     Conquista("arsenal_em_uso", "Arsenal em Uso", "Use poderes, habilidades ou magias 25 vezes.", "usos", 25, "rara", "brilho"),
-    # Nível
+    # Nível total. Do 60 em diante cada uma marca um patamar novo (as chaves
+    # batem com data/ficha/progressao-niveis.json, e um teste confere): a
+    # comemoração é o aviso de "outro patamar", que aparece e some sozinho.
     Conquista("nivel_5", "Pé na Estrada", "Chegue ao nível 5.", "nivel", 5, "comum", "trofeu"),
     Conquista("nivel_10", "Meio Caminho", "Chegue ao nível 10.", "nivel", 10, "rara", "trofeu"),
     Conquista("nivel_15", "Veterano do Jardim", "Chegue ao nível 15.", "nivel", 15, "rara", "trofeu"),
     Conquista("nivel_20", "Ápice", "Chegue ao nível 20.", "nivel", 20, "lendaria", "trofeu"),
+    Conquista("nivel_30", "Passo Firme", "Chegue ao nível 30.", "nivel", 30, "rara", "trofeu"),
+    Conquista("nivel_40", "Nome que Pesa", "Chegue ao nível 40.", "nivel", 40, "rara", "trofeu"),
+    Conquista("nivel_50", "Metade de Cem", "Chegue ao nível 50.", "nivel", 50, "lendaria", "trofeu"),
+    Conquista(
+        "nivel_60", "Fora do Padrão",
+        "Chegue ao nível 60. As regras padrão terminam aqui: daqui em diante é outro patamar.",
+        "nivel", 60, "lendaria", "montanha",
+    ),
+    Conquista("nivel_100", "Três Dígitos", "Chegue ao nível 100. Outro patamar.", "nivel", 100, "lendaria", "montanha"),
+    Conquista("nivel_150", "Além da Conta", "Chegue ao nível 150. Outro patamar.", "nivel", 150, "lendaria", "montanha"),
+    Conquista("nivel_250", "Fora do Mapa", "Chegue ao nível 250. Outro patamar.", "nivel", 250, "lendaria", "montanha"),
+    Conquista("nivel_500", "Sem Teto", "Chegue ao nível 500. Outro patamar.", "nivel", 500, "lendaria", "montanha"),
+    # Classe: o maior nível numa classe só. O 20 é onde ela termina de entregar
+    # recompensas escritas; do 21 ao 50 vale a Maestria (data/ficha/maestria-classe.json).
+    Conquista("classe_20", "Ofício Completo", "Chegue ao nível 20 em uma classe.", "classe_max", 20, "rara", "medalha"),
+    Conquista("classe_30", "Mão de Mestre", "Chegue ao nível 30 em uma classe.", "classe_max", 30, "rara", "medalha"),
+    Conquista("classe_40", "Sem Segredos", "Chegue ao nível 40 em uma classe.", "classe_max", 40, "rara", "medalha"),
+    Conquista("classe_50", "Maestria Plena", "Chegue ao nível 50 em uma classe.", "classe_max", 50, "lendaria", "medalha"),
     # Fama
     Conquista("nome_conhecido", "Nome Conhecido", "Alcance Fama 3.", "fama", 3, "rara", "fama"),
     Conquista("lenda_viva", "Lenda Viva", "Alcance Fama 5.", "fama", 5, "lendaria", "fama"),
@@ -68,6 +88,15 @@ def _inteiro(valor) -> int:
     if isinstance(valor, bool) or not isinstance(valor, (int, float)):
         return 0
     return int(valor)
+
+
+def _maior_nivel_de_classe(ficha: dict) -> int:
+    """O maior nível numa classe só. Ficha antiga, sem a lista de classes, tem
+    uma classe só e o nível dela é o nível da ficha."""
+    classes = ficha.get("classes")
+    if isinstance(classes, list) and classes:
+        return max((_inteiro(item.get("nivel")) for item in classes if isinstance(item, dict)), default=0)
+    return _inteiro(ficha.get("nivel"))
 
 
 def metricas(connection, personagem_id) -> dict[str, int]:
@@ -115,6 +144,7 @@ def metricas(connection, personagem_id) -> dict[str, int]:
         "usos": int(registros["usos"]),
         "sessoes": int(sessoes["total"]),
         "nivel": _inteiro(ficha.get("nivel")),
+        "classe_max": _maior_nivel_de_classe(ficha),
         "fama": _inteiro(ficha.get("fama")),
         "lunaris": int(lunaris["total"]),
     }
@@ -158,6 +188,18 @@ def avaliar(connection, personagem_id, *, gravar: bool = True) -> dict:
         if inserida:
             ja[conquista.chave] = inserida["desbloqueada_em"]
             novas.append(conquista.chave)
+
+    # Tudo que desbloqueou fica gravado, mas a comemoração é uma só por métrica:
+    # a maior. Quem abre pela primeira vez uma ficha de nível 100 (um NPC do
+    # Mestre, por exemplo) leva um aviso, não uma fila de treze.
+    maiores: dict[str, str] = {}
+    for chave in novas:
+        conquista = POR_CHAVE[chave]
+        atual = maiores.get(conquista.metrica)
+        if atual is None or conquista.minimo > POR_CHAVE[atual].minimo:
+            maiores[conquista.metrica] = chave
+    anunciadas = set(maiores.values())
+    novas = [chave for chave in novas if chave in anunciadas]
 
     catalogo = []
     for conquista in CATALOGO:

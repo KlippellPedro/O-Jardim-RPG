@@ -2,7 +2,7 @@ import type { EfeitoAtmosfericoFicha } from '../fichaTheme';
 export type FormaJoia = 'losango' | 'circulo' | 'estrela';
 
 export interface EstiloMoldura {
-  /** Posição na escada (0 é a moldura simples, 12 a do nível 60). */
+  /** Posição na escada (0 é a moldura simples, 12 a do nível 60, 16 a do 500). */
   degrau: number;
   /** Chave estável do degrau, usada como classe CSS. */
   chave: string;
@@ -25,7 +25,9 @@ export interface EstiloMoldura {
 
 type DegrauMoldura = Omit<EstiloMoldura, 'degrau'>;
 
-/** Uma moldura nova a cada 5 níveis, do 5 ao 60. Abaixo do 5 vale a simples. */
+/** Uma moldura nova a cada 5 níveis, do 5 ao 60, e uma por patamar depois disso
+ * (100, 150, 250 e 500, os mesmos de data/ficha/progressao-niveis.json). Abaixo
+ * do 5 vale a simples; acima do 500 vale a última. */
 export const ESCADA_MOLDURAS: DegrauMoldura[] = [
   { chave: 'comum', rotulo: null, nivelMinimo: 1, fio: '#5b5566', fio2: '#5b5566', brilho: 'rgba(91, 85, 102, 0.35)', joias: 0, forma: 'losango', aro: false, animada: false },
   { chave: 'bronze', rotulo: 'Bronze', nivelMinimo: 5, fio: '#d08a4a', fio2: '#7a4a1f', brilho: 'rgba(208, 138, 74, 0.45)', joias: 2, forma: 'losango', aro: false, animada: false },
@@ -40,9 +42,14 @@ export const ESCADA_MOLDURAS: DegrauMoldura[] = [
   { chave: 'celestial', rotulo: 'Celestial', nivelMinimo: 50, fio: '#d6efff', fio2: '#6fb4f5', brilho: 'rgba(190, 228, 255, 0.75)', joias: 4, forma: 'estrela', aro: true, animada: true },
   { chave: 'solar', rotulo: 'Solar', nivelMinimo: 55, fio: '#ffc233', fio2: '#ff5a1f', brilho: 'rgba(255, 150, 40, 0.75)', joias: 4, forma: 'estrela', aro: true, animada: true },
   { chave: 'lenda', rotulo: 'Lendário', nivelMinimo: 60, fio: '#f6d872', fio2: '#fff3bd', brilho: 'rgba(255, 233, 150, 0.8)', joias: 4, forma: 'estrela', aro: true, animada: true },
+  { chave: 'mitico', rotulo: 'Mítico', nivelMinimo: 100, fio: '#ff5ecb', fio2: '#7b2cff', brilho: 'rgba(255, 94, 203, 0.85)', joias: 4, forma: 'estrela', aro: true, animada: true },
+  { chave: 'cosmico', rotulo: 'Cósmico', nivelMinimo: 150, fio: '#6ff3ff', fio2: '#4b3bff', brilho: 'rgba(111, 243, 255, 0.85)', joias: 4, forma: 'estrela', aro: true, animada: true },
+  { chave: 'eterno', rotulo: 'Eterno', nivelMinimo: 250, fio: '#b8ff7a', fio2: '#12a35b', brilho: 'rgba(184, 255, 122, 0.85)', joias: 4, forma: 'estrela', aro: true, animada: true },
+  { chave: 'absoluto', rotulo: 'Absoluto', nivelMinimo: 500, fio: '#ffffff', fio2: '#c8b6ff', brilho: 'rgba(255, 255, 255, 0.95)', joias: 4, forma: 'estrela', aro: true, animada: true },
 ];
 
-/** A moldura do retrato sobe um degrau a cada 5 níveis, até o 60. O cartaz de
+/** A moldura do retrato sobe um degrau a cada 5 níveis, até o 60, e depois um por
+ * patamar (100, 150, 250 e 500). O cartaz de
  * Procurado usa esta mesma escada, para o personagem ter a mesma "patente"
  * nas duas telas. */
 export function molduraDoRetrato(nivel: number): EstiloMoldura {

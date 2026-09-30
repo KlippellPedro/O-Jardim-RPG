@@ -22,7 +22,7 @@ interface RetratoPersonagemProps {
 
 /** Retrato do personagem: a foto quando existe, ou uma composição feita com as
  * cores da classe e da raça, o símbolo da atmosfera da classe e as iniciais.
- * A moldura muda a cada 5 níveis, até o 60. */
+ * A moldura muda a cada 5 níveis, até o 60, e depois a cada patamar. */
 export const RetratoPersonagem = ({
   nome,
   foto,

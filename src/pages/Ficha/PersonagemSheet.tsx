@@ -90,6 +90,9 @@ import { dispararSuaVez } from '../../components/suaVez/suaVez';
 
 
 import { SimboloOculto } from '../../components/descobertas/SimboloOculto';
+/** O autosave da ficha espera 900 ms (useCharacterStore); com folga para a rede. */
+const ESPERA_AUTOSAVE_CONQUISTAS_MS = 1800;
+
 const TABS = [
   { id: 'Ficha', icon: UserRound },
   { id: 'Perícias', icon: Dices },
@@ -263,18 +266,23 @@ export const PersonagemSheet: React.FC = () => {
 
   // Conquistas de nível, Fama e saldo não passam por rolagem: avalia ao abrir a
   // ficha e quando o nível ou a Fama mudam. O servidor decide; aqui só comemora.
+  // Dá uma folga antes de perguntar: o nível novo (digitado ou de um "subir de
+  // nível") só chega ao servidor no autosave, cerca de 1 s depois, e perguntar
+  // antes avaliaria a ficha antiga e perderia o aviso de patamar.
   const idParaConquistas = character?.id;
   const nivelParaConquistas = character?.nivel;
   const famaParaConquistas = character?.ficha?.fama;
   useEffect(() => {
     if (!idParaConquistas) return undefined;
     let ativo = true;
-    conquistasApi.listar(idParaConquistas)
-      .then((resposta) => {
-        if (ativo) dispararConquistas(resposta.catalogo.filter((item) => resposta.novas.includes(item.chave)), idParaConquistas);
-      })
-      .catch(() => undefined);
-    return () => { ativo = false; };
+    const timer = window.setTimeout(() => {
+      conquistasApi.listar(idParaConquistas)
+        .then((resposta) => {
+          if (ativo) dispararConquistas(resposta.catalogo.filter((item) => resposta.novas.includes(item.chave)), idParaConquistas);
+        })
+        .catch(() => undefined);
+    }, ESPERA_AUTOSAVE_CONQUISTAS_MS);
+    return () => { ativo = false; window.clearTimeout(timer); };
   }, [idParaConquistas, nivelParaConquistas, famaParaConquistas]);
   const somenteLeitura = character?.somenteLeitura === true;
   const characterPersistence = id ? persistence[id] : undefined;
