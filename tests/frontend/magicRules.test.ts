@@ -599,9 +599,10 @@ test('a curva de Mana mantém a magia máxima como decisão, não como rotina', 
   const mana = magiasData.regras.circulos.map((item) => item.mana_base);
   assert.deepEqual(mana, [2, 4, 7, 10, 14, 19, 25, 32, 42, 55]);
 
-  // Reserva de um conjurador no nível em que destrava cada círculo, tirada de
-  // data/regras/balanceamento-referencia-v1.json. Se a curva ficar barata
-  // demais, o topo vira rotina; cara demais, o personagem não conjura.
+  // Reserva de Mana de um conjurador de exemplo no nível em que destrava cada
+  // círculo: valores fixos, não lidos do relatório de balanceamento (que agora
+  // sai da fórmula real da ficha). Se a curva ficar barata demais, o topo vira
+  // rotina; cara demais, o personagem não conjura.
   const reservaPorCirculoMaximo: Array<[number, number]> = [[2, 8], [4, 24], [6, 44], [8, 64], [10, 84]];
   reservaPorCirculoMaximo.forEach(([circulo, reserva]) => {
     const conjuracoes = reserva / mana[circulo - 1];

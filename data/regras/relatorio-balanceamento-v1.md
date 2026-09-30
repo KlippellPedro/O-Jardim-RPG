@@ -4,8 +4,9 @@ Gerado por `npm run audit:balance`. Esta é uma verificação quantitativa, não
 
 ## Premissas
 
-- Força 12, Destreza 14, Constituição 14, Inteligência 13, Sabedoria 10, Carisma 8 e Fluxo 14.
-- Depois do nível 20, a referência usa uma segunda classe neutra com 3,5 de Vida e 3,5 de Mana por nível.
+- Força 12, Destreza 14, Constituição 14, Inteligência 13, Sabedoria 10, Carisma 8 e Fluxo 14. Os atributos ficam fixos na tabela de classes, para compará-las entre si.
+- Vida, Mana, Estamina e Defesa saem da mesma fórmula da ficha (calcularDerivadosComClasses), sem raça e com a Maestria da classe (níveis 25, 35 e 45).
+- Cada classe vai até o nível 50, o teto de uma classe. Depois disso a referência soma níveis de uma classe neutra com 3 de Vida, 3 de Mana e 3 de Estamina por nível.
 - Mede recursos, vagas, dano médio e palavras de risco. Efeitos narrativos e controle ainda exigem playtest.
 
 ## Resultado automático
@@ -15,39 +16,73 @@ Gerado por `npm run audit:balance`. Esta é uma verificação quantitativa, não
 - 0 classes fora do orçamento de 9 pontos de Vida + Mana + Estamina.
 - 0 armas acima de 75 de dano médio sem bloqueio do Mestre.
 
-Cada célula mostra `Vida/Mana/vagas de poder`.
+Cada célula mostra `Vida/Mana/Estamina`. As vagas de poder chegam a 8 no nível 20 e não mudam depois; ficam no JSON.
 
-| Classe | Tipo | Orçamento | N1 | N5 | N10 | N15 | N20 | N30 | N40 | Alertas qualitativos |
-|---|---|---:|---: | ---: | ---: | ---: | ---: | ---: | ---:|---|
-| Guerreiro | comum | 9 | 16/8/0 | 44/12/1 | 79/17/3 | 114/22/5 | 149/27/8 | 204/62/8 | 259/97/8 | nenhum |
-| Piloto | comum | 9 | 16/8/0 | 40/24/1 | 70/44/3 | 100/64/5 | 130/84/8 | 185/119/8 | 240/154/8 | nenhum |
-| Ninja | comum | 9 | 16/8/0 | 40/16/1 | 70/26/3 | 100/36/5 | 130/46/8 | 185/81/8 | 240/116/8 | nenhum |
-| Pop Star | comum | 9 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
-| Espadachim | comum | 9 | 16/8/0 | 44/12/1 | 79/17/3 | 114/22/5 | 149/27/8 | 204/62/8 | 259/97/8 | nenhum |
-| Lutador | comum | 9 | 16/8/0 | 48/12/1 | 88/17/3 | 128/22/5 | 168/27/8 | 223/62/8 | 278/97/8 | nenhum |
-| Atirador | comum | 9 | 16/8/0 | 40/12/1 | 70/17/3 | 100/22/5 | 130/27/8 | 185/62/8 | 240/97/8 | nenhum |
-| Médico | comum | 9 | 16/8/0 | 36/20/1 | 61/35/3 | 86/50/5 | 111/65/8 | 166/100/8 | 221/135/8 | nenhum |
-| Guardião | comum | 9 | 16/8/0 | 44/12/1 | 79/17/3 | 114/22/5 | 149/27/8 | 204/62/8 | 259/97/8 | nenhum |
-| Caçador | comum | 9 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
-| Engenheiro | comum | 9 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | Engenhocas |
-| Alquimista | comum | 9 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
-| Comerciante | comum | 9 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | nenhum |
-| Campeão Dimensional | especial | 9 | 16/8/0 | 44/12/1 | 79/17/3 | 114/22/5 | 149/27/8 | 204/62/8 | 259/97/8 | nenhum |
-| Pirata Amaldiçoado | especial | 9 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
-| Cartista Arcano | especial | 9 | 16/8/0 | 36/28/1 | 61/53/3 | 86/78/5 | 111/103/8 | 166/138/8 | 221/173/8 | nenhum |
-| Guia Dimensional | especial | 9 | 16/8/0 | 36/28/1 | 61/53/3 | 86/78/5 | 111/103/8 | 166/138/8 | 221/173/8 | nenhum |
-| Caçador das Almas | especial | 9 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | Zanpakutō |
-| Escritor de Contos | especial | 9 | 16/8/0 | 36/28/1 | 61/53/3 | 86/78/5 | 111/103/8 | 166/138/8 | 221/173/8 | nenhum |
-| Invocador | especial | 9 | 16/8/0 | 36/28/1 | 61/53/3 | 86/78/5 | 111/103/8 | 166/138/8 | 221/173/8 | nenhum |
-| Viajante | especial | 9 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
-| Canalizador | comum | 9 | 16/8/0 | 32/32/1 | 52/62/3 | 72/92/5 | 92/122/8 | 147/157/8 | 202/192/8 | nenhum |
-| Sintonizador | comum | 9 | 16/8/0 | 32/32/1 | 52/62/3 | 72/92/5 | 92/122/8 | 147/157/8 | 202/192/8 | nenhum |
-| Ritualista | comum | 9 | 16/8/0 | 32/32/1 | 52/62/3 | 72/92/5 | 92/122/8 | 147/157/8 | 202/192/8 | nenhum |
-| Interceptador | especial | 9 | 16/8/0 | 36/28/1 | 61/53/3 | 86/78/5 | 111/103/8 | 166/138/8 | 221/173/8 | nenhum |
-| Chef | comum | 9 | 16/8/0 | 36/24/1 | 61/44/3 | 86/64/5 | 111/84/8 | 166/119/8 | 221/154/8 | Cardápio |
-| Detetive | comum | 9 | 16/8/0 | 40/20/1 | 70/35/3 | 100/50/5 | 130/65/8 | 185/100/8 | 240/135/8 | nenhum |
-| Devorador | especial | 9 | 16/8/0 | 40/16/1 | 70/26/3 | 100/36/5 | 130/46/8 | 185/81/8 | 240/116/8 | nenhum |
-| Elementarista | especial | 9 | 16/8/0 | 36/28/1 | 61/53/3 | 86/78/5 | 111/103/8 | 166/138/8 | 221/173/8 | nenhum |
+| Classe | Tipo | Orçamento | N1 | N5 | N10 | N15 | N20 | N30 | N40 | N50 | N60 | N80 | N100 | N150 | N200 | Alertas qualitativos |
+|---|---|---:|---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---:|---|
+| Guerreiro | comum | 9 | 13/1/9 | 33/5/21 | 58/10/36 | 83/15/51 | 108/20/66 | 168/32/102 | 228/44/138 | 288/56/174 | 318/86/204 | 384/152/270 | 456/224/342 | 606/374/492 | 756/524/642 | nenhum |
+| Piloto | comum | 9 | 12/4/7 | 28/20/11 | 48/40/16 | 68/60/21 | 88/80/26 | 136/128/38 | 184/176/50 | 232/224/62 | 262/254/92 | 328/320/158 | 400/392/230 | 550/542/380 | 700/692/530 | nenhum |
+| Ninja | comum | 9 | 12/2/9 | 28/10/21 | 48/20/36 | 68/30/51 | 88/40/66 | 136/64/102 | 184/88/138 | 232/112/174 | 262/142/204 | 328/208/270 | 400/280/342 | 550/430/492 | 700/580/642 | nenhum |
+| Pop Star | comum | 9 | 11/4/8 | 23/20/16 | 38/40/26 | 53/60/36 | 68/80/46 | 104/128/70 | 140/176/94 | 176/224/118 | 206/254/148 | 272/320/214 | 344/392/286 | 494/542/436 | 644/692/586 | nenhum |
+| Espadachim | comum | 9 | 13/1/9 | 33/5/21 | 58/10/36 | 83/15/51 | 108/20/66 | 168/32/102 | 228/44/138 | 288/56/174 | 318/86/204 | 384/152/270 | 456/224/342 | 606/374/492 | 756/524/642 | nenhum |
+| Lutador | comum | 9 | 14/1/8 | 38/5/16 | 68/10/26 | 98/15/36 | 128/20/46 | 200/32/70 | 272/44/94 | 344/56/118 | 374/86/148 | 440/152/214 | 512/224/286 | 662/374/436 | 812/524/586 | nenhum |
+| Atirador | comum | 9 | 12/1/10 | 28/5/26 | 48/10/46 | 68/15/66 | 88/20/86 | 136/32/134 | 184/44/182 | 232/56/230 | 262/86/260 | 328/152/326 | 400/224/398 | 550/374/548 | 700/524/698 | nenhum |
+| Médico | comum | 9 | 11/3/9 | 23/15/21 | 38/30/36 | 53/45/51 | 68/60/66 | 104/96/102 | 140/132/138 | 176/168/174 | 206/198/204 | 272/264/270 | 344/336/342 | 494/486/492 | 644/636/642 | nenhum |
+| Guardião | comum | 9 | 13/1/9 | 33/5/21 | 58/10/36 | 83/15/51 | 108/20/66 | 168/32/102 | 228/44/138 | 288/56/174 | 318/86/204 | 384/152/270 | 456/224/342 | 606/374/492 | 756/524/642 | nenhum |
+| Caçador | comum | 9 | 12/3/8 | 28/15/16 | 48/30/26 | 68/45/36 | 88/60/46 | 136/96/70 | 184/132/94 | 232/168/118 | 262/198/148 | 328/264/214 | 400/336/286 | 550/486/436 | 700/636/586 | nenhum |
+| Engenheiro | comum | 9 | 11/4/8 | 23/20/16 | 38/40/26 | 53/60/36 | 68/80/46 | 104/128/70 | 140/176/94 | 176/224/118 | 206/254/148 | 272/320/214 | 344/392/286 | 494/542/436 | 644/692/586 | Engenhocas |
+| Alquimista | comum | 9 | 11/4/8 | 23/20/16 | 38/40/26 | 53/60/36 | 68/80/46 | 104/128/70 | 140/176/94 | 176/224/118 | 206/254/148 | 272/320/214 | 344/392/286 | 494/542/436 | 644/692/586 | nenhum |
+| Comerciante | comum | 9 | 11/4/8 | 23/20/16 | 38/40/26 | 53/60/36 | 68/80/46 | 104/128/70 | 140/176/94 | 176/224/118 | 206/254/148 | 272/320/214 | 344/392/286 | 494/542/436 | 644/692/586 | nenhum |
+| Campeão Dimensional | especial | 9 | 13/1/9 | 33/5/21 | 58/10/36 | 83/15/51 | 108/20/66 | 168/32/102 | 228/44/138 | 288/56/174 | 318/86/204 | 384/152/270 | 456/224/342 | 606/374/492 | 756/524/642 | nenhum |
+| Pirata Amaldiçoado | especial | 9 | 12/3/8 | 28/15/16 | 48/30/26 | 68/45/36 | 88/60/46 | 136/96/70 | 184/132/94 | 232/168/118 | 262/198/148 | 328/264/214 | 400/336/286 | 550/486/436 | 700/636/586 | nenhum |
+| Cartista Arcano | especial | 9 | 11/5/7 | 23/25/11 | 38/50/16 | 53/75/21 | 68/100/26 | 104/160/38 | 140/220/50 | 176/280/62 | 206/310/92 | 272/376/158 | 344/448/230 | 494/598/380 | 644/748/530 | nenhum |
+| Guia Dimensional | especial | 9 | 11/5/7 | 23/25/11 | 38/50/16 | 53/75/21 | 68/100/26 | 104/160/38 | 140/220/50 | 176/280/62 | 206/310/92 | 272/376/158 | 344/448/230 | 494/598/380 | 644/748/530 | nenhum |
+| Caçador das Almas | especial | 9 | 12/3/8 | 28/15/16 | 48/30/26 | 68/45/36 | 88/60/46 | 136/96/70 | 184/132/94 | 232/168/118 | 262/198/148 | 328/264/214 | 400/336/286 | 550/486/436 | 700/636/586 | Zanpakutō |
+| Escritor de Contos | especial | 9 | 11/5/7 | 23/25/11 | 38/50/16 | 53/75/21 | 68/100/26 | 104/160/38 | 140/220/50 | 176/280/62 | 206/310/92 | 272/376/158 | 344/448/230 | 494/598/380 | 644/748/530 | nenhum |
+| Invocador | especial | 9 | 11/5/7 | 23/25/11 | 38/50/16 | 53/75/21 | 68/100/26 | 104/160/38 | 140/220/50 | 176/280/62 | 206/310/92 | 272/376/158 | 344/448/230 | 494/598/380 | 644/748/530 | nenhum |
+| Viajante | especial | 9 | 12/3/8 | 28/15/16 | 48/30/26 | 68/45/36 | 88/60/46 | 136/96/70 | 184/132/94 | 232/168/118 | 262/198/148 | 328/264/214 | 400/336/286 | 550/486/436 | 700/636/586 | nenhum |
+| Canalizador | comum | 9 | 10/6/7 | 18/30/11 | 28/60/16 | 38/90/21 | 48/120/26 | 72/192/38 | 96/264/50 | 120/336/62 | 150/366/92 | 216/432/158 | 288/504/230 | 438/654/380 | 588/804/530 | nenhum |
+| Sintonizador | comum | 9 | 10/6/7 | 18/30/11 | 28/60/16 | 38/90/21 | 48/120/26 | 72/192/38 | 96/264/50 | 120/336/62 | 150/366/92 | 216/432/158 | 288/504/230 | 438/654/380 | 588/804/530 | nenhum |
+| Ritualista | comum | 9 | 10/6/7 | 18/30/11 | 28/60/16 | 38/90/21 | 48/120/26 | 72/192/38 | 96/264/50 | 120/336/62 | 150/366/92 | 216/432/158 | 288/504/230 | 438/654/380 | 588/804/530 | nenhum |
+| Interceptador | especial | 9 | 11/5/7 | 23/25/11 | 38/50/16 | 53/75/21 | 68/100/26 | 104/160/38 | 140/220/50 | 176/280/62 | 206/310/92 | 272/376/158 | 344/448/230 | 494/598/380 | 644/748/530 | nenhum |
+| Chef | comum | 9 | 11/4/8 | 23/20/16 | 38/40/26 | 53/60/36 | 68/80/46 | 104/128/70 | 140/176/94 | 176/224/118 | 206/254/148 | 272/320/214 | 344/392/286 | 494/542/436 | 644/692/586 | Cardápio |
+| Detetive | comum | 9 | 12/3/8 | 28/15/16 | 48/30/26 | 68/45/36 | 88/60/46 | 136/96/70 | 184/132/94 | 232/168/118 | 262/198/148 | 328/264/214 | 400/336/286 | 550/486/436 | 700/636/586 | nenhum |
+| Devorador | especial | 9 | 12/2/9 | 28/10/21 | 48/20/36 | 68/30/51 | 88/40/66 | 136/64/102 | 184/88/138 | 232/112/174 | 262/142/204 | 328/208/270 | 400/280/342 | 550/430/492 | 700/580/642 | nenhum |
+| Elementarista | especial | 9 | 11/5/7 | 23/25/11 | 38/50/16 | 53/75/21 | 68/100/26 | 104/160/38 | 140/220/50 | 176/280/62 | 206/310/92 | 272/376/158 | 344/448/230 | 494/598/380 | 644/748/530 | nenhum |
+
+## Referência para NPCs e inimigos
+
+O NPC de referência tem Força 15 (atributo principal) e os aumentos de nível vão em rodízio: metade na Força, um quarto na Constituição e um quarto na Destreza. Ataca com a melhor arma que o nível alcança (Comum no 1, Incomum no 5, Rara no 10, Épica no 15, Lendária no 25 e Relíquia da Criação no 35) e com o maior grau de perícia que o nível permite. A Vida de inimigo padrão é a que aguenta 4.5 rodadas de um grupo de 4.
+
+A Vida mostra a menor, a média e a maior entre as 18 classes comuns. O dano da arma para de subir no nível 35 (as relíquias da criação): daí em diante quem escala é o modificador de atributo, e a Vida de inimigo padrão cresce com ele.
+
+| Nível | Patamar | Vida (mín / média / máx) | Defesa | Ataque | Dano por acerto | DT padrão | DT extrema | Vida de inimigo padrão |
+|---:|---|---|---:|---:|---:|---:|---:|---:|
+| 1 | padrão | 10 / 12 / 14 | 12 | +4 | 8 | 15 | 25 | 90 |
+| 5 | padrão | 18 / 26 / 38 | 14 | +9 | 12 | 17 | 27 | 170 |
+| 10 | padrão | 28 / 44 / 68 | 17 | +14 | 20.5 | 20 | 30 | 330 |
+| 15 | padrão | 38 / 62 / 98 | 19 | +18 | 29 | 22 | 32 | 500 |
+| 20 | padrão | 48 / 80 / 128 | 22 | +24 | 30 | 25 | 35 | 510 |
+| 30 | padrão | 76 / 128 / 204 | 27 | +31 | 59 | 30 | 40 | 1010 |
+| 40 | padrão | 100 / 171 / 276 | 33 | +37 | 77 | 35 | 45 | 1320 |
+| 50 | padrão | 124 / 214 / 348 | 38 | +42 | 77 | 40 | 50 | 1320 |
+| 60 | Patamar I | 154 / 244 / 378 | 43 | +48 | 78 | 45 | 55 | 1330 |
+| 80 | Patamar I | 224 / 314 / 448 | 53 | +58 | 78 | 55 | 65 | 1330 |
+| 100 | Patamar II | 296 / 386 / 520 | 64 | +69 | 79 | 65 | 75 | 1350 |
+| 150 | Patamar III | 446 / 536 / 670 | 89 | +95 | 80 | 90 | 100 | 1370 |
+| 200 | Patamar III | 600 / 690 / 824 | 115 | +120 | 80 | 115 | 125 | 1370 |
+
+## Bestiário contra a referência
+
+Vida mediana dos monstros escritos por faixa de nível, ao lado da Vida de inimigo padrão do nível mais alto da faixa. O bestiário vai até o nível 50; acima disso a tabela de NPCs e inimigos é o guia. A Defesa da tabela é a natural, sem armadura: a partir do nível 29 quem investe na perícia de combate acerta quase sempre um inimigo do mesmo nível, então armadura, escudo e efeitos de cena é que sustentam a Defesa dos NPCs fortes.
+
+| Faixa de nível | Monstros | Vida mediana | Vida de inimigo padrão |
+|---|---:|---:|---:|
+| 1 a 10 | 41 | 140 | 330 |
+| 11 a 20 | 31 | 330 | 510 |
+| 21 a 30 | 25 | 570 | 1010 |
+| 31 a 40 | 23 | 900 | 1320 |
+| 41 a 50 | 11 | 1490 | 1320 |
 
 ## Maiores danos do arsenal
 
