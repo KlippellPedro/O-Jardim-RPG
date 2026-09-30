@@ -133,7 +133,11 @@ regra estão em [Balanceamento](BALANCEAMENTO.md#níveis-além-do-60-2026-09-29)
   padrão; Mestre e assistente nem passam por ela. Acima do nível total 60 as
   regras de "duas comuns + uma especial" e da ordem de multiclasse deixam de ser
   conferidas, e uma classe acima do 20 deixou de ser erro. Legados, aumentos de
-  atributo e graus de perícia seguem os ritmos do JSON.
+  atributo e graus de perícia seguem os ritmos do JSON. Em compensação, `PUT
+  /personagens/{id}` avisa o Mestre e o assistente quando o nível total de um
+  jogador entra num patamar novo (`patamar_novo`, `core/progressao_niveis.py`;
+  títulos "Personagem passou do nível padrão" e "Personagem entrou num patamar
+  novo"), e o teste de banco está em `test_niveis_altos_banco.py`.
 - **Limite de item especial.** `special_item_use_limit` usa o mesmo ritmo do
   aumento de atributo e o nível real de cada classe (antes `characters.py` cortava
   cada uma em 20). A trava de ativação (HTTP 422) é anterior e continua só para

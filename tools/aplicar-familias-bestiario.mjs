@@ -98,7 +98,8 @@ function montarEntrada(familia, novo) {
     habilidades: [...modelo.habilidades, ...novo.habilidades.map((texto) => texto.replaceAll('{dt}', String(dt)))],
     loot: novo.loot.map((item) => `${item} (${valorDoLoot} Solares)`),
     classe: novo.classe,
-    nivelMinimoLoja: lojaMinimaDoVd(novo.vd),
+    // O classificador do catálogo (`npm run catalogo:classificar`) é quem manda; o valor dele fica gravado na proposta.
+    nivelMinimoLoja: novo.nivelMinimoLoja ?? lojaMinimaDoVd(novo.vd),
     papel: novo.papel ?? 'solo',
     geradoPorFamilia: true,
   };

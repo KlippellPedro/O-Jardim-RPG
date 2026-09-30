@@ -23,6 +23,8 @@ interface SelectProps {
   id?: string;
   name?: string;
   title?: string;
+  /** Largura mínima da lista em px, para textos longos num botão estreito. */
+  menuMinWidth?: number;
 }
 
 /**
@@ -42,6 +44,7 @@ export const Select: React.FC<SelectProps> = ({
   id,
   name,
   title,
+  menuMinWidth,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [coords, setCoords] = useState({ top: 0, left: 0, width: 0, maxHeight: 256 });
@@ -58,7 +61,7 @@ export const Select: React.FC<SelectProps> = ({
       const viewportWidth = document.documentElement.clientWidth;
       const viewportHeight = document.documentElement.clientHeight;
       const edge = 8;
-      const width = Math.max(0, Math.min(rect.width, viewportWidth - edge * 2));
+      const width = Math.max(0, Math.min(Math.max(rect.width, menuMinWidth ?? 0), viewportWidth - edge * 2));
       const maxHeight = Math.max(96, Math.min(256, viewportHeight - edge * 2));
       const measuredHeight = Math.min(panelRef.current?.scrollHeight ?? maxHeight, maxHeight);
       const left = Math.max(edge, Math.min(rect.left, viewportWidth - width - edge));
@@ -68,7 +71,7 @@ export const Select: React.FC<SelectProps> = ({
       const top = Math.max(edge, Math.min(preferredTop, viewportHeight - measuredHeight - edge));
       setCoords({ top, left, width, maxHeight });
     }
-  }, []);
+  }, [menuMinWidth]);
 
   useLayoutEffect(() => {
     if (!isOpen) return;

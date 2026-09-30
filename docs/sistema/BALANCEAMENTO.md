@@ -169,8 +169,9 @@ outra conta, sem ligação mecânica com a Estamina.
 O nível total deixou de ter teto, por decisão do criador do jogo. O 60 continua
 sendo o **padrão** (duas classes comuns e uma especial), mas a ficha não trava
 nada acima dele: quem passa do 60 entra num patamar novo e recebe só avisos. O
-servidor alerta o Mestre apenas enquanto a ficha está dentro do padrão. Nada
-bloqueia, e um NPC pode ter o nível que a história pedir.
+servidor deixa de conferir a ordem das classes acima do padrão, mas **avisa o
+Mestre** quando a ficha de um jogador passa do 60 e a cada patamar novo (100, 150,
+250 e 500). Nada bloqueia, e um NPC pode ter o nível que a história pedir.
 
 Todos os ritmos moram em [progressao-niveis.json](../../data/ficha/progressao-niveis.json),
 lido pelo site ([progressaoNiveis.ts](../../src/services/progressaoNiveis.ts)) e

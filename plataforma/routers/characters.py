@@ -9,6 +9,7 @@ from psycopg.types.json import Jsonb
 from core import live_session
 from core.audit import record_audit
 from core.combate_intenso import registrar_minimos
+from core.progressao_niveis import NIVEL_TOTAL_PADRAO, patamar_novo, rotulo_do_patamar
 from core.character_summary import (
     _classes_da_ficha,
     _nome,
@@ -1056,6 +1057,28 @@ def update_character(
                     actor_user_id=user.id,
                     details={"personagem_id": str(character_id)},
                 )
+                # Acima do nível 60 a ficha não trava nada e o servidor deixa de
+                # conferir a ordem das classes. Em troca, o Mestre é avisado a cada
+                # patamar novo (60, 100, 150, 250, 500), que é a hora de decidir se
+                # a mesa aceita o personagem ali.
+                nivel_antes = sum(int(item.get("nivel") or 0) for item in classes_antes)
+                nivel_depois = sum(int(item.get("nivel") or 0) for item in classes_depois)
+                patamar = patamar_novo(nivel_antes, nivel_depois)
+                if patamar is not None:
+                    notifications.notify(
+                        connection,
+                        user_ids=managers,
+                        category="campanha",
+                        title="Personagem passou do nível padrão" if patamar == NIVEL_TOTAL_PADRAO else "Personagem entrou num patamar novo",
+                        message=(
+                            f"A ficha '{name}' chegou ao nível total {nivel_depois} ({rotulo_do_patamar(nivel_depois)}, a partir do nível {patamar}). "
+                            f"O jogo padrão termina no nível {NIVEL_TOTAL_PADRAO}; a ficha não trava nada acima disso, "
+                            "então vale conferir com o jogador se a mesa aceita o personagem nesse patamar."
+                        ),
+                        campaign_id=current["campanha_id"],
+                        actor_user_id=user.id,
+                        details={"personagem_id": str(character_id), "patamar": patamar},
+                    )
         row = connection.execute(
             """
             UPDATE personagens

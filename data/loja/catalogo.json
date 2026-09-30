@@ -29688,7 +29688,7 @@
           "Elmo Vazio (150 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 4,
+        "nivelMinimoLoja": 3,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "morto-vivo",
@@ -30411,7 +30411,7 @@
           "Escama de Dragão Jovem (120 Solares)"
         ],
         "classe": "Ser Lendário",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 4,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "dragao",
@@ -30871,7 +30871,7 @@
           "Pele de Lobo Atroz (60 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "cao-e-lobo",
@@ -31260,7 +31260,7 @@
           "Dente de Rei (70 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 3,
+        "nivelMinimoLoja": 2,
         "papel": "chefe",
         "geradoPorFamilia": true,
         "familia": "roedor",
@@ -31519,7 +31519,7 @@
           "Presa de Ogro (40 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 2,
+        "nivelMinimoLoja": 1,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "gigante",
@@ -31647,7 +31647,7 @@
           "Faísca de Tormenta (140 Solares)"
         ],
         "classe": "Criatura",
-        "nivelMinimoLoja": 4,
+        "nivelMinimoLoja": 3,
         "papel": "solo",
         "geradoPorFamilia": true,
         "familia": "gigante",

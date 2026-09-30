@@ -38,7 +38,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 1600
-        }
+        },
+        "nivelMinimoLoja": 3
       },
       {
         "id": "elemental-de-fogo-primordial",
@@ -76,7 +77,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "elemental-de-gelo-maior",
@@ -114,7 +116,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 400
-        }
+        },
+        "nivelMinimoLoja": 3
       },
       {
         "id": "elemental-de-gelo-primordial",
@@ -152,7 +155,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "elemental-de-fogo-ancestral",
@@ -192,7 +196,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "elemental-de-gelo-ancestral",
@@ -231,7 +236,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "dragao": [
@@ -271,7 +277,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 400
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "dragao-adulto",
@@ -310,7 +317,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "dragao-primordial",
@@ -350,7 +358,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "dragao-ancestral",
@@ -391,7 +400,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "cao-e-lobo": [
@@ -432,7 +442,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 400
-        }
+        },
+        "nivelMinimoLoja": 2
       },
       {
         "id": "lobo-alfa",
@@ -471,7 +482,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 1600
-        }
+        },
+        "nivelMinimoLoja": 3
       }
     ],
     "avulsas": [
@@ -513,7 +525,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "espantalho-vivo",
@@ -551,7 +564,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 150
-        }
+        },
+        "nivelMinimoLoja": 2
       },
       {
         "id": "gorgona",
@@ -589,7 +603,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 400
-        }
+        },
+        "nivelMinimoLoja": 3
       },
       {
         "id": "cavaleiro-da-ultima-hora",
@@ -630,7 +645,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "serpente-do-mundo",
@@ -670,7 +686,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "come-tempo",
@@ -712,7 +729,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "fim-que-anda",
@@ -753,7 +771,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "titan-que-sustenta-o-ceu",
@@ -793,7 +812,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "roedor": [
@@ -834,7 +854,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 60
-        }
+        },
+        "nivelMinimoLoja": 1
       },
       {
         "id": "rato-gigante",
@@ -873,7 +894,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 150
-        }
+        },
+        "nivelMinimoLoja": 1
       },
       {
         "id": "rei-dos-ratos",
@@ -913,7 +935,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 150
-        }
+        },
+        "nivelMinimoLoja": 2
       }
     ],
     "salteador": [
@@ -954,7 +977,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 60
-        }
+        },
+        "nivelMinimoLoja": 1
       },
       {
         "id": "capitao-de-bando",
@@ -993,7 +1017,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 150
-        }
+        },
+        "nivelMinimoLoja": 2
       },
       {
         "id": "senhor-da-estrada",
@@ -1034,7 +1059,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 400
-        }
+        },
+        "nivelMinimoLoja": 3
       }
     ],
     "gigante": [
@@ -1075,7 +1101,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 60
-        }
+        },
+        "nivelMinimoLoja": 1
       },
       {
         "id": "gigante-de-pedra",
@@ -1114,7 +1141,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 1600
-        }
+        },
+        "nivelMinimoLoja": 3
       },
       {
         "id": "gigante-da-tormenta",
@@ -1153,7 +1181,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 3
       },
       {
         "id": "gigante-ancestral",
@@ -1193,7 +1222,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "hidra": [
@@ -1236,7 +1266,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "hidra-primordial",
@@ -1276,7 +1307,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "behemoth": [
@@ -1317,7 +1349,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "golem": [
@@ -1359,7 +1392,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "morto-vivo": [
@@ -1401,7 +1435,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 1600
-        }
+        },
+        "nivelMinimoLoja": 3
       },
       {
         "id": "vampiro-anciao",
@@ -1441,7 +1476,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "vazio": [
@@ -1485,7 +1521,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "ausencia-faminta",
@@ -1527,7 +1564,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "ultimo-silencio",
@@ -1569,7 +1607,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "espirito": [
@@ -1610,7 +1649,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 400
-        }
+        },
+        "nivelMinimoLoja": 3
       },
       {
         "id": "arcanjo",
@@ -1650,7 +1690,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "serafim",
@@ -1690,7 +1731,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       }
     ],
     "mar": [
@@ -1732,7 +1774,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       },
       {
         "id": "maremoto-que-anda",
@@ -1772,7 +1815,8 @@
         },
         "contrato_mensal": {
           "Lunaris": 6000
-        }
+        },
+        "nivelMinimoLoja": 4
       }
     ]
   }

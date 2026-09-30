@@ -455,10 +455,11 @@ export const AbaPericias = ({ character, onUpdate }: { character: any, onUpdate:
                       title={`Grau de treinamento: ${nomeDoGrauPericia(grauAtual)} (+${BONUS_GRAU[grauAtual] || 0})`}
                       value={grauAtual}
                       onChange={(grau) => handleGrauChange(p.id, grau)}
+                      menuMinWidth={250}
                       options={GRAUS_PERICIA.map((grau, indiceDoGrau) => ({
                         value: grau,
                         // Grau que pede mais nível total do que a ficha tem: só um aviso, o Mestre decide.
-                        label: `${nomeDoGrauPericia(grau)} (+${BONUS_GRAU[grau]})${NIVEL_MINIMO_GRAU[indiceDoGrau] > nivel ? ` · pede nível ${NIVEL_MINIMO_GRAU[indiceDoGrau]}` : ''}`,
+                        label: `${nomeDoGrauPericia(grau)} (+${BONUS_GRAU[grau]})${NIVEL_MINIMO_GRAU[indiceDoGrau] > nivel ? ` · nível ${NIVEL_MINIMO_GRAU[indiceDoGrau]}` : ''}`,
                         triggerLabel: `${nomeDoGrauPericia(grau)} +${BONUS_GRAU[grau]}`,
                         labelClassName: CORES_GRAU[grau],
                       }))}

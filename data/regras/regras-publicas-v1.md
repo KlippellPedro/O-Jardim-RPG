@@ -1340,7 +1340,7 @@ Se a dúvida é "o que eu ganho quando passo do 20?", esta parte responde sem vo
 
 - Níveis totais 100, 150, 250 e 500 | Patamares II a V. Cada um traz Conquista, moldura nova no retrato e um grau de perícia novo: Mítico, Cósmico, Eterno e Absoluto. | Esta página e Perícias
 
-- Nada disso trava a ficha. Passou do que a regra padrão prevê, a ficha só mostra o aviso do patamar novo e a mesa decide o que fazer com isso.
+- Nada disso trava a ficha. Ao passar do nível 60 e a cada patamar novo, o Mestre recebe um aviso e a mesa decide o que fazer com isso.
 
 - O atributo não tem teto, e a rolagem de magia soma metade do nível como qualquer teste. O Fluxo recomendado de cada círculo é aviso, e a DT do círculo decide se a magia sai.
 
@@ -1383,6 +1383,8 @@ O nível 60 é onde terminam as regras padrão. A ficha não trava nada acima de
 - Os patamares são os níveis totais 60, 100, 150, 250 e 500.
 
 - Cada um traz uma Conquista, uma moldura própria no retrato e no cartaz de Procurado e um selo na ficha, de Patamar I a Patamar V. O aviso aparece uma vez e some sozinho.
+
+- O Mestre recebe um aviso quando a sua ficha passa do nível 60 e a cada patamar novo. Ele não trava nada: serve para a mesa conversar sobre o personagem naquele ponto.
 
 - Um NPC do Mestre pode ficar num patamar alto sem cumprir nenhuma regra de criação: a ficha serve para guardar a Vida, a Defesa e os números dele.
 
@@ -3500,11 +3502,11 @@ O catálogo inteiro tem 985 itens, e você nunca vê todos de uma vez. Cada item
 
 - Feira de Vila | O cotidiano: armas simples, proteção comum, ferramentas, suprimentos e criaturas mundanas de nível baixo. | 278
 
-- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 248
+- Metrópole | Armas marciais, proteção rara, selos básicos, veículos civis, propriedades, especialistas e criaturas intermediárias. | 249
 
-- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 240
+- Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 238
 
-- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 219
+- Banco Lunar | Lendário, mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 220
 
 Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
 

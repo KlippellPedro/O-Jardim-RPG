@@ -154,6 +154,25 @@ def patamares_alcancados(nivel_total: object) -> list[int]:
     return [patamar for patamar in PATAMARES_NIVEL if alvo >= patamar]
 
 
+_ROMANOS = ("I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X")
+
+
+def rotulo_do_patamar(nivel_total: object) -> str | None:
+    """"Patamar I" a partir do primeiro patamar, ou None dentro do padrão."""
+    alcancados = patamares_alcancados(nivel_total)
+    if not alcancados:
+        return None
+    return f"Patamar {_ROMANOS[min(len(alcancados), len(_ROMANOS)) - 1]}"
+
+
+def patamar_novo(nivel_antes: object, nivel_depois: object) -> int | None:
+    """O patamar em que a ficha ENTROU ao ir de um nível total ao outro (o maior
+    novo), ou None quando não entrou em nenhum. Descer de nível nunca conta."""
+    antes = set(patamares_alcancados(nivel_antes))
+    novos = [patamar for patamar in patamares_alcancados(nivel_depois) if patamar not in antes]
+    return max(novos) if novos else None
+
+
 def patamar_atual(nivel_total: object) -> int | None:
     """Maior patamar alcançado, ou None enquanto vale o padrão."""
     alcancados = patamares_alcancados(nivel_total)

@@ -1619,7 +1619,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         </tbody>
       </table></div>
       <ul class="regras-list">
-        <li>Nada disso trava a ficha. Passou do que a regra padrão prevê, a ficha só mostra o aviso do patamar novo e a mesa decide o que fazer com isso.</li>
+        <li>Nada disso trava a ficha. Ao passar do nível ${NIVEL_TOTAL_PADRAO} e a cada patamar novo, o Mestre recebe um aviso e a mesa decide o que fazer com isso.</li>
         <li>O atributo não tem teto, e a rolagem de magia soma metade do nível como qualquer teste. O Fluxo recomendado de cada círculo é aviso, e a DT do círculo decide se a magia sai.</li>
         <li>Personagens de nível muito alto costumam ser NPCs do Mestre, como o dono de um banco ou um guardião antigo. Eles usam a mesma ficha, sem cumprir regra de criação.</li>
       </ul>
@@ -1650,6 +1650,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <ul class="regras-list">
         <li>Os patamares são os níveis totais ${PATAMARES_NIVEL.slice(0, -1).join(', ')} e ${PATAMARES_NIVEL[PATAMARES_NIVEL.length - 1]}.</li>
         <li>Cada um traz uma Conquista, uma moldura própria no retrato e no cartaz de Procurado e um selo na ficha, de Patamar I a Patamar V. O aviso aparece uma vez e some sozinho.</li>
+        <li>O Mestre recebe um aviso quando a sua ficha passa do nível ${NIVEL_TOTAL_PADRAO} e a cada patamar novo. Ele não trava nada: serve para a mesa conversar sobre o personagem naquele ponto.</li>
         <li>Um NPC do Mestre pode ficar num patamar alto sem cumprir nenhuma regra de criação: a ficha serve para guardar a Vida, a Defesa e os números dele.</li>
       </ul>
 

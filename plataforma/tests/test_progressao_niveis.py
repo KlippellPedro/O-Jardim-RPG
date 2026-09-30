@@ -15,6 +15,8 @@ from core.progressao_niveis import (
     legados_por_nivel,
     nivel_por_xp,
     patamar_atual,
+    patamar_novo,
+    rotulo_do_patamar,
     patamares_alcancados,
     vagas_item_especial_por_nivel,
     xp_para_nivel,
@@ -116,6 +118,18 @@ class ProgressaoNiveisTests(unittest.TestCase):
         self.assertIsNone(patamar_atual(59))
         self.assertEqual(patamar_atual(249), 150)
         self.assertEqual(patamar_atual(250), 250)
+
+    def test_rotulo_e_entrada_em_patamar(self) -> None:
+        self.assertIsNone(rotulo_do_patamar(59))
+        self.assertEqual([rotulo_do_patamar(n) for n in (60, 99, 100, 150, 250, 500, 5000)],
+                         ["Patamar I", "Patamar I", "Patamar II", "Patamar III", "Patamar IV", "Patamar V", "Patamar V"])
+        self.assertEqual(patamar_novo(59, 60), 60)
+        self.assertIsNone(patamar_novo(60, 61))
+        self.assertEqual(patamar_novo(99, 100), 100)
+        # Pular vários de uma vez avisa o maior; descer nunca avisa.
+        self.assertEqual(patamar_novo(1, 200), 150)
+        self.assertIsNone(patamar_novo(100, 59))
+        self.assertIsNone(patamar_novo(0, 59))
 
     def test_limites_de_classe(self) -> None:
         self.assertEqual(NIVEL_CONTEUDO_CLASSE, 20)

@@ -109,7 +109,7 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
     },
     {
       id: 'pericias-grau', titulo: 'Grau de treinamento',
-      descricao: 'O grau vai de Iniciante a Absoluto e define o bônus de treinamento; os cinco últimos só abrem a partir do nível 60. Um grau que pede mais nível do que você tem aparece com “pede nível N”: dá para escolher, mas o Mestre é avisado. Clique no grau para ver todos os degraus e escolher o treinamento atual da perícia.',
+      descricao: 'O grau vai de Iniciante a Absoluto e define o bônus de treinamento; os cinco últimos só abrem a partir do nível 60. Um grau que pede mais nível do que você tem aparece com o nível que pede (por exemplo, “Cósmico (+18) · nível 150”): dá para escolher, mas o Mestre é avisado. Clique no grau para ver todos os degraus e escolher o treinamento atual da perícia.',
       alvos: ['[data-tour="pericia-grau"]'], opcional: true,
     },
     {
@@ -277,7 +277,7 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
   Magias: [
     {
       id: 'magias-resumo', titulo: 'Fonte, Fluxo e manifestações',
-      descricao: 'Escolha entre Magias, Rituais, Selos e Encantamentos. O painel resume fonte, Fluxo nativo, Mana, círculo máximo, dificuldade e vagas; o menor limite entre fonte e Fluxo determina o que pode ser conjurado.',
+      descricao: 'Escolha entre Magias, Rituais, Selos e Encantamentos. O painel resume fonte, Fluxo nativo, Mana, o maior círculo que a fonte libera, a dificuldade dele e as vagas. A fonte diz até que círculo você aprende; o Fluxo é uma recomendação.',
       alvos: ['[data-tour="magias-resumo"]', '[data-tour="section-overview"]'],
     },
     {
@@ -287,8 +287,13 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
     },
     {
       id: 'magias-limites', titulo: 'Limites mágicos',
-      descricao: 'Fonte concede acesso e vagas; Fluxo sustenta o círculo; Misticismo participa dos testes; Mana paga custos. Avisos neste painel explicam quando uma dessas regras impede aprender ou conjurar.',
+      descricao: 'A fonte concede acesso e vagas; o Fluxo recomendado avisa até onde a conjuração sai com folga; Misticismo e metade do nível entram no teste; a Mana paga os custos. Quando o Fluxo está abaixo do recomendado, a ficha só avisa e a DT do círculo decide se a magia sai.',
       alvos: ['[data-tour="magias-limites"]'],
+    },
+    {
+      id: 'magias-por-circulo', titulo: 'Magias por círculo',
+      descricao: 'Cada chip mostra quantas magias daquele círculo você já conhece e o limite. Do nível 25 da classe em diante vale no máximo 4 magias do mesmo círculo; antes disso não há limite por círculo, e o painel avisa quando ele passa a valer.',
+      alvos: ['[data-tour="magias-por-circulo"]'], opcional: true,
     },
     {
       id: 'magias-catalisadores', titulo: 'Catalisadores de Fluxo',
