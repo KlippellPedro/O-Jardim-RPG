@@ -1,7 +1,9 @@
-import { ATRIBUTOS, ROTULOS_ATRIBUTOS, TABELA_XP, modificador, type TAtributo } from '../../../services/calculoService';
+import { ATRIBUTOS, ROTULOS_ATRIBUTOS, modificador, xpParaNivel, type TAtributo } from '../../../services/calculoService';
 import { CLASSES_CATALOGO, RACAS_CATALOGO } from '../../../services/catalogoService';
 import { formatarRecompensaClasse } from '../../../services/classeService';
 import { obterEstagiosRaciaisAlcancados } from '../../../services/racaService';
+import { NIVEL_MAXIMO_CLASSE } from '../../../services/progressaoNiveis';
+import { descreverMarcoMaestria, marcosMaestriaEntre } from '../../../services/maestriaClasse';
 import {
   podeSelecionarPoder,
   selecoesPoderValidas,
@@ -10,7 +12,8 @@ import {
 import { recalcularDerivadosSalvos } from '../../../store/useCharacterStore';
 import type { IClasse, IPoderClasse } from '../../../types/catalogo';
 
-export const NIVEL_MAXIMO_SIMULADO = 20;
+/** Até onde o simulador deixa subir uma classe: o teto do sistema. */
+export const NIVEL_MAXIMO_SIMULADO = NIVEL_MAXIMO_CLASSE;
 export const AJUSTE_ATRIBUTO_MAXIMO = 10;
 
 export interface ISlotClasse {
@@ -79,8 +82,13 @@ export interface IResultadoSimulacao {
   mudou: boolean;
 }
 
+/** Nível do cenário: nunca passa do teto do sistema. */
 const limitarNivel = (valor: unknown) =>
   Math.max(1, Math.min(NIVEL_MAXIMO_SIMULADO, Math.trunc(Number(valor) || 1)));
+
+/** Nível atual de uma classe da ficha: sem teto, para o nível total não mentir
+ * quando alguém já digitou um valor acima dele. */
+const nivelDaFicha = (valor: unknown) => Math.max(1, Math.trunc(Number(valor) || 1));
 
 export function limitarAjusteAtributo(valor: unknown): number {
   const numero = Math.trunc(Number(valor) || 0);
@@ -94,7 +102,7 @@ export function slotsDaFicha(ficha: any): ISlotClasse[] {
     ? ficha.classes
     : ficha?.classeId ? [{ classeId: ficha.classeId, nivel: ficha.nivel || 1 }] : [];
   return brutos
-    .map((slot) => ({ classeId: String(slot.classeId || slot.id || ''), nivel: limitarNivel(slot.nivel) }))
+    .map((slot) => ({ classeId: String(slot.classeId || slot.id || ''), nivel: nivelDaFicha(slot.nivel) }))
     .filter((slot) => slot.classeId);
 }
 
@@ -216,6 +224,12 @@ export function simularCenario(ficha: any, cenario: ICenarioSimulacao): IResulta
         classeTitulo: classe.titulo,
         itens: marco.recompensas.map(formatarRecompensaClasse),
       }));
+    marcosMaestriaEntre(slot.nivel, nivelNovo).forEach((marco) => recompensas.push({
+      nivel: marco.nivel,
+      classeId: classe.id,
+      classeTitulo: classe.titulo,
+      itens: [`Maestria: ${descreverMarcoMaestria(marco)}`],
+    }));
 
     const escolhidos = selecoesPoderValidas(ficha).filter((item) => item.classeId === classe.id).length;
     const vagasAtuais = vagasPoderDaClasse(classe, slot.nivel);
@@ -242,7 +256,7 @@ export function simularCenario(ficha: any, cenario: ICenarioSimulacao): IResulta
     .map((estagio) => estagio.titulo);
 
   const xpAtual = Math.max(0, Number(ficha?.xp) || 0);
-  const xpNecessario = TABELA_XP[Math.max(0, Math.min(TABELA_XP.length - 1, nivelSimulado - 1))] ?? 0;
+  const xpNecessario = xpParaNivel(nivelSimulado);
 
   return {
     nivelAtual,

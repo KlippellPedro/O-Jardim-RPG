@@ -1,3 +1,7 @@
+import { marcosMaestriaEntre } from '../../../services/maestriaClasse';
+import { aumentosAtributoPorNivel, legadosPorNivel, vagasItemEspecialPorNivel } from '../../../services/progressaoNiveis';
+import falasSubida from './falasSubida.json';
+
 /** Uma recompensa já pronta para o painel. */
 export interface RecompensaSubida {
   /** Etiqueta da linha (Poder, Habilidade, Ganho...). */
@@ -36,6 +40,43 @@ export const descreverRecompensa = (
     return { rotulo: 'Ganho', texto: titulo, fala: titulo };
   }
   return { rotulo, texto: titulo, fala: `${rotulo}: ${titulo}` };
+};
+
+/** Fala da linha "Classe" quando a classe já passou do nível com recompensas
+ * escritas: não cita o nome, para a voz gravada valer para as 29 classes. */
+export const falaClasseAcimaDoConteudo = (nivelClasse: number): string =>
+  falasSubida.classeAcimaDoConteudo.replace('{n}', String(nivelClasse));
+
+/** Marcos de Maestria que a classe cruzou ao ir de `nivelAntes` a `nivelDepois`
+ * (o reforço de recursos aparece também nas linhas de Vida, Mana e Estamina). */
+export const recompensasDeMaestria = (nivelAntes: number, nivelDepois: number): RecompensaSubida[] =>
+  marcosMaestriaEntre(nivelAntes, nivelDepois).map((marco) => (
+    marco.tipo === 'grau_pericia'
+      ? descreverRecompensa('grau_pericia', marco.titulo, marco.quantidade)
+      : { rotulo: 'Maestria', texto: marco.titulo, fala: falasSubida.maestriaRecursos }
+  ));
+
+/** O que o nível TOTAL libera, sem depender da classe escolhida: Legado,
+ * aumento de atributo e vaga de item especial, cada um no seu ritmo. */
+export const ganhosDoNivelTotal = (totalAntes: number, totalDepois: number): RecompensaSubida[] => {
+  const ganho = (diferenca: number, singular: string, plural: (quantidade: number) => string): RecompensaSubida[] => {
+    if (diferenca <= 0) return [];
+    const texto = diferenca === 1 ? singular : plural(diferenca);
+    return [{ rotulo: 'Ganho', texto, fala: texto }];
+  };
+  return [
+    ...ganho(legadosPorNivel(totalDepois) - legadosPorNivel(totalAntes), falasSubida.legado, (n) => `Mais ${n} Legados`),
+    ...ganho(
+      aumentosAtributoPorNivel(totalDepois) - aumentosAtributoPorNivel(totalAntes),
+      falasSubida.atributo,
+      (n) => `Mais ${n} aumentos de atributo`,
+    ),
+    ...ganho(
+      vagasItemEspecialPorNivel(totalDepois) - vagasItemEspecialPorNivel(totalAntes),
+      falasSubida.itemEspecial,
+      (n) => `Mais ${n} vagas de item especial`,
+    ),
+  ];
 };
 
 export interface SubidaNivel {

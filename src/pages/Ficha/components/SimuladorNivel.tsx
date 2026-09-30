@@ -129,7 +129,7 @@ export const SimuladorNivel = ({ character }: ISimuladorNivelProps) => {
                         />
                       </div>
                       <div className="flex flex-wrap gap-1.5">
-                        {[slot.nivel + 1, slot.nivel + 3, 5, 10, 15, 20]
+                        {[slot.nivel + 1, slot.nivel + 3, 5, 10, 15, 20, 30, 40, 50]
                           .filter((valor, indice, lista) => valor > slot.nivel && valor <= NIVEL_MAXIMO_SIMULADO && lista.indexOf(valor) === indice)
                           .sort((a, b) => a - b)
                           .map((valor) => (

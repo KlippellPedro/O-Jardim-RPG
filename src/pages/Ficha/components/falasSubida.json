@@ -1,0 +1,8 @@
+{
+  "_nota": "Falas fixas do painel de subida de nível que não vêm das classes. O texto é a chave da frase gravada, então tools/gerar-voz-sabio.py lê este mesmo arquivo: mudou aqui, rode o script para regravar. {n} vira o número.",
+  "maestriaRecursos": "Maestria: reforço de recursos",
+  "legado": "Mais um Legado",
+  "atributo": "Mais um aumento de atributo",
+  "itemEspecial": "Mais uma vaga de item especial",
+  "classeAcimaDoConteudo": "Classe no nível {n}"
+}

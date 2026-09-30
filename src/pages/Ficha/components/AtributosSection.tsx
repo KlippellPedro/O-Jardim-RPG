@@ -13,6 +13,7 @@ import {
   obterAjustesManuais,
 } from '../../../services/ajustesFichaService';
 import type { IDetalheEfeitoAutomatico } from '../../../services/equipamentoService';
+import { aumentosDeAtributo } from '../../../services/progressaoFichaService';
 import { AjusteButton } from './AjustesFichaModal';
 import { SectionTitle } from './SharedFichaComponents';
 
@@ -79,9 +80,21 @@ export function AtributosSection({
   onOpenInfo,
   onOpenAdjust,
 }: AtributosSectionProps) {
+  // Só informa: o servidor avisa o Mestre se a conta passar, e NPCs e bênçãos
+  // podem legitimamente estar acima do que o nível libera.
+  const aumentos = aumentosDeAtributo(ficha);
   return (
     <section className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6" data-tour="ficha-atributos">
       <SectionTitle title="Atributos" />
+      {aumentos && (
+        <p className="-mt-2 mb-4 text-xs text-gray-500" data-testid="aumentos-atributo">
+          Aumentos pelo nível:{' '}
+          <span className={aumentos.livres > 0 ? 'font-bold text-emerald-300' : 'font-bold text-gray-300'}>
+            {aumentos.usados} de {aumentos.direito} usados
+          </span>
+          {aumentos.livres > 0 ? ` · ${aumentos.livres} para gastar` : ''}
+        </p>
+      )}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-7">
         {ATRIBUTOS.map((atributo) => {
           const valorNatural = naturais[atributo] ?? 10;

@@ -52,7 +52,7 @@ const PASSOS_POR_ABA: Record<FichaTourTabId, FichaTourStep[]> = {
     },
     {
       id: 'ficha-classes', titulo: 'Classes e níveis',
-      descricao: 'A ficha aceita até três classes. O nível de cada uma libera habilidades, poderes e eventos próprios, e a soma desses níveis forma o nível total do personagem.',
+      descricao: 'A ficha aceita quantas classes você quiser. O nível de cada uma libera habilidades, poderes e eventos próprios até o 20, e a soma desses níveis forma o nível total do personagem.',
       alvos: ['[data-tour="ficha-classes"]'],
     },
     {

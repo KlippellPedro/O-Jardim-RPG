@@ -5,6 +5,7 @@ import {
   obterOpcoesRaciaisSelecionadas,
   obterTracosRaciaisDisponiveis,
 } from './racaService';
+import { niveisDeReforcoDeRecursos } from './maestriaClasse';
 
 export const ATRIBUTOS = ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma', 'fluxo'] as const;
 export type TAtributo = typeof ATRIBUTOS[number];
@@ -225,7 +226,9 @@ export function aplicarAjusteAtributoRacial(valorBase: number, ajuste = 0, limit
   const bonus = Number(ajuste);
   if (!Number.isFinite(bonus) || bonus === 0) return base;
 
-  const teto = Number(limite);
+  // Sem teto declarado o bônus vale inteiro. `Number(null)` seria 0 e
+  // descartaria o bônus como se o teto fosse 0, então null/undefined ficam de fora.
+  const teto = limite === null || limite === undefined ? Number.NaN : Number(limite);
   if (!Number.isFinite(teto) || bonus < 0) {
     return Math.max(ATRIBUTO_VALOR_MINIMO, base + bonus);
   }
@@ -248,19 +251,9 @@ export function aplicarAjustesAtributosRaciais(atributosFinais: Record<string, n
   ]));
 }
 
-export const TABELA_XP = Array.from(
-  { length: 100 },
-  (_, indice) => 500 * (indice + 1) * indice,
-);
-
-export function nivelPorXp(xp: number) {
-  const valor = typeof xp === 'number' && xp >= 0 ? xp : 0;
-  let nivel = 1;
-  TABELA_XP.forEach((limite, indice) => {
-    if (valor >= limite) nivel = indice + 1;
-  });
-  return nivel;
-}
+// A tabela de XP deixou de ser um array de 100 linhas: sem teto de nível, ela é
+// uma conta por faixas (data/ficha/progressao-niveis.json).
+export { custoDoNivel, nivelPorXp, xpParaNivel } from './progressaoNiveis';
 
 function calcularDerivadosBase(
   atributosFinais: Record<string, number>,
@@ -395,12 +388,15 @@ export function calcularDerivadosComClasses(
       return;
     }
     const niveisComGanho = Math.max(0, Math.trunc(Number(referencia.nivel) || 0));
-    vida += niveisComGanho * Math.max(1, Number(classe.vida));
-    mana += niveisComGanho * Math.max(1, Number(classe.mana));
+    // Os reforços de recursos da Maestria (25, 35 e 45 da classe) valem como
+    // alguns níveis a mais do perfil de Vida, Mana e Estamina da própria classe.
+    const niveisContados = niveisComGanho + niveisDeReforcoDeRecursos(niveisComGanho);
+    vida += niveisContados * Math.max(1, Number(classe.vida));
+    mana += niveisContados * Math.max(1, Number(classe.mana));
     // Sem o piso de 1 por nível que Vida e Mana têm: classe que ainda não
     // declarou `estamina` no catálogo simplesmente não soma nada por nível, em
     // vez de ganhar um ponto de graça antes do orçamento novo ser definido.
-    estamina += niveisComGanho * Math.max(0, Number(classe.estamina) || 0);
+    estamina += niveisContados * Math.max(0, Number(classe.estamina) || 0);
   });
 
   return {

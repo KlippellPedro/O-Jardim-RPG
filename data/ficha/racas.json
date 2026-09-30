@@ -3100,9 +3100,6 @@
     "ajustes_atributos": {
       "inteligencia": 4
     },
-    "limites_atributos": {
-      "inteligencia": 24
-    },
     "legados_adicionais": 1,
     "beneficios_criacao": {
       "lunaris_total": 40,
@@ -3118,7 +3115,7 @@
         "id": "intelecto-elfico",
         "titulo": "Intelecto Élfico",
         "tipo": "passiva",
-        "descricao": "Receba +4 em Inteligência. Somente esse bônus racial pode levar Inteligência acima do limite natural 20, até o máximo 24; ele não altera o limite de nenhum outro atributo.",
+        "descricao": "Receba +4 em Inteligência.",
         "automatizada": true,
         "nivel_minimo": 1
       },
@@ -3777,10 +3774,6 @@
       "sabedoria": 2,
       "carisma": -3
     },
-    "limites_atributos": {
-      "inteligencia": 20,
-      "sabedoria": 20
-    },
     "pericias_iniciais_adicionais": 6,
     "conhecimentos_extremos_total": 2,
     "legados_adicionais": 1,
@@ -4269,10 +4262,6 @@
           "forca": -2,
           "destreza": 2
         },
-        "limites_atributos": {
-          "forca": 20,
-          "destreza": 20
-        },
         "dano_natural": "1d6",
         "caracteristicas": [
           {
@@ -4297,10 +4286,6 @@
         "ajustes_atributos": {
           "forca": 2,
           "destreza": 1
-        },
-        "limites_atributos": {
-          "forca": 20,
-          "destreza": 20
         },
         "dano_natural": "1d8",
         "caracteristicas": [
@@ -4327,10 +4312,6 @@
           "forca": 4,
           "destreza": 0
         },
-        "limites_atributos": {
-          "forca": 20,
-          "destreza": 20
-        },
         "dano_natural": "2d6",
         "caracteristicas": [
           {
@@ -4355,10 +4336,6 @@
         "ajustes_atributos": {
           "forca": 5,
           "destreza": -2
-        },
-        "limites_atributos": {
-          "forca": 20,
-          "destreza": 20
         },
         "dano_natural": "3d6",
         "caracteristicas": [
@@ -4385,10 +4362,6 @@
           "forca": -3,
           "destreza": 4
         },
-        "limites_atributos": {
-          "forca": 20,
-          "destreza": 20
-        },
         "dano_natural": "1d4",
         "caracteristicas": [
           {
@@ -4413,10 +4386,6 @@
         "ajustes_atributos": {
           "forca": 0,
           "destreza": 3
-        },
-        "limites_atributos": {
-          "forca": 20,
-          "destreza": 20
         },
         "dano_natural": "1d6",
         "caracteristicas": [
@@ -4443,10 +4412,6 @@
           "forca": 3,
           "destreza": 2
         },
-        "limites_atributos": {
-          "forca": 20,
-          "destreza": 20
-        },
         "dano_natural": "1d8",
         "caracteristicas": [
           {
@@ -4471,10 +4436,6 @@
         "ajustes_atributos": {
           "forca": 5,
           "destreza": 0
-        },
-        "limites_atributos": {
-          "forca": 20,
-          "destreza": 20
         },
         "dano_natural": "2d6",
         "caracteristicas": [
@@ -4749,7 +4710,6 @@
       "total": 2,
       "bonus_por_escolha": 2,
       "distintos": true,
-      "limite": 20,
       "campo": "atributosRaciais",
       "titulo": "Atributo da Matriz"
     },
@@ -4766,7 +4726,7 @@
         "id": "matriz-aperfeicoada",
         "titulo": "Matriz Aperfeiçoada",
         "tipo": "criacao",
-        "descricao": "Escolha dois atributos diferentes. Cada um recebe +2, respeitando o limite natural 20.",
+        "descricao": "Escolha dois atributos diferentes. Cada um recebe +2.",
         "automatizada": true
       },
       {
@@ -4920,7 +4880,6 @@
       "total": 1,
       "bonus_por_escolha": 4,
       "distintos": true,
-      "limite": 20,
       "campo": "atributosRaciais",
       "titulo": "Atributo Marcante"
     },
@@ -5137,10 +5096,6 @@
       "constituicao": 2,
       "fluxo": 2
     },
-    "limites_atributos": {
-      "constituicao": 20,
-      "fluxo": 20
-    },
     "fragmentos_config": {
       "conhecidos_iniciais": 3,
       "conhecidos_maximo": 6,
@@ -5331,10 +5286,6 @@
     "ajustes_atributos": {
       "inteligencia": 2,
       "fluxo": 2
-    },
-    "limites_atributos": {
-      "inteligencia": 20,
-      "fluxo": 20
     },
     "ajustes_pericias": {
       "misticismo": 4
@@ -5544,10 +5495,6 @@
     "ajustes_atributos": {
       "sabedoria": 2,
       "fluxo": 2
-    },
-    "limites_atributos": {
-      "sabedoria": 20,
-      "fluxo": 20
     },
     "legados_adicionais": 1,
     "descricao": "Nasceu em Sonhar, o mundo dos sonhos, e continua existindo mesmo quando todo mundo acorda. O corpo é feito da matéria de lá, então consegue dobrar pedacinhos da realidade, entrar no sonho dos outros e trazer sonho ou pesadelo pra dentro de uma luta. A Parte do Sonhar escolhida mostra qual lado desse mundo mais marcou ele.",
@@ -5910,10 +5857,6 @@
     "ajustes_atributos": {
       "carisma": 2,
       "fluxo": 2
-    },
-    "limites_atributos": {
-      "carisma": 20,
-      "fluxo": 20
     },
     "ajustes_pericias": {
       "vontade": 4

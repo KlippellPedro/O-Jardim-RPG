@@ -86,7 +86,7 @@ export const Clone = ({ raca }: { raca: IRaca }) => {
             <Dna size={32} className={`${tema.icon} mb-4`} strokeWidth={1.5} />
             <h3 className={`text-xl font-bold ${tema.text} mb-3`} style={{ fontFamily: 'Cinzel, serif' }}>Matriz Aperfeiçoada</h3>
             <p className="text-emerald-200/60 leading-relaxed text-sm">
-              Criado em laboratório para superar falhas biológicas. Escolha dois atributos diferentes e receba +2 em cada um deles, respeitando o limite natural 20.
+              Criado em laboratório para superar falhas biológicas. Escolha dois atributos diferentes e receba +2 em cada um deles.
             </p>
           </PremiumCard>
 

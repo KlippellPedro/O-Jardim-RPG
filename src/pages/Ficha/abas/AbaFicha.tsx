@@ -4,14 +4,15 @@ import { SectionTitle, LabeledInput, LabeledModalSelect, LabeledSelect } from '.
 import { ModalInfoFicha } from '../components/ModalInfoFicha';
 import { carregarCatalogo } from '../../../services/catalogoService';
 import { ICatalogo } from '../../../types/catalogo';
-import { aplicarAjustesAtributosRaciais, ATRIBUTOS, ATRIBUTO_VALOR_MINIMO, bonusTesteAtributo, calcularDerivadosComClasses, TABELA_XP, nivelPorXp, TAtributo } from '../../../services/calculoService';
+import { aplicarAjustesAtributosRaciais, ATRIBUTOS, ATRIBUTO_VALOR_MINIMO, bonusTesteAtributo, calcularDerivadosComClasses, xpParaNivel, nivelPorXp, TAtributo } from '../../../services/calculoService';
+import { NIVEL_MAXIMO_CLASSE, NIVEL_TOTAL_PADRAO, patamarAtual, rotuloDoPatamar } from '../../../services/progressaoNiveis';
 import { limparEscolhasPrincipaisRaciais, obterGruposEscolhaRacial, nomeExibicaoRaca, RACA_PERSONALIZADA_ID } from '../../../services/racaService';
 import { registrosApi } from '../../../services/registrosApi';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { ARVORES, SEM_ARVORE_ID, arvoreVisivel, arvoresVisiveisComAtual, filtrarPorArvore, filtrarPorLiberacao, type ArvoreEntry } from '../../../../data/mundo/arvoresCatalog';
 import { AVISO_FLUXO_FIM } from '../../../services/magiaService';
 import { dispararEscolhaImpacto } from '../components/escolhaImpacto';
-import { descreverRecompensa, dispararSubidaNivel } from '../components/subidaNivel';
+import { descreverRecompensa, dispararSubidaNivel, ganhosDoNivelTotal, recompensasDeMaestria } from '../components/subidaNivel';
 import '../components/subidaNivel.css';
 import {
   adicionarCondicaoOficial,
@@ -431,19 +432,21 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
   };
 
   // BUG-FIX: barra de XP era decorativa (0/1000 fixo, botões sem ação).
-  // Usa a mesma tabela de XP do Wizard (TABELA_XP/nivelPorXp).
+  // A tabela de XP (xpParaNivel/nivelPorXp) é a mesma do Wizard e não tem teto
+  // de nível: até o 100 o custo é N x 1.000, depois cada faixa cobra um valor
+  // fixo (data/ficha/progressao-niveis.json).
   // ficha.xp guarda o total acumulado (o servidor soma o XP da sessão nele),
   // mas a barra mostra só o progresso DENTRO do nível: ao subir, volta a 0 e
-  // o alvo passa a ser o custo do próximo (N x 1.000). O que passou do
-  // custo continua contando pro nível seguinte.
+  // o alvo passa a ser o custo do próximo. O que passou do custo continua
+  // contando pro nível seguinte.
   const xpAtual = Number(f.xp) || 0;
   const nivelAtual = character.nivel || 1;
-  const xpNivelAtual = TABELA_XP[nivelAtual - 1] ?? 0;
-  const xpProximoNivel = TABELA_XP[nivelAtual] ?? null;
+  const xpNivelAtual = xpParaNivel(nivelAtual);
+  const xpProximoNivel = xpParaNivel(nivelAtual + 1);
   const xpNoNivel = Math.max(0, xpAtual - xpNivelAtual);
-  const custoNivel = xpProximoNivel !== null ? xpProximoNivel - xpNivelAtual : null;
-  const percentXp = custoNivel ? Math.min(100, (xpNoNivel / custoNivel) * 100) : 100;
-  const podeSubirNivel = xpProximoNivel !== null && xpAtual >= xpProximoNivel;
+  const custoNivel = xpProximoNivel - xpNivelAtual;
+  const percentXp = Math.min(100, (xpNoNivel / custoNivel) * 100);
+  const podeSubirNivel = xpAtual >= xpProximoNivel;
 
   const [xpFlutuante, setXpFlutuante] = useState<{ chave: number; delta: number } | null>(null);
 
@@ -480,9 +483,16 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
       const nivelTotalNovo = next.reduce((sum, c) => sum + (Number(c.nivel) || 1), 0) || 1;
       const antes = calcularDerivadosComClasses(atributosParaDerivados(attrsNaturais, f), racaAtual, classes, catalogo.classes, nivelTotalAtual || 1, f.escolhaRacial);
       const depois = calcularDerivadosComClasses(atributosParaDerivados(attrsNaturais, f), racaAtual, next, catalogo.classes, nivelTotalNovo, f.escolhaRacial);
-      const recompensas = (classeCatalogo.progressao || [])
-        .find(marco => marco.nivel === classeAlvo.nivel)?.recompensas
-        .map(item => descreverRecompensa(item.tipo, item.titulo, item.quantidade)) || [];
+      const nivelClasseAntes = escolha.tipo === 'existente' && escolha.index !== undefined
+        ? Number(classes[escolha.index]?.nivel) || 0
+        : 0;
+      const recompensas = [
+        ...((classeCatalogo.progressao || [])
+          .find(marco => marco.nivel === classeAlvo.nivel)?.recompensas
+          .map(item => descreverRecompensa(item.tipo, item.titulo, item.quantidade)) || []),
+        ...recompensasDeMaestria(nivelClasseAntes, classeAlvo.nivel),
+        ...ganhosDoNivelTotal(nivelTotalAtual, nivelTotalNovo),
+      ];
       dispararSubidaNivel({
         nivelTotal: nivelTotalNovo,
         classeId: classeCatalogo.id,
@@ -653,20 +663,13 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
     });
   };
 
-  const classesAtuaisCatalogo = classes
-    .map(slot => ({ slot, classe: catalogo?.classes.find(item => item.id === slot.classeId) }))
-    .filter(item => item.classe);
-  const comunsAtuais = classesAtuaisCatalogo.filter(item => item.classe?.categoria === 'padrao');
-  const possuiEspecial = classesAtuaisCatalogo.some(item => item.classe?.categoria !== 'padrao');
-  const classesDisponiveisMulticlasse = classesFiltradas.filter(classe => {
-    if (classes.some(slot => slot.classeId === classe.id)) return false;
-    if (!isMestre) {
-      if (nivelTotalClasses >= 60) return false;
-      if (classe.categoria !== 'padrao') return !possuiEspecial && nivelTotalClasses >= 20;
-      return comunsAtuais.length < 2;
-    }
-    return true;
-  });
+  // Nada trava a multiclasse: qualquer classe que o jogador já pode ver (Árvore
+  // e liberações do Mestre em classesFiltradas) e que ainda não está na ficha
+  // pode ser adicionada. O padrão de duas comuns e uma especial até o nível 60
+  // continua valendo como alerta ao Mestre no servidor, não como bloqueio aqui.
+  const classesDisponiveisMulticlasse = classesFiltradas.filter(
+    classe => !classes.some(slot => slot.classeId === classe.id),
+  );
 
   const handleAdicionarClasse = () => {
     salvarClasses([...classes, { classeId: '', nivel: 1 }]);
@@ -685,7 +688,9 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
   };
 
   const handleClasseNivelChange = (index: number, nivel: number) => {
-    const nivelLimpo = Math.min(20, Math.max(1, Math.trunc(nivel) || 1));
+    // Digitar é livre: o teto de NIVEL_MAXIMO_CLASSE vale para o botão de subir
+    // nível, e passar dele só gera o aviso abaixo da lista de classes.
+    const nivelLimpo = Math.max(1, Math.trunc(nivel) || 1);
     salvarClasses(classes.map((c, i) => (i === index ? { ...c, nivel: nivelLimpo } : c)));
   };
 
@@ -848,7 +853,18 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
         {/* CLASSE */}
         <div className="bg-[#0f0e15] border border-white/5 rounded-2xl p-6" data-tour="ficha-classes">
           <SectionTitle title="Classe" />
-          <p className="text-xs text-gray-500 mb-4">{classes.length || 0} classe(s) · nível total {character.nivel}</p>
+          <p className="text-xs text-gray-500 mb-4">
+            {classes.length || 0} classe(s) · nível total {character.nivel}
+            {rotuloDoPatamar(character.nivel) ? (
+              <span
+                className="ml-2 rounded-full border border-amber-300/40 bg-amber-300/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-200"
+                title={`Nível total ${patamarAtual(character.nivel)} ou mais: além das regras padrão, que terminam no ${NIVEL_TOTAL_PADRAO}.`}
+                data-testid="selo-patamar"
+              >
+                {rotuloDoPatamar(character.nivel)}
+              </span>
+            ) : null}
+          </p>
           <div className="flex flex-col gap-2 mb-4">
             {classes.map((classeSlot, index) => {
               const classeAtualDoSlot = catalogo?.classes.find((classe) => classe.id === classeSlot.classeId);
@@ -890,7 +906,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
                     id={`nivel-classe-${index}`}
                     type="number"
                     min={1}
-                    max={20}
+                    max={NIVEL_MAXIMO_CLASSE}
                     value={classeSlot.nivel}
                     onChange={(e) => handleClasseNivelChange(index, parseInt(e.target.value) || 1)}
                     className="ficha-class-slot__level-input"
@@ -911,11 +927,15 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
             {classes.length === 0 && (
               <p className="text-xs text-gray-600 italic">Nenhuma classe ainda.</p>
             )}
+            {classes.some(classe => (Number(classe.nivel) || 0) > NIVEL_MAXIMO_CLASSE) && (
+              <p className="text-xs text-amber-300/90" role="status">
+                Uma classe passou do nível {NIVEL_MAXIMO_CLASSE}, o teto do sistema. Serve para NPCs e exceções: acima dele a classe só soma Vida, Mana e Estamina.
+              </p>
+            )}
           </div>
           <button
             onClick={handleAdicionarClasse}
-            disabled={classes.length >= 3}
-            className="w-full py-3 rounded-lg border border-yellow-600/30 text-yellow-600 text-xs font-bold uppercase tracking-widest hover:bg-yellow-600/10 transition-colors border-dashed disabled:cursor-not-allowed disabled:opacity-40"
+            className="w-full py-3 rounded-lg border border-yellow-600/30 text-yellow-600 text-xs font-bold uppercase tracking-widest hover:bg-yellow-600/10 transition-colors border-dashed"
           >
             + Adicionar Classe
           </button>
@@ -1214,15 +1234,13 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
                   onKeyDown={(e) => { if (e.key === 'Enter') { (e.target as HTMLInputElement).blur(); } }}
                 />
                 <span className="mx-1">/</span>
-                <span>{custoNivel ?? xpNoNivel}</span>
+                <span>{custoNivel}</span>
               </div>
            </div>
-           {custoNivel !== null && (
-             <p className="mt-1 text-[11px] text-gray-500 font-mono text-center">
-               Nível {nivelAtual} → {nivelAtual + 1}
-               {podeSubirNivel ? ' · pronto para subir' : ` · faltam ${custoNivel - xpNoNivel} XP`}
-             </p>
-           )}
+           <p className="mt-1 text-[11px] text-gray-500 font-mono text-center">
+             Nível {nivelAtual} → {nivelAtual + 1}
+             {podeSubirNivel ? ' · pronto para subir' : ` · faltam ${custoNivel - xpNoNivel} XP`}
+           </p>
            </div>
            <div className="grid grid-cols-2 gap-2 sm:flex">
               <button onClick={() => handleXp(10)} className="px-3 py-1.5 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white disabled:opacity-30">+10</button>
@@ -1341,7 +1359,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
                         <button
                           key={i}
                           onClick={() => handleSubirNivel({ tipo: 'existente', index: i })}
-                          disabled={c.nivel >= 20 || nivelTotalClasses >= 60}
+                          disabled={c.nivel >= NIVEL_MAXIMO_CLASSE}
                           className="flex justify-between items-center w-full p-3 rounded-lg border border-white/10 hover:border-[#c7a44c]/50 hover:bg-[#c7a44c]/10 transition-colors text-left disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                           <span className="text-white font-bold">{classeObj?.titulo || 'Classe'}</span>
@@ -1374,7 +1392,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
                   </button>
                 </form>
                 {classesDisponiveisMulticlasse.length === 0 && (
-                  <p className="mt-2 text-xs text-gray-500">Uma classe só chega ao nível 20 se outra já tiver nível 10. Classe especial exige nível total 20 e liberação do Mestre.</p>
+                  <p className="mt-2 text-xs text-gray-500">Você já tem todas as classes que estão liberadas para este personagem. Classe especial depende de liberação do Mestre.</p>
                 )}
               </div>
             </div>

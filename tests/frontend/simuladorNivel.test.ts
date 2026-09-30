@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { CLASSES_CATALOGO } from '../../src/services/catalogoService';
-import { TABELA_XP } from '../../src/services/calculoService';
+import { xpParaNivel } from '../../src/services/calculoService';
 import {
+  NIVEL_MAXIMO_SIMULADO,
   aplicarCenario,
   cenarioInicial,
   formatarDelta,
@@ -55,9 +56,9 @@ test('recompensas listadas ficam entre o nivel atual e o simulado, em ordem', ()
   assert.deepEqual(niveis, [...niveis].sort((a, b) => a - b));
 });
 
-test('so simula para frente: nunca abaixo do nivel atual nem acima do 20', () => {
+test('so simula para frente: nunca abaixo do nivel atual nem acima do teto de 50 da classe', () => {
   const ficha = fichaNivel(3);
-  assert.equal(simularCenario(ficha, { niveis: { [classe.id]: 99 }, atributos: {} }).nivelSimulado, 20);
+  assert.equal(simularCenario(ficha, { niveis: { [classe.id]: 99 }, atributos: {} }).nivelSimulado, NIVEL_MAXIMO_SIMULADO);
   const abaixo = simularCenario(ficha, { niveis: { [classe.id]: 1 }, atributos: {} });
   assert.equal(abaixo.nivelSimulado, 3);
   assert.equal(abaixo.mudou, false);
@@ -83,10 +84,10 @@ test('ajuste de atributo e limitado a mais ou menos 10', () => {
 test('xp necessario acompanha a tabela e nunca fica negativo', () => {
   const ficha = fichaNivel(3, { xp: 999_999 });
   const resultado = simularCenario(ficha, { niveis: { [classe.id]: 6 }, atributos: {} });
-  assert.equal(resultado.xp.necessario, TABELA_XP[5]);
+  assert.equal(resultado.xp.necessario, xpParaNivel(6));
   assert.equal(resultado.xp.faltam, 0);
   const pobre = simularCenario(fichaNivel(3, { xp: 0 }), { niveis: { [classe.id]: 6 }, atributos: {} });
-  assert.equal(pobre.xp.faltam, TABELA_XP[5]);
+  assert.equal(pobre.xp.faltam, xpParaNivel(6));
 });
 
 test('poderes: subir de nivel libera vagas e marca o que passa a poder ser escolhido', () => {

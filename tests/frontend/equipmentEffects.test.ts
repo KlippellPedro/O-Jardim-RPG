@@ -69,6 +69,13 @@ test('itens de perícia e artefatos compartilham uma vaga a cada quatro níveis'
   assert.equal(limiteItensEspeciaisPorNivel(7), 1);
   assert.equal(limiteItensEspeciaisPorNivel(8), 2);
   assert.equal(limiteItensEspeciaisPorNivel(20), 5);
+  // Depois do 50 o ritmo desacelera: 1 a cada 8 até o 100 e 1 a cada 16 depois.
+  assert.equal(limiteItensEspeciaisPorNivel(50), 12);
+  assert.equal(limiteItensEspeciaisPorNivel(57), 12);
+  assert.equal(limiteItensEspeciaisPorNivel(58), 13);
+  assert.equal(limiteItensEspeciaisPorNivel(60), 13);
+  assert.equal(limiteItensEspeciaisPorNivel(100), 18);
+  assert.equal(limiteItensEspeciaisPorNivel(116), 19);
 
   assert.equal(grupoLimiteItemEspecial({ item_id: 'acessorio-refinado', dados: {} }), 'item-pericia');
   assert.equal(grupoLimiteItemEspecial({ item_id: 'qualquer', dados: { tipo: 'artefato' } }), 'artefato');

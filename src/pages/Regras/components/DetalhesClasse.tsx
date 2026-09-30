@@ -2,6 +2,8 @@ import { ChevronDown } from 'lucide-react';
 import type { IClasse, IFichaTecnicaClasse, IOpcaoHabilidadeClasse } from '../../../types/catalogo';
 import { classeTemProgressaoPublicada, formatarRecompensaClasse } from '../../../services/classeService';
 import { rotuloCustoDePoder } from '../../../services/statusService';
+import { MARCOS_MAESTRIA, descreverMarcoMaestria } from '../../../services/maestriaClasse';
+import { NIVEL_CONTEUDO_CLASSE, NIVEL_MAXIMO_CLASSE } from '../../../services/progressaoNiveis';
 import { ARVORES } from '../../../../data/mundo/arvoresCatalog';
 import { AuraEspecial, SeloEspecial } from '../../../redesign/components/premium/AuraEspecial';
 import { obterTemaPorId } from '../../../redesign/themeMap';
@@ -370,6 +372,25 @@ export const DetalhesClasse = ({ classe, ocultarCatalogos = [] }: DetalhesClasse
               })}
             </tbody>
           </table>
+        </div>
+        <div className="mt-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-5" data-testid="maestria-classe">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-emerald-300">
+            Maestria · níveis {NIVEL_CONTEUDO_CLASSE + 1} a {NIVEL_MAXIMO_CLASSE}
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-gray-300">
+            A grade acima termina no nível {NIVEL_CONTEUDO_CLASSE}. Do {NIVEL_CONTEUDO_CLASSE + 1} ao {NIVEL_MAXIMO_CLASSE} a classe segue somando {classe.vida} de Vida, {classe.mana} de Mana e {classe.estamina ?? 0} de Estamina por nível e ganha a Maestria de 5 em 5 níveis, igual para todas as classes. Não há poder, habilidade nem evento novo depois do {NIVEL_CONTEUDO_CLASSE}.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {MARCOS_MAESTRIA.map(marco => (
+              <span
+                key={marco.nivel}
+                title={descreverMarcoMaestria(marco)}
+                className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[11px] text-emerald-100"
+              >
+                Nível {marco.nivel} · {marco.tipo === 'grau_pericia' ? 'Grau de perícia' : 'Reforço de recursos'}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 

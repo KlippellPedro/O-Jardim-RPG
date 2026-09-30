@@ -319,7 +319,7 @@ const referenciasClasse = (ficha: any): Array<{ id: string; nivel: number }> => 
   return bruto.flatMap((item: any) => {
     const id = String(item?.classeId || item?.id || '');
     if (!CLASSES_CATALOGO.some((classe) => classe.id === id)) return [];
-    return [{ id, nivel: Math.max(1, Math.min(20, Math.trunc(Number(item?.nivel) || 1))) }];
+    return [{ id, nivel: Math.max(1, Math.trunc(Number(item?.nivel) || 1)) }];
   });
 };
 

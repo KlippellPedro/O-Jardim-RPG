@@ -7,7 +7,8 @@ import {
   obterGruposEscolhaRacial,
   tracoDisponivelNoNivel,
 } from './racaService';
-import { obterFragmentosRaciaisExpressos, obterModificacoesRaciaisInstaladas } from './calculoService';
+import { ATRIBUTOS, obterFragmentosRaciaisExpressos, obterModificacoesRaciaisInstaladas } from './calculoService';
+import { aumentosAtributoPorNivel, legadosPorNivel } from './progressaoNiveis';
 
 export interface IReferenciaClasseFicha {
   classeId?: string;
@@ -62,7 +63,9 @@ export function classesDaFicha(ficha: any): Array<{ classe: IClasse; nivel: numb
     const classeId = String(referencia.classeId || referencia.id || '');
     const classe = CLASSES_CATALOGO.find((item) => item.id === classeId);
     if (!classe) return [];
-    return [{ classe, nivel: Math.max(1, Math.min(20, Math.trunc(Number(referencia.nivel) || 1))) }];
+    // Sem teto: o nível total precisa contar o nível real de cada classe, mesmo
+    // acima do 20 (onde ela deixa de ter recompensas escritas, só soma recursos).
+    return [{ classe, nivel: Math.max(1, Math.trunc(Number(referencia.nivel) || 1)) }];
   });
 }
 
@@ -919,9 +922,35 @@ export function podeSelecionarPoder(
   return { permitido: true };
 }
 
+/** Um Legado a cada 5 níveis até o 50, a cada 10 até o 100 e a cada 20 depois
+ * (data/ficha/progressao-niveis.json), mais os que a raça dá de bônus. */
 export function vagasLegado(ficha: any): number {
   const raca = RACAS_CATALOGO.find((item) => item.id === ficha?.racaId);
-  return Math.floor(nivelTotalFicha(ficha) / 5) + Math.max(0, Number(raca?.legados_adicionais) || 0);
+  return legadosPorNivel(nivelTotalFicha(ficha)) + Math.max(0, Number(raca?.legados_adicionais) || 0);
+}
+
+export interface IAumentosAtributo {
+  /** Aumentos de +1 que o nível total libera. */
+  direito: number;
+  /** Quanto os atributos da ficha já passaram dos valores de criação. */
+  usados: number;
+  /** O que ainda dá para gastar (nunca negativo). */
+  livres: number;
+}
+
+/** Aumentos de atributo pelo nível: o que o nível libera contra o que a ficha
+ * já subiu em relação à criação (mesma conta do servidor). Sem os atributos de
+ * criação, como numa ficha bem antiga, não dá para saber e devolve null. */
+export function aumentosDeAtributo(ficha: any): IAumentosAtributo | null {
+  const base = ficha?.atributosBase;
+  const finais = ficha?.atributosFinais;
+  if (!base || typeof base !== 'object' || !finais || typeof finais !== 'object') return null;
+  const usados = ATRIBUTOS.reduce(
+    (total, atributo) => total + Math.max(0, (Number(finais[atributo]) || 0) - (Number(base[atributo]) || 0)),
+    0,
+  );
+  const direito = aumentosAtributoPorNivel(nivelTotalFicha(ficha));
+  return { direito, usados, livres: Math.max(0, direito - usados) };
 }
 
 function grauPericia(ficha: any, id: string): number {

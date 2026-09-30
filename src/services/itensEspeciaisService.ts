@@ -1,4 +1,5 @@
 import { nivelTotalFicha } from './progressaoFichaService';
+import { vagasItemEspecialPorNivel } from './progressaoNiveis';
 
 export type GrupoLimiteItemEspecial = 'item-pericia' | 'artefato';
 
@@ -65,10 +66,10 @@ export function grupoLimiteItemEspecial(item: ItemInventarioLike | null | undefi
   return categoria === 'geral' && possuiEfeitoPericia ? 'item-pericia' : null;
 }
 
-/** 1 vaga inicial; depois, uma vaga a cada quatro níveis totais. */
+/** 1 vaga inicial; depois, uma vaga a cada quatro níveis totais até o 50, a cada
+ * oito até o 100 e a cada dezesseis depois (data/ficha/progressao-niveis.json). */
 export function limiteItensEspeciaisPorNivel(nivelTotal: unknown): number {
-  const nivel = Math.max(1, Math.trunc(Number(nivelTotal) || 1));
-  return Math.max(1, Math.floor(nivel / 4));
+  return vagasItemEspecialPorNivel(Math.max(1, Math.trunc(Number(nivelTotal) || 1)));
 }
 
 export function itemEspecialEstaEquipado(item: ItemInventarioLike): boolean {

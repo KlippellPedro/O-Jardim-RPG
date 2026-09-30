@@ -1,7 +1,8 @@
 import { memo, useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import { obterTemaPorId } from '../../../redesign/themeMap';
-import { inscreverSubidaNivel, type SubidaNivel } from './subidaNivel';
+import { falaClasseAcimaDoConteudo, inscreverSubidaNivel, type SubidaNivel } from './subidaNivel';
+import { NIVEL_CONTEUDO_CLASSE } from '../../../services/progressaoNiveis';
 import {
   definirVozGrandeSabioLigada,
   falarSequencia,
@@ -43,7 +44,13 @@ const montarPainel = (subida: SubidaNivel): { titulo: PassoFala; linhas: LinhaPa
     : {
       rotulo: 'Classe',
       texto: `${subida.nomeClasse} chegou ao nível ${subida.nivelClasse}`,
-      passo: { texto: `${subida.nomeClasse} chegou ao nível ${subida.nivelClasse}` },
+      // Acima do 20 a fala não cita a classe: uma frase gravada só por nível
+      // serve às 29 classes (a tela continua mostrando o nome).
+      passo: {
+        texto: subida.nivelClasse > NIVEL_CONTEUDO_CLASSE
+          ? falaClasseAcimaDoConteudo(subida.nivelClasse)
+          : `${subida.nomeClasse} chegou ao nível ${subida.nivelClasse}`,
+      },
     });
 
   const recurso = (rotulo: string, ganho: number) => {

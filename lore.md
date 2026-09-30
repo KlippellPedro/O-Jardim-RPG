@@ -75,7 +75,7 @@
 ## Elfo (elfo)
 **Fisiologia:** Não envelhece e é imune a envelhecimento sobrenatural.
 
-- **Intelecto Élfico**: Receba +4 em Inteligência. Somente esse bônus racial pode levar Inteligência acima do limite natural 20, até o máximo 24; ele não altera o limite de nenhum outro atributo.
+- **Intelecto Élfico**: Receba +4 em Inteligência.
 - **Memória Milenar**: Você possui quatro rerrolagens por sessão, utilizáveis somente em testes cujo atributo seja Inteligência. Ao gastar uma, rerrole o teste e use o novo resultado.
 - **Herança Ancestral**: Ao adquirir esta raça, receba um Legado adicional.
 - **Linhagem Élfica**: Escolha uma das sete Linhagens Élficas. Você recebe apenas as características da Linhagem escolhida e não pode acumular efeitos de duas Linhagens.
@@ -108,7 +108,7 @@
 ## Clone (clone)
 **Fisiologia:** É biologicamente vivo e precisa respirar, alimentar-se, dormir e descansar normalmente. A aparência pode reproduzir outra raça, mas o Clone possui somente as características raciais deste pacote.
 
-- **Matriz Aperfeiçoada**: Escolha dois atributos diferentes. Cada um recebe +2, respeitando o limite natural 20.
+- **Matriz Aperfeiçoada**: Escolha dois atributos diferentes. Cada um recebe +2.
 - **Cópia Biométrica**: Você reproduz aparência, voz, digitais, retina e outras características físicas do Original. Receba vantagem em Enganação para se passar por ele quando aparência, voz ou identificação biométrica forem as evidências principais. Pessoas que conheçam intimamente o Original podem usar Intuição para perceber diferenças de comportamento. Você não copia automaticamente raça, classe, Habilidades, Poderes, Legados, alma, pactos, bênçãos, Fragmentos de Arkarin ou lembranças completas.
 - **Memórias Residuais**: Uma vez por sessão, pergunte se possui uma lembrança relacionada ao Original. Se ele conhecia a informação no momento da clonagem, o mestre entrega uma memória curta, verdadeira e incompleta: imagem, frase, sensação, rosto ou localização aproximada. Isso não fornece senhas completas, segredos sem contexto ou conhecimentos posteriores à clonagem.
 - **Regeneração Programada**: Uma vez por cena, quando sofrer dano e ficar com metade da Vida máxima ou menos, gaste uma reação e 4 Mana para recuperar 2d6 + Mod.Constituição de Vida, com mínimo de 2d6.

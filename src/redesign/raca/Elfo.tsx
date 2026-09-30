@@ -56,7 +56,7 @@ export const Elfo = ({ raca }: { raca: IRaca }) => {
              transition={{ duration: 1, delay: 0.6 }}
              className="text-lg text-emerald-100/50 max-w-2xl mx-auto font-medium leading-relaxed font-serif"
           >
-            Não envelhece e não esquece; carrega séculos de leitura empilhados num Intelecto que ultrapassa o limite natural. Fala Finlandês e escolhe uma das seis Linhagens na criação, que define a diferença entre um Elfo de Sombras e um Elfo de Tempestades.
+            Não envelhece e não esquece; carrega séculos de leitura empilhados num Intelecto fora do comum. Fala Finlandês e escolhe uma das seis Linhagens na criação, que define a diferença entre um Elfo de Sombras e um Elfo de Tempestades.
           </motion.p>
         </motion.header>
 
@@ -64,7 +64,7 @@ export const Elfo = ({ raca }: { raca: IRaca }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
           {[
             { icon: InfinityIcon, title: "Fisiologia Imortal", desc: "Não envelhece e é imune a envelhecimento sobrenatural.", delay: 0 },
-            { icon: Brain, title: "Intelecto Élfico", desc: "Receba +4 em Inteligência. Somente esse bônus racial pode levar Inteligência acima do limite natural 20, até o máximo 24.", delay: 0.2 },
+            { icon: Brain, title: "Intelecto Élfico", desc: "Receba +4 em Inteligência.", delay: 0.2 },
             { icon: BookKey, title: "Memória Milenar", desc: "Quatro rerrolagens por sessão, utilizáveis somente em testes de Inteligência. Ao gastar, rerrole e use o novo resultado.", delay: 0.4 },
             { icon: TreeDeciduous, title: "Herança Ancestral", desc: "Ao adquirir esta raça, receba um Legado adicional e escolha uma das seis Linhagens Élficas, recebendo suas características exclusivas.", delay: 0.6 },
           ].map((trait, index) => (

@@ -1,6 +1,13 @@
 import { Link } from 'react-router-dom';
 import { ConstelacaoClasse } from './ConstelacaoClasse';
 import type { IClasse } from '../../../types/catalogo';
+import { NIVEL_CONTEUDO_CLASSE, NIVEL_MAXIMO_CLASSE } from '../../../services/progressaoNiveis';
+import {
+  MARCOS_MAESTRIA,
+  descreverMarcoMaestria,
+  grausDeMaestria,
+  proximoMarcoMaestria,
+} from '../../../services/maestriaClasse';
 import {
   classeTemProgressaoPublicada,
   contarRecompensasPorTipo,
@@ -37,11 +44,16 @@ export const ProgressaoClasses = ({ classes, catalogoClasses }: ProgressaoClasse
 
       <div className="space-y-5">
         {classesPublicadas.map(({ slot, classe }) => {
-          const nivel = Math.max(1, Math.min(20, Number(slot.nivel) || 1));
+          // A tabela de recompensas termina no nível 20; acima dele o nível real
+          // continua contando (o crachá mostra), mas a consulta usa o 20.
+          const nivelReal = Math.max(1, Math.trunc(Number(slot.nivel) || 1));
+          const nivel = Math.min(nivelReal, NIVEL_CONTEUDO_CLASSE);
+          const acimaDoConteudo = nivelReal > NIVEL_CONTEUDO_CLASSE;
           const atual = classe.progressao?.find(item => item.nivel === nivel);
           const proxima = obterProximaProgressao(classe, nivel);
           const poderes = contarRecompensasPorTipo(classe, nivel, 'poder');
-          const graus = contarRecompensasPorTipo(classe, nivel, 'grau_pericia');
+          const graus = contarRecompensasPorTipo(classe, nivel, 'grau_pericia') + grausDeMaestria(nivelReal);
+          const proximaMaestria = proximoMarcoMaestria(nivelReal);
           const eventos = contarRecompensasPorTipo(classe, nivel, 'evento');
 
           return (
@@ -51,16 +63,22 @@ export const ProgressaoClasses = ({ classes, catalogoClasses }: ProgressaoClasse
                   <div className="flex flex-wrap items-center gap-3">
                     <h3 className="text-xl font-bold text-white">{classe.titulo}</h3>
                     <span className="rounded-full border border-[#c7a44c]/30 bg-[#c7a44c]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#c7a44c]">
-                      Nível {nivel}
+                      Nível {nivelReal}
                     </span>
                   </div>
                   <p className="mt-2 text-sm text-gray-300">
-                    Neste nível: {atual?.recompensas.map(formatarRecompensaClasse).join(', ') || 'Sem recompensa registrada'}
+                    {acimaDoConteudo
+                      ? `Todas as recompensas escritas desta classe já foram conquistadas. Do nível ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} ela segue somando Vida, Mana e Estamina e ganha a Maestria de 5 em 5 níveis.`
+                      : `Neste nível: ${atual?.recompensas.map(formatarRecompensaClasse).join(', ') || 'Sem recompensa registrada'}`}
                   </p>
                   <p className="mt-1 text-xs text-gray-500">
                     {proxima
                       ? `Próxima recompensa no nível ${proxima.nivel}: ${proxima.recompensas.map(formatarRecompensaClasse).join(', ')}`
-                      : 'Progressão concluída. A Habilidade Final foi alcançada.'}
+                      : proximaMaestria
+                        ? `Próxima Maestria no nível ${proximaMaestria.nivel}: ${descreverMarcoMaestria(proximaMaestria)}`
+                        : nivelReal >= NIVEL_MAXIMO_CLASSE
+                          ? 'Maestria completa. A próxima subida é em outra classe.'
+                          : 'Progressão concluída. A Habilidade Final foi alcançada.'}
                   </p>
                 </div>
                 <Link
@@ -89,6 +107,29 @@ export const ProgressaoClasses = ({ classes, catalogoClasses }: ProgressaoClasse
               <div className="mt-4">
                 <ConstelacaoClasse classe={classe} nivel={nivel} />
               </div>
+
+              {nivelReal >= NIVEL_CONTEUDO_CLASSE && (
+                <div className="mt-4" role="group" aria-label={`Maestria de ${classe.titulo}`}>
+                  <div className="mb-2 text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                    Maestria · níveis {NIVEL_CONTEUDO_CLASSE + 1} a {NIVEL_MAXIMO_CLASSE}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {MARCOS_MAESTRIA.map((marco) => {
+                      const alcancado = nivelReal >= marco.nivel;
+                      return (
+                        <span
+                          key={marco.nivel}
+                          data-alcancado={alcancado}
+                          title={descreverMarcoMaestria(marco)}
+                          className={`rounded-full border px-3 py-1 text-[11px] font-bold ${alcancado ? 'border-emerald-400/40 bg-emerald-400/10 text-emerald-200' : 'border-white/10 text-gray-500'}`}
+                        >
+                          Nv {marco.nivel} · {marco.tipo === 'grau_pericia' ? 'Grau de perícia' : 'Reforço de recursos'}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </article>
           );
         })}
