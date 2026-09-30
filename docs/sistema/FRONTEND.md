@@ -82,6 +82,36 @@ Cobertura: `npm run test:frontend` (611 testes em 21/09, incluindo os novos
 [avisosRelampagoHub.test.ts](../../tests/frontend/avisosRelampagoHub.test.ts))
 e `npx tsc -b` limpos. Não repete navegação manual em navegador real.
 
+<a id="niveis-alem-do-60"></a>
+
+## Níveis além do 60: ficha, avisos e molduras (29 de setembro de 2026)
+
+O nível total deixou de ter teto (decisões em
+[Balanceamento](BALANCEAMENTO.md#níveis-além-do-60-2026-09-29)). O que mudou na
+experiência da ficha:
+
+| Assunto | Fechamento |
+| --- | --- |
+| A Aba Ficha travava o botão de subir nível no 20 por classe e no 60 no total, e o "Adicionar classe" em 3 classes. | O botão de subir para no 50 da classe; digitar o nível é livre, com um aviso acima do 50. Qualquer classe liberada e ainda fora da ficha pode ser adicionada. [AbaFicha.tsx](../../src/pages/Ficha/abas/AbaFicha.tsx). |
+| O nível total cortava cada classe em 20, então Legados e slots saíam errados. | `classesDaFicha` e `magiaService` contam o nível real. A consulta das recompensas escritas continua parando no 20. |
+| Nada mostrava quantos aumentos de atributo o nível liberava. | Seção Atributos: "Aumentos pelo nível: X de Y usados · N para gastar" (só informa). |
+| O painel de progressão não sabia o que fazer acima do 20. | Mostra o nível real, a Maestria (seis marcos, acesos ou apagados) e o próximo marco. O Simulador de Nível sobe até o 50 e lista os marcos da Maestria. A página de cada classe no livro ganhou o bloco da Maestria. |
+| O painel de subida de nível só falava das recompensas da classe. | Avisa também Maestria, Legado, aumento de atributo e vaga de item especial, com voz gravada. |
+| Patamares 60, 100, 150, 250 e 500. | O aviso é a Conquista lendária (o cartão que desce, fala e some sozinho), mais o selo "Patamar I a V" na linha de classes e a moldura nova do retrato e do cartaz. |
+| As molduras do cartaz de Procurado nunca apareciam. O nome da classe CSS é montado em tempo de execução (`wanted-poster--${chave}`) e o Tailwind descartava as regras. | `safelist` no [tailwind.config.js](../../tailwind.config.js) e um teste que confere que toda moldura da escada tem regra de CSS e está na lista. |
+| A recompensa do cartaz crescia 22% por nível e passaria de 10^40 Lunaris no nível 500. | Até o 60 a conta é a mesma; depois soma mais 10% do valor do 60 por nível (o 100 vale 5 vezes o 60). |
+
+Cobertura: `npm run test:frontend` (767 testes em 29/09, incluindo
+[progressaoNiveis.test.ts](../../tests/frontend/progressaoNiveis.test.ts),
+[maestriaClasse.test.ts](../../tests/frontend/maestriaClasse.test.ts),
+[nivelAcimaDe20.test.ts](../../tests/frontend/nivelAcimaDe20.test.ts),
+[referenciaBalanceamento.test.ts](../../tests/frontend/referenciaBalanceamento.test.ts) e
+[vozSabioCobertura.test.ts](../../tests/frontend/vozSabioCobertura.test.ts)) e
+`npx tsc -b` limpos. Os componentes novos foram vistos no servidor de
+desenvolvimento (painel de progressão, contador de atributos, molduras, cartaz,
+aviso de Conquista e painel de subida). A ficha completa não foi exercitada,
+porque exige API e banco.
+
 ## Responsividade e acessibilidade
 
 O fechamento de agosto corrigiu sete problemas reproduzidos:

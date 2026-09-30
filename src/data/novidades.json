@@ -1,6 +1,31 @@
 {
   "itens": [
     {
+      "id": "2026-09-29-niveis-alem-do-60",
+      "data": "2026-09-29",
+      "tipo": "novo",
+      "area": "Regras",
+      "titulo": "Níveis além do 60",
+      "detalhes": [
+        "O 60 continua sendo o padrão do jogo (duas classes comuns e uma especial), mas a ficha não trava mais: dá para passar do 60, abrir mais classes e subir uma classe até o nível 50.",
+        "Do nível 21 ao 50 de uma classe entra a Maestria: reforço de Vida, Mana e Estamina nos níveis 25, 35 e 45 e um grau de perícia extra nos 30, 40 e 50.",
+        "O XP não tem mais fim. Até o 100 é a conta de sempre, e depois cada faixa custa um valor fixo: 100 mil, 150 mil, 250 mil e 500 mil por nível.",
+        "Legado, aumento de atributo e vaga de item especial passam a vir mais espaçados depois do 50 e do 100. O limite natural 20 de atributo acabou, e os bônus de raça também não têm mais teto.",
+        "Os patamares 60, 100, 150, 250 e 500 ganharam Conquista, selo na ficha e moldura nova no retrato e no cartaz de Procurado. O aviso aparece uma vez e some sozinho.",
+        "O painel de subida de nível agora avisa Legado, aumento de atributo e vaga de item especial, e o Grande Sábio fala os níveis mais altos."
+      ]
+    },
+    {
+      "id": "2026-09-29-cartaz-molduras",
+      "data": "2026-09-29",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "As molduras do cartaz de Procurado voltaram",
+      "detalhes": [
+        "A borda colorida que acompanha o nível do personagem (de Bronze a Lendário) não estava aparecendo no cartaz. Agora aparece, junto com as molduras novas dos patamares."
+      ]
+    },
+    {
       "id": "2026-09-24-modelos-3d-mundo",
       "data": "2026-09-24",
       "tipo": "melhoria",

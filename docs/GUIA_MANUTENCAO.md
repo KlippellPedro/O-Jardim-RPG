@@ -35,6 +35,28 @@ npm run generate:server-content
 npm run check:server-content
 ```
 
+Os ritmos de nível (XP, Legado, atributo, item especial, graus de perícia,
+patamares) e a Maestria de classe têm uma fonte só cada:
+`data/ficha/progressao-niveis.json` e `data/ficha/maestria-classe.json`. Site
+e plataforma leem os mesmos arquivos; mudou um número, atualize os testes
+espelhados (`progressaoNiveis.test.ts` e `test_progressao_niveis.py`,
+`maestriaClasse.test.ts` e `test_maestria_classe.py`) e os capítulos do livro,
+que já leem o JSON. A referência de balanceamento se regera assim:
+
+```powershell
+npm run audit:balance
+npm run check:balance
+```
+
+A voz do Grande Sábio (`public/audio/sabio/`) precisa ser regravada quando muda
+uma frase do painel de subida, um nome de Conquista ou uma classe. O script só
+gera o que falta e um teste confere a cobertura:
+
+```powershell
+pip install edge-tts
+python tools/gerar-voz-sabio.py
+```
+
 As regras públicas partem de `data/regras/regras.ts` e geram `data/regras/regras-publicas-v1.md`:
 
 ```powershell

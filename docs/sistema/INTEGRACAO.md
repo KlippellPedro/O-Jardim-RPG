@@ -98,6 +98,40 @@ automática; a cobertura efetiva continua sendo a implementada nos serviços.
 
 <a id="veiculos-e-propriedades"></a>
 
+## Níveis além do 60
+
+Contrato entre site e servidor para o nível total sem teto. As decisões de
+regra estão em [Balanceamento](BALANCEAMENTO.md#níveis-além-do-60-2026-09-29).
+
+- **Dados compartilhados.** [progressao-niveis.json](../../data/ficha/progressao-niveis.json)
+  (XP, Legado, atributo, item especial, graus de perícia, patamares, teto de
+  classe) e [maestria-classe.json](../../data/ficha/maestria-classe.json). O
+  site e a plataforma são pacotes separados, então cada lado tem seu módulo
+  (`progressaoNiveis.ts` e `progressao_niveis.py`; `maestriaClasse.ts` e
+  `maestria_classe.py`) e um teste com os mesmos valores. `data/ficha/` já vai
+  no ZIP da plataforma.
+- **Validação da ficha continua sendo alerta.** `validar_regras_ficha` só devolve
+  erro que vira "Alerta de Regras" para o Mestre quando o jogador salva fora do
+  padrão; Mestre e assistente nem passam por ela. Acima do nível total 60 as
+  regras de "duas comuns + uma especial" e da ordem de multiclasse deixam de ser
+  conferidas, e uma classe acima do 20 deixou de ser erro. Legados, aumentos de
+  atributo e graus de perícia seguem os ritmos do JSON.
+- **Limite de item especial.** `special_item_use_limit` usa o mesmo ritmo do
+  aumento de atributo e o nível real de cada classe (antes `characters.py` cortava
+  cada uma em 20). A trava de ativação (HTTP 422) é anterior e continua só para
+  novas ativações acima do limite.
+- **Conquistas.** A métrica `classe_max` (maior nível numa classe só) e as
+  Conquistas de nível 30 a 500 e de classe 20 a 50 estão em
+  [conquistas.py](../../plataforma/core/conquistas.py). Todas as desbloqueadas
+  ficam gravadas, mas a comemoração é uma só por métrica (a maior). Um teste
+  garante que cada patamar do JSON tem sua Conquista. O site espera 1,8 s antes
+  de consultar depois de uma mudança de nível, para o autosave chegar primeiro.
+- **Voz do Grande Sábio.** `tools/gerar-voz-sabio.py` lê o mesmo JSON de níveis
+  (falas "Nível N alcançado" até o 200 e nos patamares, "Classe no nível N" do 21
+  ao 50) e [falasSubida.json](../../src/pages/Ficha/components/falasSubida.json).
+  Um teste confere que toda frase do painel tem áudio gravado. Regravar exige
+  `pip install edge-tts` e internet; o script só gera o que falta.
+
 ## Veículos e propriedades
 
 Comprar um bem e migrá-lo para a entidade jogável da campanha continuam sendo

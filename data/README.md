@@ -18,6 +18,13 @@ Em `ficha/`, prefira adicionar um JSON temático quando uma revisão complementa
 
 Todos os JSONs devem permanecer em UTF-8 e ser validados pelos testes antes de publicação.
 
+Dois arquivos de `ficha/` guardam a progressão de nível e são lidos também pela
+plataforma: `progressao-niveis.json` (curva de XP, ritmo de Legado, atributo e
+item especial, nível mínimo de cada grau de perícia, patamares e teto de
+classe) e `maestria-classe.json` (os marcos do nível 21 ao 50 de uma classe,
+iguais para todas). O nível total não tem teto: esses arquivos dizem quanto vale
+cada faixa. Os capítulos de Experiência, Legados e Sistema Base leem os dois.
+
 `ficha/magias.json` guarda a configuração do sistema de dez círculos e o
 catálogo ativo dos onze Fluxos. A versão 3.1 reúne magias, rituais, selos,
 encantamentos e assinaturas de fusão. O conteúdo antigo de cinco círculos não

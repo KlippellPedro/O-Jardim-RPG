@@ -1,6 +1,6 @@
 # Balanceamento e economia
 
-Consolidado em **7 de setembro de 2026**. Reúne auditoria, propostas, decisões e
+Consolidado em **7 de setembro de 2026** e atualizado em **29 de setembro de 2026** (níveis além do 60). Reúne auditoria, propostas, decisões e
 implementação de agosto, com conferência das fontes locais citadas abaixo.
 Os relatórios originais e suas simulações estão no [histórico](../HISTORICO.md#balanceamento).
 Esta organização documental não altera números, regras ou aprovações.
@@ -164,6 +164,53 @@ outra conta, sem ligação mecânica com a Estamina.
   Roubado, Corte que Lembra, Escudo Emprestado, Passo Fora do Tempo e Sombra
   que Aprende). O preço em Sementes não mudou.
 
+## Níveis além do 60 (2026-09-29)
+
+O nível total deixou de ter teto, por decisão do criador do jogo. O 60 continua
+sendo o **padrão** (duas classes comuns e uma especial), mas a ficha não trava
+nada acima dele: quem passa do 60 entra num patamar novo e recebe só avisos. O
+servidor alerta o Mestre apenas enquanto a ficha está dentro do padrão. Nada
+bloqueia, e um NPC pode ter o nível que a história pedir.
+
+Todos os ritmos moram em [progressao-niveis.json](../../data/ficha/progressao-niveis.json),
+lido pelo site ([progressaoNiveis.ts](../../src/services/progressaoNiveis.ts)) e
+pela plataforma ([progressao_niveis.py](../../plataforma/core/progressao_niveis.py)).
+Os dois lados têm testes com os mesmos valores de referência.
+
+| Assunto | Decisão implementada |
+| --- | --- |
+| XP | `500 × N × (N − 1)` até o nível 100. Depois, um custo fixo por nível em cada faixa: 100 mil (100 a 149), 150 mil (150 a 249), 250 mil (250 a 499) e 500 mil (500 em diante). XP acumulado: 1,77 milhão no 60, 4,95 milhões no 100, 9,95 milhões no 150, 24,95 milhões no 250 e 87,45 milhões no 500. |
+| Classe | Vai até o nível 50 (o botão de subir para aí; digitar um número maior segue livre, com aviso). Não há limite de número de classes. As recompensas escritas terminam no 20. |
+| Maestria (21 a 50 da classe) | Igual para as 29 classes, em [maestria-classe.json](../../data/ficha/maestria-classe.json): reforço de Vida, Mana e Estamina nos níveis 25, 35 e 45 (vale 2 níveis do perfil da própria classe) e +1 grau de perícia nos 30, 40 e 50. O orçamento de Graus de Treinamento no servidor inclui esses graus. |
+| Legado | 1 a cada 5 níveis até o 50, a cada 10 até o 100 e a cada 20 depois (10, 11, 15, 20 e 35 Legados nos níveis 50, 60, 100, 200 e 500). Quem estava entre o 55 e o 60 perde 1 vaga em relação ao ritmo antigo; no servidor isso só gera alerta. |
+| Aumento de atributo e vaga de item especial | +1 a cada 4 níveis até o 50, a cada 8 até o 100 e a cada 16 depois. A ficha mostra "aumentos pelo nível: X de Y usados" (informativo). O teto do servidor para itens especiais passou a contar o nível real de cada classe; antes cortava cada uma em 20. |
+| Atributos | O limite natural 20 acabou. Os tetos raciais de atributo (Elfo, Auleth, Autômato, Clone, Anomalia, Amálgamo, Bruxa, Onírico e Divino) saíram do `racas.json`. O mecanismo de teto por raça continua no código, sem dados usando. Corrigi junto um erro latente: sem teto declarado, o site descartava o bônus racial. |
+| Bônus de nível | Continua `⌊nível ÷ 2⌋`. Um nível 60 só acerta um nível 200 num 20 natural, o que é intencional. |
+| Patamares | 60, 100, 150, 250 e 500, alinhados às faixas de XP. Cada um tem uma Conquista (Fora do Padrão, Três Dígitos, Além da Conta, Fora do Mapa e Sem Teto), um selo na ficha (Patamar I a V) e uma moldura de retrato e cartaz (Mítico, Cósmico, Eterno e Absoluto do 100 em diante). |
+| Recomendação de mesa | Para a 4ª classe em diante, o menor atributo do personagem em 12, 13, 14 e 15 (4ª a 7ª). Está só no Guia do Mestre; a ficha não confere. |
+
+A **referência de balanceamento** foi refeita sobre a mesma fórmula da ficha
+(`calcularDerivadosComClasses`). A versão anterior tinha uma fórmula própria e
+superestimava a Vida em 20 a 40% (o Guerreiro no nível 20 saía com 149; a ficha
+dá 108). O relatório agora vai do nível 1 ao 200 e traz, por nível, Vida, Defesa,
+ataque, dano por acerto, DT e a **Vida de inimigo padrão** (a que aguenta quatro
+rodadas e meia de um grupo de quatro). Ele é gerado por `npm run audit:balance`
+e conferido por `npm run check:balance` e por um teste. As premissas (atributo
+principal 15, aumentos em rodízio, arma por raridade, maior grau permitido) estão
+no próprio relatório e em
+[referenciaBalanceamento.ts](../../src/services/referenciaBalanceamento.ts).
+
+Leituras que a tabela deixa claras, sem mudança de regra:
+
+- O dano da arma para no nível 35 (relíquias da criação, 72 de média). Depois
+  disso o dano por acerto só sobe pelo modificador de atributo, e a Vida de
+  inimigo padrão fica perto de 1.350 dos níveis 40 a 200, enquanto a Vida dos
+  personagens continua subindo.
+- Do nível 29, quem investe na perícia de combate acerta uns 95% contra um
+  inimigo do mesmo nível. A Defesa da tabela é natural, sem armadura.
+- O bestiário vai até o nível 50 e acompanha a curva: mediana de 1.490 de Vida na
+  faixa 41–50, contra 1.320 da referência.
+
 ## Pendências para a próxima revisão de design
 
 | Questão | Próximo passo |
@@ -174,6 +221,12 @@ outra conta, sem ligação mecânica com a Estamina.
 | Exceção do Marco de Pedra | Manter até uma decisão específica de preço; comparar com os componentes atuais. |
 | Juros, risco e concentração de patrimônio | Calibrar com dados de uso; números de simulação antiga não substituem acompanhamento de campanha. |
 | Modificações aplicadas a veículos e distinção de escudos | Ver as decisões ainda abertas em Integração. |
+| XP de combate por Valor de Desafio | A tabela para no VD 10 (11 mil XP). Nos patamares altos o XP por marco (em porcentagem do próximo nível) é o caminho; decidir se o VD ganha graus acima do 10. |
+| Economia acima do nível 50 | Salário, recompensa de missão e faixas de preço não têm linha própria depois do 50 (a linha "50+" da tabela de trabalho é a última). |
+| Chefes e criaturas do nível 55 em diante | O bestiário termina no 50. A referência de NPCs e inimigos serve de alvo; falta escrever criaturas ou um botão "escalar para nível X" no editor da Sessão. |
+| Legados nos níveis muito altos | O catálogo tem 42 Legados e nem todos se repetem; passa a faltar perto dos 500 níveis. |
+| DT de conjuração e graus de perícia | A DT de magia é fixa (7 + 3 × círculo, no máximo 37) e o grau Renomado é o último. Acima do nível 60 nenhum dos dois evolui; decidir se ganham degraus novos. |
+| Regra da segunda classe comum | O livro dizia "classe 20 exige outra no 10"; o servidor exige uma classe no 20 antes da segunda comum. O texto foi alinhado ao servidor. Confirmar se essa é a intenção. |
 
 ## Fontes e verificações
 

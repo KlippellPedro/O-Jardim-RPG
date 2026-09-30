@@ -7,6 +7,25 @@ import marcasCirculoData from '../ficha/marcas-de-circulo.json';
 import periciasData from '../ficha/pericias.json';
 import racasData from '../ficha/racas.json';
 import catalogoLojaData from '../loja/catalogo.json';
+import progressaoNiveisData from '../ficha/progressao-niveis.json';
+import type { IClasse } from '../../src/types/catalogo';
+import { MARCOS_MAESTRIA } from '../../src/services/maestriaClasse';
+import {
+  NIVEL_CONTEUDO_CLASSE,
+  NIVEL_MAXIMO_CLASSE,
+  NIVEL_TOTAL_PADRAO,
+  PATAMARES_NIVEL,
+  aumentosAtributoPorNivel,
+  legadosPorNivel,
+  vagasItemEspecialPorNivel,
+  xpParaNivel,
+} from '../../src/services/progressaoNiveis';
+import {
+  NIVEIS_DE_REFERENCIA,
+  derivadosDeReferencia,
+  mediaDeDados,
+  referenciaDoNivel,
+} from '../../src/services/referenciaBalanceamento';
 import { ARVORES } from '../mundo/arvoresCatalog';
 import { REGRA_AFLICOES } from './aflicoes';
 import { REGRA_ATAQUES_COMBINADOS } from './ataquesCombinados';
@@ -41,10 +60,11 @@ function formatarXP(valor: number) {
   return new Intl.NumberFormat('pt-BR').format(valor);
 }
 
-const tabelaXP = Array.from({ length: 60 }, (_, indice) => {
+/** XP acumulado dos níveis 1 a 100, pela mesma conta da ficha
+ * (src/services/progressaoNiveis.ts); depois do 100 o custo vira faixa fixa. */
+const tabelaXP = Array.from({ length: 100 }, (_, indice) => {
   const nivel = indice + 1;
-  const xp = 500 * nivel * (nivel - 1);
-  return `<span><strong>N${nivel}</strong>${formatarXP(xp)} XP</span>`;
+  return `<span><strong>N${nivel}</strong>${formatarXP(xpParaNivel(nivel))} XP</span>`;
 }).join('');
 
 const tabelaRaridadesEquipamento = RARIDADES_EQUIPAMENTO.map((raridade) => `
@@ -110,6 +130,70 @@ const totalClassesVida5 = contarClassesPorVida(5);
 const totalClassesVida4 = contarClassesPorVida(4);
 const totalClassesVida3 = contarClassesPorVida(3);
 const totalClassesVida2 = contarClassesPorVida(2);
+
+/** Faixas de ritmo de nível lidas de data/ficha/progressao-niveis.json, a mesma
+ * fonte da ficha e do servidor: o livro nunca diverge do que a ficha confere. */
+const ritmoNaFaixa = (faixas: Array<{ a_partir_do_nivel: number; a_cada: number }>, inicio: number) => (
+  [...faixas].reverse().find((faixa) => faixa.a_partir_do_nivel <= inicio)?.a_cada ?? 0
+);
+const rotuloDaFaixa = (inicio: number, proximo?: number) => (
+  proximo === undefined ? `${inicio + 1} em diante` : `${inicio + 1} a ${proximo}`
+);
+const linhasRitmoDeNivel = () => progressaoNiveisData.legados.faixas.map((faixa, indice, faixas) => {
+  const inicio = faixa.a_partir_do_nivel;
+  const rotulo = rotuloDaFaixa(inicio, faixas[indice + 1]?.a_partir_do_nivel);
+  const atributo = ritmoNaFaixa(progressaoNiveisData.aumento_atributo.faixas, inicio);
+  const item = ritmoNaFaixa(progressaoNiveisData.item_especial.faixas, inicio);
+  return `<tr><td><strong>${rotulo}</strong></td><td>a cada ${faixa.a_cada} níveis</td><td>a cada ${atributo} níveis</td><td>a cada ${item} níveis</td></tr>`;
+}).join('\n');
+const linhasFaixasDeXP = () => progressaoNiveisData.xp.faixas.map((faixa, indice, faixas) => {
+  const proxima = faixas[indice + 1];
+  const rotulo = proxima ? `${faixa.a_partir_do_nivel} a ${proxima.a_partir_do_nivel - 1}` : `${faixa.a_partir_do_nivel} em diante`;
+  return `<tr><td><strong>${rotulo}</strong></td><td>${formatarXP(faixa.custo_por_nivel)} XP por nível</td></tr>`;
+}).join('\n');
+const linhasMaestria = () => MARCOS_MAESTRIA.map((marco) => {
+  const nome = marco.tipo === 'grau_pericia' ? 'Grau de perícia' : 'Reforço de recursos';
+  const efeito = marco.tipo === 'grau_pericia'
+    ? 'Um grau de perícia à sua escolha, igual ao das outras recompensas de classe.'
+    : `Vida, Mana e Estamina da classe como se você tivesse ${marco.niveis_equivalentes} níveis a mais nela.`;
+  return `<tr><td><strong>${marco.nivel}</strong></td><td>${nome}</td><td>${efeito}</td></tr>`;
+}).join('\n');
+const linhasItemEspecial = () => [
+  ['1 a 7', '1'], ['8 a 11', '2'], ['12 a 15', '3'], ['16 a 19', '4'], ['20 a 23', '5'],
+].map(([faixa, vagas]) => `<tr><td>${faixa}</td><td>${vagas}</td></tr>`).join('\n')
+  + `\n<tr><td>24 a 50</td><td>nível ÷ 4, arredondado para baixo (${vagasItemEspecialPorNivel(24)} no 24 e ${vagasItemEspecialPorNivel(50)} no 50)</td></tr>`
+  + `\n<tr><td>51 a 100</td><td>mais uma a cada 8 níveis depois do 50 (${vagasItemEspecialPorNivel(58)} no 58 e ${vagasItemEspecialPorNivel(100)} no 100)</td></tr>`
+  + `\n<tr><td>101 em diante</td><td>mais uma a cada 16 níveis (${vagasItemEspecialPorNivel(116)} no 116 e ${vagasItemEspecialPorNivel(200)} no 200)</td></tr>`;
+
+/** Personagem de referência do Guia do Mestre e tabela de NPCs e inimigos: as
+ * duas saem da fórmula da ficha (src/services/referenciaBalanceamento.ts), a
+ * mesma que gera o relatório de balanceamento. */
+const classeDeVidaParaReferencia = (vida: number) => ({
+  id: `referencia-vida-${vida}`, titulo: `Vida ${vida}`, categoria: 'padrao', vida, mana: 1, estamina: 8 - vida,
+}) as unknown as IClasse;
+const vagasDePoderNoNivel = (nivel: number) => (classesData[0]?.progressao || [])
+  .filter((marco) => marco.nivel <= Math.min(nivel, NIVEL_CONTEUDO_CLASSE))
+  .reduce((total, marco) => total + (marco.recompensas || []).filter((recompensa) => recompensa.tipo === 'poder').length, 0);
+const linhasPersonagemDeReferencia = () => [1, 5, 10, 15, 20, 30, 40, 50, 60, 100, 200].map((nivel) => {
+  const colunas = [6, 5, 4, 3, 2].map((vida) => {
+    const derivados = derivadosDeReferencia(classeDeVidaParaReferencia(vida), nivel);
+    return `<td>${derivados.vida} / ${derivados.mana + derivados.estamina}</td>`;
+  }).join('');
+  const defesa = derivadosDeReferencia(classeDeVidaParaReferencia(5), nivel).defesaNatural;
+  return `<tr><td><strong>${nivel}</strong></td>${colunas}<td>${defesa}</td><td>${vagasDePoderNoNivel(nivel)}</td></tr>`;
+}).join('\n');
+const classesComunsParaReferencia = classesData.filter((classe) => classe.categoria === 'padrao') as unknown as IClasse[];
+const armasParaReferencia = catalogoLojaData.entradas
+  .filter((item) => item.tipo === 'arma')
+  .map((item) => ({
+    nivelRecomendado: Number(item.conteudo?.nivel_recomendado) || null,
+    raridade: String(item.conteudo?.raridade ?? ''),
+    mediaNormal: mediaDeDados(item.conteudo?.dano),
+  }));
+const linhasNpcsEInimigos = () => NIVEIS_DE_REFERENCIA.map((nivel) => {
+  const referencia = referenciaDoNivel(nivel, classesComunsParaReferencia, armasParaReferencia);
+  return `<tr><td><strong>${nivel}</strong></td><td>${referencia.patamar ?? 'padrão'}</td><td>${referencia.vida.media} <small>(${referencia.vida.minima} a ${referencia.vida.maxima})</small></td><td>${referencia.defesaNatural}</td><td>+${referencia.bonusDeAtaque}</td><td>${formatarXP(referencia.danoPorAcerto)}</td><td>${referencia.dt.padrao} / ${referencia.dt.extrema}</td><td>${formatarXP(referencia.vidaDeInimigoPadrao)}</td></tr>`;
+}).join('\n');
 
 const racasMecanicas = racasData
   .filter((raca) => !raca.indisponivel && raca.id !== 'raca-personalizada');
@@ -303,7 +387,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
             <tr><td><strong>Defesa</strong></td><td>O número que um inimigo precisa alcançar para acertar você.</td></tr>
             <tr><td><strong>Fluxo</strong></td><td>A energia que atravessa tudo neste mundo, e também o atributo que mede seu controle sobre ela. Toda magia sai de um Fluxo.</td></tr>
             <tr><td><strong>Árvore</strong></td><td>A realidade de onde seu personagem vem. Cada Árvore tem sua deidade, seus povos e suas opções exclusivas.</td></tr>
-            <tr><td><strong>Legado</strong></td><td>Uma escolha permanente que você faz a cada cinco níveis e que muda como o personagem funciona.</td></tr>
+            <tr><td><strong>Legado</strong></td><td>Uma escolha permanente que você faz em certos níveis (de cinco em cinco no começo, mais espaçados depois do 50) e que muda como o personagem funciona.</td></tr>
             <tr><td><strong>NPC</strong></td><td>Qualquer personagem controlado pelo Mestre, de um taverneiro a um dragão.</td></tr>
             <tr><td><strong>⌊ ⌋</strong></td><td>Arredonde para baixo e ignore a fração. ⌊Nível ÷ 2⌋ no nível 7 dá 3, não 3,5.</td></tr>
           </tbody>
@@ -462,11 +546,11 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   'sistema-base': {
     categoria: 'Livro do Jogador',
     status: 'Regra oficial',
-    resumo: 'As fórmulas fundamentais, limites de nível, multiclasse, maestrias e o papel do atributo Fluxo.',
+    resumo: 'As fórmulas fundamentais, níveis e multiclasse, maestrias e o papel do atributo Fluxo.',
     destaques: [
       ['Teste', 'd20 + bônus vs. DT'],
-      ['Classes', '2 comuns + 1 especial'],
-      ['Teto', '40 / 60 níveis totais'],
+      ['Padrão', '2 comuns + 1 especial'],
+      ['Classe', `até o nível ${NIVEL_MAXIMO_CLASSE}`],
     ],
     corpo: `
       <p class="regras-lead">Esta é a página de consulta: todas as contas que a ficha faz por você, reunidas num lugar só. Você não precisa decorar nenhuma delas para jogar. Dois avisos de leitura: ⌊ ⌋ quer dizer "arredonde para baixo", e "Mod." é o modificador de um atributo, que sai da primeira linha da tabela.</p>
@@ -498,16 +582,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Nível e multiclasse</h3>
       <ul class="regras-list">
-        <li><strong>Nível total</strong> é a soma dos níveis de todas as suas classes, incluindo as especiais.</li>
-        <li>Cada classe vai até o <strong>nível 20</strong>. Só com classes comuns, o teto é <strong>40 níveis totais</strong>; com uma classe especial, sobe para <strong>60</strong>.</li>
-        <li>Você pode ter no máximo <strong>duas classes comuns e uma especial</strong>.</li>
-        <li>Os níveis podem ser intercalados. Para levar uma classe ao nível 20, o personagem precisa ter pelo menos nível 10 em outra classe.</li>
+        <li><strong>Nível total</strong> é a soma dos níveis de todas as suas classes, incluindo as especiais. Ele não tem teto.</li>
+        <li>Cada classe vai até o <strong>nível ${NIVEL_MAXIMO_CLASSE}</strong>. As recompensas escritas dela terminam no ${NIVEL_CONTEUDO_CLASSE}. Do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} ela soma Vida, Mana e Estamina a cada nível e ganha a Maestria de classe, um marco de 5 em 5 níveis (ver Poderes e Habilidades).</li>
+        <li>O padrão do jogo é <strong>duas classes comuns e uma especial</strong>, que fecha em ${NIVEL_TOTAL_PADRAO} níveis totais. Passando do ${NIVEL_TOTAL_PADRAO} a ficha aceita mais classes e mais níveis, e só marca o patamar novo (ver Experiência e Níveis).</li>
+        <li>Os níveis podem ser intercalados. A segunda classe comum entra depois que uma das suas classes chega ao nível 20.</li>
         <li>Classe especial exige nível total 20, liberação do Mestre e um acontecimento na história que justifique, a não ser que a própria classe abra uma exceção explícita.</li>
         <li>Classe geral serve a qualquer Árvore. Classe exclusiva só se você pertencer à Árvore indicada.</li>
       </ul>
 
       <h3 class="regras-subtitle">Maestria de atributo</h3>
-      <p class="regras-note">Quando um atributo chega a 20 <strong>por mérito próprio</strong>, sem item, pacto ou efeito temporário segurando o número, você ganha a maestria dele. Coisa de fora pode empurrar o atributo acima de 20, e não dá maestria nenhuma. E só uma característica que declare explicitamente um limite maior consegue passar de 20.</p>
+      <p class="regras-note">Quando um atributo chega a 20 <strong>por mérito próprio</strong>, sem item, pacto ou efeito temporário segurando o número, você ganha a maestria dele. Item, pacto ou efeito temporário que leve o atributo até o 20, ou além dele, não dá maestria nenhuma. Atributo não tem valor máximo: passando do 20 ele segue subindo, e o modificador continua sendo a conta de sempre.</p>
       <ul class="regras-sublist regras-sublist--grid">
         <li><strong>Força:</strong> uma vez por turno, +2 no dano de um ataque corpo a corpo.</li>
         <li><strong>Destreza:</strong> +1 na Defesa Natural ou +1,5 m de movimento.</li>
@@ -524,17 +608,11 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       <p class="regras-lead">Esta é a página que você consulta para saber com quem está lidando. As fórmulas são as mesmas para todo mundo, então dá para prever a ficha de um personagem sabendo só o nível e o tipo de classe dele.</p>
 
       <h3 class="regras-subtitle">O personagem de referência</h3>
-      <p>Todas as ${classesData.length} classes gastam o mesmo orçamento de 9 pontos por nível, distribuído entre Vida, Mana e Estamina. A Vida define a coluna, e o que sobra vira Mana e Estamina somadas. A tabela abaixo é o personagem médio de cada coluna, calculada com Constituição 14, Sabedoria 10 e Destreza 14. Use como piso ao montar encontro.</p>
+      <p>Todas as ${classesData.length} classes gastam o mesmo orçamento de 9 pontos por nível, distribuído entre Vida, Mana e Estamina. A Vida define a coluna, e o que sobra vira Mana e Estamina somadas. A tabela abaixo é o personagem médio de cada coluna, calculada com Constituição 14, Sabedoria 10 e Destreza 14, pela mesma conta que a ficha faz. Cada classe vai até o nível ${NIVEL_MAXIMO_CLASSE} (com a Maestria dos níveis 25, 35 e 45); depois disso a tabela soma níveis de uma classe neutra, com 3 de Vida e 6 de recurso por nível. Use como piso ao montar encontro.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Nível</th><th>Vida 6 (3 de recurso)</th><th>Vida 5 (4)</th><th>Vida 4 (5)</th><th>Vida 3 (6)</th><th>Vida 2 (7)</th><th>Defesa</th><th>Poderes</th></tr></thead>
         <tbody>
-          <tr><td><strong>1</strong></td><td>14 / 9</td><td>13 / 10</td><td>12 / 11</td><td>11 / 12</td><td>10 / 13</td><td>11</td><td>0</td></tr>
-          <tr><td><strong>5</strong></td><td>38 / 21</td><td>33 / 26</td><td>28 / 31</td><td>23 / 36</td><td>18 / 41</td><td>13</td><td>1</td></tr>
-          <tr><td><strong>10</strong></td><td>68 / 36</td><td>58 / 46</td><td>48 / 56</td><td>38 / 66</td><td>28 / 76</td><td>16</td><td>3</td></tr>
-          <tr><td><strong>15</strong></td><td>98 / 51</td><td>83 / 66</td><td>68 / 81</td><td>53 / 96</td><td>38 / 111</td><td>18</td><td>5</td></tr>
-          <tr><td><strong>20</strong></td><td>128 / 66</td><td>108 / 86</td><td>88 / 106</td><td>68 / 126</td><td>48 / 146</td><td>21</td><td>8</td></tr>
-          <tr><td><strong>30</strong></td><td>188 / 96</td><td>158 / 126</td><td>128 / 156</td><td>98 / 186</td><td>68 / 216</td><td>26</td><td>8</td></tr>
-          <tr><td><strong>40</strong></td><td>248 / 126</td><td>208 / 166</td><td>168 / 206</td><td>128 / 246</td><td>88 / 286</td><td>31</td><td>8</td></tr>
+          ${linhasPersonagemDeReferencia()}
         </tbody>
       </table></div>
       <p class="regras-note">Classes por Vida: ${totalClassesVida6} com 6, ${totalClassesVida5} com 5, ${totalClassesVida4} com 4, ${totalClassesVida3} com 3 e ${totalClassesVida2} com 2. Nas colunas de Vida alta o recurso vai quase todo para Estamina; nas de Vida baixa, para Mana. Num grupo comum de quatro, some as Vidas da coluna certa e multiplique o dano do grupo por rodada por 4,5: sai a Vida efetiva do encontro padrão.</p>
@@ -548,9 +626,11 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Multiclasse e classe especial</h3>
       <ul class="regras-list">
-        <li>O teto é 40 níveis com classes comuns e 60 com uma especial. Uma campanha que pretende chegar lá é uma campanha de anos: combine a altura antes de começar.</li>
+        <li>O padrão fecha em ${NIVEL_TOTAL_PADRAO} níveis totais: duas classes comuns e uma especial. Uma campanha que pretende chegar lá é uma campanha de anos, então combine a altura antes de começar.</li>
+        <li>A ficha não trava nada acima do padrão, e o servidor só avisa você enquanto o personagem ainda está dentro dele. Passar do ${NIVEL_TOTAL_PADRAO} é decisão de mesa. Vale a mesma cautela de sempre: uma exceção aberta para um personagem vale para a mesa inteira dali em diante.</li>
         <li>Classe especial exige nível total 20 e um acontecimento na história. O acontecimento é seu, e é o que impede a especial de virar só a próxima caixa marcada.</li>
-        <li>Duas classes comuns mais uma especial é o teto rígido. Não abra exceção sem perceber que ela vale para a mesa inteira dali em diante.</li>
+        <li>Se a mesa quiser uma quarta classe, ou mais, recomendo que o menor atributo do personagem seja pelo menos 12 na quarta, 13 na quinta, 14 na sexta e 15 na sétima. A ficha não confere isso. Serve para o personagem que abre tantos caminhos ter aberto também o corpo e a cabeça, e não só o cardápio de poderes.</li>
+        <li>Personagem e NPC de nível muito alto têm tabela própria de Vida, ataque, dano e DT no Guia do Mestre (NPCs e inimigos de nível alto).</li>
       </ul>
     `,
   },
@@ -1469,40 +1549,57 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
   xp: {
     categoria: 'Livro do Jogador',
     status: 'Regra oficial',
-    resumo: 'Uma tabela de XP só, do nível 1 ao 60, com recompensas que saem do nível total, nunca de cada classe separada.',
+    resumo: 'Uma tabela de XP sem teto de nível: a conta de sempre até o 100 e uma faixa fixa por patamar depois. As recompensas saem do nível total, nunca de cada classe separada.',
     destaques: [
-      ['Níveis', '1–60'],
-      ['Legado', 'a cada 5 níveis'],
-      ['Atributo', '+1 a cada 4 níveis'],
+      ['Níveis', `padrão até o ${NIVEL_TOTAL_PADRAO}, sem teto`],
+      ['Legado', 'a cada 5, 10 ou 20 níveis'],
+      ['Atributo', '+1 a cada 4, 8 ou 16 níveis'],
     ],
     corpo: `
       <h3 class="regras-subtitle">Progressão do nível total</h3>
       <p class="regras-lead">Toda vez que você sobe de nível, escolhe uma das suas classes e aumenta o nível dela em 1. As recompensas da tabela olham para o <strong>nível total</strong>, então multiclasse não recebe nada em dobro.</p>
       <div class="regras-table-wrap"><table class="regras-table">
-        <thead><tr><th>Níveis totais</th><th>Recompensa global</th></tr></thead>
+        <thead><tr><th>Níveis totais</th><th>Legado de Ascensão</th><th>+1 em um atributo</th><th>Vaga de item especial</th></tr></thead>
         <tbody>
-          <tr><td>Todos os níveis</td><td>+1 nível em uma classe escolhida</td></tr>
-          <tr><td>4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56 e 60</td><td>+1 em um atributo, respeitando o limite natural 20</td></tr>
-          <tr><td>5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 e 60</td><td>1 Legado de Ascensão</td></tr>
+          ${linhasRitmoDeNivel()}
         </tbody>
       </table></div>
+      <p class="regras-note">Isso dá ${legadosPorNivel(50)} Legados e ${aumentosAtributoPorNivel(50)} aumentos de atributo até o nível 50, ${legadosPorNivel(100)} e ${aumentosAtributoPorNivel(100)} até o 100, e ${legadosPorNivel(200)} e ${aumentosAtributoPorNivel(200)} até o 200. O ritmo desacelera para os Legados durarem e para o poder crescer devagar nos níveis muito altos.</p>
+      <p>Atributo não tem valor máximo. Passando do 20 ele segue subindo, e o modificador continua sendo ⌊(Atributo − 10) ÷ 2⌋.</p>
 
-      <h3 class="regras-subtitle">Especialização e multiclasse</h3>
+      <h3 class="regras-subtitle">Classes e multiclasse</h3>
       <ul class="regras-list">
-        <li>Uma classe só chega ao nível 20 se você já tiver nível 10 em outra classe. Não dá para maximizar uma classe sozinha.</li>
-        <li>Fora essa trava, subir de nível é livre: escolha qualquer classe que já tenha entre suas classes atuais.</li>
+        <li>Cada classe vai até o <strong>nível ${NIVEL_MAXIMO_CLASSE}</strong>. As recompensas escritas dela (poderes, habilidades e o fecho da classe) terminam no ${NIVEL_CONTEUDO_CLASSE}. Do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} ela segue somando Vida, Mana e Estamina a cada nível e ganha a Maestria, um marco de 5 em 5 níveis.</li>
+        <li>O padrão do jogo é <strong>duas classes comuns e uma especial</strong>, que fecha em ${NIVEL_TOTAL_PADRAO} níveis totais. A ficha aceita mais classes e níveis acima disso, e só marca o patamar novo.</li>
+        <li>A segunda classe comum entra depois que uma das suas classes chega ao nível 20. Fora essa ordem, subir de nível é livre: escolha qualquer classe que você já tenha entre as suas.</li>
         <li>Classe especial exige nível total 20, consome nível como qualquer outra e não ocupa uma das duas vagas de classe comum.</li>
         <li>Classe comum serve a qualquer Árvore. Classe especial depende de liberação do Mestre e só aparece nas Árvores indicadas na página dela.</li>
         <li>Ao entrar numa classe nova você não ganha equipamento, dinheiro ou qualquer outro benefício de criação de novo.</li>
       </ul>
 
+      <h3 class="regras-subtitle">Depois do nível ${NIVEL_TOTAL_PADRAO}</h3>
+      <p>O nível ${NIVEL_TOTAL_PADRAO} é onde terminam as regras padrão. A ficha não trava nada acima dele: você continua subindo, abre mais classes e passa do ${NIVEL_MAXIMO_CLASSE} numa classe se a mesa quiser. O que muda é que o personagem entra num patamar novo.</p>
+      <ul class="regras-list">
+        <li>Os patamares são os níveis totais ${PATAMARES_NIVEL.slice(0, -1).join(', ')} e ${PATAMARES_NIVEL[PATAMARES_NIVEL.length - 1]}.</li>
+        <li>Cada um traz uma Conquista, uma moldura própria no retrato e no cartaz de Procurado e um selo na ficha, de Patamar I a Patamar V. O aviso aparece uma vez e some sozinho.</li>
+        <li>Um NPC do Mestre pode ficar num patamar alto sem cumprir nenhuma regra de criação: a ficha serve para guardar a Vida, a Defesa e os números dele.</li>
+      </ul>
+
       <h3 class="regras-subtitle">Fórmula de progressão</h3>
-      <div class="regras-formula">XP total do nível N = 500 × N × (N − 1)</div>
+      <div class="regras-formula">XP total do nível N = 500 × N × (N − 1), até o nível 100</div>
       <p class="regras-note">Sair do nível N e chegar ao N+1 custa N × 1.000 XP. Na ficha, a barra recomeça do zero a cada nível: o que passar do custo continua contando para o próximo.</p>
+      <p>Do nível 100 em diante cada nível custa um valor fixo, que só muda quando o personagem entra na faixa seguinte:</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Do nível</th><th>Custo de cada nível</th></tr></thead>
+        <tbody>
+          ${linhasFaixasDeXP()}
+        </tbody>
+      </table></div>
+      <p class="regras-note">O XP total acumulado é ${formatarXP(xpParaNivel(60))} no nível 60, ${formatarXP(xpParaNivel(100))} no 100, ${formatarXP(xpParaNivel(150))} no 150, ${formatarXP(xpParaNivel(250))} no 250 e ${formatarXP(xpParaNivel(500))} no 500.</p>
 
       <h3 class="regras-subtitle">Tabela completa</h3>
       <details class="regras-details regras-details--xp">
-        <summary>Abrir níveis 1 a 60</summary>
+        <summary>Abrir níveis 1 a 100</summary>
         <div class="regras-xp-grid regras-xp-grid--revised">${tabelaXP}</div>
       </details>
 
@@ -1515,38 +1612,43 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
     `,
     corpoMestre: `
-      <p class="regras-lead">A tabela é fechada e a fórmula é simples: sair do nível N custa N mil de experiência. Do 1 para o 2 são mil; do 19 para o 20 são dezenove mil. Isso quer dizer que o mesmo tesouro de XP vale cada vez menos, e é por isso que a recompensa por marco é dada em porcentagem, não em número.</p>
+      <p class="regras-lead">A tabela é fechada e a fórmula é simples: sair do nível N custa N mil de experiência até o 99. Do 1 para o 2 são mil; do 19 para o 20 são dezenove mil. A partir do 100 o custo deixa de crescer nível a nível e vira uma faixa (100 mil, 150 mil, 250 mil e 500 mil), então uma campanha longa não precisa de tabela gigante. O mesmo tesouro de XP vale cada vez menos, e é por isso que a recompensa por marco é dada em porcentagem, não em número.</p>
 
       <h3 class="regras-subtitle">Distribuir por marco</h3>
       <ul class="regras-list">
         <li>Descoberta ou objetivo menor vale 10% do próximo nível; missão relevante, 25%; fim de arco, 50%. Trabalhando com esses três, o grupo sobe um nível a cada arco mais algumas conquistas no caminho.</li>
         <li>XP de combate se divide pelo grupo, mas XP de descoberta e de arco vai inteiro para cada um. Um grupo grande sobe mais devagar pela luta e na mesma velocidade pela história: use isso se a mesa tiver seis pessoas.</li>
+        <li>O XP de combate por Valor de Desafio para no VD 10, que paga 11 mil. Perto dos níveis 50 e acima disso ele rende pouco diante do custo de um nível, então nos patamares altos dê o XP por marco, em porcentagem.</li>
         <li>Prefira anunciar o marco quando ele acontece, em vez de somar tudo no fim da sessão. O grupo joga melhor quando sabe que aquilo ali contou.</li>
       </ul>
 
       <h3 class="regras-subtitle">Os níveis que mudam o jogo</h3>
       <ul class="regras-list">
-        <li>A cada 4 níveis totais entra +1 em um atributo, e a cada 5 entra um Legado de Ascensão. Nos níveis 20, 40 e 60 os dois caem juntos: são os saltos maiores da campanha.</li>
-        <li>Quando o grupo cruzar um desses, recalibre a Vida do encontro antes de reaproveitar ficha de inimigo antiga. Um Legado muda mais o encontro que dois níveis.</li>
+        <li>Até o nível 50, +1 em um atributo entra a cada 4 níveis totais e um Legado de Ascensão a cada 5. Nos níveis 20 e 40 os dois caem juntos, e no 50 o Legado cai sozinho: são os saltos maiores da campanha padrão. Depois do 50 os dois espaçam (a cada 8 e a cada 10 níveis, e depois a cada 16 e a cada 20).</li>
+        <li>Os patamares ${PATAMARES_NIVEL.join(', ')} são momentos de história. Aproveite: um personagem que cruza o 60 ou o 100 merece uma cena, e a ficha já mostra a Conquista e a moldura nova para acompanhar.</li>
+        <li>Quando o grupo cruzar um desses saltos, recalibre a Vida do encontro antes de reaproveitar ficha de inimigo antiga. Um Legado muda mais o encontro que dois níveis. A tabela de NPCs e inimigos de nível alto, no Guia do Mestre, dá o alvo de Vida por nível.</li>
         <li>Multiclasse não recebe nada em dobro, porque a tabela olha o nível total. Deixe isso claro na primeira vez que alguém abrir uma segunda classe: a dúvida aparece sempre.</li>
       </ul>
 
-      <h3 class="regras-subtitle">A trava do nível 20</h3>
-      <p>Uma classe só chega ao 20 se outra já estiver no 10. Quem quer maximizar uma classe sozinho vai travar no 19, e é melhor avisar isso quando o personagem estiver no 15 do que quando ele bater na parede.</p>
+      <h3 class="regras-subtitle">Teto de classe e segunda classe</h3>
+      <p>Uma classe vai até o 50, e a segunda classe comum só entra depois que uma classe chega ao 20. Quem quer maximizar uma classe sozinho pode, e vai ganhar Vida, Mana, Estamina e a Maestria do 21 ao 50, mas nenhum poder novo: avise quando o personagem estiver no 15, para a escolha ser consciente.</p>
+
+      <h3 class="regras-subtitle">Legados no fim da estrada</h3>
+      <p>O catálogo tem ${(legadosData.legados?.length || 0) + (legadosNovosData.novos?.length || 0)} Legados e nem todos se repetem. Numa mesa que passe dos 500 níveis o catálogo vai faltar: combine com o grupo se os Legados novos vêm da história ou se a vaga vira outra coisa.</p>
     `,
   },
 
   legados: {
     categoria: 'Livro do Jogador',
     status: 'Regra oficial',
-    resumo: 'A cada cinco níveis totais você escolhe um Legado. É escolha permanente, e a ficha confere os pré-requisitos na hora.',
+    resumo: 'Um Legado a cada cinco níveis totais no começo, a cada dez depois do 50 e a cada vinte depois do 100. É escolha permanente, e a ficha confere os pré-requisitos na hora.',
     destaques: [
       ['Catálogo', `${(legadosData.legados?.length || 0) + (legadosNovosData.novos?.length || 0)} Legados`],
-      ['Marco', 'a cada 5 níveis'],
+      ['Marco', 'a cada 5, 10 ou 20 níveis'],
       ['Escolha', 'permanente']
     ],
     corpo: `
-      <p class="regras-lead">A cada cinco níveis totais, ou seja, no 5, no 10, no 15 e assim por diante até o 60, escolha um Legado de Ascensão cujos pré-requisitos você já cumpre. Algumas raças dão vagas extras, e quando dão está escrito no catálogo racial.</p>
+      <p class="regras-lead">Nos níveis totais 5, 10, 15 e assim por diante até o 50, escolha um Legado de Ascensão cujos pré-requisitos você já cumpre. Depois do 50 o ritmo desacelera: um Legado no 60, no 70, no 80, no 90 e no 100, e daí em diante a cada 20 níveis (120, 140, 160 e por aí vai). Algumas raças dão vagas extras, e quando dão está escrito no catálogo racial.</p>
       <ul class="regras-list">
         <li>Legado escolhido não volta atrás. O jogador não pode remover nem trocar depois.</li>
         <li>Legado não é recompensa de classe. Multiclasse não repete os marcos.</li>
@@ -1560,7 +1662,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">O ritmo dos marcos</h3>
       <ul class="regras-list">
-        <li>Um Legado a cada 5 níveis totais. Numa campanha que vai até o 20, são quatro escolhas por personagem, e elas definem mais a identidade dele do que a classe.</li>
+        <li>Um Legado a cada 5 níveis totais até o 50 (dez escolhas), a cada 10 até o 100 e a cada 20 depois. Numa campanha que vai até o 20, são quatro escolhas por personagem, e elas definem mais a identidade dele do que a classe.</li>
         <li>O marco é um bom lugar para uma cena. Um Legado de Ascensão que aparece do nada na ficha rende bem menos que um que apareceu depois de alguma coisa acontecer.</li>
         <li>Marca de Círculo e Cicatriz contam como Legado para efeitos que citem Legados, sem ocupar vaga. Um conjurador de círculo alto acumula os dois tipos, e é bom você saber disso ao ler a ficha dele.</li>
       </ul>
@@ -1818,16 +1920,11 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
       </ul>
 
       <h3 class="regras-subtitle">Quantos itens especiais você pode usar</h3>
-      <p><strong>Itens de perícia</strong> e <strong>artefatos</strong> dividem o mesmo limite de uso: seu <strong>nível total dividido por 4, arredondado para baixo, com o mínimo de 1</strong>. Só uma peça equipada ou ativa ocupa vaga; comprar, carregar ou guardar não ocupa. Arma, armadura, escudo, consumível e item comum continuam seguindo seus próprios espaços.</p>
+      <p><strong>Itens de perícia</strong> e <strong>artefatos</strong> dividem o mesmo limite de uso: 1 vaga no começo e mais uma a cada <strong>4 níveis totais até o 50, a cada 8 até o 100 e a cada 16 depois</strong>. Só uma peça equipada ou ativa ocupa vaga; comprar, carregar ou guardar não ocupa. Arma, armadura, escudo, consumível e item comum continuam seguindo seus próprios espaços.</p>
       <div class="regras-table-wrap"><table class="regras-table">
         <thead><tr><th>Nível total</th><th>Itens de perícia + artefatos em uso</th></tr></thead>
         <tbody>
-          <tr><td>1 a 7</td><td>1</td></tr>
-          <tr><td>8 a 11</td><td>2</td></tr>
-          <tr><td>12 a 15</td><td>3</td></tr>
-          <tr><td>16 a 19</td><td>4</td></tr>
-          <tr><td>20 a 23</td><td>5</td></tr>
-          <tr><td>24 ou mais</td><td>nível ÷ 4, arredondado para baixo</td></tr>
+          ${linhasItemEspecial()}
         </tbody>
       </table></div>
     `,
@@ -1858,7 +1955,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Fiscalizar o limite de itens especiais</h3>
       <ul class="regras-list">
-        <li>O teto (nível total ÷ 4, arredondado para baixo, mínimo 1) é compartilhado por itens de perícia e artefatos. Arma, armadura, escudo e os demais equipamentos não entram nessa conta.</li>
+        <li>O teto (1 vaga e mais uma a cada 4 níveis totais até o 50, a cada 8 até o 100 e a cada 16 depois) é compartilhado por itens de perícia e artefatos. Arma, armadura, escudo e os demais equipamentos não entram nessa conta.</li>
         <li>A ficha impede uma nova ativação acima do teto. Se uma ficha antiga já estiver acima dele, as peças permanecem no inventário, mas os efeitos excedentes ficam inativos até o jogador liberar vagas.</li>
         <li>A compra continua permitida mesmo sem vaga: o limite controla o que está em uso, não o que o personagem possui.</li>
       </ul>
@@ -2227,7 +2324,7 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
 
       <h3 class="regras-subtitle">Liberar uma especial</h3>
       <ul class="regras-list">
-        <li>A especial não ocupa vaga de classe comum, então quem a ganha fica com três classes. É um salto real de versatilidade, não só de poder.</li>
+        <li>A especial não ocupa vaga de classe comum, então quem a ganha fica com três classes no padrão do jogo (a ficha aceita mais, depois do 60). É um salto real de versatilidade, não só de poder.</li>
         <li>Peça que o acontecimento venha da história do personagem. Uma especial concedida como recompensa genérica desperdiça o único momento em que ela poderia significar alguma coisa.</li>
       </ul>
     `,
@@ -2290,6 +2387,16 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>O que sai dali é recompensa combinada na mesa. Evento não concede nível, dinheiro infinito nem item garantido.</li>
         <li>Se o grupo estiver no meio de outra coisa, o evento espera. Ele é oportunidade, não interrupção.</li>
       </ul>
+      <h3 class="regras-subtitle">Depois do nível 20: a Maestria</h3>
+      <p>A grade das classes termina no nível ${NIVEL_CONTEUDO_CLASSE}. Cada classe pode ir até o ${NIVEL_MAXIMO_CLASSE}, e do ${NIVEL_CONTEUDO_CLASSE + 1} ao ${NIVEL_MAXIMO_CLASSE} ela soma Vida, Mana e Estamina a cada nível, do jeito de sempre, mais a Maestria a cada 5 níveis. A Maestria é igual para todas as classes e conta pelo nível da própria classe.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Nível da classe</th><th>Recompensa</th><th>O que dá</th></tr></thead>
+        <tbody>
+          ${linhasMaestria()}
+        </tbody>
+      </table></div>
+      <p class="regras-note">Não há poder, habilidade nem evento novo depois do 20. Quem quer conteúdo novo abre outra classe; quem quer profundidade sobe a mesma.</p>
+
       <p class="regras-note">Vale conferir a lista de poderes da classe antes de escolhê-la. Duas classes com a mesma Vida, a mesma Mana e a mesma Estamina podem jogar de formas completamente diferentes por causa do que está nessa lista, e é ela que decide como o personagem vai se sentir no nível 10.</p>
     `,
     corpoMestre: `
@@ -2832,6 +2939,21 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <li>Chefe sozinho precisa de reação, fase ou ação de cenário. Chefe que só tem Vida alta produz um combate longo e parado.</li>
         <li>Terreno, cobertura e objetivo existem para mudar decisão, não para conceder mais um bônus numérico.</li>
         <li>Nunca tire o turno inteiro de um jogador por mais de uma rodada seguida. Ficar olhando não é jogar.</li>
+      </ul>
+
+      <h3 class="regras-subtitle">NPCs e inimigos de nível alto</h3>
+      <p>Para montar um NPC ou um chefe acima do nível 20, parta desta tabela. Ela usa a mesma conta da ficha: a Vida é a média das ${classesComunsParaReferencia.length} classes comuns, o atributo principal começa em 15 e os aumentos de nível se distribuem em rodízio, a arma é a melhor que o nível alcança e o grau de perícia é o maior que o nível permite. A última coluna é a Vida de um inimigo que aguenta quatro rodadas e meia de um grupo de quatro personagens do mesmo nível.</p>
+      <div class="regras-table-wrap"><table class="regras-table">
+        <thead><tr><th>Nível</th><th>Patamar</th><th>Vida média (menor a maior)</th><th>Defesa</th><th>Ataque</th><th>Dano por acerto</th><th>DT padrão / extrema</th><th>Vida de inimigo padrão</th></tr></thead>
+        <tbody>
+          ${linhasNpcsEInimigos()}
+        </tbody>
+      </table></div>
+      <ul class="regras-list">
+        <li>O dano da arma para de crescer no nível 35, nas relíquias da criação. Daí em diante o dano por acerto sobe só com o modificador de atributo, e um chefe fica maior com mais Vida, mais Defesa e mais ações, não com mais dano por golpe.</li>
+        <li>A Defesa da tabela é a natural. Do nível 29 em diante quem investe na perícia de combate acerta quase sempre um inimigo do mesmo nível, e é a armadura, o escudo e os efeitos de cena que seguram a Defesa de um NPC forte.</li>
+        <li>DT fixa (5 a 40) deixa de ser desafio a partir do nível 40. Acima disso use a DT padrão e a extrema da linha do nível.</li>
+        <li>O bestiário escrito vai até o nível 50. A Vida dos monstros dele fica de metade a um pouco acima da coluna de inimigo padrão: criatura de bando é mais frágil que o encontro padrão, e o chefe passa dela.</li>
       </ul>
 
       <h3 class="regras-subtitle">Descanso e pressão</h3>

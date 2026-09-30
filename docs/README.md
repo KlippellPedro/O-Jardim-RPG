@@ -9,7 +9,7 @@ reconstruir sua história em vários arquivos.
 
 | Documento | O que consultar |
 | --- | --- |
-| [Balanceamento e economia](sistema/BALANCEAMENTO.md) | Decisões de Legados, moedas, preços, Cofre e Investimentos; mudanças posteriores e questões ainda abertas. |
+| [Balanceamento e economia](sistema/BALANCEAMENTO.md) | Decisões de Legados, moedas, preços, Cofre e Investimentos, níveis além do 60 e a referência de NPCs e inimigos; mudanças posteriores e questões ainda abertas. |
 | [Integração e segurança](sistema/INTEGRACAO.md) | Ficha, sessão, loja, modificações, permissões e fechamento das correções técnicas. |
 | [Frontend e experiência do jogador](sistema/FRONTEND.md) | Jornada, navegação, carrinho, responsividade, acessibilidade e performance. |
 | [Bots e sistemas do Discord](sistema/BOTS_DISCORD.md) | Arquitetura aprovada, evolução dos bots, Cofre/roubo e operação do Salão do Banco Lunar. |

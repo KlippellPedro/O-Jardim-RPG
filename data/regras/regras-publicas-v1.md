@@ -84,7 +84,7 @@ Estas palavras aparecem no livro inteiro sem serem explicadas de novo. Se travar
 
 - Árvore | A realidade de onde seu personagem vem. Cada Árvore tem sua deidade, seus povos e suas opções exclusivas.
 
-- Legado | Uma escolha permanente que você faz a cada cinco níveis e que muda como o personagem funciona.
+- Legado | Uma escolha permanente que você faz em certos níveis (de cinco em cinco no começo, mais espaçados depois do 50) e que muda como o personagem funciona.
 
 - NPC | Qualquer personagem controlado pelo Mestre, de um taverneiro a um dragão.
 
@@ -204,7 +204,7 @@ Distribua os valores entre Força, Destreza, Constituição, Inteligência, Sabe
 
 **Status:** Regra oficial
 
-As fórmulas fundamentais, limites de nível, multiclasse, maestrias e o papel do atributo Fluxo.
+As fórmulas fundamentais, níveis e multiclasse, maestrias e o papel do atributo Fluxo.
 
 Esta é a página de consulta: todas as contas que a ficha faz por você, reunidas num lugar só. Você não precisa decorar nenhuma delas para jogar. Dois avisos de leitura: ⌊ ⌋ quer dizer "arredonde para baixo", e "Mod." é o modificador de um atributo, que sai da primeira linha da tabela.
 
@@ -248,13 +248,13 @@ Esta é a página de consulta: todas as contas que a ficha faz por você, reunid
 
 ### Nível e multiclasse
 
-- **Nível total** é a soma dos níveis de todas as suas classes, incluindo as especiais.
+- **Nível total** é a soma dos níveis de todas as suas classes, incluindo as especiais. Ele não tem teto.
 
-- Cada classe vai até o **nível 20**. Só com classes comuns, o teto é **40 níveis totais**; com uma classe especial, sobe para **60**.
+- Cada classe vai até o **nível 50**. As recompensas escritas dela terminam no 20. Do 21 ao 50 ela soma Vida, Mana e Estamina a cada nível e ganha a Maestria de classe, um marco de 5 em 5 níveis (ver Poderes e Habilidades).
 
-- Você pode ter no máximo **duas classes comuns e uma especial**.
+- O padrão do jogo é **duas classes comuns e uma especial**, que fecha em 60 níveis totais. Passando do 60 a ficha aceita mais classes e mais níveis, e só marca o patamar novo (ver Experiência e Níveis).
 
-- Os níveis podem ser intercalados. Para levar uma classe ao nível 20, o personagem precisa ter pelo menos nível 10 em outra classe.
+- Os níveis podem ser intercalados. A segunda classe comum entra depois que uma das suas classes chega ao nível 20.
 
 - Classe especial exige nível total 20, liberação do Mestre e um acontecimento na história que justifique, a não ser que a própria classe abra uma exceção explícita.
 
@@ -262,7 +262,7 @@ Esta é a página de consulta: todas as contas que a ficha faz por você, reunid
 
 ### Maestria de atributo
 
-Quando um atributo chega a 20 **por mérito próprio**, sem item, pacto ou efeito temporário segurando o número, você ganha a maestria dele. Coisa de fora pode empurrar o atributo acima de 20, e não dá maestria nenhuma. E só uma característica que declare explicitamente um limite maior consegue passar de 20.
+Quando um atributo chega a 20 **por mérito próprio**, sem item, pacto ou efeito temporário segurando o número, você ganha a maestria dele. Item, pacto ou efeito temporário que leve o atributo até o 20, ou além dele, não dá maestria nenhuma. Atributo não tem valor máximo: passando do 20 ele segue subindo, e o modificador continua sendo a conta de sempre.
 
 - **Força:** uma vez por turno, +2 no dano de um ataque corpo a corpo.
 
@@ -1294,25 +1294,31 @@ Nem todo dia livre precisa render número. Se você não souber o que o seu pers
 
 **Status:** Regra oficial
 
-Uma tabela de XP só, do nível 1 ao 60, com recompensas que saem do nível total, nunca de cada classe separada.
+Uma tabela de XP sem teto de nível: a conta de sempre até o 100 e uma faixa fixa por patamar depois. As recompensas saem do nível total, nunca de cada classe separada.
 
 ### Progressão do nível total
 
 Toda vez que você sobe de nível, escolhe uma das suas classes e aumenta o nível dela em 1. As recompensas da tabela olham para o **nível total**, então multiclasse não recebe nada em dobro.
 
-- Níveis totais | Recompensa global
+- Níveis totais | Legado de Ascensão | +1 em um atributo | Vaga de item especial
 
-- Todos os níveis | +1 nível em uma classe escolhida
+- 1 a 50 | a cada 5 níveis | a cada 4 níveis | a cada 4 níveis
 
-- 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56 e 60 | +1 em um atributo, respeitando o limite natural 20
+- 51 a 100 | a cada 10 níveis | a cada 8 níveis | a cada 8 níveis
 
-- 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 e 60 | 1 Legado de Ascensão
+- 101 em diante | a cada 20 níveis | a cada 16 níveis | a cada 16 níveis
 
-### Especialização e multiclasse
+Isso dá 10 Legados e 12 aumentos de atributo até o nível 50, 15 e 18 até o 100, e 20 e 24 até o 200. O ritmo desacelera para os Legados durarem e para o poder crescer devagar nos níveis muito altos.
 
-- Uma classe só chega ao nível 20 se você já tiver nível 10 em outra classe. Não dá para maximizar uma classe sozinha.
+Atributo não tem valor máximo. Passando do 20 ele segue subindo, e o modificador continua sendo ⌊(Atributo − 10) ÷ 2⌋.
 
-- Fora essa trava, subir de nível é livre: escolha qualquer classe que já tenha entre suas classes atuais.
+### Classes e multiclasse
+
+- Cada classe vai até o **nível 50**. As recompensas escritas dela (poderes, habilidades e o fecho da classe) terminam no 20. Do 21 ao 50 ela segue somando Vida, Mana e Estamina a cada nível e ganha a Maestria, um marco de 5 em 5 níveis.
+
+- O padrão do jogo é **duas classes comuns e uma especial**, que fecha em 60 níveis totais. A ficha aceita mais classes e níveis acima disso, e só marca o patamar novo.
+
+- A segunda classe comum entra depois que uma das suas classes chega ao nível 20. Fora essa ordem, subir de nível é livre: escolha qualquer classe que você já tenha entre as suas.
 
 - Classe especial exige nível total 20, consome nível como qualquer outra e não ocupa uma das duas vagas de classe comum.
 
@@ -1320,15 +1326,39 @@ Toda vez que você sobe de nível, escolhe uma das suas classes e aumenta o nív
 
 - Ao entrar numa classe nova você não ganha equipamento, dinheiro ou qualquer outro benefício de criação de novo.
 
+### Depois do nível 60
+
+O nível 60 é onde terminam as regras padrão. A ficha não trava nada acima dele: você continua subindo, abre mais classes e passa do 50 numa classe se a mesa quiser. O que muda é que o personagem entra num patamar novo.
+
+- Os patamares são os níveis totais 60, 100, 150, 250 e 500.
+
+- Cada um traz uma Conquista, uma moldura própria no retrato e no cartaz de Procurado e um selo na ficha, de Patamar I a Patamar V. O aviso aparece uma vez e some sozinho.
+
+- Um NPC do Mestre pode ficar num patamar alto sem cumprir nenhuma regra de criação: a ficha serve para guardar a Vida, a Defesa e os números dele.
+
 ### Fórmula de progressão
 
-XP total do nível N = 500 × N × (N − 1)
+XP total do nível N = 500 × N × (N − 1), até o nível 100
 
 Sair do nível N e chegar ao N+1 custa N × 1.000 XP. Na ficha, a barra recomeça do zero a cada nível: o que passar do custo continua contando para o próximo.
 
+Do nível 100 em diante cada nível custa um valor fixo, que só muda quando o personagem entra na faixa seguinte:
+
+- Do nível | Custo de cada nível
+
+- 100 a 149 | 100.000 XP por nível
+
+- 150 a 249 | 150.000 XP por nível
+
+- 250 a 499 | 250.000 XP por nível
+
+- 500 em diante | 500.000 XP por nível
+
+O XP total acumulado é 1.770.000 no nível 60, 4.950.000 no 100, 9.950.000 no 150, 24.950.000 no 250 e 87.450.000 no 500.
+
 ### Tabela completa
 
-Abrir níveis 1 a 60
+Abrir níveis 1 a 100
 
 **N1**0 XP
 
@@ -1450,6 +1480,86 @@ Abrir níveis 1 a 60
 
 **N60**1.770.000 XP
 
+**N61**1.830.000 XP
+
+**N62**1.891.000 XP
+
+**N63**1.953.000 XP
+
+**N64**2.016.000 XP
+
+**N65**2.080.000 XP
+
+**N66**2.145.000 XP
+
+**N67**2.211.000 XP
+
+**N68**2.278.000 XP
+
+**N69**2.346.000 XP
+
+**N70**2.415.000 XP
+
+**N71**2.485.000 XP
+
+**N72**2.556.000 XP
+
+**N73**2.628.000 XP
+
+**N74**2.701.000 XP
+
+**N75**2.775.000 XP
+
+**N76**2.850.000 XP
+
+**N77**2.926.000 XP
+
+**N78**3.003.000 XP
+
+**N79**3.081.000 XP
+
+**N80**3.160.000 XP
+
+**N81**3.240.000 XP
+
+**N82**3.321.000 XP
+
+**N83**3.403.000 XP
+
+**N84**3.486.000 XP
+
+**N85**3.570.000 XP
+
+**N86**3.655.000 XP
+
+**N87**3.741.000 XP
+
+**N88**3.828.000 XP
+
+**N89**3.916.000 XP
+
+**N90**4.005.000 XP
+
+**N91**4.095.000 XP
+
+**N92**4.186.000 XP
+
+**N93**4.278.000 XP
+
+**N94**4.371.000 XP
+
+**N95**4.465.000 XP
+
+**N96**4.560.000 XP
+
+**N97**4.656.000 XP
+
+**N98**4.753.000 XP
+
+**N99**4.851.000 XP
+
+**N100**4.950.000 XP
+
 ### Recompensas por marco
 
 - **Descoberta ou objetivo menor:** 10% do próximo nível.
@@ -1466,9 +1576,9 @@ Abrir níveis 1 a 60
 
 **Status:** Regra oficial
 
-A cada cinco níveis totais você escolhe um Legado. É escolha permanente, e a ficha confere os pré-requisitos na hora.
+Um Legado a cada cinco níveis totais no começo, a cada dez depois do 50 e a cada vinte depois do 100. É escolha permanente, e a ficha confere os pré-requisitos na hora.
 
-A cada cinco níveis totais, ou seja, no 5, no 10, no 15 e assim por diante até o 60, escolha um Legado de Ascensão cujos pré-requisitos você já cumpre. Algumas raças dão vagas extras, e quando dão está escrito no catálogo racial.
+Nos níveis totais 5, 10, 15 e assim por diante até o 50, escolha um Legado de Ascensão cujos pré-requisitos você já cumpre. Depois do 50 o ritmo desacelera: um Legado no 60, no 70, no 80, no 90 e no 100, e daí em diante a cada 20 níveis (120, 140, 160 e por aí vai). Algumas raças dão vagas extras, e quando dão está escrito no catálogo racial.
 
 - Legado escolhido não volta atrás. O jogador não pode remover nem trocar depois.
 
@@ -1702,7 +1812,7 @@ Fora do bônus automático de armas e proteções, o ganho de uma raridade mais 
 
 ### Quantos itens especiais você pode usar
 
-**Itens de perícia** e **artefatos** dividem o mesmo limite de uso: seu **nível total dividido por 4, arredondado para baixo, com o mínimo de 1**. Só uma peça equipada ou ativa ocupa vaga; comprar, carregar ou guardar não ocupa. Arma, armadura, escudo, consumível e item comum continuam seguindo seus próprios espaços.
+**Itens de perícia** e **artefatos** dividem o mesmo limite de uso: 1 vaga no começo e mais uma a cada **4 níveis totais até o 50, a cada 8 até o 100 e a cada 16 depois**. Só uma peça equipada ou ativa ocupa vaga; comprar, carregar ou guardar não ocupa. Arma, armadura, escudo, consumível e item comum continuam seguindo seus próprios espaços.
 
 - Nível total | Itens de perícia + artefatos em uso
 
@@ -1716,7 +1826,11 @@ Fora do bônus automático de armas e proteções, o ganho de uma raridade mais 
 
 - 20 a 23 | 5
 
-- 24 ou mais | nível ÷ 4, arredondado para baixo
+- 24 a 50 | nível ÷ 4, arredondado para baixo (6 no 24 e 12 no 50)
+
+- 51 a 100 | mais uma a cada 8 níveis depois do 50 (13 no 58 e 18 no 100)
+
+- 101 em diante | mais uma a cada 16 níveis (19 no 116 e 24 no 200)
 
 ## modificacoes-equipamentos
 
@@ -3081,6 +3195,26 @@ Evento não é poder. É um gancho que a classe entrega ao Mestre: uma arena que
 - O que sai dali é recompensa combinada na mesa. Evento não concede nível, dinheiro infinito nem item garantido.
 
 - Se o grupo estiver no meio de outra coisa, o evento espera. Ele é oportunidade, não interrupção.
+
+### Depois do nível 20: a Maestria
+
+A grade das classes termina no nível 20. Cada classe pode ir até o 50, e do 21 ao 50 ela soma Vida, Mana e Estamina a cada nível, do jeito de sempre, mais a Maestria a cada 5 níveis. A Maestria é igual para todas as classes e conta pelo nível da própria classe.
+
+- Nível da classe | Recompensa | O que dá
+
+- 25 | Reforço de recursos | Vida, Mana e Estamina da classe como se você tivesse 2 níveis a mais nela.
+
+- 30 | Grau de perícia | Um grau de perícia à sua escolha, igual ao das outras recompensas de classe.
+
+- 35 | Reforço de recursos | Vida, Mana e Estamina da classe como se você tivesse 2 níveis a mais nela.
+
+- 40 | Grau de perícia | Um grau de perícia à sua escolha, igual ao das outras recompensas de classe.
+
+- 45 | Reforço de recursos | Vida, Mana e Estamina da classe como se você tivesse 2 níveis a mais nela.
+
+- 50 | Grau de perícia | Um grau de perícia à sua escolha, igual ao das outras recompensas de classe.
+
+Não há poder, habilidade nem evento novo depois do 20. Quem quer conteúdo novo abre outra classe; quem quer profundidade sobe a mesma.
 
 Vale conferir a lista de poderes da classe antes de escolhê-la. Duas classes com a mesma Vida, a mesma Mana e a mesma Estamina podem jogar de formas completamente diferentes por causa do que está nessa lista, e é ela que decide como o personagem vai se sentir no nível 10.
 
